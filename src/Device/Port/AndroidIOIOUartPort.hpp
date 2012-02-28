@@ -39,7 +39,6 @@ class AndroidIOIOUartPort : public AndroidPort
 {
 public:
   AndroidIOIOUartPort(unsigned UartID, unsigned BaudRate, Handler &_handler);
-  virtual ~AndroidIOIOUartPort();
 
   /**
    * Opens the serial port

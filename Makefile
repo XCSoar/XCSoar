@@ -756,7 +756,6 @@ XCSOAR_SOURCES += \
 ifneq ($(IOIOLIB_DIR),)
 XCSOAR_SOURCES += \
 	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \
-	$(SRC)/Android/IOIOManager.cpp \
 	$(SRC)/Android/IOIOHelper.cpp
 endif
 

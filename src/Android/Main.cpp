@@ -41,7 +41,7 @@ Copyright_License {
 #include "org_xcsoar_NativeView.h"
 
 #ifdef IOIOLIB
-#include "Android/IOIOManager.hpp"
+#include "Android/IOIOHelper.hpp"
 #endif
 
 #ifndef NDEBUG
@@ -63,7 +63,7 @@ Vibrator *vibrator;
 bool os_haptic_feedback_enabled;
 
 #ifdef IOIOLIB
-IOIOManager *ioio_manager;
+IOIOHelper *ioio_helper;
 #endif
 
 gcc_visibility_default
@@ -92,7 +92,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   vibrator = Vibrator::Create(env, *context);
 
 #ifdef IOIOLIB
-  ioio_manager = new IOIOManager(env);
+  ioio_helper = new IOIOHelper(env);
 #endif
 
   ScreenInitialized();
@@ -116,9 +116,12 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   CommonInterface::main_window.reset();
   DisallowLanguage();
   Fonts::Deinitialize();
+
 #ifdef IOIOLIB
-  delete ioio_manager;
+  delete ioio_helper;
+  ioio_helper = NULL;
 #endif
+
   delete sound_util;
   delete event_queue;
   event_queue = NULL;

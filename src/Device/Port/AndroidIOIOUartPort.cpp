@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "AndroidIOIOUartPort.hpp"
 #include "Android/IOIOHelper.hpp"
-#include "Android/IOIOManager.hpp"
 #include "Android/Main.hpp"
 
 #include <assert.h>
@@ -35,18 +34,12 @@ AndroidIOIOUartPort::AndroidIOIOUartPort(unsigned UartID_, unsigned _BaudRate, H
 {
 }
 
-AndroidIOIOUartPort::~AndroidIOIOUartPort()
-{
-  ioio_manager->RemoveClient();
-}
-
 bool
 AndroidIOIOUartPort::Open()
 {
   assert(UartID >=0 && UartID < (int)getNumberUarts());
 
-  IOIOHelper *helper = ioio_manager->AddClient();
-  PortBridge *bridge = helper->openUart(Java::GetEnv(), UartID, BaudRate);
+  PortBridge *bridge = ioio_helper->openUart(Java::GetEnv(), UartID, BaudRate);
   if (bridge == NULL)
     return false;
 

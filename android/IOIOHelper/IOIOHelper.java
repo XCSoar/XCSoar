@@ -101,6 +101,27 @@ final class IOIOHelper {
   }
 
   /**
+   * Is the IOIO connection currently in use?  If not, it may be
+   * closed eventually.
+   */
+  private boolean isInUse() {
+    for (XCSUart uart : xuarts_)
+      if (!uart.isAvailable())
+        return true;
+
+    return false;
+  }
+
+  boolean autoOpen() {
+    return ioio_ != null || open();
+  }
+
+  void autoClose() {
+    if (ioio_ != null && !isInUse())
+      close();
+  }
+
+  /**
    * Supports array of 4 XCSUart with ID=0, 1, 2, 3
    *
    * ID = 0, pins TX=3, RX=4
@@ -190,6 +211,7 @@ final class IOIOHelper {
       }
       uart = null;
       isAvailable = true;
+      autoClose();
     }
 
     public int setBaudRate(int baud) {
@@ -208,6 +230,9 @@ final class IOIOHelper {
    * @return: ID of opened UArt or -1 if fail
    */
   public AndroidPort openUart(int ID, int baud) {
+    if (!autoOpen())
+      return null;
+
     XCSUart uart = xuarts_[ID];
     return uart.openUart(baud)
       ? uart

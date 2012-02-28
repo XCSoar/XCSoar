@@ -32,7 +32,7 @@ class EventQueue;
 class SoundUtil;
 class Vibrator;
 #ifdef IOIOLIB
-class IOIOManager;
+class IOIOHelper;
 #endif
 
 extern Context *context;
@@ -47,7 +47,7 @@ extern Vibrator *vibrator;
 extern bool os_haptic_feedback_enabled;
 
 #ifdef IOIOLIB
-extern IOIOManager *ioio_manager;
+extern IOIOHelper *ioio_helper;
 #endif
 
 #endif
