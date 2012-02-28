@@ -128,6 +128,8 @@ final class IOIOHelper {
     private int ID;
 
     XCSUart(int ID_) {
+      super("IOIO UART " + ID_);
+
       ID = ID_;
       isAvailable = true;
 

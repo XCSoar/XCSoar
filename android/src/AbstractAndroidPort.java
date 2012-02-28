@@ -31,8 +31,13 @@ import java.io.OutputStream;
  * IOIO).
  */
 abstract class AbstractAndroidPort implements AndroidPort {
+  private final String name;
   private InputThread input;
   private OutputThread output;
+
+  protected AbstractAndroidPort(String _name) {
+    name = _name;
+  }
 
   private synchronized InputThread stealInput() {
     InputThread i = input;
@@ -47,8 +52,8 @@ abstract class AbstractAndroidPort implements AndroidPort {
   }
 
   protected synchronized void set(InputStream _input, OutputStream _output) {
-    input = new InputThread(_input);
-    output = new OutputThread(_output);
+    input = new InputThread(name, _input);
+    output = new OutputThread(name, _output);
     output.setTimeout(5000);
   }
 

@@ -35,6 +35,8 @@ class OutputThread extends Thread {
 
   static final int BUFFER_SIZE = 256;
 
+  final String name;
+
   OutputStream os;
 
   int timeout = 0;
@@ -42,7 +44,8 @@ class OutputThread extends Thread {
   byte[] buffer = new byte[BUFFER_SIZE];
   int head, tail;
 
-  OutputThread(OutputStream _os) {
+  OutputThread(String _name, OutputStream _os) {
+    name = _name;
     os = _os;
 
     start();
@@ -107,7 +110,7 @@ class OutputThread extends Thread {
       }
     } catch (IOException e) {
       if (os != null)
-        Log.e(TAG, "Failed to write to Bluetooth socket: " + e.getMessage());
+        Log.e(TAG, "Failed to write to " + name + ": " + e.getMessage());
     }
   }
 
