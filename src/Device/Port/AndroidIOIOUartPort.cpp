@@ -29,8 +29,6 @@ Copyright_License {
 
 #include <assert.h>
 
-IOIOHelper* helper = NULL;
-
 AndroidIOIOUartPort::AndroidIOIOUartPort(unsigned UartID_, unsigned _BaudRate, Handler &_handler)
   :Port(_handler),
    BaudRate(_BaudRate),
