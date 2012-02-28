@@ -63,17 +63,17 @@ Profile::LoadAirspaceConfig()
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
     if (Get(szProfileAirspaceMode[i], Temp)) {
-      renderer.display[i] = (Temp & 0x1) != 0;
+      renderer.classes[i].display = (Temp & 0x1) != 0;
       computer.warnings.class_warnings[i] = (Temp & 0x2) != 0;
     }
 
 #ifdef HAVE_HATCHED_BRUSH
-    Get(szProfileBrush[i], renderer.brushes[i]);
-    if (renderer.brushes[i] >= NUMAIRSPACEBRUSHES)
-      renderer.brushes[i] = 0;
+    Get(szProfileBrush[i], renderer.classes[i].brush);
+    if (renderer.classes[i].brush >= NUMAIRSPACEBRUSHES)
+      renderer.classes[i].brush = 0;
 #endif
 
-    GetAirspaceColor(i, renderer.colours[i]);
+    GetAirspaceColor(i, renderer.classes[i].color);
   }
 }
 
@@ -86,7 +86,7 @@ Profile::SetAirspaceMode(int i)
     CommonInterface::GetMapSettings().airspace;
 
   int val = 0;
-  if (renderer.display[i])
+  if (renderer.classes[i].display)
     val |= 0x1;
   if (computer.warnings.class_warnings[i])
     val |= 0x2;

@@ -72,9 +72,9 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
       canvas.Select(look.solid_brushes[i]);
     } else {
 #endif
-      canvas.SetTextColor(renderer.colours[i]);
+      canvas.SetTextColor(renderer.classes[i].color);
       canvas.SetBackgroundColor(Color(0xFF, 0xFF, 0xFF));
-      canvas.Select(look.brushes[renderer.brushes[i]]);
+      canvas.Select(look.brushes[renderer.classes[i].brush]);
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif
@@ -86,7 +86,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
                   _("Warn"));
 
-    if (renderer.display[i])
+    if (renderer.classes[i].display)
       canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
                   _("Display"));
   }
@@ -111,9 +111,9 @@ OnAirspaceListEnter(unsigned ItemIndex)
   if (colormode) {
     int c = dlgAirspaceColoursShowModal();
     if (c >= 0) {
-      renderer.colours[ItemIndex] = AirspaceLook::preset_colors[c];
+      renderer.classes[ItemIndex].color = AirspaceLook::preset_colors[c];
       ActionInterface::SendMapSettings();
-      Profile::SetAirspaceColor(ItemIndex, renderer.colours[ItemIndex]);
+      Profile::SetAirspaceColor(ItemIndex, renderer.classes[ItemIndex].color);
       changed = true;
 
       AirspaceLook &look =
@@ -127,9 +127,9 @@ OnAirspaceListEnter(unsigned ItemIndex)
 #endif
       int p = dlgAirspacePatternsShowModal();
       if (p >= 0) {
-        renderer.brushes[ItemIndex] = p;
+        renderer.classes[ItemIndex].brush = p;
         ActionInterface::SendMapSettings();
-        Profile::SetAirspaceBrush(ItemIndex, renderer.brushes[ItemIndex]);
+        Profile::SetAirspaceBrush(ItemIndex, renderer.classes[ItemIndex].brush);
         changed = true;
       }
 #ifdef HAVE_ALPHA_BLEND
@@ -137,8 +137,8 @@ OnAirspaceListEnter(unsigned ItemIndex)
 #endif
 #endif
   } else {
-    renderer.display[ItemIndex] = !renderer.display[ItemIndex];
-    if (!renderer.display[ItemIndex])
+    renderer.classes[ItemIndex].display = !renderer.classes[ItemIndex].display;
+    if (!renderer.classes[ItemIndex].display)
       computer.warnings.class_warnings[ItemIndex] =
         !computer.warnings.class_warnings[ItemIndex];
 

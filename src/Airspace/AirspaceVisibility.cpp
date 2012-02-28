@@ -30,7 +30,7 @@ Copyright_License {
 bool
 AirspaceVisiblePredicate::IsTypeVisible(const AbstractAirspace& airspace) const
 {
-  return renderer_settings.display[airspace.GetType()];
+  return renderer_settings.classes[airspace.GetType()].display;
 }
 
 bool

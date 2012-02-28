@@ -163,14 +163,15 @@ public:
 
     // Select pens and brushes
 #ifndef USE_GDI
-    Color color = settings.colours[type];
+    Color color = settings.classes[type].color;
 #ifdef ENABLE_OPENGL
     color = color.WithAlpha(48);
 #endif
     Brush brush(color);
 #else
-    const Brush &brush = airspace_look.brushes[settings.brushes[type]];
-    canvas.SetTextColor(LightColor(airspace_look.preset_colors[settings.colours[type]]));
+    const Brush &brush = airspace_look.brushes[settings.classes[type].brush];
+    canvas.SetTextColor(LightColor(
+        airspace_look.preset_colors[settings.classes[type].color]));
 #endif
 
     PixelRect rcd;

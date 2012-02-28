@@ -47,7 +47,7 @@ void
 OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
-    Color color = settings.colours[AATASK];
+    Color color = settings.classes[AATASK].color;
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -59,7 +59,7 @@ OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
     // this color is used as the black bit
     canvas.SetTextColor(color);
     // get brush, can be solid or a 1bpp bitmap
-    canvas.Select(airspace_look.brushes[settings.brushes[AATASK]]);
+    canvas.Select(airspace_look.brushes[settings.classes[AATASK].brush]);
 #else /* !GDI */
     canvas.Select(Brush(color));
 #endif /* !GDI */

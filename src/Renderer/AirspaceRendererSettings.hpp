@@ -41,6 +41,17 @@ enum class AirspaceDisplayMode: uint8_t
   ALLOFF
 };
 
+struct AirspaceClassRendererSettings
+{
+  /** Class-specific display flags */
+  bool display;
+
+  Color color;
+
+#ifdef HAVE_HATCHED_BRUSH
+  uint8_t brush;
+#endif
+};
 
 /**
  * Settings for airspace options
@@ -56,9 +67,6 @@ struct AirspaceRendererSettings {
 
   /**< Altitude (m) above which airspace is not drawn for clip mode */
   unsigned clip_altitude;
-
-  /** Class-specific display flags */
-  bool display[AIRSPACECLASSCOUNT];
 
 #ifndef ENABLE_OPENGL
   /**
@@ -83,11 +91,7 @@ struct AirspaceRendererSettings {
     PADDING,
   } fill_mode;
 
-#ifdef HAVE_HATCHED_BRUSH
-  uint8_t brushes[AIRSPACECLASSCOUNT];
-#endif
-
-  Color colours[AIRSPACECLASSCOUNT];
+  AirspaceClassRendererSettings classes[AIRSPACECLASSCOUNT];
 
   void SetDefaults();
 };

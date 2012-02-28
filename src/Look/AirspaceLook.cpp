@@ -53,7 +53,7 @@ void
 AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 {
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    pens[i].Set(Layout::ScalePenWidth(2), settings.colours[i]);
+    pens[i].Set(Layout::ScalePenWidth(2), settings.classes[i].color);
 
   // airspace brushes and colors
 #ifdef HAVE_HATCHED_BRUSH
@@ -75,7 +75,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 #endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
     for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i)
-      solid_brushes[i].Set(settings.colours[i]);
+      solid_brushes[i].Set(settings.classes[i].color);
 #endif
 
   thick_pen.Set(Layout::ScalePenWidth(10), COLOR_BLACK);

@@ -33,39 +33,44 @@ AirspaceRendererSettings::SetDefaults()
   altitude_mode = AirspaceDisplayMode::ALLON;
   clip_altitude = 1000;
 
-  std::fill(display, display + AIRSPACECLASSCOUNT, true);
-  display[CLASSG] = false;
-
 #ifndef ENABLE_OPENGL
   transparency = false;
 #endif
 
   fill_mode = FillMode::DEFAULT;
 
+  AirspaceClassRendererSettings default_settings = {
+    true,
+    COLOR_RED,
 #ifdef HAVE_HATCHED_BRUSH
-  std::fill(brushes, brushes + AIRSPACECLASSCOUNT, 0);
+    0,
+#endif
+  };
 
-  brushes[OTHER] = 2;
-  brushes[CLASSA] = 3;
-  brushes[CLASSB] = 3;
-  brushes[CLASSC] = 3;
-  brushes[CLASSD] = 3;
-  brushes[CTR] = 3;
-  brushes[WAVE] = 2;
-  brushes[AATASK] = 3;
-  brushes[CLASSE] = 3;
-  brushes[CLASSF] = 3;
+  std::fill(classes, classes + AIRSPACECLASSCOUNT, default_settings);
+
+  classes[CLASSG].display = false;
+
+#ifdef HAVE_HATCHED_BRUSH
+  classes[OTHER].brush = 2;
+  classes[CLASSA].brush = 3;
+  classes[CLASSB].brush = 3;
+  classes[CLASSC].brush = 3;
+  classes[CLASSD].brush = 3;
+  classes[CTR].brush = 3;
+  classes[WAVE].brush = 2;
+  classes[AATASK].brush = 3;
+  classes[CLASSE].brush = 3;
+  classes[CLASSF].brush = 3;
 #endif
 
-  std::fill(colours, colours + AIRSPACECLASSCOUNT, COLOR_RED);
-
-  colours[OTHER] = COLOR_CYAN;
-  colours[DANGER] = DarkColor(COLOR_MAGENTA);
-  colours[CLASSC] = DarkColor(COLOR_MAGENTA);
-  colours[CLASSD] = COLOR_BLUE;
-  colours[CTR] = DarkColor(COLOR_MAGENTA);
-  colours[WAVE] = DarkColor(COLOR_YELLOW);
-  colours[AATASK] = COLOR_YELLOW;
-  colours[CLASSE] = DarkColor(COLOR_GREEN);
-  colours[CLASSF] = DarkColor(COLOR_GREEN);
+  classes[OTHER].color = COLOR_CYAN;
+  classes[DANGER].color = DarkColor(COLOR_MAGENTA);
+  classes[CLASSC].color = DarkColor(COLOR_MAGENTA);
+  classes[CLASSD].color = COLOR_BLUE;
+  classes[CTR].color = DarkColor(COLOR_MAGENTA);
+  classes[WAVE].color = DarkColor(COLOR_YELLOW);
+  classes[AATASK].color = COLOR_YELLOW;
+  classes[CLASSE].color = DarkColor(COLOR_GREEN);
+  classes[CLASSF].color = DarkColor(COLOR_GREEN);
 }
