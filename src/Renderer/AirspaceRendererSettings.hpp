@@ -65,7 +65,7 @@ struct AirspaceRendererSettings {
   /** Mode controlling how airspaces are filtered for display */
   AirspaceDisplayMode altitude_mode;
 
-  /**< Altitude (m) above which airspace is not drawn for clip mode */
+  /** Altitude (m) above which airspace is not drawn for clip mode */
   unsigned clip_altitude;
 
 #ifndef ENABLE_OPENGL
