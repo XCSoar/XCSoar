@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "AndroidPort.hpp"
 #include "Android/PortBridge.hpp"
-#include "OS/Sleep.h"
 
 #include <assert.h>
 

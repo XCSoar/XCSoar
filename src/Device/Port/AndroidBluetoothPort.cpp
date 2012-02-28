@@ -24,7 +24,6 @@ Copyright_License {
 #include "AndroidBluetoothPort.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Java/Global.hpp"
-#include "OS/Sleep.h"
 
 #include <assert.h>
 
