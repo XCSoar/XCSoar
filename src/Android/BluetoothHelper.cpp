@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Android/BluetoothHelper.hpp"
+#include "PortBridge.hpp"
 #include "Java/String.hpp"
 #include "Java/Class.hpp"
 
@@ -46,7 +47,7 @@ BluetoothHelper::list(JNIEnv *env)
   return (jobjectArray)env->CallStaticObjectMethod(cls, cid);
 }
 
-BluetoothHelper *
+PortBridge *
 BluetoothHelper::connect(JNIEnv *env, const char *address)
 {
   jclass _cls = env->FindClass("org/xcsoar/BluetoothHelper");
@@ -69,7 +70,7 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
   if (obj == NULL)
     return NULL;
 
-  BluetoothHelper *helper = new BluetoothHelper(env, cls, obj);
+  PortBridge *helper = new PortBridge(env, obj);
   env->DeleteLocalRef(obj);
 
   return helper;

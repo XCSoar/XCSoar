@@ -21,24 +21,42 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
-#define XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
+#ifndef XCSOAR_ANDROID_PORT_BRIDGE_HPP
+#define XCSOAR_ANDROID_PORT_BRIDGE_HPP
 
-#include "Compiler.h"
+#include "Java/Object.hpp"
 
-#include <jni.h>
+class PortBridge : protected Java::Object {
+  jmethodID setReadTimeout_mid;
+  jmethodID read_mid, write_mid, flush_mid;
+  jmethodID waitRead_method;
 
-class PortBridge;
+public:
+  PortBridge(JNIEnv *env, jobject obj);
 
-namespace BluetoothHelper {
-  /**
-   * Returns a list of all bonded devices.
-   */
-  gcc_malloc
-  jobjectArray list(JNIEnv *env);
+  ~PortBridge() {
+    CallVoid("close");
+  }
 
-  gcc_malloc
-  PortBridge *connect(JNIEnv *env, const char *address);
+  void setReadTimeout(JNIEnv *env, int timeout) {
+    env->CallVoidMethod(Get(), setReadTimeout_mid, timeout);
+  }
+
+  int read(JNIEnv *env) {
+    return env->CallIntMethod(Get(), read_mid);
+  }
+
+  int waitRead(JNIEnv *env, unsigned timeout_ms) {
+    return env->CallIntMethod(Get(), waitRead_method, timeout_ms);
+  }
+
+  bool write(JNIEnv *env, int ch) {
+    return env->CallBooleanMethod(Get(), write_mid, ch);
+  }
+
+  void flush(JNIEnv *env) {
+    env->CallVoidMethod(Get(), flush_mid);
+  }
 };
 
 #endif

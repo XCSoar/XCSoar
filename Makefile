@@ -739,6 +739,7 @@ ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Java/Global.cpp \
 	$(SRC)/Java/String.cpp \
+	$(SRC)/Device/Port/AndroidPort.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
 	$(SRC)/Android/Environment.cpp \
 	$(SRC)/Android/InternalSensors.cpp \
@@ -746,6 +747,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/TextUtil.cpp \
 	$(SRC)/Android/Timer.cpp \
 	$(SRC)/Android/EventBridge.cpp \
+	$(SRC)/Android/PortBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \
 	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/Vibrator.cpp \

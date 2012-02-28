@@ -24,57 +24,29 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 #define XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 
+#include "AndroidPort.hpp"
 #include "Util/StaticString.hpp"
-#include "Thread/StoppableThread.hpp"
-#include "Thread/Trigger.hpp"
-#include "Port.hpp"
-#include "Java/Object.hpp"
-
-class BluetoothHelper;
 
 /**
  * A #Port implementation which transmits data over a Bluetooth RFCOMM
  * socket.
  */
-class AndroidBluetoothPort : public Port, protected StoppableThread
+class AndroidBluetoothPort : public AndroidPort
 {
   /** the peer's Bluetooth address */
   StaticString<32> address;
 
-  BluetoothHelper *helper;
-
 public:
   AndroidBluetoothPort(const TCHAR *address, Handler &_handler);
-  virtual ~AndroidBluetoothPort();
-
-  virtual size_t Write(const void *data, size_t length);
-  virtual void Flush();
 
   /**
    * Opens the serial port
    * @return True on success, False on failure
    */
   bool Open();
-  /**
-   * Closes the serial port
-   * @return True on success, False on failure
-   */
-  bool Close();
 
-  virtual bool SetRxTimeout(unsigned Timeout);
   virtual unsigned GetBaudrate() const;
   virtual unsigned SetBaudrate(unsigned BaudRate);
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-
-  virtual int Read(void *Buffer, size_t Size);
-  virtual WaitResult WaitRead(unsigned timeout_ms);
-
-protected:
-  /**
-   * Entry point for the receive thread
-   */
-  virtual void Run();
 };
 
 #endif

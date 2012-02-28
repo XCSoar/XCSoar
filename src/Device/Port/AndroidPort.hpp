@@ -21,24 +21,45 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
-#define XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
+#ifndef XCSOAR_DEVICE_ANDROID_PORT_HPP
+#define XCSOAR_DEVICE_ANDROID_PORT_HPP
 
-#include "Compiler.h"
-
-#include <jni.h>
+#include "Port.hpp"
+#include "Thread/StoppableThread.hpp"
 
 class PortBridge;
 
-namespace BluetoothHelper {
-  /**
-   * Returns a list of all bonded devices.
-   */
-  gcc_malloc
-  jobjectArray list(JNIEnv *env);
+/**
+ * A #Port implementation which transmits data over a Bluetooth RFCOMM
+ * socket.
+ */
+class AndroidPort : public Port, private StoppableThread
+{
+  PortBridge *bridge;
 
-  gcc_malloc
-  PortBridge *connect(JNIEnv *env, const char *address);
+protected:
+  AndroidPort(Handler &_handler);
+  virtual ~AndroidPort();
+
+  void SetBridge(PortBridge *bridge);
+
+public:
+  bool Close();
+
+  /* virtual methods from class Port */
+  virtual bool SetRxTimeout(unsigned Timeout);
+  virtual void Flush();
+  virtual size_t Write(const void *data, size_t length);
+  virtual int Read(void *Buffer, size_t Size);
+  virtual WaitResult WaitRead(unsigned timeout_ms);
+  virtual bool StopRxThread();
+  virtual bool StartRxThread();
+
+protected:
+  /**
+   * Entry point for the receive thread
+   */
+  virtual void Run();
 };
 
 #endif

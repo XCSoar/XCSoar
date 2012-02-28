@@ -23,129 +23,25 @@ Copyright_License {
 
 #include "AndroidBluetoothPort.hpp"
 #include "Android/BluetoothHelper.hpp"
+#include "Java/Global.hpp"
 #include "OS/Sleep.h"
 
 #include <assert.h>
 
 AndroidBluetoothPort::AndroidBluetoothPort(const TCHAR *_address,
                                            Handler &_handler)
-  :Port(_handler), address(_address), helper(NULL)
+  :AndroidPort(_handler), address(_address)
 {
-}
-
-AndroidBluetoothPort::~AndroidBluetoothPort()
-{
-  Close();
 }
 
 bool
 AndroidBluetoothPort::Open()
 {
-  helper = BluetoothHelper::connect(Java::GetEnv(), address);
-  if (helper == NULL)
+  PortBridge *bridge = BluetoothHelper::connect(Java::GetEnv(), address);
+  if (bridge == NULL)
     return false;
 
-  return true;
-}
-
-void
-AndroidBluetoothPort::Flush()
-{
-  helper->flush(Java::GetEnv());
-}
-
-void
-AndroidBluetoothPort::Run()
-{
-  assert(helper != NULL);
-
-  SetRxTimeout(500);
-
-  JNIEnv *const env = Java::GetEnv();
-
-  while (!CheckStopped()) {
-    int ch = helper->read(env);
-    if (ch >= 0) {
-      char ch2 = ch;
-      handler.DataReceived(&ch2, sizeof(ch2));
-    }
-  }
-}
-
-bool
-AndroidBluetoothPort::Close()
-{
-  if (helper == NULL)
-    return true;
-
-  StopRxThread();
-
-  delete helper;
-  helper = NULL;
-  return true;
-}
-
-size_t
-AndroidBluetoothPort::Write(const void *data, size_t length)
-{
-  if (helper == NULL)
-    return 0;
-
-  JNIEnv *env = Java::GetEnv();
-
-  size_t nbytes = 0;
-  const uint8_t *bytes = (const uint8_t *)data;
-  for (size_t i = 0; i < length; ++i) {
-    if (!helper->write(env, bytes[i]))
-      break;
-    ++nbytes;
-  }
-
-  return nbytes;
-}
-
-bool
-AndroidBluetoothPort::StopRxThread()
-{
-  // Make sure the thread isn't terminating itself
-  assert(!Thread::IsInside());
-
-  if (helper == NULL)
-    return false;
-
-  // If the thread is not running, cancel the rest of the function
-  if (!Thread::IsDefined())
-    return true;
-
-  BeginStop();
-
-  Thread::Join();
-
-  return true;
-}
-
-bool
-AndroidBluetoothPort::StartRxThread()
-{
-  // Make sure the thread isn't starting itself
-  assert(!Thread::IsInside());
-
-  // Make sure the port was opened correctly
-  if (helper == NULL)
-    return false;
-
-  // Start the receive thread
-  StoppableThread::Start();
-  return true;
-}
-
-bool
-AndroidBluetoothPort::SetRxTimeout(unsigned Timeout)
-{
-  if (helper == NULL)
-    return false;
-
-  helper->setReadTimeout(Java::GetEnv(), Timeout);
+  SetBridge(bridge);
   return true;
 }
 
@@ -159,22 +55,4 @@ unsigned
 AndroidBluetoothPort::SetBaudrate(unsigned BaudRate)
 {
   return BaudRate;
-}
-
-int
-AndroidBluetoothPort::Read(void *Buffer, size_t Size)
-{
-  JNIEnv *env = Java::GetEnv();
-  int ch = helper->read(env);
-  if (ch < 0)
-    return -1;
-
-  *(uint8_t *)Buffer = ch;
-  return 1;
-}
-
-Port::WaitResult
-AndroidBluetoothPort::WaitRead(unsigned timeout_ms)
-{
-  return (Port::WaitResult)helper->waitRead(Java::GetEnv(), timeout_ms);
 }

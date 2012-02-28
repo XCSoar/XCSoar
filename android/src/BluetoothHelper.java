@@ -37,7 +37,7 @@ import android.bluetooth.BluetoothSocket;
  * A utility class which wraps the Java API into an easier API for the
  * C++ code.
  */
-final class BluetoothHelper {
+final class BluetoothHelper extends AbstractAndroidPort {
   private static final String TAG = "XCSoar";
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -61,20 +61,15 @@ final class BluetoothHelper {
   }
 
   BluetoothSocket socket;
-  InputThread input;
-  OutputThread output;
 
   BluetoothHelper(BluetoothSocket _socket) throws IOException {
     socket = _socket;
 
-    input = new InputThread(socket.getInputStream());
-    output = new OutputThread(socket.getOutputStream());
-    output.setTimeout(5000);
+    super.set(socket.getInputStream(), socket.getOutputStream());
   }
 
   public void close() {
-    input.close();
-    output.close();
+    super.close();
 
     try {
       socket.close();
@@ -82,26 +77,6 @@ final class BluetoothHelper {
       /* ignore... what else should we do if closing the socket
          fails? */
     }
-  }
-
-  public void setReadTimeout(int timeout) {
-    input.setTimeout(timeout);
-  }
-
-  public int read() {
-    return input.read();
-  }
-
-  public int waitRead(int timeout) {
-    return input.waitRead(timeout);
-  }
-
-  public boolean write(byte ch) {
-    return output.write(ch);
-  }
-
-  public void flush() {
-    input.flush();
   }
 
   public static String[] list() {

@@ -21,24 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
-#define XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
+package org.xcsoar;
 
-#include "Compiler.h"
+/**
+ * The Java interface of the C++ AndroidPort class.
+ */
+interface AndroidPort {
+  void close();
+  void flush();
 
-#include <jni.h>
+  void setReadTimeout(int timeout);
+  int waitRead(int timeout);
+  int read();
 
-class PortBridge;
-
-namespace BluetoothHelper {
-  /**
-   * Returns a list of all bonded devices.
-   */
-  gcc_malloc
-  jobjectArray list(JNIEnv *env);
-
-  gcc_malloc
-  PortBridge *connect(JNIEnv *env, const char *address);
-};
-
-#endif
+  boolean write(byte ch);
+}

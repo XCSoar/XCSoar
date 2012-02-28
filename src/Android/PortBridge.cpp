@@ -21,24 +21,15 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
-#define XCSOAR_ANDROID_BLUETOOTH_HELPER_HPP
+#include "Android/PortBridge.hpp"
+#include "Java/Class.hpp"
 
-#include "Compiler.h"
-
-#include <jni.h>
-
-class PortBridge;
-
-namespace BluetoothHelper {
-  /**
-   * Returns a list of all bonded devices.
-   */
-  gcc_malloc
-  jobjectArray list(JNIEnv *env);
-
-  gcc_malloc
-  PortBridge *connect(JNIEnv *env, const char *address);
-};
-
-#endif
+PortBridge::PortBridge(JNIEnv *env, jobject obj)
+  :Java::Object(env, obj) {
+  Java::Class cls(env, env->GetObjectClass(obj));
+  setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(I)V");
+  read_mid = env->GetMethodID(cls, "read", "()I");
+  write_mid = env->GetMethodID(cls, "write", "(B)Z");
+  flush_mid = env->GetMethodID(cls, "flush", "()V");
+  waitRead_method = env->GetMethodID(cls, "waitRead", "(I)I");
+}
