@@ -126,7 +126,7 @@ final class IOIOHelper {
   class XCSUart {
     private IOIO ioio_;
     private Uart uart;
-    private InputStream input;
+    private InputThread input;
     private OutputThread output;
     private int inputTimeout = 50;
     private final int inPin;
@@ -187,7 +187,7 @@ final class IOIOHelper {
         Log.e("IOIOHelper", "IOIOJopenUart() Unexpected exception caught", e);
         return -1;
       }
-      input = uart.getInputStream();
+      input = new InputThread(uart.getInputStream());
       output = new OutputThread(uart.getOutputStream());
       output.setTimeout(5000);
       isAvailable = false;
@@ -199,9 +199,10 @@ final class IOIOHelper {
      * sets isAvailable to true to indicate it is available for reopening
      */
     private void closeUart() {
+      input.close();
+      output.close();
+
       try {
-        input.close();
-        output.close();
         uart.close();
       } catch (Exception e) {
         Log.e("IOIOHelper", "IOIOJclose() Unexpected exception caught", e);
@@ -221,7 +222,7 @@ final class IOIOHelper {
     }
 
     public void setReadTimeout(int timeout) {
-      inputTimeout = timeout;
+      input.setTimeout(timeout);
     }
 
     /**
@@ -231,37 +232,11 @@ final class IOIOHelper {
      * the character read if data is available.
      */
     synchronized public int read() {
-      try {
-        if (input.available() <= 0) {
-          wait(inputTimeout);
-          if (input.available() <= 0)
-            return -1;
-        }
-        	
-        int r = input.read() & 0xFF;
-        return r;
-      } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJRead() Unexpected exception caught", e);
-        return -1;
-      }
+      return input.read();
     }
 
     synchronized public int waitRead(int timeout_ms) {
-      try {
-        final int step = 10;
-        int timeleft = timeout_ms;
-        while (timeleft > 0 && input.available() <= 0) {
-          wait(step);
-          timeleft -= step;
-        }
-        if (input.available() <= 0)
-          return 1; /* WaitResult::TIMEOUT */
-
-        return 0; /* WaitResult::READY */
-      } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJRead() Unexpected exception caught", e);
-        return 2; /* WaitResult::FAILED */
-      }
+      return input.waitRead(timeout_ms);
     }
 
     public void write(byte ch) {
@@ -276,16 +251,7 @@ final class IOIOHelper {
     }
 
     public void flush() {
-      if (uart == null)
-        return;
-
-      try {
-        final int toskip = input.available();
-        if (toskip > 0)
-          input.skip(toskip);
-      } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJflush() Unexpected exception caught", e);
-      }
+      input.flush();
     }
   }
 
