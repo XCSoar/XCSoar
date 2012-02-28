@@ -23,24 +23,14 @@
 
 package org.xcsoar;
 
-import ioio.lib.api.DigitalOutput;
+import java.util.Timer;
+import java.util.TimerTask;
+import android.util.Log;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.IOIOFactory;
 import ioio.lib.api.Uart;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.api.exception.IncompatibilityException;
-
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.UUID;
-import java.util.Set;
-import java.io.InterruptedIOException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import android.util.Log;
-
-
 
 /**
  * A utility class which wraps the Java API into an easier API for the
