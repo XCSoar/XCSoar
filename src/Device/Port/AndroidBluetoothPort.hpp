@@ -44,9 +44,6 @@ public:
    * @return True on success, False on failure
    */
   bool Open();
-
-  virtual unsigned GetBaudrate() const;
-  virtual unsigned SetBaudrate(unsigned BaudRate);
 };
 
 #endif

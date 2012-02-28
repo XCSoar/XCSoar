@@ -27,6 +27,7 @@ Copyright_License {
 #include "Java/Object.hpp"
 
 class PortBridge : protected Java::Object {
+  jmethodID getBaudRate_method, setBaudRate_method;
   jmethodID setReadTimeout_mid;
   jmethodID read_mid, write_mid, flush_mid;
   jmethodID waitRead_method;
@@ -36,6 +37,14 @@ public:
 
   ~PortBridge() {
     CallVoid("close");
+  }
+
+  int getBaudRate(JNIEnv *env) const {
+    return env->CallIntMethod(Get(), getBaudRate_method);
+  }
+
+  int setBaudRate(JNIEnv *env, int baud_rate) {
+    return env->CallIntMethod(Get(), setBaudRate_method, baud_rate);
   }
 
   void setReadTimeout(JNIEnv *env, int timeout) {

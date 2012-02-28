@@ -30,6 +30,9 @@ interface AndroidPort {
   void close();
   void flush();
 
+  int getBaudRate();
+  int setBaudRate(int baud);
+
   void setReadTimeout(int timeout);
   int waitRead(int timeout);
   int read();

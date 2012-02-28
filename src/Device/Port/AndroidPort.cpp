@@ -83,6 +83,22 @@ AndroidPort::Close()
   return true;
 }
 
+unsigned
+AndroidPort::GetBaudrate() const
+{
+  return bridge != NULL
+    ? bridge->getBaudRate(Java::GetEnv())
+    : 0;
+}
+
+unsigned
+AndroidPort::SetBaudrate(unsigned baud_rate)
+{
+  return bridge != NULL
+    ? bridge->setBaudRate(Java::GetEnv(), baud_rate)
+    : 0;
+}
+
 size_t
 AndroidPort::Write(const void *data, size_t length)
 {

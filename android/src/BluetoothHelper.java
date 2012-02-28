@@ -80,6 +80,14 @@ final class BluetoothHelper extends AbstractAndroidPort {
     }
   }
 
+  public int getBaudRate() {
+    return 19200;
+  }
+
+  public int setBaudRate(int baudRate) {
+    return baudRate;
+  }
+
   public static String[] list() {
     if (adapter == null)
       return null;

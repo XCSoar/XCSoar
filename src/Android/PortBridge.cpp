@@ -27,6 +27,8 @@ Copyright_License {
 PortBridge::PortBridge(JNIEnv *env, jobject obj)
   :Java::Object(env, obj) {
   Java::Class cls(env, env->GetObjectClass(obj));
+  getBaudRate_method = env->GetMethodID(cls, "getBaudRate", "()I");
+  setBaudRate_method = env->GetMethodID(cls, "setBaudRate", "(I)I");
   setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(I)V");
   read_mid = env->GetMethodID(cls, "read", "()I");
   write_mid = env->GetMethodID(cls, "write", "(B)Z");

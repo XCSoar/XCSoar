@@ -44,15 +44,3 @@ AndroidBluetoothPort::Open()
   SetBridge(bridge);
   return true;
 }
-
-unsigned
-AndroidBluetoothPort::GetBaudrate() const
-{
-  return 19200;
-}
-
-unsigned
-AndroidBluetoothPort::SetBaudrate(unsigned BaudRate)
-{
-  return BaudRate;
-}
