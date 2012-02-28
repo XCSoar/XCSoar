@@ -120,7 +120,6 @@ final class IOIOHelper {
    *
    */
   class XCSUart {
-    private IOIO ioio_;
     private Uart uart;
     private InputThread input;
     private OutputThread output;
@@ -164,13 +163,12 @@ final class IOIOHelper {
      * available to open.
      * @return: ID of uart if successful or -1 if fail
      */
-    public int openUart(IOIO ioio, int _baud) {
+    public int openUart(int _baud) {
       if (!isAvailable) {
         Log.e("IOIOHelper", "IOIOJopenUart() is not available: " + ID);
         return -1;
       }
 
-      ioio_ = ioio;
       baudrate = _baud;
       try {
         uart = ioio_.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
@@ -208,7 +206,7 @@ final class IOIOHelper {
 
     public int setBaudRate(int baud) {
       closeUart();
-      openUart(ioio_, baud);
+      openUart(baud);
       return baud;
     }
 
@@ -256,7 +254,7 @@ final class IOIOHelper {
    */
   public int openUart(int ID, int baud) {
     if (xuarts_[ID].isAvailable())
-      return xuarts_[ID].openUart(ioio_, baud);
+      return xuarts_[ID].openUart(baud);
     return -1;
   }
 
