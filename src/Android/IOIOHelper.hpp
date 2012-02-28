@@ -27,14 +27,12 @@ Copyright_License {
 #include "Java/Object.hpp"
 #include "Java/Ref.hpp"
 
+class PortBridge;
+
 class IOIOHelper : protected Java::Object {
 private:
   jmethodID open_mid;
-  jmethodID openUart_mid, closeUart_mid, resetInputThread_mid;
-  jmethodID setReadTimeout_mid;
-  jmethodID setBaudRate_mid, getBaudRate_mid;
-  jmethodID read_mid, write_mid, flush_mid;
-  jmethodID waitRead_method;
+  jmethodID openUart_mid;
 
 public:
   IOIOHelper(JNIEnv *env);
@@ -72,47 +70,7 @@ public:
    * @return True if Uart port on IOIO board is successfully
    * opened.  Else false.
    */
-  int openUart(JNIEnv *env, unsigned ID, unsigned baud) {
-    return env->CallIntMethod(Get(), openUart_mid, ID, (int)baud);
-  }
-
-  /**
-   * Closes a single Uart on the IOIO board
-   * @param env
-   * @param ID ID of Uart (0, 1, 2, 3)
-   */
-  void closeUart(JNIEnv *env, unsigned ID) {
-    env->CallVoidMethod(Get(), closeUart_mid, ID);
-  }
-
-  unsigned setBaudRate(JNIEnv *env, unsigned ID, unsigned baud) {
-    return env->CallIntMethod(Get(), setBaudRate_mid, ID, (int)baud);
-  }
-
-  unsigned getBaudRate(JNIEnv *env, unsigned ID) {
-    return (unsigned)(env->CallIntMethod(Get(), getBaudRate_mid, ID));
-  }
-
-  void setReadTimeout(JNIEnv *env, unsigned ID, int timeout) {
-    env->CallVoidMethod(Get(), setReadTimeout_mid, ID, timeout);
-  }
-
-  int read(JNIEnv *env, unsigned ID) {
-    return env->CallIntMethod(Get(), read_mid, ID);
-  }
-
-  int waitRead(JNIEnv *env, unsigned ID, unsigned timeout_ms) {
-    return env->CallIntMethod(Get(), waitRead_method, ID, timeout_ms);
-  }
-
-  bool write(JNIEnv *env, unsigned ID, int ch) {
-    env->CallVoidMethod(Get(), write_mid, ID, ch);
-    return true;
-  }
-
-  void flush(JNIEnv *env, unsigned ID) {
-    env->CallVoidMethod(Get(), flush_mid, ID);
-  }
+  PortBridge *openUart(JNIEnv *env, unsigned ID, unsigned baud);
 };
 
 #endif

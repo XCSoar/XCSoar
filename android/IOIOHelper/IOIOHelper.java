@@ -151,12 +151,12 @@ final class IOIOHelper {
      * opens the Uart
      * sets isAvailable to false to indicate that it is no longer 
      * available to open.
-     * @return: ID of uart if successful or -1 if fail
+     * @return true on success
      */
-    public int openUart(int _baud) {
+    public boolean openUart(int _baud) {
       if (!isAvailable) {
         Log.e("IOIOHelper", "IOIOJopenUart() is not available: " + ID);
-        return -1;
+        return false;
       }
 
       baudrate = _baud;
@@ -165,22 +165,22 @@ final class IOIOHelper {
                               Uart.StopBits.ONE);
       } catch (ConnectionLostException e) {
         Log.w("IOIOHelper", "IOIOJopenUart() Connection Lost.  Baud: " + _baud, e);
-        return -1;
+        return false;
       } catch (Exception e) {
         Log.e("IOIOHelper", "IOIOJopenUart() Unexpected exception caught", e);
-        return -1;
+        return false;
       }
 
       super.set(uart.getInputStream(), uart.getOutputStream());
       isAvailable = false;
-      return ID;
+      return true;
     }
 
     /**
      * closes the Uart on the ioio
      * sets isAvailable to true to indicate it is available for reopening
      */
-    private void closeUart() {
+    public void close() {
       super.close();
 
       try {
@@ -193,7 +193,7 @@ final class IOIOHelper {
     }
 
     public int setBaudRate(int baud) {
-      closeUart();
+      close();
       openUart(baud);
       return baud;
     }
@@ -207,72 +207,10 @@ final class IOIOHelper {
    * @ID: ID of UArt to open (0, 1, 2, 3)
    * @return: ID of opened UArt or -1 if fail
    */
-  public int openUart(int ID, int baud) {
-    return xuarts_[ID].openUart(baud);
-  }
-
-  /**
-   * wrapper function that closes 
-   * Uart specified by ID
-   */
-  public void closeUart(int ID) {
-    if (!xuarts_[ID].isAvailable())
-      xuarts_[ID].closeUart();
-  }
-
-  /**
-   * wrapper function that sets baud rate
-   * of Uart specified by ID
-   * @return: baud rate
-   */
-  public int setBaudRate(int ID, int baud) {
-    return xuarts_[ID].setBaudRate(baud);
-  }
-
-  /**
-   * wrapper function that gets baud rate
-   * of Uart specified by ID
-   * @return: baud rate
-   */
-  public int getBaudRate(int ID) {
-    return xuarts_[ID].getBaudRate();
-  }
-
-  /**
-   * wrapper function that sets the read
-   * timeout of Uart specified by ID
-   */
-  public void setReadTimeout(int ID, int timeout) {
-    xuarts_[ID].setReadTimeout(timeout);
-  }
-
-  /**
-   * wrapper function that reads one byte from
-   * Uart specified by ID.  Waits up to 100ms
-   * if no data is available.
-   * @return: -1 if no data available else char
-   */
-  public int read(int ID) {
-    return xuarts_[ID].read();
-  }
-
-  public int waitRead(int id, int timeout) {
-    return xuarts_[id].waitRead(timeout);
-  }
-
-  /**
-   * wrapper function that writes one byte
-   * to Uart specified by ID
-   */
-  public void write(int ID, byte ch) {
-    xuarts_[ID].write(ch);
-  }
-
-  /**
-   * wrapper function that flushes
-   * input stream of Uart specified by ID
-   */
-  public void flush(int ID) {
-    xuarts_[ID].flush();
+  public AndroidPort openUart(int ID, int baud) {
+    XCSUart uart = xuarts_[ID];
+    return uart.openUart(baud)
+      ? uart
+      : null;
   }
 }

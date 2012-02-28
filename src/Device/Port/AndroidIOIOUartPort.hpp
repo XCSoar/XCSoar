@@ -28,41 +28,24 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Thread/Trigger.hpp"
-#include "Port.hpp"
+#include "AndroidPort.hpp"
 #include "Java/Object.hpp"
 
 /**
  * A #Port implementation which transmits data over a IOIOUart RFCOMM
  * socket.
  */
-class AndroidIOIOUartPort : public Port, protected StoppableThread
+class AndroidIOIOUartPort : public AndroidPort
 {
 public:
   AndroidIOIOUartPort(unsigned UartID, unsigned BaudRate, Handler &_handler);
   virtual ~AndroidIOIOUartPort();
-
-  virtual size_t Write(const void *data, size_t length);
-  virtual void Flush();
 
   /**
    * Opens the serial port
    * @return True on success, False on failure
    */
   bool Open();
-  /**
-   * Closes the serial port
-   * @return True on success, False on failure
-   */
-  bool Close();
-
-  virtual bool SetRxTimeout(unsigned Timeout);
-  virtual unsigned GetBaudrate() const;
-  virtual unsigned SetBaudrate(unsigned BaudRate);
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-
-  virtual int Read(void *Buffer, size_t Size);
-  virtual WaitResult WaitRead(unsigned timeout_ms);
 
   static unsigned getNumberUarts() { return 4; }
 
@@ -82,11 +65,6 @@ public:
   }
 
 protected:
-  /**
-   * Entry point for the receive thread
-   */
-  virtual void Run();
-  IOIOHelper* helper;
   unsigned BaudRate;
   int UartID;
 };

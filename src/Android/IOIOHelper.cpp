@@ -22,7 +22,20 @@ Copyright_License {
 */
 
 #include "Android/IOIOHelper.hpp"
+#include "PortBridge.hpp"
 #include "Java/Class.hpp"
+
+PortBridge *
+IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
+{
+  jobject obj = env->CallObjectMethod(Get(), openUart_mid, ID, (int)baud);
+  if (obj == NULL)
+    return NULL;
+
+  PortBridge *bridge = new PortBridge(env, obj);
+  env->DeleteLocalRef(obj);
+  return bridge;
+}
 
 IOIOHelper::IOIOHelper(JNIEnv *env)
 {
@@ -42,13 +55,5 @@ IOIOHelper::IOIOHelper(JNIEnv *env)
   env->DeleteLocalRef(obj);
 
   open_mid = env->GetMethodID(cls, "open", "()Z");
-  openUart_mid = env->GetMethodID(cls, "openUart", "(II)I");
-  closeUart_mid = env->GetMethodID(cls, "closeUart", "(I)V");
-  setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(II)V");
-  setBaudRate_mid = env->GetMethodID(cls, "setBaudRate", "(II)I");
-  getBaudRate_mid = env->GetMethodID(cls, "getBaudRate", "(I)I");
-  read_mid = env->GetMethodID(cls, "read", "(I)I");
-  write_mid = env->GetMethodID(cls, "write", "(IB)V");
-  flush_mid = env->GetMethodID(cls, "flush", "(I)V");
-  waitRead_method = env->GetMethodID(cls, "waitRead", "(II)I");
+  openUart_mid = env->GetMethodID(cls, "openUart", "(II)Lorg/xcsoar/AndroidPort;");
 }
