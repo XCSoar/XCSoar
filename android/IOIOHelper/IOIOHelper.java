@@ -61,11 +61,7 @@ final class IOIOHelper {
     ioio_ = IOIOFactory.create();
     xuarts_ = new XCSUart [4];
     for (int i = 0; i < 4; i++)
-      try {
-        xuarts_[i] = new XCSUart(i);
-      } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJIOIOHelper() fail " + i, e);
-      }
+      xuarts_[i] = new XCSUart(i);
     return waitConnect();
   }
   
@@ -135,7 +131,7 @@ final class IOIOHelper {
     private boolean isAvailable;
     private int ID;
 
-    XCSUart(int ID_) throws Exception {
+    XCSUart(int ID_) {
       ID = ID_;
       isAvailable = true;
 
@@ -151,7 +147,7 @@ final class IOIOHelper {
         outPin = inPin - 1;
         break;
       default:
-        throw new Exception();
+        throw new IllegalArgumentException();
       }
     }
 
