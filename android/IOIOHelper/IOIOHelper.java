@@ -124,7 +124,6 @@ final class IOIOHelper {
     private Uart uart;
     private InputThread input;
     private OutputThread output;
-    private int inputTimeout = 50;
     private final int inPin;
     private final int outPin;
     private int baudrate = 0;
