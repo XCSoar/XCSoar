@@ -119,10 +119,8 @@ final class IOIOHelper {
    * ID = 3, pins TX=12 RX=13
    *
    */
-  class XCSUart {
+  class XCSUart extends AbstractAndroidPort {
     private Uart uart;
-    private InputThread input;
-    private OutputThread output;
     private final int inPin;
     private final int outPin;
     private int baudrate = 0;
@@ -180,9 +178,8 @@ final class IOIOHelper {
         Log.e("IOIOHelper", "IOIOJopenUart() Unexpected exception caught", e);
         return -1;
       }
-      input = new InputThread(uart.getInputStream());
-      output = new OutputThread(uart.getOutputStream());
-      output.setTimeout(5000);
+
+      super.set(uart.getInputStream(), uart.getOutputStream());
       isAvailable = false;
       return ID;
     }
@@ -192,8 +189,7 @@ final class IOIOHelper {
      * sets isAvailable to true to indicate it is available for reopening
      */
     private void closeUart() {
-      input.close();
-      output.close();
+      super.close();
 
       try {
         uart.close();
@@ -212,39 +208,6 @@ final class IOIOHelper {
 
     public int getBaudRate() {
       return baudrate;
-    }
-
-    public void setReadTimeout(int timeout) {
-      input.setTimeout(timeout);
-    }
-
-    /**
-     * reads one byte
-     * waits timeout ms if no data is available, then checks again for data
-     * returns -1 if no data is available or
-     * the character read if data is available.
-     */
-    synchronized public int read() {
-      return input.read();
-    }
-
-    synchronized public int waitRead(int timeout_ms) {
-      return input.waitRead(timeout_ms);
-    }
-
-    public void write(byte ch) {
-      if (uart == null)
-        return;
-
-      try {
-        output.write(ch);
-      } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJwrite() Unexpected exception caught", e);
-      }
-    }
-
-    public void flush() {
-      input.flush();
     }
   }
 
