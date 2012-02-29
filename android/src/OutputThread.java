@@ -111,10 +111,19 @@ class OutputThread extends Thread {
     } catch (IOException e) {
       if (os != null)
         Log.e(TAG, "Failed to write to " + name, e);
+
+      close();
+    } finally {
+      synchronized(this) {
+        notifyAll();
+      }
     }
   }
 
   public synchronized int write(byte[] data, int length) {
+    if (os == null)
+      return -1;
+
     if (tail >= BUFFER_SIZE) {
       if (head == 0) {
         // buffer is full
@@ -128,7 +137,7 @@ class OutputThread extends Thread {
           return -1;
         }
 
-        if (head == 0)
+        if (os == null || head == 0)
           // still full, timeout
           return -1;
       }

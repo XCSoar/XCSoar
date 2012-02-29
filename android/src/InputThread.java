@@ -119,10 +119,19 @@ class InputThread extends Thread {
     } catch (IOException e) {
       if (is != null)
         Log.e(TAG, "Failed to read from " + name, e);
+
+      close();
+    } finally {
+      synchronized(this) {
+        notifyAll();
+      }
     }
   }
 
   synchronized public int read(byte[] dest, int length) {
+    if (is == null)
+      return -1;
+
     if (head >= tail) {
       // buffer is empty
       if (timeout <= 0)
@@ -135,7 +144,7 @@ class InputThread extends Thread {
         return -1;
       }
 
-      if (head >= tail)
+      if (is == null || head >= tail)
         // still empty
         return -1;
     }
@@ -156,6 +165,9 @@ class InputThread extends Thread {
   }
 
   synchronized public int waitRead(int wait_timeout) {
+    if (is == null)
+      return 2; /* WaitResult::FAILED */
+
     if (head >= tail) {
       try {
         wait(wait_timeout);
@@ -164,7 +176,7 @@ class InputThread extends Thread {
       }
     }
 
-    return head >= tail
+    return is != null && head >= tail
       ? 1 /* WaitResult::TIMEOUT */
       : 0; /* WaitResult::READY */
   }
