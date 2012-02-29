@@ -42,7 +42,7 @@ MapLook::Initialise(const MapSettings &settings)
   above_terrain_brush.Set(above_terrain_bitmap);
 #endif
 
-  hTerrainWarning.Load(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
+  terrain_warning_icon.Load(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
 
   compass_brush.Set(Color(207, 207, 207));
   compass_pen.Set(Layout::ScalePenWidth(1), COLOR_GRAY);
@@ -70,14 +70,14 @@ MapLook::Initialise(const MapSettings &settings)
   map_scale_left_icon.Load(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
   map_scale_right_icon.Load(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
 
-  hLogger.Load(IDB_LOGGER, IDB_LOGGER_HD);
-  hLoggerOff.Load(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
+  logger_on_icon.Load(IDB_LOGGER, IDB_LOGGER_HD);
+  logger_off_icon.Load(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
 
-  hCruise.Load(IDB_CRUISE, IDB_CRUISE_HD, false);
-  hClimb.Load(IDB_CLIMB, IDB_CLIMB_HD, false);
-  hFinalGlide.Load(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
-  hAbort.Load(IDB_ABORT, IDB_ABORT_HD, false);
+  cruise_mode_icon.Load(IDB_CRUISE, IDB_CRUISE_HD, false);
+  climb_mode_icon.Load(IDB_CLIMB, IDB_CLIMB_HD, false);
+  final_glide_mode_icon.Load(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
+  abort_mode_icon.Load(IDB_ABORT, IDB_ABORT_HD, false);
 
-  hGPSStatus1.Load(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
-  hGPSStatus2.Load(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
+  waiting_for_fix_icon.Load(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
+  no_gps_icon.Load(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
 }

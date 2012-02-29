@@ -53,7 +53,7 @@ struct MapLook {
   Brush above_terrain_brush;
 #endif
 
-  MaskedIcon hTerrainWarning;
+  MaskedIcon terrain_warning_icon;
 
   Pen compass_pen;
   Brush compass_brush;
@@ -74,9 +74,9 @@ struct MapLook {
   MaskedIcon map_scale_left_icon;
   MaskedIcon map_scale_right_icon;
 
-  MaskedIcon hLogger, hLoggerOff;
-  MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
-  MaskedIcon hGPSStatus1, hGPSStatus2;
+  MaskedIcon logger_on_icon, logger_off_icon;
+  MaskedIcon cruise_mode_icon, climb_mode_icon, final_glide_mode_icon, abort_mode_icon;
+  MaskedIcon waiting_for_fix_icon, no_gps_icon;
 
   void Initialise(const MapSettings &settings);
 };

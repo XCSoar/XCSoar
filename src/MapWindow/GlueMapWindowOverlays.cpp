@@ -123,10 +123,10 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   const MaskedIcon *icon;
 
   if (!info.connected) {
-    icon = &look.hGPSStatus2;
+    icon = &look.no_gps_icon;
     txt = _("GPS not connected");
   } else if (!info.location_available) {
-    icon = &look.hGPSStatus1;
+    icon = &look.waiting_for_fix_icon;
     txt = _("GPS waiting for fix");
   } else
     // early exit
@@ -154,7 +154,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   // draw logger status
   if (logger != NULL && logger->IsLoggerActive()) {
     bool flip = (Basic().date_time_utc.second % 2) == 0;
-    const MaskedIcon &icon = flip ? look.hLogger : look.hLoggerOff;
+    const MaskedIcon &icon = flip ? look.logger_on_icon : look.logger_off_icon;
     offset = icon.GetSize().cx;
     icon.Draw(canvas, rc.right - offset, rc.bottom - icon.GetSize().cy);
   }
@@ -163,13 +163,13 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   const MaskedIcon *bmp;
 
   if (task != NULL && (task->GetMode() == TaskManager::MODE_ABORT))
-    bmp = &look.hAbort;
+    bmp = &look.abort_mode_icon;
   else if (GetDisplayMode() == DM_CIRCLING)
-    bmp = &look.hClimb;
+    bmp = &look.climb_mode_icon;
   else if (GetDisplayMode() == DM_FINAL_GLIDE)
-    bmp = &look.hFinalGlide;
+    bmp = &look.final_glide_mode_icon;
   else
-    bmp = &look.hCruise;
+    bmp = &look.cruise_mode_icon;
 
   offset += bmp->GetSize().cx + Layout::Scale(6);
 
