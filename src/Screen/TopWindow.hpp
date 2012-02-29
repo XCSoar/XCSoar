@@ -269,9 +269,11 @@ protected:
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
 
-#ifdef ANDROID
+#ifndef USE_GDI
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
+#endif
 
+#ifdef ANDROID
   /**
    * @see Event::PAUSE
    */

@@ -240,4 +240,12 @@ TopWindow::post_quit()
   ::SDL_PushEvent(&event);
 }
 
+void
+TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
+{
+  ContainerWindow::OnResize(width, height);
+
+  screen.OnResize(width, height);
+}
+
 #endif /* !ANDROID */
