@@ -142,7 +142,8 @@ OnAirspaceListEnter(unsigned ItemIndex)
       computer.warnings.class_warnings[ItemIndex] =
         !computer.warnings.class_warnings[ItemIndex];
 
-    Profile::SetAirspaceMode(ItemIndex);
+    Profile::SetAirspaceMode(ItemIndex, renderer.classes[ItemIndex].display,
+                             computer.warnings.class_warnings[ItemIndex]);
     changed = true;
   }
 

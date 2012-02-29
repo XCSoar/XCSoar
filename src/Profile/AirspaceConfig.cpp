@@ -78,17 +78,12 @@ Profile::LoadAirspaceConfig()
 }
 
 void
-Profile::SetAirspaceMode(int i)
+Profile::SetAirspaceMode(int i, bool display, bool warning)
 {
-  const AirspaceComputerSettings &computer =
-    CommonInterface::GetComputerSettings().airspace;
-  const AirspaceRendererSettings &renderer =
-    CommonInterface::GetMapSettings().airspace;
-
   int val = 0;
-  if (renderer.classes[i].display)
+  if (display)
     val |= 0x1;
-  if (computer.warnings.class_warnings[i])
+  if (warning)
     val |= 0x2;
 
   Set(szProfileAirspaceMode[i], val);
