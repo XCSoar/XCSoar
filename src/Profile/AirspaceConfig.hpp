@@ -39,10 +39,10 @@ namespace Profile
    * Saves the airspace mode setting to the profile
    * @param i Airspace class index
    */
-  void SetAirspaceMode(int i, bool display, bool warning);
-  bool GetAirspaceColor(int i, Color &color);
-  void SetAirspaceColor(int i, const Color &color);
-  void SetAirspaceBrush(int i, int c);
+  void SetAirspaceMode(unsigned i, bool display, bool warning);
+  bool GetAirspaceColor(unsigned i, Color &color);
+  void SetAirspaceColor(unsigned i, const Color &color);
+  void SetAirspaceBrush(unsigned i, int c);
 };
 
 #endif

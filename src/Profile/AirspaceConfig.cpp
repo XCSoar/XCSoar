@@ -79,7 +79,7 @@ Profile::Load(AirspaceComputerSettings &settings)
 }
 
 void
-Profile::SetAirspaceMode(int i, bool display, bool warning)
+Profile::SetAirspaceMode(unsigned i, bool display, bool warning)
 {
   int value = 0;
   if (display)
@@ -91,7 +91,7 @@ Profile::SetAirspaceMode(int i, bool display, bool warning)
 }
 
 void
-Profile::SetAirspaceColor(int i, const Color &color)
+Profile::SetAirspaceColor(unsigned i, const Color &color)
 {
   TCHAR buffer[16];
   FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
@@ -99,7 +99,7 @@ Profile::SetAirspaceColor(int i, const Color &color)
 }
 
 bool
-Profile::GetAirspaceColor(int i, Color &color)
+Profile::GetAirspaceColor(unsigned i, Color &color)
 {
   const TCHAR *color_string = Get(szProfileColour[i]);
   if (!color_string)
@@ -120,7 +120,7 @@ Profile::GetAirspaceColor(int i, Color &color)
 }
 
 void
-Profile::SetAirspaceBrush(int i, int brush_index)
+Profile::SetAirspaceBrush(unsigned i, int brush_index)
 {
   Set(szProfileBrush[i], brush_index);
 }
