@@ -24,11 +24,9 @@ Copyright_License {
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Features.hpp"
-#include "Formatter/HexColor.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Util/Macros.hpp"
 #include "Sizes.h"
 
 void
@@ -93,19 +91,13 @@ Profile::SetAirspaceMode(unsigned i, bool display, bool warning)
 void
 Profile::SetAirspaceColor(unsigned i, const Color &color)
 {
-  TCHAR buffer[16];
-  FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
-  Set(szProfileColour[i], buffer);
+  SetColor(szProfileColour[i], color);
 }
 
 bool
 Profile::GetAirspaceColor(unsigned i, Color &color)
 {
-  const TCHAR *color_string = Get(szProfileColour[i]);
-  if (!color_string)
-    return false;
-
-  if (ParseHexColor(color_string, color))
+  if (GetColor(szProfileColour[i], color))
     return true;
 
   unsigned index;

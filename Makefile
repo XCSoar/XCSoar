@@ -599,6 +599,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Earth.cpp \
+	$(SRC)/Profile/Screen.cpp \
 	$(SRC)/Profile/TrackingProfile.cpp \
 	$(SRC)/Profile/SystemProfile.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \
