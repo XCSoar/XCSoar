@@ -22,11 +22,10 @@ Copyright_License {
 */
 
 #include "Dialogs/Airspace.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
+#include "Dialogs/ListPicker.hpp"
+#include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Features.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 
@@ -34,10 +33,6 @@ Copyright_License {
 
 /* brush patterns are only available on GDI */
 #ifdef HAVE_HATCHED_BRUSH
-
-class WndButton;
-
-static WndForm *wf = NULL;
 
 static void
 OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
@@ -55,49 +50,12 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
                    rc.bottom - Layout::FastScale(2));
 }
 
-static void
-OnAirspacePatternsListEnter(gcc_unused unsigned i)
+int
+dlgAirspacePatternsShowModal()
 {
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrCancel);
-}
-
-
-static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
-
-int dlgAirspacePatternsShowModal(){
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape
-                  ? _T("IDR_XML_AIRSPACEPATTERNS")
-                  : _T("IDR_XML_AIRSPACEPATTERNS_L"));
-  assert(wf!=NULL);
-
-  WndListFrame *wAirspacePatternsList =
-    (WndListFrame*)wf->FindByName(_T("frmAirspacePatternsList"));
-  assert(wAirspacePatternsList!=NULL);
-  wAirspacePatternsList->SetActivateCallback(OnAirspacePatternsListEnter);
-  wAirspacePatternsList->SetPaintItemCallback(OnAirspacePatternsPaintListItem);
-  wAirspacePatternsList->SetLength(NUMAIRSPACEBRUSHES);
-
-  int result = wf->ShowModal();
-  result = result == mrOK
-    ? (int)wAirspacePatternsList->GetCursorIndex()
-    : -1;
-
-  // now retrieve back the properties...
-  delete wf;
-  wf = NULL;
-
-  return result;
+  return ListPicker(UIGlobals::GetMainWindow(), _("Select Pattern"),
+                    NUMAIRSPACEBRUSHES, 0, Layout::FastScale(18),
+                    OnAirspacePatternsPaintListItem);
 }
 
 #endif /* HAVE_HATCHED_BRUSH */
