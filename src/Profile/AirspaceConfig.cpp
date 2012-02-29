@@ -32,20 +32,20 @@ Copyright_License {
 #include "Sizes.h"
 
 void
-Profile::Load(AirspaceRendererSettings &renderer)
+Profile::Load(AirspaceRendererSettings &settings)
 {
-  Get(szProfileAirspaceBlackOutline, renderer.black_outline);
-  GetEnum(szProfileAltMode, renderer.altitude_mode);
-  Get(szProfileClipAlt, renderer.clip_altitude);
+  Get(szProfileAirspaceBlackOutline, settings.black_outline);
+  GetEnum(szProfileAltMode, settings.altitude_mode);
+  Get(szProfileClipAlt, settings.clip_altitude);
 
 #ifndef ENABLE_OPENGL
-  Get(szProfileAirspaceTransparency, renderer.transparency);
+  Get(szProfileAirspaceTransparency, settings.transparency);
 #endif
 
-  GetEnum(szProfileAirspaceFillMode, renderer.fill_mode);
+  GetEnum(szProfileAirspaceFillMode, settings.fill_mode);
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    Load(i, renderer.classes[i]);
+    Load(i, settings.classes[i]);
 }
 
 void
@@ -65,29 +65,29 @@ Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
 }
 
 void
-Profile::Load(AirspaceComputerSettings &computer)
+Profile::Load(AirspaceComputerSettings &settings)
 {
-  Get(szProfileAirspaceWarning, computer.enable_warnings);
-  Get(szProfileAltMargin, computer.warnings.altitude_warning_margin);
-  Get(szProfileWarningTime, computer.warnings.warning_time);
-  Get(szProfileAcknowledgementTime, computer.warnings.acknowledgement_time);
+  Get(szProfileAirspaceWarning, settings.enable_warnings);
+  Get(szProfileAltMargin, settings.warnings.altitude_warning_margin);
+  Get(szProfileWarningTime, settings.warnings.warning_time);
+  Get(szProfileAcknowledgementTime, settings.warnings.acknowledgement_time);
 
-  unsigned Temp;
+  unsigned value;
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    if (Get(szProfileAirspaceMode[i], Temp))
-      computer.warnings.class_warnings[i] = (Temp & 0x2) != 0;
+    if (Get(szProfileAirspaceMode[i], value))
+      settings.warnings.class_warnings[i] = (value & 0x2) != 0;
 }
 
 void
 Profile::SetAirspaceMode(int i, bool display, bool warning)
 {
-  int val = 0;
+  int value = 0;
   if (display)
-    val |= 0x1;
+    value |= 0x1;
   if (warning)
-    val |= 0x2;
+    value |= 0x2;
 
-  Set(szProfileAirspaceMode[i], val);
+  Set(szProfileAirspaceMode[i], value);
 }
 
 void
@@ -120,7 +120,7 @@ Profile::GetAirspaceColor(int i, Color &color)
 }
 
 void
-Profile::SetAirspaceBrush(int i, int c)
+Profile::SetAirspaceBrush(int i, int brush_index)
 {
-  Set(szProfileBrush[i], c);
+  Set(szProfileBrush[i], brush_index);
 }
