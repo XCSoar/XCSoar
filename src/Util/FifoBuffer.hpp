@@ -90,6 +90,14 @@ public:
     head = tail = 0;
   }
 
+  bool IsEmpty() const {
+    return head == tail;
+  }
+
+  bool IsFull() const {
+    return head == 0 && tail == size;
+  }
+
   /**
    * Prepares writing.  Returns a buffer range which may be written.
    * When you are finished, call append().
