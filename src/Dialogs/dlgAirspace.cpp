@@ -45,6 +45,7 @@ static WndForm *wf = NULL;
 static WndListFrame *airspace_list = NULL;
 
 static bool color_mode = false;
+static bool changed = false;
 
 static void
 OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
@@ -96,8 +97,6 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
       rc.top + Layout::FastScale(2), x0 - Layout::FastScale(10),
                       AirspaceClassAsText((AirspaceClass)i, false));
 }
-
-static bool changed = false;
 
 static void
 OnAirspaceListEnter(unsigned index)
