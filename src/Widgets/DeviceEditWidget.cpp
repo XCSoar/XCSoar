@@ -37,6 +37,7 @@
 #endif
 
 #ifdef ANDROID
+#include "Java/Global.hpp"
 #include "Android/BluetoothHelper.hpp"
 #ifdef IOIOLIB
 #include "Device/Port/AndroidIOIOUartPort.hpp"
