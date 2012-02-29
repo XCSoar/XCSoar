@@ -24,26 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 #define XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 
-#include "AndroidPort.hpp"
-#include "Util/StaticString.hpp"
+#include "Port.hpp"
+#include "Compiler.h"
 
-/**
- * A #Port implementation which transmits data over a Bluetooth RFCOMM
- * socket.
- */
-class AndroidBluetoothPort : public AndroidPort
-{
-  /** the peer's Bluetooth address */
-  StaticString<32> address;
+#include <tchar.h>
 
-public:
-  AndroidBluetoothPort(const TCHAR *address, Handler &_handler);
-
-  /**
-   * Opens the serial port
-   * @return True on success, False on failure
-   */
-  bool Open();
-};
+gcc_malloc
+Port *
+OpenAndroidBluetoothPort(const TCHAR *address, Port::Handler &_handler);
 
 #endif

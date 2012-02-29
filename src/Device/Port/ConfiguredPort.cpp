@@ -114,16 +114,7 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
       return NULL;
     }
 
-    {
-      AndroidBluetoothPort *port =
-        new AndroidBluetoothPort(config.bluetooth_mac, handler);
-      if (!port->Open()) {
-        delete port;
-        return NULL;
-      }
-
-      return port;
-    }
+    return OpenAndroidBluetoothPort(config.bluetooth_mac, handler);
 #else
     LogStartUp(_T("Bluetooth not available on this platform"));
     return NULL;
@@ -131,24 +122,13 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
 
   case DeviceConfig::PortType::IOIOUART:
 #if defined(ANDROID) && defined(IOIOLIB)
-    {
-      if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
-        LogStartUp(_T("No IOIOUart configured in profile"));
-        return NULL;
-      }
-
-      {
-        AndroidIOIOUartPort *port =
-          new AndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate, handler);
-
-        if (!port->Open()) {
-          delete port;
-          return NULL;
-        }
-
-        return port;
-      }
+    if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
+      LogStartUp(_T("No IOIOUart configured in profile"));
+      return NULL;
     }
+
+    return OpenAndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate,
+                                   handler);
 #else
     LogStartUp(_T("IOIO Uart not available on this platform or version"));
     return NULL;

@@ -26,23 +26,16 @@ Copyright_License {
 
 #include <assert.h>
 
-AndroidPort::AndroidPort(Handler &_handler)
-  :Port(_handler), bridge(NULL)
+AndroidPort::AndroidPort(Handler &_handler, PortBridge *_bridge)
+  :Port(_handler), bridge(_bridge)
 {
 }
 
 AndroidPort::~AndroidPort()
 {
-  Close();
-}
+  StopRxThread();
 
-void
-AndroidPort::SetBridge(PortBridge *_bridge)
-{
-  assert(bridge == NULL);
-  assert(_bridge != NULL);
-
-  bridge = _bridge;
+  delete bridge;
 }
 
 void
@@ -66,19 +59,6 @@ AndroidPort::Run()
     if (nbytes > 0)
       handler.DataReceived(buffer, nbytes);
   }
-}
-
-bool
-AndroidPort::Close()
-{
-  if (bridge == NULL)
-    return true;
-
-  StopRxThread();
-
-  delete bridge;
-  bridge = NULL;
-  return true;
 }
 
 unsigned

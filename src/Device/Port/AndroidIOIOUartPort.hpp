@@ -24,31 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 #define XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 
-#include "Android/IOIOHelper.hpp"
-#include "Util/StaticString.hpp"
-#include "Thread/StoppableThread.hpp"
-#include "Thread/Trigger.hpp"
-#include "AndroidPort.hpp"
-#include "Java/Object.hpp"
+#include "Port.hpp"
+#include "Compiler.h"
 
-/**
- * A #Port implementation which transmits data over a IOIOUart RFCOMM
- * socket.
- */
-class AndroidIOIOUartPort : public AndroidPort
+#include <tchar.h>
+
+namespace AndroidIOIOUartPort
 {
-public:
-  AndroidIOIOUartPort(unsigned UartID, unsigned BaudRate, Handler &_handler);
+  static inline unsigned getNumberUarts() { return 4; }
 
-  /**
-   * Opens the serial port
-   * @return True on success, False on failure
-   */
-  bool Open();
-
-  static unsigned getNumberUarts() { return 4; }
-
-  static const TCHAR *getPortHelp(unsigned UartID) {
+  static inline const TCHAR *getPortHelp(unsigned UartID) {
     switch (UartID) {
     case 0:
       return _T("IOIO external board Uart: pin3=out, pin4=in");
@@ -62,10 +47,11 @@ public:
       return _T("Illegal IOIO Uart ID");
     }
   }
+}
 
-protected:
-  unsigned BaudRate;
-  int UartID;
-};
+gcc_malloc
+Port *
+OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
+                        Port::Handler &handler);
 
 #endif

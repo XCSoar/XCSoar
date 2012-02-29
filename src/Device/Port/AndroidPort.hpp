@@ -37,14 +37,9 @@ class AndroidPort : public Port, private StoppableThread
 {
   PortBridge *bridge;
 
-protected:
-  AndroidPort(Handler &_handler);
-  virtual ~AndroidPort();
-
-  void SetBridge(PortBridge *bridge);
-
 public:
-  bool Close();
+  AndroidPort(Handler &_handler, PortBridge *bridge);
+  virtual ~AndroidPort();
 
   virtual unsigned GetBaudrate() const;
   virtual bool SetBaudrate(unsigned baud_rate);

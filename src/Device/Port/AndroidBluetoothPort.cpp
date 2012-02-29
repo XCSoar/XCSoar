@@ -22,24 +22,20 @@ Copyright_License {
 */
 
 #include "AndroidBluetoothPort.hpp"
+#include "AndroidPort.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Java/Global.hpp"
 
 #include <assert.h>
 
-AndroidBluetoothPort::AndroidBluetoothPort(const TCHAR *_address,
-                                           Handler &_handler)
-  :AndroidPort(_handler), address(_address)
+Port *
+OpenAndroidBluetoothPort(const TCHAR *address, Port::Handler &handler)
 {
-}
+  assert(address != NULL);
 
-bool
-AndroidBluetoothPort::Open()
-{
   PortBridge *bridge = BluetoothHelper::connect(Java::GetEnv(), address);
   if (bridge == NULL)
-    return false;
+    return NULL;
 
-  SetBridge(bridge);
-  return true;
+  return new AndroidPort(handler, bridge);
 }
