@@ -289,14 +289,12 @@ final class IOIOHelper extends Thread {
     private final int inPin;
     private final int outPin;
     private int baudrate = 0;
-    private boolean isAvailable;
     private int ID;
 
     XCSUart(int ID_) {
       super("IOIO UART " + ID_);
 
       ID = ID_;
-      isAvailable = true;
 
       switch (ID) {
       case 0:
@@ -319,7 +317,7 @@ final class IOIOHelper extends Thread {
      * returns false if Uart is already open
      */
     public boolean isAvailable() {
-      return isAvailable;
+      return uart == null;
     }
 
     private boolean doOpen() {
@@ -333,7 +331,6 @@ final class IOIOHelper extends Thread {
       try {
         uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
                              Uart.StopBits.ONE);
-        isAvailable = false;
         super.set(uart.getInputStream(), uart.getOutputStream());
         return true;
       } catch (ConnectionLostException e) {
@@ -352,7 +349,7 @@ final class IOIOHelper extends Thread {
      * @return true on success
      */
     public boolean openUart(int _baud) {
-      if (!isAvailable) {
+      if (!isAvailable()) {
         Log.e(TAG, "IOIOJopenUart() is not available: " + ID);
         return false;
       }
@@ -370,7 +367,6 @@ final class IOIOHelper extends Thread {
         Log.e(TAG, "IOIOJclose() Unexpected exception caught", e);
       }
       uart = null;
-      isAvailable = true;
     }
 
     /**
