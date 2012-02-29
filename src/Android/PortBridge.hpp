@@ -27,17 +27,23 @@ Copyright_License {
 #include "Java/Object.hpp"
 
 class PortBridge : protected Java::Object {
-  jmethodID drain_method;
-  jmethodID getBaudRate_method, setBaudRate_method;
-  jmethodID setReadTimeout_mid;
-  jmethodID read_method, write_method, flush_mid;
-  jmethodID waitRead_method;
+  static jmethodID drain_method;
+  static jmethodID getBaudRate_method, setBaudRate_method;
+  static jmethodID setReadTimeout_mid;
+  static jmethodID read_method, write_method, flush_mid;
+  static jmethodID waitRead_method;
 
   static gcc_constexpr_data size_t read_buffer_size = 4096;
   static gcc_constexpr_data size_t write_buffer_size = 4096;
   Java::GlobalRef<jbyteArray> read_buffer, write_buffer;
 
 public:
+  /**
+   * Global initialisation.  Looks up the methods of the AndroidPort
+   * Java class.
+   */
+  static void Initialise(JNIEnv *env);
+
   PortBridge(JNIEnv *env, jobject obj);
 
   ~PortBridge() {

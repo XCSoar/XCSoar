@@ -26,9 +26,20 @@ Copyright_License {
 
 #include <string.h>
 
-PortBridge::PortBridge(JNIEnv *env, jobject obj)
-  :Java::Object(env, obj) {
-  Java::Class cls(env, env->GetObjectClass(obj));
+jmethodID PortBridge::drain_method;
+jmethodID PortBridge::getBaudRate_method;
+jmethodID PortBridge::setBaudRate_method;
+jmethodID PortBridge::setReadTimeout_mid;
+jmethodID PortBridge::read_method;
+jmethodID PortBridge::write_method;
+jmethodID PortBridge::flush_mid;
+jmethodID PortBridge::waitRead_method;
+
+void
+PortBridge::Initialise(JNIEnv *env)
+{
+  Java::Class cls(env, "org/xcsoar/AndroidPort");
+
   drain_method = env->GetMethodID(cls, "drain", "()Z");
   getBaudRate_method = env->GetMethodID(cls, "getBaudRate", "()I");
   setBaudRate_method = env->GetMethodID(cls, "setBaudRate", "(I)Z");
@@ -37,7 +48,10 @@ PortBridge::PortBridge(JNIEnv *env, jobject obj)
   write_method = env->GetMethodID(cls, "write", "([BI)I");
   flush_mid = env->GetMethodID(cls, "flush", "()V");
   waitRead_method = env->GetMethodID(cls, "waitRead", "(I)I");
+}
 
+PortBridge::PortBridge(JNIEnv *env, jobject obj)
+  :Java::Object(env, obj) {
   read_buffer.Set(env, env->NewByteArray(read_buffer_size));
   write_buffer.Set(env, env->NewByteArray(write_buffer_size));
 }
