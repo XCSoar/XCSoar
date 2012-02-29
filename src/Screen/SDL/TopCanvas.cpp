@@ -48,12 +48,8 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height,
 {
 #ifndef ANDROID
   Uint32 flags = SDL_ANYFORMAT;
-#endif
-
 #ifdef ENABLE_OPENGL
-#ifndef ANDROID
   flags |= SDL_OPENGL;
-#endif
 #else /* !ENABLE_OPENGL */
   /* we need async screen updates as long as we don't have a global
      frame rate */
@@ -68,15 +64,12 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height,
     flags |= SDL_SWSURFACE;
 #endif /* !ENABLE_OPENGL */
 
-#ifndef ANDROID
   if (full_screen)
     flags |= SDL_FULLSCREEN;
 
   if (resizable)
     flags |= SDL_RESIZABLE;
-#endif
 
-#ifndef ANDROID
   SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
   if (s == NULL)
     return;
