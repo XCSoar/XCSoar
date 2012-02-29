@@ -26,7 +26,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
-#include "Look/MapLook.hpp"
+#include "Look/AirspaceLook.hpp"
 
 #include <assert.h>
 
@@ -35,8 +35,7 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
-  const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
-  const Color &color = look.preset_colors[i];
+  const Color &color = AirspaceLook::preset_colors[i];
 
   PixelRect rc2 = rc;
   InflateRect(&rc2, -Layout::FastScale(2), -Layout::FastScale(2));
