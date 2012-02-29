@@ -36,10 +36,187 @@ import ioio.lib.api.exception.IncompatibilityException;
  * A utility class which wraps the Java API into an easier API for the
  * C++ code.
  */
-final class IOIOHelper {
+final class IOIOHelper extends Thread {
+  private enum Command {
+    NONE,
+    SHUTDOWN,
+    OPEN,
+    CLOSE,
+  }
+
+  /**
+   * The command being sent to the connection thread.
+   */
+  private Command command = Command.NONE;
 
   private IOIO ioio_;
-  private XCSUart[] xuarts_;
+
+  /**
+   * The IOIO connection that is currently being established.  It may
+   * be non-null while running the OPEN command, and may be used by
+   * the client thread to cancel the connection.
+   */
+  private IOIO connecting;
+
+  private XCSUart[] xuarts_ = new XCSUart[4];
+
+  public IOIOHelper() {
+    super("IOIO");
+
+    for (int i = 0; i < 4; i++)
+      xuarts_[i] = new XCSUart(i);
+
+    start();
+  }
+
+  private synchronized void wakeUp() {
+    if (ioio_ != null)
+      interrupt();
+    else
+      notifyAll();
+  }
+
+  private synchronized boolean waitCompletion() {
+    while (command != Command.NONE) {
+      try {
+        wait();
+      } catch (InterruptedException e) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private synchronized boolean waitCompletion(int timeout_ms) {
+    try {
+      wait(timeout_ms);
+    } catch (InterruptedException e) {
+      return false;
+    }
+
+    return command == Command.NONE;
+  }
+
+  private synchronized boolean runCommand(Command _cmd)
+    throws InterruptedException {
+    if (command != _cmd && !waitCompletion())
+      return false;
+
+    command = _cmd;
+    wakeUp();
+    return waitCompletion();
+  }
+
+  private synchronized boolean runCommand(Command _cmd, int timeout_ms) {
+    if (!waitCompletion(timeout_ms))
+      return false;
+
+    command = _cmd;
+    wakeUp();
+    return waitCompletion(timeout_ms);
+  }
+
+  /**
+   * Called by the connection thread when a command has been executed.
+   */
+  private synchronized void commandFinished() {
+    command = Command.NONE;
+    notifyAll();
+  }
+
+  public void shutdown() {
+    try {
+      runCommand(Command.SHUTDOWN);
+      join();
+    } catch (InterruptedException e) {
+    }
+  }
+
+  /**
+   * Called by the connection thread to open a connection.
+   */
+  private void synchronousOpen() {
+    if (ioio_ != null)
+      return;
+
+    IOIO ioio = IOIOFactory.create();
+
+    try {
+      ioio.waitForConnect();
+      if (ioio.getState() == IOIO.State.CONNECTED) {
+        Log.d("IOIOHelper", "IOIO connection established");
+        ioio.softReset();
+        ioio_ = ioio;
+      } else {
+        Log.w("IOIOHelper", "IOIO connection failed");
+        ioio.disconnect();
+      }
+    } catch (ConnectionLostException e) {
+      Log.w("IOIOHelper", "IOIOJWaitConnect() Connection Lost", e);
+    } catch (IncompatibilityException e) {
+      Log.e("IOIOHelper", "IOIOJWaitConnect() Incompatibility detected", e);
+    }
+  }
+
+  /**
+   * Called by the connection thread to close the connection.
+   */
+  private synchronized void synchronousClose() {
+    if (ioio_ == null)
+      return;
+
+    ioio_.disconnect();
+    ioio_ = null;
+  }
+
+  /**
+   * The connection thread.
+   */
+  public void run() {
+    while (true) {
+      synchronized(this) {
+        if (ioio_ != null && ioio_.getState() != IOIO.State.CONNECTED)
+          synchronousClose();
+      }
+
+      switch (command) {
+      case NONE:
+        /* idle: wait for a wakeUp() call */
+        try {
+          if (ioio_ != null) {
+            /* there is a connection: wait for connection error or
+               until Thread.interrupt() gets called */
+            ioio_.waitForDisconnect();
+            Log.w("IOIOHelper", "IOIO connection lost");
+          } else {
+            /* there is no connection: wait until Object.notify() gets
+               called */
+            synchronized(this) {
+              wait();
+            }
+          }
+        } catch (InterruptedException e) {
+        }
+        break;
+
+      case SHUTDOWN:
+        synchronousClose();
+        commandFinished();
+        return;
+
+      case OPEN:
+        synchronousOpen();
+        commandFinished();
+        break;
+
+      case CLOSE:
+        synchronousClose();
+        commandFinished();
+        break;
+      }
+    }
+  }
 
   /**
    * Initializes the connection to the IOIO board.
@@ -47,56 +224,31 @@ final class IOIOHelper {
    * @return: True if connection is successful. False if fails to 
    * connect after 3000ms.
    */
-  public boolean open() {
-    ioio_ = IOIOFactory.create();
-    xuarts_ = new XCSUart [4];
-    for (int i = 0; i < 4; i++)
-      xuarts_[i] = new XCSUart(i);
-    return waitConnect();
+  public synchronized boolean open() {
+    if (command == Command.NONE && ioio_ != null)
+      return true;
+
+    if (!runCommand(Command.OPEN, 3000)) {
+      IOIO ioio = connecting;
+      if (ioio != null)
+        ioio.disconnect();
+      return false;
+    }
+
+    return true;
   }
-  
+
   /**
    * Disconnects the ioio board.
    * The board can be reopened by calling waitConnect()
    */
-  public void close() {
-    try {
-      ioio_.disconnect();
-    } catch (Exception e) {
-      Log.e("IOIOHelper", "IOIOJclose()/disconnect Unexpected exception caught", e);
-    } finally {
-      ioio_ = null;
-    }
-  }
+  public synchronized void close() {
+    if (ioio_ == null)
+      return;
 
-  /**
-   * Waits up to 3000ms for connection to IOIO.
-   * Does soft reset of IOIO Board and all ports
-   * @return: true if connection to board is successful
-   */
-  private boolean waitConnect() {
-    boolean result = false;
-    Timer t = new Timer();
     try {
-      t.schedule(new TimerTask() {
-          @Override
-          public void run() {
-            Log.w("IOIOHelper", "IOIOJWaitConnect() TimerDisconnecting...");
-            ioio_.disconnect();
-          }
-        }, 3000);
-      ioio_.waitForConnect();
-      ioio_.softReset();
-      result = true;
-    } catch (ConnectionLostException e) {
-      Log.w("IOIOHelper", "IOIOJWaitConnect() Connection Lost", e);
-    } catch (IncompatibilityException e) {
-      Log.e("IOIOHelper", "IOIOJWaitConnect() Incompatibility detected", e);
-    } catch (Exception e) {
-      Log.e("IOIOHelper", "IOIOJWaitConnect() Unexpected exception caught", e);
-    } finally {
-      t.cancel();
-      return result;
+      runCommand(Command.CLOSE);
+    } catch (InterruptedException e) {
     }
   }
 

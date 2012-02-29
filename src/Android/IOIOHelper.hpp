@@ -58,7 +58,7 @@ public:
    * @param env
    */
   void close() {
-    CallVoid("close");
+    CallVoid("shutdown");
   }
 
   /**
