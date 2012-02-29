@@ -124,7 +124,10 @@ public:
 #endif /* USE_GDI */
 
   void set(PixelRect _rc) {
-    SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"), _rc);
+    TopWindowStyle style;
+    style.Resizable();
+
+    SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"), _rc, style);
 
     PixelRect rc = get_client_rect();
     map.set(*this, rc);
@@ -153,6 +156,11 @@ protected:
     }
 
     return TopWindow::OnCommand(id, code);
+  }
+
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+    SingleWindow::OnResize(width, height);
+    map.resize(width, height);
   }
 };
 
