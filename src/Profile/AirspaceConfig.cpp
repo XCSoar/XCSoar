@@ -27,7 +27,7 @@ Copyright_License {
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Sizes.h"
+#include "Util/Macros.hpp"
 
 void
 Profile::Load(AirspaceRendererSettings &settings)
@@ -55,7 +55,7 @@ Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
 
 #ifdef HAVE_HATCHED_BRUSH
   Get(szProfileBrush[i], settings.brush);
-  if (settings.brush >= NUMAIRSPACEBRUSHES)
+  if (settings.brush >= ARRAY_SIZE(AirspaceLook::brushes))
     settings.brush = 0;
 #endif
 
@@ -107,7 +107,7 @@ Profile::GetAirspaceColor(unsigned i, Color &color)
     return false;
 
   // Adjust index if the user has configured a preset color out of range
-  if (index >= NUMAIRSPACECOLORS)
+  if (index >= ARRAY_SIZE(AirspaceLook::preset_colors))
     index = 0;
 
   // Assign configured preset color

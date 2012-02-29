@@ -27,13 +27,14 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Look/AirspaceLook.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 
 static void
 OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  assert(i < NUMAIRSPACECOLORS);
+  assert(i < ARRAY_SIZE(AirspaceLook::preset_colors));
 
   const Color &color = AirspaceLook::preset_colors[i];
 
@@ -56,6 +57,6 @@ int
 dlgAirspaceColoursShowModal()
 {
   return ListPicker(UIGlobals::GetMainWindow(), _("Select Color"),
-                    NUMAIRSPACECOLORS, 0, Layout::FastScale(18),
-                    OnAirspaceColoursPaintListItem);
+                    ARRAY_SIZE(AirspaceLook::preset_colors), 0,
+                    Layout::FastScale(18), OnAirspaceColoursPaintListItem);
 }

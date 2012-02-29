@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "UIGlobals.hpp"
 #include "Look/AirspaceLook.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 
@@ -39,7 +40,7 @@ static const AirspaceLook *look;
 static void
 OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  assert(i < NUMAIRSPACEBRUSHES);
+  assert(i < ARRAY_SIZE(AirspaceLook::brushes));
 
   canvas.SetBackgroundTransparent();
   canvas.Select(look->brushes[i]);
@@ -56,7 +57,7 @@ dlgAirspacePatternsShowModal(const AirspaceLook &_look)
   look = &_look;
 
   return ListPicker(UIGlobals::GetMainWindow(), _("Select Pattern"),
-                    NUMAIRSPACEBRUSHES, 0, Layout::FastScale(18),
+                    ARRAY_SIZE(AirspaceLook::brushes), 0, Layout::FastScale(18),
                     OnAirspacePatternsPaintListItem);
 }
 

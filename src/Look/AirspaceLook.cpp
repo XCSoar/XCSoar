@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "resource.h"
+#include "Util/Macros.hpp"
 
 #ifdef USE_GDI
 #include "Screen/GDI/AlphaBlend.hpp"
@@ -66,7 +67,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
   bitmaps[6].Load(IDB_AIRSPACE6);
   bitmaps[7].Load(IDB_AIRSPACE7);
 
-  for (int i = 0; i < NUMAIRSPACEBRUSHES; i++)
+  for (unsigned i = 0; i < ARRAY_SIZE(AirspaceLook::brushes); i++)
     brushes[i].Set(bitmaps[i]);
 #endif
 
