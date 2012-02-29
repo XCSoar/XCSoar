@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/ListPicker.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
