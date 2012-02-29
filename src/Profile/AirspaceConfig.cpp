@@ -44,19 +44,24 @@ Profile::Load(AirspaceRendererSettings &renderer)
 
   GetEnum(szProfileAirspaceFillMode, renderer.fill_mode);
 
-  unsigned Temp = 0;
-  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    if (Get(szProfileAirspaceMode[i], Temp))
-      renderer.classes[i].display = (Temp & 0x1) != 0;
+  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
+    Load(i, renderer.classes[i]);
+}
+
+void
+Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
+{
+  unsigned value;
+  if (Get(szProfileAirspaceMode[i], value))
+    settings.display = (value & 0x1) != 0;
 
 #ifdef HAVE_HATCHED_BRUSH
-    Get(szProfileBrush[i], renderer.classes[i].brush);
-    if (renderer.classes[i].brush >= NUMAIRSPACEBRUSHES)
-      renderer.classes[i].brush = 0;
+  Get(szProfileBrush[i], settings.brush);
+  if (settings.brush >= NUMAIRSPACEBRUSHES)
+    settings.brush = 0;
 #endif
 
-    GetAirspaceColor(i, renderer.classes[i].color);
-  }
+  GetAirspaceColor(i, settings.color);
 }
 
 void

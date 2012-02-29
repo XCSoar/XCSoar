@@ -25,12 +25,14 @@ Copyright_License {
 #define XCSOAR_PROFILE_AIRSPACE_CONFIG_HPP
 
 struct AirspaceRendererSettings;
+struct AirspaceClassRendererSettings;
 struct AirspaceComputerSettings;
 struct Color;
 
 namespace Profile
 {
   void Load(AirspaceRendererSettings &renderer);
+  void Load(unsigned i, AirspaceClassRendererSettings &settings);
   void Load(AirspaceComputerSettings &computer);
 
   /**
