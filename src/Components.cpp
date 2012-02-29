@@ -229,6 +229,8 @@ XCSoarInterface::Startup()
   TopWindowStyle style;
   if (CommandLine::full_screen)
     style.FullScreen();
+  if (CommandLine::resizable)
+    style.Resizable();
 
   main_window.Set(szTitle, SystemWindowSize(), style);
   if (!main_window.IsDefined())
