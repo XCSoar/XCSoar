@@ -97,16 +97,20 @@ Profile::SetAirspaceColor(unsigned i, const Color &color)
 bool
 Profile::GetAirspaceColor(unsigned i, Color &color)
 {
+  // Try to load the hex color directly
   if (GetColor(szProfileColour[i], color))
     return true;
 
+  // Try to load an indexed preset color (legacy, < 6.3)
   unsigned index;
   if (!Get(szProfileColour[i], index))
     return false;
 
+  // Adjust index if the user has configured a preset color out of range
   if (index >= NUMAIRSPACECOLORS)
     index = 0;
 
+  // Assign configured preset color
   color = AirspaceLook::preset_colors[index];
   return true;
 }
