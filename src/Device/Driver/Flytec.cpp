@@ -281,22 +281,9 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 }
 
 static bool
-ExpectCharacter(Port &port, char c, unsigned timeout_ms)
+ExpectXOff(Port &port, OperationEnvironment &env, unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
-
-  while (!timeout.Check(timeout_ms))
-    if (port.GetChar() == c)
-      return true;
-
-  return false;
-}
-
-static bool
-ExpectXOff(Port &port, unsigned timeout_ms)
-{
-  return ExpectCharacter(port, 0x13, timeout_ms);
+  return port.WaitForChar(0x13, env, timeout_ms) == Port::WaitResult::READY;
 }
 
 static bool
@@ -436,7 +423,7 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, 1000))
+  if (!ExpectXOff(port, env, 1000))
     return false;
 
   unsigned tracks = 0;
@@ -518,7 +505,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
   strcat(buffer, "\r\n");
 
   port.Write(buffer);
-  if (!ExpectXOff(port, 1000))
+  if (!ExpectXOff(port, env, 1000))
     return false;
 
   // Open file writer
