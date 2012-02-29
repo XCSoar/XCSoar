@@ -43,7 +43,8 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopCanvas::Set(UPixelScalar width, UPixelScalar height, bool full_screen)
+TopCanvas::Set(UPixelScalar width, UPixelScalar height,
+               bool full_screen, bool resizable)
 {
 #ifndef ANDROID
   Uint32 flags = SDL_ANYFORMAT;
@@ -70,6 +71,9 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height, bool full_screen)
 #ifndef ANDROID
   if (full_screen)
     flags |= SDL_FULLSCREEN;
+
+  if (resizable)
+    flags |= SDL_RESIZABLE;
 #endif
 
 #ifndef ANDROID

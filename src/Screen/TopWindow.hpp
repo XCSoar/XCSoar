@@ -45,12 +45,13 @@ struct Event;
 class TopWindowStyle : public WindowStyle {
 #if defined(ENABLE_SDL) && !defined(ANDROID)
   bool full_screen;
+  bool resizable;
 #endif
 
 public:
   TopWindowStyle()
 #if defined(ENABLE_SDL) && !defined(ANDROID)
-    :full_screen(false)
+    :full_screen(false), resizable(false)
 #endif
   {
     Popup();
@@ -59,7 +60,7 @@ public:
   TopWindowStyle(const WindowStyle other)
     :WindowStyle(other)
 #if defined(ENABLE_SDL) && !defined(ANDROID)
-    , full_screen(false)
+    , full_screen(false), resizable(false)
 #endif
   {
     Popup();
@@ -74,6 +75,20 @@ public:
   bool GetFullScreen() const {
 #if defined(ENABLE_SDL) && !defined(ANDROID)
     return full_screen;
+#else
+    return false;
+#endif
+  }
+
+  void Resizable() {
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    resizable = true;
+#endif
+  }
+
+  bool GetResizable() const {
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    return resizable;
 #else
     return false;
 #endif

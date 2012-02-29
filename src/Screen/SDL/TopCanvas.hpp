@@ -28,7 +28,8 @@ Copyright_License {
 
 class TopCanvas : public Canvas {
 public:
-  void Set(UPixelScalar width, UPixelScalar height, bool full_screen);
+  void Set(UPixelScalar width, UPixelScalar height,
+           bool full_screen, bool resizable);
 
 #ifdef ENABLE_OPENGL
   /**
