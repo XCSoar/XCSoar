@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Profile/ComputerProfile.hpp"
+#include "Profile/AirspaceConfig.hpp"
 #include "Profile/TaskProfile.hpp"
 #include "Profile/TrackingProfile.hpp"
 #include "Profile/Profile.hpp"
@@ -135,6 +136,7 @@ Profile::Load(ComputerSettings &settings)
   Load(settings.voice);
   Load(settings.poi);
   Load(settings.features);
+  Load(settings.airspace);
 
   Get(szProfileEnableExternalTriggerCruise,
       settings.external_trigger_cruise_enabled);

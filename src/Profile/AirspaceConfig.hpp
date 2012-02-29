@@ -25,11 +25,13 @@ Copyright_License {
 #define XCSOAR_PROFILE_AIRSPACE_CONFIG_HPP
 
 struct AirspaceRendererSettings;
+struct AirspaceComputerSettings;
 struct Color;
 
 namespace Profile
 {
-  void LoadAirspaceConfig(AirspaceRendererSettings &renderer);
+  void Load(AirspaceRendererSettings &renderer);
+  void Load(AirspaceComputerSettings &computer);
 
   /**
    * Saves the airspace mode setting to the profile

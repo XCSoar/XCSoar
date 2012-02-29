@@ -26,28 +26,14 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Formatter/HexColor.hpp"
 #include "Look/AirspaceLook.hpp"
-#include "Interface.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
+#include "Airspace/AirspaceComputerSettings.hpp"
 #include "Util/Macros.hpp"
 #include "Sizes.h"
 
 void
-Profile::LoadAirspaceConfig(AirspaceRendererSettings &renderer)
+Profile::Load(AirspaceRendererSettings &renderer)
 {
-  unsigned Temp = 0;
-
-  // ComputerSettings
-
-  AirspaceComputerSettings &computer =
-    CommonInterface::SetComputerSettings().airspace;
-
-  Get(szProfileAirspaceWarning, computer.enable_warnings);
-  Get(szProfileAltMargin, computer.warnings.altitude_warning_margin);
-  Get(szProfileWarningTime, computer.warnings.warning_time);
-  Get(szProfileAcknowledgementTime, computer.warnings.acknowledgement_time);
-
-
-  // RendererSettings
-
   Get(szProfileAirspaceBlackOutline, renderer.black_outline);
   GetEnum(szProfileAltMode, renderer.altitude_mode);
   Get(szProfileClipAlt, renderer.clip_altitude);
@@ -58,11 +44,10 @@ Profile::LoadAirspaceConfig(AirspaceRendererSettings &renderer)
 
   GetEnum(szProfileAirspaceFillMode, renderer.fill_mode);
 
+  unsigned Temp = 0;
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    if (Get(szProfileAirspaceMode[i], Temp)) {
+    if (Get(szProfileAirspaceMode[i], Temp))
       renderer.classes[i].display = (Temp & 0x1) != 0;
-      computer.warnings.class_warnings[i] = (Temp & 0x2) != 0;
-    }
 
 #ifdef HAVE_HATCHED_BRUSH
     Get(szProfileBrush[i], renderer.classes[i].brush);
@@ -72,6 +57,20 @@ Profile::LoadAirspaceConfig(AirspaceRendererSettings &renderer)
 
     GetAirspaceColor(i, renderer.classes[i].color);
   }
+}
+
+void
+Profile::Load(AirspaceComputerSettings &computer)
+{
+  Get(szProfileAirspaceWarning, computer.enable_warnings);
+  Get(szProfileAltMargin, computer.warnings.altitude_warning_margin);
+  Get(szProfileWarningTime, computer.warnings.warning_time);
+  Get(szProfileAcknowledgementTime, computer.warnings.acknowledgement_time);
+
+  unsigned Temp;
+  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
+    if (Get(szProfileAirspaceMode[i], Temp))
+      computer.warnings.class_warnings[i] = (Temp & 0x2) != 0;
 }
 
 void
