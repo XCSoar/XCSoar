@@ -219,7 +219,7 @@ final class IOIOHelper {
         Log.e("IOIOHelper", "IOIOJclose() Unexpected exception caught", e);
       }
       uart = null;
-      isAvailable = false;
+      isAvailable = true;
     }
 
     /**
