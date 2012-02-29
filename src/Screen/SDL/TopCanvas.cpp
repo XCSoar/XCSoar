@@ -47,7 +47,8 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height,
                bool full_screen, bool resizable)
 {
 #ifndef ANDROID
-  Uint32 flags = SDL_ANYFORMAT;
+  flags = SDL_ANYFORMAT;
+
 #ifdef ENABLE_OPENGL
   flags |= SDL_OPENGL;
 #else /* !ENABLE_OPENGL */
@@ -106,6 +107,15 @@ TopCanvas::Resume()
 void
 TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 {
+  if (width == get_width() && height == get_height())
+    return;
+
+#ifndef ANDROID
+  SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
+  if (s == NULL)
+    return;
+#endif
+
 #ifdef ENABLE_OPENGL
   OpenGL::SetupViewport(width, height);
   Canvas::set(width, height);

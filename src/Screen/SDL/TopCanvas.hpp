@@ -27,6 +27,10 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 
 class TopCanvas : public Canvas {
+#ifndef ANDROID
+  Uint32 flags;
+#endif
+
 public:
   void Set(UPixelScalar width, UPixelScalar height,
            bool full_screen, bool resizable);
