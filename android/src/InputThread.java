@@ -118,7 +118,7 @@ class InputThread extends Thread {
       }
     } catch (IOException e) {
       if (is != null)
-        Log.e(TAG, "Failed to read from " + name + ": " + e.getMessage());
+        Log.e(TAG, "Failed to read from " + name, e);
     }
   }
 

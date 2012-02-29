@@ -110,7 +110,7 @@ class OutputThread extends Thread {
       }
     } catch (IOException e) {
       if (os != null)
-        Log.e(TAG, "Failed to write to " + name + ": " + e.getMessage());
+        Log.e(TAG, "Failed to write to " + name, e);
     }
   }
 
