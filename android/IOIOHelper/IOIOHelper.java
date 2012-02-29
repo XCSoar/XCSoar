@@ -180,6 +180,7 @@ final class IOIOHelper {
         uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
                              Uart.StopBits.ONE);
         isAvailable = false;
+        super.set(uart.getInputStream(), uart.getOutputStream());
         return true;
       } catch (ConnectionLostException e) {
         Log.w("IOIOHelper", "IOIOJopenUart() Connection Lost.  Baud: " + baudrate, e);
@@ -203,11 +204,7 @@ final class IOIOHelper {
       }
 
       baudrate = _baud;
-      if (!doOpen())
-        return false;
-
-      super.set(uart.getInputStream(), uart.getOutputStream());
-      return true;
+      return doOpen();
     }
 
     private void doClose() {
