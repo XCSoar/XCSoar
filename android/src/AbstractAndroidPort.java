@@ -86,10 +86,10 @@ abstract class AbstractAndroidPort implements AndroidPort {
       : 2; /* WaitResult::FAILED */
   }
 
-  public final int read() {
+  public final int read(byte[] buffer, int length) {
     InputThread i = input;
     return i != null
-      ? i.read()
+      ? i.read(buffer, length)
       : -1;
   }
 

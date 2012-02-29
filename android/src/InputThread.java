@@ -122,7 +122,7 @@ class InputThread extends Thread {
     }
   }
 
-  synchronized public int read() {
+  synchronized public int read(byte[] dest, int length) {
     if (head >= tail) {
       // buffer is empty
       if (timeout <= 0)
@@ -140,15 +140,19 @@ class InputThread extends Thread {
         return -1;
     }
 
-    // the result must be unsigned
-    int ch = (int)buffer[head] & 0xff;
-    ++head;
+    int nbytes = tail - head;
+    if (nbytes > length)
+      nbytes = length;
+
+    System.arraycopy(buffer, head, dest, 0, nbytes);
+
+    head += nbytes;
 
     if (tail >= BUFFER_SIZE)
       // notify the thread that it may continue reading
       notifyAll();
 
-    return ch;
+    return nbytes;
   }
 
   synchronized public int waitRead(int wait_timeout) {

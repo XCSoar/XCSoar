@@ -35,7 +35,16 @@ interface AndroidPort {
 
   void setReadTimeout(int timeout);
   int waitRead(int timeout);
-  int read();
+
+  /**
+   * Read data on the port.  If no data is available, execution blocks
+   * until at least one byte is read or until the timeout expires.
+   *
+   * @param buffer the destination buffer
+   * @param length the maxmium number of bytes to read
+   * @return the number of bytes that were read or -1 on error/timeout
+   */
+  int read(byte[] buffer, int length);
 
   boolean write(byte ch);
 }

@@ -60,12 +60,11 @@ AndroidPort::Run()
 
   JNIEnv *const env = Java::GetEnv();
 
+  char buffer[1024];
   while (!CheckStopped()) {
-    int ch = bridge->read(env);
-    if (ch >= 0) {
-      char ch2 = ch;
-      handler.DataReceived(&ch2, sizeof(ch2));
-    }
+    int nbytes = bridge->read(env, buffer, sizeof(buffer));
+    if (nbytes > 0)
+      handler.DataReceived(buffer, nbytes);
   }
 }
 
@@ -162,15 +161,10 @@ AndroidPort::SetRxTimeout(unsigned Timeout)
 }
 
 int
-AndroidPort::Read(void *Buffer, size_t Size)
+AndroidPort::Read(void *buffer, size_t length)
 {
   JNIEnv *env = Java::GetEnv();
-  int ch = bridge->read(env);
-  if (ch < 0)
-    return -1;
-
-  *(uint8_t *)Buffer = ch;
-  return 1;
+  return bridge->read(env, buffer, length);
 }
 
 Port::WaitResult

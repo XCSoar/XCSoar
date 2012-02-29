@@ -24,14 +24,35 @@ Copyright_License {
 #include "Android/PortBridge.hpp"
 #include "Java/Class.hpp"
 
+#include <string.h>
+
 PortBridge::PortBridge(JNIEnv *env, jobject obj)
   :Java::Object(env, obj) {
   Java::Class cls(env, env->GetObjectClass(obj));
   getBaudRate_method = env->GetMethodID(cls, "getBaudRate", "()I");
   setBaudRate_method = env->GetMethodID(cls, "setBaudRate", "(I)Z");
   setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(I)V");
-  read_mid = env->GetMethodID(cls, "read", "()I");
+  read_method = env->GetMethodID(cls, "read", "([BI)I");
   write_mid = env->GetMethodID(cls, "write", "(B)Z");
   flush_mid = env->GetMethodID(cls, "flush", "()V");
   waitRead_method = env->GetMethodID(cls, "waitRead", "(I)I");
+
+  read_buffer.Set(env, env->NewByteArray(read_buffer_size));
+}
+
+int
+PortBridge::read(JNIEnv *env, void *buffer, size_t length)
+{
+  if (length > read_buffer_size)
+    length = read_buffer_size;
+
+  jint nbytes = env->CallIntMethod(Get(), read_method,
+                                   read_buffer.Get(), length);
+  if (nbytes > 0) {
+    jbyte *src = env->GetByteArrayElements(read_buffer, NULL);
+    memcpy(buffer, src, nbytes);
+    env->ReleaseByteArrayElements(read_buffer, src, 0);
+  }
+
+  return nbytes;
 }
