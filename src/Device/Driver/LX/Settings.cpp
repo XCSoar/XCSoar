@@ -50,10 +50,15 @@ ModeColibri(Port &port)
 static bool
 ModeLX1600(Port &port)
 {
-  const unsigned old_baud_rate = port.SetBaudrate(4800);
+  unsigned old_baud_rate = port.GetBaudrate();
+  if (old_baud_rate == 4800)
+    old_baud_rate = 0;
+  else if (!port.SetBaudrate(4800))
+    return false;
+
   const bool success = PortWriteNMEA(port, "PFLX0,LX1600");
 
-  if (old_baud_rate != 0 && old_baud_rate != 4800)
+  if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);
 
   return success;

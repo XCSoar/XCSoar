@@ -130,19 +130,16 @@ BaudRateToK6Bt(unsigned baud_rate)
   }
 }
 
-unsigned
+bool
 K6BtPort::SetBaudrate(unsigned _baud_rate)
 {
   int code = BaudRateToK6Bt(_baud_rate);
   if (code < 0)
     /* not supported by K6Bt */
-    return 0;
+    return false;
 
   SendCommand(CHANGE_BAUD_RATE | code);
-
-  unsigned old = baud_rate;
-  baud_rate = _baud_rate;
-  return old;
+  return true;
 }
 
 unsigned

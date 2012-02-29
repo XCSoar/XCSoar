@@ -71,10 +71,9 @@ public:
     return baud_rate;
   }
 
-  unsigned SetBaudrate(unsigned _baud_rate) {
-    unsigned old_value = baud_rate;
+  bool SetBaudrate(unsigned _baud_rate) {
     baud_rate = _baud_rate;
-    return old_value;
+    return true;
   }
 
   int Read(void *Buffer, size_t Size) {

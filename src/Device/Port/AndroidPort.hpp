@@ -47,7 +47,7 @@ public:
   bool Close();
 
   virtual unsigned GetBaudrate() const;
-  virtual unsigned SetBaudrate(unsigned baud_rate);
+  virtual bool SetBaudrate(unsigned baud_rate);
 
   /* virtual methods from class Port */
   virtual bool SetRxTimeout(unsigned Timeout);

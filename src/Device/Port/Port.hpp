@@ -131,7 +131,7 @@ public:
    * @param BaudRate The desired baudrate
    * @return The previous baud rate or 0 on error
    */
-  virtual unsigned SetBaudrate(unsigned BaudRate) = 0;
+  virtual bool SetBaudrate(unsigned BaudRate) = 0;
 
   /**
    * Gets the current baud rate of the serial port

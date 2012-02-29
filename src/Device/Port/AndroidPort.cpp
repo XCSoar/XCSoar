@@ -90,12 +90,11 @@ AndroidPort::GetBaudrate() const
     : 0;
 }
 
-unsigned
+bool
 AndroidPort::SetBaudrate(unsigned baud_rate)
 {
-  return bridge != NULL
-    ? bridge->setBaudRate(Java::GetEnv(), baud_rate)
-    : 0;
+  return bridge != NULL &&
+    bridge->setBaudRate(Java::GetEnv(), baud_rate);
 }
 
 size_t

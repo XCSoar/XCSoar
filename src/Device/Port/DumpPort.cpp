@@ -64,7 +64,7 @@ DumpPort::GetBaudrate() const
   return port->GetBaudrate();
 }
 
-unsigned
+bool
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
   LogStartUp(_T("SetBaudrate %u"), baud_rate);

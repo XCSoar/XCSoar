@@ -70,10 +70,10 @@ NullPort::GetBaudrate() const
   return 0;
 }
 
-unsigned
-NullPort::SetBaudrate(unsigned BaudRate)
+bool
+NullPort::SetBaudrate(unsigned baud_rate)
 {
-  return BaudRate;
+  return true;
 }
 
 int

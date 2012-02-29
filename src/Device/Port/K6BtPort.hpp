@@ -55,7 +55,7 @@ public:
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
   virtual bool SetRxTimeout(unsigned timeout_ms);
-  virtual unsigned SetBaudrate(unsigned baud_rate);
+  virtual bool SetBaudrate(unsigned baud_rate);
   virtual unsigned GetBaudrate() const;
   virtual bool StopRxThread();
   virtual bool StartRxThread();

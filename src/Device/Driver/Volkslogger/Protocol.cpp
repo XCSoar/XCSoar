@@ -176,8 +176,7 @@ Volkslogger::SendCommandSwitchBaudRate(Port &port, OperationEnvironment &env,
   if (!SendCommand(port, env, cmd, param1, baud_rate_index))
     return false;
 
-  port.SetBaudrate(baud_rate);
-  return true;
+  return port.SetBaudrate(baud_rate);
 }
 
 bool
@@ -336,10 +335,11 @@ Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
                                  void *buffer, unsigned max_length,
                                  unsigned baud_rate)
 {
+  unsigned old_baud_rate = port.GetBaudrate();
+
   if (!SendCommandSwitchBaudRate(port, env, cmd, param1, baud_rate))
     return -1;
 
-  unsigned old_baud_rate = port.SetBaudrate(baud_rate);
   int nbytes = ReadBulk(port, env, buffer, max_length);
 
   port.SetBaudrate(old_baud_rate);

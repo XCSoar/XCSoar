@@ -481,16 +481,15 @@ SerialPort::GetBaudrate() const
   return PortDCB.BaudRate;
 }
 
-unsigned
+bool
 SerialPort::SetBaudrate(unsigned BaudRate)
 {
   COMSTAT ComStat;
   DCB PortDCB;
   DWORD dwErrors;
-  unsigned result = 0;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return result;
+    return false;
 
   do {
     ClearCommError(hPort, &dwErrors, &ComStat);
@@ -500,13 +499,9 @@ SerialPort::SetBaudrate(unsigned BaudRate)
 
   GetCommState(hPort, &PortDCB);
 
-  result = PortDCB.BaudRate;
   PortDCB.BaudRate = BaudRate;
 
-  if (!SetCommState(hPort, &PortDCB))
-    return 0;
-
-  return result;
+  return SetCommState(hPort, &PortDCB);
 }
 
 int

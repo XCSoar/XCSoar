@@ -233,10 +233,10 @@ TCPPort::GetBaudrate() const
   return 0;
 }
 
-unsigned
-TCPPort::SetBaudrate(unsigned BaudRate)
+bool
+TCPPort::SetBaudrate(unsigned baud_rate)
 {
-  return 0;
+  return true;
 }
 
 int

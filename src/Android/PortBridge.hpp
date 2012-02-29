@@ -43,8 +43,8 @@ public:
     return env->CallIntMethod(Get(), getBaudRate_method);
   }
 
-  int setBaudRate(JNIEnv *env, int baud_rate) {
-    return env->CallIntMethod(Get(), setBaudRate_method, baud_rate);
+  bool setBaudRate(JNIEnv *env, int baud_rate) {
+    return env->CallBooleanMethod(Get(), setBaudRate_method, baud_rate);
   }
 
   void setReadTimeout(JNIEnv *env, int timeout) {

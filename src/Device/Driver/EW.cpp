@@ -194,7 +194,11 @@ EWDevice::Declare(const struct Declaration &declaration,
                   OperationEnvironment &env)
 {
   // change to IO Mode baudrate
-  lLastBaudrate = port.SetBaudrate(9600L);
+  unsigned old_baud_rate = port.GetBaudrate();
+  if (old_baud_rate == 9600)
+    old_baud_rate = 0;
+  else if (!port.SetBaudrate(9600))
+    return false;
 
   // set RX timeout to 500[ms]
   port.SetRxTimeout(500);
@@ -205,7 +209,8 @@ EWDevice::Declare(const struct Declaration &declaration,
   port.Write("NMEA\r\n");
 
   // restore baudrate
-  port.SetBaudrate(lLastBaudrate);
+  if (old_baud_rate != 0)
+    port.SetBaudrate(old_baud_rate);
 
   return success;
 }

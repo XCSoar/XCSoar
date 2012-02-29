@@ -231,11 +231,10 @@ final class IOIOHelper {
       autoClose();
     }
 
-    public int setBaudRate(int baud) {
+    public boolean setBaudRate(int baud) {
       doClose();
       baudrate = baud;
-      doOpen();
-      return baud;
+      return doOpen();
     }
 
     public int getBaudRate() {

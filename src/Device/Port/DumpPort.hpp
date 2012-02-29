@@ -42,7 +42,7 @@ public:
   virtual void Flush();
   virtual bool SetRxTimeout(unsigned timeout_ms);
   virtual unsigned GetBaudrate() const;
-  virtual unsigned SetBaudrate(unsigned baud_rate);
+  virtual bool SetBaudrate(unsigned baud_rate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
   virtual int Read(void *buffer, size_t size);

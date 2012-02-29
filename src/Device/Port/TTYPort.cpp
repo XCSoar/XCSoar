@@ -229,22 +229,20 @@ baud_rate_to_speed_t(unsigned baud_rate)
   }
 }
 
-unsigned
+bool
 TTYPort::SetBaudrate(unsigned BaudRate)
 {
   if (fd < 0)
-    return 0;
+    return false;
 
   speed_t speed = baud_rate_to_speed_t(BaudRate);
   if (speed == B0)
     /* not supported */
-    return 0;
-
-  unsigned old = baud_rate;
+    return false;
 
   struct termios attr;
   if (tcgetattr(fd, &attr) < 0)
-    return 0;
+    return false;
 
   attr.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
   attr.c_oflag &= ~OPOST;
@@ -257,12 +255,11 @@ TTYPort::SetBaudrate(unsigned BaudRate)
   cfsetispeed(&attr, speed);
   if (tcsetattr(fd, TCSANOW, &attr) < 0) {
     close(fd);
-    return 0;
+    return false;
   }
 
   baud_rate = BaudRate;
-
-  return old;
+  return true;
 }
 
 int
