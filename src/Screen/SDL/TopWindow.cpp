@@ -210,6 +210,10 @@ TopWindow::OnEvent(const SDL_Event &event)
 
   case SDL_QUIT:
     return OnClose();
+
+  case SDL_VIDEORESIZE:
+    OnResize(event.resize.w, event.resize.h);
+    return true;
   }
 
   return false;
