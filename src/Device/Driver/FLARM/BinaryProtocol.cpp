@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
-#include "PeriodClock.hpp"
+#include "TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 
 #define FLARM_STARTFRAME 0x73
@@ -38,13 +38,12 @@ FlarmDevice::SendEscaped(const void *buffer, size_t length, unsigned timeout_ms)
   assert(buffer != NULL);
   assert(length > 0);
 
-  PeriodClock timeout;
-  timeout.Update();
+  const TimeoutClock timeout(timeout_ms);
 
   // Send data byte-by-byte including escaping
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.Check(timeout_ms))
+    if (timeout.HasExpired())
       return false;
 
     // Check for bytes that need to be escaped and send
@@ -74,13 +73,12 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length, unsigned timeout_ms)
   assert(buffer != NULL);
   assert(length > 0);
 
-  PeriodClock timeout;
-  timeout.Update();
+  const TimeoutClock timeout(timeout_ms);
 
   // Receive data byte-by-byte including escaping until buffer is full
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.Check(timeout_ms))
+    if (timeout.HasExpired())
       return false;
 
     // Read single character from port
@@ -98,7 +96,7 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length, unsigned timeout_ms)
       // Read next character after the ESCAPE
       int c2;
       while ((c2 = port.GetChar()) == -1)
-        if (timeout.Check(timeout_ms))
+        if (timeout.HasExpired())
           return false;
 
       switch (c2) {
@@ -135,10 +133,10 @@ bool
 FlarmDevice::WaitForStartByte(unsigned timeout_ms)
 {
   assert(in_binary_mode);
-  PeriodClock timeout;
-  timeout.Update();
 
-  while (!timeout.Check(timeout_ms))
+  const TimeoutClock timeout(timeout_ms);
+
+  while (!timeout.HasExpired())
     if (port.GetChar() == FLARM_STARTFRAME)
       return true;
 
@@ -217,18 +215,17 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               AllocatedArray<uint8_t> &data, uint16_t &length,
                               unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
+  const TimeoutClock timeout(timeout_ms);
 
   // Receive frames until timeout or expected frame found
-  while (!timeout.Check(timeout_ms)) {
+  while (!timeout.HasExpired()) {
     // Wait until the next start byte comes around
-    if (!WaitForStartByte(timeout_ms - timeout.Elapsed()))
+    if (!WaitForStartByte(timeout.GetRemainingOrZero()))
       continue;
 
     // Read the following FrameHeader
     FrameHeader header;
-    if (!ReceiveFrameHeader(header, timeout_ms - timeout.Elapsed()))
+    if (!ReceiveFrameHeader(header, timeout.GetRemainingOrZero()))
       continue;
 
     // Read and check length of the FrameHeader
@@ -241,7 +238,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read payload and check length
     data.GrowDiscard(length);
-    if (!ReceiveEscaped(data.begin(), length, timeout_ms - timeout.Elapsed()))
+    if (!ReceiveEscaped(data.begin(), length, timeout.GetRemainingOrZero()))
       continue;
 
     // Verify CRC
@@ -282,30 +279,28 @@ FlarmDevice::WaitForACK(uint16_t sequence_number, unsigned timeout_ms)
 bool
 FlarmDevice::BinaryPing(unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
+  const TimeoutClock timeout(timeout_ms);
 
   // Create header for sending a binary ping request
   FrameHeader header = PrepareFrameHeader(MT_PING);
 
   // Send request and wait for positive answer
   return SendStartByte() &&
-         SendFrameHeader(header, timeout_ms - timeout.Elapsed()) &&
-         WaitForACK(header.GetSequenceNumber(), timeout_ms - timeout.Elapsed());
+         SendFrameHeader(header, timeout.GetRemainingOrZero()) &&
+         WaitForACK(header.GetSequenceNumber(), timeout.GetRemainingOrZero());
 }
 
 bool
 FlarmDevice::BinaryReset(unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
+  TimeoutClock timeout(timeout_ms);
 
   // Create header for sending a binary reset request
   FrameHeader header = PrepareFrameHeader(MT_EXIT);
 
   // Send request and wait for positive answer
   return SendStartByte() &&
-         SendFrameHeader(header, timeout_ms - timeout.Elapsed());
+    SendFrameHeader(header, timeout.GetRemainingOrZero());
 }
 
 bool

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
-#include "PeriodClock.hpp"
+#include "TimeoutClock.hpp"
 
 #include <assert.h>
 
@@ -48,15 +48,14 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
   assert(!in_binary_mode);
   assert(prefix != NULL);
 
-  PeriodClock timeout;
-  timeout.Update();
+  TimeoutClock timeout(timeout_ms);
 
   if (!port.ExpectString(prefix, timeout_ms))
     return false;
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.Check(timeout_ms))
+    if (timeout.HasExpired())
       return false;
 
     // Read single character from port

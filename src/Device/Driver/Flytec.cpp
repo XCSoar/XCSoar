@@ -30,7 +30,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Device/Port/Port.hpp"
-#include "PeriodClock.hpp"
+#include "TimeoutClock.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Operation/Operation.hpp"
@@ -289,12 +289,11 @@ ExpectXOff(Port &port, OperationEnvironment &env, unsigned timeout_ms)
 static bool
 ReceiveLine(Port &port, char *buffer, size_t length, unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
+  TimeoutClock timeout(timeout_ms);
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.Check(timeout_ms))
+    if (timeout.HasExpired())
       return false;
 
     // Read single character from port

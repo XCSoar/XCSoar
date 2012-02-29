@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Port.hpp"
-#include "PeriodClock.hpp"
+#include "TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 
 #include <algorithm>
@@ -43,12 +43,11 @@ Port::Write(const char *s)
 bool
 Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
+  const TimeoutClock timeout(timeout_ms);
 
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.Check(timeout_ms))
+    if (timeout.HasExpired())
       return false;
 
     size_t nbytes = Write(p, end - p);
@@ -82,8 +81,7 @@ Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
 {
   Flush();
 
-  PeriodClock clock;
-  clock.Update();
+  const TimeoutClock total_timeout(total_timeout_ms);
 
   char buffer[0x100];
   do {
@@ -100,7 +98,7 @@ Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
     case WaitResult::CANCELLED:
       return false;
     }
-  } while (!clock.Check(total_timeout_ms));
+  } while (!total_timeout.HasExpired());
 
   return true;
 }
@@ -108,12 +106,11 @@ Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
 bool
 Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
+  const TimeoutClock timeout(timeout_ms);
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.Check(timeout_ms))
+    if (timeout.HasExpired())
       return false;
 
     int nbytes = Read(p, end - p);
@@ -130,14 +127,11 @@ bool
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
                unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
-
-  unsigned remaining = timeout_ms;
+  const TimeoutClock timeout(timeout_ms);
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    WaitResult wait_result = WaitRead(env, remaining);
+    WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());
     if (wait_result != WaitResult::READY)
       // Operation canceled, Timeout expired or I/O error occurred
       return false;
@@ -152,11 +146,8 @@ Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
 
     p += nbytes;
 
-    unsigned elapsed = timeout.Elapsed();
-    if (elapsed >= timeout_ms)
+    if (timeout.HasExpired())
       return false;
-
-    remaining = timeout_ms - elapsed;
   }
 
   return true;
@@ -189,8 +180,7 @@ Port::ExpectString(const char *token, unsigned timeout_ms)
 {
   assert(token != NULL);
 
-  PeriodClock timeout;
-  timeout.Update();
+  const TimeoutClock timeout(timeout_ms);
 
   const char *p = token;
   while (*p != '\0') {
@@ -199,7 +189,7 @@ Port::ExpectString(const char *token, unsigned timeout_ms)
       return false;
 
     if (ch != *p++) {
-      if (timeout.Check(timeout_ms))
+      if (timeout.HasExpired())
         /* give up after 2 seconds (is that enough for all
            devices?) */
         return false;
@@ -216,13 +206,10 @@ Port::WaitResult
 Port::WaitForChar(const char token, OperationEnvironment &env,
                   unsigned timeout_ms)
 {
-  PeriodClock timeout;
-  timeout.Update();
-
-  unsigned remaining = timeout_ms;
+  const TimeoutClock timeout(timeout_ms);
 
   while (true) {
-    WaitResult wait_result = WaitRead(env, remaining);
+    WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());
     if (wait_result != WaitResult::READY)
       // Operation canceled, Timeout expired or I/O error occurred
       return wait_result;
@@ -232,11 +219,8 @@ Port::WaitForChar(const char token, OperationEnvironment &env,
     if (ch == token)
       break;
 
-    unsigned elapsed = timeout.Elapsed();
-    if (elapsed >= timeout_ms)
+    if (timeout.HasExpired())
       return WaitResult::TIMEOUT;
-
-    remaining = timeout_ms - elapsed;
   }
 
   return WaitResult::READY;
