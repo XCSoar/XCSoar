@@ -110,6 +110,9 @@ OnAirspaceListEnter(unsigned index)
     CommonInterface::SetMapSettings().airspace;
 
   if (color_mode) {
+    AirspaceLook &look =
+      CommonInterface::main_window.SetLook().map.airspace;
+
     int color_index = dlgAirspaceColoursShowModal();
     if (color_index >= 0) {
       renderer.classes[index].color = AirspaceLook::preset_colors[color_index];
@@ -117,8 +120,6 @@ OnAirspaceListEnter(unsigned index)
       Profile::SetAirspaceColor(index, renderer.classes[index].color);
       changed = true;
 
-      AirspaceLook &look =
-        CommonInterface::main_window.SetLook().map.airspace;
       look.Initialise(renderer);
     }
 
@@ -126,7 +127,7 @@ OnAirspaceListEnter(unsigned index)
 #ifdef HAVE_ALPHA_BLEND
     if (!renderer.transparency || !AlphaBlendAvailable()) {
 #endif
-      int pattern_index = dlgAirspacePatternsShowModal();
+      int pattern_index = dlgAirspacePatternsShowModal(look);
       if (pattern_index >= 0) {
         renderer.classes[index].brush = pattern_index;
         ActionInterface::SendMapSettings();

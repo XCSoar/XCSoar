@@ -27,13 +27,14 @@ Copyright_License {
 class AbstractAirspace;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
+struct AirspaceLook;
 
 void
 dlgAirspaceDetails(const AbstractAirspace& the_airspace,
                    ProtectedAirspaceWarningManager *_airspace_warnings);
 
 int dlgAirspaceColoursShowModal();
-int dlgAirspacePatternsShowModal();
+int dlgAirspacePatternsShowModal(const AirspaceLook &look);
 void dlgAirspaceShowModal(bool colored);
 
 void

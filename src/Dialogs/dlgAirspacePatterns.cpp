@@ -27,22 +27,22 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Features.hpp"
 #include "UIGlobals.hpp"
-#include "Look/MapLook.hpp"
+#include "Look/AirspaceLook.hpp"
 
 #include <assert.h>
 
 /* brush patterns are only available on GDI */
 #ifdef HAVE_HATCHED_BRUSH
 
+static const AirspaceLook *look;
+
 static void
 OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   assert(i < NUMAIRSPACEBRUSHES);
 
-  const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
-
   canvas.SetBackgroundTransparent();
-  canvas.Select(look.brushes[i]);
+  canvas.Select(look->brushes[i]);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.Rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),
@@ -51,8 +51,10 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 }
 
 int
-dlgAirspacePatternsShowModal()
+dlgAirspacePatternsShowModal(const AirspaceLook &_look)
 {
+  look = &_look;
+
   return ListPicker(UIGlobals::GetMainWindow(), _("Select Pattern"),
                     NUMAIRSPACEBRUSHES, 0, Layout::FastScale(18),
                     OnAirspacePatternsPaintListItem);
