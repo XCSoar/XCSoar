@@ -41,9 +41,9 @@ Copyright_License {
 #include <assert.h>
 
 static WndForm *wf = NULL;
-static WndListFrame *wAirspaceList = NULL;
+static WndListFrame *airspace_list = NULL;
 
-static bool colormode = false;
+static bool color_mode = false;
 
 static void
 OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
@@ -62,7 +62,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   PixelScalar w2 = canvas.CalcTextWidth(_("Display")) + Layout::FastScale(10);
   PixelScalar x0 = w0 - w1 - w2;
 
-  if (colormode) {
+  if (color_mode) {
     canvas.SelectWhitePen();
 #ifndef HAVE_HATCHED_BRUSH
     canvas.Select(look.solid_brushes[i]);
@@ -99,21 +99,21 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 static bool changed = false;
 
 static void
-OnAirspaceListEnter(unsigned ItemIndex)
+OnAirspaceListEnter(unsigned index)
 {
-  assert(ItemIndex < AIRSPACECLASSCOUNT);
+  assert(index < AIRSPACECLASSCOUNT);
 
   AirspaceComputerSettings &computer =
     CommonInterface::SetComputerSettings().airspace;
   AirspaceRendererSettings &renderer =
     CommonInterface::SetMapSettings().airspace;
 
-  if (colormode) {
-    int c = dlgAirspaceColoursShowModal();
-    if (c >= 0) {
-      renderer.classes[ItemIndex].color = AirspaceLook::preset_colors[c];
+  if (color_mode) {
+    int color_index = dlgAirspaceColoursShowModal();
+    if (color_index >= 0) {
+      renderer.classes[index].color = AirspaceLook::preset_colors[color_index];
       ActionInterface::SendMapSettings();
-      Profile::SetAirspaceColor(ItemIndex, renderer.classes[ItemIndex].color);
+      Profile::SetAirspaceColor(index, renderer.classes[index].color);
       changed = true;
 
       AirspaceLook &look =
@@ -125,11 +125,11 @@ OnAirspaceListEnter(unsigned ItemIndex)
 #ifdef HAVE_ALPHA_BLEND
     if (!renderer.transparency || !AlphaBlendAvailable()) {
 #endif
-      int p = dlgAirspacePatternsShowModal();
-      if (p >= 0) {
-        renderer.classes[ItemIndex].brush = p;
+      int pattern_index = dlgAirspacePatternsShowModal();
+      if (pattern_index >= 0) {
+        renderer.classes[index].brush = pattern_index;
         ActionInterface::SendMapSettings();
-        Profile::SetAirspaceBrush(ItemIndex, renderer.classes[ItemIndex].brush);
+        Profile::SetAirspaceBrush(index, renderer.classes[index].brush);
         changed = true;
       }
 #ifdef HAVE_ALPHA_BLEND
@@ -137,17 +137,17 @@ OnAirspaceListEnter(unsigned ItemIndex)
 #endif
 #endif
   } else {
-    renderer.classes[ItemIndex].display = !renderer.classes[ItemIndex].display;
-    if (!renderer.classes[ItemIndex].display)
-      computer.warnings.class_warnings[ItemIndex] =
-        !computer.warnings.class_warnings[ItemIndex];
+    renderer.classes[index].display = !renderer.classes[index].display;
+    if (!renderer.classes[index].display)
+      computer.warnings.class_warnings[index] =
+        !computer.warnings.class_warnings[index];
 
-    Profile::SetAirspaceMode(ItemIndex, renderer.classes[ItemIndex].display,
-                             computer.warnings.class_warnings[ItemIndex]);
+    Profile::SetAirspaceMode(index, renderer.classes[index].display,
+                             computer.warnings.class_warnings[index]);
     changed = true;
   }
 
-  wAirspaceList->invalidate();
+  airspace_list->invalidate();
 
   ActionInterface::SendMapSettings();
 }
@@ -171,20 +171,20 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAirspaceShowModal(bool coloredit)
+dlgAirspaceShowModal(bool _color_mode)
 {
-  colormode = coloredit;
+  color_mode = _color_mode;
 
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   !Layout::landscape ? _T("IDR_XML_AIRSPACE_L") :
                                        _T("IDR_XML_AIRSPACE"));
   assert(wf != NULL);
 
-  wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
-  assert(wAirspaceList != NULL);
-  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
-  wAirspaceList->SetPaintItemCallback(OnAirspacePaintListItem);
-  wAirspaceList->SetLength(AIRSPACECLASSCOUNT);
+  airspace_list = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
+  assert(airspace_list != NULL);
+  airspace_list->SetActivateCallback(OnAirspaceListEnter);
+  airspace_list->SetPaintItemCallback(OnAirspacePaintListItem);
+  airspace_list->SetLength(AIRSPACECLASSCOUNT);
 
   changed = false;
 
@@ -192,7 +192,7 @@ dlgAirspaceShowModal(bool coloredit)
 
   // now retrieve back the properties...
   if (changed) {
-    if (!colormode && glide_computer != NULL) {
+    if (!color_mode && glide_computer != NULL) {
       ProtectedAirspaceWarningManager::ExclusiveLease awm(glide_computer->GetAirspaceWarnings());
       awm->SetConfig(CommonInterface::SetComputerSettings().airspace.warnings);
     }
