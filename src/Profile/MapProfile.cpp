@@ -54,7 +54,7 @@ Profile::Load(MapSettings &settings)
 
   GetEnum(szProfileSnailTrail, settings.trail_length);
 
-  LoadAirspaceConfig();
+  LoadAirspaceConfig(settings.airspace);
 
   Get(szProfileGliderScreenPosition, settings.glider_screen_position);
 

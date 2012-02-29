@@ -31,7 +31,7 @@ Copyright_License {
 #include "Sizes.h"
 
 void
-Profile::LoadAirspaceConfig()
+Profile::LoadAirspaceConfig(AirspaceRendererSettings &renderer)
 {
   unsigned Temp = 0;
 
@@ -47,9 +47,6 @@ Profile::LoadAirspaceConfig()
 
 
   // RendererSettings
-
-  AirspaceRendererSettings &renderer =
-    CommonInterface::SetMapSettings().airspace;
 
   Get(szProfileAirspaceBlackOutline, renderer.black_outline);
   GetEnum(szProfileAltMode, renderer.altitude_mode);
