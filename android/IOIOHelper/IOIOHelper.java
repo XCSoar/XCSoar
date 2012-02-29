@@ -37,6 +37,8 @@ import ioio.lib.api.exception.IncompatibilityException;
  * C++ code.
  */
 final class IOIOHelper extends Thread {
+  private static final String TAG = "XCSoar";
+
   private enum Command {
     NONE,
     SHUTDOWN,
@@ -145,17 +147,17 @@ final class IOIOHelper extends Thread {
     try {
       ioio.waitForConnect();
       if (ioio.getState() == IOIO.State.CONNECTED) {
-        Log.d("IOIOHelper", "IOIO connection established");
+        Log.d(TAG, "IOIO connection established");
         ioio.softReset();
         ioio_ = ioio;
       } else {
-        Log.w("IOIOHelper", "IOIO connection failed");
+        Log.w(TAG, "IOIO connection failed");
         ioio.disconnect();
       }
     } catch (ConnectionLostException e) {
-      Log.w("IOIOHelper", "IOIOJWaitConnect() Connection Lost", e);
+      Log.w(TAG, "IOIOJWaitConnect() Connection Lost", e);
     } catch (IncompatibilityException e) {
-      Log.e("IOIOHelper", "IOIOJWaitConnect() Incompatibility detected", e);
+      Log.e(TAG, "IOIOJWaitConnect() Incompatibility detected", e);
     }
   }
 
@@ -188,7 +190,7 @@ final class IOIOHelper extends Thread {
             /* there is a connection: wait for connection error or
                until Thread.interrupt() gets called */
             ioio_.waitForDisconnect();
-            Log.w("IOIOHelper", "IOIO connection lost");
+            Log.w(TAG, "IOIO connection lost");
           } else {
             /* there is no connection: wait until Object.notify() gets
                called */
@@ -335,10 +337,10 @@ final class IOIOHelper extends Thread {
         super.set(uart.getInputStream(), uart.getOutputStream());
         return true;
       } catch (ConnectionLostException e) {
-        Log.w("IOIOHelper", "IOIOJopenUart() Connection Lost.  Baud: " + baudrate, e);
+        Log.w(TAG, "IOIOJopenUart() Connection Lost.  Baud: " + baudrate, e);
         return false;
       } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJopenUart() Unexpected exception caught", e);
+        Log.e(TAG, "IOIOJopenUart() Unexpected exception caught", e);
         return false;
       }
     }
@@ -351,7 +353,7 @@ final class IOIOHelper extends Thread {
      */
     public boolean openUart(int _baud) {
       if (!isAvailable) {
-        Log.e("IOIOHelper", "IOIOJopenUart() is not available: " + ID);
+        Log.e(TAG, "IOIOJopenUart() is not available: " + ID);
         return false;
       }
 
@@ -365,7 +367,7 @@ final class IOIOHelper extends Thread {
       try {
         uart.close();
       } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJclose() Unexpected exception caught", e);
+        Log.e(TAG, "IOIOJclose() Unexpected exception caught", e);
       }
       uart = null;
       isAvailable = true;
