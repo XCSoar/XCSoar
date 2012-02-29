@@ -42,7 +42,7 @@ static WndForm *wf = NULL;
 static void
 OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
-  assert(i < NUMAIRSPACECOLORS);
+  assert(i < NUMAIRSPACEBRUSHES);
 
   const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
 
