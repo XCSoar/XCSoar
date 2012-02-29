@@ -84,7 +84,7 @@ namespace Profile
   bool GetGeoPoint(const TCHAR *key, GeoPoint &value);
 
   /**
-   * Save a GeoPoint from the profile.  It is stored as a string,
+   * Save a GeoPoint to the profile.  It is stored as a string,
    * longitude and latitude formatted in degrees separated by a space
    * character.
    */
