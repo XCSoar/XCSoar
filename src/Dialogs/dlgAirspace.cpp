@@ -177,8 +177,8 @@ dlgAirspaceShowModal(bool _color_mode)
   color_mode = _color_mode;
 
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  !Layout::landscape ? _T("IDR_XML_AIRSPACE_L") :
-                                       _T("IDR_XML_AIRSPACE"));
+                  Layout::landscape ? _T("IDR_XML_AIRSPACE_L") :
+                                      _T("IDR_XML_AIRSPACE"));
   assert(wf != NULL);
 
   airspace_list = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
