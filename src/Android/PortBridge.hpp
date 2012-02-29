@@ -29,11 +29,12 @@ Copyright_License {
 class PortBridge : protected Java::Object {
   jmethodID getBaudRate_method, setBaudRate_method;
   jmethodID setReadTimeout_mid;
-  jmethodID read_method, write_mid, flush_mid;
+  jmethodID read_method, write_method, flush_mid;
   jmethodID waitRead_method;
 
   static gcc_constexpr_data size_t read_buffer_size = 4096;
-  Java::GlobalRef<jbyteArray> read_buffer;
+  static gcc_constexpr_data size_t write_buffer_size = 4096;
+  Java::GlobalRef<jbyteArray> read_buffer, write_buffer;
 
 public:
   PortBridge(JNIEnv *env, jobject obj);
@@ -60,9 +61,7 @@ public:
 
   int read(JNIEnv *env, void *buffer, size_t length);
 
-  bool write(JNIEnv *env, int ch) {
-    return env->CallBooleanMethod(Get(), write_mid, ch);
-  }
+  int write(JNIEnv *env, const void *data, size_t length);
 
   void flush(JNIEnv *env) {
     env->CallVoidMethod(Get(), flush_mid);

@@ -93,8 +93,10 @@ abstract class AbstractAndroidPort implements AndroidPort {
       : -1;
   }
 
-  public final boolean write(byte ch) {
+  public final int write(byte[] data, int length) {
     OutputThread o = output;
-    return o != null && o.write(ch);
+    return o != null
+      ? o.write(data, length)
+      : -1;
   }
 }

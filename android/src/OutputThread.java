@@ -114,34 +114,41 @@ class OutputThread extends Thread {
     }
   }
 
-  public synchronized boolean write(byte ch) {
+  public synchronized int write(byte[] data, int length) {
     if (tail >= BUFFER_SIZE) {
       if (head == 0) {
         // buffer is full
 
         if (timeout <= 0)
-          return false;
+          return -1;
 
         try {
           wait(timeout);
         } catch (InterruptedException e) {
-          return false;
+          return -1;
         }
 
         if (head == 0)
           // still full, timeout
-          return false;
+          return -1;
       }
 
       shift();
     }
 
-    buffer[tail++] = ch;
+    final boolean was_empty = head == tail;
+    int nbytes = BUFFER_SIZE - tail;
+    if (nbytes > length)
+      nbytes = length;
 
-    if (tail == head + 1)
+    System.arraycopy(data, 0, buffer, tail, nbytes);
+
+    tail += nbytes;
+
+    if (was_empty)
       // notify the thread that it may continue writing
       notifyAll();
 
-    return true;
+    return nbytes;
   }
 }

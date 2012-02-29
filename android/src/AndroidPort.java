@@ -46,5 +46,13 @@ interface AndroidPort {
    */
   int read(byte[] buffer, int length);
 
-  boolean write(byte ch);
+  /**
+   * Write data to the port.  Execution blocks until at least one
+   * bytes is written or an error occurs or until the timeout expires.
+   *
+   * @param data the data to be written
+   * @param length the number of bytes to be written
+   * @return the number of bytes that were written or -1 on error/timeout
+   */
+  int write(byte[] data, int length);
 }

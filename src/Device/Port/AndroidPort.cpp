@@ -103,16 +103,10 @@ AndroidPort::Write(const void *data, size_t length)
     return 0;
 
   JNIEnv *env = Java::GetEnv();
-
-  size_t nbytes = 0;
-  const uint8_t *bytes = (const uint8_t *)data;
-  for (size_t i = 0; i < length; ++i) {
-    if (!bridge->write(env, bytes[i]))
-      break;
-    ++nbytes;
-  }
-
-  return nbytes;
+  int nbytes = bridge->write(env, data, length);
+  return nbytes > 0
+    ? (size_t)nbytes
+    : 0;
 }
 
 bool

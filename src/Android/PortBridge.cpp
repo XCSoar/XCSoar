@@ -33,11 +33,12 @@ PortBridge::PortBridge(JNIEnv *env, jobject obj)
   setBaudRate_method = env->GetMethodID(cls, "setBaudRate", "(I)Z");
   setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(I)V");
   read_method = env->GetMethodID(cls, "read", "([BI)I");
-  write_mid = env->GetMethodID(cls, "write", "(B)Z");
+  write_method = env->GetMethodID(cls, "write", "([BI)I");
   flush_mid = env->GetMethodID(cls, "flush", "()V");
   waitRead_method = env->GetMethodID(cls, "waitRead", "(I)I");
 
   read_buffer.Set(env, env->NewByteArray(read_buffer_size));
+  write_buffer.Set(env, env->NewByteArray(write_buffer_size));
 }
 
 int
@@ -55,4 +56,17 @@ PortBridge::read(JNIEnv *env, void *buffer, size_t length)
   }
 
   return nbytes;
+}
+
+int
+PortBridge::write(JNIEnv *env, const void *data, size_t length)
+{
+  if (length > write_buffer_size)
+    length = write_buffer_size;
+
+  jbyte *dest = env->GetByteArrayElements(write_buffer, NULL);
+  memcpy(dest, data, length);
+  env->ReleaseByteArrayElements(write_buffer, dest, 0);
+
+  return env->CallIntMethod(Get(), write_method, write_buffer.Get(), length);
 }
