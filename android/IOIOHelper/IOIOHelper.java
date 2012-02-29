@@ -168,6 +168,27 @@ final class IOIOHelper {
       return isAvailable;
     }
 
+    private boolean doOpen() {
+      if (baudrate == 0)
+        return false;
+
+      IOIO ioio = ioio_;
+      if (ioio == null)
+        return false;
+
+      try {
+        uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
+                             Uart.StopBits.ONE);
+        return true;
+      } catch (ConnectionLostException e) {
+        Log.w("IOIOHelper", "IOIOJopenUart() Connection Lost.  Baud: " + baudrate, e);
+        return false;
+      } catch (Exception e) {
+        Log.e("IOIOHelper", "IOIOJopenUart() Unexpected exception caught", e);
+        return false;
+      }
+    }
+
     /**
      * opens the Uart
      * sets isAvailable to false to indicate that it is no longer 
@@ -181,27 +202,15 @@ final class IOIOHelper {
       }
 
       baudrate = _baud;
-      try {
-        uart = ioio_.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
-                              Uart.StopBits.ONE);
-      } catch (ConnectionLostException e) {
-        Log.w("IOIOHelper", "IOIOJopenUart() Connection Lost.  Baud: " + _baud, e);
+      if (!doOpen())
         return false;
-      } catch (Exception e) {
-        Log.e("IOIOHelper", "IOIOJopenUart() Unexpected exception caught", e);
-        return false;
-      }
 
       super.set(uart.getInputStream(), uart.getOutputStream());
       isAvailable = false;
       return true;
     }
 
-    /**
-     * closes the Uart on the ioio
-     * sets isAvailable to true to indicate it is available for reopening
-     */
-    public void close() {
+    private void doClose() {
       super.close();
 
       try {
@@ -210,13 +219,21 @@ final class IOIOHelper {
         Log.e("IOIOHelper", "IOIOJclose() Unexpected exception caught", e);
       }
       uart = null;
-      isAvailable = true;
+    }
+
+    /**
+     * closes the Uart on the ioio
+     * sets isAvailable to true to indicate it is available for reopening
+     */
+    public void close() {
+      doClose();
       autoClose();
     }
 
     public int setBaudRate(int baud) {
-      close();
-      openUart(baud);
+      doClose();
+      baudrate = baud;
+      doOpen();
       return baud;
     }
 
