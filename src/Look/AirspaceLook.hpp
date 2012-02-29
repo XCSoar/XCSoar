@@ -29,8 +29,10 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Screen/Features.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
-#include "Sizes.h"
 #include "Compiler.h"
+
+#define NUMAIRSPACECOLORS 16
+#define NUMAIRSPACEBRUSHES 8
 
 struct AirspaceRendererSettings;
 

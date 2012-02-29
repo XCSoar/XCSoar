@@ -4,7 +4,4 @@
 // max length airspace and waypoint names
 #define NAME_SIZE 50
 
-#define NUMAIRSPACECOLORS 16
-#define NUMAIRSPACEBRUSHES 8
-
 #endif
