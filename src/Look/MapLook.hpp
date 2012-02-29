@@ -78,7 +78,7 @@ struct MapLook {
   MaskedIcon hCruise, hClimb, hFinalGlide, hAbort;
   MaskedIcon hGPSStatus1, hGPSStatus2;
 
-  void Initialise(const struct MapSettings &settings);
+  void Initialise(const MapSettings &settings);
 };
 
 #endif

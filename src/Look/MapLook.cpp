@@ -27,7 +27,7 @@ Copyright_License {
 #include "resource.h"
 
 void
-MapLook::Initialise(const struct MapSettings &settings)
+MapLook::Initialise(const MapSettings &settings)
 {
   waypoint.Initialise(settings.waypoint);
   airspace.Initialise(settings.airspace);
