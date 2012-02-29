@@ -32,7 +32,7 @@ struct Color;
 /**
  * Formats a Color struct into a hex-based RGB string, i.e. "#123456"
  */
-void FormatHexColor(TCHAR *buffer, size_t size, const Color &color);
+void FormatHexColor(TCHAR *buffer, size_t size, const Color color);
 
 bool ParseHexColor(const TCHAR *buffer, Color &color);
 

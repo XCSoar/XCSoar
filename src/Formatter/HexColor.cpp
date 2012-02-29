@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-FormatHexColor(TCHAR *buffer, size_t size, const Color &color)
+FormatHexColor(TCHAR *buffer, size_t size, const Color color)
 {
   assert(size >= 7);
 
