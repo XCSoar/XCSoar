@@ -90,6 +90,10 @@ public:
   void Signal() {
     pthread_cond_signal(&cond);
   }
+
+  void Broadcast() {
+    pthread_cond_broadcast(&cond);
+  }
 };
 
 #endif
