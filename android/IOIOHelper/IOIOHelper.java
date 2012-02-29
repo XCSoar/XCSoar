@@ -179,6 +179,7 @@ final class IOIOHelper {
       try {
         uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
                              Uart.StopBits.ONE);
+        isAvailable = false;
         return true;
       } catch (ConnectionLostException e) {
         Log.w("IOIOHelper", "IOIOJopenUart() Connection Lost.  Baud: " + baudrate, e);
@@ -206,7 +207,6 @@ final class IOIOHelper {
         return false;
 
       super.set(uart.getInputStream(), uart.getOutputStream());
-      isAvailable = false;
       return true;
     }
 
@@ -219,6 +219,7 @@ final class IOIOHelper {
         Log.e("IOIOHelper", "IOIOJclose() Unexpected exception caught", e);
       }
       uart = null;
+      isAvailable = false;
     }
 
     /**
