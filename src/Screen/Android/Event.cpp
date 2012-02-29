@@ -183,5 +183,5 @@ EventLoop::Dispatch(const Event &event)
     Notify *notify = (Notify *)event.ptr;
     notify->RunNotification();
   } else if (event.type != Event::NOP)
-    top_window.on_event(event);
+    top_window.OnEvent(event);
 }

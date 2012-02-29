@@ -70,7 +70,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
 }
 
 void
-TopWindow::full_screen()
+TopWindow::Fullscreen()
 {
   screen.Fullscreen();
 }
@@ -131,13 +131,13 @@ TopWindow::refresh()
 }
 
 bool
-TopWindow::on_activate()
+TopWindow::OnActivate()
 {
   return false;
 }
 
 bool
-TopWindow::on_deactivate()
+TopWindow::OnDeactivate()
 {
   return false;
 }
@@ -152,7 +152,7 @@ TopWindow::OnClose()
 #ifndef ANDROID
 
 bool
-TopWindow::on_event(const SDL_Event &event)
+TopWindow::OnEvent(const SDL_Event &event)
 {
   switch (event.type) {
     Window *w;

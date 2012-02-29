@@ -186,7 +186,7 @@ public:
   }
 #endif
 
-  void full_screen();
+  void Fullscreen();
 
 #ifndef USE_GDI
   virtual void invalidate();
@@ -211,9 +211,9 @@ public:
   }
 
 #ifdef ANDROID
-  bool on_event(const Event &event);
+  bool OnEvent(const Event &event);
 #elif defined(ENABLE_SDL)
-  bool on_event(const SDL_Event &event);
+  bool OnEvent(const SDL_Event &event);
 #endif
 
 #ifdef ANDROID
@@ -244,8 +244,8 @@ public:
 #endif
 
 protected:
-  virtual bool on_activate();
-  virtual bool on_deactivate();
+  virtual bool OnActivate();
+  virtual bool OnDeactivate();
 
 #ifdef ENABLE_SDL
   virtual bool OnClose();

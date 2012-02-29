@@ -61,7 +61,7 @@ EventLoop::Dispatch(SDL_Event &event)
     Notify *notify = (Notify *)event.user.data1;
     notify->RunNotification();
   } else
-    top_window.on_event(event);
+    top_window.OnEvent(event);
 }
 
 void

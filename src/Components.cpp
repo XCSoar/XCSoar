@@ -195,7 +195,7 @@ XCSoarInterface::AfterStartup()
 
   task_manager->Resume();
 
-  main_window.full_screen();
+  main_window.Fullscreen();
   InfoBoxManager::SetDirty();
 
   TriggerGPSUpdate();

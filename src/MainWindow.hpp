@@ -280,7 +280,7 @@ private:
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  bool on_activate();
+  bool OnActivate();
   void OnSetFocus();
   virtual bool OnKeyDown(unsigned key_code);
   bool OnTimer(WindowTimer &timer);

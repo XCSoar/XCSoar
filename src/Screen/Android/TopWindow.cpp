@@ -159,7 +159,7 @@ TopWindow::resume()
 }
 
 bool
-TopWindow::on_event(const Event &event)
+TopWindow::OnEvent(const Event &event)
 {
   switch (event.type) {
     Window *w;

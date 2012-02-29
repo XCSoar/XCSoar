@@ -461,11 +461,11 @@ MainWindow::OnResize(UPixelScalar width, UPixelScalar height)
 }
 
 bool
-MainWindow::on_activate()
+MainWindow::OnActivate()
 {
-  SingleWindow::on_activate();
+  SingleWindow::OnActivate();
 
-  full_screen();
+  Fullscreen();
 
   return true;
 }

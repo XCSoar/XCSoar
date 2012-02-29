@@ -83,7 +83,7 @@ TopWindow::reset()
 #endif
 
 void
-TopWindow::full_screen()
+TopWindow::Fullscreen()
 {
   ::SetForegroundWindow(hWnd);
 #ifndef _WIN32_WCE
@@ -121,7 +121,7 @@ TopWindow::refresh()
 }
 
 bool
-TopWindow::on_activate()
+TopWindow::OnActivate()
 {
   if (hSavedFocus != NULL && ::IsWindow(hSavedFocus) &&
       ::IsWindowVisible(hSavedFocus) && ::IsWindowEnabled(hSavedFocus)) {
@@ -135,7 +135,7 @@ TopWindow::on_activate()
 }
 
 bool
-TopWindow::on_deactivate()
+TopWindow::OnDeactivate()
 {
   /* remember the currently focused control */
   hSavedFocus = ::GetFocus();
@@ -155,7 +155,7 @@ TopWindow::OnMessage(HWND _hWnd, UINT message,
     ayg_shell_dll.SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);
 #endif
 
-    if (wParam == WA_INACTIVE ? on_deactivate() : on_activate())
+    if (wParam == WA_INACTIVE ? OnDeactivate() : OnActivate())
       return true;
     break;
 
