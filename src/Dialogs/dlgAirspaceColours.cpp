@@ -22,18 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/Airspace.hpp"
-#include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 
 #include <assert.h>
-
-static WndForm *wf = NULL;
-static WndListFrame *wAirspaceColoursList = NULL;
-
-static int ItemIndex = -1;
 
 static void
 OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
@@ -58,50 +53,10 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.Rectangle(rc2.left, rc2.top, rc2.right, rc2.bottom);
 }
 
-static void
-OnAirspaceColoursListEnter(gcc_unused unsigned i)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  ItemIndex = -1;
-  wf->SetModalResult(mrOK);
-}
-
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 int
 dlgAirspaceColoursShowModal()
 {
-  ItemIndex = -1;
-
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape
-                  ? _T("IDR_XML_AIRSPACECOLOURS")
-                  : _T("IDR_XML_AIRSPACECOLOURS_L"));
-  assert(wf != NULL);
-
-  wAirspaceColoursList = (WndListFrame*)wf->FindByName(
-      _T("frmAirspaceColoursList"));
-  assert(wAirspaceColoursList != NULL);
-  wAirspaceColoursList->SetActivateCallback(OnAirspaceColoursListEnter);
-  wAirspaceColoursList->SetPaintItemCallback(OnAirspaceColoursPaintListItem);
-  wAirspaceColoursList->SetLength(NUMAIRSPACECOLORS);
-
-  int result = wf->ShowModal();
-  result = result == mrOK ? (int)wAirspaceColoursList->GetCursorIndex() : -1;
-
-  // now retrieve back the properties...
-
-  delete wf;
-
-  wf = NULL;
-
-  return result;
+  return ListPicker(UIGlobals::GetMainWindow(), _("Select Color"),
+                    NUMAIRSPACECOLORS, 0, Layout::FastScale(18),
+                    OnAirspaceColoursPaintListItem);
 }
