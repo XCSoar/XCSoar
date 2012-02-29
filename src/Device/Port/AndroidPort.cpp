@@ -23,48 +23,47 @@ Copyright_License {
 
 #include "AndroidPort.hpp"
 #include "Android/PortBridge.hpp"
+#include "TimeoutClock.hpp"
 
 #include <assert.h>
 
-AndroidPort::AndroidPort(Handler &_handler, PortBridge *_bridge)
-  :Port(_handler), bridge(_bridge)
+AndroidPort::AndroidPort(Port::Handler &_handler, PortBridge *_bridge)
+  :Port(_handler), bridge(_bridge), read_timeout(500),
+   running(false), waiting(false), closing(false)
 {
+  bridge->setListener(Java::GetEnv(), this);
 }
 
 AndroidPort::~AndroidPort()
 {
-  StopRxThread();
+  {
+    ScopeLock protect(mutex);
+    closing = true;
+  }
 
   delete bridge;
+
+  {
+    ScopeLock protect(mutex);
+    /* make sure the callback isn't running */
+    while (waiting) {
+      cond.Signal();
+      cond.Wait(mutex);
+    }
+  }
 }
 
 void
 AndroidPort::Flush()
 {
-  bridge->flush(Java::GetEnv());
+  ScopeLock protect(mutex);
+  buffer.Clear();
 }
 
 bool
 AndroidPort::Drain()
 {
   return bridge != NULL && bridge->drain(Java::GetEnv());
-}
-
-void
-AndroidPort::Run()
-{
-  assert(bridge != NULL);
-
-  SetRxTimeout(500);
-
-  JNIEnv *const env = Java::GetEnv();
-
-  char buffer[1024];
-  while (!CheckStopped()) {
-    int nbytes = bridge->read(env, buffer, sizeof(buffer));
-    if (nbytes > 0)
-      handler.DataReceived(buffer, nbytes);
-  }
 }
 
 unsigned
@@ -98,57 +97,117 @@ AndroidPort::Write(const void *data, size_t length)
 bool
 AndroidPort::StopRxThread()
 {
-  // Make sure the thread isn't terminating itself
-  assert(!Thread::IsInside());
-
-  if (bridge == NULL)
-    return false;
-
-  // If the thread is not running, cancel the rest of the function
-  if (!Thread::IsDefined())
-    return true;
-
-  BeginStop();
-
-  Thread::Join();
-
+  ScopeLock protect(mutex);
+  running = false;
+  cond.Broadcast();
   return true;
 }
 
 bool
 AndroidPort::StartRxThread()
 {
-  // Make sure the thread isn't starting itself
-  assert(!Thread::IsInside());
+  ScopeLock protect(mutex);
+  if (!running) {
+    running = true;
+    buffer.Clear();
+  }
 
-  // Make sure the port was opened correctly
-  if (bridge == NULL)
-    return false;
+  cond.Broadcast();
 
-  // Start the receive thread
-  StoppableThread::Start();
   return true;
 }
 
 bool
 AndroidPort::SetRxTimeout(unsigned Timeout)
 {
-  if (bridge == NULL)
-    return false;
-
-  bridge->setReadTimeout(Java::GetEnv(), Timeout);
+  read_timeout = Timeout;
   return true;
 }
 
 int
-AndroidPort::Read(void *buffer, size_t length)
+AndroidPort::Read(void *dest, size_t length)
 {
-  JNIEnv *env = Java::GetEnv();
-  return bridge->read(env, buffer, length);
+  TimeoutClock timeout(read_timeout);
+  ScopeLock protect(mutex);
+
+  while (!running) {
+    assert(!closing);
+
+    auto r = buffer.Read();
+    if (r.length > 0) {
+      size_t nbytes = std::min(length, r.length);
+      std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
+      buffer.Consume(nbytes);
+      return nbytes;
+    }
+
+    /* the buffer is empty; wait for DataReceived() to be called */
+    int remaining_ms = timeout.GetRemainingSigned();
+    if (remaining_ms <= 0)
+      return -1;
+
+    cond.Wait(mutex, remaining_ms);
+  }
+
+  return -1;
 }
 
 Port::WaitResult
 AndroidPort::WaitRead(unsigned timeout_ms)
 {
-  return (Port::WaitResult)bridge->waitRead(Java::GetEnv(), timeout_ms);
+  TimeoutClock timeout(timeout_ms);
+  ScopeLock protect(mutex);
+
+  while (buffer.IsEmpty()) {
+    if (running)
+      return WaitResult::CANCELLED;
+
+    int remaining_ms = timeout.GetRemainingSigned();
+    if (remaining_ms <= 0)
+      return WaitResult::TIMEOUT;
+
+    cond.Wait(mutex, remaining_ms);
+  }
+
+  return WaitResult::READY;
+}
+
+void
+AndroidPort::DataReceived(const void *data, size_t length)
+{
+  ScopeLock protect(mutex);
+
+  assert(!waiting);
+
+  if (running) {
+    handler.DataReceived(data, length);
+  } else {
+    const uint8_t *p = (const uint8_t *)data;
+
+    while (length > 0) {
+      auto r = buffer.Write();
+      if (r.length > 0) {
+        size_t nbytes = std::min(length, r.length);
+        std::copy(p, p + nbytes, r.data);
+        buffer.Append(nbytes);
+
+        p += nbytes;
+        length -= nbytes;
+
+        cond.Broadcast();
+      } else {
+        if (closing)
+          break;
+
+        waiting = true;
+        cond.Wait(mutex);
+        waiting = false;
+
+        if (!running)
+          /* while we were waiting, somebody else has called
+             StopRxThread() */
+          break;
+      }
+    }
+  }
 }

@@ -25,7 +25,11 @@ Copyright_License {
 #define XCSOAR_DEVICE_ANDROID_PORT_HPP
 
 #include "Port.hpp"
-#include "Thread/StoppableThread.hpp"
+#include "Thread/Mutex.hpp"
+#include "Thread/Cond.hpp"
+#include "Util/FifoBuffer.hpp"
+
+#include <stdint.h>
 
 class PortBridge;
 
@@ -33,12 +37,23 @@ class PortBridge;
  * A #Port implementation which transmits data over a Bluetooth RFCOMM
  * socket.
  */
-class AndroidPort : public Port, private StoppableThread
+class AndroidPort : public Port, private Port::Handler
 {
   PortBridge *bridge;
 
+  unsigned read_timeout;
+
+  Mutex mutex;
+  Cond cond;
+
+  FifoBuffer<uint8_t, 1024> buffer;
+
+  bool running;
+
+  bool waiting, closing;
+
 public:
-  AndroidPort(Handler &_handler, PortBridge *bridge);
+  AndroidPort(Port::Handler &_handler, PortBridge *bridge);
   virtual ~AndroidPort();
 
   virtual bool Drain();
@@ -55,11 +70,9 @@ public:
   virtual bool StopRxThread();
   virtual bool StartRxThread();
 
-protected:
-  /**
-   * Entry point for the receive thread
-   */
-  virtual void Run();
+private:
+  /* virtual methods from class Port::Handler */
+  virtual void DataReceived(const void *data, size_t length);
 };
 
 #endif

@@ -62,7 +62,8 @@ final class BluetoothHelper extends AbstractAndroidPort {
 
   BluetoothSocket socket;
 
-  BluetoothHelper(BluetoothSocket _socket) throws IOException {
+  BluetoothHelper(BluetoothSocket _socket)
+    throws IOException {
     super(_socket.getRemoteDevice().getAddress());
     socket = _socket;
 

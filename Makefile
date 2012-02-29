@@ -748,6 +748,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/TextUtil.cpp \
 	$(SRC)/Android/Timer.cpp \
 	$(SRC)/Android/EventBridge.cpp \
+	$(SRC)/Android/NativeInputListener.cpp \
 	$(SRC)/Android/PortBridge.cpp \
 	$(SRC)/Android/BluetoothHelper.cpp \
 	$(SRC)/Android/Battery.cpp \

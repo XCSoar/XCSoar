@@ -22,55 +22,46 @@ Copyright_License {
 */
 
 #include "Android/PortBridge.hpp"
+#include "Android/NativeInputListener.hpp"
 #include "Java/Class.hpp"
 
 #include <string.h>
 
+jmethodID PortBridge::setListener_method;
 jmethodID PortBridge::drain_method;
 jmethodID PortBridge::getBaudRate_method;
 jmethodID PortBridge::setBaudRate_method;
-jmethodID PortBridge::setReadTimeout_mid;
-jmethodID PortBridge::read_method;
 jmethodID PortBridge::write_method;
-jmethodID PortBridge::flush_mid;
-jmethodID PortBridge::waitRead_method;
 
 void
 PortBridge::Initialise(JNIEnv *env)
 {
   Java::Class cls(env, "org/xcsoar/AndroidPort");
 
+  setListener_method = env->GetMethodID(cls, "setListener",
+                                        "(Lorg/xcsoar/InputListener;)V");
   drain_method = env->GetMethodID(cls, "drain", "()Z");
   getBaudRate_method = env->GetMethodID(cls, "getBaudRate", "()I");
   setBaudRate_method = env->GetMethodID(cls, "setBaudRate", "(I)Z");
-  setReadTimeout_mid = env->GetMethodID(cls, "setReadTimeout", "(I)V");
-  read_method = env->GetMethodID(cls, "read", "([BI)I");
   write_method = env->GetMethodID(cls, "write", "([BI)I");
-  flush_mid = env->GetMethodID(cls, "flush", "()V");
-  waitRead_method = env->GetMethodID(cls, "waitRead", "(I)I");
 }
 
 PortBridge::PortBridge(JNIEnv *env, jobject obj)
   :Java::Object(env, obj) {
-  read_buffer.Set(env, env->NewByteArray(read_buffer_size));
   write_buffer.Set(env, env->NewByteArray(write_buffer_size));
 }
 
-int
-PortBridge::read(JNIEnv *env, void *buffer, size_t length)
+void
+PortBridge::setListener(JNIEnv *env, Port::Handler *handler)
 {
-  if (length > read_buffer_size)
-    length = read_buffer_size;
+  jobject listener = handler != NULL
+    ? NativeInputListener::Create(env, *handler)
+    : NULL;
 
-  jint nbytes = env->CallIntMethod(Get(), read_method,
-                                   read_buffer.Get(), length);
-  if (nbytes > 0) {
-    jbyte *src = env->GetByteArrayElements(read_buffer, NULL);
-    memcpy(buffer, src, nbytes);
-    env->ReleaseByteArrayElements(read_buffer, src, 0);
-  }
+  env->CallVoidMethod(Get(), setListener_method, listener);
 
-  return nbytes;
+  if (listener != NULL)
+    env->DeleteLocalRef(listener);
 }
 
 int

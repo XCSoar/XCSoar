@@ -24,28 +24,18 @@ Copyright_License {
 package org.xcsoar;
 
 /**
- * The Java interface of the C++ AndroidPort class.
+ * An #InputListener implementation that passes method calls to native
+ * code.
  */
-interface AndroidPort {
-  void setListener(InputListener listener);
-
-  void close();
-
+class NativeInputListener implements InputListener {
   /**
-   * @see Port::Drain()
+   * A native pointer.
    */
-  boolean drain();
+  private final long ptr;
 
-  int getBaudRate();
-  boolean setBaudRate(int baud);
+  NativeInputListener(long _ptr) {
+    ptr = _ptr;
+  }
 
-  /**
-   * Write data to the port.  Execution blocks until at least one
-   * bytes is written or an error occurs or until the timeout expires.
-   *
-   * @param data the data to be written
-   * @param length the number of bytes to be written
-   * @return the number of bytes that were written or -1 on error/timeout
-   */
-  int write(byte[] data, int length);
+  @Override public native void dataReceived(byte[] data, int length);
 }

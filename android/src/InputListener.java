@@ -24,28 +24,8 @@ Copyright_License {
 package org.xcsoar;
 
 /**
- * The Java interface of the C++ AndroidPort class.
+ * A listener that gets called when data is received on a socket.
  */
-interface AndroidPort {
-  void setListener(InputListener listener);
-
-  void close();
-
-  /**
-   * @see Port::Drain()
-   */
-  boolean drain();
-
-  int getBaudRate();
-  boolean setBaudRate(int baud);
-
-  /**
-   * Write data to the port.  Execution blocks until at least one
-   * bytes is written or an error occurs or until the timeout expires.
-   *
-   * @param data the data to be written
-   * @param length the number of bytes to be written
-   * @return the number of bytes that were written or -1 on error/timeout
-   */
-  int write(byte[] data, int length);
+interface InputListener {
+  void dataReceived(byte[] data, int length);
 }

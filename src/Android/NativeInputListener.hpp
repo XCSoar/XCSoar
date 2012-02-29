@@ -21,31 +21,21 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+#ifndef XCSOAR_ANDROID_NATIVE_INPUT_LISTENER_HPP
+#define XCSOAR_ANDROID_NATIVE_INPUT_LISTENER_HPP
 
-/**
- * The Java interface of the C++ AndroidPort class.
- */
-interface AndroidPort {
-  void setListener(InputListener listener);
+#include "Device/Port/Port.hpp"
 
-  void close();
+#include <jni.h>
 
-  /**
-   * @see Port::Drain()
-   */
-  boolean drain();
-
-  int getBaudRate();
-  boolean setBaudRate(int baud);
+namespace NativeInputListener {
+  void Initialise(JNIEnv *env);
 
   /**
-   * Write data to the port.  Execution blocks until at least one
-   * bytes is written or an error occurs or until the timeout expires.
-   *
-   * @param data the data to be written
-   * @param length the number of bytes to be written
-   * @return the number of bytes that were written or -1 on error/timeout
+   * Create a Java NativeInputListener instance.  It is not bound to a
+   * handler yet; call Set() to do this.
    */
-  int write(byte[] data, int length);
+  jobject Create(JNIEnv *env, Port::Handler &handler);
 }
+
+#endif

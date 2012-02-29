@@ -25,17 +25,16 @@ Copyright_License {
 #define XCSOAR_ANDROID_PORT_BRIDGE_HPP
 
 #include "Java/Object.hpp"
+#include "Device/Port/Port.hpp"
 
 class PortBridge : protected Java::Object {
+  static jmethodID setListener_method;
   static jmethodID drain_method;
   static jmethodID getBaudRate_method, setBaudRate_method;
-  static jmethodID setReadTimeout_mid;
-  static jmethodID read_method, write_method, flush_mid;
-  static jmethodID waitRead_method;
+  static jmethodID write_method;
 
-  static gcc_constexpr_data size_t read_buffer_size = 4096;
   static gcc_constexpr_data size_t write_buffer_size = 4096;
-  Java::GlobalRef<jbyteArray> read_buffer, write_buffer;
+  Java::GlobalRef<jbyteArray> write_buffer;
 
 public:
   /**
@@ -50,6 +49,8 @@ public:
     CallVoid("close");
   }
 
+  void setListener(JNIEnv *env, Port::Handler *handler);
+
   bool drain(JNIEnv *env) {
     return env->CallBooleanMethod(Get(), drain_method);
   }
@@ -62,21 +63,7 @@ public:
     return env->CallBooleanMethod(Get(), setBaudRate_method, baud_rate);
   }
 
-  void setReadTimeout(JNIEnv *env, int timeout) {
-    env->CallVoidMethod(Get(), setReadTimeout_mid, timeout);
-  }
-
-  int waitRead(JNIEnv *env, unsigned timeout_ms) {
-    return env->CallIntMethod(Get(), waitRead_method, timeout_ms);
-  }
-
-  int read(JNIEnv *env, void *buffer, size_t length);
-
   int write(JNIEnv *env, const void *data, size_t length);
-
-  void flush(JNIEnv *env) {
-    env->CallVoidMethod(Get(), flush_mid);
-  }
 };
 
 #endif

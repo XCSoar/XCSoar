@@ -31,6 +31,8 @@ that have native methods, to prepare for calling "javah".
       <include name="NonGPSSensors.java"/>
       <include name="Settings.java"/>
       <include name="SafeDestruct.java"/>
+      <include name="InputListener.java"/>
+      <include name="NativeInputListener.java"/>
     </javac>
   </target>
 </project>

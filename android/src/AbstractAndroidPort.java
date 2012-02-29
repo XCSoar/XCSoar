@@ -32,6 +32,7 @@ import java.io.OutputStream;
  */
 abstract class AbstractAndroidPort implements AndroidPort {
   private final String name;
+  private InputListener listener;
   private InputThread input;
   private OutputThread output;
 
@@ -52,9 +53,15 @@ abstract class AbstractAndroidPort implements AndroidPort {
   }
 
   protected synchronized void set(InputStream _input, OutputStream _output) {
-    input = new InputThread(name, _input);
+    input = new InputThread(name, listener, _input);
     output = new OutputThread(name, _output);
     output.setTimeout(5000);
+  }
+
+  @Override public void setListener(InputListener _listener) {
+    listener = _listener;
+    if (input != null)
+      input.setListener(listener);
   }
 
   public void close() {
@@ -67,35 +74,9 @@ abstract class AbstractAndroidPort implements AndroidPort {
       o.close();
   }
 
-  public final void flush() {
-    InputThread i = input;
-    if (i != null)
-      i.flush();
-  }
-
   public final boolean drain() {
     OutputThread o = output;
     return o != null && o.drain();
-  }
-
-  public final void setReadTimeout(int timeout) {
-    InputThread i = input;
-    if (i != null)
-      i.setTimeout(timeout);
-  }
-
-  public final int waitRead(int timeout) {
-    InputThread i = input;
-    return i != null
-      ? i.waitRead(timeout)
-      : 2; /* WaitResult::FAILED */
-  }
-
-  public final int read(byte[] buffer, int length) {
-    InputThread i = input;
-    return i != null
-      ? i.read(buffer, length)
-      : -1;
   }
 
   public final int write(byte[] data, int length) {

@@ -37,18 +37,22 @@ class InputThread extends Thread {
 
   final String name;
 
+  InputListener listener;
+
   InputStream is;
 
   int timeout = 0;
 
-  byte[] buffer = new byte[BUFFER_SIZE];
-  int head, tail;
-
-  InputThread(String _name, InputStream _is) {
+  InputThread(String _name, InputListener _listener, InputStream _is) {
     name = _name;
+    listener = _listener;
     is = _is;
 
     start();
+  }
+
+  synchronized void setListener(final InputListener _listener) {
+    listener = _listener;
   }
 
   synchronized void close() {
@@ -62,122 +66,38 @@ class InputThread extends Thread {
       is2.close();
     } catch (IOException e) {
     }
-
-    notifyAll();
-  }
-
-  synchronized void flush() {
-    head = tail;
   }
 
   void setTimeout(int _timeout) {
     timeout = _timeout;
   }
 
-  private void shift() {
-    System.arraycopy(buffer, head, buffer, 0, tail - head);
-    tail -= head;
-    head = 0;
-  }
-
   @Override public void run() {
-    try {
-      while (true) {
-        InputStream is2;
+    byte[] buffer = new byte[BUFFER_SIZE];
 
-        if (tail >= BUFFER_SIZE) {
-          synchronized(this) {
-            while (is != null && head == 0) {
-              try {
-                wait();
-              } catch (InterruptedException e) {
-              }
-            }
-
-            is2 = is;
-            shift();
-          }
-        } else
-          is2 = is;
-
-        if (is2 == null)
-          // close() was called
-          break;
-
-        int n = is2.read(buffer, tail, BUFFER_SIZE - tail);
-        if (n < 0)
-          break;
-
-        synchronized(this) {
-          boolean wasEmpty = head >= tail;
-          tail += n;
-
-          if (wasEmpty)
-            notifyAll();
-        }
-      }
-    } catch (IOException e) {
-      if (is != null)
-        Log.e(TAG, "Failed to read from " + name, e);
-
-      close();
-    } finally {
-      synchronized(this) {
-        notifyAll();
-      }
-    }
-  }
-
-  synchronized public int read(byte[] dest, int length) {
-    if (is == null)
-      return -1;
-
-    if (head >= tail) {
-      // buffer is empty
-      if (timeout <= 0)
-        return -1;
-
-      // wait for the thread to fill the buffer
+    InputStream is2 = is;
+    while (is2 != null) {
+      int n;
       try {
-        wait(timeout);
-      } catch (InterruptedException e) {
-        return -1;
+        n = is2.read(buffer, 0, buffer.length);
+      } catch (IOException e) {
+        if (is != null)
+          Log.e(TAG, "Failed to read from " + name, e);
+
+        close();
+        break;
       }
 
-      if (is == null || head >= tail)
-        // still empty
-        return -1;
+      if (n < 0)
+        break;
+
+      is2 = is;
+      if (is2 == null)
+        // close() was called
+        break;
+
+      if (listener != null)
+        listener.dataReceived(buffer, n);
     }
-
-    int nbytes = tail - head;
-    if (nbytes > length)
-      nbytes = length;
-
-    System.arraycopy(buffer, head, dest, 0, nbytes);
-
-    head += nbytes;
-
-    if (tail >= BUFFER_SIZE)
-      // notify the thread that it may continue reading
-      notifyAll();
-
-    return nbytes;
-  }
-
-  synchronized public int waitRead(int wait_timeout) {
-    if (is == null)
-      return 2; /* WaitResult::FAILED */
-
-    if (head >= tail) {
-      try {
-        wait(wait_timeout);
-      } catch (InterruptedException e) {
-        return 2; /* WaitResult::FAILED */
-      }
-    }
-
-    return is != null && head >= tail
-      ? 1 /* WaitResult::TIMEOUT */
-      : 0; /* WaitResult::READY */
   }
 }

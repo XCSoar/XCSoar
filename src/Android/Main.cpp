@@ -27,6 +27,7 @@ Copyright_License {
 #include "Android/SoundUtil.hpp"
 #include "Android/Vibrator.hpp"
 #include "Android/PortBridge.hpp"
+#include "Android/NativeInputListener.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Debug.hpp"
@@ -77,6 +78,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 {
   Java::Init(env);
 
+  NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
 
   context = new Context(env, _context);
