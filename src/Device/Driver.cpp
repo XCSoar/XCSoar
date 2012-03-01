@@ -55,7 +55,7 @@ AbstractDevice::PutBugs(fixed bugs)
 }
 
 bool
-AbstractDevice::PutBallast(fixed ballast)
+AbstractDevice::PutBallast(fixed fraction, fixed overload)
 {
   return true;
 }

@@ -140,8 +140,15 @@ ActionInterface::SetBallast(fixed ballast, bool to_devices)
   }
 
   // send to external devices
-  if (to_devices)
-    device_blackboard->SetBallast(ballast);
+  if (to_devices) {
+    const Plane &plane = GetComputerSettings().plane;
+    if (positive(plane.dry_mass)) {
+      fixed overload = (plane.dry_mass + ballast * plane.max_ballast) /
+        plane.dry_mass;
+
+      device_blackboard->SetBallast(ballast, overload);
+    }
+  }
 }
 
 void

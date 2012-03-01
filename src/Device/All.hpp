@@ -43,7 +43,7 @@ AllDevicesAutoReopen(OperationEnvironment &env);
 
 void AllDevicesPutMacCready(fixed MacCready);
 void AllDevicesPutBugs(fixed bugs);
-void AllDevicesPutBallast(fixed ballast);
+void AllDevicesPutBallast(fixed fraction, fixed overload);
 void AllDevicesPutVolume(int volume);
 
 void

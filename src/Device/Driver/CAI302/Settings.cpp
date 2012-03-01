@@ -61,9 +61,9 @@ CAI302Device::PutBugs(fixed Bugs)
 }
 
 bool
-CAI302Device::PutBallast(fixed Ballast)
+CAI302Device::PutBallast(fixed fraction, gcc_unused fixed overload)
 {
-  unsigned ballast = uround(Ballast * 100);
+  unsigned ballast = uround(fraction * 100);
 
   char szTmp[32];
   sprintf(szTmp, "!g,b%u\r", ballast);

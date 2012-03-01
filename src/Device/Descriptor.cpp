@@ -365,19 +365,22 @@ DeviceDescriptor::PutBugs(fixed value)
 }
 
 bool
-DeviceDescriptor::PutBallast(fixed value)
+DeviceDescriptor::PutBallast(fixed fraction, fixed overload)
 {
-  if (device == NULL || settings_sent.CompareBallastFraction(value) ||
-      !config.sync_to_device)
+  if (device == NULL || !config.sync_to_device ||
+      (settings_sent.CompareBallastFraction(fraction) &&
+       settings_sent.CompareBallastOverload(overload)))
     return true;
 
-  if (!device->PutBallast(value))
+  if (!device->PutBallast(fraction, overload))
     return false;
 
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
-  settings_sent.ballast_fraction = value;
+  settings_sent.ballast_fraction = fraction;
   settings_sent.ballast_fraction_available.Update(basic.clock);
+  settings_sent.ballast_overload = overload;
+  settings_sent.ballast_overload_available.Update(basic.clock);
 
   return true;
 }

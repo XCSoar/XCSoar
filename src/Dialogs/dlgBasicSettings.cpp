@@ -132,8 +132,16 @@ FlightSetupPanel::SetBallast()
   if (positive(wl))
     LoadValue(WingLoading, wl);
 
-  if (device_blackboard != NULL)
-    device_blackboard->SetBallast(polar_settings.glide_polar_task.GetBallast());
+  if (device_blackboard != NULL) {
+    const Plane &plane = CommonInterface::GetComputerSettings().plane;
+    if (positive(plane.dry_mass)) {
+      fixed fraction = polar_settings.glide_polar_task.GetBallast();
+      fixed overload = (plane.dry_mass + fraction * plane.max_ballast) /
+        plane.dry_mass;
+
+      device_blackboard->SetBallast(fraction, overload);
+    }
+  }
 }
 
 void

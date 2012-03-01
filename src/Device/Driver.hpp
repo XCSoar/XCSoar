@@ -127,10 +127,11 @@ public:
   /**
    * Send the new ballast value to the device.
    *
-   * @param ballast the new ballast value (XXX define this)
+   * @param fraction the new ballast value (0=no ballast, 1=full)
+   * @param overload an alternative description of ballast value
    * @return true on success
    */
-  virtual bool PutBallast(fixed ballast) = 0;
+  virtual bool PutBallast(fixed fraction, fixed overload) = 0;
 
   /**
    * Send the new QNH value to the device.
@@ -258,7 +259,7 @@ public:
 
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
-  virtual bool PutBallast(fixed ballast);
+  virtual bool PutBallast(fixed fraction, fixed overload);
   virtual bool PutQNH(const AtmosphericPressure &pres);
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(RadioFrequency frequency);

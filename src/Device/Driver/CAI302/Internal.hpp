@@ -42,7 +42,7 @@ public:
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
-  virtual bool PutBallast(fixed ballast);
+  virtual bool PutBallast(fixed fraction, fixed overload);
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 

@@ -235,7 +235,7 @@ public:
 
   bool PutMacCready(fixed MacCready);
   bool PutBugs(fixed bugs);
-  bool PutBallast(fixed ballast);
+  bool PutBallast(fixed fraction, fixed overload);
   bool PutVolume(int volume);
   bool PutActiveFrequency(RadioFrequency frequency);
   bool PutStandbyFrequency(RadioFrequency frequency);

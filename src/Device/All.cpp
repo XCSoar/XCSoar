@@ -71,13 +71,13 @@ AllDevicesPutBugs(fixed bugs)
 }
 
 void
-AllDevicesPutBallast(fixed ballast)
+AllDevicesPutBallast(fixed fraction, fixed overload)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutBallast(ballast);
+    device_list[i].PutBallast(fraction, overload);
 }
 
 void

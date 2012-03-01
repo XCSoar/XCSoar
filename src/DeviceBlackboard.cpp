@@ -296,9 +296,9 @@ DeviceBlackboard::Merge()
 }
 
 void
-DeviceBlackboard::SetBallast(fixed ballast)
+DeviceBlackboard::SetBallast(fixed fraction, fixed overload)
 {
-  AllDevicesPutBallast(ballast);
+  AllDevicesPutBallast(fraction, overload);
 }
 
 void
