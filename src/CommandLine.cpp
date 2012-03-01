@@ -33,8 +33,11 @@ namespace CommandLine {
   unsigned width = 640, height = 480;
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef HAVE_CMDLINE_FULLSCREEN
   bool full_screen = false;
+#endif
+
+#ifdef HAVE_CMDLINE_RESIZABLE
   bool resizable = false;
 #endif
 }

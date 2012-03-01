@@ -83,6 +83,9 @@ public:
   void Resizable() {
 #if defined(ENABLE_SDL) && !defined(ANDROID)
     resizable = true;
+#elif defined(USE_GDI)
+    style &= ~WS_BORDER;
+    style |= WS_THICKFRAME;
 #endif
   }
 

@@ -89,10 +89,27 @@ TimeLocal(int d)
   return d;
 }
 
+#ifndef ENABLE_OPENGL
+
+class DrawThread {
+public:
+  static void Draw(MapWindow &map) {
+    map.repaint();
+    map.UpdateAll();
+    map.repaint();
+  }
+};
+
+#endif
+
 class TestWindow : public SingleWindow {
 public:
   MapWindow map;
   ButtonWindow close_button;
+
+#ifdef USE_GDI
+  bool initialised;
+#endif
 
   enum {
     ID_START = 100,
@@ -102,7 +119,12 @@ public:
 public:
   TestWindow(const MapLook &map_look,
              const TrafficLook &traffic_look)
-    :map(map_look, traffic_look) {}
+    :map(map_look, traffic_look)
+#ifdef USE_GDI
+     , initialised(false)
+#endif
+  {
+  }
 
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
@@ -161,6 +183,11 @@ protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::OnResize(width, height);
     map.resize(width, height);
+
+#ifndef ENABLE_OPENGL
+  if (initialised)
+    DrawThread::Draw(map);
+#endif
   }
 };
 
@@ -237,19 +264,6 @@ GenerateBlackboard(MapWindow &map, const MapSettings &settings_map)
                      settings_map);
 }
 
-#ifndef ENABLE_OPENGL
-
-class DrawThread {
-public:
-  static void Draw(MapWindow &map) {
-    map.repaint();
-    map.UpdateAll();
-    map.repaint();
-  }
-};
-
-#endif
-
 #ifndef WIN32
 int main(int argc, char **argv)
 #else
@@ -296,6 +310,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Fonts::Initialize();
 #ifndef ENABLE_OPENGL
   DrawThread::Draw(window.map);
+  window.initialised = true;
 #endif
   window.show();
 
