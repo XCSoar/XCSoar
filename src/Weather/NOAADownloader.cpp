@@ -168,7 +168,8 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 #ifndef NDEBUG
   assert(strlen(code) == 4);
   for (unsigned i = 0; i < 4; i++)
-    assert(code[i] >= 'A' && code[i] <= 'Z');
+    assert((code[i] >= 'A' && code[i] <= 'Z') ||
+           (code[i] >= '0' && code[i] <= '9'));
 #endif
 
   // Build file url
@@ -266,7 +267,8 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
 #ifndef NDEBUG
   assert(strlen(code) == 4);
   for (unsigned i = 0; i < 4; i++)
-    assert(code[i] >= 'A' && code[i] <= 'Z');
+    assert((code[i] >= 'A' && code[i] <= 'Z') ||
+           (code[i] >= '0' && code[i] <= '9'));
 #endif
 
   // Build file url

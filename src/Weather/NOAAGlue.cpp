@@ -34,16 +34,6 @@ Copyright_License {
 
 NOAAStore *noaa_store;
 
-static bool
-IsValidCode(const TCHAR* code)
-{
-  for (unsigned i = 0; i < 4; ++i)
-    if (code[i] < _T('A') || code[i] > _T('Z'))
-      return false;
-
-  return true;
-}
-
 bool
 NOAAStore::LoadFromString(const TCHAR *string)
 {

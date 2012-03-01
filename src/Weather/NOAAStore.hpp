@@ -130,6 +130,15 @@ public:
   }
 
   /**
+   * Check if the four letter code is valid
+   * @param code Four letter code of the station/airport (upper case)
+   */
+  static bool IsValidCode(const char *code);
+#ifdef _UNICODE
+  static bool IsValidCode(const TCHAR *code);
+#endif
+
+  /**
    * Add a station to the set of stations for which
    * weather information should be downloaded
    * @param code Four letter code of the station/airport (upper case)

@@ -93,14 +93,40 @@ NOAAStore::Item::Update(JobRunner &runner)
   return metar_downloaded && taf_downloaded;
 }
 
+bool
+NOAAStore::IsValidCode(const char *code)
+{
+  for (unsigned i = 0; i < 4; ++i)
+    if (! ((code[i] >= 'A' && code[i] <= 'Z') ||
+           (code[i] >= '0' && code[i] <= '9')))
+      return false;
+
+  if (code[4] != 0)
+    return false;
+
+  return true;
+}
+
+#ifdef _UNICODE
+bool
+NOAAStore::IsValidCode(const TCHAR* code)
+{
+  for (unsigned i = 0; i < 4; ++i)
+    if (! ((code[i] >= _T('A') && code[i] <= _T('Z')) ||
+           (code[i] >= _T('0') && code[i] <= _T('9'))))
+      return false;
+
+  if (code[4] != _T('\0'))
+    return false;
+
+  return true;
+}
+#endif
+
 NOAAStore::iterator
 NOAAStore::AddStation(const char *code)
 {
-#ifndef NDEBUG
-  assert(strlen(code) == 4);
-  for (unsigned i = 0; i < 4; i++)
-    assert(code[i] >= 'A' && code[i] <= 'Z');
-#endif
+  assert(IsValidCode(code));
 
   Item item;
 
@@ -121,11 +147,7 @@ NOAAStore::AddStation(const char *code)
 NOAAStore::iterator
 NOAAStore::AddStation(const TCHAR *code)
 {
-#ifndef NDEBUG
-  assert(_tcslen(code) == 4);
-  for (unsigned i = 0; i < 4; i++)
-    assert(code[i] >= _T('A') && code[i] <= _T('Z'));
-#endif
+  assert(IsValidCode(code));
 
   size_t len = _tcslen(code);
   char code2[len * 4 + 1];

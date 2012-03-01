@@ -148,12 +148,10 @@ AddClicked(gcc_unused WndButton &button)
     return;
   }
 
-  for (unsigned i = 0; i < 4; i++) {
-    if (code[i] < _T('A') || code[i] > _T('Z')) {
-      MessageBoxX(_("Please don't use special characters in the four letter code of the desired station."),
+  if (!NOAAStore::IsValidCode(code)) {
+    MessageBoxX(_("Please don't use special characters in the four letter code of the desired station."),
                   _("Error"), MB_OK);
-      return;
-    }
+    return;
   }
 
   NOAAStore::iterator i = noaa_store->AddStation(code);
