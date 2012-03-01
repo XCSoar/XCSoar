@@ -74,6 +74,8 @@ void
 Profile::Save()
 {
   LogStartUp(_T("Saving profiles"));
+  if (string_is_empty(startProfileFile))
+    SetFiles(_T(""));
   SaveFile(startProfileFile);
 }
 
