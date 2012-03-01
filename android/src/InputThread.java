@@ -55,7 +55,7 @@ class InputThread extends Thread {
     listener = _listener;
   }
 
-  synchronized void close() {
+  void close() {
     InputStream is2 = is;
     if (is2 == null)
       return;
@@ -65,6 +65,11 @@ class InputThread extends Thread {
     try {
       is2.close();
     } catch (IOException e) {
+    }
+
+    try {
+      join();
+    } catch (InterruptedException e) {
     }
   }
 
