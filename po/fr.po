@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-21 21:10+0100\n"
-"PO-Revision-Date: 2012-02-22 20:40+0000\n"
+"PO-Revision-Date: 2012-02-29 22:09+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-23 00:04+0000\n"
-"X-Generator: Launchpad (build 14838)\n"
+"X-Launchpad-Export-Date: 2012-03-01 18:40+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -39,7 +39,7 @@ msgstr "Chargement du fichier d'espace aérien..."
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Parse Error at Line"
-msgstr "Erreur d'analyse à la ligne"
+msgstr ""
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Line skipped."
@@ -4147,13 +4147,15 @@ msgstr "Affiche le profile d'ascendance, affiché sur la carte"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:73
 msgid "Final glide bar MC0"
-msgstr ""
+msgstr "Indicateur d'arrivée à MC0"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:74
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
+"Si activé, l'indicateur d'arrivée affiche une seconde flèche indiquant la "
+"hauteur nécessaire pour atteindre le prochain waypoint au calage MacCready 0."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:60
 msgid "Speed arrows"
