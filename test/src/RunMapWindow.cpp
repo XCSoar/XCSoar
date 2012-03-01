@@ -107,7 +107,7 @@ public:
   MapWindow map;
   ButtonWindow close_button;
 
-#ifdef USE_GDI
+#ifndef ENABLE_OPENGL
   bool initialised;
 #endif
 
@@ -120,7 +120,7 @@ public:
   TestWindow(const MapLook &map_look,
              const TrafficLook &traffic_look)
     :map(map_look, traffic_look)
-#ifdef USE_GDI
+#ifndef ENABLE_OPENGL
      , initialised(false)
 #endif
   {
