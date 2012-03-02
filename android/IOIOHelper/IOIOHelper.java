@@ -148,6 +148,16 @@ final class IOIOHelper extends Thread {
       ioio.waitForConnect();
       if (ioio.getState() == IOIO.State.CONNECTED) {
         Log.d(TAG, "IOIO connection established");
+
+        Log.i(TAG, "IOIO hardware version " +
+              ioio.getImplVersion(IOIO.VersionType.HARDWARE_VER));
+        Log.i(TAG, "IOIO bootloader version " +
+              ioio.getImplVersion(IOIO.VersionType.BOOTLOADER_VER));
+        Log.i(TAG, "IOIO firmware version " +
+              ioio.getImplVersion(IOIO.VersionType.APP_FIRMWARE_VER));
+        Log.i(TAG, "IOIOLib version " +
+              ioio.getImplVersion(IOIO.VersionType.IOIOLIB_VER));
+
         ioio.softReset();
         ioio_ = ioio;
       } else {
