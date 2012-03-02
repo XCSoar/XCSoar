@@ -505,7 +505,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/TargetMapWindowEvents.cpp \
 	$(SRC)/MapWindow/TargetMapWindowDrag.cpp \
 	$(SRC)/GestureManager.cpp \
-	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/Computer/BasicComputer.cpp \
@@ -703,6 +702,10 @@ XCSOAR_SOURCES := \
 #	$(SRC)/VarioSound.cpp \
 #	$(SRC)/WaveThread.cpp \
 
+ifneq ($(NO_HORIZON),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Renderer/HorizonRenderer.cpp
+endif
 
 ifneq ($(DEBUG),n)
 XCSOAR_SOURCES += \
