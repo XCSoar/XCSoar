@@ -2,6 +2,11 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.2.7 - not yet released
+* Android
+  - fix profile saving bug after initial installation
+  - improve Bluetooth and IOIO error handling
+
 Version 6.2.6 - 2012/02/25
 * calculations
   - fix bogus terrain warnings
