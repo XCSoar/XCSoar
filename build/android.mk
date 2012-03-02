@@ -39,6 +39,8 @@ else
 JARSIGNER += -verbose
 endif
 
+JARSIGNER += -digestalg SHA1 -sigalg MD5withRSA
+
 JAVA_PACKAGE = org.xcsoar
 CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
