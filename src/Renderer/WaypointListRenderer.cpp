@@ -53,7 +53,7 @@ FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
 {
   TCHAR alt[16];
   FormatUserAltitude(waypoint.altitude, alt, 16);
-  buffer.Format(_T("%s: %s"), _("Altitude"), alt);
+  buffer.Format(_T("%s: %s"), _("Elevation"), alt);
 
   if (waypoint.radio_frequency.IsDefined()) {
     TCHAR radio[16];
