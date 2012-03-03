@@ -560,25 +560,6 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Driver.cpp \
-	$(SRC)/Device/Driver/BorgeltB50.cpp \
-	$(SRC)/Device/Driver/Condor.cpp \
-	$(SRC)/Device/Driver/EW.cpp \
-	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
-	$(SRC)/Device/Driver/FlymasterF1.cpp \
-	$(SRC)/Device/Driver/FlyNet.cpp \
-	$(SRC)/Device/Driver/Flytec.cpp \
-	$(SRC)/Device/Driver/Leonardo.cpp \
-	$(SRC)/Device/Driver/ILEC.cpp \
-	$(SRC)/Device/Driver/Westerboer.cpp \
-	$(SRC)/Device/Driver/WesterboerVW921.cpp \
-	$(SRC)/Device/Driver/PosiGraph.cpp \
-	$(SRC)/Device/Driver/Zander.cpp \
-	$(CAI302_SOURCES) \
-	$(IMI_SOURCES) \
-	$(LX_SOURCES) \
-	$(FLARM_SOURCES) \
-	$(VOLKSLOGGER_SOURCES) \
-	$(VEGA_SOURCES) \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
@@ -607,7 +588,7 @@ TEST_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
-TEST_DRIVER_DEPENDS = MATH IO DRIVER
+TEST_DRIVER_DEPENDS = DRIVER MATH IO
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
 
 TEST_WAY_POINT_FILE_SOURCES = \
