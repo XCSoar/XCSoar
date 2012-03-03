@@ -86,6 +86,45 @@ ListPilots(CAI302Device &device, OperationEnvironment &env)
 }
 
 static bool
+ListNavpoints(CAI302Device &device, OperationEnvironment &env)
+{
+  const int count = device.ReadNavpointCount(env);
+  if (count < 0)
+    return false;
+
+  printf("count=%u\n", count);
+  for (int i = 0; i < count; ++i) {
+    CAI302::Navpoint n;
+    if (!device.ReadNavpoint(i, n, env))
+      return false;
+
+    int32_t latitude = FromBE32(n.latitude) - 54000000;
+    char latitude_letter = latitude >= 0 ? 'N' : 'S';
+    if (latitude < 0)
+      latitude = -latitude;
+
+    int32_t longitude = FromBE32(n.longitude) - 108000000;
+    char longitude_letter = longitude >= 0 ? 'E' : 'W';
+    if (longitude < 0)
+      longitude = -longitude;
+
+    printf("%u: %u:%02u:%02u%c %u:%02u:%02u%c '%.*s' '%.*s'\n", i,
+           latitude / 10000 / 60,
+           latitude / 10000 % 60,
+           latitude * 6 / 1000 % 60,
+           latitude_letter,
+           longitude / 10000 / 60,
+           longitude / 10000 % 60,
+           longitude * 6 / 1000 % 60,
+           longitude_letter,
+           StringBufferLength(n.name, ARRAY_SIZE(n.name)), n.name,
+           StringBufferLength(n.remark, ARRAY_SIZE(n.remark)), n.remark);
+  }
+
+  return true;
+}
+
+static bool
 RunCommand(CAI302Device &device, const char *command,
            OperationEnvironment &env)
 {
@@ -101,6 +140,8 @@ RunCommand(CAI302Device &device, const char *command,
     return device.StopLogging(env);
   else if (strcmp(command, "pilots") == 0)
     return ListPilots(device, env);
+  else if (strcmp(command, "navpoints") == 0)
+    return ListNavpoints(device, env);
   else {
     fprintf(stderr, "Unknown command: %s\n", command);
     return false;
@@ -117,6 +158,7 @@ int main(int argc, char **argv)
     "\n\tstartlogger"
     "\n\tstoplogger"
     "\n\tpilots"
+    "\n\tnavpoints"
     ;
   Args args(argc, argv, usage);
 

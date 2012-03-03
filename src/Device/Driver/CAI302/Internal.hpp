@@ -114,6 +114,18 @@ public:
                   OperationEnvironment &env);
 
   bool AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env);
+
+  int ReadNavpointCount(OperationEnvironment &env);
+  bool ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
+                    OperationEnvironment &env);
+
+  bool BeginWriteBulkNavpoints(OperationEnvironment &env);
+  bool WriteBulkNavpoint(unsigned id, const Waypoint &wp,
+                         OperationEnvironment &env);
+  bool EndWriteBulkNavpoints(OperationEnvironment &env);
+
+  bool WriteNavpoint(unsigned id, const Waypoint &wp,
+                     OperationEnvironment &env);
 };
 
 #endif

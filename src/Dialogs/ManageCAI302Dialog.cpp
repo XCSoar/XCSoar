@@ -24,7 +24,11 @@ Copyright_License {
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/FilePicker.hpp"
+#include "Dialogs/JobDialog.hpp"
+#include "UIGlobals.hpp"
 #include "CAI302/UnitsEditor.hpp"
+#include "CAI302/WaypointUploader.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
@@ -34,10 +38,12 @@ Copyright_License {
 #include "OS/ByteOrder.hpp"
 
 #include <vector>
+#include <windef.h> /* for MAX_PATH */
 
 class ManageCAI302Widget : public RowFormWidget, private ActionListener {
   enum Controls {
     Units,
+    Waypoints,
     StartLogger,
     StopLogger,
     DeleteAllFlights,
@@ -62,6 +68,7 @@ void
 ManageCAI302Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   AddButton(_("Units"), this, Units);
+  AddButton(_("Waypoints"), this, Waypoints);
   AddButton(_("Start Logger"), this, StartLogger);
   AddButton(_("Stop Logger"), this, StopLogger);
   AddButton(_("Delete all flights"), this, DeleteAllFlights);
@@ -84,12 +91,27 @@ EditUnits(const DialogLook &look, CAI302Device &device)
   device.WriteActivePilot(widget.GetData(), env);
 }
 
+static void
+UploadWaypoints(const DialogLook &look, CAI302Device &device)
+{
+  TCHAR path[MAX_PATH];
+  if (!FilePicker(_("Waypoints"), _T("*.cup"), path))
+    return;
+
+  CAI302WaypointUploader job(path, device);
+  JobDialog(UIGlobals::GetMainWindow(), look, _("Waypoints"), job, true);
+}
+
 void
 ManageCAI302Widget::OnAction(int id)
 {
   switch (id) {
   case Units:
     EditUnits(GetLook(), device);
+    break;
+
+  case Waypoints:
+    UploadWaypoints(GetLook(), device);
     break;
 
   case StartLogger:

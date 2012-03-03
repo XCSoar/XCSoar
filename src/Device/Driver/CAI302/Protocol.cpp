@@ -376,8 +376,23 @@ CAI302::DownloadPolar(Port &port, const Polar &polar,
 }
 
 bool
-CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
-                  int altitude, const char *name, OperationEnvironment &env)
+CAI302::UploadNavpointMeta(Port &port, NavpointMeta &data,
+                           OperationEnvironment &env)
+{
+  return UploadShort(port, "C\r", &data, sizeof(data), env) > 0;
+}
+
+bool
+CAI302::UploadNavpoint(Port &port, unsigned i, Navpoint &data,
+                       OperationEnvironment &env)
+{
+  char cmd[16];
+  snprintf(cmd, sizeof(cmd), "C %u\r", i);
+  return UploadShort(port, cmd, &data, sizeof(data), env) > 0;
+}
+
+static void
+FormatGeoPoint(char *buffer, const GeoPoint &location)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -401,12 +416,51 @@ CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
   DegLon = (int)tmp;
   MinLon = (tmp - DegLon) * 60;
 
+  sprintf(buffer, "%02d%07.4f%c,%03d%07.4f%c",
+          DegLat, MinLat, NoS,
+          DegLon, MinLon, EoW);
+}
+
+bool
+CAI302::DownloadNavpoint(Port &port, const GeoPoint &location,
+                         int altitude, unsigned id,
+                         bool turnpoint, bool airfield, bool markpoint,
+                         bool landing_point, bool start_point,
+                         bool finish_point, bool home_point,
+                         bool thermal_point, bool waypoint, bool airspace,
+                         const char *name, const char *remark,
+                         OperationEnvironment &env)
+{
+  assert(name != NULL);
+
+  char location_string[32];
+  FormatGeoPoint(location_string, location);
+
+  unsigned attr = turnpoint | (airfield << 1) | (markpoint << 2) |
+    (landing_point << 3) | (start_point << 4) | (finish_point << 5) |
+    (home_point << 6) | (thermal_point << 7) | (waypoint << 8) |
+    (airfield << 9);
+
+  if (remark == NULL)
+    remark = "";
+
+  char buffer[256];
+  snprintf(buffer, sizeof(buffer), "C,0,%s,%d,%u,%u,%-12s,%-12s\r",
+           location_string, altitude, id, attr, name, remark);
+  return DownloadCommand(port, buffer, env);
+}
+
+bool
+CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
+                  int altitude, const char *name, OperationEnvironment &env)
+{
+  char location_string[32];
+  FormatGeoPoint(location_string, location);
+
   char buffer[256];
   snprintf(buffer, sizeof(buffer),
-           "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
-           128 + i,
-           DegLat, MinLat, NoS,
-           DegLon, MinLon, EoW,
+           "D,%d,%s,%s,%d\r",
+           128 + i, location_string,
            name,
            altitude);
 

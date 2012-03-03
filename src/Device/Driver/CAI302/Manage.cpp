@@ -25,6 +25,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
+#include "Util/Macros.hpp"
 
 bool
 CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
@@ -190,4 +191,86 @@ CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
     return false;
 
   return CAI302::DownloadPilot(port, pilot, 255, env);
+}
+
+int
+CAI302Device::ReadNavpointCount(OperationEnvironment &env)
+{
+  port.SetRxTimeout(500);
+
+  CAI302::CommandModeQuick(port);
+
+  CAI302::NavpointMeta meta;
+  return CAI302::UploadMode(port, env) &&
+    CAI302::UploadNavpointMeta(port, meta, env)
+    ? FromBE16(meta.count)
+    : -1;
+}
+
+bool
+CAI302Device::ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
+                           OperationEnvironment &env)
+{
+  port.SetRxTimeout(1000);
+
+  return CAI302::CommandModeQuick(port) &&
+    CAI302::UploadMode(port, env) &&
+    CAI302::UploadNavpoint(port, index, navpoint, env);
+}
+
+bool
+CAI302Device::BeginWriteBulkNavpoints(OperationEnvironment &env)
+{
+  port.SetRxTimeout(1000);
+
+  return CAI302::CommandModeQuick(port) &&
+    CAI302::DownloadMode(port, env);
+}
+
+static bool
+IsASCII(TCHAR ch)
+{
+  return ch >= 0x20 && (int8_t)ch >= 0x20;
+}
+
+static void
+ToASCII(char *dest, size_t dest_size, const TCHAR *src)
+{
+  char *end = dest + dest_size - 1;
+  while (*src != _T('\0') && dest < end)
+    if (IsASCII(*src))
+      *dest++ = (char)*src++;
+
+  *dest = 0;
+}
+
+bool
+CAI302Device::WriteBulkNavpoint(unsigned id, const Waypoint &wp,
+                                OperationEnvironment &env)
+{
+  char name[64], remark[64];
+  ToASCII(name, ARRAY_SIZE(name), wp.name.c_str());
+  ToASCII(remark, ARRAY_SIZE(remark), wp.comment.c_str());
+
+  return CAI302::DownloadNavpoint(port, wp.location, (int)wp.altitude, id,
+                                  wp.IsTurnpoint(), wp.IsAirport(), false,
+                                  wp.IsLandable(), wp.IsStartpoint(),
+                                  wp.IsFinishpoint(), wp.flags.home,
+                                  false, wp.IsTurnpoint(), false,
+                                  name, remark, env);
+}
+
+bool
+CAI302Device::EndWriteBulkNavpoints(OperationEnvironment &env)
+{
+  return true;
+}
+
+bool
+CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
+                            OperationEnvironment &env)
+{
+  return BeginWriteBulkNavpoints(env) &&
+    WriteBulkNavpoint(id, wp, env) &&
+    EndWriteBulkNavpoints(env);
 }

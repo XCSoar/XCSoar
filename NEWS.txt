@@ -20,6 +20,7 @@ Version 6.3 - not yet released
   - send/receive bugs setting to/from device, if driver support it
   - support for K6-Bt baud rate switching
   - CAI302: units editor
+  - CAI302: write waypoint database to CAI302
 * map
   - airspace rendering fixed
   - show new map items list on click

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <stdint.h>
+#include <stddef.h>
 
 class OperationEnvironment;
 class Port;
@@ -272,6 +273,26 @@ namespace CAI302 {
     uint8_t reserved3[2];
   } gcc_packed;
 
+  /**
+   * Returned by "C".
+   */
+  struct NavpointMeta {
+    uint16_t count;
+    uint8_t record_size;
+  };
+
+  /**
+   * A waypoint.  This structure is returned by "C <N>".
+   */
+  struct Navpoint {
+    uint32_t latitude, longitude;
+    uint16_t elevation;
+    uint16_t id;
+    uint16_t attribute;
+    char name[12];
+    char remark[12];
+  } gcc_packed;
+
 #pragma pack(pop)
 
   bool
@@ -439,6 +460,24 @@ namespace CAI302 {
 
   bool
   DownloadPolar(Port &port, const Polar &data, OperationEnvironment &env);
+
+  bool
+  UploadNavpointMeta(Port &port, NavpointMeta &data,
+                     OperationEnvironment &env);
+
+  bool
+  UploadNavpoint(Port &port, unsigned i, Navpoint &data,
+                 OperationEnvironment &env);
+
+  bool
+  DownloadNavpoint(Port &port, const GeoPoint &location,
+                   int altitude, unsigned id,
+                   bool turnpoint, bool airfield, bool markpoint,
+                   bool landing_point, bool start_point, bool finish_point,
+                   bool home_point, bool thermal_point, bool waypoint,
+                   bool airspace,
+                   const char *name, const char *remark,
+                   OperationEnvironment &env);
 
   bool
   DeclareTP(Port &port, unsigned i, const GeoPoint &location,
