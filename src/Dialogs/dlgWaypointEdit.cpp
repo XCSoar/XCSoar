@@ -235,7 +235,7 @@ SetValues()
     break;
   }
 
-  LoadFormProperty(*wf, _T("prpAltitude"), UnitGroup::ALTITUDE, global_wpt->altitude);
+  LoadFormProperty(*wf, _T("prpAltitude"), UnitGroup::ALTITUDE, global_wpt->elevation);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   assert(wp != NULL);
@@ -321,7 +321,7 @@ GetValues()
   global_wpt->location.latitude = Angle::Degrees(fixed(num));
 
   ss = GetFormValueInteger(*wf, _T("prpAltitude"));
-  global_wpt->altitude = (ss == 0 && terrain != NULL)
+  global_wpt->elevation = (ss == 0 && terrain != NULL)
     ? fixed(terrain->GetTerrainHeight(global_wpt->location))
     : Units::ToSysAltitude(fixed(ss));
 

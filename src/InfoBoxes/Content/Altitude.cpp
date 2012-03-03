@@ -183,7 +183,7 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxData &data)
 
   const Waypoint *home_waypoint = way_points.GetHome();
   if (home_waypoint)
-    Value -= home_waypoint->altitude;
+    Value -= home_waypoint->elevation;
 
   data.SetValueFromAltitude(Value);
   data.SetCommentFromAlternateAltitude(Value);

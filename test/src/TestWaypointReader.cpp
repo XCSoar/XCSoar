@@ -210,7 +210,7 @@ GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
   }
   if(!ok1(wp->location.Distance(org_wp.location) <= fixed(1000)))
     printf("%f %f\n", (double)wp->location.latitude.Degrees(), (double)wp->location.longitude.Degrees());
-  ok1(fabs(wp->altitude - org_wp.altitude) < fixed_half);
+  ok1(fabs(wp->elevation - org_wp.elevation) < fixed_half);
 
   return wp;
 }
@@ -444,7 +444,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::Degrees(fixed(7.7061111111111114));
 
   Waypoint wp(loc);
-  wp.altitude = fixed(488);
+  wp.elevation = fixed(488);
   wp.name = _T("Bergneustadt");
   wp.comment = _T("Rabbit holes, 20\" ditch south end of rwy");
   wp.runway.SetDirection(Angle::Degrees(fixed(40)));
@@ -462,7 +462,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(fixed(70), fixed(0), fixed(42)).Flipped();
 
   Waypoint wp2(loc);
-  wp2.altitude = fixed(6962);
+  wp2.elevation = fixed(6962);
   wp2.name = _T("Aconcagua");
   wp2.comment = _T("Highest mountain in south-america");
 
@@ -478,7 +478,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(fixed(122), fixed(28), fixed(42)).Flipped();
 
   Waypoint wp3(loc);
-  wp3.altitude = fixed(227);
+  wp3.elevation = fixed(227);
   wp3.name = _T("Golden Gate Bridge");
   wp3.comment = _T("");
 
@@ -494,7 +494,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(fixed(37), fixed(37), fixed(12));
 
   Waypoint wp4(loc);
-  wp4.altitude = fixed(123);
+  wp4.elevation = fixed(123);
   wp4.name = _T("Red Square");
   wp4.runway.SetDirection(Angle::Degrees(fixed(90)));
   wp4.runway.SetLength((unsigned)Units::ToSysUnit(fixed(0.01), Unit::STATUTE_MILES));
@@ -511,7 +511,7 @@ CreateOriginalWaypoints()
   loc.longitude = Angle::DMS(fixed(151), fixed(12), fixed(55));
 
   Waypoint wp5(loc);
-  wp5.altitude = fixed(5);
+  wp5.elevation = fixed(5);
   wp5.name = _T("Sydney Opera");
   wp5.comment = _T("");
 

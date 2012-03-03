@@ -40,7 +40,7 @@ public:
     _ftprintf(stdout, _T("%s, %f, %f, %.0fm\n"), wp.name.c_str(),
               (double)wp.location.latitude.Degrees(),
               (double)wp.location.longitude.Degrees(),
-              (double)wp.altitude);
+              (double)wp.elevation);
   }
 };
 

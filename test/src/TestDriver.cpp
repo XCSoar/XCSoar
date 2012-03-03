@@ -846,7 +846,7 @@ TestDeclare(const struct DeviceRegister &driver)
                     Angle::Degrees(fixed(51.051944444444445)));
   Waypoint wp(gp);
   wp.name = _T("Foo");
-  wp.altitude = fixed(123);
+  wp.elevation = fixed(123);
   declaration.Append(wp);
   declaration.Append(wp);
   declaration.Append(wp);

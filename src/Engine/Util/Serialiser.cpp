@@ -199,7 +199,7 @@ Serialiser::serialise(const Waypoint& data)
   m_node.set_attribute(_T("name"), data.name.c_str());
   m_node.set_attribute(_T("id"), data.id);
   m_node.set_attribute(_T("comment"), data.comment.c_str());
-  m_node.set_attribute(_T("altitude"), data.altitude);
+  m_node.set_attribute(_T("altitude"), data.elevation);
 
   DataNode* child = m_node.add_child(_T("Location"));
   Serialiser ser(*child);

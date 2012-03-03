@@ -51,7 +51,7 @@ MakeGeoPoint(double longitude, double latitude)
 static Waypoint
 MakeWaypoint(Waypoint wp, double altitude)
 {
-  wp.altitude = fixed(altitude);
+  wp.elevation = fixed(altitude);
   return wp;
 }
 
@@ -85,7 +85,7 @@ CheckLeg(const TaskWaypoint &tp, const AircraftState &aircraft,
 {
   const GeoPoint destination = tp.GetWaypoint().location;
   const fixed safety_height = GetSafetyHeight(tp);
-  const fixed min_arrival_alt = tp.GetWaypoint().altitude + safety_height;
+  const fixed min_arrival_alt = tp.GetWaypoint().elevation + safety_height;
   const GeoVector vector = aircraft.location.DistanceBearing(destination);
   const fixed ld = glide_polar.GetBestLD();
   const fixed height_above_min = aircraft.altitude - min_arrival_alt;
@@ -125,9 +125,9 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
            const TaskWaypoint &start, const TaskWaypoint &tp1,
            const TaskWaypoint &finish)
 {
-  const fixed min_arrival_alt1 = tp1.GetWaypoint().altitude +
+  const fixed min_arrival_alt1 = tp1.GetWaypoint().elevation +
     task_behaviour.route_planner.safety_height_terrain;
-  const fixed min_arrival_alt2 = finish.GetWaypoint().altitude + task_behaviour.safety_height_arrival;
+  const fixed min_arrival_alt2 = finish.GetWaypoint().elevation + task_behaviour.safety_height_arrival;
   const GeoVector vector0 =
     start.GetWaypoint().location.DistanceBearing(tp1.GetWaypoint().location);
   const GeoVector vector1 =
@@ -265,7 +265,7 @@ TestHighFinish()
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
   Waypoint wp2b(wp2);
-  wp2b.altitude = fixed(1000);
+  wp2b.elevation = fixed(1000);
   const FinishPoint tp2(new CylinderZone(wp2b.location),
                         wp2b, task_behaviour, ordered_task_behaviour);
   task.Append(tp2);

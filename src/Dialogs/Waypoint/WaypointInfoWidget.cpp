@@ -106,7 +106,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                      buffer.buffer(), buffer.MAX_SIZE) != NULL)
     AddReadOnly(_("Location"), NULL, buffer);
 
-  FormatUserAltitude(waypoint.altitude,
+  FormatUserAltitude(waypoint.elevation,
                             buffer.buffer(), buffer.MAX_SIZE);
   AddReadOnly(_("Elevation"), NULL, buffer);
 
@@ -137,7 +137,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (basic.location_available && basic.NavAltitudeAvailable() &&
       settings.polar.glide_polar_task.IsValid()) {
     const GlideState glide_state(basic.location.DistanceBearing(waypoint.location),
-                                 waypoint.altitude + settings.task.safety_height_arrival,
+                                 waypoint.elevation + settings.task.safety_height_arrival,
                                  basic.nav_altitude,
                                  calculated.GetWindOrZero());
 

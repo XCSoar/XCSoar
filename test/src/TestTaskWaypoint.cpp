@@ -71,14 +71,14 @@ TaskWaypointTest::Run()
   GeoPoint gp(Angle::Degrees(fixed(20)), Angle::Degrees(fixed(50)));
   Waypoint wp(gp);
   wp.name = _T("Test");
-  wp.altitude = fixed(42);
+  wp.elevation = fixed(42);
 
   DummyTaskWaypoint tw(TaskPoint::AST, wp);
 
   const Waypoint &wp2 = tw.GetWaypoint();
   ok1(wp2.name == _T("Test"));
   ok1(equals(tw.GetBaseElevation(), 42));
-  ok1(equals(tw.GetBaseElevation(), wp2.altitude));
+  ok1(equals(tw.GetBaseElevation(), wp2.elevation));
   ok1(equals(wp2.location, gp));
   ok1(equals(tw.GetLocation(), gp));
 }

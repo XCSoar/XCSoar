@@ -244,7 +244,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
-  if (!ParseAltitude(params[3], new_waypoint.altitude) &&
+  if (!ParseAltitude(params[3], new_waypoint.elevation) &&
       !CheckAltitude(new_waypoint))
     return false;
 

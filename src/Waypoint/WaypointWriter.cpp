@@ -54,7 +54,7 @@ WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint& wp)
   writer.write(',');
 
   // Write the altitude id
-  WriteAltitude(writer, wp.altitude);
+  WriteAltitude(writer, wp.elevation);
   writer.write(',');
 
   // Write the waypoint flags

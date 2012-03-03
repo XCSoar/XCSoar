@@ -102,7 +102,7 @@ struct Waypoint {
   DebugFlag flat_location_initialised;
 
   /** Height AMSL (m) of waypoint terrain */
-  fixed altitude;
+  fixed elevation;
 
   /** Main runway */
   Runway runway;

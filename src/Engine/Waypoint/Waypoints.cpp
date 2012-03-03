@@ -377,7 +377,7 @@ Waypoints::GenerateTakeoffPoint(const GeoPoint& location,
 {
   // fallback: create a takeoff point
   Waypoint to_point(location, true);
-  to_point.altitude = terrain_alt;
+  to_point.elevation = terrain_alt;
   to_point.file_num = -1;
   to_point.name = _T("(takeoff)");
   to_point.type = Waypoint::Type::OUTLANDING;

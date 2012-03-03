@@ -216,7 +216,7 @@ Deserialiser::deserialise_waypoint()
   wp->name = name;
   m_node.get_attribute(_T("id"), wp->id);
   m_node.get_attribute(_T("comment"), wp->comment);
-  m_node.get_attribute(_T("altitude"), wp->altitude);
+  m_node.get_attribute(_T("altitude"), wp->elevation);
 
   return wp;
 }
