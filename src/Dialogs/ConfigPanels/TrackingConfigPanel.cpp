@@ -37,6 +37,7 @@ Copyright_License {
 
 enum ControlIndex {
   TrackingInterval,
+  TrackingVehicleType,
   Spacer,
   LT24Enabled,
   LT24Server,
@@ -86,6 +87,14 @@ static const StaticEnumChoice  server_list[] = {
   { 0 },
 };
 
+static const StaticEnumChoice vehicle_type_list[] = {
+  { (unsigned) TrackingSettings::VehicleType::GLIDER, N_("Glider") },
+  { (unsigned) TrackingSettings::VehicleType::PARAGLIDER, N_("Paraglider") },
+  { (unsigned) TrackingSettings::VehicleType::POWERED_AIRCRAFT, N_("Powered aircraft") },
+  { (unsigned) TrackingSettings::VehicleType::HOT_AIR_BALLOON, N_("Hot-air balloon") },
+  { 0 },
+};
+
 void
 TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -95,6 +104,9 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.interval);
+
+  AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
+          (unsigned) settings.vehicleType);
 
   AddSpacer();
 
@@ -119,6 +131,9 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
     CommonInterface::SetComputerSettings().tracking;
 
   changed |= SaveValue(TrackingInterval, ProfileTrackingInterval, settings.interval);
+
+  changed |= SaveValueEnum(TrackingVehicleType, ProfileTrackingVehicleType,
+                           settings.vehicleType);
 
   changed |= SaveValue(LT24Enabled, ProfileLiveTrack24Enabled, settings.livetrack24.enabled);
 

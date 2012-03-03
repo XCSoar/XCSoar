@@ -38,6 +38,7 @@ void
 TrackingSettings::SetDefaults()
 {
   interval = 60;
+  vehicleType = VehicleType::GLIDER;
 
   livetrack24.SetDefaults();
 }

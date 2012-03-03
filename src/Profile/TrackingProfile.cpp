@@ -41,6 +41,7 @@ void
 Profile::Load(TrackingSettings &settings)
 {
   Get(ProfileTrackingInterval, settings.interval);
+  GetEnum(ProfileTrackingVehicleType, settings.vehicleType);
   Load(settings.livetrack24);
 }
 

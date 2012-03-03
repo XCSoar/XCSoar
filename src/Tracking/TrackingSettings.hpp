@@ -40,8 +40,16 @@ struct LiveTrack24Settings {
 };
 
 struct TrackingSettings {
+  enum class VehicleType {
+    GLIDER = 0,
+    PARAGLIDER = 1,
+    POWERED_AIRCRAFT = 2,
+    HOT_AIR_BALLOON = 3,
+  };
+
   /** Minimum time between two position updates (in seconds) */
   unsigned interval;
+  VehicleType vehicleType;
 
   LiveTrack24Settings livetrack24;
 
