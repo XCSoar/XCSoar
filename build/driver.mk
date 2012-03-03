@@ -64,7 +64,6 @@ VEGA_SOURCES = \
 
 DRIVER_SOURCES = \
 	$(VOLKSLOGGER_SOURCES) \
-	$(CAI302_SOURCES) \
 	$(IMI_SOURCES) \
 	$(LX_SOURCES) \
 	$(FLARM_SOURCES) \
@@ -89,3 +88,6 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Zander.cpp
 
 $(eval $(call link-library,driver,DRIVER))
+
+$(eval $(call link-library,cai302,CAI302))
+DRIVER_LDADD += $(CAI302_LDADD)
