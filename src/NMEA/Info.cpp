@@ -94,6 +94,7 @@ NMEAInfo::Reset()
 
   gps.Reset();
   acceleration.Reset();
+  attitude.Reset();
 
   location_available.Clear();
 
