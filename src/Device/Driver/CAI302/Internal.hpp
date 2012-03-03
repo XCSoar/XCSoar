@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_CAI302_INTERNAL_HPP
 
 #include "Device/Driver.hpp"
+#include "Protocol.hpp"
 
 /** 
  * Device driver for Cambridge Aero Instruments 302 
@@ -53,6 +54,8 @@ public:
                               OperationEnvironment &env);
 
 public:
+  bool ReadGeneralInfo(CAI302::GeneralInfo &data, OperationEnvironment &env);
+
   /**
    * Restart the CAI302 by sending the command "SIF 0 0".
    */

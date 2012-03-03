@@ -24,6 +24,21 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
+#include "Operation/Operation.hpp"
+
+bool
+CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
+                              OperationEnvironment &env)
+{
+  port.SetRxTimeout(500);
+  CAI302::CommandModeQuick(port);
+  if (!CAI302::UploadMode(port) || env.IsCancelled())
+    return false;
+
+  bool success = CAI302::UploadGeneralInfo(port, data);
+  CAI302::LogModeQuick(port);
+  return success;
+}
 
 bool
 CAI302Device::Reboot(OperationEnvironment &env)

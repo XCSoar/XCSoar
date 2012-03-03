@@ -35,11 +35,44 @@ Copyright_License {
 
 #include <stdio.h>
 
+gcc_pure
+static int
+StringBufferLength(const char *buffer, size_t size)
+{
+  const char *z = (const char *)memchr(buffer, 0, size);
+  if (z == NULL)
+    return size;
+
+  while (z > buffer && z[-1] == ' ')
+    --z;
+
+  return z - buffer;
+}
+
+static bool
+PrintInfo(CAI302Device &device, OperationEnvironment &env)
+{
+  CAI302::GeneralInfo info;
+  if (!device.ReadGeneralInfo(info, env))
+    return false;
+
+  printf("id: %.*s\n",
+         StringBufferLength(info.id, ARRAY_SIZE(info.id)), info.id);
+  printf("firmward: %.*s (%s)\n",
+         StringBufferLength(info.version, ARRAY_SIZE(info.version)),
+         info.version,
+         info.type == 'F' ? "production"
+         : (info.type == 'P' ? "prototype" : "unknown"));
+  return true;
+}
+
 static bool
 RunCommand(CAI302Device &device, const char *command,
            OperationEnvironment &env)
 {
-  if (strcmp(command, "reboot") == 0)
+  if (strcmp(command, "info") == 0)
+    return PrintInfo(device, env);
+  else if (strcmp(command, "reboot") == 0)
     return device.Reboot(env);
   else if (strcmp(command, "poweroff") == 0)
     return device.PowerOff(env);
@@ -57,6 +90,7 @@ int main(int argc, char **argv)
 {
   const char *const usage = "PORT BAUD COMMAND\n\n"
     "Where COMMAND is one of:"
+    "\n\tinfo"
     "\n\treboot"
     "\n\tpoweroff"
     "\n\tstartlogger"

@@ -183,11 +183,26 @@ namespace CAI302 {
   /** Structure for CAI302 device info */
   struct GeneralInfo {
     uint8_t reserved[15];
-    uint8_t id[3];
-    uint8_t type;
-    uint8_t version[5];
+
+    /**
+     * Base 36 ASCII.
+     */
+    char id[3];
+
+    /**
+     * 'P' = Prototype, 'F' = Production Firmware.
+     */
+    char type;
+
+    char version[5];
+
     uint8_t reserved2[5];
+
+    /**
+     * Always 3.
+     */
     uint8_t cai302_id;
+
     uint8_t reserved3[2];
   } gcc_packed;
 
@@ -289,6 +304,9 @@ namespace CAI302 {
   UploadLarge(Port &port, const char *command,
               void *response, unsigned max_size,
               unsigned timeout_ms=8000);
+
+  bool
+  UploadGeneralInfo(Port &port, GeneralInfo &data);
 
   bool
   UploadFileList(Port &port, unsigned i, FileList &data);

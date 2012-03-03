@@ -196,6 +196,12 @@ CAI302::UploadLarge(Port &port, const char *command,
 }
 
 bool
+CAI302::UploadGeneralInfo(Port &port, GeneralInfo &data)
+{
+  return UploadShort(port, "W\r", &data, sizeof(data)) == sizeof(data);
+}
+
+bool
 CAI302::UploadFileList(Port &port, unsigned i, FileList &data)
 {
   assert(i < 8);
