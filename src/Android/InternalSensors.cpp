@@ -27,7 +27,7 @@ Copyright_License {
 #include "Java/Class.hpp"
 #include "org_xcsoar_InternalGPS.h"
 #include "org_xcsoar_NonGPSSensors.h"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "OS/Clock.hpp"
 #include "Geo/Geoid.hpp"

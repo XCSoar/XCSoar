@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "WaypointGlue.hpp"
 #include "ComputerSettings.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Profile/Profile.hpp"
 #include "StringUtil.hpp"
 #include "LogFile.hpp"

@@ -27,7 +27,7 @@
 #include "Device/Register.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 

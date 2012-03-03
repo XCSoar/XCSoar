@@ -24,7 +24,7 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "DrawThread.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)

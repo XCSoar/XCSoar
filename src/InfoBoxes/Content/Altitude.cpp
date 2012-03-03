@@ -33,7 +33,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Language/Language.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Simulator.hpp"
 #include "Protection.hpp"

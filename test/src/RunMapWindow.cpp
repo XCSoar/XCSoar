@@ -43,7 +43,7 @@ Copyright_License {
 #include "Logger/LoggerImpl.hpp"
 #include "Audio/Sound.hpp"
 #include "Menu/ButtonLabel.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"

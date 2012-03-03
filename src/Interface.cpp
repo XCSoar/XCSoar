@@ -39,7 +39,7 @@ Copyright_License {
 #include "Gauge/GaugeFLARM.hpp"
 #include "PeriodClock.hpp"
 #include "LogFile.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Profile/Profile.hpp"

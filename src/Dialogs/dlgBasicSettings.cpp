@@ -24,7 +24,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Protection.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"

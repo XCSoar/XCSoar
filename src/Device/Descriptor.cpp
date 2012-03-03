@@ -27,7 +27,7 @@ Copyright_License {
 #include "Driver/FLARM/Device.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Register.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Port/ConfiguredPort.hpp"
 #include "NMEA/Info.hpp"

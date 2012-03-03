@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"

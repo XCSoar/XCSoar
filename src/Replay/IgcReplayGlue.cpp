@@ -25,7 +25,7 @@
 #include "Logger/Logger.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 
 #include <algorithm>

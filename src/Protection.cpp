@@ -30,7 +30,7 @@ Copyright_License {
 #include "CalculationThread.hpp"
 #include "MergeThread.hpp"
 #include "DrawThread.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 
 #include <assert.h>
 

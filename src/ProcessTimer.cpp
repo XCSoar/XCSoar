@@ -31,7 +31,7 @@ Copyright_License {
 #include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Screen/Blank.hpp"
 #include "UtilsSystem.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "PeriodClock.hpp"
 #include "MainWindow.hpp"

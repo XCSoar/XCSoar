@@ -518,7 +518,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Blackboard/LiveBlackboard.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	\
-	$(SRC)/DeviceBlackboard.cpp \
+	$(SRC)/Blackboard/DeviceBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/UIGlobals.cpp \

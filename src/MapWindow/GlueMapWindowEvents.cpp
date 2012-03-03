@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Simulator.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Waypoint.hpp"

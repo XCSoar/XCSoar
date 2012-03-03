@@ -34,7 +34,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Logger/Logger.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"

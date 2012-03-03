@@ -51,7 +51,7 @@ Copyright_License {
 #include "Logger/GlueFlightLogger.hpp"
 #include "Waypoint/WaypointDetailsReader.hpp"
 #include "Screen/Fonts.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Markers/Markers.hpp"
 #include "Markers/ProtectedMarkers.hpp"

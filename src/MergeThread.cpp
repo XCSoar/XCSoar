@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MergeThread.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Protection.hpp"
 #include "NMEA/MoreData.hpp"
 

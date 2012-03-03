@@ -26,7 +26,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Protection.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #else
 #include "Screen/WindowCanvas.hpp"
 #endif

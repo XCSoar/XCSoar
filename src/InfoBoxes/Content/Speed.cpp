@@ -26,7 +26,7 @@ Copyright_License {
 #include "Interface.hpp"
 
 #include "Simulator.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"

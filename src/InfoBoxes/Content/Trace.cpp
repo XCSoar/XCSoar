@@ -31,7 +31,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
 #include "Protection.hpp"
 #include "UIGlobals.hpp"

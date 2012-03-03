@@ -30,7 +30,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Screen/Layout.hpp"

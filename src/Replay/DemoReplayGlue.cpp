@@ -23,7 +23,7 @@
 
 #include "Replay/DemoReplayGlue.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Task/TaskManager.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"

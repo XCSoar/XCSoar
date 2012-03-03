@@ -24,7 +24,7 @@ Copyright_License {
 #include "AltitudeSimulator.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Units/Units.hpp"
 #include "Simulator.hpp"
 #include "Dialogs/CallBackTable.hpp"

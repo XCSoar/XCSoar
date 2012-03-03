@@ -32,7 +32,7 @@ Copyright_License {
 #include "Util/TrivialArray.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"

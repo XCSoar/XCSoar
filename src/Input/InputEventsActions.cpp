@@ -80,7 +80,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "DeviceBlackboard.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
 #include "UtilsSettings.hpp"
 #include "Pages.hpp"
 #include "Hardware/AltairControl.hpp"
