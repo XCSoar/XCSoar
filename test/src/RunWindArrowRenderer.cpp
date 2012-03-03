@@ -117,8 +117,11 @@ public:
 #endif /* USE_GDI */
 
   void Set(PixelRect _rc) {
+    TopWindowStyle style;
+    style.Resizable();
+
     SingleWindow::set(_T("RunWindArrowRenderer"), _T("RunWindArrowRenderer"),
-                      _rc);
+                      _rc, style);
 
     const PixelRect rc = get_client_rect();
 
@@ -157,6 +160,11 @@ protected:
     }
 
     return SingleWindow::OnTimer(_timer);
+  }
+
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) {
+    SingleWindow::OnResize(width, height);
+    wind.resize(width, height);
   }
 };
 
