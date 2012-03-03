@@ -670,6 +670,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunWaypointParser RunAirspaceParser \
 	ReadPort RunPortHandler \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
+	CAI302Tool \
 	lxn2igc \
 	RunIGCWriter \
 	RunFlightLogger \
@@ -1246,6 +1247,23 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
 RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
+
+CAI302_TOOL_SOURCES = \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(TEST_SRC_DIR)/CAI302Tool.cpp
+CAI302_TOOL_DEPENDS = CAI302 PORT MATH IO
+$(eval $(call link-program,CAI302Tool,CAI302_TOOL))
 
 TEST_LXN_TO_IGC_SOURCES = \
 	$(SRC)/Device/Driver/LX/Convert.cpp \
