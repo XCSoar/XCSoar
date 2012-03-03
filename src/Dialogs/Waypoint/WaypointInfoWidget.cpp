@@ -47,7 +47,7 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
 
   switch (result.validity) {
   case GlideResult::Validity::OK:
-    Units::FormatRelativeUserAltitude(result.altitude_difference,
+    FormatRelativeUserAltitude(result.altitude_difference,
                                       buffer, ARRAY_SIZE(buffer));
     AddReadOnly(label, NULL, buffer);
     break;
@@ -94,7 +94,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       buffer += _T("; ");
 
     TCHAR length_buffer[16];
-    Units::FormatSmallUserDistance(length_buffer,
+    FormatSmallUserDistance(length_buffer,
                                    fixed(waypoint.runway.GetLength()));
     buffer += length_buffer;
   }
@@ -106,7 +106,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                      buffer.buffer(), buffer.MAX_SIZE) != NULL)
     AddReadOnly(_("Location"), NULL, buffer);
 
-  Units::FormatUserAltitude(waypoint.altitude,
+  FormatUserAltitude(waypoint.altitude,
                             buffer.buffer(), buffer.MAX_SIZE);
   AddReadOnly(_("Elevation"), NULL, buffer);
 
@@ -126,7 +126,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     const GeoVector vector = basic.location.DistanceBearing(waypoint.location);
 
     TCHAR distance_buffer[32];
-    Units::FormatUserDistanceSmart(vector.distance, distance_buffer,
+    FormatUserDistanceSmart(vector.distance, distance_buffer,
                                    ARRAY_SIZE(distance_buffer));
 
     FormatBearing(buffer.buffer(), buffer.MAX_SIZE,

@@ -121,8 +121,8 @@ AltitudeSetupPanel::Show(const PixelRect &rc)
     df.SetMax(Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)));
     df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, Unit::HECTOPASCAL)));
     df.SetUnits(Units::GetPressureName());
-    df.SetStep(Units::GetUserPressureStep());
-    df.SetFormat(Units::GetUserPressureFormat());
+    df.SetStep(GetUserPressureStep());
+    df.SetFormat(GetUserPressureFormat());
     wp->RefreshDisplay();
 }
 

@@ -62,7 +62,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelScalar dy_glidebar = 0;
   PixelScalar dy_glidebar0 = 0;
 
-  Units::FormatUserAltitude(calculated.task_stats.total.solution_remaining.altitude_difference,
+  FormatUserAltitude(calculated.task_stats.total.solution_remaining.altitude_difference,
                             Value, false);
   canvas.Select(Fonts::map_bold);
   const PixelSize text_size = canvas.CalcTextSize(Value);

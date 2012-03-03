@@ -55,27 +55,27 @@ TaskStatusPanel::Refresh()
   SetFormValue(form, _T("prpRemainingTime"), Temp);
 
   if (task_stats.total.planned.IsDefined()) {
-    Units::FormatUserDistanceSmart(task_stats.total.planned.get_distance(),
+    FormatUserDistanceSmart(task_stats.total.planned.get_distance(),
                               Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpTaskDistance"), Temp);
   } else
     SetFormValue(form, _T("prpTaskDistance"), _T(""));
 
   if (task_stats.total.remaining.IsDefined()) {
-    Units::FormatUserDistanceSmart(task_stats.total.remaining.get_distance(),
+    FormatUserDistanceSmart(task_stats.total.remaining.get_distance(),
                               Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpRemainingDistance"), Temp);
   }
 
   if (task_stats.total.planned.IsDefined()) {
-    Units::FormatUserTaskSpeed(task_stats.total.planned.get_speed(),
+    FormatUserTaskSpeed(task_stats.total.planned.get_speed(),
                                Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpEstimatedSpeed"), Temp);
   } else
     SetFormValue(form, _T("prpEstimatedSpeed"), _T(""));
 
   if (task_stats.total.travelled.IsDefined()) {
-    Units::FormatUserTaskSpeed(task_stats.total.travelled.get_speed(),
+    FormatUserTaskSpeed(task_stats.total.travelled.get_speed(),
                                Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpAverageSpeed"), Temp);
   } else

@@ -44,7 +44,7 @@ static void
 SetVSpeed(InfoBoxData &data, fixed value)
 {
   TCHAR buffer[32];
-  Units::FormatUserVerticalSpeed(value, buffer, false);
+  FormatUserVerticalSpeed(value, buffer, false);
   data.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
   data.SetValueUnit(Units::current.vertical_speed_unit);
 }
@@ -104,13 +104,13 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 
   switch (keycode) {
   case ibkUp:
-    mc = std::min(mc + Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
                   fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   case ibkDown:
-    mc = std::max(mc - Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
                   fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;
@@ -145,25 +145,25 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   fixed mc = polar.GetMC();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {
-    mc = std::min(mc + Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
                   fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
-    mc = std::min(mc + Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep() * 5),
+    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep() * 5),
                   fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.1")) == 0) {
-    mc = std::max(mc - Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
                   fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
-    mc = std::max(mc - Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep() * 5),
+    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep() * 5),
                   fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;

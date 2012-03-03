@@ -92,7 +92,7 @@ InfoBoxContentSpark::label_vspeed(InfoBoxData &data,
     return;
 
   TCHAR sTmp[32];
-  Units::FormatUserVerticalSpeed(var.last(), sTmp,
+  FormatUserVerticalSpeed(var.last(), sTmp,
                           ARRAY_SIZE(sTmp));
   data.SetComment(sTmp);
 
@@ -124,7 +124,7 @@ InfoBoxContentBarogram::Update(InfoBoxData &data)
   const MoreData &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  Units::FormatUserAltitude(basic.nav_altitude, sTmp,
+  FormatUserAltitude(basic.nav_altitude, sTmp,
                             ARRAY_SIZE(sTmp));
   data.SetComment(sTmp);
 

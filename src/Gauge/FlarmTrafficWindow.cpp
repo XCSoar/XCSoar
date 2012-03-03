@@ -477,9 +477,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   TCHAR tmp[10];
 
   if (side_display_type == 1)
-    Units::FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, false);
+    FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, false);
   else
-    Units::FormatRelativeUserAltitude(traffic.relative_altitude, tmp, true);
+    FormatRelativeUserAltitude(traffic.relative_altitude, tmp, true);
 
   PixelSize sz = canvas.CalcTextSize(tmp);
 
@@ -651,13 +651,13 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.SetBackgroundColor(look.background_color);
 
   TCHAR distance_string[10];
-  Units::FormatUserDistanceSmart(distance, distance_string,
+  FormatUserDistanceSmart(distance, distance_string,
                             ARRAY_SIZE(distance_string));
   PixelSize s = canvas.CalcTextSize(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius - s.cy * 0.75, distance_string);
 
-  Units::FormatUserDistanceSmart(distance / 2, distance_string,
+  FormatUserDistanceSmart(distance / 2, distance_string,
                             ARRAY_SIZE(distance_string));
   s = canvas.CalcTextSize(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,

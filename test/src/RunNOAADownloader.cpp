@@ -56,22 +56,22 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
 
   if (parsed.qnh_available) {
     TCHAR buffer[256];
-    Units::FormatUserPressure(parsed.qnh, buffer, ARRAY_SIZE(buffer));
+    FormatUserPressure(parsed.qnh, buffer, ARRAY_SIZE(buffer));
     _tprintf(_T("QNH: %s\n"), buffer);
   }
 
   if (parsed.wind_available) {
     TCHAR buffer[256];
-    Units::FormatUserWindSpeed(parsed.wind.norm, buffer, ARRAY_SIZE(buffer));
+    FormatUserWindSpeed(parsed.wind.norm, buffer, ARRAY_SIZE(buffer));
     _tprintf(_T("Wind: %.0f" DEG " %s\n"),
              (double)parsed.wind.bearing.Degrees(), buffer);
   }
 
   if (parsed.temperatures_available) {
     TCHAR buffer[256];
-    Units::FormatUserTemperature(parsed.temperature, buffer, ARRAY_SIZE(buffer));
+    FormatUserTemperature(parsed.temperature, buffer, ARRAY_SIZE(buffer));
     _tprintf(_T("Temperature: %s\n"), buffer);
-    Units::FormatUserTemperature(parsed.dew_point, buffer, ARRAY_SIZE(buffer));
+    FormatUserTemperature(parsed.dew_point, buffer, ARRAY_SIZE(buffer));
     _tprintf(_T("Dew point: %s\n"), buffer);
   }
 
@@ -81,7 +81,7 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
       _tcscpy(buffer, _T("unlimited"));
     else {
       fixed visibility(parsed.visibility);
-      Units::FormatUserDistanceSmart(visibility, buffer, ARRAY_SIZE(buffer));
+      FormatUserDistanceSmart(visibility, buffer, ARRAY_SIZE(buffer));
     }
     _tprintf(_T("Visibility: %s\n"), buffer);
   }

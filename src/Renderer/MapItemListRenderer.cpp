@@ -228,7 +228,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   StaticString<256> buffer;
   TCHAR lift_buffer[32], time_buffer[32], timespan_buffer[32];
-  Units::FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
+  FormatUserVerticalSpeed(thermal.lift_rate, lift_buffer, 32);
   FormatSignedTimeHHMM(time_buffer, TimeLocal((int)thermal.time));
 
   int timespan = BrokenDateTime::NowUTC().GetSecondOfDay() - (int)thermal.time;
@@ -328,12 +328,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Generate the line of info about the target, if it's available
   if (traffic.altitude_available) {
     TCHAR tmp[15];
-    Units::FormatUserAltitude(traffic.altitude, tmp, 15);
+    FormatUserAltitude(traffic.altitude, tmp, 15);
     info_string.AppendFormat(_T(" - %s: %s"), _("Altitude"), tmp);
   }
   if (traffic.climb_rate_avg30s_available) {
     TCHAR tmp[15];
-    Units::FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 15);
+    FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 15);
     info_string.AppendFormat(_T(" - %s: %s"), _("Vario"), tmp);
   }
   canvas.Select(small_font);

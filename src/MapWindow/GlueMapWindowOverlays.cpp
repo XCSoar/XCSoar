@@ -103,7 +103,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
     return;
 
   StaticString<64> elevation_short, elevation_long;
-  Units::FormatUserAltitude(fixed(elevation),
+  FormatUserAltitude(fixed(elevation),
                             elevation_short.buffer(), elevation_short.MAX_SIZE);
 
   elevation_long = _("Elevation: ");
@@ -220,7 +220,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   fixed MapWidth = projection.GetScreenWidthMeters();
 
   canvas.Select(Fonts::map_bold);
-  Units::FormatUserMapScale(MapWidth, buffer.buffer(), true);
+  FormatUserMapScale(MapWidth, buffer.buffer(), true);
   PixelSize TextSize = canvas.CalcTextSize(buffer);
 
   UPixelScalar Height = Fonts::map_bold.GetCapitalHeight() + Layout::Scale(2);

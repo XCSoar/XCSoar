@@ -52,7 +52,7 @@ static void
 FormatWaypointDetails(Buffer &buffer, const Waypoint &waypoint)
 {
   TCHAR alt[16];
-  Units::FormatUserAltitude(waypoint.altitude, alt, 16);
+  FormatUserAltitude(waypoint.altitude, alt, 16);
   buffer.Format(_T("%s: %s"), _("Altitude"), alt);
 
   if (waypoint.radio_frequency.IsDefined()) {
@@ -127,8 +127,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw distance and arrival altitude
   StaticString<256> buffer;
   TCHAR dist[20], alt[20], radio[20];
-  Units::FormatUserDistanceSmart(distance, dist, true);
-  Units::FormatRelativeUserAltitude(arrival_altitude, alt, true);
+  FormatUserDistanceSmart(distance, dist, true);
+  FormatRelativeUserAltitude(arrival_altitude, alt, true);
   buffer.Format(_T("%s: %s - %s: %s"), _("Distance"), dist,
                 _("Arrival Alt"), alt);
 
@@ -176,7 +176,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw leg distance
   UPixelScalar leg_info_width = 0;
   if (vector) {
-    Units::FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
+    FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
     UPixelScalar width = leg_info_width = canvas.CalcTextWidth(buffer.c_str());
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +

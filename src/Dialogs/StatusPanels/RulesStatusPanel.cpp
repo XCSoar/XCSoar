@@ -63,7 +63,7 @@ RulesStatusPanel::Refresh()
   }
 
   if (common_stats.task_started) {
-    Units::FormatUserTaskSpeed(start_state.ground_speed,
+    FormatUserTaskSpeed(start_state.ground_speed,
                                Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpStartSpeed"), Temp);
   } else {
@@ -72,13 +72,13 @@ RulesStatusPanel::Refresh()
 
   // StartMaxHeight, StartMaxSpeed;
   if (common_stats.task_started) {
-    Units::FormatUserAltitude(start_state.altitude, Temp, ARRAY_SIZE(Temp));
+    FormatUserAltitude(start_state.altitude, Temp, ARRAY_SIZE(Temp));
     SetFormValue(form, _T("prpStartHeight"), Temp);
   } else {
     SetFormValue(form, _T("prpStartHeight"), _T(""));
   }
 
-  Units::FormatUserAltitude(protected_task_manager->GetFinishHeight(),
+  FormatUserAltitude(protected_task_manager->GetFinishHeight(),
                             Temp, ARRAY_SIZE(Temp));
   SetFormValue(form, _T("prpFinishAlt"), Temp);
 

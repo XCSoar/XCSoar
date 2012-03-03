@@ -207,12 +207,12 @@ ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.SetBackgroundOpaque();
 
   TCHAR lift_string[10];
-  Units::FormatUserVerticalSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
+  FormatUserVerticalSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
   PixelSize s = canvas.CalcTextSize(lift_string);
   canvas.text(mid.x - s.cx / 2,
               mid.y + radius - s.cy * 0.75, lift_string);
 
-  Units::FormatUserVerticalSpeed(fixed_zero, lift_string, ARRAY_SIZE(lift_string));
+  FormatUserVerticalSpeed(fixed_zero, lift_string, ARRAY_SIZE(lift_string));
   s = canvas.CalcTextSize(lift_string);
   canvas.text(mid.x - s.cx / 2,
               mid.y + radius / 2 - s.cy * 0.75, lift_string);

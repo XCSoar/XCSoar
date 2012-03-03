@@ -370,7 +370,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
       _tcscat(buffer, _T(" vertical "));
 
       fixed delta = solution.altitude - CommonInterface::Basic().nav_altitude;
-      Units::FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
+      FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
 
     canvas.text_clipped(paint_rc.left + left0,

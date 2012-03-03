@@ -135,11 +135,11 @@ InputEvents::eventMacCready(const TCHAR *misc)
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
   if (StringIsEqual(misc, _T("up"))) {
-    mc = std::min(mc + Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
                   fixed(5));
     ActionInterface::SetManualMacCready(mc);
   } else if (StringIsEqual(misc, _T("down"))) {
-    mc = std::max(mc - Units::ToSysVSpeed(Units::GetUserVerticalSpeedStep()),
+    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
                   fixed_zero);
     ActionInterface::SetManualMacCready(mc);
   } else if (StringIsEqual(misc, _T("auto toggle"))) {
@@ -159,7 +159,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
     }
   } else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
-    Units::FormatUserVerticalSpeed(mc, Temp, false);
+    FormatUserVerticalSpeed(mc, Temp, false);
     Message::AddMessage(_("MacCready "), Temp);
   }
 }
@@ -305,8 +305,8 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     TCHAR TempSpeed[40];
     
     FormatSignedTimeHHMM(TempTime, (int)TimeLocal((int)start_state.time));
-    Units::FormatUserAltitude(start_state.altitude, TempAlt, true);
-    Units::FormatUserSpeed(start_state.ground_speed,TempSpeed, true);
+    FormatUserAltitude(start_state.altitude, TempAlt, true);
+    FormatUserSpeed(start_state.ground_speed,TempSpeed, true);
     
     TCHAR TempAll[120];
     _stprintf(TempAll, _T("\r\nAltitude: %s\r\nSpeed:%s\r\nTime: %s"),

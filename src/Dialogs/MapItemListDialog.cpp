@@ -152,7 +152,7 @@ ShowMapItemListDialog(SingleWindow &parent)
 
   TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
   if (vector.IsValid()) {
-    Units::FormatUserDistanceSmart(vector.distance, distance_buffer, 32);
+    FormatUserDistanceSmart(vector.distance, distance_buffer, 32);
     FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
                   vector.bearing);
     _stprintf(info_buffer, _T("%s: %s - %s: %s"),
@@ -165,7 +165,7 @@ ShowMapItemListDialog(SingleWindow &parent)
 
   TCHAR elevation_buffer[32];
   if (elevation != RasterBuffer::TERRAIN_INVALID) {
-    Units::FormatUserAltitude(fixed(elevation), elevation_buffer, 32);
+    FormatUserAltitude(fixed(elevation), elevation_buffer, 32);
     _stprintf(info_buffer + _tcslen(info_buffer), _T(" - %s: %s"),
               _("Elevation"), elevation_buffer);
   }

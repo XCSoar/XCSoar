@@ -307,7 +307,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   // Climb Rate
   if (!WarningMode() && traffic.climb_rate_avg30s_available) {
-    Units::FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 20);
+    FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 20);
     canvas.Select(look.info_values_font);
     sz = canvas.CalcTextSize(tmp);
     canvas.text(rc.right - sz.cx, rc.top + look.info_labels_font.GetHeight(), tmp);
@@ -318,7 +318,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   }
 
   // Distance
-  Units::FormatUserDistanceSmart(traffic.distance, tmp, 20);
+  FormatUserDistanceSmart(traffic.distance, tmp, 20);
   canvas.Select(look.info_values_font);
   sz = canvas.CalcTextSize(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);
@@ -329,7 +329,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
               _("Distance"));
 
   // Relative Height
-  Units::FormatRelativeUserAltitude(traffic.relative_altitude, tmp, 20);
+  FormatRelativeUserAltitude(traffic.relative_altitude, tmp, 20);
   canvas.Select(look.info_values_font);
   sz = canvas.CalcTextSize(tmp);
   canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);

@@ -46,13 +46,13 @@ FlightStatusPanel::Refresh()
     SetFormValue(form, _T("prpLocation"), _T(""));
 
   if (basic.gps_altitude_available) {
-    Units::FormatUserAltitude(basic.gps_altitude,
+    FormatUserAltitude(basic.gps_altitude,
                               buffer.buffer(), buffer.MAX_SIZE);
     SetFormValue(form, _T("prpAltitude"), buffer);
   } else
     SetFormValue(form, _T("prpAltitude"), _T(""));
 
-  Units::FormatUserAltitude(calculated.max_height_gain,
+  FormatUserAltitude(calculated.max_height_gain,
                             buffer.buffer(), buffer.MAX_SIZE);
   SetFormValue(form, _T("prpMaxHeightGain"), buffer);
 
@@ -65,7 +65,7 @@ FlightStatusPanel::Refresh()
     FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vec.bearing, _T(""));
     SetFormValue(form, _T("prpBearing"), buffer);
 
-    Units::FormatUserDistanceSmart(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
+    FormatUserDistanceSmart(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
     SetFormValue(form, _T("prpDistance"), buffer);
   } else {
     SetFormValue(form, _T("prpNear"), _T("-"));

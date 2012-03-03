@@ -70,7 +70,7 @@ UpdateChanging()
 
   // Fill distance field
   if (target_ok)
-    Units::FormatUserDistanceSmart(target->distance, tmp, 20);
+    FormatUserDistanceSmart(target->distance, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
@@ -85,7 +85,7 @@ UpdateChanging()
 
   // Fill altitude field
   if (target_ok && target->altitude_available)
-    Units::FormatUserAltitude(target->altitude, tmp, 20);
+    FormatUserAltitude(target->altitude, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
@@ -101,7 +101,7 @@ UpdateChanging()
 
   // Fill climb speed field
   if (target_ok && target->climb_rate_avg30s_available)
-    Units::FormatUserVerticalSpeed(target->climb_rate_avg30s, tmp, 20);
+    FormatUserVerticalSpeed(target->climb_rate_avg30s, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpVSpeed")))->SetText(tmp);

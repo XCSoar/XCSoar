@@ -34,10 +34,9 @@ Copyright_License {
 #include <stdlib.h>
 
 void
-Units::FormatUserAltitude(fixed value, TCHAR *buffer,
-                          bool include_unit)
+FormatUserAltitude(fixed value, TCHAR *buffer, bool include_unit)
 {
-  FormatAltitude(buffer, value, current.altitude_unit, include_unit);
+  FormatAltitude(buffer, value, Units::GetUserAltitudeUnit(), include_unit);
 }
 
 gcc_const
@@ -57,109 +56,108 @@ GetAlternateAltitudeUnit(Unit unit)
 }
 
 void
-Units::FormatAlternateUserAltitude(fixed value, TCHAR *buffer,
-                                   bool include_unit)
+FormatAlternateUserAltitude(fixed value, TCHAR *buffer, bool include_unit)
 {
-  FormatAltitude(buffer, value, GetAlternateAltitudeUnit(current.altitude_unit),
+  FormatAltitude(buffer, value,
+                 GetAlternateAltitudeUnit(Units::GetUserAltitudeUnit()),
                  include_unit);
 }
 
 void
-Units::FormatRelativeUserAltitude(fixed value, TCHAR *buffer,
-                                  bool include_unit)
+FormatRelativeUserAltitude(fixed value, TCHAR *buffer, bool include_unit)
 {
-  FormatRelativeAltitude(buffer, value, current.altitude_unit,
+  FormatRelativeAltitude(buffer, value, Units::GetUserAltitudeUnit(),
                          include_unit);
 }
 
 Unit
-Units::FormatSmallUserDistance(TCHAR *buffer, fixed value,
-                           bool include_unit, int precision)
+FormatSmallUserDistance(TCHAR *buffer, fixed value, bool include_unit,
+                        int precision)
 {
-  return FormatSmallDistance(buffer, value, current.distance_unit,
+  return FormatSmallDistance(buffer, value, Units::GetUserDistanceUnit(),
                              include_unit, precision);
 }
 
 Unit
-Units::FormatUserDistanceSmart(fixed value, TCHAR *buffer,
-                               bool include_unit)
+FormatUserDistanceSmart(fixed value, TCHAR *buffer, bool include_unit)
 {
-  return FormatDistanceSmart(buffer, value, current.distance_unit,
+  return FormatDistanceSmart(buffer, value, Units::GetUserDistanceUnit(),
                              include_unit);
 }
 
 Unit
-Units::FormatUserMapScale(fixed value, TCHAR *buffer,
-                          bool include_unit)
+FormatUserMapScale(fixed value, TCHAR *buffer, bool include_unit)
 {
-  return FormatDistanceSmart(buffer, value, current.distance_unit,
+  return FormatDistanceSmart(buffer, value, Units::GetUserDistanceUnit(),
                              include_unit, fixed(1000), fixed(9.999));
 }
 
 void
-Units::FormatUserSpeed(fixed value, TCHAR *buffer,
-                       bool include_unit, bool precision)
+FormatUserSpeed(fixed value, TCHAR *buffer, bool include_unit, bool precision)
 {
-  FormatSpeed(buffer, value, current.speed_unit, include_unit, precision);
+  FormatSpeed(buffer, value, Units::GetUserSpeedUnit(), include_unit,
+              precision);
 }
 
 void
-Units::FormatUserWindSpeed(fixed value, TCHAR *buffer,
-                           bool include_unit, bool precision)
+FormatUserWindSpeed(fixed value, TCHAR *buffer, bool include_unit,
+                    bool precision)
 {
-  FormatSpeed(buffer, value, current.wind_speed_unit, include_unit, precision);
+  FormatSpeed(buffer, value, Units::GetUserWindSpeedUnit(), include_unit,
+              precision);
 }
 
 void
-Units::FormatUserTaskSpeed(fixed value, TCHAR *buffer,
-                           bool include_unit, bool precision)
+FormatUserTaskSpeed(fixed value, TCHAR *buffer, bool include_unit,
+                    bool precision)
 {
-  FormatSpeed(buffer, value, current.task_speed_unit, include_unit, precision);
+  FormatSpeed(buffer, value, Units::GetUserTaskSpeedUnit(), include_unit,
+              precision);
 }
 
 const TCHAR*
-Units::GetUserVerticalSpeedFormat(bool include_unit, bool include_sign)
+GetUserVerticalSpeedFormat(bool include_unit, bool include_sign)
 {
-  return GetVerticalSpeedFormat(current.vertical_speed_unit, include_unit,
+  return GetVerticalSpeedFormat(Units::GetUserVerticalSpeedUnit(), include_unit,
                                 include_sign);
 }
 
 fixed
-Units::GetUserVerticalSpeedStep()
+GetUserVerticalSpeedStep()
 {
-  return GetVerticalSpeedStep(current.vertical_speed_unit);
+  return GetVerticalSpeedStep(Units::GetUserVerticalSpeedUnit());
 }
 
 void
-Units::FormatUserVerticalSpeed(fixed value, TCHAR *buffer,
-                               bool include_unit, bool include_sign)
+FormatUserVerticalSpeed(fixed value, TCHAR *buffer, bool include_unit,
+                        bool include_sign)
 {
-  FormatVerticalSpeed(buffer, value, current.vertical_speed_unit,
+  FormatVerticalSpeed(buffer, value, Units::GetUserVerticalSpeedUnit(),
                       include_unit, include_sign);
 }
 
 void
-Units::FormatUserTemperature(fixed value, TCHAR *buffer,
-                             bool include_unit)
+FormatUserTemperature(fixed value, TCHAR *buffer, bool include_unit)
 {
-  FormatTemperature(buffer, value, current.temperature_unit, include_unit);
+  FormatTemperature(buffer, value, Units::GetUserTemperatureUnit(),
+                    include_unit);
 }
 
 void
-Units::FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
-                          bool include_unit)
+FormatUserPressure(AtmosphericPressure pressure, TCHAR *buffer,
+                   bool include_unit)
 {
-  FormatPressure(buffer, pressure, current.pressure_unit, include_unit);
+  FormatPressure(buffer, pressure, Units::GetUserPressureUnit(), include_unit);
 }
 
 const TCHAR*
-Units::GetUserPressureFormat(bool include_unit)
+GetUserPressureFormat(bool include_unit)
 {
-  return GetPressureFormat(current.pressure_unit);
+  return GetPressureFormat(Units::GetUserPressureUnit());
 }
 
 fixed
-Units::GetUserPressureStep()
+GetUserPressureStep()
 {
-  return GetPressureStep(current.pressure_unit);
+  return GetPressureStep(Units::current.pressure_unit);
 }

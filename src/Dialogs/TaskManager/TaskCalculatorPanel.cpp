@@ -216,10 +216,10 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
   assert(df != NULL);
 
-  df->SetFormat(Units::GetUserVerticalSpeedFormat(false, false));
+  df->SetFormat(GetUserVerticalSpeedFormat(false, false));
   df->SetMin(fixed_zero);
   df->SetMax(Units::ToUserVSpeed(fixed(5)));
-  df->SetStep(Units::GetUserVerticalSpeedStep());
+  df->SetStep(GetUserVerticalSpeedStep());
 
   wp = (WndProperty *)form.FindByName(_T("prpEffectiveMacCready"));
   assert(wp != NULL);
@@ -227,7 +227,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   df = (DataFieldFloat *)wp->GetDataField();
   assert(df != NULL);
 
-  df->SetFormat(Units::GetUserVerticalSpeedFormat(false, false));
+  df->SetFormat(GetUserVerticalSpeedFormat(false, false));
 
 }
 

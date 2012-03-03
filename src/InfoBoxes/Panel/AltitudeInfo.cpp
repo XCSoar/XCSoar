@@ -54,7 +54,7 @@ AltitudeInfoPanel::Refresh()
     SetFormValue(form, _T("prpAltAGL"), _("N/A"));
   } else {
     // Set Value
-    Units::FormatUserAltitude(calculated.altitude_agl, sTmp, ARRAY_SIZE(sTmp));
+    FormatUserAltitude(calculated.altitude_agl, sTmp, ARRAY_SIZE(sTmp));
     SetFormValue(form, _T("prpAltAGL"), sTmp);
   }
 
@@ -62,7 +62,7 @@ AltitudeInfoPanel::Refresh()
     SetFormValue(form, _T("prpAltBaro"), _("N/A"));
   } else {
     // Set Value
-    Units::FormatUserAltitude(basic.baro_altitude, sTmp, ARRAY_SIZE(sTmp));
+    FormatUserAltitude(basic.baro_altitude, sTmp, ARRAY_SIZE(sTmp));
     SetFormValue(form, _T("prpAltBaro"), sTmp);
   }
 
@@ -70,7 +70,7 @@ AltitudeInfoPanel::Refresh()
     SetFormValue(form, _T("prpAltGPS"), _("N/A"));
   } else {
     // Set Value
-    Units::FormatUserAltitude(basic.gps_altitude, sTmp, ARRAY_SIZE(sTmp));
+    FormatUserAltitude(basic.gps_altitude, sTmp, ARRAY_SIZE(sTmp));
     SetFormValue(form, _T("prpAltGPS"), sTmp);
   }
 
@@ -78,7 +78,7 @@ AltitudeInfoPanel::Refresh()
     SetFormValue(form, _T("prpTerrain"), _("N/A"));
   } else {
     // Set Value
-    Units::FormatUserAltitude(calculated.terrain_altitude,
+    FormatUserAltitude(calculated.terrain_altitude,
                               sTmp, ARRAY_SIZE(sTmp));
     SetFormValue(form, _T("prpTerrain"), sTmp);
   }

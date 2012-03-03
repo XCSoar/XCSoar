@@ -311,12 +311,11 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   wp = AddFloat(_("QNH"),
                 _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
-                Units::GetUserPressureFormat(), Units::GetUserPressureFormat(),
+                GetUserPressureFormat(), GetUserPressureFormat(),
                 Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
                 Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
-                Units::GetUserPressureStep(), false,
-                Units::ToUserPressure(settings.pressure),
-                OnQnhData);
+                GetUserPressureStep(), false,
+                Units::ToUserPressure(settings.pressure), OnQnhData);
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetPressureName());
