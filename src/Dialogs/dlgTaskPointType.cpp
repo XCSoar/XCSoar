@@ -37,7 +37,7 @@ Copyright_License {
 #include <stdio.h>
 
 static WndForm *wf = NULL;
-static WndListFrame* wPointTypes = NULL;
+static ListControl* wPointTypes = NULL;
 static bool task_modified = false;
 static OrderedTask* ordered_task = NULL;
 static OrderedTaskPoint* point = NULL;
@@ -216,7 +216,7 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   assert(wf != NULL);
 
-  wPointTypes = (WndListFrame*)wf->FindByName(_T("frmPointTypes"));
+  wPointTypes = (ListControl*)wf->FindByName(_T("frmPointTypes"));
   assert(wPointTypes != NULL);
 
   point_types = ordered_task->GetFactory().GetValidTypes(index);

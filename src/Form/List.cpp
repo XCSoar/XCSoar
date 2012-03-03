@@ -42,11 +42,11 @@ Copyright_License {
 using std::min;
 using std::max;
 
-WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
-                           PixelScalar x, PixelScalar y,
-                           UPixelScalar width, UPixelScalar height,
-                           const WindowStyle style,
-                           UPixelScalar _item_height)
+ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
+                         PixelScalar x, PixelScalar y,
+                         UPixelScalar width, UPixelScalar height,
+                         const WindowStyle style,
+                         UPixelScalar _item_height)
   :look(_look),
    item_height(_item_height),
    length(0),
@@ -65,7 +65,7 @@ WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
 }
 
 void
-WndListFrame::show_or_hide_scroll_bar()
+ListControl::show_or_hide_scroll_bar()
 {
   const PixelSize size = get_size();
 
@@ -79,7 +79,7 @@ WndListFrame::show_or_hide_scroll_bar()
 }
 
 void
-WndListFrame::OnResize(UPixelScalar width, UPixelScalar height)
+ListControl::OnResize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::OnResize(width, height);
   items_visible = height / item_height;
@@ -87,21 +87,21 @@ WndListFrame::OnResize(UPixelScalar width, UPixelScalar height)
 }
 
 void
-WndListFrame::OnSetFocus()
+ListControl::OnSetFocus()
 {
   PaintWindow::OnSetFocus();
   invalidate_item(cursor);
 }
 
 void
-WndListFrame::OnKillFocus()
+ListControl::OnKillFocus()
 {
   PaintWindow::OnKillFocus();
   invalidate_item(cursor);
 }
 
 void
-WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
+ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
   PixelRect rc = item_rect(start);
 
@@ -145,7 +145,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 }
 
 void
-WndListFrame::OnPaint(Canvas &canvas)
+ListControl::OnPaint(Canvas &canvas)
 {
   if (paint_item_callback != NULL)
     DrawItems(canvas, origin, origin + items_visible + 2);
@@ -154,7 +154,7 @@ WndListFrame::OnPaint(Canvas &canvas)
 }
 
 void
-WndListFrame::OnPaint(Canvas &canvas, const PixelRect &dirty)
+ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
   if (paint_item_callback != NULL)
     DrawItems(canvas, origin + (dirty.top + pixel_pan) / item_height,
@@ -163,7 +163,8 @@ WndListFrame::OnPaint(Canvas &canvas, const PixelRect &dirty)
   DrawScrollBar(canvas);
 }
 
-void WndListFrame::DrawScrollBar(Canvas &canvas) {
+void
+ListControl::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.IsDefined())
     return;
 
@@ -172,7 +173,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
 }
 
 void
-WndListFrame::SetItemHeight(UPixelScalar _item_height)
+ListControl::SetItemHeight(UPixelScalar _item_height)
 {
   item_height = _item_height;
   items_visible = get_size().cy / item_height;
@@ -182,7 +183,7 @@ WndListFrame::SetItemHeight(UPixelScalar _item_height)
 }
 
 void
-WndListFrame::SetLength(unsigned n)
+ListControl::SetLength(unsigned n)
 {
   if (n == length)
     return;
@@ -212,7 +213,7 @@ WndListFrame::SetLength(unsigned n)
 }
 
 void
-WndListFrame::EnsureVisible(unsigned i)
+ListControl::EnsureVisible(unsigned i)
 {
   assert(i < length);
 
@@ -228,7 +229,7 @@ WndListFrame::EnsureVisible(unsigned i)
 }
 
 bool
-WndListFrame::SetCursorIndex(unsigned i)
+ListControl::SetCursorIndex(unsigned i)
 {
   if (i >= length)
     return false;
@@ -248,7 +249,7 @@ WndListFrame::SetCursorIndex(unsigned i)
 }
 
 void
-WndListFrame::MoveCursor(int delta)
+ListControl::MoveCursor(int delta)
 {
   if (length == 0)
     return;
@@ -263,7 +264,7 @@ WndListFrame::MoveCursor(int delta)
 }
 
 void
-WndListFrame::SetPixelPan(UPixelScalar _pixel_pan)
+ListControl::SetPixelPan(UPixelScalar _pixel_pan)
 {
   if (pixel_pan == _pixel_pan)
     return;
@@ -273,7 +274,7 @@ WndListFrame::SetPixelPan(UPixelScalar _pixel_pan)
 }
 
 void
-WndListFrame::SetOrigin(int i)
+ListControl::SetOrigin(int i)
 {
   if (length <= items_visible)
     return;
@@ -311,14 +312,14 @@ WndListFrame::SetOrigin(int i)
 }
 
 void
-WndListFrame::MoveOrigin(int delta)
+ListControl::MoveOrigin(int delta)
 {
   int pixel_origin = (int)GetPixelOrigin();
   SetPixelOrigin(pixel_origin + delta * (int)item_height);
 }
 
 bool
-WndListFrame::OnKeyCheck(unsigned key_code) const
+ListControl::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
@@ -362,7 +363,7 @@ WndListFrame::OnKeyCheck(unsigned key_code) const
 }
 
 bool
-WndListFrame::OnKeyDown(unsigned key_code)
+ListControl::OnKeyDown(unsigned key_code)
 {
   scroll_bar.DragEnd(this);
 
@@ -436,7 +437,7 @@ WndListFrame::OnKeyDown(unsigned key_code)
 }
 
 bool
-WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
+ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (scroll_bar.IsDragging()) {
     scroll_bar.DragEnd(this);
@@ -466,7 +467,7 @@ WndListFrame::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 void
-WndListFrame::drag_end()
+ListControl::drag_end()
 {
   if (drag_mode != DragMode::NONE) {
     if (drag_mode == DragMode::CURSOR)
@@ -478,7 +479,7 @@ WndListFrame::drag_end()
 }
 
 bool
-WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.IsDragging()) {
@@ -508,7 +509,7 @@ WndListFrame::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 }
 
 bool
-WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
+ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   // End any previous drag
   scroll_bar.DragEnd(this);
@@ -577,7 +578,7 @@ WndListFrame::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-WndListFrame::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
+ListControl::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 {
   scroll_bar.DragEnd(this);
   drag_end();
@@ -598,7 +599,7 @@ WndListFrame::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 }
 
 bool
-WndListFrame::OnCancelMode()
+ListControl::OnCancelMode()
 {
   PaintWindow::OnCancelMode();
 
@@ -615,7 +616,7 @@ WndListFrame::OnCancelMode()
 #ifndef _WIN32_WCE
 
 bool
-WndListFrame::OnTimer(WindowTimer &timer)
+ListControl::OnTimer(WindowTimer &timer)
 {
   if (timer == kinetic_timer) {
     if (kinetic.IsSteady()) {
@@ -630,7 +631,7 @@ WndListFrame::OnTimer(WindowTimer &timer)
 }
 
 void
-WndListFrame::OnDestroy()
+ListControl::OnDestroy()
 {
   kinetic_timer.Cancel();
 

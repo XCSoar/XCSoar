@@ -195,7 +195,7 @@ oz_type_cursor_callback(unsigned idx)
 
 class TestWindow : public SingleWindow {
   ButtonWindow close_button;
-  WndListFrame *type_list;
+  ListControl *type_list;
   OZWindow oz;
 
   enum {
@@ -241,9 +241,9 @@ public:
            with_border);
     oz_window = &oz;
 
-    type_list = new WndListFrame(*this, look,
-                                 0, 0, rc.right / 2, rc.bottom - 30,
-                                 with_border, 25);
+    type_list = new ListControl(*this, look,
+                                0, 0, rc.right / 2, rc.bottom - 30,
+                                with_border, 25);
     type_list->SetPaintItemCallback(paint_oz_type_name);
     type_list->SetCursorCallback(oz_type_cursor_callback);
     type_list->SetLength(NUM_OZ_TYPES);

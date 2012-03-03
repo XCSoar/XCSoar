@@ -489,7 +489,7 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wTaskView->SetOnMouseDownNotify(::OnTaskViewClick);
   fullscreen = false;
 
-  wTasks = (WndListFrame*)form.FindByName(_T("frmTasks"));
+  wTasks = (ListControl*)form.FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
 
   // Set callbacks

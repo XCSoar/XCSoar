@@ -391,7 +391,7 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   instance = this;
 
-  wTaskPoints = (WndListFrame*)form.FindByName(_T("frmTaskPoints"));
+  wTaskPoints = (ListControl*)form.FindByName(_T("frmTaskPoints"));
   assert(wTaskPoints != NULL);
 
   wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskView"));

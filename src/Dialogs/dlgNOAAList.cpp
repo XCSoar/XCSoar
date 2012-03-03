@@ -48,7 +48,7 @@ Copyright_License {
 #include <stdio.h>
 
 static WndForm *wf;
-static WndListFrame *station_list;
+static ListControl *station_list;
 static WndButton *add_button;
 static WndButton *update_button;
 static WndButton *remove_button;
@@ -241,7 +241,7 @@ dlgNOAAListShowModal(SingleWindow &parent)
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
 
-  station_list = (WndListFrame *)wf->FindByName(_T("StationList"));
+  station_list = (ListControl *)wf->FindByName(_T("StationList"));
   assert(station_list != NULL);
   station_list->SetItemHeight(GetRowHeight(UIGlobals::GetDialogLook()));
   station_list->SetPaintItemCallback(PaintListItem);

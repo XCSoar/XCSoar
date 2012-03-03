@@ -37,10 +37,10 @@ struct DialogLook;
 class ContainerWindow;
 
 /**
- * A WndListFrame implements a scrollable list control based on the
+ * A ListControl implements a scrollable list control based on the
  * WindowControl class.
  */
-class WndListFrame : public PaintWindow {
+class ListControl : public PaintWindow {
 public:
   typedef void (*ActivateCallback)(unsigned idx);
   typedef void (*CursorCallback)(unsigned idx);
@@ -118,7 +118,6 @@ protected:
 
 public:
   /**
-   * Constructor of the WndListFrame class
    * @param parent the parent window
    * @param X x-Coordinate of the ListFrameControl
    * @param Y y-Coordinate of the ListFrameControl
@@ -126,11 +125,11 @@ public:
    * @param Height Height of the ListFrameControl
    * @param _item_height Height of an item of the ListFrameControl
    */
-  WndListFrame(ContainerWindow &parent, const DialogLook &look,
-               PixelScalar x, PixelScalar y,
-               UPixelScalar width, UPixelScalar height,
-               const WindowStyle style,
-               UPixelScalar _item_height);
+  ListControl(ContainerWindow &parent, const DialogLook &look,
+              PixelScalar x, PixelScalar y,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle style,
+              UPixelScalar _item_height);
 
   /** Sets the function to call when a ListItem is chosen */
   void SetActivateCallback(ActivateCallback cb) {

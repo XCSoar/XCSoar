@@ -48,7 +48,7 @@ Copyright_License {
 
 static const TerminalLook *terminal_look;
 static WndForm *dialog;
-static WndListFrame *list;
+static ListControl *list;
 static unsigned current;
 static UPixelScalar font_height;
 
@@ -293,9 +293,9 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   list_style.TabStop();
   list_style.Border();
 
-  list = new WndListFrame(client_area, look, rc.left, rc.top,
-                          rc.right - rc.left, rc.bottom - rc.top,
-                          list_style, 3 * margin + 2 * font_height);
+  list = new ListControl(client_area, look, rc.left, rc.top,
+                         rc.right - rc.left, rc.bottom - rc.top,
+                         list_style, 3 * margin + 2 * font_height);
   list->SetPaintItemCallback(PaintDevice);
   list->SetCursorCallback(OnCursor);
 

@@ -55,7 +55,7 @@ static WndForm *wf=NULL;
 static WndProperty *wpName;
 static WndProperty *wpDistance;
 static WndProperty *wpDirection;
-static WndListFrame *wAirspaceList=NULL;
+static ListControl *wAirspaceList=NULL;
 
 static fixed distance_filter;
 
@@ -397,7 +397,7 @@ PrepareAirspaceSelectDialog()
   wf->SetKeyDownNotify(FormKeyDown);
 #endif
 
-  wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
+  wAirspaceList = (ListControl*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList != NULL);
   wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnPaintListItem);

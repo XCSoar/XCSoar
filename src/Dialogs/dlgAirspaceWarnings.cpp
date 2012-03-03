@@ -70,7 +70,7 @@ static WndButton *ack_day_button = NULL;
 static WndButton *ack_space_button = NULL;
 static WndButton *enable_button = NULL; // Enable
 
-static WndListFrame *warning_list_frame = NULL;
+static ListControl *warning_list_frame = NULL;
 static gcc_constexpr_data Color inside_color(254,50,50);
 static gcc_constexpr_data Color near_color(254,254,50);
 static gcc_constexpr_data Color inside_ack_color(254,100,100);
@@ -509,7 +509,7 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   dialog->SetKeyDownNotify(OnKeyDown);
 
   warning_list_frame =
-    (WndListFrame*)dialog->FindByName(_T("frmAirspaceWarningList"));
+    (ListControl*)dialog->FindByName(_T("frmAirspaceWarningList"));
   assert(warning_list_frame != NULL);
   warning_list_frame->SetPaintItemCallback(OnAirspaceListItemPaint);
   warning_list_frame->SetCursorCallback(AirspaceWarningCursorCallback);

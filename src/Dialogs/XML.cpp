@@ -784,7 +784,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     window = frame;
 
-  // ListBoxControl (WndListFrame)
+  // ListBoxControl (ListControl)
   } else if (StringIsEqual(node.getName(), _T("List"))){
     // Determine ItemHeight of the list items
     UPixelScalar item_height =
@@ -801,10 +801,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     else
       style.SunkenEdge();
 
-    window = new WndListFrame(parent, *xml_dialog_look,
-                              pos.x, pos.y, size.cx, size.cy,
-                              style,
-                              item_height);
+    window = new ListControl(parent, *xml_dialog_look,
+                             pos.x, pos.y, size.cx, size.cy,
+                             style,
+                             item_height);
 
   // TabControl (Tabbed)
   } else if (StringIsEqual(node.getName(), _T("Tabbed"))) {

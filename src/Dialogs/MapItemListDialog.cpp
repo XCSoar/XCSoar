@@ -134,8 +134,8 @@ ShowMapItemListDialog(SingleWindow &parent)
   details_button = (WndButton *)wf->FindByName(_T("cmdDetails"));
   assert(details_button);
 
-  WndListFrame *list_control =
-      (WndListFrame *)wf->FindByName(_T("frmComboPopupList"));
+  ListControl *list_control =
+      (ListControl *)wf->FindByName(_T("frmComboPopupList"));
   assert(list_control != NULL);
   list_control->SetItemHeight(item_height);
   list_control->SetLength(num_items);

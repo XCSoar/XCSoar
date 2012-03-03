@@ -71,10 +71,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   WindowStyle style;
   style.TabStop();
-  WndListFrame list(client_area, *dialog_look, 2, 2,
-                    client_area.get_width() - 4,
-                    client_area.get_height() - 4,
-                    style, normal_font.GetHeight() + 4);
+  ListControl list(client_area, *dialog_look, 2, 2,
+                   client_area.get_width() - 4,
+                   client_area.get_height() - 4,
+                   style, normal_font.GetHeight() + 4);
   list.SetPaintItemCallback(PaintItemCallback);
   list.SetLength(64);
   list.set_focus();

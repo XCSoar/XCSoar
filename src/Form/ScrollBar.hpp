@@ -185,7 +185,7 @@ public:
 
   /**
    * Should be called when beginning to drag
-   * (Called by WndListFrame::OnMouseDown)
+   * (Called by ListControl::OnMouseDown)
    * @param w The Window object the ScrollBar is belonging to
    * @param y y-Coordinate
    */
@@ -193,7 +193,7 @@ public:
 
   /**
    * Should be called when stopping to drag
-   * (Called by WndListFrame::OnMouseUp)
+   * (Called by ListControl::OnMouseUp)
    * @param w The Window object the ScrollBar is belonging to
    */
   void DragEnd(Window *w);

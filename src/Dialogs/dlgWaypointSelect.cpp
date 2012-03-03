@@ -63,7 +63,7 @@ class FAITrianglePointValidator;
 static GeoPoint location;
 static FAITrianglePointValidator *triangle_validator = NULL;
 static WndForm *dialog = NULL;
-static WndListFrame *waypoint_list = NULL;
+static ListControl *waypoint_list = NULL;
 static WndButton *name_button;
 static WndProperty *distance_filter;
 static WndProperty *direction_filter;
@@ -872,7 +872,7 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  waypoint_list = (WndListFrame*)dialog->FindByName(_T("frmWaypointList"));
+  waypoint_list = (ListControl*)dialog->FindByName(_T("frmWaypointList"));
   assert(waypoint_list != NULL);
   waypoint_list->SetActivateCallback(OnWaypointListEnter);
   waypoint_list->SetPaintItemCallback(OnPaintListItem);

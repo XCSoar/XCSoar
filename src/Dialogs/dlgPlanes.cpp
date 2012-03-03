@@ -43,7 +43,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 static WndForm *dialog = NULL;
-static WndListFrame *plane_list = NULL;
+static ListControl *plane_list = NULL;
 
 struct ListItem
 {
@@ -322,7 +322,7 @@ dlgPlanesShowModal(SingleWindow &parent)
 
   UPixelScalar item_height = GetRowHeight(UIGlobals::GetDialogLook());
 
-  plane_list = (WndListFrame*)dialog->FindByName(_T("List"));
+  plane_list = (ListControl*)dialog->FindByName(_T("List"));
   assert(plane_list != NULL);
   plane_list->SetItemHeight(item_height);
   plane_list->SetPaintItemCallback(OnPlaneListPaint);

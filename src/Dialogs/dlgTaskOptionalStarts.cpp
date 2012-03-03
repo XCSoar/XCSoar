@@ -36,7 +36,7 @@ Copyright_License {
 #include <stdio.h>
 
 static WndForm *wf = NULL;
-static WndListFrame* wOptionalStartPoints = NULL;
+static ListControl* wOptionalStartPoints = NULL;
 static bool task_modified = false;
 static OrderedTask* ordered_task = NULL;
 static bool RealStartExists = false;
@@ -171,7 +171,7 @@ dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task)
 
   assert(wf != NULL);
 
-  wOptionalStartPoints = (WndListFrame*)wf->FindByName(_T("frmOptionalStarts"));
+  wOptionalStartPoints = (ListControl*)wf->FindByName(_T("frmOptionalStarts"));
   assert(wOptionalStartPoints != NULL);
 
   RealStartExists = ordered_task->TaskSize();

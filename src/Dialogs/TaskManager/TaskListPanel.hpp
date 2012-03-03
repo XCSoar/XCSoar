@@ -28,7 +28,7 @@ Copyright_License {
 
 class WndForm;
 class TabBarControl;
-class WndListFrame;
+class ListControl;
 class WndOwnerDrawFrame;
 class TabbedControl;
 class Canvas;
@@ -46,7 +46,7 @@ class TaskListPanel : public XMLWidget {
 
   bool lazy_loaded; // if store has been loaded first time tab displayed
 
-  WndListFrame *wTasks;
+  ListControl *wTasks;
   WndOwnerDrawFrame* wTaskView;
   TabbedControl *browse_tabbed;
   PixelRect TaskViewRect;

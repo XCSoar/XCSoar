@@ -35,7 +35,7 @@ static WndForm *wf;
 static ListHelpCallback_t help_callback;
 
 static WndFrame *wItemHelp;
-static WndListFrame *list_control;
+static ListControl *list_control;
 static ItemHelpCallback_t itemhelp_callback;
 
 static void
@@ -92,7 +92,7 @@ int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            UPixelScalar item_height,
-           WndListFrame::PaintItemCallback paint_callback, bool update,
+           ListControl::PaintItemCallback paint_callback, bool update,
            ListHelpCallback_t _help_callback,
            ItemHelpCallback_t _itemhelp_callback)
 {
@@ -109,7 +109,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   if (caption != NULL)
     wf->SetCaption(caption);
 
-  list_control = (WndListFrame *)wf->FindByName(_T("frmComboPopupList"));
+  list_control = (ListControl *)wf->FindByName(_T("frmComboPopupList"));
   assert(list_control != NULL);
   list_control->SetItemHeight(item_height);
   list_control->SetLength(num_items);

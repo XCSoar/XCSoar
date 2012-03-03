@@ -42,7 +42,7 @@ Copyright_License {
 #include <assert.h>
 
 static WndForm *wf = NULL;
-static WndListFrame *airspace_list = NULL;
+static ListControl *airspace_list = NULL;
 
 static bool color_mode = false;
 static bool changed = false;
@@ -181,7 +181,7 @@ dlgAirspaceShowModal(bool _color_mode)
                                       _T("IDR_XML_AIRSPACE"));
   assert(wf != NULL);
 
-  airspace_list = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
+  airspace_list = (ListControl*)wf->FindByName(_T("frmAirspaceList"));
   assert(airspace_list != NULL);
   airspace_list->SetActivateCallback(OnAirspaceListEnter);
   airspace_list->SetPaintItemCallback(OnAirspacePaintListItem);

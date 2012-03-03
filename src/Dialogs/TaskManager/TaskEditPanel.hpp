@@ -31,7 +31,7 @@ struct DialogLook;
 struct TaskLook;
 struct AirspaceLook;
 class OrderedTask;
-class WndListFrame;
+class ListControl;
 class WndOwnerDrawFrame;
 class WndFrame;
 class Canvas;
@@ -45,7 +45,7 @@ class TaskEditPanel : public XMLWidget {
   OrderedTask **ordered_task_pointer, *ordered_task;
   bool *task_modified;
 
-  WndListFrame *wTaskPoints;
+  ListControl *wTaskPoints;
   WndOwnerDrawFrame *wTaskView;
   WndFrame *wSummary;
 

@@ -204,7 +204,7 @@ DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   edit->SetListener(this);
   dock->SetWidget(edit);
 
-  WndListFrame *list = (WndListFrame *)form.FindByName(_T("list"));
+  ListControl *list = (ListControl *)form.FindByName(_T("list"));
   assert(list != NULL);
   list->SetPaintItemCallback(PaintDeviceListItem);
   list->SetLength(NUMDEV);
@@ -246,7 +246,7 @@ DevicesConfigPanel::OnModified(DeviceEditWidget &widget)
   bool changed = false, require_restart = false;
   if (GetEditWidget().Save(changed, require_restart) && changed) {
     current_modified = true;
-    WndListFrame *list = (WndListFrame *)form.FindByName(_T("list"));
+    ListControl *list = (ListControl *)form.FindByName(_T("list"));
     list->invalidate();
   }
 }
