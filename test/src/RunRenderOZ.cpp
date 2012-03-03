@@ -241,8 +241,11 @@ public:
            with_border);
     oz_window = &oz;
 
-    type_list = new ListControl(*this, look,
-                                0, 0, rc.right / 2, rc.bottom - 30,
+    const PixelRect list_rc = {
+      0, 0, PixelScalar(rc.right / 2), PixelScalar(rc.bottom - 30),
+    };
+
+    type_list = new ListControl(*this, look, list_rc,
                                 with_border, 25);
     type_list->SetPaintItemCallback(paint_oz_type_name);
     type_list->SetCursorCallback(oz_type_cursor_callback);

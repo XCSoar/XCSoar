@@ -801,10 +801,14 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     else
       style.SunkenEdge();
 
+    const PixelRect rc = {
+      pos.x, pos.y,
+      PixelScalar(pos.x + size.cx),
+      PixelScalar(pos.y + size.cy),
+    };
+
     window = new ListControl(parent, *xml_dialog_look,
-                             pos.x, pos.y, size.cx, size.cy,
-                             style,
-                             item_height);
+                             rc, style, item_height);
 
   // TabControl (Tabbed)
   } else if (StringIsEqual(node.getName(), _T("Tabbed"))) {

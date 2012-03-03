@@ -119,16 +119,10 @@ protected:
 public:
   /**
    * @param parent the parent window
-   * @param X x-Coordinate of the ListFrameControl
-   * @param Y y-Coordinate of the ListFrameControl
-   * @param Width Width of the ListFrameControl
-   * @param Height Height of the ListFrameControl
    * @param _item_height Height of an item of the ListFrameControl
    */
   ListControl(ContainerWindow &parent, const DialogLook &look,
-              PixelScalar x, PixelScalar y,
-              UPixelScalar width, UPixelScalar height,
-              const WindowStyle style,
+              PixelRect rc, const WindowStyle style,
               UPixelScalar _item_height);
 
   /** Sets the function to call when a ListItem is chosen */

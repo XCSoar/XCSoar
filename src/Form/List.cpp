@@ -43,15 +43,12 @@ using std::min;
 using std::max;
 
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
-                         PixelScalar x, PixelScalar y,
-                         UPixelScalar width, UPixelScalar height,
-                         const WindowStyle style,
+                         PixelRect rc, const WindowStyle style,
                          UPixelScalar _item_height)
   :look(_look),
    item_height(_item_height),
    length(0),
    origin(0), pixel_pan(0),
-   items_visible(height / item_height),
    cursor(0),
    drag_mode(DragMode::NONE),
    activate_callback(NULL),
@@ -61,7 +58,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    , kinetic_timer(*this)
 #endif
 {
-  set(parent, x, y, width, height, style);
+  set(parent, rc, style);
 }
 
 void

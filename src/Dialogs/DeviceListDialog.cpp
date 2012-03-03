@@ -293,8 +293,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   list_style.TabStop();
   list_style.Border();
 
-  list = new ListControl(client_area, look, rc.left, rc.top,
-                         rc.right - rc.left, rc.bottom - rc.top,
+  list = new ListControl(client_area, look, rc,
                          list_style, 3 * margin + 2 * font_height);
   list->SetPaintItemCallback(PaintDevice);
   list->SetCursorCallback(OnCursor);

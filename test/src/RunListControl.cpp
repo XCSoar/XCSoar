@@ -69,11 +69,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                _T("RunListControl"));
   ContainerWindow &client_area = form.GetClientAreaWindow();
 
+  PixelRect list_rc = client_area.get_client_rect();
+  InflateRect(&list_rc, -2, -2);
+
   WindowStyle style;
   style.TabStop();
-  ListControl list(client_area, *dialog_look, 2, 2,
-                   client_area.get_width() - 4,
-                   client_area.get_height() - 4,
+  ListControl list(client_area, *dialog_look, list_rc,
                    style, normal_font.GetHeight() + 4);
   list.SetPaintItemCallback(PaintItemCallback);
   list.SetLength(64);
