@@ -25,6 +25,25 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/System.hpp"
+#include "Util/Macros.hpp"
+
+
+static LiveTrack24::VehicleType
+MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
+{
+  static const LiveTrack24::VehicleType vehicleTypeMap[] = {
+    LiveTrack24::VehicleType::GLIDER,
+    LiveTrack24::VehicleType::PARAGLIDER,
+    LiveTrack24::VehicleType::POWERED_AIRCRAFT,
+    LiveTrack24::VehicleType::HOT_AIR_BALLOON
+  };
+
+  unsigned vti = (unsigned) vt;
+  if (vti >= ARRAY_SIZE(vehicleTypeMap))
+    vti = 0;
+
+  return vehicleTypeMap[vti];
+}
 
 TrackingGlue::TrackingGlue()
 {
@@ -135,7 +154,7 @@ TrackingGlue::Tick()
 
     if (!LiveTrack24::StartTracking(state.session_id, copy.username,
                                     copy.password, tracking_interval,
-                                    LiveTrack24::VehicleType::GLIDER)) {
+                                    MapVehicleTypeToLifetrack24(settings.vehicleType))) {
       state.ResetSession();
       mutex.Lock();
       return;
