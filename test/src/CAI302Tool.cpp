@@ -41,7 +41,7 @@ StringBufferLength(const char *buffer, size_t size)
 {
   const char *z = (const char *)memchr(buffer, 0, size);
   if (z == NULL)
-    return size;
+    z = buffer + size;
 
   while (z > buffer && z[-1] == ' ')
     --z;
