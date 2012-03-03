@@ -76,8 +76,15 @@ static gcc_constexpr_data KeyMap lx_mm_key_map[] = {
   { 'N', VK_APP2 }, // TSK/TRG
   { 'C', VK_APP3 }, // SET/SYS
   { 'P', VK_APP4 }, // INFO
+  { 'F', VK_F1 }, // AN/CLC (long press)
+  { 'H', VK_F2 }, // START/R (long press)
+  { 'R', VK_F3 }, // INFO (long press)
+  { 'M', VK_F4 }, // NAV (long press)
   { 'E', VK_F5 }, // AN/CLC
   { 'G', VK_F6 }, // START/R
+  { 'O', VK_F7 }, // TSK/TRG (long press)
+  { 'I', VK_F8 }, // SET/SYS (long press)
+  { ' ', VK_MENU }, // press rotary knop (left buttom)
   { VK_UP, VK_DOWN }, // Invert direction of rotation
   { VK_DOWN, VK_UP }, // of the UP/DOWN rotary knob
   { 0 }
