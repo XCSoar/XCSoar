@@ -480,7 +480,9 @@ WndForm::ShowModal()
       }
     }
 
-#ifndef USE_GDI
+#if !defined USE_GDI || defined _WIN32_WCE
+    // The Windows CE dialog manager does not handle VK_ESCAPE and so we have
+    // to do it by ourself.
     if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
       modal_result = mrCancel;
       continue;
