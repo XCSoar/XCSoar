@@ -303,13 +303,13 @@ CAI302::DownloadCommand(Port &port, const char *command, unsigned timeout_ms)
 }
 
 bool
-CAI302::DownloadPilot(Port &port, const Pilot &pilot)
+CAI302::DownloadPilot(Port &port, const Pilot &pilot, unsigned ordinal)
 {
   char buffer[256];
   snprintf(buffer, sizeof(buffer),
            "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
            pilot.name,
-           pilot.old_units,
+           (ordinal << 8) | pilot.old_units,
            pilot.old_temperatur_units,
            pilot.sink_tone,
            pilot.total_energy_final_glide,

@@ -356,7 +356,7 @@ namespace CAI302 {
   DownloadCommand(Port &port, const char *command, unsigned timeout_ms=2000);
 
   bool
-  DownloadPilot(Port &port, const Pilot &data);
+  DownloadPilot(Port &port, const Pilot &data, unsigned ordinal=0);
 
   bool
   DownloadPolar(Port &port, const Polar &data);
