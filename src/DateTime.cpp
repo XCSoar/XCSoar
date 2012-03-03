@@ -201,6 +201,7 @@ BrokenDateTime::ToUnixTimeUTC() const
   tm.tm_hour = hour;
   tm.tm_min = minute;
   tm.tm_sec = second;
+  tm.tm_isdst = 0;
   return ::timegm(&tm);
 }
 
