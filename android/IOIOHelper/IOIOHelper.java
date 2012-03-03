@@ -245,7 +245,7 @@ final class IOIOHelper {
         return r;
       } catch (Exception e) {
         Log.e("IOIOHelper", "IOIOJRead() Unexpected exception caught", e);
-        return -1;
+        return -2;
       }
     }
 

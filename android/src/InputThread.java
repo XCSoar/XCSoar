@@ -42,6 +42,8 @@ class InputThread extends Thread {
   byte[] buffer = new byte[BUFFER_SIZE];
   int head, tail;
 
+  boolean error;
+
   InputThread(InputStream _is) {
     is = _is;
 
@@ -114,6 +116,7 @@ class InputThread extends Thread {
         }
       }
     } catch (IOException e) {
+      error = true;
       if (is != null)
         Log.e(TAG, "Failed to read from Bluetooth socket: " + e.getMessage());
     }
@@ -131,6 +134,9 @@ class InputThread extends Thread {
       } catch (InterruptedException e) {
         return -1;
       }
+
+      if (error)
+        return -2;
 
       if (head >= tail)
         // still empty

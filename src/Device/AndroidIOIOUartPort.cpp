@@ -70,10 +70,11 @@ AndroidIOIOUartPort::Run()
 
   while (!CheckStopped()) {
     int ch = helper->read(Java::GetEnv(), UartID);
-    if (ch < 0)
+    if (ch == -2)
       break;
 
-    ProcessChar(ch);
+    if (ch >= 0)
+      ProcessChar(ch);
   }
 }
 

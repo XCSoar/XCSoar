@@ -65,10 +65,11 @@ AndroidBluetoothPort::Run()
 
   while (!CheckStopped()) {
     int ch = helper->read(env);
-    if (ch < 0)
+    if (ch == -2)
       break;
 
-    ProcessChar(ch);
+    if (ch >= 0)
+      ProcessChar(ch);
   }
 }
 
