@@ -175,6 +175,10 @@ public:
   virtual ~RowFormWidget();
 
 protected:
+  const DialogLook &GetLook() const {
+    return look;
+  }
+
   void Add(Row::Type type, Window *window);
 
   WndProperty *CreateEdit(const TCHAR *label, const TCHAR *help=NULL,
