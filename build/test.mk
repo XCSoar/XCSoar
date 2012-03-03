@@ -680,6 +680,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunTerminal \
 	RunRenderOZ \
 	RunWindArrowRenderer \
+	RunHorizonRenderer \
 	RunFinalGlideBarRenderer \
 	RunProgressWindow \
 	RunJobDialog \
@@ -1682,6 +1683,33 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_WIND_ARROW_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
+
+RUN_HORIZON_RENDERER_SOURCES = \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/LabelBlock.cpp \
+	$(SRC)/Screen/TextInBox.cpp \
+	$(SRC)/Look/HorizonLook.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/Settings.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Renderer/HorizonRenderer.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
+RUN_HORIZON_RENDERER_LDADD = $(RESOURCE_BINARY)
+RUN_HORIZON_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
+$(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
 
 RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
