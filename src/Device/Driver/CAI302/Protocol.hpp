@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CAI302_PROTOCOL_HPP
 #define XCSOAR_CAI302_PROTOCOL_HPP
 
+#include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 
 #include <stdint.h>
@@ -185,6 +186,63 @@ namespace CAI302 {
     uint16_t unit_word;
     uint16_t reserved2;
     uint16_t margin_height; // (10ths of Meters)
+
+    unsigned GetUnitBits(unsigned bit, unsigned n) const {
+      return (FromBE16(unit_word) >> bit) & (0xffff >> (16 - n));
+    }
+
+    void SetUnitBits(unsigned bit, unsigned n, unsigned value) {
+      unsigned mask = (0xffff >> (16 - n)) << bit;
+      unit_word = ToBE16((FromBE16(unit_word) & ~mask) | (value << bit));
+    }
+
+    unsigned GetVarioUnit() const {
+      return GetUnitBits(0, 1);
+    }
+
+    void SetVarioUnit(unsigned unit) {
+      SetUnitBits(0, 1, unit);
+    }
+
+    unsigned GetAltitudeUnit() const {
+      return GetUnitBits(1, 1);
+    }
+
+    void SetAltitudeUnit(unsigned unit) {
+      SetUnitBits(1, 1, unit);
+    }
+
+    unsigned GetTemperatureUnit() const {
+      return GetUnitBits(2, 1);
+    }
+
+    void SetTemperatureUnit(unsigned unit) {
+      SetUnitBits(2, 1, unit);
+    }
+
+    unsigned GetPressureUnit() const {
+      return GetUnitBits(3, 1);
+    }
+
+    void SetPressureUnit(unsigned unit) {
+      SetUnitBits(3, 1, unit);
+    }
+
+    unsigned GetDistanceUnit() const {
+      return GetUnitBits(4, 2);
+    }
+
+    void SetDistanceUnit(unsigned unit) {
+      SetUnitBits(4, 2, unit);
+    }
+
+    unsigned GetSpeedUnit() const {
+      return GetUnitBits(6, 2);
+    }
+
+    void SetSpeedUnit(unsigned unit) {
+      SetUnitBits(6, 2, unit);
+    }
   } gcc_packed;
 
   /** Structure for CAI302 device info */
