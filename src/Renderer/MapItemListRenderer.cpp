@@ -35,11 +35,14 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 #include "Util/StaticString.hpp"
+#include "Terrain/RasterBuffer.hpp"
 #include "MapSettings.hpp"
 #include "LocalTime.hpp"
 #include "Math/Screen.hpp"
@@ -50,6 +53,9 @@ Copyright_License {
 
 namespace MapItemListRenderer
 {
+  void Draw(Canvas &canvas, const PixelRect rc, const LocationMapItem &item,
+            const DialogLook &dialog_look);
+
   void Draw(Canvas &canvas, const PixelRect rc, const SelfMapItem &item,
             const DialogLook &dialog_look,
             const AircraftLook &look, const MapSettings &settings);
@@ -75,6 +81,49 @@ namespace MapItemListRenderer
 
   void Draw(Canvas &canvas, const PixelRect rc, const ThermalMapItem &item,
             const DialogLook &dialog_look, const MapLook &look);
+}
+
+void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const LocationMapItem &item,
+                          const DialogLook &dialog_look)
+{
+  const UPixelScalar line_height = rc.bottom - rc.top;
+
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
+  canvas.SetTextColor(COLOR_BLACK);
+
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+
+  TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
+  if (item.vector.IsValid()) {
+    FormatUserDistanceSmart(item.vector.distance, distance_buffer, 32);
+    FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
+                  item.vector.bearing);
+    _stprintf(info_buffer, _T("%s: %s - %s: %s"),
+              _("Distance"), distance_buffer,
+              _("Direction"), direction_buffer);
+  } else {
+    _stprintf(info_buffer, _T("%s: %s - %s: %s"),
+              _("Distance"), _T("???"), _("Direction"), _T("???"));
+  }
+
+  canvas.Select(name_font);
+
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, info_buffer);
+
+
+  TCHAR elevation_buffer[32];
+  if (item.elevation != RasterBuffer::TERRAIN_INVALID) {
+    FormatUserAltitude(fixed(item.elevation), elevation_buffer, 32);
+    _stprintf(info_buffer, _T("%s: %s"), _("Elevation"), elevation_buffer);
+  }
+
+  canvas.Select(small_font);
+  canvas.text_clipped(left,
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                      rc, info_buffer);
 }
 
 void
@@ -350,6 +399,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const MapSettings &settings)
 {
   switch (item.type) {
+  case MapItem::LOCATION:
+    Draw(canvas, rc, (const LocationMapItem &)item, dialog_look);
+    break;
   case MapItem::SELF:
     Draw(canvas, rc, (const SelfMapItem &)item,
          dialog_look, look.aircraft, settings);

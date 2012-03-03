@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
+#include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "Markers/Markers.hpp"
 #include "FLARM/Traffic.hpp"
@@ -38,6 +39,7 @@ struct Waypoint;
 struct MapItem
 {
   enum Type {
+    LOCATION,
     SELF,
     TASK_OZ,
     AIRSPACE,
@@ -55,6 +57,15 @@ public:
      "deletes" MapItem objects without knowing that it's really a
      TaskOZMapItem */
   virtual ~MapItem() {}
+};
+
+struct LocationMapItem: public MapItem
+{
+  GeoVector vector;
+  short elevation;
+
+  LocationMapItem(const GeoVector &_vector, short _elevation)
+    :MapItem(LOCATION), vector(_vector), elevation(_elevation) {}
 };
 
 struct SelfMapItem: public MapItem

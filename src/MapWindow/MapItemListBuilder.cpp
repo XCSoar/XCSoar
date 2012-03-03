@@ -150,6 +150,12 @@ public:
 };
 
 void
+MapItemListBuilder::AddLocation(const GeoVector &vector, short elevation)
+{
+  list.checked_append(new LocationMapItem(vector, elevation));
+}
+
+void
 MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, const Angle &bearing)
 {
   if (location.Distance(self) < range)

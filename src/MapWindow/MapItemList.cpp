@@ -56,6 +56,12 @@ CompareWaypointItems(const WaypointMapItem *a, const WaypointMapItem *b)
 static bool
 CompareMapItems(const MapItem *a, const MapItem *b)
 {
+  if (a->type == MapItem::LOCATION)
+    return true;
+
+  if (b->type == MapItem::LOCATION)
+    return false;
+
   if (a->type == MapItem::SELF)
     return true;
 

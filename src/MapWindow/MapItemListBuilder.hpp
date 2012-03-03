@@ -50,6 +50,7 @@ public:
   MapItemListBuilder(MapItemList &_list, GeoPoint _location, fixed _range)
     :list(_list), location(_location), range(_range) {}
 
+  void AddLocation(const GeoVector &vector, short elevation);
   void AddSelfIfNear(const GeoPoint &self, const Angle &bearing);
   void AddWaypoints(const Waypoints &waypoints);
   void AddVisibleAirspace(const Airspaces &airspaces,

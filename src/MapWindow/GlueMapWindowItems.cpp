@@ -42,6 +42,20 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
 
+  GeoVector vector;
+  if (Basic().location_available)
+    vector = Basic().location.DistanceBearing(location);
+  else
+    vector.SetInvalid();
+
+  short elevation;
+  if (terrain)
+    elevation = terrain->GetTerrainHeight(location);
+  else
+    elevation = RasterBuffer::TERRAIN_INVALID;
+
+  builder.AddLocation(vector, elevation);
+
   if (Basic().location_available)
     builder.AddSelfIfNear(Basic().location, Calculated().heading);
 
@@ -72,18 +86,6 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   list.Sort();
 
   // Show the list dialog
-  GeoVector vector;
-  if (Basic().location_available)
-    vector = Basic().location.DistanceBearing(location);
-  else
-    vector.SetInvalid();
-
-  short elevation;
-  if (terrain)
-    elevation = terrain->GetTerrainHeight(location);
-  else
-    elevation = RasterBuffer::TERRAIN_INVALID;
-
   if (list.empty()) {
     if (show_empty_message)
       MessageBoxX(_("There is nothing interesting near this location."),
