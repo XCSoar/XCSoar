@@ -48,28 +48,28 @@ FormatInteger(TCHAR *buffer,
 }
 
 void
-Units::FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
+FormatAltitude(TCHAR *buffer, fixed value, Unit unit,
                       bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, false);
 }
 
 void
-Units::FormatRelativeAltitude(TCHAR *buffer, fixed value,
+FormatRelativeAltitude(TCHAR *buffer, fixed value,
                               Unit unit, bool include_unit)
 {
   FormatInteger(buffer, value, unit, include_unit, true);
 }
 
 void
-Units::FormatDistance(TCHAR *buffer, fixed value, Unit unit,
+FormatDistance(TCHAR *buffer, fixed value, Unit unit,
                       bool include_unit, int precision)
 {
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
     _stprintf(buffer, _T("%.*f %s"), precision, (double)value,
-               Units::GetUnitName(unit));
+              Units::GetUnitName(unit));
   else
     _stprintf(buffer, _T("%.*f"), precision, (double)value);
 }
@@ -92,7 +92,7 @@ GetSmallerDistanceUnit(Unit unit)
 }
 
 Unit
-Units::FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
+FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit, int precision)
 {
   unit = GetSmallerDistanceUnit(unit);
@@ -131,7 +131,7 @@ GetBestDistancePrecision(fixed value, Unit unit, fixed threshold = fixed(100))
 }
 
 Unit
-Units::FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
+FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit, fixed small_unit_threshold,
                            fixed precision_threshold)
 {
@@ -143,7 +143,7 @@ Units::FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
 }
 
 void
-Units::FormatSpeed(TCHAR *buffer,
+FormatSpeed(TCHAR *buffer,
             fixed value, const Unit unit, bool include_unit, bool precision)
 {
   value = Units::ToUserUnit(value, unit);
@@ -157,7 +157,7 @@ Units::FormatSpeed(TCHAR *buffer,
 }
 
 const TCHAR*
-Units::GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
+GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
 {
   static const TCHAR *const format[2][2][2]= {
     //      0 0 0       0 0 1            0 1 0          0 1 1
@@ -172,7 +172,7 @@ Units::GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
 }
 
 fixed
-Units::GetVerticalSpeedStep(Unit unit)
+GetVerticalSpeedStep(Unit unit)
 {
   switch (unit) {
   case Unit::FEET_PER_MINUTE:
@@ -185,10 +185,10 @@ Units::GetVerticalSpeedStep(Unit unit)
 }
 
 void
-Units::FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
+FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
                            bool include_unit, bool include_sign)
 {
-  value = ToUserUnit(value, unit);
+  value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
     _stprintf(buffer, GetVerticalSpeedFormat(unit, include_unit, include_sign),
@@ -199,10 +199,10 @@ Units::FormatVerticalSpeed(TCHAR *buffer, fixed value, Unit unit,
 }
 
 void
-Units::FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
+FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
                          bool include_unit)
 {
-  value = ToUserUnit(value, unit);
+  value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
     _stprintf(buffer, _T("%.0f %s"), (double)value, Units::GetUnitName(unit));
@@ -211,10 +211,10 @@ Units::FormatTemperature(TCHAR *buffer, fixed value, Unit unit,
 }
 
 void
-Units::FormatPressure(TCHAR *buffer, AtmosphericPressure pressure,
+FormatPressure(TCHAR *buffer, AtmosphericPressure pressure,
                       Unit unit, bool include_unit)
 {
-  fixed _pressure = ToUserUnit(pressure.GetHectoPascal(), unit);
+  fixed _pressure = Units::ToUserUnit(pressure.GetHectoPascal(), unit);
 
   if (include_unit)
     _stprintf(buffer, GetPressureFormat(unit, include_unit), (double)_pressure,
@@ -224,7 +224,7 @@ Units::FormatPressure(TCHAR *buffer, AtmosphericPressure pressure,
 }
 
 const TCHAR*
-Units::GetPressureFormat(Unit unit, bool include_unit)
+GetPressureFormat(Unit unit, bool include_unit)
 {
   if (include_unit)
     return unit == Unit::INCH_MERCURY ? _T("%.2f %s") : _T("%.f %s");
@@ -233,7 +233,7 @@ Units::GetPressureFormat(Unit unit, bool include_unit)
 }
 
 fixed
-Units::GetPressureStep(Unit unit)
+GetPressureStep(Unit unit)
 {
   return unit == Unit::INCH_MERCURY ? fixed(0.01) : fixed_one;
 }
