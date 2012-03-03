@@ -152,6 +152,24 @@ event=QuickMenu
 
 mode=default
 type=key
+data=F2
+event=Analysis
+event=Mode default
+
+mode=default
+type=key
+data=F3
+event=Checklist
+event=Mode default
+
+mode=default
+type=key
+data=F4
+event=FlarmTraffic
+event=Mode default
+
+mode=default
+type=key
 data=F5
 event=GotoLookup
 event=Mode default
@@ -160,6 +178,18 @@ mode=default
 type=key
 data=F6
 event=Setup Alternates
+event=Mode default
+
+mode=default
+type=key
+data=F7
+event=Setup Task
+event=Mode default
+
+mode=default
+type=key
+data=F8
+event=Setup Basic
 event=Mode default
 
 mode=default
