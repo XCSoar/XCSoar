@@ -238,9 +238,9 @@ OnManageClicked(gcc_unused WndButton &button)
 
   if (descriptor.IsDriver(_T("CAI 302")))
     ManageCAI302Dialog(dialog->GetMainWindow(), dialog->GetLook(), *device);
-  if (descriptor.IsDriver(_T("FLARM")))
+  else if (descriptor.IsDriver(_T("FLARM")))
     ManageFlarmDialog(*device);
-  if (descriptor.IsDriver(_T("Vega")))
+  else if (descriptor.IsDriver(_T("Vega")))
     dlgConfigurationVarioShowModal(*device);
 
   descriptor.DisableDownloadMode();
