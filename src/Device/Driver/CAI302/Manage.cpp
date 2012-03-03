@@ -153,6 +153,7 @@ CAI302Device::ClearLog(OperationEnvironment &env)
 
 bool
 CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
+                            unsigned &active_index,
                             OperationEnvironment &env)
 {
   assert(list.empty());
@@ -163,8 +164,8 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
   if (!CAI302::UploadMode(port) || env.IsCancelled())
     return false;
 
-  CAI302::PilotMeta meta;
-  if (!CAI302::UploadPilotMeta(port, meta) || env.IsCancelled())
+  CAI302::PilotMetaActive meta;
+  if (!CAI302::UploadPilotMetaActive(port, meta) || env.IsCancelled())
     return false;
 
   if (meta.record_size < sizeof(CAI302::Pilot))
@@ -174,6 +175,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
   const unsigned count = meta.count;
   list.reserve(count);
   const unsigned record_size = meta.record_size;
+  active_index = meta.active_index;
 
   const unsigned block_count = 8;
 

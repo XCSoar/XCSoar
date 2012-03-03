@@ -99,6 +99,7 @@ public:
   bool ClearLog(OperationEnvironment &env);
 
   bool ReadPilotList(std::vector<CAI302::Pilot> &list,
+                     unsigned &active_index,
                      OperationEnvironment &env);
 
   bool WritePilot(unsigned index, const CAI302::Pilot &pilot,

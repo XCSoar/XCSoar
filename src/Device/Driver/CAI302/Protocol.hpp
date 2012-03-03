@@ -157,6 +157,13 @@ namespace CAI302 {
     uint8_t record_size;
   } gcc_packed;
 
+  /** Structure for CAI302 "O A" response */
+  struct PilotMetaActive {
+    uint8_t count;
+    uint8_t record_size;
+    uint8_t active_index;
+  } gcc_packed;
+
   /** Structure for CAI302 settings */
   struct Pilot {
     char name[24];
@@ -331,6 +338,9 @@ namespace CAI302 {
 
   bool
   UploadPilotMeta(Port &port, PilotMeta &data);
+
+  bool
+  UploadPilotMetaActive(Port &port, PilotMetaActive &data);
 
   bool
   UploadPilot(Port &port, unsigned i, Pilot &data);

@@ -262,6 +262,12 @@ CAI302::UploadPilotMeta(Port &port, PilotMeta &data)
 }
 
 bool
+CAI302::UploadPilotMetaActive(Port &port, PilotMetaActive &data)
+{
+  return UploadShort(port, "O A\r", &data, sizeof(data)) > 0;
+}
+
+bool
 CAI302::UploadPilot(Port &port, unsigned i, Pilot &data)
 {
   char cmd[16];

@@ -71,13 +71,16 @@ static bool
 ListPilots(CAI302Device &device, OperationEnvironment &env)
 {
   std::vector<CAI302::Pilot> pilots;
-  if (!device.ReadPilotList(pilots, env))
+  unsigned active;
+  if (!device.ReadPilotList(pilots, active, env))
     return false;
 
   unsigned index = 0;
   for (auto i = pilots.begin(), end = pilots.end(); i != end; ++i)
     printf("%u: '%.*s'\n", index++,
            StringBufferLength(i->name, ARRAY_SIZE(i->name)), i->name);
+
+  printf("active=%u\n", active);
 
   return true;
 }
