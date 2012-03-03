@@ -52,9 +52,7 @@ static const MapLook *look;
 static const TrafficLook *traffic_look;
 static const MapSettings *settings;
 static ProtectedAirspaceWarningManager *airspace_warnings;
-static GeoVector vector;
 static const MapItemList *list;
-static short elevation;
 static WndForm *wf;
 static WndButton *details_button;
 
@@ -146,46 +144,6 @@ ShowMapItemListDialog(SingleWindow &parent)
   list_control->SetCursorCallback(OnListIndexChange);
   OnListIndexChange(0);
 
-  WndFrame *info_label = (WndFrame *)wf->FindByName(_T("lblInfo"));
-  assert(info_label);
-  info_label->SetAlignCenter();
-  info_label->SetVAlignCenter();
-
-  TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
-  if (vector.IsValid()) {
-    FormatUserDistanceSmart(vector.distance, distance_buffer, 32);
-    FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
-                  vector.bearing);
-    _stprintf(info_buffer, _T("%s: %s - %s: %s"),
-              _("Distance"), distance_buffer,
-              _("Direction"), direction_buffer);
-  } else {
-    _stprintf(info_buffer, _T("%s: %s - %s: %s"),
-              _("Distance"), _T("???"), _("Direction"), _T("???"));
-  }
-
-  TCHAR elevation_buffer[32];
-  if (elevation != RasterBuffer::TERRAIN_INVALID) {
-    FormatUserAltitude(fixed(elevation), elevation_buffer, 32);
-    _stprintf(info_buffer + _tcslen(info_buffer), _T(" - %s: %s"),
-              _("Elevation"), elevation_buffer);
-  }
-
-  AnyCanvas canvas;
-  canvas.Select(info_label->GetFont());
-  UPixelScalar text_width = canvas.CalcTextWidth(info_buffer);
-  if (text_width > info_label->get_width()) {
-    if (vector.IsValid())
-      _stprintf(info_buffer, _T("%s - %s"), distance_buffer, direction_buffer);
-    else
-      _stprintf(info_buffer, _T("%s - %s"), _T("???"), _T("???"));
-
-    if (elevation != RasterBuffer::TERRAIN_INVALID)
-      _stprintf(info_buffer + _tcslen(info_buffer), _T(" - %s"), elevation_buffer);
-  }
-
-  info_label->SetCaption(info_buffer);
-
   int result = wf->ShowModal() == mrOK
     ? (int)list_control->GetCursorIndex()
     : -1;
@@ -223,8 +181,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 
 void
 ShowMapItemListDialog(SingleWindow &parent,
-                      const GeoVector &_vector,
-                      const MapItemList &_list, short _elevation,
+                      const MapItemList &_list,
                       const DialogLook &_dialog_look,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,
@@ -243,9 +200,7 @@ ShowMapItemListDialog(SingleWindow &parent,
 
   default:
     /* more than one map item: show a list */
-    vector = _vector;
     list = &_list;
-    elevation = _elevation;
 
     dialog_look = &_dialog_look,
     look = &_look;

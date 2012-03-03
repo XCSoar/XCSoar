@@ -38,8 +38,7 @@ void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
 
 void
 ShowMapItemListDialog(SingleWindow &parent,
-                      const GeoVector &_vector,
-                      const MapItemList &_list, short _elevation,
+                      const MapItemList &_list,
                       const DialogLook &_dialog_look,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,

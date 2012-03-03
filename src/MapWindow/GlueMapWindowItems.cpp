@@ -94,7 +94,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
     return false;
   }
 
-  ShowMapItemListDialog(UIGlobals::GetMainWindow(), vector, list, elevation,
+  ShowMapItemListDialog(UIGlobals::GetMainWindow(), list,
                         UIGlobals::GetDialogLook(), look, traffic_look,
                         GetMapSettings(),
                         glide_computer != NULL
