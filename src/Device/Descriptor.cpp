@@ -485,7 +485,8 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 
   SetBusy(true);
 
-  port->StopRxThread();
+  if (driver == NULL || !driver->AlwaysNMEA())
+    port->StopRxThread();
 
   /* enable the "muxed FLARM" hack? */
   const bool flarm = device_blackboard->IsFLARM(index) &&
@@ -494,7 +495,8 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
   bool result = DoDeclare(declaration, *port, *driver, device, flarm,
                           home, env);
 
-  port->StartRxThread();
+  if (driver == NULL || !driver->AlwaysNMEA())
+    port->StartRxThread();
 
   SetBusy(false);
   return result;
@@ -507,12 +509,17 @@ DeviceDescriptor::EnableDownloadMode(OperationEnvironment &env)
     return false;
 
   SetBusy(true);
-  port->StopRxThread();
+
+  if (driver == NULL || !driver->AlwaysNMEA())
+    port->StopRxThread();
+
   bool result = device->EnableDownloadMode(env);
   if (!result) {
     /* roll back */
     SetBusy(false);
-    port->StartRxThread();
+
+    if (driver == NULL || !driver->AlwaysNMEA())
+      port->StartRxThread();
   }
 
   return result;
@@ -527,7 +534,10 @@ DeviceDescriptor::DisableDownloadMode()
   assert(IsBusy());
 
   bool result = device->DisableDownloadMode();
-  port->StartRxThread();
+
+  if (driver == NULL || !driver->AlwaysNMEA())
+    port->StartRxThread();
+
   SetBusy(false);
   return result;
 }

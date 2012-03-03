@@ -363,6 +363,13 @@ struct DeviceRegister {
      * EnablePassThrough() is implemented.
      */
     PASS_THROUGH = 0x200,
+
+    /**
+     * Shall the NMEA parser continue even in "download mode"?
+     * Usually, the driver wants exclusive access to the port, and
+     * this flag is not set.
+     */
+    ALWAYS_NMEA = 0x400,
   };
 
   /**
@@ -459,6 +466,10 @@ struct DeviceRegister {
    */
   bool HasPassThrough() const {
     return (flags & PASS_THROUGH) != 0;
+  }
+
+  bool AlwaysNMEA() const {
+    return (flags & ALWAYS_NMEA) != 0;
   }
 };
 
