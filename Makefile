@@ -81,6 +81,7 @@ include $(topdir)/build/libnet.mk
 include $(topdir)/build/zlib.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
+include $(topdir)/build/libport.mk
 include $(topdir)/build/driver.mk
 include $(topdir)/build/io.mk
 include $(topdir)/build/shapelib.mk
@@ -694,10 +695,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/All.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Simulator.cpp \
-	$(SRC)/Device/Port/Port.cpp \
-	$(SRC)/Device/Port/NullPort.cpp \
-	$(SRC)/Device/Port/TCPPort.cpp \
-	$(SRC)/Device/Port/K6BtPort.cpp \
 	$(SRC)/Device/Port/LineHandler.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)
@@ -705,24 +702,6 @@ XCSOAR_SOURCES := \
 #	$(SRC)/VarioSound.cpp \
 #	$(SRC)/WaveThread.cpp \
 
-
-ifeq ($(TARGET),ANDROID)
-# broken Android headers
-$(call SRC_TO_OBJ,$(SRC)/Device/Port/TCPPort.cpp): CXXFLAGS += -Wno-cast-align
-endif
-
-ifeq ($(HAVE_POSIX),n)
-# broken mingw32 4.4 headers
-$(call SRC_TO_OBJ,$(SRC)/Device/Port/TCPPort.cpp): CXXFLAGS += -Wno-sign-compare
-endif
-
-ifeq ($(HAVE_POSIX),y)
-XCSOAR_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-XCSOAR_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
 
 ifneq ($(DEBUG),n)
 XCSOAR_SOURCES += \
@@ -732,8 +711,7 @@ endif
 ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
 	$(SRC)/OS/MemInfo.cpp \
-	$(SRC)/Device/Windows/Enumerator.cpp \
-	$(SRC)/Device/Port/Widcomm.cpp
+	$(SRC)/Device/Windows/Enumerator.cpp
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -797,7 +775,7 @@ XCSOAR_LDADD = \
 XCSOAR_DEPENDS = GETTEXT PROFILE \
 	FORM DATA_FIELD \
 	SCREEN \
-	DRIVER \
+	DRIVER PORT \
 	IO ENGINE \
 	SHAPELIB JASPER ZZIP \
 	LIBNET \

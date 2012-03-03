@@ -1088,41 +1088,23 @@ RUN_AIRSPACE_PARSER_DEPENDS = ENGINE IO ZZIP MATH UTIL
 $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
 
 READ_PORT_SOURCES = \
-	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/ReadPort.cpp
-ifeq ($(HAVE_POSIX),y)
-READ_PORT_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-READ_PORT_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
-ifeq ($(HAVE_CE),y)
-READ_PORT_SOURCES += \
-	$(SRC)/Device/Port/Widcomm.cpp
-endif
+READ_PORT_DEPENDS = PORT
 $(eval $(call link-program,ReadPort,READ_PORT))
 
 RUN_PORT_HANDLER_SOURCES = \
-	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/RunPortHandler.cpp
-ifeq ($(HAVE_POSIX),y)
-RUN_PORT_HANDLER_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-RUN_PORT_HANDLER_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
 ifeq ($(HAVE_CE),y)
 RUN_PORT_HANDLER_SOURCES += \
 	$(SRC)/Device/Port/Widcomm.cpp
 endif
+RUN_PORT_HANDLER_DEPENDS = PORT
 $(eval $(call link-program,RunPortHandler,RUN_PORT_HANDLER))
 
 RUN_TCP_LISTENER_SOURCES = \
@@ -1179,7 +1161,6 @@ $(eval $(call link-program,RunDeviceDriver,RUN_DEVICE_DRIVER))
 RUN_DECLARE_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -1201,23 +1182,11 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
-ifeq ($(HAVE_POSIX),y)
-RUN_DECLARE_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-RUN_DECLARE_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
-ifeq ($(HAVE_CE),y)
-RUN_DECLARE_SOURCES += \
-	$(SRC)/Device/Port/Widcomm.cpp
-endif
-RUN_DECLARE_DEPENDS = DRIVER ENGINE MATH UTIL IO
+RUN_DECLARE_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
 
 RUN_VEGA_SETTINGS_SOURCES = \
 	$(VEGA_SOURCES) \
-	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
@@ -1229,22 +1198,10 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/RunVegaSettings.cpp
-ifeq ($(HAVE_POSIX),y)
-RUN_VEGA_SETTINGS_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-RUN_VEGA_SETTINGS_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
-ifeq ($(HAVE_CE),y)
-RUN_VEGA_SETTINGS_SOURCES += \
-	$(SRC)/Device/Port/Widcomm.cpp
-endif
-RUN_VEGA_SETTINGS_DEPENDS = MATH UTIL IO
+RUN_VEGA_SETTINGS_DEPENDS = PORT MATH UTIL IO
 $(eval $(call link-program,RunVegaSettings,RUN_VEGA_SETTINGS))
 
 RUN_FLARM_UTILS_SOURCES = \
-	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
@@ -1254,24 +1211,12 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
-ifeq ($(HAVE_POSIX),y)
-RUN_FLARM_UTILS_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-RUN_FLARM_UTILS_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
-ifeq ($(HAVE_CE),y)
-RUN_FLARM_UTILS_SOURCES += \
-	$(SRC)/Device/Port/Widcomm.cpp
-endif
-RUN_FLARM_UTILS_DEPENDS = DRIVER ENGINE MATH UTIL IO
+RUN_FLARM_UTILS_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunFlarmUtils,RUN_FLARM_UTILS))
 
 RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -1292,24 +1237,12 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
-ifeq ($(HAVE_POSIX),y)
-RUN_FLIGHT_LIST_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-RUN_FLIGHT_LIST_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
-ifeq ($(HAVE_CE),y)
-RUN_FLIGHT_LIST_SOURCES += \
-	$(SRC)/Device/Port/Widcomm.cpp
-endif
-RUN_FLIGHT_LIST_DEPENDS = DRIVER ENGINE MATH UTIL IO
+RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunFlightList,RUN_FLIGHT_LIST))
 
 RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -1330,18 +1263,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
-ifeq ($(HAVE_POSIX),y)
-RUN_DOWNLOAD_FLIGHT_SOURCES += \
-	$(SRC)/Device/Port/TTYPort.cpp
-else
-RUN_DOWNLOAD_FLIGHT_SOURCES += \
-	$(SRC)/Device/Port/SerialPort.cpp
-endif
-ifeq ($(HAVE_CE),y)
-RUN_DOWNLOAD_FLIGHT_SOURCES += \
-	$(SRC)/Device/Port/Widcomm.cpp
-endif
-RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER ENGINE MATH UTIL IO
+RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
 
 TEST_LXN_TO_IGC_SOURCES = \
