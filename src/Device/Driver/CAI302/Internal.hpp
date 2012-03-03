@@ -102,6 +102,9 @@ public:
                      unsigned &active_index,
                      OperationEnvironment &env);
 
+  bool ReadActivePilot(CAI302::Pilot &pilot, OperationEnvironment &env);
+  bool WriteActivePilot(const CAI302::Pilot &pilot, OperationEnvironment &env);
+
   bool WritePilot(unsigned index, const CAI302::Pilot &pilot,
                   OperationEnvironment &env);
 

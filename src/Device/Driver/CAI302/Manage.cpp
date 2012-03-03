@@ -197,6 +197,27 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
 }
 
 bool
+CAI302Device::ReadActivePilot(CAI302::Pilot &pilot, OperationEnvironment &env)
+{
+  port.SetRxTimeout(500);
+
+  CAI302::CommandModeQuick(port);
+  return CAI302::UploadMode(port) && !env.IsCancelled() &&
+    CAI302::UploadPilot(port, 0, pilot);
+}
+
+bool
+CAI302Device::WriteActivePilot(const CAI302::Pilot &pilot,
+                               OperationEnvironment &env)
+{
+  port.SetRxTimeout(5000);
+
+  CAI302::CommandModeQuick(port);
+  return CAI302::DownloadMode(port) && !env.IsCancelled() &&
+    CAI302::DownloadPilot(port, pilot, 0);
+}
+
+bool
 CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
                          OperationEnvironment &env)
 {
