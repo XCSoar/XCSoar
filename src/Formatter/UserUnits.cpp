@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Units/UserUnitsFormatter.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
+#include "Formatter/Units.hpp"
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
 #include "Math/Angle.hpp"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Look/TaskLook.hpp"
-#include "Units/UserUnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Util/Macros.hpp"
 #include "Screen/Fonts.hpp"
 

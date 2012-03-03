@@ -355,7 +355,7 @@ $(eval $(call link-program,TestUnits,TEST_UNITS))
 
 TEST_UNITS_FORMATTER_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -834,8 +834,8 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
-	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/UserUnitsFormatter.cpp \
+	$(SRC)/Formatter/Units.cpp \
+	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1519,8 +1519,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/UserUnitsFormatter.cpp \
+	$(SRC)/Formatter/Units.cpp \
+	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/Earth.cpp \
@@ -1703,8 +1703,8 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/UserUnitsFormatter.cpp \
+	$(SRC)/Formatter/Units.cpp \
+	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \
 	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/VarioInfo.cpp \
@@ -1820,8 +1820,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/UserUnitsFormatter.cpp \
+	$(SRC)/Formatter/Units.cpp \
+	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -1957,8 +1957,8 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Units/UserUnitsFormatter.cpp \
+	$(SRC)/Formatter/Units.cpp \
+	$(SRC)/Formatter/UserUnits.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
@@ -2032,7 +2032,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Units/UnitsFormatter.cpp \
+	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \

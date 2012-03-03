@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Data.hpp"
 #include "Units/Units.hpp"
-#include "Units/UserUnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 
 void
 InfoBoxData::SetValueFromDistance(fixed new_value)

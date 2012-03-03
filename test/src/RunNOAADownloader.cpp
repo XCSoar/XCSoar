@@ -27,7 +27,7 @@ Copyright_License {
 #include "Net/Init.hpp"
 #include "ConsoleJobRunner.hpp"
 #include "Units/Units.hpp"
-#include "Units/UserUnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Formatter/GeoPointFormatter.hpp"
 #include "Util/Macros.hpp"
 

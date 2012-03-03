@@ -24,7 +24,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Team.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Formatter/Units.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

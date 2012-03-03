@@ -27,7 +27,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "ComputerSettings.hpp"
 #include "Units/Units.hpp"
-#include "Units/UserUnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "DataField/Float.hpp"
 #include "UIGlobals.hpp"

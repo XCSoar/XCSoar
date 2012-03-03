@@ -35,7 +35,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "Hardware/Battery.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Formatter/Units.hpp"
 #include "Logger/Logger.hpp"
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"

@@ -42,7 +42,7 @@
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
-#include "Units/UserUnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"

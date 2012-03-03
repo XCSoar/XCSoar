@@ -33,7 +33,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Terrain/RasterWeather.hpp"
-#include "Units/UserUnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "UIState.hpp"

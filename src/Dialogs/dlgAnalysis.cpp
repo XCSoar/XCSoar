@@ -39,7 +39,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "StringUtil.hpp"
 #include "Compiler.h"
-#include "Units/UnitsFormatter.hpp"
+#include "Formatter/Units.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"
 #include "Renderer/GlidePolarRenderer.hpp"
 #include "Renderer/BarographRenderer.hpp"

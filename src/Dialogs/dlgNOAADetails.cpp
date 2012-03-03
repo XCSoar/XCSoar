@@ -36,7 +36,7 @@ Copyright_License {
 #include "Weather/ParsedMETAR.hpp"
 #include "Weather/TAF.hpp"
 #include "Weather/NOAAFormatter.hpp"
-#include "Units/UnitsFormatter.hpp"
+#include "Formatter/Units.hpp"
 #include "Screen/Layout.hpp"
 
 #include <stdio.h>

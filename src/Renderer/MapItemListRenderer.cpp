@@ -32,7 +32,7 @@ Copyright_License {
 #include "Airspace/AbstractAirspace.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Units/UserUnitsFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
