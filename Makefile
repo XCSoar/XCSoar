@@ -662,6 +662,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TrailLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
+	$(SRC)/Look/HorizonLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \

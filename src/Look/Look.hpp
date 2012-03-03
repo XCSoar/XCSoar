@@ -33,6 +33,7 @@ Copyright_License {
 #include "TraceHistoryLook.hpp"
 #include "MapLook.hpp"
 #include "CrossSectionLook.hpp"
+#include "HorizonLook.hpp"
 #include "TrafficLook.hpp"
 #include "Gauge/FlarmTrafficLook.hpp"
 #include "InfoBoxLook.hpp"
@@ -51,6 +52,7 @@ struct Look {
   TraceHistoryLook trace_history;
   MapLook map;
   CrossSectionLook cross_section;
+  HorizonLook horizon;
   TrafficLook traffic;
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;

@@ -159,7 +159,7 @@ InfoBoxContentHorizon::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
   if (CommonInterface::Basic().acceleration.available) {
     const Look &look = UIGlobals::GetLook();
     HorizonRenderer::Draw(canvas, infobox.GetValueAndCommentRect(),
-                          look.cross_section, CommonInterface::Basic().attitude);
+                          look.horizon, CommonInterface::Basic().attitude);
   }
 #endif
 }

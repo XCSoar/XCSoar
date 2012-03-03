@@ -21,20 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef HORIZON_RENDERER_HPP
-#define HORIZON_RENDERER_HPP
+#include "HorizonLook.hpp"
+#include "Screen/Layout.hpp"
 
-#include "Screen/Point.hpp"
-
-struct HorizonLook;
-struct AttitudeState;
-class Canvas;
-
-namespace HorizonRenderer
+void
+HorizonLook::Initialise()
 {
-  void Draw(Canvas &canvas, const PixelRect &rc,
-            const HorizonLook &look,
-            const AttitudeState &attitude);
-}
+  aircraft_pen.Set(Layout::Scale(2), COLOR_BLACK);
 
-#endif
+  sky_color = Color(0x0a, 0xb9, 0xf3);
+  sky_brush.Set(sky_color);
+  sky_pen.Set(Layout::Scale(1), DarkColor(sky_color));
+
+  terrain_color = Color(0x80, 0x45, 0x15);
+  terrain_brush.Set(terrain_color);
+  terrain_pen.Set(Layout::Scale(1), DarkColor(terrain_color));
+}

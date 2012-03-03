@@ -1840,6 +1840,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
+	$(SRC)/Look/HorizonLook.cpp \
 	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
