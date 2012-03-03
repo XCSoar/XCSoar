@@ -26,6 +26,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "OS/PathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "Util/Macros.hpp"
 
 #ifdef HAVE_POSIX
 #include "Device/Port/TTYPort.hpp"
@@ -67,6 +68,21 @@ PrintInfo(CAI302Device &device, OperationEnvironment &env)
 }
 
 static bool
+ListPilots(CAI302Device &device, OperationEnvironment &env)
+{
+  std::vector<CAI302::Pilot> pilots;
+  if (!device.ReadPilotList(pilots, env))
+    return false;
+
+  unsigned index = 0;
+  for (auto i = pilots.begin(), end = pilots.end(); i != end; ++i)
+    printf("%u: '%.*s'\n", index++,
+           StringBufferLength(i->name, ARRAY_SIZE(i->name)), i->name);
+
+  return true;
+}
+
+static bool
 RunCommand(CAI302Device &device, const char *command,
            OperationEnvironment &env)
 {
@@ -80,6 +96,8 @@ RunCommand(CAI302Device &device, const char *command,
     return device.StartLogging(env);
   else if (strcmp(command, "stoplogger") == 0)
     return device.StopLogging(env);
+  else if (strcmp(command, "pilots") == 0)
+    return ListPilots(device, env);
   else {
     fprintf(stderr, "Unknown command: %s\n", command);
     return false;
@@ -95,6 +113,7 @@ int main(int argc, char **argv)
     "\n\tpoweroff"
     "\n\tstartlogger"
     "\n\tstoplogger"
+    "\n\tpilots"
     ;
   Args args(argc, argv, usage);
 

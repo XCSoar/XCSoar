@@ -27,6 +27,8 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Protocol.hpp"
 
+#include <vector>
+
 /** 
  * Device driver for Cambridge Aero Instruments 302 
  */
@@ -95,6 +97,9 @@ public:
    * Erase all log memory.
    */
   bool ClearLog(OperationEnvironment &env);
+
+  bool ReadPilotList(std::vector<CAI302::Pilot> &list,
+                     OperationEnvironment &env);
 };
 
 #endif

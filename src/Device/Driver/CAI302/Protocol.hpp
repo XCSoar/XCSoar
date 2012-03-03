@@ -336,6 +336,14 @@ namespace CAI302 {
   UploadPilot(Port &port, unsigned i, Pilot &data);
 
   /**
+   * @return the number of pilots returned in the buffer, or -1 on
+   * error
+   */
+  int
+  UploadPilotBlock(Port &port, unsigned start, unsigned count,
+                   unsigned record_size, void *buffer);
+
+  /**
    * Enter "download" mode.
    */
   bool

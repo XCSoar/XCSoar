@@ -269,6 +269,21 @@ CAI302::UploadPilot(Port &port, unsigned i, Pilot &data)
   return UploadShort(port, cmd, &data, sizeof(data)) > 0;
 }
 
+int
+CAI302::UploadPilotBlock(Port &port, unsigned start, unsigned count,
+                         unsigned record_size, void *buffer)
+{
+  char cmd[16];
+  snprintf(cmd, sizeof(cmd), "O B %u %u\r", start, count);
+
+  /* the CAI302 data port user's guide 2.2 says that the "O B"
+     response is "large", but this seems wrong */
+  int nbytes = UploadShort(port, cmd, buffer, count * record_size);
+  return nbytes >= 0 && nbytes % record_size == 0
+    ? nbytes / record_size
+    : -1;
+}
+
 static bool
 WaitDownloadPrompt(Port &port)
 {

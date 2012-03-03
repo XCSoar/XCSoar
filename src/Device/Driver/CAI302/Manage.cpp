@@ -151,3 +151,45 @@ CAI302Device::ClearLog(OperationEnvironment &env)
   return success;
 }
 
+bool
+CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
+                            OperationEnvironment &env)
+{
+  assert(list.empty());
+
+  port.SetRxTimeout(500);
+
+  CAI302::CommandModeQuick(port);
+  if (!CAI302::UploadMode(port) || env.IsCancelled())
+    return false;
+
+  CAI302::PilotMeta meta;
+  if (!CAI302::UploadPilotMeta(port, meta) || env.IsCancelled())
+    return false;
+
+  if (meta.record_size < sizeof(CAI302::Pilot))
+    /* weird record size */
+    return false;
+
+  const unsigned count = meta.count;
+  list.reserve(count);
+  const unsigned record_size = meta.record_size;
+
+  const unsigned block_count = 8;
+
+  uint8_t buffer[1024];
+
+  for (unsigned i = 0; i < count; i += block_count) {
+    unsigned this_block = std::min(count - i, block_count);
+    unsigned n = CAI302::UploadPilotBlock(port, i, this_block,
+                                          record_size, buffer);
+    if (n != this_block)
+      return false;
+
+    const uint8_t *p = buffer;
+    for (unsigned j = 0; j < n; ++j, p += record_size)
+      list.push_back(*(const CAI302::Pilot *)p);
+  }
+
+  return true;
+}
