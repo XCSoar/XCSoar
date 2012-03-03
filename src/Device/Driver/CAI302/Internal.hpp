@@ -42,12 +42,17 @@ public:
 
 public:
   virtual bool Open(OperationEnvironment &env);
+  virtual void LinkTimeout();
+
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
   virtual bool PutBallast(fixed fraction, fixed overload);
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
+
+  virtual bool EnableDownloadMode(OperationEnvironment &env);
+  virtual bool DisableDownloadMode();
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env);

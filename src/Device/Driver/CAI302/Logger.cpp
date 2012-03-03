@@ -57,9 +57,9 @@ Copy(RecordedFlightInfo &dest, unsigned index,
   dest.internal.cai302 = index;
 }
 
-static bool
-ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
-                    OperationEnvironment &env)
+bool
+CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
+                             OperationEnvironment &env)
 {
   env.SetProgressRange(9);
 
@@ -92,26 +92,15 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
 }
 
 bool
-CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
+CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
+                             const TCHAR *path,
                              OperationEnvironment &env)
 {
-  bool success = ReadFlightListInner(port, flight_list, env);
-
-  port.SetRxTimeout(500);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
-}
-
-static bool
-DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
-                    BinaryWriter &writer, OperationEnvironment &env)
-{
   assert(flight.internal.cai302 < 64);
+
+  BinaryWriter writer(path);
+  if (writer.HasError())
+    return false;
 
   port.SetRxTimeout(500);
 
@@ -176,27 +165,4 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
     return false;
 
   return true;
-}
-
-bool
-CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
-                             const TCHAR *path,
-                             OperationEnvironment &env)
-{
-  assert(flight.internal.cai302 < 64);
-
-  BinaryWriter writer(path);
-  if (writer.HasError())
-    return false;
-
-  bool success = DownloadFlightInner(port, flight, writer, env);
-
-  port.SetRxTimeout(500);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
 }

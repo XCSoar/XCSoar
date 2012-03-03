@@ -35,9 +35,7 @@ CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
   if (!CAI302::UploadMode(port) || env.IsCancelled())
     return false;
 
-  bool success = CAI302::UploadGeneralInfo(port, data);
-  CAI302::LogModeQuick(port);
-  return success;
+  return CAI302::UploadGeneralInfo(port, data);
 }
 
 bool
@@ -45,9 +43,7 @@ CAI302Device::Reboot(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::Reboot(port);
-  CAI302::LogModeQuick(port);
-  return success;
+  return CAI302::Reboot(port);
 }
 
 bool
@@ -55,9 +51,7 @@ CAI302Device::PowerOff(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::PowerOff(port);
-  CAI302::LogModeQuick(port);
-  return success;
+  return CAI302::PowerOff(port);
 }
 
 bool
@@ -65,14 +59,7 @@ CAI302Device::StartLogging(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::StartLogging(port);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
+  return CAI302::StartLogging(port);
 }
 
 bool
@@ -80,14 +67,7 @@ CAI302Device::StopLogging(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::StopLogging(port);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
+  return CAI302::StopLogging(port);
 }
 
 bool
@@ -95,14 +75,7 @@ CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::SetVolume(port, volume);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
+  return CAI302::SetVolume(port, volume);
 }
 
 bool
@@ -110,14 +83,7 @@ CAI302Device::ClearPoints(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::ClearPoints(port);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
+  return CAI302::ClearPoints(port);
 }
 
 
@@ -126,14 +92,7 @@ CAI302Device::ClearPilot(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::ClearPilot(port);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
+  return CAI302::ClearPilot(port);
 }
 
 bool
@@ -141,14 +100,7 @@ CAI302Device::ClearLog(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  bool success = CAI302::ClearLog(port);
-
-  if (success)
-    CAI302::LogMode(port);
-  else
-    CAI302::LogModeQuick(port);
-
-  return success;
+  return CAI302::ClearLog(port);
 }
 
 bool

@@ -23,43 +23,29 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol.hpp"
-#include "Device/Port/Port.hpp"
-#include "Units/System.hpp"
-
-#include <stdio.h>
 
 bool
-CAI302Device::PutMacCready(fixed MacCready)
+CAI302Device::Open(gcc_unused OperationEnvironment &env)
 {
-  unsigned mac_cready = uround(Units::ToUserUnit(MacCready * 10, Unit::KNOTS));
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,m%u\r", mac_cready);
-  port.Write(szTmp);
+  CAI302::LogModeQuick(port);
 
   return true;
 }
 
-bool
-CAI302Device::PutBugs(fixed Bugs)
+void
+CAI302Device::LinkTimeout()
 {
-  unsigned bugs = uround(Bugs * 100);
-
-  char szTmp[32];
-  sprintf(szTmp, "!g,u%u\r", bugs);
-  port.Write(szTmp);
-
-  return true;
+  CAI302::LogModeQuick(port);
 }
 
 bool
-CAI302Device::PutBallast(fixed fraction, gcc_unused fixed overload)
+CAI302Device::EnableDownloadMode(OperationEnvironment &env)
 {
-  unsigned ballast = uround(fraction * 100);
+  return CAI302::CommandModeQuick(port);
+}
 
-  char szTmp[32];
-  sprintf(szTmp, "!g,b%u\r", ballast);
-  port.Write(szTmp);
-
-  return true;
+bool
+CAI302Device::DisableDownloadMode()
+{
+  return CAI302::LogMode(port);
 }
