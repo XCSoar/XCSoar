@@ -166,6 +166,17 @@ Port::ExpectString(const char *token, unsigned timeout_ms)
   return true;
 }
 
+bool
+Port::ExpectString(const char *token,
+                   OperationEnvironment &env, unsigned timeout_ms)
+{
+  if (inject_port_fault == 0)
+    return false;
+
+  --inject_port_fault;
+  return true;
+}
+
 Port::WaitResult
 Port::WaitForChar(const char token, OperationEnvironment &env,
                   unsigned timeout_ms)

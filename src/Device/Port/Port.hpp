@@ -228,6 +228,9 @@ public:
 
   bool ExpectString(const char *token, unsigned timeout_ms = 2000);
 
+  bool ExpectString(const char *token, OperationEnvironment &env,
+                    unsigned timeout_ms = 2000);
+
   /**
    * Wait until the expected character is received, the timeout expires
    * or the operation gets canceled.

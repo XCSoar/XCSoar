@@ -202,6 +202,39 @@ Port::ExpectString(const char *token, unsigned timeout_ms)
   return true;
 }
 
+bool
+Port::ExpectString(const char *token, OperationEnvironment &env,
+                   unsigned timeout_ms)
+{
+  assert(token != NULL);
+
+  const TimeoutClock timeout(timeout_ms);
+
+  const char *p = token;
+  while (*p != '\0') {
+    WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());
+    if (wait_result != WaitResult::READY)
+      // Operation canceled, Timeout expired or I/O error occurred
+      return false;
+
+    int ch = GetChar();
+    if (ch == -1 || env.IsCancelled())
+      return false;
+
+    if (ch != *p++) {
+      if (timeout.HasExpired())
+        /* give up after 2 seconds (is that enough for all
+           devices?) */
+        return false;
+
+      /* retry */
+      p = token;
+    }
+  }
+
+  return true;
+}
+
 Port::WaitResult
 Port::WaitForChar(const char token, OperationEnvironment &env,
                   unsigned timeout_ms)
