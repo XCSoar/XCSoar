@@ -157,6 +157,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgPlaneDetails.cpp \
 	$(SRC)/Dialogs/dlgPlanePolar.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
+	$(SRC)/Dialogs/FilePicker.cpp \
 	$(SRC)/Dialogs/dlgConfiguration.cpp \
 	$(SRC)/Dialogs/dlgConfigFonts.cpp \
 	$(SRC)/Dialogs/dlgConfigInfoboxes.cpp \
