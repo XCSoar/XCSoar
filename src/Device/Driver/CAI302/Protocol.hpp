@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <stdint.h>
 
+class OperationEnvironment;
 class Port;
 struct GeoPoint;
 
@@ -286,19 +287,20 @@ namespace CAI302 {
    * Enter "command" mode.
    */
   bool
-  CommandMode(Port &port);
+  CommandMode(Port &port, OperationEnvironment &env);
 
   /**
    * Send a command, but don't wait for the next command prompt.
    */
   bool
-  SendCommandQuick(Port &port, const char *cmd);
+  SendCommandQuick(Port &port, const char *cmd, OperationEnvironment &env);
 
   /**
    * Send a command, and wait for the next command prompt.
    */
   bool
-  SendCommand(Port &port, const char *cmd);
+  SendCommand(Port &port, const char *cmd, OperationEnvironment &env,
+              unsigned timeout_ms=2000);
 
   /**
    * Enter "log" mode, but don't wait for the command prompt.
@@ -310,13 +312,13 @@ namespace CAI302 {
    * Enter "log" mode.
    */
   bool
-  LogMode(Port &port);
+  LogMode(Port &port, OperationEnvironment &env);
 
   /**
    * Enter "upload" mode.
    */
   bool
-  UploadMode(Port &port);
+  UploadMode(Port &port, OperationEnvironment &env);
 
   /**
    * Receive a "short" reply from the CAI302.
@@ -326,7 +328,7 @@ namespace CAI302 {
    */
   int
   ReadShortReply(Port &port, void *buffer, unsigned max_size,
-                 unsigned timeout_ms=2000);
+                 OperationEnvironment &env, unsigned timeout_ms=2000);
 
   /**
    * Receive a "large" reply from the CAI302.
@@ -336,7 +338,7 @@ namespace CAI302 {
    */
   int
   ReadLargeReply(Port &port, void *buffer, unsigned max_size,
-                 unsigned timeout_ms=8000);
+                 OperationEnvironment &env, unsigned timeout_ms=8000);
 
   /**
    * Send an upload command, and read the short response.  CAI302 must
@@ -352,7 +354,7 @@ namespace CAI302 {
   int
   UploadShort(Port &port, const char *command,
               void *response, unsigned max_size,
-              unsigned timeout_ms=2000);
+              OperationEnvironment &env, unsigned timeout_ms=2000);
 
   /**
    * Send an upload command, and read the large response.  CAI302 must
@@ -368,40 +370,46 @@ namespace CAI302 {
   int
   UploadLarge(Port &port, const char *command,
               void *response, unsigned max_size,
-              unsigned timeout_ms=8000);
+              OperationEnvironment &env, unsigned timeout_ms=8000);
 
   bool
-  UploadGeneralInfo(Port &port, GeneralInfo &data);
+  UploadGeneralInfo(Port &port, GeneralInfo &data, OperationEnvironment &env);
 
   bool
-  UploadFileList(Port &port, unsigned i, FileList &data);
+  UploadFileList(Port &port, unsigned i, FileList &data,
+                 OperationEnvironment &env);
 
   bool
-  UploadFileASCII(Port &port, unsigned i, FileASCII &data);
+  UploadFileASCII(Port &port, unsigned i, FileASCII &data,
+                  OperationEnvironment &env);
 
   bool
-  UploadFileBinary(Port &port, unsigned i, FileBinary &data);
+  UploadFileBinary(Port &port, unsigned i, FileBinary &data,
+                   OperationEnvironment &env);
 
   int
-  UploadFileData(Port &port, bool next, void *data, unsigned length);
+  UploadFileData(Port &port, bool next, void *data, unsigned length,
+                 OperationEnvironment &env);
 
   bool
-  UploadFileSignatureASCII(Port &port, FileSignatureASCII &data);
+  UploadFileSignatureASCII(Port &port, FileSignatureASCII &data,
+                           OperationEnvironment &env);
 
   bool
-  UploadPolarMeta(Port &port, PolarMeta &data);
+  UploadPolarMeta(Port &port, PolarMeta &data, OperationEnvironment &env);
 
   bool
-  UploadPolar(Port &port, Polar &data);
+  UploadPolar(Port &port, Polar &data, OperationEnvironment &env);
 
   bool
-  UploadPilotMeta(Port &port, PilotMeta &data);
+  UploadPilotMeta(Port &port, PilotMeta &data, OperationEnvironment &env);
 
   bool
-  UploadPilotMetaActive(Port &port, PilotMetaActive &data);
+  UploadPilotMetaActive(Port &port, PilotMetaActive &data,
+                        OperationEnvironment &env);
 
   bool
-  UploadPilot(Port &port, unsigned i, Pilot &data);
+  UploadPilot(Port &port, unsigned i, Pilot &data, OperationEnvironment &env);
 
   /**
    * @return the number of pilots returned in the buffer, or -1 on
@@ -409,80 +417,83 @@ namespace CAI302 {
    */
   int
   UploadPilotBlock(Port &port, unsigned start, unsigned count,
-                   unsigned record_size, void *buffer);
+                   unsigned record_size, void *buffer,
+                   OperationEnvironment &env);
 
   /**
    * Enter "download" mode.
    */
   bool
-  DownloadMode(Port &port);
+  DownloadMode(Port &port, OperationEnvironment &env);
 
   /**
    * Send a command.  CAI302 must be at the download prompt already.
    */
   bool
-  DownloadCommand(Port &port, const char *command, unsigned timeout_ms=2000);
+  DownloadCommand(Port &port, const char *command,
+                  OperationEnvironment &env, unsigned timeout_ms=2000);
 
   bool
-  DownloadPilot(Port &port, const Pilot &data, unsigned ordinal=0);
+  DownloadPilot(Port &port, const Pilot &data, unsigned ordinal,
+                OperationEnvironment &env);
 
   bool
-  DownloadPolar(Port &port, const Polar &data);
+  DownloadPolar(Port &port, const Polar &data, OperationEnvironment &env);
 
   bool
   DeclareTP(Port &port, unsigned i, const GeoPoint &location,
-            int altitude, const char *name);
+            int altitude, const char *name, OperationEnvironment &env);
 
   bool
-  DeclareSave(Port &port);
+  DeclareSave(Port &port, OperationEnvironment &env);
 
   /**
    * Restart the CAI302 by sending the command "SIF 0 0".
    */
   bool
-  Reboot(Port &port);
+  Reboot(Port &port, OperationEnvironment &env);
 
   /**
    * Power off the CAI302 by sending the command "DIE".
    */
   bool
-  PowerOff(Port &port);
+  PowerOff(Port &port, OperationEnvironment &env);
 
   /**
    * Start logging unconditionally.
    */
   bool
-  StartLogging(Port &port);
+  StartLogging(Port &port, OperationEnvironment &env);
 
   /**
    * Stop logging unconditionally.
    */
   bool
-  StopLogging(Port &port);
+  StopLogging(Port &port, OperationEnvironment &env);
 
   /**
    * Set audio volume 0 is loudest, 170 is silent.
    */
   bool
-  SetVolume(Port &port, unsigned volume);
+  SetVolume(Port &port, unsigned volume, OperationEnvironment &env);
 
   /**
    * Erase all waypoints.
    */
   bool
-  ClearPoints(Port &port);
+  ClearPoints(Port &port, OperationEnvironment &env);
 
   /**
    * Erase the pilot name.
    */
   bool
-  ClearPilot(Port &port);
+  ClearPilot(Port &port, OperationEnvironment &env);
 
   /**
    * Erase all log memory.
    */
   bool
-  ClearLog(Port &port);
+  ClearLog(Port &port, OperationEnvironment &env);
 }
 
 #endif

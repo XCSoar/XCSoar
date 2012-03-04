@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol.hpp"
+#include "Operation/Operation.hpp"
 
 bool
 CAI302Device::Open(gcc_unused OperationEnvironment &env)
@@ -47,5 +48,6 @@ CAI302Device::EnableDownloadMode(OperationEnvironment &env)
 bool
 CAI302Device::DisableDownloadMode()
 {
-  return CAI302::LogMode(port);
+  NullOperationEnvironment env;
+  return CAI302::LogMode(port, env);
 }

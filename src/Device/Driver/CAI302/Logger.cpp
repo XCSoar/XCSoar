@@ -66,7 +66,7 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
   port.SetRxTimeout(500);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port) || env.IsCancelled())
+  if (!CAI302::UploadMode(port, env))
     return false;
 
   env.SetProgressPosition(1);
@@ -75,8 +75,7 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
 
   for (unsigned i = 0; i < 8 && !flight_list.full(); ++i) {
     CAI302::FileList file_list;
-    if (!CAI302::UploadFileList(port, i, file_list) ||
-        env.IsCancelled())
+    if (!CAI302::UploadFileList(port, i, file_list, env))
       break;
 
     for (unsigned j = 0; j < 8 && !flight_list.full(); ++j) {
@@ -105,13 +104,13 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
   port.SetRxTimeout(500);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port) || env.IsCancelled())
+  if (!CAI302::UploadMode(port, env))
     return false;
 
   port.SetRxTimeout(8000);
 
   CAI302::FileASCII file_ascii;
-  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii) ||
+  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii, env) ||
       env.IsCancelled())
     return false;
 
@@ -129,8 +128,8 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
   unsigned current_block = 0;
   unsigned valid_bytes;
   do {
-    int i = UploadFileData(port, true, header, allocated_size);
-    if (i < (int)sizeof(*header) || env.IsCancelled()) {
+    int i = UploadFileData(port, true, header, allocated_size, env);
+    if (i < (int)sizeof(*header)) {
       free(allocated);
       return false;
     }
@@ -154,7 +153,7 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
   free(allocated);
 
   CAI302::FileSignatureASCII signature;
-  if (!CAI302::UploadFileSignatureASCII(port, signature) || env.IsCancelled())
+  if (!CAI302::UploadFileSignatureASCII(port, signature, env))
     return false;
 
   valid_bytes = FromBE16(signature.size);

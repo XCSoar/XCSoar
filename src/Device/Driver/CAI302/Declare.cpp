@@ -55,14 +55,15 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 static bool
-cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
+cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point,
+                      OperationEnvironment &env)
 {
   char Name[13];
   convert_string(Name, sizeof(Name), way_point.name.c_str());
 
   return CAI302::DeclareTP(port, DeclIndex, way_point.location,
                            (int)way_point.altitude,
-                           Name);
+                           Name, env);
 }
 
 static bool
@@ -78,36 +79,36 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressPosition(0);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port) || env.IsCancelled())
+  if (!CAI302::UploadMode(port, env))
     return false;
 
   port.SetRxTimeout(1500);
 
   CAI302::PilotMeta pilot_meta;
-  if (!CAI302::UploadPilotMeta(port, pilot_meta) || env.IsCancelled())
+  if (!CAI302::UploadPilotMeta(port, pilot_meta, env))
     return false;
 
   env.SetProgressPosition(1);
 
   CAI302::Pilot pilot;
-  if (!CAI302::UploadPilot(port, 0, pilot) || env.IsCancelled())
+  if (!CAI302::UploadPilot(port, 0, pilot, env))
     return false;
 
   env.SetProgressPosition(2);
 
   CAI302::PolarMeta polar_meta;
-  if (!CAI302::UploadPolarMeta(port, polar_meta) || env.IsCancelled())
+  if (!CAI302::UploadPolarMeta(port, polar_meta, env))
     return false;
 
   env.SetProgressPosition(3);
 
   CAI302::Polar polar;
-  if (!CAI302::UploadPolar(port, polar) || env.IsCancelled())
+  if (!CAI302::UploadPolar(port, polar, env))
     return false;
 
   env.SetProgressPosition(4);
 
-  if (!CAI302::DownloadMode(port) || env.IsCancelled())
+  if (!CAI302::DownloadMode(port, env))
     return false;
 
   char GliderType[13], GliderID[13];
@@ -115,7 +116,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   convert_string(GliderID, sizeof(GliderID), declaration.aircraft_registration);
 
   convert_string(pilot.name, sizeof(pilot.name), declaration.pilot_name);
-  if (!CAI302::DownloadPilot(port, pilot) || env.IsCancelled())
+  if (!CAI302::DownloadPilot(port, pilot, 0, env))
     return false;
 
   env.SetProgressPosition(5);
@@ -124,21 +125,20 @@ DeclareInner(Port &port, const Declaration &declaration,
                  declaration.aircraft_type);
   convert_string(polar.glider_id, sizeof(polar.glider_id),
                  declaration.aircraft_registration);
-  if (!CAI302::DownloadPolar(port, polar) || env.IsCancelled())
+  if (!CAI302::DownloadPolar(port, polar, env))
     return false;
 
   env.SetProgressPosition(6);
 
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(port, i, declaration.GetWaypoint(i)) ||
-        env.IsCancelled())
+    if (!cai302DeclAddWaypoint(port, i, declaration.GetWaypoint(i), env))
       return false;
 
     env.SetProgressPosition(7 + i);
   }
 
   port.SetRxTimeout(1500); // D,255 takes more than 800ms
-  return CAI302::DeclareSave(port);
+  return CAI302::DeclareSave(port, env);
 }
 
 bool
@@ -151,7 +151,7 @@ CAI302Device::Declare(const Declaration &declaration,
   port.SetRxTimeout(500);
 
   if (success)
-    CAI302::LogMode(port);
+    CAI302::LogMode(port, env);
   else
     CAI302::LogModeQuick(port);
 

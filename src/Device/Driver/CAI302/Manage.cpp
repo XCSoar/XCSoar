@@ -32,10 +32,10 @@ CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port) || env.IsCancelled())
+  if (!CAI302::UploadMode(port, env))
     return false;
 
-  return CAI302::UploadGeneralInfo(port, data);
+  return CAI302::UploadGeneralInfo(port, data, env);
 }
 
 bool
@@ -43,7 +43,7 @@ CAI302Device::Reboot(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::Reboot(port);
+  return CAI302::Reboot(port, env);
 }
 
 bool
@@ -51,7 +51,7 @@ CAI302Device::PowerOff(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::PowerOff(port);
+  return CAI302::PowerOff(port, env);
 }
 
 bool
@@ -59,7 +59,7 @@ CAI302Device::StartLogging(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::StartLogging(port);
+  return CAI302::StartLogging(port, env);
 }
 
 bool
@@ -67,7 +67,7 @@ CAI302Device::StopLogging(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::StopLogging(port);
+  return CAI302::StopLogging(port, env);
 }
 
 bool
@@ -75,7 +75,7 @@ CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::SetVolume(port, volume);
+  return CAI302::SetVolume(port, volume, env);
 }
 
 bool
@@ -83,7 +83,7 @@ CAI302Device::ClearPoints(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::ClearPoints(port);
+  return CAI302::ClearPoints(port, env);
 }
 
 
@@ -92,7 +92,7 @@ CAI302Device::ClearPilot(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::ClearPilot(port);
+  return CAI302::ClearPilot(port, env);
 }
 
 bool
@@ -100,7 +100,7 @@ CAI302Device::ClearLog(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
   CAI302::CommandModeQuick(port);
-  return CAI302::ClearLog(port);
+  return CAI302::ClearLog(port, env);
 }
 
 bool
@@ -113,11 +113,11 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
   port.SetRxTimeout(500);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port) || env.IsCancelled())
+  if (!CAI302::UploadMode(port, env))
     return false;
 
   CAI302::PilotMetaActive meta;
-  if (!CAI302::UploadPilotMetaActive(port, meta) || env.IsCancelled())
+  if (!CAI302::UploadPilotMetaActive(port, meta, env))
     return false;
 
   if (meta.record_size < sizeof(CAI302::Pilot))
@@ -136,7 +136,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
   for (unsigned i = 0; i < count; i += block_count) {
     unsigned this_block = std::min(count - i, block_count);
     unsigned n = CAI302::UploadPilotBlock(port, i, this_block,
-                                          record_size, buffer);
+                                          record_size, buffer, env);
     if (n != this_block)
       return false;
 
@@ -154,8 +154,8 @@ CAI302Device::ReadActivePilot(CAI302::Pilot &pilot, OperationEnvironment &env)
   port.SetRxTimeout(500);
 
   CAI302::CommandModeQuick(port);
-  return CAI302::UploadMode(port) && !env.IsCancelled() &&
-    CAI302::UploadPilot(port, 0, pilot);
+  return CAI302::UploadMode(port, env) &&
+    CAI302::UploadPilot(port, 0, pilot, env);
 }
 
 bool
@@ -165,8 +165,8 @@ CAI302Device::WriteActivePilot(const CAI302::Pilot &pilot,
   port.SetRxTimeout(5000);
 
   CAI302::CommandModeQuick(port);
-  return CAI302::DownloadMode(port) && !env.IsCancelled() &&
-    CAI302::DownloadPilot(port, pilot, 0);
+  return CAI302::DownloadMode(port, env) &&
+    CAI302::DownloadPilot(port, pilot, 0, env);
 }
 
 bool
@@ -176,10 +176,8 @@ CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
   port.SetRxTimeout(5000);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::DownloadMode(port) || env.IsCancelled())
-    return false;
-
-  return CAI302::DownloadPilot(port, pilot, 64 + index);
+  return CAI302::DownloadMode(port, env) &&
+    CAI302::DownloadPilot(port, pilot, 64 + index, env);
 }
 
 bool
@@ -188,8 +186,8 @@ CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
   port.SetRxTimeout(5000);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::DownloadMode(port) || env.IsCancelled())
+  if (!CAI302::DownloadMode(port, env))
     return false;
 
-  return CAI302::DownloadPilot(port, pilot, 255);
+  return CAI302::DownloadPilot(port, pilot, 255, env);
 }

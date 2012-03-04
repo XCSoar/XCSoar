@@ -45,22 +45,24 @@ CAI302::CommandModeQuick(Port &port)
 }
 
 static bool
-WaitCommandPrompt(Port &port)
+WaitCommandPrompt(Port &port, OperationEnvironment &env,
+                  unsigned timeout_ms=2000)
 {
-  return port.ExpectString("cmd>");
+  return port.ExpectString("cmd>", env, timeout_ms);
 }
 
 bool
-CAI302::CommandMode(Port &port)
+CAI302::CommandMode(Port &port, OperationEnvironment &env)
 {
   port.Flush();
-  return CommandModeQuick(port) && WaitCommandPrompt(port);
+  return CommandModeQuick(port) && WaitCommandPrompt(port, env);
 }
 
 bool
-CAI302::SendCommandQuick(Port &port, const char *cmd)
+CAI302::SendCommandQuick(Port &port, const char *cmd,
+                         OperationEnvironment &env)
 {
-  if (!CommandMode(port))
+  if (!CommandMode(port, env))
     return false;
 
   port.Flush();
@@ -68,9 +70,11 @@ CAI302::SendCommandQuick(Port &port, const char *cmd)
 }
 
 bool
-CAI302::SendCommand(Port &port, const char *cmd)
+CAI302::SendCommand(Port &port, const char *cmd,
+                    OperationEnvironment &env, unsigned timeout_ms)
 {
-  return SendCommandQuick(port, cmd) && WaitCommandPrompt(port);
+  return SendCommandQuick(port, cmd, env) &&
+    WaitCommandPrompt(port, env, timeout_ms);
 }
 
 bool
@@ -80,29 +84,31 @@ CAI302::LogModeQuick(Port &port)
 }
 
 bool
-CAI302::LogMode(Port &port)
+CAI302::LogMode(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "LOG 0\r");
+  return SendCommandQuick(port, "LOG 0\r", env);
 }
 
 static bool
-WaitUploadPrompt(Port &port)
+WaitUploadPrompt(Port &port, OperationEnvironment &env,
+                 unsigned timeout_ms=2000)
 {
-  return port.ExpectString("up>");
+  return port.ExpectString("up>", env, timeout_ms);
 }
 
 bool
-CAI302::UploadMode(Port &port)
+CAI302::UploadMode(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "UPLOAD 1\r") && WaitUploadPrompt(port);
+  return SendCommandQuick(port, "UPLOAD 1\r", env) &&
+    WaitUploadPrompt(port, env);
 }
 
 int
 CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
-                       unsigned timeout_ms)
+                       OperationEnvironment &env, unsigned timeout_ms)
 {
   unsigned char header[3];
-  if (!port.FullRead(header, sizeof(header), timeout_ms))
+  if (!port.FullRead(header, sizeof(header), env, timeout_ms))
     return -1;
 
   unsigned size = header[0];
@@ -113,7 +119,7 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, timeout_ms))
+  if (!port.FullRead(buffer, size, env, timeout_ms))
     return -1;
 
   // XXX verify the checksum
@@ -129,10 +135,10 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
 
 int
 CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
-                       unsigned timeout_ms)
+                       OperationEnvironment &env, unsigned timeout_ms)
 {
   unsigned char header[5];
-  if (!port.FullRead(header, sizeof(header), timeout_ms))
+  if (!port.FullRead(header, sizeof(header), env, timeout_ms))
     return -1;
 
   unsigned size = (header[0] << 8) | header[1];
@@ -143,7 +149,7 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
   if (size > max_size)
     size = max_size;
 
-  if (!port.FullRead(buffer, size, timeout_ms))
+  if (!port.FullRead(buffer, size, env, timeout_ms))
     return -1;
 
   // XXX verify the checksum
@@ -160,17 +166,17 @@ CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
 int
 CAI302::UploadShort(Port &port, const char *command,
                     void *response, unsigned max_size,
-                    unsigned timeout_ms)
+                    OperationEnvironment &env, unsigned timeout_ms)
 {
   port.Flush();
   if (!WriteString(port, command))
     return -1;
 
-  int nbytes = ReadShortReply(port, response, max_size, timeout_ms);
+  int nbytes = ReadShortReply(port, response, max_size, env, timeout_ms);
   if (nbytes < 0)
     return nbytes;
 
-  if (!WaitUploadPrompt(port))
+  if (!WaitUploadPrompt(port, env))
     return -1;
 
   return nbytes;
@@ -179,137 +185,150 @@ CAI302::UploadShort(Port &port, const char *command,
 int
 CAI302::UploadLarge(Port &port, const char *command,
                     void *response, unsigned max_size,
-                    unsigned timeout_ms)
+                    OperationEnvironment &env, unsigned timeout_ms)
 {
   port.Flush();
   if (!WriteString(port, command))
     return -1;
 
-  int nbytes = ReadLargeReply(port, response, max_size, timeout_ms);
+  int nbytes = ReadLargeReply(port, response, max_size, env, timeout_ms);
   if (nbytes < 0)
     return nbytes;
 
-  if (!WaitUploadPrompt(port))
+  if (!WaitUploadPrompt(port, env))
     return -1;
 
   return nbytes;
 }
 
 bool
-CAI302::UploadGeneralInfo(Port &port, GeneralInfo &data)
+CAI302::UploadGeneralInfo(Port &port, GeneralInfo &data,
+                          OperationEnvironment &env)
 {
-  return UploadShort(port, "W\r", &data, sizeof(data)) == sizeof(data);
+  return UploadShort(port, "W\r", &data, sizeof(data), env) == sizeof(data);
 }
 
 bool
-CAI302::UploadFileList(Port &port, unsigned i, FileList &data)
+CAI302::UploadFileList(Port &port, unsigned i, FileList &data,
+                       OperationEnvironment &env)
 {
   assert(i < 8);
 
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 196 + i);
-  return UploadLarge(port, cmd, &data, sizeof(data)) == sizeof(data);
+  return UploadLarge(port, cmd, &data, sizeof(data), env) == sizeof(data);
 }
 
 bool
-CAI302::UploadFileASCII(Port &port, unsigned i, FileASCII &data)
+CAI302::UploadFileASCII(Port &port, unsigned i, FileASCII &data,
+                        OperationEnvironment &env)
 {
   assert(i < 64);
 
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 64 + i);
-  return UploadLarge(port, cmd, &data, sizeof(data)) == sizeof(data);
+  return UploadLarge(port, cmd, &data, sizeof(data), env) == sizeof(data);
 }
 
 bool
-CAI302::UploadFileBinary(Port &port, unsigned i, FileBinary &data)
+CAI302::UploadFileBinary(Port &port, unsigned i, FileBinary &data,
+                         OperationEnvironment &env)
 {
   assert(i < 64);
 
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "B %u\r", 256 + i);
-  return UploadLarge(port, cmd, &data, sizeof(data)) == sizeof(data);
+  return UploadLarge(port, cmd, &data, sizeof(data), env) == sizeof(data);
 }
 
 int
-CAI302::UploadFileData(Port &port, bool next, void *data, unsigned length)
+CAI302::UploadFileData(Port &port, bool next, void *data, unsigned length,
+                       OperationEnvironment &env)
 {
-  return UploadLarge(port, next ? "B N\r" : "B R\r", data, length, 15000);
+  return UploadLarge(port, next ? "B N\r" : "B R\r", data, length, env, 15000);
 }
 
 bool
-CAI302::UploadFileSignatureASCII(Port &port, FileSignatureASCII &data)
+CAI302::UploadFileSignatureASCII(Port &port, FileSignatureASCII &data,
+                                 OperationEnvironment &env)
 {
-  return UploadLarge(port, "B S\r", &data, sizeof(data)) == sizeof(data);
+  return UploadLarge(port, "B S\r", &data, sizeof(data), env) == sizeof(data);
 }
 
 bool
-CAI302::UploadPolarMeta(Port &port, PolarMeta &data)
+CAI302::UploadPolarMeta(Port &port, PolarMeta &data, OperationEnvironment &env)
 {
-  return UploadShort(port, "G\r", &data, sizeof(data)) > 0;
+  return UploadShort(port, "G\r", &data, sizeof(data), env) > 0;
 }
 
 bool
-CAI302::UploadPolar(Port &port, Polar &data)
+CAI302::UploadPolar(Port &port, Polar &data, OperationEnvironment &env)
 {
-  return UploadShort(port, "G 0\r", &data, sizeof(data)) > 0;
+  return UploadShort(port, "G 0\r", &data, sizeof(data), env) > 0;
 }
 
 bool
-CAI302::UploadPilotMeta(Port &port, PilotMeta &data)
+CAI302::UploadPilotMeta(Port &port, PilotMeta &data, OperationEnvironment &env)
 {
-  return UploadShort(port, "O\r", &data, sizeof(data)) > 0;
+  return UploadShort(port, "O\r", &data, sizeof(data), env) > 0;
 }
 
 bool
-CAI302::UploadPilotMetaActive(Port &port, PilotMetaActive &data)
+CAI302::UploadPilotMetaActive(Port &port, PilotMetaActive &data,
+                              OperationEnvironment &env)
 {
-  return UploadShort(port, "O A\r", &data, sizeof(data)) > 0;
+  return UploadShort(port, "O A\r", &data, sizeof(data), env) > 0;
 }
 
 bool
-CAI302::UploadPilot(Port &port, unsigned i, Pilot &data)
+CAI302::UploadPilot(Port &port, unsigned i, Pilot &data,
+                    OperationEnvironment &env)
 {
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "O %u\r", i);
-  return UploadShort(port, cmd, &data, sizeof(data)) > 0;
+  return UploadShort(port, cmd, &data, sizeof(data), env) > 0;
 }
 
 int
 CAI302::UploadPilotBlock(Port &port, unsigned start, unsigned count,
-                         unsigned record_size, void *buffer)
+                         unsigned record_size, void *buffer,
+                         OperationEnvironment &env)
 {
   char cmd[16];
   snprintf(cmd, sizeof(cmd), "O B %u %u\r", start, count);
 
   /* the CAI302 data port user's guide 2.2 says that the "O B"
      response is "large", but this seems wrong */
-  int nbytes = UploadShort(port, cmd, buffer, count * record_size);
+  int nbytes = UploadShort(port, cmd, buffer, count * record_size, env);
   return nbytes >= 0 && nbytes % record_size == 0
     ? nbytes / record_size
     : -1;
 }
 
 static bool
-WaitDownloadPrompt(Port &port)
+WaitDownloadPrompt(Port &port, OperationEnvironment &env,
+                   unsigned timeout_ms=2000)
 {
-  return port.ExpectString("dn>");
+  return port.ExpectString("dn>", env, timeout_ms);
 }
 
 bool
-CAI302::DownloadMode(Port &port)
+CAI302::DownloadMode(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "DOWNLOAD 1\r") && WaitDownloadPrompt(port);
+  return SendCommandQuick(port, "DOWNLOAD 1\r", env) &&
+    WaitDownloadPrompt(port, env);
 }
 
 bool
-CAI302::DownloadCommand(Port &port, const char *command, unsigned timeout_ms)
+CAI302::DownloadCommand(Port &port, const char *command,
+                        OperationEnvironment &env, unsigned timeout_ms)
 {
-  return WriteString(port, command) && WaitDownloadPrompt(port);
+  return WriteString(port, command) && WaitDownloadPrompt(port, env);
 }
 
 bool
-CAI302::DownloadPilot(Port &port, const Pilot &pilot, unsigned ordinal)
+CAI302::DownloadPilot(Port &port, const Pilot &pilot, unsigned ordinal,
+                      OperationEnvironment &env)
 {
   char buffer[256];
   snprintf(buffer, sizeof(buffer),
@@ -332,11 +351,12 @@ CAI302::DownloadPilot(Port &port, const Pilot &pilot, unsigned ordinal)
            FromBE16(pilot.unit_word),
            FromBE16(pilot.margin_height));
 
-  return DownloadCommand(port, buffer);
+  return DownloadCommand(port, buffer, env);
 }
 
 bool
-CAI302::DownloadPolar(Port &port, const Polar &polar)
+CAI302::DownloadPolar(Port &port, const Polar &polar,
+                      OperationEnvironment &env)
 {
   char buffer[256];
   snprintf(buffer, sizeof(buffer),
@@ -352,12 +372,12 @@ CAI302::DownloadPolar(Port &port, const Polar &polar)
            FromBE16(polar.config_word),
            FromBE16(polar.wing_area));
 
-  return DownloadCommand(port, buffer);
+  return DownloadCommand(port, buffer, env);
 }
 
 bool
 CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
-                  int altitude, const char *name)
+                  int altitude, const char *name, OperationEnvironment &env)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -390,61 +410,61 @@ CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
            name,
            altitude);
 
-  return DownloadCommand(port, buffer);
+  return DownloadCommand(port, buffer, env);
 }
 
 bool
-CAI302::DeclareSave(Port &port)
+CAI302::DeclareSave(Port &port, OperationEnvironment &env)
 {
-  return DownloadCommand(port, "D,255\r");
+  return DownloadCommand(port, "D,255\r", env, 5000);
 }
 
 bool
-CAI302::Reboot(Port &port)
+CAI302::Reboot(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "SIF 0 0\r");
+  return SendCommandQuick(port, "SIF 0 0\r", env);
 }
 
 bool
-CAI302::PowerOff(Port &port)
+CAI302::PowerOff(Port &port, OperationEnvironment &env)
 {
-  return SendCommandQuick(port, "DIE\r");
+  return SendCommandQuick(port, "DIE\r", env);
 }
 
 bool
-CAI302::StartLogging(Port &port)
+CAI302::StartLogging(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "START\r");
+  return SendCommand(port, "START\r", env);
 }
 
 bool
-CAI302::StopLogging(Port &port)
+CAI302::StopLogging(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "STOP\r");
+  return SendCommand(port, "STOP\r", env);
 }
 
 bool
-CAI302::SetVolume(Port &port, unsigned volume)
+CAI302::SetVolume(Port &port, unsigned volume, OperationEnvironment &env)
 {
   char cmd[16];
   sprintf(cmd, "VOL %u\r", volume);
-  return SendCommand(port, cmd);
+  return SendCommand(port, cmd, env);
 }
 
 bool
-CAI302::ClearPoints(Port &port)
+CAI302::ClearPoints(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR POINTS\r");
+  return SendCommand(port, "CLEAR POINTS\r", env, 5000);
 }
 
 bool
-CAI302::ClearPilot(Port &port)
+CAI302::ClearPilot(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR PILOT\r");
+  return SendCommand(port, "CLEAR PILOT\r", env, 5000);
 }
 
 bool
-CAI302::ClearLog(Port &port)
+CAI302::ClearLog(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR LOG\r");
+  return SendCommand(port, "CLEAR LOG\r", env, 5000);
 }
