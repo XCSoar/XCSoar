@@ -29,7 +29,7 @@ while ( <@ARGV> ) {
 
         next if (/^#/);
 
-        if (/^label=([^\$]*[^\$\s])\s*(?:\$.*)?/) {
+        if (/^label=([^\$]*?[^\$\s])\s*(?:\\n[^[:alpha:]]*)?(?:\$.*)?$/) {
             my $msg = $1;
             $msg =~ s,\s*\\[nr]$,,g;
             $msges{$msg} .= "#: $filename:$line\n";
