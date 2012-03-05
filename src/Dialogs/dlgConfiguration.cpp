@@ -293,6 +293,11 @@ void dlgConfigurationShowModal()
   if (wf->IsDefined())
     Save();
 
+  /* destroy the TabMenuControl first, to have a well-defined
+     destruction order; this is necessary because some config panels
+     refer to buttons belonging to the dialog */
+  wTabMenu->reset();
+
   delete wf;
   wf = NULL;
 }
