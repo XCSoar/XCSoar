@@ -84,6 +84,7 @@ typedef wchar_t TCHAR;
 #define _istalnum iswalnum
 #define _istspace iswspace
 #define _istdigit iswdigit
+#define _istpunct iswpunct
 
 #else /* !UNICODE */
 
@@ -141,6 +142,7 @@ typedef char TCHAR;
 #define _istalnum isalnum
 #define _istdigit isdigit
 #define _istspace isspace
+#define _istpunct ispunct
 
 #endif /* UNICODE */
 
