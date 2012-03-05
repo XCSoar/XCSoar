@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-02-21 21:10+0100\n"
-"PO-Revision-Date: 2012-02-25 00:19+0000\n"
+"PO-Revision-Date: 2012-03-01 21:26+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-25 13:12+0000\n"
-"X-Generator: Launchpad (build 14860)\n"
+"X-Launchpad-Export-Date: 2012-03-05 11:32+0000\n"
+"X-Generator: Launchpad (build 14900)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -8914,7 +8914,7 @@ msgstr ""
 
 #: Data/Input/default.xci:932
 msgid "Return"
-msgstr "Umdrehen"
+msgstr "Zurück"
 
 #: Data/Input/default.xci:582 Data/Input/default.xci:1135
 msgid ""
