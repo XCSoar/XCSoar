@@ -887,7 +887,7 @@ TestFlightList(const struct DeviceRegister &driver)
       break;
   }
 
-  ok1(device->DisableDownloadMode());
+  device->DisableDownloadMode();
 
   ok1(port.running);
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
@@ -897,7 +897,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(458);
+  plan_tests(456);
 
   TestGeneric();
   TestTasman();
