@@ -47,11 +47,13 @@ class AltairProDevice : public AbstractDevice {
 private:
   Port &port;
 
-  bool DeclareInternal(const struct Declaration &declaration);
-  void PutTurnPoint(const TCHAR *name, const Waypoint *waypoint);
-  bool PropertySetGet(char *Buffer, size_t size);
+  bool DeclareInternal(const struct Declaration &declaration,
+                       OperationEnvironment &env);
+  void PutTurnPoint(const TCHAR *name, const Waypoint *waypoint,
+                    OperationEnvironment &env);
+  bool PropertySetGet(char *Buffer, size_t size, OperationEnvironment &env);
 #ifdef _UNICODE
-  bool PropertySetGet(TCHAR *Buffer, size_t size);
+  bool PropertySetGet(TCHAR *Buffer, size_t size, OperationEnvironment &env);
 #endif
 
 public:
@@ -107,28 +109,27 @@ AltairProDevice::Declare(const struct Declaration &declaration,
 {
   port.StopRxThread();
 
-  port.SetRxTimeout(500); // set RX timeout to 500[ms]
-
-  bool result = DeclareInternal(declaration);
+  bool result = DeclareInternal(declaration, env);
 
   return result;
 }
 
 bool
-AltairProDevice::DeclareInternal(const struct Declaration &declaration)
+AltairProDevice::DeclareInternal(const struct Declaration &declaration,
+                                 OperationEnvironment &env)
 {
   TCHAR Buffer[256];
 
   _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), declaration.pilot_name.c_str());
-  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
   _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), declaration.aircraft_registration.c_str());
-  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
   _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), declaration.aircraft_type.c_str());
-  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
   /* TODO currently not supported by XCSOAR
@@ -141,26 +142,27 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
    */
 
   if (declaration.Size() > 1) {
-    PutTurnPoint(_T("DeclTakeoff"), NULL);
-    PutTurnPoint(_T("DeclLanding"), NULL);
+    PutTurnPoint(_T("DeclTakeoff"), NULL, env);
+    PutTurnPoint(_T("DeclLanding"), NULL, env);
 
-    PutTurnPoint(_T("DeclStart"), &declaration.GetFirstWaypoint());
-    PutTurnPoint(_T("DeclFinish"), &declaration.GetLastWaypoint());
+    PutTurnPoint(_T("DeclStart"), &declaration.GetFirstWaypoint(), env);
+    PutTurnPoint(_T("DeclFinish"), &declaration.GetLastWaypoint(), env);
 
     for (unsigned int index=1; index <= 10; index++){
       TCHAR TurnPointPropertyName[32];
       _stprintf(TurnPointPropertyName, _T("DeclTurnPoint%d"), index);
 
       if (index < declaration.Size() - 1) {
-        PutTurnPoint(TurnPointPropertyName, &declaration.GetWaypoint(index));
+        PutTurnPoint(TurnPointPropertyName, &declaration.GetWaypoint(index),
+                     env);
       } else {
-        PutTurnPoint(TurnPointPropertyName, NULL);
+        PutTurnPoint(TurnPointPropertyName, NULL, env);
       }
     }
   }
 
   _stprintf(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
-  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer)))
+  if (!PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env))
     return false;
 
   if (_tcscmp(&Buffer[9], _T("LOCKED")) == 0)
@@ -177,9 +179,12 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
 
 
 bool
-AltairProDevice::PropertySetGet(char *Buffer, size_t size)
+AltairProDevice::PropertySetGet(char *Buffer, size_t size,
+                                OperationEnvironment &env)
 {
   assert(Buffer != NULL);
+
+  port.Flush();
 
   // eg $PDVSC,S,FOO,BAR*<cr>\r\n
   if (!PortWriteNMEA(port, Buffer))
@@ -192,7 +197,7 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size)
     comma[1] = '\0';
 
     // expect eg $PDVSC,A,FOO,
-    if (port.ExpectString(Buffer)){
+    if (port.ExpectString(Buffer, env)) {
 
       // read value eg bar
       while(--size){
@@ -218,7 +223,8 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size)
 
 #ifdef _UNICODE
 bool
-AltairProDevice::PropertySetGet(TCHAR *s, size_t size)
+AltairProDevice::PropertySetGet(TCHAR *s, size_t size,
+                                OperationEnvironment &env)
 {
   assert(s != NULL);
 
@@ -227,7 +233,7 @@ AltairProDevice::PropertySetGet(TCHAR *s, size_t size)
                                NULL, NULL) <= 0)
     return false;
 
-  if (!PropertySetGet(buffer, _tcslen(s) * 4 + 1))
+  if (!PropertySetGet(buffer, _tcslen(s) * 4 + 1, env))
     return false;
 
   if (::MultiByteToWideChar(CP_ACP, 0, buffer, -1, s, size) <= 0)
@@ -239,7 +245,9 @@ AltairProDevice::PropertySetGet(TCHAR *s, size_t size)
 #endif
 
 void
-AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoint)
+AltairProDevice::PutTurnPoint(const TCHAR *propertyName,
+                              const Waypoint *waypoint,
+                              OperationEnvironment &env)
 {
 
   TCHAR Name[DECELWPNAMESIZE];
@@ -293,7 +301,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
             DegLat, MinLat, NoS, DegLon, MinLon, EoW, Name
   );
 
-  PropertySetGet(Buffer, ARRAY_SIZE(Buffer));
+  PropertySetGet(Buffer, ARRAY_SIZE(Buffer), env);
 
 }
 
