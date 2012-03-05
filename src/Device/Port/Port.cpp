@@ -104,26 +104,6 @@ Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
 }
 
 bool
-Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
-{
-  const TimeoutClock timeout(timeout_ms);
-
-  char *p = (char *)buffer, *end = p + length;
-  while (p < end) {
-    if (timeout.HasExpired())
-      return false;
-
-    int nbytes = Read(p, end - p);
-    if (nbytes <= 0)
-      return false;
-
-    p += nbytes;
-  }
-
-  return true;
-}
-
-bool
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
                unsigned timeout_ms)
 {
@@ -173,33 +153,6 @@ Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
   } while (remaining > 0);
 
   return WaitResult::TIMEOUT;
-}
-
-bool
-Port::ExpectString(const char *token, unsigned timeout_ms)
-{
-  assert(token != NULL);
-
-  const TimeoutClock timeout(timeout_ms);
-
-  const char *p = token;
-  while (*p != '\0') {
-    int ch = GetChar();
-    if (ch == -1)
-      return false;
-
-    if (ch != *p++) {
-      if (timeout.HasExpired())
-        /* give up after 2 seconds (is that enough for all
-           devices?) */
-        return false;
-
-      /* retry */
-      p = token;
-    }
-  }
-
-  return true;
 }
 
 bool

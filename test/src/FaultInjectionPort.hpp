@@ -138,32 +138,16 @@ Port::FullFlush(OperationEnvironment &env, unsigned timeout_ms,
 }
 
 bool
-Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
-{
-  return Read(buffer, length) == (int)length;
-}
-
-bool
 Port::FullRead(void *buffer, size_t length, OperationEnvironment &env,
                unsigned timeout_ms)
 {
-  return FullRead(buffer, length, timeout_ms);
+  return Read(buffer, length) == (int)length;
 }
 
 Port::WaitResult
 Port::WaitRead(OperationEnvironment &env, unsigned timeout_ms)
 {
   return WaitRead(timeout_ms);
-}
-
-bool
-Port::ExpectString(const char *token, unsigned timeout_ms)
-{
-  if (inject_port_fault == 0)
-    return false;
-
-  --inject_port_fault;
-  return true;
 }
 
 bool
