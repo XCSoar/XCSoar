@@ -27,12 +27,13 @@ Copyright_License {
 static Device *
 CAI302CreateOnPort(const DeviceConfig &config, Port &port)
 {
-  return new CAI302Device(port);
+  return new CAI302Device(config, port);
 }
 
 const struct DeviceRegister cai302Device = {
   _T("CAI 302"),
   _T("Cambridge CAI302"),
+  DeviceRegister::BULK_BAUD_RATE |
   DeviceRegister::DECLARE | DeviceRegister::LOGGER | DeviceRegister::MANAGE |
   DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
   CAI302CreateOnPort,

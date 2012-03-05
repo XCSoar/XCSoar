@@ -87,14 +87,22 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
                              OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  if (!UploadMode(env))
+
+  if (!EnableBulkMode(env))
     return false;
 
-  if (!ReadFlightListInner(port, flight_list, env)) {
-    mode = Mode::UNKNOWN;
+  if (!UploadMode(env)) {
+    DisableBulkMode(env);
     return false;
   }
 
+  if (!ReadFlightListInner(port, flight_list, env)) {
+    mode = Mode::UNKNOWN;
+    DisableBulkMode(env);
+    return false;
+  }
+
+  DisableBulkMode(env);
   return true;
 }
 
@@ -175,13 +183,21 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
   assert(flight.internal.cai302 < 64);
 
   port.SetRxTimeout(500);
-  if (!UploadMode(env))
+
+  if (!EnableBulkMode(env))
     return false;
 
-  if (!DownloadFlightInner(port, flight, path, env)) {
-    mode = Mode::UNKNOWN;
+  if (!UploadMode(env)) {
+    DisableBulkMode(env);
     return false;
   }
 
+  if (!DownloadFlightInner(port, flight, path, env)) {
+    mode = Mode::UNKNOWN;
+    DisableBulkMode(env);
+    return false;
+  }
+
+  DisableBulkMode(env);
   return true;
 }

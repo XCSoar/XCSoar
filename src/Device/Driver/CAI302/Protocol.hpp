@@ -533,6 +533,13 @@ namespace CAI302 {
    */
   bool
   ClearLog(Port &port, OperationEnvironment &env);
+
+  /**
+   * Ask the CAI302 to switch the baud rate.  It does not change the
+   * baud rate of the specified #Port.
+   */
+  bool
+  SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env);
 }
 
 #endif

@@ -53,6 +53,12 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
     return;
   }
 
+  if (!device.EnableBulkMode(env)) {
+    if (!env.IsCancelled())
+      env.SetErrorMessage(_("Failed to switch baud rate."));
+    return;
+  }
+
   unsigned id = 1;
   for (auto i = waypoints.begin(), end = waypoints.end();
        i != end; ++i, ++id) {
@@ -67,4 +73,6 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
       break;
     }
   }
+
+  device.DisableBulkMode(env);
 }

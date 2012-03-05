@@ -25,6 +25,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
 #include "Device/Port/Port.hpp"
+#include "Profile/DeviceConfig.hpp"
 
 bool
 CAI302Device::CommandMode(OperationEnvironment &env)
@@ -75,6 +76,36 @@ CAI302Device::UploadMode(OperationEnvironment &env)
     mode = Mode::UNKNOWN;
     return false;
   }
+}
+
+bool
+CAI302Device::SetBaudRate(unsigned baud_rate, OperationEnvironment &env)
+{
+  if (!CommandMode(env) || !CAI302::SetBaudRate(port, baud_rate, env) ||
+      !port.Drain())
+    return false;
+
+  /* the CAI302 needs some time to apply the new baud rate; if we
+     switch too early, it'll cancel the command */
+  env.Sleep(500);
+
+  return port.SetBaudrate(baud_rate) && CAI302::CommandMode(port, env);
+}
+
+bool
+CAI302Device::EnableBulkMode(OperationEnvironment &env)
+{
+  return !config.UsesSpeed() || config.bulk_baud_rate == 0 ||
+    config.bulk_baud_rate == config.baud_rate ||
+    SetBaudRate(config.bulk_baud_rate, env);
+}
+
+bool
+CAI302Device::DisableBulkMode(OperationEnvironment &env)
+{
+  return !config.UsesSpeed() || config.bulk_baud_rate == 0 ||
+    config.bulk_baud_rate == config.baud_rate ||
+    SetBaudRate(config.baud_rate, env);
 }
 
 void

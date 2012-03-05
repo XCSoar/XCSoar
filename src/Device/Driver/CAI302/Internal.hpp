@@ -42,18 +42,22 @@ class CAI302Device : public AbstractDevice {
     DOWNLOAD,
   };
 
+  const DeviceConfig &config;
+
   Port &port;
 
   Mode mode;
 
 public:
-  CAI302Device(Port &_port)
-    :port(_port), mode(Mode::UNKNOWN) {}
+  CAI302Device(const DeviceConfig &_config, Port &_port)
+    :config(_config), port(_port), mode(Mode::UNKNOWN) {}
 
 private:
   bool CommandMode(OperationEnvironment &env);
   bool DownloadMode(OperationEnvironment &env);
   bool UploadMode(OperationEnvironment &env);
+
+  bool SetBaudRate(unsigned baud_rate, OperationEnvironment &env);
 
 public:
   virtual void LinkTimeout();
@@ -75,6 +79,9 @@ public:
                               OperationEnvironment &env);
 
 public:
+  bool EnableBulkMode(OperationEnvironment &env);
+  bool DisableBulkMode(OperationEnvironment &env);
+
   bool ReadGeneralInfo(CAI302::GeneralInfo &data, OperationEnvironment &env);
 
   /**

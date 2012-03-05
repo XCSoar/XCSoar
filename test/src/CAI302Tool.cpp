@@ -183,7 +183,7 @@ int main(int argc, char **argv)
 
   ConsoleOperationEnvironment env;
 
-  CAI302Device device(port);
+  CAI302Device device(config, port);
   if (!RunCommand(device, command, env)) {
     fprintf(stderr, "error\n");
     return EXIT_FAILURE;

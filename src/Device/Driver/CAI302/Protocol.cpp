@@ -522,3 +522,31 @@ CAI302::ClearLog(Port &port, OperationEnvironment &env)
 {
   return SendCommand(port, "CLEAR LOG\r", env, 5000);
 }
+
+static unsigned
+ConvertBaudRate(unsigned baud_rate)
+{
+  switch (baud_rate) {
+  case 1200: return 4;
+  case 2400: return 5;
+  case 4800: return 6;
+  case 9600: return 7;
+  case 19200: return 8;
+  case 38400: return 9;
+  case 57600: return 10;
+  case 115200: return 11;
+  default: return 0;
+  }
+}
+
+bool
+CAI302::SetBaudRate(Port &port, unsigned baud_rate, OperationEnvironment &env)
+{
+  unsigned n = ConvertBaudRate(baud_rate);
+  if (n == 0)
+    return false;
+
+  char cmd[16];
+  sprintf(cmd, "BAUD %u\r", n);
+  return SendCommandQuick(port, cmd, env);
+}
