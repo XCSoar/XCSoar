@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 22:17+0100\n"
+"POT-Creation-Date: 2012-03-05 23:23+0100\n"
 "PO-Revision-Date: 2011-12-20 19:55+0100\n"
 "Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -7824,7 +7824,8 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: Data/Dialogs/dlgVoice.xml:22
+#: Data/Dialogs/dlgVoice.xml:22 Data/Input/default.xci:548
+#: Data/Input/default.xci:555
 msgid "MacCready"
 msgstr ""
 
@@ -8227,13 +8228,6 @@ msgid ""
 "here?"
 msgstr ""
 
-#: Data/Input/default.xci:555
-#, fuzzy
-msgid ""
-"MacCready\n"
-"-"
-msgstr "マクレディー "
-
 #: Data/Input/default.xci:426 Data/Input/default.xci:1068
 msgid ""
 "Waypoint\n"
@@ -8411,13 +8405,6 @@ msgid ""
 "Code"
 msgstr ""
 
-#: Data/Input/default.xci:548
-#, fuzzy
-msgid ""
-"MacCready\n"
-"+"
-msgstr "マクレディー "
-
 #: Data/Input/default.xci:59
 msgid "Landing"
 msgstr "着陸"
@@ -8427,6 +8414,18 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "MacCready\n"
+#~ "-"
+#~ msgstr "マクレディー "
+
+#, fuzzy
+#~ msgid ""
+#~ "MacCready\n"
+#~ "+"
+#~ msgstr "マクレディー "
 
 #, fuzzy
 #~ msgid "Panel name"

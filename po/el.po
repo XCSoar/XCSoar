@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 22:17+0100\n"
+"POT-Creation-Date: 2012-03-05 23:23+0100\n"
 "PO-Revision-Date: 2012-01-17 18:22+0000\n"
 "Last-Translator: Kostas Hellas <Unknown>\n"
 "Language-Team: none\n"
@@ -7829,7 +7829,8 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: Data/Dialogs/dlgVoice.xml:22
+#: Data/Dialogs/dlgVoice.xml:22 Data/Input/default.xci:548
+#: Data/Input/default.xci:555
 msgid "MacCready"
 msgstr ""
 
@@ -8230,12 +8231,6 @@ msgid ""
 "here?"
 msgstr ""
 
-#: Data/Input/default.xci:555
-msgid ""
-"MacCready\n"
-"-"
-msgstr ""
-
 #: Data/Input/default.xci:426 Data/Input/default.xci:1068
 msgid ""
 "Waypoint\n"
@@ -8408,12 +8403,6 @@ msgstr ""
 msgid ""
 "Team\n"
 "Code"
-msgstr ""
-
-#: Data/Input/default.xci:548
-msgid ""
-"MacCready\n"
-"+"
 msgstr ""
 
 #: Data/Input/default.xci:59

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 22:17+0100\n"
+"POT-Creation-Date: 2012-03-05 23:23+0100\n"
 "PO-Revision-Date: 2011-12-20 19:56+0100\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -8184,7 +8184,8 @@ msgstr "Opakovať"
 msgid "Back"
 msgstr ""
 
-#: Data/Dialogs/dlgVoice.xml:22
+#: Data/Dialogs/dlgVoice.xml:22 Data/Input/default.xci:548
+#: Data/Input/default.xci:555
 msgid "MacCready"
 msgstr "MacCready"
 
@@ -8596,13 +8597,6 @@ msgid ""
 "here?"
 msgstr ""
 
-#: Data/Input/default.xci:555
-#, fuzzy
-msgid ""
-"MacCready\n"
-"-"
-msgstr "MacCready"
-
 #: Data/Input/default.xci:426 Data/Input/default.xci:1068
 msgid ""
 "Waypoint\n"
@@ -8793,13 +8787,6 @@ msgstr ""
 "Tímový\n"
 "kód"
 
-#: Data/Input/default.xci:548
-#, fuzzy
-msgid ""
-"MacCready\n"
-"+"
-msgstr "MacCready"
-
 #: Data/Input/default.xci:59
 msgid "Landing"
 msgstr "Pristánie"
@@ -8809,6 +8796,18 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "MacCready\n"
+#~ "-"
+#~ msgstr "MacCready"
+
+#, fuzzy
+#~ msgid ""
+#~ "MacCready\n"
+#~ "+"
+#~ msgstr "MacCready"
 
 #, fuzzy
 #~ msgid "Panel name"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-05 22:17+0100\n"
+"POT-Creation-Date: 2012-03-05 23:23+0100\n"
 "PO-Revision-Date: 2012-02-29 21:34+0000\n"
 "Last-Translator: Wil Crielaars <kawa1998@home.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -8146,7 +8146,8 @@ msgstr "Herhaal"
 msgid "Back"
 msgstr ""
 
-#: Data/Dialogs/dlgVoice.xml:22
+#: Data/Dialogs/dlgVoice.xml:22 Data/Input/default.xci:548
+#: Data/Input/default.xci:555
 msgid "MacCready"
 msgstr "McCready"
 
@@ -8547,12 +8548,6 @@ msgid ""
 "here?"
 msgstr ""
 
-#: Data/Input/default.xci:555
-msgid ""
-"MacCready\n"
-"-"
-msgstr ""
-
 #: Data/Input/default.xci:426 Data/Input/default.xci:1068
 msgid ""
 "Waypoint\n"
@@ -8741,14 +8736,6 @@ msgstr ""
 "Team\n"
 "Code"
 
-#: Data/Input/default.xci:548
-msgid ""
-"MacCready\n"
-"+"
-msgstr ""
-"MacCready\n"
-"+"
-
 #: Data/Input/default.xci:59
 msgid "Landing"
 msgstr "Landing"
@@ -8760,6 +8747,13 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
+
+#~ msgid ""
+#~ "MacCready\n"
+#~ "+"
+#~ msgstr ""
+#~ "MacCready\n"
+#~ "+"
 
 #~ msgid "Failed to enable download mode."
 #~ msgstr "Inschakelen download modus mislukt."
