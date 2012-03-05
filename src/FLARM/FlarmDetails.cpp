@@ -72,6 +72,10 @@ LoadSecondaryFile(TLineReader &reader)
     TCHAR *endptr;
     FlarmId id;
     id.Parse(line, &endptr);
+    if (!id.IsDefined())
+      /* ignore malformed records */
+      continue;
+
     if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
       TCHAR *Name = endptr + 1;
       TrimRight(Name);
@@ -178,6 +182,10 @@ FlarmDetails::LookupId(const TCHAR *cn)
 bool
 FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
 {
+  if (!id.IsDefined())
+    /* ignore malformed records */
+    return false;
+
   int index = LookupSecondaryIndex(id);
   if (index != -1) {
     // modify existing record

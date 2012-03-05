@@ -27,7 +27,12 @@ Copyright_License {
 void
 FlarmDatabase::Insert(const FlarmRecord &record)
 {
-  map.insert(std::make_pair(record.GetId(), record));
+  FlarmId id = record.GetId();
+  if (!id.IsDefined())
+    /* ignore malformed records */
+    return;
+
+  map.insert(std::make_pair(id, record));
 }
 
 const FlarmRecord *
