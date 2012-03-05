@@ -30,60 +30,6 @@
 
 #include <stdio.h>
 
-bool
-LXDevice::EnableDownloadMode(OperationEnvironment &env)
-{
-  if (!EnablePassThrough(env))
-    return false;
-
-  if (bulk_baud_rate != 0) {
-    old_baud_rate = port.GetBaudrate();
-    if (old_baud_rate == bulk_baud_rate)
-      old_baud_rate = 0;
-    else if (!port.SetBaudrate(bulk_baud_rate))
-      return false;
-  } else
-    old_baud_rate = 0;
-
-  if (!LX::CommandMode(port, env)) {
-    if (old_baud_rate != 0)
-      port.SetBaudrate(old_baud_rate);
-    return false;
-  }
-
-  ScopeLock protect(mutex);
-  in_command_mode = true;
-  busy = false;
-  return true;
-}
-
-bool
-LXDevice::DisableDownloadMode()
-{
-  DisablePassThrough();
-
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
-
-  port.Flush();
-
-  ScopeLock protect(mutex);
-  in_command_mode = false;
-  return true;
-}
-
-void
-LXDevice::OnSysTicker(const DerivedInfo &calculated)
-{
-  ScopeLock protect(mutex);
-  if (in_command_mode && !busy) {
-    /* keep the command mode alive while the user chooses a flight in
-       the download dialog */
-    port.Flush();
-    LX::SendSYN(port);
-  }
-}
-
 static bool
 ParseDate(BrokenDate &date, const char *p)
 {

@@ -28,63 +28,6 @@ Copyright_License {
 
 #include <cstdio>
 
-/**
- * Enable pass-through mode on the LX1600.  This command was provided
- * by Crtomir Rojnik (LX Navigation) in an email without further
- * explanation.  Tests have shown that this command can be sent at
- * either 4800 baud or the current vario baud rate.  Since both works
- * equally well, we don't bother to switch.
- */
-static bool
-ModeColibri(Port &port)
-{
-  return PortWriteNMEA(port, "PFLX0,COLIBRI");
-}
-
-/**
- * Cancel pass-through mode on the LX1600.  This command was provided
- * by Crtomir Rojnik (LX Navigation) in an email.  It must always be
- * sent at 4800 baud.  After this command has been sent, we switch
- * back to the "real" baud rate.
- */
-static bool
-ModeLX1600(Port &port)
-{
-  unsigned old_baud_rate = port.GetBaudrate();
-  if (old_baud_rate == 4800)
-    old_baud_rate = 0;
-  else if (!port.SetBaudrate(4800))
-    return false;
-
-  const bool success = PortWriteNMEA(port, "PFLX0,LX1600");
-
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
-
-  return success;
-}
-
-static bool
-EnableLXWP(Port &port)
-{
-  return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4");
-}
-
-bool
-LXDevice::Open(gcc_unused OperationEnvironment &env)
-{
-  /* just in case the LX1600 is still in pass-through mode: */
-  ModeLX1600(port);
-
-  // This line initiates the Color Vario to send out LXWP2 and LXWP3
-  // LXWP0 once started, is repeated every second
-  // This is a copy of the initiation done in LK8000, realized by Lx developers
-  // We have no documentation and so we do not know what this exactly means
-  EnableLXWP(port);
-
-  return true;
-}
-
 bool
 LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
                      OperationEnvironment &env)
@@ -129,16 +72,4 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset / 0.3048);
   PortWriteNMEA(port, buffer);
   return true;
-}
-
-bool
-LXDevice::EnablePassThrough(OperationEnvironment &env)
-{
-  return ModeColibri(port);
-}
-
-void
-LXDevice::DisablePassThrough()
-{
-  ModeLX1600(port);
 }
