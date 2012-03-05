@@ -23,12 +23,12 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
-#include "Util/StringUtil.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
 #endif
 
+#include <algorithm>
 #include <assert.h>
 #include <string.h>
 #include <winuser.h>
@@ -346,7 +346,8 @@ void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *_text, size_t length)
 {
   TCHAR copy[length + 1];
-  CopyString(copy, _text, length + 1);
+  std::copy(_text, _text + length, copy);
+  copy[length] = _T('\0');
   text(x, y, copy);
 }
 
