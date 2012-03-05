@@ -108,10 +108,10 @@ static bool
 TryConnect(Port &port, char *user_data, size_t max_user_data,
            OperationEnvironment &env)
 {
+  port.Flush();
   port.Write('\x02');         // send IO Mode command
 
   unsigned user_size = 0;
-  bool started = false;
 
   TimeoutClock timeout(8000);
 
@@ -123,28 +123,30 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
     if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
       return false;
 
-    int i = port.GetChar();
-    if (i < 0)
+    int nbytes = port.Read(user_data + user_size, max_user_data - user_size);
+    if (nbytes < 0)
       return false;
 
-    char ch = (char)i;
+    if (user_size == 0) {
+      const char *minus = (const char *)memchr(user_data, '-', nbytes);
+      if (minus == NULL)
+        continue;
 
-    if (!started && ch == '-')
-      started = true;
+      user_size = user_data + nbytes - minus;
+      memmove(user_data, minus, user_size);
+    } else
+      user_size += nbytes;
 
-    if (started) {
-      if (ch == 0x13) {
-        port.Write('\x16');
-        user_data[user_size] = 0;
-        // found end of file
-        return true;
-      } else {
-        if (user_size < max_user_data - 1) {
-          user_data[user_size] = ch;
-          user_size++;
-        }
-      }
+    char *end = (char *)memchr(user_data, '\x13', user_size);
+    if (end != NULL) {
+      *end = 0;
+      port.Write('\x16');
+      return true;
     }
+
+    if (user_size >= max_user_data)
+      /* response too large */
+      return false;
   }
 
   return false;
