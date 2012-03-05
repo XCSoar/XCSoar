@@ -206,10 +206,10 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
   memset(buffer, 0xff, max_length);
 
   uint8_t *p = (uint8_t *)buffer;
-  env.Sleep(300);
   while (!ende) {
     // Zeichen anfordern und darauf warten
-    if (!port.Write(ACK))
+    if (!port.Write(ACK) ||
+        port.WaitRead(env, 1000) != Port::WaitResult::READY)
       return -1;
 
     int ch = port.GetChar();
