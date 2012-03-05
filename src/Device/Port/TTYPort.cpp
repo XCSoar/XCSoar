@@ -141,8 +141,9 @@ TTYPort::StopRxThread()
 bool
 TTYPort::StartRxThread()
 {
-  // Make sure the thread isn't starting itself
-  assert(!Thread::IsInside());
+  if (Thread::IsDefined())
+    /* already running */
+    return true;
 
   // Make sure the port was opened correctly
   if (fd < 0)

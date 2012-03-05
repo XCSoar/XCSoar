@@ -414,8 +414,9 @@ SerialPort::StopRxThread()
 bool
 SerialPort::StartRxThread()
 {
-  // Make sure the thread isn't starting itself
-  assert(!Thread::IsInside());
+  if (Thread::IsDefined())
+    /* already running */
+    return true;
 
   // Make sure the port was opened correctly
   if (hPort == INVALID_HANDLE_VALUE)
