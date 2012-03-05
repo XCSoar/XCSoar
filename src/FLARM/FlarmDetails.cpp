@@ -220,6 +220,11 @@ unsigned
 FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                                 unsigned size)
 {
+  assert(cn != NULL);
+
+  if (StringIsEmpty(cn))
+    return 0;
+
   unsigned count = FlarmNet::FindIdsByCallSign(cn, array, size);
 
   for (unsigned i = 0; i < flarm_names.size() && count < size; i++) {
