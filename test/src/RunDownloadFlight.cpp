@@ -133,7 +133,7 @@ int main(int argc, char **argv)
   }
 
   delete device;
-    delete port;
+  delete port;
   DeinitialiseIOThread();
 
   printf("Flight downloaded successfully\n");

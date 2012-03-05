@@ -650,6 +650,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunWaypointParser RunAirspaceParser \
 	ReadPort RunPortHandler \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
+	RunEnableNMEA \
 	CAI302Tool \
 	lxn2igc \
 	RunIGCWriter \
@@ -1166,6 +1167,35 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
 RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC IO OS THREAD WAYPOINT GEO MATH UTIL
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
+
+RUN_ENABLE_NMEA_SOURCES = \
+	$(SRC)/OS/LogError.cpp \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/RunEnableNMEA.cpp
+RUN_ENABLE_NMEA_DEPENDS = DRIVER PORT MATH UTIL ASYNC IO OS THREAD
+$(eval $(call link-program,RunEnableNMEA,RUN_ENABLE_NMEA))
 
 RUN_VEGA_SETTINGS_SOURCES = \
 	$(VEGA_SOURCES) \
