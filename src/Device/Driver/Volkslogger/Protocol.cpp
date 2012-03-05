@@ -25,7 +25,7 @@ Copyright_License {
 #include "CRC16.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
-#include "PeriodClock.hpp"
+#include "TimeoutClock.hpp"
 
 #include <string.h>
 
@@ -48,33 +48,42 @@ bool
 Volkslogger::Handshake(Port &port, OperationEnvironment &env,
                        unsigned timeout_ms)
 {
-  PeriodClock clock;
-  clock.Update();
+  TimeoutClock timeout(timeout_ms);
 
-  do { // Solange R's aussenden, bis ein L zurückkommt
-    port.Write('R');
-    env.Sleep(30);
-    if (env.IsCancelled())
+  while (true) { // Solange R's aussenden, bis ein L zurückkommt
+    if (!port.Write('R'))
       return false;
 
-    if (clock.Check(timeout_ms))
+    int remaining = timeout.GetRemainingSigned();
+    if (remaining < 0)
       return false;
-  } while (port.GetChar() != 'L');
+
+    if (remaining > 500)
+      remaining = 500;
+
+    Port::WaitResult result =
+      port.WaitForChar('L', env, remaining);
+    if (result == Port::WaitResult::READY)
+      break;
+
+    if (result != Port::WaitResult::TIMEOUT)
+      return false;
+
+    /* timeout, try again */
+  }
 
   unsigned count = 1;
   while (true) { // Auf 4 hintereinanderfolgende L's warten
-    int ch = port.GetChar();
-    if (ch >= 0) {
-      if (ch != 'L')
-        return false;
-
-      count++;
-      if (count >= 4)
-        return true;
-    }
-
-    if (clock.Check(timeout_ms))
+    int remaining = timeout.GetRemainingSigned();
+    if (remaining < 0)
       return false;
+
+    if (port.WaitForChar('L', env, remaining) != Port::WaitResult::READY)
+      return false;
+
+    count++;
+    if (count >= 4)
+      return true;
   }
 }
 

@@ -23,7 +23,6 @@
 #include "Device/Port/Port.hpp"
 #include "Util.hpp"
 #include "Protocol.hpp"
-#include "PeriodClock.hpp"
 #include "Operation/Operation.hpp"
 
 #include <memory.h>
