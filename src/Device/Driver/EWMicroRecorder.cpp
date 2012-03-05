@@ -334,7 +334,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   port.Write('\x03');         // finish sending user file
 
-  return port.ExpectString("uploaded successfully");
+  return port.ExpectString("uploaded successfully", env, 5000);
 }
 
 bool
