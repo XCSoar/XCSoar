@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-05 23:23+0100\n"
-"PO-Revision-Date: 2012-02-08 19:41+0000\n"
-"Last-Translator: Pop Paul <poppali1@yahoo.com>\n"
+"PO-Revision-Date: 2012-03-05 21:42+0000\n"
+"Last-Translator: tudor abrudan <tyt2002ro@yahoo.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-08 19:56+0000\n"
-"X-Generator: Launchpad (build 14747)\n"
+"X-Launchpad-Export-Date: 2012-03-05 22:40+0000\n"
+"X-Generator: Launchpad (build 14900)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -139,9 +139,8 @@ msgid "Failed to download flight."
 msgstr "descarcare zbor nereusita"
 
 #: src/Logger/ExternalLogger.cpp:311
-#, fuzzy
 msgid "Do you want to download another flight?"
-msgstr "descarcare zbor nereusita"
+msgstr ""
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -231,18 +230,24 @@ msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"avansat\n"
+"(manual)"
 
 #: src/Menu/ExpandMacros.cpp:282
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"avansat\n"
+"(auto)"
 
 #: src/Menu/ExpandMacros.cpp:287
 msgid ""
 "Abort\n"
 "Start"
 msgstr ""
+"intrerupe\n"
+"porneste"
 
 #: src/Menu/ExpandMacros.cpp:292
 msgid ""
@@ -341,7 +346,7 @@ msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:483 src/Menu/ExpandMacros.cpp:509
 msgid "Terrain + Topography"
-msgstr ""
+msgstr "Teren + Topografie"
 
 #: src/Menu/ExpandMacros.cpp:487 src/Menu/ExpandMacros.cpp:513
 msgid "Terrain Off"
@@ -366,7 +371,7 @@ msgstr "Automat"
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All"
-msgstr ""
+msgstr "Tot/Toate"
 
 #: src/Menu/ExpandMacros.cpp:536 src/Input/InputEventsSettings.cpp:323
 #, no-c-format
@@ -651,7 +656,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:220 src/InfoBoxes/Content/Task.cpp:83
 #, no-c-format
 msgid "Next"
-msgstr ""
+msgstr "Următorul"
 
 #: src/InfoBoxes/Content/Factory.cpp:221
 #, no-c-format
@@ -661,11 +666,15 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Numele punctului de referinta selectat. Când Infobox este activ, folosind "
+"tastele sus / jos cursorul selecteaza punct de referinţă următor / anterior "
+"în sarcina. (Touchscreen / PC-ul numai) apăsând tasta Enter cursorul aduce "
+"detalii punct de referinţă."
 
 #: src/InfoBoxes/Content/Factory.cpp:229
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "Diferenta de altitudine finala"
 
 #: src/InfoBoxes/Content/Factory.cpp:230
 #, no-c-format
@@ -678,11 +687,13 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
+"Altitudine sosirea la punctul final rândul său de activitate în raport cu "
+"înălţimea de sosire de siguranţă."
 
 #: src/InfoBoxes/Content/Factory.cpp:239
 #, no-c-format
 msgid "Final altitude required"
-msgstr ""
+msgstr "Altitudine finala necesara"
 
 #: src/InfoBoxes/Content/Factory.cpp:240
 #, no-c-format
@@ -692,12 +703,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
 msgid "Additional altitude required to finish the task."
-msgstr ""
+msgstr "Altitudine suplimentara necesara pentru finalizarea task-ului."
 
 #: src/InfoBoxes/Content/Factory.cpp:249
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Viteza medie a task-ului."
 
 #: src/InfoBoxes/Content/Factory.cpp:250
 #, no-c-format
@@ -710,16 +721,18 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"Media de viteza la cross contry pentru task-ul curent, nu este compensată de "
+"altitudine."
 
 #: src/InfoBoxes/Content/Factory.cpp:259
 #, no-c-format
 msgid "Final distance"
-msgstr ""
+msgstr "Distanta finala"
 
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Fin Dist"
-msgstr ""
+msgstr "Dist Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
@@ -751,7 +764,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:279
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "Elevatie teren"
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
@@ -769,7 +782,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:289
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Termică medie"
 
 #: src/InfoBoxes/Content/Factory.cpp:290
 #, no-c-format
@@ -782,27 +795,29 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"Altitudinea câştigata/pierduta în curentul termic, diminuata de timp "
+"petrecut tin termica."
 
 #: src/InfoBoxes/Content/Factory.cpp:299
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "Castig in termica"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "TC Castigat"
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
 msgid "The altitude gained/lost in the current thermal."
-msgstr ""
+msgstr "Altitudinea castigata/pierduta in termana curenta"
 
 #: src/InfoBoxes/Content/Factory.cpp:309 src/InfoBoxes/Content/Factory.cpp:310
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:55
 #, no-c-format
 msgid "Track"
-msgstr ""
+msgstr "Pistă"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -811,6 +826,9 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Pistă magnetică raportate de GPS. (Touchscreen / PC-ul numai) Dacă Infobox "
+"este activ în modul de simulare, apăsând în sus şi în jos săgeţile ajustează "
+"pista."
 
 #: src/InfoBoxes/Content/Factory.cpp:319 src/InfoBoxes/Content/Factory.cpp:320
 #: src/InfoBoxes/Content/Factory.cpp:884
@@ -823,7 +841,7 @@ msgstr ""
 #: Data/Input/default.xci:672 Data/Input/default.xci:719
 #, no-c-format
 msgid "Vario"
-msgstr ""
+msgstr "Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:321
 #, no-c-format
@@ -831,16 +849,18 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"Viteza instantanee verticală, raportata de GPS sau altivario inteligent,  "
+"valoare totală de energie în cazul în care conectat la unul."
 
 #: src/InfoBoxes/Content/Factory.cpp:329
 #, no-c-format
 msgid "Wind speed"
-msgstr ""
+msgstr "Viteza vantului"
 
 #: src/InfoBoxes/Content/Factory.cpp:330
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "Vant V"
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
@@ -851,6 +871,11 @@ msgid ""
 "enter cursor key saves the wind value as the initial value when XCSoar next "
 "starts."
 msgstr ""
+"Viteza vantului estimat de XCSoar. (Touchscreen / PC-ul numai) ajustarea "
+"manuală este posibilă prin apăsarea tastelor sus / jos cursorul pentru a "
+"ajusta amploarea şi stânga / dreapta tastele de cursor pentru a ajusta "
+"poartă atunci când Infobox este activ. Apăsând tasta Enter cursorul salvează "
+"valoarea vântului ca valoarea iniţială atunci când începe următoarele XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:339
 #, no-c-format
@@ -860,7 +885,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "Wind B"
-msgstr ""
+msgstr "Vant B"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
@@ -873,28 +898,28 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:349 Data/Dialogs/pnlTaskCalculator.xml:10
 #, no-c-format
 msgid "AAT time"
-msgstr ""
+msgstr "AAT timp"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "AAT Time"
-msgstr ""
+msgstr "AAT Timp"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
-msgstr ""
+msgstr "Timpul ramas alocat task-ului. Apare rosu cand timpul expira."
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
 msgid "AAT max. distance "
-msgstr ""
+msgstr "AAT distanta maxima "
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid "AAT Dmax"
-msgstr ""
+msgstr "AAT maxD"
 
 #: src/InfoBoxes/Content/Factory.cpp:361
 #, no-c-format
@@ -904,12 +929,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
 msgid "AAT min. distance"
-msgstr ""
+msgstr "AAT min. distanta"
 
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
 msgid "AAT Dmin"
-msgstr ""
+msgstr "AAT Dmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:371
 #, no-c-format
@@ -919,12 +944,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:379
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr ""
+msgstr "AAT viteza max. distanta"
 
 #: src/InfoBoxes/Content/Factory.cpp:380
 #, no-c-format
 msgid "AAT Vmax"
-msgstr ""
+msgstr "AAT Vmax"
 
 #: src/InfoBoxes/Content/Factory.cpp:381
 #, no-c-format
@@ -932,16 +957,18 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Viteza medie de zbor pentru task-ul in curs poate fi atins daca se zboara la "
+"viteza maxima posibila pana la sfarsitul timpului AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr ""
+msgstr "AAT viteza min. distanta"
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "AAT Vmin"
-msgstr ""
+msgstr "AAT Vmin"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
@@ -953,27 +980,27 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr ""
+msgstr "Viteza aerului IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:400
 #, no-c-format
 msgid "V IAS"
-msgstr ""
+msgstr "V IAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:401
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "Viteza vantului raportata de un altivario extern suportat"
 
 #: src/InfoBoxes/Content/Factory.cpp:409
 #, no-c-format
 msgid "Barometric altitude"
-msgstr ""
+msgstr "Altitudine barometrica"
 
 #: src/InfoBoxes/Content/Factory.cpp:410
 #, no-c-format
 msgid "Alt. Baro."
-msgstr ""
+msgstr "Alt. Baro."
 
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
@@ -981,16 +1008,18 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
+"Aceasta e altitudinea barometrica obtinuta de la un aparat echipat cu senzor "
+"de presiune"
 
 #: src/InfoBoxes/Content/Factory.cpp:419
 #, no-c-format
 msgid "Speed MacCready"
-msgstr ""
+msgstr "Viteza MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:420
 #, no-c-format
 msgid "V MC"
-msgstr ""
+msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:421
 #, no-c-format
@@ -1003,12 +1032,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:429
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "Procent urcare"
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid "% Climb"
-msgstr ""
+msgstr "% Urcare"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1016,31 +1045,33 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
+"Procent timp petrecut in modul de urcare. Aceste statistici sunt resetate la "
+"incepulul task-ului."
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "Time of flight"
-msgstr ""
+msgstr "Timp de zbor"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Time Flt"
-msgstr ""
+msgstr "Timp zbor"
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
 msgid "Time elapsed since takeoff was detected."
-msgstr ""
+msgstr "Timp parcurs de cand a fost depistata decolarea"
 
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
 msgid "G load"
-msgstr ""
+msgstr "G incarcare"
 
 #: src/InfoBoxes/Content/Factory.cpp:450
 #, no-c-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/InfoBoxes/Content/Factory.cpp:451
 #, no-c-format
@@ -1074,12 +1105,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:469
 #, no-c-format
 msgid "Time local"
-msgstr ""
+msgstr "Timp local"
 
 #: src/InfoBoxes/Content/Factory.cpp:470
 #, no-c-format
 msgid "Time loc"
-msgstr ""
+msgstr "Timp aici"
 
 #: src/InfoBoxes/Content/Factory.cpp:471
 #, no-c-format
@@ -1099,7 +1130,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "Timp ramas pentru parcurgerea task-ului"
 
 #: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
@@ -1112,11 +1143,13 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"Timp necesar pentru parcurgerea task-ului, luand in considerare performanta "
+"de croaziera/urcare calculata de MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "De mers data viitoare"
 
 #: src/InfoBoxes/Content/Factory.cpp:500
 #, no-c-format
@@ -1129,6 +1162,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"Timpul estimat pentru a ajunge la urmatorul checkpoint, luand in considerare "
+"performanta de croaziera/urcare calculata de MacCready"
 
 #: src/InfoBoxes/Content/Factory.cpp:509
 #, no-c-format
@@ -1160,7 +1195,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:520 src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
 msgid "Netto"
-msgstr ""
+msgstr "Net"
 
 #: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
@@ -1174,7 +1209,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
 msgid "Task arrival time"
-msgstr ""
+msgstr "Timp indeplinire task"
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
@@ -1191,7 +1226,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
 msgid "Next arrival time"
-msgstr ""
+msgstr "Urmatorul timp de sosire"
 
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
@@ -1231,7 +1266,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:559
 #, no-c-format
 msgid "Outside air temperature"
-msgstr ""
+msgstr "Termperatura aerului de afara"
 
 #: src/InfoBoxes/Content/Factory.cpp:560
 #, no-c-format
@@ -1248,12 +1283,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:569
 #, no-c-format
 msgid "Relative humidity"
-msgstr ""
+msgstr "Umiditate relativa"
 
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
 msgid "Rel Hum"
-msgstr ""
+msgstr "Rel. umid."
 
 #: src/InfoBoxes/Content/Factory.cpp:571
 #, no-c-format
@@ -1261,16 +1296,18 @@ msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
 msgstr ""
+"Umiditatea relativa a aerului masurata in procente identificata de un "
+"variometru inteligent, daca e conectat"
 
 #: src/InfoBoxes/Content/Factory.cpp:579 src/Input/InputEventsSettings.cpp:310
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "Temperatura anuntata"
 
 #: src/InfoBoxes/Content/Factory.cpp:580
 #, no-c-format
 msgid "Max Temp"
-msgstr ""
+msgstr "Temp. max."
 
 #: src/InfoBoxes/Content/Factory.cpp:581
 #, no-c-format
@@ -1284,7 +1321,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:589
 #, no-c-format
 msgid "AAT distance around target"
-msgstr ""
+msgstr "AAT distanta pana la tinta"
 
 #: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
@@ -1299,7 +1336,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:599
 #, no-c-format
 msgid "AAT speed around target"
-msgstr ""
+msgstr "AAT viteza pana la tinta"
 
 #: src/InfoBoxes/Content/Factory.cpp:600
 #, no-c-format
@@ -1321,7 +1358,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
 msgid "LD Vario"
-msgstr ""
+msgstr "LD Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
@@ -1350,12 +1387,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
 msgid "Team code"
-msgstr ""
+msgstr "Codul echipei"
 
 #: src/InfoBoxes/Content/Factory.cpp:630
 #, no-c-format
 msgid "TeamCode"
-msgstr ""
+msgstr "Cod echipa"
 
 #: src/InfoBoxes/Content/Factory.cpp:631
 #, no-c-format
@@ -1404,7 +1441,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
 msgid "Team Dis"
-msgstr ""
+msgstr "Distant echipa"
 
 #: src/InfoBoxes/Content/Factory.cpp:661
 #, no-c-format
@@ -1414,12 +1451,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:669
 #, no-c-format
 msgid "Speed task instantaneous"
-msgstr ""
+msgstr "Viteza task-ului instanta"
 
 #: src/InfoBoxes/Content/Factory.cpp:670
 #, no-c-format
 msgid "V Tsk Ins"
-msgstr ""
+msgstr "V inst. task"
 
 #: src/InfoBoxes/Content/Factory.cpp:671
 #, no-c-format
@@ -1431,12 +1468,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:679
 #, no-c-format
 msgid "Distance home"
-msgstr ""
+msgstr "Distanta pana acasa"
 
 #: src/InfoBoxes/Content/Factory.cpp:680
 #, no-c-format
 msgid "Home Dis"
-msgstr ""
+msgstr "Distanta casa"
 
 #: src/InfoBoxes/Content/Factory.cpp:681
 #, no-c-format
@@ -1446,12 +1483,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:689
 #, no-c-format
 msgid "Speed task achieved"
-msgstr ""
+msgstr "Viteza task-ului atinsa"
 
 #: src/InfoBoxes/Content/Factory.cpp:690
 #, no-c-format
 msgid "V Tsk Ach"
-msgstr ""
+msgstr "V task"
 
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
@@ -1491,7 +1528,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:711
 #, no-c-format
 msgid "Time-average climb rate in all thermals."
-msgstr ""
+msgstr "Timpul mediu de urcare in termici."
 
 #: src/InfoBoxes/Content/Factory.cpp:719
 #, no-c-format
@@ -1513,17 +1550,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:730
 #, no-c-format
 msgid "Battery percent"
-msgstr ""
+msgstr "Procent baterie"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
 #, no-c-format
 msgid "Battery voltage"
-msgstr ""
+msgstr "Voltaj baterie"
 
 #: src/InfoBoxes/Content/Factory.cpp:734
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "Baterie"
 
 #: src/InfoBoxes/Content/Factory.cpp:735
 #, no-c-format
@@ -1531,6 +1568,8 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
+"Afiseaza procentul de baterie ramasa (daca se poate) si statusul/voltajul "
+"bateriei externa."
 
 #: src/InfoBoxes/Content/Factory.cpp:743
 #, no-c-format
@@ -1637,22 +1676,22 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:803
 #, no-c-format
 msgid "Experimental 1"
-msgstr ""
+msgstr "Experiment 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:804
 #, no-c-format
 msgid "Exp1"
-msgstr ""
+msgstr "Exp 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:813
 #, no-c-format
 msgid "On-Line Contest distance"
-msgstr ""
+msgstr "Concurs de distanta on-line"
 
 #: src/InfoBoxes/Content/Factory.cpp:814
 #, no-c-format
 msgid "OLC"
-msgstr ""
+msgstr "xc online"
 
 #: src/InfoBoxes/Content/Factory.cpp:815
 #, no-c-format
@@ -1664,7 +1703,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:823
 #, no-c-format
 msgid "Experimental 2"
-msgstr ""
+msgstr "Experiment 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:824
 #, no-c-format
@@ -1674,17 +1713,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:833
 #, no-c-format
 msgid "CPU load"
-msgstr ""
+msgstr "utilizare procesor"
 
 #: src/InfoBoxes/Content/Factory.cpp:834
 #, no-c-format
 msgid "CPU"
-msgstr ""
+msgstr "Procesor"
 
 #: src/InfoBoxes/Content/Factory.cpp:835
 #, no-c-format
 msgid "CPU load consumed by XCSoar averaged over 5 seconds."
-msgstr ""
+msgstr "Incarcare procesor consumata de XCSoar medie in ultimele 5 secunde"
 
 #: src/InfoBoxes/Content/Factory.cpp:843
 #, no-c-format
@@ -1736,7 +1775,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
 msgid "Trace of altitude during flight"
-msgstr ""
+msgstr "Urma altitudine in timpul zborului"
 
 #: src/InfoBoxes/Content/Factory.cpp:883
 #, no-c-format
@@ -7882,8 +7921,9 @@ msgid "Radial"
 msgstr ""
 
 #: Data/Dialogs/pnlStatusTimes.xml:5
+#, fuzzy
 msgid "UTC time"
-msgstr ""
+msgstr "AAT timp"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
