@@ -59,6 +59,7 @@ public:
 
   virtual bool Drain();
 
+  WaitResult WaitWrite(unsigned timeout_ms);
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
 

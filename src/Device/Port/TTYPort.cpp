@@ -34,6 +34,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <errno.h>
 
 TTYPort::TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :Port(_handler), rx_timeout(0), baud_rate(_baud_rate),
@@ -63,7 +64,7 @@ TTYPort::Drain()
 bool
 TTYPort::Open()
 {
-  fd = open(sPortName, O_RDWR | O_NOCTTY);
+  fd = open(sPortName, O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd < 0) {
     return false;
   }
@@ -107,6 +108,25 @@ TTYPort::Close()
   return true;
 }
 
+Port::WaitResult
+TTYPort::WaitWrite(unsigned timeout_ms)
+{
+  if (fd < 0)
+    return WaitResult::FAILED;
+
+  struct pollfd pfd;
+  pfd.fd = fd;
+  pfd.events = POLLOUT;
+
+  int ret = poll(&pfd, 1, timeout_ms);
+  if (ret > 0)
+    return WaitResult::READY;
+  else if (ret == 0)
+    return WaitResult::TIMEOUT;
+  else
+    return WaitResult::FAILED;
+}
+
 size_t
 TTYPort::Write(const void *data, size_t length)
 {
@@ -114,6 +134,15 @@ TTYPort::Write(const void *data, size_t length)
     return 0;
 
   ssize_t nbytes = write(fd, data, length);
+  if (nbytes < 0 && errno == EAGAIN) {
+    /* the output fifo is full; wait until we can write (or until the
+       timeout expires) */
+    if (WaitWrite(5000) != Port::WaitResult::READY)
+      return 0;
+
+    nbytes = write(fd, data, length);
+  }
+
   return nbytes < 0 ? 0 : nbytes;
 }
 
@@ -277,10 +306,18 @@ TTYPort::SetBaudrate(unsigned BaudRate)
 int
 TTYPort::Read(void *Buffer, size_t Size)
 {
-  if (WaitRead(rx_timeout) != WaitResult::READY)
-    return -1;
+  ssize_t nbytes = read(fd, Buffer, Size);
 
-  return read(fd, Buffer, Size);
+  if (nbytes < 0 && errno == EAGAIN && rx_timeout > 0) {
+    /* the input fifo is empty; wait until at least one byte is
+       received (or until the timeout expires) */
+    if (WaitRead(rx_timeout) != WaitResult::READY)
+      return -1;
+
+    nbytes = read(fd, Buffer, Size);
+  }
+
+  return nbytes;
 }
 
 Port::WaitResult
