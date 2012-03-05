@@ -58,8 +58,8 @@ public:
      lLastBaudrate(0), ewDecelTpIndex(0) {}
 
 protected:
-  bool TryConnect();
-  bool AddWaypoint(const Waypoint &way_point);
+  bool TryConnect(OperationEnvironment &env);
+  bool AddWaypoint(const Waypoint &way_point, OperationEnvironment &env);
   bool DeclareInner(const struct Declaration &declaration,
                     OperationEnvironment &env);
 
@@ -80,17 +80,18 @@ WriteWithChecksum(Port &port, const char *String)
 }
 
 bool
-EWDevice::TryConnect()
+EWDevice::TryConnect(OperationEnvironment &env)
 {
   int retries = 10;
   while (--retries) {
 
     // send IO Mode command
     port.Write("##\r\n");
-    if (port.ExpectString("IO Mode.\r"))
+    if (port.ExpectString("IO Mode.\r", env))
       return true;
 
-    port.ExpectString("$$$"); // empty input buffer
+    if (!port.FullFlush(env, 100, 500))
+      return false;
   }
 
   return false;
@@ -123,7 +124,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
 
   ewDecelTpIndex = 0;
 
-  if (!TryConnect())
+  if (!TryConnect(env))
     return false;
 
   // send SetPilotInfo
@@ -141,7 +142,7 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
           /* format unknown, left blank (GPS has a RTC) */);
   port.Write(sTmp);
 
-  if (!port.ExpectString("OK\r"))
+  if (!port.ExpectString("OK\r", env))
     return false;
 
   /*
@@ -177,12 +178,12 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   for (int i = 0; i < 6; i++) {
     sprintf(sTmp, "#CTP%02d", i);
     WriteWithChecksum(port, sTmp);
-    if (!port.ExpectString("OK\r"))
+    if (!port.ExpectString("OK\r", env))
       return false;
   }
 
   for (unsigned j = 0; j < declaration.Size(); ++j)
-    if (!AddWaypoint(declaration.GetWaypoint(j)))
+    if (!AddWaypoint(declaration.GetWaypoint(j), env))
       return false;
 
   return true;
@@ -218,7 +219,7 @@ EWDevice::Declare(const struct Declaration &declaration,
 }
 
 bool
-EWDevice::AddWaypoint(const Waypoint &way_point)
+EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
 {
   char EWRecord[100];
   TCHAR IDString[12];
@@ -292,7 +293,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
   WriteWithChecksum(port, EWRecord);
 
   // wait for response
-  if (!port.ExpectString("OK\r"))
+  if (!port.ExpectString("OK\r", env))
     return false;
 
   // increase TP index
