@@ -342,7 +342,7 @@ mode=Nav1
 type=key
 data=APP1
 event=Mode Nav2
-label=Nav
+label=Nav\n1/2
 location=1
 
 mode=Nav1
@@ -391,7 +391,7 @@ mode=Nav2
 type=key
 data=APP1
 event=Mode default
-label=Nav
+label=Nav\n2/2
 location=1
 
 mode=Nav2
@@ -439,7 +439,7 @@ mode=Display1
 type=key
 data=APP2
 event=Mode Display2
-label=Display
+label=Display\n1/2
 location=2
 
 
@@ -490,7 +490,7 @@ mode=Display2
 type=key
 data=APP2
 event=Mode default
-label=Display
+label=Display\n2/2
 location=2
 
 mode=Display2
@@ -537,7 +537,7 @@ mode=Config1
 type=key
 data=APP3
 event=Mode Config2
-label=Config
+label=Config\n1/3
 location=3
 
 
@@ -586,7 +586,7 @@ mode=Config2
 type=key
 data=APP3
 event=Mode Config3
-label=Config
+label=Config\n2/3
 location=3
 
 mode=Config2
@@ -635,7 +635,7 @@ mode=Config3
 type=key
 data=APP3
 event=Mode default
-label=Config
+label=Config\n3/3
 location=3
 
 mode=Config3
@@ -669,7 +669,7 @@ mode=Vario1
 type=key
 data=APP3
 event=Mode Vario2
-label=Vario
+label=Vario\n1/2
 location=3
 
 mode=Vario1
@@ -716,7 +716,7 @@ mode=Vario2
 type=key
 data=APP3
 event=Mode default
-label=Vario
+label=Vario\n2/2
 location=3
 
 mode=Vario2
@@ -763,7 +763,7 @@ mode=Info1
 type=key
 data=APP4
 event=Mode Info2
-label=Info
+label=Info\n1/3
 location=4
 
 mode=Info1
@@ -813,7 +813,7 @@ mode=Info2
 type=key
 data=APP4
 event=Mode Info3
-label=Info
+label=Info\n2/3
 location=4
 
 mode=Info2
@@ -863,7 +863,7 @@ mode=Info3
 type=key
 data=APP4
 event=Mode default
-label=Info
+label=Info\n3/3
 location=4
 
 
