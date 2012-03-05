@@ -41,7 +41,7 @@ public:
   B50Device(Port &_port):port(_port) {}
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutMacCready(fixed mc);
+  virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
 };
 
 /*
@@ -148,7 +148,7 @@ B50Device::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 bool
-B50Device::PutMacCready(fixed mac_cready)
+B50Device::PutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
   /* the Borgelt B800 understands the CAI302 "!g" command for
      MacCready, ballast and bugs */

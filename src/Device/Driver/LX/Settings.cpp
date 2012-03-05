@@ -86,7 +86,8 @@ LXDevice::Open(gcc_unused OperationEnvironment &env)
 }
 
 bool
-LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload)
+LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
+                     OperationEnvironment &env)
 {
   // This is a copy of the routine done in LK8000 for LX MiniMap, realized
   // by Lx developers.
@@ -98,7 +99,7 @@ LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload)
 }
 
 bool
-LXDevice::PutBugs(fixed bugs)
+LXDevice::PutBugs(fixed bugs, OperationEnvironment &env)
 {
   // This is a copy of the routine done in LK8000 for LX MiniMap, realized
   // by Lx developers.
@@ -111,7 +112,7 @@ LXDevice::PutBugs(fixed bugs)
 }
 
 bool
-LXDevice::PutMacCready(fixed mac_cready)
+LXDevice::PutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
   char tmp[32];
   sprintf(tmp, "PFLX2,%1.1f,,,,,,", (double)mac_cready);
@@ -120,7 +121,7 @@ LXDevice::PutMacCready(fixed mac_cready)
 }
 
 bool
-LXDevice::PutQNH(const AtmosphericPressure &pres)
+LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
   fixed altitude_offset =
     pres.StaticPressureToQNHAltitude(AtmosphericPressure::Standard());

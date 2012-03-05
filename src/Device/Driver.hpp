@@ -113,7 +113,7 @@ public:
    * @param mac_cready the new MacCready value [m/s]
    * @return true on success
    */
-  virtual bool PutMacCready(fixed mac_cready) = 0;
+  virtual bool PutMacCready(fixed mac_cready, OperationEnvironment &env) = 0;
 
   /**
    * Send the new "bugs" value to the device (degradation of the
@@ -122,7 +122,7 @@ public:
    * @param bugs the new bugs value (XXX define this)
    * @return true on success
    */
-  virtual bool PutBugs(fixed bugs) = 0;
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env) = 0;
 
   /**
    * Send the new ballast value to the device.
@@ -131,7 +131,8 @@ public:
    * @param overload an alternative description of ballast value
    * @return true on success
    */
-  virtual bool PutBallast(fixed fraction, fixed overload) = 0;
+  virtual bool PutBallast(fixed fraction, fixed overload,
+                          OperationEnvironment &env) = 0;
 
   /**
    * Send the new QNH value to the device.
@@ -140,7 +141,8 @@ public:
    * @param calculated the current set of calculation results
    * @return true on success
    */
-  virtual bool PutQNH(const AtmosphericPressure &pressure) = 0;
+  virtual bool PutQNH(const AtmosphericPressure &pressure,
+                      OperationEnvironment &env) = 0;
 
   /**
    * Set the radio volume.
@@ -148,7 +150,7 @@ public:
    * @param volume the new volume (XXX define this)
    * @return true on success
    */
-  virtual bool PutVolume(int volume) = 0;
+  virtual bool PutVolume(int volume, OperationEnvironment &env) = 0;
 
   /**
    * Set a new radio frequency.
@@ -156,7 +158,8 @@ public:
    * @param frequency the new frequency
    * @return true on success
    */
-  virtual bool PutActiveFrequency(RadioFrequency frequency) = 0;
+  virtual bool PutActiveFrequency(RadioFrequency frequency,
+                                  OperationEnvironment &env) = 0;
 
   /**
    * Set a new "standby" radio frequency.
@@ -164,7 +167,8 @@ public:
    * @param frequency the new frequency
    * @return true on success
    */
-  virtual bool PutStandbyFrequency(RadioFrequency frequency) = 0;
+  virtual bool PutStandbyFrequency(RadioFrequency frequency,
+                                   OperationEnvironment &env) = 0;
 
   /**
    * Enable pass-through mode.  This may be used to communicate
@@ -257,13 +261,17 @@ public:
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
-  virtual bool PutMacCready(fixed MacCready);
-  virtual bool PutBugs(fixed bugs);
-  virtual bool PutBallast(fixed fraction, fixed overload);
-  virtual bool PutQNH(const AtmosphericPressure &pres);
-  virtual bool PutVolume(int volume);
-  virtual bool PutActiveFrequency(RadioFrequency frequency);
-  virtual bool PutStandbyFrequency(RadioFrequency frequency);
+  virtual bool PutMacCready(fixed MacCready, OperationEnvironment &env);
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
+  virtual bool PutBallast(fixed fraction, fixed overload,
+                          OperationEnvironment &env);
+  virtual bool PutQNH(const AtmosphericPressure &pres,
+                      OperationEnvironment &env);
+  virtual bool PutVolume(int volume, OperationEnvironment &env);
+  virtual bool PutActiveFrequency(RadioFrequency frequency,
+                                  OperationEnvironment &env);
+  virtual bool PutStandbyFrequency(RadioFrequency frequency,
+                                   OperationEnvironment &env);
 
   virtual bool EnablePassThrough(OperationEnvironment &env);
   virtual void DisablePassThrough();

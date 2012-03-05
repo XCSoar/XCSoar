@@ -233,13 +233,16 @@ public:
   bool WriteNMEA(const TCHAR *line);
 #endif
 
-  bool PutMacCready(fixed MacCready);
-  bool PutBugs(fixed bugs);
-  bool PutBallast(fixed fraction, fixed overload);
-  bool PutVolume(int volume);
-  bool PutActiveFrequency(RadioFrequency frequency);
-  bool PutStandbyFrequency(RadioFrequency frequency);
-  bool PutQNH(const AtmosphericPressure &pres);
+  bool PutMacCready(fixed mac_cready, OperationEnvironment &env);
+  bool PutBugs(fixed bugs, OperationEnvironment &env);
+  bool PutBallast(fixed fraction, fixed overload,
+                  OperationEnvironment &env);
+  bool PutVolume(int volume, OperationEnvironment &env);
+  bool PutActiveFrequency(RadioFrequency frequency,
+                          OperationEnvironment &env);
+  bool PutStandbyFrequency(RadioFrequency frequency,
+                           OperationEnvironment &env);
+  bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);

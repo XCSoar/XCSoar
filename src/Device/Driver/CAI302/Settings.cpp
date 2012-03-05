@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdio.h>
 
 bool
-CAI302Device::PutMacCready(fixed MacCready)
+CAI302Device::PutMacCready(fixed MacCready, OperationEnvironment &env)
 {
   unsigned mac_cready = uround(Units::ToUserUnit(MacCready * 10, Unit::KNOTS));
 
@@ -41,7 +41,7 @@ CAI302Device::PutMacCready(fixed MacCready)
 }
 
 bool
-CAI302Device::PutBugs(fixed Bugs)
+CAI302Device::PutBugs(fixed Bugs, OperationEnvironment &env)
 {
   unsigned bugs = uround(Bugs * 100);
 
@@ -53,7 +53,8 @@ CAI302Device::PutBugs(fixed Bugs)
 }
 
 bool
-CAI302Device::PutBallast(fixed fraction, gcc_unused fixed overload)
+CAI302Device::PutBallast(fixed fraction, gcc_unused fixed overload,
+                         OperationEnvironment &env)
 {
   unsigned ballast = uround(fraction * 100);
 

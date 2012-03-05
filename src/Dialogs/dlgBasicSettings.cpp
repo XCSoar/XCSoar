@@ -40,6 +40,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Language/Language.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 #include "Compiler.h"
 
 #include <math.h>
@@ -139,7 +140,8 @@ FlightSetupPanel::SetBallast()
       fixed overload = (plane.dry_mass + fraction * plane.max_ballast) /
         plane.dry_mass;
 
-      device_blackboard->SetBallast(fraction, overload);
+      MessageOperationEnvironment env;
+      device_blackboard->SetBallast(fraction, overload, env);
     }
   }
 }
@@ -196,8 +198,10 @@ FlightSetupPanel::SetBugs(fixed bugs) {
   polar_settings.SetBugs(bugs);
   PublishPolarSettings();
 
-  if (device_blackboard != NULL)
-    device_blackboard->SetBugs(bugs);
+  if (device_blackboard != NULL) {
+    MessageOperationEnvironment env;
+    device_blackboard->SetBugs(bugs, env);
+  }
 }
 
 void
@@ -209,8 +213,10 @@ FlightSetupPanel::SetQNH(AtmosphericPressure qnh)
   settings_computer.pressure = qnh;
   settings_computer.pressure_available.Update(basic.clock);
 
-  if (device_blackboard != NULL)
-    device_blackboard->SetQNH(qnh);
+  if (device_blackboard != NULL) {
+    MessageOperationEnvironment env;
+    device_blackboard->SetQNH(qnh, env);
+  }
 
   RefreshAltitudeControl();
 }

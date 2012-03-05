@@ -51,73 +51,77 @@ AllDevicesAutoReopen(OperationEnvironment &env)
 }
 
 void
-AllDevicesPutMacCready(fixed MacCready)
+AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutMacCready(MacCready);
+    device_list[i].PutMacCready(mac_cready, env);
 }
 
 void
-AllDevicesPutBugs(fixed bugs)
+AllDevicesPutBugs(fixed bugs, OperationEnvironment &env)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutBugs(bugs);
+    device_list[i].PutBugs(bugs, env);
 }
 
 void
-AllDevicesPutBallast(fixed fraction, fixed overload)
+AllDevicesPutBallast(fixed fraction, fixed overload,
+                     OperationEnvironment &env)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutBallast(fraction, overload);
+    device_list[i].PutBallast(fraction, overload, env);
 }
 
 void
-AllDevicesPutVolume(int volume)
+AllDevicesPutVolume(int volume, OperationEnvironment &env)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutVolume(volume);
+    device_list[i].PutVolume(volume, env);
 }
 
 void
-AllDevicesPutActiveFrequency(RadioFrequency frequency)
+AllDevicesPutActiveFrequency(RadioFrequency frequency,
+                             OperationEnvironment &env)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutActiveFrequency(frequency);
+    device_list[i].PutActiveFrequency(frequency, env);
 }
 
 void
-AllDevicesPutStandbyFrequency(RadioFrequency frequency)
+AllDevicesPutStandbyFrequency(RadioFrequency frequency,
+                              OperationEnvironment &env)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutStandbyFrequency(frequency);
+    device_list[i].PutStandbyFrequency(frequency, env);
 }
 
 void
-AllDevicesPutQNH(const AtmosphericPressure &pres)
+AllDevicesPutQNH(const AtmosphericPressure &pres,
+                 OperationEnvironment &env)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutQNH(pres);
+    device_list[i].PutQNH(pres, env);
 }
 
 bool

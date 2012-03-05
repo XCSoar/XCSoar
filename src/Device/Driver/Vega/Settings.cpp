@@ -80,7 +80,7 @@ VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
 }
 
 bool
-VegaDevice::PutQNH(const AtmosphericPressure& pres)
+VegaDevice::PutQNH(const AtmosphericPressure& pres, OperationEnvironment &env)
 {
   qnh = pres;
 

@@ -36,6 +36,7 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/XMLWidget.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 
 class WndButton;
 
@@ -66,7 +67,12 @@ PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessMode Mode)
   case DataField::daChange:
     settings_computer.pressure = Units::FromUserPressure(Sender->GetAsFixed());
     settings_computer.pressure_available.Update(CommonInterface::Basic().clock);
-    device_blackboard->SetQNH(Units::FromUserPressure(Sender->GetAsFixed()));
+
+    {
+      MessageOperationEnvironment env;
+      device_blackboard->SetQNH(Units::FromUserPressure(Sender->GetAsFixed()),
+                                env);
+    }
     break;
 
   case DataField::daSpecial:

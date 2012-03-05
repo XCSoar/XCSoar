@@ -47,10 +47,13 @@ public:
   virtual bool Open(OperationEnvironment &env);
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutBallast(fixed fraction, fixed overload);
-  virtual bool PutBugs(fixed bugs);
-  virtual bool PutMacCready(fixed MacCready);
-  virtual bool PutQNH(const AtmosphericPressure &pres);
+
+  virtual bool PutBallast(fixed fraction, fixed overload,
+                          OperationEnvironment &env);
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
+  virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
+  virtual bool PutQNH(const AtmosphericPressure &pres,
+                      OperationEnvironment &env);
 
   virtual bool EnablePassThrough(OperationEnvironment &env);
   virtual void DisablePassThrough();

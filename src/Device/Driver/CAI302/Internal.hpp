@@ -45,9 +45,11 @@ public:
   virtual void LinkTimeout();
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutMacCready(fixed MacCready);
-  virtual bool PutBugs(fixed bugs);
-  virtual bool PutBallast(fixed fraction, fixed overload);
+  virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
+  virtual bool PutBallast(fixed fraction, fixed overload,
+                          OperationEnvironment &env);
+
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
 

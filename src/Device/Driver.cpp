@@ -43,43 +43,47 @@ AbstractDevice::ParseNMEA(const char *line, struct NMEAInfo &info)
 }
 
 bool
-AbstractDevice::PutMacCready(fixed MacCready)
+AbstractDevice::PutMacCready(fixed MacCready, OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBugs(fixed bugs)
+AbstractDevice::PutBugs(fixed bugs, OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutBallast(fixed fraction, fixed overload)
+AbstractDevice::PutBallast(fixed fraction, fixed overload,
+                           OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutQNH(const AtmosphericPressure &pres)
+AbstractDevice::PutQNH(const AtmosphericPressure &pres,
+                       OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutVolume(int volume)
+AbstractDevice::PutVolume(int volume, OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutActiveFrequency(RadioFrequency frequency)
+AbstractDevice::PutActiveFrequency(RadioFrequency frequency,
+                                   OperationEnvironment &env)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutStandbyFrequency(RadioFrequency frequency)
+AbstractDevice::PutStandbyFrequency(RadioFrequency frequency,
+                                    OperationEnvironment &env)
 {
   return true;
 }

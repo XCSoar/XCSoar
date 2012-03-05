@@ -33,6 +33,7 @@ Copyright_License {
 #include <cassert>
 
 class AtmosphericPressure;
+class OperationEnvironment;
 
 /**
  * Blackboard used by com devices: can write NMEA_INFO, reads DERIVED_INFO.
@@ -118,10 +119,12 @@ public:
   void SetTrack(Angle val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
-  void SetBallast(fixed fraction, fixed overload);
-  void SetBugs(fixed bugs);
-  void SetQNH(AtmosphericPressure qnh);
-  void SetMC(fixed mc);
+
+  void SetBallast(fixed fraction, fixed overload,
+                  OperationEnvironment &env);
+  void SetBugs(fixed bugs, OperationEnvironment &env);
+  void SetQNH(AtmosphericPressure qnh, OperationEnvironment &env);
+  void SetMC(fixed mc, OperationEnvironment &env);
 
   /**
    * Check the expiry time of the device connection with the wall

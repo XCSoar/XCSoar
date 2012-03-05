@@ -44,6 +44,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Profile/Profile.hpp"
 #include "UIState.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 
 UIState CommonInterface::ui_state;
 
@@ -146,7 +147,8 @@ ActionInterface::SetBallast(fixed ballast, bool to_devices)
       fixed overload = (plane.dry_mass + ballast * plane.max_ballast) /
         plane.dry_mass;
 
-      device_blackboard->SetBallast(ballast, overload);
+      MessageOperationEnvironment env;
+      device_blackboard->SetBallast(ballast, overload, env);
     }
   }
 }
@@ -168,8 +170,10 @@ ActionInterface::SetBugs(fixed bugs, bool to_devices)
   }
 
   // send to external devices
-  if (to_devices)
-    device_blackboard->SetBugs(bugs);
+  if (to_devices) {
+    MessageOperationEnvironment env;
+    device_blackboard->SetBugs(bugs, env);
+  }
 }
 
 void
@@ -203,8 +207,10 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
 
   /* send to external devices */
 
-  if (to_devices)
-    device_blackboard->SetMC(mc);
+  if (to_devices) {
+    MessageOperationEnvironment env;
+    device_blackboard->SetMC(mc, env);
+  }
 }
 
 void ActionInterface::SetManualMacCready(fixed mc, bool to_devices)

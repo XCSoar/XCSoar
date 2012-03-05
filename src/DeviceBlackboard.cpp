@@ -296,25 +296,26 @@ DeviceBlackboard::Merge()
 }
 
 void
-DeviceBlackboard::SetBallast(fixed fraction, fixed overload)
+DeviceBlackboard::SetBallast(fixed fraction, fixed overload,
+                             OperationEnvironment &env)
 {
-  AllDevicesPutBallast(fraction, overload);
+  AllDevicesPutBallast(fraction, overload, env);
 }
 
 void
-DeviceBlackboard::SetBugs(fixed bugs)
+DeviceBlackboard::SetBugs(fixed bugs, OperationEnvironment &env)
 {
-  AllDevicesPutBugs(bugs);
+  AllDevicesPutBugs(bugs, env);
 }
 
 void
-DeviceBlackboard::SetQNH(AtmosphericPressure qnh)
+DeviceBlackboard::SetQNH(AtmosphericPressure qnh, OperationEnvironment &env)
 {
-  AllDevicesPutQNH(qnh);
+  AllDevicesPutQNH(qnh, env);
 }
 
 void
-DeviceBlackboard::SetMC(fixed mc)
+DeviceBlackboard::SetMC(fixed mc, OperationEnvironment &env)
 {
-  AllDevicesPutMacCready(mc);
+  AllDevicesPutMacCready(mc, env);
 }

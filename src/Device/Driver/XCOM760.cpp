@@ -35,13 +35,15 @@ public:
   XCOM760Device(Port &_port):port(_port) {}
 
 public:
-  virtual bool PutVolume(int volume);
-  virtual bool PutActiveFrequency(RadioFrequency frequency);
-  virtual bool PutStandbyFrequency(RadioFrequency frequency);
+  virtual bool PutVolume(int volume, OperationEnvironment &env);
+  virtual bool PutActiveFrequency(RadioFrequency frequency,
+                                  OperationEnvironment &env);
+  virtual bool PutStandbyFrequency(RadioFrequency frequency,
+                                   OperationEnvironment &env);
 };
 
 bool
-XCOM760Device::PutVolume(int Volume)
+XCOM760Device::PutVolume(int Volume, OperationEnvironment &env)
 {
   char szTmp[32];
   sprintf(szTmp, "$RVOL=%d\r\n", Volume);
@@ -50,7 +52,8 @@ XCOM760Device::PutVolume(int Volume)
 }
 
 bool
-XCOM760Device::PutActiveFrequency(RadioFrequency frequency)
+XCOM760Device::PutActiveFrequency(RadioFrequency frequency,
+                                  OperationEnvironment &env)
 {
   char szTmp[32];
   sprintf(szTmp, "$TXAF=%u.%03u\r\n",
@@ -61,7 +64,8 @@ XCOM760Device::PutActiveFrequency(RadioFrequency frequency)
 }
 
 bool
-XCOM760Device::PutStandbyFrequency(RadioFrequency frequency)
+XCOM760Device::PutStandbyFrequency(RadioFrequency frequency,
+                                   OperationEnvironment &env)
 {
   char szTmp[32];
   sprintf(szTmp, "$TXSF=%u.%03u\r\n",

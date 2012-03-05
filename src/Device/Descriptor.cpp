@@ -329,13 +329,13 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line)
 #endif
 
 bool
-DeviceDescriptor::PutMacCready(fixed value)
+DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
 {
   if (device == NULL || settings_sent.CompareMacCready(value) ||
       !config.sync_to_device)
     return true;
 
-  if (!device->PutMacCready(value))
+  if (!device->PutMacCready(value, env))
     return false;
 
   ScopeLock protect(device_blackboard->mutex);
@@ -347,13 +347,13 @@ DeviceDescriptor::PutMacCready(fixed value)
 }
 
 bool
-DeviceDescriptor::PutBugs(fixed value)
+DeviceDescriptor::PutBugs(fixed value, OperationEnvironment &env)
 {
   if (device == NULL || settings_sent.CompareBugs(value) ||
       !config.sync_to_device)
     return true;
 
-  if (!device->PutBugs(value))
+  if (!device->PutBugs(value, env))
     return false;
 
   ScopeLock protect(device_blackboard->mutex);
@@ -365,14 +365,15 @@ DeviceDescriptor::PutBugs(fixed value)
 }
 
 bool
-DeviceDescriptor::PutBallast(fixed fraction, fixed overload)
+DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
+                             OperationEnvironment &env)
 {
   if (device == NULL || !config.sync_to_device ||
       (settings_sent.CompareBallastFraction(fraction) &&
        settings_sent.CompareBallastOverload(overload)))
     return true;
 
-  if (!device->PutBallast(fraction, overload))
+  if (!device->PutBallast(fraction, overload, env))
     return false;
 
   ScopeLock protect(device_blackboard->mutex);
@@ -386,34 +387,37 @@ DeviceDescriptor::PutBallast(fixed fraction, fixed overload)
 }
 
 bool
-DeviceDescriptor::PutVolume(int volume)
+DeviceDescriptor::PutVolume(int volume, OperationEnvironment &env)
 {
-  return device != NULL && config.sync_to_device ?
-        device->PutVolume(volume) : true;
+  return device != NULL && config.sync_to_device
+    ? device->PutVolume(volume, env) : true;
 }
 
 bool
-DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency)
+DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
+                                     OperationEnvironment &env)
 {
-  return device != NULL && config.sync_to_device ?
-         device->PutActiveFrequency(frequency) : true;
+  return device != NULL && config.sync_to_device
+    ? device->PutActiveFrequency(frequency, env) : true;
 }
 
 bool
-DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency)
+DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
+                                      OperationEnvironment &env)
 {
-  return device != NULL && config.sync_to_device ?
-         device->PutStandbyFrequency(frequency) : true;
+  return device != NULL && config.sync_to_device
+    ? device->PutStandbyFrequency(frequency, env) : true;
 }
 
 bool
-DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
+DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
+                         OperationEnvironment &env)
 {
   if (device == NULL || settings_sent.CompareQNH(value) ||
       !config.sync_to_device)
     return true;
 
-  if (!device->PutQNH(value))
+  if (!device->PutQNH(value, env))
     return false;
 
   ScopeLock protect(device_blackboard->mutex);

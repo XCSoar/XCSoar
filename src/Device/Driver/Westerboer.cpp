@@ -45,8 +45,8 @@ public:
   WesterboerDevice(Port &_port):port(_port) {}
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutMacCready(fixed mac_cready);
-  virtual bool PutBugs(fixed bugs);
+  virtual bool PutMacCready(fixed mac_cready, OperationEnvironment &env);
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
 };
 
 /**
@@ -156,7 +156,7 @@ WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 bool
-WesterboerDevice::PutMacCready(fixed _mac_cready)
+WesterboerDevice::PutMacCready(fixed _mac_cready, OperationEnvironment &env)
 {
   /* "0 .. 60 in 5-er Schritten" */
   unsigned mac_cready = std::min(uround(_mac_cready * 10 / 5) * 5, 60u);
@@ -171,7 +171,7 @@ WesterboerDevice::PutMacCready(fixed _mac_cready)
 }
 
 bool
-WesterboerDevice::PutBugs(fixed _bugs)
+WesterboerDevice::PutBugs(fixed _bugs, OperationEnvironment &env)
 {
   // Dirtyness from 0 until 20 %
   unsigned bugs = 100 - (unsigned)(_bugs * 100);

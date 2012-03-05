@@ -92,7 +92,8 @@ protected:
 public:
   virtual void LinkTimeout();
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutQNH(const AtmosphericPressure& pres);
+  virtual bool PutQNH(const AtmosphericPressure& pres,
+                      OperationEnvironment &env);
   virtual void OnSysTicker(const DerivedInfo &calculated);
 };
 

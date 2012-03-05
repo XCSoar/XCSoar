@@ -43,6 +43,7 @@ Copyright_License {
 #include "BallastDumpManager.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 #include "Tracking/TrackingGlue.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 
 #ifdef _WIN32_WCE
 void
@@ -218,7 +219,8 @@ QNHProcessTimer()
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
-    AllDevicesPutQNH(settings_computer.pressure);
+    MessageOperationEnvironment env;
+    AllDevicesPutQNH(settings_computer.pressure, env);
   }
 }
 

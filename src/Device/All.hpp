@@ -41,19 +41,29 @@ devTick(const DerivedInfo &calculated);
 void
 AllDevicesAutoReopen(OperationEnvironment &env);
 
-void AllDevicesPutMacCready(fixed MacCready);
-void AllDevicesPutBugs(fixed bugs);
-void AllDevicesPutBallast(fixed fraction, fixed overload);
-void AllDevicesPutVolume(int volume);
+void
+AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env);
 
 void
-AllDevicesPutActiveFrequency(RadioFrequency frequency);
+AllDevicesPutBugs(fixed bugs, OperationEnvironment &env);
 
 void
-AllDevicesPutStandbyFrequency(RadioFrequency frequency);
+AllDevicesPutBallast(fixed fraction, fixed overload,
+                     OperationEnvironment &env);
 
 void
-AllDevicesPutQNH(const AtmosphericPressure &pres);
+AllDevicesPutVolume(int volume, OperationEnvironment &env);
+
+void
+AllDevicesPutActiveFrequency(RadioFrequency frequency,
+                             OperationEnvironment &env);
+
+void
+AllDevicesPutStandbyFrequency(RadioFrequency frequency,
+                              OperationEnvironment &env);
+
+void
+AllDevicesPutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 
 /**
  * Is any device currently declaring a task?
