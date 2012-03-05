@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-21 21:10+0100\n"
+"POT-Creation-Date: 2012-03-05 22:17+0100\n"
 "PO-Revision-Date: 2012-03-01 20:42+0000\n"
 "Last-Translator: Pop Paul <poppali1@yahoo.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -22,13 +22,13 @@ msgstr ""
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
-#: src/Task/TaskStore.cpp:74 src/Menu/ExpandMacros.cpp:538
-#: src/Input/InputEventsSettings.cpp:324 src/Dialogs/dlgAnalysis.cpp:355
+#: src/Task/TaskStore.cpp:74 src/Menu/ExpandMacros.cpp:537
+#: src/Input/InputEventsSettings.cpp:324 src/Dialogs/dlgAnalysis.cpp:360
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:77
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:191
-#: Data/Input/default.xci:323 Data/Input/default.xci:372
-#: Data/Input/default.xci:976 Data/Input/default.xci:1014
+#: Data/Input/default.xci:353 Data/Input/default.xci:402
+#: Data/Input/default.xci:1006 Data/Input/default.xci:1044
 #, no-c-format
 msgid "Task"
 msgstr "Feladat"
@@ -45,7 +45,7 @@ msgstr "Hiba a következõ sorban:"
 msgid "Line skipped."
 msgstr "sor kihagyva"
 
-#: src/Airspace/AirspaceParser.cpp:241 src/Dialogs/dlgAnalysis.cpp:373
+#: src/Airspace/AirspaceParser.cpp:241 src/Dialogs/dlgAnalysis.cpp:378
 #: src/Dialogs/dlgConfiguration.cpp:91
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:105
 #: Data/Dialogs/dlgAirspace.xml:3 Data/Dialogs/dlgAirspace_L.xml:3
@@ -82,7 +82,7 @@ msgstr "Várható érkezés napnyugta után"
 msgid "Significant wind change"
 msgstr "Jelentõs szél változás"
 
-#: src/Logger/Logger.cpp:110 src/Dialogs/ManageCAI302Dialog.cpp:115
+#: src/Logger/Logger.cpp:110 src/Dialogs/ManageCAI302Dialog.cpp:72
 msgid "Start Logger"
 msgstr "Logger indul"
 
@@ -94,15 +94,20 @@ msgstr "A logger áll, mert kevés a tárolóhely!"
 msgid "Logger Error"
 msgstr "Logger hiba"
 
-#: src/Logger/Logger.cpp:146 src/Dialogs/ManageCAI302Dialog.cpp:124
+#: src/Logger/Logger.cpp:146 src/Dialogs/ManageCAI302Dialog.cpp:73
 msgid "Stop Logger"
 msgstr "Loggert leállítsam?"
 
-#: src/Logger/ExternalLogger.cpp:82
+#: src/Logger/ExternalLogger.cpp:85
 msgid "Declare task?"
 msgstr "Deklarálja a feladatot?"
 
-#: src/Logger/ExternalLogger.cpp:87
+#: src/Logger/ExternalLogger.cpp:91 src/Logger/ExternalLogger.cpp:118
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:395
+msgid "Declare task"
+msgstr "Feladat deklarálása"
+
+#: src/Logger/ExternalLogger.cpp:94
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
@@ -110,42 +115,32 @@ msgstr ""
 "Hiba történt,\n"
 "a feladat NINCS deklarálva!"
 
-#: src/Logger/ExternalLogger.cpp:92
+#: src/Logger/ExternalLogger.cpp:99
 msgid "Task declared!"
 msgstr "Feladat deklarálva!"
 
-#: src/Logger/ExternalLogger.cpp:110
+#: src/Logger/ExternalLogger.cpp:117
 msgid "No logger connected"
 msgstr "Nincs logger csatlakoztatva"
 
-#: src/Logger/ExternalLogger.cpp:111
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:394
-msgid "Declare task"
-msgstr "Feladat deklarálása"
-
-#: src/Logger/ExternalLogger.cpp:251
-msgid "Failed to enable download mode."
-msgstr "Sikertelen letöltési mód engedélyezés"
-
-#: src/Logger/ExternalLogger.cpp:252 src/Logger/ExternalLogger.cpp:261
-#: src/Logger/ExternalLogger.cpp:269 src/Logger/ExternalLogger.cpp:286
-#: src/Logger/ExternalLogger.cpp:313
-msgid "Download flight"
-msgstr "Repülés letöltése"
-
-#: src/Logger/ExternalLogger.cpp:260
+#: src/Logger/ExternalLogger.cpp:259
 msgid "Failed to download flight list."
 msgstr "Hiba a repülési lista letöltésekor"
 
-#: src/Logger/ExternalLogger.cpp:268
+#: src/Logger/ExternalLogger.cpp:260 src/Logger/ExternalLogger.cpp:268
+#: src/Logger/ExternalLogger.cpp:285 src/Logger/ExternalLogger.cpp:312
+msgid "Download flight"
+msgstr "Repülés letöltése"
+
+#: src/Logger/ExternalLogger.cpp:267
 msgid "Logger is empty."
 msgstr "A logger üres"
 
-#: src/Logger/ExternalLogger.cpp:285
+#: src/Logger/ExternalLogger.cpp:284
 msgid "Failed to download flight."
 msgstr "Hiba a repülés letöltésekor."
 
-#: src/Logger/ExternalLogger.cpp:312
+#: src/Logger/ExternalLogger.cpp:311
 msgid "Do you want to download another flight?"
 msgstr "Szeretne egy masik repulest letolteni?"
 
@@ -161,7 +156,8 @@ msgstr "Visszajátszás"
 msgid "Could not open NMEA file!"
 msgstr "Az NMEA file-t nem lehetett megnyitni!"
 
-#: src/Waypoint/WaypointGlue.cpp:265
+#: src/Waypoint/WaypointGlue.cpp:266
+#: src/Dialogs/CAI302/WaypointUploader.cpp:35
 msgid "Loading Waypoints..."
 msgstr "Fordulópontok betöltése..."
 
@@ -279,47 +275,47 @@ msgstr ""
 "FPfigyelő\n"
 "BE"
 
-#: src/Menu/ExpandMacros.cpp:321 src/Menu/ExpandMacros.cpp:325
+#: src/Menu/ExpandMacros.cpp:320 src/Menu/ExpandMacros.cpp:324
 #: src/Dialogs/PortMonitor.cpp:115
 msgid "Resume"
 msgstr "Folytatás"
 
-#: src/Menu/ExpandMacros.cpp:321 src/Menu/ExpandMacros.cpp:325
+#: src/Menu/ExpandMacros.cpp:320 src/Menu/ExpandMacros.cpp:324
 #: src/Dialogs/Message.cpp:169
 msgid "Abort"
 msgstr "Állj"
 
-#: src/Menu/ExpandMacros.cpp:438 src/Dialogs/dlgBasicSettings.cpp:123
+#: src/Menu/ExpandMacros.cpp:437 src/Dialogs/dlgBasicSettings.cpp:120
 #: Data/Dialogs/dlgLoggerReplay.xml:12
 msgid "Stop"
 msgstr "Leállít"
 
-#: src/Menu/ExpandMacros.cpp:439 Data/Dialogs/dlgLoggerReplay.xml:10
+#: src/Menu/ExpandMacros.cpp:438 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
 msgstr "Indít"
 
-#: src/Menu/ExpandMacros.cpp:445
+#: src/Menu/ExpandMacros.cpp:444
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:93
 #, no-c-format
 msgid "Long"
 msgstr "Hosszú"
 
-#: src/Menu/ExpandMacros.cpp:449
+#: src/Menu/ExpandMacros.cpp:448
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:94
 #, no-c-format
 msgid "Short"
 msgstr "Rövid"
 
-#: src/Menu/ExpandMacros.cpp:453
+#: src/Menu/ExpandMacros.cpp:452
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:95
 #, no-c-format
 msgid "Full"
 msgstr "Teljes"
 
-#: src/Menu/ExpandMacros.cpp:457 src/Menu/ExpandMacros.cpp:464
-#: src/Menu/ExpandMacros.cpp:521 src/Menu/ExpandMacros.cpp:527
-#: src/Menu/ExpandMacros.cpp:530 src/Menu/ExpandMacros.cpp:533
-#: src/Menu/ExpandMacros.cpp:551 src/Menu/ExpandMacros.cpp:604
+#: src/Menu/ExpandMacros.cpp:456 src/Menu/ExpandMacros.cpp:463
+#: src/Menu/ExpandMacros.cpp:520 src/Menu/ExpandMacros.cpp:526
+#: src/Menu/ExpandMacros.cpp:529 src/Menu/ExpandMacros.cpp:532
+#: src/Menu/ExpandMacros.cpp:550 src/Menu/ExpandMacros.cpp:603
 #: src/Input/InputEventsSettings.cpp:453 src/Input/InputEventsSettings.cpp:456
 #: src/Dialogs/XML.cpp:518 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:78
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:211
@@ -334,10 +330,10 @@ msgstr "Teljes"
 msgid "Off"
 msgstr "Ki"
 
-#: src/Menu/ExpandMacros.cpp:464 src/Menu/ExpandMacros.cpp:521
-#: src/Menu/ExpandMacros.cpp:527 src/Menu/ExpandMacros.cpp:530
-#: src/Menu/ExpandMacros.cpp:533 src/Menu/ExpandMacros.cpp:551
-#: src/Menu/ExpandMacros.cpp:604 src/Input/InputEventsSettings.cpp:451
+#: src/Menu/ExpandMacros.cpp:463 src/Menu/ExpandMacros.cpp:520
+#: src/Menu/ExpandMacros.cpp:526 src/Menu/ExpandMacros.cpp:529
+#: src/Menu/ExpandMacros.cpp:532 src/Menu/ExpandMacros.cpp:550
+#: src/Menu/ExpandMacros.cpp:603 src/Input/InputEventsSettings.cpp:451
 #: src/Input/InputEventsSettings.cpp:456 src/Dialogs/XML.cpp:518
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:77
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:212
@@ -348,29 +344,29 @@ msgstr "Ki"
 msgid "On"
 msgstr "Be"
 
-#: src/Menu/ExpandMacros.cpp:476 src/Menu/ExpandMacros.cpp:502
+#: src/Menu/ExpandMacros.cpp:475 src/Menu/ExpandMacros.cpp:501
 msgid "Topography On"
 msgstr "Térképjelek be"
 
-#: src/Menu/ExpandMacros.cpp:480 src/Menu/ExpandMacros.cpp:506
+#: src/Menu/ExpandMacros.cpp:479 src/Menu/ExpandMacros.cpp:505
 msgid "Terrain On"
 msgstr "Domborzat be"
 
-#: src/Menu/ExpandMacros.cpp:484 src/Menu/ExpandMacros.cpp:510
+#: src/Menu/ExpandMacros.cpp:483 src/Menu/ExpandMacros.cpp:509
 msgid "Terrain + Topography"
 msgstr "Jelek + Domborzat"
 
-#: src/Menu/ExpandMacros.cpp:488 src/Menu/ExpandMacros.cpp:514
+#: src/Menu/ExpandMacros.cpp:487 src/Menu/ExpandMacros.cpp:513
 msgid "Terrain Off"
 msgstr "Domborzat ki"
 
-#: src/Menu/ExpandMacros.cpp:524 src/Menu/ExpandMacros.cpp:548
+#: src/Menu/ExpandMacros.cpp:523 src/Menu/ExpandMacros.cpp:547
 #: src/InfoBoxes/Panel/WindSetup.cpp:94 src/Dialogs/WindSettingsPanel.cpp:46
 #, no-c-format
 msgid "Manual"
 msgstr "Kézi"
 
-#: src/Menu/ExpandMacros.cpp:524 src/Menu/ExpandMacros.cpp:548
+#: src/Menu/ExpandMacros.cpp:523 src/Menu/ExpandMacros.cpp:547
 #: src/PageSettings.cpp:58 src/PageSettings.cpp:62
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:56
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:86
@@ -379,18 +375,18 @@ msgstr "Kézi"
 msgid "Auto"
 msgstr "Automata"
 
-#: src/Menu/ExpandMacros.cpp:536 src/Input/InputEventsSettings.cpp:322
+#: src/Menu/ExpandMacros.cpp:535 src/Input/InputEventsSettings.cpp:322
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:140
 #, no-c-format
 msgid "All"
 msgstr "Mind"
 
-#: src/Menu/ExpandMacros.cpp:537 src/Input/InputEventsSettings.cpp:323
+#: src/Menu/ExpandMacros.cpp:536 src/Input/InputEventsSettings.cpp:323
 #, no-c-format
 msgid "Task & Landables"
 msgstr "feladat + leszállók"
 
-#: src/Menu/ExpandMacros.cpp:539 src/Input/InputEventsSettings.cpp:325
+#: src/Menu/ExpandMacros.cpp:538 src/Input/InputEventsSettings.cpp:325
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:101
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:100
@@ -859,11 +855,11 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:884
 #: src/Renderer/MapItemListRenderer.cpp:337 src/Widgets/TrafficWidget.cpp:320
 #: src/Widgets/TrafficWidget.cpp:321 src/Dialogs/DeviceListDialog.cpp:140
-#: src/Dialogs/dlgConfiguration.cpp:97 src/Dialogs/dlgFlarmTraffic.cpp:316
-#: src/Dialogs/dlgFlarmTraffic.cpp:317
+#: src/Dialogs/CAI302/UnitsEditor.cpp:38 src/Dialogs/dlgConfiguration.cpp:97
+#: src/Dialogs/dlgFlarmTraffic.cpp:316 src/Dialogs/dlgFlarmTraffic.cpp:317
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:14
-#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:22 Data/Input/default.xci:566
-#: Data/Input/default.xci:642 Data/Input/default.xci:689
+#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:22 Data/Input/default.xci:596
+#: Data/Input/default.xci:672 Data/Input/default.xci:719
 #, no-c-format
 msgid "Vario"
 msgstr "Varió"
@@ -2140,9 +2136,9 @@ msgid "Simulator"
 msgstr "Szimulátor"
 
 #: src/InfoBoxes/Content/Altitude.cpp:57 src/PageSettings.cpp:45
-#: src/PageSettings.cpp:56 Data/Input/default.xci:736
-#: Data/Input/default.xci:786 Data/Input/default.xci:836
-#: Data/Input/default.xci:899
+#: src/PageSettings.cpp:56 Data/Input/default.xci:766
+#: Data/Input/default.xci:816 Data/Input/default.xci:866
+#: Data/Input/default.xci:929
 #, no-c-format
 msgid "Info"
 msgstr "Infó"
@@ -2160,7 +2156,7 @@ msgid "no QNH"
 msgstr "nincs QNH"
 
 #: src/InfoBoxes/Content/MacCready.cpp:58
-#: src/InfoBoxes/Content/Weather.cpp:101 src/Dialogs/DeviceListDialog.cpp:280
+#: src/InfoBoxes/Content/Weather.cpp:101 src/Dialogs/DeviceListDialog.cpp:283
 #: Data/Dialogs/dlgConfigFonts.xml:11 Data/Dialogs/dlgConfigFonts.xml:14
 #: Data/Dialogs/dlgConfigFonts.xml:17 Data/Dialogs/dlgConfigFonts.xml:20
 #: Data/Dialogs/dlgConfigFonts.xml:23 Data/Dialogs/dlgConfigFonts.xml:26
@@ -2176,25 +2172,30 @@ msgstr "nincs QNH"
 msgid "Edit"
 msgstr "Szerk."
 
-#: src/InfoBoxes/Content/MacCready.cpp:89
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:72
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:97
-msgid "AUTO"
+#: src/InfoBoxes/Content/MacCready.cpp:85
+#, fuzzy
+msgid "MC AUTO"
 msgstr "AUTOMATA"
 
-#: src/InfoBoxes/Content/MacCready.cpp:91
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:74
-#: src/InfoBoxes/Panel/MacCreadySetup.cpp:95
-msgid "MANUAL"
+#: src/InfoBoxes/Content/MacCready.cpp:85
+#, fuzzy
+msgid "MC MANUAL"
 msgstr "KÉZI"
 
-#: src/InfoBoxes/Content/Other.cpp:59
+#: src/InfoBoxes/Content/Other.cpp:62
 msgid "AC Off"
 msgstr "TÁP KI"
 
-#: src/InfoBoxes/Content/Other.cpp:63
+#: src/InfoBoxes/Content/Other.cpp:66
 msgid "AC ON"
 msgstr "TÁP BE"
+
+#: src/InfoBoxes/Content/Other.cpp:172 src/Profile/DeviceConfig.cpp:78
+#: src/Widgets/DeviceEditWidget.cpp:61
+#: src/Dialogs/Vega/AudioModeParameters.hpp:41
+#, no-c-format
+msgid "Disabled"
+msgstr "Tiltva"
 
 #: src/InfoBoxes/Content/Speed.cpp:126
 msgid "BLOCK"
@@ -2224,13 +2225,13 @@ msgstr "Siklás"
 msgid "FinalGlide"
 msgstr "Végsiklás"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:478 src/InfoBoxes/InfoBoxManager.cpp:526
-#: src/Dialogs/dlgConfigInfoboxes.cpp:224
-#: src/Dialogs/dlgConfigInfoboxes.cpp:389
+#: src/InfoBoxes/InfoBoxManager.cpp:480 src/InfoBoxes/InfoBoxManager.cpp:528
+#: src/Dialogs/dlgConfigInfoboxes.cpp:225
+#: src/Dialogs/dlgConfigInfoboxes.cpp:367
 msgid "InfoBox"
 msgstr "Kijelző"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:486 src/Dialogs/dlgConfigInfoboxes.cpp:228
+#: src/InfoBoxes/InfoBoxManager.cpp:488 src/Dialogs/dlgConfigInfoboxes.cpp:229
 #: src/Dialogs/dlgWeather.cpp:67
 msgid "No help available on this item"
 msgstr "Ehhez nincs súgó."
@@ -2241,6 +2242,16 @@ msgstr "Ehhez nincs súgó."
 #: src/InfoBoxes/Panel/AltitudeInfo.cpp:78
 msgid "N/A"
 msgstr "na."
+
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:72
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:97
+msgid "AUTO"
+msgstr "AUTOMATA"
+
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:74
+#: src/InfoBoxes/Panel/MacCreadySetup.cpp:95
+msgid "MANUAL"
+msgstr "KÉZI"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:86
 #, no-c-format
@@ -2277,39 +2288,39 @@ msgstr "Alap kijelzők"
 msgid "Competition ID"
 msgstr "Farokjel"
 
-#: src/Input/InputEventsActions.cpp:260
+#: src/Input/InputEventsActions.cpp:261
 msgid "Show details:"
 msgstr "Részletek:"
 
-#: src/Input/InputEventsActions.cpp:265
+#: src/Input/InputEventsActions.cpp:266
 msgid "Unknown competition number"
 msgstr "Ismeretlen farokjel"
 
-#: src/Input/InputEventsActions.cpp:266
+#: src/Input/InputEventsActions.cpp:267
 msgid "Not found"
 msgstr "Nem található"
 
-#: src/Input/InputEventsActions.cpp:326
+#: src/Input/InputEventsActions.cpp:327
 msgid "No active waypoint!"
 msgstr "Nincs Aktív Fordulópont!"
 
-#: src/Input/InputEventsActions.cpp:416
+#: src/Input/InputEventsActions.cpp:417
 msgid "NMEA log on"
 msgstr "NMEA Logger BE"
 
-#: src/Input/InputEventsActions.cpp:418
+#: src/Input/InputEventsActions.cpp:419
 msgid "NMEA log off"
 msgstr "NMEA Logger KI"
 
-#: src/Input/InputEventsActions.cpp:422
+#: src/Input/InputEventsActions.cpp:423
 msgid "Logger on"
 msgstr "Logger BE"
 
-#: src/Input/InputEventsActions.cpp:424
+#: src/Input/InputEventsActions.cpp:425
 msgid "Logger off"
 msgstr "Logger KI"
 
-#: src/Input/InputEventsActions.cpp:591
+#: src/Input/InputEventsActions.cpp:592
 msgid "Map labels on"
 msgstr "Térkép cimkék BE"
 
@@ -2386,7 +2397,7 @@ msgid "Ordered task"
 msgstr "Kiadott feladat"
 
 #: src/Input/InputEventsTask.cpp:224
-#: src/Renderer/FlightStatisticsRenderer.cpp:227
+#: src/Renderer/FlightStatisticsRenderer.cpp:229
 msgid "No task"
 msgstr "Nincs feladat"
 
@@ -2497,7 +2508,7 @@ msgstr "FLARM forgalom"
 
 #: src/Renderer/MapItemListRenderer.cpp:332
 #: src/Renderer/WaypointListRenderer.cpp:56
-#: src/Dialogs/dlgBasicSettings.cpp:304
+#: src/Dialogs/CAI302/UnitsEditor.cpp:46 src/Dialogs/dlgBasicSettings.cpp:326
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:103
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:182
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:12
@@ -2512,8 +2523,9 @@ msgstr "Magasság"
 #: src/Renderer/FlightStatisticsRenderer.cpp:120
 #: src/Renderer/FlightStatisticsRenderer.cpp:144
 #: src/Renderer/FlightStatisticsRenderer.cpp:172
-#: src/Widgets/TrafficWidget.cpp:333 src/Dialogs/MapItemListDialog.cpp:159
-#: src/Dialogs/MapItemListDialog.cpp:163 src/Dialogs/dlgFlarmTraffic.cpp:329
+#: src/Widgets/TrafficWidget.cpp:333 src/Dialogs/CAI302/UnitsEditor.cpp:71
+#: src/Dialogs/MapItemListDialog.cpp:159 src/Dialogs/MapItemListDialog.cpp:163
+#: src/Dialogs/dlgFlarmTraffic.cpp:329
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:161
 #: Data/Dialogs/dlgAirspaceSelect.xml:16
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:10
@@ -2556,7 +2568,7 @@ msgstr "Térképjelek betöltése..."
 #: src/Terrain/RasterWeather.cpp:49 src/Dialogs/dlgConfiguration.cpp:90
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:103
 #: src/Dialogs/dlgWeather.cpp:111 Data/Dialogs/dlgVoice.xml:10
-#: Data/Input/default.xci:486 Data/Input/default.xci:1087
+#: Data/Input/default.xci:516 Data/Input/default.xci:1117
 #, no-c-format
 msgid "Terrain"
 msgstr "Terep"
@@ -2775,30 +2787,30 @@ msgstr "Idő"
 #: src/Renderer/FlightStatisticsRenderer.cpp:123
 #: src/Renderer/FlightStatisticsRenderer.cpp:147
 #: src/Renderer/FlightStatisticsRenderer.cpp:175
-#: src/Dialogs/WindSettingsPanel.cpp:73
+#: src/Dialogs/CAI302/UnitsEditor.cpp:80 src/Dialogs/WindSettingsPanel.cpp:73
 #: Data/Dialogs/Infobox/pnlInfoBoxWindEdit.xml:4
 msgid "Speed"
 msgstr "Sebesség"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
-#: src/Renderer/FlightStatisticsRenderer.cpp:248
-#: src/Renderer/FlightStatisticsRenderer.cpp:259
+#: src/Renderer/FlightStatisticsRenderer.cpp:241
+#: src/Renderer/FlightStatisticsRenderer.cpp:250
+#: src/Renderer/FlightStatisticsRenderer.cpp:261
 msgid "Task to go"
 msgstr "Hátralévő idő"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:239
-#: src/Renderer/FlightStatisticsRenderer.cpp:248
+#: src/Renderer/FlightStatisticsRenderer.cpp:241
+#: src/Renderer/FlightStatisticsRenderer.cpp:250
 msgid "AAT to go"
 msgstr "AAT hátralévő"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:240
-#: src/Renderer/FlightStatisticsRenderer.cpp:249
-#: src/Renderer/FlightStatisticsRenderer.cpp:259
+#: src/Renderer/FlightStatisticsRenderer.cpp:242
+#: src/Renderer/FlightStatisticsRenderer.cpp:251
+#: src/Renderer/FlightStatisticsRenderer.cpp:261
 msgid "Distance to go"
 msgstr "Hátralévő táv"
 
-#: src/Renderer/FlightStatisticsRenderer.cpp:242
-#: src/Renderer/FlightStatisticsRenderer.cpp:252
+#: src/Renderer/FlightStatisticsRenderer.cpp:244
+#: src/Renderer/FlightStatisticsRenderer.cpp:254
 msgid "Target speed"
 msgstr "Cél sebesség"
 
@@ -2827,12 +2839,12 @@ msgstr "Optimális"
 msgid "Min. sink"
 msgstr "Gazdaságos"
 
-#: src/Renderer/GlidePolarRenderer.cpp:114 src/Dialogs/dlgAnalysis.cpp:328
+#: src/Renderer/GlidePolarRenderer.cpp:114 src/Dialogs/dlgAnalysis.cpp:333
 msgid "Mass"
 msgstr "Tömeg"
 
 #: src/Renderer/GlidePolarRenderer.cpp:121
-#: src/Dialogs/dlgBasicSettings.cpp:276
+#: src/Dialogs/dlgBasicSettings.cpp:298
 msgid "Wing loading"
 msgstr "Felületi terhelés"
 
@@ -2844,7 +2856,7 @@ msgstr "Termik magasság"
 msgid "Cloud base"
 msgstr "Felhőalap"
 
-#: src/Interface.cpp:199
+#: src/Interface.cpp:261
 msgid "Quit program?"
 msgstr "Kilép a programból?"
 
@@ -2869,22 +2881,16 @@ msgid "Australian"
 msgstr "Ausztrál"
 
 #. Read the terrain file
-#: src/UtilsSettings.cpp:121 src/Components.cpp:324
+#: src/UtilsSettings.cpp:121 src/Components.cpp:326
 msgid "Loading Terrain File..."
 msgstr "Terep fájl betöltése..."
 
-#: src/Profile/DeviceConfig.cpp:78 src/Widgets/DeviceEditWidget.cpp:55
-#: src/Dialogs/Vega/AudioModeParameters.hpp:41
-#, no-c-format
-msgid "Disabled"
-msgstr "Tiltva"
-
-#: src/Profile/DeviceConfig.cpp:94 src/Widgets/DeviceEditWidget.cpp:57
+#: src/Profile/DeviceConfig.cpp:94 src/Widgets/DeviceEditWidget.cpp:63
 #, no-c-format
 msgid "GPS Intermediate Driver"
 msgstr "GPS köztes meghajtó"
 
-#: src/Profile/DeviceConfig.cpp:97 src/Widgets/DeviceEditWidget.cpp:60
+#: src/Profile/DeviceConfig.cpp:97 src/Widgets/DeviceEditWidget.cpp:66
 #, no-c-format
 msgid "Built-in GPS"
 msgstr "Beépített GPS"
@@ -2906,12 +2912,12 @@ msgstr "Figyelmeztetés"
 msgid "Battery low"
 msgstr "Lemerült a telep"
 
-#: src/Components.cpp:274
+#: src/Components.cpp:276
 msgid "Initialising"
 msgstr "Előkészülés"
 
 #. Start the device thread(s)
-#: src/Components.cpp:400
+#: src/Components.cpp:402
 msgid "Starting devices"
 msgstr "Eszközök indítása"
 
@@ -2922,27 +2928,27 @@ msgstr "Eszközök indítása"
 #.
 #. This should be done inside devStartup if it is really required
 #.
-#: src/Components.cpp:411
+#: src/Components.cpp:413
 msgid "Initialising display"
 msgstr "Kijelző előkészítése"
 
 #. Show progress dialog
-#: src/Components.cpp:491 src/Components.cpp:525 src/Components.cpp:567
+#: src/Components.cpp:497 src/Components.cpp:531 src/Components.cpp:573
 msgid "Shutdown, please wait..."
 msgstr "Leállás, kérem várjon..."
 
 #. Stop logger and save igc file
-#: src/Components.cpp:506
+#: src/Components.cpp:512
 msgid "Shutdown, saving logs..."
 msgstr "Leállás, naplók mentése..."
 
 #. Save settings to profile
-#: src/Components.cpp:515
+#: src/Components.cpp:521
 msgid "Shutdown, saving profile..."
 msgstr "Leállás, profil mentése..."
 
 #. Save the task for the next time
-#: src/Components.cpp:558
+#: src/Components.cpp:564
 msgid "Shutdown, saving task..."
 msgstr "Leállás, feladat mentése..."
 
@@ -2951,57 +2957,68 @@ msgstr "Leállás, feladat mentése..."
 msgid "Rel. Alt."
 msgstr "Rel. mgsg."
 
-#: src/Widgets/DeviceEditWidget.cpp:501
+#. label not translated for now, until we have a TCP port
+#. selection UI
+#: src/Widgets/DeviceEditWidget.cpp:71 src/Widgets/DeviceEditWidget.cpp:532
+#, no-c-format
+msgid "TCP Port"
+msgstr "TCP Port"
+
+#: src/Widgets/DeviceEditWidget.cpp:511
 msgid "Port"
 msgstr "Port"
 
-#: src/Widgets/DeviceEditWidget.cpp:506
+#: src/Widgets/DeviceEditWidget.cpp:517
 msgid "Baudrate"
 msgstr "Baud"
 
-#: src/Widgets/DeviceEditWidget.cpp:512
+#: src/Widgets/DeviceEditWidget.cpp:524
 msgid "Bulk baud rate"
 msgstr ""
 
-#: src/Widgets/DeviceEditWidget.cpp:513
+#: src/Widgets/DeviceEditWidget.cpp:525
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
 
-#: src/Widgets/DeviceEditWidget.cpp:519
-msgid "TCP Port"
-msgstr "TCP Port"
-
-#: src/Widgets/DeviceEditWidget.cpp:530
+#: src/Widgets/DeviceEditWidget.cpp:543
 msgid "Driver"
 msgstr "Illesztőprogram"
 
-#: src/Widgets/DeviceEditWidget.cpp:532
+#: src/Widgets/DeviceEditWidget.cpp:545
 msgid "Sync. from device"
 msgstr ""
 
-#: src/Widgets/DeviceEditWidget.cpp:533
+#: src/Widgets/DeviceEditWidget.cpp:546
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
 
-#: src/Widgets/DeviceEditWidget.cpp:538
+#: src/Widgets/DeviceEditWidget.cpp:551
 msgid "Sync. to device"
 msgstr ""
 
-#: src/Widgets/DeviceEditWidget.cpp:539
+#: src/Widgets/DeviceEditWidget.cpp:552
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
 
-#: src/Widgets/DeviceEditWidget.cpp:544
+#: src/Widgets/DeviceEditWidget.cpp:558
+msgid "Enable this if you use a K6Bt to connect the device."
+msgstr ""
+
+#: src/Widgets/DeviceEditWidget.cpp:565
+msgid "Enable this if you would like to log the communication with the device."
+msgstr ""
+
+#: src/Widgets/DeviceEditWidget.cpp:572
 msgid "Ignore checksum"
 msgstr "Kontrollszám érdektelen"
 
-#: src/Widgets/DeviceEditWidget.cpp:545
+#: src/Widgets/DeviceEditWidget.cpp:573
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
@@ -3015,20 +3032,20 @@ msgstr "Nincs ilyen illesztőprogram."
 msgid "Unable to open port"
 msgstr "A port nem nyitható meg."
 
-#: src/Device/Descriptor.cpp:433 src/Device/Descriptor.cpp:441
+#: src/Device/Descriptor.cpp:510 src/Device/Descriptor.cpp:516
 msgid "Sending declaration"
 msgstr "Deklarálás küldése"
 
-#: src/Device/Descriptor.cpp:485
+#: src/Device/Descriptor.cpp:553
 msgid "Reading flight list"
 msgstr "Repülési lista betöltése"
 
-#: src/Device/Descriptor.cpp:503
+#: src/Device/Descriptor.cpp:570
 msgid "Downloading flight log"
 msgstr "Napló letöltése"
 
 #: src/Dialogs/Message.cpp:131 src/Dialogs/WidgetDialog.cpp:155
-#: src/Dialogs/WidgetDialog.cpp:170 src/Dialogs/dlgBasicSettings.cpp:365
+#: src/Dialogs/WidgetDialog.cpp:170 src/Dialogs/dlgBasicSettings.cpp:387
 #: src/Dialogs/dlgWindSettings.cpp:33 src/Dialogs/dlgFontEdit.cpp:186
 #: Data/Dialogs/dlgPlaneDetails.xml:60 Data/Dialogs/dlgPlaneDetails_L.xml:52
 #: Data/Dialogs/dlgPlanePolar.xml:66 Data/Dialogs/dlgPlanePolar_L.xml:54
@@ -3062,7 +3079,7 @@ msgstr "Újra"
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:8
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:8
 #: Data/Dialogs/dlgWaypointSelect.xml:20
-#: Data/Dialogs/dlgWaypointSelect_L.xml:18 Data/Input/default.xci:906
+#: Data/Dialogs/dlgWaypointSelect_L.xml:18 Data/Input/default.xci:936
 msgid "Cancel"
 msgstr "Mégsem"
 
@@ -3071,7 +3088,7 @@ msgid "Ignore"
 msgstr "Mellőz"
 
 #: src/Dialogs/DeviceListDialog.cpp:111
-#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:156
+#: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:184
 #, c-format
 msgid "%s on %s"
 msgstr ""
@@ -3102,25 +3119,21 @@ msgstr "Nincs kapcsolat"
 msgid "Edit device"
 msgstr "Eszköz szerkesztése"
 
-#: src/Dialogs/DeviceListDialog.cpp:271 src/Dialogs/dlgConfiguration.cpp:104
-#: Data/Input/default.xci:623 Data/Input/default.xci:1158
+#: src/Dialogs/DeviceListDialog.cpp:274 src/Dialogs/dlgConfiguration.cpp:104
+#: Data/Input/default.xci:653 Data/Input/default.xci:1188
 #, no-c-format
 msgid "Devices"
 msgstr "Eszközök"
 
-#: src/Dialogs/DeviceListDialog.cpp:276 src/Dialogs/PortMonitor.cpp:147
-#: src/Dialogs/ManageCAI302Dialog.cpp:95 src/Dialogs/ManageFlarmDialog.cpp:72
-#: src/Dialogs/dlgConfigInfoboxes.cpp:443 src/Dialogs/dlgInfoBoxAccess.cpp:134
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:258
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:262
-#: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
-#: Data/Dialogs/dlgAirspaceColours_L.xml:4
-#: Data/Dialogs/dlgAirspaceDetails.xml:4
-#: Data/Dialogs/dlgAirspacePatterns.xml:4
-#: Data/Dialogs/dlgAirspacePatterns_L.xml:4
+#: src/Dialogs/DeviceListDialog.cpp:279 src/Dialogs/PortMonitor.cpp:147
+#: src/Dialogs/ManageCAI302Dialog.cpp:157 src/Dialogs/ManageFlarmDialog.cpp:72
+#: src/Dialogs/dlgConfigInfoboxes.cpp:421 src/Dialogs/dlgInfoBoxAccess.cpp:134
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:259
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:263
+#: Data/Dialogs/dlgAirspace.xml:7 Data/Dialogs/dlgAirspaceDetails.xml:4
 #: Data/Dialogs/dlgAirspaceSelect.xml:6
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:22
-#: Data/Dialogs/dlgAirspaceWarnings.xml:10 Data/Dialogs/dlgAirspace_L.xml:4
+#: Data/Dialogs/dlgAirspaceWarnings.xml:10 Data/Dialogs/dlgAirspace_L.xml:7
 #: Data/Dialogs/dlgAnalysis.xml:14 Data/Dialogs/dlgAnalysis_L.xml:14
 #: Data/Dialogs/dlgBrightness.xml:4 Data/Dialogs/dlgChecklist.xml:8
 #: Data/Dialogs/dlgChecklist_L.xml:6 Data/Dialogs/dlgConfigFonts.xml:4
@@ -3151,25 +3164,25 @@ msgstr "Eszközök"
 msgid "Close"
 msgstr "Bezár"
 
-#: src/Dialogs/DeviceListDialog.cpp:277
+#: src/Dialogs/DeviceListDialog.cpp:280
 msgid "Refresh"
 msgstr "Frissít"
 
-#: src/Dialogs/DeviceListDialog.cpp:278 src/Dialogs/PortMonitor.cpp:149
+#: src/Dialogs/DeviceListDialog.cpp:281 src/Dialogs/PortMonitor.cpp:149
 msgid "Reconnect"
 msgstr "Újrakapcsolódás"
 
-#: src/Dialogs/DeviceListDialog.cpp:279
+#: src/Dialogs/DeviceListDialog.cpp:282
 msgid "Flight download"
 msgstr "Repülés letöltése"
 
-#: src/Dialogs/DeviceListDialog.cpp:281
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:253
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:267
+#: src/Dialogs/DeviceListDialog.cpp:284
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:254
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:268
 msgid "Manage"
 msgstr "Műveletek"
 
-#: src/Dialogs/DeviceListDialog.cpp:282
+#: src/Dialogs/DeviceListDialog.cpp:285
 msgid "Monitor"
 msgstr ""
 
@@ -3188,17 +3201,74 @@ msgstr ""
 msgid "Clear"
 msgstr "Törlés"
 
-#: src/Dialogs/ManageCAI302Dialog.cpp:60
-msgid "Do you really want to delete all flights from the device?"
-msgstr "Valóban letöröl az eszközről minden repülést?"
+#: src/Dialogs/ManageCAI302Dialog.cpp:70 src/Dialogs/ManageCAI302Dialog.cpp:88
+#: src/Dialogs/dlgConfiguration.cpp:107
+#, no-c-format
+msgid "Units"
+msgstr "Mértékegységek"
 
-#: src/Dialogs/ManageCAI302Dialog.cpp:133
+#: src/Dialogs/ManageCAI302Dialog.cpp:71 src/Dialogs/ManageCAI302Dialog.cpp:98
+#: src/Dialogs/ManageCAI302Dialog.cpp:102 src/Dialogs/dlgConfiguration.cpp:89
+#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:103
+#, no-c-format
+msgid "Waypoints"
+msgstr "Fordulópontok"
+
+#: src/Dialogs/ManageCAI302Dialog.cpp:74
 msgid "Delete all flights"
 msgstr "Minden repülés törlése"
 
-#: src/Dialogs/ManageCAI302Dialog.cpp:142 src/Dialogs/ManageFlarmDialog.cpp:92
+#: src/Dialogs/ManageCAI302Dialog.cpp:75 src/Dialogs/ManageFlarmDialog.cpp:92
 msgid "Reboot"
 msgstr "Újraindítás"
+
+#: src/Dialogs/ManageCAI302Dialog.cpp:133
+msgid "Do you really want to delete all flights from the device?"
+msgstr "Valóban letöröl az eszközről minden repülést?"
+
+#: src/Dialogs/CAI302/UnitsEditor.cpp:54
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:192
+#: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
+#: src/Dialogs/Vega/HardwareParameters.hpp:69
+#, no-c-format
+msgid "Temperature"
+msgstr "Hőmérséklet"
+
+#: src/Dialogs/CAI302/UnitsEditor.cpp:62
+#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:214
+#: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
+msgid "Pressure"
+msgstr ""
+
+#: src/Dialogs/CAI302/WaypointUploader.cpp:37
+#, fuzzy
+msgid "Failed to load file."
+msgstr "Hiba a repülés letöltésekor."
+
+#: src/Dialogs/CAI302/WaypointUploader.cpp:42
+#, fuzzy
+msgid "Too many waypoints."
+msgstr "Túl sok fordulópont.\n"
+
+#: src/Dialogs/CAI302/WaypointUploader.cpp:46
+#, fuzzy
+msgid "Uploading Waypoints"
+msgstr "Fordulópontok betöltése..."
+
+#: src/Dialogs/CAI302/WaypointUploader.cpp:52
+#, fuzzy
+msgid "Failed to erase waypoints."
+msgstr "Alkalmi FP"
+
+#: src/Dialogs/CAI302/WaypointUploader.cpp:58
+#, fuzzy
+msgid "Failed to switch baud rate."
+msgstr "Hiba a repülés letöltésekor."
+
+#: src/Dialogs/CAI302/WaypointUploader.cpp:72
+#, fuzzy
+msgid "Failed to write waypoint."
+msgstr "Alkalmi FP"
 
 #: src/Dialogs/Vega/VegaConfigurationDialog.cpp:99
 msgid "Set new audio scheme?  Old values will be lost."
@@ -3270,15 +3340,24 @@ msgstr "A szélsebesség kézi beállítása."
 msgid "Manual adjustment of wind direction."
 msgstr "Szélirány kézi beállítása"
 
-#: src/Dialogs/dlgAirspace.cpp:61 src/Dialogs/dlgAirspace.cpp:87
+#: src/Dialogs/dlgAirspace.cpp:63 src/Dialogs/dlgAirspace.cpp:89
 msgid "Warn"
 msgstr "Riaszt"
 
-#: src/Dialogs/dlgAirspace.cpp:62 src/Dialogs/dlgAirspace.cpp:91
-#: Data/Input/default.xci:412 Data/Input/default.xci:463
-#: Data/Input/default.xci:885
+#: src/Dialogs/dlgAirspace.cpp:64 src/Dialogs/dlgAirspace.cpp:93
+#: Data/Input/default.xci:442 Data/Input/default.xci:493
+#: Data/Input/default.xci:915
 msgid "Display"
 msgstr "Kijelző"
+
+#: src/Dialogs/dlgAirspaceColours.cpp:59
+#, fuzzy
+msgid "Select Color"
+msgstr "Válassz színt"
+
+#: src/Dialogs/dlgAirspacePatterns.cpp:59
+msgid "Select Pattern"
+msgstr "Válassz mintát"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:56
 msgid "Enable airspace again?"
@@ -3309,8 +3388,8 @@ msgstr "Irányszög"
 msgid "No Warnings"
 msgstr "Nincs mire figyelmeztetni"
 
-#: src/Dialogs/dlgAlternatesList.cpp:69 Data/Input/default.xci:353
-#: Data/Input/default.xci:1006
+#: src/Dialogs/dlgAlternatesList.cpp:69 Data/Input/default.xci:383
+#: Data/Input/default.xci:1036
 msgid "Alternates"
 msgstr "Kitérők"
 
@@ -3318,75 +3397,75 @@ msgstr "Kitérők"
 msgid "No further information"
 msgstr "Nincs további információ"
 
-#: src/Dialogs/dlgAnalysis.cpp:292 src/Dialogs/dlgAnalysis.cpp:301
-#: src/Dialogs/dlgAnalysis.cpp:310 src/Dialogs/dlgAnalysis.cpp:319
-#: src/Dialogs/dlgAnalysis.cpp:327 src/Dialogs/dlgAnalysis.cpp:337
-#: src/Dialogs/dlgAnalysis.cpp:346 src/Dialogs/dlgAnalysis.cpp:354
-#: src/Dialogs/dlgAnalysis.cpp:363 src/Dialogs/dlgAnalysis.cpp:372
+#: src/Dialogs/dlgAnalysis.cpp:297 src/Dialogs/dlgAnalysis.cpp:306
+#: src/Dialogs/dlgAnalysis.cpp:315 src/Dialogs/dlgAnalysis.cpp:324
+#: src/Dialogs/dlgAnalysis.cpp:332 src/Dialogs/dlgAnalysis.cpp:342
+#: src/Dialogs/dlgAnalysis.cpp:351 src/Dialogs/dlgAnalysis.cpp:359
+#: src/Dialogs/dlgAnalysis.cpp:368 src/Dialogs/dlgAnalysis.cpp:377
 #: Data/Dialogs/dlgAnalysis.xml:3 Data/Dialogs/dlgAnalysis_L.xml:3
-#: Data/Input/default.xci:776 Data/Input/default.xci:1205
+#: Data/Input/default.xci:806 Data/Input/default.xci:1235
 msgid "Analysis"
 msgstr "Elemzés"
 
-#: src/Dialogs/dlgAnalysis.cpp:293
+#: src/Dialogs/dlgAnalysis.cpp:298
 msgid "Barograph"
 msgstr "Barográf"
 
-#: src/Dialogs/dlgAnalysis.cpp:297 src/Dialogs/dlgAnalysis.cpp:333
-#: src/Dialogs/dlgAnalysis.cpp:342
+#: src/Dialogs/dlgAnalysis.cpp:302 src/Dialogs/dlgAnalysis.cpp:338
+#: src/Dialogs/dlgAnalysis.cpp:347
 msgid "Settings"
 msgstr "Rep. tényezők"
 
-#: src/Dialogs/dlgAnalysis.cpp:302
+#: src/Dialogs/dlgAnalysis.cpp:307
 msgid "Climb"
 msgstr "Emelkedés"
 
-#: src/Dialogs/dlgAnalysis.cpp:306 src/Dialogs/dlgAnalysis.cpp:350
+#: src/Dialogs/dlgAnalysis.cpp:311 src/Dialogs/dlgAnalysis.cpp:355
 msgid "Task Calc"
 msgstr "Feladatkezelő"
 
-#: src/Dialogs/dlgAnalysis.cpp:311
+#: src/Dialogs/dlgAnalysis.cpp:316
 msgid "Thermal Band"
 msgstr "Termikus sáv"
 
-#: src/Dialogs/dlgAnalysis.cpp:320
+#: src/Dialogs/dlgAnalysis.cpp:325
 msgid "Wind At Altitude"
 msgstr "Szél adott magasságban"
 
-#: src/Dialogs/dlgAnalysis.cpp:323
+#: src/Dialogs/dlgAnalysis.cpp:328
 msgid "Set Wind"
 msgstr "Szél beáll."
 
-#: src/Dialogs/dlgAnalysis.cpp:328
+#: src/Dialogs/dlgAnalysis.cpp:333
 msgid "Glide Polar"
 msgstr "Gép Poláris"
 
-#: src/Dialogs/dlgAnalysis.cpp:338
+#: src/Dialogs/dlgAnalysis.cpp:343
 msgid "Temp Trace"
 msgstr "Hőmérséklet görbe"
 
-#: src/Dialogs/dlgAnalysis.cpp:347
+#: src/Dialogs/dlgAnalysis.cpp:352
 msgid "Task Speed"
 msgstr "Feladat sebessége"
 
-#: src/Dialogs/dlgAnalysis.cpp:359
+#: src/Dialogs/dlgAnalysis.cpp:364
 msgid "Task calc"
 msgstr "Feladatkezelő"
 
-#: src/Dialogs/dlgAnalysis.cpp:376
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:191
+#: src/Dialogs/dlgAnalysis.cpp:381
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:195
 msgid "Warnings"
 msgstr "Riasztás"
 
-#: src/Dialogs/dlgBasicSettings.cpp:123 src/Dialogs/dlgBasicSettings.cpp:364
+#: src/Dialogs/dlgBasicSettings.cpp:120 src/Dialogs/dlgBasicSettings.cpp:386
 msgid "Dump"
 msgstr "Ürítés"
 
-#: src/Dialogs/dlgBasicSettings.cpp:268
+#: src/Dialogs/dlgBasicSettings.cpp:290
 msgid "Ballast"
 msgstr "Ballaszt"
 
-#: src/Dialogs/dlgBasicSettings.cpp:269
+#: src/Dialogs/dlgBasicSettings.cpp:291
 msgid ""
 "Ballast of the glider.  Increase this value if the pilot/cockpit load is "
 "greater than the reference pilot weight of the glide polar (typically "
@@ -3398,23 +3477,23 @@ msgstr ""
 "Enter megnyomására elindul a ballaszt kiengedése, a konfigurációban megadott "
 "ütemben."
 
-#: src/Dialogs/dlgBasicSettings.cpp:282
+#: src/Dialogs/dlgBasicSettings.cpp:304
 msgid "Bugs"
 msgstr ""
 
-#: src/Dialogs/dlgBasicSettings.cpp:283
+#: src/Dialogs/dlgBasicSettings.cpp:305
 #, no-c-format
 msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
 
-#: src/Dialogs/dlgBasicSettings.cpp:290
+#: src/Dialogs/dlgBasicSettings.cpp:312
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
 msgid "QNH"
 msgstr "QNH"
 
-#: src/Dialogs/dlgBasicSettings.cpp:291
+#: src/Dialogs/dlgBasicSettings.cpp:313
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
 msgid ""
 "Area pressure for barometric altimeter calibration.  This is set "
@@ -3423,11 +3502,11 @@ msgstr ""
 "Területi nyomás barometrikus magasságmérő kalibrálásához. Ez automatikus, ha "
 "Vega csatlakozik."
 
-#: src/Dialogs/dlgBasicSettings.cpp:310
+#: src/Dialogs/dlgBasicSettings.cpp:332
 msgid "Max. temp."
 msgstr "Max. hőm."
 
-#: src/Dialogs/dlgBasicSettings.cpp:311
+#: src/Dialogs/dlgBasicSettings.cpp:333
 msgid ""
 "Set to forecast ground temperature.  Used by convection estimator "
 "(temperature trace page of Analysis dialog)"
@@ -3435,7 +3514,7 @@ msgstr ""
 "Állítsa be a várható talajmenti hőmérsékletet. A konvekció-becslő használja "
 "(Elemzés ablak hőmérsékletváltozás oldala)"
 
-#: src/Dialogs/dlgBasicSettings.cpp:362
+#: src/Dialogs/dlgBasicSettings.cpp:384
 msgid "Flight Setup"
 msgstr "Repülési tényezők"
 
@@ -3469,7 +3548,7 @@ msgstr "Aktív"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:157
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:167
 #: src/Dialogs/dlgWaypointDetails.cpp:237 src/Dialogs/dlgNOAAList.cpp:147
-#: src/Dialogs/dlgNOAAList.cpp:154 src/Dialogs/dlgNOAAList.cpp:274
+#: src/Dialogs/dlgNOAAList.cpp:153 src/Dialogs/dlgNOAAList.cpp:272
 #: src/Dialogs/dlgNOAADetails.cpp:132
 msgid "Error"
 msgstr "Hiba"
@@ -3592,12 +3671,6 @@ msgstr ""
 msgid "Elements"
 msgstr "Elemek"
 
-#: src/Dialogs/dlgConfiguration.cpp:89
-#: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:103
-#, no-c-format
-msgid "Waypoints"
-msgstr "Fordulópontok"
-
 #: src/Dialogs/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Safety Factors"
@@ -3651,16 +3724,11 @@ msgid "InfoBox Modes"
 msgstr "Kijelző oldalak tartalma"
 
 #: src/Dialogs/dlgConfiguration.cpp:106 Data/Dialogs/dlgStatusSystem.xml:8
-#: Data/Dialogs/pnlStatusSystem.xml:8 Data/Input/default.xci:590
-#: Data/Input/default.xci:1143
+#: Data/Dialogs/pnlStatusSystem.xml:8 Data/Input/default.xci:620
+#: Data/Input/default.xci:1173
 #, no-c-format
 msgid "Logger"
 msgstr "Logger"
-
-#: src/Dialogs/dlgConfiguration.cpp:107
-#, no-c-format
-msgid "Units"
-msgstr "Mértékegységek"
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -3676,22 +3744,22 @@ msgstr "Kísérleti funkciók"
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr "Változások elmentve. Újra kell indítani az XCSoar programot."
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:114
+#: src/Dialogs/dlgConfigInfoboxes.cpp:115
 msgid "Overwrite?"
 msgstr "Felülírjam?"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:114
+#: src/Dialogs/dlgConfigInfoboxes.cpp:115
 msgid "InfoBox paste"
 msgstr "Kijelzők beillesztés"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:201 Data/Dialogs/dlgPlanePolar.xml:6
+#: src/Dialogs/dlgConfigInfoboxes.cpp:202 Data/Dialogs/dlgPlanePolar.xml:6
 #: Data/Dialogs/dlgPlanePolar_L.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:6
 msgid "Invalid"
 msgstr "Érvénytelen"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:242 src/Dialogs/dlgWaypointEdit.cpp:53
+#: src/Dialogs/dlgConfigInfoboxes.cpp:353 src/Dialogs/dlgWaypointEdit.cpp:53
 #: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect.xml:8
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:6 Data/Dialogs/dlgWaypointEdit.xml:6
 #: Data/Dialogs/dlgWaypointEdit_L.xml:6 Data/Dialogs/dlgWaypointSelect.xml:2
@@ -3699,19 +3767,15 @@ msgstr "Érvénytelen"
 msgid "Name"
 msgstr "Név"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:256
-msgid "Panel name"
-msgstr "Panel név"
-
-#: src/Dialogs/dlgConfigInfoboxes.cpp:406
+#: src/Dialogs/dlgConfigInfoboxes.cpp:384
 msgid "Content"
 msgstr "Tartalom"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:449
+#: src/Dialogs/dlgConfigInfoboxes.cpp:427
 msgid "Copy"
 msgstr "Másol"
 
-#: src/Dialogs/dlgConfigInfoboxes.cpp:455
+#: src/Dialogs/dlgConfigInfoboxes.cpp:433
 msgid "Paste"
 msgstr "Beill."
 
@@ -3762,8 +3826,8 @@ msgid "Switch InfoBox"
 msgstr ""
 
 #: src/Dialogs/dlgStatus.cpp:63 Data/Dialogs/dlgStatus.xml:2
-#: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:794
-#: Data/Input/default.xci:1213
+#: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:824
+#: Data/Input/default.xci:1243
 msgid "Status"
 msgstr "Státusz"
 
@@ -3826,7 +3890,7 @@ msgid "Location"
 msgstr "Hely"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:122
-#: Data/Dialogs/dlgStatusAircraft.xml:8 Data/Dialogs/pnlStatusTimes.xml:8
+#: Data/Dialogs/dlgStatusAircraft.xml:8 Data/Dialogs/pnlStatusTimes.xml:10
 msgid "Sunset"
 msgstr "Napnyugta"
 
@@ -3969,19 +4033,19 @@ msgstr "Teljes kitöltés"
 msgid "Fill padding"
 msgstr "Szélek kitöltése"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:137
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:141
 msgid "Colours"
 msgstr "Szinek"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:142
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:146
 msgid "Filter"
 msgstr "Szűrő"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:179
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:183
 msgid "Airspace display"
 msgstr "Légterek kijelzése"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:180
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:184
 msgid ""
 "Controls filtering of airspace for display and warnings.  The airspace "
 "filter button also allows filtering of display and warnings independently "
@@ -3991,11 +4055,11 @@ msgstr ""
 "szűrő nyomógomb ugyancsak lehetővé teszi a megjelenítés és a figyelmeztetés "
 "szűrését, osztályonként."
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:183
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:187
 msgid "Clip altitude"
 msgstr "Vágási magasság"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:184
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:188
 msgid ""
 "For clip airspace mode, this is the altitude below which airspace is "
 "displayed."
@@ -4003,35 +4067,35 @@ msgstr ""
 "Amikor a légterek megjelenítése vágásra van állítva, az itt megadott szint "
 "alatti légterek lesznek megjelenítve."
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:187
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:191
 msgid "Margin"
 msgstr "Vágási sáv"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:188
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:192
 msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:191
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:195
 msgid "Enable/disable all airspace warnings."
 msgstr "Engedélyezi vagy letiltja az összes légtér-riasztást."
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:194
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:198
 msgid "Warning time"
 msgstr "Riasztás időzítése"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:195
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:199
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr "Egy légtér megsértése előtt ennyi idővel figyelmezteti a pilótát."
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:199
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:203
 msgid "Acknowledge time"
 msgstr "Nyugtázás érvénye"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:200
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:204
 msgid ""
 "This is the time period in which an acknowledged airspace warning will not "
 "be repeated."
@@ -4039,28 +4103,28 @@ msgstr ""
 "Egy tudomásul vett légtérsértési figyelmeztetést ennyi időn belül nem "
 "ismétel meg."
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:204
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:208
 msgid "Use black outline"
 msgstr "Fekete keret"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:205
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:209
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:209
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:213
 msgid "Airspace fill mode"
 msgstr "Légtér kiszínezésének módja"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:210
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:214
 msgid "Specifies the mode for filling the airspace area."
 msgstr "Légtér kiszínezésének módja."
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:216
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:220
 msgid "Airspace transparency"
 msgstr "Légtér átlátszóság"
 
-#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:216
+#: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:220
 msgid "If enabled, then airspaces are filled transparently."
 msgstr "Ha bekapcsoljuk, a légtereket átlátszóan színezi ki."
 
@@ -5798,13 +5862,6 @@ msgstr "méter"
 msgid "Units used for temperature."
 msgstr "A hőmérsékletekhez használt mértékegység."
 
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:192
-#: src/Weather/NOAAFormatter.cpp:114 src/Weather/NOAAFormatter.cpp:121
-#: src/Dialogs/Vega/HardwareParameters.hpp:69
-#, no-c-format
-msgid "Temperature"
-msgstr "Hőmérséklet"
-
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:196
 msgid "Units used for task speeds."
 msgstr "Feladat sebességéhez használt mértékegységek."
@@ -5815,11 +5872,6 @@ msgstr "Feladat sebesség"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:207
 msgid "Units used for pressures."
-msgstr ""
-
-#: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:214
-#: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
-msgid "Pressure"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:221
@@ -5845,16 +5897,16 @@ msgstr ""
 "A helyi időzóna, az UTC-hez képesti eltolás beállítása. Alul látszik a "
 "számított helyi idő, ami segít a megfelelő eltolást beállítani."
 
-#: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:102
 #: Data/Dialogs/dlgStatusAircraft.xml:7 Data/Dialogs/pnlStatusTimes.xml:4
 msgid "Local time"
 msgstr "Helyi idő"
 
-#: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:109
+#: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:105
 msgid "Use GPS time"
 msgstr "GPS idő használata"
 
-#: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:110
+#: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:106
 msgid ""
 "If enabled sets the clock of the computer to the GPS time once a fix is set. "
 "This is only necessary if your computer does not have a real-time clock with "
@@ -6116,16 +6168,16 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:82
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:171
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:172
 #: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
 msgid "Task Manager"
 msgstr "Feladatkezelő"
 
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:168
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:169
 msgid "Validation Errors"
 msgstr "Érvénytelen értékek"
 
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:170
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:171
 msgid ""
 "Task not valid. Changes will be lost.\n"
 "Continue?"
@@ -6133,17 +6185,17 @@ msgstr ""
 "A feladat nem szabályos. A módosítások elvesznek.\n"
 "Folytatja?"
 
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:247
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:248
 msgid "Calculator"
 msgstr "Számítások"
 
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:250
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:264
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:251
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:265
 msgid "Turn Points"
 msgstr "Fordulópontok"
 
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:255
-#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:269
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:256
+#: src/Dialogs/TaskManager/TaskManagerDialog.cpp:270
 msgid "Rules"
 msgstr "Szabályok"
 
@@ -6167,44 +6219,44 @@ msgstr "Feladat szerkesztés"
 msgid "Add Turnpoint"
 msgstr "Fordulópont hozzáadása"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:186
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:187
 msgid "Task not saved"
 msgstr "Feladat nincs mentve."
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:198
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:199
 msgid "Load the selected task?"
 msgstr "Betöltsem a kiválasztott feladatot?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:203
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:238
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:204
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:239
 msgid "Task Browser"
 msgstr "Feladatböngésző"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:228
 msgid "Can't delete .CUP files"
 msgstr "A .CUP fájl nem törölhető."
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:227
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:228
 msgid "Delete Error"
 msgstr "Törlési hiba"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:233
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:234
 msgid "Delete the selected task?"
 msgstr "Töröljem a kiválasztott feladatot?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:274
 msgid "Can't rename .CUP files"
 msgstr "A .CUP fájl nem nevezhető át."
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:273
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:274
 msgid "Rename Error"
 msgstr "Átnevezési hiba"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:337
 msgid "Create new task?"
 msgstr "Új feladatot hoz létre?"
 
-#: src/Dialogs/TaskManager/TaskListPanel.cpp:336
+#: src/Dialogs/TaskManager/TaskListPanel.cpp:337
 msgid "Task New"
 msgstr "Új feladat"
 
@@ -6224,11 +6276,11 @@ msgstr "Alternatív start engedélyezve"
 msgid "Edit Alternates"
 msgstr "Alternatívok szerkesztése"
 
-#: src/Dialogs/dlgTaskPoint.cpp:296
+#: src/Dialogs/dlgTaskPoint.cpp:297
 msgid "Remove task point?"
 msgstr "Töröljem a feladat ezen pontját?"
 
-#: src/Dialogs/dlgTaskPoint.cpp:296 src/Dialogs/dlgTaskPointType.cpp:110
+#: src/Dialogs/dlgTaskPoint.cpp:297 src/Dialogs/dlgTaskPointType.cpp:110
 msgid "Task Point"
 msgstr "Feladat pont"
 
@@ -6678,23 +6730,23 @@ msgstr "Reptér ICAO kód"
 msgid "Please enter the FOUR letter code of the desired station."
 msgstr "Írd be a négybetüs kódját a kívánt állomásnak."
 
-#: src/Dialogs/dlgNOAAList.cpp:153
+#: src/Dialogs/dlgNOAAList.cpp:152
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
 msgstr "Ne használj speciális karaktert az állomások négybetűs kódjában"
 
-#: src/Dialogs/dlgNOAAList.cpp:163 src/Dialogs/dlgNOAAList.cpp:173
+#: src/Dialogs/dlgNOAAList.cpp:161 src/Dialogs/dlgNOAAList.cpp:171
 #: src/Dialogs/dlgNOAADetails.cpp:74
 msgid "Download"
 msgstr "Letöltés"
 
-#: src/Dialogs/dlgNOAAList.cpp:185 src/Dialogs/dlgNOAADetails.cpp:83
+#: src/Dialogs/dlgNOAAList.cpp:183 src/Dialogs/dlgNOAADetails.cpp:83
 #, c-format
 msgid "Do you want to remove station %s?"
 msgstr "El akarod távolítani a %s állomást?"
 
-#: src/Dialogs/dlgNOAAList.cpp:188 src/Dialogs/dlgNOAADetails.cpp:86
+#: src/Dialogs/dlgNOAAList.cpp:186 src/Dialogs/dlgNOAADetails.cpp:86
 #: Data/Dialogs/dlgNOAADetails.xml:7 Data/Dialogs/dlgNOAADetails_L.xml:7
 #: Data/Dialogs/dlgNOAAList.xml:8 Data/Dialogs/dlgNOAAList_L.xml:10
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:5
@@ -6703,7 +6755,7 @@ msgstr "El akarod távolítani a %s állomást?"
 msgid "Remove"
 msgstr "Törlés"
 
-#: src/Dialogs/dlgNOAAList.cpp:273 src/Dialogs/dlgNOAADetails.cpp:131
+#: src/Dialogs/dlgNOAAList.cpp:271 src/Dialogs/dlgNOAADetails.cpp:131
 msgid "This function is not available on your platform yet."
 msgstr "Ez a funkció még nem elérhető a platformodon."
 
@@ -6713,19 +6765,48 @@ msgstr "Ez a funkció még nem elérhető a platformodon."
 msgid "METAR and TAF"
 msgstr "METAR és TAF"
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:96
-msgid "Tracking Interval"
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:91
+#, fuzzy, no-c-format
+msgid "Glider"
+msgstr "Gép Poláris"
+
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:92
+#, no-c-format
+msgid "Paraglider"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:102
-msgid "Server"
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:93
+#, fuzzy, no-c-format
+msgid "Powered aircraft"
+msgstr "Nincs géptípus"
+
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:94
+#, no-c-format
+msgid "Hot-air balloon"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:106
+msgid "Tracking Interval"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
+#, fuzzy
+msgid "Vehicle Type"
+msgstr "Típusváltás"
+
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
+msgid "Type of vehicle used."
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:115
+msgid "Server"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:119
 msgid "Username"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:107
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:120
 msgid "Password"
 msgstr ""
 
@@ -6746,7 +6827,7 @@ msgstr ""
 msgid "Sky Conditions"
 msgstr ""
 
-#: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:802
+#: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:832
 msgid "Weather"
 msgstr "Időjárás"
 
@@ -7645,11 +7726,6 @@ msgstr "Saját kód"
 msgid "Handicap"
 msgstr "Gép handicap"
 
-#: Data/Dialogs/dlgAirspacePatterns.xml:3
-#: Data/Dialogs/dlgAirspacePatterns_L.xml:3
-msgid "Select Pattern"
-msgstr "Válassz mintát"
-
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:3
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:3
 msgid "Edit Text"
@@ -7722,7 +7798,7 @@ msgstr "Légtér nyugta"
 msgid "Height of font.  65 is large, 20 is very small."
 msgstr "Betűméret. A 65 hatalmas, a 20 az apró."
 
-#: Data/Dialogs/pnlStatusTimes.xml:7
+#: Data/Dialogs/pnlStatusTimes.xml:9
 msgid "Landing time"
 msgstr "Leszállás"
 
@@ -7868,11 +7944,6 @@ msgstr "Hátralévő idő"
 #: Data/Dialogs/dlgSwitches.xml:41
 msgid "User up"
 msgstr "Fel"
-
-#: Data/Dialogs/dlgAirspaceColours.xml:3
-#: Data/Dialogs/dlgAirspaceColours_L.xml:3
-msgid "Select Colour"
-msgstr "Válassz színt"
 
 #: Data/Dialogs/pnlStatusRules.xml:6
 msgid "Start alt."
@@ -8157,13 +8228,13 @@ msgstr "Vissza"
 msgid "MacCready"
 msgstr "MacCready"
 
-#: Data/Dialogs/dlgStatusAircraft.xml:6 Data/Dialogs/pnlStatusTimes.xml:5
+#: Data/Dialogs/dlgStatusAircraft.xml:6 Data/Dialogs/pnlStatusTimes.xml:7
 msgid "Flight time"
 msgstr "Repült idő"
 
 #: Data/Dialogs/dlgSimulatorPrompt.xml:8
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:8 Data/Dialogs/dlgStartup.xml:10
-#: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:914
+#: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:944
 msgid "Quit"
 msgstr "Kilépés"
 
@@ -8190,7 +8261,7 @@ msgstr "Kijelzők neve"
 msgid "Start time"
 msgstr "Start ideje"
 
-#: Data/Dialogs/pnlStatusTimes.xml:6
+#: Data/Dialogs/pnlStatusTimes.xml:8
 msgid "Takeoff time"
 msgstr "Felszállás"
 
@@ -8213,7 +8284,7 @@ msgstr "Repülés"
 msgid "Bold"
 msgstr "Félkövér"
 
-#: Data/Dialogs/dlgAirspace.xml:5 Data/Dialogs/dlgAirspace_L.xml:5
+#: Data/Dialogs/dlgAirspace.xml:6 Data/Dialogs/dlgAirspace_L.xml:6
 msgid "Lookup"
 msgstr "Keresés"
 
@@ -8270,6 +8341,11 @@ msgstr ""
 msgid "Radial"
 msgstr "Radiál"
 
+#: Data/Dialogs/pnlStatusTimes.xml:5
+#, fuzzy
+msgid "UTC time"
+msgstr "HT idő"
+
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
 msgid "Waypoints Editor"
@@ -8316,6 +8392,11 @@ msgstr "Másodlagos startok"
 #: Data/Dialogs/dlgVegaDemo.xml:3
 msgid "Vario Demo"
 msgstr "Varió demó"
+
+#: Data/Dialogs/pnlStatusTimes.xml:6
+#, fuzzy
+msgid "UTC date"
+msgstr "Frissítés"
 
 #: Data/Dialogs/dlgStatusSystem.xml:5 Data/Dialogs/pnlStatusSystem.xml:5
 msgid "Satellites in view"
@@ -8414,12 +8495,12 @@ msgid "Rename"
 msgstr "Átnevez"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:10
-#: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:380
-#: Data/Input/default.xci:1022
+#: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:410
+#: Data/Input/default.xci:1052
 msgid "GoTo"
 msgstr "Menj"
 
-#: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:598
+#: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:628
 msgid "Replay"
 msgstr "Lejátszás"
 
@@ -8483,15 +8564,15 @@ msgstr "Repülőgép Státusz"
 msgid "Change callsign"
 msgstr ""
 
-#: Data/Input/default.xci:631 Data/Input/default.xci:1166
+#: Data/Input/default.xci:661 Data/Input/default.xci:1196
 msgid "Setup Plane"
 msgstr ""
 
-#: Data/Input/default.xci:493 Data/Input/default.xci:1094
+#: Data/Input/default.xci:523 Data/Input/default.xci:1124
 msgid "Topo."
 msgstr "Topo."
 
-#: Data/Input/default.xci:345 Data/Input/default.xci:998
+#: Data/Input/default.xci:375 Data/Input/default.xci:1028
 msgid ""
 "Waypoint\n"
 "List"
@@ -8499,12 +8580,12 @@ msgstr ""
 "FP\n"
 "Lista"
 
-#: Data/Input/default.xci:510 Data/Input/default.xci:559
-#: Data/Input/default.xci:608 Data/Input/default.xci:892
+#: Data/Input/default.xci:540 Data/Input/default.xci:589
+#: Data/Input/default.xci:638 Data/Input/default.xci:922
 msgid "Config"
 msgstr "Konfig"
 
-#: Data/Input/default.xci:471 Data/Input/default.xci:1072
+#: Data/Input/default.xci:501 Data/Input/default.xci:1102
 msgid "Labels"
 msgstr "Címke"
 
@@ -8512,7 +8593,7 @@ msgstr "Címke"
 msgid "Below final glide"
 msgstr "Végsikló pálya alatt"
 
-#: Data/Input/default.xci:719
+#: Data/Input/default.xci:749
 msgid ""
 "Cruise\n"
 "Demo"
@@ -8520,7 +8601,7 @@ msgstr ""
 "Utazás\n"
 "Demó"
 
-#: Data/Input/default.xci:704
+#: Data/Input/default.xci:734
 msgid ""
 "Accel\n"
 "Zero"
@@ -8528,7 +8609,7 @@ msgstr ""
 "Gyorsít\n"
 "Zero"
 
-#: Data/Input/default.xci:664
+#: Data/Input/default.xci:694
 msgid ""
 "Manual\n"
 "Demo"
@@ -8536,11 +8617,11 @@ msgstr ""
 "Kézi\n"
 "demó"
 
-#: Data/Input/default.xci:479 Data/Input/default.xci:1080
+#: Data/Input/default.xci:509 Data/Input/default.xci:1110
 msgid "Trail"
 msgstr "Nyom"
 
-#: Data/Input/default.xci:671
+#: Data/Input/default.xci:701
 msgid ""
 "Setup\n"
 "Stall"
@@ -8548,7 +8629,7 @@ msgstr ""
 "Átesés\n"
 "konfig"
 
-#: Data/Input/default.xci:768 Data/Input/default.xci:1197
+#: Data/Input/default.xci:798 Data/Input/default.xci:1227
 msgid ""
 "Check\n"
 "list"
@@ -8556,19 +8637,19 @@ msgstr ""
 "Ellenőrző\n"
 "lista"
 
-#: Data/Input/default.xci:143 Data/Input/default.xci:760
+#: Data/Input/default.xci:143 Data/Input/default.xci:790
 msgid ""
 "What's\n"
 "here?"
 msgstr ""
 
-#: Data/Input/default.xci:525
+#: Data/Input/default.xci:555
 msgid ""
 "MacCready\n"
 "-"
 msgstr ""
 
-#: Data/Input/default.xci:396 Data/Input/default.xci:1038
+#: Data/Input/default.xci:426 Data/Input/default.xci:1068
 msgid ""
 "Waypoint\n"
 "Details"
@@ -8576,15 +8657,15 @@ msgstr ""
 "FP\n"
 "részletek"
 
-#: Data/Input/default.xci:442 Data/Input/default.xci:1054
+#: Data/Input/default.xci:472 Data/Input/default.xci:1084
 msgid "Dropped marker"
 msgstr "Jelzőt letettem"
 
-#: Data/Input/default.xci:615 Data/Input/default.xci:1150
+#: Data/Input/default.xci:645 Data/Input/default.xci:1180
 msgid "Raw Logger"
 msgstr "NMEA logger"
 
-#: Data/Input/default.xci:549 Data/Input/default.xci:1119
+#: Data/Input/default.xci:579 Data/Input/default.xci:1149
 msgid ""
 "Setup\n"
 "Wind"
@@ -8592,7 +8673,7 @@ msgstr ""
 "Szél\n"
 "konfig"
 
-#: Data/Input/default.xci:650
+#: Data/Input/default.xci:680
 msgid ""
 "Airframe\n"
 "Switches"
@@ -8608,7 +8689,7 @@ msgstr ""
 "Görgetés\n"
 "Ki"
 
-#: Data/Input/default.xci:826 Data/Input/default.xci:1221
+#: Data/Input/default.xci:856 Data/Input/default.xci:1251
 msgid "Thermal Assistant"
 msgstr "Termik segéd"
 
@@ -8616,7 +8697,7 @@ msgstr "Termik segéd"
 msgid "Above final glide"
 msgstr "Végsikló pálya fölött"
 
-#: Data/Input/default.xci:1189
+#: Data/Input/default.xci:1219
 msgid ""
 "Nearest\n"
 "Airspace"
@@ -8624,7 +8705,7 @@ msgstr ""
 "Közeli\n"
 "légtér"
 
-#: Data/Input/default.xci:541 Data/Input/default.xci:1111
+#: Data/Input/default.xci:571 Data/Input/default.xci:1141
 msgid ""
 "Flight\n"
 "Setup"
@@ -8632,7 +8713,7 @@ msgstr ""
 "Repülési\n"
 "tényezők"
 
-#: Data/Input/default.xci:574 Data/Input/default.xci:1127
+#: Data/Input/default.xci:604 Data/Input/default.xci:1157
 msgid ""
 "Setup\n"
 "System"
@@ -8640,28 +8721,28 @@ msgstr ""
 "Rendszer\n"
 "konfig"
 
-#: Data/Input/default.xci:657
+#: Data/Input/default.xci:687
 msgid "Setup Audio"
 msgstr "Hang konfig"
 
-#: Data/Input/default.xci:744 Data/Input/default.xci:1173
+#: Data/Input/default.xci:774 Data/Input/default.xci:1203
 msgid "FLARM Radar"
 msgstr "FLARM Radar"
 
-#: Data/Input/default.xci:435 Data/Input/default.xci:957
-#: Data/Input/default.xci:1047
+#: Data/Input/default.xci:465 Data/Input/default.xci:987
+#: Data/Input/default.xci:1077
 msgid "Zoom"
 msgstr "Nagyítás"
 
-#: Data/Input/default.xci:696
+#: Data/Input/default.xci:726
 msgid "Vario ASI zeroed"
 msgstr "Varió ASI nullázva"
 
-#: Data/Input/default.xci:703
+#: Data/Input/default.xci:733
 msgid "Accelerometer leveled"
 msgstr "Gyorsulásmérő szintben"
 
-#: Data/Input/default.xci:452 Data/Input/default.xci:1064
+#: Data/Input/default.xci:482 Data/Input/default.xci:1094
 msgid ""
 "Pan\n"
 "On"
@@ -8677,7 +8758,7 @@ msgstr "Felszállás"
 msgid "Final glide through terrain"
 msgstr "Végsiklás terepen át"
 
-#: Data/Input/default.xci:697
+#: Data/Input/default.xci:727
 msgid ""
 "ASI\n"
 "Zero"
@@ -8685,7 +8766,7 @@ msgstr ""
 "ASI\n"
 "Zero"
 
-#: Data/Input/default.xci:445 Data/Input/default.xci:1057
+#: Data/Input/default.xci:475 Data/Input/default.xci:1087
 msgid ""
 "Mark\n"
 "Drop"
@@ -8693,26 +8774,26 @@ msgstr ""
 "Jelet\n"
 "tesz"
 
-#: Data/Input/default.xci:711
+#: Data/Input/default.xci:741
 msgid "Stored to EEPROM"
 msgstr "EEPROMban tárolva"
 
-#: Data/Input/default.xci:678
+#: Data/Input/default.xci:708
 msgid "Accel"
 msgstr "Gyorsít"
 
-#: Data/Input/default.xci:845
+#: Data/Input/default.xci:875
 msgid "Credits"
 msgstr "Névjegy"
 
-#: Data/Input/default.xci:136 Data/Input/default.xci:427
-#: Data/Input/default.xci:950
+#: Data/Input/default.xci:136 Data/Input/default.xci:457
+#: Data/Input/default.xci:980
 msgid ""
 "Zoom\n"
 "Out"
 msgstr "Távolít"
 
-#: Data/Input/default.xci:726
+#: Data/Input/default.xci:756
 msgid ""
 "Climb\n"
 "Demo"
@@ -8720,7 +8801,7 @@ msgstr ""
 "Emelkedés\n"
 "Demó"
 
-#: Data/Input/default.xci:867
+#: Data/Input/default.xci:897
 msgid ""
 "Message\n"
 "Repeat"
@@ -8728,7 +8809,7 @@ msgstr ""
 "Üzenet\n"
 "ismét"
 
-#: Data/Input/default.xci:818
+#: Data/Input/default.xci:848
 msgid ""
 "FLARM\n"
 "Details"
@@ -8736,18 +8817,18 @@ msgstr ""
 "FLARM\n"
 "részletek"
 
-#: Data/Input/default.xci:129 Data/Input/default.xci:420
-#: Data/Input/default.xci:943
+#: Data/Input/default.xci:129 Data/Input/default.xci:450
+#: Data/Input/default.xci:973
 msgid ""
 "Zoom\n"
 "In"
 msgstr "Közelít"
 
-#: Data/Input/default.xci:932
+#: Data/Input/default.xci:962
 msgid "Return"
 msgstr ""
 
-#: Data/Input/default.xci:582 Data/Input/default.xci:1135
+#: Data/Input/default.xci:612 Data/Input/default.xci:1165
 msgid ""
 "Settings\n"
 "Airspace"
@@ -8755,16 +8836,16 @@ msgstr ""
 "Légtér\n"
 "konfig"
 
-#: Data/Input/default.xci:315 Data/Input/default.xci:364
-#: Data/Input/default.xci:878
+#: Data/Input/default.xci:345 Data/Input/default.xci:394
+#: Data/Input/default.xci:908
 msgid "Nav"
 msgstr "Navigáció"
 
-#: Data/Input/default.xci:712
+#: Data/Input/default.xci:742
 msgid "Store"
 msgstr "Tárol"
 
-#: Data/Input/default.xci:810
+#: Data/Input/default.xci:840
 msgid ""
 "Team\n"
 "Code"
@@ -8772,7 +8853,7 @@ msgstr ""
 "Csapat\n"
 "kód"
 
-#: Data/Input/default.xci:518
+#: Data/Input/default.xci:548
 msgid ""
 "MacCready\n"
 "+"
@@ -8782,11 +8863,17 @@ msgstr ""
 msgid "Landing"
 msgstr "Leszállás"
 
-#: Data/Input/default.xci:752 Data/Input/default.xci:1181
+#: Data/Input/default.xci:782 Data/Input/default.xci:1211
 msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+
+#~ msgid "Failed to enable download mode."
+#~ msgstr "Sikertelen letöltési mód engedélyezés"
+
+#~ msgid "Panel name"
+#~ msgstr "Panel név"
 
 #~ msgid "Unknown Filetype."
 #~ msgstr "Ismeretlen file típus."
