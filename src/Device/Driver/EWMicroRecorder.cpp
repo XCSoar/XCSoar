@@ -34,7 +34,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units/System.hpp"
-#include "PeriodClock.hpp"
+#include "TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/StringUtil.hpp"
 
@@ -113,12 +113,20 @@ TryConnect(Port &port, char *user_data, size_t max_user_data,
   unsigned user_size = 0;
   bool started = false;
 
-  PeriodClock clock;
-  clock.Update();
+  TimeoutClock timeout(8000);
 
-  int i;
-  while ((i = port.GetChar()) != EOF && !clock.Check(8000) &&
-         !env.IsCancelled()) {
+  while (true) {
+    int remaining = timeout.GetRemainingSigned();
+    if (remaining < 0)
+      return false;
+
+    if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
+      return false;
+
+    int i = port.GetChar();
+    if (i < 0)
+      return false;
+
     char ch = (char)i;
 
     if (!started && ch == '-')
