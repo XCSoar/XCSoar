@@ -46,7 +46,7 @@ FlarmDevice::Declare(const Declaration &declaration,
   // Total data size must not surpass 183 bytes
   // probably will issue PFLAC,ERROR if a problem?
 
-  return false;
+  return true;
 }
 
 bool
