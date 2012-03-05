@@ -52,6 +52,17 @@ ButtonLabel::Destroy()
   bar = NULL;
 }
 
+static bool
+OnlyDigitsAndPunctuation(const TCHAR *s)
+{
+  while (*s) {
+    if (!(_istdigit(*s) || _istpunct(*s)))
+      return false;
+    s++;
+  }
+  return true;
+}
+
 ButtonLabel::Expanded
 ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
 {
@@ -65,7 +76,27 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     /* no macro, we can just translate the text */
     expanded.visible = true;
     expanded.enabled = true;
-    expanded.text = gettext(text);
+    const TCHAR *nl;
+    if (((nl = _tcschr(text, '\n')) != NULL) && OnlyDigitsAndPunctuation(nl+1)) {
+      /* Quick hack for skipping the translation for second line of a two line
+         label with only digits and punctuation in the second line, e.g.
+         for menu labels like "Config\n2/3" */
+
+      /* copy the text up to the '\n' to a new buffer and translate it */
+      TCHAR translatable[256];
+      std::copy(text, nl, translatable);
+      translatable[nl - text] = _T('\0');
+
+      const TCHAR *translated = StringIsEmpty(translatable)
+        ? _T("") : gettext(translatable);
+
+      /* concatenate the translated text and the part starting with '\n' */
+      _tcscpy(buffer, translated);
+      _tcscat(buffer, nl);
+
+      expanded.text = buffer;
+    } else
+      expanded.text = gettext(text);
     return expanded;
   } else {
     const TCHAR *macros = dollar;
