@@ -230,8 +230,6 @@ bool
 FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
                             OperationEnvironment &env)
 {
-  assert(in_binary_mode);
-
   // Create header for getting record information
   FrameHeader header = PrepareFrameHeader(MT_GETRECORDINFO);
 
@@ -257,8 +255,6 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
 FlarmDevice::MessageType
 FlarmDevice::SelectFlight(uint8_t record_number, OperationEnvironment &env)
 {
-  assert(in_binary_mode);
-
   // Create header for selecting a log record
   uint8_t data[1] = { record_number };
   FrameHeader header = PrepareFrameHeader(MT_SELECTRECORD, data, sizeof(data));
@@ -277,7 +273,8 @@ bool
 FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
                             OperationEnvironment &env)
 {
-  assert(in_binary_mode);
+  if (!BinaryMode(env))
+    return false;
 
   // Try to receive flight information until the list is full
   env.SetProgressRange(10);
@@ -291,8 +288,10 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
       break;
 
     // If neither ACK nor NACK was received
-    if (ack_result != MT_ACK || env.IsCancelled())
+    if (ack_result != MT_ACK || env.IsCancelled()) {
+      mode = Mode::UNKNOWN;
       return false;
+    }
 
     RecordedFlightInfo flight_info;
     flight_info.internal.flarm = i;
@@ -306,8 +305,6 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
 bool
 FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
 {
-  assert(in_binary_mode);
-
   BinaryWriter writer(path);
   if (writer.HasError() || env.IsCancelled())
     return false;
@@ -360,7 +357,8 @@ bool
 FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
                             const TCHAR *path, OperationEnvironment &env)
 {
-  assert(in_binary_mode);
+  if (!BinaryMode(env))
+    return false;
 
   MessageType ack_result = SelectFlight(flight.internal.flarm, env);
 
@@ -371,6 +369,7 @@ FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (DownloadFlight(path, env))
     return true;
 
+  mode = Mode::UNKNOWN;
   File::Delete(path);
 
   return false;

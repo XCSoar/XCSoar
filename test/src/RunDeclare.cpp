@@ -149,12 +149,6 @@ int main(int argc, char **argv)
     assert(through_driver->CreateOnPort != NULL);
     through_device = through_driver->CreateOnPort(config, port);
     assert(through_device != NULL);
-
-    ConsoleOperationEnvironment env;
-    if (!through_device->Open(env)) {
-      _ftprintf(stderr, _T("Failed to open driver: %s\n"), through_name);
-      return EXIT_FAILURE;
-    }
   }
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
@@ -180,21 +174,12 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!device->Open(env)) {
-    _ftprintf(stderr, _T("Failed to open driver: %s\n"), driver_name);
-    return EXIT_FAILURE;
-  }
-
   if (device->Declare(declaration, NULL, env))
     fprintf(stderr, "Declaration ok\n");
   else
     fprintf(stderr, "Declaration failed\n");
 
-  if (through_device != NULL) {
-    through_device->DisablePassThrough();
-    delete through_device;
-  }
-
+  delete through_device;
   delete device;
 
   return EXIT_SUCCESS;

@@ -36,6 +36,8 @@ IMIDevice::Declare(const Declaration &declaration,
   if (size < 2 || size > 13)
     return false;
 
+  port.StopRxThread();
+
   bool success = Connect(env) && !env.IsCancelled();
   success = success && IMI::DeclarationWrite(port, declaration);
 

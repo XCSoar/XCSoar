@@ -217,7 +217,7 @@ LXDevice::Declare(const Declaration &declaration,
   if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;
 
-  if (!EnablePassThrough(env))
+  if (!EnableCommandMode(env))
     return false;
 
   unsigned old_baud_rate = 0;
@@ -232,11 +232,6 @@ LXDevice::Declare(const Declaration &declaration,
   bool success = DeclareInner(port, declaration, env);
 
   LX::CommandModeQuick(port, env);
-
-  DisablePassThrough();
-
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
 
   return success;
 }

@@ -133,7 +133,8 @@ bool
 LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
 {
-  assert(in_command_mode);
+  if (!EnableCommandMode(env))
+    return false;
 
   assert(!busy);
   mutex.Lock();
@@ -158,7 +159,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
                     FILE *file, OperationEnvironment &env)
 {
   if (!LX::CommandMode(port, env))
-      return false;
+    return false;
 
   LX::SeekMemory seek;
   seek.start_address = flight.internal.lx.start_address;
@@ -204,6 +205,9 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
                          const TCHAR *path,
                          OperationEnvironment &env)
 {
+  if (!EnableCommandMode(env))
+    return false;
+
   FILE *file = _tfopen(path, _T("wb"));
   if (file == NULL)
     return false;

@@ -45,11 +45,11 @@ public:
   CaiGpsNavDevice(Port &_port):port(_port) {}
 
 public:
-  virtual bool Open(OperationEnvironment &env);
+  virtual bool EnableNMEA(OperationEnvironment &env);
 };
 
 bool
-CaiGpsNavDevice::Open(OperationEnvironment &env)
+CaiGpsNavDevice::EnableNMEA(OperationEnvironment &env)
 {
   port.Write(CtrlC);
   env.Sleep(50);

@@ -174,6 +174,12 @@ public:
    */
   void AutoReopen(OperationEnvironment &env);
 
+  /**
+   * Call this method after Declare(), ReadFlightList(),
+   * DownloadFlight() when you're done, to switch back to NMEA mode.
+   */
+  bool EnableNMEA(OperationEnvironment &env);
+
   const TCHAR *GetDisplayName() const;
 
   /**
@@ -208,8 +214,6 @@ public:
   }
 
   void SetBusy(bool _busy) {
-    assert(_busy != busy);
-
     busy = _busy;
   }
 
@@ -246,9 +250,6 @@ public:
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);
-
-  bool EnableDownloadMode(OperationEnvironment &env);
-  bool DisableDownloadMode();
 
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env);

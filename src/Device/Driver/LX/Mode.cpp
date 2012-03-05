@@ -25,6 +25,16 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
 
+void
+LXDevice::LinkTimeout()
+{
+  ScopeLock protect(mutex);
+
+  mode = Mode::UNKNOWN;
+  old_baud_rate = 0;
+  busy = false;
+}
+
 /**
  * Enable pass-through mode on the LX1600.  This command was provided
  * by Crtomir Rojnik (LX Navigation) in an email without further
@@ -68,8 +78,21 @@ EnableLXWP(Port &port)
 }
 
 bool
-LXDevice::Open(gcc_unused OperationEnvironment &env)
+LXDevice::EnableNMEA(gcc_unused OperationEnvironment &env)
 {
+  unsigned old_baud_rate;
+
+  {
+    ScopeLock protect(mutex);
+    if (mode == Mode::NMEA)
+      return true;
+
+    old_baud_rate = this->old_baud_rate;
+    this->old_baud_rate = 0;
+    mode = Mode::NMEA;
+    busy = false;
+  }
+
   /* just in case the LX1600 is still in pass-through mode: */
   ModeLX1600(port);
 
@@ -79,6 +102,11 @@ LXDevice::Open(gcc_unused OperationEnvironment &env)
   // We have no documentation and so we do not know what this exactly means
   EnableLXWP(port);
 
+  if (old_baud_rate != 0)
+    port.SetBaudrate(old_baud_rate);
+
+  port.Flush();
+
   return true;
 }
 
@@ -86,7 +114,7 @@ void
 LXDevice::OnSysTicker(const DerivedInfo &calculated)
 {
   ScopeLock protect(mutex);
-  if (in_command_mode && !busy) {
+  if (mode == Mode::COMMAND && !busy) {
     /* keep the command mode alive while the user chooses a flight in
        the download dialog */
     port.Flush();
@@ -100,50 +128,46 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
   return ModeColibri(port);
 }
 
-void
-LXDevice::DisablePassThrough()
-{
-  ModeLX1600(port);
-}
-
 bool
-LXDevice::EnableDownloadMode(OperationEnvironment &env)
+LXDevice::EnableCommandMode(OperationEnvironment &env)
 {
-  if (!ModeColibri(port))
+  {
+    ScopeLock protect(mutex);
+    if (mode == Mode::COMMAND)
+      return true;
+  }
+
+  port.StopRxThread();
+
+  if (!ModeColibri(port)) {
+    mode = Mode::UNKNOWN;
     return false;
+  }
 
   if (bulk_baud_rate != 0) {
     old_baud_rate = port.GetBaudrate();
     if (old_baud_rate == bulk_baud_rate)
       old_baud_rate = 0;
-    else if (!port.SetBaudrate(bulk_baud_rate))
+    else if (!port.SetBaudrate(bulk_baud_rate)) {
+      mode = Mode::UNKNOWN;
       return false;
+    }
   } else
     old_baud_rate = 0;
 
   if (!LX::CommandMode(port, env)) {
-    if (old_baud_rate != 0)
+    if (old_baud_rate != 0) {
       port.SetBaudrate(old_baud_rate);
+      old_baud_rate = 0;
+    }
+
+    ScopeLock protect(mutex);
+    mode = Mode::UNKNOWN;
     return false;
   }
 
   ScopeLock protect(mutex);
-  in_command_mode = true;
+  mode = Mode::COMMAND;
   busy = false;
-  return true;
-}
-
-bool
-LXDevice::DisableDownloadMode()
-{
-  ModeLX1600(port);
-
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
-
-  port.Flush();
-
-  ScopeLock protect(mutex);
-  in_command_mode = false;
   return true;
 }

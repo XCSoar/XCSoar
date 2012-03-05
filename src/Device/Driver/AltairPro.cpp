@@ -105,6 +105,8 @@ AltairProDevice::Declare(const struct Declaration &declaration,
                          gcc_unused const Waypoint *home,
                          OperationEnvironment &env)
 {
+  port.StopRxThread();
+
   port.SetRxTimeout(500); // set RX timeout to 500[ms]
 
   bool result = DeclareInternal(declaration);

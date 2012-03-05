@@ -35,7 +35,6 @@ bool
 FlarmDevice::SendEscaped(const void *buffer, size_t length,
                          OperationEnvironment &env, unsigned timeout_ms)
 {
-  assert(in_binary_mode);
   assert(buffer != NULL);
   assert(length > 0);
 
@@ -71,7 +70,6 @@ bool
 FlarmDevice::ReceiveEscaped(void *buffer, size_t length,
                             OperationEnvironment &env, unsigned timeout_ms)
 {
-  assert(in_binary_mode);
   assert(buffer != NULL);
   assert(length > 0);
 
@@ -130,15 +128,12 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length,
 bool
 FlarmDevice::SendStartByte()
 {
-  assert(in_binary_mode);
   return port.Write(FLARM_STARTFRAME);
 }
 
 bool
 FlarmDevice::WaitForStartByte(unsigned timeout_ms)
 {
-  assert(in_binary_mode);
-
   const TimeoutClock timeout(timeout_ms);
 
   while (!timeout.HasExpired())
@@ -205,7 +200,6 @@ bool
 FlarmDevice::SendFrameHeader(const FrameHeader &header,
                              OperationEnvironment &env, unsigned timeout_ms)
 {
-  assert(in_binary_mode);
   return SendEscaped(&header, sizeof(header), env, timeout_ms);
 }
 
@@ -213,7 +207,6 @@ bool
 FlarmDevice::ReceiveFrameHeader(FrameHeader &header,
                                 OperationEnvironment &env, unsigned timeout_ms)
 {
-  assert(in_binary_mode);
   return ReceiveEscaped(&header, sizeof(header), env, timeout_ms);
 }
 
@@ -314,16 +307,19 @@ FlarmDevice::BinaryReset(OperationEnvironment &env, unsigned timeout_ms)
 }
 
 bool
-FlarmDevice::EnableDownloadMode(OperationEnvironment &env)
+FlarmDevice::BinaryMode(OperationEnvironment &env)
 {
-  assert(!in_binary_mode);
+  if (mode == Mode::BINARY)
+    return true;
+
+  port.StopRxThread();
 
   // "Binary mode is engaged by sending the text command "$PFLAX"
   // (including a newline character) to Flarm."
   Send("PFLAX");
 
   // Remember that we should now be in binary mode (for further assert() calls)
-  in_binary_mode = true;
+  mode = Mode::BINARY;
 
   // "After switching, connection should again be checked by issuing a ping."
   // Testing has revealed that switching the protocol takes a certain amount
@@ -332,7 +328,7 @@ FlarmDevice::EnableDownloadMode(OperationEnvironment &env)
   for (unsigned i = 0; i < 10; ++i) {
     if (env.IsCancelled()) {
       BinaryReset(env, 200);
-      in_binary_mode = true;
+      mode = Mode::UNKNOWN;
       return false;
     }
 
@@ -342,20 +338,6 @@ FlarmDevice::EnableDownloadMode(OperationEnvironment &env)
   }
 
   // Apparently the switch to binary mode didn't work
-  in_binary_mode = false;
+  mode = Mode::UNKNOWN;
   return false;
-}
-
-bool
-FlarmDevice::DisableDownloadMode()
-{
-  assert(in_binary_mode);
-
-  // "Reset Device, exit binary communication mode."
-  NullOperationEnvironment env;
-  if (!BinaryReset(env, 500))
-    return false;
-
-  in_binary_mode = false;
-  return true;
 }

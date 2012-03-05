@@ -87,17 +87,22 @@ public:
   virtual ~Device();
 
   /**
-   * Called right after opening the port.  May be used to initialise
-   * the connected device, e.g. to switch to NMEA mode.
-   */
-  virtual bool Open(OperationEnvironment &env) = 0;
-
-  /**
    * Called after there has not been any NMEA input on the port for
-   * some time, and XCSoar considers the device "disconnected".  May
-   * be used to reinitialise NMEA mode.
+   * some time, and XCSoar considers the device "disconnected".  The
+   * next EnableNMEA() code should attempt to put the device back to
+   * NMEA mode.
    */
   virtual void LinkTimeout() = 0;
+
+  /**
+   * Enable NMEA mode.  This method is called after opening the
+   * device, after LinkTimeout() and after all other methods that
+   * manipulate the device.  If a driver does not need to disable NMEA
+   * mode for a method implementation, this should be a no-op.
+   *
+   * The caller is responsible for invoking Port::StartRxThread().
+   */
+  virtual bool EnableNMEA(OperationEnvironment &env) = 0;
 
   /**
    * Parse a line of input from the port.
@@ -178,11 +183,6 @@ public:
   virtual bool EnablePassThrough(OperationEnvironment &env) = 0;
 
   /**
-   * Disable pass-through mode, see EnablePassThrough().
-   */
-  virtual void DisablePassThrough() = 0;
-
-  /**
    * Declare a task.
    *
    * @param declaration the task declaration
@@ -193,23 +193,6 @@ public:
    */
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env) = 0;
-
-  /**
-   * Set the device into download mode.
-   * Should be done before a downloading operation is started
-   * (e.g. ReadFlightList() or DownloadFlight()).
-   * are called.
-   * @return true on success
-   */
-  virtual bool EnableDownloadMode(OperationEnvironment &env) = 0;
-
-  /**
-   * Leave the download mode.
-   * Should be done after all downloading operations are finished
-   * (e.g. ReadFlightList() or DownloadFlight()).
-   * @return true on success
-   */
-  virtual bool DisableDownloadMode() = 0;
 
   /**
    * Read the list of recorded flights.
@@ -255,9 +238,8 @@ public:
  */
 class AbstractDevice : public Device {
 public:
-  virtual bool Open(OperationEnvironment &env);
-
   virtual void LinkTimeout();
+  virtual bool EnableNMEA(OperationEnvironment &env);
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
@@ -274,18 +256,9 @@ public:
                                    OperationEnvironment &env);
 
   virtual bool EnablePassThrough(OperationEnvironment &env);
-  virtual void DisablePassThrough();
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
-
-  virtual bool EnableDownloadMode(OperationEnvironment &env) {
-    return true;
-  }
-
-  virtual bool DisableDownloadMode() {
-    return true;
-  }
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env) {
@@ -371,13 +344,6 @@ struct DeviceRegister {
      * EnablePassThrough() is implemented.
      */
     PASS_THROUGH = 0x200,
-
-    /**
-     * Shall the NMEA parser continue even in "download mode"?
-     * Usually, the driver wants exclusive access to the port, and
-     * this flag is not set.
-     */
-    ALWAYS_NMEA = 0x400,
   };
 
   /**
@@ -474,10 +440,6 @@ struct DeviceRegister {
    */
   bool HasPassThrough() const {
     return (flags & PASS_THROUGH) != 0;
-  }
-
-  bool AlwaysNMEA() const {
-    return (flags & ALWAYS_NMEA) != 0;
   }
 };
 

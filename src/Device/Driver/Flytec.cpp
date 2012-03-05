@@ -416,6 +416,8 @@ bool
 FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
                              OperationEnvironment &env)
 {
+  port.StopRxThread();
+
   char buffer[256];
   strcpy(buffer, "$PBRTL,");
   AppendNMEAChecksum(buffer);
@@ -494,6 +496,8 @@ bool
 FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
                              const TCHAR *path, OperationEnvironment &env)
 {
+  port.StopRxThread();
+
   PeriodClock status_clock;
   status_clock.Update();
 

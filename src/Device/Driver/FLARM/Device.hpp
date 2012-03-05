@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_DEVICE_HPP
 #define XCSOAR_FLARM_DEVICE_HPP
 
-#include "Util/DebugFlag.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
@@ -32,7 +31,6 @@ Copyright_License {
 #include "Device/Driver.hpp"
 
 #include <stdint.h>
-#include <assert.h>
 
 class Port;
 struct Declaration;
@@ -42,18 +40,30 @@ struct RecordedFlightInfo;
 
 class FlarmDevice: public AbstractDevice
 {
+  enum class Mode : uint8_t {
+    UNKNOWN,
+    NMEA,
+    TEXT,
+    BINARY,
+  };
+
   Port &port;
 
-  DebugFlag in_binary_mode;
+  Mode mode;
+
   uint16_t sequence_number;
 
 public:
-  FlarmDevice(Port &_port):port(_port), sequence_number(0) {}
+  FlarmDevice(Port &_port)
+    :port(_port), mode(Mode::UNKNOWN), sequence_number(0) {}
 
-  ~FlarmDevice() {
-    // Make sure we left the binary transfer mode before destruction
-    assert(!in_binary_mode);
-  }
+protected:
+  bool TextMode(OperationEnvironment &env);
+  bool BinaryMode(OperationEnvironment &env);
+
+public:
+  void LinkTimeout();
+  bool EnableNMEA(OperationEnvironment &env);
 
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);
@@ -331,20 +341,6 @@ private:
   bool DownloadFlight(const TCHAR *path, OperationEnvironment &env);
 
 public:
-  /**
-   * Tries to enable the binary transfer mode of the connected FLARM device
-   * @return True if binary mode was enabled and confirmed, False otherwise
-   */
-  bool EnableDownloadMode(OperationEnvironment &env);
-
-  /**
-   * Tries to disable the binary transfer mode of the connected FLARM device.
-   * This has to be called before destruction! Don't ever leave a FLARM in
-   * binary transfer mode!
-   * @return True if binary mode was disabled, False otherwise
-   */
-  bool DisableDownloadMode();
-
   /**
    * Reads a RecordedFlightList from the Flarm
    * @param flight_list RecordedFlightList that should be filled

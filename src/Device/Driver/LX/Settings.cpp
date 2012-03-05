@@ -32,6 +32,9 @@ bool
 LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {
+  if (!EnableNMEA(env))
+    return false;
+
   // This is a copy of the routine done in LK8000 for LX MiniMap, realized
   // by Lx developers.
 
@@ -44,6 +47,9 @@ LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
 bool
 LXDevice::PutBugs(fixed bugs, OperationEnvironment &env)
 {
+  if (!EnableNMEA(env))
+    return false;
+
   // This is a copy of the routine done in LK8000 for LX MiniMap, realized
   // by Lx developers.
 
@@ -57,6 +63,9 @@ LXDevice::PutBugs(fixed bugs, OperationEnvironment &env)
 bool
 LXDevice::PutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
+  if (!EnableNMEA(env))
+    return false;
+
   char tmp[32];
   sprintf(tmp, "PFLX2,%1.1f,,,,,,", (double)mac_cready);
   PortWriteNMEA(port, tmp);
@@ -66,6 +75,9 @@ LXDevice::PutMacCready(fixed mac_cready, OperationEnvironment &env)
 bool
 LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
 {
+  if (!EnableNMEA(env))
+    return false;
+
   fixed altitude_offset =
     pres.StaticPressureToQNHAltitude(AtmosphericPressure::Standard());
   char buffer[100];

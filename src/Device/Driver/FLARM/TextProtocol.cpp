@@ -28,10 +28,23 @@ Copyright_License {
 
 #include <assert.h>
 
+bool
+FlarmDevice::TextMode(OperationEnvironment &env)
+{
+  /* the "text" mode is the same as NMEA mode, only the Port thread is
+     stopped */
+
+  if (!EnableNMEA(env))
+    return false;
+
+  port.StopRxThread();
+  mode = Mode::TEXT;
+  return true;
+}
+
 void
 FlarmDevice::Send(const char *sentence)
 {
-  assert(!in_binary_mode);
   assert(sentence != NULL);
 
   /* From the FLARM data port specification: "All sentences must [...]
@@ -45,7 +58,6 @@ bool
 FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
                      unsigned timeout_ms)
 {
-  assert(!in_binary_mode);
   assert(prefix != NULL);
 
   TimeoutClock timeout(timeout_ms);

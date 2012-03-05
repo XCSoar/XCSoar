@@ -63,6 +63,8 @@ public:
 
   virtual void Run(OperationEnvironment &env) {
     result = device.Declare(declaration, home, env);
+
+    device.EnableNMEA(env);
   }
 };
 
@@ -249,16 +251,11 @@ void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
   MessageOperationEnvironment env;
-  if (!device.EnableDownloadMode(env)) {
-    MessageBoxX(_("Failed to enable download mode."),
-                _("Download flight"), MB_OK | MB_ICONERROR);
-    return;
-  }
 
   // Download the list of flights that the logger contains
   RecordedFlightList flight_list;
   if (!DoReadFlightList(device, flight_list)) {
-    device.DisableDownloadMode();
+    device.EnableNMEA(env);
     MessageBoxX(_("Failed to download flight list."),
                 _("Download flight"), MB_OK | MB_ICONERROR);
     return;
@@ -266,7 +263,7 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 
   // The logger seems to be empty -> cancel
   if (flight_list.empty()) {
-    device.DisableDownloadMode();
+    device.EnableNMEA(env);
     MessageBoxX(_("Logger is empty."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
@@ -316,5 +313,5 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
       break;
   }
 
-  device.DisableDownloadMode();
+  device.EnableNMEA(env);
 }

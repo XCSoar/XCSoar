@@ -346,6 +346,8 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
   if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;
 
+  port.StopRxThread();
+
   /* during tests, the EW has taken up to one second to respond to
      the command \x18 */
   port.SetRxTimeout(2500);

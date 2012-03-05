@@ -32,8 +32,7 @@ CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
                               OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port, env))
+  if (!UploadMode(env))
     return false;
 
   return CAI302::UploadGeneralInfo(port, data, env);
@@ -43,7 +42,9 @@ bool
 CAI302Device::Reboot(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::Reboot(port, env);
 }
 
@@ -51,7 +52,9 @@ bool
 CAI302Device::PowerOff(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::PowerOff(port, env);
 }
 
@@ -59,7 +62,9 @@ bool
 CAI302Device::StartLogging(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::StartLogging(port, env);
 }
 
@@ -67,7 +72,9 @@ bool
 CAI302Device::StopLogging(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::StopLogging(port, env);
 }
 
@@ -75,7 +82,9 @@ bool
 CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::SetVolume(port, volume, env);
 }
 
@@ -83,7 +92,9 @@ bool
 CAI302Device::ClearPoints(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::ClearPoints(port, env);
 }
 
@@ -92,7 +103,9 @@ bool
 CAI302Device::ClearPilot(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::ClearPilot(port, env);
 }
 
@@ -100,7 +113,9 @@ bool
 CAI302Device::ClearLog(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-  CAI302::CommandModeQuick(port);
+  if (!CommandMode(env))
+    return false;
+
   return CAI302::ClearLog(port, env);
 }
 
@@ -112,9 +127,7 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
   assert(list.empty());
 
   port.SetRxTimeout(500);
-
-  CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port, env))
+  if (!UploadMode(env))
     return false;
 
   CAI302::PilotMetaActive meta;
@@ -153,10 +166,15 @@ bool
 CAI302Device::ReadActivePilot(CAI302::Pilot &pilot, OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
+  if (!UploadMode(env))
+    return false;
 
-  CAI302::CommandModeQuick(port);
-  return CAI302::UploadMode(port, env) &&
-    CAI302::UploadPilot(port, 0, pilot, env);
+  if (!CAI302::UploadPilot(port, 0, pilot, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
+
+  return true;
 }
 
 bool
@@ -164,10 +182,15 @@ CAI302Device::WriteActivePilot(const CAI302::Pilot &pilot,
                                OperationEnvironment &env)
 {
   port.SetRxTimeout(5000);
+  if (!DownloadMode(env))
+    return false;
 
-  CAI302::CommandModeQuick(port);
-  return CAI302::DownloadMode(port, env) &&
-    CAI302::DownloadPilot(port, pilot, 0, env);
+  if (!CAI302::DownloadPilot(port, pilot, 0, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
+
+  return true;
 }
 
 bool
@@ -175,36 +198,46 @@ CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
                          OperationEnvironment &env)
 {
   port.SetRxTimeout(5000);
+  if (!DownloadMode(env))
+    return false;
 
-  CAI302::CommandModeQuick(port);
-  return CAI302::DownloadMode(port, env) &&
-    CAI302::DownloadPilot(port, pilot, 64 + index, env);
+  if (!CAI302::DownloadPilot(port, pilot, 64 + index, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
+
+  return true;
 }
 
 bool
 CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
 {
   port.SetRxTimeout(5000);
-
-  CAI302::CommandModeQuick(port);
-  if (!CAI302::DownloadMode(port, env))
+  if (!DownloadMode(env))
     return false;
 
-  return CAI302::DownloadPilot(port, pilot, 255, env);
+  if (!CAI302::DownloadPilot(port, pilot, 255, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
+
+  return true;
 }
 
 int
 CAI302Device::ReadNavpointCount(OperationEnvironment &env)
 {
   port.SetRxTimeout(500);
-
-  CAI302::CommandModeQuick(port);
+  if (!UploadMode(env))
+    return false;
 
   CAI302::NavpointMeta meta;
-  return CAI302::UploadMode(port, env) &&
-    CAI302::UploadNavpointMeta(port, meta, env)
-    ? FromBE16(meta.count)
-    : -1;
+  if (!CAI302::UploadNavpointMeta(port, meta, env)) {
+    mode = Mode::UNKNOWN;
+    return -1;
+  }
+
+  return FromBE16(meta.count);
 }
 
 bool
@@ -212,19 +245,15 @@ CAI302Device::ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
                            OperationEnvironment &env)
 {
   port.SetRxTimeout(1000);
+  if (!UploadMode(env))
+    return false;
 
-  return CAI302::CommandModeQuick(port) &&
-    CAI302::UploadMode(port, env) &&
-    CAI302::UploadNavpoint(port, index, navpoint, env);
-}
+  if (!CAI302::UploadNavpoint(port, index, navpoint, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
 
-bool
-CAI302Device::BeginWriteBulkNavpoints(OperationEnvironment &env)
-{
-  port.SetRxTimeout(1000);
-
-  return CAI302::CommandModeQuick(port) &&
-    CAI302::DownloadMode(port, env);
+  return true;
 }
 
 static bool
@@ -245,32 +274,26 @@ ToASCII(char *dest, size_t dest_size, const TCHAR *src)
 }
 
 bool
-CAI302Device::WriteBulkNavpoint(unsigned id, const Waypoint &wp,
-                                OperationEnvironment &env)
+CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
+                            OperationEnvironment &env)
 {
+  port.SetRxTimeout(1000);
+  if (!DownloadMode(env))
+    return false;
+
   char name[64], remark[64];
   ToASCII(name, ARRAY_SIZE(name), wp.name.c_str());
   ToASCII(remark, ARRAY_SIZE(remark), wp.comment.c_str());
 
-  return CAI302::DownloadNavpoint(port, wp.location, (int)wp.altitude, id,
-                                  wp.IsTurnpoint(), wp.IsAirport(), false,
-                                  wp.IsLandable(), wp.IsStartpoint(),
-                                  wp.IsFinishpoint(), wp.flags.home,
-                                  false, wp.IsTurnpoint(), false,
-                                  name, remark, env);
-}
+  if (!CAI302::DownloadNavpoint(port, wp.location, (int)wp.altitude, id,
+                                wp.IsTurnpoint(), wp.IsAirport(), false,
+                                wp.IsLandable(), wp.IsStartpoint(),
+                                wp.IsFinishpoint(), wp.flags.home,
+                                false, wp.IsTurnpoint(), false,
+                                name, remark, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
 
-bool
-CAI302Device::EndWriteBulkNavpoints(OperationEnvironment &env)
-{
   return true;
-}
-
-bool
-CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
-                            OperationEnvironment &env)
-{
-  return BeginWriteBulkNavpoints(env) &&
-    WriteBulkNavpoint(id, wp, env) &&
-    EndWriteBulkNavpoints(env);
 }

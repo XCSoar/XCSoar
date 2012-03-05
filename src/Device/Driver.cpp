@@ -26,7 +26,7 @@ Copyright_License {
 Device::~Device() {}
 
 bool
-AbstractDevice::Open(OperationEnvironment &env)
+AbstractDevice::EnableNMEA(OperationEnvironment &env)
 {
   return true;
 }
@@ -92,11 +92,6 @@ bool
 AbstractDevice::EnablePassThrough(OperationEnvironment &env)
 {
   return true;
-}
-
-void
-AbstractDevice::DisablePassThrough()
-{
 }
 
 bool

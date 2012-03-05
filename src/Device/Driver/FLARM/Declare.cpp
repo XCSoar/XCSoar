@@ -31,20 +31,22 @@ FlarmDevice::Declare(const Declaration &declaration,
                      gcc_unused const Waypoint *home,
                      OperationEnvironment &env)
 {
-  assert(!in_binary_mode);
-
   port.SetRxTimeout(500); // set RX timeout to 500[ms]
 
-  bool result = DeclareInternal(declaration, env);
+  if (!TextMode(env))
+    return false;
+
+  if (!DeclareInternal(declaration, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
 
   // TODO bug: JMW, FLARM Declaration checks
   // Only works on IGC approved devices
   // Total data size must not surpass 183 bytes
   // probably will issue PFLAC,ERROR if a problem?
 
-  port.SetRxTimeout(0); // clear timeout
-
-  return result;
+  return false;
 }
 
 bool

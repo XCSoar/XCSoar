@@ -53,12 +53,6 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
     return;
   }
 
-  if (!device.BeginWriteBulkNavpoints(env)) {
-    if (!env.IsCancelled())
-      env.SetErrorMessage(_("Failed to configure the device."));
-    return;
-  }
-
   unsigned id = 1;
   for (auto i = waypoints.begin(), end = waypoints.end();
        i != end; ++i, ++id) {
@@ -67,12 +61,10 @@ CAI302WaypointUploader::Run(OperationEnvironment &env)
 
     env.SetProgressPosition(id);
 
-    if (!device.WriteBulkNavpoint(id, *i, env)) {
+    if (!device.WriteNavpoint(id, *i, env)) {
       if (!env.IsCancelled())
         env.SetErrorMessage(_("Failed to write waypoint."));
       break;
     }
   }
-
-  device.EndWriteBulkNavpoints(env);
 }

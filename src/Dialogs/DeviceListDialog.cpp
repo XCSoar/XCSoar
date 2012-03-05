@@ -232,9 +232,7 @@ OnManageClicked(gcc_unused WndButton &button)
   if (device == NULL)
     return;
 
-  MessageOperationEnvironment env;
-  if (!descriptor.EnableDownloadMode(env))
-    return;
+  descriptor.SetBusy(true);
 
   if (descriptor.IsDriver(_T("CAI 302")))
     ManageCAI302Dialog(dialog->GetMainWindow(), dialog->GetLook(), *device);
@@ -243,7 +241,8 @@ OnManageClicked(gcc_unused WndButton &button)
   else if (descriptor.IsDriver(_T("Vega")))
     dlgConfigurationVarioShowModal(*device);
 
-  descriptor.DisableDownloadMode();
+  MessageOperationEnvironment env;
+  descriptor.EnableNMEA(env);
 }
 
 static void

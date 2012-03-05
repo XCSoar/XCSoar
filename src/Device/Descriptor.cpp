@@ -95,7 +95,7 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
     parser.DisableGeoid();
 
   device = driver->CreateOnPort(config, *port);
-  if (!device->Open(env) || !port->StartRxThread()) {
+  if (!EnableNMEA(env)) {
     delete device;
     device = NULL;
     port = NULL;
@@ -218,6 +218,25 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
   Reopen(env, false);
 }
 
+bool
+DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
+{
+  SetBusy(false);
+
+  if (device == NULL)
+    return true;
+
+  if (!device->EnableNMEA(env))
+    return false;
+
+  if (port != NULL)
+    /* re-enable the NMEA handler if it has been disabled by the
+       driver */
+    port->StartRxThread();
+
+  return true;
+}
+
 const TCHAR *
 DeviceDescriptor::GetDisplayName() const
 {
@@ -328,6 +347,25 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line)
 }
 #endif
 
+/**
+ * This scope class sets the "busy" flag during the lifetime of the
+ * instance, and reenables the NMEA mode in the destructor.
+ */
+struct DeviceBusyRestoreNMEA {
+  DeviceDescriptor &device;
+  OperationEnvironment &env;
+
+  DeviceBusyRestoreNMEA(DeviceDescriptor &_device, OperationEnvironment &_env)
+    :device(_device), env(_env) {
+    device.SetBusy(true);
+  }
+
+  ~DeviceBusyRestoreNMEA() {
+    device.EnableNMEA(env);
+    device.SetBusy(false);
+  }
+};
+
 bool
 DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
 {
@@ -335,6 +373,7 @@ DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
       !config.sync_to_device)
     return true;
 
+  DeviceBusyRestoreNMEA restore(*this, env);
   if (!device->PutMacCready(value, env))
     return false;
 
@@ -353,6 +392,7 @@ DeviceDescriptor::PutBugs(fixed value, OperationEnvironment &env)
       !config.sync_to_device)
     return true;
 
+  DeviceBusyRestoreNMEA restore(*this, env);
   if (!device->PutBugs(value, env))
     return false;
 
@@ -373,6 +413,7 @@ DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
        settings_sent.CompareBallastOverload(overload)))
     return true;
 
+  DeviceBusyRestoreNMEA restore(*this, env);
   if (!device->PutBallast(fraction, overload, env))
     return false;
 
@@ -389,24 +430,33 @@ DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
 bool
 DeviceDescriptor::PutVolume(int volume, OperationEnvironment &env)
 {
-  return device != NULL && config.sync_to_device
-    ? device->PutVolume(volume, env) : true;
+  if (device == NULL || !config.sync_to_device)
+    return true;
+
+  DeviceBusyRestoreNMEA restore(*this, env);
+  return device->PutVolume(volume, env);
 }
 
 bool
 DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
                                      OperationEnvironment &env)
 {
-  return device != NULL && config.sync_to_device
-    ? device->PutActiveFrequency(frequency, env) : true;
+  if (device == NULL || !config.sync_to_device)
+    return true;
+
+  DeviceBusyRestoreNMEA restore(*this, env);
+  return device->PutActiveFrequency(frequency, env);
 }
 
 bool
 DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
                                       OperationEnvironment &env)
 {
-  return device != NULL && config.sync_to_device
-    ? device->PutStandbyFrequency(frequency, env) : true;
+  if (device == NULL || !config.sync_to_device)
+    return true;
+
+  DeviceBusyRestoreNMEA restore(*this, env);
+  return device->PutStandbyFrequency(frequency, env);
 }
 
 bool
@@ -417,6 +467,7 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
       !config.sync_to_device)
     return true;
 
+  DeviceBusyRestoreNMEA restore(*this, env);
   if (!device->PutQNH(value, env))
     return false;
 
@@ -446,13 +497,7 @@ DeclareToFLARM(const struct Declaration &declaration,
       !device->EnablePassThrough(env))
     return false;
 
-  bool success = DeclareToFLARM(declaration, port, home, env);
-
-  /* leave pass-through mode */
-  if (driver.HasPassThrough() && device != NULL)
-    device->DisablePassThrough();
-
-  return success;
+  return DeclareToFLARM(declaration, port, home, env);
 }
 
 static bool
@@ -489,61 +534,12 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 
   SetBusy(true);
 
-  if (driver == NULL || !driver->AlwaysNMEA())
-    port->StopRxThread();
-
   /* enable the "muxed FLARM" hack? */
   const bool flarm = device_blackboard->IsFLARM(index) &&
     !IsDriver(_T("FLARM"));
 
-  bool result = DoDeclare(declaration, *port, *driver, device, flarm,
-                          home, env);
-
-  if (driver == NULL || !driver->AlwaysNMEA())
-    port->StartRxThread();
-
-  SetBusy(false);
-  return result;
-}
-
-bool
-DeviceDescriptor::EnableDownloadMode(OperationEnvironment &env)
-{
-  if (port == NULL || device == NULL)
-    return false;
-
-  SetBusy(true);
-
-  if (driver == NULL || !driver->AlwaysNMEA())
-    port->StopRxThread();
-
-  bool result = device->EnableDownloadMode(env);
-  if (!result) {
-    /* roll back */
-    SetBusy(false);
-
-    if (driver == NULL || !driver->AlwaysNMEA())
-      port->StartRxThread();
-  }
-
-  return result;
-}
-
-bool
-DeviceDescriptor::DisableDownloadMode()
-{
-  if (port == NULL || device == NULL)
-    return false;
-
-  assert(IsBusy());
-
-  bool result = device->DisableDownloadMode();
-
-  if (driver == NULL || !driver->AlwaysNMEA())
-    port->StartRxThread();
-
-  SetBusy(false);
-  return result;
+  return DoDeclare(declaration, *port, *driver, device, flarm,
+                   home, env);
 }
 
 bool
@@ -556,6 +552,8 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
   StaticString<60> text;
   text.Format(_T("%s: %s."), _("Reading flight list"), driver->display_name);
   env.SetText(text);
+
+  SetBusy(true);
 
   return device->ReadFlightList(flight_list, env);
 }
@@ -572,6 +570,8 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
   text.Format(_T("%s: %s."), _("Downloading flight log"), driver->display_name);
   env.SetText(text);
 
+  SetBusy(true);
+
   return device->DownloadFlight(flight, path, env);
 }
 
@@ -582,9 +582,13 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
     return;
 
   const bool now_connected = IsConnected();
-  if (!now_connected && was_connected && !IsBusy())
+  if (!now_connected && was_connected && !IsBusy()) {
     /* connection was just lost */
     device->LinkTimeout();
+
+    NullOperationEnvironment env;
+    device->EnableNMEA(env);
+  }
 
   was_connected = now_connected;
 

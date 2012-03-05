@@ -78,10 +78,6 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
 
-  CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port, env))
-    return false;
-
   port.SetRxTimeout(1500);
 
   CAI302::PilotMeta pilot_meta;
@@ -146,14 +142,14 @@ CAI302Device::Declare(const Declaration &declaration,
                       gcc_unused const Waypoint *home,
                       OperationEnvironment &env)
 {
-  bool success = DeclareInner(port, declaration, env);
-
   port.SetRxTimeout(500);
+  if (!UploadMode(env))
+    return false;
 
-  if (success)
-    CAI302::LogMode(port, env);
-  else
-    CAI302::LogModeQuick(port);
+  if (!DeclareInner(port, declaration, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
 
-  return success;
+  return true;
 }

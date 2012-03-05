@@ -852,16 +852,18 @@ TestDeclare(const struct DeviceRegister &driver)
   declaration.Append(wp);
   declaration.Append(wp);
 
+  NullOperationEnvironment env;
+
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
-    NullOperationEnvironment env;
     bool success = device->Declare(declaration, NULL, env);
     if (success || !port.running || port.timeout != 0 ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
   }
 
-  ok1(port.running);
+  device->EnableNMEA(env);
+
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
   delete device;
@@ -875,8 +877,6 @@ TestFlightList(const struct DeviceRegister &driver)
   ok1(device != NULL);
 
   NullOperationEnvironment env;
-  if (!device->EnableDownloadMode(env))
-    return;
 
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
@@ -887,9 +887,8 @@ TestFlightList(const struct DeviceRegister &driver)
       break;
   }
 
-  device->DisableDownloadMode();
+  device->EnableNMEA(env);
 
-  ok1(port.running);
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
   delete device;
@@ -897,7 +896,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(456);
+  plan_tests(448);
 
   TestGeneric();
   TestTasman();

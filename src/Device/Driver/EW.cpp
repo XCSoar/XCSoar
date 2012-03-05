@@ -193,6 +193,8 @@ EWDevice::Declare(const struct Declaration &declaration,
                   gcc_unused const Waypoint *home,
                   OperationEnvironment &env)
 {
+  port.StopRxThread();
+
   // change to IO Mode baudrate
   unsigned old_baud_rate = port.GetBaudrate();
   if (old_baud_rate == 9600)

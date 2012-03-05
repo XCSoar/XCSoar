@@ -113,28 +113,14 @@ int main(int argc, char **argv)
   Device *device = driver->CreateOnPort(config, port);
   assert(device != NULL);
 
-  if (!device->Open(env)) {
-    delete device;
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  if (!device->EnableDownloadMode(env)) {
-    delete device;
-    fprintf(stderr, "Failed to enable download mode\n");
-    return EXIT_FAILURE;
-  }
-
   RecordedFlightList flight_list;
   if (!device->ReadFlightList(flight_list, env)) {
-    device->DisableDownloadMode();
     delete device;
     fprintf(stderr, "Failed to download flight list\n");
     return EXIT_FAILURE;
   }
 
   if (flight_list.empty()) {
-    device->DisableDownloadMode();
     delete device;
     fprintf(stderr, "Logger is empty\n");
     return EXIT_FAILURE;
@@ -143,20 +129,17 @@ int main(int argc, char **argv)
   PrintFlightList(flight_list);
 
   if (flight_id >= flight_list.size()) {
-    device->DisableDownloadMode();
     delete device;
     fprintf(stderr, "Flight id not found\n");
     return EXIT_FAILURE;
   }
 
   if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
-    device->DisableDownloadMode();
     delete device;
     fprintf(stderr, "Failed to download flight\n");
     return EXIT_FAILURE;
   }
 
-  device->DisableDownloadMode();
   delete device;
 
   printf("Flight downloaded successfully\n");

@@ -98,26 +98,12 @@ int main(int argc, char **argv)
   Device *device = driver->CreateOnPort(config, port);
   assert(device != NULL);
 
-  if (!device->Open(env)) {
-    delete device;
-    fprintf(stderr, "Failed to open driver: %s\n", argv[1]);
-    return EXIT_FAILURE;
-  }
-
-  if (!device->EnableDownloadMode(env)) {
-    delete device;
-    fprintf(stderr, "Failed to enable download mode\n");
-    return EXIT_FAILURE;
-  }
-
   if (!device->ReadFlightList(flight_list, env)) {
-    device->DisableDownloadMode();
     delete device;
     fprintf(stderr, "Failed to download flight list\n");
     return EXIT_FAILURE;
   }
 
-  device->DisableDownloadMode();
   delete device;
 
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {

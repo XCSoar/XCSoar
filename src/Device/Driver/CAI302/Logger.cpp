@@ -57,19 +57,11 @@ Copy(RecordedFlightInfo &dest, unsigned index,
   dest.internal.cai302 = index;
 }
 
-bool
-CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
-                             OperationEnvironment &env)
+static bool
+ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
+                    OperationEnvironment &env)
 {
-  env.SetProgressRange(9);
-
-  port.SetRxTimeout(500);
-
-  CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port, env))
-    return false;
-
-  env.SetProgressPosition(1);
+  env.SetProgressRange(8);
 
   port.SetRxTimeout(8000);
 
@@ -84,27 +76,36 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
         Copy(flight_list.append(), i * 8 + j, file);
     }
 
-    env.SetProgressPosition(1 + i);
+    env.SetProgressPosition(i);
   }
 
   return !flight_list.empty() && !env.IsCancelled();
 }
 
 bool
-CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
-                             const TCHAR *path,
+CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
                              OperationEnvironment &env)
+{
+  port.SetRxTimeout(500);
+  if (!UploadMode(env))
+    return false;
+
+  if (!ReadFlightListInner(port, flight_list, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
+
+  return true;
+}
+
+static bool
+DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
+                    const TCHAR *path, OperationEnvironment &env)
 {
   assert(flight.internal.cai302 < 64);
 
   BinaryWriter writer(path);
   if (writer.HasError())
-    return false;
-
-  port.SetRxTimeout(500);
-
-  CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port, env))
     return false;
 
   port.SetRxTimeout(8000);
@@ -162,6 +163,25 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
 
   if (!writer.Write(signature.signature, 1, valid_bytes))
     return false;
+
+  return true;
+}
+
+bool
+CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
+                             const TCHAR *path,
+                             OperationEnvironment &env)
+{
+  assert(flight.internal.cai302 < 64);
+
+  port.SetRxTimeout(500);
+  if (!UploadMode(env))
+    return false;
+
+  if (!DownloadFlightInner(port, flight, path, env)) {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
 
   return true;
 }

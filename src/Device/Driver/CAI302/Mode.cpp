@@ -24,30 +24,67 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
+#include "Device/Port/Port.hpp"
 
 bool
-CAI302Device::Open(gcc_unused OperationEnvironment &env)
+CAI302Device::CommandMode(OperationEnvironment &env)
 {
-  CAI302::LogModeQuick(port);
+  if (mode == Mode::COMMAND)
+    return true;
 
-  return true;
+  port.StopRxThread();
+
+  if (CAI302::CommandMode(port, env)) {
+    mode = Mode::COMMAND;
+    return true;
+  } else {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
+}
+
+bool
+CAI302Device::DownloadMode(OperationEnvironment &env)
+{
+  if (mode == Mode::DOWNLOAD)
+    return true;
+
+  port.StopRxThread();
+
+  if (CAI302::DownloadMode(port, env)) {
+    mode = Mode::DOWNLOAD;
+    return true;
+  } else {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
+}
+
+bool
+CAI302Device::UploadMode(OperationEnvironment &env)
+{
+  if (mode == Mode::UPLOAD)
+    return true;
+
+  port.StopRxThread();
+
+  if (CAI302::UploadMode(port, env)) {
+    mode = Mode::UPLOAD;
+    return true;
+  } else {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
 }
 
 void
 CAI302Device::LinkTimeout()
 {
-  CAI302::LogModeQuick(port);
+  mode = Mode::UNKNOWN;
 }
 
 bool
-CAI302Device::EnableDownloadMode(OperationEnvironment &env)
+CAI302Device::EnableNMEA(OperationEnvironment &env)
 {
-  return CAI302::CommandModeQuick(port);
-}
-
-bool
-CAI302Device::DisableDownloadMode()
-{
-  NullOperationEnvironment env;
   return CAI302::LogMode(port, env);
 }

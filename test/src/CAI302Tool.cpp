@@ -184,11 +184,6 @@ int main(int argc, char **argv)
   ConsoleOperationEnvironment env;
 
   CAI302Device device(port);
-  if (!device.Open(env)) {
-    fprintf(stderr, "Failed to open driver\n");
-    return EXIT_FAILURE;
-  }
-
   if (!RunCommand(device, command, env)) {
     fprintf(stderr, "error\n");
     return EXIT_FAILURE;

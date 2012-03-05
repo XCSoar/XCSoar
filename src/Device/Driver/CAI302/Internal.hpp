@@ -28,21 +28,36 @@ Copyright_License {
 #include "Protocol.hpp"
 
 #include <vector>
+#include <stdint.h>
 
 /** 
  * Device driver for Cambridge Aero Instruments 302 
  */
 class CAI302Device : public AbstractDevice {
-private:
+  enum class Mode : uint8_t {
+    UNKNOWN,
+    NMEA,
+    COMMAND,
+    UPLOAD,
+    DOWNLOAD,
+  };
+
   Port &port;
+
+  Mode mode;
 
 public:
   CAI302Device(Port &_port)
-    :port(_port) {}
+    :port(_port), mode(Mode::UNKNOWN) {}
+
+private:
+  bool CommandMode(OperationEnvironment &env);
+  bool DownloadMode(OperationEnvironment &env);
+  bool UploadMode(OperationEnvironment &env);
 
 public:
-  virtual bool Open(OperationEnvironment &env);
   virtual void LinkTimeout();
+  virtual bool EnableNMEA(OperationEnvironment &env);
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
@@ -52,9 +67,6 @@ public:
 
   virtual bool Declare(const Declaration &declaration, const Waypoint *home,
                        OperationEnvironment &env);
-
-  virtual bool EnableDownloadMode(OperationEnvironment &env);
-  virtual bool DisableDownloadMode();
 
   virtual bool ReadFlightList(RecordedFlightList &flight_list,
                               OperationEnvironment &env);
@@ -120,11 +132,6 @@ public:
   int ReadNavpointCount(OperationEnvironment &env);
   bool ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
                     OperationEnvironment &env);
-
-  bool BeginWriteBulkNavpoints(OperationEnvironment &env);
-  bool WriteBulkNavpoint(unsigned id, const Waypoint &wp,
-                         OperationEnvironment &env);
-  bool EndWriteBulkNavpoints(OperationEnvironment &env);
 
   bool WriteNavpoint(unsigned id, const Waypoint &wp,
                      OperationEnvironment &env);

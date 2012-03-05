@@ -30,6 +30,8 @@ bool
 IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
                           OperationEnvironment &env)
 {
+  port.StopRxThread();
+
   bool success = Connect(env) && !env.IsCancelled();
   success = success && IMI::ReadFlightList(port, flight_list);
 
@@ -43,6 +45,8 @@ bool
 IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
                           OperationEnvironment &env)
 {
+  port.StopRxThread();
+
   bool success = Connect(env) && !env.IsCancelled();
   success = success && IMI::FlightDownload(port, flight, path, env);
 

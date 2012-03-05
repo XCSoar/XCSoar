@@ -26,6 +26,50 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "OS/PathName.hpp"
 
+void
+FlarmDevice::LinkTimeout()
+{
+  mode = Mode::UNKNOWN;
+}
+
+bool
+FlarmDevice::EnableNMEA(OperationEnvironment &env)
+{
+  switch (mode) {
+  case Mode::UNKNOWN:
+    /* device could be in binary mode, we don't know, but this is the
+       best we can do: */
+    if (!BinaryReset(env, 500))
+      return false;
+
+    mode = Mode::NMEA;
+    return true;
+
+  case Mode::NMEA:
+    return true;
+
+  case Mode::TEXT:
+    /* no real difference between NMEA and TEXT; in mode==TEXT, the
+       Port thread is stopped, but the caller is responsible for
+       restarting it, which means there's nothing to do for us */
+    mode = Mode::NMEA;
+    return true;
+
+  case Mode::BINARY:
+    if (!BinaryReset(env, 500)) {
+      mode = Mode::UNKNOWN;
+      return false;
+    }
+
+    mode = Mode::NMEA;
+    return true;
+  }
+
+  /* unreachable */
+  assert(false);
+  return false;
+}
+
 bool
 FlarmDevice::GetStealthMode(bool &enabled)
 {
