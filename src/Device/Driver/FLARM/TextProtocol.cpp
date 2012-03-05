@@ -56,26 +56,29 @@ FlarmDevice::Send(const char *sentence)
 
 bool
 FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
-                     unsigned timeout_ms)
+                     OperationEnvironment &env, unsigned timeout_ms)
 {
   assert(prefix != NULL);
 
   TimeoutClock timeout(timeout_ms);
 
-  if (!port.ExpectString(prefix, timeout_ms))
+  if (!port.ExpectString(prefix, env, timeout_ms))
     return false;
 
   char *p = (char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.HasExpired())
+    int remaining = timeout.GetRemainingSigned();
+    if (remaining < 0)
+      /* timeout */
+      return false;
+
+    if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
       return false;
 
     // Read single character from port
     int c = port.GetChar();
-
-    // On failure try again until timed out
     if (c == -1)
-      continue;
+      return false;
 
     // Break on line break or checksum
     if (c == '*' || c == '\n') {

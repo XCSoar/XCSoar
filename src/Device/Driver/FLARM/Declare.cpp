@@ -31,8 +31,6 @@ FlarmDevice::Declare(const Declaration &declaration,
                      gcc_unused const Waypoint *home,
                      OperationEnvironment &env)
 {
-  port.SetRxTimeout(500); // set RX timeout to 500[ms]
-
   if (!TextMode(env))
     return false;
 
@@ -58,27 +56,27 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
 
-  if (!SetPilot(declaration.pilot_name.c_str()))
+  if (!SetPilot(declaration.pilot_name.c_str(), env))
     return false;
 
   env.SetProgressPosition(1);
 
-  if (!SetPlaneRegistration(declaration.aircraft_registration.c_str()))
+  if (!SetPlaneRegistration(declaration.aircraft_registration.c_str(), env))
     return false;
 
   env.SetProgressPosition(2);
 
-  if (!SetPlaneType(declaration.aircraft_type.c_str()))
+  if (!SetPlaneType(declaration.aircraft_type.c_str(), env))
     return false;
 
   env.SetProgressPosition(3);
 
-  if (!SetConfig("NEWTASK", _T("Task")))
+  if (!SetConfig("NEWTASK", _T("Task"), env))
     return false;
 
   env.SetProgressPosition(4);
 
-  if (!SetConfig("ADDWP", _T("0000000N,00000000E,TAKEOFF")))
+  if (!SetConfig("ADDWP", _T("0000000N,00000000E,TAKEOFF"), env))
     return false;
 
   env.SetProgressPosition(5);
@@ -113,13 +111,13 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
                   (double)MinLat, NoS, DegLon, (double)MinLon, EoW,
                   declaration.GetName(i));
 
-    if (!SetConfig("ADDWP", buffer))
+    if (!SetConfig("ADDWP", buffer, env))
       return false;
 
     env.SetProgressPosition(6 + i);
   }
 
-  if (!SetConfig("ADDWP", _T("0000000N,00000000E,LANDING")))
+  if (!SetConfig("ADDWP", _T("0000000N,00000000E,LANDING"), env))
     return false;
 
   env.SetProgressPosition(6 + size);

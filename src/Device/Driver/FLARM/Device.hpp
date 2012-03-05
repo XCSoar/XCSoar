@@ -68,23 +68,29 @@ public:
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);
 
-  bool GetPilot(TCHAR *buffer, size_t length);
-  bool SetPilot(const TCHAR *pilot_name);
-  bool GetCoPilot(TCHAR *buffer, size_t length);
-  bool SetCoPilot(const TCHAR *copilot_name);
-  bool GetPlaneType(TCHAR *buffer, size_t length);
-  bool SetPlaneType(const TCHAR *plane_type);
-  bool GetPlaneRegistration(TCHAR *buffer, size_t length);
-  bool SetPlaneRegistration(const TCHAR *registration);
-  bool GetCompetitionId(TCHAR *buffer, size_t length);
-  bool SetCompetitionId(const TCHAR *competition_id);
-  bool GetCompetitionClass(TCHAR *buffer, size_t length);
-  bool SetCompetitionClass(const TCHAR *competition_class);
+  bool GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
+  bool SetPilot(const TCHAR *pilot_name, OperationEnvironment &env);
+  bool GetCoPilot(TCHAR *buffer, size_t length, OperationEnvironment &env);
+  bool SetCoPilot(const TCHAR *copilot_name, OperationEnvironment &env);
+  bool GetPlaneType(TCHAR *buffer, size_t length, OperationEnvironment &env);
+  bool SetPlaneType(const TCHAR *plane_type, OperationEnvironment &env);
+  bool GetPlaneRegistration(TCHAR *buffer, size_t length,
+                            OperationEnvironment &env);
+  bool SetPlaneRegistration(const TCHAR *registration,
+                            OperationEnvironment &env);
+  bool GetCompetitionId(TCHAR *buffer, size_t length,
+                        OperationEnvironment &env);
+  bool SetCompetitionId(const TCHAR *competition_id,
+                        OperationEnvironment &env);
+  bool GetCompetitionClass(TCHAR *buffer, size_t length,
+                           OperationEnvironment &env);
+  bool SetCompetitionClass(const TCHAR *competition_class,
+                           OperationEnvironment &env);
 
-  bool GetStealthMode(bool &enabled);
-  bool SetStealthMode(bool enabled);
-  bool GetRange(unsigned &range);
-  bool SetRange(unsigned range);
+  bool GetStealthMode(bool &enabled, OperationEnvironment &env);
+  bool SetStealthMode(bool enabled, OperationEnvironment &env);
+  bool GetRange(unsigned &range, OperationEnvironment &env);
+  bool SetRange(unsigned range, OperationEnvironment &env);
 
   void Restart();
 
@@ -94,10 +100,12 @@ private:
    */
   void Send(const char *sentence);
   bool Receive(const char *prefix, char *buffer, size_t length,
-               unsigned timeout_ms);
+               OperationEnvironment &env, unsigned timeout_ms);
 
-  bool GetConfig(const char *setting, TCHAR *buffer, size_t length);
-  bool SetConfig(const char *setting, const TCHAR *value);
+  bool GetConfig(const char *setting, TCHAR *buffer, size_t length,
+                 OperationEnvironment &env);
+  bool SetConfig(const char *setting, const TCHAR *value,
+                 OperationEnvironment &env);
 
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
