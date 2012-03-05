@@ -32,6 +32,8 @@ Copyright_License {
 #include "IO/DataFile.hpp"
 #include "IO/TextWriter.hpp"
 
+#include <assert.h>
+
 struct FlarmIdNameCouple
 {
   FlarmId id;
@@ -110,10 +112,13 @@ FlarmDetails::SaveSecondary()
 
   TCHAR id[16];
 
-  for (unsigned i = 0; i < flarm_names.size(); i++)
+  for (unsigned i = 0; i < flarm_names.size(); i++) {
+    assert(flarm_names[i].id.IsDefined());
+
     writer->printfln(_T("%s=%s"),
                      flarm_names[i].id.Format(id),
                      flarm_names[i].name.c_str());
+  }
 
   delete writer;
 }
@@ -121,9 +126,12 @@ FlarmDetails::SaveSecondary()
 int
 FlarmDetails::LookupSecondaryIndex(FlarmId id)
 {
-  for (unsigned i = 0; i < flarm_names.size(); i++)
+  for (unsigned i = 0; i < flarm_names.size(); i++) {
+    assert(flarm_names[i].id.IsDefined());
+
     if (flarm_names[i].id == id)
       return i;
+  }
 
   return -1;
 }
@@ -131,9 +139,12 @@ FlarmDetails::LookupSecondaryIndex(FlarmId id)
 int
 FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
 {
-  for (unsigned i = 0; i < flarm_names.size(); i++)
+  for (unsigned i = 0; i < flarm_names.size(); i++) {
+    assert(flarm_names[i].id.IsDefined());
+
     if (flarm_names[i].name.equals(cn))
       return i;
+  }
 
   return -1;
 }
@@ -213,6 +224,8 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
 
   for (unsigned i = 0; i < flarm_names.size() && count < size; i++) {
     if (flarm_names[i].name.equals(cn)) {
+      assert(flarm_names[i].id.IsDefined());
+
       array[count] = flarm_names[i].id;
       count++;
     }

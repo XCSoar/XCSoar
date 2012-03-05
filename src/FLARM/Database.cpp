@@ -24,6 +24,8 @@ Copyright_License {
 #include "Database.hpp"
 #include "Util/StringUtil.hpp"
 
+#include <assert.h>
+
 void
 FlarmDatabase::Insert(const FlarmRecord &record)
 {
@@ -39,6 +41,8 @@ const FlarmRecord *
 FlarmDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 {
   for (auto i = map.begin(), end = map.end(); i != end; ++i) {
+    assert(i->first.IsDefined());
+
     const FlarmRecord &record = i->second;
     if (StringIsEqual(record.callsign, cn))
       return &record;
@@ -54,6 +58,8 @@ FlarmDatabase::FindRecordsByCallSign(const TCHAR *cn,
 {
   unsigned count = 0;
   for (auto i = map.begin(), end = map.end(); i != end; ++i) {
+    assert(i->first.IsDefined());
+
     const FlarmRecord &record = i->second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = &record;
@@ -68,6 +74,8 @@ FlarmDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
 {
   unsigned count = 0;
   for (auto i = map.begin(), end = map.end(); i != end; ++i) {
+    assert(i->first.IsDefined());
+
     const FlarmRecord &record = i->second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = i->first;
