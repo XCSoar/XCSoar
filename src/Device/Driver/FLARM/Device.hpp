@@ -185,7 +185,8 @@ private:
    * @return True if the data was sent successfully, False if a timeout
    * or some transfer problems occurred
    */
-  bool SendEscaped(const void *data, size_t length, unsigned timeout_ms);
+  bool SendEscaped(const void *data, size_t length,
+                   OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Reads a specified number of bytes from the port while applying the
@@ -197,7 +198,8 @@ private:
    * @return True if the data was received successfully, False if a timeout
    * or any transfer problems occurred
    */
-  bool ReceiveEscaped(void *data, size_t length, unsigned timeout_ms);
+  bool ReceiveEscaped(void *data, size_t length,
+                      OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Send the byte that is used to signal that start of a new frame
@@ -243,7 +245,8 @@ private:
    * @return True if the header was sent successfully, False if a timeout
    * or any transfer problems occurred
    */
-  bool SendFrameHeader(const FrameHeader &header, unsigned timeout_ms);
+  bool SendFrameHeader(const FrameHeader &header,
+                       OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Reads a FrameHeader from the port. This should only be done directly
@@ -253,7 +256,8 @@ private:
    * @return True if the header was received successfully, False if a timeout
    * or any transfer problems occurred
    */
-  bool ReceiveFrameHeader(FrameHeader &header, unsigned timeout_ms);
+  bool ReceiveFrameHeader(FrameHeader &header,
+                          OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Waits for an ACK or NACK message from the FLARM with the right
@@ -266,7 +270,8 @@ private:
    */
   MessageType
   WaitForACKOrNACK(uint16_t sequence_number, AllocatedArray<uint8_t> &data,
-                   uint16_t &length, unsigned timeout_ms);
+                   uint16_t &length,
+                   OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Waits for an ACK or NACK message from the FLARM with the right
@@ -275,7 +280,8 @@ private:
    * @param timeout_ms Timeout in milliseconds
    * @return Message type if N(ACK) was received properly, otherwise 0x00
    */
-  MessageType WaitForACKOrNACK(uint16_t sequence_number, unsigned timeout_ms);
+  MessageType WaitForACKOrNACK(uint16_t sequence_number,
+                               OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Waits for an ACK message from the FLARM with the right sequence number
@@ -283,7 +289,8 @@ private:
    * @param timeout_ms Timeout in milliseconds
    * @return True if the ACK message was properly received, False otherwise
    */
-  bool WaitForACK(uint16_t sequence_number, unsigned timeout_ms);
+  bool WaitForACK(uint16_t sequence_number,
+                  OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * "Pings" the connected FLARM device in binary mode to see if the transfer
@@ -291,14 +298,14 @@ private:
    * @param timeout_ms Timeout in milliseconds
    * @return True if the FLARM responded properly to the ping, False otherwise
    */
-  bool BinaryPing(unsigned timeout_ms);
+  bool BinaryPing(OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * "Resets the device. The only way to resume normal operation."
    * @param timeout_ms Timeout in milliseconds
    * @return True if the message was sent properly, False otherwise
    */
-  bool BinaryReset(unsigned timeout_ms);
+  bool BinaryReset(OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Sends a SelectRecord message to the Flarm
@@ -306,14 +313,14 @@ private:
    * @return ACK if record exists, NACK if record does not exist,
    * ERROR in case of timeout or transfer error
    */
-  MessageType SelectFlight(uint8_t record_number);
+  MessageType SelectFlight(uint8_t record_number, OperationEnvironment &env);
 
   /**
    * Sends a GetRecordInfo message to the Flarm and parses the output
    * @param flight RecordedFlightInfo instance to parse into
    * @return True if received and parsed successfully, otherwise False
    */
-  bool ReadFlightInfo(RecordedFlightInfo &flight);
+  bool ReadFlightInfo(RecordedFlightInfo &flight, OperationEnvironment &env);
 
   /**
    * Sends GetIGCData messages to the Flarm and downloads the currently

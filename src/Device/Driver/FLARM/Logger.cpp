@@ -227,7 +227,8 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
 }
 
 bool
-FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight)
+FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight,
+                            OperationEnvironment &env)
 {
   assert(in_binary_mode);
 
@@ -236,14 +237,14 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight)
 
   // Send request
   if (!SendStartByte() ||
-      !SendFrameHeader(header, 1000))
+      !SendFrameHeader(header, env, 1000))
     return false;
 
   // Wait for an answer and save the payload for further processing
   AllocatedArray<uint8_t> data;
   uint16_t length;
   uint8_t ack_result =
-      WaitForACKOrNACK(header.GetSequenceNumber(), data, length, 1000);
+    WaitForACKOrNACK(header.GetSequenceNumber(), data, length, env, 1000);
 
   // If neither ACK nor NACK was received
   if (ack_result != MT_ACK || length <= 2)
@@ -254,7 +255,7 @@ FlarmDevice::ReadFlightInfo(RecordedFlightInfo &flight)
 }
 
 FlarmDevice::MessageType
-FlarmDevice::SelectFlight(uint8_t record_number)
+FlarmDevice::SelectFlight(uint8_t record_number, OperationEnvironment &env)
 {
   assert(in_binary_mode);
 
@@ -264,12 +265,12 @@ FlarmDevice::SelectFlight(uint8_t record_number)
 
   // Send request
   if (!SendStartByte() ||
-      !SendFrameHeader(header, 1000) ||
-      !SendEscaped(data, sizeof(data), 1000))
+      !SendFrameHeader(header, env, 1000) ||
+      !SendEscaped(data, sizeof(data), env, 1000))
     return MT_ERROR;
 
   // Wait for an answer
-  return WaitForACKOrNACK(header.GetSequenceNumber(), 1000);
+  return WaitForACKOrNACK(header.GetSequenceNumber(), env, 1000);
 }
 
 bool
@@ -283,7 +284,7 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
   for (uint8_t i = 0; !flight_list.full(); ++i) {
     env.SetProgressPosition(i % 10);
 
-    MessageType ack_result = SelectFlight(i);
+    MessageType ack_result = SelectFlight(i, env);
 
     // Last record reached -> bail out and return list
     if (ack_result == MT_NACK)
@@ -295,7 +296,7 @@ FlarmDevice::ReadFlightList(RecordedFlightList &flight_list,
 
     RecordedFlightInfo flight_info;
     flight_info.internal.flarm = i;
-    if (ReadFlightInfo(flight_info))
+    if (ReadFlightInfo(flight_info, env))
       flight_list.append(flight_info);
   }
 
@@ -318,7 +319,7 @@ FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
 
     // Send request
     if (!SendStartByte() ||
-        !SendFrameHeader(header, 1000) ||
+        !SendFrameHeader(header, env, 1000) ||
         env.IsCancelled())
       return false;
 
@@ -326,7 +327,7 @@ FlarmDevice::DownloadFlight(const TCHAR *path, OperationEnvironment &env)
     AllocatedArray<uint8_t> data;
     uint16_t length;
     bool ack = WaitForACKOrNACK(header.GetSequenceNumber(), data,
-                                length, 3000) == MT_ACK;
+                                length, env, 3000) == MT_ACK;
 
     // If no ACK was received
     if (!ack || length <= 3 || env.IsCancelled())
@@ -361,7 +362,7 @@ FlarmDevice::DownloadFlight(const RecordedFlightInfo &flight,
 {
   assert(in_binary_mode);
 
-  MessageType ack_result = SelectFlight(flight.internal.flarm);
+  MessageType ack_result = SelectFlight(flight.internal.flarm, env);
 
   // If no ACK was received -> cancel
   if (ack_result != MT_ACK || env.IsCancelled())

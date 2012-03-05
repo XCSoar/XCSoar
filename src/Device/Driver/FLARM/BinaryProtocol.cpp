@@ -32,7 +32,8 @@ Copyright_License {
 #define FLARM_ESC_START 0x31
 
 bool
-FlarmDevice::SendEscaped(const void *buffer, size_t length, unsigned timeout_ms)
+FlarmDevice::SendEscaped(const void *buffer, size_t length,
+                         OperationEnvironment &env, unsigned timeout_ms)
 {
   assert(in_binary_mode);
   assert(buffer != NULL);
@@ -43,7 +44,7 @@ FlarmDevice::SendEscaped(const void *buffer, size_t length, unsigned timeout_ms)
   // Send data byte-by-byte including escaping
   const char *p = (const char *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.HasExpired())
+    if (timeout.HasExpired() || env.IsCancelled())
       return false;
 
     // Check for bytes that need to be escaped and send
@@ -67,7 +68,8 @@ FlarmDevice::SendEscaped(const void *buffer, size_t length, unsigned timeout_ms)
 }
 
 bool
-FlarmDevice::ReceiveEscaped(void *buffer, size_t length, unsigned timeout_ms)
+FlarmDevice::ReceiveEscaped(void *buffer, size_t length,
+                            OperationEnvironment &env, unsigned timeout_ms)
 {
   assert(in_binary_mode);
   assert(buffer != NULL);
@@ -81,12 +83,13 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length, unsigned timeout_ms)
     if (timeout.HasExpired())
       return false;
 
+    if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
+      return false;
+
     // Read single character from port
     int c = port.GetChar();
-
-    // On failure try again until timed out
     if (c == -1)
-      continue;
+      return false;
 
     // If a STARTFRAME was detected inside of the frame -> cancel
     if (c == FLARM_STARTFRAME)
@@ -94,10 +97,12 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length, unsigned timeout_ms)
 
     if (c == FLARM_ESCAPE) {
       // Read next character after the ESCAPE
-      int c2;
-      while ((c2 = port.GetChar()) == -1)
-        if (timeout.HasExpired())
-          return false;
+      if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
+        return false;
+
+      int c2 = port.GetChar();
+      if (c2 == -1 || timeout.HasExpired())
+        return false;
 
       switch (c2) {
       case FLARM_ESC_ESC:
@@ -197,23 +202,25 @@ FlarmDevice::PrepareFrameHeader(MessageType message_type,
 }
 
 bool
-FlarmDevice::SendFrameHeader(const FrameHeader &header, unsigned timeout_ms)
+FlarmDevice::SendFrameHeader(const FrameHeader &header,
+                             OperationEnvironment &env, unsigned timeout_ms)
 {
   assert(in_binary_mode);
-  return SendEscaped(&header, sizeof(header), timeout_ms);
+  return SendEscaped(&header, sizeof(header), env, timeout_ms);
 }
 
 bool
-FlarmDevice::ReceiveFrameHeader(FrameHeader &header, unsigned timeout_ms)
+FlarmDevice::ReceiveFrameHeader(FrameHeader &header,
+                                OperationEnvironment &env, unsigned timeout_ms)
 {
   assert(in_binary_mode);
-  return ReceiveEscaped(&header, sizeof(header), timeout_ms);
+  return ReceiveEscaped(&header, sizeof(header), env, timeout_ms);
 }
 
 FlarmDevice::MessageType
 FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               AllocatedArray<uint8_t> &data, uint16_t &length,
-                              unsigned timeout_ms)
+                              OperationEnvironment &env, unsigned timeout_ms)
 {
   const TimeoutClock timeout(timeout_ms);
 
@@ -225,7 +232,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read the following FrameHeader
     FrameHeader header;
-    if (!ReceiveFrameHeader(header, timeout.GetRemainingOrZero()))
+    if (!ReceiveFrameHeader(header, env, timeout.GetRemainingOrZero()))
       continue;
 
     // Read and check length of the FrameHeader
@@ -238,7 +245,8 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 
     // Read payload and check length
     data.GrowDiscard(length);
-    if (!ReceiveEscaped(data.begin(), length, timeout.GetRemainingOrZero()))
+    if (!ReceiveEscaped(data.begin(), length,
+                        env, timeout.GetRemainingOrZero()))
       continue;
 
     // Verify CRC
@@ -263,21 +271,23 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
 }
 
 FlarmDevice::MessageType
-FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number, unsigned timeout_ms)
+FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
+                              OperationEnvironment &env, unsigned timeout_ms)
 {
   AllocatedArray<uint8_t> data;
   uint16_t length;
-  return WaitForACKOrNACK(sequence_number, data, length, timeout_ms);
+  return WaitForACKOrNACK(sequence_number, data, length, env, timeout_ms);
 }
 
 bool
-FlarmDevice::WaitForACK(uint16_t sequence_number, unsigned timeout_ms)
+FlarmDevice::WaitForACK(uint16_t sequence_number,
+                        OperationEnvironment &env, unsigned timeout_ms)
 {
-  return WaitForACKOrNACK(sequence_number, timeout_ms) == MT_ACK;
+  return WaitForACKOrNACK(sequence_number, env, timeout_ms) == MT_ACK;
 }
 
 bool
-FlarmDevice::BinaryPing(unsigned timeout_ms)
+FlarmDevice::BinaryPing(OperationEnvironment &env, unsigned timeout_ms)
 {
   const TimeoutClock timeout(timeout_ms);
 
@@ -286,12 +296,12 @@ FlarmDevice::BinaryPing(unsigned timeout_ms)
 
   // Send request and wait for positive answer
   return SendStartByte() &&
-         SendFrameHeader(header, timeout.GetRemainingOrZero()) &&
-         WaitForACK(header.GetSequenceNumber(), timeout.GetRemainingOrZero());
+    SendFrameHeader(header, env, timeout.GetRemainingOrZero()) &&
+    WaitForACK(header.GetSequenceNumber(), env, timeout.GetRemainingOrZero());
 }
 
 bool
-FlarmDevice::BinaryReset(unsigned timeout_ms)
+FlarmDevice::BinaryReset(OperationEnvironment &env, unsigned timeout_ms)
 {
   TimeoutClock timeout(timeout_ms);
 
@@ -300,7 +310,7 @@ FlarmDevice::BinaryReset(unsigned timeout_ms)
 
   // Send request and wait for positive answer
   return SendStartByte() &&
-    SendFrameHeader(header, timeout.GetRemainingOrZero());
+    SendFrameHeader(header, env, timeout.GetRemainingOrZero());
 }
 
 bool
@@ -321,12 +331,12 @@ FlarmDevice::EnableDownloadMode(OperationEnvironment &env)
   // for a certain time until the ping is ACKed properly or a timeout occurs.
   for (unsigned i = 0; i < 10; ++i) {
     if (env.IsCancelled()) {
-      BinaryReset(200);
+      BinaryReset(env, 200);
       in_binary_mode = true;
       return false;
     }
 
-    if (BinaryPing(500))
+    if (BinaryPing(env, 500))
       // We are now in binary mode and have verified that with a binary ping
       return true;
   }
@@ -342,7 +352,8 @@ FlarmDevice::DisableDownloadMode()
   assert(in_binary_mode);
 
   // "Reset Device, exit binary communication mode."
-  if (!BinaryReset(500))
+  NullOperationEnvironment env;
+  if (!BinaryReset(env, 500))
     return false;
 
   in_binary_mode = false;
