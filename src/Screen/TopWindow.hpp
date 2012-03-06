@@ -171,6 +171,12 @@ public:
   void reset();
 #endif
 
+  /**
+   * Triggers an OnCancelMode() call on the focused #Window and/or the
+   * #Window currently capturing the mouse.
+   */
+  void CancelMode();
+
 #if defined(USE_GDI) && !defined(_WIN32_WCE)
   gcc_pure
   const PixelRect get_client_rect() const {

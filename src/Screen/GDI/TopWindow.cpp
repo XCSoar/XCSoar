@@ -83,6 +83,15 @@ TopWindow::reset()
 #endif
 
 void
+TopWindow::CancelMode()
+{
+  HWND focus = ::GetFocus();
+  if (focus != NULL)
+    ::SendMessage(focus, WM_CANCELMODE, 0, 0);
+}
+
+
+void
 TopWindow::Fullscreen()
 {
   ::SetForegroundWindow(hWnd);

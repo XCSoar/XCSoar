@@ -235,6 +235,20 @@ ContainerWindow::OnDestroy()
 }
 
 bool
+ContainerWindow::OnCancelMode()
+{
+  bool result = Window::OnCancelMode();
+
+  if (active_child != NULL)
+    result |= active_child->OnCancelMode();
+
+  if (capture_child != NULL)
+    result |= capture_child->OnCancelMode();
+
+  return result;
+}
+
+bool
 ContainerWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   Window *child = EventChildAt(x, y);

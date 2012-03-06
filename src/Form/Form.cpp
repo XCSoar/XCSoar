@@ -382,10 +382,10 @@ WndForm::ShowModal()
 
   modal_result = 0;
 
+  main_window.CancelMode();
+
 #ifdef USE_GDI
   oldFocusHwnd = ::GetFocus();
-  if (oldFocusHwnd != NULL)
-    ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
 #endif /* USE_GDI */
   set_focus();
   if (default_focus)

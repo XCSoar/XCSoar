@@ -64,6 +64,7 @@ protected:
 
 #ifndef USE_GDI
   virtual void OnDestroy();
+  virtual bool OnCancelMode();
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);

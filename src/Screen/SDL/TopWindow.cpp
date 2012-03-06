@@ -70,6 +70,12 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
 }
 
 void
+TopWindow::CancelMode()
+{
+  OnCancelMode();
+}
+
+void
 TopWindow::Fullscreen()
 {
   screen.Fullscreen();
