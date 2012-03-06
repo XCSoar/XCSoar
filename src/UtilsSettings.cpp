@@ -52,6 +52,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Units/Units.hpp"
+#include "InfoBoxes/InfoBoxManager.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -204,6 +205,7 @@ SettingsLeave(const UISettings &old_ui_settings)
   ActionInterface::SendMapSettings(true);
 
   operation.Hide();
+  InfoBoxManager::SetDirty();
   main_window.full_redraw();
   main_window.SetDefaultFocus();
 }
