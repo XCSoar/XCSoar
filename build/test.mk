@@ -690,7 +690,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunVegaSettings \
 	RunFlarmUtils \
 	RunTCPListener \
-	TaskInfo \
+	TaskInfo DumpTaskFile \
 	IGC2NMEA
 
 ifeq ($(TARGET),UNIX)
@@ -2130,6 +2130,25 @@ TASK_INFO_SOURCES = \
 	$(TEST_SRC_DIR)/TaskInfo.cpp
 TASK_INFO_DEPENDS = ENGINE IO MATH UTIL
 $(eval $(call link-program,TaskInfo,TASK_INFO))
+
+DUMP_TASK_FILE_SOURCES = \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/OS/PathName.cpp \
+	$(SRC)/xmlParser.cpp \
+	$(SRC)/Task/TaskFile.cpp \
+	$(SRC)/Task/TaskFileXCSoar.cpp \
+	$(SRC)/Task/TaskFileSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/DumpTaskFile.cpp
+DUMP_TASK_FILE_DEPENDS = ENGINE IO ZZIP MATH UTIL
+$(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 
 IGC2NMEA_SOURCES = \
 	$(SRC)/Replay/IgcReplay.cpp \
