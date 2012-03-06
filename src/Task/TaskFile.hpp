@@ -23,8 +23,10 @@
 #ifndef XCSOAR_TASK_FILE_HPP
 #define XCSOAR_TASK_FILE_HPP
 
+#include "Util/StaticString.hpp"
 #include "Util/StaticArray.hpp"
-#include <tchar.h>
+
+#include <windef.h> // for MAX_PATH
 
 class Waypoints;
 class OrderedTask;
@@ -32,12 +34,11 @@ class OrderedTask;
 class TaskFile
 {
 protected:
-  TCHAR path[255];
+  StaticString<MAX_PATH> path;
 
 protected:
-  TaskFile(const TCHAR* _path) {
-    _tcscpy(path, _path);
-  }
+  TaskFile(const TCHAR *_path)
+    :path(_path) {}
 
 public:
   virtual ~TaskFile();
