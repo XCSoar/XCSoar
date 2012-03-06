@@ -349,6 +349,10 @@ Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
   if (!SendCommandSwitchBaudRate(port, env, cmd, param1, baud_rate))
     return -1;
 
+  /* after switching baud rates, this sleep time is necessary; it has
+     been verified experimentally */
+  env.Sleep(300);
+
   int nbytes = ReadBulk(port, env, buffer, max_length);
 
   port.SetBaudrate(old_baud_rate);
