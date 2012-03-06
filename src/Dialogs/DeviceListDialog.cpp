@@ -45,6 +45,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Logger/ExternalLogger.hpp"
 #include "Profile/Profile.hpp"
+#include "Interface.hpp"
 
 static const TerminalLook *terminal_look;
 static WndForm *dialog;
@@ -198,8 +199,9 @@ OnEditClicked(gcc_unused WndButton &button)
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &descriptor = device_list[indices[current]];
-  DeviceEditWidget widget(descriptor.GetConfig());
+  const unsigned index = indices[current];
+  DeviceConfig &config = CommonInterface::SetSystemSettings().devices[index];
+  DeviceEditWidget widget(config);
 
   if (!DefaultWidgetDialog(_("Edit device"), widget))
     /* not modified */
@@ -207,12 +209,13 @@ OnEditClicked(gcc_unused WndButton &button)
 
   /* save new config to profile .. */
 
-  Profile::SetDeviceConfig(descriptor.GetIndex(),
-                           widget.GetConfig());
+  config = widget.GetConfig();
+  Profile::SetDeviceConfig(index, config);
   Profile::Save();
 
   /* .. and reopen the device */
 
+  DeviceDescriptor &descriptor = device_list[index];
   descriptor.SetConfig() = widget.GetConfig();
   MessageOperationEnvironment env;
   descriptor.Reopen(env);
