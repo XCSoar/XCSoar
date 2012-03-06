@@ -91,7 +91,7 @@ Window::set_enabled(bool enabled)
   if (enabled == this->enabled)
     return;
 
-  if (!enabled && has_focus())
+  if (!enabled)
     /* cancel dragging before disabling this Window */
     OnCancelMode();
 
