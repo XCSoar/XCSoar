@@ -112,10 +112,12 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
       N_("Straight glide arrival height (no terrain is considered).") },
     { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN,
       N_("Terrain avoidance glide"),
-      N_("Arrival height considering terrain avoidance") },
+      N_("Arrival height considering terrain avoidance. "
+         "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings.") },
     { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN,
       N_("Straight & terrain glide"),
-      N_("Both arrival heights are displayed.") },
+      N_("Both arrival heights are displayed. "
+         "Requires \"Reach mode: Turning\" in \"Glide Computer > Route\" settings.") },
     { (unsigned)WaypointRendererSettings::ArrivalHeightDisplay::REQUIRED_GR,
       N_("Required glide ratio") },
     { 0 }
