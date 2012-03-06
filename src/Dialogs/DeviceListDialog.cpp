@@ -35,11 +35,9 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Look/DialogLook.hpp"
-#include "Form/Form.hpp"
 #include "Form/List.hpp"
-#include "Form/ButtonPanel.hpp"
+#include "Form/ListWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Simulator.hpp"
@@ -47,21 +45,100 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 
-static const TerminalLook *terminal_look;
-static WndForm *dialog;
-static ListControl *list;
-static unsigned current;
-static UPixelScalar font_height;
+class DeviceListWidget : public ListWidget, private ActionListener {
+  enum Buttons {
+    REFRESH, RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
+  };
 
-static WndButton *reconnect_button, *flight_button, *manage_button;
-static WndButton *edit_button;
-static WndButton *monitor_button;
+  const DialogLook &look;
+  const TerminalLook &terminal_look;
 
-static TrivialArray<unsigned, NUMDEV> indices;
+  UPixelScalar font_height;
 
-static void
-UpdateButtons()
+  TrivialArray<unsigned, NUMDEV> indices;
+
+  WndButton *reconnect_button, *flight_button;
+  WndButton *edit_button;
+  WndButton *manage_button, *monitor_button;
+
+public:
+  DeviceListWidget(const DialogLook &_look, const TerminalLook &_terminal_look)
+    :look(_look), terminal_look(_terminal_look) {}
+
+  void CreateButtons(WidgetDialog &dialog);
+
+protected:
+  gcc_pure
+  bool IsFlarm(unsigned index) const {
+    return device_blackboard->RealState(indices[index]).flarm.IsDetected();
+  }
+
+  void RefreshList();
+
+  void UpdateButtons();
+
+  void ReconnectCurrent();
+  void DownloadFlightFromCurrent();
+  void EditCurrent();
+  void ManageCurrent();
+  void MonitorCurrent();
+
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare() {
+    DeleteWindow();
+  }
+
+  /* virtual methods from class List::Handler */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx);
+  virtual void OnCursorMoved(unsigned index);
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id);
+};
+
+void
+DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  UPixelScalar margin = Layout::Scale(2);
+  UPixelScalar font_height = look.list.font->GetHeight();
+  CreateList(parent, look, rc, 3 * margin + 2 * font_height);
+  RefreshList();
+  UpdateButtons();
+}
+
+void
+DeviceListWidget::RefreshList()
+{
+  indices.clear();
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (device_list[i].IsConfigured())
+      indices.append(i);
+
+  ListControl &list = GetList();
+  list.SetLength(indices.size());
+  list.invalidate();
+}
+
+void
+DeviceListWidget::CreateButtons(WidgetDialog &dialog)
+{
+  dialog.AddButton(_("Refresh"), this, REFRESH);
+  reconnect_button = dialog.AddButton(_("Reconnect"), this, RECONNECT);
+  flight_button = dialog.AddButton(_("Flight download"), this, FLIGHT);
+  edit_button = dialog.AddButton(_("Edit"), this, EDIT);
+  manage_button = dialog.AddButton(_("Manage"), this, MANAGE);
+  monitor_button = dialog.AddButton(_("Monitor"), this, MONITOR);
+}
+
+void
+DeviceListWidget::UpdateButtons()
+{
+  const unsigned current = GetList().GetCursorIndex();
+
   if (is_simulator() || current >= indices.size()) {
     reconnect_button->set_enabled(false);
     flight_button->set_enabled(false);
@@ -79,26 +156,9 @@ UpdateButtons()
   edit_button->set_enabled(current < indices.size());
 }
 
-static void
-RefreshList()
-{
-  indices.clear();
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i].IsConfigured())
-      indices.append(i);
-
-  list->SetLength(indices.size());
-  list->invalidate();
-}
-
-static bool
-IsFlarm(unsigned index)
-{
-  return device_blackboard->RealState(indices[index]).flarm.IsDetected();
-}
-
-static void
-PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
+void
+DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                              unsigned i)
 {
   const DeviceDescriptor &device = device_list[indices[i]];
 
@@ -152,29 +212,16 @@ PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
   }
 }
 
-static void
-OnCursor(unsigned idx)
+void
+DeviceListWidget::OnCursorMoved(unsigned index)
 {
-  current = idx;
   UpdateButtons();
 }
 
-static void
-OnCloseClicked(gcc_unused WndButton &button)
+void
+DeviceListWidget::ReconnectCurrent()
 {
-  dialog->SetModalResult(mrOK);
-}
-
-static void
-OnRefreshClicked(gcc_unused WndButton &button)
-{
-  RefreshList();
-  UpdateButtons();
-}
-
-static void
-OnReconnectClicked(gcc_unused WndButton &button)
-{
+  const unsigned current = GetList().GetCursorIndex();
   if (current >= indices.size())
     return;
 
@@ -183,9 +230,10 @@ OnReconnectClicked(gcc_unused WndButton &button)
   device.Reopen(env);
 }
 
-static void
-OnFlightDownloadClicked(gcc_unused WndButton &button)
+void
+DeviceListWidget::DownloadFlightFromCurrent()
 {
+  const unsigned current = GetList().GetCursorIndex();
   if (current >= indices.size())
     return;
 
@@ -193,9 +241,10 @@ OnFlightDownloadClicked(gcc_unused WndButton &button)
   ExternalLogger::DownloadFlightFrom(device);
 }
 
-static void
-OnEditClicked(gcc_unused WndButton &button)
+void
+DeviceListWidget::EditCurrent()
 {
+  const unsigned current = GetList().GetCursorIndex();
   if (current >= indices.size())
     return;
 
@@ -221,9 +270,10 @@ OnEditClicked(gcc_unused WndButton &button)
   descriptor.Reopen(env);
 }
 
-static void
-OnManageClicked(gcc_unused WndButton &button)
+void
+DeviceListWidget::ManageCurrent()
 {
+  const unsigned current = GetList().GetCursorIndex();
   if (current >= indices.size())
     return;
 
@@ -238,7 +288,7 @@ OnManageClicked(gcc_unused WndButton &button)
   descriptor.SetBusy(true);
 
   if (descriptor.IsDriver(_T("CAI 302")))
-    ManageCAI302Dialog(dialog->GetMainWindow(), dialog->GetLook(), *device);
+    ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
   else if (descriptor.IsDriver(_T("FLARM")))
     ManageFlarmDialog(*device);
   else if (descriptor.IsDriver(_T("Vega")))
@@ -248,72 +298,59 @@ OnManageClicked(gcc_unused WndButton &button)
   descriptor.EnableNMEA(env);
 }
 
-static void
-OnMonitorClicked(gcc_unused WndButton &button)
+void
+DeviceListWidget::MonitorCurrent()
 {
+  const unsigned current = GetList().GetCursorIndex();
   if (current >= indices.size())
     return;
 
   DeviceDescriptor &descriptor = device_list[indices[current]];
-  ShowPortMonitor(dialog->GetMainWindow(), dialog->GetLook(), *terminal_look,
+  ShowPortMonitor(UIGlobals::GetMainWindow(), look, terminal_look,
                   descriptor);
 }
 
 void
-ShowDeviceList(SingleWindow &parent, const DialogLook &look,
-               const TerminalLook &_terminal_look)
+DeviceListWidget::OnAction(int id)
 {
-  terminal_look = &_terminal_look;
+  switch (id) {
+  case REFRESH:
+    RefreshList();
+    UpdateButtons();
+    break;
 
-  UPixelScalar margin = Layout::Scale(2);
+  case RECONNECT:
+    ReconnectCurrent();
+    break;
 
-  /* create the dialog */
+  case FLIGHT:
+    DownloadFlightFromCurrent();
+    break;
 
-  WindowStyle dialog_style;
-  dialog_style.Hide();
-  dialog_style.ControlParent();
+  case EDIT:
+    EditCurrent();
+    break;
 
-  dialog = new WndForm(parent, look, parent.get_client_rect(),
-                       _("Devices"), dialog_style);
+  case MANAGE:
+    ManageCurrent();
+    break;
 
-  ContainerWindow &client_area = dialog->GetClientAreaWindow();
+  case MONITOR:
+    MonitorCurrent();
+    break;
+  }
+}
 
-  ButtonPanel buttons(client_area, look);
-  buttons.Add(_("Close"), OnCloseClicked);
-  buttons.Add(_("Refresh"), OnRefreshClicked);
-  reconnect_button = buttons.Add(_("Reconnect"), OnReconnectClicked);
-  flight_button = buttons.Add(_("Flight download"), OnFlightDownloadClicked);
-  edit_button = buttons.Add(_("Edit"), OnEditClicked);
-  manage_button = buttons.Add(_("Manage"), OnManageClicked);
-  monitor_button = buttons.Add(_("Monitor"), OnMonitorClicked);
+void
+ShowDeviceList(SingleWindow &parent, const DialogLook &look,
+               const TerminalLook &terminal_look)
+{
+  DeviceListWidget widget(look, terminal_look);
 
-  const PixelRect rc = buttons.UpdateLayout();
+  WidgetDialog dialog(_("Devices"), &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  widget.CreateButtons(dialog);
 
-  /* create the list */
-
-  current = 0;
-
-  font_height = look.list.font->GetHeight();
-
-  WindowStyle list_style;
-  list_style.TabStop();
-  list_style.Border();
-
-  list = new ListControl(client_area, look, rc,
-                         list_style, 3 * margin + 2 * font_height);
-  list->SetPaintItemCallback(PaintDevice);
-  list->SetCursorCallback(OnCursor);
-
-  RefreshList();
-
-  /* update buttons */
-
-  UpdateButtons();
-
-  /* run it */
-
-  dialog->ShowModal();
-
-  delete list;
-  delete dialog;
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
