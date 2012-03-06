@@ -22,9 +22,6 @@ Copyright_License {
 */
 
 #include "Task/TaskFileXCSoar.hpp"
-
-#include "Components.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Deserialiser.hpp"
 #include "Engine/Util/DataNodeXML.hpp"
 #include "Util/StringUtil.hpp"
@@ -32,12 +29,10 @@ Copyright_License {
 #include <assert.h>
 
 OrderedTask* 
-TaskFileXCSoar::GetTask(const Waypoints *waypoints, unsigned index) const
+TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
+                        const Waypoints *waypoints, unsigned index) const
 {
   assert(index == 0);
-
-  if (protected_task_manager == NULL)
-    return NULL;
 
   // Load root node
   DataNode* root = DataNodeXML::load(path);
@@ -51,7 +46,7 @@ TaskFileXCSoar::GetTask(const Waypoints *waypoints, unsigned index) const
   }
 
   // Create a blank task
-  OrderedTask* task = protected_task_manager->TaskBlank();
+  OrderedTask *task = new OrderedTask(task_behaviour);
 
   // Read the task from the XML file
   Deserialiser des(*root, waypoints);

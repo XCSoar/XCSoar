@@ -211,7 +211,7 @@ ProtectedTaskManager::TaskCreate(const TCHAR* path, const Waypoints *waypoints,
 {
   TaskFile* task_file = TaskFile::Create(path);
   if (task_file != NULL) {
-    OrderedTask* task = task_file->GetTask(waypoints, index);
+    OrderedTask* task = task_file->GetTask(task_behaviour, waypoints, index);
     delete task_file;
     return task;
   }

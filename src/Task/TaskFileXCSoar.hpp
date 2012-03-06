@@ -31,7 +31,9 @@ public:
   TaskFileXCSoar(const TCHAR* _path):
     TaskFile(_path) {}
 
-  OrderedTask* GetTask(const Waypoints *waypoints, unsigned index) const;
+  virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
+                               const Waypoints *waypoints,
+                               unsigned index) const;
 
   unsigned Count() {
     return 1;

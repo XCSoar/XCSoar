@@ -28,6 +28,7 @@
 
 #include <windef.h> // for MAX_PATH
 
+struct TaskBehaviour;
 class Waypoints;
 class OrderedTask;
 
@@ -50,7 +51,9 @@ public:
    */
   static TaskFile* Create(const TCHAR* path);
 
-  virtual OrderedTask* GetTask(const Waypoints *waypoints, unsigned index) const = 0;
+  virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
+                               const Waypoints *waypoints,
+                               unsigned index) const = 0;
   virtual unsigned Count() = 0;
 
   StaticArray<TCHAR *, 64> namesuffixes;

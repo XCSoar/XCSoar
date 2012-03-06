@@ -26,17 +26,17 @@
 #include "IO/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
-#include "Task/ProtectedTaskManager.hpp"
-#include "Components.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
+#include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
+#include "Engine/Task/Tasks/OrderedTask.hpp"
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 
@@ -442,7 +442,8 @@ AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
 }
 
 OrderedTask*
-TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
+TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
+                        const Waypoints *waypoints, unsigned index) const
 {
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
@@ -475,10 +476,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
-  OrderedTask* task = protected_task_manager->TaskBlank();
-  if (task == NULL)
-    return NULL;
-
+  OrderedTask *task = new OrderedTask(task_behaviour);
   task->SetFactory(task_info.wp_dis ?
                     TaskFactoryType::RACING : TaskFactoryType::AAT);
   AbstractTaskFactory& fact = task->GetFactory();
