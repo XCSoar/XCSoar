@@ -86,9 +86,6 @@ public:
   gcc_malloc
   OrderedTask* TaskClone() const;
 
-  gcc_malloc
-  OrderedTask* TaskBlank() const;
-
   /**
    * Copy task into this task
    *
@@ -115,12 +112,6 @@ public:
   OrderedTask* TaskCreateDefault(const Waypoints *waypoints,
                                  TaskFactoryType factory);
 
-  gcc_malloc
-  OrderedTask* TaskCopy(const OrderedTask& that) const;
-
-  gcc_malloc
-  OrderedTask *TaskCreate(const TCHAR *path, const Waypoints *waypoints,
-                          unsigned index = 0) const;
   bool TaskSave(const TCHAR* path, const OrderedTask& task);
 
   /** Reset the tasks (as if never flown) */

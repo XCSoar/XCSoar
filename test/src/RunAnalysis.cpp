@@ -73,8 +73,9 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "LocalTime.hpp"
 
-TaskFile*
-TaskFile::Create(const TCHAR* path)
+OrderedTask *
+TaskFile::GetTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
+                  const Waypoints *waypoints, unsigned index)
 {
   return NULL;
 }

@@ -163,20 +163,6 @@ ProtectedTaskManager::TaskClone() const
   return lease->Clone(task_behaviour);
 }
 
-OrderedTask* 
-ProtectedTaskManager::TaskCopy(const OrderedTask &that) const
-{
-  Lease lease(*this);
-  return that.Clone(task_behaviour);
-}
-
-OrderedTask* 
-ProtectedTaskManager::TaskBlank() const
-{
-  Lease lease(*this);
-  return new OrderedTask(task_behaviour);
-}
-
 bool
 ProtectedTaskManager::TaskCommit(const OrderedTask& that)
 {
@@ -205,19 +191,6 @@ ProtectedTaskManager::TaskSave(const TCHAR* path)
   return retval;
 }
 
-OrderedTask* 
-ProtectedTaskManager::TaskCreate(const TCHAR* path, const Waypoints *waypoints,
-                                  unsigned index) const
-{
-  TaskFile* task_file = TaskFile::Create(path);
-  if (task_file != NULL) {
-    OrderedTask* task = task_file->GetTask(task_behaviour, waypoints, index);
-    delete task_file;
-    return task;
-  }
-  return NULL;
-}
-
 const TCHAR ProtectedTaskManager::default_task_path[] = _T("Default.tsk");
 
 
@@ -227,9 +200,9 @@ ProtectedTaskManager::TaskCreateDefault(const Waypoints *waypoints,
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, default_task_path);
-  OrderedTask *task = TaskCreate(path, waypoints);
+  OrderedTask *task = TaskFile::GetTask(path, task_behaviour, waypoints, 0);
   if (!task) {
-    task = TaskBlank();
+    task = new OrderedTask(task_behaviour);
     assert(task);
     task->SetFactory(factoryfail);
   }

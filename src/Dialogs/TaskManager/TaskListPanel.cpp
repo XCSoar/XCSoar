@@ -34,7 +34,6 @@ Copyright_License {
 #include "Form/Tabbed.hpp"
 #include "Form/TabBar.hpp"
 #include "Task/TaskStore.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 #include "Gauge/TaskView.hpp"
@@ -47,6 +46,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/Layout.hpp"
 #include "Device/Declaration.hpp"
+#include "Engine/Task/Tasks/OrderedTask.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -71,7 +72,8 @@ TaskListPanel::get_cursor_task()
   if (cursor_index >= task_store->Size())
     return NULL;
 
-  OrderedTask *ordered_task = task_store->GetTask(cursor_index);
+  OrderedTask *ordered_task = task_store->GetTask(cursor_index,
+                                                  CommonInterface::GetComputerSettings().task);
 
   if (!ordered_task)
     return NULL;
@@ -206,7 +208,7 @@ TaskListPanel::LoadTask()
     return;
 
   // create new task first to guarantee pointers are different
-  OrderedTask* temptask = protected_task_manager->TaskCopy(*orig);
+  OrderedTask* temptask = orig->Clone(CommonInterface::GetComputerSettings().task);
   delete *active_task;
   *active_task = temptask;
   RefreshView();

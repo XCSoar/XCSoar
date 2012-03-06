@@ -127,14 +127,14 @@ TaskStore::Item::~Item()
 }
 
 OrderedTask*
-TaskStore::Item::GetTask()
+TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
 {
   if (task != NULL)
     return task;
 
   if (valid)
-    task = protected_task_manager->
-      TaskCreate(filename.c_str(), &way_points, task_index);
+    task = TaskFile::GetTask(filename.c_str(), task_behaviour,
+                             &way_points, task_index);
 
   if (task == NULL)
     valid = false;
@@ -161,7 +161,7 @@ TaskStore::GetName(unsigned index) const
 }
 
 OrderedTask* 
-TaskStore::GetTask(unsigned index)
+TaskStore::GetTask(unsigned index, const TaskBehaviour &task_behaviour)
 {
-  return store[index].GetTask();
+  return store[index].GetTask(task_behaviour);
 }

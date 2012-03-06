@@ -55,3 +55,15 @@ TaskFile::Create(const TCHAR* path)
   return NULL;
 }
 
+OrderedTask *
+TaskFile::GetTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
+                  const Waypoints *waypoints, unsigned index)
+{
+  TaskFile  *file = TaskFile::Create(path);
+  if (file == NULL)
+    return NULL;
+
+  OrderedTask *task = file->GetTask(task_behaviour, waypoints, index);
+  delete file;
+  return task;
+}

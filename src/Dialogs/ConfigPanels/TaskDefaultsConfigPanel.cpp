@@ -26,10 +26,9 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Listener.hpp"
 #include "Interface.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Components.hpp"
+#include "Engine/Task/Tasks/OrderedTask.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "TaskDefaultsConfigPanel.hpp"
 #include "UIGlobals.hpp"
@@ -109,8 +108,8 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   WndProperty *wp;
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
-  OrderedTask* temptask = protected_task_manager->TaskBlank();
-  temptask->SetFactory(TaskFactoryType::RACING);
+  OrderedTask temptask(task_behaviour);
+  temptask.SetFactory(TaskFactoryType::RACING);
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -118,7 +117,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                _("Default start type for new tasks you create."),
                this);
   if (wp) {
-    const auto point_types = temptask->GetFactory().GetValidStartTypes();
+    const auto point_types = temptask.GetFactory().GetValidStartTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -143,7 +142,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                _("Default finish type for new tasks you create."),
                this);
   if (wp) {
-    const auto point_types = temptask->GetFactory().GetValidFinishTypes();
+    const auto point_types = temptask.GetFactory().GetValidFinishTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -166,7 +165,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   wp = AddEnum(_("Turn point"), _("Default turn point type for new tasks you create."));
   if (wp) {
-    const auto point_types = temptask->GetFactory().GetValidIntermediateTypes();
+    const auto point_types = temptask.GetFactory().GetValidIntermediateTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -191,7 +190,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wp = AddEnum(_("Task"), _("Default task type for new tasks you create."));
   if (wp) {
     const std::vector<TaskFactoryType> factory_types =
-        temptask->GetFactoryTypes();
+      temptask.GetFactoryTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -216,8 +215,6 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   SetStartLabel();
   SetFinishLabel();
-
-  delete temptask;
 }
 
 bool

@@ -39,6 +39,7 @@ Copyright_License {
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/TaskFile.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -258,7 +259,9 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
 
-    OrderedTask *task = protected_task_manager->TaskCreate(buffer, &way_points);
+    OrderedTask *task = TaskFile::GetTask(buffer,
+                                          CommonInterface::GetComputerSettings().task,
+                                          &way_points, 0);
     if (task) {
       {
         ScopeSuspendAllThreads suspend;

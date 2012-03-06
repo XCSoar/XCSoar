@@ -51,6 +51,11 @@ public:
    */
   static TaskFile* Create(const TCHAR* path);
 
+  static OrderedTask *GetTask(const TCHAR *path,
+                              const TaskBehaviour &task_behaviour,
+                              const Waypoints *waypoints,
+                              unsigned index);
+
   virtual OrderedTask *GetTask(const TaskBehaviour &task_behaviour,
                                const Waypoints *waypoints,
                                unsigned index) const = 0;
