@@ -415,7 +415,7 @@ type=key
 data=8
 event=Setup Target
 event=Mode default
-label=$(CheckTask)$(CheckTaskResumed)Target
+label=Target$(CheckTask)$(CheckTaskResumed)
 location=7
 
 mode=Nav2
@@ -1057,7 +1057,7 @@ type=key
 data=0
 event=Setup Target
 event=Mode default
-label=$(CheckTask)$(CheckTaskResumed)Target
+label=Target$(CheckTask)$(CheckTaskResumed)
 location=7
 
 mode=RemoteStick
