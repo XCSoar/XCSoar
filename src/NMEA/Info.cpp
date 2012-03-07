@@ -44,6 +44,8 @@ SwitchInfo::Reset()
 void
 GPSState::Reset()
 {
+  fix_quality = 0;
+  fix_quality_available.Clear();
   real = false;
   simulator = false;
 #ifdef ANDROID
@@ -57,6 +59,9 @@ GPSState::Reset()
 void
 GPSState::Expire(fixed now)
 {
+  if (fix_quality_available.Expire(now, fixed(5)))
+    fix_quality = 0;
+
   satellites_used_available.Expire(now, fixed(5));
   satellite_ids_available.Expire(now, fixed(5));
 }

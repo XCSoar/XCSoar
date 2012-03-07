@@ -506,7 +506,9 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  gps.fix_quality = line.read(0);
+  if (line.read_checked(gps.fix_quality))
+    gps.fix_quality_available.Update(info.clock);
+
   gps.satellites_used_available.Update(info.clock);
   gps.satellites_used = min(16, line.read(-1));
 

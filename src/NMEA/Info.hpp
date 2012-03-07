@@ -88,6 +88,7 @@ struct GPSState
    * 8 = Simulation mode
    */
   int fix_quality;
+  Validity fix_quality_available;
 
   /**
    * Number of satellites used for gps fix.  -1 means "unknown".
