@@ -104,7 +104,7 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
   UPixelScalar margin = Layout::Scale(2);
-  UPixelScalar font_height = look.list.font->GetHeight();
+  font_height = look.list.font->GetHeight();
   CreateList(parent, look, rc, 3 * margin + 2 * font_height);
   RefreshList();
   UpdateButtons();
