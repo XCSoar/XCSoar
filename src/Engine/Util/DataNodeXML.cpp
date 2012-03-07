@@ -23,7 +23,7 @@
 #include "DataNodeXML.hpp"
 #include "OS/PathName.hpp"
 #include "IO/TextWriter.hpp"
-#include "xmlParser.hpp"
+#include "XML/xmlParser.hpp"
 
 #include <stdio.h>
 

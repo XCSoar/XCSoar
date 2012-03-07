@@ -221,7 +221,7 @@ TEST_TASKWAYPOINT_DEPENDS = MATH IO
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TROUTE_SOURCES = \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -236,7 +236,7 @@ TEST_TROUTE_DEPENDS = TEST1 JASPER
 $(eval $(call link-program,test_troute,TEST_TROUTE))
 
 TEST_REACH_SOURCES = \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -252,7 +252,7 @@ $(eval $(call link-program,test_reach,TEST_REACH))
 
 TEST_ROUTE_SOURCES = \
 	$(SRC)/NMEA/FlyingState.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
@@ -269,7 +269,7 @@ $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/NMEA/FlyingState.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
 TEST_REPLAY_TASK_DEPENDS = TEST1
@@ -282,7 +282,7 @@ TEST_MATH_TABLES_DEPENDS = MATH
 $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
 
 TEST_LOAD_TASK_SOURCES = \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/test_load_task.cpp
@@ -868,7 +868,7 @@ $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_XML_PARSER_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(TEST_SRC_DIR)/RunXMLParser.cpp
 RUN_XML_PARSER_DEPENDS = IO
 $(eval $(call link-program,RunXMLParser,RUN_XML_PARSER))
@@ -1537,7 +1537,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Compatibility/fmode.c \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1555,7 +1555,7 @@ $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 RUN_DIALOG_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
@@ -1894,7 +1894,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
@@ -1979,7 +1979,7 @@ $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Units/Units.cpp \
@@ -2033,7 +2033,7 @@ $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG)
 
 RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
@@ -2155,7 +2155,7 @@ endif
 $(eval $(call link-program,FeedFlyNetData,FEED_FLYNET_DATA))
 
 TASK_INFO_SOURCES = \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(TEST_SRC_DIR)/TaskInfo.cpp
 TASK_INFO_DEPENDS = ENGINE IO MATH UTIL
 $(eval $(call link-program,TaskInfo,TASK_INFO))
@@ -2166,7 +2166,7 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \

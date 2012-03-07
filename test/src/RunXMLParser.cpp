@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "xmlParser.hpp"
+#include "XML/xmlParser.hpp"
 #include "IO/TextWriter.hpp"
 
 #include <stdio.h>

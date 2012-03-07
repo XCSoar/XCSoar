@@ -619,7 +619,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
 	$(SRC)/Profile/TerrainConfig.cpp \
-	$(SRC)/xmlParser.cpp \
+	$(SRC)/XML/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Thread/SuspensibleThread.cpp \

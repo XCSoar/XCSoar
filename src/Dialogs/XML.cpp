@@ -27,7 +27,7 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "xmlParser.hpp"
+#include "XML/xmlParser.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"
