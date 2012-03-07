@@ -143,8 +143,6 @@ LXDevice::ReadFlightList(RecordedFlightList &flight_list,
 
   bool success = ReadFlightListInner(port, flight_list, env);
 
-  port.SetRxTimeout(500);
-
   LX::CommandModeQuick(port, env);
 
   mutex.Lock();
@@ -219,8 +217,6 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
 
   bool success = DownloadFlightInner(port, flight, file, env);
   fclose(file);
-
-  port.SetRxTimeout(500);
 
   LX::CommandModeQuick(port, env);
 
