@@ -53,7 +53,7 @@ RefreshView()
   wOptionalStartPoints->SetLength(ordered_task->optional_start_points_size()
       + (RealStartExists ? 2 : 1));
 
-  wOptionalStartPoints->invalidate();
+  wOptionalStartPoints->Invalidate();
 }
 
 static void

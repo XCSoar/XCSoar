@@ -105,7 +105,7 @@ dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
                  TaskViewRect.bottom - TaskViewRect.top);
     fullscreen = false;
   }
-  Sender->invalidate();
+  Sender->Invalidate();
   return true;
 }
 

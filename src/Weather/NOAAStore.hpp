@@ -51,7 +51,7 @@ public:
     /**
      * Returns the four letter code as a TCHAR string.  This may
      * return a pointer to a static buffer, and consecutive calls
-     * (even with different objects) may invalidate the previous
+     * (even with different objects) may Invalidate the previous
      * return value.  May be called only from the main thread.
      */
 #ifdef _UNICODE

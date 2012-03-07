@@ -81,7 +81,7 @@ class ContestDijkstra:
 
   /**
    * Working trace for solver.  This contains pointers to trace_master
-   * records, which get invalidated when the trace gets thinned.  Be
+   * records, which get Invalidated when the trace gets thinned.  Be
    * careful!
    */
   TracePointerVector trace;

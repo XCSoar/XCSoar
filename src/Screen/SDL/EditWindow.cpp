@@ -95,5 +95,5 @@ EditWindow::set_text(const TCHAR *text)
     value = text;
   else
     value.clear();
-  invalidate();
+  Invalidate();
 }

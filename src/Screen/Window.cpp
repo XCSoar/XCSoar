@@ -142,7 +142,7 @@ Window::OnDestroy()
   visible = false;
 
   if (capture)
-    release_capture();
+    ReleaseCapture();
 
   if (parent != NULL) {
     parent->Removehild(*this);
@@ -252,7 +252,7 @@ bool
 Window::OnCancelMode()
 {
 #ifndef USE_GDI
-  release_capture();
+  ReleaseCapture();
 #endif
 
   return false;
@@ -274,7 +274,7 @@ Window::OnKillFocus()
 #ifndef USE_GDI
   assert(focused);
 
-  release_capture();
+  ReleaseCapture();
 
   focused = false;
 #endif /* USE_GDI */

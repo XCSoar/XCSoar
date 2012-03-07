@@ -200,7 +200,7 @@ protected:
       final_glide.SetAltitudeDifference(altitude_difference);
       final_glide.SetAltitudeDifference0(altitude_difference0);
 
-      final_glide.invalidate();
+      final_glide.Invalidate();
 
       return true;
     }
@@ -240,7 +240,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow window(final_glide_look, task_look);
   window.Set(PixelRect{0, 0, 60, 320});
 
-  window.show();
+  window.Show();
   window.event_loop();
 
   Fonts::Deinitialize();

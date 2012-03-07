@@ -227,14 +227,14 @@ TabDisplay::OnPaint(Canvas &canvas)
 void
 TabDisplay::OnKillFocus()
 {
-  invalidate();
+  Invalidate();
   PaintWindow::OnKillFocus();
 }
 
 void
 TabDisplay::OnSetFocus()
 {
-  invalidate();
+  Invalidate();
   PaintWindow::OnSetFocus();
 }
 
@@ -326,14 +326,14 @@ TabDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  set_focus();
+  SetFocus();
 
   int i = GetButtonIndexAt(Pos);
   if (i >= 0) {
     dragging = true;
     down_index = i;
-    set_capture();
-    invalidate();
+    SetCapture();
+    Invalidate();
     return true;
   }
 
@@ -355,7 +355,7 @@ TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
       tab_bar.ClickPage(i);
 
     if (down_index > -1)
-      invalidate();
+      Invalidate();
     down_index = -1;
     return true;
   } else {
@@ -377,7 +377,7 @@ TabDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   const bool tmp = !PtInRect(&rc, Pos);
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
-    invalidate(rc);
+    Invalidate(rc);
   }
   return true;
 }
@@ -388,6 +388,6 @@ TabDisplay::drag_end()
   if (dragging) {
     dragging = false;
     drag_off_button = false;
-    release_capture();
+    ReleaseCapture();
   }
 }

@@ -126,11 +126,11 @@ TopWindow::on_resume()
   if (!paused)
     return;
 
-  /* tell TopWindow::expose() to reinitialize OpenGL */
+  /* tell TopWindow::Expose() to reinitialize OpenGL */
   resumed = true;
 
   /* schedule a redraw */
-  invalidate();
+  Invalidate();
 }
 
 static bool
@@ -173,14 +173,14 @@ TopWindow::OnEvent(const Event &event)
     break;
 
   case Event::KEY_DOWN:
-    w = get_focused_window();
+    w = GetFocusedWindow();
     if (w == NULL)
       w = this;
 
     return w->OnKeyDown(event.param);
 
   case Event::KEY_UP:
-    w = get_focused_window();
+    w = GetFocusedWindow();
     if (w == NULL)
       w = this;
 

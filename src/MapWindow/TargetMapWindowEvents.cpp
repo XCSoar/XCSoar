@@ -28,7 +28,7 @@ bool
 TargetMapWindow::OnCancelMode()
 {
   if (drag_mode != DRAG_NONE) {
-    release_capture();
+    ReleaseCapture();
     drag_mode = DRAG_NONE;
   }
 
@@ -42,7 +42,7 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   if (drag_mode != DRAG_NONE)
     return true;
 
-  set_focus();
+  SetFocus();
 
   drag_start.x = x;
   drag_start.y = y;
@@ -50,12 +50,12 @@ TargetMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 
   if (isClickOnTarget(drag_start)) {
     drag_mode = DRAG_TARGET;
-    set_capture();
+    SetCapture();
     return true;
   } else if (isInSector(x, y)) {
     drag_mode = DRAG_OZ;
-    set_capture();
-    PaintWindow::invalidate();
+    SetCapture();
+    PaintWindow::Invalidate();
     return true;
   }
 
@@ -66,7 +66,7 @@ bool
 TargetMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (drag_mode != DRAG_NONE)
-    release_capture();
+    ReleaseCapture();
 
   DragMode old_drag_mode = drag_mode;
   drag_mode = DRAG_NONE;
@@ -101,7 +101,7 @@ TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 
       /* no full repaint: copy the map from the buffer, draw dragged
          icon on top */
-      PaintWindow::invalidate();
+      PaintWindow::Invalidate();
     }
     return true;
 
@@ -109,9 +109,9 @@ TargetMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     if (manhattan_distance(drag_last, RasterPoint{x,y}) > Layout::GetHitRadius()) {
       /* cancel the target move click when the finger has moved too
          far since it was pressed down */
-      release_capture();
+      ReleaseCapture();
       drag_mode = DRAG_NONE;
-      PaintWindow::invalidate();
+      PaintWindow::Invalidate();
     }
 
     return true;

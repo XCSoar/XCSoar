@@ -51,7 +51,7 @@ namespace ProfileMap {
    *
    * @param key name of the value
    * @param default_value a value to be returned when the key does not exist
-   * @return the value (gets invalidated by any write access to the
+   * @return the value (gets Invalidated by any write access to the
    * profile), or default_value if the key does not exist
    */
   gcc_pure

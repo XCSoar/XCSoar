@@ -51,7 +51,7 @@ ButtonWindow::set_down(bool _down)
 #endif
 
   down = _down;
-  invalidate();
+  Invalidate();
 }
 
 bool
@@ -98,10 +98,10 @@ bool
 ButtonWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   if (is_tab_stop())
-    set_focus();
+    SetFocus();
 
   set_down(true);
-  set_capture();
+  SetCapture();
   dragging = true;
   return true;
 }
@@ -113,7 +113,7 @@ ButtonWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     return true;
 
   dragging = false;
-  release_capture();
+  ReleaseCapture();
 
   if (!down)
     return true;
@@ -130,14 +130,14 @@ void
 ButtonWindow::OnSetFocus()
 {
   PaintWindow::OnSetFocus();
-  invalidate();
+  Invalidate();
 }
 
 void
 ButtonWindow::OnKillFocus()
 {
   PaintWindow::OnKillFocus();
-  invalidate();
+  Invalidate();
 }
 
 bool

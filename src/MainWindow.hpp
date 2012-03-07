@@ -199,15 +199,15 @@ public:
    */
   void SendAirspaceWarning() {
     airspace_warning_pending = true;
-    send_user(CMD_AIRSPACE_WARNING);
+    SendUser(CMD_AIRSPACE_WARNING);
   }
 
   void SendGPSUpdate() {
-    send_user(CMD_GPS_UPDATE);
+    SendUser(CMD_GPS_UPDATE);
   }
 
   void SendCalculatedUpdate() {
-    send_user(CMD_CALCULATED_UPDATE);
+    SendUser(CMD_CALCULATED_UPDATE);
   }
 
   void SetTerrain(RasterTerrain *terrain);

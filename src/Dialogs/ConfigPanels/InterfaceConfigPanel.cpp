@@ -83,7 +83,7 @@ InterfaceConfigPanel::Show(const PixelRect &rc)
 {
   buttonFonts->set_text(_("Fonts"));
   buttonFonts->SetOnClickNotify(OnFonts);
-  buttonFonts->show();
+  buttonFonts->Show();
 
   RowFormWidget::Show(rc);
 }
@@ -91,7 +91,7 @@ InterfaceConfigPanel::Show(const PixelRect &rc)
 void
 InterfaceConfigPanel::Hide()
 {
-  buttonFonts->hide();
+  buttonFonts->Hide();
 
   RowFormWidget::Hide();
 }

@@ -52,7 +52,7 @@ WindowWidget::Hide()
   assert(window != NULL);
   assert(window->is_visible());
 
-  window->fast_hide();
+  window->FastHide();
 }
 
 void

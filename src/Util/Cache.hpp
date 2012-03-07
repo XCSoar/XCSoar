@@ -253,7 +253,7 @@ public:
        object */
     map.rehash(capacity);
 
-    /* forcibly disable rehashing, as that would invalidate existing
+    /* forcibly disable rehashing, as that would Invalidate existing
        iterators */
     map.max_load_factor(std::numeric_limits<decltype(map.max_load_factor())>::infinity());
   }

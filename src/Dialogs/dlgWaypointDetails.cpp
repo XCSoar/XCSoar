@@ -102,9 +102,9 @@ NextPage(int Step)
   wImage->set_visible(page >= 3);
   zoom = 0;
   wMagnify->set_visible(page >= 3);
-  wMagnify->set_enabled(true);
+  wMagnify->SetEnabled(true);
   wShrink->set_visible(page >= 3);
-  wShrink->set_enabled(false);
+  wShrink->SetEnabled(false);
 }
 
 static void
@@ -114,9 +114,9 @@ OnMagnifyClicked(gcc_unused WndButton &button)
     return;
   zoom++;
 
-  wMagnify->set_enabled(zoom < 5);
-  wShrink->set_enabled(zoom > 0);
-  wImage->invalidate();
+  wMagnify->SetEnabled(zoom < 5);
+  wShrink->SetEnabled(zoom > 0);
+  wImage->Invalidate();
 }
 
 static void
@@ -126,9 +126,9 @@ OnShrinkClicked(gcc_unused WndButton &button)
     return;
   zoom--;
 
-  wMagnify->set_enabled(zoom < 5);
-  wShrink->set_enabled(zoom > 0);
-  wImage->invalidate();
+  wMagnify->SetEnabled(zoom < 5);
+  wShrink->SetEnabled(zoom > 0);
+  wImage->Invalidate();
 }
 
 static void
@@ -157,7 +157,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
     NextPage(-1);
     return true;
 
@@ -165,7 +165,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
     NextPage(+1);
     return true;
 
@@ -355,7 +355,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wCommand->SetWidget(new WaypointCommandsWidget(UIGlobals::GetDialogLook(),
                                                  wf, _waypoint,
                                                  protected_task_manager));
-  wCommand->hide();
+  wCommand->Hide();
 
   wDetails = wf->FindByName(_T("frmDetails"));
   assert(wDetails != NULL);
@@ -384,7 +384,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
     wDetailsText->move(rc);
   } else
 #endif
-    wFilesList->hide();
+    wFilesList->Hide();
 
   wImage = (PaintWindow *)wf->FindByName(_T("frmImage"));
   assert(wImage != NULL);
@@ -396,15 +396,15 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   if (!allow_navigation) {
     WndButton* butnav = (WndButton *)wf->FindByName(_T("cmdPrev"));
     assert(butnav != NULL);
-    butnav->hide();
+    butnav->Hide();
 
     butnav = (WndButton *)wf->FindByName(_T("cmdNext"));
     assert(butnav != NULL);
-    butnav->hide();
+    butnav->Hide();
 
     butnav = (WndButton *)wf->FindByName(_T("cmdGoto"));
     assert(butnav != NULL);
-    butnav->hide();
+    butnav->Hide();
   }
 
   for (auto it = waypoint->files_embed.begin(),

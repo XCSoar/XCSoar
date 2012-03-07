@@ -191,7 +191,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
       wTabMenu->HighlightPreviousMenuItem();
     } else {
       wTabMenu->PreviousPage();
-      ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
     }
     return true;
 
@@ -204,7 +204,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
       wTabMenu->HighlightNextMenuItem();
     } else {
       wTabMenu->NextPage();
-      ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+      ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
     }
     return true;
 

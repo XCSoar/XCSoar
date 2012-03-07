@@ -126,10 +126,10 @@ RowFormWidget::SetRowAvailable(unsigned i, bool available)
 
   row.available = available;
   if (!available)
-    row.GetWindow().hide();
+    row.GetWindow().Hide();
   else if (row.visible &&
            (!row.expert || UIGlobals::GetDialogSettings().expert))
-    row.GetWindow().show();
+    row.GetWindow().Show();
 
   UpdateLayout();
 }
@@ -143,10 +143,10 @@ RowFormWidget::SetRowVisible(unsigned i, bool visible)
 
   row.visible = visible;
   if (!visible)
-    row.GetWindow().hide();
+    row.GetWindow().Hide();
   else if (row.available &&
            (!row.expert || UIGlobals::GetDialogSettings().expert))
-    row.GetWindow().show();
+    row.GetWindow().Show();
 }
 
 void
@@ -800,17 +800,17 @@ RowFormWidget::UpdateLayout()
     Window &window = i->GetWindow();
 
     if (!i->available) {
-      window.hide();
+      window.Hide();
       continue;
     }
 
     if (i->expert) {
       if (!expert) {
-        window.hide();
+        window.Hide();
         continue;
       }
 
-      window.show();
+      window.Show();
     }
 
     if (caption_width > 0 && i->type == Row::Type::EDIT &&
@@ -894,7 +894,7 @@ RowFormWidget::Show(const PixelRect &rc)
 
   UpdateLayout();
 
-  panel.show();
+  panel.Show();
 }
 
 void

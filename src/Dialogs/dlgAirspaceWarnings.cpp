@@ -156,7 +156,7 @@ HasWarning()
 static void
 Hide()
 {
-  dialog->hide();
+  dialog->Hide();
   dialog->SetModalResult(mrOK);
 }
 
@@ -456,7 +456,7 @@ UpdateList()
     warning_list_frame->SetLength(1);
     selected_airspace = NULL;
   }
-  warning_list_frame->invalidate();
+  warning_list_frame->Invalidate();
   UpdateButtons();
   AutoHide();
 }

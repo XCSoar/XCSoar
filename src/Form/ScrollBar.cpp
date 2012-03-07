@@ -211,7 +211,7 @@ ScrollBar::DragBegin(Window *w, UPixelScalar y)
   drag_offset = y - rc_slider.top;
   // ... and remember that we are dragging now
   dragging = true;
-  w->set_capture();
+  w->SetCapture();
 }
 
 void
@@ -223,7 +223,7 @@ ScrollBar::DragEnd(Window *w)
 
   // Realize that we are not dragging anymore
   dragging = false;
-  w->release_capture();
+  w->ReleaseCapture();
 }
 
 unsigned

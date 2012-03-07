@@ -205,7 +205,7 @@ WndProperty::BeginEditing()
     dlgComboPicker(*root, this);
     return true;
   } else if (CanEditInPlace()) {
-    edit.set_focus();
+    edit.SetFocus();
     return true;
   } else if (mDataField != NULL) {
     const TCHAR *value = mDataField->GetAsString();
@@ -247,7 +247,7 @@ WndProperty::UpdateLayout()
   if (edit.IsDefined())
     edit.move(edit_rc);
 
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -257,7 +257,7 @@ WndProperty::on_editor_setfocus()
     edit.set_text(mDataField->GetAsString());
   }
 
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -270,7 +270,7 @@ WndProperty::on_editor_killfocus()
     edit.set_text(mDataField->GetAsDisplayString());
   }
 
-  invalidate();
+  Invalidate();
 }
 
 void

@@ -52,7 +52,7 @@ void
 TabbedControl::AddClient(Window *w)
 {
   /* backwards compatibility: make sure the Window is hidden */
-  w->hide();
+  w->Hide();
 
   AddPage(new WindowWidget(w));
 }

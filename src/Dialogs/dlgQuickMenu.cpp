@@ -71,7 +71,7 @@ SetFormDefaultFocus()
 
   if (centerPos < buttons.size()) {
     if (wf->is_visible()) {
-      buttons[centerPos]->set_focus();
+      buttons[centerPos]->SetFocus();
       grid_view->RefreshLayout();
     } else if (buttons[centerPos]->is_enabled())
       wf->SetDefaultFocus(buttons[centerPos]);
@@ -119,7 +119,7 @@ OnButtonClicked(gcc_unused WndButton &sender)
   wf->SetModalResult(mrOK);
 
   if (focusPos != -1) {
-    wf->hide();
+    wf->Hide();
     unsigned event = events[focusPos];
     if (event > 0)
       InputEvents::ProcessEvent(event);
@@ -179,7 +179,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
     WndButton *button =
       new WndCustomButton(*grid_view, dialog_look, expanded.text,
                           button_rc, buttonStyle, OnButtonClicked);
-    button->set_enabled(expanded.enabled);
+    button->SetEnabled(expanded.enabled);
 
     buttons.append(button);
     events.append(menuItem.event);

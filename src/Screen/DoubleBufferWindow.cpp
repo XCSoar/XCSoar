@@ -45,7 +45,7 @@ DoubleBufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::OnResize(width, height);
   buffer.reset();
-  invalidate();
+  Invalidate();
 }
 
 #else /* !OpenGL */
@@ -80,7 +80,7 @@ DoubleBufferWindow::flip()
   mutex.Unlock();
 
   /* commit the finished buffer to the screen (asynchronously) */
-  invalidate();
+  Invalidate();
 
   /* grow the current buffer, just in case the window has been
      resized */

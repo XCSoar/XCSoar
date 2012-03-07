@@ -45,21 +45,21 @@ WndFrame::SetAlignCenter()
 {
   mCaptionStyle &= ~(DT_LEFT|DT_RIGHT);
   mCaptionStyle |= DT_CENTER;
-  invalidate();
+  Invalidate();
 }
 
 void
 WndFrame::SetVAlignCenter()
 {
   mCaptionStyle |= DT_VCENTER;
-  invalidate();
+  Invalidate();
 }
 
 void
 WndFrame::SetText(const TCHAR *_text)
 {
   text = _text;
-  invalidate();
+  Invalidate();
 }
 
 unsigned

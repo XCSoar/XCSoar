@@ -58,7 +58,7 @@ WindowControl::SetCaption(const TCHAR *Value)
 
   if (!caption.equals(Value)) {
     caption = Value;
-    invalidate();
+    Invalidate();
   }
 }
 
@@ -103,12 +103,12 @@ void
 WindowControl::OnSetFocus()
 {
   ContainerWindow::OnSetFocus();
-  invalidate();
+  Invalidate();
 }
 
 void
 WindowControl::OnKillFocus()
 {
   ContainerWindow::OnKillFocus();
-  invalidate();
+  Invalidate();
 }

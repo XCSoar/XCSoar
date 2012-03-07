@@ -51,7 +51,7 @@ BufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   buffer.resize(width, height);
   PaintWindow::OnResize(width, height);
-  invalidate();
+  Invalidate();
 }
 
 #endif

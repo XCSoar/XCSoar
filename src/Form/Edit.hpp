@@ -147,9 +147,9 @@ public:
 
   void RefreshDisplay();
 
-  void set_enabled(bool enabled) {
-    WindowControl::set_enabled(enabled);
-    edit.set_enabled(enabled);
+  void SetEnabled(bool enabled) {
+    WindowControl::SetEnabled(enabled);
+    edit.SetEnabled(enabled);
   }
 
   void SetReadOnly(bool read_only=true) {

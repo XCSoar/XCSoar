@@ -128,7 +128,7 @@ static void UpdateList()
     airspace_sorter->FilterNamePrefix(AirspaceSelectInfo, name_filter);
 
   wAirspaceList->SetLength(max((size_t)1, AirspaceSelectInfo.size()));
-  wAirspaceList->invalidate();
+  wAirspaceList->Invalidate();
 }
 
 static void FilterMode(bool direction) {

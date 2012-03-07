@@ -49,7 +49,7 @@ CheckBox::SetState(bool value)
     return;
 
   checked = value;
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -59,7 +59,7 @@ CheckBox::SetPressed(bool value)
     return;
 
   pressed = value;
-  invalidate();
+  Invalidate();
 }
 
 bool
@@ -69,7 +69,7 @@ CheckBox::OnKeyDown(unsigned key_code)
   case VK_RETURN:
   case VK_SPACE:
     checked = !checked;
-    invalidate();
+    Invalidate();
 
     if (!OnClicked() && id != 0 && parent != NULL)
       parent->OnCommand(id, 0);
@@ -95,10 +95,10 @@ bool
 CheckBox::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   if (is_tab_stop())
-    set_focus();
+    SetFocus();
 
   SetPressed(true);
-  set_capture();
+  SetCapture();
   dragging = true;
   return true;
 }
@@ -110,14 +110,14 @@ CheckBox::OnMouseUp(PixelScalar x, PixelScalar y)
     return true;
 
   dragging = false;
-  release_capture();
+  ReleaseCapture();
 
   if (!pressed)
     return true;
 
   SetPressed(false);
   checked = !checked;
-  invalidate();
+  Invalidate();
 
   if (!OnClicked() && id != 0 && parent != NULL)
     parent->OnCommand(id, 0);
@@ -129,14 +129,14 @@ void
 CheckBox::OnSetFocus()
 {
   PaintWindow::OnSetFocus();
-  invalidate();
+  Invalidate();
 }
 
 void
 CheckBox::OnKillFocus()
 {
   PaintWindow::OnKillFocus();
-  invalidate();
+  Invalidate();
 }
 
 bool

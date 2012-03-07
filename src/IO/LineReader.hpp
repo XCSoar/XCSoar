@@ -37,7 +37,7 @@ public:
    * Read one line, and returns a it as a null-terminated string
    * (without the trailing line feed character).  The returned buffer
    * is writable, and may be modified by the caller while parsing it.
-   * It is invalidated by the next call.  After the last line has been
+   * It is Invalidated by the next call.  After the last line has been
    * read, this method returns NULL.
    */
   virtual T *read() = 0;

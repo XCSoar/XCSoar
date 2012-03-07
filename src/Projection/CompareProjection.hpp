@@ -59,7 +59,7 @@ public:
 
   /**
    * Clears the object, so that comparisons are always false.  Useful
-   * to invalidate a cache.
+   * to Invalidate a cache.
    */
   void Clear() {
     max_delta = fixed_minus_one;

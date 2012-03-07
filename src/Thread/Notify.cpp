@@ -61,7 +61,7 @@ Notify::SendNotification()
   event.user.data1 = this;
   ::SDL_PushEvent(&event);
 #else
-  send_user(0);
+  SendUser(0);
 #endif
 }
 

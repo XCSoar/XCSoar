@@ -181,18 +181,18 @@ ContainerWindow::FocusFirstControl()
   if (control == NULL)
     return false;
 
-  control->set_focus();
+  control->SetFocus();
   return true;
 }
 
 bool
 ContainerWindow::FocusNextControl()
 {
-  Window *focused = get_focused_window();
+  Window *focused = GetFocusedWindow();
   if (focused != NULL) {
     Window *control = FindNextControl(focused);
     if (control != NULL) {
-      control->set_focus();
+      control->SetFocus();
       return true;
     } else
       return FocusFirstControl();
@@ -203,7 +203,7 @@ ContainerWindow::FocusNextControl()
 bool
 ContainerWindow::FocusPreviousControl()
 {
-  Window *focused = get_focused_window();
+  Window *focused = GetFocusedWindow();
   Window *control = focused != NULL
     ? FindPreviousControl(focused)
     : NULL;
@@ -213,7 +213,7 @@ ContainerWindow::FocusPreviousControl()
       return false;
   }
 
-  control->set_focus();
+  control->SetFocus();
   return true;
 }
 
@@ -367,7 +367,7 @@ ContainerWindow::OnPaint(Canvas &canvas)
 
     SubCanvas sub_canvas(canvas, child.get_left(), child.get_top(),
                          child.get_width(), child.get_height());
-    child.setup(sub_canvas);
+    child.Setup(sub_canvas);
     child.OnPaint(sub_canvas);
   }
 
@@ -384,7 +384,7 @@ void
 ContainerWindow::AddChild(Window &child) {
   children.push_back(&child);
 
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -394,7 +394,7 @@ ContainerWindow::Removehild(Window &child) {
   if (active_child == &child)
     active_child = NULL;
 
-  invalidate();
+  Invalidate();
 }
 
 bool
@@ -407,7 +407,7 @@ void
 ContainerWindow::BringChildToTop(Window &child) {
   children.remove(&child);
   children.insert(children.begin(), &child);
-  invalidate();
+  Invalidate();
 }
 
 Window *
@@ -454,13 +454,13 @@ ContainerWindow::SetActiveChild(Window &child)
 }
 
 void
-ContainerWindow::set_focus()
+ContainerWindow::SetFocus()
 {
   /* just in case our child window was focused previously, we must
      clear it now */
   ClearFocus();
 
-  Window::set_focus();
+  Window::SetFocus();
 }
 
 void
@@ -477,14 +477,14 @@ ContainerWindow::ClearFocus()
 }
 
 Window *
-ContainerWindow::get_focused_window()
+ContainerWindow::GetFocusedWindow()
 {
-  Window *window = PaintWindow::get_focused_window();
+  Window *window = PaintWindow::GetFocusedWindow();
   if (window != NULL)
     return window;
 
   if (active_child != NULL)
-    return active_child->get_focused_window();
+    return active_child->GetFocusedWindow();
 
   return NULL;
 }
@@ -492,7 +492,7 @@ ContainerWindow::get_focused_window()
 WindowReference
 ContainerWindow::GetFocusedWindowReference()
 {
-  Window *focus = get_focused_window();
+  Window *focus = GetFocusedWindow();
   return focus != NULL
     ? WindowReference(*this, *focus)
     : WindowReference();
@@ -508,7 +508,7 @@ ContainerWindow::SetChildCapture(Window *window)
     return;
 
   if (capture_child != NULL)
-    clear_capture();
+    ClearCapture();
 
   capture_child = window;
   if (parent != NULL)
@@ -531,12 +531,12 @@ ContainerWindow::ReleaseChildCapture(Window *window)
 }
 
 void
-ContainerWindow::clear_capture()
+ContainerWindow::ClearCapture()
 {
-  Window::clear_capture();
+  Window::ClearCapture();
 
   if (capture_child != NULL) {
-    capture_child->clear_capture();
+    capture_child->ClearCapture();
     capture_child = NULL;
   }
 }

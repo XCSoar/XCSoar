@@ -89,7 +89,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 static void
 OnListIndexChange(unsigned i)
 {
-  details_button->set_enabled(HasDetails(*(*list)[i]));
+  details_button->SetEnabled(HasDetails(*(*list)[i]));
 }
 
 static void

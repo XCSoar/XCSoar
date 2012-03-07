@@ -389,15 +389,15 @@ Update()
   switch (page) {
   case ANALYSIS_PAGE_AIRSPACE:
     UpdateCrossSection();
-    csw->invalidate();
-    csw->show();
-    wGrid->hide();
+    csw->Invalidate();
+    csw->Show();
+    wGrid->Hide();
     break;
 
   default:
-    csw->hide();
-    wGrid->show();
-    wGrid->invalidate();
+    csw->Hide();
+    wGrid->Show();
+    wGrid->Invalidate();
     break;
   }
 }
@@ -501,7 +501,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
     NextPage(-1);
     return true;
 
@@ -509,7 +509,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
     NextPage(+1);
     return true;
 
@@ -527,9 +527,9 @@ OnCalcClicked(gcc_unused WndButton &Sender)
     dlgBasicSettingsShowModal();
 
   if (page == ANALYSIS_PAGE_CLIMB) {
-    wf->hide();
+    wf->Hide();
     dlgTaskManagerShowModal(*(SingleWindow *)wf->GetRootOwner());
-    wf->show();
+    wf->Show();
   }
 
   if (page == ANALYSIS_PAGE_WIND)
@@ -542,9 +542,9 @@ OnCalcClicked(gcc_unused WndButton &Sender)
     dlgBasicSettingsShowModal();
 
   if ((page == ANALYSIS_PAGE_TASK) || (page == ANALYSIS_PAGE_TASK_SPEED)) {
-    wf->hide();
+    wf->Hide();
     dlgTaskManagerShowModal(*(SingleWindow *)wf->GetRootOwner());
-    wf->show();
+    wf->Show();
   }
 
   if (page == ANALYSIS_PAGE_AIRSPACE)

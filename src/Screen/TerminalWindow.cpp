@@ -44,7 +44,7 @@ TerminalWindow::Write(const char *p, size_t length)
     }
   }
 
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -52,7 +52,7 @@ TerminalWindow::Clear()
 {
   cursor_x = cursor_y = 0;
   std::fill(data.begin(), data.end(), ' ');
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -67,7 +67,7 @@ TerminalWindow::Scroll()
   auto end = data.end();
   std::fill(end - data.GetWidth(), end, ' ');
 
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -114,7 +114,7 @@ TerminalWindow::OnResize(UPixelScalar width, UPixelScalar height)
   if (cursor_y >= data.GetHeight())
     cursor_y = data.GetHeight() - 1;
 
-  invalidate();
+  Invalidate();
 }
 
 void

@@ -96,7 +96,7 @@ DerivedInfo::Expire(fixed Time)
   // due to the expiration of the real wind source. If wind_available would be
   // expired here (with an shorter expiry time then the source) this would lead
   // to alternating valid/invalid transitions (valid after the source is copied,
-  // invalidated shortly after the copy here).
+  // Invalidated shortly after the copy here).
 
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.Expire(Time, fixed(3600));

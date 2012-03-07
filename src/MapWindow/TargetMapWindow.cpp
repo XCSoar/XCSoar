@@ -307,7 +307,7 @@ TargetMapWindow::SetTarget(unsigned index)
 
   target_index = index;
 
-  invalidate();
+  Invalidate();
 }
 
 void

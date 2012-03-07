@@ -63,7 +63,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunListControl"), screen_rc);
-  main_window.show();
+  main_window.Show();
 
   WndForm form(main_window, *dialog_look, main_window.get_client_rect(),
                _T("RunListControl"));
@@ -78,7 +78,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    style, normal_font.GetHeight() + 4);
   list.SetPaintItemCallback(PaintItemCallback);
   list.SetLength(64);
-  list.set_focus();
+  list.SetFocus();
 
   form.ShowModal();
 

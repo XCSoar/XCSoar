@@ -164,7 +164,7 @@ void
 PopupMessage::Resize()
 {
   if (*msgText == _T('\0')) {
-    hide();
+    Hide();
   } else {
     set_text(msgText);
 

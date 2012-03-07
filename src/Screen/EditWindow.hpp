@@ -144,7 +144,7 @@ public:
 
 #ifndef USE_GDI
     read_only = value;
-    invalidate();
+    Invalidate();
 #else
     ::SendMessage(hWnd, EM_SETREADONLY, (WPARAM)(BOOL)value, 0L);
 #endif

@@ -89,14 +89,14 @@ UpdateList()
   std::sort(list.begin(), list.end());
 
   station_list->SetLength(list.size());
-  station_list->invalidate();
+  station_list->Invalidate();
 
-  add_button->set_enabled(!list.full());
+  add_button->SetEnabled(!list.full());
 
   bool empty = list.empty();
-  update_button->set_enabled(!empty);
-  remove_button->set_enabled(!empty);
-  details_button->set_enabled(!empty);
+  update_button->SetEnabled(!empty);
+  remove_button->SetEnabled(!empty);
+  details_button->SetEnabled(!empty);
 }
 
 static void

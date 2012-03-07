@@ -249,7 +249,7 @@ DevicesConfigPanel::OnModified(DeviceEditWidget &widget)
   if (GetEditWidget().Save(changed, require_restart) && changed) {
     current_modified = true;
     ListControl *list = (ListControl *)form.FindByName(_T("list"));
-    list->invalidate();
+    list->Invalidate();
   }
 }
 

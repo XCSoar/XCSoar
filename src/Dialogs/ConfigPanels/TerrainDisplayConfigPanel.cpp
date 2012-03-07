@@ -113,9 +113,9 @@ TerrainDisplayConfigPanel::OnModified(DataField &df)
       PercentToByte(GetValueInteger(TerrainBrightness));
     terrain_settings.ramp = GetValueInteger(TerrainColors);
 
-    // invalidate terrain preview
+    // Invalidate terrain preview
     if (terrain != NULL)
-      ((WndOwnerDrawFrame &)GetRow(TerrainPreview)).invalidate();
+      ((WndOwnerDrawFrame &)GetRow(TerrainPreview)).Invalidate();
   }
 }
 

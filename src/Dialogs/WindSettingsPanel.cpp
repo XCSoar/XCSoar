@@ -77,7 +77,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                                                        Unit::KILOMETER_PER_HOUR)),
                fixed_one, false,
                Units::ToUserWindSpeed(manual_wind.norm));
-    wp->set_enabled(!external_wind);
+    wp->SetEnabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetWindSpeedName());
     wp->RefreshDisplay();
@@ -86,7 +86,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                   _T("%.0f°"), _T("%.0f"),
                   fixed_zero, fixed(355), fixed(5), false,
                   manual_wind.bearing.Degrees());
-    wp->set_enabled(!external_wind);
+    wp->SetEnabled(!external_wind);
   }
 }
 

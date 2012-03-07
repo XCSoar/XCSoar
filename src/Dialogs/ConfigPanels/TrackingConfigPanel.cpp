@@ -66,9 +66,9 @@ private:
 void
 TrackingConfigPanel::SetEnabled(bool enabled)
 {
-  GetControl(LT24Server).set_enabled(enabled);
-  GetControl(LT24Username).set_enabled(enabled);
-  GetControl(LT24Password).set_enabled(enabled);
+  GetControl(LT24Server).SetEnabled(enabled);
+  GetControl(LT24Username).SetEnabled(enabled);
+  GetControl(LT24Password).SetEnabled(enabled);
 }
 
 void

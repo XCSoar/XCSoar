@@ -83,7 +83,7 @@ InfoBoxManager::Hide()
   InfoBoxesHidden = true;
 
   for (unsigned i = 0; i < layout.count; i++)
-    InfoBoxes[i]->fast_hide();
+    InfoBoxes[i]->FastHide();
 }
 
 void
@@ -95,7 +95,7 @@ InfoBoxManager::Show()
   InfoBoxesHidden = false;
 
   for (unsigned i = 0; i < layout.count; i++)
-    InfoBoxes[i]->show();
+    InfoBoxes[i]->Show();
 
   SetDirty();
 }
@@ -125,7 +125,7 @@ InfoBoxManager::Event_Select(int i)
   }
 
   if (InfoFocus >= 0)
-    InfoBoxes[InfoFocus]->set_focus();
+    InfoBoxes[InfoFocus]->SetFocus();
   else
     XCSoarInterface::main_window.SetDefaultFocus();
 }

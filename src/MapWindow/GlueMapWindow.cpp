@@ -120,7 +120,7 @@ GlueMapWindow::FullRedraw()
   UpdateMapScale();
 
 #ifdef ENABLE_OPENGL
-  invalidate();
+  Invalidate();
 #else
   draw_thread->TriggerRedraw();
 #endif
@@ -143,7 +143,7 @@ GlueMapWindow::QuickRedraw()
   scale_buffer = 2;
 #endif
 
-  invalidate();
+  Invalidate();
 
 #ifndef ENABLE_OPENGL
   /* we suppose that the operation will need a full redraw later, so

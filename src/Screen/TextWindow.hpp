@@ -84,7 +84,7 @@ public:
       text = _text;
     else
       text.clear();
-    invalidate();
+    Invalidate();
 #else /* USE_GDI */
     ::SetWindowText(hWnd, _text);
 #endif /* USE_GDI */

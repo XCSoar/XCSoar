@@ -53,7 +53,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunProgressWindow"), screen_rc);
-  main_window.show();
+  main_window.Show();
 
   ProgressWindow progress(main_window);
   progress.set_message(_T("Testing..."));

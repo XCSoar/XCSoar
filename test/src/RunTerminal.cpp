@@ -118,7 +118,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   TestWindow window(look);
   window.set(PixelRect{0, 0, 400, 400});
-  window.show();
+  window.Show();
 
   window.event_loop();
 

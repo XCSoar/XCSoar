@@ -94,66 +94,66 @@ SetUnits()
   case CoordinateFormat::DDMMSS_SS: // ("DDMMSS.ss");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     break;
 
   case CoordinateFormat::DDMM_MMM: // ("DDMM.mmm");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeDDDD"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeDDDD"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     break;
 
   case CoordinateFormat::DD_DDDD: // ("DD.dddd");
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeM"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeM"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudeS"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudeS"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLongitudemmm"));
     // hide this field for DD.dddd format
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     wp = (WndProperty*)wf->FindByName(_T("prpLatitudemmm"));
     assert(wp != NULL);
-    wp->hide();
+    wp->Hide();
 
     break;
   case CoordinateFormat::UTM:

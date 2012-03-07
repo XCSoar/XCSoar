@@ -160,7 +160,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.set(_T("STATIC"), _T("RunTaskEditorDialog"),
                   0, 0, 640, 480);
   ((Window &)main_window).InstallWndProc();
-  main_window.show();
+  main_window.Show();
 
   Layout::Initialize(640, 480);
   Fonts::Initialize();

@@ -389,7 +389,7 @@ public:
 #ifndef USE_GDI
     this->left = left;
     this->top = top;
-    invalidate();
+    Invalidate();
 #else
     ::SetWindowPos(hWnd, NULL, left, top, 0, 0,
                    SWP_NOSIZE | SWP_NOZORDER |
@@ -449,7 +449,7 @@ public:
                    SWP_NOZORDER | SWP_NOOWNERZORDER);
 #else
     move(rc);
-    show();
+    Show();
 #endif
   }
 
@@ -464,7 +464,7 @@ public:
     this->width = width;
     this->height = height;
 
-    invalidate();
+    Invalidate();
     OnResize(width, height);
 #else /* USE_GDI */
     ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
@@ -475,10 +475,10 @@ public:
   }
 
 #ifndef USE_GDI
-  void bring_to_top();
+  void BringToTop();
   void BringToBottom();
 #else
-  void bring_to_top() {
+  void BringToTop() {
     assert_none_locked();
     AssertThread();
 
@@ -504,8 +504,8 @@ public:
     AssertThread();
 
 #ifndef USE_GDI
-    bring_to_top();
-    show();
+    BringToTop();
+    Show();
 #else
     ::SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0,
                    SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE|
@@ -519,7 +519,7 @@ public:
 
 #ifndef USE_GDI
     font = &_font;
-    invalidate();
+    Invalidate();
 #else
     ::SendMessage(hWnd, WM_SETFONT,
                   (WPARAM)_font.Native(), MAKELPARAM(TRUE,0));
@@ -541,16 +541,16 @@ public:
   }
 
 #ifndef USE_GDI
-  void show();
-  void hide();
+  void Show();
+  void Hide();
 #else
-  void show() {
+  void Show() {
     AssertThread();
 
     ::ShowWindow(hWnd, SW_SHOW);
   }
 
-  void hide() {
+  void Hide() {
     AssertThread();
 
     ::ShowWindow(hWnd, SW_HIDE);
@@ -558,14 +558,14 @@ public:
 #endif
 
   /**
-   * Like hide(), but does not trigger a synchronous redraw of the
+   * Like Hide(), but does not trigger a synchronous redraw of the
    * parent window's background.
    */
-  void fast_hide() {
+  void FastHide() {
     AssertThread();
 
 #ifndef USE_GDI
-    hide();
+    Hide();
 #else
     ::SetWindowPos(hWnd, NULL, 0, 0, 0, 0,
                    SWP_HIDEWINDOW |
@@ -577,9 +577,9 @@ public:
 
   void set_visible(bool visible) {
     if (visible)
-      show();
+      Show();
     else
-      hide();
+      Hide();
   }
 
 #ifndef USE_GDI
@@ -608,19 +608,19 @@ public:
    * Specifies whether this window can get user input.
    */
 #ifdef USE_GDI
-  void set_enabled(bool enabled) {
+  void SetEnabled(bool enabled) {
     AssertThread();
 
     ::EnableWindow(hWnd, enabled);
   }
 #else
-  void set_enabled(bool enabled);
+  void SetEnabled(bool enabled);
 #endif
 
 #ifndef USE_GDI
 
-  virtual Window *get_focused_window();
-  virtual void set_focus();
+  virtual Window *GetFocusedWindow();
+  virtual void SetFocus();
 
   /**
    * Called by the parent window when this window loses focus, or when
@@ -631,7 +631,7 @@ public:
 
 #else /* USE_GDI */
 
-  void set_focus() {
+  void SetFocus() {
     assert_none_locked();
     AssertThread();
 
@@ -650,19 +650,19 @@ public:
   }
 
 #ifndef USE_GDI
-  void set_capture();
-  void release_capture();
-  virtual void clear_capture();
+  void SetCapture();
+  void ReleaseCapture();
+  virtual void ClearCapture();
 #else /* USE_GDI */
 
-  void set_capture() {
+  void SetCapture() {
     assert_none_locked();
     AssertThread();
 
     ::SetCapture(hWnd);
   }
 
-  void release_capture() {
+  void ReleaseCapture() {
     assert_none_locked();
     AssertThread();
 
@@ -685,7 +685,7 @@ public:
 #endif /* USE_GDI */
 
 #ifndef USE_GDI
-  void to_screen(PixelRect &rc) const;
+  void ToScreen(PixelRect &rc) const;
 #endif
 
   /**
@@ -697,7 +697,7 @@ public:
     PixelRect rc;
 #ifndef USE_GDI
     rc = get_position();
-    to_screen(rc);
+    ToScreen(rc);
 #else
     ::GetWindowRect(hWnd, &rc);
 #endif
@@ -783,14 +783,14 @@ public:
 #endif
 
 #ifndef USE_GDI
-  void setup(Canvas &canvas);
+  void Setup(Canvas &canvas);
 
-  virtual void invalidate();
+  virtual void Invalidate();
 
   /**
    * Ensures that the window is updated on the physical screen.
    */
-  virtual void expose();
+  virtual void Expose();
 #else /* USE_GDI */
   HDC BeginPaint(PAINTSTRUCT *ps) {
     AssertThread();
@@ -869,9 +869,9 @@ public:
 #endif
 
 #ifndef USE_GDI
-  void send_user(unsigned id);
+  void SendUser(unsigned id);
 #else
-  void send_user(unsigned id) {
+  void SendUser(unsigned id) {
     ::PostMessage(hWnd, WM_USER + id, (WPARAM)0, (LPARAM)0);
   }
 #endif

@@ -51,7 +51,7 @@ public:
 
   void SetWind(const SpeedVector &_wind) {
     wind = _wind;
-    invalidate();
+    Invalidate();
   }
 
 protected:
@@ -188,7 +188,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow window(wind_look);
   window.Set(PixelRect{0, 0, 160, 160});
 
-  window.show();
+  window.Show();
   window.event_loop();
 
   Fonts::Deinitialize();

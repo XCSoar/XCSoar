@@ -81,7 +81,7 @@ EnableSizeEdit(bool enable)
 static void
 RefreshView()
 {
-  wTaskView->invalidate();
+  wTaskView->Invalidate();
 
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
   if (!tp)
@@ -377,7 +377,7 @@ OnOZData(gcc_unused DataField *Sender,
 {
   if (!Refreshing)
     ReadValues();
-  wTaskView->invalidate();
+  wTaskView->Invalidate();
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {

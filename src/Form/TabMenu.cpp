@@ -352,7 +352,7 @@ void
 TabMenuControl::FocusMenuPage()
 {
   GotoMenuPage();
-  tab_display->set_focus();
+  tab_display->SetFocus();
 }
 
 // TabMenuDisplay Functions
@@ -381,12 +381,12 @@ TabMenuDisplay::SetSelectedIndex(TabMenuControl::MenuTabIndex di)
   if (SupportsPartialRedraw() && di.main_index == selected_index.main_index &&
       di.sub_index < main_button.NumSubMenus() &&
       selected_index.sub_index < main_button.NumSubMenus()) {
-    invalidate(menu.GetSubMenuButtonSize(main_button.first_page_index +
+    Invalidate(menu.GetSubMenuButtonSize(main_button.first_page_index +
                                          selected_index.sub_index));
-    invalidate(menu.GetSubMenuButtonSize(main_button.first_page_index +
+    Invalidate(menu.GetSubMenuButtonSize(main_button.first_page_index +
                                          di.sub_index));
   } else
-    invalidate();
+    Invalidate();
 
   selected_index = di;
 }
@@ -439,15 +439,15 @@ TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  set_focus();
+  SetFocus();
 
   down_index = GetTabMenuBar().IsPointOverButton(Pos,
                                                 selected_index.main_index);
 
   if (!down_index.IsNone()) {
     dragging = true;
-    set_capture();
-    invalidate();
+    SetCapture();
+    Invalidate();
     return true;
   }
   return PaintWindow::OnMouseDown(x, y);
@@ -474,7 +474,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
       // main menu click
       else if (di.IsMain())
         selected_index = down_index;
-      invalidate();
+      Invalidate();
     }
 
     down_index = TabMenuControl::MenuTabIndex::None();
@@ -512,7 +512,7 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   const bool tmp = !PtInRect(&rc, Pos);
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
-    invalidate(rc);
+    Invalidate(rc);
   }
   return true;
 }
@@ -649,14 +649,14 @@ TabMenuDisplay::OnPaint(Canvas &canvas)
 void
 TabMenuDisplay::OnKillFocus()
 {
-  invalidate();
+  Invalidate();
   PaintWindow::OnKillFocus();
 }
 
 void
 TabMenuDisplay::OnSetFocus()
 {
-  invalidate();
+  Invalidate();
   PaintWindow::OnSetFocus();
 }
 
@@ -666,6 +666,6 @@ TabMenuDisplay::drag_end()
   if (dragging) {
     dragging = false;
     drag_off_button = false;
-    release_capture();
+    ReleaseCapture();
   }
 }

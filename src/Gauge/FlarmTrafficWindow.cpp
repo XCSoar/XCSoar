@@ -80,7 +80,7 @@ FlarmTrafficWindow::SetTarget(int i)
     return;
 
   selection = i;
-  invalidate();
+  Invalidate();
 }
 
 /**
@@ -193,7 +193,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const FlarmState &new_data,
   UpdateWarnings();
   UpdateSelector(selection_id, pt);
 
-  invalidate();
+  Invalidate();
 }
 
 /**

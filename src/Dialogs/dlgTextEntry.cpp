@@ -112,7 +112,7 @@ UpdateCursor()
   edittext[cursor] = EntryLetters[lettercursor];
 
   if (wGrid != NULL)
-    wGrid->invalidate();
+    wGrid->Invalidate();
 }
 
 static void

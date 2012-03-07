@@ -71,7 +71,7 @@ static WndFrame *edit_content_description;
 static void
 RefreshPasteButton()
 {
-  buttonPaste->set_enabled(clipboard_size > 0);
+  buttonPaste->SetEnabled(clipboard_size > 0);
 }
 
 static void
@@ -122,7 +122,7 @@ OnPaste(gcc_unused WndButton &button)
       continue;
 
     data.contents[item] = content;
-    previews[item].invalidate();
+    previews[item].Invalidate();
   }
 
   RefreshEditContent();
@@ -136,9 +136,9 @@ SetCurrentInfoBox(unsigned _current_preview)
   if (_current_preview == current_preview)
     return;
 
-  previews[current_preview].invalidate();
+  previews[current_preview].Invalidate();
   current_preview = _current_preview;
-  previews[current_preview].invalidate();
+  previews[current_preview].Invalidate();
 
   DataFieldEnum &df = *(DataFieldEnum *)edit_select->GetDataField();
   df.Set(current_preview);
@@ -161,7 +161,7 @@ OnContentAccess(DataField *Sender, DataField::DataAccessMode Mode)
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
   data.contents[current_preview] = (InfoBoxFactory::t_InfoBox)dfe.GetAsInteger();
-  previews[current_preview].invalidate();
+  previews[current_preview].Invalidate();
   RefreshEditContentDescription();
 }
 

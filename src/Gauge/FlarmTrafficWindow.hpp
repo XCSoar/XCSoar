@@ -100,7 +100,7 @@ public:
 
   void SetDistance(fixed _distance) {
     distance = _distance;
-    invalidate();
+    Invalidate();
   }
 
   void Paint(Canvas &canvas);

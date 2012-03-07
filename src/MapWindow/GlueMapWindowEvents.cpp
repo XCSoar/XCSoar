@@ -104,7 +104,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   mouse_down_clock.Update();
   arm_mapitem_list = has_focus();
 
-  set_focus();
+  SetFocus();
 
   drag_start.x = x;
   drag_start.y = y;
@@ -132,7 +132,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode != DRAG_NONE)
-    set_capture();
+    SetCapture();
 
   return true;
 }
@@ -141,7 +141,7 @@ bool
 GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (drag_mode != DRAG_NONE)
-    release_capture();
+    ReleaseCapture();
 
   // Ignore single click event if double click detected
   if (ignore_single_click) {
@@ -284,7 +284,7 @@ GlueMapWindow::OnCancelMode()
       follow_mode = FOLLOW_SELF;
 #endif
 
-    release_capture();
+    ReleaseCapture();
     drag_mode = DRAG_NONE;
   }
 

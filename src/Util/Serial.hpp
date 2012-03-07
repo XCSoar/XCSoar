@@ -26,7 +26,7 @@ Copyright_License {
 
 /**
  * A serial version number for an object.  It can be used to check
- * whether an object has been modified.  Useful to invalidate cached
+ * whether an object has been modified.  Useful to Invalidate cached
  * values.
  */
 class Serial {

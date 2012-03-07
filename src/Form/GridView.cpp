@@ -203,7 +203,7 @@ GridView::ShowNextPage(Direction direction)
   }
 
   if (newPos != -1) {
-    items[newPos]->set_focus();
+    items[newPos]->SetFocus();
     /* unable to set the focus on the desired item, let's try
        Tab/Shift-Tab behavior instead */
     if (!items[newPos]->has_focus()) {
@@ -218,7 +218,7 @@ GridView::ShowNextPage(Direction direction)
       if (newPos != -1 &&
           newPos >= (signed)(current_page * pageSize) &&
           newPos < (signed)(current_page * pageSize + currentPageSize)) {
-        items[newPos]->set_focus();
+        items[newPos]->SetFocus();
       }
     } else if (focusPos != -1) {
 #ifdef USE_GDI
@@ -305,13 +305,13 @@ GridView::MoveFocus(Direction direction)
 
     if (newFocusPos != -1) {
       // we are on the same page
-      items[newFocusPos]->set_focus();
+      items[newFocusPos]->SetFocus();
       if (!items[newFocusPos]->has_focus()) {
         /* unable to set the focus, let's try simple Tab/Shift-Tab
            behavior instead */
         newFocusPos = GetNextEnabledItemIndex(focusPos, direction);
         if (newFocusPos != -1)
-          items[newFocusPos]->set_focus();
+          items[newFocusPos]->SetFocus();
       }
       RefreshLayout();
     } else

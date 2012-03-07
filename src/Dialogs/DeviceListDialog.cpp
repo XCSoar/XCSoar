@@ -120,7 +120,7 @@ DeviceListWidget::RefreshList()
 
   ListControl &list = GetList();
   list.SetLength(indices.size());
-  list.invalidate();
+  list.Invalidate();
 }
 
 void
@@ -140,25 +140,24 @@ DeviceListWidget::UpdateButtons()
   const unsigned current = GetList().GetCursorIndex();
 
   if (is_simulator() || current >= indices.size()) {
-    reconnect_button->set_enabled(false);
-    flight_button->set_enabled(false);
-    manage_button->set_enabled(false);
-    monitor_button->set_enabled(false);
+    reconnect_button->SetEnabled(false);
+    flight_button->SetEnabled(false);
+    manage_button->SetEnabled(false);
+    monitor_button->SetEnabled(false);
   } else {
     const DeviceDescriptor &device = device_list[indices[current]];
 
-    reconnect_button->set_enabled(device.IsConfigured());
-    flight_button->set_enabled(device.IsLogger());
-    manage_button->set_enabled(device.IsManageable());
-    monitor_button->set_enabled(device.GetConfig().UsesPort());
+    reconnect_button->SetEnabled(device.IsConfigured());
+    flight_button->SetEnabled(device.IsLogger());
+    manage_button->SetEnabled(device.IsManageable());
+    monitor_button->SetEnabled(device.GetConfig().UsesPort());
   }
 
-  edit_button->set_enabled(current < indices.size());
+  edit_button->SetEnabled(current < indices.size());
 }
 
 void
-DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
-                              unsigned i)
+DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   const DeviceDescriptor &device = device_list[indices[i]];
 

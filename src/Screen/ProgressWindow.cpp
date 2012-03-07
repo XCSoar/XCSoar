@@ -146,7 +146,7 @@ ProgressWindow::OnResize(UPixelScalar width, UPixelScalar height)
                       width - progress_height,
                       progress_height);
 
-  invalidate();
+  Invalidate();
 }
 
 void

@@ -116,7 +116,7 @@ TaskPropertiesPanel::RefreshView()
   ShowFormControl(form, _T("prpFinishHeightRef"), !fai_start_finish);
   LoadFormProperty(form, _T("prpFinishHeightRef"), (unsigned)p.finish_min_height_ref);
 
-  wTaskView->invalidate();
+  wTaskView->Invalidate();
 
   // fixed aat_min_time
   // finish_min_height

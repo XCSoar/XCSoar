@@ -54,7 +54,7 @@ SetFormControlEnabled(SubForm &form, const TCHAR *control_name, bool enabled)
 {
   Window *window = form.FindByName(control_name);
   assert(window != NULL);
-  window->set_enabled(enabled);
+  window->SetEnabled(enabled);
 }
 
 void

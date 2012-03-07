@@ -112,14 +112,14 @@ void
 ListControl::OnSetFocus()
 {
   PaintWindow::OnSetFocus();
-  invalidate_item(cursor);
+  Invalidate_item(cursor);
 }
 
 void
 ListControl::OnKillFocus()
 {
   PaintWindow::OnKillFocus();
-  invalidate_item(cursor);
+  Invalidate_item(cursor);
 }
 
 void
@@ -204,7 +204,7 @@ ListControl::SetItemHeight(UPixelScalar _item_height)
   items_visible = get_size().cy / item_height;
 
   show_or_hide_scroll_bar();
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -232,7 +232,7 @@ ListControl::SetLength(unsigned n)
     origin = cursor;
 
   show_or_hide_scroll_bar();
-  invalidate();
+  Invalidate();
 
   SetCursorIndex(cursor);
 }
@@ -264,9 +264,9 @@ ListControl::SetCursorIndex(unsigned i)
 
   EnsureVisible(i);
 
-  invalidate_item(cursor);
+  Invalidate_item(cursor);
   cursor = i;
-  invalidate_item(cursor);
+  Invalidate_item(cursor);
 
   if (handler != NULL)
     handler->OnCursorMoved(i);
@@ -297,7 +297,7 @@ ListControl::SetPixelPan(UPixelScalar _pixel_pan)
     return;
 
   pixel_pan = _pixel_pan;
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -326,7 +326,7 @@ ListControl::SetOrigin(int i)
     rc.right = scroll_bar.GetLeft(get_size());
     scroll(0, delta * item_height, rc);
 
-    /* repaint the scrollbar synchronously; we could invalidate its
+    /* repaint the scrollbar synchronously; we could Invalidate its
        area and repaint asynchronously via WM_PAINT, but then the clip
        rect passed to OnPaint() would be the whole client area */
     WindowCanvas canvas(*this);
@@ -335,7 +335,7 @@ ListControl::SetOrigin(int i)
   }
 #endif
 
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -492,10 +492,10 @@ ListControl::drag_end()
 {
   if (drag_mode != DragMode::NONE) {
     if (drag_mode == DragMode::CURSOR)
-      invalidate_item(cursor);
+      Invalidate_item(cursor);
 
     drag_mode = DragMode::NONE;
-    release_capture();
+    ReleaseCapture();
   }
 }
 
@@ -512,7 +512,7 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   } else if (drag_mode == DragMode::CURSOR) {
     if (abs(y - drag_y_window) > ((int)item_height / 5)) {
       drag_mode = DragMode::SCROLL;
-      invalidate_item(cursor);
+      Invalidate_item(cursor);
     } else
       return true;
   }
@@ -547,7 +547,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
   // If possible -> Give focus to the Control
   bool had_focus = has_focus();
   if (!had_focus)
-    set_focus();
+    SetFocus();
 
   if (scroll_bar.IsInsideSlider(Pos)) {
     // if click is on scrollbar handle
@@ -582,7 +582,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
     if (had_focus && (unsigned)index == GetCursorIndex() &&
         CanActivateItem()) {
       drag_mode = DragMode::CURSOR;
-      invalidate_item(cursor);
+      Invalidate_item(cursor);
     } else {
       // If item was not selected before
       // -> select it
@@ -592,7 +592,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
 #ifndef _WIN32_WCE
     kinetic.MouseDown(GetPixelOrigin());
 #endif
-    set_capture();
+    SetCapture();
   }
 
   return true;

@@ -85,7 +85,7 @@ void
 InfoBoxWindow::SetTitle(const TCHAR *_title)
 {
   data.SetTitle(_title);
-  invalidate(title_rect);
+  Invalidate(title_rect);
 }
 
 void
@@ -309,7 +309,7 @@ InfoBoxWindow::SetContentProvider(InfoBoxContent *_content)
   content = _content;
 
   data.SetInvalid();
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -322,21 +322,21 @@ InfoBoxWindow::UpdateContent()
   content->Update(data);
 
   if (old.GetCustom() || data.GetCustom())
-    /* must invalidate everything when custom painting is/was
+    /* must Invalidate everything when custom painting is/was
        enabled */
-    invalidate();
+    Invalidate();
   else {
 #ifdef ENABLE_OPENGL
     if (!data.CompareTitle(old) || !data.CompareValue(old) ||
         !data.CompareComment(old))
-      invalidate();
+      Invalidate();
 #else
     if (!data.CompareTitle(old))
-      invalidate(title_rect);
+      Invalidate(title_rect);
     if (!data.CompareValue(old))
-      invalidate(value_rect);
+      Invalidate(value_rect);
     if (!data.CompareComment(old))
-      invalidate(comment_rect);
+      Invalidate(comment_rect);
 #endif
   }
 }
@@ -453,11 +453,11 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 bool
 InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  set_capture();
+  SetCapture();
   click_clock.Update();
 
   // if single clicked -> focus the InfoBoxWindow
-  set_focus();
+  SetFocus();
   return true;
 }
 
@@ -468,7 +468,7 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     return PaintWindow::OnMouseUp(x, y);
 
   if (click_clock.IsDefined()) {
-    release_capture();
+    ReleaseCapture();
 
     if ((unsigned)x < get_width() && (unsigned)y < get_height() &&
         click_clock.Check(1000)) {
@@ -502,7 +502,7 @@ bool
 InfoBoxWindow::OnCancelMode()
 {
   click_clock.Reset();
-  release_capture();
+  ReleaseCapture();
   PaintWindow::OnCancelMode();
   return false;
 }
@@ -518,7 +518,7 @@ InfoBoxWindow::OnSetFocus()
   focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
 
   // Redraw fast to paint the selector
-  invalidate();
+  Invalidate();
 }
 
 void
@@ -531,7 +531,7 @@ InfoBoxWindow::OnKillFocus()
   focus_timer.Cancel();
 
   // Redraw fast to remove the selector
-  invalidate();
+  Invalidate();
 }
 
 bool
@@ -539,7 +539,7 @@ InfoBoxWindow::OnTimer(WindowTimer &timer)
 {
   if (timer == focus_timer) {
     focus_timer.Cancel();
-    parent.set_focus();
+    parent.SetFocus();
     return true;
   } else
     return PaintWindow::OnTimer(timer);

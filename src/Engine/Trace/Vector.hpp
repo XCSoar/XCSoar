@@ -40,7 +40,7 @@ public:
 
 /**
  * A direct-access storage for TracePoint pointers that refer to
- * elements of a Trace.  Be careful: all pointers get invalidated when
+ * elements of a Trace.  Be careful: all pointers get Invalidated when
  * the Trace gets thinned.  Be sure to check Trace::GetModifySerial()
  * for updates.
  */

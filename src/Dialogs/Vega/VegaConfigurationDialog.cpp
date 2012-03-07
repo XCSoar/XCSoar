@@ -183,7 +183,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
     tabbed->PreviousPage();
     PageSwitched();
     //((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocused(true, NULL);
@@ -193,7 +193,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
+    ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
     tabbed->NextPage();
     PageSwitched();
     //((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocused(true, NULL);

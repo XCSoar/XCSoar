@@ -88,8 +88,8 @@ TaskEditPanel::RefreshView()
   else
     wTaskPoints->SetLength(ordered_task->TaskSize());
 
-  wTaskView->invalidate();
-  wTaskPoints->invalidate();
+  wTaskView->Invalidate();
+  wTaskPoints->Invalidate();
 
   if (wSummary) {
     TCHAR text[300];

@@ -233,7 +233,7 @@ gcc_pure
 static bool
 check_key(ContainerWindow *container, const Event &event)
 {
-  Window *focused = container->get_focused_window();
+  Window *focused = container->GetFocusedWindow();
   if (focused == NULL)
     return false;
 
@@ -273,7 +273,7 @@ gcc_pure
 static bool
 check_key(ContainerWindow *container, const SDL_Event &event)
 {
-  Window *focused = container->get_focused_window();
+  Window *focused = container->GetFocusedWindow();
   if (focused == NULL)
     return false;
 
@@ -367,9 +367,9 @@ WndForm::ShowModal()
 #ifdef USE_GDI
   oldFocusHwnd = ::GetFocus();
 #endif /* USE_GDI */
-  set_focus();
+  SetFocus();
   if (default_focus)
-    default_focus->set_focus();
+    default_focus->SetFocus();
   else
     FocusFirstControl();
 
@@ -475,12 +475,12 @@ WndForm::ShowModal()
   main_window.RemoveDialog(this);
 
 #ifdef USE_GDI
-  SetFocus(oldFocusHwnd);
+  ::SetFocus(oldFocusHwnd);
 #else
   if (old_focus_reference.Defined()) {
     Window *old_focus = old_focus_reference.Get(*root);
     if (old_focus != NULL)
-      old_focus->set_focus();
+      old_focus->SetFocus();
   }
 #endif /* !USE_GDI */
 
@@ -536,7 +536,7 @@ WndForm::SetCaption(const TCHAR *_caption)
   if (!caption.equals(_caption)) {
     caption = _caption;
     UpdateLayout();
-    invalidate(title_rect);
+    Invalidate(title_rect);
   }
 }
 

@@ -1442,7 +1442,7 @@ ZEXTERN const char * ZEXPORT gzerror OF((gzFile file, int *errnum));
    Z_ERRNO and the application may consult errno to get the exact error code.
 
      The application must not modify the returned string.  Future calls to
-   this function may invalidate the previously returned string.  If file is
+   this function may Invalidate the previously returned string.  If file is
    closed, then the string previously returned by gzerror will no longer be
    available.
 

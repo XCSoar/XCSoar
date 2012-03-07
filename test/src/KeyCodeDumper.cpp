@@ -58,12 +58,12 @@ protected:
     events[num_events].down = down;
     ++num_events;
 
-    invalidate();
+    Invalidate();
   }
 
 protected:
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) {
-    set_focus();
+    SetFocus();
     return true;
   }
 
@@ -79,12 +79,12 @@ protected:
 
   virtual void OnSetFocus() {
     PaintWindow::OnSetFocus();
-    invalidate();
+    Invalidate();
   }
 
   virtual void OnKillFocus() {
     PaintWindow::OnKillFocus();
-    invalidate();
+    Invalidate();
   }
 
   virtual void OnPaint(Canvas &canvas) {
@@ -149,7 +149,7 @@ public:
 
     close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
 
-    key_code_dumper.set_focus();
+    key_code_dumper.SetFocus();
   }
 
 protected:
@@ -191,7 +191,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   TestWindow window;
   window.set(PixelRect{0, 0, 240, 100});
-  window.show();
+  window.Show();
 
   window.event_loop();
 

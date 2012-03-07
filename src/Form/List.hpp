@@ -293,8 +293,8 @@ protected:
     return rc;
   }
 
-  void invalidate_item(unsigned i) {
-    invalidate(item_rect(i));
+  void Invalidate_item(unsigned i) {
+    Invalidate(item_rect(i));
   }
 
   void drag_end();

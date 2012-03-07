@@ -112,7 +112,7 @@ TabBarControl::ClickPage(unsigned i)
     return;
 
   if (tab_display != NULL)
-    tab_display->invalidate();
+    tab_display->Invalidate();
 
   if (!is_current)
     /* switching to a new page by mouse click focuses the first
@@ -135,7 +135,7 @@ TabBarControl::SetCurrentPage(unsigned i)
     return;
 
   if (tab_display != NULL)
-    tab_display->invalidate();
+    tab_display->Invalidate();
 
   if (page_flipped_callback != NULL)
     page_flipped_callback();
@@ -149,7 +149,7 @@ TabBarControl::NextPage()
     return;
 
   if (tab_display != NULL)
-    tab_display->invalidate();
+    tab_display->Invalidate();
 
   if (page_flipped_callback != NULL)
     page_flipped_callback();
@@ -163,7 +163,7 @@ TabBarControl::PreviousPage()
     return;
 
   if (tab_display != NULL)
-    tab_display->invalidate();
+    tab_display->Invalidate();
 
   if (page_flipped_callback != NULL)
     page_flipped_callback();

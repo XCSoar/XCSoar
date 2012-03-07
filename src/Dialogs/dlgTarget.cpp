@@ -210,11 +210,11 @@ LockCalculatorUI()
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp)
-    wp->set_enabled(IsLocked);
+    wp->SetEnabled(IsLocked);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
   if (wp)
-    wp->set_enabled(IsLocked);
+    wp->SetEnabled(IsLocked);
 }
 
 /**
@@ -544,7 +544,7 @@ dlgTargetShowModal(int TargetPoint)
   struct TargetDialogUpdateListener : public NullBlackboardListener {
     virtual void OnCalculatedUpdate(const MoreData &basic,
                                     const DerivedInfo &calculated) {
-      map->invalidate();
+      map->Invalidate();
       RefreshCalculator();
     }
   };

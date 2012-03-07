@@ -92,7 +92,7 @@ WindEditPanel::Show(const PixelRect &rc)
 
   wp = (WndProperty *)form.FindByName(_T("prpSpeed"));
   if (wp) {
-    wp->set_enabled(!external_wind);
+    wp->SetEnabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), Unit::KILOMETER_PER_HOUR)));
     df.SetUnits(Units::GetSpeedName());
@@ -102,7 +102,7 @@ WindEditPanel::Show(const PixelRect &rc)
 
   wp = (WndProperty *)form.FindByName(_T("prpDirection"));
   if (wp) {
-    wp->set_enabled(!external_wind);
+    wp->SetEnabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.Set(wind.bearing.Degrees());
     wp->RefreshDisplay();

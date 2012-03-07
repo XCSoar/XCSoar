@@ -264,7 +264,7 @@ namespace KDTree
 
       /*! \brief Comparator for the values in the KDTree.
 
-	The comparator shall not be modified, it could invalidate the tree.
+	The comparator shall not be modified, it could Invalidate the tree.
 	\return a copy of the comparator used by the KDTree.
        */
       _Cmp
@@ -273,7 +273,7 @@ namespace KDTree
 
       /*! \brief Accessor to the value's elements.
 
-	This accessor shall not be modified, it could invalidate the tree.
+	This accessor shall not be modified, it could Invalidate the tree.
 	\return a copy of the accessor used by the KDTree.
        */
       _Acc

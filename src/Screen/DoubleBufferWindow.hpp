@@ -47,9 +47,9 @@ class DoubleBufferWindow : public PaintWindow {
   bool dirty;
 
 public:
-  void invalidate() {
+  void Invalidate() {
     dirty = true;
-    PaintWindow::invalidate();
+    PaintWindow::Invalidate();
   }
 
 protected:
@@ -116,7 +116,7 @@ public:
     OnPaintBuffer(get_canvas());
     flip();
 #else
-    invalidate();
+    Invalidate();
 #endif
   }
 };

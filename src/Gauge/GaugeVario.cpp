@@ -67,7 +67,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 
   set(parent, left, top, width, height, style);
 
-  hide();
+  Hide();
 }
 
 void

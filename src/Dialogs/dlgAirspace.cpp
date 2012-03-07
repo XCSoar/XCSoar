@@ -148,7 +148,7 @@ OnAirspaceListEnter(unsigned index)
     changed = true;
   }
 
-  airspace_list->invalidate();
+  airspace_list->Invalidate();
 
   ActionInterface::SendMapSettings();
 }

@@ -156,7 +156,7 @@ void
 TaskListPanel::RefreshView()
 {
   wTasks->SetLength(task_store->Size());
-  wTaskView->invalidate();
+  wTaskView->Invalidate();
 
   WndFrame* wSummary = (WndFrame*)form.FindByName(_T("frmSummary1"));
   assert(wSummary != NULL);
@@ -215,7 +215,7 @@ TaskListPanel::LoadTask()
   *task_modified = true;
 
   tab_bar.SetCurrentPage(dlgTaskManager::GetTurnpointTab());
-  tab_bar.set_focus();
+  tab_bar.SetFocus();
 }
 
 void
@@ -342,7 +342,7 @@ TaskListPanel::OnNewTaskClicked()
     (*active_task)->SetFactory(XCSoarInterface::GetComputerSettings().task.task_type_default);
     *task_modified = true;
     tab_bar.SetCurrentPage(dlgTaskManager::GetPropertiesTab());
-    tab_bar.set_focus();
+    tab_bar.SetFocus();
   }
 }
 
@@ -427,7 +427,7 @@ TaskListPanel::OnTaskViewClick()
                     TaskViewRect.bottom - TaskViewRect.top);
     fullscreen = false;
   }
-  wTaskView->invalidate();
+  wTaskView->Invalidate();
 }
 
 static bool
@@ -481,7 +481,7 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */
-    form.FindByName(_T("cmdDeclare"))->set_enabled(false);
+    form.FindByName(_T("cmdDeclare"))->SetEnabled(false);
 
   // Save important control pointers
   wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskView1"));

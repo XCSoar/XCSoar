@@ -40,7 +40,7 @@ Copyright_License {
  * Representation of a file name.  It is automatically converted to
  * the file system character set.  If no conversion is needed, then
  * this object will hold a pointer to the original input string; it
- * must not be invalidated.
+ * must not be Invalidated.
  */
 class PathName {
 #ifdef _UNICODE
@@ -93,7 +93,7 @@ public:
 /**
  * Representation of a file name in narrow characters.  If no
  * conversion is needed, then this object will hold a pointer to the
- * original input string; it must not be invalidated.
+ * original input string; it must not be Invalidated.
  */
 class NarrowPathName {
 #ifdef _UNICODE

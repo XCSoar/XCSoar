@@ -61,7 +61,7 @@ public:
 
   /**
    * Returns words from this source.  After you have used them, call
-   * the method consume().  This method invalidates any range returned
+   * the method consume().  This method Invalidates any range returned
    * by a previous call.
    *
    * This object will always return as many words as possible; calling
@@ -72,7 +72,7 @@ public:
 
   /**
    * Marks words as "consumed".  The buffer returned by read() is not
-   * yet invalidated, and may be used until the next read() call is
+   * yet Invalidated, and may be used until the next read() call is
    * issued.
    */
   virtual void consume(unsigned n) = 0;

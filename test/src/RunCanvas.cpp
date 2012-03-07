@@ -193,7 +193,7 @@ private:
     }
 #endif
 
-    invalidate();
+    Invalidate();
   }
 
 protected:
@@ -265,7 +265,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   TestWindow window;
   window.set(PixelRect{0, 0, 250, 250});
-  window.show();
+  window.Show();
 
   window.event_loop();
 

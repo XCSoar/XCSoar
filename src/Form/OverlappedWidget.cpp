@@ -30,7 +30,7 @@ OverlappedWidget::Raise()
   assert(IsDefined());
   assert(GetWindow()->is_visible());
 
-  GetWindow()->bring_to_top();
+  GetWindow()->BringToTop();
 }
 
 #ifdef USE_GDI
@@ -41,10 +41,10 @@ OverlappedWidget::Hide()
   assert(IsDefined());
   assert(GetWindow()->is_visible());
 
-  /* WindowWidget::Hide() uses Window::fast_hide() to reduce overhead,
+  /* WindowWidget::Hide() uses Window::FastHide() to reduce overhead,
      but that doesn't work well for overlapped windows, because hiding
      an overlapped Widget must redraw the area behind it */
-  GetWindow()->hide();
+  GetWindow()->Hide();
 }
 
 #endif

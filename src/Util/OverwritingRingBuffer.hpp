@@ -130,7 +130,7 @@ public:
   }
 
   const T &shift() {
-    /* this returns a reference to an item which is being invalidated
+    /* this returns a reference to an item which is being Invalidated
        - but that's okay, because it won't get purged yet */
     const T &value = peek();
     head = next(head);

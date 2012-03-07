@@ -105,8 +105,8 @@ class TopWindow : public ContainerWindow {
 #ifndef USE_GDI
   TopCanvas screen;
 
-  Mutex invalidated_lock;
-  bool invalidated;
+  Mutex Invalidated_lock;
+  bool Invalidated;
 
 #ifdef ANDROID
   Mutex paused_mutex;
@@ -121,7 +121,7 @@ class TopWindow : public ContainerWindow {
 
   /**
    * Has the application been resumed?  When this flag is set,
-   * TopWindow::expose() attempts to reinitialize the OpenGL surface.
+   * TopWindow::Expose() attempts to reinitialize the OpenGL surface.
    */
   bool resumed;
 
@@ -213,9 +213,9 @@ public:
   void Fullscreen();
 
 #ifndef USE_GDI
-  virtual void invalidate();
+  virtual void Invalidate();
 
-  virtual void expose();
+  virtual void Expose();
 #endif /* !USE_GDI */
 
   /**

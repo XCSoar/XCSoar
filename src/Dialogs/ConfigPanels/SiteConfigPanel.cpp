@@ -93,7 +93,7 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   WndProperty *wp = Add(_T(""), 0, true);
   wp->SetText(GetPrimaryDataPath());
-  wp->set_enabled(false);
+  wp->SetEnabled(false);
 
   AddFileReader(_("Map database"),
                 _("The name of the file (.xcm) containing terrain, topography, and optionally "

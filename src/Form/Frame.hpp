@@ -52,7 +52,7 @@ public:
 
   void SetFont(const Font &_font) {
     font = &_font;
-    invalidate();
+    Invalidate();
   }
 
   void SetText(const TCHAR *_text);

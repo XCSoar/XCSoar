@@ -103,9 +103,9 @@ public:
    * Invalidates the visible area and schedules a repaint (which will
    * occur in the main thread).
    */
-  void invalidate() {
+  void Invalidate() {
 #ifndef USE_GDI
-    Window::invalidate();
+    Window::Invalidate();
 #else
     ::InvalidateRect(hWnd, NULL, false);
 #endif
@@ -115,9 +115,9 @@ public:
    * Invalidates a part of the visible area and schedules a repaint
    * (which will occur in the main thread).
    */
-  void invalidate(const PixelRect &rect) {
+  void Invalidate(const PixelRect &rect) {
 #ifndef USE_GDI
-    invalidate();
+    Invalidate();
 #else
     ::InvalidateRect(hWnd, &rect, false);
 #endif

@@ -241,7 +241,7 @@ MainWindow::ReinitialiseLayout_vario(const InfoBoxLayout::Layout &layout)
   vario.Move(layout.vario);
   vario.Show();
 
-  // XXX vario->bring_to_top();
+  // XXX vario->BringToTop();
 }
 
 void
@@ -425,9 +425,9 @@ void
 MainWindow::SetDefaultFocus()
 {
   if (map != NULL && widget == NULL)
-    map->set_focus();
+    map->SetFocus();
   else if (widget == NULL || !widget->SetFocus())
-    set_focus();
+    SetFocus();
 }
 
 void
@@ -480,7 +480,7 @@ MainWindow::OnSetFocus()
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
     if (map != NULL && widget == NULL)
-      map->set_focus();
+      map->SetFocus();
     else if (widget != NULL)
       widget->SetFocus();
   }
@@ -685,8 +685,8 @@ MainWindow::ActivateMap()
 
   if (widget != NULL) {
     KillWidget();
-    map->show();
-    map->set_focus();
+    map->Show();
+    map->SetFocus();
   }
 
   return map;
@@ -717,7 +717,7 @@ MainWindow::SetWidget(Widget *_widget)
 
   /* hide the map (might be hidden already) */
   if (map != NULL)
-    map->fast_hide();
+    map->FastHide();
 
   widget = _widget;
 
@@ -727,7 +727,7 @@ MainWindow::SetWidget(Widget *_widget)
   widget->Show(rc);
 
   if (!widget->SetFocus())
-    set_focus();
+    SetFocus();
 }
 
 void

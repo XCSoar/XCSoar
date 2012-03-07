@@ -670,7 +670,7 @@ TrafficWidget::Hide()
 bool
 TrafficWidget::SetFocus()
 {
-  GetWindow()->set_focus();
+  GetWindow()->SetFocus();
   return true;
 }
 

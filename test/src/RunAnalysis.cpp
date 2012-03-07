@@ -239,7 +239,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   dialog_look = &look->dialog;
 
-  main_window.show();
+  main_window.Show();
 
   dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,
                        &protected_task_manager,

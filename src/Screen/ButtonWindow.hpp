@@ -97,7 +97,7 @@ public:
     AssertThread();
 
     text = _text;
-    invalidate();
+    Invalidate();
   }
 
   const tstring &get_text() const {

@@ -69,7 +69,7 @@ OnCancelClicked(gcc_unused WndButton &Sender)
 static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  list_control->invalidate();
+  list_control->Invalidate();
 }
 
 static void
@@ -138,12 +138,12 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   WndButton *help_button = (WndButton *)wf->FindByName(_T("cmdHelp"));
   assert(help_button != NULL);
   if (help_callback == NULL)
-    help_button->hide();
+    help_button->Hide();
 
   if (num_items == 0) {
     WndButton *select_button = (WndButton *)wf->FindByName(_T("SelectButton"));
     assert(select_button != NULL);
-    select_button->set_enabled(false);
+    select_button->SetEnabled(false);
   }
 
   if (update)

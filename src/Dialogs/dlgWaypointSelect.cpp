@@ -619,7 +619,7 @@ UpdateList()
   waypoint_list->SetLength(std::max(1, (int)waypoint_select_info.size()));
   waypoint_list->SetOrigin(0);
   waypoint_list->SetCursorIndex(0);
-  waypoint_list->invalidate();
+  waypoint_list->Invalidate();
 }
 
 static const TCHAR *

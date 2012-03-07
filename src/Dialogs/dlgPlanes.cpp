@@ -89,19 +89,19 @@ UpdateList()
     std::sort(list.begin(), list.end());
 
   plane_list->SetLength(len);
-  plane_list->invalidate();
+  plane_list->Invalidate();
 
   WndButton* b = (WndButton*)dialog->FindByName(_T("LoadButton"));
   assert(b != NULL);
-  b->set_enabled(len > 0);
+  b->SetEnabled(len > 0);
 
   b = (WndButton*)dialog->FindByName(_T("EditButton"));
   assert(b != NULL);
-  b->set_enabled(len > 0);
+  b->SetEnabled(len > 0);
 
   b = (WndButton*)dialog->FindByName(_T("DeleteButton"));
   assert(b != NULL);
-  b->set_enabled(len > 0);
+  b->SetEnabled(len > 0);
 }
 
 static void

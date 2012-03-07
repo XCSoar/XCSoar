@@ -110,7 +110,7 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
     cancel_button.set(client_area, _("Cancel"), rc,
                       style);
     cancel_button.set_font(*dialog_look.button.font);
-    cancel_button.bring_to_top();
+    cancel_button.BringToTop();
   }
 
   int result = form.ShowModal();

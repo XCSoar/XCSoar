@@ -45,9 +45,9 @@ private:
   bool dirty;
 
 public:
-  void invalidate() {
+  void Invalidate() {
     dirty = true;
-    PaintWindow::invalidate();
+    PaintWindow::Invalidate();
   }
 #endif
 

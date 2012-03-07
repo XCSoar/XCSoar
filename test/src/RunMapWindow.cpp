@@ -166,7 +166,7 @@ public:
     rc.bottom = rc.top + 20;
     close_button.set(*this, _T("Close"), ID_CLOSE, rc);
     close_button.set_font(Fonts::map);
-    close_button.bring_to_top();
+    close_button.BringToTop();
   }
 
 protected:
@@ -312,7 +312,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   DrawThread::Draw(window.map);
   window.initialised = true;
 #endif
-  window.show();
+  window.Show();
 
   window.event_loop();
   window.reset();

@@ -148,7 +148,7 @@ public:
     if (oz != NULL)
       oz->set_legs(&previous, &location, &next);
 
-    invalidate();
+    Invalidate();
   }
 
 protected:
@@ -258,7 +258,7 @@ public:
 
     oz.set_shape(ObservationZonePoint::LINE);
 
-    type_list->set_focus();
+    type_list->SetFocus();
   }
 
 protected:
@@ -308,7 +308,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow window(*task_look, *airspace_look);
   window.set(*look, PixelRect{0, 0, 480, 480});
 
-  window.show();
+  window.Show();
   window.event_loop();
 
   delete airspace_look;

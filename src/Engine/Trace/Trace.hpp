@@ -242,7 +242,7 @@ protected:
 
   /**
    * Erase a non-edge item from delta list and tree, updating
-   * deltas in the process.  This invalidates the calling iterator.
+   * deltas in the process.  This Invalidates the calling iterator.
    *
    * @param it Item to erase
    * @param tree Tree to remove from
@@ -332,7 +332,7 @@ public:
 
   /**
    * Returns a #Serial that gets incremented when iterators get
-   * invalidated (e.g. when the #Trace gets cleared or optimised).
+   * Invalidated (e.g. when the #Trace gets cleared or optimised).
    */
   const Serial &GetModifySerial() const {
     return modify_serial;

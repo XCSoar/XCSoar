@@ -65,7 +65,7 @@ Window::set(ContainerWindow *parent,
 }
 
 void
-Window::to_screen(PixelRect &rc) const
+Window::ToScreen(PixelRect &rc) const
 {
   for (const Window *p = parent; p != NULL; p = p->parent) {
     rc.left += p->left;
@@ -84,7 +84,7 @@ Window::GetParentClientRect() const
 }
 
 void
-Window::set_enabled(bool enabled)
+Window::SetEnabled(bool enabled)
 {
   AssertThread();
 
@@ -96,17 +96,17 @@ Window::set_enabled(bool enabled)
     OnCancelMode();
 
   this->enabled = enabled;
-  invalidate();
+  Invalidate();
 }
 
 Window *
-Window::get_focused_window()
+Window::GetFocusedWindow()
 {
   return focused ? this : NULL;
 }
 
 void
-Window::set_focus()
+Window::SetFocus()
 {
   if (parent != NULL)
     parent->SetActiveChild(*this);
@@ -128,7 +128,7 @@ Window::ClearFocus()
 }
 
 void
-Window::set_capture()
+Window::SetCapture()
 {
   assert_none_locked();
   AssertThread();
@@ -140,7 +140,7 @@ Window::set_capture()
 }
 
 void
-Window::release_capture()
+Window::ReleaseCapture()
 {
   assert_none_locked();
   AssertThread();
@@ -152,37 +152,37 @@ Window::release_capture()
 }
 
 void
-Window::clear_capture()
+Window::ClearCapture()
 {
   capture = false;
 }
 
 void
-Window::setup(Canvas &canvas)
+Window::Setup(Canvas &canvas)
 {
   if (font != NULL)
     canvas.Select(*font);
 }
 
 void
-Window::invalidate()
+Window::Invalidate()
 {
   if (visible && parent != NULL)
-    parent->invalidate();
+    parent->Invalidate();
 }
 
 void
-Window::expose()
+Window::Expose()
 {
   if (!visible)
     return;
 
   if (parent != NULL)
-    parent->expose();
+    parent->Expose();
 }
 
 void
-Window::show()
+Window::Show()
 {
   AssertThread();
 
@@ -190,11 +190,11 @@ Window::show()
     return;
 
   visible = true;
-  parent->invalidate();
+  parent->Invalidate();
 }
 
 void
-Window::hide()
+Window::Hide()
 {
   AssertThread();
 
@@ -202,11 +202,11 @@ Window::hide()
     return;
 
   visible = false;
-  parent->invalidate();
+  parent->Invalidate();
 }
 
 void
-Window::bring_to_top()
+Window::BringToTop()
 {
   assert_none_locked();
   AssertThread();
@@ -224,7 +224,7 @@ Window::BringToBottom()
 }
 
 void
-Window::send_user(unsigned id)
+Window::SendUser(unsigned id)
 {
 #ifdef ANDROID
   event_queue->Push(Event(Event::USER, id, this));

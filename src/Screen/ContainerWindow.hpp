@@ -95,7 +95,7 @@ public:
   void BringChildToBottom(Window &child) {
     children.remove(&child);
     children.push_back(&child);
-    invalidate();
+    Invalidate();
   }
 
   /**
@@ -112,22 +112,22 @@ public:
   Window *EventChildAt(PixelScalar x, PixelScalar y);
 
   void SetActiveChild(Window &child);
-  virtual void set_focus();
+  virtual void SetFocus();
   virtual void ClearFocus();
 
   /**
-   * Override the Window::get_focused_window() method, and search in
+   * Override the Window::GetFocusedWindow() method, and search in
    * the active child window.
    */
   gcc_pure
-  virtual Window *get_focused_window();
+  virtual Window *GetFocusedWindow();
 
   gcc_pure
   WindowReference GetFocusedWindowReference();
 
   void SetChildCapture(Window *window);
   void ReleaseChildCapture(Window *window);
-  virtual void clear_capture();
+  virtual void ClearCapture();
 
 protected:
   gcc_pure

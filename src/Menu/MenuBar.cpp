@@ -146,7 +146,7 @@ MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text,
   Button &button = buttons[i];
 
   button.set_text(text);
-  button.set_enabled(enabled && event > 0);
+  button.SetEnabled(enabled && event > 0);
   button.SetEvent(event);
   button.show_on_top();
 }
@@ -156,7 +156,7 @@ MenuBar::HideButton(unsigned i)
 {
   assert(i < MAX_BUTTONS);
 
-  buttons[i].hide();
+  buttons[i].Hide();
 }
 
 void
