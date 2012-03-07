@@ -39,7 +39,7 @@ GlidePolarCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
   _stprintf(sTmp, Layout::landscape ?
                   _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n  %3.2f %s\r\n  at %d %s") :
                   _T("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
-            _("Best L/D"),
+            _("L/D"),
             (int)glide_polar.GetBestLD(),
             (int)Units::ToUserSpeed(glide_polar.GetVBestLD()),
             Units::GetSpeedName(),
