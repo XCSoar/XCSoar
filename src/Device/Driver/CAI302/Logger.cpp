@@ -63,8 +63,6 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
 {
   env.SetProgressRange(8);
 
-  port.SetRxTimeout(8000);
-
   for (unsigned i = 0; i < 8 && !flight_list.full(); ++i) {
     CAI302::FileList file_list;
     if (!CAI302::UploadFileList(port, i, file_list, env))
@@ -86,8 +84,6 @@ bool
 CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
                              OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
-
   if (!EnableBulkMode(env))
     return false;
 
@@ -116,8 +112,6 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   if (writer.HasError())
     return false;
 
-  port.SetRxTimeout(8000);
-
   CAI302::FileASCII file_ascii;
   if (!UploadFileASCII(port, flight.internal.cai302, file_ascii, env) ||
       env.IsCancelled())
@@ -131,8 +125,6 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   void *allocated = malloc(allocated_size);
   CAI302::FileData *header = (CAI302::FileData *)allocated;
   void *data = header + 1;
-
-  port.SetRxTimeout(15000);
 
   unsigned current_block = 0;
   unsigned valid_bytes;
@@ -181,8 +173,6 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
                              OperationEnvironment &env)
 {
   assert(flight.internal.cai302 < 64);
-
-  port.SetRxTimeout(500);
 
   if (!EnableBulkMode(env))
     return false;

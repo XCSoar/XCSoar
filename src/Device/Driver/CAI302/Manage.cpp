@@ -31,7 +31,6 @@ bool
 CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
                               OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!UploadMode(env))
     return false;
 
@@ -41,7 +40,6 @@ CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
 bool
 CAI302Device::Reboot(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -51,7 +49,6 @@ CAI302Device::Reboot(OperationEnvironment &env)
 bool
 CAI302Device::PowerOff(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -61,7 +58,6 @@ CAI302Device::PowerOff(OperationEnvironment &env)
 bool
 CAI302Device::StartLogging(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -71,7 +67,6 @@ CAI302Device::StartLogging(OperationEnvironment &env)
 bool
 CAI302Device::StopLogging(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -81,7 +76,6 @@ CAI302Device::StopLogging(OperationEnvironment &env)
 bool
 CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -91,7 +85,6 @@ CAI302Device::SetVolume(unsigned volume, OperationEnvironment &env)
 bool
 CAI302Device::ClearPoints(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -102,7 +95,6 @@ CAI302Device::ClearPoints(OperationEnvironment &env)
 bool
 CAI302Device::ClearPilot(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -112,7 +104,6 @@ CAI302Device::ClearPilot(OperationEnvironment &env)
 bool
 CAI302Device::ClearLog(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!CommandMode(env))
     return false;
 
@@ -126,7 +117,6 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
 {
   assert(list.empty());
 
-  port.SetRxTimeout(500);
   if (!UploadMode(env))
     return false;
 
@@ -165,7 +155,6 @@ CAI302Device::ReadPilotList(std::vector<CAI302::Pilot> &list,
 bool
 CAI302Device::ReadActivePilot(CAI302::Pilot &pilot, OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!UploadMode(env))
     return false;
 
@@ -181,7 +170,6 @@ bool
 CAI302Device::WriteActivePilot(const CAI302::Pilot &pilot,
                                OperationEnvironment &env)
 {
-  port.SetRxTimeout(5000);
   if (!DownloadMode(env))
     return false;
 
@@ -197,7 +185,6 @@ bool
 CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
                          OperationEnvironment &env)
 {
-  port.SetRxTimeout(5000);
   if (!DownloadMode(env))
     return false;
 
@@ -212,7 +199,6 @@ CAI302Device::WritePilot(unsigned index, const CAI302::Pilot &pilot,
 bool
 CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
 {
-  port.SetRxTimeout(5000);
   if (!DownloadMode(env))
     return false;
 
@@ -227,7 +213,6 @@ CAI302Device::AddPilot(const CAI302::Pilot &pilot, OperationEnvironment &env)
 int
 CAI302Device::ReadNavpointCount(OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!UploadMode(env))
     return false;
 
@@ -244,7 +229,6 @@ bool
 CAI302Device::ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
                            OperationEnvironment &env)
 {
-  port.SetRxTimeout(1000);
   if (!UploadMode(env))
     return false;
 
@@ -277,7 +261,6 @@ bool
 CAI302Device::WriteNavpoint(unsigned id, const Waypoint &wp,
                             OperationEnvironment &env)
 {
-  port.SetRxTimeout(1000);
   if (!DownloadMode(env))
     return false;
 

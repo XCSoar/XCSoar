@@ -73,12 +73,8 @@ DeclareInner(Port &port, const Declaration &declaration,
   using CAI302::UploadShort;
   unsigned size = declaration.Size();
 
-  port.SetRxTimeout(500);
-
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
-
-  port.SetRxTimeout(1500);
 
   CAI302::PilotMeta pilot_meta;
   if (!CAI302::UploadPilotMeta(port, pilot_meta, env))
@@ -133,7 +129,6 @@ DeclareInner(Port &port, const Declaration &declaration,
     env.SetProgressPosition(7 + i);
   }
 
-  port.SetRxTimeout(1500); // D,255 takes more than 800ms
   return CAI302::DeclareSave(port, env);
 }
 
@@ -142,7 +137,6 @@ CAI302Device::Declare(const Declaration &declaration,
                       gcc_unused const Waypoint *home,
                       OperationEnvironment &env)
 {
-  port.SetRxTimeout(500);
   if (!UploadMode(env))
     return false;
 
