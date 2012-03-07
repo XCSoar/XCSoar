@@ -60,9 +60,6 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end) const
   const FlatPoint f_end = m_task_projection->fproject(end);
   const FlatLine line(f_start, f_end);
 
-  if (Inside(start))
-    sorter.add(fixed_zero, start);
-
   FlatPoint f_p1, f_p2;
   if (line.intersect_circle(f_radius, f_center, f_p1, f_p2)) {
     const fixed mag = line.dsq();
