@@ -36,6 +36,7 @@ Copyright_License {
 #include "Task/FAITriangleValidator.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -376,8 +377,11 @@ OrderedTaskSave(SingleWindow &parent, const OrderedTask& task, bool noask)
     return false;
 
   TCHAR path[MAX_PATH];
+  LocalPath(path, _T("tasks"));
+  Directory::Create(path);
+
   _tcscat(fname, _T(".tsk"));
-  LocalPath(path, fname);
+  LocalPath(path, _T("tasks"), fname);
   protected_task_manager->TaskSave(path, task);
   return true;
 }
