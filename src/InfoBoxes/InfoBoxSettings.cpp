@@ -61,14 +61,14 @@ InfoBoxSettings::SetDefaults()
   static gcc_constexpr_data unsigned DFLT_CONFIG_BOXES = 9;
   static gcc_constexpr_data unsigned DFLT_CONFIG_PANELS = 4;
   static gcc_constexpr_data t_InfoBox contents[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
-    { e_WP_Name,       e_WP_Distance,     e_Thermal_Gain, e_HumidityRel, e_Temperature,
-      e_H_Baro,        e_TL_Avg,          e_Fin_AltDiff,  e_Fin_TimeLocal },
-    { e_WP_Name,       e_WP_Distance,     e_Bearing,      e_Act_Speed,   e_Temperature,
-      e_H_Baro,        e_SpeedTaskAvg,    e_Fin_AltDiff,  e_Fin_TimeLocal },
-    { e_WP_Name,       e_Fin_Distance,    e_Bearing,      e_Act_Speed,   e_WP_LD,
-      e_H_Baro,        e_Fin_Time,        e_Fin_AltDiff,  e_Fin_TimeLocal },
-    { e_AA_SpeedAvg,   e_Fin_AA_Distance, e_HumidityRel,  e_HeightGPS,   e_Speed_GPS,
-      e_WindSpeed_Est, e_TimeLocal,       e_Load_G,       e_WindBearing_Est }
+    { e_WP_Distance,   e_TL_Avg,          e_HeightGPS,        e_HeightAGL,   e_TL_Gain,
+      e_MacCready,     e_TL_Time,         e_Thermal_30s,      e_TimeLocal },
+    { e_WP_Distance,   e_Alternate_1_GR,  e_HeightGPS,        e_HeightAGL,   e_WP_AltDiff,
+      e_MacCready,     e_Speed_GPS,       e_LD_Avg,           e_LD_Cruise },
+    { e_WP_Distance,   e_Alternate_1_GR,  e_HeightGPS,        e_HeightAGL,   e_Fin_AltDiff,
+      e_MacCready,     e_Fin_LD,          e_LD_Avg,           e_Fin_Time },
+    { e_WP_Name,       e_Fin_TimeLocal,   e_WP_Distance,      e_WP_Time,     e_Fin_Distance,
+      e_Fin_Time,      e_TimeLocal,       e_TimeSinceTakeoff, e_CC_Speed }
   };
 
   assert(MAX_PANELS >= DFLT_CONFIG_PANELS);
