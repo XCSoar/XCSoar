@@ -627,7 +627,7 @@ XMLNode::ParseXMLElement(XML *pXML)
   size_t cbTemp;
   unsigned nDeclaration;
   const TCHAR *lpszText = NULL;
-  XMLNode pNew;
+  XMLNode *pNew;
   enum Status status; // inside or outside a tag
   enum Attrib attrib = eAttribName;
 
@@ -708,14 +708,14 @@ XMLNode::ParseXMLElement(XML *pXML)
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
-        pNew = AddChild(stringDup(token.pStr, cbToken), nDeclaration);
+        pNew = &AddChild(stringDup(token.pStr, cbToken), nDeclaration);
 
         while (true) {
           // Callself to process the new node.  If we return
           // FALSE this means we dont have any more
           // processing to do...
 
-          if (!pNew.ParseXMLElement(pXML)) {
+          if (!pNew->ParseXMLElement(pXML)) {
             return false;
           } else {
             // If the call to recurse this function
@@ -754,8 +754,8 @@ XMLNode::ParseXMLElement(XML *pXML)
                 return true;
 
               // Add the new element and recurse
-              pNew = AddChild(stringDup(pXML->lpNewElement,
-                                        pXML->cbNewElement), false);
+              pNew = &AddChild(stringDup(pXML->lpNewElement,
+                                         pXML->cbNewElement), false);
               pXML->cbNewElement = 0;
             } else {
               // If we didn't have a new element to create
