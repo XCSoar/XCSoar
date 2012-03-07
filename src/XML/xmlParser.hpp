@@ -195,6 +195,18 @@ public:
       : NULL;
   }
 
+private:
+  /**
+   * @return the first child node, or NULL if there is none
+   */
+  gcc_pure
+  XMLNode *GetFirstChild() {
+    return d != NULL && !d->pChild.empty()
+      ? &d->pChild.front()
+      : NULL;
+  }
+
+public:
   /**
    * @return ith child node with specific name (return an empty node
    * if failing)

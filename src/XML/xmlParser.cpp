@@ -1025,7 +1025,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
   error = xml.error;
 
   // If the document node does not have childnodes
-  const XMLNode *child = xnode.GetFirstChild();
+  XMLNode *child = xnode.GetFirstChild();
   if (child == NULL) {
     // If XMLResults object exists
     if (pResults) {
@@ -1039,7 +1039,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
     return NULL;
   } else {
     // Set the document's first childnode as new main node
-    xnode = XMLNode(*child);
+    xnode = std::move(*child);
   }
 
   // If the new main node is the xml declaration
@@ -1060,7 +1060,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
       return NULL;
     } else {
       // Set the declaration's first childnode as new main node
-      xnode = XMLNode(*child);
+      xnode = std::move(*child);
     }
   }
 
@@ -1082,7 +1082,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
     return NULL;
 
   // Return the node (empty, main or child of main that equals tag)
-  return new XMLNode(xnode);
+  return new XMLNode(std::move(xnode));
 }
 
 static bool
