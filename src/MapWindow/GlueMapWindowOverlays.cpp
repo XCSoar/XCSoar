@@ -63,15 +63,15 @@ void
 GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 {
   GeoPoint location = render_projection.GetGeoLocation();
-  RasterPoint center = render_projection.GetScreenOrigin();
 
   TextInBoxMode mode;
   mode.mode = RenderMode::RM_OUTLINED_INVERTED;
   mode.bold = true;
+  mode.align = A_RIGHT;
 
   UPixelScalar padding = Layout::FastScale(4);
   UPixelScalar height = Fonts::map_bold.GetHeight();
-  PixelScalar y = center.y + padding;
+  PixelScalar y = 0 + padding;
 
   TCHAR buffer[256];
   FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer), _T('\n'));
@@ -83,7 +83,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
       *newline = _T('\0');
 
     TextInBox(canvas, start,
-              center.x + padding, y, mode,
+              render_projection.GetScreenWidth() - padding, y, mode,
               render_projection.GetScreenWidth(),
               render_projection.GetScreenHeight());
 
@@ -101,6 +101,10 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   short elevation = terrain->GetTerrainHeight(location);
   if (RasterBuffer::IsSpecial(elevation))
     return;
+
+  RasterPoint center = render_projection.GetScreenOrigin();
+  y = center.y + padding;
+  mode.align = A_LEFT;
 
   StaticString<64> elevation_short, elevation_long;
   FormatUserAltitude(fixed(elevation),
