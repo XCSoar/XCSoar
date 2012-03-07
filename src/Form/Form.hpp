@@ -222,9 +222,6 @@ public:
    */
   void ReinitialiseLayout();
 #endif
-
-private:
-  static PeriodClock time_any_open_close; // when any dlg opens or child closes
 };
 
 #endif

@@ -72,8 +72,6 @@ WndForm::ClientAreaWindow::OnPaint(Canvas &canvas)
   ContainerWindow::OnPaint(canvas);
 }
 
-PeriodClock WndForm::time_any_open_close;
-
 static WindowStyle
 add_border(WindowStyle style)
 {
@@ -226,12 +224,6 @@ get_key_code(const Event &event)
 }
 
 static bool
-is_mouse_up(const Event &event)
-{
-  return event.type == Event::MOUSE_UP;
-}
-
-static bool
 is_mouse_down(const Event &event)
 {
   return event.type == Event::MOUSE_DOWN;
@@ -272,12 +264,6 @@ get_key_code(const SDL_Event &event)
 }
 
 static bool
-is_mouse_up(const SDL_Event &event)
-{
-  return event.type == SDL_MOUSEBUTTONUP;
-}
-
-static bool
 is_mouse_down(const SDL_Event &event)
 {
   return event.type == SDL_MOUSEBUTTONDOWN;
@@ -315,12 +301,6 @@ get_key_code(const MSG &msg)
   assert(msg.message == WM_KEYDOWN || msg.message == WM_KEYUP);
 
   return msg.wParam;
-}
-
-static bool
-is_mouse_up(const MSG &msg)
-{
-  return msg.message == WM_LBUTTONUP;
 }
 
 static bool
@@ -394,7 +374,6 @@ WndForm::ShowModal()
     FocusFirstControl();
 
   bool hastimed = false;
-  WndForm::time_any_open_close.Update(); // when current dlg opens or child closes
 
   main_window.AddDialog(this);
 
@@ -437,12 +416,6 @@ WndForm::ShowModal()
       else
         hastimed = true;
     }
-
-    if (IsEmbedded() && is_mouse_up(event) &&
-        !time_any_open_close.Check(OPENCLOSESUPPRESSTIME))
-      /* prevents child click from being repeat-handled by parent if
-         buttons overlap */
-      continue;
 
     if (key_down_notify_callback != NULL && is_key_down(event) &&
 #ifdef USE_GDI
@@ -500,9 +473,6 @@ WndForm::ShowModal()
   } // End Modal Loop
 
   main_window.RemoveDialog(this);
-
-  // static.  this is current open/close or child open/close
-  WndForm::time_any_open_close.Update();
 
 #ifdef USE_GDI
   SetFocus(oldFocusHwnd);
