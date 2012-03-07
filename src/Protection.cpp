@@ -74,6 +74,12 @@ TriggerCalculatedUpdate()
 }
 
 void
+TriggerAirspaceWarning()
+{
+  CommonInterface::main_window.SendAirspaceWarning();
+}
+
+void
 CreateCalculationThread()
 {
   assert(glide_computer != NULL);

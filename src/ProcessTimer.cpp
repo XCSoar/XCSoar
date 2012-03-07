@@ -69,24 +69,6 @@ ProcessTimer::MessageProcessTimer()
       ResetDisplayTimeOut();
 }
 
-void
-ProcessTimer::AirspaceProcessTimer()
-{
-  static Validity previous;
-
-  const AirspaceWarningsInfo &warnings =
-    CommonInterface::Calculated().airspace_warnings;
-
-  if (previous.Modified(warnings.latest))
-    /* time warp, reset */
-    previous.Clear();
-
-  if (warnings.latest.Modified(previous)) {
-    previous = warnings.latest;
-    CommonInterface::main_window.SendAirspaceWarning();
-  }
-}
-
 /**
  * Sets the system time to GPS time if not yet done and
  * defined in settings
@@ -307,7 +289,6 @@ ProcessTimer::CommonProcessTimer()
   InfoBoxManager::ProcessTimer();
   InputEvents::ProcessTimer();
 
-  AirspaceProcessTimer();
   MessageProcessTimer();
   SystemProcessTimer();
 }

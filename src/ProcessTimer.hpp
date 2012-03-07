@@ -33,7 +33,6 @@ private:
   static int ConnectionProcessTimer(int itimeout);
   static void SystemProcessTimer();
   static void MessageProcessTimer();
-  static void AirspaceProcessTimer();
 
 #ifdef _WIN32_WCE
   static void HeapCompact();

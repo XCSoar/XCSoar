@@ -50,6 +50,13 @@ TriggerMapUpdate();
 void
 TriggerCalculatedUpdate();
 
+/**
+ * Called by the calculation thread when new airspace warning has been
+ * added.  It triggers showing the airspace warning dialog.
+ */
+void
+TriggerAirspaceWarning();
+
 void CreateCalculationThread();
 
 // changed only in config or by user interface
