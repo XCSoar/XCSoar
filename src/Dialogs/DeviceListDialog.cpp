@@ -184,6 +184,10 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     if (basic.location_available) {
       _tcscat(buffer1, _T("; "));
       _tcscat(buffer1, _("GPS fix"));
+    } else if (basic.gps.fix_quality_available) {
+      /* device sends GPGGA, but no valid location */
+      _tcscat(buffer1, _T("; "));
+      _tcscat(buffer1, _("bad GPS"));
     }
 
     if (basic.baro_altitude_available) {
