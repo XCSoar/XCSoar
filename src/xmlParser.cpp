@@ -1297,25 +1297,12 @@ XMLNode::serialise(TextWriter &writer, int nFormat) const
   serialiseR(d, writer, nFormat);
 }
 
-XMLNode::~XMLNode()
-{
-  destroyCurrentBuffer(d);
-}
-
-void
-XMLNode::destroyCurrentBuffer(XMLNodeData *d)
-{
-  if (!d)
-    return;
-
-  d->Unref();
-}
-
 XMLNode&
 XMLNode::operator=(const XMLNode& A)
 {
   if (this != &A) {
-    destroyCurrentBuffer(d);
+    if (d != NULL)
+      d->Unref();
     d = A.d;
     if (d)
       d->Ref();

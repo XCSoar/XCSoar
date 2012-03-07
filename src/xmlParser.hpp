@@ -226,7 +226,10 @@ public:
   }
 
   // to allow shallow copy:
-  ~XMLNode();
+  ~XMLNode() {
+    if (d != NULL)
+      d->Unref();
+  }
 
   /**
    * Shallow copy.
@@ -247,8 +250,6 @@ public:
     std::swap(d, other.d);
     return *this;
   }
-
-  static void destroyCurrentBuffer(XMLNodeData *d);
 
   gcc_constexpr_ctor
   XMLNode(): d(NULL) {}
