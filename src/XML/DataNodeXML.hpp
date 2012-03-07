@@ -47,6 +47,9 @@ protected:
   explicit DataNodeXML(const XMLNode &_node)
     :node(_node) {}
 
+  explicit DataNodeXML(const XMLNode &&_node)
+    :node(std::move(_node)) {}
+
 public:
   DataNodeXML(DataNodeXML &&other)
     :node(std::move(other.node)) {
@@ -68,7 +71,10 @@ public:
    *
    * @return Pointer to root node
    */
-  static DataNodeXML CreateRoot(const TCHAR *node_name);
+  gcc_pure
+  static DataNodeXML CreateRoot(const TCHAR *node_name) {
+    return DataNodeXML(XMLNode::CreateRoot(node_name));
+  }
 
   /**
    * Save tree canonically to file

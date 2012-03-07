@@ -24,7 +24,6 @@
 #include "IO/TextWriter.hpp"
 #include "XML/Parser.hpp"
 
-#include <stdio.h>
 #include <memory>
 
 DataNode *
@@ -34,14 +33,7 @@ DataNodeXML::Load(const TCHAR* path)
   if (!child)
     return NULL;
 
-  return new DataNodeXML(*child);
-}
-
-DataNodeXML
-DataNodeXML::CreateRoot(const TCHAR *node_name)
-{
-  XMLNode new_root = XMLNode::CreateRoot(node_name);
-  return DataNodeXML(new_root);
+  return new DataNodeXML(std::move(*child));
 }
 
 void
