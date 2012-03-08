@@ -33,7 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 static bool
-devInitOne(DeviceDescriptor &device, DeviceDescriptor *nmeaout)
+devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
 {
   PopupOperationEnvironment env;
 
