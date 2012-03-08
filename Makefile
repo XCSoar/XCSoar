@@ -631,6 +631,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/Notify.cpp \
 	\
 	$(SRC)/Job/Thread.cpp \
+	$(SRC)/Job/Async.cpp \
 	\
 	$(SRC)/RateLimiter.cpp \
 	\
