@@ -116,7 +116,7 @@ DeviceListWidget::RefreshList()
 {
   indices.clear();
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i].IsConfigured())
+    if (device_list[i]->IsConfigured())
       indices.append(i);
 
   ListControl &list = GetList();
@@ -146,7 +146,7 @@ DeviceListWidget::UpdateButtons()
     manage_button->SetEnabled(false);
     monitor_button->SetEnabled(false);
   } else {
-    const DeviceDescriptor &device = device_list[indices[current]];
+    const DeviceDescriptor &device = *device_list[indices[current]];
 
     reconnect_button->SetEnabled(device.IsConfigured());
     flight_button->SetEnabled(device.IsLogger());
@@ -160,7 +160,7 @@ DeviceListWidget::UpdateButtons()
 void
 DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  const DeviceDescriptor &device = device_list[indices[i]];
+  const DeviceDescriptor &device = *device_list[indices[i]];
 
   const UPixelScalar margin = Layout::Scale(2);
 
@@ -234,7 +234,7 @@ DeviceListWidget::ReconnectCurrent()
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &device = device_list[indices[current]];
+  DeviceDescriptor &device = *device_list[indices[current]];
   if (device.IsBorrowed()) {
     MessageBoxX(_("Device is occupied"), _("Reconnect"), MB_OK | MB_ICONERROR);
     return;
@@ -251,7 +251,7 @@ DeviceListWidget::DownloadFlightFromCurrent()
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &device = device_list[indices[current]];
+  DeviceDescriptor &device = *device_list[indices[current]];
   if (!device.Borrow()) {
     MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
     return;
@@ -284,7 +284,7 @@ DeviceListWidget::EditCurrent()
 
   /* .. and reopen the device */
 
-  DeviceDescriptor &descriptor = device_list[index];
+  DeviceDescriptor &descriptor = *device_list[index];
   descriptor.SetConfig() = widget.GetConfig();
   MessageOperationEnvironment env;
   descriptor.Reopen(env);
@@ -297,7 +297,7 @@ DeviceListWidget::ManageCurrent()
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &descriptor = device_list[indices[current]];
+  DeviceDescriptor &descriptor = *device_list[indices[current]];
   if (!descriptor.IsManageable())
     return;
 
@@ -331,7 +331,7 @@ DeviceListWidget::MonitorCurrent()
   if (current >= indices.size())
     return;
 
-  DeviceDescriptor &descriptor = device_list[indices[current]];
+  DeviceDescriptor &descriptor = *device_list[indices[current]];
   ShowPortMonitor(UIGlobals::GetMainWindow(), look, terminal_look,
                   descriptor);
 }

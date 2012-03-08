@@ -36,8 +36,8 @@ devTick(const DerivedInfo &calculated)
   int i;
 
   for (i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor *d = &device_list[i];
-    d->OnSysTicker(calculated);
+    DeviceDescriptor &device = *device_list[i];
+    device.OnSysTicker(calculated);
   }
 }
 
@@ -45,7 +45,7 @@ void
 AllDevicesAutoReopen(OperationEnvironment &env)
 {
   for (unsigned i = 0; i < NUMDEV; i++) {
-    DeviceDescriptor &d = device_list[i];
+    DeviceDescriptor &d = *device_list[i];
     d.AutoReopen(env);
   }
 }
@@ -57,7 +57,7 @@ AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutMacCready(mac_cready, env);
+    device_list[i]->PutMacCready(mac_cready, env);
 }
 
 void
@@ -67,7 +67,7 @@ AllDevicesPutBugs(fixed bugs, OperationEnvironment &env)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutBugs(bugs, env);
+    device_list[i]->PutBugs(bugs, env);
 }
 
 void
@@ -78,7 +78,7 @@ AllDevicesPutBallast(fixed fraction, fixed overload,
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutBallast(fraction, overload, env);
+    device_list[i]->PutBallast(fraction, overload, env);
 }
 
 void
@@ -88,7 +88,7 @@ AllDevicesPutVolume(int volume, OperationEnvironment &env)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutVolume(volume, env);
+    device_list[i]->PutVolume(volume, env);
 }
 
 void
@@ -99,7 +99,7 @@ AllDevicesPutActiveFrequency(RadioFrequency frequency,
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutActiveFrequency(frequency, env);
+    device_list[i]->PutActiveFrequency(frequency, env);
 }
 
 void
@@ -110,7 +110,7 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency,
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutStandbyFrequency(frequency, env);
+    device_list[i]->PutStandbyFrequency(frequency, env);
 }
 
 void
@@ -121,5 +121,5 @@ AllDevicesPutQNH(const AtmosphericPressure &pres,
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    device_list[i].PutQNH(pres, env);
+    device_list[i]->PutQNH(pres, env);
 }

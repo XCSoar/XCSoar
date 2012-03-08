@@ -50,9 +50,9 @@ static void
 SetPipeTo(DeviceDescriptor &out)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDescriptor &device = device_list[i];
+    DeviceDescriptor *device = device_list[i];
 
-    device.SetPipeTo(&device == &out ? NULL : &out);
+    device->SetPipeTo(device == &out ? NULL : &out);
   }
 }
 
@@ -99,9 +99,7 @@ devStartup()
 
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    device_list[i].SetIndex(i);
-
-    DeviceConfig &config = device_list[i].SetConfig();
+    DeviceConfig &config = device_list[i]->SetConfig();
     config = settings.devices[i];
     if (!config.IsAvailable()) {
       config.Clear();
@@ -112,7 +110,7 @@ devStartup()
 
     bool overlap = false;
     for (unsigned j = 0; j < i; ++j)
-      if (DeviceConfigOverlaps(config, device_list[j].GetConfig()))
+      if (DeviceConfigOverlaps(config, device_list[j]->GetConfig()))
         overlap = true;
 
     if (overlap) {
@@ -120,7 +118,7 @@ devStartup()
       continue;
     }
 
-    devInitOne(device_list[i], pDevNmeaOut);
+    devInitOne(*device_list[i], pDevNmeaOut);
   }
 
   if (none_available) {
@@ -129,10 +127,10 @@ devStartup()
        available on this platform */
     LogStartUp(_T("Falling back to built-in GPS"));
 
-    DeviceConfig &config = device_list[0].SetConfig();
+    DeviceConfig &config = device_list[0]->SetConfig();
     config.Clear();
     config.port_type = DeviceConfig::PortType::INTERNAL;
-    devInitOne(device_list[0], pDevNmeaOut);
+    devInitOne(*device_list[0], pDevNmeaOut);
 #endif
   }
 
@@ -144,7 +142,7 @@ bool
 HaveCondorDevice()
 {
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i].IsCondor())
+    if (device_list[i]->IsCondor())
       return true;
 
   return false;
@@ -154,16 +152,16 @@ void
 VarioWriteNMEA(const TCHAR *text)
 {
   for (int i = 0; i < NUMDEV; i++)
-    if (device_list[i].IsVega())
-      device_list[i].WriteNMEA(text);
+    if (device_list[i]->IsVega())
+      device_list[i]->WriteNMEA(text);
 }
 
 DeviceDescriptor *
 devVarioFindVega()
 {
   for (int i = 0; i < NUMDEV; i++)
-    if (device_list[i].IsVega())
-      return &device_list[i];
+    if (device_list[i]->IsVega())
+      return device_list[i];
 
   return NULL;
 }
@@ -177,7 +175,7 @@ devShutdown()
   LogStartUp(_T("Stop COM devices"));
 
   for (i = 0; i < NUMDEV; i++) {
-    device_list[i].Close();
+    device_list[i]->Close();
   }
 }
 

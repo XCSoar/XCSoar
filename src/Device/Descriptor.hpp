@@ -51,7 +51,7 @@ class OperationEnvironment;
 
 class DeviceDescriptor : PortLineHandler {
   /** the index of this device in the global list */
-  unsigned index;
+  const unsigned index;
 
   DeviceConfig config;
 
@@ -109,17 +109,13 @@ class DeviceDescriptor : PortLineHandler {
   bool borrowed;
 
 public:
-  DeviceDescriptor();
+  DeviceDescriptor(unsigned index);
   ~DeviceDescriptor() {
     assert(!IsOccupied());
   }
 
   unsigned GetIndex() const {
     return index;
-  }
-
-  void SetIndex(unsigned _index) {
-    index = _index;
   }
 
   const DeviceConfig &GetConfig() const {

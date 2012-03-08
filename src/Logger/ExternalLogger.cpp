@@ -115,9 +115,11 @@ ExternalLogger::Declare(const Declaration &decl, const Waypoint *home)
   bool found_logger = false;
 
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    if (device_list[i].CanDeclare()) {
+    DeviceDescriptor &device = *device_list[i];
+
+    if (device.CanDeclare()) {
       found_logger = true;
-      DeviceDeclare(device_list[i], decl, home);
+      DeviceDeclare(device, decl, home);
     }
   }
 

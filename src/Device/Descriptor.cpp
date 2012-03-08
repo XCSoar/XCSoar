@@ -71,8 +71,9 @@ struct ScopeReturnDevice {
   }
 };
 
-DeviceDescriptor::DeviceDescriptor()
-  :port(NULL), monitor(NULL),
+DeviceDescriptor::DeviceDescriptor(unsigned _index)
+  :index(_index),
+   port(NULL), monitor(NULL),
    pipe_to_device(NULL),
    driver(NULL), device(NULL),
 #ifdef ANDROID

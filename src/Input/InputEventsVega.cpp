@@ -42,7 +42,7 @@ static void
 AllVegasSendSetting(const char *name, int value)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    VegaDevice *vega = GetVegaDevice(device_list[i]);
+    VegaDevice *vega = GetVegaDevice(*device_list[i]);
     if (vega != NULL)
       vega->SendSetting(name, value);
   }
@@ -52,7 +52,7 @@ static void
 AllVegasRequestSetting(const char *name)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    VegaDevice *vega = GetVegaDevice(device_list[i]);
+    VegaDevice *vega = GetVegaDevice(*device_list[i]);
     if (vega != NULL)
       vega->RequestSetting(name);
   }

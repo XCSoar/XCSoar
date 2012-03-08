@@ -51,7 +51,7 @@ InputEvents::eventSendNMEAPort1(const TCHAR *misc)
   const unsigned i = 0;
 
   if (misc != NULL && i < NUMDEV)
-    device_list[i].WriteNMEA(misc);
+    device_list[i]->WriteNMEA(misc);
 }
 
 void
@@ -60,7 +60,7 @@ InputEvents::eventSendNMEAPort2(const TCHAR *misc)
   const unsigned i = 1;
 
   if (misc != NULL && i < NUMDEV)
-    device_list[i].WriteNMEA(misc);
+    device_list[i]->WriteNMEA(misc);
 }
 
 void

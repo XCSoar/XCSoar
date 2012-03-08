@@ -24,4 +24,28 @@ Copyright_License {
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 
-DeviceDescriptor device_list[NUMDEV];
+DeviceDescriptor *device_list[NUMDEV];
+
+void
+DeviceListInitialise()
+{
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    device_list[i] = new DeviceDescriptor(i);
+}
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+/* no, DeviceDescriptor really doesn't need a virtual destructor */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+
+void
+DeviceListDeinitialise()
+{
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    delete device_list[i];
+}
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+#pragma GCC diagnostic pop
+#endif

@@ -294,6 +294,8 @@ XCSoarInterface::Startup()
   // Initialize DeviceBlackboard
   device_blackboard = new DeviceBlackboard();
 
+  DeviceListInitialise();
+
   // Initialize Markers
   marks = new Markers();
   protected_marks = new ProtectedMarkers(*marks);
@@ -593,6 +595,8 @@ XCSoarInterface::Shutdown()
   NMEALogger::Shutdown();
 
   delete replay;
+
+  DeviceListDeinitialise();
 
   delete device_blackboard;
   device_blackboard = NULL;

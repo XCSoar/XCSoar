@@ -35,6 +35,12 @@ enum {
 
 class DeviceDescriptor;
 
-extern DeviceDescriptor device_list[NUMDEV];
+extern DeviceDescriptor *device_list[NUMDEV];
+
+void
+DeviceListInitialise();
+
+void
+DeviceListDeinitialise();
 
 #endif
