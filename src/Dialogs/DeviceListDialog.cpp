@@ -235,8 +235,8 @@ DeviceListWidget::ReconnectCurrent()
     return;
 
   DeviceDescriptor &device = device_list[indices[current]];
-  if (device.IsOccupied()) {
-    MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+  if (device.IsBorrowed()) {
+    MessageBoxX(_("Device is occupied"), _("Reconnect"), MB_OK | MB_ICONERROR);
     return;
   }
 
