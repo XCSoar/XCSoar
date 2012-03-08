@@ -72,6 +72,25 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   UPixelScalar padding = Layout::FastScale(4);
   UPixelScalar height = Fonts::map_bold.GetHeight();
   PixelScalar y = 0 + padding;
+  PixelScalar x = render_projection.GetScreenWidth() - padding;
+
+  if (terrain) {
+    short elevation = terrain->GetTerrainHeight(location);
+    if (!RasterBuffer::IsSpecial(elevation)) {
+      StaticString<64> elevation_short, elevation_long;
+      FormatUserAltitude(fixed(elevation),
+                                elevation_short.buffer(), elevation_short.MAX_SIZE);
+
+      elevation_long = _("Elevation: ");
+      elevation_long += elevation_short;
+
+      TextInBox(canvas, elevation_long, x, y, mode,
+                render_projection.GetScreenWidth(),
+                render_projection.GetScreenHeight());
+
+      y += height;
+    }
+  }
 
   TCHAR buffer[256];
   FormatGeoPoint(location, buffer, ARRAY_SIZE(buffer), _T('\n'));
@@ -82,8 +101,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
     if (newline != NULL)
       *newline = _T('\0');
 
-    TextInBox(canvas, start,
-              render_projection.GetScreenWidth() - padding, y, mode,
+    TextInBox(canvas, start, x, y, mode,
               render_projection.GetScreenWidth(),
               render_projection.GetScreenHeight());
 
@@ -94,29 +112,6 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
     start = newline + 1;
   }
-
-  if (!terrain)
-    return;
-
-  short elevation = terrain->GetTerrainHeight(location);
-  if (RasterBuffer::IsSpecial(elevation))
-    return;
-
-  RasterPoint center = render_projection.GetScreenOrigin();
-  y = center.y + padding;
-  mode.align = A_LEFT;
-
-  StaticString<64> elevation_short, elevation_long;
-  FormatUserAltitude(fixed(elevation),
-                            elevation_short.buffer(), elevation_short.MAX_SIZE);
-
-  elevation_long = _("Elevation: ");
-  elevation_long += elevation_short;
-
-  TextInBox(canvas, elevation_long,
-            center.x + padding, y, mode,
-            render_projection.GetScreenWidth(),
-            render_projection.GetScreenHeight());
 }
 
 void
