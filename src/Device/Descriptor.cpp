@@ -95,13 +95,7 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
     parser.DisableGeoid();
 
   device = driver->CreateOnPort(config, *port);
-  if (!EnableNMEA(env)) {
-    delete device;
-    device = NULL;
-    port = NULL;
-    return false;
-  }
-
+  EnableNMEA(env);
   return true;
 }
 
