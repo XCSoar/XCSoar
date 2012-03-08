@@ -34,60 +34,6 @@ Copyright_License {
 #include <string.h>
 #include <stdarg.h>
 
-#ifdef UNICODE
-
-#include <wchar.h>
-#include <wctype.h>
-
-typedef wchar_t TCHAR;
-#define _stprintf wsprintf
-#define _vstprintf vswprintf
-#define _sntprintf wsnprintf
-#define _vsntprintf wsnprintf
-#define _tprintf wprintf
-#define _ftprintf fwprintf
-#define _vftprintf vfwprintf
-#define _fputts fputws
-#define _tcsdup wcsdup
-#define _tcscpy wcscpy
-#define _tcscmp wcscmp
-#define _tcsncmp wcscmp
-#define _tcsicmp wcscasecmp
-#define _tcsnicmp wcsncasecmp
-#define _tcslen wcslen
-#define _tcsclen wcslen
-#define _tcsstr wcsstr
-#define _tcschr wcschr
-#define _tcsrchr wcsrchr
-#define _tcspbrk wcspbrk
-#define _tcscat wcscat
-#define _tcsncat wcsncat
-#define _T(x) (L ## x)
-
-#define _TEOF EOF
-#define _fgetts fgetws
-#define _putts(t) putws((t), stdout)
-#define _stscanf swscanf
-
-#define _tremove _wremove
-#define _tunlink _wunlink
-
-#define _tcstok wcstok
-//#define _totupper XXX
-#define _itot _itow
-#define _ttoi(x) wcstol((x), NULL, 10)
-#define _tcstol wcstol
-#define _tcstoul wcstoul
-#define _tcstod wcstod
-
-#define _istalpha iswalpha
-#define _istalnum iswalnum
-#define _istspace iswspace
-#define _istdigit iswdigit
-#define _istpunct iswpunct
-
-#else /* !UNICODE */
-
 #include <ctype.h>
 
 typedef char TCHAR;
@@ -144,8 +90,6 @@ typedef char TCHAR;
 #define _istspace isspace
 #define _istpunct ispunct
 
-#endif /* UNICODE */
-
 #define _tcsupr CharUpper
 
 static inline TCHAR *
@@ -153,11 +97,7 @@ CharUpper(TCHAR *s)
 {
   TCHAR *p;
   for (p = s; *p != 0; ++p)
-#ifdef UNICODE
-    *p = towupper(*p);
-#else
     *p = (TCHAR)toupper(*p);
-#endif
   return s;
 }
 
