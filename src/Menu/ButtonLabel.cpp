@@ -26,6 +26,7 @@ Copyright_License {
 #include "MenuData.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/CharUtil.hpp"
 #include "Util/Macros.hpp"
 
 #include <assert.h>
@@ -103,7 +104,7 @@ ButtonLabel::Expand(const TCHAR *text, TCHAR *buffer, size_t size)
     /* backtrack until the first non-whitespace character, because we
        don't want to translate whitespace between the text and the
        macro */
-    while (macros > text && _istspace(macros[-1]))
+    while (macros > text && IsWhitespaceOrNull(macros[-1]))
       --macros;
 
     TCHAR s[100];
