@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
-#include "Job.hpp"
+#include "Job/Job.hpp"
 #include "Operation/Operation.hpp"
 #include "ResourceLoader.hpp"
 

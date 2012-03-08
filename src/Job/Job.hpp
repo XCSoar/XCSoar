@@ -21,14 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CONSOLE_JOB_RUNNER_HPP
-#define XCSOAR_CONSOLE_JOB_RUNNER_HPP
+#ifndef XCSOAR_JOB_HPP
+#define XCSOAR_JOB_HPP
 
-#include "Job/Runner.hpp"
+class OperationEnvironment;
 
-class ConsoleJobRunner : public JobRunner {
+/**
+ * Base class for a job that can be offloaded into a separate thread.
+ */
+class Job {
 public:
-  virtual bool Run(Job &job);
+  virtual void Run(OperationEnvironment &env) = 0;
 };
 
 #endif

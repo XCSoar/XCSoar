@@ -1780,7 +1780,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Thread/Thread.cpp \
-	$(SRC)/Thread/JobThread.cpp \
+	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \

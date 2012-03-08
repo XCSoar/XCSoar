@@ -629,7 +629,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/Thread/JobThread.cpp \
+	\
+	$(SRC)/Job/Thread.cpp \
+	\
 	$(SRC)/RateLimiter.cpp \
 	\
 	$(SRC)/Tracking/TrackingSettings.cpp \

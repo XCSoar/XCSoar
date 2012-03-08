@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Operation/Operation.hpp"
-#include "Thread/JobThread.hpp"
+#include "Job/Thread.hpp"
 #include "Language/Language.hpp"
 
 class ProgressWindowOperation

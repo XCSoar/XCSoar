@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef NET_TO_BUFFER_HPP
 #define NET_TO_BUFFER_HPP
 
-#include "Job.hpp"
+#include "Job/Job.hpp"
 
 #include <tchar.h>
 #include <stdint.h>

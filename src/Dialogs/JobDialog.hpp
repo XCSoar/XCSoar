@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_JOB_DIALOG_HPP
 #define XCSOAR_JOB_DIALOG_HPP
 
-#include "Job.hpp"
+#include "Job/Runner.hpp"
 
 #include <tchar.h>
 

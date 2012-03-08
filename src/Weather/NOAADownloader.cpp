@@ -28,6 +28,7 @@ Copyright_License {
 #include "Net/ToBuffer.hpp"
 #include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
+#include "Job/Runner.hpp"
 
 #include <cstdlib>
 

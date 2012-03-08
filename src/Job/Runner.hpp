@@ -21,38 +21,21 @@ Copyright_License {
 }
 */
 
-#include "Thread/JobThread.hpp"
-#include "Job.hpp"
+#ifndef XCSOAR_JOB_RUNNER_HPP
+#define XCSOAR_JOB_RUNNER_HPP
 
-bool
-JobThread::Start()
-{
-  if (!Thread::Start())
-    return false;
+class Job;
 
-  was_running = true;
-  return true;
-}
+/**
+ * An environment that can run one or more jobs.
+ */
+class JobRunner {
+public:
+  /**
+   * @return true if the job has finished (may have failed), false if
+   * the job was cancelled by the user
+   */
+  virtual bool Run(Job &job) = 0;
+};
 
-void
-JobThread::Run()
-{
-  assert(!running.Get());
-
-  running.Set();
-  job.Run(*this);
-  running.Reset();
-
-  SendNotification();
-}
-
-void
-JobThread::OnNotification()
-{
-  ThreadedOperationEnvironment::OnNotification();
-
-  if (was_running && !running.Get()) {
-    OnComplete();
-    was_running = false;
-  }
-}
+#endif
