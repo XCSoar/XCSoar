@@ -77,7 +77,7 @@ Dump(const NMEAInfo &basic)
   printf("Time=%02u:%02u:%02u\n",
          basic.date_time_utc.hour, basic.date_time_utc.minute, basic.date_time_utc.second);
 
-  if (!basic.connected)
+  if (!basic.alive)
     printf("GPS not connected\n");
   else if (!basic.gps.satellites_used_available)
     printf("GPS connected\n");

@@ -65,7 +65,7 @@ MergeThread::Tick()
     // trigger update if gps has become available or dropped out
     TriggerGPSUpdate();
 
-  if ((bool)last_any.connected != (bool)basic.connected ||
+  if ((bool)last_any.alive != (bool)basic.alive ||
       (bool)last_any.location_available != (bool)basic.location_available)
     /* trigger a redraw when the connection was just lost, to show the
        new state; when no GPS is connected, no other entity triggers

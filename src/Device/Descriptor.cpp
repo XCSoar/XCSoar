@@ -79,7 +79,7 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
 
   settings_sent.Clear();
   settings_received.Clear();
-  was_connected = false;
+  was_alive = false;
 
   port = &_port;
   driver = &_driver;
@@ -202,7 +202,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
       IsAltair() || !config.IsAvailable() || config.IsServer() ||
       /* reopening the Android internal GPS doesn't help */
       config.IsAndroidInternalGPS() ||
-      IsConnected() || (driver != NULL && !driver->HasTimeout()) ||
+      IsAlive() || (driver != NULL && !driver->HasTimeout()) ||
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.CheckUpdate(30000))
     return;
@@ -274,10 +274,10 @@ DeviceDescriptor::IsManageable() const
 }
 
 bool
-DeviceDescriptor::IsConnected() const
+DeviceDescriptor::IsAlive() const
 {
   ScopeLock protect(device_blackboard->mutex);
-  return device_blackboard->RealState(index).connected;
+  return device_blackboard->RealState(index).alive;
 }
 
 bool
@@ -290,7 +290,7 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
   info.settings = settings_received;
 
   if (device != NULL && device->ParseNMEA(line, info)) {
-    info.connected.Update(info.clock);
+    info.alive.Update(info.clock);
 
     if (!config.sync_from_device)
       info.settings = old_settings;
@@ -310,7 +310,7 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
 
   // Additional "if" to find GPS strings
   if (parser.ParseLine(line, info)) {
-    info.connected.Update(fixed(MonotonicClockMS()) / 1000);
+    info.alive.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 
@@ -577,8 +577,8 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
   if (device == NULL)
     return;
 
-  const bool now_connected = IsConnected();
-  if (!now_connected && was_connected && !IsBusy()) {
+  const bool now_alive = IsAlive();
+  if (!now_alive && was_alive && !IsBusy()) {
     /* connection was just lost */
     device->LinkTimeout();
 
@@ -586,9 +586,9 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
     device->EnableNMEA(env);
   }
 
-  was_connected = now_connected;
+  was_alive = now_alive;
 
-  if (now_connected || IsBusy()) {
+  if (now_alive || IsBusy()) {
     ticker = !ticker;
     if (ticker)
       // write settings to vario every second

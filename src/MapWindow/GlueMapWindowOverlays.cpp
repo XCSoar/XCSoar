@@ -121,7 +121,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   const TCHAR *txt;
   const MaskedIcon *icon;
 
-  if (!info.connected) {
+  if (!info.alive) {
     icon = &look.no_gps_icon;
     txt = _("GPS not connected");
   } else if (!info.location_available) {

@@ -168,18 +168,18 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
 
   switch (connected) {
   case 0: /* not connected */
-    basic.connected.Clear();
+    basic.alive.Clear();
     basic.location_available.Clear();
     break;
 
   case 1: /* waiting for fix */
-    basic.connected.Update(fixed(MonotonicClockMS()) / 1000);
+    basic.alive.Update(fixed(MonotonicClockMS()) / 1000);
     basic.gps.android_internal_gps = true;
     basic.location_available.Clear();
     break;
 
   case 2: /* connected */
-    basic.connected.Update(fixed(MonotonicClockMS()) / 1000);
+    basic.alive.Update(fixed(MonotonicClockMS()) / 1000);
     basic.gps.android_internal_gps = true;
     break;
   }
@@ -203,7 +203,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &basic = device_blackboard->SetRealState(index);
   basic.UpdateClock();
-  basic.connected.Update(basic.clock);
+  basic.alive.Update(basic.clock);
 
   BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
   fixed second_of_day = fixed(date_time.GetSecondOfDay()) +

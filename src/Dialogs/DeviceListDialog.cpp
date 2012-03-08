@@ -179,7 +179,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const NMEAInfo &basic = device_blackboard->RealState(indices[i]);
 
   const TCHAR *text;
-  if (basic.connected) {
+  if (basic.alive) {
     _tcscpy(buffer1, _("Connected"));
 
     if (basic.location_available) {

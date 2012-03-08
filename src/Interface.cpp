@@ -73,7 +73,7 @@ XCSoarInterface::ReceiveGPS()
     ReadBlackboardBasic(device_blackboard->Basic());
 
     const NMEAInfo &real = device_blackboard->RealState();
-    movement_detected = real.connected && real.gps.real &&
+    movement_detected = real.alive && real.gps.real &&
       real.MovementDetected();
   }
 

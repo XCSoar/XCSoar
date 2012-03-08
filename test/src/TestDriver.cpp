@@ -70,12 +70,12 @@ TestGeneric()
   NMEAInfo nmea_info;
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
-  nmea_info.connected.Update(nmea_info.clock);
+  nmea_info.alive.Update(nmea_info.clock);
 
   /* no GPS reception */
   ok1(parser.ParseLine("$GPRMC,082310,V,,,,,230610*3f",
                                       nmea_info));
-  ok1(nmea_info.connected);
+  ok1(nmea_info.alive);
   ok1(!nmea_info.location_available);
   ok1(nmea_info.date_time_utc.year == 2010);
   ok1(nmea_info.date_time_utc.month == 6);
@@ -87,7 +87,7 @@ TestGeneric()
   /* got a GPS fix */
   ok1(parser.ParseLine("$GPRMC,082311,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
                                       nmea_info));
-  ok1(nmea_info.connected);
+  ok1(nmea_info.alive);
   ok1(nmea_info.location_available);
   ok1(nmea_info.date_time_utc.hour == 8);
   ok1(nmea_info.date_time_utc.minute == 23);

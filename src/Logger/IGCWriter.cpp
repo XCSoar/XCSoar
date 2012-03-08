@@ -64,7 +64,7 @@ igc_format_location(char *buffer, const GeoPoint &location)
 }
 
 IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
-  :simulator(gps_info.connected && !gps_info.gps.real)
+  :simulator(gps_info.alive && !gps_info.gps.real)
 {
   _tcscpy(path, _path);
 
@@ -102,7 +102,7 @@ IGCWriter::Flush()
 void
 IGCWriter::Finish(const NMEAInfo &gps_info)
 {
-  if (gps_info.connected && !gps_info.gps.real)
+  if (gps_info.alive && !gps_info.gps.real)
     simulator = true;
 
   Flush();
@@ -309,7 +309,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
   char IsValidFix;
 
   // if at least one GPS fix comes from the simulator, disable signing
-  if (gps_info.connected && !gps_info.gps.real)
+  if (gps_info.alive && !gps_info.gps.real)
     simulator = true;
 
   if (!simulator) {

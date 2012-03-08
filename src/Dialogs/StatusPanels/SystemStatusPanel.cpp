@@ -32,7 +32,7 @@ gcc_pure
 static const TCHAR *
 GetGPSStatus(const NMEAInfo &basic)
 {
-  if (!basic.connected)
+  if (!basic.alive)
     return N_("Disconnected");
   else if (!basic.location_available)
     return N_("Fix invalid");
@@ -52,7 +52,7 @@ SystemStatusPanel::Refresh()
 
   SetFormValue(form, _T("prpGPS"), gettext(GetGPSStatus(basic)));
 
-  if (!basic.connected)
+  if (!basic.alive)
     SetFormValue(form, _T("prpNumSat"), _T(""));
   else if (gps.satellites_used_available) {
     // known number of sats

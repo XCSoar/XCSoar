@@ -94,7 +94,7 @@ class DeviceDescriptor : PortLineHandler {
    */
   ExternalSettings settings_received;
 
-  bool was_connected;
+  bool was_alive;
 
   bool ticker;
 
@@ -218,11 +218,11 @@ public:
   }
 
   /**
-   * Query the device's "connected" flag from the DeviceBlackboard.
+   * Query the device's "alive" flag from the DeviceBlackboard.
    * This method locks the DeviceBlackboard.
    */
   gcc_pure
-  bool IsConnected() const;
+  bool IsAlive() const;
 
 private:
   bool ParseNMEA(const char *line, struct NMEAInfo &info);

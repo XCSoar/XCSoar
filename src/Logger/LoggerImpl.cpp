@@ -124,7 +124,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 void
 LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
 {
-  if (!gps_info.connected && pre_takeoff_buffer.empty())
+  if (!gps_info.alive && pre_takeoff_buffer.empty())
     return;
 
   PreTakeoffBuffer item;
@@ -142,7 +142,7 @@ LoggerImpl::LogEvent(const NMEAInfo &gps_info, const char *event)
 void
 LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 {
-  if (!gps_info.connected || !gps_info.time_available)
+  if (!gps_info.alive || !gps_info.time_available)
     return;
 
   if (writer == NULL) {

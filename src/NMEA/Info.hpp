@@ -142,11 +142,10 @@ struct NMEAInfo {
   fixed clock;
 
   /**
-   * Is there a device connected?  This attribute gets updated each
-   * time a NMEA line was successfully parsed.  When this expires, it
-   * means that the device got disconnected.
+   * Is the device alive?  This attribute gets updated each time a
+   * NMEA line was successfully parsed.
    */
-  Validity connected;
+  Validity alive;
 
   GPSState gps;
 

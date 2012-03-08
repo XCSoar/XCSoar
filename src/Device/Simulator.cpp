@@ -107,7 +107,7 @@ Simulator::Touch(NMEAInfo &basic)
   assert(is_simulator());
 
   basic.UpdateClock();
-  basic.connected.Update(basic.clock);
+  basic.alive.Update(basic.clock);
   basic.gps.simulator = true;
   basic.gps.real = false;
 

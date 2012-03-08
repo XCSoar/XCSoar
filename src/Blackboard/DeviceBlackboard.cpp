@@ -112,7 +112,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   NMEAInfo &basic = SetReplayState();
 
   basic.clock = t;
-  basic.connected.Update(basic.clock);
+  basic.alive.Update(basic.clock);
   basic.ProvideTime(t);
   basic.gps.satellites_used_available.Clear();
   basic.acceleration.Reset();
@@ -144,7 +144,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutex);
 
-  replay_data.connected.Clear();
+  replay_data.alive.Clear();
 
   ScheduleMerge();
 }
@@ -242,17 +242,17 @@ void
 DeviceBlackboard::expire_wall_clock()
 {
   ScopeLock protect(mutex);
-  if (!Basic().connected)
+  if (!Basic().alive)
     return;
 
   bool modified = false;
   for (unsigned i = 0; i < NUMDEV; ++i) {
     NMEAInfo &basic = per_device_data[i];
-    if (!basic.connected)
+    if (!basic.alive)
       continue;
 
     basic.ExpireWallClock();
-    if (!basic.connected)
+    if (!basic.alive)
       modified = true;
   }
 
@@ -271,7 +271,7 @@ DeviceBlackboard::Merge()
 {
   real_data.Reset();
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    if (!per_device_data[i].connected)
+    if (!per_device_data[i].alive)
       continue;
 
     per_device_data[i].UpdateClock();
@@ -279,14 +279,14 @@ DeviceBlackboard::Merge()
     real_data.Complement(per_device_data[i]);
   }
 
-  if (replay_data.connected) {
+  if (replay_data.alive) {
     /* the replay may run at a higher speed; use NMEA_INFO::Time as a
        "fake wallclock" to prevent them from expiring too quickly */
     replay_data.clock = replay_data.time;
 
     replay_data.Expire();
     SetBasic() = replay_data;
-  } else if (simulator_data.connected) {
+  } else if (simulator_data.alive) {
     simulator_data.UpdateClock();
     simulator_data.Expire();
     SetBasic() = simulator_data;

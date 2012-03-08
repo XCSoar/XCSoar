@@ -84,7 +84,7 @@ SystemClockTimer()
   // system clock to the GPS time.
   static bool sysTimeInitialised = false;
 
-  if (basic.connected &&
+  if (basic.alive &&
       CommonInterface::GetComputerSettings().set_system_time_from_gps
       && basic.gps.real
       /* assume that we only have a valid date and time when we have a
@@ -116,7 +116,7 @@ SystemClockTimer()
     SetTimeZoneInformation(&tzi);
 #endif
     sysTimeInitialised =true;
-  } else if (!basic.connected)
+  } else if (!basic.alive)
     /* set system clock again after a device reconnect; the new device
        may have a better GPS time */
     sysTimeInitialised = false;
@@ -302,7 +302,7 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
 
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  bool connected_now = basic.connected;
+  bool connected_now = basic.alive;
   if (connected_now) {
     if (basic.location_available) {
       wait_connect = false;

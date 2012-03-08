@@ -95,7 +95,7 @@ NMEAInfo::Reset()
 {
   UpdateClock();
 
-  connected.Clear();
+  alive.Clear();
 
   gps.Reset();
   acceleration.Reset();
@@ -155,7 +155,7 @@ NMEAInfo::Reset()
 void
 NMEAInfo::ExpireWallClock()
 {
-  if (!connected)
+  if (!alive)
     return;
 
   UpdateClock();
@@ -166,8 +166,8 @@ NMEAInfo::ExpireWallClock()
     return;
 #endif
 
-  connected.Expire(clock, fixed(10));
-  if (!connected) {
+  alive.Expire(clock, fixed(10));
+  if (!alive) {
     time_available.Clear();
     gps.Reset();
     flarm.Clear();
@@ -204,16 +204,16 @@ NMEAInfo::Expire()
 void
 NMEAInfo::Complement(const NMEAInfo &add)
 {
-  if (!add.connected)
+  if (!add.alive)
     /* if there is no heartbeat on the other object, there cannot be
        useful information */
     return;
 
-  if (!connected) {
+  if (!alive) {
     gps = add.gps;
   }
 
-  connected.Complement(add.connected);
+  alive.Complement(add.alive);
 
   if (time_available.Complement(add.time_available)) {
     time = add.time;

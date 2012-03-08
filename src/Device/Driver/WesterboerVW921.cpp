@@ -180,7 +180,7 @@ WesterboerVW921Device::SentenceReceived(unsigned sentence_number,
                                         const void *data, size_t length,
                                         struct NMEAInfo &info)
 {
-  info.connected.Update(info.clock);
+  info.alive.Update(info.clock);
 
   switch (sentence_number) {
   case 0:
