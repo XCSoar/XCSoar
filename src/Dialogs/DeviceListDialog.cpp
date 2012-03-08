@@ -180,15 +180,13 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   const TCHAR *text;
   if (basic.alive) {
-    _tcscpy(buffer1, _("Connected"));
-
     if (basic.location_available) {
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("GPS fix"));
+      _tcscpy(buffer1, _("GPS fix"));
     } else if (basic.gps.fix_quality_available) {
       /* device sends GPGGA, but no valid location */
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("bad GPS"));
+      _tcscpy(buffer1, _("Bad GPS"));
+    } else {
+      _tcscpy(buffer1, _("Connected"));
     }
 
     if (basic.baro_altitude_available) {
@@ -211,7 +209,9 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
     text = buffer1;
   } else if (is_simulator()) {
-    return;
+    text = _("N/A");
+  } else if (device.IsOpen()) {
+    text = _("No data");
   } else {
     text = _("Not connected");
   }
