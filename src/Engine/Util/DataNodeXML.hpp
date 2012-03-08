@@ -33,6 +33,8 @@ struct XMLNode;
 class DataNodeXML:
   public DataNode
 {
+  XMLNode *m_xml_node;
+
 protected:
   /** 
    * Construct a node from an XMLNode
@@ -86,9 +88,6 @@ public:
 
   virtual void set_attribute(const TCHAR *name, const TCHAR *value);
   virtual bool get_attribute(const TCHAR *name, tstring &value) const;
-
-private:
-  XMLNode *m_xml_node;
 };
 
 #endif
