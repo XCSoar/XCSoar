@@ -26,6 +26,7 @@ Copyright_License {
 #include "ParsedMETAR.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
+#include "Util/CharUtil.hpp"
 #include "Compatibility/string.h"
 
 #include <tchar.h>
@@ -143,7 +144,7 @@ DetectWindToken(const TCHAR *token)
   bool variable = (_tcsnicmp(token, _T("VRB"), 3) == 0);
 
   for (unsigned i = variable ? 3 : 0; i < 5; ++i)
-    if (!_istdigit(token[i]))
+    if (!IsDigitASCII(token[i]))
       return false;
 
   return true;
@@ -194,7 +195,7 @@ DetectVisibilityToken(const TCHAR *token)
     return false;
 
   for (unsigned i = 0; i < 4; ++i)
-    if (!_istdigit(token[i]))
+    if (!IsDigitASCII(token[i]))
       return false;
 
   return true;
@@ -227,7 +228,7 @@ DetectTemperaturesToken(const TCHAR *token)
   bool divider_found = false;
 
   for (unsigned i = 0; i < length; i++) {
-    if (_istdigit(token[i]))
+    if (IsDigitASCII(token[i]))
       continue;
 
     if (token[i] == _T('/')) {
@@ -295,7 +296,7 @@ DetectAdditionalTemperaturesToken(const TCHAR *token)
     return false;
 
   for (unsigned i = 1; i < 9; ++i) {
-    if (!_istdigit(token[i]))
+    if (!IsDigitASCII(token[i]))
       return false;
   }
 

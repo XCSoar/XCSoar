@@ -86,7 +86,6 @@ typedef char TCHAR;
 
 #define _istalpha isalpha
 #define _istalnum isalnum
-#define _istdigit isdigit
 #define _istpunct ispunct
 
 #define _tcsupr CharUpper

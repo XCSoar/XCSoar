@@ -57,7 +57,7 @@ static bool
 OnlyDigitsAndPunctuation(const TCHAR *s)
 {
   while (*s) {
-    if (!(_istdigit(*s) || _istpunct(*s)))
+    if (!(IsDigitASCII(*s) || _istpunct(*s)))
       return false;
     s++;
   }

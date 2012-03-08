@@ -28,6 +28,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
+#include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "Math/Earth.hpp"
@@ -41,7 +42,6 @@ Copyright_License {
 
 #include <math.h>
 #include <tchar.h>
-#include <ctype.h>
 #include <assert.h>
 #include <stdio.h>
 #include <windef.h> /* for MAX_PATH */
@@ -254,7 +254,7 @@ ReadAltitude(const TCHAR *Text, AirspaceAltitude &Alt)
     while (*p == _T(' '))
       ++p;
 
-    if (_istdigit(*p)) {
+    if (IsDigitASCII(*p)) {
       TCHAR *endptr;
       altitude = fixed(_tcstod(p, &endptr));
       p = endptr;

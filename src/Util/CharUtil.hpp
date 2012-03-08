@@ -56,6 +56,22 @@ IsWhitespaceNotNull(const char ch)
 
 #endif /* _UNICODE */
 
+gcc_constexpr_function
+static inline bool
+IsDigitASCII(char ch)
+{
+  return ch >= '0' && ch <= '9';
+}
+
+#ifdef _UNICODE
+gcc_constexpr_function
+static inline bool
+IsDigitASCII(TCHAR ch)
+{
+  return ch >= _T('0') && ch <= _T('9');
+}
+#endif
+
 /**
  * Convert the specified ASCII character (0x00..0x7f) to upper case.
  * Unlike toupper(), it ignores the system locale.
