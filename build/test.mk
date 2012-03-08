@@ -972,11 +972,6 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Topography/XShape.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
-	$(SRC)/Units/Units.cpp \
-	$(SRC)/Units/Settings.cpp \
-	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Units/System.cpp \
-	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
 LOAD_TOPOGRAPHY_DEPENDS = MATH IO UTIL SHAPELIB ZZIP

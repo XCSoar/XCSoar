@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Topography/XShape.hpp"
 #include "Util/UTF8.hpp"
-#include "Units/Units.hpp"
 #include "shapelib/mapserver.h"
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
@@ -33,7 +32,6 @@ Copyright_License {
 
 #include <algorithm>
 #include <tchar.h>
-#include <ctype.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -48,19 +46,6 @@ import_label(const char *src)
       strcmp(src, "RAILWAY STATION") == 0 ||
       strcmp(src, "RAILROAD STATION") == 0)
     return NULL;
-
-  if (ispunct(src[0])) {
-    fixed value(strtod(src + 1, NULL));
-    value = Units::ToUserAltitude(value);
-
-    TCHAR buffer[32];
-    if (value > fixed(999))
-      _stprintf(buffer, _T("%.1f"), (double)(value / 1000));
-    else
-      _stprintf(buffer, _T("%d"), (int)value);
-
-    return _tcsdup(buffer);
-  }
 
 #ifdef _UNICODE
   size_t length = strlen(src);
