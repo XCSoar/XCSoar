@@ -51,6 +51,26 @@ Copyright_License {
 
 #include <assert.h>
 
+/**
+ * This scope class calls DeviceDescriptor::Return() and
+ * DeviceDescriptor::EnableNMEA() when the caller leaves the current
+ * scope.  The caller must have called DeviceDescriptor::Borrow()
+ * successfully before constructing this class.
+ */
+struct ScopeReturnDevice {
+  DeviceDescriptor &device;
+  OperationEnvironment &env;
+
+  ScopeReturnDevice(DeviceDescriptor &_device, OperationEnvironment &_env)
+    :device(_device), env(_env) {
+  }
+
+  ~ScopeReturnDevice() {
+    device.EnableNMEA(env);
+    device.Return();
+  }
+};
+
 DeviceDescriptor::DeviceDescriptor()
   :port(NULL), monitor(NULL),
    pipe_to_device(NULL),
@@ -58,7 +78,7 @@ DeviceDescriptor::DeviceDescriptor()
 #ifdef ANDROID
    internal_sensors(NULL),
 #endif
-   ticker(false), busy(false)
+   ticker(false), borrowed(false)
 {
 }
 
@@ -69,6 +89,7 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
   assert(port == NULL);
   assert(device == NULL);
   assert(!ticker);
+  assert(!IsBorrowed());
 
   reopen_clock.Update();
 
@@ -162,6 +183,8 @@ DeviceDescriptor::Open(OperationEnvironment &env, bool show_error_messages)
 void
 DeviceDescriptor::Close()
 {
+  assert(!IsBorrowed());
+
 #ifdef ANDROID
   delete internal_sensors;
   internal_sensors = NULL;
@@ -190,6 +213,8 @@ DeviceDescriptor::Close()
 bool
 DeviceDescriptor::Reopen(OperationEnvironment &env, bool show_error_messages)
 {
+  assert(!IsBorrowed());
+
   Close();
   return Open(env, show_error_messages);
 }
@@ -198,7 +223,7 @@ void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
   if (/* don't reopen a device that is occupied */
-      IsBusy() ||
+      IsOccupied() ||
       IsAltair() || !config.IsAvailable() || config.IsServer() ||
       /* reopening the Android internal GPS doesn't help */
       config.IsAndroidInternalGPS() ||
@@ -217,8 +242,6 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 bool
 DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
 {
-  SetBusy(false);
-
   if (device == NULL)
     return true;
 
@@ -271,6 +294,25 @@ bool
 DeviceDescriptor::IsManageable() const
 {
   return driver != NULL && driver->IsManageable();
+}
+
+bool
+DeviceDescriptor::Borrow()
+{
+  if (!CanBorrow())
+    return false;
+
+  borrowed = true;
+  return true;
+}
+
+void
+DeviceDescriptor::Return()
+{
+  assert(IsBorrowed());
+
+  borrowed = false;
+  assert(!IsOccupied());
 }
 
 bool
@@ -343,25 +385,6 @@ DeviceDescriptor::WriteNMEA(const TCHAR *line)
 }
 #endif
 
-/**
- * This scope class sets the "busy" flag during the lifetime of the
- * instance, and reenables the NMEA mode in the destructor.
- */
-struct DeviceBusyRestoreNMEA {
-  DeviceDescriptor &device;
-  OperationEnvironment &env;
-
-  DeviceBusyRestoreNMEA(DeviceDescriptor &_device, OperationEnvironment &_env)
-    :device(_device), env(_env) {
-    device.SetBusy(true);
-  }
-
-  ~DeviceBusyRestoreNMEA() {
-    device.EnableNMEA(env);
-    device.SetBusy(false);
-  }
-};
-
 bool
 DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
 {
@@ -369,7 +392,11 @@ DeviceDescriptor::PutMacCready(fixed value, OperationEnvironment &env)
       !config.sync_to_device)
     return true;
 
-  DeviceBusyRestoreNMEA restore(*this, env);
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
   if (!device->PutMacCready(value, env))
     return false;
 
@@ -388,7 +415,11 @@ DeviceDescriptor::PutBugs(fixed value, OperationEnvironment &env)
       !config.sync_to_device)
     return true;
 
-  DeviceBusyRestoreNMEA restore(*this, env);
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
   if (!device->PutBugs(value, env))
     return false;
 
@@ -409,7 +440,11 @@ DeviceDescriptor::PutBallast(fixed fraction, fixed overload,
        settings_sent.CompareBallastOverload(overload)))
     return true;
 
-  DeviceBusyRestoreNMEA restore(*this, env);
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
   if (!device->PutBallast(fraction, overload, env))
     return false;
 
@@ -429,7 +464,11 @@ DeviceDescriptor::PutVolume(int volume, OperationEnvironment &env)
   if (device == NULL || !config.sync_to_device)
     return true;
 
-  DeviceBusyRestoreNMEA restore(*this, env);
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
   return device->PutVolume(volume, env);
 }
 
@@ -440,7 +479,11 @@ DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency,
   if (device == NULL || !config.sync_to_device)
     return true;
 
-  DeviceBusyRestoreNMEA restore(*this, env);
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
   return device->PutActiveFrequency(frequency, env);
 }
 
@@ -451,7 +494,11 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency,
   if (device == NULL || !config.sync_to_device)
     return true;
 
-  DeviceBusyRestoreNMEA restore(*this, env);
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
   return device->PutStandbyFrequency(frequency, env);
 }
 
@@ -463,7 +510,11 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
       !config.sync_to_device)
     return true;
 
-  DeviceBusyRestoreNMEA restore(*this, env);
+  if (!Borrow())
+    /* TODO: postpone until the borrowed device has been returned */
+    return false;
+
+  ScopeReturnDevice restore(*this, env);
   if (!device->PutQNH(value, env))
     return false;
 
@@ -523,12 +574,10 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
                           const Waypoint *home,
                           OperationEnvironment &env)
 {
-  if (port == NULL)
-    return false;
-
+  assert(borrowed);
+  assert(port != NULL);
   assert(driver != NULL);
-
-  SetBusy(true);
+  assert(device != NULL);
 
   /* enable the "muxed FLARM" hack? */
   const bool flarm = device_blackboard->IsFLARM(index) &&
@@ -542,14 +591,14 @@ bool
 DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                                  OperationEnvironment &env)
 {
-  if (port == NULL || driver == NULL || device == NULL)
-    return false;
+  assert(IsBorrowed());
+  assert(port != NULL);
+  assert(driver != NULL);
+  assert(device != NULL);
 
   StaticString<60> text;
   text.Format(_T("%s: %s."), _("Reading flight list"), driver->display_name);
   env.SetText(text);
-
-  SetBusy(true);
 
   return device->ReadFlightList(flight_list, env);
 }
@@ -559,14 +608,17 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
                                  const TCHAR *path,
                                  OperationEnvironment &env)
 {
+  assert(IsBorrowed());
+  assert(port != NULL);
+  assert(driver != NULL);
+  assert(device != NULL);
+
   if (port == NULL || driver == NULL || device == NULL)
     return false;
 
   StaticString<60> text;
   text.Format(_T("%s: %s."), _("Downloading flight log"), driver->display_name);
   env.SetText(text);
-
-  SetBusy(true);
 
   return device->DownloadFlight(flight, path, env);
 }
@@ -578,7 +630,7 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
     return;
 
   const bool now_alive = IsAlive();
-  if (!now_alive && was_alive && !IsBusy()) {
+  if (!now_alive && was_alive && !IsOccupied()) {
     /* connection was just lost */
     device->LinkTimeout();
 
@@ -588,7 +640,7 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
 
   was_alive = now_alive;
 
-  if (now_alive || IsBusy()) {
+  if (now_alive || IsBorrowed()) {
     ticker = !ticker;
     if (ticker)
       // write settings to vario every second

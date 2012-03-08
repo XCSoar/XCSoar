@@ -27,6 +27,7 @@ Copyright_License {
 #include "Dialogs/ManageFlarmDialog.hpp"
 #include "Dialogs/PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/Message.hpp"
 #include "Widgets/DeviceEditWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Util/TrivialArray.hpp"
@@ -234,6 +235,11 @@ DeviceListWidget::ReconnectCurrent()
     return;
 
   DeviceDescriptor &device = device_list[indices[current]];
+  if (device.IsOccupied()) {
+    MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+    return;
+  }
+
   MessageOperationEnvironment env;
   device.Reopen(env);
 }
@@ -246,7 +252,13 @@ DeviceListWidget::DownloadFlightFromCurrent()
     return;
 
   DeviceDescriptor &device = device_list[indices[current]];
+  if (!device.Borrow()) {
+    MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+    return;
+  }
+
   ExternalLogger::DownloadFlightFrom(device);
+  device.Return();
 }
 
 void
@@ -286,14 +298,19 @@ DeviceListWidget::ManageCurrent()
     return;
 
   DeviceDescriptor &descriptor = device_list[indices[current]];
-  if (!descriptor.IsManageable() || descriptor.IsBusy())
+  if (!descriptor.IsManageable())
     return;
+
+  if (!descriptor.Borrow()) {
+    MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+    return;
+  }
 
   Device *device = descriptor.GetDevice();
-  if (device == NULL)
+  if (device == NULL) {
+    descriptor.Return();
     return;
-
-  descriptor.SetBusy(true);
+  }
 
   if (descriptor.IsDriver(_T("CAI 302")))
     ManageCAI302Dialog(UIGlobals::GetMainWindow(), look, *device);
@@ -304,6 +321,7 @@ DeviceListWidget::ManageCurrent()
 
   MessageOperationEnvironment env;
   descriptor.EnableNMEA(env);
+  descriptor.Return();
 }
 
 void

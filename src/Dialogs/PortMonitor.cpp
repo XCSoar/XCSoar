@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "PortMonitor.hpp"
+#include "Dialogs/Message.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/TerminalWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -102,6 +103,11 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnReconnectClicked(gcc_unused WndButton &button)
 {
+  if (device->IsOccupied()) {
+    MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+    return;
+  }
+
   MessageOperationEnvironment env;
   device->Reopen(env);
 }

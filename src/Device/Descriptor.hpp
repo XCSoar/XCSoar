@@ -99,15 +99,19 @@ class DeviceDescriptor : PortLineHandler {
   bool ticker;
 
   /**
-   * True during task declaration or flight download.  Link timeouts
-   * are disabled meanwhile.
+   * True when somebody has "borrowed" the device.  Link timeouts are
+   * disabled meanwhile.
+   *
+   * This attribute is only accessed from the main thread.
+   *
+   * @see CanBorrow(), Borrow()
    */
-  bool busy;
+  bool borrowed;
 
 public:
   DeviceDescriptor();
   ~DeviceDescriptor() {
-    assert(!IsBusy());
+    assert(!IsOccupied());
   }
 
   unsigned GetIndex() const {
@@ -204,18 +208,49 @@ public:
   bool IsNMEAOut() const;
   bool IsManageable() const;
 
-  /**
-   * Is this device currently busy (i.e. not in normal NMEA receiving
-   * mode)?  During that, we do not expect it to send GPS updates, and
-   * the link timeouts are disabled.
-   */
-  bool IsBusy() const {
-    return busy;
+  bool IsBorrowed() const {
+    return borrowed;
   }
 
-  void SetBusy(bool _busy) {
-    busy = _busy;
+  /**
+   * Is this device currently occupied, i.e. does somebody have
+   * exclusive access?
+   *
+   * May only be called from the main thread.
+   */
+  bool IsOccupied() const {
+    return IsBorrowed();
   }
+
+  /**
+   * Can this device be borrowed?
+   *
+   * May only be called from the main thread.
+   *
+   * @see Borrow()
+   */
+  bool CanBorrow() const {
+    return device != NULL && port != NULL && !IsOccupied();
+  }
+
+  /**
+   * "Borrow" the device.  The caller gets exclusive access, e.g. to
+   * submit a task declaration.  Call Return() when you are done.
+   *
+   * May only be called from the main thread.
+   *
+   * @return false if the device is already occupied and cannot be
+   * borrowed
+   */
+  bool Borrow();
+
+  /**
+   * Return a borrowed device.  The caller is responsible for
+   * switching the device back to NMEA mode, see EnableNMEA().
+   *
+   * May only be called from the main thread.
+   */
+  void Return();
 
   /**
    * Query the device's "alive" flag from the DeviceBlackboard.
@@ -248,11 +283,21 @@ public:
                            OperationEnvironment &env);
   bool PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 
+  /**
+   * Caller is responsible for calling Borrow() and Return().
+   */
   bool Declare(const Declaration &declaration, const Waypoint *home,
                OperationEnvironment &env);
 
+  /**
+   * Caller is responsible for calling Borrow() and Return().
+   */
   bool ReadFlightList(RecordedFlightList &flight_list,
                       OperationEnvironment &env);
+
+  /**
+   * Caller is responsible for calling Borrow() and Return().
+   */
   bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
                       OperationEnvironment &env);
 

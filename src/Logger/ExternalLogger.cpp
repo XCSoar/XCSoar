@@ -81,15 +81,24 @@ static bool
 DeviceDeclare(DeviceDescriptor &dev, const Declaration &declaration,
               const Waypoint *home)
 {
+  if (dev.IsOccupied())
+    return false;
+
   if (MessageBoxX(_("Declare task?"), dev.GetDisplayName(),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return false;
+
+  if (!dev.Borrow())
     return false;
 
   const TCHAR *caption = dev.GetDisplayName();
   if (caption == NULL)
     caption = _("Declare task");
 
-  if (!DoDeviceDeclare(dev, declaration, home)) {
+  bool success = DoDeviceDeclare(dev, declaration, home);
+  dev.Return();
+
+  if (!success) {
     MessageBoxX(_("Error occured,\nTask NOT declared!"),
                 caption, MB_OK | MB_ICONERROR);
     return false;
@@ -249,6 +258,8 @@ ShowFlightList(const RecordedFlightList &flight_list)
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
+  assert(device.IsBorrowed());
+
   MessageOperationEnvironment env;
 
   // Download the list of flights that the logger contains

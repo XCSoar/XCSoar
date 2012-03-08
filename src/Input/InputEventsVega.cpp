@@ -32,7 +32,7 @@ Copyright_License {
 static VegaDevice *
 GetVegaDevice(DeviceDescriptor &device)
 {
-  return device.IsOpen() && !device.IsBusy() && device.IsVega() &&
+  return !device.IsOccupied() && device.IsOpen() && device.IsVega() &&
     device.GetDevice() != NULL
     ? (VegaDevice *)device.GetDevice()
     : NULL;
