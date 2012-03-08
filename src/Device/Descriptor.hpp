@@ -157,6 +157,7 @@ public:
     return device;
   }
 
+private:
   /**
    * When this method fails, the caller is responsible for freeing the
    * Port object.
@@ -166,6 +167,7 @@ public:
 
   bool OpenInternalSensors();
 
+public:
   bool Open(OperationEnvironment &env, bool show_error_messages = true);
 
   void Close();
@@ -303,9 +305,9 @@ public:
 
   void OnSysTicker(const DerivedInfo &calculated);
 
+private:
   bool ParseLine(const char *line);
 
-private:
   /* virtual methods from Port::Handler */
   virtual void DataReceived(const void *data, size_t length);
 
