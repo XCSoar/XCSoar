@@ -139,7 +139,7 @@ DeviceDescriptor::OpenInternalSensors()
 }
 
 bool
-DeviceDescriptor::Open(OperationEnvironment &env, bool show_error_messages)
+DeviceDescriptor::Open(OperationEnvironment &env)
 {
   TCHAR buffer[64];
   LogStartUp(_T("Opening device %s"), config.GetPortName(buffer, 64));
@@ -149,11 +149,9 @@ DeviceDescriptor::Open(OperationEnvironment &env, bool show_error_messages)
 
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   if (driver == NULL) {
-    if (show_error_messages) {
-      StaticString<256> msg;
-      msg.Format(_T("%s: %s."), _("No such driver"), config.driver_name.c_str());
-      env.SetErrorMessage(msg);
-    }
+    StaticString<256> msg;
+    msg.Format(_T("%s: %s."), _("No such driver"), config.driver_name.c_str());
+    env.SetErrorMessage(msg);
     return false;
   }
 
@@ -161,14 +159,12 @@ DeviceDescriptor::Open(OperationEnvironment &env, bool show_error_messages)
 
   Port *port = OpenPort(config, *this);
   if (port == NULL) {
-    if (show_error_messages) {
-      TCHAR name_buffer[64];
-      const TCHAR *name = config.GetPortName(name_buffer, 64);
+    TCHAR name_buffer[64];
+    const TCHAR *name = config.GetPortName(name_buffer, 64);
 
-      StaticString<256> msg;
-      msg.Format(_T("%s: %s."), _("Unable to open port"), name);
-      env.SetErrorMessage(msg);
-    }
+    StaticString<256> msg;
+    msg.Format(_T("%s: %s."), _("Unable to open port"), name);
+    env.SetErrorMessage(msg);
     return false;
   }
 
@@ -211,12 +207,12 @@ DeviceDescriptor::Close()
 }
 
 bool
-DeviceDescriptor::Reopen(OperationEnvironment &env, bool show_error_messages)
+DeviceDescriptor::Reopen(OperationEnvironment &env)
 {
   assert(!IsBorrowed());
 
   Close();
-  return Open(env, show_error_messages);
+  return Open(env);
 }
 
 void
@@ -236,7 +232,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
   LogStartUp(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
-  Reopen(env, false);
+  Reopen(env);
 }
 
 bool

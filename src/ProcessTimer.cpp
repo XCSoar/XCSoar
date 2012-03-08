@@ -41,7 +41,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "BallastDumpManager.hpp"
-#include "Operation/PopupOperationEnvironment.hpp"
+#include "Operation/Operation.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
@@ -322,7 +322,7 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
     }
   }
 
-  PopupOperationEnvironment env;
+  QuietOperationEnvironment env;
   AllDevicesAutoReopen(env);
 
   connected_last = connected_now;
