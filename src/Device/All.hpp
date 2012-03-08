@@ -65,11 +65,4 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency,
 void
 AllDevicesPutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 
-/**
- * Is any device currently declaring a task?
- */
-gcc_pure
-bool
-AllDevicesIsBusy();
-
 #endif

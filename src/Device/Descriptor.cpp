@@ -197,7 +197,9 @@ DeviceDescriptor::Reopen(OperationEnvironment &env, bool show_error_messages)
 void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
-  if (IsAltair() || !config.IsAvailable() || config.IsServer() ||
+  if (/* don't reopen a device that is occupied */
+      IsBusy() ||
+      IsAltair() || !config.IsAvailable() || config.IsServer() ||
       /* reopening the Android internal GPS doesn't help */
       config.IsAndroidInternalGPS() ||
       IsConnected() || (driver != NULL && !driver->HasTimeout()) ||

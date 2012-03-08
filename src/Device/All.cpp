@@ -123,15 +123,3 @@ AllDevicesPutQNH(const AtmosphericPressure &pres,
   for (unsigned i = 0; i < NUMDEV; ++i)
     device_list[i].PutQNH(pres, env);
 }
-
-bool
-AllDevicesIsBusy()
-{
-  assert(!is_simulator());
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i].IsBusy())
-      return true;
-
-  return false;
-}

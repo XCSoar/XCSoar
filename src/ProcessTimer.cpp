@@ -296,11 +296,6 @@ ProcessTimer::CommonProcessTimer()
 int
 ProcessTimer::ConnectionProcessTimer(int itimeout)
 {
-  if (AllDevicesIsBusy())
-    /* don't check for device timeouts during task declaration, as the
-       device is busy with that and will not send NMEA updates */
-    return itimeout;
-
   static bool connected_last = false;
   static bool location_last = false;
   static bool wait_connect = false;
