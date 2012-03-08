@@ -177,6 +177,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   /* show a list of features that are available in the second row */
 
   const NMEAInfo &basic = device_blackboard->RealState(indices[i]);
+
+  const TCHAR *text;
   if (basic.connected) {
     _tcscpy(buffer1, _("Connected"));
 
@@ -207,12 +209,15 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
     if (IsFlarm(i))
       _tcscat(buffer1, _T("; FLARM"));
 
-    canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
-                buffer1);
-  } else if (!is_simulator()) {
-    canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
-                _("Not connected"));
+    text = buffer1;
+  } else if (is_simulator()) {
+    return;
+  } else {
+    text = _("Not connected");
   }
+
+  canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
+              text);
 }
 
 void
