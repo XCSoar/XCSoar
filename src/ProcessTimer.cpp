@@ -322,7 +322,9 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
     }
   }
 
-  QuietOperationEnvironment env;
+  /* this OperationEnvironment instance must be persistent, because
+     DeviceDescriptor::Open() is asynchronous */
+  static QuietOperationEnvironment env;
   AllDevicesAutoReopen(env);
 
   connected_last = connected_now;

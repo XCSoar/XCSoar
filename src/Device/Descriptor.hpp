@@ -31,6 +31,8 @@ Copyright_License {
 #include "RadioFrequency.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "PeriodClock.hpp"
+#include "Job/Async.hpp"
+#include "Thread/Notify.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -48,12 +50,21 @@ class InternalSensors;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
+class OpenDeviceJob;
 
-class DeviceDescriptor : PortLineHandler {
+class DeviceDescriptor : private Notify, private PortLineHandler {
   /** the index of this device in the global list */
   const unsigned index;
 
   DeviceConfig config;
+
+  /**
+   * This object runs the Open() method in background to make it
+   * non-blocking.
+   */
+  AsyncJobRunner async;
+
+  OpenDeviceJob *open_job;
 
   Port *port;
   Port::Handler *monitor;
@@ -155,6 +166,11 @@ public:
 
 private:
   /**
+   * Cancel the #AsyncJobRunner object if it is running.
+   */
+  void CancelAsync();
+
+  /**
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
@@ -164,15 +180,28 @@ private:
   bool OpenInternalSensors();
 
 public:
-  bool Open(OperationEnvironment &env);
+  /**
+   * To be used by OpenDeviceJob, don't call directly.
+   */
+  bool DoOpen(OperationEnvironment &env);
+
+  /**
+   * @param env a persistent object
+   */
+  void Open(OperationEnvironment &env);
 
   void Close();
 
-  bool Reopen(OperationEnvironment &env);
+  /**
+   * @param env a persistent object
+   */
+  void Reopen(OperationEnvironment &env);
 
   /**
    * Call this periodically to auto-reopen a failed device after a
    * certain delay.
+   *
+   * @param env a persistent object
    */
   void AutoReopen(OperationEnvironment &env);
 
@@ -217,7 +246,7 @@ public:
    * May only be called from the main thread.
    */
   bool IsOccupied() const {
-    return IsBorrowed();
+    return IsBorrowed() || async.IsBusy();
   }
 
   /**
@@ -303,6 +332,9 @@ public:
 
 private:
   bool ParseLine(const char *line);
+
+  /* virtual methods from class Notify */
+  virtual void OnNotification();
 
   /* virtual methods from Port::Handler */
   virtual void DataReceived(const void *data, size_t length);

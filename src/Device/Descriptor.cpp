@@ -41,6 +41,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Input/InputQueue.hpp"
 #include "LogFile.hpp"
+#include "Job/Job.hpp"
 
 #ifdef ANDROID
 #include "Java/Object.hpp"
@@ -71,8 +72,21 @@ struct ScopeReturnDevice {
   }
 };
 
+class OpenDeviceJob : public Job {
+  DeviceDescriptor &device;
+
+public:
+  OpenDeviceJob(DeviceDescriptor &_device):device(_device) {}
+
+  /* virtual methods from class Job */
+  virtual void Run(OperationEnvironment &env) {
+    device.DoOpen(env);
+  };
+};
+
 DeviceDescriptor::DeviceDescriptor(unsigned _index)
   :index(_index),
+   open_job(NULL),
    port(NULL), monitor(NULL),
    pipe_to_device(NULL),
    driver(NULL), device(NULL),
@@ -82,6 +96,31 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
    ticker(false), borrowed(false)
 {
 }
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+/* no, OpenDeviceJob really doesn't need a virtual destructor */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+
+void
+DeviceDescriptor::CancelAsync()
+{
+  if (!async.IsBusy())
+    return;
+
+  assert(open_job != NULL);
+
+  async.Cancel();
+  async.Wait();
+
+  delete open_job;
+  open_job = NULL;
+}
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+#pragma GCC diagnostic pop
+#endif
 
 bool
 DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
@@ -140,11 +179,8 @@ DeviceDescriptor::OpenInternalSensors()
 }
 
 bool
-DeviceDescriptor::Open(OperationEnvironment &env)
+DeviceDescriptor::DoOpen(OperationEnvironment &env)
 {
-  TCHAR buffer[64];
-  LogStartUp(_T("Opening device %s"), config.GetPortName(buffer, 64));
-
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalSensors();
 
@@ -178,9 +214,31 @@ DeviceDescriptor::Open(OperationEnvironment &env)
 }
 
 void
+DeviceDescriptor::Open(OperationEnvironment &env)
+{
+  assert(port == NULL);
+  assert(device == NULL);
+  assert(!ticker);
+  assert(!IsBorrowed());
+
+  CancelAsync();
+
+  assert(!IsOccupied());
+  assert(open_job == NULL);
+
+  TCHAR buffer[64];
+  LogStartUp(_T("Opening device %s"), config.GetPortName(buffer, 64));
+
+  open_job = new OpenDeviceJob(*this);
+  async.Start(open_job, env, this);
+}
+
+void
 DeviceDescriptor::Close()
 {
   assert(!IsBorrowed());
+
+  CancelAsync();
 
 #ifdef ANDROID
   delete internal_sensors;
@@ -207,13 +265,13 @@ DeviceDescriptor::Close()
   settings_received.Clear();
 }
 
-bool
+void
 DeviceDescriptor::Reopen(OperationEnvironment &env)
 {
   assert(!IsBorrowed());
 
   Close();
-  return Open(env);
+  Open(env);
 }
 
 void
@@ -653,6 +711,33 @@ DeviceDescriptor::ParseLine(const char *line)
   basic.UpdateClock();
   return ParseNMEA(line, basic);
 }
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+/* no, OpenDeviceJob really doesn't need a virtual destructor */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+
+void
+DeviceDescriptor::OnNotification()
+{
+  /* notification from AsyncJobRunner, the Job was finished */
+
+  if (!async.IsBusy())
+    /* this can happen when CancelAsync() has been called */
+    return;
+
+  assert(open_job != NULL);
+
+  async.Wait();
+
+  delete open_job;
+  open_job = NULL;
+}
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+#pragma GCC diagnostic pop
+#endif
 
 void
 DeviceDescriptor::DataReceived(const void *data, size_t length)

@@ -32,18 +32,17 @@ Copyright_License {
 
 #include <assert.h>
 
-static bool
+static void
 devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
 {
-  PopupOperationEnvironment env;
+  /* this OperationEnvironment instance must be persistent, because
+     DeviceDescriptor::Open() is asynchronous */
+  static PopupOperationEnvironment env;
 
-  if (!device.Open(env))
-    return false;
+  device.Open(env);
 
   if (nmeaout == NULL && device.IsNMEAOut())
     nmeaout = &device;
-
-  return true;
 }
 
 static void
