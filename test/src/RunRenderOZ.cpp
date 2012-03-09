@@ -146,7 +146,7 @@ public:
     }
 
     if (oz != NULL)
-      oz->set_legs(&previous, &location, &next);
+      oz->SetLegs(&previous, &location, &next);
 
     Invalidate();
   }

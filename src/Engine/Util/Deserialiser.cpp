@@ -120,7 +120,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 
     fixed length;
     if (m_node.get_attribute(_T("length"), length))
-      ls->setLength(length);
+      ls->SetLength(length);
 
     return ls;
   } else if (StringIsEqual(type.c_str(), _T("Cylinder"))) {
@@ -128,7 +128,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 
     fixed radius;
     if (m_node.get_attribute(_T("radius"), radius))
-      ls->setRadius(radius);
+      ls->SetRadius(radius);
 
     return ls;
   } else if (StringIsEqual(type.c_str(), _T("Sector"))) {
@@ -139,17 +139,17 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 
     if (m_node.get_attribute(_T("inner_radius"), inner_radius)) {
       AnnularSectorZone *als = new AnnularSectorZone(wp.location);
-      als->setInnerRadius(inner_radius);
+      als->SetInnerRadius(inner_radius);
       ls = als;
     } else
       ls = new SectorZone(wp.location);
 
     if (m_node.get_attribute(_T("radius"), radius))
-      ls->setRadius(radius);
+      ls->SetRadius(radius);
     if (m_node.get_attribute(_T("start_radial"), start))
-      ls->setStartRadial(start);
+      ls->SetStartRadial(start);
     if (m_node.get_attribute(_T("end_radial"), end))
-      ls->setEndRadial(end);
+      ls->SetEndRadial(end);
 
     return ls;
   } else if (StringIsEqual(type.c_str(), _T("FAISector")))

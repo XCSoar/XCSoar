@@ -29,20 +29,20 @@
 class AnnularSectorZone:
   public SectorZone
 {
-  fixed InnerRadius;
+  fixed inner_radius;
 
 protected:
   AnnularSectorZone(Shape _shape, const GeoPoint &loc,
                     const fixed _radiusOuter = fixed(10000.0),
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
-                    const fixed _InnerRadius = fixed(0.0))
+                    const fixed _inner_radius = fixed(0.0))
     :SectorZone(_shape, loc, _radiusOuter, _startRadial, _endRadial),
-     InnerRadius(_InnerRadius) {}
+     inner_radius(_inner_radius) {}
 
   AnnularSectorZone(const AnnularSectorZone &other, const GeoPoint &reference)
     :SectorZone((const SectorZone &)other, reference),
-     InnerRadius(other.InnerRadius) {}
+     inner_radius(other.inner_radius) {}
 
 public:
   /**
@@ -59,18 +59,18 @@ public:
                     const fixed _radiusOuter=fixed(10000.0),
                     const Angle _startRadial = Angle::Zero(),
                     const Angle _endRadial = Angle::FullCircle(),
-                    const fixed _InnerRadius = fixed(0.0))
+                    const fixed _inner_radius = fixed(0.0))
     :SectorZone(ANNULAR_SECTOR, loc, _radiusOuter, _startRadial, _endRadial),
-     InnerRadius(_InnerRadius)
+     inner_radius(_inner_radius)
   {
-    updateSector();
+    UpdateSector();
   }
 
-  virtual ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
     if (_location)
       return new AnnularSectorZone(*this, *_location);
 
-    return new AnnularSectorZone(*this, get_location());
+    return new AnnularSectorZone(*this, GetReference());
   }
 
   /**
@@ -78,10 +78,11 @@ public:
    *
    * @param x Radius (m) of inner boundary
    */
-  void setInnerRadius(const fixed new_radius) {
-    InnerRadius = new_radius;
-    Radius = std::max(Radius, InnerRadius);
-    updateSector();
+  void SetInnerRadius(const fixed new_radius) {
+    inner_radius = new_radius;
+    if (new_radius > GetRadius())
+      CylinderZone::SetRadius(new_radius);
+    UpdateSector();
   }
 
   /**
@@ -89,8 +90,8 @@ public:
    *
    * @return Radius (m) of inner boundary
    */
-  fixed getInnerRadius() const {
-    return InnerRadius;
+  fixed GetInnerRadius() const {
+    return inner_radius;
   }
 
   /**
@@ -98,10 +99,11 @@ public:
    *
    * @param new_radius Radius (m) of cylinder
    */
-  virtual void setRadius(fixed new_radius) {
-    CylinderZone::setRadius(new_radius);
-    InnerRadius = std::min(new_radius, InnerRadius);
-    updateSector();
+  virtual void SetRadius(fixed new_radius) {
+    CylinderZone::SetRadius(new_radius);
+    if (new_radius < inner_radius)
+      inner_radius = new_radius;
+    UpdateSector();
   }
 
   /**
@@ -127,7 +129,7 @@ public:
    *
    * @return True if same type and OZ parameters
    */
-  virtual bool equals(const ObservationZonePoint* other) const;
+  virtual bool Equals(const ObservationZonePoint &other) const;
 };
 
 #endif

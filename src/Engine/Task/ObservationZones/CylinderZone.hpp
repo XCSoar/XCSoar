@@ -35,18 +35,17 @@
  */
 class CylinderZone : public ObservationZonePoint
 {
-protected:
   /** radius (m) of OZ */
-  fixed Radius;
+  fixed radius;
 
 protected:
   CylinderZone(Shape _shape, const GeoPoint &loc,
                const fixed _radius = fixed(10000.0))
-    :ObservationZonePoint(_shape, loc), Radius(_radius) {}
+    :ObservationZonePoint(_shape, loc), radius(_radius) {}
 
   CylinderZone(const CylinderZone &other, const GeoPoint &reference)
     :ObservationZonePoint((const ObservationZonePoint &)other, reference),
-     Radius(other.Radius) {}
+     radius(other.radius) {}
 
 public:
   /**
@@ -58,13 +57,13 @@ public:
    * @return Initialised object
    */
   CylinderZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0))
-    :ObservationZonePoint(CYLINDER, loc), Radius(_radius) {}
+    :ObservationZonePoint(CYLINDER, loc), radius(_radius) {}
 
-  virtual ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint * _location=NULL) const {
     if (_location)
       return new CylinderZone(*this, *_location);
 
-    return new CylinderZone(*this, get_location());
+    return new CylinderZone(*this, GetReference());
   }
 
   /** 
@@ -74,7 +73,7 @@ public:
    */
   virtual bool IsInSector(const AircraftState &ref) const
   {
-    return distance(ref.location) <= Radius;
+    return DistanceTo(ref.location) <= radius;
   }  
 
   /**
@@ -111,9 +110,9 @@ public:
    *
    * @param new_radius Radius (m) of cylinder
    */
-  virtual void setRadius(fixed new_radius) {
+  virtual void SetRadius(fixed new_radius) {
     assert(positive(new_radius));
-    Radius = new_radius;
+    radius = new_radius;
   }
 
   /**
@@ -121,8 +120,8 @@ public:
    *
    * @return Radius (m) of cylinder
    */
-  fixed getRadius() const {
-    return Radius;
+  fixed GetRadius() const {
+    return radius;
   }
 
   /**
@@ -132,7 +131,7 @@ public:
    *
    * @return True if same type and OZ parameters
    */
-  virtual bool equals(const ObservationZonePoint* other) const;
+  virtual bool Equals(const ObservationZonePoint &other) const;
 
   /**
    * Generate a random location inside the OZ (to be used for testing)
@@ -141,7 +140,7 @@ public:
    *
    * @return Location of point
    */
-  virtual GeoPoint randomPointInSector(const fixed mag) const;
+  virtual GeoPoint GetRandomPointInSector(const fixed mag) const;
 };
 
 #endif

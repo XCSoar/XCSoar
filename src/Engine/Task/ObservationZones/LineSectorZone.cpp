@@ -25,7 +25,7 @@
 
 GeoPoint LineSectorZone::GetBoundaryParametric(fixed t) const
 { 
-  return SectorStart.Interpolate(SectorEnd,t);
+  return GetSectorStart().Interpolate(GetSectorEnd(), t);
 }
 
 fixed

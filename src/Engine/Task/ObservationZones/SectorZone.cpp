@@ -26,23 +26,23 @@
 GeoPoint
 SectorZone::GetBoundaryParametric(fixed t) const
 {
-  const Angle sweep = (EndRadial - StartRadial).AsBearing();
-  const fixed l = Radius;
-  const fixed c1 = sweep.Radians() * Radius;
+  const Angle sweep = (EndRadial - start_radial).AsBearing();
+  const fixed l = GetRadius();
+  const fixed c1 = sweep.Radians() * GetRadius();
   const fixed tt = t * (c1 + 2 * l);
   Angle a;
   fixed d;
   if (tt < l) {
-    d = (tt / l) * Radius;
-    a = StartRadial;
+    d = (tt / l) * GetRadius();
+    a = start_radial;
   } else if (tt < l + c1) {
-    d = Radius;
-    a = StartRadial + Angle::Radians(((tt - l) / c1) * sweep.Radians());
+    d = GetRadius();
+    a = start_radial + Angle::Radians(((tt - l) / c1) * sweep.Radians());
   } else {
-    d = Radius - (tt - l - c1) / l * Radius;
+    d = GetRadius() - (tt - l - c1) / l * GetRadius();
     a = EndRadial;
   }
-  return GeoVector(d, a).EndPoint(get_location());
+  return GeoVector(d, a).EndPoint(GetReference());
 }
 
 fixed
@@ -52,46 +52,46 @@ SectorZone::ScoreAdjustment() const
 }
 
 void 
-SectorZone::updateSector() 
+SectorZone::UpdateSector() 
 {
-  SectorStart = GeoVector(Radius, StartRadial).EndPoint(get_location());
-  SectorEnd = GeoVector(Radius, EndRadial).EndPoint(get_location());
+  sector_start = GeoVector(GetRadius(), start_radial).EndPoint(GetReference());
+  sector_end = GeoVector(GetRadius(), EndRadial).EndPoint(GetReference());
 }
 
 bool 
 SectorZone::IsInSector(const AircraftState &ref) const
 {
-  GeoVector f(get_location(), ref.location);
+  GeoVector f(GetReference(), ref.location);
 
-  return f.distance <= Radius && angleInSector(f.bearing);
+  return f.distance <= GetRadius() && IsAngleInSector(f.bearing);
 }
 
 void
-SectorZone::setStartRadial(const Angle x)
+SectorZone::SetStartRadial(const Angle x)
 {
-  StartRadial = x;
-  updateSector();
+  start_radial = x;
+  UpdateSector();
 }
 
 void
-SectorZone::setEndRadial(const Angle x)
+SectorZone::SetEndRadial(const Angle x)
 {
   EndRadial = x;
-  updateSector();
+  UpdateSector();
 }
 
 bool
-SectorZone::angleInSector(const Angle b) const
+SectorZone::IsAngleInSector(const Angle b) const
 {
-  return b.Between(StartRadial, EndRadial);
+  return b.Between(start_radial, EndRadial);
 }
 
 bool
-SectorZone::equals(const ObservationZonePoint* other) const
+SectorZone::Equals(const ObservationZonePoint &other) const
 {
-  const SectorZone *z = (const SectorZone *)other;
+  const SectorZone &z = (const SectorZone &)other;
 
-  return CylinderZone::equals(other) &&
-         StartRadial == z->getStartRadial() &&
-         EndRadial == z->getEndRadial();
+  return CylinderZone::Equals(other) &&
+    start_radial == z.GetStartRadial() &&
+    EndRadial == z.GetEndRadial();
 }

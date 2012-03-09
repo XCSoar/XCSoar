@@ -240,7 +240,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
   case ObservationZonePoint::SECTOR:
   case ObservationZonePoint::ANNULAR_SECTOR:
     _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Sector"), _("Radius"),
-              (double)Units::ToUserDistance(((const SectorZone &)ozp).getRadius()),
+              (double)Units::ToUserDistance(((const SectorZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 
@@ -252,7 +252,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 
   case ObservationZonePoint::CYLINDER:
     _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Cylinder"), _("Radius"),
-              (double)Units::ToUserDistance(((const CylinderZone &)ozp).getRadius()),
+              (double)Units::ToUserDistance(((const CylinderZone &)ozp).GetRadius()),
               Units::GetDistanceName());
     return;
 

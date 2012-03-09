@@ -41,16 +41,16 @@ GetOZSize(ObservationZonePoint *oz)
 {
   switch (oz->shape) {
   case ObservationZonePoint::SECTOR:
-    return ((SectorZone *)oz)->getRadius();
+    return ((SectorZone *)oz)->GetRadius();
 
   case ObservationZonePoint::LINE:
     return ((LineSectorZone *)oz)->getLength();
 
   case ObservationZonePoint::CYLINDER:
-    return ((CylinderZone *)oz)->getRadius();
+    return ((CylinderZone *)oz)->GetRadius();
 
   case ObservationZonePoint::ANNULAR_SECTOR:
-    return ((AnnularSectorZone *)oz)->getRadius();
+    return ((AnnularSectorZone *)oz)->GetRadius();
 
   default:
     return fixed_minus_one;

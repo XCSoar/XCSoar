@@ -29,7 +29,7 @@
 /** Segment centered on bisector of incoming/outgoing legs */
 class SymmetricSectorZone: public SectorZone
 {
-  const Angle SectorAngle;
+  const Angle sector_angle;
 
 protected:
   /**
@@ -44,15 +44,15 @@ protected:
   SymmetricSectorZone(Shape _shape, const GeoPoint &loc,
                       const fixed radius=fixed(10000.0),
                       const Angle angle=Angle::QuarterCircle())
-    :SectorZone(_shape, loc, radius), SectorAngle(angle) {}
+    :SectorZone(_shape, loc, radius), sector_angle(angle) {}
 
   SymmetricSectorZone(const SymmetricSectorZone &other,
                       const GeoPoint &reference)
     :SectorZone((const SectorZone &)other, reference),
-     SectorAngle(other.SectorAngle) {}
+     sector_angle(other.sector_angle) {}
 
 public:
-  virtual ObservationZonePoint* clone(const GeoPoint *_location = NULL) const = 0;
+  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const = 0;
 
   /**
    * Update radials when previous/next legs are modified.
@@ -61,8 +61,8 @@ public:
    * @param current Taskpoint this is located at
    * @param next Following task point (destination of outbound leg)
    */
-  virtual void set_legs(const GeoPoint *previous, const GeoPoint *current,
-                        const GeoPoint *next);
+  virtual void SetLegs(const GeoPoint *previous, const GeoPoint *current,
+                       const GeoPoint *next);
 
   /**
    * Test whether an OZ is equivalent to this one
@@ -71,15 +71,15 @@ public:
    *
    * @return True if same type and OZ parameters
    */
-  virtual bool equals(const ObservationZonePoint *other) const;
+  virtual bool Equals(const ObservationZonePoint &other) const;
 
   /** 
    * Accessor for angle of sector (angle between start/end radials)
    * 
    * @return Angle (deg) of sector
    */
-  Angle getSectorAngle() const {
-    return SectorAngle;
+  Angle GetSectorAngle() const {
+    return sector_angle;
   }
 };
 

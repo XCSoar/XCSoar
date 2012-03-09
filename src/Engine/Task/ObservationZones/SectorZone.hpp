@@ -32,13 +32,12 @@
  */
 class SectorZone: public CylinderZone
 {
-protected:
   /** Location of far end point of start radial */
-  GeoPoint SectorStart;
+  GeoPoint sector_start;
   /** Location of far end point of end radial */
-  GeoPoint SectorEnd;
+  GeoPoint sector_end;
 
-  Angle StartRadial;
+  Angle start_radial;
   Angle EndRadial;
 
 protected:
@@ -47,12 +46,12 @@ protected:
              const Angle _startRadial = Angle::Zero(),
              const Angle _endRadial = Angle::FullCircle())
     :CylinderZone(_shape, loc, _radius),
-     StartRadial(_startRadial), EndRadial(_endRadial) {}
+     start_radial(_startRadial), EndRadial(_endRadial) {}
 
   SectorZone(const SectorZone &other, const GeoPoint &reference)
     :CylinderZone((const CylinderZone &)other, reference),
-     SectorStart(other.SectorStart), SectorEnd(other.SectorEnd),
-     StartRadial(other.StartRadial), EndRadial(other.EndRadial) {}
+     sector_start(other.sector_start), sector_end(other.sector_end),
+     start_radial(other.start_radial), EndRadial(other.EndRadial) {}
 
 public:
   /**
@@ -69,16 +68,16 @@ public:
              const Angle _startRadial = Angle::Zero(),
              const Angle _endRadial = Angle::FullCircle())
     :CylinderZone(SECTOR, loc, _radius),
-     StartRadial(_startRadial), EndRadial(_endRadial)
+     start_radial(_startRadial), EndRadial(_endRadial)
   {
-    updateSector();
+    UpdateSector();
   }
 
-  virtual ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
     if (_location)
       return new SectorZone(*this, *_location);
 
-    return new SectorZone(*this, get_location());
+    return new SectorZone(*this, GetReference());
   }
 
   /**
@@ -86,22 +85,22 @@ public:
    *
    * @param x Angle (deg) of radial
    */
-  virtual void setStartRadial(const Angle x); 
+  void SetStartRadial(const Angle x);
 
   /**
    * Set end angle (most clockwise) of sector
    *
    * @param x Angle (deg) of radial
    */
-  virtual void setEndRadial(const Angle x); 
+  void SetEndRadial(const Angle x);
 
   /**
    * Get start radial property value
    *
    * @return Angle (deg) of radial
    */
-  Angle getStartRadial() const {
-    return StartRadial;
+  Angle GetStartRadial() const {
+    return start_radial;
   }
 
   /**
@@ -109,7 +108,7 @@ public:
    *
    * @return Angle (deg) of radial
    */
-  Angle getEndRadial() const {
+  Angle GetEndRadial() const {
     return EndRadial;
   }
 
@@ -118,9 +117,9 @@ public:
    *
    * @param new_radius Radius (m) of cylinder
    */
-  virtual void setRadius(fixed new_radius) {
-    CylinderZone::setRadius(new_radius);
-    updateSector();
+  virtual void SetRadius(fixed new_radius) {
+    CylinderZone::SetRadius(new_radius);
+    UpdateSector();
   }
 
   /** 
@@ -153,15 +152,15 @@ public:
    *
    * @return True if same type and OZ parameters
    */
-  virtual bool equals(const ObservationZonePoint* other) const;
+  virtual bool Equals(const ObservationZonePoint &other) const;
 
   /** 
    * Retrieve start radial endpoint
    * 
    * @return Location of extreme point on start radial
    */
-  const GeoPoint& get_SectorStart() const {
-    return SectorStart;
+  const GeoPoint& GetSectorStart() const {
+    return sector_start;
   }
 
   /** 
@@ -169,17 +168,17 @@ public:
    * 
    * @return Location of extreme point on end radial
    */
-  const GeoPoint& get_SectorEnd() const {
-    return SectorEnd;
+  const GeoPoint& GetSectorEnd() const {
+    return sector_end;
   }
 
 protected:
   /**
    * Updates sector parameters; call this if geometry changes to recalculate
-   * SectorStart and SectorEnd etc.
+   * sector_start and sector_end etc.
    *
    */
-  virtual void updateSector();
+  void UpdateSector();
 
   /**
    * Test whether an angle is inside the sector limits
@@ -188,7 +187,8 @@ protected:
    *
    * @return True if that is within the start/end radials
    */
-  virtual bool angleInSector(const Angle that) const;
+  gcc_pure
+  bool IsAngleInSector(const Angle that) const;
 };
 
 #endif

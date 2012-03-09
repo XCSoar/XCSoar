@@ -75,7 +75,7 @@ struct TaskOZMapItem: public MapItem
 
   TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
                 TaskPoint::Type _tp_type, const Waypoint &_waypoint)
-    :MapItem(TASK_OZ), index(_index), oz(_oz.clone()),
+    :MapItem(TASK_OZ), index(_index), oz(_oz.Clone()),
      tp_type(_tp_type), waypoint(_waypoint) {}
 
   ~TaskOZMapItem() {

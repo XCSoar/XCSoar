@@ -43,7 +43,7 @@ ObservationZoneClient::CanStartThroughTop() const
 GeoPoint
 ObservationZoneClient::GetRandomPointInSector(const fixed mag) const
 {
-  return oz_point->randomPointInSector(mag);
+  return oz_point->GetRandomPointInSector(mag);
 }
 
 fixed
@@ -70,7 +70,7 @@ ObservationZoneClient::SetLegs(const TaskPoint *previous,
                                const TaskPoint *current,
                                const TaskPoint *next)
 {
-  oz_point->set_legs(previous != NULL ? &previous->GetLocation() : NULL,
-                     current != NULL ? &current->GetLocation() : NULL,
-                     next != NULL ? &next->GetLocation() : NULL);
+  oz_point->SetLegs(previous != NULL ? &previous->GetLocation() : NULL,
+                    current != NULL ? &current->GetLocation() : NULL,
+                    next != NULL ? &next->GetLocation() : NULL);
 }

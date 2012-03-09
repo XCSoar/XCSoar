@@ -101,15 +101,15 @@ RefreshView()
     ShowFormControl(*wf, _T("frmOZSector"), true);
 
     LoadFormProperty(*wf, _T("prpOZSectorRadius"),
-                     UnitGroup::DISTANCE, ((const SectorZone &)oz).getRadius());
+                     UnitGroup::DISTANCE, ((const SectorZone &)oz).GetRadius());
     LoadFormProperty(*wf, _T("prpOZSectorStartRadial"),
-                     ((const SectorZone &)oz).getStartRadial().Degrees());
+                     ((const SectorZone &)oz).GetStartRadial().Degrees());
     LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
-                     ((const SectorZone &)oz).getEndRadial().Degrees());
+                     ((const SectorZone &)oz).GetEndRadial().Degrees());
 
     if (oz.shape == ObservationZonePoint::ANNULAR_SECTOR) {
       LoadFormProperty(*wf, _T("prpOZSectorInnerRadius"),
-                       UnitGroup::DISTANCE, ((const AnnularSectorZone &)oz).getInnerRadius());
+                       UnitGroup::DISTANCE, ((const AnnularSectorZone &)oz).GetInnerRadius());
 
       ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), true);
     } else
@@ -128,7 +128,7 @@ RefreshView()
     ShowFormControl(*wf, _T("frmOZCylinder"), true);
 
     LoadFormProperty(*wf, _T("prpOZCylinderRadius"), UnitGroup::DISTANCE,
-                     ((const CylinderZone &)oz).getRadius());
+                     ((const CylinderZone &)oz).GetRadius());
     break;
 
   default:
@@ -211,8 +211,8 @@ ReadValues()
     fixed radius = Units::ToSysDistance(
         GetFormValueFixed(*wf, _T("prpOZSectorInnerRadius")));
 
-    if (fabs(radius - ((AnnularSectorZone &)oz).getInnerRadius()) > fixed(49)) {
-      ((AnnularSectorZone &)oz).setInnerRadius(radius);
+    if (fabs(radius - ((AnnularSectorZone &)oz).GetInnerRadius()) > fixed(49)) {
+      ((AnnularSectorZone &)oz).SetInnerRadius(radius);
       task_modified = true;
     }
   }
@@ -220,20 +220,20 @@ ReadValues()
     fixed radius =
       Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZSectorRadius")));
 
-    if (fabs(radius - ((SectorZone &)oz).getRadius()) > fixed(49)) {
-      ((SectorZone &)oz).setRadius(radius);
+    if (fabs(radius - ((SectorZone &)oz).GetRadius()) > fixed(49)) {
+      ((SectorZone &)oz).SetRadius(radius);
       task_modified = true;
     }
 
     fixed start_radial = GetFormValueFixed(*wf, _T("prpOZSectorStartRadial"));
-    if (start_radial != ((SectorZone &)oz).getStartRadial().Degrees()) {
-      ((SectorZone &)oz).setStartRadial(Angle::Degrees(start_radial));
+    if (start_radial != ((SectorZone &)oz).GetStartRadial().Degrees()) {
+      ((SectorZone &)oz).SetStartRadial(Angle::Degrees(start_radial));
       task_modified = true;
     }
 
     fixed finish_radial = GetFormValueFixed(*wf, _T("prpOZSectorFinishRadial"));
-    if (finish_radial != ((SectorZone &)oz).getEndRadial().Degrees()) {
-      ((SectorZone &)oz).setEndRadial(Angle::Degrees(finish_radial));
+    if (finish_radial != ((SectorZone &)oz).GetEndRadial().Degrees()) {
+      ((SectorZone &)oz).SetEndRadial(Angle::Degrees(finish_radial));
       task_modified = true;
     }
     break;
@@ -243,7 +243,7 @@ ReadValues()
         GetFormValueFixed(*wf, _T("prpOZLineLength")));
 
     if (fabs(line_length - ((LineSectorZone &)oz).getLength()) > fixed(49)) {
-      ((LineSectorZone &)oz).setLength(line_length);
+      ((LineSectorZone &)oz).SetLength(line_length);
       task_modified = true;
     }
     break;
@@ -253,8 +253,8 @@ ReadValues()
     fixed radius = Units::ToSysDistance(
         GetFormValueFixed(*wf, _T("prpOZCylinderRadius")));
 
-    if (fabs(radius - ((CylinderZone &)oz).getRadius()) > fixed(49)) {
-      ((CylinderZone &)oz).setRadius(radius);
+    if (fabs(radius - ((CylinderZone &)oz).GetRadius()) > fixed(49)) {
+      ((CylinderZone &)oz).SetRadius(radius);
       task_modified = true;
     }
     break;

@@ -50,14 +50,14 @@ public:
   LineSectorZone(const GeoPoint loc, const fixed length = fixed(1000.0))
     :SymmetricSectorZone(LINE, loc, half(length), Angle::HalfCircle())
   {
-    updateSector();
+    UpdateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint *_location = NULL) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
     if (_location)
       return new LineSectorZone(*this, *_location);
 
-    return new LineSectorZone(*this, get_location());
+    return new LineSectorZone(*this, GetReference());
   }
 
   /**
@@ -89,8 +89,8 @@ public:
    *
    * @param new_length Length (m) of line
    */
-  void setLength(const fixed new_length) {
-    setRadius(half(new_length));
+  void SetLength(const fixed new_length) {
+    SetRadius(half(new_length));
   }
   
   /**
@@ -99,7 +99,7 @@ public:
    * @return Length (m) of line
    */
   fixed getLength() const {
-    return Double(getRadius());
+    return Double(GetRadius());
   }
 
   /**

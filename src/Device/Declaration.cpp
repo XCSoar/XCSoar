@@ -57,7 +57,7 @@ get_radius(const OrderedTaskPoint &tp)
   if (oz == NULL)
     return Declaration::TurnPoint::SECTOR;
 
-  return (unsigned)((const CylinderZone *)oz)->getRadius();
+  return (unsigned)((const CylinderZone *)oz)->GetRadius();
 }
 
 Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)

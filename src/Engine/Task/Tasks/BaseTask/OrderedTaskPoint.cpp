@@ -121,8 +121,8 @@ OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
   return GetWaypoint() == other->GetWaypoint() &&
          GetType() == other->GetType() &&
-         GetOZPoint()->equals(other->GetOZPoint()) &&
-         other->GetOZPoint()->equals(GetOZPoint());
+    GetOZPoint()->Equals(*other->GetOZPoint()) &&
+    other->GetOZPoint()->Equals(*GetOZPoint());
 }
 
 OrderedTaskPoint* 
@@ -135,19 +135,19 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
 
   switch (GetType()) {
   case START:
-    return new StartPoint(GetOZPoint()->clone(&waypoint->location),
+    return new StartPoint(GetOZPoint()->Clone(&waypoint->location),
                           *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AST:
-    return new ASTPoint(GetOZPoint()->clone(&waypoint->location),
+    return new ASTPoint(GetOZPoint()->Clone(&waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AAT:
-    return new AATPoint(GetOZPoint()->clone(&waypoint->location),
+    return new AATPoint(GetOZPoint()->Clone(&waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case FINISH:
-    return new FinishPoint(GetOZPoint()->clone(&waypoint->location),
+    return new FinishPoint(GetOZPoint()->Clone(&waypoint->location),
                            *waypoint, task_behaviour, ordered_task_behaviour);
 
   case UNORDERED:

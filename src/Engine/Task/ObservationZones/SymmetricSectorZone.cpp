@@ -24,8 +24,8 @@
 #include "Navigation/GeoPoint.hpp"
 
 void
-SymmetricSectorZone::set_legs(const GeoPoint *previous, const GeoPoint *current,
-                              const GeoPoint *next)
+SymmetricSectorZone::SetLegs(const GeoPoint *previous, const GeoPoint *current,
+                             const GeoPoint *next)
 {
   Angle biSector;
   if (!next && previous)
@@ -41,14 +41,14 @@ SymmetricSectorZone::set_legs(const GeoPoint *previous, const GeoPoint *current,
     // single point
     biSector = Angle::Zero();
 
-  setStartRadial((biSector - SectorAngle.Half()).AsBearing());
-  setEndRadial((biSector + SectorAngle.Half()).AsBearing());
+  SetStartRadial((biSector - sector_angle.Half()).AsBearing());
+  SetEndRadial((biSector + sector_angle.Half()).AsBearing());
 }
 
 bool
-SymmetricSectorZone::equals(const ObservationZonePoint* other) const
+SymmetricSectorZone::Equals(const ObservationZonePoint &other) const
 {
-  const SymmetricSectorZone* z = (const SymmetricSectorZone *)other;
+  const SymmetricSectorZone &z = (const SymmetricSectorZone &)other;
 
-  return CylinderZone::equals(other) && SectorAngle == z->getSectorAngle();
+  return CylinderZone::Equals(other) && sector_angle == z.GetSectorAngle();
 }

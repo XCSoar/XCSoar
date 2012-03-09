@@ -160,16 +160,16 @@ void
 Serialiser::Visit(const SectorZone& data)
 {
   m_node.set_attribute(_T("type"), _T("Sector"));
-  m_node.set_attribute(_T("radius"), data.getRadius());
-  m_node.set_attribute(_T("start_radial"), data.getStartRadial());
-  m_node.set_attribute(_T("end_radial"), data.getEndRadial());
+  m_node.set_attribute(_T("radius"), data.GetRadius());
+  m_node.set_attribute(_T("start_radial"), data.GetStartRadial());
+  m_node.set_attribute(_T("end_radial"), data.GetEndRadial());
 }
 
 void
 Serialiser::Visit(const AnnularSectorZone& data)
 {
   Visit((const SectorZone&)data);
-  m_node.set_attribute(_T("inner_radius"), data.getInnerRadius());
+  m_node.set_attribute(_T("inner_radius"), data.GetInnerRadius());
 }
 
 void 
@@ -183,7 +183,7 @@ void
 Serialiser::Visit(const CylinderZone& data)
 {
   m_node.set_attribute(_T("type"), _T("Cylinder"));
-  m_node.set_attribute(_T("radius"), data.getRadius());
+  m_node.set_attribute(_T("radius"), data.GetRadius());
 }
 
 void 

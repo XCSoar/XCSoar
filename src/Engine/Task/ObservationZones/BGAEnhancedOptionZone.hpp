@@ -49,14 +49,14 @@ public:
     :KeyholeZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
                  Angle::HalfCircle())
   {
-    updateSector();
+    UpdateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint *_location = NULL) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
     if (_location)
       return new BGAEnhancedOptionZone(*this, *_location);
 
-    return new BGAEnhancedOptionZone(*this, get_location());
+    return new BGAEnhancedOptionZone(*this, GetReference());
   }
 };
 

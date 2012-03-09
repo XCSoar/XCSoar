@@ -30,35 +30,35 @@
 fixed
 CylinderZone::ScoreAdjustment() const
 {
-  return Radius;
+  return radius;
 }
 
 GeoPoint
 CylinderZone::GetBoundaryParametric(fixed t) const
 {
-  return GeoVector(Radius, Angle::Radians(t * fixed_two_pi)).
-           EndPoint(get_location());
+  return GeoVector(radius, Angle::Radians(t * fixed_two_pi)).
+           EndPoint(GetReference());
 }
 
 bool
-CylinderZone::equals(const ObservationZonePoint* other) const
+CylinderZone::Equals(const ObservationZonePoint &other) const
 {
-  const CylinderZone* z = (const CylinderZone*)other;
+  const CylinderZone &z = (const CylinderZone &)other;
 
-  return ObservationZonePoint::equals(other) && Radius == z->getRadius();
+  return ObservationZonePoint::Equals(other) && GetRadius() == z.GetRadius();
 }
 
 GeoPoint
-CylinderZone::randomPointInSector(const fixed mag) const
+CylinderZone::GetRandomPointInSector(const fixed mag) const
 {
   AircraftState ac;
 
   do {
     Angle dir = Angle::Degrees(fixed(rand() % 360));
-    fixed dmag = max(min(Radius, fixed(100.0)), Radius * mag);
+    fixed dmag = max(min(radius, fixed(100.0)), radius * mag);
     fixed dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
     GeoVector vec(dis, dir);
-    ac.location = vec.EndPoint(get_location());
+    ac.location = vec.EndPoint(GetReference());
   } while (!IsInSector(ac));
 
   return ac.location;

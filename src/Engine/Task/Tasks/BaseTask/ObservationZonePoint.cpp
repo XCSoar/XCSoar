@@ -23,8 +23,8 @@
 #include "ObservationZonePoint.hpp"
 
 bool
-ObservationZonePoint::equals(const ObservationZonePoint* other) const
+ObservationZonePoint::Equals(const ObservationZonePoint &other) const
 {
-  return shape == other->shape && get_location().Equals(other->get_location());
+  return shape == other.shape && GetReference().Equals(other.GetReference());
 }
 

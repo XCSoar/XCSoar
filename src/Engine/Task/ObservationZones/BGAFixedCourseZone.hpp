@@ -46,14 +46,14 @@ public:
   BGAFixedCourseZone(const GeoPoint loc)
     :KeyholeZone(BGAFIXEDCOURSE, loc, fixed(20000.0))
   {
-    updateSector();
+    UpdateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint *_location = NULL) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
     if (_location)
       return new BGAFixedCourseZone(*this, *_location);
 
-    return new BGAFixedCourseZone(*this, get_location());
+    return new BGAFixedCourseZone(*this, GetReference());
   }
 };
 

@@ -46,14 +46,14 @@ public:
   BGAStartSectorZone(const GeoPoint loc)
     :SymmetricSectorZone(BGA_START, loc, fixed(5000.0), Angle::HalfCircle())
   {
-    updateSector();
+    UpdateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
     if (_location)
       return new BGAStartSectorZone(*this, *_location);
 
-    return new BGAStartSectorZone(*this, get_location());
+    return new BGAStartSectorZone(*this, GetReference());
   }
 };
 

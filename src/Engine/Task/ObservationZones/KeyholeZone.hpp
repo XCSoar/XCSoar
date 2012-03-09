@@ -61,14 +61,14 @@ public:
   KeyholeZone(const GeoPoint loc, const fixed radius = fixed(10000.0))
     :SymmetricSectorZone(KEYHOLE, loc, radius, Angle::QuarterCircle())
   {
-    updateSector();
+    UpdateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+  virtual ObservationZonePoint *Clone(const GeoPoint * _location=NULL) const {
     if (_location)
       return new KeyholeZone(*this, *_location);
 
-    return new KeyholeZone(*this, get_location());
+    return new KeyholeZone(*this, GetReference());
   }
 
   /** 

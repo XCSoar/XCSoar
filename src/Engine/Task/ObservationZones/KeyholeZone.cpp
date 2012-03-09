@@ -26,15 +26,15 @@
 GeoPoint
 KeyholeZone::GetBoundaryParametric(fixed t) const
 {
-  const fixed sweep = (getEndRadial() - getStartRadial()).AsBearing().Radians();
+  const fixed sweep = (GetEndRadial() - GetStartRadial()).AsBearing().Radians();
   const fixed small_sweep = fixed_two_pi - sweep;
   const fixed SmallRadius = fixed(500);
   // length of sector element
-  const fixed c1 = sweep * Radius;
+  const fixed c1 = sweep * GetRadius();
   // length of cylinder element
   const fixed c2 = small_sweep * SmallRadius * fixed(5);
   // length of straight elements
-  const fixed l = (Radius - SmallRadius) * fixed(0.2);
+  const fixed l = (GetRadius() - SmallRadius) * fixed(0.2);
   // total distance
   const fixed tt = t * (c1 + l + l + c2);
 
@@ -42,22 +42,22 @@ KeyholeZone::GetBoundaryParametric(fixed t) const
   fixed d;
   if (tt < l) {
     // first straight element
-    d = (tt / l) * (Radius - SmallRadius) + SmallRadius;
-    a = getStartRadial();
+    d = (tt / l) * (GetRadius() - SmallRadius) + SmallRadius;
+    a = GetStartRadial();
   } else if (tt < l + c1) {
     // sector element
-    d = Radius;
-    a = getStartRadial() + Angle::Radians((tt - l) / c1 * sweep);
+    d = GetRadius();
+    a = GetStartRadial() + Angle::Radians((tt - l) / c1 * sweep);
   } else if (tt < l + l + c1) {
     // second straight element
-    d = (fixed_one - (tt - l - c1) / l) * (Radius - SmallRadius) + SmallRadius;
-    a = getEndRadial();
+    d = (fixed_one - (tt - l - c1) / l) * (GetRadius() - SmallRadius) + SmallRadius;
+    a = GetEndRadial();
   } else {
     // cylinder element
     d = SmallRadius;
-    a = getEndRadial() + Angle::Radians((tt - l - l - c1) / c2 * small_sweep);
+    a = GetEndRadial() + Angle::Radians((tt - l - l - c1) / c2 * small_sweep);
   }
-  return GeoVector(d, a).EndPoint(get_location());
+  return GeoVector(d, a).EndPoint(GetReference());
 }
 
 fixed
@@ -69,8 +69,8 @@ KeyholeZone::ScoreAdjustment() const
 bool 
 KeyholeZone::IsInSector(const AircraftState &ref) const
 {
-  GeoVector f(get_location(), ref.location);
+  GeoVector f(GetReference(), ref.location);
 
   return f.distance <= fixed(500) ||
-         (f.distance <= Radius && angleInSector(f.bearing));
+    (f.distance <= GetRadius() && IsAngleInSector(f.bearing));
 }

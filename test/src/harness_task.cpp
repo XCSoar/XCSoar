@@ -401,7 +401,7 @@ bool test_task_mixed(TaskManager& task_manager,
     tp = fact.CreateStart(AbstractTaskFactory::START_LINE,*wp);
     if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->setRadius(fixed(5000.0));
+      cz->SetRadius(fixed(5000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
@@ -429,7 +429,7 @@ bool test_task_mixed(TaskManager& task_manager,
     tp = fact.CreateIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->setRadius(fixed(30000.0));
+      cz->SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
@@ -454,7 +454,7 @@ bool test_task_mixed(TaskManager& task_manager,
     tp = fact.CreateIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->setRadius(fixed(30000.0));
+      cz->SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
@@ -576,7 +576,7 @@ bool test_task_aat(TaskManager& task_manager,
     OrderedTaskPoint* tp = fact.CreateIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->setRadius(fixed(30000.0));
+      cz->SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {
@@ -591,7 +591,7 @@ bool test_task_aat(TaskManager& task_manager,
     OrderedTaskPoint* tp = fact.CreateIntermediate(AbstractTaskFactory::AAT_CYLINDER,*wp);
     if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
       CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->setRadius(fixed(40000.0));
+      cz->SetRadius(fixed(40000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {

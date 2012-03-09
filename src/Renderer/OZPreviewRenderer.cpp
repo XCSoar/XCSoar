@@ -44,8 +44,8 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
   GeoPoint center;
 
   if (IsAncientHardware()) {
-    scale = fixed(radius) / ((const CylinderZone &)oz).getRadius();
-    center = oz.get_location();
+    scale = fixed(radius) / ((const CylinderZone &)oz).GetRadius();
+    center = oz.GetReference();
   } else {
     GeoBounds bounds(oz.GetBoundaryParametric(fixed_one));
     for (fixed i = fixed_zero; i < fixed_one; i += fixed_one / 10)

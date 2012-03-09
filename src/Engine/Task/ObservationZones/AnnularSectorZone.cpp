@@ -26,47 +26,47 @@
 GeoPoint
 AnnularSectorZone::GetBoundaryParametric(fixed t) const
 {
-  const Angle sweep = (EndRadial - StartRadial).AsBearing();
-  const fixed c0 = sweep.Radians() * InnerRadius;
-  const fixed l = Radius - InnerRadius;
-  const fixed c1 = sweep.Radians() * Radius;
+  const Angle sweep = (GetEndRadial() - GetStartRadial()).AsBearing();
+  const fixed c0 = sweep.Radians() * inner_radius;
+  const fixed l = GetRadius() - inner_radius;
+  const fixed c1 = sweep.Radians() * GetRadius();
   const fixed tt = t * (c0 + c1 + 2 * l);
   Angle a;
   fixed d;
   if (tt < c0) {
-    d = InnerRadius;
-    a = Angle::Radians((tt / c0) * sweep.Radians()) + StartRadial;
+    d = inner_radius;
+    a = Angle::Radians((tt / c0) * sweep.Radians()) + GetStartRadial();
   } else if (positive(l) && (tt < c0 + l)) {
-    d = (tt - c0) / l * (Radius - InnerRadius) + InnerRadius;
-    a = EndRadial;
+    d = (tt - c0) / l * (GetRadius() - inner_radius) + inner_radius;
+    a = GetEndRadial();
   } else if (tt < c0 + l + c1) {
-    d = Radius;
-    a = EndRadial
+    d = GetRadius();
+    a = GetEndRadial()
         - Angle::Radians(((tt - c0 - l) / c1) * sweep.Radians());
   } else if (positive(l)) {
-    d = (tt - c0 - l - c1) / l * (InnerRadius - Radius) + Radius;
-    a = StartRadial;
+    d = (tt - c0 - l - c1) / l * (inner_radius - GetRadius()) + GetRadius();
+    a = GetStartRadial();
   } else {
-    d = InnerRadius;
-    a = StartRadial;
+    d = inner_radius;
+    a = GetStartRadial();
   }
-  return GeoVector(d, a).EndPoint(get_location());
+  return GeoVector(d, a).EndPoint(GetReference());
 }
 
 bool
 AnnularSectorZone::IsInSector(const AircraftState &ref) const
 {
-  GeoVector f(get_location(), ref.location);
+  GeoVector f(GetReference(), ref.location);
 
-  return (f.distance <= Radius) &&
-         (f.distance >= InnerRadius) &&
-         angleInSector(f.bearing);
+  return (f.distance <= GetRadius()) &&
+    (f.distance >= inner_radius) &&
+    IsAngleInSector(f.bearing);
 }
 
 bool
-AnnularSectorZone::equals(const ObservationZonePoint* other) const
+AnnularSectorZone::Equals(const ObservationZonePoint &other) const
 {
-  const AnnularSectorZone *z = (const AnnularSectorZone *)other;
+  const AnnularSectorZone &z = (const AnnularSectorZone &)other;
 
-  return SectorZone::equals(other) && InnerRadius == z->InnerRadius;
+  return SectorZone::Equals(other) && inner_radius == z.inner_radius;
 }

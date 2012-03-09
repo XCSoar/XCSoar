@@ -81,8 +81,8 @@ public:
    * @param current Taskpoint this is located at
    * @param next Following task point (destination of outbound leg)
    */
-  virtual void set_legs(const GeoPoint *previous, const GeoPoint *current,
-                        const GeoPoint *next) {};
+  virtual void SetLegs(const GeoPoint *previous, const GeoPoint *current,
+                       const GeoPoint *next) {};
 
   /**
    * Test whether an OZ is equivalent to this one
@@ -91,7 +91,7 @@ public:
    *
    * @return True if same location and OZ
    */
-  virtual bool equals(const ObservationZonePoint* other) const;
+  virtual bool Equals(const ObservationZonePoint &other) const;
 
   /**
    * Generate a random location inside the OZ (to be used for testing)
@@ -100,7 +100,7 @@ public:
    *
    * @return Location of point
    */
-  virtual GeoPoint randomPointInSector(const fixed mag) const = 0;
+  virtual GeoPoint GetRandomPointInSector(const fixed mag) const = 0;
 
   /**
    * Clone this object with optional shift
@@ -108,19 +108,19 @@ public:
    * @param _location New location, or if NULL, uses object's location
    * @return Cloned object
    */
-  virtual ObservationZonePoint* clone(const GeoPoint* _location = 0) const = 0;
+  virtual ObservationZonePoint *Clone(const GeoPoint *location=NULL) const = 0;
 
   /**
    * distance from this to the reference
    */
-  fixed distance(const GeoPoint & ref) const {
+  fixed DistanceTo(const GeoPoint &ref) const {
     return reference.Distance(ref);
   }
 
   /**
    * The actual location
    */
-  const GeoPoint & get_location() const {
+  const GeoPoint &GetReference() const {
     return reference;
   }
 };
