@@ -40,11 +40,13 @@ Notify::Notify()
 
 Notify::~Notify()
 {
+  if (pending.Get()) {
 #ifdef ANDROID
-  event_queue->Purge(*this);
+    event_queue->Purge(*this);
 #elif defined(ENABLE_SDL)
-  EventQueue::Purge(*this);
+    EventQueue::Purge(*this);
 #endif
+  }
 }
 
 void
