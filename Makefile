@@ -270,6 +270,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	\
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/PopupOperationEnvironment.cpp \
 	$(SRC)/Operation/MessageOperationEnvironment.cpp \
 	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \
