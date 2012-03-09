@@ -577,6 +577,8 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -752,6 +754,8 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
@@ -1127,6 +1131,8 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -1152,6 +1158,8 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1208,6 +1216,8 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1234,6 +1244,8 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
@@ -1253,6 +1265,8 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
@@ -1946,6 +1960,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/IO/ConfiguredFile.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Register.cpp \

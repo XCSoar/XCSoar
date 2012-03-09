@@ -271,6 +271,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/PopupOperationEnvironment.cpp \
 	$(SRC)/Operation/MessageOperationEnvironment.cpp \
 	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \

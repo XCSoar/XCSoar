@@ -24,6 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Protocol.hpp"
 #include "Operation/Operation.hpp"
+#include "Operation/NoCancelOperationEnvironment.hpp"
 #include "Device/Port/Port.hpp"
 #include "Profile/DeviceConfig.hpp"
 
@@ -95,17 +96,25 @@ CAI302Device::SetBaudRate(unsigned baud_rate, OperationEnvironment &env)
 bool
 CAI302Device::EnableBulkMode(OperationEnvironment &env)
 {
+  /* this operation should not be cancellable, because we don't know
+     what to do with a partial result */
+  NoCancelOperationEnvironment env2(env);
+
   return !config.UsesSpeed() || config.bulk_baud_rate == 0 ||
     config.bulk_baud_rate == config.baud_rate ||
-    SetBaudRate(config.bulk_baud_rate, env);
+    SetBaudRate(config.bulk_baud_rate, env2);
 }
 
 bool
 CAI302Device::DisableBulkMode(OperationEnvironment &env)
 {
+  /* even if the operation was cancelled, switch back to the normal
+     baud rate safely */
+  NoCancelOperationEnvironment env2(env);
+
   return !config.UsesSpeed() || config.bulk_baud_rate == 0 ||
     config.bulk_baud_rate == config.baud_rate ||
-    SetBaudRate(config.baud_rate, env);
+    SetBaudRate(config.baud_rate, env2);
 }
 
 void
