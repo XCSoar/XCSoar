@@ -40,6 +40,21 @@ CylinderZone::GetBoundaryParametric(fixed t) const
            EndPoint(GetReference());
 }
 
+ObservationZone::Boundary
+CylinderZone::GetBoundary() const
+{
+  Boundary boundary;
+
+  const unsigned steps = 20;
+  const Angle delta = Angle::FullCircle() / steps;
+
+  GeoVector vector(GetRadius(), Angle::Zero());
+  for (unsigned i = 0; i < steps; ++i, vector.bearing += delta)
+    boundary.push_front(vector.EndPoint(GetReference()));
+
+  return boundary;
+}
+
 bool
 CylinderZone::Equals(const ObservationZonePoint &other) const
 {

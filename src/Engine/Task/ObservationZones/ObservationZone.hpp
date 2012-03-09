@@ -25,8 +25,9 @@
 #define OBSERVATIONZONE_HPP
 
 #include "Math/fixed.hpp"
-
 #include "Compiler.h"
+
+#include <forward_list>
 
 struct GeoPoint;
 struct AircraftState;
@@ -38,6 +39,8 @@ struct AircraftState;
 class ObservationZone
 {
 public:
+  typedef std::forward_list<GeoPoint> Boundary;
+
   virtual ~ObservationZone() {}
 
   /** 
@@ -109,6 +112,21 @@ public:
    */
   gcc_pure
   virtual GeoPoint GetBoundaryParametric(fixed t) const = 0;
+
+  /**
+   * Return an unordered list of boundary points for evaluation by the
+   * class #TaskDijkstra.  It shall contain all corners, all middle
+   * points of straight lines and approximations for arcs.
+   *
+   * Even though there is no specific ordering, the most important
+   * points should be at the front of the list if possible, to avoid
+   * rounding problems as much as possible; for example, the
+   * LineSectorZone has its center point at the beginning, so
+   * TaskDijkstra chooses the outer points only if there is a
+   * measurable advantage.
+   */
+  gcc_pure
+  virtual Boundary GetBoundary() const = 0;
 
   /**
    * Distance reduction for scoring when outside this OZ

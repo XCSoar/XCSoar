@@ -172,6 +172,16 @@ OZWindow::OnPaint(Canvas &canvas)
   roz.Draw(canvas, OZRenderer::LAYER_SHADE, projection, *oz, offset);
   roz.Draw(canvas, OZRenderer::LAYER_INACTIVE, projection, *oz, offset);
   roz.Draw(canvas, OZRenderer::LAYER_ACTIVE, projection, *oz, offset);
+
+  /* debugging for ObservationZone::GetBoundary() */
+  Pen pen(1, COLOR_RED);
+  canvas.Select(pen);
+  const ObservationZone::Boundary boundary = oz->GetBoundary();
+  for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
+    RasterPoint p = projection.GeoToScreen(*i);
+    canvas.line(p.x - 3, p.y - 3, p.x + 3, p.y + 3);
+    canvas.line(p.x + 3, p.y - 3, p.x - 3, p.y + 3);
+  }
 }
 
 static void

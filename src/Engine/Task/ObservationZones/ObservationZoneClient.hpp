@@ -97,6 +97,8 @@ public:
    */
   GeoPoint GetBoundaryParametric(fixed t) const;
 
+  virtual Boundary GetBoundary() const;
+
 protected:
   /**
    * Check transition constraints

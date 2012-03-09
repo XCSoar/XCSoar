@@ -45,6 +45,30 @@ SectorZone::GetBoundaryParametric(fixed t) const
   return GeoVector(d, a).EndPoint(GetReference());
 }
 
+
+ObservationZone::Boundary
+SectorZone::GetBoundary() const
+{
+  Boundary boundary;
+
+  boundary.push_front(GetReference());
+  boundary.push_front(GetSectorStart());
+  boundary.push_front(GetSectorEnd());
+
+  const unsigned steps = 20;
+  const Angle delta = Angle::FullCircle() / steps;
+  const Angle start = GetStartRadial().AsBearing();
+  Angle end = GetEndRadial().AsBearing();
+  if (end <= start)
+    end += Angle::FullCircle();
+
+  GeoVector vector(GetRadius(), start + delta);
+  for (; vector.bearing < end; vector.bearing += delta)
+    boundary.push_front(vector.EndPoint(GetReference()));
+
+  return boundary;
+}
+
 fixed
 SectorZone::ScoreAdjustment() const
 {

@@ -53,6 +53,38 @@ AnnularSectorZone::GetBoundaryParametric(fixed t) const
   return GeoVector(d, a).EndPoint(GetReference());
 }
 
+ObservationZone::Boundary
+AnnularSectorZone::GetBoundary() const
+{
+  Boundary boundary;
+
+  const unsigned steps = 20;
+  const Angle delta = Angle::FullCircle() / steps;
+  const Angle start = GetStartRadial().AsBearing();
+  Angle end = GetEndRadial().AsBearing();
+
+  const GeoPoint inner_start =
+    GeoVector(GetInnerRadius(), GetStartRadial()).EndPoint(GetReference());
+  const GeoPoint inner_end =
+    GeoVector(GetInnerRadius(), GetEndRadial()).EndPoint(GetReference());
+
+  GeoVector inner_vector(GetInnerRadius(), start + delta);
+  for (; inner_vector.bearing < end; inner_vector.bearing += delta)
+    boundary.push_front(inner_vector.EndPoint(GetReference()));
+
+  boundary.push_front(inner_end);
+  boundary.push_front(inner_start);
+
+  GeoVector vector(GetRadius(), start + delta);
+  for (; vector.bearing < end; vector.bearing += delta)
+    boundary.push_front(vector.EndPoint(GetReference()));
+
+  boundary.push_front(GetSectorEnd());
+  boundary.push_front(GetSectorStart());
+
+  return boundary;
+}
+
 bool
 AnnularSectorZone::IsInSector(const AircraftState &ref) const
 {

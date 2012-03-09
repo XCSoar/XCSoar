@@ -58,6 +58,12 @@ ObservationZoneClient::GetBoundaryParametric(fixed t) const
   return oz_point->GetBoundaryParametric(t);
 }
 
+ObservationZone::Boundary
+ObservationZoneClient::GetBoundary() const
+{
+  return oz_point->GetBoundary();
+}
+
 bool
 ObservationZoneClient::TransitionConstraint(const AircraftState & ref_now,
                                             const AircraftState & ref_last) const

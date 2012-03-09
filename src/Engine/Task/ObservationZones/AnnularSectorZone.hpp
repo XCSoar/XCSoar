@@ -119,6 +119,8 @@ public:
    */
   GeoPoint GetBoundaryParametric(fixed t) const;
 
+  virtual Boundary GetBoundary() const;
+
   /**
    * Test whether an OZ is equivalent to this one
    *

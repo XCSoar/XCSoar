@@ -87,8 +87,9 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
   boundary_points.clear();
 
   if (boundary_scored) {
-    for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
-      SearchPoint sp(GetBoundaryParametric(t));
+    const Boundary boundary = GetBoundary();
+    for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
+      SearchPoint sp(*i);
       boundary_points.push_back(sp);
     }
 

@@ -84,6 +84,8 @@ public:
    */
   GeoPoint GetBoundaryParametric(fixed t) const;  
 
+  // TODO: implement virtual Boundary GetBoundary() const;
+
   /**
    * Distance reduction for scoring when outside this OZ
    *

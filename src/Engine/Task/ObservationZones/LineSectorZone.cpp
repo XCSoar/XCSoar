@@ -28,6 +28,16 @@ GeoPoint LineSectorZone::GetBoundaryParametric(fixed t) const
   return GetSectorStart().Interpolate(GetSectorEnd(), t);
 }
 
+ObservationZone::Boundary
+LineSectorZone::GetBoundary() const
+{
+  Boundary boundary;
+  boundary.push_front(GetSectorEnd());
+  boundary.push_front(GetSectorStart());
+  boundary.push_front(GetReference());
+  return boundary;
+}
+
 fixed
 LineSectorZone::ScoreAdjustment() const
 {
