@@ -208,11 +208,15 @@ Window::OnMessage(HWND _hWnd, UINT message,
 
   case WM_SETFOCUS:
     OnSetFocus();
-    return 0;
+    /* pass on to DefWindowProc() so the underlying window class knows
+       it's focused */
+    break;
 
   case WM_KILLFOCUS:
     OnKillFocus();
-    return 0;
+    /* pass on to DefWindowProc() so the underlying window class knows
+       it's not focused anymore */
+    break;
 
   case WM_TIMER:
     if (OnTimer(*(WindowTimer *)wParam))
