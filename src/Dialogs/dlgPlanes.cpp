@@ -51,7 +51,7 @@ struct ListItem
   StaticString<MAX_PATH> path;
 
   bool operator<(const ListItem &i2) const {
-    return _tcscmp(name, i2.name) == -1;
+    return _tcscmp(name, i2.name) < 0;
   }
 };
 
