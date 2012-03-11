@@ -53,11 +53,8 @@ public:
     UpdateSector();
   }
 
-  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
-    if (_location)
-      return new LineSectorZone(*this, *_location);
-
-    return new LineSectorZone(*this, GetReference());
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new LineSectorZone(*this, _reference);
   }
 
   /**

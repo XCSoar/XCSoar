@@ -108,7 +108,11 @@ public:
    * @param _location New location, or if NULL, uses object's location
    * @return Cloned object
    */
-  virtual ObservationZonePoint *Clone(const GeoPoint *location=NULL) const = 0;
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const = 0;
+
+  ObservationZonePoint *Clone() const {
+    return Clone(GetReference());
+  }
 
   /**
    * distance from this to the reference

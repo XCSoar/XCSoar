@@ -59,11 +59,8 @@ public:
   CylinderZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0))
     :ObservationZonePoint(CYLINDER, loc), radius(_radius) {}
 
-  virtual ObservationZonePoint *Clone(const GeoPoint * _location=NULL) const {
-    if (_location)
-      return new CylinderZone(*this, *_location);
-
-    return new CylinderZone(*this, GetReference());
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new CylinderZone(*this, _reference);
   }
 
   /** 

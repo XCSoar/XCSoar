@@ -64,11 +64,8 @@ public:
     UpdateSector();
   }
 
-  virtual ObservationZonePoint *Clone(const GeoPoint * _location=NULL) const {
-    if (_location)
-      return new KeyholeZone(*this, *_location);
-
-    return new KeyholeZone(*this, GetReference());
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new KeyholeZone(*this, _reference);
   }
 
   /** 

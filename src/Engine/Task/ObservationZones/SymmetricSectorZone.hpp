@@ -52,8 +52,6 @@ protected:
      sector_angle(other.sector_angle) {}
 
 public:
-  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const = 0;
-
   /**
    * Update radials when previous/next legs are modified.
    *

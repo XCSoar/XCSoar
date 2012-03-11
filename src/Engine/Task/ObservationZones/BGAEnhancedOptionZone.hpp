@@ -52,11 +52,8 @@ public:
     UpdateSector();
   }
 
-  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
-    if (_location)
-      return new BGAEnhancedOptionZone(*this, *_location);
-
-    return new BGAEnhancedOptionZone(*this, GetReference());
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new BGAEnhancedOptionZone(*this, _reference);
   }
 };
 

@@ -49,11 +49,8 @@ public:
     UpdateSector();
   }
 
-  virtual ObservationZonePoint *Clone(const GeoPoint *_location=NULL) const {
-    if (_location)
-      return new BGAFixedCourseZone(*this, *_location);
-
-    return new BGAFixedCourseZone(*this, GetReference());
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new BGAFixedCourseZone(*this, _reference);
   }
 };
 
