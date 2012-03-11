@@ -26,7 +26,7 @@
 GeoPoint
 SectorZone::GetBoundaryParametric(fixed t) const
 {
-  const Angle sweep = (EndRadial - start_radial).AsBearing();
+  const Angle sweep = (end_radial - start_radial).AsBearing();
   const fixed l = GetRadius();
   const fixed c1 = sweep.Radians() * GetRadius();
   const fixed tt = t * (c1 + 2 * l);
@@ -40,7 +40,7 @@ SectorZone::GetBoundaryParametric(fixed t) const
     a = start_radial + Angle::Radians(((tt - l) / c1) * sweep.Radians());
   } else {
     d = GetRadius() - (tt - l - c1) / l * GetRadius();
-    a = EndRadial;
+    a = end_radial;
   }
   return GeoVector(d, a).EndPoint(GetReference());
 }
@@ -55,7 +55,7 @@ void
 SectorZone::UpdateSector() 
 {
   sector_start = GeoVector(GetRadius(), start_radial).EndPoint(GetReference());
-  sector_end = GeoVector(GetRadius(), EndRadial).EndPoint(GetReference());
+  sector_end = GeoVector(GetRadius(), end_radial).EndPoint(GetReference());
 }
 
 bool 
@@ -76,14 +76,14 @@ SectorZone::SetStartRadial(const Angle x)
 void
 SectorZone::SetEndRadial(const Angle x)
 {
-  EndRadial = x;
+  end_radial = x;
   UpdateSector();
 }
 
 bool
 SectorZone::IsAngleInSector(const Angle b) const
 {
-  return b.Between(start_radial, EndRadial);
+  return b.Between(start_radial, end_radial);
 }
 
 bool
@@ -93,5 +93,5 @@ SectorZone::Equals(const ObservationZonePoint &other) const
 
   return CylinderZone::Equals(other) &&
     start_radial == z.GetStartRadial() &&
-    EndRadial == z.GetEndRadial();
+    end_radial == z.GetEndRadial();
 }

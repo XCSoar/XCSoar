@@ -38,20 +38,20 @@ class SectorZone: public CylinderZone
   GeoPoint sector_end;
 
   Angle start_radial;
-  Angle EndRadial;
+  Angle end_radial;
 
 protected:
   SectorZone(Shape _shape, const GeoPoint &loc,
              const fixed _radius = fixed(10000.0),
-             const Angle _startRadial = Angle::Zero(),
-             const Angle _endRadial = Angle::FullCircle())
+             const Angle _start_radial = Angle::Zero(),
+             const Angle _end_radial = Angle::FullCircle())
     :CylinderZone(_shape, loc, _radius),
-     start_radial(_startRadial), EndRadial(_endRadial) {}
+     start_radial(_start_radial), end_radial(_end_radial) {}
 
   SectorZone(const SectorZone &other, const GeoPoint &reference)
     :CylinderZone((const CylinderZone &)other, reference),
      sector_start(other.sector_start), sector_end(other.sector_end),
-     start_radial(other.start_radial), EndRadial(other.EndRadial) {}
+     start_radial(other.start_radial), end_radial(other.end_radial) {}
 
 public:
   /**
@@ -59,16 +59,16 @@ public:
    *
    * @param loc Location of tip of sector
    * @param _radius Radius of sector (m)
-   * @param _startRadial Start radial (degrees), most counter-clockwise
-   * @param _endRadial End radial (degrees), most clockwise
+   * @param _start_radial Start radial (degrees), most counter-clockwise
+   * @param _end_radial End radial (degrees), most clockwise
    *
    * @return Initialised object
    */
   SectorZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0),
-             const Angle _startRadial = Angle::Zero(),
-             const Angle _endRadial = Angle::FullCircle())
+             const Angle _start_radial = Angle::Zero(),
+             const Angle _end_radial = Angle::FullCircle())
     :CylinderZone(SECTOR, loc, _radius),
-     start_radial(_startRadial), EndRadial(_endRadial)
+     start_radial(_start_radial), end_radial(_end_radial)
   {
     UpdateSector();
   }
@@ -109,7 +109,7 @@ public:
    * @return Angle (deg) of radial
    */
   Angle GetEndRadial() const {
-    return EndRadial;
+    return end_radial;
   }
 
   /**
