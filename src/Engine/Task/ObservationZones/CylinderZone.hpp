@@ -24,7 +24,7 @@
 #ifndef CYLINDERZONE_HPP
 #define CYLINDERZONE_HPP
 
-#include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+#include "ObservationZonePoint.hpp"
 #include "Navigation/Aircraft.hpp"
 
 #include <assert.h>

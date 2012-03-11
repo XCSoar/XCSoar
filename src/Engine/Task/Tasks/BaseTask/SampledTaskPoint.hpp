@@ -24,7 +24,7 @@
 #define SAMPLEDTASKPOINT_H
 
 #include "Navigation/SearchPointVector.hpp"
-#include "ObservationZone.hpp"
+#include "Task/ObservationZones/ObservationZone.hpp"
 #include "TaskWaypoint.hpp"
 #include "Compiler.h"
 

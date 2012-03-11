@@ -26,7 +26,7 @@
 
 #include "TaskLeg.hpp"
 #include "ScoredTaskPoint.hpp"
-#include "ObservationZoneClient.hpp"
+#include "Task/ObservationZones/ObservationZoneClient.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Compiler.h"
 

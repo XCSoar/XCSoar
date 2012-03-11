@@ -24,7 +24,7 @@ Copyright_License {
 #include "Declaration.hpp"
 #include "Logger/Settings.hpp"
 #include "Plane/Plane.hpp"
-#include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+#include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"

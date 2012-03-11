@@ -21,7 +21,7 @@
  */
 
 #include "OrderedTaskPoint.hpp"
-#include "ObservationZonePoint.hpp"
+#include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"

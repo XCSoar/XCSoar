@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/StaticArray.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
-#include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+#include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "Markers/Markers.hpp"
 #include "FLARM/Traffic.hpp"

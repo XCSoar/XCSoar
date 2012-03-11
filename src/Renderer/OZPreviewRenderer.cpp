@@ -25,7 +25,6 @@ Copyright_License {
 #include "OZRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
-#include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"

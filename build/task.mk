@@ -71,8 +71,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/Tasks/UnorderedTask.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/IntermediatePoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZoneClient.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZonePoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/OrderedTaskPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/SampledTaskPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ScoredTaskPoint.cpp \
@@ -84,6 +82,8 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATIsoline.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATIsolineSegment.cpp \
+	$(ENGINE_SRC_DIR)/Task/ObservationZones/ObservationZoneClient.cpp \
+	$(ENGINE_SRC_DIR)/Task/ObservationZones/ObservationZonePoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/CylinderZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/SectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/LineSectorZone.cpp \
