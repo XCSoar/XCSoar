@@ -313,7 +313,35 @@ public:
 
   gcc_pure
   Angle
+  operator*(const int x) const
+  {
+    return Angle(value * x);
+  }
+
+  gcc_pure
+  Angle
+  operator*(const unsigned x) const
+  {
+    return Angle(value * x);
+  }
+
+  gcc_pure
+  Angle
   operator/(const fixed x) const
+  {
+    return Angle(value / x);
+  }
+
+  gcc_pure
+  Angle
+  operator/(const int x) const
+  {
+    return Angle(value / x);
+  }
+
+  gcc_pure
+  Angle
+  operator/(const unsigned x) const
   {
     return Angle(value / x);
   }
