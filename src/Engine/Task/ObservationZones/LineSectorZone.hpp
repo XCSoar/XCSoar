@@ -98,7 +98,7 @@ public:
    *
    * @return Length (m) of line
    */
-  fixed getLength() const {
+  fixed GetLength() const {
     return Double(GetRadius());
   }
 

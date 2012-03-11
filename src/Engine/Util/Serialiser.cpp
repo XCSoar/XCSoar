@@ -176,7 +176,7 @@ void
 Serialiser::Visit(const LineSectorZone& data)
 {
   m_node.set_attribute(_T("type"), _T("Line"));
-  m_node.set_attribute(_T("length"), data.getLength());
+  m_node.set_attribute(_T("length"), data.GetLength());
 }
 
 void 

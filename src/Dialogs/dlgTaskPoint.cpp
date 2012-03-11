@@ -121,7 +121,7 @@ RefreshView()
     ShowFormControl(*wf, _T("frmOZLine"), true);
 
     LoadFormProperty(*wf, _T("prpOZLineLength"), UnitGroup::DISTANCE,
-                     ((const LineSectorZone &)oz).getLength());
+                     ((const LineSectorZone &)oz).GetLength());
     break;
 
   case ObservationZonePoint::CYLINDER:
@@ -242,7 +242,7 @@ ReadValues()
     fixed line_length = Units::ToSysDistance(
         GetFormValueFixed(*wf, _T("prpOZLineLength")));
 
-    if (fabs(line_length - ((LineSectorZone &)oz).getLength()) > fixed(49)) {
+    if (fabs(line_length - ((LineSectorZone &)oz).GetLength()) > fixed(49)) {
       ((LineSectorZone &)oz).SetLength(line_length);
       task_modified = true;
     }

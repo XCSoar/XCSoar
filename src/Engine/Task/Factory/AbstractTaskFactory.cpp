@@ -44,7 +44,7 @@ GetOZSize(ObservationZonePoint *oz)
     return ((SectorZone *)oz)->GetRadius();
 
   case ObservationZonePoint::LINE:
-    return ((LineSectorZone *)oz)->getLength();
+    return ((LineSectorZone *)oz)->GetLength();
 
   case ObservationZonePoint::CYLINDER:
     return ((CylinderZone *)oz)->GetRadius();
