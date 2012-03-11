@@ -45,6 +45,7 @@ Copyright_License {
 #include "MapItemList.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "Terrain/RasterTerrain.hpp"
 
 class AirspaceWarningList
 {
@@ -150,8 +151,21 @@ public:
 };
 
 void
-MapItemListBuilder::AddLocation(const GeoVector &vector, short elevation)
+MapItemListBuilder::AddLocation(const NMEAInfo &basic,
+                                const RasterTerrain *terrain)
 {
+  GeoVector vector;
+  if (basic.location_available)
+    vector = basic.location.DistanceBearing(location);
+  else
+    vector.SetInvalid();
+
+  short elevation;
+  if (terrain != NULL)
+    elevation = terrain->GetTerrainHeight(location);
+  else
+    elevation = RasterBuffer::TERRAIN_INVALID;
+
   list.checked_append(new LocationMapItem(vector, elevation));
 }
 

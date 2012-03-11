@@ -39,6 +39,8 @@ class ProtectedTaskManager;
 class ProtectedMarkers;
 struct FlarmState;
 struct ThermalLocatorInfo;
+struct NMEAInfo;
+class RasterTerrain;
 
 class MapItemListBuilder
 {
@@ -50,7 +52,7 @@ public:
   MapItemListBuilder(MapItemList &_list, GeoPoint _location, fixed _range)
     :list(_list), location(_location), range(_range) {}
 
-  void AddLocation(const GeoVector &vector, short elevation);
+  void AddLocation(const NMEAInfo &basic, const RasterTerrain *terrain);
   void AddSelfIfNear(const GeoPoint &self, const Angle &bearing);
   void AddWaypoints(const Waypoints &waypoints);
   void AddVisibleAirspace(const Airspaces &airspaces,

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
-#include "Terrain/RasterTerrain.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
@@ -42,19 +41,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
 
-  GeoVector vector;
-  if (Basic().location_available)
-    vector = Basic().location.DistanceBearing(location);
-  else
-    vector.SetInvalid();
-
-  short elevation;
-  if (terrain)
-    elevation = terrain->GetTerrainHeight(location);
-  else
-    elevation = RasterBuffer::TERRAIN_INVALID;
-
-  builder.AddLocation(vector, elevation);
+  builder.AddLocation(Basic(), terrain);
 
   if (Basic().location_available)
     builder.AddSelfIfNear(Basic().location, Calculated().heading);
