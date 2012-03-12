@@ -872,6 +872,7 @@ $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_XML_PARSER_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/XML/xmlParser.cpp \
 	$(TEST_SRC_DIR)/RunXMLParser.cpp
 RUN_XML_PARSER_DEPENDS = IO

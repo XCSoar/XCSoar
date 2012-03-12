@@ -250,4 +250,40 @@ StringIsEqual(const char *str1, const char *str2)
 }
 #endif
 
+/**
+ * Copy the string to a new allocation.  The return value must be
+ * freed with free().
+ */
+gcc_malloc
+static inline char *
+DuplicateString(const char *p)
+{
+  return strdup(p);
+}
+
+/**
+ * Copy a portion of the string to a new allocation.  The given length
+ * must not be smaller than the actual length of the null-terminated
+ * string.  The return value will be null-terminated and must be freed
+ * with free().
+ */
+gcc_malloc
+char *
+DuplicateString(const char *p, size_t length);
+
+#ifdef _UNICODE
+
+gcc_malloc
+static inline TCHAR *
+DuplicateString(const TCHAR *p)
+{
+  return _tcsdup(p);
+}
+
+gcc_malloc
+TCHAR *
+DuplicateString(const TCHAR *p, size_t length);
+
+#endif
+
 #endif

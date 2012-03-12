@@ -137,3 +137,23 @@ NormalizeSearchString(TCHAR *gcc_restrict dest,
 
   return retval;
 }
+
+char *
+DuplicateString(const char *p, size_t length)
+{
+  char *q = (char *)malloc((length + 1) * sizeof(*p));
+  if (q != NULL)
+    *std::copy(p, p + length, q) = '\0';
+  return q;
+}
+
+#ifdef _UNICODE
+TCHAR *
+DuplicateString(const TCHAR *p, size_t length)
+{
+  TCHAR *q = (TCHAR *)malloc((length + 1) * sizeof(*p));
+  if (q != NULL)
+    *std::copy(p, p + length, q) = _T('\0');
+  return q;
+}
+#endif

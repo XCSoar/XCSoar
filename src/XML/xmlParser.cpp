@@ -599,24 +599,6 @@ FindEndOfText(const TCHAR *lpszToken, size_t *pcbText)
   }
 }
 
-
-/**
- * Duplicate (copy in a new allocated buffer) the source string.
- */
-static TCHAR *
-stringDup(const TCHAR *lpszData, size_t cbData)
-{
-  assert(lpszData != NULL);
-
-  TCHAR *lpszNew = (TCHAR *)malloc((cbData + 1) * sizeof(TCHAR));
-  assert(lpszNew);
-  if (lpszNew) {
-    memcpy(lpszNew, lpszData, (cbData) * sizeof(TCHAR));
-    lpszNew[cbData] = (TCHAR)NULL;
-  }
-  return lpszNew;
-}
-
 /**
  * Recursively parse an XML element.
  */
@@ -708,7 +690,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
-        pNew = &AddChild(stringDup(token.pStr, cbToken), nDeclaration);
+        pNew = &AddChild(DuplicateString(token.pStr, cbToken), nDeclaration);
 
         while (true) {
           // Callself to process the new node.  If we return
@@ -754,8 +736,9 @@ XMLNode::ParseXMLElement(XML *pXML)
                 return true;
 
               // Add the new element and recurse
-              pNew = &AddChild(stringDup(pXML->lpNewElement,
-                                         pXML->cbNewElement), false);
+              pNew = &AddChild(DuplicateString(pXML->lpNewElement,
+                                               pXML->cbNewElement),
+                               false);
               pXML->cbNewElement = 0;
             } else {
               // If we didn't have a new element to create
@@ -873,7 +856,7 @@ XMLNode::ParseXMLElement(XML *pXML)
           // Eg.  'Attribute AnotherAttribute'
         case eTokenText:
           // Add the unvalued attribute to the list
-          AddAttribute(stringDup(lpszTemp, cbTemp), NULL);
+          AddAttribute(DuplicateString(lpszTemp, cbTemp), NULL);
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
           lpszTemp = token.pStr;
@@ -891,7 +874,7 @@ XMLNode::ParseXMLElement(XML *pXML)
 
           if (cbTemp)
             // Add the unvalued attribute to the list
-            AddAttribute(stringDup(lpszTemp, cbTemp), NULL);
+            AddAttribute(DuplicateString(lpszTemp, cbTemp), NULL);
 
           // If this is the end of the tag then return to the caller
           if (type == eTokenShortHandClose)
@@ -942,8 +925,8 @@ XMLNode::ParseXMLElement(XML *pXML)
               token.pStr++;
               cbToken -= 2;
             }
-            AddAttribute(stringDup(lpszTemp, cbTemp), fromXMLString(
-                                                                    token.pStr, cbToken));
+            AddAttribute(DuplicateString(lpszTemp, cbTemp),
+                         fromXMLString(token.pStr, cbToken));
           }
 
           // Indicate we are searching for a new attribute
