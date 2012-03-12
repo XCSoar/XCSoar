@@ -300,17 +300,16 @@ ConnectionProcessTimer()
 
   const NMEAInfo &basic = CommonInterface::Basic();
 
-  bool connected_now = basic.alive;
+  const bool connected_now = basic.alive,
+    location_now = basic.location_available;
   if (connected_now) {
-    if (basic.location_available) {
+    if (location_now) {
       wait_connect = false;
     } else if (!connected_last || location_last) {
       // waiting for lock first time
       InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
     }
-  }
-
-  if (!connected_now && !connected_last) {
+  } else if (!connected_last) {
     if (!wait_connect) {
       // gps is waiting for connection first time
       wait_connect = true;
@@ -319,7 +318,7 @@ ConnectionProcessTimer()
   }
 
   connected_last = connected_now;
-  location_last = basic.location_available;
+  location_last = location_now;
 
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
