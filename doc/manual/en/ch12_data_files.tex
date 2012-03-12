@@ -19,23 +19,25 @@ is good practice to make sure that the file names are recognisable so
 that when making configuration changes there is less risk of confusion
 between different files and different file types.
 
-Although it is a generally good idea to have data files located in
+Regarding older Pocket PC devices it is a good idea to have data files located in
 nonvolatile memory, the use of SD cards and other removable media in
 PDAs can cause performance issues; for smaller files, and files that
 are only accessed at start-up (waypoints, airspace, glide polars,
 configuration files), this is acceptable.  However, terrain and
 topology files are accessed continuously while XCSoar is running, so
 these should be located in faster storage memory.
+For newer Windows Mobile or Android devices this is not an issue any 
+more. The access to modern memory cards usually meets the required performance.   
 
 Many PDAs provide a 'file store' which is nonvolatile; the same
 arguments above apply regarding their use and performance.
 
-All data files should be copied into the directory:
+All data files should be copied into the directory: 
 \begin{verbatim}
 My Documents/XCSoarData
 \end{verbatim}
 
-For PDA users, data can also be stored on the operating system file
+On PDAs data can also be stored on the operating system file
 store, on Compact Flash cards or SD cards under the directory
 \verb|XCSoarData|.
 
@@ -45,16 +47,46 @@ SD Card/XCSoarData
 IPAQ File Store/XCSoarData
 \end{verbatim}
 
-\todonum[inline]{Explain where files are generated to and search paths.}
+If unsure, just start the newly installed XCSoar and it creates the \verb|XCSoarData|
+directory at the right place.
+
+\section{Map Database}\label{sec:map}
+
+A map database (extension \verb|.xcm|) contains terrain,
+topography and optional contents like waypoints and airspaces.
+
+Terrain is a raster digital elevation model represented as an array of
+elevations in meters on a latitude/longitude grid.  The internal file
+format is GeoJPEG2000.
+
+The topography is vector data such as roads, railway lines, large
+built-up areas (cities), miscellaneous populated areas (towns and
+villages), lakes and rivers.  The topography is stored in ERSI Shape
+files which are generated from OpenStreetMap.
+
+Map files can be downloaded from the XCSoar web site:
+
+\url{http://www.xcsoar.org/download/maps/}
+
+To generate a custom map database with different settings and bounds, you
+may use the map generator:
+
+\url{http://mapgen.xcsoar.org/}
+
+As far as waypoints or airspaces are included in the map database CXSoar 
+defaults to them. An e.g. separately configured waypoint file will replace all the 
+waypoints given by the map database.
 
 \section{Waypoints}
 
 XCSoar understands the following waypoint file formats:
 
 \begin{itemize}
-\item WinPilot (\verb|.dat|)
+\item WinPilot/Cambridge (\verb|.dat|)
 \item SeeYou (\verb|.cup|)
 \item Zander (\verb|.wpz|)
+\item OziExplorer (\verb|.wpt|)
+\item GPSDump/FS, GEO and UTM (\verb|.wpt|)
 \end{itemize}
 
 Files are available from the Soaring Turn-points section of the
@@ -74,41 +106,16 @@ if available.
 \section{Airspace}
 
 XCSoar supports airspace files (extension \verb|.txt|) using a sub set
-of the widely distributed OpenAir format. Files are available from the
+of the widely distributed OpenAir format, as well as the Tim Newport-Pearce file
+format (extension \verb|.sua|). Files are available from the
 Special Use Airspace section of the Soaring Server:
 
 \verb|http://soaringweb.org/Airspace|
 
-\todonum[inline]{support for TNP airspace files}
-\todonum[inline]{interference, preference to airspace data in xcm file?}
-
-The following are the list of supported airspace types: Class A, Class
-B, Class C, Class D, Class E, Class F, Prohibited areas, Danger areas,
-Restricted Areas, CTR, No Gliders, Wave, Other.  All other airspace
+The following is the list of supported airspace types: Class A-G, Prohibited, Danger Areas,
+Restricted, Task Area, CTR, No Gliders, Wave, Transponder Mandatory, and Other.  All other airspace
 types will be drawn as type ``Other''.
-
-\section{Map}\label{sec:map}
-
-A map file (extension \verb|.xcm|) contains both terrain and
-topography.
-
-Terrain is a raster digital elevation model represented as an array of
-elevations in meters on a latitude/longitude grid.  The internal file
-format is GeoJPEG2000.
-
-The topography is vector data such as roads, railway lines, large
-built-up areas (cities), miscellaneous populated areas (towns and
-villages), lakes and rivers.  The topography is stored in ERSI Shape
-files which are generated from OpenStreetMap.
-
-Map files can be downloaded from the XCSoar web site:
-
-\url{http://www.xcsoar.org/download/maps/}
-
-To generate a custom map file with different settings and bounds, you
-may use the map generator:
-
-\url{http://mapgen.xcsoar.org/}
+In addition to the OpenAir standard the AR command is recognized as the airspace radio frequency.
 
 \section{Airfield details}
 
@@ -183,13 +190,14 @@ must contain a single row of numbers separated with commas:
 \begin{itemize}
 \item Mass dry gross weight in kg: this is the weight of the glider plus
   a 'standard' pilot without ballast.
-\item Max water ballast in liters (kg)
-\item Speed in km/h for first measurement point, (usually minimum sink speed)
-\item Sink rate in m/s for first measurement point
-\item Speed in km/h for second measurement point, (usually best glide speed)
-\item Sink rate in m/s for second measurement point
-\item Speed in km/h for third measurement point, (usually max manoeuvring speed)
-\item Sink rate in m/s for third measurement point
+\item Max water ballast in liters (kg).
+\item Speed in km/h for first measurement point, (usually minimum sink speed).
+\item Sink rate in m/s for first measurement point.
+\item Speed in km/h for second measurement point, (usually best glide speed).
+\item Sink rate in m/s for second measurement point.
+\item Speed in km/h for third measurement point, (usually max manoeuvring speed).
+\item Sink rate in m/s for third measurement point.
+\item Optional the wing area in m$^2$ to allow the wing load computation. 
 \end{itemize}
 
 An example, for the LS-3 glider, is given below:
@@ -263,10 +271,10 @@ Remove tape from wings and tail
 ...
 \end{verbatim}
 
-%%%%%%%%%%%%%% advanced stuff below..
 \section{Tasks}
 
-Task files (extension \verb|.tsk|) are stored in the XML format.
+Task files (extension \verb|.tsk|) are stored in a XCSoar own XML format, 
+whereas SeeYou tasks can also be loaded from file (extension \verb|.cup|).
 
 \section{Flight logs}
 
@@ -281,6 +289,33 @@ settings.  Typically the circling time step is set to a smaller value
 than cruise in order to give good quality flight logs for replay
 purposes.
 
+\section{FLARM Identification}\label{sec:flarm-ident-file}
+
+The FLARM identification file \verb|xcsoar-flarm.txt| defines a table
+of aircraft registrations or pilot names against the ICAO IDs that are
+optionally broadcast by FLARM equipped aircraft.  These names are
+displayed on the map next to FLARM traffic symbols, for matching ICAO
+IDs.
+
+The format of this file is a list of entries, one for each aircraft,
+of the form {\em icao id=name}, where {\em icao id} is the six-digit
+hex value of the ICAO aircraft ID, and {\em name} is free text
+(limited to 20 characters), describing the aircraft and/or pilot name.
+Short names are preferred in order to reduce clutter on the map
+display.
+
+Example:
+\begin{verbatim}
+DD8F12=WUS
+DA8B06=Chuck Yeager
+\end{verbatim}
+
+Currently this file is limited to a maximum of 200 entries.
+
+Additionally the FlarmNet file \verb|data.fln| is supported. It contains all 
+the FLARM identifications distributed by the FlarmNet community.
+
+%%%%%%%%%%%%%% advanced stuff below..
 \section{Input events}
 
 The input event file (extension \verb|.xci|) is a plain text file
@@ -328,26 +363,3 @@ delay=1500
 hide=yes
 \end{verbatim}
 % 
-
-\section{FLARM Identification file}\label{sec:flarm-ident-file}
-
-The FLARM identification file \verb|xcsoar-flarm.txt| defines a table
-of aircraft registrations or pilot names against the ICAO IDs that are
-optionally broadcast by FLARM equipped aircraft.  These names are
-displayed on the map next to FLARM traffic symbols, for matching ICAO
-IDs.
-
-The format of this file is a list of entries, one for each aircraft,
-of the form {\em icao id=name}, where {\em icao id} is the six-digit
-hex value of the ICAO aircraft ID, and {\em name} is free text
-(limited to 20 characters), describing the aircraft and/or pilot name.
-Short names are preferred in order to reduce clutter on the map
-display.
-
-Example:
-\begin{verbatim}
-DD8F12=WUS
-DA8B06=Chuck Yeager
-\end{verbatim}
-
-Currently this file is limited to a maximum of 200 entries.
