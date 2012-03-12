@@ -47,7 +47,7 @@ DataNodeXML::CreateRoot(const TCHAR *node_name)
 }
 
 void
-DataNodeXML::Serialise(TextWriter &writer)
+DataNodeXML::Serialise(TextWriter &writer) const
 {
   node.serialise(writer, true);
 }

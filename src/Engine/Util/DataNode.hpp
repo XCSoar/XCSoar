@@ -87,7 +87,7 @@ public:
    *
    * @param writer the destination file
    */
-  virtual void Serialise(TextWriter &writer) = 0;
+  virtual void Serialise(TextWriter &writer) const = 0;
 
   /**
    * Set named attribute value

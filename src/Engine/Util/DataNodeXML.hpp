@@ -85,7 +85,7 @@ public:
   virtual DataNode *GetChildNamed(const TCHAR *name) const;
   virtual List ListChildren() const;
   virtual List ListChildrenNamed(const TCHAR *name) const;
-  virtual void Serialise(TextWriter &writer);
+  virtual void Serialise(TextWriter &writer) const;
   virtual void SetAttribute(const TCHAR *name, const TCHAR *value);
   virtual bool GetAttribute(const TCHAR *name, tstring &value) const;
 };
