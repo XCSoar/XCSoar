@@ -291,8 +291,8 @@ CommonProcessTimer()
   SystemProcessTimer();
 }
 
-static int
-ConnectionProcessTimer(int itimeout)
+static void
+ConnectionProcessTimer()
 {
   static bool connected_last = false;
   static bool location_last = false;
@@ -304,10 +304,8 @@ ConnectionProcessTimer(int itimeout)
   if (connected_now) {
     if (basic.location_available) {
       wait_connect = false;
-      itimeout = 0;
     } else if (!connected_last || location_last) {
       // waiting for lock first time
-      itimeout = 0;
       InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
     }
   }
@@ -327,7 +325,6 @@ ConnectionProcessTimer(int itimeout)
 
   connected_last = connected_now;
   location_last = basic.location_available;
-  return itimeout;
 }
 
 void
@@ -339,9 +336,6 @@ ProcessTimer()
     // now check GPS status
     devTick(CommonInterface::Calculated());
 
-    static int itimeout = -1;
-    itimeout++;
-
     // also service replay logger
     if (replay && replay->Update()) {
       if (CommonInterface::MovementDetected())
@@ -350,9 +344,7 @@ ProcessTimer()
       return;
     }
 
-    if (itimeout % 10 == 0)
-      // check connection status every 5 seconds
-      itimeout = ConnectionProcessTimer(itimeout);
+    ConnectionProcessTimer();
   } else {
     static PeriodClock m_clock;
     if (m_clock.Elapsed() < 0)
