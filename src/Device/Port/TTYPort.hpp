@@ -61,6 +61,7 @@ public:
   WaitResult WaitWrite(unsigned timeout_ms);
 
   /* virtual methods from class Port */
+  virtual bool IsValid() const;
   virtual bool Drain();
   virtual void Flush();
   virtual bool SetRxTimeout(unsigned Timeout);

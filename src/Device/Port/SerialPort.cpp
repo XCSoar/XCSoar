@@ -137,6 +137,12 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 }
 
 bool
+SerialPort::IsValid() const
+{
+  return hPort != INVALID_HANDLE_VALUE;
+}
+
+bool
 SerialPort::Drain()
 {
   if (hPort == INVALID_HANDLE_VALUE)

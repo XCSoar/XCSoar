@@ -56,6 +56,7 @@ public:
   AndroidPort(Port::Handler &_handler, PortBridge *bridge);
   virtual ~AndroidPort();
 
+  virtual bool IsValid() const;
   virtual bool Drain();
 
   virtual unsigned GetBaudrate() const;

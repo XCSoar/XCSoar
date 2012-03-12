@@ -76,6 +76,17 @@ public:
   virtual ~Port();
 
   /**
+   * Is the port still valid, or did it fail?  A failed/stale Port
+   * cannot be used, it should be deleted.
+   *
+   * Special case: the TCPPort implementation will return true even if
+   * one client connection has failed, because it is possible to reuse
+   * the listener socket.  Only listener socket failures are fatal by
+   * the definition of this method.
+   */
+  virtual bool IsValid() const = 0;
+
+  /**
    * Writes a string to the serial port
    * @param data Pointer to the first character
    * @param length Length of the string

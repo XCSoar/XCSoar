@@ -41,6 +41,10 @@ public:
   FaultInjectionPort(Handler &_handler)
     :Port(_handler), running(true), timeout(0), baud_rate(DEFAULT_BAUD_RATE) {}
 
+  virtual bool IsValid() const {
+    return inject_port_fault > 0;
+  }
+
   bool Drain() {
     return true;
   }

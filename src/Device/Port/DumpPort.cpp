@@ -34,6 +34,12 @@ DumpPort::~DumpPort()
   delete port;
 }
 
+bool
+DumpPort::IsValid() const
+{
+  return port->IsValid();
+}
+
 size_t
 DumpPort::Write(const void *data, size_t length)
 {

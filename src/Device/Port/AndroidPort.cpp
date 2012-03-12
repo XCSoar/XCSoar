@@ -53,6 +53,12 @@ AndroidPort::~AndroidPort()
   }
 }
 
+bool
+AndroidPort::IsValid() const
+{
+  return bridge != NULL && bridge->isValid(Java::GetEnv());
+}
+
 void
 AndroidPort::Flush()
 {

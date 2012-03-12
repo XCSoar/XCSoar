@@ -36,6 +36,12 @@ NullPort::NullPort(Port::Handler &_handler)
 }
 
 bool
+NullPort::IsValid() const
+{
+  return true;
+}
+
+bool
 NullPort::Drain()
 {
   return true;

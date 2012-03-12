@@ -93,6 +93,12 @@ TCPPort::Open(unsigned port)
 }
 
 bool
+TCPPort::IsValid() const
+{
+  return listener_fd >= 0;
+}
+
+bool
 TCPPort::Drain()
 {
   /* writes are synchronous */

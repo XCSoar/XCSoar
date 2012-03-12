@@ -28,6 +28,7 @@ Copyright_License {
 #include <string.h>
 
 jmethodID PortBridge::setListener_method;
+jmethodID PortBridge::isValid_method;
 jmethodID PortBridge::drain_method;
 jmethodID PortBridge::getBaudRate_method;
 jmethodID PortBridge::setBaudRate_method;
@@ -40,6 +41,7 @@ PortBridge::Initialise(JNIEnv *env)
 
   setListener_method = env->GetMethodID(cls, "setListener",
                                         "(Lorg/xcsoar/InputListener;)V");
+  isValid_method = env->GetMethodID(cls, "isValid", "()Z");
   drain_method = env->GetMethodID(cls, "drain", "()Z");
   getBaudRate_method = env->GetMethodID(cls, "getBaudRate", "()I");
   setBaudRate_method = env->GetMethodID(cls, "setBaudRate", "(I)Z");

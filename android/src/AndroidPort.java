@@ -31,6 +31,8 @@ interface AndroidPort {
 
   void close();
 
+  boolean isValid();
+
   /**
    * @see Port::Drain()
    */

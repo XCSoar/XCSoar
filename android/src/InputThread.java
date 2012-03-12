@@ -73,6 +73,10 @@ class InputThread extends Thread {
     }
   }
 
+  boolean isValid() {
+    return is != null;
+  }
+
   void setTimeout(int _timeout) {
     timeout = _timeout;
   }

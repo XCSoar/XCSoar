@@ -52,6 +52,12 @@ TTYPort::~TTYPort()
 }
 
 bool
+TTYPort::IsValid() const
+{
+  return valid.Get();
+}
+
+bool
 TTYPort::Drain()
 {
 #ifdef __BIONIC__

@@ -50,6 +50,12 @@ K6BtPort::SendCommand(uint8_t cmd)
   port->Write(data, sizeof(data));
 }
 
+bool
+K6BtPort::IsValid() const
+{
+  return port->IsValid();
+}
+
 size_t
 K6BtPort::Write(const void *_data, size_t length)
 {

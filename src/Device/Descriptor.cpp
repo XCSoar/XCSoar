@@ -684,6 +684,9 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 void
 DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
 {
+  if (port != NULL && !port->IsValid())
+    Close();
+
   if (device == NULL)
     return;
 
