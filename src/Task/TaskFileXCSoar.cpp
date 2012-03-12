@@ -35,12 +35,12 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
   assert(index == 0);
 
   // Load root node
-  DataNode* root = DataNodeXML::load(path);
+  DataNode *root = DataNodeXML::Load(path);
   if (!root)
     return NULL;
 
   // Check if root node is a <Task> node
-  if (!StringIsEqual(root->get_name(), _T("Task"))) {
+  if (!StringIsEqual(root->GetName(), _T("Task"))) {
     delete root;
     return NULL;
   }

@@ -6,7 +6,7 @@
 static OrderedTask *
 LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour)
 {
-  DataNode *node = DataNodeXML::load(path);
+  DataNode *node = DataNodeXML::Load(path);
   if (node == NULL) {
     fprintf(stderr, "Failed to parse XML\n");
     return NULL;

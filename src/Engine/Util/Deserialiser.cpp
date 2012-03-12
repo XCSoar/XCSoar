@@ -44,7 +44,7 @@ void
 Deserialiser::deserialise_point(OrderedTask& data)
 {
   tstring type;
-  if (!m_node.get_attribute(_T("type"), type)) {
+  if (!m_node.GetAttribute(_T("type"), type)) {
     assert(1);
     return;
   }
@@ -110,7 +110,7 @@ ObservationZonePoint*
 Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 {
   tstring type;
-  if (!m_node.get_attribute(_T("type"), type)) {
+  if (!m_node.GetAttribute(_T("type"), type)) {
     assert(1);
     return NULL;
   }
@@ -119,7 +119,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     LineSectorZone *ls = new LineSectorZone(wp.location);
 
     fixed length;
-    if (m_node.get_attribute(_T("length"), length))
+    if (m_node.GetAttribute(_T("length"), length))
       ls->SetLength(length);
 
     return ls;
@@ -127,7 +127,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     CylinderZone *ls = new CylinderZone(wp.location);
 
     fixed radius;
-    if (m_node.get_attribute(_T("radius"), radius))
+    if (m_node.GetAttribute(_T("radius"), radius))
       ls->SetRadius(radius);
 
     return ls;
@@ -137,18 +137,18 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     Angle start, end;
     SectorZone *ls;
 
-    if (m_node.get_attribute(_T("inner_radius"), inner_radius)) {
+    if (m_node.GetAttribute(_T("inner_radius"), inner_radius)) {
       AnnularSectorZone *als = new AnnularSectorZone(wp.location);
       als->SetInnerRadius(inner_radius);
       ls = als;
     } else
       ls = new SectorZone(wp.location);
 
-    if (m_node.get_attribute(_T("radius"), radius))
+    if (m_node.GetAttribute(_T("radius"), radius))
       ls->SetRadius(radius);
-    if (m_node.get_attribute(_T("start_radial"), start))
+    if (m_node.GetAttribute(_T("start_radial"), start))
       ls->SetStartRadial(start);
-    if (m_node.get_attribute(_T("end_radial"), end))
+    if (m_node.GetAttribute(_T("end_radial"), end))
       ls->SetEndRadial(end);
 
     return ls;
@@ -170,8 +170,8 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 void 
 Deserialiser::deserialise(GeoPoint& data)
 {
-  m_node.get_attribute(_T("longitude"), data.longitude);
-  m_node.get_attribute(_T("latitude"), data.latitude);
+  m_node.GetAttribute(_T("longitude"), data.longitude);
+  m_node.GetAttribute(_T("latitude"), data.latitude);
 }
 
 Waypoint*
@@ -187,7 +187,7 @@ Deserialiser::deserialise_waypoint()
   delete loc_node;
 
   tstring name;
-  if (!m_node.get_attribute(_T("name"), name))
+  if (!m_node.GetAttribute(_T("name"), name))
     // Turnpoints need names
     return NULL;
 
@@ -214,9 +214,9 @@ Deserialiser::deserialise_waypoint()
   // Create a new waypoint from the original one
   Waypoint *wp = new Waypoint(loc);
   wp->name = name;
-  m_node.get_attribute(_T("id"), wp->id);
-  m_node.get_attribute(_T("comment"), wp->comment);
-  m_node.get_attribute(_T("altitude"), wp->elevation);
+  m_node.GetAttribute(_T("id"), wp->id);
+  m_node.GetAttribute(_T("comment"), wp->comment);
+  m_node.GetAttribute(_T("altitude"), wp->elevation);
 
   return wp;
 }
@@ -224,18 +224,18 @@ Deserialiser::deserialise_waypoint()
 void 
 Deserialiser::deserialise(OrderedTaskBehaviour& data)
 {
-  m_node.get_attribute(_T("task_scored"), data.task_scored);
-  m_node.get_attribute(_T("aat_min_time"), data.aat_min_time);
-  m_node.get_attribute(_T("start_max_speed"), data.start_max_speed);
-  m_node.get_attribute(_T("start_max_height"), data.start_max_height);
+  m_node.GetAttribute(_T("task_scored"), data.task_scored);
+  m_node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
+  m_node.GetAttribute(_T("start_max_speed"), data.start_max_speed);
+  m_node.GetAttribute(_T("start_max_height"), data.start_max_height);
   data.start_max_height_ref = height_ref(_T("start_max_height_ref"));
-  m_node.get_attribute(_T("finish_min_height"), data.finish_min_height);
+  m_node.GetAttribute(_T("finish_min_height"), data.finish_min_height);
   data.finish_min_height_ref = height_ref(_T("finish_min_height_ref"));
-  m_node.get_attribute(_T("fai_finish"), data.fai_finish);
-  m_node.get_attribute(_T("min_points"), data.min_points);
-  m_node.get_attribute(_T("max_points"), data.max_points);
-  m_node.get_attribute(_T("homogeneous_tps"), data.homogeneous_tps);
-  m_node.get_attribute(_T("is_closed"), data.is_closed);
+  m_node.GetAttribute(_T("fai_finish"), data.fai_finish);
+  m_node.GetAttribute(_T("min_points"), data.min_points);
+  m_node.GetAttribute(_T("max_points"), data.max_points);
+  m_node.GetAttribute(_T("homogeneous_tps"), data.homogeneous_tps);
+  m_node.GetAttribute(_T("is_closed"), data.is_closed);
 }
 
 void 
@@ -262,7 +262,7 @@ HeightReferenceType
 Deserialiser::height_ref(const TCHAR *nodename) const
 {
   tstring type;
-  if (m_node.get_attribute(nodename, type) &&
+  if (m_node.GetAttribute(nodename, type) &&
       StringIsEqual(type.c_str(), _T("MSL")))
     return HeightReferenceType::MSL;
 
@@ -273,7 +273,7 @@ TaskFactoryType
 Deserialiser::task_factory_type() const
 {
   tstring type;
-  if (!m_node.get_attribute(_T("type"),type)) {
+  if (!m_node.GetAttribute(_T("type"),type)) {
     assert(1);
     return TaskFactoryType::FAI_GENERAL;
   }

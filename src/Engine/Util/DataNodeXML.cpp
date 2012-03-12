@@ -37,8 +37,8 @@ DataNodeXML::~DataNodeXML()
   delete m_xml_node;
 }
 
-DataNode* 
-DataNodeXML::load(const TCHAR* path)
+DataNode *
+DataNodeXML::Load(const TCHAR* path)
 {
   NarrowPathName buf(path);
   XMLNode *child = XMLNode::openFileHelper(buf);
@@ -50,27 +50,27 @@ DataNodeXML::load(const TCHAR* path)
   return data_node;
 }
 
-DataNodeXML*
-DataNodeXML::createRoot(const TCHAR *node_name)
+DataNodeXML *
+DataNodeXML::CreateRoot(const TCHAR *node_name)
 {
   XMLNode new_root = XMLNode::createRoot(_tcsdup(node_name));
   return new DataNodeXML(new_root);
 }
 
 void
-DataNodeXML::serialise(TextWriter &writer)
+DataNodeXML::Serialise(TextWriter &writer)
 {
   m_xml_node->serialise(writer, true);
 }
 
 const TCHAR *
-DataNodeXML::get_name() const
+DataNodeXML::GetName() const
 {
   return m_xml_node->getName();
 }
 
 DataNode*
-DataNodeXML::add_child(const TCHAR *name)
+DataNodeXML::AppendChild(const TCHAR *name)
 {
   return new DataNodeXML(m_xml_node->AddChild(_tcsdup(name), false));
 }
@@ -105,13 +105,13 @@ DataNodeXML::ListChildrenNamed(const TCHAR *name) const
 }
 
 void
-DataNodeXML::set_attribute(const TCHAR *name, const TCHAR *value)
+DataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
 {
   m_xml_node->AddAttribute(_tcsdup(name), _tcsdup(value));
 }
 
 bool
-DataNodeXML::get_attribute(const TCHAR *name, tstring &value) const
+DataNodeXML::GetAttribute(const TCHAR *name, tstring &value) const
 {
   const TCHAR *v = m_xml_node->getAttribute(name);
   if (v == NULL)
@@ -123,13 +123,13 @@ DataNodeXML::get_attribute(const TCHAR *name, tstring &value) const
 }
 
 bool
-DataNodeXML::save(const TCHAR* path)
+DataNodeXML::Save(const TCHAR *path)
 {
   /// @todo make xml writing portable (unicode etc)
   TextWriter writer(path);
   if (writer.error())
     return false;
 
-  serialise(writer);
+  Serialise(writer);
   return true;
 }

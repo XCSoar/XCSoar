@@ -10,7 +10,7 @@
 
 static OrderedTask* task_load(OrderedTask* task) {
   PathName szFilename(task_file.c_str());
-  DataNode* root = DataNodeXML::load(szFilename);
+  DataNode *root = DataNodeXML::Load(szFilename);
   if (!root)
     return NULL;
 

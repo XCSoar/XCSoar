@@ -48,7 +48,7 @@ public:
    *
    * @return Copy of name
    */
-  virtual const TCHAR *get_name() const = 0;
+  virtual const TCHAR *GetName() const = 0;
 
   /**
    * Add child to this node
@@ -57,7 +57,7 @@ public:
    *
    * @return Pointer to new child
    */
-  virtual DataNode* add_child(const TCHAR *name) = 0;
+  virtual DataNode* AppendChild(const TCHAR *name) = 0;
 
   /**
    * Retrieve child by name
@@ -87,7 +87,7 @@ public:
    *
    * @param writer the destination file
    */
-  virtual void serialise(TextWriter &writer) = 0;
+  virtual void Serialise(TextWriter &writer) = 0;
 
   /**
    * Set named attribute value
@@ -95,7 +95,7 @@ public:
    * @param name Name of attribute
    * @param value Value of attribute
    */
-  virtual void set_attribute(const TCHAR *name, const TCHAR *value) = 0;
+  virtual void SetAttribute(const TCHAR *name, const TCHAR *value) = 0;
 
   /**
    * Set named attribute value, with numeric to text conversion
@@ -103,9 +103,9 @@ public:
    * @param name Name of attribute
    * @param value Value (fixed)
    */
-  void set_attribute(const TCHAR *name, fixed value);
+  void SetAttribute(const TCHAR *name, fixed value);
 
-  void set_attribute(const TCHAR *name, Angle value);
+  void SetAttribute(const TCHAR *name, Angle value);
 
   /**
    * Set named attribute value, with numeric to text conversion
@@ -113,7 +113,7 @@ public:
    * @param name Name of attribute
    * @param value Value (int)
    */
-  void set_attribute(const TCHAR *name, int value);
+  void SetAttribute(const TCHAR *name, int value);
 
   /**
    * Set named attribute value, with numeric to text conversion
@@ -121,7 +121,7 @@ public:
    * @param name Name of attribute
    * @param value Value (unsigned int)
    */
-  void set_attribute(const TCHAR *name, unsigned value);
+  void SetAttribute(const TCHAR *name, unsigned value);
 
   /**
    * Set named attribute value, with numeric to text conversion
@@ -129,7 +129,7 @@ public:
    * @param name Name of attribute
    * @param value Value (boolean)
    */
-  void set_attribute(const TCHAR *name, bool &value);
+  void SetAttribute(const TCHAR *name, bool &value);
 
   /**
    * Retrieve named attribute value
@@ -139,7 +139,7 @@ public:
    *
    * @return True if attribute exists
    */
-  virtual bool get_attribute(const TCHAR *name, tstring &value) const = 0;
+  virtual bool GetAttribute(const TCHAR *name, tstring &value) const = 0;
 
   /**
    * Retrieve named attribute value, with numeric conversion
@@ -149,19 +149,9 @@ public:
    *
    * @return True if attribute exists
    */
-  bool get_attribute(const TCHAR *name, fixed &value) const;
+  bool GetAttribute(const TCHAR *name, fixed &value) const;
 
-  bool get_attribute(const TCHAR *name, Angle &value) const;
-
-  /**
-   * Retrieve named attribute value, with numeric conversion
-   *
-   * @param name Name of attribute
-   * @param value Value (written)
-   *
-   * @return True if attribute exists
-   */
-  bool get_attribute(const TCHAR *name, int &value) const;
+  bool GetAttribute(const TCHAR *name, Angle &value) const;
 
   /**
    * Retrieve named attribute value, with numeric conversion
@@ -171,7 +161,7 @@ public:
    *
    * @return True if attribute exists
    */
-  bool get_attribute(const TCHAR *name, unsigned &value) const;
+  bool GetAttribute(const TCHAR *name, int &value) const;
 
   /**
    * Retrieve named attribute value, with numeric conversion
@@ -181,7 +171,17 @@ public:
    *
    * @return True if attribute exists
    */
-  bool get_attribute(const TCHAR *name, bool &value) const;
+  bool GetAttribute(const TCHAR *name, unsigned &value) const;
+
+  /**
+   * Retrieve named attribute value, with numeric conversion
+   *
+   * @param name Name of attribute
+   * @param value Value (written)
+   *
+   * @return True if attribute exists
+   */
+  bool GetAttribute(const TCHAR *name, bool &value) const;
 };
 
 #endif

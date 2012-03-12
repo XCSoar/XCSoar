@@ -173,11 +173,11 @@ ProtectedTaskManager::TaskCommit(const OrderedTask& that)
 bool 
 ProtectedTaskManager::TaskSave(const TCHAR* path, const OrderedTask& task)
 {
-  DataNodeXML* root = DataNodeXML::createRoot(_T("Task"));
+  DataNodeXML *root = DataNodeXML::CreateRoot(_T("Task"));
   Serialiser tser(*root);
   tser.serialise(task);
 
-  bool retval = root->save(path);
+  bool retval = root->Save(path);
   delete root;  
   return retval;
 }

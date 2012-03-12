@@ -55,7 +55,7 @@ public:
    *
    * @return Root node (or NULL on failure)
    */
-  static DataNode* load(const TCHAR* path);
+  static DataNode *Load(const TCHAR* path);
 
   /**
    * Create root node
@@ -64,9 +64,7 @@ public:
    *
    * @return Pointer to root node
    */
-  static DataNodeXML* createRoot(const TCHAR *node_name);
-
-  virtual void serialise(TextWriter &writer);
+  static DataNodeXML *CreateRoot(const TCHAR *node_name);
 
   /**
    * Save tree canonically to file
@@ -75,19 +73,17 @@ public:
    *
    * @return True on success
    */
-  bool save(const TCHAR* path);
+  bool Save(const TCHAR* path);
 
-  virtual const TCHAR *get_name() const;
-
-  virtual DataNode *add_child(const TCHAR *name);
-
+  /* virtual methods from DataNode */
+  virtual const TCHAR *GetName() const;
+  virtual DataNode *AppendChild(const TCHAR *name);
   virtual DataNode *GetChildNamed(const TCHAR *name) const;
-
   virtual List ListChildren() const;
   virtual List ListChildrenNamed(const TCHAR *name) const;
-
-  virtual void set_attribute(const TCHAR *name, const TCHAR *value);
-  virtual bool get_attribute(const TCHAR *name, tstring &value) const;
+  virtual void Serialise(TextWriter &writer);
+  virtual void SetAttribute(const TCHAR *name, const TCHAR *value);
+  virtual bool GetAttribute(const TCHAR *name, tstring &value) const;
 };
 
 #endif
