@@ -38,9 +38,6 @@ class OverlappedEvent;
  */
 class SerialPort : public Port, protected StoppableThread
 {
-  /** Name of the serial port */
-  TCHAR sPortName[64];
-
   unsigned baud_rate;
 
   HANDLE hPort;
@@ -60,12 +57,10 @@ public:
   /**
    * Creates a new serial port (RS-232) object, but does not open it yet.
    *
-   * @param path the path of the virtual file to open, e.g. "COM1:"
-   * @param _baud_rate the speed of the port
    * @param _handler the callback object for input received on the
    * port
    */
-  SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
+  SerialPort(Handler &_handler);
 
   /**
    * Closes the serial port (Destructor)
@@ -76,7 +71,7 @@ public:
    * Opens the serial port
    * @return True on success, False on failure
    */
-  bool Open();
+  bool Open(const TCHAR *path, unsigned baud_rate);
 
 protected:
   unsigned GetRxTimeout();

@@ -36,13 +36,9 @@ Copyright_License {
 #include <stdio.h>
 #include <errno.h>
 
-TTYPort::TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
-  :Port(_handler), rx_timeout(0), baud_rate(_baud_rate),
-   fd(-1)
+TTYPort::TTYPort(Handler &_handler)
+  :Port(_handler), rx_timeout(0)
 {
-  assert(path != NULL);
-
-  _tcscpy(sPortName, path);
 }
 
 TTYPort::~TTYPort()
@@ -68,13 +64,14 @@ TTYPort::Drain()
 }
 
 bool
-TTYPort::Open()
+TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
-  fd = open(sPortName, O_RDWR | O_NOCTTY | O_NONBLOCK);
+  fd = open(path, O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd < 0) {
     return false;
   }
 
+  baud_rate = _baud_rate;
   SetBaudrate(baud_rate);
 
   return true;

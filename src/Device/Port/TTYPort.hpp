@@ -32,9 +32,6 @@ Copyright_License {
  */
 class TTYPort : public Port, protected StoppableThread
 {
-  /** Name of the serial port */
-  TCHAR sPortName[64];
-
   unsigned rx_timeout;
 
   unsigned baud_rate;
@@ -45,12 +42,10 @@ public:
   /**
    * Creates a new TTYPort object, but does not open it yet.
    *
-   * @param path the path of the virtual file to open, e.g. "/dev/ttyS0"
-   * @param _baud_rate the speed of the port
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
+  TTYPort(Handler &_handler);
 
   virtual ~TTYPort();
 
@@ -58,7 +53,7 @@ public:
    * Opens the serial port
    * @return True on success, False on failure
    */
-  bool Open();
+  bool Open(const TCHAR *path, unsigned baud_rate);
 
   WaitResult WaitWrite(unsigned timeout_ms);
 

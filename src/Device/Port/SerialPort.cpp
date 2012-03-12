@@ -38,16 +38,9 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-SerialPort::SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
-  :Port(_handler), baud_rate(_baud_rate),
-   hPort(INVALID_HANDLE_VALUE)
-#ifndef _WIN32_WCE
-   , rx_timeout(0)
-#endif
+SerialPort::SerialPort(Handler &_handler)
+  :Port(_handler)
 {
-  assert(path != NULL);
-
-  _tcscpy(sPortName, path);
 }
 
 SerialPort::~SerialPort()
@@ -66,18 +59,18 @@ SerialPort::~SerialPort()
 }
 
 bool
-SerialPort::Open()
+SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
   assert(!Thread::IsInside());
 
 #ifdef _WIN32_WCE
-  is_widcomm = IsWidcommDevice(sPortName);
+  is_widcomm = IsWidcommDevice(path);
 #endif
 
   DCB PortDCB;
 
   // Open the serial port.
-  hPort = CreateFile(sPortName,    // Pointer to the name of the port
+  hPort = CreateFile(path,
                      GENERIC_READ | GENERIC_WRITE, // Access (read-write) mode
                      0,            // Share mode
                      NULL,         // Pointer to the security attribute
@@ -93,6 +86,8 @@ SerialPort::Open()
   if (hPort == INVALID_HANDLE_VALUE) {
     return false;
   }
+
+  baud_rate = _baud_rate;
 
   PortDCB.DCBlength = sizeof(DCB);
 

@@ -159,16 +159,16 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 
 #ifdef HAVE_POSIX
-  TTYPort *Com = new TTYPort(path, config.baud_rate, handler);
+  TTYPort *port = new TTYPort(handler);
 #else
-  SerialPort *Com = new SerialPort(path, config.baud_rate, handler);
+  SerialPort *port = new SerialPort(handler);
 #endif
-  if (!Com->Open()) {
-    delete Com;
+  if (!port->Open(path, config.baud_rate)) {
+    delete port;
     return NULL;
   }
 
-  return Com;
+  return port;
 }
 
 Port *
