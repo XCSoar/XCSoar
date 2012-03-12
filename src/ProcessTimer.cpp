@@ -318,13 +318,13 @@ ConnectionProcessTimer()
     }
   }
 
+  connected_last = connected_now;
+  location_last = basic.location_available;
+
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static QuietOperationEnvironment env;
   AllDevicesAutoReopen(env);
-
-  connected_last = connected_now;
-  location_last = basic.location_available;
 }
 
 void
