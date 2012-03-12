@@ -23,19 +23,8 @@
 #include "DataNodeXML.hpp"
 #include "OS/PathName.hpp"
 #include "IO/TextWriter.hpp"
-#include "XML/xmlParser.hpp"
 
 #include <stdio.h>
-
-DataNodeXML::DataNodeXML(const XMLNode &the_node)
-{
-  m_xml_node = new XMLNode(the_node);
-}
-
-DataNodeXML::~DataNodeXML()
-{
-  delete m_xml_node;
-}
 
 DataNode *
 DataNodeXML::Load(const TCHAR* path)
@@ -60,25 +49,25 @@ DataNodeXML::CreateRoot(const TCHAR *node_name)
 void
 DataNodeXML::Serialise(TextWriter &writer)
 {
-  m_xml_node->serialise(writer, true);
+  node.serialise(writer, true);
 }
 
 const TCHAR *
 DataNodeXML::GetName() const
 {
-  return m_xml_node->getName();
+  return node.getName();
 }
 
 DataNode*
 DataNodeXML::AppendChild(const TCHAR *name)
 {
-  return new DataNodeXML(m_xml_node->AddChild(_tcsdup(name), false));
+  return new DataNodeXML(node.AddChild(_tcsdup(name), false));
 }
 
 DataNode *
 DataNodeXML::GetChildNamed(const TCHAR *name) const
 {
-  const XMLNode *child = m_xml_node->getChildNode(name);
+  const XMLNode *child = node.getChildNode(name);
   if (child == NULL)
     return NULL;
 
@@ -89,7 +78,7 @@ DataNode::List
 DataNodeXML::ListChildren() const
 {
   List list;
-  for (auto i = m_xml_node->begin(), end = m_xml_node->end(); i != end; ++i)
+  for (auto i = node.begin(), end = node.end(); i != end; ++i)
     list.push_back(new DataNodeXML(*i));
   return list;
 }
@@ -98,7 +87,7 @@ DataNode::List
 DataNodeXML::ListChildrenNamed(const TCHAR *name) const
 {
   List list;
-  for (auto i = m_xml_node->begin(), end = m_xml_node->end(); i != end; ++i)
+  for (auto i = node.begin(), end = node.end(); i != end; ++i)
     if (_tcsicmp(i->getName(), name) == 0)
       list.push_back(new DataNodeXML(*i));
   return list;
@@ -107,13 +96,13 @@ DataNodeXML::ListChildrenNamed(const TCHAR *name) const
 void
 DataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
 {
-  m_xml_node->AddAttribute(_tcsdup(name), _tcsdup(value));
+  node.AddAttribute(_tcsdup(name), _tcsdup(value));
 }
 
 bool
 DataNodeXML::GetAttribute(const TCHAR *name, tstring &value) const
 {
-  const TCHAR *v = m_xml_node->getAttribute(name);
+  const TCHAR *v = node.getAttribute(name);
   if (v == NULL)
     return false;
 

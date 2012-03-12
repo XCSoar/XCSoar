@@ -24,6 +24,7 @@
 #define DATANODE_XML_HPP
 
 #include "DataNode.hpp"
+#include "XML/xmlParser.hpp"
 
 struct XMLNode;
 
@@ -33,7 +34,7 @@ struct XMLNode;
 class DataNodeXML:
   public DataNode
 {
-  XMLNode *m_xml_node;
+  XMLNode node;
 
 protected:
   /** 
@@ -43,15 +44,13 @@ protected:
    * 
    * @return Initialised object
    */
-  explicit DataNodeXML(const XMLNode& the_node);
+  explicit DataNodeXML(const XMLNode &_node)
+    :node(_node) {}
 
 public:
   DataNodeXML(DataNodeXML &&other)
-    :m_xml_node(other.m_xml_node) {
-    other.m_xml_node = NULL;
+    :node(std::move(other.node)) {
   }
-
-  ~DataNodeXML();
 
   /**
    * Create a DataNode tree from an XML file
