@@ -1086,7 +1086,7 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
 }
 
 static bool
-read_text_file(const char *path, tstring &buffer)
+read_text_file(const TCHAR *path, tstring &buffer)
 {
   /* auto-detect the character encoding, to be able to parse XCSoar
      6.0 task files */
@@ -1124,7 +1124,7 @@ read_text_file(const char *path, tstring &buffer)
  * @return The main XMLNode or an empty node on error
  */
 XMLNode *
-XMLNode::parseFile(const char *filename, XMLResults *pResults)
+XMLNode::parseFile(const TCHAR *filename, XMLResults *pResults)
 {
   // Open the file for reading
   tstring buffer;
@@ -1155,7 +1155,7 @@ XMLNode::parseFile(const char *filename, XMLResults *pResults)
  * @return The main XMLNode
  */
 XMLNode *
-XMLNode::openFileHelper(const char *lpszXML)
+XMLNode::openFileHelper(const TCHAR *lpszXML)
 {
   XMLResults pResults;
   XMLNode::GlobalError = false;

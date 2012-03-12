@@ -21,7 +21,6 @@
  */
 
 #include "DataNodeXML.hpp"
-#include "OS/PathName.hpp"
 #include "IO/TextWriter.hpp"
 
 #include <stdio.h>
@@ -29,8 +28,7 @@
 DataNode *
 DataNodeXML::Load(const TCHAR* path)
 {
-  NarrowPathName buf(path);
-  XMLNode *child = XMLNode::openFileHelper(buf);
+  XMLNode *child = XMLNode::openFileHelper(path);
   if (child == NULL)
     return NULL;
 

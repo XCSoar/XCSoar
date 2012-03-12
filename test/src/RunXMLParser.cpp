@@ -31,10 +31,10 @@ Copyright_License {
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "FILE");
-  const char *path = args.ExpectNext();
+  tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
-  XMLNode *node = XMLNode::parseFile(path);
+  XMLNode *node = XMLNode::parseFile(path.c_str());
   if (node == NULL) {
     fprintf(stderr, "XML parser failed\n");
     return EXIT_FAILURE;
