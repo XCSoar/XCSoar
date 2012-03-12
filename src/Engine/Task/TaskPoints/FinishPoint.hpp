@@ -52,7 +52,8 @@ public:
    * @return Partially-initialised object
    */
   FinishPoint(ObservationZonePoint* _oz, const Waypoint & wp,
-              const TaskBehaviour& tb, const OrderedTaskBehaviour& to);
+              const TaskBehaviour &tb, const OrderedTaskBehaviour &to,
+              bool boundary_scored=true);
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 

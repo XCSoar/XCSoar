@@ -187,7 +187,7 @@ TestFlightToFinish(fixed aircraft_altitude)
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
   const FinishPoint tp2(new CylinderZone(wp2.location),
-                        wp2, task_behaviour, ordered_task_behaviour);
+                        wp2, task_behaviour, ordered_task_behaviour, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
 
@@ -228,7 +228,7 @@ TestSimpleTask()
                        wp1, task_behaviour, ordered_task_behaviour);
   task.Append(tp1);
   const FinishPoint tp2(new CylinderZone(wp3.location),
-                        wp3, task_behaviour, ordered_task_behaviour);
+                        wp3, task_behaviour, ordered_task_behaviour, false);
   task.Append(tp2);
 
   ok1(task.CheckTask());
@@ -267,7 +267,7 @@ TestHighFinish()
   Waypoint wp2b(wp2);
   wp2b.elevation = fixed(1000);
   const FinishPoint tp2(new CylinderZone(wp2b.location),
-                        wp2b, task_behaviour, ordered_task_behaviour);
+                        wp2b, task_behaviour, ordered_task_behaviour, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
 
@@ -313,7 +313,7 @@ TestHighTP()
   task.Append(tp2);
   const Waypoint wp4b = MakeWaypoint(wp4, 100);
   const FinishPoint tp3(new CylinderZone(wp4b.location),
-                        wp4b, task_behaviour, ordered_task_behaviour);
+                        wp4b, task_behaviour, ordered_task_behaviour, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 
@@ -349,7 +349,7 @@ TestHighTPFinal()
   task.Append(tp2);
   const Waypoint wp5b = MakeWaypoint(wp5, 200);
   const FinishPoint tp3(new CylinderZone(wp5b.location),
-                        wp5b, task_behaviour, ordered_task_behaviour);
+                        wp5b, task_behaviour, ordered_task_behaviour, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 
@@ -384,7 +384,7 @@ TestLowTPFinal()
                      wp2, task_behaviour, ordered_task_behaviour);
   task.Append(tp2);
   const FinishPoint tp3(new CylinderZone(wp3.location),
-                        wp3, task_behaviour, ordered_task_behaviour);
+                        wp3, task_behaviour, ordered_task_behaviour, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 
