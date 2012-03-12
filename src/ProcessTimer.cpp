@@ -46,8 +46,8 @@ Copyright_License {
 #include "Operation/MessageOperationEnvironment.hpp"
 
 #ifdef _WIN32_WCE
-void
-ProcessTimer::HeapCompact()
+static void
+HeapCompact()
 {
   static int iheapcompact = 0;
   // called 2 times per second, compact heap every minute.
@@ -59,8 +59,8 @@ ProcessTimer::HeapCompact()
 }
 #endif
 
-void
-ProcessTimer::MessageProcessTimer()
+static void
+MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
   if (!dlgAirspaceWarningVisible())
@@ -125,8 +125,8 @@ SystemClockTimer()
 #endif
 }
 
-void
-ProcessTimer::SystemProcessTimer()
+static void
+SystemProcessTimer()
 {
 #ifdef _WIN32_WCE
   HeapCompact();
@@ -277,8 +277,8 @@ SettingsProcessTimer()
   ManualWindProcessTimer();
 }
 
-void
-ProcessTimer::CommonProcessTimer()
+static void
+CommonProcessTimer()
 {
   BlackboardProcessTimer();
 
@@ -291,8 +291,8 @@ ProcessTimer::CommonProcessTimer()
   SystemProcessTimer();
 }
 
-int
-ProcessTimer::ConnectionProcessTimer(int itimeout)
+static int
+ConnectionProcessTimer(int itimeout)
 {
   static bool connected_last = false;
   static bool location_last = false;

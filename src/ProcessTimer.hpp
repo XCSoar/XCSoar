@@ -27,16 +27,6 @@ class ProcessTimer
 {
 public:
   static void Process();
-
-private:
-  static void CommonProcessTimer();
-  static int ConnectionProcessTimer(int itimeout);
-  static void SystemProcessTimer();
-  static void MessageProcessTimer();
-
-#ifdef _WIN32_WCE
-  static void HeapCompact();
-#endif
 };
 
 #endif
