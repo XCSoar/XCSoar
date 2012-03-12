@@ -45,23 +45,33 @@
  ****************************************************************************
  */
 
-#include "xmlParser.hpp"
-#include "Compatibility/string.h"
-#include "IO/TextWriter.hpp"
-#include "IO/FileLineReader.hpp"
+#include "Parser.hpp"
+#include "Node.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
-#include "Util/tstring.hpp"
+#include "IO/FileLineReader.hpp"
+#include "Compatibility/string.h"
 
 #include <assert.h>
-#include <memory.h>
 #include <stdio.h>
-#include <stdlib.h>
 
-bool XMLNode::global_error = false;
+namespace XML {
+  bool global_error = false;
 
-/** Enumeration used to decipher what type a token is. */
-enum TokenTypeTag {
+  /** Main structure used for parsing XML. */
+  struct Parser {
+    const TCHAR *lpXML;
+    unsigned nIndex;
+    Error error;
+    const TCHAR *lpEndTag;
+    size_t cbEndTag;
+    const TCHAR *lpNewElement;
+    size_t cbNewElement;
+    bool nFirst;
+  };
+
+  /** Enumeration used to decipher what type a token is. */
+  enum TokenTypeTag {
     eTokenText = 0,
     eTokenQuotedText,
     eTokenTagStart,         /* "<"            */
@@ -71,93 +81,33 @@ enum TokenTypeTag {
     eTokenDeclaration,      /* "<?"           */
     eTokenShortHandClose,   /* "/>"           */
     eTokenError
-};
+  };
 
-#define INDENTCHAR '\t'
-
-/** Main structure used for parsing XML. */
-struct XML {
-    const TCHAR *lpXML;
-    unsigned nIndex;
-    enum XMLError error;
-    const TCHAR *lpEndTag;
-    size_t cbEndTag;
-    const TCHAR *lpNewElement;
-    size_t cbNewElement;
-    bool nFirst;
-};
-
-struct NextToken {
+  struct NextToken {
     const TCHAR *pStr;
-};
+  };
 
-/** Enumeration used when parsing attributes. */
-enum Attrib {
+  /** Enumeration used when parsing attributes. */
+  enum Attrib {
     eAttribName = 0,
     eAttribEquals,
     eAttribValue
-};
+  };
 
-/**
- * Enumeration used when parsing elements to dictate whether we are
- * currently inside a tag.
- */
-enum Status {
+  /**
+   * Enumeration used when parsing elements to dictate whether we are
+   * currently inside a tag.
+   */
+  enum Status {
     eInsideTag = 0,
     eOutsideTag
-};
+  };
 
-XMLNode::Data::~Data()
-{
-  assert(ref_count == 0);
+  static XML::NextToken
+  GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType);
 
-  free((void*)const_cast<TCHAR *>(name));
-}
-
-void
-XMLNode::Data::Ref()
-{
-  assert(ref_count > 0);
-
-  ++ref_count;
-}
-
-void
-XMLNode::Data::Unref()
-{
-  assert(ref_count > 0);
-
-  --ref_count;
-  if (ref_count == 0)
-    delete this;
-}
-
-static void
-WriteXMLString(TextWriter &writer, const TCHAR *source)
-{
-  while (*source) {
-    switch (*source) {
-    case '<':
-      writer.write("&lt;");
-      break;
-    case '>':
-      writer.write("&gt;");
-      break;
-    case '&':
-      writer.write("&amp;");
-      break;
-    case '\'':
-      writer.write("&apos;");
-      break;
-    case '"':
-      writer.write("&quot;");
-      break;
-    default:
-      writer.write(*source);
-      break;
-    }
-    source++;
-  }
+  static bool
+  ParseXMLElement(XMLNode &node, Parser *pXML);
 }
 
 /**
@@ -211,7 +161,7 @@ FromXMLString(const TCHAR *ss, size_t lo)
         unsigned long i = _tcstoul(ss, &endptr, 10);
         if (endptr == ss || endptr >= end || *endptr != ';') {
           free(result);
-          XMLNode::global_error = true;
+          XML::global_error = true;
           return NULL;
         }
 
@@ -224,7 +174,7 @@ FromXMLString(const TCHAR *ss, size_t lo)
         ss = endptr + 1;
       } else {
         free(result);
-        XMLNode::global_error = true;
+        XML::global_error = true;
         return NULL;
       }
     } else {
@@ -270,7 +220,7 @@ CompareTagName(const TCHAR *cclose, const TCHAR *copen)
  * Obtain the next character from the string.
  */
 static inline TCHAR
-GetNextChar(XML *pXML)
+GetNextChar(XML::Parser *pXML)
 {
   TCHAR ch = pXML->lpXML[pXML->nIndex];
   if (ch != 0)
@@ -282,7 +232,7 @@ GetNextChar(XML *pXML)
  * Find next non-white space character.
  */
 static TCHAR
-FindNonWhiteSpace(XML *pXML)
+FindNonWhiteSpace(XML::Parser *pXML)
 {
   assert(pXML);
 
@@ -309,10 +259,10 @@ FindNonWhiteSpace(XML *pXML)
  *
  * @param token_length_r contains the number of characters that have been read
  */
-static NextToken
-GetNextToken(XML *pXML, size_t &token_length_r, enum TokenTypeTag &pType)
+static XML::NextToken
+XML::GetNextToken(Parser *pXML, size_t &token_length_r, TokenTypeTag &pType)
 {
-  NextToken result;
+  XML::NextToken result;
   const TCHAR *lpXML;
   TCHAR ch;
   TCHAR temp_ch;
@@ -498,7 +448,7 @@ GetNextToken(XML *pXML, size_t &token_length_r, enum TokenTypeTag &pType)
 }
 
 const TCHAR *
-XMLNode::GetErrorMessage(XMLError error)
+XML::GetErrorMessage(Error error)
 {
   switch (error) {
   case eXMLErrorNone:
@@ -528,52 +478,6 @@ XMLNode::GetErrorMessage(XMLError error)
   return _T("Unknown");
 }
 
-
-XMLNode
-XMLNode::CreateRoot(const TCHAR *name)
-{
-  return XMLNode(name, false);
-}
-
-XMLNode::XMLNode(const TCHAR *name, bool is_declaration)
-  :d(new Data(name, is_declaration))
-{
-  assert(d);
-}
-
-XMLNode &
-XMLNode::AddChild(const TCHAR *name, bool is_declaration)
-{
-  assert(name != NULL);
-
-  d->children.push_back(XMLNode(name, is_declaration));
-  return d->children.back();
-}
-
-void
-XMLNode::AddAttribute(TCHAR *name, TCHAR *value)
-{
-  assert(name != NULL);
-
-  d->AddAttribute(name, value);
-}
-
-void
-XMLNode::AddText(const TCHAR *value)
-{
-  assert(value != NULL);
-
-  d->text.append(value);
-}
-
-void
-XMLNode::AddText(const TCHAR *text, size_t length)
-{
-  assert(text != NULL);
-
-  d->text.append(text, length);
-}
-
 /**
  * Trim the end of the text to remove white space characters.
  */
@@ -595,8 +499,8 @@ FindEndOfText(const TCHAR *token, size_t length)
 /**
  * Recursively parse an XML element.
  */
-bool
-XMLNode::ParseXMLElement(XML *pXML)
+static bool
+XML::ParseXMLElement(XMLNode &node, Parser *pXML)
 {
   const TCHAR *temp = NULL;
   size_t temp_length;
@@ -652,7 +556,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         // If we have node text then add this to the element
         if (text != NULL) {
           temp_length = FindEndOfText(text, token.pStr - text);
-          AddText(text, temp_length);
+          node.AddText(text, temp_length);
           text = NULL;
         }
 
@@ -682,15 +586,15 @@ XMLNode::ParseXMLElement(XML *pXML)
         // If the name of the new element differs from the name of
         // the current element we need to add the new element to
         // the current one and recurse
-        pNew = &AddChild(DuplicateString(token.pStr, token_length),
-                         is_declaration);
+        pNew = &node.AddChild(DuplicateString(token.pStr, token_length),
+                              is_declaration);
 
         while (true) {
           // Callself to process the new node.  If we return
           // FALSE this means we dont have any more
           // processing to do...
 
-          if (!pNew->ParseXMLElement(pXML)) {
+          if (!ParseXMLElement(*pNew, pXML)) {
             return false;
           } else {
             // If the call to recurse this function
@@ -702,7 +606,7 @@ XMLNode::ParseXMLElement(XML *pXML)
             if (pXML->cbEndTag) {
               // If we are back at the root node then we
               // have an unmatched end tag
-              if (d->name == NULL) {
+              if (node.GetName() == NULL) {
                 pXML->error = eXMLErrorUnmatchedEndTag;
                 return false;
               }
@@ -711,7 +615,7 @@ XMLNode::ParseXMLElement(XML *pXML)
               // element then we only need to unwind
               // once more...
 
-              if (CompareTagName(d->name, pXML->lpEndTag)) {
+              if (CompareTagName(node.GetName(), pXML->lpEndTag)) {
                 pXML->cbEndTag = 0;
               }
 
@@ -725,13 +629,13 @@ XMLNode::ParseXMLElement(XML *pXML)
               // then we need to return to the caller
               // and let it process the element.
 
-              if (CompareTagName(d->name, pXML->lpNewElement))
+              if (CompareTagName(node.GetName(), pXML->lpNewElement))
                 return true;
 
               // Add the new element and recurse
-              pNew = &AddChild(DuplicateString(pXML->lpNewElement,
-                                               pXML->cbNewElement),
-                               false);
+              pNew = &node.AddChild(DuplicateString(pXML->lpNewElement,
+                                                    pXML->cbNewElement),
+                                    false);
               pXML->cbNewElement = 0;
             } else {
               // If we didn't have a new element to create
@@ -753,7 +657,7 @@ XMLNode::ParseXMLElement(XML *pXML)
             return false;
           }
 
-          AddText(text2);
+          node.AddText(text2);
           free(text2);
           text = NULL;
         }
@@ -778,7 +682,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         // We need to return to the previous caller.  If the name
         // of the tag cannot be found we need to keep returning to
         // caller until we find a match
-        if (!CompareTagName(d->name, temp)) {
+        if (!CompareTagName(node.GetName(), temp)) {
           pXML->lpEndTag = temp;
           pXML->cbEndTag = temp_length;
         }
@@ -848,7 +752,7 @@ XMLNode::ParseXMLElement(XML *pXML)
           // Eg.  'Attribute AnotherAttribute'
         case eTokenText:
           // Add the unvalued attribute to the list
-          AddAttribute(DuplicateString(temp, temp_length), NULL);
+          node.AddAttribute(DuplicateString(temp, temp_length), NULL);
           // Cache the token then indicate.  We are next to
           // look for the equals attribute
           temp = token.pStr;
@@ -861,12 +765,12 @@ XMLNode::ParseXMLElement(XML *pXML)
         case eTokenCloseTag:
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
-          if (d->is_declaration && (temp[temp_length - 1]) == _T('?'))
+          if (node.IsDeclaration() && (temp[temp_length - 1]) == _T('?'))
             temp_length--;
 
           if (temp_length)
             // Add the unvalued attribute to the list
-            AddAttribute(DuplicateString(temp, temp_length), NULL);
+            node.AddAttribute(DuplicateString(temp, temp_length), NULL);
 
           // If this is the end of the tag then return to the caller
           if (type == eTokenShortHandClose)
@@ -907,7 +811,7 @@ XMLNode::ParseXMLElement(XML *pXML)
         case eTokenQuotedText:
           // If we are a declaration element '<?' then we need
           // to remove extra closing '?' if it exists
-          if (d->is_declaration && (token.pStr[token_length - 1]) == _T('?')) {
+          if (node.IsDeclaration() && (token.pStr[token_length - 1]) == _T('?')) {
             token_length--;
           }
 
@@ -917,8 +821,8 @@ XMLNode::ParseXMLElement(XML *pXML)
               token.pStr++;
               token_length -= 2;
             }
-            AddAttribute(DuplicateString(temp, temp_length),
-                         FromXMLString(token.pStr, token_length));
+            node.AddAttribute(DuplicateString(temp, temp_length),
+                              FromXMLString(token.pStr, token_length));
           }
 
           // Indicate we are searching for a new attribute
@@ -946,7 +850,7 @@ XMLNode::ParseXMLElement(XML *pXML)
  * Count the number of lines and columns in an XML string.
  */
 static void
-CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XMLResults *pResults)
+CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XML::Results *pResults)
 {
   assert(lpXML);
   assert(pResults);
@@ -972,11 +876,11 @@ CountLinesAndColumns(const TCHAR *lpXML, size_t nUpto, XMLResults *pResults)
  * @return The main XMLNode or empty XMLNode on error
  */
 XMLNode *
-XMLNode::ParseString(const TCHAR *xml_string, XMLResults *pResults)
+XML::ParseString(const TCHAR *xml_string, Results *pResults)
 {
   // If String is empty
   if (xml_string == NULL) {
-    // If XMLResults object exists
+    // If XML::Results object exists
     if (pResults) {
       // -> Save the error type
       pResults->error = eXMLErrorNoElements;
@@ -988,21 +892,21 @@ XMLNode::ParseString(const TCHAR *xml_string, XMLResults *pResults)
     return NULL;
   }
 
-  enum XMLError error;
-  XMLNode xnode(NULL, false);
-  struct XML xml = { NULL, 0, eXMLErrorNone, NULL, 0, NULL, 0, true, };
+  Error error;
+  XMLNode xnode = XMLNode::Null();
+  Parser xml = { NULL, 0, eXMLErrorNone, NULL, 0, NULL, 0, true, };
 
   xml.lpXML = xml_string;
 
   // Fill the XMLNode xnode with the parsed data of xml
   // note: xnode is now the document node, not the main XMLNode
-  xnode.ParseXMLElement(&xml);
+  ParseXMLElement(xnode, &xml);
   error = xml.error;
 
   // If the document node does not have childnodes
   XMLNode *child = xnode.GetFirstChild();
   if (child == NULL) {
-    // If XMLResults object exists
+    // If XML::Results object exists
     if (pResults) {
       // -> Save the error type
       pResults->error = eXMLErrorNoElements;
@@ -1023,7 +927,7 @@ XMLNode::ParseString(const TCHAR *xml_string, XMLResults *pResults)
     // If the declaration does not have childnodes
     child = xnode.GetFirstChild();
     if (child == NULL) {
-      // If XMLResults object exists
+      // If XML::Results object exists
       if (pResults) {
         // -> Save the error type
         pResults->error = eXMLErrorNoElements;
@@ -1039,7 +943,7 @@ XMLNode::ParseString(const TCHAR *xml_string, XMLResults *pResults)
     }
   }
 
-  // If an XMLResults object exists
+  // If an XML::Results object exists
   // -> save the result (error/success)
   if (pResults) {
     pResults->error = error;
@@ -1047,7 +951,7 @@ XMLNode::ParseString(const TCHAR *xml_string, XMLResults *pResults)
     // If we have an error
     if (error != eXMLErrorNone) {
       // Find which line and column it starts on and
-      // save it in the XMLResults object
+      // save it in the XML::Results object
       CountLinesAndColumns(xml.lpXML, xml.nIndex, pResults);
     }
   }
@@ -1095,18 +999,18 @@ ReadTextFile(const TCHAR *path, tstring &buffer)
 * (Includes error handling)
  * @param filename Filepath to the XML file to parse
  * @param tag (?)
- * @param pResults Pointer to the XMLResults object to fill on error or success
+ * @param pResults Pointer to the XML::Results object to fill on error or success
  * @return The main XMLNode or an empty node on error
  */
 XMLNode *
-XMLNode::ParseFile(const TCHAR *filename, XMLResults *pResults)
+XML::ParseFile(const TCHAR *filename, Results *pResults)
 {
   // Open the file for reading
   tstring buffer;
 
   // If file can't be read
   if (!ReadTextFile(filename, buffer)) {
-    // If XMLResults object exists
+    // If XML::Results object exists
     if (pResults) {
       // -> Save the error type into it
       pResults->error = eXMLErrorFileNotFound;
@@ -1130,13 +1034,13 @@ XMLNode::ParseFile(const TCHAR *filename, XMLResults *pResults)
  * @return The main XMLNode
  */
 XMLNode *
-XMLNode::OpenFileHelper(const TCHAR *path)
+XML::OpenFileHelper(const TCHAR *path)
 {
-  XMLResults pResults;
-  XMLNode::global_error = false;
+  Results pResults;
+  global_error = false;
 
   // Parse the file and get the main XMLNode
-  XMLNode *xnode = XMLNode::ParseFile(path, &pResults);
+  XMLNode *xnode = ParseFile(path, &pResults);
 
   // If error appeared
   if (pResults.error != eXMLErrorNone) {
@@ -1150,171 +1054,14 @@ XMLNode::OpenFileHelper(const TCHAR *path)
            "Error: %s\n"
 #endif
            "At line %u, column %u.\n", path,
-           XMLNode::GetErrorMessage(pResults.error),
+           GetErrorMessage(pResults.error),
            pResults.line, pResults.column);
 #endif
 
     // Remember Error
-    XMLNode::global_error = true;
+    global_error = true;
   }
 
   // Return the parsed node or empty node on error
   return xnode;
-}
-
-static void
-WriteIndent(TextWriter &writer, unsigned n)
-{
-  while (n-- > 0)
-    writer.write(INDENTCHAR);
-}
-
-void
-XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
-{
-  bool has_children = false;
-
-  // If the element has no name then assume this is the head node.
-  if (!StringIsEmpty(data.name)) {
-    // "<elementname "
-    const unsigned cb = format == -1 ? 0 : format;
-
-    WriteIndent(writer, cb);
-    writer.write('<');
-    if (data.is_declaration)
-      writer.write('?');
-    writer.write(data.name);
-
-    // Enumerate attributes and add them to the string
-    for (auto i = data.attributes.begin(), end = data.attributes.end();
-         i != end; ++i) {
-      const Data::Attribute *pAttr = &*i;
-      writer.write(' ');
-      writer.write(pAttr->name);
-      writer.write('=');
-      writer.write('"');
-      if (pAttr->value != NULL)
-        WriteXMLString(writer, pAttr->value);
-      writer.write('"');
-      pAttr++;
-    }
-
-    has_children = data.HasChildren();
-    if (data.is_declaration) {
-      writer.write('?');
-      writer.write('>');
-      if (format != -1)
-        writer.newline();
-    } else
-    // If there are child nodes we need to terminate the start tag
-    if (has_children) {
-      writer.write('>');
-      if (format != -1)
-        writer.newline();
-    }
-  }
-
-  // Calculate the child format for when we recurse.  This is used to
-  // determine the number of spaces used for prefixes.
-  int child_format = -1;
-  if (format != -1) {
-    if (!StringIsEmpty(data.name))
-      child_format = format + 1;
-    else
-      child_format = format;
-  }
-
-  /* write the child elements */
-  for (auto i = data.begin(), end = data.end(); i != end; ++i)
-    Serialise(*i->d, writer, child_format);
-
-  /* write the text */
-  if (!data.text.empty()) {
-    if (format != -1) {
-      WriteIndent(writer, format + 1);
-      WriteXMLString(writer, data.text.c_str());
-      writer.newline();
-    } else {
-      WriteXMLString(writer, data.text.c_str());
-    }
-  }
-
-  if (!StringIsEmpty(data.name) && !data.is_declaration) {
-    // If we have child entries we need to use long XML notation for
-    // closing the element - "<elementname>blah blah blah</elementname>"
-    if (has_children) {
-      // "</elementname>\0"
-      if (format != -1)
-        WriteIndent(writer, format);
-
-      writer.write("</");
-      writer.write(data.name);
-
-      writer.write('>');
-    } else {
-      // If there are no children we can use shorthand XML notation -
-      // "<elementname/>"
-      // "/>\0"
-      writer.write("/>");
-    }
-
-    if (format != -1)
-      writer.newline();
-  }
-}
-
-void
-XMLNode::Serialise(TextWriter &writer, int format) const
-{
-  format = format ? 0 : -1;
-  Serialise(*d, writer, format);
-}
-
-XMLNode&
-XMLNode::operator=(const XMLNode& A)
-{
-  if (this != &A) {
-    if (d != NULL)
-      d->Unref();
-    d = A.d;
-    if (d)
-      d->Ref();
-  }
-  return *this;
-}
-
-XMLNode::XMLNode(const XMLNode &A)
-{
-  d = A.d;
-  if (d)
-    d->Ref();
-}
-
-const XMLNode *
-XMLNode::GetChildNode(const TCHAR *name) const
-{
-  if (!d)
-    return NULL;
-
-  for (auto i = d->begin(), end = d->end(); i != end; ++i) {
-    const XMLNode &node = *i;
-    if (_tcsicmp(node.d->name, name) == 0)
-      return &node;
-  }
-
-  return NULL;
-}
-
-const TCHAR *
-XMLNode::GetAttribute(const TCHAR *name) const
-{
-  if (!d)
-    return NULL;
-
-  for (auto i = d->attributes.begin(), end = d->attributes.end();
-       i != end; ++i)
-    if (_tcsicmp(i->name, name) == 0)
-      return i->value;
-
-  return NULL;
 }

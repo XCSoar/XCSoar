@@ -25,8 +25,9 @@
  *
  ****************************************************************************
  */
-#ifndef __INCLUDE_XML_NODE__
-#define __INCLUDE_XML_NODE__
+
+#ifndef XCSOAR_XML_NODE_HPP
+#define XCSOAR_XML_NODE_HPP
 
 #include "Util/NonCopyable.hpp"
 #include "Util/tstring.hpp"
@@ -40,29 +41,6 @@
 #include <stdlib.h>
 
 class TextWriter;
-
-/** Enumeration for XML parse errors. */
-enum XMLError {
-  eXMLErrorNone = 0,
-  eXMLErrorEmpty,
-  eXMLErrorFirstNotStartTag,
-  eXMLErrorMissingTagName,
-  eXMLErrorMissingEndTagName,
-  eXMLErrorNoMatchingQuote,
-  eXMLErrorUnmatchedEndTag,
-  eXMLErrorUnexpectedToken,
-  eXMLErrorInvalidTag,
-  eXMLErrorNoElements,
-  eXMLErrorFileNotFound
-};
-
-/** Structure used to obtain error details if the parse fails. */
-struct XMLResults {
-  enum XMLError error;
-  unsigned line, column;
-};
-
-struct XML;
 
 struct XMLNode {
 //  friend class XMLNode;
@@ -140,33 +118,11 @@ protected:
   XMLNode(const TCHAR *name, bool is_declaration);
 
 public:
-  // You must create your first instance of XMLNode with these 3 parse functions:
-  // (see complete explanation of parameters below)
+  static inline XMLNode Null() {
+    return XMLNode(NULL, false);
+  }
 
   static XMLNode CreateRoot(const TCHAR *name);
-
-  static XMLNode *ParseString(const TCHAR *xml_string,
-                              XMLResults *pResults=NULL);
-  static XMLNode *ParseFile(const TCHAR *path, XMLResults *pResults=NULL);
-  static XMLNode *OpenFileHelper(const TCHAR *path);
-
-  // The tag parameter should be the name of the first tag inside the XML file.
-  // If the tag parameter is omitted, the 3 functions return a node that represents
-  // the head of the xml document including the declaration term (<? ... ?>).
-
-  // If the XML document is corrupted:
-  //   - The "openFileHelper" method will stop execution and display an error message.
-  //   - The 2 other methods will initialize the "pResults" variable with some information that
-  //     can be used to trace the error.
-  // you can have a detailed explanation of the parsing error with this function:
-
-  static bool global_error;
-
-  /**
-   * Parse XML errors into a user friendly string.
-   */
-  gcc_const
-  static const TCHAR *GetErrorMessage(XMLError error);
 
   /**
    * name of the node
@@ -197,7 +153,6 @@ public:
       : NULL;
   }
 
-private:
   /**
    * @return the first child node, or NULL if there is none
    */
@@ -289,9 +244,6 @@ public:
   void AddText(const TCHAR *text, size_t length);
 
 private:
-  // these are functions used internally (don't bother about them):
-  bool ParseXMLElement(XML *pXML);
-
   /**
    * Creates an user friendly XML string from a given element with
    * appropriate white space and carriage returns.

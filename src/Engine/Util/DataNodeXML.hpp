@@ -24,7 +24,7 @@
 #define DATANODE_XML_HPP
 
 #include "DataNode.hpp"
-#include "XML/xmlParser.hpp"
+#include "XML/Node.hpp"
 
 struct XMLNode;
 

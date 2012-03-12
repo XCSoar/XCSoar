@@ -1,0 +1,169 @@
+/*
+ ****************************************************************************
+ * <P> XML.c - implementation file for basic XML parser written in ANSI C++
+ * for portability. It works by using recursion and a node tree for breaking
+ * down the elements of an XML document.  </P>
+ *
+ * @version     V1.08
+ *
+ * @author      Frank Vanden Berghen
+ * based on original implementation by Martyn C Brown
+ *
+ * NOTE:
+ *
+ *   If you add "#define APPROXIMATE_PARSING", on the first line of this file
+ *   the parser will see the following XML-stream:
+ *     <data name="n1">
+ *     <data name="n2">
+ *     <data name="n3" />
+ *   as equivalent to the following XML-stream:
+ *     <data name="n1" />
+ *     <data name="n2" />
+ *     <data name="n3" />
+ *   This can be useful for badly-formed XML-streams but prevent the use
+ *   of the following XML-stream:
+ *     <data name="n1">
+ *        <data name="n2">
+ *            <data name="n3" />
+ *        </data>
+ *     </data>
+ *
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ ****************************************************************************
+ */
+
+#include "Node.hpp"
+
+#include <assert.h>
+
+XMLNode::Data::~Data()
+{
+  assert(ref_count == 0);
+
+  free((void*)const_cast<TCHAR *>(name));
+}
+
+void
+XMLNode::Data::Ref()
+{
+  assert(ref_count > 0);
+
+  ++ref_count;
+}
+
+void
+XMLNode::Data::Unref()
+{
+  assert(ref_count > 0);
+
+  --ref_count;
+  if (ref_count == 0)
+    delete this;
+}
+
+XMLNode
+XMLNode::CreateRoot(const TCHAR *name)
+{
+  return XMLNode(name, false);
+}
+
+XMLNode::XMLNode(const TCHAR *name, bool is_declaration)
+  :d(new Data(name, is_declaration))
+{
+  assert(d);
+}
+
+XMLNode &
+XMLNode::AddChild(const TCHAR *name, bool is_declaration)
+{
+  assert(name != NULL);
+
+  d->children.push_back(XMLNode(name, is_declaration));
+  return d->children.back();
+}
+
+void
+XMLNode::AddAttribute(TCHAR *name, TCHAR *value)
+{
+  assert(name != NULL);
+
+  d->AddAttribute(name, value);
+}
+
+void
+XMLNode::AddText(const TCHAR *value)
+{
+  assert(value != NULL);
+
+  d->text.append(value);
+}
+
+void
+XMLNode::AddText(const TCHAR *text, size_t length)
+{
+  assert(text != NULL);
+
+  d->text.append(text, length);
+}
+
+XMLNode&
+XMLNode::operator=(const XMLNode& A)
+{
+  if (this != &A) {
+    if (d != NULL)
+      d->Unref();
+    d = A.d;
+    if (d)
+      d->Ref();
+  }
+  return *this;
+}
+
+XMLNode::XMLNode(const XMLNode &A)
+{
+  d = A.d;
+  if (d)
+    d->Ref();
+}
+
+const XMLNode *
+XMLNode::GetChildNode(const TCHAR *name) const
+{
+  if (!d)
+    return NULL;
+
+  for (auto i = d->begin(), end = d->end(); i != end; ++i) {
+    const XMLNode &node = *i;
+    if (_tcsicmp(node.d->name, name) == 0)
+      return &node;
+  }
+
+  return NULL;
+}
+
+const TCHAR *
+XMLNode::GetAttribute(const TCHAR *name) const
+{
+  if (!d)
+    return NULL;
+
+  for (auto i = d->attributes.begin(), end = d->attributes.end();
+       i != end; ++i)
+    if (_tcsicmp(i->name, name) == 0)
+      return i->value;
+
+  return NULL;
+}

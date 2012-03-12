@@ -27,7 +27,8 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "XML/xmlParser.hpp"
+#include "XML/Node.hpp"
+#include "XML/Parser.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/FileReader.hpp"
@@ -296,7 +297,7 @@ GetCallBack(const CallBackTableEntry *lookup_table,
 }
 
 static XMLNode *
-LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
+LoadXMLFromResource(const TCHAR* resource, XML::Results *xml_results)
 {
   ResourceLoader::Data data = ResourceLoader::Load(resource, _T("XMLDialog"));
   assert(data.first != NULL);
@@ -314,7 +315,7 @@ LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
   const char *buffer2 = buffer;
 #endif
 
-  XMLNode *x = XMLNode::ParseString(buffer2, xml_results);
+  XMLNode *x = XML::ParseString(buffer2, xml_results);
 
 #ifdef _UNICODE
   delete[] buffer2;
@@ -333,17 +334,17 @@ LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
 static XMLNode *
 LoadXMLFromResource(const TCHAR *resource)
 {
-  XMLResults xml_results;
+  XML::Results xml_results;
 
   // Reset errors
-  xml_results.error = eXMLErrorNone;
-  XMLNode::global_error = false;
+  xml_results.error = XML::eXMLErrorNone;
+  XML::global_error = false;
 
   // Load and parse the resource
   XMLNode *node = LoadXMLFromResource(resource, &xml_results);
 
   // Show errors if they exist
-  assert(xml_results.error == eXMLErrorNone);
+  assert(xml_results.error == XML::eXMLErrorNone);
 
   return node;
 }
@@ -392,7 +393,7 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   Window *window = LoadChild(*form, parent, lookup_table, *node, 0, style);
   delete node;
 
-  assert(!XMLNode::global_error);
+  assert(!XML::global_error);
 
   return window;
 }
@@ -472,7 +473,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   delete node;
 
   // If XML error occurred -> Error messagebox + cancel
-  assert(!XMLNode::global_error);
+  assert(!XML::global_error);
 
   // Return the created form
   return form;

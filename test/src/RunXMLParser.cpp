@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "XML/xmlParser.hpp"
+#include "XML/Node.hpp"
+#include "XML/Parser.hpp"
 #include "IO/TextWriter.hpp"
 #include "OS/Args.hpp"
 
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
   tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
-  XMLNode *node = XMLNode::ParseFile(path.c_str());
+  XMLNode *node = XML::ParseFile(path.c_str());
   if (node == NULL) {
     fprintf(stderr, "XML parser failed\n");
     return EXIT_FAILURE;

@@ -22,13 +22,14 @@
 
 #include "DataNodeXML.hpp"
 #include "IO/TextWriter.hpp"
+#include "XML/Parser.hpp"
 
 #include <stdio.h>
 
 DataNode *
 DataNodeXML::Load(const TCHAR* path)
 {
-  XMLNode *child = XMLNode::OpenFileHelper(path);
+  XMLNode *child = XML::OpenFileHelper(path);
   if (child == NULL)
     return NULL;
 
