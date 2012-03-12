@@ -145,8 +145,8 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
     break;
 
   case DeviceConfig::PortType::TCP_LISTENER: {
-    TCPPort *port = new TCPPort(config.tcp_port, handler);
-    if (!port->Open()) {
+    TCPPort *port = new TCPPort(handler);
+    if (!port->Open(config.tcp_port)) {
       delete port;
       return NULL;
     }

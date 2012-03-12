@@ -32,19 +32,16 @@ Copyright_License {
  */
 class TCPPort : public Port, protected StoppableThread
 {
-  unsigned port;
-
   int listener_fd, connection_fd;
 
 public:
   /**
    * Creates a new TCPPort object, but does not open it yet.
    *
-   * @param port the port number (1..32767)
    * @param handler the callback object for input received on the
    * port
    */
-  TCPPort(unsigned port, Handler &handler);
+  TCPPort(Handler &handler):Port(handler) {}
 
   /**
    * Closes the serial port (Destructor)
@@ -55,7 +52,7 @@ public:
    * Opens the serial port
    * @return True on success, False on failure
    */
-  bool Open();
+  bool Open(unsigned port);
 
   /* virtual methods from class Port */
   virtual bool Drain();

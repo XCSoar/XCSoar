@@ -49,8 +49,8 @@ int main(int argc, char **argv)
   }
 
   MyHandler handler;
-  TCPPort port(tcp_port, handler);
-  if (!port.Open() || !port.StartRxThread()) {
+  TCPPort port(handler);
+  if (!port.Open(tcp_port) || !port.StartRxThread()) {
     fprintf(stderr, "Failed to open TCP port\n");
     return EXIT_FAILURE;
   }

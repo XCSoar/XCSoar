@@ -38,12 +38,6 @@ Copyright_License {
 #include <ws2tcpip.h>
 #endif
 
-TCPPort::TCPPort(unsigned _port, Handler &_handler)
-  :Port(_handler), port(_port),
-   listener_fd(-1), connection_fd(-1)
-{
-}
-
 TCPPort::~TCPPort()
 {
   if (listener_fd < 0)
@@ -58,11 +52,8 @@ TCPPort::~TCPPort()
 }
 
 bool
-TCPPort::Open()
+TCPPort::Open(unsigned port)
 {
-  assert(listener_fd < 0);
-  assert(connection_fd < 0);
-
   listener_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (listener_fd < 0) {
     return false;
@@ -97,6 +88,7 @@ TCPPort::Open()
     return false;
   }
 
+  connection_fd = -1;
   return true;
 }
 
