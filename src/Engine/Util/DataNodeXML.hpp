@@ -46,6 +46,11 @@ protected:
   explicit DataNodeXML(const XMLNode& the_node);
 
 public:
+  DataNodeXML(DataNodeXML &&other)
+    :m_xml_node(other.m_xml_node) {
+    other.m_xml_node = NULL;
+  }
+
   ~DataNodeXML();
 
   /**
