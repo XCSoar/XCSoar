@@ -23,18 +23,18 @@ Copyright_License {
 
 #include "XML/xmlParser.hpp"
 #include "IO/TextWriter.hpp"
+#include "OS/Args.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: RunXMLParser FILE\n");
-    return EXIT_FAILURE;
-  }
+  Args args(argc, argv, "FILE");
+  const char *path = args.ExpectNext();
+  args.ExpectEnd();
 
-  XMLNode *node = XMLNode::parseFile(argv[1]);
+  XMLNode *node = XMLNode::parseFile(path);
   if (node == NULL) {
     fprintf(stderr, "XML parser failed\n");
     return EXIT_FAILURE;
