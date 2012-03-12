@@ -179,14 +179,14 @@ ScaleWidth(const int x)
 static const TCHAR*
 GetName(const XMLNode &node)
 {
-  return StringToStringDflt(node.getAttribute(_T("Name")), _T(""));
+  return StringToStringDflt(node.GetAttribute(_T("Name")), _T(""));
 }
 
 static const TCHAR*
 GetCaption(const XMLNode &node)
 {
   const TCHAR* tmp =
-      StringToStringDflt(node.getAttribute(_T("Caption")), _T(""));
+      StringToStringDflt(node.GetAttribute(_T("Caption")), _T(""));
 
   // don't translate empty strings, it would query gettext metadata
   if (tmp[0] == _T('\0'))
@@ -201,8 +201,8 @@ GetPosition(const XMLNode &node, const PixelRect rc, int bottom_most = -1)
   ControlPosition pt;
 
   // Calculate x- and y-Coordinate
-  pt.x = StringToIntDflt(node.getAttribute(_T("X")), 0);
-  pt.y = StringToIntDflt(node.getAttribute(_T("Y")), -1);
+  pt.x = StringToIntDflt(node.GetAttribute(_T("X")), 0);
+  pt.y = StringToIntDflt(node.GetAttribute(_T("Y")), -1);
   pt.no_scaling = false;
 
   if (Layout::ScaleSupported()) {
@@ -244,8 +244,8 @@ GetSize(const XMLNode &node, const PixelRect rc, const RasterPoint &pos)
   ControlSize sz;
 
   // Calculate width and height
-  sz.cx = StringToIntDflt(node.getAttribute(_T("Width")), 0);
-  sz.cy = StringToIntDflt(node.getAttribute(_T("Height")), 0);
+  sz.cx = StringToIntDflt(node.GetAttribute(_T("Width")), 0);
+  sz.cy = StringToIntDflt(node.GetAttribute(_T("Height")), 0);
   sz.no_scaling = false;
 
   if (Layout::ScaleSupported()) {
@@ -286,7 +286,7 @@ static void *
 GetCallBack(const CallBackTableEntry *lookup_table,
             const XMLNode &node, const TCHAR* attribute)
 {
-  const TCHAR *name = node.getAttribute(attribute);
+  const TCHAR *name = node.GetAttribute(attribute);
   if (name == NULL)
     return NULL;
 
@@ -314,7 +314,7 @@ LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
   const char *buffer2 = buffer;
 #endif
 
-  XMLNode *x = XMLNode::parseString(buffer2, xml_results);
+  XMLNode *x = XMLNode::ParseString(buffer2, xml_results);
 
 #ifdef _UNICODE
   delete[] buffer2;
@@ -337,7 +337,7 @@ LoadXMLFromResource(const TCHAR *resource)
 
   // Reset errors
   xml_results.error = eXMLErrorNone;
-  XMLNode::GlobalError = false;
+  XMLNode::global_error = false;
 
   // Load and parse the resource
   XMLNode *node = LoadXMLFromResource(resource, &xml_results);
@@ -392,7 +392,7 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   Window *window = LoadChild(*form, parent, lookup_table, *node, 0, style);
   delete node;
 
-  assert(!XMLNode::GlobalError);
+  assert(!XMLNode::global_error);
 
   return window;
 }
@@ -421,7 +421,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   assert(node != NULL);
 
   // If the main XMLNode is of type "Form"
-  assert(StringIsEqual(node->getName(), _T("Form")));
+  assert(StringIsEqual(node->GetName(), _T("Form")));
 
   // Determine the dialog size
   const TCHAR* caption = GetCaption(*node);
@@ -472,7 +472,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
   delete node;
 
   // If XML error occurred -> Error messagebox + cancel
-  assert(!XMLNode::GlobalError);
+  assert(!XMLNode::global_error);
 
   // Return the created form
   return form;
@@ -488,16 +488,16 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   bool fine;
 
   _tcscpy(data_type,
-          StringToStringDflt(node.getAttribute(_T("DataType")), _T("")));
+          StringToStringDflt(node.GetAttribute(_T("DataType")), _T("")));
   _tcscpy(display_format,
-          StringToStringDflt(node. getAttribute(_T("DisplayFormat")), _T("")));
+          StringToStringDflt(node. GetAttribute(_T("DisplayFormat")), _T("")));
   _tcscpy(edit_format,
-          StringToStringDflt(node.getAttribute(_T("EditFormat")), _T("")));
+          StringToStringDflt(node.GetAttribute(_T("EditFormat")), _T("")));
 
-  fixed min = fixed(StringToFloatDflt(node.getAttribute(_T("Min")), INT_MIN));
-  fixed max = fixed(StringToFloatDflt(node.getAttribute(_T("Max")), INT_MAX));
-  step = StringToFloatDflt(node.getAttribute(_T("Step")), 1);
-  fine = StringToIntDflt(node.getAttribute(_T("Fine")), false);
+  fixed min = fixed(StringToFloatDflt(node.GetAttribute(_T("Min")), INT_MIN));
+  fixed max = fixed(StringToFloatDflt(node.GetAttribute(_T("Max")), INT_MAX));
+  step = StringToFloatDflt(node.GetAttribute(_T("Step")), 1);
+  fine = StringToIntDflt(node.GetAttribute(_T("Fine")), false);
 
   DataField::DataAccessCallback callback = (DataField::DataAccessCallback)
     GetCallBack(LookUpTable, node, _T("OnDataAccess"));
@@ -508,7 +508,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   if (_tcsicmp(data_type, _T("filereader")) == 0) {
     DataFieldFileReader *df = new DataFieldFileReader(callback);
 
-    if (StringToIntDflt(node.getAttribute(_T("Nullable")), true))
+    if (StringToIntDflt(node.GetAttribute(_T("Nullable")), true))
       df->AddNull();
 
     return df;
@@ -524,7 +524,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   if (_tcsicmp(data_type, _T("time")) == 0) {
     DataFieldTime *df = new DataFieldTime((int)min, (int)max, 0,
                                           (unsigned)step, callback);
-    unsigned max_token = StringToIntDflt(node.getAttribute(_T("MaxTokens")), 2);
+    unsigned max_token = StringToIntDflt(node.GetAttribute(_T("MaxTokens")), 2);
     df->SetMaxTokenNumber(max_token);
     return df;
   }
@@ -568,10 +568,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   if (!size.no_scaling)
     size.cx = ScaleWidth(size.cx);
 
-  if (!StringToIntDflt(node.getAttribute(_T("Visible")), 1))
+  if (!StringToIntDflt(node.GetAttribute(_T("Visible")), 1))
     style.Hide();
 
-  if (StringToIntDflt(node.getAttribute(_T("Border")), 0))
+  if (StringToIntDflt(node.GetAttribute(_T("Border")), 0))
     style.Border();
 
   rc.left = pos.x;
@@ -579,12 +579,12 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   rc.right = rc.left + size.cx;
   rc.bottom = rc.top + size.cy;
 
-  bool expert = (StringToIntDflt(node.getAttribute(_T("Expert")), 0) == 1);
+  bool expert = (StringToIntDflt(node.GetAttribute(_T("Expert")), 0) == 1);
 
   // PropertyControl (WndProperty)
-  if (StringIsEqual(node.getName(), _T("Edit"))) {
+  if (StringIsEqual(node.GetName(), _T("Edit"))) {
     // Determine the width of the caption field
-    int caption_width = StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0);
+    int caption_width = StringToIntDflt(node.GetAttribute(_T("CaptionWidth")), 0);
 
     if (Layout::ScaleSupported())
       caption_width = Layout::Scale(caption_width);
@@ -592,8 +592,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     caption_width = ScaleWidth(caption_width);
 
     // Determine whether the control is multiline or readonly
-    bool multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
-    bool read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
+    bool multi_line = StringToIntDflt(node.GetAttribute(_T("MultiLine")), 0);
+    bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
 
     // Load the event callback properties
     WndProperty::DataChangeCallback_t data_notify_callback =
@@ -635,11 +635,11 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     property->SetOnHelpCallback(help_callback);
 
     // Load the help text
-    property->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")),
+    property->SetHelpText(StringToStringDflt(node.GetAttribute(_T("Help")),
                                              NULL));
 
     // If the control has (at least) one DataField child control
-    const XMLNode *data_field_node = node.getChildNode(_T("DataField"));
+    const XMLNode *data_field_node = node.GetChildNode(_T("DataField"));
     if (data_field_node != NULL) {
       // -> Load the first DataField control
       DataField *data_field =
@@ -650,10 +650,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
         property->SetDataField(data_field);
     }
 
-  } else if (StringIsEqual(node.getName(), _T("TextEdit"))) {
+  } else if (StringIsEqual(node.GetName(), _T("TextEdit"))) {
     // Determine whether the control is multiline or readonly
-    bool multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
-    bool read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
+    bool multi_line = StringToIntDflt(node.GetAttribute(_T("MultiLine")), 0);
+    bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
 
     EditWindowStyle edit_style(style);
     if (read_only)
@@ -680,7 +680,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     edit->set_font(*xml_dialog_look->text_font);
 
   // ButtonControl (WndButton)
-  } else if (StringIsEqual(node.getName(), _T("Button"))) {
+  } else if (StringIsEqual(node.GetName(), _T("Button"))) {
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback click_callback =
       (WndButton::ClickNotifyCallback)
@@ -696,7 +696,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                            rc,
                            button_style, click_callback);
 
-  } else if (StringIsEqual(node.getName(), _T("CheckBox"))) {
+  } else if (StringIsEqual(node.GetName(), _T("CheckBox"))) {
     // Determine click_callback function
     CheckBoxControl::ClickNotifyCallback click_callback =
       (CheckBoxControl::ClickNotifyCallback)
@@ -711,7 +711,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                                  style, click_callback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
-  } else if (StringIsEqual(node.getName(), _T("SymbolButton"))) {
+  } else if (StringIsEqual(node.GetName(), _T("SymbolButton"))) {
     // Determine ClickCallback function
     WndButton::ClickNotifyCallback click_callback =
       (WndButton::ClickNotifyCallback)
@@ -726,7 +726,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                                  style, click_callback);
 
   // PanelControl (WndPanel)
-  } else if (StringIsEqual(node.getName(), _T("Panel"))) {
+  } else if (StringIsEqual(node.GetName(), _T("Panel"))) {
     // Create the PanelControl
 
     style.ControlParent();
@@ -742,7 +742,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                         lookup_table, &node);
 
   // KeyboardControl
-  } else if (StringIsEqual(node.getName(), _T("Keyboard"))) {
+  } else if (StringIsEqual(node.GetName(), _T("Keyboard"))) {
     KeyboardControl::OnCharacterCallback_t character_callback =
       (KeyboardControl::OnCharacterCallback_t)
       GetCallBack(lookup_table, node, _T("OnCharacter"));
@@ -755,7 +755,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     window = kb;
   // DrawControl (WndOwnerDrawFrame)
-  } else if (StringIsEqual(node.getName(), _T("Canvas"))) {
+  } else if (StringIsEqual(node.GetName(), _T("Canvas"))) {
     // Determine DrawCallback function
     WndOwnerDrawFrame::OnPaintCallback_t paint_callback =
       (WndOwnerDrawFrame::OnPaintCallback_t)
@@ -769,7 +769,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     window = canvas;
 
   // FrameControl (WndFrame)
-  } else if (StringIsEqual(node.getName(), _T("Label"))){
+  } else if (StringIsEqual(node.GetName(), _T("Label"))){
     // Create the FrameControl
     WndFrame* frame = new WndFrame(parent, *xml_dialog_look,
                                    pos.x, pos.y, size.cx, size.cy,
@@ -779,16 +779,16 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     frame->SetCaption(caption);
     // Set caption color
     Color color;
-    if (StringToColor(node.getAttribute(_T("CaptionColor")), color))
+    if (StringToColor(node.GetAttribute(_T("CaptionColor")), color))
       frame->SetCaptionColor(color);
 
     window = frame;
 
   // ListBoxControl (ListControl)
-  } else if (StringIsEqual(node.getName(), _T("List"))){
+  } else if (StringIsEqual(node.GetName(), _T("List"))){
     // Determine ItemHeight of the list items
     UPixelScalar item_height =
-      Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
+      Layout::Scale(StringToIntDflt(node.GetAttribute(_T("ItemHeight")), 18));
 
     // Create the ListBoxControl
 
@@ -811,7 +811,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                              rc, style, item_height);
 
   // TabControl (Tabbed)
-  } else if (StringIsEqual(node.getName(), _T("Tabbed"))) {
+  } else if (StringIsEqual(node.GetName(), _T("Tabbed"))) {
     // Create the TabControl
 
     style.ControlParent();
@@ -831,12 +831,12 @@ LoadChild(SubForm &form, ContainerWindow &parent,
         tabbed->AddClient(child);
     }
   // TabBarControl (TabBar)
-  } else if (StringIsEqual(node.getName(), _T("TabBar"))) {
+  } else if (StringIsEqual(node.GetName(), _T("TabBar"))) {
     // Create the TabBarControl
 
     bool flip_orientation = false;
-    if ( (Layout::landscape && StringToIntDflt(node.getAttribute(_T("Horizontal")), 0)) ||
-         (!Layout::landscape && StringToIntDflt(node.getAttribute(_T("Vertical")), 0) ) )
+    if ( (Layout::landscape && StringToIntDflt(node.GetAttribute(_T("Horizontal")), 0)) ||
+         (!Layout::landscape && StringToIntDflt(node.GetAttribute(_T("Vertical")), 0) ) )
       flip_orientation = true;
 
     style.ControlParent();
@@ -846,7 +846,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     window = tabbar;
 
     // TabMenuControl (TabMenu)
-  } else if (StringIsEqual(node.getName(), _T("TabMenu"))) {
+  } else if (StringIsEqual(node.GetName(), _T("TabMenu"))) {
     // Create the TabMenuControl
 
     style.ControlParent();
@@ -860,7 +860,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
                                                  style);
     window = tabmenu;
 
-  } else if (StringIsEqual(node.getName(), _T("Custom"))) {
+  } else if (StringIsEqual(node.GetName(), _T("Custom"))) {
     // Create a custom Window object with a callback
     CreateWindowCallback_t create_callback =
         (CreateWindowCallback_t)GetCallBack(lookup_table, node, _T("OnCreate"));
@@ -868,7 +868,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       return NULL;
 
     window = create_callback(parent, pos.x, pos.y, size.cx, size.cy, style);
-  } else if (StringIsEqual(node.getName(), _T("Widget"))) {
+  } else if (StringIsEqual(node.GetName(), _T("Widget"))) {
     style.ControlParent();
     DockWindow *dock = new DockWindow();
     dock->set(parent, rc, style);

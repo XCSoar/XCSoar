@@ -59,7 +59,7 @@ enum XMLError {
 /** Structure used to obtain error details if the parse fails. */
 struct XMLResults {
   enum XMLError error;
-  unsigned nLine, nColumn;
+  unsigned line, column;
 };
 
 struct XML;
@@ -71,83 +71,84 @@ protected:
    * To allow shallow copy and "intelligent/smart" pointers (automatic
    * delete).
    */
-  struct XMLNodeData : private NonCopyable {
+  struct Data : private NonCopyable {
     /** Structure for XML attribute. */
     struct Attribute : private NonCopyable {
-      TCHAR *lpszName;
-      TCHAR *lpszValue;
+      TCHAR *name;
+      TCHAR *value;
 
       Attribute(TCHAR *_name, TCHAR *_value)
-        :lpszName(_name), lpszValue(_value) {}
+        :name(_name), value(_value) {}
 
       ~Attribute() {
-        free(lpszName);
-        free(lpszValue);
+        free(name);
+        free(value);
       }
     };
 
     /** Element name (=NULL if root) */
-    const TCHAR *lpszName;
+    const TCHAR *name;
 
     /** Whether node is an XML declaration - '<?xml ?>' */
-    bool isDeclaration;
+    bool is_declaration;
 
     /** Array of child nodes */
-    std::list<XMLNode> pChild;
+    std::list<XMLNode> children;
 
     /** A concatentation of all text nodes */
     tstring text;
 
     /** Array of attributes */
-    std::forward_list<Attribute> pAttribute;
+    std::forward_list<Attribute> attributes;
 
     unsigned ref_count;
 
-    XMLNodeData(const TCHAR *_name, bool _is_declaration)
-      :lpszName(_name),
-       isDeclaration(_is_declaration),
+    Data(const TCHAR *_name, bool _is_declaration)
+      :name(_name),
+       is_declaration(_is_declaration),
        ref_count(1) {}
-    ~XMLNodeData();
+    ~Data();
 
     void Ref();
     void Unref();
 
     bool HasChildren() const {
-      return !pChild.empty() || !text.empty();
+      return !children.empty() || !text.empty();
     }
 
     void AddAttribute(TCHAR *name, TCHAR *value) {
-      pAttribute.emplace_front(name, value);
+      attributes.emplace_front(name, value);
     }
 
     typedef std::list<XMLNode>::const_iterator const_iterator;
 
     const_iterator begin() const {
-      return pChild.begin();
+      return children.begin();
     }
 
     const_iterator end() const {
-      return pChild.end();
+      return children.end();
     }
   };
 
-  XMLNodeData *d;
+  Data *d;
 
   /**
    * Protected constructor: use "parse" functions to get your first
    * instance of XMLNode.
    */
-  XMLNode(const TCHAR *lpszName, bool isDeclaration);
+  XMLNode(const TCHAR *name, bool is_declaration);
 
 public:
   // You must create your first instance of XMLNode with these 3 parse functions:
   // (see complete explanation of parameters below)
 
-  static XMLNode createRoot(const TCHAR *lpszName);
+  static XMLNode CreateRoot(const TCHAR *name);
 
-  static XMLNode *parseString(const TCHAR *lpszXML, XMLResults *pResults=NULL);
-  static XMLNode *parseFile(const TCHAR *lpszXML, XMLResults *pResults=NULL);
-  static XMLNode *openFileHelper(const TCHAR *lpszXML);
+  static XMLNode *ParseString(const TCHAR *xml_string,
+                              XMLResults *pResults=NULL);
+  static XMLNode *ParseFile(const TCHAR *path, XMLResults *pResults=NULL);
+  static XMLNode *OpenFileHelper(const TCHAR *path);
 
   // The tag parameter should be the name of the first tag inside the XML file.
   // If the tag parameter is omitted, the 3 functions return a node that represents
@@ -159,23 +160,24 @@ public:
   //     can be used to trace the error.
   // you can have a detailed explanation of the parsing error with this function:
 
-  static bool GlobalError;
+  static bool global_error;
 
   /**
    * Parse XML errors into a user friendly string.
    */
-  static const TCHAR *getError(XMLError error);
+  gcc_const
+  static const TCHAR *GetErrorMessage(XMLError error);
 
   /**
    * name of the node
    */
-  const TCHAR *getName() const {
+  const TCHAR *GetName() const {
     assert(d != NULL);
 
-    return d->lpszName;
+    return d->name;
   }
 
-  typedef XMLNodeData::const_iterator const_iterator;
+  typedef Data::const_iterator const_iterator;
 
   const_iterator begin() const {
     return d->begin();
@@ -190,8 +192,8 @@ public:
    */
   gcc_pure
   const XMLNode *GetFirstChild() const {
-    return d != NULL && !d->pChild.empty()
-      ? &d->pChild.front()
+    return d != NULL && !d->children.empty()
+      ? &d->children.front()
       : NULL;
   }
 
@@ -201,8 +203,8 @@ private:
    */
   gcc_pure
   XMLNode *GetFirstChild() {
-    return d != NULL && !d->pChild.empty()
-      ? &d->pChild.front()
+    return d != NULL && !d->children.empty()
+      ? &d->children.front()
       : NULL;
   }
 
@@ -212,29 +214,30 @@ public:
    * if failing)
    */
   gcc_pure
-  const XMLNode *getChildNode(const TCHAR *name) const;
+  const XMLNode *GetChildNode(const TCHAR *name) const;
 
   /**
    * @return ith attribute content with specific name (return a NULL
    * if failing)
    */
-  const TCHAR *getAttribute(const TCHAR *name) const;
+  gcc_pure
+  const TCHAR *GetAttribute(const TCHAR *name) const;
 
   /**
    * Create an XML file from the head element.
    *
    * @param writer the stream to write the XML text to
 
-   * @param nFormat 0 if no formatting is required, otherwise nonzero
+   * @param format 0 if no formatting is required, otherwise nonzero
    * for formatted text with carriage returns and indentation.
    */
-  void serialise(TextWriter &writer, int nFormat) const;
+  void Serialise(TextWriter &writer, int format) const;
 
   gcc_pure
-  bool isDeclaration() const {
+  bool IsDeclaration() const {
     assert(d != NULL);
 
-    return d->isDeclaration;
+    return d->is_declaration;
   }
 
   // to allow shallow copy:
@@ -256,7 +259,7 @@ public:
   /**
    * Shallow copy.
    */
-  XMLNode& operator=(const XMLNode& A);
+  XMLNode &operator=(const XMLNode& A);
 
   XMLNode &operator=(XMLNode &&other) {
     std::swap(d, other.d);
@@ -271,7 +274,7 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode &AddChild(const TCHAR *lpszName, bool isDeclaration);
+  XMLNode &AddChild(const TCHAR *name, bool is_declaration);
 
   /**
    * Add an attribute to an element.
@@ -281,7 +284,7 @@ public:
   /**
    * Add text to the element.
    */
-  void AddText(const TCHAR *lpszValue);
+  void AddText(const TCHAR *value);
 
   void AddText(const TCHAR *text, size_t length);
 
@@ -296,8 +299,7 @@ private:
    * This recurses through all subnodes then adds contents of the
    * nodes to the string.
    */
-  static void serialiseR(const XMLNodeData *pEntry, TextWriter &writer,
-                         int nFormat);
+  static void Serialise(const Data &data, TextWriter &writer, int format);
 };
 
 #endif

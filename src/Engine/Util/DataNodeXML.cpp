@@ -28,7 +28,7 @@
 DataNode *
 DataNodeXML::Load(const TCHAR* path)
 {
-  XMLNode *child = XMLNode::openFileHelper(path);
+  XMLNode *child = XMLNode::OpenFileHelper(path);
   if (child == NULL)
     return NULL;
 
@@ -40,20 +40,20 @@ DataNodeXML::Load(const TCHAR* path)
 DataNodeXML
 DataNodeXML::CreateRoot(const TCHAR *node_name)
 {
-  XMLNode new_root = XMLNode::createRoot(_tcsdup(node_name));
+  XMLNode new_root = XMLNode::CreateRoot(_tcsdup(node_name));
   return DataNodeXML(new_root);
 }
 
 void
 DataNodeXML::Serialise(TextWriter &writer) const
 {
-  node.serialise(writer, true);
+  node.Serialise(writer, true);
 }
 
 const TCHAR *
 DataNodeXML::GetName() const
 {
-  return node.getName();
+  return node.GetName();
 }
 
 DataNode*
@@ -65,7 +65,7 @@ DataNodeXML::AppendChild(const TCHAR *name)
 DataNode *
 DataNodeXML::GetChildNamed(const TCHAR *name) const
 {
-  const XMLNode *child = node.getChildNode(name);
+  const XMLNode *child = node.GetChildNode(name);
   if (child == NULL)
     return NULL;
 
@@ -86,7 +86,7 @@ DataNodeXML::ListChildrenNamed(const TCHAR *name) const
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
-    if (_tcsicmp(i->getName(), name) == 0)
+    if (_tcsicmp(i->GetName(), name) == 0)
       list.push_back(new DataNodeXML(*i));
   return list;
 }
@@ -100,7 +100,7 @@ DataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
 bool
 DataNodeXML::GetAttribute(const TCHAR *name, tstring &value) const
 {
-  const TCHAR *v = node.getAttribute(name);
+  const TCHAR *v = node.GetAttribute(name);
   if (v == NULL)
     return false;
 

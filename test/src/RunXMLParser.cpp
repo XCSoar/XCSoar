@@ -34,7 +34,7 @@ int main(int argc, char **argv)
   tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
-  XMLNode *node = XMLNode::parseFile(path.c_str());
+  XMLNode *node = XMLNode::ParseFile(path.c_str());
   if (node == NULL) {
     fprintf(stderr, "XML parser failed\n");
     return EXIT_FAILURE;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
 #ifndef WIN32
   TextWriter writer("/dev/stdout");
-  node->serialise(writer, true);
+  node->Serialise(writer, true);
 #endif
   delete node;
 
