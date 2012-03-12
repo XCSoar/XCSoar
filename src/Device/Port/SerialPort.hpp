@@ -72,7 +72,15 @@ public:
    */
   virtual ~SerialPort();
 
+  /**
+   * Opens the serial port
+   * @return True on success, False on failure
+   */
+  bool Open();
+
 protected:
+  unsigned GetRxTimeout();
+
   bool IsDataPending() const {
     COMSTAT com_stat;
     DWORD errors;
@@ -98,31 +106,20 @@ protected:
 #endif
 
 public:
-  virtual size_t Write(const void *data, size_t length);
-
+  /* virtual methods from class Port */
   virtual bool Drain();
   virtual void Flush();
-
-  /**
-   * Opens the serial port
-   * @return True on success, False on failure
-   */
-  bool Open();
-
-  unsigned GetRxTimeout();
   virtual bool SetRxTimeout(unsigned Timeout);
-  virtual unsigned GetBaudrate() const;
   virtual bool SetBaudrate(unsigned baud_rate);
+  virtual unsigned GetBaudrate() const;
   virtual bool StopRxThread();
   virtual bool StartRxThread();
-
   virtual int Read(void *Buffer, size_t Size);
   virtual WaitResult WaitRead(unsigned timeout_ms);
+  virtual size_t Write(const void *data, size_t length);
 
 protected:
-  /**
-   * Entry point for the receive thread
-   */
+  /* virtual methods from class Thread */
   virtual void Run();
 };
 
