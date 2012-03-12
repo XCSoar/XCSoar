@@ -68,11 +68,6 @@ public:
    * @return True on success, False on failure
    */
   bool Open();
-  /**
-   * Closes the serial port
-   * @return True on success, False on failure
-   */
-  bool Close();
 
   virtual bool SetRxTimeout(unsigned Timeout);
   virtual unsigned GetBaudrate() const;

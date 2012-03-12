@@ -52,7 +52,17 @@ SerialPort::SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler
 
 SerialPort::~SerialPort()
 {
-  Close();
+  if (hPort == INVALID_HANDLE_VALUE)
+    return;
+
+  StopRxThread();
+  Sleep(100); // todo ...
+
+  // Close the communication port.
+  if (CloseHandle(hPort)) {
+    if (!IsEmbedded())
+      Sleep(2000); // needed for windows bug
+  }
 }
 
 bool
@@ -298,28 +308,6 @@ SerialPort::Run()
   }
 
   Flush();
-}
-
-bool
-SerialPort::Close()
-{
-  if (hPort != INVALID_HANDLE_VALUE) {
-    StopRxThread();
-    Sleep(100); // todo ...
-
-    // Close the communication port.
-    if (!CloseHandle(hPort)) {
-      return false;
-    } else {
-      if (!IsEmbedded())
-        Sleep(2000); // needed for windows bug
-
-      hPort = INVALID_HANDLE_VALUE;
-      return true;
-    }
-  }
-
-  return false;
 }
 
 size_t

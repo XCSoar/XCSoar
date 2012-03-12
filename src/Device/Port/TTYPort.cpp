@@ -47,7 +47,13 @@ TTYPort::TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
 
 TTYPort::~TTYPort()
 {
-  Close();
+  if (fd < 0)
+    return;
+
+  StopRxThread();
+
+  close(fd);
+  fd = -1;
 }
 
 bool
@@ -93,19 +99,6 @@ TTYPort::Run()
   }
 
   Flush();
-}
-
-bool
-TTYPort::Close()
-{
-  if (fd < 0)
-    return true;
-
-  StopRxThread();
-
-  close(fd);
-  fd = -1;
-  return true;
 }
 
 Port::WaitResult
