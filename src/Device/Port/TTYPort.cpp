@@ -92,8 +92,35 @@ TTYPort::Run()
 {
   char buffer[1024];
 
-  // XXX use poll()
-  while (!WaitForStopped(50)) {
+  while (true) {
+    /* wait for data to arrive on the port */
+    switch (WaitRead(200)) {
+    case WaitResult::READY:
+      /* linger for a few more milliseconds so the device can send
+         some more data; without this, we would be waking up for every
+         single byte */
+      if (WaitForStopped(10))
+        return;
+
+      break;
+
+    case WaitResult::FAILED:
+      if (errno != EAGAIN && errno != EINTR) {
+        valid.Reset();
+        return;
+      }
+
+      /* non-fatal error, fall through */
+
+    case WaitResult::TIMEOUT:
+    case WaitResult::CANCELLED:
+      /* throttle */
+      if (WaitForStopped(500))
+        return;
+
+      continue;
+    }
+
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
     if (nbytes < 0 && errno != EAGAIN && errno != EINTR) {
       valid.Reset();
