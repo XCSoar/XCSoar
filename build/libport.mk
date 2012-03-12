@@ -16,6 +16,10 @@ ifeq ($(HAVE_CE),y)
 PORT_SOURCES += $(SRC)/Device/Port/Widcomm.cpp
 endif
 
+ifneq ($(DEBUG),n)
+PORT_SOURCES += $(SRC)/Device/Port/DumpPort.cpp
+endif
+
 $(eval $(call link-library,port,PORT))
 
 ifeq ($(TARGET),ANDROID)

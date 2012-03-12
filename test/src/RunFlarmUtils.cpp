@@ -21,20 +21,17 @@ Copyright_License {
 }
 */
 
+#include "DebugPort.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "OS/PathName.hpp"
+#include "OS/Args.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Util/StringUtil.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
-
-#ifdef HAVE_POSIX
-#include "Device/Port/TTYPort.hpp"
-#else
-#include "Device/Port/SerialPort.hpp"
-#endif
 
 #include <stdio.h>
 
@@ -348,31 +345,21 @@ RunUI(FlarmDevice &flarm, OperationEnvironment &env)
 int
 main(int argc, char **argv)
 {
-  if (argc != 3) {
-    fprintf(stderr, "Usage: %s PORT BAUD\n", argv[0]);
-    return EXIT_FAILURE;
-  }
+  Args args(argc, argv, "PORT BAUD");
+  const DeviceConfig config = ParsePortArgs(args);
+  args.ExpectEnd();
 
-  PathName port_name(argv[1]);
-
-  DeviceConfig config;
-  config.Clear();
-  config.baud_rate = atoi(argv[2]);
-
-#ifdef HAVE_POSIX
-  TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#else
-  SerialPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#endif
-
-  if (!port.Open()) {
+  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
 
   ConsoleOperationEnvironment env;
-  FlarmDevice flarm(port);
+  FlarmDevice flarm(*port);
   RunUI(flarm, env);
+
+  delete port;
 
   return EXIT_SUCCESS;
 }

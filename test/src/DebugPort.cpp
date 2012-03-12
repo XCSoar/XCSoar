@@ -24,35 +24,17 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "OS/Args.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Device/Port/ConfiguredPort.hpp"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-int main(int argc, char **argv)
+DeviceConfig
+ParsePortArgs(Args &args)
 {
-  Args args(argc, argv, "PORT BAUD");
-  const DeviceConfig config = ParsePortArgs(args);
-  args.ExpectEnd();
+  DeviceConfig config;
+  config.Clear();
 
-  Port *port = OpenPort(config, *(Port::Handler *)NULL);
-  if (port == NULL) {
-    delete port;
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  config.port_type = DeviceConfig::PortType::SERIAL;
+  config.path = args.ExpectNextT().c_str();
+  if (config.UsesSpeed())
+    config.baud_rate = atoi(args.ExpectNext());
 
-  port->SetRxTimeout(0x10000);
-
-  char buffer[4096];
-  while (true) {
-    int nbytes = port->Read(buffer, sizeof(buffer));
-    if (nbytes < 0)
-      break;
-
-    fwrite((const void *)buffer, 1, nbytes, stdout);
-  }
-
-  delete port;
-  return EXIT_SUCCESS;
+  return config;
 }

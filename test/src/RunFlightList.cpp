@@ -21,6 +21,8 @@ Copyright_License {
 }
 */
 
+#include "DebugPort.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Register.hpp"
@@ -29,14 +31,9 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/PathName.hpp"
+#include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
-
-#ifdef HAVE_POSIX
-#include "Device/Port/TTYPort.hpp"
-#else
-#include "Device/Port/SerialPort.hpp"
-#endif
 
 #include <stdio.h>
 
@@ -52,38 +49,27 @@ NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 
 int main(int argc, char **argv)
 {
-  if (argc != 4) {
-    fprintf(stderr, "Usage: %s DRIVER PORT BAUD\n"
-            "Where DRIVER is one of:\n", argv[0]);
-
-    const struct DeviceRegister *driver;
-    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
-      if (driver->IsLogger())
-        _ftprintf(stderr, _T("\t%s\n"), driver->name);
-
-    return EXIT_FAILURE;
+  NarrowString<1024> usage;
+  usage = "DRIVER PORT BAUD\n\n"
+          "Where DRIVER is one of:";
+  {
+    const DeviceRegister *driver;
+    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i) {
+      if (driver->IsLogger()) {
+        NarrowPathName driver_name(driver->name);
+        usage.AppendFormat("\n\t%s", (const char *)driver_name);
+      }
+    }
   }
 
-  PathName driver_name(argv[1]);
-  PathName port_name(argv[2]);
-
-  DeviceConfig config;
-  config.Clear();
-  config.baud_rate = atoi(argv[3]);
-
-#ifdef HAVE_POSIX
-  TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#else
-  SerialPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#endif
-  if (!port.Open()) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
+  Args args(argc, argv, usage);
+  tstring driver_name = args.ExpectNextT();
+  const DeviceConfig config = ParsePortArgs(args);
+  args.ExpectEnd();
 
   ConsoleOperationEnvironment env;
   RecordedFlightList flight_list;
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
     return EXIT_FAILURE;
@@ -95,7 +81,14 @@ int main(int argc, char **argv)
   }
 
   assert(driver->CreateOnPort != NULL);
-  Device *device = driver->CreateOnPort(config, port);
+
+  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  if (port == NULL) {
+    fprintf(stderr, "Failed to open COM port\n");
+    return EXIT_FAILURE;
+  }
+
+  Device *device = driver->CreateOnPort(config, *port);
   assert(device != NULL);
 
   if (!device->ReadFlightList(flight_list, env)) {
@@ -105,6 +98,7 @@ int main(int argc, char **argv)
   }
 
   delete device;
+  delete port;
 
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;

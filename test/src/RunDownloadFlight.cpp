@@ -24,19 +24,14 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/device.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
+#include "DebugPort.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/PathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "OS/Args.hpp"
-
-#ifdef HAVE_POSIX
-#include "Device/Port/TTYPort.hpp"
-#else
-#include "Device/Port/SerialPort.hpp"
-#endif
 
 #include <stdio.h>
 
@@ -74,31 +69,22 @@ int main(int argc, char **argv)
   }
 
   Args args(argc, argv, usage);
-
-  PathName driver_name(args.ExpectNext());
-  PathName port_name(args.ExpectNext());
-
-  DeviceConfig config;
-  config.Clear();
-  config.baud_rate = atoi(args.ExpectNext());
+  tstring driver_name = args.ExpectNextT();
+  const DeviceConfig config = ParsePortArgs(args);
 
   PathName path(args.ExpectNext());
 
   unsigned flight_id = args.IsEmpty() ? 0 : atoi(args.GetNext());
   args.ExpectEnd();
 
-#ifdef HAVE_POSIX
-  TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#else
-  SerialPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#endif
-  if (!port.Open()) {
+  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
 
   ConsoleOperationEnvironment env;
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
     args.UsageError();
@@ -110,18 +96,20 @@ int main(int argc, char **argv)
   }
 
   assert(driver->CreateOnPort != NULL);
-  Device *device = driver->CreateOnPort(config, port);
+  Device *device = driver->CreateOnPort(config, *port);
   assert(device != NULL);
 
   RecordedFlightList flight_list;
   if (!device->ReadFlightList(flight_list, env)) {
     delete device;
+    delete port;
     fprintf(stderr, "Failed to download flight list\n");
     return EXIT_FAILURE;
   }
 
   if (flight_list.empty()) {
     delete device;
+    delete port;
     fprintf(stderr, "Logger is empty\n");
     return EXIT_FAILURE;
   }
@@ -130,17 +118,20 @@ int main(int argc, char **argv)
 
   if (flight_id >= flight_list.size()) {
     delete device;
+    delete port;
     fprintf(stderr, "Flight id not found\n");
     return EXIT_FAILURE;
   }
 
   if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
     delete device;
+    delete port;
     fprintf(stderr, "Failed to download flight\n");
     return EXIT_FAILURE;
   }
 
   delete device;
+    delete port;
 
   printf("Flight downloaded successfully\n");
 

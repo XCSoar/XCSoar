@@ -23,16 +23,11 @@ Copyright_License {
 
 #include "Device/Driver/CAI302/Internal.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
+#include "DebugPort.hpp"
 #include "OS/Args.hpp"
-#include "OS/PathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Util/Macros.hpp"
-
-#ifdef HAVE_POSIX
-#include "Device/Port/TTYPort.hpp"
-#else
-#include "Device/Port/SerialPort.hpp"
-#endif
 
 #include <stdio.h>
 
@@ -161,33 +156,25 @@ int main(int argc, char **argv)
     "\n\tnavpoints"
     ;
   Args args(argc, argv, usage);
-
-  PathName port_name(args.ExpectNext());
-
-  DeviceConfig config;
-  config.Clear();
-  config.baud_rate = atoi(args.ExpectNext());
+  const DeviceConfig config = ParsePortArgs(args);
 
   const char *command = args.ExpectNext();
   args.ExpectEnd();
 
-#ifdef HAVE_POSIX
-  TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#else
-  SerialPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#endif
-  if (!port.Open()) {
+  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  if (port == NULL) {
     fprintf(stderr, "Failed to open port\n");
     return EXIT_FAILURE;
   }
 
   ConsoleOperationEnvironment env;
 
-  CAI302Device device(config, port);
+  CAI302Device device(config, *port);
   if (!RunCommand(device, command, env)) {
     fprintf(stderr, "error\n");
     return EXIT_FAILURE;
   }
 
+  delete port;
   return EXIT_SUCCESS;
 }

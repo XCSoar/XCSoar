@@ -21,38 +21,13 @@ Copyright_License {
 }
 */
 
-#include "DebugPort.hpp"
-#include "OS/Args.hpp"
-#include "Profile/DeviceConfig.hpp"
-#include "Device/Port/ConfiguredPort.hpp"
+#ifndef XCSOAR_DEBUG_PORT_HPP
+#define XCSOAR_DEBUG_PORT_HPP
 
-#include <stdio.h>
-#include <stdlib.h>
+class Args;
+struct DeviceConfig;
 
-int main(int argc, char **argv)
-{
-  Args args(argc, argv, "PORT BAUD");
-  const DeviceConfig config = ParsePortArgs(args);
-  args.ExpectEnd();
+DeviceConfig
+ParsePortArgs(Args &args);
 
-  Port *port = OpenPort(config, *(Port::Handler *)NULL);
-  if (port == NULL) {
-    delete port;
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
-
-  port->SetRxTimeout(0x10000);
-
-  char buffer[4096];
-  while (true) {
-    int nbytes = port->Read(buffer, sizeof(buffer));
-    if (nbytes < 0)
-      break;
-
-    fwrite((const void *)buffer, 1, nbytes, stdout);
-  }
-
-  delete port;
-  return EXIT_SUCCESS;
-}
+#endif

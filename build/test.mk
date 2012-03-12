@@ -1077,23 +1077,25 @@ RUN_AIRSPACE_PARSER_DEPENDS = ENGINE IO ZZIP MATH UTIL
 $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
 
 READ_PORT_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/ReadPort.cpp
-READ_PORT_DEPENDS = PORT
+READ_PORT_DEPENDS = PORT UTIL
 $(eval $(call link-program,ReadPort,READ_PORT))
 
 RUN_PORT_HANDLER_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunPortHandler.cpp
-ifeq ($(HAVE_CE),y)
-RUN_PORT_HANDLER_SOURCES += \
-	$(SRC)/Device/Port/Widcomm.cpp
-endif
-RUN_PORT_HANDLER_DEPENDS = PORT
+RUN_PORT_HANDLER_DEPENDS = PORT UTIL
 $(eval $(call link-program,RunPortHandler,RUN_PORT_HANDLER))
 
 RUN_TCP_LISTENER_SOURCES = \
@@ -1150,6 +1152,7 @@ RUN_DEVICE_DRIVER_DEPENDS = DRIVER MATH UTIL IO
 $(eval $(call link-program,RunDeviceDriver,RUN_DEVICE_DRIVER))
 
 RUN_DECLARE_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -1174,6 +1177,8 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
 RUN_DECLARE_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
@@ -1182,6 +1187,7 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(VEGA_SOURCES) \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1190,11 +1196,14 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunVegaSettings.cpp
 RUN_VEGA_SETTINGS_DEPENDS = PORT MATH UTIL IO
 $(eval $(call link-program,RunVegaSettings,RUN_VEGA_SETTINGS))
 
 RUN_FLARM_UTILS_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
@@ -1203,11 +1212,14 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
 RUN_FLARM_UTILS_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunFlarmUtils,RUN_FLARM_UTILS))
 
 RUN_FLIGHT_LIST_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -1231,11 +1243,14 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
 RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunFlightList,RUN_FLIGHT_LIST))
 
 RUN_DOWNLOAD_FLIGHT_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -1259,11 +1274,14 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
 RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ENGINE MATH UTIL IO
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
 
 CAI302_TOOL_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -1278,8 +1296,10 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/CAI302Tool.cpp
-CAI302_TOOL_DEPENDS = CAI302 PORT MATH IO
+CAI302_TOOL_DEPENDS = CAI302 PORT MATH IO UTIL
 $(eval $(call link-program,CAI302Tool,CAI302_TOOL))
 
 TEST_LXN_TO_IGC_SOURCES = \

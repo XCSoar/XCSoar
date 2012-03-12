@@ -21,14 +21,11 @@ Copyright_License {
 }
 */
 
-#include "OS/PathName.hpp"
+#include "DebugPort.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
+#include "Profile/DeviceConfig.hpp"
+#include "OS/Args.hpp"
 #include "OS/Sleep.h"
-
-#ifdef HAVE_POSIX
-#include "Device/Port/TTYPort.hpp"
-#else
-#include "Device/Port/SerialPort.hpp"
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,21 +39,13 @@ public:
 
 int main(int argc, char **argv)
 {
-  if (argc != 3) {
-    fprintf(stderr, "Usage: %s PORT BAUD\n", argv[0]);
-    return EXIT_FAILURE;
-  }
-
-  PathName port_name(argv[1]);
-  int baud = atoi(argv[2]);
+  Args args(argc, argv, "PORT BAUD");
+  const DeviceConfig config = ParsePortArgs(args);
+  args.ExpectEnd();
 
   MyHandler handler;
-#ifdef HAVE_POSIX
-  TTYPort port(port_name, baud, handler);
-#else
-  SerialPort port(port_name, baud, handler);
-#endif
-  if (!port.Open()) {
+  Port *port = OpenPort(config, handler);
+  if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
@@ -64,5 +53,6 @@ int main(int argc, char **argv)
   while (true)
     Sleep(10000);
 
+  delete port;
   return EXIT_SUCCESS;
 }

@@ -32,15 +32,11 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
+#include "DebugPort.hpp"
 
 #define MORE_USAGE
 #include "OS/Args.hpp"
-
-#ifdef HAVE_POSIX
-#include "Device/Port/TTYPort.hpp"
-#else
-#include "Device/Port/SerialPort.hpp"
-#endif
 
 #include <stdio.h>
 
@@ -97,21 +93,11 @@ int main(int argc, char **argv)
 
   tstring _driver_name = args.ExpectNextT();
   const TCHAR *driver_name = _driver_name.c_str();
-  tstring _port_name = args.ExpectNextT();
-  const TCHAR *port_name = _port_name.c_str();
-  const char *baud_string = args.ExpectNext();
+  const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
 
-  DeviceConfig config;
-  config.Clear();
-  config.baud_rate = atoi(baud_string);
-
-#ifdef HAVE_POSIX
-  TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#else
-  SerialPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
-#endif
-  if (!port.Open()) {
+  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
@@ -147,7 +133,7 @@ int main(int argc, char **argv)
     }
 
     assert(through_driver->CreateOnPort != NULL);
-    through_device = through_driver->CreateOnPort(config, port);
+    through_device = through_driver->CreateOnPort(config, *port);
     assert(through_device != NULL);
   }
 
@@ -163,7 +149,7 @@ int main(int argc, char **argv)
   }
 
   assert(driver->CreateOnPort != NULL);
-  Device *device = driver->CreateOnPort(config, port);
+  Device *device = driver->CreateOnPort(config, *port);
   assert(device != NULL);
 
   ConsoleOperationEnvironment env;
@@ -181,6 +167,7 @@ int main(int argc, char **argv)
 
   delete through_device;
   delete device;
+  delete port;
 
   return EXIT_SUCCESS;
 }
