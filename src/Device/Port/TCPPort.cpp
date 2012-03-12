@@ -46,7 +46,15 @@ TCPPort::TCPPort(unsigned _port, Handler &_handler)
 
 TCPPort::~TCPPort()
 {
-  Close();
+  if (listener_fd < 0)
+    return;
+
+  StopRxThread();
+
+  if (connection_fd >= 0)
+    close(connection_fd);
+
+  close(listener_fd);
 }
 
 bool
@@ -160,26 +168,6 @@ TCPPort::Run()
       }
     }
   }
-}
-
-bool
-TCPPort::Close()
-{
-  if (listener_fd < 0) {
-    assert(connection_fd < 0);
-    return true;
-  }
-
-  StopRxThread();
-
-  if (connection_fd >= 0) {
-    close(connection_fd);
-    connection_fd = -1;
-  }
-
-  close(listener_fd);
-  listener_fd = -1;
-  return true;
 }
 
 size_t

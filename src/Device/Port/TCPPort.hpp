@@ -56,11 +56,6 @@ public:
    * @return True on success, False on failure
    */
   bool Open();
-  /**
-   * Closes the serial port
-   * @return True on success, False on failure
-   */
-  bool Close();
 
   /* virtual methods from class Port */
   virtual bool Drain();
