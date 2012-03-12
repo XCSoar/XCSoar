@@ -331,7 +331,7 @@ ConnectionProcessTimer(int itimeout)
 }
 
 void
-ProcessTimer::Process()
+ProcessTimer()
 {
   CommonProcessTimer();
 

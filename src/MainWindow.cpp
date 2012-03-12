@@ -502,7 +502,7 @@ MainWindow::OnTimer(WindowTimer &_timer)
   if (globalRunningEvent.Test()) {
     battery_timer.Process();
 
-    ProcessTimer::Process();
+    ProcessTimer();
 
     UpdateGaugeVisibility();
 
