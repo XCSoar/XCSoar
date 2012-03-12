@@ -28,12 +28,12 @@
 #include "Polar/Polar.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarStore.hpp"
+#include "Util/Macros.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
 #endif
 
-void GlidePolar::Update() {}
 
 TLineReader*
 OpenConfiguredTextFile(const TCHAR *profile_key, ConvertLineReader::charset cs)
@@ -113,13 +113,117 @@ TestBuiltInPolars()
   }
 }
 
+struct PerformanceItem {
+  unsigned storeIndex;
+  bool check_best_LD;
+  fixed best_LD;
+  bool check_best_LD_speed;
+  fixed best_LD_speed;       // km/h
+  bool check_min_sink;
+  fixed min_sink;            // m/s
+  bool check_min_sink_speed;
+  fixed min_sink_speed;      // km/h
+};
+
+static const PerformanceItem performanceData[] = {
+  /* 206 Hornet         */
+  {   0, true, fixed(38),   true,  fixed(103), true,  fixed(0.6),  true,  fixed( 74) },
+  /* Discus             */
+  {  30, true, fixed(43),   false, fixed(  0), true,  fixed(0.59), false, fixed(  0) },
+  /* G-103 TWIN II (PIL)*/
+  {  37, true, fixed(38.5), true,  fixed( 95), true,  fixed(0.64), true,  fixed( 80) },
+  /* H-201 Std. Libelle */
+  {  41, true, fixed(38),   true,  fixed( 90), true,  fixed(0.6),  true,  fixed( 75) },
+  /* Ka6 CR             */
+  {  45, true, fixed(30),   true,  fixed( 85), true,  fixed(0.65), true,  fixed( 72) },
+  /* K8                 */
+  {  46, true, fixed(25),   true,  fixed( 75), false, fixed(0),    true,  fixed( 62) },
+  /* LS-4               */
+  {  52, true, fixed(40.5), false, fixed(  0), true,  fixed(0.60), false, fixed(  0) },
+  /* Std. Cirrus        */
+  {  79, true, fixed(38.5), false, fixed(  0), true,  fixed(0.6),  false, fixed(  0) },
+  /* LS-1f              */
+  { 157, true, fixed(38.2), false, fixed(  0), true,  fixed(0.64), false, fixed(  0) },
+};
+
+static bool
+ValuePlausible(fixed ref, fixed used, fixed threshold = fixed(0.05))
+{
+  fprintf(stderr, "%.2f %.2f %.2f %.2f -- ", (double) ref, (double) used,
+          (double) fabs(ref - used), (double) (ref * threshold));
+  return fabs(ref - used) < ref * threshold;
+}
+
+static void
+TestBuiltInPolarsPlausibility()
+{
+  for(unsigned i = 0; i < ARRAY_SIZE(performanceData); i++) {
+    assert(i < PolarStore::Count());
+    unsigned si = performanceData[i].storeIndex;
+    PolarInfo polar = PolarStore::GetItem(si).ToPolarInfo();
+    PolarCoefficients pc = PolarCoefficients::From3VW(
+                              polar.v1, polar.v2, polar.v3,
+                              polar.w1, polar.w2, polar.w3);
+
+#ifdef _UNICODE
+    size_t wide_length = _tcslen(PolarStore::GetItem(i).name);
+    char polarName[wide_length * 4 + 1];
+    int narrow_length =
+        ::WideCharToMultiByte(CP_ACP, 0, PolarStore::GetItem(i).name, wide_length,
+                              polarName, sizeof(polarName), NULL, NULL);
+    polarName[narrow_length] = 0;
+#else
+    const char* polarName=PolarStore::GetItem(si).name;
+#endif
+
+    ok(pc.IsValid(), polarName);
+
+    GlidePolar gp(fixed_zero);
+    gp.SetCoefficients(pc, false);
+
+    // Glider empty weight
+    gp.SetReferenceMass(polar.reference_mass, false);
+    gp.SetBallastRatio(polar.max_ballast / polar.reference_mass);
+    gp.SetWingArea(polar.wing_area);
+
+    gp.Update();
+
+    fprintf(stderr, " LD: ");
+    ok(!performanceData[i].check_best_LD ||
+      ValuePlausible(performanceData[i].best_LD, gp.GetBestLD()),
+      polarName);
+    fprintf(stderr, "VLD: ");
+    ok(!performanceData[i].check_best_LD_speed ||
+       ValuePlausible(performanceData[i].best_LD_speed, gp.GetVBestLD() * fixed(3.6)),
+       polarName);
+    fprintf(stderr, " MS: ");
+    ok(!performanceData[i].check_min_sink ||
+       ValuePlausible(performanceData[i].min_sink, gp.GetSMin()),
+       polarName);
+    fprintf(stderr, "VMS: ");
+    ok(!performanceData[i].check_min_sink_speed ||
+       ValuePlausible(performanceData[i].min_sink_speed, gp.GetVMin() * fixed(3.6)),
+       polarName);
+  }
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(19 + 9 + PolarStore::Count());
+  unsigned num_tests = 19 + 9 + PolarStore::Count();
+
+  // NOTE: Plausibility tests disabled for now since many fail
+  if (0)
+    num_tests += ARRAY_SIZE(performanceData) * 5;
+
+  plan_tests(num_tests);
 
   TestBasic();
   TestFileImport();
   TestBuiltInPolars();
+
+  // NOTE: Plausibility tests disabled for now since many fail
+  if (0)
+    TestBuiltInPolarsPlausibility();
 
   return exit_status();
 }

@@ -423,6 +423,9 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Polar/Polar.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
+	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(TEST_SRC_DIR)/tap.c \
