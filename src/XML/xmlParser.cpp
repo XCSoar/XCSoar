@@ -49,6 +49,7 @@
 #include "Compatibility/string.h"
 #include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/tstring.hpp"
 
@@ -584,18 +585,12 @@ FindEndOfText(const TCHAR *lpszToken, size_t *pcbText)
 
   size_t cbText = (*pcbText) - 1;
   while (1) {
-    TCHAR ch = lpszToken[cbText];
-    switch (ch) {
-    case _T('\r'):
-    case _T('\n'):
-    case _T('\t'):
-    case _T(' '):
-      cbText--;
-      break;
-    default:
+    if (!IsWhitespaceOrNull(lpszToken[cbText])) {
       *pcbText = cbText + 1;
       return;
     }
+
+    cbText--;
   }
 }
 
