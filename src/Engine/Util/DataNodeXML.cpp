@@ -104,8 +104,7 @@ DataNodeXML::GetAttribute(const TCHAR *name, tstring &value) const
   if (v == NULL)
     return false;
 
-  tstring val(v);
-  value = val;
+  value.assign(v);
   return true;
 }
 
