@@ -183,10 +183,6 @@ class ActionInterface: public CommonInterface {
   friend class ProcessTimer;
 
 protected:
-  /**
-   * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
-   */
-  static void DisplayModes();
   static void SendGetComputerSettings();
 
   static bool force_shutdown;

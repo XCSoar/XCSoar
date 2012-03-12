@@ -282,8 +282,6 @@ ProcessTimer::CommonProcessTimer()
 {
   BlackboardProcessTimer();
 
-  ActionInterface::DisplayModes();
-
   SettingsProcessTimer();
 
   InfoBoxManager::ProcessTimer();

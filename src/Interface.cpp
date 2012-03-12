@@ -231,7 +231,7 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
   // (via ProcessTimer()) rather than waiting for the idle timer every 500ms
 
   if (trigger_draw) {
-    DisplayModes();
+    main_window.UpdateGaugeVisibility();
     InfoBoxManager::ProcessTimer();
   }
 
@@ -260,10 +260,4 @@ XCSoarInterface::CheckShutdown()
 
   return MessageBoxX(_("Quit program?"), _T("XCSoar"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES;
-}
-
-void
-ActionInterface::DisplayModes()
-{
-  main_window.UpdateGaugeVisibility();
 }

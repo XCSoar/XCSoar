@@ -504,6 +504,8 @@ MainWindow::OnTimer(WindowTimer &_timer)
 
     ProcessTimer::Process();
 
+    UpdateGaugeVisibility();
+
     if (!CommonInterface::GetUISettings().enable_thermal_assistant_gauge) {
       thermal_assistant.Clear();
     } else if (!CommonInterface::Calculated().circling ||
