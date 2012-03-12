@@ -122,7 +122,7 @@ TTYPort::Run()
     }
 
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
-    if (nbytes < 0 && errno != EAGAIN && errno != EINTR) {
+    if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
       valid.Reset();
       return;
     }
