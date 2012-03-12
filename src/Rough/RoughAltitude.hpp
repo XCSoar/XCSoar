@@ -154,7 +154,7 @@ public:
   }
 
   RoughAltitude &operator+=(const RoughAltitude other) {
-    value -= other.value;
+    value += other.value;
     return *this;
   }
 
