@@ -26,7 +26,6 @@ Copyright_License {
 #include "TCPPort.hpp"
 #include "K6BtPort.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Simulator.hpp"
 #include "LogFile.hpp"
 
 #ifdef _WIN32_WCE
@@ -90,9 +89,6 @@ WrapPort(const DeviceConfig &config, Port::Handler &handler, Port *port)
 static Port *
 OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
 {
-  if (is_simulator())
-    return new NullPort(handler);
-
   const TCHAR *path = NULL;
   TCHAR buffer[MAX_PATH];
 

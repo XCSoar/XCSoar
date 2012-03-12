@@ -221,6 +221,9 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(!ticker);
   assert(!IsBorrowed());
 
+  if (is_simulator())
+    return;
+
   CancelAsync();
 
   assert(!IsOccupied());
