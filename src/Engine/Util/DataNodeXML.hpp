@@ -69,7 +69,7 @@ public:
    *
    * @return Pointer to root node
    */
-  static DataNodeXML *CreateRoot(const TCHAR *node_name);
+  static DataNodeXML CreateRoot(const TCHAR *node_name);
 
   /**
    * Save tree canonically to file

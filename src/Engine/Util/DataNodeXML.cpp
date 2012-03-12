@@ -50,11 +50,11 @@ DataNodeXML::Load(const TCHAR* path)
   return data_node;
 }
 
-DataNodeXML *
+DataNodeXML
 DataNodeXML::CreateRoot(const TCHAR *node_name)
 {
   XMLNode new_root = XMLNode::createRoot(_tcsdup(node_name));
-  return new DataNodeXML(new_root);
+  return DataNodeXML(new_root);
 }
 
 void
