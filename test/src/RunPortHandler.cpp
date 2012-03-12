@@ -50,6 +50,12 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  if (!port->StartRxThread()) {
+    delete port;
+    fprintf(stderr, "Failed to start the port thread\n");
+    return EXIT_FAILURE;
+  }
+
   while (true)
     Sleep(10000);
 
