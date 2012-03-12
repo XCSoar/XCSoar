@@ -49,7 +49,6 @@ TTYPort::~TTYPort()
   StopRxThread();
 
   close(fd);
-  fd = -1;
 }
 
 bool
@@ -72,14 +71,19 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
   }
 
   baud_rate = _baud_rate;
-  SetBaudrate(baud_rate);
+  if (!SetBaudrate(baud_rate))
+    return false;
 
+  valid.Set();
   return true;
 }
 
 void
 TTYPort::Flush()
 {
+  if (!valid.Get())
+    return;
+
   tcflush(fd, TCIFLUSH);
 }
 
@@ -91,6 +95,11 @@ TTYPort::Run()
   // XXX use poll()
   while (!WaitForStopped(50)) {
     ssize_t nbytes = read(fd, buffer, sizeof(buffer));
+    if (nbytes < 0 && errno != EAGAIN && errno != EINTR) {
+      valid.Reset();
+      return;
+    }
+
     if (nbytes > 0)
       handler.DataReceived(buffer, nbytes);
   }
@@ -101,7 +110,9 @@ TTYPort::Run()
 Port::WaitResult
 TTYPort::WaitWrite(unsigned timeout_ms)
 {
-  if (fd < 0)
+  assert(fd >= 0);
+
+  if (!valid.Get())
     return WaitResult::FAILED;
 
   struct pollfd pfd;
@@ -120,7 +131,9 @@ TTYPort::WaitWrite(unsigned timeout_ms)
 size_t
 TTYPort::Write(const void *data, size_t length)
 {
-  if (fd < 0)
+  assert(fd >= 0);
+
+  if (!valid.Get())
     return 0;
 
   ssize_t nbytes = write(fd, data, length);
@@ -141,10 +154,7 @@ TTYPort::StopRxThread()
 {
   // Make sure the thread isn't terminating itself
   assert(!Thread::IsInside());
-
-  // Make sure the port is still open
-  if (fd < 0)
-    return false;
+  assert(fd >= 0);
 
   // If the thread is not running, cancel the rest of the function
   if (!Thread::IsDefined())
@@ -160,13 +170,14 @@ TTYPort::StopRxThread()
 bool
 TTYPort::StartRxThread()
 {
+  assert(fd >= 0);
+
+  if (!valid.Get())
+    return false;
+
   if (Thread::IsDefined())
     /* already running */
     return true;
-
-  // Make sure the port was opened correctly
-  if (fd < 0)
-    return false;
 
   // Start the receive thread
   StoppableThread::Start();
@@ -176,6 +187,11 @@ TTYPort::StartRxThread()
 bool
 TTYPort::SetRxTimeout(unsigned Timeout)
 {
+  assert(fd >= 0);
+
+  if (!valid.Get())
+    return false;
+
   rx_timeout = Timeout;
   return true;
 }
@@ -263,8 +279,7 @@ baud_rate_to_speed_t(unsigned baud_rate)
 bool
 TTYPort::SetBaudrate(unsigned BaudRate)
 {
-  if (fd < 0)
-    return false;
+  assert(fd >= 0);
 
   speed_t speed = baud_rate_to_speed_t(BaudRate);
   if (speed == B0)
@@ -296,6 +311,11 @@ TTYPort::SetBaudrate(unsigned BaudRate)
 int
 TTYPort::Read(void *Buffer, size_t Size)
 {
+  assert(fd >= 0);
+
+  if (!valid.Get())
+    return -1;
+
   ssize_t nbytes = read(fd, Buffer, Size);
 
   if (nbytes < 0 && errno == EAGAIN && rx_timeout > 0) {
@@ -313,7 +333,9 @@ TTYPort::Read(void *Buffer, size_t Size)
 Port::WaitResult
 TTYPort::WaitRead(unsigned timeout_ms)
 {
-  if (fd < 0)
+  assert(fd >= 0);
+
+  if (!valid.Get())
     return WaitResult::FAILED;
 
   struct pollfd pfd;

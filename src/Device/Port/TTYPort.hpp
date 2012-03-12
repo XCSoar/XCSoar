@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
 #include "Thread/StoppableThread.hpp"
+#include "Thread/Flag.hpp"
 #include "Port.hpp"
 
 /**
@@ -37,6 +38,8 @@ class TTYPort : public Port, protected StoppableThread
   unsigned baud_rate;
 
   int fd;
+
+  Flag valid;
 
 public:
   /**

@@ -1081,6 +1081,7 @@ $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
 
 READ_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1092,6 +1093,7 @@ $(eval $(call link-program,ReadPort,READ_PORT))
 
 RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1211,6 +1213,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -1296,6 +1299,7 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
