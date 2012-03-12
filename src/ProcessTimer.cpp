@@ -340,8 +340,6 @@ ProcessTimer()
     if (replay && replay->Update()) {
       if (CommonInterface::MovementDetected())
         replay->Stop();
-
-      return;
     }
 
     ConnectionProcessTimer();
