@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<Panel Name="frmComm">
-  <List Name="list" X="2" Y="2" Width="-2" Height="50" ItemHeight="18" Border="1"/>
-  <Widget Name="edit" X="2" Y="52" Height="-1" />
-</Panel>
-

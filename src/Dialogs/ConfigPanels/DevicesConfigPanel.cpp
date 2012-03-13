@@ -23,54 +23,48 @@ Copyright_License {
 
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
 #include "Form/List.hpp"
-#include "Form/DockWindow.hpp"
+#include "Form/ListWidget.hpp"
+#include "Form/TwoWidgets.hpp"
 #include "Widgets/DeviceEditWidget.hpp"
-#include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
-#include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Device/Register.hpp"
-#include "Device/List.hpp"
-#include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
-#include "Device/device.hpp"
 #include "Asset.hpp"
 #include "Protection.hpp"
 #include "DevicesConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Compatibility/string.h"
-#include "Util/Macros.hpp"
-#include "Form/XMLWidget.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/CallBackTable.hpp"
 
 class DevicesConfigPanel
-  : public XMLWidget, private ListControl::Handler,
-    private DeviceEditWidget::Listener {
+  : public ListWidget, private DeviceEditWidget::Listener {
+  TwoWidgets &container;
+  DeviceEditWidget &edit;
+
   unsigned current_device;
   bool current_modified;
 
   gcc_pure
   DeviceEditWidget &GetEditWidget() {
-    DockWindow *dock = (DockWindow *)form.FindByName(_T("edit"));
-    assert(dock != NULL);
-    return *(DeviceEditWidget *)dock->GetWidget();
+    return edit;
   }
 
   gcc_pure
   const DeviceEditWidget &GetEditWidget() const {
-    const DockWindow *dock = (const DockWindow *)form.FindByName(_T("edit"));
-    assert(dock != NULL);
-    return *(const DeviceEditWidget *)dock->GetWidget();
+    return edit;
   }
 
   bool SaveDeviceConfig();
 
 public:
+  DevicesConfigPanel(TwoWidgets &_container, DeviceEditWidget &_edit)
+    :container(_container), edit(_edit) {
+    edit.SetListener(this);
+  }
+
   const DeviceConfig &GetDeviceConfig(unsigned i) const {
     assert(i < NUMDEV);
 
@@ -95,8 +89,7 @@ public:
 
   void ShowDevice(unsigned idx);
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Move(const PixelRect &rc);
+  virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
 
 private:
@@ -159,6 +152,7 @@ void
 DevicesConfigPanel::OnCursorMoved(unsigned idx)
 {
   ShowDevice(idx);
+  container.UpdateLayout();
 }
 
 void
@@ -194,35 +188,10 @@ DevicesConfigPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-DevicesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+DevicesConfigPanel::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent,
-             Layout::landscape ? _T("IDR_XML_DEVICESCONFIGPANEL") :
-                               _T("IDR_XML_DEVICESCONFIGPANEL_L"));
-
-  current_device = 0;
-
-  DockWindow *dock = (DockWindow *)form.FindByName(_T("edit"));
-  assert(dock != NULL);
-  DeviceEditWidget *edit = new DeviceEditWidget(GetDeviceConfig(0));
-  edit->SetListener(this);
-  dock->SetWidget(edit);
-
-  ListControl *list = (ListControl *)form.FindByName(_T("list"));
-  assert(list != NULL);
-  list->SetHandler(this);
-  list->SetLength(NUMDEV);
-}
-
-void
-DevicesConfigPanel::Move(const PixelRect &rc)
-{
-  XMLWidget::Move(rc);
-
-  /* update "expert" rows (hack) */
-  DockWindow *dock = (DockWindow *)form.FindByName(_T("edit"));
-  assert(dock != NULL);
-  dock->MoveWidget();
+  CreateList(parent, UIGlobals::GetDialogLook(),
+             rc, Layout::Scale(18)).SetLength(NUMDEV);
 }
 
 bool
@@ -248,13 +217,25 @@ DevicesConfigPanel::OnModified(DeviceEditWidget &widget)
   bool changed = false, require_restart = false;
   if (GetEditWidget().Save(changed, require_restart) && changed) {
     current_modified = true;
-    ListControl *list = (ListControl *)form.FindByName(_T("list"));
-    list->Invalidate();
+    GetList().Invalidate();
   }
+
+  container.UpdateLayout();
 }
+
+class DevicesConfigPanel2 : public TwoWidgets {
+public:
+  DevicesConfigPanel2() {
+    const DeviceConfig &config =
+      CommonInterface::GetSystemSettings().devices[0];
+    DeviceEditWidget *edit = new DeviceEditWidget(config);
+    DevicesConfigPanel *list = new DevicesConfigPanel(*this, *edit);
+    TwoWidgets::Set(list, edit);
+  }
+};
 
 Widget *
 CreateDevicesConfigPanel()
 {
-  return new DevicesConfigPanel();
+  return new DevicesConfigPanel2();
 }
