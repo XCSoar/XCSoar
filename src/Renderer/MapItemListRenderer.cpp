@@ -101,11 +101,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     FormatUserDistanceSmart(item.vector.distance, distance_buffer, 32);
     FormatBearing(direction_buffer, ARRAY_SIZE(direction_buffer),
                   item.vector.bearing);
-    _stprintf(info_buffer, _T("%s: %s - %s: %s"),
+    _stprintf(info_buffer, _T("%s: %s, %s: %s"),
               _("Distance"), distance_buffer,
               _("Direction"), direction_buffer);
   } else {
-    _stprintf(info_buffer, _T("%s: %s - %s: %s"),
+    _stprintf(info_buffer, _T("%s: %s, %s: %s"),
               _("Distance"), _T("???"), _("Direction"), _T("???"));
   }
 
@@ -367,7 +367,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   StaticString<26> title_string(_("FLARM Traffic"));
   // Append name to the title, if it exists
   if (traffic.HasName()) {
-    title_string.append(_T(" - "));
+    title_string.append(_T(", "));
     title_string.append(traffic.name);
   }
   canvas.Select(name_font);
@@ -378,12 +378,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   if (traffic.altitude_available) {
     TCHAR tmp[15];
     FormatUserAltitude(traffic.altitude, tmp, 15);
-    info_string.AppendFormat(_T(" - %s: %s"), _("Altitude"), tmp);
+    info_string.AppendFormat(_T(", %s: %s"), _("Altitude"), tmp);
   }
   if (traffic.climb_rate_avg30s_available) {
     TCHAR tmp[15];
     FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 15);
-    info_string.AppendFormat(_T(" - %s: %s"), _("Vario"), tmp);
+    info_string.AppendFormat(_T(", %s: %s"), _("Vario"), tmp);
   }
   canvas.Select(small_font);
   canvas.text_clipped(left,
