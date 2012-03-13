@@ -40,7 +40,6 @@ enum ControlIndex {
   PolarDegradation,
   SafetyMC,
   RiskFactor,
-  PredictWindDrift,
 };
 
 class SafetyFactorsConfigPanel : public RowFormWidget {
@@ -105,11 +104,6 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            fixed_zero, fixed_one, fixed(0.1), false,
            task_behaviour.risk_gamma);
   SetExpertRow(RiskFactor);
-
-  AddBoolean(_("Predict wind drift"),
-             _("Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."),
-             task_behaviour.glide.predict_wind_drift);
-  SetExpertRow(PredictWindDrift);
 }
 
 bool
@@ -152,9 +146,6 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
                  iround(task_behaviour.risk_gamma * 10));
     changed = true;
   }
-
-  changed |= SaveValue(PredictWindDrift, szProfilePredictWindDrift,
-                       task_behaviour.glide.predict_wind_drift);
 
   _changed |= changed;
   _require_restart |= require_restart;

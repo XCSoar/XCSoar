@@ -36,7 +36,8 @@ enum ControlIndex {
   BlockSTF,
   EnableNavBaroAltitude,
   EnableExternalTriggerCruise,
-  AverEffTime
+  AverEffTime,
+  PredictWindDrift,
 };
 
 class GlideComputerConfigPanel : public RowFormWidget {
@@ -52,6 +53,7 @@ void
 GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
+  const TaskBehaviour &task_behaviour = settings_computer.task;
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -105,6 +107,11 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
               "Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds."),
           aver_eff_list, settings_computer.average_eff_time);
   SetExpertRow(AverEffTime);
+
+  AddBoolean(_("Predict wind drift"),
+             _("Account for wind drift for the predicted circling duration. This reduces the arrival height for legs with head wind."),
+             task_behaviour.glide.predict_wind_drift);
+  SetExpertRow(PredictWindDrift);
 }
 
 bool
@@ -113,6 +120,7 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false, require_restart = false;
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
+  TaskBehaviour &task_behaviour = settings_computer.task;
 
   changed |= SaveValueEnum(AutoMcMode, szProfileAutoMcMode, settings_computer.task.auto_mc_mode);
 
@@ -127,6 +135,9 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= require_restart |=
       SaveValueEnum(AverEffTime, szProfileAverEffTime, settings_computer.average_eff_time);
+
+  changed |= SaveValue(PredictWindDrift, szProfilePredictWindDrift,
+                       task_behaviour.glide.predict_wind_drift);
 
   _changed |= changed;
   _require_restart |= require_restart;
