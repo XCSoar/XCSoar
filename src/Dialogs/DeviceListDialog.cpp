@@ -240,7 +240,9 @@ DeviceListWidget::ReconnectCurrent()
     return;
   }
 
-  MessageOperationEnvironment env;
+  /* this OperationEnvironment instance must be persistent, because
+     DeviceDescriptor::Open() is asynchronous */
+  static MessageOperationEnvironment env;
   device.Reopen(env);
 }
 
@@ -286,7 +288,10 @@ DeviceListWidget::EditCurrent()
 
   DeviceDescriptor &descriptor = *device_list[index];
   descriptor.SetConfig() = widget.GetConfig();
-  MessageOperationEnvironment env;
+
+  /* this OperationEnvironment instance must be persistent, because
+     DeviceDescriptor::Open() is asynchronous */
+  static MessageOperationEnvironment env;
   descriptor.Reopen(env);
 }
 
