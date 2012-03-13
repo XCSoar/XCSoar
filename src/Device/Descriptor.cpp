@@ -371,6 +371,12 @@ DeviceDescriptor::Return()
 
   borrowed = false;
   assert(!IsOccupied());
+
+  /* if the caller has disabled the NMEA while the device was
+     borrowed, we may not have received new values for some time, but
+     that doesn't mean the device has failed; give it some time to
+     recover, and don't reopen right away */
+  reopen_clock.Update();
 }
 
 bool
