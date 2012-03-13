@@ -239,6 +239,10 @@ static gcc_constexpr_data PolarStore::Item internal_polars[] =
 
   // from IDAFlieg
   { _T("LS-1f"), 345, 80, 100, -0.75, 120, -0.98, 150, -1.6, 9.74, 0.0, 100 },
+
+  // from factory polar
+  { _T("Janus C RG (PIL)"), 519, 240, 90, -0.6, 120, -0.88, 160, -1.64, 17.3, 50, 108 },
+  { _T("Janus C RG (PAS)"), 610, 240, 95, -0.63, 140, -1.12, 180, -2.01, 17.3, 50, 108 },
 };
 
 const PolarStore::Item &
