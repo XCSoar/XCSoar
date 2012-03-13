@@ -31,8 +31,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#include <algorithm>
-
 using std::min;
 
 ScrollBar::ScrollBar()
@@ -85,6 +83,9 @@ ScrollBar::SetSlider(unsigned size, unsigned view_size,
   // Prevent the slider from getting to small
   if (height < GetWidth())
     height = GetWidth();
+
+  if (height > netto_height)
+    height = netto_height;
 
   // Calculate highest origin (counted in ListItems)
   unsigned max_origin = size - view_size;
@@ -184,21 +185,26 @@ ScrollBar::Paint(Canvas &canvas) const
   // ####  Slider   ####
   // ###################
 
-  canvas.line(rc_slider.left, rc_slider.top,
-              rc_slider.right, rc_slider.top);
-  canvas.line(rc_slider.left, rc_slider.bottom,
-              rc_slider.right, rc_slider.bottom);
+  if (rc_slider.top + 4 < rc_slider.bottom) {
+    canvas.line(rc_slider.left, rc_slider.top,
+                rc_slider.right, rc_slider.top);
+    canvas.line(rc_slider.left, rc_slider.bottom,
+                rc_slider.right, rc_slider.bottom);
 
-  PixelRect rc_slider2 = rc_slider;
-  ++rc_slider2.left;
-  ++rc_slider2.top;
-  canvas.DrawButton(rc_slider2, false);
+    PixelRect rc_slider2 = rc_slider;
+    ++rc_slider2.left;
+    ++rc_slider2.top;
+    canvas.DrawButton(rc_slider2, false);
+  }
 
   // fill the rest with darker gray
-  canvas.DrawFilledRectangle(rc.left + 1, up_arrow_rect.bottom + 1,
-                        rc.right, rc_slider.top, COLOR_GRAY);
-  canvas.DrawFilledRectangle(rc.left + 1, rc_slider.bottom,
-                        rc.right, down_arrow_rect.top, COLOR_GRAY);
+  if (up_arrow_rect.bottom + 1 < rc_slider.top)
+    canvas.DrawFilledRectangle(rc.left + 1, up_arrow_rect.bottom + 1,
+                               rc.right, rc_slider.top, COLOR_GRAY);
+
+  if (rc_slider.bottom < down_arrow_rect.top)
+    canvas.DrawFilledRectangle(rc.left + 1, rc_slider.bottom,
+                               rc.right, down_arrow_rect.top, COLOR_GRAY);
 }
 
 void

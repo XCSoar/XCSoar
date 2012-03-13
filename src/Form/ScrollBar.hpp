@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
+#include <algorithm>
+
 #ifdef WIN32
 #include <windows.h>
 #else
@@ -66,7 +68,8 @@ public:
 
   /** Returns the height of the scrollable area of the ScrollBar */
   PixelScalar GetNettoHeight() const {
-    return GetHeight() - 2 * GetWidth() - 1;
+    return std::max(PixelScalar(GetHeight() - 2 * GetWidth() - 1),
+                    PixelScalar(0));
   }
 
   /**
@@ -74,7 +77,8 @@ public:
    * (the area thats not covered with the slider)
    */
   PixelScalar GetScrollHeight() const {
-    return GetNettoHeight() - GetSliderHeight();
+    return std::max(PixelScalar(GetNettoHeight() - GetSliderHeight()),
+                    PixelScalar(1));
   }
 
   /**
