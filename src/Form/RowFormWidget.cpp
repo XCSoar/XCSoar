@@ -854,9 +854,12 @@ RowFormWidget::GetMinimumSize() const
   const UPixelScalar value_width =
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
 
+  const bool expert = UIGlobals::GetDialogSettings().expert;
+
   PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
   for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
-    size.cy += i->GetMinimumHeight();
+    if (i->available && (!i->expert || expert))
+      size.cy += i->GetMinimumHeight();
 
   return size;
 }
