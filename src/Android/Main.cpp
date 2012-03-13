@@ -82,6 +82,9 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
   BluetoothHelper::Initialise(env);
+#ifdef IOIOLIB
+  IOIOHelper::Initialise(env);
+#endif
 
   context = new Context(env, _context);
 
@@ -140,6 +143,9 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   delete context;
 
+#ifdef IOIOLIB
+  IOIOHelper::Deinitialise(env);
+#endif
   BluetoothHelper::Deinitialise(env);
   NativeInputListener::Deinitialise(env);
 }

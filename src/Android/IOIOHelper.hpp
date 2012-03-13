@@ -31,10 +31,19 @@ class PortBridge;
 
 class IOIOHelper : protected Java::Object {
 private:
-  jmethodID open_mid;
-  jmethodID openUart_mid;
+  static jclass cls;
+  static jmethodID ctor;
+  static jmethodID open_method;
+  static jmethodID openUart_method;
 
 public:
+  /**
+   * Global initialisation.  Looks up the methods of the
+   * IOIOHelper Java class.
+   */
+  static bool Initialise(JNIEnv *env);
+  static void Deinitialise(JNIEnv *env);
+
   IOIOHelper(JNIEnv *env);
   ~IOIOHelper() {
   }
@@ -47,7 +56,7 @@ public:
    * @return true if connection to IOIO is established, else false
    */
   bool open(JNIEnv *env) {
-    return env->CallBooleanMethod(Get(), open_mid);
+    return env->CallBooleanMethod(Get(), open_method);
   }
 
   /**

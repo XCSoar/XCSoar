@@ -25,10 +25,43 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "Java/Class.hpp"
 
+jclass IOIOHelper::cls;
+jmethodID IOIOHelper::ctor, IOIOHelper::open_method,
+  IOIOHelper::openUart_method;
+
+bool
+IOIOHelper::Initialise(JNIEnv *env)
+{
+  assert(cls == NULL);
+  assert(env != NULL);
+
+  jclass _cls = env->FindClass("org/xcsoar/IOIOHelper");
+  if (_cls == NULL) {
+    env->ExceptionClear();
+    return false;
+  }
+
+  cls = (jclass)env->NewGlobalRef(_cls);
+  env->DeleteLocalRef(_cls);
+
+  ctor = env->GetMethodID(cls, "<init>", "()V");
+  open_method = env->GetMethodID(cls, "open", "()Z");
+  openUart_method = env->GetMethodID(cls, "openUart",
+                                     "(II)Lorg/xcsoar/AndroidPort;");
+  return true;
+}
+
+void
+IOIOHelper::Deinitialise(JNIEnv *env)
+{
+  if (cls != NULL)
+    env->DeleteGlobalRef(cls);
+}
+
 PortBridge *
 IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 {
-  jobject obj = env->CallObjectMethod(Get(), openUart_mid, ID, (int)baud);
+  jobject obj = env->CallObjectMethod(Get(), openUart_method, ID, (int)baud);
   if (obj == NULL)
     return NULL;
 
@@ -39,21 +72,10 @@ IOIOHelper::openUart(JNIEnv *env, unsigned ID, unsigned baud)
 
 IOIOHelper::IOIOHelper(JNIEnv *env)
 {
-  jclass _cls = env->FindClass("org/xcsoar/IOIOHelper");
-  assert(_cls != NULL);
-
-  const Java::Class cls(env, _cls);
-
-  jmethodID cid = env->GetMethodID(cls, "<init>", "()V");
-  assert(cid != NULL);
-
-  jobject obj = env->NewObject(cls, cid);
+  jobject obj = env->NewObject(cls, ctor);
   assert(obj != NULL);
 
   Set(env, obj);
 
   env->DeleteLocalRef(obj);
-
-  open_mid = env->GetMethodID(cls, "open", "()Z");
-  openUart_mid = env->GetMethodID(cls, "openUart", "(II)Lorg/xcsoar/AndroidPort;");
 }
