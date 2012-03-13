@@ -27,6 +27,7 @@ Copyright_License {
 #include "Android/SoundUtil.hpp"
 #include "Android/Vibrator.hpp"
 #include "Android/PortBridge.hpp"
+#include "Android/BluetoothHelper.hpp"
 #include "Android/NativeInputListener.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
@@ -80,6 +81,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
+  BluetoothHelper::Initialise(env);
 
   context = new Context(env, _context);
 
@@ -137,6 +139,8 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   DeinitialiseDataPath();
 
   delete context;
+
+  BluetoothHelper::Deinitialise(env);
 }
 
 gcc_visibility_default

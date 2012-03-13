@@ -32,6 +32,13 @@ class PortBridge;
 
 namespace BluetoothHelper {
   /**
+   * Global initialisation.  Looks up the methods of the
+   * BluetoothHelper Java class.
+   */
+  bool Initialise(JNIEnv *env);
+  void Deinitialise(JNIEnv *env);
+
+  /**
    * Returns a list of all bonded devices.
    */
   gcc_malloc

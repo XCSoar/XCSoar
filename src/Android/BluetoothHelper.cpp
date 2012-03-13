@@ -26,47 +26,62 @@ Copyright_License {
 #include "Java/String.hpp"
 #include "Java/Class.hpp"
 
-jobjectArray
-BluetoothHelper::list(JNIEnv *env)
+namespace BluetoothHelper {
+  static jclass cls;
+  static jmethodID list_method, connect_method;
+}
+
+bool
+BluetoothHelper::Initialise(JNIEnv *env)
 {
+  assert(cls == NULL);
+  assert(env != NULL);
+
   jclass _cls = env->FindClass("org/xcsoar/BluetoothHelper");
   if (_cls == NULL) {
     /* Android < 2.0 doesn't have Bluetooth support */
     env->ExceptionClear();
-    return NULL;
+    return false;
   }
 
-  const Java::Class cls(env, _cls);
+  cls = (jclass)env->NewGlobalRef(_cls);
+  env->DeleteLocalRef(_cls);
+
+  list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
+  connect_method = env->GetStaticMethodID(cls, "connect",
+                                          "(Ljava/lang/String;)Lorg/xcsoar/BluetoothHelper;");
+  return true;
+}
+
+void
+BluetoothHelper::Deinitialise(JNIEnv *env)
+{
+  if (cls != NULL)
+    env->DeleteGlobalRef(cls);
+}
+
+jobjectArray
+BluetoothHelper::list(JNIEnv *env)
+{
+  if (cls == NULL)
+    return NULL;
 
   /* call BluetoothHelper.connect() */
 
-  jmethodID cid = env->GetStaticMethodID(cls, "list",
-                                         "()[Ljava/lang/String;");
-  assert(cid != NULL);
-
-  return (jobjectArray)env->CallStaticObjectMethod(cls, cid);
+  return (jobjectArray)env->CallStaticObjectMethod(cls, list_method);
 }
 
 PortBridge *
 BluetoothHelper::connect(JNIEnv *env, const char *address)
 {
-  jclass _cls = env->FindClass("org/xcsoar/BluetoothHelper");
-  if (_cls == NULL) {
-    /* Android < 2.0 doesn't have Bluetooth support */
-    env->ExceptionClear();
+  if (cls == NULL)
     return NULL;
-  }
-
-  const Java::Class cls(env, _cls);
 
   /* call BluetoothHelper.connect() */
 
-  jmethodID cid = env->GetStaticMethodID(cls, "connect",
-                                         "(Ljava/lang/String;)Lorg/xcsoar/BluetoothHelper;");
-  assert(cid != NULL);
-
   const Java::String address2(env, address);
-  jobject obj = env->CallStaticObjectMethod(cls, cid, address2.Get());
+  jobject obj = env->CallStaticObjectMethod(cls, connect_method,
+                                            address2.Get());
   if (obj == NULL)
     return NULL;
 
