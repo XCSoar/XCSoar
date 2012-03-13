@@ -61,6 +61,7 @@ HasDetails(const MapItem &item)
 {
   switch (item.type) {
   case MapItem::LOCATION:
+  case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::SELF:
   case MapItem::MARKER:
   case MapItem::THERMAL:
@@ -157,6 +158,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 {
   switch (item.type) {
   case MapItem::LOCATION:
+  case MapItem::ARRIVAL_ALTITUDE:
   case MapItem::SELF:
   case MapItem::MARKER:
   case MapItem::THERMAL:

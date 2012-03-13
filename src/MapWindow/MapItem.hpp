@@ -40,6 +40,7 @@ struct MapItem
 {
   enum Type {
     LOCATION,
+    ARRIVAL_ALTITUDE,
     SELF,
     TASK_OZ,
     AIRSPACE,
@@ -66,6 +67,29 @@ struct LocationMapItem: public MapItem
 
   LocationMapItem(const GeoVector &_vector, short _elevation)
     :MapItem(LOCATION), vector(_vector), elevation(_elevation) {}
+};
+
+/**
+ * An indirect MapItem that shows at what altitude the clicked location can
+ * be reached in straight glide and around terrain obstacles.
+ */
+struct ArrivalAltitudeMapItem: public MapItem
+{
+  /** Elevation of the point including safety height in MSL */
+  RoughAltitude safety_elevation;
+
+  /** Arrival altitude for straight glide in MSL */
+  RoughAltitude arrival_altitude_direct;
+  /** Arrival altitude around terrain in MSL */
+  RoughAltitude arrival_altitude_reach;
+
+  ArrivalAltitudeMapItem(RoughAltitude _safety_elevation,
+                         RoughAltitude _arrival_altitude_direct,
+                         RoughAltitude _arrival_altitude_reach)
+    :MapItem(ARRIVAL_ALTITUDE),
+     safety_elevation(_safety_elevation),
+     arrival_altitude_direct(_arrival_altitude_direct),
+     arrival_altitude_reach(_arrival_altitude_reach) {}
 };
 
 struct SelfMapItem: public MapItem

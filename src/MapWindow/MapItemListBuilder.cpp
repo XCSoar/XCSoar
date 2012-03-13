@@ -37,6 +37,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/ProtectedRoutePlanner.hpp"
 #include "FLARM/State.hpp"
 #include "Markers/ProtectedMarkers.hpp"
 #include "Markers/Markers.hpp"
@@ -167,6 +168,44 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
     elevation = RasterBuffer::TERRAIN_INVALID;
 
   list.checked_append(new LocationMapItem(vector, elevation));
+}
+
+void
+MapItemListBuilder::AddArrivalAltitudes(
+    const ProtectedRoutePlanner &route_planner,
+    const RasterTerrain *terrain, fixed safety_height)
+{
+  // Calculate terrain elevation if possible
+  short elevation;
+  if (terrain != NULL)
+    elevation = terrain->GetTerrainHeight(location);
+  else
+    elevation = RasterBuffer::TERRAIN_INVALID;
+
+  // Calculate target altitude
+  RoughAltitude safety_elevation(safety_height);
+  if (!RasterBuffer::IsInvalid(elevation))
+    safety_elevation += RoughAltitude(elevation);
+
+  // Save destination point incl. elevation and safety height
+  const AGeoPoint destination(location, safety_elevation);
+
+  // Calculate arrival altitudes
+  RoughAltitude arrival_height_direct(0), arrival_height_reach(0);
+
+  ProtectedRoutePlanner::Lease leased_route_planner(route_planner);
+  if (!leased_route_planner->FindPositiveArrival(
+      destination, arrival_height_reach, arrival_height_direct))
+    return;
+
+  // If we don't have terrain information we should not display the AGL
+  // arrival altitude. We achieve this by saving an invalid elevation in
+  // the MapItem instance.
+  if (RasterBuffer::IsInvalid(elevation))
+    safety_elevation = RasterBuffer::TERRAIN_INVALID;
+
+  list.checked_append(new ArrivalAltitudeMapItem(
+      safety_elevation, arrival_height_direct, arrival_height_reach));
 }
 
 void

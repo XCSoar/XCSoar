@@ -62,6 +62,12 @@ CompareMapItems(const MapItem *a, const MapItem *b)
   if (b->type == MapItem::LOCATION)
     return false;
 
+  if (a->type == MapItem::ARRIVAL_ALTITUDE)
+    return true;
+
+  if (b->type == MapItem::ARRIVAL_ALTITUDE)
+    return false;
+
   if (a->type == MapItem::SELF)
     return true;
 

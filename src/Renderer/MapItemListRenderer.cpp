@@ -56,6 +56,9 @@ namespace MapItemListRenderer
   void Draw(Canvas &canvas, const PixelRect rc, const LocationMapItem &item,
             const DialogLook &dialog_look);
 
+  void Draw(Canvas &canvas, const PixelRect rc,
+            const ArrivalAltitudeMapItem &item, const DialogLook &dialog_look);
+
   void Draw(Canvas &canvas, const PixelRect rc, const SelfMapItem &item,
             const DialogLook &dialog_look,
             const AircraftLook &look, const MapSettings &settings);
@@ -124,6 +127,86 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, info_buffer);
+}
+
+void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const ArrivalAltitudeMapItem &item,
+                          const DialogLook &dialog_look)
+{
+  const UPixelScalar line_height = rc.bottom - rc.top;
+
+  const Font &name_font = *dialog_look.list.font;
+  const Font &small_font = *dialog_look.small_font;
+  canvas.SetTextColor(COLOR_BLACK);
+
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+
+
+  bool elevation_available =
+      !RasterBuffer::IsInvalid((short)item.safety_elevation);
+
+  bool reach_relevant =
+      (item.arrival_altitude_reach != item.arrival_altitude_direct);
+
+  // Format title row
+
+  TCHAR altitude_buffer[32];
+  StaticString<256> buffer;
+
+  buffer.Format(_T("%s: "), _("Arrival Alt"));
+
+  if (elevation_available) {
+    RoughAltitude relative_arrival_altitude =
+        item.arrival_altitude_direct - item.safety_elevation;
+
+    FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
+                               altitude_buffer, ARRAY_SIZE(altitude_buffer));
+
+    buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
+  }
+
+  FormatUserAltitude(fixed((short)item.arrival_altitude_direct),
+                     altitude_buffer, ARRAY_SIZE(altitude_buffer));
+
+  buffer.AppendFormat(_T("%s %s"), altitude_buffer, _("MSL"));
+
+  // Draw title row
+
+  canvas.Select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
+
+  // Format comment row
+
+  if (reach_relevant) {
+    buffer.Format(_T("%s: "), _("around terrain"));
+
+    if (elevation_available) {
+      RoughAltitude relative_arrival_altitude =
+          item.arrival_altitude_reach - item.safety_elevation;
+
+      FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
+                                 altitude_buffer, ARRAY_SIZE(altitude_buffer));
+
+     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
+    }
+
+    FormatUserAltitude(fixed((short)item.arrival_altitude_reach),
+                       altitude_buffer, ARRAY_SIZE(altitude_buffer));
+
+    buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("MSL"));
+  } else {
+    buffer.clear();
+  }
+
+  buffer += _("incl. safety height");
+
+  // Draw comment row
+
+  canvas.Select(small_font);
+  canvas.text_clipped(left,
+                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                      rc, buffer);
 }
 
 void
@@ -401,6 +484,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   switch (item.type) {
   case MapItem::LOCATION:
     Draw(canvas, rc, (const LocationMapItem &)item, dialog_look);
+    break;
+  case MapItem::ARRIVAL_ALTITUDE:
+    Draw(canvas, rc, (const ArrivalAltitudeMapItem &)item, dialog_look);
     break;
   case MapItem::SELF:
     Draw(canvas, rc, (const SelfMapItem &)item,
