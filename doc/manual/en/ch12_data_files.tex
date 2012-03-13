@@ -197,7 +197,11 @@ must contain a single row of numbers separated with commas:
 \item Sink rate in m/s for second measurement point.
 \item Speed in km/h for third measurement point, (usually max manoeuvring speed).
 \item Sink rate in m/s for third measurement point.
-\item Optional the wing area in m$^2$ to allow the wing load computation. 
+\end{itemize}
+The following is an extension to the existing polare file format and thus optional. 
+\begin{itemize}
+\item The wing area in m$^2$ to allow the wing load computation (could be zero if unknown). 
+\item The max. manoeuvering speed in km/h to enable simple checks for the cruise speed command. 
 \end{itemize}
 
 An example, for the LS-3 glider, is given below:
