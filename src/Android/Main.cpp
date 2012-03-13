@@ -141,6 +141,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete context;
 
   BluetoothHelper::Deinitialise(env);
+  NativeInputListener::Deinitialise(env);
 }
 
 gcc_visibility_default

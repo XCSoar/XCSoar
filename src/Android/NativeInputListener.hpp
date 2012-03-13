@@ -30,6 +30,7 @@ Copyright_License {
 
 namespace NativeInputListener {
   void Initialise(JNIEnv *env);
+  void Deinitialise(JNIEnv *env);
 
   /**
    * Create a Java NativeInputListener instance.  It is not bound to a
