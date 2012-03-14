@@ -26,6 +26,7 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #include "Android/SoundUtil.hpp"
 #include "Android/Vibrator.hpp"
+#include "Android/InternalSensors.hpp"
 #include "Android/PortBridge.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Android/NativeInputListener.hpp"
@@ -79,6 +80,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 {
   Java::Init(env);
 
+  InternalSensors::Initialise(env);
   NativeInputListener::Initialise(env);
   PortBridge::Initialise(env);
   BluetoothHelper::Initialise(env);
@@ -148,6 +150,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 #endif
   BluetoothHelper::Deinitialise(env);
   NativeInputListener::Deinitialise(env);
+  InternalSensors::Deinitialise(env);
 }
 
 gcc_visibility_default

@@ -36,19 +36,27 @@ class Context;
 // and sensor facilities. Public methods handle activation and deactivation of
 // specific sensors.
 class InternalSensors {
+  static jclass gps_cls, sensors_cls;
+
+  // IDs for methods in InternalGPS.java.
+  static jmethodID gps_ctor_id, close_method;
+
+  // IDs for methods in NonGPSSensors.java.
+  static jmethodID sensors_ctor_id;
+  static jmethodID mid_sensors_getSubscribableSensors;
+  static jmethodID mid_sensors_subscribeToSensor_;
+  static jmethodID mid_sensors_cancelSensorSubscription_;
+  static jmethodID mid_sensors_subscribedToSensor_;
+  static jmethodID mid_sensors_cancelAllSensorSubscriptions_;
+
+public:
+  static bool Initialise(JNIEnv *env);
+  static void Deinitialise(JNIEnv *env);
+
  private:
   // Java objects working with the GPS and the other sensors respectively.
   Java::Object obj_InternalGPS_;
   Java::Object obj_NonGPSSensors_;
-
-  // IDs for methods in InternalGPS.java.
-  jmethodID close_method;
-
-  // IDs for methods in NonGPSSensors.java.
-  jmethodID mid_sensors_subscribeToSensor_;
-  jmethodID mid_sensors_cancelSensorSubscription_;
-  jmethodID mid_sensors_subscribedToSensor_;
-  jmethodID mid_sensors_cancelAllSensorSubscriptions_;
   std::vector<int> subscribable_sensors_;
 
   InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_obj);

@@ -24,7 +24,6 @@ Copyright_License {
 #include "Android/InternalSensors.hpp"
 #include "Android/Context.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "Java/Class.hpp"
 #include "org_xcsoar_InternalGPS.h"
 #include "org_xcsoar_NonGPSSensors.h"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -41,15 +40,52 @@ const int InternalSensors::TYPE_GYROSCOPE = 0x4;
 const int InternalSensors::TYPE_MAGNETIC_FIELD = 0x2;
 const int InternalSensors::TYPE_PRESSURE = 0x6;
 
-InternalSensors::InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_obj)
-    : obj_InternalGPS_(env, gps_obj),
-      obj_NonGPSSensors_(env, sensors_obj) {
-  // Retrieve method IDs from the InternalGPS object.
-  Java::Class gps_cls(env, env->GetObjectClass(gps_obj));
+jclass InternalSensors::gps_cls, InternalSensors::sensors_cls;
+jmethodID InternalSensors::gps_ctor_id, InternalSensors::close_method;
+jmethodID InternalSensors::sensors_ctor_id;
+jmethodID InternalSensors::mid_sensors_getSubscribableSensors;
+jmethodID InternalSensors::mid_sensors_subscribeToSensor_;
+jmethodID InternalSensors::mid_sensors_cancelSensorSubscription_;
+jmethodID InternalSensors::mid_sensors_subscribedToSensor_;
+jmethodID InternalSensors::mid_sensors_cancelAllSensorSubscriptions_;
+
+static jclass
+FindGlobalClass(JNIEnv *env, const char *name)
+{
+  jclass local_class = env->FindClass(name);
+  if (local_class == NULL)
+    return NULL;
+
+  jclass global_class = (jclass)env->NewGlobalRef(local_class);
+  env->DeleteLocalRef(local_class);
+
+  return global_class;
+}
+
+bool
+InternalSensors::Initialise(JNIEnv *env)
+{
+  assert(gps_cls == NULL);
+  assert(sensors_cls == NULL);
+  assert(env != NULL);
+
+  gps_cls = FindGlobalClass(env, "org/xcsoar/InternalGPS");
+  assert(gps_cls != NULL);
+
+  gps_ctor_id = env->GetMethodID(gps_cls, "<init>",
+                                 "(Landroid/content/Context;I)V");
   close_method = env->GetMethodID(gps_cls, "close", "()V");
 
-  // Retrieve method IDs from the NonGPSSensors object.
-  Java::Class sensors_cls(env, env->GetObjectClass(sensors_obj));
+  sensors_cls = FindGlobalClass(env, "org/xcsoar/NonGPSSensors");
+  assert(sensors_cls != NULL);
+
+  sensors_ctor_id = env->GetMethodID(sensors_cls, "<init>",
+                                     "(Landroid/content/Context;I)V");
+
+  mid_sensors_getSubscribableSensors =
+    env->GetMethodID(sensors_cls, "getSubscribableSensors", "()[I");
+  assert(mid_sensors_getSubscribableSensors != NULL);
+
   mid_sensors_subscribeToSensor_ =
       env->GetMethodID(sensors_cls, "subscribeToSensor", "(I)Z");
   mid_sensors_cancelSensorSubscription_ =
@@ -63,6 +99,22 @@ InternalSensors::InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_o
   assert(mid_sensors_subscribedToSensor_ != NULL);
   assert(mid_sensors_cancelAllSensorSubscriptions_ != NULL);
 
+  return true;
+}
+
+void
+InternalSensors::Deinitialise(JNIEnv *env)
+{
+  if (gps_cls != NULL)
+    env->DeleteGlobalRef(gps_cls);
+
+  if (sensors_cls != NULL)
+    env->DeleteGlobalRef(sensors_cls);
+}
+
+InternalSensors::InternalSensors(JNIEnv* env, jobject gps_obj, jobject sensors_obj)
+    : obj_InternalGPS_(env, gps_obj),
+      obj_NonGPSSensors_(env, sensors_obj) {
   // Import the list of subscribable sensors from the NonGPSSensors object.
   getSubscribableSensors(env, sensors_obj);
 }
@@ -101,20 +153,15 @@ void InternalSensors::cancelAllSensorSubscriptions() {
 
 InternalSensors* InternalSensors::create(JNIEnv* env, Context* context,
                                          unsigned int index) {
+  assert(sensors_cls != NULL);
+  assert(gps_cls != NULL);
+
   // Construct InternalGPS object.
-  Java::Class gps_cls(env, "org/xcsoar/InternalGPS");
-  jmethodID gps_ctor_id =
-      env->GetMethodID(gps_cls, "<init>", "(Landroid/content/Context;I)V");
-  assert(gps_ctor_id != NULL);
   jobject gps_obj =
-      env->NewObject(gps_cls, gps_ctor_id, context->Get(), index);
+    env->NewObject(gps_cls, gps_ctor_id, context->Get(), index);
   assert(gps_obj != NULL);
 
   // Construct NonGPSSensors object.
-  Java::Class sensors_cls(env, "org/xcsoar/NonGPSSensors");
-  jmethodID sensors_ctor_id =
-      env->GetMethodID(sensors_cls, "<init>", "(Landroid/content/Context;I)V");
-  assert(sensors_ctor_id != NULL);
   jobject sensors_obj =
       env->NewObject(sensors_cls, sensors_ctor_id, context->Get(), index);
   assert(sensors_obj != NULL);
@@ -129,11 +176,6 @@ InternalSensors* InternalSensors::create(JNIEnv* env, Context* context,
 
 // Helper for retrieving the set of sensors to which we can subscribe.
 void InternalSensors::getSubscribableSensors(JNIEnv* env, jobject sensors_obj) {
-  Java::Class cls(env, env->GetObjectClass(sensors_obj));
-  jmethodID mid_sensors_getSubscribableSensors =
-      env->GetMethodID(cls, "getSubscribableSensors", "()[I");
-  assert(mid_sensors_getSubscribableSensors != NULL);
-
   jintArray ss_arr = (jintArray) env->CallObjectMethod(
       obj_NonGPSSensors_.Get(), mid_sensors_getSubscribableSensors);
   jsize ss_arr_size = env->GetArrayLength(ss_arr);
