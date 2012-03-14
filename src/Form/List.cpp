@@ -105,14 +105,13 @@ ListControl::OnResize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::OnResize(width, height);
 
+  items_visible = height / item_height;
+
   if (height >= length * item_height) {
     /* after the resize, there is enough room for all list items -
        scroll back to the top */
-    SetOrigin(0);
-    SetPixelPan(0);
+    origin = pixel_pan = 0;
   }
-
-  items_visible = height / item_height;
 
   if (length > 0)
     /* make sure the cursor is still visible */
