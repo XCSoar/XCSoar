@@ -810,7 +810,8 @@ RowFormWidget::UpdateLayout()
         continue;
       }
 
-      window.Show();
+      if (i->visible)
+        window.Show();
     }
 
     if (caption_width > 0 && i->type == Row::Type::EDIT &&
