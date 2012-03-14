@@ -410,7 +410,7 @@ TestFlytec()
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, 3.34));
   ok1(nmea_info.airspeed_available);
-  ok1(equals(nmea_info.true_airspeed, 20.0));
+  ok1(equals(nmea_info.true_airspeed, 200));
 
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
@@ -424,7 +424,7 @@ TestFlytec()
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, 3.34));
   ok1(nmea_info.airspeed_available);
-  ok1(equals(nmea_info.true_airspeed, 20.0));
+  ok1(equals(nmea_info.true_airspeed, 200));
   ok1(!nmea_info.battery_level_available);
   ok1(!nmea_info.temperature_available);
 
@@ -441,7 +441,7 @@ TestFlytec()
   ok1(nmea_info.track_available);
   ok1(equals(nmea_info.track, 92));
   ok1(nmea_info.ground_speed_available);
-  ok1(equals(nmea_info.ground_speed, 11));
+  ok1(equals(nmea_info.ground_speed, 110));
   ok1(nmea_info.gps_altitude_available);
   ok1(equals(nmea_info.gps_altitude, 1234));
   ok1(nmea_info.gps.satellites_used_available);
@@ -453,7 +453,7 @@ TestFlytec()
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, -0.01));
   ok1(nmea_info.airspeed_available);
-  ok1(equals(nmea_info.true_airspeed, 10.3));
+  ok1(equals(nmea_info.true_airspeed, 103));
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, (88.0 + 38.0) / 2));
   ok1(nmea_info.temperature_available);
@@ -478,7 +478,7 @@ TestFlytec()
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, -0.01));
   ok1(nmea_info.airspeed_available);
-  ok1(equals(nmea_info.true_airspeed, 10.3));
+  ok1(equals(nmea_info.true_airspeed, 103));
   ok1(nmea_info.battery_level_available);
   ok1(equals(nmea_info.battery_level, 38.0));
   ok1(nmea_info.temperature_available);

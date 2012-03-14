@@ -170,10 +170,10 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
       info.track_available.Update(info.clock);
     }
 
-    //  Speed over Ground (xxxxx cm/s)        5 Digits
+    //  Speed over Ground (xxxxx dm/s), 5 Digits
     fixed ground_speed;
     if (line.read_checked(ground_speed)) {
-      info.ground_speed = ground_speed / 100;
+      info.ground_speed = ground_speed / 10;
       info.ground_speed_available.Update(info.clock);
     }
 
@@ -210,10 +210,10 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   if (line.read_checked(vario))
     info.ProvideTotalEnergyVario(vario / 100);
 
-  //  True airspeed (xxxxx cm/s),           5 Digits (0 to 99999cm/s = 3600km/h)
+  //  True airspeed (xxxxx dm/s), 5 Digits
   fixed tas;
   if (line.read_checked(tas))
-    info.ProvideTrueAirspeed(tas / 100);
+    info.ProvideTrueAirspeed(tas / 10);
 
   //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
   line.skip();
