@@ -497,6 +497,11 @@ DeviceEditWidget::UpdateVisibilities()
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
                 CanSendSettings(GetDataField(Driver)));
   SetRowAvailable(K6Bt, maybe_bluetooth);
+
+#ifndef NDEBUG
+  SetRowVisible(DumpPort, DeviceConfig::UsesPort(type));
+#endif
+
   SetRowVisible(IgnoreCheckSum, DeviceConfig::UsesDriver(type));
 }
 
@@ -671,7 +676,8 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
   }
 
 #ifndef NDEBUG
-  changed |= SaveValue(DumpPort, config.dump_port);
+  if (config.UsesPort())
+    changed |= SaveValue(DumpPort, config.dump_port);
 #endif
 
   _changed |= changed;
