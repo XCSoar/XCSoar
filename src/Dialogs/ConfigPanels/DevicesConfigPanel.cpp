@@ -61,7 +61,8 @@ class DevicesConfigPanel
 
 public:
   DevicesConfigPanel(TwoWidgets &_container, DeviceEditWidget &_edit)
-    :container(_container), edit(_edit) {
+    :container(_container), edit(_edit),
+     current_device(0), current_modified(false) {
     edit.SetListener(this);
   }
 
