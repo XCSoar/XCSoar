@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-05 23:23+0100\n"
-"PO-Revision-Date: 2012-03-05 18:00+0000\n"
+"PO-Revision-Date: 2012-03-07 22:39+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-05 22:41+0000\n"
-"X-Generator: Launchpad (build 14900)\n"
+"X-Launchpad-Export-Date: 2012-03-14 01:28+0000\n"
+"X-Generator: Launchpad (build 14933)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2188,14 +2188,12 @@ msgid "Edit"
 msgstr "Bearbeiten"
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
-#, fuzzy
 msgid "MC AUTO"
-msgstr "auto"
+msgstr "MC auto"
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
-#, fuzzy
 msgid "MC MANUAL"
-msgstr "manuell"
+msgstr "MC manuell"
 
 #: src/InfoBoxes/Content/Other.cpp:62
 msgid "AC Off"
@@ -3036,11 +3034,12 @@ msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:558
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr ""
+msgstr "Aktiviere dies, wenn Du ein K6Bt angeschlossen hast."
 
 #: src/Widgets/DeviceEditWidget.cpp:565
 msgid "Enable this if you would like to log the communication with the device."
 msgstr ""
+"Dies aktiviert den Mitschnitt der Kommunikation zum angeschlossenen Gerät."
 
 #: src/Widgets/DeviceEditWidget.cpp:572
 msgid "Ignore checksum"
@@ -3271,34 +3270,28 @@ msgid "Pressure"
 msgstr "Luftdruck"
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:37
-#, fuzzy
 msgid "Failed to load file."
-msgstr "Flug herunterladen fehlgeschlagen"
+msgstr "Konnte Datei nicht laden."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:42
-#, fuzzy
 msgid "Too many waypoints."
-msgstr "Zu viele Wenden.\n"
+msgstr "Zu viele Wegpunkte."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:46
-#, fuzzy
 msgid "Uploading Waypoints"
-msgstr "Lade Wegpunkte..."
+msgstr "Lade Wegpunkte hoch"
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:52
-#, fuzzy
 msgid "Failed to erase waypoints."
-msgstr "Weitere Wegpunkte"
+msgstr "Konnte Wegpunkte nicht löschen."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:58
-#, fuzzy
 msgid "Failed to switch baud rate."
-msgstr "Flug herunterladen fehlgeschlagen"
+msgstr "Konnte Baudrate nicht ändern."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:72
-#, fuzzy
 msgid "Failed to write waypoint."
-msgstr "Weitere Wegpunkte"
+msgstr "Konnte Wegpunkt nicht schreiben."
 
 #: src/Dialogs/Vega/VegaConfigurationDialog.cpp:99
 msgid "Set new audio scheme?  Old values will be lost."
@@ -3383,7 +3376,6 @@ msgid "Display"
 msgstr "Anzeige"
 
 #: src/Dialogs/dlgAirspaceColours.cpp:59
-#, fuzzy
 msgid "Select Color"
 msgstr "Farbauswahl"
 
@@ -6913,37 +6905,36 @@ msgid "METAR and TAF"
 msgstr "METAR und TAF"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Glider"
-msgstr "Polare"
+msgstr "Segler"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:92
 #, no-c-format
 msgid "Paraglider"
-msgstr ""
+msgstr "Gleitschirm"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Powered aircraft"
-msgstr "Kein Flugzeugtyp"
+msgstr "Motorflugzeug"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:94
 #, no-c-format
 msgid "Hot-air balloon"
-msgstr ""
+msgstr "Heißluftballon"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:106
 msgid "Tracking Interval"
 msgstr "Verfolgungsinterval"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
-#, fuzzy
 msgid "Vehicle Type"
-msgstr "Ändere Typ"
+msgstr "Luftfahrzeugtyp"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
 msgid "Type of vehicle used."
-msgstr ""
+msgstr "Typ des Luftfahrzeugs."
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:115
 msgid "Server"
@@ -8500,9 +8491,8 @@ msgid "Radial"
 msgstr "Radial"
 
 #: Data/Dialogs/pnlStatusTimes.xml:5
-#, fuzzy
 msgid "UTC time"
-msgstr "AAT - Zeit"
+msgstr "UTC Zeit"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
@@ -8552,9 +8542,8 @@ msgid "Vario Demo"
 msgstr "Vario Demo"
 
 #: Data/Dialogs/pnlStatusTimes.xml:6
-#, fuzzy
 msgid "UTC date"
-msgstr "Aktualisieren"
+msgstr "UTC Datum"
 
 #: Data/Dialogs/dlgStatusSystem.xml:5 Data/Dialogs/pnlStatusSystem.xml:5
 msgid "Satellites in view"
@@ -9036,26 +9025,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Wenn \"Externe Polare\" als Polarentyp ausgewählt ist, muss hier die "
 #~ "Datei mit der Polare ausgewählt werden (im WinPilot Format)."
-
-#~ msgid "Failed to enable download mode."
-#~ msgstr "Download Modus konnte nicht gestartet werden"
-
-#~ msgid "Panel name"
-#~ msgstr "Panel Name"
-
-#~ msgid ""
-#~ "MacCready\n"
-#~ "-"
-#~ msgstr ""
-#~ "MacCready\n"
-#~ "-"
-
-#~ msgid ""
-#~ "MacCready\n"
-#~ "+"
-#~ msgstr ""
-#~ "MacCready\n"
-#~ "+"
 
 #~ msgid "Task Declared!"
 #~ msgstr "Aufgabe deklariert!"
