@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-05 22:40+0000\n"
-"X-Generator: Launchpad (build 14900)\n"
+"X-Launchpad-Export-Date: 2012-03-14 01:28+0000\n"
+"X-Generator: Launchpad (build 14933)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3065,34 +3065,28 @@ msgid "Pressure"
 msgstr ""
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:37
-#, fuzzy
 msgid "Failed to load file."
-msgstr "descarcare zbor nereusita"
+msgstr ""
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:42
-#, fuzzy
 msgid "Too many waypoints."
-msgstr "Prea multe puncte de cotitură.\n"
+msgstr ""
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:46
-#, fuzzy
 msgid "Uploading Waypoints"
-msgstr "Incărcarea punctelor de cotitură..."
+msgstr ""
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:52
-#, fuzzy
 msgid "Failed to erase waypoints."
-msgstr "activare mod descarcare nereusita"
+msgstr ""
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:58
-#, fuzzy
 msgid "Failed to switch baud rate."
-msgstr "descarcare zbor nereusita"
+msgstr ""
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:72
-#, fuzzy
 msgid "Failed to write waypoint."
-msgstr "descarcare lista de zbor nereusita"
+msgstr ""
 
 #: src/Dialogs/Vega/VegaConfigurationDialog.cpp:99
 msgid "Set new audio scheme?  Old values will be lost."
@@ -7921,9 +7915,8 @@ msgid "Radial"
 msgstr ""
 
 #: Data/Dialogs/pnlStatusTimes.xml:5
-#, fuzzy
 msgid "UTC time"
-msgstr "AAT timp"
+msgstr ""
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
