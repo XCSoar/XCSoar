@@ -254,8 +254,12 @@ struct DeviceConfig {
 #endif
   }
 
+  static bool UsesPort(PortType port_type) {
+    return UsesDriver(port_type);
+  }
+
   bool UsesPort() const {
-    return UsesDriver();
+    return UsesPort(port_type);
   }
 
   void Clear() {
