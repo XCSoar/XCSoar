@@ -24,25 +24,42 @@ Copyright_License {
 #include "AircraftRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/AircraftLook.hpp"
-#include "Math/Screen.hpp"
 #include "MapSettings.hpp"
 #include "Util/Macros.hpp"
 #include "Math/Angle.hpp"
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/CanvasRotateShift.hpp"
+#else
+#include "Math/Screen.hpp"
+#endif
 
 class RotatedPolygonRenderer {
+#ifdef ENABLE_OPENGL
+  const RasterPoint *points;
+  CanvasRotateShift rotate_shift;
+#else
   RasterPoint points[64];
+#endif
 
 public:
   RotatedPolygonRenderer(const RasterPoint *src, unsigned n,
-                         const RasterPoint pos, const Angle angle) {
+                         const RasterPoint pos, const Angle angle)
+#ifdef ENABLE_OPENGL
+    :points(src), rotate_shift(pos, angle)
+#endif
+  {
+#ifndef ENABLE_OPENGL
     assert(n <= ARRAY_SIZE(points));
 
     std::copy(src, src + n, points);
     PolygonRotateShift(points, n, pos.x, pos.y, angle);
+#endif
   }
 
   void Draw(Canvas &canvas, unsigned start, unsigned n) const {
+#ifndef ENABLE_OPENGL
     assert(start + n <= ARRAY_SIZE(points));
+#endif
 
     canvas.DrawPolygon(points + start, n);
   }
@@ -61,7 +78,11 @@ DrawMirroredPolygon(const RasterPoint *src, unsigned points,
     dst[2 * points - i - 1].x = -dst[i].x;
     dst[2 * points - i - 1].y = dst[i].y;
   }
+#ifdef ENABLE_OPENGL
+  CanvasRotateShift rotate_shift(pos, angle, 50);
+#else
   PolygonRotateShift(dst, 2 * points, pos.x, pos.y, angle, 50);
+#endif
   canvas.DrawPolygon(dst, 2 * points);
 }
 
