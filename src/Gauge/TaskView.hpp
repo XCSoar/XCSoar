@@ -36,7 +36,10 @@ struct TaskLook;
 struct AirspaceLook;
 
 /**
+ * Draw the whole Task into a rectangle.
+ *
  * @param fai_sectors render FAI triangle sectors?
+ * @highlight_index highlight the task point as beeing manually edited
  */
 void
 PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
@@ -45,8 +48,13 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain, const Airspaces *airspaces,
-          bool fai_sectors=false);
+          bool fai_sectors=false,
+          int highlight_index = -1);
 
+/**
+ * Draw a detailed view of a TaskPoint into a rectangle.
+ * @highlight_index highlight the task point as beeing manually edited
+ */
 void
 PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
@@ -54,6 +62,7 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const MapSettings &settings_map,
                const TaskLook &task_look,
                const AirspaceLook &airspace_look,
-               const RasterTerrain *terrain, const Airspaces *airspaces);
+               const RasterTerrain *terrain, const Airspaces *airspaces,
+               int highlight_index = -1);
 
 #endif

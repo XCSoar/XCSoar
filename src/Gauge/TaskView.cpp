@@ -33,6 +33,7 @@
 #include "Look/AirspaceLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Look/TaskLook.hpp"
 #include "MapSettings.hpp"
 
 #ifndef ENABLE_OPENGL
@@ -102,7 +103,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain, const Airspaces *airspaces,
-          bool fai_sectors)
+          bool fai_sectors,
+          int highlight_index)
 {
   BackgroundRenderer background;
   background.SetTerrain(terrain);
@@ -122,8 +124,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 #ifndef ENABLE_OPENGL
                            buffer_canvas, stencil_canvas,
 #endif
-                           projection,
-                           settings_map.airspace);
+                           projection, settings_map.airspace);
   }
 
 #ifdef ENABLE_OPENGL
@@ -167,6 +168,19 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
                         location_available, location);
   TaskRenderer dv(tpv, projection.GetScreenBounds());
   dv.Draw(task);
+
+  // highlight a task point
+  if (highlight_index >= 0 && highlight_index < (int) task.TaskSize()) {
+    /* TODO: clumsy way of highlighting. maybe it should be done by
+     *       painting the task point with a different pen and brush,
+     *       e.g. red, 4px wide
+     */
+    RasterPoint pt = projection.GeoToScreen(task.GetPoint(highlight_index).
+                                            GetLocation());
+    canvas.Select(task_look.highlight_pen);
+    canvas.DrawLine(pt.x - 7, pt.y - 7, pt.x + 7, pt.y + 7);
+    canvas.DrawLine(pt.x + 7, pt.y - 7, pt.x - 7, pt.y + 7);
+  }
 }
 
 void
@@ -176,29 +190,30 @@ PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
           const RasterTerrain *terrain, const Airspaces *airspaces,
-          bool fai_sectors)
+          bool fai_sectors,
+          int highlight_index)
 {
   /* TODO: check location_available in ChartProjection */
   ChartProjection projection(rc, task, location);
   PaintTask(canvas, projection, task, location_available, location,
             settings_map,
             task_look, airspace_look, terrain, airspaces,
-            fai_sectors);
+            fai_sectors, highlight_index);
 }
 
 void
 PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const OrderedTask &task, const OrderedTaskPoint &point,
                bool location_available, const GeoPoint &location,
-               const MapSettings &settings_map,
-               const TaskLook &task_look,
+               const MapSettings &settings_map, const TaskLook &task_look,
                const AirspaceLook &airspace_look,
-               const RasterTerrain *terrain, const Airspaces *airspaces)
+               const RasterTerrain *terrain, const Airspaces *airspaces,
+               int highlight_index)
 {
   /* TODO: check location_available in ChartProjection */
   ChartProjection projection(rc, point, point.GetLocation());
   PaintTask(canvas, projection, task, location_available, location,
             settings_map,
             task_look, airspace_look, terrain, airspaces,
-            false);
+            false, highlight_index);
 }

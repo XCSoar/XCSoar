@@ -45,6 +45,8 @@ struct TaskLook {
   Pen best_cruise_track_pen;
   Brush best_cruise_track_brush;
 
+  Pen highlight_pen;
+
   MaskedIcon target_icon;
 
   /**

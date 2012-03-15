@@ -48,6 +48,8 @@ TaskLook::Initialise()
   best_cruise_track_brush.Set(bearing_color);
   best_cruise_track_pen.Set(Layout::ScalePenWidth(1), DarkColor(bearing_color));
 
+  highlight_pen.Set(Layout::ScalePenWidth(4), COLOR_BLACK);
+
   target_icon.Load(IDB_TARGET, IDB_TARGET_HD);
 
   hbGreen.Set(COLOR_GRAY);
