@@ -95,7 +95,7 @@ RenderFAISectors(Canvas &canvas, const WindowProjection &projection,
                     false);
 }
 
-static void
+void
 PaintTask(Canvas &canvas, const WindowProjection &projection,
           const OrderedTask &task,
           bool location_available, const GeoPoint &location,
