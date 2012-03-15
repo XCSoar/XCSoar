@@ -170,8 +170,7 @@ public:
     Brush brush(color);
 #else
     const Brush &brush = airspace_look.brushes[settings.classes[type].brush];
-    canvas.SetTextColor(LightColor(
-        airspace_look.preset_colors[settings.classes[type].color]));
+    canvas.SetTextColor(LightColor(settings.classes[type].color));
 #endif
 
     PixelRect rcd;
