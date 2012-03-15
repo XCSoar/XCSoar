@@ -44,3 +44,7 @@
 
 % the command \version prints the XCSoar version number
 \newcommand{\version}{\begingroup\catcode`\_=\active\input{VERSION.txt}\endgroup}
+
+% Define command to draw a sketch on the margin
+\newcommand{\sketch}[1]{\marginpar{\parbox{4.0cm}{\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{#1}}}}
+
