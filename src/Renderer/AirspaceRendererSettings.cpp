@@ -41,10 +41,10 @@ AirspaceRendererSettings::SetDefaults()
 
   AirspaceClassRendererSettings default_settings = {
     true,
-    COLOR_RED,
 #ifdef HAVE_HATCHED_BRUSH
     0,
 #endif
+    COLOR_RED,
   };
 
   std::fill(classes, classes + AIRSPACECLASSCOUNT, default_settings);

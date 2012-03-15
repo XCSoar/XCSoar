@@ -46,11 +46,11 @@ struct AirspaceClassRendererSettings
   /** Class-specific display flags */
   bool display;
 
-  Color color;
-
 #ifdef HAVE_HATCHED_BRUSH
   uint8_t brush;
 #endif
+
+  Color color;
 };
 
 /**
