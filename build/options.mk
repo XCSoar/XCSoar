@@ -29,6 +29,7 @@ ifeq ($(STOP_WATCH),y)
 TARGET_CPPFLAGS += -DSTOP_WATCH
 endif
 
+# this option must not be used if TESTING=y
 ifeq ($(NO_HORIZON),y)
 TARGET_CPPFLAGS += -DNO_HORIZON
 endif

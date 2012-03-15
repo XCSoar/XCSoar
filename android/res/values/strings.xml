@@ -2,4 +2,5 @@
 <resources>
   <string name="app_name">XCSoar</string>
   <string name="app_name_testing">XCS-test</string>
+  <string name="app_name_nohorizon">XCS-No Horizon</string>
 </resources>

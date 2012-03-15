@@ -395,8 +395,12 @@ class NativeView extends SurfaceView
     if (resourceId == 0) {
       resourceId = resources.getIdentifier(name, "drawable",
                                            "org.xcsoar.testing");
-      if (resourceId == 0)
-        return false;
+      if (resourceId == 0) {
+        resourceId = resources.getIdentifier(name, "drawable",
+                                             "org.xcsoar.nohorizon");
+        if (resourceId == 0)
+          return false;
+      }
     }
 
     /* load the Bitmap from the resource */
