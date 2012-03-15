@@ -69,8 +69,13 @@ ifeq ($(TESTING),y)
 $(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
 else
+ifeq ($(NO_HORIZON),y)
+$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_no_horizon_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
+	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+else
 $(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
+endif
 endif
 
 OGGENC = oggenc --quiet --quality 1

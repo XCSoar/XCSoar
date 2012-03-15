@@ -138,8 +138,13 @@ IDB_SMALL_HD            BITMAP  DISCARDABLE     "../output/data/icons/map_small_
 IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_red_160.bmp"
 IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_red_80.bmp"
 #else
+#ifdef NO_HORIZON
+IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_no_horizon_160.bmp"
+IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_no_horizon_80.bmp"
+#else
 IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_160.bmp"
 IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_80.bmp"
+#endif
 #endif
 IDB_TARGET              BITMAP  DISCARDABLE     "../output/data/icons/map_target.bmp"
 IDB_TARGET_HD           BITMAP  DISCARDABLE     "../output/data/icons/map_target_160.bmp"
