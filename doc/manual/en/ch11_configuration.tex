@@ -427,11 +427,14 @@ This page allows the safety heights and behaviour in abort mode to be defined.
   clear during final glide.
 \item[Alternates mode]  \label{conf:alternatesmode} Determines sorting of alternates 
   in the alternates dialogue and in abort mode. \\
-  {\bf Simple}: The alternates will only   be sorted by waypoint type 
-  (airport/outlanding field) and arrival height. \\
-  {\bf Task}: The sorting will also take the current task direction into account. \\
+  {\bf Simple}: The alternates will only be sorted by arrival height. 
+    The first waypoint in the list is therefore the most reachable waypoint. \\
+  {\bf Task}: The sorting will also take the current task direction into account, 
+    such that the sort order is according to minimum extra distance travelled to 
+    the respective field and onwards to the task. \\
   {\bf Home}: The sorting will try to find landing options in the current direction 
-  to the configured home waypoint.
+    to the configured home waypoint.  Similar to `task' but with 
+    the home field as the desired destination.
 \item[Safety MC*]  The MacCready setting used for reach calculations, task abort, alternates and
   for determining arrival altitude at airfields. 
 \item[STF risk factor*] 
