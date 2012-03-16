@@ -60,9 +60,9 @@ public:
 
   /** max number of items in list */
   static const unsigned max_abort;
-  /** min search range in km */
+  /** min search range in m */
   static const fixed min_search_range;
-  /** max search range in km */
+  /** max search range in m */
   static const fixed max_search_range;
 
   struct Alternate {
