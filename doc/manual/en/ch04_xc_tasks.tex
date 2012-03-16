@@ -21,8 +21,8 @@ later, preserving any statistics about achievement in the task.
 \section{Goto tasks}
 
 Goto tasks may be established by selecting a waypoint from the map,
-the waypoint list, or any other mechanism e.g. the alternates dialog 
-\gesture{Down - Left}, and select ``Goto''.  In goto task mode, selecting
+the waypoint list, or any other mechanism e.g. the alternates dialog,
+\gesture{Down - Left} and select ``Goto''.  In goto task mode, selecting
 \bmenu{Nav}\blink\bmenu{Task resume} resumes the ordered task (if
 any).
 
@@ -773,6 +773,7 @@ judgement that it will be impossible to complete the task.  In this
 situation, XCSoar can be instructed to 'abort' the task, and it will
 then help you reach a safe landing site.
 
+\subsection*{Task Abort}
 The task is aborted by any of those actions:
 \begin{itemize}
 \item Pressing \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Abort}
@@ -783,8 +784,7 @@ The task is aborted by any of those actions:
 
 Once aborted, whatever cross-country task was being flown is
 discarded.  The task waypoint list is then filled with nearby landing
-points. The landing point ordering follows the configured `Alternates mode'
-\config{alternatesmode} (Simple, Task, or Home).
+points. The landing points are ordered simply by their reachability.
 
 The configuration option `Reach polar' determines whether
 waypoint arrival heights in abort mode uses the MacCready value prior
@@ -806,6 +806,17 @@ If conditions improve, the task can be resumed (by selecting the same
 menu button that aborted the task).  The active waypoint, prior to
 aborting the task, is then restored along with all the other task
 details.
+
+\subsection*{Alternates}
+Alternates are maintained throughout the flight. They are filtered by
+the configured `Alternates mode' criteria. The first two items of that 
+alternates list are available as InfoBox. 
+\config{alternatesmode} (Simple, Task, or Home).
+Althouth the alternates obey different rules they interact in the same way 
+with the current task. Choosing a target of the alternates list aborts the task; 
+once the conditions get better the resuming of the task is doable by the already 
+mentioned button.
+
 
 \section{Logger}
 
