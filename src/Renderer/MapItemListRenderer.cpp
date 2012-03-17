@@ -153,8 +153,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   TCHAR altitude_buffer[32];
   StaticString<256> buffer;
-
-  buffer.Format(_T("%s: "), _("Arrival Alt"));
+  buffer.clear();
 
   if (elevation_available) {
     RoughAltitude relative_arrival_altitude =
@@ -199,7 +198,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     buffer.clear();
   }
 
-  buffer += _("incl. safety height");
+  buffer += _("Arrival altitude incl. safety height");
 
   // Draw comment row
 
