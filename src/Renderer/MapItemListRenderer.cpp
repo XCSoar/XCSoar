@@ -144,7 +144,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 
   bool elevation_available =
-      !RasterBuffer::IsInvalid((short)item.safety_elevation);
+      !RasterBuffer::IsInvalid((short)item.elevation);
 
   bool reach_relevant =
       (item.arrival_altitude_reach != item.arrival_altitude_direct);
@@ -158,7 +158,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   if (elevation_available) {
     RoughAltitude relative_arrival_altitude =
-        item.arrival_altitude_direct - item.safety_elevation;
+        item.arrival_altitude_direct - item.elevation;
 
     FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
                                altitude_buffer, ARRAY_SIZE(altitude_buffer));
@@ -183,7 +183,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
     if (elevation_available) {
       RoughAltitude relative_arrival_altitude =
-          item.arrival_altitude_reach - item.safety_elevation;
+          item.arrival_altitude_reach - item.elevation;
 
       FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
                                  altitude_buffer, ARRAY_SIZE(altitude_buffer));

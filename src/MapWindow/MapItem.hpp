@@ -75,19 +75,19 @@ struct LocationMapItem: public MapItem
  */
 struct ArrivalAltitudeMapItem: public MapItem
 {
-  /** Elevation of the point including safety height in MSL */
-  RoughAltitude safety_elevation;
+  /** Elevation of the point in MSL */
+  RoughAltitude elevation;
 
   /** Arrival altitude for straight glide in MSL */
   RoughAltitude arrival_altitude_direct;
   /** Arrival altitude around terrain in MSL */
   RoughAltitude arrival_altitude_reach;
 
-  ArrivalAltitudeMapItem(RoughAltitude _safety_elevation,
+  ArrivalAltitudeMapItem(RoughAltitude _elevation,
                          RoughAltitude _arrival_altitude_direct,
                          RoughAltitude _arrival_altitude_reach)
     :MapItem(ARRIVAL_ALTITUDE),
-     safety_elevation(_safety_elevation),
+     elevation(_elevation),
      arrival_altitude_direct(_arrival_altitude_direct),
      arrival_altitude_reach(_arrival_altitude_reach) {}
 };

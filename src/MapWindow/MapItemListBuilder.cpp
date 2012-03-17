@@ -198,14 +198,11 @@ MapItemListBuilder::AddArrivalAltitudes(
       destination, arrival_height_reach, arrival_height_direct))
     return;
 
-  // If we don't have terrain information we should not display the AGL
-  // arrival altitude. We achieve this by saving an invalid elevation in
-  // the MapItem instance.
-  if (RasterBuffer::IsInvalid(elevation))
-    safety_elevation = RasterBuffer::TERRAIN_INVALID;
+  arrival_height_direct -= RoughAltitude(safety_height);
+  arrival_height_reach -= RoughAltitude(safety_height);
 
   list.checked_append(new ArrivalAltitudeMapItem(
-      safety_elevation, arrival_height_direct, arrival_height_reach));
+      RoughAltitude(elevation), arrival_height_direct, arrival_height_reach));
 }
 
 void
