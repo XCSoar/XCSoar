@@ -70,7 +70,7 @@ UpdateChanging()
 
   // Fill distance field
   if (target_ok)
-    FormatUserDistanceSmart(target->distance, tmp, 20);
+    FormatUserDistanceSmart(target->distance, tmp, 20, fixed(1000));
   else
     _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);

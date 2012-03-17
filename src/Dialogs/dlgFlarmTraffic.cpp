@@ -318,7 +318,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   }
 
   // Distance
-  FormatUserDistanceSmart(traffic.distance, tmp, 20);
+  FormatUserDistanceSmart(traffic.distance, tmp, 20, fixed(1000));
   canvas.Select(look.info_values_font);
   sz = canvas.CalcTextSize(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);
