@@ -240,8 +240,13 @@ AbortTask::UpdateSample(const AircraftState &state,
 {
   Clear();
 
-  const unsigned active_waypoint_on_entry =
-      is_active ? active_waypoint : (unsigned)-1;
+  unsigned active_waypoint_on_entry;
+  if (is_active)
+    active_waypoint_on_entry = active_waypoint;
+  else {
+    active_waypoint = 0;
+    active_waypoint_on_entry = (unsigned) -1 ;
+  }
 
   active_task_point = 0; // default to best result if can't find user-set one 
 
@@ -256,7 +261,7 @@ AbortTask::UpdateSample(const AircraftState &state,
     return false;
   }
 
-  // sort by alt difference
+  // sort by arrival time
 
   // first try with final glide only
   reachable_landable |=  FillReachable(state, approx_waypoints, glide_polar,
