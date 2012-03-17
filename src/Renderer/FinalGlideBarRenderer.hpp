@@ -40,6 +40,10 @@ public:
                         const TaskLook &_task_look)
     :look(_look), task_look(_task_look) {}
 
+  const FinalGlideBarLook &GetLook() const {
+    return look;
+  }
+
   void Draw(Canvas &canvas, const PixelRect &rc,
             const DerivedInfo &calculated,
             const bool &final_glide_bar_mc0_enabled) const;
