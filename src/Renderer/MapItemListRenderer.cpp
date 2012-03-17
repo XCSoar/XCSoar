@@ -91,13 +91,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const LocationMapItem &item,
                           const DialogLook &dialog_look)
 {
-  const UPixelScalar line_height = rc.bottom - rc.top;
-
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
   canvas.SetTextColor(COLOR_BLACK);
 
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+  PixelScalar left = rc.left + Layout::FastScale(2);
 
   TCHAR info_buffer[256], distance_buffer[32], direction_buffer[32];
   if (item.vector.IsValid()) {
