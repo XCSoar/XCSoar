@@ -60,6 +60,16 @@ void FormatRelativeUserAltitude(fixed value, TCHAR *buffer,
                                 bool include_unit = true);
 
 /**
+ * Converts a distance into a formatted string
+ * @param value the distance
+ * @param buffer buffer string to write to (pointer)
+ * @param include_unit include the unit into the string?
+ * @param precision the number of decimal places
+ */
+void FormatUserDistance(fixed value, TCHAR *buffer,
+                        bool include_unit = true, int precision = 0);
+
+/**
  * Converts a distance into a formatted string using the smaller version
  * of the user-defined distance unit (km -> m, nm -> ft, sm -> ft)
  * @param buffer buffer string to write to (pointer)

@@ -70,6 +70,13 @@ FormatRelativeUserAltitude(fixed value, TCHAR *buffer, bool include_unit)
                          include_unit);
 }
 
+void
+FormatUserDistance(fixed value, TCHAR *buffer, bool include_unit, int precision)
+{
+  FormatDistance(buffer, value, Units::GetUserDistanceUnit(),
+                 include_unit, precision);
+}
+
 Unit
 FormatSmallUserDistance(TCHAR *buffer, fixed value, bool include_unit,
                         int precision)
