@@ -84,6 +84,11 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   MapItemListRenderer::Draw(canvas, rc, item,
                             *dialog_look, *look, *traffic_look,
                             *settings);
+
+  if (item.type == MapItem::Type::ARRIVAL_ALTITUDE) {
+    canvas.SelectBlackPen();
+    canvas.line(rc.left, rc.bottom - 1, rc.right, rc.bottom - 1);
+  }
 }
 
 static void
