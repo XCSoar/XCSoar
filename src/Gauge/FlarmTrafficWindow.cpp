@@ -652,13 +652,13 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 
   TCHAR distance_string[10];
   FormatUserDistanceSmart(distance, distance_string,
-                            ARRAY_SIZE(distance_string));
+                          ARRAY_SIZE(distance_string), fixed(1000));
   PixelSize s = canvas.CalcTextSize(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius - s.cy * 0.75, distance_string);
 
   FormatUserDistanceSmart(distance / 2, distance_string,
-                            ARRAY_SIZE(distance_string));
+                          ARRAY_SIZE(distance_string), fixed(1000));
   s = canvas.CalcTextSize(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);
