@@ -87,7 +87,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
   ShowMapItemListDialog(UIGlobals::GetMainWindow(), list,
                         UIGlobals::GetDialogLook(), look, traffic_look,
-                        GetMapSettings(),
+                        final_glide_bar_renderer.GetLook(), GetMapSettings(),
                         glide_computer != NULL
                         ? &glide_computer->GetAirspaceWarnings() : NULL);
   return true;

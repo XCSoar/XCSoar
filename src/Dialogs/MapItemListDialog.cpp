@@ -50,6 +50,7 @@ Copyright_License {
 static const DialogLook *dialog_look;
 static const MapLook *look;
 static const TrafficLook *traffic_look;
+static const FinalGlideBarLook *final_glide_look;
 static const MapSettings *settings;
 static ProtectedAirspaceWarningManager *airspace_warnings;
 static const MapItemList *list;
@@ -83,7 +84,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   const MapItem &item = *(*list)[idx];
   MapItemListRenderer::Draw(canvas, rc, item,
                             *dialog_look, *look, *traffic_look,
-                            *settings);
+                            *final_glide_look, *settings);
 
   if (item.type == MapItem::Type::ARRIVAL_ALTITUDE) {
     canvas.SelectBlackPen();
@@ -192,6 +193,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                       const DialogLook &_dialog_look,
                       const MapLook &_look,
                       const TrafficLook &_traffic_look,
+                      const FinalGlideBarLook &_final_glide_look,
                       const MapSettings &_settings,
                       ProtectedAirspaceWarningManager *_airspace_warnings)
 {
@@ -212,6 +214,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     dialog_look = &_dialog_look,
     look = &_look;
     traffic_look = &_traffic_look;
+    final_glide_look = &_final_glide_look;
     settings = &_settings;
     airspace_warnings = _airspace_warnings;
 

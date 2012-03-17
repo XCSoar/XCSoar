@@ -31,6 +31,7 @@ struct MapItem;
 struct DialogLook;
 struct MapLook;
 struct TrafficLook;
+struct FinalGlideBarLook;
 struct MapSettings;
 
 namespace MapItemListRenderer
@@ -39,6 +40,7 @@ namespace MapItemListRenderer
             const DialogLook &dialog_look,
             const MapLook &look,
             const TrafficLook &traffic_look,
+            const FinalGlideBarLook &final_glide_look,
             const MapSettings &settings);
 }
 
