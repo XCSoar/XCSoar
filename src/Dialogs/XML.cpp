@@ -722,7 +722,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     style.TabStop();
 
-    window = new WndSymbolButton(parent, *xml_dialog_look, caption,
+    const TCHAR* original_caption =
+        StringToStringDflt(node.GetAttribute(_T("Caption")), _T(""));
+
+    window = new WndSymbolButton(parent, *xml_dialog_look, original_caption,
                                  rc,
                                  style, click_callback);
 
