@@ -13,7 +13,7 @@ To run XCSoar, you need to obtain the following:
 
 \section{Compatibility}
 
-\subsection{Devices for running XCSoar}
+\subsection*{Devices for running XCSoar}
 
 XCSoar runs on the following platforms:
 
@@ -33,7 +33,7 @@ XCSoar runs on the following platforms:
 \item Linux
 \end{itemize}
 
-\subsection{GPS, Logger, Vario}
+\subsection*{GPS, Logger, Vario}
 
 XCSoar is compatible with any GPS emitting NMEA data.  Most modern
 Android devices have a built-in GPS, but sometimes it is favorable to
@@ -49,11 +49,12 @@ connect to an external device:
   XCSoar
 \end{itemize}
 
-\begin{figure}
+\subsection*{Supported external devices and features}
 \label{sec:supported-varios}
 \begin{tabular}{l|cccc}
 
-Product & Airspeed & Vario & Declaration & Download \\
+NMEA & Feature \\
+Device & Airspeed & Vario & Declaration & Download \\
 
 \hline
 
@@ -96,8 +97,6 @@ Westerboer VW1150 & $\surd$ & $\surd$ \\
 Zander / SDI & $\surd$ & $\surd$ \\
 
 \end{tabular}
-\caption{Supported external devices and some of their features}
-\end{figure}
 
 While most Windows CE based devices have a serial port, such legacy
 hardware is not present in modern Android devices.  Those can either
@@ -132,15 +131,12 @@ Choose one of the targets:
 
 Download the program file \verb|XCSoar.exe| to a SD card.  You can
 launch it with the File Explorer.
-
+\sketch{figures/XCS_Today.png}
 Another method to install XCSoar on a PDA is the CAB file.  Download
 it to the SD card.  Use the File Explorer to install it.  After the
 installation, the XCSoar `FLY' and `SIM' launcher icons will be
 visible on the Today screen.
 
-\begin{center}
-\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/XCS_Today.png}
-\end{center}
 
 \subsection*{On a PNA (Windows CE)}
 
@@ -265,15 +261,13 @@ To tell XCSoar which files to load, double click/tap the map (the large,
 blank white part with the glider symbol in the center),
 choose the menu \bmenu{Config} (click/tap it twice), then select
 \bmenu{System Setup}.  The System Setup screen should be displayed:
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-basic.png}
-\end{center}
+\sketch{figures/config-basic.png}
 The first page allows you to choose the map, 
 waypoint and airspace files, by clicking/tapping on the text boxes.
 Many other features of XCSoar may be configured with
 \bmenu{System Setup}. These are described in detail in Chapter
 \ref{cha:configuration}.
-Once completed, XCSoar must be restarted; from now on, the data files
+Once completed, XCSoar reloads those files; from now on, the data files
 will be loaded automatically at run time.
 
 \subsection*{Start-up and user profiles}

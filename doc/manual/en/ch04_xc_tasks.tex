@@ -21,12 +21,12 @@ later, preserving any statistics about achievement in the task.
 \section{Goto tasks}
 
 Goto tasks may be established by selecting a waypoint from the map,
-the waypoint list, or any other mechanism (e.g.\ alternate dialog),
-and select ``Goto''.  In goto task mode, selecting
+the waypoint list, or any other mechanism e.g. the alternates dialog,
+\gesture{Down - Left} and select ``Goto''.  In goto task mode, selecting
 \bmenu{Nav}\blink\bmenu{Task resume} resumes the ordered task (if
 any).
 
-\subsection{Automatic goto}
+\subsection*{Automatic goto}
 
 If no ordered task is defined, then on takeoff, a goto task is automatically
 established with the takeoff point as the destination, or the nearest airfield
@@ -513,7 +513,7 @@ will potentially brought back in a next release.
 The task calculator dialog allows the pilot to see the effect of
 various changes to the task on final performance.
 
-This may be accessed several ways:
+This may be accessed several ways: \gesture{Right - Down}
 \begin{itemize}
 \item From the menu 
 \begin{quote}
@@ -766,67 +766,57 @@ The score and computed optimal distance is approximate.
 When the aircraft has landed, the displayed result gest not updated anymore.
 
 
-\section{Abort/resume task}
+\section{Abort/resume the task and Alternates}
 
 If atmospheric conditions change for the worse, you may make the
 judgement that it will be impossible to complete the task.  In this
 situation, XCSoar can be instructed to 'abort' the task, and it will
 then help you reach a safe landing site.
 
-To abort/resume the task, press
-\begin{quote}
-\bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Abort}
-\end{quote}
+\subsection*{Task Abort}
+The task is aborted by any of those actions:
+\begin{itemize}
+\item Pressing \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Abort}
+\item Chosing an alternate from the list under  \gesture{Down - Left}
+ \bmenu{Nav}\blink\bmenu{Alternates}
+\item Or selecting a waypoint from the map and start a `Goto task'.
+\end{itemize}
 
 Once aborted, whatever cross-country task was being flown is
 discarded.  The task waypoint list is then filled with nearby landing
-points, ordered according to one of three `Alternates mode'\config{alternatesmode} configuration settings:
-\begin{description}
-\item[Simple] The estimated arrival altitude at best glide angle
-with the safety MacCready ring setting, adjusted for wind.    
-The first waypoint in the list is therefore the most reachable waypoint.
-\item[Task] The sorting will also take the current task direction into account, such that the sort order is according to minimum extra distance travelled to the respective field and onwards to the task.
-\item[Home] The sorting will try to find landing options in the current direction to the configured home waypoint.  Similar to `task' but with the home field as the desired destination.
-\end{description}
+points. The landing points are ordered simply by their reachability.
 
-The configuration option `Abort use current MC' determines whether
+The configuration option `Reach polar' determines whether
 waypoint arrival heights in abort mode uses the MacCready value prior
-to aborting the task, or if the safety MacCready value is used.  If
-this is false, the MC value used to calculate arrival heights in abort
-mode is the safety MacCready value.  Default is to use the safety
-MacCready value.  When switching to abort mode, the MacCready setting
-is set to the safety value if it is lower than the current setting.
+to aborting the task, or if the safety MacCready value is used. \config{reachpolar}
+Default is to use the safety MacCready value.  When switching to
+abort mode, the MacCready setting is set to the safety value 
+if it is lower than the current setting.
 
-When no land-point is reachable, then the nearest 10 landable points
-are shown. 
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/abort-low.png}
-\end{center}
-
-When at least one land-point is reachable, then only the reachable land-points are shown.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/abort-high.png}
-\end{center}
-
-If the task waypoint that was active, prior to aborting the task, is
-landable and estimated to be reachable, then it remains the active
-waypoint in abort mode.  Otherwise, the most reachable landable
-waypoint is selected as the active waypoint, even if there are no
-reachable waypoints.
+Always the nearest 10 landable points are shown, even if none 
+of them is reachable.
 
 The active waypoint, and in fact the list of nearby landable points in
 the task, is changed dynamically when in abort mode, so that at any
 time the pilot is presented with several landing options and any of
 these may be selected as the active waypoint.
+\sketch{figures/abort-low.png}
 
 If conditions improve, the task can be resumed (by selecting the same
 menu button that aborted the task).  The active waypoint, prior to
 aborting the task, is then restored along with all the other task
 details.
 
-When the task is aborted, the flight mode changes to final glide mode.
+\subsection*{Alternates}
+Alternates are maintained throughout the flight. They are filtered by
+the configured `Alternates mode' criteria. The first two items of that 
+alternates list are available as InfoBox. 
+\config{alternatesmode} (Simple, Task, or Home).
+Althouth the alternates obey different rules they interact in the same way 
+with the current task. Choosing a target of the alternates list aborts the task; 
+once the conditions get better the resuming of the task is doable by the already 
+mentioned button.
+
 
 \section{Logger}
 
@@ -919,7 +909,7 @@ The logger replay works best with high sampling rate log files;
 \section{Analysis dialog}\label{sec:analysis-dialog-climb}
 
 The analysis dialog is very useful in planning and conducting
-cross-country flights.  This is accessed via the menu under
+cross-country flights.  It is accessed via the menu  \gesture{Up - Right - Down}
 \begin{quote}
 \bmenu{Info}\blink\bmenu{Analysis}
 \end{quote}
