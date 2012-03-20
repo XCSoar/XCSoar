@@ -220,25 +220,27 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   canvas.Select(Fonts::map_bold);
   FormatUserMapScale(MapWidth, buffer.buffer(), true);
-  PixelSize TextSize = canvas.CalcTextSize(buffer);
+  PixelSize textSize = canvas.CalcTextSize(buffer);
 
-  UPixelScalar Height = Fonts::map_bold.GetCapitalHeight() + Layout::Scale(2);
-  // 2: add 1pix border
+  const PixelScalar textXPadding = Layout::Scale(2);
+  const PixelScalar height = Fonts::map_bold.GetCapitalHeight() + Layout::Scale(2);
 
-  canvas.DrawFilledRectangle(Layout::Scale(4), rc.bottom - Height,
-                        TextSize.cx + Layout::Scale(11), rc.bottom,
-                        COLOR_WHITE);
+  PixelScalar x = 0;
+  look.map_scale_left_icon.Draw(canvas, 0, rc.bottom - height);
+
+  x += look.map_scale_left_icon.GetSize().cx;
+  canvas.DrawFilledRectangle(x, rc.bottom - height,
+                             x + 2 * textXPadding + textSize.cx,
+                             rc.bottom, COLOR_WHITE);
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
-
-  canvas.text(Layout::Scale(7),
-              rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
+  x += textXPadding;
+  canvas.text(x, rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
               buffer);
 
-  look.map_scale_left_icon.Draw(canvas, 0, rc.bottom - Height);
-  look.map_scale_right_icon.Draw(canvas, Layout::Scale(9) + TextSize.cx,
-                                   rc.bottom - Height);
+  x += textXPadding + textSize.cx;
+  look.map_scale_right_icon.Draw(canvas, x, rc.bottom - height);
 
   buffer.clear();
   if (GetMapSettings().auto_zoom_enabled)
@@ -278,7 +280,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   if (!buffer.empty()) {
-    int y = rc.bottom - Height;
+    int y = rc.bottom - height;
 
     canvas.Select(Fonts::title);
     canvas.SetBackgroundOpaque();
