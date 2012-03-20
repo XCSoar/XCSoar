@@ -39,6 +39,7 @@ AndroidPort::~AndroidPort()
   {
     ScopeLock protect(mutex);
     closing = true;
+    cond.Signal();
   }
 
   delete bridge;
