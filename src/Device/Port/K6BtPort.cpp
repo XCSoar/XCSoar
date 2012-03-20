@@ -43,11 +43,11 @@ K6BtPort::~K6BtPort()
   delete port;
 }
 
-void
+bool
 K6BtPort::SendCommand(uint8_t cmd)
 {
   const uint8_t data[2] = { ESCAPE, cmd };
-  port->Write(data, sizeof(data));
+  return port->Write(data, sizeof(data)) == sizeof(data);
 }
 
 bool
@@ -150,8 +150,7 @@ K6BtPort::SetBaudrate(unsigned _baud_rate)
     /* not supported by K6Bt */
     return false;
 
-  SendCommand(CHANGE_BAUD_RATE | code);
-  return true;
+  return SendCommand(CHANGE_BAUD_RATE | code);
 }
 
 unsigned

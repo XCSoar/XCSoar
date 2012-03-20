@@ -48,7 +48,7 @@ public:
   virtual ~K6BtPort();
 
 protected:
-  void SendCommand(uint8_t cmd);
+  bool SendCommand(uint8_t cmd);
 
 public:
   /* virtual methods from Port */
