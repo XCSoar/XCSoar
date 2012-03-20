@@ -33,7 +33,7 @@ Copyright_License {
 #include <stdio.h>
 
 K6BtPort::K6BtPort(Port *_port, unsigned _baud_rate, Handler &_handler)
-  :Port(_handler), port(_port), baud_rate(_baud_rate)
+  :Port(_handler), port(_port), baud_rate(0)
 {
   SetBaudrate(baud_rate);
 }
@@ -145,12 +145,19 @@ BaudRateToK6Bt(unsigned baud_rate)
 bool
 K6BtPort::SetBaudrate(unsigned _baud_rate)
 {
+  if (_baud_rate == baud_rate)
+    return true;
+
   int code = BaudRateToK6Bt(_baud_rate);
   if (code < 0)
     /* not supported by K6Bt */
     return false;
 
-  return SendCommand(CHANGE_BAUD_RATE | code);
+  if (!SendCommand(CHANGE_BAUD_RATE | code))
+    return false;
+
+  baud_rate = _baud_rate;
+  return true;
 }
 
 unsigned
