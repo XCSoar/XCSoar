@@ -35,7 +35,7 @@ The configuration can be accessed through a two layer structured menu
 or just sequentially through the back and forward buttons.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-menu.png}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/config-menu.png}
 \end{center}
 
 You are strongly discouraged from changing these settings during
@@ -110,7 +110,7 @@ specified separately (as the ``Terrain file'' and ``Topography file'' respective
 When XCM map files are used, however, then these files contain terrain, topography
 and optionally waypoints and airspaces.  In this case, the ``Terrain file'', ``Topography file'' and 
 ``Primary waypoint file'' may be left blank and the system will load those items
-from the map file. However, if a map file is used, the useer can still specify the other
+from the map file. However, if a map file is used, the user can still specify the other
 files and they will be used instead of the data in the map file.
 
 See Section~\ref{sec:map} for more details on map files.
@@ -218,7 +218,7 @@ This page provides options relating to the map display.
   displayed. \\
   {\bf Required L/D}: Show the glide ratio (above ground) that is
   required to reach the waypoint.
-\item[Label style*]  Labels for lanbables can be shown on a rounded rectangle with 
+\item[Label style*]  Labels for landables can be shown on a rounded rectangle with 
   white background, or with outlined letters.
 \item[Waypoint label visibility*]  \label{conf:labelvisibility} Controls which waypoints 
   are displayed with names and arrival altitudes on the map: \\
@@ -261,7 +261,6 @@ changed terrain settings are directly visible at the small preview below.
 \end{description}
 
 
-%\begin{maxipage}
 The available terrain colour schemes are illustrated in the table below.
 
 \begin{longtable}{c c c c}
@@ -270,15 +269,13 @@ The available terrain colour schemes are illustrated in the table below.
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-grey.png}
 \end{longtable}
-%\\
+
 \begin{longtable}{c c c c}
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof4.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof7.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
 \includegraphics[angle=0,width=3.0cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
-%\\
 \end{longtable}
-%\end{maxipage}
 
 
 %%%%%%%%%%%%%%%%%%
@@ -386,7 +383,7 @@ This page allows glide computer algorithms to be configured.
   is set to the MacCready speed to fly in no vertical air-mass movement.
   If disabled, the command speed in cruise is set to the dolphin speed to fly,
   equivalent to the MacCready speed with vertical air-mass movement.
-\item[Nav by baro altitude*]  When enabled and if connected to a barometric
+\item[Nav. by baro altitude*]  When enabled and if connected to a barometric
   altimeter, barometric altitude is used for all navigation functions. Otherwise
   GPS altitude is used.
 \item[Flap forces cruise*]
@@ -440,7 +437,7 @@ optimisations.
 \item[Route mode]  \label{conf:routemode} This controls which types
   of obstacles are used in route planning. Please have a look at Section~\ref{sec:route} 
   for a detailed description.
-\item[Route climb*]  \label{conf:routeclimb} When enabled and Mc is positive, route 
+\item[Route climb*]  \label{conf:routeclimb} When enabled and MC is positive, route 
   planning allows climbs between the aircraft location and destination.
 \item[Route ceiling*]  \label{conf:routeceiling} When enabled, route planning climbs 
   are limited to ceiling defined by greater of current aircraft altitude plus 
@@ -471,7 +468,7 @@ glide reach is drawn as a line resp.\ a shade on the map area.
  the relative altitude of the target relative to you.
 \\
 \item[Auto close FLARM*]  This will close the FLARM radar view when all FLARM traffic has gone.
-\item[ThermalAssistant] \label{conf:thermalassistant} Enables the display of the
+\item[Thermal assistant] \label{conf:thermalassistant} Enables the display of the
 ThermalAssistant gauge.
 \item[Thermal band] \label{conf:thermalband} Enables the display of the
 thermal profile (climb band) overlay on the map.
@@ -507,10 +504,6 @@ This page bundles all details to the vario-gauge and is entirely classified as e
 Task rules may be defined to limit valid starts according to competition
 rules. \label{conf:taskrules}
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-rules.png}
-\end{center}
-
 \begin{description}
 \item[Start max. speed*]  Maximum speed allowed in start observation zone.  Set 
   to 0 for no limit.
@@ -523,11 +516,14 @@ rules. \label{conf:taskrules}
 \item[Start height ref.*]  Reference used for start max. height rule. \\
   {\bf MSL}: Reference is altitude above mean sea level. \\
   {\bf AGL}: Reference is the height above the start point.
-\item[Finish min. height*]  Minimum height above ground while finishing the task. 
-  Set to 0 for no limit. 
-\item[OnLine Contest] Determines the rules used to optimize OnLine Contest 
+\item[Finish min. height*]  Minimum height based on finish height reference 
+  (AGL or MSL) while finishing the task.  Set to 0 for no limit.
+\item[Finish height ref.*]  Reference used for finish min. height rule, 
+  correspondingly to the start rule height reference.
+\item[On-Line Contest] Determines the rules used to optimize On-Line Contest 
   paths.  The implementation  conforms to the official release 2010, Sept. 23. \\
-  {\bf OLC FAI}: Four points with common start and finish.  For tasks longer than
+  {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
+  finish.  For tasks longer than
   500km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\% 
   of total.  Finish height must not be lower than start height less 1000 meters. \\
   {\bf OLC Classic}: Up to seven points including start and finish, finish height
@@ -543,163 +539,18 @@ rules. \label{conf:taskrules}
 \end{description}
 
 
-
-
-
-
 %%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Polar}
-
-This page allows the glide polar to be defined. For a large variety of glider types 
-XCSoar provides a predefined glide polar, they could be modified if needed, or 
-you can load your own polar from a file. 
-The file format is based on the WinPilot polar file format (see section~\ref{sec:glide-polar}).
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-polar.png}
-\end{center}
-
-\label{conf:polar} To configure the glide computer to the performance of a glider 
-type start with the selection of a type from the \button{List}. 
-Choose \button{Import} when you want to load an external polar file.
-Customise the three V/W points defining the parable curve and the reference 
-weight to your needs. 
-\tip Be aware that namely those four items are of crucial importance 
-for every glide performance relevant computation of XCSoar.   
-\button{Export} your efforts to a file is always a good idea.
-
-\begin{description}
-\item[Polar V/W]  Three pairs of corresponding horizontal and vertical speed of the glider. 
-  A good choice for the point triplet is one at the top most area of the polar, the second at a 
-  still very curved area and the third far out where the curvature seems to disappear.
-\item[Reference mass]  Reference weight at which the given polar is valid.
-\item[Dry mass]  The empty wight of the rigged glider as you take it and get ready to start. In the absence of a pilot weight in the XCSoar setup you probably want to add your own weight to the dry mass.
-\item[Wing area]  Optional specification of the wing area of the glider type.
-\item[V rough air] Optional the maximum manoeuvring speed can 
-  be entered on this page to prevent the glide computer from commanding 
-  unrealistic cruise speeds.
-\item[Handicap]  The handicap factor used for the OnLine Contest scoring.
-\item[Max. ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
-  Set to zero if it does not apply.
-\item[Dump time]  The time in seconds needed for dumping full ballast.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-%\clearpage
-\section{Default Task Turnpoint Types}
+\section{Task Defaults / Turnpoint Types}
 
 This page allows to set default turnpoint types used by the task editor. All 
 options are well described for the task editor in chapter~\ref{cha:tasks}.
 
 
 %%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Devices} \label{conf:comdevices}
-
-The Devices page is used to specify the ports used to communicate with
-the GPS and other serial devices. The default settings are COM1 and
-4800 bits per second.  When connected to the Vega intelligent
-variometer, the settings should be COM1 and 38400.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-devices.png}
-\end{center}
-
-Two COM devices are available (device A and device B), to allow, for
-example, one to be connected to a GPS and another to be connected to a
-second device such as a variometer.  If there is no second device, set
-the device B port settings to the same as those of device A -- this
-instructs the program to ignore device B.
-
-The specific type of device can also be selected from a list in order
-to enable support for devices with proprietary protocols or special
-functions.
-
-COM ports 0 to 10 may be used.  Which COM port is appropriate for you
-depends on what make of PDA you use, and the communications medium
-(serial cable, Bluetooth, virtual COM port, SD card or CF based GPS,
-internal GPS).  Detailing the various options for different devices is
-beyond the scope of this document.  If you have trouble identifying
-which COM port to set, please refer to the XCSoar website and mailing
-lists.
-
-\begin{description}
-\item[Use GPS time*] This option, if enabled sets the clock of the computer to 
-  the GPS time once a fix is set. This is only necessary if your computer does 
-  not have a real-time clock with battery backup or your computer 
-  frequently runs out of battery power or otherwise loses time.
-\item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this 
-  will allow it's data to be used anyway.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Logger}
-
-This page allows you to set the pilot and aircraft details used for
-annotating XCSoar's IGC logger. 
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-logger.png}
-\end{center}
-
-\begin{description}
-\item[Time step cruise*]  This is the time interval between logged points when 
-  not circling. 
-\item[Time step circling*]  This is the time interval between logged points when 
-  circling. 
-\item[Pilot name]  This is the pilot name used in the internal software logger 
-  declaration.
-\item[Aircraft type]  This is the aircraft type used in the internal software 
-  logger declaration.
-\item[Aircraft reg.]  This is the aircraft registration used in the internal 
-  software logger declaration.
-\item[Competition ID]  This is the aircraft competition ID.
-\item[Logger ID]  This is the logger registration.
-\item[Short file name*]  This determines whether the logger uses the short or the 
-  long IGC file name.
-\item[Auto logger*]  Enables the automatic starting and stopping of the logger
-  on takeoff and landing respectively. Disable when flying paragliders to prevent 
-  the low ground speeds from triggering the automatic logger.
-\end{description}
-
-
-%%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Units}
-
-This page allows you to set the units preferences used in all
-displays, InfoBoxes, dialogues and input fields.  Separate selections
-are available for speed, distance, lift rate, altitude, temperature, task
-speed and latitude/longitude.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-units.png}
-\end{center}
-
-For most users hopefully one of the presets will match the needs.  The presets 
-include unit sets for {\bf American}, {\bf Australian}, {\bf British}, 
-and {\bf European}.
-
-The UTC offset field allows the UTC local time offset to be specified.
-The local time is displayed below in order to make it easier to verify
-the correct offset has been entered.  Offsets to the half-hour may be
-set.
-
-
-%%%%%%%%%%%%%%%%%%
-\clearpage
-\section{User Interface}\label{sec:interface}
+\section{Look / Language, Input}\label{sec:interface}
 
 This page allows to customise the way the user controls and interacts with
 XCSoar.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-interface.png}
-\end{center}
 
 \begin{description}
 \item[Auto Blank*] This determines whether to blank the display after a long
@@ -725,6 +576,8 @@ XCSoar.
   character to the relevant letter. \\
   {\bf Keyboard}: Uses the on-screen keyboard for entering text. \\
   {\bf Default}: Uses the default input style for your platform.
+\item[Haptic feedback*]  (Android devices only) Let you switch on or off the `brrt' 
+  when the device accepts your finger press as valid input on the touch-screen.
 \end{description}
 
 Some Pocket PC devices have poorly designed keys that are subject to
@@ -736,69 +589,100 @@ the value is set too low, then bouncing may occur.
 
 Press the \button{Fonts} button to adjust the fonts XCSoar uses.
 
-
-%%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Fonts}
+\subsection*{Font Configuration}
 
 This page enables customisation of fonts in various fields of the program.
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-fonts.png}
-\end{center}
+\sketch{figures/config-fonts.png}
 
-Once the customisation is enabled, the \button{Edit} buttons allow to change some parameters (font face, height, bold and italic) of the chosen font.
+Once the customisation is enabled, the \button{Edit} buttons allow to change 
+some parameters (font face, height, bold and italic) of the chosen font.
 
 If customisation is disabled, default fonts will be used.
 
 
 %%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Interface Appearance}\label{sec:interface-appearance}
+\section{Look / Screen Layout}\label{sec:interface-appearance}
 
 This page once more details the appearance of the graphical user interface of XCSoar.
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-interface_appearance.png}
-\end{center}
-
 \begin{description}
-\item[Infobox Geometry]  A list of possible InfoBox layouts. Do some trials to find the 
+\item[InfoBox geometry]  A list of possible InfoBox layouts. Do some trials to find the 
   best for your screen size. The numbers in front refer to the total number of 
   InfoBoxes.
-\item[Tab dialog style]  Determines whether tabbed dialogs use text or icons.
-\item[Msg. window*]  Defines the alignment of the status message box, either 
+\item[FLARM display*]  In case you enabled the FLARM display this is to configure the
+  place on the screen, where the tiny radar window appears. As a default an "Auto" setup 
+  is possible, which means that the radar window will overlay the InfoBoxes, and not the map
+  part of the screen.
+\item[Tab dialogue style]  Determines whether tabbed dialogues use text or icons.
+\item[Message display*]  Defines the alignment of the status message box, either 
   centred or in the top left corner.
-\item[Dialog style*]  Determines the display size of dialogues.
+\item[Dialogue size*]  Determines the display size of dialogues.
 \item[Inverse InfoBoxes*]  If {\bf On}, the InfoBoxes are white on black, otherwise 
   black on white.
 \item[Colour InfoBoxes*]  If {\bf On}, certain InfoBoxes will have coloured text. For 
   example, the active waypoint InfoBox will turn blue when the glider is above final 
   glide.
-\item[Infobox border*]  Two styles for InfoBox borders are available: {\bf Box} draws 
+\item[InfoBox border*]  Two styles for InfoBox borders are available: {\bf Box} draws 
   boxes around each InfoBox. {\bf Tab} draws a tab at the top of the InfoBox across the 
   title.
 \end{description}
 
 
+%%%%%%%%%%%%%%%%%%
+\section{Look / InfoBox Pages (or just Pages)}
+
+This page allows the definition of the screen page ensemble. A typical setup 
+will contain three pages, the expert can pile up to eight possible pages.
+
+A page is more or less a composition of map and InfoBox set. There are five 
+predefined pages for circling, cruise, final glide, a map only page and a 
+page with automatic InfoBox set activation depending on your flight mode.
+
+Additionally you can choose from up to five more pages that are composed from map 
+and your custom InfoBox sets.  
+
+\begin{description}
+\item[Page 1..3]  Select what you feel is appropriate for you to appear on page 1,2,3 etc. 
+  Selecting "---" will let the page inactive.
+\item[Page 4..8*]  Experts can configure up to eight pages in the already 
+  described manner.
+\end{description}
+
+
 %%%%%%%%%%
-\clearpage
-\section{Screen Pages (or InfoBox Pages)}
+\section{InfoBox Sets (or InfoBox Modes)}\label{sec:infobox_sets}
 
-This page allows the definition of the screen page ensemble. A typical setup will contain three pages, the expert mode accesses up to eight possible pages.
+This page shows the available InfoBox sets.
 
-There are three predefined InfoBox sets (circling, cruise, final glide) to assign to a screen page. Additionally you can define up to five more InfoBox sets and assign them to further screen pages.  Indeed you can select a map only page and a page with automatic InfoBox set activation depending on your flight mode.
+There are three predefined InfoBox sets (Circling, Cruise, Final Glide). Additionally you 
+can define up to five more InfoBox sets and name them as you want.   By default they 
+are named AUX-1, AUX-2, and so on.
+
+Selecting one of the sets starts a dialogue which provides all means to name and 
+compose an InfoBox set up to your needs.
+
+\subsection*{InfoBox Set Customisation}
+
+\begin{description}
+\item[Name]  Sets the name of the currently customized InfoBox set. The 
+  button starts the text input dialogue of XCSoar.
+\item[InfoBox]  The number identifying the current box.
+\item[Content]  Select the information you want to see at the current box.
+\end{description}
+
+The right side of the dialogue always gives the overview on the composed set. 
+When composing at the PC you can use the mouse to select the individual boxes 
+right from the overview.
 
 See Section~\ref{cha:infobox} for a description of the InfoBox types and their meanings.
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-pages.png}
-\end{center}
+To change a set press on one of the InfoBoxes labeled with it's current content.
+The InfoBoxes are numbered; the location of the InfoBoxes depends on the screen layout.  
+The tables below shows the InfoBox enumeration scheme for the 
+landscape and portait screen layout.
 
-To arrange a set of InfoBoxes press one of the buttons labeled with the name
-of the set.  The InfoBoxes are numbered; the location of the InfoBoxes depends
-on the screen layout.  The table below shows the InfoBox enumeration scheme for the landscape screen layout:
-
+\begin{multicols}{2}
 \begin{tabular}{|c|c|}
 \hline
 1 & 7 \\
@@ -815,8 +699,6 @@ on the screen layout.  The table below shows the InfoBox enumeration scheme for 
 \hline
 \end{tabular}
 
-This table shows the InfoBox enumeration scheme for a portrait screen layout:
-
 \begin{tabular}{|c|c|c|c|}
 \hline
 1 & 2 & 3 & 4 \\
@@ -825,32 +707,166 @@ This table shows the InfoBox enumeration scheme for a portrait screen layout:
 5 & 6 & 7 & 8 \\
 \hline
 \end{tabular}
+\end{multicols}
+
+%%%%%%%%%%%%%%%%%%
+\section{Setup / Devices} \label{conf:comdevices}
+
+The Devices page is used to specify the ports used to communicate with
+the GPS and other serial devices. The default settings are COM1 and
+4800 bits per second.  When connected to the Vega intelligent
+variometer, the settings should be COM1 and 38400.
+
+Four devices can be configured (device A through D). One, for
+example, can be connected to a GPS and another to a
+second device such as a variometer.  If there is no further device, 
+set the unused ports to `Disabled'.  XCSoar will then ignore those ports.
+\sketch{figures/config-devices.png}
+
+COM ports 0 to 10 may be used, including a TCP/IP connection.  
+Which COM port is appropriate for you
+depends on what brand of PDA you use, and the communications medium
+(serial cable, Bluetooth, virtual COM port, SD card or CF based GPS,
+internal GPS).  Detailing the various options for different devices is
+beyond the scope of this document.  If you have trouble identifying
+which COM port to set, please refer to the XCSoar website and mailing
+lists.
+
+\begin{description}
+\item[Port]  This setting maps an existing interface (port) of your 
+  glide computer to one of the available slots A to D.
+\item[Baudrate]  Set this to the communication speed of the connected device.
+\item[TCP Port]  This setting is useful to e.g. connect to the Condor flight
+  simulator and do some XCSoar training in winter time.
+\item[Bulk baud rate]  The baud rate used for bulk transfers, such 
+  as task declaration or flight download. The item is visible for those 
+  devices that support the feature.
+\item[Driver]  The specific type of device can be selected from a list in order
+  to enable support for devices with proprietary protocols or special
+  functions.
+\item[Sync. from device*]  This option lets you configure if XCSoar should use settings 
+  like the MacCready value, bugs and ballast from the device.
+\item[Sync. to device*]  This option lets you configure if XCSoar should send settings 
+  like the MacCready value, bugs and ballast to the device.
+\item[DumpPort*]  Enable this if you would like to log the communication with the device.
+\item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this 
+  will allow it's data to be used anyway.
+\end{description}
 
 
 %%%%%%%%%%%%%%%%%%
-\clearpage
-\section{InfoBox Set Composition (or InfoBox Modes)}\label{sec:infobox_sets}
+\section{Setup / Polar}
 
-This page shows the available InfoBox sets.
+This page allows the glide polar to be defined. For a large variety of glider types 
+XCSoar provides a predefined glide polar, they could be modified if needed, or 
+you can load your own polar from a file. 
+The file format is based on the WinPilot polar file format (see section~\ref{sec:glide-polar}).
 
-There are the three predefined ones to configure, and additionally five more you can freely name. By default they are named AUX-1, AUX-2, and so on.
-
-Selecting one of the sets starts a dialogue which provides all means to name and compose an InfoBox set up to your needs.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-infoboxes.png}
-\end{center}
+\label{conf:polar} To configure the glide computer to the performance of a glider 
+type start with the selection of a type from the \button{List}. 
+Choose \button{Import} when you want to load an external polar file.
+Customise the three V/W points defining the parable curve and the reference 
+weight to your needs. 
+\tip Be aware that namely those four items are of crucial importance 
+for every glide performance relevant computation of XCSoar.   
+\button{Export} your efforts to a file is always a good idea.
 
 \begin{description}
-\item[Name]  Sets the name of the currently customized InfoBox set. The 
-  button starts the text input dialogue of XCSoar.
-\item[InfoBox]  The number identifying the current box.
-\item[Content]  Select the information you want to see at the current box.
+\item[Polar V/W]  Three pairs of corresponding horizontal and vertical speed of the glider. 
+  A good choice for the point triplet is one at the top most area of the polar, the second at a 
+  still very curved area and the third far out where the curvature seems to disappear.
+\item[Reference mass]  Reference weight at which the given polar is valid.
+\item[Dry mass]  The empty weight of the rigged glider as you take it and get ready to start. In the absence of a pilot weight in the XCSoar setup you probably want to add your own weight to the dry mass.
+\item[Wing area]  Optional specification of the wing area of the glider type.
+\item[V rough air] Optional the maximum manoeuvring speed can 
+  be entered on this page to prevent the glide computer from commanding 
+  unrealistic cruise speeds.
+\item[Handicap]  The handicap factor used for the On-Line Contest scoring.
+\item[Max. ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
+  Set to zero if it does not apply.
+\item[Dump time]  The time in seconds needed for dumping full ballast.
 \end{description}
 
-The right side of the dialogue always gives the overview on the composed set. When composing at the PC you can use the mouse to select the individual boxes right from the overview.
+
+%%%%%%%%%%%%%%%%%%
+\section{Setup / Logger}
+
+This page allows you to set the pilot and aircraft details used for
+annotating XCSoar's IGC logger. 
+
+\begin{description}
+\item[Time step cruise*]  This is the time interval between logged points when 
+  not circling. 
+\item[Time step circling*]  This is the time interval between logged points when 
+  circling. 
+\item[Pilot name]  This is the pilot name used in the internal software logger 
+  declaration.
+\item[Aircraft type]  This is the aircraft type used in the internal software 
+  logger declaration.
+\item[Aircraft reg.]  This is the aircraft registration used in the internal 
+  software logger declaration.
+\item[Competition ID]  This is the aircraft competition ID.
+\item[Logger ID]  This is the logger registration.
+\item[Short file name*]  This determines whether the logger uses the short or the 
+  long IGC file name.
+\item[Auto logger*]  Enables the automatic starting and stopping of the logger
+  on takeoff and landing respectively. Disable when flying paragliders to prevent 
+  the low ground speeds from triggering the automatic logger.
+\item[Log book*]  Logs each start and landing.
+\end{description}
 
 
+%%%%%%%%%%%%%%%%%%
+\section{Setup / Units}
+
+This page allows you to set the units preferences used in all
+displays, InfoBoxes, dialogues and input fields.  
+For most users hopefully one of the presets will match the needs.  The presets 
+include unit sets for {\bf American}, {\bf Australian}, {\bf British}, 
+and {\bf European}.
+
+Separate selections are available for all items. Once you changed a given preset it 
+will be referenced as `Custom' set and will also be stored in your profile.
+
+\begin{description}
+\item[Aircraft/Wind speed*]  Unit used for airspeed and ground speed. A separate
+  unit is available for task speeds.
+\item[Distance*]  Unit used for horizontal distances e.g. range to waypoint, distance to go.
+\item[Lift*]  Unit used for vertical speeds (variometer).
+\item[Altitude*] Unit used for altitude and heights.
+\item[Temperature*]  Units used for temperature.
+\item[Task speed*] unit used for task speed.
+\item[Pressure*]  Unit used for pressures.
+\item[Lat./Lon.*]  Unit, or better format used for latitude and longitude.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Setup / Time}
+
+The UTC offset field allows the UTC local time offset to be specified.
+The local time is displayed below in order to make it easier to verify
+the correct offset has been entered.  Offsets to the half-hour may be
+set.
+
+\begin{description}
+\item[Use GPS time*] This option, if enabled sets the clock of the computer to 
+  the GPS time once a fix is set. This is only necessary if your computer does 
+  not have a real-time clock with battery backup or your computer 
+  frequently runs out of battery power or otherwise loses time.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Setup / Tracking}
+
+To have live tracking enabled you have to have the capability to connect to 
+mobile networking from your glide computer.
+Please consult the web pages of the service provider listed under `Server' 
+for details on this setup.
+%By using a GPS to determine your position and a mobile network to send this 
+%position in Real Time to a server, other people can see your excact 
+%position presented in a map in Real Time.
 
 
 
