@@ -78,6 +78,7 @@ Profile::Load(LoggerSettings &settings)
       settings.logger_id.MAX_SIZE);
   Get(szProfilePilotName, settings.pilot_name.buffer(),
       settings.pilot_name.MAX_SIZE);
+  Get(szProfileEnableFlightLogger, settings.enable_flight_logger);
 }
 
 void
