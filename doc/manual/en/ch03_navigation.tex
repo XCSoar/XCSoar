@@ -11,15 +11,15 @@ map display.
 
 The moving map shows:
 \begin{enumerate} 
-\item Glider symbol
-\item Waypoints
-\item The active task
+\item Glider, wind indicator, thermal profile, final glide indicator
+\item Terrain, relief and hight of the terrain
+\item Topography, rivers, roads, towns
+\item Waypoints, airports, landabls 
+\item The active task, observation zones, turnpoints
 \item The bearing (or route\footnote{The line to the next waypoint may be a {\em route}, as described in Section~\ref{sec:route}.})
-  to the next waypoint
+  to the next waypoint, heading
 \item Special Use Airspace
-\item Terrain and topology
-\item Markers
-\item Trail
+\item Markers, thermals history, snail trail
 \item Glide range\footnote{The glide range is also referred to as the {\em reach}, as described in Section~\ref{sec:reach}.}
 \end{enumerate}
 The map is drawn in a projected coordinate system (not latitude and
@@ -169,7 +169,7 @@ Orange Icon &
 
 
 Waypoints are optionally labelled according to one of several
-abbreviation schemes \config{labels} and visibility \config{labelvisibility}.
+abbreviation schemes \config{labels} and visibility.
 
 XCSoar continually calculates which landing points are within gliding
 range using the current wind estimate.  The estimated arrival altitude
@@ -202,9 +202,9 @@ further detail in Section~\ref{sec:route}.
 \end{tabular}
 \end{center}
 
-\section{Terrain and Topology}
+\section{Terrain and Topography}
 
-The following topological features are drawn on the map:
+The following topographical features are drawn on the map:
 \begin{itemize}
 \item Major roads, shown as red lines
 \item Rivers, shown as blue lines
@@ -225,7 +225,7 @@ the lee of the hill.  The amount of shading and overall terrain
 brightness is configurable.  Support for a sun ephemeris is underway.
 Terrain shading and brightness can be configured \config{shading}.
 
-Both terrain and topology display can be switched on or off from the
+Both terrain and topography display can be switched on or off from the
 menu:
 \begin{quote}
 \bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Terrain On} \\
@@ -234,7 +234,7 @@ menu:
 
 \begin{center}
 \begin{tabular}{c c}
-Topology & Terrain \\
+Topography & Terrain \\
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-topo.png} &
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-terrain.png} \\
 \end{tabular}
@@ -246,7 +246,7 @@ off), the background colour of the map window is white.  All terrain
 below mean sea level is coloured blue.  If you are flying outside the
 terrain region, the background colour will be white.
 
-The screen can be de-cluttered, turning off the display of topology
+The screen can be de-cluttered, turning off the display of topography
 labels and non-task waypoint labels by toggling:
 \begin{quote}
 \bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Labels None}
@@ -319,12 +319,6 @@ The trail width can optionally be scaled according to the variometer display\con
 
 \section{Markers}
 
-\begin{tabular}{c}%{c}
-%\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/map_flag.pdf}\\
-%(a)
-\end{tabular}
-
-
 Markers are shown as small flags (a) on the map.  The markers can be dropped
 manually, by pressing a button, or automatically.  An example use of
 automatic markers is to drop markers when entering circling mode, as a
@@ -333,10 +327,18 @@ simple way of showing all thermals encountered.
 Markers are not preserved after XCSoar is exited, however the location
 of all marks are appended to the file \verb|xcsoar-marks.txt|.
 
-Markers are dropped by the menu, or by gesture \gesture{Left}: 
+Markers are dropped by the menu: 
 \begin{quote}
 \bmenu{Display}\blink\bmenu{Mark Drop}
 \end{quote}
+
+\section{Thermals}
+
+While climbing in thermals automatically a mark is generated and stored up 
+\sketch{figures/thermalhistory.png}
+to the end of the flight. This thermal history is accesible through the map 
+element functions in the same way as markers or waypoints.
+\\
 
 \section{Glide range line}\label{sec:reach}
 
@@ -345,7 +347,7 @@ black and white dashed line, indicating where the glider would descend
 through the terrain clearance height.  The reach shows clearance
 tracks extending in all directions, optionally including paths around
 terrain obstructions.  This feature is useful in assessing range with
-respect to topology when searching low for lift, and when flying in
+respect to topography when searching low for lift, and when flying in
 mountainous areas.
 
 Reach calculations may be configured \config{turningreach} to two levels of detail:
@@ -413,7 +415,7 @@ location to others.
 
 Currently the landmarks scanned are the list of waypoints.  In the
 future, XCSoar may also search for nearby towns and cities in the
-topology database.
+topography database.
 
 The aircraft status dialog (see Section~\ref{sec:dialog-windows})
 shows the status of the aircraft's locality, and can be useful when
