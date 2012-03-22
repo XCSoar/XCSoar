@@ -194,18 +194,21 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east."),
           slope_shading_list, (unsigned)terrain.slope_shading);
   GetDataField(TerrainSlopeShading).SetListener(this);
+  SetExpertRow(TerrainSlopeShading);
 
   AddInteger(_("Terrain contrast"),
              _("Defines the amount of Phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains."),
              _T("%d %%"), _T("%d %%"), 0, 100, 5,
              ByteToPercent(terrain.contrast));
   GetDataField(TerrainContrast).SetListener(this);
+  SetExpertRow(TerrainContrast);
 
   AddInteger(_("Terrain brightness"),
              _("Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain."),
              _T("%d %%"), _T("%d %%"), 0, 100, 5,
              ByteToPercent(terrain.brightness));
   GetDataField(TerrainBrightness).SetListener(this);
+  SetExpertRow(TerrainBrightness);
 
   if (::terrain != NULL) {
     WindowStyle style;
