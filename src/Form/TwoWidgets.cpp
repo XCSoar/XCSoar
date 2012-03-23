@@ -46,7 +46,14 @@ TwoWidgets::CalculateSplit(const PixelRect &rc) const
   const PixelSize min_b = second->GetMinimumSize();
   const PixelSize max_b = second->GetMaximumSize();
 
-  if (rc.bottom - rc.top >= min_a.cy + max_b.cy)
+  assert(min_b.cy <= max_b.cy);
+
+  if (min_a.cy <= 0 || min_b.cy <= 0)
+    /* at least one Widet doesn't know its minimums size; there may be
+       better solutions for this, but this workaround is good enough
+       for fixing the assertion failure in DevicesConfigPanel */
+    return (rc.top + rc.bottom) / 2;
+  else if (rc.bottom - rc.top >= min_a.cy + max_b.cy)
     /* more than enough space: align the second Widget at the bottom
        and give the rest to the first Widget */
     return rc.bottom - max_b.cy;
