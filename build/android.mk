@@ -163,18 +163,6 @@ endef
 
 $(foreach NAME,$(ANDROID_LIB_NAMES),$(eval $(call generate-all-abis,$(NAME))))
 
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
-	@$(NQ)echo "  ANT     $@"
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
-
-$(ANDROID_BIN)/XCSoar-release-unsigned.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
-	@$(NQ)echo "  ANT     $@"
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) release
-
-$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-release-unsigned.apk
-	@$(NQ)echo "  SIGN    $@"
-	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) -signedjar $(ANDROID_BIN)/XCSoar.apk $(ANDROID_BIN)/XCSoar-release-unsigned.apk $(ANDROID_KEY_ALIAS)
-
 else # !FAT_BINARY
 
 # add dependency to this source file
@@ -189,11 +177,6 @@ ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp
 	cp $< $@
 
-$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
-	@$(NQ)echo "  ANT     $@"
-	@rm -f $@ $(patsubst %.apk,%-unaligned.apk,$@) $(@D)/classes.dex
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
-
 $(ANDROID_JNI)/build.xml $(ANDROID_JNI)/AndroidManifest.xml: | $(ANDROID_JNI)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)ln -s ../../../android/$(@F) $@
@@ -207,15 +190,20 @@ $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDR
 	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_JNI)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
 
-$(ANDROID_BIN)/XCSoar-release-unsigned.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
+endif # !FAT_BINARY
+
+$(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
 	@$(NQ)echo "  ANT     $@"
 	@rm -f $@ $(patsubst %.apk,%-unaligned.apk,$@) $(@D)/classes.dex
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
+
+$(ANDROID_BIN)/XCSoar-release-unsigned.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
+	@$(NQ)echo "  ANT     $@"
+	@rm -f $@ $(@D)/classes.dex
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) release
 
 $(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-release-unsigned.apk
 	@$(NQ)echo "  SIGN    $@"
-	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) -signedjar $(ANDROID_BIN)/XCSoar.apk $(ANDROID_BIN)/XCSoar-unsigned.apk $(ANDROID_KEY_ALIAS)
-
-endif # !FAT_BINARY
+	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) -signedjar $@ $< $(ANDROID_KEY_ALIAS)
 
 endif
