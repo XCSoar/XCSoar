@@ -108,7 +108,8 @@ $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.sed | $(TARGET_BIN_
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $@ $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
-	$(Q)ln -s ../../../$(MANIFEST) ../bin $(@D)/
+	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
+	$(Q)ln -s ../bin $(@D)/bin
 	$(Q)ln -s ../../../../android/src $(@D)/src/xcsoar
 ifneq ($(IOIOLIB_DIR),)
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio_api
@@ -117,7 +118,7 @@ ifneq ($(IOIOLIB_DIR),)
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio_impl
 	$(Q)ln -s ../../../../android/IOIOHelper $(@D)/src/ioio_xcsoar
 endif
-	$(Q)ln -s ../../../../android/res/values $(@D)/res/
+	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
 ifeq ($(TESTING),y)
 ifeq ($(HOST_IS_DARWIN),y)
