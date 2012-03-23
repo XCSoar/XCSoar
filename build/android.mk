@@ -40,6 +40,13 @@ endif
 
 JARSIGNER += -digestalg SHA1 -sigalg MD5withRSA
 
+# The environment variable ANDROID_KEYSTORE_PASS may be used to
+# specify the keystore password; if you don't set it, you will be
+# asked interactively
+ifeq ($(origin ANDROID_KEYSTORE_PASS),environment)
+JARSIGNER += -storepass:env ANDROID_KEYSTORE_PASS
+endif
+
 JAVA_PACKAGE = org.xcsoar
 CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
