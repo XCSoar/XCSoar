@@ -9,6 +9,7 @@ Version 6.3 - not yet released
   - finish: allow flight to boundary (reenabled)
 * devices
   - COM port monitor
+  - fix for TCP port on Windows
   - added separate FLARM driver for declaration and IGC file download
   - FLARM: generate checksums for task declaration
   - added driver for the Westerboer VW921/VW922 devices

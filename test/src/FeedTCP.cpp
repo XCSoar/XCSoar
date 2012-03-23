@@ -41,6 +41,14 @@ Copyright_License {
 #include <winsock2.h>
 #endif
 
+#ifdef HAVE_POSIX
+static inline void
+closesocket(int fd)
+{
+  close(fd);
+}
+#endif
+
 int main(int argc, char **argv)
 {
   // Determine on which TCP port to connect to the server
@@ -77,7 +85,7 @@ int main(int argc, char **argv)
   if (connect(sock, (struct sockaddr *)&server_addr,
               sizeof(struct sockaddr)) == -1)
   {
-    close(sock);
+    closesocket(sock);
     perror("Connect");
     exit(1);
   }
@@ -116,7 +124,7 @@ int main(int argc, char **argv)
 
     send(sock,line,l, 0);
   }
-  close(sock);
+  closesocket(sock);
   printf(">>>> Av %ld\n", c_count/l_count);
   return 0;
 }

@@ -38,6 +38,22 @@ Copyright_License {
 #include <ws2tcpip.h>
 #endif
 
+#ifdef HAVE_POSIX
+
+/**
+ * On WIN32, the WinSock function closesocket() must be used to close
+ * socket descriptors, which are very different from file descriptors.
+ * This wrapper allows using closesocket() on all other operating
+ * systems, simply a wrapper for close().
+ */
+static inline void
+closesocket(int fd)
+{
+  close(fd);
+}
+
+#endif
+
 TCPPort::~TCPPort()
 {
   if (listener_fd < 0)
@@ -46,9 +62,9 @@ TCPPort::~TCPPort()
   StopRxThread();
 
   if (connection_fd >= 0)
-    close(connection_fd);
+    closesocket(connection_fd);
 
-  close(listener_fd);
+  closesocket(listener_fd);
 }
 
 bool
@@ -77,13 +93,13 @@ TCPPort::Open(unsigned port)
 
   if (bind(listener_fd, (const struct sockaddr *)&address,
            sizeof(address)) < 0) {
-    close(listener_fd);
+    closesocket(listener_fd);
     listener_fd = -1;
     return false;
   }
 
   if (listen(listener_fd, 1) < 0) {
-    close(listener_fd);
+    closesocket(listener_fd);
     listener_fd = -1;
     return false;
   }
@@ -134,7 +150,7 @@ TCPPort::Run()
       if (ret > 0)
         connection_fd = accept(listener_fd, NULL, NULL);
       else if (ret < 0) {
-        close(listener_fd);
+        closesocket(listener_fd);
         listener_fd = -1;
         break;
       }
@@ -154,14 +170,14 @@ TCPPort::Run()
       if (ret > 0) {
         ssize_t nbytes = recv(connection_fd, buffer, sizeof(buffer), 0);
         if (nbytes <= 0) {
-          close(connection_fd);
+          closesocket(connection_fd);
           connection_fd = -1;
           continue;
         }
 
         handler.DataReceived(buffer, nbytes);
       } else if (ret < 0) {
-        close(connection_fd);
+        closesocket(connection_fd);
         connection_fd = -1;
       }
     }
