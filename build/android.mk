@@ -119,7 +119,13 @@ ifneq ($(IOIOLIB_DIR),)
 	$(Q)ln -s ../../../../android/IOIOHelper $(@D)/src/ioio_xcsoar
 endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
+ifeq ($(WINHOST),y)
+	echo "now run your android build followed by exit.  For example:"
+	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_PLATFORM)"
+	cmd
+else
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
+endif
 ifeq ($(TESTING),y)
 ifeq ($(HOST_IS_DARWIN),y)
 	$(Q)sed -i "" -f build/r.sed $@
