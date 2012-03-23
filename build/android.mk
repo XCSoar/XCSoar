@@ -202,8 +202,12 @@ $(ANDROID_BIN)/XCSoar-release-unsigned.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD
 	@rm -f $@ $(@D)/classes.dex
 	$(Q)cd $(ANDROID_BUILD) && $(ANT) release
 
-$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-release-unsigned.apk
+$(ANDROID_BIN)/XCSoar-release-unaligned.apk: $(ANDROID_BIN)/XCSoar-release-unsigned.apk
 	@$(NQ)echo "  SIGN    $@"
 	$(Q)$(JARSIGNER) -keystore $(ANDROID_KEYSTORE) -signedjar $@ $< $(ANDROID_KEY_ALIAS)
+
+$(ANDROID_BIN)/XCSoar.apk: $(ANDROID_BIN)/XCSoar-release-unaligned.apk
+	@$(NQ)echo "  ALIGN   $@"
+	$(Q)$(ANDROID_SDK)/tools/zipalign -f 4 $< $@
 
 endif
