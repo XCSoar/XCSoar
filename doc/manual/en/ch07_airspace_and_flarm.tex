@@ -27,10 +27,7 @@ specific to different airspace categories and may be configured by the
 user.  Depending on the settings, the user may choose to display all
 airspaces, only airspaces below a certain altitude, only airspace within a
 particular height separation, or only airspace below the glider.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspace.png}
-\end{center}
+\sketch{figures/airspace.png}
 
 The patterns used to display airspace areas include opaque,
 transparent (hollow) and several hatched and stippled patterns.  The
@@ -83,9 +80,9 @@ violations based on QNH-adjusted altitude.
 The concept of airspace warning levels is introduced:
 \begin{description}
 \item[0] Aircraft is outside and distant from airspace.
-\item[1] Aircraft is predicted to penetrate the airspace but is not close.
-\item[2] Aircraft is predicted to penetrate the airspace and is close to doing so.
-\item[3] Aircraft is inside airspace.
+\item[1] \colorbox{AirspaceYellow}{Aircraft is predicted to penetrate the airspace but is not close.}
+\item[2] \colorbox{AirspaceYellow}{Aircraft is predicted to penetrate the airspace and is close to doing so.}
+\item[3] \colorbox{AirspaceRed}{Aircraft is inside airspace.}
 \end{description}
 
 At all times XCSoar monitors the aircraft relative to all airspace and
@@ -97,35 +94,32 @@ The sequence of events when entering an airspace results typically
 in three warnings: when near (level 1), when close (level 2), and when
 inside (level 3).
 
+\sketch{figures/airspacewarning_2.png}
 Whenever the warning level increases (above level 0) for any airspace,
 the airspace warning dialog appears, accompanied by a system beep from
 Altair or the PDA.  When there are no more airspace regions at warning
 levels above 0, the dialog disappears automatically.
 
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/airspacewarning_2.png}
-\end{center}
-
 \section{Airspace warning dialog}
 
 The airspace warning dialog contains a list of up to 4 individual
-warnings.  The list item backgrounds are coloured RED if the glider is
-inside, and YELLOW if near.  If the warning is acknowledged, the
+warnings.  The list items status background is coloured red if the glider is
+inside, and yellow if near.  If the warning is acknowledged, the
 text is greyed out.
 
 Each list item occupies two rows, and includes the following details:
 
 \begin{verbatim}
-<NAME>                <TOP>   <Inside>
-<distance if outside> <BASE>
+<NAME and Class>               <TOP>   <Inside>
+<Time and distance if outside> <BASE>
 \end{verbatim} 
 
 The values in the list are continuously updated. 
 
 An example follows:
 \begin{verbatim}
-Bern TMA Class D     FL100     near
-dist 1300            1750m 
+Bern TMA Class D                FL100     \colorbox{AirspaceYellow}{near}
+35 sec horizontal dist 1300     1750m 
 \end{verbatim}
 
 This means that the aircraft is 1300m horizontally separated from the Class D airspace
@@ -133,7 +127,7 @@ This means that the aircraft is 1300m horizontally separated from the Class D ai
 
 Another example:
 \begin{verbatim}
-Bern CTRgld Class C 1350m	    inside
+Bern CTRgld Class C 1350m	    \colorbox{AirspaceRed}{inside}
                     SFC
 \end{verbatim}
 
@@ -148,6 +142,8 @@ the menu:
 If there were airspace warnings and you are not well outside all airspace, this
 menu item redisplays the dialog with the list of airspace warnings.
 
+At any time the airspace warning dialog is show you get the details to an 
+airspace by touching on it.
 
 \section{Airspace warning acknowledgement}
 
