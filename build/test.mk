@@ -1981,6 +1981,12 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideComputerStats.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/Computer/CuComputer.cpp \
+	$(SRC)/UISettings.cpp \
+	$(SRC)/DisplaySettings.cpp \
+	$(SRC)/PageSettings.cpp \
+	$(SRC)/InfoBoxes/InfoBoxSettings.cpp \
+	$(SRC)/Gauge/VarioSettings.cpp \
+	$(SRC)/Gauge/TrafficSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \

@@ -192,6 +192,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   InterfaceBlackboard blackboard;
   blackboard.SetComputerSettings().SetDefaults();
+  blackboard.SetUISettings().SetDefaults();
 
   GlideComputerTaskEvents task_events;
   TaskManager task_manager(way_points);
