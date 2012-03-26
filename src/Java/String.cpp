@@ -31,13 +31,14 @@
 #include "Util/StringUtil.hpp"
 
 char *
-Java::String::CopyTo(JNIEnv *env, char *buffer, size_t max_size)
+Java::String::CopyTo(JNIEnv *env, jstring value,
+                     char *buffer, size_t max_size)
 {
-  const char *p = env->GetStringUTFChars(Get(), NULL);
+  const char *p = env->GetStringUTFChars(value, NULL);
   if (p == NULL)
     return NULL;
 
   char *result = CopyString(buffer, p, max_size);
-  env->ReleaseStringUTFChars(Get(), p);
+  env->ReleaseStringUTFChars(value, p);
   return result;
 }

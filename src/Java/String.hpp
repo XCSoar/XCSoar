@@ -53,7 +53,18 @@ namespace Java {
      *
      * @return a pointer to the terminating null byte, NULL on error
      */
-    char *CopyTo(JNIEnv *env, char *buffer, size_t max_size);
+    static char *CopyTo(JNIEnv *env, jstring value,
+                        char *buffer, size_t max_size);
+
+    /**
+     * Copy the value to the specified buffer.  Truncates the value if
+     * it does not fit into the buffer.
+     *
+     * @return a pointer to the terminating null byte, NULL on error
+     */
+    char *CopyTo(JNIEnv *env, char *buffer, size_t max_size) {
+      return CopyTo(env, Get(), buffer, max_size);
+    }
   };
 }
 
