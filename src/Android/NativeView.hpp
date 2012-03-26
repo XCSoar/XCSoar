@@ -73,8 +73,7 @@ public:
      width(_width), height(_height),
      xdpi(_xdpi), ydpi(_ydpi),
      sdk_version(_sdk_version) {
-    Java::String product2(env, _product);
-    product2.CopyTo(env, product, sizeof(product));
+    Java::String::CopyTo(env, _product, product, sizeof(product));
     Java::Class cls(env, "org/xcsoar/NativeView");
     init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
     deinit_surface_method = env->GetMethodID(cls, "deinitSurface", "()V");
