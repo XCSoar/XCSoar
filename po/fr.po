@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-05 23:23+0100\n"
-"PO-Revision-Date: 2012-02-29 22:09+0000\n"
+"PO-Revision-Date: 2012-03-15 23:06+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-01 18:40+0000\n"
-"X-Generator: Launchpad (build 14886)\n"
+"X-Launchpad-Export-Date: 2012-03-26 14:44+0000\n"
+"X-Generator: Launchpad (build 15008)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -39,7 +39,7 @@ msgstr "Chargement du fichier d'espace aérien..."
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "Erreur de parsing en ligne"
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Line skipped."
@@ -2196,14 +2196,12 @@ msgid "Edit"
 msgstr "Éditer"
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
-#, fuzzy
 msgid "MC AUTO"
-msgstr "AUTO"
+msgstr "MC AUTO"
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
-#, fuzzy
 msgid "MC MANUAL"
-msgstr "Manuel"
+msgstr "MC MANUEL"
 
 #: src/InfoBoxes/Content/Other.cpp:62
 msgid "AC Off"
@@ -3250,34 +3248,28 @@ msgid "Pressure"
 msgstr "Pression"
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:37
-#, fuzzy
 msgid "Failed to load file."
-msgstr "Impossible de télécharger le vol."
+msgstr "Echec du chargement du fichier."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:42
-#, fuzzy
 msgid "Too many waypoints."
-msgstr "Trop de points de virage.\n"
+msgstr "Trop de waypoints."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:46
-#, fuzzy
 msgid "Uploading Waypoints"
-msgstr "Chargement des points de virage..."
+msgstr ""
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:52
-#, fuzzy
 msgid "Failed to erase waypoints."
-msgstr "Autres wpts."
+msgstr "Echec de l'effacement des waypoints."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:58
-#, fuzzy
 msgid "Failed to switch baud rate."
-msgstr "Impossible de télécharger le vol."
+msgstr "Echec du changement de vitesse de transfert."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:72
-#, fuzzy
 msgid "Failed to write waypoint."
-msgstr "Autres wpts."
+msgstr "Echec de l'écriture du waypoint."
 
 #: src/Dialogs/Vega/VegaConfigurationDialog.cpp:99
 msgid "Set new audio scheme?  Old values will be lost."
@@ -3362,9 +3354,8 @@ msgid "Display"
 msgstr "Affich."
 
 #: src/Dialogs/dlgAirspaceColours.cpp:59
-#, fuzzy
 msgid "Select Color"
-msgstr "Select. Couleur"
+msgstr "Choisir une couleur"
 
 #: src/Dialogs/dlgAirspacePatterns.cpp:59
 msgid "Select Pattern"
@@ -5199,7 +5190,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:86
 msgid "Polar degradation"
-msgstr ""
+msgstr "Dégradation de la polaire"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:87
 #, no-c-format
@@ -5207,6 +5198,8 @@ msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
+"Un dégradation permanente de la polaire. 0% pour aucune, 50% double le taux "
+"de chute."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:96
 msgid ""
@@ -5354,8 +5347,8 @@ msgstr "Toujours afficher la route."
 msgid ""
 "Display track bearing if there is a significant difference to plane heading."
 msgstr ""
-"Afficher la route si il y a une différence significative avec la trajectoire "
-"du planeur."
+"Afficher la route si il y a une différence significative avec le cap du "
+"planeur."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:90
 #, no-c-format
@@ -6842,9 +6835,9 @@ msgid "METAR and TAF"
 msgstr "METAR et TAF"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Glider"
-msgstr "Polaire"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:92
 #, no-c-format
@@ -6852,9 +6845,9 @@ msgid "Paraglider"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Powered aircraft"
-msgstr "Pas de type d'aéronef"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:94
 #, no-c-format
@@ -6866,9 +6859,8 @@ msgid "Tracking Interval"
 msgstr "Intervalle de tracking"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
-#, fuzzy
 msgid "Vehicle Type"
-msgstr "Modifier le type"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
 msgid "Type of vehicle used."
@@ -8374,9 +8366,8 @@ msgid "Radial"
 msgstr "Radial"
 
 #: Data/Dialogs/pnlStatusTimes.xml:5
-#, fuzzy
 msgid "UTC time"
-msgstr "AAT temps"
+msgstr ""
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
@@ -8422,9 +8413,8 @@ msgid "Vario Demo"
 msgstr ""
 
 #: Data/Dialogs/pnlStatusTimes.xml:6
-#, fuzzy
 msgid "UTC date"
-msgstr "Mettre à jour"
+msgstr ""
 
 #: Data/Dialogs/dlgStatusSystem.xml:5 Data/Dialogs/pnlStatusSystem.xml:5
 msgid "Satellites in view"
@@ -8883,24 +8873,6 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
-
-#~ msgid ""
-#~ "MacCready\n"
-#~ "-"
-#~ msgstr ""
-#~ "MacCready\n"
-#~ "-"
-
-#~ msgid ""
-#~ "MacCready\n"
-#~ "+"
-#~ msgstr "MacCready"
-
-#~ msgid "Failed to enable download mode."
-#~ msgstr "Impossible d'activer le mode téléchargement"
-
-#~ msgid "Panel name"
-#~ msgstr "Nom du tableau de bord"
 
 #~ msgid "Task declared"
 #~ msgstr "Circuit déclaré"
