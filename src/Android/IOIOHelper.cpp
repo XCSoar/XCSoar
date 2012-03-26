@@ -26,7 +26,7 @@ Copyright_License {
 #include "Java/Class.hpp"
 
 jclass IOIOHelper::cls;
-jmethodID IOIOHelper::ctor, IOIOHelper::open_method,
+jmethodID IOIOHelper::ctor,
   IOIOHelper::openUart_method;
 
 bool
@@ -45,7 +45,6 @@ IOIOHelper::Initialise(JNIEnv *env)
   env->DeleteLocalRef(_cls);
 
   ctor = env->GetMethodID(cls, "<init>", "()V");
-  open_method = env->GetMethodID(cls, "open", "()Z");
   openUart_method = env->GetMethodID(cls, "openUart",
                                      "(II)Lorg/xcsoar/AndroidPort;");
   return true;

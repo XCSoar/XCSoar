@@ -49,17 +49,6 @@ public:
   }
 
   /**
-   * Open a connection to the IOIO board.
-   * Soft resets all ports on board.
-   * Waits for up to 3000ms, then fails if IOIO board does not respond
-   * @param env
-   * @return true if connection to IOIO is established, else false
-   */
-  bool open(JNIEnv *env) {
-    return env->CallBooleanMethod(Get(), open_method);
-  }
-
-  /**
    * Close the connection to the IOIO board.  It can be reopened
    * by calling open().
    * Should not be called until all open Uarts have been closed
