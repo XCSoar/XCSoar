@@ -39,25 +39,18 @@ PageSettings::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
     break;
 
   case PageSettings::PageLayout::tlMapAndInfoBoxes:
+    _tcscpy(buffer, concise ? _("Info") : _("Map and InfoBoxes"));
+
     if (!infoBoxConfig.autoSwitch &&
         infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
-      if (concise) {
-        _tcscpy(buffer, _("Info"));
-        _tcscat(buffer, _T(" "));
-        _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
-      } else {
-        _tcscpy(buffer, _("Map and InfoBoxes"));
-        _tcscat(buffer, _T(" "));
-        _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
-      }
+      _tcscat(buffer, _T(" "));
+      _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
     }
     else {
       if (concise) {
-        _tcscpy(buffer, _("Info"));
         _tcscat(buffer, _T(" "));
         _tcscat(buffer, _("Auto"));
       } else {
-        _tcscpy(buffer, _("Map and InfoBoxes"));
         _tcscat(buffer, _T(" ("));
         _tcscat(buffer, _("Auto"));
         _tcscat(buffer, _T(")"));
