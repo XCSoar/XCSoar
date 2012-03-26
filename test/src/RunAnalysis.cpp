@@ -133,7 +133,7 @@ LoadFiles(Airspaces &airspace_database)
 
   terrain = RasterTerrain::OpenTerrain(NULL, operation);
 
-  AtmosphericPressure pressure;
+  const AtmosphericPressure pressure = AtmosphericPressure::Standard();
   ReadAirspace(airspace_database, terrain, pressure, operation);
 }
 
