@@ -109,6 +109,11 @@ const struct builtin_language language_table[] = {
   { LANG_DUTCH, _T("nl.mo") },
   { LANG_POLISH, _T("pl.mo") },
   { LANG_PORTUGUESE, _T("pt_BR.mo") },
+
+  /* our Portuguese translation is less advanced than Brazilian
+     Portuguese */
+  { LANG_PORTUGUESE, _T("pt.mo") },
+
   { LANG_ROMANIAN, _T("ro.mo") },
   { LANG_RUSSIAN, _T("ru.mo") },
   { LANG_SLOVAK, _T("sk.mo") },
