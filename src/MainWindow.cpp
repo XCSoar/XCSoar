@@ -51,6 +51,10 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "UIState.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Cache.hpp"
+#endif
+
 #if !defined(WIN32) && !defined(ANDROID)
 #include <unistd.h>
 #endif
@@ -170,6 +174,12 @@ MainWindow::InitialiseConfigured()
         NoFontsAvailable();
       }
     }
+
+#ifdef ENABLE_OPENGL
+    /* fonts may have changed, discard all pre-rendered font
+       textures */
+    TextCache::Flush();
+#endif
   }
 
   assert(look != NULL);
