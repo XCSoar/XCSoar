@@ -36,6 +36,11 @@ Copyright_License {
 void
 GlidePolarCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
 {
+  if (!glide_polar.IsValid()) {
+    sTmp = _T('\0');
+    return;
+  }
+
   _stprintf(sTmp, Layout::landscape ?
                   _T("%s:\r\n  %d\r\n  at %d %s\r\n\r\n%s:\r\n  %3.2f %s\r\n  at %d %s") :
                   _T("%s:\r\n  %d at %d %s\r\n%s:\r\n  %3.2f %s at %d %s"),
@@ -58,6 +63,12 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                  const GlidePolar &glide_polar)
 {
   ChartRenderer chart(chart_look, canvas, rc);
+
+  if (!glide_polar.IsValid()) {
+    chart.DrawNoData();
+    return;
+  }
+
   Pen blue_pen(2, COLOR_BLUE);
 
   chart.ScaleYFromValue(fixed_zero);
