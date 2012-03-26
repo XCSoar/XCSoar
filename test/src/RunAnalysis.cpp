@@ -208,9 +208,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   GlideComputer glide_computer(way_points, airspace_database,
                                protected_task_manager,
                                task_events);
+  glide_computer.ReadComputerSettings(blackboard.GetComputerSettings());
   glide_computer.SetTerrain(terrain);
   glide_computer.Initialise();
-  glide_computer.ReadComputerSettings(blackboard.GetComputerSettings());
 
   ScreenGlobalInit screen_init;
 
