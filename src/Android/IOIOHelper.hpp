@@ -45,7 +45,9 @@ public:
   static void Deinitialise(JNIEnv *env);
 
   IOIOHelper(JNIEnv *env);
+
   ~IOIOHelper() {
+    close();
   }
 
   /**
