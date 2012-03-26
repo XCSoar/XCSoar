@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-05 23:23+0100\n"
-"PO-Revision-Date: 2012-03-07 22:39+0000\n"
-"Last-Translator: Helmut Rohs <Unknown>\n"
+"PO-Revision-Date: 2012-03-23 00:20+0000\n"
+"Last-Translator: Dennis Baudys <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-14 01:28+0000\n"
-"X-Generator: Launchpad (build 14933)\n"
+"X-Launchpad-Export-Date: 2012-03-26 14:44+0000\n"
+"X-Generator: Launchpad (build 15008)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -5049,7 +5049,7 @@ msgstr "Lufträme und Gelände werden vermieden."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:112
 msgid "Route mode"
-msgstr "Rutenplaner Modus"
+msgstr "Routenplaner Modus"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:115
 msgid "Route climb"
@@ -8657,12 +8657,12 @@ msgstr "Wiedergabe"
 
 #: Data/Dialogs/dlgAirspaceSelect.xml:4 Data/Dialogs/dlgAirspaceSelect_L.xml:4
 msgid "Filter..."
-msgstr "Filter..."
+msgstr "Filter …"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:59
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:59
 msgid "The time in seconds to dump full ballast."
-msgstr "Zeit in Sekunden um die komplett gefüllten Tanks zu entleeren."
+msgstr "Zeit in Sekunden, um die komplett gefüllten Tanks zu entleeren."
 
 #: Data/Dialogs/pnlStatusRules.xml:10
 msgid "Valid finish"
