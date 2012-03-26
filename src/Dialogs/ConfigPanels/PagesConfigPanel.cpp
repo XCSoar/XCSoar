@@ -48,16 +48,19 @@ public:
 static void
 UpdateComboBox(DataFieldEnum* dfe, unsigned page)
 {
+  const InfoBoxSettings &info_box_settings =
+    CommonInterface::GetUISettings().info_boxes;
+
   TCHAR buffer[128];
   const PageSettings::PageLayout *pl;
   const PageSettings::PageLayout *currentPL =
     &CommonInterface::SetUISettings().pages.pages[page];
   assert(currentPL != NULL);
-  currentPL->MakeTitle(buffer);
+  currentPL->MakeTitle(info_box_settings, buffer);
   // dont offer "None" for first page
   unsigned i = (page == 0) ? 1 : 0;
   while (NULL != (pl = PossiblePageLayout(i))) {
-    pl->MakeTitle(buffer);
+    pl->MakeTitle(info_box_settings, buffer);
     dfe->addEnumText(buffer, i);
     if (*pl == *currentPL)
       dfe->Set(i);

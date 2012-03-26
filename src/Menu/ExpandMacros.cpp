@@ -606,7 +606,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     TCHAR label[30];
     const PageSettings::PageLayout &page =
       CommonInterface::GetUISettings().pages.pages[Pages::NextIndex()];
-    page.MakeTitle(label, true);
+    page.MakeTitle(CommonInterface::GetUISettings().info_boxes, label, true);
     ReplaceInString(OutBuffer, _T("$(NextPageName)"), label, Size);
   }
 

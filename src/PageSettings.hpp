@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct InfoBoxSettings;
+
 struct PageSettings {
   static gcc_constexpr_data unsigned MAX_PAGES = 8;
 
@@ -80,7 +82,8 @@ struct PageSettings {
       infoBoxConfig.SetDefaults();
     }
 
-    void MakeTitle(TCHAR* str, const bool concise=false) const;
+    void MakeTitle(const InfoBoxSettings &info_box_settings,
+                   TCHAR *str, const bool concise=false) const;
 
     bool operator==(const PageLayout& pl) const {
       if (topLayout != pl.topLayout)

@@ -22,13 +22,14 @@ Copyright_License {
 */
 
 #include "PageSettings.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Language/Language.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 
 #include <stdio.h>
 
 void
-PageSettings::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
+PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
+                                    TCHAR *buffer, const bool concise) const
 {
   switch (topLayout) {
   case PageSettings::PageLayout::tlMap:
@@ -44,7 +45,8 @@ PageSettings::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
     if (!infoBoxConfig.autoSwitch &&
         infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
       _tcscat(buffer, _T(" "));
-      _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
+      _tcscat(buffer,
+              gettext(info_box_settings.panels[infoBoxConfig.panel].name));
     }
     else {
       if (concise) {
