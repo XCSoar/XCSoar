@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-05 23:23+0100\n"
-"PO-Revision-Date: 2012-03-01 20:42+0000\n"
-"Last-Translator: Pop Paul <poppali1@yahoo.com>\n"
+"PO-Revision-Date: 2012-03-24 08:25+0000\n"
+"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-05 11:32+0000\n"
-"X-Generator: Launchpad (build 14900)\n"
+"X-Launchpad-Export-Date: 2012-03-26 14:44+0000\n"
+"X-Generator: Launchpad (build 15008)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2173,14 +2173,12 @@ msgid "Edit"
 msgstr "Szerk."
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
-#, fuzzy
 msgid "MC AUTO"
-msgstr "AUTOMATA"
+msgstr ""
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
-#, fuzzy
 msgid "MC MANUAL"
-msgstr "KÉZI"
+msgstr ""
 
 #: src/InfoBoxes/Content/Other.cpp:62
 msgid "AC Off"
@@ -3008,11 +3006,11 @@ msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:558
 msgid "Enable this if you use a K6Bt to connect the device."
-msgstr ""
+msgstr "Engedélyezze, ha K6Bt-t használ az eszköz csatlakoztatásához"
 
 #: src/Widgets/DeviceEditWidget.cpp:565
 msgid "Enable this if you would like to log the communication with the device."
-msgstr ""
+msgstr "Engedélyezze, ha naplózni szeretné a kommunikációt az eszközzel."
 
 #: src/Widgets/DeviceEditWidget.cpp:572
 msgid "Ignore checksum"
@@ -3023,6 +3021,8 @@ msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
 msgstr ""
+"Ez megengedi érvénytelen NMEA ellenőrzőszám esetén is a GPS adatok "
+"felhasználását."
 
 #: src/Device/Descriptor.cpp:139
 msgid "No such driver"
@@ -3184,15 +3184,15 @@ msgstr "Műveletek"
 
 #: src/Dialogs/DeviceListDialog.cpp:285
 msgid "Monitor"
-msgstr ""
+msgstr "Monitor"
 
 #: src/Dialogs/PortMonitor.cpp:118 src/Dialogs/PortMonitor.cpp:150
 msgid "Pause"
-msgstr ""
+msgstr "Szünet"
 
 #: src/Dialogs/PortMonitor.cpp:138
 msgid "Port monitor"
-msgstr ""
+msgstr "Port monitor"
 
 #: src/Dialogs/PortMonitor.cpp:148 Data/Dialogs/dlgFlarmTrafficDetails.xml:26
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
@@ -3238,37 +3238,31 @@ msgstr "Hőmérséklet"
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:214
 #: src/Weather/NOAAFormatter.cpp:150 src/Weather/NOAAFormatter.cpp:156
 msgid "Pressure"
-msgstr ""
+msgstr "Légnyomás"
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:37
-#, fuzzy
 msgid "Failed to load file."
-msgstr "Hiba a repülés letöltésekor."
+msgstr "Nem sikerült betölteni a fájlt."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:42
-#, fuzzy
 msgid "Too many waypoints."
-msgstr "Túl sok fordulópont.\n"
+msgstr "Túl sok a fordulópont."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:46
-#, fuzzy
 msgid "Uploading Waypoints"
-msgstr "Fordulópontok betöltése..."
+msgstr "Fordulópontok feltöltése"
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:52
-#, fuzzy
 msgid "Failed to erase waypoints."
-msgstr "Alkalmi FP"
+msgstr "Fordulópont törlése nem sikerült."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:58
-#, fuzzy
 msgid "Failed to switch baud rate."
-msgstr "Hiba a repülés letöltésekor."
+msgstr "Baud átváltás nem sikerült."
 
 #: src/Dialogs/CAI302/WaypointUploader.cpp:72
-#, fuzzy
 msgid "Failed to write waypoint."
-msgstr "Alkalmi FP"
+msgstr "Fordulópont kiírása nem sikerült."
 
 #: src/Dialogs/Vega/VegaConfigurationDialog.cpp:99
 msgid "Set new audio scheme?  Old values will be lost."
@@ -3294,21 +3288,23 @@ msgid ""
 "When the algorithm is switched off, the pilot is responsible for setting the "
 "wind estimate."
 msgstr ""
+"Ha az algoritmus ki lett kapcsolva, a pilóta feladata a becsült széladatok "
+"beállítása."
 
 #: src/Dialogs/WindSettingsPanel.cpp:49
 #, no-c-format
 msgid "Requires only a GPS source."
-msgstr ""
+msgstr "Csak GPS jelet igényel."
 
 #: src/Dialogs/WindSettingsPanel.cpp:51
 #, no-c-format
 msgid "Requires GPS and an intelligent vario with airspeed output."
-msgstr ""
+msgstr "GPS jelet és sebességjelet adó intelligens variót igényel."
 
 #: src/Dialogs/WindSettingsPanel.cpp:53
 #, no-c-format
 msgid "Use ZigZag and circling."
-msgstr ""
+msgstr "Cikk-cakk és körözés"
 
 #: src/Dialogs/WindSettingsPanel.cpp:57
 msgid "Auto wind"
@@ -3351,9 +3347,8 @@ msgid "Display"
 msgstr "Kijelző"
 
 #: src/Dialogs/dlgAirspaceColours.cpp:59
-#, fuzzy
 msgid "Select Color"
-msgstr "Válassz színt"
+msgstr "Válasszon színt"
 
 #: src/Dialogs/dlgAirspacePatterns.cpp:59
 msgid "Select Pattern"
@@ -6766,9 +6761,9 @@ msgid "METAR and TAF"
 msgstr "METAR és TAF"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Glider"
-msgstr "Gép Poláris"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:92
 #, no-c-format
@@ -6776,9 +6771,9 @@ msgid "Paraglider"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:93
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Powered aircraft"
-msgstr "Nincs géptípus"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:94
 #, no-c-format
@@ -6790,9 +6785,8 @@ msgid "Tracking Interval"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
-#, fuzzy
 msgid "Vehicle Type"
-msgstr "Típusváltás"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
 msgid "Type of vehicle used."
@@ -8343,9 +8337,8 @@ msgid "Radial"
 msgstr "Radiál"
 
 #: Data/Dialogs/pnlStatusTimes.xml:5
-#, fuzzy
 msgid "UTC time"
-msgstr "HT idő"
+msgstr ""
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
@@ -8395,9 +8388,8 @@ msgid "Vario Demo"
 msgstr "Varió demó"
 
 #: Data/Dialogs/pnlStatusTimes.xml:6
-#, fuzzy
 msgid "UTC date"
-msgstr "Frissítés"
+msgstr ""
 
 #: Data/Dialogs/dlgStatusSystem.xml:5 Data/Dialogs/pnlStatusSystem.xml:5
 msgid "Satellites in view"
@@ -8857,12 +8849,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#~ msgid "Failed to enable download mode."
-#~ msgstr "Sikertelen letöltési mód engedélyezés"
-
-#~ msgid "Panel name"
-#~ msgstr "Panel név"
 
 #~ msgid "Unknown Filetype."
 #~ msgstr "Ismeretlen file típus."
