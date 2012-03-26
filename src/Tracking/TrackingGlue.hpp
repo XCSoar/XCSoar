@@ -58,6 +58,12 @@ class TrackingGlue : protected StandbyThread {
   TrackingSettings settings;
   LiveTrack24State state;
 
+  /**
+   * The Unix UTC time stamp that was last submitted to the tracking
+   * server.  This attribute is used to detect time warps.
+   */
+  int64_t last_timestamp;
+
   BrokenDateTime date_time;
   GeoPoint location;
   unsigned altitude;

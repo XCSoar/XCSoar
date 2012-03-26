@@ -139,6 +139,16 @@ TrackingGlue::Tick()
 
   mutex.Unlock();
 
+  const int64_t current_timestamp = date_time.ToUnixTimeUTC();
+
+  if (state.HasSession() && current_timestamp + 60 < last_timestamp) {
+    /* time warp: create a new session */
+    LiveTrack24::EndTracking(state.session_id, state.packet_id);
+    state.ResetSession();
+  }
+
+  last_timestamp = current_timestamp;
+
   if (!state.HasSession()) {
     LiveTrack24::UserID user_id = 0;
     if (!copy.username.empty() && !copy.password.empty())
@@ -165,7 +175,7 @@ TrackingGlue::Tick()
 
   LiveTrack24::SendPosition(state.session_id, state.packet_id++,
                             location, altitude, ground_speed, track,
-                            date_time.ToUnixTimeUTC());
+                            current_timestamp);
 
   mutex.Lock();
 }
