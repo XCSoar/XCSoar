@@ -32,15 +32,21 @@ class Timer;
 
 class AndroidTimer {
   class Bridge : protected Java::Object {
+    static jclass cls;
+    static jmethodID ctor, install_method, uninstall_method;
+
   public:
+    static void Initialise(JNIEnv *env);
+    static void Deinitialise(JNIEnv *env);
+
     Bridge(JNIEnv *env, jlong ptr, jint period);
 
-    void install() {
-      CallVoid("install");
+    void install(JNIEnv *env) {
+      env->CallVoidMethod(Get(), install_method);
     }
 
-    void uninstall() {
-      CallVoid("uninstall");
+    void uninstall(JNIEnv *env) {
+      env->CallVoidMethod(Get(), uninstall_method);
     }
   };
 
@@ -51,6 +57,14 @@ private:
   bool disabled, running;
 
 public:
+  static void Initialise(JNIEnv *env) {
+    Bridge::Initialise(env);
+  }
+
+  static void Deinitialise(JNIEnv *env) {
+    Bridge::Deinitialise(env);
+  }
+
   AndroidTimer(Timer &timer, unsigned ms);
 
   void disable();

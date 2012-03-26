@@ -32,6 +32,37 @@ Copyright_License {
 
 #include <assert.h>
 
+jclass AndroidTimer::Bridge::cls;
+jmethodID AndroidTimer::Bridge::ctor;
+jmethodID AndroidTimer::Bridge::install_method;
+jmethodID AndroidTimer::Bridge::uninstall_method;
+
+void
+AndroidTimer::Bridge::Initialise(JNIEnv *env)
+{
+  assert(cls == NULL);
+  assert(env != NULL);
+
+  jclass _cls = env->FindClass("org/xcsoar/Timer");
+  assert(_cls != NULL);
+
+  cls = (jclass)env->NewGlobalRef(_cls);
+  env->DeleteLocalRef(_cls);
+
+  ctor = env->GetMethodID(cls, "<init>", "(JI)V");
+  install_method = env->GetMethodID(cls, "install", "()V");
+  uninstall_method = env->GetMethodID(cls, "uninstall", "()V");
+}
+
+void
+AndroidTimer::Bridge::Deinitialise(JNIEnv *env)
+{
+  assert(cls != NULL);
+  assert(env != NULL);
+
+  env->DeleteGlobalRef(cls);
+}
+
 AndroidTimer::Bridge::Bridge(JNIEnv *env, jlong ptr, jint period)
 {
   Java::Class cls(env, "org/xcsoar/Timer");
@@ -61,7 +92,7 @@ AndroidTimer::disable()
 {
   assert(!disabled);
 
-  bridge.uninstall();
+  bridge.uninstall(Java::GetEnv());
   event_queue->Purge(match_timer, (void *)this);
 
   if (running)
@@ -84,7 +115,7 @@ AndroidTimer::run()
   if (disabled)
     delete this;
   else
-    bridge.install();
+    bridge.install(Java::GetEnv());
 }
 
 gcc_visibility_default

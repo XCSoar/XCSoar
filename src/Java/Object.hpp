@@ -30,7 +30,6 @@
 #ifndef XCSOAR_JAVA_OBJECT_HPP
 #define XCSOAR_JAVA_OBJECT_HPP
 
-#include "Java/Global.hpp"
 #include "Java/Ref.hpp"
 
 #include <jni.h>
@@ -50,17 +49,6 @@ namespace Java {
     Object() {}
 
     Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
-
-    void CallVoid(JNIEnv *env, const char *name) {
-      jclass cls = env->GetObjectClass(Get());
-      jmethodID mid = env->GetMethodID(cls, name, "()V");
-      env->CallVoidMethod(Get(), mid);
-      env->DeleteLocalRef(cls);
-    }
-
-    void CallVoid(const char *name) {
-      CallVoid(GetEnv(), name);
-    }
   };
 }
 

@@ -35,6 +35,7 @@ private:
   static jmethodID ctor;
   static jmethodID open_method;
   static jmethodID openUart_method;
+  static jmethodID shutdown_method;
 
 public:
   /**
@@ -47,7 +48,7 @@ public:
   IOIOHelper(JNIEnv *env);
 
   ~IOIOHelper() {
-    close();
+    shutdown(Java::GetEnv());
   }
 
   /**
@@ -57,8 +58,8 @@ public:
    * by calling closeUart();
    * @param env
    */
-  void close() {
-    CallVoid("shutdown");
+  void shutdown(JNIEnv *env) {
+    env->CallVoidMethod(Get(), shutdown_method);
   }
 
   /**

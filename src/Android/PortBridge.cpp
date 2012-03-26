@@ -27,6 +27,7 @@ Copyright_License {
 
 #include <string.h>
 
+jmethodID PortBridge::close_method;
 jmethodID PortBridge::setListener_method;
 jmethodID PortBridge::isValid_method;
 jmethodID PortBridge::drain_method;
@@ -39,6 +40,7 @@ PortBridge::Initialise(JNIEnv *env)
 {
   Java::Class cls(env, "org/xcsoar/AndroidPort");
 
+  close_method = env->GetMethodID(cls, "close", "()V");
   setListener_method = env->GetMethodID(cls, "setListener",
                                         "(Lorg/xcsoar/InputListener;)V");
   isValid_method = env->GetMethodID(cls, "isValid", "()Z");

@@ -27,7 +27,8 @@ Copyright_License {
 
 jclass IOIOHelper::cls;
 jmethodID IOIOHelper::ctor,
-  IOIOHelper::openUart_method;
+  IOIOHelper::openUart_method,
+  IOIOHelper::shutdown_method;
 
 bool
 IOIOHelper::Initialise(JNIEnv *env)
@@ -47,6 +48,8 @@ IOIOHelper::Initialise(JNIEnv *env)
   ctor = env->GetMethodID(cls, "<init>", "()V");
   openUart_method = env->GetMethodID(cls, "openUart",
                                      "(II)Lorg/xcsoar/AndroidPort;");
+  shutdown_method = env->GetMethodID(cls, "shutdown", "()V");
+
   return true;
 }
 

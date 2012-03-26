@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 
 class PortBridge : protected Java::Object {
+  static jmethodID close_method;
   static jmethodID setListener_method;
   static jmethodID isValid_method;
   static jmethodID drain_method;
@@ -47,7 +48,11 @@ public:
   PortBridge(JNIEnv *env, jobject obj);
 
   ~PortBridge() {
-    CallVoid("close");
+    close(Java::GetEnv());
+  }
+
+  void close(JNIEnv *env) {
+    env->CallVoidMethod(Get(), close_method);
   }
 
   void setListener(JNIEnv *env, Port::Handler *handler);
