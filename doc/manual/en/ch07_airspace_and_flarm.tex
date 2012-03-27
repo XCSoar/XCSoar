@@ -45,7 +45,7 @@ Section~\ref{sec:airsp-filt-dial}.
 The default colouring of Class C, D, E and F airspace is consistent
 with ICAO charts.
 
-\section{Incursion events}
+\subsection*{Incursion events}
 
 Three types of events are detected by XCSoar in relation to SUA:
 \begin{description}
@@ -75,14 +75,14 @@ preferentially to GPS altitude in detecting airspace incursions.  This
 makes the system conform to normal conventions of having airspace
 violations based on QNH-adjusted altitude.
 
-\section{Airspace warning levels}
+\section{Airspace warnings}
 
-The concept of airspace warning levels is introduced:
+The concept of airspace warnings in gradual levels is introduced:
 \begin{description}
-\item[0] Aircraft is outside and distant from airspace.
-\item[1] \colorbox{AirspaceYellow}{Aircraft is predicted to penetrate the airspace but is not close.}
-\item[2] \colorbox{AirspaceYellow}{Aircraft is predicted to penetrate the airspace and is close to doing so.}
-\item[3] \colorbox{AirspaceRed}{Aircraft is inside airspace.}
+\item[None] Aircraft is outside and distant from airspace.
+\item[\colorbox{AirspaceYellow}{Near}] Aircraft is predicted to penetrate the airspace and 
+  is close to doing so.
+\item[\colorbox{AirspaceRed}{Inside}] Aircraft is inside airspace.
 \end{description}
 
 At all times XCSoar monitors the aircraft relative to all airspace and
@@ -91,18 +91,17 @@ filtered according to the airspace filter preferences; such that
 certain categories of airspace may be effectively disabled.
 
 The sequence of events when entering an airspace results typically
-in three warnings: when near (level 1), when close (level 2), and when
-inside (level 3).
+in two warnings: when near (level 1), and when inside (level 2).
 
-\sketch{figures/airspacewarning_2.png}
+\sketch{figures/airspacewarning.png}
 Whenever the warning level increases (above level 0) for any airspace,
-the airspace warning dialog appears, accompanied by a system beep from
+the airspace warning dialogue appears, accompanied by a system beep from
 Altair or the PDA.  When there are no more airspace regions at warning
-levels above 0, the dialog disappears automatically.
+levels above 0, the dialogue disappears automatically.
 
-\section{Airspace warning dialog}
+\subsection*{Airspace warning dialogue}
 
-The airspace warning dialog contains a list of up to 4 individual
+The airspace warning dialogue contains a list of up to 4 individual
 warnings.  The list items status background is coloured red if the glider is
 inside, and yellow if near.  If the warning is acknowledged, the
 text is greyed out.
@@ -110,50 +109,38 @@ text is greyed out.
 Each list item occupies two rows, and includes the following details:
 
 \begin{verbatim}
-<NAME and Class>               <TOP>   <Inside>
+<NAME and Class>               <TOP>   <Position>
 <Time and distance if outside> <BASE>
-\end{verbatim} 
+\end{verbatim}
 
 The values in the list are continuously updated. 
-
-An example follows:
-\begin{verbatim}
-Bern TMA Class D                FL100     \colorbox{AirspaceYellow}{near}
-35 sec horizontal dist 1300     1750m 
-\end{verbatim}
+An example follows:\\
+\verb+Bern TMA Class D                FL100     +\colorbox{AirspaceYellow}{near}
+\verb+35 sec horizontal dist 1300     1750m+
 
 This means that the aircraft is 1300m horizontally separated from the Class D airspace
 `Bern TMA', with a base of 1750m and ceiling at FL100.
 
-Another example:
-\begin{verbatim}
-Bern CTRgld Class C 1350m	    \colorbox{AirspaceRed}{inside}
-                    SFC
-\end{verbatim}
+Another example:\\
+\verb+Bern CTRgld Class C             1350m     +\colorbox{AirspaceRed}{inside}
+\verb+                                SFC+
 
 This means that the aircraft is inside the Class C airspace `Bern
 CTRgld', with base of terrain surface and ceiling at 1350m.
 
-At any time, the airspace warning dialog can be opened by selecting
-the menu:
+If there are airspace warnings any time the airspace warning dialogue is shown 
+you get the details to an airspace by touching it (for Altair: Selecting and 
+pressing the Enter key).
 
-\bmenu{Info}\blink\bmenu{Nearest Airspace}
+\subsection*{Airspace warning acknowledgement}
 
-If there were airspace warnings and you are not well outside all airspace, this
-menu item redisplays the dialog with the list of airspace warnings.
+When the warning dialogue is visible and an airspace warning is active, the
+dialogue can be closed by pressing ESC.  This has the effect of closing the
+warning without actually acknowledging the warning.
 
-At any time the airspace warning dialog is show you get the details to an 
-airspace by touching on it.
-
-\section{Airspace warning acknowledgement}
-
-When the warning dialog is visible and an airspace warning is active, the
-dialog can be closed by pressing ESC.  This has the effect of closing the
-warning without actually acknowledging the warning.  
-
-When one or more warnings are visible in the airspace warning dialog,
+When one or more warnings are visible in the airspace warning dialogue,
 a warning can be acknowledged by pressing one of the buttons along the bottom
-of the dialog.  When the list contains more than one airspace warning,
+of the dialogue.  When the list contains more than one airspace warning,
 the rotary button on Altair (or cursor on PDA) can be used to select one
 for acknowledgement.
 
@@ -169,8 +156,8 @@ airspace region for the rest of the flight (specifically, until Altair/XCSoar
 is restarted). (Key F7 on Altair)
 \item[Enable]  Cancels an acknowledgement of the airspace, to reactivate all warnings
 from this space. (Key F8 on Altair)
-\item[Close] Closes the airspace warning dialog, without acknowledging airspace.
-  The dialog will re-open automatically if the airspace warning level increases.
+\item[Close] Closes the airspace warning dialogue, without acknowledging airspace.
+  The dialogue will re-open automatically if the airspace warning level increases.
 \end{description}
 
 Note that not all acknowledgement buttons may be visible for all
@@ -179,11 +166,11 @@ option to Acknowledge the Warning (ACK Warn), since it is at this
 point no longer warning of an impending airspace incursion, but in
 fact stating that you are currently inside the airspace.
 
-The general guidelines for using the dialog are:
+The general guidelines for using the dialogue are:
 \begin{itemize}
-\item Don't acknowledge a warning if you intend to or must avoid the airspace
-\item The warning system beep only occurs when the warning level increases.
-\item The warning system is designed to allow circling near an airspace without
+\item  Don't acknowledge a warning if you intend to or must avoid the airspace
+\item  The warning system beep only occurs when the warning level increases.
+\item  The warning system is designed to allow circling near an airspace without
   over-stressing the pilot with extraneous warnings.
 \end{itemize}
 
@@ -192,17 +179,12 @@ screen without a pattern.
 
 When the aircraft is predicted to enter an SUA region, or it actually
 enters an SUA region, a warning is raised, presented as an audio alert
-and a status message describing the type of airspace warning, the SUA
+and a status message describing the type of airspace warning, and some SUA
 details (including class of airspace, base and ceiling altitude or
-flight level, radio frequencies).
-
-%{\it DIAGRAM SHOWING AIRSPACE WARNING}
-%\begin{center}
-%\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/airspacewarn.png}
-%\end{center}
+flight level).
 
 Acknowledged warnings will repeat after a certain time specified as
-the 'Acknowledge time' in the configuration settings.
+the `Acknowledge time' in the configuration settings.
 
 Airspace warning acknowledgements apply to individual SUA regions.
 If, for example, a glider enters airspace A and the pilot acknowledges
@@ -220,68 +202,64 @@ of the airspace.
 Simultaneous airspace warnings can occur if the aircraft (or its
 estimated future track) penetrates multiple airspace regions.
 
-\section{Airspace queries}
+\section{Airspace query and details}
 
 For touchscreen/mouse devices, when an airspace region is visible on
 the map area, it may be queried by touching the region on the map.
-This brings up a status message containing similar SUA details as is
-provided when an actual warning is raised.  Touching the status
-message or pressing the enter key makes the message disappear (that
-is, it acknowledges the query).  The query returns the details of all
-airspace regions when overlapping airspace is visible at the query
-location.
+This brings up a dialogue with a list of map elements in the near of this 
+location. All SUAs are listed with similar details as is
+provided when an actual warning is raised.  Selecting the SUA on the list and 
+pressing \button{Details} or the enter key displays all airspace details. 
+\sketch{figures/airspace_mapelements.png}
+ The query returns all airspace regions when overlapping airspace 
+is visible at the query location.
 
-Through the button menus, there is another way of querying airspace.
-The `Nearest Airspace' query brings up a status message containing SUA
-details of the nearest airspace region. 
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Nearest airspace}
-\end{quote}
-This returns at most a single airspace region.  The search is limited
-to items within half an hour from the aircraft according to flight at
-average cross-country speed.
+%% To put at another place
+%Through the button menus is the same map query available.
+%The `What's here?' query brings up a map element list including the the nearest 
+%airspace region. 
+%\begin{quote}
+%\bmenu{Info}\blink\bmenu{What's here?}
+%\end{quote}
 
-If the glider is outside the airspace, it also describes the distance
-and bearing to the nearest point on the airspace perimeter to the
-glider.  If the glider is inside the airspace, it also describes the
-distance and bearing to the nearest exit.
+%% Probably wrong and outdated
+%If the glider is outside the airspace, it also describes the distance
+%and bearing to the nearest point on the airspace perimeter to the
+%glider.  If the glider is inside the airspace, it also describes the
+%distance and bearing to the nearest exit.
 
-\section{Airspace filter dialog}\label{sec:airsp-filt-dial}
+\subsection*{Airspace filter dialogue}\label{sec:airsp-filt-dial}
 
-The Airspace Filter dialog allows warnings and display to be enabled
+The Airspace Filter dialogue allows warnings and display to be enabled
 or disabled for each class of airspace.  
 
 This may be accessed several ways:
 \begin{itemize}
 \item From the menu \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Settings
-Airspace}
-\item From the configuration dialog, menu under
+Airspace}.
+\item From the configuration dialogue, menu under
 \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup System} then in the
-Airspace page, select the button \button{Filter}
+Airspace page, press the \button{Filter} button.
 \end{itemize}
 
-To use the dialog, move up or down the list and the enter key will
+To use the dialogue, move up or down the list and the enter key will
 cycle between the various warning and display options.
+\sketch{figures/airspacefilter.png}
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacefilter.png}
-\end{center}
+\subsection*{Airspace selection dialogue}
 
-Pressing the ``Lookup'' button brings up the airspace select dialog.
-This functions similarly to the waypoint lookup dialog, and allows
+Pressing the \button{Lookup} button brings up the airspace select dialogue.
+This functions similarly to the waypoint lookup dialogue, and allows
 search based on name, distance, direction, and type (class).  
+\sketch{figures/airspacelookup.png}
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
-\end{center}
+Once an airspace item has been located, you have the chance to acknowledged it 
+for the day.  From the
+airspace management dialogue it is possible to re-enable it again.
 
-Once an airspace item has been located, selecting it will add it to
-the airspace management system as acknowledged for the day.  From the
-airspace management dialog it is possible to re-enable it again.
+\section{Analysis dialogue}
 
-\section{Analysis dialog}
-
-The analysis dialog contains a page showing a cross-section of the
+The analysis dialogue contains a page showing a cross-section of the
 airspace.  This is accessed via the menu under
 \begin{quote}
 \bmenu{Info}\blink\bmenu{Analysis}
