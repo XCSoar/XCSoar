@@ -108,6 +108,10 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
 bool
 ExternalSettings::ProvideMacCready(fixed value, fixed time)
 {
+  if (negative(value) || value > fixed(20))
+    /* failed sanity check */
+    return false;
+
   if (CompareMacCready(value))
     return false;
 
@@ -119,6 +123,10 @@ ExternalSettings::ProvideMacCready(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 {
+  if (negative(value) || value > fixed_one)
+    /* failed sanity check */
+    return false;
+
   if (CompareBallastFraction(value))
     return false;
 
@@ -130,6 +138,10 @@ ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
 {
+  if (value < fixed_one || value > fixed(5))
+    /* failed sanity check */
+    return false;
+
   if (CompareBallastOverload(value))
     return false;
 
@@ -141,6 +153,10 @@ ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
 bool
 ExternalSettings::ProvideWingLoading(fixed value, fixed time)
 {
+  if (value < fixed_one || value > fixed(200))
+    /* failed sanity check */
+    return false;
+
   if (CompareWingLoading(value))
     return false;
 
@@ -152,6 +168,10 @@ ExternalSettings::ProvideWingLoading(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBugs(fixed value, fixed time)
 {
+  if (value < fixed_half || value > fixed_one)
+    /* failed sanity check */
+    return false;
+
   if (CompareBugs(value))
     return false;
 
@@ -163,6 +183,11 @@ ExternalSettings::ProvideBugs(fixed value, fixed time)
 bool
 ExternalSettings::ProvideQNH(AtmosphericPressure value, fixed time)
 {
+  if (value.GetHectoPascal() < fixed(500) ||
+      value.GetHectoPascal() > fixed(1500))
+    /* failed sanity check */
+    return false;
+
   if (CompareQNH(value))
     return false;
 
