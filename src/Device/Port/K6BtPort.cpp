@@ -35,6 +35,9 @@ Copyright_License {
 K6BtPort::K6BtPort(Port *_port, unsigned _baud_rate, Handler &_handler)
   :Port(_handler), port(_port), baud_rate(0)
 {
+  /* ensure that the K6Bt is not in command mode */
+  SendCommand(NOP);
+
   SetBaudrate(_baud_rate);
 }
 
