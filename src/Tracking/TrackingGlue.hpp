@@ -35,7 +35,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "DateTime.hpp"
 
-struct NMEAInfo;
+struct MoreData;
 struct DerivedInfo;
 
 class TrackingGlue : protected StandbyThread {
@@ -77,7 +77,7 @@ public:
   void WaitStopped();
 
   void SetSettings(const TrackingSettings &_settings);
-  void OnTimer(const NMEAInfo &basic, const DerivedInfo &calculated);
+  void OnTimer(const MoreData &basic, const DerivedInfo &calculated);
 
 protected:
   virtual void Tick();

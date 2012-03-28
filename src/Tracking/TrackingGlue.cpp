@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "TrackingGlue.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/System.hpp"
 #include "Util/Macros.hpp"
@@ -83,7 +83,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 }
 
 void
-TrackingGlue::OnTimer(const NMEAInfo &basic, const DerivedInfo &calculated)
+TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */
@@ -112,8 +112,8 @@ TrackingGlue::OnTimer(const NMEAInfo &basic, const DerivedInfo &calculated)
 
   location = basic.location;
   /* XXX use nav_altitude? */
-  altitude = basic.gps_altitude_available && positive(basic.gps_altitude)
-    ? (unsigned)basic.gps_altitude
+  altitude = basic.NavAltitudeAvailable() && positive(basic.nav_altitude)
+    ? (unsigned)basic.nav_altitude
     : 0u;
   ground_speed = basic.ground_speed_available
     ? (unsigned)Units::ToUserUnit(basic.ground_speed, Unit::KILOMETER_PER_HOUR)
