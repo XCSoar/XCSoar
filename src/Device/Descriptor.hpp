@@ -208,6 +208,10 @@ public:
   /**
    * Call this method after Declare(), ReadFlightList(),
    * DownloadFlight() when you're done, to switch back to NMEA mode.
+   *
+   * Even when the driver's EnableNMEA() method fails, this method
+   * will re-enable the receive thread, to avoid false negatives due
+   * to flaky cables.
    */
   bool EnableNMEA(OperationEnvironment &env);
 

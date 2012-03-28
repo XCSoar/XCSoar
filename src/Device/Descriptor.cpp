@@ -303,15 +303,14 @@ DeviceDescriptor::EnableNMEA(OperationEnvironment &env)
   if (device == NULL)
     return true;
 
-  if (!device->EnableNMEA(env))
-    return false;
+  bool success = device->EnableNMEA(env);
 
   if (port != NULL)
     /* re-enable the NMEA handler if it has been disabled by the
        driver */
     port->StartRxThread();
 
-  return true;
+  return success;
 }
 
 const TCHAR *
