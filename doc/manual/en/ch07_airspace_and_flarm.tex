@@ -277,7 +277,7 @@ visualise complex layering of airspace.
 The ``Warnings'' button opens the airspace warning dialog if close to
 airspace.
 
-\section{FLARM traffic display}
+\section{FLARM traffic}
 
 If connected to a FLARM device, FLARM traffic is displayed on the map
 area.  Each FLARM aircraft received is drawn as a dashed red disk.
@@ -293,37 +293,36 @@ a poor aid at helping to locate the traffic.
 
 \subsection*{FLARM map display}
 
-The FLARM targets on the map are drawn as red circles and have coloured 
+The FLARM targets on the map are drawn as red coloured 
 arrow heads to indicate the direction the FLARM target is
-heading, as well as the collision risk \config{flarm-on-map}.  Note that these
+heading, as well as the collision risk\config{flarm-on-map}.  Note that these
 arrow heads are oriented according to the display orientation.  For example, if 
 the orientation is track-up, then the arrows show the relative track bearing of
 the target to the aircraft.  If the orientation is north-up, then the arrows show the
 absolute track bearing of the target.
-
-\begin{center}
-\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/flarmmap.png}
-\end{center}
+\sketch{figures/flarmmap.png}
 
 Display on the map FLARM of aircraft registration or pilot name is
 made possible via a look-up of the ICAO aircraft ID of FLARM traffic
 in a file.  See Section~\ref{sec:flarm-ident-file} for details on this
-file format.  Aircraft with the FLARM privacy flag set will not have
+file format.  Aircrafts with the FLARM privacy flag set will not have
 any identification displayed.
 
 \subsection*{FLARM radar}
 
-To remedy this situation, when FLARM traffic is received, the lower
-right corner of the screen shows a small radar-style view of the FLARM
-traffic from the perspective of the aircraft.  FLARM traffic is
-displayed in identical style.
+To remedy this situation, when FLARM traffic is received, XCSoar shows a 
+small radar-style view of the FLARM
+traffic from the perspective of the aircraft.  The FLARM traffic is
+displayed in identical style, except that the threatening traffic is emphasized 
+with one or two red circles around the arrow head icon.  The display corner used 
+for the small radar view can be configured\config{flarmradar-place}.
 
 This FLARM display is oriented track-up and a small glider icon
 clearly shows that the display is oriented as such.  The scale of the
 display is linear up to maximum distance of 2000 meters.  On the
 background there are two rings; the first is 1000 meters and the second 
 is 2000 meters.  Traffic further away than 2000 meters is drawn at the 2000 meter ring.
-\marginpar{\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/flarmrose.png}}
+\sketch{figures/flarmrose.png}
 
 All the FLARM displays shows FLARM traffic in colours according to
 the threat level, or team and dialog status.  The traffic is coloured:
@@ -339,7 +338,7 @@ the threat level, or team and dialog status.  The traffic is coloured:
 
 For every target above threat level 1 the rough relative hight is shown. The
 supplied figure is the absolute hight difference rounded by 100.  A small
-triangle indicates that the target is higher or lower than you. The example
+triangle indicates that the target is higher or lower than you.  The example
 radar shows a target approximately 100 meter (for metric altitude) higher.
 
 The FLARM radar-like display, when enabled, can be suppressed when
@@ -349,19 +348,12 @@ suppression and the radar is shown again.  When new traffic appears in
 the radar, or if the FLARM issues a collision warning, the suppression
 is cancelled.
 
-When the alert level of the FLARM target indicates a collision
-warning, a black line is drawn from the target to the edge of the
-radar.  This is done to make it easier to see at a glance which
-direction the target is relative to the glider, since when a collision
-warning is active, typically the target will be close to the glider.
-
 \subsection*{FLARM Traffic dialog}
+
 Once FLARM has reported traffic and the small radar-style view of the FLARM
 traffic gets activated  \config{flarmdisplay} you can tap on the FLARM radar to
-enlarge the view to fullscreen size.  This is also accessed via the menu under
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{FLARM Radar}
-\end{quote}
+enlarge the view to fullscreen size.  This is also accessed via the menu under 
+\bmenu{Info ...}\blink\bmenu{FLARM Radar}.
 The fullscreen FLARM display offers all available information
 about the FLARM traffic and depending on the setup it closes by itself, when all
 traffic has been gone.
@@ -408,51 +400,48 @@ messages.
 
 From the first to the second FLARM snapshot were passed about 15 seconds. The
 selected blue target was climbing with 3.4 m/s and had a not as threat
-recognised course relation.  Then in the mean time the ``DC'' has turned more to
+recognised course relation.  Then in the mean time the `DC' has turned more to
 the left, became an alerting threat and gets now displayed red.  The FLARM
 radar switched the zoom from 1000 meter to 500 meter. In snapshot three the
-continuously climbing target becomes classified to thread level 1, gets yellow 
-coloured and seams to no longer a threat.  
+continuously climbing target becomes classified to threat level 1, gets yellow 
+coloured and seams to no longer a threat.
 
 
 \section{Team flying}
 
-  Team code is a system to allow pilots flying within a team to
-  communicate their position to each other in a concise and accurate
-  manner.  The principle of the system is that each pilot uses their
-  computer to determine a 5 digit code which describes their position
-  relative to a common waypoint.  The pilots call each other reporting
-  these codes, and entering the codes into the computer allows their
-  mates to be located accurately by the computer.
+Team code is a system to allow pilots flying within a team to 
+communicate their position to each other in a concise and accurate 
+manner.  The principle of the system is that each pilot uses their 
+computer to determine a 5 digit code which describes their position 
+relative to a common waypoint.  The pilots call each other reporting 
+these codes, and entering the codes into the computer allows their 
+mates to be located accurately by the computer. 
 
-  Support for encrypted team codes will be provided in the future.
+To use the team code, all pilots in the team should select a waypoint to 
+be used as the reference.  This is all done on the team code dialogue 
+\bmenu{Info ..}\blink\bmenu{Team Code}.  The reference waypoint is set 
+via the \button{Set WP} button. Select a waypoint from the lookup dialogue 
+and it will be the team reference.
 
-  To use team code, all pilots in the team should select a waypoint to
-  be used as the reference.  This is done via selecting a waypoint
-  from the Waypoint lookup dialog and then pressing the `Set teamcode'
-  button in the waypoint details page.
+During flight, the pilot can read out his `Own code' from the team 
+code dialogue to his team mate, in order to report his position.  When 
+the pilot hears a code report from a team mate, he presses the \button{Set Code} 
+button to open the text entry dialogue to allow entry of the mate's code.
+\sketch{figures/dialog-teamcode.png}
 
-  The teamcode dialog is accessed via the menu:
+After entering the mate's code, the relative distance and 
+bearing to the mate is calculated and updated in the dialogue.
 
-   \bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Team Code}
+XCSoar also supports the encrypted team codes from the FlarmNet initiative.
+The \button{Flarm Lock} button accesses the FlarmNet database. A simple but 
+ambiguous lookup for a competition ID delivers a FLARM ID, which allows you 
+to `lock' your FLARM mate from the far. See Section~\ref{sec:flarm-ident-file} 
+where to find the FlarmNet database etc.
 
-  During flight, the pilot can read out his `Own code' from the team
-  code dialog to his team mate, in order to report his position.  When
-  the pilot hears a code report from a team mate, he presses the \button{Set
-  Mate code} button to open the text entry dialog to allow entry of the
-  mate's code.
-
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/fig-teamcode1.png}
-\end{center}
-
-  After entering the mate's code, the relative distance and
-  bearing to the mate is calculated and updated in the dialog.
-  
-  The \button{Flarm lock} button access the flarm net database. A simple but
-  ambiguous lookup for an competition id delivers an flarm id, which alows you
-  to ``lock'' your flarm mate from the far.
-  
+Finally XCSoar can manage only one team mate with a defined reference waypoint, 
+but any number of `friends' with a known FLARM ID. In case you get closer to 
+your flying college, just pick a colour on the FLARM dialogue and identify this 
+FLARM response in the future as your buddy.
 
 
 
