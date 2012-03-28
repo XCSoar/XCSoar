@@ -132,15 +132,9 @@ FlarmDevice::SendStartByte()
 }
 
 bool
-FlarmDevice::WaitForStartByte(unsigned timeout_ms)
+FlarmDevice::WaitForStartByte(OperationEnvironment &env, unsigned timeout_ms)
 {
-  const TimeoutClock timeout(timeout_ms);
-
-  while (!timeout.HasExpired())
-    if (port.GetChar() == FLARM_STARTFRAME)
-      return true;
-
-  return false;
+  return port.WaitForChar(FLARM_STARTFRAME, env, timeout_ms) == Port::WaitResult::READY;
 }
 
 /*
@@ -220,7 +214,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
   // Receive frames until timeout or expected frame found
   while (!timeout.HasExpired()) {
     // Wait until the next start byte comes around
-    if (!WaitForStartByte(timeout.GetRemainingOrZero()))
+    if (!WaitForStartByte(env, timeout.GetRemainingOrZero()))
       continue;
 
     // Read the following FrameHeader

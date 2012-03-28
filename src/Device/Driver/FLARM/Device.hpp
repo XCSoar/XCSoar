@@ -231,7 +231,7 @@ private:
    * @param timeout_ms Timeout in milliseconds
    * @return True if the start byte was received, False if a timeout occurred
    */
-  bool WaitForStartByte(unsigned timeout_ms);
+  bool WaitForStartByte(OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Calculates the CRC value of the FrameHeader and an optional payload
