@@ -46,6 +46,7 @@ MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
 }
 
 TrackingGlue::TrackingGlue()
+  :last_timestamp(0)
 {
   settings.SetDefaults();
   LiveTrack24::SetServer(settings.livetrack24.server);
