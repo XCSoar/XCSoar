@@ -69,7 +69,7 @@ class TrackingGlue : protected StandbyThread {
   unsigned altitude;
   unsigned ground_speed;
   Angle track;
-  bool flying;
+  bool flying, last_flying;
 
 public:
   TrackingGlue();

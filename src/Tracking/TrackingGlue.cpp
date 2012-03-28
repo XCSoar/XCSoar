@@ -46,7 +46,8 @@ MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
 }
 
 TrackingGlue::TrackingGlue()
-  :last_timestamp(0)
+  :last_timestamp(0),
+   flying(false)
 {
   settings.SetDefaults();
   LiveTrack24::SetServer(settings.livetrack24.server);
@@ -127,6 +128,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
     ? basic.track
     : Angle::Zero();
 
+  last_flying = flying;
   flying = calculated.flight.flying;
 
   Trigger();
@@ -143,6 +145,19 @@ TrackingGlue::Tick()
   LiveTrack24Settings copy = this->settings.livetrack24;
 
   mutex.Unlock();
+
+  if (!flying) {
+    if (last_flying && state.HasSession()) {
+      /* landing: end tracking session */
+      LiveTrack24::EndTracking(state.session_id, state.packet_id);
+      state.ResetSession();
+      last_timestamp = 0;
+    }
+
+    /* don't track if not flying */
+    mutex.Lock();
+    return;
+  }
 
   const int64_t current_timestamp = date_time.ToUnixTimeUTC();
 
