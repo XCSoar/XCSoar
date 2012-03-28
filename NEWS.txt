@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.3 - not yet released
+Version 6.3 - 2012/03/29
 * calculations
   - real-time OLC score
   - configurable permanent polar degradation
@@ -55,15 +55,12 @@ Version 6.3 - not yet released
 * Android
   - support reverse screen modes for Galaxy Tab
   - support baro sensor
+  - fix profile saving bug after initial installation
+  - improve Bluetooth and IOIO error handling
 * Altair
   - fix configuration dialog navigation
 * LX MiniMap
   - support for the hardware buttons
-
-Version 6.2.7 - not yet released
-* Android
-  - fix profile saving bug after initial installation
-  - improve Bluetooth and IOIO error handling
 
 Version 6.2.6 - 2012/02/25
 * calculations
