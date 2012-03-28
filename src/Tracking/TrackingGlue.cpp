@@ -68,18 +68,22 @@ TrackingGlue::WaitStopped()
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
-  ScopeLock protect(mutex);
+  if (_settings.livetrack24.server != settings.livetrack24.server ||
+      _settings.livetrack24.username != settings.livetrack24.username ||
+      _settings.livetrack24.password != settings.livetrack24.password) {
+    /* wait for the current job to finish */
+    WaitDone();
 
-  if (_settings.livetrack24.server != settings.livetrack24.server) {
+    /* now it's safe to access these variables without a lock */
+    settings = _settings;
     state.ResetSession();
     LiveTrack24::SetServer(_settings.livetrack24.server);
+  } else {
+    /* no fundamental setting changes; the write needs to be protected
+       by the mutex, because another job may be running already */
+    ScopeLock protect(mutex);
+    settings = _settings;
   }
-
-  if (_settings.livetrack24.username != settings.livetrack24.username ||
-      _settings.livetrack24.password != settings.livetrack24.password)
-    state.ResetSession();
-
-  settings = _settings;
 }
 
 void
