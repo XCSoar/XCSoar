@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-05 23:23+0100\n"
-"PO-Revision-Date: 2012-03-23 00:20+0000\n"
-"Last-Translator: Dennis Baudys <Unknown>\n"
+"PO-Revision-Date: 2012-03-28 16:12+0000\n"
+"Last-Translator: Folken Van Vanel <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-26 14:44+0000\n"
-"X-Generator: Launchpad (build 15008)\n"
+"X-Launchpad-Export-Date: 2012-03-28 22:41+0000\n"
+"X-Generator: Launchpad (build 15027)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -680,7 +680,7 @@ msgstr "Nächster Wegpunkt"
 #: src/InfoBoxes/Content/Factory.cpp:220 src/InfoBoxes/Content/Task.cpp:83
 #, no-c-format
 msgid "Next"
-msgstr "Nächster"
+msgstr "Nächster WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:221
 #, no-c-format
@@ -8649,7 +8649,7 @@ msgstr "Umbenennen"
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:410
 #: Data/Input/default.xci:1052
 msgid "GoTo"
-msgstr "Flieg hin"
+msgstr "Fliege zu"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:3 Data/Input/default.xci:628
 msgid "Replay"
