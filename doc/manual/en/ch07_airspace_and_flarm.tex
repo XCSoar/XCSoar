@@ -51,7 +51,7 @@ Three types of events are detected by XCSoar in relation to SUA:
 \begin{description}
 \item[Predicted incursion] This event is detected when the glider is estimated
 to be on a track that will result in entering the airspace at a set
-time in the future.  The time is the 'airspace warning time'
+time in the future.  The time is the airspace `warning time'
 configuration setting.
 
 The use of a long term average track in these calculations means that
@@ -89,11 +89,10 @@ At all times XCSoar monitors the aircraft relative to all airspace and
 maintains warning levels for each.  The airspace warnings are still
 filtered according to the airspace filter preferences; such that
 certain categories of airspace may be effectively disabled.
-
+\sketch{figures/airspacewarning.png}
 The sequence of events when entering an airspace results typically
 in two warnings: when near (level 1), and when inside (level 2).
 
-\sketch{figures/airspacewarning.png}
 Whenever the warning level increases (above level 0) for any airspace,
 the airspace warning dialogue appears, accompanied by a system beep from
 Altair or the PDA.  When there are no more airspace regions at warning
@@ -106,12 +105,9 @@ warnings.  The list items status background is coloured red if the glider is
 inside, and yellow if near.  If the warning is acknowledged, the
 text is greyed out.
 
-Each list item occupies two rows, and includes the following details:
-
-\begin{verbatim}
-<NAME and Class>               <TOP>   <Position>
-<Time and distance if outside> <BASE>
-\end{verbatim}
+Each list item occupies two rows, and includes the following details:\\
+\verb+<NAME and Class>               <TOP>   <Position>+
+\verb+<Time and distance if outside> <BASE>+
 
 The values in the list are continuously updated. 
 An example follows:\\
@@ -120,7 +116,6 @@ An example follows:\\
 
 This means that the aircraft is 1300m horizontally separated from the Class D airspace
 `Bern TMA', with a base of 1750m and ceiling at FL100.
-
 Another example:\\
 \verb+Bern CTRgld Class C             1350m     +\colorbox{AirspaceRed}{inside}
 \verb+                                SFC+
@@ -205,14 +200,20 @@ estimated future track) penetrates multiple airspace regions.
 \section{Airspace query and details}
 
 For touchscreen/mouse devices, when an airspace region is visible on
-the map area, it may be queried by touching the region on the map.
-This brings up a dialogue with a list of map elements in the near of this 
-location. All SUAs are listed with similar details as is
-provided when an actual warning is raised.  Selecting the SUA on the list and 
-pressing \button{Details} or the enter key displays all airspace details. 
+the map area, it may be queried by touching the region on the map.  
+The map item list will appear and give you an overview of the waypoints, 
+airspaces, etc. below your finger tip, or mouse pointer.  SUAs are listed with 
+similar details as provided when an actual warning is raised.  
+The query returns all airspace regions when overlapping airspace is visible at 
+the query location.
 \sketch{figures/airspace_mapelements.png}
- The query returns all airspace regions when overlapping airspace 
-is visible at the query location.
+Selecting the SUA on the list and pressing \button{Details} or the enter key 
+displays all airspace details. 
+
+\tip For Altair users: This kind of airspace detail query can also be accessed through 
+the pan mode.  Move the cursor cross over the location that you are interested 
+in and click the \button{What's here?} button.  The map item list will appear 
+and give access to the details under your cursor position.
 
 %% To put at another place
 %Through the button menus is the same map query available.
@@ -235,16 +236,14 @@ or disabled for each class of airspace.
 
 This may be accessed several ways:
 \begin{itemize}
-\item From the menu \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Settings
+\item From the main menu \bmenu{Config ..}\blink\bmenu{Settings
 Airspace}.
-\item From the configuration dialogue, menu under
-\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup System} then in the
-Airspace page, press the \button{Filter} button.
+\item Or at the system configuration page for airspacees, press the \button{Filter} button.
 \end{itemize}
 
+\sketch{figures/airspacefilter.png}
 To use the dialogue, move up or down the list and the enter key will
 cycle between the various warning and display options.
-\sketch{figures/airspacefilter.png}
 
 \subsection*{Airspace selection dialogue}
 
