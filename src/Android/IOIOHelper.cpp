@@ -25,7 +25,7 @@ Copyright_License {
 #include "PortBridge.hpp"
 #include "Java/Class.hpp"
 
-jclass IOIOHelper::cls;
+Java::TrivialClass IOIOHelper::cls;
 jmethodID IOIOHelper::ctor,
   IOIOHelper::openUart_method,
   IOIOHelper::shutdown_method;
@@ -36,14 +36,8 @@ IOIOHelper::Initialise(JNIEnv *env)
   assert(cls == NULL);
   assert(env != NULL);
 
-  jclass _cls = env->FindClass("org/xcsoar/IOIOHelper");
-  if (_cls == NULL) {
-    env->ExceptionClear();
+  if (!cls.FindOptional(env, "org/xcsoar/IOIOHelper"))
     return false;
-  }
-
-  cls = (jclass)env->NewGlobalRef(_cls);
-  env->DeleteLocalRef(_cls);
 
   ctor = env->GetMethodID(cls, "<init>", "()V");
   openUart_method = env->GetMethodID(cls, "openUart",
@@ -56,8 +50,7 @@ IOIOHelper::Initialise(JNIEnv *env)
 void
 IOIOHelper::Deinitialise(JNIEnv *env)
 {
-  if (cls != NULL)
-    env->DeleteGlobalRef(cls);
+  cls.ClearOptional(env);
 }
 
 PortBridge *

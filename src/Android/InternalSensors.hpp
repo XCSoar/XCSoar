@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ANDROID_INTERNAL_SENSORS_HPP
 
 #include "Java/Object.hpp"
+#include "Java/Class.hpp"
 #include "Compiler.h"
 
 #include <jni.h>
@@ -36,7 +37,7 @@ class Context;
 // and sensor facilities. Public methods handle activation and deactivation of
 // specific sensors.
 class InternalSensors {
-  static jclass gps_cls, sensors_cls;
+  static Java::TrivialClass gps_cls, sensors_cls;
 
   // IDs for methods in InternalGPS.java.
   static jmethodID gps_ctor_id, close_method;

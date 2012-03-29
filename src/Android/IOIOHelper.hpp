@@ -25,13 +25,13 @@ Copyright_License {
 #define XCSOAR_ANDROID_IOIOHELPER_HPP
 
 #include "Java/Object.hpp"
-#include "Java/Ref.hpp"
+#include "Java/Class.hpp"
 
 class PortBridge;
 
 class IOIOHelper : protected Java::Object {
 private:
-  static jclass cls;
+  static Java::TrivialClass cls;
   static jmethodID ctor;
   static jmethodID open_method;
   static jmethodID openUart_method;

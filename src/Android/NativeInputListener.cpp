@@ -28,7 +28,7 @@ Copyright_License {
 #include <stddef.h>
 
 namespace NativeInputListener {
-  static jclass cls;
+  static Java::TrivialClass cls;
   static jmethodID ctor;
   static jfieldID ptr_field;
 };
@@ -52,13 +52,7 @@ Java_org_xcsoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
 void
 NativeInputListener::Initialise(JNIEnv *env)
 {
-  assert(cls == NULL);
-
-  jclass _cls = env->FindClass("org/xcsoar/NativeInputListener");
-  assert(_cls != NULL);
-
-  cls = (jclass)env->NewGlobalRef(_cls);
-  env->DeleteLocalRef(_cls);
+  cls.Find(env, "org/xcsoar/NativeInputListener");
 
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
@@ -67,9 +61,7 @@ NativeInputListener::Initialise(JNIEnv *env)
 void
 NativeInputListener::Deinitialise(JNIEnv *env)
 {
-  assert(cls != NULL);
-
-  env->DeleteGlobalRef(cls);
+  cls.Clear(env);
 }
 
 jobject
