@@ -110,6 +110,61 @@ namespace Java {
       return value;
     }
   };
+
+  /**
+   * Container for a global reference to a JNI object that gets
+   * initialised and deinitialised explicitly.  Since there is no
+   * implicit initialisation in the default constructor, this is a
+   * trivial C++ class.  It should only be used for global variables
+   * that are implicitly initialised with zeroes.
+   */
+  template<typename T>
+  class TrivialRef : private NonCopyable {
+    T value;
+
+  public:
+    bool IsDefined() const {
+      return value != NULL;
+    }
+
+    /**
+     * Obtain a global reference on the specified object and store it.
+     * This object must not be set already.
+     */
+    void Set(JNIEnv *env, T _value) {
+      assert(value == NULL);
+      assert(_value != NULL);
+
+      value = (T)env->NewGlobalRef(_value);
+    }
+
+    /**
+     * Release the global reference and clear this object.
+     */
+    void Clear(JNIEnv *env) {
+      assert(value != NULL);
+
+      env->DeleteGlobalRef(value);
+      value = NULL;
+    }
+
+    /**
+     * Release the global reference and clear this object.  It is
+     * allowed to call this method without ever calling Set().
+     */
+    void ClearOptional(JNIEnv *env) {
+      if (value != NULL)
+        Clear(env);
+    }
+
+    T Get() const {
+      return value;
+    }
+
+    operator T() const {
+      return value;
+    }
+  };
 }
 
 #endif
