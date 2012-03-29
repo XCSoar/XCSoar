@@ -79,7 +79,7 @@ namespace Java {
      * Constructs an uninitialized object.  The method set() must be
      * called before it is destructed.
      */
-    GlobalRef() {}
+    GlobalRef() = default;
 
     GlobalRef(JNIEnv *env, T _value):value(_value) {
       assert(env != NULL);

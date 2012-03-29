@@ -46,7 +46,7 @@ namespace Java {
      * Constructs an uninitialized object.  The method set() must be
      * called before it is destructed.
      */
-    Object() {}
+    Object() = default;
 
     Object(JNIEnv *env, jobject obj):GlobalRef<jobject>(env, obj) {}
   };
