@@ -24,11 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_ENVIRONMENT_HPP
 #define XCSOAR_ANDROID_ENVIRONMENT_HPP
 
-#include "Compiler.h"
-
+#include <jni.h>
 #include <stddef.h>
 
 namespace Environment {
+  void Initialise(JNIEnv *env);
+  void Deinitialise(JNIEnv *env);
+
   /**
    * Determine the mount point of the external SD card.
    */

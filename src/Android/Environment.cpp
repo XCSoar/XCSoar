@@ -27,6 +27,35 @@ Copyright_License {
 #include "Java/File.hpp"
 #include "Util/StringUtil.hpp"
 
+namespace Environment {
+  static Java::TrivialClass cls;
+  static jmethodID getExternalStorageDirectory_method;
+  static jmethodID getExternalStoragePublicDirectory_method;
+};
+
+void
+Environment::Initialise(JNIEnv *env)
+{
+  cls.Find(env, "android/os/Environment");
+
+  getExternalStorageDirectory_method =
+    env->GetStaticMethodID(cls, "getExternalStorageDirectory",
+                           "()Ljava/io/File;");
+
+  getExternalStoragePublicDirectory_method =
+    env->GetStaticMethodID(cls, "getExternalStoragePublicDirectory",
+                           "(Ljava/lang/String;)Ljava/io/File;");
+  if (getExternalStoragePublicDirectory_method == NULL)
+    /* needs API level 8 */
+    env->ExceptionClear();
+}
+
+void
+Environment::Deinitialise(JNIEnv *env)
+{
+  cls.Clear(env);
+}
+
 static jstring
 ToAbsolutePathChecked(JNIEnv *env, jobject file)
 {
@@ -41,12 +70,8 @@ ToAbsolutePathChecked(JNIEnv *env, jobject file)
 static jstring
 getExternalStorageDirectory(JNIEnv *env)
 {
-  const Java::Class cls(env, "android/os/Environment");
-  jmethodID mid = env->GetStaticMethodID(cls, "getExternalStorageDirectory",
-                                         "()Ljava/io/File;");
-  assert(mid != NULL);
-
-  jobject file = env->CallStaticObjectMethod(cls, mid);
+  jobject file = env->CallStaticObjectMethod(Environment::cls,
+                                             Environment::getExternalStorageDirectory_method);
   return ToAbsolutePathChecked(env, file);
 }
 
@@ -67,18 +92,14 @@ Environment::getExternalStorageDirectory(char *buffer, size_t max_size)
 static jstring
 getExternalStoragePublicDirectory(JNIEnv *env, const char *type)
 {
-  const Java::Class cls(env, "android/os/Environment");
-  Java::String type2(env, type);
-  jmethodID mid =
-    env->GetStaticMethodID(cls, "getExternalStoragePublicDirectory",
-                           "(Ljava/lang/String;)Ljava/io/File;");
-  if (mid == NULL) {
+  if (Environment::getExternalStoragePublicDirectory_method == NULL)
     /* needs API level 8 */
-    env->ExceptionClear();
     return NULL;
-  }
 
-  jobject file = env->CallStaticObjectMethod(cls, mid, type2.Get());
+  Java::String type2(env, type);
+  jobject file = env->CallStaticObjectMethod(Environment::cls,
+                                             Environment::getExternalStoragePublicDirectory_method,
+                                             type2.Get());
   return ToAbsolutePathChecked(env, file);
 }
 

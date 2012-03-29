@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Android/Main.hpp"
+#include "Android/Environment.hpp"
 #include "Android/Context.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/Timer.hpp"
@@ -81,6 +82,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Java::Init(env);
   Java::File::Initialise(env);
 
+  Environment::Initialise(env);
   AndroidTimer::Initialise(env);
   InternalSensors::Initialise(env);
   NativeInputListener::Initialise(env);
@@ -154,6 +156,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   NativeInputListener::Deinitialise(env);
   InternalSensors::Deinitialise(env);
   AndroidTimer::Deinitialise(env);
+  Environment::Deinitialise(env);
 }
 
 gcc_visibility_default
