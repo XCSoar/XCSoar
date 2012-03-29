@@ -247,6 +247,12 @@ DataFieldEnum::Dec()
   }
 }
 
+#ifdef __WINE__
+/* this doesn't seem to be available with winegcc - this kludge will
+   be removed once we have switched to std::sort() */
+#define _cdecl
+#endif
+
 static int _cdecl
 DataFieldEnumCompare(const void *elem1, const void *elem2)
 {
