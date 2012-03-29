@@ -58,6 +58,11 @@ protected:
    */
   void DeleteWindow();
 
+  const Window *GetWindow() const {
+    assert(window != NULL);
+    return window;
+  }
+
   Window *GetWindow() {
     assert(window != NULL);
     return window;
