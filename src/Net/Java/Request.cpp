@@ -26,6 +26,7 @@ Copyright_License {
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
+#include "Java/InputStream.hpp"
 
 #include <assert.h>
 
@@ -83,12 +84,6 @@ Net::Request::Request(Session &_session, const TCHAR *url,
     input_stream = NULL;
     return;
   }
-
-  Java::Class stream_class(env, env->GetObjectClass(input_stream));
-  read_method = env->GetMethodID(stream_class.Get(), "read", "([B)I");
-  assert(read_method != NULL);
-  close_method = env->GetMethodID(stream_class.Get(), "close", "()V");
-  assert(close_method != NULL);
 }
 
 Net::Request::~Request()
@@ -97,7 +92,7 @@ Net::Request::~Request()
     env->DeleteLocalRef(connection);
 
   if (input_stream != NULL) {
-    env->CallVoidMethod(input_stream, close_method);
+    Java::InputStream::close(env, input_stream);
     env->ExceptionClear();
 
     env->DeleteLocalRef(input_stream);
@@ -120,7 +115,7 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
 
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));
-  jint nbytes = env->CallIntMethod(input_stream, read_method, array.Get());
+  jint nbytes = Java::InputStream::read(env, input_stream, array.Get());
   if (nbytes <= 0)
     return 0;
 
