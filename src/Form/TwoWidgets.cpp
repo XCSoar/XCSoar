@@ -94,11 +94,25 @@ TwoWidgets::GetMaximumSize() const
   return PixelSize{ std::max(a.cx, b.cx), PixelScalar(a.cy + b.cy) };
 }
 
+/**
+ * Calculates a "dummy" layout that is splitted in the middle.  In
+ * TwoWidgets::Initialise() and TwoWidgets::Prepare(), we are not
+ * allowed to call Widget::GetMinimumSize() yet.
+ */
+gcc_const
+static std::pair<PixelRect,PixelRect>
+DummyLayout(const PixelRect rc)
+{
+  PixelRect a = rc, b = rc;
+  a.bottom = b.top = (rc.top + rc.bottom) / 2;
+  return std::make_pair(a, b);
+}
+
 void
 TwoWidgets::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   this->rc = rc;
-  const auto layout = CalculateLayout(rc);
+  const auto layout = DummyLayout(rc);
   first->Initialise(parent, layout.first);
   second->Initialise(parent, layout.second);
 }
@@ -107,7 +121,7 @@ void
 TwoWidgets::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   this->rc = rc;
-  const auto layout = CalculateLayout(rc);
+  const auto layout = DummyLayout(rc);
   first->Prepare(parent, layout.first);
   second->Prepare(parent, layout.second);
 }
