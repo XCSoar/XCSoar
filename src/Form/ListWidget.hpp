@@ -37,6 +37,10 @@ class Window;
  */
 class ListWidget : public WindowWidget, protected ListControl::Handler {
 protected:
+  const ListControl &GetList() const {
+    return *(const ListControl *)GetWindow();
+  }
+
   ListControl &GetList() {
     return *(ListControl *)GetWindow();
   }
