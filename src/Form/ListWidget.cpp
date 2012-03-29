@@ -29,7 +29,9 @@ PixelSize
 ListWidget::GetMinimumSize() const
 {
   return PixelSize { Layout::Scale(200),
-      PixelScalar(Layout::GetMinimumControlHeight()) };
+      /* a list makes only sense when the user sees more than one row
+         at a time */
+      PixelScalar(2 * GetList().GetItemHeight()) };
 }
 
 PixelSize
