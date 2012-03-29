@@ -142,7 +142,7 @@ final class IOIOHelper extends Thread {
     if (ioio_ != null)
       return;
 
-    IOIO ioio = IOIOFactory.create();
+    IOIO ioio = connecting = IOIOFactory.create();
 
     try {
       ioio.waitForConnect();
@@ -168,6 +168,8 @@ final class IOIOHelper extends Thread {
       Log.w(TAG, "IOIOJWaitConnect() Connection Lost", e);
     } catch (IncompatibilityException e) {
       Log.e(TAG, "IOIOJWaitConnect() Incompatibility detected", e);
+    } finally {
+      connecting = null;
     }
   }
 
