@@ -24,15 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_SOUND_UTIL_HPP
 #define XCSOAR_ANDROID_SOUND_UTIL_HPP
 
-#include "Java/Class.hpp"
-#include "Compiler.h"
+#include <jni.h>
 
-class SoundUtil {
-  Java::GlobalClass cls;
-  jmethodID mid_play;
-
-public:
-  SoundUtil(JNIEnv *env);
+namespace SoundUtil {
+  void Initialise(JNIEnv *env);
+  void Deinitialise(JNIEnv *env);
 
   bool Play(JNIEnv *env, jobject context, const char *name);
 };

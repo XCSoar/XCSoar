@@ -40,8 +40,7 @@ PlayResource(const TCHAR *resource_name)
 {
 #ifdef ANDROID
 
-  return sound_util != NULL &&
-         sound_util->Play(Java::GetEnv(), context->Get(), resource_name);
+  return SoundUtil::Play(Java::GetEnv(), context->Get(), resource_name);
 
 #elif defined(WIN32) && !defined(GNAV)
 

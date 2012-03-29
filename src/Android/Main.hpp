@@ -29,7 +29,6 @@ Copyright_License {
 class Context;
 class NativeView;
 class EventQueue;
-class SoundUtil;
 class Vibrator;
 #ifdef IOIOLIB
 class IOIOHelper;
@@ -40,8 +39,6 @@ extern Context *context;
 extern NativeView *native_view;
 
 extern EventQueue *event_queue;
-
-extern SoundUtil *sound_util;
 
 extern Vibrator *vibrator;
 extern bool os_haptic_feedback_enabled;

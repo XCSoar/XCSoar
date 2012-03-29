@@ -22,18 +22,36 @@ Copyright_License {
 */
 
 #include "Android/SoundUtil.hpp"
+#include "Java/Class.hpp"
 #include "Java/String.hpp"
 
-SoundUtil::SoundUtil(JNIEnv *env)
-  :cls(env, "org/xcsoar/SoundUtil"),
-   mid_play(env->GetStaticMethodID(cls, "play",
-                                   "(Landroid/content/Context;Ljava/lang/String;)Z"))
+namespace SoundUtil {
+  static Java::TrivialClass cls;
+  static jmethodID play_method;
+}
+
+void
+SoundUtil::Initialise(JNIEnv *env)
 {
+  assert(!cls.IsDefined());
+  assert(env != NULL);
+
+  cls.Find(env, "org/xcsoar/SoundUtil");
+  play_method = env->GetStaticMethodID(cls, "play",
+                                       "(Landroid/content/Context;"
+                                       "Ljava/lang/String;)Z");
+}
+
+void
+SoundUtil::Deinitialise(JNIEnv *env)
+{
+  cls.Clear(env);
 }
 
 bool
 SoundUtil::Play(JNIEnv *env, jobject context, const char *name)
 {
   Java::String paramName(env, name);
-  return env->CallStaticBooleanMethod(cls, mid_play, context, paramName.Get());
+  return env->CallStaticBooleanMethod(cls, play_method, context,
+                                      paramName.Get());
 }

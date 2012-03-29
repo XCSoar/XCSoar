@@ -62,8 +62,6 @@ NativeView *native_view;
 
 EventQueue *event_queue;
 
-SoundUtil *sound_util;
-
 Vibrator *vibrator;
 bool os_haptic_feedback_enabled;
 
@@ -102,7 +100,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   event_queue = new EventQueue();
 
-  sound_util = new SoundUtil(env);
+  SoundUtil::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
 
 #ifdef IOIOLIB
@@ -136,7 +134,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   ioio_helper = NULL;
 #endif
 
-  delete sound_util;
+  SoundUtil::Deinitialise(env);
   delete event_queue;
   event_queue = NULL;
   delete native_view;
