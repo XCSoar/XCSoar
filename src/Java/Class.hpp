@@ -50,21 +50,6 @@ namespace Java {
   /**
    * Wrapper for a global "jclass" reference.
    */
-  class GlobalClass : public Java::GlobalRef<jclass> {
-  public:
-    GlobalClass(JNIEnv *env, jclass cls)
-      :GlobalRef<jclass>(env, cls) {}
-
-    GlobalClass(JNIEnv *env, const char *name) {
-      jclass tmp = env->FindClass(name);
-      Set(env, tmp);
-      env->DeleteLocalRef(tmp);
-    }
-  };
-
-  /**
-   * Wrapper for a global "jclass" reference.
-   */
   class TrivialClass : public TrivialRef<jclass> {
   public:
     void Find(JNIEnv *env, const char *name) {
