@@ -37,7 +37,11 @@ Copyright_License {
 #include <stdlib.h>
 #include <windef.h> // for MAX_PATH
 #ifdef WIN32
+#ifdef HAVE_POSIX
+#include <windows.h>
+#else
 #include <shlobj.h>
+#endif
 #endif
 
 #ifdef _WIN32_WCE
