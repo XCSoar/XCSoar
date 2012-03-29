@@ -24,18 +24,8 @@ Copyright_License {
 #include "Android/Environment.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
+#include "Java/File.hpp"
 #include "Util/StringUtil.hpp"
-
-static jstring
-getAbsolutePath(JNIEnv *env, jobject file)
-{
-  Java::Class cls(env, env->GetObjectClass(file));
-  jmethodID mid = env->GetMethodID(cls, "getAbsolutePath",
-                                   "()Ljava/lang/String;");
-  assert(mid != NULL);
-
-  return (jstring)env->CallObjectMethod(file, mid);
-}
 
 static jstring
 ToAbsolutePathChecked(JNIEnv *env, jobject file)
@@ -43,7 +33,7 @@ ToAbsolutePathChecked(JNIEnv *env, jobject file)
   if (file == NULL)
     return NULL;
 
-  jstring path = getAbsolutePath(env, file);
+  jstring path = Java::File::getAbsolutePath(env, file);
   env->DeleteLocalRef(file);
   return path;
 }

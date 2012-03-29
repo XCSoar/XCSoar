@@ -42,6 +42,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Java/Global.hpp"
+#include "Java/File.hpp"
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
 
@@ -78,6 +79,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint sdk_version, jstring product)
 {
   Java::Init(env);
+  Java::File::Initialise(env);
 
   AndroidTimer::Initialise(env);
   InternalSensors::Initialise(env);
