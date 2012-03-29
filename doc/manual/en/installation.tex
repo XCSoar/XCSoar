@@ -51,11 +51,12 @@ connect to an external device:
 
 \subsection*{Supported external devices and features}
 \label{sec:supported-varios}
-\begin{tabular}{l|cccc}
+
+\noindent\makebox[\textwidth]{%
+\begin{tabularx}{1.2\textwidth}{l|cccc}
 
 NMEA & Feature \\
 Device & Airspeed & Vario & Declaration & Download \\
-
 \hline
 
 Borgelt B50 & $\surd$ \\
@@ -65,6 +66,7 @@ CAI 302 & $\surd$ & $\surd$ & $\surd$ & $\surd$ \\
 CAI GPS Nav \\
 
 Condor & $\surd$ \\
+\hline
 
 Digifly Leonardo & $\surd$ & $\surd$ \\
 
@@ -73,6 +75,7 @@ EW Logger &&& $\surd$ \\
 EW microRecorder &&& $\surd$ \\
 
 Flymaster F1 && $\surd$ \\
+\hline
 
 Flytec 5030 & $\surd$ & $\surd$ \\
 
@@ -81,6 +84,7 @@ ILEC SN10 & & $\surd$ \\
 IMI ERIXX &&& $\surd$ & $\surd$ \\
 
 LX20, Colibri &&& $\surd$ & $\surd$ \\
+\hline
 
 LX 5000, 7000 & $\surd$ & $\surd$ & $\surd$ \\
 
@@ -89,14 +93,18 @@ PosiGraph &&& $\surd$ \\
 Triadis Altair &&& $\surd$ \\
 
 Triadis Vega & $\surd$ & $\surd$ \\
+\hline
 
 Volkslogger &&& $\surd$ \\
 
 Westerboer VW1150 & $\surd$ & $\surd$ \\
 
+Westerboer VW921, 922 & $\surd$ & $\surd$ \\
+
 Zander / SDI & $\surd$ & $\surd$ \\
 
-\end{tabular}
+\end{tabularx}}
+
 
 While most Windows CE based devices have a serial port, such legacy
 hardware is not present in modern Android devices.  Those can either
