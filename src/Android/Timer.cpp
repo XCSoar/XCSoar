@@ -60,11 +60,7 @@ AndroidTimer::Bridge::Deinitialise(JNIEnv *env)
 
 AndroidTimer::Bridge::Bridge(JNIEnv *env, jlong ptr, jint period)
 {
-  Java::Class cls(env, "org/xcsoar/Timer");
-  jmethodID cid = env->GetMethodID(cls, "<init>", "(JI)V");
-  assert(cid != NULL);
-
-  jobject obj = env->NewObject(cls, cid, ptr, period);
+  jobject obj = env->NewObject(cls, ctor, ptr, period);
 
   Set(env, obj);
   env->DeleteLocalRef(obj);
