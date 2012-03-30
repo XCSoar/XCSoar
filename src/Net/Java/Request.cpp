@@ -24,9 +24,9 @@ Copyright_License {
 #include "Net/Request.hpp"
 #include "Version.hpp"
 #include "Java/Global.hpp"
-#include "Java/Class.hpp"
 #include "Java/String.hpp"
 #include "Java/InputStream.hpp"
+#include "Java/URL.hpp"
 
 #include <assert.h>
 
@@ -34,24 +34,15 @@ Net::Request::Request(Session &_session, const TCHAR *url,
                       unsigned long timeout)
   :env(Java::GetEnv())
 {
-  Java::Class url_class(env, "java/net/URL");
-  jmethodID url_ctor = env->GetMethodID(url_class.Get(), "<init>",
-                                        "(Ljava/lang/String;)V");
-  assert(url_ctor != NULL);
-
   Java::String j_url(env, url);
-  jobject url_object = env->NewObject(url_class.Get(), url_ctor, j_url.Get());
+  jobject url_object = Java::URL::Create(env, j_url);
   if (env->ExceptionOccurred() || url_object == NULL) {
     env->ExceptionClear();
     input_stream = NULL;
     return;
   }
 
-  jmethodID url_open = env->GetMethodID(url_class.Get(), "openConnection",
-                                        "()Ljava/net/URLConnection;");
-  assert(url_open != NULL);
-
-  connection = env->CallObjectMethod(url_object, url_open);
+  connection = Java::URL::openConnection(env, url_object);
   env->DeleteLocalRef(url_object);
   if (env->ExceptionOccurred() || connection == NULL) {
     env->ExceptionClear();
@@ -60,23 +51,9 @@ Net::Request::Request(Session &_session, const TCHAR *url,
     return;
   }
 
-  Java::Class connection_class(env, env->GetObjectClass(connection));
+  Java::URLConnection::setConnectTimeout(env, connection, (jint)timeout);
 
-  set_timeout_method = env->GetMethodID(connection_class.Get(),
-                                        "setConnectTimeout", "(I)V");
-  assert(set_timeout_method != NULL);
-  env->CallVoidMethod(connection, set_timeout_method, (jint)timeout);
-
-  set_timeout_method = env->GetMethodID(connection_class.Get(),
-                                        "setReadTimeout", "(I)V");
-  assert(set_timeout_method != NULL);
-
-  jmethodID get_input_stream = env->GetMethodID(connection_class.Get(),
-                                                "getInputStream",
-                                                "()Ljava/io/InputStream;");
-  assert(get_input_stream != NULL);
-
-  input_stream = env->CallObjectMethod(connection, get_input_stream);
+  input_stream = Java::URLConnection::getInputStream(env, connection);
   if (env->ExceptionOccurred() || input_stream == NULL) {
     env->ExceptionClear();
     env->DeleteLocalRef(connection);
@@ -111,7 +88,7 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
   assert(connection != NULL);
   assert(input_stream != NULL);
 
-  env->CallVoidMethod(connection, set_timeout_method, (jint)timeout);
+  Java::URLConnection::setReadTimeout(env, connection, (jint)timeout);
 
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));

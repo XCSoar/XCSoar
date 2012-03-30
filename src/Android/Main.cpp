@@ -45,6 +45,7 @@ Copyright_License {
 #include "Java/Global.hpp"
 #include "Java/File.hpp"
 #include "Java/InputStream.hpp"
+#include "Java/URL.hpp"
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
 
@@ -83,6 +84,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Java::Init(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
+  Java::URL::Initialise(env);
+  Java::URLConnection::Initialise(env);
 
   Environment::Initialise(env);
   AndroidTimer::Initialise(env);
@@ -159,6 +162,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   InternalSensors::Deinitialise(env);
   AndroidTimer::Deinitialise(env);
   Environment::Deinitialise(env);
+  Java::URL::Deinitialise(env);
 }
 
 gcc_visibility_default
