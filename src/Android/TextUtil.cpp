@@ -27,12 +27,34 @@ Copyright_License {
 #include "Screen/Point.hpp"
 
 JNIEnv *TextUtil::env(NULL);
+static Java::TrivialClass cls;
 jmethodID TextUtil::midTextUtil(NULL);
 jmethodID TextUtil::midGetFontMetrics(NULL);
 jmethodID TextUtil::midGetTextBounds(NULL);
 jmethodID TextUtil::midGetTextTextureGL(NULL);
 
-TextUtil::TextUtil(jobject _obj, jclass textUtilClass)
+void
+TextUtil::Initialise(JNIEnv *_env)
+{
+  env = _env;
+
+  cls.Find(env, "org/xcsoar/TextUtil");
+
+  midTextUtil = env->GetMethodID(cls, "<init>", "(Ljava/lang/String;II)V");
+  midGetFontMetrics = env->GetMethodID(cls, "getFontMetrics", "([I)V");
+  midGetTextBounds = env->GetMethodID(cls, "getTextBounds",
+                                      "(Ljava/lang/String;)[I");
+  midGetTextTextureGL = env->GetMethodID(cls, "getTextTextureGL",
+                                         "(Ljava/lang/String;)[I");
+}
+
+void
+TextUtil::Deinitialise(JNIEnv *env)
+{
+  cls.Clear(env);
+}
+
+TextUtil::TextUtil(jobject _obj)
   :Java::Object(env, _obj) {
   // get height, ascent_height and capital_height
   assert(midGetFontMetrics);
@@ -57,25 +79,6 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
   jobject localObject;
   jint paramStyle, paramTextSize;
 
-  if (env == NULL) {
-    // initialize static jvm
-    env = Java::GetEnv();
-  }
-
-  Java::Class textUtilClass(env, "org/xcsoar/TextUtil");
-
-  if (midTextUtil == NULL) {
-    // initialize static method ID's once
-    midTextUtil         = env->GetMethodID(textUtilClass, "<init>",
-                                           "(Ljava/lang/String;II)V");
-    midGetFontMetrics   = env->GetMethodID(textUtilClass, "getFontMetrics",
-                                           "([I)V");
-    midGetTextBounds    = env->GetMethodID(textUtilClass, "getTextBounds",
-                                           "(Ljava/lang/String;)[I");
-    midGetTextTextureGL = env->GetMethodID(textUtilClass, "getTextTextureGL",
-                                           "(Ljava/lang/String;)[I");
-  }
-
   Java::String paramFamilyName(env, facename);
   paramStyle = 0;
   if (bold)
@@ -85,13 +88,13 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
   paramTextSize = height;
 
   // construct org.xcsoar.TextUtil object
-  localObject = env->NewObject(textUtilClass, midTextUtil,
+  localObject = env->NewObject(cls, midTextUtil,
                                paramFamilyName.Get(),
                                paramStyle, paramTextSize);
   if (!localObject)
     return NULL;
 
-  TextUtil *tu = new TextUtil(localObject, textUtilClass);
+  TextUtil *tu = new TextUtil(localObject);
 
   env->DeleteLocalRef(localObject);
 

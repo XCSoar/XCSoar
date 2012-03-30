@@ -32,6 +32,7 @@ Copyright_License {
 #include "Android/PortBridge.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Android/NativeInputListener.hpp"
+#include "Android/TextUtil.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Debug.hpp"
@@ -102,6 +103,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   InitialiseDataPath();
 
   OpenGL::Initialise();
+  TextUtil::Initialise(env);
 
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height, xdpi, ydpi,
@@ -148,6 +150,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   event_queue = NULL;
   delete native_view;
 
+  TextUtil::Deinitialise(env);
   OpenGL::Deinitialise();
   ScreenDeinitialized();
   DeinitialiseDataPath();

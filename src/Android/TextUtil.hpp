@@ -39,9 +39,12 @@ class TextUtil : protected Java::Object {
   unsigned height, ascent_height, capital_height;
   unsigned line_spacing, style;
 
-  TextUtil(jobject _obj, jclass textUtilClass);
+  TextUtil(jobject _obj);
 
 public:
+  static void Initialise(JNIEnv *env);
+  static void Deinitialise(JNIEnv *env);
+
   gcc_malloc
   static TextUtil *create(const char *facename, int height,
                           bool bold, bool italic);
