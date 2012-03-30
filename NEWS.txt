@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3.1 - not yet released
+* map
+  - don't fill acked airspaces
 * Android
   - fix hanging shutdown after IOIO connection failure
 

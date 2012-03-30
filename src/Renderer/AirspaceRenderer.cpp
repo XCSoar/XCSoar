@@ -160,7 +160,7 @@ public:
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
     GLEnable stencil(GL_STENCIL_TEST);
 
-    {
+    if (!m_warnings.is_acked(airspace)) {
       GLEnable blend(GL_BLEND);
       setup_interior(airspace);
       if (m_warnings.is_warning(airspace) ||
