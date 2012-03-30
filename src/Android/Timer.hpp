@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_SDL_TIMER_HXX
 
 #include "Java/Object.hpp"
-#include "Java/Class.hpp"
 
 #include <jni.h>
 
@@ -33,8 +32,7 @@ class Timer;
 
 class AndroidTimer {
   class Bridge : protected Java::Object {
-    static Java::TrivialClass cls;
-    static jmethodID ctor, install_method, uninstall_method;
+    static jmethodID install_method, uninstall_method;
 
   public:
     static void Initialise(JNIEnv *env);

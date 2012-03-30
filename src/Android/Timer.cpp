@@ -32,8 +32,8 @@ Copyright_License {
 
 #include <assert.h>
 
-Java::TrivialClass AndroidTimer::Bridge::cls;
-jmethodID AndroidTimer::Bridge::ctor;
+static Java::TrivialClass cls;
+static jmethodID ctor;
 jmethodID AndroidTimer::Bridge::install_method;
 jmethodID AndroidTimer::Bridge::uninstall_method;
 
