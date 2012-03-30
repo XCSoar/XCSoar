@@ -51,15 +51,9 @@ OnAcknowledgeClicked(gcc_unused WndButton &Sender)
     return;
 
   bool acked = airspace_warnings->get_ack_day(*airspace);
+  airspace_warnings->acknowledge_day(*airspace, !acked);
 
-  int answer = MessageBoxX(airspace->GetName(), acked ?
-                           _("Enable airspace again?") : _("Acknowledge for day?"),
-                           MB_YESNO | MB_ICONQUESTION);
-
-  if (answer == IDYES) {
-    airspace_warnings->acknowledge_day(*airspace, !acked);
-    wf->SetModalResult(mrOK);
-  }
+  wf->SetModalResult(mrOK);
 }
 
 static void
