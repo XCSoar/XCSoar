@@ -35,7 +35,7 @@ Copyright_License {
 void
 FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             const DerivedInfo &calculated,
-                            const bool &final_glide_bar_mc0_enabled) const
+                            const bool final_glide_bar_mc0_enabled) const
 {
   RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }

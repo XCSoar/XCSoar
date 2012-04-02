@@ -42,7 +42,7 @@ public:
 
   void Draw(Canvas &canvas, const PixelRect &rc,
             const DerivedInfo &calculated,
-            const bool &final_glide_bar_mc0_enabled) const;
+            const bool final_glide_bar_mc0_enabled) const;
 };
 
 #endif
