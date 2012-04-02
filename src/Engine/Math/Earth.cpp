@@ -303,8 +303,13 @@ FindLatitudeLongitude(const GeoPoint loc, const Angle bearing,
       sin_latitude * cos_distance + cos_latitude * sin_distance * cos_bearing));
 
   fixed result = loc.longitude.Radians();
-  if (cos_latitude != fixed_zero)
-    result += earth_asin(sin_bearing * sin_distance / cos_latitude);
+  if (cos_latitude != fixed_zero) {
+    fixed s = sin_bearing * sin_distance / cos_latitude;
+    assert(s >= fixed_minus_one);
+    assert(s <= fixed_one);
+
+    result += earth_asin(s);
+  }
 
   loc_out.longitude = Angle::Radians(result);
   loc_out.Normalize(); // ensure longitude is within -180:180
