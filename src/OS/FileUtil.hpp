@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_OS_FILEUTIL_HPP
 #define XCSOAR_OS_FILEUTIL_HPP
 
+#include "Compiler.h"
+
 #include <stdint.h>
 #include <tchar.h>
 
@@ -58,7 +60,9 @@ namespace Directory
    * @param path File system path to check
    * @return True if the folder exists
    */
+  gcc_pure
   bool Exists(const TCHAR* path);
+
   /**
    * Creates a new folder at the given path
    * @param path Path to the folder that should be created
@@ -92,6 +96,7 @@ namespace File
    * @param path File system path to check
    * @return True if the file exists
    */
+  gcc_pure
   bool Exists(const TCHAR* path);
 
   /**
@@ -127,6 +132,7 @@ namespace File
    * @param path Path to the file
    * @return 0 in case of failure or a timestamp for comparison
    */
+  gcc_pure
   uint64_t GetLastModification(const TCHAR *path);
 
   /**
