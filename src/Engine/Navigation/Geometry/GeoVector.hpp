@@ -86,16 +86,6 @@ struct GeoVector {
    * @return location of end point
    */
   GeoPoint MidPoint(const GeoPoint &source) const;
-  
-  /**
-   * Returns the location of a point from source along vector at distance
-   *
-   * @param source start of vector
-   * @param distance Great circle distance (m) from source at which to find intermediate point
-   * @return location of point
-   */
-  gcc_pure
-  GeoPoint IntermediatePoint(const GeoPoint &source, const fixed distance) const;
 
   /**
    * Minimum distance from a point on the vector to the reference

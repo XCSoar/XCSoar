@@ -52,10 +52,3 @@ GeoVector::MinimumDistance(const GeoPoint &source,
 {
   return ::CrossTrackError(source, EndPoint(source), ref, NULL);
 }
-
-GeoPoint 
-GeoVector::IntermediatePoint(const GeoPoint &source,
-                              const fixed distance) const
-{
-  return source.IntermediatePoint(EndPoint(source), distance);
-}
