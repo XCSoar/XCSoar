@@ -316,7 +316,7 @@ AirspaceWarningManager::UpdateTask(const AircraftState &state,
   if (vector.distance > max_distance)
     /* limit the distance to what our glider can actually fly within
        the configured warning time */
-    location_tp = vector.IntermediatePoint(state.location, max_distance);
+    location_tp = state.location.IntermediatePoint(location_tp, max_distance);
 
   return UpdatePredicted(state, location_tp, perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);
