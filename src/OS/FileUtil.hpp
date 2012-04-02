@@ -92,6 +92,13 @@ namespace Directory
 namespace File
 {
   /**
+   * Returns whether a file or directory or any other directory entry
+   * with the specified name exists.
+   */
+  gcc_pure
+  bool ExistsAny(const TCHAR *path);
+
+  /**
    * Returns whether the given file exists and is a file (not a folder)
    * @param path File system path to check
    * @return True if the file exists

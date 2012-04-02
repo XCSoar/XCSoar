@@ -297,6 +297,17 @@ Directory::VisitSpecificFiles(const TCHAR* path, const TCHAR* filter,
 }
 
 bool
+File::ExistsAny(const TCHAR *path)
+{
+#ifdef HAVE_POSIX
+  struct stat st;
+  return stat(NarrowPathName(path), &st) == 0;
+#else
+  return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
+#endif
+}
+
+bool
 File::Exists(const TCHAR* path)
 {
 #ifdef HAVE_POSIX
