@@ -616,6 +616,37 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 }
 
 static void
+TestLXV7()
+{
+  NullPort null;
+  Device *device = lxDevice.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo basic;
+  basic.Reset();
+  basic.clock = fixed_one;
+
+  ok1(device->ParseNMEA("$PLXVF,,1.00,0.87,-0.12,-0.25,90.2,244.3,*64", basic));
+  ok1(basic.netto_vario_available);
+  ok1(equals(basic.netto_vario, -0.25));
+  ok1(basic.airspeed_available);
+  ok1(equals(basic.indicated_airspeed, 90.2));
+  ok1(basic.pressure_altitude_available);
+  ok1(equals(basic.pressure_altitude, 244.3));
+
+  ok1(device->ParseNMEA("$PLXVS,23.1,0,12.3,*71", basic));
+  ok1(basic.temperature_available);
+  ok1(equals(basic.temperature, 296.25));
+  ok1(basic.switch_state_available);
+  ok1(basic.switch_state.flight_mode == SwitchInfo::FlightMode::CIRCLING);
+  ok1(!basic.switch_state.speed_command);
+  ok1(basic.voltage_available);
+  ok1(equals(basic.voltage, 12.3));
+
+  delete device;
+}
+
+static void
 TestILEC()
 {
   NullPort null;
@@ -896,7 +927,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(448);
+  plan_tests(464);
 
   TestGeneric();
   TestTasman();
@@ -908,6 +939,7 @@ int main(int argc, char **argv)
   TestLeonardo();
   TestLX(lxDevice);
   TestLX(condorDevice, true);
+  TestLXV7();
   TestILEC();
   TestVega();
   TestWesterboer();
