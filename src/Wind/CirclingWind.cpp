@@ -68,6 +68,8 @@ a number of windmeasurements and calculates a weighted average based on quality.
 void
 CirclingWind::Reset()
 {
+  last_track_available.Reset();
+  last_ground_speed_available.Reset();
   circle_count = 0;
   active = false;
   circle_deg = 0;
