@@ -83,7 +83,7 @@ Net::Session::Select(int timeout_ms)
   struct timeval timeout, *timeout_p;
   if (timeout_ms >= 0) {
     timeout.tv_sec = timeout_ms / 1000;
-    timeout.tv_usec = timeout_ms * 1000;
+    timeout.tv_usec = (timeout_ms % 1000) * 1000;
     timeout_p = &timeout;
   } else
     timeout_p = NULL;
