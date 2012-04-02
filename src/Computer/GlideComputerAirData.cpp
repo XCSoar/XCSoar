@@ -463,7 +463,13 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
                                   FlyingState &flying,
                                   const GlidePolar &glide_polar)
 {
-  flying_computer.Compute(glide_polar.GetVTakeoff(), basic, last_basic,
+  fixed v_takeoff = glide_polar.IsValid()
+    ? glide_polar.GetVTakeoff()
+    /* if there's no valid polar, assume 20 m/s (72 km/h); that's an
+       arbitrary value, but better than nothing */
+    : fixed(20);
+
+  flying_computer.Compute(v_takeoff, basic, last_basic,
                           calculated, flying);
 }
 
