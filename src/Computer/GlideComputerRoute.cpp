@@ -82,7 +82,11 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
                                          (int)calculated.thermal_band.working_band_ceiling));
   // allow at least 500m of climb above current altitude as ceiling, in case
   // there are no actual working band stats.
-  const GeoVector &v = sol.vector;
+  GeoVector v = sol.vector;
+  if (v.distance > fixed(200000))
+    /* limit to reasonable distances (200km max.) to avoid overflow in
+       GeoVector::EndPoint() */
+    v.distance = fixed(200000);
 
   if (terrain) {
     if (sol.IsDefined()) {

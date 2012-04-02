@@ -99,13 +99,15 @@ for any waypoints that are missing in the new waypoint file.
 %The display will now show the waypoint details dialog.
 
 The waypoint info. dialog describes a waypoint in detail and has
-navigation functions such as GoTo, Insert or append to the task, and set the waypoint as the new home..
+navigation functions such as GoTo, Insert or append to the task, and set the 
+waypoint as the new home.
 
 This may be accessed several ways:
 \begin{itemize}
 \item
 From the task editor, menu \bmenu{Nav}\blink\bmenu{Task}\blink\bmenu{Turn Points}
-and highligh a waypoint, then tap the highlighted waypoint again to display the Task point dialog, then press the \bmenu{Details} \InfoBox.
+and highligh a waypoint, then tap the highlighted waypoint again to display the 
+Task point dialog, then press the \bmenu{Details} \InfoBox.
 
 \item 
 From the menu \bmenu{Info}\blink\bmenu{Waypoint details} to show the
@@ -131,34 +133,45 @@ The waypoint details dialog contains two major pages (accessed via the
 details to the waypoint they will by shown on extra pages.
 
 \subsection*{Waypoint details}
-This page contains text describing the waypoint's location, radio frequency and runway information (if this information is in the waypoint file) elevation, local sunset, bearing and distance to the waypoint, and the altitude required to reach the waypoint as described below. In addition, there is a button \button{GoTo} to directly initiate
+This page contains text describing the waypoint's location, radio frequency and 
+runway information (if this information is in the waypoint file) elevation, 
+local sunset, bearing and distance to the waypoint, and the altitude required 
+to reach the waypoint as described below. In addition, there is a button 
+\button{GoTo} to directly initiate
 navigating to this waypoint. The button cancels the current task. 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
 \end{center}
 
-As mentioned above, the Waypoint info dialog also shows three forms of altitude difference (additional
+As mentioned above, the Waypoint info dialog also shows three forms of altitude 
+difference (additional
 altitude required to reach the waypoint at the safety height) for
 the corresponding waypoint:
 \begin{description}
 \item[Alt diff MC 0] Altitude difference at MC setting of 0
-\item[Alt diff MC safety] Altitude difference at the abort/safety MacCready setting (see \ref{sec:Safety factors})
+\item[Alt diff MC safety] Altitude difference at the abort/safety MacCready 
+  setting (see \ref{sec:Safety factors})
 \item[Alt diff MC current] Altitude difference at the current MacCready setting
 \end{description}
 
-From the main Waypoint Info screen, you can access the second page by using the "$<$-" and "$-$>" buttons in the bottom left corner of the page.
+From the main Waypoint Info screen, you can access the second page by using the 
+"$<$-" and "$-$>" buttons in the bottom left corner of the page.
 \subsection*{Task menu}  
 This page contains a column of buttons allowing various actions to be performed:
 \begin{description}
-\item[\button{Replace in task}] replaces the active waypoint in the task with the selected waypoint.
-\item[\button{Insert in task}] inserts the selected waypoint before the active waypoint in
+\item[\button{Replace in task}] replaces the active waypoint in the task with 
+  the selected waypoint.
+\item[\button{Insert in task}] inserts the selected waypoint before the active 
+  waypoint in
   the task.
 \item[\button{Append to task}] adds the selected waypoint to the end of the task.
-\item[\button{Remove from task}] removes the selected waypoint from the task.  Note that this option is only visible if the selected waypoint is included in the active task.
+\item[\button{Remove from task}] removes the selected waypoint from the task.  
+  Note that this option is only visible if the selected waypoint is included in 
+  the active task.
 \item[\button{Set as new home}] sets the waypoint as the home airfield.
-\item[\button{Set teamcode}] sets the waypoint as reference waypoint for
-  team code coordinates.
-%I don't see this last box, but I don't have FLARM.  Is this box only visible if you have FLARM, or was it removed?%
+\item[\button{Pan to waypoint}] switches to pan mode and pans to that waypoint.
+%\item[\button{Set teamcode}] sets the waypoint as reference waypoint for
+%  team code coordinates.
 
 
 \end{description}
@@ -180,7 +193,9 @@ contacts.
 This page shows a satellite image of the
 waypoint.
 
-%I don't have a screen for the Satellite image.  Has this feature been removed, or is it because I haven't loaded the satellite images into the waypoint datafile?  Where is this documented?%
+%I don't have a screen for the Satellite image.  Has this feature been removed, 
+%or is it because I haven't loaded the satellite images into the waypoint 
+%datafile?  Where is this documented?%
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
@@ -194,7 +209,7 @@ from a potentially large database.
 This may be accessed several ways:
 \begin{itemize}
 \item  From the menu \bmenu{Nav}\blink\bmenu{Waypoint List}
-\item  From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task
+\item  From the task editor, menu \bmenu{Nav ..}\blink\bmenu{Task
 Edit} and selecting a waypoint and open the details.
 \item  Or just by gesture\gesture{Down - Right}.
 \end{itemize}
@@ -205,12 +220,13 @@ There are several filters available, which may be used together,
 individually or not at all.
 \begin{description}
 \item[Name] Filtering based on the matching the first letter in the waypoint name. 
-\item[Distance] Filters out waypoints further that a specified distance to the aircraft.
-\item[Direction] Filters out waypoints that are not in a specified direction from the aircraft. 
-   An additional special direction ``HDG(0°)'' filters waypoints within 30
-   degrees to either side of the heading of the glider.  This allows the pilot to point the glider at a group of
-  waypoints and quickly find them.
-%Filtering by heading doesn't seem to work as described. Need more explanation here.%
+\item[Distance] Filters out waypoints further that a specified distance to the 
+  aircraft.
+\item[Direction] Filters out waypoints that are not in a specified direction 
+  from the aircraft. 
+  An additional special direction ``HDG(0°)'' filters waypoints within 30
+  degrees to either side of the heading of the glider.  This allows the pilot 
+  to point the glider at a group of waypoints and quickly find them.
 \item[Type] Filters out waypoints that are not of the specified type
 (Landable point, Airport or Turnpoint) or that appear in the specified File~1 or
 File~2 (primary or secondary waypoint file respectively).
@@ -233,7 +249,8 @@ use it brings up the waypoint details dialog for the selected
 waypoint.
 
 \section{Task manager}\label{sec:task-manager-dialog}
-\begin{it}The task manager has undergone significant redesign compared with earlier versions of XC Soar.\end{it}
+\begin{it}  The task manager has undergone significant redesign compared with 
+earlier versions of XC Soar.\end{it}
 
 The task manager is used to edit, view, load, save to file, and declare cross
 country tasks. It is accessed via the menu
@@ -241,7 +258,9 @@ country tasks. It is accessed via the menu
 \bmenu{Nav}\blink\bmenu{Task}
 \end{quote} 
 
-The task manager's primary page is an calculator. It shows various calculations related to the active task, as described in detail below.  In addition, there are buttons for \button{Calculator}, \button{Turn Points}, \button{Manage}, and \button{Rules}, as well as a button to \button{Close} the task manager.
+The task manager's primary page is an calculator. It shows various calculations 
+related to the active task, as described in detail below.  In addition, there 
+are buttons for \button{Calculator}, \button{Turn Points}, \button{Manage}, and \button{Rules}, as well as a button to \button{Close} the task manager.
 
 \subsection*{Turn Points}
 The \button{Turn Points} button displays an ordered list of the points in the current active task.  If there are no waypoints in the active task, there will be only an option to "Add Turnpoint."  By highlighting (tapping) the "Add Turnpoint" function, then tapping in the highlighted region, the waypoint selector is displayed, as described above.  Highlighting a waypoint from the list and then tapping on the highlighted region adds the waypoint to the task.
@@ -267,25 +286,25 @@ XC Soar currently defines three different task types: Racing, AAT, and FAI badge
 A brief description of the task types is included below, but this manual does not intend to rephrase FAI rules or contest task types.  The reader is encouraged to become thoroughly familiar with each task type by referring to contest rules or FAI rules, which are available at \url{http://www.fai.org}. 
 
 \begin{itemize}
-    \item Racing (also known as an "assigned task").  The racing task involves flight around each specified turnpoint in the specified order.  Selecting the racing task type allows the pilot to enter the following parameters (note: if the option "FAI start/finish rules" is set to "On" then none of the options are available %Why is this?%:
-\begin{itemize}
-    \item Start max. speed: This is the maximum speed allowed in the start observation zone.  This should be set to 0 if there is no limit.
-		\item Start max. height: This is the maximum height above the start height reference (AGL or MSL) at which a task can be started.  This  should be set to 0 for no limit.
-	\item Start height referece: This specifies whether the maximum start height is referenced to ground level of the start point ("AGL") or Mean Sea Level ("MSL")
-	\item Finish Minimum Height: This is the minimum height based on the finish reference (AGL or MSL) at which a task can be finished.  This should be set to 0 for no limit.
-	\item Finish height referece: This specifies whether the minimum finish height is referenced to ground level of the finish point ("AGL") or Mean Sea Level ("MSL")
-	\item FAI start/finish rules: If enabled, this task type has no max start height or max start speed.  Finish height reference is set to AGL and finish height is 1000m below the start height %Is this description correct?%
-\end{itemize}
+\item Racing (also known as an "assigned task").  The racing task involves flight around each specified turnpoint in the specified order.  Selecting the racing task type allows the pilot to enter the following parameters (note: if the option "FAI start/finish rules" is set to "On" then none of the options are available %Why is this?%:
+  \begin{itemize}
+  \item Start max. speed: This is the maximum speed allowed in the start observation zone.  This should be set to 0 if there is no limit.
+  \item Start max. height: This is the maximum height above the start height reference (AGL or MSL) at which a task can be started.  This  should be set to 0 for no limit.
+  \item Start height reference: This specifies whether the maximum start height is referenced to ground level of the start point ("AGL") or Mean Sea Level ("MSL")
+  \item Finish Minimum Height: This is the minimum height based on the finish reference (AGL or MSL) at which a task can be finished.  This should be set to 0 for no limit.
+  \item Finish height reference: This specifies whether the minimum finish height is referenced to ground level of the finish point ("AGL") or Mean Sea Level ("MSL")
+  \item FAI start/finish rules: If enabled, this task type has no max. start height or max. start speed.  Finish height reference is set to AGL and finish height is 1000m below the start height %Is this description correct?%
+  \end{itemize}
 \item AAT (also known as "Turn Area Task,"or TAT).  This is a task through assigned areas (restricted to cylinder or sector observation zones).  A minimum task time applies.  Rules options for this task type include:
-\begin{itemize}
-    \item AAT minimum time:  This is the required minimum time for the task.  Refer to contest rules or consult an expert for penalties associated with finishing prior to the minimum time.  The time in this option is given in minutes.
-	\item Start maximum speed: Same meaning as in the racing task type, above
-	\item Start maximum height: Same meaning as in the racing task type, above
-	\item Start height reference: Same meaning as in the racing task type, above
-	\item Finish minimum height: Same meaning as in the racing task type, above
-	\item Finish height reference: Same meaning as in the racing task type, above
-	\item FAI start/finish rules: Same meaning as in the racing task type, above
-\end{itemize}
+  \begin{itemize}
+  \item AAT minimum time:  This is the required minimum time for the task.  Refer to contest rules or consult an expert for penalties associated with finishing prior to the minimum time.  The time in this option is given in minutes.
+  \item Start maximum speed: Same meaning as in the racing task type, above
+  \item Start maximum height: Same meaning as in the racing task type, above
+  \item Start height reference: Same meaning as in the racing task type, above
+  \item Finish minimum height: Same meaning as in the racing task type, above
+  \item Finish height reference: Same meaning as in the racing task type, above
+   \item FAI start/finish rules: Same meaning as in the racing task type, above
+ \end{itemize}
 \item FAI badges/records.  This task type allows only FAI start, finish, and turn point types.
 \end{itemize}
 
@@ -530,14 +549,14 @@ This may be accessed several ways: \gesture{Right - Down}
 \begin{description}
 \item[Assigned task time]  This field displays the assigned task time.
 \item[Estimated task time]  This field displays the estimated total time 
- on task to complete the task at the provided MacCready setting.
+  on task to complete the task at the provided MacCready setting.
 \item[Task distance]  This field displays the task distance remaining.
 \item[Set MacCready]  Allows the user to adjust the MacCready value and 
- see the effect it has on the estimated task time.
+  see the effect it has on the estimated task time.
 \item[Set range]  Allows the user to adjust the targets within the remaining 
- AAT areas, to see the effect it has on estimated task time and task distance.
+  AAT areas, to see the effect it has on estimated task time and task distance.
 \item[Set speed remaining]  This field displays the estimated speed for the
- remainder of the task at the provided MacCready setting.
+  remainder of the task at the provided MacCready setting.
 \item[Achieved MacCready]  This field displays the achieved MacCready value.
 \item[Cruise efficiency]  100 indicates perfect MacCready performance, greater 
 than 100 indicates better than MacCready performance is achieved through flying
@@ -571,7 +590,7 @@ task.
 
 This is accessed via the menu:
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}
+\bmenu{Info ..}\blink\bmenu{Status}
 \end{quote}
 the pages `Task' and the following are of interest.
 
@@ -763,20 +782,20 @@ produce the largest triangle. \todonum{still true?}
 The score and computed optimal distance is approximate.
 
 
-When the aircraft has landed, the displayed result gest not updated anymore.
+When the aircraft has landed, the displayed result gets not updated anymore.
 
 
 \section{Abort/resume the task and Alternates}
 
 If atmospheric conditions change for the worse, you may make the
 judgement that it will be impossible to complete the task.  In this
-situation, XCSoar can be instructed to 'abort' the task, and it will
+situation, XCSoar can be instructed to `abort' the task, and it will
 then help you reach a safe landing site.
 
 \subsection*{Task Abort}
 The task is aborted by any of those actions:
 \begin{itemize}
-\item Pressing \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Abort}
+\item Pressing \bmenu{Nav ..}\blink\bmenu{Task Abort}
 \item Chosing an alternate from the list under  \gesture{Down - Left}
  \bmenu{Nav}\blink\bmenu{Alternates}
 \item Or selecting a waypoint from the map and start a `Goto task'.
@@ -786,7 +805,7 @@ Once aborted, whatever cross-country task was being flown is
 discarded.  The task waypoint list is then filled with nearby landing
 points. The landing points are ordered simply by their reachability.
 
-The configuration option `Reach polar' determines whether
+The configuration option `reach polar' determines whether
 waypoint arrival heights in abort mode uses the MacCready value prior
 to aborting the task, or if the safety MacCready value is used. \config{reachpolar}
 Default is to use the safety MacCready value.  When switching to
@@ -808,12 +827,20 @@ aborting the task, is then restored along with all the other task
 details.
 
 \subsection*{Alternates}
-Alternates are maintained throughout the flight. They are filtered by
-the configured `Alternates mode' criteria. The first two items of that 
-alternates list are available as InfoBox. 
-\config{alternatesmode} (Simple, Task, or Home).
-Althouth the alternates obey different rules they interact in the same way 
-with the current task. Choosing a target of the alternates list aborts the task; 
+Alternates are maintained throughout the flight. In contrast to the abort mode 
+options is the idea to have continously an eye on possible alternates. Six landing 
+options are maintained. They are filtered by the configured `alternates mode' 
+criteria (Simple, Task, or Home). \config{alternatesmode} 
+One of those criterias should fit to your personal preference. 
+
+Besides the list including the distance, arrival height and frequency, there 
+is an InfoBox available for the first two items on the list. A good candidate 
+for an extra page with InfoBoxes besides the default.
+\sketch{figures/alternates_list.png}
+
+Although the items on the alternate list obey different rules they interact 
+in the same way 
+with the current task. Choosing a target from the alternates list aborts the task; 
 once the conditions get better the resuming of the task is doable by the already 
 mentioned button.
 
@@ -828,21 +855,33 @@ Several flight loggers are accessible via XCSoar:
 \item A software-based logger.  All versions of XCSoar have this
   functionality.  The logger conforms to the IGC standard but is not
   certified.
-\item The PRO version of Altair has an internal IGC certified logger device.
-  XCSoar communicates with the logger as if it were an external serial device.
-
+\item For example the PRO version of Altair has an internal IGC certified logger 
+  device.  XCSoar communicates with the logger as to any other external device.
 \item XCSoar can also send declarations to some external logger devices. 
-For this to work, the device must be specified in the ``Devices'' 
-section of the configuration \config{comdevices} settings.
+  For this to work, the device must be specified in the `Devices' 
+  section of the configuration \config{comdevices} settings.
+\item  For some of the numerous logger devices XCSoar can download IGC files. 
+  This is convenient especially for logger devices, which are not that easy 
+  removable from the glider.
 \end{itemize}
 
-The logger can be turned on and off automatically or manually.  
-To turn the logger on (or off) manually, select from the menu
+\subsection*{Setup}
+For a complete matrix of the supported logger features see section~\ref{sec:supported-varios}.  
+The configuration is described in detail in section~\ref{conf:logger}.  Details 
+to the log files can be found in section~\ref{sec:logfiles}.
+
+\subsection*{Logger activation}
+The logger can be turned on and off automatically or manually.  For para-glider 
+XCSoar provides the option to only start the logger automatically. Thus a very 
+slow and close to the terrain flight won't automatically stop logging the flight. 
+If you choose the auto start only logger you have to stop the logger manually.
+To turn the logger on (or off) manually, select from the menu:
+\sketch{figures/logger-startdeclare.png}
 \begin{quote}
-\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Logger Start}
+\bmenu{Config ..}\blink\bmenu{Logger Start}
 \end{quote}
 
-When the internal software logger is active, a small diamond in the
+When the internal software logger is active, a small `green status led' in the
 lower right corner of the map area flashes once per second.
 
 By default, XCSoar is set up to automatically start and stop the
@@ -850,6 +889,7 @@ internal software flight logger when it detects the aircraft is flying
 and when it has landed, respectively.  Only when the logger is
 manually started does it ask if the flight is to be declared; when
 automatically starting it automatically declares the current task.
+In simulation mode the logger does not get activated automatically.
 
 If a task has been declared, then subsequent attempts at modifying the
 task result in a warning message asking to confirm whether the action
@@ -861,32 +901,28 @@ The XCSoar software logger, when started, checks for 500kB of free
 space on the file storage.  If there is insufficient space, it will
 automatically delete IGC files, oldest first, in order to free up
 500kB.  It does not ask the user for confirmation before performing
-this operation.
+this operation. \warning
 
 The internal software logger buffers data so that when it starts
 (automatically or manually) up to 60 seconds of data prior to starting
 is recorded.  This means that the software logger now adequately
-captures the full takeoff.
+captures the full take-off.
 
-\section{Logger replay dialog}
-
+\subsection*{Logger replay}
 Flight logs in the IGC format generated by XCSoar or other loggers can
-be replayed.  The logger replay dialog can be accessed via the
+be replayed.  The logger replay dialogue can be accessed via the
 menu:
 \begin{quote}
-\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Replay}
+\bmenu{Config ..}\blink\bmenu{Replay}
 \end{quote}
+\sketch{figures/loggerreplay.png}
 
-\begin{center}
-\includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/loggerreplay.png}
-\end{center}
-
-During replay, the word ``REPLAY'' appears at the lower left corner of
+During replay, the word `REPLAY' appears at the lower left corner of
 the screen.  During replay, the program behaves as if real GPS updates
-are being received by a GPS.  The logger replay dialog does not need
+are being received by a GPS.  The logger replay dialogue does not need
 to be open during replay.
 
-To start a log, first select the file to load, and then select the
+To start a log replay, first select the file to load, and then select the
 \button{Start} button.  The replay can be performed in accelerated time
 by changing the time scale from 1x to a higher number, and paused by
 setting the time scale to zero.  High time scales can result in degraded
@@ -896,7 +932,7 @@ Stop the log using the \button{Stop}.
 Once a log is started, further presses of the \button{Start} has the
 effect of restarting the replay.
 
-Note: it is recommended to reset the device before flight, after a log
+\tip It is recommended to reset the device before flight, after a log
 file has been replayed, in order to ensure that XCSoar's internal
 statistics are properly reset.
 
@@ -904,12 +940,12 @@ When operating XCSoar in FLY mode, the replay is disabled (stopped) if
 the real GPS receiver detects that the aircraft is moving.
 
 The logger replay works best with high sampling rate log files;
-6 second interval or less works fine.
+a 6 second interval or less works fine.
 
-\section{Analysis dialog}\label{sec:analysis-dialog-climb}
+\section{Flight analysis} \label{sec:analysis-dialog-climb}
 
 The analysis dialog is very useful in planning and conducting
-cross-country flights.  It is accessed via the menu  \gesture{Up - Right - Down}
+cross-country flights.  It is accessed via the menu:  \gesture{Up - Right - Down}
 \begin{quote}
 \bmenu{Info}\blink\bmenu{Analysis}
 \end{quote}

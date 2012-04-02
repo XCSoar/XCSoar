@@ -26,6 +26,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
+#include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Atmosphere/Temperature.hpp"
@@ -137,6 +138,9 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
 bool
 B50Device::ParseNMEA(const char *String, NMEAInfo &info)
 {
+  if (!VerifyNMEAChecksum(String))
+    return false;
+
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);

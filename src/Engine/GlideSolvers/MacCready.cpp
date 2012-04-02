@@ -202,6 +202,7 @@ MacCready::SolveCruise(const GlideState &task) const
   result.validity = GlideResult::Validity::OK;
   result.pure_glide_height = task.vector.distance /
     glide_polar.GetLDOverGround(task.vector.bearing, task.wind);
+  result.pure_glide_altitude_difference -= result.pure_glide_height;
 
   return result;
 }
@@ -247,6 +248,7 @@ MacCready::SolveGlide(const GlideState &task, const fixed v_set,
   result.height_glide = time_cruise * sink_rate;
   result.pure_glide_height = result.height_glide;
   result.altitude_difference -= result.height_glide;
+  result.pure_glide_altitude_difference -= result.pure_glide_height;
 
   const fixed inv_mc = glide_polar.GetInvMC();
   if(positive(inv_mc))
@@ -308,9 +310,6 @@ MacCready::Solve(const GlideState &task) const
   if (!positive(glide_polar.GetMC()))
     // whole task must be glide
     return OptimiseGlide(task, false);
-
-  if (!settings.predict_wind_drift)
-    return SolveGlide(task, glide_polar.GetVBestLD());
 
   if (negative(task.altitude_difference))
     // whole task climb-cruise

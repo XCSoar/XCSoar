@@ -35,7 +35,8 @@ Copyright_License {
 void
 FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             const DerivedInfo &calculated,
-                            const bool &final_glide_bar_mc0_enabled) const
+                            const GlideSettings &glide_settings,
+                            const bool final_glide_bar_mc0_enabled) const
 {
   RasterPoint GlideBar[6] = {
       { 0, 0 }, { 9, -9 }, { 18, 0 }, { 18, 0 }, { 9, 0 }, { 0, 0 }
@@ -52,9 +53,12 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   TCHAR Value[10];
 
-  if (!calculated.task_stats.task_valid ||
-      !calculated.task_stats.total.solution_remaining.IsOk() ||
-      !calculated.task_stats.total.solution_mc0.IsDefined())
+  const TaskStats &task_stats = calculated.task_stats;
+  const ElementStat &total = task_stats.total;
+  const GlideResult &solution = total.solution_remaining;
+  const GlideResult &solution_mc0 = total.solution_mc0;
+
+  if (!task_stats.task_valid || !solution.IsOk() || !solution_mc0.IsDefined())
     return;
 
   const int y0 = (rc.bottom + rc.top) / 2;
@@ -62,7 +66,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelScalar dy_glidebar = 0;
   PixelScalar dy_glidebar0 = 0;
 
-  FormatUserAltitude(calculated.task_stats.total.solution_remaining.altitude_difference,
+  FormatUserAltitude(solution.SelectAltitudeDifference(glide_settings),
                             Value, false);
   canvas.Select(Fonts::map_bold);
   const PixelSize text_size = canvas.CalcTextSize(Value);
@@ -71,8 +75,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelScalar clipping_arrow0_offset = Layout::Scale(4);
 
   // 468 meters is it's size. Will be divided by 9 to fit screen resolution.
-  int altitude_difference = ((int)calculated.task_stats.total.solution_remaining.altitude_difference);
-  int altitude_difference0 = ((int)calculated.task_stats.total.solution_mc0.altitude_difference);
+  int altitude_difference = (int)
+    solution.SelectAltitudeDifference(glide_settings);
+  int altitude_difference0 = (int)
+    solution_mc0.SelectAltitudeDifference(glide_settings);
   // TODO feature: should be an angle if in final glide mode
 
   // cut altitude_difference at +- 468 meters (55 units)
@@ -202,7 +208,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   // or above final glide but impeded by obstacle
   int cross_sign = 0;
 
-  if (!calculated.task_stats.total.IsAchievable())
+  if (!total.IsAchievable())
     cross_sign = 1;
   if (calculated.terrain_warning && (altitude_difference>0))
     cross_sign = -1;

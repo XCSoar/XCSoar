@@ -24,6 +24,7 @@ Copyright_License {
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
@@ -85,6 +86,9 @@ ParsePDA1(NMEAInputLine &line, NMEAInfo &info)
 bool
 ILECDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
+  if (!VerifyNMEAChecksum(_line))
+    return false;
+
   NMEAInputLine line(_line);
   char type[16];
   line.read(type, sizeof(type));

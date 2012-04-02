@@ -70,26 +70,29 @@ Net::Session::Select(int timeout_ms)
   if (mcode != CURLM_OK)
     return false;
 
+  bool using_curl_timeout = false;
   long curl_timeout;
   mcode = curl_multi_timeout(multi, &curl_timeout);
   if (mcode == CURLM_OK && curl_timeout >= 0) {
     if (curl_timeout < 50)
       curl_timeout = 50;
 
-    if (timeout_ms < 0 || curl_timeout < (long)timeout_ms)
+    if (timeout_ms < 0 || curl_timeout < (long)timeout_ms) {
       timeout_ms = curl_timeout;
+      using_curl_timeout = true;
+    }
   }
 
   struct timeval timeout, *timeout_p;
   if (timeout_ms >= 0) {
     timeout.tv_sec = timeout_ms / 1000;
-    timeout.tv_usec = timeout_ms * 1000;
+    timeout.tv_usec = (timeout_ms % 1000) * 1000;
     timeout_p = &timeout;
   } else
     timeout_p = NULL;
 
-  int ret = select(max_fd, &rfds, &wfds, &efds, timeout_p);
-  return ret > 0;
+  int ret = select(max_fd + 1, &rfds, &wfds, &efds, timeout_p);
+  return ret > 0 || (using_curl_timeout && ret == 0);
 }
 
 CURLMcode

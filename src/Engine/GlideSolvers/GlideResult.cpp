@@ -33,6 +33,8 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
 #endif
   min_arrival_altitude(task.min_arrival_altitude),
   vector(task.vector),
+  pure_glide_min_arrival_altitude(task.min_arrival_altitude),
+  pure_glide_altitude_difference(task.altitude_difference),
   altitude_difference(task.altitude_difference),
   effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
@@ -94,6 +96,28 @@ GlideResult::Add(const GlideResult &s2)
 
     /* adopt the minimum height of the second leg */
     min_arrival_altitude = s2.min_arrival_altitude;
+  }
+
+  /* same as above, but for "pure glide" */
+
+  if (s2.GetRequiredAltitude() < pure_glide_min_arrival_altitude) {
+    /* must meet the safety height of the first leg */
+    assert(s2.pure_glide_min_arrival_altitude <
+           s2.GetArrivalAltitude(pure_glide_min_arrival_altitude));
+
+    /* calculate a new minimum arrival height that considers the
+       "mountain top" in the middle */
+    pure_glide_min_arrival_altitude =
+      s2.GetArrivalAltitude(pure_glide_min_arrival_altitude);
+  } else {
+    /* must meet the safety height of the second leg */
+
+    /* apply the increased altitude requirement */
+    pure_glide_altitude_difference -=
+      s2.GetRequiredAltitude() - pure_glide_min_arrival_altitude;
+
+    /* adopt the minimum height of the second leg */
+    pure_glide_min_arrival_altitude = s2.pure_glide_min_arrival_altitude;
   }
 
   pure_glide_height += s2.pure_glide_height;

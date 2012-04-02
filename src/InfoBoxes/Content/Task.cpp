@@ -221,6 +221,21 @@ InfoBoxContentNextETA::Update(InfoBoxData &data)
   data.UnsafeFormatComment(_T("%02u"), t.second);
 }
 
+static void
+SetValueFromAltDiff(InfoBoxData &data, const TaskStats &task_stats,
+                    const GlideResult &solution)
+{
+  if (!task_stats.task_valid || !solution.IsAchievable()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  fixed altitude_difference =
+    solution.SelectAltitudeDifference(settings.task.glide);
+  data.SetValueFromArrival(altitude_difference);
+}
+
 void
 InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
 {
@@ -228,25 +243,16 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.IsAchievable()) {
-    data.SetInvalid();
-    return;
-  }
 
-  data.SetValueFromArrival(next_solution.altitude_difference);
+  SetValueFromAltDiff(data, task_stats, next_solution);
 }
 
 void
 InfoBoxContentNextMC0AltitudeDiff::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const GlideResult &next_solution = task_stats.current_leg.solution_mc0;
-  if (!task_stats.task_valid || !next_solution.IsDefined()) {
-    data.SetInvalid();
-    return;
-  }
 
-  data.SetValueFromArrival(next_solution.altitude_difference);
+  SetValueFromAltDiff(data, task_stats, task_stats.current_leg.solution_mc0);
 }
 
 void
@@ -370,13 +376,8 @@ void
 InfoBoxContentFinalAltitudeDiff::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid ||
-      !task_stats.total.solution_remaining.IsOk()) {
-    data.SetInvalid();
-    return;
-  }
 
-  data.SetValueFromArrival(task_stats.total.solution_remaining.altitude_difference);
+  SetValueFromAltDiff(data, task_stats, task_stats.total.solution_remaining);
 }
 
 void

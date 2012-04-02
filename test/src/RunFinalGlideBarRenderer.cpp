@@ -99,7 +99,7 @@ protected:
       0, 0, (PixelScalar)canvas.get_width(), (PixelScalar)canvas.get_height()
     };
 
-    renderer.Draw(canvas, rc, calculated, true);
+    renderer.Draw(canvas, rc, calculated, glide_settings, true);
   }
 };
 

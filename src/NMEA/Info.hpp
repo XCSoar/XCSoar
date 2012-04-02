@@ -527,6 +527,18 @@ struct NMEAInfo {
 
   /**
    * Set the true airspeed [m/s] and derive the indicated airspeed
+   * from it, using the specified altitude [m].
+   */
+  void ProvideIndicatedAirspeedWithAltitude(fixed ias, fixed altitude) {
+    indicated_airspeed = ias;
+    true_airspeed = indicated_airspeed *
+      AtmosphericPressure::AirDensityRatio(altitude);
+    airspeed_available.Update(clock);
+    airspeed_real = true;
+  }
+
+  /**
+   * Set the true airspeed [m/s] and derive the indicated airspeed
    * from it, using the current altitude.
    */
   void ProvideTrueAirspeed(fixed tas) {

@@ -36,6 +36,17 @@ WindComputer::Reset()
   wind_store.reset();
 }
 
+gcc_pure
+static fixed
+GetVTakeoffFallback(const GlidePolar &glide_polar)
+{
+  return glide_polar.IsValid()
+    ? glide_polar.GetVTakeoff()
+    /* if there's no valid polar, assume 20 m/s (72 km/h); that's an
+       arbitrary value, but better than nothing */
+    : fixed(20);
+}
+
 void
 WindComputer::Compute(const WindSettings &settings,
                       const GlidePolar &glide_polar,
@@ -59,7 +70,7 @@ WindComputer::Compute(const WindSettings &settings,
 
   if (settings.ZigZagWindEnabled() &&
       basic.airspeed_available && basic.airspeed_real &&
-      basic.true_airspeed > glide_polar.GetVTakeoff()) {
+      basic.true_airspeed > GetVTakeoffFallback(glide_polar)) {
     WindEKFGlue::Result result = wind_ekf.Update(basic, calculated);
     if (result.quality > 0) {
       Vector v_wind = Vector(result.wind);

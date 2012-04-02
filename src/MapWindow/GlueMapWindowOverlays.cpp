@@ -207,6 +207,7 @@ void
 GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 {
   final_glide_bar_renderer.Draw(canvas, rc, Calculated(),
+                                GetComputerSettings().task.glide,
     CommonInterface::GetUISettings().final_glide_bar_mc0_enabled);
 }
 

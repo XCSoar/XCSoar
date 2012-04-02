@@ -652,7 +652,7 @@ and your custom InfoBox sets.
 
 
 %%%%%%%%%%
-\section{InfoBox Sets (or InfoBox Modes)}\label{sec:infobox_sets}
+\section{Look / InfoBox Modes (or InfoBox Sets)}\label{sec:infobox_sets}
 
 This page shows the available InfoBox sets.
 
@@ -790,10 +790,15 @@ for every glide performance relevant computation of XCSoar.
 
 
 %%%%%%%%%%%%%%%%%%
-\section{Setup / Logger}
+\section{Setup / Logger} \label{conf:logger}
 
 This page allows you to set the pilot and aircraft details used for
-annotating XCSoar's IGC logger. 
+annotating XCSoar's IGC logger.  
+The internal software logger has adjustable time steps, separate for
+cruise and circling modes.  
+Typically the circling time step is set to a smaller value
+than cruise in order to give good quality flight logs for replay
+purposes.
 
 \begin{description}
 \item[Time step cruise*]  This is the time interval between logged points when 
@@ -838,7 +843,7 @@ will be referenced as `Custom' set and will also be stored in your profile.
 \item[Temperature*]  Units used for temperature.
 \item[Task speed*] unit used for task speed.
 \item[Pressure*]  Unit used for pressures.
-\item[Lat./Lon.*]  Unit, or better format used for latitude and longitude.
+\item[Lat./Lon.*]  Unit, or better format used for latitude and longitude. Supported are several `degree/minutes/seconds' formats, respectively their decimal fraction, and the  UTM WGS 84 format.
 \end{description}
 
 

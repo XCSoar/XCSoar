@@ -280,18 +280,14 @@ Remove tape from wings and tail
 Task files (extension \verb|.tsk|) are stored in a XCSoar own XML format, 
 whereas SeeYou tasks can also be loaded from file (extension \verb|.cup|).
 
-\section{Flight logs}
+\section{Flight logs} \label{sec:logfiles}
 
 The software flight logger generates IGC files (extension \verb|.igc|)
 according to the long naming convention described in the FAI 
 document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.  
-These files can be imported into other programs for analysis after flight.
 
-The internal software logger has adjustable time steps, separate for
-cruise and circling modes, via parameters in the configuration
-settings.  Typically the circling time step is set to a smaller value
-than cruise in order to give good quality flight logs for replay
-purposes.
+Log-files are stored in the `logs' subdirectory of the XCSoarData directory.
+These files can be imported into other programs for analysis after flight.
 
 \section{FLARM Identification}\label{sec:flarm-ident-file}
 

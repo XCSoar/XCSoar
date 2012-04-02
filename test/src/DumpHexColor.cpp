@@ -21,46 +21,35 @@ Copyright_License {
 }
 */
 
-#include "HexColor.hpp"
+#include "Formatter/HexColor.hpp"
 #include "Screen/Color.hpp"
+#include "OS/Args.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
-void
-FormatHexColor(TCHAR *buffer, size_t size, const Color _color)
+int main(int argc, char **argv)
 {
-  assert(size >= 7);
+  Args args(argc, argv, "COLOR ...");
+  tstring s = args.ExpectNextT();
+  while (true) {
+    Color color;
+    if (!ParseHexColor(s.c_str(), color)) {
+      _ftprintf(stderr, _T("Failed to parse '%s'\n"), s.c_str());
+      return EXIT_FAILURE;
+    }
 
-#if defined(__ARM_ARCH_7A__) && GCC_VERSION < 40500
-  // NOTE: The local "c" copy of "color" works around an android compiler
-  //       bug (observed with gcc version 4.4.3)
-  const Color color(_color.Red(), _color.Green(), _color.Blue());
-#else
-  const Color color(_color);
-#endif
-  _sntprintf(buffer, size, _T("#%02X%02X%02X"),
-             color.Red(), color.Green(), color.Blue());
-}
+    TCHAR buffer[32];
+    FormatHexColor(buffer, ARRAY_SIZE(buffer), color);
 
-bool
-ParseHexColor(const TCHAR *buffer, Color &color)
-{
-  if (*buffer != _T('#'))
-    return false;
+    _tprintf(_T("%s -> %s\n"), s.c_str(), buffer);
 
-  buffer++;
+    if (args.IsEmpty())
+      break;
 
-  TCHAR *endptr;
-  unsigned long value = _tcstoul(buffer, &endptr, 16);
-  if (endptr != buffer + 6)
-    return false;
+    s = args.ExpectNextT();
+  }
 
-  uint8_t r = value >> 16;
-  uint8_t g = value >> 8;
-  uint8_t b = value;
-
-  color = Color(r, g, b);
-  return true;
+  return EXIT_SUCCESS;
 }

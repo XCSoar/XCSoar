@@ -666,6 +666,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunOLCAnalysis \
 	BenchmarkProjection \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
+	DumpHexColor \
 	RunXMLParser \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
@@ -814,6 +815,12 @@ DUMP_TEXT_ZIP_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextZip.cpp
 DUMP_TEXT_ZIP_DEPENDS = IO ZZIP
 $(eval $(call link-program,DumpTextZip,DUMP_TEXT_ZIP))
+
+DUMP_HEX_COLOR_SOURCES = \
+	$(SRC)/Formatter/HexColor.cpp \
+	$(TEST_SRC_DIR)/DumpHexColor.cpp
+DUMP_HEX_COLOR_DEPENDS = SCREEN
+$(eval $(call link-program,DumpHexColor,DUMP_HEX_COLOR))
 
 DEBUG_DISPLAY_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \

@@ -41,6 +41,11 @@ LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
   char tmp[100];
   sprintf(tmp, "PFLX2,,%.2f,,,,", (double)overload);
   PortWriteNMEA(port, tmp);
+
+  // LXNAV V7 variant:
+  sprintf(tmp, "PLXV0,BAL,W,%.2f", (double)overload);
+  PortWriteNMEA(port, tmp);
+
   return true;
 }
 
@@ -57,6 +62,11 @@ LXDevice::PutBugs(fixed bugs, OperationEnvironment &env)
   int transformed_bugs_value = 100 - (int)(bugs*100);
   sprintf(tmp, "PFLX2,,,%d,,,", transformed_bugs_value);
   PortWriteNMEA(port, tmp);
+
+  // LXNAV V7 variant:
+  sprintf(tmp, "PLXV0,BUGS,W,%d", transformed_bugs_value);
+  PortWriteNMEA(port, tmp);
+
   return true;
 }
 
@@ -69,6 +79,11 @@ LXDevice::PutMacCready(fixed mac_cready, OperationEnvironment &env)
   char tmp[32];
   sprintf(tmp, "PFLX2,%1.1f,,,,,,", (double)mac_cready);
   PortWriteNMEA(port, tmp);
+
+  // LXNAV V7 variant:
+  sprintf(tmp, "PLXV0,MC,W,%.1f", (double)mac_cready);
+  PortWriteNMEA(port, tmp);
+
   return true;
 }
 
@@ -78,10 +93,16 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
   if (!EnableNMEA(env))
     return false;
 
-  fixed altitude_offset =
-    pres.StaticPressureToQNHAltitude(AtmosphericPressure::Standard());
+  double altitude_offset =
+    (double)pres.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()) / 0.3048;
+
   char buffer[100];
-  sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset / 0.3048);
+  sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", altitude_offset);
   PortWriteNMEA(port, buffer);
+
+  // LXNAV V7 variant:
+  sprintf(buffer, "PLXV0,QNH,W,%.2f", altitude_offset);
+  PortWriteNMEA(port, buffer);
+
   return true;
 }

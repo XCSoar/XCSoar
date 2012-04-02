@@ -115,7 +115,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
         !session.Select(timeout_ms))
       return 0;
 
-    CURLMcode mcode = session.Perform();
+    mcode = session.Perform();
     if (mcode != CURLM_OK && mcode != CURLM_CALL_MULTI_PERFORM)
       return 0;
   }

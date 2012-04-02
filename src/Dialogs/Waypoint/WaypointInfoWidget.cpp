@@ -43,11 +43,13 @@ void
 WaypointInfoWidget::AddGlideResult(const TCHAR *label,
                                    const GlideResult &result)
 {
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+
   TCHAR buffer[64];
 
   switch (result.validity) {
   case GlideResult::Validity::OK:
-    FormatRelativeUserAltitude(result.altitude_difference,
+    FormatRelativeUserAltitude(result.SelectAltitudeDifference(settings.task.glide),
                                       buffer, ARRAY_SIZE(buffer));
     AddReadOnly(label, NULL, buffer);
     break;
