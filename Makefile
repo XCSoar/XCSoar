@@ -770,6 +770,7 @@ endif
 ifeq ($(HAVE_NET),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Net/ToBuffer.cpp \
+	$(SRC)/Net/ToFile.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAAFormatter.cpp \

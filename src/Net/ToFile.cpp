@@ -1,0 +1,97 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2012 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
+
+#include "Net/ToFile.hpp"
+#include "Net/Features.hpp"
+
+#ifdef HAVE_NET
+
+#include "Net/Request.hpp"
+#include "Operation/Operation.hpp"
+#include "OS/FileUtil.hpp"
+
+#include <assert.h>
+#include <stdio.h>
+
+static bool
+DownloadToFile(Net::Session &session, const TCHAR *url, FILE *file,
+               OperationEnvironment &env)
+{
+  assert(url != NULL);
+  assert(file != NULL);
+
+  Net::Request request(session, url, 10000);
+  if (!request.Created())
+    return false;
+
+  uint8_t buffer[4096];
+  while (true) {
+    if (env.IsCancelled())
+      return false;
+
+    size_t nbytes = request.Read(buffer, sizeof(buffer), 5000);
+    if (nbytes == 0)
+      break;
+
+    size_t written = fwrite(buffer, 1, nbytes, file);
+    if (written != nbytes)
+      return false;
+  }
+
+  return true;
+}
+
+bool
+Net::DownloadToFile(Session &session, const TCHAR *url, const TCHAR *path,
+                    OperationEnvironment &env)
+{
+  assert(url != NULL);
+  assert(path != NULL);
+
+  /* make sure we create a new file */
+  if (!File::Delete(path) && File::ExistsAny(path))
+    /* failed to delete the old file */
+    return false;
+
+  /* now create the new file */
+  FILE *file = _tfopen(path, _T("wb"));
+  if (file == NULL)
+    return false;
+
+  bool success = ::DownloadToFile(session, url, file, env);
+  success &= fclose(file) == 0;
+
+  if (!success)
+    /* delete the partial file on error */
+    File::Delete(path);
+
+  return success;
+}
+
+void
+Net::DownloadToFileJob::Run(OperationEnvironment &env)
+{
+  success = DownloadToFile(session, url, path, env);
+}
+
+#endif

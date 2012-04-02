@@ -845,6 +845,16 @@ DOWNLOAD_FILE_SOURCES = \
 DOWNLOAD_FILE_DEPENDS = IO LIBNET
 $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 
+RUN_DOWNLOAD_TO_FILE_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/Net/ToFile.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
+RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBNET
+$(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
+
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Util/StringUtil.cpp \
