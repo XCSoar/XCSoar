@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
@@ -152,6 +153,9 @@ LXWP3(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 bool
 LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
+  if (!VerifyNMEAChecksum(String))
+    return false;
+
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);

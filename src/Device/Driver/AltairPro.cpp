@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Port/Port.hpp"
+#include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/System.hpp"
@@ -85,6 +86,9 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 bool
 AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
+  if (!VerifyNMEAChecksum(String))
+    return false;
+
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);

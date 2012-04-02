@@ -6,6 +6,8 @@ Version 6.3.1 - not yet released
 * calculations
   - fix crash with far away task
   - fix high speed remaining when wind drift is disabled
+* devices
+  - add missing NMEA checksum verifications
 * map
   - don't fill acked airspaces
 * Linux

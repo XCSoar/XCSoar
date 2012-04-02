@@ -209,7 +209,7 @@ TestBorgeltB50()
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
-  ok1(device->ParseNMEA("$PBB50,042,-01.1,1.0,12345,10,1.3,1,-28", nmea_info));
+  ok1(device->ParseNMEA("$PBB50,042,-01.1,1.0,12345,10,1.3,1,-28*75", nmea_info));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, 21.60666666666667));
   ok1(equals(nmea_info.indicated_airspeed, 57.15892189196558));
@@ -295,7 +295,7 @@ TestFlymasterF1()
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
-  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,0,21.3,25.5*CS",
+  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,0,21.3,25.5*66",
                         nmea_info));
   ok1(!nmea_info.airspeed_available);
   ok1(nmea_info.total_energy_vario_available);
@@ -309,12 +309,12 @@ TestFlymasterF1()
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 99998));
 
-  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,1,21.3,25.5*CS",
+  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,1,21.3,25.5*67",
                         nmea_info));
   ok1(nmea_info.voltage_available);
   ok1(equals(nmea_info.voltage, 12.4));
 
-  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,2,21.3,25.5*CS",
+  ok1(device->ParseNMEA("$VARIO,999.98,-12,12.4,12.7,2,21.3,25.5*64",
                         nmea_info));
   ok1(nmea_info.voltage_available);
   ok1(equals(nmea_info.voltage, 12.7));
@@ -379,7 +379,7 @@ TestFlytec()
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
-  ok1(device->ParseNMEA("$BRSF,063,-013,-0035,1,193,00351,535,485*38",
+  ok1(device->ParseNMEA("$BRSF,063,-013,-0035,1,193,00351,535,485*33",
                         nmea_info));
   ok1(nmea_info.airspeed_available);
   ok1(equals(nmea_info.true_airspeed, 17.5));
@@ -401,7 +401,7 @@ TestFlytec()
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
-  ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*5e",
+  ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*72",
                         nmea_info));
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 101450));
@@ -435,7 +435,7 @@ TestFlytec()
 
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,A,09,097517,01321,-001,01030,P,023,,038,"
-                        "088,00090,00088,800,,*38", nmea_info));
+                        "088,00090,00088,800,,*29", nmea_info));
   ok1(nmea_info.location_available);
   ok1(equals(nmea_info.location, 47.014, 8.307616667));
   ok1(nmea_info.track_available);
@@ -591,7 +591,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
   ok1(!nmea_info.total_energy_vario_available);
 
   /* airspeed and vario available */
-  ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1",
+  ok1(device->ParseNMEA("$LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1*47",
                         nmea_info));
   ok1((bool)nmea_info.pressure_altitude_available == !condor);
   ok1((bool)nmea_info.baro_altitude_available == condor);
@@ -603,7 +603,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
   ok1(equals(nmea_info.total_energy_vario, 1.71));
 
   if (!condor) {
-    ok1(device->ParseNMEA("$LXWP2,1.7,1.1,5,,,,", nmea_info));
+    ok1(device->ParseNMEA("$LXWP2,1.7,1.1,5,,,,*3e", nmea_info));
     ok1(nmea_info.settings.mac_cready_available);
     ok1(equals(nmea_info.settings.mac_cready, 1.7));
     ok1(nmea_info.settings.ballast_overload_available);
@@ -627,7 +627,7 @@ TestILEC()
   nmea_info.clock = fixed_one;
 
   /* baro altitude disabled */
-  ok1(device->ParseNMEA("$PILC,PDA1,1489,-3.21*7D", nmea_info));
+  ok1(device->ParseNMEA("$PILC,PDA1,1489,-3.21*69", nmea_info));
   ok1(!nmea_info.airspeed_available);
   ok1(nmea_info.total_energy_vario_available);
   ok1(equals(nmea_info.total_energy_vario, -3.21));

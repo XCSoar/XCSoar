@@ -266,6 +266,9 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 bool
 FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
+  if (!VerifyNMEAChecksum(_line))
+    return false;
+
   NMEAInputLine line(_line);
   char type[16];
   line.read(type, 16);
