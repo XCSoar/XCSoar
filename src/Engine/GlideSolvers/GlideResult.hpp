@@ -24,6 +24,7 @@
 
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Util/TypeTraits.hpp"
+#include "GlideSettings.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
@@ -89,6 +90,13 @@ struct GlideResult {
   GeoVector vector;
 
   /**
+   * The minimum arrival altitude, assuming pure glide.  This is
+   * usually the same as #min_arrival_altitude, but may differ on
+   * multi-leg calculations when there is an obstacle.
+   */
+  fixed pure_glide_min_arrival_altitude;
+
+  /**
    * The total height that would be glided straight along the vector
    * if the target were reachable by pure glide (i.e. ignoring current
    * aircraft altitude, minimum arrival altitude and cruise
@@ -98,6 +106,11 @@ struct GlideResult {
    * This attribute is only valid when validity==OK.
    */
   fixed pure_glide_height;
+
+  /**
+   * The height above/below final glide, assuming pure glide.
+   */
+  fixed pure_glide_altitude_difference;
 
   /** Track bearing in cruise for optimal drift compensation (deg true) */
   Angle cruise_track_bearing;
@@ -192,7 +205,7 @@ struct GlideResult {
    */
   gcc_pure
   fixed GetRequiredAltitude() const {
-    return min_arrival_altitude + pure_glide_height;
+    return pure_glide_min_arrival_altitude + pure_glide_height;
   }
 
   /**
@@ -246,6 +259,24 @@ struct GlideResult {
   gcc_pure
   fixed GetArrivalAltitudeWithDrift(fixed start_altitude) const {
     return start_altitude - height_glide;
+  }
+
+  /**
+   * Calculate the height above/below final glide, assuming pure
+   * glide.
+   *
+   * @param start_altitude the current aircraft altitude
+   */
+  gcc_pure
+  fixed GetPureGlideAltitudeDifference(fixed start_altitude) const {
+    return start_altitude - GetRequiredAltitude();
+  }
+
+  gcc_pure
+  fixed SelectAltitudeDifference(const GlideSettings &settings) const {
+    return settings.predict_wind_drift
+      ? altitude_difference
+      : pure_glide_altitude_difference;
   }
 
   /**
