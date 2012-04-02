@@ -47,11 +47,12 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < alternates.size());
 
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   const Waypoint &waypoint = alternates[index].waypoint;
   const GlideResult& solution = alternates[index].solution;
 
   WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
-                             solution.altitude_difference,
+                             solution.SelectAltitudeDifference(settings.task.glide),
                              UIGlobals::GetDialogLook(),
                              UIGlobals::GetMapLook().waypoint,
                              CommonInterface::GetMapSettings().waypoint);

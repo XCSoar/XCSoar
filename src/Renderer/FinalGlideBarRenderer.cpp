@@ -35,6 +35,7 @@ Copyright_License {
 void
 FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                             const DerivedInfo &calculated,
+                            const GlideSettings &glide_settings,
                             const bool final_glide_bar_mc0_enabled) const
 {
   RasterPoint GlideBar[6] = {
@@ -65,7 +66,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelScalar dy_glidebar = 0;
   PixelScalar dy_glidebar0 = 0;
 
-  FormatUserAltitude(solution.altitude_difference,
+  FormatUserAltitude(solution.SelectAltitudeDifference(glide_settings),
                             Value, false);
   canvas.Select(Fonts::map_bold);
   const PixelSize text_size = canvas.CalcTextSize(Value);
@@ -74,8 +75,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   PixelScalar clipping_arrow0_offset = Layout::Scale(4);
 
   // 468 meters is it's size. Will be divided by 9 to fit screen resolution.
-  int altitude_difference = ((int)solution.altitude_difference);
-  int altitude_difference0 = ((int)solution_mc0.altitude_difference);
+  int altitude_difference = (int)
+    solution.SelectAltitudeDifference(glide_settings);
+  int altitude_difference0 = (int)
+    solution_mc0.SelectAltitudeDifference(glide_settings);
   // TODO feature: should be an angle if in final glide mode
 
   // cut altitude_difference at +- 468 meters (55 units)

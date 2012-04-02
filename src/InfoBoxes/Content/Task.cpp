@@ -230,7 +230,10 @@ SetValueFromAltDiff(InfoBoxData &data, const TaskStats &task_stats,
     return;
   }
 
-  data.SetValueFromArrival(solution.altitude_difference);
+  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+  fixed altitude_difference =
+    solution.SelectAltitudeDifference(settings.task.glide);
+  data.SetValueFromArrival(altitude_difference);
 }
 
 void

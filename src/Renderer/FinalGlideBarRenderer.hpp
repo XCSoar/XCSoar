@@ -30,6 +30,7 @@ class Canvas;
 struct DerivedInfo;
 struct FinalGlideBarLook;
 struct TaskLook;
+struct GlideSettings;
 
 class FinalGlideBarRenderer {
   const FinalGlideBarLook &look;
@@ -42,6 +43,7 @@ public:
 
   void Draw(Canvas &canvas, const PixelRect &rc,
             const DerivedInfo &calculated,
+            const GlideSettings &glide_settings,
             const bool final_glide_bar_mc0_enabled) const;
 };
 
