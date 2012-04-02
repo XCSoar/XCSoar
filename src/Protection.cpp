@@ -101,6 +101,7 @@ CreateCalculationThread()
   device_blackboard->ReadBlackboard(glide_computer->Calculated());
 
   calculation_thread = new CalculationThread(*glide_computer);
+  calculation_thread->SetComputerSettings(CommonInterface::GetComputerSettings());
 }
 
 void
