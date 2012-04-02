@@ -91,7 +91,7 @@ Net::Session::Select(int timeout_ms)
   } else
     timeout_p = NULL;
 
-  int ret = select(max_fd, &rfds, &wfds, &efds, timeout_p);
+  int ret = select(max_fd + 1, &rfds, &wfds, &efds, timeout_p);
   return ret > 0 || (using_curl_timeout && ret == 0);
 }
 
