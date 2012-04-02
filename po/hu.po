@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-05 23:23+0100\n"
-"PO-Revision-Date: 2012-03-24 08:25+0000\n"
+"PO-Revision-Date: 2012-03-30 14:26+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-26 14:44+0000\n"
-"X-Generator: Launchpad (build 15008)\n"
+"X-Launchpad-Export-Date: 2012-04-02 21:12+0000\n"
+"X-Generator: Launchpad (build 15045)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -189,7 +189,7 @@ msgstr "Legtávolabbi leszállóhely"
 
 #: src/Menu/ExpandMacros.cpp:150 src/Menu/ExpandMacros.cpp:170
 msgid "Next Landpoint"
-msgstr "Következő leszállóhely"
+msgstr "Következő LH"
 
 #: src/Menu/ExpandMacros.cpp:159 src/Menu/ExpandMacros.cpp:179
 msgid "Closest Landpoint"
@@ -197,7 +197,7 @@ msgstr "Legközelebbi leszállóhely"
 
 #: src/Menu/ExpandMacros.cpp:160 src/Menu/ExpandMacros.cpp:180
 msgid "Previous Landpoint"
-msgstr "Előző leszállóhely"
+msgstr "Előző LH"
 
 #: src/Menu/ExpandMacros.cpp:197 src/Menu/ExpandMacros.cpp:227
 msgid "Finish Turnpoint"
@@ -2048,7 +2048,7 @@ msgstr "Legközelebbi légtér vízszintesen"
 #: src/InfoBoxes/Content/Factory.cpp:972
 #, no-c-format
 msgid "Near AS H"
-msgstr ""
+msgstr "Légtér V"
 
 #: src/InfoBoxes/Content/Factory.cpp:973
 #, no-c-format
@@ -2077,12 +2077,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr ""
+msgstr "FP magasság érkezés MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr ""
+msgstr "FP mgsg MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:992
 #, no-c-format
@@ -2090,11 +2090,13 @@ msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Érkezési magasság a következő fordulópontra MC0 beállítással a biztonságos "
+"érkezési magassághoz képest."
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
 #, no-c-format
 msgid "Head wind component"
-msgstr ""
+msgstr "Szembeszél komponens"
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
@@ -2108,16 +2110,19 @@ msgid ""
 "ground speed if airspeed is available from external device. Otherwise the "
 "estimated wind is used for the calculation."
 msgstr ""
+"A pillanatnyi szembeszél komponens. Ha a légsebesség külső eszközből "
+"rendelkezésre áll, akkor a valódi sebességből és a GPS szerinti föld feletti "
+"sebességből, különben a becsült szélből kerül kiszámításra."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
 #, no-c-format
 msgid "Terrain collision"
-msgstr ""
+msgstr "Földnek ütközés"
 
 #: src/InfoBoxes/Content/Factory.cpp:1010
 #, no-c-format
 msgid "Terr Coll"
-msgstr ""
+msgstr "FÖLD"
 
 #: src/InfoBoxes/Content/Factory.cpp:1011
 #, no-c-format
@@ -2126,6 +2131,9 @@ msgid ""
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
+"Az útvonal aktuális szakaszán a földnek ütközésig megtehető távolság. Ezen a "
+"ponton a magasság kisebb lesz a beállított minimális talaj feletti "
+"magasságnál."
 
 #: src/InfoBoxes/Content/Altitude.cpp:53
 #: src/MapWindow/GlueMapWindowOverlays.cpp:266
@@ -2174,11 +2182,11 @@ msgstr "Szerk."
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
 msgid "MC AUTO"
-msgstr ""
+msgstr "Mc auto"
 
 #: src/InfoBoxes/Content/MacCready.cpp:85
 msgid "MC MANUAL"
-msgstr ""
+msgstr "Mc kézi"
 
 #: src/InfoBoxes/Content/Other.cpp:62
 msgid "AC Off"
@@ -2484,7 +2492,7 @@ msgstr "Jelölő"
 #: src/Renderer/MapItemListRenderer.cpp:197
 #, c-format
 msgid "dropped %s ago"
-msgstr ""
+msgstr "ledobva %s korábban"
 
 #: src/Renderer/MapItemListRenderer.cpp:227
 msgid "Thermal"
@@ -2497,7 +2505,7 @@ msgstr "Átl. emelés"
 #: src/Renderer/MapItemListRenderer.cpp:242
 #, c-format
 msgid "left %s ago"
-msgstr ""
+msgstr "elhagyva %s korábban"
 
 #: src/Renderer/MapItemListRenderer.cpp:318 Data/Dialogs/dlgFlarmTraffic.xml:3
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:3
@@ -2540,12 +2548,12 @@ msgstr "Érkezési magasság"
 
 #: src/MapWindow/GlueMapWindowItems.cpp:89
 msgid "There is nothing interesting near this location."
-msgstr ""
+msgstr "Itt nincs semmi érdekes."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:90 Data/Dialogs/dlgMapItemList.xml:3
 #: Data/Dialogs/dlgMapItemList_L.xml:3
 msgid "Map elements at this location"
-msgstr ""
+msgstr "Térképelemek ezen a helyen"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:109
 msgid "Elevation: "
@@ -2972,13 +2980,15 @@ msgstr "Baud"
 
 #: src/Widgets/DeviceEditWidget.cpp:524
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "Átviteli sebesség"
 
 #: src/Widgets/DeviceEditWidget.cpp:525
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"Nagy mennyiségű adat (feladat deklarálása, tárolt repülés) átvitele során "
+"alkalmazott sebesség."
 
 #: src/Widgets/DeviceEditWidget.cpp:543
 msgid "Driver"
@@ -2986,23 +2996,27 @@ msgstr "Illesztőprogram"
 
 #: src/Widgets/DeviceEditWidget.cpp:545
 msgid "Sync. from device"
-msgstr ""
+msgstr "Szinkronizálás eszközből"
 
 #: src/Widgets/DeviceEditWidget.cpp:546
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
+"MacCready érték, bogárpiszok, ballaszt és más beállítások szinkronizálása az "
+"XCSoarba az eszköz értékei alapján."
 
 #: src/Widgets/DeviceEditWidget.cpp:551
 msgid "Sync. to device"
-msgstr ""
+msgstr "Szinkronizálás eszközbe"
 
 #: src/Widgets/DeviceEditWidget.cpp:552
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
+"MacCready érték, bogárpiszok, ballaszt és más beállítások szinkronizálása az "
+"eszközbe az XCSoar értékei alapján."
 
 #: src/Widgets/DeviceEditWidget.cpp:558
 msgid "Enable this if you use a K6Bt to connect the device."
@@ -3091,7 +3105,7 @@ msgstr "Mellőz"
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:184
 #, c-format
 msgid "%s on %s"
-msgstr ""
+msgstr "%s %s-n"
 
 #: src/Dialogs/DeviceListDialog.cpp:121
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:67
@@ -3474,7 +3488,7 @@ msgstr ""
 
 #: src/Dialogs/dlgBasicSettings.cpp:304
 msgid "Bugs"
-msgstr ""
+msgstr "Bogárpiszok"
 
 #: src/Dialogs/dlgBasicSettings.cpp:305
 #, no-c-format
@@ -3482,6 +3496,9 @@ msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
 "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."
 msgstr ""
+"Milyen tiszta a gép. Állítsa 0%-ra ha tiszta és növelje, ha a szárnyak "
+"bogárpiszkosak vagy vizesek. 50%-nál a gép merülését már kétszeresnek "
+"feltételezi."
 
 #: src/Dialogs/dlgBasicSettings.cpp:312
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
@@ -3649,17 +3666,17 @@ msgstr "Műszerek"
 #: src/Dialogs/dlgConfiguration.cpp:80
 #, no-c-format
 msgid "Task Defaults"
-msgstr ""
+msgstr "Feladat alapértelmezések"
 
 #: src/Dialogs/dlgConfiguration.cpp:81
 #, no-c-format
 msgid "Look"
-msgstr ""
+msgstr "Megjelenés"
 
 #: src/Dialogs/dlgConfiguration.cpp:87
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "Tájolás"
 
 #: src/Dialogs/dlgConfiguration.cpp:88
 #, no-c-format
@@ -3686,7 +3703,7 @@ msgstr "Útvonal"
 #: src/Dialogs/dlgConfiguration.cpp:96
 #, no-c-format
 msgid "FLARM, Other"
-msgstr ""
+msgstr "FLARM, egyebek"
 
 #: src/Dialogs/dlgConfiguration.cpp:98
 #, no-c-format
@@ -3701,7 +3718,7 @@ msgstr "Fordulópont típusok"
 #: src/Dialogs/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "Language, Input"
-msgstr ""
+msgstr "Nyelv, adatbevitel"
 
 #: src/Dialogs/dlgConfiguration.cpp:101
 #, no-c-format
@@ -3728,7 +3745,7 @@ msgstr "Logger"
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
 msgid "Tracking"
-msgstr ""
+msgstr "Nyomkövetés"
 
 #: src/Dialogs/dlgConfiguration.cpp:116
 #, no-c-format
@@ -3801,11 +3818,11 @@ msgstr "FLARM forgalom részletei"
 #. Ask for confirmation
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:212
 msgid "Do you want to set this FLARM contact as your new teammate?"
-msgstr ""
+msgstr "Ez a FLARM kapcsolat legyen az új csapattárs?"
 
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:213
 msgid "New Teammate"
-msgstr ""
+msgstr "Új csapattárs"
 
 #: src/Dialogs/dlgHelp.cpp:64 Data/Dialogs/dlgComboPicker.xml:8
 #: Data/Dialogs/dlgComboPicker_L.xml:7 Data/Dialogs/dlgHelp.xml:3
@@ -3818,7 +3835,7 @@ msgstr "Súgó"
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:5
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:12
 msgid "Switch InfoBox"
-msgstr ""
+msgstr "Kijelzőváltás"
 
 #: src/Dialogs/dlgStatus.cpp:63 Data/Dialogs/dlgStatus.xml:2
 #: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:824
@@ -3841,7 +3858,7 @@ msgstr "Érvénytelen pozíció"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:40
 #, no-c-format
 msgid "2D fix"
-msgstr ""
+msgstr "2D pozíció"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:42
 #, no-c-format
@@ -3856,11 +3873,11 @@ msgstr "Ismeretlen"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:57
 msgid "Too much wind"
-msgstr ""
+msgstr "Túl erős szél"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:61
 msgid "No solution"
-msgstr ""
+msgstr "Nincs megoldás"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:78
 #: src/Dialogs/dlgWaypointEdit.cpp:58 Data/Dialogs/dlgWaypointEdit.xml:8
@@ -3872,7 +3889,7 @@ msgstr "Infó"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:26
 msgid "Radio frequency"
-msgstr ""
+msgstr "Rádiófrekvencia"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:103
 msgid "Runway"
@@ -3994,12 +4011,12 @@ msgstr "Vágás"
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:55
 #, no-c-format
 msgid "Display airspaces below the clip altitude."
-msgstr ""
+msgstr "A vágási magasság alatti légterek megjelenítése."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:57
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr ""
+msgstr "A gép körüli magassági sávba eső légterek megjelenítése."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:58
 #, no-c-format
@@ -4009,7 +4026,7 @@ msgstr "Alatta mindet"
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:59
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
-msgstr ""
+msgstr "A gép körül magassági sávba vagy az alatti légterek megjelenítése."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:64
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:192
@@ -4071,6 +4088,8 @@ msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr ""
+"Az 'automata' vagy az 'alatta mind' légtérvágási módban alkalmazott sáv "
+"magassága."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:195
 msgid "Enable/disable all airspace warnings."
@@ -4106,6 +4125,8 @@ msgstr "Fekete keret"
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr ""
+"A légtér kerülete fekete színnel kerüljön kirajzolásra, nem a légtér saját "
+"színével."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:213
 msgid "Airspace fill mode"
@@ -8584,7 +8605,7 @@ msgstr "Címke"
 
 #: Data/Input/default.xci:70
 msgid "Below final glide"
-msgstr "Végsikló pálya alatt"
+msgstr "Végsiklás pálya alatt"
 
 #: Data/Input/default.xci:749
 msgid ""
@@ -8682,7 +8703,7 @@ msgstr "Termik segéd"
 
 #: Data/Input/default.xci:65
 msgid "Above final glide"
-msgstr "Végsikló pálya fölött"
+msgstr "Végsiklás pálya felett"
 
 #: Data/Input/default.xci:1219
 msgid ""
