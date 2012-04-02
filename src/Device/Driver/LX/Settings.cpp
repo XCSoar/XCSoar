@@ -94,7 +94,7 @@ LXDevice::PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env)
     return false;
 
   double altitude_offset =
-    pres.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()) / 0.3048;
+    (double)pres.StaticPressureToQNHAltitude(AtmosphericPressure::Standard()) / 0.3048;
 
   char buffer[100];
   sprintf(buffer, "PFLX3,%.2f,,,,,,,,,,,,", altitude_offset);
