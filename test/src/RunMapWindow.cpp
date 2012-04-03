@@ -27,8 +27,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
-#include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "UtilsSystem.hpp"
@@ -36,13 +34,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
 #include "Waypoint/WaypointGlue.hpp"
-#include "Device/device.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
-#include "Dialogs/Dialogs.h"
-#include "Logger/LoggerImpl.hpp"
-#include "Audio/Sound.hpp"
-#include "Menu/ButtonLabel.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Profile/Profile.hpp"
@@ -56,32 +49,17 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
 
-#ifndef _MSC_VER
-#include <algorithm>
-using std::min;
-#endif
-
 DeviceBlackboard *device_blackboard;
-
-ProtectedTaskManager *protected_task_manager;
-ProtectedAirspaceWarningManager *airspace_warnings;
 
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}
 
 static Waypoints way_points;
 
-static TaskManager task_manager(way_points);
-
 static Airspaces airspace_database;
 
 static TopographyStore *topography;
 static RasterTerrain *terrain;
-
-bool PlayResource(const TCHAR* lpName)
-{
-  return false;
-}
 
 unsigned
 TimeLocal(int d)
