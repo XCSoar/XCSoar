@@ -21,24 +21,38 @@ Copyright_License {
 }
 */
 
-#include "Internal.hpp"
 #include "PocketNav.hpp"
+#include "Device/Port/Port.hpp"
+#include "Units/System.hpp"
+
+#include <stdio.h>
 
 bool
-CAI302Device::PutMacCready(fixed MacCready, OperationEnvironment &env)
+CAI302::PutMacCready(Port &port, fixed mc, OperationEnvironment &env)
 {
-  return CAI302::PutMacCready(port, MacCready, env);
+  unsigned mac_cready = uround(Units::ToUserUnit(mc * 10, Unit::KNOTS));
+
+  char buffer[32];
+  sprintf(buffer, "!g,m%u\r", mac_cready);
+  return port.Write(buffer);
 }
 
 bool
-CAI302Device::PutBugs(fixed Bugs, OperationEnvironment &env)
+CAI302::PutBugs(Port &port, fixed bugs, OperationEnvironment &env)
 {
-  return CAI302::PutBugs(port, Bugs, env);
+  unsigned bugs2 = uround(bugs * 100);
+
+  char buffer[32];
+  sprintf(buffer, "!g,u%u\r", bugs2);
+  return port.Write(buffer);
 }
 
 bool
-CAI302Device::PutBallast(fixed fraction, gcc_unused fixed overload,
-                         OperationEnvironment &env)
+CAI302::PutBallast(Port &port, fixed fraction, OperationEnvironment &env)
 {
-  return CAI302::PutBallast(port, fraction, env);
+  unsigned ballast = uround(fraction * 100);
+
+  char buffer[32];
+  sprintf(buffer, "!g,b%u\r", ballast);
+  return port.Write(buffer);
 }
