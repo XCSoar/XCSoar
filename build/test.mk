@@ -720,7 +720,7 @@ DEBUG_PROGRAM_NAMES += FeedTCP \
 endif
 
 ifeq ($(HAVE_NET),y)
-DEBUG_PROGRAM_NAMES += DownloadFile RunNOAADownloader RunLiveTrack24
+DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunLiveTrack24
 endif
 
 ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
