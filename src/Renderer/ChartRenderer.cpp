@@ -172,15 +172,15 @@ ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 void
 ChartRenderer::DrawNoData()
 {
-  const TCHAR *text = _("No data");
-
   canvas.Select(*look.label_font);
+  canvas.SetBackgroundTransparent();
+
+  const TCHAR *text = _("No data");
   PixelSize tsize = canvas.CalcTextSize(text);
 
   PixelScalar x = (rc.left + rc.right - tsize.cx) / 2;
   PixelScalar y = (rc.top + rc.bottom - tsize.cy) / 2;
 
-  canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
 }
 
@@ -188,12 +188,12 @@ void
 ChartRenderer::DrawXLabel(const TCHAR *text)
 {
   canvas.Select(*look.axis_label_font);
+  canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
   PixelScalar x = rc.right - tsize.cx - Layout::Scale(3);
   PixelScalar y = rc.bottom - tsize.cy;
 
-  canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
 }
 
@@ -212,12 +212,12 @@ void
 ChartRenderer::DrawYLabel(const TCHAR *text)
 {
   canvas.Select(*look.axis_label_font);
+  canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
   PixelScalar x = max(PixelScalar(2), PixelScalar(rc.left - tsize.cx));
   PixelScalar y = rc.top;
 
-  canvas.SetBackgroundTransparent();
   canvas.text(x, y, text);
 }
 
@@ -421,6 +421,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
   canvas.Select(pen);
   canvas.Select(*look.axis_value_font);
+  canvas.SetBackgroundTransparent();
 
   RasterPoint line[2];
 
@@ -449,7 +450,6 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.SetBackgroundTransparent();
         canvas.text(xmin, rc.bottom - Layout::Scale(17), unit_text);
 
         next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
@@ -470,7 +470,6 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.SetBackgroundTransparent();
         canvas.text(xmin, rc.bottom - Layout::Scale(17), unit_text);
       }
     }
@@ -494,6 +493,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
   canvas.Select(pen);
   canvas.Select(*look.axis_value_font);
+  canvas.SetBackgroundTransparent();
 
   RasterPoint line[2];
 
@@ -518,7 +518,6 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.SetBackgroundTransparent();
         canvas.text(rc.left + Layout::Scale(8), ymin, unit_text);
       }
     }
@@ -536,7 +535,6 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.SetBackgroundTransparent();
         canvas.text(rc.left + Layout::Scale(8), ymin, unit_text);
       }
     }
