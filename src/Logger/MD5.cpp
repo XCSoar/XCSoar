@@ -198,11 +198,7 @@ MD5::Finalize()
 
   //append bit length (bit, not byte) of unpadded message as 64-bit little-endian integer to message
   // store 8 bytes of length into last 8 bytes of buffer (little endian least sig bytes first
-  // 4 bytes of length we store go in bytes 56-59 of buffer, 60-63 are all 0's (already)
-  buff512bits[59] = (unsigned char)((message_length_bits & 0xFF000000) >> 24);
-  buff512bits[58] = (unsigned char)((message_length_bits & 0x00FF0000) >> 16);
-  buff512bits[57] = (unsigned char)((message_length_bits & 0x0000FF00) >> 8);
-  buff512bits[56] = (unsigned char)(message_length_bits & 0x000000FF);
+  *(uint64_t *)(void *)(buff512bits + 56) = ToLE64(message_length_bits);
 
   Process512(buff512bits);
 }
