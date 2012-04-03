@@ -214,7 +214,7 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   nmea_info.gps_altitude = fixed(1500);
   nmea_info.gps_altitude_available.Update(nmea_info.clock);
 
-  memset(&derived_info, 0, sizeof(derived_info));
+  derived_info.Reset();
   derived_info.terrain_valid = true;
 
   if (terrain != NULL) {

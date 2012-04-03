@@ -1478,6 +1478,13 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
+	$(SRC)/NMEA/Derived.cpp \
+	$(SRC)/NMEA/VarioInfo.cpp \
+	$(SRC)/NMEA/ClimbInfo.cpp \
+	$(SRC)/NMEA/ClimbHistory.cpp \
+	$(SRC)/NMEA/CirclingInfo.cpp \
+	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
