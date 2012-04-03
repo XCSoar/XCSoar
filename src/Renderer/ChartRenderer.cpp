@@ -636,7 +636,7 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
   if (vals.size()<2)
     return;
   const unsigned fsize = vals.size()+2;
-  RasterPoint line[fsize];
+  RasterPoint *line = point_buffer.get(fsize);
 
   for (unsigned i = 0; i < vals.size(); ++i)
     line[i + 2] = ToScreen(vals[i].first, vals[i].second);

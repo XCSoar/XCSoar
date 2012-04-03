@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CHART_RENDERER_HPP
 #define XCSOAR_CHART_RENDERER_HPP
 
+#include "Util/ReusableArray.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Screen/Point.hpp"
@@ -44,6 +45,8 @@ class ChartRenderer
 
   Canvas &canvas;
   PixelRect rc;
+
+  ReusableArray<RasterPoint> point_buffer;
 
   fixed yscale;
   fixed xscale;
