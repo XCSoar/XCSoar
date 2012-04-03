@@ -304,7 +304,7 @@ Waypoints::Clear()
 void
 Waypoints::Erase(const Waypoint& wp)
 {
-  if (home != NULL && home->id == wp.id)
+  if (home == &wp)
     home = NULL;
 
   const auto it = waypoint_tree.FindPointer(&wp);
