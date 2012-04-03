@@ -33,13 +33,13 @@ public:
   };
 
 private:
-  unsigned char buff512bits[64];
+  uint8_t buff512bits[64];
   uint32_t h0, h1, h2, h3;
   // max message size = 536870912
   // because of 32-bit length tracking (MD5 standard is 64-bits)
   uint32_t message_length_bits;
 
-  void Process512(const unsigned char *in);
+  void Process512(const uint8_t *in);
 
 public:
   void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);

@@ -204,7 +204,7 @@ MD5::Finalize()
 }
 
 void
-MD5::Process512(const unsigned char *s512in)
+MD5::Process512(const uint8_t *s512in)
 {
   // assume exactly 512 bytes
 
