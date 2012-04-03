@@ -244,20 +244,13 @@ Waypoints::FindHome()
 bool
 Waypoints::SetHome(const unsigned id)
 {
-  home = NULL;
+  home = LookupId(id);
+  if (home == NULL)
+    return false;
 
-  for (auto found = waypoint_tree.begin();
-       found != waypoint_tree.end(); ++found) {
-    Waypoint &wp = *found;
-
-    if (wp.id == id) {
-      home = &wp;
-      wp.flags.home = true;
-      return true;
-    }
-  }
-
-  return false;
+  Waypoint &wp = const_cast<Waypoint &>(*home);
+  wp.flags.home = true;
+  return true;
 }
 
 const Waypoint*
