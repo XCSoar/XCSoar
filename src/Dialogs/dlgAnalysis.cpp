@@ -37,7 +37,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Protection.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Compiler.h"
 #include "Formatter/Units.hpp"
 #include "Renderer/FlightStatisticsRenderer.hpp"

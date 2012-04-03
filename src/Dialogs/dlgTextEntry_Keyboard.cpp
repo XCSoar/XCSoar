@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Compatibility/string.h"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <algorithm>
 #include <assert.h>

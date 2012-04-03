@@ -24,7 +24,7 @@ Copyright_License {
 #include "Profile/ProfileMap.hpp"
 #include "IO/KeyValueFileWriter.hpp"
 #include "Util/tstring.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <map>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_RENDERER_HPP
 #define XCSOAR_AIRSPACE_RENDERER_HPP
 
-#include "StaticArray.hpp"
+#include "Util/StaticArray.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 
 struct AirspaceLook;

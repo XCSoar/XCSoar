@@ -35,7 +35,7 @@ Copyright_License {
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/TextInBox.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Look/TrafficLook.hpp"

@@ -23,11 +23,11 @@
 
 #include "Replay/IgcReplay.hpp"
 #include "Replay/IGCParser.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <algorithm>
 
 #include "Navigation/GeoPoint.hpp"
-#include "StringUtil.hpp"
 
 IgcReplay::IgcReplay() :
   AbstractReplay(),

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/ConfiguredFile.hpp"

@@ -22,7 +22,7 @@
 
 #include "Waypoints.hpp"
 #include "WaypointVisitor.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 
 // global, used for test harness
 unsigned n_queries = 0;

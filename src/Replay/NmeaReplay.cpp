@@ -23,11 +23,11 @@
 
 #include "Replay/NmeaReplay.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <algorithm>
 
 #include "Navigation/GeoPoint.hpp"
-#include "StringUtil.hpp"
 
 NmeaReplay::NmeaReplay() :
   AbstractReplay(),

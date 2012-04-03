@@ -26,7 +26,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Util/EscapeBackslash.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "IO/ConfiguredFile.hpp"
 
 #include <stdio.h>

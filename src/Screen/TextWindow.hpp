@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Window.hpp"
 
 #ifndef USE_GDI
-#include <tstring.hpp>
+#include "Util/tstring.hpp"
 #include <algorithm>
 #endif
 

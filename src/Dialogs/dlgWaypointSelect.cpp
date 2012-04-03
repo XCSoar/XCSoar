@@ -39,7 +39,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "DataField/Enum.hpp"
 #include "LogFile.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/FAITriangleValidator.hpp"

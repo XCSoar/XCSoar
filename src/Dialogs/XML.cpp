@@ -52,7 +52,7 @@ Copyright_License {
 #include "Form/Keyboard.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/DockWindow.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "ResourceLoader.hpp"
 #include "Look/DialogLook.hpp"
 #include "Inflate.hpp"

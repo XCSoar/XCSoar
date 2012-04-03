@@ -114,7 +114,7 @@ include $(topdir)/build/install.mk
 
 ######## compiler flags
 
-INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR) -I$(SRC)/Waypoint
+INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 
 ####### linker configuration
 

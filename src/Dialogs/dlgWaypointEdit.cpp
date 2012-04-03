@@ -33,7 +33,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Compiler.h"
 #include "Sizes.h"
 

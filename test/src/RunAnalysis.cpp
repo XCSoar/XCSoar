@@ -32,7 +32,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "WaypointGlue.hpp"
+#include "Waypoint/WaypointGlue.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/Task.hpp"

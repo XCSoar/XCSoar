@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Logger/LoggerFRecord.hpp"
 #include "Logger/LoggerGRecord.hpp"
-#include "BatchBuffer.hpp"
+#include "Util/BatchBuffer.hpp"
 #include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 

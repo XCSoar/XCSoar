@@ -25,7 +25,7 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Profile/Profile.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"

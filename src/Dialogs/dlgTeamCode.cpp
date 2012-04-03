@@ -32,7 +32,7 @@
 #include "ComputerSettings.hpp"
 #include "Screen/Layout.hpp"
 #include "DataField/Base.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "TeamCodeCalculation.hpp"
 #include "Compiler.h"
 #include "Profile/Profile.hpp"

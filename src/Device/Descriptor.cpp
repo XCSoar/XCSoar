@@ -32,7 +32,7 @@ Copyright_License {
 #include "Port/ConfiguredPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation/Operation.hpp"

@@ -27,8 +27,8 @@ Copyright_License {
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Logger/IGCWriter.hpp"
-#include "OverwritingRingBuffer.hpp"
-#include "BatchBuffer.hpp"
+#include "Util/OverwritingRingBuffer.hpp"
+#include "Util/BatchBuffer.hpp"
 #include "NMEA/Info.hpp"
 
 #include <tchar.h>

@@ -28,7 +28,7 @@
  */
 
 #include "GestureManager.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Math/FastMath.h"
 #include "Compiler.h"
 

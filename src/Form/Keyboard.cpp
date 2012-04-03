@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Form/Keyboard.hpp"
 #include "Look/DialogLook.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Layout.hpp"
 

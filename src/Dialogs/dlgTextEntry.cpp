@@ -32,7 +32,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 #include "MapSettings.hpp"
 #include "Asset.hpp"
-#include "StringUtil.hpp"
+#include "Util/StringUtil.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Util/Macros.hpp"

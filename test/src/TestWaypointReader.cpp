@@ -26,7 +26,7 @@
 #include "Terrain/RasterMap.hpp"
 #include "Units/System.hpp"
 #include "TestUtil.hpp"
-#include "tstring.hpp"
+#include "Util/tstring.hpp"
 #include "Operation/Operation.hpp"
 
 #include <vector>
