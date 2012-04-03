@@ -1521,6 +1521,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/Renderer/WaypointIconRenderer.cpp \
 	$(SRC)/Renderer/WaypointRenderer.cpp \
+	$(SRC)/Renderer/WaypointRendererSettings.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	$(SRC)/Markers/ProtectedMarkers.cpp \
@@ -1580,9 +1581,18 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Formatter/UserUnits.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/Earth.cpp \
+	$(SRC)/Profile/ComputerProfile.cpp \
+	$(SRC)/Profile/TaskProfile.cpp \
+	$(SRC)/Profile/RouteProfile.cpp \
+	$(SRC)/Profile/AirspaceConfig.cpp \
+	$(SRC)/Profile/TrackingProfile.cpp \
+	$(SRC)/Profile/MapProfile.cpp \
+	$(SRC)/Profile/TerrainConfig.cpp \
+	$(SRC)/Profile/Screen.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \

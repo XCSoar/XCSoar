@@ -31,6 +31,8 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "UtilsSystem.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Profile/ComputerProfile.hpp"
+#include "Profile/MapProfile.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
 #include "Waypoint/WaypointGlue.hpp"
@@ -170,18 +172,6 @@ protected:
 };
 
 static void
-SetDefaults(MapSettings &settings_map)
-{
-  settings_map.cruise_orientation = NORTHUP;
-  settings_map.circling_orientation = NORTHUP;
-  settings_map.waypoint.SetDefaults();
-  settings_map.topography_enabled = true;
-  settings_map.terrain.SetDefaults();
-  settings_map.terrain.enable = true;
-  settings_map.terrain.slope_shading = SlopeShading::FIXED;
-}
-
-static void
 LoadFiles()
 {
   NullOperationEnvironment operation;
@@ -204,11 +194,11 @@ LoadFiles()
 }
 
 static void
-GenerateBlackboard(MapWindow &map, const MapSettings &settings_map)
+GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
+                   const MapSettings &settings_map)
 {
   MoreData nmea_info;
   DerivedInfo derived_info;
-  ComputerSettings settings_computer;
 
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
@@ -227,16 +217,12 @@ GenerateBlackboard(MapWindow &map, const MapSettings &settings_map)
   memset(&derived_info, 0, sizeof(derived_info));
   derived_info.terrain_valid = true;
 
-  memset(&settings_computer, 0, sizeof(settings_computer));
-
   if (terrain != NULL) {
     RasterTerrain::UnprotectedLease lease(*terrain);
     do {
       lease->SetViewCenter(nmea_info.location, fixed(50000));
     } while (lease->IsDirty());
   }
-
-  settings_computer.airspace.SetDefaults();
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      settings_map);
@@ -259,6 +245,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Profile::SetFiles(_T(""));
   Profile::Load();
 
+  ComputerSettings settings_computer;
+  settings_computer.SetDefaults();
+  Profile::Load(settings_computer);
+
+  MapSettings settings_map;
+  settings_map.SetDefaults();
+  Profile::Load(settings_map);
+
   LoadFiles();
 
   ScreenGlobalInit screen_init;
@@ -271,10 +265,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
 #endif
 
-  MapSettings settings_map;
-  settings_map.SetDefaults();
-  SetDefaults(settings_map);
-
   MapLook *map_look = new MapLook();
   map_look->Initialise(settings_map);
 
@@ -284,7 +274,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow window(*map_look, *traffic_look);
   window.set(PixelRect{0, 0, 640, 480});
 
-  GenerateBlackboard(window.map, settings_map);
+  GenerateBlackboard(window.map, settings_computer, settings_map);
   Fonts::Initialize();
 #ifndef ENABLE_OPENGL
   DrawThread::Draw(window.map);
