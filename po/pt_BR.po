@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-04-02 23:59+0000\n"
+"PO-Revision-Date: 2012-04-03 12:44+0000\n"
 "Last-Translator: Rene Villa <renesampaio@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-03 08:28+0000\n"
+"X-Launchpad-Export-Date: 2012-04-03 19:37+0000\n"
 "X-Generator: Launchpad (build 15052)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -140,7 +140,7 @@ msgstr "Falha ao descarregar o vôo"
 
 #: src/Logger/ExternalLogger.cpp:323
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "Do you want to download another flight?"
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -768,6 +768,12 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"L/D necessário para terminar a prova, dado pela distância que falta dividida "
+"pela altura necessária menos a altura de segurança. Valores negativos "
+"indicam subida necessária. Se a altura é próxima a zero, o valor mostrado é "
+"'---'. Note que o cálculo pode ser otimista pois ele reduz a altura "
+"necessária compensando pela energia cinética adicional se a velocidade "
+"verdadeira é maior que a sugerida pelo MacCready e L/D."
 
 #: src/InfoBoxes/Content/Factory.cpp:279
 #, no-c-format
@@ -778,7 +784,7 @@ msgstr "Elevação do terreno"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr ""
+msgstr "H GND"
 
 #: src/InfoBoxes/Content/Factory.cpp:281
 #, no-c-format
@@ -825,7 +831,7 @@ msgstr "Ganho;perda de altitude na térmica atual."
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:55
 #, no-c-format
 msgid "Track"
-msgstr "Curso"
+msgstr "Caminho"
 
 #: src/InfoBoxes/Content/Factory.cpp:311
 #, no-c-format
@@ -1120,6 +1126,14 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
+"A taxa de descida necessária para alcançar o ponto de passagem seguinte, "
+"dada pela distância para próximo ponto dividida pela altura necessária para "
+"chegar à altura da chegada de segurança. Os valores negativos indicam uma "
+"subida é necessário para alcançar o waypoint. Se a altura necessária é "
+"próximo de zero, o valor apresentado é '---'. Note-se que este cálculo pode "
+"ser otimista porque reduz a altura necessária para alcançar o ponto de "
+"passagem pela altura excesso de energia da asa, se a sua velocidade real é "
+"maior do que o MacCready e melhores velocidades de LD"
 
 #: src/InfoBoxes/Content/Factory.cpp:469
 #, no-c-format
@@ -1441,7 +1455,7 @@ msgstr "Velocidade verdadeira reportada por um vario inteligente suportado."
 #: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
 msgid "Team code"
-msgstr ""
+msgstr "Código do time"
 
 #: src/InfoBoxes/Content/Factory.cpp:630
 #, no-c-format
@@ -2002,12 +2016,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:962
 #, no-c-format
 msgid "Attitude indicator"
-msgstr ""
+msgstr "Indicador de Altitude"
 
 #: src/InfoBoxes/Content/Factory.cpp:963
 #, no-c-format
 msgid "Horizon"
-msgstr ""
+msgstr "Horizonte"
 
 #: src/InfoBoxes/Content/Factory.cpp:964
 #, no-c-format
@@ -2015,31 +2029,33 @@ msgid ""
 "Attitude indicator (artifical horizon) display calculated from flightpath, "
 "supplemented with acceleration and variometer data if available."
 msgstr ""
+"Indicador de atitude (horizonte artificial) mostrar cálculo a partir "
+"flightpath, suplementado com aceleração e dados do vario, se disponível"
 
 #: src/InfoBoxes/Content/Factory.cpp:971
 #, no-c-format
 msgid "Nearest airspace horizontal"
-msgstr ""
+msgstr "Horizontal próximo do espaço aéreo"
 
 #: src/InfoBoxes/Content/Factory.cpp:972
 #, no-c-format
 msgid "Near AS H"
-msgstr ""
+msgstr "Próximo AS H"
 
 #: src/InfoBoxes/Content/Factory.cpp:973
 #, no-c-format
 msgid "The horizontal distance to the nearest airspace"
-msgstr ""
+msgstr "Distância horizontal próximo ao espaço aéreo"
 
 #: src/InfoBoxes/Content/Factory.cpp:980
 #, no-c-format
 msgid "Nearest airspace vertical"
-msgstr ""
+msgstr "Vertical próximo ao espaço aéreo"
 
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
 msgid "Near AS V"
-msgstr ""
+msgstr "Próximo AS V"
 
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
@@ -2047,16 +2063,19 @@ msgid ""
 "The vertical distance to the nearest airspace.  A positive value means the "
 "airspace is above you, and negative means the airspace is below you."
 msgstr ""
+"A distância vertical está próximo do espaço aéreo. Se o valor for positivo "
+"significa que o espaço aéreo está acima de você, e for negativo, o espaço "
+"aéreo está abaixo de você."
 
 #: src/InfoBoxes/Content/Factory.cpp:990
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr ""
+msgstr "Próximo MC0 diferença de altitude"
 
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr ""
+msgstr "WP MC0 AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:992
 #, no-c-format
@@ -2064,16 +2083,18 @@ msgid ""
 "Arrival altitude at the next waypoint with MC 0 setting relative to the "
 "safety arrival height."
 msgstr ""
+"Altitude chegada ao próximo waypoint com MC 0 em relação à segurança a "
+"altura da chegada."
 
 #: src/InfoBoxes/Content/Factory.cpp:1000
 #, no-c-format
 msgid "Head wind component"
-msgstr ""
+msgstr "Componente vento de cabeça"
 
 #: src/InfoBoxes/Content/Factory.cpp:1001
 #, no-c-format
 msgid "Head wind"
-msgstr ""
+msgstr "Vento de cabeça"
 
 #: src/InfoBoxes/Content/Factory.cpp:1002
 #, no-c-format
@@ -2082,16 +2103,19 @@ msgid ""
 "ground speed if airspeed is available from external device. Otherwise the "
 "estimated wind is used for the calculation."
 msgstr ""
+"O componente atual vento de cabeça. Cabeça de vento é calculada a partir TAS "
+"e GPS velocidade no solo se velocidade está disponível a partir do "
+"dispositivo externo. Caso contrário, o vento estimado é usado para o cálculo."
 
 #: src/InfoBoxes/Content/Factory.cpp:1009
 #, no-c-format
 msgid "Terrain collision"
-msgstr ""
+msgstr "Colisão de Terreno"
 
 #: src/InfoBoxes/Content/Factory.cpp:1010
 #, no-c-format
 msgid "Terr Coll"
-msgstr ""
+msgstr "Terr Col"
 
 #: src/InfoBoxes/Content/Factory.cpp:1011
 #, no-c-format
@@ -2100,6 +2124,8 @@ msgid ""
 "this location, the altitude will be below the configured terrain clearance "
 "altitude."
 msgstr ""
+"A distância até a colisão terreno próximo ao longo da tarefa atual. Neste "
+"local, a altitude será abaixo da altitude configurado terreno depuração."
 
 #: src/InfoBoxes/Content/Altitude.cpp:53
 #: src/MapWindow/GlueMapWindowOverlays.cpp:268
@@ -2166,7 +2192,7 @@ msgstr "AC ligado"
 #: src/Dialogs/Vega/AudioModeParameters.hpp:41
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Desativado"
 
 #: src/InfoBoxes/Content/Speed.cpp:126
 msgid "BLOCK"
@@ -2270,7 +2296,7 @@ msgstr "Número da competição desconhecido"
 
 #: src/Input/InputEventsActions.cpp:267
 msgid "Not found"
-msgstr ""
+msgstr "Não localizado"
 
 #: src/Input/InputEventsActions.cpp:327
 msgid "No active waypoint!"
@@ -2441,7 +2467,7 @@ msgstr "Mapa (tela cheia)"
 
 #: src/PageSettings.cpp:43
 msgid "Map and InfoBoxes"
-msgstr ""
+msgstr "Mapa e caixas de informações"
 
 #: src/Renderer/ChartRenderer.cpp:177 src/Dialogs/DeviceListDialog.cpp:215
 msgid "No data"
@@ -2503,30 +2529,28 @@ msgstr "MSL"
 
 #: src/Renderer/MapItemListRenderer.cpp:179
 msgid "around terrain"
-msgstr ""
+msgstr "Em torno do terreno"
 
 #: src/Renderer/MapItemListRenderer.cpp:199
-#, fuzzy
 msgid "Arrival altitude incl. safety height"
-msgstr ""
-"Altitude de chegada no próximo ponto relativo à altura de chegada segura."
+msgstr "Incl altitude chegada. altura de segurança"
 
 #: src/Renderer/MapItemListRenderer.cpp:229
 msgid "Your Position"
-msgstr ""
+msgstr "Sua Posição"
 
 #: src/Renderer/MapItemListRenderer.cpp:319
 msgid "Marker"
-msgstr ""
+msgstr "Marcador"
 
 #: src/Renderer/MapItemListRenderer.cpp:326
 #, c-format
 msgid "dropped %s ago"
-msgstr ""
+msgstr "caiu %s atrás"
 
 #: src/Renderer/MapItemListRenderer.cpp:356
 msgid "Thermal"
-msgstr ""
+msgstr "Térmica"
 
 #: src/Renderer/MapItemListRenderer.cpp:369
 msgid "Avg. lift"
@@ -2560,16 +2584,16 @@ msgstr ""
 
 #: src/MapWindow/GlueMapWindowItems.cpp:82
 msgid "There is nothing interesting near this location."
-msgstr ""
+msgstr "Não há nada de interessante perto deste local."
 
 #: src/MapWindow/GlueMapWindowItems.cpp:83 Data/Dialogs/dlgMapItemList.xml:3
 #: Data/Dialogs/dlgMapItemList_L.xml:3
 msgid "Map elements at this location"
-msgstr ""
+msgstr "Elementos de mapa nestes local"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:84
 msgid "Elevation: "
-msgstr ""
+msgstr "Elevação: "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:126
 msgid "GPS not connected"
@@ -2623,6 +2647,8 @@ msgid ""
 "prediction can be misleading if there is a large change in wind direction "
 "through the BL."
 msgstr ""
+"A velocidade e direção do vento vetor-média na BL. Esta previsão pode ser "
+"enganosa se ​​houver uma grande mudança na direção do vento através do BL."
 
 #: src/Terrain/RasterWeather.cpp:64
 #, no-c-format
@@ -2810,9 +2836,8 @@ msgid "Climb trend"
 msgstr "Tendênc subida"
 
 #: src/Renderer/GlidePolarRenderer.cpp:47
-#, fuzzy
 msgid "L/D"
-msgstr "L/D Cruz"
+msgstr ""
 
 #: src/Renderer/GlidePolarRenderer.cpp:51
 msgid "Min. sink"
@@ -3102,9 +3127,8 @@ msgstr ""
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/DeviceListDialog.cpp:188
-#, fuzzy
 msgid "Bad GPS"
-msgstr "A GPS"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:190
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:67
@@ -3126,9 +3150,8 @@ msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:239 src/Dialogs/DeviceListDialog.cpp:258
 #: src/Dialogs/DeviceListDialog.cpp:310 src/Dialogs/PortMonitor.cpp:107
-#, fuzzy
 msgid "Device is occupied"
-msgstr "Modelo dispositivo"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:277
 msgid "Edit device"
@@ -4475,9 +4498,9 @@ msgid "9 Right + Vario (Landscape)"
 msgstr "9 Direita + Vario (Paisagem)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 Direita + Vario (Paisagem)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
 #, no-c-format
@@ -8548,15 +8571,6 @@ msgid ""
 "TAF"
 msgstr ""
 
-#~ msgid "Best L/D"
-#~ msgstr "Melhor LD"
-
-#~ msgid "Arrival height considering terrain avoidance"
-#~ msgstr "Altura de chegada considerando terreno"
-
-#~ msgid "Both arrival heights are displayed."
-#~ msgstr "Ambas alturas de chegada são mostradas."
-
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "OK para invalidar declaração?"
 
@@ -9346,6 +9360,9 @@ msgstr ""
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Planeio Final Através do Terreno"
 
+#~ msgid "Best L/D"
+#~ msgstr "Melhor LD"
+
 #~ msgid "Altrn1 GR"
 #~ msgstr "Grad Altrn 1"
 
@@ -9393,6 +9410,12 @@ msgstr ""
 
 #~ msgid "ft/min"
 #~ msgstr "pés/min"
+
+#~ msgid "Arrival height considering terrain avoidance"
+#~ msgstr "Altura de chegada considerando terreno"
+
+#~ msgid "Both arrival heights are displayed."
+#~ msgstr "Ambas alturas de chegada são mostradas."
 
 #~ msgid "Purple Circle"
 #~ msgstr "Círculo púrpura"
