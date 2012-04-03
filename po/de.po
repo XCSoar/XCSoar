@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-03-28 16:12+0000\n"
-"Last-Translator: Folken Van Vanel <Unknown>\n"
+"PO-Revision-Date: 2012-04-03 21:52+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-28 22:41+0000\n"
-"X-Generator: Launchpad (build 15027)\n"
+"X-Launchpad-Export-Date: 2012-04-03 23:41+0000\n"
+"X-Generator: Launchpad (build 15052)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2543,15 +2543,12 @@ msgid "MSL"
 msgstr "MSL"
 
 #: src/Renderer/MapItemListRenderer.cpp:179
-#, fuzzy
 msgid "around terrain"
-msgstr "V Gelände"
+msgstr "um Gelände herum"
 
 #: src/Renderer/MapItemListRenderer.cpp:199
-#, fuzzy
 msgid "Arrival altitude incl. safety height"
-msgstr ""
-"Ankunftshöhe am nächsten Wegpunkt, relativ zur eingestellten Sicherheitshöhe."
+msgstr "Ankunftshöhe inkl. Sicherheitshöhe"
 
 #: src/Renderer/MapItemListRenderer.cpp:229
 msgid "Your Position"
@@ -2899,9 +2896,8 @@ msgid "Climb trend"
 msgstr "Steigen Trend"
 
 #: src/Renderer/GlidePolarRenderer.cpp:47
-#, fuzzy
 msgid "L/D"
-msgstr "GZ Vorfl."
+msgstr "L/D"
 
 #: src/Renderer/GlidePolarRenderer.cpp:51
 msgid "Min. sink"
@@ -3200,9 +3196,8 @@ msgstr "GPS Fix"
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/DeviceListDialog.cpp:188
-#, fuzzy
 msgid "Bad GPS"
-msgstr "H GPS"
+msgstr "GPS Empfang schlecht"
 
 #: src/Dialogs/DeviceListDialog.cpp:190
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:67
@@ -3224,9 +3219,8 @@ msgstr "Nicht verbunden"
 
 #: src/Dialogs/DeviceListDialog.cpp:239 src/Dialogs/DeviceListDialog.cpp:258
 #: src/Dialogs/DeviceListDialog.cpp:310 src/Dialogs/PortMonitor.cpp:107
-#, fuzzy
 msgid "Device is occupied"
-msgstr "Geräte Modell"
+msgstr "Gerät ist belegt"
 
 #: src/Dialogs/DeviceListDialog.cpp:277
 msgid "Edit device"
@@ -4659,9 +4653,9 @@ msgid "9 Right + Vario (Landscape)"
 msgstr "9 Rechts + Vario (Querformat)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 Rechts + Vario (Querformat)"
+msgstr "9 Links + Rechts + Vario (Querformat)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
 #, no-c-format
@@ -5166,7 +5160,7 @@ msgstr "Die Reichweitenberechnung erlaubt Umwege um Hindernisse."
 #. Spacer
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:140
 msgid "Reach mode"
-msgstr "Erreichbar Modus"
+msgstr "Reichweite Modus"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:141
 msgid ""
@@ -6135,6 +6129,8 @@ msgid ""
 "Arrival height considering terrain avoidance. Requires \"Reach mode: Turning"
 "\" in \"Glide Computer > Route\" settings."
 msgstr ""
+"Ankunftshöhe mit Rücksicht auf Gelände. Benötigt den Reichweite Modus \"mit "
+"Umweg\" bei den Routenplaner Einstellungen."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:118
 #, no-c-format
@@ -6147,6 +6143,8 @@ msgid ""
 "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in "
 "\"Glide Computer > Route\" settings."
 msgstr ""
+"Beide Ankunftshöhen werden angezeigt. Benötigt den Reichweite Modus \"mit "
+"Umweg\" bei den Routenplaner Einstellungen."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:122
 #, no-c-format
@@ -9052,18 +9050,6 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
-
-#~ msgid "Best L/D"
-#~ msgstr "Beste Gleitzahl"
-
-#~ msgid "9 Left + Right (Landscape)"
-#~ msgstr "9 Links + Rechts (Querformat)"
-
-#~ msgid "Arrival height considering terrain avoidance"
-#~ msgstr "Ankunftshöhe unter Beachtung des Geländes"
-
-#~ msgid "Both arrival heights are displayed."
-#~ msgstr "Beide Ankunftshöhen werden angezeigt."
 
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
