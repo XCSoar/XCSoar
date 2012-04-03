@@ -671,6 +671,7 @@ DEBUG_PROGRAM_NAMES = \
 	ReadMO \
 	ReadProfileString ReadProfileInt \
 	WriteProfileString WriteProfileInt \
+	RunMD5 \
 	ReadGRecord VerifyGRecord AppendGRecord \
 	AddChecksum \
 	KeyCodeDumper \
@@ -949,6 +950,11 @@ WRITE_PROFILE_INT_SOURCES = \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
 WRITE_PROFILE_INT_DEPENDS = PROFILE IO UTIL
 $(eval $(call link-program,WriteProfileInt,WRITE_PROFILE_INT))
+
+RUN_MD5_SOURCES = \
+	$(SRC)/Logger/MD5.cpp \
+	$(TEST_SRC_DIR)/RunMD5.cpp
+$(eval $(call link-program,RunMD5,RUN_MD5))
 
 READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
