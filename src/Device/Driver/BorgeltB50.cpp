@@ -43,7 +43,11 @@ public:
   B50Device(Port &_port):port(_port) {}
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+
   virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
+  virtual bool PutBallast(fixed fraction, fixed overload,
+                          OperationEnvironment &env);
 };
 
 /*
@@ -159,6 +163,25 @@ B50Device::PutMacCready(fixed mac_cready, OperationEnvironment &env)
      MacCready, ballast and bugs */
 
   return CAI302::PutMacCready(port, mac_cready, env);
+}
+
+bool
+B50Device::PutBugs(fixed bugs, OperationEnvironment &env)
+{
+  /* the Borgelt B800 understands the CAI302 "!g" command for
+     MacCready, ballast and bugs */
+
+  return CAI302::PutBugs(port, bugs, env);
+}
+
+bool
+B50Device::PutBallast(fixed fraction, gcc_unused fixed overload,
+                      OperationEnvironment &env)
+{
+  /* the Borgelt B800 understands the CAI302 "!g" command for
+     MacCready, ballast and bugs */
+
+  return CAI302::PutBallast(port, fraction, env);
 }
 
 static Device *
