@@ -27,7 +27,6 @@
 
 #include <algorithm>
 #include <stdio.h>
-#include <string.h>
 
 static gcc_constexpr_data uint32_t k[64] = {
   // k[i] := floor(abs(sin(i)) * (2 pow 32))
@@ -150,13 +149,11 @@ MD5::Append(uint8_t ch)
 void
 MD5::AppendString(const unsigned char *in, bool skip_invalid_igc_chars)
 {
-  size_t length = strlen((const char *)in);
-
-  for (size_t i = 0; i < length; i++) {
-    if (skip_invalid_igc_chars && !IsValidIGCChar(in[i]))
+  for (; *in != 0; ++in) {
+    if (skip_invalid_igc_chars && !IsValidIGCChar(*in))
       continue;
 
-    Append(in[i]);
+    Append(*in);
   }
 }
 
