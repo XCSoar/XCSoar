@@ -49,7 +49,7 @@ public:
   void InitDigest();
   void AppendString(const unsigned char *in, int skip_invalid_igc_chars); // must be NULL-terminated string!
   void Finalize();
-  int GetDigest(char *buffer);
+  void GetDigest(char *buffer);
   static bool IsValidIGCChar(char c);
 };
 

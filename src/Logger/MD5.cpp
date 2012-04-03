@@ -270,11 +270,9 @@ MD5::Process512(const unsigned char *s512in)
   h3 = h3 + d;
 }
 
-int
+void
 MD5::GetDigest(char *buffer)
 {
   sprintf(buffer, "%08x%08x%08x%08x",
           ByteSwap32(h0), ByteSwap32(h1), ByteSwap32(h2), ByteSwap32(h3));
-
-  return 1;
 }
