@@ -125,9 +125,7 @@ MD5::InitDigest()
   memset(buff512bits, 0, 64);
 
   message_length_bits = 0;
-  a = b = c = d = 0;
   h0 = h1 = h2 = h3 = 0;
-  f = g = 0;
 }
 
 
@@ -225,20 +223,18 @@ MD5::Process512(const unsigned char *s512in)
 {
   // assume exactly 512 bytes
 
-  // Initialize hash value for this chunk:
-  a = h0;
-  b = h1;
-  c = h2;
-  d = h3;
-
   // copy the 64 chars into the 16 uint32_ts
   uint32_t w[16];
   const uint32_t *s512_32 = (const uint32_t *)(const void *)s512in;
   for (int j = 0; j < 16; j++)
     w[j] = ToLE32(s512_32[j]);
 
+  // Initialize hash value for this chunk:
+  uint32_t a = h0, b = h1, c = h2, d = h3;
+
   // Main loop:
   for (int i = 0; i < 64; i++) {
+    uint32_t f, g;
     if (i <= 15) {
       f = (b & c) | ((~b) & d);
       g = i;

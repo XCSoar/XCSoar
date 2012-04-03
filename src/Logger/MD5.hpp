@@ -34,9 +34,7 @@ public:
 
 private:
   unsigned char buff512bits[64];
-  uint32_t a, b, c, d;
   uint32_t h0, h1, h2, h3;
-  uint32_t f, g;
   // max message size = 536870912
   // because of 32-bit length tracking (MD5 standard is 64-bits)
   uint32_t message_length_bits;
