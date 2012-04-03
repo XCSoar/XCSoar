@@ -849,6 +849,7 @@ $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Net/ToFile.cpp \
+	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \

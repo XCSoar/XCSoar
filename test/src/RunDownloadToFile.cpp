@@ -37,14 +37,18 @@ int main(int argc, char **argv)
   tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
+  char md5_digest[33];
+
   ConsoleOperationEnvironment env;
 
   Net::Session session;
-  if (!Net::DownloadToFile(session, url.c_str(), path.c_str(), env)) {
+  if (!Net::DownloadToFile(session, url.c_str(), path.c_str(),
+                           md5_digest, env)) {
     fprintf(stderr, "Error\n");
     return EXIT_FAILURE;
   }
 
+  puts(md5_digest);
   return EXIT_SUCCESS;
 #else
   fprintf(stderr, "Networking not available on this platform\n");

@@ -29,12 +29,14 @@ Copyright_License {
 #include "Net/Request.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
+#include "Logger/MD5.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
 static bool
 DownloadToFile(Net::Session &session, const TCHAR *url, FILE *file,
+               char *md5_digest,
                OperationEnvironment &env)
 {
   assert(url != NULL);
@@ -43,6 +45,9 @@ DownloadToFile(Net::Session &session, const TCHAR *url, FILE *file,
   Net::Request request(session, url, 10000);
   if (!request.Created())
     return false;
+
+  MD5 md5;
+  md5.InitKey();
 
   uint8_t buffer[4096];
   while (true) {
@@ -53,9 +58,17 @@ DownloadToFile(Net::Session &session, const TCHAR *url, FILE *file,
     if (nbytes == 0)
       break;
 
+    if (md5_digest != NULL)
+      md5.Append(buffer, nbytes);
+
     size_t written = fwrite(buffer, 1, nbytes, file);
     if (written != nbytes)
       return false;
+  }
+
+  if (md5_digest != NULL) {
+    md5.Finalize();
+    md5.GetDigest(md5_digest);
   }
 
   return true;
@@ -63,6 +76,7 @@ DownloadToFile(Net::Session &session, const TCHAR *url, FILE *file,
 
 bool
 Net::DownloadToFile(Session &session, const TCHAR *url, const TCHAR *path,
+                    char *md5_digest,
                     OperationEnvironment &env)
 {
   assert(url != NULL);
@@ -78,7 +92,7 @@ Net::DownloadToFile(Session &session, const TCHAR *url, const TCHAR *path,
   if (file == NULL)
     return false;
 
-  bool success = ::DownloadToFile(session, url, file, env);
+  bool success = ::DownloadToFile(session, url, file, md5_digest, env);
   success &= fclose(file) == 0;
 
   if (!success)
@@ -91,7 +105,7 @@ Net::DownloadToFile(Session &session, const TCHAR *url, const TCHAR *path,
 void
 Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
-  success = DownloadToFile(session, url, path, env);
+  success = DownloadToFile(session, url, path, md5_digest,env);
 }
 
 #endif

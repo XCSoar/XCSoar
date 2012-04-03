@@ -36,15 +36,19 @@ namespace Net {
   /**
    * Download a URL into the specified file.
    *
+   * @param md5_digest an optional buffer with at least 33 characters
+   * which will contain the hex MD5 digest after returning
    * @return true on success, false on error
    */
   bool DownloadToFile(Session &session, const TCHAR *url, const TCHAR *path,
+                      char *md5_digest,
                       OperationEnvironment &env);
 
   class DownloadToFileJob : public Job {
     Session &session;
     const TCHAR *url;
     const TCHAR *path;
+    char md5_digest[33];
     bool success;
 
   public:
@@ -53,6 +57,10 @@ namespace Net {
 
     bool WasSuccessful() const {
       return success;
+    }
+
+    const char *GetMD5Digest() const {
+      return md5_digest;
     }
 
     virtual void Run(OperationEnvironment &env);
