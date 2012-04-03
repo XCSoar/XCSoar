@@ -130,76 +130,144 @@ settings.
 For the PC version, the keys 1, 2, 3 and 4 activate the 
 corresponding menu.
 
-\subsection*{Navigation menu (Nav)}
-\jindent{\bmenut{Task}{Calc}}{ Displays the task calculator dialog. }
-\jindent{\bmenut{Arm}{Start}}{ Arms the automatic task 
-waypoint trigger. }
-\jindent{\bmenut{Previous}{turnpoint}}{ Selects the previous/start waypoint in
-the task. }
-\jindent{\bmenut{Next}{turnpoint}}{ Selects the next/finish waypoint in the
-task. }
-\jindent{\bmenut{Waypoint}{List}}{ Displays the waypoint selector dialog. }
-\jindent{\bmenut{Task}{Edit}}{ Displays the task editor. }
-\jindent{\bmenus{GoTo}}{ Displays the waypoint selector dialog and activates
-the GoTo mode for the selected waypoint. }
-\jindent{\bmenut{Task}{Abort}}{ Aborts/resumes the current task. }
-\jindent{\bmenus{Alternates}}{ Shows a list to landable alternates in the near, sorted by
-by the configured aspect and distance.} 
-\jindent{\bmenus{Target}}{ Displays the target dialog, which is
-important for modifying AAT tasks. }
+\subsection*{Navigation menu}
+\noindent\makebox[\textwidth]{%
+\begin{tabularx}{1.7\textwidth}{l|ccccc}
+
+Nav 1/2 & \ref{cha:tasks}\bmenus{Task}
+ & {\bmenut{Previous}{Turnpoint}} & {\bmenut{Next}{Turnpoint}}
+ & \ref{sec:waypoint-selector-dialog}\bmenut{Waypoint}{List}
+ & \ref{sec:alternates}\bmenus{Alternates} \\ \\
+Nav 2/2 & \ref{sec:taskabort}\bmenut{Task}{Abort} & \bmenus{GoTo}
+ & \bmenus{Target}
+ & \ref{sec:waypointdetails}\bmenut{Waypoint}{Details}
+
+\end{tabularx}}
+
+%\jindent{\bmenus{Task}}{ Displays the task manager. }
+%%\jindent{\bmenut{Arm}{Start}}{ Arms the automatic task 
+%%waypoint trigger. }
+%\jindent{\bmenut{Previous}{Turnpoint}}{ Selects the previous/start waypoint in
+%the task. }
+%\jindent{\bmenut{Next}{Turnpoint}}{ Selects the next/finish waypoint in the
+%task. }
+%\jindent{\bmenut{Waypoint}{List}}{ Displays the waypoint selector dialog. }
+%\jindent{\bmenus{Alternates}}{ Shows a list to landable alternates in the near, sorted by
+%by the configured aspect and distance.} 
+
+%\jindent{\bmenut{Task}{Abort}}{ Aborts/resumes the current task. }
+%\jindent{\bmenus{GoTo}}{ Displays the waypoint selector dialog and activates
+%the GoTo mode for the selected waypoint. }
+%\jindent{\bmenus{Target}}{ Displays the target dialog, which is
+%important for modifying AAT tasks. }
+%\jindent{\bmenut{Waypoint}{Details}}{ Displays details to the nearest waypoint. }
 
 \subsection*{Display menu}
-\jindent{\bmenut{Zoom}{In}}{ Zooms in the map display. }
-\jindent{\bmenut{Zoom}{Out}}{ Zooms out the map display. }
-\jindent{\bmenut{Zoom}{Auto}}{ Toggles automatic/manual zooming. }
-\jindent{\bmenut{Mark}{Drop}}{ Drops a marker at the current glider location. }
-\jindent{\bmenut{Pan}{On}}{ Activates pan map mode. }
-\jindent{\bmenut{Labels}{On}}{ Displays map labels, MID labels, or none. }
-\jindent{\bmenut{Trail}{Full}}{ Selects a display option out of Full,
-Long, Short, Off. }
-\jindent{\bmenut{Terrain}{On}}{ Toggles display of terrain. }
-\jindent{\bmenut{Topology}{On}}{ Toggles display of topology. }
-\jindent{\bmenut{Info}{Auto}}{  Steps through InfoBox grids.  }
+\noindent\makebox[\textwidth]{%
+\begin{tabularx}{1.7\textwidth}{l|ccccc}
+
+Display 1/2 & \ref{sec:zooming}\bmenut{Zoom}{In}
+ & \bmenut{Zoom}{Out} & \bmenut{Zoom}{Auto}
+ & \ref{sec:markers}\bmenut{Mark}{Drop}
+ & \ref{sec:panning}\bmenut{Pan}{On} \\ \\
+Display 2/2 &  \ref{sec:maplabels}\bmenut{Labels}{All/...}
+ & \ref{sec:trail}\bmenut{Trail}{Full/...}
+ & \bmenut{Terrain}{On/Off} & \ref{sec:terrain_topo}\bmenut{Topography}{On/Off}
+ & \bmenut{Info}{Auto}
+
+\end{tabularx}}
+
+%\subsection*{Display menu}
+%\jindent{\bmenut{Zoom}{In}}{ Zooms in the map display. }
+%\jindent{\bmenut{Zoom}{Out}}{ Zooms out the map display. }
+%\jindent{\bmenut{Zoom}{Auto}}{ Toggles automatic/manual zooming. }
+%\jindent{\bmenut{Mark}{Drop}}{ Drops a marker at the current glider location. }
+%\jindent{\bmenut{Pan}{On}}{ Activates pan map mode. }
+
+%\jindent{\bmenut{Labels}{On}}{ Displays map labels, MID labels, or none. }
+%\jindent{\bmenut{Trail}{Full}}{ Selects a display option out of Full,
+%Long, Short, Off. }
+%\jindent{\bmenut{Terrain}{On}}{ Toggles display of terrain. }
+%\jindent{\bmenut{Topography}{On}}{ Toggles display of topography. }
+%\jindent{\bmenut{Info}{Auto}}{  Steps through InfoBox grids.  }
 
 
-\subsection*{Configuration menu (Config)}
-\jindent{\bmenut{MC}{$+$}}{ Increases MacCready value. }
-\jindent{\bmenut{MC}{$-$}}{ Decreases MacCready value. }
-\jindent{\bmenut{MC}{Auto}}{ Toggles automatic/manual MacCready. }
-\jindent{\bmenut{Flight}{Setup}}{ Displays the flight settings
-(bugs/ballast/QNH) dialog. }
-\jindent{\bmenut{Setup}{Wind}}{ Displays the wind settings dialog. }
-\jindent{\bmenus{Vario}}{ Control of Vega intelligent variometer, this 
-comprises a sub-menu. }
-\jindent{\bmenut{Setup}{System}}{ Displays the XCSoar configuration dialog. }
-\jindent{\bmenut{Settings}{Airspace}}{  Displays the airspace filter dialog. }
-\jindent{\bmenut{Logger}{Start}}{ Turns on/off XCSoar's software IGC flight
-recorder. } 
-\jindent{\bmenus{Replay}}{ Displays the IGC/NMEA logger replay dialog. }
-\jindent{\bmenut{Raw}{Logger}}{ Activates the raw NMEA logger (usually only used
-for debugging). }
-\jindent{\bmenus{Devices}}{  Displays the Device connection dialog.  }
-\jindent{\bmenus{Setup Plane}}{  Displays the selection dialog for plane profiles.  }
+\subsection*{Configuration menu}
+\noindent\makebox[\textwidth]{%
+\begin{tabularx}{1.9\textwidth}{l|ccccc}
 
-\subsection*{Information menu (Info)}
-\jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog. }
-\jindent{\bmenut{METAR}{TAF}}{  Displays the METAR/TAF dialog.  }
-\jindent{\bmenut{Nearest}{Airspace}}{ Displays details of the airspace nearest
-to the aircraft. }
-\jindent{\bmenut{Waypoint}{Details}}{ Displays the waypoint details dialog of
-the active task waypoint. }
-\jindent{\bmenut{Check}{List}}{ Displays the check list dialog. }
-\jindent{\bmenus{Analysis}}{ Displays the analysis/statistics dialog. }
-\jindent{\bmenus{Status}}{ Displays the status dialog. }
-\jindent{\bmenus{Weather}}{ Displays the weather forecast dialog. }
-\jindent{\bmenut{Team}{Code}}{ Opens the team code dialog. }
-\jindent{\bmenut{FLARM}{Details}}{Opens the FLARM details dialog.  }
-\jindent{\bmenut{Thermal}{Assistant}}{ Opens the full screen thermal assistant
-dialog. }
-\jindent{\bmenus{Credits}}{  Displays version information and developer team details.  }
-\jindent{\bmenut{Nearest}{Waypoint}}{ Displays details of the waypoint nearest
-to the aircraft. }
-\jindent{\bmenut{Message}{Repeat}}{ Repeats the last status message. }
+Config 1/3 & \bmenut{MacCready}{$+$} & \ref{sec:stf}\bmenut{MacCready}{$-$}
+ & \ref{sec:auto-maccready}\bmenut{MacCready}{Auto}
+ & \ref{sec:flight-setup}\bmenut{Flight}{Setup}
+ & \ref{sec:wind-setup}\bmenut{Setup}{Wind} \\ \\
+Config 2/3 & \bmenus{Vario}
+ & \ref{cha:configuration}\bmenut{Setup}{System}
+ & \ref{sec:airspace-filter}\bmenut{Settings}{Airspace}
+ & \ref{sec:logger}\bmenut{Logger}{Start}
+ & \ref{sec:logger-replay}\bmenus{Replay} \\ \\
+Config 3/3 & \ref{sec:raw-logger}\bmenut{Raw}{Logger}
+ & \ref{conf:comdevices}\bmenus{Devices}
+ & \bmenus{Setup Plane}
+
+\end{tabularx}}
+
+%\subsection*{Configuration menu (Config)}
+%\jindent{\bmenut{MacCready}{$+$}}{ Increases MacCready value. }
+%\jindent{\bmenut{MC}{$-$}}{ Decreases MacCready value. }
+%\jindent{\bmenut{MC}{Auto}}{ Toggles automatic/manual MacCready. }
+%\jindent{\bmenut{Flight}{Setup}}{ Displays the flight settings
+%(bugs/ballast/QNH) dialog. }
+%\jindent{\bmenut{Setup}{Wind}}{ Displays the wind settings dialog. }
+%\jindent{\bmenus{Vario}}{ Control of Vega intelligent variometer, this 
+%comprises a sub-menu. }
+%\jindent{\bmenut{Setup}{System}}{ Displays the XCSoar configuration dialog. }
+%\jindent{\bmenut{Settings}{Airspace}}{  Displays the airspace filter dialog. }
+%\jindent{\bmenut{Logger}{Start}}{ Turns on/off XCSoar's software IGC flight
+%recorder. } 
+%\jindent{\bmenus{Replay}}{ Displays the IGC/NMEA logger replay dialog. }
+%\jindent{\bmenut{Raw}{Logger}}{ Activates the raw NMEA logger (usually only used
+%for debugging). }
+%\jindent{\bmenus{Devices}}{  Displays the Device connection dialog. }
+%\jindent{\bmenus{Setup Plane}}{  Displays the selection dialog for plane profiles. }
+
+
+\subsection*{Information menu}
+\noindent\makebox[\textwidth]{%
+\begin{tabularx}{1.8\textwidth}{l|ccccc}
+
+Info 1/3 & \ref{sec:flarm-traffic}\bmenut{FLARM}{Radar}
+ & \bmenut{METAR}{TAF} & \bmenut{What's}{here?}
+ & \ref{sec:checklist}\bmenut{Check}{list}
+ & \ref{sec:analysis-climb}\bmenus{Analysis} \\ \\
+Info 2/3 & \ref{sec:flight-status}\bmenus{Status}
+ & \ref{sec:weather-forecast}\bmenus{Weather}
+ & \ref{sec:team-flying}\bmenut{Team}{Code}
+ & \bmenut{FLARM}{Details}
+ & \ref{sec:team-flying}\bmenut{Thermal}{Assistant} \\ \\
+Info 3/3 & \ref{sec:credits}\bmenus{Credits}
+ & \bmenut{Message}{Repeat}
+
+\end{tabularx}}
+
+%\subsection*{Information menu (Info)}
+%\jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog. }
+%\jindent{\bmenut{METAR}{TAF}}{  Displays the METAR/TAF dialog.  }
+%\jindent{\bmenut{Nearest}{Airspace}}{ Displays details of the airspace nearest
+%to the aircraft. }
+%\jindent{\bmenut{Waypoint}{Details}}{ Displays the waypoint details dialog of
+%the active task waypoint. }
+%\jindent{\bmenut{Check}{List}}{ Displays the check list dialog. }
+%\jindent{\bmenus{Analysis}}{ Displays the analysis/statistics dialog. }
+%\jindent{\bmenus{Status}}{ Displays the status dialog. }
+%\jindent{\bmenus{Weather}}{ Displays the weather forecast dialog. }
+%\jindent{\bmenut{Team}{Code}}{ Opens the team code dialog. }
+%\jindent{\bmenut{FLARM}{Details}}{Opens the FLARM details dialog.  }
+%\jindent{\bmenut{Thermal}{Assistant}}{ Opens the full screen thermal assistant
+%dialog. }
+%\jindent{\bmenus{Credits}}{  Displays version information and developer team details.  }
+%\jindent{\bmenut{Nearest}{Waypoint}}{ Displays details of the waypoint nearest
+%to the aircraft. }
+%\jindent{\bmenut{Message}{Repeat}}{ Repeats the last status message. }
 
 
 \subsection*{Variometer sub-menu (Vario) of the Configuration menu}
@@ -316,17 +384,17 @@ A selection of key dynamic menu items is presented below:
   Greyed out if there is no waypoint database.
 \end{description}
 
-\section{{\InfoBox}es}
+\section{InfoBoxes}
 
-The information displayed in the {\InfoBox} fields can be selected from a
+The information displayed in the InfoBox fields can be selected from a
 wide variety of options (listed in Chapter~\ref{cha:infobox}). These
 fields can also be used to set user configurable variables, for example
 the MacCready setting.
 
-The specific number and layout of the {\InfoBox} grid depends on the
+The specific number and layout of the InfoBox grid depends on the
 screen orientation and the device's display size.  For a 320x240 display
-Pocket PC in portrait mode, there are four {\InfoBox}es above and four
-{\InfoBox}es below the map display. For landscape mode, there are 9
+Pocket PC in portrait mode, there are four InfoBoxes above and four
+InfoBoxes below the map display. For landscape mode, there are 9
 InfoBoxes to the right of the map display.
 
 \begin{center}
@@ -343,30 +411,30 @@ or
 \gesture{Left}
 
 
-\subsection*{Modifying {\InfoBox} values}
+\subsection*{Modifying InfoBox values}
 (This section applies only when a touchscreen or mouse is present.)
 
-Some {\InfoBox} values can be changed by the user by selecting (i.e. long-pressing) the
-{\InfoBox} with the touchscreen or mouse.  This brings up a set of {\InfoBox}es:
+Some InfoBox values can be changed by the user by selecting (i.e. long-pressing) the
+InfoBox with the touchscreen or mouse.  This brings up a set of InfoBoxes:
 
 \begin{description}
 \item[\bmenu{Edit}]  
-  Allows the pilot to adjust the {\InfoBox} setting (e.g. raise or lower the McCready setting)
+  Allows the pilot to adjust the InfoBox setting (e.g. raise or lower the McCready setting)
 
 \item[\bmenu{Setup}]
-	Allows you to change the behavior of the setting related to the {\InfoBox} (for example, changing from Auto to Manual McCready setting mode) or choose to setup of the {\InfoBox} itself (that is, choosing \bmenu{Setup InfoBox} will display a list dialog of all available {\InfoBox}es from which to choose.
+	Allows you to change the behavior of the setting related to the InfoBox (for example, changing from Auto to Manual McCready setting mode) or choose to setup of the InfoBox itself (that is, choosing \bmenu{Setup InfoBox} will display a list dialog of all available InfoBoxes from which to choose.
 
 \end{description}
 
 
-Examples of {\InfoBox}es that can
+Examples of InfoBoxes that can
 be adjusted include the MacCready setting, and the wind speed.
 
-\subsection*{Changing {\InfoBox}es}
-{\InfoBox}es can either be changed by calling the configuration dialog from the
-menu \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup System} Screen 21, "InfoBox Modes" or by
-performing a long press on the {\InfoBox} that should be changed. In the second case a list dialog opens,
-giving you all available {\InfoBox}es to choose from.
+\subsection*{Changing InfoBoxes}
+InfoBoxes can either be changed by calling the configuration dialog from the
+menu \bmenu{Config ..}\blink\bmenu{Setup System} Screen 21, "InfoBox Modes" or by
+performing a long press on the InfoBox that should be changed. In the second case a list dialog opens,
+giving you all available InfoBoxes to choose from.
 
 \section{Status messages}
 Status messages appear over the map area to present text for a short period of
@@ -430,9 +498,7 @@ has been opened, the menu buttons are disabled until the dialog is closed.
 In some dialogs, items that are not relevant or valid (such as AAT details when
 flying a non-AAT task) are not displayed.
 
-\todonum[inline]{This list of dialog explanations (up to 'Text entry') should
-move somewhere else, because it does not explain the interface.} A summary of the
-major dialogs is presented below.
+A summary of the major dialogs is presented below.
 \begin{description}
 \item[Flight setup] Used to modify the polar of the glider both before and
 during flight, as well as to set the QNH pressure
@@ -461,7 +527,7 @@ of each airspace class
 These dialogs are described in later chapters. with the exception of the
 checklist, status and text entry dialogs, which are described below.
 
-\subsection*{Checklist dialog}
+\subsection*{Checklist dialog}\label{sec:checklist}
 The checklist dialog can display several pages of user-defined free text.
 Typically this is used for checklists. It can be accessed via the menu under 
 \begin{quote}
@@ -478,48 +544,6 @@ knob on Altair) may be used to scroll through the text. Clicking the
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/checklist.png}
 \end{center}
 
-\subsection*{Status dialog}
-The status dialog is a multi-tabular dialog giving overview information on the 
-flight, system, task, rules and times. Note that the values in the Status dialog 
-are static once the particular dialog page is displayed. 
-That is, position, times, etc. do not update while the page is displayed. 
-To see the updated values, it is necessary to select a different dialog, 
-then return to the previous dialog to see the new values.
-
-This dialog is accessed via the menu (or by gesture "S")  \gesture{Left - Down - Right - Down - Left}
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Status}
-\end{quote}
-
-\begin{description}
-\item[Flight] Shows the location of the aircraft, nearest waypoint and the
-maximum height gain.
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-aircraft.png}
-\end{center}
-
-\item[System] Shows the status of connected devices and battery levels.
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-system.png}
-\end{center}
-
-\item[Task] Shows the AAT times, distances achieved and remaining
-and the task speeds.
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-task.png}
-\end{center}
-
-\item[Rules] Shows validity of start/finish according to the task rules.
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-rules.png}
-\end{center}
-
-\item[Times]  Shows the local time, flight time, takeoff and landing time and
-the local sunset time.
-\begin{center}
-\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/status-times.png}
-\end{center}
-\end{description}
 
 \subsection*{Text entry} \label{sec:textentry}
 A text entry dialog is used for entering text.  This is used for team

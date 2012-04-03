@@ -46,7 +46,7 @@ symbol to be positioned (e.g.) 20\% from the bottom of the screen, giving a good
 map ahead of the glider.  This position is adjustable in the configuration
 \config{gliderposition} settings.
 
-\section{Zoom and map scale}
+\section{Zoom and map scale}\label{sec:zooming}
 
 To change the scale of the map, for PC, PNA, or Pocket PC:
 \begin{enumerate}
@@ -54,9 +54,10 @@ To change the scale of the map, for PC, PNA, or Pocket PC:
 already selected.
 Then use mouse wheel, or the Pocket PC up/down key to either zoom
 in or out.
+\item A PNA with a button wheel let you also change the zoom. 
+\item Android devices have the +/- rocker that let you change the zoom. 
 \item You can also gesture to change the zoom level. Gesture \gesture{Up/Down}
 ``Up'' zooms in, ``Down'' zooms out.
-\item A PNA with a button wheel let you also change the zoom. 
 \item Or select the function from the menus:
 \begin{quote}
 \bmenu{Display}\blink\bmenu{Zoom In} and \bmenu{Display}\blink\bmenu{Zoom Out}
@@ -99,7 +100,7 @@ automatically so that the next waypoint is visible on the map.
 During circling, if a thermal has been detected, then the map is centered about
 the thermal or part-way such that the glider is still visible.
 
-\section{Panning the map}
+\section{Panning the map}\label{sec:panning}
 
 A pan mode allows the user to explore areas beyond the glider.  This
 is particularly useful when task planning.
@@ -202,7 +203,7 @@ further detail in Section~\ref{sec:route}.
 \end{tabular}
 \end{center}
 
-\section{Terrain and Topography}
+\section{Terrain and Topography}\label{sec:terrain_topo}
 
 The following topographical features are drawn on the map:
 \begin{itemize}
@@ -228,8 +229,8 @@ Terrain shading and brightness can be configured \config{shading}.
 Both terrain and topography display can be switched on or off from the
 menu:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Terrain On} \\
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Topo. On}
+\bmenu{Display ..}\blink\bmenu{Terrain On} \\
+\bmenu{Display ..}\blink\bmenu{Topo. On}
 \end{quote}
 
 \begin{center}
@@ -246,10 +247,12 @@ off), the background colour of the map window is white.  All terrain
 below mean sea level is coloured blue.  If you are flying outside the
 terrain region, the background colour will be white.
 
+\subsection*{Map labels}\label{sec:maplabels}
+
 The screen can be de-cluttered, turning off the display of topography
 labels and non-task waypoint labels by toggling:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Labels None}
+\bmenu{Display ..}\blink\bmenu{Labels None}
 \end{quote}
 
 Other options for display decluttering include:
@@ -282,7 +285,7 @@ which displays the entire flight.  This can be performed permanently
 through the configuration \config{snailtrail} settings or temporarily by the
 menu:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Trail}
+\bmenu{Display ..}\blink\bmenu{Trail}
 \end{quote}
 
 Note that for all of these modes, the snail trail is short in
@@ -317,7 +320,7 @@ are cranked due to wind shear.
 
 The trail width can optionally be scaled according to the variometer display\config{trailscaled}.
 
-\section{Markers}
+\section{Markers}\label{sec:markers}
 
 Markers are shown as small flags (a) on the map.  The markers can be dropped
 manually, by pressing a button, or automatically.  An example use of
@@ -358,7 +361,7 @@ Reach calculations may be configured \config{turningreach} to two levels of deta
 
 \begin{center}
 \includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/reach1.png}
-%{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOLOGY,
+%{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOGRAPHY,
 %FULLSCREEN, NO TASK. TURNING=FALSE}
 \end{center}
 
@@ -372,7 +375,7 @@ Reach calculations may be configured \config{turningreach} to two levels of deta
 
 \begin{center}
 \includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/reach2.png}
-%{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOLOGY,
+%{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOGRAPHY,
 %FULLSCREEN, NO TASK. TURNING=TRUE}
 \end{center}
 
@@ -403,29 +406,34 @@ performance and MacCready setting used in these calculations are configurable\co
 
 \end{description}
 
-\section{Status dialog}\label{sec:aircr-stat-dial}
+\section{Flight status}\label{sec:flight-status}
 
-The nearest landmark function, typically available via the button
-menu, brings up a status message describing the name, distance and
-bearing to the nearest landmark.  The nearest landmark is also
-reported on the status dialog.
+The status dialog is a multi-tabular dialog giving overview information on the 
+flight, system, task, rules and times.
+It is accessed via the gesture "S", or with the menu under: \gesture{Left - Down - Right - Down - Left}
+\begin{quote}
+\bmenu{Info ..}\blink\bmenu{Status}
+\end{quote}
+and then selecting the page `Flight'. 
+
+\subsection*{Position}
+The flight status dialog shows the status of the aircraft's locality, and can be useful when giving position reports. It shows the location of the aircraft, the
+maximum height gain, and nearest waypoint it's bearing and distance.
+\sketch{figures/status-flight.png}
 
 You may find this function useful when you need to report your
 location to others.
 
-Currently the landmarks scanned are the list of waypoints.  In the
-future, XCSoar may also search for nearby towns and cities in the
-topography database.
+\subsection*{Times}
+Shows the local time, flight time, takeoff and landing time and
+the local sunset time.
 
-The aircraft status dialog (see Section~\ref{sec:dialog-windows})
-shows the status of the aircraft's locality, and can be useful when
-giving position reports.
-
-This is accessed via the menu under: 
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}.
-\end{quote}
-and then selecting the page `Aircraft'.
+Note that the values in the Status dialog 
+are static once the particular dialog page is displayed. 
+\sketch{figures/status-times.png}s
+That is, position, times, etc. do not update while the page is displayed. 
+To see the updated values, it is necessary to select a different tabular, 
+then return to the previous dialog to see the new values.
 
 \section{Route}\label{sec:route}
 
