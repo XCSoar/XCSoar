@@ -48,9 +48,8 @@ Copyright_License {
 #ifndef _LEASTSQS_H
 #define _LEASTSQS_H
 
+#include "Util/StaticArray.hpp"
 #include "Math/fixed.hpp"
-
-#define MAX_STATISTICS 1000
 
 /**
  * A solver for least squares problems
@@ -105,11 +104,25 @@ public:
 
   fixed y_ave;
 
-  fixed xstore[MAX_STATISTICS];
-  fixed ystore[MAX_STATISTICS];
+  struct Slot {
+    fixed x, y;
+
 #ifdef LEASTSQS_WEIGHT_STORE
-  fixed weightstore[MAX_STATISTICS];
+    fixed weight;
 #endif
+
+    Slot() = default;
+
+    gcc_constexpr_ctor
+    Slot(fixed _x, fixed _y, fixed _weight)
+      :x(_x), y(_y)
+#ifdef LEASTSQS_WEIGHT_STORE
+      , weight(_weight)
+#endif
+    {}
+  };
+
+  StaticArray<Slot, 1000> slots;
 
   LeastSquares();
 

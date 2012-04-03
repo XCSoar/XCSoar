@@ -122,7 +122,7 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   chart.PaddingBottom = 0;
   chart.PaddingLeft = 0;
 
-  if (fs.Altitude.sum_n < 2)
+  if (fs.Altitude.slots.size() < 2)
     return;
 
   chart.ScaleXFromData(fs.Altitude);
@@ -155,7 +155,7 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.Altitude.sum_n < 2) {
+  if (fs.Altitude.slots.size() < 2) {
     chart.DrawNoData();
     return;
   }
@@ -202,7 +202,7 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if ((fs.Task_Speed.sum_n < 2) || !task.CheckOrderedTask()) {
+  if (fs.Task_Speed.slots.size() < 2 || !task.CheckOrderedTask()) {
     chart.DrawNoData();
     return;
   }

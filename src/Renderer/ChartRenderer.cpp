@@ -338,13 +338,13 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
   canvas.Select(green_brush);
   canvas.SelectNullPen();
 
-  for (unsigned i = 0; i < lsdata.sum_n; i++) {
+  for (unsigned i = 0, n = lsdata.slots.size(); i != n; i++) {
     PixelScalar xmin((fixed(i) + fixed(1.2)) * xscale
                      + fixed(rc.left + PaddingLeft));
     PixelScalar ymin((y_max - y_min) * yscale + fixed(rc.top));
     PixelScalar xmax((fixed(i) + fixed(1.8)) * xscale
                      + fixed(rc.left + PaddingLeft));
-    PixelScalar ymax((y_max - lsdata.ystore[i]) * yscale + fixed(rc.top));
+    PixelScalar ymax((y_max - lsdata.slots[i].y) * yscale + fixed(rc.top));
     canvas.Rectangle(xmin, ymin, xmax, ymax);
   }
 }
@@ -352,11 +352,16 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
 void
 ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 {
+  assert(lsdata.slots.size() >= 2);
+
   RasterPoint line[4];
 
-  for (unsigned i = 0; i < lsdata.sum_n - 1; i++) {
-    line[0] = ToScreen(lsdata.xstore[i], lsdata.ystore[i]);
-    line[1] = ToScreen(lsdata.xstore[i + 1], lsdata.ystore[i + 1]);
+  for (unsigned i = 0, n = lsdata.slots.size() - 1; i != n; i++) {
+    const auto &slot = lsdata.slots[i];
+    const auto &next_slot = lsdata.slots[i + 1];
+
+    line[0] = ToScreen(slot.x, slot.y);
+    line[1] = ToScreen(next_slot.x, next_slot.y);
     line[2].x = line[1].x;
     line[2].y = rc.bottom - PaddingBottom;
     line[3].x = line[0].x;
@@ -368,11 +373,16 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 void
 ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 {
+  assert(lsdata.slots.size() >= 2);
+
   RasterPoint line[2];
 
-  for (unsigned i = 0; i < lsdata.sum_n - 1; i++) {
-    line[0] = ToScreen(lsdata.xstore[i], lsdata.ystore[i]);
-    line[1] = ToScreen(lsdata.xstore[i + 1], lsdata.ystore[i + 1]);
+  for (unsigned i = 0, n = lsdata.slots.size() - 1; i != n; i++) {
+    const auto &slot = lsdata.slots[i];
+    const auto &next_slot = lsdata.slots[i + 1];
+
+    line[0] = ToScreen(slot.x, slot.y);
+    line[1] = ToScreen(next_slot.x, next_slot.y);
 
     // STYLE_DASHGREEN
     // STYLE_MEDIUMBLACK
