@@ -185,15 +185,9 @@ public:
     }
 
     pthread_mutex_unlock(&mutex);
-#else /* !HAVE_POSIX */
-#if defined(_WIN32_WCE) && defined(__MINGW32__) && defined(EVENT_SET)
-    /* mingw32ce < 0.59 has a bugged SetEvent() implementation in
-       kfuncs.h */
-    ::EventModify(handle, EVENT_SET);
 #else
     ::SetEvent(handle);
 #endif
-#endif /* !HAVE_POSIX */
   }
 
   /**
@@ -204,9 +198,9 @@ public:
     pthread_mutex_lock(&mutex);
     value = false;
     pthread_mutex_unlock(&mutex);
-#else /* !HAVE_POSIX */
+#else
     ::ResetEvent(handle);
-#endif /* !HAVE_POSIX */
+#endif
   }
 };
 
