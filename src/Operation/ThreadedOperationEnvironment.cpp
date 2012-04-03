@@ -25,7 +25,7 @@ Copyright_License {
 #include "OS/Sleep.h"
 
 ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment &_other)
-  :other(_other), cancelled(true)
+  :other(_other)
 {
 }
 

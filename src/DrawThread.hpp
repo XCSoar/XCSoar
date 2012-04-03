@@ -52,7 +52,7 @@ class DrawThread : public RecursivelySuspensibleThread {
 
 public:
   DrawThread(GlueMapWindow &_map)
-    :trigger(true), map(_map) {}
+    :map(_map) {}
 
   /** Locks the Mutex and "pauses" the drawing thread */
   void BeginSuspend() {

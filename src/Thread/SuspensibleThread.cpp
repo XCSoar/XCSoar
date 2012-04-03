@@ -25,13 +25,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifndef HAVE_POSIX
-SuspensibleThread::SuspensibleThread()
-  :command_trigger(false), stop_trigger(true), suspend_trigger(true),
-   suspended(true)
-{}
-#endif
-
 bool
 SuspensibleThread::Start(bool _suspended)
 {
@@ -165,7 +158,8 @@ SuspensibleThread::CheckStoppedOrSuspended()
   if (suspend_trigger.Test()) {
     suspended.Signal();
     while (suspend_trigger.Test() && !stop_trigger.Test())
-      command_trigger.Wait();
+      command_trigger.WaitAndReset();
+
     suspended.Reset();
   }
 
@@ -203,9 +197,9 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
 
   suspended.Signal();
 
-  command_trigger.Wait(timeout_ms);
+  command_trigger.WaitAndReset(timeout_ms);
   while (suspend_trigger.Test() && !stop_trigger.Test())
-    command_trigger.Wait();
+    command_trigger.WaitAndReset();
 
   suspended.Reset();
 

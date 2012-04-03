@@ -39,7 +39,6 @@ ConnectionCallback(HINTERNET hInternet,
 
 Net::Connection::Connection(Session &session, const char *server,
                             unsigned long timeout)
-  :event(false)
 {
   INTERNET_STATUS_CALLBACK old_callback =
     session.handle.SetStatusCallback(ConnectionCallback);

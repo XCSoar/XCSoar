@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_THREAD_TRIGGER_HXX
 
 #include "Util/NonCopyable.hpp"
+#include "Compiler.h"
 
 #ifdef HAVE_POSIX
 #include <pthread.h>
@@ -41,11 +42,11 @@ Copyright_License {
 class Trigger : private NonCopyable {
 #ifdef HAVE_POSIX
   /** this mutex protects the value */
-  pthread_mutex_t mutex;
+  mutable pthread_mutex_t mutex;
 
   pthread_cond_t cond;
 
-  bool manual_reset, value;
+  bool value;
 #else
   HANDLE handle;
 #endif
@@ -57,14 +58,13 @@ public:
    * @param name an application specific name for this trigger
    */
 #ifdef HAVE_POSIX
-  Trigger(bool _manual_reset = true)
-    :manual_reset(_manual_reset), value(false) {
+  Trigger()
+    :value(false) {
     pthread_mutex_init(&mutex, NULL);
     pthread_cond_init(&cond, NULL);
   }
 #else
-  Trigger(bool _manual_reset = true)
-    :handle(::CreateEvent(NULL, _manual_reset, false, NULL)) {}
+  Trigger():handle(::CreateEvent(NULL, true, false, NULL)) {}
 #endif
 
   /**
@@ -107,9 +107,6 @@ public:
     } else
       ret = true;
 
-    if (!manual_reset)
-      value = false;
-
     pthread_mutex_unlock(&mutex);
     return ret;
 #else
@@ -119,11 +116,22 @@ public:
 #endif
   }
 
+#ifndef HAVE_POSIX
+  bool WaitAndReset(unsigned timeout_ms) {
+    if (::WaitForSingleObject(handle, timeout_ms) != WAIT_OBJECT_0)
+      return false;
+
+    Reset();
+    return true;
+  }
+#endif
+
   /**
    * Checks if this object is triggered.
    * @return true if this object was triggered, false if not
    */
-  bool Test() {
+  gcc_pure
+  bool Test() const {
 #ifdef HAVE_POSIX
     bool ret;
 
@@ -151,14 +159,17 @@ public:
     if (!value)
       pthread_cond_wait(&cond, &mutex);
 
-    if (!manual_reset)
-      value = false;
-
     pthread_mutex_unlock(&mutex);
 #else
     Wait(INFINITE);
 #endif
   }
+
+#ifndef HAVE_POSIX
+  void WaitAndReset() {
+    WaitAndReset(INFINITE);
+  }
+#endif
 
   /**
    * Wakes up the thread waiting for the trigger.  The state of the
