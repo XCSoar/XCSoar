@@ -21,6 +21,7 @@
  */
 
 #include "Logger/MD5.hpp"
+#include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 
 #include <stdio.h>
@@ -272,31 +273,8 @@ MD5::Process512(const unsigned char *s512in)
 int
 MD5::GetDigest(char *buffer)
 {
-  // extract 4 bytes from each uint32_t
-  unsigned char digest[16];
-
-  digest[0] = (unsigned char) (h0 & 0xFF);
-  digest[1] = (unsigned char)((h0 >> 8) & 0xFF);
-  digest[2] = (unsigned char)((h0 >> 16) & 0xFF);
-  digest[3] = (unsigned char)((h0 >> 24) & 0xFF);
-
-  digest[4] = (unsigned char) (h1 & 0xFF);
-  digest[5] = (unsigned char)((h1 >> 8) & 0xFF);
-  digest[6] = (unsigned char)((h1 >> 16) & 0xFF);
-  digest[7] = (unsigned char)((h1 >> 24) & 0xFF);
-
-  digest[8] =  (unsigned char) (h2 & 0xFF);
-  digest[9] =  (unsigned char)((h2 >> 8) & 0xFF);
-  digest[10] = (unsigned char)((h2 >> 16) & 0xFF);
-  digest[11] = (unsigned char)((h2 >> 24) & 0xFF);
-
-  digest[12] = (unsigned char) (h3 & 0xFF);
-  digest[13] = (unsigned char)((h3 >> 8) & 0xFF);
-  digest[14] = (unsigned char)((h3 >> 16) & 0xFF);
-  digest[15] = (unsigned char)((h3 >> 24) & 0xFF);
-
-  for (int i = 0; i < 16; i++)
-    sprintf(buffer + i * 2, "%02x", digest[i]);
+  sprintf(buffer, "%08x%08x%08x%08x",
+          ByteSwap32(h0), ByteSwap32(h1), ByteSwap32(h2), ByteSwap32(h3));
 
   return 1;
 }
