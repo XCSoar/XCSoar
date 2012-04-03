@@ -122,8 +122,6 @@ MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
 void
 MD5::InitDigest()
 {
-  memset(buff512bits, 0, 64);
-
   message_length_bits = 0;
   h0 = h1 = h2 = h3 = 0;
 }
