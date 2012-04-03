@@ -77,7 +77,8 @@ LoadFiles(Airspaces &airspace_database)
 {
   NullOperationEnvironment operation;
 
-  TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
+  TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile,
+                                               ConvertLineReader::AUTO);
   if (reader != NULL) {
     AirspaceParser parser(airspace_database);
     parser.Parse(*reader, operation);
