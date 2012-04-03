@@ -40,6 +40,14 @@ private:
   void Process512(const uint8_t *in);
 
 public:
+  /**
+   * Initialise with the default key.
+   */
+  void InitKey();
+
+  /**
+   * Initialise with a custom key.
+   */
   void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
 
   void Append(uint8_t ch);

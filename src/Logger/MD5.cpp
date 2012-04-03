@@ -120,6 +120,12 @@ MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
   message_length = 0;
 }
 
+void
+MD5::InitKey()
+{
+  InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
+}
+
 bool
 MD5::IsValidIGCChar(char c)
 {
