@@ -21,9 +21,11 @@
  */
 
 #include "Logger/MD5.hpp"
+#include "Util/Macros.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 
+#include <algorithm>
 #include <stdio.h>
 #include <string.h>
 
@@ -170,9 +172,8 @@ MD5::Finalize()
     buff512bits[buffer_left_over] = 0x80;
 
     // pad with 56 - len to get exactly
-    for (int i = buffer_left_over + 1; i < 64; i++)
-      // clear out rest of buffer too
-      buff512bits[i] = 0;
+    std::fill(buff512bits + buffer_left_over + 1,
+              buff512bits + ARRAY_SIZE(buff512bits), 0);
 
     // exactly 64 bits left for message size bits
 
@@ -184,15 +185,13 @@ MD5::Finalize()
     buff512bits[buffer_left_over] = 0x80;
 
     // fill buffer w/ 0's and process
-    for (int i = buffer_left_over + 1; i < 64; i++ )
-      buff512bits[i] = 0;
+    std::fill(buff512bits + buffer_left_over + 1,
+              buff512bits + ARRAY_SIZE(buff512bits), 0);
 
     Process512(buff512bits);
 
     // now  load 1st 56 bytes of buffer w/ all 0's,
-    for (int i = 0; i < 64; i++)
-      // clear out rest of buffer too
-      buff512bits[i] = 0;
+    std::fill(buff512bits, buff512bits + ARRAY_SIZE(buff512bits), 0);
 
     // ready to append message length
   }
