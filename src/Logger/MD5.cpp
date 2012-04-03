@@ -153,6 +153,15 @@ MD5::Append(uint8_t ch)
 }
 
 void
+MD5::Append(const void *data, size_t length)
+{
+  const uint8_t *i = (const uint8_t *)data, *const end = i + length;
+
+  while (i != end)
+    Append(*i++);
+}
+
+void
 MD5::AppendString(const unsigned char *in, bool skip_invalid_igc_chars)
 {
   for (; *in != 0; ++in) {
