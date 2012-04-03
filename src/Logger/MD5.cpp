@@ -119,14 +119,6 @@ MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
   message_length_bits = 0;
 }
 
-void
-MD5::InitDigest()
-{
-  message_length_bits = 0;
-  h0 = h1 = h2 = h3 = 0;
-}
-
-
 bool
 MD5::IsValidIGCChar(char c)
 {
