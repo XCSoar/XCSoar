@@ -101,26 +101,9 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
                                               min(fixed(30), value)) / 100,
                               info.clock);
 
-  line.skip();
-  /*
-
-  JMW disabled bugs/ballast due to problems with test b50
-
-  // for Borgelt it's % of empty weight,
-  // for us, it's % of ballast capacity
-  // RMN: Borgelt ballast->XCSoar ballast
-
-  double bal = max(1.0, min(1.60, line.read(0.0))) - 1.0;
-  if (WEIGHTS[2]>0) {
-    info.Ballast = min(1.0, max(0.0,
-                                     bal*(WEIGHTS[0]+WEIGHTS[1])/WEIGHTS[2]));
-    BALLAST = info.Ballast;
-  } else {
-    info.Ballast = 0;
-    BALLAST = 0;
-  }
-  // w0 pilot weight, w1 glider empty weight, w2 ballast weight
-  */
+  fixed ballast_overload;
+  if (line.read_checked(ballast_overload))
+    info.settings.ProvideBallastOverload(ballast_overload, info.clock);
 
   // inclimb/incruise 1=cruise,0=climb, OAT
   switch (line.read(-1)) {

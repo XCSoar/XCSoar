@@ -219,6 +219,8 @@ TestBorgeltB50()
   ok1(equals(nmea_info.settings.mac_cready, 0.5144444444444444));
   ok1(nmea_info.settings.bugs_available);
   ok1(equals(nmea_info.settings.bugs, 0.9));
+  ok1(nmea_info.settings.ballast_overload_available);
+  ok1(equals(nmea_info.settings.ballast_overload, 1.3));
   ok1(nmea_info.switch_state.flight_mode == SwitchInfo::FlightMode::CIRCLING);
   ok1(nmea_info.temperature_available);
   ok1(equals(nmea_info.temperature, 245.15));
@@ -927,7 +929,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(464);
+  plan_tests(466);
 
   TestGeneric();
   TestTasman();
