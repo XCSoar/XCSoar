@@ -6,13 +6,14 @@
 \usepackage{rotating}
 \usepackage{multicol}
 \usepackage{todonotes}
+\usepackage{hyperref}
 \makeatletter
 \def\trdvvs{Vega}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
 % Define command to insert XCSoar website
-\newcommand{\xcsoarwebsite}[0]{\url{www.xcsoar.org}}
+\newcommand{\xcsoarwebsite}[1]{\href{http://www.xcsoar.org#1}{www.xcsoar.org#1}}
 
 % Define command to insert tip image
 \newcommand{\tip}[0]{\marginlabel{\parbox{1.1cm}{\includegraphics[width=1.2cm]{figures/dialog-information.pdf}}}}
@@ -40,7 +41,6 @@
 % Include XCSoar header and footer settings
 \input{xcsoar-headers.sty}
 \input{buttons.sty}
-\usepackage{hyperref}
 \widowpenalty=1000
 \clubpenalty=1000
 
