@@ -90,7 +90,7 @@ FlightStatistics::AddClimbBase(const fixed tflight, const fixed alt)
 {
   ScopeLock lock(mutexStats);
 
-  if (Altitude_Ceiling.sum_n > 0)
+  if (!Altitude_Ceiling.IsEmpty())
     // only update base if have already climbed, otherwise
     // we will catch the takeoff height as the base.
     Altitude_Base.LeastSquaresUpdate(max(fixed_zero, tflight) / 3600, alt);

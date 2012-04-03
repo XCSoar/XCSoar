@@ -113,6 +113,10 @@ public:
 
   LeastSquares();
 
+  bool IsEmpty() const {
+    return sum_n == 0;
+  }
+
   void Reset();
 
   void LeastSquaresUpdate();

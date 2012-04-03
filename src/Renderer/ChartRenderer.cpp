@@ -59,7 +59,7 @@ ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
 void
 ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
 {
-  if (!lsdata.sum_n)
+  if (lsdata.IsEmpty())
     return;
 
   if (unscaled_y) {
@@ -91,7 +91,7 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
 void
 ChartRenderer::ScaleXFromData(const LeastSquares &lsdata)
 {
-  if (!lsdata.sum_n)
+  if (lsdata.IsEmpty())
     return;
 
   if (unscaled_x) {

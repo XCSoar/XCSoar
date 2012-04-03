@@ -34,7 +34,7 @@ ClimbChartCaption(TCHAR *sTmp,
                   const FlightStatistics &fs)
 {
   ScopeLock lock(fs.mutexStats);
-  if (fs.ThermalAverage.sum_n == 0) {
+  if (fs.ThermalAverage.IsEmpty()) {
     sTmp[0] = _T('\0');
   } else if (fs.ThermalAverage.sum_n == 1) {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s"),
@@ -60,7 +60,7 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.ThermalAverage.sum_n < 1) {
+  if (fs.ThermalAverage.IsEmpty()) {
     chart.DrawNoData();
     return;
   }
