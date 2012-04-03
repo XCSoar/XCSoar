@@ -24,6 +24,7 @@ Copyright_License {
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
+#include "Device/Internal.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
@@ -33,9 +34,22 @@ Copyright_License {
 #include <math.h>
 
 class FlymasterF1Device : public AbstractDevice {
+  Port &port;
+
 public:
+  FlymasterF1Device(Port &_port):port(_port) {}
+
+  virtual bool EnableNMEA(OperationEnvironment &env);
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
+
+bool
+FlymasterF1Device::EnableNMEA(OperationEnvironment &env)
+{
+  /* this command initiates NMEA mode according to the "Flymaster F1
+     Commands" document */
+  return PortWriteNMEA(port, "$PFMNAV,");
+}
 
 static bool
 VARIO(NMEAInputLine &line, NMEAInfo &info)
@@ -92,9 +106,9 @@ FlymasterF1Device::ParseNMEA(const char *String, NMEAInfo &info)
 }
 
 static Device *
-FlymasterF1CreateOnPort(const DeviceConfig &config, Port &com_port)
+FlymasterF1CreateOnPort(const DeviceConfig &config, Port &port)
 {
-  return new FlymasterF1Device();
+  return new FlymasterF1Device(port);
 }
 
 const struct DeviceRegister flymasterf1Device = {
