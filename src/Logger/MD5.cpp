@@ -203,7 +203,7 @@ MD5::Finalize()
 void
 MD5::Process512(const uint8_t *s512in)
 {
-  // assume exactly 512 bytes
+  // assume exactly 512 bits
 
   // copy the 64 chars into the 16 uint32_ts
   uint32_t w[16];
