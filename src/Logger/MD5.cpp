@@ -118,7 +118,7 @@ MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
   h1 = h1in;
   h2 = h2in;
   h3 = h3in;
-  message_length_bits = 0;
+  message_length = 0;
 }
 
 bool
@@ -142,14 +142,14 @@ void
 MD5::AppendString(const unsigned char *in, int skip_invalid_igc_chars) // must be NULL-terminated string!
 {
   size_t length = strlen((const char *)in);
-  int buffer_left_over = (message_length_bits / 8) % 64;
+  int buffer_left_over = message_length % 64;
 
-  message_length_bits += ((uint32_t)length * 8);
+  message_length += length;
 
   for (size_t i = 0; i < length; i++) {
     if (skip_invalid_igc_chars == 1 && !IsValidIGCChar(in[i]))
       // skip OD because when saved to file, OD OA comes back as OA only
-      message_length_bits -= 8; //subtract it out of the buffer pointer
+      --message_length; //subtract it out of the buffer pointer
     else {
       buff512bits[buffer_left_over++] = in[i];  //
       if (buffer_left_over * 8 == 512) { // we have a full buffer
@@ -164,7 +164,7 @@ void
 MD5::Finalize()
 {
   // append "0" bits until message length in bits ? 448 (mod 512)
-  int buffer_left_over = (message_length_bits / 8) % 64;
+  int buffer_left_over = message_length % 64;
   // need at least 64 bits (8 bytes) for length bits at end
 
   if (buffer_left_over < (64 - 8)) {
@@ -198,7 +198,7 @@ MD5::Finalize()
 
   //append bit length (bit, not byte) of unpadded message as 64-bit little-endian integer to message
   // store 8 bytes of length into last 8 bytes of buffer (little endian least sig bytes first
-  *(uint64_t *)(void *)(buff512bits + 56) = ToLE64(message_length_bits);
+  *(uint64_t *)(void *)(buff512bits + 56) = ToLE64(message_length * 8);
 
   Process512(buff512bits);
 }

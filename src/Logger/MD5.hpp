@@ -35,9 +35,7 @@ public:
 private:
   uint8_t buff512bits[64];
   uint32_t h0, h1, h2, h3;
-  // max message size = 536870912
-  // because of 32-bit length tracking (MD5 standard is 64-bits)
-  uint32_t message_length_bits;
+  uint64_t message_length;
 
   void Process512(const uint8_t *in);
 
