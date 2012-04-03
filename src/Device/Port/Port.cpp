@@ -41,7 +41,8 @@ Port::Write(const char *s)
 }
 
 bool
-Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
+Port::FullWrite(const void *buffer, size_t length,
+                OperationEnvironment &env, unsigned timeout_ms)
 {
   const TimeoutClock timeout(timeout_ms);
 
@@ -51,7 +52,7 @@ Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
       return false;
 
     size_t nbytes = Write(p, end - p);
-    if (nbytes == 0)
+    if (nbytes == 0 || env.IsCancelled())
       return false;
 
     p += nbytes;
@@ -61,9 +62,10 @@ Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
 }
 
 bool
-Port::FullWriteString(const char *s, unsigned timeout_ms)
+Port::FullWriteString(const char *s,
+                      OperationEnvironment &env, unsigned timeout_ms)
 {
-  return FullWrite(s, strlen(s), timeout_ms);
+  return FullWrite(s, strlen(s), env, timeout_ms);
 }
 
 int

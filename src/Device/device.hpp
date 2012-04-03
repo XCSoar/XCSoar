@@ -30,8 +30,11 @@ Copyright_License {
 struct Declaration;
 class Mutex;
 class DeviceDescriptor;
+class OperationEnvironment;
 
-void VarioWriteNMEA(const TCHAR *Text);
+void
+VarioWriteNMEA(const TCHAR *Text, OperationEnvironment &env);
+
 DeviceDescriptor *devVarioFindVega();
 
 /**

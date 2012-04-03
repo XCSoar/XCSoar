@@ -45,7 +45,7 @@ public:
                        OperationEnvironment &env);
 private:
   bool Connect(OperationEnvironment &env);
-  void Disconnect();
+  void Disconnect(OperationEnvironment &env);
 };
 
 #endif

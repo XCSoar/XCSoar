@@ -1218,6 +1218,8 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \

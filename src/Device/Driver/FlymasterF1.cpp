@@ -48,7 +48,7 @@ FlymasterF1Device::EnableNMEA(OperationEnvironment &env)
 {
   /* this command initiates NMEA mode according to the "Flymaster F1
      Commands" document */
-  return PortWriteNMEA(port, "$PFMNAV,");
+  return PortWriteNMEA(port, "$PFMNAV,", env);
 }
 
 static bool

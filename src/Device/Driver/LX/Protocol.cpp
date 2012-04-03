@@ -50,10 +50,10 @@ LX::CommandModeQuick(Port &port, OperationEnvironment &env)
 bool
 LX::SendPacket(Port &port, Command command,
                const void *data, size_t length,
-               unsigned timeout_ms)
+               OperationEnvironment &env, unsigned timeout_ms)
 {
   return SendCommand(port, command) &&
-    port.FullWrite(data, length, timeout_ms) &&
+    port.FullWrite(data, length, env, timeout_ms) &&
     port.Write(calc_crc(data, length, 0xff));
 }
 

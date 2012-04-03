@@ -198,7 +198,8 @@ CleanString(char *p)
  * Clean a string and write it to the Port.
  */
 static bool
-WriteCleanString(Port &port, const TCHAR *p, unsigned timeout_ms)
+WriteCleanString(Port &port, const TCHAR *p,
+                 OperationEnvironment &env, unsigned timeout_ms)
 {
   char buffer[256];
 
@@ -212,29 +213,30 @@ WriteCleanString(Port &port, const TCHAR *p, unsigned timeout_ms)
 
   CleanString(buffer);
 
-  return port.FullWriteString(buffer, timeout_ms);
+  return port.FullWriteString(buffer, env, timeout_ms);
 }
 
 static bool
-WriteLabel(Port &port, const char *name)
+WriteLabel(Port &port, const char *name, OperationEnvironment &env)
 {
-  return port.FullWriteString(name, 1000) &&
-    port.FullWrite(": ", 2, 500);
+  return port.FullWriteString(name, env, 1000) &&
+    port.FullWrite(": ", 2, env, 500);
 }
 
 /**
  * Write a name/value pair to the EW microRecorder.
  */
 static bool
-WritePair(Port &port, const char *name, const TCHAR *value)
+WritePair(Port &port, const char *name, const TCHAR *value,
+          OperationEnvironment &env)
 {
-  return WriteLabel(port, name) &&
-    WriteCleanString(port, value, 1000) &&
-    port.FullWrite("\r\n", 2, 500);
+  return WriteLabel(port, name, env) &&
+    WriteCleanString(port, value, env, 1000) &&
+    port.FullWrite("\r\n", 2, env, 500);
 }
 
 static bool
-WriteGeoPoint(Port &port, const GeoPoint &value)
+WriteGeoPoint(Port &port, const GeoPoint &value, OperationEnvironment &env)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -269,18 +271,19 @@ WriteGeoPoint(Port &port, const GeoPoint &value)
           DegLat, (int)MinLat, NoS,
           DegLon, (int)MinLon, EoW);
 
-  return port.FullWriteString(buffer, 1000);
+  return port.FullWriteString(buffer, env, 1000);
 }
 
 static bool
 EWMicroRecorderWriteWaypoint(Port &port, const char *type,
-                             const Waypoint &way_point)
+                             const Waypoint &way_point,
+                             OperationEnvironment &env)
 {
-  return WriteLabel(port, type) &&
-    WriteGeoPoint(port, way_point.location) &&
+  return WriteLabel(port, type, env) &&
+    WriteGeoPoint(port, way_point.location, env) &&
     port.Write(' ') &&
-    WriteCleanString(port, way_point.name.c_str(), 1000) &&
-    port.FullWrite("\r\n", 2, 500);
+    WriteCleanString(port, way_point.name.c_str(), env, 1000) &&
+    port.FullWrite("\r\n", 2, env, 500);
 }
 
 static bool
@@ -301,21 +304,22 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   port.Write('\x18');         // start to upload file
 
-  if (!port.FullWriteString(user_data, 5000) ||
-      !port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n", 1000))
+  if (!port.FullWriteString(user_data, env, 5000) ||
+      !port.FullWriteString("USER DETAILS\r\n--------------\r\n\r\n",
+                            env, 1000))
     return false;
 
-  WritePair(port, "Pilot Name", declaration.pilot_name.c_str());
-  WritePair(port, "Competition ID", declaration.competition_id.c_str());
-  WritePair(port,  "Aircraft Type", declaration.aircraft_type.c_str());
+  WritePair(port, "Pilot Name", declaration.pilot_name.c_str(), env);
+  WritePair(port, "Competition ID", declaration.competition_id.c_str(), env);
+  WritePair(port,  "Aircraft Type", declaration.aircraft_type.c_str(), env);
   WritePair(port,  "Aircraft ID",
-            declaration.aircraft_registration.c_str());
+            declaration.aircraft_registration.c_str(), env);
 
   if (!port.FullWriteString("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n",
-                            1000))
+                            env, 1000))
     return false;
 
-  WritePair(port, "Description", _T("XCSoar task declaration"));
+  WritePair(port, "Description", _T("XCSoar task declaration"), env);
 
   for (unsigned i = 0; i < 11; i++) {
     if (env.IsCancelled())
@@ -323,23 +327,24 @@ DeclareInner(Port &port, const Declaration &declaration,
 
     if (i+1>= declaration.Size()) {
       port.FullWriteString("TP LatLon: 0000000N00000000E TURN POINT\r\n",
-                           1000);
+                           env, 1000);
     } else {
       const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {
-        EWMicroRecorderWriteWaypoint(port, "Take Off LatLong", wp);
-        EWMicroRecorderWriteWaypoint(port, "Start LatLon", wp);
+        if (!EWMicroRecorderWriteWaypoint(port, "Take Off LatLong", wp, env) ||
+            !EWMicroRecorderWriteWaypoint(port, "Start LatLon", wp, env))
+          return false;
       } else if (i + 1 < declaration.Size()) {
-        EWMicroRecorderWriteWaypoint(port, "TP LatLon", wp);
+        if (!EWMicroRecorderWriteWaypoint(port, "TP LatLon", wp, env))
+          return false;
       }
     }
   }
 
   const Waypoint &wp = declaration.GetLastWaypoint();
-  EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp);
-  EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp);
-
-  if (env.IsCancelled())
+  if (!EWMicroRecorderWriteWaypoint(port, "Finish LatLon", wp, env) ||
+      !EWMicroRecorderWriteWaypoint(port, "Land LatLon", wp, env) ||
+      env.IsCancelled())
       return false;
 
   port.Write('\x03');         // finish sending user file
@@ -365,7 +370,7 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
   bool success = DeclareInner(port, declaration, env);
 
   // go back to NMEA mode
-  port.FullWrite("!!\r\n", 4, 500);
+  port.FullWrite("!!\r\n", 4, env, 500);
 
   return success;
 }

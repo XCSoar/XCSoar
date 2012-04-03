@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/DataField/Float.hpp"
 #include "PeriodClock.hpp"
 #include "Form/Util.hpp"
+#include "Operation/PopupOperationEnvironment.hpp"
 
 static WndForm *wf;
 
@@ -56,7 +57,9 @@ VegaWriteDemo()
   _stprintf(dbuf, _T("PDVDD,%d,%d"),
             iround(VegaDemoW * 10),
             iround(VegaDemoV * 10));
-  VarioWriteNMEA(dbuf);
+
+  PopupOperationEnvironment env;
+  VarioWriteNMEA(dbuf, env);
 }
 
 static void
@@ -121,8 +124,9 @@ dlgVegaDemoShowModal()
 
   if (!wf) return;
 
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"));
+  PopupOperationEnvironment env;
+  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
+  VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
 
   LoadFormProperty(*wf, _T("prpVegaDemoW"), UnitGroup::VERTICAL_SPEED, VegaDemoW);
   LoadFormProperty(*wf, _T("prpVegaDemoV"), UnitGroup::VERTICAL_SPEED, VegaDemoV);
@@ -131,7 +135,7 @@ dlgVegaDemoShowModal()
   wf->ShowModal();
 
   // deactivate demo.
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"));
+  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
 
   delete wf;
 

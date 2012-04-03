@@ -188,7 +188,7 @@ namespace LX {
   bool
   SendPacket(Port &port, Command command,
              const void *data, size_t length,
-             unsigned timeout_ms=5000);
+             OperationEnvironment &env, unsigned timeout_ms=5000);
 
   bool
   ReceivePacket(Port &port, Command command,
@@ -217,8 +217,9 @@ namespace LX {
   public:
     CRCWriter(Port &_port):port(_port), crc(0xff) {}
 
-    bool Write(const void *data, size_t length, unsigned timeout_ms=5000) {
-      if (!port.FullWrite(data, length, timeout_ms))
+    bool Write(const void *data, size_t length,
+               OperationEnvironment &env, unsigned timeout_ms=5000) {
+      if (!port.FullWrite(data, length, env, timeout_ms))
         return false;
 
       crc = calc_crc((const uint8_t *)data, length, crc);

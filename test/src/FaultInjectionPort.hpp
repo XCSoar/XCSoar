@@ -113,15 +113,17 @@ Port::Write(const char *s)
 }
 
 bool
-Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
+Port::FullWrite(const void *buffer, size_t length,
+                OperationEnvironment &env, unsigned timeout_ms)
 {
   return Write(buffer, length) == length;
 }
 
 bool
-Port::FullWriteString(const char *s, unsigned timeout_ms)
+Port::FullWriteString(const char *s,
+                      OperationEnvironment &env, unsigned timeout_ms)
 {
-  return FullWrite(s, strlen(s), timeout_ms);
+  return FullWrite(s, strlen(s), env, timeout_ms);
 }
 
 int

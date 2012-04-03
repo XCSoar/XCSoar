@@ -31,7 +31,7 @@ Copyright_License {
 #include <string.h>
 
 bool
-PortWriteNMEA(Port &port, const char *line)
+PortWriteNMEA(Port &port, const char *line, OperationEnvironment &env)
 {
   assert(line != NULL);
 
@@ -40,10 +40,10 @@ PortWriteNMEA(Port &port, const char *line)
   const unsigned timeout_ms = 1000;
 
   if (!port.Write('$') ||
-      !port.FullWrite(line, strlen(line), timeout_ms))
+      !port.FullWrite(line, strlen(line), env, timeout_ms))
     return false;
 
   char checksum[16];
   sprintf(checksum, "*%02X\r\n", NMEAChecksum(line));
-  return port.FullWrite(checksum, strlen(checksum), timeout_ms);
+  return port.FullWrite(checksum, strlen(checksum), env, timeout_ms);
 }

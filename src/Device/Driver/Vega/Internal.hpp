@@ -65,7 +65,7 @@ public:
    * @return true if sending the command has succeeded (it does not
    * indicate whether the Vega has understood and processed it)
    */
-  bool SendSetting(const char *name, int value);
+  bool SendSetting(const char *name, int value, OperationEnvironment &env);
 
   /**
    * Request an integer setting from the Vega.  The Vega will send the
@@ -74,7 +74,7 @@ public:
    * @return true if sending the command has succeeded (it does not
    * indicate whether the Vega has understood and processed it)
    */
-  bool RequestSetting(const char *name);
+  bool RequestSetting(const char *name, OperationEnvironment &env);
 
   /**
    * Look up the given setting in the table of received values.  The
@@ -85,7 +85,8 @@ public:
   std::pair<bool, int> GetSetting(const char *name) const;
 
 protected:
-  void VarioWriteSettings(const DerivedInfo &calculated) const;
+  void VarioWriteSettings(const DerivedInfo &calculated,
+                          OperationEnvironment &env) const;
 
   bool PDVSC(NMEAInputLine &line, NMEAInfo &info);
 

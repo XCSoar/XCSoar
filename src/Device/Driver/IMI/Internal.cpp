@@ -41,8 +41,8 @@ IMIDevice::Connect(OperationEnvironment &env)
 }
 
 void
-IMIDevice::Disconnect()
+IMIDevice::Disconnect(OperationEnvironment &env)
 {
   // disconnect
-  IMI::Disconnect(port);
+  IMI::Disconnect(port, env);
 }

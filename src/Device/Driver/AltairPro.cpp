@@ -191,7 +191,7 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
   port.Flush();
 
   // eg $PDVSC,S,FOO,BAR*<cr>\r\n
-  if (!PortWriteNMEA(port, Buffer))
+  if (!PortWriteNMEA(port, Buffer, env))
     return false;
 
   Buffer[6] = _T('A');

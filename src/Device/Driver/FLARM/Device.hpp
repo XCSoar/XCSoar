@@ -92,13 +92,13 @@ public:
   bool GetRange(unsigned &range, OperationEnvironment &env);
   bool SetRange(unsigned range, OperationEnvironment &env);
 
-  void Restart();
+  void Restart(OperationEnvironment &env);
 
 private:
   /**
    * Sends the supplied sentence with a $ prepended and a line break appended
    */
-  void Send(const char *sentence);
+  bool Send(const char *sentence, OperationEnvironment &env);
   bool Receive(const char *prefix, char *buffer, size_t length,
                OperationEnvironment &env, unsigned timeout_ms);
 

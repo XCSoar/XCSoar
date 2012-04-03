@@ -296,7 +296,7 @@ namespace CAI302 {
 #pragma pack(pop)
 
   bool
-  WriteString(Port &port, const char *p);
+  WriteString(Port &port, const char *p, OperationEnvironment &env);
 
   /**
    * Enter "command" mode, but don't wait for the prompt.
@@ -327,7 +327,7 @@ namespace CAI302 {
    * Enter "log" mode, but don't wait for the command prompt.
    */
   bool
-  LogModeQuick(Port &port);
+  LogModeQuick(Port &port, OperationEnvironment &env);
 
   /**
    * Enter "log" mode.

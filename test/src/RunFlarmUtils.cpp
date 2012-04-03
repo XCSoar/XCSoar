@@ -313,7 +313,7 @@ RunUI(FlarmDevice &flarm, OperationEnvironment &env)
     case 'r':
     case 'R':
       fprintf(stdout, "Restarting the FLARM ...\n");
-      flarm.Restart();
+      flarm.Restart(env);
       break;
     case 's':
     case 'S':

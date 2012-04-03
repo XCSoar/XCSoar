@@ -310,7 +310,8 @@ FlarmDevice::BinaryMode(OperationEnvironment &env)
 
   // "Binary mode is engaged by sending the text command "$PFLAX"
   // (including a newline character) to Flarm."
-  Send("PFLAX");
+  if (!Send("PFLAX", env))
+    return false;
 
   // Remember that we should now be in binary mode (for further assert() calls)
   mode = Mode::BINARY;

@@ -32,7 +32,7 @@ Copyright_License {
 #endif
 
 bool
-VegaDevice::SendSetting(const char *name, int value)
+VegaDevice::SendSetting(const char *name, int value, OperationEnvironment &env)
 {
   /* erase the old value from the settings map, because we expect to
      receive the new one now */
@@ -42,15 +42,15 @@ VegaDevice::SendSetting(const char *name, int value)
 
   char buffer[64];
   sprintf(buffer, "PDVSC,S,%s,%d", name, value);
-  return PortWriteNMEA(port, buffer);
+  return PortWriteNMEA(port, buffer, env);
 }
 
 bool
-VegaDevice::RequestSetting(const char *name)
+VegaDevice::RequestSetting(const char *name, OperationEnvironment &env)
 {
   char buffer[64];
   sprintf(buffer, "PDVSC,R,%s", name);
-  return PortWriteNMEA(port, buffer);
+  return PortWriteNMEA(port, buffer, env);
 }
 
 std::pair<bool, int>
@@ -65,7 +65,8 @@ VegaDevice::GetSetting(const char *name) const
 }
 
 void
-VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
+VegaDevice::VarioWriteSettings(const DerivedInfo &calculated,
+                               OperationEnvironment &env) const
 {
     char mcbuf[100];
 
@@ -76,7 +77,7 @@ VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
             iround(calculated.terrain_altitude),
             uround(qnh.GetHectoPascal() * 10));
 
-    PortWriteNMEA(port, mcbuf);
+    PortWriteNMEA(port, mcbuf, env);
 }
 
 bool

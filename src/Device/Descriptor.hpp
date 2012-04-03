@@ -298,9 +298,9 @@ public:
     monitor = _monitor;
   }
 
-  bool WriteNMEA(const char *line);
+  bool WriteNMEA(const char *line, OperationEnvironment &env);
 #ifdef _UNICODE
-  bool WriteNMEA(const TCHAR *line);
+  bool WriteNMEA(const TCHAR *line, OperationEnvironment &env);
 #endif
 
   bool PutMacCready(fixed mac_cready, OperationEnvironment &env);

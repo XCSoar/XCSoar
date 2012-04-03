@@ -210,7 +210,7 @@ FlarmDevice::GetConfig(const char *setting, TCHAR *buffer, size_t length,
 
   char narrow_buffer[length];
 
-  Send(request);
+  Send(request, env);
   if (!Receive(expected_answer, narrow_buffer, length, env, 1000))
     return false;
 
@@ -231,12 +231,12 @@ FlarmDevice::SetConfig(const char *setting, const TCHAR *value,
   NarrowString<256> expected_answer(buffer);
   expected_answer[6u] = 'A';
 
-  Send(buffer);
+  Send(buffer, env);
   return port.ExpectString(expected_answer, env, 1000);
 }
 
 void
-FlarmDevice::Restart()
+FlarmDevice::Restart(OperationEnvironment &env)
 {
-  Send("PFLAR,0");
+  Send("PFLAR,0", env);
 }

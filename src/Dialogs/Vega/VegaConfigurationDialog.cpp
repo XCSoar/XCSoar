@@ -52,6 +52,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "OS/Sleep.h"
 #include "Util/Macros.hpp"
+#include "Operation/MessageOperationEnvironment.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -160,7 +161,8 @@ OnSaveClicked(gcc_unused WndButton &Sender)
   dirty |= changed;
 
   // make sure changes are sent to device
-  if (dirty && device->SendSetting("StoreToEeprom", 2))
+  MessageOperationEnvironment env;
+  if (dirty && device->SendSetting("StoreToEeprom", 2, env))
     dirty = false;
 }
 

@@ -44,7 +44,8 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnRebootClicked(gcc_unused WndButton &button)
 {
-  device->Restart();
+  MessageOperationEnvironment env;
+  device->Restart(env);
 }
 
 void

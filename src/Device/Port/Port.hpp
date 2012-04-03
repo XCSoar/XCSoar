@@ -118,12 +118,14 @@ public:
    * @param timeout_ms give up after this number of milliseconds
    * @return true on success
    */
-  bool FullWrite(const void *buffer, size_t length, unsigned timeout_ms);
+  bool FullWrite(const void *buffer, size_t length,
+                 OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Just like FullWrite(), but write a null-terminated string
    */
-  bool FullWriteString(const char *s, unsigned timeout_ms);
+  bool FullWriteString(const char *s,
+                       OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Wait until all data in the output buffer has been sent.

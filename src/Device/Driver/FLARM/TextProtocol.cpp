@@ -42,8 +42,8 @@ FlarmDevice::TextMode(OperationEnvironment &env)
   return true;
 }
 
-void
-FlarmDevice::Send(const char *sentence)
+bool
+FlarmDevice::Send(const char *sentence, OperationEnvironment &env)
 {
   assert(sentence != NULL);
 
@@ -51,7 +51,7 @@ FlarmDevice::Send(const char *sentence)
      end with [...] two checksum characters [...].  [...] these
      characters [...] must be provided in sentences to FLARM and are
      part of the answers given by FLARM." */
-  PortWriteNMEA(port, sentence);
+  return PortWriteNMEA(port, sentence, env);
 }
 
 bool

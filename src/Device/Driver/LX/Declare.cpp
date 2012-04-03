@@ -186,13 +186,13 @@ DeclareInner(Port &port, const Declaration &declaration,
   LX::SendCommand(port, LX::WRITE_FLIGHT_INFO); // start declaration
 
   LX::CRCWriter writer(port);
-  writer.Write(&pilot, sizeof(pilot));
+  writer.Write(&pilot, sizeof(pilot), env);
   env.SetProgressPosition(3);
 
   if (env.IsCancelled())
     return false;
 
-  writer.Write(&lxDevice_Declaration, sizeof(lxDevice_Declaration));
+  writer.Write(&lxDevice_Declaration, sizeof(lxDevice_Declaration), env);
   writer.Flush();
   if (!LX::ExpectACK(port, env))
     return false;
@@ -202,7 +202,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   env.SetProgressPosition(4);
   LX::SendCommand(port, LX::WRITE_CONTEST_CLASS);
-  writer.Write(&contest_class, sizeof(contest_class));
+  writer.Write(&contest_class, sizeof(contest_class), env);
   env.SetProgressPosition(5);
 
   writer.Flush();

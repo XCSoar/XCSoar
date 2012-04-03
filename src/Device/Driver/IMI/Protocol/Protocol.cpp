@@ -54,10 +54,10 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   MessageParser::Reset();
 
   // check connectivity
-  if (!Send(port, MSG_CFG_HELLO) || env.IsCancelled())
+  if (!Send(port, env, MSG_CFG_HELLO) || env.IsCancelled())
     return false;
 
-  const TMsg *msg = Receive(port, 100, 0);
+  const TMsg *msg = Receive(port, env, 100, 0);
   if (!msg || msg->msgID != MSG_CFG_HELLO || env.IsCancelled())
     return false;
 
@@ -68,19 +68,20 @@ IMI::Connect(Port &port, OperationEnvironment &env)
   if (baudRate == 0)
     return false;
 
-  if (!Send(port, MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
+  if (!Send(port, env,
+            MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
             IMICOMM_BIGPARAM2(baudRate)) || env.IsCancelled())
     return false;
 
   // get device info
   for (unsigned i = 0; i < 4; i++) {
-    if (!Send(port, MSG_CFG_DEVICEINFO))
+    if (!Send(port, env, MSG_CFG_DEVICEINFO))
       continue;
 
     if (env.IsCancelled())
       return false;
 
-    const TMsg *msg = Receive(port, 300, sizeof(TDeviceInfo));
+    const TMsg *msg = Receive(port, env, 300, sizeof(TDeviceInfo));
     if (!msg || env.IsCancelled())
       return false;
 
@@ -105,7 +106,8 @@ IMI::Connect(Port &port, OperationEnvironment &env)
 }
 
 bool
-IMI::DeclarationWrite(Port &port, const Declaration &decl)
+IMI::DeclarationWrite(Port &port, const Declaration &decl,
+                      OperationEnvironment &env)
 {
   if (!_connected)
     return false;
@@ -138,12 +140,13 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl)
               imiDecl.wp[size + 1]);
 
   // send declaration for current task
-  return SendRet(port, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
+  return SendRet(port, env, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
                  MSG_ACK_SUCCESS, 0, -1) != NULL;
 }
 
 bool
-IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list)
+IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list,
+                    OperationEnvironment &env)
 {
   flight_list.clear();
 
@@ -154,7 +157,8 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list)
   IMIBYTE count = 1, totalCount = 0;
 
   for (;; count++) {
-    const TMsg *pMsg = SendRet(port, MSG_FLIGHT_INFO, NULL, 0, MSG_FLIGHT_INFO,
+    const TMsg *pMsg = SendRet(port, env,
+                               MSG_FLIGHT_INFO, NULL, 0, MSG_FLIGHT_INFO,
                                -1, totalCount, address, addressStop, 200, 6);
     if (pMsg == NULL)
       break;
@@ -191,7 +195,7 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
   MessageParser::Reset();
 
   Flight flight;
-  if (!FlashRead(port, &flight, flight_info.internal.imi, sizeof(flight)))
+  if (!FlashRead(port, &flight, flight_info.internal.imi, sizeof(flight), env))
     return false;
 
   FILE *fileIGC = _tfopen(path, _T("w+b"));
@@ -219,7 +223,7 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
     if (fixesToRead > fixesCount)
       fixesToRead = fixesCount;
 
-    if (!FlashRead(port, fixBuffer, address, fixesToRead * sizeof(Fix)))
+    if (!FlashRead(port, fixBuffer, address, fixesToRead * sizeof(Fix), env))
       ok = false;
 
     for (unsigned i = 0; ok && i < fixesToRead; i++) {
@@ -250,12 +254,12 @@ IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
 }
 
 bool
-IMI::Disconnect(Port &port)
+IMI::Disconnect(Port &port, OperationEnvironment &env)
 {
   if (!_connected)
     return true;
 
-  if (!Send(port, MSG_CFG_BYE))
+  if (!Send(port, env, MSG_CFG_BYE))
     return false;
 
   _connected = false;

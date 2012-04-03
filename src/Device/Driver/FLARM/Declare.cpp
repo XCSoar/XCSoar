@@ -133,7 +133,7 @@ FlarmDevice::DeclareInternal(const Declaration &declaration,
   // PFLAC,,ADDWP:
 
   // Reset the FLARM to activate the declaration
-  Restart();
+  Restart(env);
 
   return true;
 }
