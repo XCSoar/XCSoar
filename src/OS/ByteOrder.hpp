@@ -83,6 +83,18 @@ ByteSwap32(uint32_t value)
 #endif
 }
 
+gcc_const
+static inline uint64_t
+ByteSwap64(uint64_t value)
+{
+#ifdef HAVE_BYTESWAP_H
+  return bswap_64(value);
+#else
+  return uint64_t(ByteSwap32(uint32_t(value >> 32)))
+    | (uint64_t(ByteSwap32(value)) << 32);
+#endif
+}
+
 /**
  * Converts a 16bit value from big endian to the system's byte order
  */
@@ -121,6 +133,28 @@ FromBE32(uint32_t value)
 #elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return ByteSwap32(value);
+#else
+  /* generic big-endian */
+  return value;
+#endif
+}
+
+/**
+ * Converts a 64bit value from big endian to the system's byte order
+ */
+gcc_const
+static inline uint64_t
+FromBE64(uint64_t value)
+{
+#ifdef HAVE_BYTESWAP_H
+#ifdef __BIONIC__
+  return betoh64(value);
+#else
+  return be64toh(value);
+#endif
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
+  /* generic little-endian */
+  return ByteSwap64(value);
 #else
   /* generic big-endian */
   return value;
@@ -172,6 +206,28 @@ FromLE32(uint32_t value)
 }
 
 /**
+ * Converts a 64bit value from little endian to the system's byte order
+ */
+gcc_const
+static inline uint64_t
+FromLE64(uint64_t value)
+{
+#ifdef HAVE_BYTESWAP_H
+#ifdef __BIONIC__
+  return letoh64(value);
+#else
+  return le64toh(value);
+#endif
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
+  /* generic little-endian */
+  return value;
+#else
+  /* generic big-endian */
+  return ByteSwap64(value);
+#endif
+}
+
+/**
  * Converts a 16bit value from the system's byte order to big endian
  */
 gcc_const
@@ -201,6 +257,24 @@ ToBE32(uint32_t value)
 #elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return ByteSwap32(value);
+#else
+  /* generic big-endian */
+  return value;
+#endif
+}
+
+/**
+ * Converts a 64bit value from the system's byte order to big endian
+ */
+gcc_const
+static inline uint64_t
+ToBE64(uint64_t value)
+{
+#ifdef HAVE_BYTESWAP_H
+  return htobe64(value);
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
+  /* generic little-endian */
+  return ByteSwap64(value);
 #else
   /* generic big-endian */
   return value;
@@ -240,6 +314,24 @@ ToLE32(uint32_t value)
 #else
   /* generic big-endian */
   return ByteSwap32(value);
+#endif
+}
+
+/**
+ * Converts a 64bit value from the system's byte order to little endian
+ */
+gcc_const
+static inline uint64_t
+ToLE64(uint64_t value)
+{
+#ifdef HAVE_BYTESWAP_H
+  return htole64(value);
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
+  /* generic little-endian */
+  return value;
+#else
+  /* generic big-endian */
+  return ByteSwap64(value);
 #endif
 }
 
