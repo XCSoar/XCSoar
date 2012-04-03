@@ -139,7 +139,7 @@ MD5::IsValidIGCChar(char c)
 }
 
 void
-MD5::AppendString(const unsigned char *in, int skip_invalid_igc_chars) // must be NULL-terminated string!
+MD5::AppendString(const unsigned char *in, bool skip_invalid_igc_chars)
 {
   size_t length = strlen((const char *)in);
   int buffer_left_over = message_length % 64;
@@ -147,7 +147,7 @@ MD5::AppendString(const unsigned char *in, int skip_invalid_igc_chars) // must b
   message_length += length;
 
   for (size_t i = 0; i < length; i++) {
-    if (skip_invalid_igc_chars == 1 && !IsValidIGCChar(in[i]))
+    if (skip_invalid_igc_chars && !IsValidIGCChar(in[i]))
       // skip OD because when saved to file, OD OA comes back as OA only
       --message_length; //subtract it out of the buffer pointer
     else {

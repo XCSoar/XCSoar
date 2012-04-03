@@ -42,7 +42,7 @@ private:
 public:
   void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
 
-  void AppendString(const unsigned char *in, int skip_invalid_igc_chars); // must be NULL-terminated string!
+  void AppendString(const unsigned char *in, bool skip_invalid_igc_chars); // must be NULL-terminated string!
   void Finalize();
   void GetDigest(char *buffer);
   static bool IsValidIGCChar(char c);

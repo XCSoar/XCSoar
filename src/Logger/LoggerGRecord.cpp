@@ -61,7 +61,7 @@ GRecord::AppendStringToBuffer(const unsigned char *in)
 {
   for (int i = 0; i < 4; i++)
     // skip whitespace flag=1
-    md5[i].AppendString(in, 1);
+    md5[i].AppendString(in, true);
 }
 
 void
