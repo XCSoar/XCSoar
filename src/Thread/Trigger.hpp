@@ -55,7 +55,6 @@ public:
    * Initializes the trigger.
    *
    * @param name an application specific name for this trigger
-   * @param _manual_reset whether trigger needs to be manually reset
    */
 #ifdef HAVE_POSIX
   Trigger(bool _manual_reset = true)
@@ -184,18 +183,6 @@ public:
     ::SetEvent(handle);
 #endif
 #endif /* !HAVE_POSIX */
-  }
-
-  /**
-   * Wakes up the thread waiting for the trigger, and immediately
-   * resets the state of the trigger.
-   */
-  void Pulse() {
-#ifdef HAVE_POSIX
-    pthread_cond_broadcast(&cond);
-#else
-    ::PulseEvent(handle);
-#endif
   }
 
   /**
