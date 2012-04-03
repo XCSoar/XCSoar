@@ -338,7 +338,7 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
   canvas.Select(green_brush);
   canvas.SelectNullPen();
 
-  for (int i = 0; i < lsdata.sum_n; i++) {
+  for (unsigned i = 0; i < lsdata.sum_n; i++) {
     PixelScalar xmin((fixed(i) + fixed(1.2)) * xscale
                      + fixed(rc.left + PaddingLeft));
     PixelScalar ymin((y_max - y_min) * yscale + fixed(rc.top));
@@ -354,7 +354,7 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 {
   RasterPoint line[4];
 
-  for (int i = 0; i < lsdata.sum_n - 1; i++) {
+  for (unsigned i = 0; i < lsdata.sum_n - 1; i++) {
     line[0] = ToScreen(lsdata.xstore[i], lsdata.ystore[i]);
     line[1] = ToScreen(lsdata.xstore[i + 1], lsdata.ystore[i + 1]);
     line[2].x = line[1].x;
@@ -370,7 +370,7 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 {
   RasterPoint line[2];
 
-  for (int i = 0; i < lsdata.sum_n - 1; i++) {
+  for (unsigned i = 0; i < lsdata.sum_n - 1; i++) {
     line[0] = ToScreen(lsdata.xstore[i], lsdata.ystore[i]);
     line[1] = ToScreen(lsdata.xstore[i + 1], lsdata.ystore[i + 1]);
 
