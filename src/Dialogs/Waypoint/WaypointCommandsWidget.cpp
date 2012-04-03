@@ -186,7 +186,7 @@ SetHome(const Waypoint &waypoint)
     ScopeSuspendAllThreads suspend;
     WaypointGlue::SetHome(way_points, terrain,
                           settings_computer,
-                          false);
+                          device_blackboard, false);
     WaypointGlue::SaveHome(settings_computer);
   }
 }

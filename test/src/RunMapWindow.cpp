@@ -51,8 +51,6 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
 
-DeviceBlackboard *device_blackboard;
-
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}
 
@@ -182,7 +180,7 @@ LoadFiles(ComputerSettings &settings)
   terrain = RasterTerrain::OpenTerrain(NULL, operation);
 
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
-  WaypointGlue::SetHome(way_points, terrain, settings, false);
+  WaypointGlue::SetHome(way_points, terrain, settings, NULL, false);
 
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile,
                                                ConvertLineReader::AUTO);

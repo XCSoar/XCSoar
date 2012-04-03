@@ -157,7 +157,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     // re-set home
     WaypointGlue::SetHome(way_points, terrain,
                           XCSoarInterface::SetComputerSettings(),
-                          WaypointFileChanged);
+                          device_blackboard, WaypointFileChanged);
     WaypointGlue::SaveHome(CommonInterface::GetComputerSettings());
   }
 

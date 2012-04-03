@@ -28,7 +28,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Components.hpp"
 
 const Waypoint *
 WaypointGlue::FindHomeId(Waypoints &waypoints,
@@ -83,6 +82,7 @@ WaypointGlue::FindFlaggedHome(Waypoints &waypoints,
 void
 WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                       ComputerSettings &settings,
+                      DeviceBlackboard *device_blackboard,
                       const bool reset)
 {
   LogStartUp(_T("SetHome"));

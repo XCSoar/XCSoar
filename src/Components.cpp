@@ -362,7 +362,7 @@ XCSoarInterface::Startup()
 
   // Set the home waypoint
   WaypointGlue::SetHome(way_points, terrain, SetComputerSettings(),
-                        false);
+                        device_blackboard, false);
 
   // ReSynchronise the blackboards here since SetHome touches them
   device_blackboard->Merge();
