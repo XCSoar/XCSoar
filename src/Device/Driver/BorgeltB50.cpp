@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/BorgeltB50.hpp"
+#include "Device/Driver/CAI302/PocketNav.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
@@ -157,13 +158,7 @@ B50Device::PutMacCready(fixed mac_cready, OperationEnvironment &env)
   /* the Borgelt B800 understands the CAI302 "!g" command for
      MacCready, ballast and bugs */
 
-  unsigned mac_cready2 = uround(Units::ToUserUnit(mac_cready * 10, Unit::KNOTS));
-
-  char buffer[32];
-  sprintf(buffer, "!g,m%u\r", mac_cready2);
-  port.Write(buffer);
-
-  return true;
+  return CAI302::PutMacCready(port, mac_cready, env);
 }
 
 static Device *
