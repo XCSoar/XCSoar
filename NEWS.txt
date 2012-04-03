@@ -9,8 +9,12 @@ Version 6.3.1 - not yet released
   - fix crash with far away task
   - fix high speed remaining when wind drift is disabled
 * devices
+  - allow standard NMEA sentences to begin with 'P'
   - add missing NMEA checksum verifications
+  - Borgelt: send bugs and ballast to the B800
+  - Borgelt: read the ballast setting from the B800
   - LX: support the LXNav V7
+  - Flymaster: initiate NMEA mode
 * map
   - don't fill acked airspaces
 * Linux

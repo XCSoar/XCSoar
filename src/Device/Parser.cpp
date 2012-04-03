@@ -25,6 +25,7 @@ Copyright_License {
 
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
+#include "Util/CharUtil.hpp"
 #include "Geo/Geoid.hpp"
 #include "Math/Earth.hpp"
 #include "NMEA/Info.hpp"
@@ -77,6 +78,20 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   char type[16];
   line.read(type, 16);
 
+  if (IsAlphaASCII(type[1]) && IsAlphaASCII(type[2])) {
+    if (StringIsEqual(type + 3, "GSA"))
+      return GSA(line, info);
+
+    if (StringIsEqual(type + 3, "GLL"))
+      return GLL(line, info);
+
+    if (StringIsEqual(type + 3, "RMC"))
+      return RMC(line, info);
+
+    if (StringIsEqual(type + 3, "GGA"))
+      return GGA(line, info);
+  }
+
   // if (proprietary sentence) ...
   if (type[1] == 'P') {
     // Airspeed and vario sentence
@@ -96,18 +111,6 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 
     return false;
   }
-
-  if (StringIsEqual(type + 3, "GSA"))
-    return GSA(line, info);
-
-  if (StringIsEqual(type + 3, "GLL"))
-    return GLL(line, info);
-
-  if (StringIsEqual(type + 3, "RMC"))
-    return RMC(line, info);
-
-  if (StringIsEqual(type + 3, "GGA"))
-    return GGA(line, info);
 
   return false;
 }

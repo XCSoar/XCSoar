@@ -21,24 +21,18 @@ Copyright_License {
 }
 */
 
-#include "Internal.hpp"
-#include "PocketNav.hpp"
+#ifndef XCSOAR_CAI302_POCKET_NAV_HPP
+#define XCSOAR_CAI302_POCKET_NAV_HPP
 
-bool
-CAI302Device::PutMacCready(fixed MacCready, OperationEnvironment &env)
-{
-  return CAI302::PutMacCready(port, MacCready, env);
+#include "Math/fixed.hpp"
+
+class Port;
+class OperationEnvironment;
+
+namespace CAI302 {
+  bool PutMacCready(Port &port, fixed mc, OperationEnvironment &env);
+  bool PutBugs(Port &port, fixed bugs, OperationEnvironment &env);
+  bool PutBallast(Port &port, fixed fraction, OperationEnvironment &env);
 }
 
-bool
-CAI302Device::PutBugs(fixed Bugs, OperationEnvironment &env)
-{
-  return CAI302::PutBugs(port, Bugs, env);
-}
-
-bool
-CAI302Device::PutBallast(fixed fraction, gcc_unused fixed overload,
-                         OperationEnvironment &env)
-{
-  return CAI302::PutBallast(port, fraction, env);
-}
+#endif

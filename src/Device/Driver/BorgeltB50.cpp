@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/BorgeltB50.hpp"
+#include "Device/Driver/CAI302/PocketNav.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
@@ -42,7 +43,11 @@ public:
   B50Device(Port &_port):port(_port) {}
 
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+
   virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
+  virtual bool PutBugs(fixed bugs, OperationEnvironment &env);
+  virtual bool PutBallast(fixed fraction, fixed overload,
+                          OperationEnvironment &env);
 };
 
 /*
@@ -96,26 +101,9 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
                                               min(fixed(30), value)) / 100,
                               info.clock);
 
-  line.skip();
-  /*
-
-  JMW disabled bugs/ballast due to problems with test b50
-
-  // for Borgelt it's % of empty weight,
-  // for us, it's % of ballast capacity
-  // RMN: Borgelt ballast->XCSoar ballast
-
-  double bal = max(1.0, min(1.60, line.read(0.0))) - 1.0;
-  if (WEIGHTS[2]>0) {
-    info.Ballast = min(1.0, max(0.0,
-                                     bal*(WEIGHTS[0]+WEIGHTS[1])/WEIGHTS[2]));
-    BALLAST = info.Ballast;
-  } else {
-    info.Ballast = 0;
-    BALLAST = 0;
-  }
-  // w0 pilot weight, w1 glider empty weight, w2 ballast weight
-  */
+  fixed ballast_overload;
+  if (line.read_checked(ballast_overload))
+    info.settings.ProvideBallastOverload(ballast_overload, info.clock);
 
   // inclimb/incruise 1=cruise,0=climb, OAT
   switch (line.read(-1)) {
@@ -157,13 +145,26 @@ B50Device::PutMacCready(fixed mac_cready, OperationEnvironment &env)
   /* the Borgelt B800 understands the CAI302 "!g" command for
      MacCready, ballast and bugs */
 
-  unsigned mac_cready2 = uround(Units::ToUserUnit(mac_cready * 10, Unit::KNOTS));
+  return CAI302::PutMacCready(port, mac_cready, env);
+}
 
-  char buffer[32];
-  sprintf(buffer, "!g,m%u\r", mac_cready2);
-  port.Write(buffer);
+bool
+B50Device::PutBugs(fixed bugs, OperationEnvironment &env)
+{
+  /* the Borgelt B800 understands the CAI302 "!g" command for
+     MacCready, ballast and bugs */
 
-  return true;
+  return CAI302::PutBugs(port, bugs, env);
+}
+
+bool
+B50Device::PutBallast(fixed fraction, gcc_unused fixed overload,
+                      OperationEnvironment &env)
+{
+  /* the Borgelt B800 understands the CAI302 "!g" command for
+     MacCready, ballast and bugs */
+
+  return CAI302::PutBallast(port, fraction, env);
 }
 
 static Device *

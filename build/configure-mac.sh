@@ -35,7 +35,7 @@ echo $0
 
 DEST=`dirname $0`/local-config.mk
 
-for i in \$a-4.6 \$a-mp-4.6 \$a-4.5 \$a-mp-4.5 \$a-4.4 \$a-mp-4.4 /usr/local/bin/\$a-4.6 /usr/local/bin/\$a \$a;
+for i in \$a-4.7 \$a-mp-4.7 \$a-4.6 \$a-mp-4.6 \$a-4.5 \$a-mp-4.5 \$a-4.4 \$a-mp-4.4 /usr/local/bin/\$a-4.6 /usr/local/bin/\$a \$a;
 do
     a=gcc
     eval name=$i

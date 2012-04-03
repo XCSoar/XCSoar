@@ -33,7 +33,7 @@ computational load by turning off certain features.  Drawing terrain
 and long snail trails contribute significantly to the CPU load.
 
 For Altair/Vega systems, the external supply voltage is displayed on
-the system status dialog (see Section~\ref{sec:system-status-dialog}).
+the system status dialogue (see Section~\ref{sec:system-status}).
 
 For other embedded platforms, a \infobox{Battery} InfoBox is available that displays the available battery life remaining, as well as the charge state (AC on--charging, or AC Off--operating off internal battery power).
 
@@ -115,16 +115,16 @@ example ``airbrake extended and gear retracted''.
 Refer to the Vega documentation %and {\em XCSoar Advanced Configuration Manual}
 for more details on switch inputs and how they may be used.
 
-\section{Switch dialog}
+\section{Switch dialogue}
 
-A dialog displaying switch states for the Vega variometer
+A dialogue displaying switch states for the Vega variometer
 is available from the menu:
 \begin{quote}
 \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Vario}\blink\bmenu{Airframe
 Switches}
 \end{quote}
 
-This dialog is updated in real-time, allowing the pilot
+This dialogue is updated in real-time, allowing the pilot
 to check the correct functioning of switches during daily
 inspection tests or before takeoff. 
 
@@ -146,21 +146,19 @@ Pro'' and this system receives all data as if it came from the
 Master's GPS and connected instruments (Vega, FLARM etc).
 
 
-\section{System status dialog}\label{sec:system-status-dialog}
+\section{System status}\label{sec:system-status}
 
-The system status dialog (see Section~\ref{sec:dialog-windows}) is
+The system status dialogue is
 used primarily as a systems check, to see how the host computer and
-connected devices are performing.
-
-This is accessed via the menu under 
+connected devices are performing.  This is accessed via the menu under:
+\sketch{figures/status-system.png}
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Status}
+\bmenu{Info ..}\blink\bmenu{Status}
 \end{quote}
-and then selecting the page `System'.
+and then selecting the tabular `System'.
 
 All dynamic values (e.g.\ battery voltage, number of satellites in
 view) are updated continuously.
-
 
 \section{Multiple devices}
 
@@ -184,7 +182,7 @@ traffic data.
 
 \section{Managing external devices}
 
-The device management dialog can be accessed from the configuration
+The device management dialogue can be accessed from the configuration
 menu (third page).  It shows a list of configured external devices,
 and it lists what information they provide.
 
@@ -193,7 +191,7 @@ device.  XCSoar reconnects to a failed device periodically, but
 sometimes, it might be desirable to trigger that manually.
 
 The button ``Flight download'' is only available with supported IGC
-loggers (see \label{sec:supported-varios} for a list).  Upon clicking,
+loggers (see \ref{sec:supported-varios} for a list).  Upon clicking,
 XCSoar retrieves a list of flights, and asks you to select one.  The
 IGC file will be downloaded to the ``\texttt{logs}'' directory inside
 \texttt{XCSoarData}.
