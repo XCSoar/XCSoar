@@ -613,19 +613,19 @@ ChartRenderer::ScaleMakeSquare()
   xscale = fixed(rc.right - rc.left - PaddingLeft) / (x_max - x_min);
 }
 
-long
+PixelScalar
 ChartRenderer::screenX(fixed x) const
 {
   return (long)((x - x_min) * xscale) + rc.left + PaddingLeft;
 }
 
-long
+PixelScalar
 ChartRenderer::screenY(fixed y) const
 {
   return (long)((y_max - y) * yscale) + rc.top;
 }
 
-long
+PixelScalar
 ChartRenderer::screenS(fixed s) const
 {
   return (long)(s * yscale);

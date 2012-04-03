@@ -119,13 +119,13 @@ public:
   fixed getXmax() const { return x_max; }
 
   gcc_pure
-  long screenX(fixed x) const;
+  PixelScalar screenX(fixed x) const;
 
   gcc_pure
-  long screenY(fixed y) const;
+  PixelScalar screenY(fixed y) const;
 
   gcc_pure
-  long screenS(fixed s) const;
+  PixelScalar screenS(fixed s) const;
 
   Canvas& get_canvas() { return canvas; }
 };
