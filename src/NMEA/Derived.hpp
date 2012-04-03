@@ -210,8 +210,6 @@ struct DerivedInfo:
    */
   void Reset();
 
-  void ResetFlight(bool full);
-
   void Expire(fixed Time);
 
   /**
