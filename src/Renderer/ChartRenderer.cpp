@@ -354,20 +354,19 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 {
   assert(lsdata.slots.size() >= 2);
 
-  RasterPoint line[4];
+  const unsigned n = lsdata.slots.size() + 2;
+  RasterPoint *points = point_buffer.get(n);
 
-  for (unsigned i = 0, n = lsdata.slots.size() - 1; i != n; i++) {
-    const auto &slot = lsdata.slots[i];
-    const auto &next_slot = lsdata.slots[i + 1];
+  RasterPoint *p = points;
+  for (auto i = lsdata.slots.begin(), end = lsdata.slots.end();
+       i != end; ++i)
+    *p++ = ToScreen(i->x, i->y);
+  *p++ = RasterPoint{ p[-1].x, PixelScalar(rc.bottom - PaddingBottom) };
+  *p++ = RasterPoint{ points[0].x, PixelScalar(rc.bottom - PaddingBottom) };
 
-    line[0] = ToScreen(slot.x, slot.y);
-    line[1] = ToScreen(next_slot.x, next_slot.y);
-    line[2].x = line[1].x;
-    line[2].y = rc.bottom - PaddingBottom;
-    line[3].x = line[0].x;
-    line[3].y = rc.bottom - PaddingBottom;
-    canvas.DrawTriangleFan(line, 4);
-  }
+  assert(p == points + n);
+
+  canvas.polygon(points, n);
 }
 
 void
@@ -375,19 +374,17 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 {
   assert(lsdata.slots.size() >= 2);
 
-  RasterPoint line[2];
+  const unsigned n = lsdata.slots.size();
+  RasterPoint *points = point_buffer.get(n);
 
-  for (unsigned i = 0, n = lsdata.slots.size() - 1; i != n; i++) {
-    const auto &slot = lsdata.slots[i];
-    const auto &next_slot = lsdata.slots[i + 1];
+  RasterPoint *p = points;
+  for (auto i = lsdata.slots.begin(), end = lsdata.slots.end();
+       i != end; ++i)
+    *p++ = ToScreen(i->x, i->y);
+  assert(p == points + n);
 
-    line[0] = ToScreen(slot.x, slot.y);
-    line[1] = ToScreen(next_slot.x, next_slot.y);
-
-    // STYLE_DASHGREEN
-    // STYLE_MEDIUMBLACK
-    StyleLine(line[0], line[1], pen);
-  }
+  canvas.Select(pen);
+  canvas.DrawPolyline(points, n);
 }
 
 void
