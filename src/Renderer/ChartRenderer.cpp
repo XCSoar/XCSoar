@@ -162,13 +162,11 @@ void
 ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
   canvas.Select(*look.label_font);
-  PixelSize tsize = canvas.CalcTextSize(text);
-
-  PixelScalar x = PixelScalar((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + PaddingLeft;
-  PixelScalar y = PixelScalar((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
-
   canvas.SetBackgroundTransparent();
-  canvas.text(x, y, text);
+
+  PixelSize tsize = canvas.CalcTextSize(text);
+  RasterPoint pt = ToScreen(xv, yv);
+  canvas.text(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
 }
 
 void
@@ -299,13 +297,7 @@ ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
   if (unscaled_x || unscaled_y)
     return;
 
-  RasterPoint line[2];
-  line[0].x = (int)((xmin - x_min) * xscale) + rc.left + PaddingLeft;
-  line[0].y = (int)((y_max - ymin) * yscale) + rc.top;
-  line[1].x = (int)((xmax - x_min) * xscale) + rc.left + PaddingLeft;
-  line[1].y = (int)((y_max - ymax) * yscale) + rc.top;
-
-  StyleLine(line[0], line[1], pen);
+  StyleLine(ToScreen(xmin, ymin), ToScreen(xmax, ymax), pen);
 }
 
 void 
@@ -315,10 +307,9 @@ ChartRenderer::DrawFilledLine(const fixed xmin, const fixed ymin,
 {
   RasterPoint line[4];
 
-  line[0].x = (int)((xmin - x_min) * xscale) + rc.left + PaddingLeft;
-  line[0].y = (int)((y_max - ymin) * yscale) + rc.top;
-  line[1].x = (int)((xmax - x_min) * xscale) + rc.left + PaddingLeft;
-  line[1].y = (int)((y_max - ymax) * yscale) + rc.top;
+  line[0] = ToScreen(xmin, ymin);
+  line[1] = ToScreen(xmax, ymax);
+
   line[2].x = line[1].x;
   line[2].y = (int)((y_max) * yscale) + rc.top;
   line[3].x = line[0].x;
@@ -364,10 +355,8 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
   RasterPoint line[4];
 
   for (int i = 0; i < lsdata.sum_n - 1; i++) {
-    line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + PaddingLeft;
-    line[0].y = (int)((y_max - lsdata.ystore[i]) * yscale) + rc.top;
-    line[1].x = (int)((lsdata.xstore[i + 1] - x_min) * xscale) + rc.left + PaddingLeft;
-    line[1].y = (int)((y_max - lsdata.ystore[i + 1]) * yscale) + rc.top;
+    line[0] = ToScreen(lsdata.xstore[i], lsdata.ystore[i]);
+    line[1] = ToScreen(lsdata.xstore[i + 1], lsdata.ystore[i + 1]);
     line[2].x = line[1].x;
     line[2].y = rc.bottom - PaddingBottom;
     line[3].x = line[0].x;
@@ -382,10 +371,8 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
   RasterPoint line[2];
 
   for (int i = 0; i < lsdata.sum_n - 1; i++) {
-    line[0].x = (int)((lsdata.xstore[i] - x_min) * xscale) + rc.left + PaddingLeft;
-    line[0].y = (int)((y_max - lsdata.ystore[i]) * yscale) + rc.top;
-    line[1].x = (int)((lsdata.xstore[i + 1] - x_min) * xscale) + rc.left + PaddingLeft;
-    line[1].y = (int)((y_max - lsdata.ystore[i + 1]) * yscale) + rc.top;
+    line[0] = ToScreen(lsdata.xstore[i], lsdata.ystore[i]);
+    line[1] = ToScreen(lsdata.xstore[i + 1], lsdata.ystore[i + 1]);
 
     // STYLE_DASHGREEN
     // STYLE_MEDIUMBLACK
@@ -429,8 +416,6 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
   RasterPoint line[2];
 
-  PixelScalar xmin, ymin, xmax, ymax;
-
   /** the minimum next position of the text, to avoid overlapping */
   PixelScalar next_text = rc.left;
 
@@ -441,16 +426,12 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
   }
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
-  ymin = rc.top;
-  ymax = rc.bottom;
-  line[0].y = ymin;
-  line[1].y = ymax - PaddingBottom;
+  line[0].y = rc.top;
+  line[1].y = rc.bottom - PaddingBottom;
 
   for (fixed xval = zero; xval <= x_max; xval += tic_step) {
-    xmin = (int)((xval - x_min) * xscale) + rc.left + PaddingLeft;
-    xmax = xmin;
-    line[0].x = xmin;
-    line[1].x = xmax;
+    const PixelScalar xmin = screenX(xval);
+    line[0].x = line[1].x = xmin;
 
     // STYLE_THINDASHPAPER
     if ((xval < x_max) && (xmin >= rc.left + PaddingLeft) && (xmin <= rc.right)) {
@@ -461,23 +442,16 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
         canvas.SetBackgroundTransparent();
-        canvas.text(xmin, ymax - Layout::Scale(17), unit_text);
+        canvas.text(xmin, rc.bottom - Layout::Scale(17), unit_text);
 
         next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
       }
     }
   }
 
-  ymin = rc.top;
-  ymax = rc.bottom;
-  line[0].y = ymin;
-  line[1].y = ymax - PaddingBottom;
-
   for (fixed xval = zero - tic_step; xval >= x_min; xval -= tic_step) {
-    xmin = (int)((xval - x_min) * xscale) + rc.left + PaddingLeft;
-    xmax = xmin;
-    line[0].x = xmin;
-    line[1].x = xmax;
+    const PixelScalar xmin = screenX(xval);
+    line[0].x = line[1].x = xmin;
 
     // STYLE_THINDASHPAPER
 
@@ -489,7 +463,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
         canvas.SetBackgroundTransparent();
-        canvas.text(xmin, ymax - Layout::Scale(17), unit_text);
+        canvas.text(xmin, rc.bottom - Layout::Scale(17), unit_text);
       }
     }
   }
@@ -514,24 +488,18 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
   RasterPoint line[2];
 
-  PixelScalar xmin, ymin, xmax, ymax;
-
   /* increase tic step so graph not too crowded */
   while ((y_max-y_min)/tic_step > fixed_ten) {
     tic_step *= fixed_two;
     unit_step *= fixed_two;
   }
 
-  xmin = rc.left;
-  xmax = rc.right;
-  line[0].x = xmin + PaddingLeft;
-  line[1].x = xmax;
+  line[0].x = rc.left + PaddingLeft;
+  line[1].x = rc.right;
 
   for (fixed yval = zero; yval <= y_max; yval += tic_step) {
-    ymin = (int)((y_max - yval) * yscale) + rc.top;
-    ymax = ymin;
-    line[0].y = ymin;
-    line[1].y = ymax;
+    const PixelScalar ymin = screenY(yval);
+    line[0].y = line[1].y = ymin;
 
     // STYLE_THINDASHPAPER
     if ((yval < y_max) && (ymin >= rc.top) && (ymin <= rc.bottom - PaddingBottom)) {
@@ -542,21 +510,14 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
         canvas.SetBackgroundTransparent();
-        canvas.text(xmin + Layout::Scale(8), ymin, unit_text);
+        canvas.text(rc.left + Layout::Scale(8), ymin, unit_text);
       }
     }
   }
 
-  xmin = rc.left;
-  xmax = rc.right;
-  line[0].x = xmin + PaddingLeft;
-  line[1].x = xmax;
-
   for (fixed yval = zero - tic_step; yval >= y_min; yval -= tic_step) {
-    ymin = (int)((y_max - yval) * yscale) + rc.top;
-    ymax = ymin;
-    line[0].y = ymin;
-    line[1].y = ymax;
+    const PixelScalar ymin = screenY(yval);
+    line[0].y = line[1].y = ymin;
 
     // STYLE_THINDASHPAPER
     if ((yval > y_min) && (ymin >= rc.top) && (ymin <= rc.bottom - PaddingBottom)) {
@@ -567,7 +528,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
         canvas.SetBackgroundTransparent();
-        canvas.text(xmin + Layout::Scale(8), ymin, unit_text);
+        canvas.text(rc.left + Layout::Scale(8), ymin, unit_text);
       }
     }
   }
@@ -637,8 +598,7 @@ ChartRenderer::DrawArrow(const fixed x, const fixed y, const fixed mag,
 {
   RasterPoint wv[2];
 
-  wv[0].x = screenX(x);
-  wv[0].y = screenY(y);
+  wv[0] = ToScreen(x, y);
 
   const FastRotation r(angle);
   FastRotation::Pair p;
@@ -668,10 +628,9 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
   const unsigned fsize = vals.size()+2;
   RasterPoint line[fsize];
 
-  for (unsigned i=0; i< vals.size(); ++i) {
-    line[i+2].x = (int)((vals[i].first - x_min) * xscale) + rc.left + PaddingLeft;
-    line[i+2].y = (int)((y_max - vals[i].second) * yscale) + rc.top;
-  }
+  for (unsigned i = 0; i < vals.size(); ++i)
+    line[i + 2] = ToScreen(vals[i].first, vals[i].second);
+
   line[0].x = rc.left + PaddingLeft;
   line[0].y = line[fsize-1].y;
   line[1].x = rc.left + PaddingLeft;
@@ -689,9 +648,7 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
 void
 ChartRenderer::DrawDot(const fixed x, const fixed y, const PixelScalar width)
 {
-  RasterPoint p;
-  p.x = (PixelScalar)((x - x_min) * xscale) + rc.left + PaddingLeft;
-  p.y = (PixelScalar)((y_max - y) * yscale) + rc.top;
+  RasterPoint p = ToScreen(x, y);
   RasterPoint line[4] = { { p.x, PixelScalar(p.y - width) },
                           { PixelScalar(p.x - width), p.y },
                           { p.x, PixelScalar(p.y + width) },

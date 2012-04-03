@@ -296,10 +296,8 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
 
   RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
 
-  points[0].x = chart.screenX(vec.distance);
-  points[0].y = chart.screenY(fixed_zero);
-  points[1].x = chart.screenX(fixed_zero);
-  points[1].y = chart.screenY(fixed_zero);
+  points[0] = chart.ToScreen(vec.distance, fixed_zero);
+  points[1] = chart.ToScreen(fixed_zero, fixed_zero);
 
   unsigned i = 2;
   for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
@@ -317,8 +315,7 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
         continue;
     }
 
-    points[i].x = chart.screenX(t_this * vec.distance);
-    points[i].y = chart.screenY(fixed(h));
+    points[i] = chart.ToScreen(t_this * vec.distance, fixed(h));
     i++;
   }
 
@@ -351,8 +348,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
   canvas.SelectNullPen();
 
   RasterPoint line[4];
-  line[0].x = chart.screenX(fixed_zero);
-  line[0].y = chart.screenY(gps_info.nav_altitude);
+  line[0] = chart.ToScreen(fixed_zero, gps_info.nav_altitude);
   line[1].x = rc.left;
   line[1].y = line[0].y;
   line[2].x = line[1].x;
