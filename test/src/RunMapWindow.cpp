@@ -172,7 +172,7 @@ protected:
 };
 
 static void
-LoadFiles()
+LoadFiles(ComputerSettings &settings)
 {
   NullOperationEnvironment operation;
 
@@ -182,6 +182,7 @@ LoadFiles()
   terrain = RasterTerrain::OpenTerrain(NULL, operation);
 
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
+  WaypointGlue::SetHome(way_points, terrain, settings, false);
 
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
   if (reader != NULL) {
@@ -204,8 +205,14 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   nmea_info.clock = fixed_one;
   nmea_info.time = fixed(1297230000);
   nmea_info.alive.Update(nmea_info.clock);
-  nmea_info.location.latitude = Angle::Degrees(fixed(51.2));
-  nmea_info.location.longitude = Angle::Degrees(fixed(7.7));
+
+  if (settings_computer.poi.home_location_available)
+    nmea_info.location = settings_computer.poi.home_location;
+  else {
+    nmea_info.location.latitude = Angle::Degrees(fixed(51.2));
+    nmea_info.location.longitude = Angle::Degrees(fixed(7.7));
+  }
+
   nmea_info.location_available.Update(nmea_info.clock);
   nmea_info.track = Angle::Degrees(fixed_90);
   nmea_info.track_available.Update(nmea_info.clock);
@@ -226,6 +233,7 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      settings_map);
+  map.SetLocation(nmea_info.location);
 }
 
 #ifndef WIN32
@@ -253,7 +261,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   settings_map.SetDefaults();
   Profile::Load(settings_map);
 
-  LoadFiles();
+  LoadFiles(settings_computer);
 
   ScreenGlobalInit screen_init;
 
