@@ -256,15 +256,15 @@ MD5::Process512(const unsigned char *s512in)
     uint32_t temp = d;
     d = c;
     c = b;
-    b = b + leftrotate((a + f + k[i] + w[g]), r[i]);
+    b += leftrotate((a + f + k[i] + w[g]), r[i]);
     a = temp;
   }
 
   // Add this chunk's hash to result so far:
-  h0 = h0 + a;
-  h1 = h1 + b;
-  h2 = h2 + c;
-  h3 = h3 + d;
+  h0 += a;
+  h1 += b;
+  h2 += c;
+  h3 += d;
 }
 
 void
