@@ -233,12 +233,9 @@ MD5::Process512(const unsigned char *s512in)
 
   // copy the 64 chars into the 16 uint32_ts
   uint32_t w[16];
-  for (int j = 0; j < 16; j++) {
-    w[j] = (((uint32_t)s512in[(j * 4) + 3]) << 24) |
-           (((uint32_t)s512in[(j * 4) + 2]) << 16) |
-           (((uint32_t)s512in[(j * 4) + 1]) << 8) |
-           ((uint32_t)s512in[(j * 4)]);
-  }
+  const uint32_t *s512_32 = (const uint32_t *)(const void *)s512in;
+  for (int j = 0; j < 16; j++)
+    w[j] = ToLE32(s512_32[j]);
 
   // Main loop:
   for (int i = 0; i < 64; i++) {
