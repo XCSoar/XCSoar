@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_FLOAT_HPP
 #define XCSOAR_DATA_FIELD_FLOAT_HPP
 
-#include "DataField/Number.hpp"
+#include "Number.hpp"
 #include "PeriodClock.hpp"
 #include "Math/fixed.hpp"
 

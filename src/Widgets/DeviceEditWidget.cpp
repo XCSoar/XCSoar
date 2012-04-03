@@ -27,8 +27,8 @@
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Compatibility/string.h"
-#include "DataField/Enum.hpp"
-#include "DataField/Boolean.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Device/Register.hpp"
 #include "Device/Driver.hpp"
 

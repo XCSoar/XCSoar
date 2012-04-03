@@ -21,56 +21,81 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_INTEGER_HPP
-#define XCSOAR_DATA_FIELD_INTEGER_HPP
+#ifndef XCSOAR_DATA_FIELD_TIME_HPP
+#define XCSOAR_DATA_FIELD_TIME_HPP
 
-#include "DataField/Number.hpp"
+#include "Base.hpp"
 #include "PeriodClock.hpp"
+#include "Math/fixed.hpp"
 
-class DataFieldInteger : public NumberDataField
+class DataFieldTime : public DataField
 {
 private:
   int value;
   int min;
   int max;
-  int step;
+  unsigned step;
+  unsigned max_tokens;
   PeriodClock last_step;
-  int speedup;
-  TCHAR outpuf_buffer[OUTBUFFERSIZE + 1];
+  uint8_t speedup;
+
+  mutable TCHAR display_buffer[OUTBUFFERSIZE + 1];
 
 protected:
   int SpeedUp(bool keyup);
 
 public:
-  DataFieldInteger(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                   int Min, int Max,
-                   int Default, int Step, DataAccessCallback OnDataAccess)
-    :NumberDataField(Type::INTEGER, true, EditFormat, DisplayFormat, OnDataAccess),
-     value(Default), min(Min), max(Max), step(Step) {}
+  DataFieldTime(int _min, int _max, int _value, unsigned _step,
+                DataAccessCallback OnDataAccess)
+    :DataField(Type::TIME, true, OnDataAccess),
+     value(_value), min(_min), max(_max), step(_step), max_tokens(2),
+     speedup(0) {}
+
 
   void Inc();
   void Dec();
   virtual ComboList *CreateComboList() const;
-  virtual void SetFromCombo(int iDataFieldIndex, TCHAR *sValue);
+  void SetFromCombo(int data_field_index, TCHAR *value_string);
 
-  virtual int GetAsInteger() const;
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
-  void Set(int value);
+  void SetValue(int _value) {
+    value = _value;
+  }
 
-  int SetMin(int _min) {
+  void SetMin(int _min) {
     min = _min;
-    return min;
   }
 
-  int SetMax(int _max) {
+  void SetMax(int _max) {
     max = _max;
-    return max;
   }
 
-  virtual void SetAsInteger(int value);
-  virtual void SetAsString(const TCHAR *value);
+  void SetStep(unsigned _step) {
+    step = _step;
+  }
+
+  void SetMaxTokenNumber(unsigned _max_tokens) {
+    assert(max_tokens > 0 && max_tokens <= 4);
+    max_tokens = _max_tokens;
+  }
+
+  virtual int GetAsInteger() const {
+    return value;
+  }
+
+  virtual void SetAsInteger(int _value) {
+    value = _value;
+  }
+
+  fixed GetAsFixed() const {
+    return fixed(value);
+  }
+
+  void SetAsFixed(fixed value) {
+    SetValue((int)value);
+  }
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

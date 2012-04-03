@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "DataField/Boolean.hpp"
-#include "DataField/ComboList.hpp"
+#include "Boolean.hpp"
+#include "ComboList.hpp"
 
 ComboList *
 DataFieldBoolean::CreateComboList() const

@@ -1,6 +1,6 @@
 # Build rules for the DataField library
 
-DATA_FIELD_SRC_DIR = $(SRC)/DataField
+DATA_FIELD_SRC_DIR = $(SRC)/Form/DataField
 
 DATA_FIELD_SOURCES = \
 	$(DATA_FIELD_SRC_DIR)/Base.cpp \

@@ -28,8 +28,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Device/device.hpp"
 #include "Math/FastMath.h"
-#include "DataField/Boolean.hpp"
-#include "DataField/Float.hpp"
+#include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/Float.hpp"
 #include "PeriodClock.hpp"
 #include "Form/Util.hpp"
 

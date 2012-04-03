@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "GlideComputerConfigPanel.hpp"
 #include "Language/Language.hpp"

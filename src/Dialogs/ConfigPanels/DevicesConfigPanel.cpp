@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "DataField/Enum.hpp"
-#include "DataField/ComboList.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/ComboList.hpp"
 #include "Form/List.hpp"
 #include "Form/ListWidget.hpp"
 #include "Form/TwoWidgets.hpp"

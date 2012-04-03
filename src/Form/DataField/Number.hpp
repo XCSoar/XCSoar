@@ -21,49 +21,25 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_BOOLEAN_HPP
-#define XCSOAR_DATA_FIELD_BOOLEAN_HPP
+#ifndef XCSOAR_DATA_FIELD_NUMBER_HPP
+#define XCSOAR_DATA_FIELD_NUMBER_HPP
 
+#include "Base.hpp"
 #include "Util/StaticString.hpp"
-#include "DataField/Base.hpp"
+#include "Compiler.h"
 
-class DataFieldBoolean: public DataField
-{
-private:
-  bool mValue;
-
-  StaticString<32> true_text;
-  StaticString<32> false_text;
+class NumberDataField : public DataField {
+protected:
+  StaticString<32> edit_format;
+  StaticString<32> display_format;
 
 public:
-  DataFieldBoolean(bool Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
-                   DataAccessCallback OnDataAccess)
-    :DataField(Type::BOOLEAN, true, OnDataAccess),
-     mValue(Default),
-     true_text(TextTrue), false_text(TextFalse) {}
+  void SetFormat(const TCHAR *text);
 
-  void Inc();
-  void Dec();
-  virtual ComboList *CreateComboList() const;
-
-  bool GetAsBoolean() const;
-  virtual int GetAsInteger() const;
-  virtual const TCHAR *GetAsString() const;
-
-  virtual void
-  Set(int Value)
-  {
-    if (Value > 0)
-      Set(true);
-    else
-      Set(false);
-  }
-
-  void Set(bool Value);
-
-  void SetAsBoolean(bool Value);
-  virtual void SetAsInteger(int Value);
-  virtual void SetAsString(const TCHAR *Value);
+protected:
+  NumberDataField(Type type, bool support_combo,
+                  const TCHAR *edit_format, const TCHAR *display_format,
+                  DataAccessCallback OnDataAccess = NULL);
 };
 
 #endif

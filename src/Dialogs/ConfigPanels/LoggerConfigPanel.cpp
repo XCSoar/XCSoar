@@ -31,7 +31,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 
 enum ControlIndex {
   LoggerTimeStepCruise,

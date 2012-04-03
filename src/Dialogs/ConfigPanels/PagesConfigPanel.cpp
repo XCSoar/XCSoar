@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "PagesConfigPanel.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Pages.hpp"
 #include "Language/Language.hpp"
 #include "Profile/PageProfile.hpp"

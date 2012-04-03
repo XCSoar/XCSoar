@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Form/Edit.hpp"
-#include "DataField/Float.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
 

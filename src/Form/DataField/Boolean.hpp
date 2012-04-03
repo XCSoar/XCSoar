@@ -21,28 +21,49 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_STRING_HPP
-#define XCSOAR_DATA_FIELD_STRING_HPP
+#ifndef XCSOAR_DATA_FIELD_BOOLEAN_HPP
+#define XCSOAR_DATA_FIELD_BOOLEAN_HPP
 
-#include "DataField/Base.hpp"
+#include "Base.hpp"
 #include "Util/StaticString.hpp"
 
-#define EDITSTRINGSIZE 32
-
-class DataFieldString: public DataField
+class DataFieldBoolean: public DataField
 {
-  StaticString<EDITSTRINGSIZE> mValue;
+private:
+  bool mValue;
+
+  StaticString<32> true_text;
+  StaticString<32> false_text;
 
 public:
-  DataFieldString(const TCHAR *Default,
-                  DataAccessCallback OnDataAccess) :
-    DataField(Type::STRING, false, OnDataAccess), mValue(Default) {}
+  DataFieldBoolean(bool Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
+                   DataAccessCallback OnDataAccess)
+    :DataField(Type::BOOLEAN, true, OnDataAccess),
+     mValue(Default),
+     true_text(TextTrue), false_text(TextFalse) {}
 
-  virtual void SetAsString(const TCHAR *Value);
+  void Inc();
+  void Dec();
+  virtual ComboList *CreateComboList() const;
 
-  void Set(const TCHAR *Value);
-
+  bool GetAsBoolean() const;
+  virtual int GetAsInteger() const;
   virtual const TCHAR *GetAsString() const;
+
+  virtual void
+  Set(int Value)
+  {
+    if (Value > 0)
+      Set(true);
+    else
+      Set(false);
+  }
+
+  void Set(bool Value);
+
+  void SetAsBoolean(bool Value);
+  virtual void SetAsInteger(int Value);
+  virtual void SetAsString(const TCHAR *Value);
 };
 
 #endif

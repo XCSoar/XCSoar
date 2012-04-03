@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_ENUM_HPP
 #define XCSOAR_DATA_FIELD_ENUM_HPP
 
-#include "DataField/Base.hpp"
+#include "Base.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 

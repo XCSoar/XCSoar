@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "AirspaceConfigPanel.hpp"
 #include "ConfigPanel.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/Boolean.hpp"
-#include "DataField/Listener.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Boolean.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Form/Button.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Dialogs/Airspace.hpp"

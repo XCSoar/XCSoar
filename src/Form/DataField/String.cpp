@@ -21,25 +21,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_NUMBER_HPP
-#define XCSOAR_DATA_FIELD_NUMBER_HPP
+#include "String.hpp"
 
-#include "Util/StaticString.hpp"
-#include "DataField/Base.hpp"
-#include "Compiler.h"
+void
+DataFieldString::SetAsString(const TCHAR *Value)
+{
+  if (mValue == Value)
+    return;
 
-class NumberDataField : public DataField {
-protected:
-  StaticString<32> edit_format;
-  StaticString<32> display_format;
+  mValue = Value;
+  Modified();
+}
 
-public:
-  void SetFormat(const TCHAR *text);
+void
+DataFieldString::Set(const TCHAR *Value)
+{
+  mValue = Value;
+}
 
-protected:
-  NumberDataField(Type type, bool support_combo,
-                  const TCHAR *edit_format, const TCHAR *display_format,
-                  DataAccessCallback OnDataAccess = NULL);
-};
-
-#endif
+const TCHAR *
+DataFieldString::GetAsString() const
+{
+  return mValue;
+}

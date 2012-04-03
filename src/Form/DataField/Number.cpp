@@ -21,26 +21,21 @@ Copyright_License {
 }
 */
 
-#include "DataField/String.hpp"
+#include "Number.hpp"
 
-void
-DataFieldString::SetAsString(const TCHAR *Value)
+NumberDataField::NumberDataField(Type type, bool support_combo,
+                                 const TCHAR *_edit_format,
+                                 const TCHAR *_display_format,
+                                 DataAccessCallback OnDataAccess)
+  :DataField(type, support_combo, OnDataAccess),
+   edit_format(_edit_format), display_format(_display_format)
 {
-  if (mValue == Value)
-    return;
-
-  mValue = Value;
-  Modified();
 }
 
 void
-DataFieldString::Set(const TCHAR *Value)
+NumberDataField::SetFormat(const TCHAR *text)
 {
-  mValue = Value;
-}
-
-const TCHAR *
-DataFieldString::GetAsString() const
-{
-  return mValue;
+  edit_format = text;
+  display_format = text;
+  display_format += _T(" %s") ;
 }

@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "UnitsConfigPanel.hpp"
 #include "UIGlobals.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/Listener.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Units/Units.hpp"
@@ -33,7 +33,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
-#include "DataField/Base.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "DataField/Enum.hpp"
-#include "DataField/ComboList.hpp"
+#include "Enum.hpp"
+#include "ComboList.hpp"
 #include "Language/Language.hpp"
 
 #include <stdlib.h>

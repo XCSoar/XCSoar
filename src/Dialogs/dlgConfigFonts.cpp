@@ -29,7 +29,7 @@ Copyright_License {
 #include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
-#include "DataField/Boolean.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "Util/StringUtil.hpp"
 #include "Compiler.h"
 

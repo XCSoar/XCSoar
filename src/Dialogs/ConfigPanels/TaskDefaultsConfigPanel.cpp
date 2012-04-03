@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/Listener.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"

@@ -28,8 +28,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Components.hpp"
 #include "Replay/Replay.hpp"
-#include "DataField/FileReader.hpp"
-#include "DataField/Float.hpp"
+#include "Form/DataField/FileReader.hpp"
+#include "Form/DataField/Float.hpp"
 
 static WndForm *wf = NULL;
 

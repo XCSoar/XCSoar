@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "WindSettingsPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "DataField/Enum.hpp"
-#include "DataField/Float.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"

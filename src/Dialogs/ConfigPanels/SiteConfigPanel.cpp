@@ -25,7 +25,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Waypoint.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Form/Button.hpp"
 #include "Form/Util.hpp"
 #include "Form/Form.hpp"

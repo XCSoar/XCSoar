@@ -25,8 +25,8 @@
 #define XCSOAR_DEVICE_EDIT_WIDGET_HPP
 
 #include "Form/RowFormWidget.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "DataField/Listener.hpp"
 
 #include <assert.h>
 

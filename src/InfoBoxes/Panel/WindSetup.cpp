@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/XMLWidget.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"

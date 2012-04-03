@@ -23,8 +23,8 @@ Copyright_License {
 
 #include "FilePicker.hpp"
 #include "ComboPicker.hpp"
-#include "DataField/FileReader.hpp"
-#include "DataField/ComboList.hpp"
+#include "Form/DataField/FileReader.hpp"
+#include "Form/DataField/ComboList.hpp"
 #include "UIGlobals.hpp"
 
 bool

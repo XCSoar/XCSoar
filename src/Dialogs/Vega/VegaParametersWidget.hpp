@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_VEGA_PARAMETERS_WIDGET_HPP
 
 #include "Form/RowFormWidget.hpp"
-#include "DataField/Base.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Util/StaticArray.hpp"
 
 class VegaDevice;

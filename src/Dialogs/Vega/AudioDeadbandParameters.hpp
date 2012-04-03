@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_VEGA_AUDIO_DEADBAND_PARAMETERS
 
 #include "VegaParametersWidget.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
 

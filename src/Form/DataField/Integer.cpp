@@ -21,50 +21,87 @@ Copyright_License {
 }
 */
 
-#include "DataField/Time.hpp"
-#include "DataField/ComboList.hpp"
-#include "Formatter/TimeFormatter.hpp"
+#include "Integer.hpp"
+#include "ComboList.hpp"
+#include "Math/FastMath.h"
+#include "Compatibility/string.h"
 #include "Asset.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
 
-static bool data_field_key_up = false;
+static bool datafield_key_up = false;
 
-const TCHAR *
-DataFieldTime::GetAsString() const
+int
+DataFieldInteger::GetAsInteger() const
 {
-  return GetAsDisplayString();
+  return value;
 }
 
 const TCHAR *
-DataFieldTime::GetAsDisplayString() const
+DataFieldInteger::GetAsString() const
 {
-  FormatTimespanSmart(display_buffer, value, max_tokens);
-  return display_buffer;
+  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
+  _stprintf(output_buffer, edit_format, value);
+  return output_buffer;
+}
+
+const TCHAR *
+DataFieldInteger::GetAsDisplayString() const
+{
+  TCHAR *output_buffer = const_cast<TCHAR *>(this->outpuf_buffer);
+  _stprintf(output_buffer, display_format, value);
+  return output_buffer;
 }
 
 void
-DataFieldTime::Inc()
+DataFieldInteger::Set(int _value)
 {
-  SetValue(value + step * SpeedUp(true));
+  value = _value;
 }
 
 void
-DataFieldTime::Dec()
+DataFieldInteger::SetAsInteger(int _value)
 {
-  SetValue(value - step * SpeedUp(false));
+  if (_value < min)
+    _value = min;
+  if (_value > max)
+    _value = max;
+  if (value != _value) {
+    value = _value;
+    Modified();
+  }
+}
+
+void
+DataFieldInteger::SetAsString(const TCHAR *_value)
+{
+  SetAsInteger(_ttoi(_value));
+}
+
+void
+DataFieldInteger::Inc()
+{
+  SetAsInteger(value + step * SpeedUp(true));
+}
+
+void
+DataFieldInteger::Dec()
+{
+  SetAsInteger(value - step * SpeedUp(false));
 }
 
 int
-DataFieldTime::SpeedUp(bool key_up)
+DataFieldInteger::SpeedUp(bool keyup)
 {
-  if (IsAltair())
-    return 1;
+  int res = 1;
 
-  if (key_up != data_field_key_up) {
+  if (IsAltair())
+    return res;
+
+  if (keyup != datafield_key_up) {
     speedup = 0;
-    data_field_key_up = key_up;
+    datafield_key_up = keyup;
     last_step.Update();
     return 1;
   }
@@ -72,33 +109,29 @@ DataFieldTime::SpeedUp(bool key_up)
   if (!last_step.Check(200)) {
     speedup++;
     if (speedup > 5) {
+      res = 10;
       last_step.UpdateWithOffset(350);
-      return 10;
+      return (res);
     }
   } else
     speedup = 0;
 
   last_step.Update();
 
-  return 1;
+  return res;
 }
 
 void
-DataFieldTime::SetFromCombo(int data_field_index, TCHAR *value_string)
+DataFieldInteger::AppendComboValue(ComboList &combo_list, int value) const
 {
-  SetValue(data_field_index);
-}
-
-void
-DataFieldTime::AppendComboValue(ComboList &combo_list, int value) const
-{
-  TCHAR buffer[128];
-  FormatTimespanSmart(buffer, value, max_tokens);
-  combo_list.Append(value, buffer);
+  TCHAR a[edit_format.MAX_SIZE], b[display_format.MAX_SIZE];
+  _stprintf(a, edit_format, value);
+  _stprintf(b, display_format, value);
+  combo_list.Append(combo_list.size(), a, b);
 }
 
 ComboList *
-DataFieldTime::CreateComboList() const
+DataFieldInteger::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
 
@@ -115,7 +148,7 @@ DataFieldTime::CreateComboList() const
   else if (first < min)
     first = min;
 
-  int last = std::min(first + (int)(surrounding_items * step * 2), max);
+  int last = std::min(first + (int)surrounding_items * step * 2, max);
 
   bool found_current = false;
   for (int i = first; i <= last; i += step) {
@@ -143,4 +176,10 @@ DataFieldTime::CreateComboList() const
     combo_list->Append(ComboList::Item::NEXT_PAGE, _T("<<More Items>>"));
 
   return combo_list;
+}
+
+void
+DataFieldInteger::SetFromCombo(int index, TCHAR *value)
+{
+  SetAsString(value);
 }

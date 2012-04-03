@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "DataField/Float.hpp"
-#include "DataField/ComboList.hpp"
+#include "Float.hpp"
+#include "ComboList.hpp"
 #include "Math/FastMath.h"
 #include "Asset.hpp"
 

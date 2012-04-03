@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TaskRulesConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Form/RowFormWidget.hpp"

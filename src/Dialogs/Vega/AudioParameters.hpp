@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "VegaParametersWidget.hpp"
 #include "Schemes.hpp"
-#include "DataField/Enum.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "Util/StaticString.hpp"
 #include "Compiler.h"
