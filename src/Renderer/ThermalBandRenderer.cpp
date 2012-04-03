@@ -128,6 +128,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   // position of thermal band
   if (numtherm > 1) {
     std::vector< std::pair<fixed, fixed> > ThermalProfile; 
+    ThermalProfile.reserve(numtherm);
     for (int i = 0; i < numtherm; ++i) {
       ThermalProfile.push_back(std::make_pair(Wt[i], ht[i]));
     }
