@@ -84,7 +84,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
   else
     canvas.Select(look.pens[airspace.GetType()]);
 
-  if (airspace.shape == AbstractAirspace::Shape::CIRCLE)
+  if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
     canvas.circle(pt.x, pt.y, radius);
   else
     DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);

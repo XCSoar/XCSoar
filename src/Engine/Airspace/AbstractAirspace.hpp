@@ -55,6 +55,7 @@ public:
     POLYGON,
   };
 
+private:
   const Shape shape;
 
 protected:
@@ -90,6 +91,10 @@ protected:
 public:
   AbstractAirspace(Shape _shape):shape(_shape), active(true) {}
   virtual ~AbstractAirspace();
+
+  Shape GetShape() const {
+    return shape;
+  }
 
   /** 
    * Compute bounding box enclosing the airspace.  Rounds up/down

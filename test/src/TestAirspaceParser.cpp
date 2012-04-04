@@ -91,7 +91,7 @@ TestOpenAir()
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->get_airspace();
     if (_tcscmp(_T("Circle-Test"), airspace.GetName()) == 0) {
-      if (!ok1(airspace.shape == AbstractAirspace::Shape::CIRCLE))
+      if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
@@ -99,7 +99,7 @@ TestOpenAir()
       ok1(equals(circle.GetCenter(), 
                  Angle::Degrees(fixed(1.091667)), Angle::Degrees(fixed(0.091667))));
     } else if (_tcscmp(_T("Polygon-Test"), airspace.GetName()) == 0) {
-      if (!ok1(airspace.shape == AbstractAirspace::Shape::POLYGON))
+      if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
 
       const AirspacePolygon &polygon = (const AirspacePolygon &)airspace;
@@ -196,7 +196,7 @@ TestTNP()
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->get_airspace();
     if (_tcscmp(_T("Circle-Test"), airspace.GetName()) == 0) {
-      if (!ok1(airspace.shape == AbstractAirspace::Shape::CIRCLE))
+      if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::CIRCLE))
         continue;
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
@@ -204,7 +204,7 @@ TestTNP()
       ok1(equals(circle.GetCenter(), 
                  Angle::Degrees(fixed(1.091667)), Angle::Degrees(fixed(0.091667))));
     } else if (_tcscmp(_T("Polygon-Test"), airspace.GetName()) == 0) {
-      if (!ok1(airspace.shape == AbstractAirspace::Shape::POLYGON))
+      if (!ok1(airspace.GetShape() == AbstractAirspace::Shape::POLYGON))
         continue;
 
       const AirspacePolygon &polygon = (const AirspacePolygon &)airspace;
