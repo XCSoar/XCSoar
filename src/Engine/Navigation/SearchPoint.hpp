@@ -68,6 +68,14 @@ public:
 #endif
   {}
 
+  SearchPoint(const GeoPoint &_reference, const FlatGeoPoint &_flat)
+    :reference(_reference), flatLocation(_flat)
+#ifndef NDEBUG
+    , projected(true)
+#endif
+  {
+  }
+
   /**
    * Constructor
    *
