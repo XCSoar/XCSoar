@@ -405,30 +405,35 @@ location=5
 mode=Nav2
 type=key
 data=7
-event=GotoLookup
 event=Mode default
-label=GoTo$(CheckWaypointFile)
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Mark\nDrop
 location=6
 
 mode=Nav2
 type=key
 data=8
-event=Setup Target
+event=GotoLookup
 event=Mode default
-label=Target$(CheckTask)$(CheckTaskResumed)
+label=GoTo$(CheckWaypointFile)
 location=7
 
 mode=Nav2
 type=key
 data=9
-event=WaypointDetails current
+event=Setup Target
 event=Mode default
-label=Waypoint\nDetails$(CheckTask)
+label=Target$(CheckTask)$(CheckTaskResumed)
 location=8
 
 mode=Nav2
 type=key
 data=0
+event=WaypointDetails current
+event=Mode default
+label=Waypoint\nDetails$(CheckTask)
 location=9
 
 # -------------
@@ -464,16 +469,6 @@ event=Zoom auto show
 event=Zoom auto toggle
 label=Zoom\n$(ZoomAutoToggleActionName)
 location=7
-
-mode=Display1
-type=key
-data=9
-event=Mode default
-event=StatusMessage Dropped marker
-event=Logger note Mark
-event=MarkLocation
-label=Mark\nDrop
-location=8
 
 mode=Display1
 type=key
