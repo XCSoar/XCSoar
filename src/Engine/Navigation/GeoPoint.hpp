@@ -80,6 +80,17 @@ struct GeoPoint {
   }
 
   /**
+   * Set this instance to "invalid", i.e. IsValid() will
+   * return false.  The return value must not be used in any
+   * calculation.  This method may be used to explicitly declare a
+   * GeoPoint attribute as "invalid".
+   */
+  void SetInvalid() {
+    longitude = Angle::Zero();
+    latitude = Angle::FullCircle();
+  }
+
+  /**
    * Check if this object is "valid".  Returns false when it was
    * constructed by Invalid().  This is not an extensive plausibility
    * check; it is only designed to catch instances created by
