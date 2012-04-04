@@ -61,14 +61,12 @@ protected:
    * @param as Airspace to test
    * @param state Aircraft state
    * @param perf Performance of aircraft for query
-   * @param all Whether to find solution for first or all intersections
    *
    * @return Solution if any
    */
   AirspaceInterceptSolution Intercept(const AbstractAirspace &as,
                                       const AircraftState &state,
-                                      const AirspaceAircraftPerformance &perf,
-                                      bool all = true) const;
+                                      const AirspaceAircraftPerformance &perf) const;
 };
 
 #endif

@@ -26,19 +26,14 @@
 AirspaceInterceptSolution 
 AirspaceIntersectionVisitor::Intercept(const AbstractAirspace &as,
                                        const AircraftState &state,
-                                       const AirspaceAircraftPerformance &perf,
-                                       bool all) const
+                                       const AirspaceAircraftPerformance &perf) const
 {
   if (intersections.empty())
     return AirspaceInterceptSolution::Invalid();
 
   AirspaceInterceptSolution solution;
-  for (auto it = intersections.begin(); it != intersections.end(); ++it) {
+  for (auto it = intersections.begin(); it != intersections.end(); ++it)
     as.Intercept(state, perf, solution, it->first, it->second);
-
-    if (!all)
-      return solution;
-  }
 
   return solution;
 }
