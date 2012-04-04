@@ -52,8 +52,6 @@ AirspaceCircle::Inside(const GeoPoint &loc) const
 AirspaceIntersectionVector
 AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end) const
 {
-  AirspaceIntersectSort sorter(start, end, *this);
-
   const fixed f_radius = m_task_projection->fproject_range(m_center, m_radius);
   const FlatPoint f_center = m_task_projection->fproject(m_center);
   const FlatPoint f_start = m_task_projection->fproject(start);
@@ -61,24 +59,27 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end) const
   const FlatLine line(f_start, f_end);
 
   FlatPoint f_p1, f_p2;
-  if (line.intersect_circle(f_radius, f_center, f_p1, f_p2)) {
-    const fixed mag = line.dsq();
-    if (positive(mag)) {
-      const fixed inv_mag = fixed_one / mag;
-      const fixed t1 = FlatLine(f_start, f_p1).dot(line);
-      const fixed t2 = (f_p1 == f_p2) ?
-                       -fixed_one : FlatLine(f_start, f_p2).dot(line);
+  if (!line.intersect_circle(f_radius, f_center, f_p1, f_p2))
+    return AirspaceIntersectionVector();
 
-      const bool in_range = (t1 < mag) || (t2 < mag);
-      // if at least one point is within range, capture both points
+  const fixed mag = line.dsq();
+  if (!positive(mag))
+    return AirspaceIntersectionVector();
 
-      if ((t1 >= fixed_zero) && in_range)
-        sorter.add(t1 * inv_mag, m_task_projection->funproject(f_p1));
+  const fixed inv_mag = fixed_one / mag;
+  const fixed t1 = FlatLine(f_start, f_p1).dot(line);
+  const fixed t2 = (f_p1 == f_p2) ?
+    -fixed_one : FlatLine(f_start, f_p2).dot(line);
 
-      if ((t2 >= fixed_zero) && in_range)
-        sorter.add(t2 * inv_mag, m_task_projection->funproject(f_p2));
-    }
-  }
+  const bool in_range = (t1 < mag) || (t2 < mag);
+  // if at least one point is within range, capture both points
+
+  AirspaceIntersectSort sorter(start, end, *this);
+  if ((t1 >= fixed_zero) && in_range)
+    sorter.add(t1 * inv_mag, m_task_projection->funproject(f_p1));
+
+  if ((t2 >= fixed_zero) && in_range)
+    sorter.add(t2 * inv_mag, m_task_projection->funproject(f_p2));
 
   return sorter.all();
 }
