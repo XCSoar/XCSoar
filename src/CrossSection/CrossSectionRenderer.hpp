@@ -56,8 +56,6 @@ protected:
   /** Pointer to an airspace database instance or NULL */
   const Airspaces *airspace_database;
 
-  bool valid;
-
   /** Left side of the CrossSectionWindow */
   GeoPoint start;
   /** Range and direction of the CrossSection */
@@ -122,12 +120,9 @@ public:
     start = _start;
   }
 
-  void SetValid() {
-    valid = true;
-  }
-
   void SetInvalid() {
-    valid = false;
+    vec.SetInvalid();
+    start.SetInvalid();
   }
 
 protected:

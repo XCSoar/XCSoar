@@ -251,7 +251,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (!valid) {
+  if (!vec.IsValid() || !start.IsValid()) {
     chart.DrawNoData();
     return;
   }

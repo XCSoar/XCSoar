@@ -100,10 +100,6 @@ public:
     renderer.SetStart(start);
   }
 
-  void SetValid() {
-    renderer.SetValid();
-  }
-
   void SetInvalid() {
     renderer.SetInvalid();
   }

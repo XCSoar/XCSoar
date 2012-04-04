@@ -273,7 +273,6 @@ UpdateCrossSection()
   if (basic.location_available && basic.track_available) {
     csw->SetDirection(basic.track);
     csw->SetStart(basic.location);
-    csw->SetValid();
   } else
     csw->SetInvalid();
 }
