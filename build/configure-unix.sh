@@ -15,11 +15,13 @@
 # AC_CONFIG_FILES([Makefile])
 # AC_OUTPUT
 
+DEST=`dirname $0`/local-config.mk
 
 # Test if running on a Mac
 if [ "`uname -s`" != "Darwin" -a "`uname -s`" != "Linux" ]; 
 then
     echo "Not running on Linux or Mac OS X.  Automatic configuration not available."
+    rm ${DEST}
     exit 0
 fi
 
@@ -29,43 +31,30 @@ fi
 # look for possibly newer GCC versions in common locations
 # gcc-4.6 - in PATH
 # gcc-mp-4.6 - Macports in PATH
-# /usr/local/bin/gcc - typical binary location
+# /usr/local/bin/gcc-mp-4.7 - typical binary location
 
-echo $0
-
-DEST=`dirname $0`/local-config.mk
-
-for i in \$a-4.7 \$a-mp-4.7 \$a-4.6 \$a-mp-4.6 \$a-4.5 \$a-mp-4.5 \$a-4.4 \$a-mp-4.4 /usr/local/bin/\$a-4.6 /usr/local/bin/\$a \$a;
+for prefix in "" /usr/local/bin/;
 do
-    a=gcc
-    eval name=$i
-    location=`which $name`
+    for suffix in -4.7 -mp-4.7 -4.6 -mp-4.6 -4.5 -mp-4.5 -4.4 -mp-4.4 "";
+    do
+	CXX="${prefix}gcc${suffix}"
+	location=`which $CXX`
 
-    if [ -e "$location" ]; then
-
-	CC=$location
-
-	a=g++
-	eval name=$i
-	CXX=`which $name`
-
-	a=cpp
-	eval name=$i
-	HOSTCPP=`which $name`
-
-	HOSTCC=$CC
-	HOSTCXX=$CXX
-
-	break
+	if [ -e "$location" ]; then
+	    CXX=$location
+	    LOCAL_TCPATH=`dirname "$location"`/
+	    LOCAL_TCEXT=${suffix}
+	    break 2
 	fi
-
+    done
 done
+
 
 # Test to ensure compiler is new enough.
 (echo "main(){}" | ${CXX} -std=gnu++0x -x c++ -o /dev/null -) || { echo "C compiler fails, or does not understand -std=gnu++0x.  GCC 4.3 or later needed!"; exit 1; }
 
-echo "Using ${CXX} as compiler."
-echo "Using ${HOSTCXX} as host compiler."
+echo "Using ${CXX} as compiler for UNIX targets."
+echo "Using toolchain in ${LOCAL_TCPATH} for UNIX targets."
 
 # Building for Android 
 
@@ -116,7 +105,8 @@ fi
 # if TARGET is not UNIX, do not override compiler
 
 # we must set TARGET_LDFLAGS, as  -Wl,--gc-sections seems to be unknown to the linker.
-
+# we're guaranteed that the host is unix, so we can set LOCAL_TCPATH.
+# target.mk uses this for UNIX targets.
 
 cat >${DEST} <<FINISHED || exit 1;
 
@@ -129,13 +119,11 @@ endif
 
 ifeq (\$(TARGET),UNIX)
 TARGET_LDFLAGS = -static-libgcc
-CC = "$CC"
-CXX = "$CXX"
-HOSTCC = "$HOSTCC"
-HOSTCPP = "$HOSTCPP"
-HOSTCXX = "$HOSTCXX"
-LINK = "$CXX"
 endif
+
+# Best local toolchain:
+LOCAL_TCPATH = $LOCAL_TCPATH
+LOCAL_TCEXT = $LOCAL_TCEXT
 FINISHED
 
 echo "Ready to run make."

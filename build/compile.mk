@@ -7,8 +7,12 @@ endif
 
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPATH)ar$(EXE)
-CXX = $(TCPATH)g++$(EXE)
-CC = $(TCPATH)gcc$(EXE)
+# Fall back to "ar" in PATH (ar is installed separately from GCC)
+ifeq ($(strip $(wildcard $(AR))),)
+  AR = ar$(EXE)
+endif
+CXX = $(TCPATH)g++$(TCEXT)$(EXE)
+CC = $(TCPATH)gcc$(TCEXT)$(EXE)
 DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)
 STRIP = $(TCPATH)strip$(EXE)

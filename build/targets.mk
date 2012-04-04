@@ -149,8 +149,9 @@ ifeq ($(TARGET),WINE)
 endif
 
 ifeq ($(TARGET),UNIX)
-  TCPATH :=
-
+  # LOCAL_TCPATH is set in local-config.mk if configure was run.
+  TCPATH := $(LOCAL_TCPATH)
+  TCEXT := $(LOCAL_TCEXT)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
