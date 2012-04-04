@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(22);
+  plan_tests(29);
 
   // Test StringIsEqual()
 
@@ -59,6 +59,18 @@ int main(int argc, char **argv)
   ok1(StringStartsWith(_T("aaa"), _T("aaa")));
   ok1(StringStartsWith(_T("aaa"), _T("a")));
   ok1(!StringStartsWith(_T("bbb"), _T("aaa")));
+
+  // Test StringAfterPrefix()
+
+  ok1(StringIsEqual(StringAfterPrefix(_T(""), _T("")), _T("")));
+  ok1(StringIsEqual(StringAfterPrefix(_T("a"), _T("")), _T("a")));
+  ok1(StringAfterPrefix(_T(""), _T("a")) == NULL);
+  ok1(StringIsEqual(StringAfterPrefix(_T("aaa"), _T("aaa")), _T("")));
+  ok1(StringIsEqual(StringAfterPrefix(_T("aaa"), _T("a")), _T("aa")));
+  ok1(StringAfterPrefix(_T("bbb"), _T("aaa")) == NULL);
+  ok1(StringIsEqual(StringAfterPrefix(_T("This is a funny test case!"),
+                                      _T("This is")),
+                                      _T(" a funny test case!")));
 
   return exit_status();
 }
