@@ -19,7 +19,7 @@
 # Test if running on a Mac
 if [ "`uname -s`" != "Darwin" ]; 
 then
-    echo "Not running on a Mac.  Nothing to do for us."
+    echo "Not running on Mac OS X.  Automatic configuration not available."
     exit 0
 fi
 
@@ -64,13 +64,64 @@ done
 # Test to ensure compiler is new enough.
 (echo "main(){}" | ${CXX} -std=gnu++0x -x c++ -o /dev/null -) || { echo "C compiler fails, or does not understand -std=gnu++0x.  GCC 4.3 or later needed!"; exit 1; }
 
+echo "Using ${CXX} as compiler."
+echo "Using ${HOSTCXX} as host compiler."
+
+# Building for Android 
+
+ANDROID_SDK=${ANDROID_SDK-`locate android-sdk-macosx | head -n1`}
+if [ -d ${ANDROID_SDK} ]; then
+  echo "Using Android SDK: ${ANDROID_SDK}"
+  ANDROID_NDK=${ANDROID_NDK-${ANDROID_SDK}/../android-ndk-*}
+  if [ ! -d ${ANDROID_NDK} ]; then
+      ANDROID_NDK=${ANDROID_SDK}/android-ndk-*
+  fi  
+  if [ -d ${ANDROID_NDK} ]; then
+      ANDROID_NDK=`cd ${ANDROID_NDK}; pwd`
+      echo "Using Android NDK: ${ANDROID_NDK}"
+  else
+      echo "Android NDK not found (see http://developer.android.com/sdk/).  Cannot build for Android."
+  fi
+
+  ANDROID_PLATFORM=${ANDROID_PLATFORM-"android-8"}
+  ANDROID_SDK_PLATFORM=${ANDROID_SDK}/platforms/${ANDROID_PLATFORM}
+  ANDROID_NDK_PLATFORM=${ANDROID_NDK}/platforms/${ANDROID_PLATFORM}
+
+  if [ ! -d "${ANDROID_SDK_PLATFORM}" ]; then
+      echo "Android SDK platform $ANDROID_PLATFORM not found.
+  Install platform with ${ANDROID_SDK_PLATFORM}/tools/android 
+  or adapt targets.mk in order to build for Android."
+  fi
+  if [ ! -d "${ANDROID_NDK_PLATFORM}" ]; then
+      echo "Android NDK platform ${ANDROID_PLATFORM} not found.  
+  Install platform with ${ANDROID_SDK_PLATFORM}/tools/android 
+  or adapt targets.mk in order to build for Android.
+  The NDK platform must match the SDK one.  It is set in targets.mk."
+  fi
+
+  if test `which oggenc`; then
+      if [ -d "${ANDROID_SDK}" -a -d "${ANDROID_SDK_PLATFORM}" -a -d "${ANDROID_NDK_PLATFORM}" ]; then
+	  echo "ANDROID7 and/or ANDROID targets seem available."
+      fi
+  else
+      echo "oggenc is missing (try: brew install vorbis-tools, or port install vorbis-tools).  Cannot build for Android."
+  fi
+
+else
+  echo "Android SDK not found (see http://developer.android.com/sdk/).  Cannot build for Android."
+fi
+
 # Output local-config.mk
 # local-config is loaded twice
 # if TARGET is not UNIX, do not override compiler
 
 # we must set TARGET_LDFLAGS, as  -Wl,--gc-sections seems to be unknown to the linker.
 
+
 cat >${DEST} <<FINISHED || exit 1;
+
+ANDROID_SDK = $ANDROID_SDK
+ANDROID_NDK = $ANDROID_NDK
 
 ifeq (\$(TARGET),)
 TARGET=UNIX
@@ -87,5 +138,4 @@ LINK = "$CXX"
 endif
 FINISHED
 
-echo "Using ${CXX} as compiler."
 echo "Ready to run make."
