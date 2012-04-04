@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(16);
+  plan_tests(19);
 
   // Test StringIsEqual()
 
@@ -50,6 +50,12 @@ int main(int argc, char **argv)
 
   ok1(StringIsEqual(_T("This is a funny test case!"),
                     _T("This is a funny test case!")));
+
+  // Test StringStartsWith()
+
+  ok1(StringStartsWith(_T("aaa"), _T("aaa")));
+  ok1(StringStartsWith(_T("aaa"), _T("a")));
+  ok1(!StringStartsWith(_T("bbb"), _T("aaa")));
 
   return exit_status();
 }

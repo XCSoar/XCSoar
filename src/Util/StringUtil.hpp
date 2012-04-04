@@ -65,7 +65,7 @@ gcc_pure
 static inline bool
 StringStartsWith(const char *haystack, const char *needle)
 {
-  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0]));
+  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
 }
 
 #ifdef _UNICODE
@@ -73,7 +73,7 @@ gcc_pure
 static inline bool
 StringStartsWith(const TCHAR *haystack, const TCHAR *needle)
 {
-  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0]));
+  return memcmp(haystack, needle, StringLength(needle) * sizeof(needle[0])) == 0;
 }
 #endif
 
