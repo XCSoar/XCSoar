@@ -826,6 +826,7 @@ everything: $(OUTPUTS) debug build-check build-harness
 
 clean: FORCE
 	@$(NQ)echo "cleaning all"
+	$(Q)rm -rf build/local-config.mk
 	$(Q)rm -rf $(OUT)
 	$(RM) $(BUILDTESTS)
 

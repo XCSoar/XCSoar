@@ -17,9 +17,9 @@
 
 
 # Test if running on a Mac
-if [ "`uname -s`" != "Darwin" ]; 
+if [ "`uname -s`" != "Darwin" -a "`uname -s`" != "Linux" ]; 
 then
-    echo "Not running on Mac OS X.  Automatic configuration not available."
+    echo "Not running on Linux or Mac OS X.  Automatic configuration not available."
     exit 0
 fi
 

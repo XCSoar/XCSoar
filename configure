@@ -3,17 +3,14 @@
 DIR=`dirname $0`
 SYSTEM=`uname -s 2>/dev/null`
 
-# Test if running on a Mac
+# Test if running on a Mac or Linux machine:
 
 case "${SYSTEM}" in
-"Darwin")
-    ${DIR}/build/configure-mac.sh \
-    && echo "Now run
-     make TARGET=UNIX
-to build XCSoar for Mac OS X."
-;;
-*)
-    echo "Now run
+"Darwin" | "Linux")
+  ${DIR}/build/configure-unix.sh
+  ;;
+esac
+
+echo "Now run
      make TARGET=<t>
 to build XCSoar.  See README for valid targets."
-esac
