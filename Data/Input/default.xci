@@ -525,6 +525,13 @@ event=TerrainTopography topography toggle
 label=Topo.\n$(TopographyToggleActionName)
 location=8
 
+mode=Display2
+type=key
+data=0
+event=AirSpace toggle
+label=Airspace\n$(AirspaceToggleActionName)
+location=9
+
 # -------------
 # mode=Config1
 # -------------
