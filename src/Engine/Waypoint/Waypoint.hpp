@@ -99,7 +99,9 @@ struct Waypoint {
   /** Flat projected location */
   FlatGeoPoint flat_location;
 
+#ifndef NDEBUG
   DebugFlag flat_location_initialised;
+#endif
 
   /** Height AMSL (m) of waypoint terrain */
   fixed elevation;
