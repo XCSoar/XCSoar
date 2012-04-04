@@ -184,19 +184,16 @@ public:
 
     // Iterate through the intersections
     for (auto it = m_intersections.begin(); it != m_intersections.end(); ++it) {
-      const GeoPoint p_start = it->first;
-      const GeoPoint p_end = it->second;
-      const fixed distance_start = start.Distance(p_start);
-      const fixed distance_end = start.Distance(p_end);
+      const GeoPoint &p_start = it->first;
+      const GeoPoint &p_end = it->second;
 
-      // Determine left and right coordinate
-      rcd.left = chart.screenX(distance_start);
-      rcd.right = chart.screenX(distance_end);
+      rcd.left = chart.screenX(start.Distance(p_start));
 
       // only one edge found, next edge must be beyond screen
-      if ((rcd.left == rcd.right) && (p_start == p_end)) {
+      if (p_start == p_end)
         rcd.right = chart.screenX(chart.getXmax());
-      }
+      else
+        rcd.right = chart.screenX(start.Distance(p_end));
 
       // Draw the airspace
       RenderBox(rcd, brush, settings.black_outline, type);
