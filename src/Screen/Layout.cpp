@@ -70,5 +70,5 @@ Layout::Initialize(unsigned width, unsigned height)
     maximum_control_height = minimum_control_height;
   }
 
-  hit_radius = x_dpi / (HasTouchScreen() ? 6 : 12);
+  hit_radius = x_dpi / (HasTouchScreen() ? 3 : 12);
 }
