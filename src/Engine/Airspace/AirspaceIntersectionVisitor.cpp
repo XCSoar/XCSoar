@@ -24,24 +24,22 @@
 #include "AirspaceInterceptSolution.hpp"
 
 AirspaceInterceptSolution 
-AirspaceIntersectionVisitor::intercept(const AbstractAirspace& as,
-                                       const AircraftState& state,
+AirspaceIntersectionVisitor::Intercept(const AbstractAirspace &as,
+                                       const AircraftState &state,
                                        const AirspaceAircraftPerformance &perf,
                                        bool all) const
 {
-  AirspaceInterceptSolution solution =
-    AirspaceInterceptSolution::Invalid();
-  if (m_intersections.empty()) {
+  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
+
+  if (intersections.empty())
     return solution;
-  }
 
-  for (auto it = m_intersections.begin(); it != m_intersections.end(); ++it) {
-
+  for (auto it = intersections.begin(); it != intersections.end(); ++it) {
     as.Intercept(state, perf, solution, it->first, it->second);
 
-    if (!all) {
+    if (!all)
       return solution;
-    }
   }
+
   return solution;
 }

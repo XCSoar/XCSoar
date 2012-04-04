@@ -66,9 +66,9 @@ public:
     visit_abstract(as);
   }
   void visit_abstract(const AbstractAirspace &as) {
-    assert(!m_intersections.empty());
+    assert(!intersections.empty());
 
-    GeoPoint point = m_intersections[0].first;
+    GeoPoint point = intersections[0].first;
 
     RouteLink l = rpolar.GenerateIntermediate(link.first,
                                                RoutePoint(proj.project(point), link.second.altitude),

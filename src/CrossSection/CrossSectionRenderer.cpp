@@ -159,7 +159,7 @@ public:
       return;
 
     // No intersections for this airspace
-    if (m_intersections.empty())
+    if (intersections.empty())
       return;
 
     // Select pens and brushes
@@ -183,7 +183,7 @@ public:
       rcd.bottom = chart.screenY(as.GetBaseAltitude(state));
 
     // Iterate through the intersections
-    for (auto it = m_intersections.begin(); it != m_intersections.end(); ++it) {
+    for (auto it = intersections.begin(); it != intersections.end(); ++it) {
       const GeoPoint &p_start = it->first;
       const GeoPoint &p_end = it->second;
 

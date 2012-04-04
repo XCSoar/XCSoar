@@ -174,14 +174,14 @@ public:
   }
   virtual void intersection(const AbstractAirspace& as) {
     *fout << "# intersection point\n";
-    for (auto it = m_intersections.begin(); it != m_intersections.end(); ++it) {
+    for (auto it = intersections.begin(); it != intersections.end(); ++it) {
       const GeoPoint start = (it->first);
       const GeoPoint end = (it->second);
       *fout << start.longitude << " " << start.latitude << " " << "\n";
       *fout << end.longitude << " " << end.latitude << " " << "\n\n";
     }
 
-    AirspaceInterceptSolution solution = intercept(as, m_state, m_perf);
+    AirspaceInterceptSolution solution = Intercept(as, m_state, m_perf);
     if (solution.IsValid()) {
       *iout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
       *iout << solution.location.longitude << " " << solution.location.latitude << " " << "\n\n";

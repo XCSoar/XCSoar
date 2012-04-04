@@ -207,7 +207,7 @@ public:
       if (mode_inside) {
         airspace.Intercept(state, perf, solution, state.location, state.location);
       } else {
-        solution = intercept(airspace, state, perf);
+        solution = Intercept(airspace, state, perf);
       }
       if (!solution.IsValid())
         return;

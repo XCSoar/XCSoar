@@ -79,7 +79,7 @@ public:
 
   void operator()(Airspace as) {
     if (as.intersects(*ray) &&
-        visitor->set_intersections(as.Intersects(start, end)))
+        visitor->SetIntersections(as.Intersects(start, end)))
       visitor->Visit(as);
   }
 };

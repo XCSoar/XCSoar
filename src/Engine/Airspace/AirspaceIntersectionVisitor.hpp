@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AIRSPACE_INTERSECTION_VISITOR_HPP
 #define AIRSPACE_INTERSECTION_VISITOR_HPP
 
@@ -36,36 +37,38 @@ class AirspaceIntersectionVisitor:
   public AirspaceVisitor
 {
 protected:
-  AirspaceIntersectionVector m_intersections; /**< Vector of accumulated intersection pairs */ 
+  /** Vector of accumulated intersection pairs */
+  AirspaceIntersectionVector intersections;
 
 public:
-/** 
- * Called by Airspaces prior to visiting the airspace to
- * make available the point to the visitor.
- * 
- * @param p Sorted vector of intercepts
- *
- * @return True if more than one intersection pair
- */
-  bool set_intersections(const AirspaceIntersectionVector& p) {
-    m_intersections = p;
-    return !m_intersections.empty();
+  /**
+   * Called by Airspaces prior to visiting the airspace to
+   * make available the point to the visitor.
+   *
+   * @param p Sorted vector of intercepts
+   *
+   * @return True if more than one intersection pair
+   */
+  bool SetIntersections(const AirspaceIntersectionVector &p) {
+    intersections = p;
+    return !intersections.empty();
   }
+
 protected:
-/** 
- * Find intercept solution of intersections
- * 
- * @param as Airspace to test
- * @param state Aircraft state
- * @param perf Performance of aircraft for query
- * @param all Whether to find solution for first or all intersections
- * 
- * @return Solution if any
- */
-  AirspaceInterceptSolution intercept(const AbstractAirspace& as,
-                                      const AircraftState& state,
+  /**
+   * Find intercept solution of intersections
+   *
+   * @param as Airspace to test
+   * @param state Aircraft state
+   * @param perf Performance of aircraft for query
+   * @param all Whether to find solution for first or all intersections
+   *
+   * @return Solution if any
+   */
+  AirspaceInterceptSolution Intercept(const AbstractAirspace &as,
+                                      const AircraftState &state,
                                       const AirspaceAircraftPerformance &perf,
-                                      bool all=true) const;
+                                      bool all = true) const;
 };
 
 #endif
