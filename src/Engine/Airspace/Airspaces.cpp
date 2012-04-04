@@ -67,19 +67,22 @@ Airspaces::visit_within_range(const GeoPoint &loc,
 
 class IntersectingAirspaceVisitorAdapter {
   GeoPoint start, end;
-  const FlatRay *ray;
+  const TaskProjection *projection;
+  FlatRay ray;
   AirspaceIntersectionVisitor *visitor;
 
 public:
   IntersectingAirspaceVisitorAdapter(const GeoPoint &_loc,
                                      const GeoPoint &_end,
-                                     const FlatRay &_ray,
+                                     const TaskProjection &_projection,
                                      AirspaceIntersectionVisitor &_visitor)
-    :start(_loc), end(_end), ray(&_ray), visitor(&_visitor) {}
+    :start(_loc), end(_end), projection(&_projection),
+     ray(projection->project(start), projection->project(end)),
+     visitor(&_visitor) {}
 
   void operator()(Airspace as) {
-    if (as.intersects(*ray) &&
-        visitor->SetIntersections(as.Intersects(start, end)))
+    if (as.intersects(ray) &&
+        visitor->SetIntersections(as.Intersects(start, end, *projection)))
       visitor->Visit(as);
   }
 };
@@ -90,12 +93,11 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
 {
   if (empty()) return; // nothing to do
 
-  FlatRay ray(task_projection.project(loc), task_projection.project(end));
-
   const GeoPoint c = loc.Middle(end);
   Airspace bb_target(c, task_projection);
   int mrange = task_projection.project_range(c, loc.Distance(end) / 2);
-  IntersectingAirspaceVisitorAdapter adapter(loc, end, ray, visitor);
+  IntersectingAirspaceVisitorAdapter adapter(loc, end, task_projection,
+                                             visitor);
   airspace_tree.visit_within_range(bb_target, -mrange, adapter);
 
 #ifdef INSTRUMENT_TASK

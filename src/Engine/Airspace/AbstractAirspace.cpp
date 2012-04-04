@@ -181,10 +181,12 @@ AbstractAirspace::Intercept(const AircraftState &state,
 bool 
 AbstractAirspace::Intercept(const AircraftState &state,
                             const GeoPoint &end,
+                            const TaskProjection &projection,
                             const AirspaceAircraftPerformance &perf,
                             AirspaceInterceptSolution &solution) const
 {
-  AirspaceIntersectionVector vis = Intersects(state.location, end);
+  AirspaceIntersectionVector vis = Intersects(state.location, end,
+                                              projection);
   if (vis.empty())
     return false;
 
@@ -265,14 +267,12 @@ AbstractAirspace::GetGeoBounds() const
 }
 
 const SearchPointVector&
-AbstractAirspace::GetClearance() const
+AbstractAirspace::GetClearance(const TaskProjection &projection) const
 {
   #define RADIUS 5
 
   if (!m_clearance.empty())
     return m_clearance;
-
-  assert(m_task_projection != NULL);
 
   m_clearance = m_border;
   if (!m_is_convex)
@@ -287,7 +287,7 @@ AbstractAirspace::GetClearance() const
     int mag = hypot(r.vector.Longitude, r.vector.Latitude);
     int mag_new = mag + RADIUS;
     p = r.Parametric((fixed)mag_new / mag);
-    *i = SearchPoint(m_task_projection->unproject(p), p);
+    *i = SearchPoint(projection.unproject(p), p);
   }
 
   return m_clearance;

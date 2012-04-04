@@ -23,6 +23,14 @@
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 
+const TaskProjection &
+ProtectedAirspaceWarningManager::GetProjection() const
+{
+  /* access to TaskProjection does not need to be protected */
+  UnprotectedLease lease(const_cast<ProtectedAirspaceWarningManager &>(*this));
+  return lease->GetProjection();
+}
+
 void
 ProtectedAirspaceWarningManager::clear()
 {

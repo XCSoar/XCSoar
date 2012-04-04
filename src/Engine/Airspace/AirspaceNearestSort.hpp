@@ -85,7 +85,8 @@ public:
  * 
  * @return Solution
  */
-  virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a) const;
+  virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a,
+                                                    const TaskProjection &projection) const;
 
 /** 
  * Metric defining sort criteria

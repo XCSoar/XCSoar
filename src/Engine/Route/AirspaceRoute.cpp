@@ -264,7 +264,8 @@ void
 AirspaceRoute::AddNearbyAirspace(const RouteAirspaceIntersection &inx,
                                    const RouteLink &e)
 {
-  const SearchPointVector& fat = inx.airspace->GetClearance();
+  const SearchPointVector& fat =
+    inx.airspace->GetClearance(m_airspaces.GetProjection());
   const ClearingPair p = GetPairs(fat, e.first, e.second);
   const ClearingPair pb = GetBackupPairs(fat, e.first, inx.point);
 

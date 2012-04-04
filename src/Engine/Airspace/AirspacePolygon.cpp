@@ -74,10 +74,10 @@ AirspacePolygon::Inside(const GeoPoint &loc) const
 }
 
 AirspaceIntersectionVector
-AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end) const
+AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
+                            const TaskProjection &projection) const
 {
-  const FlatRay ray(m_task_projection->project(start),
-                    m_task_projection->project(end));
+  const FlatRay ray(projection.project(start), projection.project(end));
 
   AirspaceIntersectSort sorter(start, end, *this);
 
@@ -86,16 +86,17 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end) const
     const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
     fixed t = ray.DistinctIntersection(r_seg);
     if (!negative(t))
-      sorter.add(t, m_task_projection->unproject(ray.Parametric(t)));
+      sorter.add(t, projection.unproject(ray.Parametric(t)));
   }
 
   return sorter.all();
 }
 
 GeoPoint 
-AirspacePolygon::ClosestPoint(const GeoPoint &loc) const
+AirspacePolygon::ClosestPoint(const GeoPoint &loc,
+                              const TaskProjection &projection) const
 {
-  const FlatGeoPoint p = m_task_projection->project(loc);
+  const FlatGeoPoint p = projection.project(loc);
   const FlatGeoPoint pb = m_border.NearestPoint(p);
-  return m_task_projection->unproject(pb);
+  return projection.unproject(pb);
 }

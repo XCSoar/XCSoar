@@ -29,11 +29,15 @@
 struct AircraftState;
 class AirspaceWarningManager;
 class AbstractAirspace;
+class TaskProjection;
 
 class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
 public:
   ProtectedAirspaceWarningManager(AirspaceWarningManager &awm):
     Guard<AirspaceWarningManager>(awm) {}
+
+  gcc_pure
+  const TaskProjection &GetProjection() const;
 
   void clear();
   void clear_warnings();

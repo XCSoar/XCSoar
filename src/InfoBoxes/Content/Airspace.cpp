@@ -116,7 +116,8 @@ FindNearestHorizontalAirspace()
   const AbstractAirspace &as = *airspace->get_airspace();
 
   /* calculate distance to the nearest point */
-  const GeoPoint closest = as.ClosestPoint(basic.location);
+  const GeoPoint closest = as.ClosestPoint(basic.location,
+                                           airspace_database.GetProjection());
   return NearestAirspace(as, basic.location.Distance(closest));
 }
 

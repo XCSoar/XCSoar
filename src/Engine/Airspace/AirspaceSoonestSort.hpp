@@ -43,7 +43,8 @@ public:
  * 
  * @return Intercept solution (whether valid or otherwise)
  */
-  virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a) const;
+  virtual AirspaceInterceptSolution solve_intercept(const AbstractAirspace &a,
+                                                    const TaskProjection &projection) const;
 
 /** 
  * Calculate metric for intercept solution.  In this case, returns the

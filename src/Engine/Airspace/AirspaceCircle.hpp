@@ -76,8 +76,9 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  AirspaceIntersectionVector Intersects(const GeoPoint &g1,
-                                        const GeoPoint &end) const;
+  virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
+                                                const GeoPoint &end,
+                                                const TaskProjection &projection) const;
 
   /**
    * Returns the GeoPoint inside the AirspaceCircle, that is closest
@@ -87,7 +88,8 @@ public:
    *
    * @return Closest GeoPoint in the AirspaceCircle
    */
-  GeoPoint ClosestPoint(const GeoPoint &loc) const;
+  virtual GeoPoint ClosestPoint(const GeoPoint &loc,
+                                const TaskProjection &projection) const;
 
   /**
    * Accessor for radius

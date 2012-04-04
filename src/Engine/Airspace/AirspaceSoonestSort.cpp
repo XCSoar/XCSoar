@@ -3,9 +3,10 @@
 #include "AbstractAirspace.hpp"
 
 AirspaceInterceptSolution 
-AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a) const
+AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a,
+                                     const TaskProjection &projection) const
 {
-  const GeoPoint loc = a.ClosestPoint(m_state.location);
+  const GeoPoint loc = a.ClosestPoint(m_state.location, projection);
 
   AirspaceInterceptSolution sol =
     AirspaceInterceptSolution::Invalid();

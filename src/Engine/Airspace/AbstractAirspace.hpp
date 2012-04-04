@@ -77,9 +77,6 @@ protected:
   /** Radio frequency (optional) */
   tstring radio;
 
-  /** Task projection (owned by container) that can be used for query speedups */
-  const TaskProjection* m_task_projection;
-
   /** Actual border */
   SearchPointVector m_border;
 
@@ -107,15 +104,6 @@ public:
   const FlatBoundingBox GetBoundingBox(const TaskProjection& task_projection);
 
   GeoBounds GetGeoBounds() const;
-
-  /**
-   * Set task projection for internal use
-   *
-   * @param task_projection Global task projection (owned by Airspaces)
-   */
-  void SetTaskProjection(const TaskProjection &task_projection) {
-    m_task_projection = &task_projection;
-  }
 
   /**
    * Get arbitrary center or reference point for use in determining
@@ -159,7 +147,8 @@ public:
    */
   gcc_pure
   virtual AirspaceIntersectionVector Intersects(const GeoPoint &g1,
-                                                const GeoPoint &end) const = 0;
+                                                const GeoPoint &end,
+                                                const TaskProjection &projection) const = 0;
 
   /**
    * Find location of closest point on boundary to a reference
@@ -169,7 +158,8 @@ public:
    * @return Location of closest point of boundary to reference
    */
   gcc_pure
-  virtual GeoPoint ClosestPoint(const GeoPoint &loc) const = 0;
+  virtual GeoPoint ClosestPoint(const GeoPoint &loc,
+                                const TaskProjection &projection) const = 0;
 
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 
@@ -302,6 +292,7 @@ public:
    */
   bool Intercept(const AircraftState &state,
                  const GeoPoint &end,
+                 const TaskProjection &projection,
                  const AirspaceAircraftPerformance &perf,
                  AirspaceInterceptSolution &solution) const;
 
@@ -396,7 +387,7 @@ public:
    * from within a visit method.
    */
   gcc_pure
-  const SearchPointVector &GetClearance() const;
+  const SearchPointVector &GetClearance(const TaskProjection &projection) const;
   void ClearClearance() const;
 
   gcc_pure

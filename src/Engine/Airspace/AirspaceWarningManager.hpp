@@ -33,6 +33,7 @@
 class TaskStats;
 class GlidePolar;
 class Airspaces;
+class TaskProjection;
 
 /**
  * Class to detect and track airspace warnings
@@ -80,6 +81,9 @@ public:
   AirspaceWarningManager(const Airspaces &_airspaces,
                          const fixed _prediction_time_glide = fixed(15.0),
                          const fixed _prediction_time_filter = fixed(60.0));
+
+  gcc_pure
+  const TaskProjection &GetProjection() const;
 
   const AirspaceWarningConfig &GetConfig() const {
     return config;

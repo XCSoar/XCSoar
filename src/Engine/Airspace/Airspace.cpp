@@ -33,7 +33,6 @@ Airspace::Airspace(AbstractAirspace& airspace,
   FlatBoundingBox(airspace.GetBoundingBox(tp)),
   pimpl_airspace(&airspace)
 {
-  pimpl_airspace->SetTaskProjection(tp);
 }
 
 
@@ -67,10 +66,11 @@ Airspace::intersects(const FlatRay& ray) const
 
 
 AirspaceIntersectionVector
-Airspace::Intersects(const GeoPoint& g1, const GeoPoint &end) const
+Airspace::Intersects(const GeoPoint& g1, const GeoPoint &end,
+                     const TaskProjection &projection) const
 {
   if (pimpl_airspace) {
-    return pimpl_airspace->Intersects(g1, end);
+    return pimpl_airspace->Intersects(g1, end, projection);
   } else {
     AirspaceIntersectionVector null;
     return null;

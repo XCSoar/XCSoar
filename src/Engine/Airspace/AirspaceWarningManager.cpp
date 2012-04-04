@@ -43,6 +43,12 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
 {
 }
 
+const TaskProjection &
+AirspaceWarningManager::GetProjection() const
+{
+  return airspaces.GetProjection();
+}
+
 void
 AirspaceWarningManager::SetConfig(const AirspaceWarningConfig &_config)
 {
@@ -380,10 +386,10 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
     AirspaceWarning& warning = GetWarning(airspace);
 
     if (warning.IsStateAccepted(AirspaceWarning::WARNING_INSIDE)) {
-      GeoPoint c = airspace.ClosestPoint(state.location);
+      GeoPoint c = airspace.ClosestPoint(state.location, GetProjection());
       const AirspaceAircraftPerformanceGlide perf_glide(glide_polar);
       AirspaceInterceptSolution solution;
-      airspace.Intercept(state, c, perf_glide, solution);
+      airspace.Intercept(state, c, GetProjection(), perf_glide, solution);
 
       warning.UpdateSolution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;

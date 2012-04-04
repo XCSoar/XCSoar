@@ -25,7 +25,8 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
 
     info.airspace = &airspace;
 
-    const GeoPoint closest_loc = airspace.ClosestPoint(Location);
+    const GeoPoint closest_loc =
+      airspace.ClosestPoint(Location, airspaces.GetProjection());
     const GeoVector vec(Location, closest_loc);
 
     info.Distance = vec.distance * distance_factor;
