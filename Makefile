@@ -378,6 +378,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Wind/WindEKF.cpp \
 	$(SRC)/Wind/WindEKFGlue.cpp \
 	\
+	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	\
 	$(SRC)/Gauge/ThermalAssistantWindow.cpp \

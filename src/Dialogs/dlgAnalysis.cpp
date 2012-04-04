@@ -271,8 +271,8 @@ UpdateCrossSection()
   csw->ReadBlackboard(basic, calculated, blackboard->GetMapSettings().airspace);
 
   if (basic.location_available && basic.track_available) {
-    csw->set_direction(basic.track);
-    csw->set_start(basic.location);
+    csw->SetDirection(basic.track);
+    csw->SetStart(basic.location);
     csw->SetValid();
   } else
     csw->SetInvalid();
@@ -563,8 +563,8 @@ OnCreateCrossSectionControl(ContainerWindow &parent,
   csw = new CrossSectionControl(look->cross_section, look->map.airspace,
                                 look->chart);
   csw->set(parent, left, top, width, height, style);
-  csw->set_airspaces(airspaces);
-  csw->set_terrain(terrain);
+  csw->SetAirspaces(airspaces);
+  csw->SetTerrain(terrain);
   UpdateCrossSection();
   return csw;
 }
