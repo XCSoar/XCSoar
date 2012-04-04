@@ -260,7 +260,7 @@ public:
   gcc_pure
   AirspaceTree::const_iterator end() const;
 
-  const TaskProjection& get_task_projection() const {
+  const TaskProjection &GetProjection() const {
     return task_projection;
   }
 

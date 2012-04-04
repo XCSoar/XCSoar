@@ -335,7 +335,7 @@ AirspaceRoute::OnSolve(const AGeoPoint& origin,
     task_projection.reset(origin);
     task_projection.update_fast();
   } else {
-    task_projection = m_airspaces.get_task_projection();
+    task_projection = m_airspaces.GetProjection();
   }
 }
 
