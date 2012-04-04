@@ -117,14 +117,3 @@ std::ostream& operator<< (std::ostream& f,
 
   return f;
 }
-
-void write_border (const AbstractAirspace& as)
-{
-  const SearchPointVector& spv = as.GetPoints();
-  for (auto v = spv.begin(); v != spv.end(); ++v)
-    write_point(*v, v->get_flatLocation(), "polygon");
-
-  printf("polygon\n");
-  write_spv(as.GetClearance());
-  fflush(stdout);
-}

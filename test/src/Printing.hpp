@@ -83,13 +83,4 @@ public:
   static void print(const FlatTriangleFan& r, const unsigned depth);
 };
 
-struct FlatGeoPoint;
-class SearchPoint;
-class SearchPointVector;
-class AbstractAirspace;
-
-void write_point(const SearchPoint& sp, const FlatGeoPoint& p, const char* name);
-void write_spv (const SearchPointVector& spv);
-void write_border (const AbstractAirspace& as);
-
 #endif

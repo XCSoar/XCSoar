@@ -121,27 +121,6 @@ std::ostream& operator<< (std::ostream& o, const Angle& a)
   return o;
 } 
 
-
-void write_point(const SearchPoint& sp, const FlatGeoPoint& p, const char* name)
-{
-  printf("%g %g %d %d # %s\n",
-         (double)sp.get_location().longitude.Degrees(),
-         (double)sp.get_location().latitude.Degrees(),
-         p.Longitude,
-         p.Latitude,
-         name);
-  fflush(stdout);
-}
-
-void write_spv (const SearchPointVector& spv)
-{
-  for (auto v = spv.begin(); v != spv.end(); ++v) {
-    write_point(*v, v->get_flatLocation(), "spv");
-  }
-  printf("spv\n");
-  fflush(stdout);
-}
-
 #include "Route/AirspaceRoute.hpp"
 
 void PrintHelper::print_route(RoutePlanner& r)
