@@ -1013,6 +1013,15 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     TerrainCollision,
     TerrainCollision,
   },
+
+  {
+    N_("Altitude (Auto)"),
+    N_("Alt. Auto."),
+    N_("This is the barometric altitude obtained from a device equipped with a pressure sensor or the GPS altitude if the barometric altitude is not available."),
+    IBFHelper<InfoBoxContentAltitudeNav>::Create,
+    NavAltitude,
+    NavAltitude,
+  },
 };
 
 bool

@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4 - not yet released
 * user interface
   - added "Airspace On/Off" menu button
+* infoboxes
+  - added automatic altitude infobox (baro. altitude with GPS fallback)
 
 Version 6.3.1 - not yet released
 * calculations

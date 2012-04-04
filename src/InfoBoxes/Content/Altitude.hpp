@@ -32,6 +32,12 @@ public:
   virtual const DialogContent *GetDialogContent();
 };
 
+class InfoBoxContentAltitudeNav : public InfoBoxContentAltitude
+{
+public:
+  virtual void Update(InfoBoxData &data);
+};
+
 class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
 {
 public:
