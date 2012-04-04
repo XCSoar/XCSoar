@@ -29,11 +29,10 @@ AirspaceIntersectionVisitor::Intercept(const AbstractAirspace &as,
                                        const AirspaceAircraftPerformance &perf,
                                        bool all) const
 {
-  AirspaceInterceptSolution solution = AirspaceInterceptSolution::Invalid();
-
   if (intersections.empty())
-    return solution;
+    return AirspaceInterceptSolution::Invalid();
 
+  AirspaceInterceptSolution solution;
   for (auto it = intersections.begin(); it != intersections.end(); ++it) {
     as.Intercept(state, perf, solution, it->first, it->second);
 
