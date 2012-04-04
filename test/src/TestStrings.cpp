@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(19);
+  plan_tests(22);
 
   // Test StringIsEqual()
 
@@ -53,6 +53,9 @@ int main(int argc, char **argv)
 
   // Test StringStartsWith()
 
+  ok1(StringStartsWith(_T(""), _T("")));
+  ok1(StringStartsWith(_T("a"), _T("")));
+  ok1(!StringStartsWith(_T(""), _T("a")));
   ok1(StringStartsWith(_T("aaa"), _T("aaa")));
   ok1(StringStartsWith(_T("aaa"), _T("a")));
   ok1(!StringStartsWith(_T("bbb"), _T("aaa")));
