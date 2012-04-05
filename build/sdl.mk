@@ -35,6 +35,8 @@ ifeq ($(TARGET_IS_DARWIN),y)
 # -lSDL flag manually
 SDL_LDLIBS := $(filter-out -l%,$(SDL_LDLIBS))
 SDL_LDADD = /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a
+# SDL may be dynamically linked to these X11 libraries:
+SDL_LDADD += /usr/X11/lib/libX11.dylib /usr/X11/lib/libXext.dylib /usr/X11/lib/libXrandr.dylib
 SDL_LDADD += /opt/local/lib/libbz2.a /opt/local/lib/libz.a
 SDL_LDADD += /opt/local/lib/libSDL_image.a
 else
