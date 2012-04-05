@@ -246,7 +246,7 @@ protected:
       size_t length = _tcslen(buffer);
       if (length > 0)
         buffer[length++] = _T(':');
-      _stprintf(buffer + length, _T("%u"), uround(gr));
+      _stprintf(buffer + length, _T("%.1f"), (double) gr);
       return;
     }
 
