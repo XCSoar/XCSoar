@@ -42,8 +42,8 @@ do
 
 	if [ -e "$location" ]; then
 	    CXX=$location
-	    LOCAL_TCPATH=`dirname "$location"`/
-	    LOCAL_TCEXT=${suffix}
+	    LOCAL_TCPREFIX=`dirname "$location"`/
+	    LOCAL_TCSUFFIX=${suffix}
 	    break 2
 	fi
     done
@@ -54,7 +54,7 @@ done
 (echo "main(){}" | ${CXX} -std=gnu++0x -x c++ -o /dev/null -) || { echo "C compiler fails, or does not understand -std=gnu++0x.  GCC 4.3 or later needed!"; exit 1; }
 
 echo "Using ${CXX} as compiler for UNIX targets."
-echo "Using toolchain in ${LOCAL_TCPATH} for UNIX targets."
+echo "Using toolchain in ${LOCAL_TCPREFIX} for UNIX targets."
 
 # Building for Android 
 
@@ -105,7 +105,7 @@ fi
 # if TARGET is not UNIX, do not override compiler
 
 # we must set TARGET_LDFLAGS, as  -Wl,--gc-sections seems to be unknown to the linker.
-# we're guaranteed that the host is unix, so we can set LOCAL_TCPATH.
+# we're guaranteed that the host is unix, so we can set LOCAL_TCPREFIX.
 # target.mk uses this for UNIX targets.
 
 cat >${DEST} <<FINISHED || exit 1;
@@ -122,8 +122,8 @@ TARGET_LDFLAGS = -static-libgcc
 endif
 
 # Best local toolchain:
-LOCAL_TCPATH = $LOCAL_TCPATH
-LOCAL_TCEXT = $LOCAL_TCEXT
+LOCAL_TCPREFIX = $LOCAL_TCPATH
+LOCAL_TCSUFFIX = $LOCAL_TCEXT
 FINISHED
 
 echo "Ready to run make."
