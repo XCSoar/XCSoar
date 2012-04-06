@@ -33,21 +33,21 @@ void
 ClimbChartCaption(TCHAR *sTmp,
                   const FlightStatistics &fs)
 {
-  ScopeLock lock(fs.mutexStats);
-  if (fs.ThermalAverage.IsEmpty()) {
+  ScopeLock lock(fs.mutex);
+  if (fs.thermal_average.IsEmpty()) {
     sTmp[0] = _T('\0');
-  } else if (fs.ThermalAverage.sum_n == 1) {
+  } else if (fs.thermal_average.sum_n == 1) {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s"),
               _("Avg. climb"),
-              (double)Units::ToUserVSpeed(fixed(fs.ThermalAverage.y_ave)),
+              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
               Units::GetVerticalSpeedName());
   } else {
     _stprintf(sTmp, _T("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
               _("Avg. climb"),
-              (double)Units::ToUserVSpeed(fixed(fs.ThermalAverage.y_ave)),
+              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.y_ave)),
               Units::GetVerticalSpeedName(),
               _("Climb trend"),
-              (double)Units::ToUserVSpeed(fixed(fs.ThermalAverage.m)),
+              (double)Units::ToUserVSpeed(fixed(fs.thermal_average.m)),
               Units::GetVerticalSpeedName());
   }
 }
@@ -60,32 +60,32 @@ RenderClimbChart(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.ThermalAverage.IsEmpty()) {
+  if (fs.thermal_average.IsEmpty()) {
     chart.DrawNoData();
     return;
   }
 
   fixed MACCREADY = glide_polar.GetMC();
 
-  chart.ScaleYFromData(fs.ThermalAverage);
+  chart.ScaleYFromData(fs.thermal_average);
   chart.ScaleYFromValue(MACCREADY + fixed_half);
   chart.ScaleYFromValue(fixed_zero);
 
   chart.ScaleXFromValue(fixed_minus_one);
-  chart.ScaleXFromValue(fixed(fs.ThermalAverage.sum_n));
+  chart.ScaleXFromValue(fixed(fs.thermal_average.sum_n));
 
   chart.DrawYGrid(Units::ToSysVSpeed(fixed_one), fixed_zero,
                   ChartLook::STYLE_THINDASHPAPER, fixed_one, true);
-  chart.DrawBarChart(fs.ThermalAverage);
+  chart.DrawBarChart(fs.thermal_average);
 
-  chart.DrawLine(fixed_zero, MACCREADY, fixed(fs.ThermalAverage.sum_n), MACCREADY,
+  chart.DrawLine(fixed_zero, MACCREADY, fixed(fs.thermal_average.sum_n), MACCREADY,
                  ChartLook::STYLE_REDTHICK);
 
   chart.DrawLabel(_T("MC"),
-                  max(fixed_half, fixed(fs.ThermalAverage.sum_n) - fixed_one),
+                  max(fixed_half, fixed(fs.thermal_average.sum_n) - fixed_one),
                   MACCREADY);
 
-  chart.DrawTrendN(fs.ThermalAverage, ChartLook::STYLE_BLUETHIN);
+  chart.DrawTrendN(fs.thermal_average, ChartLook::STYLE_BLUETHIN);
 
   chart.DrawXLabel(_T("n"));
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());

@@ -35,23 +35,23 @@ Copyright_License {
 void
 BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)
 {
-  ScopeLock lock(fs.mutexStats);
-  if (fs.Altitude_Ceiling.sum_n < 2) {
+  ScopeLock lock(fs.mutex);
+  if (fs.altitude_ceiling.sum_n < 2) {
     sTmp[0] = _T('\0');
-  } else if (fs.Altitude_Ceiling.sum_n < 4) {
+  } else if (fs.altitude_ceiling.sum_n < 4) {
     _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s"),
               _("Working band"),
-              (double)Units::ToUserAltitude(fixed(fs.Altitude_Base.y_ave)),
-              (double)Units::ToUserAltitude(fixed(fs.Altitude_Ceiling.y_ave)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
               Units::GetAltitudeName());
   } else {
     _stprintf(sTmp, _T("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
               _("Working band"),
-              (double)Units::ToUserAltitude(fixed(fs.Altitude_Base.y_ave)),
-              (double)Units::ToUserAltitude(fixed(fs.Altitude_Ceiling.y_ave)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_base.y_ave)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.y_ave)),
               Units::GetAltitudeName(),
               _("Ceiling trend"),
-              (double)Units::ToUserAltitude(fixed(fs.Altitude_Ceiling.m)),
+              (double)Units::ToUserAltitude(fixed(fs.altitude_ceiling.m)),
               Units::GetAltitudeName());
   }
 }
@@ -117,16 +117,16 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
                      const DerivedInfo &derived_info,
                      const ProtectedTaskManager *_task)
 {
-  ScopeLock lock(fs.mutexStats);
+  ScopeLock lock(fs.mutex);
   ChartRenderer chart(chart_look, canvas, rc);
   chart.PaddingBottom = 0;
   chart.PaddingLeft = 0;
 
-  if (fs.Altitude.slots.size() < 2)
+  if (fs.altitude.slots.size() < 2)
     return;
 
-  chart.ScaleXFromData(fs.Altitude);
-  chart.ScaleYFromData(fs.Altitude);
+  chart.ScaleXFromData(fs.altitude);
+  chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(fixed_zero);
 
   if (_task != NULL) {
@@ -138,10 +138,10 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
   canvas.SelectNullPen();
   canvas.Select(cross_section_look.terrain_brush);
 
-  chart.DrawFilledLineGraph(fs.Altitude_Terrain);
+  chart.DrawFilledLineGraph(fs.altitude_terrain);
 
   Pen pen(2, inverse ? COLOR_WHITE : COLOR_BLACK);
-  chart.DrawLineGraph(fs.Altitude, pen);
+  chart.DrawLineGraph(fs.altitude, pen);
 }
 
 void
@@ -155,16 +155,16 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.Altitude.slots.size() < 2) {
+  if (fs.altitude.slots.size() < 2) {
     chart.DrawNoData();
     return;
   }
 
-  chart.ScaleXFromData(fs.Altitude);
-  chart.ScaleYFromData(fs.Altitude);
+  chart.ScaleXFromData(fs.altitude);
+  chart.ScaleYFromData(fs.altitude);
   chart.ScaleYFromValue(fixed_zero);
-  chart.ScaleXFromValue(fs.Altitude.x_min + fixed_one); // in case no data
-  chart.ScaleXFromValue(fs.Altitude.x_min);
+  chart.ScaleXFromValue(fs.altitude.x_min + fixed_one); // in case no data
+  chart.ScaleXFromValue(fs.altitude.x_min);
 
   if (_task != NULL) {
     ProtectedTaskManager::Lease task(*_task);
@@ -174,19 +174,19 @@ RenderBarograph(Canvas &canvas, const PixelRect rc,
   canvas.SelectNullPen();
   canvas.Select(cross_section_look.terrain_brush);
 
-  chart.DrawFilledLineGraph(fs.Altitude_Terrain);
+  chart.DrawFilledLineGraph(fs.altitude_terrain);
   canvas.SelectWhitePen();
   canvas.SelectWhiteBrush();
 
-  chart.DrawXGrid(fixed_half, fs.Altitude.x_min,
+  chart.DrawXGrid(fixed_half, fs.altitude.x_min,
                   ChartLook::STYLE_THINDASHPAPER,
                   fixed_half, true);
   chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
                   fixed_zero, ChartLook::STYLE_THINDASHPAPER, fixed(1000), true);
-  chart.DrawLineGraph(fs.Altitude, ChartLook::STYLE_MEDIUMBLACK);
+  chart.DrawLineGraph(fs.altitude, ChartLook::STYLE_MEDIUMBLACK);
 
-  chart.DrawTrend(fs.Altitude_Base, ChartLook::STYLE_BLUETHIN);
-  chart.DrawTrend(fs.Altitude_Ceiling, ChartLook::STYLE_BLUETHIN);
+  chart.DrawTrend(fs.altitude_base, ChartLook::STYLE_BLUETHIN);
+  chart.DrawTrend(fs.altitude_ceiling, ChartLook::STYLE_BLUETHIN);
 
   chart.DrawXLabel(_T("t"), _T("hr"));
   chart.DrawYLabel(_T("h"), Units::GetAltitudeName());
@@ -202,25 +202,25 @@ RenderSpeed(Canvas &canvas, const PixelRect rc,
 {
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.Task_Speed.slots.size() < 2 || !task.CheckOrderedTask()) {
+  if (fs.task_speed.slots.size() < 2 || !task.CheckOrderedTask()) {
     chart.DrawNoData();
     return;
   }
 
-  chart.ScaleXFromData(fs.Task_Speed);
-  chart.ScaleYFromData(fs.Task_Speed);
+  chart.ScaleXFromData(fs.task_speed);
+  chart.ScaleYFromData(fs.task_speed);
   chart.ScaleYFromValue(fixed_zero);
-  chart.ScaleXFromValue(fs.Task_Speed.x_min + fixed_one); // in case no data
-  chart.ScaleXFromValue(fs.Task_Speed.x_min);
+  chart.ScaleXFromValue(fs.task_speed.x_min + fixed_one); // in case no data
+  chart.ScaleXFromValue(fs.task_speed.x_min);
 
   DrawLegs(chart, task, nmea_info, derived_info, true);
 
-  chart.DrawXGrid(fixed_half, fs.Task_Speed.x_min,
+  chart.DrawXGrid(fixed_half, fs.task_speed.x_min,
                   ChartLook::STYLE_THINDASHPAPER, fixed_half, true);
   chart.DrawYGrid(Units::ToSysTaskSpeed(fixed_ten),
                   fixed_zero, ChartLook::STYLE_THINDASHPAPER, fixed(10), true);
-  chart.DrawLineGraph(fs.Task_Speed, ChartLook::STYLE_MEDIUMBLACK);
-  chart.DrawTrend(fs.Task_Speed, ChartLook::STYLE_BLUETHIN);
+  chart.DrawLineGraph(fs.task_speed, ChartLook::STYLE_MEDIUMBLACK);
+  chart.DrawTrend(fs.task_speed, ChartLook::STYLE_BLUETHIN);
 
   chart.DrawXLabel(_T("t"), _T("hr"));
   chart.DrawYLabel(_T("h"), Units::GetTaskSpeedName());

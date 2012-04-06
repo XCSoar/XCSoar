@@ -46,14 +46,14 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   LeastSquares windstats_mag;
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.Altitude_Ceiling.y_max - fs.Altitude_Ceiling.y_min <= fixed_ten) {
+  if (fs.altitude_ceiling.y_max - fs.altitude_ceiling.y_min <= fixed_ten) {
     chart.DrawNoData();
     return;
   }
 
   for (i = 0; i < numsteps; i++) {
-    h = fixed(fs.Altitude_Ceiling.y_max - fs.Altitude_Base.y_min) * i /
-        (numsteps - 1) + fixed(fs.Altitude_Base.y_min);
+    h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * i /
+        (numsteps - 1) + fixed(fs.altitude_base.y_min);
 
     wind = wind_store.GetWind(nmea_info.time, h, found);
     mag = hypot(wind.x, wind.y);
@@ -82,8 +82,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   fixed hfact;
   for (i = 0; i < numsteps; i++) {
     hfact = fixed(i + 1) / (numsteps + 1);
-    h = fixed(fs.Altitude_Ceiling.y_max - fs.Altitude_Base.y_min) * hfact +
-        fixed(fs.Altitude_Base.y_min);
+    h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * hfact +
+        fixed(fs.altitude_base.y_min);
 
     wind = wind_store.GetWind(nmea_info.time, h, found);
     if (windstats_mag.x_max == fixed_zero)
