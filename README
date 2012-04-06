@@ -72,7 +72,7 @@ For Mac OS X, you need:
 - SDL_image (http://www.libsdl.org/projects/SDL_image/)
 - libicns (http://icns.sourceforge.net/)
 
-To compile for the Mac, run
+To compile on a Unix-like system (Linux, Mac), run
 
  ./configure
  make

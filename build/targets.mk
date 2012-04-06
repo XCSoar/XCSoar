@@ -91,26 +91,26 @@ endif
 
 ifeq ($(TARGET),PC)
   ifeq ($(X64),y)
-    TCPATH := x86_64-w64-mingw32-
+    TCPREFIX := x86_64-w64-mingw32-
     TARGET_ARCH += -m64
   else
-    TCPATH := i686-w64-mingw32-
+    TCPREFIX := i686-w64-mingw32-
     TARGET_ARCH += -march=i586
   endif
 
   ifneq ($(MINGWPATH),)
-    TCPATH := $(MINGWPATH)
+    TCPREFIX := $(MINGWPATH)
   endif
 
   ifeq ($(WINHOST),y)
-    TCPATH :=
+    TCPREFIX :=
   endif
 
   WINVER = 0x0500
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  TCPATH :=
+  TCPREFIX :=
 
   TARGET_ARCH += -march=i586
 
@@ -140,7 +140,7 @@ ifeq ($(TARGET),WM5)
 endif
 
 ifeq ($(TARGET),WINE)
-  TCPATH := wine
+  TCPREFIX := wine
   TARGET_ARCH += -march=i586
   WINVER = 0x0500
 
@@ -149,8 +149,9 @@ ifeq ($(TARGET),WINE)
 endif
 
 ifeq ($(TARGET),UNIX)
-  TCPATH :=
-
+  # LOCAL_TCPREFIX is set in local-config.mk if configure was run.
+  TCPREFIX := $(LOCAL_TCPREFIX)
+  TCSUFFIX := $(LOCAL_TCSUFFIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n
@@ -193,7 +194,7 @@ ifeq ($(TARGET),ANDROID)
   else
     ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/prebuilt/linux-x86
   endif
-  TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI4)-
+  TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI4)-
 
   ifeq ($(X86),y)
     ANDROID_PLATFORM := android-9
@@ -225,7 +226,7 @@ ifeq ($(TARGET),ANDROID)
 endif
 
 ifeq ($(HAVE_CE),y)
-  TCPATH := arm-mingw32ce-
+  TCPREFIX := arm-mingw32ce-
   HAVE_FPU := n
 
   ifeq ($(XSCALE),y)

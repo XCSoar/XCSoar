@@ -6,13 +6,17 @@ ifeq ($(USE_CCACHE),y)
 endif
 
 EXE := $(findstring .exe,$(MAKE))
-AR = $(TCPATH)ar$(EXE)
-CXX = $(TCPATH)g++$(EXE)
-CC = $(TCPATH)gcc$(EXE)
-DLLTOOL = $(TCPATH)dlltool$(EXE)
-SIZE = $(TCPATH)size$(EXE)
-STRIP = $(TCPATH)strip$(EXE)
-WINDRES = $(TCPATH)windres$(EXE)
+AR = $(TCPREFIX)ar$(EXE)
+# Fall back to "ar" in PATH (ar is installed separately from GCC)
+ifeq ($(strip $(wildcard $(AR))),)
+  AR = ar$(EXE)
+endif
+CXX = $(TCPREFIX)g++$(TCSUFFIX)$(EXE)
+CC = $(TCPREFIX)gcc$(TCSUFFIX)$(EXE)
+DLLTOOL = $(TCPREFIX)dlltool$(EXE)
+SIZE = $(TCPREFIX)size$(EXE)
+STRIP = $(TCPREFIX)strip$(EXE)
+WINDRES = $(TCPREFIX)windres$(EXE)
 ARFLAGS = rcs
 
 ifeq ($(TARGET),WINE)
