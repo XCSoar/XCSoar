@@ -3,8 +3,6 @@ This chapter describes the fundamental user interface concepts used by
 XCSoar, and is intended as an overview.  More detailed descriptions
 are given in following chapters.
 
-\todonum[inline]{explain the principal display modes}
-
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/plain.png}
 \end{center}
@@ -15,9 +13,9 @@ The XCSoar display is composed of several parts:
 display. Various symbols relating to glide computer information are overlaid 
 on the map area. Icons and text may appear along the lower edge of the screen
 to indicate status of connected devices, operating modes etc.
-\item[{\InfoBox}es] A grid of data values is displayed usually either along
+\item[InfoBoxes] A grid of data values is displayed usually either along
 the top and bottom of the screen (portrait display) or to the right of the
-screen (landscape display).  These so-called {\InfoBox}es display data from the
+screen (landscape display).  These so-called InfoBoxes display data from the
 GPS and other input devices as well as data calculated by XCSoar.
 \item[Gauges]  Gauges provide instrumentation displays. All gauges are optional
 and some may only have meaningful information displayed when XCSoar is
@@ -65,10 +63,6 @@ The button menu is a set of buttons drawn on the screen and activated by touch
 or hardware button presses.  Using buttons and the button menu is the primary
 way the user interacts with XCSoar.
 
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/buttonmenu.png}
-\end{center}
-
 \subsection*{Interface basics}
 The menu is organised into four different groups of functions, usually in
 the form of a hierarchy.  The specific menu layout depends on the
@@ -78,6 +72,7 @@ user.
 XCSoar can also accept input from external keyboards, game-pads, joysticks,
 stick grip switches etc. A wide variety of functions can be assigned to these
 inputs.
+\sketch{figures/buttonmenu.png}
 
 For Altair, there are four major menus, activated by pressing one of
 the vertical strip of hardware buttons on the left of the display.
@@ -207,7 +202,7 @@ Info 3/3 & \ref{sec:credits}\bmenus{Credits}
 
 \end{tabularx}}
 
-The information menu is always a good address, when not only a clue on how to set MacCread is requested, but rather more elaborate help on a larger scope tactical decision on your flight is requested.
+The information menu is always a good address, when not only a clue on how to set MacCready is requested, but rather more elaborate help on a larger scope tactical decision on your flight is requested.
 
 
 \subsection*{The Vega variometer sub-menu of the configuration menu}
@@ -256,7 +251,7 @@ the following functions:
 \item[Up key] Zoom in
 \item[Down key] Zoom out
 \item[Left key] Drop marker
-\item[Right key] Toggle through normal/aux. InfoBoxes and Fullscreen
+\item[Right key] Toggle through normal/aux. InfoBoxes and full-screen
 \item[Enter] Clear status message or suppress FLARM gauge if open and no warning
 active
 \end{jspecs}
@@ -323,57 +318,58 @@ A selection of key dynamic menu items is presented below:
   Greyed out if there is no waypoint database.
 \end{description}
 
-\section{InfoBoxes}
+\section{InfoBoxes and screen pages}
 
 The information displayed in the InfoBox fields can be selected from a
 wide variety of options (listed in Chapter~\ref{cha:infobox}). These
-fields can also be used to set user configurable variables, for example
-the MacCready setting.
+fields can also be used to change for example the MacCready setting.
 
 The specific number and layout of the InfoBox grid depends on the
-screen orientation and the device's display size.  For a 320x240 display
+screen orientation and the device's display size.  
+
+For a 320x240 display
 Pocket PC in portrait mode, there are four InfoBoxes above and four
-InfoBoxes below the map display. For landscape mode, there are 9
-InfoBoxes to the right of the map display.
+InfoBoxes below the map display.  
+\sketch{figures/infoboxes.png}
 
-\begin{center}
-\includegraphics[angle=0,width=0.35\linewidth,keepaspectratio='true']{figures/infoboxes.png}
-\end{center}
+A typical landscape layout has 9 InfoBoxes and the variometer gauge 
+to the right of the map display. 
+ 
+For larger displays are up to 24 InfoBoxes on one screen page possible.
 
-\subsection*{Screen display modes}
+\subsection*{Pages with different InfoBox sets}
 
-XCSoar allows the pilot to define various sets of InfoBoxes that are appropriate to various stages of flight (e.g. when circling in a thermal, flying between thermals, on final glide, etc.). XCSoar can be configured to automatically switch from one InfoBox display to another based on the mode of flight, or you can manually scroll through the various InfoBox displays, including a display with a full-screen map and no InfoBoxes at all.
+XCSoar allows the pilot to define various sets of InfoBoxes that are appropriate to various stages of flight (e.g. when circling in a thermal, flying between thermals, on final glide, etc.). XCSoar can be configured to automatically switch from one screen page to another based on the mode of flight, or you can manually roll through the various pages, including one with a full-screen map and no InfoBoxes at all. Thus a screen page consists of a InfoBox set and specific map appearance, that includes map orientation and scale.
 
-To toggle through the various InfoBox displays, using a touch-screen:
-\gesture{Right} 
-or
-\gesture{Left}
+To toggle through the various InfoBox pages, using the left/right cursor keys (Altair), or by gestures (touch-screen).
+\gesture{Right or Left} 
 
 
 \subsection*{Modifying InfoBox values}
 (This section applies only when a touch-screen or mouse is present.)
 
 Some InfoBox values can be changed by the user by selecting (i.e. long-pressing) the
-InfoBox with the touch-screen or mouse.  This brings up a set of InfoBoxes:
+InfoBox with the touch-screen or mouse.  This brings up a small tabular dialogue:
 
 \begin{description}
 \item[\bmenu{Edit}]  
   Allows the pilot to adjust the InfoBox setting (e.g. raise or lower the MacCready setting)
 
 \item[\bmenu{Setup}]
-	Allows you to change the behaviour of the setting related to the InfoBox (for example, changing from Auto to Manual MacCready setting mode) or choose to setup of the InfoBox itself (that is, choosing \bmenu{Setup InfoBox} will display a list dialogue of all available InfoBoxes from which to choose.
+  Allows you to change the behaviour of the setting related to the InfoBox (for example, changing from Auto to Manual MacCready setting mode); or to change the InfoBox itself by pressing \bmenu{Switch InfoBox}, then choosing from a list of all available InfoBoxes.
 
 \end{description}
 
 
 Examples of InfoBoxes that can
-be adjusted include the MacCready setting, and the wind speed.
+be adjusted include MacCready setting, wind speed, and height (QNH).
 
-\subsection*{Changing InfoBoxes}
-InfoBoxes can either be changed by calling the configuration dialogue from the
-menu \bmenu{Config ..}\blink\bmenu{Setup System} Screen 21, "InfoBox Modes" or by
-performing a long press on the InfoBox that should be changed. In the second case a list dialogue opens,
-giving you all available InfoBoxes to choose from.
+\subsection*{Changing InfoBox sets}
+An InfoBox set can either be composed by calling the configuration dialogue from the menu: \begin{center}
+\bmenu{Config ..}\blink\bmenu{Setup System}
+\end{center}
+on the `Look / InfoBox Modes' setup page or by
+performing a long press on the InfoBox that should be changed. In the second case a list dialogue opens, giving you all available InfoBoxes to choose from.
 
 \section{Status messages}
 Status messages appear over the map area to present text for a short period of
@@ -423,16 +419,16 @@ from a list.
 
 Dialogues are typically started from the button menu.  
 
-Many of the dialog windows have multiple pages of information and are controlled
+Many of the dialogue windows have multiple pages of information and are controlled
 in a consistent fashion. Press the \button{$<$} or \button{$>$} buttons to
 select the next or previous page of the dialog and the \button{Close} button to
-make the dialog disappear.
+make the dialogue disappear.
 
 The escape key on a PC or the PWR/ESC button on Altair, can also be used to
 close dialogues.
 
-The user must close the dialog to return to the normal map mode. When a dialog
-has been opened, the menu buttons are disabled until the dialog is closed.
+The user must close the dialogue to return to the normal map mode. When a dialogue
+has been opened, the main button menu is disabled until the dialogue is closed.
 
 In some dialogues, items that are not relevant or valid (such as AAT details when
 flying a non-AAT task) are not displayed.
@@ -443,37 +439,32 @@ A summary of the major dialogues is presented below.
 during flight, as well as to set the QNH pressure
 \item[Wind] Used to modify or adjust the estimated wind magnitude and direction
 \item[Waypoint details] Describes a waypoint in detail and has navigation
-functions such as ``GoTo'' and ``Insert in Task''
-\item[Waypoint selector] Used to select a waypoint from the waypoint database
-\item[Task editor] Used to edit and view cross country tasks
-\item[Task calculator] Allows the pilot to see the effect of various changes to
-the task on final performance
+functions such as `GoTo' and `Insert in Task'
+\item[Waypoint list] Used to select a waypoint from the waypoint database
+\item[Task manager] Used to create, modify and view cross country tasks
 \item[Analysis] Shows several pages of analysis and statistics about the flight
 \item[Status] The status dialogues give summaries of the situation of the 
 aircraft, system, task, start and times
-\item[Checklist] A multi-page custom check-list
 \item[Configuration] Allows XCSoar and certain connected devices to be
 configured
-\item[Airspace colours and patterns] Configuration of colours and patterns of
-airspace used on the map display
 \item[Airspace filter] Controls enabling and disabling the display and warnings
 of each airspace class
-\item[Team code] Allows transfer of coordinates between team mates via a code
-\item[Devices]  Allows setup of various external devices (e.g. glide computers, FLARM, etc.).
-\item[Setup Plane]  Allows easy reconfiguration of the plane-dependant settings (e.g. polar, competition ID, etc.) by choosing from a list of previously-created plane profiles.
+\item[Team code] Allows transfer of coordinates between FLARM team mates via a code
+\item[Devices]  Selection of various external devices (e.g. smart variometers, FLARM, etc.).
+\item[Setup Plane]  Easy reconfiguration of the plane-dependant settings (e.g. polar, competition ID, etc.) by choosing from a list of previously-created plane profiles.
 \end{description}
 
 These dialogues are described in later chapters. with the exception of the
 check-list, status and text entry dialogues, which are described below.
 
-\subsection*{Checklist dialog}\label{sec:checklist}
+\subsection*{Check-list (dialogue example)}\label{sec:checklist}
 The checklist dialog can display several pages of user-defined free text.
 Typically this is used for check-lists. It can be accessed via the menu under 
 \begin{quote}
 \bmenu{Info}\blink\bmenu{Check list}
 \end{quote}
 
-These check-lists may include: daily inspection, preflight, outlanding,
+These check-lists may include: daily inspection, preflight, out-landing,
 pre-landing, radio procedures, and aircraft rigging and de-rigging
 instructions.  Since the check-lists may be long, the up/down keys (or rotary
 knob on Altair) may be used to scroll through the text. Clicking the
