@@ -49,6 +49,7 @@ public:
     ~Item();
 
     const TCHAR* GetName() const;
+    const TCHAR* GetPath() const;
     OrderedTask *GetTask(const TaskBehaviour &task_behaviour);
 
     bool operator<(const TaskStore::Item &other) const;
@@ -86,6 +87,14 @@ public:
    * @return Filename of the task defined by the given index
    */
   const TCHAR *GetName(unsigned index) const;
+
+  /**
+   * Return the pathname of the task defined by the given index
+   * (e.g. tasks/TestTask.tsk)
+   * @param index TaskStore index of the desired Task
+   * @return pathname of the task defined by the given index
+   */
+  const TCHAR *GetPath(unsigned index) const;
 
   /**
    * Return the task defined by the given index

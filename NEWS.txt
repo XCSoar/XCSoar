@@ -15,6 +15,8 @@ Version 6.3.1 - not yet released
   - Flymaster: initiate NMEA mode
 * map
   - don't fill acked airspaces
+* task manager
+  - fix rename/delete function for task files
 * Linux
   - fix HTTP networking bugs
 * Android
