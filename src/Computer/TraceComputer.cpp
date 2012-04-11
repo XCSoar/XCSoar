@@ -35,8 +35,11 @@ static gcc_constexpr_data unsigned contest_trace_size =
 static gcc_constexpr_data unsigned sprint_trace_size =
   IsAncientHardware() ? 96 : 128;
 
+static gcc_constexpr_data unsigned full_trace_no_thin_time =
+  HasLittleMemory() ? 60 : 120;
+
 TraceComputer::TraceComputer()
- :full(60, Trace::null_time, full_trace_size),
+ :full(full_trace_no_thin_time, Trace::null_time, full_trace_size),
   contest(0, Trace::null_time, contest_trace_size),
   sprint(0, 9000, sprint_trace_size)
 {
