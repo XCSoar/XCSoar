@@ -320,7 +320,9 @@ Trace::Thin2()
     return;
 
   // if still too big, thin again, ignoring recency
-  erase_delta(target_size, no_thin_time);
+  if (no_thin_time > 0)
+    erase_delta(target_size, 0);
+
   assert(size() <= target_size);
 }
 
