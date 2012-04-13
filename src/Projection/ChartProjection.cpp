@@ -30,7 +30,7 @@ ChartProjection::Set(const PixelRect &rc, const TaskManager &task,
 {
   const GeoPoint center = task.GetTaskCenter(fallback_loc);
   const fixed radius = max(fixed(10000), task.GetTaskRadius(fallback_loc));
-  set_projection(rc, center, radius);
+  Set(rc, center, radius);
 }
 
 void
@@ -41,7 +41,7 @@ ChartProjection::Set(const PixelRect &rc,
   const GeoPoint center = task_projection.get_center();
   const fixed radius = max(fixed(10000),
                            task_projection.ApproxRadius() * radius_factor);
-  set_projection(rc, center, radius);
+  Set(rc, center, radius);
 }
 
 void
@@ -50,7 +50,7 @@ ChartProjection::Set(const PixelRect &rc, const OrderedTask &task,
 {
   const GeoPoint center = task.GetTaskCenter(fallback_loc);
   const fixed radius = max(fixed(10000), task.GetTaskRadius(fallback_loc));
-  set_projection(rc, center, radius);
+  Set(rc, center, radius);
 }
 
 void
@@ -65,8 +65,8 @@ ChartProjection::Set(const PixelRect &rc, const OrderedTaskPoint &point,
 }
 
 void
-ChartProjection::set_projection(const PixelRect &rc, const GeoPoint &center,
-                                const fixed radius)
+ChartProjection::Set(const PixelRect &rc, const GeoPoint &center,
+                     const fixed radius)
 {
   SetMapRect(rc);
   SetScaleFromRadius(radius);

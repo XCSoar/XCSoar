@@ -73,6 +73,5 @@ public:
            const GeoPoint &fallback_loc);
 
 private:
-  void set_projection(const PixelRect &rc, const GeoPoint &center,
-                      const fixed radius);
+  void Set(const PixelRect &rc, const GeoPoint &center, const fixed radius);
 };
