@@ -434,24 +434,6 @@ TaskManager::UpdateAutoMC(const AircraftState& state_now,
   return false;
 }
 
-GeoPoint
-TaskManager::GetTaskCenter(const GeoPoint& fallback_location) const
-{
-  if (active_task)
-    return active_task->GetTaskCenter(fallback_location);
-
-  return fallback_location;
-}
-
-fixed
-TaskManager::GetTaskRadius(const GeoPoint& fallback_location) const
-{
-  if (active_task)
-    return active_task->GetTaskRadius(fallback_location);
-
-  return fixed_zero;
-}
-
 bool
 TaskManager::IsInSector (const unsigned index, const AircraftState &ref,
                          const bool AATOnly) const
