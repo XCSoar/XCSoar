@@ -25,12 +25,14 @@ Copyright_License {
 #include "Engine/Task/TaskManager.hpp"
 
 void
-ChartProjection::Set(const PixelRect &rc, const TaskManager &task,
+ChartProjection::Set(const PixelRect &rc, const TaskManager &task_manager,
                      const GeoPoint &fallback_loc)
 {
-  const GeoPoint center = task.GetTaskCenter(fallback_loc);
-  const fixed radius = max(fixed(10000), task.GetTaskRadius(fallback_loc));
-  Set(rc, center, radius);
+  const AbstractTask *task = task_manager.GetActiveTask();
+  if (task != NULL)
+    Set(rc, *task, fallback_loc);
+  else
+    Set(rc, fallback_loc, fixed_zero);
 }
 
 void
