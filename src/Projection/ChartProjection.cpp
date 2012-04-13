@@ -45,7 +45,7 @@ ChartProjection::Set(const PixelRect &rc,
 }
 
 void
-ChartProjection::Set(const PixelRect &rc, const OrderedTask &task,
+ChartProjection::Set(const PixelRect &rc, const AbstractTask &task,
                      const GeoPoint &fallback_loc)
 {
   const GeoPoint center = task.GetTaskCenter(fallback_loc);
