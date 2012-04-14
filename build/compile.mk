@@ -7,10 +7,6 @@ endif
 
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPREFIX)ar$(EXE)
-# Fall back to "ar" in PATH (ar is installed separately from GCC)
-ifeq ($(strip $(wildcard $(AR))),)
-  AR = ar$(EXE)
-endif
 CXX = $(TCPREFIX)g++$(TCSUFFIX)$(EXE)
 CC = $(TCPREFIX)gcc$(TCSUFFIX)$(EXE)
 DLLTOOL = $(TCPREFIX)dlltool$(EXE)
