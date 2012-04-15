@@ -23,53 +23,90 @@
 #ifndef XCSOAR_TASK_ACCESSOR_HPP
 #define XCSOAR_TASK_ACCESSOR_HPP
 
-struct GeoPoint;
-struct ElementStat;
-class GlidePolar;
+#include "Engine/Task/TaskManager.hpp"
 
 class TaskAccessor {
+  TaskManager &task_manager;
+  const fixed floor_alt;
+
 public:
-  gcc_pure
-  virtual bool is_ordered() const = 0;
+  TaskAccessor(TaskManager &_task_manager, fixed _floor_alt)
+    :task_manager(_task_manager), floor_alt(_floor_alt) {}
 
   gcc_pure
-  virtual bool is_empty() const = 0;
+  bool is_ordered() const {
+    return task_manager.TaskSize() > 1;
+  }
 
   gcc_pure
-  virtual bool is_finished() const = 0;
+  virtual bool is_empty() const {
+    return task_manager.TaskSize()==0;
+  }
 
   gcc_pure
-  virtual bool is_started() const = 0;
+  bool is_finished() const {
+    return task_manager.GetCommonStats().task_finished;
+  }
 
   gcc_pure
-  virtual GeoPoint random_oz_point(unsigned index, const fixed noise) const = 0;
+  bool is_started() const {
+    return task_manager.GetCommonStats().task_started;
+  }
 
   gcc_pure
-  virtual unsigned size() const = 0;
+  GeoPoint random_oz_point(unsigned index, const fixed noise) const {
+    return task_manager.RandomPointInTask(index, noise);
+  }
 
   gcc_pure
-  virtual GeoPoint getActiveTaskPointLocation() const = 0;
+  unsigned size() const {
+    return task_manager.TaskSize();
+  }
 
   gcc_pure
-  virtual bool has_entered(unsigned index) const = 0;
+  GeoPoint getActiveTaskPointLocation() const {
+    return task_manager.GetActiveTaskPoint()->GetLocation();
+  }
 
   gcc_pure
-  virtual const ElementStat leg_stats() const = 0;
+  bool has_entered(unsigned index) const {
+    AbstractTaskFactory &fact = task_manager.GetFactory();
+    return fact.HasEntered(index);
+  }
 
   gcc_pure
-  virtual fixed target_height() const = 0;
+  const ElementStat leg_stats() const {
+    return task_manager.GetStats().current_leg;
+  }
 
   gcc_pure
-  virtual fixed remaining_alt_difference() const = 0;
+  fixed target_height() const {
+    if (task_manager.GetActiveTaskPoint()) {
+      return max(floor_alt, task_manager.GetActiveTaskPoint()->GetElevation());
+    } else {
+      return floor_alt;
+    }
+  }
 
   gcc_pure
-  virtual GlidePolar get_glide_polar() const =0;
+  fixed remaining_alt_difference() const {
+    return task_manager.GetStats().total.solution_remaining.altitude_difference;
+  }
 
   gcc_pure
-  virtual void setActiveTaskPoint(unsigned index) = 0;
+  GlidePolar get_glide_polar() const {
+    return task_manager.GetGlidePolar();
+  }
 
   gcc_pure
-  virtual unsigned getActiveTaskPointIndex() const = 0;
+  void setActiveTaskPoint(unsigned index) {
+    task_manager.SetActiveTaskPoint(index);
+  }
+
+  gcc_pure
+  unsigned getActiveTaskPointIndex() const {
+    return task_manager.GetActiveTaskPointIndex();
+  }
 };
 
 #endif

@@ -74,62 +74,6 @@ wind_name(int n_wind)
 
 #define fixed_300 fixed(300)
 
-class DirectTaskAccessor: public TaskAccessor {
-public:
-  DirectTaskAccessor(TaskManager& _task_manager):
-    task_manager(_task_manager) {};
-
-  bool is_ordered() const {
-    return task_manager.TaskSize()>1;
-  }
-  bool is_empty() const {
-    return task_manager.TaskSize()==0;
-  }
-  bool is_finished() const {
-    return task_manager.GetCommonStats().task_finished;
-  }
-  bool is_started() const {
-    return task_manager.GetCommonStats().task_started;
-  }
-  GeoPoint random_oz_point(unsigned index, const fixed noise) const {
-    return task_manager.RandomPointInTask(index, noise);
-  }
-  unsigned size() const {
-    return task_manager.TaskSize();
-  }
-  GeoPoint getActiveTaskPointLocation() const {
-    return task_manager.GetActiveTaskPoint()->GetLocation();
-  }
-  bool has_entered(unsigned index) const {
-    AbstractTaskFactory &fact = task_manager.GetFactory();
-    return fact.HasEntered(index);
-  }
-  const ElementStat leg_stats() const {
-    return task_manager.GetStats().current_leg;
-  }
-  fixed target_height() const {
-    if (task_manager.GetActiveTaskPoint()) {
-      return max(fixed_300, task_manager.GetActiveTaskPoint()->GetElevation());
-    } else {
-      return fixed_300;
-    }
-  }
-  fixed remaining_alt_difference() const {
-    return task_manager.GetStats().total.solution_remaining.altitude_difference;
-  }
-  GlidePolar get_glide_polar() const {
-    return task_manager.GetGlidePolar();
-  }
-  void setActiveTaskPoint(unsigned index) {
-    task_manager.SetActiveTaskPoint(index);
-  }
-  unsigned getActiveTaskPointIndex() const {
-    return task_manager.GetActiveTaskPointIndex();
-  }
-private:
-  TaskManager& task_manager;
-};
-
 class PrintTaskAutoPilot: public TaskAutoPilot
 {
 public:
@@ -180,7 +124,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   TestFlightResult result;
 
-  DirectTaskAccessor ta(task_manager);
+  TaskAccessor ta(task_manager, fixed_300);
   PrintTaskAutoPilot autopilot(parms);
   AircraftSim aircraft;
 

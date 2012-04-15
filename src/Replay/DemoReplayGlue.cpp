@@ -31,65 +31,6 @@
 
 #define fixed_300 fixed(300)
 
-class ProtectedTaskAccessor: public TaskAccessor {
-public:
-  ProtectedTaskAccessor(ProtectedTaskManager::ExclusiveLease& _task,
-    const fixed _floor_alt):
-    task(_task), floor_alt(_floor_alt) {};
-
-  bool is_ordered() const {
-    return task->TaskSize()>1;
-  }
-  bool is_empty() const {
-    return task->TaskSize()==0;
-  }
-  bool is_finished() const {
-    return task->GetCommonStats().task_finished;
-  }
-  bool is_started() const {
-    return task->GetCommonStats().task_started;
-  }
-  GeoPoint random_oz_point(unsigned index, const fixed noise) const {
-    return task->RandomPointInTask(index, noise);
-  }
-  unsigned size() const {
-    return task->TaskSize();
-  }
-  GeoPoint getActiveTaskPointLocation() const {
-    return task->GetActiveTaskPoint()->GetLocation();
-  }
-  bool has_entered(unsigned index) const {
-    AbstractTaskFactory &fact = task->GetFactory();
-    return fact.HasEntered(index);
-  }
-  const ElementStat leg_stats() const {
-    return task->GetStats().current_leg;
-  }
-  fixed target_height() const {
-    if (task->GetActiveTaskPoint()) {
-      return max(floor_alt, task->GetActiveTaskPoint()->GetElevation());
-    } else {
-      return floor_alt;
-    }
-  }
-  fixed remaining_alt_difference() const {
-    return task->GetStats().total.solution_remaining.altitude_difference;
-  }
-  GlidePolar get_glide_polar() const {
-    return task->GetGlidePolar();
-  }
-  void setActiveTaskPoint(unsigned index) {
-    task->SetActiveTaskPoint(index);
-  }
-  unsigned getActiveTaskPointIndex() const {
-    return task->GetActiveTaskPointIndex();
-  }
-private:
-  ProtectedTaskManager::ExclusiveLease& task;
-  const fixed floor_alt;
-};
-
-
 bool
 DemoReplayGlue::UpdateTime()
 {
@@ -117,7 +58,7 @@ void
 DemoReplayGlue::Start()
 {
   ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
-  ProtectedTaskAccessor ta(protected_task_manager, fixed_zero);
+  const TaskAccessor ta(protected_task_manager, fixed_zero);
   parms.realistic();
   parms.start_alt = device_blackboard->Basic().nav_altitude;
   DemoReplay::Start(ta, device_blackboard->Basic().location);
@@ -147,7 +88,7 @@ DemoReplayGlue::Update()
   }
 
   ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
-  ProtectedTaskAccessor ta(protected_task_manager, floor_alt);
+  TaskAccessor ta(protected_task_manager, floor_alt);
   bool retval = DemoReplay::Update(ta);
 
   const AircraftState s = aircraft.GetState();
