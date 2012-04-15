@@ -26,6 +26,8 @@
 #include "Util/AircraftStateFilter.hpp"
 #include "Replay/TaskAutoPilot.hpp"
 #include "Replay/AircraftSim.hpp"
+#include "Replay/TaskAccessor.hpp"
+
 #include <fstream>
 
 fixed

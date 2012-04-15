@@ -19,7 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "TaskAutoPilot.hpp"
+#include "TaskAccessor.hpp"
 #include "Task/TaskStats/ElementStat.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
