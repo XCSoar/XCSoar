@@ -98,6 +98,11 @@ public:
 
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
+  void PaintClimbRate(Canvas &canvas, PixelRect rc, fixed climb_rate) const;
+  void PaintDistance(Canvas &canvas, PixelRect rc, fixed distance) const;
+  void PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
+                             fixed relative_altitude) const;
+  void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
 protected:
@@ -264,95 +269,77 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
   canvas.polygon(triangle, 4);
 }
 
-/**
- * Paints the basic info for the selected target on the given canvas
- * @param canvas The canvas to paint on
- */
 void
-FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
+FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
+                                    fixed climb_rate) const
 {
-  // Don't paint numbers if no plane selected
-  if (selection == -1 && !WarningMode())
-    return;
+  TCHAR buffer[20];
+  PixelSize size;
 
-  // Shortcut to the selected traffic
-  FlarmTraffic traffic = data.traffic[WarningMode() ? warning : selection];
-  assert(traffic.IsDefined());
-
-  // Temporary string
-  TCHAR tmp[20];
-  // Temporary string size
-  PixelSize sz;
-
-  PixelRect rc;
-  rc.left = padding;
-  rc.top = padding;
-  rc.right = canvas.get_width() - padding;
-  rc.bottom = canvas.get_height() - padding;
-
-  // Set the text color and background
-  switch (traffic.alarm_level) {
-  case FlarmTraffic::AlarmType::LOW:
-    canvas.SetTextColor(look.warning_color);
-    break;
-  case FlarmTraffic::AlarmType::IMPORTANT:
-  case FlarmTraffic::AlarmType::URGENT:
-    canvas.SetTextColor(look.alarm_color);
-    break;
-  case FlarmTraffic::AlarmType::NONE:
-    canvas.SetTextColor(look.default_color);
-    break;
-  }
-  canvas.SetBackgroundTransparent();
-
-  // Climb Rate
-  if (!WarningMode() && traffic.climb_rate_avg30s_available) {
-    FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 20);
-    canvas.Select(look.info_values_font);
-    sz = canvas.CalcTextSize(tmp);
-    canvas.text(rc.right - sz.cx, rc.top + look.info_labels_font.GetHeight(), tmp);
-
-    canvas.Select(look.info_labels_font);
-    sz = canvas.CalcTextSize(_("Vario"));
-    canvas.text(rc.right - sz.cx, rc.top, _("Vario"));
-  }
-
-  // Distance
-  FormatUserDistanceSmart(traffic.distance, tmp, 20, fixed(1000));
+  FormatUserVerticalSpeed(climb_rate, buffer, true);
   canvas.Select(look.info_values_font);
-  sz = canvas.CalcTextSize(tmp);
-  canvas.text(rc.left, rc.bottom - sz.cy, tmp);
+  size = canvas.CalcTextSize(buffer);
+  canvas.text(rc.right - size.cx,
+              rc.top + look.info_labels_font.GetHeight(), buffer);
 
   canvas.Select(look.info_labels_font);
-  canvas.text(rc.left,
-              rc.bottom - look.info_values_font.GetHeight() - look.info_labels_font.GetHeight(),
-              _("Distance"));
+  size = canvas.CalcTextSize(_("Vario"));
+  canvas.text(rc.right - size.cx, rc.top, _("Vario"));
+}
 
-  // Relative Height
-  FormatRelativeUserAltitude(traffic.relative_altitude, tmp, 20);
+void
+FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
+                                    fixed distance) const
+{
+  TCHAR buffer[20];
+  PixelSize size;
+
+  FormatUserDistanceSmart(distance, buffer, true, fixed(1000));
   canvas.Select(look.info_values_font);
-  sz = canvas.CalcTextSize(tmp);
-  canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
+  size = canvas.CalcTextSize(buffer);
+  canvas.text(rc.left, rc.bottom - size.cy, buffer);
 
   canvas.Select(look.info_labels_font);
-  sz = canvas.CalcTextSize(_("Rel. Alt."));
-  canvas.text(rc.right - sz.cx,
-              rc.bottom - look.info_values_font.GetHeight() - look.info_labels_font.GetHeight(),
-              _("Rel. Alt."));
+  canvas.text(rc.left, rc.bottom - look.info_values_font.GetHeight() -
+                       look.info_labels_font.GetHeight(), _("Distance"));
+}
 
-  // ID / Name
+void
+FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
+                                           fixed relative_altitude) const
+{
+  TCHAR buffer[20];
+  PixelSize size;
+
+  FormatRelativeUserAltitude(relative_altitude, buffer, true);
+  canvas.Select(look.info_values_font);
+  size = canvas.CalcTextSize(buffer);
+  canvas.text(rc.right - size.cx, rc.bottom - size.cy, buffer);
+
+  canvas.Select(look.info_labels_font);
+  size = canvas.CalcTextSize(_("Rel. Alt."));
+  canvas.text(rc.right - size.cx,
+              rc.bottom - look.info_values_font.GetHeight() -
+              look.info_labels_font.GetHeight(), _("Rel. Alt."));
+}
+
+void
+FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
+                             const FlarmTraffic &traffic) const
+{
+  TCHAR buffer[20];
+
   unsigned font_size;
   if (traffic.HasName()) {
     canvas.Select(look.call_sign_font);
     font_size = look.call_sign_font.GetHeight();
 
-    if (!traffic.HasAlarm())
-      canvas.SetTextColor(look.selection_color);
-
-    _tcscpy(tmp, traffic.name);
+    _tcscpy(buffer, traffic.name);
   } else {
+    canvas.Select(look.info_labels_font);
     font_size = look.info_labels_font.GetHeight();
-    traffic.id.Format(tmp);
+
+    traffic.id.Format(buffer);
   }
 
   if (!WarningMode()) {
@@ -363,10 +350,10 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     if (team_color == FlarmFriends::NONE &&
         settings.team_flarm_tracking &&
         traffic.id == settings.team_flarm_id)
-      // .. use yellow color
+      // .. use green color
       team_color = FlarmFriends::GREEN;
 
-    // If team color found -> draw a colored circle around the target
+    // If team color found -> draw a colored circle in front of the name
     if (team_color != FlarmFriends::NONE) {
       switch (team_color) {
       case FlarmFriends::GREEN:
@@ -393,7 +380,60 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     }
   }
 
-  canvas.text(rc.left, rc.top, tmp);
+  canvas.text(rc.left, rc.top, buffer);
+}
+
+/**
+ * Paints the basic info for the selected target on the given canvas
+ * @param canvas The canvas to paint on
+ */
+void
+FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
+{
+  // Don't paint numbers if no plane selected
+  if (selection == -1 && !WarningMode())
+    return;
+
+  // Shortcut to the selected traffic
+  FlarmTraffic traffic = data.traffic[WarningMode() ? warning : selection];
+  assert(traffic.IsDefined());
+
+  PixelRect rc;
+  rc.left = padding;
+  rc.top = padding;
+  rc.right = canvas.get_width() - padding;
+  rc.bottom = canvas.get_height() - padding;
+
+  // Set the text color and background
+  switch (traffic.alarm_level) {
+  case FlarmTraffic::AlarmType::LOW:
+    canvas.SetTextColor(look.warning_color);
+    break;
+  case FlarmTraffic::AlarmType::IMPORTANT:
+  case FlarmTraffic::AlarmType::URGENT:
+    canvas.SetTextColor(look.alarm_color);
+    break;
+  case FlarmTraffic::AlarmType::NONE:
+    canvas.SetTextColor(look.default_color);
+    break;
+  }
+  canvas.SetBackgroundTransparent();
+
+  // Climb Rate
+  if (!WarningMode() && traffic.climb_rate_avg30s_available)
+    PaintClimbRate(canvas, rc, traffic.climb_rate_avg30s);
+
+  // Distance
+  PaintDistance(canvas, rc, traffic.distance);
+
+  // Relative Height
+  PaintRelativeAltitude(canvas, rc, traffic.relative_altitude);
+
+  // ID / Name
+  if (!traffic.HasAlarm())
+    canvas.SetTextColor(look.selection_color);
+
+  PaintID(canvas, rc, traffic);
 }
 
 void
