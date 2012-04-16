@@ -697,6 +697,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunAnalysis \
 	RunAirspaceWarningDialog \
 	TestNotify \
+	FeedNMEA \
 	DebugDisplay \
 	RunVegaSettings \
 	RunFlarmUtils \
@@ -705,7 +706,7 @@ DEBUG_PROGRAM_NAMES = \
 	IGC2NMEA
 
 ifeq ($(TARGET),UNIX)
-DEBUG_PROGRAM_NAMES += FeedNMEA \
+DEBUG_PROGRAM_NAMES += \
 	FeedVega \
 	FeedTCP \
 	FeedFlyNetData
