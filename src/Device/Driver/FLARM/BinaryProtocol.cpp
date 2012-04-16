@@ -223,7 +223,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Read and check length of the FrameHeader
-    length = header.GetLenght();
+    length = header.GetLength();
     if (length <= sizeof(header))
       continue;
 

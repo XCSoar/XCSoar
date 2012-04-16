@@ -164,7 +164,7 @@ private:
     uint16_t crc;
 
   public:
-    uint16_t GetLenght() const {
+    uint16_t GetLength() const {
       return FromLE16(length);
     }
 
