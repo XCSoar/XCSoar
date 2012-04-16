@@ -36,10 +36,14 @@ namespace FlarmFriends
     BLUE,
     YELLOW,
     MAGENTA,
+    COUNT
   };
 
   Color GetFriendColor(FlarmId id);
   void SetFriendColor(FlarmId id, Color color);
+
+  void Load();
+  void Save();
 };
 
 #endif

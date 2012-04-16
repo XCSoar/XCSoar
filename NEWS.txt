@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4 - not yet released
 * user interface
   - added "Airspace On/Off" menu button
+  - save Flarm team mates in the profile
 * infoboxes
   - added automatic altitude infobox (baro. altitude with GPS fallback)
 

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Glue.hpp"
 #include "FlarmDetails.hpp"
+#include "Friends.hpp"
 #include "Components.hpp"
 #include "MergeThread.hpp"
 
@@ -41,6 +42,7 @@ LoadFlarmDatabases()
   merge_thread->Suspend();
 
   FlarmDetails::Load();
+  FlarmFriends::Load();
 
   merge_thread->Resume();
 }
