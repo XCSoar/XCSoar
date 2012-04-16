@@ -32,6 +32,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
+#include "TimeoutClock.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -190,6 +191,8 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
 
   port.Flush();
 
+  TimeoutClock timeout(5000);
+
   // eg $PDVSC,S,FOO,BAR*<cr>\r\n
   if (!PortWriteNMEA(port, Buffer))
     return false;
@@ -203,11 +206,18 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
   comma[1] = '\0';
 
   // expect eg $PDVSC,A,FOO,
-  if (!port.ExpectString(Buffer, env))
+  if (!port.ExpectString(Buffer, env, timeout.GetRemainingOrZero()))
     return false;
 
   // read value eg bar
   while (size > 0) {
+    int remaining = timeout.GetRemainingSigned();
+    if (remaining < 0)
+      return false;
+
+    if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
+      return false;
+
     int nbytes = port.Read(Buffer, size);
     if (nbytes < 0)
       return false;

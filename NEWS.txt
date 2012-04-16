@@ -13,6 +13,7 @@ Version 6.3.1 - not yet released
   - Borgelt: read the ballast setting from the B800
   - LX: support the LXNav V7
   - Flymaster: initiate NMEA mode
+  - AltairPro: relax timeouts
   - fix timeouts on Windows CE (FLARM driver and others)
 * logger
   - fix format of IGC 'C' records for takeoff/landing (ambiguous spec)
