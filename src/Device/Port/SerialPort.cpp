@@ -584,7 +584,7 @@ SerialPort::WaitRead(unsigned timeout_ms)
     if (remaining == 0)
       return WaitResult::TIMEOUT;
 
-    const unsigned t = std::min(remaining, 500u);
+    const unsigned t = std::min(remaining, 50u);
     remaining -= t;
     Sleep(t);
   }
