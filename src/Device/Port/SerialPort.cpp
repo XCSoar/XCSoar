@@ -604,6 +604,7 @@ SerialPort::Read(void *Buffer, size_t Size)
 Port::WaitResult
 SerialPort::WaitRead(unsigned timeout_ms)
 {
+#ifdef _WIN32_WCE
   unsigned remaining = timeout_ms;
 
   while (true) {
@@ -620,4 +621,8 @@ SerialPort::WaitRead(unsigned timeout_ms)
     remaining -= t;
     Sleep(t);
   }
+#else
+  OverlappedEvent overlapped;
+  return WaitDataPending(overlapped, timeout_ms);
+#endif
 }
