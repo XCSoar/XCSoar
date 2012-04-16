@@ -41,10 +41,10 @@ ConditionMonitorWind::CheckCondition(const GlideComputer &cmp)
   fixed mag_change = fabs(wind.norm - last_wind.norm);
   fixed dir_change = (wind.bearing - last_wind.bearing).AsDelta().AbsoluteDegrees();
 
-  if (mag_change > Units::ToSysUnit(fixed(5), Unit::KNOTS))
+  if (mag_change > fixed(2.5))
     return true;
 
-  return wind.norm > Units::ToSysUnit(fixed(10), Unit::KNOTS) &&
+  return wind.norm > fixed(5) &&
          dir_change > fixed(45);
 }
 
