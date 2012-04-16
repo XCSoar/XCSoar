@@ -254,30 +254,35 @@ static void
 OnFriendBlueClicked(gcc_unused WndButton &Sender)
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::BLUE);
+  wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendGreenClicked(gcc_unused WndButton &Sender)
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::GREEN);
+  wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendYellowClicked(gcc_unused WndButton &Sender)
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::YELLOW);
+  wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendMagentaClicked(gcc_unused WndButton &Sender)
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::MAGENTA);
+  wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendClearClicked(gcc_unused WndButton &Sender)
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::NONE);
+  wf->SetModalResult(mrOK);
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
