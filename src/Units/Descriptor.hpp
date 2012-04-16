@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_UNITS_DESCRIPTOR_HPP
 #define XCSOAR_UNITS_DESCRIPTOR_HPP
 
-#include "Units/Settings.hpp"
+#include "Unit.hpp"
 #include "Math/fixed.hpp"
 
 #include <tchar.h>

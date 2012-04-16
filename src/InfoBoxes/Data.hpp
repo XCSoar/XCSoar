@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_INFO_BOX_DATA_HPP
 
 #include "Util/StaticString.hpp"
-#include "Units/Settings.hpp"
+#include "Units/Unit.hpp"
 #include "Math/fixed.hpp"
 
 class Angle;

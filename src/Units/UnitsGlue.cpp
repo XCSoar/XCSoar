@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Units/UnitsGlue.hpp"
-#include "Units/Settings.hpp"
 #include "Units/UnitsStore.hpp"
 #include "LogFile.hpp"
 
