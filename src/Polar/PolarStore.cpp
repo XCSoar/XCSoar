@@ -243,6 +243,9 @@ static gcc_constexpr_data PolarStore::Item internal_polars[] =
   // from factory polar
   { _T("Janus C RG (PIL)"), 519, 240, 90, -0.6, 120, -0.88, 160, -1.64, 17.3, 50, 108 },
   { _T("Janus C RG (PAS)"), 610, 240, 95, -0.63, 140, -1.12, 180, -2.01, 17.3, 50, 108 },
+
+  // from LK8000
+  { _T("Apis 2 (15m)"), 310, 0, 80, -0.60, 100, -0.75, 140, -1.45, 12.40, 0.0, 98 },
 };
 
 const PolarStore::Item &
