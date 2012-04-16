@@ -71,6 +71,13 @@ struct DeviceConfig {
      * Listen on a TCP port.
      */
     TCP_LISTENER,
+
+    /**
+     * A master pseudo-terminal.  The "path" attribute specifies the
+     * path of a symlink pointing to the slave pseudo-terminal.  Only
+     * for debugging.
+     */
+    PTY,
   };
 
   /**

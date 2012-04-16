@@ -34,6 +34,7 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 
 TTYPort::TTYPort(Handler &_handler)
@@ -82,6 +83,20 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   valid.Set();
   return true;
+}
+
+const char *
+TTYPort::OpenPseudo()
+{
+  fd = open("/dev/ptmx", O_RDWR | O_NOCTTY | O_NONBLOCK);
+  if (fd < 0)
+    return NULL;
+
+  if (unlockpt(fd) < 0)
+    return NULL;
+
+  valid.Set();
+  return ptsname(fd);
 }
 
 void

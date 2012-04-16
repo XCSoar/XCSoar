@@ -37,6 +37,7 @@ static const TCHAR *const port_type_strings[] = {
   _T("auto"),
   _T("internal"),
   _T("tcp_listener"),
+  _T("pty"),
   NULL
 };
 
@@ -64,6 +65,13 @@ DeviceConfig::IsAvailable() const
 
   case PortType::TCP_LISTENER:
     return true;
+
+  case PortType::PTY:
+#if defined(HAVE_POSIX) && !defined(ANDROID)
+    return true;
+#else
+    return false;
+#endif
   }
 
   /* unreachable */
@@ -98,6 +106,10 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 
   case PortType::TCP_LISTENER:
     _sntprintf(buffer, max_size, _T("TCP port %d"), tcp_port);
+    return buffer;
+
+  case PortType::PTY:
+    _sntprintf(buffer, max_size, _T("Pseudo-terminal %s"), path.c_str());
     return buffer;
   }
 

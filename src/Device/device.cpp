@@ -66,6 +66,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 {
   switch (a.port_type) {
   case DeviceConfig::PortType::SERIAL:
+  case DeviceConfig::PortType::PTY:
     return b.port_type == DeviceConfig::PortType::SERIAL &&
       a.path.equals(b.path);
 

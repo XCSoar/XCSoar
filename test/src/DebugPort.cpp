@@ -34,6 +34,12 @@ ParsePortArgs(Args &args)
   config.port_type = DeviceConfig::PortType::SERIAL;
   config.path = args.ExpectNextT().c_str();
 
+  if (config.path.equals(_T("pty"))) {
+    config.port_type = DeviceConfig::PortType::PTY;
+    config.path = args.ExpectNextT().c_str();
+    return config;
+  }
+
   if (config.path.equals(_T("tcp"))) {
     config.port_type = DeviceConfig::PortType::TCP_LISTENER;
     config.tcp_port = atoi(args.ExpectNext());
