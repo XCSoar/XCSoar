@@ -207,17 +207,18 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
     return false;
 
   // read value eg bar
-  while(--size){
-    int ch = port.GetChar();
-    if (ch == -1)
-      break;
+  while (size > 0) {
+    int nbytes = port.Read(Buffer, size);
+    if (nbytes < 0)
+      return false;
 
-    if (ch == '*'){
-      Buffer = '\0';
+    char *asterisk = (char *)memchr(Buffer, '*', nbytes);
+    if (asterisk != NULL) {
+      *asterisk = 0;
       return true;
     }
 
-    *Buffer++ = (char) ch;
+    size -= nbytes;
   }
 
   return false;
