@@ -310,14 +310,14 @@ GlideComputerAirData::LD(const MoreData &basic, const MoreData &last_basic,
                          const DerivedInfo &calculated, VarioInfo &vario_info)
 {
   if (!basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
-    vario_info.ld_vario = fixed(INVALID_GR);
-    vario_info.ld = fixed(INVALID_GR);
+    vario_info.ld_vario = INVALID_GR;
+    vario_info.ld = INVALID_GR;
     return;
   }
 
   if (basic.HasTimeRetreatedSince(last_basic)) {
-    vario_info.ld_vario = fixed(INVALID_GR);
-    vario_info.ld = fixed(INVALID_GR);
+    vario_info.ld_vario = INVALID_GR;
+    vario_info.ld = INVALID_GR;
   }
 
   const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
@@ -339,7 +339,7 @@ GlideComputerAirData::LD(const MoreData &basic, const MoreData &last_basic,
       UpdateLD(vario_info.ld_vario, basic.indicated_airspeed,
                -basic.total_energy_vario, fixed(0.3));
   } else {
-    vario_info.ld_vario = fixed(INVALID_GR);
+    vario_info.ld_vario = INVALID_GR;
   }
 }
 

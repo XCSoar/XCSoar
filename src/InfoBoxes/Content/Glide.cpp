@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Glide.hpp"
+#include "Computer/GlideRatioCalculator.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 
@@ -59,20 +60,20 @@ InfoBoxContentLDCruise::Update(InfoBoxData &data)
 void
 InfoBoxContentLDAvg::Update(InfoBoxData &data)
 {
-  const int average_ld = XCSoarInterface::Calculated().average_ld;
+  const fixed average_ld = XCSoarInterface::Calculated().average_ld;
 
-  if (average_ld == 0) {
+  if (average_ld == fixed_zero) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  if (average_ld < 0)
+  if (average_ld < fixed_zero)
     data.SetValue(_T("^^^"));
-  else if (average_ld >= 999)
+  else if (average_ld >= INVALID_GR)
     data.SetValue(_T("+++"));
   else
-    data.SetValueFromGlideRatio(fixed(average_ld));
+    data.SetValueFromGlideRatio(average_ld);
 }
 
 void

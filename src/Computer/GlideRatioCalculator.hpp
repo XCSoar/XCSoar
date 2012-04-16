@@ -28,7 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-static const unsigned INVALID_GR = 999;
+static const fixed INVALID_GR = fixed(999);
 
 struct ComputerSettings;
 
@@ -60,7 +60,7 @@ class GlideRatioCalculator : private NonCopyable {
 public:
   void Initialize(const ComputerSettings &settings);
   void Add(unsigned distance, int altitude);
-  int Calculate() const;
+  fixed Calculate() const;
 };
 
 // methods using low-pass filter
