@@ -19,10 +19,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskManager.hpp"
 #include "Visitors/TaskPointVisitor.hpp"
 #include "Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "TaskPoints/AATPoint.hpp"
 #include "Util/StringUtil.hpp"
 
 // uses delegate pattern

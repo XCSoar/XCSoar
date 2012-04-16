@@ -31,6 +31,7 @@ Copyright_License {
 #include "Engine/Airspace/Predicate/AirspacePredicateInside.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"

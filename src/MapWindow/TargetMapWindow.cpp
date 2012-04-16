@@ -39,6 +39,9 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"
 #include "Asset.hpp"
+#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
+#include "Engine/Task/ObservationZones/CylinderZone.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

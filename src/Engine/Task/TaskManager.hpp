@@ -32,8 +32,6 @@
 #include "TaskStats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/ObservationZones/CylinderZone.hpp"
 
 class AbstractTaskFactory;
 class TaskEvents;
