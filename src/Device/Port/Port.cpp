@@ -174,15 +174,9 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
     if (ch == -1 || env.IsCancelled())
       return false;
 
-    if (ch != *p++) {
-      if (timeout.HasExpired())
-        /* give up after 2 seconds (is that enough for all
-           devices?) */
-        return false;
-
+    if (ch != *p++)
       /* retry */
       p = token;
-    }
   }
 
   return true;
