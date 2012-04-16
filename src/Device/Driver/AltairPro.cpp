@@ -197,31 +197,29 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
   Buffer[6] = _T('A');
   char *comma = strchr(&Buffer[8], ',');
 
-  if (comma != NULL){
-    comma[1] = '\0';
+  if (comma == NULL)
+    return false;
 
-    // expect eg $PDVSC,A,FOO,
-    if (port.ExpectString(Buffer, env)) {
+  comma[1] = '\0';
 
-      // read value eg bar
-      while(--size){
-        int ch = port.GetChar();
-        if (ch == -1)
-          break;
+  // expect eg $PDVSC,A,FOO,
+  if (!port.ExpectString(Buffer, env))
+    return false;
 
-        if (ch == '*'){
-          Buffer = '\0';
-          return true;
-        }
+  // read value eg bar
+  while(--size){
+    int ch = port.GetChar();
+    if (ch == -1)
+      break;
 
-        *Buffer++ = (char) ch;
-
-      }
-
+    if (ch == '*'){
+      Buffer = '\0';
+      return true;
     }
+
+    *Buffer++ = (char) ch;
   }
 
-  *Buffer = '\0';
   return false;
 }
 
