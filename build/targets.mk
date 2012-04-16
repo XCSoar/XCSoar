@@ -167,7 +167,7 @@ ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r7b
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r7c
 
   ANDROID_PLATFORM = android-8
   ANDROID_ARCH = arm
