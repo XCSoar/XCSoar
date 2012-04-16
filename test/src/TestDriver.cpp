@@ -196,6 +196,31 @@ TestFLARM()
   } else {
     skip(12, 0, "traffic == NULL");
   }
+
+  ok1(parser.ParseLine("$PFLAA,0,1206,574,21,2,DDAED5,196,,32,1.0,1*10",
+                       nmea_info));
+  ok1(nmea_info.flarm.GetActiveTrafficCount() == 3);
+
+  id.Parse("DDAED5", NULL);
+  traffic = nmea_info.flarm.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->valid);
+    ok1(traffic->alarm_level == FlarmTraffic::AlarmType::NONE);
+    ok1(equals(traffic->relative_north, 1206));
+    ok1(equals(traffic->relative_east, 574));
+    ok1(equals(traffic->relative_altitude, 21));
+    ok1(equals(traffic->track, 196));
+    ok1(traffic->track_received);
+    ok1(!traffic->turn_rate_received);
+    ok1(equals(traffic->speed, 32));
+    ok1(traffic->speed_received);
+    ok1(equals(traffic->climb_rate, 1.0));
+    ok1(traffic->climb_rate_received);
+    ok1(traffic->type == FlarmTraffic::AircraftType::GLIDER);
+    ok1(!traffic->stealth);
+  } else {
+    skip(15, 0, "traffic == NULL");
+  }
 }
 
 static void
@@ -929,7 +954,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(466);
+  plan_tests(483);
 
   TestGeneric();
   TestTasman();

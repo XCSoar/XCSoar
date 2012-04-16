@@ -148,6 +148,12 @@ TaskStore::Item::GetName() const
   return task_name.c_str();
 }
 
+const TCHAR *
+TaskStore::Item::GetPath() const
+{
+  return filename.c_str();
+}
+
 bool
 TaskStore::Item::operator<(const Item &other) const
 {
@@ -158,6 +164,12 @@ const TCHAR *
 TaskStore::GetName(unsigned index) const
 {
   return store[index].GetName();
+}
+
+const TCHAR *
+TaskStore::GetPath(unsigned index) const
+{
+  return store[index].GetPath();
 }
 
 OrderedTask* 

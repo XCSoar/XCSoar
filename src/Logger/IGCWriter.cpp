@@ -236,7 +236,7 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
 
   // takeoff line
   // IGC GNSS specification 3.6.3
-  WriteLine("C00000000N000000000ETAKEOFF");
+  WriteLine("C0000000N00000000ETAKEOFF");
 }
 
 void
@@ -244,7 +244,7 @@ IGCWriter::EndDeclaration()
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  WriteLine("C00000000N000000000ELANDING");
+  WriteLine("C0000000N00000000ELANDING");
 }
 
 void

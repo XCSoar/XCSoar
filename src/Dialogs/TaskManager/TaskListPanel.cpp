@@ -221,7 +221,11 @@ TaskListPanel::LoadTask()
 void
 TaskListPanel::DeleteTask()
 {
-  const TCHAR *fname = get_cursor_name();
+  const unsigned cursor_index = wTasks->GetCursorIndex();
+  if (cursor_index >= task_store->Size())
+    return;
+
+  const TCHAR *fname = task_store->GetName(cursor_index);
   tstring upperstring = fname;
   std::transform(upperstring.begin(), upperstring.end(), upperstring.begin(),
       ::toupper);
@@ -242,9 +246,7 @@ TaskListPanel::DeleteTask()
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, fname);
-  File::Delete(path);
+  File::Delete(task_store->GetPath(cursor_index));
 
   task_store->Scan();
   RefreshView();
@@ -269,7 +271,11 @@ ClearSuffix(TCHAR *p, const TCHAR *suffix)
 void
 TaskListPanel::RenameTask()
 {
-  const TCHAR *oldname = get_cursor_name();
+  const unsigned cursor_index = wTasks->GetCursorIndex();
+  if (cursor_index >= task_store->Size())
+    return;
+
+  const TCHAR *oldname = task_store->GetName(cursor_index);
   StaticString<40> newname(oldname);
 
   if (ClearSuffix(newname.buffer(), _T(".cup"))) {
@@ -285,12 +291,12 @@ TaskListPanel::RenameTask()
 
   newname.append(_T(".tsk"));
 
-  TCHAR oldpath[MAX_PATH];
   TCHAR newpath[MAX_PATH];
-  LocalPath(oldpath, oldname);
-  LocalPath(newpath, newname.c_str());
+  LocalPath(newpath, _T("tasks"));
+  Directory::Create(newpath);
+  LocalPath(newpath, _T("tasks"), newname.c_str());
 
-  File::Rename(oldpath, newpath);
+  File::Rename(task_store->GetPath(cursor_index), newpath);
 
   task_store->Scan();
   RefreshView();

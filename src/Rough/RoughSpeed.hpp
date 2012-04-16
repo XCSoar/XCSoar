@@ -33,19 +33,19 @@ Copyright_License {
 /**
  * Store an rough speed value, when the exact value is not needed.
  *
- * The accuracy is about 1mm/s.
+ * The accuracy is about 2mm/s. The range is 0 - 127 m/s.
  */
 class RoughSpeed {
   uint16_t value;
 
   gcc_const
-  static int16_t Import(fixed x) {
-    return (int16_t)(x * 1024);
+  static uint16_t Import(fixed x) {
+    return (uint16_t)(x * 512);
   }
 
   gcc_const
-  static fixed Export(int16_t x) {
-    return fixed(x) / 1024;
+  static fixed Export(uint16_t x) {
+    return fixed(x) / 512;
   }
 
 public:

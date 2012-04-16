@@ -53,5 +53,8 @@ void
 Waypoint::Project(const TaskProjection &task_projection)
 {
   flat_location = task_projection.project(location);
+
+#ifndef NDEBUG
   flat_location_initialised = true;
+#endif
 }
