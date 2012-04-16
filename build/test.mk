@@ -708,13 +708,11 @@ ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
 	FeedVega \
 	FeedTCP \
-	FeedTCPServer \
 	FeedFlyNetData
 endif
 
 ifeq ($(TARGET),PC)
 DEBUG_PROGRAM_NAMES += FeedTCP \
-  FeedTCPServer \
   FeedFlyNetData
 endif
 
@@ -2164,7 +2162,15 @@ TEST_NOTIFY_DEPENDS = SCREEN TEST1
 $(eval $(call link-program,TestNotify,TEST_NOTIFY))
 
 FEED_NMEA_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/FeedNMEA.cpp
+FEED_NMEA_DEPENDS = PORT UTIL
 $(eval $(call link-program,FeedNMEA,FEED_NMEA))
 
 FEED_VEGA_SOURCES = \
@@ -2183,24 +2189,6 @@ endif
 endif
 
 $(eval $(call link-program,FeedTCP,FEED_TCP))
-
-FEED_TCP_SERVER_SOURCES = \
-	$(SRC)/Device/Port/Port.cpp \
-	$(SRC)/Thread/Thread.cpp \
-	$(SRC)/Thread/StoppableThread.cpp \
-	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Device/Port/TCPPort.cpp \
-	$(TEST_SRC_DIR)/FeedTCPServer.cpp
-
-ifeq ($(HAVE_POSIX),n)
-ifeq ($(HAVE_CE),y)
-FEED_TCP_SERVER_LDLIBS += -lwinsock
-else
-FEED_TCP_SERVER_LDLIBS += -lws2_32
-endif
-endif
-
-$(eval $(call link-program,FeedTCPServer,FEED_TCP_SERVER))
 
 FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Math/fixed.cpp \
