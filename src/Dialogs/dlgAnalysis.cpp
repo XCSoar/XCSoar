@@ -297,6 +297,7 @@ Update()
               _("Barograph"));
     wf->SetCaption(sTmp);
     BarographCaption(sTmp, glide_computer->GetFlightStats());
+    wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
     break;
 
@@ -305,6 +306,7 @@ Update()
               _("Climb"));
     wf->SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
+    wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Task Calc"));
     break;
 
@@ -313,6 +315,7 @@ Update()
               _("Thermal Band"));
     wf->SetCaption(sTmp);
     ClimbChartCaption(sTmp, glide_computer->GetFlightStats());
+    wInfo->SetCaption(sTmp);
     SetCalcCaption(_T(""));
     break;
 
@@ -320,6 +323,7 @@ Update()
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Wind At Altitude"));
     wf->SetCaption(sTmp);
+    wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Set Wind"));
     break;
 
@@ -329,6 +333,7 @@ Update()
               (int)settings_computer.polar.glide_polar_task.GetTotalMass());
     wf->SetCaption(sTmp);
     GlidePolarCaption(sTmp, settings_computer.polar.glide_polar_task);
+    wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
    break;
 
@@ -337,6 +342,7 @@ Update()
               _("Temp Trace"));
     wf->SetCaption(sTmp);
     TemperatureChartCaption(sTmp, glide_computer->GetCuSonde());
+    wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
     break;
 
@@ -344,6 +350,7 @@ Update()
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Task Speed"));
     wf->SetCaption(sTmp);
+    wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Task Calc"));
     break;
 
@@ -352,6 +359,7 @@ Update()
               _("Task"));
     wf->SetCaption(sTmp);
     FlightStatisticsRenderer::CaptionTask(sTmp, calculated);
+    wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Task calc"));
     break;
 
@@ -361,12 +369,14 @@ Update()
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
     FlightStatisticsRenderer::CaptionOLC(sTmp, settings_computer.task, calculated);
+    wInfo->SetCaption(sTmp);
     break;
 
   case AnalysisPage::AIRSPACE:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Airspace"));
     wf->SetCaption(sTmp);
+    wInfo->SetCaption(_T(""));
     SetCalcCaption(_("Warnings"));
     break;
 
