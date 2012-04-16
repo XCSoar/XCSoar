@@ -86,7 +86,10 @@ InfoBoxContentAltitudeNav::Update(InfoBoxData &data)
     return;
   }
 
-  if (basic.baro_altitude_available)
+  const ComputerSettings &settings_computer = CommonInterface::GetComputerSettings();
+
+  if (basic.baro_altitude_available &&
+      settings_computer.features.nav_baro_altitude_enabled)
     data.SetTitle(InfoBoxFactory::MetaData[InfoBoxFactory::e_H_Baro].caption);
   else
     data.SetTitle(InfoBoxFactory::MetaData[InfoBoxFactory::e_HeightGPS].caption);
