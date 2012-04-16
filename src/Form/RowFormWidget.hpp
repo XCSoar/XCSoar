@@ -28,7 +28,7 @@ Copyright_License {
 #include "Edit.hpp"
 #include "DataField/Base.hpp"
 #include "Util/StaticArray.hpp"
-#include "Units/Settings.hpp"
+#include "Units/Group.hpp"
 
 #include <assert.h>
 #include <stdint.h>

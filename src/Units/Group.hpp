@@ -21,44 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_UNITS_SETTINGS_HPP
-#define XCSOAR_UNITS_SETTINGS_HPP
-
-#include "Geo/CoordinateFormat.hpp"
-#include "Unit.hpp"
-#include "Group.hpp"
-#include "Compiler.h"
+#ifndef XCSOAR_UNITS_GROUP_HPP
+#define XCSOAR_UNITS_GROUP_HPP
 
 #include <stdint.h>
 
-struct UnitSetting
+enum class UnitGroup: uint8_t
 {
-  /** Unit for distances */
-  Unit distance_unit;
-  /** Unit for altitudes, heights */
-  Unit altitude_unit;
-  /** Unit for temperature */
-  Unit temperature_unit;
-  /** Unit for aircraft speeds */
-  Unit speed_unit;
-  /** Unit for vertical speeds, varios */
-  Unit vertical_speed_unit;
-  /** Unit for wind speeds */
-  Unit wind_speed_unit;
-  /** Unit for task speeds */
-  Unit task_speed_unit;
-  /** Unit for pressures */
-  Unit pressure_unit;
-
-  void SetDefaults();
-
-  /**
-   * Return the configured unit for a given group.
-   */
-  gcc_pure
-  Unit GetByGroup(UnitGroup group) const;
-
-  bool operator==(const UnitSetting &right) const;
+  NONE,
+  DISTANCE,
+  ALTITUDE,
+  TEMPERATURE,
+  HORIZONTAL_SPEED,
+  VERTICAL_SPEED,
+  WIND_SPEED,
+  TASK_SPEED,
+  PRESSURE,
 };
 
 #endif
