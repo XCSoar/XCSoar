@@ -34,6 +34,14 @@ ParsePortArgs(Args &args)
   config.port_type = DeviceConfig::PortType::SERIAL;
   config.path = args.ExpectNextT().c_str();
 
+#ifndef NDEBUG
+  if (config.path.equals(_T("dump"))) {
+    config = ParsePortArgs(args);
+    config.dump_port = true;
+    return config;
+  }
+#endif
+
   if (config.path.equals(_T("pty"))) {
     config.port_type = DeviceConfig::PortType::PTY;
     config.path = args.ExpectNextT().c_str();
