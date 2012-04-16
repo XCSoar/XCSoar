@@ -698,7 +698,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunAirspaceWarningDialog \
 	TestNotify \
 	FeedNMEA \
-	FeedVega \
+	FeedVega EmulateVega \
 	DebugDisplay \
 	RunVegaSettings \
 	RunFlarmUtils \
@@ -2185,6 +2185,23 @@ FEED_VEGA_SOURCES = \
 	$(TEST_SRC_DIR)/FeedVega.cpp
 FEED_VEGA_DEPENDS = PORT UTIL
 $(eval $(call link-program,FeedVega,FEED_VEGA))
+
+EMULATE_VEGA_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Device/Port/LineHandler.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/IO/CSVLine.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/EmulateVega.cpp
+EMULATE_VEGA_DEPENDS = PORT UTIL
+$(eval $(call link-program,EmulateVega,EMULATE_VEGA))
 
 FEED_TCP_SOURCES = \
 	$(TEST_SRC_DIR)/FeedTCP.cpp
