@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Glide.hpp"
+#include "Engine/Util/Gradient.hpp"
 #include "Computer/GlideRatioCalculator.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
@@ -34,7 +35,7 @@ InfoBoxContentLDInstant::Update(InfoBoxData &data)
 {
   const fixed ld = XCSoarInterface::Calculated().ld;
 
-  if (ld == fixed(999)) {
+  if (!::GradientValid(ld)) {
     data.SetInvalid();
     return;
   }
@@ -48,7 +49,7 @@ InfoBoxContentLDCruise::Update(InfoBoxData &data)
 {
   const fixed cruise_ld = XCSoarInterface::Calculated().cruise_ld;
 
-  if (cruise_ld == fixed(999)) {
+  if (!::GradientValid(cruise_ld)) {
     data.SetInvalid();
     return;
   }
@@ -70,7 +71,7 @@ InfoBoxContentLDAvg::Update(InfoBoxData &data)
   // Set Value
   if (average_ld < fixed_zero)
     data.SetValue(_T("^^^"));
-  else if (average_ld >= INVALID_GR)
+  else if (!::GradientValid(average_ld))
     data.SetValue(_T("+++"));
   else
     data.SetValueFromGlideRatio(average_ld);
@@ -81,7 +82,7 @@ InfoBoxContentLDVario::Update(InfoBoxData &data)
 {
   const fixed ld_vario = XCSoarInterface::Calculated().ld_vario;
 
-  if (ld_vario == fixed(999) ||
+  if (!::GradientValid(ld_vario) ||
       !XCSoarInterface::Basic().total_energy_vario_available ||
       !XCSoarInterface::Basic().airspeed_available) {
     data.SetInvalid();
