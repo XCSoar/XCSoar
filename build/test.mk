@@ -698,6 +698,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunAirspaceWarningDialog \
 	TestNotify \
 	FeedNMEA \
+	FeedVega \
 	DebugDisplay \
 	RunVegaSettings \
 	RunFlarmUtils \
@@ -707,7 +708,6 @@ DEBUG_PROGRAM_NAMES = \
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
-	FeedVega \
 	FeedTCP \
 	FeedFlyNetData
 endif
@@ -2175,7 +2175,15 @@ FEED_NMEA_DEPENDS = PORT UTIL
 $(eval $(call link-program,FeedNMEA,FEED_NMEA))
 
 FEED_VEGA_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/FeedVega.cpp
+FEED_VEGA_DEPENDS = PORT UTIL
 $(eval $(call link-program,FeedVega,FEED_VEGA))
 
 FEED_TCP_SOURCES = \
