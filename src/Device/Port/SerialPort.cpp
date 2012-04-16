@@ -321,12 +321,19 @@ SerialPort::Write(const void *data, size_t length)
 
 #ifdef _WIN32_WCE
 
+#if 0
+  /* this workaround is currently disabled because it causes major
+    problems with some of our device drivers, causing timeouts; this
+    may be a regression on the bugged HP31x, but I prefer to support
+    sane platforms any day */
+
   if (IsWindowsCE() && !IsAltair())
     /* this is needed to work around a driver bug on the HP31x -
        without it, the second consecutive write without a task switch
        will hang the whole PNA; this Sleep() call enforces a task
        switch */
     Sleep(100);
+#endif
 
   // lpNumberOfBytesWritten : This parameter can be NULL only when the lpOverlapped parameter is not NULL.
   if (!::WriteFile(hPort, data, length, &NumberOfBytesWritten, NULL))
