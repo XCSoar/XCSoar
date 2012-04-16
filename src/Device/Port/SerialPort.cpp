@@ -443,7 +443,7 @@ SerialPort::SetRxTimeout(unsigned Timeout)
     CommTimeouts.ReadTotalTimeoutConstant = Timeout;
   }
 
-  CommTimeouts.WriteTotalTimeoutMultiplier = 10;
+  CommTimeouts.WriteTotalTimeoutMultiplier = 0;
   CommTimeouts.WriteTotalTimeoutConstant = 1000;
 
   // Set the time-out parameters
