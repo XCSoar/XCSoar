@@ -49,9 +49,17 @@ public:
     GOTO,
   };
 
+private:
   const Type type;
 
+public:
+  gcc_constexpr_ctor
   TaskInterface(const Type _type):type(_type) {}
+
+  gcc_constexpr_method
+  Type GetType() const {
+    return type;
+  }
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) = 0;
 

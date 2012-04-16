@@ -161,7 +161,7 @@ void task_report(TaskManager& task_manager, const char* text)
 
     const AbstractTask *task = task_manager.GetActiveTask();
     if (task != NULL) {
-      switch (task->type) {
+      switch (task->GetType()) {
       case TaskInterface::ORDERED:
         printf("# task is ordered\n");
         break;
@@ -180,7 +180,7 @@ void task_report(TaskManager& task_manager, const char* text)
       printf("# - dist nominal %g\n",
              (double)task->GetStats().distance_nominal);
 
-      if (task->type == TaskInterface::ORDERED &&
+      if (task->GetType() == TaskInterface::ORDERED &&
           task->GetStats().distance_max > task->GetStats().distance_min) {
         printf("# - dist max %g\n", (double)task->GetStats().distance_max);
         printf("# - dist min %g\n", (double)task->GetStats().distance_min);
