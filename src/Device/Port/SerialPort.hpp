@@ -97,7 +97,8 @@ protected:
    *
    * @return the number of bytes, or -1 on error
    */
-  int WaitDataPending(OverlappedEvent &overlapped, unsigned timeout_ms) const;
+  WaitResult WaitDataPending(OverlappedEvent &overlapped,
+                             unsigned timeout_ms) const;
 #endif
 
 public:

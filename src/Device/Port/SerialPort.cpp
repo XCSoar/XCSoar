@@ -175,38 +175,53 @@ SerialPort::GetDataPending() const
 
 #ifndef _WIN32_WCE
 
-int
+Port::WaitResult
 SerialPort::WaitDataPending(OverlappedEvent &overlapped,
                             unsigned timeout_ms) const
 {
   int nbytes = GetDataPending();
-  if (nbytes != 0)
-    return nbytes;
+  if (nbytes > 0)
+    return WaitResult::READY;
+  else if (nbytes < 0)
+    return WaitResult::FAILED;
 
   ::SetCommMask(hPort, EV_RXCHAR);
 
   DWORD dwCommModemStatus;
   if (!::WaitCommEvent(hPort, &dwCommModemStatus, overlapped.GetPointer())) {
     if (::GetLastError() != ERROR_IO_PENDING)
-      return -1;
+      return WaitResult::FAILED;
 
-    if (overlapped.Wait(timeout_ms) != OverlappedEvent::FINISHED) {
+    switch (overlapped.Wait(timeout_ms)) {
+    case OverlappedEvent::FINISHED:
+      break;
+
+    case OverlappedEvent::TIMEOUT:
       /* the operation may still be running, we have to cancel it */
       ::CancelIo(hPort);
       ::SetCommMask(hPort, 0);
       overlapped.Wait();
-      return -1;
+      return WaitResult::TIMEOUT;
+
+    case OverlappedEvent::CANCELED:
+      /* the operation may still be running, we have to cancel it */
+      ::CancelIo(hPort);
+      ::SetCommMask(hPort, 0);
+      overlapped.Wait();
+      return WaitResult::CANCELLED;
     }
 
     DWORD result;
     if (!::GetOverlappedResult(hPort, overlapped.GetPointer(), &result, FALSE))
-      return -1;
+      return WaitResult::FAILED;
   }
 
   if ((dwCommModemStatus & EV_RXCHAR) == 0)
-    return -1;
+      return WaitResult::FAILED;
 
-  return GetDataPending();
+  return GetDataPending() > 0
+    ? WaitResult::READY
+    : WaitResult::FAILED;
 }
 
 #endif
@@ -241,7 +256,21 @@ SerialPort::Run()
 
 #ifndef _WIN32_WCE
 
-    int nbytes = WaitDataPending(osStatus, 500);
+    WaitResult result = WaitDataPending(osStatus, INFINITE);
+    switch (result) {
+    case WaitResult::READY:
+      break;
+
+    case WaitResult::TIMEOUT:
+      continue;
+
+    case WaitResult::FAILED:
+    case WaitResult::CANCELLED:
+      ::Sleep(100);
+      continue;
+    }
+
+    int nbytes = GetDataPending();
     if (nbytes <= 0) {
       ::Sleep(100);
       continue;
@@ -533,7 +562,10 @@ SerialPort::Read(void *Buffer, size_t Size)
 #else
   OverlappedEvent osReader;
 
-  int pending = WaitDataPending(osReader, rx_timeout);
+  if (WaitDataPending(osReader, rx_timeout) != WaitResult::READY)
+    return -1;
+
+  int pending = GetDataPending();
   if (pending < 0)
     return -1;
 
