@@ -28,14 +28,13 @@ Copyright_License {
 
 namespace FlarmFriends
 {
-  typedef std::map<FlarmId, Color> FriendMap;
-  FriendMap friends;
+  std::map<FlarmId, Color> friends;
 }
 
 FlarmFriends::Color
 FlarmFriends::GetFriendColor(FlarmId id)
 {
-  FriendMap::const_iterator i = friends.find(id);
+  auto i = friends.find(id);
   if (i != friends.end())
     return i->second;
 
