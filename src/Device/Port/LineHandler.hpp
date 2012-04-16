@@ -27,7 +27,7 @@ Copyright_License {
 #include "Port.hpp"
 #include "FifoBuffer.hpp"
 
-class PortLineHandler : protected Port::Handler {
+class PortLineHandler : public Port::Handler {
   typedef FifoBuffer<char, 256u> Buffer;
 
   Buffer buffer;
