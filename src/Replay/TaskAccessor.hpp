@@ -35,12 +35,14 @@ public:
 
   gcc_pure
   bool is_ordered() const {
-    return task_manager.TaskSize() > 1;
+    const TaskInterface *task = task_manager.GetActiveTask();
+    return task != NULL && task->GetType() == TaskInterface::ORDERED;
   }
 
   gcc_pure
   virtual bool is_empty() const {
-    return task_manager.TaskSize()==0;
+    const TaskInterface *task = task_manager.GetActiveTask();
+    return task == NULL || task->TaskSize() == 0;
   }
 
   gcc_pure
