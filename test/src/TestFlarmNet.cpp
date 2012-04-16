@@ -31,8 +31,7 @@ int main(int argc, char **argv)
   int count = FlarmNet::LoadFile(_T("test/data/flarmnet/data.fln"));
   ok1(count == 6);
 
-  FlarmId id, id2;
-  id.Parse("DDA85C", NULL);
+  FlarmId id = FlarmId::Parse("DDA85C", NULL);
 
   const FlarmRecord *record = FlarmNet::FindRecordById(id);
   ok1(record != NULL);
@@ -62,8 +61,8 @@ int main(int argc, char **argv)
   FlarmId ids[3];
   ok1(FlarmNet::FindIdsByCallSign(_T("TH"), ids, 3) == 2);
 
-  id.Parse("DDA85C", NULL);
-  id2.Parse("DDA896", NULL);
+  id = FlarmId::Parse("DDA85C", NULL);
+  FlarmId id2 = FlarmId::Parse("DDA896", NULL);
   bool foundDDA85C = false, foundDDA896 = false;
   for (unsigned i = 0; i < 2; i++) {
     if (ids[i] == id)

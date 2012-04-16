@@ -26,17 +26,17 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-void
+FlarmId
 FlarmId::Parse(const char *input, char **endptr_r)
 {
-  value = strtol(input, endptr_r, 16);
+  return FlarmId(strtol(input, endptr_r, 16));
 }
 
 #ifdef _UNICODE
-void
+FlarmId
 FlarmId::Parse(const TCHAR *input, TCHAR **endptr_r)
 {
-  value = _tcstol(input, endptr_r, 16);
+  return FlarmId(_tcstol(input, endptr_r, 16));
 }
 #endif
 

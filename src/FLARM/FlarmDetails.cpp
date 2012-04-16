@@ -72,8 +72,7 @@ LoadSecondaryFile(TLineReader &reader)
   TCHAR *line;
   while ((line = reader.read()) != NULL) {
     TCHAR *endptr;
-    FlarmId id;
-    id.Parse(line, &endptr);
+    FlarmId id = FlarmId::Parse(line, &endptr);
     if (!id.IsDefined())
       /* ignore malformed records */
       continue;

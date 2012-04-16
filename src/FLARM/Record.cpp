@@ -27,7 +27,5 @@ Copyright_License {
 FlarmId
 FlarmRecord::GetId() const
 {
-  FlarmId id;
-  id.Parse(this->id, NULL);
-  return id;
+  return FlarmId::Parse(this->id, NULL);
 };
