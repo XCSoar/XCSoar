@@ -39,12 +39,12 @@ class RoughSpeed {
   uint16_t value;
 
   gcc_const
-  static int16_t Import(fixed x) {
-    return (int16_t)(x * 1024);
+  static uint16_t Import(fixed x) {
+    return (uint16_t)(x * 1024);
   }
 
   gcc_const
-  static fixed Export(int16_t x) {
+  static fixed Export(uint16_t x) {
     return fixed(x) / 1024;
   }
 
