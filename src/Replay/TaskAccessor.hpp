@@ -70,8 +70,13 @@ public:
 
   gcc_pure
   bool has_entered(unsigned index) const {
-    AbstractTaskFactory &fact = task_manager.GetFactory();
-    return fact.HasEntered(index);
+    const TaskInterface *task = task_manager.GetActiveTask();
+    if (task == NULL || task->GetType() != TaskInterface::ORDERED)
+      return true;
+
+    const OrderedTask &o_task = *(const OrderedTask *)task;
+    return o_task.IsValidIndex(index) &&
+      o_task.GetTaskPoint(index).HasEntered();
   }
 
   gcc_pure

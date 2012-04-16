@@ -530,15 +530,6 @@ AbstractTaskFactory::Remove(const unsigned position,
 }
 
 bool 
-AbstractTaskFactory::HasEntered(unsigned position) const
-{
-  if (m_task.IsValidIndex(position))
-    return m_task.GetTaskPoint(position).HasEntered();
-
-  return true;
-}
-
-bool 
 AbstractTaskFactory::Swap(const unsigned position, const bool auto_mutate)
 {
   if (m_task.TaskSize() <= 1)

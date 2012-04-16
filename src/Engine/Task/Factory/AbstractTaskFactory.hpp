@@ -490,15 +490,6 @@ public:
                                  const unsigned position) const;
 
   /**
-   *  FOR TESTING ONLY
-   * @param index index of task point sequence
-   * @return True if aircraft has previously entered the taskpoint or
-   * if index is invalid
-   */
-  gcc_pure
-  bool HasEntered(unsigned index) const;
-
-  /**
    * List valid intermediate types for a given position
    *
    * @param position Index position in task
