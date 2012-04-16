@@ -82,7 +82,7 @@ main(int argc, char **argv)
     }
 
     if (!port->FullWriteString(line, 1000)) {
-      perror("Failed to write to port\n");
+      fprintf(stderr, "Failed to write to port\n");
       delete port;
       return EXIT_FAILURE;
     }
