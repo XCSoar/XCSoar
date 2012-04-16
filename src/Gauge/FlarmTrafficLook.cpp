@@ -62,6 +62,8 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   plane_pen.Set(width, radar_color);
   radar_pen.Set(1, radar_color);
 
+  unit_fraction_pen.Set(1, COLOR_BLACK);
+
   no_traffic_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
   label_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
   side_info_font.Set(Fonts::GetStandardFontFace(),
@@ -69,6 +71,7 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
 
   info_labels_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(10), true);
   info_values_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(20));
+  info_units_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(8));
   call_sign_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(28), true);
 }
 
@@ -98,6 +101,8 @@ FlarmTrafficLook::Deinitialise()
 
   plane_pen.Reset();
   radar_pen.Reset();
+
+  unit_fraction_pen.Reset();
 
   no_traffic_font.Reset();
   label_font.Reset();

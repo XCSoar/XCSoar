@@ -48,6 +48,8 @@
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Units/Units.hpp"
+#include "Renderer/UnitSymbolRenderer.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -273,54 +275,118 @@ void
 FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
                                     fixed climb_rate) const
 {
-  TCHAR buffer[20];
-  PixelSize size;
-
-  FormatUserVerticalSpeed(climb_rate, buffer, true);
-  canvas.Select(look.info_values_font);
-  size = canvas.CalcTextSize(buffer);
-  canvas.text(rc.right - size.cx,
-              rc.top + look.info_labels_font.GetHeight(), buffer);
-
+  // Paint label
   canvas.Select(look.info_labels_font);
-  size = canvas.CalcTextSize(_("Vario"));
-  canvas.text(rc.right - size.cx, rc.top, _("Vario"));
+  PixelScalar label_width = canvas.CalcTextSize(_("Vario")).cx;
+  canvas.text(rc.right - label_width, rc.top, _("Vario"));
+
+  // Format climb rate
+  TCHAR buffer[20];
+  Unit unit = Units::GetUserVerticalSpeedUnit();
+  FormatUserVerticalSpeed(climb_rate, buffer, false);
+
+  // Calculate unit size
+  canvas.Select(look.info_units_font);
+  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  UPixelScalar unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
+
+  UPixelScalar space_width = unit_width / 3;
+
+  // Calculate value size
+  canvas.Select(look.info_values_font);
+  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
+  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
+
+  // Calculate positions
+  PixelScalar max_height = max(unit_height, value_height);
+  PixelScalar y = rc.top + look.info_units_font.GetHeight() + max_height;
+
+  // Paint value
+  canvas.text(rc.right - unit_width - space_width - value_width, y - value_height, buffer);
+
+  // Paint unit
+  canvas.Select(look.info_units_font);
+  UnitSymbolRenderer::Draw(
+      canvas, { PixelScalar(rc.right - unit_width), PixelScalar(y - unit_height) }, unit, look.unit_fraction_pen);
 }
 
 void
 FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
                                     fixed distance) const
 {
+  // Format distance
   TCHAR buffer[20];
-  PixelSize size;
+  Unit unit = FormatUserDistanceSmart(distance, buffer, false, fixed(1000));
 
-  FormatUserDistanceSmart(distance, buffer, true, fixed(1000));
+  // Calculate unit size
+  canvas.Select(look.info_units_font);
+  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  UPixelScalar unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
+
+  UPixelScalar space_width = unit_width / 3;
+
+  // Calculate value size
   canvas.Select(look.info_values_font);
-  size = canvas.CalcTextSize(buffer);
-  canvas.text(rc.left, rc.bottom - size.cy, buffer);
+  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
+  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
 
+  // Calculate positions
+  PixelScalar max_height = max(unit_height, value_height);
+
+  // Paint value
+  canvas.text(rc.left, rc.bottom - value_height, buffer);
+
+  // Paint unit
+  canvas.Select(look.info_units_font);
+  UnitSymbolRenderer::Draw(
+      canvas, { PixelScalar(rc.left + value_width + space_width), PixelScalar(rc.bottom - unit_height) }, unit, look.unit_fraction_pen);
+
+
+  // Paint label
   canvas.Select(look.info_labels_font);
-  canvas.text(rc.left, rc.bottom - look.info_values_font.GetHeight() -
-                       look.info_labels_font.GetHeight(), _("Distance"));
+  canvas.text(rc.left, rc.bottom - max_height - look.info_labels_font.GetHeight(), _("Distance"));
 }
 
 void
 FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
                                            fixed relative_altitude) const
 {
+  // Format relative altitude
   TCHAR buffer[20];
-  PixelSize size;
+  Unit unit = Units::GetUserAltitudeUnit();
+  FormatRelativeUserAltitude(relative_altitude, buffer, false);
 
-  FormatRelativeUserAltitude(relative_altitude, buffer, true);
+  // Calculate unit size
+  canvas.Select(look.info_units_font);
+  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  UPixelScalar unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
+
+  UPixelScalar space_width = unit_width / 3;
+
+  // Calculate value size
   canvas.Select(look.info_values_font);
-  size = canvas.CalcTextSize(buffer);
-  canvas.text(rc.right - size.cx, rc.bottom - size.cy, buffer);
+  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
+  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
 
+  // Calculate positions
+  PixelScalar max_height = max(unit_height, value_height);
+
+  // Paint value
+  canvas.text(rc.right - unit_width - space_width - value_width, rc.bottom - value_height, buffer);
+
+  // Paint unit
+  canvas.Select(look.info_units_font);
+  UnitSymbolRenderer::Draw(
+      canvas, { PixelScalar(rc.right - unit_width), PixelScalar(rc.bottom - unit_height) }, unit, look.unit_fraction_pen);
+
+
+  // Paint label
   canvas.Select(look.info_labels_font);
-  size = canvas.CalcTextSize(_("Rel. Alt."));
-  canvas.text(rc.right - size.cx,
-              rc.bottom - look.info_values_font.GetHeight() -
-              look.info_labels_font.GetHeight(), _("Rel. Alt."));
+  PixelScalar label_width = canvas.CalcTextSize(_("Rel. Alt.")).cx;
+  canvas.text(rc.right - label_width, rc.bottom - max_height - look.info_labels_font.GetHeight(), _("Rel. Alt."));
 }
 
 void
