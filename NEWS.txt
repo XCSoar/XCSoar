@@ -17,6 +17,7 @@ Version 6.3.1 - not yet released
   - fix format of IGC 'C' records for takeoff/landing (ambiguous spec)
 * map
   - don't fill acked airspaces
+  - fix display of full-circle annulus
 * task manager
   - fix rename/delete function for task files
 * Linux

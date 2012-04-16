@@ -345,6 +345,33 @@ AngleToDonutVertex(Angle angle)
   return (NATIVE_TO_INT(angle.Native()) * 64 / 4096 + 48) & 0x3e;
 }
 
+gcc_const
+static std::pair<unsigned,unsigned>
+AngleToDonutVertices(Angle start, Angle end)
+{
+  static const Angle epsilon = Angle::FullCircle() / 64 / 2;
+
+  const Angle delta = end - start;
+
+  if (delta >= Angle::FullCircle() - epsilon)
+    /* full circle */
+    return std::make_pair(0, 64);
+
+  const unsigned istart = AngleToDonutVertex(start);
+  unsigned iend = AngleToDonutVertex(end);
+
+  if (istart == iend && delta > epsilon) {
+    if (end - start >= Angle::HalfCircle())
+      /* nearly full circle, round down the end */
+      iend = (iend - 2) & 0x3e;
+    else
+      /* slightly larger than epsilon: draw at least two indices */
+      iend = (iend + 2) & 0x3e;
+  }
+
+  return std::make_pair(istart, iend);
+}
+
 void
 Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
@@ -352,8 +379,9 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
 {
   GLDonutVertices vertices(x, y, small_radius, big_radius);
 
-  const unsigned istart = AngleToDonutVertex(start);
-  const unsigned iend = AngleToDonutVertex(end);
+  const std::pair<unsigned,unsigned> i = AngleToDonutVertices(start, end);
+  const unsigned istart = i.first;
+  const unsigned iend = i.second;
 
   if (!brush.IsHollow()) {
     brush.Set();
@@ -370,7 +398,7 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
   if (pen_over_brush()) {
     pen.Bind();
 
-    if (istart != iend) {
+    if (istart != iend && iend != 64) {
       if (brush.IsHollow())
         vertices.bind();
 
