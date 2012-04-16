@@ -38,7 +38,7 @@ FlarmFriends::GetFriendColor(FlarmId id)
   if (i != friends.end())
     return i->second;
 
-  return NONE;
+  return Color::NONE;
 }
 
 void

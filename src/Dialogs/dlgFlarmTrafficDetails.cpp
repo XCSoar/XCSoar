@@ -253,35 +253,35 @@ OnCallsignClicked(gcc_unused WndButton &Sender)
 static void
 OnFriendBlueClicked(gcc_unused WndButton &Sender)
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::BLUE);
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::BLUE);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendGreenClicked(gcc_unused WndButton &Sender)
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::GREEN);
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::GREEN);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendYellowClicked(gcc_unused WndButton &Sender)
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::YELLOW);
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::YELLOW);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendMagentaClicked(gcc_unused WndButton &Sender)
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::MAGENTA);
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::MAGENTA);
   wf->SetModalResult(mrOK);
 }
 
 static void
 OnFriendClearClicked(gcc_unused WndButton &Sender)
 {
-  FlarmFriends::SetFriendColor(target_id, FlarmFriends::NONE);
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::NONE);
   wf->SetModalResult(mrOK);
 }
 

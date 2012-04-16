@@ -413,25 +413,25 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
     FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(traffic.id);
 
     // If no color found but target is teammate
-    if (team_color == FlarmFriends::NONE &&
+    if (team_color == FlarmFriends::Color::NONE &&
         settings.team_flarm_tracking &&
         traffic.id == settings.team_flarm_id)
       // .. use green color
-      team_color = FlarmFriends::GREEN;
+      team_color = FlarmFriends::Color::GREEN;
 
     // If team color found -> draw a colored circle in front of the name
-    if (team_color != FlarmFriends::NONE) {
+    if (team_color != FlarmFriends::Color::NONE) {
       switch (team_color) {
-      case FlarmFriends::GREEN:
+      case FlarmFriends::Color::GREEN:
         canvas.Select(look.team_brush_green);
         break;
-      case FlarmFriends::BLUE:
+      case FlarmFriends::Color::BLUE:
         canvas.Select(look.team_brush_blue);
         break;
-      case FlarmFriends::YELLOW:
+      case FlarmFriends::Color::YELLOW:
         canvas.Select(look.team_brush_yellow);
         break;
-      case FlarmFriends::MAGENTA:
+      case FlarmFriends::Color::MAGENTA:
         canvas.Select(look.team_brush_magenta);
         break;
       default:
