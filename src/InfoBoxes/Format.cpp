@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Data.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Formatter/GlideRatioFormatter.hpp"
 #include "Math/Angle.hpp"
 
 void
@@ -43,6 +44,12 @@ void
 InfoBoxData::SetValueFromBearingDifference(Angle delta)
 {
   FormatAngleDelta(value.buffer(), value.MAX_SIZE, delta);
+}
+
+void
+InfoBoxData::SetValueFromGlideRatio(fixed gr)
+{
+  FormatGlideRatio(value.buffer(), value.MAX_SIZE, gr);
 }
 
 void

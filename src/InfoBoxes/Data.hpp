@@ -100,6 +100,11 @@ struct InfoBoxData {
   void SetValueFromBearingDifference(Angle delta);
 
   /**
+   * Set the InfoBox value to the specified glide ratio.
+   */
+  void SetValueFromGlideRatio(fixed gr);
+
+  /**
    * Set the InfoBox value to the specified distance.
    */
   void SetValueFromDistance(fixed value);
