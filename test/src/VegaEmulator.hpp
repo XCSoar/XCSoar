@@ -21,20 +21,12 @@ Copyright_License {
 }
 */
 
-/*
- * This program creates a pseudo-TTY symlinked to /tmp/nmea, and feeds
- * NMEA data read from stdin to it.  It is useful to feed WINE with
- * it: symlink ~/.wine/dosdevices/com1 to /tmp/nmea, and configure
- * "COM1" in XCSoar.
- */
+#ifndef XCSOAR_VEGA_EMULATOR_HPP
+#define XCSOAR_VEGA_EMULATOR_HPP
 
-#include "DebugPort.hpp"
-#include "Device/Port/ConfiguredPort.hpp"
+#include "DeviceEmulator.hpp"
 #include "Device/Port/LineHandler.hpp"
 #include "Device/Internal.hpp"
-#include "Profile/DeviceConfig.hpp"
-#include "OS/Args.hpp"
-#include "OS/Sleep.h"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Util/Macros.hpp"
@@ -42,22 +34,14 @@ Copyright_License {
 #include <string>
 #include <map>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
-class VegaHandler : public PortLineHandler {
-  Port *port;
-
+class VegaEmulator : public Emulator, PortLineHandler {
   std::map<std::string, std::string> settings;
 
 public:
-  VegaHandler():port(NULL) {}
-
-  Port::Handler &GetBase() {
-    return *this;
-  }
-
-  void SetPort(Port &_port) {
-    port = &_port;
+  VegaEmulator() {
+    handler = this;
   }
 
 private:
@@ -114,34 +98,4 @@ protected:
   }
 };
 
-int
-main(int argc, char **argv)
-{
-  Args args(argc, argv, "PORT BAUD");
-  const DeviceConfig config = ParsePortArgs(args);
-  args.ExpectEnd();
-
-  VegaHandler handler;
-  Port *port = OpenPort(config, handler);
-  if (port == NULL) {
-    fprintf(stderr, "Failed to open COM port\n");
-    return EXIT_FAILURE;
-  }
-
-  /* turn off output buffering */
-  setvbuf(stdout, NULL, _IONBF, 0);
-
-  handler.SetPort(*port);
-
-  if (!port->StartRxThread()) {
-    delete port;
-    fprintf(stderr, "Failed to start the port thread\n");
-    return EXIT_FAILURE;
-  }
-
-  while (port->IsValid())
-    Sleep(1000);
-
-  delete port;
-  return EXIT_SUCCESS;
-}
+#endif
