@@ -504,7 +504,7 @@ drawBtnNext()
     // altair already has < and > buttons on WndProperty
     btnNext->set_visible(false);
 
-  btnPrev = (WndSymbolButton*)wf->FindByName(_T("btnNext"));
+  btnPrev = (WndSymbolButton*)wf->FindByName(_T("btnPrev"));
   assert(btnPrev != NULL);
 
   if (IsAltair())
