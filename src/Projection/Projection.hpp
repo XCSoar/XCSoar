@@ -184,6 +184,7 @@ public:
    */
   void SetGeoLocation(GeoPoint g) {
     geo_location = g;
+    geo_location.Normalize();
   }
 
   /**
