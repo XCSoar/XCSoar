@@ -23,12 +23,17 @@ Copyright_License {
 
 #include "FLARM/Friends.hpp"
 #include "FLARM/FlarmId.hpp"
+#include "Profile/Profile.hpp"
+#include "Util/tstring.hpp"
+#include "LogFile.hpp"
 
 #include <map>
 
 namespace FlarmFriends
 {
   std::map<FlarmId, Color> friends;
+
+  void LoadColor(const TCHAR *key, Color color);
 }
 
 FlarmFriends::Color
@@ -45,4 +50,66 @@ void
 FlarmFriends::SetFriendColor(FlarmId id, Color color)
 {
   friends[id] = color;
+}
+
+void
+FlarmFriends::LoadColor(const TCHAR *key, Color color)
+{
+  const TCHAR *ids = Profile::Get(key);
+  if (ids == NULL || StringIsEmpty(ids))
+    return;
+
+  FlarmId id;
+  TCHAR *endptr;
+
+  const TCHAR *p = ids;
+  while (p != NULL && *p) {
+    id.Parse(p, &endptr);
+
+    if (id.IsDefined()) {
+      SetFriendColor(id, color);
+      id.Clear();
+    }
+
+    p = _tcschr(endptr, _T(','));
+    if (p != NULL)
+      p++;
+  }
+}
+
+void
+FlarmFriends::Load()
+{
+  LogStartUp(_T("Loading FLARM friends database"));
+
+  LoadColor(_T("FriendsGreen"), Color::GREEN);
+  LoadColor(_T("FriendsBlue"), Color::BLUE);
+  LoadColor(_T("FriendsYellow"), Color::YELLOW);
+  LoadColor(_T("FriendsMagenta"), Color::MAGENTA);
+}
+
+void
+FlarmFriends::Save()
+{
+  TCHAR id[16];
+  tstring ids[4];
+
+  for (auto it = friends.begin(), it_end = friends.end(); it != it_end; ++it) {
+    assert(it->first.IsDefined());
+    assert((int)it->second < (int)Color::COUNT);
+
+    if (it->second == Color::NONE)
+      continue;
+
+    unsigned color_index = (int)it->second - 1;
+
+    it->first.Format(id);
+    ids[color_index] += id;
+    ids[color_index] += ',';
+  }
+
+  Profile::Set(_T("FriendsGreen"), ids[0].c_str());
+  Profile::Set(_T("FriendsBlue"), ids[1].c_str());
+  Profile::Set(_T("FriendsYellow"), ids[2].c_str());
+  Profile::Set(_T("FriendsMagenta"), ids[3].c_str());
 }
