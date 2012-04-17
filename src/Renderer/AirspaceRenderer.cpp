@@ -427,12 +427,14 @@ private:
 
     m_buffer.SelectNullPen();
 
-    if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
-      m_stencil.SelectBlackBrush();
-      m_stencil.Select(airspace_look.medium_pen);
-    } else {
-      m_stencil.Select(airspace_look.thick_pen);
-      m_stencil.SelectHollowBrush();
+    if (m_use_stencil) {
+      if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
+        m_stencil.SelectBlackBrush();
+        m_stencil.Select(airspace_look.medium_pen);
+      } else {
+        m_stencil.Select(airspace_look.thick_pen);
+        m_stencil.SelectHollowBrush();
+      }
     }
 
 #endif /* HAVE_HATCHED_BRUSH */
