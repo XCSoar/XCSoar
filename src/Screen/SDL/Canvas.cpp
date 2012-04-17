@@ -502,12 +502,18 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
   assert(src != NULL);
+  assert(dest_width < 0x4000);
+  assert(dest_height < 0x4000);
 
   if (dest_width == src_width && dest_height == src_height) {
     /* fast path: no zooming needed */
     copy(dest_x, dest_y, dest_width, dest_height, src, src_x, src_y);
     return;
   }
+
+  if (dest_width >= 0x4000 || dest_height >= 0x4000)
+    /* paranoid sanity check; shouldn't ever happen */
+    return;
 
   SDL_Surface *zoomed =
     ::zoomSurface(src, (double)dest_width / (double)src_width,
@@ -573,6 +579,12 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(IsDefined());
   assert(src.IsDefined());
+  assert(dest_width < 0x4000);
+  assert(dest_height < 0x4000);
+
+  if (dest_width >= 0x4000 || dest_height >= 0x4000)
+    /* paranoid sanity check; shouldn't ever happen */
+    return;
 
   SDL_Surface *src_surface = src.GetNative();
   assert(src_surface->format->palette != NULL &&
