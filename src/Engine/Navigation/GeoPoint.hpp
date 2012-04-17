@@ -97,6 +97,12 @@ struct GeoPoint {
    */
   GeoPoint &Normalize() {
     longitude = longitude.AsDelta();
+
+    if (latitude < -Angle::QuarterCircle())
+      latitude = -Angle::QuarterCircle();
+    else if (latitude > Angle::QuarterCircle())
+      latitude = Angle::QuarterCircle();
+
     return *this;
   }
 
