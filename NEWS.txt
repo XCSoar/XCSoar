@@ -17,6 +17,7 @@ Version 6.3.1 - not yet released
   - AltairPro: relax timeouts
   - FLARM: relax timeouts
   - fix timeouts on Windows CE (FLARM driver and others)
+  - ignore garbage at the beginning of NMEA lines
 * logger
   - fix format of IGC 'C' records for takeoff/landing (ambiguous spec)
   - fix landing time in flight logger
