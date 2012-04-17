@@ -66,7 +66,7 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
     return false;
 
   char *p = (char *)buffer, *end = p + length;
-  while (p < end) {
+  while (true) {
     int remaining = timeout.GetRemainingSigned();
     if (remaining < 0)
       /* timeout */
@@ -75,25 +75,21 @@ FlarmDevice::Receive(const char *prefix, char *buffer, size_t length,
     if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
       return false;
 
-    // Read single character from port
-    int c = port.GetChar();
-    if (c == -1)
+    int nbytes = port.Read(p, end - p);
+    if (nbytes < 0)
       return false;
 
-    // Break on line break or checksum
-    if (c == '*' || c == '\n') {
-      *p = '\0';
-      break;
+    char *q = (char *)memchr(p, '*', nbytes);
+    if (q != NULL) {
+      /* stop at checksum */
+      *q = 0;
+      return true;
     }
 
-    // Skip carriage return
-    if (c == '\r')
-      continue;
+    p += nbytes;
 
-    // Write received character to buffer
-    *p = c;
-    p++;
+    if (p >= end)
+      /* line too long */
+      return false;
   }
-
-  return true;
 }
