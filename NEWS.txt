@@ -6,6 +6,7 @@ Version 6.3.1 - not yet released
 * calculations
   - fix crash with far away task
   - fix high speed remaining when wind drift is disabled
+  - fix crash when scrolling beyond the poles
 * devices
   - allow standard NMEA sentences to begin with 'P'
   - add missing NMEA checksum verifications

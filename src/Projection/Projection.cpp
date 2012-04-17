@@ -43,7 +43,15 @@ Projection::ScreenToGeo(int x, int y) const
   GeoPoint g(PixelsToAngle(p.first), PixelsToAngle(p.second));
 
   g.latitude = geo_location.latitude - g.latitude;
-  g.longitude = geo_location.longitude + g.longitude * g.latitude.invfastcosine();
+
+  /* paranoid sanity check to avoid integer overflow near the poles;
+     our projection isn't doing well at all there; this check avoids
+     assertion failures when the user pans all the way up/down */
+  const Angle latitude(std::min(Angle::Degrees(fixed(80)),
+                                std::max(Angle::Degrees(fixed(-80)),
+                                         g.latitude)));
+
+  g.longitude = geo_location.longitude + g.longitude * latitude.invfastcosine();
 
   return g;
 }
