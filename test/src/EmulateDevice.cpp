@@ -28,6 +28,7 @@ Copyright_License {
  * "COM1" in XCSoar.
  */
 
+#include "FLARMEmulator.hpp"
 #include "VegaEmulator.hpp"
 #include "DebugPort.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
@@ -44,6 +45,8 @@ LoadEmulator(Args &args)
   const char *driver = args.ExpectNext();
   if (strcmp(driver, "Vega") == 0)
     return new VegaEmulator();
+  else if (strcmp(driver, "FLARM") == 0)
+    return new FLARMEmulator();
   else {
     fprintf(stderr, "No such emulator driver: %s\n", driver);
     exit(EXIT_FAILURE);
