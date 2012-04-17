@@ -29,7 +29,7 @@ Version 6.3.1 - not yet released
   - fix hanging shutdown after IOIO connection failure
   - fix saving of airspace colors (workaround for android compiler bug)
 * Windows
-  - fix double Return key press on Windows CE
+  - fix double key presses on Windows CE / PPC2000
 
 Version 6.3 - 2012/03/29
 * calculations
