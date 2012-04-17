@@ -365,15 +365,12 @@ public:
   {
     switch (settings.fill_mode) {
     case AirspaceRendererSettings::FillMode::DEFAULT:
+    case AirspaceRendererSettings::FillMode::PADDING:
       m_use_stencil = !IsAncientHardware();
       break;
 
     case AirspaceRendererSettings::FillMode::ALL:
       m_use_stencil = false;
-      break;
-
-    case AirspaceRendererSettings::FillMode::PADDING:
-      m_use_stencil = true;
       break;
     }
   }
