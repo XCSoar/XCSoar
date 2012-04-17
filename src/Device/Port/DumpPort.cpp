@@ -113,5 +113,7 @@ Port::WaitResult
 DumpPort::WaitRead(unsigned timeout_ms)
 {
   LogStartUp(_T("WaitRead %u"), timeout_ms);
-  return port->WaitRead(timeout_ms);
+  Port::WaitResult result = port->WaitRead(timeout_ms);
+  LogStartUp(_T("WaitRead %u = %d"), timeout_ms, (int)result);
+  return result;
 }
