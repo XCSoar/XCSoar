@@ -26,6 +26,7 @@ Version 6.3.1 - not yet released
   - fix display of full-circle annulus
 * task manager
   - fix rename/delete function for task files
+  - also clear optional starts with "Clear All" button
 * Linux
   - fix HTTP networking bugs
 * Android
