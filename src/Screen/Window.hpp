@@ -513,6 +513,16 @@ public:
 #endif
   }
 
+#ifndef USE_GDI
+  const Font &GetFont() const {
+    AssertThread();
+    assert(IsDefined());
+    assert(font != NULL);
+
+    return *font;
+  }
+#endif
+
   void SetFont(const Font &_font) {
     assert_none_locked();
     AssertThread();
