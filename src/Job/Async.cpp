@@ -75,7 +75,7 @@ void
 AsyncJobRunner::Run()
 {
   assert(IsInside());
-  assert(!HasFinished());
+  assert(running.Get());
 
   job->Run(*env);
 
