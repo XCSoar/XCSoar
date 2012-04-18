@@ -75,6 +75,14 @@ Window::CreateMessageWindow()
 }
 
 void
+Window::SetEnabled(bool enabled)
+{
+  AssertThread();
+
+  ::EnableWindow(hWnd, enabled);
+}
+
+void
 Window::created(HWND _hWnd)
 {
   assert(hWnd == NULL);

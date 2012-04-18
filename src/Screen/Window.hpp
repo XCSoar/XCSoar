@@ -607,15 +607,7 @@ public:
   /**
    * Specifies whether this window can get user input.
    */
-#ifdef USE_GDI
-  void SetEnabled(bool enabled) {
-    AssertThread();
-
-    ::EnableWindow(hWnd, enabled);
-  }
-#else
   void SetEnabled(bool enabled);
-#endif
 
 #ifndef USE_GDI
 
