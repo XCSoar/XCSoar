@@ -153,12 +153,12 @@ public:
   }
 
   void SetReadOnly(bool read_only=true) {
-    edit.set_read_only(read_only);
+    edit.SetReadOnly(read_only);
   }
 
   gcc_pure
   bool IsReadOnly() const {
-    return edit.is_read_only();
+    return edit.IsReadOnly();
   }
 
   /**
@@ -207,7 +207,9 @@ public:
    * Sets the Editors text to the given Value
    * @param Value The new text of the Editor Control
    */
-  void SetText(const TCHAR *Value);
+  void SetText(const TCHAR *value) {
+    edit.SetText(value);
+  }
 
 private:
   /**

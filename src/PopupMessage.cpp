@@ -113,9 +113,9 @@ PopupMessage::set(const PixelRect _rc)
 
   EditWindowStyle style;
   style.Border();
-  style.center();
-  style.multiline();
-  style.read_only();
+  style.SetCenter();
+  style.SetMultiLine();
+  style.SetReadOnly();
   style.Hide();
 
   EditWindow::set(parent, GetRect(100), style);
@@ -166,13 +166,13 @@ PopupMessage::Resize()
   if (*msgText == _T('\0')) {
     Hide();
   } else {
-    set_text(msgText);
+    SetText(msgText);
 
     AnyCanvas canvas;
     canvas.Select(Fonts::map_bold);
     PixelSize tsize = canvas.CalcTextSize(msgText);
 
-    int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
+    int linecount = max((unsigned)nvisible, max((unsigned)1, GetRowCount()));
 
     PixelScalar height = min((PixelScalar)((rc.bottom-rc.top) * 0.8),
                              (PixelScalar)(tsize.cy * (linecount + 1)));
@@ -186,7 +186,7 @@ PopupMessage::Resize()
          create a new one */
       reset();
       set(rc);
-      set_text(msgText);
+      SetText(msgText);
     }
 #endif
 

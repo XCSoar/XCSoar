@@ -365,7 +365,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   EditWindow *wDetailsText = (EditWindow *)wf->FindByName(_T("Details"));
   assert(wDetailsText != NULL);
-  wDetailsText->set_text(waypoint->details.c_str());
+  wDetailsText->SetText(waypoint->details.c_str());
 
 #ifdef ANDROID
   int num_files = std::distance(waypoint->files_external.begin(),

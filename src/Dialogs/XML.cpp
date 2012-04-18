@@ -609,9 +609,9 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     style.ControlParent();
 
     EditWindowStyle edit_style;
-    edit_style.vertical_center();
+    edit_style.SetVerticalCenter();
     if (read_only)
-      edit_style.read_only();
+      edit_style.SetReadOnly();
     else
       edit_style.TabStop();
 
@@ -623,7 +623,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       edit_style.SunkenEdge();
 
     if (multi_line) {
-      edit_style.multiline();
+      edit_style.SetMultiLine();
       edit_style.VerticalScroll();
     }
 
@@ -658,7 +658,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     EditWindowStyle edit_style(style);
     if (read_only)
-      edit_style.read_only();
+      edit_style.SetReadOnly();
     else
       edit_style.TabStop();
 
@@ -670,7 +670,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
       edit_style.SunkenEdge();
 
     if (multi_line) {
-      edit_style.multiline();
+      edit_style.SetMultiLine();
       edit_style.VerticalScroll();
     }
 

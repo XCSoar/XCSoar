@@ -49,7 +49,7 @@ void
 EditWindow::OnPaint(Canvas &canvas)
 {
   if (is_enabled()) {
-    if (is_read_only())
+    if (IsReadOnly())
       canvas.clear(Color(0xf0, 0xf0, 0xf0));
     else
       canvas.ClearWhite();
@@ -87,7 +87,7 @@ EditWindow::OnPaint(Canvas &canvas)
 }
 
 void
-EditWindow::set_text(const TCHAR *text)
+EditWindow::SetText(const TCHAR *text)
 {
   assert_none_locked();
 

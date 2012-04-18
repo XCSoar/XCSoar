@@ -330,7 +330,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   style.ControlParent();
 
   EditWindowStyle edit_style;
-  edit_style.vertical_center();
+  edit_style.SetVerticalCenter();
   edit_style.TabStop();
 
   if (IsEmbedded() || Layout::scale_1024 < 2048)

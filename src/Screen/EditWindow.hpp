@@ -57,7 +57,7 @@ public:
   }
 #endif
 
-  void read_only() {
+  void SetReadOnly() {
 #ifndef USE_GDI
     is_read_only = true;
 #else
@@ -65,7 +65,7 @@ public:
 #endif
   }
 
-  void multiline() {
+  void SetMultiLine() {
 #ifndef USE_GDI
     text_style &= ~DT_VCENTER;
     text_style |= DT_WORDBREAK;
@@ -75,7 +75,7 @@ public:
 #endif
   }
 
-  void center() {
+  void SetCenter() {
 #ifndef USE_GDI
     text_style &= ~DT_LEFT;
     text_style |= DT_CENTER;
@@ -85,7 +85,7 @@ public:
 #endif
   }
 
-  void vertical_center() {
+  void SetVerticalCenter() {
 #ifndef USE_GDI
     text_style |= DT_VCENTER;
 #else
@@ -112,7 +112,7 @@ public:
   void set(ContainerWindow &parent, const PixelRect rc,
            const EditWindowStyle style);
 
-  unsigned get_row_count() const {
+  unsigned GetRowCount() const {
     assert_none_locked();
 
 #ifndef USE_GDI
@@ -129,9 +129,9 @@ public:
 #endif /* USE_GDI */
   }
 
-  void set_text(const TCHAR *text);
+  void SetText(const TCHAR *text);
 
-  void get_text(TCHAR *text, size_t max_length) {
+  void GetText(TCHAR *text, size_t max_length) {
 #ifndef USE_GDI
     value.copy(text, std::min(max_length - 1, value.length()));
 #else
@@ -139,7 +139,7 @@ public:
 #endif
   }
 
-  void set_read_only(bool value) {
+  void SetReadOnly(bool value) {
     assert_none_locked();
 
 #ifndef USE_GDI
@@ -150,7 +150,7 @@ public:
 #endif
   }
 
-  bool is_read_only() const {
+  bool IsReadOnly() const {
 #ifndef USE_GDI
     return read_only;
 #else
@@ -158,7 +158,7 @@ public:
 #endif
   }
 
-  void set_selection(int start, int end) {
+  void Select(int start, int end) {
     assert_none_locked();
 
 #ifndef USE_GDI
@@ -168,11 +168,11 @@ public:
 #endif
   }
 
-  void set_selection() {
+  void SelectAll() {
 #ifndef USE_GDI
     // XXX
 #else
-    set_selection(0, -1);
+    Select(0, -1);
 #endif
   }
 

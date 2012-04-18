@@ -185,10 +185,10 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
     style.ControlParent();
 
   EditWindowStyle edit_style;
-  edit_style.vertical_center();
+  edit_style.SetVerticalCenter();
 
   if (read_only)
-    edit_style.read_only();
+    edit_style.SetReadOnly();
   else
     edit_style.TabStop();
 
@@ -376,8 +376,8 @@ RowFormWidget::AddSpacer()
 
   WindowStyle style;
   EditWindowStyle edit_style;
-  edit_style.vertical_center();
-  edit_style.read_only();
+  edit_style.SetVerticalCenter();
+  edit_style.SetReadOnly();
 
   PanelControl &panel = *(PanelControl *)GetWindow();
   WndProperty *edit = new WndProperty(panel, look, _T(""), edit_rc, 0, style, edit_style, NULL);
@@ -424,9 +424,9 @@ RowFormWidget::AddMultiLine(const TCHAR *label, const TCHAR *help,
   WindowStyle style;
 
   EditWindowStyle edit_style;
-  edit_style.multiline();
+  edit_style.SetMultiLine();
   edit_style.VerticalScroll();
-  edit_style.read_only();
+  edit_style.SetReadOnly();
 
   if (IsEmbedded() || Layout::scale_1024 < 2048)
     /* sunken edge doesn't fit well on the tiny screen of an embedded

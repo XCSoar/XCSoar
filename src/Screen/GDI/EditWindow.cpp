@@ -42,7 +42,7 @@ EditWindow::set(ContainerWindow &parent, const PixelRect rc,
 }
 
 void
-EditWindow::set_text(const TCHAR *text)
+EditWindow::SetText(const TCHAR *text)
 {
   assert_none_locked();
 
