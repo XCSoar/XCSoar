@@ -55,14 +55,6 @@ protected:
   }
 };
 
-// Message Box Replacement
-/**
- * Displays a MessageBox and returns the pressed button
- * @param lpText Text displayed inside the MessageBox
- * @param lpCaption Text displayed in the Caption of the MessageBox
- * @param uType Type of MessageBox to display (OK+Cancel, Yes+No, etc.)
- * @return
- */
 int
 MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 {
