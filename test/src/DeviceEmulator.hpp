@@ -21,41 +21,16 @@ Copyright_License {
 }
 */
 
-#include "DebugPort.hpp"
-#include "OS/Args.hpp"
-#include "Profile/DeviceConfig.hpp"
+#ifndef XCSOAR_DEVICE_EMULATOR_HPP
+#define XCSOAR_DEVICE_EMULATOR_HPP
 
-DeviceConfig
-ParsePortArgs(Args &args)
-{
-  DeviceConfig config;
-  config.Clear();
+#include "Device/Port/Port.hpp"
 
-  config.port_type = DeviceConfig::PortType::SERIAL;
-  config.path = args.ExpectNextT().c_str();
+struct Emulator {
+  Port *port;
+  Port::Handler *handler;
 
-#ifndef NDEBUG
-  if (config.path.equals(_T("dump"))) {
-    config = ParsePortArgs(args);
-    config.dump_port = true;
-    return config;
-  }
+  virtual ~Emulator() {}
+};
+
 #endif
-
-  if (config.path.equals(_T("pty"))) {
-    config.port_type = DeviceConfig::PortType::PTY;
-    config.path = args.ExpectNextT().c_str();
-    return config;
-  }
-
-  if (config.path.equals(_T("tcp"))) {
-    config.port_type = DeviceConfig::PortType::TCP_LISTENER;
-    config.tcp_port = atoi(args.ExpectNext());
-    return config;
-  }
-
-  if (config.UsesSpeed())
-    config.baud_rate = atoi(args.ExpectNext());
-
-  return config;
-}

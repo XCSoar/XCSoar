@@ -21,44 +21,47 @@ Copyright_License {
 }
 */
 
-#include <fcntl.h>
-#include <unistd.h>
+#include "DebugPort.hpp"
+#include "Device/Port/ConfiguredPort.hpp"
+#include "Profile/DeviceConfig.hpp"
+#include "OS/Args.hpp"
+#include "OS/Sleep.h"
+#include "Operation/ConsoleOperationEnvironment.hpp"
+
 #include <stdio.h>
-#include <string.h>
-#include <errno.h>
 #include <stdlib.h>
-#include <algorithm>
 
-/** Create a pseudo TTY, and symlink it to /tmp/nmea. */
-static int
-open_virtual(const char *symlink_path)
-{
-  int fd = open("/dev/ptmx", O_RDWR | O_NOCTTY);
-  if (fd < 0) {
-    fprintf(stderr, "failed to open /dev/ptmx: %s\n", strerror(errno));
-    _exit(1);
+class MyHandler : public Port::Handler {
+public:
+  virtual void DataReceived(const void *data, size_t length) {
+    fwrite(data, 1, length, stdout);
   }
-
-  int ret = unlockpt(fd);
-  if (ret < 0) {
-    fprintf(stderr, "failed to unlockpt(): %s\n", strerror(errno));
-    _exit(1);
-  }
-
-  unlink(symlink_path);
-  ret = symlink(ptsname(fd), symlink_path);
-  if (ret < 0) {
-    fprintf(stderr, "symlink() failed: %s\n", strerror(errno));
-    _exit(1);
-  }
-
-  return fd;
-}
+};
 
 int
 main(int argc, char **argv)
 {
-  int fd = open_virtual("/tmp/nmea");
+  Args args(argc, argv, "PORT BAUD");
+  const DeviceConfig config = ParsePortArgs(args);
+  args.ExpectEnd();
+
+  MyHandler handler;
+  Port *port = OpenPort(config, handler);
+  if (port == NULL) {
+    fprintf(stderr, "Failed to open COM port\n");
+    return EXIT_FAILURE;
+  }
+
+  /* turn off output buffering */
+  setvbuf(stdout, NULL, _IONBF, 0);
+
+  if (!port->StartRxThread()) {
+    delete port;
+    fprintf(stderr, "Failed to start the port thread\n");
+    return EXIT_FAILURE;
+  }
+
+  ConsoleOperationEnvironment env;
 
   unsigned long last_stamp = -1;
   char line[1024];
@@ -78,20 +81,19 @@ main(int argc, char **argv)
 
     if (current_stamp > last_stamp) {
       unsigned long delta_t = std::min(current_stamp - last_stamp, 1000ul);
-      usleep(delta_t * 1000);
+      Sleep(delta_t);
     }
 
     last_stamp = current_stamp;
 
-    ssize_t nbytes = write(fd, start, end - start);
-    if (nbytes < 0) {
-      perror("Failed to write to port\n");
-      close(fd);
-      return 2;
+    if (!port->FullWrite(start, end - start, env, 1000)) {
+      fprintf(stderr, "Failed to write to port\n");
+      delete port;
+      return EXIT_FAILURE;
+
     }
   }
 
-  close(fd);
-
+  delete port;
   return EXIT_SUCCESS;
 }

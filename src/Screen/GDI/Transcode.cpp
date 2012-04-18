@@ -109,7 +109,12 @@ TranscodeKey(unsigned key_code)
 
 #ifdef _WIN32_WCE
   /* VK_F23 is the "action" key on some iPaqs */
-  if (key_code == VK_F23)
+  static bool seen_return = false;
+  if (key_code == VK_RETURN)
+    /* some devices send both VK_F23 and VK_RETURN; don't translate
+       VK_F23 to VK_RETURN if get a "real" VK_RETURN message */
+    seen_return = true;
+  else if (key_code == VK_F23 && !seen_return)
     return VK_RETURN;
 #endif
 

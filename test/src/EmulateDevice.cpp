@@ -21,6 +21,15 @@ Copyright_License {
 }
 */
 
+/*
+ * This program creates a pseudo-TTY symlinked to /tmp/nmea, and feeds
+ * NMEA data read from stdin to it.  It is useful to feed WINE with
+ * it: symlink ~/.wine/dosdevices/com1 to /tmp/nmea, and configure
+ * "COM1" in XCSoar.
+ */
+
+#include "FLARMEmulator.hpp"
+#include "VegaEmulator.hpp"
 #include "DebugPort.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Profile/DeviceConfig.hpp"
@@ -30,22 +39,31 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
-class MyHandler : public Port::Handler {
-public:
-  virtual void DataReceived(const void *data, size_t length) {
-    fwrite(data, 1, length, stdout);
-  }
-};
-
-int main(int argc, char **argv)
+static Emulator *
+LoadEmulator(Args &args)
 {
-  Args args(argc, argv, "PORT BAUD");
+  const char *driver = args.ExpectNext();
+  if (strcmp(driver, "Vega") == 0)
+    return new VegaEmulator();
+  else if (strcmp(driver, "FLARM") == 0)
+    return new FLARMEmulator();
+  else {
+    fprintf(stderr, "No such emulator driver: %s\n", driver);
+    exit(EXIT_FAILURE);
+  }
+}
+
+int
+main(int argc, char **argv)
+{
+  Args args(argc, argv, "DRIVER PORT BAUD");
+  Emulator *emulator = LoadEmulator(args);
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
 
-  MyHandler handler;
-  Port *port = OpenPort(config, handler);
+  Port *port = OpenPort(config, *emulator->handler);
   if (port == NULL) {
+    delete emulator;
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
@@ -53,15 +71,19 @@ int main(int argc, char **argv)
   /* turn off output buffering */
   setvbuf(stdout, NULL, _IONBF, 0);
 
+  emulator->port = port;
+
   if (!port->StartRxThread()) {
     delete port;
+    delete emulator;
     fprintf(stderr, "Failed to start the port thread\n");
     return EXIT_FAILURE;
   }
 
-  while (true)
-    Sleep(10000);
+  while (port->IsValid())
+    Sleep(1000);
 
   delete port;
+  delete emulator;
   return EXIT_SUCCESS;
 }

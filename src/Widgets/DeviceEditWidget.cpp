@@ -319,6 +319,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
   case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::TCP_LISTENER:
+  case DeviceConfig::PortType::PTY:
     break;
 
   case DeviceConfig::PortType::SERIAL:
@@ -608,6 +609,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
     return true;
 
   case DeviceConfig::PortType::SERIAL:
+  case DeviceConfig::PortType::PTY:
     /* Serial Port */
     if (new_type == config.port_type &&
         _tcscmp(config.path, df.GetAsString()) == 0)

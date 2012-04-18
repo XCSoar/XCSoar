@@ -81,7 +81,7 @@ FlightLogger::TickInternal(const MoreData &basic,
       /* landing was confirmed (not on ground anymore): log it */
       seen_flying = false;
 
-      LogEvent(start_time, "landing");
+      LogEvent(landing_time, "landing");
 
       landing_time.Clear();
     }

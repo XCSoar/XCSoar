@@ -118,6 +118,12 @@ MapWindow::OnPaint(Canvas &canvas)
     if (abs(buffer_height - (bottom_right.y - top_left.y)) < 5)
       bottom_right.y = top_left.y + buffer_height;
 
+    if (top_left.x > bottom_right.x || top_left.y > bottom_right.y) {
+      /* paranoid sanity check */
+      canvas.ClearWhite();
+      return;
+    }
+
     /* clear the areas around the buffer */
 
     canvas.SelectNullPen();

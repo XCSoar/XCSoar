@@ -163,31 +163,32 @@ Port::ExpectString(const char *token, OperationEnvironment &env,
 {
   assert(token != NULL);
 
+  const char *const token_end = token + strlen(token);
+
   const TimeoutClock timeout(timeout_ms);
 
+  char buffer[256];
+
   const char *p = token;
-  while (*p != '\0') {
+  while (true) {
     WaitResult wait_result = WaitRead(env, timeout.GetRemainingOrZero());
     if (wait_result != WaitResult::READY)
       // Operation canceled, Timeout expired or I/O error occurred
       return false;
 
-    int ch = GetChar();
-    if (ch == -1 || env.IsCancelled())
+    int nbytes = Read(buffer, std::min(sizeof(buffer), size_t(token_end - p)));
+    if (nbytes < 0 || env.IsCancelled())
       return false;
 
-    if (ch != *p++) {
-      if (timeout.HasExpired())
-        /* give up after 2 seconds (is that enough for all
-           devices?) */
-        return false;
-
-      /* retry */
-      p = token;
+    for (const char *q = buffer, *end = buffer + nbytes; q != end; ++q) {
+      const char ch = *q;
+      if (ch != *p)
+        /* retry */
+        p = token;
+      else if (++p == token_end)
+        return true;
     }
   }
-
-  return true;
 }
 
 Port::WaitResult

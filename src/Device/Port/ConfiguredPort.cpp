@@ -49,6 +49,11 @@ Copyright_License {
 #include "DumpPort.hpp"
 #endif
 
+#if defined(HAVE_POSIX) && !defined(ANDROID)
+#include <unistd.h>
+#include <errno.h>
+#endif
+
 #include <windef.h> /* for MAX_PATH */
 
 /**
@@ -152,6 +157,32 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
     }
 
     return port;
+  }
+
+  case DeviceConfig::PortType::PTY: {
+#if defined(HAVE_POSIX) && !defined(ANDROID)
+    if (config.path.empty())
+      return NULL;
+
+    if (unlink(config.path.c_str()) < 0 && errno != ENOENT)
+      return NULL;
+
+    TTYPort *port = new TTYPort(handler);
+    const char *slave_path = port->OpenPseudo();
+    if (slave_path == NULL) {
+      delete port;
+      return NULL;
+    }
+
+    if (symlink(slave_path, config.path.c_str()) < 0) {
+      delete port;
+      return NULL;
+    }
+
+    return port;
+#else
+    return NULL;
+#endif
   }
   }
 

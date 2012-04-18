@@ -211,7 +211,7 @@ FlarmDevice::GetConfig(const char *setting, TCHAR *buffer, size_t length,
   char narrow_buffer[length];
 
   Send(request, env);
-  if (!Receive(expected_answer, narrow_buffer, length, env, 1000))
+  if (!Receive(expected_answer, narrow_buffer, length, env, 2000))
     return false;
 
   _tcscpy(buffer, PathName(narrow_buffer));
@@ -232,7 +232,7 @@ FlarmDevice::SetConfig(const char *setting, const TCHAR *value,
   expected_answer[6u] = 'A';
 
   Send(buffer, env);
-  return port.ExpectString(expected_answer, env, 1000);
+  return port.ExpectString(expected_answer, env, 2000);
 }
 
 void

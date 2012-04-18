@@ -32,6 +32,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
+#include "TimeoutClock.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -190,6 +191,8 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
 
   port.Flush();
 
+  TimeoutClock timeout(5000);
+
   // eg $PDVSC,S,FOO,BAR*<cr>\r\n
   if (!PortWriteNMEA(port, Buffer, env))
     return false;
@@ -197,31 +200,37 @@ AltairProDevice::PropertySetGet(char *Buffer, size_t size,
   Buffer[6] = _T('A');
   char *comma = strchr(&Buffer[8], ',');
 
-  if (comma != NULL){
-    comma[1] = '\0';
+  if (comma == NULL)
+    return false;
 
-    // expect eg $PDVSC,A,FOO,
-    if (port.ExpectString(Buffer, env)) {
+  comma[1] = '\0';
 
-      // read value eg bar
-      while(--size){
-        int ch = port.GetChar();
-        if (ch == -1)
-          break;
+  // expect eg $PDVSC,A,FOO,
+  if (!port.ExpectString(Buffer, env, timeout.GetRemainingOrZero()))
+    return false;
 
-        if (ch == '*'){
-          Buffer = '\0';
-          return true;
-        }
+  // read value eg bar
+  while (size > 0) {
+    int remaining = timeout.GetRemainingSigned();
+    if (remaining < 0)
+      return false;
 
-        *Buffer++ = (char) ch;
+    if (port.WaitRead(env, remaining) != Port::WaitResult::READY)
+      return false;
 
-      }
+    int nbytes = port.Read(Buffer, size);
+    if (nbytes < 0)
+      return false;
 
+    char *asterisk = (char *)memchr(Buffer, '*', nbytes);
+    if (asterisk != NULL) {
+      *asterisk = 0;
+      return true;
     }
+
+    size -= nbytes;
   }
 
-  *Buffer = '\0';
   return false;
 }
 

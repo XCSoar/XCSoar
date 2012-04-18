@@ -13,6 +13,7 @@ Version 6.3.1 - not yet released
 * calculations
   - fix crash with far away task
   - fix high speed remaining when wind drift is disabled
+  - fix crash when scrolling beyond the poles
 * devices
   - allow standard NMEA sentences to begin with 'P'
   - add missing NMEA checksum verifications
@@ -20,17 +21,26 @@ Version 6.3.1 - not yet released
   - Borgelt: read the ballast setting from the B800
   - LX: support the LXNav V7
   - Flymaster: initiate NMEA mode
+  - AltairPro: relax timeouts
+  - FLARM: relax timeouts
+  - fix timeouts on Windows CE (FLARM driver and others)
+  - ignore garbage at the beginning of NMEA lines
 * logger
   - fix format of IGC 'C' records for takeoff/landing (ambiguous spec)
+  - fix landing time in flight logger
 * map
   - don't fill acked airspaces
+  - fix display of full-circle annulus
 * task manager
   - fix rename/delete function for task files
+  - also clear optional starts with "Clear All" button
 * Linux
   - fix HTTP networking bugs
 * Android
   - fix hanging shutdown after IOIO connection failure
   - fix saving of airspace colors (workaround for android compiler bug)
+* Windows
+  - fix double key presses on Windows CE / PPC2000
 
 Version 6.3 - 2012/03/29
 * calculations

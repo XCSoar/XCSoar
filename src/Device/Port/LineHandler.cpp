@@ -66,7 +66,17 @@ PortLineHandler::DataReceived(const void *_data, size_t length)
         --end;
 
       *end = '\0';
-      LineReceived(range.data);
+
+      const char *line = range.data;
+
+      /* if there are NUL bytes in the line, skip to after the last
+         one, to avoid conflicts with NUL terminated C strings due to
+         binary garbage */
+      const void *nul;
+      while ((nul = memchr(line, 0, end - line)) != NULL)
+        line = (const char *)nul + 1;
+
+      LineReceived(line);
 
       buffer.Consume(newline - range.data + 1);
     }

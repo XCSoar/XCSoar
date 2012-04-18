@@ -41,6 +41,19 @@ EventLoop::Get(MSG &msg)
   if (!::GetMessage(&msg, NULL, 0, 0))
     return false;
 
+  if (IsOldWindowsCE() && IsKeyMessage(msg) &&
+      msg.wParam >= VK_APP1 && msg.wParam <= VK_APP4) {
+    /* kludge for iPaq 3xxx: the VK_APPx buttons emit a WM_KEYUP
+       instead of WM_KEYDOWN when the user presses the button */
+
+    static bool seen_app_down = false;
+    if (msg.message == WM_KEYDOWN)
+      /* everything seems ok, disable the kludge */
+      seen_app_down = true;
+    else if (!seen_app_down && msg.lParam == (LPARAM)0x80000001)
+      msg.message = WM_KEYDOWN;
+  }
+
   if (IsKeyMessage(msg))
     msg.wParam = TranscodeKey(msg.wParam);
 

@@ -58,6 +58,14 @@ public:
    */
   bool Open(const TCHAR *path, unsigned baud_rate);
 
+  /**
+   * Opens this object with a new pseudo-terminal.  This is only used
+   * for debugging.
+   *
+   * @return the path of the slave pseudo-terminal, NULL on error
+   */
+  const char *OpenPseudo();
+
   WaitResult WaitWrite(unsigned timeout_ms);
 
   /* virtual methods from class Port */
