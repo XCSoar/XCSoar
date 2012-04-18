@@ -126,7 +126,7 @@ Window::GetRootOwner()
 
   /* can't use the "checked" method get() because hRoot may be a
      dialog, and uses Dialog::DlgProc() */
-  return (ContainerWindow *)get_unchecked(hRoot);
+  return (ContainerWindow *)GetUnchecked(hRoot);
 #endif /* USE_GDI */
 }
 

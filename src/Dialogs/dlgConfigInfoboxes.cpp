@@ -301,7 +301,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   look = &_look;
   data = data_r;
 
-  PixelRect rc = parent.get_client_rect();
+  PixelRect rc = parent.GetClientRect();
   wf = new WndForm(parent, dialog_look, rc);
 
 #ifdef _WIN32_WCE
@@ -310,7 +310,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 #endif
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();
-  rc = client_area.get_client_rect();
+  rc = client_area.GetClientRect();
 
   InflateRect(&rc, Layout::FastScale(-2), Layout::FastScale(-2));
   info_box_layout = InfoBoxLayout::Calculate(rc, geometry);

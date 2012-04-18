@@ -28,7 +28,7 @@ void
 OverlappedWidget::Raise()
 {
   assert(IsDefined());
-  assert(GetWindow()->is_visible());
+  assert(GetWindow()->IsVisible());
 
   GetWindow()->BringToTop();
 }
@@ -39,7 +39,7 @@ void
 OverlappedWidget::Hide()
 {
   assert(IsDefined());
-  assert(GetWindow()->is_visible());
+  assert(GetWindow()->IsVisible());
 
   /* WindowWidget::Hide() uses Window::FastHide() to reduce overhead,
      but that doesn't work well for overlapped windows, because hiding

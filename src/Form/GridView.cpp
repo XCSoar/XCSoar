@@ -40,7 +40,7 @@ GridView::GridView(ContainerWindow &parent,
   row_height = Layout::Scale(42);
   horizontal_spacing = Layout::Scale(0);
   vertical_spacing = Layout::Scale(0);
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
   num_columns = (rc.right - rc.left + horizontal_spacing)
     / (column_width + horizontal_spacing);
   if (num_columns == 0)
@@ -99,7 +99,7 @@ GridView::SetNumRows(unsigned _numRows)
 void
 GridView::RefreshLayout()
 {
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
   unsigned maxColumns = (rc.right - rc.left + horizontal_spacing)
     / (column_width + horizontal_spacing);
   if (maxColumns == 0)
@@ -139,10 +139,10 @@ GridView::RefreshLayout()
     unsigned colNum = pagePos % num_columns;
     unsigned rowNum = pagePos / num_columns;
 
-    items[i]->move(leftOrigin + colNum * (column_width + horizontal_spacing),
+    items[i]->Move(leftOrigin + colNum * (column_width + horizontal_spacing),
                    topOrigin + rowNum * (row_height + vertical_spacing),
                    column_width, row_height);
-    items[i]->set_visible(itemPage == current_page);
+    items[i]->SetVisible(itemPage == current_page);
   }
 }
 
@@ -154,7 +154,7 @@ GridView::GetIndexOfItemInFocus() const
 {
   signed index = -1;
   for (unsigned i = items.size(); i--;) {
-    if (items[i]->has_focus()) {
+    if (items[i]->HasFocus()) {
       index = i;
       break;
     }
@@ -206,7 +206,7 @@ GridView::ShowNextPage(Direction direction)
     items[newPos]->SetFocus();
     /* unable to set the focus on the desired item, let's try
        Tab/Shift-Tab behavior instead */
-    if (!items[newPos]->has_focus()) {
+    if (!items[newPos]->HasFocus()) {
       if (direction == Direction::LEFT)
         newPos = GetNextEnabledItemIndex(current_page * pageSize
                                          + currentPageSize, direction);
@@ -241,12 +241,12 @@ GridView::GetNextEnabledItemIndex(signed currIndex, Direction direction) const
   if (direction == Direction::UP || direction == Direction::LEFT) {
     // Treat as Shift-Tab
     for (signed i = currIndex - 1; i >= 0; i--)
-      if (items[i]->is_enabled())
+      if (items[i]->IsEnabled())
         return i;
   } else {
     // Treat as Tab
     for (unsigned i = currIndex + 1; i < items.size(); i++)
-      if (items[i]->is_enabled())
+      if (items[i]->IsEnabled())
         return i;
   }
 
@@ -306,7 +306,7 @@ GridView::MoveFocus(Direction direction)
     if (newFocusPos != -1) {
       // we are on the same page
       items[newFocusPos]->SetFocus();
-      if (!items[newFocusPos]->has_focus()) {
+      if (!items[newFocusPos]->HasFocus()) {
         /* unable to set the focus, let's try simple Tab/Shift-Tab
            behavior instead */
         newFocusPos = GetNextEnabledItemIndex(focusPos, direction);

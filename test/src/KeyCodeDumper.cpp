@@ -89,7 +89,7 @@ protected:
 
   virtual void OnPaint(Canvas &canvas) {
     canvas.SelectWhiteBrush();
-    if (has_focus())
+    if (HasFocus())
       canvas.SelectBlackPen();
     else
       canvas.SelectWhitePen();
@@ -138,7 +138,7 @@ public:
   void set(PixelRect _rc) {
     SingleWindow::set(_T("KeyCodeDumper"), _T("KeyCodeDumper"), _rc);
 
-    PixelRect rc = get_client_rect();
+    PixelRect rc = GetClientRect();
 
     PixelRect d_rc = rc;
     d_rc.bottom = (rc.top + rc.bottom + 1) / 2;
@@ -155,8 +155,8 @@ public:
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::OnResize(width, height);
-    key_code_dumper.move(0, 0, width, (height + 1) / 2);
-    close_button.move(0, (height + 1) / 2, width, height / 2);
+    key_code_dumper.Move(0, 0, width, (height + 1) / 2);
+    close_button.Move(0, (height + 1) / 2, width, height / 2);
   }
 
   virtual bool OnCommand(unsigned id, unsigned code) {

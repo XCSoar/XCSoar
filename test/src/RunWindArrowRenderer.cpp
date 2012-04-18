@@ -123,7 +123,7 @@ public:
     SingleWindow::set(_T("RunWindArrowRenderer"), _T("RunWindArrowRenderer"),
                       _rc, style);
 
-    const PixelRect rc = get_client_rect();
+    const PixelRect rc = GetClientRect();
 
     WindowStyle with_border;
     with_border.Border();
@@ -164,7 +164,7 @@ protected:
 
   virtual void OnResize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::OnResize(width, height);
-    wind.resize(width, height);
+    wind.Resize(width, height);
   }
 };
 

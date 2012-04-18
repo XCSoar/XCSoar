@@ -385,11 +385,11 @@ public:
   void SetSelectedIndex(TabMenuControl::MenuTabIndex di);
 
   UPixelScalar GetTabHeight() const {
-    return this->get_height();
+    return this->GetHeight();
   }
 
   UPixelScalar GetTabWidth() const {
-    return this->get_width();
+    return this->GetWidth();
   }
 
   /**

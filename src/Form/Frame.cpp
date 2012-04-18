@@ -65,7 +65,7 @@ WndFrame::SetText(const TCHAR *_text)
 unsigned
 WndFrame::GetTextHeight()
 {
-  PixelRect rc = get_client_rect();
+  PixelRect rc = GetClientRect();
   ::InflateRect(&rc, -2, -2); // todo border width
 
   AnyCanvas canvas;
@@ -87,7 +87,7 @@ WndFrame::OnPaint(Canvas &canvas)
 
   canvas.Select(*font);
 
-  PixelRect rc = get_client_rect();
+  PixelRect rc = GetClientRect();
   InflateRect(&rc, -2, -2); // todo border width
 
   canvas.formatted_text(&rc, text.c_str(), mCaptionStyle);

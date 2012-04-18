@@ -85,7 +85,7 @@ CheckBox::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     SetPressed(x >= 0 && y >= 0 &&
-                (unsigned)x < get_width() && (unsigned)y < get_height());
+                (unsigned)x < GetWidth() && (unsigned)y < GetHeight());
     return true;
   } else
     return PaintWindow::OnMouseMove(x, y, keys);
@@ -94,7 +94,7 @@ CheckBox::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 bool
 CheckBox::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  if (is_tab_stop())
+  if (IsTabStop())
     SetFocus();
 
   SetPressed(true);
@@ -151,13 +151,13 @@ CheckBox::OnCancelMode()
 void
 CheckBox::OnPaint(Canvas &canvas)
 {
-  if (has_focus())
+  if (HasFocus())
     canvas.clear(COLOR_XCSOAR_DARK);
 
   Brush brush(pressed ? COLOR_XCSOAR_LIGHT : COLOR_WHITE);
   canvas.Select(brush);
 
-  if (is_enabled())
+  if (IsEnabled())
     canvas.SelectBlackPen();
   else
     canvas.Select(Pen(1, COLOR_GRAY));
@@ -168,7 +168,7 @@ CheckBox::OnPaint(Canvas &canvas)
   if (checked) {
     canvas.SelectNullPen();
 
-    if (is_enabled())
+    if (IsEnabled())
       canvas.SelectBlackBrush();
     else
       canvas.Select(Brush(COLOR_GRAY));
@@ -191,8 +191,9 @@ CheckBox::OnPaint(Canvas &canvas)
     canvas.polygon(check_mark, ARRAY_SIZE(check_mark));
   }
 
-  canvas.SetTextColor(
-      is_enabled() ? (has_focus() ? COLOR_WHITE : COLOR_BLACK) : COLOR_GRAY);
+  canvas.SetTextColor(IsEnabled()
+                      ? (HasFocus() ? COLOR_WHITE : COLOR_BLACK)
+                      : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
   canvas.text(canvas.get_height() + 2, 2, text.c_str());
 }

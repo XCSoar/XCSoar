@@ -122,11 +122,12 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   if (itemhelp_callback != NULL) {
     wItemHelp = (WndFrame *)wf->FindByName(_T("lblItemHelp"));
     assert(wItemHelp);
-    wItemHelp->set_visible(true);
-    const UPixelScalar help_height = wItemHelp->get_height();
-    const PixelRect rc = list_control->get_position();
+    wItemHelp->Hide();
+    const UPixelScalar help_height = wItemHelp->GetHeight();
+    const PixelRect rc = list_control->GetPosition();
     assert(rc.bottom - rc.top - help_height > 0);
-    list_control->move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top - help_height);
+    list_control->Move(rc.left, rc.top,
+                       rc.right - rc.left, rc.bottom - rc.top - help_height);
     list_control->SetCursorCallback(OnPointCursorCallback);
     OnPointCursorCallback(initial_value);
   }

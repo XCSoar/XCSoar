@@ -26,7 +26,7 @@
 void
 CrossSectionWindow::OnPaint(Canvas &canvas)
 {
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
 
   renderer.Paint(canvas, rc);
 }

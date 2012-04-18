@@ -73,7 +73,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 void
 GaugeVario::OnPaintBuffer(Canvas &canvas)
 {
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
   const UPixelScalar width = rc.right - rc.left;
   const UPixelScalar height = rc.bottom - rc.top;
 
@@ -225,7 +225,7 @@ GaugeVario::MakeAllPolygons()
 void
 GaugeVario::RenderClimb(Canvas &canvas)
 {
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
   PixelScalar x = rc.right - Layout::Scale(14);
   PixelScalar y = rc.bottom - Layout::Scale(24);
 
@@ -434,7 +434,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
   const UPixelScalar arrow_y_size = Layout::Scale(3);
   const UPixelScalar arrow_x_size = Layout::Scale(7);
 
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
 
   PixelScalar nary = NARROWS * arrow_y_size;
   PixelScalar ytop = rc.top + YOFFSET + nary; // JMW
@@ -549,7 +549,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
   static RasterPoint orgValue = {-1,-1};
 
   if (!ballast_initialised) { // ontime init, origin and background rect
-    const PixelRect rc = get_client_rect();
+    const PixelRect rc = GetClientRect();
 
     PixelSize tSize;
 
@@ -650,7 +650,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
   static RasterPoint orgValue = {-1,-1};
 
   if (!bugs_initialised) {
-    const PixelRect rc = get_client_rect();
+    const PixelRect rc = GetClientRect();
     PixelSize tSize;
 
     orgLabel.x = 1;

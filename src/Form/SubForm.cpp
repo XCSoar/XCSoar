@@ -40,7 +40,7 @@ SubForm::FilterAdvanced(bool advanced)
 {
   for (auto i = expert_windows.begin(), end = expert_windows.end();
        i != end; ++i)
-    (*i)->set_visible(advanced);
+    (*i)->SetVisible(advanced);
 }
 
 void

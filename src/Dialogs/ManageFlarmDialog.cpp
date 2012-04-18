@@ -62,7 +62,7 @@ ManageFlarmDialog(Device &_device)
   SingleWindow &parent = UIGlobals::GetMainWindow();
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  dialog = new WndForm(parent, look, parent.get_client_rect(),
+  dialog = new WndForm(parent, look, parent.GetClientRect(),
                        _T("FLARM"), dialog_style);
 
   ContainerWindow &client_area = dialog->GetClientAreaWindow();

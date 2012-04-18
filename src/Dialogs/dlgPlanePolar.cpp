@@ -72,7 +72,7 @@ UpdateInvalidLabel()
 
   WndFrame *label = ((WndFrame *)dialog->FindByName(_T("InvalidLabel")));
   assert(label != NULL);
-  label->set_visible(visible);
+  label->SetVisible(visible);
 }
 
 static void

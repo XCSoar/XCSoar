@@ -113,7 +113,7 @@ static FlightSetupPanel *instance;
 void
 FlightSetupPanel::SetButtons()
 {
-  dump_button->set_visible(polar_settings.glide_polar_task.HasBallast());
+  dump_button->SetVisible(polar_settings.glide_polar_task.HasBallast());
 
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
   dump_button->SetCaption(settings.polar.ballast_timer_active

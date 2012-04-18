@@ -121,7 +121,7 @@ TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   const MapLook &look = UIGlobals::GetMapLook();
   const NMEAInfo &basic = CommonInterface::Basic();
-  PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
+  PaintTask(canvas, Sender->GetClientRect(), *ordered_task,
             basic.location_available, basic.location,
             XCSoarInterface::GetMapSettings(),
             look.task, look.airspace,
@@ -422,13 +422,13 @@ TaskListPanel::OnTaskViewClick()
   if (!fullscreen) {
     const UPixelScalar xoffset = (Layout::landscape ? tab_bar.GetTabWidth() : 0);
     const UPixelScalar yoffset = (!Layout::landscape ? tab_bar.GetTabHeight() : 0);
-    wTaskView->move(xoffset, yoffset,
-                    wf.GetClientAreaWindow().get_width() - xoffset,
-                    wf.GetClientAreaWindow().get_height() - yoffset);
+    wTaskView->Move(xoffset, yoffset,
+                    wf.GetClientAreaWindow().GetWidth() - xoffset,
+                    wf.GetClientAreaWindow().GetHeight() - yoffset);
     fullscreen = true;
-    wTaskView->show_on_top();
+    wTaskView->ShowOnTop();
   } else {
-    wTaskView->move(TaskViewRect.left, TaskViewRect.top,
+    wTaskView->Move(TaskViewRect.left, TaskViewRect.top,
                     TaskViewRect.right - TaskViewRect.left,
                     TaskViewRect.bottom - TaskViewRect.top);
     fullscreen = false;
@@ -493,7 +493,7 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskView1"));
   assert(wTaskView != NULL);
 
-  TaskViewRect = wTaskView->get_position();
+  TaskViewRect = wTaskView->GetPosition();
   wTaskView->SetOnMouseDownNotify(::OnTaskViewClick);
   fullscreen = false;
 

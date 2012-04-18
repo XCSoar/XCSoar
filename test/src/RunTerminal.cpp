@@ -61,7 +61,7 @@ public:
   void set(PixelRect _rc) {
     SingleWindow::set(_T("RunTerminal"), _T("RunTerminal"), _rc);
 
-    PixelRect rc = get_client_rect();
+    PixelRect rc = GetClientRect();
 
     terminal.set(*this, rc.left, rc.top,
                  rc.right - rc.left, rc.bottom - rc.top);

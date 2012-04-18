@@ -89,7 +89,7 @@ ListControl::ActivateItem()
 void
 ListControl::show_or_hide_scroll_bar()
 {
-  const PixelSize size = get_size();
+  const PixelSize size = GetSize();
 
   if (length > items_visible)
     // enable the scroll bar
@@ -148,12 +148,12 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   /* enable clipping */
   GLScissor scissor(OpenGL::translate_x,
                     OpenGL::screen_height - OpenGL::translate_y - canvas.get_height() - 1,
-                    scroll_bar.GetLeft(get_size()), canvas.get_height());
+                    scroll_bar.GetLeft(GetSize()), canvas.get_height());
 #endif
 
   unsigned last_item = min(length, end);
 
-  const bool focused = has_focus();
+  const bool focused = HasFocus();
 
   for (unsigned i = start; i < last_item; i++) {
     const bool selected = i == cursor;
@@ -205,7 +205,7 @@ ListControl::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.IsDefined())
     return;
 
-  scroll_bar.SetSlider(length * item_height, get_height(), GetPixelOrigin());
+  scroll_bar.SetSlider(length * item_height, GetHeight(), GetPixelOrigin());
   scroll_bar.Paint(canvas);
 }
 
@@ -213,7 +213,7 @@ void
 ListControl::SetItemHeight(UPixelScalar _item_height)
 {
   item_height = _item_height;
-  items_visible = get_size().cy / item_height;
+  items_visible = GetHeight() / item_height;
 
   show_or_hide_scroll_bar();
   Invalidate();
@@ -234,7 +234,7 @@ ListControl::SetLength(unsigned n)
   else if (cursor >= n)
     cursor = n - 1;
 
-  items_visible = get_size().cy / item_height;
+  items_visible = GetHeight() / item_height;
 
   if (n <= items_visible)
     origin = 0;
@@ -261,7 +261,7 @@ ListControl::EnsureVisible(unsigned i)
     SetOrigin(i - items_visible);
 
     if (origin > 0 || i >= items_visible)
-      SetPixelPan(((items_visible + 1) * item_height - get_height()) % item_height);
+      SetPixelPan(((items_visible + 1) * item_height - GetHeight()) % item_height);
   }
 }
 
@@ -334,9 +334,9 @@ ListControl::SetOrigin(int i)
 
 #ifdef USE_GDI
   if ((unsigned)abs(delta) < items_visible) {
-    PixelRect rc = get_client_rect();
-    rc.right = scroll_bar.GetLeft(get_size());
-    scroll(0, delta * item_height, rc);
+    PixelRect rc = GetClientRect();
+    rc.right = scroll_bar.GetLeft(GetSize());
+    Scroll(0, delta * item_height, rc);
 
     /* repaint the scrollbar synchronously; we could Invalidate its
        area and repaint asynchronously via WM_PAINT, but then the clip
@@ -480,7 +480,7 @@ ListControl::OnMouseUp(PixelScalar x, PixelScalar y)
   }
 
   if (drag_mode == DragMode::CURSOR &&
-      x >= 0 && x <= ((PixelScalar)get_width() - scroll_bar.GetWidth())) {
+      x >= 0 && x <= ((PixelScalar)GetWidth() - scroll_bar.GetWidth())) {
     drag_end();
     ActivateItem();
     return true;
@@ -518,7 +518,7 @@ ListControl::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   if (scroll_bar.IsDragging()) {
     // -> Update ListBox origin
     unsigned value =
-      scroll_bar.DragMove(length * item_height, get_height(), y);
+      scroll_bar.DragMove(length * item_height, GetHeight(), y);
     SetPixelOrigin(value);
     return true;
   } else if (drag_mode == DragMode::CURSOR) {
@@ -557,7 +557,7 @@ ListControl::OnMouseDown(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   // If possible -> Give focus to the Control
-  bool had_focus = has_focus();
+  const bool had_focus = HasFocus();
   if (!had_focus)
     SetFocus();
 

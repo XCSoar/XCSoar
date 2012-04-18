@@ -96,7 +96,7 @@ TopWindow::Fullscreen()
 {
   ::SetForegroundWindow(hWnd);
 #ifndef _WIN32_WCE
-  show_on_top();
+  ShowOnTop();
 #else
 
   bool success = false;
@@ -148,7 +148,7 @@ TopWindow::OnDeactivate()
 {
   /* remember the currently focused control */
   hSavedFocus = ::GetFocus();
-  if (hSavedFocus != NULL && !identify_descendant(hSavedFocus))
+  if (hSavedFocus != NULL && !IdentifyDescendant(hSavedFocus))
     hSavedFocus = NULL;
 
   return false;

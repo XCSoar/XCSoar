@@ -67,14 +67,14 @@ public:
 void
 SiteConfigPanel::Show(const PixelRect &rc)
 {
-  buttonWaypoints->set_visible(true);
+  buttonWaypoints->SetVisible(true);
   RowFormWidget::Show(rc);
 }
 
 void
 SiteConfigPanel::Hide()
 {
-  buttonWaypoints->set_visible(false);
+  buttonWaypoints->SetVisible(false);
   RowFormWidget::Hide();
 }
 

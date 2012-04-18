@@ -148,7 +148,7 @@ static void
 SetCalcVisibility(const bool visible)
 {
   assert(wCalc != NULL);
-  wCalc->set_visible(visible);
+  wCalc->SetVisible(visible);
 }
 
 static void
@@ -177,7 +177,7 @@ ChartControl::OnPaint(Canvas &canvas)
   canvas.clear(COLOR_WHITE);
   canvas.SetTextColor(COLOR_BLACK);
 
-  PixelRect rcgfx = get_client_rect();
+  PixelRect rcgfx = GetClientRect();
 
   // background is painted in the base-class
 

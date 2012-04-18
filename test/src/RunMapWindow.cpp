@@ -127,7 +127,7 @@ public:
 
     SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"), _rc, style);
 
-    PixelRect rc = get_client_rect();
+    PixelRect rc = GetClientRect();
     map.set(*this, rc);
     map.SetWaypoints(&way_points);
     map.SetAirspaces(&airspace_database);
@@ -141,7 +141,7 @@ public:
     rc.right = rc.left + 60;
     rc.bottom = rc.top + 20;
     close_button.set(*this, _T("Close"), ID_CLOSE, rc);
-    close_button.set_font(Fonts::map);
+    close_button.SetFont(Fonts::map);
     close_button.BringToTop();
   }
 
@@ -158,7 +158,7 @@ protected:
 
   virtual void OnResize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::OnResize(width, height);
-    map.resize(width, height);
+    map.Resize(width, height);
 
 #ifndef ENABLE_OPENGL
   if (initialised)

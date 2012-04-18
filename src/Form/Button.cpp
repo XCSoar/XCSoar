@@ -42,7 +42,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
 {
   style.EnableCustomPainting();
   set(parent, Caption, rc, style);
-  set_font(*look.button.font);
+  SetFont(*look.button.font);
 }
 
 
@@ -65,7 +65,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
   /* our custom SDL/OpenGL button doesn't need this hack */
   set(parent, caption, _id, rc, style);
 #endif
-  set_font(*look.button.font);
+  SetFont(*look.button.font);
 }
 
 bool
@@ -172,9 +172,10 @@ WndButton::OnPaint(Canvas &canvas)
     PixelScalar(canvas.get_height())
   };
 
-  bool pressed = is_down();
+  const bool focused = HasFocus();
+  const bool pressed = is_down();
 
-  renderer.DrawButton(canvas, rc, has_focus(), pressed);
+  renderer.DrawButton(canvas, rc, focused, pressed);
 
   // If button has text on it
   tstring caption = get_text();
@@ -184,15 +185,15 @@ WndButton::OnPaint(Canvas &canvas)
   rc = renderer.GetDrawingRect(rc, pressed);
 
   canvas.SetBackgroundTransparent();
-  if (!is_enabled())
+  if (!IsEnabled())
     canvas.SetTextColor(look.button.disabled.color);
-  else if (has_focus())
+  else if (focused)
     canvas.SetTextColor(look.button.focused.foreground_color);
   else
     canvas.SetTextColor(look.button.standard.foreground_color);
 
 #ifndef USE_GDI
-  canvas.formatted_text(&rc, caption.c_str(), get_text_style());
+  canvas.formatted_text(&rc, caption.c_str(), GetTextStyle());
 #else
   unsigned style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
   canvas.Select(*(look.button.font));

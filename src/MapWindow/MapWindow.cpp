@@ -184,7 +184,7 @@ MapWindow::OnPaintBuffer(Canvas &canvas)
 #endif
 
   // Render the moving map
-  Render(canvas, get_client_rect());
+  Render(canvas, GetClientRect());
   draw_sw.Finish();
 
 #ifndef ENABLE_OPENGL

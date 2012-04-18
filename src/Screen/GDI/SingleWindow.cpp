@@ -32,7 +32,7 @@ SingleWindow::FilterEvent(const MSG &msg, Window *allowed) const
   assert(allowed != NULL);
 
   if (IsUserInput(msg.message)) {
-    if (allowed->identify_descendant(msg.hwnd))
+    if (allowed->IdentifyDescendant(msg.hwnd))
       /* events to the current modal dialog are allowed */
       return true;
 

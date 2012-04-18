@@ -95,10 +95,10 @@ UpdateButtons()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
   if (airspace == NULL) {
-    ack_warn_button->set_visible(false);
-    ack_day_button->set_visible(false);
-    ack_space_button->set_visible(false);
-    enable_button->set_visible(false);
+    ack_warn_button->SetVisible(false);
+    ack_day_button->SetVisible(false);
+    ack_space_button->SetVisible(false);
+    enable_button->SetVisible(false);
     return;
   }
 
@@ -112,10 +112,10 @@ UpdateButtons()
     inside = warning.GetWarningState() == AirspaceWarning::WARNING_INSIDE;
   }
 
-  ack_warn_button->set_visible(ack_expired && !inside);
-  ack_day_button->set_visible(!ack_day);
-  ack_space_button->set_visible(ack_expired && inside);
-  enable_button->set_visible(!ack_expired);
+  ack_warn_button->SetVisible(ack_expired && !inside);
+  ack_day_button->SetVisible(!ack_day);
+  ack_space_button->SetVisible(ack_expired && inside);
+  enable_button->SetVisible(!ack_expired);
 }
 
 static void

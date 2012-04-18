@@ -263,7 +263,7 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location)
 void
 GlueMapWindow::UpdateProjection()
 {
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
 
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */

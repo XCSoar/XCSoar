@@ -154,7 +154,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
   edit.set(*this, edit_rc, edit_style);
   edit.InstallWndProc();
 
-  edit.set_font(*look.text_font);
+  edit.SetFont(*look.text_font);
 
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
@@ -221,7 +221,7 @@ WndProperty::BeginEditing()
 void
 WndProperty::UpdateLayout()
 {
-  edit_rc = get_client_rect();
+  edit_rc = GetClientRect();
 
   const UPixelScalar DEFAULTBORDERPENWIDTH = Layout::FastScale(1);
 
@@ -239,7 +239,7 @@ WndProperty::UpdateLayout()
   }
 
   if (edit.IsDefined())
-    edit.move(edit_rc);
+    edit.Move(edit_rc);
 
   Invalidate();
 }
@@ -319,7 +319,7 @@ WndProperty::DecValue()
 void
 WndProperty::OnPaint(Canvas &canvas)
 {
-  const bool focused = edit.has_focus();
+  const bool focused = edit.HasFocus();
 
   /* background and selector */
   if (focused) {
@@ -351,7 +351,7 @@ WndProperty::OnPaint(Canvas &canvas)
       org.y = edit_rc.top - tsize.cy;
     } else {
       org.x = caption_width - tsize.cx - Layout::FastScale(3);
-      org.y = (get_size().cy - tsize.cy) / 2;
+      org.y = (GetHeight() - tsize.cy) / 2;
     }
 
     if (org.x < 1)
@@ -371,7 +371,7 @@ WndProperty::RefreshDisplay()
   if (!mDataField)
     return;
 
-  if (edit.has_focus() && CanEditInPlace())
+  if (edit.HasFocus() && CanEditInPlace())
     edit.SetText(mDataField->GetAsString());
   else
     edit.SetText(mDataField->GetAsDisplayString());

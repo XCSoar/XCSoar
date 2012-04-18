@@ -36,16 +36,16 @@ WndCustomButton::OnPaint(Canvas &canvas)
   canvas.clear(look.background_brush);
 #endif
 
-  PixelRect rc = get_client_rect();
+  PixelRect rc = GetClientRect();
 
   // Draw focus rectangle
-  if (has_focus()) {
+  if (HasFocus()) {
     canvas.DrawFilledRectangle(rc, look.focused.background_color);
-    canvas.SetTextColor(is_enabled()
+    canvas.SetTextColor(IsEnabled()
                         ? look.focused.text_color : look.button.disabled.color);
   } else {
     canvas.DrawFilledRectangle(rc, look.background_color);
-    canvas.SetTextColor(is_enabled() ? look.text_color : look.button.disabled.color);
+    canvas.SetTextColor(IsEnabled() ? look.text_color : look.button.disabled.color);
   }
 
   // If button has text on it
@@ -60,7 +60,7 @@ WndCustomButton::OnPaint(Canvas &canvas)
   canvas.SelectNullPen();
   canvas.SetBackgroundTransparent();
 #ifndef USE_GDI
-  canvas.formatted_text(&rc, caption.c_str(), get_text_style());
+  canvas.formatted_text(&rc, caption.c_str(), GetTextStyle());
 #else
   unsigned s = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
   canvas.Select(*(look.button.font));

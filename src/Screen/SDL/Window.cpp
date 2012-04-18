@@ -80,7 +80,7 @@ Window::GetParentClientRect() const
 {
   assert(parent != NULL);
 
-  return parent->get_client_rect();
+  return parent->GetClientRect();
 }
 
 void

@@ -514,7 +514,7 @@ protected:
   PixelRect InitialControlRect(UPixelScalar height) {
     assert(IsDefined());
 
-    PixelRect rc = GetWindow()->get_client_rect();
+    PixelRect rc = GetWindow()->GetClientRect();
     rc.bottom = rc.top + height;
     return rc;
   }

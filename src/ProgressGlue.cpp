@@ -56,7 +56,7 @@ ProgressGlue::Resize(UPixelScalar width, UPixelScalar height)
   if (global_progress_window == NULL)
     return;
 
-  global_progress_window->move(0, 0, width, height);
+  global_progress_window->Move(0, 0, width, height);
   throttle_clock.Reset();
 }
 

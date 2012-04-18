@@ -52,7 +52,7 @@ ButtonPanel::UpdateLayout(const PixelRect rc)
 PixelRect
 ButtonPanel::UpdateLayout()
 {
-  return UpdateLayout(parent.get_client_rect());
+  return UpdateLayout(parent.GetClientRect());
 }
 
 static gcc_constexpr_data PixelRect dummy_rc = { 0, 0, 100, 40 };
@@ -116,7 +116,7 @@ ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end)
   rc.left += width;
 
   for (unsigned i = start; i < end; ++i) {
-    buttons[i]->move(button_rc);
+    buttons[i]->Move(button_rc);
 
     button_rc.top = button_rc.bottom;
     button_rc.bottom += row_height;
@@ -142,7 +142,7 @@ ButtonPanel::HorizontalRange(PixelRect rc, unsigned start, unsigned end)
   rc.bottom -= row_height;
 
   for (unsigned i = start; i < end; ++i) {
-    buttons[i]->move(button_rc);
+    buttons[i]->Move(button_rc);
 
     button_rc.left = button_rc.right;
     button_rc.right += width;
@@ -162,7 +162,7 @@ ButtonPanel::LeftLayout(PixelRect rc)
 PixelRect
 ButtonPanel::LeftLayout()
 {
-  return LeftLayout(parent.get_client_rect());
+  return LeftLayout(parent.GetClientRect());
 }
 
 PixelRect
@@ -198,5 +198,5 @@ ButtonPanel::BottomLayout(PixelRect rc)
 PixelRect
 ButtonPanel::BottomLayout()
 {
-  return BottomLayout(parent.get_client_rect());
+  return BottomLayout(parent.GetClientRect());
 }

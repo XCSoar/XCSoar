@@ -136,7 +136,7 @@ NoFontsAvailable()
 void
 MainWindow::Initialise()
 {
-  PixelRect rc = get_client_rect();
+  PixelRect rc = GetClientRect();
 
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
@@ -157,7 +157,7 @@ MainWindow::InitialiseConfigured()
 {
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  PixelRect rc = get_client_rect();
+  PixelRect rc = GetClientRect();
 
   LogStartUp(_T("InfoBox geometry"));
   const InfoBoxLayout::Layout ib_layout =
@@ -207,7 +207,7 @@ MainWindow::InitialiseConfigured()
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
   map->SetMapSettings(CommonInterface::GetMapSettings());
   map->set(*this, map_rect);
-  map->set_font(Fonts::map);
+  map->SetFont(Fonts::map);
 
   LogStartUp(_T("Initialise message system"));
   popup.set(rc);
@@ -289,7 +289,7 @@ MainWindow::ReinitialiseLayout()
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
-  PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
@@ -315,7 +315,7 @@ MainWindow::ReinitialiseLayout()
       InfoBoxManager::Show();
 
     const PixelRect &current_map = FullScreen ? rc : map_rect;
-    map->move(current_map.left, current_map.top,
+    map->Move(current_map.left, current_map.top,
               current_map.right - current_map.left,
               current_map.bottom - current_map.top);
     map->FullRedraw();
@@ -406,7 +406,7 @@ void
 MainWindow::ReinitialisePosition()
 {
   PixelRect rc = SystemWindowSize();
-  fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  FastMove(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 }
 
 void
@@ -465,7 +465,7 @@ MainWindow::OnResize(UPixelScalar width, UPixelScalar height)
     map->BringToBottom();
   }
 
-  ButtonLabel::OnResize(get_client_rect());
+  ButtonLabel::OnResize(GetClientRect());
 
   ProgressGlue::Resize(width, height);
 }
@@ -637,11 +637,11 @@ MainWindow::SetFullScreen(bool _full_screen)
     InfoBoxManager::Show();
 
   if (widget != NULL)
-    widget->Move(FullScreen ? get_client_rect() : map_rect);
+    widget->Move(FullScreen ? GetClientRect() : map_rect);
 
   if (map != NULL) {
-    const PixelRect rc = FullScreen ? get_client_rect() : map_rect;
-    map->fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    const PixelRect rc = FullScreen ? GetClientRect() : map_rect;
+    map->FastMove(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
   }
 
   // the repaint will be triggered by the DrawThread
@@ -733,7 +733,7 @@ MainWindow::SetWidget(Widget *_widget)
 
   widget = _widget;
 
-  const PixelRect rc = FullScreen ? get_client_rect() : map_rect;
+  const PixelRect rc = FullScreen ? GetClientRect() : map_rect;
   widget->Initialise(*this, rc);
   widget->Prepare(*this, rc);
   widget->Show(rc);

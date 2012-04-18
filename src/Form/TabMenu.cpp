@@ -48,7 +48,7 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
 {
   set(_parent, x, y, _width, _height, style);
 
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
   WindowStyle pager_style;
   pager_style.ControlParent();
   pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
@@ -541,7 +541,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
   const TabMenuControl &tb = GetTabMenuBar();
   PaintMainMenuBorder(canvas);
 
-  const bool is_focused = has_focus();
+  const bool is_focused = HasFocus();
 
   unsigned main_menu_index = 0;
   for (auto i = tb.GetMainMenuButtons().begin(),
@@ -602,7 +602,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
   assert(main_button.first_page_index < tb.GetTabButtons().size());
   assert(main_button.last_page_index < tb.GetTabButtons().size());
 
-  const bool is_focused = has_focus();
+  const bool is_focused = HasFocus();
 
   for (unsigned first_page_index = main_button.first_page_index,
          last_page_index = main_button.last_page_index,

@@ -103,7 +103,7 @@ int
 InfoBoxManager::GetFocused()
 {
   for (unsigned i = 0; i < layout.count; i++)
-    if (InfoBoxes[i]->has_focus())
+    if (InfoBoxes[i]->HasFocus())
       return i;
 
   return -1;

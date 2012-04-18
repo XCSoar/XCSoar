@@ -147,7 +147,7 @@ RefreshView()
   WndButton* wb;
   wb = (WndButton*)wf->FindByName(_T("cmdOptionalStarts"));
   assert(wb);
-  wb->set_visible(active_index == 0);
+  wb->SetVisible(active_index == 0);
   if (ordered_task->optional_start_points_size() == 0)
     wb->SetCaption(_("Enable Alternate Starts"));
   else {
@@ -268,7 +268,7 @@ ReadValues()
 static void
 OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  PixelRect rc = Sender->get_client_rect();
+  PixelRect rc = Sender->GetClientRect();
 
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
 

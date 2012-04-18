@@ -88,7 +88,7 @@ ButtonWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     set_down(x >= 0 && y >= 0 &&
-             (unsigned)x < get_width() && (unsigned)y < get_height());
+             (unsigned)x < GetWidth() && (unsigned)y < GetHeight());
     return true;
   } else
     return PaintWindow::OnMouseMove(x, y, keys);
@@ -97,7 +97,7 @@ ButtonWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 bool
 ButtonWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  if (is_tab_stop())
+  if (IsTabStop())
     SetFocus();
 
   set_down(true);
@@ -152,7 +152,7 @@ ButtonWindow::OnCancelMode()
 void
 ButtonWindow::OnPaint(Canvas &canvas)
 {
-  if (has_focus()) {
+  if (HasFocus()) {
     Pen pen(Layout::Scale(1), COLOR_BLACK);
     canvas.Select(pen);
     canvas.SelectHollowBrush();
@@ -169,11 +169,11 @@ ButtonWindow::OnPaint(Canvas &canvas)
     rc.top += Layout::FastScale(1);
   }
 
-  canvas.DrawButton(get_client_rect(), down);
+  canvas.DrawButton(GetClientRect(), down);
 
-  canvas.SetTextColor(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
+  canvas.SetTextColor(IsEnabled() ? COLOR_BLACK : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
-  canvas.formatted_text(&rc, text.c_str(), get_text_style());
+  canvas.formatted_text(&rc, text.c_str(), GetTextStyle());
 }
 
 bool

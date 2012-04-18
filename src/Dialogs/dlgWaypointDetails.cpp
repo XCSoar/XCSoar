@@ -96,14 +96,14 @@ NextPage(int Step)
 #endif
            waypoint->details.empty());
 
-  wInfo->set_visible(page == 0);
-  wDetails->set_visible(page == 1);
-  wCommand->set_visible(page == 2);
-  wImage->set_visible(page >= 3);
+  wInfo->SetVisible(page == 0);
+  wDetails->SetVisible(page == 1);
+  wCommand->SetVisible(page == 2);
+  wImage->SetVisible(page >= 3);
   zoom = 0;
-  wMagnify->set_visible(page >= 3);
+  wMagnify->SetVisible(page >= 3);
   wMagnify->SetEnabled(true);
-  wShrink->set_visible(page >= 3);
+  wShrink->SetVisible(page >= 3);
   wShrink->SetEnabled(false);
 }
 
@@ -376,12 +376,12 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
     wFilesList->SetActivateCallback(OnFileListEnter);
 
     unsigned list_height = wFilesList->GetItemHeight() * std::min(num_files, 5);
-    wFilesList->resize(wFilesList->get_width(), list_height);
+    wFilesList->Resize(wFilesList->GetWidth(), list_height);
     wFilesList->SetLength(num_files);
 
-    PixelRect rc = wDetailsText->get_position();
+    PixelRect rc = wDetailsText->GetPosition();
     rc.top += list_height;
-    wDetailsText->move(rc);
+    wDetailsText->Move(rc);
   } else
 #endif
     wFilesList->Hide();

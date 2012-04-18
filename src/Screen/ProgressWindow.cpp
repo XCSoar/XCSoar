@@ -34,7 +34,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
    background_brush(background_color),
    position(0)
 {
-  PixelRect rc = parent.get_client_rect();
+  PixelRect rc = parent.GetClientRect();
   WindowStyle style;
   style.Hide();
   set(parent, rc, style);
@@ -66,7 +66,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
               width, text_height, message_style);
 
 #ifndef USE_GDI
-  message.set_font(font);
+  message.SetFont(font);
 #endif
 
   // Initialize progress bar
@@ -83,7 +83,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   set_step(50);
 
   // Show dialog
-  show_on_top();
+  ShowOnTop();
 }
 
 void
@@ -137,11 +137,11 @@ ProgressWindow::OnResize(UPixelScalar width, UPixelScalar height)
   progress_border_height = progress_height * 2;
 
   if (message.IsDefined())
-    message.move(0, height - progress_border_height - text_height - (height/48),
+    message.Move(0, height - progress_border_height - text_height - (height/48),
                  width, text_height);
 
   if (progress_bar.IsDefined())
-    progress_bar.move(progress_horizontal_border,
+    progress_bar.Move(progress_horizontal_border,
                       height - progress_border_height + progress_horizontal_border,
                       width - progress_height,
                       progress_height);

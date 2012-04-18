@@ -373,7 +373,7 @@ InitScaleWidth(const PixelSize size, const PixelRect rc)
  * @param LookUpTable The CallBackTable
  * @param form The WndForm into which the Window is added
  * @param parent The parent window of the control being created
- *    set parent to "form-get_client_rect()" to make top level control
+ *    set parent to "form-GetClientRect()" to make top level control
  *    or to a PanelControl to add it to a tab window
  * @param FileName The XML filename
  * @return the pointer to the Window added to the form
@@ -426,7 +426,7 @@ LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
 
   // Determine the dialog size
   const TCHAR* caption = GetCaption(*node);
-  const PixelRect rc = target_rc ? *target_rc : parent.get_client_rect();
+  const PixelRect rc = target_rc ? *target_rc : parent.GetClientRect();
   ControlPosition pos = GetPosition(*node, rc, 0);
   ControlSize size = GetSize(*node, rc, pos);
 
@@ -560,7 +560,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   // and caption of the control
   const TCHAR* name = GetName(node);
   const TCHAR* caption = GetCaption(node);
-  PixelRect rc = parent.get_client_rect();
+  PixelRect rc = parent.GetClientRect();
   ControlPosition pos = GetPosition(node, rc, bottom_most);
   if (!pos.no_scaling)
     pos.x = ScaleWidth(pos.x);
@@ -678,7 +678,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     window = edit = new EditWindow();
     edit->set(parent, pos.x, pos.y, size.cx, size.cy, edit_style);
     edit->InstallWndProc();
-    edit->set_font(*xml_dialog_look->text_font);
+    edit->SetFont(*xml_dialog_look->text_font);
 
   // ButtonControl (WndButton)
   } else if (StringIsEqual(node.GetName(), _T("Button"))) {
@@ -916,6 +916,6 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
     if (window == NULL)
       continue;
 
-    bottom_most = window->get_position().bottom;
+    bottom_most = window->GetPosition().bottom;
   }
 }

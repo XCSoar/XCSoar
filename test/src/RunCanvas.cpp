@@ -83,7 +83,7 @@ public:
   void set(PixelRect _rc) {
     SingleWindow::set(_T("RunCanvas"), _T("RunCanvas"), _rc);
 
-    PixelRect rc = get_client_rect();
+    PixelRect rc = GetClientRect();
 
     PixelRect button_rc = rc;
     button_rc.bottom -= 5;
@@ -109,7 +109,7 @@ private:
 
     Brush red_brush(COLOR_RED);
 
-    const PixelRect rc = get_client_rect();
+    const PixelRect rc = GetClientRect();
     const UPixelScalar width = rc.right - rc.left;
     const UPixelScalar height = rc.bottom - rc.top;
     const UPixelScalar hmiddle = (rc.left + rc.right) / 2;

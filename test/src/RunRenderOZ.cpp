@@ -241,7 +241,7 @@ public:
   void set(const DialogLook &look, PixelRect _rc) {
     SingleWindow::set(_T("RunRenderOZ"), _T("RunRenderOZ"), _rc);
 
-    const PixelRect rc = get_client_rect();
+    const PixelRect rc = GetClientRect();
 
     WindowStyle with_border;
     with_border.Border();

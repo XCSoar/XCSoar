@@ -67,8 +67,8 @@ void
 KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
-    buttons[i].set_visible(allowed == NULL ||
-                           _tcschr(allowed, button_values[i]) != NULL);
+    buttons[i].SetVisible(allowed == NULL ||
+                          _tcschr(allowed, button_values[i]) != NULL);
 }
 
 ButtonWindow *
@@ -96,7 +96,7 @@ KeyboardControl::move_button(TCHAR ch, PixelScalar left, PixelScalar top)
 {
   ButtonWindow *kb = get_button(ch);
   if (kb)
-    kb->move(left, top);
+    kb->Move(left, top);
 }
 
 /**
@@ -113,14 +113,14 @@ KeyboardControl::resize_button(TCHAR ch,
 {
   ButtonWindow *kb = get_button(ch);
   if (kb)
-    kb->resize(width, height);
+    kb->Resize(width, height);
 }
 
 void
 KeyboardControl::resize_buttons()
 {
   for (unsigned i = 0; i < num_buttons; ++i)
-    buttons[i].resize(button_width, button_height);
+    buttons[i].Resize(button_width, button_height);
 }
 
 /**
@@ -133,8 +133,8 @@ KeyboardControl::resize_buttons()
 void
 KeyboardControl::set_buttons_size()
 {
-  button_width = get_width() / 10;
-  button_height = get_height() / 5;
+  button_width = GetWidth() / 10;
+  button_height = GetHeight() / 5;
 }
 
 void
@@ -150,7 +150,7 @@ KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row,
     if (!kb)
       continue;
 
-    kb->move(i * button_width + offset, row * button_height);
+    kb->Move(i * button_width + offset, row * button_height);
   }
 }
 
@@ -203,7 +203,7 @@ KeyboardControl::OnResize(UPixelScalar width, UPixelScalar height)
 
 bool
 KeyboardControl::is_landscape() {
-  return get_width() >= get_height();
+  return GetWidth() >= GetHeight();
 }
 
 void
@@ -221,5 +221,5 @@ KeyboardControl::add_button(const TCHAR* caption)
 
   ButtonWindow *button = &buttons[num_buttons++];
   button->set(*this, caption, (unsigned)caption[0], rc);
-  button->set_font(*look.button.font);
+  button->SetFont(*look.button.font);
 }

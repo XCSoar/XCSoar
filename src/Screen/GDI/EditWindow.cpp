@@ -46,7 +46,7 @@ EditWindow::SetText(const TCHAR *text)
 {
   assert_none_locked();
 
-  if ((get_window_style()  & ES_MULTILINE) == 0) {
+  if (!IsMultiLine()) {
     ::SetWindowText(hWnd, text);
     return;
   }

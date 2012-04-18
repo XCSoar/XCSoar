@@ -80,7 +80,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
   case WM_CTLCOLORSTATIC:
   case WM_CTLCOLORBTN:
     {
-      Window *window = Window::get((HWND)lParam);
+      Window *window = Window::GetChecked((HWND)lParam);
       if (window == NULL)
         break;
 
@@ -98,7 +98,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
     {
       const DRAWITEMSTRUCT *di = (const DRAWITEMSTRUCT *)lParam;
 
-      Window *window = Window::get(di->hwndItem);
+      Window *window = Window::GetChecked(di->hwndItem);
       if (window == NULL)
         break;
 
@@ -111,7 +111,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
   case WM_COMMAND:
     if (wParam == MAKEWPARAM(BaseButtonWindow::COMMAND_BOUNCE_ID, BN_CLICKED)) {
       /* forward this message to ButtonWindow::OnClicked() */
-      BaseButtonWindow *window = (BaseButtonWindow *)Window::get((HWND)lParam);
+      BaseButtonWindow *window = (BaseButtonWindow *)Window::GetChecked((HWND)lParam);
       if (window != NULL && window->OnClicked())
         return true;
     }

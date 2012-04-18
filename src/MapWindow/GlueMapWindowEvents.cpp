@@ -102,7 +102,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
     return true;
 
   mouse_down_clock.Update();
-  arm_mapitem_list = has_focus();
+  arm_mapitem_list = HasFocus();
 
   SetFocus();
 
@@ -313,7 +313,7 @@ GlueMapWindow::OnPaintBuffer(Canvas &canvas)
 {
   MapWindow::OnPaintBuffer(canvas);
 
-  DrawMapScale(canvas, get_client_rect(), render_projection);
+  DrawMapScale(canvas, GetClientRect(), render_projection);
   if (IsPanning())
     DrawPanInfo(canvas);
 }

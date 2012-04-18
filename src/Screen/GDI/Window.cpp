@@ -75,7 +75,7 @@ Window::CreateMessageWindow()
 }
 
 void
-Window::created(HWND _hWnd)
+Window::Created(HWND _hWnd)
 {
   assert(hWnd == NULL);
   hWnd = _hWnd;
@@ -252,10 +252,10 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     LPCREATESTRUCT cs = (LPCREATESTRUCT)lParam;
 
     window = (Window *)cs->lpCreateParams;
-    window->created(_hWnd);
-    window->set_userdata(window);
+    window->Created(_hWnd);
+    window->SetUserData(window);
   } else {
-    window = get_unchecked(_hWnd);
+    window = GetUnchecked(_hWnd);
   }
 
   LRESULT result = window->OnMessage(_hWnd, message, wParam, lParam);
@@ -269,6 +269,6 @@ Window::InstallWndProc()
 {
   assert(prev_wndproc == NULL);
 
-  set_userdata(this);
-  prev_wndproc = set_wndproc(WndProc);
+  SetUserData(this);
+  prev_wndproc = SetWndProc(WndProc);
 }

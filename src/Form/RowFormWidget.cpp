@@ -68,7 +68,7 @@ RowFormWidget::Row::GetMinimumHeight() const
     return Layout::GetMinimumControlHeight();
   }
 
-  return window->get_height();
+  return window->GetHeight();
 }
 
 UPixelScalar
@@ -97,7 +97,7 @@ RowFormWidget::Row::GetMaximumHeight() const
     return 4096;
   }
 
-  return window->get_height();
+  return window->GetHeight();
 }
 
 RowFormWidget::RowFormWidget(const DialogLook &_look)
@@ -164,7 +164,7 @@ RowFormWidget::Add(Row::Type type, Window *window)
 #ifndef USE_GDI
   assert(window->GetParent() == GetWindow());
 #endif
-  assert(window->is_visible());
+  assert(window->IsVisible());
   /* cannot append rows after a REMAINING row */
   assert(rows.empty() || rows.back().type != Row::Type::REMAINING);
 
@@ -757,7 +757,7 @@ RowFormWidget::GetRecommendedCaptionWidth() const
 void
 RowFormWidget::UpdateLayout()
 {
-  PixelRect current_rect = GetWindow()->get_client_rect();
+  PixelRect current_rect = GetWindow()->GetClientRect();
   const unsigned total_width = current_rect.right - current_rect.left;
   const unsigned total_height = current_rect.bottom - current_rect.top;
   current_rect.bottom = current_rect.top;
@@ -842,7 +842,7 @@ RowFormWidget::UpdateLayout()
 
     /* finally move and resize */
     NextControlRect(current_rect, height);
-    window.move(current_rect);
+    window.Move(current_rect);
   }
 
   assert(excess_height == 0 || n_elastic == 0);
@@ -894,7 +894,7 @@ void
 RowFormWidget::Show(const PixelRect &rc)
 {
   PanelControl &panel = *(PanelControl *)GetWindow();
-  panel.move(rc);
+  panel.Move(rc);
 
   UpdateLayout();
 
@@ -905,7 +905,7 @@ void
 RowFormWidget::Move(const PixelRect &rc)
 {
   PanelControl &panel = *(PanelControl *)GetWindow();
-  panel.move(rc);
+  panel.Move(rc);
 
   UpdateLayout();
 }

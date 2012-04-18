@@ -179,7 +179,7 @@ public:
 
 #if defined(USE_GDI) && !defined(_WIN32_WCE)
   gcc_pure
-  const PixelRect get_client_rect() const {
+  const PixelRect GetClientRect() const {
     if (::IsIconic(hWnd)) {
       /* for a minimized window, GetClientRect() returns the
          dimensions of the icon, which is not what we want */
@@ -195,14 +195,14 @@ public:
       }
     }
 
-    return ContainerWindow::get_client_rect();
+    return ContainerWindow::GetClientRect();
   }
 
   gcc_pure
-  const PixelSize get_size() const {
+  const PixelSize GetSize() const {
     /* this is implemented again because Window::get_size() would call
-       Window::get_client_rect() (method is not virtual) */
-    PixelRect rc = get_client_rect();
+       Window::GetClientRect() (method is not virtual) */
+    PixelRect rc = GetClientRect();
     PixelSize s;
     s.cx = rc.right;
     s.cy = rc.bottom;

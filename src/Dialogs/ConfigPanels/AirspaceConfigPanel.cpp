@@ -128,10 +128,10 @@ void
 AirspaceConfigPanel::SetButtonsVisible(bool active)
 {
   if (buttonColors != NULL)
-    buttonColors->set_visible(active);
+    buttonColors->SetVisible(active);
 
   if (buttonMode != NULL)
-    buttonMode->set_visible(active);
+    buttonMode->SetVisible(active);
 }
 
 void

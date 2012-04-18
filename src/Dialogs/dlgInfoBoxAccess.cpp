@@ -104,7 +104,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
   WindowStyle tab_style;
   tab_style.ControlParent();
   ContainerWindow &client_area = wf->GetClientAreaWindow();
-  const PixelRect rc = client_area.get_client_rect();
+  const PixelRect rc = client_area.GetClientRect();
   wTabBar = new TabBarControl(client_area, look, rc.left, rc.top,
                               rc.right - rc.left, Layout::Scale(45),
                               tab_style, Layout::landscape);
@@ -124,7 +124,8 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
 
   if (!wTabBar->GetTabCount()) {
     form_rc.top = form_rc.bottom - Layout::Scale(58);
-    wf->move(form_rc.left, form_rc.top, form_rc.right - form_rc.left, form_rc.bottom - form_rc.top);
+    wf->Move(form_rc.left, form_rc.top,
+             form_rc.right - form_rc.left, form_rc.bottom - form_rc.top);
 
     Widget *wSwitch = new SwitchInfoBox(id, *wf);
     wTabBar->AddTab(wSwitch, _("Switch InfoBox"));

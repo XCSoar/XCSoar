@@ -84,7 +84,7 @@ DoubleBufferWindow::flip()
 
   /* grow the current buffer, just in case the window has been
      resized */
-  buffers[current].grow(get_width(), get_height());
+  buffers[current].grow(GetWidth(), GetHeight());
 }
 
 #endif

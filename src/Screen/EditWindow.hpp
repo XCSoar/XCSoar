@@ -154,15 +154,15 @@ public:
 #ifndef USE_GDI
     return read_only;
 #else
-    return (get_window_style() & ES_READONLY) != 0;
+    return (GetStyle() & ES_READONLY) != 0;
 #endif
   }
 
   bool IsMultiLine() const {
 #ifndef USE_GDI
-    return (get_text_style() & DT_WORDBREAK) != 0;
+    return (GetTextStyle() & DT_WORDBREAK) != 0;
 #else
-    return (get_window_style() & ES_MULTILINE) != 0;
+    return (GetStyle() & ES_MULTILINE) != 0;
 #endif
   }
 

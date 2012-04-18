@@ -74,7 +74,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   assert(lpText != NULL);
 
   SingleWindow &main_window = UIGlobals::GetMainWindow();
-  const PixelRect rc = main_window.get_client_rect();
+  const PixelRect rc = main_window.GetClientRect();
 
   UPixelScalar Width = Layout::Scale(200);
   UPixelScalar Height = Layout::Scale(160);
@@ -108,12 +108,12 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   wText->SetAlignCenter();
 
   UPixelScalar text_height = wText->GetTextHeight();
-  wText->resize(Width, text_height + Layout::Scale(2));
+  wText->Resize(Width, text_height + Layout::Scale(2));
 
   Height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + h;
   X = ((rc.right - rc.left) - Width) / 2;
   Y = ((rc.bottom - rc.top) - Height) / 2;
-  wf.move(X, Y, Width, Height);
+  wf.Move(X, Y, Width, Height);
 
   PixelRect button_rc;
   button_rc.left = 0;
@@ -183,7 +183,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   // Move buttons to the right positions
   for (i = 0; i < ButtonCount; i++) {
-    wButtons[i]->move(x, button_rc.top);
+    wButtons[i]->Move(x, button_rc.top);
     x += d;
   }
 

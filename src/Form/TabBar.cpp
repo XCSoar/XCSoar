@@ -45,13 +45,13 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
    client_overlap_tabs(_clientOverlapTabs),
    page_flipped_callback(NULL)
 {
-  set(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
+  set(_parent, 0, 0, _parent.GetWidth(), _parent.GetHeight(), style),
 
   tab_display = new TabDisplay(*this, look, *this,
                                  x, y, _width, _height,
                                  flip_orientation);
 
-  PixelRect rc = get_client_rect();
+  PixelRect rc = GetClientRect();
   if (!_clientOverlapTabs) {
     if (Layout::landscape ^ flip_orientation)
       rc.left += tab_display->GetTabWidth();
@@ -77,7 +77,7 @@ TabBarControl::SetClientOverlapTabs(bool value)
 
   client_overlap_tabs = value;
 
-  PixelRect rc = get_client_rect();
+  PixelRect rc = GetClientRect();
   if (!client_overlap_tabs) {
     if (Layout::landscape ^ flip_orientation)
       rc.left += tab_display->GetTabWidth();
@@ -186,7 +186,7 @@ TabBarControl::OnCreate()
 {
   ContainerWindow::OnCreate();
 
-  const PixelRect rc = get_client_rect();
+  const PixelRect rc = GetClientRect();
   pager.Initialise(*this, rc);
   pager.Prepare(*this, rc);
   pager.Show(rc);

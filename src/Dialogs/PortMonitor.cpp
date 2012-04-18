@@ -146,7 +146,7 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device->GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  dialog = new WndForm(parent, dialog_look, parent.get_client_rect(),
+  dialog = new WndForm(parent, dialog_look, parent.GetClientRect(),
                        caption, dialog_style);
 
   ContainerWindow &client_area = dialog->GetClientAreaWindow();

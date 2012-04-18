@@ -201,7 +201,7 @@ TabDisplay::OnPaint(Canvas &canvas)
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
-  const bool is_focused = has_focus();
+  const bool is_focused = HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {
     const OneTabButton &button = *buttons[i];
 

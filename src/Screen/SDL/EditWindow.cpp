@@ -48,7 +48,7 @@ EditWindow::set(ContainerWindow &parent, const PixelRect rc,
 void
 EditWindow::OnPaint(Canvas &canvas)
 {
-  if (is_enabled()) {
+  if (IsEnabled()) {
     if (IsReadOnly())
       canvas.clear(Color(0xf0, 0xf0, 0xf0));
     else
@@ -75,8 +75,8 @@ EditWindow::OnPaint(Canvas &canvas)
   InflateRect(&rc, -padding, -padding);
 
   if (have_clipping() || IsMultiLine())
-    canvas.formatted_text(&rc, value.c_str(), get_text_style());
-  else if ((get_text_style() & DT_VCENTER) == 0)
+    canvas.formatted_text(&rc, value.c_str(), GetTextStyle());
+  else if ((GetTextStyle() & DT_VCENTER) == 0)
     canvas.TextAutoClipped(rc.left, rc.top, value.c_str());
   else {
     PixelScalar canvas_height = rc.bottom - rc.top;

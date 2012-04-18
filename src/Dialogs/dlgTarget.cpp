@@ -244,7 +244,7 @@ RefreshCalculator()
   }
 
   if (chkbOptimized) {
-    chkbOptimized->set_visible(bAAT);
+    chkbOptimized->SetVisible(bAAT);
     chkbOptimized->SetState(!IsLocked);
   }
 
@@ -255,7 +255,7 @@ RefreshCalculator()
     DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
     df->Set(Range * fixed(100));
     wp->RefreshDisplay();
-    wp->set_visible(!nodisplay);
+    wp->SetVisible(!nodisplay);
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
@@ -269,7 +269,7 @@ RefreshCalculator()
     DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
     df->Set(rTemp);
     wp->RefreshDisplay();
-    wp->set_visible(!nodisplay);
+    wp->SetVisible(!nodisplay);
   }
 
   // update outputs
@@ -502,14 +502,14 @@ drawBtnNext()
 
   if (IsAltair())
     // altair already has < and > buttons on WndProperty
-    btnNext->set_visible(false);
+    btnNext->SetVisible(false);
 
   btnPrev = (WndSymbolButton*)wf->FindByName(_T("btnPrev"));
   assert(btnPrev != NULL);
 
   if (IsAltair())
     // altair already has < and > buttons on WndProperty
-    btnPrev->set_visible(false);
+    btnPrev->SetVisible(false);
 }
 
 void

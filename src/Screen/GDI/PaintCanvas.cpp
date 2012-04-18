@@ -28,7 +28,7 @@ PaintCanvas::PaintCanvas(Window &_window)
   :window(_window)
 {
   HDC hDC = window.BeginPaint(&ps);
-  set(hDC, window.get_width(), window.get_height());
+  set(hDC, window.GetWidth(), window.GetHeight());
 }
 
 PaintCanvas::~PaintCanvas()

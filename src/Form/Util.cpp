@@ -37,7 +37,7 @@ ShowFormControl(SubForm &form, const TCHAR *control_name, bool visible)
 {
   Window *window = form.FindByName(control_name);
   assert(window != NULL);
-  window->set_visible(visible);
+  window->SetVisible(visible);
 }
 
 void
@@ -46,7 +46,7 @@ ShowOptionalFormControl(SubForm &form, const TCHAR *control_name,
 {
   Window *window = form.FindByName(control_name);
   if (window != NULL)
-    window->set_visible(visible);
+    window->SetVisible(visible);
 }
 
 void

@@ -89,18 +89,18 @@ dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
                                 PixelScalar x, PixelScalar y)
 {
   if (TaskViewRect.right == 0)
-    TaskViewRect = Sender->get_position();
+    TaskViewRect = Sender->GetPosition();
 
   if (!fullscreen) {
     const UPixelScalar xoffset = Layout::landscape ? wTabBar->GetTabWidth() : 0;
     const UPixelScalar yoffset = !Layout::landscape ? wTabBar->GetTabHeight() : 0;
-    Sender->move(xoffset, yoffset,
-                 wf->GetClientAreaWindow().get_width() - xoffset,
-                 wf->GetClientAreaWindow().get_height() - yoffset);
+    Sender->Move(xoffset, yoffset,
+                 wf->GetClientAreaWindow().GetWidth() - xoffset,
+                 wf->GetClientAreaWindow().GetHeight() - yoffset);
     fullscreen = true;
-    Sender->show_on_top();
+    Sender->ShowOnTop();
   } else {
-    Sender->move(TaskViewRect.left, TaskViewRect.top,
+    Sender->Move(TaskViewRect.left, TaskViewRect.top,
                  TaskViewRect.right - TaskViewRect.left,
                  TaskViewRect.bottom - TaskViewRect.top);
     fullscreen = false;
@@ -113,12 +113,12 @@ void
 dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
 {
   if (TaskViewRect.right == 0) {
-    TaskViewRect = wTaskView->get_position();
+    TaskViewRect = wTaskView->GetPosition();
     return;
   }
 
   fullscreen = false;
-  wTaskView->move(TaskViewRect.left, TaskViewRect.top,
+  wTaskView->Move(TaskViewRect.left, TaskViewRect.top,
                   TaskViewRect.right - TaskViewRect.left,
                   TaskViewRect.bottom - TaskViewRect.top);
 }
@@ -133,7 +133,7 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   const MapLook &look = UIGlobals::GetMapLook();
   const NMEAInfo &basic = CommonInterface::Basic();
-  PaintTask(canvas, Sender->get_client_rect(), *active_task,
+  PaintTask(canvas, Sender->GetClientRect(), *active_task,
             basic.location_available, basic.location,
             XCSoarInterface::GetMapSettings(),
             look.task, look.airspace,
