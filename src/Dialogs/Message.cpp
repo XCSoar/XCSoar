@@ -34,18 +34,18 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
-class ModalResultButton : public WndButton {
+class ModalResultButton : public WndButton
+{
   WndForm &form;
   int result;
 
 public:
   ModalResultButton(ContainerWindow &parent, const DialogLook &look,
-                    const TCHAR *Caption,
+                    const TCHAR *caption,
                     const PixelRect &rc,
                     const WindowStyle style,
                     WndForm &_form, int _result)
-    :WndButton(parent, look, Caption, rc,
-               style),
+    :WndButton(parent, look, caption, rc, style),
      form(_form), result(_result) {}
 
 protected:
@@ -56,25 +56,25 @@ protected:
 };
 
 int
-MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
+MessageBoxX(const TCHAR *text, const TCHAR *caption, unsigned flags)
 {
-  WndFrame *wText = NULL;
-  WndButton *wButtons[10];
-  int ButtonCount = 0;
+  WndFrame *text_frame = NULL;
+  WndButton *buttons[10];
+  int button_count = 0;
   int i, res;
 
-  assert(lpText != NULL);
+  assert(text != NULL);
 
   SingleWindow &main_window = UIGlobals::GetMainWindow();
   const PixelRect rc = main_window.GetClientRect();
 
-  UPixelScalar Width = Layout::Scale(200);
-  UPixelScalar Height = Layout::Scale(160);
+  UPixelScalar dialog_width = Layout::Scale(200);
+  UPixelScalar dialog_height = Layout::Scale(160);
 
-  PixelScalar X = 0, Y = 0;
+  PixelScalar dialog_x = 0, dialog_y = 0;
 
-  UPixelScalar w = Layout::Scale(60);
-  UPixelScalar h = Layout::Scale(32);
+  UPixelScalar button_width = Layout::Scale(60);
+  UPixelScalar button_height = Layout::Scale(32);
 
   // Create dialog
   WindowStyle style;
@@ -82,110 +82,116 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   style.ControlParent();
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+
   PixelRect form_rc;
-  form_rc.left = X;
-  form_rc.top = Y;
-  form_rc.right = form_rc.left + Width;
-  form_rc.bottom = form_rc.top + Height;
-  WndForm wf(main_window, dialog_look,
-             form_rc, lpCaption,
-             style);
+  form_rc.left = dialog_x;
+  form_rc.top = dialog_y;
+  form_rc.right = form_rc.left + dialog_width;
+  form_rc.bottom = form_rc.top + dialog_height;
+
+  WndForm wf(main_window, dialog_look, form_rc, caption, style);
+
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
   // Create text element
-  wText = new WndFrame(client_area, dialog_look,
-                       0, Layout::Scale(2), Width, Height);
+  text_frame = new WndFrame(client_area, dialog_look, 0, Layout::Scale(2),
+                            dialog_width, dialog_height);
 
-  wText->SetCaption(lpText);
-  wText->SetAlignCenter();
+  text_frame->SetCaption(text);
+  text_frame->SetAlignCenter();
 
-  UPixelScalar text_height = wText->GetTextHeight();
-  wText->Resize(Width, text_height + Layout::Scale(2));
+  UPixelScalar text_height = text_frame->GetTextHeight();
+  text_frame->Resize(dialog_width, text_height + Layout::Scale(2));
 
-  Height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + h;
-  X = ((rc.right - rc.left) - Width) / 2;
-  Y = ((rc.bottom - rc.top) - Height) / 2;
-  wf.Move(X, Y, Width, Height);
+  dialog_height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + button_height;
+  dialog_x = ((rc.right - rc.left) - dialog_width) / 2;
+  dialog_y = ((rc.bottom - rc.top) - dialog_height) / 2;
+  wf.Move(dialog_x, dialog_y, dialog_width, dialog_height);
 
   PixelRect button_rc;
   button_rc.left = 0;
   button_rc.top = Layout::Scale(6) + text_height;
-  button_rc.right = button_rc.left + w;
-  button_rc.bottom = button_rc.top + h;
+  button_rc.right = button_rc.left + button_width;
+  button_rc.bottom = button_rc.top + button_height;
 
   // Create buttons
   WindowStyle button_style;
   button_style.TabStop();
 
-  uType = uType & 0x000f;
-  if (uType == MB_OK || uType == MB_OKCANCEL) {
-    wButtons[ButtonCount] =
+  unsigned button_flags = flags & 0x000f;
+  if (button_flags == MB_OK ||
+      button_flags == MB_OKCANCEL) {
+    buttons[button_count] =
       new ModalResultButton(client_area, dialog_look, _("OK"), button_rc,
                             button_style, wf, IDOK);
 
-    ButtonCount++;
+    button_count++;
   }
 
-  if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
-    wButtons[ButtonCount] =
+  if (button_flags == MB_YESNO ||
+      button_flags == MB_YESNOCANCEL) {
+    buttons[button_count] =
       new ModalResultButton(client_area, dialog_look, _("Yes"), button_rc,
                             button_style, wf, IDYES);
 
-    ButtonCount++;
+    button_count++;
 
-    wButtons[ButtonCount] =
+    buttons[button_count] =
       new ModalResultButton(client_area, dialog_look, _("No"), button_rc,
                             button_style, wf, IDNO);
 
-    ButtonCount++;
+    button_count++;
   }
 
-  if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
-    wButtons[ButtonCount] =
+  if (button_flags == MB_ABORTRETRYIGNORE ||
+      button_flags == MB_RETRYCANCEL) {
+    buttons[button_count] =
       new ModalResultButton(client_area, dialog_look, _("Retry"), button_rc,
                             button_style, wf, IDRETRY);
 
-    ButtonCount++;
+    button_count++;
   }
 
-  if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
-    wButtons[ButtonCount] =
+  if (button_flags == MB_OKCANCEL ||
+      button_flags == MB_RETRYCANCEL ||
+      button_flags == MB_YESNOCANCEL) {
+    buttons[button_count] =
       new ModalResultButton(client_area, dialog_look, _("Cancel"), button_rc,
                             button_style, wf, IDCANCEL);
 
-    ButtonCount++;
+    button_count++;
   }
 
-  if (uType == MB_ABORTRETRYIGNORE) {
-    wButtons[ButtonCount] =
+  if (button_flags == MB_ABORTRETRYIGNORE) {
+    buttons[button_count] =
       new ModalResultButton(client_area, dialog_look, _("Abort"), button_rc,
                             button_style, wf, IDABORT);
 
-    ButtonCount++;
+    button_count++;
 
-    wButtons[ButtonCount] =
+    buttons[button_count] =
       new ModalResultButton(client_area, dialog_look, _("Ignore"), button_rc,
                             button_style, wf, IDIGNORE);
 
-    ButtonCount++;
+    button_count++;
   }
 
-  UPixelScalar d = Width / (ButtonCount);
-  PixelScalar x = d / 2 - w / 2;
+  UPixelScalar max_button_width = dialog_width / button_count;
+  PixelScalar button_x = max_button_width / 2 - button_width / 2;
 
   // Move buttons to the right positions
-  for (i = 0; i < ButtonCount; i++) {
-    wButtons[i]->Move(x, button_rc.top);
-    x += d;
+  for (i = 0; i < button_count; i++) {
+    buttons[i]->Move(button_x, button_rc.top);
+    button_x += max_button_width;
   }
 
   // Show MessageBox and save result
   res = wf.ShowModal();
 
-  delete wText;
-  for (int i = 0; i < ButtonCount; ++i)
-    delete wButtons[i];
+  delete text_frame;
+  for (int i = 0; i < button_count; ++i)
+    delete buttons[i];
   wf.reset();
 
-  return(res);
+  return res;
 }
