@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Util/StaticArray.hpp"
 #include "UIGlobals.hpp"
 
 #include <assert.h>
@@ -59,9 +60,7 @@ int
 ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 {
   WndFrame *text_frame = NULL;
-  WndButton *buttons[10];
-  int button_count = 0;
-  int i, res;
+  StaticArray<WndButton *, 10> buttons;
 
   assert(text != NULL);
 
@@ -120,77 +119,61 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   unsigned button_flags = flags & 0x000f;
   if (button_flags == MB_OK ||
-      button_flags == MB_OKCANCEL) {
-    buttons[button_count] =
+      button_flags == MB_OKCANCEL)
+    buttons.append() =
       new ModalResultButton(client_area, dialog_look, _("OK"), button_rc,
                             button_style, wf, IDOK);
 
-    button_count++;
-  }
-
   if (button_flags == MB_YESNO ||
       button_flags == MB_YESNOCANCEL) {
-    buttons[button_count] =
+    buttons.append() =
       new ModalResultButton(client_area, dialog_look, _("Yes"), button_rc,
                             button_style, wf, IDYES);
 
-    button_count++;
-
-    buttons[button_count] =
+    buttons.append() =
       new ModalResultButton(client_area, dialog_look, _("No"), button_rc,
                             button_style, wf, IDNO);
-
-    button_count++;
   }
 
   if (button_flags == MB_ABORTRETRYIGNORE ||
-      button_flags == MB_RETRYCANCEL) {
-    buttons[button_count] =
+      button_flags == MB_RETRYCANCEL)
+    buttons.append() =
       new ModalResultButton(client_area, dialog_look, _("Retry"), button_rc,
                             button_style, wf, IDRETRY);
 
-    button_count++;
-  }
-
   if (button_flags == MB_OKCANCEL ||
       button_flags == MB_RETRYCANCEL ||
-      button_flags == MB_YESNOCANCEL) {
-    buttons[button_count] =
+      button_flags == MB_YESNOCANCEL)
+    buttons.append() =
       new ModalResultButton(client_area, dialog_look, _("Cancel"), button_rc,
                             button_style, wf, IDCANCEL);
 
-    button_count++;
-  }
-
   if (button_flags == MB_ABORTRETRYIGNORE) {
-    buttons[button_count] =
+    buttons.append() =
       new ModalResultButton(client_area, dialog_look, _("Abort"), button_rc,
                             button_style, wf, IDABORT);
 
-    button_count++;
-
-    buttons[button_count] =
+    buttons.append() =
       new ModalResultButton(client_area, dialog_look, _("Ignore"), button_rc,
                             button_style, wf, IDIGNORE);
-
-    button_count++;
   }
 
-  UPixelScalar max_button_width = dialog_width / button_count;
+  UPixelScalar max_button_width = dialog_width / buttons.size();
   PixelScalar button_x = max_button_width / 2 - button_width / 2;
 
   // Move buttons to the right positions
-  for (i = 0; i < button_count; i++) {
+  for (unsigned i = 0; i < buttons.size(); i++) {
     buttons[i]->Move(button_x, button_rc.top);
     button_x += max_button_width;
   }
 
   // Show MessageBox and save result
-  res = wf.ShowModal();
+  unsigned res = wf.ShowModal();
 
   delete text_frame;
-  for (int i = 0; i < button_count; ++i)
+  for (unsigned i = 0; i < buttons.size(); ++i)
     delete buttons[i];
+
   wf.reset();
 
   return res;
