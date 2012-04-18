@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 
 void
 EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
@@ -32,6 +33,7 @@ EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
                 const EditWindowStyle style)
 {
   read_only = style.is_read_only;
+  origin = 0;
 
   Window::set(&parent, left, top, width, height, style);
 }
@@ -41,8 +43,51 @@ EditWindow::set(ContainerWindow &parent, const PixelRect rc,
                 const EditWindowStyle style)
 {
   read_only = style.is_read_only;
+  origin = 0;
 
   Window::set(&parent, rc, style);
+}
+
+void
+EditWindow::ScrollVertically(int delta_lines)
+{
+  assert_none_locked();
+  assert(IsMultiLine());
+
+  const unsigned visible_rows = GetVisibleRows();
+  const unsigned row_count = GetRowCount();
+
+  if (visible_rows >= row_count)
+    /* all rows are visible at a time, no scrolling needed/possible */
+    return;
+
+  unsigned new_origin = origin + delta_lines;
+  if ((int)new_origin < 0)
+    new_origin = 0;
+  else if (new_origin > row_count - visible_rows)
+    new_origin = row_count - visible_rows;
+
+  if (new_origin != origin) {
+    origin = new_origin;
+    Invalidate();
+  }
+}
+
+void
+EditWindow::OnResize(UPixelScalar width, UPixelScalar height)
+{
+  Window::OnResize(width, height);
+
+  if (IsMultiLine() && !value.empty()) {
+    /* revalidate the scroll position */
+    const unsigned visible_rows = GetVisibleRows();
+    const unsigned row_count = GetRowCount();
+    if (visible_rows >= row_count)
+      origin = 0;
+    else if (origin > row_count - visible_rows)
+      origin = row_count - visible_rows;
+    Invalidate();
+  }
 }
 
 void
@@ -74,9 +119,10 @@ EditWindow::OnPaint(Canvas &canvas)
   PixelScalar padding = Layout::FastScale(2);
   InflateRect(&rc, -padding, -padding);
 
-  if (have_clipping() || IsMultiLine())
+  if (have_clipping() || IsMultiLine()) {
+    rc.top -= origin * GetFont().GetHeight();
     canvas.formatted_text(&rc, value.c_str(), GetTextStyle());
-  else if ((GetTextStyle() & DT_VCENTER) == 0)
+  } else if ((GetTextStyle() & DT_VCENTER) == 0)
     canvas.TextAutoClipped(rc.left, rc.top, value.c_str());
   else {
     PixelScalar canvas_height = rc.bottom - rc.top;
@@ -84,6 +130,45 @@ EditWindow::OnPaint(Canvas &canvas)
     PixelScalar top = rc.top + (canvas_height - text_height) / 2;
     canvas.TextAutoClipped(rc.left, top, value.c_str());
   }
+}
+
+bool
+EditWindow::OnKeyCheck(unsigned key_code) const
+{
+  switch (key_code) {
+  case VK_UP:
+    return IsMultiLine() && origin > 0;
+
+  case VK_DOWN:
+    return IsMultiLine() && GetRowCount() > GetVisibleRows() &&
+      origin < GetRowCount() - GetVisibleRows();
+  }
+
+  return false;
+}
+
+bool
+EditWindow::OnKeyDown(unsigned key_code)
+{
+  switch (key_code) {
+  case VK_UP:
+    if (IsMultiLine()) {
+      ScrollVertically(-1);
+      return true;
+    }
+
+    break;
+
+  case VK_DOWN:
+    if (IsMultiLine()) {
+      ScrollVertically(1);
+      return true;
+    }
+
+    break;
+  }
+
+  return Window::OnKeyDown(key_code);
 }
 
 void

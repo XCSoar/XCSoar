@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/EditWindow.hpp"
 
 #include <commctrl.h>
+#include <windowsx.h>
 
 void
 EditWindow::set(ContainerWindow &parent,
@@ -73,4 +74,10 @@ EditWindow::SetText(const TCHAR *text)
   *p3 = _T('\0');
 
   ::SetWindowText(hWnd, buffer);
+}
+
+void
+EditWindow::ScrollVertically(int delta_lines)
+{
+  Edit_Scroll(*this, delta_lines, 0);
 }

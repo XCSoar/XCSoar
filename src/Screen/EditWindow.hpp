@@ -102,6 +102,11 @@ class EditWindow : public Window {
   bool read_only;
 
   tstring value;
+
+  /**
+   * The first visible line.
+   */
+  unsigned origin;
 #endif
 
 public:
@@ -112,6 +117,16 @@ public:
   void set(ContainerWindow &parent, const PixelRect rc,
            const EditWindowStyle style);
 
+#ifndef USE_GDI
+  gcc_pure
+  unsigned GetVisibleRows() const {
+    assert(IsMultiLine());
+
+    return GetHeight() / GetFont().GetHeight();
+  }
+#endif
+
+  gcc_pure
   unsigned GetRowCount() const {
     assert_none_locked();
 
@@ -184,9 +199,18 @@ public:
 #endif
   }
 
+  /**
+   * Scroll the contents of a multi-line control by the specified
+   * number of lines.
+   */
+  void ScrollVertically(int delta_lines);
+
 #ifndef USE_GDI
 protected:
+  virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual void OnPaint(Canvas &canvas);
+  virtual bool OnKeyCheck(unsigned key_code) const;
+  virtual bool OnKeyDown(unsigned key_code);
 #endif /* !USE_GDI */
 };
 
