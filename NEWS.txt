@@ -36,6 +36,8 @@ Version 6.3.1 - not yet released
   - fix saving of airspace colors (workaround for android compiler bug)
 * Windows
   - fix double key presses on Windows CE / PPC2000
+* Altair
+  - recover focused dialog control
 
 Version 6.3 - 2012/03/29
 * calculations
