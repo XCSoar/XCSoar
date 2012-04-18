@@ -59,9 +59,6 @@ protected:
 int
 ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 {
-  WndFrame *text_frame = NULL;
-  StaticArray<WndButton *, 10> buttons;
-
   assert(text != NULL);
 
   SingleWindow &main_window = UIGlobals::GetMainWindow();
@@ -69,8 +66,6 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   UPixelScalar dialog_width = Layout::Scale(200);
   UPixelScalar dialog_height = Layout::Scale(160);
-
-  PixelScalar dialog_x = 0, dialog_y = 0;
 
   UPixelScalar button_width = Layout::Scale(60);
   UPixelScalar button_height = Layout::Scale(32);
@@ -83,18 +78,19 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
   PixelRect form_rc;
-  form_rc.left = dialog_x;
-  form_rc.top = dialog_y;
-  form_rc.right = form_rc.left + dialog_width;
-  form_rc.bottom = form_rc.top + dialog_height;
+  form_rc.left = 0;
+  form_rc.top = 0;
+  form_rc.right = dialog_width;
+  form_rc.bottom = dialog_height;
 
   WndForm wf(main_window, dialog_look, form_rc, caption, style);
 
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
   // Create text element
-  text_frame = new WndFrame(client_area, dialog_look, 0, Layout::Scale(2),
-                            dialog_width, dialog_height);
+  WndFrame *text_frame = new WndFrame(client_area, dialog_look,
+                                      0, Layout::Scale(2),
+                                      dialog_width, dialog_height);
 
   text_frame->SetCaption(text);
   text_frame->SetAlignCenter();
@@ -103,8 +99,8 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   text_frame->Resize(dialog_width, text_height + Layout::Scale(2));
 
   dialog_height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + button_height;
-  dialog_x = ((rc.right - rc.left) - dialog_width) / 2;
-  dialog_y = ((rc.bottom - rc.top) - dialog_height) / 2;
+  PixelScalar dialog_x = ((rc.right - rc.left) - dialog_width) / 2;
+  PixelScalar dialog_y = ((rc.bottom - rc.top) - dialog_height) / 2;
   wf.Move(dialog_x, dialog_y, dialog_width, dialog_height);
 
   PixelRect button_rc;
@@ -116,6 +112,8 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   // Create buttons
   WindowStyle button_style;
   button_style.TabStop();
+
+  StaticArray<WndButton *, 10> buttons;
 
   unsigned button_flags = flags & 0x000f;
   if (button_flags == MB_OK ||
