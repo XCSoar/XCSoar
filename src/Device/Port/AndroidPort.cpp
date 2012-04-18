@@ -182,8 +182,6 @@ AndroidPort::WaitRead(unsigned timeout_ms)
 void
 AndroidPort::DataReceived(const void *data, size_t length)
 {
-  ScopeLock protect(mutex);
-
   assert(!waiting);
 
   if (running) {
@@ -192,6 +190,8 @@ AndroidPort::DataReceived(const void *data, size_t length)
     const uint8_t *p = (const uint8_t *)data;
 
     while (length > 0) {
+      ScopeLock protect(mutex);
+
       auto r = buffer.Write();
       if (r.length > 0) {
         size_t nbytes = std::min(length, r.length);
