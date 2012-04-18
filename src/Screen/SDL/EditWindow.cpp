@@ -51,7 +51,7 @@ EditWindow::set(ContainerWindow &parent, const PixelRect rc,
 void
 EditWindow::ScrollVertically(int delta_lines)
 {
-  assert_none_locked();
+  AssertNoneLocked();
   assert(IsMultiLine());
 
   const unsigned visible_rows = GetVisibleRows();
@@ -174,7 +174,7 @@ EditWindow::OnKeyDown(unsigned key_code)
 void
 EditWindow::SetText(const TCHAR *text)
 {
-  assert_none_locked();
+  AssertNoneLocked();
 
   if (text != NULL)
     value = text;

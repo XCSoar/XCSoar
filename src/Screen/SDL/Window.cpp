@@ -130,7 +130,7 @@ Window::ClearFocus()
 void
 Window::SetCapture()
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
   if (parent != NULL)
@@ -142,7 +142,7 @@ Window::SetCapture()
 void
 Window::ReleaseCapture()
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
   capture = false;
@@ -208,7 +208,7 @@ Window::Hide()
 void
 Window::BringToTop()
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
   parent->BringChildToTop(*this);
@@ -217,7 +217,7 @@ Window::BringToTop()
 void
 Window::BringToBottom()
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
   parent->BringChildToBottom(*this);

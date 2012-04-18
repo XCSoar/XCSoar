@@ -57,7 +57,7 @@ BaseButtonWindow::Click()
 
 void
 ButtonWindow::set_text(const TCHAR *_text) {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
   if (GetCustomPainting() || _tcschr(_text, _T('&')) == NULL) {
@@ -88,7 +88,7 @@ ButtonWindow::set_text(const TCHAR *_text) {
 const tstring
 ButtonWindow::get_text() const
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
   TCHAR buffer[256]; /* should be large enough for buttons */

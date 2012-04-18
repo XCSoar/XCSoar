@@ -128,7 +128,7 @@ public:
 
   gcc_pure
   unsigned GetRowCount() const {
-    assert_none_locked();
+    AssertNoneLocked();
 
 #ifndef USE_GDI
     const TCHAR *str = value.c_str();
@@ -155,7 +155,7 @@ public:
   }
 
   void SetReadOnly(bool value) {
-    assert_none_locked();
+    AssertNoneLocked();
 
 #ifndef USE_GDI
     read_only = value;
@@ -182,7 +182,7 @@ public:
   }
 
   void Select(int start, int end) {
-    assert_none_locked();
+    AssertNoneLocked();
 
 #ifndef USE_GDI
     // XXX

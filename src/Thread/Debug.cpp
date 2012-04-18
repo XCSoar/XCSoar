@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-assert_none_locked()
+AssertNoneLocked()
 {
   assert(thread_locks_held == 0);
 }

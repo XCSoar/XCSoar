@@ -93,7 +93,7 @@ public:
   }
 
   void set_text(const TCHAR *_text) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
     text = _text;
@@ -196,7 +196,7 @@ public:
   }
 
   bool is_down() const {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
     return (Button_GetState(hWnd) & BST_PUSHED) != 0;

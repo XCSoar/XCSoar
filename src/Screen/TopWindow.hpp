@@ -225,7 +225,7 @@ public:
   void refresh();
 
   void close() {
-    assert_none_locked();
+    AssertNoneLocked();
 
 #ifndef USE_GDI
     OnClose();

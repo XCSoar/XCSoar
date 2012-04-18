@@ -383,7 +383,7 @@ public:
   ContainerWindow *GetRootOwner();
 
   void Move(PixelScalar left, PixelScalar top) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_GDI
@@ -399,7 +399,7 @@ public:
 
   void Move(PixelScalar left, PixelScalar top,
             UPixelScalar width, UPixelScalar height) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_GDI
@@ -422,7 +422,7 @@ public:
    */
   void FastMove(PixelScalar left, PixelScalar top,
                 UPixelScalar width, UPixelScalar height) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_GDI
@@ -439,7 +439,7 @@ public:
    * ContainerWindow and make it visible.
    */
   void MoveAndShow(const PixelRect rc) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifdef USE_GDI
@@ -454,7 +454,7 @@ public:
   }
 
   void Resize(UPixelScalar width, UPixelScalar height) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_GDI
@@ -479,7 +479,7 @@ public:
   void BringToBottom();
 #else
   void BringToTop() {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
     /* not using BringWindowToTop() because it activates the
@@ -490,7 +490,7 @@ public:
   }
 
   void BringToBottom() {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
     ::SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
@@ -500,7 +500,7 @@ public:
 #endif
 
   void ShowOnTop() {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_GDI
@@ -524,7 +524,7 @@ public:
 #endif
 
   void SetFont(const Font &_font) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_GDI
@@ -642,7 +642,7 @@ public:
 #else /* USE_GDI */
 
   void SetFocus() {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
     ::SetFocus(hWnd);
@@ -666,14 +666,14 @@ public:
 #else /* USE_GDI */
 
   void SetCapture() {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
     ::SetCapture(hWnd);
   }
 
   void ReleaseCapture() {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
     ::ReleaseCapture();

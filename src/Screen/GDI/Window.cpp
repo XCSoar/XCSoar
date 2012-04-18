@@ -240,7 +240,7 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif
   };
 
-  assert_none_locked();
+  AssertNoneLocked();
 
   if (message == WM_GETMINMAXINFO)
     /* WM_GETMINMAXINFO is called before WM_CREATE, and we havn't set
@@ -259,7 +259,7 @@ Window::WndProc(HWND _hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   }
 
   LRESULT result = window->OnMessage(_hWnd, message, wParam, lParam);
-  assert_none_locked();
+  AssertNoneLocked();
 
   return result;
 }

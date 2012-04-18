@@ -63,7 +63,7 @@ ProgressBar::set(ContainerWindow &parent,
 void
 ProgressBar::set_range(unsigned min_value, unsigned max_value)
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
 #ifndef USE_GDI
@@ -81,7 +81,7 @@ ProgressBar::set_range(unsigned min_value, unsigned max_value)
 void
 ProgressBar::set_position(unsigned value)
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
 #ifndef USE_GDI
@@ -95,7 +95,7 @@ ProgressBar::set_position(unsigned value)
 void
 ProgressBar::set_step(unsigned size)
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
 #ifndef USE_GDI
@@ -109,7 +109,7 @@ ProgressBar::set_step(unsigned size)
 void
 ProgressBar::step()
 {
-  assert_none_locked();
+  AssertNoneLocked();
   AssertThread();
 
 #ifndef USE_GDI

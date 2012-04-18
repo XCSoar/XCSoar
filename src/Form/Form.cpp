@@ -344,7 +344,7 @@ int WndForm::ShowModeless()
 int
 WndForm::ShowModal()
 {
-  assert_none_locked();
+  AssertNoneLocked();
 
 #define OPENCLOSESUPPRESSTIME 500
 #ifndef USE_GDI

@@ -76,7 +76,7 @@ public:
            const TextWindowStyle style=TextWindowStyle());
 
   void set_text(const TCHAR *_text) {
-    assert_none_locked();
+    AssertNoneLocked();
     AssertThread();
 
 #ifndef USE_GDI

@@ -45,7 +45,7 @@ EditWindow::set(ContainerWindow &parent, const PixelRect rc,
 void
 EditWindow::SetText(const TCHAR *text)
 {
-  assert_none_locked();
+  AssertNoneLocked();
 
   if (!IsMultiLine()) {
     ::SetWindowText(hWnd, text);
