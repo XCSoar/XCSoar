@@ -62,7 +62,6 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   assert(text != NULL);
 
   SingleWindow &main_window = UIGlobals::GetMainWindow();
-  const PixelRect rc = main_window.GetClientRect();
 
   UPixelScalar dialog_width = Layout::Scale(200);
   UPixelScalar dialog_height = Layout::Scale(160);
@@ -98,9 +97,11 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   UPixelScalar text_height = text_frame->GetTextHeight();
   text_frame->Resize(dialog_width, text_height + Layout::Scale(2));
 
+  const PixelSize root_size = main_window.GetSize();
+
   dialog_height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + button_height;
-  PixelScalar dialog_x = ((rc.right - rc.left) - dialog_width) / 2;
-  PixelScalar dialog_y = ((rc.bottom - rc.top) - dialog_height) / 2;
+  PixelScalar dialog_x = (root_size.cx - dialog_width) / 2;
+  PixelScalar dialog_y = (root_size.cy - dialog_height) / 2;
   wf.Move(dialog_x, dialog_y, dialog_width, dialog_height);
 
   PixelRect button_rc;
