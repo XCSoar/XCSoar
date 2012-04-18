@@ -107,6 +107,10 @@ SectorZone::SetEndRadial(const Angle x)
 bool
 SectorZone::IsAngleInSector(const Angle b) const
 {
+  // Quit early if we have a full circle
+  if ((end_radial - start_radial).AsBearing() <= Angle::FullCircle() / 512)
+    return true;
+
   return b.Between(start_radial, end_radial);
 }
 
