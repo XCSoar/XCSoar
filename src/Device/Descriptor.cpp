@@ -102,6 +102,12 @@ void
 DeviceDescriptor::SetConfig(const DeviceConfig &_config)
 {
   config = _config;
+
+  if (config.UsesDriver()) {
+    driver = FindDriverByName(config.driver_name);
+    assert(driver != NULL);
+  } else
+    driver = NULL;
 }
 
 void
@@ -136,11 +142,11 @@ DeviceDescriptor::CancelAsync()
 #endif
 
 bool
-DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
-                       OperationEnvironment &env)
+DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
 {
   assert(port == NULL);
   assert(device == NULL);
+  assert(driver != NULL);
   assert(!ticker);
   assert(!IsBorrowed());
 
@@ -156,7 +162,6 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
   was_alive = false;
 
   port = &_port;
-  driver = &_driver;
 
   assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
   if (driver->CreateOnPort == NULL)
@@ -197,14 +202,6 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalSensors();
 
-  const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
-  if (driver == NULL) {
-    StaticString<256> msg;
-    msg.Format(_T("%s: %s."), _("No such driver"), config.driver_name.c_str());
-    env.SetErrorMessage(msg);
-    return false;
-  }
-
   reopen_clock.Update();
 
   Port *port = OpenPort(config, *this);
@@ -218,7 +215,7 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
     return false;
   }
 
-  if (!Open(*port, *driver, env)) {
+  if (!Open(*port, env)) {
     delete port;
     return false;
   }
@@ -268,7 +265,6 @@ DeviceDescriptor::Close()
   port = NULL;
   delete old_port;
 
-  driver = NULL;
   pipe_to_device = NULL;
   ticker = false;
 

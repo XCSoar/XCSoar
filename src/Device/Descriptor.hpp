@@ -173,8 +173,7 @@ private:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool Open(Port &port, const DeviceRegister &driver,
-            OperationEnvironment &env);
+  bool Open(Port &port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
 

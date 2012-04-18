@@ -18,6 +18,7 @@ Version 6.3.1 - not yet released
   - FLARM: relax timeouts
   - fix timeouts on Windows CE (FLARM driver and others)
   - ignore garbage at the beginning of NMEA lines
+  - fix the NMEA out driver (for Altair double seater and others)
 * logger
   - fix format of IGC 'C' records for takeoff/landing (ambiguous spec)
   - fix landing time in flight logger
