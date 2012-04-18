@@ -341,6 +341,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(wf != NULL);
 
+  dlgWaypointSelectAddToLastUsed(_waypoint);
+
   UpdateCaption(waypoint->name.c_str());
 
   wf->SetKeyDownNotify(FormKeyDown);

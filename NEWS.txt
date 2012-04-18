@@ -27,6 +27,8 @@ Version 6.3.1 - not yet released
 * task manager
   - fix rename/delete function for task files
   - also clear optional starts with "Clear All" button
+* waypoints
+  - add all examined waypoints to recently used waypoint list
 * Linux
   - fix HTTP networking bugs
 * Android
