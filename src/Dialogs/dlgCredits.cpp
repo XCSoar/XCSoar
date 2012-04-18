@@ -52,10 +52,49 @@ OnPrev(gcc_unused WndButton &button)
   tab->PreviousPage();
 }
 
+gcc_pure
+static EditWindow *
+FindEditWindow()
+{
+  const TCHAR *name;
+  switch (tab->GetCurrentPage()) {
+  case 1:
+    name = _T("prpAuthors");
+    break;
+
+  case 2:
+    name = _T("prpLicense");
+    break;
+
+  default:
+    return NULL;
+  }
+
+  return (EditWindow *)wf->FindByName(name);
+}
+
 static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
+    EditWindow *edit;
+
+  case VK_UP:
+    edit = FindEditWindow();
+    if (edit != NULL) {
+      edit->ScrollVertically(-3);
+      return true;
+    } else
+      return false;
+
+  case VK_DOWN:
+    edit = FindEditWindow();
+    if (edit != NULL) {
+      edit->ScrollVertically(3);
+      return true;
+    } else
+      return false;
+
   case VK_LEFT:
 #ifdef GNAV
   case '6':
