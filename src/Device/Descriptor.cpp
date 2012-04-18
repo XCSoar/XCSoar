@@ -95,6 +95,19 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
 #endif
    ticker(false), borrowed(false)
 {
+  config.Clear();
+}
+
+void
+DeviceDescriptor::SetConfig(const DeviceConfig &_config)
+{
+  config = _config;
+}
+
+void
+DeviceDescriptor::ClearConfig()
+{
+  config.Clear();
 }
 
 #if defined(__clang__) || GCC_VERSION >= 40700

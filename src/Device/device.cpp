@@ -99,10 +99,10 @@ devStartup()
 
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceConfig &config = device_list[i]->SetConfig();
-    config = settings.devices[i];
+    DeviceDescriptor &device = *device_list[i];
+    const DeviceConfig &config = settings.devices[i];
     if (!config.IsAvailable()) {
-      config.Clear();
+      device.ClearConfig();
       continue;
     }
 
@@ -114,10 +114,11 @@ devStartup()
         overlap = true;
 
     if (overlap) {
-      config.Clear();
+      device.ClearConfig();
       continue;
     }
 
+    device.SetConfig(config);
     devInitOne(*device_list[i], pDevNmeaOut);
   }
 
@@ -127,10 +128,13 @@ devStartup()
        available on this platform */
     LogStartUp(_T("Falling back to built-in GPS"));
 
-    DeviceConfig &config = device_list[0]->SetConfig();
+    DeviceConfig config;
     config.Clear();
     config.port_type = DeviceConfig::PortType::INTERNAL;
-    devInitOne(*device_list[0], pDevNmeaOut);
+
+    DeviceDescriptor &device = *device_list[0];
+    device.SetConfig(config);
+    devInitOne(device, pDevNmeaOut);
 #endif
   }
 

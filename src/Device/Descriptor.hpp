@@ -133,9 +133,8 @@ public:
     return config;
   }
 
-  DeviceConfig &SetConfig() {
-    return config;
-  }
+  void SetConfig(const DeviceConfig &config);
+  void ClearConfig();
 
   void SetPipeTo(DeviceDescriptor *_pipe_to_device) {
     pipe_to_device = _pipe_to_device;
