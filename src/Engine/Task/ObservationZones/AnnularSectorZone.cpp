@@ -62,7 +62,7 @@ AnnularSectorZone::GetBoundary() const
   const Angle delta = Angle::FullCircle() / steps;
   const Angle start = GetStartRadial().AsBearing();
   Angle end = GetEndRadial().AsBearing();
-  if (end <= start)
+  if (end <= start + Angle::FullCircle() / 512)
     end += Angle::FullCircle();
 
   const GeoPoint inner_start =
