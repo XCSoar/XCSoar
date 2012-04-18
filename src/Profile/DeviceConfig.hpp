@@ -213,7 +213,7 @@ struct DeviceConfig {
   static bool UsesDriver(PortType port_type) {
     return port_type == PortType::SERIAL || port_type == PortType::RFCOMM ||
       port_type == PortType::AUTO || port_type == PortType::TCP_LISTENER ||
-      port_type == PortType::IOIOUART;
+      port_type == PortType::IOIOUART || port_type == PortType::PTY;
   }
 
   bool UsesDriver() const {
