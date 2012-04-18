@@ -97,7 +97,7 @@ static TabbedControl *tabbed;
 static void
 SetParametersScheme(int schemetype)
 {
-  if(MessageBoxX(_("Set new audio scheme?  Old values will be lost."),
+  if(ShowMessageBox(_("Set new audio scheme?  Old values will be lost."),
                  _T("Vega"),
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;

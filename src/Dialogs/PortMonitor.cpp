@@ -104,7 +104,7 @@ static void
 OnReconnectClicked(gcc_unused WndButton &button)
 {
   if (device->IsOccupied()) {
-    MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
+    ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
     return;
   }
 

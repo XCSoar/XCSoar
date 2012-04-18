@@ -130,7 +130,7 @@ ManageCAI302Widget::OnAction(int id)
 
   case DeleteAllFlights:
     {
-      if (MessageBoxX(_("Do you really want to delete all flights from the device?"),
+      if (ShowMessageBox(_("Do you really want to delete all flights from the device?"),
                       _T("CAI 302"), MB_YESNO) != IDYES)
         return;
 

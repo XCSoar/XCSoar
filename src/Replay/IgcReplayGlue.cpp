@@ -76,7 +76,7 @@ IgcReplayGlue::OnStop()
 void
 IgcReplayGlue::OnBadFile()
 {
-  MessageBoxX(_("Could not open IGC file!"),
+  ShowMessageBox(_("Could not open IGC file!"),
               _("Flight replay"), MB_OK | MB_ICONINFORMATION);
 }
 

@@ -209,7 +209,7 @@ static void
 OnTeamClicked(gcc_unused WndButton &Sender)
 {
   // Ask for confirmation
-  if (MessageBoxX(_("Do you want to set this FLARM contact as your new teammate?"),
+  if (ShowMessageBox(_("Do you want to set this FLARM contact as your new teammate?"),
                   _("New Teammate"), MB_YESNO) != IDYES)
     return;
 

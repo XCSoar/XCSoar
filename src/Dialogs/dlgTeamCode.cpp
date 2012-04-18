@@ -150,7 +150,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
       return;
     }
   } else {
-    MessageBoxX(_("Unknown Competition Number"),
+    ShowMessageBox(_("Unknown Competition Number"),
                 _("Not Found"), MB_OK | MB_ICONINFORMATION);
   }
 

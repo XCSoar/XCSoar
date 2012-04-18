@@ -168,7 +168,7 @@ LoadWithDialog(unsigned i)
                 list[i].name.c_str());
   }
 
-  MessageBoxX(text, title, MB_OK);
+  ShowMessageBox(text, title, MB_OK);
 
   return result;
 }
@@ -193,7 +193,7 @@ NewClicked(gcc_unused WndButton &button)
 
   while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane)) {
     if (plane.registration.empty()) {
-      MessageBoxX(_("Please enter the registration of the plane!"),
+      ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);
       continue;
     }
@@ -209,7 +209,7 @@ NewClicked(gcc_unused WndButton &button)
       tmp.Format(_("A plane profile \"%s\" already exists. "
                    "Do you want to overwrite it?"),
                    filename.c_str());
-      if (MessageBoxX(tmp, _("Overwrite"), MB_YESNO) != IDYES)
+      if (ShowMessageBox(tmp, _("Overwrite"), MB_YESNO) != IDYES)
         continue;
     }
 
@@ -233,7 +233,7 @@ EditClicked(gcc_unused WndButton &button)
 
   while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane)) {
     if (plane.registration.empty()) {
-      MessageBoxX(_("Please enter the registration of the plane!"),
+      ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);
       continue;
     }
@@ -252,7 +252,7 @@ EditClicked(gcc_unused WndButton &button)
         tmp.Format(_("A plane profile \"%s\" already exists. "
                      "Do you want to overwrite it?"),
                      filename.c_str());
-        if (MessageBoxX(tmp, _("Overwrite"), MB_YESNO) != IDYES)
+        if (ShowMessageBox(tmp, _("Overwrite"), MB_YESNO) != IDYES)
           continue;
       }
 
@@ -282,7 +282,7 @@ DeleteClicked(gcc_unused WndButton &button)
   StaticString<256> tmp;
   tmp.Format(_("Do you really want to delete plane profile \"%s\"?"),
              list[plane_list->GetCursorIndex()].name.c_str());
-  if (MessageBoxX(tmp, _("Delete"), MB_YESNO) != IDYES)
+  if (ShowMessageBox(tmp, _("Delete"), MB_YESNO) != IDYES)
     return;
 
   File::Delete(list[plane_list->GetCursorIndex()].path);
@@ -298,7 +298,7 @@ ListItemSelected(unsigned i)
   tmp.Format(_("Do you want to load plane profile \"%s\"?"),
              list[i].name.c_str());
 
-  if (MessageBoxX(tmp, _("Load"), MB_YESNO) == IDYES)
+  if (ShowMessageBox(tmp, _("Load"), MB_YESNO) == IDYES)
     if (LoadWithDialog(i))
       dialog->SetModalResult(mrOK);
 }

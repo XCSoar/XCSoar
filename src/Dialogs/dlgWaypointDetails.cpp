@@ -222,7 +222,7 @@ OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
   if (protected_task_manager == NULL)
     return;
 
-  if ((ordered_task_size() > 2) && MessageBoxX(_("Clear current task?"),
+  if ((ordered_task_size() > 2) && ShowMessageBox(_("Clear current task?"),
                         _("Goto and clear task"), MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
@@ -234,7 +234,7 @@ OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
   case NOTASK:
   case UNMODIFIED:
   case INVALID:
-    MessageBoxX(_("Unknown error creating task."), _("Error"),
+    ShowMessageBox(_("Unknown error creating task."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
   }

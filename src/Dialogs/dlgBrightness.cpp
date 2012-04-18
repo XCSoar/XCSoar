@@ -124,7 +124,7 @@ dlgBrightnessShowModal()
 {
   /* XXX this is ugly, non-Altair platforms should not even see the
      according menu item; not translating this superfluous message */
-  MessageBoxX(_T("Only available on Altair"), _T("Brightness"),
+  ShowMessageBox(_T("Only available on Altair"), _T("Brightness"),
               MB_OK|MB_ICONERROR);
 }
 

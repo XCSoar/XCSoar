@@ -238,7 +238,7 @@ ShowParseWarning(int line, const TCHAR* str)
   StaticString<256> buffer;
   buffer.Format(_T("%s: %d\r\n\"%s\"\r\n%s."),
                 _("Parse Error at Line"), line, str, _("Line skipped."));
-  return (MessageBoxX(buffer, _("Airspace"), MB_OKCANCEL) == IDOK);
+  return (ShowMessageBox(buffer, _("Airspace"), MB_OKCANCEL) == IDOK);
 
 }
 

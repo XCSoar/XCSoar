@@ -263,7 +263,7 @@ InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
     if (id.IsDefined())
       dlgFlarmTrafficDetailsShowModal(id);
   } else {
-    MessageBoxX(_("Unknown competition number"),
+    ShowMessageBox(_("Unknown competition number"),
                 _("Not found"), MB_OK | MB_ICONINFORMATION);
   }
 }

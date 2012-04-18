@@ -56,7 +56,7 @@ protected:
 };
 
 int
-MessageBoxX(const TCHAR *text, const TCHAR *caption, unsigned flags)
+ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 {
   WndFrame *text_frame = NULL;
   WndButton *buttons[10];

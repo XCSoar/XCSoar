@@ -54,17 +54,17 @@ ReplaceInTask(ProtectedTaskManager &task_manager,
     return true;
 
   case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
+    ShowMessageBox(_("No task defined."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 
   case MapTaskManager::UNMODIFIED:
-    MessageBoxX(_("No active task point."), _("Replace in task"),
+    ShowMessageBox(_("No active task point."), _("Replace in task"),
                 MB_OK | MB_ICONINFORMATION);
     break;
 
   case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+    ShowMessageBox(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 
@@ -86,23 +86,23 @@ InsertInTask(ProtectedTaskManager &task_manager,
     return true;
 
   case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
+    ShowMessageBox(_("No task defined."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 
   case MapTaskManager::UNMODIFIED:
   case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+    ShowMessageBox(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 
   case MapTaskManager::MUTATED_TO_GOTO:
-    MessageBoxX(_("Created Goto Task."), _("Success"),
+    ShowMessageBox(_("Created Goto Task."), _("Success"),
                 MB_OK | MB_ICONEXCLAMATION);
     return true;
 
   case MapTaskManager::MUTATED_FROM_GOTO:
-    MessageBoxX(_("Created 2-point task from Goto Task."), _("Success"),
+    ShowMessageBox(_("Created 2-point task from Goto Task."), _("Success"),
                 MB_OK | MB_ICONEXCLAMATION);
     return true;
   }
@@ -120,23 +120,23 @@ AppendToTask(ProtectedTaskManager &task_manager,
     return true;
 
   case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
+    ShowMessageBox(_("No task defined."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 
   case MapTaskManager::UNMODIFIED:
   case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+    ShowMessageBox(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 
   case MapTaskManager::MUTATED_TO_GOTO:
-    MessageBoxX(_("Created Goto Task."), _("Success"),
+    ShowMessageBox(_("Created Goto Task."), _("Success"),
                 MB_OK | MB_ICONEXCLAMATION);
     return true;
 
   case MapTaskManager::MUTATED_FROM_GOTO:
-    MessageBoxX(_("Created 2-point task from Goto Task."), _("Success"),
+    ShowMessageBox(_("Created 2-point task from Goto Task."), _("Success"),
                 MB_OK | MB_ICONEXCLAMATION);
     return true;
   }
@@ -154,17 +154,17 @@ RemoveFromTask(ProtectedTaskManager &task_manager,
     return true;
 
   case MapTaskManager::NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
+    ShowMessageBox(_("No task defined."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 
   case MapTaskManager::UNMODIFIED:
-    MessageBoxX(_("Waypoint not in task."), _("Remove from task"),
+    ShowMessageBox(_("Waypoint not in task."), _("Remove from task"),
                 MB_OK | MB_ICONINFORMATION);
     break;
 
   case MapTaskManager::INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+    ShowMessageBox(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
 

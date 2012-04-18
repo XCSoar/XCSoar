@@ -83,7 +83,7 @@ RemoveClicked(gcc_unused WndButton &Sender)
   tmp.Format(_("Do you want to remove station %s?"),
              station_iterator->GetCodeT());
 
-  if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
+  if (ShowMessageBox(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
   noaa_store->erase(station_iterator);
@@ -128,7 +128,7 @@ dlgNOAADetailsShowModal(SingleWindow &parent, NOAAStore::iterator iterator)
 void
 dlgNOAADetailsShowModal(SingleWindow &parent, unsigned station_index)
 {
-  MessageBoxX(_("This function is not available on your platform yet."),
+  ShowMessageBox(_("This function is not available on your platform yet."),
               _("Error"), MB_OK);
 }
 #endif

@@ -294,7 +294,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 static void 
 OnRemoveClicked(gcc_unused WndButton &Sender)
 {
-  if (MessageBoxX(_("Remove task point?"), _("Task Point"),
+  if (ShowMessageBox(_("Remove task point?"), _("Task Point"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 

@@ -164,11 +164,11 @@ dlgTaskManager::CommitTaskChanges()
     return true;
   }
 
-  MessageBoxX(getTaskValidationErrors(
+  ShowMessageBox(getTaskValidationErrors(
     active_task->GetFactory().GetValidationErrors()),
     _("Validation Errors"), MB_ICONEXCLAMATION);
 
-  return (MessageBoxX(_("Task not valid. Changes will be lost.\nContinue?"),
+  return (ShowMessageBox(_("Task not valid. Changes will be lost.\nContinue?"),
                       _("Task Manager"), MB_YESNO | MB_ICONQUESTION) == IDYES);
 }
 

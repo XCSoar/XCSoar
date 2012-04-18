@@ -50,7 +50,7 @@ static void
 OnWaypointNewClicked(gcc_unused WndButton &Sender)
 {
   if (!WaypointGlue::IsWritable()) {
-    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
     return;
   }
 
@@ -73,7 +73,7 @@ static void
 OnWaypointEditClicked(gcc_unused WndButton &Sender)
 {
   if (!WaypointGlue::IsWritable()) {
-    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
     return;
   }
 
@@ -95,7 +95,7 @@ static void
 SaveWaypoints()
 {
   if (!WaypointGlue::SaveWaypoints(way_points))
-    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
   else
     WaypointFileChanged = true;
 
@@ -112,7 +112,7 @@ static void
 OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
 {
   if (!WaypointGlue::IsWritable()) {
-    MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
+    ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
     return;
   }
 
@@ -120,7 +120,7 @@ OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
   int res;
   res = dlgWaypointSelect(XCSoarInterface::Basic().location);
   if (res != -1){
-    if(MessageBoxX(way_points.get(res).name,
+    if(ShowMessageBox(way_points.get(res).name,
                    _("Delete Waypoint?"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
       Waypoint &waypoint = way_points.set(res);
@@ -155,7 +155,7 @@ dlgConfigWaypointsShowModal()
   wf->ShowModal();
 
   if (WaypointsNeedSave &&
-      MessageBoxX(_("Save changes to waypoint file?"), _("Waypoints edited"),
+      ShowMessageBox(_("Save changes to waypoint file?"), _("Waypoints edited"),
                   MB_YESNO | MB_ICONQUESTION) == IDYES)
       SaveWaypoints();
 

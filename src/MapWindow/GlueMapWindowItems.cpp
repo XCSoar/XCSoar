@@ -79,7 +79,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   // Show the list dialog
   if (list.empty()) {
     if (show_empty_message)
-      MessageBoxX(_("There is nothing interesting near this location."),
+      ShowMessageBox(_("There is nothing interesting near this location."),
                   _("Map elements at this location"), MB_OK | MB_ICONINFORMATION);
 
     return false;

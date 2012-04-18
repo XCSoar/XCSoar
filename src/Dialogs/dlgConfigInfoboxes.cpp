@@ -112,7 +112,7 @@ OnPaste(gcc_unused WndButton &button)
   if (clipboard_size == 0)
     return;
 
-  if(MessageBoxX(_("Overwrite?"), _("InfoBox paste"),
+  if(ShowMessageBox(_("Overwrite?"), _("InfoBox paste"),
                  MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 

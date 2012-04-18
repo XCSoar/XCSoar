@@ -377,7 +377,7 @@ dlgWaypointEditShowModal(Waypoint &way_point)
 
   if (CommonInterface::GetUISettings().coordinate_format ==
       CoordinateFormat::UTM) {
-    MessageBoxX(
+    ShowMessageBox(
         _("Sorry, the waypoint editor is not yet available for the UTM coordinate format."),
         _("Waypoint Editor"), MB_OK);
     return false;
