@@ -158,6 +158,14 @@ public:
 #endif
   }
 
+  bool IsMultiLine() const {
+#ifndef USE_GDI
+    return (get_text_style() & DT_WORDBREAK) != 0;
+#else
+    return (get_window_style() & ES_MULTILINE) != 0;
+#endif
+  }
+
   void Select(int start, int end) {
     assert_none_locked();
 
