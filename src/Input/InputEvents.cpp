@@ -131,6 +131,12 @@ InputEvents::setMode(Mode mode)
   if (mode == current_mode)
     return;
 
+  if (current_mode == MODE_PAN)
+    /* disable pan mode before displaying the normal menu; leaving pan
+       mode enabled would be confusing for the user, and doesn't look
+       consistent */
+    LeavePan();
+
   current_mode = mode;
   UpdateOverlayMode();
 
@@ -423,11 +429,6 @@ InputEvents::HideMenu()
 void
 InputEvents::ShowMenu()
 {
-  /* disable pan mode before displaying the normal menu; leaving pan
-     mode enabled would be confusing for the user, and doesn't look
-     consistent */
-  LeavePan();
-
   setMode(MODE_MENU);
   MenuTimeOut = 0;
   ProcessMenuTimer();
