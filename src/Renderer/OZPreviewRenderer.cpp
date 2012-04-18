@@ -46,9 +46,12 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
     scale = fixed(radius) / ((const CylinderZone &)oz).GetRadius();
     center = oz.GetReference();
   } else {
-    GeoBounds bounds(oz.GetBoundaryParametric(fixed_one));
-    for (fixed i = fixed_zero; i < fixed_one; i += fixed_one / 10)
-      bounds.Extend(oz.GetBoundaryParametric(i));
+    ObservationZone::Boundary boundary = oz.GetBoundary();
+
+    auto it = boundary.begin();
+    GeoBounds bounds(*it);
+    for (auto it_end = boundary.end(); it != it_end; ++it)
+      bounds.Extend(*it);
 
     center = bounds.GetCenter();
 
