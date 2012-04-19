@@ -64,6 +64,7 @@ SearchPointVector::Project(const TaskProjection& tp)
     i->project(tp);
 }
 
+gcc_pure
 static FlatGeoPoint
 NearestPoint(const FlatGeoPoint &p1, const FlatGeoPoint &p2,
               const FlatGeoPoint &p3)
@@ -86,6 +87,7 @@ NearestPoint(const FlatGeoPoint &p1, const FlatGeoPoint &p2,
   }
 }
 
+gcc_pure
 static FlatGeoPoint
 SegmentNearestPoint(const SearchPointVector& spv,
                       const SearchPointVector::const_iterator i1,
@@ -102,6 +104,7 @@ SegmentNearestPoint(const SearchPointVector& spv,
   }
 }
 
+gcc_pure
 static FlatGeoPoint
 NearestPointNonConvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
 {
