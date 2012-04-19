@@ -31,13 +31,13 @@
 class FlatRay {
 public:
   /** Origin of ray */
-  const FlatGeoPoint point;
+  FlatGeoPoint point;
   /** Vector representing ray direction and length */
-  const FlatGeoPoint vector;
+  FlatGeoPoint vector;
   /** speedups for box intersection test */
-  const fixed fx;
+  fixed fx;
   /** speedups for box intersection test */
-  const fixed fy;
+  fixed fy;
 
   /**
    * Constructor given start/end locations
