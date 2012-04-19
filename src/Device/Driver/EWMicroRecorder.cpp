@@ -358,10 +358,6 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
 
   port.StopRxThread();
 
-  /* during tests, the EW has taken up to one second to respond to
-     the command \x18 */
-  port.SetRxTimeout(2500);
-
   bool success = DeclareInner(port, declaration, env);
 
   // go back to NMEA mode
