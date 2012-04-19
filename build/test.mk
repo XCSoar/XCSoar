@@ -2190,6 +2190,8 @@ EMULATE_DEVICE_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Port/LineHandler.cpp \
 	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Driver/FLARM/BinaryProtocol.cpp \
+	$(SRC)/Device/Driver/FLARM/CRC16.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/IO/CSVLine.cpp \

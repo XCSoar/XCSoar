@@ -26,10 +26,12 @@ Copyright_License {
 
 #include "DeviceEmulator.hpp"
 #include "Device/Port/LineHandler.hpp"
+#include "Device/Driver/FLARM/BinaryProtocol.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Util/Macros.hpp"
+#include "Util/FifoBuffer.hpp"
 
 #include <string>
 #include <map>
@@ -39,8 +41,11 @@ Copyright_License {
 class FLARMEmulator : public Emulator, PortLineHandler {
   std::map<std::string, std::string> settings;
 
+  bool binary;
+  FifoBuffer<char, 256u> binary_buffer;
+
 public:
-  FLARMEmulator() {
+  FLARMEmulator():binary(false) {
     handler = this;
   }
 
@@ -82,10 +87,126 @@ private:
       PFLAC_R(line);
   }
 
+  void PFLAX() {
+    binary = true;
+    binary_buffer.Clear();
+  }
+
+  size_t Unescape(const uint8_t *const data, const uint8_t *const end,
+                  void *_dest, size_t length) {
+    uint8_t *dest = (uint8_t *)_dest;
+
+    const uint8_t *p;
+    for (p = data; length > 0; ++p) {
+      if (p >= end)
+        return std::min(p - data, end - data - 1);
+
+      if (*p == FLARM::START_FRAME)
+        return std::min(p - data, end - data - 1);
+
+      if (*p == FLARM::ESCAPE) {
+        ++p;
+        if (p >= end)
+          return std::min(p - data, end - data - 1);
+
+        if (*p == FLARM::ESCAPE_START)
+          *dest++ = FLARM::START_FRAME;
+        else if (*p == FLARM::ESCAPE_ESCAPE)
+          *dest++ = FLARM::ESCAPE;
+        else
+          return std::min(p - data, end - data - 1);
+      } else
+        *dest++ = *p;
+    }
+
+    return p - data;
+  }
+
+  bool SendACK(uint16_t sequence_number) {
+    uint16_t payload = ToLE16(sequence_number);
+    FLARM::FrameHeader header =
+      FLARM::PrepareFrameHeader(sequence_number, FLARM::MT_ACK,
+                                &payload, sizeof(payload));
+    return port->Write(FLARM::START_FRAME) &&
+      FLARM::SendEscaped(*port, &header, sizeof(header), *env, 2000) &&
+      FLARM::SendEscaped(*port, &payload, sizeof(payload), *env, 2000);
+  }
+
+  size_t HandleBinary(const void *_data, size_t length) {
+    const uint8_t *const data = (const uint8_t *)_data, *end = data + length;
+    const uint8_t *p = data;
+
+    p = std::find(p, end, FLARM::START_FRAME);
+    if (p == NULL)
+      return length;
+
+    ++p;
+
+    FLARM::FrameHeader header;
+    size_t nbytes = Unescape(p, end, &header, sizeof(header));
+    p += nbytes;
+    if (nbytes < sizeof(header))
+      return p - data;
+
+    //XXX size_t payload_length = header.GetLength();
+
+    switch (header.type) {
+    case FLARM::MT_PING:
+    case FLARM::MT_SELECTRECORD:
+      SendACK(header.GetSequenceNumber());
+      break;
+
+    case FLARM::MT_EXIT:
+      SendACK(header.GetSequenceNumber());
+      binary = false;
+      break;
+    }
+
+    return p - data;
+  }
+
+  void BinaryReceived(const void *_data, size_t length) {
+    const uint8_t *data = (const uint8_t *)_data, *end = data + length;
+
+    do {
+      /* append new data to buffer, as much as fits there */
+      auto range = binary_buffer.Write();
+      if (range.IsEmpty()) {
+        /* overflow: reset buffer to recover quickly */
+        binary_buffer.Clear();
+        continue;
+      }
+
+      size_t nbytes = std::min(size_t(range.length), size_t(end - data));
+      memcpy(range.data, data, nbytes);
+      data += nbytes;
+      binary_buffer.Append(nbytes);
+
+      while (true) {
+        range = binary_buffer.Read();
+        if (range.IsEmpty())
+          break;
+
+        size_t nbytes = HandleBinary(range.data, range.length);
+        if (nbytes == 0) {
+          if (binary_buffer.IsFull())
+            binary_buffer.Clear();
+          break;
+        }
+
+        binary_buffer.Consume(nbytes);
+      }
+    } while (data < end);
+  }
+
 protected:
   virtual void DataReceived(const void *data, size_t length) {
-    fwrite(data, 1, length, stdout);
-    PortLineHandler::DataReceived(data, length);
+    if (binary) {
+      BinaryReceived(data, length);
+    } else {
+      fwrite(data, 1, length, stdout);
+      PortLineHandler::DataReceived(data, length);
+    }
   }
 
   virtual void LineReceived(const char *_line) {
@@ -97,8 +218,13 @@ protected:
       return;
 
     NMEAInputLine line(_line);
-    if (line.read_compare("$PFLAC"))
+    char cmd[32];
+    line.read(cmd, ARRAY_SIZE(cmd));
+
+    if (strcmp(cmd, "$PFLAC") == 0)
       PFLAC(line);
+    else if (strcmp(cmd, "$PFLAX") == 0)
+      PFLAX();
   }
 };
 
