@@ -593,12 +593,6 @@ ChartRenderer::screenY(fixed y) const
   return (long)((y_max - y) * yscale) + rc.top;
 }
 
-PixelScalar
-ChartRenderer::screenS(fixed s) const
-{
-  return (long)(s * yscale);
-}
-
 void
 ChartRenderer::DrawArrow(const fixed x, const fixed y, const fixed mag,
                          const Angle angle, ChartLook::Style Style)

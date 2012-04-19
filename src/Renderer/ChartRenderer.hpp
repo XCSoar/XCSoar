@@ -128,9 +128,6 @@ public:
   PixelScalar screenY(fixed y) const;
 
   gcc_pure
-  PixelScalar screenS(fixed s) const;
-
-  gcc_pure
   RasterPoint ToScreen(fixed x, fixed y) const {
     return RasterPoint{ screenX(x), screenY(y) };
   }
