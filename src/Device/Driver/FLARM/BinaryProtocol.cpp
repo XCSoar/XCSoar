@@ -22,18 +22,14 @@ Copyright_License {
 */
 
 #include "Device.hpp"
+#include "CRC16.hpp"
 #include "Device/Port/Port.hpp"
 #include "TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 
-#define FLARM_STARTFRAME 0x73
-#define FLARM_ESCAPE 0x78
-#define FLARM_ESC_ESC 0x55
-#define FLARM_ESC_START 0x31
-
 bool
-FlarmDevice::SendEscaped(const void *buffer, size_t length,
-                         OperationEnvironment &env, unsigned timeout_ms)
+FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
+                   OperationEnvironment &env, unsigned timeout_ms)
 {
   assert(buffer != NULL);
   assert(length > 0);
@@ -49,10 +45,10 @@ FlarmDevice::SendEscaped(const void *buffer, size_t length,
     // Check for bytes that need to be escaped and send
     // the appropriate replacements
     bool result;
-    if (*p == FLARM_STARTFRAME)
-      result = port.Write(FLARM_ESCAPE) && port.Write(FLARM_ESC_START);
-    else if (*p == FLARM_ESCAPE)
-      result = port.Write(FLARM_ESCAPE) && port.Write(FLARM_ESC_ESC);
+    if (*p == START_FRAME)
+      result = port.Write(ESCAPE) && port.Write(ESCAPE_START);
+    else if (*p == ESCAPE)
+      result = port.Write(ESCAPE) && port.Write(ESCAPE_ESCAPE);
     else
       // Otherwise just send the original byte
       result = port.Write(*p);
@@ -67,8 +63,8 @@ FlarmDevice::SendEscaped(const void *buffer, size_t length,
 }
 
 bool
-FlarmDevice::ReceiveEscaped(void *buffer, size_t length,
-                            OperationEnvironment &env, unsigned timeout_ms)
+FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
+                      OperationEnvironment &env, unsigned timeout_ms)
 {
   assert(buffer != NULL);
   assert(length > 0);
@@ -90,10 +86,10 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length,
       return false;
 
     // If a STARTFRAME was detected inside of the frame -> cancel
-    if (c == FLARM_STARTFRAME)
+    if (c == START_FRAME)
       return false;
 
-    if (c == FLARM_ESCAPE) {
+    if (c == ESCAPE) {
       // Read next character after the ESCAPE
       if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
         return false;
@@ -103,13 +99,13 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length,
         return false;
 
       switch (c2) {
-      case FLARM_ESC_ESC:
+      case ESCAPE_ESCAPE:
         // Nothing to do because ESCAPE is already in the buffer
         break;
 
-      case FLARM_ESC_START:
+      case ESCAPE_START:
         // Replace the byte in the buffer with the unescaped STARTFRAME byte
-        c = FLARM_STARTFRAME;
+        c = START_FRAME;
         break;
 
       default:
@@ -128,56 +124,18 @@ FlarmDevice::ReceiveEscaped(void *buffer, size_t length,
 bool
 FlarmDevice::SendStartByte()
 {
-  return port.Write(FLARM_STARTFRAME);
+  return port.Write(FLARM::START_FRAME);
 }
 
 bool
 FlarmDevice::WaitForStartByte(OperationEnvironment &env, unsigned timeout_ms)
 {
-  return port.WaitForChar(FLARM_STARTFRAME, env, timeout_ms) == Port::WaitResult::READY;
+  return port.WaitForChar(FLARM::START_FRAME, env, timeout_ms) == Port::WaitResult::READY;
 }
 
-/*
- * Source: FLARM_BINCOMM.pdf
- */
-static uint16_t
-crc_update(uint16_t crc, uint8_t data)
-{
-  crc = crc ^ ((uint16_t)data << 8);
-  for (unsigned i = 0; i < 8; ++i) {
-    if (crc & 0x8000)
-      crc = (crc << 1) ^ 0x1021;
-    else
-      crc <<= 1;
-  }
-  return crc;
-}
-
-uint16_t
-FlarmDevice::CalculateCRC(const FrameHeader &header,
+FLARM::FrameHeader
+FLARM::PrepareFrameHeader(unsigned sequence_number, MessageType message_type,
                           const void *data, size_t length)
-{
-  assert((data != NULL && length > 0) || (data == NULL && length == 0));
-
-  uint16_t crc = 0x00;
-
-  const uint8_t *_header = (const uint8_t *)&header;
-  for (unsigned i = 0; i < 6; ++i, ++_header)
-    crc = crc_update(crc, *_header);
-
-  if (length == 0 || data == NULL)
-    return crc;
-
-  const uint8_t *_data = (const uint8_t *)data;
-  for (unsigned i = 0; i < length; ++i, ++_data)
-    crc = crc_update(crc, *_data);
-
-  return crc;
-}
-
-FlarmDevice::FrameHeader
-FlarmDevice::PrepareFrameHeader(MessageType message_type,
-                                const void *data, size_t length)
 {
   assert((data != NULL && length > 0) || (data == NULL && length == 0));
 
@@ -190,21 +148,29 @@ FlarmDevice::PrepareFrameHeader(MessageType message_type,
   return header;
 }
 
+FLARM::FrameHeader
+FlarmDevice::PrepareFrameHeader(FLARM::MessageType message_type,
+                                const void *data, size_t length)
+{
+  return FLARM::PrepareFrameHeader(sequence_number++, message_type,
+                                   data, length);
+}
+
 bool
-FlarmDevice::SendFrameHeader(const FrameHeader &header,
+FlarmDevice::SendFrameHeader(const FLARM::FrameHeader &header,
                              OperationEnvironment &env, unsigned timeout_ms)
 {
   return SendEscaped(&header, sizeof(header), env, timeout_ms);
 }
 
 bool
-FlarmDevice::ReceiveFrameHeader(FrameHeader &header,
+FlarmDevice::ReceiveFrameHeader(FLARM::FrameHeader &header,
                                 OperationEnvironment &env, unsigned timeout_ms)
 {
   return ReceiveEscaped(&header, sizeof(header), env, timeout_ms);
 }
 
-FlarmDevice::MessageType
+FLARM::MessageType
 FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               AllocatedArray<uint8_t> &data, uint16_t &length,
                               OperationEnvironment &env, unsigned timeout_ms)
@@ -218,7 +184,7 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Read the following FrameHeader
-    FrameHeader header;
+    FLARM::FrameHeader header;
     if (!ReceiveFrameHeader(header, env, timeout.GetRemainingOrZero()))
       continue;
 
@@ -237,11 +203,11 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
       continue;
 
     // Verify CRC
-    if (header.GetCRC() != CalculateCRC(header, data.begin(), length))
+    if (header.GetCRC() != FLARM::CalculateCRC(header, data.begin(), length))
       continue;
 
     // Check message type
-    if (header.type != MT_ACK && header.type != MT_NACK)
+    if (header.type != FLARM::MT_ACK && header.type != FLARM::MT_NACK)
       continue;
 
     // Check payload length
@@ -251,13 +217,13 @@ FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
     // Check whether the received ACK is for the right sequence number
     if (FromLE16(*((const uint16_t *)(const void *)data.begin())) ==
         sequence_number)
-      return (MessageType)header.type;
+      return (FLARM::MessageType)header.type;
   }
 
-  return MT_ERROR;
+  return FLARM::MT_ERROR;
 }
 
-FlarmDevice::MessageType
+FLARM::MessageType
 FlarmDevice::WaitForACKOrNACK(uint16_t sequence_number,
                               OperationEnvironment &env, unsigned timeout_ms)
 {
@@ -270,7 +236,7 @@ bool
 FlarmDevice::WaitForACK(uint16_t sequence_number,
                         OperationEnvironment &env, unsigned timeout_ms)
 {
-  return WaitForACKOrNACK(sequence_number, env, timeout_ms) == MT_ACK;
+  return WaitForACKOrNACK(sequence_number, env, timeout_ms) == FLARM::MT_ACK;
 }
 
 bool
@@ -279,7 +245,7 @@ FlarmDevice::BinaryPing(OperationEnvironment &env, unsigned timeout_ms)
   const TimeoutClock timeout(timeout_ms);
 
   // Create header for sending a binary ping request
-  FrameHeader header = PrepareFrameHeader(MT_PING);
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_PING);
 
   // Send request and wait for positive answer
   return SendStartByte() &&
@@ -293,45 +259,9 @@ FlarmDevice::BinaryReset(OperationEnvironment &env, unsigned timeout_ms)
   TimeoutClock timeout(timeout_ms);
 
   // Create header for sending a binary reset request
-  FrameHeader header = PrepareFrameHeader(MT_EXIT);
+  FLARM::FrameHeader header = PrepareFrameHeader(FLARM::MT_EXIT);
 
   // Send request and wait for positive answer
   return SendStartByte() &&
     SendFrameHeader(header, env, timeout.GetRemainingOrZero());
-}
-
-bool
-FlarmDevice::BinaryMode(OperationEnvironment &env)
-{
-  if (mode == Mode::BINARY)
-    return true;
-
-  port.StopRxThread();
-
-  // "Binary mode is engaged by sending the text command "$PFLAX"
-  // (including a newline character) to Flarm."
-  Send("PFLAX");
-
-  // Remember that we should now be in binary mode (for further assert() calls)
-  mode = Mode::BINARY;
-
-  // "After switching, connection should again be checked by issuing a ping."
-  // Testing has revealed that switching the protocol takes a certain amount
-  // of time (around 1.5 sec). Due to that it is recommended to issue new pings
-  // for a certain time until the ping is ACKed properly or a timeout occurs.
-  for (unsigned i = 0; i < 10; ++i) {
-    if (env.IsCancelled()) {
-      BinaryReset(env, 200);
-      mode = Mode::UNKNOWN;
-      return false;
-    }
-
-    if (BinaryPing(env, 500))
-      // We are now in binary mode and have verified that with a binary ping
-      return true;
-  }
-
-  // Apparently the switch to binary mode didn't work
-  mode = Mode::UNKNOWN;
-  return false;
 }
