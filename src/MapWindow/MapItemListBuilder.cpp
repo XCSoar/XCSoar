@@ -167,8 +167,7 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
   else
     elevation = RasterBuffer::TERRAIN_INVALID;
 
-  if (!RasterBuffer::IsSpecial(elevation))
-    list.checked_append(new LocationMapItem(vector, elevation));
+  list.checked_append(new LocationMapItem(vector, elevation));
 }
 
 void
