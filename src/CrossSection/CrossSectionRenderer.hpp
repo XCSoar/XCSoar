@@ -43,6 +43,8 @@ class Canvas;
 class CrossSectionRenderer :
   public BaseBlackboard
 {
+  static const unsigned NUM_SLICES = 16;
+
 protected:
   AirspaceRendererSettings airspace_renderer_settings;
 

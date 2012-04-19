@@ -42,8 +42,6 @@
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-#define AIRSPACE_SCANSIZE_X 16
-
 /**
  * Local visitor class used for rendering airspaces in the CrossSectionRenderer
  */
@@ -302,14 +300,14 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
 
   RasterTerrain::Lease map(*terrain);
 
-  RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
+  RasterPoint points[2 + NUM_SLICES];
 
   points[0] = chart.ToScreen(vec.distance, fixed_zero);
   points[1] = chart.ToScreen(fixed_zero, fixed_zero);
 
   unsigned i = 2;
-  for (unsigned j = 0; j < AIRSPACE_SCANSIZE_X; ++j) {
-    const fixed t_this = fixed(j) / (AIRSPACE_SCANSIZE_X - 1);
+  for (unsigned j = 0; j < NUM_SLICES; ++j) {
+    const fixed t_this = fixed(j) / (NUM_SLICES - 1);
     const GeoPoint p_this = start + p_diff * t_this;
 
     short h = map->GetHeight(p_this);
