@@ -27,6 +27,15 @@ Copyright_License {
 #include "TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 
+gcc_pure
+static const uint8_t *
+FindSpecial(const uint8_t *const begin, const uint8_t *const end)
+{
+  const uint8_t *start = std::find(begin, end, FLARM::START_FRAME);
+  const uint8_t *escape = std::find(begin, end, FLARM::ESCAPE);
+  return std::min(start, escape);
+}
+
 bool
 FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
                    OperationEnvironment &env, unsigned timeout_ms)
@@ -38,9 +47,20 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
 
   // Send data byte-by-byte including escaping
   const uint8_t *p = (const uint8_t *)buffer, *end = p + length;
-  while (p < end) {
-    if (timeout.HasExpired() || env.IsCancelled())
-      return false;
+  while (true) {
+    const uint8_t *special = FindSpecial(p, end);
+
+    if (special > p) {
+      /* bulk write of "harmless" characters */
+
+      if (!port.FullWrite(p, special - p, timeout.GetRemainingOrZero()))
+        return false;
+
+      p = special;
+    }
+
+    if (p == end)
+      break;
 
     // Check for bytes that need to be escaped and send
     // the appropriate replacements
@@ -62,6 +82,55 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
   return true;
 }
 
+static uint8_t *
+ReceiveSomeUnescape(Port &port, uint8_t *buffer, size_t length,
+                    OperationEnvironment &env, const TimeoutClock &timeout)
+{
+  /* read "length" bytes from the port, optimistically assuming that
+     there are no escaped bytes */
+
+  if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
+    return NULL;
+
+  int nbytes = port.Read(buffer, length);
+  if (nbytes <= 0)
+    return NULL;
+
+  /* unescape in-place */
+
+  uint8_t *end = buffer + nbytes;
+  for (const uint8_t *src = buffer; src != end;) {
+    if (*src == FLARM::ESCAPE) {
+      ++src;
+
+      int ch;
+      if (src == end) {
+        /* at the end of the buffer; need to read one more byte */
+        if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
+          return NULL;
+
+        ch = port.GetChar();
+      } else
+        ch = *src++;
+
+      if (ch == FLARM::ESCAPE_START)
+        *buffer++ = FLARM::START_FRAME;
+      else if (ch == FLARM::ESCAPE_ESCAPE)
+        *buffer++ = FLARM::ESCAPE;
+      else
+        /* unknown escape */
+        return NULL;
+    } else
+      /* "harmless" byte */
+      *buffer++ = *src++;
+  }
+
+  /* return the current end position of the destination buffer; if
+     there were escaped bytes, then this function must be called again
+     to account for the escaping overhead */
+  return buffer;
+}
+
 bool
 FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
                       OperationEnvironment &env, unsigned timeout_ms)
@@ -74,48 +143,9 @@ FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
   // Receive data byte-by-byte including escaping until buffer is full
   uint8_t *p = (uint8_t *)buffer, *end = p + length;
   while (p < end) {
-    if (timeout.HasExpired())
+    p = ReceiveSomeUnescape(port, p, end - p, env, timeout);
+    if (p == NULL)
       return false;
-
-    if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
-      return false;
-
-    // Read single character from port
-    int c = port.GetChar();
-    if (c == -1)
-      return false;
-
-    // If a STARTFRAME was detected inside of the frame -> cancel
-    if (c == START_FRAME)
-      return false;
-
-    if (c == ESCAPE) {
-      // Read next character after the ESCAPE
-      if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
-        return false;
-
-      int c2 = port.GetChar();
-      if (c2 == -1 || timeout.HasExpired())
-        return false;
-
-      switch (c2) {
-      case ESCAPE_ESCAPE:
-        // Nothing to do because ESCAPE is already in the buffer
-        break;
-
-      case ESCAPE_START:
-        // Replace the byte in the buffer with the unescaped STARTFRAME byte
-        c = START_FRAME;
-        break;
-
-      default:
-        // ESCAPE must be followed by either ESCAPE or STARTFRAME -> cancel
-        return false;
-      }
-    }
-
-    *p = c;
-    p++;
   }
 
   return true;
