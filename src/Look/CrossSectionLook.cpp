@@ -33,6 +33,7 @@ CrossSectionLook::Initialise()
   terrain_color = Color(0x80, 0x45, 0x15);
   terrain_brush.Set(terrain_color);
   sea_color = Color(0xbd, 0xc5, 0xd5); // ICAO open water area
+  sea_brush.Set(sea_color);
 
   grid_pen.Set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
   aircraft_brush.Set(text_color);
