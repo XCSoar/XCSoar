@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Key.h"
 
 #include <string.h>
+#include <ctype.h>
 
 struct string_to_key {
   const TCHAR *name;

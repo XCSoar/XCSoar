@@ -28,6 +28,10 @@ Copyright_License {
 #include "Hardware/Display.hpp"
 #include "Simulator.hpp"
 
+#ifdef WIN32
+#include <windows.h> /* for AllocConsole() */
+#endif
+
 namespace CommandLine {
 #if !defined(_WIN32_WCE)
   unsigned width = 640, height = 480;

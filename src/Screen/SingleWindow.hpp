@@ -61,6 +61,12 @@ public:
     return &dialog == dialogs.top();
   }
 
+  WndForm &GetTopDialog() {
+    assert(HasDialog());
+
+    return *dialogs.top();
+  }
+
 #ifndef USE_GDI
 protected:
   gcc_pure

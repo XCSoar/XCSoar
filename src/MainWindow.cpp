@@ -493,7 +493,9 @@ MainWindow::OnSetFocus()
       map->SetFocus();
     else if (widget != NULL)
       widget->SetFocus();
-  }
+  } else
+    /* recover the dialog focus if it got lost */
+    GetTopDialog().FocusFirstControl();
 }
 
 bool

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_DEVICE_HPP
 #define XCSOAR_FLARM_DEVICE_HPP
 
+#include "BinaryProtocol.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
@@ -110,114 +111,15 @@ private:
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
 
-  enum MessageType {
-    MT_ERROR = 0x00,
-    MT_ACK = 0xA0,
-    MT_NACK = 0xB7,
-    MT_PING = 0x01,
-    MT_SETBAUDRATE = 0x02,
-    MT_FLASHUPLOAD = 0x10,
-    MT_EXIT = 0x12,
-    MT_SELECTRECORD = 0x20,
-    MT_GETRECORDINFO = 0x21,
-    MT_GETIGCDATA = 0x22,
-  };
-
-#pragma pack(push, 1) // force 1-byte alignment
-  /**
-   * The binary transfer mode works with "frames". Each frame consists of a
-   * start byte (0x73), an 8-byte frame header and an optional payload. The
-   * length of the payload is transfered inside the frame header.
-   */
-  struct FrameHeader
-  {
-  private:
-    /**
-     * Length of the frame header (8) + length of the payload in bytes.
-     * Use the Get/Set() functions to interact with this attribute!
-     */
-    uint16_t length;
-
-  public:
-    /**
-     * Protocol version. Frames with higher version number than implemented
-     * by software shall be discarded.
-     */
-    uint8_t version;
-
-  private:
-    /**
-     * Sequence counter. Shall be increased by one for every frame sent.
-     * Use the Get/Set() functions to interact with this attribute!
-     */
-    uint16_t sequence_number;
-
-  public:
-    /** Message type */
-    uint8_t type;
-
-  private:
-    /**
-     * CRC over the complete message, except CRC field.
-     * Use the Get/Set() functions to interact with this attribute!
-     */
-    uint16_t crc;
-
-  public:
-    uint16_t GetLength() const {
-      return FromLE16(length);
-    }
-
-    void SetLength(uint16_t _length) {
-      length = ToLE16(_length);
-    }
-
-    uint16_t GetSequenceNumber() const {
-      return ReadUnalignedLE16(&sequence_number);
-    }
-
-    void SetSequenceNumber(uint16_t _sequence_number) {
-      WriteUnalignedLE16(&sequence_number, _sequence_number);
-    }
-
-    uint16_t GetCRC() const {
-      return FromLE16(crc);
-    }
-
-    void SetCRC(uint16_t _crc) {
-      crc = ToLE16(_crc);
-    }
-  } gcc_packed;
-#pragma pack(pop)
-
-  static_assert(sizeof(FrameHeader) == 8,
-                "The FrameHeader struct needs to have a size of 8 bytes");
-
-  /**
-   * Sends the specified data stream to the FLARM using the escaping algorithm
-   * specified in the reference document.
-   * @param data Pointer to the first byte
-   * @param length Amount of bytes that should be send. Note that the actual
-   * number of bytes can be larger due to the escaping.
-   * @param timeout_ms Timeout in milliseconds
-   * @return True if the data was sent successfully, False if a timeout
-   * or some transfer problems occurred
-   */
   bool SendEscaped(const void *data, size_t length,
-                   OperationEnvironment &env, unsigned timeout_ms);
+                   OperationEnvironment &env, unsigned timeout_ms) {
+    return FLARM::SendEscaped(port, data, length, env, timeout_ms);
+  }
 
-  /**
-   * Reads a specified number of bytes from the port while applying the
-   * escaping algorithm. The algorithm will try to read bytes until the
-   * specified number is reached or a timeout occurs.
-   * @param data Pointer to the first byte of the writable buffer
-   * @param length Length of the buffer that should be filled
-   * @param timeout_ms Timeout in milliseconds
-   * @return True if the data was received successfully, False if a timeout
-   * or any transfer problems occurred
-   */
   bool ReceiveEscaped(void *data, size_t length,
-                      OperationEnvironment &env, unsigned timeout_ms);
+                      OperationEnvironment &env, unsigned timeout_ms) {
+    return FLARM::ReceiveEscaped(port, data, length, env, timeout_ms);
+  }
 
   /**
    * Send the byte that is used to signal that start of a new frame
@@ -234,16 +136,6 @@ private:
   bool WaitForStartByte(OperationEnvironment &env, unsigned timeout_ms);
 
   /**
-   * Calculates the CRC value of the FrameHeader and an optional payload
-   * @param header FrameHeader to calculate the CRC for
-   * @param data Optional pointer to the first byte of the payload
-   * @param length Optional length of the payload
-   * @return CRC value
-   */
-  uint16_t CalculateCRC(const FrameHeader &header, const void *data = NULL,
-                        size_t length = 0);
-
-  /**
    * Convenience function. Returns a pre-populated FrameHeader instance that is
    * ready to be sent by the SendFrameHeader() function.
    * @param message_type Message type of the FrameHeader
@@ -252,8 +144,9 @@ private:
    * @param length Optional length of the payload
    * @return An initialized FrameHeader instance
    */
-  FrameHeader PrepareFrameHeader(MessageType message_type,
-                                 const void *data = NULL, size_t length = 0);
+  FLARM::FrameHeader PrepareFrameHeader(FLARM::MessageType message_type,
+                                        const void *data = NULL,
+                                        size_t length = 0);
 
   /**
    * Sends a FrameHeader to the port. Remember that a StartByte should be
@@ -263,7 +156,7 @@ private:
    * @return True if the header was sent successfully, False if a timeout
    * or any transfer problems occurred
    */
-  bool SendFrameHeader(const FrameHeader &header,
+  bool SendFrameHeader(const FLARM::FrameHeader &header,
                        OperationEnvironment &env, unsigned timeout_ms);
 
   /**
@@ -274,7 +167,7 @@ private:
    * @return True if the header was received successfully, False if a timeout
    * or any transfer problems occurred
    */
-  bool ReceiveFrameHeader(FrameHeader &header,
+  bool ReceiveFrameHeader(FLARM::FrameHeader &header,
                           OperationEnvironment &env, unsigned timeout_ms);
 
   /**
@@ -286,7 +179,7 @@ private:
    * @param timeout_ms Timeout in milliseconds
    * @return Message type if N(ACK) was received properly, otherwise 0x00
    */
-  MessageType
+  FLARM::MessageType
   WaitForACKOrNACK(uint16_t sequence_number, AllocatedArray<uint8_t> &data,
                    uint16_t &length,
                    OperationEnvironment &env, unsigned timeout_ms);
@@ -298,8 +191,9 @@ private:
    * @param timeout_ms Timeout in milliseconds
    * @return Message type if N(ACK) was received properly, otherwise 0x00
    */
-  MessageType WaitForACKOrNACK(uint16_t sequence_number,
-                               OperationEnvironment &env, unsigned timeout_ms);
+  FLARM::MessageType WaitForACKOrNACK(uint16_t sequence_number,
+                                      OperationEnvironment &env,
+                                      unsigned timeout_ms);
 
   /**
    * Waits for an ACK message from the FLARM with the right sequence number
@@ -331,7 +225,8 @@ private:
    * @return ACK if record exists, NACK if record does not exist,
    * ERROR in case of timeout or transfer error
    */
-  MessageType SelectFlight(uint8_t record_number, OperationEnvironment &env);
+  FLARM::MessageType SelectFlight(uint8_t record_number,
+                                  OperationEnvironment &env);
 
   /**
    * Sends a GetRecordInfo message to the Flarm and parses the output

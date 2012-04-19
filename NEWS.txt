@@ -9,11 +9,12 @@ Version 6.4 - not yet released
 * infoboxes
   - added automatic altitude infobox (baro. altitude with GPS fallback)
 
-Version 6.3.1 - not yet released
+Version 6.3.1 - 2011/04/19
 * calculations
   - fix crash with far away task
   - fix high speed remaining when wind drift is disabled
   - fix crash when scrolling beyond the poles
+  - fix airspace activity (day of week) calculation
 * devices
   - allow standard NMEA sentences to begin with 'P'
   - add missing NMEA checksum verifications
@@ -25,6 +26,7 @@ Version 6.3.1 - not yet released
   - FLARM: relax timeouts
   - fix timeouts on Windows CE (FLARM driver and others)
   - ignore garbage at the beginning of NMEA lines
+  - fix the NMEA out driver (for Altair double seater and others)
 * logger
   - fix format of IGC 'C' records for takeoff/landing (ambiguous spec)
   - fix landing time in flight logger
@@ -34,6 +36,8 @@ Version 6.3.1 - not yet released
 * task manager
   - fix rename/delete function for task files
   - also clear optional starts with "Clear All" button
+* waypoints
+  - add all examined waypoints to recently used waypoint list
 * Linux
   - fix HTTP networking bugs
 * Android
@@ -41,6 +45,8 @@ Version 6.3.1 - not yet released
   - fix saving of airspace colors (workaround for android compiler bug)
 * Windows
   - fix double key presses on Windows CE / PPC2000
+* Altair
+  - recover focused dialog control
 
 Version 6.3 - 2012/03/29
 * calculations

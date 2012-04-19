@@ -398,8 +398,15 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   const TCHAR *driver_name;
   if (is_simulator())
     driver_name = _T("Simulator");
-  else
-    driver_name = CommonInterface::GetSystemSettings().devices[0].driver_name;
+  else {
+    const DeviceConfig &device = CommonInterface::GetSystemSettings().devices[0];
+    if (device.UsesDriver())
+      driver_name = device.driver_name;
+    else if (device.IsAndroidInternalGPS())
+      driver_name = _T("Internal GPS (Android)");
+    else
+      driver_name = _T("Unknown");
+  }
 
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,

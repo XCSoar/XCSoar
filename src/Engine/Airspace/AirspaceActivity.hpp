@@ -99,7 +99,7 @@ public:
   }
 
   bool matches(AirspaceActivity mask) const {
-    return (v.bits) && (mask.v.bits);
+    return v.bits & mask.v.bits;
   }
 };
 

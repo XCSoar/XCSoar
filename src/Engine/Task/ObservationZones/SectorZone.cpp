@@ -59,7 +59,7 @@ SectorZone::GetBoundary() const
   const Angle delta = Angle::FullCircle() / steps;
   const Angle start = GetStartRadial().AsBearing();
   Angle end = GetEndRadial().AsBearing();
-  if (end <= start)
+  if (end <= start + Angle::FullCircle() / 512)
     end += Angle::FullCircle();
 
   GeoVector vector(GetRadius(), start + delta);
@@ -107,6 +107,10 @@ SectorZone::SetEndRadial(const Angle x)
 bool
 SectorZone::IsAngleInSector(const Angle b) const
 {
+  // Quit early if we have a full circle
+  if ((end_radial - start_radial).AsBearing() <= Angle::FullCircle() / 512)
+    return true;
+
   return b.Between(start_radial, end_radial);
 }
 

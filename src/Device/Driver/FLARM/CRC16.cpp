@@ -21,18 +21,45 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_EMULATOR_HPP
-#define XCSOAR_DEVICE_EMULATOR_HPP
+#include "CRC16.hpp"
 
-#include "Device/Port/Port.hpp"
-#include "Operation/Operation.hpp"
+#include <assert.h>
 
-struct Emulator {
-  Port *port;
-  Port::Handler *handler;
-  OperationEnvironment *env;
+/*
+ * Source: FLARM_BINCOMM.pdf
+ */
+gcc_const
+static uint16_t
+crc_update(uint16_t crc, uint8_t data)
+{
+  crc = crc ^ ((uint16_t)data << 8);
+  for (unsigned i = 0; i < 8; ++i) {
+    if (crc & 0x8000)
+      crc = (crc << 1) ^ 0x1021;
+    else
+      crc <<= 1;
+  }
+  return crc;
+}
 
-  virtual ~Emulator() {}
-};
+uint16_t
+FLARM::CalculateCRC(const FrameHeader &header,
+                    const void *data, size_t length)
+{
+  assert((data != NULL && length > 0) || (data == NULL && length == 0));
 
-#endif
+  uint16_t crc = 0x00;
+
+  const uint8_t *_header = (const uint8_t *)&header;
+  for (unsigned i = 0; i < 6; ++i, ++_header)
+    crc = crc_update(crc, *_header);
+
+  if (length == 0 || data == NULL)
+    return crc;
+
+  const uint8_t *_data = (const uint8_t *)data;
+  for (unsigned i = 0; i < length; ++i, ++_data)
+    crc = crc_update(crc, *_data);
+
+  return crc;
+}

@@ -203,9 +203,6 @@ EWDevice::Declare(const struct Declaration &declaration,
   else if (!port.SetBaudrate(9600))
     return false;
 
-  // set RX timeout to 500[ms]
-  port.SetRxTimeout(500);
-
   bool success = DeclareInner(declaration, env);
 
   // switch to NMEA mode

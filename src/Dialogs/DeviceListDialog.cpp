@@ -287,7 +287,7 @@ DeviceListWidget::EditCurrent()
   /* .. and reopen the device */
 
   DeviceDescriptor &descriptor = *device_list[index];
-  descriptor.SetConfig() = widget.GetConfig();
+  descriptor.SetConfig(widget.GetConfig());
 
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */

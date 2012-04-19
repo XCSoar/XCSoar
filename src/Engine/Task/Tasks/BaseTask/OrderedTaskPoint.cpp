@@ -167,9 +167,9 @@ OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
   task_projection.scan_location(GetLocation());
   #define fixed_steps fixed(0.05)
 
-  for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
-    task_projection.scan_location(GetBoundaryParametric(t));
-  }
+  const ObservationZone::Boundary boundary = GetBoundary();
+  for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
+    task_projection.scan_location(*i);
 }
 
 void
@@ -177,8 +177,9 @@ OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
 {
   flat_bb = FlatBoundingBox(task_projection.project(GetLocation()));
 
-  for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps)
-    flat_bb.Expand(task_projection.project(GetBoundaryParametric(t)));
+  const ObservationZone::Boundary boundary = GetBoundary();
+  for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
+    flat_bb.Expand(task_projection.project(*i));
 
   flat_bb.ExpandByOne(); // add 1 to fix rounding
 }

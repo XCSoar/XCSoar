@@ -912,8 +912,5 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
   if (index < waypoint_select_info.size())
     retval = waypoint_select_info[index].waypoint;
 
-  if (retval != NULL)
-    dlgWaypointSelectAddToLastUsed(*retval);
-
   return retval;
 }

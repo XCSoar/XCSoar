@@ -1034,6 +1034,10 @@ InfoBoxFactory::Get(const TCHAR *key, InfoBoxFactory::t_InfoBox &val)
 {
   unsigned _val = val;
   bool ret = ProfileMap::Get(key, _val);
+
+  if (_val >= e_NUM_TYPES)
+    return false;
+
   val = (InfoBoxFactory::t_InfoBox)_val;
   return ret;
 }

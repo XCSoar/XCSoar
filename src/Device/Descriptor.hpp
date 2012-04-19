@@ -133,9 +133,8 @@ public:
     return config;
   }
 
-  DeviceConfig &SetConfig() {
-    return config;
-  }
+  void SetConfig(const DeviceConfig &config);
+  void ClearConfig();
 
   void SetPipeTo(DeviceDescriptor *_pipe_to_device) {
     pipe_to_device = _pipe_to_device;
@@ -174,8 +173,7 @@ private:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool Open(Port &port, const DeviceRegister &driver,
-            OperationEnvironment &env);
+  bool Open(Port &port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
 

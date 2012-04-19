@@ -21,18 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_EMULATOR_HPP
-#define XCSOAR_DEVICE_EMULATOR_HPP
+#ifndef XCSOAR_FLARM_CRC16_HPP
+#define XCSOAR_FLARM_CRC16_HPP
 
-#include "Device/Port/Port.hpp"
-#include "Operation/Operation.hpp"
+#include "Compiler.h"
 
-struct Emulator {
-  Port *port;
-  Port::Handler *handler;
-  OperationEnvironment *env;
+#include <stdint.h>
+#include <stddef.h>
 
-  virtual ~Emulator() {}
+namespace FLARM {
+  struct FrameHeader;
+
+  /**
+   * Calculates the CRC value of the FrameHeader and an optional payload
+   * @param header FrameHeader to calculate the CRC for
+   * @param data Optional pointer to the first byte of the payload
+   * @param length Optional length of the payload
+   * @return CRC value
+   */
+  gcc_pure
+  uint16_t CalculateCRC(const FrameHeader &header, const void *data = NULL,
+                        size_t length = 0);
 };
 
 #endif
