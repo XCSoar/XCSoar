@@ -116,9 +116,11 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 
   TCHAR elevation_buffer[32];
-  if (item.elevation != RasterBuffer::TERRAIN_INVALID) {
+  if (!RasterBuffer::IsSpecial(item.elevation)) {
     FormatUserAltitude(fixed(item.elevation), elevation_buffer, 32);
     _stprintf(info_buffer, _T("%s: %s"), _("Elevation"), elevation_buffer);
+  } else {
+    _stprintf(info_buffer, _T("%s: %s"), _("Elevation"), _T("???"));
   }
 
   canvas.Select(small_font);
@@ -142,7 +144,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 
   bool elevation_available =
-      !RasterBuffer::IsInvalid((short)item.elevation);
+      !RasterBuffer::IsSpecial((short)item.elevation);
 
   bool reach_relevant =
       (item.arrival_altitude_reach != item.arrival_altitude_direct);
