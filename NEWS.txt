@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.3.1 - not yet released
+Version 6.3.1 - 2011/04/19
 * calculations
   - fix crash with far away task
   - fix high speed remaining when wind drift is disabled
