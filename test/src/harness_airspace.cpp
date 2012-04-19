@@ -107,6 +107,9 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
 
 class AirspaceVisitorPrint: 
   public AirspaceVisitor {
+  std::ofstream *fout;
+  const bool do_report;
+
 public:
   AirspaceVisitorPrint(const char* fname,
                        const bool _do_report):
@@ -140,14 +143,18 @@ public:
       visit_general(as);
     }
   }
-private:
-  std::ofstream *fout;
-  const bool do_report;
 };
 
 
 class AirspaceIntersectionVisitorPrint: 
   public AirspaceIntersectionVisitor {
+  std::ofstream *fout;
+  std::ofstream *yout;
+  std::ofstream *iout;
+  const bool do_report;
+  const AircraftState m_state;
+  const AirspaceAircraftPerformance &m_perf;
+
 public:
   AirspaceIntersectionVisitorPrint(const char* fname,
                                    const char* yname,
@@ -199,17 +206,14 @@ public:
       intersection(as);
     }
   }
-private:
-  std::ofstream *fout;
-  std::ofstream *yout;
-  std::ofstream *iout;
-  const bool do_report;
-  const AircraftState m_state;
-  const AirspaceAircraftPerformance &m_perf;
 };
 
 
 class AirspaceVisitorClosest: public AirspaceVisitor {
+  std::ofstream *fout;
+  const AircraftState& state;
+  const AirspaceAircraftPerformance &m_perf;
+
 public:
   AirspaceVisitorClosest(const char* fname,
                          const AircraftState &_state,
@@ -247,10 +251,6 @@ public:
   virtual void Visit(const AirspacePolygon& as) {
     closest(as);
   }
-private:
-  std::ofstream *fout;
-  const AircraftState& state;
-  const AirspaceAircraftPerformance &m_perf;
 };
 
 /**
