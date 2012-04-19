@@ -302,8 +302,8 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
 
   RasterPoint points[2 + NUM_SLICES];
 
-  points[0] = chart.ToScreen(vec.distance, fixed_zero);
-  points[1] = chart.ToScreen(fixed_zero, fixed_zero);
+  points[0] = chart.ToScreen(vec.distance, fixed(-500));
+  points[1] = chart.ToScreen(fixed_zero, fixed(-500));
 
   unsigned i = 2;
   for (unsigned j = 0; j < NUM_SLICES; ++j) {
