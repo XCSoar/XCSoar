@@ -25,10 +25,12 @@ Copyright_License {
 #define XCSOAR_DEVICE_EMULATOR_HPP
 
 #include "Device/Port/Port.hpp"
+#include "Operation/Operation.hpp"
 
 struct Emulator {
   Port *port;
   Port::Handler *handler;
+  OperationEnvironment *env;
 
   virtual ~Emulator() {}
 };

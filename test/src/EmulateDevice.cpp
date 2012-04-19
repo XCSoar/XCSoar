@@ -35,6 +35,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,6 +73,9 @@ main(int argc, char **argv)
   setvbuf(stdout, NULL, _IONBF, 0);
 
   emulator->port = port;
+
+  ConsoleOperationEnvironment env;
+  emulator->env = &env;
 
   if (!port->StartRxThread()) {
     delete port;

@@ -2197,6 +2197,8 @@ EMULATE_DEVICE_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/EmulateDevice.cpp
