@@ -174,11 +174,9 @@ AirspaceRoute::FindClearingPair(const SearchPointVector& spv,
       }
     }
 
-    if (backwards)
-      spv.PreviousCircular(i);
-    else
-      spv.NextCircular(i);
+    i = backwards ? spv.PreviousCircular(i) : spv.NextCircular(i);
   }
+
   return p;
 }
 
@@ -203,12 +201,10 @@ AirspaceRoute::GetBackupPairs(const SearchPointVector& spv,
   SearchPointVector::const_iterator start = spv.NearestIndexConvex(intc);
   ClearingPair p(intc, intc);
 
-  SearchPointVector::const_iterator i_left = start;
-  spv.NextCircular(i_left);
+  SearchPointVector::const_iterator i_left = spv.NextCircular(start);
   p.first = AFlatGeoPoint(i_left->get_flatLocation(), _start.altitude); // @todo alt!
 
-  SearchPointVector::const_iterator i_right = start;
-  spv.PreviousCircular(i_right);
+  SearchPointVector::const_iterator i_right = spv.PreviousCircular(start);
   p.second = AFlatGeoPoint(i_right->get_flatLocation(), _start.altitude); // @todo alt!
 
   return p;

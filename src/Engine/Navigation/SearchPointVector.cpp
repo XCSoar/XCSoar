@@ -188,21 +188,23 @@ SearchPointVector::CalculateGeoBounds() const
   return bb;
 }
 
-void
-SearchPointVector::NextCircular(SearchPointVector::const_iterator &i) const
+SearchPointVector::const_iterator
+SearchPointVector::NextCircular(const_iterator i) const
 {
   i++;
   if (i == end())
     i = begin();
+  return i;
 }
 
-void
-SearchPointVector::PreviousCircular(SearchPointVector::const_iterator &i) const
+SearchPointVector::const_iterator
+SearchPointVector::PreviousCircular(const_iterator i) const
 {
   if (i == begin())
     i = begin() + size() - 1;
   else
     i--;
+  return i;
 }
 
 bool

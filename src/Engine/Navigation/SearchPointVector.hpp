@@ -61,10 +61,12 @@ public:
   GeoBounds CalculateGeoBounds() const;
 
   /** increment iterator, wrapping around to start if required */
-  void NextCircular(SearchPointVector::const_iterator &i) const;
+  gcc_pure
+  const_iterator NextCircular(const_iterator i) const;
 
   /** decreement iterator, wrapping around to last item if required */
-  void PreviousCircular(SearchPointVector::const_iterator &i) const;
+  gcc_pure
+  const_iterator PreviousCircular(const_iterator i) const;
 
   /** Is the given GeoPoint inside the polygon of SearchPoints? */
   bool IsInside(const GeoPoint &pt) const;
