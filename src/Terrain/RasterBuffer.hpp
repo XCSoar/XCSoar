@@ -36,6 +36,10 @@ public:
   static const short TERRAIN_INVALID = -32768;
   static const short TERRAIN_WATER_THRESHOLD = -30000;
 
+  enum class TerrainType: uint8_t {
+    UNKNOWN, GROUND, WATER
+  };
+
   gcc_const
   static bool IsInvalid(short h) {
     return h == TERRAIN_INVALID;
@@ -49,6 +53,17 @@ public:
   gcc_const
   static bool IsSpecial(short h) {
     return h <= TERRAIN_WATER_THRESHOLD;
+  }
+
+  gcc_const
+  static TerrainType GetTerrainType(short h) {
+    if (!RasterBuffer::IsSpecial(h))
+      return TerrainType::GROUND;
+
+    if (RasterBuffer::IsWater(h))
+      return TerrainType::WATER;
+
+    return TerrainType::UNKNOWN;
   }
 
 private:
