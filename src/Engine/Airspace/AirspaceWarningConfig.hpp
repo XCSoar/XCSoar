@@ -44,9 +44,9 @@ struct AirspaceWarningConfig
   void SetDefaults();
 
   bool IsClassEnabled(AirspaceClass cls) const {
-    assert(cls >= 0 && cls < AIRSPACECLASSCOUNT);
+    assert((unsigned)cls < AIRSPACECLASSCOUNT);
 
-    return class_warnings[cls];
+    return class_warnings[(unsigned)cls];
   }
 };
 

@@ -28,7 +28,6 @@
 #include "AirspaceActivity.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/SearchPointVector.hpp"
-#include "Util/TinyEnum.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
@@ -60,7 +59,7 @@ private:
 
 protected:
   /** Airspace class */
-  TinyEnum<AirspaceClass> type;
+  AirspaceClass type;
 
   bool m_is_convex;
   mutable bool active;

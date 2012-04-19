@@ -25,9 +25,10 @@
 
 #include "Compiler.h"
 
+#include <stdint.h>
 #include <tchar.h>
 
-enum AirspaceClass 
+enum AirspaceClass : uint8_t
 {
   OTHER = 0,
   RESTRICT,
