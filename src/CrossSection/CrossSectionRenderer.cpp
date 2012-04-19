@@ -329,7 +329,7 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
   if (i >= 4) {
     canvas.SelectNullPen();
     canvas.Select(look.terrain_brush);
-    canvas.polygon(&points[0], i);
+    canvas.polygon(points, i);
   }
 }
 
