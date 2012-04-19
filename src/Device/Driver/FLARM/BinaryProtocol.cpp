@@ -37,7 +37,7 @@ FLARM::SendEscaped(Port &port, const void *buffer, size_t length,
   const TimeoutClock timeout(timeout_ms);
 
   // Send data byte-by-byte including escaping
-  const char *p = (const char *)buffer, *end = p + length;
+  const uint8_t *p = (const uint8_t *)buffer, *end = p + length;
   while (p < end) {
     if (timeout.HasExpired() || env.IsCancelled())
       return false;
@@ -72,7 +72,7 @@ FLARM::ReceiveEscaped(Port &port, void *buffer, size_t length,
   const TimeoutClock timeout(timeout_ms);
 
   // Receive data byte-by-byte including escaping until buffer is full
-  char *p = (char *)buffer, *end = p + length;
+  uint8_t *p = (uint8_t *)buffer, *end = p + length;
   while (p < end) {
     if (timeout.HasExpired())
       return false;
