@@ -296,7 +296,7 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
   if (terrain == NULL)
     return;
 
-  const GeoPoint p_diff = vec.EndPoint(start) - start;
+  const GeoPoint point_diff = vec.EndPoint(start) - start;
 
   RasterTerrain::Lease map(*terrain);
 
@@ -307,10 +307,11 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
 
   unsigned i = 2;
   for (unsigned j = 0; j < NUM_SLICES; ++j) {
-    const fixed t_this = fixed(j) / (NUM_SLICES - 1);
-    const GeoPoint p_this = start + p_diff * t_this;
+    const fixed slice_distance_factor = fixed(i) / (NUM_SLICES - 1);
+    const fixed slice_distance = slice_distance_factor * vec.distance;
+    const GeoPoint slice_point = start + point_diff * slice_distance_factor;
 
-    short h = map->GetHeight(p_this);
+    short h = map->GetHeight(slice_point);
     if (RasterBuffer::IsSpecial(h)) {
       if (RasterBuffer::IsWater(h))
         /* water is at 0m MSL */
@@ -321,7 +322,7 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
         continue;
     }
 
-    points[i] = chart.ToScreen(t_this * vec.distance, fixed(h));
+    points[i] = chart.ToScreen(slice_distance, fixed(h));
     i++;
   }
 
