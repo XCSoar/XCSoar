@@ -296,9 +296,21 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
   if (terrain == NULL)
     return;
 
+  // STEP 1: Find elevations by slicing the terrain
+
   const GeoPoint point_diff = vec.EndPoint(start) - start;
 
+  short elevations[NUM_SLICES];
+
   RasterTerrain::Lease map(*terrain);
+  for (unsigned i = 0; i < NUM_SLICES; ++i) {
+    const fixed slice_distance_factor = fixed(i) / (NUM_SLICES - 1);
+    const GeoPoint slice_point = start + point_diff * slice_distance_factor;
+
+    elevations[i] = map->GetHeight(slice_point);
+  }
+
+  // STEP 2: Render the terrain cross section
 
   RasterPoint points[2 + NUM_SLICES];
 
@@ -309,9 +321,8 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
   for (unsigned j = 0; j < NUM_SLICES; ++j) {
     const fixed slice_distance_factor = fixed(j) / (NUM_SLICES - 1);
     const fixed slice_distance = slice_distance_factor * vec.distance;
-    const GeoPoint slice_point = start + point_diff * slice_distance_factor;
 
-    short h = map->GetHeight(slice_point);
+    short h = elevations[j];
     if (RasterBuffer::IsSpecial(h)) {
       if (RasterBuffer::IsWater(h))
         /* water is at 0m MSL */
