@@ -143,9 +143,9 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                    settings_computer.polar.glide_polar_task.GetMC(), h, pen);
 
     if (is_infobox && look.inverse)
-      chart.get_canvas().SelectWhiteBrush();
+      chart.GetCanvas().SelectWhiteBrush();
     else
-      chart.get_canvas().SelectBlackBrush();
+      chart.GetCanvas().SelectBlackBrush();
     chart.DrawDot(settings_computer.polar.glide_polar_task.GetMC(),
                   h, Layout::Scale(2));
   }
@@ -190,8 +190,8 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
 {
   ChartRenderer chart(chart_look, canvas, rc);
   if (is_map) {
-    chart.PaddingBottom = 0;
-    chart.PaddingLeft = 0;
+    chart.padding_bottom = 0;
+    chart.padding_left = 0;
   }
   scale_chart(calculated, settings_computer, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
@@ -218,8 +218,8 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const TaskBehaviour &task_props) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.PaddingBottom = 0;
-  chart.PaddingLeft = Layout::Scale(3);
+  chart.padding_bottom = 0;
+  chart.padding_left = Layout::Scale(3);
   scale_chart(calculated, settings_computer, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, true, NULL);

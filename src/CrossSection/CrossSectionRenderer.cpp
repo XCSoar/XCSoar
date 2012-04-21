@@ -174,24 +174,24 @@ public:
 
     PixelRect rcd;
     // Calculate top and bottom coordinate
-    rcd.top = chart.screenY(as.GetTopAltitude(state));
+    rcd.top = chart.ScreenY(as.GetTopAltitude(state));
     if (as.IsBaseTerrain())
-      rcd.bottom = chart.screenY(fixed_zero);
+      rcd.bottom = chart.ScreenY(fixed_zero);
     else
-      rcd.bottom = chart.screenY(as.GetBaseAltitude(state));
+      rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 
     // Iterate through the intersections
     for (auto it = intersections.begin(); it != intersections.end(); ++it) {
       const GeoPoint &p_start = it->first;
       const GeoPoint &p_end = it->second;
 
-      rcd.left = chart.screenX(start.Distance(p_start));
+      rcd.left = chart.ScreenX(start.Distance(p_start));
 
       // only one edge found, next edge must be beyond screen
       if (p_start == p_end)
-        rcd.right = chart.screenX(chart.getXmax());
+        rcd.right = chart.ScreenX(chart.GetXMax());
       else
-        rcd.right = chart.screenX(start.Distance(p_end));
+        rcd.right = chart.ScreenX(start.Distance(p_end));
 
       // Draw the airspace
       RenderBox(rcd, brush, settings.black_outline, type);

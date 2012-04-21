@@ -102,7 +102,7 @@ DrawLegs(ChartRenderer &chart,
     fixed x = tp.GetEnteredState().time - start_time;
     if (!negative(x)) {
       x /= 3600;
-      chart.DrawLine(x, chart.getYmin(), x, chart.getYmax(),
+      chart.DrawLine(x, chart.GetYMin(), x, chart.GetYMax(),
                      ChartLook::STYLE_REDTHICK);
     }
   }
@@ -120,8 +120,8 @@ RenderBarographSpark(Canvas &canvas, const PixelRect rc,
 {
   ScopeLock lock(fs.mutex);
   ChartRenderer chart(chart_look, canvas, rc);
-  chart.PaddingBottom = 0;
-  chart.PaddingLeft = 0;
+  chart.padding_bottom = 0;
+  chart.padding_left = 0;
 
   if (fs.altitude.slots.size() < 2)
     return;

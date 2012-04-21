@@ -56,8 +56,8 @@ class ChartRenderer
   bool unscaled_y;
 
 public:
-  int PaddingLeft;
-  int PaddingBottom;
+  int padding_left;
+  int padding_bottom;
 
 public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
@@ -116,23 +116,23 @@ public:
                  const Angle angle, ChartLook::Style Style);
   void DrawNoData();
 
-  fixed getYmin() const { return y_min; }
-  fixed getYmax() const { return y_max; }
-  fixed getXmin() const { return x_min; }
-  fixed getXmax() const { return x_max; }
+  fixed GetYMin() const { return y_min; }
+  fixed GetYMax() const { return y_max; }
+  fixed GetXMin() const { return x_min; }
+  fixed GetXMax() const { return x_max; }
 
   gcc_pure
-  PixelScalar screenX(fixed x) const;
+  PixelScalar ScreenX(fixed x) const;
 
   gcc_pure
-  PixelScalar screenY(fixed y) const;
+  PixelScalar ScreenY(fixed y) const;
 
   gcc_pure
   RasterPoint ToScreen(fixed x, fixed y) const {
-    return RasterPoint{ screenX(x), screenY(y) };
+    return RasterPoint{ ScreenX(x), ScreenY(y) };
   }
 
-  Canvas& get_canvas() { return canvas; }
+  Canvas& GetCanvas() { return canvas; }
 };
 
 #endif
