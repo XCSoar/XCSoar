@@ -305,9 +305,9 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
   points[0] = chart.ToScreen(vec.distance, fixed(-500));
   points[1] = chart.ToScreen(fixed_zero, fixed(-500));
 
-  unsigned i = 2;
+  unsigned num_points = 2;
   for (unsigned j = 0; j < NUM_SLICES; ++j) {
-    const fixed slice_distance_factor = fixed(i) / (NUM_SLICES - 1);
+    const fixed slice_distance_factor = fixed(j) / (NUM_SLICES - 1);
     const fixed slice_distance = slice_distance_factor * vec.distance;
     const GeoPoint slice_point = start + point_diff * slice_distance_factor;
 
@@ -322,14 +322,13 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
         continue;
     }
 
-    points[i] = chart.ToScreen(slice_distance, fixed(h));
-    i++;
+    points[num_points++] = chart.ToScreen(slice_distance, fixed(h));
   }
 
-  if (i >= 4) {
+  if (num_points >= 4) {
     canvas.SelectNullPen();
     canvas.Select(look.terrain_brush);
-    canvas.polygon(points, i);
+    canvas.polygon(points, num_points);
   }
 }
 
