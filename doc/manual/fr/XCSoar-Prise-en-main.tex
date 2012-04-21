@@ -6,36 +6,30 @@
 %\usepackage[latin1]{inputenc}
 \usepackage[utf8]{inputenc}
 \usepackage[french]{babel}
+\usepackage[T1]{fontenc}
 %
 \begin{document}
 %
 \begin{center}
-%
-% TODO :
-% Improve layout according to other XCSoar manuals (use of svg, \
-%def....???)
-% ##############  Ajouter ici le logo XCSoar
-%Utiliser : http://git.xcsoar.org/cgit/master/xcsoar.git/tree/Data/graphics/xcsoarswiftsplash.svg
-%Pb : conversion en PDF
-%
-\Huge
-XCSoar\\
-% \title{XCSoar} Marche pas ????
-\normalsize
-%\subtitle{Prise en main du logiciel} 
-Prise en main du logiciel
+\includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/xcsoarswiftsplash.pdf}
+\vskip 0.5cm
+\includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}
+\subsection*{Prise en main du logiciel}
 \end{center}
 %
 \begin{flushright}
-%\vspace{15cm}{Mise à jour du XXX}
-Mise à jour du 21 avril 2012
+Mise à jour du 21 avril 2012 (de la part de Adrien Ott)
 \end{flushright}
 %
 \pagebreak
 \noindent
 \textbf{\textit{Avant-propos}}\\
 Ce document est un guide de prise en main du logiciel XCSoar et ne constitue pas un mode d'emploi exhaustif du logiciel. L'objectif de ce document est de permettre à un(e) utilisateur(trice) ne connaissant pas le logiciel de l'installer, le configurer et l'utiliser le plus rapidement et facilement possible.\\Le mode d'emploi complet faisant actuellement référence est en anglais et disponible dans chaque répertoire de livraison (voir paragraphe "liens divers").\\Si vous avez des commentaires ou des suggestions d'amélioration de ce guide, n'hésitez pas à les faire sur le forum d'XCSoar, dans la rubrique "French".
+
 %
+% Just an example to inlude the images from the "images" directory
+%\marginpar{\parbox{4.0cm}{\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{images/smiley.png}}}
+
 \section{Introduction}
 \noindent
 XCSoar est un logiciel d'aide à la navigation en planeur : "XC" est une abbréviation pour "cross county" (vol sur la campagne), "Soar" fait référence au vol sans moteur (vol à voile, vol libre).\\
