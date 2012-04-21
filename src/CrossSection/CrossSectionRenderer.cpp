@@ -263,8 +263,11 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
+  short elevations[NUM_SLICES];
+  UpdateTerrain(elevations);
+
   PaintAirspaces(canvas, chart);
-  PaintTerrain(canvas, chart);
+  PaintTerrain(canvas, chart, elevations);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
   PaintGrid(canvas, chart);
@@ -291,16 +294,12 @@ CrossSectionRenderer::PaintAirspaces(Canvas &canvas,
 }
 
 void
-CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
+CrossSectionRenderer::UpdateTerrain(short *elevations) const
 {
   if (terrain == NULL)
     return;
 
-  // STEP 1: Find elevations by slicing the terrain
-
   const GeoPoint point_diff = vec.EndPoint(start) - start;
-
-  short elevations[NUM_SLICES];
 
   RasterTerrain::Lease map(*terrain);
   for (unsigned i = 0; i < NUM_SLICES; ++i) {
@@ -309,8 +308,14 @@ CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart) const
 
     elevations[i] = map->GetHeight(slice_point);
   }
+}
 
-  // STEP 2: Render the terrain cross section
+void
+CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart,
+                                   const short *elevations) const
+{
+  if (terrain == NULL)
+    return;
 
   RasterPoint points[2 + NUM_SLICES];
 
