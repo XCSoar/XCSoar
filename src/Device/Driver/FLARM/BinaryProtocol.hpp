@@ -65,39 +65,33 @@ namespace FLARM {
    */
   struct FrameHeader
   {
-  private:
     /**
      * Length of the frame header (8) + length of the payload in bytes.
      * Use the Get/Set() functions to interact with this attribute!
      */
     uint16_t length;
 
-  public:
     /**
      * Protocol version. Frames with higher version number than implemented
      * by software shall be discarded.
      */
     uint8_t version;
 
-  private:
     /**
      * Sequence counter. Shall be increased by one for every frame sent.
      * Use the Get/Set() functions to interact with this attribute!
      */
     uint16_t sequence_number;
 
-  public:
     /** Message type */
     uint8_t type;
 
-  private:
     /**
      * CRC over the complete message, except CRC field.
      * Use the Get/Set() functions to interact with this attribute!
      */
     uint16_t crc;
 
-  public:
     uint16_t GetLength() const {
       return FromLE16(length);
     }
