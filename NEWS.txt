@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.3.2 - not yet released
+
 Version 6.3.1 - 2011/04/19
 * calculations
   - fix crash with far away task
