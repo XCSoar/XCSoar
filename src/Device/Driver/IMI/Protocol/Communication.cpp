@@ -90,13 +90,13 @@ IMI::Receive(Port &port, OperationEnvironment &env,
   const TMsg *msg = NULL;
   while (true) {
     if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
-      break;
+      return NULL;
 
     // read message
     IMIBYTE buffer[64];
     int bytesRead = port.Read(buffer, sizeof(buffer));
     if (bytesRead <= 0)
-      break;
+      return NULL;
 
     // parse message
     const TMsg *lastMsg = MessageParser::Parse(buffer, bytesRead);
@@ -107,11 +107,9 @@ IMI::Receive(Port &port, OperationEnvironment &env,
       else if (lastMsg->msgID != MSG_CFG_KEEPCONFIG)
         msg = lastMsg;
 
-      break;
+      return msg;
     }
   }
-
-  return msg;
 }
 
 const IMI::TMsg *
