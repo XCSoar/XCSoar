@@ -39,7 +39,7 @@ IMIDevice::Declare(const Declaration &declaration,
   port.StopRxThread();
 
   bool success = Connect(env) && !env.IsCancelled();
-  success = success && IMI::DeclarationWrite(port, declaration);
+  success = success && IMI::DeclarationWrite(port, env, declaration);
 
   // disconnect
   Disconnect();

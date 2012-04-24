@@ -60,9 +60,11 @@ namespace IMI
    *
    * @return Operation status
    */
-  bool DeclarationWrite(Port &port, const Declaration &decl);
+  bool DeclarationWrite(Port &port, OperationEnvironment &env,
+                        const Declaration &decl);
 
-  bool ReadFlightList(Port &port, RecordedFlightList &flight_list);
+  bool ReadFlightList(Port &port, OperationEnvironment &env,
+                      RecordedFlightList &flight_list);
   bool FlightDownload(Port &port, const RecordedFlightInfo &flight,
                       const TCHAR *path, OperationEnvironment &env);
   /**

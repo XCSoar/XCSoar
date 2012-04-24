@@ -29,6 +29,7 @@ Copyright_License {
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
 #include "OS/Clock.hpp"
+#include "TimeoutClock.hpp"
 
 namespace IMI
 {
@@ -71,7 +72,8 @@ IMI::Send(Port &port, IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
 }
 
 const IMI::TMsg *
-IMI::Receive(Port &port, unsigned extraTimeout, unsigned expectedPayloadSize)
+IMI::Receive(Port &port, OperationEnvironment &env,
+             unsigned extraTimeout, unsigned expectedPayloadSize)
 {
   if (expectedPayloadSize > COMM_MAX_PAYLOAD_SIZE)
     expectedPayloadSize = COMM_MAX_PAYLOAD_SIZE;
@@ -81,15 +83,15 @@ IMI::Receive(Port &port, unsigned extraTimeout, unsigned expectedPayloadSize)
   if (baudrate == 0)
     return NULL;
 
-  unsigned timeout = extraTimeout + 10000 * (expectedPayloadSize
-      + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate;
-  if (!port.SetRxTimeout(timeout))
-    return NULL;
+  const TimeoutClock timeout(extraTimeout + 10000 *
+                             (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate);
 
   // wait for the message
   const TMsg *msg = NULL;
-  timeout += MonotonicClockMS();
-  while (MonotonicClockMS() < timeout) {
+  while (true) {
+    if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
+      break;
+
     // read message
     IMIBYTE buffer[64];
     int bytesRead = port.Read(buffer, sizeof(buffer));
@@ -109,15 +111,12 @@ IMI::Receive(Port &port, unsigned extraTimeout, unsigned expectedPayloadSize)
     }
   }
 
-  // restore timeout
-  if (!port.SetRxTimeout(0))
-    return NULL;
-
   return msg;
 }
 
 const IMI::TMsg *
-IMI::SendRet(Port &port, IMIBYTE msgID, const void *payload,
+IMI::SendRet(Port &port, OperationEnvironment &env,
+             IMIBYTE msgID, const void *payload,
              IMIWORD payloadSize, IMIBYTE reMsgID, IMIWORD retPayloadSize,
              IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3,
              unsigned extraTimeout, int retry)
@@ -131,7 +130,7 @@ IMI::SendRet(Port &port, IMIBYTE msgID, const void *payload,
   while (retry--) {
     if (Send(port, msgID, payload, payloadSize, parameter1, parameter2,
              parameter3)) {
-      const TMsg *msg = Receive(port, extraTimeout, retPayloadSize);
+      const TMsg *msg = Receive(port, env, extraTimeout, retPayloadSize);
       if (msg && msg->msgID == reMsgID && (retPayloadSize == (IMIWORD)-1
           || msg->payloadSize == retPayloadSize))
         return msg;
@@ -180,7 +179,8 @@ RLEDecompress(IMI::IMIBYTE* dest, const IMI::IMIBYTE *src, unsigned size,
 }
 
 bool
-IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size)
+IMI::FlashRead(Port &port, OperationEnvironment &env,
+               void *buffer, unsigned address, unsigned size)
 {
   if (!_connected)
     return false;
@@ -188,7 +188,7 @@ IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size)
   if (size == 0)
     return true;
 
-  const TMsg *pMsg = SendRet(port, MSG_FLASH, 0, 0, MSG_FLASH, -1,
+  const TMsg *pMsg = SendRet(port, env, MSG_FLASH, 0, 0, MSG_FLASH, -1,
                              IMICOMM_BIGPARAM1(address),
                              IMICOMM_BIGPARAM2(address),
                              size, 300, 2);

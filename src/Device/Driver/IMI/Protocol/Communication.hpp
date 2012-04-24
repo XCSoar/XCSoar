@@ -27,6 +27,7 @@ Copyright_License {
 #include "Types.hpp"
 
 class Port;
+class OperationEnvironment;
 
 namespace IMI
 {
@@ -65,8 +66,10 @@ namespace IMI
    *
    * @return Pointer to a message structure if expected message was received or 0 otherwise
    */
-  const TMsg *Receive(Port &port, unsigned extraTimeout,
+  const TMsg *Receive(Port &port, OperationEnvironment &env,
+                      unsigned extraTimeout,
                       unsigned expectedPayloadSize);
+
   /**
    * @brief Sends a message and waits for a confirmation from the device
    *
@@ -84,13 +87,15 @@ namespace IMI
    *
    * @return Pointer to a message structure if expected message was received or 0 otherwise
    */
-  const TMsg *SendRet(Port &port, IMIBYTE msgID, const void *payload,
+  const TMsg *SendRet(Port &port, OperationEnvironment &env,
+                      IMIBYTE msgID, const void *payload,
                       IMIWORD payloadSize, IMIBYTE reMsgID,
                       IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
                       IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
                       unsigned extraTimeout = 300, int retry = 4);
 
-  bool FlashRead(Port &port, void *buffer, unsigned address, unsigned size);
+  bool FlashRead(Port &port, OperationEnvironment &env,
+                 void *buffer, unsigned address, unsigned size);
 }
 
 #endif

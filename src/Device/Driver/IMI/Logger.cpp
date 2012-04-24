@@ -33,7 +33,7 @@ IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
   port.StopRxThread();
 
   bool success = Connect(env) && !env.IsCancelled();
-  success = success && IMI::ReadFlightList(port, flight_list);
+  success = success && IMI::ReadFlightList(port, env, flight_list);
 
   // disconnect
   Disconnect();
