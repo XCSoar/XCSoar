@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3.2 - not yet released
 * devices
   - FLARM: fix flight download
+* user interface
+  - improved list colors, white text on dark blue background
 
 Version 6.3.1 - 2011/04/19
 * calculations
