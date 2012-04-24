@@ -149,7 +149,6 @@ VolksloggerDevice::Declare(const Declaration &declaration,
     return false;
 
   port.StopRxThread();
-  port.SetRxTimeout(500);
 
   // change to IO mode baud rate
   unsigned old_baud_rate = port.GetBaudrate();
