@@ -784,7 +784,7 @@ RowFormWidget::UpdateLayout()
     }
   }
 
-  if (caption_width / 3 > total_width * 2)
+  if (caption_width * 3 > total_width * 2)
     caption_width = total_width * 2 / 3;
 
   /* how much excess height in addition to the minimum height? */

@@ -7,6 +7,7 @@ Version 6.3.2 - not yet released
   - FLARM: fix flight download
 * user interface
   - improved list colors, white text on dark blue background
+  - limit form field labels that are too wide
 
 Version 6.3.1 - 2011/04/19
 * calculations
