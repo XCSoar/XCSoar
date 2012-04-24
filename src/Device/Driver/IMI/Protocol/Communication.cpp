@@ -87,7 +87,6 @@ IMI::Receive(Port &port, OperationEnvironment &env,
                              (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate);
 
   // wait for the message
-  const TMsg *msg = NULL;
   while (true) {
     if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
       return NULL;
@@ -99,15 +98,16 @@ IMI::Receive(Port &port, OperationEnvironment &env,
       return NULL;
 
     // parse message
-    const TMsg *lastMsg = MessageParser::Parse(buffer, bytesRead);
-    if (lastMsg) {
+    const TMsg *msg = MessageParser::Parse(buffer, bytesRead);
+    if (msg != NULL) {
       // message received
-      if (lastMsg->msgID == MSG_ACK_NOTCONFIG)
+      if (msg->msgID == MSG_ACK_NOTCONFIG) {
         Disconnect(port);
-      else if (lastMsg->msgID != MSG_CFG_KEEPCONFIG)
-        msg = lastMsg;
-
-      return msg;
+        return NULL;
+      } else if (msg->msgID == MSG_CFG_KEEPCONFIG)
+        return NULL;
+      else
+        return msg;
     }
   }
 }
