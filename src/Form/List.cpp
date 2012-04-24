@@ -139,7 +139,6 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
   PixelRect rc = item_rect(start);
 
-  canvas.SetTextColor(look.list.text_color);
   canvas.SetBackgroundColor(look.list.background_color);
   canvas.SetBackgroundTransparent();
   canvas.Select(*look.list.font);
@@ -163,6 +162,8 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
                                look.list.GetBackgroundColor(selected,
                                                             focused,
                                                             pressed));
+
+    canvas.SetTextColor(look.list.GetTextColor(selected, focused, pressed));
 
     if (handler != NULL)
       handler->OnPaintItem(canvas, rc, i);
