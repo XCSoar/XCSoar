@@ -30,6 +30,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Form/DataField/Float.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
@@ -59,6 +60,7 @@ enum Actions {
 };
 
 class FlightSetupPanel : public RowFormWidget,
+                         DataFieldListener,
                          public ActionListener {
   WndButton *dump_button;
 
@@ -106,6 +108,11 @@ public:
   virtual bool Save(bool &changed, bool &require_restart);
 
   virtual void OnAction(int id);
+
+private:
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+  virtual void OnSpecial(DataField &df);
 };
 
 static FlightSetupPanel *instance;
@@ -234,50 +241,26 @@ FlightSetupPanel::OnTimer()
   RefreshAltitudeControl();
 }
 
-static void
-OnBallastData(DataField *Sender, DataField::DataAccessMode Mode)
+void
+FlightSetupPanel::OnModified(DataField &df)
 {
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
-
-  switch (Mode) {
-  case DataField::daSpecial:
-    instance->FlipBallastTimer();
-    break;
-
-  case DataField::daChange:
-    instance->SetBallastLitres(df.GetAsFixed());
-    break;
+  if (IsDataField(Ballast, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    SetBallastLitres(dff.GetAsFixed());
+  } else if (IsDataField(Bugs, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    SetBugs(fixed_one - (dff.GetAsFixed() / 100));
+  } else if (IsDataField(QNH, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    SetQNH(Units::FromUserPressure(dff.GetAsFixed()));
   }
 }
 
-static void
-OnBugsData(DataField *_Sender, DataField::DataAccessMode Mode)
+void
+FlightSetupPanel::OnSpecial(DataField &df)
 {
-  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
-
-  switch (Mode) {
-  case DataField::daChange:
-    instance->SetBugs(fixed_one - (Sender->GetAsFixed() / 100));
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnQnhData(DataField *_Sender, DataField::DataAccessMode Mode)
-{
-  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
-
-  switch (Mode) {
-  case DataField::daChange:
-    instance->SetQNH(Units::FromUserPressure(Sender->GetAsFixed()));
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  if (IsDataField(Ballast, df))
+    FlipBallastTimer();
 }
 
 void
@@ -292,7 +275,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _T("%.0f l"), _T("%.0f"),
            fixed_zero, fixed(500), fixed(5), false,
            fixed_zero,
-           OnBallastData);
+           this);
 
   WndProperty *wp =
     AddFloat(_("Wing loading"), NULL,
@@ -307,7 +290,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _T("%.0f %%"), _T("%.0f"),
            fixed_zero, fixed(50), fixed_one, false,
            (fixed_one - polar_settings.bugs) * 100,
-           OnBugsData);
+           this);
 
   wp = AddFloat(_("QNH"),
                 _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
@@ -315,7 +298,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                 Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
                 Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
                 GetUserPressureStep(), false,
-                Units::ToUserPressure(settings.pressure), OnQnhData);
+                Units::ToUserPressure(settings.pressure), this);
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetUnits(Units::GetPressureName());
