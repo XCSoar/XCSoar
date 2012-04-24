@@ -93,9 +93,7 @@ IMI::Receive(Port &port, unsigned extraTimeout, unsigned expectedPayloadSize)
     // read message
     IMIBYTE buffer[64];
     int bytesRead = port.Read(buffer, sizeof(buffer));
-    if (bytesRead == 0)
-      continue;
-    if (bytesRead == -1)
+    if (bytesRead <= 0)
       break;
 
     // parse message
