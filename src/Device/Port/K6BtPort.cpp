@@ -108,12 +108,6 @@ K6BtPort::Flush()
   SendCommand(FLUSH_BUFFERS | 0x3); /* flush RX and TX buffer */
 }
 
-bool
-K6BtPort::SetRxTimeout(unsigned timeout_ms)
-{
-  return port->SetRxTimeout(timeout_ms);
-}
-
 gcc_const
 static int
 BaudRateToK6Bt(unsigned baud_rate)

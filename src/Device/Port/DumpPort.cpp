@@ -64,13 +64,6 @@ DumpPort::Flush()
   port->Flush();
 }
 
-bool
-DumpPort::SetRxTimeout(unsigned timeout_ms)
-{
-  LogStartUp(_T("SetRxTimeout %u"), timeout_ms);
-  return port->SetRxTimeout(timeout_ms);
-}
-
 unsigned
 DumpPort::GetBaudrate() const
 {

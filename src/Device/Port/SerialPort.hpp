@@ -75,6 +75,7 @@ public:
 
 protected:
   unsigned GetRxTimeout();
+  bool SetRxTimeout(unsigned Timeout);
 
   bool IsDataPending() const {
     COMSTAT com_stat;
@@ -106,7 +107,6 @@ public:
   virtual bool IsValid() const;
   virtual bool Drain();
   virtual void Flush();
-  virtual bool SetRxTimeout(unsigned Timeout);
   virtual bool SetBaudrate(unsigned baud_rate);
   virtual unsigned GetBaudrate() const;
   virtual bool StopRxThread();

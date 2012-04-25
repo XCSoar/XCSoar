@@ -231,12 +231,6 @@ TCPPort::StartRxThread()
   return true;
 }
 
-bool
-TCPPort::SetRxTimeout(unsigned Timeout)
-{
-  return true;
-}
-
 unsigned
 TCPPort::GetBaudrate() const
 {
@@ -262,13 +256,13 @@ TCPPort::Read(void *buffer, size_t length)
 
   struct timeval timeout;
   timeout.tv_sec = 0;
-  timeout.tv_usec = 250000;
+  timeout.tv_usec = 0;
 
   int ret = select(ufd + 1, &rfds, NULL, NULL, &timeout);
   if (ret != 1)
     return -1;
 
-  return read(ufd, buffer, length);
+  return read(connection_fd, buffer, length);
 }
 
 Port::WaitResult

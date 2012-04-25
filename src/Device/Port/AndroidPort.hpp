@@ -63,7 +63,6 @@ public:
   virtual bool SetBaudrate(unsigned baud_rate);
 
   /* virtual methods from class Port */
-  virtual bool SetRxTimeout(unsigned Timeout);
   virtual void Flush();
   virtual size_t Write(const void *data, size_t length);
   virtual int Read(void *Buffer, size_t Size);

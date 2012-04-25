@@ -138,13 +138,6 @@ public:
   virtual void Flush() = 0;
 
   /**
-   * Sets the RX timeout in ms
-   * @param Timeout The receive timeout in ms
-   * @return true on success, false on error
-   */
-  virtual bool SetRxTimeout(unsigned Timeout) = 0;
-
-  /**
    * Sets the baud rate of the serial port to the given value
    * @param BaudRate The desired baudrate
    * @return The previous baud rate or 0 on error
