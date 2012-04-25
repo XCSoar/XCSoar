@@ -25,6 +25,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
+#include "Operation/ConsoleOperationEnvironment.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,10 +43,26 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  port->SetRxTimeout(0x10000);
+  ConsoleOperationEnvironment env;
 
   char buffer[4096];
   while (true) {
+    switch (port->WaitRead(env, 60000)) {
+    case Port::WaitResult::READY:
+      break;
+
+    case Port::WaitResult::TIMEOUT:
+      continue;
+
+    case Port::WaitResult::FAILED:
+      delete port;
+      return EXIT_FAILURE;
+
+    case Port::WaitResult::CANCELLED:
+      delete port;
+      return EXIT_SUCCESS;
+    }
+
     int nbytes = port->Read(buffer, sizeof(buffer));
     if (nbytes < 0)
       break;
