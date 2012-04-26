@@ -45,8 +45,7 @@ public:
    * @param distance_factor Units factor to apply to distance calculations
    */
   AirspaceSorter(const Airspaces &_airspaces,
-                 const GeoPoint &Location,
-                 const fixed distance_factor);
+                 const GeoPoint &Location);
 
   /**
    * Return master list

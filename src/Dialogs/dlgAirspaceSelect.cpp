@@ -39,6 +39,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "UIGlobals.hpp"
 
 #include <assert.h>
@@ -177,7 +178,7 @@ static void OnFilterDistance(DataField *_Sender,
   switch(Mode){
     case DataField::daChange:
     distance_filter = (unsigned)Sender->GetAsInteger() != WILDCARD
-      ? fixed(Sender->GetAsInteger())
+      ? Units::ToSysDistance(fixed(Sender->GetAsInteger()))
       : fixed_minus_one;
     FilterMode(false);
     UpdateList();
@@ -253,9 +254,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   StaticString<12> sTmp;
 
   // right justified after airspace type
-  sTmp.Format(_T("%d%s"),
-              (int)AirspaceSelectInfo[i].distance,
-              Units::GetDistanceName());
+  FormatUserDistance(AirspaceSelectInfo[i].distance, sTmp.buffer(), true, 0);
   x2 = w0 - w3 - canvas.CalcTextWidth(sTmp);
   canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
     
@@ -427,8 +426,7 @@ dlgAirspaceSelect(const Airspaces &airspace_database,
   PrepareAirspaceSelectDialog();
 
   GeoPoint Location = XCSoarInterface::Basic().location;
-  AirspaceSorter g_airspace_sorter(airspace_database, Location,
-                                   Units::ToUserDistance(fixed_one));
+  AirspaceSorter g_airspace_sorter(airspace_database, Location);
   airspace_sorter = &g_airspace_sorter;
 
   UpdateList();

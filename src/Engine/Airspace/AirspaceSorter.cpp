@@ -6,8 +6,7 @@
 #include <algorithm>
 
 AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
-                               const GeoPoint &Location,
-                               const fixed distance_factor)
+                               const GeoPoint &Location)
 {
   m_airspaces_all.reserve(airspaces.size());
 
@@ -22,7 +21,7 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
       airspace.ClosestPoint(Location, airspaces.GetProjection());
     const GeoVector vec(Location, closest_loc);
 
-    info.distance = vec.distance * distance_factor;
+    info.distance = vec.distance;
     info.direction = vec.bearing;
 
     const TCHAR *name = airspace.GetName();
