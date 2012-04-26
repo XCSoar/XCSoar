@@ -31,49 +31,56 @@ Copyright_License {
 void
 InfoBoxContentLDInstant::Update(InfoBoxData &data)
 {
-  if (XCSoarInterface::Calculated().ld == fixed(999)) {
+  const fixed ld = XCSoarInterface::Calculated().ld;
+
+  if (ld == fixed(999)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValue(_T("%2.0f"), XCSoarInterface::Calculated().ld);
+  data.SetValueFromGlideRatio(ld);
 }
 
 void
 InfoBoxContentLDCruise::Update(InfoBoxData &data)
 {
-  if (XCSoarInterface::Calculated().cruise_ld == fixed(999)) {
+  const fixed cruise_ld = XCSoarInterface::Calculated().cruise_ld;
+
+  if (cruise_ld == fixed(999)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValue(_T("%2.0f"), XCSoarInterface::Calculated().cruise_ld);
+  data.SetValueFromGlideRatio(cruise_ld);
 }
 
 void
 InfoBoxContentLDAvg::Update(InfoBoxData &data)
 {
-  if (XCSoarInterface::Calculated().average_ld == 0) {
+  const int average_ld = XCSoarInterface::Calculated().average_ld;
+
+  if (average_ld == 0) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  if (XCSoarInterface::Calculated().average_ld < 0)
+  if (average_ld < 0)
     data.SetValue(_T("^^^"));
-  else if (XCSoarInterface::Calculated().average_ld >= 999)
+  else if (average_ld >= 999)
     data.SetValue(_T("+++"));
   else
-    data.SetValue(_T("%2.0f"),
-                      fixed(XCSoarInterface::Calculated().average_ld));
+    data.SetValueFromGlideRatio(fixed(average_ld));
 }
 
 void
 InfoBoxContentLDVario::Update(InfoBoxData &data)
 {
-  if (XCSoarInterface::Calculated().ld_vario == fixed(999) ||
+  const fixed ld_vario = XCSoarInterface::Calculated().ld_vario;
+
+  if (ld_vario == fixed(999) ||
       !XCSoarInterface::Basic().total_energy_vario_available ||
       !XCSoarInterface::Basic().airspeed_available) {
     data.SetInvalid();
@@ -81,5 +88,5 @@ InfoBoxContentLDVario::Update(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValue(_T("%2.0f"), XCSoarInterface::Calculated().ld_vario);
+  data.SetValueFromGlideRatio(ld_vario);
 }
