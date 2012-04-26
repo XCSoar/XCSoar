@@ -228,13 +228,6 @@ AbstractAirspace::GetRadioText() const
   return radio;
 }
 
-const tstring
-AbstractAirspace::GetVerticalText() const
-{
-  return _T("Base: ") + altitude_base.GetAsText(false) +
-         _T(" Top: ") + altitude_top.GetAsText(false);
-}
-
 void
 AbstractAirspace::Project(const TaskProjection &task_projection)
 {

@@ -128,7 +128,7 @@ public:
   virtual void visit_general(const AbstractAirspace& as) {
     if (do_report) {
       *fout << "# Name: " << AirspaceFormatter::GetNameAndClass(as).c_str()
-            << " " << as.GetVerticalText().c_str()
+            << " " << AirspaceFormatter::GetVerticalText(as).c_str()
             << "\n";
     }
   }

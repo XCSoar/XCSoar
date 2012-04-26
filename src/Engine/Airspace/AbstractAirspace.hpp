@@ -320,16 +320,6 @@ public:
   const tstring GetRadioText() const;
 
   /**
-   * Produce text version of base+top altitude (no units).
-   *
-   * @param concise Whether to use short form or long form
-   *
-   * @return Text version of base altitude
-   */
-  gcc_pure
-  const tstring GetVerticalText() const;
-
-  /**
    * Produce text version of base altitude with units.
    *
    * @param concise Whether to use short form or long form

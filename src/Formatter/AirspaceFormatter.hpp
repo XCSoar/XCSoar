@@ -46,6 +46,9 @@ const TCHAR *GetClassShort(const AbstractAirspace &airspace);
 /** Returns the airspace name and class as text. */
 tstring GetNameAndClass(const AbstractAirspace &airspace);
 
+/** Returns the base and top altitudes as text without units */
+tstring GetVerticalText(const AbstractAirspace &airspace);
+
 }
 
 #endif
