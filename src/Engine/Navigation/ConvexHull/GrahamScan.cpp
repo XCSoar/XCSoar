@@ -24,7 +24,8 @@
 #include "Navigation/SearchPointVector.hpp"
 
 static bool
-sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
+sortleft
+(const SearchPoint& sp1, const SearchPoint& sp2)
 { 
   return sp1.sort(sp2);
 }
@@ -35,22 +36,24 @@ GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):
 {
 }
 
-//
-// The initial array of points is stored in vector raw_points. I first
-// sort it, which gives me the far left and far right points of the
-// hull.  These are special values, and they are stored off separately
-// in the left and right members.
-//
-// I then go through the list of raw_points, and one by one determine
-// whether each point is above or below the line formed by the right
-// and left points.  If it is above, the point is moved into the
-// upper_partition_points sequence. If it is below, the point is moved
-// into the lower_partition_points sequence. So the output of this
-// routine is the left and right points, and the sorted points that
-// are in the upper and lower partitions.
-//
-void GrahamScan::partition_points()
+void
+GrahamScan::partition_points()
 {
+  //
+  // The initial array of points is stored in vector raw_points. I first
+  // sort it, which gives me the far left and far right points of the
+  // hull.  These are special values, and they are stored off separately
+  // in the left and right members.
+  //
+  // I then go through the list of raw_points, and one by one determine
+  // whether each point is above or below the line formed by the right
+  // and left points.  If it is above, the point is moved into the
+  // upper_partition_points sequence. If it is below, the point is moved
+  // into the lower_partition_points sequence. So the output of this
+  // routine is the left and right points, and the sorted points that
+  // are in the upper and lower partitions.
+  //
+
   //
   // Step one in partitioning the points is to sort the raw data
   //
@@ -74,52 +77,55 @@ void GrahamScan::partition_points()
   lower_partition_points.reserve(size);
 
   for (auto i = raw_points.begin(); i != raw_points.end();) {
-    if ((loclast.longitude != i->get_location().longitude)
-        ||(loclast.latitude != i->get_location().latitude)) {
+    if (loclast.longitude != i->get_location().longitude ||
+        loclast.latitude != i->get_location().latitude) {
       loclast = i->get_location();
 
       int dir = direction(left->get_location(), right->get_location(),
-                          i->get_location(), tolerance );
+                          i->get_location(), tolerance);
       SearchPoint* sp = &(*i);
-      if ( dir < 0 )
-        upper_partition_points.push_back( sp );
+      if (dir < 0)
+        upper_partition_points.push_back(sp);
       else
-        lower_partition_points.push_back( sp );
+        lower_partition_points.push_back(sp);
     }
     ++i;
   };
 
 }
 
-//
-// Building the hull consists of two procedures: building the lower
-// and then the upper hull. The two procedures are nearly identical -
-// the main difference between the two is the test for convexity. When
-// building the upper hull, our rull is that the middle point must
-// always be *above* the line formed by its two closest
-// neighbors. When building the lower hull, the rule is that point
-// must be *below* its two closest neighbors. We pass this information
-// to the building routine as the last parameter, which is either -1
-// or 1.
-//
-void GrahamScan::build_hull()
+void
+GrahamScan::build_hull()
 {
-  build_half_hull(lower_partition_points, lower_hull, 1 );
-  build_half_hull(upper_partition_points, upper_hull, -1 );
+  //
+  // Building the hull consists of two procedures: building the lower
+  // and then the upper hull. The two procedures are nearly identical -
+  // the main difference between the two is the test for convexity. When
+  // building the upper hull, our rull is that the middle point must
+  // always be *above* the line formed by its two closest
+  // neighbors. When building the lower hull, the rule is that point
+  // must be *below* its two closest neighbors. We pass this information
+  // to the building routine as the last parameter, which is either -1
+  // or 1.
+  //
+
+  build_half_hull(lower_partition_points, lower_hull, 1);
+  build_half_hull(upper_partition_points, upper_hull, -1);
 }
 
-//
-// This is the method that builds either the upper or the lower half convex
-// hull. It takes as its input a copy of the input array, which will be the
-// sorted list of points in one of the two halfs. It produces as output a list
-// of the points in the corresponding convex hull.
-//
-// The factor should be 1 for the lower hull, and -1 for the upper hull.
-//
-void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
-                                  std::vector< SearchPoint* > &output,
-                                  int factor )
+void
+GrahamScan::build_half_hull(std::vector<SearchPoint*> input,
+                            std::vector<SearchPoint*> &output, int factor)
 {
+  //
+  // This is the method that builds either the upper or the lower half convex
+  // hull. It takes as its input a copy of the input array, which will be the
+  // sorted list of points in one of the two halfs. It produces as output a list
+  // of the points in the corresponding convex hull.
+  //
+  // The factor should be 1 for the lower hull, and -1 for the upper hull.
+  //
+
   output.reserve(input.size() + 1);
 
   //
@@ -128,8 +134,8 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
   // first point in the output sequence, and make sure the right point
   // is the last point in the input sequence.
   //
-  input.push_back( right );
-  output.push_back( left );
+  input.push_back(right);
+  output.push_back(left);
 
   //
   // The construction loop runs until the input is exhausted
@@ -143,54 +149,51 @@ void GrahamScan::build_half_hull( std::vector< SearchPoint* > input,
     //
     output.push_back(*i);
 
-    while ( output.size() >= 3 ) {
+    while (output.size() >= 3) {
       size_t end = output.size() - 1;
 
-      if ( factor * direction( output[ end - 2 ]->get_location(), 
-                               output[ end ]->get_location(), 
-                               output[ end - 1 ]->get_location(),
-                               tolerance) <= 0 ) {
-        output.erase( output.begin() + end - 1 );
-      }
-      else
+      if (factor * direction(output[end - 2]->get_location(),
+                             output[end]->get_location(),
+                             output[end - 1]->get_location(),
+                             tolerance) > 0)
         break;
+
+      output.erase(output.begin() + end - 1);
     }
   }
 }
 
-//
-// In this program we frequently want to look at three consecutive
-// points, p0, p1, and p2, and determine whether p2 has taken a turn
-// to the left or a turn to the right.
-//
-// We can do this by by translating the points so that p1 is at the origin,
-// then taking the cross product of p0 and p2. The result will be positive,
-// negative, or 0, meaning respectively that p2 has turned right, left, or
-// is on a straight line.
-//
-
-int GrahamScan::direction( const GeoPoint& p0,
-                           const GeoPoint& p1,
-                           const GeoPoint& p2,
-                           const fixed& tolerance)
+int
+GrahamScan::direction(const GeoPoint& p0, const GeoPoint& p1,
+                      const GeoPoint& p2, const fixed& tolerance)
 {
-  return (( (p0.longitude - p1.longitude ) * (p2.latitude - p1.latitude ) )
-          - ( (p2.longitude - p1.longitude ) * (p0.latitude - p1.latitude ) )).Sign(tolerance);
+  //
+  // In this program we frequently want to look at three consecutive
+  // points, p0, p1, and p2, and determine whether p2 has taken a turn
+  // to the left or a turn to the right.
+  //
+  // We can do this by by translating the points so that p1 is at the origin,
+  // then taking the cross product of p0 and p2. The result will be positive,
+  // negative, or 0, meaning respectively that p2 has turned right, left, or
+  // is on a straight line.
+  //
+
+  return (((p0.longitude - p1.longitude) * (p2.latitude - p1.latitude)) -
+          ((p2.longitude - p1.longitude) * (p0.latitude - p1.latitude))).Sign(tolerance);
 }
 
 
-bool 
+bool
 GrahamScan::prune_interior()
 {
   SearchPointVector res;
 
   /* the result is usually one more than the input vector - is that a
-     bug? */
+   bug? */
   res.reserve(size + 1);
 
-  if (size<3) {
-    std::copy(raw_points.begin(), raw_points.end(),
-              std::back_inserter(res));
+  if (size < 3) {
+    std::copy(raw_points.begin(), raw_points.end(), std::back_inserter(res));
     return false;
     // nothing to do
   }
@@ -198,17 +201,15 @@ GrahamScan::prune_interior()
   partition_points();
   build_hull();
 
-  for ( unsigned i = 0 ; i+1 < lower_hull.size() ; i++ ) {
+  for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
     res.push_back(*lower_hull[i]);
-  }
-  for ( int i = upper_hull.size()-1; i>=0 ; i-- ) {
-    res.push_back(*upper_hull[i]);
-  }
 
-  if (res.size() != size) {
-    raw_vector.swap(res);
-    return true;
-  } else {
+  for (int i = upper_hull.size() - 1; i >= 0; i--)
+    res.push_back(*upper_hull[i]);
+
+  if (res.size() == size)
     return false;
-  }
+
+  raw_vector.swap(res);
+  return true;
 }

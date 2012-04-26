@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef GRAHAM_SCAN_HPP
 #define GRAHAM_SCAN_HPP
 
@@ -42,44 +43,41 @@ struct GeoPoint;
  */
 class GrahamScan: private NonCopyable
 {
-  std::list< SearchPoint > raw_points;
+  std::list<SearchPoint> raw_points;
   SearchPoint *left;
   SearchPoint *right;
-  std::vector< SearchPoint* > upper_partition_points;
-  std::vector< SearchPoint* > lower_partition_points;
-  std::vector< SearchPoint* > lower_hull;
-  std::vector< SearchPoint* > upper_hull;
+  std::vector<SearchPoint*> upper_partition_points;
+  std::vector<SearchPoint*> lower_partition_points;
+  std::vector<SearchPoint*> lower_hull;
+  std::vector<SearchPoint*> upper_hull;
   SearchPointVector &raw_vector;
   const unsigned size;
   const fixed tolerance;
 
-public :
-/** 
- * Constructor.  Note that this class should be used temporarily only
- * 
- * @param sps Input vector of points (may be unordered)
- */
+public:
+  /**
+   * Constructor.  Note that this class should be used temporarily only
+   *
+   * @param sps Input vector of points (may be unordered)
+   */
   GrahamScan(SearchPointVector& sps, const fixed sign_tolerance = fixed(1.0e-8));
 
-/** 
- * Perform convex hull transformation
- * 
- * @return changed Return status as to whether input vector was altered (pruned) or not
- */
+  /**
+   * Perform convex hull transformation
+   *
+   * @return changed Return status as to whether input vector was altered (pruned) or not
+   */
   bool prune_interior();
 
-private :
+private:
   void partition_points();
   void build_hull();
-  void build_half_hull( std::vector< SearchPoint* > input,
-                        std::vector< SearchPoint* > &output,
-                        int factor );
+  void build_half_hull(std::vector<SearchPoint*> input,
+                       std::vector<SearchPoint*> &output, int factor);
 
   gcc_pure
-  static int direction(const GeoPoint& p0,
-                       const GeoPoint& p1,
-                       const GeoPoint& p2,
-                       const fixed& _tolerance);
+  static int direction(const GeoPoint& p0, const GeoPoint& p1,
+                       const GeoPoint& p2, const fixed& _tolerance);
 };
 
 
