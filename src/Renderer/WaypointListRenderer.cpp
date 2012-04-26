@@ -105,18 +105,6 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
-
-  // Draw icon
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
-
-  WaypointIconRenderer::Reachability reachable =
-      positive(arrival_altitude) ?
-      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
-
-  WaypointIconRenderer wir(settings, look, canvas);
-  wir.Draw(waypoint, pt, reachable);
 
   // Y-Coordinate of the second row
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
@@ -144,6 +132,17 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
                       waypoint.name.c_str());
+
+  // Draw icon
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
+
+  WaypointIconRenderer::Reachability reachable =
+      positive(arrival_altitude) ?
+      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
+
+  WaypointIconRenderer wir(settings, look, canvas);
+  wir.Draw(waypoint, pt, reachable);
 }
 
 void
@@ -157,15 +156,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   Buffer buffer;
-
-  // Draw icon
-  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
-                     (PixelScalar)(rc.top + line_height / 2) };
-  WaypointIconRenderer wir(settings, look, canvas);
-  wir.Draw(waypoint, pt);
 
   // Y-Coordinate of the second row
   PixelScalar top2 = rc.top + name_font.GetHeight() + Layout::FastScale(4);
@@ -205,4 +197,10 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2),
                       rc.right - leg_info_width - left, waypoint.name.c_str());
+
+  // Draw icon
+  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
+                     (PixelScalar)(rc.top + line_height / 2) };
+  WaypointIconRenderer wir(settings, look, canvas);
+  wir.Draw(waypoint, pt);
 }
