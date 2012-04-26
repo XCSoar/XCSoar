@@ -76,7 +76,7 @@ GrahamScan::partition_points()
   upper_partition_points.reserve(size);
   lower_partition_points.reserve(size);
 
-  for (auto i = raw_points.begin(); i != raw_points.end();) {
+  for (auto i = raw_points.begin(); i != raw_points.end(); ++i) {
     if (loclast.longitude != i->get_location().longitude ||
         loclast.latitude != i->get_location().latitude) {
       loclast = i->get_location();
@@ -89,7 +89,6 @@ GrahamScan::partition_points()
       else
         lower_partition_points.push_back(sp);
     }
-    ++i;
   };
 
 }
