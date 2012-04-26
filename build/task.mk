@@ -1,6 +1,5 @@
 ENGINE_GLUE_SOURCES = \
-	$(ENGINE_SRC_DIR)/Airspace/AirspacesTerrain.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/AirspaceAltitudeText.cpp 
+	$(ENGINE_SRC_DIR)/Airspace/AirspacesTerrain.cpp
 
 ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Airspace/Airspace.cpp \

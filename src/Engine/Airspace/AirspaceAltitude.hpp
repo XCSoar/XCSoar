@@ -107,15 +107,6 @@ struct AirspaceAltitude
    */
   const tstring GetAsText(const bool concise = false) const;
 
-  /**
-   * Generate text form of airspace altitude boundary with user units
-   *
-   * @param concise Whether to produce short-form
-   *
-   * @return String version of altitude reference
-   */
-  const tstring GetAsTextUnits(const bool concise = false) const;
-
   static bool SortHighest(const AirspaceAltitude &a, const AirspaceAltitude &b) {
     return a.altitude > b.altitude;
   }

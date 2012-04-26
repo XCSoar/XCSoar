@@ -313,8 +313,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   const AirspaceInterceptSolution &solution = warning.solution;
 
   tstring name = AirspaceFormatter::GetNameAndClass(airspace);
-  tstring top = airspace.GetTopText(true);
-  tstring base = airspace.GetBaseText(true);
+  tstring top = AirspaceFormatter::GetTopShort(airspace);
+  tstring base = AirspaceFormatter::GetBaseShort(airspace);
 
   const UPixelScalar text_height = 12, text_top = 1;
 

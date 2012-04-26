@@ -301,17 +301,20 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, AirspaceFormatter::GetClass(airspace));
 
+  tstring top = AirspaceFormatter::GetTopShort(airspace);
   PixelScalar altitude_width =
-    canvas.CalcTextWidth(airspace.GetTopText(true).c_str());
+    canvas.CalcTextWidth(top.c_str());
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.GetHeight() -
                       small_font.GetHeight() + Layout::FastScale(2), rc,
-                      airspace.GetTopText(true).c_str());
+                      top.c_str());
 
-  altitude_width = canvas.CalcTextWidth(airspace.GetBaseText(true).c_str());
+  tstring base = AirspaceFormatter::GetBaseShort(airspace);
+  altitude_width = canvas.CalcTextWidth(base.c_str());
+
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, airspace.GetBaseText(true).c_str());
+                      rc, base.c_str());
 }
 
 void

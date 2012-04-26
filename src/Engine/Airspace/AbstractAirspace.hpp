@@ -320,26 +320,6 @@ public:
   const tstring GetRadioText() const;
 
   /**
-   * Produce text version of base altitude with units.
-   *
-   * @param concise Whether to use short form or long form
-   *
-   * @return Text version of base altitude
-   */
-  gcc_pure
-  const tstring GetBaseText(const bool concise = false) const;
-
-  /**
-   * Produce text version of top altitude with units.
-   *
-   * @param concise Whether to use short form or long form
-   *
-   * @return Text version of top altitude
-   */
-  gcc_pure
-  const tstring GetTopText(const bool concise = false) const;
-
-  /**
    * Accessor for airspace shape
    *
    * For polygon airspaces, this is the actual boundary,

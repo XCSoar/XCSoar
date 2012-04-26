@@ -30,6 +30,7 @@ Copyright_License {
 #include <tchar.h>
 
 class AbstractAirspace;
+struct AirspaceAltitude;
 
 namespace AirspaceFormatter {
 
@@ -46,8 +47,23 @@ const TCHAR *GetClassShort(const AbstractAirspace &airspace);
 /** Returns the airspace name and class as text. */
 tstring GetNameAndClass(const AbstractAirspace &airspace);
 
+/** Returns the airspace altitude limit as text with unit. */
+tstring GetAltitude(const AirspaceAltitude &altitude);
+/** Returns the airspace altitude limit as short text with unit. */
+tstring GetAltitudeShort(const AirspaceAltitude &altitude);
+
 /** Returns the base and top altitudes as text without units */
 tstring GetVerticalText(const AbstractAirspace &airspace);
+
+/** Returns the base altitude as text with unit. */
+tstring GetBase(const AbstractAirspace &airspace);
+/** Returns the base altitude as short text with unit. */
+tstring GetBaseShort(const AbstractAirspace &airspace);
+
+/** Returns the top altitude as text with unit. */
+tstring GetTop(const AbstractAirspace &airspace);
+/** Returns the top altitude as short text with unit. */
+tstring GetTopShort(const AbstractAirspace &airspace);
 
 }
 

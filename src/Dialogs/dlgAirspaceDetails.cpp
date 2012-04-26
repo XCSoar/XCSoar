@@ -107,12 +107,12 @@ SetValues()
 
   wp = (WndProperty*)wf->FindByName(_T("prpTop"));
   assert(wp != NULL);
-  wp->SetText(airspace->GetTopText().c_str());
+  wp->SetText(AirspaceFormatter::GetTop(*airspace).c_str());
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpBase"));
   assert(wp != NULL);
-  wp->SetText(airspace->GetBaseText().c_str());
+  wp->SetText(AirspaceFormatter::GetBase(*airspace).c_str());
   wp->RefreshDisplay();
 
   if (airspace_warnings != NULL) {
