@@ -36,6 +36,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.os.SystemClock;
 
 /**
  * Code to support the growing suite of non-GPS sensors on Android platforms.
@@ -68,6 +69,12 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // for proportioning the following two arrays and for index checking.
   private static final int SENSOR_TYPE_ID_UPPER_BOUND = 20;
 
+  // Constants for the Kalman filter's noise models. These values are bigger
+  // than actual noise recovered from data, but that's because that noise
+  // looks more Laplacian than anything.
+  private static final double KF_VAR_ACCEL = 0.0075;  // Variance of pressure acceleration noise input.
+  private static final double KF_VAR_MEASUREMENT = 0.05;  // Variance of pressure measurement noise.
+
   // The set of sensors in SUPPORTED_SENSORS that are present on this device,
   // i.e. that are retrieved by calling getDefaultSensor on sensor IDs present
   // in that array. This array is indexed by sensor numerical type ID---if the
@@ -79,6 +86,17 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // indexed by sensor numerical type ID---if the corresponding sensor is
   // absent or unsupported, the value will be null.
   private boolean[] enabled_sensors_;
+
+  /**
+   * A Kalman filter used to smoothen the pressure sensor readings.
+   */
+  private KalmanFilter pressureFilter = new KalmanFilter(KF_VAR_ACCEL);
+
+  /**
+   * Time stamp of the last pressure reading.  This is used to
+   * calculate delta-time for the KalmanFilter.
+   */
+  private double lastPressureTime = -1;
 
   // Sensor manager.
   private SensorManager sensor_manager_;
@@ -205,6 +223,10 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     // again) to all desired sensors.
     Log.d(TAG, "Updating non-GPS sensor subscriptions...");
     sensor_manager_.unregisterListener(this);
+
+    /* schedule a KalmanFilter reset */
+    lastPressureTime = -1;
+
     for (int id : SUPPORTED_SENSORS) {
       if (enabled_sensors_[id] && default_sensors_[id] != null) {
         Log.d(TAG, "Subscribing to sensor ID " + id + " (" + default_sensors_[id].getName() + ")");
@@ -213,6 +235,18 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
       }
     }
     Log.d(TAG, "Done updating non-GPS sensor subscriptions...");
+  }
+
+  private void onBarometricPressure(float value) {
+    final double now = SystemClock.elapsedRealtime() / 1000.;
+    if (lastPressureTime < 0)
+      pressureFilter.reset(value);
+    else
+      pressureFilter.update(value, KF_VAR_MEASUREMENT,
+                            now - lastPressureTime);
+    lastPressureTime = now;
+
+    setBarometricPressure((float)pressureFilter.getXAbs());
   }
 
   /** from SensorEventListener; currently does nothing. */
@@ -236,7 +270,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
         setMagneticField(event.values[0], event.values[1], event.values[2]);
         break;
       case Sensor.TYPE_PRESSURE:
-        setBarometricPressure(event.values[0]);
+        onBarometricPressure(event.values[0]);
         break;
       }
     } finally {

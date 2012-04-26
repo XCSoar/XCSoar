@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 AndroidPort::AndroidPort(Port::Handler &_handler, PortBridge *_bridge)
-  :Port(_handler), bridge(_bridge), read_timeout(500),
+  :Port(_handler), bridge(_bridge),
    running(false), waiting(false), closing(false)
 {
   bridge->setListener(Java::GetEnv(), this);
@@ -124,39 +124,22 @@ AndroidPort::StartRxThread()
   return true;
 }
 
-bool
-AndroidPort::SetRxTimeout(unsigned Timeout)
-{
-  read_timeout = Timeout;
-  return true;
-}
-
 int
 AndroidPort::Read(void *dest, size_t length)
 {
-  TimeoutClock timeout(read_timeout);
+  assert(!closing);
+  assert(!running);
+
   ScopeLock protect(mutex);
 
-  while (!running) {
-    assert(!closing);
+  auto r = buffer.Read();
+  if (r.length == 0)
+    return -1;
 
-    auto r = buffer.Read();
-    if (r.length > 0) {
-      size_t nbytes = std::min(length, r.length);
-      std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
-      buffer.Consume(nbytes);
-      return nbytes;
-    }
-
-    /* the buffer is empty; wait for DataReceived() to be called */
-    int remaining_ms = timeout.GetRemainingSigned();
-    if (remaining_ms <= 0)
-      return -1;
-
-    cond.Wait(mutex, remaining_ms);
-  }
-
-  return -1;
+  size_t nbytes = std::min(length, r.length);
+  std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
+  buffer.Consume(nbytes);
+  return nbytes;
 }
 
 Port::WaitResult

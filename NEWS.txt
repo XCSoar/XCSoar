@@ -9,6 +9,15 @@ Version 6.4 - not yet released
 * infoboxes
   - added automatic altitude infobox (baro. altitude with GPS fallback)
 
+Version 6.3.2 - 2011/04/26
+* devices
+  - FLARM: fix flight download
+* user interface
+  - improved list colors, white text on dark blue background
+  - limit form field labels that are too wide
+* Android
+  - apply a Kalman filter to the pressure reading
+
 Version 6.3.1 - 2011/04/19
 * calculations
   - fix crash with far away task

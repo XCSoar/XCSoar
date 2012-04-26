@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 
 #include "Util/AllocatedArray.hpp"
+#include "Util/TypeTraits.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 #include "tchar.h"
@@ -42,7 +43,7 @@ namespace FLARM {
   static const uint8_t START_FRAME = 0x73;
   static const uint8_t ESCAPE = 0x78;
   static const uint8_t ESCAPE_ESCAPE = 0x55;
-  static const uint8_t ESCAPE_START = 0x41;
+  static const uint8_t ESCAPE_START = 0x31;
 
   enum MessageType {
     MT_ERROR = 0x00,
@@ -65,39 +66,33 @@ namespace FLARM {
    */
   struct FrameHeader
   {
-  private:
     /**
      * Length of the frame header (8) + length of the payload in bytes.
      * Use the Get/Set() functions to interact with this attribute!
      */
     uint16_t length;
 
-  public:
     /**
      * Protocol version. Frames with higher version number than implemented
      * by software shall be discarded.
      */
     uint8_t version;
 
-  private:
     /**
      * Sequence counter. Shall be increased by one for every frame sent.
      * Use the Get/Set() functions to interact with this attribute!
      */
     uint16_t sequence_number;
 
-  public:
     /** Message type */
     uint8_t type;
 
-  private:
     /**
      * CRC over the complete message, except CRC field.
      * Use the Get/Set() functions to interact with this attribute!
      */
     uint16_t crc;
 
-  public:
     uint16_t GetLength() const {
       return FromLE16(length);
     }
@@ -126,6 +121,7 @@ namespace FLARM {
 
   static_assert(sizeof(FrameHeader) == 8,
                 "The FrameHeader struct needs to have a size of 8 bytes");
+  static_assert(is_trivial<FrameHeader>::value, "type is not trivial");
 
   /**
    * Convenience function. Returns a pre-populated FrameHeader instance that is

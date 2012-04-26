@@ -33,8 +33,6 @@ Copyright_License {
  */
 class TTYPort : public Port, protected StoppableThread
 {
-  unsigned rx_timeout;
-
   unsigned baud_rate;
 
   int fd;
@@ -48,7 +46,7 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(Handler &_handler);
+  TTYPort(Handler &_handler):Port(_handler) {}
 
   virtual ~TTYPort();
 
@@ -72,7 +70,6 @@ public:
   virtual bool IsValid() const;
   virtual bool Drain();
   virtual void Flush();
-  virtual bool SetRxTimeout(unsigned Timeout);
   virtual bool SetBaudrate(unsigned baud_rate);
   virtual unsigned GetBaudrate() const;
   virtual bool StopRxThread();

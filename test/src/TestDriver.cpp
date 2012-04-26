@@ -914,7 +914,7 @@ TestDeclare(const struct DeviceRegister &driver)
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;
     bool success = device->Declare(declaration, NULL, env);
-    if (success || !port.running || port.timeout != 0 ||
+    if (success || !port.running ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
   }
@@ -939,7 +939,7 @@ TestFlightList(const struct DeviceRegister &driver)
     inject_port_fault = i;
     RecordedFlightList flight_list;
     bool success = device->ReadFlightList(flight_list, env);
-    if (success || !port.running || port.timeout != 0 ||
+    if (success || !port.running ||
         port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
       break;
   }

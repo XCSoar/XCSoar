@@ -149,17 +149,13 @@ VolksloggerDevice::Declare(const Declaration &declaration,
     return false;
 
   port.StopRxThread();
-  port.SetRxTimeout(500);
 
   // change to IO mode baud rate
-  unsigned old_baud_rate = 0;
-  if (9600 != 0) {
-    old_baud_rate = port.GetBaudrate();
-    if (old_baud_rate == 9600)
-      old_baud_rate = 0;
-    else if (!port.SetBaudrate(9600))
-      return false;
-  }
+  unsigned old_baud_rate = port.GetBaudrate();
+  if (old_baud_rate == 9600)
+    old_baud_rate = 0;
+  else if (!port.SetBaudrate(9600))
+    return false;
 
   bool success = DeclareInner(port, declaration, home, env);
 

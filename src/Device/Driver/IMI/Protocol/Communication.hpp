@@ -70,6 +70,7 @@ namespace IMI
   const TMsg *Receive(Port &port, OperationEnvironment &env,
                       unsigned extraTimeout,
                       unsigned expectedPayloadSize);
+
   /**
    * @brief Sends a message and waits for a confirmation from the device
    *

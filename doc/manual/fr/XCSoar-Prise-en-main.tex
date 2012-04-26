@@ -1,0 +1,180 @@
+\documentclass{article}
+% Uncomment the following line to allow the usage of graphics (.png, .jpg)
+\usepackage[pdftex]{graphicx}
+%
+\usepackage{hyperref}
+%\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+%
+\begin{document}
+%
+\begin{center}
+\includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/xcsoarswiftsplash.pdf}
+\vskip 0.5cm
+\includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}
+\subsection*{Prise en main du logiciel}
+\end{center}
+%
+\begin{flushright}
+Mise à jour du 21 avril 2012 (de la part de Adrien Ott)
+\end{flushright}
+%
+\pagebreak
+\noindent
+\textbf{\textit{Avant-propos}}\\
+Ce document est un guide de prise en main du logiciel XCSoar et ne constitue pas un mode d'emploi exhaustif du logiciel. L'objectif de ce document est de permettre à un(e) utilisateur(trice) ne connaissant pas le logiciel de l'installer, le configurer et l'utiliser le plus rapidement et facilement possible.\\Le mode d'emploi complet faisant actuellement référence est en anglais et disponible dans chaque répertoire de livraison (voir paragraphe "liens divers").\\Si vous avez des commentaires ou des suggestions d'amélioration de ce guide, n'hésitez pas à les faire sur le forum d'XCSoar, dans la rubrique "French".
+
+%
+% Just an example to inlude the images from the "images" directory
+%\marginpar{\parbox{4.0cm}{\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{images/smiley.png}}}
+
+\section{Introduction}
+\noindent
+XCSoar est un logiciel d'aide à la navigation en planeur : "XC" est une abbréviation pour "cross county" (vol sur la campagne), "Soar" fait référence au vol sans moteur (vol à voile, vol libre).\\
+XCSoar est disponible sur plusieurs platformes matérielles (PDA, PNA, smartphones, Altair de Triadis) et plusieurs sysèmes d'exploitation, dont Windows Mobile 5 et 6, et Android (version 1.6 et plus récentes).\\
+XCSoar est développé par des volontaires avec un grand souci de qualité et de performance, et est très largement configurable du point de vue de l'interface utilisateur.\\
+Ce guide de prise en main suppose que vous utilisez une version aussi ou plus récente que la version 6.3.\\
+Pour une version 6.x.y :
+\begin{itemize}
+\item les mises à jour dites de maintenance sont les évolutions "y" (correctifs si nécessaire),
+\item les mises à jour majeures sont les évolutions "x".
+\end{itemize}
+%
+Pour être informé des mises à jour, vous pouvez vous abonner au flux RSS du site XCSoar.org (voir paragraphe \ref{LiensDivers} "Liens divers").\\
+%
+\section{Installation}
+\noindent
+La première étape nécessaire à l'installation est le téléchagement de la dernière version d'XCSoar au lien suivant : \url{http://www.xcsoar.org/download/}\\
+Sur cette page figurent les différents systèmes d'exploitation supportés, sélectionnez le votre et téléchagez le logiciel. Copiez le sur votre appareil, et lancez-le.\\
+\newline
+\itshape Sous Windows Mobile, préférez le fichier ".exe" plutôt que le ".cab", quitte à placer un raccourci vers le ".exe" dans le menu "Démarrer" de Windows.\upshape\\
+\newline
+XCSoar affiche alors le logo au centre, la version du logiciel en haut à gauche, un bouton "Quit" en haut à droite, et deux boutons de lancement \textbf{FLY} et \textbf{SIM} en bas de l'écran, respectivement pour le mode vol (pour voler et enregistrer le vol) et le mode simulation (pour apprendre à l'utiliser et le configurer, de façon isolée ou connecté à une simulateur, comme Condor par exemple). A ce stade vous pouvez quitter.
+%
+Si vous avez lancé le mode \textbf{FLY} ou \textbf{SIM}, le menu principal peut être invoqué par un double clic sur le fond de carte.
+L'utilisation est détaillée plus bas.
+%
+\section{Configuration}
+%
+\subsection{Les fichiers}
+\noindent
+XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, mettez de préférence ce répertoire sur la carte mémoire, à la racine, si ce n'est pas le cas par défaut (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows.\\
+Les fichiers les plus utiles sont les suivants :
+\begin{itemize}
+\item points de virage ("waypoints"), ils peuvent être de diffèrents formats (*.dat de WinPilot/Cambridge, *.cup de SeeYou, *.wpz de Zander, *.wpt d'OziExplorer, GPSDump/FS, GEO ou UTM),
+\item espaces aériens (au format OpenAir),
+\item fond cartographique (format .xcm).
+\end{itemize}
+Pour trouver ces fichiers, voir le paragraphe \ref{LiensDivers} "Liens divers".
+%
+\subsection{L'interface}
+\noindent
+%
+Une fois ces fichiers placés dans le répertoire XCSoarData, la configuration proprement dite peut commencer. L'interaction avec le logiciel se fait principalement via l'écran tactile (plus les boutons éventuels, comme sur un iPaq ou un smartphone Android, mais cela ne sera pas détaillé ici).\\
+Lancez XCSoar en mode simulation et lancez le menu principal:
+\begin{itemize}
+\item double clic sur la carte,
+ou
+\item raccourci gestuel "bas-haut" (\textbf{B H}).
+\end{itemize}
+Un raccourci gestuel ("gesture" dans le manuel en anglais), est un dessin géométrique que l'utilisateur peut tracer à l'écran pour invoquer un menu en particulier. "\textbf{B H}" consiste à tracer sur l'écran, avec le doigt, un aller-retour commençant par descendre. D'autres exemples sont détaillés plus bas.\\
+%
+Le \textbf{menu principal} est constitué des boutons Nav., Affich., Config., Info d'une part, Annuler et Quitter d'autre part. Les premiers permettent de gérer les principales fonctions du logiciel, les options d'affichage, la configuration du logiciel, consulter l'état du système, les derniers permettent d'effacer le menu principal (plus tôt qu'automatiquement) et quitter le logiciel.\\
+%
+Une fois le menu principal invoqué, vous pouvez changez la langue utilisée par l'interface si celle-ci n'est pas le français, par exemple (si en anglais) : choisir "fr.mo" dans Config / Config / System Setup / Look Language, Inputs / Language.
+Sinon passez directement à la configuration dans le menu Config. / Config. / Options Système / Fichiers / Fichiers
+Sélectionnez les fichiers correspondants aux champs suivants :
+\begin{itemize}
+\item Carte,
+\item Waypoints,
+\item Espaces aériens.
+\end{itemize}
+Les champs configurables sont affichés sur fond blanc et modifiables en cliquant dessus, puis en sélectionnant l'option voulue. Pour chaque option une aide est disponible en français, fournissant les explications sur les différentes options si nécessaire.\\
+%
+XCSoar permet l'affichage de \textbf{plusieurs pages} (de une à huit) dont le contenu de chaque InfoBox peut être paramétré. Voir dans "Config. / Config. / Options Système / Apparence" les menus "Pages des InfoBoxes" et "Modes InfoBoxes".
+%
+Une page nommée AUTO permet de basculer automatiquement entre les trois suivantes :
+\begin{itemize}
+\item Thermique,
+\item Transition,
+\item PlanéFinal (Arrivée).
+\end{itemize}
+Rien ne vous empêche de ne pas utiliser la page AUTO, ou de l'utiliser en parametrant les mêmes InfoBox pour Transition et Arrivée.\\
+A l'utilisation, le passage d'une page à l'autre s'effectue au choix par le menu principal ou par les raccourcis gestuels suivants :
+\begin{itemize}
+\item "gauche" (glisser le doigt de la droite vers la gauche sur la carte),
+\item "droite" (l'inverse).
+\end{itemize}
+Ce qui permet respectivement de passer à la page précédente ou suivante (telles que listées dans le menu de configuration "Apparence / Pages de InfoBox").\\
+%
+L'affichage portrait ou paysage est également configurable, ainsi que la disposition des InfoBox sur l'écran (quoique identique sur toutes les pages).
+\newline
+Les \textbf{InfoBox} sont des fenêtres d'information numériques, alphanumériques ou graphiques. Leur configuration peut se faire au choix 
+\begin{itemize}
+\item dans le menu de configuration de la page correspondante (Config. / Config. / Options Système / Apparence / Modes InfoBox)
+ou
+\item en agissant directement sur l'InfoBox, à partir de la carte : en effectuant un appui long sur l'InfoBox correspondante.
+\end{itemize}
+%
+\textit{Conseils :
+\begin{itemize}
+\item La capacité de configuration est telle qu'il est préférable que vos InfoBox reflétent vos habitudes de vol, ainsi demandez-vous de quelles informations vous avez besoin aujourd'hui, en évitant (dans un premier temps) d'afficher des données que vous n'utilisez pas.
+\item Si vous utilisez la même information sur deux pages (par exemple la distance au prochain point de virage), alors positionnez la au même endroit sur l'écran.
+\end{itemize} }
+%
+\subsection{Raccourcis gestuels}
+\noindent
+%
+Voici quelques raccourcis facilitant l'accès à certaines fonctions fréquemment utilisées :
+\begin{itemize}
+\item Menu circuit : \textbf{D B}
+\item Menu waypoints : \textbf{B D}
+\item Dégagements : \textbf{B G}
+\item Page "Etats" : \textbf{G B D B G} (décrire un "S" pour \textit{Status})
+\end{itemize}
+%
+\section{Utilisation}
+\noindent
+Les valeurs numériques de certaines InfoBox sont modifiables :
+\begin{itemize}
+\item  En mode SIM (e.g. altitude, route instantanée) afin de modifier la trajectoire du symbole,
+\item En mode FLY (e.g. l'InfoBox du calage MacCready).
+\end{itemize}
+La flêche verticale à gauche de l'écran indique l'écart au plan vertical pour rejoindre le prochain point de virage avec le calage sélectionné. Une seconde flêche peut être ajoutée à l'intérieur de la première pour indiquer l'écart au plan avec un calage nul. L'apparition d'une croix sur le symbole d'écart au plan signifie que la trajectoire directe vers le point de virage intersecte le terrain (prenant en compte la marge paramétrable de franchissement du terrain).\\
+\section{Liens Utiles}
+\subsection{Liens XCSoar}
+\noindent
+\begin{flushleft}
+Site du logiciel XCSoar :\\
+\url{http://www.xcsoar.org}\\
+Flux RSS du site XCSoar.org :\\
+\url{http://xcsoar.org/atom.xml}\\
+Rubrique de téléchargement de la dernière version :\\ \url{http://www.xcsoar.org/download/}\\
+Génération de cartes :\\
+\url{http://http://mapgen.xcsoar.org/}\\
+Boîte à bugs (et demandes d'amélioration) :\\ \url{http://www.xcsoar.org/trac/}\\
+Le forum, dont une rubrique en français pour poser vos questions :\\
+\url{http://www.xcsoar.org/forum/}\\
+Pour les développeurs, voir le "developer manual".
+\end{flushleft}
+%
+\subsection{Liens divers}
+\noindent
+\label{LiensDivers}
+\begin{flushleft}
+Page brute contenant toutes les versions officielles :\\ \url{http://max.kellermann.name/download/xcsoar/releases/}\\
+Différents sites pour points de virages et terrains :\\
+\url{http://planeur.net/index.php?option=com_jooget&Itemid=177}\\
+\url{http://www.segelflug.de/vereine/welt2000/}\\
+\url{http://www.cumulus-soaring.com/soaring_links/airports.htm}\\
+\url{http://soaringweb.org/TP}\\
+\url{http://www.lvzc.be/index.php/secretariaat/documenten/cat_view/62-keerpuntbestanden}\\
+Espaces aériens en France :\\
+\url{http://www.ffvvespaceaerien.org/?page_id=412}\\
+Et ailleurs :\\
+\url{http://soaringweb.org/Airspace}\\
+\end{flushleft}
+%
+\end{document}

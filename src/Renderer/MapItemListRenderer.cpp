@@ -95,7 +95,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + Layout::FastScale(2);
 
@@ -176,7 +175,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
@@ -255,7 +253,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.Select(name_font);
@@ -292,7 +289,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.Select(name_font);
@@ -345,7 +341,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
@@ -382,7 +377,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
@@ -432,7 +426,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
-  canvas.SetTextColor(COLOR_BLACK);
 
   TCHAR buffer[256];
 
@@ -475,8 +468,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
-
-  canvas.SetTextColor(COLOR_BLACK);
 
   StaticString<26> title_string(_("FLARM Traffic"));
   // Append name to the title, if it exists

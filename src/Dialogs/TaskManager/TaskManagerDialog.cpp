@@ -205,6 +205,9 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   if (protected_task_manager == NULL)
     return;
 
+  /* invalidate the preview layout */
+  TaskViewRect.right = 0;
+
   wf = LoadDialog(NULL, parent,
                   Layout::landscape ?
                   _T("IDR_XML_TASKMANAGER_L") : _T("IDR_XML_TASKMANAGER"));

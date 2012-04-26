@@ -70,12 +70,6 @@ NullPort::StartRxThread()
   return true;
 }
 
-bool
-NullPort::SetRxTimeout(unsigned Timeout)
-{
-  return true;
-}
-
 unsigned
 NullPort::GetBaudrate() const
 {

@@ -35,11 +35,10 @@ public:
   };
 
   bool running;
-  int timeout;
   unsigned baud_rate;
 
   FaultInjectionPort(Handler &_handler)
-    :Port(_handler), running(true), timeout(0), baud_rate(DEFAULT_BAUD_RATE) {}
+    :Port(_handler), running(true), baud_rate(DEFAULT_BAUD_RATE) {}
 
   virtual bool IsValid() const {
     return inject_port_fault > 0;
@@ -68,11 +67,6 @@ public:
 
   int GetChar() {
     return EOF;
-  }
-
-  bool SetRxTimeout(unsigned _timeout) {
-    timeout = _timeout;
-    return true;
   }
 
   unsigned GetBaudrate() const {

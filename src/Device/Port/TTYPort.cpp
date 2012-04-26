@@ -37,11 +37,6 @@ Copyright_License {
 #include <stdlib.h>
 #include <errno.h>
 
-TTYPort::TTYPort(Handler &_handler)
-  :Port(_handler), rx_timeout(0)
-{
-}
-
 TTYPort::~TTYPort()
 {
   if (fd < 0)
@@ -232,18 +227,6 @@ TTYPort::StartRxThread()
   return true;
 }
 
-bool
-TTYPort::SetRxTimeout(unsigned Timeout)
-{
-  assert(fd >= 0);
-
-  if (!valid.Get())
-    return false;
-
-  rx_timeout = Timeout;
-  return true;
-}
-
 static unsigned
 speed_t_to_baud_rate(speed_t speed)
 {
@@ -364,18 +347,7 @@ TTYPort::Read(void *Buffer, size_t Size)
   if (!valid.Get())
     return -1;
 
-  ssize_t nbytes = read(fd, Buffer, Size);
-
-  if (nbytes < 0 && errno == EAGAIN && rx_timeout > 0) {
-    /* the input fifo is empty; wait until at least one byte is
-       received (or until the timeout expires) */
-    if (WaitRead(rx_timeout) != WaitResult::READY)
-      return -1;
-
-    nbytes = read(fd, Buffer, Size);
-  }
-
-  return nbytes;
+  return read(fd, Buffer, Size);
 }
 
 Port::WaitResult

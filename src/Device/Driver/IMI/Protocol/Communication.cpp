@@ -29,6 +29,7 @@ Copyright_License {
 #include "MessageParser.hpp"
 #include "Device/Port/Port.hpp"
 #include "OS/Clock.hpp"
+#include "TimeoutClock.hpp"
 
 namespace IMI
 {
@@ -84,41 +85,33 @@ IMI::Receive(Port &port, OperationEnvironment &env,
   if (baudrate == 0)
     return NULL;
 
-  unsigned timeout = extraTimeout + 10000 * (expectedPayloadSize
-      + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate;
-  if (!port.SetRxTimeout(timeout))
-    return NULL;
+  const TimeoutClock timeout(extraTimeout + 10000 *
+                             (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate);
 
   // wait for the message
-  const TMsg *msg = NULL;
-  timeout += MonotonicClockMS();
-  while (MonotonicClockMS() < timeout) {
+  while (true) {
+    if (port.WaitRead(env, timeout.GetRemainingOrZero()) != Port::WaitResult::READY)
+      return NULL;
+
     // read message
     IMIBYTE buffer[64];
     int bytesRead = port.Read(buffer, sizeof(buffer));
-    if (bytesRead == 0)
-      continue;
-    if (bytesRead == -1)
-      break;
+    if (bytesRead <= 0)
+      return NULL;
 
     // parse message
-    const TMsg *lastMsg = MessageParser::Parse(buffer, bytesRead);
-    if (lastMsg) {
+    const TMsg *msg = MessageParser::Parse(buffer, bytesRead);
+    if (msg != NULL) {
       // message received
-      if (lastMsg->msgID == MSG_ACK_NOTCONFIG)
+      if (msg->msgID == MSG_ACK_NOTCONFIG) {
         Disconnect(port, env);
-      else if (lastMsg->msgID != MSG_CFG_KEEPCONFIG)
-        msg = lastMsg;
-
-      break;
+        return NULL;
+      } else if (msg->msgID == MSG_CFG_KEEPCONFIG)
+        return NULL;
+      else
+        return msg;
     }
   }
-
-  // restore timeout
-  if (!port.SetRxTimeout(0))
-    return NULL;
-
-  return msg;
 }
 
 const IMI::TMsg *

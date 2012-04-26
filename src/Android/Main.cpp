@@ -35,6 +35,8 @@ Copyright_License {
 #include "Android/TextUtil.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
+#include "LogFile.hpp"
+#include "Version.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Android/Event.hpp"
@@ -101,6 +103,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   context = new Context(env, _context);
 
   InitialiseDataPath();
+
+  LogStartUp(_T("Starting XCSoar %s"), XCSoar_VersionString);
 
   OpenGL::Initialise();
   TextUtil::Initialise(env);
