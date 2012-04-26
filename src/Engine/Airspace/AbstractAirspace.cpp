@@ -202,12 +202,6 @@ AbstractAirspace::Intercept(const AircraftState &state,
   return true;
 }
 
-const TCHAR *
-AbstractAirspace::GetTypeText(const bool concise) const
-{
-  return AirspaceClassAsText(type, concise);
-}
-
 const tstring 
 AbstractAirspace::GetNameText() const
 {

@@ -36,6 +36,7 @@ Copyright_License {
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Formatter/AirspaceFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
@@ -298,7 +299,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, airspace.GetTypeText(false));
+                      rc, AirspaceFormatter::GetClass(airspace));
 
   PixelScalar altitude_width =
     canvas.CalcTextWidth(airspace.GetTopText(true).c_str());

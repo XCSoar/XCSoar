@@ -27,6 +27,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Formatter/AirspaceFormatter.hpp"
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
@@ -101,7 +102,7 @@ SetValues()
 
   wp = (WndProperty*)wf->FindByName(_T("prpType"));
   assert(wp != NULL);
-  wp->SetText(airspace->GetTypeText());
+  wp->SetText(AirspaceFormatter::GetClass(*airspace));
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpTop"));

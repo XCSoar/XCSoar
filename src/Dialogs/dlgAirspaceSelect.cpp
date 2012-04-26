@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
+#include "Formatter/AirspaceFormatter.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
 #include "Compiler.h"
@@ -246,7 +247,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     
   // left justified
   canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), 
-              airspace.GetTypeText(true));
+              AirspaceFormatter::GetClassShort(airspace));
     
   StaticString<12> sTmp;
 

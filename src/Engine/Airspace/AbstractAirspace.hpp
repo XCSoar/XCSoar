@@ -300,16 +300,6 @@ public:
                                    const AbstractAirspace &as);
 #endif
 
-  /**
-   * Produce text version of airspace class.
-   *
-   * @param concise Whether to use short form or long form
-   *
-   * @return Text version of class
-   */
-  gcc_pure
-  const TCHAR *GetTypeText(const bool concise = false) const;
-
   gcc_pure
   const TCHAR *GetName() const {
     return name.c_str();
