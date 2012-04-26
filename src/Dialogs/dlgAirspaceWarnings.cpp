@@ -407,6 +407,11 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     rc.bottom = paint_rc.bottom - Layout::FastScale(padding);
 
     canvas.DrawFilledRectangle(rc, state_color);
+
+    /* on this background we just painted, we must use black color for
+       the state text; our caller might have selected a different
+       color, override it here */
+    canvas.SetTextColor(COLOR_BLACK);
   }
 
   if (state_text != NULL) {
