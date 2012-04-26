@@ -42,6 +42,11 @@ static const TCHAR *airspace_class_names[] = {
   _T("Class G"),
 };
 
+static_assert(ARRAY_SIZE(airspace_class_names) ==
+              (size_t)AirspaceClass::AIRSPACECLASSCOUNT,
+              "number of airspace class names does not match number of "
+              "airspace classes");
+
 static const TCHAR *airspace_class_short_names[] = {
   _T("?"),
   _T("R"),
@@ -60,6 +65,11 @@ static const TCHAR *airspace_class_short_names[] = {
   _T("TMZ"),
   _T("G"),
 };
+
+static_assert(ARRAY_SIZE(airspace_class_short_names) ==
+              (size_t)AirspaceClass::AIRSPACECLASSCOUNT,
+              "number of airspace class short names does not match number of "
+              "airspace classes");
 
 const TCHAR *
 AirspaceClassAsText(const AirspaceClass item, const bool short_name)
