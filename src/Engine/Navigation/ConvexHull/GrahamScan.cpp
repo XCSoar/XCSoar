@@ -37,7 +37,7 @@ GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):
 }
 
 void
-GrahamScan::partition_points()
+GrahamScan::PartitionPoints()
 {
   //
   // The initial array of points is stored in vector raw_points. I first
@@ -81,7 +81,7 @@ GrahamScan::partition_points()
         loclast.latitude != i->get_location().latitude) {
       loclast = i->get_location();
 
-      int dir = direction(left->get_location(), right->get_location(),
+      int dir = Direction(left->get_location(), right->get_location(),
                           i->get_location(), tolerance);
       SearchPoint* sp = &(*i);
       if (dir < 0)
@@ -94,7 +94,7 @@ GrahamScan::partition_points()
 }
 
 void
-GrahamScan::build_hull()
+GrahamScan::BuildHull()
 {
   //
   // Building the hull consists of two procedures: building the lower
@@ -108,13 +108,13 @@ GrahamScan::build_hull()
   // or 1.
   //
 
-  build_half_hull(lower_partition_points, lower_hull, 1);
-  build_half_hull(upper_partition_points, upper_hull, -1);
+  BuildHalfHull(lower_partition_points, lower_hull, 1);
+  BuildHalfHull(upper_partition_points, upper_hull, -1);
 }
 
 void
-GrahamScan::build_half_hull(std::vector<SearchPoint*> input,
-                            std::vector<SearchPoint*> &output, int factor)
+GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
+                          std::vector<SearchPoint*> &output, int factor)
 {
   //
   // This is the method that builds either the upper or the lower half convex
@@ -151,7 +151,7 @@ GrahamScan::build_half_hull(std::vector<SearchPoint*> input,
     while (output.size() >= 3) {
       size_t end = output.size() - 1;
 
-      if (factor * direction(output[end - 2]->get_location(),
+      if (factor * Direction(output[end - 2]->get_location(),
                              output[end]->get_location(),
                              output[end - 1]->get_location(),
                              tolerance) > 0)
@@ -163,7 +163,7 @@ GrahamScan::build_half_hull(std::vector<SearchPoint*> input,
 }
 
 int
-GrahamScan::direction(const GeoPoint& p0, const GeoPoint& p1,
+GrahamScan::Direction(const GeoPoint& p0, const GeoPoint& p1,
                       const GeoPoint& p2, const fixed& tolerance)
 {
   //
@@ -183,7 +183,7 @@ GrahamScan::direction(const GeoPoint& p0, const GeoPoint& p1,
 
 
 bool
-GrahamScan::prune_interior()
+GrahamScan::PruneInterior()
 {
   SearchPointVector res;
 
@@ -197,8 +197,8 @@ GrahamScan::prune_interior()
     // nothing to do
   }
 
-  partition_points();
-  build_hull();
+  PartitionPoints();
+  BuildHull();
 
   for (unsigned i = 0; i + 1 < lower_hull.size(); i++)
     res.push_back(*lower_hull[i]);

@@ -32,7 +32,7 @@ bool
 SearchPointVector::PruneInterior()
 {
   GrahamScan gs(*this);
-  return gs.prune_interior();
+  return gs.PruneInterior();
 }
 
 bool
@@ -43,7 +43,7 @@ SearchPointVector::ThinToSize(const unsigned max_size)
   bool retval = false;
   while (size() > max_size) {
     GrahamScan gs(*this, tolerance * i);
-    retval |= gs.prune_interior();
+    retval |= gs.PruneInterior();
     i *= i;
   }
   return retval;
@@ -54,7 +54,7 @@ SearchPointVector::IsConvex() const
 {
   SearchPointVector copy = *this;
   GrahamScan gs(copy);
-  return !gs.prune_interior();
+  return !gs.PruneInterior();
 }
 
 void 

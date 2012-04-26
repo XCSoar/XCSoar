@@ -67,16 +67,16 @@ public:
    *
    * @return changed Return status as to whether input vector was altered (pruned) or not
    */
-  bool prune_interior();
+  bool PruneInterior();
 
 private:
-  void partition_points();
-  void build_hull();
-  void build_half_hull(std::vector<SearchPoint*> input,
-                       std::vector<SearchPoint*> &output, int factor);
+  void PartitionPoints();
+  void BuildHull();
+  void BuildHalfHull(std::vector<SearchPoint*> input,
+                     std::vector<SearchPoint*> &output, int factor);
 
   gcc_pure
-  static int direction(const GeoPoint& p0, const GeoPoint& p1,
+  static int Direction(const GeoPoint& p0, const GeoPoint& p1,
                        const GeoPoint& p2, const fixed& _tolerance);
 };
 
