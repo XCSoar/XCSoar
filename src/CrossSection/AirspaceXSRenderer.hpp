@@ -24,10 +24,11 @@
 #ifndef AIRSPACE_CROSS_SECTION_RENDERER_HPP
 #define AIRSPACE_CROSS_SECTION_RENDERER_HPP
 
+#include "Renderer/AirspaceRendererSettings.hpp"
+
 struct AirspaceLook;
 class Canvas;
 class ChartRenderer;
-struct AirspaceRendererSettings;
 class Airspaces;
 struct GeoPoint;
 struct GeoVector;
@@ -38,15 +39,21 @@ struct AircraftState;
  */
 class AirspaceXSRenderer
 {
+  AirspaceRendererSettings settings;
+
   const AirspaceLook &look;
 
 public:
   AirspaceXSRenderer(const AirspaceLook &_look): look(_look) {}
 
   void Draw(Canvas &canvas, const ChartRenderer &chart,
-            const AirspaceRendererSettings &settings, const Airspaces &database,
+            const Airspaces &database,
             const GeoPoint &start, const GeoVector &vec,
             const AircraftState &state) const;
+
+  void SetSettings(const AirspaceRendererSettings &_settings) {
+    settings = _settings;
+  }
 };
 
 #endif

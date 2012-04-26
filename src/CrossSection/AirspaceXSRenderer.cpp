@@ -209,7 +209,6 @@ public:
 
 void
 AirspaceXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart,
-                         const AirspaceRendererSettings &settings,
                          const Airspaces &database, const GeoPoint &start,
                          const GeoVector &vec, const AircraftState &state) const
 {

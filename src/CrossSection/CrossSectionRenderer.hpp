@@ -25,7 +25,6 @@
 #define CROSS_SECTION_RENDERER_HPP
 
 #include "Blackboard/BaseBlackboard.hpp"
-#include "Renderer/AirspaceRendererSettings.hpp"
 #include "TerrainXSRenderer.hpp"
 #include "AirspaceXSRenderer.hpp"
 #include "Screen/Point.hpp"
@@ -34,6 +33,7 @@ struct MoreData;
 struct CrossSectionLook;
 struct AirspaceLook;
 struct ChartLook;
+struct AirspaceRendererSettings;
 class Airspaces;
 class RasterTerrain;
 class ChartRenderer;
@@ -49,8 +49,6 @@ public:
   static const unsigned NUM_SLICES = 16;
 
 protected:
-  AirspaceRendererSettings airspace_renderer_settings;
-
   const CrossSectionLook &look;
   const ChartLook &chart_look;
 
@@ -78,7 +76,7 @@ public:
 
   void ReadBlackboard(const MoreData &_gps_info,
                       const DerivedInfo &_calculated_info,
-                      const AirspaceRendererSettings &_ar_settings);
+                      const AirspaceRendererSettings &ar_settings);
 
   /**
    * Renders the CrossSection to the given canvas in the given PixelRect

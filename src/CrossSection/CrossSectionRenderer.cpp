@@ -53,11 +53,11 @@ CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
 void
 CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
                                    const DerivedInfo &_calculated_info,
-                                   const AirspaceRendererSettings &_ar_settings)
+                                   const AirspaceRendererSettings &ar_settings)
 {
   gps_info = _gps_info;
   calculated_info = _calculated_info;
-  airspace_renderer_settings = _ar_settings;
+  airspace_renderer.SetSettings(ar_settings);
 }
 
 void
@@ -90,8 +90,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   UpdateTerrain(elevations);
 
   if (airspace_database)
-    airspace_renderer.Draw(canvas, chart, airspace_renderer_settings,
-                           *airspace_database, start, vec,
+    airspace_renderer.Draw(canvas, chart, *airspace_database, start, vec,
                            ToAircraftState(Basic(), Calculated()));
   terrain_renderer.Draw(canvas, chart, elevations);
   PaintGlide(chart);
