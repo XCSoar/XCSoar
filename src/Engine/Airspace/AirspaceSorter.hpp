@@ -5,6 +5,7 @@
 #include "Airspace/AirspaceClass.hpp"
 #include "Compiler.h"
 
+#include <tchar.h>
 #include <vector>
 
 class AbstractAirspace;

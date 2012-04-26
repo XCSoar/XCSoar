@@ -22,7 +22,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningManager.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarning.cpp \
-	$(ENGINE_SRC_DIR)/Airspace/AirspaceClass.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceSorter.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideState.cpp \
