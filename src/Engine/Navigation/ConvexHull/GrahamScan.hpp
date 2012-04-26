@@ -74,10 +74,6 @@ private:
   void BuildHull();
   void BuildHalfHull(std::vector<SearchPoint*> input,
                      std::vector<SearchPoint*> &output, int factor);
-
-  gcc_pure
-  static int Direction(const GeoPoint& p0, const GeoPoint& p1,
-                       const GeoPoint& p2, const fixed& _tolerance);
 };
 
 

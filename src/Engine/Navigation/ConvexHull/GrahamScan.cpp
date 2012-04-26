@@ -30,6 +30,25 @@ sortleft
   return sp1.sort(sp2);
 }
 
+static int
+Direction(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
+          fixed tolerance)
+{
+  //
+  // In this program we frequently want to look at three consecutive
+  // points, p0, p1, and p2, and determine whether p2 has taken a turn
+  // to the left or a turn to the right.
+  //
+  // We can do this by by translating the points so that p1 is at the origin,
+  // then taking the cross product of p0 and p2. The result will be positive,
+  // negative, or 0, meaning respectively that p2 has turned right, left, or
+  // is on a straight line.
+  //
+
+  return (((p0.longitude - p1.longitude) * (p2.latitude - p1.latitude)) -
+          ((p2.longitude - p1.longitude) * (p0.latitude - p1.latitude))).Sign(tolerance);
+}
+
 GrahamScan::GrahamScan(SearchPointVector& sps, const fixed sign_tolerance):
   raw_points(sps.begin(), sps.end()), raw_vector(sps), size(sps.size()),
   tolerance(sign_tolerance)
@@ -161,26 +180,6 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
     }
   }
 }
-
-int
-GrahamScan::Direction(const GeoPoint& p0, const GeoPoint& p1,
-                      const GeoPoint& p2, const fixed& tolerance)
-{
-  //
-  // In this program we frequently want to look at three consecutive
-  // points, p0, p1, and p2, and determine whether p2 has taken a turn
-  // to the left or a turn to the right.
-  //
-  // We can do this by by translating the points so that p1 is at the origin,
-  // then taking the cross product of p0 and p2. The result will be positive,
-  // negative, or 0, meaning respectively that p2 has turned right, left, or
-  // is on a straight line.
-  //
-
-  return (((p0.longitude - p1.longitude) * (p2.latitude - p1.latitude)) -
-          ((p2.longitude - p1.longitude) * (p0.latitude - p1.latitude))).Sign(tolerance);
-}
-
 
 bool
 GrahamScan::PruneInterior()
