@@ -162,6 +162,33 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
   canvas.polygon(aircraft, AircraftPoints);
 }
 
+static void
+DrawHangGlider(Canvas &canvas, const AircraftLook &look,
+               const Angle angle, const RasterPoint aircraft_pos)
+{
+  RasterPoint aircraft[] = {
+    {1, -3},
+    {7, 0},
+    {13, 4},
+    {13, 6},
+    {6, 3},
+    {1, 2},
+    {-1, 2},
+    {-6, 3},
+    {-13, 6},
+    {-13, 4},
+    {-7, 0},
+    {-1, -3},
+   };
+
+  PolygonRotateShift(aircraft, ARRAY_SIZE(aircraft),
+                     aircraft_pos.x, aircraft_pos.y, angle);
+
+  canvas.SelectWhiteBrush();
+  canvas.SelectBlackPen();
+  canvas.polygon(aircraft, ARRAY_SIZE(aircraft));
+}
+
 void
 AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
                        const AircraftLook &look,
@@ -177,6 +204,9 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
     break;
   case acSimple:
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, false);
+    break;
+  case acHangGlider:
+    DrawHangGlider(canvas, look, angle, aircraft_pos);
     break;
   }
 }

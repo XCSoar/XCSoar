@@ -111,6 +111,8 @@ static const StaticEnumChoice  aircraft_symbol_list[] = {
     N_("Enlarged simple graphics.") },
   { acDetailed, N_("Detailed"),
     N_("Detailed rendered aircraft graphics.") },
+  { acHangGlider, N_("HangGlider"),
+    N_("Simplified hang glider as line graphics, white with black contours.") },
   { 0 }
 };
 
