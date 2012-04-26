@@ -103,30 +103,30 @@ OnAirspaceListEnter(unsigned i)
 
 static void UpdateList()
 {
-  AirspaceSelectInfo = airspace_sorter->get_list();
+  AirspaceSelectInfo = airspace_sorter->GetList();
 
   if (TypeFilterIdx != WILDCARD)
-    airspace_sorter->filter_class(AirspaceSelectInfo, (AirspaceClass)TypeFilterIdx);
+    airspace_sorter->FilterByClass(AirspaceSelectInfo, (AirspaceClass)TypeFilterIdx);
   
   bool sort_distance = false;
   if (positive(distance_filter)) {
     sort_distance = true;
-    airspace_sorter->filter_distance(AirspaceSelectInfo, distance_filter);
+    airspace_sorter->FilterByDistance(AirspaceSelectInfo, distance_filter);
   } 
   if (direction_filter != WILDCARD) {
     sort_distance = true;
     Angle a = direction_filter == 0
       ? CommonInterface::Calculated().heading
       : Angle::Degrees(fixed(direction_filter));
-    airspace_sorter->filter_direction(AirspaceSelectInfo, a);
+    airspace_sorter->FilterByDirection(AirspaceSelectInfo, a);
   }
   if (sort_distance) {
-    airspace_sorter->sort_distance(AirspaceSelectInfo);
+    airspace_sorter->SortByDistance(AirspaceSelectInfo);
   }
 
   const TCHAR *name_filter = wpName->GetDataField()->GetAsString();
   if (!StringIsEmpty(name_filter))
-    airspace_sorter->FilterNamePrefix(AirspaceSelectInfo, name_filter);
+    airspace_sorter->FilterByNamePrefix(AirspaceSelectInfo, name_filter);
 
   wAirspaceList->SetLength(max((size_t)1, AirspaceSelectInfo.size()));
   wAirspaceList->Invalidate();
@@ -254,13 +254,13 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   // right justified after airspace type
   sTmp.Format(_T("%d%s"),
-              (int)AirspaceSelectInfo[i].Distance,
+              (int)AirspaceSelectInfo[i].distance,
               Units::GetDistanceName());
   x2 = w0 - w3 - canvas.CalcTextWidth(sTmp);
   canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
     
   // right justified after distance
-  FormatBearing(sTmp.buffer(), sTmp.MAX_SIZE, AirspaceSelectInfo[i].Direction);
+  FormatBearing(sTmp.buffer(), sTmp.MAX_SIZE, AirspaceSelectInfo[i].direction);
   x3 = w0 - canvas.CalcTextWidth(sTmp);
   canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
 }
