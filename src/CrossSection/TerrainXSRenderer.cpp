@@ -27,18 +27,18 @@
 #include "Screen/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
 #include "Terrain/RasterBuffer.hpp"
+#include "Util/StaticArray.hpp"
 
 void
 TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short *elevations) const
 {
   const fixed max_distance = chart.GetXMax();
 
-  RasterPoint points[2 + CrossSectionRenderer::NUM_SLICES];
+  StaticArray<RasterPoint, CrossSectionRenderer::NUM_SLICES + 2> points;
 
-  points[0] = chart.ToScreen(max_distance, fixed(-500));
-  points[1] = chart.ToScreen(fixed_zero, fixed(-500));
+  points.append() = chart.ToScreen(max_distance, fixed(-500));
+  points.append() = chart.ToScreen(fixed_zero, fixed(-500));
 
-  unsigned num_points = 2;
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
     const fixed distance_factor =
         fixed(j) / (CrossSectionRenderer::NUM_SLICES - 1);
@@ -55,12 +55,12 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
         continue;
     }
 
-    points[num_points++] = chart.ToScreen(distance, fixed(h));
+    points.append() = chart.ToScreen(distance, fixed(h));
   }
 
-  if (num_points >= 4) {
+  if (points.size() >= 4) {
     canvas.SelectNullPen();
     canvas.Select(look.terrain_brush);
-    canvas.polygon(points, num_points);
+    canvas.polygon(points.begin(), points.size());
   }
 }
