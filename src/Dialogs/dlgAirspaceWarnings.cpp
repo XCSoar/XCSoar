@@ -314,7 +314,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   tstring name = airspace.GetNameText();
   tstring top = airspace.GetTopText(true);
   tstring base = airspace.GetBaseText(true);
-  tstring type = airspace.GetTypeText(true);
 
   const UPixelScalar text_height = 12, text_top = 1;
 
