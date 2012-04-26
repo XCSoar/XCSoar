@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_FORMATTER_HPP
 
 #include "Engine/Airspace/AirspaceClass.hpp"
+#include "Util/tstring.hpp"
 
 #include <tchar.h>
 
@@ -41,6 +42,9 @@ const TCHAR *GetClassShort(AirspaceClass airspace_class);
 const TCHAR *GetClass(const AbstractAirspace &airspace);
 /** Returns the class of the airspace as short text. */
 const TCHAR *GetClassShort(const AbstractAirspace &airspace);
+
+/** Returns the airspace name and class as text. */
+tstring GetNameAndClass(const AbstractAirspace &airspace);
 
 }
 

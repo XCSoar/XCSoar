@@ -243,7 +243,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2),
-                      x1 - Layout::FastScale(5), airspace.GetNameText().c_str());
+                      x1 - Layout::FastScale(5),
+                      AirspaceFormatter::GetNameAndClass(airspace).c_str());
     
   // left justified
   canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), 

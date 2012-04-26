@@ -306,14 +306,6 @@ public:
   }
 
   /**
-   * Produce text version of name and airspace class.
-   *
-   * @return Text version of name/type
-   */
-  gcc_pure
-  const tstring GetNameText() const;
-
-  /**
    * Returns true if the name begins with the specified string.
    */
   gcc_pure

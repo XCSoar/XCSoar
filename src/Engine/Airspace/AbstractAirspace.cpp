@@ -202,12 +202,6 @@ AbstractAirspace::Intercept(const AircraftState &state,
   return true;
 }
 
-const tstring 
-AbstractAirspace::GetNameText() const
-{
-  return name + _T(" ") + AirspaceClassAsText(type);
-}
-
 bool
 AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const
 {

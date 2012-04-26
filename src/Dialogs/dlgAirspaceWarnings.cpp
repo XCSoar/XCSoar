@@ -32,6 +32,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
+#include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Util/TrivialArray.hpp"
 
@@ -311,7 +312,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   const AbstractAirspace &airspace = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
 
-  tstring name = airspace.GetNameText();
+  tstring name = AirspaceFormatter::GetNameAndClass(airspace);
   tstring top = airspace.GetTopText(true);
   tstring base = airspace.GetBaseText(true);
 

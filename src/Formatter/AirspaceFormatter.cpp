@@ -48,3 +48,9 @@ AirspaceFormatter::GetClassShort(const AbstractAirspace &airspace)
 {
   return GetClassShort(airspace.GetType());
 }
+
+tstring
+AirspaceFormatter::GetNameAndClass(const AbstractAirspace &airspace)
+{
+  return tstring(airspace.GetName()) + _T(" ") + GetClass(airspace.GetType());
+}
