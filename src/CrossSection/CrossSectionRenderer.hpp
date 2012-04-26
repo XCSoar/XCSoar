@@ -135,8 +135,6 @@ protected:
   void UpdateTerrain(short *elevations) const;
 
   void PaintAirspaces(Canvas &canvas, const ChartRenderer &chart) const;
-  void PaintTerrain(Canvas &canvas, ChartRenderer &chart,
-                    const short *elevations) const;
   void PaintGlide(ChartRenderer &chart) const;
   void PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
                      const PixelRect rc) const;
