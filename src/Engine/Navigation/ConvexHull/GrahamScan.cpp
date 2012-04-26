@@ -23,14 +23,6 @@
 #include "GrahamScan.hpp"
 #include "Navigation/SearchPointVector.hpp"
 
-/*
-static bool
-operator==(const SearchPoint& s1, const SearchPoint& s2)
-{
-  return s1.equals(s2);
-}
-*/
-
 static bool
 sortleft (const SearchPoint& sp1, const SearchPoint& sp2)
 { 
@@ -212,10 +204,6 @@ GrahamScan::prune_interior()
   for ( int i = upper_hull.size()-1; i>=0 ; i-- ) {
     res.push_back(*upper_hull[i]);
   }
-
-// if (!has_changed) {
-//      *changed = !std::equal(res.begin(), res.end(), raw_vector.begin() );
-//    }
 
   if (res.size() != size) {
     raw_vector.swap(res);
