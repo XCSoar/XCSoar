@@ -24,6 +24,9 @@
 #ifndef TERRAIN_CROSS_SECTION_RENDERER_HPP
 #define TERRAIN_CROSS_SECTION_RENDERER_HPP
 
+#include "Terrain/RasterBuffer.hpp"
+#include "Screen/Point.hpp"
+
 class Canvas;
 class ChartRenderer;
 struct CrossSectionLook;
@@ -40,6 +43,10 @@ public:
 
   void Draw(Canvas &canvas, const ChartRenderer &chart,
             const short *elevations) const;
+
+private:
+  void DrawPolygon(Canvas &canvas, RasterBuffer::TerrainType type,
+                   const RasterPoint *points, unsigned num_points) const;
 };
 
 #endif

@@ -26,7 +26,6 @@
 #include "Renderer/ChartRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/CrossSectionLook.hpp"
-#include "Terrain/RasterBuffer.hpp"
 #include "Util/StaticArray.hpp"
 
 void
@@ -36,8 +35,10 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
 
   StaticArray<RasterPoint, CrossSectionRenderer::NUM_SLICES + 2> points;
 
-  points.append() = chart.ToScreen(max_distance, fixed(-500));
-  points.append() = chart.ToScreen(fixed_zero, fixed(-500));
+  canvas.SelectNullPen();
+
+  RasterBuffer::TerrainType last_type = RasterBuffer::TerrainType::UNKNOWN;
+  fixed last_distance = fixed_zero;
 
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
     const fixed distance_factor =
@@ -45,22 +46,61 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
     const fixed distance = distance_factor * max_distance;
 
     short h = elevations[j];
-    if (RasterBuffer::IsSpecial(h)) {
-      if (RasterBuffer::IsWater(h))
-        /* water is at 0m MSL */
-        /* XXX paint in blue? */
-        h = 0;
-      else
-        /* skip "unknown" values */
-        continue;
+    RasterBuffer::TerrainType type = RasterBuffer::GetTerrainType(h);
+
+    if (type == RasterBuffer::TerrainType::WATER)
+      h = 0;
+
+    // Close and paint polygon
+    if (j != 0 &&
+        type != last_type &&
+        last_type != RasterBuffer::TerrainType::UNKNOWN) {
+      const fixed center_distance = (distance + last_distance) / 2;
+      points.append() = chart.ToScreen(center_distance, fixed(0));
+      points.append() = chart.ToScreen(center_distance, fixed(-500));
+
+      DrawPolygon(canvas, last_type, points.begin(), points.size());
     }
 
-    points.append() = chart.ToScreen(distance, fixed(h));
-  }
+    if (type != RasterBuffer::TerrainType::UNKNOWN) {
+      if (j == 0) {
+        // Start first polygon
+        points.append() = chart.ToScreen(distance, fixed(-500));
+        points.append() = chart.ToScreen(distance, fixed(h));
+      } else if (type != last_type) {
+        // Start new polygon
+        points.clear();
 
-  if (points.size() >= 4) {
-    canvas.SelectNullPen();
-    canvas.Select(look.terrain_brush);
-    canvas.polygon(points.begin(), points.size());
+        const fixed center_distance = (distance + last_distance) / 2;
+        points.append() = chart.ToScreen(center_distance, fixed(-500));
+        points.append() = chart.ToScreen(center_distance, fixed(0));
+      }
+
+      if (j + 1 == CrossSectionRenderer::NUM_SLICES) {
+        // Close and paint last polygon
+        points.append() = chart.ToScreen(distance, fixed(h));
+        points.append() = chart.ToScreen(distance, fixed(-500));
+
+        DrawPolygon(canvas, type, points.begin(), points.size());
+      } else if (type == last_type && j != 0) {
+        // Add single point to polygon
+        points.append() = chart.ToScreen(distance, fixed(h));
+      }
+    }
+
+    last_type = type;
+    last_distance = distance;
   }
+}
+
+void
+TerrainXSRenderer::DrawPolygon(Canvas &canvas, RasterBuffer::TerrainType type,
+                               const RasterPoint *points,
+                               unsigned num_points) const
+{
+  assert(type != RasterBuffer::TerrainType::UNKNOWN);
+
+  canvas.Select(type == RasterBuffer::TerrainType::WATER ?
+                look.sea_brush : look.terrain_brush);
+  canvas.polygon(points, num_points);
 }
