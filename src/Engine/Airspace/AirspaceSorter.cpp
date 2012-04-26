@@ -5,12 +5,6 @@
 
 #include <algorithm>
 
-static AirspaceClass match_class;
-static unsigned char match_char = 0;
-static const TCHAR *name_prefix;
-static Angle direction;
-static fixed max_distance;
-
 AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
                                const GeoPoint &Location,
                                const fixed distance_factor)
@@ -50,80 +44,105 @@ AirspaceSorter::GetList() const
   return m_airspaces_all;
 }
 
-static bool
-AirspaceClassFilter(const AirspaceSelectInfo& elem1)
+class AirspaceClassFilter
 {
-  return elem1.airspace->GetType() != match_class;
-}
+  AirspaceClass match_class;
+
+public:
+  AirspaceClassFilter(AirspaceClass _match_class): match_class(_match_class) {}
+
+  bool operator()(const AirspaceSelectInfo &info) {
+    return info.airspace->GetType() != match_class;
+  }
+};
 
 void
 AirspaceSorter::FilterByClass(AirspaceSelectInfoVector& vec,
-                             const AirspaceClass t) const
+                             const AirspaceClass match_class) const
 {
-  match_class = t;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceClassFilter),
-            vec.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(),
+                           AirspaceClassFilter(match_class)), vec.end());
 }
 
-static bool
-AirspaceNameFilter(const AirspaceSelectInfo& elem1)
+class AirspaceNameFilter
 {
-  return (((elem1.four_chars & 0xff000000) >> 24) != match_char);
-}
+  unsigned char match_char;
+
+public:
+  AirspaceNameFilter(unsigned char _match_char): match_char(_match_char) {}
+
+  bool operator()(const AirspaceSelectInfo &info) {
+    return (((info.four_chars & 0xff000000) >> 24) != match_char);
+  }
+};
 
 void
 AirspaceSorter::FilterByName(AirspaceSelectInfoVector& vec,
-                            const unsigned char c) const
+                             const unsigned char match_char) const
 {
-  match_char = c;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceNameFilter),
-            vec.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(),
+                           AirspaceNameFilter(match_char)), vec.end());
 }
 
-static bool
-AirspaceNamePrefixFilter(const AirspaceSelectInfo& elem1)
+class AirspaceNamePrefixFilter
 {
-  return !elem1.airspace->MatchNamePrefix(name_prefix);
-}
+  const TCHAR *prefix;
+
+public:
+  AirspaceNamePrefixFilter(const TCHAR *_prefix): prefix(_prefix) {}
+
+  bool operator()(const AirspaceSelectInfo &info) {
+    return !info.airspace->MatchNamePrefix(prefix);
+  }
+};
 
 void
 AirspaceSorter::FilterByNamePrefix(AirspaceSelectInfoVector &v,
                                    const TCHAR *prefix) const
 {
-  name_prefix = prefix;
-  v.erase(std::remove_if(v.begin(), v.end(), AirspaceNamePrefixFilter),
-          v.end());
+  v.erase(std::remove_if(v.begin(), v.end(),
+                         AirspaceNamePrefixFilter(prefix)), v.end());
 }
 
-static bool
-AirspaceDirectionFilter(const AirspaceSelectInfo& elem1)
+class AirspaceDirectionFilter
 {
-  fixed DirectionErr = (elem1.direction - direction).AsDelta().AbsoluteDegrees();
-  return DirectionErr > fixed_int_constant(18);
-}
+  Angle direction;
+
+public:
+  AirspaceDirectionFilter(Angle _direction): direction(_direction) {}
+
+  bool operator()(const AirspaceSelectInfo &info) {
+    fixed direction_error = (info.direction - direction).AsDelta().AbsoluteDegrees();
+    return direction_error > fixed_int_constant(18);
+  }
+};
 
 void
 AirspaceSorter::FilterByDirection(AirspaceSelectInfoVector& vec,
-                                 const Angle _direction) const
+                                 const Angle direction) const
 {
-  direction = _direction;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceDirectionFilter),
-            vec.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(),
+                           AirspaceDirectionFilter(direction)), vec.end());
 }
 
-static bool
-AirspaceDistanceFilter(const AirspaceSelectInfo& elem1)
+class AirspaceDistanceFilter
 {
-  return (elem1.distance > max_distance);
-}
+  fixed min_distance;
+
+public:
+  AirspaceDistanceFilter(fixed _min_distance): min_distance(_min_distance) {}
+
+  bool operator()(const AirspaceSelectInfo &info) {
+    return info.distance > min_distance;
+  }
+};
 
 void
 AirspaceSorter::FilterByDistance(AirspaceSelectInfoVector& vec,
                                 const fixed distance) const
 {
-  max_distance = distance;
-  vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceDistanceFilter),
-            vec.end());
+  vec.erase(std::remove_if(vec.begin(), vec.end(),
+                           AirspaceDistanceFilter(distance)), vec.end());
 }
 
 static bool
