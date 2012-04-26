@@ -29,6 +29,7 @@ that have native methods, to prepare for calling "javah".
       <include name="Timer.java"/>
       <include name="InternalGPS.java"/>
       <include name="NonGPSSensors.java"/>
+      <include name="KalmanFilter.java"/>
       <include name="Settings.java"/>
       <include name="SafeDestruct.java"/>
       <include name="InputListener.java"/>
