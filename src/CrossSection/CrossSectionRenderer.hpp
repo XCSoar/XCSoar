@@ -26,6 +26,7 @@
 
 #include "Blackboard/BaseBlackboard.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
+#include "TerrainXSRenderer.hpp"
 #include "Screen/Point.hpp"
 
 struct MoreData;
@@ -43,6 +44,7 @@ class Canvas;
 class CrossSectionRenderer :
   public BaseBlackboard
 {
+public:
   static const unsigned NUM_SLICES = 16;
 
 protected:
@@ -51,6 +53,8 @@ protected:
   const CrossSectionLook &look;
   const AirspaceLook &airspace_look;
   const ChartLook &chart_look;
+
+  TerrainXSRenderer terrain_renderer;
 
   /** Pointer to a RasterTerrain instance or NULL */
   const RasterTerrain *terrain;

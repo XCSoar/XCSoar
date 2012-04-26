@@ -223,7 +223,7 @@ CrossSectionRenderer::CrossSectionRenderer(const CrossSectionLook &_look,
                                        const AirspaceLook &_airspace_look,
                                        const ChartLook &_chart_look)
   :look(_look), airspace_look(_airspace_look), chart_look(_chart_look),
-  terrain(NULL), airspace_database(NULL),
+  terrain_renderer(look), terrain(NULL), airspace_database(NULL),
   start(Angle::Zero(), Angle::Zero()),
    vec(fixed(50000), Angle::Zero()) {}
 
@@ -267,7 +267,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
   UpdateTerrain(elevations);
 
   PaintAirspaces(canvas, chart);
-  PaintTerrain(canvas, chart, elevations);
+  terrain_renderer.Draw(canvas, chart, elevations);
   PaintGlide(chart);
   PaintAircraft(canvas, chart, rc);
   PaintGrid(canvas, chart);
@@ -307,44 +307,6 @@ CrossSectionRenderer::UpdateTerrain(short *elevations) const
     const GeoPoint slice_point = start + point_diff * slice_distance_factor;
 
     elevations[i] = map->GetHeight(slice_point);
-  }
-}
-
-void
-CrossSectionRenderer::PaintTerrain(Canvas &canvas, ChartRenderer &chart,
-                                   const short *elevations) const
-{
-  if (terrain == NULL)
-    return;
-
-  RasterPoint points[2 + NUM_SLICES];
-
-  points[0] = chart.ToScreen(vec.distance, fixed(-500));
-  points[1] = chart.ToScreen(fixed_zero, fixed(-500));
-
-  unsigned num_points = 2;
-  for (unsigned j = 0; j < NUM_SLICES; ++j) {
-    const fixed slice_distance_factor = fixed(j) / (NUM_SLICES - 1);
-    const fixed slice_distance = slice_distance_factor * vec.distance;
-
-    short h = elevations[j];
-    if (RasterBuffer::IsSpecial(h)) {
-      if (RasterBuffer::IsWater(h))
-        /* water is at 0m MSL */
-        /* XXX paint in blue? */
-        h = 0;
-      else
-        /* skip "unknown" values */
-        continue;
-    }
-
-    points[num_points++] = chart.ToScreen(slice_distance, fixed(h));
-  }
-
-  if (num_points >= 4) {
-    canvas.SelectNullPen();
-    canvas.Select(look.terrain_brush);
-    canvas.polygon(points, num_points);
   }
 }
 
