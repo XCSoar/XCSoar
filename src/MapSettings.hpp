@@ -38,6 +38,7 @@ enum AircraftSymbol {
   acDetailed,
   acSimpleLarge,
   acHangGlider,
+  acParaGlider,
 };
 
 enum DisplayOrientation {
