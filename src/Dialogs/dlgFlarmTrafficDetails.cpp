@@ -131,9 +131,12 @@ Update()
     ((WndProperty *)wf->FindByName(_T("prpPilot")))->SetText(tmp);
 
     // Fill the frequency field
-    _tcscpy(tmp, record->frequency);
-    _tcscat(tmp, _T(" MHz"));
-    ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(tmp);
+    if (!StringIsEmpty(record->frequency)) {
+      _tcscpy(tmp, record->frequency);
+      _tcscat(tmp, _T(" MHz"));
+      ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(tmp);
+    } else
+      ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(_T("--"));
 
     // Fill the home airfield field
     _tcscpy(tmp, record->airfield);
