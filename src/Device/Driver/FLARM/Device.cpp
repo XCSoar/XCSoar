@@ -118,6 +118,30 @@ FlarmDevice::SetRange(unsigned range, OperationEnvironment &env)
 }
 
 bool
+FlarmDevice::GetBaudRate(unsigned &baud_id, OperationEnvironment &env)
+{
+  TCHAR buffer[12];
+  if (!GetConfig("BAUD", buffer, ARRAY_SIZE(buffer), env))
+    return false;
+
+  TCHAR *end_ptr;
+  unsigned value = _tcstoul(buffer, &end_ptr, 10);
+  if (end_ptr == buffer)
+    return false;
+
+  baud_id = value;
+  return true;
+}
+
+bool
+FlarmDevice::SetBaudRate(unsigned baud_id, OperationEnvironment &env)
+{
+  StaticString<32> buffer;
+  buffer.Format(_T("%u"), baud_id);
+  return SetConfig("BAUD", buffer, env);
+}
+
+bool
 FlarmDevice::GetPilot(TCHAR *buffer, size_t length, OperationEnvironment &env)
 {
   return GetConfig("PILOT", buffer, length, env);

@@ -248,6 +248,44 @@ ChangeRange(FlarmDevice &flarm, OperationEnvironment &env)
 }
 
 static void
+ChangeBaudRate(FlarmDevice &flarm, OperationEnvironment &env)
+{
+  while (true) {
+    unsigned baud_id;
+
+    if (flarm.GetBaudRate(baud_id, env))
+      printf("Old baud rate setting: \"%d\"\n", baud_id);
+
+    fprintf(stdout, "Please enter the baud rate setting (2000-25500):\n");
+    fprintf(stdout, "> ");
+
+    char buffer[64];
+    if (fgets(buffer, 64, stdin) == NULL || strlen(buffer) == 0) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    TrimRight(buffer);
+
+    char *end_ptr;
+    baud_id = strtoul(buffer, &end_ptr, 10);
+    if (end_ptr == buffer) {
+      fprintf(stdout, "Invalid input\n");
+      continue;
+    }
+
+    fprintf(stdout, "Setting baud rate to \"%d\" ...\n", baud_id);
+
+    if (flarm.SetBaudRate(baud_id, env))
+      fprintf(stdout, "BaudRate set to \"%d\"\n", baud_id);
+    else
+      fprintf(stdout, "Operation failed!\n");
+
+    return;
+  }
+}
+
+static void
 WriteMenu()
 {
   fprintf(stdout, "------------------------------------\n"
@@ -262,6 +300,7 @@ WriteMenu()
                   "5:  Change competition id\n"
                   "6:  Change competition class\n"
                   "7:  Change receiving range\n"
+                  "8:  Change baud rate\n"
                   "r:  Restart the FLARM\n"
                   "s+: Enable the stealth mode\n"
                   "s-: Disable the stealth mode\n"
@@ -309,6 +348,9 @@ RunUI(FlarmDevice &flarm, OperationEnvironment &env)
       break;
     case '7':
       ChangeRange(flarm, env);
+      break;
+    case '8':
+      ChangeBaudRate(flarm, env);
       break;
     case 'r':
     case 'R':

@@ -92,6 +92,8 @@ public:
   bool SetStealthMode(bool enabled, OperationEnvironment &env);
   bool GetRange(unsigned &range, OperationEnvironment &env);
   bool SetRange(unsigned range, OperationEnvironment &env);
+  bool GetBaudRate(unsigned &baud_id, OperationEnvironment &env);
+  bool SetBaudRate(unsigned baud_id, OperationEnvironment &env);
 
   void Restart(OperationEnvironment &env);
 
