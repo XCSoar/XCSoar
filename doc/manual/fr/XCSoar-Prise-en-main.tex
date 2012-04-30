@@ -18,7 +18,7 @@
 \end{center}
 %
 \begin{flushright}
-Mise à jour du 21 avril 2012 (de la part de Adrien Ott)
+Mise à jour du \today \space(par Adrien Ott)
 \end{flushright}
 %
 \pagebreak
@@ -32,10 +32,10 @@ Ce document est un guide de prise en main du logiciel XCSoar et ne constitue pas
 
 \section{Introduction}
 \noindent
-XCSoar est un logiciel d'aide à la navigation en planeur : "XC" est une abbréviation pour "cross county" (vol sur la campagne), "Soar" fait référence au vol sans moteur (vol à voile, vol libre).\\
-XCSoar est disponible sur plusieurs platformes matérielles (PDA, PNA, smartphones, Altair de Triadis) et plusieurs sysèmes d'exploitation, dont Windows Mobile 5 et 6, et Android (version 1.6 et plus récentes).\\
-XCSoar est développé par des volontaires avec un grand souci de qualité et de performance, et est très largement configurable du point de vue de l'interface utilisateur.\\
-Ce guide de prise en main suppose que vous utilisez une version aussi ou plus récente que la version 6.3.\\
+XCSoar est un logiciel d'aide à la navigation en planeur : "XC" est l'abbréviation de "cross county" (vol sur la campagne), "Soar" fait référence au vol sans moteur (vol à voile, vol libre).\\
+XCSoar est disponible sur plusieurs platformes matérielles (PDA, PNA, smartphones, Altair de Triadis) et plusieurs systèmes d'exploitation, dont Windows Mobile 5 et 6, et Android (version 1.6 et plus récentes).\\
+XCSoar est développé par des volontaires bénévoles avec un grand souci de qualité et de performance, et est très largement configurable du point de vue de l'interface utilisateur.\\
+Ce guide de prise en main suppose que vous utilisiez XSoar version 6.3 ou plus récente.\\
 Pour une version 6.x.y :
 \begin{itemize}
 \item les mises à jour dites de maintenance sont les évolutions "y" (correctifs si nécessaire),
@@ -51,7 +51,7 @@ Sur cette page figurent les différents systèmes d'exploitation supportés, sé
 \newline
 \itshape Sous Windows Mobile, préférez le fichier ".exe" plutôt que le ".cab", quitte à placer un raccourci vers le ".exe" dans le menu "Démarrer" de Windows.\upshape\\
 \newline
-XCSoar affiche alors le logo au centre, la version du logiciel en haut à gauche, un bouton "Quit" en haut à droite, et deux boutons de lancement \textbf{FLY} et \textbf{SIM} en bas de l'écran, respectivement pour le mode vol (pour voler et enregistrer le vol) et le mode simulation (pour apprendre à l'utiliser et le configurer, de façon isolée ou connecté à une simulateur, comme Condor par exemple). A ce stade vous pouvez quitter.
+XCSoar affiche alors le logo au centre, la version du logiciel en haut à gauche, un bouton "Quit" en haut à droite, et deux boutons de lancement \textbf{FLY} et \textbf{SIM} en bas de l'écran, respectivement pour le mode vol (pour voler et enregistrer la trace du vol) et le mode simulation (pour apprendre à l'utiliser et le configurer, de façon isolée ou avec votre appareil connecté à un simulateur, comme Condor par exemple). A ce stade vous pouvez quitter le logiciel (bouton "Quit").
 %
 Si vous avez lancé le mode \textbf{FLY} ou \textbf{SIM}, le menu principal peut être invoqué par un double clic sur le fond de carte.
 L'utilisation est détaillée plus bas.
@@ -60,7 +60,7 @@ L'utilisation est détaillée plus bas.
 %
 \subsection{Les fichiers}
 \noindent
-XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, mettez de préférence ce répertoire sur la carte mémoire, à la racine, si ce n'est pas le cas par défaut (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows.\\
+XCSoar stocke tous les fichiers et répertoires nécessaires à son fonctionnement dans un répertoire nommé XCSoarData. Si vous diposez d'une carte mémoire, ce répertoire peut être sur la carte mémoire, dans ce cas à la racine (typiquement "/sdcard/XCSoarData"). Sinon le répertoire XCSoarData sera dans "Mes Documents" pour les systèmes Windows.\\
 Les fichiers les plus utiles sont les suivants :
 \begin{itemize}
 \item points de virage ("waypoints"), ils peuvent être de diffèrents formats (*.dat de WinPilot/Cambridge, *.cup de SeeYou, *.wpz de Zander, *.wpt d'OziExplorer, GPSDump/FS, GEO ou UTM),
@@ -81,17 +81,16 @@ ou
 \end{itemize}
 Un raccourci gestuel ("gesture" dans le manuel en anglais), est un dessin géométrique que l'utilisateur peut tracer à l'écran pour invoquer un menu en particulier. "\textbf{B H}" consiste à tracer sur l'écran, avec le doigt, un aller-retour commençant par descendre. D'autres exemples sont détaillés plus bas.\\
 %
-Le \textbf{menu principal} est constitué des boutons Nav., Affich., Config., Info d'une part, Annuler et Quitter d'autre part. Les premiers permettent de gérer les principales fonctions du logiciel, les options d'affichage, la configuration du logiciel, consulter l'état du système, les derniers permettent d'effacer le menu principal (plus tôt qu'automatiquement) et quitter le logiciel.\\
+Le \textbf{menu principal} est constitué des boutons "Nav.", "Affich.", "Config.", "Info." d'une part, "Annuler" et "Quitter" d'autre part. Les premiers permettent de gérer les principales fonctions du logiciel, les options d'affichage, la configuration du logiciel, consulter l'état du système, les derniers permettent d'effacer le menu principal (plus tôt qu'automatiquement) et quitter le logiciel.\\
 %
-Une fois le menu principal invoqué, vous pouvez changez la langue utilisée par l'interface si celle-ci n'est pas le français, par exemple (si en anglais) : choisir "fr.mo" dans Config / Config / System Setup / Look Language, Inputs / Language.
-Sinon passez directement à la configuration dans le menu Config. / Config. / Options Système / Fichiers / Fichiers
+Une fois le menu principal invoqué, vous pouvez changez la langue utilisée par l'interface si celle-ci n'est pas le français, par exemple (si en anglais) : choisir "fr.mo" dans Config / Config / System Setup / Look Language, Inputs / Language. Sinon passez directement à la configuration du logiciel dans le menu Config. / Config. / Options Système / Fichiers / Fichiers
 Sélectionnez les fichiers correspondants aux champs suivants :
 \begin{itemize}
 \item Carte,
 \item Waypoints,
 \item Espaces aériens.
 \end{itemize}
-Les champs configurables sont affichés sur fond blanc et modifiables en cliquant dessus, puis en sélectionnant l'option voulue. Pour chaque option une aide est disponible en français, fournissant les explications sur les différentes options si nécessaire.\\
+Les champs configurables sont affichés sur fond blanc et modifiables en cliquant dessus, puis en sélectionnant l'option voulue. Pour chaque option une aide est disponible en français, fournissant les explications sur les différentes options (bouton "Aide").\\
 %
 XCSoar permet l'affichage de \textbf{plusieurs pages} (de une à huit) dont le contenu de chaque InfoBox peut être paramétré. Voir dans "Config. / Config. / Options Système / Apparence" les menus "Pages des InfoBoxes" et "Modes InfoBoxes".
 %
@@ -99,10 +98,10 @@ Une page nommée AUTO permet de basculer automatiquement entre les trois suivant
 \begin{itemize}
 \item Thermique,
 \item Transition,
-\item PlanéFinal (Arrivée).
+\item Arrivée.
 \end{itemize}
 Rien ne vous empêche de ne pas utiliser la page AUTO, ou de l'utiliser en parametrant les mêmes InfoBox pour Transition et Arrivée.\\
-A l'utilisation, le passage d'une page à l'autre s'effectue au choix par le menu principal ou par les raccourcis gestuels suivants :
+A l'utilisation, le passage d'une page à l'autre s'effectue au choix par le menu principal (appuyez deux fois sur Affich., puis le bouton correspondant au nom de la prochaine page) ou plus simplement par les raccourcis gestuels suivants :
 \begin{itemize}
 \item "gauche" (glisser le doigt de la droite vers la gauche sur la carte),
 \item "droite" (l'inverse).
@@ -123,6 +122,9 @@ ou
 \item La capacité de configuration est telle qu'il est préférable que vos InfoBox reflétent vos habitudes de vol, ainsi demandez-vous de quelles informations vous avez besoin aujourd'hui, en évitant (dans un premier temps) d'afficher des données que vous n'utilisez pas.
 \item Si vous utilisez la même information sur deux pages (par exemple la distance au prochain point de virage), alors positionnez la au même endroit sur l'écran.
 \end{itemize} }
+%
+\noindent
+Une fonction utile est l'affichage du \textbf{plan nécessaire} pour rejoindre un aérodrome par exemple (en prenant en compte la hauteur de sécurité configurée). Cette fonction est activable dans "Config. / Config. / Options Système /  Afficher la carte / Eléments / Hauteur d'arrivée", y choisir "Finesse nécessaire".
 %
 \subsection{Raccourcis gestuels}
 \noindent
@@ -164,7 +166,7 @@ Pour les développeurs, voir le "developer manual".
 \noindent
 \label{LiensDivers}
 \begin{flushleft}
-Page brute contenant toutes les versions officielles :\\ \url{http://max.kellermann.name/download/xcsoar/releases/}\\
+Page brute contenant toutes les versions officielles :\\ \url{http://download.xcsoar.org/releases/}\\
 Différents sites pour points de virages et terrains :\\
 \url{http://planeur.net/index.php?option=com_jooget&Itemid=177}\\
 \url{http://www.segelflug.de/vereine/welt2000/}\\
