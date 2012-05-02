@@ -38,7 +38,6 @@ IGCWriter::Fix::operator=(const NMEAInfo &gps_info)
 {
   location = gps_info.location;
   altitude_gps = (int)gps_info.gps_altitude;
-  initialized = true;
 
   return *this;
 }
@@ -69,7 +68,7 @@ IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
   _tcscpy(path, _path);
 
   frecord.Reset();
-  last_valid_point.initialized = false;
+  last_valid_point_initialized = false;
 
   if (!simulator)
     grecord.Initialize();
@@ -321,7 +320,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
       WriteLine(f_record_line);
   }
 
-  if (!last_valid_point.initialized &&
+  if (!last_valid_point_initialized &&
       ((gps_info.gps_altitude < fixed(-100))
        || (gps_info.baro_altitude < fixed(-100))
           || !gps_info.location_available))
@@ -335,6 +334,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
     IsValidFix = 'A'; // Active
     // save last active fix location
     p = last_valid_point = gps_info;
+    last_valid_point_initialized = true;
   }
 
   char *q = szBRecord;

@@ -59,8 +59,6 @@ class IGCWriter {
   bool simulator;
 
   struct Fix {
-    bool initialized;
-
     GeoPoint location;
     int altitude_gps;
 
@@ -68,6 +66,7 @@ class IGCWriter {
   };
 
   Fix last_valid_point;
+  bool last_valid_point_initialized;
 
 public:
   IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info);
