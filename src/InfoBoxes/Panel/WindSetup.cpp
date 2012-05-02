@@ -22,74 +22,67 @@ Copyright_License {
 */
 
 #include "WindSetup.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/Util.hpp"
 #include "Form/TabBar.hpp"
-#include "Form/XMLWidget.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Boolean.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
+#include "Units/Group.hpp"
+#include "Form/RowFormWidget.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "Screen/Layout.hpp"
+#include "Look/DialogLook.hpp"
 
-class WndButton;
+enum ControlIndex {
+  AutoWind,
+  TrailDrift,
+  SetupButton,
+};
 
-class WindSetupPanel : public XMLWidget {
+class WindSetupPanel: public RowFormWidget, DataFieldListener {
+public:
   unsigned id;
 
 public:
-  WindSetupPanel(unsigned _id):id(_id) {}
-
-  void Setup();
+  WindSetupPanel(unsigned _id)
+    :RowFormWidget(UIGlobals::GetDialogLook()), id(_id) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
-};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static WindSetupPanel *instance;
+protected:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
 
-void
-WindSetupPanel::Setup()
-{
-  InfoBoxManager::ShowInfoBoxPicker(id);
-  dlgInfoBoxAccess::OnClose();
-}
-
-static void
-PnlSetupOnSetup(gcc_unused WndButton &Sender)
-{
-  instance->Setup();
-}
-
-static gcc_constexpr_data
-CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(PnlSetupOnSetup),
-  DeclareCallBackEntry(NULL)
+private:
+  void OnAutoWind(DataFieldEnum &Sender);
+  void OnTrailDrift(DataFieldBoolean &Sender);
 };
 
 void
 WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXWINDSETUP"));
-
   const NMEAInfo &basic = XCSoarInterface::Basic();
   const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const bool external_wind = basic.external_wind_available &&
     settings.use_external_wind;
+
+  RowFormWidget::Prepare(parent, rc);
 
   if (external_wind) {
     static gcc_constexpr_data StaticEnumChoice external_wind_list[] = {
       { 0, N_("External") },
       { 0 }
     };
-
-    SetFormControlEnabled(form, _T("prpAutoWind"), false);
-    LoadFormProperty(form, _T("prpAutoWind"), external_wind_list, 0);
+    AddEnum(_("Auto. wind"),
+            _("This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling."),
+            external_wind_list, settings.GetLegacyAutoWindMode(), this);
   } else {
+
     static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
       { AUTOWIND_NONE, N_("Manual") },
       { AUTOWIND_CIRCLING, N_("Circling") },
@@ -98,51 +91,42 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       { 0 }
     };
 
-    LoadFormProperty(form, _T("prpAutoWind"), auto_wind_list,
-                     settings.GetLegacyAutoWindMode());
+    AddEnum(_("Auto. wind"),
+            _("This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling."),
+            auto_wind_list, settings.GetLegacyAutoWindMode(), this);
   }
+
+  AddBoolean(_("Trail drift"),
+             _("Determines whether the snail trail is drifted with the wind when displayed in circling mode."),
+             XCSoarInterface::GetMapSettings().trail_drift_enabled, this);
+}
+
+
+void
+WindSetupPanel::OnModified(DataField &df)
+{
+  if (IsDataField(AutoWind, df))
+    OnAutoWind((DataFieldEnum&)df);
+
+  else if (IsDataField(TrailDrift, df))
+    OnTrailDrift((DataFieldBoolean&)df);
 }
 
 void
-WindSetupPanel::Show(const PixelRect &rc)
+WindSetupPanel::OnAutoWind(DataFieldEnum &Sender)
 {
-  LoadFormProperty(form, _T("prpTrailDrift"),
-                   XCSoarInterface::GetMapSettings().trail_drift_enabled);
-
-  XMLWidget::Show(rc);
+  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
+  settings.SetLegacyAutoWindMode(Sender.GetAsInteger());
 }
 
-bool
-WindSetupPanel::Save(bool &_changed, bool &_require_restart)
+void
+WindSetupPanel::OnTrailDrift(DataFieldBoolean &Sender)
 {
-  bool changed = false, require_restart = false;
-
-  const NMEAInfo &basic = XCSoarInterface::Basic();
-  WindSettings &settings = CommonInterface::SetComputerSettings().wind;
-  const bool external_wind = basic.external_wind_available &&
-    settings.use_external_wind;
-
-  if (!external_wind) {
-    unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
-    if (SaveFormProperty(form, _T("prpAutoWind"), szProfileAutoWind,
-                         auto_wind_mode)) {
-      settings.SetLegacyAutoWindMode(auto_wind_mode);
-      changed = true;
-    }
-  }
-
-  changed |= SaveFormProperty(form, _T("prpTrailDrift"),
-                              XCSoarInterface::
-                              SetMapSettings().trail_drift_enabled);
-  ActionInterface::SendMapSettings();
-
-  _changed |= changed;
-  _require_restart |= require_restart;
-  return true;
+  XCSoarInterface::SetMapSettings().trail_drift_enabled = Sender.GetAsBoolean();
 }
 
 Widget *
 LoadWindSetupPanel(unsigned id)
 {
-  return instance = new WindSetupPanel(id);
+  return new WindSetupPanel(id);
 }
