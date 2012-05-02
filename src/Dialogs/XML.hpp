@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_XML_HPP
 #define XCSOAR_DIALOGS_XML_HPP
 
-#include "Screen/SingleWindow.hpp"
+#include "Screen/Window.hpp"
 
 #include <tchar.h>
 
