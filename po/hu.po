@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-03-30 14:26+0000\n"
+"PO-Revision-Date: 2012-04-20 13:10+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-02 21:12+0000\n"
-"X-Generator: Launchpad (build 15045)\n"
+"X-Launchpad-Export-Date: 2012-05-02 21:41+0000\n"
+"X-Generator: Launchpad (build 15185)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -2536,15 +2536,12 @@ msgid "MSL"
 msgstr "Tengerszint feletti"
 
 #: src/Renderer/MapItemListRenderer.cpp:179
-#, fuzzy
 msgid "around terrain"
-msgstr "Seb ff"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:199
-#, fuzzy
 msgid "Arrival altitude incl. safety height"
-msgstr ""
-"A következő fordulópontba érkezés magassága a biztonsági magassághoz képest."
+msgstr "Érkezési magasság beleértve a biztonsági magasságot"
 
 #: src/Renderer/MapItemListRenderer.cpp:229
 msgid "Your Position"
@@ -2885,9 +2882,8 @@ msgid "Climb trend"
 msgstr "Emelkedési trend"
 
 #: src/Renderer/GlidePolarRenderer.cpp:47
-#, fuzzy
 msgid "L/D"
-msgstr "Sklsz skl"
+msgstr ""
 
 #: src/Renderer/GlidePolarRenderer.cpp:51
 msgid "Min. sink"
@@ -3185,9 +3181,8 @@ msgstr "GPS vétel"
 
 #. device sends GPGGA, but no valid location
 #: src/Dialogs/DeviceListDialog.cpp:188
-#, fuzzy
 msgid "Bad GPS"
-msgstr "Mgsg TF"
+msgstr "Hibás GPS"
 
 #: src/Dialogs/DeviceListDialog.cpp:190
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:67
@@ -3209,9 +3204,8 @@ msgstr "Nincs kapcsolat"
 
 #: src/Dialogs/DeviceListDialog.cpp:239 src/Dialogs/DeviceListDialog.cpp:258
 #: src/Dialogs/DeviceListDialog.cpp:310 src/Dialogs/PortMonitor.cpp:107
-#, fuzzy
 msgid "Device is occupied"
-msgstr "Eszköz tipus"
+msgstr "Az eszköz foglalt."
 
 #: src/Dialogs/DeviceListDialog.cpp:277
 msgid "Edit device"
@@ -3995,19 +3989,19 @@ msgstr "A feladat így érvénytelen lesz."
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:100
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
 msgid "Created Goto Task."
-msgstr ""
+msgstr "Létrehozott MENJ feladat"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:100
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:105
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:139
 msgid "Success"
-msgstr ""
+msgstr "Sikerült"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:105
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:139
 msgid "Created 2-point task from Goto Task."
-msgstr ""
+msgstr "MENJ feladatból létrehozott kétpontos feladat."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:162
 msgid "Waypoint not in task."
@@ -4248,23 +4242,28 @@ msgstr "A termiksegéd megjelenését szabályozza."
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:69
 msgid "Thermal band"
-msgstr ""
+msgstr "Termikerő"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:70
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
 msgstr ""
+"Ezzel a kijelzővel a térkép szélén megjeleníthető a termik erejének "
+"magasságtól függő változása."
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:73
 msgid "Final glide bar MC0"
-msgstr ""
+msgstr "Siklópálya MC0"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:74
 msgid ""
 "If set to ON the final glide bar will show a second arrow indicating the "
 "required height to reach the final waypoint at MC zero."
 msgstr ""
+"Bekapcsolásával a siklópálya-kijelzőn egy második nyíl is megjelenik, ami "
+"nulla MC szerint számítja az utolsó fordulópont eléréséhez szükséges "
+"magasságot."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:60
 msgid "Speed arrows"
@@ -4350,6 +4349,9 @@ msgid ""
 "adjusted in order to cover the greatest distance in the remaining time and "
 "reach the finish height."
 msgstr ""
+"A legkorábbi érkezéshez igazítja a MC értékét.  OLC sprint feladatokban a "
+"MacCready értéket úgy igazítja, hogy a hátralevő időben a legnagyobb "
+"távolság legyen megtehető és a célmagasság is tartható legyen."
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:64
 #, no-c-format
@@ -4626,9 +4628,9 @@ msgid "9 Right + Vario (Landscape)"
 msgstr "9 jobbra + varió (Fekvő)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
-msgstr "9 jobbra + varió (Fekvő)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
 #, no-c-format
@@ -8907,18 +8909,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#~ msgid "Best L/D"
-#~ msgstr "Optimális"
-
-#~ msgid "9 Left + Right (Landscape)"
-#~ msgstr "9 balra + jobbra (tájkép)"
-
-#~ msgid "Arrival height considering terrain avoidance"
-#~ msgstr "Érkezési magasság a terep elkerülésével."
-
-#~ msgid "Both arrival heights are displayed."
-#~ msgstr "Mindkét érkezési magasság megjelenik."
 
 #~ msgid "Unknown Filetype."
 #~ msgstr "Ismeretlen file típus."
