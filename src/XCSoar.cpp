@@ -45,6 +45,12 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "OS/Args.hpp"
 
+#ifndef NDEBUG
+#include "Thread/Thread.hpp"
+#endif
+
+#include <assert.h>
+
 static const char *Usage = "\n"
 #ifdef SIMULATOR_AVAILABLE
   "  -simulator      bypass startup-screen, use simulator mode directly\n"
@@ -137,6 +143,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   DeinitialiseDataPath();
   Net::Deinitialise();
+
+  assert(!ExistsAnyThread());
 
   return ret;
 }
