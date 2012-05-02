@@ -35,14 +35,6 @@ Copyright_License {
 
 #include "LogFile.hpp"
 
-Thread::~Thread()
-{
-#ifndef HAVE_POSIX
-  if (handle != NULL)
-    ::CloseHandle(handle);
-#endif
-}
-
 bool
 Thread::Start()
 {

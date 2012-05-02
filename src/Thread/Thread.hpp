@@ -32,6 +32,8 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#include <assert.h>
+
 /**
  * This class provides an OS independent view on a thread.
  */
@@ -64,7 +66,14 @@ public:
 #else
   Thread():handle(NULL) {}
 #endif
-  virtual ~Thread();
+
+#ifndef NDEBUG
+  virtual ~Thread() {
+    /* all Thread objects must be destructed manually by calling
+       Join(), to clean up */
+    assert(!IsDefined());
+  }
+#endif
 
   bool IsDefined() const {
 #ifdef HAVE_POSIX
