@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3.3 - not yet released
+* Android
+  - fix crash after too many network failures (#1957)
 
 Version 6.3.2 - 2011/04/26
 * devices
