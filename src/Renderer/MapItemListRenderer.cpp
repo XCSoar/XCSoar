@@ -215,10 +215,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
 
-  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
-                     (PixelScalar)(rc.top + line_height / 2) };
-  AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
-
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
 
@@ -234,6 +230,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, buffer);
+
+  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
+                     (PixelScalar)(rc.top + line_height / 2) };
+  AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 }
 
 void
@@ -246,14 +246,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const PixelScalar line_height = rc.bottom - rc.top;
 
   const AbstractAirspace &airspace = *item.airspace;
-
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
-  PixelScalar radius = std::min(PixelScalar(line_height / 2
-                                            - Layout::FastScale(4)),
-                                Layout::FastScale(10));
-  AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
-                                renderer_settings, look);
 
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
@@ -279,6 +271,14 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, airspace.GetBaseText(true).c_str());
+
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
+  PixelScalar radius = std::min(PixelScalar(line_height / 2
+                                            - Layout::FastScale(4)),
+                                Layout::FastScale(10));
+  AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
+                                renderer_settings, look);
 }
 
 void
@@ -384,14 +384,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = item.waypoint;
 
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
-  PixelScalar radius = std::min(PixelScalar(line_height / 2
-                                            - Layout::FastScale(4)),
-                                Layout::FastScale(10));
-  OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
-                          airspace_settings, airspace_look);
-
   const Font &name_font = *dialog_look.list.font;
   const Font &small_font = *dialog_look.small_font;
 
@@ -415,6 +407,15 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                         item.index, buffer);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2),
                       rc.right - left, buffer);
+
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
+  PixelScalar radius = std::min(PixelScalar(line_height / 2
+                                            - Layout::FastScale(4)),
+                                Layout::FastScale(10));
+  OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
+                          airspace_settings, airspace_look);
+
 }
 
 void
@@ -425,12 +426,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 {
   const PixelScalar line_height = rc.bottom - rc.top;
   const FlarmTraffic traffic = item.traffic;
-
-  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
-                     (PixelScalar)(rc.top + line_height / 2) };
-
-  // Render the representation of the traffic icon
-  TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track, pt);
 
   // Now render the text information
   const Font &name_font = *dialog_look.list.font;
@@ -462,6 +457,12 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, info_string);
+
+  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
+                     (PixelScalar)(rc.top + line_height / 2) };
+
+  // Render the representation of the traffic icon
+  TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track, pt);
 }
 
 void
