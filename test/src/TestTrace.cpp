@@ -80,7 +80,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
     }
 
     IGCFix fix;
-    if (!IGCParseFix(line, fix))
+    if (!IGCParseFix(line, fix) || !fix.gps_valid)
       continue;
 
     OnAdvance(trace,

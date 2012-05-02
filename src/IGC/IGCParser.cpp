@@ -109,19 +109,27 @@ IGCParseFix(const char *buffer, IGCFix &fix)
   int DegLat, DegLon;
   int MinLat, MinLon;
   char NoS, EoW;
+  char valid_char;
   int iAltitude, iPressureAltitude;
   int Hour = 0;
   int Minute = 0;
   int Second = 0;
   int lfound =
-      sscanf(buffer, "B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d",
+      sscanf(buffer, "B%02d%02d%02d%02d%05d%c%03d%05d%c%c%05d%05d",
       &Hour, &Minute, &Second, &DegLat, &MinLat, &NoS, &DegLon,
-      &MinLon, &EoW, &iPressureAltitude, &iAltitude);
+      &MinLon, &EoW, &valid_char, &iPressureAltitude, &iAltitude);
 
   if (lfound == EOF)
     return false;
 
-  if (lfound != 11)
+  if (lfound != 12)
+    return false;
+
+  if (valid_char == 'A')
+    fix.gps_valid = true;
+  else if (valid_char == 'V')
+    fix.gps_valid = false;
+  else
     return false;
 
   fixed Latitude = fixed(DegLat) + fixed(MinLat) / 60000;

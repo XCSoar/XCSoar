@@ -34,6 +34,8 @@ struct IGCFix
 
   GeoPoint location;
 
+  bool gps_valid;
+
   fixed gps_altitude, pressure_altitude;
 };
 

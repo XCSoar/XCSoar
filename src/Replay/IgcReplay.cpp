@@ -41,7 +41,7 @@ IgcReplay::IgcReplay() :
 bool
 IgcReplay::ScanBuffer(const char *buffer, IGCFix &fix)
 {
-  return IGCParseFix(buffer, fix);
+  return IGCParseFix(buffer, fix) && fix.gps_valid;
 }
 
 bool

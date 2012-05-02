@@ -142,7 +142,7 @@ DebugReplayIGC::Next()
   while ((line = reader->read()) != NULL) {
     if (line[0] == 'B') {
       IGCFix fix;
-      if (IGCParseFix(line, fix)) {
+      if (IGCParseFix(line, fix) && fix.gps_valid) {
         CopyFromFix(fix);
 
         Compute();

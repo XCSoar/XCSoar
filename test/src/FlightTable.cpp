@@ -65,6 +65,9 @@ public:
 void
 FlightCheck::fix(const IGCFix &fix)
 {
+  if (!fix.gps_valid)
+    return;
+
   if (previous_valid && fix.time > previous.time) {
     fixed distance = fix.location.Distance(previous.location);
     fixed speed = distance / (fix.time.GetSecondOfDay() - previous.time.GetSecondOfDay());
