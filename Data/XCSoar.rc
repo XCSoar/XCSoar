@@ -292,7 +292,6 @@ IDR_XML_INFOBOXMACCREADYSETUP XMLDIALOG DISCARDABLE "../output/data/dialogs/Info
 IDR_XML_INFOBOXALTITUDEINFO XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml.gz"
 IDR_XML_INFOBOXALTITUDESIMULATOR XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxAltitudeSimulator.xml.gz"
 IDR_XML_INFOBOXALTITUDESETUP XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml.gz"
-IDR_XML_INFOBOXWINDEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxWindEdit.xml.gz"
 IDR_XML_INFOBOXWINDSETUP XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxWindSetup.xml.gz"
 
 // new task editor

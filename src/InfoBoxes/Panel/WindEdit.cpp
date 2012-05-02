@@ -22,23 +22,51 @@ Copyright_License {
 */
 
 #include "WindEdit.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Form/TabBar.hpp"
-#include "Form/XMLWidget.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
+#include "Units/Group.hpp"
+#include "Form/RowFormWidget.hpp"
+#include "Form/DataField/Listener.hpp"
+#include "UIGlobals.hpp"
+#include "Language/Language.hpp"
+#include "Screen/Layout.hpp"
 
-class WindEditPanel : public XMLWidget {
-public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
+enum ControlIndex {
+  WindSpeed,
+  WindDirection,
+  LastItemInList,
 };
 
-static void
-PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
+class WindEditPanel: public RowFormWidget, DataFieldListener {
+public:
+  WindEditPanel()
+    :RowFormWidget(UIGlobals::GetDialogLook()) {}
+
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+
+protected:
+  /* methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+
+private:
+  void OnWindSpeed(DataFieldFloat &Sender);
+  void OnWindDirection(DataFieldFloat &Sender);
+};
+
+void
+WindEditPanel::OnModified(DataField &df)
+{
+  if (IsDataField(WindSpeed, df))
+    OnWindSpeed((DataFieldFloat&)df);
+
+  else if (IsDataField(WindDirection, df))
+    OnWindDirection((DataFieldFloat&)df);
+}
+
+void
+WindEditPanel::OnWindSpeed(DataFieldFloat &Sender)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
@@ -51,8 +79,8 @@ PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
   }
 }
 
-static void
-PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
+void
+WindEditPanel::OnWindDirection(DataFieldFloat &Sender)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
@@ -65,50 +93,20 @@ PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
   }
 }
 
-static gcc_constexpr_data
-CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(PnlEditOnWindSpeed),
-  DeclareCallBackEntry(PnlEditOnWindDirection),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 WindEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXWINDEDIT"));
-}
+  RowFormWidget::Prepare(parent, rc);
 
-void
-WindEditPanel::Show(const PixelRect &rc)
-{
-  const NMEAInfo &basic = XCSoarInterface::Basic();
-  const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
-  const bool external_wind = basic.external_wind_available &&
-    settings.use_external_wind;
+  AddFloat(_("Speed"), _("Manual adjustment of wind speed."), _T("%.0f"),
+           _T("%.0f"), fixed_zero, fixed(130), fixed(1), false,
+           UnitGroup::WIND_SPEED,
+           CommonInterface::Calculated().GetWindOrZero().norm, this);
 
-  WndProperty* wp;
-
-  const SpeedVector wind = CommonInterface::Calculated().GetWindOrZero();
-
-  wp = (WndProperty *)form.FindByName(_T("prpSpeed"));
-  if (wp) {
-    wp->SetEnabled(!external_wind);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetMax(Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200), Unit::KILOMETER_PER_HOUR)));
-    df.SetUnits(Units::GetSpeedName());
-    df.Set(Units::ToUserWindSpeed(wind.norm));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty *)form.FindByName(_T("prpDirection"));
-  if (wp) {
-    wp->SetEnabled(!external_wind);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(wind.bearing.Degrees());
-    wp->RefreshDisplay();
-  }
-
-  XMLWidget::Show(rc);
+  AddFloat(_("Direction"), _("Manual adjustment of wind direction."),
+           _T("%.0f°"), _T("%.0f"), fixed_zero, fixed(355), fixed(5), false, // TO DO Add degrees to first display format
+           CommonInterface::Calculated().GetWindOrZero().bearing.Degrees(),
+           this);
 }
 
 Widget *
