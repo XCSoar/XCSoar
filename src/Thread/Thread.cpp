@@ -162,6 +162,8 @@ Thread::ThreadProc(LPVOID lpParameter)
 
 #endif /* !HAVE_POSIX */
 
+#ifndef NDEBUG
+
 bool
 ExistsAnyThread()
 {
@@ -170,3 +172,5 @@ ExistsAnyThread()
   all_threads_mutex.Unlock();
   return result;
 }
+
+#endif
