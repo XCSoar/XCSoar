@@ -159,6 +159,10 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     tmp_info.date_time_utc = src.date_time_utc;
     tmp_info.time = src.time;
 
+    // NOTE: clock is only used to set the validity of valid objects to true
+    //       for which "1" is sufficient. This kludge needs to be rewritten.
+    tmp_info.clock = fixed_one;
+
     if (src.nav_warning)
       tmp_info.location_available.Clear();
     else

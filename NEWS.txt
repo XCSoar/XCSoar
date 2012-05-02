@@ -7,6 +7,7 @@ Version 6.3.3 - not yet released
   - fix crash after too many network failures (#1957)
 * logger
   - Fix logging of "start" events
+  - Fix logging of "before takeoff position fixes" in IGC logs (#2052)
 
 Version 6.3.2 - 2011/04/26
 * devices
