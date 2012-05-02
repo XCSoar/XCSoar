@@ -42,8 +42,8 @@ CheckTextFile(const TCHAR *path, const char *const* expect)
 
     ok1(*expect != NULL);
 
-    if (strncmp(*expect, "HFFTYFR TYPE:", 13) == 0) {
-      ok1(strncmp(line, "HFFTYFR TYPE:", 13) == 0);
+    if (strncmp(*expect, "HFFTYFRTYPE:", 12) == 0) {
+      ok1(strncmp(line, "HFFTYFRTYPE:", 12) == 0);
     } else {
       if (strcmp(line, *expect)) {
         printf("# \"%s\" fails to match with \"%s\"\n", line, *expect);
@@ -60,14 +60,14 @@ CheckTextFile(const TCHAR *path, const char *const* expect)
 static const char *const expect[] = {
   "AXCSFOO",
   "HFDTE040910",
-  "HFFXA50",
+  "HFFXA050",
   "HFPLTPILOT:Pilot Name",
   "HFGTYGLIDERTYPE:ASK-21",
   "HFGIDGLIDERID:D-1234",
   "HFCIDCOMPETITIONID:34",
-  "HFFTYFR TYPE:XCSOAR XCSOAR",
-  "HFGPS: bar",
-  "HFDTM100Datum: WGS-84",
+  "HFFTYFRTYPE:XCSOAR XCSOAR",
+  "HFGPS:bar",
+  "HFDTM100DATUM:WGS-84",
   "I023638FXA3940SIU",
   "C040910112233000000000001",
   "C0000000N00000000ETAKEOFF",

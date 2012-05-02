@@ -59,9 +59,9 @@ IGCWriter::GetHFFXARecord()
    * typical EPE radius achieved by the receiver in good reception conditions. (AL3)
    *
    * XCSoar Interpretation: Use 50 meters to be conservative:
-   * ---> HFFXA50
+   * ---> HFFXA050
    */
-  return "HFFXA50";
+  return "HFFXA050";
 }
 
 const char *

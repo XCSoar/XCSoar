@@ -205,10 +205,10 @@ IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
   WriteLine("HFGTYGLIDERTYPE:", aircraft_model);
   WriteLine("HFGIDGLIDERID:", aircraft_registration);
   WriteLine("HFCIDCOMPETITIONID:", competition_id);
-  WriteLine("HFFTYFR TYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
-  WriteLine("HFGPS: ", driver_name);
+  WriteLine("HFFTYFRTYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
+  WriteLine("HFGPS:", driver_name);
 
-  WriteLine("HFDTM100Datum: WGS-84");
+  WriteLine("HFDTM100DATUM:WGS-84");
 
   if (!simulator)
     WriteLine(GetIRecord());

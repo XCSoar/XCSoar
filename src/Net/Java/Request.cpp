@@ -27,6 +27,7 @@ Copyright_License {
 #include "Java/String.hpp"
 #include "Java/InputStream.hpp"
 #include "Java/URL.hpp"
+#include "Java/Exception.hpp"
 
 #include <assert.h>
 
@@ -36,16 +37,15 @@ Net::Request::Request(Session &_session, const TCHAR *url,
 {
   Java::String j_url(env, url);
   jobject url_object = Java::URL::Create(env, j_url);
-  if (env->ExceptionOccurred() || url_object == NULL) {
-    env->ExceptionClear();
+  if (Java::DiscardException(env)) {
+    connection = NULL;
     input_stream = NULL;
     return;
   }
 
   connection = Java::URL::openConnection(env, url_object);
   env->DeleteLocalRef(url_object);
-  if (env->ExceptionOccurred() || connection == NULL) {
-    env->ExceptionClear();
+  if (Java::DiscardException(env)) {
     connection = NULL;
     input_stream = NULL;
     return;
@@ -54,8 +54,7 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   Java::URLConnection::setConnectTimeout(env, connection, (jint)timeout);
 
   input_stream = Java::URLConnection::getInputStream(env, connection);
-  if (env->ExceptionOccurred() || input_stream == NULL) {
-    env->ExceptionClear();
+  if (Java::DiscardException(env)) {
     env->DeleteLocalRef(connection);
     connection = NULL;
     input_stream = NULL;
