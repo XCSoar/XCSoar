@@ -128,6 +128,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.gps_altitude_available.Update(t);
   basic.ProvidePressureAltitude(baroalt);
   basic.ProvideBaroAltitudeTrue(baroalt);
+  basic.noncomp_vario_available.Clear();
   basic.total_energy_vario_available.Clear();
   basic.netto_vario_available.Clear();
   basic.external_wind_available.Clear();
