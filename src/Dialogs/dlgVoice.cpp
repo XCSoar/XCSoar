@@ -104,14 +104,10 @@ void dlgVoiceShowModal(){
   bool changed = false;
 
   changed = SaveFromForm(*wf, CommonInterface::SetComputerSettings().voice);
+  delete wf;
 
   if (changed) {
     Profile::Save();
     LogDebug(_T("Voice configuration: Changes saved"));
   }
-
-  delete wf;
-  wf = NULL;
-
 }
-

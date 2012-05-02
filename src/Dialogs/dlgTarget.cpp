@@ -557,7 +557,7 @@ dlgTargetShowModal(int TargetPoint)
   CommonInterface::GetLiveBlackboard().AddListener(rate_limited_bl);
 
   wf->ShowModal();
-  CommonInterface::GetLiveBlackboard().RemoveListener(rate_limited_bl);
-
   delete wf;
+
+  CommonInterface::GetLiveBlackboard().RemoveListener(rate_limited_bl);
 }
