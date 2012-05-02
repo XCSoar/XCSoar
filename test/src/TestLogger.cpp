@@ -20,7 +20,7 @@
 }
 */
 
-#include "Logger/IGCWriter.hpp"
+#include "IGC/IGCWriter.hpp"
 #include "OS/FileUtil.hpp"
 #include "NMEA/Info.hpp"
 #include "IO/FileLineReader.hpp"

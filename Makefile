@@ -328,7 +328,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/LoggerImpl.cpp \
-	$(SRC)/Logger/IGCWriter.cpp \
+	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \
@@ -351,7 +351,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/Replay/Replay.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/IgcReplayGlue.cpp \
 	$(SRC)/Replay/NmeaReplay.cpp \

@@ -1,6 +1,6 @@
 HARNESS_SOURCES = \
 	$(SRC)/Computer/FlyingComputer.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \

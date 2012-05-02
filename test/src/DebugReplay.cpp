@@ -30,8 +30,8 @@ Copyright_License {
 #include "Device/Port/NullPort.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Replay/IGCParser.hpp"
-#include "Replay/IGCFix.hpp"
+#include "IGC/IGCParser.hpp"
+#include "IGC/IGCFix.hpp"
 
 static DeviceConfig config;
 static NullPort port;

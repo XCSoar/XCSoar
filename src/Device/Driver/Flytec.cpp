@@ -34,7 +34,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Operation/Operation.hpp"
-#include "Replay/IGCParser.hpp"
+#include "IGC/IGCParser.hpp"
 
 #include <stdlib.h>
 #include <math.h>

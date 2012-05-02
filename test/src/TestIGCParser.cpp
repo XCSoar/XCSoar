@@ -20,8 +20,8 @@
 }
 */
 
-#include "Replay/IGCParser.hpp"
-#include "Replay/IGCFix.hpp"
+#include "IGC/IGCParser.hpp"
+#include "IGC/IGCFix.hpp"
 #include "DateTime.hpp"
 #include "TestUtil.hpp"
 

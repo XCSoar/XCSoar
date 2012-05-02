@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "OS/PathName.hpp"
-#include "Logger/IGCWriter.hpp"
+#include "IGC/IGCWriter.hpp"
 #include "DebugReplay.hpp"
 #include "OS/Args.hpp"
 

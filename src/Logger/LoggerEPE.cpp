@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Logger/IGCWriter.hpp"
+#include "IGC/IGCWriter.hpp"
 #include "NMEA/Info.hpp"
 
 /*

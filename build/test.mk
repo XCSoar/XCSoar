@@ -104,7 +104,7 @@ TEST_OVERWRITING_RING_BUFFER_DEPENDS = MATH
 $(eval $(call link-program,TestOverwritingRingBuffer,TEST_OVERWRITING_RING_BUFFER))
 
 TEST_IGC_PARSER_SOURCES = \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestIGCParser.cpp
 TEST_IGC_PARSER_DEPENDS = MATH
@@ -548,7 +548,7 @@ TEST_RADIX_TREE_SOURCES = \
 $(eval $(call link-program,TestRadixTree,TEST_RADIX_TREE))
 
 TEST_LOGGER_SOURCES = \
-	$(SRC)/Logger/IGCWriter.cpp \
+	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
@@ -583,7 +583,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -638,7 +638,7 @@ $(eval $(call link-program,TestWaypointReader,TEST_WAY_POINT_FILE))
 
 TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
@@ -647,7 +647,7 @@ $(eval $(call link-program,TestTrace,TEST_TRACE))
 
 FLIGHT_TABLE_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(TEST_SRC_DIR)/FlightTable.cpp
@@ -740,7 +740,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/ComputerSettings.cpp \
@@ -1166,7 +1166,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1193,7 +1193,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1260,7 +1260,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1290,7 +1290,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1350,7 +1350,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
-	$(SRC)/Logger/IGCWriter.cpp \
+	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
@@ -1403,7 +1403,7 @@ $(eval $(call link-program,RunWindEKF,RUN_WIND_EKF))
 
 RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
@@ -1420,7 +1420,7 @@ $(eval $(call link-program,RunTrace,RUN_TRACE))
 
 RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
@@ -2033,7 +2033,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
@@ -2307,7 +2307,7 @@ $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 
 IGC2NMEA_SOURCES = \
 	$(SRC)/Replay/IgcReplay.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Units/Descriptor.cpp \

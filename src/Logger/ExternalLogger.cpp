@@ -39,7 +39,7 @@
 #include "Job/Job.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
-#include "Replay/IGCParser.hpp"
+#include "IGC/IGCParser.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 
 #include <windef.h> /* for MAX_PATH */
