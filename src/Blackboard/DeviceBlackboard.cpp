@@ -145,7 +145,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutex);
 
-  replay_data.alive.Clear();
+  replay_data.Reset();
 
   ScheduleMerge();
 }
