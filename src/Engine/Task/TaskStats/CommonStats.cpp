@@ -25,6 +25,7 @@ CommonStats::reset_task()
   next_is_last = false;
   previous_is_first = false;
   next_solution.Reset();
+  next_solution_mc0.Reset();
   ordered_summary.clear();
 }
 
