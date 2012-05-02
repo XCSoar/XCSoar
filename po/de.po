@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-04-03 21:52+0000\n"
-"Last-Translator: Helmut Rohs <Unknown>\n"
+"PO-Revision-Date: 2012-05-02 06:09+0000\n"
+"Last-Translator: Dennis Baudys <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-03 23:41+0000\n"
-"X-Generator: Launchpad (build 15052)\n"
+"X-Launchpad-Export-Date: 2012-05-02 21:41+0000\n"
+"X-Generator: Launchpad (build 15185)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -436,7 +436,7 @@ msgstr "Höhe - über Grund"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:7
 #, no-c-format
 msgid "H AGL"
-msgstr "H ü. GND"
+msgstr "H üb GND"
 
 #: src/InfoBoxes/Content/Factory.cpp:91
 #, no-c-format
@@ -452,12 +452,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:99
 #, no-c-format
 msgid "Thermal last 30 s"
-msgstr "Vario - 30 s Mittel"
+msgstr "Thermik - Vario 30s Mittel"
 
 #: src/InfoBoxes/Content/Factory.cpp:100
 #, no-c-format
 msgid "TC 30s"
-msgstr "Steigen 30s"
+msgstr "Steig 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:101
 #, no-c-format
@@ -492,7 +492,7 @@ msgstr "Gleitzahl - aktuell"
 #: src/InfoBoxes/Content/Factory.cpp:120
 #, no-c-format
 msgid "L/D Inst"
-msgstr "Gleitzahl"
+msgstr "GZ aktuell"
 
 #: src/InfoBoxes/Content/Factory.cpp:121
 #, no-c-format
@@ -515,7 +515,7 @@ msgstr "Gleitzahl - im Vorflug"
 #: src/InfoBoxes/Content/Factory.cpp:130
 #, no-c-format
 msgid "L/D Cru"
-msgstr "GZ Vorfl."
+msgstr "GZ Vorfl"
 
 #: src/InfoBoxes/Content/Factory.cpp:131
 #, no-c-format
@@ -558,7 +558,7 @@ msgstr "Letzte Thermik - Steigen im Durchschnitt"
 #: src/InfoBoxes/Content/Factory.cpp:150
 #, no-c-format
 msgid "TL Avg"
-msgstr "l. Steigmitl."
+msgstr "LSteig mittl"
 
 #: src/InfoBoxes/Content/Factory.cpp:151
 #, no-c-format
@@ -577,7 +577,7 @@ msgstr "Letzte Thermik - Höhengewinn"
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
 msgid "TL Gain"
-msgstr "l. Höhengewinn"
+msgstr "LT H Gewinn"
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
@@ -592,7 +592,7 @@ msgstr "Letzte Thermik - Zeit im Steigflug"
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "TL Time"
-msgstr "l. Steigzeit"
+msgstr "L SteigZeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
@@ -602,7 +602,7 @@ msgstr "Gesamtzeit, die in der letzten Thermik gekreist wurde."
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "MacCready setting"
-msgstr "MacCready Einstellung"
+msgstr "MacCready - Einstellung"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
@@ -629,7 +629,7 @@ msgstr "Nächster Wegpunkt - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:190 src/InfoBoxes/Content/Task.cpp:155
 #, no-c-format
 msgid "WP Dist"
-msgstr "WP Distanz"
+msgstr "WP Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:191
 #, no-c-format
@@ -648,7 +648,7 @@ msgstr "Nächster Wegpunkt - relative Ankunftshöhe"
 #: src/InfoBoxes/Content/Factory.cpp:200
 #, no-c-format
 msgid "WP AltD"
-msgstr "WP rel. Ank. Höhe"
+msgstr "WP H Diff"
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
@@ -665,7 +665,7 @@ msgstr "Nächster Wegpunkt - benötigte Endanflughöhe"
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "WP AltR"
-msgstr "WP ben. Höhe"
+msgstr "WP benö H"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -680,7 +680,7 @@ msgstr "Nächster Wegpunkt"
 #: src/InfoBoxes/Content/Factory.cpp:220 src/InfoBoxes/Content/Task.cpp:83
 #, no-c-format
 msgid "Next"
-msgstr "Nächster WP"
+msgstr "WP nächst"
 
 #: src/InfoBoxes/Content/Factory.cpp:221
 #, no-c-format
@@ -702,7 +702,7 @@ msgstr "Endanflug - Höhenreserve"
 #: src/InfoBoxes/Content/Factory.cpp:230
 #, no-c-format
 msgid "Fin AltD"
-msgstr "EA Höhe Diff."
+msgstr "EndA H Diff"
 
 #: src/InfoBoxes/Content/Factory.cpp:231
 #, no-c-format
@@ -721,7 +721,7 @@ msgstr "Endanflug - benötigte Endanflughöhe"
 #: src/InfoBoxes/Content/Factory.cpp:240
 #, no-c-format
 msgid "Fin AltR"
-msgstr "EA ben. Höhe"
+msgstr "EndA benö H"
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -736,7 +736,7 @@ msgstr "Aufgabe - Durchschnittsgeschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:250
 #, no-c-format
 msgid "VTask Avg"
-msgstr "mitl. V Aufgabe"
+msgstr "V Aufg mittl"
 
 #: src/InfoBoxes/Content/Factory.cpp:251
 #, no-c-format
@@ -753,7 +753,7 @@ msgstr "Endanflug - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "Fin Dist"
-msgstr "EA Distanz"
+msgstr "EndA Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
@@ -768,7 +768,7 @@ msgstr "Endanflug - benötigte Gleitzahl"
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Fin LD"
-msgstr "EA GZ"
+msgstr "EndA GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -799,7 +799,7 @@ msgstr "Höhe - vom Gelände (Karte)"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr "GND"
+msgstr "GND H"
 
 #: src/InfoBoxes/Content/Factory.cpp:281
 #, no-c-format
@@ -818,7 +818,7 @@ msgstr "Thermik - Durchschnitt"
 #: src/InfoBoxes/Content/Factory.cpp:290
 #, no-c-format
 msgid "TC Avg"
-msgstr "mitl. Steigen"
+msgstr "Steig mittl"
 
 #: src/InfoBoxes/Content/Factory.cpp:291
 #, no-c-format
@@ -837,7 +837,7 @@ msgstr "Thermik - Höhengewinn"
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
 msgid "TC Gain"
-msgstr "Höhengewinn"
+msgstr "Steig H Gewinn"
 
 #: src/InfoBoxes/Content/Factory.cpp:301
 #, no-c-format
@@ -891,7 +891,7 @@ msgstr "Wind - Geschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:330
 #, no-c-format
 msgid "Wind V"
-msgstr "Windgeschw"
+msgstr "Wind V"
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
@@ -915,7 +915,7 @@ msgstr "Wind - Richtung"
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "Wind B"
-msgstr "Windricht."
+msgstr "Wind Peilu"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
@@ -936,7 +936,7 @@ msgstr "AAT - Zeit"
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "AAT Time"
-msgstr "AAT - Zeit"
+msgstr "AAT Zeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
@@ -1033,12 +1033,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:409
 #, no-c-format
 msgid "Barometric altitude"
-msgstr "Barometrische Höhe"
+msgstr "Höhe - barometrisch"
 
 #: src/InfoBoxes/Content/Factory.cpp:410
 #, no-c-format
 msgid "Alt. Baro."
-msgstr "H Baro."
+msgstr "H Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
@@ -1090,7 +1090,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "Time of flight"
-msgstr "Flugzeit"
+msgstr "Zeit - Flugdauer"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
@@ -1129,7 +1129,7 @@ msgstr "Nächster Wegpunkt - benötigte Gleitzahl"
 #: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
 msgid "WP LD"
-msgstr "WP ben. GZ"
+msgstr "WP benö GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:461
 #, no-c-format
@@ -1184,7 +1184,7 @@ msgstr "Aufgabe - benötigte Zeit"
 #: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
 msgid "Fin ETE"
-msgstr "EA ETE"
+msgstr "EndA ETE"
 
 #: src/InfoBoxes/Content/Factory.cpp:491
 #, no-c-format
@@ -1247,7 +1247,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:519
 #, no-c-format
 msgid "Netto vario"
-msgstr "Vario - Netto"
+msgstr "Thermik - netto Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:520 src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
@@ -1275,7 +1275,7 @@ msgstr "Aufgabe - Ankunftszeit"
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
 msgid "Fin ETA"
-msgstr "ETA"
+msgstr "EndA ETA"
 
 #: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
@@ -1313,7 +1313,7 @@ msgstr "Nächster Wegpunkt - Peildifferenz"
 #: src/InfoBoxes/Content/Factory.cpp:550
 #, no-c-format
 msgid "Brng D"
-msgstr "WP Peildiff."
+msgstr "WP Peil Diff"
 
 #: src/InfoBoxes/Content/Factory.cpp:551
 #, no-c-format
@@ -1342,7 +1342,7 @@ msgstr "Aussentemperatur"
 #: src/InfoBoxes/Content/Factory.cpp:560
 #, no-c-format
 msgid "OAT"
-msgstr "Temp"
+msgstr "Luft Temp"
 
 #: src/InfoBoxes/Content/Factory.cpp:561
 #, no-c-format
@@ -1359,7 +1359,7 @@ msgstr "Relative Luftfeuchtigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:570
 #, no-c-format
 msgid "Rel Hum"
-msgstr "Rel. Feuchte"
+msgstr "Rel Feuchte"
 
 #: src/InfoBoxes/Content/Factory.cpp:571
 #, no-c-format
@@ -1376,7 +1376,7 @@ msgstr "Temperaturprognose"
 #: src/InfoBoxes/Content/Factory.cpp:580
 #, no-c-format
 msgid "Max Temp"
-msgstr "Max. Temp"
+msgstr "Max Temp"
 
 #: src/InfoBoxes/Content/Factory.cpp:581
 #, no-c-format
@@ -1399,7 +1399,7 @@ msgstr "AAT - Restdistanz zum Ziel"
 #: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
 msgid "AAT Dtgt"
-msgstr "AAT DZiel"
+msgstr "AAT Dist Ziel"
 
 #: src/InfoBoxes/Content/Factory.cpp:591
 #, no-c-format
@@ -1465,12 +1465,12 @@ msgstr "Wahre Geschwindigkeit gegenüber Luft laut dem angeschlossenen Sensor."
 #: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
 msgid "Team code"
-msgstr "Teamkode"
+msgstr "Team - Kode"
 
 #: src/InfoBoxes/Content/Factory.cpp:630
 #, no-c-format
 msgid "TeamCode"
-msgstr "TeamKode"
+msgstr "Tm Kode"
 
 #: src/InfoBoxes/Content/Factory.cpp:631
 #, no-c-format
@@ -1505,7 +1505,7 @@ msgstr "Team - Peildifferenz"
 #: src/InfoBoxes/Content/Factory.cpp:650
 #, no-c-format
 msgid "Team Bd"
-msgstr "Tm Peildiff."
+msgstr "Tm Peil Diff"
 
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
@@ -1522,7 +1522,7 @@ msgstr "Team - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
 msgid "Team Dis"
-msgstr "Tm Distanz"
+msgstr "Tm Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:661
 #, no-c-format
@@ -1537,7 +1537,7 @@ msgstr "Aufgabe - aktuelle m. Geschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:670
 #, no-c-format
 msgid "V Tsk Ins"
-msgstr "V Aufg. aktuell"
+msgstr "V Aufg aktuell"
 
 #: src/InfoBoxes/Content/Factory.cpp:671
 #, no-c-format
@@ -1556,7 +1556,7 @@ msgstr "Heimdistanz"
 #: src/InfoBoxes/Content/Factory.cpp:680
 #, no-c-format
 msgid "Home Dis"
-msgstr "Heim Distanz"
+msgstr "Heim Dist"
 
 #: src/InfoBoxes/Content/Factory.cpp:681
 #, no-c-format
@@ -1571,7 +1571,7 @@ msgstr "Aufgabe - erreichte Geschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:690
 #, no-c-format
 msgid "V Tsk Ach"
-msgstr "V Aufg. ercht."
+msgstr "V Aufg errcht"
 
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
@@ -1590,7 +1590,7 @@ msgstr "AAT - Differenzzeit"
 #: src/InfoBoxes/Content/Factory.cpp:700
 #, no-c-format
 msgid "AAT dT"
-msgstr "AAT dT"
+msgstr "AAT Zeit Diff"
 
 #: src/InfoBoxes/Content/Factory.cpp:701
 #, no-c-format
@@ -1612,7 +1612,7 @@ msgstr "Thermik - gesamt Durchschnitt"
 #: src/InfoBoxes/Content/Factory.cpp:710
 #, no-c-format
 msgid "TC All"
-msgstr "mitl. St. insg."
+msgstr "Steig mittl insg"
 
 #: src/InfoBoxes/Content/Factory.cpp:711
 #, no-c-format
@@ -1627,7 +1627,7 @@ msgstr "Aufgabe - Trend benötigte Höhe"
 #: src/InfoBoxes/Content/Factory.cpp:720
 #, no-c-format
 msgid "RH Trend"
-msgstr "Trend bH"
+msgstr "Trend benö H"
 
 #: src/InfoBoxes/Content/Factory.cpp:721
 #, no-c-format
@@ -1670,7 +1670,7 @@ msgstr "Endanflug - benötigte Gleitzahl"
 #: src/InfoBoxes/Content/Factory.cpp:744
 #, no-c-format
 msgid "Fin GR"
-msgstr "EA GZ"
+msgstr "EndA benö GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:745
 #, no-c-format
@@ -1689,7 +1689,7 @@ msgstr "Alternative 1 - Name"
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
 msgid "Altn 1"
-msgstr "Alt. 1"
+msgstr "Altn 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
@@ -1705,7 +1705,7 @@ msgstr "Alternative 2 - Name"
 #: src/InfoBoxes/Content/Factory.cpp:764
 #, no-c-format
 msgid "Altn 2"
-msgstr "Alt. 2"
+msgstr "Altn 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:765
 #, no-c-format
@@ -1721,7 +1721,7 @@ msgstr "Alternative 1 - Gleitzahl"
 #: src/InfoBoxes/Content/Factory.cpp:774
 #, no-c-format
 msgid "Altn1 GR"
-msgstr "GZ Alt.1"
+msgstr "Altn1 benö GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:775
 #, no-c-format
@@ -1735,7 +1735,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:783 src/InfoBoxes/Content/Factory.cpp:784
 #, no-c-format
 msgid "QFE GPS"
-msgstr "Höhe - QFE (GPS)"
+msgstr "QFE GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:785
 #, no-c-format
@@ -1759,7 +1759,7 @@ msgstr "Gleitzahl - Mittelwert"
 #: src/InfoBoxes/Content/Factory.cpp:794
 #, no-c-format
 msgid "L/D Avg"
-msgstr "mitl. GZ"
+msgstr "GZ mittl"
 
 #: src/InfoBoxes/Content/Factory.cpp:795
 #, no-c-format
@@ -1827,12 +1827,12 @@ msgstr "Exp2"
 #: src/InfoBoxes/Content/Factory.cpp:833
 #, no-c-format
 msgid "CPU load"
-msgstr "CPU-Auslastung"
+msgstr "CPU - Auslastung"
 
 #: src/InfoBoxes/Content/Factory.cpp:834
 #, no-c-format
 msgid "CPU"
-msgstr "Prozessor"
+msgstr "CPU"
 
 #: src/InfoBoxes/Content/Factory.cpp:835
 #, no-c-format
@@ -1847,7 +1847,7 @@ msgstr "Nächster Wegpunkt - Ankunftshöhe (MSL)"
 #: src/InfoBoxes/Content/Factory.cpp:844
 #, no-c-format
 msgid "WP AltA"
-msgstr "WP Ank. Höhe"
+msgstr "WP H Ankunft"
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -1857,7 +1857,7 @@ msgstr "Absolute Ankunftshöhe am nächsten Wegpunkt im Endanflug."
 #: src/InfoBoxes/Content/Factory.cpp:853 src/InfoBoxes/Content/Factory.cpp:854
 #, no-c-format
 msgid "Free RAM"
-msgstr "Freier Arbeitsspeicher"
+msgstr "Freier Speicher"
 
 #: src/InfoBoxes/Content/Factory.cpp:855
 #, no-c-format
@@ -1886,7 +1886,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:873 src/InfoBoxes/Content/Factory.cpp:874
 #, no-c-format
 msgid "Barogram"
-msgstr "Barogramm"
+msgstr "Barogram"
 
 #: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
@@ -1927,7 +1927,7 @@ msgstr "Spur - Thermik Kreisen"
 #: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
 msgid "TC Circling"
-msgstr "TK Spur"
+msgstr "Steig Spur"
 
 #: src/InfoBoxes/Content/Factory.cpp:905
 #, no-c-format
@@ -1979,7 +1979,7 @@ msgstr "Zeit - Dauer unterhalb der max. Abflughöhe"
 #: src/InfoBoxes/Content/Factory.cpp:934
 #, no-c-format
 msgid "Start Height"
-msgstr "Abflughöhe"
+msgstr "Zeit unt H Abfl"
 
 #: src/InfoBoxes/Content/Factory.cpp:935
 #, no-c-format
@@ -1997,7 +1997,7 @@ msgstr "Aufgabe - benötigte Zeit (Geschw. ü. Gnd. )"
 #: src/InfoBoxes/Content/Factory.cpp:944
 #, no-c-format
 msgid "Fin ETE VMG"
-msgstr "EA ETE VMG"
+msgstr "EndA ETE VMG"
 
 #: src/InfoBoxes/Content/Factory.cpp:945
 #, no-c-format
@@ -2049,12 +2049,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:971
 #, no-c-format
 msgid "Nearest airspace horizontal"
-msgstr "Nahester Luftraum Horizontal"
+msgstr "Luftraum - horizontal nächster"
 
 #: src/InfoBoxes/Content/Factory.cpp:972
 #, no-c-format
 msgid "Near AS H"
-msgstr "Nahe LR horiz."
+msgstr "Näch LR horiz"
 
 #: src/InfoBoxes/Content/Factory.cpp:973
 #, no-c-format
@@ -2064,12 +2064,12 @@ msgstr "Horizontale Distanz zum nächsten Luftraum"
 #: src/InfoBoxes/Content/Factory.cpp:980
 #, no-c-format
 msgid "Nearest airspace vertical"
-msgstr "Nahester Luftraum Vertikal"
+msgstr "Luftraum - vertikal nächster"
 
 #: src/InfoBoxes/Content/Factory.cpp:981
 #, no-c-format
 msgid "Near AS V"
-msgstr "Nahe LR vert."
+msgstr "Näch LR vert"
 
 #: src/InfoBoxes/Content/Factory.cpp:982
 #, no-c-format
@@ -2088,7 +2088,7 @@ msgstr "Nächster Wegpunkt - relative MC0 Ankunftshöhe"
 #: src/InfoBoxes/Content/Factory.cpp:991
 #, no-c-format
 msgid "WP MC0 AltD"
-msgstr "WP MC0 rel. Ank. H."
+msgstr "WP MC0 H Diff"
 
 #: src/InfoBoxes/Content/Factory.cpp:992
 #, no-c-format
@@ -2129,7 +2129,7 @@ msgstr "Geländekollision"
 #: src/InfoBoxes/Content/Factory.cpp:1010
 #, no-c-format
 msgid "Terr Coll"
-msgstr "Gelände"
+msgstr "Gelände Koll"
 
 #: src/InfoBoxes/Content/Factory.cpp:1011
 #, no-c-format
@@ -2569,7 +2569,7 @@ msgstr "Thermik - Mittel ü. alle Bärte"
 
 #: src/Renderer/MapItemListRenderer.cpp:369
 msgid "Avg. lift"
-msgstr "Thermik - Mittel aktuell"
+msgstr "Steig mittl ges"
 
 #: src/Renderer/MapItemListRenderer.cpp:371
 #, c-format
@@ -2889,7 +2889,7 @@ msgstr "Obergrenze Trend"
 #: src/Renderer/ClimbChartRenderer.cpp:41
 #: src/Renderer/ClimbChartRenderer.cpp:46
 msgid "Avg. climb"
-msgstr "Mitl. Steigen"
+msgstr "Steig mittl"
 
 #: src/Renderer/ClimbChartRenderer.cpp:49
 msgid "Climb trend"
@@ -3019,7 +3019,7 @@ msgstr "Abstellvorgang, speichere Aufgabe..."
 #: src/Widgets/TrafficWidget.cpp:342 src/Widgets/TrafficWidget.cpp:345
 #: src/Dialogs/dlgFlarmTraffic.cpp:338 src/Dialogs/dlgFlarmTraffic.cpp:341
 msgid "Rel. Alt."
-msgstr "Relative Höhe"
+msgstr "Rel Höhe"
 
 #. label not translated for now, until we have a TCP port
 #. selection UI
@@ -3178,7 +3178,7 @@ msgstr "Flug Download"
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:254
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:268
 msgid "Manage"
-msgstr "Verwalte"
+msgstr "Verwalten"
 
 #: src/Dialogs/DeviceListDialog.cpp:135
 msgid "Monitor"
@@ -3973,15 +3973,15 @@ msgstr "Peilung und Distanz"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:148
 msgid "Alt. diff. MC 0"
-msgstr "Höhenunterschied MC 0"
+msgstr "H Diff MC 0"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
 msgid "Alt. diff. MC safety"
-msgstr "Höhenunterschied MC Sicherheit"
+msgstr "H Diff MC sicher"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:157
 msgid "Alt. diff. MC current"
-msgstr "Höhenunterschied MC aktuell"
+msgstr "H Diff MC aktuell"
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:57
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:89
@@ -8126,7 +8126,7 @@ msgstr "Benutzer angemeldet"
 
 #: Data/Dialogs/pnlStatusRules.xml:6
 msgid "Start alt."
-msgstr "Starthöhe"
+msgstr "H Start"
 
 #: Data/Dialogs/dlgStatusSystem.xml:9 Data/Dialogs/pnlStatusSystem.xml:9
 msgid "Supply voltage"
@@ -8722,7 +8722,7 @@ msgstr "Oben"
 
 #: Data/Dialogs/pnlStatusRules.xml:9
 msgid "Finish min. alt."
-msgstr "Min. Ankunftshöhe"
+msgstr "Min. H Ankunft"
 
 #: Data/Dialogs/dlgWaypointEdit.xml:34
 msgid "Lat."
