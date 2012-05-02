@@ -90,6 +90,7 @@ SetPrimaryDataPath(const TCHAR *path)
 
   free(data_path);
   data_path = _tcsdup(path);
+  data_path_length = _tcslen(data_path);
 }
 
 void
