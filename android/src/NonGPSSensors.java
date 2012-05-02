@@ -38,6 +38,9 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.os.SystemClock;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Code to support the growing suite of non-GPS sensors on Android platforms.
  */
@@ -64,16 +67,24 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // taking care of that on our own.
   };
 
+  // Noise variance constants for various types of Android pressure sensors.
+  private static final Map<String, Float> KF_PRESSURE_SENSOR_NOISE_VARIANCE = new HashMap<String, Float>() {{
+    // BMP180: seen in Galaxy Nexus.
+    /* The BMP180 noise variance is larger than the actual maximum
+       likelihood variance estimate based on data, since the noise
+       distribution appears to be more heavy-tailed than a normal
+       distribution. */
+    put("BMP180 Pressure sensor", 0.05f);
+    // Add more sensors using the syntax above.
+  }};
+
+  // A fallback pressure sensor noise variance constant for unfamiliar sensors.
+  private static final float KF_PRESSURE_SENSOR_NOISE_VARIANCE_FALLBACK = 0.05f;
+
   // Non-inclusive upper bound on the largest sensor numerical type ID. As of
   // API 14, the largest sensor numerical type ID appears to be 13. Used only
   // for proportioning the following two arrays and for index checking.
   private static final int SENSOR_TYPE_ID_UPPER_BOUND = 20;
-
-  // Constants for the Kalman filter's noise models. These values are bigger
-  // than actual noise recovered from data, but that's because that noise
-  // looks more Laplacian than anything.
-  private static final double KF_VAR_ACCEL = 0.0075;  // Variance of pressure acceleration noise input.
-  private static final double KF_VAR_MEASUREMENT = 0.05;  // Variance of pressure measurement noise.
 
   // The set of sensors in SUPPORTED_SENSORS that are present on this device,
   // i.e. that are retrieved by calling getDefaultSensor on sensor IDs present
@@ -87,22 +98,14 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   // absent or unsupported, the value will be null.
   private boolean[] enabled_sensors_;
 
-  /**
-   * A Kalman filter used to smoothen the pressure sensor readings.
-   */
-  private KalmanFilter pressureFilter = new KalmanFilter(KF_VAR_ACCEL);
-
-  /**
-   * Time stamp of the last pressure reading.  This is used to
-   * calculate delta-time for the KalmanFilter.
-   */
-  private double lastPressureTime = -1;
-
   // Sensor manager.
   private SensorManager sensor_manager_;
 
   // Handler for non-GPS sensor reading.
   private static Handler handler_;
+
+  // Noise variance we'll use for the pressure sensor in this device.
+  private float kf_sensor_noise_variance_;
 
   private final SafeDestruct safeDestruct = new SafeDestruct();
 
@@ -133,6 +136,21 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     // possible. Missing sensors will yield null values.
     for (int id : SUPPORTED_SENSORS) {
       default_sensors_[id] = sensor_manager_.getDefaultSensor(id);
+    }
+
+    /* Attempt to identify the type of pressure sensor in this device,
+       if one is present. */
+    kf_sensor_noise_variance_ = KF_PRESSURE_SENSOR_NOISE_VARIANCE_FALLBACK;
+    if (default_sensors_[Sensor.TYPE_PRESSURE] != null) {
+      final String sensor_name = default_sensors_[Sensor.TYPE_PRESSURE].getName();
+      final Float variance = KF_PRESSURE_SENSOR_NOISE_VARIANCE.get(sensor_name);
+      if (variance != null) {
+        Log.d(TAG, "Identified pressure sensor '" + sensor_name + "'; noise variance: " + variance);
+        kf_sensor_noise_variance_ = variance;
+      } else {
+        Log.d(TAG, "Unrecognized pressure sensor '" + sensor_name + "'; using default variance: " +
+                   KF_PRESSURE_SENSOR_NOISE_VARIANCE_FALLBACK);
+      }
     }
 
     updateSensorSubscriptions();
@@ -224,9 +242,6 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
     Log.d(TAG, "Updating non-GPS sensor subscriptions...");
     sensor_manager_.unregisterListener(this);
 
-    /* schedule a KalmanFilter reset */
-    lastPressureTime = -1;
-
     for (int id : SUPPORTED_SENSORS) {
       if (enabled_sensors_[id] && default_sensors_[id] != null) {
         Log.d(TAG, "Subscribing to sensor ID " + id + " (" + default_sensors_[id].getName() + ")");
@@ -235,18 +250,6 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
       }
     }
     Log.d(TAG, "Done updating non-GPS sensor subscriptions...");
-  }
-
-  private void onBarometricPressure(float value) {
-    final double now = SystemClock.elapsedRealtime() / 1000.;
-    if (lastPressureTime < 0)
-      pressureFilter.reset(value);
-    else
-      pressureFilter.update(value, KF_VAR_MEASUREMENT,
-                            now - lastPressureTime);
-    lastPressureTime = now;
-
-    setBarometricPressure((float)pressureFilter.getXAbs());
   }
 
   /** from SensorEventListener; currently does nothing. */
@@ -270,7 +273,7 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
         setMagneticField(event.values[0], event.values[1], event.values[2]);
         break;
       case Sensor.TYPE_PRESSURE:
-        onBarometricPressure(event.values[0]);
+        setBarometricPressure(event.values[0], kf_sensor_noise_variance_);
         break;
       }
     } finally {
@@ -282,5 +285,5 @@ public class NonGPSSensors implements SensorEventListener, Runnable {
   private native void setAcceleration(float ddx, float ddy, float ddz);
   private native void setRotation(float dtheta_x, float dtheta_y, float dtheta_z);
   private native void setMagneticField(float h_x, float h_y, float h_z);
-  private native void setBarometricPressure(float pressure);
+  private native void setBarometricPressure(float pressure, float sensor_noise_variance);
 }
