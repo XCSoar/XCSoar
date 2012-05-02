@@ -21,6 +21,7 @@
 */
 
 #include "Replay/IGCParser.hpp"
+#include "Replay/IGCFix.hpp"
 #include "DateTime.hpp"
 #include "TestUtil.hpp"
 

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "IGCParser.hpp"
+#include "IGCFix.hpp"
 #include "DateTime.hpp"
 
 #include <string.h>

@@ -23,6 +23,7 @@
 
 #include "Replay/IgcReplay.hpp"
 #include "Replay/IGCParser.hpp"
+#include "Replay/IGCFix.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <algorithm>

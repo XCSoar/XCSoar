@@ -21,6 +21,7 @@
 */
 
 #include "Replay/IGCParser.hpp"
+#include "Replay/IGCFix.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Trace/Vector.hpp"
