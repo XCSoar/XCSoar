@@ -42,6 +42,7 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   jobject url_object = env->NewObject(url_class.Get(), url_ctor, j_url.Get());
   if (env->ExceptionOccurred() || url_object == NULL) {
     env->ExceptionClear();
+    connection = NULL;
     input_stream = NULL;
     return;
   }
