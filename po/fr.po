@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-04-09 15:37+0000\n"
+"PO-Revision-Date: 2012-04-29 16:29+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-14 10:32+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-05-02 21:41+0000\n"
+"X-Generator: Launchpad (build 15185)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1675,12 +1675,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:743
 #, no-c-format
 msgid "Final GR"
-msgstr "Plané final"
+msgstr "Finesse Arrivée"
 
 #: src/InfoBoxes/Content/Factory.cpp:744
 #, no-c-format
 msgid "Fin GR"
-msgstr "Plané fin."
+msgstr "Fin. Arr."
 
 #: src/InfoBoxes/Content/Factory.cpp:745
 #, no-c-format
@@ -2244,7 +2244,7 @@ msgstr "Transition"
 #: src/InfoBoxes/InfoBoxSettings.cpp:79
 #, no-c-format
 msgid "FinalGlide"
-msgstr "Plané final"
+msgstr "Arrivée"
 
 #: src/InfoBoxes/InfoBoxManager.cpp:480 src/InfoBoxes/InfoBoxManager.cpp:528
 #: src/Dialogs/dlgConfigInfoboxes.cpp:225
@@ -3042,7 +3042,7 @@ msgstr "Port"
 
 #: src/Widgets/DeviceEditWidget.cpp:522
 msgid "Baudrate"
-msgstr "Vitesse de transfert (Baud)"
+msgstr "Vitesse (Baud)"
 
 #: src/Widgets/DeviceEditWidget.cpp:529
 msgid "Bulk baud rate"
@@ -3193,7 +3193,7 @@ msgstr "General"
 
 #: src/Dialogs/DeviceListDialog.cpp:135
 msgid "Monitor"
-msgstr "Ecran"
+msgstr "Contrôle"
 
 #: src/Dialogs/DeviceListDialog.cpp:172
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:179
@@ -3288,7 +3288,7 @@ msgstr "Pause"
 
 #: src/Dialogs/PortMonitor.cpp:146
 msgid "Port monitor"
-msgstr "Port de l'écran"
+msgstr "Contrôle du port"
 
 #: src/Dialogs/PortMonitor.cpp:156 Data/Dialogs/dlgFlarmTrafficDetails.xml:26
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
@@ -4203,7 +4203,7 @@ msgstr "Contours noirs autour des espaces aériens au lieu de colorés."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:213
 msgid "Airspace fill mode"
-msgstr "Mode de remplissage de l'espace aérien"
+msgstr "Mode remplissage"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:214
 msgid "Specifies the mode for filling the airspace area."
@@ -4211,7 +4211,7 @@ msgstr "Spécifie le mode de remplissage de l'espace aérien."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:220
 msgid "Airspace transparency"
-msgstr "Transparence des espaces aériens"
+msgstr "Transparence"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:220
 msgid "If enabled, then airspaces are filled transparently."
@@ -4369,7 +4369,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:61
 #, no-c-format
 msgid "Final glide"
-msgstr "Plané Final"
+msgstr "Arrivée"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:62
 #, no-c-format
@@ -5598,7 +5598,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:69
 msgid "Start max. speed margin"
-msgstr "Marge de vitesse max. au départ"
+msgstr "Marge de v. max. au départ"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:70
 msgid ""
@@ -5626,7 +5626,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:85
 msgid "Start max. height margin"
-msgstr "Marge de hauteur max. pour le départ"
+msgstr "Marge h. max. au départ"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:86
 msgid ""
@@ -5768,7 +5768,8 @@ msgstr "Type de circuit par défaut à la création d'un nouveau circuit."
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:135
 msgid "Default radius or gate width of the start zone for new tasks."
-msgstr "Rayon ou largeur de ligne pour le départ d'un nouveau circuit."
+msgstr ""
+"Rayon ou largeur de ligne par défaut pour le départ d'un nouveau circuit."
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:141
 msgid "Finish point"
@@ -7456,6 +7457,9 @@ msgid ""
 "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
 "specified."
 msgstr ""
+"Si une sonde de température et d'humidité est branchée. Mettre 0 pour ne pas "
+"utilisiser.  255 pour détection automatique. Sinon le numéro "
+"d'identification de l'appareil (1Wire)."
 
 #: src/Dialogs/Vega/HardwareParameters.hpp:74
 #, no-c-format
@@ -7571,7 +7575,7 @@ msgstr ""
 #: src/Dialogs/Vega/MixerParameters.hpp:41
 #, no-c-format
 msgid "Headset threshold"
-msgstr ""
+msgstr "Seuil des écouteurs"
 
 #: src/Dialogs/Vega/MixerParameters.hpp:43
 #, no-c-format
@@ -7688,7 +7692,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:3 Data/Dialogs/dlgConfiguration_L.xml:3
 #: Data/Dialogs/dlgCredits.xml:3
 msgid "Configuration"
-msgstr ""
+msgstr "Configuration"
 
 #: Data/Dialogs/pnlTaskProperties.xml:20
 #: Data/Dialogs/pnlTaskProperties_L.xml:21
