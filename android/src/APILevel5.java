@@ -20,19 +20,18 @@
 }
 */
 
-package org.xcsoar.testing;
+package org.xcsoar;
 
-import android.os.Bundle;
+import android.app.Service;
+import android.app.Notification;
 
 /**
- * Wrapper class to move org.xcsoar.XCSoar forward to package
- * org.xcsoar.testing.
+ * Wrappers for API level 5.  This class must only be accessed after
+ * verifying that Build.VERSION.SDK_INT is 5 or bigger.
  */
-public class XCSoar extends org.xcsoar.XCSoar {
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    if (serviceClass == null)
-      serviceClass = MyService.class;
-
-    super.onCreate(savedInstanceState);
+abstract class APILevel5 {
+  public static void startForeground(Service service, int id,
+                                     Notification notification) {
+    service.startForeground(id, notification);
   }
 }
