@@ -198,6 +198,13 @@ AndroidPort::DataReceived(const void *data, size_t length)
         cond.Wait(mutex);
         waiting = false;
 
+        if (closing) {
+          /* while we were waiting, the destructor got called, and it
+             is waiting for us to return  */
+          cond.Broadcast();
+          break;
+        }
+
         if (running)
           /* while we were waiting, somebody else has called
              StartRxThread() */
