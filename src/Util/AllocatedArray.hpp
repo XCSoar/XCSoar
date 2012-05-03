@@ -33,6 +33,7 @@
 #include "Compiler.h"
 
 #include <assert.h>
+#include <stddef.h>
 #include <algorithm>
 
 /**
@@ -40,8 +41,11 @@
  */
 template<class T>
 class AllocatedArray {
+public:
+  typedef size_t size_type;
+
 protected:
-  unsigned the_size;
+  size_type the_size;
   T *gcc_restrict data;
 
 public:
@@ -51,7 +55,7 @@ public:
 public:
   gcc_constexpr_ctor AllocatedArray():the_size(0), data(NULL) {}
 
-  explicit AllocatedArray(unsigned _size)
+  explicit AllocatedArray(size_type _size)
     :the_size(_size), data(new T[the_size]) {
     assert(size() == 0 || data != NULL);
   }
@@ -102,14 +106,14 @@ public:
   /**
    * Returns the number of allocated elements.
    */
-  unsigned size() const {
+  size_type size() const {
     return the_size;
   }
 
   /**
    * Returns one element.  No bounds checking.
    */
-  T &operator[](unsigned i) {
+  T &operator[](size_type i) {
     assert(i < size());
 
     return data[i];
@@ -118,7 +122,7 @@ public:
   /**
    * Returns one constant element.  No bounds checking.
    */
-  const T &operator[](unsigned i) const {
+  const T &operator[](size_type i) const {
     assert(i < size());
 
     return data[i];
@@ -143,7 +147,7 @@ public:
   /**
    * Resizes the array, discarding old data.
    */
-  void ResizeDiscard(unsigned _size) {
+  void ResizeDiscard(size_type _size) {
     if (_size == the_size)
       return;
 
@@ -159,7 +163,7 @@ public:
    * Similar to ResizeDiscard(), but will never shrink the array to
    * avoid expensive heap operations.
    */
-  void GrowDiscard(unsigned _size) {
+  void GrowDiscard(size_type _size) {
     if (_size > the_size)
       ResizeDiscard(_size);
   }
@@ -168,7 +172,7 @@ public:
    * Grows the array to the specified size, preserving the value of a
    * range of elements, starting from the beginning.
    */
-  void GrowPreserve(unsigned _size, unsigned preserve) {
+  void GrowPreserve(size_type _size, size_type preserve) {
     if (_size <= the_size)
       return;
 
