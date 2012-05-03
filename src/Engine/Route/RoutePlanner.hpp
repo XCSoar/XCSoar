@@ -186,6 +186,10 @@ public:
     terrain = _terrain;
   }
 
+  bool IsReachEmpty() const {
+    return reach.IsEmpty();
+  }
+
   /**
    * Delete all reach fans.
    */

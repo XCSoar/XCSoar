@@ -42,6 +42,10 @@ public:
 
   friend class PrintHelper;
 
+  bool IsEmpty() const {
+    return root.IsEmpty();
+  }
+
   void Reset();
 
   bool Solve(const AGeoPoint origin, const RoutePolars &rpolars,
