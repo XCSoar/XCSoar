@@ -79,9 +79,8 @@ struct VisibleWaypoint {
     in_task = _in_task;
   }
 
-  void CalculateReachability(const RoutePlannerGlue &route_planner,
-                             const TaskBehaviour &task_behaviour)
-  {
+  void CalculateRouteArrival(const RoutePlannerGlue &route_planner,
+                             const TaskBehaviour &task_behaviour) {
     const RoughAltitude elevation(waypoint->elevation +
                                   task_behaviour.safety_height_arrival);
     const AGeoPoint p_dest (waypoint->location, elevation);
@@ -90,6 +89,12 @@ struct VisibleWaypoint {
       arrival_height_terrain -= elevation;
       arrival_height_glide -= elevation;
     }
+  }
+
+  void CalculateReachability(const RoutePlannerGlue &route_planner,
+                             const TaskBehaviour &task_behaviour)
+  {
+    CalculateRouteArrival(route_planner, task_behaviour);
 
     if (!arrival_height_glide.IsPositive())
       reachable = WaypointRenderer::Unreachable;
