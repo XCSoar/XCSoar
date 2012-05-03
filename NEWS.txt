@@ -9,6 +9,7 @@ Version 6.3.3 - not yet released
 * Android
   - fix crash after too many network failures (#1957)
   - improve the pressure sensor's Kalman filter
+  - fix Bluetooth/IOIO receive data truncation
 * logger
   - Fix logging of "start" events
   - Fix logging of "before takeoff position fixes" in IGC logs (#2052)

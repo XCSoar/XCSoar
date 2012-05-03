@@ -193,9 +193,9 @@ AndroidPort::DataReceived(const void *data, size_t length)
         cond.Wait(mutex);
         waiting = false;
 
-        if (!running)
+        if (running)
           /* while we were waiting, somebody else has called
-             StopRxThread() */
+             StartRxThread() */
           break;
       }
     }
