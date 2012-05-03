@@ -35,13 +35,16 @@ Copyright_License {
 
 #include "LogFile.hpp"
 
-Thread::~Thread()
-{
-#ifndef HAVE_POSIX
-  if (handle != NULL)
-    ::CloseHandle(handle);
+#ifndef NDEBUG
+#include "FastMutex.hpp"
+static FastMutex all_threads_mutex;
+
+/**
+ * This list keeps track of all active threads.  It is used to assert
+ * that all threads have been cleaned up on shutdown.
+ */
+static ListHead all_threads = ListHead(ListHead::empty());
 #endif
-}
 
 bool
 Thread::Start()
@@ -59,12 +62,22 @@ Thread::Start()
   creating = false;
 #endif
 
-  return defined;
+  bool success = defined;
 #else
   handle = ::CreateThread(NULL, 0, ThreadProc, this, 0, &id);
 
-  return handle != NULL;
+  bool success = handle != NULL;
 #endif
+
+#ifndef NDEBUG
+  if (success) {
+    all_threads_mutex.Lock();
+    siblings.InsertAfter(all_threads);
+    all_threads_mutex.Unlock();
+  }
+#endif
+
+  return success;
 }
 
 void
@@ -81,6 +94,12 @@ Thread::Join()
   ::CloseHandle(handle);
   handle = NULL;
 #endif
+
+#ifndef NDEBUG
+  all_threads_mutex.Lock();
+  siblings.Remove();
+  all_threads_mutex.Unlock();
+#endif
 }
 
 #ifndef HAVE_POSIX
@@ -94,6 +113,12 @@ Thread::Join(unsigned timeout_ms)
   if (result) {
     ::CloseHandle(handle);
     handle = NULL;
+
+    {
+      all_threads_mutex.Lock();
+      siblings.Remove();
+      all_threads_mutex.Unlock();
+    }
   }
 
   return result;
@@ -136,3 +161,16 @@ Thread::ThreadProc(LPVOID lpParameter)
 }
 
 #endif /* !HAVE_POSIX */
+
+#ifndef NDEBUG
+
+bool
+ExistsAnyThread()
+{
+  all_threads_mutex.Lock();
+  bool result = !all_threads.IsEmpty();
+  all_threads_mutex.Unlock();
+  return result;
+}
+
+#endif

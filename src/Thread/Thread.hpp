@@ -26,16 +26,26 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 
+#ifndef NDEBUG
+#include "Util/ListHead.hpp"
+#endif
+
 #ifdef HAVE_POSIX
 #include <pthread.h>
 #else
 #include <windows.h>
 #endif
 
+#include <assert.h>
+
 /**
  * This class provides an OS independent view on a thread.
  */
 class Thread : private NonCopyable {
+#ifndef NDEBUG
+  ListHead siblings;
+#endif
+
 #ifdef HAVE_POSIX
   pthread_t handle;
   bool defined;
@@ -64,7 +74,14 @@ public:
 #else
   Thread():handle(NULL) {}
 #endif
-  virtual ~Thread();
+
+#ifndef NDEBUG
+  virtual ~Thread() {
+    /* all Thread objects must be destructed manually by calling
+       Join(), to clean up */
+    assert(!IsDefined());
+  }
+#endif
 
   bool IsDefined() const {
 #ifdef HAVE_POSIX
@@ -115,5 +132,11 @@ private:
   static DWORD WINAPI ThreadProc(LPVOID lpParameter);
 #endif
 };
+
+#ifndef NDEBUG
+gcc_pure
+bool
+ExistsAnyThread();
+#endif
 
 #endif

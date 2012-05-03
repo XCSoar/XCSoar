@@ -289,14 +289,14 @@ void dlgConfigFontsShowModal()
                               szProfileUseCustomFonts,
                               ui_settings.custom_fonts);
 
+  delete wf;
+
   if (changed) {
     Profile::Save();
 
     ShowMessageBox(_("Changes to configuration saved.  Restart XCSoar to apply changes."),
                 _T(""), MB_OK);
   }
-
-  delete wf;
 
   TempInfoWindowFont.Reset();
   TempTitleWindowFont.Reset();

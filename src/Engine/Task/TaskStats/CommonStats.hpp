@@ -107,6 +107,12 @@ public:
   /** Glide solution flying terminally to active waypoint */
   GlideResult next_solution;
 
+  /**
+   * Glide solution flying terminally to active waypoint with
+   * MacCready 0 m/s
+   */
+  GlideResult next_solution_mc0;
+
   /** Summary of ordered task progress */
   TaskSummary ordered_summary;
 

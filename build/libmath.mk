@@ -8,6 +8,8 @@ MATH_SOURCES = \
 	$(MATH_SRC_DIR)/FastRotation.cpp \
 	$(MATH_SRC_DIR)/fixed.cpp \
 	$(MATH_SRC_DIR)/LeastSquares.cpp \
+	$(MATH_SRC_DIR)/KalmanFilter1d.cpp \
+	$(MATH_SRC_DIR)/SelfTimingKalmanFilter1d.cpp \
 	$(MATH_SRC_DIR)/LowPassFilter.cpp
 
 $(eval $(call link-library,math,MATH))

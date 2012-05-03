@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "XMLWidget.hpp"
 #include "Dialogs/XML.hpp"
+#include "Screen/ContainerWindow.hpp"
 
 void
 XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,

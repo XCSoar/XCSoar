@@ -290,8 +290,13 @@ void dlgConfigurationShowModal()
 
   wf->ShowModal();
 
-  if (wf->IsDefined())
+  if (wf->IsDefined()) {
+    /* hide the dialog, to avoid redraws inside Save() on a dialog
+       that has already been deregistered from the SingleWindow */
+    wf->Hide();
+
     Save();
+  }
 
   /* destroy the TabMenuControl first, to have a well-defined
      destruction order; this is necessary because some config panels

@@ -252,7 +252,8 @@ InfoBoxContentNextMC0AltitudeDiff::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  SetValueFromAltDiff(data, task_stats, task_stats.current_leg.solution_mc0);
+  SetValueFromAltDiff(data, task_stats,
+                      CommonInterface::Calculated().common_stats.next_solution_mc0);
 }
 
 void

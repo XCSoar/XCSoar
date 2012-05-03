@@ -128,6 +128,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.gps_altitude_available.Update(t);
   basic.ProvidePressureAltitude(baroalt);
   basic.ProvideBaroAltitudeTrue(baroalt);
+  basic.noncomp_vario_available.Clear();
   basic.total_energy_vario_available.Clear();
   basic.netto_vario_available.Clear();
   basic.external_wind_available.Clear();
@@ -144,7 +145,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutex);
 
-  replay_data.alive.Clear();
+  replay_data.Reset();
 
   ScheduleMerge();
 }

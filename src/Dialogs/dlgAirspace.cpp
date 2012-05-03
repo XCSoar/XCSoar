@@ -191,6 +191,7 @@ dlgAirspaceShowModal(bool _color_mode)
   changed = false;
 
   wf->ShowModal();
+  delete wf;
 
   // now retrieve back the properties...
   if (changed) {
@@ -201,6 +202,4 @@ dlgAirspaceShowModal(bool _color_mode)
 
     Profile::Save();
   }
-
-  delete wf;
 }

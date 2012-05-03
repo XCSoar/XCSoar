@@ -208,13 +208,31 @@ static void
 ComputeGPSVario(MoreData &basic,
                 const MoreData &last, const MoreData &last_gps)
 {
-  if (basic.pressure_altitude_available && last.pressure_altitude_available) {
-    /* prefer pressure altitude for the "GPS" vario, even if navigate
-       by GPS altitude is configured, because pressure altitude is
-       expected to be more exact */
+  if (basic.noncomp_vario_available && last.noncomp_vario_available) {
+    /* If we have a noncompensated vario signal, we use that to compute
+       the "GPS" total energy vario value, even if navigate by GPS
+       altitude is configured, because a vario is expected to be more
+       exact. */
 
     /* use the "Validity" time stamp, because it reflects when this
-       altitude was measured, and GPS time may not be available */
+       vertical speed was measured, and GPS time may not be available */
+    const fixed delta_t =
+      basic.noncomp_vario_available.GetTimeDifference(last.noncomp_vario_available);
+
+    if (positive(delta_t)) {
+      /* only update when a new value was received */
+
+      fixed delta_e = basic.energy_height - last.energy_height;
+
+      basic.gps_vario = basic.noncomp_vario;
+      basic.gps_vario_TE = basic.noncomp_vario + delta_e / delta_t;
+      basic.gps_vario_available = basic.noncomp_vario_available;
+    }
+  } else if (basic.pressure_altitude_available && last.pressure_altitude_available) {
+    /* Barring that, we prefer pressure altitude for the "GPS" vario,
+       even if navigate by GPS altitude is configured, because pressure
+       altitude is expected to be more exact. */
+
     const fixed delta_t =
       basic.pressure_altitude_available.GetTimeDifference(last.pressure_altitude_available);
 

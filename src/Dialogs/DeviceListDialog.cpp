@@ -190,7 +190,9 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
       _tcscpy(buffer1, _("Connected"));
     }
 
-    if (basic.baro_altitude_available) {
+    if (basic.baro_altitude_available ||
+        basic.pressure_altitude_available ||
+        basic.static_pressure_available) {
       _tcscat(buffer1, _T("; "));
       _tcscat(buffer1, _("Baro"));
     }

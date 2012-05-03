@@ -28,6 +28,7 @@ Copyright_License {
 #include "org_xcsoar_NonGPSSensors.h"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "OS/Clock.hpp"
 #include "Geo/Geoid.hpp"
 #include "Compiler.h"
@@ -320,14 +321,64 @@ Java_org_xcsoar_NonGPSSensors_setMagneticField(
   */
 }
 
+/**
+ * Helper function for
+ * Java_org_xcsoar_NonGPSSensors_setBarometricPressure: Given a
+ * current measurement of the atmospheric pressure and the rate of
+ * change of atmospheric pressure (in millibars and millibars per
+ * second), compute the uncompensated vertical speed of the glider in
+ * meters per second, assuming standard atmospheric conditions
+ * (deviations from these conditions should not matter very
+ * much). This calculation can be derived by taking the formula for
+ * converting barometric pressure to pressure altitude (see e.g.
+ * http://psas.pdx.edu/RocketScience/PressureAltitude_Derived.pdf),
+ * expressing it as a function P(t), the atmospheric pressure at time
+ * t, then taking the derivative with respect to t. The dP(t)/dt term
+ * is the pressure change rate.
+ */
+gcc_pure
+static inline
+fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
+{
+  static const fixed FACTOR(-2260.389548275485);
+  static const fixed EXPONENT(-0.8097374740609689);
+  return fixed(FACTOR * pow(pressure, EXPONENT) * d_pressure);
+}
+
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NonGPSSensors_setBarometricPressure(
-    JNIEnv* env, jobject obj, jfloat pressure) {
+    JNIEnv* env, jobject obj, jfloat pressure, jfloat sensor_noise_variance) {
+  /* We use a Kalman filter to smooth Android device pressure sensor
+     noise.  The filter requires two parameters: the first is the
+     variance of the distribution of second derivatives of pressure
+     values that we expect to see in flight, and the second is the
+     maximum time between pressure sensor updates in seconds before
+     the filter gives up on smoothing and uses the raw value.
+
+     The pressure acceleration variance used here is actually wider
+     than the maximum likelihood variance observed in the data: it
+     turns out that the distribution is more heavy-tailed than a
+     normal distribution, probably because glider pilots usually
+     experience fairly constant pressure change most of the time. */
+  static const fixed KF_VAR_ACCEL(0.0075);
+  static const fixed KF_MAX_DT(60);
+
+  // XXX this shouldn't be a global variable
+  static SelfTimingKalmanFilter1d kalman_filter(KF_MAX_DT, KF_VAR_ACCEL);
+
   const unsigned int index = getDeviceIndex(env, obj);
   ScopeLock protect(device_blackboard->mutex);
+
+  /* Kalman filter updates are also protected by the blackboard
+     mutex. These should not take long; we won't hog the mutex
+     unduly. */
+  kalman_filter.Update(fixed(pressure), fixed(sensor_noise_variance));
+
   NMEAInfo &basic = device_blackboard->SetRealState(index);
+  basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
+                                                kalman_filter.GetXVel()));
   basic.ProvideStaticPressure(
-      AtmosphericPressure::HectoPascal(fixed(pressure)));
+      AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
   device_blackboard->ScheduleMerge();
 }

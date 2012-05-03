@@ -133,11 +133,8 @@ dlgVegaDemoShowModal()
   LoadFormProperty(*wf, _T("prpVegaDemoAudioClimb"), VegaDemoAudioClimb);
 
   wf->ShowModal();
+  delete wf;
 
   // deactivate demo.
   VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
-
-  delete wf;
-
-  wf = NULL;
 }

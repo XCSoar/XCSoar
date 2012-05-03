@@ -279,7 +279,13 @@ struct NMEAInfo {
   //###########
 
   /**
-   * Is an external vario signal available?
+   * Is an external gross, non-compensated, vertical speed vario signal present?
+   * @see NoncompVario
+   */
+  Validity noncomp_vario_available;
+
+  /**
+   * Is an external total energy vario signal available?
    * @see TotalEnergyVario
    */
   Validity total_energy_vario_available;
@@ -289,6 +295,12 @@ struct NMEAInfo {
    * @see NettoVario
    */
   Validity netto_vario_available;
+
+  /**
+   * Gross, non-compensated aircraft vertical speed (m/s, up positive)
+   * @see NoncompVarioAvailable
+   */
+  fixed noncomp_vario;
 
   /**
    * Rate of change of total energy of aircraft (m/s, up positive)
@@ -543,6 +555,14 @@ struct NMEAInfo {
    */
   void ProvideTrueAirspeed(fixed tas) {
     ProvideTrueAirspeedWithAltitude(tas, GetAltitudeBaroPreferred());
+  }
+
+  /**
+   * Set the gross, non-compensated, plain-old vertical speed vario value [m/s].
+   */
+  void ProvideNoncompVario(fixed value) {
+    noncomp_vario = value;
+    noncomp_vario_available.Update(clock);
   }
 
   /**

@@ -11,8 +11,12 @@ Version 6.4 - not yet released
   - added automatic altitude infobox (baro. altitude with GPS fallback)
 
 Version 6.3.3 - not yet released
+* calculations
+  - use arrival height instead of terrain safety height for MC0 Alt.D
+    (#1991, #1992)
 * Android
   - fix crash after too many network failures (#1957)
+  - improve the pressure sensor's Kalman filter
 * logger
   - Fix logging of "start" events
   - Fix logging of "before takeoff position fixes" in IGC logs (#2052)
