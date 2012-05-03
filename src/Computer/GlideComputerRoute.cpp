@@ -130,6 +130,7 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
     /* without valid terrain information, we cannot calculate
        reachabilty, so let's skip that step completely */
     calculated.terrain_base_valid = false;
+    protected_route_planner.ClearReach();
     return;
   }
 

@@ -35,6 +35,12 @@ RoutePlanner::RoutePlanner()
 }
 
 void
+RoutePlanner::ClearReach()
+{
+  reach.Reset();
+}
+
+void
 RoutePlanner::Reset()
 {
   origin_last = AFlatGeoPoint(0, 0, RoughAltitude(0));
@@ -46,7 +52,7 @@ RoutePlanner::Reset()
   h_min = RoughAltitude(-1);
   h_max = RoughAltitude(0);
   search_hull.clear();
-  reach.Reset();
+  ClearReach();
 }
 
 bool

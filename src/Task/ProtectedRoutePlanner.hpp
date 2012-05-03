@@ -53,6 +53,11 @@ public:
     lease->Reset();
   }
 
+  void ClearReach() {
+    ExclusiveLease lease(*this);
+    lease->ClearReach();
+  }
+
   void SetTerrain(const RasterTerrain *terrain);
 
   void SetPolars(const GlideSettings &settings,

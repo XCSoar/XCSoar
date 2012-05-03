@@ -49,6 +49,10 @@ public:
     planner.Synchronise(master, origin, destination);
   }
 
+  void ClearReach() {
+    planner.ClearReach();
+  }
+
   void Reset() {
     planner.Reset();
   }

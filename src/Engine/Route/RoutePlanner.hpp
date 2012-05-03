@@ -187,6 +187,11 @@ public:
   }
 
   /**
+   * Delete all reach fans.
+   */
+  void ClearReach();
+
+  /**
    * Find the optimal path.  Works in reverse time order, from the
    * origin (where you want to fly to) back to the destination (where you
    * are now).
