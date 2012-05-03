@@ -139,6 +139,11 @@ AndroidPort::Read(void *dest, size_t length)
   size_t nbytes = std::min(length, r.length);
   std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
   buffer.Consume(nbytes);
+
+  if (waiting)
+    /* wake up the thread that may be waiting in DataReceived() */
+    cond.Broadcast();
+
   return nbytes;
 }
 
