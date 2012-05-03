@@ -28,6 +28,8 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 #include "Screen/Features.hpp"
 
+class ActionListener;
+
 /**
  * This class is used for creating buttons with symbols instead of text.
  * It is based on the WndButton class.
@@ -53,6 +55,13 @@ public:
                   ClickNotifyCallback Function = NULL)
     :WndButton(Parent, look, Caption, rc,
                style, Function) {}
+
+  WndSymbolButton(ContainerWindow &Parent, const DialogLook &look,
+                  const TCHAR *Caption,
+                  const PixelRect &rc, const ButtonWindowStyle style,
+                  ActionListener *listener, int id)
+    :WndButton(Parent, look, Caption, rc,
+               style, listener, id) {}
 
 protected:
   /**
