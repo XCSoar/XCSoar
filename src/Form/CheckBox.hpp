@@ -28,6 +28,7 @@ Copyright_License {
 
 struct DialogLook;
 class ContainerWindow;
+class ActionListener;
 
 /**
  * This class is used for creating buttons.
@@ -37,6 +38,11 @@ public:
   typedef void (*ClickNotifyCallback)(CheckBoxControl &button);
 
 private:
+  ActionListener *listener;
+#ifdef USE_GDI
+  int id;
+#endif
+
   /**
    * The callback-function that should be called when the button is pressed
    * @see SetOnClickNotify()
@@ -56,6 +62,21 @@ public:
                   const CheckBoxStyle style,
                   ClickNotifyCallback click_notify_callback = NULL);
 
+  CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
+                  const TCHAR *caption,
+                  const PixelRect &rc,
+                  const CheckBoxStyle style,
+                  ActionListener *listener, int id);
+
+  /**
+   * Set the object that will receive click events.
+   */
+  void SetListener(ActionListener *_listener) {
+    assert(listener == nullptr);
+
+    listener = _listener;
+  }
+
   /**
    * Sets the function that should be called when the button is pressed
    * @param Function Pointer to the function to be called
@@ -63,6 +84,8 @@ public:
   void
   SetOnClickNotify(ClickNotifyCallback _click_notify_callback)
   {
+    assert(listener == nullptr);
+
     click_notify_callback = _click_notify_callback;
   }
 

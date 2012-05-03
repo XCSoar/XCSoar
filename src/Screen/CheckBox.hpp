@@ -75,6 +75,10 @@ public:
     return checked;
   }
 
+  unsigned GetID() const {
+    return id;
+  }
+
   void SetState(bool value);
 
 protected:
