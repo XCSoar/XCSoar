@@ -58,6 +58,12 @@ public:
     lease->ClearReach();
   }
 
+  gcc_pure
+  bool IsReachEmpty() const {
+    Lease lease(*this);
+    return lease->IsReachEmpty();
+  }
+
   void SetTerrain(const RasterTerrain *terrain);
 
   void SetPolars(const GlideSettings &settings,

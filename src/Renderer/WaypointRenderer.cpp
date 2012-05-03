@@ -32,7 +32,9 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
+#include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
+#include "Engine/GlideSolvers/MacCready.hpp"
 #include "Engine/Task/Tasks/OrderedTask.hpp"
 #include "Engine/Task/Tasks/AbortTask.hpp"
 #include "Engine/Task/Tasks/GotoTask.hpp"
@@ -50,6 +52,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Util/StaticArray.hpp"
 #include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -77,6 +80,25 @@ struct VisibleWaypoint {
     arrival_height_terrain = 0;
     reachable = WaypointRenderer::Unreachable;
     in_task = _in_task;
+  }
+
+  void CalculateReachabilityDirect(const MoreData &basic,
+                                   const SpeedVector &wind,
+                                   const MacCready &mac_cready,
+                                   const TaskBehaviour &task_behaviour) {
+    assert(basic.location_available);
+    assert(basic.NavAltitudeAvailable());
+
+    const fixed elevation = waypoint->elevation +
+      task_behaviour.safety_height_arrival;
+    const GlideState state(GeoVector(basic.location, waypoint->location),
+                           elevation, basic.nav_altitude, wind);
+
+    const GlideResult result = mac_cready.SolveStraight(state);
+    if (!result.IsOk())
+      return;
+
+    arrival_height_glide = result.pure_glide_altitude_difference;
   }
 
   void CalculateRouteArrival(const RoutePlannerGlue &route_planner,
@@ -383,7 +405,7 @@ public:
     task_valid = true;
   }
 
-  void Calculate(const ProtectedRoutePlanner &route_planner) {
+  void CalculateRoute(const ProtectedRoutePlanner &route_planner) {
     const ProtectedRoutePlanner::Lease lease(route_planner);
 
     for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it) {
@@ -393,6 +415,38 @@ public:
       if (way_point.IsLandable() || way_point.flags.watched)
         vwp.CalculateReachability(lease, task_behaviour);
     }
+  }
+
+  void CalculateDirect(const PolarSettings &polar_settings,
+                       const TaskBehaviour &task_behaviour,
+                       const DerivedInfo &calculated) {
+    if (!basic.location_available || !basic.NavAltitudeAvailable())
+      return;
+
+    const GlidePolar &glide_polar =
+      task_behaviour.route_planner.reach_polar_mode == RoutePlannerConfig::Polar::TASK
+      ? polar_settings.glide_polar_task
+      : calculated.glide_polar_safety;
+    const MacCready mac_cready(task_behaviour.glide, glide_polar);
+
+    for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it) {
+      VisibleWaypoint &vwp = *it;
+      const Waypoint &way_point = *vwp.waypoint;
+
+      if (way_point.IsLandable() || way_point.flags.watched)
+        vwp.CalculateReachabilityDirect(basic, calculated.GetWindOrZero(),
+                                        mac_cready, task_behaviour);
+    }
+  }
+
+  void Calculate(const ProtectedRoutePlanner *route_planner,
+                 const PolarSettings &polar_settings,
+                 const TaskBehaviour &task_behaviour,
+                 const DerivedInfo &calculated) {
+    if (route_planner != NULL && !route_planner->IsReachEmpty())
+      CalculateRoute(*route_planner);
+    else
+      CalculateDirect(polar_settings, task_behaviour, calculated);
   }
 
   void Draw(Canvas &canvas) {
@@ -419,8 +473,9 @@ void
 WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const struct WaypointRendererSettings &settings,
+                         const PolarSettings &polar_settings,
                          const TaskBehaviour &task_behaviour,
-                         const MoreData &basic,
+                         const MoreData &basic, const DerivedInfo &calculated,
                          const ProtectedTaskManager *task,
                          const ProtectedRoutePlanner *route_planner)
 {
@@ -446,8 +501,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   way_points->VisitWithinRange(projection.GetGeoScreenCenter(),
                                  projection.GetScreenDistanceMeters(), v);
 
-  if (route_planner != NULL)
-    v.Calculate(*route_planner);
+  v.Calculate(route_planner, polar_settings, task_behaviour, calculated);
 
   v.Draw(canvas);
 

@@ -32,9 +32,10 @@ class Canvas;
 class LabelBlock;
 class MapWindowProjection;
 class Waypoints;
-class GlidePolar;
+struct PolarSettings;
 struct TaskBehaviour;
 struct MoreData;
+struct DerivedInfo;
 class ProtectedTaskManager;
 class ProtectedRoutePlanner;
 
@@ -65,8 +66,9 @@ public:
   void render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,
               const struct WaypointRendererSettings &settings,
+              const PolarSettings &polar_settings,
               const TaskBehaviour &task_behaviour,
-              const MoreData &basic,
+              const MoreData &basic, const DerivedInfo &calculated,
               const ProtectedTaskManager *task,
               const ProtectedRoutePlanner *route_planner);
 
