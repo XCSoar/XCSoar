@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.3.3 - not yet released
+Version 6.3.3 - 2012/05/05
 * calculations
   - use arrival height instead of terrain safety height for MC0 Alt.D
     (#1991, #1992)
@@ -18,7 +18,7 @@ Version 6.3.3 - not yet released
   - Fix logging of "start" events
   - Fix logging of "before takeoff position fixes" in IGC logs (#2052)
 
-Version 6.3.2 - 2011/04/26
+Version 6.3.2 - 2012/04/26
 * devices
   - FLARM: fix flight download (#2024)
 * user interface
