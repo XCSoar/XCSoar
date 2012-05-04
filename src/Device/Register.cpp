@@ -114,13 +114,3 @@ FindDriverByName(const TCHAR *name)
 
   return DeviceRegister[0];
 }
-
-const struct DeviceRegister *
-FindDriverByDisplayName(const TCHAR *display_name)
-{
-  for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
-    if (_tcscmp(DeviceRegister[i]->display_name, display_name) == 0)
-      return DeviceRegister[i];
-
-  return DeviceRegister[0];
-}

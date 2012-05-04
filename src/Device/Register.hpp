@@ -45,7 +45,4 @@ GetDriverDisplayNameByIndex(unsigned i);
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name);
 
-const struct DeviceRegister *
-FindDriverByDisplayName(const TCHAR *display_name);
-
 #endif
