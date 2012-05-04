@@ -164,8 +164,9 @@ void
 DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   const unsigned idx = indices[i];
+  const DeviceConfig &config =
+    CommonInterface::SetSystemSettings().devices[idx];
   const DeviceDescriptor &device = *device_list[idx];
-  const DeviceConfig &config = device.GetConfig();
 
   const UPixelScalar margin = Layout::Scale(2);
 
