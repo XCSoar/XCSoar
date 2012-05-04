@@ -9,6 +9,8 @@ Version 6.4 - not yet released
   - added para- and hang glider and aircraft symbols (#1626)
 * infoboxes
   - added automatic altitude infobox (baro. altitude with GPS fallback)
+* Android
+  - support x86 and MIPS CPUs
 
 Version 6.3.3 - 2012/05/05
 * calculations
