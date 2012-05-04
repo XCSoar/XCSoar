@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-04-29 16:29+0000\n"
+"PO-Revision-Date: 2012-05-04 19:29+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-02 21:41+0000\n"
-"X-Generator: Launchpad (build 15185)\n"
+"X-Launchpad-Export-Date: 2012-05-04 20:44+0000\n"
+"X-Generator: Launchpad (build 15195)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1098,7 +1098,7 @@ msgstr "Temps de vol"
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Time Flt"
-msgstr "T Vol"
+msgstr "Tps Vol"
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1698,7 +1698,7 @@ msgstr "Nom 1ère option"
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
 msgid "Altn 1"
-msgstr "Opt 1"
+msgstr "Dgmt 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
@@ -1713,7 +1713,7 @@ msgstr "Nom 2e option"
 #: src/InfoBoxes/Content/Factory.cpp:764
 #, no-c-format
 msgid "Altn 2"
-msgstr "Opt 2"
+msgstr "Dgmt 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:765
 #, no-c-format
@@ -1728,7 +1728,7 @@ msgstr "Fin dégagt 1"
 #: src/InfoBoxes/Content/Factory.cpp:774
 #, no-c-format
 msgid "Altn1 GR"
-msgstr "Plan Dégagmt1"
+msgstr "Plan dégagement 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:775
 #, no-c-format
