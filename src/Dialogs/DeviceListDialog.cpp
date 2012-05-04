@@ -31,6 +31,8 @@ Copyright_License {
 #include "Widgets/DeviceEditWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Util/TrivialArray.hpp"
+#include "Util/StaticString.hpp"
+#include "Util/Macros.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
@@ -163,69 +165,76 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   const unsigned idx = indices[i];
   const DeviceDescriptor &device = *device_list[idx];
+  const DeviceConfig &config = device.GetConfig();
 
   const UPixelScalar margin = Layout::Scale(2);
 
-  TCHAR buffer1[256], buffer2[256];
-  const DeviceConfig &config = device.GetConfig();
-  const TCHAR *name = config.GetPortName(buffer1, 128);
+  TCHAR port_name_buffer[128];
+  const TCHAR *port_name =
+    config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
+
+  StaticString<256> text(_T("A: "));
+  text[0u] += idx;
 
   if (config.UsesDriver()) {
     const TCHAR *driver_name = FindDriverDisplayName(config.driver_name);
-    _sntprintf(buffer2, 128, _("%s on %s"), driver_name, name);
-    name = buffer2;
+
+    text.AppendFormat(_("%s on %s"), driver_name, port_name);
+  } else {
+    text.append(port_name);
   }
 
-  canvas.text(rc.left + margin, rc.top + margin, name);
+  canvas.text(rc.left + margin, rc.top + margin, text);
 
   /* show a list of features that are available in the second row */
 
   const NMEAInfo &basic = device_blackboard->RealState(idx);
 
-  const TCHAR *text;
+  StaticString<256> buffer;
+  const TCHAR *status;
   if (basic.alive) {
     if (basic.location_available) {
-      _tcscpy(buffer1, _("GPS fix"));
+      buffer = _("GPS fix");
     } else if (basic.gps.fix_quality_available) {
       /* device sends GPGGA, but no valid location */
-      _tcscpy(buffer1, _("Bad GPS"));
+      buffer = _("Bad GPS");
     } else {
-      _tcscpy(buffer1, _("Connected"));
+      buffer = _("Connected");
     }
 
     if (basic.baro_altitude_available ||
         basic.pressure_altitude_available ||
         basic.static_pressure_available) {
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("Baro"));
+      buffer.append(_T("; "));
+      buffer.append(_("Baro"));
     }
 
     if (basic.airspeed_available) {
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("Airspeed"));
+      buffer.append(_T("; "));
+      buffer.append(_("Airspeed"));
     }
 
     if (basic.total_energy_vario_available) {
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("Vario"));
+      buffer.append(_T("; "));
+      buffer.append(_("Vario"));
     }
 
     if (IsFlarm(i))
-      _tcscat(buffer1, _T("; FLARM"));
+      buffer.append(_T("; FLARM"));
 
-    text = buffer1;
+    status = buffer;
   } else if (config.IsDisabled()) {
-    text = _("Disabled");
+    status = _("Disabled");
   } else if (is_simulator() || !config.IsAvailable()) {
-    text = _("N/A");
+    status = _("N/A");
   } else if (device.IsOpen()) {
-    text = _("No data");
+    status = _("No data");
   } else {
-    text = _("Not connected");
+    status = _("Not connected");
   }
 
   canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
-              text);
+              status);
 }
 
 void
