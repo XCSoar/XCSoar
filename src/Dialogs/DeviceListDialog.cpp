@@ -211,7 +211,9 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
       _tcscat(buffer1, _T("; FLARM"));
 
     text = buffer1;
-  } else if (is_simulator()) {
+  } else if (config.IsDisabled()) {
+    text = _("Disabled");
+  } else if (is_simulator() || !config.IsAvailable()) {
     text = _("N/A");
   } else if (device.IsOpen()) {
     text = _("No data");
