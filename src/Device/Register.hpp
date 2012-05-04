@@ -43,4 +43,12 @@ gcc_pure
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name);
 
+/**
+ * Find the driver with the specified name, and return its display
+ * name.  If no such driver was found, the specified name is returned.
+ */
+gcc_pure
+const TCHAR *
+FindDriverDisplayName(const TCHAR *name);
+
 #endif

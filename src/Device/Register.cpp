@@ -98,3 +98,17 @@ FindDriverByName(const TCHAR *name)
 
   return driver_list[0];
 }
+
+const TCHAR *
+FindDriverDisplayName(const TCHAR *name)
+{
+  assert(name != NULL);
+
+  for (auto i = driver_list; *i != NULL; ++i) {
+    const DeviceRegister &driver = **i;
+    if (_tcscmp(driver.name, name) == 0)
+      return driver.display_name;
+  }
+
+  return name;
+}

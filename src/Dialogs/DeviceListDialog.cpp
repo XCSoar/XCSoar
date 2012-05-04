@@ -33,6 +33,7 @@ Copyright_License {
 #include "Util/TrivialArray.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
+#include "Device/Register.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Look/DialogLook.hpp"
@@ -169,7 +170,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const TCHAR *name = config.GetPortName(buffer1, 128);
 
   if (config.UsesDriver()) {
-    _sntprintf(buffer2, 128, _("%s on %s"), config.driver_name.c_str(), name);
+    const TCHAR *driver_name = FindDriverDisplayName(config.driver_name);
+    _sntprintf(buffer2, 128, _("%s on %s"), driver_name, name);
     name = buffer2;
   }
 

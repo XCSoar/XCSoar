@@ -168,9 +168,7 @@ DevicesConfigPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const TCHAR *name = config.GetPortName(buffer1, 128);
 
   if (config.UsesDriver()) {
-    const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
-    const TCHAR *driver_name = (driver != NULL) ? driver->display_name :
-                                                  config.driver_name.c_str();
+    const TCHAR *driver_name = FindDriverDisplayName(config.driver_name);
 
     buffer2[0] = TCHAR('A' + idx);
     buffer2[1] = _T(':');
