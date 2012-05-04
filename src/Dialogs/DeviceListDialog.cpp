@@ -59,8 +59,6 @@ class DeviceListWidget : public ListWidget, private ActionListener {
 
   UPixelScalar font_height;
 
-  TrivialArray<unsigned, NUMDEV> indices;
-
   WndButton *reconnect_button, *flight_button;
   WndButton *edit_button;
   WndButton *manage_button, *monitor_button;
@@ -72,11 +70,6 @@ public:
   void CreateButtons(WidgetDialog &dialog);
 
 protected:
-  gcc_pure
-  bool IsFlarm(unsigned index) const {
-    return device_blackboard->RealState(indices[index]).flarm.IsDetected();
-  }
-
   void RefreshList();
 
   void UpdateButtons();
@@ -109,7 +102,7 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const DialogLook &look = UIGlobals::GetDialogLook();
   UPixelScalar margin = Layout::Scale(2);
   font_height = look.list.font->GetHeight();
-  CreateList(parent, look, rc, 3 * margin + 2 * font_height);
+  CreateList(parent, look, rc, 3 * margin + 2 * font_height).SetLength(NUMDEV);
   RefreshList();
   UpdateButtons();
 }
@@ -117,13 +110,7 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 DeviceListWidget::RefreshList()
 {
-  indices.clear();
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    indices.append(i);
-
-  ListControl &list = GetList();
-  list.SetLength(indices.size());
-  list.Invalidate();
+  GetList().Invalidate();
 }
 
 void
@@ -142,13 +129,13 @@ DeviceListWidget::UpdateButtons()
 {
   const unsigned current = GetList().GetCursorIndex();
 
-  if (is_simulator() || current >= indices.size()) {
+  if (is_simulator() || current >= NUMDEV) {
     reconnect_button->SetEnabled(false);
     flight_button->SetEnabled(false);
     manage_button->SetEnabled(false);
     monitor_button->SetEnabled(false);
   } else {
-    const DeviceDescriptor &device = *device_list[indices[current]];
+    const DeviceDescriptor &device = *device_list[current];
 
     reconnect_button->SetEnabled(device.IsConfigured());
     flight_button->SetEnabled(device.IsLogger());
@@ -156,13 +143,14 @@ DeviceListWidget::UpdateButtons()
     monitor_button->SetEnabled(device.GetConfig().UsesPort());
   }
 
-  edit_button->SetEnabled(current < indices.size());
+  edit_button->SetEnabled(current < NUMDEV);
 }
 
 void
-DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
+DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
-  const unsigned idx = indices[i];
+  assert(idx < NUMDEV);
+
   const DeviceConfig &config =
     CommonInterface::SetSystemSettings().devices[idx];
   const DeviceDescriptor &device = *device_list[idx];
@@ -219,7 +207,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
       buffer.append(_("Vario"));
     }
 
-    if (IsFlarm(i))
+    if (basic.flarm.IsDetected())
       buffer.append(_T("; FLARM"));
 
     status = buffer;
@@ -247,10 +235,10 @@ void
 DeviceListWidget::ReconnectCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &device = *device_list[indices[current]];
+  DeviceDescriptor &device = *device_list[current];
   if (device.IsBorrowed()) {
     MessageBoxX(_("Device is occupied"), _("Reconnect"), MB_OK | MB_ICONERROR);
     return;
@@ -266,10 +254,10 @@ void
 DeviceListWidget::DownloadFlightFromCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &device = *device_list[indices[current]];
+  DeviceDescriptor &device = *device_list[current];
   if (!device.IsOpen())
     return;
 
@@ -286,10 +274,10 @@ void
 DeviceListWidget::EditCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  const unsigned index = indices[current];
+  const unsigned index = current;
   DeviceConfig &config = CommonInterface::SetSystemSettings().devices[index];
   DeviceEditWidget widget(config);
 
@@ -318,10 +306,10 @@ void
 DeviceListWidget::ManageCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &descriptor = *device_list[indices[current]];
+  DeviceDescriptor &descriptor = *device_list[current];
   if (!descriptor.IsOpen() || !descriptor.IsManageable())
     return;
 
@@ -352,10 +340,10 @@ void
 DeviceListWidget::MonitorCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &descriptor = *device_list[indices[current]];
+  DeviceDescriptor &descriptor = *device_list[current];
   ShowPortMonitor(UIGlobals::GetMainWindow(), look, terminal_look,
                   descriptor);
 }
