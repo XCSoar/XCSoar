@@ -79,14 +79,12 @@ static const struct DeviceRegister *const driver_list[] = {
   NULL
 };
 
-enum {
-  DeviceRegisterCount = ARRAY_SIZE(driver_list) - 1
-};
-
 const struct DeviceRegister *
 GetDriverByIndex(unsigned i)
 {
-  return i < DeviceRegisterCount ? driver_list[i] : NULL;
+  assert(i < ARRAY_SIZE(driver_list));
+
+  return driver_list[i];
 }
 
 const struct DeviceRegister *
