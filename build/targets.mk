@@ -200,7 +200,7 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(X86),y)
-    ANDROID_PLATFORM = android-9
+    ANDROID_PLATFORM = android-14
     ANDROID_ARCH = x86
     ANDROID_ABI2 = x86
     ANDROID_ABI3 = x86
@@ -208,7 +208,7 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(MIPS),y)
-    ANDROID_PLATFORM = android-9
+    ANDROID_PLATFORM = android-14
     ANDROID_ARCH = mips
     ANDROID_ABI2 = mipsel-linux-android
     ANDROID_ABI3 = mips
