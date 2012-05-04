@@ -270,6 +270,9 @@ DeviceListWidget::DownloadFlightFromCurrent()
     return;
 
   DeviceDescriptor &device = *device_list[indices[current]];
+  if (!device.IsOpen())
+    return;
+
   if (!device.Borrow()) {
     MessageBoxX(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
     return;
@@ -319,7 +322,7 @@ DeviceListWidget::ManageCurrent()
     return;
 
   DeviceDescriptor &descriptor = *device_list[indices[current]];
-  if (!descriptor.IsManageable())
+  if (!descriptor.IsOpen() || !descriptor.IsManageable())
     return;
 
   if (!descriptor.Borrow()) {
