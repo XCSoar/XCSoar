@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "SerialPort.hpp"
 #include "Asset.hpp"
+#include "OS/LogError.hpp"
 #include "OS/Sleep.h"
 
 #ifdef _WIN32_WCE
@@ -84,6 +85,7 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   // If it fails to open the port, return false.
   if (hPort == INVALID_HANDLE_VALUE) {
+    LogLastError(_T("Failed to open port '%s'"), path);
     return false;
   }
 
@@ -116,7 +118,7 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
 
   // Configure the port according to the specifications of the DCB structure.
   if (!SetCommState(hPort, &PortDCB)) {
-    // Could not create the read thread.
+    LogLastError(_T("Failed to configure port '%s'"), path);
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
     return false;
