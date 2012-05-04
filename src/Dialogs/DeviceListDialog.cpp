@@ -37,6 +37,7 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 #include "Components.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
@@ -49,15 +50,72 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 
-class DeviceListWidget : public ListWidget, private ActionListener {
+class DeviceListWidget : public ListWidget, private ActionListener,
+                         private NullBlackboardListener {
   enum Buttons {
-    REFRESH, RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
+    RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
   };
 
   const DialogLook &look;
   const TerminalLook &terminal_look;
 
   UPixelScalar font_height;
+
+  struct Flags {
+    bool open:1;
+    bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
+
+    void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
+      open = device.IsOpen();
+      alive = basic.alive;
+      location = basic.location_available;
+      gps = basic.gps.fix_quality_available;
+      baro = basic.baro_altitude_available ||
+        basic.pressure_altitude_available ||
+        basic.static_pressure_available;
+      airspeed = basic.airspeed_available;
+      vario = basic.total_energy_vario_available;
+      traffic = basic.flarm.IsDetected();
+    }
+  };
+
+  union Item {
+  private:
+    Flags flags;
+    uint16_t i;
+
+    static_assert(sizeof(flags) <= sizeof(i), "wrong size");
+
+  public:
+    void Clear() {
+      i = 0;
+    }
+
+    void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
+      i = 0;
+      flags.Set(device, basic);
+    }
+
+    bool operator==(const Item &other) const {
+      return i == other.i;
+    }
+
+    bool operator!=(const Item &other) const {
+      return i != other.i;
+    }
+
+    const Flags &operator->() const {
+      return flags;
+    }
+
+    const Flags &operator*() const {
+      return flags;
+    }
+  };
+
+  static_assert(sizeof(Item) == 2, "wrong size");
+
+  Item items[NUMDEV];
 
   WndButton *reconnect_button, *flight_button;
   WndButton *edit_button;
@@ -70,7 +128,7 @@ public:
   void CreateButtons(WidgetDialog &dialog);
 
 protected:
-  void RefreshList();
+  bool RefreshList();
 
   void UpdateButtons();
 
@@ -87,13 +145,32 @@ public:
     DeleteWindow();
   }
 
+  virtual void Show(const PixelRect &rc) {
+    ListWidget::Show(rc);
+
+    CommonInterface::GetLiveBlackboard().AddListener(*this);
+
+    RefreshList();
+    UpdateButtons();
+  }
+
+  virtual void Hide() {
+    ListWidget::Hide();
+
+    CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+  }
+
   /* virtual methods from class List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx);
   virtual void OnCursorMoved(unsigned index);
 
+private:
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id);
+
+  /* virtual methods from class BlackboardListener */
+  virtual void OnGPSUpdate(const MoreData &basic);
 };
 
 void
@@ -103,20 +180,37 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UPixelScalar margin = Layout::Scale(2);
   font_height = look.list.font->GetHeight();
   CreateList(parent, look, rc, 3 * margin + 2 * font_height).SetLength(NUMDEV);
-  RefreshList();
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    items[i].Clear();
+
   UpdateButtons();
 }
 
-void
+bool
 DeviceListWidget::RefreshList()
 {
-  GetList().Invalidate();
+  bool modified = false;
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    Item &item = items[i];
+
+    Item n;
+    n.Set(*device_list[i], device_blackboard->RealState(i));
+
+    if (n != item) {
+      item = n;
+      modified = true;
+    }
+  }
+
+  if (modified)
+    GetList().Invalidate();
+  return modified;
 }
 
 void
 DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_("Refresh"), this, REFRESH);
   reconnect_button = dialog.AddButton(_("Reconnect"), this, RECONNECT);
   flight_button = dialog.AddButton(_("Flight download"), this, FLIGHT);
   edit_button = dialog.AddButton(_("Edit"), this, EDIT);
@@ -153,7 +247,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
   const DeviceConfig &config =
     CommonInterface::SetSystemSettings().devices[idx];
-  const DeviceDescriptor &device = *device_list[idx];
+  const Flags flags(*items[idx]);
 
   const UPixelScalar margin = Layout::Scale(2);
 
@@ -176,38 +270,34 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
   /* show a list of features that are available in the second row */
 
-  const NMEAInfo &basic = device_blackboard->RealState(idx);
-
   StaticString<256> buffer;
   const TCHAR *status;
-  if (basic.alive) {
-    if (basic.location_available) {
+  if (flags.alive) {
+    if (flags.location) {
       buffer = _("GPS fix");
-    } else if (basic.gps.fix_quality_available) {
+    } else if (flags.gps) {
       /* device sends GPGGA, but no valid location */
       buffer = _("Bad GPS");
     } else {
       buffer = _("Connected");
     }
 
-    if (basic.baro_altitude_available ||
-        basic.pressure_altitude_available ||
-        basic.static_pressure_available) {
+    if (flags.baro) {
       buffer.append(_T("; "));
       buffer.append(_("Baro"));
     }
 
-    if (basic.airspeed_available) {
+    if (flags.airspeed) {
       buffer.append(_T("; "));
       buffer.append(_("Airspeed"));
     }
 
-    if (basic.total_energy_vario_available) {
+    if (flags.vario) {
       buffer.append(_T("; "));
       buffer.append(_("Vario"));
     }
 
-    if (basic.flarm.IsDetected())
+    if (flags.traffic)
       buffer.append(_T("; FLARM"));
 
     status = buffer;
@@ -215,7 +305,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     status = _("Disabled");
   } else if (is_simulator() || !config.IsAvailable()) {
     status = _("N/A");
-  } else if (device.IsOpen()) {
+  } else if (flags.open) {
     status = _("No data");
   } else {
     status = _("Not connected");
@@ -296,6 +386,9 @@ DeviceListWidget::EditCurrent()
   DeviceDescriptor &descriptor = *device_list[index];
   descriptor.SetConfig(widget.GetConfig());
 
+  GetList().Invalidate();
+  UpdateButtons();
+
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static MessageOperationEnvironment env;
@@ -352,11 +445,6 @@ void
 DeviceListWidget::OnAction(int id)
 {
   switch (id) {
-  case REFRESH:
-    RefreshList();
-    UpdateButtons();
-    break;
-
   case RECONNECT:
     ReconnectCurrent();
     break;
@@ -377,6 +465,13 @@ DeviceListWidget::OnAction(int id)
     MonitorCurrent();
     break;
   }
+}
+
+void
+DeviceListWidget::OnGPSUpdate(const MoreData &basic)
+{
+  if (RefreshList())
+    UpdateButtons();
 }
 
 void
