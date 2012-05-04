@@ -90,9 +90,11 @@ GetDriverByIndex(unsigned i)
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name)
 {
-  for (unsigned i = 1; driver_list[i] != NULL; ++i)
-    if (_tcscmp(driver_list[i]->name, name) == 0)
-      return driver_list[i];
+  for (auto i = driver_list; *i != NULL; ++i) {
+    const DeviceRegister &driver = **i;
+    if (_tcscmp(driver.name, name) == 0)
+      return &driver;
+  }
 
   return driver_list[0];
 }
