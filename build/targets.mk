@@ -21,6 +21,8 @@ HAVE_CE := n
 HAVE_FPU := y
 X64 := n
 XSCALE := n
+ARMV5 = n
+ARMV6 = n
 ARMV7 := n
 X86 := n
 FAT_BINARY := n
@@ -51,6 +53,15 @@ ifeq ($(TARGET),WM5X)
   XSCALE := y
   TARGET_FLAVOR := $(TARGET)
   override TARGET = WM5
+endif
+
+ifeq ($(TARGET),ANDROID)
+  ifeq ($(DEBUG),n)
+    ARMV6 = y
+  else
+    # ARMv5 in the debug build, to allow installation on the emulator
+    ARMV5 = y
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID7)
@@ -172,19 +183,17 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_PLATFORM = android-8
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
+  ANDROID_ABI3 = armeabi
+  ANDROID_ABI4 = $(ANDROID_ABI2)
   ANDROID_GCC_VERSION = 4.4.3
 
   ifeq ($(ARMV7),y)
     ANDROID_ABI3 = armeabi-v7a
-  else
-    ANDROID_ABI3 = armeabi
   endif
 
   ifeq ($(X86),y)
     ANDROID_ABI3 = x86
   endif
-
-  ANDROID_ABI4 = $(ANDROID_ABI2)
 
   ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
@@ -201,18 +210,21 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI2 := x86
     ANDROID_ABI4 := i686-android-linux
     HAVE_FPU := y
-  else
+  endif
+
+  ifeq ($(ARMV5),y)
+    TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
+    HAVE_FPU := n
+  endif
+
+  ifeq ($(ARMV6),y)
+    TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
+    HAVE_FPU := n
+  endif
+
   ifeq ($(ARMV7),y)
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
     HAVE_FPU := y
-  else
-    TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
-    ifneq ($(DEBUG),n)
-      # ARMv5 in the debug build, to allow installation on the emulator
-      TARGET_ARCH := $(subst armv6,armv5te,$(TARGET_ARCH))
-    endif
-    HAVE_FPU := n
-  endif
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
