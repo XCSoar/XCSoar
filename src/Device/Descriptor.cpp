@@ -199,6 +199,8 @@ DeviceDescriptor::OpenInternalSensors()
 bool
 DeviceDescriptor::DoOpen(OperationEnvironment &env)
 {
+  assert(config.IsAvailable());
+
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalSensors();
 
@@ -231,7 +233,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   assert(!ticker);
   assert(!IsBorrowed());
 
-  if (is_simulator())
+  if (is_simulator() || !config.IsAvailable())
     return;
 
   CancelAsync();
