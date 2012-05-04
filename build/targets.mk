@@ -192,7 +192,11 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(X86),y)
+    ANDROID_PLATFORM = android-9
+    ANDROID_ARCH = x86
+    ANDROID_ABI2 = x86
     ANDROID_ABI3 = x86
+    ANDROID_ABI4 = i686-android-linux
   endif
 
   ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM)
@@ -205,10 +209,6 @@ ifeq ($(TARGET),ANDROID)
   TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI4)-
 
   ifeq ($(X86),y)
-    ANDROID_PLATFORM := android-9
-    ANDROID_ARCH := x86
-    ANDROID_ABI2 := x86
-    ANDROID_ABI4 := i686-android-linux
     HAVE_FPU := y
   endif
 
