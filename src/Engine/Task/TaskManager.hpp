@@ -380,7 +380,7 @@ public:
    * @return Copy of glide polar
    */
   gcc_pure
-  GlidePolar GetSafetyPolar() const {
+  const GlidePolar &GetSafetyPolar() const {
     return safety_polar;
   }
 
