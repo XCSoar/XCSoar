@@ -125,7 +125,6 @@ protected:
   RoughAltitude h_min;
   /** Maxmimum height scanned during solution (m) */
   RoughAltitude h_max;
-  GlidePolar glide_polar_reach;
 
 private:
   /** A* search algorithm */

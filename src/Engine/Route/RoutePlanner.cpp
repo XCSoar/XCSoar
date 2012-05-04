@@ -375,12 +375,10 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
   switch (reach_polar_mode) {
   case RoutePlannerConfig::Polar::TASK:
     rpolars_reach = rpolars_route;
-    glide_polar_reach = task_polar;
     // make copy to avoid waste
     break;
   case RoutePlannerConfig::Polar::SAFETY:
     rpolars_reach.Initialise(settings, safety_polar, wind);
-    glide_polar_reach = safety_polar;
     break;
   }
 }
