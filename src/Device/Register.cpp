@@ -89,22 +89,6 @@ GetDriverByIndex(unsigned i)
   return i < DeviceRegisterCount ? DeviceRegister[i] : NULL;
 }
 
-const TCHAR *
-GetDriverNameByIndex(unsigned i)
-{
-  return i < DeviceRegisterCount
-    ? DeviceRegister[i]->name
-    : NULL;
-}
-
-const TCHAR *
-GetDriverDisplayNameByIndex(unsigned i)
-{
-  return i < DeviceRegisterCount
-    ? DeviceRegister[i]->display_name
-    : NULL;
-}
-
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name)
 {
