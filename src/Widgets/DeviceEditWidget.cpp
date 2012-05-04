@@ -539,9 +539,10 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   DataFieldEnum *driver_df = new DataFieldEnum(NULL);
   driver_df->SetListener(this);
-  const TCHAR *driver_name;
-  for (unsigned i = 0; (driver_name = GetDriverNameByIndex(i)) != NULL; i++)
-    driver_df->addEnumText(driver_name, GetDriverDisplayNameByIndex(i));
+
+  const struct DeviceRegister *driver;
+  for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; i++)
+    driver_df->addEnumText(driver->name, driver->display_name);
 
   driver_df->Sort(1);
   driver_df->Set(config.driver_name);

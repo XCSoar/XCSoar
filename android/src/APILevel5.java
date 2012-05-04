@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -21,34 +20,18 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This library manages the list of device drivers.
- */
+package org.xcsoar;
 
-#ifndef XCSOAR_DEVICE_REGISTRY_HPP
-#define XCSOAR_DEVICE_REGISTRY_HPP
-
-#include "Compiler.h"
-
-#include <tchar.h>
-
-struct DeviceRegister;
-
-gcc_const
-const struct DeviceRegister *
-GetDriverByIndex(unsigned i);
-
-gcc_pure
-const struct DeviceRegister *
-FindDriverByName(const TCHAR *name);
+import android.app.Service;
+import android.app.Notification;
 
 /**
- * Find the driver with the specified name, and return its display
- * name.  If no such driver was found, the specified name is returned.
+ * Wrappers for API level 5.  This class must only be accessed after
+ * verifying that Build.VERSION.SDK_INT is 5 or bigger.
  */
-gcc_pure
-const TCHAR *
-FindDriverDisplayName(const TCHAR *name);
-
-#endif
+abstract class APILevel5 {
+  public static void startForeground(Service service, int id,
+                                     Notification notification) {
+    service.startForeground(id, notification);
+  }
+}

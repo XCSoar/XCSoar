@@ -10,18 +10,23 @@ Version 6.4 - not yet released
 * infoboxes
   - added automatic altitude infobox (baro. altitude with GPS fallback)
 
-Version 6.3.3 - not yet released
+Version 6.3.3 - 2012/05/05
 * calculations
   - use arrival height instead of terrain safety height for MC0 Alt.D
     (#1991, #1992)
+  - fix arrival heights on map when no terrain is available (#2018)
+* user interface
+  - refresh the device list automatically
 * Android
   - fix crash after too many network failures (#1957)
   - improve the pressure sensor's Kalman filter
+  - fix Bluetooth/IOIO receive data truncation
+  - reduce the risk of getting killed by the Android Activity Manager
 * logger
   - Fix logging of "start" events
   - Fix logging of "before takeoff position fixes" in IGC logs (#2052)
 
-Version 6.3.2 - 2011/04/26
+Version 6.3.2 - 2012/04/26
 * devices
   - FLARM: fix flight download (#2024)
 * user interface

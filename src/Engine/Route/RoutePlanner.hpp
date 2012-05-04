@@ -125,7 +125,6 @@ protected:
   RoughAltitude h_min;
   /** Maxmimum height scanned during solution (m) */
   RoughAltitude h_max;
-  GlidePolar glide_polar_reach;
 
 private:
   /** A* search algorithm */
@@ -185,6 +184,15 @@ public:
   void SetTerrain(const RasterMap *_terrain) {
     terrain = _terrain;
   }
+
+  bool IsReachEmpty() const {
+    return reach.IsEmpty();
+  }
+
+  /**
+   * Delete all reach fans.
+   */
+  void ClearReach();
 
   /**
    * Find the optimal path.  Works in reverse time order, from the

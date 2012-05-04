@@ -153,9 +153,9 @@ int main(int argc, char **argv)
     fprintf(stderr, "Usage: %s DRIVER\n"
             "Where DRIVER is one of:\n", argv[0]);
 
-    const TCHAR *name;
-    for (unsigned i = 0; (name = GetDriverNameByIndex(i)) != NULL; ++i)
-      _ftprintf(stderr, _T("\t%s\n"), name);
+    const struct DeviceRegister *driver;
+    for (unsigned i = 0; (driver = GetDriverByIndex(i)) != NULL; ++i)
+      _ftprintf(stderr, _T("\t%s\n"), driver->name);
 
     return 1;
   }

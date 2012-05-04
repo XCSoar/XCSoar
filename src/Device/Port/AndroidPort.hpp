@@ -41,8 +41,6 @@ class AndroidPort : public Port, private Port::Handler
 {
   PortBridge *bridge;
 
-  unsigned read_timeout;
-
   Mutex mutex;
   Cond cond;
 

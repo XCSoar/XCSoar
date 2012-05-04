@@ -49,6 +49,14 @@ public:
     planner.Synchronise(master, origin, destination);
   }
 
+  bool IsReachEmpty() const {
+    return planner.IsReachEmpty();
+  }
+
+  void ClearReach() {
+    planner.ClearReach();
+  }
+
   void Reset() {
     planner.Reset();
   }

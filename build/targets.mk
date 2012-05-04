@@ -1,4 +1,4 @@
-TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 ANDROID86 ANDROIDFAT CYGWIN
+TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 ANDROID86 ANDROIDMIPS ANDROIDFAT CYGWIN
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
@@ -21,8 +21,11 @@ HAVE_CE := n
 HAVE_FPU := y
 X64 := n
 XSCALE := n
+ARMV5 = n
+ARMV6 = n
 ARMV7 := n
 X86 := n
+MIPS := n
 FAT_BINARY := n
 
 TARGET_IS_DARWIN := n
@@ -53,6 +56,15 @@ ifeq ($(TARGET),WM5X)
   override TARGET = WM5
 endif
 
+ifeq ($(TARGET),ANDROID)
+  ifeq ($(DEBUG),n)
+    ARMV6 = y
+  else
+    # ARMv5 in the debug build, to allow installation on the emulator
+    ARMV5 = y
+  endif
+endif
+
 ifeq ($(TARGET),ANDROID7)
   ARMV7 := y
   TARGET_FLAVOR := $(TARGET)
@@ -61,6 +73,12 @@ endif
 
 ifeq ($(TARGET),ANDROID86)
   X86 := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = ANDROID
+endif
+
+ifeq ($(TARGET),ANDROIDMIPS)
+  MIPS := y
   TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
@@ -168,24 +186,33 @@ ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r7c
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8
 
   ANDROID_PLATFORM = android-8
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
+  ANDROID_ABI3 = armeabi
+  ANDROID_ABI4 = $(ANDROID_ABI2)
   ANDROID_GCC_VERSION = 4.4.3
 
   ifeq ($(ARMV7),y)
     ANDROID_ABI3 = armeabi-v7a
-  else
-    ANDROID_ABI3 = armeabi
   endif
 
   ifeq ($(X86),y)
+    ANDROID_PLATFORM = android-9
+    ANDROID_ARCH = x86
+    ANDROID_ABI2 = x86
     ANDROID_ABI3 = x86
+    ANDROID_ABI4 = i686-android-linux
   endif
 
-  ANDROID_ABI4 = $(ANDROID_ABI2)
+  ifeq ($(MIPS),y)
+    ANDROID_PLATFORM = android-9
+    ANDROID_ARCH = mips
+    ANDROID_ABI2 = mipsel-linux-android
+    ANDROID_ABI3 = mips
+  endif
 
   ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
@@ -197,23 +224,26 @@ ifeq ($(TARGET),ANDROID)
   TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI4)-
 
   ifeq ($(X86),y)
-    ANDROID_PLATFORM := android-9
-    ANDROID_ARCH := x86
-    ANDROID_ABI2 := x86
-    ANDROID_ABI4 := i686-android-linux
     HAVE_FPU := y
-  else
+  endif
+
+  ifeq ($(MIPS),y)
+    HAVE_FPU := y
+  endif
+
+  ifeq ($(ARMV5),y)
+    TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
+    HAVE_FPU := n
+  endif
+
+  ifeq ($(ARMV6),y)
+    TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
+    HAVE_FPU := n
+  endif
+
   ifeq ($(ARMV7),y)
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
     HAVE_FPU := y
-  else
-    TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
-    ifneq ($(DEBUG),n)
-      # ARMv5 in the debug build, to allow installation on the emulator
-      TARGET_ARCH := $(subst armv6,armv5te,$(TARGET_ARCH))
-    endif
-    HAVE_FPU := n
-  endif
   endif
 
   TARGET_ARCH += -fpic -funwind-tables

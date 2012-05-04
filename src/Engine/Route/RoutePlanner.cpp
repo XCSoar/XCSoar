@@ -35,6 +35,12 @@ RoutePlanner::RoutePlanner()
 }
 
 void
+RoutePlanner::ClearReach()
+{
+  reach.Reset();
+}
+
+void
 RoutePlanner::Reset()
 {
   origin_last = AFlatGeoPoint(0, 0, RoughAltitude(0));
@@ -46,7 +52,7 @@ RoutePlanner::Reset()
   h_min = RoughAltitude(-1);
   h_max = RoughAltitude(0);
   search_hull.clear();
-  reach.Reset();
+  ClearReach();
 }
 
 bool
@@ -369,12 +375,10 @@ RoutePlanner::UpdatePolar(const GlideSettings &settings,
   switch (reach_polar_mode) {
   case RoutePlannerConfig::Polar::TASK:
     rpolars_reach = rpolars_route;
-    glide_polar_reach = task_polar;
     // make copy to avoid waste
     break;
   case RoutePlannerConfig::Polar::SAFETY:
     rpolars_reach.Initialise(settings, safety_polar, wind);
-    glide_polar_reach = safety_polar;
     break;
   }
 }

@@ -159,6 +159,10 @@ struct DeviceConfig {
       port_type == PortType::IOIOUART;
   }
 
+  bool IsDisabled() const {
+    return port_type == PortType::DISABLED;
+  }
+
   /**
    * Checks if the specified DeviceConfig is available on this platform.
    */

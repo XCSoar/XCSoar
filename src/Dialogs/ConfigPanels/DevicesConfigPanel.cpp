@@ -38,6 +38,8 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Compatibility/string.h"
 #include "Screen/Layout.hpp"
+#include "Util/StaticString.hpp"
+#include "Util/Macros.hpp"
 
 class DevicesConfigPanel
   : public ListWidget, private DeviceEditWidget::Listener {
@@ -164,28 +166,22 @@ DevicesConfigPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const UPixelScalar margin = Layout::Scale(2);
 
-  TCHAR buffer1[256], buffer2[256];
-  const TCHAR *name = config.GetPortName(buffer1, 128);
+  TCHAR port_name_buffer[128];
+  const TCHAR *port_name =
+    config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
+
+  StaticString<256> text(_T("A: "));
+  text[0u] += idx;
 
   if (config.UsesDriver()) {
-    const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
-    const TCHAR *driver_name = (driver != NULL) ? driver->display_name :
-                                                  config.driver_name.c_str();
+    const TCHAR *driver_name = FindDriverDisplayName(config.driver_name);
 
-    buffer2[0] = TCHAR('A' + idx);
-    buffer2[1] = _T(':');
-    buffer2[2] = _T(' ');
-
-    _sntprintf(buffer2 + 3, 128, _("%s on %s"),
-               driver_name, name);
-    name = buffer2;
+    text.AppendFormat(_("%s on %s"), driver_name, port_name);
   } else {
-    _sntprintf(buffer2, 128, _T("%c: %s"),
-               TCHAR('A' + idx), name);
-    name = buffer2;
+    text.append(port_name);
   }
 
-  canvas.text(rc.left + margin, rc.top + margin, name);
+  canvas.text(rc.left + margin, rc.top + margin, text);
 }
 
 void

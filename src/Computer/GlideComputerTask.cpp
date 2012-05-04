@@ -95,13 +95,8 @@ GlideComputerTask::ProcessMoreTask(const MoreData &basic,
                                    const DerivedInfo &last_calculated,
                                    const ComputerSettings &settings_computer)
 {
-  GlidePolar glide_polar, safety_polar;
-
-  {
-    ProtectedTaskManager::Lease _task(task);
-    glide_polar = _task->GetGlidePolar();
-    safety_polar = _task->GetSafetyPolar();
-  }
+  const GlidePolar &glide_polar = settings_computer.polar.glide_polar_task;
+  const GlidePolar &safety_polar = calculated.glide_polar_safety;
 
   route.ProcessRoute(basic, calculated, last_calculated,
                      settings_computer.task.glide,

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TTYPort.hpp"
 #include "Asset.hpp"
+#include "OS/LogError.hpp"
 #include "OS/Sleep.h"
 
 #include <time.h>
@@ -69,6 +70,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
   fd = open(path, O_RDWR | O_NOCTTY | O_NONBLOCK);
   if (fd < 0) {
+    LogErrno(_T("Failed to open port '%s'"), path);
     return false;
   }
 

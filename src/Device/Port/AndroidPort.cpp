@@ -139,6 +139,11 @@ AndroidPort::Read(void *dest, size_t length)
   size_t nbytes = std::min(length, r.length);
   std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
   buffer.Consume(nbytes);
+
+  if (waiting)
+    /* wake up the thread that may be waiting in DataReceived() */
+    cond.Broadcast();
+
   return nbytes;
 }
 
@@ -193,9 +198,16 @@ AndroidPort::DataReceived(const void *data, size_t length)
         cond.Wait(mutex);
         waiting = false;
 
-        if (!running)
+        if (closing) {
+          /* while we were waiting, the destructor got called, and it
+             is waiting for us to return  */
+          cond.Broadcast();
+          break;
+        }
+
+        if (running)
           /* while we were waiting, somebody else has called
-             StopRxThread() */
+             StartRxThread() */
           break;
       }
     }

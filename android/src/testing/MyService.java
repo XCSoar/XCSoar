@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -21,34 +20,17 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This library manages the list of device drivers.
- */
-
-#ifndef XCSOAR_DEVICE_REGISTRY_HPP
-#define XCSOAR_DEVICE_REGISTRY_HPP
-
-#include "Compiler.h"
-
-#include <tchar.h>
-
-struct DeviceRegister;
-
-gcc_const
-const struct DeviceRegister *
-GetDriverByIndex(unsigned i);
-
-gcc_pure
-const struct DeviceRegister *
-FindDriverByName(const TCHAR *name);
+package org.xcsoar.testing;
 
 /**
- * Find the driver with the specified name, and return its display
- * name.  If no such driver was found, the specified name is returned.
+ * Wrapper class to move org.xcsoar.XCSoar forward to package
+ * org.xcsoar.testing.
  */
-gcc_pure
-const TCHAR *
-FindDriverDisplayName(const TCHAR *name);
+public class MyService extends org.xcsoar.MyService {
+  @Override public void onCreate() {
+    if (mainActivityClass == null)
+      mainActivityClass = XCSoar.class;
 
-#endif
+    super.onCreate();
+  }
+}

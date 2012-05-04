@@ -50,7 +50,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 /** NULL terminated array of available device drivers. */
-static const struct DeviceRegister *const DeviceRegister[] = {
+static const struct DeviceRegister *const driver_list[] = {
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
   &genDevice, // MUST BE FIRST
   &cai302Device,
@@ -79,48 +79,36 @@ static const struct DeviceRegister *const DeviceRegister[] = {
   NULL
 };
 
-enum {
-  DeviceRegisterCount = ARRAY_SIZE(DeviceRegister) - 1
-};
-
 const struct DeviceRegister *
 GetDriverByIndex(unsigned i)
 {
-  return i < DeviceRegisterCount ? DeviceRegister[i] : NULL;
-}
+  assert(i < ARRAY_SIZE(driver_list));
 
-const TCHAR *
-GetDriverNameByIndex(unsigned i)
-{
-  return i < DeviceRegisterCount
-    ? DeviceRegister[i]->name
-    : NULL;
-}
-
-const TCHAR *
-GetDriverDisplayNameByIndex(unsigned i)
-{
-  return i < DeviceRegisterCount
-    ? DeviceRegister[i]->display_name
-    : NULL;
+  return driver_list[i];
 }
 
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name)
 {
-  for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
-    if (_tcscmp(DeviceRegister[i]->name, name) == 0)
-      return DeviceRegister[i];
+  for (auto i = driver_list; *i != NULL; ++i) {
+    const DeviceRegister &driver = **i;
+    if (_tcscmp(driver.name, name) == 0)
+      return &driver;
+  }
 
-  return DeviceRegister[0];
+  return driver_list[0];
 }
 
-const struct DeviceRegister *
-FindDriverByDisplayName(const TCHAR *display_name)
+const TCHAR *
+FindDriverDisplayName(const TCHAR *name)
 {
-  for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
-    if (_tcscmp(DeviceRegister[i]->display_name, display_name) == 0)
-      return DeviceRegister[i];
+  assert(name != NULL);
 
-  return DeviceRegister[0];
+  for (auto i = driver_list; *i != NULL; ++i) {
+    const DeviceRegister &driver = **i;
+    if (_tcscmp(driver.name, name) == 0)
+      return driver.display_name;
+  }
+
+  return name;
 }

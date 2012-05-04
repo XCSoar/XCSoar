@@ -21,34 +21,33 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This library manages the list of device drivers.
- */
+#ifndef XCSOAR_LOG_ERROR_HPP
+#define XCSOAR_LOG_ERROR_HPP
 
-#ifndef XCSOAR_DEVICE_REGISTRY_HPP
-#define XCSOAR_DEVICE_REGISTRY_HPP
-
-#include "Compiler.h"
+#ifdef WIN32
 
 #include <tchar.h>
 
-struct DeviceRegister;
+/**
+ * Logs a message followed by the error message described by
+ * GetLastError().
+ */
+void
+LogLastError(const TCHAR *fmt, ...);
 
-gcc_const
-const struct DeviceRegister *
-GetDriverByIndex(unsigned i);
+#endif
 
-gcc_pure
-const struct DeviceRegister *
-FindDriverByName(const TCHAR *name);
+#ifdef HAVE_POSIX
+
+#include <tchar.h>
 
 /**
- * Find the driver with the specified name, and return its display
- * name.  If no such driver was found, the specified name is returned.
+ * Logs a message followed by the error message described by
+ * errno.
  */
-gcc_pure
-const TCHAR *
-FindDriverDisplayName(const TCHAR *name);
+void
+LogErrno(const TCHAR *fmt, ...);
+
+#endif
 
 #endif

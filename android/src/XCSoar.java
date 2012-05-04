@@ -23,8 +23,6 @@
 package org.xcsoar;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -37,15 +35,24 @@ import android.os.PowerManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.BatteryManager;
+import android.os.IBinder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
+import android.content.ServiceConnection;
+import android.content.ComponentName;
 import android.util.Log;
 import android.provider.Settings;
 
 public class XCSoar extends Activity {
   private static final String TAG = "XCSoar";
+
+  /**
+   * Hack: this is set by onCreate(), to support the "testing"
+   * package.
+   */
+  protected static Class serviceClass;
 
   private static NativeView nativeView;
 
@@ -63,6 +70,9 @@ public class XCSoar extends Activity {
   };
 
   @Override protected void onCreate(Bundle savedInstanceState) {
+    if (serviceClass == null)
+      serviceClass = MyService.class;
+
     super.onCreate(savedInstanceState);
 
     Log.d(TAG, "ABI=" + Build.CPU_ABI);
@@ -111,6 +121,8 @@ public class XCSoar extends Activity {
   private void quit() {
     nativeView = null;
 
+    stopService(new Intent(this, serviceClass));
+
     TextView tv = new TextView(XCSoar.this);
     tv.setText("Shutting down XCSoar...");
     setContentView(tv);
@@ -140,21 +152,6 @@ public class XCSoar extends Activity {
                               PowerManager.ACQUIRE_CAUSES_WAKEUP,
                               "XCSoar");
     wakeLock.acquire();
-
-    /* add an icon to the notification area while XCSoar runs, to
-     * remind the user that we're sucking his battery empty */
-    Notification notification = new Notification(R.drawable.icon, null,
-                                                 System.currentTimeMillis());
-    Intent intent = new Intent(this, getClass());
-    PendingIntent contentIntent =
-      PendingIntent.getActivity(this, 0, intent, 0);
-    notification.setLatestEventInfo(this, "XCSoar", "XCSoar is running",
-                                    contentIntent);
-    notification.flags |= Notification.FLAG_ONGOING_EVENT;
-
-    NotificationManager notificationManager = (NotificationManager)
-      getSystemService(Context.NOTIFICATION_SERVICE);
-    notificationManager.notify(1, notification);
   }
 
   @Override protected void onPause() {
@@ -179,6 +176,9 @@ public class XCSoar extends Activity {
 
   @Override protected void onResume() {
     super.onResume();
+
+    startService(new Intent(this, serviceClass));
+
     if (nativeView != null)
       nativeView.onResume();
     else
@@ -188,11 +188,6 @@ public class XCSoar extends Activity {
 
   @Override protected void onDestroy()
   {
-    /* remove the notification icon */
-    NotificationManager notificationManager = (NotificationManager)
-      getSystemService(Context.NOTIFICATION_SERVICE);
-    notificationManager.cancel(1);
-
     if (nativeView != null) {
       nativeView.exitApp();
       nativeView = null;

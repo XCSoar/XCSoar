@@ -1110,6 +1110,7 @@ READ_PORT_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -1123,6 +1124,7 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
@@ -1194,6 +1196,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1220,6 +1223,7 @@ RUN_VEGA_SETTINGS_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1238,6 +1242,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
@@ -1261,6 +1266,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1291,6 +1297,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -1324,6 +1331,7 @@ CAI302_TOOL_SOURCES = \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
@@ -2205,6 +2213,7 @@ FEED_NMEA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -2218,6 +2227,7 @@ FEED_VEGA_SOURCES = \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -2238,6 +2248,7 @@ EMULATE_DEVICE_SOURCES = \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/OS/LogError.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \

@@ -114,11 +114,13 @@ Thread::Join(unsigned timeout_ms)
     ::CloseHandle(handle);
     handle = NULL;
 
+#ifndef NDEBUG
     {
       all_threads_mutex.Lock();
       siblings.Remove();
       all_threads_mutex.Unlock();
     }
+#endif
   }
 
   return result;

@@ -33,14 +33,6 @@ Copyright_License {
 #include "Geo/Geoid.hpp"
 #include "Compiler.h"
 
-// In Android-targeted InternalSensors implementations, these type identifier
-// constants must have the same numerical values as their counterparts in the
-// Android API's Sensor class.
-const int InternalSensors::TYPE_ACCELEROMETER = 0x1;
-const int InternalSensors::TYPE_GYROSCOPE = 0x4;
-const int InternalSensors::TYPE_MAGNETIC_FIELD = 0x2;
-const int InternalSensors::TYPE_PRESSURE = 0x6;
-
 Java::TrivialClass InternalSensors::gps_cls, InternalSensors::sensors_cls;
 jmethodID InternalSensors::gps_ctor_id, InternalSensors::close_method;
 jmethodID InternalSensors::sensors_ctor_id;

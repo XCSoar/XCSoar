@@ -31,9 +31,13 @@ Copyright_License {
 #include "Widgets/DeviceEditWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Util/TrivialArray.hpp"
+#include "Util/StaticString.hpp"
+#include "Util/Macros.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
+#include "Device/Register.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 #include "Components.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
@@ -46,9 +50,10 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 
-class DeviceListWidget : public ListWidget, private ActionListener {
+class DeviceListWidget : public ListWidget, private ActionListener,
+                         private NullBlackboardListener {
   enum Buttons {
-    REFRESH, RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
+    RECONNECT, FLIGHT, EDIT, MANAGE, MONITOR,
   };
 
   const DialogLook &look;
@@ -56,7 +61,61 @@ class DeviceListWidget : public ListWidget, private ActionListener {
 
   UPixelScalar font_height;
 
-  TrivialArray<unsigned, NUMDEV> indices;
+  struct Flags {
+    bool open:1;
+    bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
+
+    void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
+      open = device.IsOpen();
+      alive = basic.alive;
+      location = basic.location_available;
+      gps = basic.gps.fix_quality_available;
+      baro = basic.baro_altitude_available ||
+        basic.pressure_altitude_available ||
+        basic.static_pressure_available;
+      airspeed = basic.airspeed_available;
+      vario = basic.total_energy_vario_available;
+      traffic = basic.flarm.IsDetected();
+    }
+  };
+
+  union Item {
+  private:
+    Flags flags;
+    uint16_t i;
+
+    static_assert(sizeof(flags) <= sizeof(i), "wrong size");
+
+  public:
+    void Clear() {
+      i = 0;
+    }
+
+    void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
+      i = 0;
+      flags.Set(device, basic);
+    }
+
+    bool operator==(const Item &other) const {
+      return i == other.i;
+    }
+
+    bool operator!=(const Item &other) const {
+      return i != other.i;
+    }
+
+    const Flags &operator->() const {
+      return flags;
+    }
+
+    const Flags &operator*() const {
+      return flags;
+    }
+  };
+
+  static_assert(sizeof(Item) == 2, "wrong size");
+
+  Item items[NUMDEV];
 
   WndButton *reconnect_button, *flight_button;
   WndButton *edit_button;
@@ -69,12 +128,7 @@ public:
   void CreateButtons(WidgetDialog &dialog);
 
 protected:
-  gcc_pure
-  bool IsFlarm(unsigned index) const {
-    return device_blackboard->RealState(indices[index]).flarm.IsDetected();
-  }
-
-  void RefreshList();
+  bool RefreshList();
 
   void UpdateButtons();
 
@@ -91,13 +145,32 @@ public:
     DeleteWindow();
   }
 
+  virtual void Show(const PixelRect &rc) {
+    ListWidget::Show(rc);
+
+    CommonInterface::GetLiveBlackboard().AddListener(*this);
+
+    RefreshList();
+    UpdateButtons();
+  }
+
+  virtual void Hide() {
+    ListWidget::Hide();
+
+    CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+  }
+
   /* virtual methods from class List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx);
   virtual void OnCursorMoved(unsigned index);
 
+private:
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id);
+
+  /* virtual methods from class BlackboardListener */
+  virtual void OnGPSUpdate(const MoreData &basic);
 };
 
 void
@@ -106,28 +179,38 @@ DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const DialogLook &look = UIGlobals::GetDialogLook();
   UPixelScalar margin = Layout::Scale(2);
   font_height = look.list.font->GetHeight();
-  CreateList(parent, look, rc, 3 * margin + 2 * font_height);
-  RefreshList();
+  CreateList(parent, look, rc, 3 * margin + 2 * font_height).SetLength(NUMDEV);
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    items[i].Clear();
+
   UpdateButtons();
 }
 
-void
+bool
 DeviceListWidget::RefreshList()
 {
-  indices.clear();
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i]->IsConfigured())
-      indices.append(i);
+  bool modified = false;
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    Item &item = items[i];
 
-  ListControl &list = GetList();
-  list.SetLength(indices.size());
-  list.Invalidate();
+    Item n;
+    n.Set(*device_list[i], device_blackboard->RealState(i));
+
+    if (n != item) {
+      item = n;
+      modified = true;
+    }
+  }
+
+  if (modified)
+    GetList().Invalidate();
+  return modified;
 }
 
 void
 DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  dialog.AddButton(_("Refresh"), this, REFRESH);
   reconnect_button = dialog.AddButton(_("Reconnect"), this, RECONNECT);
   flight_button = dialog.AddButton(_("Flight download"), this, FLIGHT);
   edit_button = dialog.AddButton(_("Edit"), this, EDIT);
@@ -140,13 +223,13 @@ DeviceListWidget::UpdateButtons()
 {
   const unsigned current = GetList().GetCursorIndex();
 
-  if (is_simulator() || current >= indices.size()) {
+  if (is_simulator() || current >= NUMDEV) {
     reconnect_button->SetEnabled(false);
     flight_button->SetEnabled(false);
     manage_button->SetEnabled(false);
     monitor_button->SetEnabled(false);
   } else {
-    const DeviceDescriptor &device = *device_list[indices[current]];
+    const DeviceDescriptor &device = *device_list[current];
 
     reconnect_button->SetEnabled(device.IsConfigured());
     flight_button->SetEnabled(device.IsLogger());
@@ -154,73 +237,82 @@ DeviceListWidget::UpdateButtons()
     monitor_button->SetEnabled(device.GetConfig().UsesPort());
   }
 
-  edit_button->SetEnabled(current < indices.size());
+  edit_button->SetEnabled(current < NUMDEV);
 }
 
 void
-DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
+DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
-  const DeviceDescriptor &device = *device_list[indices[i]];
+  assert(idx < NUMDEV);
+
+  const DeviceConfig &config =
+    CommonInterface::SetSystemSettings().devices[idx];
+  const Flags flags(*items[idx]);
 
   const UPixelScalar margin = Layout::Scale(2);
 
-  TCHAR buffer1[256], buffer2[256];
-  const DeviceConfig &config = device.GetConfig();
-  const TCHAR *name = config.GetPortName(buffer1, 128);
+  TCHAR port_name_buffer[128];
+  const TCHAR *port_name =
+    config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
+
+  StaticString<256> text(_T("A: "));
+  text[0u] += idx;
 
   if (config.UsesDriver()) {
-    _sntprintf(buffer2, 128, _("%s on %s"), config.driver_name.c_str(), name);
-    name = buffer2;
+    const TCHAR *driver_name = FindDriverDisplayName(config.driver_name);
+
+    text.AppendFormat(_("%s on %s"), driver_name, port_name);
+  } else {
+    text.append(port_name);
   }
 
-  canvas.text(rc.left + margin, rc.top + margin, name);
+  canvas.text(rc.left + margin, rc.top + margin, text);
 
   /* show a list of features that are available in the second row */
 
-  const NMEAInfo &basic = device_blackboard->RealState(indices[i]);
-
-  const TCHAR *text;
-  if (basic.alive) {
-    if (basic.location_available) {
-      _tcscpy(buffer1, _("GPS fix"));
-    } else if (basic.gps.fix_quality_available) {
+  StaticString<256> buffer;
+  const TCHAR *status;
+  if (flags.alive) {
+    if (flags.location) {
+      buffer = _("GPS fix");
+    } else if (flags.gps) {
       /* device sends GPGGA, but no valid location */
-      _tcscpy(buffer1, _("Bad GPS"));
+      buffer = _("Bad GPS");
     } else {
-      _tcscpy(buffer1, _("Connected"));
+      buffer = _("Connected");
     }
 
-    if (basic.baro_altitude_available ||
-        basic.pressure_altitude_available ||
-        basic.static_pressure_available) {
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("Baro"));
+    if (flags.baro) {
+      buffer.append(_T("; "));
+      buffer.append(_("Baro"));
     }
 
-    if (basic.airspeed_available) {
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("Airspeed"));
+    if (flags.airspeed) {
+      buffer.append(_T("; "));
+      buffer.append(_("Airspeed"));
     }
 
-    if (basic.total_energy_vario_available) {
-      _tcscat(buffer1, _T("; "));
-      _tcscat(buffer1, _("Vario"));
+    if (flags.vario) {
+      buffer.append(_T("; "));
+      buffer.append(_("Vario"));
     }
 
-    if (IsFlarm(i))
-      _tcscat(buffer1, _T("; FLARM"));
+    if (flags.traffic)
+      buffer.append(_T("; FLARM"));
 
-    text = buffer1;
-  } else if (is_simulator()) {
-    text = _("N/A");
-  } else if (device.IsOpen()) {
-    text = _("No data");
+    status = buffer;
+  } else if (config.IsDisabled()) {
+    status = _("Disabled");
+  } else if (is_simulator() || !config.IsAvailable()) {
+    status = _("N/A");
+  } else if (flags.open) {
+    status = _("No data");
   } else {
-    text = _("Not connected");
+    status = _("Not connected");
   }
 
   canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
-              text);
+              status);
 }
 
 void
@@ -233,10 +325,10 @@ void
 DeviceListWidget::ReconnectCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &device = *device_list[indices[current]];
+  DeviceDescriptor &device = *device_list[current];
   if (device.IsBorrowed()) {
     ShowMessageBox(_("Device is occupied"), _("Reconnect"), MB_OK | MB_ICONERROR);
     return;
@@ -252,10 +344,13 @@ void
 DeviceListWidget::DownloadFlightFromCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &device = *device_list[indices[current]];
+  DeviceDescriptor &device = *device_list[current];
+  if (!device.IsOpen())
+    return;
+
   if (!device.Borrow()) {
     ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
     return;
@@ -269,10 +364,10 @@ void
 DeviceListWidget::EditCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  const unsigned index = indices[current];
+  const unsigned index = current;
   DeviceConfig &config = CommonInterface::SetSystemSettings().devices[index];
   DeviceEditWidget widget(config);
 
@@ -291,6 +386,9 @@ DeviceListWidget::EditCurrent()
   DeviceDescriptor &descriptor = *device_list[index];
   descriptor.SetConfig(widget.GetConfig());
 
+  GetList().Invalidate();
+  UpdateButtons();
+
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static MessageOperationEnvironment env;
@@ -301,11 +399,11 @@ void
 DeviceListWidget::ManageCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &descriptor = *device_list[indices[current]];
-  if (!descriptor.IsManageable())
+  DeviceDescriptor &descriptor = *device_list[current];
+  if (!descriptor.IsOpen() || !descriptor.IsManageable())
     return;
 
   if (!descriptor.Borrow()) {
@@ -335,10 +433,10 @@ void
 DeviceListWidget::MonitorCurrent()
 {
   const unsigned current = GetList().GetCursorIndex();
-  if (current >= indices.size())
+  if (current >= NUMDEV)
     return;
 
-  DeviceDescriptor &descriptor = *device_list[indices[current]];
+  DeviceDescriptor &descriptor = *device_list[current];
   ShowPortMonitor(UIGlobals::GetMainWindow(), look, terminal_look,
                   descriptor);
 }
@@ -347,11 +445,6 @@ void
 DeviceListWidget::OnAction(int id)
 {
   switch (id) {
-  case REFRESH:
-    RefreshList();
-    UpdateButtons();
-    break;
-
   case RECONNECT:
     ReconnectCurrent();
     break;
@@ -372,6 +465,13 @@ DeviceListWidget::OnAction(int id)
     MonitorCurrent();
     break;
   }
+}
+
+void
+DeviceListWidget::OnGPSUpdate(const MoreData &basic)
+{
+  if (RefreshList())
+    UpdateButtons();
 }
 
 void
