@@ -122,7 +122,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   if (itemhelp_callback != NULL) {
     wItemHelp = (WndFrame *)wf->FindByName(_T("lblItemHelp"));
     assert(wItemHelp);
-    wItemHelp->Hide();
+    wItemHelp->Show();
     const UPixelScalar help_height = wItemHelp->GetHeight();
     const PixelRect rc = list_control->GetPosition();
     assert(rc.bottom - rc.top - help_height > 0);
