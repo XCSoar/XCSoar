@@ -73,7 +73,7 @@ bool os_haptic_feedback_enabled;
 IOIOHelper *ioio_helper;
 #endif
 
-#ifdef __i386__
+#if defined(__i386__) || defined(__mips__)
 extern "C" {
   /* workaround for
      http://code.google.com/p/android/issues/detail?id=23203 copied
