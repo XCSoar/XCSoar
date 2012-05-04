@@ -29,19 +29,25 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_REGISTRY_HPP
 #define XCSOAR_DEVICE_REGISTRY_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 struct DeviceRegister;
 
+gcc_const
 const struct DeviceRegister *
 GetDriverByIndex(unsigned i);
 
+gcc_const
 const TCHAR *
 GetDriverNameByIndex(unsigned i);
 
+gcc_const
 const TCHAR *
 GetDriverDisplayNameByIndex(unsigned i);
 
+gcc_pure
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name);
 
