@@ -119,8 +119,7 @@ DeviceListWidget::RefreshList()
 {
   indices.clear();
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (device_list[i]->IsConfigured())
-      indices.append(i);
+    indices.append(i);
 
   ListControl &list = GetList();
   list.SetLength(indices.size());
