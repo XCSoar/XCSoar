@@ -161,7 +161,8 @@ DeviceListWidget::UpdateButtons()
 void
 DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  const DeviceDescriptor &device = *device_list[indices[i]];
+  const unsigned idx = indices[i];
+  const DeviceDescriptor &device = *device_list[idx];
 
   const UPixelScalar margin = Layout::Scale(2);
 
@@ -179,7 +180,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   /* show a list of features that are available in the second row */
 
-  const NMEAInfo &basic = device_blackboard->RealState(indices[i]);
+  const NMEAInfo &basic = device_blackboard->RealState(idx);
 
   const TCHAR *text;
   if (basic.alive) {
