@@ -50,7 +50,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 /** NULL terminated array of available device drivers. */
-static const struct DeviceRegister *const DeviceRegister[] = {
+static const struct DeviceRegister *const driver_list[] = {
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
   &genDevice, // MUST BE FIRST
   &cai302Device,
@@ -80,21 +80,21 @@ static const struct DeviceRegister *const DeviceRegister[] = {
 };
 
 enum {
-  DeviceRegisterCount = ARRAY_SIZE(DeviceRegister) - 1
+  DeviceRegisterCount = ARRAY_SIZE(driver_list) - 1
 };
 
 const struct DeviceRegister *
 GetDriverByIndex(unsigned i)
 {
-  return i < DeviceRegisterCount ? DeviceRegister[i] : NULL;
+  return i < DeviceRegisterCount ? driver_list[i] : NULL;
 }
 
 const struct DeviceRegister *
 FindDriverByName(const TCHAR *name)
 {
-  for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
-    if (_tcscmp(DeviceRegister[i]->name, name) == 0)
-      return DeviceRegister[i];
+  for (unsigned i = 1; driver_list[i] != NULL; ++i)
+    if (_tcscmp(driver_list[i]->name, name) == 0)
+      return driver_list[i];
 
-  return DeviceRegister[0];
+  return driver_list[0];
 }
