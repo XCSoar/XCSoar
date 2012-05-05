@@ -43,7 +43,7 @@ TCHAR asset_number[100] = _T(""); //4G17DW31L0HY");
 ModelType global_model_type = ModelType::GENERIC;
 #endif
 
-gcc_unused
+#ifdef _WIN32_WCE
 static bool
 SetAssetNumber(const TCHAR *p)
 {
@@ -61,6 +61,7 @@ SetAssetNumber(const TCHAR *p)
 
   return true;
 }
+#endif
 
 static bool
 ReadCompaqID()
