@@ -63,7 +63,7 @@ GPSState::Expire(fixed now)
     fix_quality = FixQuality::NO_FIX;
 
   satellites_used_available.Expire(now, fixed(5));
-  satellite_ids_available.Expire(now, fixed(5));
+  satellite_ids_available.Expire(now, fixed(60));
 }
 
 void
