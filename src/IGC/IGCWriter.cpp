@@ -53,8 +53,7 @@ FormatIGCLocation(char *buffer, const GeoPoint &location)
   return buffer + strlen(buffer);
 }
 
-IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
-  :simulator(gps_info.alive && !gps_info.gps.real)
+IGCWriter::IGCWriter(const TCHAR *_path, bool simulator)
 {
   _tcscpy(path, _path);
 
@@ -90,11 +89,8 @@ IGCWriter::Flush()
 }
 
 void
-IGCWriter::Finish(const NMEAInfo &gps_info)
+IGCWriter::Finish()
 {
-  if (gps_info.alive && !gps_info.gps.real)
-    simulator = true;
-
   Flush();
 }
 
@@ -158,7 +154,8 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
                        const TCHAR *pilot_name, const TCHAR *aircraft_model,
                        const TCHAR *aircraft_registration,
                        const TCHAR *competition_id,
-                       const char *logger_id, const TCHAR *driver_name)
+                       const char *logger_id, const TCHAR *driver_name,
+                       bool simulator)
 {
   /*
    * HFDTE141203  <- should be UTC, same as time in filename
@@ -309,12 +306,9 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 }
 
 void
-IGCWriter::LogPoint(const NMEAInfo& gps_info)
+IGCWriter::LogPoint(const NMEAInfo& gps_info, bool simulator)
 {
   // if at least one GPS fix comes from the simulator, disable signing
-  if (gps_info.alive && !gps_info.gps.real)
-    simulator = true;
-
   if (!simulator) {
     const char *f_record = frecord.Update(gps_info.gps, gps_info.date_time_utc,
                                           gps_info.time,
@@ -373,20 +367,17 @@ IGCWriter::LogEvent(const IGCFix &fix, int epe, int satellites,
 }
 
 void
-IGCWriter::LogEvent(const NMEAInfo &gps_info, const char *event)
+IGCWriter::LogEvent(const NMEAInfo &gps_info, bool simulator, const char *event)
 {
   LogEvent(gps_info.date_time_utc, event);
 
   // tech_spec_gnss.pdf says we need a B record immediately after an E record
-  LogPoint(gps_info);
+  LogPoint(gps_info, simulator);
 }
 
 void
 IGCWriter::Sign()
 {
-  if (simulator)
-    return;
-
   // buffer is appended w/ each igc file write
   grecord.FinalizeBuffer();
   // read record built by individual file writes

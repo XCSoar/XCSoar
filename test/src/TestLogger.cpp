@@ -111,10 +111,10 @@ int main(int argc, char **argv)
   i.gps_altitude_available.Update(i.clock);
   i.ProvideBaroAltitudeTrue(fixed(490));
 
-  IGCWriter writer(path, i);
+  IGCWriter writer(path, false);
 
   writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
-                     _T("D-1234"), _T("34"), "FOO", _T("bar"));
+                     _T("D-1234"), _T("34"), "FOO", _T("bar"), false);
   writer.StartDeclaration(i.date_time_utc, 3);
   writer.AddDeclaration(home, _T("Bergneustadt"));
   writer.AddDeclaration(tp, _T("Suhl"));
@@ -122,18 +122,18 @@ int main(int argc, char **argv)
   writer.EndDeclaration();
 
   i.date_time_utc.second += 5;
-  writer.LogPoint(i);
+  writer.LogPoint(i, false);
   i.date_time_utc.second += 5;
-  writer.LogEvent(i, "my_event");
+  writer.LogEvent(i, false, "my_event");
   i.date_time_utc.second += 5;
   writer.LoggerNote(_T("my_note"));
 
   i.date_time_utc.second += 5;
   i.location = GeoPoint(Angle::Degrees(fixed(-7.7061111111111114)),
                         Angle::Degrees(fixed(-51.051944444444445)));
-  writer.LogPoint(i);
+  writer.LogPoint(i, false);
 
-  writer.Finish(i);
+  writer.Finish();
   writer.Sign();
 
   CheckTextFile(path, expect);

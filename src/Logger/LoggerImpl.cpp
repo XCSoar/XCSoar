@@ -107,8 +107,13 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (writer == NULL)
     return;
 
-  writer->Finish(gps_info);
-  writer->Sign();
+  if (gps_info.alive && !gps_info.gps.real)
+    simulator = true;
+
+  writer->Finish();
+
+  if (!simulator)
+    writer->Sign();
 
   // Logger off
   delete writer;
@@ -135,8 +140,11 @@ LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
 void
 LoggerImpl::LogEvent(const NMEAInfo &gps_info, const char *event)
 {
+  if (gps_info.alive && !gps_info.gps.real)
+    simulator = true;
+
   if (writer != NULL)
-    writer->LogEvent(gps_info, event);
+    writer->LogEvent(gps_info, simulator, event);
 }
 
 void
@@ -188,10 +196,16 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
         tmp_info.gps.satellite_ids[i] = src.satellite_ids[i];
     }
 
-    writer->LogPoint(tmp_info);
+    if (tmp_info.alive && !tmp_info.gps.real)
+      simulator = true;
+
+    writer->LogPoint(tmp_info, simulator);
   }
 
-  writer->LogPoint(gps_info);
+  if (gps_info.alive && !gps_info.gps.real)
+    simulator = true;
+
+  writer->LogPoint(gps_info, simulator);
 }
 
 static bool
@@ -231,7 +245,9 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   }
 
   delete writer;
-  writer = new IGCWriter(filename, gps_info);
+
+  simulator = gps_info.alive && !gps_info.gps.real;
+  writer = new IGCWriter(filename, simulator);
 
   LogStartUp(_T("Logger Started: %s"), filename);
 }
@@ -416,7 +432,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
-                      logger_id, driver_name);
+                      logger_id, driver_name, simulator);
 
   if (decl.Size()) {
     BrokenDateTime FirstDateTime = !pre_takeoff_buffer.empty()

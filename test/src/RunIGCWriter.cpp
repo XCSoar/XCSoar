@@ -45,15 +45,15 @@ int main(int argc, char **argv)
   const TCHAR *driver_name = _T("Unknown");
 
   PathName igc_path(output_file);
-  IGCWriter writer(igc_path, replay->Basic());
+  IGCWriter writer(igc_path, true);
   writer.WriteHeader(replay->Basic().date_time_utc, _T("Manfred Mustermann"),
                      _T("Ventus"), _T("D-1234"),
-                     _T("MM"), "FOO", driver_name);
+                     _T("MM"), "FOO", driver_name, true);
 
   GPSClock log_clock(fixed(1));
   while (replay->Next())
     if (log_clock.CheckAdvance(replay->Basic().time))
-      writer.LogPoint(replay->Basic());
+      writer.LogPoint(replay->Basic(), true);
 
   writer.Flush();
 

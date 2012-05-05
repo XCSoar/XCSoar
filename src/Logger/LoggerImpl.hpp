@@ -94,6 +94,13 @@ public:
 private:
   IGCWriter *writer;
 
+  /**
+   * If at least one GPS fix came from the simulator
+   * (NMEA_INFO.Simulator), then this flag is true, and signing is
+   * disabled.
+   */
+  bool simulator;
+
 public:
   /** Default constructor */
   LoggerImpl();
