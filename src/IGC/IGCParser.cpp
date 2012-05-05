@@ -149,11 +149,6 @@ IGCParseFix(const char *buffer, IGCFix &fix)
   fix.gps_altitude = gps_altitude;
   fix.pressure_altitude = pressure_altitude;
 
-  // some loggers drop out GPS altitude, so when this happens, revert
-  // to pressure altitude
-  if (pressure_altitude != 0 && gps_altitude == 0)
-    fix.gps_altitude = fix.pressure_altitude;
-
   fix.time = time;
 
   return true;

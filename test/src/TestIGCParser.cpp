@@ -110,7 +110,7 @@ TestFix()
   ok1(fix.time == BrokenTime(11, 22, 43));
   ok1(fix.gps_valid);
   ok1(fix.pressure_altitude == 490);
-  ok1(fix.gps_altitude == 490);
+  ok1(fix.gps_altitude == 0);
 
   ok1(IGCParseFix("B1122535103117S00742367WA104900000700000", fix));
   ok1(fix.time == BrokenTime(11, 22, 53));
