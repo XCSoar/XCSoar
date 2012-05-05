@@ -353,14 +353,30 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
 }
 
 void
-IGCWriter::LogEvent(const NMEAInfo &gps_info, const char *event)
+IGCWriter::LogEvent(const BrokenTime &time, const char *event)
 {
   char e_record[30];
-  sprintf(e_record,"E%02d%02d%02d%s",
-          gps_info.date_time_utc.hour, gps_info.date_time_utc.minute,
-          gps_info.date_time_utc.second, event);
+  sprintf(e_record, "E%02d%02d%02d%s",
+          time.hour, time.minute, time.second, event);
 
   WriteLine(e_record);
+}
+
+void
+IGCWriter::LogEvent(const IGCFix &fix, int epe, int satellites,
+                    const char *event)
+{
+  LogEvent(fix.time, event);
+
+  // tech_spec_gnss.pdf says we need a B record immediately after an E record
+  LogPoint(fix, epe, satellites);
+}
+
+void
+IGCWriter::LogEvent(const NMEAInfo &gps_info, const char *event)
+{
+  LogEvent(gps_info.date_time_utc, event);
+
   // tech_spec_gnss.pdf says we need a B record immediately after an E record
   LogPoint(gps_info);
 }
