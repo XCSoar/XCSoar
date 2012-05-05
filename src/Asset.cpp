@@ -27,6 +27,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileHandle.hpp"
+#include "Util/CharUtil.hpp"
 
 #if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
 #include <windows.h>
@@ -42,22 +43,13 @@ TCHAR asset_number[100] = _T(""); //4G17DW31L0HY");
 ModelType global_model_type = ModelType::GENERIC;
 #endif
 
-gcc_const
-static bool
-IsAlphaNum(TCHAR c)
-{
-  return (c >= _T('A') && c <= _T('Z')) ||
-    (c >= _T('a') && c <= _T('z')) ||
-    (c >= _T('0') && c <= _T('9'));
-}
-
 gcc_unused
 static bool
 SetAssetNumber(const TCHAR *p)
 {
   size_t length = 0;
   while (length < ARRAY_SIZE(asset_number) - 1 && *p != _T('\0')) {
-    if (IsAlphaNum(*p))
+    if (IsAlphaNumericASCII(*p))
       asset_number[length++] = *p;
     ++p;
   }

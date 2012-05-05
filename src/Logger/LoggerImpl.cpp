@@ -34,6 +34,7 @@
 #include "OS/PathName.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Interface.hpp"
+#include "Util/CharUtil.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -217,17 +218,6 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
   }
 
   writer->LogPoint(gps_info);
-}
-
-static bool
-IsAlphaNum (TCHAR c)
-{
-  if ((c >= _T('A') && c <= _T('Z')) ||
-      (c >= _T('a') && c <= _T('z')) ||
-      (c >= _T('0') && c <= _T('9')))
-    return true;
-
-  return false;
 }
 
 void
@@ -437,7 +427,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   char logger_id[4];
   unsigned asset_length = _tcslen(asset_number);
   for (unsigned i = 0; i < 3; i++)
-    logger_id[i] = i < asset_length && IsAlphaNum(asset_number[i]) ?
+    logger_id[i] = i < asset_length && IsAlphaNumericASCII(asset_number[i]) ?
                    asset_number[i] : _T('A');
   logger_id[3] = _T('\0');
 
