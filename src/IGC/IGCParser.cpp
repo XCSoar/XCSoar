@@ -121,6 +121,14 @@ IGCParseFix(const char *buffer, IGCFix &fix)
              &valid_char, &pressure_altitude, &gps_altitude) != 9)
     return false;
 
+  if (lat_degrees >= 90 || lat_minutes >= 60000 ||
+      (lat_char != 'N' && lat_char != 'S'))
+    return false;
+
+  if (lon_degrees >= 180 || lon_minutes >= 60000 ||
+      (lon_char != 'E' && lon_char != 'W'))
+    return false;
+
   if (valid_char == 'A')
     fix.gps_valid = true;
   else if (valid_char == 'V')

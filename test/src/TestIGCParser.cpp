@@ -83,6 +83,13 @@ TestFix()
   ok1(!IGCParseFix("", fix));
   ok1(!IGCParseFix("B1122385103117N00742367EA", fix));
 
+  ok1(!IGCParseFix("B1122385103117X00742367EA0049000487", fix));
+  ok1(!IGCParseFix("B1122385103117N00742367XA0049000487", fix));
+  ok1(!IGCParseFix("B1122389003117N00742367EA0049000487", fix));
+  ok1(!IGCParseFix("B1122385103117N18042367EA0049000487", fix));
+  ok1(!IGCParseFix("B1122385163117N00742367EA0049000487", fix));
+  ok1(!IGCParseFix("B1122385103117N00762367EA0049000487", fix));
+
   ok1(IGCParseFix("B1122385103117N00742367EA0049000487", fix));
   ok1(fix.time == BrokenTime(11, 22, 38));
   ok1(equals(fix.location, 51.05195, 7.70611667));
@@ -138,7 +145,7 @@ TestFixTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(68);
+  plan_tests(74);
 
   TestHeader();
   TestDate();
