@@ -92,7 +92,10 @@ public:
   };
 
 private:
+  TCHAR filename[MAX_PATH];
   IGCWriter *writer;
+
+  OverwritingRingBuffer<PreTakeoffBuffer, PRETAKEOFF_BUFFER_MAX> pre_takeoff_buffer;
 
   LoggerFRecord frecord;
 
@@ -145,10 +148,6 @@ private:
 private:
   void LogPointToBuffer(const NMEAInfo &gps_info);
   void WritePoint(const NMEAInfo &gps_info);
-
-private:
-  TCHAR filename[MAX_PATH];
-  OverwritingRingBuffer<PreTakeoffBuffer, PRETAKEOFF_BUFFER_MAX> pre_takeoff_buffer;
 };
 
 #endif
