@@ -111,18 +111,20 @@ IGCParseFix(const char *buffer, IGCFix &fix)
   char NoS, EoW;
   char valid_char;
   int iAltitude, iPressureAltitude;
-  int Hour = 0;
-  int Minute = 0;
-  int Second = 0;
+
+  BrokenTime time;
+  if (!IGCParseFixTime(buffer, time))
+    return false;
+
   int lfound =
-      sscanf(buffer, "B%02d%02d%02d%02d%05d%c%03d%05d%c%c%05d%05d",
-      &Hour, &Minute, &Second, &DegLat, &MinLat, &NoS, &DegLon,
-      &MinLon, &EoW, &valid_char, &iPressureAltitude, &iAltitude);
+      sscanf(buffer + 7, "%02d%05d%c%03d%05d%c%c%05d%05d",
+      &DegLat, &MinLat, &NoS, &DegLon, &MinLon, &EoW,
+      &valid_char, &iPressureAltitude, &iAltitude);
 
   if (lfound == EOF)
     return false;
 
-  if (lfound != 12)
+  if (lfound != 9)
     return false;
 
   if (valid_char == 'A')
@@ -152,7 +154,8 @@ IGCParseFix(const char *buffer, IGCFix &fix)
     fix.gps_altitude = fix.pressure_altitude;
   }
 
-  fix.time = BrokenTime(Hour, Minute, Second);
+  fix.time = time;
+
   return true;
 }
 
