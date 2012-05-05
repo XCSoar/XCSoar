@@ -142,6 +142,7 @@ private:
   
 private:
   void LogPointToBuffer(const NMEAInfo &gps_info);
+  void WritePoint(const NMEAInfo &gps_info);
 
 private:
   TCHAR filename[MAX_PATH];

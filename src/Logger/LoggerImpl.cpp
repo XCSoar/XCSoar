@@ -196,12 +196,15 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
         tmp_info.gps.satellite_ids[i] = src.satellite_ids[i];
     }
 
-    if (tmp_info.alive && !tmp_info.gps.real)
-      simulator = true;
-
-    writer->LogPoint(tmp_info, simulator);
+    WritePoint(tmp_info);
   }
 
+  WritePoint(gps_info);
+}
+
+void
+LoggerImpl::WritePoint(const NMEAInfo &gps_info)
+{
   if (gps_info.alive && !gps_info.gps.real)
     simulator = true;
 
