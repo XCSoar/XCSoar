@@ -93,7 +93,7 @@ IGCWriter::GetIRecord()
 }
 
 fixed
-IGCWriter::GetEPE(const NMEAInfo& gps_info)
+IGCWriter::GetEPE(const GPSState &gps)
 {
   /*
    * EPE (Estimated Position Error in meters)
@@ -139,12 +139,12 @@ IGCWriter::GetEPE(const NMEAInfo& gps_info)
    * 8 = Simulation mode
    */
 
-  switch (gps_info.gps.fix_quality) {
+  switch (gps.fix_quality) {
   case FixQuality::GPS:
-    return gps_info.gps.hdop * fixed(18.2);
+    return gps.hdop * fixed(18.2);
 
   case FixQuality::DGPS:
-    return gps_info.gps.hdop * fixed_four;
+    return gps.hdop * fixed_four;
 
   default:
     return fixed_zero;
@@ -152,13 +152,13 @@ IGCWriter::GetEPE(const NMEAInfo& gps_info)
 }
 
 int
-IGCWriter::GetSIU(const NMEAInfo& gps_info)
+IGCWriter::GetSIU(const GPSState &gps)
 {
-  switch (gps_info.gps.fix_quality) {
+  switch (gps.fix_quality) {
   case FixQuality::GPS:
   case FixQuality::DGPS:
-    if (gps_info.gps.satellites_used_available)
-      return gps_info.gps.satellites_used;
+    if (gps.satellites_used_available)
+      return gps.satellites_used;
 
   default:
     break;

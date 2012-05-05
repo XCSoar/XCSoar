@@ -311,8 +311,8 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  int satellites = GetSIU(gps_info);
-  fixed epe = GetEPE(gps_info);
+  int satellites = GetSIU(gps_info.gps);
+  fixed epe = GetEPE(gps_info.gps);
   IGCFix fix;
 
   // if at least one GPS fix comes from the simulator, disable signing
