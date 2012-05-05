@@ -33,15 +33,6 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-const IGCWriter::Fix &
-IGCWriter::Fix::operator=(const NMEAInfo &gps_info)
-{
-  location = gps_info.location;
-  altitude_gps = (int)gps_info.gps_altitude;
-
-  return *this;
-}
-
 static char *
 FormatIGCLocation(char *buffer, const GeoPoint &location)
 {
@@ -303,7 +294,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
   char b_record[500];
   int satellites = GetSIU(gps_info);
   fixed epe = GetEPE(gps_info);
-  Fix fix;
+  IGCFix fix;
 
   char valid_fix_char;
 
@@ -331,8 +322,11 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
     fix = last_valid_point;
   } else {
     valid_fix_char = 'A'; // Active
+    fix.location = gps_info.location;
+    fix.gps_altitude = (int)gps_info.gps_altitude;
+
     // save last active fix location
-    fix = last_valid_point = gps_info;
+    last_valid_point = fix;
     last_valid_point_initialized = true;
   }
 
@@ -349,8 +343,8 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
           NormalizeIGCAltitude(gps_info.baro_altitude_available
                                  ? (int)gps_info.baro_altitude
                                  /* fall back to GPS altitude */
-                                 : fix.altitude_gps),
-          NormalizeIGCAltitude(fix.altitude_gps),
+                                 : fix.gps_altitude),
+          NormalizeIGCAltitude(fix.gps_altitude),
           (int)epe, satellites);
 
   WriteLine(b_record);

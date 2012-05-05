@@ -29,6 +29,7 @@ Copyright_License {
 #include "Util/BatchBuffer.hpp"
 #include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "IGCFix.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -58,14 +59,7 @@ class IGCWriter {
    */
   bool simulator;
 
-  struct Fix {
-    GeoPoint location;
-    int altitude_gps;
-
-    const Fix &operator=(const NMEAInfo &gps_info);
-  };
-
-  Fix last_valid_point;
+  IGCFix last_valid_point;
   bool last_valid_point_initialized;
 
 public:
