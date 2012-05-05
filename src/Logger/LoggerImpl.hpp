@@ -46,11 +46,8 @@ class LoggerImpl
 {
 public:
   enum {
-    /**< Buffer size (s) of points recorded before takeoff */
+    /** Buffer size (s) of points recorded before takeoff */
     PRETAKEOFF_BUFFER_MAX = 60,
-    /**< Number of records in disk buffer */
-    DISK_BUFFER_NUM_RECS = 10,
-    MAX_IGC_BUFF = 255,
   };
 
   /** Buffer for points recorded before takeoff */
