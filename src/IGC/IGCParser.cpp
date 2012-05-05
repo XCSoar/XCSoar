@@ -106,25 +106,18 @@ IGCParseDate(const char *line, BrokenDate &date)
 bool
 IGCParseFix(const char *buffer, IGCFix &fix)
 {
-  int DegLat, DegLon;
-  int MinLat, MinLon;
-  char NoS, EoW;
-  char valid_char;
-  int iAltitude, iPressureAltitude;
-
   BrokenTime time;
   if (!IGCParseFixTime(buffer, time))
     return false;
 
-  int lfound =
-      sscanf(buffer + 7, "%02d%05d%c%03d%05d%c%c%05d%05d",
-      &DegLat, &MinLat, &NoS, &DegLon, &MinLon, &EoW,
-      &valid_char, &iPressureAltitude, &iAltitude);
+  unsigned lat_degrees, lat_minutes, lon_degrees, lon_minutes;
+  char lat_char, lon_char, valid_char;
+  int gps_altitude, pressure_altitude;
 
-  if (lfound == EOF)
-    return false;
-
-  if (lfound != 9)
+  if (sscanf(buffer + 7, "%02u%05u%c%03u%05u%c%c%05d%05d",
+             &lat_degrees, &lat_minutes, &lat_char,
+             &lon_degrees, &lon_minutes, &lon_char,
+             &valid_char, &pressure_altitude, &gps_altitude) != 9)
     return false;
 
   if (valid_char == 'A')
@@ -134,25 +127,23 @@ IGCParseFix(const char *buffer, IGCFix &fix)
   else
     return false;
 
-  fixed Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
-  if (NoS == 'S')
-    Latitude = -Latitude;
+  fix.location.latitude = Angle::Degrees(fixed(lat_degrees) +
+                                         fixed(lat_minutes) / 60000);
+  if (lat_char == 'S')
+    fix.location.latitude.Flip();
 
-  fixed Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
-  if (EoW == 'W')
-    Longitude = -Longitude;
+  fix.location.longitude = Angle::Degrees(fixed(lon_degrees) +
+                                          fixed(lon_minutes) / 60000);
+  if (lon_char == 'W')
+    fix.location.longitude.Flip();
 
-  fix.location.latitude = Angle::Degrees(Latitude);
-  fix.location.longitude = Angle::Degrees(Longitude);
-
-  fix.gps_altitude = fixed(iAltitude);
-  fix.pressure_altitude = fixed(iPressureAltitude);
+  fix.gps_altitude = fixed(gps_altitude);
+  fix.pressure_altitude = fixed(pressure_altitude);
 
   // some loggers drop out GPS altitude, so when this happens, revert
   // to pressure altitude
-  if ((iPressureAltitude != 0) && (iAltitude==0)) {
+  if (pressure_altitude != 0 && gps_altitude == 0)
     fix.gps_altitude = fix.pressure_altitude;
-  }
 
   fix.time = time;
 
