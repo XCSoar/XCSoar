@@ -144,7 +144,7 @@ LoggerImpl::LogEvent(const NMEAInfo &gps_info, const char *event)
     simulator = true;
 
   if (writer != NULL)
-    writer->LogEvent(gps_info, simulator, event);
+    writer->LogEvent(gps_info, event);
 }
 
 void
@@ -208,7 +208,15 @@ LoggerImpl::WritePoint(const NMEAInfo &gps_info)
   if (gps_info.alive && !gps_info.gps.real)
     simulator = true;
 
-  writer->LogPoint(gps_info, simulator);
+  if (!simulator && frecord.Update(gps_info.gps, gps_info.time,
+                                   !gps_info.location_available)) {
+    if (gps_info.gps.satellite_ids_available)
+      writer->LogFRecord(gps_info.date_time_utc, gps_info.gps.satellite_ids);
+    else
+      writer->LogEmptyFRecord(gps_info.date_time_utc);
+  }
+
+  writer->LogPoint(gps_info);
 }
 
 static bool
@@ -249,6 +257,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   delete writer;
 
+  frecord.Reset();
   simulator = gps_info.alive && !gps_info.gps.real;
   writer = new IGCWriter(filename, simulator);
 

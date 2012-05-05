@@ -53,7 +53,7 @@ int main(int argc, char **argv)
   GPSClock log_clock(fixed(1));
   while (replay->Next())
     if (log_clock.CheckAdvance(replay->Basic().time))
-      writer.LogPoint(replay->Basic(), true);
+      writer.LogPoint(replay->Basic());
 
   writer.Flush();
 

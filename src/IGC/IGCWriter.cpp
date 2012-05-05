@@ -57,7 +57,6 @@ IGCWriter::IGCWriter(const TCHAR *_path, bool simulator)
 {
   _tcscpy(path, _path);
 
-  frecord.Reset();
   last_valid_point_initialized = false;
 
   if (!simulator)
@@ -305,17 +304,8 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 }
 
 void
-IGCWriter::LogPoint(const NMEAInfo& gps_info, bool simulator)
+IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  // if at least one GPS fix comes from the simulator, disable signing
-  if (!simulator && frecord.Update(gps_info.gps, gps_info.time,
-                                   !gps_info.location_available)) {
-    if (gps_info.gps.satellite_ids_available)
-      LogFRecord(gps_info.date_time_utc, gps_info.gps.satellite_ids);
-    else
-      LogEmptyFRecord(gps_info.date_time_utc);
-  }
-
   if (!last_valid_point_initialized &&
       ((gps_info.gps_altitude < fixed(-100))
        || (gps_info.baro_altitude < fixed(-100))
@@ -366,12 +356,12 @@ IGCWriter::LogEvent(const IGCFix &fix, int epe, int satellites,
 }
 
 void
-IGCWriter::LogEvent(const NMEAInfo &gps_info, bool simulator, const char *event)
+IGCWriter::LogEvent(const NMEAInfo &gps_info, const char *event)
 {
   LogEvent(gps_info.date_time_utc, event);
 
   // tech_spec_gnss.pdf says we need a B record immediately after an E record
-  LogPoint(gps_info, simulator);
+  LogPoint(gps_info);
 }
 
 void

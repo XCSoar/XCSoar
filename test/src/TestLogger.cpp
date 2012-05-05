@@ -126,9 +126,9 @@ int main(int argc, char **argv)
   writer.LogEmptyFRecord(i.date_time_utc);
 
   i.date_time_utc.second += 5;
-  writer.LogPoint(i, false);
+  writer.LogPoint(i);
   i.date_time_utc.second += 5;
-  writer.LogEvent(i, false, "my_event");
+  writer.LogEvent(i, "my_event");
   i.date_time_utc.second += 5;
   writer.LoggerNote(_T("my_note"));
 
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 
   i.location = GeoPoint(Angle::Degrees(fixed(-7.7061111111111114)),
                         Angle::Degrees(fixed(-51.051944444444445)));
-  writer.LogPoint(i, false);
+  writer.LogPoint(i);
 
   writer.Finish();
   writer.Sign();

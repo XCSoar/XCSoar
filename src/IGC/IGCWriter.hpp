@@ -49,7 +49,6 @@ class IGCWriter {
   TCHAR path[MAX_PATH];
   BatchBuffer<char[MAX_IGC_BUFF],LOGGER_DISK_BUFFER_NUM_RECS> buffer;
 
-  LoggerFRecord frecord;
   GRecord grecord;
 
   IGCFix last_valid_point;
@@ -93,9 +92,9 @@ public:
   void LoggerNote(const TCHAR *text);
 
   void LogPoint(const IGCFix &fix, int epe, int satellites);
-  void LogPoint(const NMEAInfo &gps_info, bool simulator);
+  void LogPoint(const NMEAInfo &gps_info);
   void LogEvent(const IGCFix &fix, int epe, int satellites, const char *event);
-  void LogEvent(const NMEAInfo &gps_info, bool simulator, const char *event);
+  void LogEvent(const NMEAInfo &gps_info, const char *event);
 
   void LogEmptyFRecord(const BrokenTime &time);
   void LogFRecord(const BrokenTime &time, const int *satellite_ids);
