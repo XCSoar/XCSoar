@@ -308,12 +308,12 @@ void
 IGCWriter::LogPoint(const NMEAInfo& gps_info, bool simulator)
 {
   // if at least one GPS fix comes from the simulator, disable signing
-  if (!simulator) {
-    const char *f_record = frecord.Update(gps_info.gps, gps_info.date_time_utc,
-                                          gps_info.time,
-                                          !gps_info.location_available);
-    if (f_record != NULL)
-      WriteLine(f_record);
+  if (!simulator && frecord.Update(gps_info.gps, gps_info.time,
+                                   !gps_info.location_available)) {
+    if (gps_info.gps.satellite_ids_available)
+      LogFRecord(gps_info.date_time_utc, gps_info.gps.satellite_ids);
+    else
+      LogEmptyFRecord(gps_info.date_time_utc);
   }
 
   if (!last_valid_point_initialized &&
