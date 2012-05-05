@@ -43,7 +43,7 @@ IGCWriter::Fix::operator=(const NMEAInfo &gps_info)
 }
 
 static char *
-igc_format_location(char *buffer, const GeoPoint &location)
+FormatIGCLocation(char *buffer, const GeoPoint &location)
 {
   char latitude_suffix = negative(location.latitude.Native())
     ? 'S' : 'N';
@@ -108,7 +108,7 @@ IGCWriter::Finish(const NMEAInfo &gps_info)
 }
 
 static void
-clean(char *p)
+ReplaceNonIGCChars(char *p)
 {
   for (; *p != 0; ++p)
     if (!GRecord::IsValidIGCChar(*p))
@@ -130,7 +130,7 @@ IGCWriter::WriteLine(const char *line)
   strncpy(dest, line, MAX_IGC_BUFF);
   dest[MAX_IGC_BUFF - 1] = '\0';
 
-  clean(dest);
+  ReplaceNonIGCChars(dest);
 
   return true;
 }
@@ -163,7 +163,7 @@ IGCWriter::WriteLine(const char *a, const TCHAR *b)
 }
 
 void
-IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
+IGCWriter::WriteHeader(const BrokenDateTime &date_time,
                        const TCHAR *pilot_name, const TCHAR *aircraft_model,
                        const TCHAR *aircraft_registration,
                        const TCHAR *competition_id,
@@ -183,7 +183,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
    * HFCCLCOMPETITIONCLASS:FAI
    */
 
-  assert(DateTime.Plausible());
+  assert(date_time.Plausible());
   assert(logger_id != NULL);
   assert(strlen(logger_id) == 3);
 
@@ -194,7 +194,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
   WriteLine(buffer);
 
   sprintf(buffer, "HFDTE%02u%02u%02u",
-          DateTime.day, DateTime.month, DateTime.year % 100);
+          date_time.day, date_time.month, date_time.year % 100);
   WriteLine(buffer);
 
   if (!simulator)
@@ -214,21 +214,21 @@ IGCWriter::WriteHeader(const BrokenDateTime &DateTime,
 }
 
 void
-IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
+IGCWriter::StartDeclaration(const BrokenDateTime &date_time,
                             const int number_of_turnpoints)
 {
-  assert(FirstDateTime.Plausible());
+  assert(date_time.Plausible());
 
   // IGC GNSS specification 3.6.1
   char buffer[100];
   sprintf(buffer, "C%02u%02u%02u%02u%02u%02u0000000000%02d",
           // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-          FirstDateTime.day,
-          FirstDateTime.month,
-          FirstDateTime.year % 100,
-          FirstDateTime.hour,
-          FirstDateTime.minute,
-          FirstDateTime.second,
+          date_time.day,
+          date_time.month,
+          date_time.year % 100,
+          date_time.hour,
+          date_time.minute,
+          date_time.second,
           number_of_turnpoints - 2);
 
   WriteLine(buffer);
@@ -247,26 +247,26 @@ IGCWriter::EndDeclaration()
 }
 
 void
-IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *ID)
+IGCWriter::AddDeclaration(const GeoPoint &location, const TCHAR *id)
 {
-  char szCRecord[500];
-  char IDString[MAX_PATH];
+  char c_record[500];
+  char id_string[MAX_PATH];
   int i;
 
   TCHAR tmpstring[MAX_PATH];
-  _tcscpy(tmpstring, ID);
+  _tcscpy(tmpstring, id);
   _tcsupr(tmpstring);
   for (i = 0; i < (int)_tcslen(tmpstring); i++)
-    IDString[i] = (char)tmpstring[i];
+    id_string[i] = (char)tmpstring[i];
 
-  IDString[i] = '\0';
+  id_string[i] = '\0';
 
-  char *p = szCRecord;
+  char *p = c_record;
   *p++ = 'C';
-  p = igc_format_location(p, location);
-  strcpy(p, IDString);
+  p = FormatIGCLocation(p, location);
+  strcpy(p, id_string);
 
-  WriteLine(szCRecord);
+  WriteLine(c_record);
 }
 
 void
@@ -280,7 +280,7 @@ IGCWriter::LoggerNote(const TCHAR *text)
  * it to an integer suitable for printing in the IGC file.
  */
 static int
-normalize_igc_altitude(int value)
+NormalizeIGCAltitude(int value)
 {
   if (value < -9999)
     /* for negative values, there are only 4 characters left (after
@@ -300,24 +300,23 @@ normalize_igc_altitude(int value)
 void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  char szBRecord[500];
-  int iSIU = GetSIU(gps_info);
-  fixed dEPE = GetEPE(gps_info);
-  Fix p;
+  char b_record[500];
+  int satellites = GetSIU(gps_info);
+  fixed epe = GetEPE(gps_info);
+  Fix fix;
 
-  char IsValidFix;
+  char valid_fix_char;
 
   // if at least one GPS fix comes from the simulator, disable signing
   if (gps_info.alive && !gps_info.gps.real)
     simulator = true;
 
   if (!simulator) {
-    const char *f_record_line = frecord.Update(gps_info.gps,
-                                               gps_info.date_time_utc,
-                                               gps_info.time,
-                                               !gps_info.location_available);
-    if (f_record_line != NULL)
-      WriteLine(f_record_line);
+    const char *f_record = frecord.Update(gps_info.gps, gps_info.date_time_utc,
+                                          gps_info.time,
+                                          !gps_info.location_available);
+    if (f_record != NULL)
+      WriteLine(f_record);
   }
 
   if (!last_valid_point_initialized &&
@@ -328,44 +327,44 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
 
 
   if (!gps_info.location_available) {
-    IsValidFix = 'V'; // invalid
-    p = last_valid_point;
+    valid_fix_char = 'V'; // invalid
+    fix = last_valid_point;
   } else {
-    IsValidFix = 'A'; // Active
+    valid_fix_char = 'A'; // Active
     // save last active fix location
-    p = last_valid_point = gps_info;
+    fix = last_valid_point = gps_info;
     last_valid_point_initialized = true;
   }
 
-  char *q = szBRecord;
-  sprintf(q, "B%02d%02d%02d",
+  char *p = b_record;
+  sprintf(p, "B%02d%02d%02d",
           gps_info.date_time_utc.hour, gps_info.date_time_utc.minute,
           gps_info.date_time_utc.second);
-  q += strlen(q);
+  p += strlen(p);
 
-  q = igc_format_location(q, p.location);
+  p = FormatIGCLocation(p, fix.location);
 
-  sprintf(q, "%c%05d%05d%03d%02d",
-          IsValidFix,
-          normalize_igc_altitude(gps_info.baro_altitude_available
+  sprintf(p, "%c%05d%05d%03d%02d",
+          valid_fix_char,
+          NormalizeIGCAltitude(gps_info.baro_altitude_available
                                  ? (int)gps_info.baro_altitude
                                  /* fall back to GPS altitude */
-                                 : p.altitude_gps),
-          normalize_igc_altitude(p.altitude_gps),
-          (int)dEPE, iSIU);
+                                 : fix.altitude_gps),
+          NormalizeIGCAltitude(fix.altitude_gps),
+          (int)epe, satellites);
 
-  WriteLine(szBRecord);
+  WriteLine(b_record);
 }
 
 void
 IGCWriter::LogEvent(const NMEAInfo &gps_info, const char *event)
 {
-  char szBRecord[30];
-  sprintf(szBRecord,"E%02d%02d%02d%s",
+  char e_record[30];
+  sprintf(e_record,"E%02d%02d%02d%s",
           gps_info.date_time_utc.hour, gps_info.date_time_utc.minute,
           gps_info.date_time_utc.second, event);
 
-  WriteLine(szBRecord);
+  WriteLine(e_record);
   // tech_spec_gnss.pdf says we need a B record immediately after an E record
   LogPoint(gps_info);
 }
