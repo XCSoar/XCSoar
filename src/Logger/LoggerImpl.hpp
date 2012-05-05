@@ -72,7 +72,7 @@ public:
     /** GPS fix state */
     int nav_warning;
     /** GPS fix quality */
-    int fix_quality;
+    FixQuality fix_quality;
     /** GPS fix state */
     int satellites_used;
     bool satellites_used_available;

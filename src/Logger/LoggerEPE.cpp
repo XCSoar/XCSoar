@@ -140,10 +140,10 @@ IGCWriter::GetEPE(const NMEAInfo& gps_info)
    */
 
   switch (gps_info.gps.fix_quality) {
-  case 1:
+  case FixQuality::GPS:
     return gps_info.gps.hdop * fixed(18.2);
 
-  case 2:
+  case FixQuality::DGPS:
     return gps_info.gps.hdop * fixed_four;
 
   default:
@@ -155,10 +155,13 @@ int
 IGCWriter::GetSIU(const NMEAInfo& gps_info)
 {
   switch (gps_info.gps.fix_quality) {
-  case 1:
-  case 2:
+  case FixQuality::GPS:
+  case FixQuality::DGPS:
     if (gps_info.gps.satellites_used_available)
       return gps_info.gps.satellites_used;
+
+  default:
+    break;
   }
 
   return 0;
