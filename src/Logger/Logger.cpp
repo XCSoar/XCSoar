@@ -31,6 +31,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
 #include "ComputerSettings.hpp"
+#include "IGCFileCleanup.hpp"
 
 void
 Logger::LogPoint(const NMEAInfo &gps_info)
@@ -75,8 +76,7 @@ Logger::IsLoggerActive() const
 bool
 Logger::LoggerClearFreeSpace(unsigned current_year)
 {
-  Poco::ScopedRWLock protect(lock, true);
-  return logger.LoggerClearFreeSpace(current_year);
+  return IGCFileCleanup(current_year);
 }
 
 void

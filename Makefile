@@ -329,6 +329,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/LoggerImpl.cpp \
+	$(SRC)/Logger/IGCFileCleanup.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \

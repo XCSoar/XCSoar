@@ -24,30 +24,22 @@
 #include "Logger/LoggerImpl.hpp"
 #include "Logger/Settings.hpp"
 #include "LogFile.hpp"
-#include "UtilsSystem.hpp"
 #include "LocalPath.hpp"
 #include "Device/Declaration.hpp"
-#include "Compatibility/dirent.h"
 #include "NMEA/Info.hpp"
 #include "Simulator.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Interface.hpp"
 #include "Util/CharUtil.hpp"
+#include "IGCFileCleanup.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
 #endif
-#include <time.h>
 #include <sys/types.h>
 #include <tchar.h>
-#include <stdio.h>
 #include <algorithm>
-
-// JMW note: we want to clear up enough space to save the persistent
-// data (85 kb approx) and a new log file
-#define LOGGER_MINFREESTORAGE 750
 
 const struct LoggerImpl::PreTakeoffBuffer &
 LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
@@ -89,18 +81,6 @@ LoggerImpl::~LoggerImpl()
   delete writer;
 }
 
-static int
-IGCCharToNum(TCHAR c)
-{
-  if ((c >= _T('1')) && (c <= _T('9')))
-    return c - _T('1') + 1;
-
-  if ((c >= _T('A')) && (c <= _T('Z')))
-    return c - _T('A') + 10;
-
-  return 0; // Error!
-}
-
 void
 LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 {
@@ -121,7 +101,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   writer = NULL;
 
   // Make space for logger file, if unsuccessful -> cancel
-  if (!LoggerClearFreeSpace(gps_info.date_time_utc.year))
+  if (!IGCFileCleanup(gps_info.date_time_utc.year))
     return;
 
   pre_takeoff_buffer.clear();
@@ -259,141 +239,6 @@ LoggerImpl::LoggerNote(const TCHAR *text)
 {
   if (writer != NULL)
     writer->LoggerNote(text);
-}
-
-static time_t
-LogFileDate(unsigned current_year, const TCHAR *filename)
-{
-  // scan for long filename
-  unsigned short year, month, day, num;
-  int matches = _stscanf(filename, _T("%hu-%hu-%hu-%*7s-%hu.igc"),
-                         &year, &month, &day, &num);
-
-  if (matches == 4) {
-    struct tm tm;
-    tm.tm_sec = 0;
-    tm.tm_min = 0;
-    tm.tm_hour = num;
-    tm.tm_mday = day;
-    tm.tm_mon = month - 1;
-    tm.tm_year = year - 1900;
-    tm.tm_isdst = -1;
-    return mktime(&tm);
-  }
-
-  TCHAR cyear, cmonth, cday, cflight;
-  // scan for short filename
-  matches = _stscanf(filename, _T("%c%c%c%*4s%c.igc"),
-		                 &cyear, &cmonth, &cday,&cflight);
-
-  if (matches == 4) {
-    int iyear = (int)current_year;
-    int syear = iyear % 10;
-    int yearzero = iyear - syear;
-    int yearthis = IGCCharToNum(cyear) + yearzero;
-    if (yearthis > iyear)
-      yearthis -= 10;
-
-    struct tm tm;
-    tm.tm_sec = 0;
-    tm.tm_min = 0;
-    tm.tm_hour = IGCCharToNum(cflight);
-    tm.tm_mday = IGCCharToNum(cday);
-    tm.tm_mon = IGCCharToNum(cmonth) - 1;
-    tm.tm_year = yearthis - 1900;
-    tm.tm_isdst = -1;
-    return mktime(&tm);
-    /*
-      YMDCXXXF.igc
-      Y: Year, 0 to 9 cycling every 10 years
-      M: Month, 1 to 9 then A for 10, B=11, C=12
-      D: Day, 1 to 9 then A for 10, B=....
-      C: Manuf. code = X
-      XXX: Logger ID Alphanum
-      F: Flight of day, 1 to 9 then A through Z
-    */
-  }
-
-  return 0;
-}
-
-static bool
-LogFileIsOlder(unsigned current_year,
-               const TCHAR *oldestname, const TCHAR *thisname)
-{
-  return LogFileDate(current_year, oldestname) >
-         LogFileDate(current_year, thisname);
-}
-
-/**
- * Delete eldest IGC file in the given path
- * @param gps_info Current NMEA_INFO
- * @param pathname Path where to search for the IGC files
- * @return True if a file was found and deleted, False otherwise
- */
-static bool
-DeleteOldestIGCFile(unsigned current_year, const TCHAR *pathname)
-{
-  StaticString<MAX_PATH> oldest_name, full_name;
-
-  _TDIR *dir = _topendir(pathname);
-  if (dir == NULL)
-    return false;
-
-  _tdirent *ent;
-  while ((ent = _treaddir(dir)) != NULL) {
-    if (!MatchesExtension(ent->d_name, _T(".igc")))
-      continue;
-
-    full_name = pathname;
-    full_name += ent->d_name;
-
-    if (File::Exists(full_name) &&
-        LogFileIsOlder(current_year, oldest_name, ent->d_name))
-      // we have a new oldest name
-      oldest_name = ent->d_name;
-  }
-
-  _tclosedir(dir);
-
-  // now, delete the file...
-  full_name.Format(_T("%s%s"), pathname, oldest_name.c_str());
-  File::Delete(full_name);
-
-  // did delete one
-  return true;
-}
-
-bool
-LoggerImpl::LoggerClearFreeSpace(unsigned current_year)
-{
-  bool found = true;
-  unsigned long kbfree = 0;
-  const TCHAR *pathname = GetPrimaryDataPath();
-  TCHAR subpathname[MAX_PATH];
-  int numtries = 0;
-
-  LocalPath(subpathname, _T("logs"));
-
-  while (found && ((kbfree = FindFreeSpace(pathname)) < LOGGER_MINFREESTORAGE)
-	       && (numtries++ < 100)) {
-    /* JMW asking for deleting old files is disabled now --- system
-       automatically deletes old files as required
-    */
-
-    // search for IGC files, and delete the oldest one
-    found = DeleteOldestIGCFile(current_year, pathname);
-    if (!found)
-      found = DeleteOldestIGCFile(current_year, subpathname);
-  }
-
-  if (kbfree >= LOGGER_MINFREESTORAGE) {
-    LogStartUp(_T("LoggerFreeSpace returned: true"));
-    return true;
-  } else {
-    LogStartUp(_T("LoggerFreeSpace returned: false"));
-    return false;
-  }
 }
 
 static const TCHAR *
