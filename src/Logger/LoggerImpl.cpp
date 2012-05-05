@@ -396,6 +396,22 @@ LoggerImpl::LoggerClearFreeSpace(unsigned current_year)
   }
 }
 
+static const TCHAR *
+GetGPSDeviceName()
+{
+  if (is_simulator())
+    return _T("Simulator");
+
+  const DeviceConfig &device = CommonInterface::GetSystemSettings().devices[0];
+  if (device.UsesDriver())
+    return device.driver_name;
+
+  if (device.IsAndroidInternalGPS())
+    return _T("Internal GPS (Android)");
+
+  return _T("Unknown");
+}
+
 // TODO: fix scope so only gui things can start it
 void
 LoggerImpl::StartLogger(const NMEAInfo &gps_info,
@@ -415,24 +431,10 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   StartLogger(gps_info, settings, logger_id);
 
-  // this is only the XCSoar Simulator, not Condor etc, so don't use Simulator flag
-  const TCHAR *driver_name;
-  if (is_simulator())
-    driver_name = _T("Simulator");
-  else {
-    const DeviceConfig &device = CommonInterface::GetSystemSettings().devices[0];
-    if (device.UsesDriver())
-      driver_name = device.driver_name;
-    else if (device.IsAndroidInternalGPS())
-      driver_name = _T("Internal GPS (Android)");
-    else
-      driver_name = _T("Unknown");
-  }
-
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
-                      logger_id, driver_name, simulator);
+                      logger_id, GetGPSDeviceName(), simulator);
 
   if (decl.Size()) {
     BrokenDateTime FirstDateTime = !pre_takeoff_buffer.empty()
