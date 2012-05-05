@@ -113,13 +113,37 @@ TestFix()
   ok1(equals(fix.gps_altitude, 7));
 }
 
+static void
+TestFixTime()
+{
+  BrokenTime time;
+  ok1(!IGCParseFixTime("", time));
+
+  ok1(IGCParseFixTime("B000000", time));
+  ok1(time == BrokenTime(00, 00, 00));
+
+  ok1(IGCParseFixTime("B112238", time));
+  ok1(time == BrokenTime(11, 22, 38));
+
+  ok1(IGCParseFixTime("B235959", time));
+  ok1(time == BrokenTime(23, 59, 59));
+
+  ok1(!IGCParseFixTime("B235960", time));
+  ok1(!IGCParseFixTime("B236059", time));
+  ok1(!IGCParseFixTime("B240000", time));
+
+  ok1(IGCParseFixTime("B0123375103117N00742367EV0049000487", time));
+  ok1(time == BrokenTime(01, 23, 37));
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(56);
+  plan_tests(68);
 
   TestHeader();
   TestDate();
   TestFix();
+  TestFixTime();
 
   return exit_status();
 }
