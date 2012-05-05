@@ -26,6 +26,8 @@
 #include "DateTime.hpp"
 #include "TestUtil.hpp"
 
+#include <string.h>
+
 static void
 TestHeader()
 {

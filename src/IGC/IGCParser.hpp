@@ -24,15 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_IGC_PARSER_HPP
 #define XCSOAR_IGC_PARSER_HPP
 
-#include "Util/StaticString.hpp"
-#include "Math/fixed.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
-#include "DateTime.hpp"
-
-#include <tchar.h>
-
 struct IGCFix;
 struct IGCHeader;
+struct BrokenDate;
+struct BrokenTime;
 
 /**
  * Parse an IGC "A" record.
