@@ -289,14 +289,31 @@ NormalizeIGCAltitude(int value)
 }
 
 void
-IGCWriter::LogPoint(const NMEAInfo& gps_info)
+IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 {
   char b_record[500];
+  char *p = b_record;
+
+  sprintf(p, "B%02d%02d%02d", fix.time.hour, fix.time.minute, fix.time.second);
+  p += strlen(p);
+
+  p = FormatIGCLocation(p, fix.location);
+
+  sprintf(p, "%c%05d%05d%03d%02d",
+          fix.gps_valid ? 'A' : 'V',
+          NormalizeIGCAltitude(fix.pressure_altitude),
+          NormalizeIGCAltitude(fix.gps_altitude),
+          epe, satellites);
+
+  WriteLine(b_record);
+}
+
+void
+IGCWriter::LogPoint(const NMEAInfo& gps_info)
+{
   int satellites = GetSIU(gps_info);
   fixed epe = GetEPE(gps_info);
   IGCFix fix;
-
-  char valid_fix_char;
 
   // if at least one GPS fix comes from the simulator, disable signing
   if (gps_info.alive && !gps_info.gps.real)
@@ -318,10 +335,10 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
 
 
   if (!gps_info.location_available) {
-    valid_fix_char = 'V'; // invalid
     fix = last_valid_point;
+    fix.gps_valid = false;
   } else {
-    valid_fix_char = 'A'; // Active
+    fix.gps_valid = true;
     fix.location = gps_info.location;
     fix.gps_altitude = (int)gps_info.gps_altitude;
 
@@ -330,24 +347,13 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
     last_valid_point_initialized = true;
   }
 
-  char *p = b_record;
-  sprintf(p, "B%02d%02d%02d",
-          gps_info.date_time_utc.hour, gps_info.date_time_utc.minute,
-          gps_info.date_time_utc.second);
-  p += strlen(p);
+  fix.time = gps_info.date_time_utc;
+  fix.pressure_altitude =
+      gps_info.baro_altitude_available ? (int)gps_info.baro_altitude :
+                                         /* fall back to GPS altitude */
+                                         fix.gps_altitude;
 
-  p = FormatIGCLocation(p, fix.location);
-
-  sprintf(p, "%c%05d%05d%03d%02d",
-          valid_fix_char,
-          NormalizeIGCAltitude(gps_info.baro_altitude_available
-                                 ? (int)gps_info.baro_altitude
-                                 /* fall back to GPS altitude */
-                                 : fix.gps_altitude),
-          NormalizeIGCAltitude(fix.gps_altitude),
-          (int)epe, satellites);
-
-  WriteLine(b_record);
+  LogPoint(fix, (int)epe, satellites);
 }
 
 void

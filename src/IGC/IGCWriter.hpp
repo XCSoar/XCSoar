@@ -98,6 +98,7 @@ public:
 
   void LoggerNote(const TCHAR *text);
 
+  void LogPoint(const IGCFix &fix, int epe, int satellites);
   void LogPoint(const NMEAInfo &gps_info);
   void LogEvent(const NMEAInfo &gps_info, const char *event);
 };
