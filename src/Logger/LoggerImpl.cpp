@@ -264,14 +264,12 @@ LoggerImpl::LoggerNote(const TCHAR *text)
 static time_t
 LogFileDate(unsigned current_year, const TCHAR *filename)
 {
-  TCHAR asset[MAX_PATH];
-
   // scan for long filename
   unsigned short year, month, day, num;
-  int matches = _stscanf(filename, _T("%hu-%hu-%hu-%7s-%hu.igc"),
-                         &year, &month, &day, asset, &num);
+  int matches = _stscanf(filename, _T("%hu-%hu-%hu-%*7s-%hu.igc"),
+                         &year, &month, &day, &num);
 
-  if (matches == 5) {
+  if (matches == 4) {
     struct tm tm;
     tm.tm_sec = 0;
     tm.tm_min = 0;
@@ -285,10 +283,10 @@ LogFileDate(unsigned current_year, const TCHAR *filename)
 
   TCHAR cyear, cmonth, cday, cflight;
   // scan for short filename
-  matches = _stscanf(filename, _T("%c%c%c%4s%c.igc"),
-		                 &cyear, &cmonth, &cday, asset, &cflight);
+  matches = _stscanf(filename, _T("%c%c%c%*4s%c.igc"),
+		                 &cyear, &cmonth, &cday,&cflight);
 
-  if (matches == 5) {
+  if (matches == 4) {
     int iyear = (int)current_year;
     int syear = iyear % 10;
     int yearzero = iyear - syear;
