@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4 - not yet released
 * devices
   - buffered serial port I/O
+  - FLARM: new FLARM setup dialog
 * user interface
   - added "Airspace On/Off" menu button
   - save Flarm team mates in the profile (#1997)

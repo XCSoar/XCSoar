@@ -140,6 +140,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Vega/VegaParametersWidget.cpp \
 	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Vega/VegaDemoDialog.cpp \
+	$(SRC)/Dialogs/FLARM/ConfigWidget.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \

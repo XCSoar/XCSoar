@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/ManageFlarmDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Dialogs/FLARM/ConfigWidget.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
@@ -31,6 +32,7 @@ Copyright_License {
 
 class ManageFLARMWidget : public RowFormWidget, private ActionListener {
   enum Controls {
+    Setup,
     Reboot,
   };
 
@@ -51,6 +53,7 @@ private:
 void
 ManageFLARMWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  AddButton(_("Setup"), this, Setup);
   AddButton(_("Reboot"), this, Reboot);
 }
 
@@ -58,6 +61,13 @@ void
 ManageFLARMWidget::OnAction(int id)
 {
   switch (id) {
+  case Setup:
+    {
+      FLARMConfigWidget widget(GetLook(), device);
+      DefaultWidgetDialog(_T("FLARM"), widget);
+    }
+    break;
+
   case Reboot:
     {
       MessageOperationEnvironment env;
