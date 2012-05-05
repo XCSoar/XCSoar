@@ -515,8 +515,11 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
     gps.fix_quality_available.Update(info.clock);
   }
 
-  gps.satellites_used_available.Update(info.clock);
-  gps.satellites_used = min(16, line.read(-1));
+  unsigned satellites_used;
+  if (line.read_checked(satellites_used)) {
+    info.gps.satellites_used = satellites_used;
+    info.gps.satellites_used_available.Update(info.clock);
+  }
 
   if (!TimeHasAdvanced(this_time, info))
     return true;
