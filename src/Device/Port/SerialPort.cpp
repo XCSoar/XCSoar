@@ -39,24 +39,26 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-SerialPort::SerialPort(Handler &_handler)
-  :Port(_handler)
+SerialPort::SerialPort(Port::Handler &_handler)
+  :BufferedPort(_handler)
 {
 }
 
 SerialPort::~SerialPort()
 {
-  if (hPort == INVALID_HANDLE_VALUE)
-    return;
-
-  StopRxThread();
-  Sleep(100); // todo ...
+  BufferedPort::BeginClose();
 
   // Close the communication port.
-  if (CloseHandle(hPort)) {
-    if (!IsEmbedded())
+  if (hPort != INVALID_HANDLE_VALUE) {
+    StoppableThread::BeginStop();
+
+    if (CloseHandle(hPort) && !IsEmbedded())
       Sleep(2000); // needed for windows bug
+
+    Thread::Join();
   }
+
+  BufferedPort::EndClose();
 }
 
 bool
@@ -124,9 +126,6 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
     return false;
   }
 
-  //  SetRxTimeout(10); // JMW20070515 wait a maximum of 10ms
-  SetRxTimeout(0);
-
   SetupComm(hPort, 1024, 1024);
 
   // Direct the port to perform extended functions SETDTR and SETRTS
@@ -134,6 +133,8 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
   EscapeCommFunction(hPort, SETDTR);
   // SETRTS: Sends the RTS (request-to-send) signal.
   EscapeCommFunction(hPort, SETRTS);
+
+  StoppableThread::Start();
 
   return true;
 }
@@ -160,6 +161,7 @@ void
 SerialPort::Flush()
 {
   PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+  BufferedPort::Flush();
 }
 
 int
@@ -303,9 +305,6 @@ SerialPort::Run()
         continue;
     }
 
-    // Process data that was directly read by ReadFile()
-    handler.DataReceived(inbuf, dwBytesTransferred);
-
 #else
 
     if (is_widcomm) {
@@ -333,10 +332,9 @@ SerialPort::Run()
       Sleep(100);
       continue;
     }
-
-    handler.DataReceived(inbuf, dwBytesTransferred);
 #endif
 
+    DataReceived(inbuf, dwBytesTransferred);
   }
 
   Flush();
@@ -401,60 +399,6 @@ SerialPort::Write(const void *data, size_t length)
 }
 
 bool
-SerialPort::StopRxThread()
-{
-  // Make sure the thread isn't terminating itself
-  assert(!Thread::IsInside());
-
-  // Make sure the port is still open
-  if (hPort == INVALID_HANDLE_VALUE)
-    return false;
-
-  // If the thread is not running, cancel the rest of the function
-  if (!Thread::IsDefined())
-    return true;
-
-  BeginStop();
-
-  Flush();
-
-  /* this will cancel WaitCommEvent() */
-  if (!is_widcomm)
-    ::SetCommMask(hPort, 0);
-
-  if (!Thread::Join(2000)) {
-    /* On Dell Axim x51v, the Bluetooth RFCOMM driver seems to be
-       bugged: when the peer gets disconnected (e.g. switched off),
-       the function WaitCommEvent() does not get cancelled by
-       SetCommMask(), but it should be according to MSDN.  As a
-       workaround, we force WaitCommEvent() to abort by destroying the
-       handle.  That seems to do the trick. */
-    ::CloseHandle(hPort);
-    hPort = INVALID_HANDLE_VALUE;
-
-    Thread::Join();
-  }
-
-  return true;
-}
-
-bool
-SerialPort::StartRxThread()
-{
-  if (Thread::IsDefined())
-    /* already running */
-    return true;
-
-  // Make sure the port was opened correctly
-  if (hPort == INVALID_HANDLE_VALUE)
-    return false;
-
-  // Start the receive thread
-  StoppableThread::Start();
-  return true;
-}
-
-bool
 SerialPort::SetRxTimeout(unsigned Timeout)
 {
   COMMTIMEOUTS CommTimeouts;
@@ -480,33 +424,7 @@ SerialPort::SetRxTimeout(unsigned Timeout)
   // Set the time-out parameters
   // for all read and write
   // operations on the port.
-  if (!SetCommTimeouts(hPort, &CommTimeouts)) {
-     // Could not create the read thread.
-    CloseHandle(hPort);
-    hPort = INVALID_HANDLE_VALUE;
-
-    if (!IsEmbedded())
-      Sleep(2000); // needed for windows bug
-
-    return false;
-  }
-
-#ifndef _WIN32_WCE
-  rx_timeout = Timeout;
-#endif
-
-  return true;
-}
-
-unsigned
-SerialPort::GetRxTimeout()
-{
-#ifdef _WIN32_WCE
-  COMMTIMEOUTS CommTimeouts;
-  return (::GetCommTimeouts(hPort, &CommTimeouts) ? CommTimeouts.ReadTotalTimeoutConstant : 0);
-#else
-  return rx_timeout;
-#endif
+  return SetCommTimeouts(hPort, &CommTimeouts);
 }
 
 unsigned
@@ -542,89 +460,4 @@ SerialPort::SetBaudrate(unsigned BaudRate)
   PortDCB.BaudRate = BaudRate;
 
   return SetCommState(hPort, &PortDCB);
-}
-
-int
-SerialPort::Read(void *Buffer, size_t Size)
-{
-  assert(!Thread::IsInside());
-
-  DWORD dwBytesTransferred;
-
-  if (hPort == INVALID_HANDLE_VALUE)
-    return -1;
-
-#ifdef _WIN32_WCE
-
-  if (ReadFile(hPort, Buffer, Size, &dwBytesTransferred, (OVERLAPPED *)NULL))
-    return dwBytesTransferred;
-
-  return -1;
-
-#else
-  OverlappedEvent osReader;
-
-  if (WaitDataPending(osReader, rx_timeout) != WaitResult::READY)
-    return -1;
-
-  int pending = GetDataPending();
-  if (pending < 0)
-    return -1;
-
-  if (Size > (size_t)pending)
-    /* don't request more bytes from the COMM buffer, because
-       otherwise ReadFile() would block until the buffer has been
-       filled completely */
-    Size = pending;
-
-  // Start reading data
-  if (!::ReadFile(hPort, Buffer, Size, &dwBytesTransferred, osReader.GetPointer())) {
-    if (::GetLastError() != ERROR_IO_PENDING)
-      return -1;
-  } else {
-    // Process data that was directly read by ReadFile()
-    return dwBytesTransferred;
-  }
-
-  // Let's wait for ReadFile() to finish
-  switch (osReader.Wait(GetRxTimeout())) {
-  case OverlappedEvent::FINISHED:
-    // Get results
-    if (!::GetOverlappedResult(hPort, osReader.GetPointer(), &dwBytesTransferred, FALSE))
-      // Error occured while fetching results
-      return -1;
-
-    // Process data that was read with a delay by ReadFile()
-    return dwBytesTransferred;
-
-  default:
-    return -1;
-  }
-#endif
-}
-
-Port::WaitResult
-SerialPort::WaitRead(unsigned timeout_ms)
-{
-#ifdef _WIN32_WCE
-  unsigned remaining = timeout_ms;
-
-  while (true) {
-    int pending = GetDataPending();
-    if (pending > 0)
-      return WaitResult::READY;
-    else if (pending < 0)
-      return WaitResult::FAILED;
-
-    if (remaining == 0)
-      return WaitResult::TIMEOUT;
-
-    const unsigned t = std::min(remaining, 50u);
-    remaining -= t;
-    Sleep(t);
-  }
-#else
-  OverlappedEvent overlapped;
-  return WaitDataPending(overlapped, timeout_ms);
-#endif
 }

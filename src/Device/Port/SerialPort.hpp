@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_SERIAL_PORT_HPP
 
 #include "Thread/StoppableThread.hpp"
-#include "Port.hpp"
+#include "BufferedPort.hpp"
 
 #include <windef.h>
 
@@ -36,7 +36,7 @@ class OverlappedEvent;
 /**
  * Generic SerialPort thread handler class
  */
-class SerialPort : public Port, protected StoppableThread
+class SerialPort : public BufferedPort, protected StoppableThread
 {
   unsigned baud_rate;
 
@@ -49,8 +49,6 @@ class SerialPort : public Port, protected StoppableThread
   bool is_widcomm;
 #else
   static const bool is_widcomm = false;
-
-  unsigned rx_timeout;
 #endif
 
 public:
@@ -60,7 +58,7 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  SerialPort(Handler &_handler);
+  SerialPort(Port::Handler &_handler);
 
   /**
    * Closes the serial port (Destructor)
@@ -74,7 +72,6 @@ public:
   bool Open(const TCHAR *path, unsigned baud_rate);
 
 protected:
-  unsigned GetRxTimeout();
   bool SetRxTimeout(unsigned Timeout);
 
   bool IsDataPending() const {
@@ -109,10 +106,6 @@ public:
   virtual void Flush();
   virtual bool SetBaudrate(unsigned baud_rate);
   virtual unsigned GetBaudrate() const;
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-  virtual int Read(void *Buffer, size_t Size);
-  virtual WaitResult WaitRead(unsigned timeout_ms);
   virtual size_t Write(const void *data, size_t length);
 
 protected:
