@@ -113,7 +113,7 @@ public:
    * @param gps_info Current NMEA_INFO
    * @return True if enough space could be cleared, False otherwise
    */
-  static bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
+  static bool LoggerClearFreeSpace(unsigned current_year);
   void StartLogger(const NMEAInfo &gps_info, const LoggerSettings &settings,
                    const TCHAR *asset_number, const Declaration &decl);
 

@@ -115,7 +115,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   writer = NULL;
 
   // Make space for logger file, if unsuccessful -> cancel
-  if (!LoggerClearFreeSpace(gps_info))
+  if (!LoggerClearFreeSpace(gps_info.date_time_utc.year))
     return;
 
   pre_takeoff_buffer.clear();
@@ -244,7 +244,7 @@ LoggerImpl::LoggerNote(const TCHAR *text)
 }
 
 static time_t
-LogFileDate(const NMEAInfo &gps_info, const TCHAR *filename)
+LogFileDate(unsigned current_year, const TCHAR *filename)
 {
   TCHAR asset[MAX_PATH];
 
@@ -271,7 +271,7 @@ LogFileDate(const NMEAInfo &gps_info, const TCHAR *filename)
 		                 &cyear, &cmonth, &cday, asset, &cflight);
 
   if (matches == 5) {
-    int iyear = (int)gps_info.date_time_utc.year;
+    int iyear = (int)current_year;
     int syear = iyear % 10;
     int yearzero = iyear - syear;
     int yearthis = IGCCharToNum(cyear) + yearzero;
@@ -302,10 +302,11 @@ LogFileDate(const NMEAInfo &gps_info, const TCHAR *filename)
 }
 
 static bool
-LogFileIsOlder(const NMEAInfo &gps_info,
+LogFileIsOlder(unsigned current_year,
                const TCHAR *oldestname, const TCHAR *thisname)
 {
-  return LogFileDate(gps_info, oldestname) > LogFileDate(gps_info, thisname);
+  return LogFileDate(current_year, oldestname) >
+         LogFileDate(current_year, thisname);
 }
 
 /**
@@ -315,7 +316,7 @@ LogFileIsOlder(const NMEAInfo &gps_info,
  * @return True if a file was found and deleted, False otherwise
  */
 static bool
-DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
+DeleteOldestIGCFile(unsigned current_year, const TCHAR *pathname)
 {
   StaticString<MAX_PATH> oldest_name, full_name;
 
@@ -332,7 +333,7 @@ DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
     full_name += ent->d_name;
 
     if (File::Exists(full_name) &&
-        LogFileIsOlder(gps_info, oldest_name, ent->d_name))
+        LogFileIsOlder(current_year, oldest_name, ent->d_name))
       // we have a new oldest name
       oldest_name = ent->d_name;
   }
@@ -348,7 +349,7 @@ DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
 }
 
 bool
-LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)
+LoggerImpl::LoggerClearFreeSpace(unsigned current_year)
 {
   bool found = true;
   unsigned long kbfree = 0;
@@ -365,9 +366,9 @@ LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)
     */
 
     // search for IGC files, and delete the oldest one
-    found = DeleteOldestIGCFile(gps_info, pathname);
+    found = DeleteOldestIGCFile(current_year, pathname);
     if (!found)
-      found = DeleteOldestIGCFile(gps_info, subpathname);
+      found = DeleteOldestIGCFile(current_year, subpathname);
   }
 
   if (kbfree >= LOGGER_MINFREESTORAGE) {
