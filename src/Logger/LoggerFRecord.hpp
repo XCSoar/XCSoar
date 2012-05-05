@@ -33,7 +33,7 @@ class LoggerFRecord
 {
   GPSClock clock;
   char last_f_record[64];
-  bool detect_f_record_change;
+  bool update_needed;
 
 public:
   LoggerFRecord()

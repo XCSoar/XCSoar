@@ -54,7 +54,7 @@ void
 LoggerFRecord::Reset()
 {
   last_f_record[0] = 0;
-  detect_f_record_change=true;
+  update_needed = true;
   clock.Reset(); // reset clock / timer
   clock.SetDT(fixed_one); // 1 sec so it appears at top of each file
 }
@@ -78,17 +78,16 @@ LoggerFRecord::Update(const GPSState &gps, const BrokenTime &broken_time,
     }
   }
 
-  detect_f_record_change = detect_f_record_change ||
-    strcmp(f_record + 7, last_f_record + 7);
+  update_needed = update_needed || strcmp(f_record + 7, last_f_record + 7);
   
   if (!gps.satellites_used_available || gps.satellites_used < 3 || nav_warning)
     clock.SetDT(fixed(30)); // accelerate to 30 seconds if bad signal
    
-  if (!clock.CheckAdvance(fixed(time)) || !detect_f_record_change)
+  if (!clock.CheckAdvance(fixed(time)) || !update_needed)
     return NULL;
 
   strcpy(last_f_record, f_record);
-  detect_f_record_change=false;
+  update_needed = false;
   clock.SetDT(fixed_270); //4.5 minutes
   return last_f_record;
 }
