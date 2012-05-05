@@ -162,17 +162,11 @@ IGCParseFix(const char *buffer, IGCFix &fix)
 bool
 IGCParseFixTime(const char *buffer, BrokenTime &time)
 {
-  int Hour = 0;
-  int Minute = 0;
-  int Second = 0;
-  int lfound = sscanf(buffer, "B%02d%02d%02d", &Hour, &Minute, &Second);
+  unsigned hour, minute, second;
 
-  if (lfound == EOF)
+  if (sscanf(buffer, "B%02u%02u%02u", &hour, &minute, &second) != 3)
     return false;
 
-  if (lfound != 3)
-    return false;
-
-  time = BrokenTime(Hour, Minute, Second);
+  time = BrokenTime(hour, minute, second);
   return true;
 }
