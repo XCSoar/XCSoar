@@ -22,83 +22,57 @@ Copyright_License {
 */
 
 #include "Dialogs/ManageFlarmDialog.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/ButtonPanel.hpp"
-#include "Screen/Layout.hpp"
-#include "Screen/SingleWindow.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/FLARM/Device.hpp"
 
-static WndForm *dialog;
-static FlarmDevice *device;
+class ManageFLARMWidget : public RowFormWidget, private ActionListener {
+  enum Controls {
+    Reboot,
+  };
 
-static void
-OnCloseClicked(gcc_unused WndButton &button)
-{
-  dialog->SetModalResult(mrOK);
-}
+  FlarmDevice &device;
 
-static void
-OnRebootClicked(gcc_unused WndButton &button)
+public:
+  ManageFLARMWidget(const DialogLook &look, FlarmDevice &_device)
+    :RowFormWidget(look), device(_device) {}
+
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+
+private:
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id);
+};
+
+void
+ManageFLARMWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  MessageOperationEnvironment env;
-  device->Restart(env);
+  AddButton(_("Reboot"), this, Reboot);
 }
 
 void
-ManageFlarmDialog(Device &_device)
+ManageFLARMWidget::OnAction(int id)
 {
-  device = (FlarmDevice *)&_device;
+  switch (id) {
+  case Reboot:
+    {
+      MessageOperationEnvironment env;
+      device.Restart(env);
+    }
+    break;
+  }
+}
 
-  /* create the dialog */
-
-  WindowStyle dialog_style;
-  dialog_style.Hide();
-  dialog_style.ControlParent();
-
-  SingleWindow &parent = UIGlobals::GetMainWindow();
-  const DialogLook &look = UIGlobals::GetDialogLook();
-
-  dialog = new WndForm(parent, look, parent.GetClientRect(),
-                       _T("FLARM"), dialog_style);
-
-  ContainerWindow &client_area = dialog->GetClientAreaWindow();
-
-  /* create buttons */
-
-  ButtonPanel buttons(client_area, look);
-  buttons.Add(_("Close"), OnCloseClicked);
-
-  const PixelRect rc = buttons.UpdateLayout();
-
-  /* create the command buttons */
-
-  const UPixelScalar margin = 0;
-  const UPixelScalar height = Layout::Scale(30);
-
-  ButtonWindowStyle button_style;
-  button_style.TabStop();
-
-  WndButton *button;
-
-  PixelRect brc = rc;
-  brc.left += margin;
-  brc.top += margin;
-  brc.right -= margin;
-  brc.bottom = brc.top + height;
-
-  button = new WndButton(client_area, look, _("Reboot"),
-                         brc,
-                         button_style,
-                         OnRebootClicked);
-  dialog->AddDestruct(button);
-
-  /* run it */
-
-  dialog->ShowModal();
-
-  delete dialog;
+void
+ManageFlarmDialog(Device &device)
+{
+  WidgetDialog dialog(_T("FLARM"),
+                      new ManageFLARMWidget(UIGlobals::GetDialogLook(),
+                                            (FlarmDevice &)device));
+  dialog.AddButton(_("Close"), mrCancel);
+  dialog.ShowModal();
 }
