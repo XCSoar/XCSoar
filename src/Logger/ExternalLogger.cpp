@@ -40,6 +40,7 @@
 #include "OS/FileUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IGC/IGCParser.hpp"
+#include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 
 #include <windef.h> /* for MAX_PATH */

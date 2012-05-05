@@ -22,6 +22,7 @@
 
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
+#include "IGC/IGCHeader.hpp"
 #include "DateTime.hpp"
 #include "TestUtil.hpp"
 

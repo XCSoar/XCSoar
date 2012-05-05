@@ -21,49 +21,24 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_IGC_PARSER_HPP
-#define XCSOAR_IGC_PARSER_HPP
+#ifndef XCSOAR_IGC_HEADER_HPP
+#define XCSOAR_IGC_HEADER_HPP
 
-#include "Util/StaticString.hpp"
-#include "Math/fixed.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
-#include "DateTime.hpp"
+struct IGCHeader {
+  /**
+   * 3-letter manufacturer id.
+   */
+  char manufacturer[4];
 
-#include <tchar.h>
+  /**
+   * 3-letter logger id.
+   */
+  char id[4];
 
-struct IGCFix;
-struct IGCHeader;
-
-/**
- * Parse an IGC "A" record.
- *
- * @return true on success, false if the line was not recognized
- */
-bool
-IGCParseHeader(const char *line, IGCHeader &header);
-
-/**
- * Parse an IGC "HFDTE" record.
- *
- * @return true on success, false if the line was not recognized
- */
-bool
-IGCParseDate(const char *line, BrokenDate &date);
-
-/**
- * Parse an IGC "B" record.
- *
- * @return true on success, false if the line was not recognized
- */
-bool
-IGCParseFix(const char *buffer, IGCFix &fix);
-
-/**
- * Parse the time from an IGC "B" record.
- *
- * @return true on success, false if the line was not recognized
- */
-bool
-IGCParseFixTime(const char *buffer, BrokenTime &time);
+  /**
+   * The flight number on that day.
+   */
+  unsigned flight;
+};
 
 #endif
