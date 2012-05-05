@@ -862,7 +862,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   // e_FlightLevel
   {
     N_("Flight level"),
-    N_("Flight Level"),
+    N_("FL"),
     N_("Pressure Altitude given as Flight Level. Only available if barometric altitude available and correct QNH set."),
     IBFHelper<InfoBoxContentFlightLevel>::Create,
     e_Barogram, // Barogram
