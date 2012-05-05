@@ -197,8 +197,7 @@ IGCWriter::WriteHeader(const BrokenDateTime &date_time,
 
   WriteLine("HFDTM100DATUM:WGS-84");
 
-  if (!simulator)
-    WriteLine(GetIRecord());
+  WriteLine(GetIRecord());
 }
 
 void
