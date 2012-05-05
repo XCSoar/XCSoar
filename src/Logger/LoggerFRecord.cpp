@@ -63,7 +63,7 @@ LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
 {
   // Accelerate to 30 seconds if bad signal
   if (!gps.satellites_used_available || gps.satellites_used < 3 || nav_warning)
-    clock.SetDT(fixed(30));
+    clock.SetDT(fixed(ACCELERATED_UPDATE_TIME));
    
   // Check whether we still have satellite information
   bool available_changed =
@@ -89,7 +89,7 @@ LoggerFRecord::Update(const GPSState &gps, fixed time, bool nav_warning)
 
   update_needed = false;
 
-  clock.SetDT(fixed_270);
+  clock.SetDT(fixed(DEFAULT_UPDATE_TIME));
 
   return true;
 }

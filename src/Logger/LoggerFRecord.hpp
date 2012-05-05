@@ -31,6 +31,10 @@ struct BrokenTime;
 
 class LoggerFRecord
 {
+  /* 4.5 minutes */
+  static gcc_constexpr_data int DEFAULT_UPDATE_TIME = 270;
+  static gcc_constexpr_data int ACCELERATED_UPDATE_TIME = 30;
+
   GPSClock clock;
   bool update_needed;
 
@@ -39,7 +43,7 @@ class LoggerFRecord
 
 public:
   LoggerFRecord()
-    :clock(fixed_270 /* 4.5 minutes */) {}
+    :clock(fixed(DEFAULT_UPDATE_TIME)) {}
 
   /**
    * Returns true if the IGCWriter is supposed to write a new F record to
