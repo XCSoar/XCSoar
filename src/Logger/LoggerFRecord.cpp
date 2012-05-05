@@ -83,7 +83,7 @@ LoggerFRecord::Update(const GPSState &gps, const BrokenTime &broken_time,
   if (!gps.satellites_used_available || gps.satellites_used < 3 || nav_warning)
     clock.SetDT(fixed(30)); // accelerate to 30 seconds if bad signal
    
-  if (!clock.CheckAdvance(fixed(time)) || !update_needed)
+  if (!clock.CheckAdvance(time) || !update_needed)
     return NULL;
 
   strcpy(last_f_record, f_record);
