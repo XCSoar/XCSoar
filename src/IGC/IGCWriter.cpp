@@ -311,10 +311,6 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  int satellites = GetSIU(gps_info.gps);
-  fixed epe = GetEPE(gps_info.gps);
-  IGCFix fix;
-
   // if at least one GPS fix comes from the simulator, disable signing
   if (gps_info.alive && !gps_info.gps.real)
     simulator = true;
@@ -333,7 +329,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
           || !gps_info.location_available))
     return;
 
-
+  IGCFix fix;
   if (!gps_info.location_available) {
     fix = last_valid_point;
     fix.gps_valid = false;
@@ -353,7 +349,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
                                          /* fall back to GPS altitude */
                                          fix.gps_altitude;
 
-  LogPoint(fix, (int)epe, satellites);
+  LogPoint(fix, (int)GetEPE(gps_info.gps), GetSIU(gps_info.gps));
 }
 
 void
