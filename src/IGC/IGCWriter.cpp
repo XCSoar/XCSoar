@@ -375,6 +375,30 @@ IGCWriter::LogEvent(const NMEAInfo &gps_info, bool simulator, const char *event)
 }
 
 void
+IGCWriter::LogEmptyFRecord(const BrokenTime &time)
+{
+  char f_record[64];
+  sprintf(f_record, "F%02u%02u%02u", time.hour, time.minute, time.second);
+  WriteLine(f_record);
+}
+
+void
+IGCWriter::LogFRecord(const BrokenTime &time, const int *satellite_ids)
+{
+  char f_record[64];
+  sprintf(f_record, "F%02u%02u%02u", time.hour, time.minute, time.second);
+
+  for (unsigned i = 0, length = 7; i < GPSState::MAXSATELLITES; ++i) {
+    if (satellite_ids[i] > 0) {
+      sprintf(f_record + length, "%02d", satellite_ids[i]);
+      length += 2;
+    }
+  }
+
+  WriteLine(f_record);
+}
+
+void
 IGCWriter::Sign()
 {
   // buffer is appended w/ each igc file write

@@ -75,17 +75,19 @@ static const char *const expect[] = {
   "C5037932N01043567ESUHL",
   "C5103117N00742367EBERGNEUSTADT",
   "C0000000N00000000ELANDING",
+  "F112233",
   "B1122385103117N00742367EA004900048700000",
   "E112243my_event",
   "B1122435103117N00742367EA004900048700000",
   "LPLTmy_note",
+  "F112253121701",
   "B1122535103117S00742367WA004900048700000",
   NULL
 };
 
 int main(int argc, char **argv)
 {
-  plan_tests(47);
+  plan_tests(51);
 
   const TCHAR *path = _T("output/test/test.igc");
   File::Delete(path);
@@ -121,6 +123,8 @@ int main(int argc, char **argv)
   writer.AddDeclaration(home, _T("Bergneustadt"));
   writer.EndDeclaration();
 
+  writer.LogEmptyFRecord(i.date_time_utc);
+
   i.date_time_utc.second += 5;
   writer.LogPoint(i, false);
   i.date_time_utc.second += 5;
@@ -128,7 +132,17 @@ int main(int argc, char **argv)
   i.date_time_utc.second += 5;
   writer.LoggerNote(_T("my_note"));
 
+  int satellites[GPSState::MAXSATELLITES];
+  for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i)
+    satellites[i] = 0;
+
+  satellites[2] = 12;
+  satellites[4] = 17;
+  satellites[7] = 1;
+
   i.date_time_utc.second += 5;
+  writer.LogFRecord(i.date_time_utc, satellites);
+
   i.location = GeoPoint(Angle::Degrees(fixed(-7.7061111111111114)),
                         Angle::Degrees(fixed(-51.051944444444445)));
   writer.LogPoint(i, false);
