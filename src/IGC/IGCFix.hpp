@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_IGC_FIX_HPP
 #define XCSOAR_IGC_FIX_HPP
 
-#include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "DateTime.hpp"
 
@@ -36,7 +35,7 @@ struct IGCFix
 
   bool gps_valid;
 
-  fixed gps_altitude, pressure_altitude;
+  int gps_altitude, pressure_altitude;
 };
 
 #endif

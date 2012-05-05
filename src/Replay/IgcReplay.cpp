@@ -134,14 +134,14 @@ IgcReplay::Update()
       return false;
     }
 
-    if (fix.pressure_altitude == fixed_zero && positive(fix.gps_altitude))
+    if (fix.pressure_altitude == 0 && fix.gps_altitude > 0)
       /* no pressure altitude was recorded - fall back to GPS
          altitude */
       fix.pressure_altitude = fix.gps_altitude;
 
     if (fix.time.Plausible())
       cli.Update(fixed(fix.time.GetSecondOfDay()), fix.location,
-                 fix.gps_altitude, fix.pressure_altitude);
+                 fixed(fix.gps_altitude), fixed(fix.pressure_altitude));
   }
 
   if (!positive(t_simulation))

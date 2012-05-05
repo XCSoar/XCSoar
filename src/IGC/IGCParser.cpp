@@ -146,8 +146,8 @@ IGCParseFix(const char *buffer, IGCFix &fix)
   if (lon_char == 'W')
     fix.location.longitude.Flip();
 
-  fix.gps_altitude = fixed(gps_altitude);
-  fix.pressure_altitude = fixed(pressure_altitude);
+  fix.gps_altitude = gps_altitude;
+  fix.pressure_altitude = pressure_altitude;
 
   // some loggers drop out GPS altitude, so when this happens, revert
   // to pressure altitude

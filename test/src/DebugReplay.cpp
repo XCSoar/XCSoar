@@ -169,9 +169,9 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
   basic.alive.Update(basic.clock);
   basic.location = fix.location;
   basic.location_available.Update(basic.clock);
-  basic.gps_altitude = fix.gps_altitude;
+  basic.gps_altitude = fixed(fix.gps_altitude);
   basic.gps_altitude_available.Update(basic.clock);
-  basic.pressure_altitude = basic.baro_altitude = fix.pressure_altitude;
+  basic.pressure_altitude = basic.baro_altitude = fixed(fix.pressure_altitude);
   basic.pressure_altitude_available.Update(basic.clock);
   basic.baro_altitude_available.Update(basic.clock);
 }

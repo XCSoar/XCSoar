@@ -94,30 +94,30 @@ TestFix()
   ok1(fix.time == BrokenTime(11, 22, 38));
   ok1(equals(fix.location, 51.05195, 7.70611667));
   ok1(fix.gps_valid);
-  ok1(equals(fix.pressure_altitude, 490));
-  ok1(equals(fix.gps_altitude, 487));
+  ok1(fix.pressure_altitude == 490);
+  ok1(fix.gps_altitude == 487);
 
   ok1(IGCParseFix("B1122385103117N00742367EV0049000487", fix));
   ok1(fix.time == BrokenTime(11, 22, 38));
   ok1(equals(fix.location, 51.05195, 7.70611667));
   ok1(!fix.gps_valid);
-  ok1(equals(fix.pressure_altitude, 490));
-  ok1(equals(fix.gps_altitude, 487));
+  ok1(fix.pressure_altitude == 490);
+  ok1(fix.gps_altitude == 487);
 
   ok1(!IGCParseFix("B1122385103117N00742367EX0049000487", fix));
 
   ok1(IGCParseFix("B1122435103117N00742367EA004900000000000", fix));
   ok1(fix.time == BrokenTime(11, 22, 43));
   ok1(fix.gps_valid);
-  ok1(equals(fix.pressure_altitude, 490));
-  ok1(equals(fix.gps_altitude, 490));
+  ok1(fix.pressure_altitude == 490);
+  ok1(fix.gps_altitude == 490);
 
   ok1(IGCParseFix("B1122535103117S00742367WA104900000700000", fix));
   ok1(fix.time == BrokenTime(11, 22, 53));
   ok1(fix.gps_valid);
   ok1(equals(fix.location, -51.05195, -7.70611667));
-  ok1(equals(fix.pressure_altitude, 10490));
-  ok1(equals(fix.gps_altitude, 7));
+  ok1(fix.pressure_altitude == 10490);
+  ok1(fix.gps_altitude == 7);
 }
 
 static void
