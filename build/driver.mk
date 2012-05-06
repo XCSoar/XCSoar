@@ -55,6 +55,8 @@ FLARM_SOURCES = \
 	$(DRIVER_SRC_DIR)/FLARM/Device.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/Register.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/Mode.cpp \
+	$(DRIVER_SRC_DIR)/FLARM/Parser.cpp \
+	$(DRIVER_SRC_DIR)/FLARM/Settings.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/Declare.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/Logger.cpp \
 	$(DRIVER_SRC_DIR)/FLARM/CRC16.cpp \
