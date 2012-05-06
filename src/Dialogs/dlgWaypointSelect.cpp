@@ -141,10 +141,8 @@ struct WaypointSelectInfo
 {
   /** Pointer to actual waypoint (unprotected!) */
   const Waypoint* waypoint;
-  /** Distance from observer to waypoint [m] */
-  fixed distance;
-  /** Bearing (deg true north) from observer to waypoint */
-  Angle direction;
+  /** From observer to waypoint */
+  GeoVector vec;
 };
 
 struct WaypointSelectInfoVector :
@@ -154,11 +152,7 @@ struct WaypointSelectInfoVector :
     WaypointSelectInfo info;
 
     info.waypoint = &waypoint;
-
-    const GeoVector vec(location, waypoint.location);
-
-    info.distance = vec.distance;
-    info.direction = vec.bearing;
+    info.vec = GeoVector(location, waypoint.location);
 
     std::vector<WaypointSelectInfo>::push_back(info);
   }
@@ -563,7 +557,7 @@ static bool
 WaypointDistanceCompare(const struct WaypointSelectInfo &a,
                         const struct WaypointSelectInfo &b)
 {
-  return a.distance < b.distance;
+  return a.vec.distance < b.vec.distance;
 }
 
 static void
@@ -762,8 +756,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   const struct WaypointSelectInfo &info = waypoint_select_info[i];
 
-  WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
-                             GeoVector(info.distance, info.direction),
+  WaypointListRenderer::Draw(canvas, rc, *info.waypoint, info.vec,
                              UIGlobals::GetDialogLook(),
                              UIGlobals::GetMapLook().waypoint,
                              CommonInterface::GetMapSettings().waypoint);
