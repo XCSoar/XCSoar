@@ -48,6 +48,9 @@ IGCCharToNum(TCHAR c)
   if ((c >= _T('A')) && (c <= _T('Z')))
     return c - _T('A') + 10;
 
+  if ((c >= _T('a')) && (c <= _T('z')))
+    return c - _T('a') + 10;
+
   return 0; // Error!
 }
 
