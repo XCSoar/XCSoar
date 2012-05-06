@@ -19,37 +19,23 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-
 */
 
-#include "Dialogs/Waypoint.hpp"
-#include "UIGlobals.hpp"
-#include "Waypoint/Waypoints.hpp"
-#include "Waypoint/LastUsed.hpp"
+#ifndef XCSOAR_LAST_USED_WAYPOINTS_HPP
+#define XCSOAR_LAST_USED_WAYPOINTS_HPP
 
-/**
- * Opens up the WaypointDetails window of the nearest
- * waypoint to location
- * @param way_points Waypoints including all possible
- * waypoints for the calculation
- * @param location Location where to search
- * @param range Maximum range to search
- * @param pan True if in Pan mode
- * @return True if a waypoint was found
- */
-bool
-PopupNearestWaypointDetails(const Waypoints &way_points,
-                            const GeoPoint &location,
-                            double range)
+#include <list>
+
+struct Waypoint;
+
+typedef std::list<unsigned> WaypointIDList;
+
+namespace LastUsedWaypoints
 {
-  const Waypoint *way_point;
-  way_point = way_points.LookupLocation(location, fixed(range));
+  void Add(unsigned waypoint_id);
+  void Add(const Waypoint &waypoint);
 
-  if (way_point) {
-    LastUsedWaypoints::Add(*way_point);
-    dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *way_point);
-    return true;
-  }
-  return false;
+  const WaypointIDList &GetList();
 }
 
+#endif

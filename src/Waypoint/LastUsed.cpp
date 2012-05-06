@@ -19,37 +19,34 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-
 */
 
-#include "Dialogs/Waypoint.hpp"
-#include "UIGlobals.hpp"
-#include "Waypoint/Waypoints.hpp"
-#include "Waypoint/LastUsed.hpp"
+#include "LastUsed.hpp"
+#include "Waypoint/Waypoint.hpp"
 
-/**
- * Opens up the WaypointDetails window of the nearest
- * waypoint to location
- * @param way_points Waypoints including all possible
- * waypoints for the calculation
- * @param location Location where to search
- * @param range Maximum range to search
- * @param pan True if in Pan mode
- * @return True if a waypoint was found
- */
-bool
-PopupNearestWaypointDetails(const Waypoints &way_points,
-                            const GeoPoint &location,
-                            double range)
+namespace LastUsedWaypoints
 {
-  const Waypoint *way_point;
-  way_point = way_points.LookupLocation(location, fixed(range));
+  WaypointIDList waypoint_ids;
+}
 
-  if (way_point) {
-    LastUsedWaypoints::Add(*way_point);
-    dlgWaypointDetailsShowModal(UIGlobals::GetMainWindow(), *way_point);
-    return true;
-  }
-  return false;
+void
+LastUsedWaypoints::Add(unsigned waypoint_id)
+{
+  // Remove it if it exists already
+  waypoint_ids.remove(waypoint_id);
+  // and add it to the top of the list
+  waypoint_ids.push_back(waypoint_id);
+}
+
+void
+LastUsedWaypoints::Add(const Waypoint &waypoint)
+{
+  Add(waypoint.id);
+}
+
+const WaypointIDList &
+LastUsedWaypoints::GetList()
+{
+  return waypoint_ids;
 }
 

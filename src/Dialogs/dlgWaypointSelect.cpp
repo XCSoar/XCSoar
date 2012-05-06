@@ -33,6 +33,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
+#include "Waypoint/LastUsed.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
@@ -164,7 +165,6 @@ struct WaypointSelectInfoVector :
 };
 
 static WaypointSelectInfoVector waypoint_select_info;
-static std::list<unsigned int> last_used_waypoint_ids;
 
 static TCHAR *
 GetDirectionData(int direction_filter_index)
@@ -589,7 +589,7 @@ FillList(WaypointSelectInfoVector &list, const Waypoints &src,
 
 static void
 FillLastUsedList(WaypointSelectInfoVector &list,
-                 const std::list<unsigned int> &last_used_ids,
+                 const WaypointIDList &last_used_ids,
                  const Waypoints &waypoints, const GeoPoint location)
 {
   list.clear();
@@ -610,7 +610,7 @@ static void
 UpdateList()
 {
   if (filter_data.type_index == TF_LAST_USED)
-    FillLastUsedList(waypoint_select_info, last_used_waypoint_ids,
+    FillLastUsedList(waypoint_select_info, LastUsedWaypoints::GetList(),
                      way_points, location);
   else
     FillList(waypoint_select_info, way_points, location, last_heading,
@@ -839,13 +839,6 @@ FormKeyDown(WndForm &sender, unsigned key_code)
 }
 
 #endif /* GNAV */
-
-void
-dlgWaypointSelectAddToLastUsed(const Waypoint &waypoint)
-{
-  last_used_waypoint_ids.remove(waypoint.id);
-  last_used_waypoint_ids.push_back(waypoint.id);
-}
 
 static gcc_constexpr_data CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnFilterDistance),

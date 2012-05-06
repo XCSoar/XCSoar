@@ -39,9 +39,6 @@ dlgWaypointSelect(SingleWindow &parent,
                   const unsigned ordered_task_index = 0);
 
 void
-dlgWaypointSelectAddToLastUsed(const Waypoint &wp);
-
-void
 dlgConfigWaypointsShowModal();
 
 bool

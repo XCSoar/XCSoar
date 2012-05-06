@@ -52,6 +52,7 @@ Copyright_License {
 #include "Compatibility/path.h"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
+#include "Waypoint/LastUsed.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -341,7 +342,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(wf != NULL);
 
-  dlgWaypointSelectAddToLastUsed(_waypoint);
+  LastUsedWaypoints::Add(_waypoint);
 
   UpdateCaption(waypoint->name.c_str());
 
