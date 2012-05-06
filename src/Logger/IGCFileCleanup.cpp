@@ -59,7 +59,7 @@ LogFileDate(unsigned current_year, const TCHAR *filename)
 {
   // scan for long filename
   unsigned short year, month, day, num;
-  int matches = _stscanf(filename, _T("%hu-%hu-%hu-%*7s-%hu.igc"),
+  int matches = _stscanf(filename, _T("%hu-%hu-%hu-%*7s-%hu."),
                          &year, &month, &day, &num);
 
   if (matches == 4) {
@@ -76,7 +76,7 @@ LogFileDate(unsigned current_year, const TCHAR *filename)
 
   TCHAR cyear, cmonth, cday, cflight;
   // scan for short filename
-  matches = _stscanf(filename, _T("%c%c%c%*4s%c.igc"),
+  matches = _stscanf(filename, _T("%c%c%c%*4s%c."),
 		                 &cyear, &cmonth, &cday,&cflight);
 
   if (matches == 4) {
