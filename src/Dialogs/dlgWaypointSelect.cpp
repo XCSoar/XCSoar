@@ -141,7 +141,7 @@ struct WaypointSelectInfo
 {
   /** Pointer to actual waypoint (unprotected!) */
   const Waypoint* waypoint;
-  /** Distance in user units from observer to waypoint */
+  /** Distance from observer to waypoint [m] */
   fixed distance;
   /** Bearing (deg true north) from observer to waypoint */
   Angle direction;
