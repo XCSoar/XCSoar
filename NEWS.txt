@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.3.4 - not yet released
+
 Version 6.3.3 - 2012/05/05
 * calculations
   - use arrival height instead of terrain safety height for MC0 Alt.D
