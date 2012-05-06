@@ -28,7 +28,6 @@
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "UtilsSystem.hpp"
-#include "Compatibility/dirent.h"
 #include "LogFile.hpp"
 
 #include <tchar.h>
@@ -108,13 +107,29 @@ LogFileDate(unsigned current_year, const TCHAR *filename)
   return 0;
 }
 
-static bool
-LogFileIsOlder(unsigned current_year,
-               const TCHAR *oldestname, const TCHAR *thisname)
+class OldIGCFileFinder: public File::Visitor
 {
-  return LogFileDate(current_year, oldestname) >
-         LogFileDate(current_year, thisname);
-}
+  unsigned current_year;
+  time_t oldest_time;
+  StaticString<MAX_PATH> oldest_path;
+
+public:
+  OldIGCFileFinder(unsigned _current_year):current_year(_current_year) {
+    oldest_path.clear();
+  }
+
+  virtual void Visit(const TCHAR* path, const TCHAR* filename) {
+    time_t this_time = LogFileDate(current_year, filename);
+    if (oldest_path.empty() || oldest_time > this_time) {
+      oldest_time = this_time;
+      oldest_path = path;
+    }
+  }
+
+  const TCHAR *GetOldestIGCFile() const {
+    return oldest_path.c_str();
+  }
+};
 
 /**
  * Delete eldest IGC file in the given path
@@ -125,33 +140,14 @@ LogFileIsOlder(unsigned current_year,
 static bool
 DeleteOldestIGCFile(unsigned current_year, const TCHAR *pathname)
 {
-  StaticString<MAX_PATH> oldest_name, full_name;
+  OldIGCFileFinder visitor(current_year);
+  Directory::VisitSpecificFiles(pathname, _T("*.igc"), visitor, true);
 
-  _TDIR *dir = _topendir(pathname);
-  if (dir == NULL)
+  if (StringIsEmpty(visitor.GetOldestIGCFile()))
     return false;
 
-  _tdirent *ent;
-  while ((ent = _treaddir(dir)) != NULL) {
-    if (!MatchesExtension(ent->d_name, _T(".igc")))
-      continue;
-
-    full_name = pathname;
-    full_name += ent->d_name;
-
-    if (File::Exists(full_name) &&
-        LogFileIsOlder(current_year, oldest_name, ent->d_name))
-      // we have a new oldest name
-      oldest_name = ent->d_name;
-  }
-
-  _tclosedir(dir);
-
   // now, delete the file...
-  full_name.Format(_T("%s%s"), pathname, oldest_name.c_str());
-  File::Delete(full_name);
-
-  // did delete one
+  File::Delete(visitor.GetOldestIGCFile());
   return true;
 }
 
@@ -159,9 +155,6 @@ bool
 IGCFileCleanup(unsigned current_year)
 {
   const TCHAR *pathname = GetPrimaryDataPath();
-
-  TCHAR subpathname[MAX_PATH];
-  LocalPath(subpathname, _T("logs"));
 
   int numtries = 0;
   do {
@@ -174,8 +167,7 @@ IGCFileCleanup(unsigned current_year)
     }
 
     // if we don't have enough space yet we try to delete old IGC files
-    if (!DeleteOldestIGCFile(current_year, pathname) &&
-        !DeleteOldestIGCFile(current_year, subpathname))
+    if (!DeleteOldestIGCFile(current_year, pathname))
       break;
 
     // but only 100 times
