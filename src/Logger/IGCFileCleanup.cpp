@@ -158,31 +158,32 @@ DeleteOldestIGCFile(unsigned current_year, const TCHAR *pathname)
 bool
 IGCFileCleanup(unsigned current_year)
 {
-  bool found = true;
-  unsigned long kbfree = 0;
   const TCHAR *pathname = GetPrimaryDataPath();
-  TCHAR subpathname[MAX_PATH];
-  int numtries = 0;
 
+  TCHAR subpathname[MAX_PATH];
   LocalPath(subpathname, _T("logs"));
 
-  while (found && ((kbfree = FindFreeSpace(pathname)) < LOGGER_MINFREESTORAGE)
-	       && (numtries++ < 100)) {
-    /* JMW asking for deleting old files is disabled now --- system
-       automatically deletes old files as required
-    */
+  int numtries = 0;
+  do {
+    // Find out how much space is available
+    unsigned long kbfree = FindFreeSpace(pathname);
+    if (kbfree >= LOGGER_MINFREESTORAGE) {
+      // if enough space is available we return happily
+      LogStartUp(_T("LoggerFreeSpace returned: true"));
+      return true;
+    }
 
-    // search for IGC files, and delete the oldest one
-    found = DeleteOldestIGCFile(current_year, pathname);
-    if (!found)
-      found = DeleteOldestIGCFile(current_year, subpathname);
-  }
+    // if we don't have enough space yet we try to delete old IGC files
+    if (!DeleteOldestIGCFile(current_year, pathname) &&
+        !DeleteOldestIGCFile(current_year, subpathname))
+      break;
 
-  if (kbfree >= LOGGER_MINFREESTORAGE) {
-    LogStartUp(_T("LoggerFreeSpace returned: true"));
-    return true;
-  } else {
-    LogStartUp(_T("LoggerFreeSpace returned: false"));
-    return false;
-  }
+    // but only 100 times
+    numtries++;
+  } while (numtries < 100);
+
+  // if we get to this point we don't have any IGC files left or deleted
+  // 100 old IGC files already
+  LogStartUp(_T("LoggerFreeSpace returned: false"));
+  return false;
 }
