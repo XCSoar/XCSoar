@@ -21,54 +21,48 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-#include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
+#include "Audio/Features.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Init.hpp"
+#ifndef HAVE_PCM_PLAYER
+#error PCMPlayer not available
 #endif
 
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include "Audio/PCMPlayer.hpp"
+#include "Audio/ToneSynthesiser.hpp"
+#include "Screen/Init.hpp"
+#include "OS/Args.hpp"
+#include "OS/Sleep.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-ScreenGlobalInit::ScreenGlobalInit()
+int
+main(int argc, char **argv)
 {
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
+  Args args(argc, argv, "HZ");
+  const char *freq_s = args.ExpectNext();
+  args.ExpectEnd();
+
+  unsigned freq = strtoul(freq_s, NULL, 10);
+  if (freq == 0 || freq > 48000) {
+    fprintf(stderr, "Invalid frequency\n");
+    return EXIT_FAILURE;
   }
 
-  ::SDL_EnableKeyRepeat(250, 50);
+  ScreenGlobalInit screen;
 
-#if defined(ENABLE_OPENGL)
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
+  PCMPlayer player;
 
-  OpenGL::Initialise();
-#endif
+  const unsigned sample_rate = 44100;
 
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
+  ToneSynthesiser tone;
+  tone.SetTone(sample_rate, freq);
+
+  if (!player.Start(tone, sample_rate)) {
+    fprintf(stderr, "Failed to start PCMPlayer\n");
+    return EXIT_FAILURE;
   }
 
-  Font::Initialise();
-
-  ScreenInitialized();
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
-#endif
-
-  ::TTF_Quit();
-  ::SDL_Quit();
-
-  ScreenDeinitialized();
+  Sleep(1000);
+  return EXIT_SUCCESS;
 }

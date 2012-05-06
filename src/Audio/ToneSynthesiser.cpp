@@ -21,54 +21,35 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-#include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
+#include "ToneSynthesiser.hpp"
+#include "Math/FastMath.h"
+#include "Util/Macros.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Init.hpp"
-#endif
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-ScreenGlobalInit::ScreenGlobalInit()
+void
+ToneSynthesiser::SetTone(unsigned sample_rate, unsigned tone_hz)
 {
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  ::SDL_EnableKeyRepeat(250, 50);
-
-#if defined(ENABLE_OPENGL)
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-
-  OpenGL::Initialise();
-#endif
-
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  Font::Initialise();
-
-  ScreenInitialized();
+  increment = ARRAY_SIZE(ISINETABLE) * tone_hz / sample_rate;
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
+void
+ToneSynthesiser::Synthesise(int16_t *buffer, size_t n)
 {
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
-#endif
+  assert(angle < ARRAY_SIZE(ISINETABLE));
 
-  ::TTF_Quit();
-  ::SDL_Quit();
+  for (int16_t *end = buffer + n; buffer != end; ++buffer) {
+    *buffer = ISINETABLE[angle] * (32767 / 1024) * (int)volume / 100;
+    angle = (angle + increment) & (ARRAY_SIZE(ISINETABLE) - 1);
+  }
+}
 
-  ScreenDeinitialized();
+unsigned
+ToneSynthesiser::ToZero() const
+{
+  assert(angle < ARRAY_SIZE(ISINETABLE));
+
+  if (angle < increment)
+    /* close enough */
+    return 0;
+
+  return (ARRAY_SIZE(ISINETABLE) - angle) / increment;
 }

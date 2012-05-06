@@ -21,54 +21,27 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-#include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
+#ifndef XCSOAR_AUDIO_PCM_SYNTHESISER_HPP
+#define XCSOAR_AUDIO_PCM_SYNTHESISER_HPP
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Init.hpp"
+#include <stddef.h>
+#include <stdint.h>
+
+/**
+ * This interface is used by PCMPlayer.
+ */
+class PCMSynthesiser {
+public:
+  /**
+   * The caller requests to generate PCM samples.
+   *
+   * Note that this method may be called from any thread.  The
+   * PCMSynthesiser implementation must be thread-safe.
+   *
+   * @param buffer the destination buffer (host byte order)
+   * @param n the number of 16 bit mono samples that shall be generated
+   */
+  virtual void Synthesise(int16_t *buffer, size_t n) = 0;
+};
+
 #endif
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  ::SDL_EnableKeyRepeat(250, 50);
-
-#if defined(ENABLE_OPENGL)
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-
-  OpenGL::Initialise();
-#endif
-
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  Font::Initialise();
-
-  ScreenInitialized();
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
-#endif
-
-  ::TTF_Quit();
-  ::SDL_Quit();
-
-  ScreenDeinitialized();
-}

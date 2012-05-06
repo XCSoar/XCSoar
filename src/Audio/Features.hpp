@@ -21,54 +21,30 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-#include "Screen/Debug.hpp"
-#include "Screen/Font.hpp"
+/** \file
+ *
+ * This header provides macros and inline functions providing
+ * information about the availability of audio playback features.
+ */
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Init.hpp"
+#ifndef XCSOAR_AUDIO_FEATURES_HPP
+#define XCSOAR_AUDIO_FEATURES_HPP
+
+#include "Compiler.h"
+
+#if !defined(ANDROID) && !defined(WIN32)
+#define HAVE_PCM_PLAYER
 #endif
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-ScreenGlobalInit::ScreenGlobalInit()
+gcc_constexpr_function
+static inline bool
+HavePCMPlayer()
 {
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  ::SDL_EnableKeyRepeat(250, 50);
-
-#if defined(ENABLE_OPENGL)
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-
-  OpenGL::Initialise();
+#ifdef HAVE_PCM_PLAYER
+  return true;
+#else
+  return false;
 #endif
-
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  Font::Initialise();
-
-  ScreenInitialized();
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
 #endif
-
-  ::TTF_Quit();
-  ::SDL_Quit();
-
-  ScreenDeinitialized();
-}

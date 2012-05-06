@@ -728,6 +728,10 @@ ifeq ($(HAVE_NET),y)
 DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunLiveTrack24
 endif
 
+ifeq ($(HAVE_PCM_PLAYER),y)
+DEBUG_PROGRAM_NAMES += PlayTone
+endif
+
 ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
 DEBUG_PROGRAM_NAMES += TodayInstall
 endif
@@ -2194,6 +2198,12 @@ RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
 	$(RESOURCE_BINARY)
 RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN ENGINE IO ZZIP UTIL MATH
 $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG))
+
+PLAY_TONE_SOURCES = \
+	$(SRC)/OS/FileUtil.cpp \
+	$(TEST_SRC_DIR)/PlayTone.cpp
+PLAY_TONE_DEPENDS = AUDIO MATH SCREEN
+$(eval $(call link-program,PlayTone,PLAY_TONE))
 
 RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \

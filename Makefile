@@ -89,6 +89,7 @@ include $(topdir)/build/task.mk
 include $(topdir)/build/datafield.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/form.mk
+include $(topdir)/build/libaudio.mk
 include $(topdir)/build/harness.mk
 
 include $(topdir)/build/setup.mk
