@@ -596,7 +596,7 @@ FillList(WaypointSelectInfoVector &list, const Waypoints &src,
 static void
 FillLastUsedList(WaypointSelectInfoVector &list,
                  const WaypointIDList &last_used_ids,
-                 const Waypoints &waypoints, const GeoPoint location)
+                 const Waypoints &waypoints)
 {
   list.clear();
 
@@ -617,7 +617,7 @@ UpdateList()
 {
   if (filter_data.type_index == TF_LAST_USED)
     FillLastUsedList(waypoint_select_info, LastUsedWaypoints::GetList(),
-                     way_points, location);
+                     way_points);
   else
     FillList(waypoint_select_info, way_points, location, last_heading,
              filter_data);
