@@ -224,8 +224,6 @@ GetProfilePathBase(const TCHAR *key)
 static void
 PrepareData()
 {
-  TCHAR buffer[15];
-
   filter_data.name[0] = _T('\0');
 
   name_button->SetCaption(_T("*"));
@@ -234,11 +232,14 @@ PrepareData()
   if (distance_filter) {
     DataFieldEnum* data_field = (DataFieldEnum*)distance_filter->GetDataField();
     data_field->addEnumText(_T("*"));
+
+    TCHAR buffer[15];
     for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
       _stprintf(buffer, _T("%.0f%s"), (double)distance_filter_items[i],
                 Units::GetDistanceName());
       data_field->addEnumText(buffer);
     }
+
     data_field->SetAsInteger(filter_data.distance_index);
     distance_filter->RefreshDisplay();
   }
