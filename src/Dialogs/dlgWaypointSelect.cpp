@@ -167,10 +167,8 @@ typedef std::vector<WaypointSelectInfo> WaypointSelectInfoVector;
 static WaypointSelectInfoVector waypoint_select_info;
 
 static TCHAR *
-GetDirectionData(int direction_filter_index)
+GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
 {
-  static TCHAR buffer[12];
-
   if (direction_filter_index == 0)
     _stprintf(buffer, _T("%c"), '*');
   else if (direction_filter_index == 1) {
@@ -178,8 +176,7 @@ GetDirectionData(int direction_filter_index)
     FormatBearing(bearing, ARRAY_SIZE(bearing), last_heading);
     _stprintf(buffer, _T("HDG(%s)"), bearing);
   } else
-    FormatBearing(buffer, ARRAY_SIZE(buffer),
-                  direction_filter_items[direction_filter_index]);
+    FormatBearing(buffer, size, direction_filter_items[direction_filter_index]);
 
   return buffer;
 }
@@ -189,15 +186,17 @@ InitializeDirection(bool only_heading)
 {
   // initialize datafieldenum for Direction
   if (direction_filter) {
+    TCHAR buffer[12];
+
     DataFieldEnum* data_field = (DataFieldEnum*)direction_filter->GetDataField();
     if (!only_heading) {
       for (unsigned int i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
-        data_field->addEnumText(GetDirectionData(i));
+        data_field->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
 
       data_field->SetAsInteger(filter_data.direction_index);
     }
     // update heading value to current heading
-    data_field->replaceEnumText(1,GetDirectionData(1));
+    data_field->replaceEnumText(1,GetDirectionData(buffer, ARRAY_SIZE(buffer), 1));
     direction_filter->RefreshDisplay();
   }
 }
