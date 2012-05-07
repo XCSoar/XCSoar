@@ -61,9 +61,9 @@ public:
             const GeoClip &_clip)
     :canvas(_canvas), projection(_projection), clip(_clip) {}
 
-  void line(GeoPoint a, GeoPoint b);
-  void offset_line(GeoPoint a, GeoPoint b);
-  void circle(const GeoPoint &center, fixed radius);
+  void DrawLine(GeoPoint a, GeoPoint b);
+  void DrawLineWithOffset(GeoPoint a, GeoPoint b);
+  void DrawCircle(const GeoPoint &center, fixed radius);
 
   /**
    * Projects all points of the #SearchPointVector to screen
@@ -72,12 +72,12 @@ public:
    * @param screen a RasterPoint array allocated by the caller, large enough
    * to hold all points of the #SearchPointVector
    */
-  static void project(const Projection &projection,
+  static void Project(const Projection &projection,
                       const SearchPointVector &points,
                       RasterPoint *screen);
 
-  void project(const SearchPointVector &points, RasterPoint *screen) const {
-    project(projection, points, screen);
+  void Project(const SearchPointVector &points, RasterPoint *screen) const {
+    Project(projection, points, screen);
   }
 
   /**
@@ -89,21 +89,21 @@ public:
    * airspaces.
    */
   gcc_pure
-  static bool visible(const Canvas &canvas,
+  static bool IsVisible(const Canvas &canvas,
                       const RasterPoint *screen, unsigned num);
 
   gcc_pure
-  bool visible(const RasterPoint *screen, unsigned num) const {
-    return visible(canvas, screen, num);
+  bool IsVisible(const RasterPoint *screen, unsigned num) const {
+    return IsVisible(canvas, screen, num);
   }
 
-  void draw(const SearchPointVector &points) {
-    if (prepare_polygon(points))
-      draw_prepared();
+  void DrawPolygon(const SearchPointVector &points) {
+    if (PreparePolygon(points))
+      DrawPrepared();
   }
 
-  bool prepare_polygon(const SearchPointVector &points);
-  void draw_prepared();
+  bool PreparePolygon(const SearchPointVector &points);
+  void DrawPrepared();
 };
 
 #endif

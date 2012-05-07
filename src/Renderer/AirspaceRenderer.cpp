@@ -185,7 +185,7 @@ public:
   }
 
   void Visit(const AirspacePolygon& airspace) {
-    if (!prepare_polygon(airspace.GetPoints()))
+    if (!PreparePolygon(airspace.GetPoints()))
       return;
 
     bool fill_airspace = m_warnings.is_warning(airspace) ||
@@ -196,26 +196,26 @@ public:
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
         set_fillstencil();
-        draw_prepared();
+        DrawPrepared();
       }
 
       // fill interior without overpainting any previous outlines
       {
         setup_interior(airspace, !fill_airspace);
         GLEnable blend(GL_BLEND);
-        draw_prepared();
+        DrawPrepared();
       }
 
       if (!fill_airspace) {
         // clear fill stencil (bit 0)
         clear_fillstencil();
-        draw_prepared();
+        DrawPrepared();
       }
     }
 
     // draw outline
     setup_outline(airspace);
-    draw_prepared();
+    DrawPrepared();
   }
 
 private:
@@ -306,7 +306,7 @@ public:
   }
 
   void Visit(const AirspacePolygon& airspace) {
-    if (!prepare_polygon(airspace.GetPoints()))
+    if (!PreparePolygon(airspace.GetPoints()))
       return;
 
     if (!m_warnings.is_acked(airspace)) {
@@ -314,13 +314,13 @@ public:
       {
         setup_interior(airspace);
         GLEnable blend(GL_BLEND);
-        draw_prepared();
+        DrawPrepared();
       }
     }
 
     // draw outline
     setup_outline(airspace);
-    draw_prepared();
+    DrawPrepared();
   }
 
 private:
@@ -471,12 +471,12 @@ protected:
 public:
   void Visit(const AirspaceCircle& airspace) {
     setup_canvas(airspace);
-    circle(airspace.GetCenter(), airspace.GetRadius());
+    DrawCircle(airspace.GetCenter(), airspace.GetRadius());
   }
 
   void Visit(const AirspacePolygon& airspace) {
     setup_canvas(airspace);
-    draw(airspace.GetPoints());
+    DrawPolygon(airspace.GetPoints());
   }
 };
 

@@ -109,7 +109,7 @@ TaskPointRenderer::DrawBearing(const TaskPoint &tp)
     return;
 
   canvas.Select(task_look.bearing_pen);
-  map_canvas.offset_line(location, tp.GetLocationRemaining());
+  map_canvas.DrawLineWithOffset(location, tp.GetLocationRemaining());
 }
 
 void
@@ -129,7 +129,7 @@ TaskPointRenderer::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   canvas.Select(LegActive() ? task_look.leg_active_pen :
                               task_look.leg_inactive_pen);
   canvas.SetBackgroundTransparent();
-  map_canvas.line(start, end);
+  map_canvas.DrawLine(start, end);
   canvas.SetBackgroundOpaque();
 
   // draw small arrow along task direction

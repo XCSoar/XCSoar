@@ -79,7 +79,7 @@ MapDrawHelper::DrawSearchPointVector(const SearchPointVector &points)
   for (unsigned i = 0; i < size; ++i)
     screen[i] = proj.GeoToScreen(geo_points[i]);
 
-  if (!MapCanvas::visible(canvas, screen, size))
+  if (!MapCanvas::IsVisible(canvas, screen, size))
     return;
 
   buffer.polygon(&screen[0], size);
