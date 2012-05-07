@@ -119,8 +119,8 @@ public:
     :AirspaceVisiblePredicate(_computer_settings, _renderer_settings, _state),
      m_warnings(warnings) {}
 
-  bool condition(const AbstractAirspace& airspace) const {
-    return AirspaceVisiblePredicate::condition(airspace)
+  bool operator()(const AbstractAirspace& airspace) const {
+    return AirspaceVisiblePredicate::operator()(airspace)
       || m_warnings.is_inside(airspace)
       || m_warnings.is_warning(airspace);
   }

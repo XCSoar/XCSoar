@@ -23,7 +23,7 @@ public:
      renderer_settings(_renderer_settings),
      state(_state) {}
 
-  virtual bool condition(const AbstractAirspace &airspace) const {
+  virtual bool operator()(const AbstractAirspace &airspace) const {
     return IsTypeVisible(airspace) && IsAltitudeVisible(airspace);
   }
 

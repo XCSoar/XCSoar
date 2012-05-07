@@ -41,17 +41,7 @@ public:
    * @return True if condition met
    */
   gcc_pure
-  bool operator()(const AbstractAirspace& t) const {
-    return condition(t);
-  }
-
-  /**
-   * Test condition (calls operator() method)
-   * @param t Airspace to test
-   * @return True if condition met
-   */
-  gcc_pure
-  virtual bool condition(const AbstractAirspace&t) const = 0;
+  virtual bool operator()(const AbstractAirspace& t) const = 0;
 
   /** Convenience condition, useful for default conditions */
   static const AirspacePredicateTrue always_true;
@@ -63,7 +53,7 @@ public:
 class AirspacePredicateTrue: public AirspacePredicate
 {
 public:
-  bool condition(const AbstractAirspace& t) const {
+  bool operator()(const AbstractAirspace& t) const {
     return true;
   }
 };

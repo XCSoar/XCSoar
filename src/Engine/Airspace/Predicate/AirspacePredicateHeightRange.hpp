@@ -48,7 +48,7 @@ public:
                                const RoughAltitude _h_max)
     :h_min(_h_min), h_max(_h_max) {}
 
-  bool condition(const AbstractAirspace &t) const {
+  bool operator()(const AbstractAirspace &t) const {
     return check_height(t);
   }
 
@@ -80,7 +80,7 @@ public:
                                          const AGeoPoint& _p2)
     :AirspacePredicateHeightRange(_h_min, _h_max), p1(_p1), p2(_p2) {}
 
-  bool condition(const AbstractAirspace &t) const;
+  bool operator()(const AbstractAirspace &t) const;
 };
 
 #endif

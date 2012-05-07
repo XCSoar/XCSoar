@@ -31,7 +31,7 @@ AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
 }
 
 bool
-AirspacePredicateHeightRangeExcludeTwo::condition(const AbstractAirspace& t) const
+AirspacePredicateHeightRangeExcludeTwo::operator()(const AbstractAirspace& t) const
 {
   if (!check_height(t))
     return false;

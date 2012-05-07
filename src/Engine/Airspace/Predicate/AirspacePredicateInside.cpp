@@ -29,7 +29,7 @@ AirspacePredicateInside::AirspacePredicateInside(
   :location(_location) {}
 
 bool 
-AirspacePredicateInside::condition(const AbstractAirspace &airspace) const
+AirspacePredicateInside::operator()(const AbstractAirspace &airspace) const
 {
   return airspace.Inside(location);
 }

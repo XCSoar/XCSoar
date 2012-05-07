@@ -87,7 +87,7 @@ public:
     }
   }
 
-  virtual bool condition(const AbstractAirspace &airspace) const {
+  virtual bool operator()(const AbstractAirspace &airspace) const {
     return CheckAirspace(airspace) &&
       /* skip airspaces that we already entered */
       !airspace.Inside(location) &&

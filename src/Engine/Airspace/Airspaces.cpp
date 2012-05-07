@@ -42,7 +42,7 @@ public:
 
   void operator()(Airspace as) {
     AbstractAirspace &aas = *as.get_airspace();
-    if (predicate->condition(aas))
+    if (predicate->operator()(aas))
       visitor->Visit(as);
   }
 };
