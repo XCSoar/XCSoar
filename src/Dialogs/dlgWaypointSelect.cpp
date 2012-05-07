@@ -141,18 +141,32 @@ struct WaypointSelectInfo
 {
   /** Pointer to actual waypoint (unprotected!) */
   const Waypoint* waypoint;
+
+private:
   /** From observer to waypoint */
-  GeoVector vec;
+  mutable GeoVector vec;
+
+public:
+  void ResetVector() {
+    vec.SetInvalid();
+  }
+
+  const GeoVector &GetVector(const GeoPoint &location) const {
+    if (!vec.IsValid())
+      vec = GeoVector(location, waypoint->location);
+
+    return vec;
+  }
 };
 
 struct WaypointSelectInfoVector :
   public std::vector<WaypointSelectInfo>
 {
-  void push_back(const Waypoint &waypoint, const GeoPoint &location) {
+  void push_back(const Waypoint &waypoint) {
     WaypointSelectInfo info;
 
     info.waypoint = &waypoint;
-    info.vec = GeoVector(location, waypoint.location);
+    info.ResetVector();
 
     std::vector<WaypointSelectInfo>::push_back(info);
   }
@@ -549,16 +563,22 @@ public:
     if (CompareType(waypoint, type_index) &&
         (filter_data.distance_index == 0 || CompareName(waypoint, name)) &&
         CompareDirection(waypoint, direction_index, location, heading))
-      vector.push_back(waypoint, location);
+      vector.push_back(waypoint);
   }
 };
 
-static bool
-WaypointDistanceCompare(const struct WaypointSelectInfo &a,
-                        const struct WaypointSelectInfo &b)
+class WaypointDistanceCompare
 {
-  return a.vec.distance < b.vec.distance;
-}
+  const GeoPoint &location;
+
+public:
+  WaypointDistanceCompare(const GeoPoint &_location):location(_location) {}
+
+  bool operator()(const WaypointSelectInfo &a,
+                  const WaypointSelectInfo &b) const {
+    return a.GetVector(location).distance < b.GetVector(location).distance;
+  }
+};
 
 static void
 FillList(WaypointSelectInfoVector &list, const Waypoints &src,
@@ -578,7 +598,7 @@ FillList(WaypointSelectInfoVector &list, const Waypoints &src,
     src.VisitNamePrefix(filter.name, visitor);
 
   if (filter.distance_index > 0 || filter.direction_index > 0)
-    std::sort(list.begin(), list.end(), WaypointDistanceCompare);
+    std::sort(list.begin(), list.end(), WaypointDistanceCompare(location));
 }
 
 static void
@@ -596,7 +616,7 @@ FillLastUsedList(WaypointSelectInfoVector &list,
     if (waypoint == NULL)
       continue;
 
-    list.push_back(*waypoint, location);
+    list.push_back(*waypoint);
   }
 }
 
@@ -756,7 +776,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   const struct WaypointSelectInfo &info = waypoint_select_info[i];
 
-  WaypointListRenderer::Draw(canvas, rc, *info.waypoint, info.vec,
+  WaypointListRenderer::Draw(canvas, rc, *info.waypoint,
+                             info.GetVector(location),
                              UIGlobals::GetDialogLook(),
                              UIGlobals::GetMapLook().waypoint,
                              CommonInterface::GetMapSettings().waypoint);
