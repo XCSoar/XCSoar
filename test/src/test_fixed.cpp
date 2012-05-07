@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
   printf("a=%g, sin(a)=%g\n", FIXED_DOUBLE(a), FIXED_DOUBLE(sina));
   printf("a=%g, sin(a)=%g\n", da, dsina);
 
-  ok(fabs(sina - fixed(dsina)) < fixed(1.0e5), "sin(a)", 0);
+  ok(fabs(sina - fixed(dsina)) < fixed(1.0e-5), "sin(a)", 0);
 
   double dx = -0.3;
   double dy = 0.6;
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
          FIXED_DOUBLE(x), FIXED_DOUBLE(y), FIXED_DOUBLE(t));
   printf("x=%g, y=%g atan(y,x)=%g\n", dx, dy, dt);
 
-  ok(fabs(t - fixed(dt)) < fixed(1.0e5), "atan(y,x)", 0);
+  ok(fabs(t - fixed(dt)) < fixed(1.0e-5), "atan(y,x)", 0);
 
   {
     for (int i=1; i<=2048; i*= 2) {
