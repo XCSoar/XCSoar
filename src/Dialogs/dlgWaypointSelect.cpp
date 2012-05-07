@@ -170,7 +170,7 @@ static TCHAR *
 GetDirectionData(TCHAR *buffer, size_t size, int direction_filter_index)
 {
   if (direction_filter_index == 0)
-    _stprintf(buffer, _T("%c"), '*');
+    _tcscpy(buffer, _T("*"));
   else if (direction_filter_index == 1) {
     TCHAR bearing[8];
     FormatBearing(bearing, ARRAY_SIZE(bearing), last_heading);
