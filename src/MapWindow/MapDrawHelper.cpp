@@ -34,30 +34,30 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
                              const WindowProjection &_proj,
                              const AirspaceRendererSettings &_settings)
   :clip(_proj.GetScreenBounds().Scale(fixed(1.1))),
-   m_canvas(_canvas),
-   m_buffer(_buffer),
-   m_stencil(_stencil),
-   m_proj(_proj),
-   m_buffer_drawn(false),
-   m_use_stencil(false),
+   canvas(_canvas),
+   buffer(_buffer),
+   stencil(_stencil),
+   proj(_proj),
+   buffer_drawn(false),
+   use_stencil(false),
    settings(_settings)
 {
 }
 
-MapDrawHelper::MapDrawHelper(MapDrawHelper &_that)
-  :clip(_that.clip),
-   m_canvas(_that.m_canvas),
-   m_buffer(_that.m_buffer),
-   m_stencil(_that.m_stencil),
-   m_proj(_that.m_proj),
-   m_buffer_drawn(_that.m_buffer_drawn),
-   m_use_stencil(_that.m_use_stencil),
-   settings(_that.settings)
+MapDrawHelper::MapDrawHelper(const MapDrawHelper &other)
+  :clip(other.clip),
+   canvas(other.canvas),
+   buffer(other.buffer),
+   stencil(other.stencil),
+   proj(other.proj),
+   buffer_drawn(other.buffer_drawn),
+   use_stencil(other.use_stencil),
+   settings(other.settings)
 {
 }
 
 void 
-MapDrawHelper::draw_search_point_vector(const SearchPointVector& points)
+MapDrawHelper::DrawSearchPointVector(const SearchPointVector &points)
 {
   size_t size = points.size();
   if (size < 3)
@@ -77,69 +77,69 @@ MapDrawHelper::draw_search_point_vector(const SearchPointVector& points)
   /* draw it all */
   RasterPoint screen[size];
   for (unsigned i = 0; i < size; ++i)
-    screen[i] = m_proj.GeoToScreen(geo_points[i]);
+    screen[i] = proj.GeoToScreen(geo_points[i]);
 
-  if (!MapCanvas::visible(m_canvas, screen, size))
+  if (!MapCanvas::visible(canvas, screen, size))
     return;
 
-  m_buffer.polygon(&screen[0], size);
-  if (m_use_stencil)
-    m_stencil.polygon(&screen[0], size);
+  buffer.polygon(&screen[0], size);
+  if (use_stencil)
+    stencil.polygon(&screen[0], size);
 }
 
 void 
-MapDrawHelper::draw_circle(const RasterPoint &center, unsigned radius)
+MapDrawHelper::DrawCircle(const RasterPoint &center, unsigned radius)
 {
-  m_buffer.circle(center.x, center.y, radius);
-  if (m_use_stencil)
-    m_stencil.circle(center.x, center.y, radius);
+  buffer.circle(center.x, center.y, radius);
+  if (use_stencil)
+    stencil.circle(center.x, center.y, radius);
 }
 
 void 
-MapDrawHelper::buffer_render_finish() 
+MapDrawHelper::BufferRenderFinish() 
 {
-  if (m_buffer_drawn) {
+  if (buffer_drawn) {
     // need to do this to prevent drawing of colored outline
-    m_buffer.SelectWhitePen();
+    buffer.SelectWhitePen();
     
-    if (m_use_stencil) {
+    if (use_stencil) {
 #ifdef ENABLE_SDL
-      m_buffer.copy_transparent_black(m_stencil);
+      buffer.copy_transparent_black(stencil);
 #else
-      m_buffer.copy_or(m_stencil);
+      buffer.copy_or(stencil);
 #endif
     }
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable())
-      m_canvas.alpha_blend(0, 0, m_canvas.get_width(), m_canvas.get_height(),
-                           m_buffer,
-                           0, 0, m_canvas.get_width(), m_canvas.get_height(),
+      canvas.alpha_blend(0, 0, canvas.get_width(), canvas.get_height(),
+                           buffer,
+                           0, 0, canvas.get_width(), canvas.get_height(),
                            60);
     else
 #endif
-      m_canvas.copy_and(m_buffer);
+      canvas.copy_and(buffer);
 
-    m_buffer_drawn = false;
+    buffer_drawn = false;
   }
 }
 
 void 
-MapDrawHelper::buffer_render_start() 
+MapDrawHelper::BufferRenderStart() 
 {
-  if (!m_buffer_drawn) {
-    clear_buffer();
-    m_buffer_drawn = true;
+  if (!buffer_drawn) {
+    ClearBuffer();
+    buffer_drawn = true;
   }
 }
 
 void 
-MapDrawHelper::clear_buffer()
+MapDrawHelper::ClearBuffer()
 {
-  m_buffer.ClearWhite();
+  buffer.ClearWhite();
 
-  if (m_use_stencil)
-    m_stencil.ClearWhite();
+  if (use_stencil)
+    stencil.ClearWhite();
 }
 
 #endif // !ENABLE_OPENGL

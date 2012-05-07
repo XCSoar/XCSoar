@@ -367,11 +367,11 @@ public:
     switch (settings.fill_mode) {
     case AirspaceRendererSettings::FillMode::DEFAULT:
     case AirspaceRendererSettings::FillMode::PADDING:
-      m_use_stencil = !IsAncientHardware();
+      use_stencil = !IsAncientHardware();
       break;
 
     case AirspaceRendererSettings::FillMode::ALL:
-      m_use_stencil = false;
+      use_stencil = false;
       break;
     }
   }
@@ -380,25 +380,25 @@ public:
     if (m_warnings.is_acked(airspace))
       return;
 
-    buffer_render_start();
+    BufferRenderStart();
     set_buffer_pens(airspace);
 
-    RasterPoint center = m_proj.GeoToScreen(airspace.GetCenter());
-    unsigned radius = m_proj.GeoToScreenDistance(airspace.GetRadius());
-    draw_circle(center, radius);
+    RasterPoint center = proj.GeoToScreen(airspace.GetCenter());
+    unsigned radius = proj.GeoToScreenDistance(airspace.GetRadius());
+    DrawCircle(center, radius);
   }
 
   void Visit(const AirspacePolygon& airspace) {
     if (m_warnings.is_acked(airspace))
       return;
 
-    buffer_render_start();
+    BufferRenderStart();
     set_buffer_pens(airspace);
-    draw_search_point_vector(airspace.GetPoints());
+    DrawSearchPointVector(airspace.GetPoints());
   }
 
   void draw_intercepts() {
-    buffer_render_finish();
+    BufferRenderFinish();
   }
 
 private:
@@ -406,35 +406,35 @@ private:
     AirspaceClass airspace_class = airspace.GetType();
 
 #ifndef HAVE_HATCHED_BRUSH
-    m_buffer.Select(airspace_look.solid_brushes[airspace_class]);
+    buffer.Select(airspace_look.solid_brushes[airspace_class]);
 #else /* HAVE_HATCHED_BRUSH */
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable()) {
-      m_buffer.Select(airspace_look.solid_brushes[airspace_class]);
+      buffer.Select(airspace_look.solid_brushes[airspace_class]);
     } else {
 #endif
       // this color is used as the black bit
-      m_buffer.SetTextColor(LightColor(settings.classes[airspace_class].color));
+      buffer.SetTextColor(LightColor(settings.classes[airspace_class].color));
 
       // get brush, can be solid or a 1bpp bitmap
-      m_buffer.Select(airspace_look.brushes[settings.classes[airspace_class].brush]);
+      buffer.Select(airspace_look.brushes[settings.classes[airspace_class].brush]);
 
-      m_buffer.SetBackgroundOpaque();
-      m_buffer.SetBackgroundColor(COLOR_WHITE);
+      buffer.SetBackgroundOpaque();
+      buffer.SetBackgroundColor(COLOR_WHITE);
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif
 
-    m_buffer.SelectNullPen();
+    buffer.SelectNullPen();
 
-    if (m_use_stencil) {
+    if (use_stencil) {
       if (m_warnings.is_warning(airspace) || m_warnings.is_inside(airspace)) {
-        m_stencil.SelectBlackBrush();
-        m_stencil.Select(airspace_look.medium_pen);
+        stencil.SelectBlackBrush();
+        stencil.Select(airspace_look.medium_pen);
       } else {
-        m_stencil.Select(airspace_look.thick_pen);
-        m_stencil.SelectHollowBrush();
+        stencil.Select(airspace_look.thick_pen);
+        stencil.SelectHollowBrush();
       }
     }
 

@@ -49,12 +49,12 @@ class MapDrawHelper
   AllocatedArray<GeoPoint> geo_points;
 
 public:
-  Canvas &m_canvas;
-  Canvas &m_buffer;
-  Canvas &m_stencil;
-  const Projection& m_proj;
-  bool m_buffer_drawn;
-  bool m_use_stencil;
+  Canvas &canvas;
+  Canvas &buffer;
+  Canvas &stencil;
+  const Projection &proj;
+  bool buffer_drawn;
+  bool use_stencil;
 
   const AirspaceRendererSettings &settings;
 
@@ -65,18 +65,17 @@ public:
                 const WindowProjection &_proj,
                 const AirspaceRendererSettings &_settings);
 
-  MapDrawHelper(MapDrawHelper &_that);
+  MapDrawHelper(const MapDrawHelper &other);
 
 protected:
-  void draw_search_point_vector(const SearchPointVector& points);
+  void DrawSearchPointVector(const SearchPointVector &points);
 
-  void draw_circle(const RasterPoint &center, unsigned radius);
+  void DrawCircle(const RasterPoint &center, unsigned radius);
 
-  void buffer_render_finish();
+  void BufferRenderStart();
+  void BufferRenderFinish();
 
-  void buffer_render_start();
-
-  void clear_buffer();
+  void ClearBuffer();
 };
 
 #endif // !ENABLE_OPENGL
