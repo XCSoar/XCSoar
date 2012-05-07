@@ -41,42 +41,40 @@ class WindowProjection;
 
 class AirspaceRenderer
 {
-  const AirspaceLook &airspace_look;
+  const AirspaceLook &look;
 
-  const Airspaces *airspace_database;
-  const ProtectedAirspaceWarningManager *airspace_warnings;
+  const Airspaces *airspaces;
+  const ProtectedAirspaceWarningManager *warning_manager;
 
-  StaticArray<GeoPoint,32> m_airspace_intersections;
+  StaticArray<GeoPoint,32> intersections;
 
 public:
-  AirspaceRenderer(const AirspaceLook &_airspace_look)
-    :airspace_look(_airspace_look),
-     airspace_database(NULL), airspace_warnings(NULL)
-  {}
+  AirspaceRenderer(const AirspaceLook &_look)
+    :look(_look), airspaces(NULL), warning_manager(NULL) {}
 
   const AirspaceLook &GetLook() const {
-    return airspace_look;
+    return look;
   }
 
   const Airspaces *GetAirspaces() const {
-    return airspace_database;
+    return airspaces;
   }
 
-  const ProtectedAirspaceWarningManager *GetAirspaceWarnings() const {
-    return airspace_warnings;
+  const ProtectedAirspaceWarningManager *GetWarningManager() const {
+    return warning_manager;
   }
 
-  void SetAirspaces(const Airspaces *_airspace_database) {
-    airspace_database = _airspace_database;
+  void SetAirspaces(const Airspaces *_airspaces) {
+    airspaces = _airspaces;
   }
 
-  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *_airspace_warnings) {
-    airspace_warnings = _airspace_warnings;
+  void SetAirspaceWarnings(const ProtectedAirspaceWarningManager *_warning_manager) {
+    warning_manager = _warning_manager;
   }
 
   void Clear() {
-    airspace_database = NULL;
-    airspace_warnings = NULL;
+    airspaces = NULL;
+    warning_manager = NULL;
   }
 
   /**

@@ -56,7 +56,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
   if (airspace_database)
     builder.AddVisibleAirspace(*airspace_database,
-                               airspace_renderer.GetAirspaceWarnings(),
+                               airspace_renderer.GetWarningManager(),
                                GetComputerSettings().airspace,
                                GetMapSettings().airspace, Basic(),
                                Calculated());
