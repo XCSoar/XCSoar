@@ -147,6 +147,10 @@ private:
   mutable GeoVector vec;
 
 public:
+  WaypointSelectInfo() = default;
+  explicit WaypointSelectInfo(const Waypoint &_waypoint):
+    waypoint(&_waypoint), vec(GeoVector::Invalid()) {}
+
   void ResetVector() {
     vec.SetInvalid();
   }
@@ -159,19 +163,7 @@ public:
   }
 };
 
-struct WaypointSelectInfoVector :
-  public std::vector<WaypointSelectInfo>
-{
-  void push_back(const Waypoint &waypoint) {
-    WaypointSelectInfo info;
-
-    info.waypoint = &waypoint;
-    info.ResetVector();
-
-    std::vector<WaypointSelectInfo>::push_back(info);
-  }
-};
-
+typedef std::vector<WaypointSelectInfo> WaypointSelectInfoVector;
 static WaypointSelectInfoVector waypoint_select_info;
 
 static TCHAR *
@@ -563,7 +555,7 @@ public:
     if (CompareType(waypoint, type_index) &&
         (filter_data.distance_index == 0 || CompareName(waypoint, name)) &&
         CompareDirection(waypoint, direction_index, location, heading))
-      vector.push_back(waypoint);
+      vector.push_back(WaypointSelectInfo(waypoint));
   }
 };
 
@@ -616,7 +608,7 @@ FillLastUsedList(WaypointSelectInfoVector &list,
     if (waypoint == NULL)
       continue;
 
-    list.push_back(*waypoint);
+    list.push_back(WaypointSelectInfo(*waypoint));
   }
 }
 
