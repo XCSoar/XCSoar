@@ -353,6 +353,7 @@ class AirspaceVisitorMap:
   public MapDrawHelper
 {
   const AirspaceLook &airspace_look;
+  const AirspaceWarningCopy& m_warnings;
 
 public:
   AirspaceVisitorMap(MapDrawHelper &_helper,
@@ -439,8 +440,6 @@ private:
 
 #endif /* HAVE_HATCHED_BRUSH */
   }
-
-  const AirspaceWarningCopy& m_warnings;
 };
 
 class AirspaceOutlineRenderer
