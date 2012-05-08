@@ -14,7 +14,7 @@ LoadTask(const TCHAR *path, const TaskBehaviour &task_behaviour)
 
   Deserialiser des(*node);
   OrderedTask *task = new OrderedTask(task_behaviour);
-  des.deserialise(*task);
+  des.Deserialise(*task);
   delete node;
 
   if (!task->CheckTask()) {
