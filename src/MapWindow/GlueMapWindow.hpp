@@ -92,7 +92,7 @@ class GlueMapWindow : public MapWindow {
    */
   Projection drag_projection;
 
-  enum DisplayMode DisplayMode;
+  DisplayMode display_mode;
 
   OffsetHistory offsetHistory;
 
@@ -232,8 +232,8 @@ public:
   void UpdateDisplayMode();
   void SetMapScale(const fixed x);
 
-  enum DisplayMode GetDisplayMode() const {
-    return DisplayMode;
+  DisplayMode GetDisplayMode() const {
+    return display_mode;
   }
 };
 

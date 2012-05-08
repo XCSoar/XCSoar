@@ -156,13 +156,13 @@ GlueMapWindow::UpdateDisplayMode()
     GetNewDisplayMode(CommonInterface::GetUIState(),
                       CommonInterface::Calculated());
 
-  bool was_circling = (DisplayMode == DM_CIRCLING);
+  bool was_circling = (display_mode == DM_CIRCLING);
   bool is_circling = (new_mode == DM_CIRCLING);
 
   if (!was_circling && is_circling)
     offsetHistory.Reset();
 
-  DisplayMode = new_mode;
+  display_mode = new_mode;
 
   if (is_circling != was_circling)
     SwitchZoomClimb();
