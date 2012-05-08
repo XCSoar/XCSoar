@@ -339,6 +339,12 @@ InputEvents::gesture_to_event(const TCHAR *data)
 }
 
 bool
+InputEvents::IsGesture(const TCHAR *data)
+{
+  return gesture_to_event(data) != 0;
+}
+
+bool
 InputEvents::processGesture(const TCHAR *data)
 {
   // get current mode
