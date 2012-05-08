@@ -51,7 +51,7 @@ public:
    *
    * @return True if buffer is full
    */
-  bool update(const fixed x0) {
+  bool Update(const fixed x0) {
     if (!x.full())
       x.append(x0);
 
@@ -64,7 +64,7 @@ public:
    * @return Average value in buffer
    */
   gcc_pure
-  fixed average() const {
+  fixed Average() const {
     assert(!x.empty());
 
     fixed y = fixed_zero;
@@ -76,9 +76,8 @@ public:
 
   /**
    * Resets filter (zero samples)
-   *
    */
-  void reset() {
+  void Reset() {
     x.clear();
   }
 };

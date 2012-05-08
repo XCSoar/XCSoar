@@ -31,9 +31,9 @@ void
 DistanceStatComputer::calc_incremental_speed(DistanceStat &data, const fixed dt)
 {
   if ((dt + fixed_half >= fixed_one) && data.IsDefined()) {
-    if (av_dist.update(data.distance)) {
-      const fixed d_av = av_dist.average() / N_AV;
-      av_dist.reset();
+    if (av_dist.Update(data.distance)) {
+      const fixed d_av = av_dist.Average() / N_AV;
+      av_dist.Reset();
 
       fixed v_f = fixed_zero;
       for (unsigned i = 0; i < (unsigned)(dt + fixed_half); ++i) {
@@ -56,7 +56,7 @@ DistanceStatComputer::reset_incremental_speed(DistanceStat &data)
   df.Reset(distance, (is_positive ? -1 : 1) * speed);
   v_lpf.Reset((is_positive ? -1 : 1) * speed);
   data.speed_incremental = fixed_zero; // data.speed;
-  av_dist.reset();
+  av_dist.Reset();
 }
 
 void

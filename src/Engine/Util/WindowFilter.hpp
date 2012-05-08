@@ -44,13 +44,13 @@ public:
    * @return True if buffer is full
    *
    */
-  bool update(const fixed x0) {
+  bool Update(const fixed x0) {
     StaticArray<fixed, max> &x = this->x;
 
     assert(i < x.capacity());
 
     if (!x.full())
-      return AvFilter<max>::update(x0);
+      return AvFilter<max>::Update(x0);
 
     x[i] = x0;
     i = (i + 1) % x.capacity();
@@ -60,8 +60,8 @@ public:
   /**
    * Resets filter (zero samples)
    */
-  void reset() {
-    AvFilter<max>::reset();
+  void Reset() {
+    AvFilter<max>::Reset();
     i = 0;
   }
 };

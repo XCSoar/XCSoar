@@ -55,8 +55,8 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
 {
   auto_qnh.Reset();
 
-  vario_30s_filter.reset();
-  netto_30s_filter.reset();
+  vario_30s_filter.Reset();
+  netto_30s_filter.Reset();
 
   ResetLiftDatabase(calculated);
 
@@ -198,8 +198,8 @@ GlideComputerAirData::Average30s(const MoreData &basic,
 {
   const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
   if (!time_advanced || calculated.circling != last_calculated.circling) {
-    vario_30s_filter.reset();
-    netto_30s_filter.reset();
+    vario_30s_filter.Reset();
+    netto_30s_filter.Reset();
     calculated.average = basic.brutto_vario;
     calculated.netto_average = basic.netto_vario;
   }
@@ -212,11 +212,11 @@ GlideComputerAirData::Average30s(const MoreData &basic,
     return;
 
   for (unsigned i = 0; i < Elapsed; ++i) {
-    vario_30s_filter.update(basic.brutto_vario);
-    netto_30s_filter.update(basic.netto_vario);
+    vario_30s_filter.Update(basic.brutto_vario);
+    netto_30s_filter.Update(basic.netto_vario);
   }
-  calculated.average = vario_30s_filter.average();
-  calculated.netto_average = netto_30s_filter.average();
+  calculated.average = vario_30s_filter.Average();
+  calculated.netto_average = netto_30s_filter.Average();
 }
 
 void
