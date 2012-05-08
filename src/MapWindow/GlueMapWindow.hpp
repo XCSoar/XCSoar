@@ -40,15 +40,19 @@ struct GestureLook;
 class Logger;
 class SingleWindow;
 
-class OffsetHistory {
+class OffsetHistory
+{
   unsigned int pos;
   std::array<RasterPoint, 30> offsets;
 
 public:
-  OffsetHistory() : pos(0) { reset(); }
-  void reset();
-  void add(RasterPoint p);
-  RasterPoint average() const;
+  OffsetHistory():pos(0) {
+    Reset();
+  }
+
+  void Reset();
+  void Add(RasterPoint p);
+  RasterPoint GetAverage() const;
 };
 
 

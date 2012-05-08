@@ -27,20 +27,20 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-OffsetHistory::reset()
+OffsetHistory::Reset()
 {
   offsets.fill(RasterPoint{0, 0});
 }
 
 void
-OffsetHistory::add(RasterPoint p)
+OffsetHistory::Add(RasterPoint p)
 {
   offsets[pos] = p;
   pos = (pos + 1) % offsets.size();
 }
 
 RasterPoint
-OffsetHistory::average() const
+OffsetHistory::GetAverage() const
 {
   int x = 0;
   int y = 0;
@@ -160,7 +160,7 @@ GlueMapWindow::UpdateDisplayMode()
   bool is_circling = (new_mode == DM_CIRCLING);
 
   if (!was_circling && is_circling)
-    offsetHistory.reset();
+    offsetHistory.Reset();
 
   DisplayMode = new_mode;
 
@@ -280,8 +280,8 @@ GlueMapWindow::UpdateProjection()
       fixed gspFactor = (fixed) (50 - settings_map.glider_screen_position) / 100;
       offset.x = PixelScalar(x * (rc.right - rc.left) * gspFactor);
       offset.y = PixelScalar(y * (rc.top - rc.bottom) * gspFactor);
-      offsetHistory.add(offset);
-      offset = offsetHistory.average();
+      offsetHistory.Add(offset);
+      offset = offsetHistory.GetAverage();
     }
     visible_projection.SetScreenOrigin(center.x + offset.x, center.y + offset.y);
   } else
