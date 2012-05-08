@@ -119,7 +119,7 @@ EditWindow::OnPaint(Canvas &canvas)
   PixelScalar padding = Layout::FastScale(2);
   InflateRect(&rc, -padding, -padding);
 
-  if (have_clipping() || IsMultiLine()) {
+  if (HaveClipping() || IsMultiLine()) {
     rc.top -= origin * GetFont().GetHeight();
     canvas.formatted_text(&rc, value.c_str(), GetTextStyle());
   } else if ((GetTextStyle() & DT_VCENTER) == 0)

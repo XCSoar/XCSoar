@@ -327,7 +327,7 @@ WndProperty::OnPaint(Canvas &canvas)
   } else {
     /* don't need to erase the background when it has been done by the
        parent window already */
-    if (have_clipping())
+    if (HaveClipping())
       canvas.Clear(look.background_color);
   }
 
@@ -357,7 +357,7 @@ WndProperty::OnPaint(Canvas &canvas)
     if (org.x < 1)
       org.x = 1;
 
-    if (have_clipping())
+    if (HaveClipping())
       canvas.text(org.x, org.y, caption.c_str());
     else
       canvas.text_clipped(org.x, org.y, caption_width - org.x,

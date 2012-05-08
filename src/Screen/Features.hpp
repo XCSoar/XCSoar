@@ -41,7 +41,7 @@ Copyright_License {
  * siblings and children.
  */
 static inline bool
-have_clipping()
+HaveClipping()
 {
 #ifdef HAVE_CLIPPING
   return true;
