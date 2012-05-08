@@ -105,11 +105,11 @@ TaskCalculatorPanel::Refresh()
 
   if (task_stats.total.remaining_effective.IsDefined())
     LoadFormProperty(form, _T("prpSpeedRemaining"), UnitGroup::TASK_SPEED,
-                     task_stats.total.remaining_effective.get_speed());
+                     task_stats.total.remaining_effective.GetSpeed());
 
   if (task_stats.total.travelled.IsDefined())
     LoadFormProperty(form, _T("prpSpeedAchieved"), UnitGroup::TASK_SPEED,
-                     task_stats.total.travelled.get_speed());
+                     task_stats.total.travelled.GetSpeed());
 
   LoadFormProperty(form, _T("prpCruiseEfficiency"),
                    task_stats.cruise_efficiency * 100);

@@ -770,12 +770,12 @@ OrderedTask::GlideSolutionPlanned(const AircraftState &aircraft,
   leg = tm.get_active_solution();
 
   if (solution_remaining_total.IsOk())
-    total_remaining_effective.set_distance(tm.effective_distance(solution_remaining_total.time_elapsed));
+    total_remaining_effective.SetDistance(tm.effective_distance(solution_remaining_total.time_elapsed));
   else
     total_remaining_effective.Reset();
 
   if (solution_remaining_leg.IsOk())
-    leg_remaining_effective.set_distance(tm.effective_leg_distance(solution_remaining_leg.time_elapsed));
+    leg_remaining_effective.SetDistance(tm.effective_leg_distance(solution_remaining_leg.time_elapsed));
   else
     leg_remaining_effective.Reset();
 }
@@ -1476,8 +1476,8 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
   }
 
   if (stats.total.remaining.IsDefined() && stats.total.planned.IsDefined())
-    ordered_summary.update(stats.total.remaining.get_distance(),
-                           stats.total.planned.get_distance());
+    ordered_summary.update(stats.total.remaining.GetDistance(),
+                           stats.total.planned.GetDistance());
 }
 
 unsigned 

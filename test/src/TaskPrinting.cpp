@@ -179,13 +179,13 @@ PrintHelper::abstracttask_print(AbstractTask& task, const AircraftState &state)
     f6 << task.stats.Time
        << " " << task.active_task_point
        << " " << task.stats.mc_best
-       << " " << task.stats.total.remaining_effective.get_distance()
-       << " " << task.stats.total.remaining.get_distance() 
+       << " " << task.stats.total.remaining_effective.GetDistance()
+       << " " << task.stats.total.remaining.GetDistance() 
        << " " << task.stats.cruise_efficiency 
-       << " " << task.stats.total.remaining.get_speed() 
-       << " " << task.stats.total.remaining.get_speed_incremental() 
-       << " " << task.stats.total.remaining_effective.get_speed() 
-       << " " << task.stats.total.remaining_effective.get_speed_incremental() 
+       << " " << task.stats.total.remaining.GetSpeed() 
+       << " " << task.stats.total.remaining.GetSpeedIncremental() 
+       << " " << task.stats.total.remaining_effective.GetSpeed() 
+       << " " << task.stats.total.remaining_effective.GetSpeedIncremental() 
        << " " << task.stats.total.vario.get_value() 
        << " " << task.stats.effective_mc
        << " " << task.stats.get_pirker_speed()

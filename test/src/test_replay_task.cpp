@@ -155,9 +155,9 @@ test_replay()
   if (verbose) {
     distance_counts();
     printf("# task elapsed %d (s)\n", (int)task_manager.GetStats().total.time_elapsed);
-    printf("# task speed %3.1f (kph)\n", (int)task_manager.GetStats().total.travelled.get_speed()*3.6);
+    printf("# task speed %3.1f (kph)\n", (int)task_manager.GetStats().total.travelled.GetSpeed()*3.6);
     printf("# travelled distance %4.1f (km)\n", 
-           (double)task_manager.GetStats().total.travelled.get_distance()/1000.0);
+           (double)task_manager.GetStats().total.travelled.GetDistance()/1000.0);
     printf("# scored distance %4.1f (km)\n", 
            (double)task_manager.GetStats().distance_scored/1000.0);
     if (task_manager.GetStats().total.time_elapsed) {

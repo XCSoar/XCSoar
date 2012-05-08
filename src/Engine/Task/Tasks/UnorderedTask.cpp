@@ -110,12 +110,12 @@ UnorderedTask::GlideSolutionPlanned(const AircraftState &state,
   leg = solution_remaining_leg;
 
   if (total.IsOk())
-    total_remaining_effective.set_distance(total.vector.distance);
+    total_remaining_effective.SetDistance(total.vector.distance);
   else
     total_remaining_effective.Reset();
 
   if (leg.IsOk())
-    leg_remaining_effective.set_distance(leg.vector.distance);
+    leg_remaining_effective.SetDistance(leg.vector.distance);
   else
     leg_remaining_effective.Reset();
 }
@@ -140,7 +140,7 @@ UnorderedTask::ScanDistanceMinMax(const GeoPoint &location, bool full,
                                     fixed *dmin, fixed *dmax)
 {
   *dmin = *dmax = stats.total.remaining.IsDefined()
-    ? stats.total.remaining.get_distance()
+    ? stats.total.remaining.GetDistance()
     : fixed_zero;
 }
 
@@ -148,7 +148,7 @@ fixed
 UnorderedTask::ScanDistanceNominal()
 {
   return stats.total.remaining.IsDefined()
-    ? stats.total.remaining.get_distance()
+    ? stats.total.remaining.GetDistance()
     : fixed_zero;
 }
 
@@ -156,7 +156,7 @@ fixed
 UnorderedTask::ScanDistancePlanned()
 {
   return stats.total.remaining.IsDefined()
-    ? stats.total.remaining.get_distance()
+    ? stats.total.remaining.GetDistance()
     : fixed_zero;
 }
 

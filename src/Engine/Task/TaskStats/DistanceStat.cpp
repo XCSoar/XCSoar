@@ -28,7 +28,7 @@ DistanceStatComputer::DistanceStatComputer(const bool _is_positive)
    is_positive(_is_positive) {}
 
 void
-DistanceStatComputer::calc_incremental_speed(DistanceStat &data, const fixed dt)
+DistanceStatComputer::CalcIncrementalSpeed(DistanceStat &data, const fixed dt)
 {
   if ((dt + fixed_half >= fixed_one) && data.IsDefined()) {
     if (av_dist.Update(data.distance)) {
@@ -43,15 +43,15 @@ DistanceStatComputer::calc_incremental_speed(DistanceStat &data, const fixed dt)
       data.speed_incremental = (is_positive ? -v_f : v_f);
     }
   } else if (!positive(dt) || !data.IsDefined()) {
-    reset_incremental_speed(data);
+    ResetIncrementalSpeed(data);
   }
 }
 
 void
-DistanceStatComputer::reset_incremental_speed(DistanceStat &data)
+DistanceStatComputer::ResetIncrementalSpeed(DistanceStat &data)
 {
-  fixed distance = data.IsDefined() ? data.get_distance() : fixed_zero;
-  fixed speed = data.IsDefined() ? data.get_speed() : fixed_zero;
+  fixed distance = data.IsDefined() ? data.GetDistance() : fixed_zero;
+  fixed speed = data.IsDefined() ? data.GetSpeed() : fixed_zero;
 
   df.Reset(distance, (is_positive ? -1 : 1) * speed);
   v_lpf.Reset((is_positive ? -1 : 1) * speed);
@@ -60,10 +60,10 @@ DistanceStatComputer::reset_incremental_speed(DistanceStat &data)
 }
 
 void
-DistanceStatComputer::calc_speed(DistanceStat &data, fixed time)
+DistanceStatComputer::CalcSpeed(DistanceStat &data, fixed time)
 {
   if (positive(time) && data.IsDefined())
-    data.speed = data.get_distance() / time;
+    data.speed = data.GetDistance() / time;
   else
     data.speed = fixed_zero;
 }

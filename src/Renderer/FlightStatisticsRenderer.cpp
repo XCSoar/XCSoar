@@ -228,7 +228,7 @@ FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived)
       !derived.task_stats.total.remaining.IsDefined()) {
     _tcscpy(sTmp, _("No task"));
   } else {
-    const fixed d_remaining = derived.task_stats.total.remaining.get_distance();
+    const fixed d_remaining = derived.task_stats.total.remaining.GetDistance();
     TCHAR timetext1[100];
     TCHAR timetext2[100];
     if (common.ordered_has_targets) {

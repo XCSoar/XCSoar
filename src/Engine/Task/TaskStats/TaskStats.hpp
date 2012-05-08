@@ -83,7 +83,7 @@ public:
 
   /** Incremental task speed adjusted for mc, target changes */
   fixed get_pirker_speed() const {
-    return total.pirker.get_speed_incremental();
+    return total.pirker.GetSpeedIncremental();
   }
 
   /** Reset each element (for incremental speeds). */

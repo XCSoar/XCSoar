@@ -329,7 +329,7 @@ InfoBoxContentFinalDistance::Update(InfoBoxData &data)
   // Set Value
   data.SetValueFromDistance(common_stats.task_finished
                             ? task_stats.current_leg.vector_remaining.distance
-                            : task_stats.total.remaining.get_distance());
+                            : task_stats.total.remaining.GetDistance());
 }
 
 void
@@ -405,7 +405,7 @@ InfoBoxContentTaskSpeed::Update(InfoBoxData &data)
 
   // Set Value
   data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.total.travelled.get_speed()));
+                    Units::ToUserTaskSpeed(task_stats.total.travelled.GetSpeed()));
 
   // Set Unit
   data.SetValueUnit(Units::current.task_speed_unit);
@@ -423,7 +423,7 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxData &data)
 
   // Set Value
   data.SetValue(_T("%2.0f"),
-                    Units::ToUserTaskSpeed(task_stats.total.remaining_effective.get_speed()));
+                    Units::ToUserTaskSpeed(task_stats.total.remaining_effective.GetSpeed()));
 
   // Set Unit
   data.SetValueUnit(Units::current.task_speed_unit);
@@ -623,7 +623,7 @@ InfoBoxContentTaskAADistance::Update(InfoBoxData &data)
   }
 
   // Set Value
-  data.SetValueFromDistance(task_stats.total.planned.get_distance());
+  data.SetValueFromDistance(task_stats.total.planned.GetDistance());
 }
 
 void
@@ -756,7 +756,7 @@ InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
     return;
   }
 
-  const fixed d = task_stats.current_leg.remaining.get_distance();
+  const fixed d = task_stats.current_leg.remaining.GetDistance();
   const fixed v = basic.ground_speed;
 
   if (!task_stats.task_valid ||
@@ -787,7 +787,7 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
     return;
   }
 
-  const fixed d = task_stats.total.remaining.get_distance();
+  const fixed d = task_stats.total.remaining.GetDistance();
   const fixed &v = basic.ground_speed;
 
   if (!task_stats.task_valid ||

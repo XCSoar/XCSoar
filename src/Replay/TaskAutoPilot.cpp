@@ -274,7 +274,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& st
   if (task.is_empty() || !task.leg_stats().remaining.IsDefined())
     return w[0].Distance(state.location)>state.ground_speed;
 
-  bool d_far = (task.leg_stats().remaining.get_distance() > fixed(100));
+  bool d_far = (task.leg_stats().remaining.GetDistance() > fixed(100));
 
   if (!task.is_ordered())
     // cheat for non-ordered tasks

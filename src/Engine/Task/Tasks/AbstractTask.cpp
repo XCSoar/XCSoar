@@ -142,7 +142,7 @@ void
 AbstractTask::UpdateStatsDistances(const GeoPoint &location,
                                    const bool full_update)
 {
-  stats.total.remaining.set_distance(ScanDistanceRemaining(location));
+  stats.total.remaining.SetDistance(ScanDistanceRemaining(location));
 
   const TaskPoint *active = GetActiveTaskPoint();
   if (active != NULL) {
@@ -159,8 +159,8 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
   ScanDistanceMinMax(location, full_update,
                        &stats.distance_min, &stats.distance_max);
 
-  stats.total.travelled.set_distance(ScanDistanceTravelled(location));
-  stats.total.planned.set_distance(ScanDistancePlanned());
+  stats.total.travelled.SetDistance(ScanDistanceTravelled(location));
+  stats.total.planned.SetDistance(ScanDistancePlanned());
 
   if (IsScored()) {
     if (!TaskStarted()) 
@@ -175,7 +175,7 @@ static void
 Copy(DistanceStat &stat, const GlideResult &solution)
 {
   if (solution.IsDefined())
-    stat.set_distance(solution.vector.distance);
+    stat.SetDistance(solution.vector.distance);
   else
     stat.Reset();
 }
@@ -185,8 +185,8 @@ CalculatePirker(DistanceStat &pirker, const DistanceStat &planned,
                 const DistanceStat &remaining_effective)
 {
   if (planned.IsDefined() && remaining_effective.IsDefined())
-    pirker.set_distance(planned.get_distance() -
-                        remaining_effective.get_distance());
+    pirker.SetDistance(planned.GetDistance() -
+                        remaining_effective.GetDistance());
   else
     pirker.Reset();
 }

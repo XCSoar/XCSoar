@@ -77,41 +77,41 @@ ElementStatComputer::Reset(ElementStat &data)
 void 
 ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
 {
-  remaining_effective.calc_speed(data.remaining_effective, data.time_remaining);
-  remaining.calc_speed(data.remaining, data.time_remaining);
-  planned.calc_speed(data.planned, data.time_planned);
-  travelled.calc_speed(data.travelled, data.time_elapsed);
-  pirker.calc_speed(data.pirker, data.time_elapsed);
+  remaining_effective.CalcSpeed(data.remaining_effective, data.time_remaining);
+  remaining.CalcSpeed(data.remaining, data.time_remaining);
+  planned.CalcSpeed(data.planned, data.time_planned);
+  travelled.CalcSpeed(data.travelled, data.time_elapsed);
+  pirker.CalcSpeed(data.pirker, data.time_elapsed);
 
   if (!initialised) {
     if (positive(dt) && data.time_elapsed > fixed(15))
       initialised = true;
 
     vario.reset(data.vario, data.solution_remaining);
-    remaining_effective.calc_incremental_speed(data.remaining_effective,
+    remaining_effective.CalcIncrementalSpeed(data.remaining_effective,
                                                fixed_zero);
-    remaining.calc_incremental_speed(data.remaining, fixed_zero);
-    planned.calc_incremental_speed(data.planned, fixed_zero);
-    travelled.calc_incremental_speed(data.travelled, fixed_zero);
-    pirker.calc_incremental_speed(data.pirker, fixed_zero);
+    remaining.CalcIncrementalSpeed(data.remaining, fixed_zero);
+    planned.CalcIncrementalSpeed(data.planned, fixed_zero);
+    travelled.CalcIncrementalSpeed(data.travelled, fixed_zero);
+    pirker.CalcIncrementalSpeed(data.pirker, fixed_zero);
     return;
   }
 
   if (!positive(dt))
     return;
 
-  remaining.calc_incremental_speed(data.remaining, dt);
-  planned.calc_incremental_speed(data.planned, dt);
-  travelled.calc_incremental_speed(data.travelled, dt);
+  remaining.CalcIncrementalSpeed(data.remaining, dt);
+  planned.CalcIncrementalSpeed(data.planned, dt);
+  travelled.CalcIncrementalSpeed(data.travelled, dt);
 
   if (data.solution_remaining.IsOk()) {
-    remaining_effective.calc_incremental_speed(data.remaining_effective, dt);
-    pirker.calc_incremental_speed(data.pirker, dt);
+    remaining_effective.CalcIncrementalSpeed(data.remaining_effective, dt);
+    pirker.CalcIncrementalSpeed(data.pirker, dt);
     vario.update(data.vario, data.solution_remaining, fixed(dt));
   } else {
-    remaining_effective.calc_incremental_speed(data.remaining_effective,
+    remaining_effective.CalcIncrementalSpeed(data.remaining_effective,
                                                fixed_zero);
-    pirker.calc_incremental_speed(data.pirker, fixed_zero);
+    pirker.CalcIncrementalSpeed(data.pirker, fixed_zero);
     vario.reset(data.vario, data.solution_remaining);
   }
 }
