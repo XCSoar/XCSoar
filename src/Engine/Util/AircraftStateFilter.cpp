@@ -45,9 +45,9 @@ AircraftStateFilter::Reset(const AircraftState &state)
   x_low_pass.Reset(fixed_zero);
   y_low_pass.Reset(fixed_zero);
   alt_low_pass.Reset(fixed_zero);
-  x_diff_filter.reset(x, fixed_zero);
-  y_diff_filter.reset(y, fixed_zero);
-  alt_diff_filter.reset(state.altitude, fixed_zero);
+  x_diff_filter.Reset(x, fixed_zero);
+  y_diff_filter.Reset(y, fixed_zero);
+  alt_diff_filter.Reset(state.altitude, fixed_zero);
 }
 
 void
@@ -74,9 +74,9 @@ AircraftStateFilter::Update(const AircraftState &state)
   x += vec.bearing.sin() * vec.distance;
   y += vec.bearing.cos() * vec.distance;
 
-  v_x = x_low_pass.Update(x_diff_filter.update(x));
-  v_y = y_low_pass.Update(y_diff_filter.update(y));
-  v_alt = alt_low_pass.Update(alt_diff_filter.update(state.altitude));
+  v_x = x_low_pass.Update(x_diff_filter.Update(x));
+  v_y = y_low_pass.Update(y_diff_filter.Update(y));
+  v_alt = alt_low_pass.Update(alt_diff_filter.Update(state.altitude));
 
   last_state = state;
 }

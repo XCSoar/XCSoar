@@ -22,7 +22,7 @@
 #include "DiffFilter.hpp"
 
 void
-DiffFilter::reset(const fixed x0, const fixed y0)
+DiffFilter::Reset(const fixed x0, const fixed y0)
 {
   for (unsigned i = 0; i < 7; i++) {
     x[i] = x0 - y0 * i;
@@ -30,7 +30,7 @@ DiffFilter::reset(const fixed x0, const fixed y0)
 }
 
 fixed
-DiffFilter::update(const fixed x0)
+DiffFilter::Update(const fixed x0)
 {
   x[6] = x[5];
   x[5] = x[4];

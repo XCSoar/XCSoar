@@ -35,17 +35,17 @@ main(int argc, char **argv)
 
   // Test steady-state response scaling
   for (long dY = 1; dY <= 10000000; dY *= 10) {
-    df.reset();
+    df.Reset();
     for (int Y = dY; Y < 30 * dY; Y += dY) {
       if (Y < 6 * dY)
         // Give the filter time to calm down before testing for steady state
-        df.update(fixed(Y));
+        df.Update(fixed(Y));
       else {
         // test if the filter response is close enough to dX
         //
         // the discrete filter design results in steady-state error
         // of approximately 3.4507 percent
-        fixed error = fabs((df.update(fixed(Y)) - fixed(dY)) / dY);
+        fixed error = fabs((df.Update(fixed(Y)) - fixed(dY)) / dY);
         ok1(error < fixed(0.035));
       }
     }
@@ -53,25 +53,25 @@ main(int argc, char **argv)
 
   // Test steady-state response scaling with reset(0, dX) call
   for (long dY = 1; dY <= 10000000; dY *= 10) {
-    df.reset(fixed_zero, fixed(dY));
+    df.Reset(fixed_zero, fixed(dY));
     for (int Y = dY; Y < 30 * dY; Y += dY) {
       // test if the filter response is close enough to dX
       //
       // the discrete filter design results in steady-state error
       // of approximately 3.4507 percent
-      fixed error = fabs((df.update(fixed(Y)) - fixed(dY)) / dY);
+      fixed error = fabs((df.Update(fixed(Y)) - fixed(dY)) / dY);
       ok1(error < fixed(0.035));
     }
   }
 
-  df.reset();
+  df.Reset();
   fixed p = fixed_two_pi / fixed(10);
   for (int X = 0; X < 50; X += 1) {
     // Y = sin(2 * pi * (X/10)
     fixed Y = fixed(sin(p * X));
 
     fixed dY_shifted = fixed(cos(p * (X - 3))) * p;
-    fixed dY_filter = df.update(fixed(Y));
+    fixed dY_filter = df.Update(fixed(Y));
     fixed error = fabs(dY_filter - dY_shifted);
     if (X >= 10)
       ok1(error < fixed(0.05));

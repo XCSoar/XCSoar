@@ -39,7 +39,7 @@ public:
    */
   DiffFilter(const fixed x_default = fixed_zero)
   {
-    reset(x_default);
+    Reset(x_default);
   }
 
   /**
@@ -50,7 +50,7 @@ public:
    *
    * @return Filter output value
    */
-  fixed update(const fixed x0);
+  fixed Update(const fixed x0);
 
   /**
    * Resets filter as if fed value to produce y0
@@ -58,7 +58,7 @@ public:
    * @param x0 Steady state value of filter input
    * @param y0 Desired value of differentiated output
    */
-  void reset(const fixed x0 = fixed_zero, const fixed y0 = fixed_zero);
+  void Reset(const fixed x0 = fixed_zero, const fixed y0 = fixed_zero);
 
 private:
   fixed x[7];
