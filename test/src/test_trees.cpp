@@ -77,13 +77,13 @@ test_as(const unsigned n, std::ostream &fo)
     int y = rand()%1200-100;
     state.location.longitude = Angle::Degrees(fixed(x/1000.0));
     state.location.latitude = Angle::Degrees(fixed(y/1000.0));
-    const AirspacesInterface::AirspaceVector vc = airspaces.find_inside(state);
+    const AirspacesInterface::AirspaceVector vc = airspaces.FindInside(state);
   }
   print_queries(n, fo);
   fo.flush();
 
   const AirspacesInterface::AirspaceVector vc =
-    airspaces.scan_range(state.location, fixed(20000.0));
+    airspaces.ScanRange(state.location, fixed(20000.0));
 
   return true;
 }

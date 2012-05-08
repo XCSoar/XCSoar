@@ -187,7 +187,7 @@ LoadFiles(ComputerSettings &settings)
     parser.Parse(*reader, operation);
     delete reader;
 
-    airspace_database.optimise();
+    airspace_database.Optimise();
   }
 }
 

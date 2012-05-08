@@ -56,7 +56,7 @@ ParseFile(const TCHAR *path, Airspaces &airspaces)
   if (!ok1(parser.Parse(reader, operation)))
     return false;
 
-  airspaces.optimise();
+  airspaces.Optimise();
   return true;
 }
 

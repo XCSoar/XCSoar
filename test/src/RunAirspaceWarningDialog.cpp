@@ -84,7 +84,7 @@ LoadFiles(Airspaces &airspace_database)
     parser.Parse(*reader, operation);
     delete reader;
 
-    airspace_database.optimise();
+    airspace_database.Optimise();
   }
 }
 

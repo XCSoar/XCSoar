@@ -24,7 +24,7 @@
 #include "Terrain/RasterTerrain.hpp"
 
 void 
-Airspaces::set_ground_levels(const RasterTerrain &terrain)
+Airspaces::SetGroundLevels(const RasterTerrain &terrain)
 {
   for (auto v = airspace_tree.begin(); v != airspace_tree.end(); ++v) {
     FlatGeoPoint c_flat = v->GetCenter();

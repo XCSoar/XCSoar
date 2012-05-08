@@ -65,10 +65,10 @@ class Airspaces:
   public AirspacesInterface,
   private NonCopyable
 {
-  AtmosphericPressure m_QNH;
-  AirspaceActivity m_day;
+  AtmosphericPressure qnh;
+  AirspaceActivity activity_mask;
 
-  bool m_owner;
+  bool owns_children;
 
   AirspaceTree airspace_tree;
   TaskProjection task_projection;
@@ -85,17 +85,16 @@ public:
    *
    * @return empty Airspaces class.
    */
-  Airspaces():m_QNH(AtmosphericPressure::Zero()), m_owner(true) {}
+  Airspaces():qnh(AtmosphericPressure::Zero()), owns_children(true) {}
 
   /**
    * Make a copy of the airspaces metadata
    */
-  Airspaces(const Airspaces& master, bool is_master);
+  Airspaces(const Airspaces &master, bool owns_children);
 
   /**
    * Destructor.
    * This also destroys Airspace objects contained in the tree or temporary buffer
-   *
    */
   ~Airspaces();
 
@@ -106,18 +105,17 @@ public:
    * 
    * @param asp New airspace to be added.
    */
-  void insert(AbstractAirspace* asp);
+  void Add(AbstractAirspace *asp);
 
   /** 
    * Re-organise the internal airspace tree after inserting/deleting.
    * Should be called after inserting/deleting airspaces prior to performing
    * any searches, but can be done once after a batch insert/delete.
    */
-  void optimise();
+  void Optimise();
 
   /**
    * Clear the airspace store, deleting airspace objects if m_owner is true
-   *
    */
   void clear();
 
@@ -143,7 +141,7 @@ public:
    * 
    * @param terrain Terrain model for lookup
    */
-  void set_ground_levels(const RasterTerrain &terrain);
+  void SetGroundLevels(const RasterTerrain &terrain);
 
   /** 
    * Set QNH pressure for all FL-referenced airspace altitudes.
@@ -151,14 +149,14 @@ public:
    * 
    * @param press Atmospheric pressure model and QNH
    */
-  void set_flight_levels(const AtmosphericPressure &press);
+  void SetFlightLevels(const AtmosphericPressure &press);
 
   /** 
    * Set activity based on day mask
    *
    * @param days Mask of activity (a particular or range of days matching this day)
    */
-  void set_activity(const AirspaceActivity mask);
+  void SetActivity(const AirspaceActivity mask);
 
   /**
    * Call visitor class on airspaces within range of location.
@@ -168,11 +166,10 @@ public:
    * @param range distance in meters of search radius
    * @param visitor visitor class to call on airspaces within range
    */
-  void visit_within_range(const GeoPoint &loc, 
-                          const fixed range,
-                          AirspaceVisitor& visitor,
-                          const AirspacePredicate &predicate
-                          =AirspacePredicate::always_true) const;
+  void VisitWithinRange(const GeoPoint &location, fixed range,
+                        AirspaceVisitor &visitor,
+                        const AirspacePredicate &predicate =
+                              AirspacePredicate::always_true) const;
 
   /** 
    * Call visitor class on airspaces intersected by vector.
@@ -182,8 +179,8 @@ public:
    * @param end end of line along with to search for intersections
    * @param visitor visitor class to call on airspaces intersected by line
    */
-  void VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
-                          AirspaceIntersectionVisitor& visitor) const;
+  void VisitIntersecting(const GeoPoint &location, const GeoPoint &end,
+                         AirspaceIntersectionVisitor &visitor) const;
 
   /**
    * Call visitor class on airspaces this location is inside
@@ -192,16 +189,15 @@ public:
    * @param loc location of origin of search
    * @param visitor visitor class to call on airspaces
    */
-  void visit_inside(const GeoPoint &loc,
-                    AirspaceVisitor& visitor) const;
+  void VisitInside(const GeoPoint &location, AirspaceVisitor &visitor) const;
 
   /**
    * Find the nearest airspace that matches the specified condition.
    */
   gcc_pure
-  const Airspace *find_nearest(const GeoPoint &location,
-                               const AirspacePredicate &condition
-                               =AirspacePredicate::always_true) const;
+  const Airspace *FindNearest(const GeoPoint &location,
+                              const AirspacePredicate &condition =
+                                    AirspacePredicate::always_true) const;
 
   /** 
    * Search for airspaces within range of the aircraft.
@@ -213,10 +209,9 @@ public:
    * @return vector of airspaces intersecting search radius
    */
   gcc_pure
-  const AirspaceVector scan_range(const GeoPoint &location,
-                                  const fixed range,
-                                  const AirspacePredicate &condition
-                                  =AirspacePredicate::always_true) const;
+  const AirspaceVector ScanRange(const GeoPoint &location, fixed range,
+                                 const AirspacePredicate &condition =
+                                       AirspacePredicate::always_true) const;
 
   /** 
    * Search for airspaces nearest to the aircraft.
@@ -227,9 +222,9 @@ public:
    * @return single nearest airspace if external, or all airspaces enclosing the aircraft
    */
   gcc_pure
-  const AirspaceVector scan_nearest(const GeoPoint &location,
-                                    const AirspacePredicate &condition
-                                    =AirspacePredicate::always_true) const;
+  const AirspaceVector ScanNearest(const GeoPoint &location,
+                                   const AirspacePredicate &condition =
+                                         AirspacePredicate::always_true) const;
 
   /** 
    * Find airspaces the aircraft is inside (taking altitude into account)
@@ -240,9 +235,9 @@ public:
    * @return airspaces enclosing the aircraft
    */
   gcc_pure
-  const AirspaceVector find_inside(const AircraftState &state,
-                                   const AirspacePredicate &condition
-                                   =AirspacePredicate::always_true) const;
+  const AirspaceVector FindInside(const AircraftState &state,
+                                  const AirspacePredicate &condition =
+                                        AirspacePredicate::always_true) const;
 
   /**
    * Access first airspace in store, for use in iterators.
@@ -267,7 +262,7 @@ public:
   /**
    * Empty clearance polygons of all airspaces in this database
    */
-  void clear_clearances();
+  void ClearClearances();
 
   /**
    * Copy/delete objects in this database based on query of master
@@ -279,11 +274,10 @@ public:
    *
    * @return True on change
    */
-  bool synchronise_in_range(const Airspaces& master,
-                            const GeoPoint &location,
-                            const fixed range,
-                            const AirspacePredicate &condition
-                            =AirspacePredicate::always_true);
+  bool SynchroniseInRange(const Airspaces &master,
+                          const GeoPoint &location, fixed range,
+                          const AirspacePredicate &condition =
+                                AirspacePredicate::always_true);
 };
 
 #endif

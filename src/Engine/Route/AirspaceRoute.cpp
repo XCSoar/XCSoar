@@ -130,7 +130,7 @@ const AbstractAirspace*
 AirspaceRoute::InsideOthers(const AGeoPoint& origin) const
 {
   AirspaceInsideOtherVisitor visitor;
-  m_airspaces.visit_within_range(origin, fixed_one, visitor);
+  m_airspaces.VisitWithinRange(origin, fixed_one, visitor);
   count_airspace++;
   return visitor.found();
 }
@@ -225,14 +225,14 @@ AirspaceRoute::AirspaceRoute(const Airspaces& master):
 AirspaceRoute::~AirspaceRoute()
 {
   // clean up, we dont need the clearances any more
-  m_airspaces.clear_clearances();
+  m_airspaces.ClearClearances();
 }
 
 void
 AirspaceRoute::Reset()
 {
   RoutePlanner::Reset();
-  m_airspaces.clear_clearances();
+  m_airspaces.ClearClearances();
   m_airspaces.clear();
 }
 
@@ -247,7 +247,7 @@ AirspaceRoute::Synchronise(const Airspaces& master,
   h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo condition(h_min, h_max, origin, destination);
-  if (m_airspaces.synchronise_in_range(master, origin.Middle(destination),
+  if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),
                                        half(origin.Distance(destination)),
                                        condition))
   {

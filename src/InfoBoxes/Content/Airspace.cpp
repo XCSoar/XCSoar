@@ -109,7 +109,7 @@ FindNearestHorizontalAirspace()
 
   /* find the nearest airspace */
   HorizontalAirspaceCondition condition(basic, CommonInterface::Calculated());
-  const Airspace *airspace = airspace_database.find_nearest(basic.location, condition);
+  const Airspace *airspace = airspace_database.FindNearest(basic.location, condition);
   if (airspace == NULL)
     return NearestAirspace();
 
@@ -204,7 +204,7 @@ FindNearestVerticalAirspace()
 
   /* find the nearest airspace */
   VerticalAirspaceVisitor visitor(basic, CommonInterface::Calculated());
-  airspace_database.visit_inside(basic.location, visitor);
+  airspace_database.VisitInside(basic.location, visitor);
   if (visitor.GetNearest() == NULL)
     return NearestAirspace();
 

@@ -237,7 +237,7 @@ MapItemListBuilder::AddVisibleAirspace(
                                      warnings, location);
 
   AirspaceListBuilderVisitor builder(list);
-  airspaces.visit_within_range(location, fixed(100.0), builder, predicate);
+  airspaces.VisitWithinRange(location, fixed(100.0), builder, predicate);
 }
 
 void

@@ -291,7 +291,7 @@ AirspaceWarningManager::UpdatePredicted(const AircraftState& state,
   airspaces.VisitIntersecting(state.location, location_predicted, visitor);
 
   visitor.SetMode(true);
-  airspaces.visit_inside(state.location, visitor);
+  airspaces.VisitInside(state.location, visitor);
 
   return visitor.Found();
 }
@@ -373,7 +373,7 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 
   AirspacePredicateAircraftInside condition(state);
 
-  Airspaces::AirspaceVector results = airspaces.find_inside(state, condition);
+  Airspaces::AirspaceVector results = airspaces.FindInside(state, condition);
   for (auto it = results.begin(); it != results.end(); ++it) {
     const AbstractAirspace& airspace = *it->get_airspace();
 

@@ -172,7 +172,7 @@ struct TempAirspaceType
     as->SetProperties(Name, Type, Base, Top);
     as->SetRadio(Radio);
     as->SetDays(days_of_operation);
-    airspace_database.insert(as);
+    airspace_database.Add(as);
   }
 
   void
@@ -182,7 +182,7 @@ struct TempAirspaceType
     as->SetProperties(Name, Type, Base, Top);
     as->SetRadio(Radio);
     as->SetDays(days_of_operation);
-    airspace_database.insert(as);
+    airspace_database.Add(as);
   }
 
   void

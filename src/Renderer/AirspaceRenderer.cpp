@@ -507,13 +507,13 @@ AirspaceRenderer::Draw(Canvas &canvas,
   if (settings.fill_mode == AirspaceRendererSettings::FillMode::ALL) {
     AirspaceFillRenderer renderer(canvas, projection, look, awc,
                                   settings);
-    airspaces->visit_within_range(projection.GetGeoScreenCenter(),
+    airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                           projection.GetScreenDistanceMeters(),
                                           renderer, visible);
   } else {
     AirspaceVisitorRenderer renderer(canvas, projection, look, awc,
                                      settings);
-    airspaces->visit_within_range(projection.GetGeoScreenCenter(),
+    airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                           projection.GetScreenDistanceMeters(),
                                           renderer, visible);
   }
@@ -526,7 +526,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  airspaces->visit_within_range(projection.GetGeoScreenCenter(),
+  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                         projection.GetScreenDistanceMeters(),
                                         v, visible);
 
@@ -538,7 +538,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
   AirspaceOutlineRenderer outline_renderer(canvas, projection,
                                            look,
                                            settings.black_outline);
-  airspaces->visit_within_range(projection.GetGeoScreenCenter(),
+  airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                         projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
   awc.VisitWarnings(outline_renderer);

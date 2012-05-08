@@ -50,7 +50,7 @@ bool test_airspace_extra(Airspaces &airspaces) {
   AbstractAirspace* as;
   std::vector<GeoPoint> pts;
   as = new AirspacePolygon(pts);
-  airspaces.insert(as);
+  airspaces.Add(as);
 
   // try clearing now (we haven't called optimise())
 
@@ -91,7 +91,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
       as = new AirspacePolygon(pts,true);
     }
     airspace_random_properties(*as);
-    airspaces.insert(as);
+    airspaces.Add(as);
     if (fin)
       *fin << *as;
   }
@@ -99,9 +99,9 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
   delete fin;
 
   // try inserting nothing
-  airspaces.insert(NULL);
+  airspaces.Add(NULL);
 
-  airspaces.optimise();
+  airspaces.Optimise();
 
 }
 
@@ -280,7 +280,7 @@ void scan_airspaces(const AircraftState state,
 {
   const fixed range(20000.0);
 
-  const std::vector<Airspace> vn = airspaces.scan_nearest(state.location);
+  const std::vector<Airspace> vn = airspaces.ScanNearest(state.location);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
                            do_report);
   std::for_each(vn.begin(), vn.end(), CallVisitor<AirspaceVisitor>(pvn));
@@ -288,17 +288,17 @@ void scan_airspaces(const AircraftState state,
   {
     AirspaceVisitorPrint pvisitor("results/res-bb-range.txt",
                                   do_report);
-    airspaces.visit_within_range(state.location, range, pvisitor);
+    airspaces.VisitWithinRange(state.location, range, pvisitor);
   }
 
   {
     AirspaceVisitorClosest pvisitor("results/res-bb-closest.txt",
                                     airspaces.GetProjection(), state, perf);
-    airspaces.visit_within_range(state.location, range, pvisitor);
+    airspaces.VisitWithinRange(state.location, range, pvisitor);
   }
 
   {
-    const std::vector<Airspace> vi = airspaces.find_inside(state);
+    const std::vector<Airspace> vi = airspaces.FindInside(state);
     AirspaceVisitorPrint pvi("results/res-bb-inside.txt",
                              do_report);
     std::for_each(vi.begin(), vi.end(), CallVisitor<AirspaceVisitor>(pvi));
