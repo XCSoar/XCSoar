@@ -175,7 +175,7 @@ ProtectedTaskManager::TaskSave(const TCHAR* path, const OrderedTask& task)
 {
   DataNodeXML root(DataNodeXML::CreateRoot(_T("Task")));
   Serialiser tser(root);
-  tser.serialise(task);
+  tser.Serialise(task);
 
   return root.Save(path);
 }
