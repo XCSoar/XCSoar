@@ -120,7 +120,6 @@ protected:
   void Serialise(const OrderedTaskPoint &data, const TCHAR* name);
 
 private:
-  TaskFactoryType GetTaskFactoryType() const;
   const TCHAR *GetTaskFactoryType(TaskFactoryType type) const;
   const TCHAR *GetHeightRef(HeightReferenceType height_ref) const;
 };
