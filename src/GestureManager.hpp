@@ -70,8 +70,9 @@ public:
 
   /**
    * Adds new coordinates to the GestureManager
+   * @return True if the threshold was reached, False otherwise
    */
-  void Update(PixelScalar x, PixelScalar y);
+  bool Update(PixelScalar x, PixelScalar y);
 };
 
 #endif

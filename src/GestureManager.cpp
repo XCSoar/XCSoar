@@ -49,7 +49,7 @@ getDirection(int dx, int dy)
   return _T('\0');
 }
 
-void
+bool
 GestureManager::Update(PixelScalar x, PixelScalar y)
 {
   // Calculate deltas
@@ -58,7 +58,7 @@ GestureManager::Update(PixelScalar x, PixelScalar y)
 
   // See if we've reached the threshold already
   if (compare_squared(dx, dy, threshold) != 1)
-    return;
+    return false;
 
   // Save position for next call
   drag_last.x = x;
@@ -69,11 +69,13 @@ GestureManager::Update(PixelScalar x, PixelScalar y)
 
   // Return if we are in an unclear direction
   if (direction == '\0')
-    return;
+    return true;
 
   // Return if we are still in the same direction
   if (gesture.empty() || gesture.last() != direction)
     gesture.Append(direction);
+
+  return true;
 }
 
 void
