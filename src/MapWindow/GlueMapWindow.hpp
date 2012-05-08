@@ -44,9 +44,7 @@ class OffsetHistory {
   unsigned int pos;
   std::array<RasterPoint, 30> offsets;
 
-  friend class GlueMapWindow;
-
-protected:
+public:
   OffsetHistory() : pos(0) { reset(); }
   void reset();
   void add(RasterPoint p);
