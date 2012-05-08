@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_LOOK_HPP
 
 #include "DialogLook.hpp"
+#include "GestureLook.hpp"
 #include "TerminalLook.hpp"
 #include "UnitsLook.hpp"
 #include "VarioLook.hpp"
@@ -44,6 +45,7 @@ struct UISettings;
 
 struct Look {
   DialogLook dialog;
+  GestureLook gesture;
   TerminalLook terminal;
   UnitsLook units;
   VarioLook vario;

@@ -1969,6 +1969,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
+	$(SRC)/Look/GestureLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
