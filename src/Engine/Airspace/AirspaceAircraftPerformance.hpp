@@ -35,7 +35,8 @@
 class AirspaceAircraftPerformance
 {
 protected:
-  fixed m_tolerance_vertical; /**< Tolerance in vertical max speeds (m/s) */
+  /** Tolerance in vertical max speeds (m/s) */
+  fixed vertical_tolerance;
 
 public:
 
@@ -46,15 +47,16 @@ public:
    *
    * @param tolerance Tolerance of vertical speeds (m/s)
    */
-  AirspaceAircraftPerformance(const fixed tolerance=fixed_zero):m_tolerance_vertical(tolerance) {};
+  AirspaceAircraftPerformance(const fixed _tolerance = fixed_zero)
+    :vertical_tolerance(_tolerance) {};
 
   /**
    * Set tolerance of vertical speeds
    *
    * @param val New value of tolerance, positive (m/s)
    */
-  void set_tolerance_vertical(const fixed val) {
-    m_tolerance_vertical = val;
+  void SetVerticalTolerance(const fixed val) {
+    vertical_tolerance = val;
   }
 
   /**
@@ -63,7 +65,7 @@ public:
    * @return Nominal cruise speed (m/s)
    */
   gcc_pure
-  virtual fixed get_cruise_speed() const = 0;
+  virtual fixed GetCruiseSpeed() const = 0;
 
   /**
    * Return nominal descent rate
@@ -71,7 +73,7 @@ public:
    * @return Nominal descent speed (m/s, positive down)
    */
   gcc_pure
-  virtual fixed get_cruise_descent() const = 0;
+  virtual fixed GetCruiseDescent() const = 0;
 
   /**
    * Return descent rate limit (above nominal descent rate)
@@ -79,7 +81,7 @@ public:
    * @return Max descent speed (m/s, positive down)
    */
   gcc_pure
-  virtual fixed get_descent_rate() const = 0;
+  virtual fixed GetDescentRate() const = 0;
 
   /**
    * Return climb rate limit (above nominal descent rate)
@@ -87,7 +89,7 @@ public:
    * @return Max climb rate (m/s, positive up)
    */
   gcc_pure
-  virtual fixed get_climb_rate() const = 0;
+  virtual fixed GetClimbRate() const = 0;
 
   /**
    * Return maximum speed achievable by this model
@@ -95,7 +97,7 @@ public:
    * @return Speed (m/s)
    */
   gcc_pure
-  virtual fixed get_max_speed() const = 0;
+  virtual fixed GetMaxSpeed() const = 0;
 
   /**
    * Find minimum intercept time to a point
@@ -106,8 +108,7 @@ public:
    * @return Time to intercept (s) or -1 if failed
    */
   gcc_pure
-  virtual fixed solution_general(const fixed& distance,
-                                 const fixed& dh) const;
+  virtual fixed SolutionGeneral(const fixed &distance, const fixed &dh) const;
 
   /**
    * Find time to intercept a target with a height band, set distance
@@ -120,11 +121,9 @@ public:
    *
    * @return Time of intercept (s)
    */
-  fixed solution_vertical(const fixed& distance,
-                          const fixed& altitude,
-                          const fixed& base,
-                          const fixed& top,
-                          fixed& intercept_alt) const;
+  fixed SolutionVertical(const fixed &distance, const fixed &altitude,
+                         const fixed &base, const fixed &top,
+                         fixed &intercept_alt) const;
 
   /**
    * Find time to intercept a target with a distance band, set height
@@ -137,18 +136,15 @@ public:
    *
    * @return Time of intercept (s)
    */
-  fixed solution_horizontal(const fixed& distance_min,
-                            const fixed& distance_max,
-                            const fixed& altitude,
-                            const fixed& h,
-                            fixed& intercept_distance) const;
+  fixed SolutionHorizontal(const fixed &distance_min, const fixed &distance_max,
+                           const fixed &altitude, const fixed &h,
+                           fixed &intercept_distance) const;
 
 private:
   gcc_pure
-  virtual bool solution_exists(const fixed& distance_min,
-                               const fixed& distance_max,
-                               const fixed& h_min,
-                               const fixed& h_max) const;
+  virtual bool SolutionExists(const fixed &distance_min,
+                              const fixed &distance_max,
+                              const fixed &h_min, const fixed &h_max) const;
 };
 
 
@@ -173,23 +169,23 @@ protected:
     :v_ld(30.0), s_ld(2.0), climb_rate(10.0), descent_rate(10.0) {}
 
 public:
-  virtual fixed get_cruise_speed() const {
+  virtual fixed GetCruiseSpeed() const {
     return v_ld;
   }
 
-  virtual fixed get_cruise_descent() const {
+  virtual fixed GetCruiseDescent() const {
     return s_ld;
   }
 
-  virtual fixed get_climb_rate() const {
+  virtual fixed GetClimbRate() const {
     return climb_rate;
   }
 
-  virtual fixed get_descent_rate() const {
+  virtual fixed GetDescentRate() const {
     return s_ld;
   }
 
-  virtual fixed get_max_speed() const {
+  virtual fixed GetMaxSpeed() const {
     return v_ld;
   }
 };
@@ -215,23 +211,23 @@ public:
   AirspaceAircraftPerformanceGlide(const GlidePolar &polar)
     :m_glide_polar(polar) {}
 
-  virtual fixed get_cruise_speed() const {
+  virtual fixed GetCruiseSpeed() const {
     return m_glide_polar.GetVBestLD();
   }
 
-  virtual fixed get_cruise_descent() const {
+  virtual fixed GetCruiseDescent() const {
     return m_glide_polar.GetSBestLD();
   }
 
-  virtual fixed get_climb_rate() const {
+  virtual fixed GetClimbRate() const {
     return m_glide_polar.GetMC();
   }
 
-  virtual fixed get_descent_rate() const {
+  virtual fixed GetDescentRate() const {
     return m_glide_polar.GetSMax();
   }
 
-  virtual fixed get_max_speed() const {
+  virtual fixed GetMaxSpeed() const {
     return m_glide_polar.GetVMax();
   }
 
@@ -264,23 +260,23 @@ public:
     :AirspaceAircraftPerformance(fixed(0.01)),
      m_state_filter(filter) {}
 
-  virtual fixed get_cruise_speed() const {
+  virtual fixed GetCruiseSpeed() const {
     return m_state_filter.GetSpeed();
   }
 
-  virtual fixed get_cruise_descent() const {
+  virtual fixed GetCruiseDescent() const {
     return -m_state_filter.GetClimbRate();
   }
 
-  virtual fixed get_climb_rate() const {
+  virtual fixed GetClimbRate() const {
     return m_state_filter.GetClimbRate();
   }
 
-  virtual fixed get_descent_rate() const {
+  virtual fixed GetDescentRate() const {
     return -m_state_filter.GetClimbRate();
   }
 
-  virtual fixed get_max_speed() const {
+  virtual fixed GetMaxSpeed() const {
     return m_state_filter.GetSpeed();
   }
 };
@@ -313,15 +309,11 @@ public:
   AirspaceAircraftPerformanceTask(const GlidePolar& polar,
                                   const GlideResult &solution);
 
-  fixed get_cruise_speed() const;
-
-  fixed get_cruise_descent() const;
-
-  fixed get_climb_rate() const;
-
-  fixed get_descent_rate() const;
-
-  fixed get_max_speed() const;
+  fixed GetCruiseSpeed() const;
+  fixed GetCruiseDescent() const;
+  fixed GetClimbRate() const;
+  fixed GetDescentRate() const;
+  fixed GetMaxSpeed() const;
 };
 
 

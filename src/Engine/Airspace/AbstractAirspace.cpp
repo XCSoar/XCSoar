@@ -64,7 +64,7 @@ AbstractAirspace::InterceptVertical(const AircraftState &state,
 {
   AirspaceInterceptSolution solution;
   solution.distance = distance;
-  solution.elapsed_time = perf.solution_vertical(solution.distance, 
+  solution.elapsed_time = perf.SolutionVertical(solution.distance, 
                                                  state.altitude,
                                                  altitude_base.GetAltitude(state),
                                                  altitude_top.GetAltitude(state),
@@ -85,7 +85,7 @@ AbstractAirspace::InterceptHorizontal(const AircraftState &state,
 
   AirspaceInterceptSolution solution;
   solution.altitude = lower? altitude_base.GetAltitude(state): altitude_top.GetAltitude(state);
-  solution.elapsed_time = perf.solution_horizontal(distance_start, 
+  solution.elapsed_time = perf.SolutionHorizontal(distance_start, 
                                                    distance_end,
                                                    state.altitude,
                                                    solution.altitude,

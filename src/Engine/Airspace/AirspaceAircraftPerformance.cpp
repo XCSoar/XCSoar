@@ -29,12 +29,12 @@
 #define fixed_big fixed_int_constant(1000000)
 
 fixed 
-AirspaceAircraftPerformance::solution_general(const fixed &distance,
+AirspaceAircraftPerformance::SolutionGeneral(const fixed &distance,
                                               const fixed &dh) const
 {
   const fixed t_cruise =
-      positive(distance) ? distance / get_cruise_speed() : fixed_zero;
-  const fixed h_descent = dh - t_cruise * get_cruise_descent();
+      positive(distance) ? distance / GetCruiseSpeed() : fixed_zero;
+  const fixed h_descent = dh - t_cruise * GetCruiseDescent();
 
   if (fabs(h_descent) < fixed_one)
     return t_cruise;
@@ -42,7 +42,7 @@ AirspaceAircraftPerformance::solution_general(const fixed &distance,
   if (positive(h_descent)) {
     // descend steeper than best glide
 
-    fixed mod_descent_rate = get_descent_rate() + m_tolerance_vertical;
+    fixed mod_descent_rate = GetDescentRate() + vertical_tolerance;
 
     if (!positive(mod_descent_rate))
       return fixed_big;
@@ -54,7 +54,7 @@ AirspaceAircraftPerformance::solution_general(const fixed &distance,
 
   // require climb
 
-  fixed mod_climb_rate = get_climb_rate() + m_tolerance_vertical;
+  fixed mod_climb_rate = GetClimbRate() + vertical_tolerance;
 
   if (!positive(mod_climb_rate))
     return fixed_big;
@@ -92,7 +92,7 @@ public:
      m_h_min(h_min), m_h_max(h_max) {}
 
   fixed f(const fixed h) {
-    return m_perf.solution_general(m_distance, m_alt-h);
+    return m_perf.SolutionGeneral(m_distance, m_alt-h);
   }
 
   /**
@@ -121,18 +121,18 @@ private:
 };
 
 fixed 
-AirspaceAircraftPerformance::solution_vertical(const fixed &distance,
+AirspaceAircraftPerformance::SolutionVertical(const fixed &distance,
                                                const fixed &altitude,
                                                const fixed &base,
                                                const fixed &top,
                                                fixed &intercept_alt) const
 {
-  if (!solution_exists(distance, altitude, base, top))
+  if (!SolutionExists(distance, altitude, base, top))
     return -fixed_one;
 
   if (top <= base) {
     // unique solution
-    fixed t_this = solution_general(distance, altitude - top);
+    fixed t_this = SolutionGeneral(distance, altitude - top);
     if (t_this < fixed_big) {
       intercept_alt = top;
       return t_this;
@@ -170,7 +170,7 @@ public:
      m_perf(aap), m_d_min(distance_min), m_d_max(distance_max), m_dh(dh) {}
 
   fixed f(const fixed distance) {
-    return m_perf.solution_general(distance, m_dh);
+    return m_perf.SolutionGeneral(distance, m_dh);
   }
 
   /**
@@ -198,20 +198,20 @@ private:
 };
 
 fixed 
-AirspaceAircraftPerformance::solution_horizontal(const fixed &distance_min,
+AirspaceAircraftPerformance::SolutionHorizontal(const fixed &distance_min,
                                                  const fixed &distance_max,
                                                  const fixed &altitude,
                                                  const fixed &h,
                                                  fixed &intercept_distance) const
 {
-  if (!solution_exists(distance_max, altitude, h, h))
+  if (!SolutionExists(distance_max, altitude, h, h))
     return -fixed_one;
 
   const fixed dh = altitude - h;
 
   if (distance_max <= distance_min) {
     // unique solution
-    fixed t_this = solution_general(distance_max, dh);
+    fixed t_this = SolutionGeneral(distance_max, dh);
     if (t_this != fixed_big) {
       intercept_distance = distance_max;
       return t_this;
@@ -228,20 +228,20 @@ TODO: write a sorter/visitor so that we can visit airspaces in increasing
  */
 
 bool 
-AirspaceAircraftPerformance::solution_exists(const fixed &distance_max,
+AirspaceAircraftPerformance::SolutionExists(const fixed &distance_max,
                                              const fixed &altitude,
                                              const fixed &h_min,
                                              const fixed &h_max) const
 {
   if (positive(altitude - h_max) &&
-      !positive(max(get_cruise_descent(), get_descent_rate()) + m_tolerance_vertical))
+      !positive(max(GetCruiseDescent(), GetDescentRate()) + vertical_tolerance))
     return false;
 
   if (positive(h_min-altitude) &&
-      !positive(max(get_climb_rate(), -get_cruise_descent()) + m_tolerance_vertical))
+      !positive(max(GetClimbRate(), -GetCruiseDescent()) + vertical_tolerance))
     return false;
 
-  if (positive(distance_max) && !positive(get_cruise_speed()))
+  if (positive(distance_max) && !positive(GetCruiseSpeed()))
     return false;
 
   return true;
@@ -269,35 +269,35 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const GlidePola
   }
   m_max_descent = polar.GetSBestLD();
 
-  set_tolerance_vertical(fixed(0.001));
+  SetVerticalTolerance(fixed(0.001));
 }
 
 fixed 
-AirspaceAircraftPerformanceTask::get_cruise_speed() const
+AirspaceAircraftPerformanceTask::GetCruiseSpeed() const
 {
   return m_v;
 }
 
 fixed 
-AirspaceAircraftPerformanceTask::get_cruise_descent() const
+AirspaceAircraftPerformanceTask::GetCruiseDescent() const
 {
   return m_cruise_descent;
 }
 
 fixed 
-AirspaceAircraftPerformanceTask::get_climb_rate() const
+AirspaceAircraftPerformanceTask::GetClimbRate() const
 {
   return m_climb_rate;
 }
 
 fixed 
-AirspaceAircraftPerformanceTask::get_descent_rate() const
+AirspaceAircraftPerformanceTask::GetDescentRate() const
 {
   return m_max_descent;
 }
 
 fixed 
-AirspaceAircraftPerformanceTask::get_max_speed() const
+AirspaceAircraftPerformanceTask::GetMaxSpeed() const
 {
   return m_v;
 }
