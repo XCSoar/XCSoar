@@ -167,19 +167,6 @@ public:
   void TogglePan();
   void PanTo(const GeoPoint &location);
 
-  /**
-   * If point is in any active OZ of the current task,
-   * it returns the index of that turnpoint.
-   *
-   * Used to popup the dlgTarget
-   *
-   * @param gp location where click started
-   *
-   * @return -1 if not in any sector, else tp index
-   *        if tp index >= task's ActiveIndex
-   */
-  int isInAnyActiveSector(const GeoPoint &gp);
-
   bool ShowMapItems(const GeoPoint &location,
                     bool show_empty_message = true) const;
 

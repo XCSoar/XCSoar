@@ -510,7 +510,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/GlueMapWindowItems.cpp \
 	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \
 	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp \
-	$(SRC)/MapWindow/GlueMapWindowTarget.cpp \
 	$(SRC)/MapWindow/GlueMapWindowDisplayMode.cpp \
 	$(SRC)/MapWindow/TargetMapWindow.cpp \
 	$(SRC)/MapWindow/TargetMapWindowEvents.cpp \
