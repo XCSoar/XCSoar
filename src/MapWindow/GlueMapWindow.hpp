@@ -235,6 +235,10 @@ public:
   DisplayMode GetDisplayMode() const {
     return display_mode;
   }
+
+  bool InCirclingMode() const {
+    return display_mode == DM_CIRCLING;
+  }
 };
 
 #endif

@@ -317,7 +317,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 void
 GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
-  if (GetDisplayMode() == DM_CIRCLING) {
+  if (InCirclingMode()) {
     // in circling mode, draw thermal at actual estimated location
     const MapWindowProjection &projection = render_projection;
     const ThermalLocatorInfo &thermal_locator = Calculated().thermal_locator;
@@ -351,7 +351,7 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
   }
 
   DrawTrail(canvas, aircraft_pos, min_time,
-            GetMapSettings().trail_drift_enabled && GetDisplayMode() == DM_CIRCLING);
+            GetMapSettings().trail_drift_enabled && InCirclingMode());
 }
 
 void
