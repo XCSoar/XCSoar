@@ -138,7 +138,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
   if (size1.cx > size2.cx) {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.line(pos.x, pos.y + size1.cy, pos.x + size1.cx, pos.y + size1.cy);
+      canvas.DrawLine(pos.x, pos.y + size1.cy, pos.x + size1.cx, pos.y + size1.cy);
     }
 
     canvas.text(pos.x, pos.y, strings.line1);
@@ -147,7 +147,7 @@ UnitSymbolRenderer::Draw(Canvas &canvas, const RasterPoint pos,
   } else {
     if (strings.is_fraction) {
       canvas.Select(unit_fraction_pen);
-      canvas.line(pos.x, pos.y + size1.cy, pos.x + size2.cx, pos.y + size1.cy);
+      canvas.DrawLine(pos.x, pos.y + size1.cy, pos.x + size2.cx, pos.y + size1.cy);
     }
 
     PixelScalar x = pos.x + (size2.cx - size1.cx) / 2;

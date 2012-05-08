@@ -67,7 +67,7 @@ WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
 void
 WndForm::ClientAreaWindow::OnPaint(Canvas &canvas)
 {
-  canvas.clear(look.background_color);
+  canvas.Clear(look.background_color);
 
   ContainerWindow::OnPaint(canvas);
 }
@@ -509,7 +509,7 @@ WndForm::OnPaint(Canvas &canvas)
 
 #ifdef EYE_CANDY
     canvas.SetBackgroundTransparent();
-    canvas.stretch(title_rect.left, title_rect.top,
+    canvas.Stretch(title_rect.left, title_rect.top,
                    title_rect.right - title_rect.left,
                    title_rect.bottom - title_rect.top,
                    look.caption.background_bitmap);

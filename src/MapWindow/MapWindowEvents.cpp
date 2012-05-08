@@ -147,7 +147,7 @@ MapWindow::OnPaint(Canvas &canvas)
 
     ScopeLock protect(DoubleBufferWindow::mutex);
     const Canvas &src = get_visible_canvas();
-    canvas.stretch(top_left.x, top_left.y,
+    canvas.Stretch(top_left.x, top_left.y,
                    bottom_right.x - top_left.x, bottom_right.y - top_left.y,
                    src, 0, 0, buffer_width, buffer_height);
   } else

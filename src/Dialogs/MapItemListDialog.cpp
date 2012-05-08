@@ -88,7 +88,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 
   if (item.type == MapItem::Type::ARRIVAL_ALTITUDE) {
     canvas.SelectBlackPen();
-    canvas.line(rc.left, rc.bottom - 1, rc.right, rc.bottom - 1);
+    canvas.DrawLine(rc.left, rc.bottom - 1, rc.right, rc.bottom - 1);
   }
 }
 

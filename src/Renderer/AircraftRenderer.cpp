@@ -40,7 +40,7 @@ DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
     dst[2 * points - i - 1].y = dst[i].y;
   }
   PolygonRotateShift(dst, 2 * points, pos.x, pos.y, angle, 50);
-  canvas.polygon(dst, 2 * points);
+  canvas.DrawPolygon(dst, 2 * points);
 }
 
 
@@ -156,10 +156,10 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
                      aircraft_pos.x, aircraft_pos.y, angle);
   canvas.SelectHollowBrush();
   canvas.Select(look.aircraft_simple2_pen);
-  canvas.polygon(aircraft, AircraftPoints);
+  canvas.DrawPolygon(aircraft, AircraftPoints);
   canvas.SelectBlackBrush();
   canvas.Select(look.aircraft_simple1_pen);
-  canvas.polygon(aircraft, AircraftPoints);
+  canvas.DrawPolygon(aircraft, AircraftPoints);
 }
 
 static void
@@ -186,7 +186,7 @@ DrawHangGlider(Canvas &canvas, const AircraftLook &look,
 
   canvas.SelectWhiteBrush();
   canvas.SelectBlackPen();
-  canvas.polygon(aircraft, ARRAY_SIZE(aircraft));
+  canvas.DrawPolygon(aircraft, ARRAY_SIZE(aircraft));
 }
 
 static void
@@ -224,11 +224,11 @@ DrawParaGlider(Canvas &canvas, const AircraftLook &look,
 
   canvas.SelectWhiteBrush();
   canvas.SelectBlackPen();
-  canvas.polygon(aircraft, ARRAY_SIZE(aircraft) - 1);
+  canvas.DrawPolygon(aircraft, ARRAY_SIZE(aircraft) - 1);
 
   canvas.SelectBlackBrush();
   canvas.SelectNullPen();
-  canvas.polygon(aircraft + ARRAY_SIZE(aircraft) - 3, 3);
+  canvas.DrawPolygon(aircraft + ARRAY_SIZE(aircraft) - 3, 3);
 }
 
 void

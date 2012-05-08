@@ -349,9 +349,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   if (circles > 0) {
     canvas.SelectHollowBrush();
     canvas.Select(*circle_pen);
-    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
+    canvas.DrawCircle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     if (circles == 2)
-      canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
+      canvas.DrawCircle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
   }
 
   // Create an arrow polygon
@@ -393,7 +393,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     canvas.Select(*target_brush);
 
   // Draw the polygon
-  canvas.polygon(Arrow, 5);
+  canvas.DrawPolygon(Arrow, 5);
 
   if (small) {
     if (WarningMode() && !traffic.HasAlarm())
@@ -560,7 +560,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
     y2 = p.second;
   }
 
-  canvas.line(radar_mid.x + x1, radar_mid.y + y1,
+  canvas.DrawLine(radar_mid.x + x1, radar_mid.y + y1,
               radar_mid.x + x2, radar_mid.y + y2);
 
   x1 = 0;
@@ -577,7 +577,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
     y2 = p.second;
   }
 
-  canvas.line(radar_mid.x + x1, radar_mid.y + y1,
+  canvas.DrawLine(radar_mid.x + x1, radar_mid.y + y1,
               radar_mid.x + x2, radar_mid.y + y2);
 
   x1 = Layout::FastScale(small ? 2 : 4);
@@ -594,7 +594,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
     y2 = p.second;
   }
 
-  canvas.line(radar_mid.x + x1, radar_mid.y + y1,
+  canvas.DrawLine(radar_mid.x + x1, radar_mid.y + y1,
               radar_mid.x + x2, radar_mid.y + y2);
 }
 
@@ -619,7 +619,7 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
   canvas.Select(look.label_font);
 
   PixelSize s = canvas.CalcTextSize(_T("N"));
-  canvas.circle(radar_mid.x + iround(x * radius),
+  canvas.DrawCircle(radar_mid.x + iround(x * radius),
                 radar_mid.y + iround(y * radius), s.cy * 0.65);
   canvas.text(radar_mid.x + iround(x * radius) - s.cx / 2,
               radar_mid.y + iround(y * radius) - s.cy / 2, _T("N"));
@@ -637,8 +637,8 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.SetTextColor(look.radar_color);
 
   // Paint circles
-  canvas.circle(radar_mid.x, radar_mid.y, radius);
-  canvas.circle(radar_mid.x, radar_mid.y, radius / 2);
+  canvas.DrawCircle(radar_mid.x, radar_mid.y, radius);
+  canvas.DrawCircle(radar_mid.x, radar_mid.y, radius / 2);
 
   PaintRadarPlane(canvas);
 

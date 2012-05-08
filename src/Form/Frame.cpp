@@ -79,7 +79,7 @@ void
 WndFrame::OnPaint(Canvas &canvas)
 {
 #ifdef HAVE_CLIPPING
-  canvas.clear(look.background_brush);
+  canvas.Clear(look.background_brush);
 #endif
 
   canvas.SetTextColor(caption_color);

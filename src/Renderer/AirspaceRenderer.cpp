@@ -168,21 +168,21 @@ public:
           warning_manager.IsInside(airspace) ||
           look.thick_pen.GetWidth() >= 2 * screen_radius) {
         // fill whole circle
-        canvas.circle(screen_center.x, screen_center.y, screen_radius);
+        canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
         Color color = settings.classes[airspace.GetType()].color;
         Pen pen_donut(look.thick_pen.GetWidth() / 2, color.WithAlpha(90));
         canvas.SelectHollowBrush();
         canvas.Select(pen_donut);
-        canvas.circle(screen_center.x, screen_center.y,
+        canvas.DrawCircle(screen_center.x, screen_center.y,
                       screen_radius - look.thick_pen.GetWidth() / 4);
       }
     }
 
     // draw outline
     SetupOutline(airspace);
-    canvas.circle(screen_center.x, screen_center.y, screen_radius);
+    canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
   void Visit(const AirspacePolygon &airspace) {
@@ -296,12 +296,12 @@ public:
     {
       GLEnable blend(GL_BLEND);
       SetupInterior(airspace);
-      canvas.circle(screen_center.x, screen_center.y, screen_radius);
+      canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
     }
 
     // draw outline
     SetupOutline(airspace);
-    canvas.circle(screen_center.x, screen_center.y, screen_radius);
+    canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
   void Visit(const AirspacePolygon &airspace) {

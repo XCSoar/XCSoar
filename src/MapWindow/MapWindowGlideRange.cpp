@@ -72,11 +72,11 @@ struct ProjectedFan {
   }
 #else
   void DrawFill(Canvas &canvas, const RasterPoint *points) const {
-    canvas.polygon(&points[0], size);
+    canvas.DrawPolygon(&points[0], size);
   }
 
   void DrawOutline(Canvas &canvas, const RasterPoint *points) const {
-    canvas.polygon(&points[0], size);
+    canvas.DrawPolygon(&points[0], size);
   }
 #endif
 };
@@ -306,7 +306,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    canvas.clear(Color(255, 255, 255, 77));
+    canvas.Clear(Color(255, 255, 255, 77));
 
     glDisable(GL_BLEND);
     glDisable(GL_STENCIL_TEST);
@@ -322,7 +322,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     buffer.SetTextColor(Color(0xd0, 0xd0, 0xd0));
 
     // Paint the whole buffer canvas with a pattern brush (small dots)
-    buffer.clear(look.above_terrain_brush);
+    buffer.Clear(look.above_terrain_brush);
 
     // Select the TerrainLine pen
     buffer.SelectHollowBrush();

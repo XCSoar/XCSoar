@@ -224,11 +224,11 @@ public:
 
     OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     GLEnable scope(GL_TEXTURE_2D);
-    dest_canvas.stretch(0, 0, dest_width, dest_height,
+    dest_canvas.Stretch(0, 0, dest_width, dest_height,
                         *texture, 0, 0, width, height);
 #elif defined(ENABLE_SDL)
     Canvas src_canvas(surface);
-    dest_canvas.stretch(0, 0, dest_width, dest_height,
+    dest_canvas.Stretch(0, 0, dest_width, dest_height,
                         src_canvas, 0, 0, width, height);
 #elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
     /* StretchDIBits() is bugged on PPC2002, workaround follows */

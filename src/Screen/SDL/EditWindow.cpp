@@ -95,12 +95,12 @@ EditWindow::OnPaint(Canvas &canvas)
 {
   if (IsEnabled()) {
     if (IsReadOnly())
-      canvas.clear(Color(0xf0, 0xf0, 0xf0));
+      canvas.Clear(Color(0xf0, 0xf0, 0xf0));
     else
       canvas.ClearWhite();
     canvas.SetTextColor(COLOR_BLACK);
   } else {
-    canvas.clear(COLOR_LIGHT_GRAY);
+    canvas.Clear(COLOR_LIGHT_GRAY);
     canvas.SetTextColor(COLOR_DARK_GRAY);
   }
 

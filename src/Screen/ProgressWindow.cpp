@@ -152,7 +152,7 @@ ProgressWindow::OnResize(UPixelScalar width, UPixelScalar height)
 void
 ProgressWindow::OnPaint(Canvas &canvas)
 {
-  canvas.clear(background_color);
+  canvas.Clear(background_color);
 
   // Determine window size
   UPixelScalar window_width = canvas.get_width();
@@ -166,7 +166,7 @@ ProgressWindow::OnPaint(Canvas &canvas)
   logo.draw(canvas, logo_rect);
 
   // Draw progress bar background
-  canvas.stretch(0, (window_height - progress_border_height),
+  canvas.Stretch(0, (window_height - progress_border_height),
                  window_width, progress_border_height,
                  bitmap_progress_border);
 

@@ -241,24 +241,24 @@ public:
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
-  void clear() {
+  void Clear() {
     Rectangle(0, 0, get_width(), get_height());
   }
 
-  void clear(const HWColor color) {
+  void Clear(const HWColor color) {
     DrawFilledRectangle(0, 0, get_width(), get_height(), color);
   }
 
-  void clear(const Color color) {
+  void Clear(const Color color) {
     DrawFilledRectangle(0, 0, get_width(), get_height(), color);
   }
 
-  void clear(const Brush &brush) {
+  void Clear(const Brush &brush) {
     DrawFilledRectangle(0, 0, get_width(), get_height(), brush);
   }
 
   void ClearWhite() {
-    clear(COLOR_WHITE);
+    Clear(COLOR_WHITE);
   }
 
   void DrawRoundRectangle(PixelScalar left, PixelScalar top,
@@ -283,13 +283,13 @@ public:
   }
 
   void DrawPolyline(const RasterPoint *points, unsigned num_points);
-  void polygon(const RasterPoint *points, unsigned num_points);
+  void DrawPolygon(const RasterPoint *points, unsigned num_points);
 
   void DrawTriangleFan(const RasterPoint *points, unsigned num_points) {
-    polygon(points, num_points);
+    DrawPolygon(points, num_points);
   }
 
-  void line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by) {
+  void DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by) {
     ax += x_offset;
     bx += x_offset;
     ay += y_offset;
@@ -307,20 +307,20 @@ public:
       ::lineColor(surface, ax, ay, bx, by, pen.GetColor().GFXColor());
   }
 
-  void line(const RasterPoint a, const RasterPoint b) {
-    line(a.x, a.y, b.x, b.y);
+  void DrawLine(const RasterPoint a, const RasterPoint b) {
+    DrawLine(a.x, a.y, b.x, b.y);
   }
 
-  void line_piece(const RasterPoint a, const RasterPoint b) {
-    line(a.x, a.y, b.x, b.y);
+  void DrawLinePiece(const RasterPoint a, const RasterPoint b) {
+    DrawLine(a, b);
   }
 
   void DrawTwoLines(PixelScalar ax, PixelScalar ay,
                  PixelScalar bx, PixelScalar by,
                  PixelScalar cx, PixelScalar cy)
   {
-    line(ax, ay, bx, by);
-    line(bx, by, cx, cy);
+    DrawLine(ax, ay, bx, by);
+    DrawLine(bx, by, cx, cy);
   }
 
   void DrawTwoLines(const RasterPoint a, const RasterPoint b,
@@ -328,7 +328,7 @@ public:
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
-  void circle(PixelScalar x, PixelScalar y, UPixelScalar radius);
+  void DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 
   void DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                Angle start, Angle end, bool horizon=false);
@@ -422,42 +422,42 @@ public:
   void stretch_transparent(const Bitmap &src, Color key);
   void invert_stretch_transparent(const Bitmap &src, Color key);
 
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                SDL_Surface *src,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height);
 
-  void stretch(SDL_Surface *src) {
-    stretch(0, 0, get_width(), get_height(),
+  void Stretch(SDL_Surface *src) {
+    Stretch(0, 0, get_width(), get_height(),
             src, 0, 0, src->w, src->h);
   }
 
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Canvas &src,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height) {
-    stretch(dest_x, dest_y, dest_width, dest_height,
+    Stretch(dest_x, dest_y, dest_width, dest_height,
             src.surface,
             src_x, src_y, src_width, src_height);
   }
 
-  void stretch(const Canvas &src,
+  void Stretch(const Canvas &src,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height);
 
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height);
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src);
 
-  void stretch(const Bitmap &src) {
-    stretch(0, 0, width, height, src);
+  void Stretch(const Bitmap &src) {
+    Stretch(0, 0, width, height, src);
   }
 
   void StretchMono(PixelScalar dest_x, PixelScalar dest_y,
@@ -467,24 +467,24 @@ public:
                    UPixelScalar src_width, UPixelScalar src_height,
                    Color fg_color, Color bg_color);
 
-  void copy_not(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_not(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_or(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_or(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_or(const Bitmap &src) {
-    copy_or(0, 0, get_width(), get_height(), src, 0, 0);
+  void CopyOr(const Bitmap &src) {
+    CopyOr(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
   void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
@@ -495,30 +495,30 @@ public:
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Canvas &src, PixelScalar src_x, PixelScalar src_y) {
-    copy_and(dest_x, dest_y, dest_width, dest_height,
+    CopyAnd(dest_x, dest_y, dest_width, dest_height,
              src.surface, src_x, src_y);
   }
 
-  void copy_and(const Canvas &src) {
-    copy_and(0, 0, src.get_width(), src.get_height(), src, 0, 0);
+  void CopyAnd(const Canvas &src) {
+    CopyAnd(0, 0, src.get_width(), src.get_height(), src, 0, 0);
   }
 
-  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_and(const Bitmap &src) {
-    copy_and(0, 0, get_width(), get_height(), src, 0, 0);
+  void CopyAnd(const Bitmap &src) {
+    CopyAnd(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
-  void scale_copy(PixelScalar dest_x, PixelScalar dest_y,
+  void ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,
                   const Bitmap &src,
                   PixelScalar src_x, PixelScalar src_y,
                   UPixelScalar src_width, UPixelScalar src_height);

@@ -179,8 +179,8 @@ OZWindow::OnPaint(Canvas &canvas)
   const ObservationZone::Boundary boundary = oz->GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
     RasterPoint p = projection.GeoToScreen(*i);
-    canvas.line(p.x - 3, p.y - 3, p.x + 3, p.y + 3);
-    canvas.line(p.x + 3, p.y - 3, p.x - 3, p.y + 3);
+    canvas.DrawLine(p.x - 3, p.y - 3, p.x + 3, p.y + 3);
+    canvas.DrawLine(p.x + 3, p.y - 3, p.x - 3, p.y + 3);
   }
 }
 

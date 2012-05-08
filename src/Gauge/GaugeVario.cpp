@@ -88,7 +88,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     bottom_position.y = middle_position.y + value_height;
     bottom_position.x = rc.right;
 
-    canvas.stretch(rc.left, rc.top, width, height,
+    canvas.Stretch(rc.left, rc.top, width, height,
                    look.background_bitmap,
                    look.background_x, 0, 58, 120);
 
@@ -233,7 +233,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
     return;
 
   if (Basic().switch_state.flight_mode == SwitchInfo::FlightMode::CIRCLING)
-    canvas.scale_copy(x, y, look.climb_bitmap, 12, 0, 12, 12);
+    canvas.ScaleCopy(x, y, look.climb_bitmap, 12, 0, 12, 12);
   else if (is_persistent())
     canvas.DrawFilledRectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
                           look.background_color);
@@ -247,8 +247,8 @@ GaugeVario::RenderZero(Canvas &canvas)
   else
     canvas.SelectBlackPen();
 
-  canvas.line(0, yoffset, Layout::Scale(17), yoffset);
-  canvas.line(0, yoffset + 1, Layout::Scale(17), yoffset + 1);
+  canvas.DrawLine(0, yoffset, Layout::Scale(17), yoffset);
+  canvas.DrawLine(0, yoffset + 1, Layout::Scale(17), yoffset + 1);
 }
 
 int

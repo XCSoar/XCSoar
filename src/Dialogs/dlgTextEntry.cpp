@@ -66,7 +66,7 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   const PixelRect rc = Sender->GetClientRect();
 
-  canvas.clear(Color(0x40, 0x40, 0x00));
+  canvas.Clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text
   const DialogLook &look = UIGlobals::GetDialogLook();

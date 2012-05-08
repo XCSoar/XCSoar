@@ -93,7 +93,7 @@ protected:
       canvas.SelectBlackPen();
     else
       canvas.SelectWhitePen();
-    canvas.clear();
+    canvas.Clear();
 
     unsigned text_height = canvas.CalcTextSize(_T("W")).cy;
     for (int i = num_events - 1, y = 4; i >= 0; --i, y += text_height) {

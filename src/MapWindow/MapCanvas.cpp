@@ -39,7 +39,7 @@ MapCanvas::DrawLine(GeoPoint a, GeoPoint b)
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
 
-  canvas.line(pts[0], pts[1]);
+  canvas.DrawLine(pts[0], pts[1]);
 }
 
 void
@@ -52,7 +52,7 @@ MapCanvas::DrawLineWithOffset(GeoPoint a, GeoPoint b)
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
   ScreenClosestPoint(pts[0], pts[1], pts[0], &pts[2], Layout::Scale(20));
-  canvas.line(pts[2], pts[1]);
+  canvas.DrawLine(pts[2], pts[1]);
 }
 
 
@@ -61,7 +61,7 @@ MapCanvas::DrawCircle(const GeoPoint &center, fixed radius)
 {
   RasterPoint screen_center = projection.GeoToScreen(center);
   unsigned screen_radius = projection.GeoToScreenDistance(radius);
-  canvas.circle(screen_center.x, screen_center.y, screen_radius);
+  canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
 }
 
 void
@@ -133,5 +133,5 @@ void
 MapCanvas::DrawPrepared()
 {
   /* draw it all */
-  canvas.polygon(raster_points.begin(), num_raster_points);
+  canvas.DrawPolygon(raster_points.begin(), num_raster_points);
 }

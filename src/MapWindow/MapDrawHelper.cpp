@@ -82,17 +82,17 @@ MapDrawHelper::DrawSearchPointVector(const SearchPointVector &points)
   if (!MapCanvas::IsVisible(canvas, screen, size))
     return;
 
-  buffer.polygon(&screen[0], size);
+  buffer.DrawPolygon(&screen[0], size);
   if (use_stencil)
-    stencil.polygon(&screen[0], size);
+    stencil.DrawPolygon(&screen[0], size);
 }
 
 void 
 MapDrawHelper::DrawCircle(const RasterPoint &center, unsigned radius)
 {
-  buffer.circle(center.x, center.y, radius);
+  buffer.DrawCircle(center.x, center.y, radius);
   if (use_stencil)
-    stencil.circle(center.x, center.y, radius);
+    stencil.DrawCircle(center.x, center.y, radius);
 }
 
 void 
@@ -106,19 +106,19 @@ MapDrawHelper::BufferRenderFinish()
 #ifdef ENABLE_SDL
       buffer.copy_transparent_black(stencil);
 #else
-      buffer.copy_or(stencil);
+      buffer.CopyOr(stencil);
 #endif
     }
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable())
-      canvas.alpha_blend(0, 0, canvas.get_width(), canvas.get_height(),
+      canvas.AlphaBlend(0, 0, canvas.get_width(), canvas.get_height(),
                            buffer,
                            0, 0, canvas.get_width(), canvas.get_height(),
                            60);
     else
 #endif
-      canvas.copy_and(buffer);
+      canvas.CopyAnd(buffer);
 
     buffer_drawn = false;
   }

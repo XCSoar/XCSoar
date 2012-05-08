@@ -95,7 +95,7 @@ public:
       mode = SOLID;
     }
 
-    canvas.polygon(points.begin(), num_points);
+    canvas.DrawPolygon(points.begin(), num_points);
 
     num_points = 0;
   }

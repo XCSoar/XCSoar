@@ -102,5 +102,5 @@ TerrainXSRenderer::DrawPolygon(Canvas &canvas, RasterBuffer::TerrainType type,
 
   canvas.Select(type == RasterBuffer::TerrainType::WATER ?
                 look.sea_brush : look.terrain_brush);
-  canvas.polygon(points, num_points);
+  canvas.DrawPolygon(points, num_points);
 }

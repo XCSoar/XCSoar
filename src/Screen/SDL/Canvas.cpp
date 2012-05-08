@@ -55,11 +55,11 @@ void
 Canvas::DrawPolyline(const RasterPoint *lppt, unsigned cPoints)
 {
   for (unsigned i = 1; i < cPoints; ++i)
-    line(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
+    DrawLine(lppt[i - 1].x, lppt[i - 1].y, lppt[i].x, lppt[i].y);
 }
 
 void
-Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
+Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 {
   if (brush.IsHollow() && !pen.IsDefined())
     return;
@@ -80,7 +80,7 @@ Canvas::polygon(const RasterPoint *lppt, unsigned cPoints)
 }
 
 void
-Canvas::circle(PixelScalar x, PixelScalar y, UPixelScalar radius)
+Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 {
   x += x_offset;
   y += y_offset;
@@ -459,7 +459,7 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
   ::SDL_SetColorKey(surface, SDL_SRCCOLORKEY,
                     ::SDL_MapRGB(surface->format, key.value.r,
                                  key.value.g, key.value.b));
-  stretch(surface);
+  Stretch(surface);
   ::SDL_SetColorKey(surface, 0, 0);
 }
 
@@ -488,14 +488,14 @@ Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
                     ::SDL_MapRGB(zoomed->format, key.value.r,
                                  key.value.g, key.value.b));
 
-  copy_not(dest_x, dest_y, dest_width, dest_height,
+  CopyNot(dest_x, dest_y, dest_width, dest_height,
            zoomed, (src_x * dest_width) / src_width,
            (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
 }
 
 void
-Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 SDL_Surface *src,
                 PixelScalar src_x, PixelScalar src_y,
@@ -532,17 +532,17 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::stretch(const Canvas &src,
+Canvas::Stretch(const Canvas &src,
                 PixelScalar src_x, PixelScalar src_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
   // XXX
-  stretch(0, 0, get_width(), get_height(),
+  Stretch(0, 0, get_width(), get_height(),
           src, src_x, src_y, src_width, src_height);
 }
 
 void
-Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src,
                 PixelScalar src_x, PixelScalar src_y,
@@ -551,13 +551,13 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
   assert(IsDefined());
   assert(src.IsDefined());
 
-  stretch(dest_x, dest_y, dest_width, dest_height,
+  Stretch(dest_x, dest_y, dest_width, dest_height,
           src.GetNative(),
           src_x, src_y, src_width, src_height);
 }
 
 void
-Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src)
 {
@@ -565,7 +565,7 @@ Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
   assert(src.IsDefined());
 
   SDL_Surface *surface = src.GetNative();
-  stretch(dest_x, dest_y, dest_width, dest_height,
+  Stretch(dest_x, dest_y, dest_width, dest_height,
           surface, 0, 0, surface->w, surface->h);
 }
 
@@ -880,7 +880,7 @@ blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::copy_not(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
 {
@@ -894,7 +894,7 @@ Canvas::copy_not(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
 {
@@ -933,7 +933,7 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::copy_and(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
 {
@@ -947,35 +947,35 @@ Canvas::copy_and(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::copy_not(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
   assert(src.IsDefined());
 
-  copy_not(dest_x, dest_y, dest_width, dest_height,
+  CopyNot(dest_x, dest_y, dest_width, dest_height,
            src.GetNative(), src_x, src_y);
 }
 
 void
-Canvas::copy_or(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
   assert(src.IsDefined());
 
-  copy_or(dest_x, dest_y, dest_width, dest_height,
+  CopyOr(dest_x, dest_y, dest_width, dest_height,
           src.GetNative(), src_x, src_y);
 }
 
 void
-Canvas::copy_and(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
   assert(src.IsDefined());
 
-  copy_and(dest_x, dest_y, dest_width, dest_height,
+  CopyAnd(dest_x, dest_y, dest_width, dest_height,
            src.GetNative(), src_x, src_y);
 }
 

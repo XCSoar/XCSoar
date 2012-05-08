@@ -146,7 +146,7 @@ private:
       break;
 
     case 2:
-      canvas.circle(hmiddle, vmiddle,
+      canvas.DrawCircle(hmiddle, vmiddle,
                     min(width, height) / 3);
       label = _T("circle");
       break;
@@ -165,13 +165,13 @@ private:
 
     case 5:
       canvas.Select(red_brush);
-      canvas.polygon(p1, 3);
+      canvas.DrawPolygon(p1, 3);
       label = _T("big polygon");
       break;
 
     case 6:
       canvas.Select(red_brush);
-      canvas.polygon(p2, 3);
+      canvas.DrawPolygon(p2, 3);
       label = _T("huge polygon");
       break;
     }

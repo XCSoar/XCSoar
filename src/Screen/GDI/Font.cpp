@@ -110,7 +110,7 @@ Font::CalculateHeights()
 
     for (UPixelScalar x = 0; x < (UPixelScalar)tm.tmAveCharWidth; ++x) {
       for (UPixelScalar y = 0; y < (UPixelScalar)tm.tmHeight; ++y) {
-        if (buffer.get_pixel(x, y) != white) {
+        if (buffer.GetPixel(x, y) != white) {
           if (top > y)
             top = y;
           if (bottom < y)

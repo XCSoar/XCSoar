@@ -323,7 +323,7 @@ GridView::MoveFocus(Direction direction)
 void
 GridView::OnPaint(Canvas &canvas)
 {
-  canvas.clear(look.background_color);
+  canvas.Clear(look.background_color);
 }
 #endif
 

@@ -176,11 +176,11 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
     canvas.Select(look.pen_above);
     canvas.Select(look.brush_above);
   }
-  canvas.polygon(GlideBar, 6);
+  canvas.DrawPolygon(GlideBar, 6);
 
   // draw clipping arrow
   if ((altitude_difference <= -468 ) || (altitude_difference >= 468))
-    canvas.polygon(clipping_arrow, 6);
+    canvas.DrawPolygon(clipping_arrow, 6);
 
   // draw glide bar at mc 0
   if (altitude_difference0 <= 0 && final_glide_bar_mc0_enabled) {
@@ -198,10 +198,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if ( ( (altitude_difference != altitude_difference0) || (altitude_difference0 < 0) )
       && final_glide_bar_mc0_enabled) {
-    canvas.polygon(GlideBar0, 4);
+    canvas.DrawPolygon(GlideBar0, 4);
 
     if ((altitude_difference0 <= -468 ) || (altitude_difference0 >= 468))
-      canvas.polygon(clipping_arrow0, 4);
+      canvas.DrawPolygon(clipping_arrow0, 4);
   }
 
   // draw cross (x) on final glide bar if unreachable at current Mc
@@ -215,9 +215,9 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   if (cross_sign != 0) {
     canvas.Select(task_look.bearing_pen);
-    canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
+    canvas.DrawLine(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
                 Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5));
-    canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),
+    canvas.DrawLine(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),
                 Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5));
   }
 

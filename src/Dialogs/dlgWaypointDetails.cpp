@@ -281,7 +281,7 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
       screen_pos.y = 0;
       screen_size.cy = canvas.get_height();
     }
-    canvas.stretch(screen_pos.x, screen_pos.y, screen_size.cx, screen_size.cy,
+    canvas.Stretch(screen_pos.x, screen_pos.y, screen_size.cx, screen_size.cy,
                    img, img_pos.x, img_pos.y, img_size.cx, img_size.cy);
   }
 }

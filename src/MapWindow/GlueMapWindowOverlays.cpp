@@ -53,9 +53,9 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 
   const RasterPoint center = render_projection.GetScreenOrigin();
 
-  canvas.line(center.x + 20, center.y,
+  canvas.DrawLine(center.x + 20, center.y,
               center.x - 20, center.y);
-  canvas.line(center.x, center.y + 20,
+  canvas.DrawLine(center.x, center.y + 20,
               center.x, center.y - 20);
 }
 
@@ -376,6 +376,6 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
     PixelScalar m((rc.bottom - rc.top) * s * s);
 
     canvas.SelectBlackPen();
-    canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
+    canvas.DrawLine(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
   }
 }

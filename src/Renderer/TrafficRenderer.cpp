@@ -68,5 +68,5 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
   PolygonRotateShift(Arrow, 5, pt.x, pt.y, angle);
 
   // Draw the arrow
-  canvas.polygon(Arrow, 5);
+  canvas.DrawPolygon(Arrow, 5);
 }

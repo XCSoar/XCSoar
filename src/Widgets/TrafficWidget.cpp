@@ -264,7 +264,7 @@ FlarmTrafficControl2::PaintTaskDirection(Canvas &canvas) const
                                        Angle::Zero() : heading));
 
   // Draw the arrow
-  canvas.polygon(triangle, 4);
+  canvas.DrawPolygon(triangle, 4);
 }
 
 /**
@@ -390,7 +390,7 @@ FlarmTrafficControl2::PaintTrafficInfo(Canvas &canvas) const
       }
 
       canvas.SelectNullPen();
-      canvas.circle(rc.left + Layout::FastScale(7), rc.top + (font_size / 2),
+      canvas.DrawCircle(rc.left + Layout::FastScale(7), rc.top + (font_size / 2),
                     Layout::FastScale(7));
 
       rc.left += Layout::FastScale(16);

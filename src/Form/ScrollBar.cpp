@@ -150,7 +150,7 @@ ScrollBar::Paint(Canvas &canvas) const
   PixelRect up_arrow_rect = rc;
   ++up_arrow_rect.left;
   up_arrow_rect.bottom = up_arrow_rect.top + GetWidth();
-  canvas.line(up_arrow_rect.left, up_arrow_rect.bottom,
+  canvas.DrawLine(up_arrow_rect.left, up_arrow_rect.bottom,
               up_arrow_rect.right, up_arrow_rect.bottom);
   canvas.DrawButton(up_arrow_rect, false);
 
@@ -167,7 +167,7 @@ ScrollBar::Paint(Canvas &canvas) const
   PixelRect down_arrow_rect = rc;
   ++down_arrow_rect.left;
   down_arrow_rect.top = down_arrow_rect.bottom - GetWidth();
-  canvas.line(down_arrow_rect.left, down_arrow_rect.top - 1,
+  canvas.DrawLine(down_arrow_rect.left, down_arrow_rect.top - 1,
               down_arrow_rect.right, down_arrow_rect.top - 1);
   canvas.DrawButton(down_arrow_rect, false);
 
@@ -186,9 +186,9 @@ ScrollBar::Paint(Canvas &canvas) const
   // ###################
 
   if (rc_slider.top + 4 < rc_slider.bottom) {
-    canvas.line(rc_slider.left, rc_slider.top,
+    canvas.DrawLine(rc_slider.left, rc_slider.top,
                 rc_slider.right, rc_slider.top);
-    canvas.line(rc_slider.left, rc_slider.bottom,
+    canvas.DrawLine(rc_slider.left, rc_slider.bottom,
                 rc_slider.right, rc_slider.bottom);
 
     PixelRect rc_slider2 = rc_slider;

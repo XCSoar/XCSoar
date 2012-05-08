@@ -29,7 +29,7 @@ Copyright_License {
 #include "Asset.hpp" /* for needclipping */
 
 void
-Canvas::line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
+Canvas::DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
 {
   assert(IsDefined());
 
@@ -334,32 +334,32 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::stretch(const Canvas &src,
+Canvas::Stretch(const Canvas &src,
                 PixelScalar src_x, PixelScalar src_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
-  stretch(0, 0, width, height, src, src_x, src_y, src_width, src_height);
+  Stretch(0, 0, width, height, src, src_x, src_y, src_width, src_height);
 }
 
 void
-Canvas::stretch(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src)
 {
   assert(src.IsDefined());
 
   const PixelSize size = src.GetSize();
-  stretch(dest_x, dest_y, dest_width, dest_height,
+  Stretch(dest_x, dest_y, dest_width, dest_height,
           src, 0, 0, size.cx, size.cy);
 }
 
 void
-Canvas::stretch(const Bitmap &src)
+Canvas::Stretch(const Bitmap &src)
 {
   assert(src.IsDefined());
 
   const PixelSize size = src.GetSize();
-  stretch(src, 0, 0, size.cx, size.cy);
+  Stretch(src, 0, 0, size.cx, size.cy);
 }
 
 void

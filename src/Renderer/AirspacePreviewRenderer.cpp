@@ -68,7 +68,7 @@ DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
   for (auto it = border.begin(), it_end = border.end(); it != it_end; ++it)
     pts.push_back(projection.GeoToScreen(it->get_location()));
 
-  canvas.polygon(&pts[0], (unsigned)pts.size());
+  canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 }
 
 void
@@ -85,7 +85,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
     canvas.Select(look.pens[airspace.GetType()]);
 
   if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
-    canvas.circle(pt.x, pt.y, radius);
+    canvas.DrawCircle(pt.x, pt.y, radius);
   else
     DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
 }

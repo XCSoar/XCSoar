@@ -186,7 +186,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
   const bool is_current = i == current_preview;
 
   if (is_current)
-    canvas.clear(COLOR_BLACK);
+    canvas.Clear(COLOR_BLACK);
   else
     canvas.ClearWhite();
 

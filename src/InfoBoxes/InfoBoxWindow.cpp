@@ -249,9 +249,9 @@ void
 InfoBoxWindow::Paint(Canvas &canvas)
 {
   if (HasFocus() || force_draw_selector)
-    canvas.clear(look.focused_background_color);
+    canvas.Clear(look.focused_background_color);
   else
-    canvas.clear(look.background_color);
+    canvas.Clear(look.background_color);
 
   if (data.GetCustom() && content != NULL)
     content->OnCustomPaint(*this, canvas);
@@ -269,19 +269,19 @@ InfoBoxWindow::Paint(Canvas &canvas)
       height = canvas.get_height();
 
     if (border_kind & BORDERTOP) {
-      canvas.line(0, 0, width - 1, 0);
+      canvas.DrawLine(0, 0, width - 1, 0);
     }
 
     if (border_kind & BORDERRIGHT) {
-      canvas.line(width - 1, 0, width - 1, height);
+      canvas.DrawLine(width - 1, 0, width - 1, height);
     }
 
     if (border_kind & BORDERBOTTOM) {
-      canvas.line(0, height - 1, width - 1, height - 1);
+      canvas.DrawLine(0, height - 1, width - 1, height - 1);
     }
 
     if (border_kind & BORDERLEFT) {
-      canvas.line(0, 0, 0, height - 1);
+      canvas.DrawLine(0, 0, 0, height - 1);
     }
   }
 }
@@ -298,7 +298,7 @@ InfoBoxWindow::PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
   BufferCanvas buffer(dest, size.cx, size.cy);
 
   Paint(buffer);
-  dest.stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
+  dest.Stretch(xoff, yoff, width, height, buffer, 0, 0, size.cx, size.cy);
 #endif
 }
 

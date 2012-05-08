@@ -52,7 +52,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
 
   canvas.Select(pen_f);
   canvas.SelectHollowBrush();
-  canvas.circle(center.x, center.y, radius);
+  canvas.DrawCircle(center.x, center.y, radius);
 
   unsigned i = 0;
   canvas.Select(pen_f);

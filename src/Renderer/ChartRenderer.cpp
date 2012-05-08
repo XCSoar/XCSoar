@@ -155,7 +155,7 @@ ChartRenderer::StyleLine(const RasterPoint l1, const RasterPoint l2,
 {
   assert(pen.IsDefined());
   canvas.Select(pen);
-  canvas.line(l1, l2);
+  canvas.DrawLine(l1, l2);
 }
 
 void
@@ -366,7 +366,7 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
 
   assert(p == points + n);
 
-  canvas.polygon(points, n);
+  canvas.DrawPolygon(points, n);
 }
 
 void
@@ -444,7 +444,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
     // STYLE_THINDASHPAPER
     if ((xval < x_max) && (xmin >= rc.left + padding_left) && (xmin <= rc.right)) {
-      canvas.line(line[0], line[1]);
+      canvas.DrawLine(line[0], line[1]);
 
       if (draw_units && xmin >= next_text) {
         TCHAR unit_text[MAX_PATH];
@@ -464,7 +464,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
     // STYLE_THINDASHPAPER
 
     if ((xval > x_min) && (xmin >= rc.left + padding_left) && (xmin <= rc.right)) {
-      canvas.line(line[0], line[1]);
+      canvas.DrawLine(line[0], line[1]);
 
       if (draw_units) {
         TCHAR unit_text[MAX_PATH];
@@ -512,7 +512,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
     // STYLE_THINDASHPAPER
     if ((yval < y_max) && (ymin >= rc.top) && (ymin <= rc.bottom - padding_bottom)) {
-      canvas.line(line[0], line[1]);
+      canvas.DrawLine(line[0], line[1]);
 
       if (draw_units) {
         TCHAR unit_text[MAX_PATH];
@@ -529,7 +529,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
     // STYLE_THINDASHPAPER
     if ((yval > y_min) && (ymin >= rc.top) && (ymin <= rc.bottom - padding_bottom)) {
-      canvas.line(line[0], line[1]);
+      canvas.DrawLine(line[0], line[1]);
 
       if (draw_units) {
         TCHAR unit_text[MAX_PATH];
@@ -609,17 +609,17 @@ ChartRenderer::DrawArrow(const fixed x, const fixed y, const fixed mag,
   p = r.Rotate(mag, fixed_zero);
   wv[1].x = wv[0].x + (int)p.first;
   wv[1].y = wv[0].y + (int)p.second;
-  canvas.line(wv[0], wv[1]);
+  canvas.DrawLine(wv[0], wv[1]);
 
   p = r.Rotate(mag - fixed(5), fixed(-3));
   wv[1].x = wv[0].x + (int)p.first;
   wv[1].y = wv[0].y + (int)p.second;
-  canvas.line(wv[0], wv[1]);
+  canvas.DrawLine(wv[0], wv[1]);
 
   p = r.Rotate(mag - fixed(5), fixed(3));
   wv[1].x = wv[0].x + (int)p.first;
   wv[1].y = wv[0].y + (int)p.second;
-  canvas.line(wv[0], wv[1]);
+  canvas.DrawLine(wv[0], wv[1]);
 }
 
 void 
@@ -645,7 +645,7 @@ ChartRenderer::DrawFilledY(const std::vector<std::pair<fixed, fixed>> &vals,
   } else {
     canvas.Select(*pen);
   }
-  canvas.polygon(line, fsize);
+  canvas.DrawPolygon(line, fsize);
 }
 
 void

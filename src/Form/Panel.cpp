@@ -41,7 +41,7 @@ PanelControl::PanelControl(ContainerWindow &parent, const DialogLook &look,
 void
 PanelControl::OnPaint(Canvas &canvas)
 {
-  canvas.clear(background_color);
+  canvas.Clear(background_color);
 
   ContainerWindow::OnPaint(canvas);
 }

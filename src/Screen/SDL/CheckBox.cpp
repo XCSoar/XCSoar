@@ -152,7 +152,7 @@ void
 CheckBox::OnPaint(Canvas &canvas)
 {
   if (HasFocus())
-    canvas.clear(COLOR_XCSOAR_DARK);
+    canvas.Clear(COLOR_XCSOAR_DARK);
 
   Brush brush(pressed ? COLOR_XCSOAR_LIGHT : COLOR_WHITE);
   canvas.Select(brush);
@@ -188,7 +188,7 @@ CheckBox::OnPaint(Canvas &canvas)
       check_mark[i].y = (check_mark[i].y * (int)size) / 24 + top;
     }
 
-    canvas.polygon(check_mark, ARRAY_SIZE(check_mark));
+    canvas.DrawPolygon(check_mark, ARRAY_SIZE(check_mark));
   }
 
   canvas.SetTextColor(IsEnabled()

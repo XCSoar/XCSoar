@@ -233,20 +233,20 @@ public:
   void FadeToWhite(PixelRect rc, GLubyte alpha);
   void FadeToWhite(GLubyte alpha);
 
-  void clear() {
+  void Clear() {
     Rectangle(0, 0, get_width(), get_height());
   }
 
-  void clear(const Color color) {
+  void Clear(const Color color) {
     DrawFilledRectangle(0, 0, get_width(), get_height(), color);
   }
 
-  void clear(const Brush &brush) {
+  void Clear(const Brush &brush) {
     DrawFilledRectangle(0, 0, get_width(), get_height(), brush);
   }
 
   void ClearWhite() {
-    clear(COLOR_WHITE);
+    Clear(COLOR_WHITE);
   }
 
   void DrawRoundRectangle(PixelScalar left, PixelScalar top,
@@ -258,7 +258,7 @@ public:
 
   void DrawPolyline(const RasterPoint *points, unsigned num_points);
 
-  void polygon(const RasterPoint *points, unsigned num_points);
+  void DrawPolygon(const RasterPoint *points, unsigned num_points);
 
   /**
    * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the
@@ -266,13 +266,13 @@ public:
    */
   void DrawTriangleFan(const RasterPoint *points, unsigned num_points);
 
-  void line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by);
+  void DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by);
 
-  void line(const RasterPoint a, const RasterPoint b) {
-    line(a.x, a.y, b.x, b.y);
+  void DrawLine(const RasterPoint a, const RasterPoint b) {
+    DrawLine(a.x, a.y, b.x, b.y);
   }
 
-  void line_piece(const RasterPoint a, const RasterPoint b);
+  void DrawLinePiece(const RasterPoint a, const RasterPoint b);
 
   void DrawTwoLines(PixelScalar ax, PixelScalar ay,
                  PixelScalar bx, PixelScalar by,
@@ -282,7 +282,7 @@ public:
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
-  void circle(PixelScalar x, PixelScalar y, UPixelScalar radius);
+  void DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 
   void DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                Angle start, Angle end, bool horizon=false);
@@ -354,13 +354,13 @@ public:
    * Draws a texture.  The caller is responsible for binding it and
    * enabling GL_TEXTURE_2D.
    */
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const GLTexture &texture,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height);
 
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const GLTexture &texture);
 
@@ -373,17 +373,17 @@ public:
   void stretch_transparent(const Bitmap &src, Color key);
   void invert_stretch_transparent(const Bitmap &src, Color key);
 
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src,
                PixelScalar src_x, PixelScalar src_y,
                UPixelScalar src_width, UPixelScalar src_height);
-  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+  void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src);
 
-  void stretch(const Bitmap &src) {
-    stretch(0, 0, width, height, src);
+  void Stretch(const Bitmap &src) {
+    Stretch(0, 0, width, height, src);
   }
 
   void StretchAnd(PixelScalar dest_x, PixelScalar dest_y,
@@ -414,31 +414,31 @@ public:
                    UPixelScalar src_width, UPixelScalar src_height,
                    Color fg_color, Color bg_color);
 
-  void copy_or(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_or(const Bitmap &src) {
-    copy_or(0, 0, get_width(), get_height(), src, 0, 0);
+  void CopyOr(const Bitmap &src) {
+    CopyOr(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
   void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
                  UPixelScalar dest_width, UPixelScalar dest_height,
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_not(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_and(const Bitmap &src) {
-    copy_and(0, 0, get_width(), get_height(), src, 0, 0);
+  void CopyAnd(const Bitmap &src) {
+    CopyAnd(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
-  void scale_copy(PixelScalar dest_x, PixelScalar dest_y,
+  void ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,
                   const Bitmap &src,
                   PixelScalar src_x, PixelScalar src_y,
                   UPixelScalar src_width, UPixelScalar src_height);

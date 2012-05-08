@@ -69,7 +69,7 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
 {
   int iradius = iround(radius);
   if (airport)
-    canvas.circle(pt.x, pt.y, iradius);
+    canvas.DrawCircle(pt.x, pt.y, iradius);
   else {
     RasterPoint diamond[4];
     diamond[0].x = pt.x + 0;

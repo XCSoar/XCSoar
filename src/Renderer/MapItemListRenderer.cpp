@@ -171,7 +171,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     canvas.Select(look.brush_below);
     canvas.Select(look.pen_below);
   }
-  canvas.polygon(arrow, ARRAY_SIZE(arrow));
+  canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
 
   const Font &name_font = *dialog_look.list.font;

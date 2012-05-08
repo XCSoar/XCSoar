@@ -180,7 +180,7 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
     const MaskedIcon *bmp = &look.intercept_icon;
     const int offsetx = bmp->GetSize().cx;
     const int offsety = canvas.get_height() - bmp->GetSize().cy;
-    canvas.clear(COLOR_YELLOW);
+    canvas.Clear(COLOR_YELLOW);
     bmp->Draw(canvas, offsetx, offsety);
 
     canvas.SetBackgroundColor(COLOR_YELLOW);
@@ -190,7 +190,7 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
                 message);
   }
   else {
-    canvas.clear(instance->GetLook().background_color);
+    canvas.Clear(instance->GetLook().background_color);
   }
 }
 

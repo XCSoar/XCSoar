@@ -55,7 +55,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
   canvas.Select(look.arrow_pen);
   canvas.Select(look.arrow_brush);
-  canvas.polygon(arrow, ARRAY_SIZE(arrow));
+  canvas.DrawPolygon(arrow, ARRAY_SIZE(arrow));
 
   // Draw arrow tail
 
@@ -69,7 +69,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
                        pos.x, pos.y, angle);
 
     canvas.Select(look.tail_pen);
-    canvas.line(tail[0], tail[1]);
+    canvas.DrawLine(tail[0], tail[1]);
   }
 }
 

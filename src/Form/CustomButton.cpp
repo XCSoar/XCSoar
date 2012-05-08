@@ -33,7 +33,7 @@ WndCustomButton::OnPaint(Canvas &canvas)
 {
 #ifdef HAVE_CLIPPING
   /* background and selector */
-  canvas.clear(look.background_brush);
+  canvas.Clear(look.background_brush);
 #endif
 
   PixelRect rc = GetClientRect();

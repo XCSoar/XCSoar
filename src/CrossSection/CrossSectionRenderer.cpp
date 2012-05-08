@@ -63,7 +63,7 @@ CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
 void
 CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
-  canvas.clear(look.background_color);
+  canvas.Clear(look.background_color);
   canvas.SetTextColor(look.text_color);
   canvas.Select(Fonts::map);
 

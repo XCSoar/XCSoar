@@ -103,9 +103,9 @@ MaskedIcon::Draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
   canvas.SetBackgroundColor(COLOR_WHITE);
 #endif
 
-  canvas.copy_or(x - origin.x, y - origin.y, size.cx, size.cy,
+  canvas.CopyOr(x - origin.x, y - origin.y, size.cx, size.cy,
                  bitmap, 0, 0);
-  canvas.copy_and(x - origin.x, y - origin.y, size.cx, size.cy,
+  canvas.CopyAnd(x - origin.x, y - origin.y, size.cx, size.cy,
                   bitmap, size.cx, 0);
 #endif
 }

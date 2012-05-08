@@ -122,7 +122,7 @@ Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 
   assert(npoly <= 66*2);
   if (npoly)
-    canvas.polygon(pt, npoly);
+    canvas.DrawPolygon(pt, npoly);
 
   return true;
 }
@@ -149,7 +149,7 @@ KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 
   assert(npoly <= 66*2);
   if (npoly)
-    canvas.polygon(pt, npoly);
+    canvas.DrawPolygon(pt, npoly);
 
   return true;
 }
@@ -168,5 +168,5 @@ RoundRect(Canvas &canvas, PixelScalar left, PixelScalar top,
 
   assert(npoly <= 66*4);
   if (npoly)
-    canvas.polygon(pt, npoly);
+    canvas.DrawPolygon(pt, npoly);
 }

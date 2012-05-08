@@ -178,7 +178,7 @@ KeyboardControl::move_buttons()
 void
 KeyboardControl::OnPaint(Canvas &canvas)
 {
-  canvas.clear(look.background_color);
+  canvas.Clear(look.background_color);
 
   ContainerWindow::OnPaint(canvas);
 }
