@@ -144,7 +144,7 @@ struct TempAirspaceType
   void
   reset()
   {
-    days_of_operation.set_all();
+    days_of_operation.SetAll();
     Radio = _T("");
     Type = OTHER;
     points.clear();
@@ -803,11 +803,11 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
     temp_area.Radio = parameter;
   } else if ((parameter = StringAfterPrefixCI(line, _T("ACTIVE="))) != NULL) {
     if (_tcsicmp(parameter, _T("WEEKEND")) == 0)
-      temp_area.days_of_operation.set_weekend();
+      temp_area.days_of_operation.SetWeekend();
     else if (_tcsicmp(parameter, _T("WEEKDAY")) == 0)
-      temp_area.days_of_operation.set_weekdays();
+      temp_area.days_of_operation.SetWeekdays();
     else if (_tcsicmp(parameter, _T("EVERYDAY")) == 0)
-      temp_area.days_of_operation.set_all();
+      temp_area.days_of_operation.SetAll();
   }
 
   return true;

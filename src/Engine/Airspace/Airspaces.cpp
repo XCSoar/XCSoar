@@ -269,7 +269,7 @@ Airspaces::Add(AbstractAirspace *airspace)
 
   // reset day to all so set_activity will be triggered next update
   // this allows for airspaces to be add at any time
-  activity_mask.set_all();
+  activity_mask.SetAll();
 
   if (owns_children) {
     if (empty())

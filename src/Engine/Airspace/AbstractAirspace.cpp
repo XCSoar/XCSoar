@@ -283,5 +283,5 @@ AbstractAirspace::ClearClearance() const
 void
 AbstractAirspace::SetActivity(const AirspaceActivity mask) const
 {
-  active = days_of_operation.matches(mask);
+  active = days_of_operation.Matches(mask);
 }
