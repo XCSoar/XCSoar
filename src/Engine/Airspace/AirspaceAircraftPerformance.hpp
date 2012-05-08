@@ -200,6 +200,10 @@ public:
 class AirspaceAircraftPerformanceGlide: 
   public AirspaceAircraftPerformance
 {
+protected:
+  /** Glide polar used for speed model */
+  const GlidePolar &m_glide_polar;
+
 public:
   /**
    * Constructor.
@@ -230,10 +234,6 @@ public:
   virtual fixed GetMaxSpeed() const {
     return m_glide_polar.GetVMax();
   }
-
-protected:
-  /** Glide polar used for speed model */
-  const GlidePolar &m_glide_polar;
 };
 
 
