@@ -180,7 +180,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     task_ordered.update_summary(common_stats.ordered_summary);
 
   } else {
-    common_stats.reset_task();
+    common_stats.ResetTask();
   }
 }
 
@@ -387,7 +387,7 @@ TaskManager::Reset()
   task_ordered.Reset();
   task_goto.Reset();
   task_abort.Reset();
-  common_stats.reset();
+  common_stats.Reset();
   glide_polar.SetCruiseEfficiency(fixed_one);
 }
 

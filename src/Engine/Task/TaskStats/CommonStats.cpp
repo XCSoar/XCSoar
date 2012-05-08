@@ -1,7 +1,7 @@
 #include "CommonStats.hpp"
 
 void
-CommonStats::reset_task()
+CommonStats::ResetTask()
 {
   landable_reachable = false;
   task_started = false;
@@ -30,7 +30,7 @@ CommonStats::reset_task()
 }
 
 void
-CommonStats::reset()
+CommonStats::Reset()
 {
   vector_home.SetInvalid();
 
@@ -42,5 +42,5 @@ CommonStats::reset()
   current_bugs = fixed_one;
   current_ballast = fixed_zero;
 
-  reset_task();
+  ResetTask();
 }

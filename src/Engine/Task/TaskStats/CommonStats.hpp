@@ -119,12 +119,12 @@ public:
   /**
    * Reset the stats as if never flown
    */
-  void reset();
+  void Reset();
 
   /**
    * Reset the task stats
    */
-  void reset_task();
+  void ResetTask();
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const CommonStats& ts);
