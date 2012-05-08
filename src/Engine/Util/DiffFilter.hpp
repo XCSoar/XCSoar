@@ -31,6 +31,8 @@
  */
 class DiffFilter 
 {
+  fixed x[7];
+
 public:
   /**
    * Constructor.  Initialises as if fed x_default continuously.
@@ -59,9 +61,6 @@ public:
    * @param y0 Desired value of differentiated output
    */
   void Reset(const fixed x0 = fixed_zero, const fixed y0 = fixed_zero);
-
-private:
-  fixed x[7];
 };
 
 
