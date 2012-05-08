@@ -40,15 +40,6 @@ struct GestureLook;
 class Logger;
 class SingleWindow;
 
-struct ZoomClimb_t
-{
-  fixed CruiseScale;
-  fixed ClimbScale;
-
-  ZoomClimb_t();
-};
-
-
 class OffsetHistory {
   unsigned int pos;
   std::array<RasterPoint, 30> offsets;
@@ -93,8 +84,6 @@ class GlueMapWindow : public MapWindow {
 
   /** flag to indicate if the MapItemList should be shown on mouse up */
   bool arm_mapitem_list;
-
-  ZoomClimb_t zoomclimb;
 
   /**
    * The projection which was active when dragging started.
@@ -236,7 +225,6 @@ private:
 
   void SwitchZoomClimb();
 
-  void LoadDisplayModeScales();
   void SaveDisplayModeScales();
 
   void UpdateScreenAngle();

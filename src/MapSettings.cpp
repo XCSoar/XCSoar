@@ -44,6 +44,8 @@ MapSettings::SetDefaults()
   glider_screen_position = 20; // 20% from bottom
   circling_orientation = TRACKUP;
   cruise_orientation = TRACKUP;
+  circling_scale = fixed_one / 2;
+  cruise_scale = fixed_one / 60;
   show_flarm_on_map = true;
   show_thermal_profile = true;
 }

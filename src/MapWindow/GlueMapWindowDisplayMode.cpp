@@ -26,10 +26,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
 
-ZoomClimb_t::ZoomClimb_t():
-  CruiseScale(fixed_one / 60),
-  ClimbScale(fixed_one / 2) {}
-
 void
 OffsetHistory::reset()
 {
@@ -116,59 +112,39 @@ GlueMapWindow::SetMapScale(const fixed x)
 {
   MapWindow::SetMapScale(x);
 
+  MapSettings &settings = CommonInterface::SetMapSettings();
+
   if (GetDisplayMode() == DM_CIRCLING &&
-      CommonInterface::GetMapSettings().circle_zoom_enabled)
+      settings.circle_zoom_enabled)
     // save cruise scale
-    zoomclimb.ClimbScale = visible_projection.GetScale();
+    settings.circling_scale = visible_projection.GetScale();
   else
-    zoomclimb.CruiseScale = visible_projection.GetScale();
+    settings.cruise_scale = visible_projection.GetScale();
 
   SaveDisplayModeScales();
 }
 
 void
-GlueMapWindow::LoadDisplayModeScales()
-{
-  fixed tmp;
-  if (Profile::Get(szProfileClimbMapScale, tmp))
-    zoomclimb.ClimbScale = tmp / 10000;
-  else
-    zoomclimb.ClimbScale = fixed_one / Layout::FastScale(2);
-
-  if (Profile::Get(szProfileCruiseMapScale, tmp))
-    zoomclimb.CruiseScale = tmp / 10000;
-  else
-    zoomclimb.CruiseScale = fixed_one / Layout::FastScale(60);
-}
-
-void
 GlueMapWindow::SaveDisplayModeScales()
 {
-  Profile::Set(szProfileClimbMapScale, (int)(zoomclimb.ClimbScale * 10000));
-  Profile::Set(szProfileCruiseMapScale, (int)(zoomclimb.CruiseScale * 10000));
+  const MapSettings &settings = CommonInterface::GetMapSettings();
+
+  Profile::Set(szProfileClimbMapScale, (int)(settings.circling_scale * 10000));
+  Profile::Set(szProfileCruiseMapScale, (int)(settings.cruise_scale * 10000));
 }
 
 void
 GlueMapWindow::SwitchZoomClimb()
 {
-  bool isclimb = (GetDisplayMode() == DM_CIRCLING);
+  const MapSettings &settings = CommonInterface::GetMapSettings();
 
-  if (CommonInterface::GetMapSettings().circle_zoom_enabled) {
-    if (isclimb) {
-      // save cruise scale
-      zoomclimb.CruiseScale = visible_projection.GetScale();
-      // switch to climb scale
-      visible_projection.SetScale(zoomclimb.ClimbScale);
-    } else {
-      // leaving climb
-      // save cruise scale
-      zoomclimb.ClimbScale = visible_projection.GetScale();
-      // switch to climb scale
-      visible_projection.SetScale(zoomclimb.CruiseScale);
-    }
+  if (!settings.circle_zoom_enabled)
+    return;
 
-    SaveDisplayModeScales();
-  }
+  if (GetDisplayMode() == DM_CIRCLING)
+    visible_projection.SetScale(settings.circling_scale);
+  else
+    visible_projection.SetScale(settings.cruise_scale);
 }
 
 void

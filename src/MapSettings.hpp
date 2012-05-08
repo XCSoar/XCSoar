@@ -114,6 +114,11 @@ struct MapSettings {
   DisplayOrientation cruise_orientation;
   DisplayOrientation circling_orientation;
 
+  /** Map scale in cruise mode [px/m] */
+  fixed cruise_scale;
+  /** Map scale in circling mode [px/m] */
+  fixed circling_scale;
+
   /** The bias for map shifting (Heading, Target, etc.) */
   MapShiftBias map_shift_bias;
 
