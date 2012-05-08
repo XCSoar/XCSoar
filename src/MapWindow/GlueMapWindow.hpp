@@ -212,7 +212,7 @@ protected:
    * @return True if the gesture was handled by the
    * event handler, False otherwise
    */
-  bool on_mouse_gesture(const TCHAR* gesture);
+  bool OnMouseGesture(const TCHAR* gesture);
 
   virtual bool OnKeyDown(unsigned key_code);
   virtual bool OnCancelMode();

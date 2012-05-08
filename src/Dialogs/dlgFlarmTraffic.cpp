@@ -113,7 +113,7 @@ protected:
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  bool on_mouse_gesture(const TCHAR* gesture);
+  bool OnMouseGesture(const TCHAR* gesture);
 };
 
 static WndForm *wf = NULL;
@@ -713,7 +713,7 @@ bool
 FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR *gesture = gestures.Finish();
-  if (gesture && on_mouse_gesture(gesture))
+  if (gesture && OnMouseGesture(gesture))
     return true;
 
   if (!WarningMode())
@@ -723,7 +723,7 @@ FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
+FlarmTrafficControl::OnMouseGesture(const TCHAR* gesture)
 {
   if (StringIsEqual(gesture, _T("U"))) {
     ZoomIn();

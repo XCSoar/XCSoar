@@ -109,7 +109,7 @@ protected:
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
   virtual bool OnKeyDown(unsigned key_code);
-  bool on_mouse_gesture(const TCHAR* gesture);
+  bool OnMouseGesture(const TCHAR* gesture);
 };
 
 /** XXX this hack is needed because the form callbacks don't get a
@@ -528,7 +528,7 @@ bool
 FlarmTrafficControl2::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR *gesture = gestures.Finish();
-  if (gesture && on_mouse_gesture(gesture))
+  if (gesture && OnMouseGesture(gesture))
     return true;
 
   if (!WarningMode())
@@ -545,7 +545,7 @@ FlarmTrafficControl2::OnMouseDouble(PixelScalar x, PixelScalar y)
 }
 
 bool
-FlarmTrafficControl2::on_mouse_gesture(const TCHAR* gesture)
+FlarmTrafficControl2::OnMouseGesture(const TCHAR* gesture)
 {
   if (StringIsEqual(gesture, _T("U"))) {
     ZoomIn();
