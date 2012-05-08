@@ -28,8 +28,7 @@ Copyright_License {
 
 ZoomClimb_t::ZoomClimb_t():
   CruiseScale(fixed_one / 60),
-  ClimbScale(fixed_one / 2),
-  last_isclimb(false) {}
+  ClimbScale(fixed_one / 2) {}
 
 void
 OffsetHistory::reset()
@@ -155,23 +154,20 @@ GlueMapWindow::SwitchZoomClimb()
   bool isclimb = (GetDisplayMode() == DM_CIRCLING);
 
   if (CommonInterface::GetMapSettings().circle_zoom_enabled) {
-    if (isclimb != zoomclimb.last_isclimb) {
-      if (isclimb) {
-        // save cruise scale
-        zoomclimb.CruiseScale = visible_projection.GetScale();
-        // switch to climb scale
-        visible_projection.SetScale(zoomclimb.ClimbScale);
-      } else {
-        // leaving climb
-        // save cruise scale
-        zoomclimb.ClimbScale = visible_projection.GetScale();
-        // switch to climb scale
-        visible_projection.SetScale(zoomclimb.CruiseScale);
-      }
-
-      SaveDisplayModeScales();
-      zoomclimb.last_isclimb = isclimb;
+    if (isclimb) {
+      // save cruise scale
+      zoomclimb.CruiseScale = visible_projection.GetScale();
+      // switch to climb scale
+      visible_projection.SetScale(zoomclimb.ClimbScale);
+    } else {
+      // leaving climb
+      // save cruise scale
+      zoomclimb.ClimbScale = visible_projection.GetScale();
+      // switch to climb scale
+      visible_projection.SetScale(zoomclimb.CruiseScale);
     }
+
+    SaveDisplayModeScales();
   }
 }
 
@@ -184,11 +180,16 @@ GlueMapWindow::UpdateDisplayMode()
     GetNewDisplayMode(CommonInterface::GetUIState(),
                       CommonInterface::Calculated());
 
-  if (DisplayMode != new_mode && new_mode == DM_CIRCLING)
+  bool was_circling = (DisplayMode == DM_CIRCLING);
+  bool is_circling = (new_mode == DM_CIRCLING);
+
+  if (!was_circling && is_circling)
     offsetHistory.reset();
 
   DisplayMode = new_mode;
-  SwitchZoomClimb();
+
+  if (is_circling != was_circling)
+    SwitchZoomClimb();
 }
 
 void

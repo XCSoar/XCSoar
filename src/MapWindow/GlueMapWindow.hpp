@@ -44,7 +44,6 @@ struct ZoomClimb_t
 {
   fixed CruiseScale;
   fixed ClimbScale;
-  bool last_isclimb;
 
   ZoomClimb_t();
 };
