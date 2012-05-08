@@ -12,13 +12,13 @@ TaskVarioComputer::update(TaskVario &data, const GlideResult &solution,
                           const fixed dt)
 {
   fixed v = df.update(solution.altitude_difference);
-  data.value = v_lpf.update(v);
+  data.value = v_lpf.Update(v);
 }
 
 void 
 TaskVarioComputer::reset(TaskVario &data, const GlideResult& solution)
 {
-  v_lpf.reset(fixed_zero);
+  v_lpf.Reset(fixed_zero);
   df.reset(solution.altitude_difference, fixed_zero);
   data.value = fixed_zero;
 }

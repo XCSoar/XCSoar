@@ -55,7 +55,7 @@ public:
    *
    * @return false if failed (cutoff_wavelength too low)
    */
-  bool design(const fixed cutoff_wavelength, const bool bessel = true);
+  bool Design(const fixed cutoff_wavelength, const bool bessel = true);
 
   /**
    * Resets filter to produce static value
@@ -64,7 +64,7 @@ public:
    *
    * @return Filter output value
    */
-  fixed reset(const fixed x0);
+  fixed Reset(const fixed x0);
 
   /**
    * Updates low-pass filter to calculate filtered output given an input sample
@@ -73,14 +73,14 @@ public:
    *
    * @return Filter output value
    */
-  fixed update(const fixed x0);
+  fixed Update(const fixed x0);
 
   /**
    * Test whether filter design was successful
    *
    * @return True if design ok
    */
-  bool valid() const {
+  bool IsValid() const {
     return ok;
   }
 };

@@ -42,9 +42,9 @@ AircraftStateFilter::Reset(const AircraftState &state)
   v_y = fixed_zero;
   v_alt = fixed_zero;
 
-  x_low_pass.reset(fixed_zero);
-  y_low_pass.reset(fixed_zero);
-  alt_low_pass.reset(fixed_zero);
+  x_low_pass.Reset(fixed_zero);
+  y_low_pass.Reset(fixed_zero);
+  alt_low_pass.Reset(fixed_zero);
   x_diff_filter.reset(x, fixed_zero);
   y_diff_filter.reset(y, fixed_zero);
   alt_diff_filter.reset(state.altitude, fixed_zero);
@@ -74,9 +74,9 @@ AircraftStateFilter::Update(const AircraftState &state)
   x += vec.bearing.sin() * vec.distance;
   y += vec.bearing.cos() * vec.distance;
 
-  v_x = x_low_pass.update(x_diff_filter.update(x));
-  v_y = y_low_pass.update(y_diff_filter.update(y));
-  v_alt = alt_low_pass.update(alt_diff_filter.update(state.altitude));
+  v_x = x_low_pass.Update(x_diff_filter.update(x));
+  v_y = y_low_pass.Update(y_diff_filter.update(y));
+  v_alt = alt_low_pass.Update(alt_diff_filter.update(state.altitude));
 
   last_state = state;
 }
@@ -97,9 +97,9 @@ bool
 AircraftStateFilter::Design(const fixed cutoff_wavelength)
 {
   bool ok = true;
-  ok &= x_low_pass.design(cutoff_wavelength);
-  ok &= y_low_pass.design(cutoff_wavelength);
-  ok &= alt_low_pass.design(cutoff_wavelength);
+  ok &= x_low_pass.Design(cutoff_wavelength);
+  ok &= y_low_pass.Design(cutoff_wavelength);
+  ok &= alt_low_pass.Design(cutoff_wavelength);
   assert(ok);
   return ok;
 }

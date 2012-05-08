@@ -38,7 +38,7 @@ DistanceStatComputer::calc_incremental_speed(DistanceStat &data, const fixed dt)
       fixed v_f = fixed_zero;
       for (unsigned i = 0; i < (unsigned)(dt + fixed_half); ++i) {
         const fixed v = df.update(d_av);
-        v_f = v_lpf.update(v);
+        v_f = v_lpf.Update(v);
       }
       data.speed_incremental = (is_positive ? -v_f : v_f);
     }
@@ -54,7 +54,7 @@ DistanceStatComputer::reset_incremental_speed(DistanceStat &data)
   fixed speed = data.IsDefined() ? data.get_speed() : fixed_zero;
 
   df.reset(distance, (is_positive ? -1 : 1) * speed);
-  v_lpf.reset((is_positive ? -1 : 1) * speed);
+  v_lpf.Reset((is_positive ? -1 : 1) * speed);
   data.speed_incremental = fixed_zero; // data.speed;
   av_dist.reset();
 }

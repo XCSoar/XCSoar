@@ -97,7 +97,7 @@ TaskAutoPilot::Start(const TaskAccessor& task)
 
   // reset the heading
   heading = Angle::Zero();
-  heading_filt.reset(fixed_zero);
+  heading_filt.Reset(fixed_zero);
 
   acstate = Cruise;
 }
@@ -140,7 +140,7 @@ TaskAutoPilot::heading_deviation()
     ? half(parms.bearing_noise)
     : parms.bearing_noise;
   fixed r = (fixed_two * rand() / RAND_MAX)-fixed_one;
-  fixed deviation = fixed(heading_filt.update(noise_mag*r));
+  fixed deviation = fixed(heading_filt.Update(noise_mag*r));
   return Angle::Degrees(deviation).AsDelta();
 }
 

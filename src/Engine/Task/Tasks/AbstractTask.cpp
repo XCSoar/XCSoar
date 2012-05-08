@@ -61,9 +61,9 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
     if (CalcBestMC(state, glide_polar, mc_found)) {
       /* final glide MacCready found */
       if (mc_lpf_valid)
-        stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+        stats.mc_best = std::max(mc_lpf.Update(mc_found), fixed_zero);
       else {
-        stats.mc_best = std::max(mc_lpf.reset(mc_found), fixed_zero);
+        stats.mc_best = std::max(mc_lpf.Reset(mc_found), fixed_zero);
         mc_lpf_valid = true;
       }
     } else
@@ -90,9 +90,9 @@ AbstractTask::UpdateAutoMC(GlidePolar &glide_polar,
 
     mc_found = fixed_zero;
     if (mc_lpf_valid)
-      stats.mc_best = std::max(mc_lpf.update(mc_found), fixed_zero);
+      stats.mc_best = std::max(mc_lpf.Update(mc_found), fixed_zero);
     else {
-      stats.mc_best = std::max(mc_lpf.reset(mc_found), fixed_zero);
+      stats.mc_best = std::max(mc_lpf.Reset(mc_found), fixed_zero);
       mc_lpf_valid = true;
     }
 
@@ -111,17 +111,17 @@ AbstractTask::UpdateIdle(const AircraftState &state,
   if (TaskStarted() && task_behaviour.calc_cruise_efficiency) {
     fixed val = fixed_one;
     if (CalcCruiseEfficiency(state, glide_polar, val))
-      stats.cruise_efficiency = std::max(ce_lpf.update(val), fixed_zero);
+      stats.cruise_efficiency = std::max(ce_lpf.Update(val), fixed_zero);
   } else {
-    stats.cruise_efficiency = ce_lpf.reset(fixed_one);
+    stats.cruise_efficiency = ce_lpf.Reset(fixed_one);
   }
 
   if (TaskStarted() && task_behaviour.calc_effective_mc) {
     fixed val = glide_polar.GetMC();
     if (CalcEffectiveMC(state, glide_polar, val))
-      stats.effective_mc = std::max(em_lpf.update(val), fixed_zero);
+      stats.effective_mc = std::max(em_lpf.Update(val), fixed_zero);
   } else {
-    stats.effective_mc = em_lpf.reset(glide_polar.GetMC());
+    stats.effective_mc = em_lpf.Reset(glide_polar.GetMC());
   }
 
   if (task_behaviour.calc_glide_required)
@@ -306,7 +306,7 @@ AbstractTask::Reset()
 {
   ResetAutoMC();
   active_task_point_last = 0 - 1;
-  ce_lpf.reset(fixed_one);
+  ce_lpf.Reset(fixed_one);
   stats.reset();
 }
 
