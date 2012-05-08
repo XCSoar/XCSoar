@@ -42,8 +42,26 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Util/Macros.hpp"
+#include "Look/GestureLook.hpp"
 
 #include <stdio.h>
+
+void
+GlueMapWindow::DrawGesture(Canvas &canvas) const
+{
+  if (!gestures.HasPoints())
+    return;
+
+  const auto &points = gestures.GetPoints();
+
+  canvas.Select(gesture_look.pen);
+  canvas.SelectHollowBrush();
+
+  auto it = points.begin();
+  auto it_last = it++;
+  for (auto it_end = points.end(); it != it_end; it_last = it++)
+    canvas.DrawLinePiece(*it_last, *it);
+}
 
 void
 GlueMapWindow::DrawCrossHairs(Canvas &canvas) const

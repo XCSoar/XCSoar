@@ -83,6 +83,7 @@ GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 
   case DRAG_GESTURE:
     gestures.Update(x, y);
+    Invalidate();
     return true;
 
   case DRAG_SIMULATOR:
@@ -306,6 +307,8 @@ GlueMapWindow::OnPaint(Canvas &canvas)
   // Draw center screen cross hair in pan mode
   if (IsPanning())
     DrawCrossHairs(canvas);
+
+  DrawGesture(canvas);
 }
 
 void

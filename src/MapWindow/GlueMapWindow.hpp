@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "PeriodClock.hpp"
-#include "GestureManager.hpp"
+#include "TrackingGestureManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Screen/Timer.hpp"
@@ -36,6 +36,7 @@ Copyright_License {
 #include <array>
 
 struct Look;
+struct GestureLook;
 class Logger;
 class SingleWindow;
 
@@ -88,7 +89,7 @@ class GlueMapWindow : public MapWindow {
 
   GeoPoint drag_start_geopoint;
   RasterPoint drag_start, drag_last;
-  GestureManager gestures;
+  TrackingGestureManager gestures;
   bool ignore_single_click;
 
   /** flag to indicate if the MapItemList should be shown on mouse up */
@@ -128,6 +129,8 @@ class GlueMapWindow : public MapWindow {
 
   ThermalBandRenderer thermal_band_renderer;
   FinalGlideBarRenderer final_glide_bar_renderer;
+
+  const GestureLook &gesture_look;
 
   WindowTimer map_item_timer;
 
@@ -218,6 +221,7 @@ protected:
   bool OnTimer(WindowTimer &timer);
 
 private:
+  void DrawGesture(Canvas &canvas) const;
   void DrawMapScale(Canvas &canvas, const PixelRect &rc,
                     const MapWindowProjection &projection) const;
   void DrawFlightMode(Canvas &canvas, const PixelRect &rc) const;
