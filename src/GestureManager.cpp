@@ -95,6 +95,12 @@ GestureManager::Start(PixelScalar x, PixelScalar y, int _threshold)
 const TCHAR*
 GestureManager::Finish()
 {
+  return GetGesture();
+}
+
+const TCHAR*
+GestureManager::GetGesture() const
+{
   return gesture.empty()
     ? NULL
     : gesture.c_str();

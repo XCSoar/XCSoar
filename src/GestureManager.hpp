@@ -58,6 +58,12 @@ public:
     threshold(0) {}
 
   /**
+   * Returns the recognized gesture
+   * @return NULL or recognized gesture string
+   */
+  const TCHAR* GetGesture() const;
+
+  /**
    * Stops the GestureManager and returns the recognized gesture
    * @return NULL or recognized gesture string
    */
