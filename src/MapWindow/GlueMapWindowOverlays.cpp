@@ -43,6 +43,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Util/Macros.hpp"
 #include "Look/GestureLook.hpp"
+#include "Input/InputEvents.hpp"
 
 #include <stdio.h>
 
@@ -52,11 +53,15 @@ GlueMapWindow::DrawGesture(Canvas &canvas) const
   if (!gestures.HasPoints())
     return;
 
-  const auto &points = gestures.GetPoints();
+  const TCHAR *gesture = gestures.GetGesture();
+  if (gesture != NULL && !InputEvents::IsGesture(gesture))
+    canvas.Select(gesture_look.invalid_pen);
+  else
+    canvas.Select(gesture_look.pen);
 
-  canvas.Select(gesture_look.pen);
   canvas.SelectHollowBrush();
 
+  const auto &points = gestures.GetPoints();
   auto it = points.begin();
   auto it_last = it++;
   for (auto it_end = points.end(); it != it_end; it_last = it++)
