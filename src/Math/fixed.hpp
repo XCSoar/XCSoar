@@ -616,6 +616,26 @@ public:
     return *this;
   }
 
+  gcc_constexpr_method
+  fixed operator>>(int bits) const {
+    return fixed(fixed::internal(), m_nVal >> bits);
+  }
+
+  gcc_constexpr_method
+  fixed operator<<(int bits) const {
+    return fixed(fixed::internal(), m_nVal << bits);
+  }
+
+  fixed &operator>>=(int bits) {
+    m_nVal >>= bits;
+    return *this;
+  }
+
+  fixed &operator<<=(int bits) {
+    m_nVal <<= bits;
+    return *this;
+  }
+
   gcc_constexpr_method bool operator!() const {
     return m_nVal==0;
   }
