@@ -129,7 +129,7 @@ struct WaypointFilterData
 
   bool IsDefined() const {
     return !StringIsEmpty(name) || distance_index > 0 ||
-      direction_index > 0 || type_index > 0;
+      direction_index > 0 || type_index != TF_ALL;
   }
 };
 
