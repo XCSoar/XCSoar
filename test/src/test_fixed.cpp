@@ -22,6 +22,7 @@
 
 #include "Math/fixed.hpp"
 #include "Math/FastMath.h"
+#include "Util/Macros.hpp"
 #include "TestUtil.hpp"
 
 #include <stdio.h>
@@ -49,8 +50,30 @@ static void test_mag_rmag(double mag) {
   ok(inv_ed< fixed_one, "mag_rmag inv_d", 0);
 }
 
+static double Hypot_test_values[][2]={
+  { 243859.6, -57083.4 },
+  { -57083.4, 243859.6 },
+  { 1234.0, 1234.0 },
+  { -1234.0, -1234.0 },
+  { 0.0, 0.0 },
+};
+
+static void test_hypot() {
+  for (unsigned i = 0; i < ARRAY_SIZE(Hypot_test_values); i++) {
+    double dx = Hypot_test_values[i][0];
+    double dy = Hypot_test_values[i][1];
+    double d = hypot(dx, dy);
+
+    fixed fdx(dx);
+    fixed fdy(dy);
+    fixed fd(hypot(fdx, fdy));
+
+    ok(fabs(fd - fixed(d)) < fixed(1.0e-3), "hypot(dx, dy)", 0);
+  }
+}
+
 int main(int argc, char** argv) {
-  plan_tests(43);
+  plan_tests(43 + ARRAY_SIZE(Hypot_test_values));
 
   /* check the division operator */
   ok((fixed_one / fixed_one) * fixed(1000) == fixed(1000), "1/1", 0);
@@ -104,5 +127,8 @@ int main(int argc, char** argv) {
       test_mag_rmag(i);
     }
   }
+
+  test_hypot();
+
   return exit_status();
 }
