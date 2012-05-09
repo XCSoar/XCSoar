@@ -141,48 +141,48 @@ WeatherTerrainRenderer::Generate(const WindowProjection &projection,
   switch (weather->GetParameter()) {
   case 1: // wstar
     height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
-    color_ramp = &weather_colors[0][0];
+    color_ramp = weather_colors[0];
     break;
 
   case 2: // bl wind spd
     height_scale = 3;
-    color_ramp = &weather_colors[1][0];
+    color_ramp = weather_colors[1];
     break;
 
   case 3: // hbl
     height_scale = 4;
-    color_ramp = &weather_colors[2][0];
+    color_ramp = weather_colors[2];
     break;
 
   case 4: // dwcrit
     height_scale = 4;
-    color_ramp = &weather_colors[2][0];
+    color_ramp = weather_colors[2];
     break;
 
   case 5: // blcloudpct
     do_water = true;
     height_scale = 0;
-    color_ramp = &weather_colors[3][0];
+    color_ramp = weather_colors[3];
     break;
 
   case 6: // sfctemp
     height_scale = 0;
-    color_ramp = &weather_colors[4][0];
+    color_ramp = weather_colors[4];
     break;
 
   case 7: // hwcrit
     height_scale = 4;
-    color_ramp = &weather_colors[2][0];
+    color_ramp = weather_colors[2];
     break;
 
   case 8: // wblmaxmin
     height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
-    color_ramp = &weather_colors[5][0];
+    color_ramp = weather_colors[5];
     break;
 
   case 9: // blcwbase
     height_scale = 4;
-    color_ramp = &weather_colors[2][0];
+    color_ramp = weather_colors[2];
     break;
 
   default:
