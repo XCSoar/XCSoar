@@ -570,9 +570,6 @@ FillLastUsedList(WaypointList &list,
 {
   list.clear();
 
-  if (last_used_ids.empty())
-    return;
-
   for (auto it = last_used_ids.rbegin(); it != last_used_ids.rend(); it++) {
     const Waypoint* waypoint = waypoints.LookupId(*it);
     if (waypoint == NULL)
