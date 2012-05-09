@@ -240,13 +240,13 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 {
   StaticString<80> buffer;
 
-  fixed MapWidth = projection.GetScreenWidthMeters();
+  fixed map_width = projection.GetScreenWidthMeters();
 
   canvas.Select(Fonts::map_bold);
-  FormatUserMapScale(MapWidth, buffer.buffer(), true);
-  PixelSize textSize = canvas.CalcTextSize(buffer);
+  FormatUserMapScale(map_width, buffer.buffer(), true);
+  PixelSize text_size = canvas.CalcTextSize(buffer);
 
-  const PixelScalar textXPadding = Layout::Scale(2);
+  const PixelScalar text_padding_x = Layout::Scale(2);
   const PixelScalar height = Fonts::map_bold.GetCapitalHeight() + Layout::Scale(2);
 
   PixelScalar x = 0;
@@ -254,16 +254,16 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   x += look.map_scale_left_icon.GetSize().cx;
   canvas.DrawFilledRectangle(x, rc.bottom - height,
-                             x + 2 * textXPadding + textSize.cx,
+                             x + 2 * text_padding_x + text_size.cx,
                              rc.bottom, COLOR_WHITE);
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
-  x += textXPadding;
+  x += text_padding_x;
   canvas.text(x, rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
               buffer);
 
-  x += textXPadding + textSize.cx;
+  x += text_padding_x + text_size.cx;
   look.map_scale_right_icon.Draw(canvas, x, rc.bottom - height);
 
   buffer.clear();

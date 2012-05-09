@@ -94,7 +94,7 @@ class GlueMapWindow : public MapWindow {
 
   DisplayMode display_mode;
 
-  OffsetHistory offsetHistory;
+  OffsetHistory offset_history;
 
 #ifndef ENABLE_OPENGL
   /**
@@ -230,7 +230,7 @@ private:
 public:
   void UpdateMapScale();
   void UpdateDisplayMode();
-  void SetMapScale(const fixed x);
+  void SetMapScale(fixed scale);
 
   DisplayMode GetDisplayMode() const {
     return display_mode;

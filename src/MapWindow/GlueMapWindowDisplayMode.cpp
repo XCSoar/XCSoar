@@ -108,9 +108,9 @@ GlueMapWindow::PanTo(const GeoPoint &location)
 }
 
 void
-GlueMapWindow::SetMapScale(const fixed x)
+GlueMapWindow::SetMapScale(fixed scale)
 {
-  MapWindow::SetMapScale(x);
+  MapWindow::SetMapScale(scale);
 
   MapSettings &settings = CommonInterface::SetMapSettings();
 
@@ -159,7 +159,7 @@ GlueMapWindow::UpdateDisplayMode()
   bool is_circling = (new_mode == DM_CIRCLING);
 
   if (!was_circling && is_circling)
-    offsetHistory.Reset();
+    offset_history.Reset();
 
   display_mode = new_mode;
 
@@ -207,21 +207,24 @@ GlueMapWindow::UpdateMapScale()
   if (!IsNearSelf())
     return;
 
-  fixed wpd = calculated.auto_zoom_distance;
-  if (settings.auto_zoom_enabled && positive(wpd)) {
+  fixed distance = calculated.auto_zoom_distance;
+  if (settings.auto_zoom_enabled && positive(distance)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
-    int AutoZoomFactor = InCirclingMode() ?
-                         50 : 100 - settings.glider_screen_position;
+    int auto_zoom_factor = InCirclingMode() ?
+                           50 : 100 - settings.glider_screen_position;
     // Leave 5% of full distance for target display
-    AutoZoomFactor -= 5;
+    auto_zoom_factor -= 5;
     // Adjust to account for map scale units
-    AutoZoomFactor *= 8;
-    wpd = wpd / ((fixed) AutoZoomFactor / fixed_int_constant(100));
+    auto_zoom_factor *= 8;
+
+    distance /= fixed(auto_zoom_factor) / 100;
+
     // Clip map auto zoom range to reasonable values
-    wpd = max(fixed_int_constant(525),
-              min(settings.max_auto_zoom_distance / fixed_int_constant(10), wpd));
-    visible_projection.SetFreeMapScale(wpd);
+    distance = max(fixed_int_constant(525),
+                   min(settings.max_auto_zoom_distance / 10, distance));
+
+    visible_projection.SetFreeMapScale(distance);
   }
 }
 
@@ -276,11 +279,11 @@ GlueMapWindow::UpdateProjection()
           y = sc.second;
         }
       }
-      fixed gspFactor = (fixed) (50 - settings_map.glider_screen_position) / 100;
-      offset.x = PixelScalar(x * (rc.right - rc.left) * gspFactor);
-      offset.y = PixelScalar(y * (rc.top - rc.bottom) * gspFactor);
-      offsetHistory.Add(offset);
-      offset = offsetHistory.GetAverage();
+      fixed position_factor = fixed(50 - settings_map.glider_screen_position) / 100;
+      offset.x = PixelScalar(x * (rc.right - rc.left) * position_factor);
+      offset.y = PixelScalar(y * (rc.top - rc.bottom) * position_factor);
+      offset_history.Add(offset);
+      offset = offset_history.GetAverage();
     }
     visible_projection.SetScreenOrigin(center.x + offset.x, center.y + offset.y);
   } else
