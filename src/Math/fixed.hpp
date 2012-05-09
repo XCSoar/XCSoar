@@ -856,7 +856,8 @@ inline fixed rsqrt(fixed const& x)
 gcc_const
 inline fixed hypot(fixed x, fixed y)
 {
-  return sqrt(sqr(x) + sqr(y));
+  /* discarding the lower 3 bits to avoid integer overflow in sqr() */
+  return sqrt(sqr(x >> 3) + sqr(y >> 3)) << 3;
 }
 
 gcc_pure
