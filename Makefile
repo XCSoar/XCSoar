@@ -363,6 +363,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
+	$(SRC)/Waypoint/WaypointList.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \

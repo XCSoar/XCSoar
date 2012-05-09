@@ -34,6 +34,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
 #include "Waypoint/LastUsed.hpp"
+#include "Waypoint/WaypointList.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
@@ -133,37 +134,6 @@ struct WaypointFilterData
 };
 
 static WaypointFilterData filter_data;
-
-/**
- * Structure to hold Waypoint sorting information
- */
-struct WaypointListItem
-{
-  /** Pointer to actual waypoint (unprotected!) */
-  const Waypoint* waypoint;
-
-private:
-  /** From observer to waypoint */
-  mutable GeoVector vec;
-
-public:
-  WaypointListItem() = default;
-  explicit WaypointListItem(const Waypoint &_waypoint):
-    waypoint(&_waypoint), vec(GeoVector::Invalid()) {}
-
-  void ResetVector() {
-    vec.SetInvalid();
-  }
-
-  const GeoVector &GetVector(const GeoPoint &location) const {
-    if (!vec.IsValid())
-      vec = GeoVector(location, waypoint->location);
-
-    return vec;
-  }
-};
-
-typedef std::vector<WaypointListItem> WaypointList;
 static WaypointList waypoint_list;
 
 static TCHAR *
