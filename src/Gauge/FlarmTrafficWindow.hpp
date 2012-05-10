@@ -26,6 +26,7 @@
 
 #include "Screen/PaintWindow.hpp"
 #include "FLARM/State.hpp"
+#include "FLARM/Friends.hpp"
 #include "ComputerSettings.hpp"
 #include "Math/FastRotation.hpp"
 #include "FlarmTrafficLook.hpp"
@@ -119,6 +120,10 @@ protected:
   void PaintRadarPlane(Canvas &canvas) const;
   void PaintRadarBackground(Canvas &canvas) const;
   void PaintNorth(Canvas &canvas) const;
+
+  FlarmFriends::Color GetTeamColor(const FlarmId &id) const;
+  static FlarmFriends::Color GetTeamColor(const FlarmId &id,
+                                          const TeamCodeSettings &settings);
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);

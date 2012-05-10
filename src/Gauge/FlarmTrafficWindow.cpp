@@ -23,7 +23,6 @@
 
 #include "FlarmTrafficWindow.hpp"
 #include "FLARM/Traffic.hpp"
-#include "FLARM/Friends.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -295,14 +294,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       hollow_brush = true;
     } else {
       // Search for team color
-      FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(traffic.id);
-
-      // If no color found but target is teammate
-      if (team_color == FlarmFriends::Color::NONE &&
-          settings.team_flarm_tracking &&
-          traffic.id == settings.team_flarm_id)
-        // .. use yellow color
-        team_color = FlarmFriends::Color::GREEN;
+      FlarmFriends::Color team_color = GetTeamColor(traffic.id);
 
       // If team color found -> draw a colored circle around the target
       if (team_color != FlarmFriends::Color::NONE) {
@@ -694,6 +686,28 @@ FlarmTrafficWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
   Paint(canvas);
+}
+
+FlarmFriends::Color
+FlarmTrafficWindow::GetTeamColor(const FlarmId &id) const
+{
+  return GetTeamColor(id, settings);
+}
+
+FlarmFriends::Color
+FlarmTrafficWindow::GetTeamColor(const FlarmId &id,
+                                 const TeamCodeSettings &settings)
+{
+  FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(id);
+
+  // If no color found but target is teammate
+  if (team_color == FlarmFriends::Color::NONE &&
+      settings.team_flarm_tracking &&
+      id == settings.team_flarm_id)
+    // .. use yellow color
+    return FlarmFriends::Color::GREEN;
+
+  return team_color;
 }
 
 bool
