@@ -65,3 +65,9 @@ InfoBoxData::SetCommentFromSpeed(fixed new_value, bool precision)
 {
   FormatUserSpeed(new_value, comment.buffer(), true, precision);
 }
+
+void
+InfoBoxData::SetCommentFromVerticalSpeed(fixed new_value, bool include_sign)
+{
+  FormatUserVerticalSpeed(new_value, comment.buffer(), true, include_sign);
+}

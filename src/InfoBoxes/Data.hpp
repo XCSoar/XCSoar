@@ -148,6 +148,11 @@ struct InfoBoxData {
    */
   void SetCommentFromAlternateAltitude(fixed value);
 
+  /**
+   * Set the InfoBox comment value to the specified vertical speed.
+   */
+  void SetCommentFromVerticalSpeed(fixed value, bool include_sign=true);
+
   template<typename... Args>
   void FormatTitle(const TCHAR *fmt, Args&&... args) {
     title.Format(fmt, args...);
