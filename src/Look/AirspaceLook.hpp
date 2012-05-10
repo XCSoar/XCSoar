@@ -55,10 +55,6 @@ struct AirspaceLook {
 
   Pen thick_pen;
 
-#ifndef ENABLE_OPENGL
-  Pen medium_pen;
-#endif
-
   MaskedIcon intercept_icon;
 
   void Initialise(const AirspaceRendererSettings &settings);

@@ -429,7 +429,7 @@ private:
     if (use_stencil) {
       if (warnings.HasWarning(airspace) || warnings.IsInside(airspace)) {
         stencil.SelectBlackBrush();
-        stencil.Select(look.medium_pen);
+        stencil.SelectNullPen();
       } else {
         stencil.Select(look.thick_pen);
         stencil.SelectHollowBrush();
