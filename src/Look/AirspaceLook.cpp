@@ -53,9 +53,19 @@ const Color AirspaceLook::preset_colors[] = {
 void
 AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 {
-  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    pens[i].Set(Layout::ScalePenWidth(settings.classes[i].border_width),
-                settings.classes[i].color);
+  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i) {
+    const AirspaceClassRendererSettings &class_settings = settings.classes[i];
+
+    pens[i].Set(Layout::ScalePenWidth(class_settings.border_width),
+                class_settings.color);
+
+#ifdef HAVE_ALPHA_BLEND
+  if (AlphaBlendAvailable())
+#endif
+#if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
+      solid_brushes[i].Set(class_settings.color);
+#endif
+  }
 
   // airspace brushes and colors
 #ifdef HAVE_HATCHED_BRUSH
@@ -70,14 +80,6 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 
   for (unsigned i = 0; i < ARRAY_SIZE(AirspaceLook::brushes); i++)
     brushes[i].Set(bitmaps[i]);
-#endif
-
-#ifdef HAVE_ALPHA_BLEND
-  if (AlphaBlendAvailable())
-#endif
-#if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
-    for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i)
-      solid_brushes[i].Set(settings.classes[i].color);
 #endif
 
   thick_pen.Set(Layout::ScalePenWidth(10), COLOR_BLACK);
