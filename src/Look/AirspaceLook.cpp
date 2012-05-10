@@ -54,7 +54,8 @@ void
 AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 {
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    pens[i].Set(Layout::ScalePenWidth(2), settings.classes[i].color);
+    pens[i].Set(Layout::ScalePenWidth(settings.classes[i].border_width),
+                settings.classes[i].color);
 
   // airspace brushes and colors
 #ifdef HAVE_HATCHED_BRUSH
