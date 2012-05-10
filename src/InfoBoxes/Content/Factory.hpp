@@ -133,15 +133,15 @@ namespace InfoBoxFactory
     e_WP_ETE_VMG,
     e_Horizon,
     e_NearestAirspaceHorizontal,
+    /* 90..99 */
     e_NearestAirspaceVertical,
     e_WP_MC0AltDiff,
     e_HeadWind,
-
     TerrainCollision,
     NavAltitude,
     NextLegEqThermal,
-
     HeadWindSimplified,
+    CruiseEfficiency,
 
     e_NUM_TYPES /* Last item */
   };

@@ -1048,6 +1048,16 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     e_WindBearing_Est,
   },
 
+  {
+    N_("Task cruise efficiency"),
+    N_("Cruise Eff"),
+    N_("Efficiency of cruise.  100 indicates perfect MacCready performance. "
+       "This value estimates your cruise efficiency according to the current "
+       "flight history with the set MC value.  Calculation begins after task is started."),
+    IBFHelper<InfoBoxContentCruiseEfficiency>::Create,
+    CruiseEfficiency,
+    CruiseEfficiency,
+  },
 };
 
 bool

@@ -805,3 +805,16 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
   data.SetValue(value);
   data.SetComment(comment);
 }
+
+void
+InfoBoxContentCruiseEfficiency::Update(InfoBoxData &data)
+{
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  if (!task_stats.task_valid || !task_stats.task_started) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.UnsafeFormatValue(_T("%d"), (int) (task_stats.cruise_efficiency * 100));
+  data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
+}

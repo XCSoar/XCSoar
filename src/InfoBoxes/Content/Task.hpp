@@ -232,4 +232,9 @@ public:
   virtual void Update(InfoBoxData &data);
 };
 
+class InfoBoxContentCruiseEfficiency : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxData &data);
+};
 #endif
