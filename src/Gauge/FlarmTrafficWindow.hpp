@@ -117,6 +117,11 @@ protected:
   void PaintRadarTarget(Canvas &canvas, const FlarmTraffic &traffic,
                         unsigned i);
   void PaintRadarTraffic(Canvas &canvas);
+
+  void PaintTargetInfoSmall(
+      Canvas &canvas, const FlarmTraffic &traffic, unsigned i,
+      const Color &text_color, const Brush &arrow_brush);
+
   void PaintRadarPlane(Canvas &canvas) const;
   void PaintRadarBackground(Canvas &canvas) const;
   void PaintNorth(Canvas &canvas) const;

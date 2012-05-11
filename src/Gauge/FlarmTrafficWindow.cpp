@@ -388,64 +388,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   canvas.DrawPolygon(Arrow, 5);
 
   if (small) {
-    if (WarningMode() && !traffic.HasAlarm())
-      return;
-
-    const short relalt =
-        iround(Units::ToUserAltitude(traffic.relative_altitude) / 100);
-
-    // if (relative altitude is other than zero)
-    if (relalt == 0)
-      return;
-
-    // Write the relativ altitude devided by 100 to the Buffer
-    StaticString<10> buffer;
-    buffer.Format(_T("%d"), abs(relalt));
-
-    // Select font
-    canvas.SetBackgroundTransparent();
-    canvas.Select(look.side_info_font);
-    canvas.SetTextColor(*text_color);
-
-    // Calculate size of the output string
-    PixelSize tsize = canvas.CalcTextSize(buffer);
-
-    UPixelScalar dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
-
-    // Draw string
-    canvas.text(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
-
-    // Set target_brush for the up/down arrow
-    canvas.Select(*arrow_brush);
-    canvas.SelectNullPen();
-
-    // Prepare the triangular polygon
-    RasterPoint triangle[4];
-    triangle[0].x = 0;
-    triangle[0].y = -4;
-    triangle[1].x = 3;
-    triangle[1].y = 0;
-    triangle[2].x = -3;
-    triangle[2].y = 0;
-
-    // Flip = -1 for arrow pointing downwards
-    short flip = 1;
-    if (relalt < 0)
-      flip = -1;
-
-    // Shift the arrow to the right position
-    for (int j = 0; j < 3; j++) {
-      triangle[j].x = Layout::FastScale(triangle[j].x);
-      triangle[j].y = Layout::FastScale(triangle[j].y);
-
-      triangle[j].x = sc[i].x + dist + triangle[j].x + tsize.cx / 2;
-      triangle[j].y = sc[i].y + flip * (triangle[j].y  - tsize.cy / 2);
-    }
-    triangle[3].x = triangle[0].x;
-    triangle[3].y = triangle[0].y;
-
-    // Draw the arrow
-    canvas.DrawTriangleFan(triangle, 4);
+    if (!WarningMode() || traffic.HasAlarm())
+      PaintTargetInfoSmall(canvas, traffic, i, *text_color, *arrow_brush);
 
     return;
   }
@@ -487,6 +431,69 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Draw vertical speed
   canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy / 2, tmp);
+}
+
+void
+FlarmTrafficWindow::PaintTargetInfoSmall(
+    Canvas &canvas, const FlarmTraffic &traffic, unsigned i,
+    const Color &text_color, const Brush &arrow_brush)
+{
+  const short relalt =
+      iround(Units::ToUserAltitude(traffic.relative_altitude) / 100);
+
+  // if (relative altitude is other than zero)
+  if (relalt == 0)
+    return;
+
+  // Write the relativ altitude devided by 100 to the Buffer
+  StaticString<10> buffer;
+  buffer.Format(_T("%d"), abs(relalt));
+
+  // Select font
+  canvas.SetBackgroundTransparent();
+  canvas.Select(look.side_info_font);
+  canvas.SetTextColor(text_color);
+
+  // Calculate size of the output string
+  PixelSize tsize = canvas.CalcTextSize(buffer);
+
+  UPixelScalar dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
+
+  // Draw string
+  canvas.text(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
+
+  // Set target_brush for the up/down arrow
+  canvas.Select(arrow_brush);
+  canvas.SelectNullPen();
+
+  // Prepare the triangular polygon
+  RasterPoint triangle[4];
+  triangle[0].x = 0;
+  triangle[0].y = -4;
+  triangle[1].x = 3;
+  triangle[1].y = 0;
+  triangle[2].x = -3;
+  triangle[2].y = 0;
+
+  // Flip = -1 for arrow pointing downwards
+  short flip = 1;
+  if (relalt < 0)
+    flip = -1;
+
+  // Shift the arrow to the right position
+  for (int j = 0; j < 3; j++) {
+    triangle[j].x = Layout::FastScale(triangle[j].x);
+    triangle[j].y = Layout::FastScale(triangle[j].y);
+
+    triangle[j].x = sc[i].x + dist + triangle[j].x + tsize.cx / 2;
+    triangle[j].y = sc[i].y + flip * (triangle[j].y  - tsize.cy / 2);
+  }
+  triangle[3].x = triangle[0].x;
+  triangle[3].y = triangle[0].y;
+
+  // Draw the arrow
+  canvas.DrawTriangleFan(triangle, 4);
+
 }
 
 /**
