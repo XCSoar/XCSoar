@@ -2050,7 +2050,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
-	$(SRC)/TeamCodeCalculation.cpp \
+	$(SRC)/TeamCode.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \

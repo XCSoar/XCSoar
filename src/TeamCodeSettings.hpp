@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TEAM_CODE_SETTINGS_HPP
 
 #include "Util/StaticString.hpp"
-#include "TeamCodeCalculation.hpp"
+#include "TeamCode.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "Util/TypeTraits.hpp"
 
