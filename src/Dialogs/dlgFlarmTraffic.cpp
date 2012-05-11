@@ -127,7 +127,7 @@ FlarmTrafficControl::OnCreate()
 
   const TrafficSettings &settings = CommonInterface::GetUISettings().traffic;
 
-  Profile::Get(szProfileFlarmSideData, side_display_type);
+  Profile::GetEnum(szProfileFlarmSideData, side_display_type);
   enable_auto_zoom = settings.auto_zoom;
   enable_north_up = settings.north_up;
 }
@@ -585,11 +585,12 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 SwitchData()
 {
-  wdf->side_display_type++;
-  if (wdf->side_display_type > 2)
-    wdf->side_display_type = 1;
+  if (wdf->side_display_type == FlarmTrafficWindow::SIDE_INFO_VARIO)
+    wdf->side_display_type = FlarmTrafficWindow::SIDE_INFO_RELATIVE_ALTITUDE;
+  else
+    wdf->side_display_type = FlarmTrafficWindow::SIDE_INFO_VARIO;
 
-  Profile::Set(szProfileFlarmSideData, wdf->side_display_type);
+  Profile::SetEnum(szProfileFlarmSideData, wdf->side_display_type);
 }
 
 /**

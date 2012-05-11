@@ -123,7 +123,7 @@ FlarmTrafficControl2::OnCreate()
 
   const TrafficSettings &settings = CommonInterface::GetUISettings().traffic;
 
-  Profile::Get(szProfileFlarmSideData, side_display_type);
+  Profile::GetEnum(szProfileFlarmSideData, side_display_type);
   enable_auto_zoom = settings.auto_zoom;
   enable_north_up = settings.north_up;
 }
@@ -453,11 +453,12 @@ TrafficWidget::NextTarget()
 void
 TrafficWidget::SwitchData()
 {
-  view->side_display_type++;
-  if (view->side_display_type > 2)
-    view->side_display_type = 1;
+  if (view->side_display_type == FlarmTrafficWindow::SIDE_INFO_VARIO)
+    view->side_display_type = FlarmTrafficWindow::SIDE_INFO_RELATIVE_ALTITUDE;
+  else
+    view->side_display_type = FlarmTrafficWindow::SIDE_INFO_VARIO;
 
-  Profile::Set(szProfileFlarmSideData, view->side_display_type);
+  Profile::SetEnum(szProfileFlarmSideData, view->side_display_type);
 }
 
 void

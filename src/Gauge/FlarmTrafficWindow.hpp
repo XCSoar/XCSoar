@@ -70,7 +70,10 @@ protected:
   TeamCodeSettings settings;
 
 public:
-  int side_display_type;
+  enum SideInfoType {
+    SIDE_INFO_RELATIVE_ALTITUDE,
+    SIDE_INFO_VARIO,
+  } side_display_type;
 
 public:
   FlarmTrafficWindow(const FlarmTrafficLook &_look,
