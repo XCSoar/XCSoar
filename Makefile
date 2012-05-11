@@ -538,6 +538,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/SystemSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
+	$(SRC)/TeamCodeSettings.cpp \
 	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \

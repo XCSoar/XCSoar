@@ -56,16 +56,6 @@ SoundSettings::SetDefaults()
 }
 
 void
-TeamCodeSettings::SetDefaults()
-{
-  team_code_reference_waypoint = -1;
-  team_flarm_tracking = false;
-  team_code_valid = false;
-  team_flarm_callsign.clear();
-  team_flarm_id.Clear();
-}
-
-void
 VoiceSettings::SetDefaults()
 {
   voice_climb_rate_enabled = false;
