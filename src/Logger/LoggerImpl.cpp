@@ -110,6 +110,8 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   writer->Finish(gps_info);
   writer->Sign();
 
+  LogStartUp(_T("Logger stopped: %s"), filename);
+
   // Logger off
   delete writer;
   writer = NULL;
