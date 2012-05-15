@@ -204,6 +204,14 @@ public:
   }
 
   /**
+   * Calculate vector planned of next leg.
+   *
+   * @return Vector planned of following leg. If there is no next leg,
+   * returns GeoVector::Invalid()
+   */
+  const GeoVector GetNextLegVector() const;
+
+  /**
    * Calculate vector around planned task with this task point as the destination.
    *
    * @return Vector planned to this taskpoint

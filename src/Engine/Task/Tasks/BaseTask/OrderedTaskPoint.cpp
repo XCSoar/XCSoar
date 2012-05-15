@@ -189,3 +189,12 @@ OrderedTaskPoint::boundingbox_overlaps(const FlatBoundingBox &that) const
 {
   return flat_bb.Overlaps(that);
 }
+
+const GeoVector
+OrderedTaskPoint::GetNextLegVector() const
+{
+  if (tp_next)
+    return tp_next->vector_planned;
+
+  return GeoVector::Invalid();
+}

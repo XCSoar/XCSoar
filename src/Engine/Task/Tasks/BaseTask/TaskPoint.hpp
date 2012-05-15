@@ -26,8 +26,8 @@
 
 #include "Compiler.h"
 #include "Navigation/Aircraft.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
-struct GeoVector;
 struct TaskBehaviour;
 
 /**
@@ -125,6 +125,16 @@ public:
    */
   gcc_pure
   virtual const GeoVector GetVectorTravelled() const = 0;
+
+  /**
+    * Calculate vector of next leg, if there is one
+    *
+    * @return Vector for task leg or GeoVector::Invalid() if there is no next leg
+    */
+   gcc_pure
+   virtual const GeoVector GetNextLegVector() const {
+     return GeoVector::Invalid();
+   }
 
   /**
    * Dummy null method.

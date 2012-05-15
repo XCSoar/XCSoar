@@ -29,6 +29,7 @@ ElementStat::Reset()
 {
   location_remaining = GeoPoint::Invalid();
   vector_remaining = GeoVector::Invalid();
+  next_leg_vector = GeoVector::Invalid();
 
   time_started = fixed_minus_one;
   time_elapsed = time_remaining = time_planned = fixed_zero;

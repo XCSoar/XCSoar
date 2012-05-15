@@ -148,9 +148,11 @@ AbstractTask::UpdateStatsDistances(const GeoPoint &location,
   if (active != NULL) {
     stats.current_leg.location_remaining = active->GetLocationRemaining();
     stats.current_leg.vector_remaining = active->GetVectorRemaining(location);
+    stats.current_leg.next_leg_vector = active->GetNextLegVector();
   } else {
     stats.current_leg.location_remaining = GeoPoint::Invalid();
     stats.current_leg.vector_remaining = GeoVector::Invalid();
+    stats.current_leg.next_leg_vector = GeoVector::Invalid();
   }
 
   if (full_update)

@@ -55,6 +55,13 @@ struct ElementStat
    */
   GeoVector vector_remaining;
 
+  /**
+    * The next leg vector.  Always check GeoVector::IsValid() before
+    * using this attribute.  This is only implemented for one leg
+    * (TaskStats::current_leg).
+    */
+   GeoVector next_leg_vector;
+
   /** Time (s) this element was started */
   fixed time_started;
   /** Time (s) since element was started */
