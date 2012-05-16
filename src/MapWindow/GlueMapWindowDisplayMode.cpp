@@ -130,14 +130,17 @@ GlueMapWindow::SetMapScale(const fixed x)
 void
 GlueMapWindow::LoadDisplayModeScales()
 {
+  // NOTE: The scale is limited between 60m and 1900km with the clipping below
   fixed tmp;
   if (Profile::Get(szProfileClimbMapScale, tmp))
-    zoomclimb.ClimbScale = tmp / 10000;
+    zoomclimb.ClimbScale =
+      std::max(fixed(0.0003), std::min(tmp / 10000, fixed(10)));
   else
     zoomclimb.ClimbScale = fixed_one / Layout::FastScale(2);
 
   if (Profile::Get(szProfileCruiseMapScale, tmp))
-    zoomclimb.CruiseScale = tmp / 10000;
+    zoomclimb.CruiseScale =
+      std::max(fixed(0.0003), std::min(tmp / 10000, fixed(10)));
   else
     zoomclimb.CruiseScale = fixed_one / Layout::FastScale(60);
 }
