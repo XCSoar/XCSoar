@@ -486,6 +486,18 @@ public:
   gcc_pure
   fixed GetLDOverGround(const AircraftState &state) const;
 
+  /**
+   * Calculates the thermal value of next leg that is equivalent (gives the
+   * same average speed) to the current MacCready setting.
+   *
+   * @param current_wind The head wind component on current leg
+   * @param next_wind The head wind component on next leg
+   *
+   * @return Equivalent thermal strength. Normally a positive value, but in
+   * some situations it can be negative.
+   */
+  fixed GetNextLegEqThermal(fixed current_wind, fixed next_wind) const;
+
   /** Returns the wing area in m^2 */
   fixed GetWingArea() const {
     return wing_area;
