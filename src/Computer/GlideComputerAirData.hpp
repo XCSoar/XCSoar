@@ -181,6 +181,13 @@ private:
                DerivedInfo &calculated, const DerivedInfo &last_calculated,
                const ComputerSettings &settings);
   void ProcessSun(const NMEAInfo &basic, DerivedInfo &calculated);
+
+  /**
+   * Calculates the thermal value of next leg that is equivalent (gives the
+   * same average speed) to the current MacCready setting.
+   */
+  void NextLegEqThermal(const NMEAInfo &basic, DerivedInfo &calculated,
+                        const ComputerSettings &settings);
 };
 
 #endif

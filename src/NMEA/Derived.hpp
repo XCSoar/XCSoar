@@ -206,6 +206,13 @@ struct DerivedInfo:
   StaticRoute planned_route;
 
   /**
+   * Thermal value of next leg that is equivalent (gives the same average
+   * speed) to the current MacCready setting. A negative value should be
+   * treated as invalid.
+   */
+  fixed next_leg_eq_thermal;
+
+  /**
    * @todo Reset to cleared state
    */
   void Reset();

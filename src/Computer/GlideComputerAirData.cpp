@@ -118,6 +118,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   CurrentThermal(basic, calculated, calculated.current_thermal);
   UpdateLiftDatabase(basic, calculated, last_calculated);
   MaxHeightGain(basic, calculated);
+  NextLegEqThermal(basic, calculated, settings);
 }
 
 void
@@ -633,4 +634,32 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
     SunEphemeris::CalcAzimuth(basic.location, basic.date_time_utc,
                               fixed(GetUTCOffset()) / 3600);
   calculated.sun_data_available.Update(basic.clock);
+}
+
+void
+GlideComputerAirData::NextLegEqThermal(const NMEAInfo &basic,
+                                       DerivedInfo &calculated,
+                                       const ComputerSettings &settings)
+{
+  const GeoVector vector_remaining =
+      calculated.task_stats.current_leg.vector_remaining;
+  const GeoVector next_leg_vector =
+      calculated.task_stats.current_leg.next_leg_vector;
+
+  if(!next_leg_vector.IsValid() ||
+      !vector_remaining.IsValid() ||
+      !calculated.wind_available) {
+    // Assign a negative value to invalidate the result
+    calculated.next_leg_eq_thermal = fixed_minus_one;
+    return;
+  }
+
+  // Calculate wind component on current and next legs
+  const fixed wind_comp = calculated.wind.norm *
+      (calculated.wind.bearing - vector_remaining.bearing).fastcosine();
+  const fixed next_comp = calculated.wind.norm *
+      (calculated.wind.bearing - next_leg_vector.bearing).fastcosine();
+
+  calculated.next_leg_eq_thermal =
+      settings.polar.glide_polar_task.GetNextLegEqThermal(wind_comp, next_comp);
 }
