@@ -139,6 +139,7 @@ namespace InfoBoxFactory
 
     TerrainCollision,
     NavAltitude,
+    NextLegEqThermal,
 
     e_NUM_TYPES /* Last item */
   };

@@ -92,4 +92,10 @@ public:
   virtual void Update(InfoBoxData &data);
 };
 
+class InfoBoxContentNextLegEqThermal : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxData &data);
+};
+
 #endif

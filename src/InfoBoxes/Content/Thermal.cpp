@@ -169,3 +169,16 @@ InfoBoxContentVarioDistance::Update(InfoBoxData &data)
   data.SetValueColor(negative(
       XCSoarInterface::Calculated().task_stats.total.vario.get_value()) ? 1 : 0);
 }
+
+
+void
+InfoBoxContentNextLegEqThermal::Update(InfoBoxData &data)
+{
+  const fixed next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
+  if (negative(next_leg_eq_thermal)) {
+    data.SetInvalid();
+    return;
+  }
+
+  SetVSpeed(data, next_leg_eq_thermal);
+}
