@@ -55,7 +55,6 @@ public:
   }
 
   bool StopRxThread() {
-    assert(running);
     running = false;
     return true;
   }
