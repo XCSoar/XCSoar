@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-05-04 19:29+0000\n"
+"PO-Revision-Date: 2012-05-05 10:24+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-04 20:44+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-05-19 10:01+0000\n"
+"X-Generator: Launchpad (build 15259)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1693,7 +1693,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:753
 #, no-c-format
 msgid "Alternate 1 name"
-msgstr "Nom 1ère option"
+msgstr "Nom dégagement 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
@@ -1708,7 +1708,7 @@ msgstr "Affiche le nom et le cap de la meilleure option d'atterrissage."
 #: src/InfoBoxes/Content/Factory.cpp:763
 #, no-c-format
 msgid "Alternate 2 name"
-msgstr "Nom 2e option"
+msgstr "Nom dégagement 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:764
 #, no-c-format
@@ -1723,12 +1723,12 @@ msgstr "Affiche le nom et le cap de la 2e option d'atterrissage."
 #: src/InfoBoxes/Content/Factory.cpp:773
 #, no-c-format
 msgid "Alternate 1 GR"
-msgstr "Fin dégagt 1"
+msgstr "Finesse dégagement 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:774
 #, no-c-format
 msgid "Altn1 GR"
-msgstr "Plan dégagement 1"
+msgstr "Fin Dgmt1"
 
 #: src/InfoBoxes/Content/Factory.cpp:775
 #, no-c-format
@@ -1879,7 +1879,7 @@ msgstr "Niveau de vol"
 #: src/InfoBoxes/Content/Factory.cpp:864
 #, no-c-format
 msgid "Flight Level"
-msgstr "Niveau de vol"
+msgstr "FL"
 
 #: src/InfoBoxes/Content/Factory.cpp:865
 #, no-c-format
