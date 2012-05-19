@@ -712,7 +712,7 @@ DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
     device->LinkTimeout();
 
     NullOperationEnvironment env;
-    device->EnableNMEA(env);
+    EnableNMEA(env);
   }
 
   was_alive = now_alive;
