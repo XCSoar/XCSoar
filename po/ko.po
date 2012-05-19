@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-05-02 14:16+0000\n"
+"PO-Revision-Date: 2012-05-07 14:37+0000\n"
 "Last-Translator: Myungha Kuh <mikekuh147@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-02 21:40+0000\n"
-"X-Generator: Launchpad (build 15185)\n"
+"X-Launchpad-Export-Date: 2012-05-19 10:01+0000\n"
+"X-Generator: Launchpad (build 15259)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -2162,7 +2162,7 @@ msgstr "공역 감추기"
 
 #: src/Input/InputEventsAirspace.cpp:66
 msgid "Show airspace on"
-msgstr "공역 끄기"
+msgstr "공역 켜기"
 
 #: src/Input/InputEventsTask.cpp:79
 msgid "Advance manually"
@@ -4151,11 +4151,11 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:84
 msgid "Fonts"
-msgstr ""
+msgstr "글꼴"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:130
 msgid "Auto. blank"
-msgstr ""
+msgstr "자도 공백"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:131
 msgid ""
@@ -4165,7 +4165,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:136
 msgid "Events"
-msgstr ""
+msgstr "이벤트"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:137
 msgid ""
@@ -4175,7 +4175,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:144
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:145
 msgid ""
@@ -4224,7 +4224,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:199
 msgid "Text input style"
-msgstr ""
+msgstr "문자 입력 스타일"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:200
 msgid ""
@@ -4234,7 +4234,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:210
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "OS 설정"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:216
 msgid "Haptic feedback"
@@ -8262,7 +8262,7 @@ msgstr ""
 
 #: Data/Input/default.xci:54
 msgid "Takeoff"
-msgstr ""
+msgstr "이륙"
 
 #: Data/Input/default.xci:75
 msgid "Final glide through terrain"
@@ -8290,14 +8290,14 @@ msgstr ""
 
 #: Data/Input/default.xci:875
 msgid "Credits"
-msgstr ""
+msgstr "만든 사람들"
 
 #: Data/Input/default.xci:136 Data/Input/default.xci:457
 #: Data/Input/default.xci:980
 msgid ""
 "Zoom\n"
 "Out"
-msgstr ""
+msgstr "축소"
 
 #: Data/Input/default.xci:756
 msgid ""
@@ -8309,7 +8309,7 @@ msgstr ""
 msgid ""
 "Message\n"
 "Repeat"
-msgstr ""
+msgstr "메시지 반복"
 
 #: Data/Input/default.xci:848
 msgid ""
@@ -8332,9 +8332,7 @@ msgstr ""
 msgid ""
 "Settings\n"
 "Airspace"
-msgstr ""
-"세팅\n"
-"공역"
+msgstr "공역 세팅"
 
 #: Data/Input/default.xci:345 Data/Input/default.xci:394
 #: Data/Input/default.xci:908
