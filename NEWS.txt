@@ -10,6 +10,8 @@ Version 6.3.4 - not yet released
   - fix FAI start/finish line length (#2079)
 * devices
   - CAI302: fix connection lost after MacCready update (#2029)
+* user interface
+  - increase double click interval to 500ms (#2088)
 * map
   - sanitise map scale (#2086)
 
