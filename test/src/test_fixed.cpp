@@ -66,7 +66,7 @@ static void test_hypot() {
 
     fixed fdx(dx);
     fixed fdy(dy);
-    fixed fd(hypot(fdx, fdy));
+    fixed fd(MediumHypot(fdx, fdy));
 
     ok(fabs(fd - fixed(d)) < fixed(1.0e-3), "hypot(dx, dy)", 0);
   }

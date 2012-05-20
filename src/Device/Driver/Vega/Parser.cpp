@@ -217,7 +217,7 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
   fixed AccelX = line.read(fixed_zero);
   fixed AccelZ = line.read(fixed_zero);
 
-  fixed mag = hypot(AccelX, AccelZ);
+  fixed mag = SmallHypot(AccelX, AccelZ);
   info.acceleration.ProvideGLoad(fixed(mag) / 100, true);
 
   /*

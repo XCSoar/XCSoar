@@ -63,7 +63,7 @@ FlatPoint::Rotate(const Angle angle)
 fixed
 FlatPoint::Distance(const FlatPoint &p) const
 {
-  return hypot(p.x - x, p.y - y);
+  return MediumHypot(p.x - x, p.y - y);
 }
 
 fixed
@@ -74,5 +74,5 @@ FlatPoint::MagnitudeSquared() const {
 fixed
 FlatPoint::Magnitude() const
 {
-  return hypot(x, y);
+  return MediumHypot(x, y);
 }

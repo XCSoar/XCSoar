@@ -249,7 +249,7 @@ CirclingWind::CalcWind()
     fixed wx = sc.second, wy = sc.first;
     wx = wx * av + mag;
     wy *= av;
-    fixed cmag = hypot(wx, wy) - samples[i].mag;
+    fixed cmag = SmallHypot(wx, wy) - samples[i].mag;
     rthis += sqr(cmag);
   }
 

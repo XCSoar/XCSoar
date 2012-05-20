@@ -103,7 +103,7 @@ public:
     const Angle track;
 
     fixed Phi(const ZZBeta& beta) const {
-      return hypot(x.gps_north + beta.north, x.gps_east + beta.east);
+      return SmallHypot(x.gps_north + beta.north, x.gps_east + beta.east);
     }
 
     fixed f(const ZZBeta& beta) const {

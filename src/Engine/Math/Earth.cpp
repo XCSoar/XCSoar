@@ -92,7 +92,7 @@ IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, fixed dthis,
   const fixed z = A * sinLoc1Latitude + B * sinLoc2Latitude;
 
   GeoPoint loc3;
-  loc3.latitude = Angle::Radians(atan2(z, hypot(x, y)));
+  loc3.latitude = Angle::Radians(atan2(z, MediumHypot(x, y)));
   loc3.longitude = Angle::Radians(atan2(y, x));
   loc3.Normalize(); // ensure longitude is within -180:180
 

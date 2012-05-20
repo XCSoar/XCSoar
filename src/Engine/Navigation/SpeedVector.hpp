@@ -65,7 +65,7 @@ struct SpeedVector {
    * @return Initialised object
    */
   SpeedVector(fixed x, fixed y)
-    :bearing(Angle::FromXY(y,x).AsBearing()), norm(hypot(x, y)) {}
+    :bearing(Angle::FromXY(y,x).AsBearing()), norm(SmallHypot(x, y)) {}
 
   /**
    * Returns the null vector.
