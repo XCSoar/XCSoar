@@ -142,7 +142,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
   // Move pointer to first character after the replaced separator
   // and check for valid character
   p++;
-  if (p == '\0')
+  if (*p == '\0')
     return false;
 
   // Check if first field is NOT the date (length > 10)
@@ -160,7 +160,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
     // Move pointer to first character after the replaced separator
     // and check for valid character
     p++;
-    if (p == '\0')
+    if (*p == '\0')
       return false;
   }
 
@@ -185,7 +185,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
   // Move pointer to first character after the replaced separator
   // and check for valid character
   p++;
-  if (p == '\0')
+  if (*p == '\0')
     return false;
 
   // Now record_info should point to the start time field,
@@ -209,7 +209,7 @@ ParseRecordInfo(char *record_info, RecordedFlightInfo &flight)
   // Move pointer to first character after the replaced separator
   // and check for valid character
   p++;
-  if (p == '\0')
+  if (*p == '\0')
     return false;
 
   // Now record_info should point to the duration field,
