@@ -30,7 +30,10 @@ VegaDevice::LinkTimeout()
 {
   AbstractDevice::LinkTimeout();
   detected = false;
+
+  settings_mutex.Lock();
   settings.clear();
+  settings_mutex.Unlock();
 }
 
 void

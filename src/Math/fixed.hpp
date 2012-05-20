@@ -616,6 +616,26 @@ public:
     return *this;
   }
 
+  gcc_constexpr_method
+  fixed operator>>(int bits) const {
+    return fixed(fixed::internal(), m_nVal >> bits);
+  }
+
+  gcc_constexpr_method
+  fixed operator<<(int bits) const {
+    return fixed(fixed::internal(), m_nVal << bits);
+  }
+
+  fixed &operator>>=(int bits) {
+    m_nVal >>= bits;
+    return *this;
+  }
+
+  fixed &operator<<=(int bits) {
+    m_nVal <<= bits;
+    return *this;
+  }
+
   gcc_constexpr_method bool operator!() const {
     return m_nVal==0;
   }
@@ -833,12 +853,6 @@ inline fixed rsqrt(fixed const& x)
   return x.rsqrt();
 }
 
-gcc_const
-inline fixed hypot(fixed x, fixed y)
-{
-  return sqrt(sqr(x) + sqr(y));
-}
-
 gcc_pure
 inline fixed exp(fixed const& x)
 {
@@ -991,6 +1005,53 @@ Double(fixed a)
 }
 
 #endif
+
+/**
+ * Calculate the euclidian distance for "small" parameter values,
+ * i.e. values below 100,000.
+ */
+gcc_const
+inline fixed
+SmallHypot(fixed x, fixed y)
+{
+#ifdef FIXED_MATH
+  return sqrt(sqr(x) + sqr(y));
+#else
+  return hypot(x, y);
+#endif
+}
+
+/**
+ * Calculate the euclidian distance for "medium" parameter values,
+ * i.e. values below 1,000,000.
+ */
+gcc_const
+inline fixed
+MediumHypot(fixed x, fixed y)
+{
+#ifdef FIXED_MATH
+  /* discarding the lower 3 bits to avoid integer overflow in sqr() */
+  return sqrt(sqr(x >> 3) + sqr(y >> 3)) << 3;
+#else
+  return hypot(x, y);
+#endif
+}
+
+/**
+ * Calculate the euclidian distance for "large" parameter values,
+ * i.e. values below 8,000,000,000.
+ */
+gcc_const
+inline fixed
+LargeHypot(fixed x, fixed y)
+{
+#ifdef FIXED_MATH
+  /* discarding the lower 16 bits to avoid integer overflow in sqr() */
+  return sqrt(sqr(x >> 16) + sqr(y >> 16)) << 16;
+#else
+  return hypot(x, y);
+#endif
+}
 
 inline void limit_tolerance(fixed& f, const fixed tol_act) {
   if (fabs(f)<tol_act) {

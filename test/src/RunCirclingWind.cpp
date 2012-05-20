@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 
     CirclingWind::Result result = circling_wind.NewSample(replay->Basic());
     if (result.quality > 0) {
-      fixed mag = hypot(result.wind.x, result.wind.y);
+      fixed mag = result.wind.Magnitude();
 
       Angle bearing;
       if (result.wind.y == fixed_zero && result.wind.x == fixed_zero)

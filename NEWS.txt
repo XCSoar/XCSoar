@@ -15,6 +15,19 @@ Version 6.4 - not yet released
 * Android
   - support x86 and MIPS CPUs
 
+Version 6.3.4 - not yet released
+* calculations
+  - fix overflow in ETE/ETA calculations on big tasks (#2066)
+  - fix bogus landing detection right after takeoff (#2081)
+* task manager
+  - fix FAI start/finish line length (#2079)
+* devices
+  - CAI302: fix connection lost after MacCready update (#2029)
+* user interface
+  - increase double click interval to 500ms (#2088)
+* map
+  - sanitise map scale (#2086)
+
 Version 6.3.3 - 2012/05/05
 * calculations
   - use arrival height instead of terrain safety height for MC0 Alt.D

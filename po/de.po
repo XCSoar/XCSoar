@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-05-02 06:09+0000\n"
-"Last-Translator: Dennis Baudys <Unknown>\n"
+"PO-Revision-Date: 2012-05-15 06:34+0000\n"
+"Last-Translator: Wolfgang Feller <mail.wolfgang.feller@googlemail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-02 21:41+0000\n"
-"X-Generator: Launchpad (build 15185)\n"
+"X-Launchpad-Export-Date: 2012-05-19 10:00+0000\n"
+"X-Generator: Launchpad (build 15259)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -4834,7 +4834,7 @@ msgstr "Reiter-Dialogstil"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:176
 msgid "Message display"
-msgstr "Nchrichtenanzeige"
+msgstr "Nachrichtenanzeige"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:180
 msgid "Dialog size"
@@ -8001,7 +8001,7 @@ msgstr "Aufgabentyp"
 
 #: Data/Dialogs/dlgTarget.xml:10
 msgid "delta T"
-msgstr "delta T, Zeitunterschied"
+msgstr "Zeit drüber"
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:5
 msgid "Set WP"
@@ -8194,7 +8194,7 @@ msgstr "Wölbklappe in Landestellung"
 
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:33
 msgid "V rem."
-msgstr "V verbl."
+msgstr "V zu fliegen"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
@@ -8617,7 +8617,7 @@ msgstr "Kursivschrift"
 
 #: Data/Dialogs/dlgTarget_L.xml:28
 msgid "Delta T"
-msgstr "Delta T"
+msgstr "Zeit drüber"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:12
 #: Data/Dialogs/dlgAirspaceSelect.xml:12

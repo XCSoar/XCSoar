@@ -71,7 +71,8 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
     }
 
     // Calculate distance
-    traffic.distance = hypot(traffic.relative_north, traffic.relative_east);
+    traffic.distance = SmallHypot(traffic.relative_north,
+                                  traffic.relative_east);
 
     // Calculate Location
     traffic.location_available = basic.location_available;

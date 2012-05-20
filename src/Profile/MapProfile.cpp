@@ -121,10 +121,12 @@ Profile::Load(MapSettings &settings)
 
   fixed tmp;
   if (Profile::Get(szProfileClimbMapScale, tmp))
-    settings.circling_scale = tmp / 10000;
+    settings.circling_scale =
+      std::max(fixed(0.0003), std::min(tmp / 10000, fixed(10)));
 
   if (Profile::Get(szProfileCruiseMapScale, tmp))
-    settings.cruise_scale = tmp / 10000;
+    settings.cruise_scale =
+      std::max(fixed(0.0003), std::min(tmp / 10000, fixed(10)));
 
   GetEnum(szProfileMapShiftBias, settings.map_shift_bias);
   Get(szProfileEnableFLARMMap, settings.show_flarm_on_map);

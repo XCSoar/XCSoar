@@ -84,7 +84,7 @@ AircraftStateFilter::Update(const AircraftState &state)
 fixed
 AircraftStateFilter::GetSpeed() const
 {
-  return hypot(v_x, v_y);
+  return SmallHypot(v_x, v_y);
 }
 
 Angle

@@ -56,7 +56,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
         (numsteps - 1) + fixed(fs.altitude_base.y_min);
 
     wind = wind_store.GetWind(nmea_info.time, h, found);
-    mag = hypot(wind.x, wind.y);
+    mag = wind.Magnitude();
 
     windstats_mag.LeastSquaresUpdate(mag, h);
   }
@@ -90,7 +90,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
       windstats_mag.x_max = fixed_one; // prevent /0 problems
     wind.x /= fixed(windstats_mag.x_max);
     wind.y /= fixed(windstats_mag.x_max);
-    mag = hypot(wind.x, wind.y);
+    mag = wind.Magnitude();
     if (negative(mag))
       continue;
 

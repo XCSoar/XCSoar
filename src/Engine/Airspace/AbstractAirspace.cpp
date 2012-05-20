@@ -265,7 +265,7 @@ AbstractAirspace::GetClearance(const TaskProjection &projection) const
   for (auto i= m_clearance.begin(); i != m_clearance.end(); ++i) {
     FlatGeoPoint p = i->get_flatLocation();
     FlatRay r(center, p);
-    int mag = hypot(r.vector.Longitude, r.vector.Latitude);
+    int mag = r.Magnitude();
     int mag_new = mag + RADIUS;
     p = r.Parametric((fixed)mag_new / mag);
     *i = SearchPoint(projection.unproject(p), p);

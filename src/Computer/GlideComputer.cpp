@@ -274,7 +274,7 @@ void
 GlideComputer::OnTakeoff()
 {
   // reset stats on takeoff
-  air_data_computer.ResetFlight(SetCalculated(), GetComputerSettings());
+  air_data_computer.ResetFlight(SetCalculated(), GetComputerSettings(), false);
 
   // save stats in case we never finish
   SaveFinish();

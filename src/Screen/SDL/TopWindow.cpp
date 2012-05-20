@@ -202,7 +202,7 @@ TopWindow::OnEvent(const SDL_Event &event)
       return OnMouseWheel(event.button.x, event.button.y, -1);
 
     static PeriodClock double_click;
-    return double_click.CheckAlwaysUpdate(300)
+    return double_click.CheckAlwaysUpdate(500)
       ? OnMouseDown(event.button.x, event.button.y)
       : OnMouseDouble(event.button.x, event.button.y);
 

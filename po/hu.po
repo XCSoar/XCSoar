@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-04-20 13:10+0000\n"
-"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
+"PO-Revision-Date: 2012-05-13 17:32+0000\n"
+"Last-Translator: Habdák Zoltán <hapci@msn.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-02 21:41+0000\n"
-"X-Generator: Launchpad (build 15185)\n"
+"X-Launchpad-Export-Date: 2012-05-19 10:01+0000\n"
+"X-Generator: Launchpad (build 15259)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -35,7 +35,7 @@ msgstr "Feladat"
 
 #: src/Airspace/AirspaceGlue.cpp:41
 msgid "Loading Airspace File..."
-msgstr "Légtér (Airspace) file betöltése..."
+msgstr "Légtér fájl betöltése"
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Parse Error at Line"
@@ -56,7 +56,7 @@ msgstr "Légtér"
 
 #: src/Airspace/AirspaceParser.cpp:875
 msgid "Unknown airspace filetype"
-msgstr "Ismerelen légtér file típus"
+msgstr "Ismeretlen légtér fájl típus"
 
 #: src/ConditionMonitor/ConditionMonitorAATTime.cpp:50
 msgid "Expect early task arrival"
@@ -2537,7 +2537,7 @@ msgstr "Tengerszint feletti"
 
 #: src/Renderer/MapItemListRenderer.cpp:179
 msgid "around terrain"
-msgstr ""
+msgstr "terep körül"
 
 #: src/Renderer/MapItemListRenderer.cpp:199
 msgid "Arrival altitude incl. safety height"
@@ -2883,7 +2883,7 @@ msgstr "Emelkedési trend"
 
 #: src/Renderer/GlidePolarRenderer.cpp:47
 msgid "L/D"
-msgstr ""
+msgstr "L/D"
 
 #: src/Renderer/GlidePolarRenderer.cpp:51
 msgid "Min. sink"
@@ -4369,6 +4369,8 @@ msgid ""
 "Uses trending average during task, then fastest arrival when in final glide "
 "mode."
 msgstr ""
+"Trend átlag használata feladat közben, ezután a leggyorsabb érkezés "
+"végsiklás módban"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:71
 msgid "Auto MC mode"
@@ -4423,12 +4425,12 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:96
 #, no-c-format
 msgid "Preferred period for paragliders."
-msgstr ""
+msgstr "Ajánlott időtartam siklóernyősöknek"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:99
 #, no-c-format
 msgid "Preferred period for gliders."
-msgstr ""
+msgstr "Ajánlott időtartam siklóernyősöknek"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:105
 msgid "L/D average period"
@@ -4446,7 +4448,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:111
 msgid "Predict wind drift"
-msgstr ""
+msgstr "Szélsodrás becslése"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:112
 msgid ""
@@ -4551,11 +4553,11 @@ msgstr "A szövegbevitel (fájlnév, csapatkód, stb.) módját határozza meg."
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:210
 #, no-c-format
 msgid "OS settings"
-msgstr ""
+msgstr "Oprendszer beállítások"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:216
 msgid "Haptic feedback"
-msgstr ""
+msgstr "Rezgő visszajelzés"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:217
 msgid "Determines if haptic feedback like vibration is used."
@@ -4580,12 +4582,12 @@ msgstr "Fekvő"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:58
 #, no-c-format
 msgid "Reverse Portrait"
-msgstr "Fordított portré"
+msgstr "Fordított álló"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:60
 #, no-c-format
 msgid "Reverse Landscape"
-msgstr "Fordított tájkép"
+msgstr "Fordított fekvő"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:66
 #, no-c-format
@@ -4600,7 +4602,7 @@ msgstr "8 lent (Álló)"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:70
 #, no-c-format
 msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 lent + varió (portré)"
+msgstr "8 lent + varió (álló)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:72
 #, no-c-format
@@ -4630,7 +4632,7 @@ msgstr "9 jobbra + varió (Fekvő)"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:82
 #, no-c-format
 msgid "9 Left + Right + Vario (Landscape)"
-msgstr ""
+msgstr "9 Bal + Jobb + Varió (Fekvő)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
 #, no-c-format
@@ -4650,7 +4652,7 @@ msgstr "12 alul (Álló)"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:90
 #, no-c-format
 msgid "12 Top (Portrait)"
-msgstr "12 felül"
+msgstr "12 felül (Álló)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:92
 #, no-c-format
@@ -4725,7 +4727,7 @@ msgstr "Középen"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:124
 #, no-c-format
 msgid "Center the status message boxes."
-msgstr ""
+msgstr "Státusz doboz középen"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:125
 #, no-c-format
@@ -4735,7 +4737,7 @@ msgstr "Balrafent"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:125
 #, no-c-format
 msgid "Show status message boxes in the top left corner."
-msgstr ""
+msgstr "Státusz doboz bal felső sarokban"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:129
 #, no-c-format
@@ -4801,7 +4803,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:169
 msgid "FLARM display"
-msgstr ""
+msgstr "FLARM megjelenítés"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:173
 msgid "Tab dialog style"
@@ -4809,11 +4811,11 @@ msgstr "Füles ablakok stílusa"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:176
 msgid "Message display"
-msgstr ""
+msgstr "Üzenet megjelenítés"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:180
 msgid "Dialog size"
-msgstr ""
+msgstr "Párbeszéd méret"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:184
 msgid "Inverse InfoBoxes"
@@ -4844,7 +4846,7 @@ msgstr "Kijelző keret"
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:61
 #, no-c-format
 msgid "Start only"
-msgstr ""
+msgstr "Csak kezdés"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:75
 msgid "Time step cruise"
@@ -4908,11 +4910,11 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:106
 msgid "Log book"
-msgstr ""
+msgstr "Naplózás"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:106
 msgid "Logs each start and landing."
-msgstr ""
+msgstr "Minden fel és leszállás naplózása"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:44
 #, no-c-format
@@ -5033,7 +5035,7 @@ msgstr "Az automata nagyítás felső határa."
 
 #: src/Dialogs/ConfigPanels/PagesConfigPanel.cpp:82
 msgid "Page"
-msgstr ""
+msgstr "Oldal"
 
 #: src/Dialogs/ConfigPanels/PagesConfigPanel.cpp:84
 msgid "Determines the information displayed on different screen pages."
@@ -5046,22 +5048,22 @@ msgstr "Poláris neve"
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:102
 #, no-c-format
 msgid "Neither airspace nor terrain is used for route planning."
-msgstr ""
+msgstr "Ne használjon se légteret se terepet az útvonal tervezéshez"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:104
 #, no-c-format
 msgid "Routes will avoid terrain."
-msgstr ""
+msgstr "Útvonal elkerüli a terepet"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:106
 #, no-c-format
 msgid "Routes will avoid airspace."
-msgstr ""
+msgstr "Útvonal elkerüli a légteret"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:108
 #, no-c-format
 msgid "Routes will avoid airspace and terrain."
-msgstr ""
+msgstr "Útvonal elkerüli a légteret és a trepet"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:112
 msgid "Route mode"
@@ -5438,7 +5440,7 @@ msgstr "Nyíl fej"
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:118
 #, no-c-format
 msgid "Draws an arrow head only."
-msgstr ""
+msgstr "Csak a nyílfej rajzolása"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:119
 #, no-c-format
@@ -5448,7 +5450,7 @@ msgstr "Teljes nyíl"
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:119
 #, no-c-format
 msgid "Draws an arrow head with a dashed arrow line."
-msgstr ""
+msgstr "Nyílfej rajzolása szaggatott vonallal"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:128
 msgid "Track bearing"
@@ -5624,7 +5626,7 @@ msgstr ""
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
 msgid "Finish height ref."
-msgstr ""
+msgstr "Befejező magasság referencia"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:124
 #, no-c-format
@@ -5652,6 +5654,8 @@ msgid ""
 "A combination of Classic and FAI rules. 30% of the FAI score are added to "
 "the Classic score."
 msgstr ""
+"Klasszikus és FAI szabályok kombinációja. 30%-a a FAI pontoknak hozzáadva a "
+"Klasszikus pontokhoz"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:138
 msgid "On-Line Contest"
@@ -5666,7 +5670,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:79
 #, no-c-format
 msgid "Gate width"
-msgstr ""
+msgstr "Kapu szélessége"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:80
 #: src/Dialogs/dlgTaskHelpers.cpp:242 src/Dialogs/dlgTaskHelpers.cpp:254
@@ -5688,6 +5692,7 @@ msgstr "Új feladatok alap starttípusa."
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:135
 msgid "Default radius or gate width of the start zone for new tasks."
 msgstr ""
+"Új feladat indulási területének alapértelmezett sugara illetve kapu szélesége"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:141
 msgid "Finish point"
@@ -5700,6 +5705,7 @@ msgstr "Új feladatok célszektorának alap típusa."
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:160
 msgid "Default radius or gate width of the finish zone in new tasks."
 msgstr ""
+"Alapértelmezett sugár vagy kapu magasság a befejező zónában új feladatban"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:166
 msgid "Turn point"
@@ -5848,19 +5854,19 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:125
 #, no-c-format
 msgid "Load a set of units."
-msgstr ""
+msgstr "Mértékegysége beállítások beöltése"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:126
 msgid "Preset"
-msgstr ""
+msgstr "Beállítás"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:130
 msgid "Custom"
-msgstr ""
+msgstr "Egyéni"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:130
 msgid "My individual set of units."
-msgstr ""
+msgstr "Egyéni mértékegység beállítások betöltése"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:141
 #, no-c-format
@@ -5889,7 +5895,7 @@ msgstr "A vízszintes távolságokhoz használt mértékegység (fordulópont, t
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:165
 msgid "Units used for vertical speeds (variometer)."
-msgstr ""
+msgstr "Vertikális sebességhez (vario) használt mértékegység"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:172
 msgid "Lift"
@@ -5923,7 +5929,7 @@ msgstr "Feladat sebesség"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:207
 msgid "Units used for pressures."
-msgstr ""
+msgstr "Nyomáshoz használt mértékegység"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:221
 msgid "Units used for latitude and longitude."
@@ -6063,7 +6069,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:122
 #, no-c-format
 msgid "Required glide ratio"
-msgstr ""
+msgstr "Szükséges siklószám"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:126
 msgid "Determines how arrival height is displayed in waypoint labels"
@@ -6072,7 +6078,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:130
 #, no-c-format
 msgid "Select a label shape."
-msgstr ""
+msgstr "Címke alak kiválasztása"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:132
 #, no-c-format
@@ -6474,7 +6480,7 @@ msgstr "Szektor"
 #: src/Dialogs/dlgTaskHelpers.cpp:248 Data/Dialogs/dlgTaskPoint.xml:19
 #: Data/Dialogs/dlgTaskPoint_L.xml:23
 msgid "Gate Width"
-msgstr ""
+msgstr "Kapu szélesség"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:254
 msgid "Cylinder"
@@ -6494,27 +6500,30 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:272
 msgid "BGA Start Sector"
-msgstr ""
+msgstr "BGA Induló Szektor"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:284
 msgid ""
 "A 90 degree sector with 1km radius. Cross corner edge from inside area to "
 "start."
 msgstr ""
+"Egy 90°-os 1km sugarú szektor. Induláshoz sarokszél keresztezése belülről."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:286
 msgid ""
 "A straight line start gate.  Cross start gate from inside area to start."
-msgstr ""
+msgstr "Egyenes vonalú induló kapu.  Induláshoz kapu keresztezése belülről."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:288
 msgid "A cylinder.  Exit area to start."
-msgstr ""
+msgstr "Egy henger. Kilépő terület az induláshoz"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:290
 msgid ""
 "A 180 degree sector with 5km radius.  Exit area in any direction to start."
 msgstr ""
+"Egy 180 fokos szektor 5km-es sugárral. Kilépő terület az induláshoz bármely "
+"irányban"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:292
 msgid ""
@@ -6562,15 +6571,15 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:314
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
-msgstr ""
+msgstr "Egy 90 fokos szektor 1km sugárral. Él keresztezése a befejezéshez"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:316
 msgid "Cross finish gate line into area to finish."
-msgstr ""
+msgstr "Keresztezze a célkapu vonalát a területen a befejezéshez"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:318
 msgid "Enter cylinder to finish."
-msgstr ""
+msgstr "Lépjen be a hengerbe a befejezéshez"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:330
 msgid "FAI start quadrant"
@@ -6823,22 +6832,22 @@ msgstr "METAR és TAF"
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:91
 #, no-c-format
 msgid "Glider"
-msgstr ""
+msgstr "Vitorlázó repülő"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:92
 #, no-c-format
 msgid "Paraglider"
-msgstr ""
+msgstr "Siklóernyő"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:93
 #, no-c-format
 msgid "Powered aircraft"
-msgstr ""
+msgstr "Motors repülőgép"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:94
 #, no-c-format
 msgid "Hot-air balloon"
-msgstr ""
+msgstr "Hőlég ballon"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:106
 msgid "Tracking Interval"
@@ -6846,40 +6855,40 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
 msgid "Vehicle Type"
-msgstr ""
+msgstr "Jármű típusa"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
 msgid "Type of vehicle used."
-msgstr ""
+msgstr "Használt jármű típusa"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:115
 msgid "Server"
-msgstr ""
+msgstr "Szerver"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:119
 msgid "Username"
-msgstr ""
+msgstr "Felhasználónév"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:120
 msgid "Password"
-msgstr ""
+msgstr "Jelszó"
 
 #: src/Weather/NOAAFormatter.cpp:132 src/Weather/NOAAFormatter.cpp:139
 msgid "Dew Point"
-msgstr ""
+msgstr "Harmatpont"
 
 #: src/Weather/NOAAFormatter.cpp:166
 msgid "Visibility"
-msgstr ""
+msgstr "Látótávolság"
 
 #: src/Weather/NOAAFormatter.cpp:175
 #, c-format
 msgid "more than %s"
-msgstr ""
+msgstr "Több mint %s"
 
 #: src/Weather/NOAAFormatter.cpp:189
 msgid "Sky Conditions"
-msgstr ""
+msgstr "Felhőviszonyok"
 
 #: src/Weather/NOAAFormatter.cpp:203 Data/Input/default.xci:832
 msgid "Weather"
@@ -6888,7 +6897,7 @@ msgstr "Időjárás"
 #: src/Weather/NOAAFormatter.cpp:251
 #, c-format
 msgid "METAR for %s:"
-msgstr ""
+msgstr "METAR %s-nak:"
 
 #: src/Weather/NOAAFormatter.cpp:279
 msgid "No METAR available!"
@@ -6936,7 +6945,7 @@ msgstr "Intervallum; telep"
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:33
 #, no-c-format
 msgid "Step"
-msgstr ""
+msgstr "Lépés"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:34
 #, no-c-format
@@ -7221,7 +7230,7 @@ msgstr "Max. jelentett objektumok"
 #: src/Dialogs/Vega/FlarmAlertParameters.hpp:45
 #, no-c-format
 msgid "Max. reported"
-msgstr ""
+msgstr "Max. jelentett"
 
 #: src/Dialogs/Vega/FlarmAlertParameters.hpp:47
 #, no-c-format
@@ -7673,7 +7682,7 @@ msgstr "Rendben"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:53 Data/Dialogs/dlgPlaneDetails_L.xml:45
 msgid "Max. Cruise Speed"
-msgstr ""
+msgstr "Max utazó sebesség"
 
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
 msgid "Auto. wind"
@@ -7681,7 +7690,7 @@ msgstr "Szélszámítás"
 
 #: Data/Dialogs/dlgTarget.xml:32 Data/Dialogs/dlgTarget_L.xml:38
 msgid "Optimized"
-msgstr ""
+msgstr "Optimalizált"
 
 #: Data/Dialogs/dlgConfiguration.xml:8 Data/Dialogs/dlgConfiguration_L.xml:4
 msgid "Expert"
@@ -7728,7 +7737,7 @@ msgstr "Az átlagemelést körözésben beolvasó hangjelzés engedélyezése."
 
 #: Data/Dialogs/dlgTaskPoint.xml:19 Data/Dialogs/dlgTaskPoint_L.xml:23
 msgid "Width of the start/finish gate."
-msgstr ""
+msgstr "Kezdő/Cél kapu szélessége"
 
 #: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:15
 #: Data/Dialogs/dlgTarget_L.xml:33 Data/Dialogs/pnlTaskCalculator.xml:33
@@ -7768,7 +7777,7 @@ msgstr ""
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:33
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:33
 msgid "Dry mass of the glider (pilot + empty mass)."
-msgstr ""
+msgstr "Üres vitorlázórepülő súly (pilóta + üres súly)"
 
 #: Data/Dialogs/dlgTeamCode.xml:10 Data/Dialogs/dlgTeamCode_L.xml:10
 msgid "Own code"
@@ -7858,12 +7867,12 @@ msgstr "Leszállás"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:39 Data/Dialogs/dlgPlaneDetails_L.xml:33
 msgid "Max. Ballast"
-msgstr ""
+msgstr "Max. Ballaszt"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:7
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
 msgid "Callsign"
-msgstr ""
+msgstr "Hívójel"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
@@ -7892,7 +7901,7 @@ msgstr "FP kezelő"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:32 Data/Dialogs/dlgPlaneDetails_L.xml:26
 msgid "Wing Area"
-msgstr ""
+msgstr "Szárnyfelület"
 
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:28
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:28
@@ -7932,7 +7941,7 @@ msgstr "FAI start/cél szabályok"
 
 #: Data/Dialogs/dlgPlanes.xml:3 Data/Dialogs/dlgPlanes_L.xml:3
 msgid "Planes"
-msgstr ""
+msgstr "Repülőgépek"
 
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
@@ -8171,7 +8180,7 @@ msgstr "Export"
 
 #: Data/Dialogs/dlgConfiguration.xml:19 Data/Dialogs/dlgConfiguration_L.xml:19
 msgid "Configuration Menu"
-msgstr ""
+msgstr "Konfigurációs menü"
 
 #: Data/Dialogs/dlgPlanePolar.xml:57 Data/Dialogs/dlgPlanePolar_L.xml:45
 msgid "Dry Mass"
@@ -8238,7 +8247,7 @@ msgstr "Dőlt"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:21
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:6
 msgid "Friends"
-msgstr ""
+msgstr "Barátok"
 
 #: Data/Dialogs/dlgStatusTask.xml:4 Data/Dialogs/pnlStatusTask.xml:4
 #: Data/Dialogs/pnlTaskCalculator_L.xml:10
@@ -8390,7 +8399,7 @@ msgstr "Sárga"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:5 Data/Dialogs/dlgPlaneDetails_L.xml:5
 msgid "Registration"
-msgstr ""
+msgstr "Regisztráció"
 
 #: Data/Dialogs/dlgTarget.xml:25 Data/Dialogs/dlgTarget_L.xml:18
 msgid "Radial"
@@ -8398,7 +8407,7 @@ msgstr "Radiál"
 
 #: Data/Dialogs/pnlStatusTimes.xml:5
 msgid "UTC time"
-msgstr ""
+msgstr "UTC idő"
 
 #: Data/Dialogs/dlgConfigWaypoints.xml:3
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:3
@@ -8408,12 +8417,12 @@ msgstr "Fordulópontok kezelése"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:23
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:8
 msgid "Blue"
-msgstr ""
+msgstr "kék"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:22
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:7
 msgid "Green"
-msgstr ""
+msgstr "zöld"
 
 #: Data/Dialogs/dlgTarget.xml:10 Data/Dialogs/dlgTarget_L.xml:28
 msgid ""
@@ -8449,7 +8458,7 @@ msgstr "Varió demó"
 
 #: Data/Dialogs/pnlStatusTimes.xml:6
 msgid "UTC date"
-msgstr ""
+msgstr "UTC dátum"
 
 #: Data/Dialogs/dlgStatusSystem.xml:5 Data/Dialogs/pnlStatusSystem.xml:5
 msgid "Satellites in view"
@@ -8517,7 +8526,7 @@ msgstr "Feladat becsült ideje"
 
 #: Data/Dialogs/dlgNOAAList.xml:6 Data/Dialogs/dlgNOAAList_L.xml:8
 msgid "Add"
-msgstr ""
+msgstr "Hozzáadás"
 
 #: Data/Dialogs/dlgStatusSystem.xml:6 Data/Dialogs/pnlStatusSystem.xml:6
 msgid "Variometer"
@@ -8615,11 +8624,11 @@ msgstr "Repülőgép Státusz"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:16
 msgid "Change callsign"
-msgstr ""
+msgstr "Hívójel változtatása"
 
 #: Data/Input/default.xci:661 Data/Input/default.xci:1196
 msgid "Setup Plane"
-msgstr ""
+msgstr "Repülőgép beállítás"
 
 #: Data/Input/default.xci:523 Data/Input/default.xci:1124
 msgid "Topo."
@@ -8694,7 +8703,7 @@ msgstr ""
 msgid ""
 "What's\n"
 "here?"
-msgstr ""
+msgstr "Mi van itt?"
 
 #: Data/Input/default.xci:426 Data/Input/default.xci:1068
 msgid ""
@@ -8873,7 +8882,7 @@ msgstr "Közelít"
 
 #: Data/Input/default.xci:962
 msgid "Return"
-msgstr ""
+msgstr "Vissza"
 
 #: Data/Input/default.xci:612 Data/Input/default.xci:1165
 msgid ""
@@ -8909,6 +8918,8 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
+"METAR\n"
+"TAF"
 
 #~ msgid "Unknown Filetype."
 #~ msgstr "Ismeretlen file típus."

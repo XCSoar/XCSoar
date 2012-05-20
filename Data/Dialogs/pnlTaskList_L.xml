@@ -16,7 +16,7 @@
     <Panel Name="frmBrowseSub">
       <List Name="frmTasks" X="0" Y="0" Height="148" ItemHeight="18"/>
 
-      <Label Name="frmSummary1" X="80" Y="150" Height="38" Border="0"/>
+      <Label Name="frmSummary1" X="2" Y="150" Height="38" Border="0"/>
 
       <Button Name="cmdLoad" Caption="Load" X="2" Y="188" Width="58" Height="35" OnClick="OnLoadClicked"/>
       <Button Name="cmdRename" Caption="Rename" X="62" Y="188" Width="58" Height="35" OnClick="OnRenameClicked"/>

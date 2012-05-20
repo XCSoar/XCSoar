@@ -172,7 +172,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
-    TrueAirspeedEstimated = hypot(x0, y0);
+    TrueAirspeedEstimated = SmallHypot(x0, y0);
   }
 
   basic.true_airspeed = TrueAirspeedEstimated;

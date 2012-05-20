@@ -126,5 +126,16 @@ CAI302Device::LinkTimeout()
 bool
 CAI302Device::EnableNMEA(OperationEnvironment &env)
 {
-  return CAI302::LogMode(port, env);
+  if (mode == Mode::NMEA)
+    return true;
+
+  port.StopRxThread();
+
+  if (CAI302::LogMode(port, env)) {
+    mode = Mode::NMEA;
+    return true;
+  } else {
+    mode = Mode::UNKNOWN;
+    return false;
+  }
 }

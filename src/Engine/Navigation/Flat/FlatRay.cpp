@@ -26,6 +26,12 @@
 
 #define sgn(x) (x >= 0 ? 1 : -1)
 
+int
+FlatRay::Magnitude() const
+{
+  return ihypot(vector.Longitude, vector.Latitude);
+}
+
 /*
  * Checks whether two lines intersect or not
  * @see http://local.wasp.uwa.edu.au/~pbourke/geometry/lineline2d/

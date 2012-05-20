@@ -48,7 +48,7 @@ struct Vector {
 
   gcc_pure
   fixed Magnitude() const {
-    return hypot(x, y);
+    return MediumHypot(x, y);
   }
 };
 

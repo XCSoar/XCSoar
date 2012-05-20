@@ -24,6 +24,7 @@ Copyright_License {
 #include "Android/TextUtil.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
+#include "Java/Exception.hpp"
 #include "Screen/Point.hpp"
 
 JNIEnv *TextUtil::env(NULL);
@@ -110,12 +111,11 @@ TextUtil::getTextBounds(const char *text) const
   jintArray paramExtent = (jintArray)
     env->CallObjectMethod(Get(), midGetTextBounds,
                           text2.Get());
-  if (paramExtent != NULL) {
+  if (!Java::DiscardException(env)) {
     env->GetIntArrayRegion(paramExtent, 0, 2, extent);
     env->DeleteLocalRef(paramExtent);
   } else {
     /* Java exception has occurred; return zeroes */
-    env->ExceptionClear();
     extent[0] = 0;
     extent[1] = 0;
   }
@@ -133,11 +133,10 @@ TextUtil::getTextTextureGL(const char *text) const
     env->CallObjectMethod(Get(), midGetTextTextureGL,
                           text2.Get());
   jint result[3];
-  if (jresult != NULL) {
+  if (!Java::DiscardException(env)) {
     env->GetIntArrayRegion(jresult, 0, 3, result);
     env->DeleteLocalRef(jresult);
   } else {
-    env->ExceptionClear();
     result[0] = result[1] = result[2] = 0;
   }
 

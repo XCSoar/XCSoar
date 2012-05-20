@@ -192,7 +192,7 @@ TopWindow::OnEvent(const Event &event)
 
   case Event::MOUSE_DOWN:
     static PeriodClock double_click;
-    return double_click.CheckAlwaysUpdate(300)
+    return double_click.CheckAlwaysUpdate(500)
       ? OnMouseDown(event.x, event.y)
       : OnMouseDouble(event.x, event.y);
 
