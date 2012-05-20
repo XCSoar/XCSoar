@@ -184,7 +184,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   for (unsigned i = 0; i < LX::MemorySection::N && lengths[i] > 0; ++i) {
     if (!LX::ReceivePacket(port, (LX::Command)(LX::READ_LOGGER_DATA + i),
                            p, lengths[i], env, 60000)) {
-      free(data);
+      delete [] data;
       return false;
     }
 
@@ -193,7 +193,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   }
 
   bool success = LX::ConvertLXNToIGC(data, total_length, file);
-  free(data);
+  delete [] data;
 
   return success;
 }
