@@ -51,6 +51,12 @@ public:
      fy(vector.Latitude != 0 ? 1.0 / vector.Latitude : 0) {}
 
   /**
+   * Return the length of the ray.
+   */
+  gcc_pure
+  int Magnitude() const;
+
+  /**
    * Test whether two rays intersect
    *
    * @param that Other ray to test intersection with
