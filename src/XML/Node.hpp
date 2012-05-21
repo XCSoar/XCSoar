@@ -183,10 +183,10 @@ public:
    *
    * @param writer the stream to write the XML text to
 
-   * @param format 0 if no formatting is required, otherwise nonzero
+   * @param format false if no formatting is required, true
    * for formatted text with carriage returns and indentation.
    */
-  void Serialise(TextWriter &writer, int format) const;
+  void Serialise(TextWriter &writer, bool format) const;
 
   gcc_pure
   bool IsDeclaration() const {

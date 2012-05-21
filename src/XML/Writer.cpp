@@ -183,8 +183,7 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
 }
 
 void
-XMLNode::Serialise(TextWriter &writer, int format) const
+XMLNode::Serialise(TextWriter &writer, bool format) const
 {
-  format = format ? 0 : -1;
-  Serialise(*d, writer, format);
+  Serialise(*d, writer, format ? 0 : -1);
 }
