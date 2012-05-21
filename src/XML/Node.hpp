@@ -235,7 +235,7 @@ public:
   /**
    * Add a child node to the given element.
    */
-  XMLNode &AddChild(const TCHAR *name, bool is_declaration);
+  XMLNode &AddChild(const TCHAR *name, bool is_declaration=false);
 
   /**
    * Add an attribute to an element.
