@@ -14,6 +14,8 @@ Version 6.3.4 - not yet released
   - increase double click interval to 500ms (#2088)
 * map
   - sanitise map scale (#2086)
+* Android
+  - fix profile path on Samsung devices with external SD card (#2051)
 
 Version 6.3.3 - 2012/05/05
 * calculations
