@@ -86,6 +86,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Flytec.cpp \
 	$(DRIVER_SRC_DIR)/Generic.cpp \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
+	$(DRIVER_SRC_DIR)/GTAltimeter.cpp \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \
 	$(DRIVER_SRC_DIR)/PosiGraph.cpp \
 	$(DRIVER_SRC_DIR)/XCOM760.cpp \
