@@ -43,12 +43,22 @@ struct Result {
 static Trace full_trace(60, Trace::null_time, 256);
 static Trace sprint_trace(0, 9000, 64);
 
+static void
+Update(const MoreData &basic, const DerivedInfo &calculated,
+       Result &result)
+{
+  if (!basic.date_available)
+    return;
+
+  if (!result.date.Plausible())
+    result.date = basic.date_time_utc;
+}
+
 static int
 Run(DebugReplay &replay, ContestManager &contest, Result &result)
 {
   for (int i = 1; replay.Next(); i++) {
-    if (replay.Basic().date_available && !result.date.Plausible())
-      result.date = replay.Basic().date_time_utc;
+    Update(replay.Basic(), replay.Calculated(), result);
 
     const AircraftState state =
       ToAircraftState(replay.Basic(), replay.Calculated());
