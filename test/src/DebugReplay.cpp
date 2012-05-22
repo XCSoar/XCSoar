@@ -148,6 +148,13 @@ DebugReplayIGC::Next()
         Compute();
         return true;
       }
+    } else if (line[0] == 'H') {
+      BrokenDate date;
+      if (memcmp(line, "HFDTE", 5) == 0 &&
+          IGCParseDate(line, date)) {
+        (BrokenDate &)basic.date_time_utc = date;
+        basic.date_available = true;
+      }
     }
   }
 
@@ -159,13 +166,9 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
 {
   basic.clock = basic.time = fixed(fix.time.GetSecondOfDay());
   basic.time_available.Update(basic.clock);
-  basic.date_time_utc.year = 2011;
-  basic.date_time_utc.month = 6;
-  basic.date_time_utc.day = 5;
   basic.date_time_utc.hour = fix.time.hour;
   basic.date_time_utc.minute = fix.time.minute;
   basic.date_time_utc.second = fix.time.second;
-  basic.date_available = true;
   basic.alive.Update(basic.clock);
   basic.location = fix.location;
   basic.location_available.Update(basic.clock);
