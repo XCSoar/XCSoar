@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-05-13 15:02+0000\n"
+"PO-Revision-Date: 2012-05-20 05:28+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-19 10:01+0000\n"
-"X-Generator: Launchpad (build 15259)\n"
+"X-Launchpad-Export-Date: 2012-05-22 17:27+0000\n"
+"X-Generator: Launchpad (build 15275)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -54,21 +54,21 @@ msgstr "空域"
 
 #: src/Airspace/AirspaceParser.cpp:875
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "空域ファイル形式が不適当です"
 
 #: src/ConditionMonitor/ConditionMonitorAATTime.cpp:50
 msgid "Expect early task arrival"
-msgstr ""
+msgstr "到着予定時刻"
 
 #: src/ConditionMonitor/ConditionMonitorStartRules.cpp:59
 msgid ""
 "Start rules slightly violated\n"
 "but within margin"
-msgstr ""
+msgstr "スタート　ルール違反　許容範囲内です"
 
 #: src/ConditionMonitor/ConditionMonitorStartRules.cpp:61
 msgid "Start rules violated"
-msgstr ""
+msgstr "スタート　ルール違反"
 
 #: src/ConditionMonitor/ConditionMonitorSunset.cpp:61
 msgid "Expect arrival past sunset"
@@ -84,7 +84,7 @@ msgstr "ロガー開始"
 
 #: src/Logger/Logger.cpp:117
 msgid "Logger inactive, insufficient storage!"
-msgstr ""
+msgstr "ロガーが作動していません　容量不足"
 
 #: src/Logger/Logger.cpp:118
 msgid "Logger Error"
@@ -96,7 +96,7 @@ msgstr "ロガー停止"
 
 #: src/Logger/ExternalLogger.cpp:87
 msgid "Declare task?"
-msgstr ""
+msgstr "タスクを宣言しますか？"
 
 #: src/Logger/ExternalLogger.cpp:96 src/Logger/ExternalLogger.cpp:128
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:397
@@ -121,12 +121,12 @@ msgstr "ロガーが未接続です"
 
 #: src/Logger/ExternalLogger.cpp:271
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "フライト　ファイルの読み込みに失敗しました"
 
 #: src/Logger/ExternalLogger.cpp:272 src/Logger/ExternalLogger.cpp:280
 #: src/Logger/ExternalLogger.cpp:297 src/Logger/ExternalLogger.cpp:324
 msgid "Download flight"
-msgstr ""
+msgstr "ファイルをダウンロード"
 
 #: src/Logger/ExternalLogger.cpp:279
 msgid "Logger is empty."
