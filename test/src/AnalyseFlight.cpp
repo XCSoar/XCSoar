@@ -30,14 +30,26 @@
 #include "XML/Node.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
+#include "Formatter/TimeFormatter.hpp"
+
+struct Result {
+  BrokenDate date;
+
+  Result() {
+    date.Clear();
+  }
+};
 
 static Trace full_trace(60, Trace::null_time, 256);
 static Trace sprint_trace(0, 9000, 64);
 
 static int
-Run(DebugReplay &replay, ContestManager &contest)
+Run(DebugReplay &replay, ContestManager &contest, Result &result)
 {
   for (int i = 1; replay.Next(); i++) {
+    if (replay.Basic().date_available && !result.date.Plausible())
+      result.date = replay.Basic().date_time_utc;
+
     const AircraftState state =
       ToAircraftState(replay.Basic(), replay.Calculated());
     full_trace.append(state);
@@ -47,6 +59,34 @@ Run(DebugReplay &replay, ContestManager &contest)
   contest.SolveExhaustive();
 
   return 0;
+}
+
+static void
+Add(XMLNode &root, const Result &result,
+    const MoreData &basic, const DerivedInfo &calculated)
+{
+  StaticString<64> buffer;
+
+  XMLNode &times = root.AddChild(_T("times"));
+  if (result.date.Plausible()) {
+    buffer.UnsafeFormat(_T("%04u-%02u-%02u"),
+                        result.date.year, result.date.month, result.date.day);
+    times.AddAttribute(_T("date"), buffer.c_str());
+  }
+
+  if (positive(calculated.flight.takeoff_time)) {
+    FormatTime(buffer.buffer(), calculated.flight.takeoff_time);
+    times.AddAttribute(_T("takeoff"), buffer.c_str());
+
+    if (positive(calculated.flight.flight_time)) {
+      FormatTime(buffer.buffer(), calculated.flight.flight_time);
+      times.AddAttribute(_T("duration"), buffer.c_str());
+
+      FormatTime(buffer.buffer(),
+                 calculated.flight.takeoff_time + calculated.flight.flight_time);
+      times.AddAttribute(_T("landing"), buffer.c_str());
+    }
+  }
 }
 
 static void
@@ -134,10 +174,13 @@ int main(int argc, char **argv)
   args.ExpectEnd();
 
   ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
-  Run(*replay, olc_plus);
-  delete replay;
+  Result result;
+  Run(*replay, olc_plus, result);
 
   XMLNode root = XMLNode::CreateRoot(_T("analysis"));
+  Add(root, result, replay->Basic(), replay->Calculated());
+  delete replay;
+
   AddOLCPlus(root, olc_plus.GetStats());
 
   TextWriter writer("/dev/stdout", true);

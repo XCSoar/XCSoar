@@ -1471,6 +1471,8 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/DateTime.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
