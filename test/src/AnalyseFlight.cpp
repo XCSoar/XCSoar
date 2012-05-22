@@ -33,10 +33,11 @@
 #include "Formatter/TimeFormatter.hpp"
 
 struct Result {
-  BrokenDate date;
+  BrokenDateTime takeoff_time, landing_time;
 
   Result() {
-    date.Clear();
+    takeoff_time.Clear();
+    landing_time.Clear();
   }
 };
 
@@ -47,11 +48,26 @@ static void
 Update(const MoreData &basic, const DerivedInfo &calculated,
        Result &result)
 {
-  if (!basic.date_available)
+  if (!basic.time_available || !basic.date_available)
     return;
 
-  if (!result.date.Plausible())
-    result.date = basic.date_time_utc;
+  if (calculated.flight.flying && !result.takeoff_time.Plausible())
+    result.takeoff_time = basic.date_time_utc;
+
+  if (!calculated.flight.flying && result.takeoff_time.Plausible() &&
+      !result.landing_time.Plausible())
+    result.landing_time = basic.date_time_utc;
+}
+
+static void
+Finish(const MoreData &basic, const DerivedInfo &calculated,
+       Result &result)
+{
+  if (!basic.time_available || !basic.date_available)
+    return;
+
+  if (result.takeoff_time.Plausible() && !result.landing_time.Plausible())
+    result.landing_time = basic.date_time_utc;
 }
 
 static int
@@ -68,6 +84,8 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
 
   contest.SolveExhaustive();
 
+  Finish(replay.Basic(), replay.Calculated(), result);
+
   return 0;
 }
 
@@ -78,24 +96,15 @@ Add(XMLNode &root, const Result &result,
   StaticString<64> buffer;
 
   XMLNode &times = root.AddChild(_T("times"));
-  if (result.date.Plausible()) {
-    buffer.UnsafeFormat(_T("%04u-%02u-%02u"),
-                        result.date.year, result.date.month, result.date.day);
-    times.AddAttribute(_T("date"), buffer.c_str());
+
+  if (result.takeoff_time.Plausible()) {
+    FormatISO8601(buffer.buffer(), result.takeoff_time);
+    times.AddAttribute(_T("takeoff"), buffer.c_str());
   }
 
-  if (positive(calculated.flight.takeoff_time)) {
-    FormatTime(buffer.buffer(), calculated.flight.takeoff_time);
-    times.AddAttribute(_T("takeoff"), buffer.c_str());
-
-    if (positive(calculated.flight.flight_time)) {
-      FormatTime(buffer.buffer(), calculated.flight.flight_time);
-      times.AddAttribute(_T("duration"), buffer.c_str());
-
-      FormatTime(buffer.buffer(),
-                 calculated.flight.takeoff_time + calculated.flight.flight_time);
-      times.AddAttribute(_T("landing"), buffer.c_str());
-    }
+  if (result.landing_time.Plausible()) {
+    FormatISO8601(buffer.buffer(), result.landing_time);
+    times.AddAttribute(_T("landing"), buffer.c_str());
   }
 }
 
