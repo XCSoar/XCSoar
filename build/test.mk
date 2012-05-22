@@ -668,6 +668,7 @@ DEBUG_PROGRAM_NAMES = \
 	FlightTable \
 	RunTrace \
 	RunOLCAnalysis \
+	FlightPath \
 	BenchmarkProjection \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	DumpHexColor \
@@ -1502,6 +1503,23 @@ ANALYSE_FLIGHT_SOURCES = \
 ANALYSE_FLIGHT_LDADD = $(DEBUG_REPLAY_LDADD)
 ANALYSE_FLIGHT_DEPENDS = UTIL MATH
 $(eval $(call link-program,AnalyseFlight,ANALYSE_FLIGHT))
+
+FLIGHT_PATH_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/FlightPath.cpp
+FLIGHT_PATH_LDADD = $(DEBUG_REPLAY_LDADD)
+FLIGHT_PATH_DEPENDS = UTIL MATH
+$(eval $(call link-program,FlightPath,FLIGHT_PATH))
 
 RUN_CANVAS_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
