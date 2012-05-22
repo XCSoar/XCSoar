@@ -41,7 +41,7 @@ DataNodeXML::Load(const TCHAR* path)
 DataNodeXML
 DataNodeXML::CreateRoot(const TCHAR *node_name)
 {
-  XMLNode new_root = XMLNode::CreateRoot(_tcsdup(node_name));
+  XMLNode new_root = XMLNode::CreateRoot(node_name);
   return DataNodeXML(new_root);
 }
 
@@ -60,7 +60,7 @@ DataNodeXML::GetName() const
 DataNode*
 DataNodeXML::AppendChild(const TCHAR *name)
 {
-  return new DataNodeXML(node.AddChild(_tcsdup(name), false));
+  return new DataNodeXML(node.AddChild(name, false));
 }
 
 DataNode *
@@ -95,7 +95,7 @@ DataNodeXML::ListChildrenNamed(const TCHAR *name) const
 void
 DataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
 {
-  node.AddAttribute(_tcsdup(name), _tcsdup(value));
+  node.AddAttribute(name, value);
 }
 
 bool

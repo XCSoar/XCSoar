@@ -52,35 +52,35 @@ Run(DebugReplay &replay, ContestManager &contest)
 static void
 Add(XMLNode &parent, const TracePoint &point, const TracePoint *previous)
 {
-  XMLNode &node = parent.AddChild(_tcsdup(_T("point")));
+  XMLNode &node = parent.AddChild(_T("point"));
 
   StaticString<64> buffer;
 
   buffer.UnsafeFormat(_T("%u"), point.GetTime());
-  node.AddAttribute(_tcsdup(_T("time")), _tcsdup(buffer.c_str()));
+  node.AddAttribute(_T("time"), buffer.c_str());
 
   buffer.UnsafeFormat(_T("%f"),
                       (double)point.get_location().longitude.Degrees());
-  node.AddAttribute(_tcsdup(_T("longitude")), _tcsdup(buffer.c_str()));
+  node.AddAttribute(_T("longitude"), buffer.c_str());
 
   buffer.UnsafeFormat(_T("%f"),
                       (double)point.get_location().latitude.Degrees());
-  node.AddAttribute(_tcsdup(_T("latitude")), _tcsdup(buffer.c_str()));
+  node.AddAttribute(_T("latitude"), buffer.c_str());
 
   if (previous != NULL) {
     fixed distance = point.distance(previous->get_location());
     buffer.UnsafeFormat(_T("%u"), uround(distance));
-    node.AddAttribute(_tcsdup(_T("distance")), _tcsdup(buffer.c_str()));
+    node.AddAttribute(_T("distance"), buffer.c_str());
 
     unsigned duration =
       std::max((int)point.GetTime() - (int)previous->GetTime(), 0);
     buffer.UnsafeFormat(_T("%u"), duration);
-    node.AddAttribute(_tcsdup(_T("duration")), _tcsdup(buffer.c_str()));
+    node.AddAttribute(_T("duration"), buffer.c_str());
 
     if (duration > 0) {
       fixed speed = distance / duration;
       buffer.UnsafeFormat(_T("%1.2f"), (double)speed);
-      node.AddAttribute(_tcsdup(_T("speed")), _tcsdup(buffer.c_str()));
+      node.AddAttribute(_T("speed"), buffer.c_str());
     }
   }
 }
@@ -89,22 +89,22 @@ static void
 Add(XMLNode &parent, const TCHAR *name,
     const ContestResult &result, const ContestTraceVector &trace)
 {
-  XMLNode &node = parent.AddChild(_tcsdup(_T("trace")));
-  node.AddAttribute(_tcsdup(_T("name")), _tcsdup(name));
+  XMLNode &node = parent.AddChild(_T("trace"));
+  node.AddAttribute(_T("name"), name);
 
   StaticString<64> buffer;
 
   buffer.UnsafeFormat(_T("%1.2f"), (double)result.score);
-  node.AddAttribute(_tcsdup(_T("score")), _tcsdup(buffer.c_str()));
+  node.AddAttribute(_T("score"), buffer.c_str());
 
   buffer.UnsafeFormat(_T("%1.2f"), (double)result.distance);
-  node.AddAttribute(_tcsdup(_T("distance")), _tcsdup(buffer.c_str()));
+  node.AddAttribute(_T("distance"), buffer.c_str());
 
   buffer.UnsafeFormat(_T("%u"), uround(result.time));
-  node.AddAttribute(_tcsdup(_T("duration")), _tcsdup(buffer.c_str()));
+  node.AddAttribute(_T("duration"), buffer.c_str());
 
   buffer.UnsafeFormat(_T("%1.2f"), (double)result.speed);
-  node.AddAttribute(_tcsdup(_T("speed")), _tcsdup(buffer.c_str()));
+  node.AddAttribute(_T("speed"), buffer.c_str());
 
   const TracePoint *previous = NULL;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
@@ -116,8 +116,8 @@ Add(XMLNode &parent, const TCHAR *name,
 static void
 AddOLCPlus(XMLNode &parent, const ContestStatistics &stats)
 {
-  XMLNode &node = parent.AddChild(_tcsdup(_T("contest")));
-  node.AddAttribute(_tcsdup(_T("name")), _tcsdup(_T("olc_plus")));
+  XMLNode &node = parent.AddChild(_T("contest"));
+  node.AddAttribute(_T("name"), _T("olc_plus"));
 
   Add(node, _T("classic"), stats.result[0], stats.solution[0]);
   Add(node, _T("triangle"), stats.result[1], stats.solution[1]);
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
   Run(*replay, olc_plus);
   delete replay;
 
-  XMLNode root = XMLNode::CreateRoot(_tcsdup(_T("analysis")));
+  XMLNode root = XMLNode::CreateRoot(_T("analysis"));
   AddOLCPlus(root, olc_plus.GetStats());
 
   TextWriter writer("/dev/stdout", true);

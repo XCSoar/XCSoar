@@ -49,13 +49,6 @@
 
 #include <assert.h>
 
-XMLNode::Data::~Data()
-{
-  assert(ref_count == 0);
-
-  free((void*)const_cast<TCHAR *>(name));
-}
-
 void
 XMLNode::Data::Ref()
 {
@@ -86,6 +79,12 @@ XMLNode::XMLNode(const TCHAR *name, bool is_declaration)
   assert(d);
 }
 
+XMLNode::XMLNode(const TCHAR *name, size_t name_length, bool is_declaration)
+  :d(new Data(name, name_length, is_declaration))
+{
+  assert(d);
+}
+
 XMLNode &
 XMLNode::AddChild(const TCHAR *name, bool is_declaration)
 {
@@ -95,12 +94,13 @@ XMLNode::AddChild(const TCHAR *name, bool is_declaration)
   return d->children.back();
 }
 
-void
-XMLNode::AddAttribute(TCHAR *name, TCHAR *value)
+XMLNode &
+XMLNode::AddChild(const TCHAR *name, size_t name_length, bool is_declaration)
 {
   assert(name != NULL);
 
-  d->AddAttribute(name, value);
+  d->children.push_back(XMLNode(name, name_length, is_declaration));
+  return d->children.back();
 }
 
 void
@@ -147,7 +147,7 @@ XMLNode::GetChildNode(const TCHAR *name) const
 
   for (auto i = d->begin(), end = d->end(); i != end; ++i) {
     const XMLNode &node = *i;
-    if (_tcsicmp(node.d->name, name) == 0)
+    if (_tcsicmp(node.d->name.c_str(), name) == 0)
       return &node;
   }
 
@@ -162,8 +162,8 @@ XMLNode::GetAttribute(const TCHAR *name) const
 
   for (auto i = d->attributes.begin(), end = d->attributes.end();
        i != end; ++i)
-    if (_tcsicmp(i->name, name) == 0)
-      return i->value;
+    if (_tcsicmp(i->name.c_str(), name) == 0)
+      return i->value.c_str();
 
   return NULL;
 }

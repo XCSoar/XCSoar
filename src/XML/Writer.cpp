@@ -94,7 +94,7 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
   bool has_children = false;
 
   // If the element has no name then assume this is the head node.
-  if (!StringIsEmpty(data.name)) {
+  if (!data.name.empty()) {
     // "<elementname "
     const unsigned cb = format == -1 ? 0 : format;
 
@@ -102,18 +102,17 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
     writer.write('<');
     if (data.is_declaration)
       writer.write('?');
-    writer.write(data.name);
+    writer.write(data.name.c_str());
 
     // Enumerate attributes and add them to the string
     for (auto i = data.attributes.begin(), end = data.attributes.end();
          i != end; ++i) {
       const Data::Attribute *pAttr = &*i;
       writer.write(' ');
-      writer.write(pAttr->name);
+      writer.write(pAttr->name.c_str());
       writer.write('=');
       writer.write('"');
-      if (pAttr->value != NULL)
-        WriteXMLString(writer, pAttr->value);
+      WriteXMLString(writer, pAttr->value.c_str());
       writer.write('"');
       pAttr++;
     }
@@ -137,7 +136,7 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
   // determine the number of spaces used for prefixes.
   int child_format = -1;
   if (format != -1) {
-    if (!StringIsEmpty(data.name))
+    if (!data.name.empty())
       child_format = format + 1;
     else
       child_format = format;
@@ -158,7 +157,7 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
     }
   }
 
-  if (!StringIsEmpty(data.name) && !data.is_declaration) {
+  if (!data.name.empty() && !data.is_declaration) {
     // If we have child entries we need to use long XML notation for
     // closing the element - "<elementname>blah blah blah</elementname>"
     if (has_children) {
@@ -167,7 +166,7 @@ XMLNode::Serialise(const Data &data, TextWriter &writer, int format)
         WriteIndent(writer, format);
 
       writer.write("</");
-      writer.write(data.name);
+      writer.write(data.name.c_str());
 
       writer.write('>');
     } else {
