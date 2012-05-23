@@ -121,7 +121,6 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
 
   switch (geometry) {
   case InfoBoxSettings::Geometry::TOP_4_BOTTOM_4:
-    layout.count = 8;
     rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
     rc.bottom = MakeBottomRow(layout, layout.positions + 4, 4,
                               rc.left, rc.bottom);
@@ -136,8 +135,6 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     /* fall through */
 
   case InfoBoxSettings::Geometry::BOTTOM_8:
-    assert(layout.count == 8);
-
     rc.bottom = MakeBottomRow(layout, layout.positions + 4, 4,
                               rc.left, rc.bottom);
     rc.bottom = MakeBottomRow(layout, layout.positions, 4,
@@ -145,23 +142,17 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::TOP_8:
-    assert(layout.count == 8);
-
     rc.top = MakeTopRow(layout, layout.positions, 4, rc.left, rc.top);
     rc.top = MakeTopRow(layout, layout.positions + 4, 4, rc.left, rc.top);
     break;
 
   case InfoBoxSettings::Geometry::LEFT_4_RIGHT_4:
-    assert(layout.count == 8);
-
     rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
     rc.right = MakeRightColumn(layout, layout.positions + 4, 4,
                                rc.right, rc.top);
     break;
 
   case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
-    assert(layout.count == 9);
-
     layout.vario.left = rc.right - layout.control_width;
     layout.vario.right = rc.right;
     layout.vario.top = 0;
@@ -173,31 +164,23 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::LEFT_8:
-    assert(layout.count == 8);
-
     rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
     rc.left = MakeLeftColumn(layout, layout.positions + 4, 4, rc.left, rc.top);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_8:
-    assert(layout.count == 8);
-
     rc.right = MakeRightColumn(layout, layout.positions + 4, 4,
                                rc.right, rc.top);
     rc.right = MakeRightColumn(layout, layout.positions, 4, rc.right, rc.top);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_12:
-    assert(layout.count == 12);
-
     rc.right = MakeRightColumn(layout, layout.positions + 6, 6,
                                rc.right, rc.top);
     rc.right = MakeRightColumn(layout, layout.positions, 6, rc.right, rc.top);
     break;
 
   case InfoBoxSettings::Geometry::BOTTOM_12:
-    assert(layout.count == 12);
-
     rc.bottom = MakeBottomRow(layout, layout.positions + 6, 6,
                               rc.left, rc.bottom);
     rc.bottom = MakeBottomRow(layout, layout.positions, 6,
@@ -205,15 +188,11 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::TOP_12:
-    assert(layout.count == 12);
-
     rc.top = MakeTopRow(layout, layout.positions, 6, rc.left, rc.top);
     rc.top = MakeTopRow(layout, layout.positions + 6, 6, rc.left, rc.top);
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_24:
-    assert(layout.count == 24);
-
     rc.right = MakeRightColumn(layout, layout.positions + 16, 8,
                                rc.right, rc.top);
     rc.right = MakeRightColumn(layout, layout.positions + 8, 8,
@@ -222,8 +201,6 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
-    assert(layout.count == 9);
-
     layout.vario.left = rc.right - layout.control_width;
     layout.vario.right = rc.right;
     layout.vario.top = 0;
@@ -235,8 +212,6 @@ InfoBoxLayout::Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry)
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_5:
-    assert(layout.count == 5);
-
     rc.right = MakeRightColumn(layout, layout.positions, 5, rc.right, rc.top);
     break;
   };
