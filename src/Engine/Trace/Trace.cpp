@@ -180,6 +180,30 @@ Trace::erase_earlier_than(const unsigned p_time)
   return true;
 }
 
+void
+Trace::EraseLaterThan(const unsigned min_time)
+{
+  assert(min_time > 0);
+  assert(!empty());
+
+  while (!empty() && GetBack().point.GetTime() > min_time) {
+    TraceDelta &td = GetBack();
+
+    td.Remove();
+
+    auto i = delta_list.find(td);
+    assert(i != delta_list.end());
+    delta_list.erase(i);
+
+    --cached_size;
+  }
+
+  /* need to set deltas for first point, only one of these will occur
+     (have to search for this point) */
+  if (!empty())
+    erase_start(GetBack());
+}
+
 Trace::TraceDelta &
 Trace::insert(const TraceDelta &td) {
   TraceDelta::iterator it = delta_list.insert(td);
@@ -222,10 +246,16 @@ Trace::append(const AircraftState& state)
     task_projection.reset(state.location);
     task_projection.update_fast();
   } else if (state.time < fixed(back().GetTime())) {
-    // gone back in time, must reset. (shouldn't get here!)
-    assert(1);
-    clear();
-    return;
+    // gone back in time
+
+    if (unsigned(state.time) + 180 < back().GetTime()) {
+      /* not fixable, clear the trace and restart from scratch */
+      clear();
+      return;
+    }
+
+    /* not much, try to fix it */
+    EraseLaterThan(unsigned(state.time) - 10);
   } else if ((unsigned)state.time - back().GetTime() < 2)
     // only add one item per two seconds
     return;
