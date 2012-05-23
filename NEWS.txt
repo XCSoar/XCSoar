@@ -12,6 +12,7 @@ Version 6.3.4 - not yet released
   - CAI302: fix connection lost after MacCready update (#2029)
 * user interface
   - increase double click interval to 500ms (#2088)
+  - fix UTC offset preview (#2082)
 * map
   - sanitise map scale (#2086)
   - fix crash on topography triangulation failure (#2089)

@@ -53,7 +53,11 @@ public:
 
 protected:
   void SetValue(int _value) {
+    if (_value == value)
+      return;
+
     value = _value;
+    Modified();
   }
 
 public:
@@ -86,7 +90,7 @@ public:
   virtual const TCHAR *GetAsDisplayString() const;
 
   virtual void SetAsInteger(int _value) {
-    value = _value;
+    SetValue(_value);
   }
 
   virtual ComboList *CreateComboList() const;
