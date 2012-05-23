@@ -342,6 +342,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
 
   case InfoBoxSettings::Geometry::BOTTOM_8:
   case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
+  case InfoBoxSettings::Geometry::BOTTOM_4:
     border |= BORDERTOP;
 
     if (i != 3 && i != 7)
@@ -356,6 +357,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxSettings::Geometry::TOP_8:
+  case InfoBoxSettings::Geometry::TOP_4:
     border |= BORDERBOTTOM;
 
     if (i != 3 && i != 7)
@@ -389,6 +391,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxSettings::Geometry::LEFT_8:
+  case InfoBoxSettings::Geometry::LEFT_4:
     if (i != 3 && i != 7)
       border |= BORDERBOTTOM;
 
@@ -396,6 +399,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxSettings::Geometry::RIGHT_8:
+  case InfoBoxSettings::Geometry::RIGHT_4:
     if (i != 3 && i != 7)
       border |= BORDERBOTTOM;
 

@@ -90,6 +90,14 @@ static const StaticEnumChoice info_box_geometry_list[] = {
     N_("12 Top (Portrait)") },
   { (unsigned)InfoBoxSettings::Geometry::RIGHT_24,
     N_("24 Right (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::TOP_4,
+    N_("4 Top (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::BOTTOM_4,
+    N_("4 Bottom (Portrait)") },
+  { (unsigned)InfoBoxSettings::Geometry::LEFT_4,
+    N_("4 Left (Landscape)") },
+  { (unsigned)InfoBoxSettings::Geometry::RIGHT_4,
+    N_("4 Right (Landscape)") },
   { 0 }
 };
 

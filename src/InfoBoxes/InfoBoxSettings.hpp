@@ -93,6 +93,10 @@ struct InfoBoxSettings {
 
     /** 8 bottom + vario */
     BOTTOM_8_VARIO = 13,
+    TOP_4 = 14,
+    BOTTOM_4 = 15,
+    RIGHT_4 = 16,
+    LEFT_4 = 17,
   } geometry;
 
   bool inverse, use_colors;
