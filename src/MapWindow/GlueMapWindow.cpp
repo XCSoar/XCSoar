@@ -26,6 +26,7 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
+#include "Interface.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
@@ -47,7 +48,7 @@ GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 {
   MapWindow::set(parent, rc);
 
-  visible_projection.SetScale(GetMapSettings().cruise_scale);
+  visible_projection.SetScale(CommonInterface::GetMapSettings().cruise_scale);
 }
 
 void
