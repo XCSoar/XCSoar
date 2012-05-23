@@ -74,14 +74,6 @@ public:
     max_tokens = _max_tokens;
   }
 
-  fixed GetAsFixed() const {
-    return fixed(value);
-  }
-
-  void SetAsFixed(fixed value) {
-    SetValue((int)value);
-  }
-
   /* virtual methods from class DataField */
   virtual void Inc();
   virtual void Dec();
