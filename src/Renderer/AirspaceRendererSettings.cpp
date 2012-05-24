@@ -26,6 +26,18 @@ Copyright_License {
 #include <algorithm>
 
 void
+AirspaceClassRendererSettings::SetDefaults()
+{
+  display = true;
+#ifdef HAVE_HATCHED_BRUSH
+  brush = 0;
+#endif
+  border_color = COLOR_RED;
+  fill_color = COLOR_RED;
+  border_width = 2;
+}
+
+void
 AirspaceRendererSettings::SetDefaults()
 {
   enable = true;
@@ -39,17 +51,8 @@ AirspaceRendererSettings::SetDefaults()
 
   fill_mode = FillMode::DEFAULT;
 
-  AirspaceClassRendererSettings default_settings = {
-    true,
-#ifdef HAVE_HATCHED_BRUSH
-    0,
-#endif
-    COLOR_RED,
-    COLOR_RED,
-    2,
-  };
-
-  std::fill(classes, classes + AIRSPACECLASSCOUNT, default_settings);
+  for (auto it = classes; it != classes + AIRSPACECLASSCOUNT; ++it)
+    it->SetDefaults();
 
   classes[CLASSG].display = false;
 

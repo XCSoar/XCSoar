@@ -55,6 +55,8 @@ struct AirspaceClassRendererSettings
 
   unsigned border_width;
 
+  void SetDefaults();
+
   void SetColors(Color color) {
     border_color = fill_color = color;
   }
