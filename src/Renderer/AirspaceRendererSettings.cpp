@@ -35,6 +35,7 @@ AirspaceClassRendererSettings::SetDefaults()
   border_color = COLOR_RED;
   fill_color = COLOR_RED;
   border_width = 2;
+  fill_mode = FillMode::PADDING;
 }
 
 void
@@ -78,4 +79,6 @@ AirspaceRendererSettings::SetDefaults()
   classes[AATASK].SetColors(COLOR_YELLOW);
   classes[CLASSE].SetColors(DarkColor(COLOR_GREEN));
   classes[CLASSF].SetColors(DarkColor(COLOR_GREEN));
+
+  classes[CTR].fill_mode = AirspaceClassRendererSettings::FillMode::ALL;
 }

@@ -161,12 +161,16 @@ public:
     unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
     GLEnable stencil(GL_STENCIL_TEST);
 
-    if (!warning_manager.IsAcked(airspace)) {
+    if (!warning_manager.IsAcked(airspace) &&
+        settings.classes[airspace.GetType()].fill_mode !=
+        AirspaceClassRendererSettings::FillMode::NONE) {
       GLEnable blend(GL_BLEND);
       SetupInterior(airspace);
       if (warning_manager.HasWarning(airspace) ||
           warning_manager.IsInside(airspace) ||
-          look.thick_pen.GetWidth() >= 2 * screen_radius) {
+          look.thick_pen.GetWidth() >= 2 * screen_radius ||
+          settings.classes[airspace.GetType()].fill_mode ==
+          AirspaceClassRendererSettings::FillMode::ALL) {
         // fill whole circle
         canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
       } else {
@@ -190,10 +194,14 @@ public:
       return;
 
     bool fill_airspace = warning_manager.HasWarning(airspace) ||
-                         warning_manager.IsInside(airspace);
+                         warning_manager.IsInside(airspace) ||
+                         settings.classes[airspace.GetType()].fill_mode ==
+                         AirspaceClassRendererSettings::FillMode::ALL;
     GLEnable stencil(GL_STENCIL_TEST);
 
-    if (!warning_manager.IsAcked(airspace)) {
+    if (!warning_manager.IsAcked(airspace) &&
+        settings.classes[airspace.GetType()].fill_mode !=
+        AirspaceClassRendererSettings::FillMode::NONE) {
       if (!fill_airspace) {
         // set stencil for filling (bit 0)
         SetFillStencil();
@@ -378,6 +386,11 @@ public:
     if (warnings.IsAcked(airspace))
       return;
 
+    AirspaceClass airspace_class = airspace.GetType();
+    if (settings.classes[airspace_class].fill_mode ==
+        AirspaceClassRendererSettings::FillMode::NONE)
+      return;
+
     BufferRenderStart();
     SetBufferPens(airspace);
 
@@ -388,6 +401,11 @@ public:
 
   void Visit(const AirspacePolygon &airspace) {
     if (warnings.IsAcked(airspace))
+      return;
+
+    AirspaceClass airspace_class = airspace.GetType();
+    if (settings.classes[airspace_class].fill_mode ==
+        AirspaceClassRendererSettings::FillMode::NONE)
       return;
 
     BufferRenderStart();
@@ -427,7 +445,9 @@ private:
     buffer.SelectNullPen();
 
     if (use_stencil) {
-      if (warnings.HasWarning(airspace) || warnings.IsInside(airspace)) {
+      if (warnings.HasWarning(airspace) || warnings.IsInside(airspace) ||
+          settings.classes[airspace_class].fill_mode ==
+          AirspaceClassRendererSettings::FillMode::ALL) {
         stencil.SelectBlackBrush();
         stencil.SelectNullPen();
       } else {

@@ -55,6 +55,24 @@ struct AirspaceClassRendererSettings
 
   unsigned border_width;
 
+  /**
+   * What portion of the airspace area should be filled with the
+   * airspace brush?
+   *
+   * (Only used if the parent FillMode is not ALL)
+   */
+  enum class FillMode: uint8_t
+  {
+    /** fill all of the area */
+    ALL,
+
+    /** fill only a thick padding (like on ICAO maps) */
+    PADDING,
+
+    /** don't fill anything */
+    NONE,
+  } fill_mode;
+
   void SetDefaults();
 
   void SetColors(Color color) {
