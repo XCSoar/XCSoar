@@ -45,6 +45,7 @@ AirspaceRendererSettings::SetDefaults()
     0,
 #endif
     COLOR_RED,
+    COLOR_RED,
     2,
   };
 
@@ -65,13 +66,13 @@ AirspaceRendererSettings::SetDefaults()
   classes[CLASSF].brush = 3;
 #endif
 
-  classes[OTHER].color = COLOR_CYAN;
-  classes[DANGER].color = DarkColor(COLOR_MAGENTA);
-  classes[CLASSC].color = DarkColor(COLOR_MAGENTA);
-  classes[CLASSD].color = COLOR_BLUE;
-  classes[CTR].color = DarkColor(COLOR_MAGENTA);
-  classes[WAVE].color = DarkColor(COLOR_YELLOW);
-  classes[AATASK].color = COLOR_YELLOW;
-  classes[CLASSE].color = DarkColor(COLOR_GREEN);
-  classes[CLASSF].color = DarkColor(COLOR_GREEN);
+  classes[OTHER].SetColors(COLOR_CYAN);
+  classes[DANGER].SetColors(DarkColor(COLOR_MAGENTA));
+  classes[CLASSC].SetColors(DarkColor(COLOR_MAGENTA));
+  classes[CLASSD].SetColors(COLOR_BLUE);
+  classes[CTR].SetColors(DarkColor(COLOR_MAGENTA));
+  classes[WAVE].SetColors(DarkColor(COLOR_YELLOW));
+  classes[AATASK].SetColors(COLOR_YELLOW);
+  classes[CLASSE].SetColors(DarkColor(COLOR_GREEN));
+  classes[CLASSF].SetColors(DarkColor(COLOR_GREEN));
 }

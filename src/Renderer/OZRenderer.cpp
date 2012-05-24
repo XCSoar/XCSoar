@@ -47,7 +47,7 @@ void
 OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
-    Color color = settings.classes[AATASK].color;
+    Color color = settings.classes[AATASK].fill_color;
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

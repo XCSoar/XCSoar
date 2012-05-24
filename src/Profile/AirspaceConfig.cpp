@@ -59,7 +59,8 @@ Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
     settings.brush = 0;
 #endif
 
-  GetAirspaceColor(i, settings.color);
+  if (GetAirspaceColor(i, settings.border_color))
+    settings.fill_color = settings.border_color;
 }
 
 void

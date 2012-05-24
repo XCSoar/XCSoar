@@ -171,7 +171,7 @@ public:
         canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
-        Color color = settings.classes[airspace.GetType()].color;
+        Color color = settings.classes[airspace.GetType()].fill_color;
         Pen pen_donut(look.thick_pen.GetWidth() / 2, color.WithAlpha(90));
         canvas.SelectHollowBrush();
         canvas.Select(pen_donut);
@@ -244,7 +244,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-    Color color = settings.classes[airspace.GetType()].color;
+    Color color = settings.classes[airspace.GetType()].fill_color;
     canvas.Select(Brush(color.WithAlpha(90)));
     canvas.SelectNullPen();
   }
@@ -332,7 +332,7 @@ private:
   }
 
   void SetupInterior(const AbstractAirspace &airspace) {
-    Color color = settings.classes[airspace.GetType()].color;
+    Color color = settings.classes[airspace.GetType()].fill_color;
     canvas.Select(Brush(color.WithAlpha(48)));
     canvas.SelectNullPen();
   }
@@ -413,7 +413,7 @@ private:
     } else {
 #endif
       // this color is used as the black bit
-      buffer.SetTextColor(LightColor(settings.classes[airspace_class].color));
+      buffer.SetTextColor(LightColor(settings.classes[airspace_class].fill_color));
 
       // get brush, can be solid or a 1bpp bitmap
       buffer.Select(look.brushes[settings.classes[airspace_class].brush]);

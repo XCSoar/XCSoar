@@ -50,9 +50,14 @@ struct AirspaceClassRendererSettings
   uint8_t brush;
 #endif
 
-  Color color;
+  Color border_color;
+  Color fill_color;
 
   unsigned border_width;
+
+  void SetColors(Color color) {
+    border_color = fill_color = color;
+  }
 };
 
 /**
