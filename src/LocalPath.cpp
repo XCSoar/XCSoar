@@ -264,9 +264,12 @@ ModuleInFlash(HMODULE module, TCHAR *buffer)
 
 /**
  * Determine whether a text file contains a given string
+ *
+ * If two strings are given, the second string is considered
+ * as no-match for the given line (i.e. string1 AND !string2).
  */
 static bool
-fgrep(const char *fname, const char *string)
+fgrep(const char *fname, const char *string, const char *string2 = NULL)
 {
   char line[100];
   FILE *fp;
@@ -274,9 +277,10 @@ fgrep(const char *fname, const char *string)
   if ((fp = fopen(fname, "r")) == NULL)
     return false;
   while (fgets(line, sizeof(line), fp) != NULL)
-    if (strstr(line, string) != NULL) {
-      fclose(fp);
-      return true;
+    if (strstr(line, string) != NULL &&
+        (string2 == NULL || strstr(line, string2) == NULL)) {
+        fclose(fp);
+        return true;
     }
   fclose(fp);
   return false;
@@ -357,7 +361,7 @@ FindDataPath()
     struct stat st;
     if (stat(ANDROID_SAMSUNG_EXTERNAL_SD, &st) == 0 &&
         (st.st_mode & S_IFDIR) != 0 &&
-        fgrep("/proc/mounts", ANDROID_SAMSUNG_EXTERNAL_SD " ")) {
+        fgrep("/proc/mounts", ANDROID_SAMSUNG_EXTERNAL_SD " ", "tmpfs ")) {
       __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
                           "Enable Samsung hack, " XCSDATADIR " in "
                           ANDROID_SAMSUNG_EXTERNAL_SD);

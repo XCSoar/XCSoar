@@ -51,19 +51,16 @@ public:
      value(_value), min(_min), max(_max), step(_step), max_tokens(2),
      speedup(0) {}
 
-
-  void Inc();
-  void Dec();
-  virtual ComboList *CreateComboList() const;
-  void SetFromCombo(int data_field_index, TCHAR *value_string);
-
-  virtual const TCHAR *GetAsString() const;
-  virtual const TCHAR *GetAsDisplayString() const;
-
+protected:
   void SetValue(int _value) {
+    if (_value == value)
+      return;
+
     value = _value;
+    Modified();
   }
 
+public:
   void SetMin(int _min) {
     min = _min;
   }
@@ -81,21 +78,23 @@ public:
     max_tokens = _max_tokens;
   }
 
+  /* virtual methods from class DataField */
+  virtual void Inc();
+  virtual void Dec();
+
   virtual int GetAsInteger() const {
     return value;
   }
 
+  virtual const TCHAR *GetAsString() const;
+  virtual const TCHAR *GetAsDisplayString() const;
+
   virtual void SetAsInteger(int _value) {
-    value = _value;
+    SetValue(_value);
   }
 
-  fixed GetAsFixed() const {
-    return fixed(value);
-  }
-
-  void SetAsFixed(fixed value) {
-    SetValue((int)value);
-  }
+  virtual ComboList *CreateComboList() const;
+  virtual void SetFromCombo(int data_field_index, TCHAR *value_string);
 
 protected:
   void AppendComboValue(ComboList &combo_list, int value) const;

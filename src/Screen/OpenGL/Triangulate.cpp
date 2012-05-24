@@ -283,6 +283,12 @@ unsigned
 TriangleToStrip(GLushort *triangles, unsigned index_count,
                 unsigned vertex_count, unsigned polygon_count)
 {
+  if (index_count < 3)
+    /* bail out, because we didn't get even one triangle; we need to
+       catch this special case, because the loop below assumes that
+       there must be at least one */
+    return 0;
+
   // count the number of occurrences for each vertex
   GLushort *vcount = new GLushort[vertex_count]();
   GLushort *t = triangles;

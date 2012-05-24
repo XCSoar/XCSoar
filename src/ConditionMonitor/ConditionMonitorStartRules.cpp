@@ -45,7 +45,7 @@ ConditionMonitorStartRules::CheckCondition(const GlideComputer& cmp)
     withinMargin = true;
   else
     withinMargin = false;
-  }
+
   return !(cmp.ValidStartSpeed() && cmp.InsideStartHeight());
 #else
   return false;

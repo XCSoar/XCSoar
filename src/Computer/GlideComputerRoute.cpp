@@ -77,6 +77,11 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
   const AircraftState as = ToAircraftState(basic, calculated);
 
   const GlideResult& sol = calculated.task_stats.current_leg.solution_remaining;
+  if (!sol.IsDefined()) {
+    calculated.terrain_warning = false;
+    return;
+  }
+
   const AGeoPoint start (as.location, as.altitude);
   const RoughAltitude h_ceiling(std::max((int)basic.nav_altitude+500,
                                          (int)calculated.thermal_band.working_band_ceiling));

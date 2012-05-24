@@ -75,10 +75,7 @@ void
 TraceComputer::Update(const ComputerSettings &settings_computer,
                       const AircraftState &state)
 {
-  if (state.time < last_time) {
-    Reset();
-  } else if (state.time <= last_time)
-    return;
+  /* time warps are handled by the Trace class */
 
   last_time = state.time;
 

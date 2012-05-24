@@ -78,11 +78,8 @@ TimeConfigPanel::SetLocalTime(int utc_offset)
 void
 TimeConfigPanel::OnModified(DataField &df)
 {
-  if (IsDataField(UTCOffset, df)) {
-    DataFieldFloat &df2 = (DataFieldFloat &)df;
-    int ival = iround(df2.GetAsFixed() * 3600);
-    SetLocalTime(ival);
-  }
+  if (IsDataField(UTCOffset, df))
+    SetLocalTime(df.GetAsInteger());
 }
 
 void

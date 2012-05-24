@@ -45,6 +45,7 @@ public:
   }
 
   ~MOLoader() {
+    delete file;
     delete mapping;
   }
 

@@ -162,7 +162,7 @@ SiteConfigPanel::Save(bool &_changed, bool &_require_restart)
 
 
   changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
-         TerrainFileChanged || TopographyFileChanged || AirfieldFileChanged;
+         TerrainFileChanged || TopographyFileChanged;
 
   _changed |= changed;
   _require_restart |= require_restart;

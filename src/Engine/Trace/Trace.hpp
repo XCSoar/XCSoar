@@ -278,6 +278,12 @@ protected:
    */
   bool erase_earlier_than(const unsigned p_time);
 
+  /**
+   * Erase elements more recent than specified time.  This is used to
+   * work around slight time warps.
+   */
+  void EraseLaterThan(const unsigned min_time);
+
   TraceDelta &insert(const TraceDelta &td);
 
   /**
@@ -395,6 +401,12 @@ private:
     assert(!empty());
 
     return *static_cast<TraceDelta *>(chronological_list.GetNext());
+  }
+
+  TraceDelta &GetBack() {
+    assert(!empty());
+
+    return *static_cast<TraceDelta *>(chronological_list.GetPrevious());
   }
 
   gcc_pure
