@@ -38,6 +38,30 @@ MakeAirspaceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n)
   return buffer;
 }
 
+static bool
+GetAirspaceColor(unsigned i, Color &color)
+{
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("Colour"), i);
+
+  // Try to load the hex color directly
+  if (Profile::GetColor(name, color))
+    return true;
+
+  // Try to load an indexed preset color (legacy, < 6.3)
+  unsigned index;
+  if (!Profile::Get(name, index))
+    return false;
+
+  // Adjust index if the user has configured a preset color out of range
+  if (index >= ARRAY_SIZE(AirspaceLook::preset_colors))
+    index = 0;
+
+  // Assign configured preset color
+  color = AirspaceLook::preset_colors[index];
+  return true;
+}
+
 void
 Profile::Load(AirspaceRendererSettings &settings)
 {
@@ -114,30 +138,6 @@ Profile::SetAirspaceColor(unsigned i, const Color &color)
   TCHAR name[64];
   MakeAirspaceSettingName(name, _T("Colour"), i);
   SetColor(name, color);
-}
-
-bool
-Profile::GetAirspaceColor(unsigned i, Color &color)
-{
-  TCHAR name[64];
-  MakeAirspaceSettingName(name, _T("Colour"), i);
-
-  // Try to load the hex color directly
-  if (GetColor(name, color))
-    return true;
-
-  // Try to load an indexed preset color (legacy, < 6.3)
-  unsigned index;
-  if (!Get(name, index))
-    return false;
-
-  // Adjust index if the user has configured a preset color out of range
-  if (index >= ARRAY_SIZE(AirspaceLook::preset_colors))
-    index = 0;
-
-  // Assign configured preset color
-  color = AirspaceLook::preset_colors[index];
-  return true;
 }
 
 void

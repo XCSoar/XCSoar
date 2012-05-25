@@ -40,7 +40,6 @@ namespace Profile
    * @param i Airspace class index
    */
   void SetAirspaceMode(unsigned i, bool display, bool warning);
-  bool GetAirspaceColor(unsigned i, Color &color);
   void SetAirspaceColor(unsigned i, const Color &color);
   void SetAirspaceBrush(unsigned i, int c);
 };
