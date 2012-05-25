@@ -12,6 +12,7 @@ AUDIO_SRC_DIR = $(SRC)/Audio
 
 AUDIO_SOURCES = \
 	$(AUDIO_SRC_DIR)/ToneSynthesiser.cpp \
+	$(AUDIO_SRC_DIR)/VarioSynthesiser.cpp \
 	$(AUDIO_SRC_DIR)/PCMPlayer.cpp
 
 $(eval $(call link-library,libaudio,AUDIO))

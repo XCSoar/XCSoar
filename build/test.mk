@@ -729,7 +729,7 @@ DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunLiveT
 endif
 
 ifeq ($(HAVE_PCM_PLAYER),y)
-DEBUG_PROGRAM_NAMES += PlayTone
+DEBUG_PROGRAM_NAMES += PlayTone PlayVario DumpVario
 endif
 
 ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
@@ -2204,6 +2204,22 @@ PLAY_TONE_SOURCES = \
 	$(TEST_SRC_DIR)/PlayTone.cpp
 PLAY_TONE_DEPENDS = AUDIO MATH SCREEN
 $(eval $(call link-program,PlayTone,PLAY_TONE))
+
+PLAY_VARIO_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/OS/FileUtil.cpp \
+	$(TEST_SRC_DIR)/PlayVario.cpp
+PLAY_VARIO_LDADD = $(DEBUG_REPLAY_LDADD)
+PLAY_VARIO_DEPENDS = AUDIO MATH SCREEN UTIL
+$(eval $(call link-program,PlayVario,PLAY_VARIO))
+
+DUMP_VARIO_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/OS/FileUtil.cpp \
+	$(TEST_SRC_DIR)/DumpVario.cpp
+DUMP_VARIO_LDADD = $(DEBUG_REPLAY_LDADD)
+DUMP_VARIO_DEPENDS = AUDIO MATH SCREEN UTIL
+$(eval $(call link-program,DumpVario,DUMP_VARIO))
 
 RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
