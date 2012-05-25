@@ -60,6 +60,7 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Audio/VarioSound.h"
+#include "Audio/VarioGlue.hpp"
 #include "Screen/Busy.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
@@ -401,6 +402,9 @@ XCSoarInterface::Startup()
   */
 #endif
 
+  AudioVarioGlue::Initialise();
+  AudioVarioGlue::Configure(GetComputerSettings().sound);
+
   // Start the device thread(s)
   operation.SetText(_("Starting devices"));
   devStartup();
@@ -532,6 +536,8 @@ XCSoarInterface::Shutdown()
   //  VarioSound_EnableSound(false);
   //  VarioSound_Close();
 #endif
+
+  AudioVarioGlue::Deinitialise();
 
   operation.SetText(_("Shutdown, please wait..."));
 

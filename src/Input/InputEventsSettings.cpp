@@ -32,6 +32,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Audio/VarioGlue.hpp"
 
 static void
 trigger_redraw()
@@ -67,6 +68,7 @@ InputEvents::eventSounds(const TCHAR *misc)
   }
   */
 
+  AudioVarioGlue::Configure(settings);
   Profile::Set(szProfileSoundAudioVario, settings.sound_vario_enabled);
 }
 

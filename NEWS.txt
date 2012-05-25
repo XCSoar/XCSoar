@@ -11,6 +11,7 @@ Version 6.4 - not yet released
   - added "Airspace On/Off" menu button
   - save Flarm team mates in the profile (#1997)
   - added para- and hang glider and aircraft symbols (#1626)
+  - audio vario
 * infoboxes
   - added automatic altitude infobox (baro. altitude with GPS fallback)
 * Android
