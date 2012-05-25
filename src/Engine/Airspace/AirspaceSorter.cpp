@@ -5,30 +5,29 @@
 
 #include <algorithm>
 
+AirspaceSelectInfo::AirspaceSelectInfo(const AbstractAirspace &_airspace,
+                                       const GeoPoint &location,
+                                       const TaskProjection &projection)
+  :airspace(&_airspace)
+{
+  const GeoPoint closest_loc = airspace->ClosestPoint(location, projection);
+  vec = GeoVector(location, closest_loc);
+
+  const TCHAR *name = airspace->GetName();
+  four_chars = ((name[0] & 0xff) << 24) +
+               ((name[1] & 0xff) << 16) +
+               ((name[2] & 0xff) << 8) +
+               ((name[3] & 0xff));
+}
+
 AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
                                const GeoPoint &Location)
 {
   m_airspaces_all.reserve(airspaces.size());
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
-    AirspaceSelectInfo info;
-
     const AbstractAirspace &airspace = *it->get_airspace();
-
-    info.airspace = &airspace;
-
-    const GeoPoint closest_loc =
-      airspace.ClosestPoint(Location, airspaces.GetProjection());
-
-    info.vec = GeoVector(Location, closest_loc);;
-
-    const TCHAR *name = airspace.GetName();
-
-    info.four_chars = ((name[0] & 0xff) << 24) +
-                     ((name[1] & 0xff) << 16) +
-                     ((name[2] & 0xff) << 8) +
-                     ((name[3] & 0xff));
-
+    AirspaceSelectInfo info(airspace, Location, airspaces.GetProjection());
     m_airspaces_all.push_back(info);
   }
 

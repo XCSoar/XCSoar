@@ -11,6 +11,7 @@
 class AbstractAirspace;
 class Airspaces;
 struct GeoPoint;
+class TaskProjection;
 
 /** Structure to hold Airspace sorting information */
 struct AirspaceSelectInfo
@@ -21,6 +22,11 @@ struct AirspaceSelectInfo
   GeoVector vec;
   /** Fast access of first four characters of name */
   unsigned int four_chars;
+
+  AirspaceSelectInfo() = default;
+  AirspaceSelectInfo(const AbstractAirspace &airspace,
+                     const GeoPoint &location,
+                     const TaskProjection &projection);
 };
 
 typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
