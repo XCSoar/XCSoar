@@ -112,6 +112,9 @@ Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
 
   MakeAirspaceSettingName(name, _T("AirspaceBorderWidth"), i);
   Get(name, settings.border_width);
+
+  MakeAirspaceSettingName(name, _T("AirspaceFillMode"), i);
+  GetEnum(name, settings.fill_mode);
 }
 
 void
@@ -168,6 +171,14 @@ Profile::SetAirspaceFillColor(unsigned i, const Color &color)
   TCHAR name[64];
   MakeAirspaceSettingName(name, _T("AirspaceFillColor"), i);
   SetColor(name, color);
+}
+
+void
+Profile::SetAirspaceFillMode(unsigned i, uint8_t mode)
+{
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("AirspaceFillMode"), i);
+  SetEnum(name, (AirspaceClassRendererSettings::FillMode)mode);
 }
 
 void
