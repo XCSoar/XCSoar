@@ -117,7 +117,8 @@ OnAirspaceListEnter(unsigned index)
     if (color_index >= 0) {
       renderer.classes[index].SetColors(AirspaceLook::preset_colors[color_index]);
       ActionInterface::SendMapSettings();
-      Profile::SetAirspaceColor(index, renderer.classes[index].border_color);
+      Profile::SetAirspaceBorderColor(index, renderer.classes[index].border_color);
+      Profile::SetAirspaceFillColor(index, renderer.classes[index].fill_color);
       changed = true;
 
       look.Initialise(renderer);

@@ -38,6 +38,12 @@ MakeAirspaceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n)
   return buffer;
 }
 
+/**
+ * This function and the "ColourXX" profile keys are deprecated and
+ * are only used as a fallback for old profiles.
+ *
+ * @see Load(unsigned, AirspaceClassRendererSettings &)
+ */
 static bool
 GetAirspaceColor(unsigned i, Color &color)
 {
@@ -96,8 +102,13 @@ Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
     settings.brush = 0;
 #endif
 
-  if (GetAirspaceColor(i, settings.border_color))
-    settings.fill_color = settings.border_color;
+  MakeAirspaceSettingName(name, _T("AirspaceBorderColor"), i);
+  if (!GetColor(name, settings.border_color))
+    GetAirspaceColor(i, settings.border_color);
+
+  MakeAirspaceSettingName(name, _T("AirspaceFillColor"), i);
+  if (!GetColor(name, settings.fill_color))
+    GetAirspaceColor(i, settings.fill_color);
 }
 
 void
@@ -133,10 +144,18 @@ Profile::SetAirspaceMode(unsigned i, bool display, bool warning)
 }
 
 void
-Profile::SetAirspaceColor(unsigned i, const Color &color)
+Profile::SetAirspaceBorderColor(unsigned i, const Color &color)
 {
   TCHAR name[64];
-  MakeAirspaceSettingName(name, _T("Colour"), i);
+  MakeAirspaceSettingName(name, _T("AirspaceBorderColor"), i);
+  SetColor(name, color);
+}
+
+void
+Profile::SetAirspaceFillColor(unsigned i, const Color &color)
+{
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("AirspaceFillColor"), i);
   SetColor(name, color);
 }
 
