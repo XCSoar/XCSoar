@@ -19,10 +19,8 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
 
     const GeoPoint closest_loc =
       airspace.ClosestPoint(Location, airspaces.GetProjection());
-    const GeoVector vec(Location, closest_loc);
 
-    info.distance = vec.distance;
-    info.direction = vec.bearing;
+    info.vec = GeoVector(Location, closest_loc);;
 
     const TCHAR *name = airspace.GetName();
 
@@ -111,7 +109,7 @@ public:
   AirspaceDirectionFilter(Angle _direction): direction(_direction) {}
 
   bool operator()(const AirspaceSelectInfo &info) {
-    fixed direction_error = (info.direction - direction).AsDelta().AbsoluteDegrees();
+    fixed direction_error = (info.vec.bearing - direction).AsDelta().AbsoluteDegrees();
     return direction_error > fixed_int_constant(18);
   }
 };
@@ -132,7 +130,7 @@ public:
   AirspaceDistanceFilter(fixed _min_distance): min_distance(_min_distance) {}
 
   bool operator()(const AirspaceSelectInfo &info) {
-    return info.distance > min_distance;
+    return info.vec.distance > min_distance;
   }
 };
 
@@ -148,7 +146,7 @@ static bool
 AirspaceDistanceCompare(const AirspaceSelectInfo& elem1,
                         const AirspaceSelectInfo& elem2)
 {
-  return (elem1.distance < elem2.distance);
+  return (elem1.vec.distance < elem2.vec.distance);
 }
 
 void

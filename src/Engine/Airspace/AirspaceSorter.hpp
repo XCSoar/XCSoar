@@ -1,7 +1,7 @@
 #ifndef AIRSPACE_SORTER_HPP
 #define AIRSPACE_SORTER_HPP
 
-#include "Math/Angle.hpp"
+#include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Compiler.h"
 
@@ -17,10 +17,8 @@ struct AirspaceSelectInfo
 {
   /** Pointer to actual airspace (unprotected!) */
   const AbstractAirspace *airspace;
-  /** Distance in user units from observer to waypoint */
-  fixed distance;
-  /** Bearing (deg true north) from observer to waypoint */
-  Angle direction;
+  /** From observer to waypoint */
+  GeoVector vec;
   /** Fast access of first four characters of name */
   unsigned int four_chars;
 };

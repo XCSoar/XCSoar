@@ -234,10 +234,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   const AbstractAirspace &airspace = *AirspaceSelectInfo[i].airspace;
 
-  GeoVector vector(AirspaceSelectInfo[i].distance,
-                   AirspaceSelectInfo[i].direction);
-
-  AirspaceListRenderer::Draw(canvas, rc, airspace, vector,
+  AirspaceListRenderer::Draw(canvas, rc, airspace, AirspaceSelectInfo[i].vec,
                              UIGlobals::GetDialogLook(),
                              UIGlobals::GetMapLook().airspace,
                              CommonInterface::GetMapSettings().airspace);
