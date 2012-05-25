@@ -109,6 +109,9 @@ Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
   MakeAirspaceSettingName(name, _T("AirspaceFillColor"), i);
   if (!GetColor(name, settings.fill_color))
     GetAirspaceColor(i, settings.fill_color);
+
+  MakeAirspaceSettingName(name, _T("AirspaceBorderWidth"), i);
+  Get(name, settings.border_width);
 }
 
 void
@@ -141,6 +144,14 @@ Profile::SetAirspaceMode(unsigned i, bool display, bool warning)
     value |= 0x2;
 
   Set(name, value);
+}
+
+void
+Profile::SetAirspaceBorderWidth(unsigned i, unsigned border_width)
+{
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("AirspaceBorderWidth"), i);
+  Set(name, border_width);
 }
 
 void
