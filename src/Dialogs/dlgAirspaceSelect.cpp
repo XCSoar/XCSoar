@@ -32,14 +32,14 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
-#include "Formatter/AirspaceFormatter.hpp"
+#include "Renderer/AirspaceListRenderer.hpp"
+#include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
-#include "Formatter/UserUnits.hpp"
 #include "UIGlobals.hpp"
 
 #include <assert.h>
@@ -233,35 +233,14 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   assert(i < AirspaceSelectInfo.size());
 
   const AbstractAirspace &airspace = *AirspaceSelectInfo[i].airspace;
-    
-  int w0, w1, w2, w3, x1, x2, x3;
-  w0 = rc.right - rc.left - Layout::FastScale(4);
-  w1 = canvas.CalcTextWidth(_T("XXX"));
-  w2 = canvas.CalcTextWidth(_T(" 000km"));
-  w3 = canvas.CalcTextWidth(_T(" 000")_T(DEG));
-  
-  x1 = w0-w1-w2-w3;
-    
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2),
-                      x1 - Layout::FastScale(5),
-                      AirspaceFormatter::GetNameAndClass(airspace).c_str());
-    
-  // left justified
-  canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), 
-              AirspaceFormatter::GetClassShort(airspace));
-    
-  StaticString<12> sTmp;
 
-  // right justified after airspace type
-  FormatUserDistance(AirspaceSelectInfo[i].distance, sTmp.buffer(), true, 0);
-  x2 = w0 - w3 - canvas.CalcTextWidth(sTmp);
-  canvas.text(rc.left + x2, rc.top + Layout::FastScale(2), sTmp);
-    
-  // right justified after distance
-  FormatBearing(sTmp.buffer(), sTmp.MAX_SIZE, AirspaceSelectInfo[i].direction);
-  x3 = w0 - canvas.CalcTextWidth(sTmp);
-  canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
+  GeoVector vector(AirspaceSelectInfo[i].distance,
+                   AirspaceSelectInfo[i].direction);
+
+  AirspaceListRenderer::Draw(canvas, rc, airspace, vector,
+                             UIGlobals::GetDialogLook(),
+                             UIGlobals::GetMapLook().airspace,
+                             CommonInterface::GetMapSettings().airspace);
 }
 
 
@@ -398,10 +377,13 @@ PrepareAirspaceSelectDialog()
   wf->SetKeyDownNotify(FormKeyDown);
 #endif
 
+  const DialogLook &dialog_look = UIGlobals::GetDialogLook();
+
   wAirspaceList = (ListControl*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList != NULL);
   wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
   wAirspaceList->SetPaintItemCallback(OnPaintListItem);
+  wAirspaceList->SetItemHeight(AirspaceListRenderer::GetHeight(dialog_look));
 
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));

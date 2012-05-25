@@ -28,6 +28,7 @@ Copyright_License {
 
 class Canvas;
 class AbstractAirspace;
+struct GeoVector;
 struct DialogLook;
 struct AirspaceLook;
 struct AirspaceRendererSettings;
@@ -39,6 +40,11 @@ namespace AirspaceListRenderer
 
   void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
             const DialogLook &dialog_look, const AirspaceLook &look,
+            const AirspaceRendererSettings &renderer_settings);
+
+  void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
+            const GeoVector &vector, const DialogLook &dialog_look,
+            const AirspaceLook &look,
             const AirspaceRendererSettings &renderer_settings);
 }
 

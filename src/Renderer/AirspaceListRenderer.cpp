@@ -28,7 +28,20 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
+#include "Formatter/AngleFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
+#include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Util/StaticString.hpp"
+#include "Util/Macros.hpp"
+
+namespace AirspaceListRenderer
+{
+  void Draw(Canvas &canvas, const PixelRect rc, const AbstractAirspace &airspace,
+            const TCHAR *comment, const DialogLook &dialog_look,
+            const AirspaceLook &look,
+            const AirspaceRendererSettings &renderer_settings);
+}
 
 UPixelScalar
 AirspaceListRenderer::GetHeight(const DialogLook &look)
@@ -40,7 +53,7 @@ AirspaceListRenderer::GetHeight(const DialogLook &look)
 void
 AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const AbstractAirspace &airspace,
-                           const DialogLook &dialog_look,
+                           const TCHAR *comment, const DialogLook &dialog_look,
                            const AirspaceLook &look,
                            const AirspaceRendererSettings &renderer_settings)
 {
@@ -57,7 +70,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.Select(small_font);
   canvas.text_clipped(left,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, AirspaceFormatter::GetClass(airspace));
+                      rc, comment);
 
   tstring top = AirspaceFormatter::GetTopShort(airspace);
   PixelScalar altitude_width =
@@ -81,4 +94,34 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                                 Layout::FastScale(10));
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
+}
+
+void
+AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const AbstractAirspace &airspace,
+                           const DialogLook &dialog_look,
+                           const AirspaceLook &look,
+                           const AirspaceRendererSettings &renderer_settings)
+{
+  Draw(canvas, rc, airspace, AirspaceFormatter::GetClass(airspace), dialog_look,
+       look, renderer_settings);
+}
+
+void
+AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const AbstractAirspace &airspace,
+                           const GeoVector &vector,
+                           const DialogLook &dialog_look,
+                           const AirspaceLook &look,
+                           const AirspaceRendererSettings &renderer_settings)
+{
+  StaticString<256> comment(AirspaceFormatter::GetClass(airspace));
+
+  TCHAR dist[20], bearing[20];
+  FormatUserDistanceSmart(vector.distance, dist, true);
+  FormatBearing(bearing, ARRAY_SIZE(bearing), vector.bearing);
+  comment.AppendFormat(_T(" - %s - %s"), dist, bearing);
+
+  Draw(canvas, rc, airspace, comment, dialog_look,
+       look, renderer_settings);
 }
