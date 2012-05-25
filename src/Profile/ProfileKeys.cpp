@@ -23,63 +23,6 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 
-const TCHAR *szProfileColour[] = {
-  _T("Colour0"),
-  _T("Colour1"),
-  _T("Colour2"),
-  _T("Colour3"),
-  _T("Colour4"),
-  _T("Colour5"),
-  _T("Colour6"),
-  _T("Colour7"),
-  _T("Colour8"),
-  _T("Colour9"),
-  _T("Colour10"),
-  _T("Colour11"),
-  _T("Colour12"),
-  _T("Colour13"),
-  _T("Colour14"),
-  _T("Colour15"),
-}; // pL
-
-const TCHAR *szProfileBrush[] = {
-  _T("Brush0"),
-  _T("Brush1"),
-  _T("Brush2"),
-  _T("Brush3"),
-  _T("Brush4"),
-  _T("Brush5"),
-  _T("Brush6"),
-  _T("Brush7"),
-  _T("Brush8"),
-  _T("Brush9"),
-  _T("Brush10"),
-  _T("Brush11"),
-  _T("Brush12"),
-  _T("Brush13"),
-  _T("Brush14"),
-  _T("Brush15"),
-}; // pL
-
-const TCHAR *szProfileAirspaceMode[] = {
-  _T("AirspaceMode0"),
-  _T("AirspaceMode1"),
-  _T("AirspaceMode2"),
-  _T("AirspaceMode3"),
-  _T("AirspaceMode4"),
-  _T("AirspaceMode5"),
-  _T("AirspaceMode6"),
-  _T("AirspaceMode7"),
-  _T("AirspaceMode8"),
-  _T("AirspaceMode9"),
-  _T("AirspaceMode10"),
-  _T("AirspaceMode11"),
-  _T("AirspaceMode12"),
-  _T("AirspaceMode13"),
-  _T("AirspaceMode14"),
-  _T("AirspaceMode15"),
-}; // pL
-
 const TCHAR szProfileAirspaceWarning[] = _T("AirspaceWarn");
 const TCHAR szProfileAirspaceBlackOutline[] = _T("AirspaceBlackOutline");
 const TCHAR szProfileAirspaceTransparency[] = _T("AirspaceTransparency");

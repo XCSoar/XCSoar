@@ -26,9 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-extern const TCHAR *szProfileColour[];
-extern const TCHAR *szProfileBrush[];
-extern const TCHAR *szProfileAirspaceMode[];
 extern const TCHAR szProfileSpeedUnitsValue[];
 extern const TCHAR szProfileDistanceUnitsValue[];
 extern const TCHAR szProfileAltitudeUnitsValue[];

@@ -29,6 +29,15 @@ Copyright_License {
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "Util/Macros.hpp"
 
+static const TCHAR *
+MakeAirspaceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n)
+{
+  _tcscpy(buffer, prefix);
+  _stprintf(buffer + _tcslen(buffer), _T("%u"), n);
+
+  return buffer;
+}
+
 void
 Profile::Load(AirspaceRendererSettings &settings)
 {
@@ -49,12 +58,16 @@ Profile::Load(AirspaceRendererSettings &settings)
 void
 Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
 {
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
+
   unsigned value;
-  if (Get(szProfileAirspaceMode[i], value))
+  if (Get(name, value))
     settings.display = (value & 0x1) != 0;
 
 #ifdef HAVE_HATCHED_BRUSH
-  Get(szProfileBrush[i], settings.brush);
+  MakeAirspaceSettingName(name, _T("Brush"), i);
+  Get(name, settings.brush);
   if (settings.brush >= ARRAY_SIZE(AirspaceLook::brushes))
     settings.brush = 0;
 #endif
@@ -71,40 +84,51 @@ Profile::Load(AirspaceComputerSettings &settings)
   Get(szProfileWarningTime, settings.warnings.warning_time);
   Get(szProfileAcknowledgementTime, settings.warnings.acknowledgement_time);
 
+  TCHAR name[64];
   unsigned value;
-  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    if (Get(szProfileAirspaceMode[i], value))
+  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
+    MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
+    if (Get(name, value))
       settings.warnings.class_warnings[i] = (value & 0x2) != 0;
+  }
 }
 
 void
 Profile::SetAirspaceMode(unsigned i, bool display, bool warning)
 {
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
+
   int value = 0;
   if (display)
     value |= 0x1;
   if (warning)
     value |= 0x2;
 
-  Set(szProfileAirspaceMode[i], value);
+  Set(name, value);
 }
 
 void
 Profile::SetAirspaceColor(unsigned i, const Color &color)
 {
-  SetColor(szProfileColour[i], color);
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("Colour"), i);
+  SetColor(name, color);
 }
 
 bool
 Profile::GetAirspaceColor(unsigned i, Color &color)
 {
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("Colour"), i);
+
   // Try to load the hex color directly
-  if (GetColor(szProfileColour[i], color))
+  if (GetColor(name, color))
     return true;
 
   // Try to load an indexed preset color (legacy, < 6.3)
   unsigned index;
-  if (!Get(szProfileColour[i], index))
+  if (!Get(name, index))
     return false;
 
   // Adjust index if the user has configured a preset color out of range
@@ -119,5 +143,7 @@ Profile::GetAirspaceColor(unsigned i, Color &color)
 void
 Profile::SetAirspaceBrush(unsigned i, int brush_index)
 {
-  Set(szProfileBrush[i], brush_index);
+  TCHAR name[64];
+  MakeAirspaceSettingName(name, _T("Brush"), i);
+  Set(name, brush_index);
 }
