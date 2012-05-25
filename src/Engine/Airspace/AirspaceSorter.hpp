@@ -18,15 +18,20 @@ struct AirspaceSelectInfo
 {
   /** Pointer to actual airspace (unprotected!) */
   const AbstractAirspace *airspace;
-  /** From observer to waypoint */
-  GeoVector vec;
   /** Fast access of first four characters of name */
   unsigned int four_chars;
 
+private:
+  /** From observer to waypoint */
+  mutable GeoVector vec;
+
+public:
   AirspaceSelectInfo() = default;
-  AirspaceSelectInfo(const AbstractAirspace &airspace,
-                     const GeoPoint &location,
-                     const TaskProjection &projection);
+  AirspaceSelectInfo(const AbstractAirspace &airspace);
+
+  void ResetVector();
+  const GeoVector &GetVector(const GeoPoint &location,
+                             const TaskProjection &projection) const;
 };
 
 typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
@@ -39,6 +44,9 @@ typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
 class AirspaceSorter
 {
   AirspaceSelectInfoVector m_airspaces_all;
+
+  const TaskProjection &projection;
+  const GeoPoint &location;
 
 public:
   /**

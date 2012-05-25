@@ -5,14 +5,9 @@
 
 #include <algorithm>
 
-AirspaceSelectInfo::AirspaceSelectInfo(const AbstractAirspace &_airspace,
-                                       const GeoPoint &location,
-                                       const TaskProjection &projection)
-  :airspace(&_airspace)
+AirspaceSelectInfo::AirspaceSelectInfo(const AbstractAirspace &_airspace)
+  :airspace(&_airspace), vec(GeoVector::Invalid())
 {
-  const GeoPoint closest_loc = airspace->ClosestPoint(location, projection);
-  vec = GeoVector(location, closest_loc);
-
   const TCHAR *name = airspace->GetName();
   four_chars = ((name[0] & 0xff) << 24) +
                ((name[1] & 0xff) << 16) +
@@ -20,14 +15,33 @@ AirspaceSelectInfo::AirspaceSelectInfo(const AbstractAirspace &_airspace,
                ((name[3] & 0xff));
 }
 
+void
+AirspaceSelectInfo::ResetVector()
+{
+  vec.SetInvalid();
+}
+
+const GeoVector &
+AirspaceSelectInfo::GetVector(const GeoPoint &location,
+                              const TaskProjection &projection) const
+{
+  if (!vec.IsValid()) {
+    const GeoPoint closest_loc = airspace->ClosestPoint(location, projection);
+    vec = GeoVector(location, closest_loc);
+  }
+
+  return vec;
+}
+
 AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
-                               const GeoPoint &Location)
+                               const GeoPoint &_location)
+  :projection(airspaces.GetProjection()), location(_location)
 {
   m_airspaces_all.reserve(airspaces.size());
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
     const AbstractAirspace &airspace = *it->get_airspace();
-    AirspaceSelectInfo info(airspace, Location, airspaces.GetProjection());
+    AirspaceSelectInfo info(airspace);
     m_airspaces_all.push_back(info);
   }
 
@@ -103,12 +117,17 @@ AirspaceSorter::FilterByNamePrefix(AirspaceSelectInfoVector &v,
 class AirspaceDirectionFilter
 {
   Angle direction;
+  const TaskProjection &projection;
+  const GeoPoint &location;
 
 public:
-  AirspaceDirectionFilter(Angle _direction): direction(_direction) {}
+  AirspaceDirectionFilter(Angle _direction,
+      const TaskProjection &_projection, const GeoPoint &_location)
+    :direction(_direction), projection(_projection), location(_location) {}
 
   bool operator()(const AirspaceSelectInfo &info) {
-    fixed direction_error = (info.vec.bearing - direction).AsDelta().AbsoluteDegrees();
+    Angle bearing = info.GetVector(location, projection).bearing;
+    fixed direction_error = (bearing - direction).AsDelta().AbsoluteDegrees();
     return direction_error > fixed_int_constant(18);
   }
 };
@@ -118,18 +137,22 @@ AirspaceSorter::FilterByDirection(AirspaceSelectInfoVector& vec,
                                  const Angle direction) const
 {
   vec.erase(std::remove_if(vec.begin(), vec.end(),
-                           AirspaceDirectionFilter(direction)), vec.end());
+      AirspaceDirectionFilter(direction, projection, location)), vec.end());
 }
 
 class AirspaceDistanceFilter
 {
   fixed min_distance;
+  const TaskProjection &projection;
+  const GeoPoint &location;
 
 public:
-  AirspaceDistanceFilter(fixed _min_distance): min_distance(_min_distance) {}
+  AirspaceDistanceFilter(fixed _min_distance,
+      const TaskProjection &_projection, const GeoPoint &_location)
+    :min_distance(_min_distance), projection(_projection), location(_location) {}
 
   bool operator()(const AirspaceSelectInfo &info) {
-    return info.vec.distance > min_distance;
+    return info.GetVector(location, projection).distance > min_distance;
   }
 };
 
@@ -138,20 +161,30 @@ AirspaceSorter::FilterByDistance(AirspaceSelectInfoVector& vec,
                                 const fixed distance) const
 {
   vec.erase(std::remove_if(vec.begin(), vec.end(),
-                           AirspaceDistanceFilter(distance)), vec.end());
+      AirspaceDistanceFilter(distance, projection, location)), vec.end());
 }
 
-static bool
-AirspaceDistanceCompare(const AirspaceSelectInfo& elem1,
-                        const AirspaceSelectInfo& elem2)
+class AirspaceDistanceCompare
 {
-  return (elem1.vec.distance < elem2.vec.distance);
-}
+  const TaskProjection &projection;
+  const GeoPoint &location;
+
+public:
+  AirspaceDistanceCompare(
+      const TaskProjection &_projection, const GeoPoint &_location)
+    :projection(_projection), location(_location) {}
+
+  bool operator()(const AirspaceSelectInfo &elem1,
+                  const AirspaceSelectInfo &elem2) {
+    return elem1.GetVector(location, projection).distance <
+           elem2.GetVector(location, projection).distance;
+  }
+};
 
 void
 AirspaceSorter::SortByDistance(AirspaceSelectInfoVector& vec) const
 {
-  std::sort(vec.begin(), vec.end(), AirspaceDistanceCompare);
+  std::sort(vec.begin(), vec.end(), AirspaceDistanceCompare(projection, location));
 }
 
 static bool

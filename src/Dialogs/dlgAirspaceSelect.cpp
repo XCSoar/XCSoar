@@ -51,7 +51,10 @@ Copyright_License {
  */
 static gcc_constexpr_data unsigned WILDCARD = 0x7fff;
 
+static const Airspaces *airspaces;
 static ProtectedAirspaceWarningManager *airspace_warnings;
+
+static GeoPoint location;
 
 static WndForm *wf=NULL;
 static WndProperty *wpName;
@@ -234,10 +237,11 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   const AbstractAirspace &airspace = *AirspaceSelectInfo[i].airspace;
 
-  AirspaceListRenderer::Draw(canvas, rc, airspace, AirspaceSelectInfo[i].vec,
-                             UIGlobals::GetDialogLook(),
-                             UIGlobals::GetMapLook().airspace,
-                             CommonInterface::GetMapSettings().airspace);
+  AirspaceListRenderer::Draw(
+      canvas, rc, airspace,
+      AirspaceSelectInfo[i].GetVector(location, airspaces->GetProjection()),
+      UIGlobals::GetDialogLook(), UIGlobals::GetMapLook().airspace,
+      CommonInterface::GetMapSettings().airspace);
 }
 
 
@@ -397,15 +401,16 @@ PrepareAirspaceSelectDialog()
 }
 
 void
-dlgAirspaceSelect(const Airspaces &airspace_database,
+dlgAirspaceSelect(const Airspaces &_airspaces,
                   ProtectedAirspaceWarningManager *_airspace_warnings)
 {
   airspace_warnings = _airspace_warnings;
+  airspaces = &_airspaces;
+  location = XCSoarInterface::Basic().location;
 
   PrepareAirspaceSelectDialog();
 
-  GeoPoint Location = XCSoarInterface::Basic().location;
-  AirspaceSorter g_airspace_sorter(airspace_database, Location);
+  AirspaceSorter g_airspace_sorter(*airspaces, location);
   airspace_sorter = &g_airspace_sorter;
 
   UpdateList();
