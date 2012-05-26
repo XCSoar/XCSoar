@@ -52,7 +52,7 @@ bool
 CaiGpsNavDevice::EnableNMEA(OperationEnvironment &env)
 {
   port.Write(CtrlC);
-  env.Sleep(50);
+  env.Sleep(200);
   port.Write("NMEA\r");
 
   // This is for a slightly different mode, that
