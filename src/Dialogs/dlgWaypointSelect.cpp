@@ -294,13 +294,13 @@ public:
    */
   bool
   IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
-             const fixed right)
+             bool right)
   {
     const Angle a01 = p0.Bearing(p1);
     const Angle a21 = p2.Bearing(p1);
     const fixed diff = (a01 - a21).AsDelta().Degrees();
 
-    if (positive(right))
+    if (right)
       return (diff > min_fai_angle) && (diff < max_fai_angle);
     else
       return (diff < fixed(-1) * min_fai_angle) && (diff > fixed(-1)
@@ -315,7 +315,7 @@ public:
    * @return True if point would be valid in an FAI Triangle
    */
   bool
-  IsFAITrianglePoint(const Waypoint& wp, const fixed right)
+  IsFAITrianglePoint(const Waypoint& wp, bool right)
   {
     if (fai_triangle_point_invalid)
       return false;
@@ -473,10 +473,10 @@ private:
       return waypoint.IsFinishpoint();
 
     case TF_FAI_TRIANGLE_LEFT:
-      return triangle_validator->IsFAITrianglePoint(waypoint, fixed(-1));
+      return triangle_validator->IsFAITrianglePoint(waypoint, false);
 
     case TF_FAI_TRIANGLE_RIGHT:
-      return triangle_validator->IsFAITrianglePoint(waypoint, fixed_one);
+      return triangle_validator->IsFAITrianglePoint(waypoint, true);
 
     case TF_FILE_1:
       return waypoint.file_num == 1;
