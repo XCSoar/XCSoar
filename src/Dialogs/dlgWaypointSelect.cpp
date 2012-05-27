@@ -768,7 +768,6 @@ OnTimerNotify(gcc_unused WndForm &sender)
       last_heading = CommonInterface::Calculated().heading;
       UpdateList();
       InitializeDirection(true);
-      direction_filter->RefreshDisplay();
     }
   }
 }
