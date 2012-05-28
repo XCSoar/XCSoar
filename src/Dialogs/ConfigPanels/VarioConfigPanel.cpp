@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "Audio/Features.hpp"
 
 enum ControlIndex {
   AppGaugeVarioSpeedToFly,
@@ -36,7 +37,11 @@ enum ControlIndex {
   AppGaugeVarioBugs,
   AppGaugeVarioBallast,
   AppGaugeVarioGross,
-  AppAveNeedle
+  AppAveNeedle,
+#ifdef HAVE_PCM_PLAYER
+  AudioVario,
+  Volume,
+#endif
 };
 
 
@@ -87,6 +92,17 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                  "average gross value."),
              settings.ShowAveNeedle);
   SetExpertRow(AppAveNeedle);
+
+#ifdef HAVE_PCM_PLAYER
+  const SoundSettings &sound = CommonInterface::GetComputerSettings().sound;
+
+  AddBoolean(_("Audio vario"),
+             _("Emulate the sound of an electronic vario."),
+             sound.sound_vario_enabled);
+
+  AddInteger(_("Volume"), NULL, _T("%u %%"), _T("%u"),
+             0, 100, 1, sound.sound_volume);
+#endif
 }
 
 bool
@@ -109,6 +125,17 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(AppGaugeVarioGross, szProfileAppGaugeVarioGross, settings.ShowGross);
 
   changed |= SaveValue(AppAveNeedle, szProfileAppAveNeedle, settings.ShowAveNeedle);
+
+#ifdef HAVE_PCM_PLAYER
+  SoundSettings &sound = CommonInterface::SetComputerSettings().sound;
+  changed |= SaveValue(AudioVario, szProfileSoundAudioVario,
+                       sound.sound_vario_enabled);
+  unsigned volume = sound.sound_volume;
+  if (SaveValue(Volume, szProfileSoundVolume, volume)) {
+    sound.sound_volume = volume;
+    changed = true;
+  }
+#endif
 
   _changed |= changed;
   _require_restart |= require_restart;

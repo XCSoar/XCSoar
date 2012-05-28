@@ -53,6 +53,7 @@ Copyright_License {
 #include "Language/LanguageGlue.hpp"
 #include "Units/Units.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Audio/VarioGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"
@@ -203,6 +204,8 @@ SettingsLeave(const UISettings &old_ui_settings)
   // allow map and calculations threads to continue
 
   ActionInterface::SendMapSettings(true);
+
+  AudioVarioGlue::Configure(CommonInterface::GetComputerSettings().sound);
 
   operation.Hide();
   InfoBoxManager::SetDirty();
