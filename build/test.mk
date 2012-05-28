@@ -766,6 +766,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -896,7 +897,6 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunLiveTrack24.cpp
 RUN_LIVETRACK24_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_LIVETRACK24_DEPENDS = LIBNET MATH UTIL
@@ -1368,7 +1368,6 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Operation/Operation.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_IGC_WRITER_DEPENDS = MATH UTIL
@@ -1378,7 +1377,6 @@ RUN_FLIGHT_LOGGER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunFlightLogger.cpp
 RUN_FLIGHT_LOGGER_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_FLIGHT_LOGGER_DEPENDS = MATH UTIL
@@ -1388,7 +1386,6 @@ RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_CIRCLING_WIND_DEPENDS = MATH UTIL
@@ -1397,7 +1394,6 @@ $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindZigZag.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_ZIG_ZAG_DEPENDS = MATH UTIL
@@ -1407,7 +1403,6 @@ RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindEKF.cpp \
 	$(SRC)/Wind/WindEKFGlue.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = MATH UTIL
@@ -1417,7 +1412,6 @@ RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
@@ -1434,7 +1428,6 @@ RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
@@ -1469,7 +1462,6 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Writer.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
@@ -1508,7 +1500,6 @@ FLIGHT_PATH_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
