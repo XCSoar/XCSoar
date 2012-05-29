@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.3.5 - not yet released
+
 Version 6.3.4 - 2012/05/24
 * calculations
   - fix overflow in ETE/ETA calculations on big tasks (#2066)
