@@ -35,6 +35,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceClass.hpp"
+#include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Components.hpp"
@@ -66,24 +67,19 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   PixelScalar x0 = w0 - w1 - w2;
 
   if (color_mode) {
-    canvas.SelectWhitePen();
-#ifndef HAVE_HATCHED_BRUSH
-    canvas.Select(look.solid_brushes[i]);
-#else
-#ifdef HAVE_ALPHA_BLEND
-    if (renderer.transparency && AlphaBlendAvailable()) {
-      canvas.Select(look.solid_brushes[i]);
-    } else {
-#endif
-      canvas.SetTextColor(renderer.classes[i].fill_color);
-      canvas.SetBackgroundColor(Color(0xFF, 0xFF, 0xFF));
-      canvas.Select(look.brushes[renderer.classes[i].brush]);
-#ifdef HAVE_ALPHA_BLEND
+    if (AirspacePreviewRenderer::PrepareFill(
+        canvas, (AirspaceClass)i, look, renderer)) {
+      canvas.Rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
+                       rc.right - Layout::FastScale(2),
+                       rc.bottom - Layout::FastScale(2));
+      AirspacePreviewRenderer::UnprepareFill(canvas);
     }
-#endif
-#endif
-    canvas.Rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
-        rc.right - Layout::FastScale(2), rc.bottom - Layout::FastScale(2));
+    if (AirspacePreviewRenderer::PrepareOutline(
+        canvas, (AirspaceClass)i, look, renderer)) {
+      canvas.Rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
+                       rc.right - Layout::FastScale(2),
+                       rc.bottom - Layout::FastScale(2));
+    }
   } else {
     if (computer.warnings.class_warnings[i])
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
