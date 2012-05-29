@@ -82,7 +82,8 @@ public:
    * @param type Airspace class
    */
   void
-  RenderBox(const PixelRect rc, const Brush &brush, bool black, int type) const
+  RenderBox(const PixelRect rc, const Brush &brush, bool black,
+            AirspaceClass type) const
   {
     // Enable "transparency" effect
 #ifdef ENABLE_OPENGL
@@ -148,7 +149,7 @@ public:
    * @param as AbstractAirspace to render
    */
   void Render(const AbstractAirspace &as) const {
-    int type = as.GetType();
+    AirspaceClass type = as.GetType();
     if (type <= 0)
       return;
 
