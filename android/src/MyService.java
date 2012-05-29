@@ -66,9 +66,7 @@ public class MyService extends Service {
     notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
   }
 
-  @Override public int onStartCommand(Intent intent, int flags, int startId) {
-    super.onStartCommand(intent, flags, startId);
-
+  private void onStart() {
     /* add an icon to the notification area while XCSoar runs, to
        remind the user that we're sucking his battery empty */
     Notification notification = new Notification(R.drawable.icon, null,
@@ -84,6 +82,18 @@ public class MyService extends Service {
 
     if (Build.VERSION.SDK_INT >= 5)
       APILevel5.startForeground(this, 1, notification);
+  }
+
+  @Override public void onStart(Intent intent, int startId) {
+    /* used by API level 4 (Android 1.6) */
+
+    onStart();
+  }
+
+  @Override public int onStartCommand(Intent intent, int flags, int startId) {
+    /* used by API level 5 (Android 2.0 and newer) */
+
+    onStart();
 
     /* We want this service to continue running until it is explicitly
        stopped, so return sticky */

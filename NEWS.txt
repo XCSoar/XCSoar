@@ -16,6 +16,10 @@ Version 6.4 - not yet released
 * Android
   - support x86 and MIPS CPUs
 
+Version 6.3.5 - not yet released
+* Android
+  - fix compatibility with Android 1.6
+
 Version 6.3.4 - 2012/05/24
 * calculations
   - fix overflow in ETE/ETA calculations on big tasks (#2066)
