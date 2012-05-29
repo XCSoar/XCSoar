@@ -28,15 +28,13 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Renderer/AircraftRenderer.hpp"
-#include "Renderer/AirspacePreviewRenderer.hpp"
-#include "Airspace/AbstractAirspace.hpp"
+#include "Renderer/AirspaceListRenderer.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
-#include "Formatter/AirspaceFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
@@ -276,45 +274,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const AirspaceLook &look,
                           const AirspaceRendererSettings &renderer_settings)
 {
-  const PixelScalar line_height = rc.bottom - rc.top;
-
-  const AbstractAirspace &airspace = *item.airspace;
-
-  const Font &name_font = *dialog_look.list.font;
-  const Font &small_font = *dialog_look.small_font;
-
-  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
-  canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                      airspace.GetName());
-
-  canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, AirspaceFormatter::GetClass(airspace));
-
-  tstring top = AirspaceFormatter::GetTopShort(airspace);
-  PixelScalar altitude_width =
-    canvas.CalcTextWidth(top.c_str());
-  canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.GetHeight() -
-                      small_font.GetHeight() + Layout::FastScale(2), rc,
-                      top.c_str());
-
-  tstring base = AirspaceFormatter::GetBaseShort(airspace);
-  altitude_width = canvas.CalcTextWidth(base.c_str());
-
-  canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, base.c_str());
-
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
-  PixelScalar radius = std::min(PixelScalar(line_height / 2
-                                            - Layout::FastScale(4)),
-                                Layout::FastScale(10));
-  AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
-                                renderer_settings, look);
+  AirspaceListRenderer::Draw(canvas, rc, *item.airspace, dialog_look, look,
+                             renderer_settings);
 }
 
 void
