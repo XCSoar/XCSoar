@@ -56,11 +56,12 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; ++i) {
     const AirspaceClassRendererSettings &class_settings = settings.classes[i];
 
-    pens[i].Set(Layout::ScalePenWidth(class_settings.border_width),
-                class_settings.border_color);
+    if (class_settings.border_width != 0)
+      pens[i].Set(Layout::ScalePenWidth(class_settings.border_width),
+                  class_settings.border_color);
 
 #ifdef HAVE_ALPHA_BLEND
-  if (AlphaBlendAvailable())
+    if (AlphaBlendAvailable())
 #endif
 #if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
       solid_brushes[i].Set(class_settings.fill_color);
