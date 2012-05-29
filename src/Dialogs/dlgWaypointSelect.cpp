@@ -199,39 +199,35 @@ PrepareData()
   name_button->SetCaption(_T("*"));
 
   // initialize datafieldenum for Distance
-  if (distance_filter) {
-    DataFieldEnum* data_field = (DataFieldEnum*)distance_filter->GetDataField();
-    data_field->addEnumText(_T("*"));
+  DataFieldEnum* data_field = (DataFieldEnum*)distance_filter->GetDataField();
+  data_field->addEnumText(_T("*"));
 
-    TCHAR buffer[15];
-    for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
-      _stprintf(buffer, _T("%.0f%s"), (double)distance_filter_items[i],
-                Units::GetDistanceName());
-      data_field->addEnumText(buffer);
-    }
-
-    data_field->SetAsInteger(filter_data.distance_index);
-    distance_filter->RefreshDisplay();
+  TCHAR buffer[15];
+  for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
+    _stprintf(buffer, _T("%.0f%s"), (double)distance_filter_items[i],
+              Units::GetDistanceName());
+    data_field->addEnumText(buffer);
   }
+
+  data_field->SetAsInteger(filter_data.distance_index);
+  distance_filter->RefreshDisplay();
 
   InitializeDirection(false);
 
   // initialize datafieldenum for Type
-  if (type_filter) {
-    DataFieldEnum* data_field = (DataFieldEnum*)type_filter->GetDataField();
-    data_field->addEnumTexts(type_filter_items);
+  data_field = (DataFieldEnum*)type_filter->GetDataField();
+  data_field->addEnumTexts(type_filter_items);
 
-    const TCHAR *p = GetProfilePathBase(szProfileWaypointFile);
-    if (p != NULL)
-      data_field->replaceEnumText(TF_FILE_1, p);
+  const TCHAR *p = GetProfilePathBase(szProfileWaypointFile);
+  if (p != NULL)
+    data_field->replaceEnumText(TF_FILE_1, p);
 
-    p = GetProfilePathBase(szProfileAdditionalWaypointFile);
-    if (p != NULL)
-      data_field->replaceEnumText(TF_FILE_2, p);
+  p = GetProfilePathBase(szProfileAdditionalWaypointFile);
+  if (p != NULL)
+    data_field->replaceEnumText(TF_FILE_2, p);
 
-    data_field->SetAsInteger(filter_data.type_index);
-    type_filter->RefreshDisplay();
-  }
+  data_field->SetAsInteger(filter_data.type_index);
+  type_filter->RefreshDisplay();
 }
 
 /**
@@ -849,8 +845,11 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
   name_button->SetOnRightNotify(OnFilterNameButtonRight);
 
   distance_filter = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
+  assert(distance_filter != NULL);
   direction_filter = (WndProperty*)dialog->FindByName(_T("prpFltDirection"));
+  assert(direction_filter != NULL);
   type_filter = (WndProperty *)dialog->FindByName(_T("prpFltType"));
+  assert(type_filter != NULL);
 
   location = _location;
   triangle_validator =
