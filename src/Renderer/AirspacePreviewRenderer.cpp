@@ -73,13 +73,14 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const AirspaceRendererSettings &settings,
                               const AirspaceLook &look)
 {
+  AbstractAirspace::Shape shape = airspace.GetShape();
+
   AirspaceClass type = airspace.GetType();
   const AirspaceClassRendererSettings &class_settings = settings.classes[type];
 
   // Container for storing the points of a polygon airspace
   std::vector<RasterPoint> pts;
-  if (airspace.GetShape() == AbstractAirspace::Shape::POLYGON &&
-      !IsAncientHardware())
+  if (shape == AbstractAirspace::Shape::POLYGON && !IsAncientHardware())
     GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 
   if (class_settings.fill_mode !=
@@ -100,7 +101,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
 #endif
 
     canvas.SelectNullPen();
-    if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
+    if (shape == AbstractAirspace::Shape::CIRCLE)
       canvas.DrawCircle(pt.x, pt.y, radius);
     else if (IsAncientHardware())
       canvas.Rectangle(pt.x - radius, pt.y - radius,
@@ -123,7 +124,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
 
   canvas.SelectHollowBrush();
 
-  if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
+  if (shape == AbstractAirspace::Shape::CIRCLE)
     canvas.DrawCircle(pt.x, pt.y, radius);
   else if (IsAncientHardware())
     canvas.Rectangle(pt.x - radius, pt.y - radius,
