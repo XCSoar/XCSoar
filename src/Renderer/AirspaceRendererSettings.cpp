@@ -79,6 +79,4 @@ AirspaceRendererSettings::SetDefaults()
   classes[AATASK].SetColors(COLOR_YELLOW);
   classes[CLASSE].SetColors(DarkColor(COLOR_GREEN));
   classes[CLASSF].SetColors(DarkColor(COLOR_GREEN));
-
-  classes[CTR].fill_mode = AirspaceClassRendererSettings::FillMode::ALL;
 }
