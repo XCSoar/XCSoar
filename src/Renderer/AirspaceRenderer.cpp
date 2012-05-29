@@ -185,8 +185,8 @@ public:
     }
 
     // draw outline
-    SetupOutline(airspace);
-    canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
+    if (SetupOutline(airspace))
+      canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
   void Visit(const AirspacePolygon &airspace) {
@@ -223,23 +223,31 @@ public:
     }
 
     // draw outline
-    SetupOutline(airspace);
-    DrawPrepared();
+    if (SetupOutline(airspace))
+      DrawPrepared();
   }
 
 private:
-  void SetupOutline(const AbstractAirspace &airspace) {
+  bool SetupOutline(const AbstractAirspace &airspace) {
+    AirspaceClass type = airspace.GetType();
+
+    if (settings.black_outline)
+      canvas.SelectBlackPen();
+    else if (settings.classes[type].border_width == 0)
+      // Don't draw outlines if border_width == 0
+      return false;
+    else
+      canvas.Select(look.pens[type]);
+
+    canvas.SelectHollowBrush();
+
     // set bit 1 in stencil buffer, where an outline is drawn
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glStencilFunc(GL_ALWAYS, 3, 3);
     glStencilMask(2);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    if (settings.black_outline)
-      canvas.SelectBlackPen();
-    else
-      canvas.Select(look.pens[airspace.GetType()]);
-    canvas.SelectHollowBrush();
+    return true;
   }
 
   void SetupInterior(const AbstractAirspace &airspace,
@@ -308,8 +316,8 @@ public:
     }
 
     // draw outline
-    SetupOutline(airspace);
-    canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
+    if (SetupOutline(airspace))
+      canvas.DrawCircle(screen_center.x, screen_center.y, screen_radius);
   }
 
   void Visit(const AirspacePolygon &airspace) {
@@ -326,17 +334,25 @@ public:
     }
 
     // draw outline
-    SetupOutline(airspace);
-    DrawPrepared();
+    if (SetupOutline(airspace))
+      DrawPrepared();
   }
 
 private:
-  void SetupOutline(const AbstractAirspace &airspace) {
+  bool SetupOutline(const AbstractAirspace &airspace) {
+    AirspaceClass type = airspace.GetType();
+
     if (settings.black_outline)
       canvas.SelectBlackPen();
+    else if (settings.classes[type].border_width == 0)
+      // Don't draw outlines if border_width == 0
+      return false;
     else
-      canvas.Select(look.pens[airspace.GetType()]);
+      canvas.Select(look.pens[type]);
+
     canvas.SelectHollowBrush();
+
+    return true;
   }
 
   void SetupInterior(const AbstractAirspace &airspace) {
@@ -465,35 +481,45 @@ class AirspaceOutlineRenderer
    protected MapCanvas
 {
   const AirspaceLook &look;
-  bool black;
+  const AirspaceRendererSettings &settings;
 
 public:
   AirspaceOutlineRenderer(Canvas &_canvas, const WindowProjection &_projection,
-                          const AirspaceLook &_look, bool _black)
+                          const AirspaceLook &_look,
+                          const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().Scale(fixed(1.1))),
-     look(_look), black(_black)
+     look(_look), settings(_settings)
   {
-    if (black)
+    if (settings.black_outline)
       canvas.SelectBlackPen();
     canvas.SelectHollowBrush();
   }
 
 protected:
-  void SetupCanvas(const AbstractAirspace &airspace) {
-    if (!black)
-      canvas.Select(look.pens[airspace.GetType()]);
+  bool SetupCanvas(const AbstractAirspace &airspace) {
+    if (settings.black_outline)
+      return true;
+
+    AirspaceClass type = airspace.GetType();
+    if (settings.classes[type].border_width == 0)
+      // Don't draw outlines if border_width == 0
+      return false;
+
+    canvas.Select(look.pens[type]);
+
+    return true;
   }
 
 public:
   void Visit(const AirspaceCircle &airspace) {
-    SetupCanvas(airspace);
-    DrawCircle(airspace.GetCenter(), airspace.GetRadius());
+    if (SetupCanvas(airspace))
+      DrawCircle(airspace.GetCenter(), airspace.GetRadius());
   }
 
   void Visit(const AirspacePolygon &airspace) {
-    SetupCanvas(airspace);
-    DrawPolygon(airspace.GetPoints());
+    if (SetupCanvas(airspace))
+      DrawPolygon(airspace.GetPoints());
   }
 };
 
@@ -555,9 +581,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 
   v.DrawIntercepts();
 
-  AirspaceOutlineRenderer outline_renderer(canvas, projection,
-                                           look,
-                                           settings.black_outline);
+  AirspaceOutlineRenderer outline_renderer(canvas, projection, look, settings);
   airspaces->VisitWithinRange(projection.GetGeoScreenCenter(),
                                         projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
