@@ -21,30 +21,26 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This header provides macros and inline functions providing
- * information about the availability of audio playback features.
- */
+#ifndef XCSOAR_AUDIO_SLES_PLAY_HPP
+#define XCSOAR_AUDIO_SLES_PLAY_HPP
 
-#ifndef XCSOAR_AUDIO_FEATURES_HPP
-#define XCSOAR_AUDIO_FEATURES_HPP
+#include <SLES/OpenSLES.h>
 
-#include "Compiler.h"
+namespace SLES {
+  /**
+   * OO wrapper for an OpenSL/ES SLPlayItf variable.
+   */
+  class Play {
+    SLPlayItf play;
 
-#if !defined(WIN32)
-#define HAVE_PCM_PLAYER
-#endif
+  public:
+    Play() = default;
+    explicit Play(SLPlayItf _play):play(_play) {}
 
-gcc_constexpr_function
-static inline bool
-HavePCMPlayer()
-{
-#ifdef HAVE_PCM_PLAYER
-  return true;
-#else
-  return false;
-#endif
+    SLresult SetPlayState(SLuint32 state) {
+      return (*play)->SetPlayState(play, state);
+    }
+  };
 }
 
 #endif

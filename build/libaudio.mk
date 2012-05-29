@@ -2,7 +2,7 @@
 
 HAVE_PCM_PLAYER = n
 
-ifeq ($(TARGET),UNIX)
+ifneq ($(findstring $(TARGET),UNIX ANDROID),)
 HAVE_PCM_PLAYER = y
 endif
 
@@ -14,6 +14,11 @@ AUDIO_SOURCES = \
 	$(AUDIO_SRC_DIR)/ToneSynthesiser.cpp \
 	$(AUDIO_SRC_DIR)/VarioSynthesiser.cpp \
 	$(AUDIO_SRC_DIR)/PCMPlayer.cpp
+
+ifeq ($(TARGET),ANDROID)
+AUDIO_SOURCES += \
+	$(AUDIO_SRC_DIR)/SLES/Init.cpp
+endif
 
 $(eval $(call link-library,libaudio,AUDIO))
 

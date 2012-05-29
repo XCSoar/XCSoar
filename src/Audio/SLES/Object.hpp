@@ -21,30 +21,38 @@ Copyright_License {
 }
 */
 
-/** \file
- *
- * This header provides macros and inline functions providing
- * information about the availability of audio playback features.
- */
+#ifndef XCSOAR_AUDIO_SLES_OBJECT_HPP
+#define XCSOAR_AUDIO_SLES_OBJECT_HPP
 
-#ifndef XCSOAR_AUDIO_FEATURES_HPP
-#define XCSOAR_AUDIO_FEATURES_HPP
+#include <SLES/OpenSLES.h>
 
-#include "Compiler.h"
+namespace SLES {
+  /**
+   * OO wrapper for an OpenSL/ES SLObjectItf variable.
+   */
+  class Object {
+    SLObjectItf object;
 
-#if !defined(WIN32)
-#define HAVE_PCM_PLAYER
-#endif
+  public:
+    Object() = default;
+    explicit Object(SLObjectItf _object):object(_object) {}
 
-gcc_constexpr_function
-static inline bool
-HavePCMPlayer()
-{
-#ifdef HAVE_PCM_PLAYER
-  return true;
-#else
-  return false;
-#endif
+    operator SLObjectItf() {
+      return object;
+    }
+
+    SLresult Realize(bool async) {
+      return (*object)->Realize(object, async);
+    }
+
+    void Destroy() {
+      (*object)->Destroy(object);
+    }
+
+    SLresult GetInterface(const SLInterfaceID iid, void *pInterface) {
+      return (*object)->GetInterface(object, iid, pInterface);
+    }
+  };
 }
 
 #endif

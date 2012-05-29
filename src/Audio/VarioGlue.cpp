@@ -26,9 +26,17 @@ Copyright_License {
 #include "VarioSynthesiser.hpp"
 #include "ComputerSettings.hpp"
 
+#ifdef ANDROID
+#include "SLES/Init.hpp"
+#endif
+
 #include <assert.h>
 
 static const unsigned sample_rate = 44100;
+
+#ifdef ANDROID
+static bool have_sles;
+#endif
 
 static PCMPlayer *player;
 static VarioSynthesiser *synthesiser;
@@ -38,6 +46,12 @@ AudioVarioGlue::Initialise()
 {
   assert(player == NULL);
   assert(synthesiser == NULL);
+
+#ifdef ANDROID
+  have_sles = SLES::Initialise();
+  if (!have_sles)
+    return;
+#endif
 
   player = new PCMPlayer();
   synthesiser = new VarioSynthesiser();
@@ -58,6 +72,11 @@ AudioVarioGlue::Deinitialise()
 void
 AudioVarioGlue::Configure(const SoundSettings &settings)
 {
+#ifdef ANDROID
+  if (!have_sles)
+    return;
+#endif
+
   assert(player != NULL);
   assert(synthesiser != NULL);
 
@@ -71,6 +90,11 @@ AudioVarioGlue::Configure(const SoundSettings &settings)
 void
 AudioVarioGlue::SetValue(fixed vario)
 {
+#ifdef ANDROID
+  if (!have_sles)
+    return;
+#endif
+
   assert(player != NULL);
   assert(synthesiser != NULL);
 
@@ -80,6 +104,11 @@ AudioVarioGlue::SetValue(fixed vario)
 void
 AudioVarioGlue::NoValue()
 {
+#ifdef ANDROID
+  if (!have_sles)
+    return;
+#endif
+
   assert(player != NULL);
   assert(synthesiser != NULL);
 
