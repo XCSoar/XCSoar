@@ -59,7 +59,6 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
-#include "Audio/VarioSound.h"
 #include "Audio/VarioGlue.hpp"
 #include "Screen/Busy.hpp"
 #include "Polar/PolarGlue.hpp"
@@ -392,16 +391,6 @@ XCSoarInterface::Startup()
   noaa_store->LoadFromProfile();
 #endif
 
-#ifndef DISABLEAUDIOVARIO
-  /*
-  VarioSound_Init();
-  VarioSound_EnableSound(EnableSoundVario);
-  VarioSound_SetVdead(SoundDeadband);
-  VarioSound_SetV(0);
-  VarioSound_SetSoundVolume(SoundVolume);
-  */
-#endif
-
   AudioVarioGlue::Initialise();
   AudioVarioGlue::Configure(GetComputerSettings().sound);
 
@@ -531,11 +520,6 @@ XCSoarInterface::Shutdown()
   Profile::Save();
 
   // Stop sound
-
-#ifndef DISABLEAUDIOVARIO
-  //  VarioSound_EnableSound(false);
-  //  VarioSound_Close();
-#endif
 
   AudioVarioGlue::Deinitialise();
 

@@ -62,12 +62,6 @@ InputEvents::eventSounds(const TCHAR *misc)
     return;
   }
 
-  /*
-  if (EnableSoundVario != OldEnableSoundVario) {
-    VarioSound_EnableSound(EnableSoundVario);
-  }
-  */
-
   AudioVarioGlue::Configure(settings);
   Profile::Set(szProfileSoundAudioVario, settings.sound_vario_enabled);
 }
@@ -168,10 +162,6 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
 
     --settings.sound_deadband;
   }
-
-  /*
-  VarioSound_SetVdead(SoundDeadband);
-  */
 
   Profile::Set(szProfileSoundDeadband, settings.sound_deadband);
 

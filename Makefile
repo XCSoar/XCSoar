@@ -724,9 +724,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)
 
-#	$(SRC)/VarioSound.cpp \
-#	$(SRC)/WaveThread.cpp \
-
 ifneq ($(NO_HORIZON),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Renderer/HorizonRenderer.cpp
