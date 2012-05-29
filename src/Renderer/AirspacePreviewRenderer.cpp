@@ -33,6 +33,10 @@ Copyright_License {
 
 #include <vector>
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 static void
 DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
             const RasterPoint pt, unsigned radius)
@@ -79,6 +83,36 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
 {
   AirspaceClass type = airspace.GetType();
   const AirspaceClassRendererSettings &class_settings = settings.classes[type];
+
+  if (class_settings.fill_mode !=
+      AirspaceClassRendererSettings::FillMode::NONE) {
+#ifdef ENABLE_OPENGL
+    GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    Color color = class_settings.fill_color;
+    canvas.Select(Brush(color.WithAlpha(48)));
+#elif defined(ENABLE_SDL)
+    Color color = class_settings.fill_color;
+    canvas.Select(Brush(LightColor(color)));
+#else
+    canvas.Select(look.brushes[settings.transparency ?
+                               3 : class_settings.brush]);
+    canvas.SetTextColor(LightColor(class_settings.fill_color));
+    canvas.SetMixMask();
+#endif
+
+    canvas.SelectNullPen();
+    if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
+      canvas.DrawCircle(pt.x, pt.y, radius);
+    else
+      DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
+
+#ifdef ENABLE_OPENGL
+    glDisable(GL_BLEND);
+#elif !defined(ENABLE_SDL)
+    canvas.SetMixCopy();
+#endif
+  }
 
   if (settings.black_outline)
     canvas.SelectBlackPen();
