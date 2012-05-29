@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_PREVIEW_RENDERER_HPP
 
 #include "Screen/Point.hpp"
+#include "Engine/Airspace/AirspaceClass.hpp"
 
 class Canvas;
 class AbstractAirspace;
@@ -33,6 +34,16 @@ struct AirspaceLook;
 
 namespace AirspacePreviewRenderer
 {
+  bool PrepareFill(Canvas &canvas, AirspaceClass type,
+                   const AirspaceLook &look,
+                   const AirspaceRendererSettings &settings);
+
+  void UnprepareFill(Canvas &canvas);
+
+  bool PrepareOutline(Canvas &canvas, AirspaceClass type,
+                      const AirspaceLook &look,
+                      const AirspaceRendererSettings &settings);
+
   /** Draw a scaled preview of the given airspace */
   void Draw(Canvas &canvas, const AbstractAirspace &airspace,
             const RasterPoint pt, unsigned radius,

@@ -67,6 +67,68 @@ GetPolygonPoints(std::vector<RasterPoint> &pts,
     pts.push_back(projection.GeoToScreen(it->get_location()));
 }
 
+bool
+AirspacePreviewRenderer::PrepareFill(
+    Canvas &canvas, AirspaceClass type, const AirspaceLook &look,
+    const AirspaceRendererSettings &settings)
+{
+  const AirspaceClassRendererSettings &class_settings = settings.classes[type];
+
+  if (class_settings.fill_mode ==
+      AirspaceClassRendererSettings::FillMode::NONE)
+    return false;
+
+#ifdef ENABLE_OPENGL
+  ::glEnable(GL_BLEND);
+  ::glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  Color color = class_settings.fill_color;
+  canvas.Select(Brush(color.WithAlpha(48)));
+#elif defined(ENABLE_SDL)
+  Color color = class_settings.fill_color;
+  canvas.Select(Brush(LightColor(color)));
+#else
+  canvas.Select(look.brushes[settings.transparency ?
+                             3 : class_settings.brush]);
+  canvas.SetTextColor(LightColor(class_settings.fill_color));
+  canvas.SetMixMask();
+#endif
+
+  canvas.SelectNullPen();
+
+  return true;
+}
+
+void
+AirspacePreviewRenderer::UnprepareFill(Canvas &canvas)
+{
+#ifdef ENABLE_OPENGL
+  ::glDisable(GL_BLEND);
+#elif defined(USE_GDI)
+  canvas.SetMixCopy();
+#endif
+}
+
+bool
+AirspacePreviewRenderer::PrepareOutline(
+    Canvas &canvas, AirspaceClass type, const AirspaceLook &look,
+    const AirspaceRendererSettings &settings)
+{
+  const AirspaceClassRendererSettings &class_settings = settings.classes[type];
+
+  if (settings.black_outline)
+    canvas.SelectBlackPen();
+  else if (class_settings.border_width == 0)
+    // Don't draw outlines if border_width == 0
+    return false;
+  else
+    canvas.Select(look.pens[type]);
+
+  canvas.SelectHollowBrush();
+
+  return true;
+}
+
 void
 AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const RasterPoint pt, unsigned radius,
@@ -74,33 +136,14 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const AirspaceLook &look)
 {
   AbstractAirspace::Shape shape = airspace.GetShape();
-
   AirspaceClass type = airspace.GetType();
-  const AirspaceClassRendererSettings &class_settings = settings.classes[type];
 
   // Container for storing the points of a polygon airspace
   std::vector<RasterPoint> pts;
   if (shape == AbstractAirspace::Shape::POLYGON && !IsAncientHardware())
     GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 
-  if (class_settings.fill_mode !=
-      AirspaceClassRendererSettings::FillMode::NONE) {
-#ifdef ENABLE_OPENGL
-    GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    Color color = class_settings.fill_color;
-    canvas.Select(Brush(color.WithAlpha(48)));
-#elif defined(ENABLE_SDL)
-    Color color = class_settings.fill_color;
-    canvas.Select(Brush(LightColor(color)));
-#else
-    canvas.Select(look.brushes[settings.transparency ?
-                               3 : class_settings.brush]);
-    canvas.SetTextColor(LightColor(class_settings.fill_color));
-    canvas.SetMixMask();
-#endif
-
-    canvas.SelectNullPen();
+  if (PrepareFill(canvas, type, look, settings)) {
     if (shape == AbstractAirspace::Shape::CIRCLE)
       canvas.DrawCircle(pt.x, pt.y, radius);
     else if (IsAncientHardware())
@@ -109,26 +152,16 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
     else
       canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 
-#ifdef USE_GDI
-    canvas.SetMixCopy();
-#endif
+    UnprepareFill(canvas);
   }
 
-  if (settings.black_outline)
-    canvas.SelectBlackPen();
-  else if (class_settings.border_width == 0)
-    // Don't draw outlines if border_width == 0
-    return;
-  else
-    canvas.Select(look.pens[type]);
-
-  canvas.SelectHollowBrush();
-
-  if (shape == AbstractAirspace::Shape::CIRCLE)
-    canvas.DrawCircle(pt.x, pt.y, radius);
-  else if (IsAncientHardware())
-    canvas.Rectangle(pt.x - radius, pt.y - radius,
-                     pt.x + radius, pt.y + radius);
-  else
-    canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
+  if (PrepareOutline(canvas, type, look, settings)) {
+    if (shape == AbstractAirspace::Shape::CIRCLE)
+      canvas.DrawCircle(pt.x, pt.y, radius);
+    else if (IsAncientHardware())
+      canvas.Rectangle(pt.x - radius, pt.y - radius,
+                       pt.x + radius, pt.y + radius);
+    else
+      canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
+  }
 }

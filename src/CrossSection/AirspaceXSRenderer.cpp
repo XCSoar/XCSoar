@@ -29,6 +29,7 @@
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
+#include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Navigation/Aircraft.hpp"
 
@@ -82,66 +83,44 @@ public:
    * @param type Airspace class
    */
   void
-  RenderBox(const PixelRect rc, const Brush &brush, bool black,
-            AirspaceClass type) const
+  RenderBox(const PixelRect rc, AirspaceClass type) const
   {
-    // Enable "transparency" effect
-#ifdef ENABLE_OPENGL
-    GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#elif defined(USE_GDI)
-    canvas.SetMixMask();
-#endif /* GDI */
+    if (AirspacePreviewRenderer::PrepareFill(
+        canvas, type, airspace_look, settings)) {
 
-    // Use filling brush without outline
-    canvas.Select(brush);
-    canvas.SelectNullPen();
+      // Draw thick brushed outlines
+      PixelScalar border_width = Layout::Scale(10);
+      if ((rc.right - rc.left) > border_width * 2 &&
+          (rc.bottom - rc.top) > border_width * 2) {
+        PixelRect border = rc;
+        border.left += border_width;
+        border.right -= border_width;
+        border.top += border_width;
+        border.bottom -= border_width;
 
-    // Draw thick brushed outlines
-    PixelScalar border_width = Layout::Scale(10);
-    if ((rc.right - rc.left) > border_width * 2 &&
-        (rc.bottom - rc.top) > border_width * 2) {
-      PixelRect border = rc;
-      border.left += border_width;
-      border.right -= border_width;
-      border.top += border_width;
-      border.bottom -= border_width;
+        // Left border
+        canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
 
-      // Left border
-      canvas.Rectangle(rc.left, rc.top, border.left, rc.bottom);
+        // Right border
+        canvas.Rectangle(border.right, rc.top, rc.right, rc.bottom);
 
-      // Right border
-      canvas.Rectangle(border.right, rc.top, rc.right, rc.bottom);
+        // Bottom border
+        canvas.Rectangle(border.left, border.bottom, border.right, rc.bottom);
 
-      // Bottom border
-      canvas.Rectangle(border.left, border.bottom, border.right, rc.bottom);
+        // Top border
+        canvas.Rectangle(border.left, rc.top, border.right, border.top);
+      } else {
+        // .. or fill the entire rect if the outlines would overlap
+        canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+      }
 
-      // Top border
-      canvas.Rectangle(border.left, rc.top, border.right, border.top);
-    } else {
-      // .. or fill the entire rect if the outlines would overlap
-      canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+      AirspacePreviewRenderer::UnprepareFill(canvas);
     }
 
-    // Disable "transparency" effect
-#ifdef ENABLE_OPENGL
-    glDisable(GL_BLEND);
-#elif defined(USE_GDI)
-    canvas.SetMixCopy();
-#endif /* GDI */
-
     // Use transparent brush and type-dependent pen for the outlines
-    if (black)
-      canvas.SelectBlackPen();
-    else if (settings.classes[type].border_width == 0)
-      // Don't draw outlines if border_width == 0
-      return;
-    else
-      canvas.Select(airspace_look.pens[type]);
-
-    canvas.SelectHollowBrush();
-
-    // Draw thin outlines
-    canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
+    if (AirspacePreviewRenderer::PrepareOutline(
+        canvas, type, airspace_look, settings))
+      canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
   }
 
   /**
@@ -156,18 +135,6 @@ public:
     // No intersections for this airspace
     if (intersections.empty())
       return;
-
-    // Select pens and brushes
-#ifndef USE_GDI
-    Color color = settings.classes[type].fill_color;
-#ifdef ENABLE_OPENGL
-    color = color.WithAlpha(48);
-#endif
-    Brush brush(color);
-#else
-    const Brush &brush = airspace_look.brushes[settings.classes[type].brush];
-    canvas.SetTextColor(LightColor(settings.classes[type].fill_color));
-#endif
 
     PixelRect rcd;
     // Calculate top and bottom coordinate
@@ -191,7 +158,7 @@ public:
         rcd.right = chart.ScreenX(start.Distance(p_end));
 
       // Draw the airspace
-      RenderBox(rcd, brush, settings.black_outline, type);
+      RenderBox(rcd, type);
     }
   }
 

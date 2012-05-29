@@ -2062,6 +2062,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
+	$(SRC)/Renderer/AirspacePreviewRenderer.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
 	$(SRC)/Renderer/BarographRenderer.cpp \
 	$(SRC)/Renderer/ClimbChartRenderer.cpp \
