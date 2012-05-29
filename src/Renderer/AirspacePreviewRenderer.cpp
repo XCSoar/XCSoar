@@ -38,15 +38,10 @@ Copyright_License {
 #endif
 
 static void
-DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
-            const RasterPoint pt, unsigned radius)
+GetPolygonPoints(std::vector<RasterPoint> &pts,
+                 const AirspacePolygon &airspace,
+                 const RasterPoint pt, unsigned radius)
 {
-  if (IsAncientHardware()) {
-    canvas.Rectangle(pt.x - radius, pt.y - radius,
-                     pt.x + radius, pt.y + radius);
-    return;
-  }
-
   GeoBounds bounds = airspace.GetGeoBounds();
   GeoPoint center = bounds.GetCenter();
 
@@ -67,11 +62,23 @@ DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
 
   const SearchPointVector &border = airspace.GetPoints();
 
-  std::vector<RasterPoint> pts;
   pts.reserve(border.size());
   for (auto it = border.begin(), it_end = border.end(); it != it_end; ++it)
     pts.push_back(projection.GeoToScreen(it->get_location()));
+}
 
+static void
+DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
+            const RasterPoint pt, unsigned radius)
+{
+  if (IsAncientHardware()) {
+    canvas.Rectangle(pt.x - radius, pt.y - radius,
+                     pt.x + radius, pt.y + radius);
+    return;
+  }
+
+  std::vector<RasterPoint> pts;
+  GetPolygonPoints(pts, airspace, pt, radius);
   canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 }
 
