@@ -129,6 +129,19 @@ AirspacePreviewRenderer::PrepareOutline(
   return true;
 }
 
+static void
+DrawShape(Canvas &canvas, AbstractAirspace::Shape shape, const RasterPoint pt,
+          unsigned radius, const std::vector<RasterPoint> &pts)
+{
+  if (shape == AbstractAirspace::Shape::CIRCLE)
+    canvas.DrawCircle(pt.x, pt.y, radius);
+  else if (IsAncientHardware())
+    canvas.Rectangle(pt.x - radius, pt.y - radius,
+                     pt.x + radius, pt.y + radius);
+  else
+    canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
+}
+
 void
 AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const RasterPoint pt, unsigned radius,
@@ -144,24 +157,10 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
     GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 
   if (PrepareFill(canvas, type, look, settings)) {
-    if (shape == AbstractAirspace::Shape::CIRCLE)
-      canvas.DrawCircle(pt.x, pt.y, radius);
-    else if (IsAncientHardware())
-      canvas.Rectangle(pt.x - radius, pt.y - radius,
-                       pt.x + radius, pt.y + radius);
-    else
-      canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
-
+    DrawShape(canvas, shape, pt, radius, pts);
     UnprepareFill(canvas);
   }
 
-  if (PrepareOutline(canvas, type, look, settings)) {
-    if (shape == AbstractAirspace::Shape::CIRCLE)
-      canvas.DrawCircle(pt.x, pt.y, radius);
-    else if (IsAncientHardware())
-      canvas.Rectangle(pt.x - radius, pt.y - radius,
-                       pt.x + radius, pt.y + radius);
-    else
-      canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
-  }
+  if (PrepareOutline(canvas, type, look, settings))
+    DrawShape(canvas, shape, pt, radius, pts);
 }
