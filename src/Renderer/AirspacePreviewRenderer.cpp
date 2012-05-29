@@ -67,15 +67,6 @@ GetPolygonPoints(std::vector<RasterPoint> &pts,
     pts.push_back(projection.GeoToScreen(it->get_location()));
 }
 
-static void
-DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
-            const RasterPoint pt, unsigned radius)
-{
-  std::vector<RasterPoint> pts;
-  GetPolygonPoints(pts, airspace, pt, radius);
-  canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
-}
-
 void
 AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const RasterPoint pt, unsigned radius,
@@ -84,6 +75,12 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
 {
   AirspaceClass type = airspace.GetType();
   const AirspaceClassRendererSettings &class_settings = settings.classes[type];
+
+  // Container for storing the points of a polygon airspace
+  std::vector<RasterPoint> pts;
+  if (airspace.GetShape() == AbstractAirspace::Shape::POLYGON &&
+      !IsAncientHardware())
+    GetPolygonPoints(pts, (const AirspacePolygon &)airspace, pt, radius);
 
   if (class_settings.fill_mode !=
       AirspaceClassRendererSettings::FillMode::NONE) {
@@ -109,7 +106,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
       canvas.Rectangle(pt.x - radius, pt.y - radius,
                        pt.x + radius, pt.y + radius);
     else
-      DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
+      canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 
 #ifdef USE_GDI
     canvas.SetMixCopy();
@@ -132,5 +129,5 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
     canvas.Rectangle(pt.x - radius, pt.y - radius,
                      pt.x + radius, pt.y + radius);
   else
-    DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
+    canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
 }
