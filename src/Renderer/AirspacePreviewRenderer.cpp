@@ -71,12 +71,6 @@ static void
 DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
             const RasterPoint pt, unsigned radius)
 {
-  if (IsAncientHardware()) {
-    canvas.Rectangle(pt.x - radius, pt.y - radius,
-                     pt.x + radius, pt.y + radius);
-    return;
-  }
-
   std::vector<RasterPoint> pts;
   GetPolygonPoints(pts, airspace, pt, radius);
   canvas.DrawPolygon(&pts[0], (unsigned)pts.size());
@@ -111,6 +105,9 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
     canvas.SelectNullPen();
     if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
       canvas.DrawCircle(pt.x, pt.y, radius);
+    else if (IsAncientHardware())
+      canvas.Rectangle(pt.x - radius, pt.y - radius,
+                       pt.x + radius, pt.y + radius);
     else
       DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
 
@@ -131,6 +128,9 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
 
   if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
     canvas.DrawCircle(pt.x, pt.y, radius);
+  else if (IsAncientHardware())
+    canvas.Rectangle(pt.x - radius, pt.y - radius,
+                     pt.x + radius, pt.y + radius);
   else
     DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
 }
