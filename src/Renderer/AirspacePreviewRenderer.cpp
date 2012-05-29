@@ -114,9 +114,7 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
     else
       DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
 
-#ifdef ENABLE_OPENGL
-    glDisable(GL_BLEND);
-#elif !defined(ENABLE_SDL)
+#ifdef USE_GDI
     canvas.SetMixCopy();
 #endif
   }
