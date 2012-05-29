@@ -77,12 +77,18 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const AirspaceRendererSettings &settings,
                               const AirspaceLook &look)
 {
-  canvas.SelectHollowBrush();
+  AirspaceClass type = airspace.GetType();
+  const AirspaceClassRendererSettings &class_settings = settings.classes[type];
 
   if (settings.black_outline)
     canvas.SelectBlackPen();
+  else if (class_settings.border_width == 0)
+    // Don't draw outlines if border_width == 0
+    return;
   else
-    canvas.Select(look.pens[airspace.GetType()]);
+    canvas.Select(look.pens[type]);
+
+  canvas.SelectHollowBrush();
 
   if (airspace.GetShape() == AbstractAirspace::Shape::CIRCLE)
     canvas.DrawCircle(pt.x, pt.y, radius);

@@ -129,11 +129,15 @@ public:
 #endif /* GDI */
 
     // Use transparent brush and type-dependent pen for the outlines
-    canvas.SelectHollowBrush();
     if (black)
       canvas.SelectBlackPen();
+    else if (settings.classes[type].border_width == 0)
+      // Don't draw outlines if border_width == 0
+      return;
     else
       canvas.Select(airspace_look.pens[type]);
+
+    canvas.SelectHollowBrush();
 
     // Draw thin outlines
     canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
