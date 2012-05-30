@@ -40,15 +40,15 @@ Copyright_License {
  * @param res Pointer to be written in
  */
 static void
-LoadString(const char *bytes, int charCount, TCHAR *res)
+LoadString(const char *bytes, size_t charCount, TCHAR *res)
 {
-  int bytesToRead = charCount * 2;
+  size_t bytesToRead = charCount * 2;
 
   TCHAR *curChar = res;
 
   char tmp[3];
   tmp[2] = 0;
-  for (int z = 0; z < bytesToRead; z += 2) {
+  for (size_t z = 0; z < bytesToRead; z += 2) {
     tmp[0] = bytes[z];
     tmp[1] = bytes[z+1];
 
