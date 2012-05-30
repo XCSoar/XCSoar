@@ -7,6 +7,7 @@ Version 6.3.5 - not yet released
   - fix crash on connection failure during flight download
 * Android
   - fix compatibility with Android 1.6
+  - fix hanging IOIO/Bluetooth connection
 
 Version 6.3.4 - 2012/05/24
 * calculations

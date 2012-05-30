@@ -55,7 +55,10 @@ class InputThread extends Thread {
     listener = _listener;
   }
 
-  void close() {
+  /**
+   * Similar to close(), but is allowed to be called from this thread.
+   */
+  private void closeInternal() {
     InputStream is2 = is;
     if (is2 == null)
       return;
@@ -66,6 +69,10 @@ class InputThread extends Thread {
       is2.close();
     } catch (IOException e) {
     }
+  }
+
+  void close() {
+    closeInternal();
 
     try {
       join();
@@ -93,7 +100,7 @@ class InputThread extends Thread {
         if (is != null)
           Log.e(TAG, "Failed to read from " + name, e);
 
-        close();
+        closeInternal();
         break;
       }
 
