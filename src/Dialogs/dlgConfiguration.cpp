@@ -40,6 +40,7 @@ Copyright_License {
 #include "ConfigPanels/UnitsConfigPanel.hpp"
 #include "ConfigPanels/TimeConfigPanel.hpp"
 #include "ConfigPanels/LoggerConfigPanel.hpp"
+#include "ConfigPanels/LoggerInfoConfigPanel.hpp"
 #include "ConfigPanels/DevicesConfigPanel.hpp"
 #include "ConfigPanels/AirspaceConfigPanel.hpp"
 #include "ConfigPanels/SiteConfigPanel.hpp"
@@ -104,6 +105,7 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Devices"), 6, CreateDevicesConfigPanel },
   {N_("Polar"), 6, CreatePolarConfigPanel },
   {N_("Logger"), 6, CreateLoggerConfigPanel },
+  {N_("Logger Info"), 6, CreateLoggerInfoConfigPanel },
   {N_("Units"), 6, CreateUnitsConfigPanel },
   // Important: all pages after Units in this list must not have data fields that are
   // unit-dependent because they will be saved after their units may have changed.

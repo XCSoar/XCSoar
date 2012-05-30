@@ -197,6 +197,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/LayoutConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/LoggerConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/LoggerInfoConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/PagesConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/PolarConfigPanel.cpp \
