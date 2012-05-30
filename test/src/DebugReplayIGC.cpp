@@ -48,6 +48,7 @@ DebugReplayIGC::Next()
           IGCParseDateRecord(line, date)) {
         (BrokenDate &)raw_basic.date_time_utc = date;
         raw_basic.date_available = true;
+        raw_basic.time_available.Clear();
       }
     } else if (line[0] == 'I') {
       IGCParseExtensions(line, extensions);
