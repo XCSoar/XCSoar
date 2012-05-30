@@ -31,12 +31,14 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Logger/NMEALogger.hpp"
 
 enum ControlIndex {
   LoggerTimeStepCruise,
   LoggerTimeStepCircling,
   LoggerShortName,
   DisableAutoLogger,
+  EnableNMEALogger,
   EnableFlightLogger,
 };
 
@@ -88,6 +90,12 @@ LoggerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           auto_logger_list, (unsigned)logger.auto_logger);
   SetExpertRow(DisableAutoLogger);
 
+  AddBoolean(_("NMEA logger"),
+             _("Enable the NMEA logger on startup? If this option is disabled, "
+                 "the NMEA logger can still be started manually."),
+             logger.enable_nmea_logger);
+  SetExpertRow(EnableNMEALogger);
+
   AddBoolean(_("Log book"), _("Logs each start and landing."),
              logger.enable_flight_logger);
   SetExpertRow(EnableFlightLogger);
@@ -111,6 +119,12 @@ LoggerConfigPanel::Save(bool &changed, bool &require_restart)
   /* GUI label is "Enable Auto Logger" */
   changed |= SaveValueEnum(DisableAutoLogger, szProfileAutoLogger,
                            logger.auto_logger);
+
+  changed |= SaveValue(EnableNMEALogger, szProfileEnableNMEALogger,
+                       logger.enable_nmea_logger);
+
+  if (logger.enable_nmea_logger)
+    NMEALogger::enabled = true;
 
   if (SaveValue(EnableFlightLogger, szProfileEnableFlightLogger,
                 logger.enable_flight_logger)) {

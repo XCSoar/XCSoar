@@ -456,6 +456,9 @@ XCSoarInterface::Startup()
     flight_logger->SetPath(path);
   }
 
+  if (CommonInterface::GetComputerSettings().logger.enable_nmea_logger)
+    NMEALogger::enabled = true;
+
   LogStartUp(_T("ProgramStarted"));
 
   // Give focus to the map

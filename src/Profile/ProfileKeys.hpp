@@ -188,6 +188,7 @@ extern const TCHAR szProfileEnableFinalGlideBarMC0[];
 extern const TCHAR szProfileAutoLogger[];
 extern const TCHAR szProfileDisableAutoLogger[];
 extern const TCHAR szProfileEnableFlightLogger[];
+extern const TCHAR szProfileEnableNMEALogger[];
 extern const TCHAR szProfileMapFile[];
 extern const TCHAR szProfileBallastSecsToEmpty[];
 extern const TCHAR szProfileAccelerometerZero[];

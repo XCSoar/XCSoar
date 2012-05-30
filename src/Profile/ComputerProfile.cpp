@@ -79,6 +79,7 @@ Profile::Load(LoggerSettings &settings)
   Get(szProfilePilotName, settings.pilot_name.buffer(),
       settings.pilot_name.MAX_SIZE);
   Get(szProfileEnableFlightLogger, settings.enable_flight_logger);
+  Get(szProfileEnableNMEALogger, settings.enable_nmea_logger);
 }
 
 void

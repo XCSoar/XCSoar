@@ -37,6 +37,11 @@ struct LoggerSettings {
    */
   bool enable_flight_logger;
 
+  /**
+   * Enable the #NMEALogger?
+   */
+  bool enable_nmea_logger;
+
   /** Logger interval in cruise mode */
   uint16_t time_step_cruise;
 

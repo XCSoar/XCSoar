@@ -36,4 +36,6 @@ LoggerSettings::SetDefaults()
   /* XXX disabled by default for now, until the FlightLogger
      implementation is finished */
   enable_flight_logger = false;
+
+  enable_nmea_logger = false;
 }
