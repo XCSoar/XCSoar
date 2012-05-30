@@ -28,6 +28,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "LastUsed.hpp"
 
 const Waypoint *
 WaypointGlue::FindHomeId(Waypoints &waypoints,
@@ -100,6 +101,9 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
       // search for home in waypoint list, if we don't have a home
       wp = FindFlaggedHome(way_points, settings.poi);
   }
+
+  if (wp != NULL)
+    LastUsedWaypoints::Add(*wp);
 
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || way_points.IsEmpty() ||

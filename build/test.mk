@@ -1673,6 +1673,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/Screen.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
+	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
