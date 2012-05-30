@@ -73,7 +73,7 @@ UpdateChanging()
     FormatUserDistanceSmart(target->distance, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
-  ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
+  SetFormValue(*wf, _T("prpDistance"), tmp);
 
   // Fill horizontal direction field
   if (target_ok)
@@ -81,14 +81,14 @@ UpdateChanging()
                      target->Bearing() - CommonInterface::Basic().track);
   else
     _tcscpy(tmp, _T("--"));
-  ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
+  SetFormValue(*wf, _T("prpDirectionH"), tmp);
 
   // Fill altitude field
   if (target_ok && target->altitude_available)
     FormatUserAltitude(target->altitude, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
-  ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
+  SetFormValue(*wf, _T("prpAltitude"), tmp);
 
   // Fill vertical direction field
   if (target_ok) {
@@ -97,14 +97,14 @@ UpdateChanging()
     FormatVerticalAngleDelta(tmp, ARRAY_SIZE(tmp), dir);
   } else
     _tcscpy(tmp, _T("--"));
-  ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
+  SetFormValue(*wf, _T("prpDirectionV"), tmp);
 
   // Fill climb speed field
   if (target_ok && target->climb_rate_avg30s_available)
     FormatUserVerticalSpeed(target->climb_rate_avg30s, tmp, 20);
   else
     _tcscpy(tmp, _T("--"));
-  ((WndProperty *)wf->FindByName(_T("prpVSpeed")))->SetText(tmp);
+  SetFormValue(*wf, _T("prpVSpeed"), tmp);
 }
 
 /**
@@ -128,32 +128,32 @@ Update()
   if (record) {
     // Fill the pilot name field
     _tcscpy(tmp, record->pilot);
-    ((WndProperty *)wf->FindByName(_T("prpPilot")))->SetText(tmp);
+    SetFormValue(*wf, _T("prpPilot"), tmp);
 
     // Fill the frequency field
     if (!StringIsEmpty(record->frequency)) {
       _tcscpy(tmp, record->frequency);
       _tcscat(tmp, _T(" MHz"));
-      ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(tmp);
+      SetFormValue(*wf, _T("prpFrequency"), tmp);
     } else
-      ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(_T("--"));
+      SetFormValue(*wf, _T("prpFrequency"), _T("--"));
 
     // Fill the home airfield field
     _tcscpy(tmp, record->airfield);
-    ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(tmp);
+    SetFormValue(*wf, _T("prpAirport"), tmp);
 
     // Fill the plane type field
     _tcscpy(tmp, record->plane_type);
-    ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(tmp);
+    SetFormValue(*wf, _T("prpPlaneType"), tmp);
   } else {
     // Fill the pilot name field
-    ((WndProperty *)wf->FindByName(_T("prpPilot")))->SetText(_T("--"));
+    SetFormValue(*wf, _T("prpPilot"), _T("--"));
 
     // Fill the frequency field
-    ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(_T("--"));
+    SetFormValue(*wf, _T("prpFrequency"), _T("--"));
 
     // Fill the home airfield field
-    ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(_T("--"));
+    SetFormValue(*wf, _T("prpAirport"), _T("--"));
 
     // Fill the plane type field
     const FlarmTraffic* target =
@@ -164,7 +164,7 @@ Update()
         (actype = FlarmTraffic::GetTypeString(target->type)) == NULL)
       actype = _T("--");
 
-    ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(actype);
+    SetFormValue(*wf, _T("prpPlaneType"), actype);
   }
 
   // Fill the callsign field (+ registration)
@@ -180,7 +180,7 @@ Update()
     }
   } else
     _tcscpy(tmp, _T("--"));
-  ((WndProperty *)wf->FindByName(_T("prpCallsign")))->SetText(tmp);
+  SetFormValue(*wf, _T("prpCallsign"), tmp);
 
   // Update the frequently changing fields too
   UpdateChanging();
