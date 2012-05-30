@@ -34,6 +34,10 @@ Copyright_License {
 #include "Screen/OpenGL/Compatibility.hpp"
 #include "Screen/Util.hpp"
 
+#ifndef NDEBUG
+#include "Util/UTF8.hpp"
+#endif
+
 #include <assert.h>
 
 AllocatedArray<RasterPoint> Canvas::vertex_buffer;
@@ -446,6 +450,9 @@ Canvas::DrawFocusRectangle(PixelRect rc)
 void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
+  assert(text != NULL);
+  assert(ValidateUTF8(text));
+
 #ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
@@ -486,6 +493,9 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 void
 Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
+  assert(text != NULL);
+  assert(ValidateUTF8(text));
+
 #ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
@@ -520,6 +530,9 @@ Canvas::TextClipped(PixelScalar x, PixelScalar y,
                     UPixelScalar width, UPixelScalar height,
                     const TCHAR *text)
 {
+  assert(text != NULL);
+  assert(ValidateUTF8(text));
+
 #ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
