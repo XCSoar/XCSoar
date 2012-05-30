@@ -224,6 +224,36 @@ TestFLARM()
 }
 
 static void
+TestAltairRU()
+{
+  NullPort null;
+  Device *device = atrDevice.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("$PTFRS,1,0,0,0,0,0,0,0,5,1,10,0,3,1338313437,0,0,0,,,2*4E",
+                        nmea_info));
+
+  ok1(nmea_info.engine_noise_level_available);
+  ok1(nmea_info.engine_noise_level == 5);
+  ok1(!nmea_info.voltage_available);
+
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("$PTFRS,1,0,0,0,0,0,0,0,342,1,10,0,3,1338313438,0,0,12743,,,2*42",
+                        nmea_info));
+
+  ok1(nmea_info.engine_noise_level_available);
+  ok1(nmea_info.engine_noise_level == 342);
+  ok1(nmea_info.voltage_available);
+  ok1(equals(nmea_info.voltage, 12.743));
+}
+
+static void
 TestGTAltimeter()
 {
   NullPort null;
@@ -992,11 +1022,12 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(505);
+  plan_tests(515);
 
   TestGeneric();
   TestTasman();
   TestFLARM();
+  TestAltairRU();
   TestGTAltimeter();
   TestBorgeltB50();
   TestCAI302();

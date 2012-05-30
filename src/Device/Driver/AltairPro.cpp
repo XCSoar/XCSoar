@@ -84,6 +84,35 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
   return true;
 }
 
+static bool
+PTFRS(NMEAInputLine &line, NMEAInfo &info)
+{
+  // $PTFRS,1,0,0,0,0,0,0,0,5,1,10,0,3,1338313437,0,0,0,,,2*4E
+  //
+  // $PTFRS,<sealed>,<downloadmode>,<event>,<neartp>,<sealing>,<baromode>,
+  //        <decllock>,<newrecavail>,<enl>,<rpm>,<interval>,<error>,<timbase>,
+  //        <time>,<secpower>,<secpowerint>,<usup>,<ulit>,
+  //        <chargerstate>,<antstate>*CS<CR><LF>
+
+  line.skip(8);
+
+  unsigned enl;
+  if (line.read_checked(enl)) {
+    info.engine_noise_level = enl;
+    info.engine_noise_level_available.Update(info.clock);
+  }
+
+  line.skip(7);
+
+  unsigned supply_voltage;
+  if (line.read_checked(supply_voltage) && supply_voltage != 0) {
+    info.voltage = fixed(supply_voltage) / 1000;
+    info.voltage_available.Update(info.clock);
+  }
+
+  return true;
+}
+
 bool
 AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
@@ -102,6 +131,8 @@ AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
       info.ProvidePressureAltitude(value);
 
     return true;
+  } else if (StringIsEqual(type, "$PTFRS")) {
+    return PTFRS(line, info);
   }
 
   return false;
