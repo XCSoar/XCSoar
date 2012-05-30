@@ -42,15 +42,16 @@ Copyright_License {
 static void
 LoadString(const char *bytes, size_t charCount, TCHAR *res)
 {
-  size_t bytesToRead = charCount * 2;
+  const char *const end = bytes + charCount * 2;
 
   TCHAR *curChar = res;
 
   char tmp[3];
   tmp[2] = 0;
-  for (size_t z = 0; z < bytesToRead; z += 2) {
-    tmp[0] = bytes[z];
-    tmp[1] = bytes[z+1];
+
+  while (bytes < end) {
+    tmp[0] = *bytes++;
+    tmp[1] = *bytes++;
 
     *curChar = (unsigned char)strtoul(tmp, NULL, 16);
     curChar++;
