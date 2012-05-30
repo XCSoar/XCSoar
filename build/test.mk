@@ -697,6 +697,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunFlarmUtils \
 	RunTCPListener \
 	TaskInfo DumpTaskFile \
+	DumpFlarmNet \
 	IGC2NMEA
 
 ifeq ($(TARGET),UNIX)
@@ -2257,6 +2258,15 @@ DUMP_TASK_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTaskFile.cpp
 DUMP_TASK_FILE_DEPENDS = ENGINE IO ZZIP MATH UTIL
 $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
+
+DUMP_FLARM_NET_SOURCES = \
+	$(SRC)/FLARM/FlarmNetReader.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Record.cpp \
+	$(SRC)/FLARM/Database.cpp \
+	$(TEST_SRC_DIR)/DumpFlarmNet.cpp
+DUMP_FLARM_NET_DEPENDS = MATH IO UTIL
+$(eval $(call link-program,DumpFlarmNet,DUMP_FLARM_NET))
 
 IGC2NMEA_SOURCES = \
 	$(SRC)/Replay/IgcReplay.cpp \

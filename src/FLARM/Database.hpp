@@ -77,6 +77,14 @@ public:
                                  unsigned size) const;
   unsigned FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                              unsigned size) const;
+
+  RecordMap::const_iterator begin() const {
+    return map.begin();
+  }
+
+  RecordMap::const_iterator end() const {
+    return map.end();
+  }
 };
 
 #endif
