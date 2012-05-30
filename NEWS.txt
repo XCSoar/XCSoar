@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3.5 - not yet released
+* devices
+  - fix crash on connection failure during flight download
 * Android
   - fix compatibility with Android 1.6
 
