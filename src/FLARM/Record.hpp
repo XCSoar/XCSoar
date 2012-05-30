@@ -31,30 +31,40 @@ Copyright_License {
 
 class FlarmId;
 
+#ifdef _UNICODE
+/* with wide characters, the exact size of the FLARMNet database field
+   (plus one for the terminator) is just right, ... */
+#define LatinBufferSize(s) (s)
+#else
+/* ..., but when we convert Latin-1 to UTF-8, we need a little bit
+   more buffer */
+#define LatinBufferSize(s) ((s) * 3 / 2 + 1)
+#endif
+
 /**
  * FlarmNet.org file entry
  */
 struct FlarmRecord {
   /**< FLARM id 6 bytes */
-  StaticString<7> id;
+  StaticString<LatinBufferSize(7)> id;
 
   /**< Name 15 bytes */
-  StaticString<22> pilot;
+  StaticString<LatinBufferSize(22)> pilot;
 
   /**< Airfield 4 bytes */
-  StaticString<22> airfield;
+  StaticString<LatinBufferSize(22)> airfield;
 
   /**< Aircraft type 1 byte */
-  StaticString<22> plane_type;
+  StaticString<LatinBufferSize(22)> plane_type;
 
   /**< Registration 7 bytes */
-  StaticString<8> registration;
+  StaticString<LatinBufferSize(8)> registration;
 
   /**< Callsign 3 bytes */
-  StaticString<4> callsign;
+  StaticString<LatinBufferSize(4)> callsign;
 
   /**< Radio frequency 6 bytes */
-  StaticString<8> frequency;
+  StaticString<LatinBufferSize(8)> frequency;
 
   gcc_pure
   FlarmId GetId() const;

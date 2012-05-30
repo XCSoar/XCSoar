@@ -29,6 +29,10 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
 
+#ifndef _UNICODE
+#include "Util/UTF8.hpp"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -40,9 +44,13 @@ Copyright_License {
  * @param res Pointer to be written in
  */
 static void
-LoadString(const char *bytes, size_t length, TCHAR *res)
+LoadString(const char *bytes, size_t length, TCHAR *res, size_t res_size)
 {
   const char *const end = bytes + length * 2;
+
+#ifndef _UNICODE
+  const char *const limit = res + res_size - 2;
+#endif
 
   TCHAR *p = res;
 
@@ -53,10 +61,27 @@ LoadString(const char *bytes, size_t length, TCHAR *res)
     tmp[0] = *bytes++;
     tmp[1] = *bytes++;
 
-    *p++ = (unsigned char)strtoul(tmp, NULL, 16);
+    /* FLARMNet files are ISO-Latin-1, which is kind of short-sighted */
+
+    const unsigned char ch = (unsigned char)strtoul(tmp, NULL, 16);
+#ifdef _UNICODE
+    /* Latin-1 can be converted to WIN32 wchar_t by casting */
+    *p++ = ch;
+#else
+    /* convert to UTF-8 on all other platforms */
+
+    if (p >= limit)
+      break;
+
+    p = Latin1ToUTF8(ch, p);
+#endif
   }
 
   *p = 0;
+
+#ifndef _UNICODE
+  assert(ValidateUTF8(res));
+#endif
 
   // Trim the string of any additional spaces
   TrimRight(res);
@@ -66,7 +91,7 @@ template<size_t size>
 static void
 LoadString(const char *bytes, size_t length, StaticString<size> &dest)
 {
-  return LoadString(bytes, length, dest.buffer());
+  return LoadString(bytes, length, dest.buffer(), dest.MAX_SIZE);
 }
 
 /**
