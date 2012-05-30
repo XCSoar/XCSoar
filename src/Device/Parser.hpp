@@ -169,26 +169,6 @@ private:
    * @return Parsing success
    */
   static bool PTAS1(NMEAInputLine &line, NMEAInfo &info);
-
-  /**
-   * Parses a PFLAU sentence
-   * (Operating status and priority intruder and obstacle data)
-   * @param line A NMEAInputLine instance that can be used for parsing
-   * @param info NMEA_INFO struct to parse into
-   * @return Parsing success
-   * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
-   */
-  bool PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time);
-
-  /**
-   * Parses a PFLAA sentence
-   * (Data on other moving objects around)
-   * @param line A NMEAInputLine instance that can be used for parsing
-   * @param info NMEA_INFO struct to parse into
-   * @return Parsing success
-   * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
-   */
-  bool PFLAA(NMEAInputLine &line, NMEAInfo &info);
 };
 
 #endif

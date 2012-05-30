@@ -35,6 +35,7 @@ Copyright_License {
 #include "Compatibility/string.h" /* for _ttoi() */
 #include "Units/System.hpp"
 #include "OS/Clock.hpp"
+#include "Driver/FLARM/StaticParser.hpp"
 
 #include <math.h>
 #include <ctype.h>
@@ -99,11 +100,15 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
       return PTAS1(line, info);
 
     // FLARM sentences
-    if (StringIsEqual(type + 1, "PFLAA"))
-      return PFLAA(line, info);
+    if (StringIsEqual(type + 1, "PFLAA")) {
+      ParsePFLAA(line, info.flarm, info.clock);
+      return true;
+    }
 
-    if (StringIsEqual(type + 1, "PFLAU"))
-      return PFLAU(line, info.flarm, info.clock);
+    if (StringIsEqual(type + 1, "PFLAU")) {
+      ParsePFLAU(line, info.flarm, info.clock);
+      return true;
+    }
 
     // Garmin altitude sentence
     if (StringIsEqual(type + 1, "PGRMZ"))
@@ -656,121 +661,6 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
   fixed vtas;
   if (line.read_checked(vtas))
     info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KNOTS));
-
-  return true;
-}
-
-bool
-NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time)
-{
-  flarm.available.Update(time);
-
-  // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
-  //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  flarm.rx = line.read(0);
-  flarm.tx = line.read(false);
-  flarm.gps = (FlarmState::GPSStatus)
-    line.read((int)FlarmState::GPSStatus::NONE);
-
-  line.skip();
-  flarm.alarm_level = (FlarmTraffic::AlarmType)
-    line.read((int)FlarmTraffic::AlarmType::NONE);
-
-  return true;
-}
-
-bool
-NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
-{
-  FlarmState &flarm = info.flarm;
-
-  // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
-  //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  FlarmTraffic traffic;
-  traffic.alarm_level = (FlarmTraffic::AlarmType)
-    line.read((int)FlarmTraffic::AlarmType::NONE);
-
-  fixed value;
-  bool stealth = false;
-
-  if (!line.read_checked(value))
-    // Relative North is required !
-    return true;
-  traffic.relative_north = value;
-
-  if (!line.read_checked(value))
-    // Relative East is required !
-    return true;
-  traffic.relative_east = value;
-
-  if (!line.read_checked(value))
-    // Relative Altitude is required !
-    return true;
-  traffic.relative_altitude = value;
-
-  line.skip(); /* id type */
-
-  // 5 id, 6 digit hex
-  char id_string[16];
-  line.read(id_string, 16);
-  traffic.id = FlarmId::Parse(id_string, NULL);
-
-  traffic.track_received = line.read_checked(value);
-  if (!traffic.track_received) {
-    // Field is empty in stealth mode
-    stealth = true;
-    traffic.track = Angle::Zero();
-  } else
-    traffic.track = Angle::Degrees(value);
-
-  traffic.turn_rate_received = line.read_checked(value);
-  if (!traffic.turn_rate_received) {
-    // Field is empty in stealth mode
-    traffic.turn_rate = fixed_zero;
-  } else
-    traffic.turn_rate = value;
-
-  traffic.speed_received = line.read_checked(value);
-  if (!traffic.speed_received) {
-    // Field is empty in stealth mode
-    stealth = true;
-    traffic.speed = fixed_zero;
-  } else
-    traffic.speed = value;
-
-  traffic.climb_rate_received = line.read_checked(value);
-  if (!traffic.climb_rate_received) {
-    // Field is empty in stealth mode
-    stealth = true;
-    traffic.climb_rate = fixed_zero;
-  } else
-    traffic.climb_rate = value;
-
-  traffic.stealth = stealth;
-
-  unsigned type = line.read(0);
-  if (type > 15 || type == 14)
-    traffic.type = FlarmTraffic::AircraftType::UNKNOWN;
-  else
-    traffic.type = (FlarmTraffic::AircraftType)type;
-
-  FlarmTraffic *flarm_slot = flarm.FindTraffic(traffic.id);
-  if (flarm_slot == NULL) {
-    flarm_slot = flarm.AllocateTraffic();
-    if (flarm_slot == NULL)
-      // no more slots available
-      return true;
-
-    flarm_slot->Clear();
-    flarm_slot->id = traffic.id;
-
-    flarm.new_traffic = true;
-  }
-
-  // set time of fix to current time
-  flarm_slot->valid.Update(info.clock);
-
-  flarm_slot->Update(traffic);
 
   return true;
 }
