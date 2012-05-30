@@ -127,8 +127,7 @@ Update()
   const FlarmRecord *record = FlarmDetails::LookupRecord(target_id);
   if (record) {
     // Fill the pilot name field
-    _tcscpy(tmp, record->pilot);
-    SetFormValue(*wf, _T("prpPilot"), tmp);
+    SetFormValue(*wf, _T("prpPilot"), record->pilot);
 
     // Fill the frequency field
     if (!StringIsEmpty(record->frequency)) {
@@ -139,12 +138,10 @@ Update()
       SetFormValue(*wf, _T("prpFrequency"), _T("--"));
 
     // Fill the home airfield field
-    _tcscpy(tmp, record->airfield);
-    SetFormValue(*wf, _T("prpAirport"), tmp);
+    SetFormValue(*wf, _T("prpAirport"), record->airfield);
 
     // Fill the plane type field
-    _tcscpy(tmp, record->plane_type);
-    SetFormValue(*wf, _T("prpPlaneType"), tmp);
+    SetFormValue(*wf, _T("prpPlaneType"), record->plane_type);
   } else {
     // Fill the pilot name field
     SetFormValue(*wf, _T("prpPilot"), _T("--"));
