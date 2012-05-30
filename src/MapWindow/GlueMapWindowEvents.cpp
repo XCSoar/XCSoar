@@ -242,7 +242,9 @@ GlueMapWindow::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
 bool
 GlueMapWindow::OnMultiTouchDown()
 {
-  if (drag_mode != DRAG_GESTURE || follow_mode != FOLLOW_SELF)
+  if (drag_mode == DRAG_GESTURE)
+    gestures.Finish();
+  else if (follow_mode != FOLLOW_SELF)
     return false;
 
   /* start panning on MultiTouch event */
@@ -283,6 +285,9 @@ GlueMapWindow::OnCancelMode()
     if (drag_mode == DRAG_MULTI_TOUCH_PAN)
       follow_mode = FOLLOW_SELF;
 #endif
+
+    if (drag_mode == DRAG_GESTURE)
+      gestures.Finish();
 
     ReleaseCapture();
     drag_mode = DRAG_NONE;
