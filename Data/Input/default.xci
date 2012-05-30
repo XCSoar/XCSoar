@@ -414,14 +414,6 @@ location=6
 
 mode=Nav2
 type=key
-data=8
-event=GotoLookup
-event=Mode default
-label=GoTo$(CheckWaypointFile)
-location=7
-
-mode=Nav2
-type=key
 data=9
 event=Setup Target
 event=Mode default
