@@ -293,6 +293,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   // Set the text color and background
   switch (traffic.alarm_level) {
   case FlarmTraffic::AlarmType::LOW:
+  case FlarmTraffic::AlarmType::INFO_ALERT:
     canvas.SetTextColor(look.warning_color);
     break;
   case FlarmTraffic::AlarmType::IMPORTANT:

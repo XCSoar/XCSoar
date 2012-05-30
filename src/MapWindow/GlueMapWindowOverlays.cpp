@@ -189,6 +189,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     bmp = &look.traffic_safe_icon;
     break;
   case FlarmTraffic::AlarmType::LOW:
+  case FlarmTraffic::AlarmType::INFO_ALERT:
     bmp = &look.traffic_warning_icon;
     break;
   case FlarmTraffic::AlarmType::IMPORTANT:
