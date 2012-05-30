@@ -40,11 +40,11 @@ Copyright_License {
  * @param res Pointer to be written in
  */
 static void
-LoadString(const char *bytes, size_t charCount, TCHAR *res)
+LoadString(const char *bytes, size_t length, TCHAR *res)
 {
-  const char *const end = bytes + charCount * 2;
+  const char *const end = bytes + length * 2;
 
-  TCHAR *curChar = res;
+  TCHAR *p = res;
 
   char tmp[3];
   tmp[2] = 0;
@@ -53,11 +53,10 @@ LoadString(const char *bytes, size_t charCount, TCHAR *res)
     tmp[0] = *bytes++;
     tmp[1] = *bytes++;
 
-    *curChar = (unsigned char)strtoul(tmp, NULL, 16);
-    curChar++;
+    *p++ = (unsigned char)strtoul(tmp, NULL, 16);
   }
 
-  *curChar = 0;
+  *p = 0;
 
   // Trim the string of any additional spaces
   TrimRight(res);
