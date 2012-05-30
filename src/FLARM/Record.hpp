@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_RECORD_HPP
 #define XCSOAR_FLARM_RECORD_HPP
 
+#include "Util/StaticString.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -35,25 +36,25 @@ class FlarmId;
  */
 struct FlarmRecord {
   /**< FLARM id 6 bytes */
-  TCHAR id[7];
+  StaticString<7> id;
 
   /**< Name 15 bytes */
-  TCHAR pilot[22];
+  StaticString<22> pilot;
 
   /**< Airfield 4 bytes */
-  TCHAR airfield[22];
+  StaticString<22> airfield;
 
   /**< Aircraft type 1 byte */
-  TCHAR plane_type[22];
+  StaticString<22> plane_type;
 
   /**< Registration 7 bytes */
-  TCHAR registration[8];
+  StaticString<8> registration;
 
   /**< Callsign 3 bytes */
-  TCHAR callsign[4];
+  StaticString<4> callsign;
 
   /**< Radio frequency 6 bytes */
-  TCHAR frequency[8];
+  StaticString<8> frequency;
 
   gcc_pure
   FlarmId GetId() const;

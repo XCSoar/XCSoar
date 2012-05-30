@@ -39,7 +39,8 @@ int main(int argc, char **argv)
     const FlarmRecord &record = i->second;
 
     _tprintf(_T("%s\t%s\t%s\t%s\n"),
-             record.id, record.pilot, record.registration, record.callsign);
+             record.id.c_str(), record.pilot.c_str(),
+             record.registration.c_str(), record.callsign.c_str());
   }
 
   return EXIT_SUCCESS;

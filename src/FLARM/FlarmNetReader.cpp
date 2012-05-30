@@ -62,6 +62,13 @@ LoadString(const char *bytes, size_t length, TCHAR *res)
   TrimRight(res);
 }
 
+template<size_t size>
+static void
+LoadString(const char *bytes, size_t length, StaticString<size> &dest)
+{
+  return LoadString(bytes, length, dest.buffer());
+}
+
 /**
  * Reads next FlarmNet.org file entry and returns the pointer to
  * a new FlarmNetRecord instance or NULL on error.
@@ -83,7 +90,7 @@ LoadRecord(FlarmRecord &record, const char *line)
   LoadString(line + 158, 7, record.frequency);
 
   // Terminate callsign string on first whitespace
-  for (TCHAR *i = record.callsign; *i != _T('\0'); ++i)
+  for (TCHAR *i = record.callsign.buffer(); *i != _T('\0'); ++i)
     if (IsWhitespaceOrNull(*i))
       *i = _T('\0');
 
