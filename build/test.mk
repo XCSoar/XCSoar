@@ -156,14 +156,12 @@ TEST_PROFILE_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestProfile.cpp
-TEST_PROFILE_DEPENDS = MATH IO
+TEST_PROFILE_DEPENDS = MATH IO UTIL
 $(eval $(call link-program,TestProfile,TEST_PROFILE))
 
 TEST_MAC_CREADY_SOURCES = \
@@ -185,11 +183,9 @@ TEST_PLANES_SOURCES = \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestPlanes.cpp
-TEST_PLANES_DEPENDS = MATH IO
+TEST_PLANES_DEPENDS = MATH IO UTIL
 $(eval $(call link-program,TestPlanes,TEST_PLANES))
 
 TEST_ZEROFINDER_SOURCES = \
@@ -209,7 +205,6 @@ TEST_TASKPOINT_DEPENDS = MATH IO
 $(eval $(call link-program,TestTaskPoint,TEST_TASKPOINT))
 
 TEST_TASKWAYPOINT_SOURCES = \
-	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
@@ -217,7 +212,7 @@ TEST_TASKWAYPOINT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskWaypoint.cpp
-TEST_TASKWAYPOINT_DEPENDS = MATH IO
+TEST_TASKWAYPOINT_DEPENDS = MATH IO UTIL
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TROUTE_SOURCES = \
@@ -313,8 +308,6 @@ TEST_GEO_BOUNDS_DEPENDS = MATH
 $(eval $(call link-program,TestGeoBounds,TEST_GEO_BOUNDS))
 
 TEST_FLARM_NET_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
@@ -322,7 +315,7 @@ TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/Database.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmNet.cpp
-TEST_FLARM_NET_DEPENDS = MATH IO
+TEST_FLARM_NET_DEPENDS = MATH IO UTIL
 $(eval $(call link-program,TestFlarmNet,TEST_FLARM_NET))
 
 TEST_GEO_CLIP_SOURCES = \
@@ -974,7 +967,6 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -983,7 +975,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
 KEY_CODE_DUMPER_LDADD = $(FAKE_LIBS)
-KEY_CODE_DUMPER_DEPENDS = SCREEN MATH
+KEY_CODE_DUMPER_DEPENDS = SCREEN MATH UTIL
 $(eval $(call link-program,KeyCodeDumper,KEY_CODE_DUMPER))
 
 LOAD_TOPOGRAPHY_SOURCES = \
@@ -1028,11 +1020,10 @@ RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation/Operation.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
 RUN_HEIGHT_MATRIX_CPPFLAGS = $(SCREEN_CPPFLAGS)
-RUN_HEIGHT_MATRIX_DEPENDS = MATH IO JASPER ZZIP
+RUN_HEIGHT_MATRIX_DEPENDS = MATH IO JASPER ZZIP UTIL
 $(eval $(call link-program,RunHeightMatrix,RUN_HEIGHT_MATRIX))
 
 RUN_INPUT_PARSER_SOURCES = \
@@ -1455,14 +1446,13 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_LDADD = $(FAKE_LIBS)
-RUN_CANVAS_DEPENDS = SCREEN MATH
+RUN_CANVAS_DEPENDS = SCREEN MATH UTIL
 $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 
 RUN_MAP_WINDOW_SOURCES = \
@@ -1632,8 +1622,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1648,7 +1636,7 @@ RUN_DIALOG_SOURCES = \
 RUN_DIALOG_LDADD = \
 	$(RESOURCE_BINARY) \
 	$(FAKE_LIBS)
-RUN_DIALOG_DEPENDS = IO DATA_FIELD FORM SCREEN MATH ZZIP
+RUN_DIALOG_DEPENDS = IO DATA_FIELD FORM SCREEN MATH ZZIP UTIL
 $(eval $(call link-program,RunDialog,RUN_DIALOG))
 
 RUN_LIST_CONTROL_SOURCES = \
@@ -1667,16 +1655,14 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Form/ScrollBar.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunListControl.cpp
-RUN_LIST_CONTROL_DEPENDS = SCREEN MATH
+RUN_LIST_CONTROL_DEPENDS = SCREEN MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 
 RUN_TERMINAL_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
@@ -1691,7 +1677,7 @@ RUN_TERMINAL_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunTerminal.cpp
-RUN_TERMINAL_DEPENDS = SCREEN MATH
+RUN_TERMINAL_DEPENDS = SCREEN MATH UTIL
 $(eval $(call link-program,RunTerminal,RUN_TERMINAL))
 
 RUN_RENDER_OZ_SOURCES = \
@@ -1706,7 +1692,6 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Projection/Projection.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1716,7 +1701,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp
 RUN_RENDER_OZ_LDADD = $(RESOURCE_BINARY)
-RUN_RENDER_OZ_DEPENDS = ENGINE_CORE FORM SCREEN MATH
+RUN_RENDER_OZ_DEPENDS = ENGINE_CORE FORM SCREEN MATH UTIL
 $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
 
 RUN_WIND_ARROW_RENDERER_SOURCES = \
@@ -1733,7 +1718,6 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1743,7 +1727,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
 RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_WIND_ARROW_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
+RUN_WIND_ARROW_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH UTIL
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 
 RUN_HORIZON_RENDERER_SOURCES = \
@@ -1760,7 +1744,6 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1770,7 +1753,7 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
 RUN_HORIZON_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_HORIZON_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
+RUN_HORIZON_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH UTIL
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
 
 RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
@@ -1788,7 +1771,6 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -1809,7 +1791,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
 RUN_FINAL_GLIDE_BAR_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH
+RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN MATH UTIL
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \
@@ -1822,14 +1804,13 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
 RUN_PROGRESS_WINDOW_LDADD = $(RESOURCE_BINARY)
-RUN_PROGRESS_WINDOW_DEPENDS = SCREEN MATH
+RUN_PROGRESS_WINDOW_DEPENDS = SCREEN MATH UTIL
 $(eval $(call link-program,RunProgressWindow,RUN_PROGRESS_WINDOW))
 
 RUN_JOB_DIALOG_SOURCES = \
@@ -1848,7 +1829,6 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
@@ -1860,7 +1840,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
 RUN_JOB_DIALOG_LDADD = $(RESOURCE_BINARY)
-RUN_JOB_DIALOG_DEPENDS = SCREEN MATH
+RUN_JOB_DIALOG_DEPENDS = SCREEN MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
 
 RUN_ANALYSIS_SOURCES = \
