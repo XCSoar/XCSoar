@@ -41,8 +41,6 @@ class InputThread extends Thread {
 
   InputStream is;
 
-  int timeout = 0;
-
   InputThread(String _name, InputListener _listener, InputStream _is) {
     name = _name;
     listener = _listener;
@@ -82,10 +80,6 @@ class InputThread extends Thread {
 
   boolean isValid() {
     return is != null;
-  }
-
-  void setTimeout(int _timeout) {
-    timeout = _timeout;
   }
 
   @Override public void run() {
