@@ -1248,6 +1248,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp

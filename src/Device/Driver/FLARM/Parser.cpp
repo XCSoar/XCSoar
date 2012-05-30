@@ -24,6 +24,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "Util/Macros.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 
 bool
 FlarmDevice::ParsePFLAC(NMEAInputLine &line)
@@ -51,6 +52,9 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line)
 bool
 FlarmDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
+  if (!VerifyNMEAChecksum(_line))
+    return false;
+
   NMEAInputLine line(_line);
   char type[16];
   line.read(type, 16);
