@@ -431,18 +431,24 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &small_font = *dialog_look.small_font;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
-  StaticString<26> title_string(_("FLARM Traffic"));
+  const FlarmRecord *record = FlarmDetails::LookupRecord(item.traffic.id);
+
+  StaticString<256> title_string;
+  if (record && !StringIsEmpty(record->pilot))
+    title_string = record->pilot.c_str();
+  else
+    title_string = _("FLARM Traffic");
+
   // Append name to the title, if it exists
   if (traffic.HasName()) {
     title_string.append(_T(", "));
     title_string.append(traffic.name);
   }
+
   canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, title_string);
 
   StaticString<256> info_string;
-
-  const FlarmRecord *record = FlarmDetails::LookupRecord(item.traffic.id);
   if (record && !StringIsEmpty(record->plane_type))
     info_string = record->plane_type;
   else
