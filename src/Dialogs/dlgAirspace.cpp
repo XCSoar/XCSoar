@@ -110,7 +110,7 @@ OnAirspaceListEnter(unsigned index)
     AirspaceLook &look =
       CommonInterface::main_window.SetLook().map.airspace;
 
-    Color color;
+    Color color = renderer.classes[index].fill_color;
     if (ShowColorListDialog(color)) {
       renderer.classes[index].SetColors(color);
       ActionInterface::SendMapSettings();
