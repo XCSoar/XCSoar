@@ -32,6 +32,7 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
+#include "Compatibility/path.h"
 
 #include <string.h>
 #include <windef.h> /* for MAX_PATH */
@@ -151,6 +152,22 @@ Profile::GetPathIsEqual(const TCHAR *key, const TCHAR *value)
     return false;
 
   return StringIsEqual(saved, value);
+}
+
+const TCHAR *
+Profile::GetPathBase(const TCHAR *key)
+{
+  const TCHAR *p = Get(key);
+  if (p == NULL)
+    return NULL;
+
+  if (DIR_SEPARATOR != '\\') {
+    const TCHAR *backslash = _tcsrchr(p, '\\');
+    if (backslash != NULL)
+      p = backslash + 1;
+  }
+
+  return BaseName(p);
 }
 
 void

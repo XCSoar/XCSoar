@@ -32,7 +32,6 @@ Copyright_License {
 #include "Form/DataField/Base.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
-#include "Compatibility/path.h"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -171,26 +170,6 @@ InitializeDirection(bool only_heading)
   }
 }
 
-/**
- * Gets a path from the profile and return its base name only.
- */
-gcc_pure
-static const TCHAR *
-GetProfilePathBase(const TCHAR *key)
-{
-  const TCHAR *p = Profile::Get(key);
-  if (p == NULL)
-    return NULL;
-
-  if (DIR_SEPARATOR != '\\') {
-    const TCHAR *backslash = _tcsrchr(p, '\\');
-    if (backslash != NULL)
-      p = backslash + 1;
-  }
-
-  return BaseName(p);
-}
-
 static void
 PrepareData()
 {
@@ -218,11 +197,11 @@ PrepareData()
   data_field = (DataFieldEnum*)type_filter->GetDataField();
   data_field->addEnumTexts(type_filter_items);
 
-  const TCHAR *p = GetProfilePathBase(szProfileWaypointFile);
+  const TCHAR *p = Profile::GetPathBase(szProfileWaypointFile);
   if (p != NULL)
     data_field->replaceEnumText(TF_FILE_1, p);
 
-  p = GetProfilePathBase(szProfileAdditionalWaypointFile);
+  p = Profile::GetPathBase(szProfileAdditionalWaypointFile);
   if (p != NULL)
     data_field->replaceEnumText(TF_FILE_2, p);
 
