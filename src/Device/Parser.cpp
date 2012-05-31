@@ -100,6 +100,11 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
       return PTAS1(line, info);
 
     // FLARM sentences
+    if (StringIsEqual(type + 1, "PFLAE")) {
+      ParsePFLAE(line, info.flarm.error, info.clock);
+      return true;
+    }
+
     if (StringIsEqual(type + 1, "PFLAV")) {
       ParsePFLAV(line, info.flarm.version, info.clock);
       return true;

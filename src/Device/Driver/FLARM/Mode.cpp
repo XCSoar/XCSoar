@@ -37,7 +37,8 @@ FlarmDevice::EnableNMEA(OperationEnvironment &env)
 
     mode = Mode::NMEA;
 
-    /* request version information from FLARM */
+    /* request self-test results and version information from FLARM */
+    Send("PFLAE,R", env);
     Send("PFLAV,R", env);
     return true;
 

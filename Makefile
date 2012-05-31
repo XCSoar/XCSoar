@@ -295,6 +295,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/FLARM/Record.cpp \
 	$(SRC)/FLARM/Database.cpp \

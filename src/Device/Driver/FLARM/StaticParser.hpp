@@ -27,9 +27,16 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 class NMEAInputLine;
+struct FlarmError;
 struct FlarmVersion;
 struct FlarmStatus;
 struct TrafficList;
+
+/**
+ * Parses a PFLAE sentence (self-test results).
+ */
+void
+ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock);
 
 /**
  * Parses a PFLAV sentence (version information).

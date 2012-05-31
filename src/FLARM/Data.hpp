@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_DATA_HPP
 #define XCSOAR_FLARM_DATA_HPP
 
+#include "FLARM/Error.hpp"
 #include "FLARM/Version.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
@@ -33,6 +34,8 @@ Copyright_License {
  * A container for all data received by a FLARM.
  */
 struct FlarmData {
+  FlarmError error;
+
   FlarmVersion version;
 
   FlarmStatus status;
@@ -44,18 +47,21 @@ struct FlarmData {
   }
 
   void Clear() {
+    error.Clear();
     version.Clear();
     status.Clear();
     traffic.Clear();
   }
 
   void Complement(const FlarmData &add) {
+    error.Complement(add.error);
     version.Complement(add.version);
     status.Complement(add.status);
     traffic.Complement(add.traffic);
   }
 
   void Expire(fixed clock) {
+    error.Expire(clock);
     version.Expire(clock);
     status.Expire(clock);
     traffic.Expire(clock);
