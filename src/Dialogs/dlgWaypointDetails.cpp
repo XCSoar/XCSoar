@@ -53,6 +53,8 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Waypoint/LastUsed.hpp"
+#include "Profile/Profile.hpp"
+#include "Profile/ProfileKeys.hpp"
 
 #ifdef ANDROID
 #include "Android/NativeView.hpp"
@@ -324,10 +326,30 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 static void
-UpdateCaption(const TCHAR *waypoint_name)
+UpdateCaption(const TCHAR *waypoint_name, int8_t file_num)
 {
   StaticString<256> buffer;
-  buffer.Format(_T("%s: '%s'"), _("Waypoint Info"), waypoint_name);
+  buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint_name);
+
+  if (file_num > 0) {
+    const TCHAR *key;
+    switch (file_num) {
+    case 1:
+      key = szProfileWaypointFile;
+      break;
+    case 2:
+      key = szProfileAdditionalWaypointFile;
+      break;
+    case 3:
+      key = szProfileWatchedWaypointFile;
+      break;
+    }
+
+    const TCHAR *filename = Profile::GetPathBase(key);
+    if (filename != NULL)
+      buffer.AppendFormat(_T(" (%s)"), filename);
+  }
+
   wf->SetCaption(buffer);
 }
 
@@ -344,7 +366,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   LastUsedWaypoints::Add(_waypoint);
 
-  UpdateCaption(waypoint->name.c_str());
+  UpdateCaption(waypoint->name.c_str(), waypoint->file_num);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
