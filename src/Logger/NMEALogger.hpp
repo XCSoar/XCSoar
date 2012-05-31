@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_LOGGER_HPP
 #define XCSOAR_NMEA_LOGGER_HPP
 
-#include <tchar.h>
-
 namespace NMEALogger
 {
   extern bool enabled;
