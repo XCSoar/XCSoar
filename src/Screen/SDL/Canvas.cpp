@@ -24,6 +24,10 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 
+#ifndef NDEBUG
+#include "Util/UTF8.hpp"
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
 #endif
@@ -166,8 +170,12 @@ Canvas::DrawButton(PixelRect rc, bool down)
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 {
+  assert(text != NULL);
+
   TCHAR *duplicated = _tcsdup(text);
   duplicated[length] = 0;
+
+  assert(ValidateUTF8(duplicated));
 
   const PixelSize size = CalcTextSize(duplicated);
   free(duplicated);
@@ -178,6 +186,9 @@ Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text) const
 {
+  assert(text != NULL);
+  assert(ValidateUTF8(text));
+
   PixelSize size = { 0, 0 };
 
   if (font == NULL)
@@ -200,6 +211,9 @@ Canvas::CalcTextSize(const TCHAR *text) const
 void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
+  assert(text != NULL);
+  assert(ValidateUTF8(text));
+
   SDL_Surface *s;
 
   if (font == NULL)
@@ -230,6 +244,9 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 void
 Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
+  assert(text != NULL);
+  assert(ValidateUTF8(text));
+
   SDL_Surface *s;
 
   if (font == NULL)
@@ -255,6 +272,9 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
 
 void
 Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
+  assert(text != NULL);
+  assert(ValidateUTF8(text));
+
   if (font == NULL)
     return;
 
@@ -345,9 +365,14 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
 void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *_text, size_t length)
 {
+  assert(_text != NULL);
+
   TCHAR copy[length + 1];
   std::copy(_text, _text + length, copy);
   copy[length] = _T('\0');
+
+  assert(ValidateUTF8(copy));
+
   text(x, y, copy);
 }
 
@@ -355,6 +380,9 @@ void
 Canvas::text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
                     const TCHAR *_text)
 {
+  assert(_text != NULL);
+  assert(ValidateUTF8(_text));
+
   DrawFilledRectangle(rc, background_color);
   text_transparent(x, y, _text);
 }

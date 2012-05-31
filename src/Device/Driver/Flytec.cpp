@@ -218,11 +218,11 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
   line.skip();
 
-  //  Temp. PCB (xxx �C),   3 Digits
+  //  Temp. PCB (xxx °C),   3 Digits
   fixed pcb_temperature;
   bool pcb_temperature_available = line.read_checked(pcb_temperature);
 
-  //  Temp. Balloon Envelope (xxx �C),      3 Digits
+  //  Temp. Balloon Envelope (xxx °C),      3 Digits
   fixed balloon_temperature;
   bool balloon_temperature_available = line.read_checked(balloon_temperature);
 

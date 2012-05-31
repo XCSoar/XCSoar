@@ -59,9 +59,37 @@ TaskDijkstra::AddEdges(const ScanTaskPoint curNode)
   ScanTaskPoint destination(curNode.GetStageNumber() + 1, 0);
   const unsigned dsize = GetStageSize(destination.GetStageNumber());
 
+  unsigned first_distance;
+
   for (const ScanTaskPoint end(destination.GetStageNumber(), dsize);
-       destination != end; destination.IncrementPointIndex())
-    Link(destination, curNode, CalcDistance(curNode, destination));
+       destination != end; destination.IncrementPointIndex()) {
+    unsigned distance = CalcDistance(curNode, destination);
+
+    if (is_min) {
+      /* This is a kludge to avoid rounding errors for the finish
+         line: due to rounding errors, the outer edge of the finish
+         line was sometimes preferred if the previous turn point was a
+         cylinder.  This kludge checks if the first point on the
+         boundary is only slightly larger than the following ones, and
+         adjusts them.  It assumes that the middle point comes first
+         in ObservationZone::GetBoundary() and should be preferred,
+         and assumes that 0.1% difference is negligible.  The real
+         problem is that the cylinder's GetBoundary() returns an
+         approximation which doesn't have enough points. */
+
+      if (destination.GetPointIndex() == 0)
+        /* remember the first distance (the one that points to the
+           center of the finish line) */
+        first_distance = distance;
+      else if (distance <= first_distance &&
+               distance > (first_distance * 1023u) / 1024u)
+        /* this distance is just slightly smaller (i.e. better) than
+           the first one; put it back */
+        distance = first_distance + 1;
+    }
+
+    Link(destination, curNode, distance);
+  }
 }
 
 void 

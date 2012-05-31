@@ -18,8 +18,14 @@ Version 6.4 - not yet released
   - support x86 and MIPS CPUs
 
 Version 6.3.5 - not yet released
+* calculations
+  - fix rounding error in task minimum search for finish lines
+* devices
+  - fix crash on connection failure during flight download
 * Android
   - fix compatibility with Android 1.6
+  - fix hanging IOIO/Bluetooth connection
+  - fix crash in FLARMNet dialog
 
 Version 6.3.4 - 2012/05/24
 * calculations

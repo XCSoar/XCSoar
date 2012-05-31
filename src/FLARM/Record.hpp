@@ -24,36 +24,47 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_RECORD_HPP
 #define XCSOAR_FLARM_RECORD_HPP
 
+#include "Util/StaticString.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
 
 class FlarmId;
 
+#ifdef _UNICODE
+/* with wide characters, the exact size of the FLARMNet database field
+   (plus one for the terminator) is just right, ... */
+#define LatinBufferSize(s) (s)
+#else
+/* ..., but when we convert Latin-1 to UTF-8, we need a little bit
+   more buffer */
+#define LatinBufferSize(s) ((s) * 3 / 2 + 1)
+#endif
+
 /**
  * FlarmNet.org file entry
  */
 struct FlarmRecord {
   /**< FLARM id 6 bytes */
-  TCHAR id[7];
+  StaticString<LatinBufferSize(7)> id;
 
   /**< Name 15 bytes */
-  TCHAR pilot[22];
+  StaticString<LatinBufferSize(22)> pilot;
 
   /**< Airfield 4 bytes */
-  TCHAR airfield[22];
+  StaticString<LatinBufferSize(22)> airfield;
 
   /**< Aircraft type 1 byte */
-  TCHAR plane_type[22];
+  StaticString<LatinBufferSize(22)> plane_type;
 
   /**< Registration 7 bytes */
-  TCHAR registration[8];
+  StaticString<LatinBufferSize(8)> registration;
 
   /**< Callsign 3 bytes */
-  TCHAR callsign[4];
+  StaticString<LatinBufferSize(4)> callsign;
 
   /**< Radio frequency 6 bytes */
-  TCHAR frequency[8];
+  StaticString<LatinBufferSize(8)> frequency;
 
   gcc_pure
   FlarmId GetId() const;

@@ -29,6 +29,10 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
 
+#ifndef _UNICODE
+#include "Util/UTF8.hpp"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -40,26 +44,54 @@ Copyright_License {
  * @param res Pointer to be written in
  */
 static void
-LoadString(const char *bytes, int charCount, TCHAR *res)
+LoadString(const char *bytes, size_t length, TCHAR *res, size_t res_size)
 {
-  int bytesToRead = charCount * 2;
+  const char *const end = bytes + length * 2;
 
-  TCHAR *curChar = res;
+#ifndef _UNICODE
+  const char *const limit = res + res_size - 2;
+#endif
+
+  TCHAR *p = res;
 
   char tmp[3];
   tmp[2] = 0;
-  for (int z = 0; z < bytesToRead; z += 2) {
-    tmp[0] = bytes[z];
-    tmp[1] = bytes[z+1];
 
-    *curChar = (unsigned char)strtoul(tmp, NULL, 16);
-    curChar++;
+  while (bytes < end) {
+    tmp[0] = *bytes++;
+    tmp[1] = *bytes++;
+
+    /* FLARMNet files are ISO-Latin-1, which is kind of short-sighted */
+
+    const unsigned char ch = (unsigned char)strtoul(tmp, NULL, 16);
+#ifdef _UNICODE
+    /* Latin-1 can be converted to WIN32 wchar_t by casting */
+    *p++ = ch;
+#else
+    /* convert to UTF-8 on all other platforms */
+
+    if (p >= limit)
+      break;
+
+    p = Latin1ToUTF8(ch, p);
+#endif
   }
 
-  *curChar = 0;
+  *p = 0;
+
+#ifndef _UNICODE
+  assert(ValidateUTF8(res));
+#endif
 
   // Trim the string of any additional spaces
   TrimRight(res);
+}
+
+template<size_t size>
+static void
+LoadString(const char *bytes, size_t length, StaticString<size> &dest)
+{
+  return LoadString(bytes, length, dest.buffer(), dest.MAX_SIZE);
 }
 
 /**
@@ -83,10 +115,9 @@ LoadRecord(FlarmRecord &record, const char *line)
   LoadString(line + 158, 7, record.frequency);
 
   // Terminate callsign string on first whitespace
-  int maxSize = sizeof(record.callsign) / sizeof(TCHAR);
-  for (int i = 0; record.callsign[i] != 0 && i < maxSize; i++)
-    if (IsWhitespaceOrNull(record.callsign[i]))
-      record.callsign[i] = 0;
+  for (TCHAR *i = record.callsign.buffer(); *i != _T('\0'); ++i)
+    if (IsWhitespaceOrNull(*i))
+      *i = _T('\0');
 
   return true;
 }

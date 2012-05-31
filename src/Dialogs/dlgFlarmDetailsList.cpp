@@ -69,7 +69,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   StaticString<256> tmp;
   if (record != NULL)
-    tmp.Format(_T("%s - %s - %s"), callsign, record->registration, tmp_id);
+    tmp.Format(_T("%s - %s - %s"),
+               callsign, record->registration.c_str(), tmp_id);
   else if (callsign != NULL)
     tmp.Format(_T("%s - %s"), callsign, tmp_id);
   else
@@ -82,17 +83,17 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   tmp.clear();
   if (record != NULL) {
-    if (!StringIsEmpty(record->pilot))
-      tmp = record->pilot;
+    if (!record->pilot.empty())
+      tmp = record->pilot.c_str();
 
-    if (!StringIsEmpty(record->plane_type)) {
+    if (!record->plane_type.empty()) {
       if (!tmp.empty())
         tmp.append(_T(" - "));
 
       tmp.append(record->plane_type);
     }
 
-    if (!StringIsEmpty(record->airfield)) {
+    if (!record->airfield.empty()) {
       if (!tmp.empty())
         tmp.append(_T(" - "));
 

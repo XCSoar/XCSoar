@@ -122,9 +122,11 @@ DebugReplayNMEA::Next()
 }
 
 class DebugReplayIGC : public DebugReplay {
+  unsigned day;
+
 public:
   DebugReplayIGC(NLineReader *reader)
-    :DebugReplay(reader) {}
+    :DebugReplay(reader), day(0) {}
 
   virtual bool Next();
 
@@ -164,7 +166,12 @@ DebugReplayIGC::Next()
 void
 DebugReplayIGC::CopyFromFix(const IGCFix &fix)
 {
-  basic.clock = basic.time = fixed(fix.time.GetSecondOfDay());
+  if (basic.time_available && basic.date_time_utc.hour >= 23 &&
+      fix.time.hour == 0)
+    ++day;
+
+  basic.clock = basic.time =
+    fixed(day * 24 * 3600 + fix.time.GetSecondOfDay());
   basic.time_available.Update(basic.clock);
   basic.date_time_utc.hour = fix.time.hour;
   basic.date_time_utc.minute = fix.time.minute;
