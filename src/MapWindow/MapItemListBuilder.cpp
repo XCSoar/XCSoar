@@ -39,7 +39,6 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ProtectedRoutePlanner.hpp"
-#include "FLARM/State.hpp"
 #include "Markers/ProtectedMarkers.hpp"
 #include "Markers/Markers.hpp"
 #include "NMEA/ThermalLocator.hpp"
@@ -278,9 +277,9 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
 }
 
 void
-MapItemListBuilder::AddTraffic(const FlarmState &flarm)
+MapItemListBuilder::AddTraffic(const TrafficList&flarm)
 {
-  for (auto it=flarm.traffic.begin(), end = flarm.traffic.end(); it != end; ++it) {
+  for (auto it = flarm.list.begin(), end = flarm.list.end(); it != end; ++it) {
     if (location.Distance(it->location) < range)
       list.checked_append(new TrafficMapItem(*it));
   }

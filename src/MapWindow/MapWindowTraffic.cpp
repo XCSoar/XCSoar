@@ -49,8 +49,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     return;
 
   // Return if FLARM data is not available
-  const FlarmState &flarm = Basic().flarm;
-  if (!flarm.available)
+  const TrafficList &flarm = Basic().flarm.traffic;
+  if (flarm.IsEmpty())
     return;
 
   const WindowProjection &projection = render_projection;
@@ -62,7 +62,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     return;
 
   // Circle through the FLARM targets
-  for (auto it = flarm.traffic.begin(), end = flarm.traffic.end();
+  for (auto it = flarm.list.begin(), end = flarm.list.end();
       it != end; ++it) {
     const FlarmTraffic &traffic = *it;
 

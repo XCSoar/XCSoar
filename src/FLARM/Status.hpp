@@ -21,24 +21,51 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_COMPUTER_HPP
-#define XCSOAR_FLARM_COMPUTER_HPP
+#ifndef XCSOAR_FLARM_STATUS_HPP
+#define XCSOAR_FLARM_STATUS_HPP
 
-#include "FLARM/FlarmCalculations.hpp"
+#include "FLARM/Traffic.hpp"
+#include "NMEA/Validity.hpp"
+#include "Util/TypeTraits.hpp"
 
-struct FlarmData;
-struct NMEAInfo;
+/**
+ * The FLARM operation status read from the PFLAU sentence.
+ */
+struct FlarmStatus {
+  enum class GPSStatus: uint8_t {
+    NONE = 0,
+    GPS_2D = 1,
+    GPS_3D = 2,
+  };
 
-class FlarmComputer {
-  FlarmCalculations flarm_calculations;
+  /** Number of received FLARM devices */
+  unsigned short rx;
+  /** Transmit status */
+  bool tx;
 
-public:
-  /**
-   * Calculates location, altitude, average climb speed and
-   * looks up the callsign of each target
-   */
-  void Process(FlarmData &flarm, const FlarmData &last_flarm,
-               const NMEAInfo &basic);
+  /** GPS status */
+  GPSStatus gps;
+
+  /** Alarm level of FLARM (0-3) */
+  FlarmTraffic::AlarmType alarm_level;
+
+  /** Is FLARM information available? */
+  Validity available;
+
+  void Clear() {
+    available.Clear();
+  }
+
+  void Complement(const FlarmStatus &add) {
+    if (!available && add.available)
+      *this = add;
+  }
+
+  void Expire(fixed clock) {
+    available.Expire(clock, fixed(10));
+  }
 };
+
+static_assert(is_trivial<FlarmStatus>::value, "type is not trivial");
 
 #endif

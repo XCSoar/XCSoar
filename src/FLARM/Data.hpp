@@ -21,33 +21,41 @@ Copyright_License {
 }
 */
 
-#include "FLARM/State.hpp"
+#ifndef XCSOAR_FLARM_DATA_HPP
+#define XCSOAR_FLARM_DATA_HPP
 
-void
-FlarmState::Clear()
-{
-  available.Clear();
-  traffic.clear();
-  new_traffic = false;
-}
+#include "FLARM/Status.hpp"
+#include "FLARM/List.hpp"
+#include "Util/TypeTraits.hpp"
 
-const FlarmTraffic *
-FlarmState::FindMaximumAlert() const
-{
-  const FlarmTraffic *alert = NULL;
+/**
+ * A container for all data received by a FLARM.
+ */
+struct FlarmData {
+  FlarmStatus status;
 
-  for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it) {
-    const FlarmTraffic &traffic = *it;
+  TrafficList traffic;
 
-    if (traffic.HasAlarm() &&
-        (alert == NULL ||
-         ((unsigned)traffic.alarm_level > (unsigned)alert->alarm_level ||
-          (traffic.alarm_level == alert->alarm_level &&
-           /* if the levels match -> let the distance decide (smaller
-              distance wins) */
-           traffic.distance < alert->distance))))
-      alert = &traffic;
+  bool IsDetected() const {
+    return status.available || !traffic.IsEmpty();
   }
 
-  return alert;
-}
+  void Clear() {
+    status.Clear();
+    traffic.Clear();
+  }
+
+  void Complement(const FlarmData &add) {
+    status.Complement(add.status);
+    traffic.Complement(add.traffic);
+  }
+
+  void Expire(fixed clock) {
+    status.Expire(clock);
+    traffic.Expire(clock);
+  }
+};
+
+static_assert(is_trivial<FlarmData>::value, "type is not trivial");
+
+#endif

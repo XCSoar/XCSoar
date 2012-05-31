@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-struct FlarmState;
 struct NMEAInfo;
 struct BrokenDateTime;
 class NMEAInputLine;

@@ -199,7 +199,7 @@ NMEAInfo::Expire()
   engine_noise_level_available.Expire(clock, fixed(30));
   voltage_available.Expire(clock, fixed(300));
   battery_level_available.Expire(clock, fixed(300));
-  flarm.Refresh(clock);
+  flarm.Expire(clock);
   gps.Expire(clock);
 }
 

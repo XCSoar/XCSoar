@@ -38,7 +38,7 @@ InputEvents::eventTraffic(const TCHAR *misc)
   LoadFlarmDatabases();
 
   if (StringIsEqual(misc, _T("show"))) {
-    if (!CommonInterface::Basic().flarm.available ||
+    if (CommonInterface::Basic().flarm.traffic.IsEmpty() ||
         IsFlavour(_T("Traffic")))
       return;
 

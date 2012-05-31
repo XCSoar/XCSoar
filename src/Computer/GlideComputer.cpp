@@ -202,15 +202,10 @@ GlideComputer::CalculateOwnTeamCode()
 
 static void
 ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
-                 const FlarmState &flarm, const FlarmId target_id,
+                 const TrafficList &traffic_list, const FlarmId target_id,
                  TeamInfo &teamcode_info)
 {
-  if (!flarm.available) {
-    teamcode_info.flarm_teammate_code_current = false;
-    return;
-  }
-
-  const FlarmTraffic *traffic = flarm.FindTraffic(target_id);
+  const FlarmTraffic *traffic = traffic_list.FindTraffic(target_id);
   if (traffic == NULL || !traffic->location_available) {
     teamcode_info.flarm_teammate_code_current = false;
     return;
@@ -256,7 +251,7 @@ GlideComputer::CalculateTeammateBearingRange()
 
   if (settings.team_flarm_tracking) {
     ComputeFlarmTeam(basic.location, team_code_ref_location,
-                     basic.flarm, settings.team_flarm_id,
+                     basic.flarm.traffic, settings.team_flarm_id,
                      teamcode_info);
   } else if (settings.team_code_valid) {
     teamcode_info.flarm_teammate_code_available = false;

@@ -237,7 +237,7 @@ InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 {
   LoadFlarmDatabases();
 
-  if (XCSoarInterface::Basic().flarm.available)
+  if (!XCSoarInterface::Basic().flarm.traffic.IsEmpty())
     dlgFlarmTrafficShowModal();
 }
 

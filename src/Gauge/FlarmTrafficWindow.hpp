@@ -25,7 +25,7 @@
 #define FLARM_TRAFFIC_WINDOW_H
 
 #include "Screen/PaintWindow.hpp"
-#include "FLARM/State.hpp"
+#include "FLARM/List.hpp"
 #include "FLARM/Friends.hpp"
 #include "TeamCodeSettings.hpp"
 #include "Math/FastRotation.hpp"
@@ -60,13 +60,13 @@ protected:
 
   bool small;
 
-  RasterPoint sc[FlarmState::FLARM_MAX_TRAFFIC];
+  RasterPoint sc[TrafficList::MAX_COUNT];
 
   bool enable_north_up;
   Angle heading;
   FastRotation fr;
   FastIntegerRotation fir;
-  FlarmState data;
+  TrafficList data;
   TeamCodeSettings settings;
 
 public:
@@ -84,7 +84,7 @@ public:
 
   const FlarmTraffic *GetTarget() const {
     return selection >= 0
-      ? &data.traffic[selection]
+      ? &data.list[selection]
       : NULL;
   }
 
@@ -114,7 +114,7 @@ protected:
 
   void UpdateSelector(const FlarmId id, const RasterPoint pt);
   void UpdateWarnings();
-  void Update(Angle new_direction, const FlarmState &new_data,
+  void Update(Angle new_direction, const TrafficList &new_data,
               const TeamCodeSettings &new_settings);
   void PaintRadarNoTraffic(Canvas &canvas) const;
   void PaintRadarTarget(Canvas &canvas, const FlarmTraffic &traffic,

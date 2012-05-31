@@ -23,10 +23,11 @@ Copyright_License {
 
 #include "StaticParser.hpp"
 #include "NMEA/InputLine.hpp"
-#include "FLARM/State.hpp"
+#include "FLARM/Status.hpp"
+#include "FLARM/List.hpp"
 
 void
-ParsePFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock)
+ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock)
 {
   flarm.available.Update(clock);
 
@@ -34,8 +35,8 @@ ParsePFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock)
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
   flarm.rx = line.read(0);
   flarm.tx = line.read(false);
-  flarm.gps = (FlarmState::GPSStatus)
-    line.read((int)FlarmState::GPSStatus::NONE);
+  flarm.gps = (FlarmStatus::GPSStatus)
+    line.read((int)FlarmStatus::GPSStatus::NONE);
 
   line.skip();
   flarm.alarm_level = (FlarmTraffic::AlarmType)
@@ -43,7 +44,7 @@ ParsePFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock)
 }
 
 void
-ParsePFLAA(NMEAInputLine &line, FlarmState &flarm, fixed clock)
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
 {
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
@@ -125,7 +126,7 @@ ParsePFLAA(NMEAInputLine &line, FlarmState &flarm, fixed clock)
     flarm_slot->Clear();
     flarm_slot->id = traffic.id;
 
-    flarm.new_traffic = true;
+    flarm.new_traffic.Update(clock);
   }
 
   // set time of fix to current time

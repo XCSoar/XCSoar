@@ -573,7 +573,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/FLARM/State.cpp \
+	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
@@ -771,9 +771,9 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Engine/Util/Filter.cpp \
@@ -1159,8 +1159,8 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/List.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
@@ -1546,7 +1546,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/FLARM/State.cpp \
+	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
@@ -1950,7 +1950,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/NMEA/ClimbHistory.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
-	$(SRC)/FLARM/State.cpp \
+	$(SRC)/FLARM/List.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/Clock.cpp \

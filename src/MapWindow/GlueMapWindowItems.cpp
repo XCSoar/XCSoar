@@ -70,8 +70,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (waypoints)
     builder.AddWaypoints(*waypoints);
 
-  if (Basic().flarm.available)
-    builder.AddTraffic(Basic().flarm);
+  builder.AddTraffic(Basic().flarm.traffic);
 
   // Sort the list of map items
   list.Sort();

@@ -51,9 +51,9 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
 bool
 FlarmTrafficWindow::WarningMode() const
 {
-  assert(warning < (int)data.traffic.size());
-  assert(warning < 0 || data.traffic[warning].IsDefined());
-  assert(warning < 0 || data.traffic[warning].HasAlarm());
+  assert(warning < (int)data.list.size());
+  assert(warning < 0 || data.list[warning].IsDefined());
+  assert(warning < 0 || data.list[warning].HasAlarm());
 
   return warning >= 0;
 }
@@ -72,8 +72,8 @@ FlarmTrafficWindow::OnResize(UPixelScalar width, UPixelScalar height)
 void
 FlarmTrafficWindow::SetTarget(int i)
 {
-  assert(i < (int)data.traffic.size());
-  assert(i < 0 || data.traffic[i].IsDefined());
+  assert(i < (int)data.list.size());
+  assert(i < 0 || data.list[i].IsDefined());
 
   if (selection == i)
     return;
@@ -92,11 +92,11 @@ FlarmTrafficWindow::NextTarget()
   if (WarningMode())
     return;
 
-  assert(selection < (int)data.traffic.size());
+  assert(selection < (int)data.list.size());
 
   const FlarmTraffic *traffic;
   if (selection >= 0)
-    traffic = data.NextTraffic(&data.traffic[selection]);
+    traffic = data.NextTraffic(&data.list[selection]);
   else
     traffic = NULL;
 
@@ -116,11 +116,11 @@ FlarmTrafficWindow::PrevTarget()
   if (WarningMode())
     return;
 
-  assert(selection < (int)data.traffic.size());
+  assert(selection < (int)data.list.size());
 
   const FlarmTraffic *traffic;
   if (selection >= 0)
-    traffic = data.PreviousTraffic(&data.traffic[selection]);
+    traffic = data.PreviousTraffic(&data.list[selection]);
   else
     traffic = NULL;
 
@@ -169,13 +169,13 @@ FlarmTrafficWindow::UpdateWarnings()
  * This should be called when the radar needs to be repainted
  */
 void
-FlarmTrafficWindow::Update(Angle new_direction, const FlarmState &new_data,
+FlarmTrafficWindow::Update(Angle new_direction, const TrafficList &new_data,
                            const TeamCodeSettings &new_settings)
 {
   FlarmId selection_id;
   RasterPoint pt;
-  if (!small && data.available && selection >= 0) {
-    selection_id = data.traffic[selection].id;
+  if (!small && selection >= 0) {
+    selection_id = data.list[selection].id;
     pt = sc[selection];
   } else {
     selection_id.Clear();
@@ -504,14 +504,14 @@ FlarmTrafficWindow::PaintTargetInfoSmall(
 void
 FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 {
-  if (!data.available || data.GetActiveTrafficCount() == 0) {
+  if (data.IsEmpty()) {
     PaintRadarNoTraffic(canvas);
     return;
   }
 
   // Iterate through the traffic (normal traffic)
-  for (unsigned i = 0; i < data.traffic.size(); ++i) {
-    const FlarmTraffic &traffic = data.traffic[i];
+  for (unsigned i = 0; i < data.list.size(); ++i) {
+    const FlarmTraffic &traffic = data.list[i];
 
     if (!traffic.HasAlarm() &&
         static_cast<unsigned> (selection) != i)
@@ -519,7 +519,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
   }
 
   if (selection >= 0) {
-    const FlarmTraffic &traffic = data.traffic[selection];
+    const FlarmTraffic &traffic = data.list[selection];
 
     if (!traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, selection);
@@ -529,8 +529,8 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
     return;
 
   // Iterate through the traffic (alarm traffic)
-  for (unsigned i = 0; i < data.traffic.size(); ++i) {
-    const FlarmTraffic &traffic = data.traffic[i];
+  for (unsigned i = 0; i < data.list.size(); ++i) {
+    const FlarmTraffic &traffic = data.list[i];
 
     if (traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, i);
@@ -675,11 +675,11 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 void
 FlarmTrafficWindow::Paint(Canvas &canvas)
 {
-  assert(selection < (int)data.traffic.size());
-  assert(selection < 0 || data.traffic[selection].IsDefined());
-  assert(warning < (int)data.traffic.size());
-  assert(warning < 0 || data.traffic[warning].IsDefined());
-  assert(warning < 0 || data.traffic[warning].HasAlarm());
+  assert(selection < (int)data.list.size());
+  assert(selection < 0 || data.list[selection].IsDefined());
+  assert(warning < (int)data.list.size());
+  assert(warning < 0 || data.list[warning].IsDefined());
+  assert(warning < 0 || data.list[warning].HasAlarm());
 
   PaintRadarBackground(canvas);
   PaintRadarTraffic(canvas);
@@ -724,9 +724,9 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
   int min_distance = 99999;
   int min_id = -1;
 
-  for (unsigned i = 0; i < data.traffic.size(); ++i) {
+  for (unsigned i = 0; i < data.list.size(); ++i) {
     // If FLARM target does not exist -> next one
-    if (!data.traffic[i].IsDefined())
+    if (!data.list[i].IsDefined())
       continue;
 
     int distance_sq = (x - sc[i].x) * (x - sc[i].x) +

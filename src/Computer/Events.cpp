@@ -33,6 +33,7 @@ GlideComputerEvents::Reset()
   last_flying = false;
   possible_climb = possible_cruise = false;
   last_traffic = 0;
+  last_new_traffic.Clear();
   last_teammate_in_sector = false;
 }
 
@@ -62,19 +63,21 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
 
   /* check for new traffic */
 
-  const FlarmState &flarm = basic.flarm;
-  if (flarm.available) {
-    if (flarm.rx > 0 && last_traffic == 0)
+  const FlarmData &flarm = basic.flarm;
+  if (flarm.status.available) {
+    if (flarm.status.rx > 0 && last_traffic == 0)
       // traffic has appeared..
       InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
-    else if (flarm.rx == 0 && last_traffic > 0)
+    else if (flarm.status.rx == 0 && last_traffic > 0)
       // traffic has disappeared..
       InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
-    last_traffic = flarm.rx;
+    last_traffic = flarm.status.rx;
 
-    if (flarm.new_traffic)
+    if (flarm.traffic.new_traffic.Modified(last_new_traffic)) {
       // new traffic has appeared
+      last_new_traffic = flarm.traffic.new_traffic;
       InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
+    }
   } else
     last_traffic = 0;
 

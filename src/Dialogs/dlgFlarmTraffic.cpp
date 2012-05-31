@@ -72,7 +72,7 @@ protected:
   void CalcAutoZoom();
 
 public:
-  void Update(Angle new_direction, const FlarmState &new_data,
+  void Update(Angle new_direction, const TrafficList &new_data,
               const TeamCodeSettings &new_settings);
   void UpdateTaskDirection(bool show_task_direction, Angle bearing);
 
@@ -174,7 +174,7 @@ FlarmTrafficControl::CalcAutoZoom()
   bool warning_mode = WarningMode();
   RoughDistance zoom_dist = fixed_zero;
 
-  for (auto it = data.traffic.begin(), end = data.traffic.end();
+  for (auto it = data.list.begin(), end = data.list.end();
       it != end; ++it) {
     if (warning_mode && !it->HasAlarm())
       continue;
@@ -192,7 +192,7 @@ FlarmTrafficControl::CalcAutoZoom()
 }
 
 void
-FlarmTrafficControl::Update(Angle new_direction, const FlarmState &new_data,
+FlarmTrafficControl::Update(Angle new_direction, const TrafficList &new_data,
                             const TeamCodeSettings &new_settings)
 {
   FlarmTrafficWindow::Update(new_direction, new_data, new_settings);
@@ -461,7 +461,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     return;
 
   // Shortcut to the selected traffic
-  FlarmTraffic traffic = data.traffic[WarningMode() ? warning : selection];
+  FlarmTraffic traffic = data.list[WarningMode() ? warning : selection];
   assert(traffic.IsDefined());
 
   PixelRect rc;
@@ -668,12 +668,11 @@ static void
 Update()
 {
   if (XCSoarInterface::GetUISettings().traffic.auto_close_dialog &&
-      (!XCSoarInterface::Basic().flarm.available ||
-       XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0))
+      XCSoarInterface::Basic().flarm.traffic.IsEmpty())
     wf->SetModalResult(mrOK);
 
   wdf->Update(XCSoarInterface::Basic().track,
-              XCSoarInterface::Basic().flarm,
+              XCSoarInterface::Basic().flarm.traffic,
               CommonInterface::GetComputerSettings().team_code);
 
   wdf->UpdateTaskDirection(XCSoarInterface::Calculated().task_stats.task_valid &&

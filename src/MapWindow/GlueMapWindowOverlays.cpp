@@ -203,8 +203,8 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     // Don't show indicator when the gauge is indicating the traffic anyway
     return;
 
-  const FlarmState &flarm = Basic().flarm;
-  if (!flarm.available || flarm.GetActiveTrafficCount() == 0)
+  const FlarmStatus &flarm = Basic().flarm.status;
+  if (!flarm.available)
     return;
 
   switch (flarm.alarm_level) {

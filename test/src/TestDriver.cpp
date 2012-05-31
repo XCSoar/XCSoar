@@ -140,21 +140,21 @@ TestFLARM()
 
   ok1(parser.ParseLine("$PFLAU,3,1,1,1,0*50",
                                       nmea_info));
-  ok1(nmea_info.flarm.rx == 3);
-  ok1(nmea_info.flarm.tx);
-  ok1(nmea_info.flarm.gps == FlarmState::GPSStatus::GPS_2D);
-  ok1(nmea_info.flarm.alarm_level == FlarmTraffic::AlarmType::NONE);
-  ok1(nmea_info.flarm.GetActiveTrafficCount() == 0);
-  ok1(!nmea_info.flarm.new_traffic);
+  ok1(nmea_info.flarm.status.rx == 3);
+  ok1(nmea_info.flarm.status.tx);
+  ok1(nmea_info.flarm.status.gps == FlarmStatus::GPSStatus::GPS_2D);
+  ok1(nmea_info.flarm.status.alarm_level == FlarmTraffic::AlarmType::NONE);
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 0);
+  ok1(!nmea_info.flarm.traffic.new_traffic);
 
   ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
                                       nmea_info));
-  ok1(nmea_info.flarm.new_traffic);
-  ok1(nmea_info.flarm.GetActiveTrafficCount() == 1);
+  ok1(nmea_info.flarm.traffic.new_traffic);
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 1);
 
   FlarmId id = FlarmId::Parse("DDA85C", NULL);
 
-  FlarmTraffic *traffic = nmea_info.flarm.FindTraffic(id);
+  FlarmTraffic *traffic = nmea_info.flarm.traffic.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->valid);
     ok1(traffic->alarm_level == FlarmTraffic::AlarmType::NONE);
@@ -177,10 +177,10 @@ TestFLARM()
 
   ok1(parser.ParseLine("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
                                       nmea_info));
-  ok1(nmea_info.flarm.GetActiveTrafficCount() == 2);
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 2);
 
   id = FlarmId::Parse("DEADFF", NULL);
-  traffic = nmea_info.flarm.FindTraffic(id);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->valid);
     ok1(traffic->alarm_level == FlarmTraffic::AlarmType::IMPORTANT);
@@ -199,10 +199,10 @@ TestFLARM()
 
   ok1(parser.ParseLine("$PFLAA,0,1206,574,21,2,DDAED5,196,,32,1.0,1*10",
                        nmea_info));
-  ok1(nmea_info.flarm.GetActiveTrafficCount() == 3);
+  ok1(nmea_info.flarm.traffic.GetActiveTrafficCount() == 3);
 
   id = FlarmId::Parse("DDAED5", NULL);
-  traffic = nmea_info.flarm.FindTraffic(id);
+  traffic = nmea_info.flarm.traffic.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->valid);
     ok1(traffic->alarm_level == FlarmTraffic::AlarmType::NONE);

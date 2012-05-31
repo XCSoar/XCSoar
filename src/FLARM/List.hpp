@@ -21,69 +21,57 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_STATE_HPP
-#define XCSOAR_FLARM_STATE_HPP
+#ifndef XCSOAR_FLARM_TRAFFIC_LIST_HPP
+#define XCSOAR_FLARM_TRAFFIC_LIST_HPP
 
-#include "FLARM/Traffic.hpp"
+#include "Traffic.hpp"
 #include "NMEA/Validity.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Util/TypeTraits.hpp"
 
 /**
- * Received FLARM data, cached
+ * This class keeps track of the traffic objects received from a
+ * FLARM.
  */
-struct FlarmState
-{
-  enum {
-    FLARM_MAX_TRAFFIC = 25,
-  };
-
-  enum class GPSStatus: uint8_t {
-    NONE = 0,
-    GPS_2D = 1,
-    GPS_3D = 2,
-  };
-
-  /** Number of received FLARM devices */
-  unsigned short rx;
-  /** Transmit status */
-  bool tx;
+struct TrafficList {
+  static gcc_constexpr_data size_t MAX_COUNT = 25;
 
   /**
-   * Is there new FLARM traffic present?
-   * @see traffic
+   * When was the last new traffic received?
    */
-  bool new_traffic;
+  Validity new_traffic;
 
-  /** GPS status */
-  GPSStatus gps;
-
-  /** Alarm level of FLARM (0-3) */
-  FlarmTraffic::AlarmType alarm_level;
-
-  /** Is FLARM information available? */
-  Validity available;
   /** Flarm traffic information */
-  TrivialArray<FlarmTraffic, FLARM_MAX_TRAFFIC> traffic;
+  TrivialArray<FlarmTraffic, MAX_COUNT> list;
 
-public:
-  void Clear();
+  void Clear() {
+    new_traffic.Clear();
+    list.clear();
+  }
 
-  bool IsDetected() const {
-    return available || !traffic.empty();
+  bool IsEmpty() const {
+    return list.empty();
   }
 
   /**
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void Complement(const FlarmState &add) {
-    if (!available && add.available)
+  void Complement(const TrafficList &add) {
+    if (IsEmpty() && !add.IsEmpty())
       *this = add;
   }
 
+  void Expire(fixed clock) {
+    new_traffic.Expire(clock, fixed(60));
+
+    for (unsigned i = list.size(); i-- > 0;)
+      if (!list[i].Refresh(clock))
+        list.quick_remove(i);
+  }
+
   unsigned GetActiveTrafficCount() const {
-    return traffic.size();
+    return list.size();
   }
 
   /**
@@ -93,7 +81,7 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FlarmTraffic *FindTraffic(FlarmId id) {
-    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+    for (auto it = list.begin(), end = list.end(); it != end; ++it)
       if (it->id == id)
         return it;
 
@@ -107,7 +95,7 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FlarmTraffic *FindTraffic(FlarmId id) const {
-    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+    for (auto it = list.begin(), end = list.end(); it != end; ++it)
       if (it->id == id)
         return it;
 
@@ -121,7 +109,7 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FlarmTraffic *FindTraffic(const TCHAR *name) {
-    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+    for (auto it = list.begin(), end = list.end(); it != end; ++it)
       if (it->name.equals(name))
         return it;
 
@@ -135,7 +123,7 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FlarmTraffic *FindTraffic(const TCHAR *name) const {
-    for (auto it = traffic.begin(), end = traffic.end(); it != end; ++it)
+    for (auto it = list.begin(), end = list.end(); it != end; ++it)
       if (it->name.equals(name))
         return it;
 
@@ -148,16 +136,16 @@ public:
    * @return the FLARM_TRAFFIC pointer, NULL if the array is full
    */
   FlarmTraffic *AllocateTraffic() {
-    return traffic.full()
+    return list.full()
       ? NULL
-      : &traffic.append();
+      : &list.append();
   }
 
   /**
    * Search for the previous traffic in the ordered list.
    */
   const FlarmTraffic *PreviousTraffic(const FlarmTraffic *t) const {
-    return t > traffic.begin()
+    return t > list.begin()
       ? t - 1
       : NULL;
   }
@@ -166,7 +154,7 @@ public:
    * Search for the next traffic in the ordered list.
    */
   const FlarmTraffic *NextTraffic(const FlarmTraffic *t) const {
-    return t + 1 < traffic.end()
+    return t + 1 < list.end()
       ? t + 1
       : NULL;
   }
@@ -175,14 +163,14 @@ public:
    * Search for the first traffic in the ordered list.
    */
   const FlarmTraffic *FirstTraffic() const {
-    return traffic.empty() ? NULL : traffic.begin();
+    return list.empty() ? NULL : list.begin();
   }
 
   /**
    * Search for the last traffic in the ordered list.
    */
   const FlarmTraffic *LastTraffic() const {
-    return traffic.empty() ? NULL : traffic.end() - 1;
+    return list.empty() ? NULL : list.end() - 1;
   }
 
   /**
@@ -192,22 +180,10 @@ public:
   const FlarmTraffic *FindMaximumAlert() const;
 
   unsigned TrafficIndex(const FlarmTraffic *t) const {
-    return t - traffic.begin();
-  }
-
-  void Refresh(fixed Time) {
-    available.Expire(Time, fixed(10));
-    if (!available)
-      traffic.clear();
-
-    for (unsigned i = traffic.size(); i-- > 0;)
-      if (!traffic[i].Refresh(Time))
-        traffic.quick_remove(i);
-
-    new_traffic = false;
+    return t - list.begin();
   }
 };
 
-static_assert(is_trivial<FlarmState>::value, "type is not trivial");
+static_assert(is_trivial<TrafficList>::value, "type is not trivial");
 
 #endif

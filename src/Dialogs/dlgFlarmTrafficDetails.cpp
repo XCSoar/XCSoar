@@ -64,7 +64,7 @@ UpdateChanging()
 {
   TCHAR tmp[20];
   const FlarmTraffic* target =
-      XCSoarInterface::Basic().flarm.FindTraffic(target_id);
+    XCSoarInterface::Basic().flarm.traffic.FindTraffic(target_id);
 
   bool target_ok = target && target->IsDefined();
 
@@ -154,7 +154,7 @@ Update()
 
     // Fill the plane type field
     const FlarmTraffic* target =
-        XCSoarInterface::Basic().flarm.FindTraffic(target_id);
+        XCSoarInterface::Basic().flarm.traffic.FindTraffic(target_id);
 
     const TCHAR* actype;
     if (target == NULL ||

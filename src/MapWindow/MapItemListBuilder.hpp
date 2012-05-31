@@ -37,7 +37,7 @@ struct MoreData;
 struct DerivedInfo;
 class ProtectedTaskManager;
 class ProtectedMarkers;
-struct FlarmState;
+struct TrafficList;
 struct ThermalLocatorInfo;
 struct NMEAInfo;
 class RasterTerrain;
@@ -65,7 +65,7 @@ public:
                           const MoreData &basic, const DerivedInfo &calculated);
   void AddTaskOZs(const ProtectedTaskManager &task);
   void AddMarkers(const ProtectedMarkers &marks);
-  void AddTraffic(const FlarmState &flarm);
+  void AddTraffic(const TrafficList &flarm);
   void AddThermals(const ThermalLocatorInfo &thermals,
                    const MoreData &basic, const DerivedInfo &calculated);
 };

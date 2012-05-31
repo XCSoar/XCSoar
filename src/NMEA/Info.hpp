@@ -32,7 +32,7 @@ Copyright_License {
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "FLARM/State.hpp"
+#include "FLARM/Data.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 
 /**
@@ -391,7 +391,7 @@ struct NMEAInfo {
   fixed stall_ratio;
   Validity stall_ratio_available;
 
-  FlarmState flarm;
+  FlarmData flarm;
 
   void UpdateClock();
 

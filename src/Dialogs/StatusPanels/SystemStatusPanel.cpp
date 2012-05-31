@@ -68,7 +68,7 @@ SystemStatusPanel::Refresh()
                : _("Disconnected"));
 
   SetFormValue(form, _T("prpFLARM"),
-               basic.flarm.available
+               basic.flarm.status.available
                ? _("Connected")
                : _("Disconnected"));
 

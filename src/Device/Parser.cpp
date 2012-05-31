@@ -101,12 +101,12 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 
     // FLARM sentences
     if (StringIsEqual(type + 1, "PFLAA")) {
-      ParsePFLAA(line, info.flarm, info.clock);
+      ParsePFLAA(line, info.flarm.traffic, info.clock);
       return true;
     }
 
     if (StringIsEqual(type + 1, "PFLAU")) {
-      ParsePFLAU(line, info.flarm, info.clock);
+      ParsePFLAU(line, info.flarm.status, info.clock);
       return true;
     }
 

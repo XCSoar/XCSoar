@@ -21,11 +21,25 @@ Copyright_License {
 }
 */
 
-#include "FLARM/FlarmCalculations.hpp"
+#include "List.hpp"
 
-fixed
-FlarmCalculations::Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude)
+const FlarmTraffic *
+TrafficList::FindMaximumAlert() const
 {
-  ClimbAverageCalculator &item = averageCalculatorMap[flarmId];
-  return item.GetAverage(curTime, curAltitude, fixed(30));
+  const FlarmTraffic *alert = NULL;
+
+  for (auto it = list.begin(), end = list.end(); it != end; ++it) {
+    const FlarmTraffic &traffic = *it;
+
+    if (traffic.HasAlarm() &&
+        (alert == NULL ||
+         ((unsigned)traffic.alarm_level > (unsigned)alert->alarm_level ||
+          (traffic.alarm_level == alert->alarm_level &&
+           /* if the levels match -> let the distance decide (smaller
+              distance wins) */
+           traffic.distance < alert->distance))))
+      alert = &traffic;
+  }
+
+  return alert;
 }

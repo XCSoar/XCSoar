@@ -27,7 +27,8 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 class NMEAInputLine;
-struct FlarmState;
+struct FlarmStatus;
+struct TrafficList;
 
 /**
  * Parses a PFLAU sentence
@@ -37,7 +38,7 @@ struct FlarmState;
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 void
-ParsePFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock);
+ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock);
 
 /**
  * Parses a PFLAA sentence
@@ -47,6 +48,6 @@ ParsePFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock);
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 void
-ParsePFLAA(NMEAInputLine &line, FlarmState &flarm, fixed clock);
+ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock);
 
 #endif
