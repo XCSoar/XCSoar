@@ -21,40 +21,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FLARM_STATIC_PARSER_HPP
-#define XCSOAR_FLARM_STATIC_PARSER_HPP
+#ifndef XCSOAR_FLARM_VERSION_HPP
+#define XCSOAR_FLARM_VERSION_HPP
 
-#include "Math/fixed.hpp"
-
-class NMEAInputLine;
-struct FlarmVersion;
-struct FlarmStatus;
-struct TrafficList;
+#include "NMEA/Validity.hpp"
+#include "Util/StaticString.hpp"
+#include "Util/TypeTraits.hpp"
 
 /**
- * Parses a PFLAV sentence (version information).
+ * The FLARM version read from the PFLAV sentence.
  */
-void
-ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock);
+struct FlarmVersion {
+  Validity available;
 
-/**
- * Parses a PFLAU sentence
- * (Operating status and priority intruder and obstacle data)
- *
- * @param line A NMEAInputLine instance that can be used for parsing
- * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
- */
-void
-ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock);
+  NarrowString<7> hardware_version, software_version;
+  NarrowString<19> obstacle_version;
 
-/**
- * Parses a PFLAA sentence
- * (Data on other moving objects around)
- *
- * @param line A NMEAInputLine instance that can be used for parsing
- * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
- */
-void
-ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock);
+  void Clear() {
+    available.Clear();
+  }
+
+  void Complement(const FlarmVersion &add) {
+    if (available.Complement(add.available)) {
+      hardware_version = add.hardware_version;
+      software_version = add.software_version;
+      obstacle_version = add.obstacle_version;
+    }
+  }
+
+  void Expire(fixed clock) {
+    /* no expiry; this object will be cleared only when the device
+       connection is lost */
+  }
+};
+
+static_assert(is_trivial<FlarmVersion>::value, "type is not trivial");
 
 #endif

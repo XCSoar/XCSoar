@@ -23,8 +23,30 @@ Copyright_License {
 
 #include "StaticParser.hpp"
 #include "NMEA/InputLine.hpp"
+#include "FLARM/Version.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
+#include "Util/Macros.hpp"
+
+void
+ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock)
+{
+  char type[2];
+  line.read(type, ARRAY_SIZE(type));
+  if (strcmp(type, "A") != 0)
+    return;
+
+  line.read(version.hardware_version.buffer(),
+            version.hardware_version.MAX_SIZE);
+
+  line.read(version.software_version.buffer(),
+            version.software_version.MAX_SIZE);
+
+  line.read(version.obstacle_version.buffer(),
+            version.obstacle_version.MAX_SIZE);
+
+  version.available.Update(clock);
+}
 
 void
 ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock)
