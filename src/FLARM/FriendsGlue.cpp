@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -21,31 +21,21 @@
 }
 */
 
-#ifndef XCSOAR_TRAFFIC_LOOK_HPP
-#define XCSOAR_TRAFFIC_LOOK_HPP
+#include "FriendsGlue.hpp"
+#include "FLARM/FlarmId.hpp"
+#include "TeamCodeSettings.hpp"
 
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Icon.hpp"
+FlarmFriends::Color
+FlarmFriends::GetFriendColor(FlarmId id, const TeamCodeSettings &settings)
+{
+  Color team_color = GetFriendColor(id);
 
-struct TrafficLook {
-  Color safe_color;
-  Color warning_color;
-  Color alarm_color;
+  // If no color found but target is teammate
+  if (team_color == Color::NONE &&
+      settings.team_flarm_tracking &&
+      id == settings.team_flarm_id)
+    // .. use green color
+    return Color::GREEN;
 
-  Brush safe_brush;
-  Brush warning_brush;
-  Brush alarm_brush;
-
-  Pen team_pen_green;
-  Pen team_pen_blue;
-  Pen team_pen_yellow;
-  Pen team_pen_magenta;
-
-  MaskedIcon teammate_icon;
-
-  void Initialise();
-};
-
-#endif
+  return team_color;
+}

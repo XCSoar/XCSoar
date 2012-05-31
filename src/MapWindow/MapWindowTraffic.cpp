@@ -33,6 +33,7 @@ Copyright_License {
 #include "Formatter/UserUnits.hpp"
 #include "Look/TrafficLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
+#include "FLARM/FriendsGlue.hpp"
 
 #include <stdio.h>
 
@@ -111,8 +112,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
       }
     }
 
+    auto color = FlarmFriends::GetFriendColor(traffic.id,
+                                              GetComputerSettings().team_code);
     TrafficRenderer::Draw(canvas, traffic_look, traffic,
-                          traffic.track - projection.GetScreenAngle(), sc);
+                          traffic.track - projection.GetScreenAngle(),
+                          color, sc);
   }
 }
 

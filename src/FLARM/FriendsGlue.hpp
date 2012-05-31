@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -21,31 +21,17 @@
 }
 */
 
-#ifndef XCSOAR_TRAFFIC_LOOK_HPP
-#define XCSOAR_TRAFFIC_LOOK_HPP
+#ifndef XCSOAR_FLARM_FRIENDS_GLUE_HPP
+#define XCSOAR_FLARM_FRIENDS_GLUE_HPP
 
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
-#include "Screen/Brush.hpp"
-#include "Screen/Icon.hpp"
+#include "Friends.hpp"
 
-struct TrafficLook {
-  Color safe_color;
-  Color warning_color;
-  Color alarm_color;
+class FlarmId;
+struct TeamCodeSettings;
 
-  Brush safe_brush;
-  Brush warning_brush;
-  Brush alarm_brush;
-
-  Pen team_pen_green;
-  Pen team_pen_blue;
-  Pen team_pen_yellow;
-  Pen team_pen_magenta;
-
-  MaskedIcon teammate_icon;
-
-  void Initialise();
+namespace FlarmFriends
+{
+  Color GetFriendColor(FlarmId id, const TeamCodeSettings &settings);
 };
 
 #endif

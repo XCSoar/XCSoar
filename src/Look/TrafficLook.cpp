@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TrafficLook.hpp"
+#include "Screen/Layout.hpp"
 #include "resource.h"
 
 void
@@ -34,6 +35,12 @@ TrafficLook::Initialise()
   safe_brush.Set(safe_color);
   warning_brush.Set(warning_color);
   alarm_brush.Set(alarm_color);
+
+  UPixelScalar width = Layout::ScalePenWidth(2);
+  team_pen_green.Set(width, Color(0x74, 0xFF, 0));
+  team_pen_blue.Set(width, Color(0, 0x90, 0xFF));
+  team_pen_yellow.Set(width, Color(0xFF, 0xE8, 0));
+  team_pen_magenta.Set(width, Color(0xFF, 0, 0xCB));
 
   teammate_icon.Load(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
 }

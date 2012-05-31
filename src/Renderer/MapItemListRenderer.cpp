@@ -48,6 +48,8 @@ Copyright_License {
 #include "Look/TrafficLook.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/TrafficRenderer.hpp"
+#include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Record.hpp"
 
 #include <cstdio>
 
@@ -429,16 +431,29 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const Font &small_font = *dialog_look.small_font;
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
-  StaticString<26> title_string(_("FLARM Traffic"));
+  const FlarmRecord *record = FlarmDetails::LookupRecord(item.traffic.id);
+
+  StaticString<256> title_string;
+  if (record && !StringIsEmpty(record->pilot))
+    title_string = record->pilot.c_str();
+  else
+    title_string = _("FLARM Traffic");
+
   // Append name to the title, if it exists
   if (traffic.HasName()) {
     title_string.append(_T(", "));
     title_string.append(traffic.name);
   }
+
   canvas.Select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, title_string);
 
-  StaticString<256> info_string(FlarmTraffic::GetTypeString(item.traffic.type));
+  StaticString<256> info_string;
+  if (record && !StringIsEmpty(record->plane_type))
+    info_string = record->plane_type;
+  else
+    info_string = FlarmTraffic::GetTypeString(item.traffic.type);
+
   // Generate the line of info about the target, if it's available
   if (traffic.altitude_available) {
     TCHAR tmp[15];
@@ -459,7 +474,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                      (PixelScalar)(rc.top + line_height / 2) };
 
   // Render the representation of the traffic icon
-  TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track, pt);
+  TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track,
+                        item.color, pt);
 }
 
 void

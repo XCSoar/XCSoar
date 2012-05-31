@@ -23,6 +23,7 @@
 
 #include "TrafficRenderer.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Look/TrafficLook.hpp"
 #include "FLARM/Traffic.hpp"
 #include "Math/Screen.hpp"
@@ -30,7 +31,7 @@
 void
 TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
                       const FlarmTraffic &traffic, const Angle &angle,
-                      const RasterPoint pt)
+                      const FlarmFriends::Color color, const RasterPoint pt)
 {
   // Create point array that will form that arrow polygon
   RasterPoint Arrow[5];
@@ -70,4 +71,24 @@ TrafficRenderer::Draw(Canvas &canvas, const TrafficLook &traffic_look,
 
   // Draw the arrow
   canvas.DrawPolygon(Arrow, 5);
+
+  switch (color) {
+  case FlarmFriends::Color::GREEN:
+    canvas.Select(traffic_look.team_pen_green);
+    break;
+  case FlarmFriends::Color::BLUE:
+    canvas.Select(traffic_look.team_pen_blue);
+    break;
+  case FlarmFriends::Color::YELLOW:
+    canvas.Select(traffic_look.team_pen_yellow);
+    break;
+  case FlarmFriends::Color::MAGENTA:
+    canvas.Select(traffic_look.team_pen_magenta);
+    break;
+  default:
+    return;
+  }
+
+  canvas.SelectHollowBrush();
+  canvas.DrawCircle(pt.x, pt.y, Layout::FastScale(11));
 }

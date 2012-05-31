@@ -130,8 +130,6 @@ protected:
   void PaintNorth(Canvas &canvas) const;
 
   FlarmFriends::Color GetTeamColor(const FlarmId &id) const;
-  static FlarmFriends::Color GetTeamColor(const FlarmId &id,
-                                          const TeamCodeSettings &settings);
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);

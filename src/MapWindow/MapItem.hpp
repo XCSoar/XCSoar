@@ -31,6 +31,7 @@ Copyright_License {
 #include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "Markers/Markers.hpp"
 #include "FLARM/Traffic.hpp"
+#include "FLARM/Friends.hpp"
 #include "NMEA/ThermalLocator.hpp"
 
 class AbstractAirspace;
@@ -146,9 +147,10 @@ struct MarkerMapItem: public MapItem
 struct TrafficMapItem: public MapItem
 {
   const FlarmTraffic &traffic;
+  FlarmFriends::Color color;
 
-  TrafficMapItem(const FlarmTraffic &_traffic)
-    :MapItem(TRAFFIC), traffic(_traffic) {}
+  TrafficMapItem(const FlarmTraffic &_traffic, FlarmFriends::Color _color)
+    :MapItem(TRAFFIC), traffic(_traffic), color(_color) {}
 };
 
 struct ThermalMapItem: public MapItem
