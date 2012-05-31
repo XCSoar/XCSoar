@@ -7,6 +7,8 @@ Version 6.3.5 - not yet released
   - fix rounding error in task minimum search for finish lines
 * devices
   - fix crash on connection failure during flight download
+* map
+  - fix horizontal terrain stripes (#1745)
 * Android
   - fix compatibility with Android 1.6
   - fix hanging IOIO/Bluetooth connection

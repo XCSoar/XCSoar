@@ -130,7 +130,11 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   }
 
   const int dx = bx - ax;
-  if (interpolate && (unsigned)abs(dx) < (size << 8u)) {
+  /* disable interpolation when an output pixel is larger than two
+     pixels in our buffer; the factor of two should account for the Y
+     axis, which can have a different scale, making the factor some
+     sort of ugly kludge to avoid horizontal shading stripes */
+  if (interpolate && (unsigned)abs(dx) < (2 * size << 8u)) {
     /* interpolate */
 
     unsigned cy = y;
@@ -194,7 +198,11 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
 
   --size;
   const int dx = bx - ax, dy = by - ay;
-  if (interpolate && (unsigned)(abs(dx) + abs(dy)) < (size << 8u)) {
+  /* disable interpolation when an output pixel is larger than two
+     pixels in our buffer; the factor of two should account for the Y
+     axis, which can have a different scale, making the factor some
+     sort of ugly kludge to avoid horizontal shading stripes */
+  if (interpolate && (unsigned)(abs(dx) + abs(dy)) < (2 * size << 8u)) {
     /* interpolate */
 
     for (int i = 0; (unsigned)i <= size; ++i) {
