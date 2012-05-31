@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Airspace.hpp"
+#include "ColorListDialog.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
@@ -32,7 +32,7 @@ Copyright_License {
 #include <assert.h>
 
 static void
-OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
+OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < ARRAY_SIZE(AirspaceLook::preset_colors));
 
@@ -54,9 +54,9 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 }
 
 int
-dlgAirspaceColoursShowModal()
+ShowColorListDialog()
 {
   return ListPicker(UIGlobals::GetMainWindow(), _("Select Color"),
                     ARRAY_SIZE(AirspaceLook::preset_colors), 0,
-                    Layout::FastScale(18), OnAirspaceColoursPaintListItem);
+                    Layout::FastScale(18), OnPaintListItem);
 }

@@ -145,7 +145,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/WindSettingsPanel.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \
-	$(SRC)/Dialogs/dlgAirspaceColours.cpp \
+	$(SRC)/Dialogs/ColorListDialog.cpp \
 	$(SRC)/Dialogs/dlgAirspacePatterns.cpp \
 	$(SRC)/Dialogs/dlgAirspaceDetails.cpp \
 	$(SRC)/Dialogs/dlgAirspaceSelect.cpp \

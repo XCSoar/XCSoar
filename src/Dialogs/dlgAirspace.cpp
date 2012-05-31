@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Airspace.hpp"
+#include "Dialogs/ColorListDialog.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Dialogs.h"
@@ -109,7 +110,7 @@ OnAirspaceListEnter(unsigned index)
     AirspaceLook &look =
       CommonInterface::main_window.SetLook().map.airspace;
 
-    int color_index = dlgAirspaceColoursShowModal();
+    int color_index = ShowColorListDialog();
     if (color_index >= 0) {
       renderer.classes[index].SetColors(AirspaceLook::preset_colors[color_index]);
       ActionInterface::SendMapSettings();

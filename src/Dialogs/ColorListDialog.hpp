@@ -21,23 +21,9 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_AIRSPACE_HPP
-#define XCSOAR_DIALOGS_AIRSPACE_HPP
+#ifndef XCSOAR_COLOR_LIST_DIALOG_HPP
+#define XCSOAR_COLOR_LIST_DIALOG_HPP
 
-class AbstractAirspace;
-class Airspaces;
-class ProtectedAirspaceWarningManager;
-struct AirspaceLook;
-
-void
-dlgAirspaceDetails(const AbstractAirspace& the_airspace,
-                   ProtectedAirspaceWarningManager *_airspace_warnings);
-
-int dlgAirspacePatternsShowModal(const AirspaceLook &look);
-void dlgAirspaceShowModal(bool colored);
-
-void
-dlgAirspaceSelect(const Airspaces &airspace_database,
-                  ProtectedAirspaceWarningManager *airspace_warnings);
+int ShowColorListDialog();
 
 #endif
