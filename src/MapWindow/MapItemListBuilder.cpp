@@ -47,6 +47,8 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "FLARM/FriendsGlue.hpp"
+#include "TeamCodeSettings.hpp"
 
 class AirspaceWarningList
 {
@@ -277,11 +279,14 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
 }
 
 void
-MapItemListBuilder::AddTraffic(const TrafficList&flarm)
+MapItemListBuilder::AddTraffic(const TrafficList &flarm,
+                               const TeamCodeSettings &teamcode)
 {
   for (auto it = flarm.list.begin(), end = flarm.list.end(); it != end; ++it) {
-    if (location.Distance(it->location) < range)
-      list.checked_append(new TrafficMapItem(*it));
+    if (location.Distance(it->location) < range) {
+      auto color = FlarmFriends::GetFriendColor(it->id, teamcode);
+      list.checked_append(new TrafficMapItem(*it, color));
+    }
   }
 }
 

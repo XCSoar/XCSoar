@@ -474,7 +474,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                      (PixelScalar)(rc.top + line_height / 2) };
 
   // Render the representation of the traffic icon
-  TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track, pt);
+  TrafficRenderer::Draw(canvas, traffic_look, traffic, traffic.track,
+                        item.color, pt);
 }
 
 void

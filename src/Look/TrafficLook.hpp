@@ -38,6 +38,11 @@ struct TrafficLook {
   Brush warning_brush;
   Brush alarm_brush;
 
+  Pen team_pen_green;
+  Pen team_pen_blue;
+  Pen team_pen_yellow;
+  Pen team_pen_magenta;
+
   MaskedIcon teammate_icon;
 
   void Initialise();
