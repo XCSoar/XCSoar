@@ -89,18 +89,20 @@ TimeLocal(int d)
   return d;
 }
 
-#ifndef ENABLE_OPENGL
-
 class DrawThread {
 public:
+#ifndef ENABLE_OPENGL
   static void Draw(MapWindow &map) {
     map.repaint();
     map.UpdateAll();
     map.repaint();
   }
-};
-
+#else
+  static void UpdateAll(MapWindow &map) {
+    map.UpdateAll();
+  }
 #endif
+};
 
 class TestWindow : public SingleWindow {
 public:
@@ -308,7 +310,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   GenerateBlackboard(window.map, settings_map);
   Fonts::Initialize();
-#ifndef ENABLE_OPENGL
+#ifdef ENABLE_OPENGL
+  DrawThread::UpdateAll(window.map);
+#else
   DrawThread::Draw(window.map);
   window.initialised = true;
 #endif
