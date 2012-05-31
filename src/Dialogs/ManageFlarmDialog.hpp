@@ -25,7 +25,9 @@ Copyright_License {
 #define XCSOAR_MANAGE_FLARM_DIALOG_HPP
 
 class Device;
+struct FlarmVersion;
 
-void ManageFlarmDialog(Device &device);
+void
+ManageFlarmDialog(Device &device, const FlarmVersion &version);
 
 #endif
