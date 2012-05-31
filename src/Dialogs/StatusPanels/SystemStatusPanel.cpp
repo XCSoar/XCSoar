@@ -73,9 +73,19 @@ SystemStatusPanel::Refresh()
   SetText(Vario, basic.total_energy_vario_available
           ? _("Connected") : _("Disconnected"));
 
-  SetText(FLARM, basic.flarm.status.available
-          ? _("Connected")
-          : _("Disconnected"));
+  Temp = basic.flarm.status.available
+    ? _("Connected")
+    : _("Disconnected");
+
+  if (basic.flarm.version.available &&
+      !basic.flarm.version.software_version.empty()) {
+    /* append FLARM firmware version */
+    Temp.append(_T(" (fw "));
+    Temp.UnsafeAppendASCII(basic.flarm.version.software_version.c_str());
+    Temp.Append(_T(')'));
+  }
+
+  SetText(FLARM, Temp);
 
   SetText(Logger, logger.IsLoggerActive()
           ? _("On")
