@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3.5 - not yet released
+* calculations
+  - fix rounding error in task minimum search for finish lines
 * devices
   - fix crash on connection failure during flight download
 * Android
