@@ -1547,6 +1547,9 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/NMEA/CirclingInfo.cpp \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Friends.cpp \
+	$(SRC)/FLARM/FriendsGlue.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
