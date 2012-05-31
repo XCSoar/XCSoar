@@ -303,6 +303,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/FLARM/Friends.cpp \
+	$(SRC)/FLARM/FriendsGlue.cpp \
 	$(SRC)/FLARM/FlarmComputer.cpp \
 	$(SRC)/FLARM/Glue.cpp \
 	$(SRC)/Computer/CuComputer.cpp \

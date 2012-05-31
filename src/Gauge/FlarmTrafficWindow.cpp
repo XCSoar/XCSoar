@@ -23,6 +23,7 @@
 
 #include "FlarmTrafficWindow.hpp"
 #include "FLARM/Traffic.hpp"
+#include "FLARM/FriendsGlue.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Formatter/UserUnits.hpp"
@@ -699,23 +700,7 @@ FlarmTrafficWindow::OnPaint(Canvas &canvas)
 FlarmFriends::Color
 FlarmTrafficWindow::GetTeamColor(const FlarmId &id) const
 {
-  return GetTeamColor(id, settings);
-}
-
-FlarmFriends::Color
-FlarmTrafficWindow::GetTeamColor(const FlarmId &id,
-                                 const TeamCodeSettings &settings)
-{
-  FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(id);
-
-  // If no color found but target is teammate
-  if (team_color == FlarmFriends::Color::NONE &&
-      settings.team_flarm_tracking &&
-      id == settings.team_flarm_id)
-    // .. use yellow color
-    return FlarmFriends::Color::GREEN;
-
-  return team_color;
+  return FlarmFriends::GetFriendColor(id, settings);
 }
 
 bool
