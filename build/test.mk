@@ -1703,6 +1703,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Hardware/Display.cpp \
@@ -1982,6 +1983,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Formatter/UserUnits.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
@@ -2140,6 +2142,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Formatter/AirspaceUserUnitsFormatter.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/Dialogs/XML.cpp \

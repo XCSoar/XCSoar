@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/SymbolButton.hpp"
 #include "Form/Control.hpp"
+#include "Formatter/HexColor.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
@@ -55,6 +56,8 @@ WndSymbolButton::OnPaint(Canvas &canvas)
     canvas.Select(look.button.standard.foreground_brush);
 
   const char ch = (char)caption[0];
+
+  Color color;
 
   // Draw arrow symbols instead of < and >
   if (ch == '<' || ch == '>') {
@@ -126,17 +129,8 @@ WndSymbolButton::OnPaint(Canvas &canvas)
       canvas.stretch_transparent(launcher2_bitmap, COLOR_BLUE);
   }
 
-  else if (caption == _T("Green")) {
+  else if (ParseHexColor(caption.c_str(), color)) {
     InflateRect(&rc, -3, -3);
-    canvas.DrawFilledRectangle(rc, Color(0x74, 0xFF, 0));
-  } else if (caption == _T("Blue")) {
-    InflateRect(&rc, -3, -3);
-    canvas.DrawFilledRectangle(rc, Color(0, 0x90, 0xFF));
-  } else if (caption == _T("Magenta")) {
-    InflateRect(&rc, -3, -3);
-    canvas.DrawFilledRectangle(rc, Color(0xFF, 0, 0xCB));
-  } else if (caption == _T("Yellow")) {
-    InflateRect(&rc, -3, -3);
-    canvas.DrawFilledRectangle(rc, Color(0xFF, 0xE8, 0));
+    canvas.DrawFilledRectangle(rc, color);
   }
 }

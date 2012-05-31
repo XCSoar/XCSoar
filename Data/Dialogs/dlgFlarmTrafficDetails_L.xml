@@ -4,10 +4,10 @@
   <Button Name="cmdSetAsTeamMate" Caption="Team" Width="70" Height="30" OnClick="OnTeamClicked" />
 
   <Label X="2" Y="38" Width="68" Height="16" Caption="Friends" />
-  <SymbolButton Name="cmdFriendGreen" Caption="Green" Y="55" Width="35" Height="35" OnClick="OnFriendGreenClicked" />
-  <SymbolButton Name="cmdFriendBlue" Caption="Blue" X="35" Y="55" Width="35" Height="35" OnClick="OnFriendBlueClicked" />
-  <SymbolButton Name="cmdFriendYellow" Caption="Yellow" Y="90" Width="35" Height="35" OnClick="OnFriendYellowClicked" />
-  <SymbolButton Name="cmdFriendMagenta" Caption="Magenta" X="35" Y="90" Width="35" Height="35" OnClick="OnFriendMagentaClicked" />
+  <SymbolButton Name="cmdFriendGreen" Caption="#74FF00" Y="55" Width="35" Height="35" OnClick="OnFriendGreenClicked" />
+  <SymbolButton Name="cmdFriendBlue" Caption="#0090FF" X="35" Y="55" Width="35" Height="35" OnClick="OnFriendBlueClicked" />
+  <SymbolButton Name="cmdFriendYellow" Caption="#FF00CB" Y="90" Width="35" Height="35" OnClick="OnFriendYellowClicked" />
+  <SymbolButton Name="cmdFriendMagenta" Caption="#FFE800" X="35" Y="90" Width="35" Height="35" OnClick="OnFriendMagentaClicked" />
   <Button Name="cmdFriendClear" Caption="Clear" Width="70" Height="30" OnClick="OnFriendClearClicked" />
 
   <Button Name="cmdClose" Caption="Close" Y="-30" Width="70" Height="30" OnClick="OnCloseClicked" />
