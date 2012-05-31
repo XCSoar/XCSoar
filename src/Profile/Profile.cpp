@@ -162,7 +162,7 @@ Profile::GetPathBase(const TCHAR *key)
     return NULL;
 
   if (DIR_SEPARATOR != '\\') {
-    const TCHAR *backslash = _tcsrchr(p, '\\');
+    const TCHAR *backslash = _tcsrchr(p, _T('\\'));
     if (backslash != NULL)
       p = backslash + 1;
   }
