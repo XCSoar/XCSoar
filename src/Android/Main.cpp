@@ -31,6 +31,7 @@ Copyright_License {
 #include "Android/PortBridge.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "Android/NativeInputListener.hpp"
+#include "Android/LogCat.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
@@ -39,6 +40,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Android/Event.hpp"
 #include "Screen/OpenGL/Init.hpp"
+#include "Dialogs/Message.hpp"
 #include "Simulator.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
@@ -132,6 +134,15 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
 {
   OpenGL::Initialise();
+
+  if (CheckLogCat())
+    MessageBoxX(_T("How embarassing, we're terribly sorry!\n"
+                   "Please submit a bug report and "
+                   "include the file from the 'crash' directory.\n"
+                   "http://www.xcsoar.org/trac/newticket\n"
+                   "After your report, we'll fix it ASAP."),
+                _T("XCSoar has crashed recently"),
+                MB_OK|MB_ICONERROR);
 
   CommonInterface::main_window.event_loop();
 }
