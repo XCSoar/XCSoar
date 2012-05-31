@@ -4,9 +4,9 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.3.5 - not yet released
 * calculations
-  - fix rounding error in task minimum search for finish lines
+  - fix rounding error in task minimum search for finish lines (#2102)
 * devices
-  - fix crash on connection failure during flight download
+  - fix crash on connection failure during flight download (#2107)
 * map
   - fix horizontal terrain stripes (#1745)
 * Android
