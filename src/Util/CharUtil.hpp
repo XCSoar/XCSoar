@@ -31,6 +31,20 @@ Copyright_License {
 #endif
 
 static inline bool
+IsASCII(const char ch)
+{
+  return (unsigned char)ch < 0x80;
+}
+
+#ifdef _UNICODE
+static inline bool
+IsASCII(const TCHAR ch)
+{
+  return (ch & ~0x7f) == 0;
+}
+#endif
+
+static inline bool
 IsWhitespaceOrNull(const char ch)
 {
   return (unsigned char)ch <= 0x20;

@@ -81,6 +81,35 @@ CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
 }
 #endif
 
+void
+CopyASCII(char *dest, const char *src)
+{
+  do {
+    if (IsASCII(*src))
+      *dest++ = *src;
+  } while (*src++ != '\0');
+}
+
+#ifdef _UNICODE
+void
+CopyASCII(TCHAR *dest, const TCHAR *src)
+{
+  do {
+    if (IsASCII(*src))
+      *dest++ = *src;
+  } while (*src++ != _T('\0'));
+}
+
+void
+CopyASCII(TCHAR *dest, const char *src)
+{
+  do {
+    if (IsASCII(*src))
+      *dest++ = (TCHAR)*src;
+  } while (*src++ != '\0');
+}
+#endif
+
 const TCHAR *
 TrimLeft(const TCHAR *p)
 {

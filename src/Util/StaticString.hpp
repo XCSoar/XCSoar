@@ -85,6 +85,13 @@ public:
     data[new_length] = SENTINEL;
   }
 
+  /**
+   * Eliminate all non-ASCII characters.
+   */
+  void CleanASCII() {
+    CopyASCII(data, data);
+  }
+
   bool equals(const T *other) const {
     assert(other != NULL);
 
@@ -181,6 +188,14 @@ public:
     data[l] = ch;
     data[l + 1] = SENTINEL;
     return true;
+  }
+
+  /**
+   * Append ASCII characters from the specified string without buffer
+   * boundary checks.
+   */
+  void UnsafeAppendASCII(const char *p) {
+    CopyASCII(data + length(), p);
   }
 
   const T *c_str() const {

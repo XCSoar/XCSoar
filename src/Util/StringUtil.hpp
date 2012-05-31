@@ -180,6 +180,23 @@ CopyString(char *dest, const char *src, size_t size);
 #endif
 
 /**
+ * Copy all ASCII characters to the destination string
+ * (i.e. 0x01..0x7f), ignoring the others.  In the worst case, the
+ * destination buffer must be as large as the source buffer.  Can be
+ * used for in-place operation.
+ */
+void
+CopyASCII(char *dest, const char *src);
+
+#ifdef _UNICODE
+void
+CopyASCII(TCHAR *dest, const TCHAR *src);
+
+void
+CopyASCII(TCHAR *dest, const char *src);
+#endif
+
+/**
  * Skips whitespace at the beginning of the string, and returns the
  * first non-whitespace character.  If the string has no
  * non-whitespace characters, then a pointer to the NULL terminator is
