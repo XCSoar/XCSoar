@@ -53,10 +53,18 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.Rectangle(rc2.left, rc2.top, rc2.right, rc2.bottom);
 }
 
-int
-ShowColorListDialog()
+bool
+ShowColorListDialog(Color &color)
 {
-  return ListPicker(UIGlobals::GetMainWindow(), _("Select Color"),
-                    ARRAY_SIZE(AirspaceLook::preset_colors), 0,
-                    Layout::FastScale(18), OnPaintListItem);
+  int index = ListPicker(UIGlobals::GetMainWindow(), _("Select Color"),
+                         ARRAY_SIZE(AirspaceLook::preset_colors), 0,
+                         Layout::FastScale(18), OnPaintListItem);
+
+  if (index < 0)
+    return false;
+
+  assert((unsigned)index < ARRAY_SIZE(AirspaceLook::preset_colors));
+
+  color = AirspaceLook::preset_colors[index];
+  return true;
 }

@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_COLOR_LIST_DIALOG_HPP
 #define XCSOAR_COLOR_LIST_DIALOG_HPP
 
-int ShowColorListDialog();
+struct Color;
+
+bool ShowColorListDialog(Color &color);
 
 #endif

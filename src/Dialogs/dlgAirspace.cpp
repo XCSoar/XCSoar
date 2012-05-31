@@ -110,9 +110,9 @@ OnAirspaceListEnter(unsigned index)
     AirspaceLook &look =
       CommonInterface::main_window.SetLook().map.airspace;
 
-    int color_index = ShowColorListDialog();
-    if (color_index >= 0) {
-      renderer.classes[index].SetColors(AirspaceLook::preset_colors[color_index]);
+    Color color;
+    if (ShowColorListDialog(color)) {
+      renderer.classes[index].SetColors(color);
       ActionInterface::SendMapSettings();
       Profile::SetAirspaceBorderColor(index, renderer.classes[index].border_color);
       Profile::SetAirspaceFillColor(index, renderer.classes[index].fill_color);
