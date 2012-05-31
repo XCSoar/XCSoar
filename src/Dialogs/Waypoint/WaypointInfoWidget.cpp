@@ -39,6 +39,27 @@ Copyright_License {
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 
+static const TCHAR *
+FormatGlideResult(TCHAR *buffer, size_t size,
+                  const GlideResult &result, const GlideSettings &settings)
+{
+  switch (result.validity) {
+  case GlideResult::Validity::OK:
+    FormatRelativeUserAltitude(result.SelectAltitudeDifference(settings),
+                               buffer, size);
+    return buffer;
+
+  case GlideResult::Validity::WIND_EXCESSIVE:
+  case GlideResult::Validity::MACCREADY_INSUFFICIENT:
+    return _("Too much wind");
+
+  case GlideResult::Validity::NO_SOLUTION:
+    return _("No solution");
+  }
+
+  return NULL;
+}
+
 void
 WaypointInfoWidget::AddGlideResult(const TCHAR *label,
                                    const GlideResult &result)
@@ -46,23 +67,8 @@ WaypointInfoWidget::AddGlideResult(const TCHAR *label,
   const ComputerSettings &settings = CommonInterface::GetComputerSettings();
 
   TCHAR buffer[64];
-
-  switch (result.validity) {
-  case GlideResult::Validity::OK:
-    FormatRelativeUserAltitude(result.SelectAltitudeDifference(settings.task.glide),
-                                      buffer, ARRAY_SIZE(buffer));
-    AddReadOnly(label, NULL, buffer);
-    break;
-
-  case GlideResult::Validity::WIND_EXCESSIVE:
-  case GlideResult::Validity::MACCREADY_INSUFFICIENT:
-    AddReadOnly(label, NULL, _("Too much wind"));
-    break;
-
-  case GlideResult::Validity::NO_SOLUTION:
-    AddReadOnly(label, NULL, _("No solution"));
-    break;
-  }
+  AddReadOnly(label, NULL, FormatGlideResult(buffer, ARRAY_SIZE(buffer),
+                                             result, settings.task.glide));
 }
 
 void
