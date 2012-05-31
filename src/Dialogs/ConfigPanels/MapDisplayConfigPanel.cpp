@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "MapDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Form/Util.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"

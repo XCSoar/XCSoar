@@ -22,16 +22,12 @@ Copyright_License {
 */
 
 #include "LoggerInfoConfigPanel.hpp"
-#include "Form/Util.hpp"
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Plane/PlaneGlue.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
-#include "Form/DataField/Enum.hpp"
 
 enum ControlIndex {
   PilotName,

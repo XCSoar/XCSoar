@@ -22,12 +22,9 @@ Copyright_License {
 */
 
 #include "LoggerConfigPanel.hpp"
-#include "Form/Util.hpp"
 #include "Profile/Profile.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
