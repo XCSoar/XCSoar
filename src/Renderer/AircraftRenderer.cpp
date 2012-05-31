@@ -164,7 +164,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
 
 static void
 DrawHangGlider(Canvas &canvas, const AircraftLook &look,
-               const Angle angle, const RasterPoint aircraft_pos)
+               const Angle angle, const RasterPoint aircraft_pos, bool inverse)
 {
   RasterPoint aircraft[] = {
     {1, -3},
@@ -184,14 +184,20 @@ DrawHangGlider(Canvas &canvas, const AircraftLook &look,
   PolygonRotateShift(aircraft, ARRAY_SIZE(aircraft),
                      aircraft_pos.x, aircraft_pos.y, angle);
 
-  canvas.SelectWhiteBrush();
-  canvas.SelectBlackPen();
+  if (inverse) {
+    canvas.SelectBlackBrush();
+    canvas.SelectWhitePen();
+  } else {
+    canvas.SelectWhiteBrush();
+    canvas.SelectBlackPen();
+  }
+
   canvas.DrawPolygon(aircraft, ARRAY_SIZE(aircraft));
 }
 
 static void
 DrawParaGlider(Canvas &canvas, const AircraftLook &look,
-               const Angle angle, const RasterPoint aircraft_pos)
+               const Angle angle, const RasterPoint aircraft_pos, bool inverse)
 {
   RasterPoint aircraft[] = {
     // Wing
@@ -222,12 +228,22 @@ DrawParaGlider(Canvas &canvas, const AircraftLook &look,
   PolygonRotateShift(aircraft, ARRAY_SIZE(aircraft),
                      aircraft_pos.x, aircraft_pos.y, angle, 50);
 
-  canvas.SelectWhiteBrush();
-  canvas.SelectBlackPen();
+  if (inverse) {
+    canvas.SelectBlackBrush();
+    canvas.SelectWhitePen();
+  } else {
+    canvas.SelectWhiteBrush();
+    canvas.SelectBlackPen();
+  }
+
   canvas.DrawPolygon(aircraft, ARRAY_SIZE(aircraft) - 1);
 
-  canvas.SelectBlackBrush();
   canvas.SelectNullPen();
+  if (inverse)
+    canvas.SelectWhiteBrush();
+  else
+    canvas.SelectBlackBrush();
+
   canvas.DrawPolygon(aircraft + ARRAY_SIZE(aircraft) - 3, 3);
 }
 
@@ -248,10 +264,12 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, false);
     break;
   case acHangGlider:
-    DrawHangGlider(canvas, look, angle, aircraft_pos);
+    DrawHangGlider(canvas, look, angle, aircraft_pos,
+                   !settings_map.terrain.enable);
     break;
   case acParaGlider:
-    DrawParaGlider(canvas, look, angle, aircraft_pos);
+    DrawParaGlider(canvas, look, angle, aircraft_pos,
+                   !settings_map.terrain.enable);
     break;
   }
 }
