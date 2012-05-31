@@ -33,8 +33,8 @@ class SystemStatusPanel
   RateLimitedBlackboardListener rate_limiter;
 
 public:
-  SystemStatusPanel()
-    :rate_limiter(*this, 2000, 500) {}
+  SystemStatusPanel(const DialogLook &look)
+    :StatusPanel(look), rate_limiter(*this, 2000, 500) {}
 
   virtual void Refresh();
 

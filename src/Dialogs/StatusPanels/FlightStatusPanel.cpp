@@ -25,11 +25,20 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Util/StaticString.hpp"
 #include "Interface.hpp"
-#include "Form/Util.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Language/Language.hpp"
+
+enum Controls {
+  Location,
+  Altitude,
+  MaxHeightGain,
+  Near,
+  Bearing,
+  Distance,
+};
 
 void
 FlightStatusPanel::Refresh()
@@ -41,41 +50,46 @@ FlightStatusPanel::Refresh()
 
   if (basic.location_available) {
     FormatGeoPoint(basic.location, buffer.buffer(), buffer.MAX_SIZE);
-    SetFormValue(form, _T("prpLocation"), buffer);
+    SetText(Location, buffer);
   } else
-    SetFormValue(form, _T("prpLocation"), _T(""));
+    SetText(Location, _T(""));
 
   if (basic.gps_altitude_available) {
     FormatUserAltitude(basic.gps_altitude,
                               buffer.buffer(), buffer.MAX_SIZE);
-    SetFormValue(form, _T("prpAltitude"), buffer);
+    SetText(Altitude, buffer);
   } else
-    SetFormValue(form, _T("prpAltitude"), _T(""));
+    SetText(Altitude, _T(""));
 
   FormatUserAltitude(calculated.max_height_gain,
                             buffer.buffer(), buffer.MAX_SIZE);
-  SetFormValue(form, _T("prpMaxHeightGain"), buffer);
+  SetText(MaxHeightGain, buffer);
 
   if (nearest_waypoint) {
     GeoVector vec(basic.location,
                   nearest_waypoint->location);
 
-    SetFormValue(form, _T("prpNear"), nearest_waypoint->name.c_str());
+    SetText(Near, nearest_waypoint->name.c_str());
 
     FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vec.bearing, _T(""));
-    SetFormValue(form, _T("prpBearing"), buffer);
+    SetText(Bearing, buffer);
 
     FormatUserDistanceSmart(vec.distance, buffer.buffer(), buffer.MAX_SIZE);
-    SetFormValue(form, _T("prpDistance"), buffer);
+    SetText(Distance, buffer);
   } else {
-    SetFormValue(form, _T("prpNear"), _T("-"));
-    SetFormValue(form, _T("prpBearing"), _T("-"));
-    SetFormValue(form, _T("prpDistance"), _T("-"));
+    SetText(Near, _T("-"));
+    SetText(Bearing, _T("-"));
+    SetText(Distance, _T("-"));
   }
 }
 
 void
 FlightStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, _T("IDR_XML_STATUS_FLIGHT"));
+  AddReadOnly(_("Location"));
+  AddReadOnly(_("Altitude"));
+  AddReadOnly(_("Max. height gain"));
+  AddReadOnly(_("Near"));
+  AddReadOnly(_("Bearing"));
+  AddReadOnly(_("Distance"));
 }

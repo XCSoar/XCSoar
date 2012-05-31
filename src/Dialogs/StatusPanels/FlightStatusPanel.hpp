@@ -32,8 +32,8 @@ class FlightStatusPanel : public StatusPanel {
   const Waypoint *nearest_waypoint;
 
 public:
-  FlightStatusPanel(const Waypoint *_waypoint)
-    :nearest_waypoint(_waypoint) {}
+  FlightStatusPanel(const DialogLook &look, const Waypoint *_waypoint)
+    :StatusPanel(look), nearest_waypoint(_waypoint) {}
 
   virtual void Refresh();
 

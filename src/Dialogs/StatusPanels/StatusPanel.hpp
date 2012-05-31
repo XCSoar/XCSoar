@@ -24,10 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_STATUS_PANEL_HPP
 #define XCSOAR_STATUS_PANEL_HPP
 
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 
-class StatusPanel : public XMLWidget {
+class StatusPanel : public RowFormWidget {
 public:
+  StatusPanel(const DialogLook &look):RowFormWidget(look) {}
+
   virtual void Refresh() = 0;
 
   virtual void Show(const PixelRect &rc);

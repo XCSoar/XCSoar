@@ -26,7 +26,15 @@ Copyright_License {
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Form/Util.hpp"
+
+enum Controls {
+  GPS,
+  NumSat,
+  Vario,
+  FLARM,
+  Logger,
+  Battery,
+};
 
 gcc_pure
 static const TCHAR *
@@ -50,32 +58,28 @@ SystemStatusPanel::Refresh()
 
   StaticString<80> Temp;
 
-  SetFormValue(form, _T("prpGPS"), gettext(GetGPSStatus(basic)));
+  SetText(GPS, gettext(GetGPSStatus(basic)));
 
   if (!basic.alive)
-    SetFormValue(form, _T("prpNumSat"), _T(""));
+    SetText(NumSat, _T(""));
   else if (gps.satellites_used_available) {
     // known number of sats
     Temp.Format(_T("%d"), gps.satellites_used);
-    SetFormValue(form, _T("prpNumSat"), Temp);
+    SetText(NumSat, Temp);
   } else
     // valid but unknown number of sats
-    SetFormValue(form, _T("prpNumSat"), _("Unknown"));
+    SetText(NumSat, _("Unknown"));
 
-  SetFormValue(form, _T("prpVario"),
-               basic.total_energy_vario_available
-               ? _("Connected")
-               : _("Disconnected"));
+  SetText(Vario, basic.total_energy_vario_available
+          ? _("Connected") : _("Disconnected"));
 
-  SetFormValue(form, _T("prpFLARM"),
-               basic.flarm.status.available
-               ? _("Connected")
-               : _("Disconnected"));
+  SetText(FLARM, basic.flarm.status.available
+          ? _("Connected")
+          : _("Disconnected"));
 
-  SetFormValue(form, _T("prpLogger"),
-               logger.IsLoggerActive()
-               ? _("On")
-               : _("Off"));
+  SetText(Logger, logger.IsLoggerActive()
+          ? _("On")
+          : _("Off"));
 
   Temp.clear();
 #ifdef HAVE_BATTERY
@@ -88,13 +92,18 @@ SystemStatusPanel::Refresh()
   else if (basic.battery_level_available)
     Temp.AppendFormat(_T("%.0f%%"), (double)basic.battery_level);
 
-  SetFormValue(form, _T("prpBattery"), Temp);
+  SetText(Battery, Temp);
 }
 
 void
 SystemStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, _T("IDR_XML_STATUS_SYSTEM"));
+  AddReadOnly(_("GPS lock"));
+  AddReadOnly(_("Satellites in view"));
+  AddReadOnly(_("Variometer"));
+  AddReadOnly(_T("FLARM"));
+  AddReadOnly(_("Logger"));
+  AddReadOnly(_("Supply voltage"));
 }
 
 void
@@ -102,13 +111,13 @@ SystemStatusPanel::Show(const PixelRect &rc)
 {
   Refresh();
   CommonInterface::GetLiveBlackboard().AddListener(rate_limiter);
-  WindowWidget::Show(rc);
+  StatusPanel::Show(rc);
 }
 
 void
 SystemStatusPanel::Hide()
 {
-  WindowWidget::Hide();
+  StatusPanel::Hide();
   CommonInterface::GetLiveBlackboard().RemoveListener(rate_limiter);
   rate_limiter.Cancel();
 }

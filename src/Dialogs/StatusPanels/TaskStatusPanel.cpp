@@ -24,11 +24,21 @@ Copyright_License {
 #include "TaskStatusPanel.hpp"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
-#include "Form/Util.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Language/Language.hpp"
+
+enum Controls {
+  TaskTime,
+  ETETime,
+  RemainingTime,
+  TaskDistance,
+  RemainingDistance,
+  EstimatedSpeed,
+  AverageSpeed,
+};
 
 void
 TaskStatusPanel::Refresh()
@@ -42,48 +52,54 @@ TaskStatusPanel::Refresh()
   TCHAR Temp[80];
 
   FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
-  ShowFormControl(form, _T("prpTaskTime"), task_stats.has_targets);
+  SetRowVisible(TaskTime, task_stats.has_targets);
   if (task_stats.has_targets)
-    SetFormValue(form, _T("prpTaskTime"), Temp);
+    SetText(TaskTime, Temp);
 
   int ete_time(task_stats.total.time_elapsed +
                task_stats.total.time_remaining);
   FormatSignedTimeHHMM(Temp, ete_time);
-  SetFormValue(form, _T("prpETETime"), Temp);
+  SetText(ETETime, Temp);
 
   FormatSignedTimeHHMM(Temp, (int)task_stats.total.time_remaining);
-  SetFormValue(form, _T("prpRemainingTime"), Temp);
+  SetText(RemainingTime, Temp);
 
   if (task_stats.total.planned.IsDefined()) {
     FormatUserDistanceSmart(task_stats.total.planned.GetDistance(),
                               Temp, ARRAY_SIZE(Temp));
-    SetFormValue(form, _T("prpTaskDistance"), Temp);
+    SetText(TaskDistance, Temp);
   } else
-    SetFormValue(form, _T("prpTaskDistance"), _T(""));
+    SetText(TaskDistance, _T(""));
 
   if (task_stats.total.remaining.IsDefined()) {
     FormatUserDistanceSmart(task_stats.total.remaining.GetDistance(),
                               Temp, ARRAY_SIZE(Temp));
-    SetFormValue(form, _T("prpRemainingDistance"), Temp);
+    SetText(RemainingDistance, Temp);
   }
 
   if (task_stats.total.planned.IsDefined()) {
     FormatUserTaskSpeed(task_stats.total.planned.GetSpeed(),
                                Temp, ARRAY_SIZE(Temp));
-    SetFormValue(form, _T("prpEstimatedSpeed"), Temp);
+    SetText(EstimatedSpeed, Temp);
   } else
-    SetFormValue(form, _T("prpEstimatedSpeed"), _T(""));
+    SetText(EstimatedSpeed, _T(""));
 
   if (task_stats.total.travelled.IsDefined()) {
     FormatUserTaskSpeed(task_stats.total.travelled.GetSpeed(),
                                Temp, ARRAY_SIZE(Temp));
-    SetFormValue(form, _T("prpAverageSpeed"), Temp);
+    SetText(AverageSpeed, Temp);
   } else
-    SetFormValue(form, _T("prpAverageSpeed"), _T(""));
+    SetText(AverageSpeed, _T(""));
 }
 
 void
 TaskStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, _T("IDR_XML_STATUS_TASK"));
+  AddReadOnly(_("Assigned task time"));
+  AddReadOnly(_("Estimated task time"));
+  AddReadOnly(_("Remaining time"));
+  AddReadOnly(_("Task distance"));
+  AddReadOnly(_("Remaining distance"));
+  AddReadOnly(_("Speed estimated"));
+  AddReadOnly(_("Speed average"));
 }

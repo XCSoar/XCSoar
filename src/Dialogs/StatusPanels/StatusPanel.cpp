@@ -27,5 +27,5 @@ void
 StatusPanel::Show(const PixelRect &rc)
 {
   Refresh();
-  XMLWidget::Show(rc);
+  RowFormWidget::Show(rc);
 }

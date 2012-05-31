@@ -31,8 +31,17 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 #include "Language/Language.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Form/Util.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+
+enum Controls {
+  ValidStart,
+  StartTime,
+  StartHeight,
+  StartPoint,
+  StartSpeed,
+  FinishAlt,
+  ValidFinish,
+};
 
 void
 RulesStatusPanel::Refresh()
@@ -46,42 +55,40 @@ RulesStatusPanel::Refresh()
   const CommonStats &common_stats = calculated.common_stats;
 
   /// @todo proper task validity check
-  SetFormValue(form, _T("prpValidStart"),
-               calculated.common_stats.task_started
-               ? _("Yes") : _T("No"));
+  SetText(ValidStart, calculated.common_stats.task_started
+          ? _("Yes") : _T("No"));
 
-  SetFormValue(form, _T("prpValidFinish"),
-               calculated.common_stats.task_finished
-               ? _("Yes") : _T("No"));
+  SetText(ValidFinish, calculated.common_stats.task_finished
+          ? _("Yes") : _T("No"));
 
   AircraftState start_state = protected_task_manager->GetStartState();
 
   if (common_stats.task_started) {
     FormatSignedTimeHHMM(Temp, (int)TimeLocal((int)start_state.time));
-    SetFormValue(form, _T("prpStartTime"), Temp);
+    SetText(StartTime, Temp);
   } else {
-    SetFormValue(form, _T("prpStartTime"), _T(""));
+    SetText(StartTime, _T(""));
   }
 
   if (common_stats.task_started) {
     FormatUserTaskSpeed(start_state.ground_speed,
                                Temp, ARRAY_SIZE(Temp));
-    SetFormValue(form, _T("prpStartSpeed"), Temp);
+    SetText(StartSpeed, Temp);
   } else {
-    SetFormValue(form, _T("prpStartSpeed"), _T(""));
+    SetText(StartSpeed, _T(""));
   }
 
   // StartMaxHeight, StartMaxSpeed;
   if (common_stats.task_started) {
     FormatUserAltitude(start_state.altitude, Temp, ARRAY_SIZE(Temp));
-    SetFormValue(form, _T("prpStartHeight"), Temp);
+    SetText(StartHeight, Temp);
   } else {
-    SetFormValue(form, _T("prpStartHeight"), _T(""));
+    SetText(StartHeight, _T(""));
   }
 
   FormatUserAltitude(protected_task_manager->GetFinishHeight(),
                             Temp, ARRAY_SIZE(Temp));
-  SetFormValue(form, _T("prpFinishAlt"), Temp);
+  SetText(FinishAlt, Temp);
 
   {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
@@ -95,11 +102,17 @@ RulesStatusPanel::Refresh()
       Temp[0] = _T('\0');
   }
 
-  SetFormValue(form, _T("prpStartPoint"), Temp);
+  SetText(StartPoint, Temp);
 }
 
 void
 RulesStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, _T("IDR_XML_STATUS_RULES"));
+  AddReadOnly(_("Valid start"));
+  AddReadOnly(_("Start time"));
+  AddReadOnly(_("Start alt."));
+  AddReadOnly(_("Start point"));
+  AddReadOnly(_("Start speed"));
+  AddReadOnly(_("Finish min. alt."));
+  AddReadOnly(_("Valid finish"));
 }

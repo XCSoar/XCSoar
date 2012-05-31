@@ -23,10 +23,20 @@ Copyright_License {
 
 #include "TimesStatusPanel.hpp"
 #include "Interface.hpp"
-#include "Form/Util.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "LocalTime.hpp"
 #include "Math/SunEphemeris.hpp"
+#include "Language/Language.hpp"
+
+enum Controls {
+  LocalTime,
+  UTCTime,
+  UTCDate,
+  FlightTime,
+  TakeoffTime,
+  LandingTime,
+  Sunset,
+};
 
 void
 TimesStatusPanel::Refresh()
@@ -44,55 +54,61 @@ TimesStatusPanel::Refresh()
     int sunsetmins = (int)((sun.time_of_sunset - fixed(sunsethours)) * 60);
 
     temp.Format(_T("%02d:%02d"), sunsethours, sunsetmins);
-    SetFormValue(form, _T("prpSunset"), temp);
+    SetText(Sunset, temp);
   } else {
-    SetFormValue(form, _T("prpSunset"), _T(""));
+    SetText(Sunset, _T(""));
   }
 
   if (basic.time_available) {
     FormatSignedTimeHHMM(temp.buffer(), DetectCurrentTime(basic));
-    SetFormValue(form, _T("prpLocalTime"), temp);
+    SetText(LocalTime, temp);
     FormatSignedTimeHHMM(temp.buffer(), (int) basic.time);
-    SetFormValue(form, _T("prpUTCTime"), temp);
+    SetText(UTCTime, temp);
   } else {
-    SetFormValue(form, _T("prpLocalTime"), _T(""));
-    SetFormValue(form, _T("prpUTCTime"), _T(""));
+    SetText(LocalTime, _T(""));
+    SetText(UTCTime, _T(""));
   }
 
   if (basic.date_available) {
     temp.Format(_T("%04d-%02d-%02d"), basic.date_time_utc.year,
                 basic.date_time_utc.month, basic.date_time_utc.day);
-    SetFormValue(form, _T("prpUTCDate"), temp);
+    SetText(UTCDate, temp);
   } else {
-    SetFormValue(form, _T("prpUTCDate"), _T(""));
+    SetText(UTCDate, _T(""));
   }
 
   if (positive(flight.flight_time)) {
     FormatSignedTimeHHMM(temp.buffer(), TimeLocal((long)flight.takeoff_time));
-    SetFormValue(form, _T("prpTakeoffTime"), temp);
+    SetText(TakeoffTime, temp);
   } else {
-    SetFormValue(form, _T("prpTakeoffTime"), _T(""));
+    SetText(TakeoffTime, _T(""));
   }
 
   if (!flight.flying && positive(flight.flight_time)) {
     FormatSignedTimeHHMM(temp.buffer(),
                       TimeLocal((long)(flight.takeoff_time
                                        + flight.flight_time)));
-    SetFormValue(form, _T("prpLandingTime"), temp);
+    SetText(LandingTime, temp);
   } else {
-    SetFormValue(form, _T("prpLandingTime"), _T(""));
+    SetText(LandingTime, _T(""));
   }
 
   if (positive(flight.flight_time)) {
     FormatSignedTimeHHMM(temp.buffer(), (int)flight.flight_time);
-    SetFormValue(form, _T("prpFlightTime"), temp);
+    SetText(FlightTime, temp);
   } else {
-    SetFormValue(form, _T("prpFlightTime"), _T(""));
+    SetText(FlightTime, _T(""));
   }
 }
 
 void
 TimesStatusPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, _T("IDR_XML_STATUS_TIMES"));
+  AddReadOnly(_("Local time"));
+  AddReadOnly(_("UTC time"));
+  AddReadOnly(_("UTC date"));
+  AddReadOnly(_("Flight time"));
+  AddReadOnly(_("Takeoff time"));
+  AddReadOnly(_("Landing time"));
+  AddReadOnly(_("Sunset"));
 }

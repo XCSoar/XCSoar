@@ -28,6 +28,8 @@ Copyright_License {
 
 class RulesStatusPanel : public StatusPanel {
 public:
+  RulesStatusPanel(const DialogLook &look):StatusPanel(look) {}
+
   virtual void Refresh();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

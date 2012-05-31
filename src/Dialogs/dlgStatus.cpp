@@ -99,6 +99,7 @@ dlgStatusShowModal(int start_page)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
 
+  const DialogLook &look = UIGlobals::GetDialogLook();
   const IconLook &icons = UIGlobals::GetIconLook();
   const Bitmap *FlightIcon = enable_icons ? &icons.hBmpTabFlight : NULL;
   const Bitmap *SystemIcon = enable_icons ? &icons.hBmpTabSystem : NULL;
@@ -106,19 +107,19 @@ dlgStatusShowModal(int start_page)
   const Bitmap *RulesIcon = enable_icons ? &icons.hBmpTabRules : NULL;
   const Bitmap *TimesIcon = enable_icons ? &icons.hBmpTabTimes : NULL;
 
-  Widget *flight_panel = new FlightStatusPanel(nearest_waypoint);
+  Widget *flight_panel = new FlightStatusPanel(look, nearest_waypoint);
   wTabBar->AddTab(flight_panel, _T("Flight"), false, FlightIcon);
 
-  Widget *system_panel = new SystemStatusPanel();
+  Widget *system_panel = new SystemStatusPanel(look);
   wTabBar->AddTab(system_panel, _T("System"), false, SystemIcon);
 
-  Widget *task_panel = new TaskStatusPanel();
+  Widget *task_panel = new TaskStatusPanel(look);
   wTabBar->AddTab(task_panel, _T("Task"), false, TaskIcon);
 
-  Widget *rules_panel = new RulesStatusPanel();
+  Widget *rules_panel = new RulesStatusPanel(look);
   wTabBar->AddTab(rules_panel, _T("Rules"), false, RulesIcon);
 
-  Widget *times_panel = new TimesStatusPanel();
+  Widget *times_panel = new TimesStatusPanel(look);
   wTabBar->AddTab(times_panel, _T("Times"), false, TimesIcon);
 
   /* restore previous page */
