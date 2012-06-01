@@ -201,18 +201,18 @@ PrepareData()
 }
 
 class WaypointListBuilder:
-  public WaypointVisitor,
-  private WaypointListFilter
+  public WaypointVisitor
 {
+  const WaypointListFilter &filter;
   const GeoPoint location;
   WaypointList &waypoint_list;
   FAITrianglePointValidator triangle_validator;
 
 public:
-  WaypointListBuilder(const WaypointListFilter &filter,
+  WaypointListBuilder(const WaypointListFilter &_filter,
                         GeoPoint _location, WaypointList &_waypoint_list,
                         OrderedTask *ordered_task, unsigned ordered_task_index)
-    :WaypointListFilter(filter), location(_location),
+    :filter(_filter), location(_location),
      waypoint_list(_waypoint_list),
      triangle_validator(ordered_task, ordered_task_index) {}
 
@@ -221,15 +221,15 @@ public:
   }
 
   void AddFiltered(const Waypoint &waypoint) {
-    if (Matches(waypoint, location, triangle_validator))
+    if (filter.Matches(waypoint, location, triangle_validator))
       Add(waypoint);
   }
 
   void AddFiltered(const Waypoints &waypoints) {
-    if (positive(distance))
-      waypoints.VisitWithinRange(location, distance, *this);
+    if (positive(filter.distance))
+      waypoints.VisitWithinRange(location, filter.distance, *this);
     else
-      waypoints.VisitNamePrefix(name, *this);
+      waypoints.VisitNamePrefix(filter.name, *this);
   }
 
   void Visit(const Waypoint &waypoint) {
