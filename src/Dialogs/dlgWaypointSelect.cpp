@@ -125,7 +125,7 @@ struct WaypointListDialogState
   }
 };
 
-static WaypointListDialogState filter_data;
+static WaypointListDialogState dialog_state;
 static WaypointList waypoint_list;
 
 static TCHAR *
@@ -154,7 +154,7 @@ InitializeDirection(bool only_heading)
     for (unsigned int i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
       data_field->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
 
-    data_field->SetAsInteger(filter_data.direction_index);
+    data_field->SetAsInteger(dialog_state.direction_index);
   }
   // update heading value to current heading
   data_field->replaceEnumText(1,GetDirectionData(buffer, ARRAY_SIZE(buffer), 1));
@@ -164,7 +164,7 @@ InitializeDirection(bool only_heading)
 static void
 PrepareData()
 {
-  filter_data.name[0] = _T('\0');
+  dialog_state.name[0] = _T('\0');
 
   name_button->SetCaption(_T("*"));
 
@@ -179,7 +179,7 @@ PrepareData()
     data_field->addEnumText(buffer);
   }
 
-  data_field->SetAsInteger(filter_data.distance_index);
+  data_field->SetAsInteger(dialog_state.distance_index);
   distance_filter->RefreshDisplay();
 
   InitializeDirection(false);
@@ -196,7 +196,7 @@ PrepareData()
   if (p != NULL)
     data_field->replaceEnumText((unsigned)TypeFilter::FILE_2, p);
 
-  data_field->SetAsInteger((int)filter_data.type_index);
+  data_field->SetAsInteger((int)dialog_state.type_index);
   type_filter->RefreshDisplay();
 }
 
@@ -237,12 +237,12 @@ UpdateList()
 {
   waypoint_list.clear();
 
-  if (filter_data.type_index == TypeFilter::LAST_USED)
+  if (dialog_state.type_index == TypeFilter::LAST_USED)
     FillLastUsedList(waypoint_list, LastUsedWaypoints::GetList(),
                      way_points);
   else
     FillList(waypoint_list, way_points, location, last_heading,
-             filter_data);
+             dialog_state);
 
   waypoint_list_control->SetLength(std::max(1, (int)waypoint_list.size()));
   waypoint_list_control->SetOrigin(0);
@@ -262,12 +262,12 @@ NameButtonUpdateChar()
 {
   const TCHAR *name_filter = WaypointNameAllowedCharacters(_T(""));
   if (name_filter_index == -1) {
-    filter_data.name[0] = '\0';
+    dialog_state.name[0] = '\0';
     name_button->SetCaption(_T("*"));
   } else {
-    filter_data.name[0] = name_filter[name_filter_index];
-    filter_data.name[1] = '\0';
-    name_button->SetCaption(filter_data.name);
+    dialog_state.name[0] = name_filter[name_filter_index];
+    dialog_state.name[1] = '\0';
+    name_button->SetCaption(dialog_state.name);
   }
 
   UpdateList();
@@ -300,7 +300,7 @@ static void
 OnFilterNameButton(gcc_unused WndButton &button)
 {
   TCHAR new_name_filter[WaypointFilter::NAME_LENGTH + 1];
-  CopyString(new_name_filter, filter_data.name,
+  CopyString(new_name_filter, dialog_state.name,
              WaypointFilter::NAME_LENGTH + 1);
 
   dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(), new_name_filter,
@@ -316,14 +316,14 @@ OnFilterNameButton(gcc_unused WndButton &button)
     i--;
   }
 
-  CopyString(filter_data.name, new_name_filter,
+  CopyString(dialog_state.name, new_name_filter,
              WaypointFilter::NAME_LENGTH + 1);
 
   if (name_button) {
-    if (StringIsEmpty(filter_data.name))
+    if (StringIsEmpty(dialog_state.name))
       name_button->SetCaption(_T("*"));
     else
-      name_button->SetCaption(filter_data.name);
+      name_button->SetCaption(dialog_state.name);
   }
 
   UpdateList();
@@ -340,11 +340,11 @@ void
 FilterDataFieldListener::OnModified(DataField &df)
 {
   if (&df == distance_filter->GetDataField())
-    filter_data.distance_index = df.GetAsInteger();
+    dialog_state.distance_index = df.GetAsInteger();
   else if (&df == direction_filter->GetDataField())
-    filter_data.direction_index = df.GetAsInteger();
+    dialog_state.direction_index = df.GetAsInteger();
   else if (&df == type_filter->GetDataField())
-    filter_data.type_index = (TypeFilter)df.GetAsInteger();
+    dialog_state.type_index = (TypeFilter)df.GetAsInteger();
 
   UpdateList();
 }
@@ -362,7 +362,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     canvas.Select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.GetHeight() / 2,
-                filter_data.IsDefined() || way_points.IsEmpty() ?
+                dialog_state.IsDefined() || way_points.IsEmpty() ?
                 _("No Match!") : _("Choose a filter or click here"));
     return;
   }
@@ -402,7 +402,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnTimerNotify(gcc_unused WndForm &sender)
 {
-  if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
+  if (dialog_state.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
     Angle a = last_heading - CommonInterface::Calculated().heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
       last_heading = CommonInterface::Calculated().heading;
@@ -417,7 +417,7 @@ OnTimerNotify(gcc_unused WndForm &sender)
 static bool
 FormKeyDown(WndForm &sender, unsigned key_code)
 {
-  TypeFilter new_index = filter_data.type_index;
+  TypeFilter new_index = dialog_state.type_index;
 
   switch (key_code) {
   case VK_APP1:
@@ -436,10 +436,10 @@ FormKeyDown(WndForm &sender, unsigned key_code)
     return false;
   }
 
-  if (filter_data.type_index != new_index) {
-    filter_data.type_index = new_index;
+  if (dialog_state.type_index != new_index) {
+    dialog_state.type_index = new_index;
     UpdateList();
-    type_filter->GetDataField()->SetAsInteger((int)filter_data.type_index);
+    type_filter->GetDataField()->SetAsInteger((int)dialog_state.type_index);
     type_filter->RefreshDisplay();
   }
 
