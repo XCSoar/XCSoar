@@ -21,27 +21,43 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_AIRSPACE_HPP
-#define XCSOAR_DIALOGS_AIRSPACE_HPP
+#ifndef XCSOAR_AIRSPACE_CLASS_RENDERER_SETTINGS_PANEL_HPP
+#define XCSOAR_AIRSPACE_CLASS_RENDERER_SETTINGS_PANEL_HPP
 
+#include "Form/RowFormWidget.hpp"
+#include "Form/ActionListener.hpp"
 #include "Airspace/AirspaceClass.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 
-class AbstractAirspace;
-class Airspaces;
-class ProtectedAirspaceWarningManager;
-struct AirspaceLook;
+class AirspaceClassRendererSettingsPanel:
+  public RowFormWidget, ActionListener
+{
+  enum ControlIndex {
+    BorderColor,
+    FillColor,
+    FillBrush,
+    BorderWidth,
+    FillMode,
+  };
 
-void
-dlgAirspaceDetails(const AbstractAirspace& the_airspace,
-                   ProtectedAirspaceWarningManager *_airspace_warnings);
+  bool border_color_changed;
+  bool fill_color_changed;
+  bool fill_brush_changed;
+  AirspaceClass type;
+  AirspaceClassRendererSettings settings;
 
-int dlgAirspacePatternsShowModal(const AirspaceLook &look);
-void dlgAirspaceShowModal(bool colored);
+public:
+  AirspaceClassRendererSettingsPanel(AirspaceClass type);
 
-void
-ShowAirspaceListDialog(const Airspaces &airspace_database,
-                       ProtectedAirspaceWarningManager *airspace_warnings);
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
 
-bool ShowAirspaceClassRendererSettingsDialog(AirspaceClass selected = OTHER);
+protected:
+  /* methods from ActionListener */
+  virtual void OnAction(int id);
+
+private:
+  void FillAirspaceClasses();
+};
 
 #endif

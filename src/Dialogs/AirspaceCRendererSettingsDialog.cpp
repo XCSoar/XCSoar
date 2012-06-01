@@ -21,27 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DIALOGS_AIRSPACE_HPP
-#define XCSOAR_DIALOGS_AIRSPACE_HPP
+#include "Airspace.hpp"
+#include "AirspaceCRendererSettingsPanel.hpp"
+#include "WidgetDialog.hpp"
+#include "Language/Language.hpp"
 
-#include "Airspace/AirspaceClass.hpp"
-
-class AbstractAirspace;
-class Airspaces;
-class ProtectedAirspaceWarningManager;
-struct AirspaceLook;
-
-void
-dlgAirspaceDetails(const AbstractAirspace& the_airspace,
-                   ProtectedAirspaceWarningManager *_airspace_warnings);
-
-int dlgAirspacePatternsShowModal(const AirspaceLook &look);
-void dlgAirspaceShowModal(bool colored);
-
-void
-ShowAirspaceListDialog(const Airspaces &airspace_database,
-                       ProtectedAirspaceWarningManager *airspace_warnings);
-
-bool ShowAirspaceClassRendererSettingsDialog(AirspaceClass selected = OTHER);
-
-#endif
+bool
+ShowAirspaceClassRendererSettingsDialog(AirspaceClass selected)
+{
+  WidgetDialog dialog(_("Airspace Renderer Settings"),
+                      new AirspaceClassRendererSettingsPanel(selected));
+  dialog.AddButton(_("OK"), mrOK);
+  dialog.AddButton(_("Cancel"), mrCancel);
+  dialog.ShowModal();
+  return dialog.GetChanged();
+}

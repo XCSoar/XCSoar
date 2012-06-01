@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Dialogs/Airspace.hpp"
-#include "Dialogs/ColorListDialog.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Dialogs.h"
@@ -110,32 +109,12 @@ OnAirspaceListEnter(unsigned index)
     AirspaceLook &look =
       CommonInterface::main_window.SetLook().map.airspace;
 
-    Color color = renderer.classes[index].fill_color;
-    if (ShowColorListDialog(color)) {
-      renderer.classes[index].SetColors(color);
-      ActionInterface::SendMapSettings();
-      Profile::SetAirspaceBorderColor(index, renderer.classes[index].border_color);
-      Profile::SetAirspaceFillColor(index, renderer.classes[index].fill_color);
-      changed = true;
+    if (!ShowAirspaceClassRendererSettingsDialog((AirspaceClass)index))
+      return;
 
-      look.Initialise(renderer);
-    }
-
-#ifdef HAVE_HATCHED_BRUSH
-#ifdef HAVE_ALPHA_BLEND
-    if (!renderer.transparency || !AlphaBlendAvailable()) {
-#endif
-      int pattern_index = dlgAirspacePatternsShowModal(look);
-      if (pattern_index >= 0) {
-        renderer.classes[index].brush = pattern_index;
-        ActionInterface::SendMapSettings();
-        Profile::SetAirspaceBrush(index, renderer.classes[index].brush);
-        changed = true;
-      }
-#ifdef HAVE_ALPHA_BLEND
-    }
-#endif
-#endif
+    ActionInterface::SendMapSettings();
+    look.Initialise(renderer);
+    airspace_list->Invalidate();
   } else {
     renderer.classes[index].display = !renderer.classes[index].display;
     if (!renderer.classes[index].display)
@@ -145,11 +124,9 @@ OnAirspaceListEnter(unsigned index)
     Profile::SetAirspaceMode(index, renderer.classes[index].display,
                              computer.warnings.class_warnings[index]);
     changed = true;
+    ActionInterface::SendMapSettings();
+    airspace_list->Invalidate();
   }
-
-  airspace_list->Invalidate();
-
-  ActionInterface::SendMapSettings();
 }
 
 static void

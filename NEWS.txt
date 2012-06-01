@@ -7,6 +7,8 @@ Version 6.4 - not yet released
   - buffered serial port I/O
   - FLARM: new FLARM setup dialog
   - added driver for GliderTools GT Altimeter
+* map
+  - configurable airspace rendering (#1847)
 * user interface
   - added "Airspace On/Off" menu button
   - save Flarm team mates in the profile (#1997)
