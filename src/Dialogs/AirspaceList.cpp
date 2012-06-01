@@ -296,13 +296,13 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 
   switch(key_code) {
   case VK_APP1:
-      NewIndex = WILDCARD;
+    new_index = WILDCARD;
     break;
   case VK_APP2:
-      NewIndex = RESTRICT;
+    new_index = RESTRICT;
     break;
   case VK_APP3:
-      NewIndex = PROHIBITED;
+    new_index = PROHIBITED;
     break;
 
   default:
@@ -310,7 +310,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   }
 
   if (type_filter != new_index){
-    wp->GetDataField()->SetAsInteger(NewIndex);
+    wp->GetDataField()->SetAsInteger(new_index);
     wp->RefreshDisplay();
   }
 
