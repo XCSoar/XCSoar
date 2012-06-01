@@ -140,22 +140,18 @@ static void FilterMode(bool direction) {
   if (direction) {
     distance_filter = fixed_minus_one;
     direction_filter = WILDCARD;
-    if (wpDistance) {
-      DataFieldEnum &df = *(DataFieldEnum *)wpDistance->GetDataField();
-      df.Set(WILDCARD);
-      wpDistance->RefreshDisplay();
-    }
-    if (wpDirection) {
-      DataFieldEnum &df = *(DataFieldEnum *)wpDirection->GetDataField();
-      df.Set(WILDCARD);
-      wpDirection->RefreshDisplay();
-    }
+
+    DataFieldEnum *df = (DataFieldEnum *)wpDistance->GetDataField();
+    df->Set(WILDCARD);
+    wpDistance->RefreshDisplay();
+
+    df = (DataFieldEnum *)wpDirection->GetDataField();
+    df->Set(WILDCARD);
+    wpDirection->RefreshDisplay();
   } else {
-    if (wpName) {
-      DataFieldString *df = (DataFieldString *)wpName->GetDataField();
-      df->Set(_T(""));
-      wpName->RefreshDisplay();
-    }
+    DataFieldString *df = (DataFieldString *)wpName->GetDataField();
+    df->Set(_T(""));
+    wpName->RefreshDisplay();
   }
 }
 
@@ -387,11 +383,15 @@ PrepareAirspaceSelectDialog()
   wAirspaceList->SetItemHeight(AirspaceListRenderer::GetHeight(dialog_look));
 
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
+  assert(wpName != NULL);
+
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
+  assert(wpDistance != NULL);
   FillDistanceEnum(*(DataFieldEnum *)wpDistance->GetDataField());
   wpDistance->RefreshDisplay();
 
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
+  assert(wpDirection != NULL);
   FillDirectionEnum(*(DataFieldEnum *)wpDirection->GetDataField());
   wpDirection->RefreshDisplay();
 
