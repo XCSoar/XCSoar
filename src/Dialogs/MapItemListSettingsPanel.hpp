@@ -21,32 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
-#define XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
+#ifndef XCSOAR_WIND_SETTINGS_PANEL_HPP
+#define XCSOAR_WIND_SETTINGS_PANEL_HPP
 
-class SingleWindow;
-struct MapItem;
-class MapItemList;
-struct GeoVector;
-struct DialogLook;
-struct MapLook;
-struct TrafficLook;
-struct FinalGlideBarLook;
-struct MapSettings;
-class ProtectedAirspaceWarningManager;
+#include "Form/RowFormWidget.hpp"
 
-void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
+class MapItemListSettingsPanel : public RowFormWidget {
+  enum ControlIndex {
+    AddLocation,
+    AddArrivalAltitude,
+  };
 
-void
-ShowMapItemListDialog(SingleWindow &parent,
-                      const MapItemList &_list,
-                      const DialogLook &_dialog_look,
-                      const MapLook &_look,
-                      const TrafficLook &_traffic_look,
-                      const FinalGlideBarLook &_final_glide_look,
-                      const MapSettings &_settings,
-                      ProtectedAirspaceWarningManager *airspace_warnings);
+public:
+  MapItemListSettingsPanel();
 
-void ShowMapItemListSettingsDialog();
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual bool Save(bool &changed, bool &require_restart);
+};
 
 #endif

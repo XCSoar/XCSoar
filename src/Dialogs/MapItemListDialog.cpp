@@ -109,6 +109,12 @@ OnDetailsClicked(gcc_unused WndButton &Sender)
 }
 
 static void
+OnSettingsClicked(gcc_unused WndButton &Sender)
+{
+  ShowMapItemListSettingsDialog();
+}
+
+static void
 OnComboPopupListEnter(gcc_unused unsigned i)
 {
   if (HasDetails(*(*list)[i]))
@@ -122,6 +128,7 @@ OnCancelClicked(gcc_unused WndButton &Sender)
 }
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnSettingsClicked),
   DeclareCallBackEntry(OnDetailsClicked),
   DeclareCallBackEntry(OnCancelClicked),
   DeclareCallBackEntry(NULL)
