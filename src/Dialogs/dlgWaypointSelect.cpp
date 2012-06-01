@@ -205,15 +205,14 @@ class WaypointListBuilder:
 {
   const WaypointListFilter &filter;
   const GeoPoint location;
-  WaypointList &waypoint_list;
+  WaypointList &list;
   FAITrianglePointValidator triangle_validator;
 
 public:
   WaypointListBuilder(const WaypointListFilter &_filter,
-                        GeoPoint _location, WaypointList &_waypoint_list,
+                        GeoPoint _location, WaypointList &_list,
                         OrderedTask *ordered_task, unsigned ordered_task_index)
-    :filter(_filter), location(_location),
-     waypoint_list(_waypoint_list),
+    :filter(_filter), location(_location), list(_list),
      triangle_validator(ordered_task, ordered_task_index) {}
 
   void Visit(const Waypoints &waypoints) {
@@ -225,7 +224,7 @@ public:
 
   void Visit(const Waypoint &waypoint) {
     if (filter.Matches(waypoint, location, triangle_validator))
-      waypoint_list.push_back(WaypointListItem(waypoint));
+      list.push_back(WaypointListItem(waypoint));
   }
 };
 
