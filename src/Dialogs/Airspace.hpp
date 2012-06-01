@@ -37,7 +37,7 @@ int dlgAirspacePatternsShowModal(const AirspaceLook &look);
 void dlgAirspaceShowModal(bool colored);
 
 void
-dlgAirspaceSelect(const Airspaces &airspace_database,
-                  ProtectedAirspaceWarningManager *airspace_warnings);
+ShowAirspaceListDialog(const Airspaces &airspace_database,
+                       ProtectedAirspaceWarningManager *airspace_warnings);
 
 #endif

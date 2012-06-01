@@ -408,8 +408,8 @@ PrepareAirspaceSelectDialog()
 }
 
 void
-dlgAirspaceSelect(const Airspaces &_airspaces,
-                  ProtectedAirspaceWarningManager *_airspace_warnings)
+ShowAirspaceListDialog(const Airspaces &_airspaces,
+                       ProtectedAirspaceWarningManager *_airspace_warnings)
 {
   airspace_warnings = _airspace_warnings;
   airspaces = &_airspaces;
