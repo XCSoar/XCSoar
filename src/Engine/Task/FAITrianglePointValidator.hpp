@@ -1,0 +1,87 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2012 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+ */
+
+#ifndef FAI_TRIANGLE_POINT_VALIDATOR_HPP
+#define FAI_TRIANGLE_POINT_VALIDATOR_HPP
+
+#include "Math/fixed.hpp"
+
+class OrderedTask;
+struct GeoPoint;
+struct Waypoint;
+
+/**
+ * Helper class to filter waypoints in list based on whether the filter is set
+ * to Right or Left FAI Triangle.
+ */
+class FAITrianglePointValidator
+{
+  OrderedTask *task;
+  unsigned t_index;
+  unsigned t_size;
+  fixed leg1;
+  fixed leg2;
+  fixed leg3;
+
+  /** min distance for any FAI Leg -- derived from circular FAI sector radius */
+  const fixed min_fai_leg;
+  /** min angle allowable in a FAI Triangle 31.5 degrees */
+  const fixed min_fai_angle;
+  /** max angle allowable in a FAI Triangle 113.2 degrees */
+  const fixed max_fai_angle;
+  bool fai_triangle_point_invalid;
+
+public:
+  FAITrianglePointValidator(OrderedTask *ordered_task,
+                            const unsigned ordered_task_index);
+
+  bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3) const;
+
+  /**
+   * Perform fast check to exclude point as from further consideration
+   * based on min/max possible values for any FAI triangle
+   * @param p0 point 1 of angle
+   * @param p1 point 2 of angle
+   * @param p2 point 3 of angle
+   * @param right.  = 1 if angle is for right triangle, -1 if left triangle.
+   * @returns False if angle from three points is out of possible range for
+   * an FAI triangle.
+   */
+  bool IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
+                  bool right) const;
+
+  /** Test whether wp could be a point in an FAI triangle based on the other
+   * points in the task and the current ordered task index
+   * Tests angle ranges first to reduce more costly calculation of distances
+   * @param wp Point being tested
+   * @param right = 1 if triangle turns are to right, -1 if turns are to left
+   * @return True if point would be valid in an FAI Triangle
+   */
+  bool IsFAITrianglePoint(const Waypoint &wp, bool right) const;
+
+private:
+  void PrepareFAITest(OrderedTask *ordered_task,
+                      const unsigned ordered_task_index);
+};
+
+#endif
