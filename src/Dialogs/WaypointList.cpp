@@ -70,10 +70,8 @@ static WndProperty *type_filter;
 static OrderedTask *ordered_task;
 static unsigned ordered_task_index;
 
-static const fixed distance_filter_items[] = {
-  fixed_zero, fixed(25.0), fixed(50.0),
-  fixed(75.0), fixed(100.0), fixed(150.0),
-  fixed(250.0), fixed(500.0), fixed(1000.0),
+static gcc_constexpr_data unsigned distance_filter_items[] = {
+  0, 25, 50, 75, 100, 150, 250, 500, 1000
 };
 
 static gcc_constexpr_data int direction_filter_items[] = {
@@ -114,7 +112,8 @@ struct WaypointListDialogState
 
   void ToFilter(WaypointFilter &filter, Angle heading) const {
     filter.name = name;
-    filter.distance = Units::ToSysDistance(distance_filter_items[distance_index]);
+    filter.distance =
+      Units::ToSysDistance(fixed(distance_filter_items[distance_index]));
     filter.type_index = type_index;
 
     if (direction_index != 1)
@@ -184,7 +183,7 @@ PrepareData()
 
   TCHAR buffer[15];
   for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
-    _stprintf(buffer, _T("%.0f%s"), (double)distance_filter_items[i],
+    _stprintf(buffer, _T("%d%s"), distance_filter_items[i],
               Units::GetDistanceName());
     data_field->addEnumText(buffer);
   }
