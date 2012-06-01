@@ -155,9 +155,10 @@ InitializeDirection(bool only_heading)
       data_field->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
 
     data_field->SetAsInteger(dialog_state.direction_index);
-  }
-  // update heading value to current heading
-  data_field->replaceEnumText(1,GetDirectionData(buffer, ARRAY_SIZE(buffer), 1));
+  } else
+    // update heading value to current heading
+    data_field->replaceEnumText(1, GetDirectionData(buffer, ARRAY_SIZE(buffer), 1));
+
   direction_filter->RefreshDisplay();
 }
 
