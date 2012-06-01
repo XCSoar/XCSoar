@@ -162,11 +162,20 @@ InitializeDirection(bool only_heading)
 }
 
 static void
+UpdateNameButtonCaption()
+{
+  if (StringIsEmpty(dialog_state.name))
+    name_button->SetCaption(_T("*"));
+  else
+    name_button->SetCaption(dialog_state.name);
+}
+
+static void
 PrepareData()
 {
   dialog_state.name[0] = _T('\0');
 
-  name_button->SetCaption(_T("*"));
+  UpdateNameButtonCaption();
 
   // initialize datafieldenum for Distance
   DataFieldEnum* data_field = (DataFieldEnum*)distance_filter->GetDataField();
@@ -263,13 +272,12 @@ NameButtonUpdateChar()
   const TCHAR *name_filter = WaypointNameAllowedCharacters(_T(""));
   if (name_filter_index == -1) {
     dialog_state.name[0] = '\0';
-    name_button->SetCaption(_T("*"));
   } else {
     dialog_state.name[0] = name_filter[name_filter_index];
     dialog_state.name[1] = '\0';
-    name_button->SetCaption(dialog_state.name);
   }
 
+  UpdateNameButtonCaption();
   UpdateList();
 }
 
@@ -319,13 +327,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
   CopyString(dialog_state.name, new_name_filter,
              WaypointFilter::NAME_LENGTH + 1);
 
-  if (name_button) {
-    if (StringIsEmpty(dialog_state.name))
-      name_button->SetCaption(_T("*"));
-    else
-      name_button->SetCaption(dialog_state.name);
-  }
-
+  UpdateNameButtonCaption();
   UpdateList();
 }
 
