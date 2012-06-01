@@ -76,9 +76,8 @@ static const fixed distance_filter_items[] = {
   fixed(250.0), fixed(500.0), fixed(1000.0),
 };
 
-#define HEADING_DIRECTION -1
 static int direction_filter_items[] = {
-  0, HEADING_DIRECTION, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
+  -1, -1, 0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
 static Angle last_heading = Angle::Zero();
@@ -118,7 +117,16 @@ enum {
   NAME_FILTER_LENGTH = 10,
 };
 
-struct WaypointFilterData
+struct WaypointListFilter
+{
+  TCHAR name[NAME_FILTER_LENGTH + 1];
+
+  fixed distance;
+  Angle direction;
+  TypeFilter type_index;
+};
+
+struct WaypointListDialogState
 {
   TCHAR name[NAME_FILTER_LENGTH + 1];
 
@@ -130,9 +138,21 @@ struct WaypointFilterData
     return !StringIsEmpty(name) || distance_index > 0 ||
       direction_index > 0 || type_index != TF_ALL;
   }
+
+  void ToFilter(WaypointListFilter &filter, Angle heading) const {
+    _tcscpy(filter.name, name);
+    filter.distance = distance_filter_items[distance_index];
+    filter.type_index = type_index;
+
+    if (direction_index != 1)
+      filter.direction = Angle::Degrees(
+          fixed(direction_filter_items[direction_index]));
+    else
+      filter.direction = heading;
+  }
 };
 
-static WaypointFilterData filter_data;
+static WaypointListDialogState filter_data;
 static WaypointList waypoint_list;
 
 static TCHAR *
@@ -416,10 +436,9 @@ private:
 
 class FilterWaypointVisitor:
   public WaypointVisitor,
-  private WaypointFilterData
+  private WaypointListFilter
 {
   const GeoPoint location;
-  const Angle heading;
   WaypointList &waypoint_list;
 
 private:
@@ -466,14 +485,10 @@ private:
   }
 
   static bool
-  CompareDirection(const Waypoint &waypoint, int direction_index,
-                    GeoPoint location, Angle heading)
+  CompareDirection(const Waypoint &waypoint, Angle angle, GeoPoint location)
   {
-    if (direction_index <= 0)
+    if (negative(angle.Native()))
       return true;
-
-    int a = direction_filter_items[direction_index];
-    Angle angle = (a == HEADING_DIRECTION) ? heading : Angle::Degrees(fixed(a));
 
     const GeoVector vec(location, waypoint.location);
     fixed direction_error = (vec.bearing - angle).AsDelta().AbsoluteDegrees();
@@ -488,16 +503,15 @@ private:
   }
 
 public:
-  FilterWaypointVisitor(const WaypointFilterData &filter,
-                        GeoPoint _location, Angle _heading,
-                        WaypointList &_waypoint_list)
-    :WaypointFilterData(filter), location(_location), heading(_heading),
+  FilterWaypointVisitor(const WaypointListFilter &filter,
+                        GeoPoint _location, WaypointList &_waypoint_list)
+    :WaypointListFilter(filter), location(_location),
      waypoint_list(_waypoint_list) {}
 
   void Visit(const Waypoint &waypoint) {
     if (CompareType(waypoint, type_index) &&
-        (distance_index == 0 || CompareName(waypoint, name)) &&
-        CompareDirection(waypoint, direction_index, location, heading))
+        (!positive(distance) || CompareName(waypoint, name)) &&
+        CompareDirection(waypoint, direction, location))
       waypoint_list.push_back(WaypointListItem(waypoint));
   }
 };
@@ -517,22 +531,25 @@ public:
 
 static void
 FillList(WaypointList &list, const Waypoints &src,
-         GeoPoint location, Angle heading, const WaypointFilterData &filter)
+         GeoPoint location, Angle heading, const WaypointListDialogState &state)
 {
   list.clear();
 
-  if (!filter.IsDefined() && src.size() >= 500)
+  if (!state.IsDefined() && src.size() >= 500)
     return;
 
-  FilterWaypointVisitor visitor(filter, location, heading, list);
+  WaypointListFilter filter;
+  state.ToFilter(filter, heading);
 
-  if (filter.distance_index > 0)
-    src.VisitWithinRange(location, Units::ToSysDistance(
-        distance_filter_items[filter.distance_index]), visitor);
+  FilterWaypointVisitor visitor(filter, location, list);
+
+  if (positive(filter.distance))
+    src.VisitWithinRange(location, Units::ToSysDistance(filter.distance),
+                         visitor);
   else
     src.VisitNamePrefix(filter.name, visitor);
 
-  if (filter.distance_index > 0 || filter.direction_index > 0)
+  if (positive(filter.distance) || !negative(filter.direction.Native()))
     std::sort(list.begin(), list.end(), WaypointDistanceCompare(location));
 }
 
