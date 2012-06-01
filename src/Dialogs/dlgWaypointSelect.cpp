@@ -227,7 +227,7 @@ PrepareData()
   type_filter->RefreshDisplay();
 }
 
-class FilterWaypointVisitor:
+class WaypointListBuilder:
   public WaypointVisitor,
   private WaypointListFilter
 {
@@ -298,7 +298,7 @@ private:
   }
 
 public:
-  FilterWaypointVisitor(const WaypointListFilter &filter,
+  WaypointListBuilder(const WaypointListFilter &filter,
                         GeoPoint _location, WaypointList &_waypoint_list,
                         OrderedTask *ordered_task, unsigned ordered_task_index)
     :WaypointListFilter(filter), location(_location),
@@ -344,14 +344,14 @@ FillList(WaypointList &list, const Waypoints &src,
   WaypointListFilter filter;
   state.ToFilter(filter, heading);
 
-  FilterWaypointVisitor visitor(filter, location, list,
-                                ordered_task, ordered_task_index);
+  WaypointListBuilder builder(filter, location, list,
+                              ordered_task, ordered_task_index);
 
   if (positive(filter.distance))
     src.VisitWithinRange(location, Units::ToSysDistance(filter.distance),
-                         visitor);
+                         builder);
   else
-    src.VisitNamePrefix(filter.name, visitor);
+    src.VisitNamePrefix(filter.name, builder);
 
   if (positive(filter.distance) || !negative(filter.direction.Native()))
     std::sort(list.begin(), list.end(), WaypointDistanceCompare(location));
