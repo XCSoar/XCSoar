@@ -56,11 +56,11 @@ static ProtectedAirspaceWarningManager *airspace_warnings;
 
 static GeoPoint location;
 
-static WndForm *wf=NULL;
+static WndForm *wf = NULL;
 static WndProperty *wpName;
 static WndProperty *wpDistance;
 static WndProperty *wpDirection;
-static ListControl *wAirspaceList=NULL;
+static ListControl *wAirspaceList = NULL;
 
 static fixed distance_filter;
 
@@ -105,7 +105,8 @@ OnAirspaceListEnter(unsigned i)
 }
 
 
-static void UpdateList()
+static void
+UpdateList()
 {
   AirspaceSelectInfo = airspace_sorter->GetList();
 
@@ -117,6 +118,7 @@ static void UpdateList()
     sort_distance = true;
     airspace_sorter->FilterByDistance(AirspaceSelectInfo, distance_filter);
   } 
+
   if (direction_filter != WILDCARD) {
     sort_distance = true;
     Angle a = direction_filter == 0
@@ -124,9 +126,10 @@ static void UpdateList()
       : Angle::Degrees(fixed(direction_filter));
     airspace_sorter->FilterByDirection(AirspaceSelectInfo, a);
   }
-  if (sort_distance) {
+
+  if (sort_distance)
     airspace_sorter->SortByDistance(AirspaceSelectInfo);
-  }
+
 
   const TCHAR *name_filter = wpName->GetDataField()->GetAsString();
   if (!StringIsEmpty(name_filter))
@@ -136,7 +139,9 @@ static void UpdateList()
   wAirspaceList->Invalidate();
 }
 
-static void FilterMode(bool direction) {
+static void
+FilterMode(bool direction)
+{
   if (direction) {
     distance_filter = fixed_minus_one;
     direction_filter = WILDCARD;
@@ -155,10 +160,11 @@ static void FilterMode(bool direction) {
   }
 }
 
-
-static void OnFilterName(DataField *_Sender, DataField::DataAccessMode Mode){
-  switch(Mode){
-    case DataField::daChange:
+static void
+OnFilterName(DataField *_Sender, DataField::DataAccessMode Mode)
+{
+  switch (Mode) {
+  case DataField::daChange:
     FilterMode(true);
     UpdateList();
     break;
@@ -168,14 +174,13 @@ static void OnFilterName(DataField *_Sender, DataField::DataAccessMode Mode){
   }
 }
 
-
-
-static void OnFilterDistance(DataField *_Sender,
-                             DataField::DataAccessMode Mode) {
+static void
+OnFilterDistance(DataField *_Sender, DataField::DataAccessMode Mode)
+{
   DataFieldString *Sender = (DataFieldString *)_Sender;
 
-  switch(Mode){
-    case DataField::daChange:
+  switch (Mode) {
+  case DataField::daChange:
     distance_filter = (unsigned)Sender->GetAsInteger() != WILDCARD
       ? Units::ToSysDistance(fixed(Sender->GetAsInteger()))
       : fixed_minus_one;
@@ -188,12 +193,13 @@ static void OnFilterDistance(DataField *_Sender,
   }
 }
 
-static void OnFilterDirection(DataField *_Sender,
-                              DataField::DataAccessMode Mode){
+static void
+OnFilterDirection(DataField *_Sender, DataField::DataAccessMode Mode)
+{
   DataFieldEnum &df = *(DataFieldEnum *)_Sender;
 
-  switch(Mode){
-    case DataField::daChange:
+  switch (Mode) {
+  case DataField::daChange:
     direction_filter = df.GetAsInteger();
     FilterMode(false);
     UpdateList();
@@ -204,13 +210,14 @@ static void OnFilterDirection(DataField *_Sender,
   }
 }
 
-static void OnFilterType(DataField *Sender,
-                         DataField::DataAccessMode Mode) {
-  switch(Mode){
-    case DataField::daChange:
-      TypeFilterIdx = Sender->GetAsInteger();
-      FilterMode(false);
-      UpdateList();
+static void
+OnFilterType(DataField *Sender, DataField::DataAccessMode Mode)
+{
+  switch (Mode) {
+  case DataField::daChange:
+    TypeFilterIdx = Sender->GetAsInteger();
+    FilterMode(false);
+    UpdateList();
     break;
 
   case DataField::daSpecial:
@@ -280,8 +287,8 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 #ifdef GNAV
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code){
-
+FormKeyDown(WndForm &Sender, unsigned key_code)
+{
   WndProperty* wp;
   unsigned NewIndex = TypeFilterIdx;
 
