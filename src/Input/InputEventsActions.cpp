@@ -328,7 +328,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (StringIsEqual(misc, _T("select"))) {
-    wp = dlgWaypointSelect(XCSoarInterface::main_window, basic.location);
+    wp = ShowWaypointListDialog(XCSoarInterface::main_window, basic.location);
   }
   if (wp)
     dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *wp);

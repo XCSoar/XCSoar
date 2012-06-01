@@ -273,8 +273,8 @@ IDR_XML_WAYPOINTDETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypoin
 IDR_XML_WAYPOINTDETAILS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointDetails_L.xml.gz"
 IDR_XML_WAYPOINTEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointEdit.xml.gz"
 IDR_XML_WAYPOINTEDIT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointEdit_L.xml.gz"
-IDR_XML_WAYPOINTSELECT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointSelect.xml.gz"
-IDR_XML_WAYPOINTSELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointSelect_L.xml.gz"
+IDR_XML_WAYPOINTSELECT XMLDIALOG DISCARDABLE "../output/data/dialogs/WaypointList.xml.gz"
+IDR_XML_WAYPOINTSELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/WaypointList_L.xml.gz"
 IDR_XML_WEATHER XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWeather.xml.gz"
 
 // configuration menu

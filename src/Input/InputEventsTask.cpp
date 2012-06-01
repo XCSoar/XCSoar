@@ -111,7 +111,7 @@ InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
+  const Waypoint* wp = ShowWaypointListDialog(XCSoarInterface::main_window,
                                          basic.location);
   if (wp != NULL) {
     protected_task_manager->DoGoto(*wp);

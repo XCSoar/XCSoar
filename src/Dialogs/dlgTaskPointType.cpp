@@ -129,7 +129,7 @@ SetPointType(AbstractTaskFactory::LegalPointType type)
         way_point = &(ordered_task->get_tp(0)->GetWaypoint());
       else
         way_point =
-          dlgWaypointSelect(wf->GetMainWindow(),
+          ShowWaypointListDialog(wf->GetMainWindow(),
                               ordered_task->TaskSize() > 0 ?
                               ordered_task->get_tp(ordered_task->
                                   TaskSize() - 1)->GetLocation() :

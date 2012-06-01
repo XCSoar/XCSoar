@@ -321,7 +321,7 @@ OnRelocateClicked(gcc_unused WndButton &Sender)
                                ordered_task->get_tp(active_index - 1)->GetLocation() :
                                XCSoarInterface::Basic().location);
 
-  const Waypoint *wp = dlgWaypointSelect(wf->GetMainWindow(), gpBearing,
+  const Waypoint *wp = ShowWaypointListDialog(wf->GetMainWindow(), gpBearing,
                                          ordered_task, active_index);
   if (wp == NULL)
     return;

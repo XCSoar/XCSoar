@@ -456,9 +456,8 @@ static gcc_constexpr_data CallBackTableEntry callback_table[] = {
 };
 
 const Waypoint*
-dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
-                  OrderedTask *_ordered_task,
-                  const unsigned _ordered_task_index)
+ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
+                       OrderedTask *_ordered_task, unsigned _ordered_task_index)
 {
   dialog = LoadDialog(callback_table, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));

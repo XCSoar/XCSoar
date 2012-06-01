@@ -235,7 +235,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     OrderedTaskPoint* point = NULL;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
-      dlgWaypointSelect(wf.GetMainWindow(),
+      ShowWaypointListDialog(wf.GetMainWindow(),
                         ordered_task->TaskSize() > 0 ?
                           ordered_task->get_tp(ordered_task->
                               TaskSize() - 1)->GetLocation() :

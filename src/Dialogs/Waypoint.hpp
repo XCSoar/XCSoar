@@ -33,10 +33,9 @@ class SingleWindow;
 class OrderedTask;
 
 const Waypoint *
-dlgWaypointSelect(SingleWindow &parent,
-                  const GeoPoint &location,
-                  OrderedTask *ordered_task = NULL,
-                  const unsigned ordered_task_index = 0);
+ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &location,
+                       OrderedTask *ordered_task = NULL,
+                       unsigned ordered_task_index = 0);
 
 void
 dlgConfigWaypointsShowModal();

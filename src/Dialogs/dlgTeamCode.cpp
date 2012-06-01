@@ -81,7 +81,7 @@ Update()
 static void
 OnSetWaypointClicked(gcc_unused WndButton &button)
 {
-  const Waypoint* wp = dlgWaypointSelect(UIGlobals::GetMainWindow(),
+  const Waypoint* wp = ShowWaypointListDialog(UIGlobals::GetMainWindow(),
                                          XCSoarInterface::Basic().location);
   if (wp != NULL) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;
