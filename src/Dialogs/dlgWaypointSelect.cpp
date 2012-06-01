@@ -305,11 +305,19 @@ public:
      waypoint_list(_waypoint_list),
      triangle_validator(ordered_task, ordered_task_index) {}
 
-  void Visit(const Waypoint &waypoint) {
+  void Add(const Waypoint &waypoint) {
+    waypoint_list.push_back(WaypointListItem(waypoint));
+  }
+
+  void AddFiltered(const Waypoint &waypoint) {
     if (CompareType(waypoint, type_index, triangle_validator) &&
         (!positive(distance) || CompareName(waypoint, name)) &&
         CompareDirection(waypoint, direction, location))
-      waypoint_list.push_back(WaypointListItem(waypoint));
+      Add(waypoint);
+  }
+
+  void Visit(const Waypoint &waypoint) {
+    AddFiltered(waypoint);
   }
 };
 
