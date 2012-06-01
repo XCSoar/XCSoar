@@ -196,6 +196,25 @@ ParseExtensionValue(const char *p, const char *end, int16_t &value_r)
     value_r = value;
 }
 
+/**
+ * Parse the first #n characters from the input string.  If the string
+ * is not long enough, nothing is parsed.  This is used to account for
+ * columns that are longer than specified; according to LXNav, this is
+ * used for decimal places (which are ignored by this function).
+ */
+static void
+ParseExtensionValueN(const char *p, const char *end, size_t n,
+                     int16_t &value_r)
+{
+  if (n > (size_t)(p - end))
+    /* string is too short */
+    return;
+
+  int value = ParseUnsigned(p, p + n);
+  if (value >= 0)
+    value_r = value;
+}
+
 bool
 IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
 {
@@ -271,11 +290,11 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
     else if (strcmp(extension.code, "TRT") == 0)
       ParseExtensionValue(start, finish, fix.trt);
     else if (strcmp(extension.code, "GSP") == 0)
-      ParseExtensionValue(start, finish, fix.gsp);
+      ParseExtensionValueN(start, finish, 3, fix.gsp);
     else if (strcmp(extension.code, "IAS") == 0)
-      ParseExtensionValue(start, finish, fix.ias);
+      ParseExtensionValueN(start, finish, 3, fix.ias);
     else if (strcmp(extension.code, "TAS") == 0)
-      ParseExtensionValue(start, finish, fix.tas);
+      ParseExtensionValueN(start, finish, 3, fix.tas);
     else if (strcmp(extension.code, "SIU") == 0)
       ParseExtensionValue(start, finish, fix.siu);
   }
