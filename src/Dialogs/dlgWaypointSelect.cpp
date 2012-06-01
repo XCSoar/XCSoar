@@ -33,7 +33,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
-#include "Waypoint/WaypointListFilter.hpp"
+#include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
@@ -101,7 +101,7 @@ static const TCHAR *const type_filter_items[] = {
 
 struct WaypointListDialogState
 {
-  TCHAR name[WaypointListFilter::NAME_LENGTH + 1];
+  TCHAR name[WaypointFilter::NAME_LENGTH + 1];
 
   int distance_index;
   int direction_index;
@@ -112,7 +112,7 @@ struct WaypointListDialogState
       direction_index > 0 || type_index != TypeFilter::ALL;
   }
 
-  void ToFilter(WaypointListFilter &filter, Angle heading) const {
+  void ToFilter(WaypointFilter &filter, Angle heading) const {
     _tcscpy(filter.name, name);
     filter.distance = Units::ToSysDistance(distance_filter_items[distance_index]);
     filter.type_index = type_index;
@@ -203,13 +203,13 @@ PrepareData()
 class WaypointListBuilder:
   public WaypointVisitor
 {
-  const WaypointListFilter &filter;
+  const WaypointFilter &filter;
   const GeoPoint location;
   WaypointList &list;
   FAITrianglePointValidator triangle_validator;
 
 public:
-  WaypointListBuilder(const WaypointListFilter &_filter,
+  WaypointListBuilder(const WaypointFilter &_filter,
                         GeoPoint _location, WaypointList &_list,
                         OrderedTask *ordered_task, unsigned ordered_task_index)
     :filter(_filter), location(_location), list(_list),
@@ -248,7 +248,7 @@ FillList(WaypointList &list, const Waypoints &src,
   if (!state.IsDefined() && src.size() >= 500)
     return;
 
-  WaypointListFilter filter;
+  WaypointFilter filter;
   state.ToFilter(filter, heading);
 
   WaypointListBuilder builder(filter, location, list,
@@ -340,12 +340,12 @@ OnFilterNameButtonLeft(gcc_unused WndButton &button)
 static void
 OnFilterNameButton(gcc_unused WndButton &button)
 {
-  TCHAR new_name_filter[WaypointListFilter::NAME_LENGTH + 1];
+  TCHAR new_name_filter[WaypointFilter::NAME_LENGTH + 1];
   CopyString(new_name_filter, filter_data.name,
-             WaypointListFilter::NAME_LENGTH + 1);
+             WaypointFilter::NAME_LENGTH + 1);
 
   dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(), new_name_filter,
-                        WaypointListFilter::NAME_LENGTH, _("Waypoint name"),
+                        WaypointFilter::NAME_LENGTH, _("Waypoint name"),
                         WaypointNameAllowedCharacters);
 
   int i = _tcslen(new_name_filter) - 1;
@@ -358,7 +358,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
   }
 
   CopyString(filter_data.name, new_name_filter,
-             WaypointListFilter::NAME_LENGTH + 1);
+             WaypointFilter::NAME_LENGTH + 1);
 
   if (name_button) {
     if (StringIsEmpty(filter_data.name))

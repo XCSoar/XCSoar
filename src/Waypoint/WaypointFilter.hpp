@@ -48,7 +48,7 @@ enum class TypeFilter: uint8_t {
   LAST_USED,
 };
 
-struct WaypointListFilter
+struct WaypointFilter
 {
   enum {
     NAME_LENGTH = 10,

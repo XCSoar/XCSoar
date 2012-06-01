@@ -21,14 +21,14 @@ Copyright_License {
 }
 */
 
-#include "WaypointListFilter.hpp"
+#include "WaypointFilter.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Task/FAITrianglePointValidator.hpp"
 #include "Compatibility/string.h"
 
 bool
-WaypointListFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
-                                const FAITrianglePointValidator &triangle_validator)
+WaypointFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
+                            const FAITrianglePointValidator &triangle_validator)
 {
   switch (type) {
   case TypeFilter::ALL:
@@ -70,14 +70,14 @@ WaypointListFilter::CompareType(const Waypoint &waypoint, TypeFilter type,
 }
 
 bool
-WaypointListFilter::CompareType(const Waypoint &waypoint,
-                                const FAITrianglePointValidator &triangle_validator) const
+WaypointFilter::CompareType(const Waypoint &waypoint,
+                            const FAITrianglePointValidator &triangle_validator) const
 {
   return CompareType(waypoint, type_index, triangle_validator);
 }
 
 bool
-WaypointListFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
+WaypointFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
                                      GeoPoint location)
 {
   if (negative(angle.Native()))
@@ -90,27 +90,27 @@ WaypointListFilter::CompareDirection(const Waypoint &waypoint, Angle angle,
 }
 
 bool
-WaypointListFilter::CompareDirection(const Waypoint &waypoint,
-                                     GeoPoint location) const
+WaypointFilter::CompareDirection(const Waypoint &waypoint,
+                                 GeoPoint location) const
 {
   return CompareDirection(waypoint, direction, location);
 }
 
 bool
-WaypointListFilter::CompareName(const Waypoint &waypoint, const TCHAR *name)
+WaypointFilter::CompareName(const Waypoint &waypoint, const TCHAR *name)
 {
   return _tcsnicmp(waypoint.name.c_str(), name, _tcslen(name)) == 0;
 }
 
 bool
-WaypointListFilter::CompareName(const Waypoint &waypoint) const
+WaypointFilter::CompareName(const Waypoint &waypoint) const
 {
   return CompareName(waypoint, name);
 }
 
 bool
-WaypointListFilter::Matches(const Waypoint &waypoint, GeoPoint location,
-                            const FAITrianglePointValidator &triangle_validator) const
+WaypointFilter::Matches(const Waypoint &waypoint, GeoPoint location,
+                        const FAITrianglePointValidator &triangle_validator) const
 {
   return CompareType(waypoint, triangle_validator) &&
          (!positive(distance) || CompareName(waypoint)) &&
