@@ -51,6 +51,6 @@ public:
   const GeoVector &GetVector(const GeoPoint &location) const;
 };
 
-typedef std::vector<WaypointListItem> WaypointList;
+class WaypointList: public std::vector<WaypointListItem> {};
 
 #endif
