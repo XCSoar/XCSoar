@@ -204,6 +204,15 @@ struct WaypointListFilter
   {
     return CompareName(waypoint, name);
   }
+
+  bool
+  Matches(const Waypoint &waypoint, GeoPoint location,
+          const FAITrianglePointValidator &triangle_validator)
+  {
+    return CompareType(waypoint, triangle_validator) &&
+           (!positive(distance) || CompareName(waypoint)) &&
+           CompareDirection(waypoint, location);
+  }
 };
 
 struct WaypointListDialogState
@@ -328,9 +337,7 @@ public:
   }
 
   void AddFiltered(const Waypoint &waypoint) {
-    if (CompareType(waypoint, triangle_validator) &&
-        (!positive(distance) || CompareName(waypoint)) &&
-        CompareDirection(waypoint, location))
+    if (Matches(waypoint, location, triangle_validator))
       Add(waypoint);
   }
 
