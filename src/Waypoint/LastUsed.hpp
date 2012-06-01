@@ -28,7 +28,7 @@ Copyright_License {
 
 struct Waypoint;
 
-typedef std::list<unsigned> WaypointIDList;
+class WaypointIDList: public std::list<unsigned> {};
 
 namespace LastUsedWaypoints
 {
