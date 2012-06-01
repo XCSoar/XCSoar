@@ -113,13 +113,13 @@ enum TypeFilter {
   TF_LAST_USED,
 };
 
-enum {
-  NAME_FILTER_LENGTH = 10,
-};
-
 struct WaypointListFilter
 {
-  TCHAR name[NAME_FILTER_LENGTH + 1];
+  enum {
+    NAME_LENGTH = 10,
+  };
+
+  TCHAR name[NAME_LENGTH + 1];
 
   fixed distance;
   Angle direction;
@@ -128,7 +128,7 @@ struct WaypointListFilter
 
 struct WaypointListDialogState
 {
-  TCHAR name[NAME_FILTER_LENGTH + 1];
+  TCHAR name[WaypointListFilter::NAME_LENGTH + 1];
 
   int distance_index;
   int direction_index;
@@ -634,10 +634,12 @@ OnFilterNameButtonLeft(gcc_unused WndButton &button)
 static void
 OnFilterNameButton(gcc_unused WndButton &button)
 {
-  TCHAR new_name_filter[NAME_FILTER_LENGTH + 1];
-  CopyString(new_name_filter, filter_data.name, NAME_FILTER_LENGTH + 1);
-  dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(),
-                        new_name_filter, NAME_FILTER_LENGTH, _("Waypoint name"),
+  TCHAR new_name_filter[WaypointListFilter::NAME_LENGTH + 1];
+  CopyString(new_name_filter, filter_data.name,
+             WaypointListFilter::NAME_LENGTH + 1);
+
+  dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(), new_name_filter,
+                        WaypointListFilter::NAME_LENGTH, _("Waypoint name"),
                         WaypointNameAllowedCharacters);
 
   int i = _tcslen(new_name_filter) - 1;
@@ -649,7 +651,8 @@ OnFilterNameButton(gcc_unused WndButton &button)
     i--;
   }
 
-  CopyString(filter_data.name, new_name_filter, NAME_FILTER_LENGTH + 1);
+  CopyString(filter_data.name, new_name_filter,
+             WaypointListFilter::NAME_LENGTH + 1);
 
   if (name_button) {
     if (StringIsEmpty(filter_data.name))
