@@ -89,11 +89,16 @@ void
 Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
 {
   TCHAR name[64];
-  MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
 
-  unsigned value;
-  if (Get(name, value))
-    settings.display = (value & 0x1) != 0;
+  MakeAirspaceSettingName(name, _T("AirspaceDisplay"), i);
+  if (!Get(name, settings.display)) {
+    // Load setting from legacy key-value pair
+    MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
+
+    unsigned value;
+    if (Get(name, value))
+      settings.display = (value & 0x1) != 0;
+  }
 
 #ifdef HAVE_HATCHED_BRUSH
   MakeAirspaceSettingName(name, _T("Brush"), i);
@@ -128,9 +133,13 @@ Profile::Load(AirspaceComputerSettings &settings)
   TCHAR name[64];
   unsigned value;
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
-    MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
-    if (Get(name, value))
-      settings.warnings.class_warnings[i] = (value & 0x2) != 0;
+    MakeAirspaceSettingName(name, _T("AirspaceWarning"), i);
+    if (Get(name, settings.warnings.class_warnings[i])) {
+      // Load setting from legacy key-value pair
+      MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
+      if (Get(name, value))
+        settings.warnings.class_warnings[i] = (value & 0x2) != 0;
+    }
   }
 }
 
@@ -138,15 +147,12 @@ void
 Profile::SetAirspaceMode(unsigned i, bool display, bool warning)
 {
   TCHAR name[64];
-  MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
 
-  int value = 0;
-  if (display)
-    value |= 0x1;
-  if (warning)
-    value |= 0x2;
+  MakeAirspaceSettingName(name, _T("AirspaceDisplay"), i);
+  Set(name, display);
 
-  Set(name, value);
+  MakeAirspaceSettingName(name, _T("AirspaceWarning"), i);
+  Set(name, warning);
 }
 
 void
