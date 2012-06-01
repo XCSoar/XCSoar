@@ -30,6 +30,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Form/DataField/String.hpp"
 #include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
@@ -60,6 +61,7 @@ static WndForm *dialog;
 static WndProperty *name_control;
 static WndProperty *distance_control;
 static WndProperty *direction_control;
+static WndProperty *type_control;
 static ListControl *airspace_list_control;
 
 static fixed distance_filter;
@@ -160,69 +162,29 @@ FilterMode(bool direction)
   }
 }
 
-static void
-OnFilterName(DataField *_Sender, DataField::DataAccessMode Mode)
+class AirspaceFilterListener: public DataFieldListener
 {
-  switch (Mode) {
-  case DataField::daChange:
-    FilterMode(true);
-    UpdateList();
-    break;
+private:
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnFilterDistance(DataField *_Sender, DataField::DataAccessMode Mode)
+void
+AirspaceFilterListener::OnModified(DataField &df)
 {
-  DataFieldString *Sender = (DataFieldString *)_Sender;
-
-  switch (Mode) {
-  case DataField::daChange:
-    distance_filter = (unsigned)Sender->GetAsInteger() != WILDCARD
-      ? Units::ToSysDistance(fixed(Sender->GetAsInteger()))
+  if (&df == distance_control->GetDataField())
+    distance_filter = (unsigned)df.GetAsInteger() != WILDCARD
+      ? Units::ToSysDistance(fixed(df.GetAsInteger()))
       : fixed_minus_one;
-    FilterMode(false);
-    UpdateList();
-    break;
 
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnFilterDirection(DataField *_Sender, DataField::DataAccessMode Mode)
-{
-  DataFieldEnum &df = *(DataFieldEnum *)_Sender;
-
-  switch (Mode) {
-  case DataField::daChange:
+  else if (&df == direction_control->GetDataField())
     direction_filter = df.GetAsInteger();
-    FilterMode(false);
-    UpdateList();
-    break;
 
-  case DataField::daSpecial:
-    return;
-  }
-}
+  else if (&df == type_control->GetDataField())
+    type_filter = df.GetAsInteger();
 
-static void
-OnFilterType(DataField *Sender, DataField::DataAccessMode Mode)
-{
-  switch (Mode) {
-  case DataField::daChange:
-    type_filter = Sender->GetAsInteger();
-    FilterMode(false);
-    UpdateList();
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  FilterMode(&df == name_control->GetDataField());
+  UpdateList();
 }
 
 static void
@@ -320,10 +282,6 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 #endif /* GNAV */
 
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnFilterName),
-  DeclareCallBackEntry(OnFilterDistance),
-  DeclareCallBackEntry(OnFilterDirection),
-  DeclareCallBackEntry(OnFilterType),
   DeclareCallBackEntry(CloseClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -402,6 +360,8 @@ PrepareAirspaceSelectDialog()
   FillDirectionEnum(*(DataFieldEnum *)direction_control->GetDataField());
   direction_control->RefreshDisplay();
 
+  type_control = (WndProperty*)dialog->FindByName(_T("prpFltType"));
+  assert(type_control != NULL);
   LoadFormProperty(*dialog, _T("prpFltType"), type_filter_list, WILDCARD);
 
   dialog->SetTimerNotify(OnTimerNotify);
@@ -416,6 +376,12 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   location = XCSoarInterface::Basic().location;
 
   PrepareAirspaceSelectDialog();
+
+  AirspaceFilterListener listener;
+  name_control->GetDataField()->SetListener(&listener);
+  distance_control->GetDataField()->SetListener(&listener);
+  direction_control->GetDataField()->SetListener(&listener);
+  type_control->GetDataField()->SetListener(&listener);
 
   AirspaceSorter _airspace_sorter(*airspaces, location);
   airspace_sorter = &_airspace_sorter;
