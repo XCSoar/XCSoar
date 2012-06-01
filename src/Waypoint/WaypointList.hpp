@@ -51,6 +51,10 @@ public:
   const GeoVector &GetVector(const GeoPoint &location) const;
 };
 
-class WaypointList: public std::vector<WaypointListItem> {};
+class WaypointList: public std::vector<WaypointListItem>
+{
+public:
+  void SortByDistance(const GeoPoint &location);
+};
 
 #endif

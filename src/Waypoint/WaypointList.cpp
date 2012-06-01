@@ -38,3 +38,20 @@ WaypointListItem::GetVector(const GeoPoint &location) const
 
   return vec;
 }
+
+class WaypointDistanceCompare
+{
+  const GeoPoint &location;
+
+public:
+  WaypointDistanceCompare(const GeoPoint &_location):location(_location) {}
+
+  bool operator()(const WaypointListItem &a,
+                  const WaypointListItem &b) const {
+    return a.GetVector(location).distance < b.GetVector(location).distance;
+  }
+};
+
+void WaypointList::SortByDistance(const GeoPoint &location) {
+  std::sort(begin(), end(), WaypointDistanceCompare(location));
+}

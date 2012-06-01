@@ -228,19 +228,6 @@ public:
   }
 };
 
-class WaypointDistanceCompare
-{
-  const GeoPoint &location;
-
-public:
-  WaypointDistanceCompare(const GeoPoint &_location):location(_location) {}
-
-  bool operator()(const WaypointListItem &a,
-                  const WaypointListItem &b) const {
-    return a.GetVector(location).distance < b.GetVector(location).distance;
-  }
-};
-
 static void
 FillList(WaypointList &list, const Waypoints &src,
          GeoPoint location, Angle heading, const WaypointListDialogState &state)
@@ -256,7 +243,7 @@ FillList(WaypointList &list, const Waypoints &src,
   builder.Visit(src);
 
   if (positive(filter.distance) || !negative(filter.direction.Native()))
-    std::sort(list.begin(), list.end(), WaypointDistanceCompare(location));
+    list.SortByDistance(location);
 }
 
 static void
