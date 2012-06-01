@@ -21,6 +21,7 @@
 */
 
 #include "IGC/IGCParser.hpp"
+#include "IGC/IGCExtensions.hpp"
 #include "IGC/IGCFix.hpp"
 #include "IGC/IGCHeader.hpp"
 #include "DateTime.hpp"
@@ -50,6 +51,30 @@ TestHeader()
   ok1(strcmp(header.manufacturer, "LXN") == 0);
   ok1(strcmp(header.id, "A3Z") == 0);
   ok1(header.flight == 1);
+}
+
+static void
+TestExtensions()
+{
+  IGCExtensions extensions;
+  ok1(!IGCParseExtensions("", extensions));
+  ok1(!IGCParseExtensions("B1122385103117N00742367EA004900048700000", extensions));
+  ok1(!IGCParseExtensions("AXYZAA", extensions));
+
+  ok1(IGCParseExtensions("I043638FXA3941ENL4246GSP4749TRT", extensions));
+  ok1(extensions.size() == 4);
+  ok1(extensions[0].start == 36);
+  ok1(extensions[0].finish == 38);
+  ok1(strcmp(extensions[0].code, "FXA") == 0);
+  ok1(extensions[1].start == 39);
+  ok1(extensions[1].finish == 41);
+  ok1(strcmp(extensions[1].code, "ENL") == 0);
+  ok1(extensions[2].start == 42);
+  ok1(extensions[2].finish == 46);
+  ok1(strcmp(extensions[2].code, "GSP") == 0);
+  ok1(extensions[3].start == 47);
+  ok1(extensions[3].finish == 49);
+  ok1(strcmp(extensions[3].code, "TRT") == 0);
 }
 
 static void
@@ -145,10 +170,11 @@ TestFixTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(74);
+  plan_tests(91);
 
   TestHeader();
   TestDate();
+  TestExtensions();
   TestFix();
   TestFixTime();
 

@@ -24,7 +24,9 @@ Copyright_License {
 #include "IGCParser.hpp"
 #include "IGCHeader.hpp"
 #include "IGCFix.hpp"
+#include "IGCExtensions.hpp"
 #include "DateTime.hpp"
+#include "Util/CharUtil.hpp"
 
 #include <string.h>
 #include <stdio.h>
@@ -102,6 +104,64 @@ IGCParseDate(const char *line, BrokenDate &date)
   date.day = value / 10000;
 
   return date.Plausible();
+}
+
+static int
+ParseTwoDigits(const char *p)
+{
+  if (!IsDigitASCII(p[0]) || !IsDigitASCII(p[1]))
+    return -1;
+
+  return (p[0] - '0') * 10 + (p[1] - '0');
+}
+
+static bool
+CheckThreeAlphaNumeric(const char *src)
+{
+  return IsAlphaNumericASCII(src[0]) && IsAlphaNumericASCII(src[1]) &&
+    IsAlphaNumericASCII(src[2]);
+}
+
+bool
+IGCParseExtensions(const char *buffer, IGCExtensions &extensions)
+{
+  if (*buffer++ != 'I')
+    return false;
+
+  int count = ParseTwoDigits(buffer);
+  if (count < 0)
+    return false;
+
+  buffer += 2;
+
+  extensions.clear();
+
+  while (count-- > 0) {
+    const int start = ParseTwoDigits(buffer);
+    if (start < 8)
+      return false;
+
+    buffer += 2;
+
+    const int finish = ParseTwoDigits(buffer);
+    if (finish < start)
+      return false;
+
+    buffer += 2;
+
+    if (!CheckThreeAlphaNumeric(buffer))
+      return false;
+
+    IGCExtension &x = extensions.append();
+    x.start = start;
+    x.finish = finish;
+    memcpy(x.code, buffer, 3);
+    x.code[3] = 0;
+
+    buffer += 3;
+  }
+
+  return true;
 }
 
 bool

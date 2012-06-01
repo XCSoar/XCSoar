@@ -26,6 +26,7 @@ Copyright_License {
 
 struct IGCFix;
 struct IGCHeader;
+struct IGCExtensions;
 struct BrokenDate;
 struct BrokenTime;
 
@@ -44,6 +45,14 @@ IGCParseHeader(const char *line, IGCHeader &header);
  */
 bool
 IGCParseDate(const char *line, BrokenDate &date);
+
+/**
+ * Parse an IGC "I" record.
+ *
+ * @return true on success, false if the line was not recognized
+ */
+bool
+IGCParseExtensions(const char *buffer, IGCExtensions &extensions);
 
 /**
  * Parse an IGC "B" record.
