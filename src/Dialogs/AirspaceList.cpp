@@ -56,11 +56,11 @@ static ProtectedAirspaceWarningManager *airspace_warnings;
 
 static GeoPoint location;
 
-static WndForm *wf = NULL;
-static WndProperty *wpName;
-static WndProperty *wpDistance;
-static WndProperty *wpDirection;
-static ListControl *wAirspaceList = NULL;
+static WndForm *dialog;
+static WndProperty *name_control;
+static WndProperty *distance_control;
+static WndProperty *direction_control;
+static ListControl *airspace_list_control;
 
 static fixed distance_filter;
 
@@ -85,38 +85,38 @@ static gcc_constexpr_data StaticEnumChoice type_filter_list[] = {
   { 0 }
 };
 
-static unsigned TypeFilterIdx = WILDCARD;
+static unsigned type_filter = WILDCARD;
 
-static AirspaceSelectInfoVector AirspaceSelectInfo;
+static AirspaceSelectInfoVector airspace_list;
 
 static AirspaceSorter* airspace_sorter;
 
 static void
 OnAirspaceListEnter(unsigned i)
 {
-  if (AirspaceSelectInfo.empty()) {
+  if (airspace_list.empty()) {
     assert(i == 0);
     return;
   }
 
-  assert(i < AirspaceSelectInfo.size());
+  assert(i < airspace_list.size());
 
-  dlgAirspaceDetails(*AirspaceSelectInfo[i].airspace, airspace_warnings);
+  dlgAirspaceDetails(*airspace_list[i].airspace, airspace_warnings);
 }
 
 
 static void
 UpdateList()
 {
-  AirspaceSelectInfo = airspace_sorter->GetList();
+  airspace_list = airspace_sorter->GetList();
 
-  if (TypeFilterIdx != WILDCARD)
-    airspace_sorter->FilterByClass(AirspaceSelectInfo, (AirspaceClass)TypeFilterIdx);
+  if (type_filter != WILDCARD)
+    airspace_sorter->FilterByClass(airspace_list, (AirspaceClass)type_filter);
   
   bool sort_distance = false;
   if (positive(distance_filter)) {
     sort_distance = true;
-    airspace_sorter->FilterByDistance(AirspaceSelectInfo, distance_filter);
+    airspace_sorter->FilterByDistance(airspace_list, distance_filter);
   } 
 
   if (direction_filter != WILDCARD) {
@@ -124,19 +124,19 @@ UpdateList()
     Angle a = direction_filter == 0
       ? CommonInterface::Calculated().heading
       : Angle::Degrees(fixed(direction_filter));
-    airspace_sorter->FilterByDirection(AirspaceSelectInfo, a);
+    airspace_sorter->FilterByDirection(airspace_list, a);
   }
 
   if (sort_distance)
-    airspace_sorter->SortByDistance(AirspaceSelectInfo);
+    airspace_sorter->SortByDistance(airspace_list);
 
 
-  const TCHAR *name_filter = wpName->GetDataField()->GetAsString();
+  const TCHAR *name_filter = name_control->GetDataField()->GetAsString();
   if (!StringIsEmpty(name_filter))
-    airspace_sorter->FilterByNamePrefix(AirspaceSelectInfo, name_filter);
+    airspace_sorter->FilterByNamePrefix(airspace_list, name_filter);
 
-  wAirspaceList->SetLength(max((size_t)1, AirspaceSelectInfo.size()));
-  wAirspaceList->Invalidate();
+  airspace_list_control->SetLength(max((size_t)1, airspace_list.size()));
+  airspace_list_control->Invalidate();
 }
 
 static void
@@ -146,17 +146,17 @@ FilterMode(bool direction)
     distance_filter = fixed_minus_one;
     direction_filter = WILDCARD;
 
-    DataFieldEnum *df = (DataFieldEnum *)wpDistance->GetDataField();
+    DataFieldEnum *df = (DataFieldEnum *)distance_control->GetDataField();
     df->Set(WILDCARD);
-    wpDistance->RefreshDisplay();
+    distance_control->RefreshDisplay();
 
-    df = (DataFieldEnum *)wpDirection->GetDataField();
+    df = (DataFieldEnum *)direction_control->GetDataField();
     df->Set(WILDCARD);
-    wpDirection->RefreshDisplay();
+    direction_control->RefreshDisplay();
   } else {
-    DataFieldString *df = (DataFieldString *)wpName->GetDataField();
+    DataFieldString *df = (DataFieldString *)name_control->GetDataField();
     df->Set(_T(""));
-    wpName->RefreshDisplay();
+    name_control->RefreshDisplay();
   }
 }
 
@@ -215,7 +215,7 @@ OnFilterType(DataField *Sender, DataField::DataAccessMode Mode)
 {
   switch (Mode) {
   case DataField::daChange:
-    TypeFilterIdx = Sender->GetAsInteger();
+    type_filter = Sender->GetAsInteger();
     FilterMode(false);
     UpdateList();
     break;
@@ -228,7 +228,7 @@ OnFilterType(DataField *Sender, DataField::DataAccessMode Mode)
 static void
 OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  if (AirspaceSelectInfo.empty()) {
+  if (airspace_list.empty()) {
     assert(i == 0);
 
     canvas.text(rc.left + Layout::FastScale(2),
@@ -236,13 +236,13 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     return;
   }
 
-  assert(i < AirspaceSelectInfo.size());
+  assert(i < airspace_list.size());
 
-  const AbstractAirspace &airspace = *AirspaceSelectInfo[i].airspace;
+  const AbstractAirspace &airspace = *airspace_list[i].airspace;
 
   AirspaceListRenderer::Draw(
       canvas, rc, airspace,
-      AirspaceSelectInfo[i].GetVector(location, airspaces->GetProjection()),
+      airspace_list[i].GetVector(location, airspaces->GetProjection()),
       UIGlobals::GetDialogLook(), UIGlobals::GetMapLook().airspace,
       CommonInterface::GetMapSettings().airspace);
 }
@@ -251,7 +251,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 static void
 CloseClicked(gcc_unused WndButton &button)
 {
-  wf->SetModalResult(mrCancel);
+  dialog->SetModalResult(mrCancel);
 }
 
 gcc_pure
@@ -276,10 +276,10 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 
       UpdateList();
 
-      DataFieldEnum &df = *(DataFieldEnum *)wpDirection->GetDataField();
+      DataFieldEnum &df = *(DataFieldEnum *)direction_control->GetDataField();
       TCHAR buffer[64];
       df.replaceEnumText(0, GetHeadingString(buffer));
-      wpDirection->RefreshDisplay();
+      direction_control->RefreshDisplay();
     }
   }
 }
@@ -290,9 +290,9 @@ static bool
 FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   WndProperty* wp;
-  unsigned NewIndex = TypeFilterIdx;
+  unsigned new_index = type_filter;
 
-  wp = ((WndProperty *)wf->FindByName(_T("prpFltType")));
+  wp = ((WndProperty *)dialog->FindByName(_T("prpFltType")));
 
   switch(key_code) {
   case VK_APP1:
@@ -309,7 +309,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     return false;
   }
 
-  if (TypeFilterIdx != NewIndex){
+  if (type_filter != new_index){
     wp->GetDataField()->SetAsInteger(NewIndex);
     wp->RefreshDisplay();
   }
@@ -372,39 +372,39 @@ PrepareAirspaceSelectDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+  dialog = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_AIRSPACESELECT_L") :
                                       _T("IDR_XML_AIRSPACESELECT"));
-  assert(wf != NULL);
+  assert(dialog != NULL);
 
 #ifdef GNAV
-  wf->SetKeyDownNotify(FormKeyDown);
+  dialog->SetKeyDownNotify(FormKeyDown);
 #endif
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
-  wAirspaceList = (ListControl*)wf->FindByName(_T("frmAirspaceList"));
-  assert(wAirspaceList != NULL);
-  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
-  wAirspaceList->SetPaintItemCallback(OnPaintListItem);
-  wAirspaceList->SetItemHeight(AirspaceListRenderer::GetHeight(dialog_look));
+  airspace_list_control = (ListControl*)dialog->FindByName(_T("frmAirspaceList"));
+  assert(airspace_list_control != NULL);
+  airspace_list_control->SetActivateCallback(OnAirspaceListEnter);
+  airspace_list_control->SetPaintItemCallback(OnPaintListItem);
+  airspace_list_control->SetItemHeight(AirspaceListRenderer::GetHeight(dialog_look));
 
-  wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
-  assert(wpName != NULL);
+  name_control = (WndProperty*)dialog->FindByName(_T("prpFltName"));
+  assert(name_control != NULL);
 
-  wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
-  assert(wpDistance != NULL);
-  FillDistanceEnum(*(DataFieldEnum *)wpDistance->GetDataField());
-  wpDistance->RefreshDisplay();
+  distance_control = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
+  assert(distance_control != NULL);
+  FillDistanceEnum(*(DataFieldEnum *)distance_control->GetDataField());
+  distance_control->RefreshDisplay();
 
-  wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
-  assert(wpDirection != NULL);
-  FillDirectionEnum(*(DataFieldEnum *)wpDirection->GetDataField());
-  wpDirection->RefreshDisplay();
+  direction_control = (WndProperty*)dialog->FindByName(_T("prpFltDirection"));
+  assert(direction_control != NULL);
+  FillDirectionEnum(*(DataFieldEnum *)direction_control->GetDataField());
+  direction_control->RefreshDisplay();
 
-  LoadFormProperty(*wf, _T("prpFltType"), type_filter_list, WILDCARD);
+  LoadFormProperty(*dialog, _T("prpFltType"), type_filter_list, WILDCARD);
 
-  wf->SetTimerNotify(OnTimerNotify);
+  dialog->SetTimerNotify(OnTimerNotify);
 }
 
 void
@@ -417,12 +417,12 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
 
   PrepareAirspaceSelectDialog();
 
-  AirspaceSorter g_airspace_sorter(*airspaces, location);
-  airspace_sorter = &g_airspace_sorter;
+  AirspaceSorter _airspace_sorter(*airspaces, location);
+  airspace_sorter = &_airspace_sorter;
 
   UpdateList();
 
-  wf->ShowModal();
-  delete wf;
+  dialog->ShowModal();
+  delete dialog;
 }
 
