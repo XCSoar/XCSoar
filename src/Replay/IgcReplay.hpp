@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "AbstractReplay.hpp"
+#include "IGC/IGCExtensions.hpp"
 
 class NLineReader;
 struct GeoPoint;
@@ -35,6 +36,8 @@ struct IGCFix;
 class IgcReplay: public AbstractReplay
 {
   NLineReader *reader;
+
+  IGCExtensions extensions;
 
 public:
   IgcReplay(NLineReader *reader);
