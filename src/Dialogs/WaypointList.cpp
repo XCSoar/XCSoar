@@ -49,6 +49,7 @@ Copyright_License {
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Formatter/UserUnits.hpp"
 
 #include <algorithm>
 #include <list>
@@ -183,8 +184,8 @@ PrepareData()
 
   TCHAR buffer[15];
   for (unsigned i = 1; i < ARRAY_SIZE(distance_filter_items); i++) {
-    _stprintf(buffer, _T("%d%s"), distance_filter_items[i],
-              Units::GetDistanceName());
+    FormatUserDistance(Units::ToSysDistance(fixed(distance_filter_items[i])),
+                       buffer);
     data_field->addEnumText(buffer);
   }
 
