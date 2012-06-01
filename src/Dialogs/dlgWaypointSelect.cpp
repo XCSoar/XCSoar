@@ -216,16 +216,7 @@ public:
      waypoint_list(_waypoint_list),
      triangle_validator(ordered_task, ordered_task_index) {}
 
-  void Add(const Waypoint &waypoint) {
-    waypoint_list.push_back(WaypointListItem(waypoint));
-  }
-
-  void AddFiltered(const Waypoint &waypoint) {
-    if (filter.Matches(waypoint, location, triangle_validator))
-      Add(waypoint);
-  }
-
-  void AddFiltered(const Waypoints &waypoints) {
+  void Visit(const Waypoints &waypoints) {
     if (positive(filter.distance))
       waypoints.VisitWithinRange(location, filter.distance, *this);
     else
@@ -233,7 +224,8 @@ public:
   }
 
   void Visit(const Waypoint &waypoint) {
-    AddFiltered(waypoint);
+    if (filter.Matches(waypoint, location, triangle_validator))
+      waypoint_list.push_back(WaypointListItem(waypoint));
   }
 };
 
@@ -262,7 +254,7 @@ FillList(WaypointList &list, const Waypoints &src,
 
   WaypointListBuilder builder(filter, location, list,
                               ordered_task, ordered_task_index);
-  builder.AddFiltered(src);
+  builder.Visit(src);
 
   if (positive(filter.distance) || !negative(filter.direction.Native()))
     std::sort(list.begin(), list.end(), WaypointDistanceCompare(location));
