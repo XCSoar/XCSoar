@@ -33,15 +33,14 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
+#include "Waypoint/WaypointListBuilder.hpp"
 #include "Waypoint/WaypointFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
 #include "Compiler.h"
 #include "Form/DataField/Enum.hpp"
 #include "LogFile.hpp"
 #include "Util/StringUtil.hpp"
-#include "Task/FAITrianglePointValidator.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
@@ -199,34 +198,6 @@ PrepareData()
   data_field->SetAsInteger((int)filter_data.type_index);
   type_filter->RefreshDisplay();
 }
-
-class WaypointListBuilder:
-  public WaypointVisitor
-{
-  const WaypointFilter &filter;
-  const GeoPoint location;
-  WaypointList &list;
-  FAITrianglePointValidator triangle_validator;
-
-public:
-  WaypointListBuilder(const WaypointFilter &_filter,
-                        GeoPoint _location, WaypointList &_list,
-                        OrderedTask *ordered_task, unsigned ordered_task_index)
-    :filter(_filter), location(_location), list(_list),
-     triangle_validator(ordered_task, ordered_task_index) {}
-
-  void Visit(const Waypoints &waypoints) {
-    if (positive(filter.distance))
-      waypoints.VisitWithinRange(location, filter.distance, *this);
-    else
-      waypoints.VisitNamePrefix(filter.name, *this);
-  }
-
-  void Visit(const Waypoint &waypoint) {
-    if (filter.Matches(waypoint, location, triangle_validator))
-      list.push_back(WaypointListItem(waypoint));
-  }
-};
 
 static void
 FillList(WaypointList &list, const Waypoints &src,
