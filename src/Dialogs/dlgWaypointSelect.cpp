@@ -99,18 +99,18 @@ static const TCHAR *const type_filter_items[] = {
   NULL
 };
 
-enum TypeFilter {
-  TF_ALL = 0,
-  TF_AIRPORT,
-  TF_LANDABLE,
-  TF_TURNPOINT,
-  TF_START,
-  TF_FINISH,
-  TF_FAI_TRIANGLE_LEFT,
-  TF_FAI_TRIANGLE_RIGHT,
-  TF_FILE_1,
-  TF_FILE_2,
-  TF_LAST_USED,
+enum class TypeFilter: uint8_t {
+  ALL = 0,
+  AIRPORT,
+  LANDABLE,
+  TURNPOINT,
+  START,
+  FINISH,
+  FAI_TRIANGLE_LEFT,
+  FAI_TRIANGLE_RIGHT,
+  FILE_1,
+  FILE_2,
+  LAST_USED,
 };
 
 struct WaypointListFilter
@@ -136,7 +136,7 @@ struct WaypointListDialogState
 
   bool IsDefined() const {
     return !StringIsEmpty(name) || distance_index > 0 ||
-      direction_index > 0 || type_index != TF_ALL;
+      direction_index > 0 || type_index != TypeFilter::ALL;
   }
 
   void ToFilter(WaypointListFilter &filter, Angle heading) const {
@@ -217,13 +217,13 @@ PrepareData()
 
   const TCHAR *p = Profile::GetPathBase(szProfileWaypointFile);
   if (p != NULL)
-    data_field->replaceEnumText(TF_FILE_1, p);
+    data_field->replaceEnumText((unsigned)TypeFilter::FILE_1, p);
 
   p = Profile::GetPathBase(szProfileAdditionalWaypointFile);
   if (p != NULL)
-    data_field->replaceEnumText(TF_FILE_2, p);
+    data_field->replaceEnumText((unsigned)TypeFilter::FILE_2, p);
 
-  data_field->SetAsInteger(filter_data.type_index);
+  data_field->SetAsInteger((int)filter_data.type_index);
   type_filter->RefreshDisplay();
 }
 
@@ -446,37 +446,37 @@ private:
   CompareType(const Waypoint &waypoint, TypeFilter type)
   {
     switch (type) {
-    case TF_ALL:
+    case TypeFilter::ALL:
       return true;
 
-    case TF_AIRPORT:
+    case TypeFilter::AIRPORT:
       return waypoint.IsAirport();
 
-    case TF_LANDABLE:
+    case TypeFilter::LANDABLE:
       return waypoint.IsLandable();
 
-    case TF_TURNPOINT:
+    case TypeFilter::TURNPOINT:
       return waypoint.IsTurnpoint();
 
-    case TF_START:
+    case TypeFilter::START:
       return waypoint.IsStartpoint();
 
-    case TF_FINISH:
+    case TypeFilter::FINISH:
       return waypoint.IsFinishpoint();
 
-    case TF_FAI_TRIANGLE_LEFT:
+    case TypeFilter::FAI_TRIANGLE_LEFT:
       return triangle_validator->IsFAITrianglePoint(waypoint, false);
 
-    case TF_FAI_TRIANGLE_RIGHT:
+    case TypeFilter::FAI_TRIANGLE_RIGHT:
       return triangle_validator->IsFAITrianglePoint(waypoint, true);
 
-    case TF_FILE_1:
+    case TypeFilter::FILE_1:
       return waypoint.file_num == 1;
 
-    case TF_FILE_2:
+    case TypeFilter::FILE_2:
       return waypoint.file_num == 2;
 
-    case TF_LAST_USED:
+    case TypeFilter::LAST_USED:
       return false;
     }
 
@@ -572,7 +572,7 @@ FillLastUsedList(WaypointList &list,
 static void
 UpdateList()
 {
-  if (filter_data.type_index == TF_LAST_USED)
+  if (filter_data.type_index == TypeFilter::LAST_USED)
     FillLastUsedList(waypoint_list, LastUsedWaypoints::GetList(),
                      way_points);
   else
@@ -778,15 +778,15 @@ FormKeyDown(WndForm &sender, unsigned key_code)
 
   switch (key_code) {
   case VK_APP1:
-    new_index = TF_ALL;
+    new_index = TypeFilter::ALL;
     break;
 
   case VK_APP2:
-    new_index = TF_LANDABLE;
+    new_index = TypeFilter::LANDABLE;
     break;
 
   case VK_APP3:
-    new_index = TF_TURNPOINT;
+    new_index = TypeFilter::TURNPOINT;
     break;
 
   default:
