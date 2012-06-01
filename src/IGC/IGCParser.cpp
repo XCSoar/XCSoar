@@ -27,6 +27,7 @@ Copyright_License {
 #include "IGCExtensions.hpp"
 #include "DateTime.hpp"
 #include "Util/CharUtil.hpp"
+#include "Util/Macros.hpp"
 
 #include <string.h>
 #include <stdio.h>
@@ -165,7 +166,7 @@ IGCParseExtensions(const char *buffer, IGCExtensions &extensions)
 }
 
 bool
-IGCParseFix(const char *buffer, IGCFix &fix)
+IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
 {
   BrokenTime time;
   if (!IGCParseFixTime(buffer, time))
@@ -211,7 +212,64 @@ IGCParseFix(const char *buffer, IGCFix &fix)
 
   fix.time = time;
 
+  fix.ClearExtensions();
+
+  const size_t line_length = strlen(buffer);
+  for (auto i = extensions.begin(), end = extensions.end(); i != end; ++i) {
+    const IGCExtension &extension = *i;
+    assert(extension.start > 0);
+    assert(extension.finish >= extension.start);
+
+    if (extension.finish > line_length)
+      /* exceeds the input line length */
+      continue;
+
+    char tmp[16];
+    size_t value_length = extension.finish - extension.start + 1;
+    if (value_length >= ARRAY_SIZE(tmp))
+      /* exceeds the temporary buffer size */
+      continue;
+
+    memcpy(tmp, buffer + extension.start - 1, value_length);
+    tmp[value_length] = 0;
+
+    char *endptr;
+    int value = strtol(tmp, &endptr, 10);
+    if (endptr != tmp + value_length)
+      continue;
+
+    if (strcmp(extension.code, "ENL") == 0)
+      fix.enl = value;
+    else if (strcmp(extension.code, "RPM") == 0)
+      fix.rpm = value;
+    else if (strcmp(extension.code, "HDM") == 0)
+      fix.hdm = value;
+    else if (strcmp(extension.code, "HDT") == 0)
+      fix.hdt = value;
+    else if (strcmp(extension.code, "TRM") == 0)
+      fix.trm = value;
+    else if (strcmp(extension.code, "TRT") == 0)
+      fix.trt = value;
+    else if (strcmp(extension.code, "GSP") == 0)
+      fix.gsp = value;
+    else if (strcmp(extension.code, "IAS") == 0)
+      fix.ias = value;
+    else if (strcmp(extension.code, "TAS") == 0)
+      fix.tas = value;
+    else if (strcmp(extension.code, "SIU") == 0)
+      fix.siu = value;
+  }
+
   return true;
+}
+
+bool
+IGCParseFix(const char *buffer, IGCFix &fix)
+{
+  IGCExtensions extensions;
+  extensions.clear();
+
+  return IGCParseFix(buffer, extensions, fix);
 }
 
 bool

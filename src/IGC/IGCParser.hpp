@@ -60,6 +60,12 @@ IGCParseExtensions(const char *buffer, IGCExtensions &extensions);
  * @return true on success, false if the line was not recognized
  */
 bool
+IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix);
+
+/**
+ * For API backwards compatibility.  To be removed.
+ */
+bool
 IGCParseFix(const char *buffer, IGCFix &fix);
 
 /**
