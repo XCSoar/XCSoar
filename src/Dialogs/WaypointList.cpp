@@ -101,19 +101,19 @@ static const TCHAR *const type_filter_items[] = {
 
 struct WaypointListDialogState
 {
-  TCHAR name[WaypointFilter::NAME_LENGTH + 1];
+  StaticString<WaypointFilter::NAME_LENGTH + 1> name;
 
   int distance_index;
   int direction_index;
   TypeFilter type_index;
 
   bool IsDefined() const {
-    return !StringIsEmpty(name) || distance_index > 0 ||
+    return !name.empty() || distance_index > 0 ||
       direction_index > 0 || type_index != TypeFilter::ALL;
   }
 
   void ToFilter(WaypointFilter &filter, Angle heading) const {
-    _tcscpy(filter.name, name);
+    _tcscpy(filter.name, name.c_str());
     filter.distance = Units::ToSysDistance(distance_filter_items[distance_index]);
     filter.type_index = type_index;
 
@@ -164,7 +164,7 @@ InitializeDirection(bool only_heading)
 static void
 UpdateNameButtonCaption()
 {
-  if (StringIsEmpty(dialog_state.name))
+  if (dialog_state.name.empty())
     name_button->SetCaption(_T("*"));
   else
     name_button->SetCaption(dialog_state.name);
@@ -173,7 +173,7 @@ UpdateNameButtonCaption()
 static void
 PrepareData()
 {
-  dialog_state.name[0] = _T('\0');
+  dialog_state.name.clear();
 
   UpdateNameButtonCaption();
 
@@ -271,10 +271,10 @@ NameButtonUpdateChar()
 {
   const TCHAR *name_filter = WaypointNameAllowedCharacters(_T(""));
   if (name_filter_index == -1) {
-    dialog_state.name[0] = '\0';
+    dialog_state.name.clear();
   } else {
-    dialog_state.name[0] = name_filter[name_filter_index];
-    dialog_state.name[1] = '\0';
+    dialog_state.name[0u] = name_filter[name_filter_index];
+    dialog_state.name[1u] = _T('\0');
   }
 
   UpdateNameButtonCaption();
@@ -308,7 +308,7 @@ static void
 OnFilterNameButton(gcc_unused WndButton &button)
 {
   TCHAR new_name_filter[WaypointFilter::NAME_LENGTH + 1];
-  CopyString(new_name_filter, dialog_state.name,
+  CopyString(new_name_filter, dialog_state.name.c_str(),
              WaypointFilter::NAME_LENGTH + 1);
 
   dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(), new_name_filter,
@@ -324,7 +324,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
     i--;
   }
 
-  CopyString(dialog_state.name, new_name_filter,
+  CopyString(dialog_state.name.buffer(), new_name_filter,
              WaypointFilter::NAME_LENGTH + 1);
 
   UpdateNameButtonCaption();
