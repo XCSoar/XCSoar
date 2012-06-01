@@ -165,6 +165,37 @@ IGCParseExtensions(const char *buffer, IGCExtensions &extensions)
   return true;
 }
 
+/**
+ * Parse an unsigned integer from the given string range
+ * (null-termination is not necessary).
+ *
+ * @param p the string
+ * @param end the end of the string
+ * @return the result, or -1 on error
+ */
+static int
+ParseUnsigned(const char *p, const char *end)
+{
+  unsigned value = 0;
+
+  for (; p < end; ++p) {
+    if (!IsDigitASCII(*p))
+      return -1;
+
+    value = value * 10 + (*p - '0');
+  }
+
+  return value;
+}
+
+static void
+ParseExtensionValue(const char *p, const char *end, int16_t &value_r)
+{
+  int value = ParseUnsigned(p, end);
+  if (value >= 0)
+    value_r = value;
+}
+
 bool
 IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
 {
@@ -224,40 +255,29 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
       /* exceeds the input line length */
       continue;
 
-    char tmp[16];
-    size_t value_length = extension.finish - extension.start + 1;
-    if (value_length >= ARRAY_SIZE(tmp))
-      /* exceeds the temporary buffer size */
-      continue;
-
-    memcpy(tmp, buffer + extension.start - 1, value_length);
-    tmp[value_length] = 0;
-
-    char *endptr;
-    int value = strtol(tmp, &endptr, 10);
-    if (endptr != tmp + value_length)
-      continue;
+    const char *start = buffer + extension.start - 1;
+    const char *finish = buffer + extension.finish;
 
     if (strcmp(extension.code, "ENL") == 0)
-      fix.enl = value;
+      ParseExtensionValue(start, finish, fix.enl);
     else if (strcmp(extension.code, "RPM") == 0)
-      fix.rpm = value;
+      ParseExtensionValue(start, finish, fix.rpm);
     else if (strcmp(extension.code, "HDM") == 0)
-      fix.hdm = value;
+      ParseExtensionValue(start, finish, fix.hdm);
     else if (strcmp(extension.code, "HDT") == 0)
-      fix.hdt = value;
+      ParseExtensionValue(start, finish, fix.hdt);
     else if (strcmp(extension.code, "TRM") == 0)
-      fix.trm = value;
+      ParseExtensionValue(start, finish, fix.trm);
     else if (strcmp(extension.code, "TRT") == 0)
-      fix.trt = value;
+      ParseExtensionValue(start, finish, fix.trt);
     else if (strcmp(extension.code, "GSP") == 0)
-      fix.gsp = value;
+      ParseExtensionValue(start, finish, fix.gsp);
     else if (strcmp(extension.code, "IAS") == 0)
-      fix.ias = value;
+      ParseExtensionValue(start, finish, fix.ias);
     else if (strcmp(extension.code, "TAS") == 0)
-      fix.tas = value;
+      ParseExtensionValue(start, finish, fix.tas);
     else if (strcmp(extension.code, "SIU") == 0)
-      fix.siu = value;
+      ParseExtensionValue(start, finish, fix.siu);
   }
 
   return true;
