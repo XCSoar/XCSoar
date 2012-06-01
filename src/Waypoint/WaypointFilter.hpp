@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_LIST_FILTER_HPP
 #define XCSOAR_WAYPOINT_LIST_FILTER_HPP
 
+#include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 
 #include <stdint.h>
-#include <tchar.h>
 
 struct Waypoint;
 struct GeoPoint;
@@ -54,7 +54,7 @@ struct WaypointFilter
     NAME_LENGTH = 10,
   };
 
-  TCHAR name[NAME_LENGTH + 1];
+  StaticString<NAME_LENGTH + 1> name;
 
   fixed distance;
   Angle direction;

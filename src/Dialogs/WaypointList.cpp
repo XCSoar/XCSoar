@@ -113,7 +113,7 @@ struct WaypointListDialogState
   }
 
   void ToFilter(WaypointFilter &filter, Angle heading) const {
-    _tcscpy(filter.name, name.c_str());
+    filter.name = name;
     filter.distance = Units::ToSysDistance(distance_filter_items[distance_index]);
     filter.type_index = type_index;
 
