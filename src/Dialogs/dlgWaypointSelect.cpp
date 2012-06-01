@@ -62,13 +62,15 @@ Copyright_License {
 class FAITrianglePointValidator;
 
 static GeoPoint location;
-static FAITrianglePointValidator *triangle_validator = NULL;
 static WndForm *dialog = NULL;
 static ListControl *waypoint_list_control = NULL;
 static WndButton *name_button;
 static WndProperty *distance_filter;
 static WndProperty *direction_filter;
 static WndProperty *type_filter;
+
+static OrderedTask *ordered_task;
+static unsigned ordered_task_index;
 
 static const fixed distance_filter_items[] = {
   fixed_zero, fixed(25.0), fixed(50.0),
@@ -267,7 +269,7 @@ public:
 
 
   bool
-  TestFAITriangle(const fixed d1, const fixed d2, const fixed d3)
+  TestFAITriangle(const fixed d1, const fixed d2, const fixed d3) const
   {
     if ((d1 < min_fai_leg) || (d2 < min_fai_leg) || (d3 < min_fai_leg))
       return false;
@@ -287,7 +289,7 @@ public:
    */
   bool
   IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
-             bool right)
+             bool right) const
   {
     const Angle a01 = p0.Bearing(p1);
     const Angle a21 = p2.Bearing(p1);
@@ -308,7 +310,7 @@ public:
    * @return True if point would be valid in an FAI Triangle
    */
   bool
-  IsFAITrianglePoint(const Waypoint& wp, bool right)
+  IsFAITrianglePoint(const Waypoint& wp, bool right) const
   {
     if (fai_triangle_point_invalid)
       return false;
@@ -440,10 +442,12 @@ class FilterWaypointVisitor:
 {
   const GeoPoint location;
   WaypointList &waypoint_list;
+  FAITrianglePointValidator triangle_validator;
 
 private:
   static bool
-  CompareType(const Waypoint &waypoint, TypeFilter type)
+  CompareType(const Waypoint &waypoint, TypeFilter type,
+              const FAITrianglePointValidator &triangle_validator)
   {
     switch (type) {
     case TypeFilter::ALL:
@@ -465,10 +469,10 @@ private:
       return waypoint.IsFinishpoint();
 
     case TypeFilter::FAI_TRIANGLE_LEFT:
-      return triangle_validator->IsFAITrianglePoint(waypoint, false);
+      return triangle_validator.IsFAITrianglePoint(waypoint, false);
 
     case TypeFilter::FAI_TRIANGLE_RIGHT:
-      return triangle_validator->IsFAITrianglePoint(waypoint, true);
+      return triangle_validator.IsFAITrianglePoint(waypoint, true);
 
     case TypeFilter::FILE_1:
       return waypoint.file_num == 1;
@@ -504,12 +508,14 @@ private:
 
 public:
   FilterWaypointVisitor(const WaypointListFilter &filter,
-                        GeoPoint _location, WaypointList &_waypoint_list)
+                        GeoPoint _location, WaypointList &_waypoint_list,
+                        OrderedTask *ordered_task, unsigned ordered_task_index)
     :WaypointListFilter(filter), location(_location),
-     waypoint_list(_waypoint_list) {}
+     waypoint_list(_waypoint_list),
+     triangle_validator(ordered_task, ordered_task_index) {}
 
   void Visit(const Waypoint &waypoint) {
-    if (CompareType(waypoint, type_index) &&
+    if (CompareType(waypoint, type_index, triangle_validator) &&
         (!positive(distance) || CompareName(waypoint, name)) &&
         CompareDirection(waypoint, direction, location))
       waypoint_list.push_back(WaypointListItem(waypoint));
@@ -541,7 +547,8 @@ FillList(WaypointList &list, const Waypoints &src,
   WaypointListFilter filter;
   state.ToFilter(filter, heading);
 
-  FilterWaypointVisitor visitor(filter, location, list);
+  FilterWaypointVisitor visitor(filter, location, list,
+                                ordered_task, ordered_task_index);
 
   if (positive(filter.distance))
     src.VisitWithinRange(location, Units::ToSysDistance(filter.distance),
@@ -817,8 +824,8 @@ static gcc_constexpr_data CallBackTableEntry callback_table[] = {
 
 const Waypoint*
 dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
-                  OrderedTask *ordered_task,
-                  const unsigned ordered_task_index)
+                  OrderedTask *_ordered_task,
+                  const unsigned _ordered_task_index)
 {
   dialog = LoadDialog(callback_table, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
@@ -848,8 +855,8 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
   assert(type_filter != NULL);
 
   location = _location;
-  triangle_validator =
-      new FAITrianglePointValidator(ordered_task, ordered_task_index);
+  ordered_task = _ordered_task;
+  ordered_task_index = _ordered_task_index;
   last_heading = CommonInterface::Calculated().heading;
 
   PrepareData();
@@ -859,14 +866,12 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
 
   if (dialog->ShowModal() != mrOK) {
     delete dialog;
-    delete triangle_validator;
     return NULL;
   }
 
   unsigned index = waypoint_list_control->GetCursorIndex();
 
   delete dialog;
-  delete triangle_validator;
 
   const Waypoint* retval = NULL;
 
