@@ -107,7 +107,8 @@ OnDetailsClicked(gcc_unused WndButton &Sender)
 static void
 OnComboPopupListEnter(gcc_unused unsigned i)
 {
-  wf->SetModalResult(mrOK);
+  if (HasDetails(*(*list)[i]))
+    wf->SetModalResult(mrOK);
 }
 
 static void
