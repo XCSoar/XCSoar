@@ -236,4 +236,7 @@ extern const TCHAR ProfileLiveTrack24Server[];
 extern const TCHAR ProfileLiveTrack24Username[];
 extern const TCHAR ProfileLiveTrack24Password[];
 
+extern const TCHAR EnableLocationMapItemProfileKey[];
+extern const TCHAR EnableArrivalAltitudeMapItemProfileKey[];
+
 #endif

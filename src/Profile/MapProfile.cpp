@@ -132,4 +132,13 @@ Profile::Load(MapSettings &settings)
   Get(szProfileEnableFLARMMap, settings.show_flarm_on_map);
 
   Get(szProfileEnableThermalProfile, settings.show_thermal_profile);
+
+  Load(settings.item_list);
+}
+
+void
+Profile::Load(MapItemListSettings &settings)
+{
+  Get(EnableLocationMapItemProfileKey, settings.add_location);
+  Get(EnableArrivalAltitudeMapItemProfileKey, settings.add_arrival_altitude);
 }
