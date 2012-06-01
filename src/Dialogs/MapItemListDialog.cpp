@@ -142,11 +142,11 @@ ShowMapItemListDialog(SingleWindow &parent)
                   _T("IDR_XML_MAPITEMLIST_L") : _T("IDR_XML_MAPITEMLIST"));
   assert(wf != NULL);
 
-  details_button = (WndButton *)wf->FindByName(_T("cmdDetails"));
+  details_button = (WndButton *)wf->FindByName(_T("details_button"));
   assert(details_button);
 
   ListControl *list_control =
-      (ListControl *)wf->FindByName(_T("frmComboPopupList"));
+      (ListControl *)wf->FindByName(_T("list"));
   assert(list_control != NULL);
   list_control->SetItemHeight(item_height);
   list_control->SetLength(num_items);
