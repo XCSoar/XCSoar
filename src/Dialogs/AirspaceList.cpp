@@ -64,9 +64,6 @@ static WndProperty *direction_control;
 static WndProperty *type_control;
 static ListControl *airspace_list_control;
 
-static fixed distance_filter;
-
-static unsigned direction_filter = WILDCARD;
 static Angle last_heading;
 
 static gcc_constexpr_data StaticEnumChoice type_filter_list[] = {
@@ -87,11 +84,21 @@ static gcc_constexpr_data StaticEnumChoice type_filter_list[] = {
   { 0 }
 };
 
-static unsigned type_filter = WILDCARD;
-
 static AirspaceSelectInfoVector airspace_list;
 
 static AirspaceSorter* airspace_sorter;
+
+struct AirspaceListDialogState
+{
+  fixed distance;
+  unsigned direction;
+  unsigned type;
+
+  AirspaceListDialogState()
+    :distance(fixed_minus_one), direction(WILDCARD), type(WILDCARD) {}
+};
+
+static AirspaceListDialogState dialog_state;
 
 static void
 OnAirspaceListEnter(unsigned i)
@@ -112,20 +119,21 @@ UpdateList()
 {
   airspace_list = airspace_sorter->GetList();
 
-  if (type_filter != WILDCARD)
-    airspace_sorter->FilterByClass(airspace_list, (AirspaceClass)type_filter);
+  if (dialog_state.type != WILDCARD)
+    airspace_sorter->FilterByClass(airspace_list,
+                                   (AirspaceClass)dialog_state.type);
   
   bool sort_distance = false;
-  if (positive(distance_filter)) {
+  if (positive(dialog_state.distance)) {
     sort_distance = true;
-    airspace_sorter->FilterByDistance(airspace_list, distance_filter);
+    airspace_sorter->FilterByDistance(airspace_list, dialog_state.distance);
   } 
 
-  if (direction_filter != WILDCARD) {
+  if (dialog_state.direction != WILDCARD) {
     sort_distance = true;
-    Angle a = direction_filter == 0
+    Angle a = dialog_state.direction == 0
       ? CommonInterface::Calculated().heading
-      : Angle::Degrees(fixed(direction_filter));
+      : Angle::Degrees(fixed(dialog_state.direction));
     airspace_sorter->FilterByDirection(airspace_list, a);
   }
 
@@ -145,8 +153,8 @@ static void
 FilterMode(bool direction)
 {
   if (direction) {
-    distance_filter = fixed_minus_one;
-    direction_filter = WILDCARD;
+    dialog_state.distance = fixed_minus_one;
+    dialog_state.direction = WILDCARD;
 
     DataFieldEnum *df = (DataFieldEnum *)distance_control->GetDataField();
     df->Set(WILDCARD);
@@ -173,15 +181,15 @@ void
 AirspaceFilterListener::OnModified(DataField &df)
 {
   if (&df == distance_control->GetDataField())
-    distance_filter = (unsigned)df.GetAsInteger() != WILDCARD
+    dialog_state.distance = (unsigned)df.GetAsInteger() != WILDCARD
       ? Units::ToSysDistance(fixed(df.GetAsInteger()))
       : fixed_minus_one;
 
   else if (&df == direction_control->GetDataField())
-    direction_filter = df.GetAsInteger();
+    dialog_state.direction = df.GetAsInteger();
 
   else if (&df == type_control->GetDataField())
-    type_filter = df.GetAsInteger();
+    dialog_state.type = df.GetAsInteger();
 
   FilterMode(&df == name_control->GetDataField());
   UpdateList();
@@ -231,7 +239,7 @@ GetHeadingString(TCHAR *buffer)
 static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  if (direction_filter == 0 && !CommonInterface::Calculated().circling) {
+  if (dialog_state.direction == 0 && !CommonInterface::Calculated().circling) {
     Angle a = last_heading - CommonInterface::Calculated().heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(10)) {
       last_heading = CommonInterface::Calculated().heading;
@@ -252,7 +260,7 @@ static bool
 FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   WndProperty* wp;
-  unsigned new_index = type_filter;
+  unsigned new_index = dialog_state.type;
 
   wp = ((WndProperty *)dialog->FindByName(_T("prpFltType")));
 
@@ -271,7 +279,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     return false;
   }
 
-  if (type_filter != new_index){
+  if (dialog_state.type != new_index){
     wp->GetDataField()->SetAsInteger(new_index);
     wp->RefreshDisplay();
   }
