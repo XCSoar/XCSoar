@@ -316,6 +316,14 @@ public:
       Add(waypoint);
   }
 
+  void AddFiltered(const Waypoints &waypoints) {
+    if (positive(distance))
+      waypoints.VisitWithinRange(location, Units::ToSysDistance(distance),
+                                 *this);
+    else
+      waypoints.VisitNamePrefix(name, *this);
+  }
+
   void Visit(const Waypoint &waypoint) {
     AddFiltered(waypoint);
   }
@@ -346,12 +354,7 @@ FillList(WaypointList &list, const Waypoints &src,
 
   WaypointListBuilder builder(filter, location, list,
                               ordered_task, ordered_task_index);
-
-  if (positive(filter.distance))
-    src.VisitWithinRange(location, Units::ToSysDistance(filter.distance),
-                         builder);
-  else
-    src.VisitNamePrefix(filter.name, builder);
+  builder.AddFiltered(src);
 
   if (positive(filter.distance) || !negative(filter.direction.Native()))
     std::sort(list.begin(), list.end(), WaypointDistanceCompare(location));
