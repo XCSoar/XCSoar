@@ -154,20 +154,18 @@ static void
 InitializeDirection(bool only_heading)
 {
   // initialize datafieldenum for Direction
-  if (direction_filter) {
-    TCHAR buffer[12];
+  TCHAR buffer[12];
 
-    DataFieldEnum* data_field = (DataFieldEnum*)direction_filter->GetDataField();
-    if (!only_heading) {
-      for (unsigned int i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
-        data_field->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
+  DataFieldEnum* data_field = (DataFieldEnum*)direction_filter->GetDataField();
+  if (!only_heading) {
+    for (unsigned int i = 0; i < ARRAY_SIZE(direction_filter_items); i++)
+      data_field->addEnumText(GetDirectionData(buffer, ARRAY_SIZE(buffer), i));
 
-      data_field->SetAsInteger(filter_data.direction_index);
-    }
-    // update heading value to current heading
-    data_field->replaceEnumText(1,GetDirectionData(buffer, ARRAY_SIZE(buffer), 1));
-    direction_filter->RefreshDisplay();
+    data_field->SetAsInteger(filter_data.direction_index);
   }
+  // update heading value to current heading
+  data_field->replaceEnumText(1,GetDirectionData(buffer, ARRAY_SIZE(buffer), 1));
+  direction_filter->RefreshDisplay();
 }
 
 static void
