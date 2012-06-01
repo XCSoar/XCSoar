@@ -124,6 +124,86 @@ struct WaypointListFilter
   fixed distance;
   Angle direction;
   TypeFilter type_index;
+
+  static bool
+  CompareType(const Waypoint &waypoint, TypeFilter type,
+              const FAITrianglePointValidator &triangle_validator)
+  {
+    switch (type) {
+    case TypeFilter::ALL:
+      return true;
+
+    case TypeFilter::AIRPORT:
+      return waypoint.IsAirport();
+
+    case TypeFilter::LANDABLE:
+      return waypoint.IsLandable();
+
+    case TypeFilter::TURNPOINT:
+      return waypoint.IsTurnpoint();
+
+    case TypeFilter::START:
+      return waypoint.IsStartpoint();
+
+    case TypeFilter::FINISH:
+      return waypoint.IsFinishpoint();
+
+    case TypeFilter::FAI_TRIANGLE_LEFT:
+      return triangle_validator.IsFAITrianglePoint(waypoint, false);
+
+    case TypeFilter::FAI_TRIANGLE_RIGHT:
+      return triangle_validator.IsFAITrianglePoint(waypoint, true);
+
+    case TypeFilter::FILE_1:
+      return waypoint.file_num == 1;
+
+    case TypeFilter::FILE_2:
+      return waypoint.file_num == 2;
+
+    case TypeFilter::LAST_USED:
+      return false;
+    }
+
+    /* not reachable */
+    return false;
+  }
+
+  bool
+  CompareType(const Waypoint &waypoint,
+              const FAITrianglePointValidator &triangle_validator)
+  {
+    return CompareType(waypoint, type_index, triangle_validator);
+  }
+
+  static bool
+  CompareDirection(const Waypoint &waypoint, Angle angle, GeoPoint location)
+  {
+    if (negative(angle.Native()))
+      return true;
+
+    auto bearing = location.Bearing(waypoint.location);
+    fixed direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
+
+    return direction_error < fixed(18);
+  }
+
+  bool
+  CompareDirection(const Waypoint &waypoint, GeoPoint location)
+  {
+    return CompareDirection(waypoint, direction, location);
+  }
+
+  static bool
+  CompareName(const Waypoint &waypoint, const TCHAR *name)
+  {
+    return _tcsnicmp(waypoint.name.c_str(), name, _tcslen(name)) == 0;
+  }
+
+  bool
+  CompareName(const Waypoint &waypoint)
+  {
+    return CompareName(waypoint, name);
+  }
 };
 
 struct WaypointListDialogState
@@ -235,68 +315,6 @@ class WaypointListBuilder:
   WaypointList &waypoint_list;
   FAITrianglePointValidator triangle_validator;
 
-private:
-  static bool
-  CompareType(const Waypoint &waypoint, TypeFilter type,
-              const FAITrianglePointValidator &triangle_validator)
-  {
-    switch (type) {
-    case TypeFilter::ALL:
-      return true;
-
-    case TypeFilter::AIRPORT:
-      return waypoint.IsAirport();
-
-    case TypeFilter::LANDABLE:
-      return waypoint.IsLandable();
-
-    case TypeFilter::TURNPOINT:
-      return waypoint.IsTurnpoint();
-
-    case TypeFilter::START:
-      return waypoint.IsStartpoint();
-
-    case TypeFilter::FINISH:
-      return waypoint.IsFinishpoint();
-
-    case TypeFilter::FAI_TRIANGLE_LEFT:
-      return triangle_validator.IsFAITrianglePoint(waypoint, false);
-
-    case TypeFilter::FAI_TRIANGLE_RIGHT:
-      return triangle_validator.IsFAITrianglePoint(waypoint, true);
-
-    case TypeFilter::FILE_1:
-      return waypoint.file_num == 1;
-
-    case TypeFilter::FILE_2:
-      return waypoint.file_num == 2;
-
-    case TypeFilter::LAST_USED:
-      return false;
-    }
-
-    /* not reachable */
-    return false;
-  }
-
-  static bool
-  CompareDirection(const Waypoint &waypoint, Angle angle, GeoPoint location)
-  {
-    if (negative(angle.Native()))
-      return true;
-
-    auto bearing = location.Bearing(waypoint.location);
-    fixed direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
-
-    return direction_error < fixed(18);
-  }
-
-  static bool
-  CompareName(const Waypoint &waypoint, const TCHAR *name)
-  {
-    return _tcsnicmp(waypoint.name.c_str(), name, _tcslen(name)) == 0;
-  }
-
 public:
   WaypointListBuilder(const WaypointListFilter &filter,
                         GeoPoint _location, WaypointList &_waypoint_list,
@@ -310,9 +328,9 @@ public:
   }
 
   void AddFiltered(const Waypoint &waypoint) {
-    if (CompareType(waypoint, type_index, triangle_validator) &&
-        (!positive(distance) || CompareName(waypoint, name)) &&
-        CompareDirection(waypoint, direction, location))
+    if (CompareType(waypoint, triangle_validator) &&
+        (!positive(distance) || CompareName(waypoint)) &&
+        CompareDirection(waypoint, location))
       Add(waypoint);
   }
 
