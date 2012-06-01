@@ -27,13 +27,13 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
-#include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "Form/DataField/Base.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
 #include "Waypoint/LastUsed.hpp"
 #include "Waypoint/WaypointList.hpp"
+#include "Waypoint/WaypointListFilter.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Components.hpp"
@@ -97,122 +97,6 @@ static const TCHAR *const type_filter_items[] = {
   _T("File 1"), _T("File 2"),
   _T("Recently Used"),
   NULL
-};
-
-enum class TypeFilter: uint8_t {
-  ALL = 0,
-  AIRPORT,
-  LANDABLE,
-  TURNPOINT,
-  START,
-  FINISH,
-  FAI_TRIANGLE_LEFT,
-  FAI_TRIANGLE_RIGHT,
-  FILE_1,
-  FILE_2,
-  LAST_USED,
-};
-
-struct WaypointListFilter
-{
-  enum {
-    NAME_LENGTH = 10,
-  };
-
-  TCHAR name[NAME_LENGTH + 1];
-
-  fixed distance;
-  Angle direction;
-  TypeFilter type_index;
-
-  static bool
-  CompareType(const Waypoint &waypoint, TypeFilter type,
-              const FAITrianglePointValidator &triangle_validator)
-  {
-    switch (type) {
-    case TypeFilter::ALL:
-      return true;
-
-    case TypeFilter::AIRPORT:
-      return waypoint.IsAirport();
-
-    case TypeFilter::LANDABLE:
-      return waypoint.IsLandable();
-
-    case TypeFilter::TURNPOINT:
-      return waypoint.IsTurnpoint();
-
-    case TypeFilter::START:
-      return waypoint.IsStartpoint();
-
-    case TypeFilter::FINISH:
-      return waypoint.IsFinishpoint();
-
-    case TypeFilter::FAI_TRIANGLE_LEFT:
-      return triangle_validator.IsFAITrianglePoint(waypoint, false);
-
-    case TypeFilter::FAI_TRIANGLE_RIGHT:
-      return triangle_validator.IsFAITrianglePoint(waypoint, true);
-
-    case TypeFilter::FILE_1:
-      return waypoint.file_num == 1;
-
-    case TypeFilter::FILE_2:
-      return waypoint.file_num == 2;
-
-    case TypeFilter::LAST_USED:
-      return false;
-    }
-
-    /* not reachable */
-    return false;
-  }
-
-  bool
-  CompareType(const Waypoint &waypoint,
-              const FAITrianglePointValidator &triangle_validator)
-  {
-    return CompareType(waypoint, type_index, triangle_validator);
-  }
-
-  static bool
-  CompareDirection(const Waypoint &waypoint, Angle angle, GeoPoint location)
-  {
-    if (negative(angle.Native()))
-      return true;
-
-    auto bearing = location.Bearing(waypoint.location);
-    fixed direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
-
-    return direction_error < fixed(18);
-  }
-
-  bool
-  CompareDirection(const Waypoint &waypoint, GeoPoint location)
-  {
-    return CompareDirection(waypoint, direction, location);
-  }
-
-  static bool
-  CompareName(const Waypoint &waypoint, const TCHAR *name)
-  {
-    return _tcsnicmp(waypoint.name.c_str(), name, _tcslen(name)) == 0;
-  }
-
-  bool
-  CompareName(const Waypoint &waypoint)
-  {
-    return CompareName(waypoint, name);
-  }
-
-  bool
-  Matches(const Waypoint &waypoint, GeoPoint location,
-          const FAITrianglePointValidator &triangle_validator)
-  {
-    return CompareType(waypoint, triangle_validator) &&
-           (!positive(distance) || CompareName(waypoint)) &&
-           CompareDirection(waypoint, location);
-  }
 };
 
 struct WaypointListDialogState
