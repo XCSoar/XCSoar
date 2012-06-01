@@ -31,7 +31,9 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "IGC/IGCParser.hpp"
+#include "IGC/IGCExtensions.hpp"
 #include "IGC/IGCFix.hpp"
+#include "Units/System.hpp"
 
 static DeviceConfig config;
 static NullPort port;
@@ -122,11 +124,15 @@ DebugReplayNMEA::Next()
 }
 
 class DebugReplayIGC : public DebugReplay {
+  IGCExtensions extensions;
+
   unsigned day;
 
 public:
   DebugReplayIGC(NLineReader *reader)
-    :DebugReplay(reader), day(0) {}
+    :DebugReplay(reader), day(0) {
+    extensions.clear();
+  }
 
   virtual bool Next();
 
@@ -144,7 +150,7 @@ DebugReplayIGC::Next()
   while ((line = reader->read()) != NULL) {
     if (line[0] == 'B') {
       IGCFix fix;
-      if (IGCParseFix(line, fix) && fix.gps_valid) {
+      if (IGCParseFix(line, extensions, fix) && fix.gps_valid) {
         CopyFromFix(fix);
 
         Compute();
@@ -157,6 +163,8 @@ DebugReplayIGC::Next()
         (BrokenDate &)basic.date_time_utc = date;
         basic.date_available = true;
       }
+    } else if (line[0] == 'I') {
+      IGCParseExtensions(line, extensions);
     }
   }
 
@@ -184,6 +192,39 @@ DebugReplayIGC::CopyFromFix(const IGCFix &fix)
   basic.pressure_altitude = basic.baro_altitude = fixed(fix.pressure_altitude);
   basic.pressure_altitude_available.Update(basic.clock);
   basic.baro_altitude_available.Update(basic.clock);
+
+  if (fix.enl >= 0) {
+    basic.engine_noise_level = fix.enl;
+    basic.engine_noise_level_available.Update(basic.clock);
+  }
+
+  if (fix.trt >= 0) {
+    basic.track = Angle::Degrees(fixed(fix.trt));
+    basic.track_available.Update(basic.clock);
+  }
+
+  if (fix.gsp >= 0) {
+    basic.ground_speed = Units::ToSysUnit(fixed(fix.gsp),
+                                          Unit::KILOMETER_PER_HOUR);
+    basic.ground_speed_available.Update(basic.clock);
+  }
+
+  if (fix.ias >= 0) {
+    fixed ias = Units::ToSysUnit(fixed(fix.ias), Unit::KILOMETER_PER_HOUR);
+    if (fix.tas >= 0)
+      basic.ProvideBothAirspeeds(ias,
+                                 Units::ToSysUnit(fixed(fix.tas),
+                                                  Unit::KILOMETER_PER_HOUR));
+    else
+      basic.ProvideIndicatedAirspeedWithAltitude(ias, basic.pressure_altitude);
+  } else if (fix.tas >= 0)
+    basic.ProvideTrueAirspeed(Units::ToSysUnit(fixed(fix.tas),
+                                               Unit::KILOMETER_PER_HOUR));
+
+  if (fix.siu >= 0) {
+    basic.gps.satellites_used = fix.siu;
+    basic.gps.satellites_used_available.Update(basic.clock);
+  }
 }
 
 DebugReplay *
