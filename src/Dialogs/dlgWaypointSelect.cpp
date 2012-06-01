@@ -474,7 +474,7 @@ private:
     if (direction_index <= 0)
       return true;
 
-    int a = direction_filter_items[filter_data.direction_index];
+    int a = direction_filter_items[direction_index];
     Angle angle = (a == HEADING_DIRECTION) ? heading : Angle::Degrees(fixed(a));
 
     const GeoVector vec(location, waypoint.location);
@@ -498,7 +498,7 @@ public:
 
   void Visit(const Waypoint &waypoint) {
     if (CompareType(waypoint, type_index) &&
-        (filter_data.distance_index == 0 || CompareName(waypoint, name)) &&
+        (distance_index == 0 || CompareName(waypoint, name)) &&
         CompareDirection(waypoint, direction_index, location, heading))
       waypoint_list.push_back(WaypointListItem(waypoint));
   }
