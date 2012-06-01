@@ -508,7 +508,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   if (StringIsEqual(misc, _T("Basic")))
     dlgBasicSettingsShowModal();
   else if (StringIsEqual(misc, _T("Wind")))
-    dlgWindSettingsShowModal();
+    ShowWindSettingsDialog();
   else if (StringIsEqual(misc, _T("System")))
     SystemConfiguration();
   else if (StringIsEqual(misc, _T("Task")))

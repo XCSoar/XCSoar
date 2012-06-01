@@ -96,7 +96,7 @@ UIGlobals::GetDialogLook()
 }
 
 void dlgBasicSettingsShowModal() {}
-void dlgWindSettingsShowModal() {}
+void ShowWindSettingsDialog() {}
 
 void
 dlgAirspaceWarningsShowModal(SingleWindow &parent,

@@ -48,7 +48,7 @@ void dlgLoggerReplayShowModal();
 bool
 dlgStartupShowModal();
 
-void dlgWindSettingsShowModal();
+void ShowWindSettingsDialog();
 
 void dlgStatusShowModal(int page);
 

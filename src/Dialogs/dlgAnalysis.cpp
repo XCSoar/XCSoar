@@ -532,7 +532,7 @@ OnCalcClicked(gcc_unused WndButton &Sender)
   }
 
   if (page == AnalysisPage::WIND)
-    dlgWindSettingsShowModal();
+    ShowWindSettingsDialog();
 
   if (page == AnalysisPage::POLAR)
     dlgBasicSettingsShowModal();

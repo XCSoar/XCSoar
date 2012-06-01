@@ -232,7 +232,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
 	$(SRC)/Dialogs/dlgWaypointEdit.cpp \
 	$(SRC)/Dialogs/WaypointList.cpp \
-	$(SRC)/Dialogs/dlgWindSettings.cpp \
+	$(SRC)/Dialogs/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/dlgFontEdit.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
