@@ -64,19 +64,19 @@ struct WaypointListFilter
                           const FAITrianglePointValidator &triangle_validator);
 
   bool CompareType(const Waypoint &waypoint,
-                   const FAITrianglePointValidator &triangle_validator);
+                   const FAITrianglePointValidator &triangle_validator) const;
 
   static bool CompareDirection(const Waypoint &waypoint, Angle angle,
                                GeoPoint location);
 
-  bool CompareDirection(const Waypoint &waypoint, GeoPoint location);
+  bool CompareDirection(const Waypoint &waypoint, GeoPoint location) const;
 
   static bool CompareName(const Waypoint &waypoint, const TCHAR *name);
 
-  bool CompareName(const Waypoint &waypoint);
+  bool CompareName(const Waypoint &waypoint) const;
 
   bool Matches(const Waypoint &waypoint, GeoPoint location,
-               const FAITrianglePointValidator &triangle_validator);
+               const FAITrianglePointValidator &triangle_validator) const;
 };
 
 #endif
