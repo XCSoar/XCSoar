@@ -285,8 +285,8 @@ private:
     if (negative(angle.Native()))
       return true;
 
-    const GeoVector vec(location, waypoint.location);
-    fixed direction_error = (vec.bearing - angle).AsDelta().AbsoluteDegrees();
+    auto bearing = location.Bearing(waypoint.location);
+    fixed direction_error = (bearing - angle).AsDelta().AbsoluteDegrees();
 
     return direction_error < fixed(18);
   }
