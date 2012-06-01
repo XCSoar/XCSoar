@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_WIND_SETTINGS_PANEL_HPP
-#define XCSOAR_WIND_SETTINGS_PANEL_HPP
+#ifndef XCSOAR_MAP_ITEM_LIST_SETTINGS_PANEL_HPP
+#define XCSOAR_MAP_ITEM_LIST_SETTINGS_PANEL_HPP
 
 #include "Form/RowFormWidget.hpp"
 
