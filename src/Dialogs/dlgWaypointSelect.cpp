@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "Form/DataField/Base.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
 #include "Waypoint/LastUsed.hpp"
@@ -75,7 +76,7 @@ static const fixed distance_filter_items[] = {
   fixed(250.0), fixed(500.0), fixed(1000.0),
 };
 
-static int direction_filter_items[] = {
+static gcc_constexpr_data int direction_filter_items[] = {
   -1, -1, 0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
@@ -328,46 +329,24 @@ OnFilterNameButton(gcc_unused WndButton &button)
   UpdateList();
 }
 
-static void
-OnFilterDistance(DataField *sender, DataField::DataAccessMode mode)
+class FilterDataFieldListener: public DataFieldListener
 {
-  switch (mode) {
-  case DataField::daChange:
-    filter_data.distance_index = sender->GetAsInteger();
-    UpdateList();
-    break;
+private:
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
+};
 
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnFilterDirection(DataField *sender, DataField::DataAccessMode mode)
+void
+FilterDataFieldListener::OnModified(DataField &df)
 {
-  switch (mode) {
-  case DataField::daChange:
-    filter_data.direction_index = sender->GetAsInteger();
-    UpdateList();
-    break;
+  if (&df == distance_filter->GetDataField())
+    filter_data.distance_index = df.GetAsInteger();
+  else if (&df == direction_filter->GetDataField())
+    filter_data.direction_index = df.GetAsInteger();
+  else if (&df == type_filter->GetDataField())
+    filter_data.type_index = (TypeFilter)df.GetAsInteger();
 
-  case DataField::daSpecial:
-    return;
-  }
-}
-
-static void
-OnFilterType(DataField *sender, DataField::DataAccessMode mode)
-{
-  switch (mode) {
-  case DataField::daChange:
-    filter_data.type_index = (TypeFilter)sender->GetAsInteger();
-    UpdateList();
-    break;
-
-  case DataField::daSpecial:
-    return;
-  }
+  UpdateList();
 }
 
 static void
@@ -470,9 +449,6 @@ FormKeyDown(WndForm &sender, unsigned key_code)
 #endif /* GNAV */
 
 static gcc_constexpr_data CallBackTableEntry callback_table[] = {
-  DeclareCallBackEntry(OnFilterDistance),
-  DeclareCallBackEntry(OnFilterDirection),
-  DeclareCallBackEntry(OnFilterType),
   DeclareCallBackEntry(OnFilterNameButton),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnSelectClicked),
@@ -504,12 +480,19 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &_location,
   name_button->SetOnLeftNotify(OnFilterNameButtonLeft);
   name_button->SetOnRightNotify(OnFilterNameButtonRight);
 
+  FilterDataFieldListener listener;
+
   distance_filter = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
   assert(distance_filter != NULL);
+  distance_filter->GetDataField()->SetListener(&listener);
+
   direction_filter = (WndProperty*)dialog->FindByName(_T("prpFltDirection"));
   assert(direction_filter != NULL);
+  direction_filter->GetDataField()->SetListener(&listener);
+
   type_filter = (WndProperty *)dialog->FindByName(_T("prpFltType"));
   assert(type_filter != NULL);
+  type_filter->GetDataField()->SetListener(&listener);
 
   location = _location;
   ordered_task = _ordered_task;
