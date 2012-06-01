@@ -25,8 +25,6 @@ Copyright_License {
 #include "MapItemListSettingsPanel.hpp"
 #include "WidgetDialog.hpp"
 #include "Language/Language.hpp"
-#include "UIGlobals.hpp"
-#include "MainWindow.hpp"
 
 void
 ShowMapItemListSettingsDialog()
