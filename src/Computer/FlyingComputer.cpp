@@ -99,8 +99,10 @@ FlyingComputer::Compute(fixed takeoff_speed,
                         const DerivedInfo &calculated,
                         FlyingState &flying)
 {
-  if (basic.HasTimeRetreatedSince(last_basic))
+  if (basic.HasTimeRetreatedSince(last_basic)) {
+    Reset();
     flying.Reset();
+  }
 
   // GPS not lost
   if (!basic.location_available)
