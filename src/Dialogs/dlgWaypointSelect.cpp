@@ -141,7 +141,7 @@ struct WaypointListDialogState
 
   void ToFilter(WaypointListFilter &filter, Angle heading) const {
     _tcscpy(filter.name, name);
-    filter.distance = distance_filter_items[distance_index];
+    filter.distance = Units::ToSysDistance(distance_filter_items[distance_index]);
     filter.type_index = type_index;
 
     if (direction_index != 1)
@@ -318,8 +318,7 @@ public:
 
   void AddFiltered(const Waypoints &waypoints) {
     if (positive(distance))
-      waypoints.VisitWithinRange(location, Units::ToSysDistance(distance),
-                                 *this);
+      waypoints.VisitWithinRange(location, distance, *this);
     else
       waypoints.VisitNamePrefix(name, *this);
   }
