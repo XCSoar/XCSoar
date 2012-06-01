@@ -24,6 +24,13 @@ Copyright_License {
 #include "MapSettings.hpp"
 
 void
+MapItemListSettings::SetDefaults()
+{
+  add_location = true;
+  add_arrival_altitude = true;
+}
+
+void
 MapSettings::SetDefaults()
 {
   circle_zoom_enabled = true;
@@ -48,4 +55,6 @@ MapSettings::SetDefaults()
   cruise_scale = fixed_one / 60;
   show_flarm_on_map = true;
   show_thermal_profile = true;
+
+  item_list.SetDefaults();
 }

@@ -32,6 +32,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Terrain/RasterBuffer.hpp"
+#include "MapSettings.hpp"
 #include "MapWindow/MapItem.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
@@ -86,7 +87,10 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
                             *dialog_look, *look, *traffic_look,
                             *final_glide_look, *settings);
 
-  if (item.type == MapItem::Type::ARRIVAL_ALTITUDE) {
+  if ((settings->item_list.add_arrival_altitude &&
+       item.type == MapItem::Type::ARRIVAL_ALTITUDE) ||
+      (!settings->item_list.add_arrival_altitude &&
+       item.type == MapItem::Type::LOCATION)) {
     canvas.SelectBlackPen();
     canvas.DrawLine(rc.left, rc.bottom - 1, rc.right, rc.bottom - 1);
   }

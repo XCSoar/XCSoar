@@ -72,6 +72,17 @@ enum DisplayTrackBearing {
   dtbAuto
 };
 
+struct MapItemListSettings {
+
+  /** Add an LocationMapItem to the MapItemList? */
+  bool add_location;
+
+  /** Add an ArrivalAltitudeMapItem to the MapItemList? */
+  bool add_arrival_altitude;
+
+  void SetDefaults();
+};
+
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should
@@ -126,6 +137,8 @@ struct MapSettings {
 
   /** Display climb band on map */
   bool show_thermal_profile;
+
+  MapItemListSettings item_list;
 
   void SetDefaults();
 };

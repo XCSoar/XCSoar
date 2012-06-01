@@ -41,9 +41,10 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
 
-  builder.AddLocation(Basic(), terrain);
+  if (GetMapSettings().item_list.add_location)
+      builder.AddLocation(Basic(), terrain);
 
-  if (route_planner)
+  if (GetMapSettings().item_list.add_arrival_altitude && route_planner)
     builder.AddArrivalAltitudes(*route_planner, terrain,
                                 GetComputerSettings().task.safety_height_arrival);
 
