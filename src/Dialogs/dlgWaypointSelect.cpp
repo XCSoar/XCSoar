@@ -594,7 +594,7 @@ FormKeyDown(WndForm &sender, unsigned key_code)
   if (filter_data.type_index != new_index) {
     filter_data.type_index = new_index;
     UpdateList();
-    type_filter->GetDataField()->SetAsInteger(filter_data.type_index);
+    type_filter->GetDataField()->SetAsInteger((int)filter_data.type_index);
     type_filter->RefreshDisplay();
   }
 
