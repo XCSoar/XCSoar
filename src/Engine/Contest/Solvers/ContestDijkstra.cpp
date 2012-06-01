@@ -72,8 +72,8 @@ ContestDijkstra::IsMasterUpdated() const
     return true;
 
   // find min distance and time step within this trace
-  const unsigned threshold_delta_t_trace = trace_master.average_delta_time();
-  const unsigned threshold_distance_trace = trace_master.average_delta_distance();
+  const unsigned threshold_delta_t_trace = trace_master.GetAverageDeltaTime();
+  const unsigned threshold_distance_trace = trace_master.GetAverageDeltaDistance();
 
   const TracePoint &last_master = trace_master.back();
   const TracePoint &last_point = *trace.back();
@@ -102,7 +102,7 @@ ContestDijkstra::UpdateTraceTail()
   assert(finished);
   assert(modify_serial == trace_master.GetModifySerial());
 
-  if (!trace_master.SyncTracePoints(trace))
+  if (!trace_master.SyncPoints(trace))
     /* no new points */
     return false;
 
@@ -125,7 +125,7 @@ ContestDijkstra::UpdateTrace()
   }
 
   trace.reserve(trace_master.GetMaxSize());
-  trace_master.GetTracePoints(trace);
+  trace_master.GetPoints(trace);
   append_serial = trace_master.GetAppendSerial();
   modify_serial = trace_master.GetModifySerial();
   n_points = trace.size();

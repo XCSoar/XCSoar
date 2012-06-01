@@ -57,7 +57,7 @@ void
 TraceComputer::LockedCopyTo(TracePointVector &v) const
 {
   mutex.Lock();
-  full.get_trace_points(v);
+  full.GetPoints(v);
   mutex.Unlock();
 }
 
@@ -67,7 +67,7 @@ TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
                             fixed resolution) const
 {
   mutex.Lock();
-  full.GetTracePoints(v, min_time, location, resolution);
+  full.GetPoints(v, min_time, location, resolution);
   mutex.Unlock();
 }
 
@@ -86,11 +86,11 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
   if (settings_computer.task.enable_olc ||
       settings_computer.task.enable_trace) {
     mutex.Lock();
-    full.append(state);
+    full.push_back(state);
     mutex.Unlock();
   }
 
   // only olc requires trace_sprint
   if (settings_computer.task.enable_olc)
-    sprint.append(state);
+    sprint.push_back(state);
 }

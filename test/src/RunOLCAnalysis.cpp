@@ -60,8 +60,8 @@ TestOLC(DebugReplay &replay)
 
     const AircraftState state =
       ToAircraftState(replay.Basic(), replay.Calculated());
-    full_trace.append(state);
-    sprint_trace.append(state);
+    full_trace.push_back(state);
+    sprint_trace.push_back(state);
 
     olc_sprint.UpdateIdle();
   }

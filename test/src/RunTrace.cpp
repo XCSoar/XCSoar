@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   while (replay->Next()) {
     const AircraftState state =
       ToAircraftState(replay->Basic(), replay->Calculated());
-    trace.append(state);
+    trace.push_back(state);
   }
 
   delete replay;

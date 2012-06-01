@@ -49,11 +49,11 @@ OnAdvance(Trace &trace,
   new_state.altitude_agl = alt;
 
   if (t>fixed_one) {
-    trace.append(new_state);
+    trace.push_back(new_state);
   }
 // get the trace, just so it's included in timing
   TracePointVector v;
-  trace.get_trace_points(v);
+  trace.GetPoints(v);
   if (trace.size()>1) {
 //    assert(abs(v.size()-trace.size())<2);
   }
