@@ -330,8 +330,6 @@ static void
 FillList(WaypointList &list, const Waypoints &src,
          GeoPoint location, Angle heading, const WaypointListDialogState &state)
 {
-  list.clear();
-
   if (!state.IsDefined() && src.size() >= 500)
     return;
 
@@ -356,8 +354,6 @@ FillLastUsedList(WaypointList &list,
                  const WaypointIDList &last_used_ids,
                  const Waypoints &waypoints)
 {
-  list.clear();
-
   for (auto it = last_used_ids.rbegin(); it != last_used_ids.rend(); it++) {
     const Waypoint* waypoint = waypoints.LookupId(*it);
     if (waypoint == NULL)
@@ -370,6 +366,8 @@ FillLastUsedList(WaypointList &list,
 static void
 UpdateList()
 {
+  waypoint_list.clear();
+
   if (filter_data.type_index == TypeFilter::LAST_USED)
     FillLastUsedList(waypoint_list, LastUsedWaypoints::GetList(),
                      way_points);
