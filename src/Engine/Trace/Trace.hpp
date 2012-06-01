@@ -305,6 +305,14 @@ public:
    */
   void clear();
 
+  void EraseEarlierThan(fixed time) {
+    EraseEarlierThan((unsigned)time);
+  }
+
+  void EraseLaterThan(fixed time) {
+    EraseLaterThan((unsigned)time);
+  }
+
   unsigned GetMaxSize() const {
     return max_size;
   }
