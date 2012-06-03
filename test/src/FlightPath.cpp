@@ -38,17 +38,23 @@ int main(int argc, char **argv)
   const unsigned max_points = 1000;
   Trace trace(0, Trace::null_time, max_points);
 
+  bool takeoff = false;
+
   while (replay->Next()) {
     const MoreData &basic = replay->Basic();
     const DerivedInfo &calculated = replay->Calculated();
 
     if (!basic.time_available || !basic.location_available ||
-        !basic.NavAltitudeAvailable() ||
-        !calculated.flight.flying)
+        !basic.NavAltitudeAvailable())
       continue;
 
     const AircraftState state = ToAircraftState(basic, calculated);
     trace.push_back(state);
+
+    if (calculated.flight.flying && !takeoff) {
+      takeoff = true;
+      trace.EraseEarlierThan(calculated.flight.takeoff_time);
+    }
   }
 
   delete replay;
