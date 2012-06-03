@@ -28,43 +28,43 @@
 void
 ThermalAssistantLook::Initialise(bool small)
 {
-  hcBackground = Color(0xFF, 0xFF, 0xFF);
-  hcCircles = Color(0xB0, 0xB0, 0xB0);
-  hcStandard = Color(0x00, 0x00, 0x00);
-  hcPolygonBrush = Color(0xCC, 0xCC, 0xFF);
-  hcPolygonPen = Color(0x00, 0x00, 0xFF);
+  background_color = COLOR_WHITE;
+  circle_color = Color(0xB0, 0xB0, 0xB0);
+  text_color = Color(0x00, 0x00, 0x00);
+  polygon_fill_color = Color(0xCC, 0xCC, 0xFF);
+  polygon_border_color = Color(0x00, 0x00, 0xFF);
 
 #ifdef ENABLE_OPENGL
-  hbPolygon.Set(hcPolygonBrush.WithAlpha(128));
+  polygon_brush.Set(polygon_fill_color.WithAlpha(128));
 #else /* !OPENGL */
-  hbPolygon.Set(hcPolygonBrush);
+  polygon_brush.Set(polygon_fill_color);
 #endif /* !OPENGL */
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
 #ifdef ENABLE_OPENGL
-  hpPolygon.Set(width, hcPolygonPen.WithAlpha(128));
+  polygon_pen.Set(width, polygon_border_color.WithAlpha(128));
 #else /* !OPENGL */
-  hpPolygon.Set(width, hcPolygonPen);
+  polygon_pen.Set(width, polygon_border_color);
 #endif /* !OPENGL */
-  hpInnerCircle.Set(1, hcCircles);
-  hpOuterCircle.Set(Pen::DASH, 1, hcCircles);
-  hpPlane.Set(width, COLOR_BLACK);
+  inner_circle_pen.Set(1, circle_color);
+  outer_circle_pen.Set(Pen::DASH, 1, circle_color);
+  plane_pen.Set(width, COLOR_BLACK);
 
-  hfNoTraffic.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  hfLabels.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
+  overlay_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
+  circle_label_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
 }
 
 void
 ThermalAssistantLook::Deinitialise()
 {
-  hbPolygon.Reset();
+  polygon_brush.Reset();
 
-  hpPlane.Reset();
+  plane_pen.Reset();
   hpRadar.Reset();
-  hpPolygon.Reset();
-  hpInnerCircle.Reset();
-  hpOuterCircle.Reset();
+  polygon_pen.Reset();
+  inner_circle_pen.Reset();
+  outer_circle_pen.Reset();
 
-  hfLabels.Reset();
-  hfNoTraffic.Reset();
+  circle_label_font.Reset();
+  overlay_font.Reset();
 }

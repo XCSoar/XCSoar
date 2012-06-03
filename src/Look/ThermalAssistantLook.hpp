@@ -30,19 +30,19 @@
 #include "Screen/Font.hpp"
 
 struct ThermalAssistantLook {
-  Color hcBackground;
-  Color hcCircles;
-  Color hcStandard;
-  Color hcPolygonBrush;
-  Color hcPolygonPen;
+  Color background_color;
+  Color circle_color;
+  Color text_color;
+  Color polygon_fill_color;
+  Color polygon_border_color;
 
-  Brush hbPolygon;
+  Brush polygon_brush;
 
-  Pen hpPlane, hpRadar, hpPolygon;
-  Pen hpInnerCircle;
-  Pen hpOuterCircle;
+  Pen plane_pen, hpRadar, polygon_pen;
+  Pen inner_circle_pen;
+  Pen outer_circle_pen;
 
-  Font hfLabels, hfNoTraffic;
+  Font circle_label_font, overlay_font;
 
   void Initialise(bool small);
   void Deinitialise();

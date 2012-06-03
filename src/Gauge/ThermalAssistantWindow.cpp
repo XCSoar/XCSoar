@@ -130,7 +130,7 @@ ThermalAssistantWindow::RangeScale(fixed lift) const
 void
 ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 {
-  canvas.Select(look.hpPlane);
+  canvas.Select(look.plane_pen);
 
   PixelScalar x = mid.x + (LeftTurn() ? radius : -radius);
 
@@ -151,20 +151,20 @@ ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 void
 ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 {
-  canvas.Clear(look.hcBackground);
+  canvas.Clear(look.background_color);
   canvas.SelectHollowBrush();
 
-  canvas.Select(look.hpInnerCircle);
+  canvas.Select(look.inner_circle_pen);
   canvas.DrawCircle(mid.x, mid.y, radius / 2);
-  canvas.Select(look.hpOuterCircle);
+  canvas.Select(look.outer_circle_pen);
   canvas.DrawCircle(mid.x, mid.y, radius);
 
   if (small)
     return;
 
   canvas.SetTextColor(COLOR_BLACK);
-  canvas.Select(look.hfLabels);
-  canvas.SetBackgroundColor(look.hcBackground);
+  canvas.Select(look.circle_label_font);
+  canvas.SetBackgroundColor(look.background_color);
   canvas.SetBackgroundOpaque();
 
   TCHAR lift_string[10];
@@ -190,8 +190,8 @@ ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
   canvas.SetMixMask();
 #endif /* GDI */
 
-  canvas.Select(look.hbPolygon);
-  canvas.Select(look.hpPolygon);
+  canvas.Select(look.polygon_brush);
+  canvas.Select(look.polygon_pen);
   canvas.DrawPolygon(lift_points, 36);
 }
 
@@ -208,9 +208,9 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
     return;
 
   const TCHAR* str = _("Not Circling");
-  canvas.Select(look.hfNoTraffic);
+  canvas.Select(look.overlay_font);
   PixelSize ts = canvas.CalcTextSize(str);
-  canvas.SetTextColor(look.hcStandard);
+  canvas.SetTextColor(look.text_color);
   canvas.text(mid.x - (ts.cx / 2), mid.y - (radius / 2), str);
 }
 
