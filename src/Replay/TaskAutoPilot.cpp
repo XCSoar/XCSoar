@@ -25,10 +25,6 @@
 #include "Task/TaskStats/ElementStat.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
-#define fixed_1000 fixed(1000)
-#define fixed_20 fixed(20)
-#define fixed_1500 fixed(1500)
-
 void
 AutopilotParameters::SetIdeal()
 {
@@ -152,7 +148,7 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
     }
     break;
   case FinalGlide:
-    if (task.remaining_alt_difference() < -fixed_20) {
+    if (task.remaining_alt_difference() < -fixed(20)) {
       acstate = Climb;
       OnModeChange();
     }
@@ -162,7 +158,7 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
     if (awp > 0 && !negative(task.remaining_alt_difference())) {
       acstate = FinalGlide;
       OnModeChange();
-    } else if (state.altitude >= fixed_1500) {
+    } else if (state.altitude >= fixed(1500)) {
       acstate = Cruise;
       OnModeChange();
     }
@@ -183,7 +179,7 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
     bearing = stat.solution_remaining.vector.bearing;
 
     if (parms.enable_bestcruisetrack &&
-        stat.solution_remaining.vector.distance > fixed_1000)
+        stat.solution_remaining.vector.distance > fixed(1000))
       bearing = bct;
 
   } else {
