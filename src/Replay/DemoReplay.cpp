@@ -34,7 +34,7 @@ void
 DemoReplay::Start(const TaskAccessor& task, const GeoPoint& default_location)
 {
   enabled = true;
-  autopilot.set_default_location(default_location);
+  autopilot.SetDefaultLocation(default_location);
   autopilot.Start(task);
   aircraft.Start(autopilot.location_start, autopilot.location_previous,
                  parms.start_alt);
@@ -43,9 +43,9 @@ DemoReplay::Start(const TaskAccessor& task, const GeoPoint& default_location)
 bool
 DemoReplay::Update(TaskAccessor& task)
 {
-  autopilot.update_state(task, aircraft.GetState(), time_scale);
+  autopilot.UpdateState(task, aircraft.GetState(), time_scale);
   aircraft.Update(autopilot.heading, time_scale);
-  if (!autopilot.update_autopilot(task, aircraft.GetState(), aircraft.GetLastState())) {
+  if (!autopilot.UpdateAutopilot(task, aircraft.GetState(), aircraft.GetLastState())) {
     enabled = false;
     return false;
   }

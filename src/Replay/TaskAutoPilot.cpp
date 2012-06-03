@@ -31,14 +31,14 @@
 
 
 void
-AutopilotParameters::ideal()
+AutopilotParameters::SetIdeal()
 {
   bearing_noise= fixed_zero;
   turn_speed= fixed(90.0);
 }
 
 void
-AutopilotParameters::realistic()
+AutopilotParameters::SetRealistic()
 {
   bearing_noise= fixed(20.0);
   turn_speed= fixed(12.0);
@@ -46,7 +46,7 @@ AutopilotParameters::realistic()
 
 TaskAutoPilot::TaskAutoPilot(const AutopilotParameters &_parms):
   parms(_parms),
-  heading_filt(fixed(8)),
+  heading_filter(fixed(8)),
   climb_rate(2.0),
   speed_factor(1.0)
 {
@@ -90,20 +90,20 @@ TaskAutoPilot::Start(const TaskAccessor& task)
   // pick up the locations from the task to be used to initialise
   // the aircraft simulator
 
-  location_start = get_start_location(task);
-  location_previous = get_start_location(task, false);
+  location_start = GetStartLocation(task);
+  location_previous = GetStartLocation(task, false);
 
   awp= 0;
 
   // reset the heading
   heading = Angle::Zero();
-  heading_filt.Reset(fixed_zero);
+  heading_filter.Reset(fixed_zero);
 
   acstate = Cruise;
 }
 
 GeoPoint
-TaskAutoPilot::get_start_location(const TaskAccessor& task, bool previous)
+TaskAutoPilot::GetStartLocation(const TaskAccessor& task, bool previous)
 {
   if (!previous && (task.is_ordered())) {
     // set start location to 200 meters directly behind start
@@ -116,15 +116,15 @@ TaskAutoPilot::get_start_location(const TaskAccessor& task, bool previous)
 }
 
 bool
-TaskAutoPilot::current_has_target(const TaskAccessor& task) const
+TaskAutoPilot::HasTarget(const TaskAccessor& task) const
 {
   return parms.goto_target && (awp>0);
 }
 
 GeoPoint
-TaskAutoPilot::target(const TaskAccessor& task) const
+TaskAutoPilot::GetTarget(const TaskAccessor& task) const
 {
-  if (current_has_target(task))
+  if (HasTarget(task))
     // in this mode, we go directly to the target
     return task.getActiveTaskPointLocation();
   else
@@ -134,24 +134,24 @@ TaskAutoPilot::target(const TaskAccessor& task) const
 
 
 Angle
-TaskAutoPilot::heading_deviation()
+TaskAutoPilot::GetHeadingDeviation()
 {
   fixed noise_mag = acstate==Climb
     ? half(parms.bearing_noise)
     : parms.bearing_noise;
   fixed r = (fixed_two * rand() / RAND_MAX)-fixed_one;
-  fixed deviation = fixed(heading_filt.Update(noise_mag*r));
+  fixed deviation = fixed(heading_filter.Update(noise_mag*r));
   return Angle::Degrees(deviation).AsDelta();
 }
 
 fixed
-TaskAutoPilot::target_height(const TaskAccessor& task) const
+TaskAutoPilot::GetTargetHeight(const TaskAccessor& task) const
 {
   return task.target_height();
 }
 
 void
-TaskAutoPilot::update_mode(const TaskAccessor& task,
+TaskAutoPilot::UpdateMode(const TaskAccessor& task,
                            const AircraftState& state)
 {
   switch (acstate) {
@@ -159,28 +159,28 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
     /* XXX this condition is probably broken */
     if (awp > 0 && !negative(task.remaining_alt_difference())) {
       acstate = FinalGlide;
-      on_mode_change();
+      OnModeChange();
     } else {
-      if (state.altitude<=target_height(task)) {
+      if (state.altitude<=GetTargetHeight(task)) {
         acstate = Climb;
-        on_mode_change();
+        OnModeChange();
       }
     }
     break;
   case FinalGlide:
     if (task.remaining_alt_difference()<-fixed_20) {
       acstate = Climb;
-      on_mode_change();
+      OnModeChange();
     }
     break;
   case Climb:
     /* XXX this condition is probably broken */
     if (awp > 0 && !negative(task.remaining_alt_difference())) {
       acstate = FinalGlide;
-      on_mode_change();
+      OnModeChange();
     } else if (state.altitude>=fixed_1500) {
       acstate = Cruise;
-      on_mode_change();
+      OnModeChange();
     }
     break;
   };
@@ -188,7 +188,7 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
 
 
 void
-TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
+TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
                                      const AircraftState& state,
                                      const fixed timestep)
 {
@@ -196,7 +196,7 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
   Angle bct = stat.solution_remaining.cruise_track_bearing;
   Angle bearing;
 
-  if (current_has_target(task)) {
+  if (HasTarget(task)) {
     bearing = stat.solution_remaining.vector.bearing;
 
     if (parms.enable_bestcruisetrack && (stat.solution_remaining.vector.distance>fixed_1000)) {
@@ -204,7 +204,7 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
     }
 
   } else {
-    bearing = state.location.Bearing(target(task));
+    bearing = state.location.Bearing(GetTarget(task));
   }
 
   if (positive(state.wind.norm) && positive(state.true_airspeed)) {
@@ -219,14 +219,14 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
   fixed max_turn = parms.turn_speed*timestep;
   heading += Angle::Degrees(max(-max_turn, min(max_turn, d)));
   if (positive(parms.bearing_noise)) {
-    heading += heading_deviation()*timestep;
+    heading += GetHeadingDeviation()*timestep;
   }
   heading = heading.AsBearing();
 }
 
 
 void
-TaskAutoPilot::update_state(const TaskAccessor& task,
+TaskAutoPilot::UpdateState(const TaskAccessor& task,
                             AircraftState& state, const fixed timestep)
 {
   const GlidePolar &glide_polar = task.get_glide_polar();
@@ -243,7 +243,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
     }
     state.indicated_airspeed = state.true_airspeed;
     state.vario = -glide_polar.SinkRate(state.true_airspeed)*parms.sink_factor;
-    update_cruise_bearing(task, state, timestep);
+    UpdateCruiseBearing(task, state, timestep);
   }
   break;
   case Climb:
@@ -254,7 +254,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
       heading += Angle::Degrees(d);
     }
     if (positive(parms.bearing_noise)) {
-      heading += heading_deviation()*timestep;
+      heading += GetHeadingDeviation()*timestep;
     }
     heading = heading.AsBearing();
     state.vario = climb_rate*parms.climb_factor;
@@ -267,7 +267,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
 
 
 bool
-TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& state)
+TaskAutoPilot::IsFarFromTarget(const TaskAccessor& task, const AircraftState& state)
 {
   // are we considered close to the target?
 
@@ -282,7 +282,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& st
 
   bool entered = awp >= task.size() || task.has_entered(awp);
 
-  if (current_has_target(task))
+  if (HasTarget(task))
     return d_far || !entered;
 
   fixed dc = w[0].Distance(state.location);
@@ -294,23 +294,23 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& st
 
 
 bool
-TaskAutoPilot::do_advance(TaskAccessor& task)
+TaskAutoPilot::DoAdvance(TaskAccessor& task)
 {
   if (task.is_ordered() && (awp==0)) {
     awp++;
   }
   awp++;
-  if (has_finished(task))
+  if (HasFinished(task))
     return false;
   task.setActiveTaskPoint(awp);
-  get_awp(task);
+  GetAWP(task);
 
   return true;
 }
 
 
 bool
-TaskAutoPilot::has_finished(TaskAccessor& task)
+TaskAutoPilot::HasFinished(TaskAccessor& task)
 {
   if (task.is_finished())
     return true;
@@ -324,7 +324,7 @@ TaskAutoPilot::has_finished(TaskAccessor& task)
 
 
 void
-TaskAutoPilot::advance_if_required(TaskAccessor& task)
+TaskAutoPilot::AdvanceIfRequired(TaskAccessor& task)
 {
   bool manual_start = false;
 
@@ -332,47 +332,47 @@ TaskAutoPilot::advance_if_required(TaskAccessor& task)
     manual_start = true;
     awp++;
   }
-  if (current_has_target(task) || manual_start) {
+  if (HasTarget(task) || manual_start) {
     if (task.getActiveTaskPointIndex() < awp) {
       // manual advance
       task.setActiveTaskPoint(awp);
-      on_manual_advance();
-      get_awp(task);
+      OnManualAdvance();
+      GetAWP(task);
     }
   }
   if (task.getActiveTaskPointIndex() > awp) {
     awp = task.getActiveTaskPointIndex();
-    get_awp(task);
+    GetAWP(task);
   }
 }
 
 void
-TaskAutoPilot::get_awp(TaskAccessor& task)
+TaskAutoPilot::GetAWP(TaskAccessor& task)
 {
   w[0] = task.random_oz_point(awp, parms.target_noise);
 }
 
 bool
-TaskAutoPilot::update_computer(TaskAccessor& task,
+TaskAutoPilot::UpdateComputer(TaskAccessor& task,
                                const AircraftState& state)
 {
-  if (!far_from_target(task, state)) {
+  if (!IsFarFromTarget(task, state)) {
     OnClose();
-    return do_advance(task);
+    return DoAdvance(task);
   }
 
-  advance_if_required(task);
+  AdvanceIfRequired(task);
 
-  return !has_finished(task);
+  return !HasFinished(task);
 }
 
 
 bool
-TaskAutoPilot::update_autopilot(TaskAccessor& task,
+TaskAutoPilot::UpdateAutopilot(TaskAccessor& task,
                                 const AircraftState& state,
                                 const AircraftState& state_last)
 {
-  update_mode(task, state);
-  return update_computer(task, state);
+  UpdateMode(task, state);
+  return UpdateComputer(task, state);
 }
 

@@ -30,13 +30,13 @@ test_effective_mc(int test_num, int n_wind)
 
   double ce0, ce1, ce2, ce3, ce4, ce5, ce6;
 
-  autopilot_parms.ideal();
+  autopilot_parms.SetIdeal();
 
   TestFlightResult result = test_flight(test_num, n_wind);
   ce0 = result.calc_effective_mc;
 
   // wandering
-  autopilot_parms.realistic();
+  autopilot_parms.SetRealistic();
   result = test_flight(test_num, n_wind);
   ce1 = result.calc_effective_mc;
   // effective mc of this should be lower than nominal
@@ -46,7 +46,7 @@ test_effective_mc(int test_num, int n_wind)
   ok(ce0 > ce1, test_name("emc wandering", test_num, n_wind), 0);
 
   // flying too slow
-  autopilot_parms.ideal();
+  autopilot_parms.SetIdeal();
   result = test_flight(test_num, n_wind, 0.8);
   ce2 = result.calc_effective_mc;
   // effective mc of this should be lower than nominal
@@ -56,7 +56,7 @@ test_effective_mc(int test_num, int n_wind)
   ok(ce0 > ce2, test_name("emc speed slow", test_num, n_wind), 0);
 
   // flying too fast
-  autopilot_parms.ideal();
+  autopilot_parms.SetIdeal();
   result = test_flight(test_num, n_wind, 1.2);
   ce3 = result.calc_effective_mc;
   // effective mc of this should be lower than nominal
@@ -121,7 +121,7 @@ int
 main(int argc, char** argv)
 {
   // default arguments
-  autopilot_parms.ideal();
+  autopilot_parms.SetIdeal();
 
   if (!parse_args(argc, argv)) {
     return 0;

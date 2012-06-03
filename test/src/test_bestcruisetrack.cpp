@@ -56,7 +56,7 @@ int
 main(int argc, char** argv)
 {
   // default arguments
-  autopilot_parms.ideal();
+  autopilot_parms.SetIdeal();
 
   if (!parse_args(argc, argv))
     return 0;

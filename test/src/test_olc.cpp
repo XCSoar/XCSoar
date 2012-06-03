@@ -60,7 +60,7 @@ int
 main(int argc, char** argv)
 {
   // default arguments
-  autopilot_parms.realistic();
+  autopilot_parms.SetRealistic();
   autopilot_parms.start_alt = fixed(400);
 
   if (!parse_args(argc, argv))

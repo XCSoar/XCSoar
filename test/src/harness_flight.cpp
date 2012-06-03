@@ -81,12 +81,12 @@ public:
     TaskAutoPilot(_parms) {};
 
 protected:
-  virtual void on_manual_advance() {
+  virtual void OnManualAdvance() {
     if (verbose>1) {
       printf("# manual advance to %d\n",awp);
     }
   }
-  virtual void on_mode_change() {
+  virtual void OnModeChange() {
     if (verbose>1) {
       switch (acstate) {
       case Cruise:
@@ -128,13 +128,13 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   PrintTaskAutoPilot autopilot(parms);
   AircraftSim aircraft;
 
-  autopilot.set_default_location(GeoPoint(Angle::Degrees(fixed(1.0)), Angle::Degrees(fixed(0.0))));
+  autopilot.SetDefaultLocation(GeoPoint(Angle::Degrees(fixed(1.0)), Angle::Degrees(fixed(0.0))));
 
   unsigned print_counter=0;
   if (n_wind)
     aircraft.SetWind(wind_to_mag(n_wind), wind_to_dir(n_wind));
 
-  autopilot.set_speed_factor(fixed(speed_factor));
+  autopilot.SetSpeedFactor(fixed(speed_factor));
 
   std::ofstream f4("results/res-sample.txt");
   std::ofstream f5("results/res-sample-filtered.txt");
@@ -197,7 +197,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
     if (airspaces) {
       scan_airspaces(aircraft.GetState(), *airspaces, perf,
                      do_print, 
-                     autopilot.target(ta));
+                     autopilot.GetTarget(ta));
     }
     if (airspace_warnings) {
       if (verbose > 1) {
@@ -221,7 +221,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
     if (aircraft_filter)
       aircraft_filter->Update(aircraft.GetState());
 
-    autopilot.update_state(ta, aircraft.GetState());
+    autopilot.UpdateState(ta, aircraft.GetState());
     aircraft.Update(autopilot.heading);
 
     {
@@ -232,7 +232,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
       task_manager.UpdateAutoMC(state, fixed_zero);
     }
 
-  } while (autopilot.update_autopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
+  } while (autopilot.UpdateAutopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
 
   autopilot.Stop();
 
