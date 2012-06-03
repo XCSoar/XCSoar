@@ -51,7 +51,7 @@ BreakTime(const NMEAInfo &basic, fixed time)
   assert(basic.date_available);
 
   BrokenDateTime broken = basic.date_time_utc;
-  (BrokenTime &)broken = BrokenTime::FromSecondOfDayChecked(time);
+  (BrokenTime &)broken = BrokenTime::FromSecondOfDayChecked((unsigned)time);
 
   // XXX: what if "time" refers to yesterday/tomorrow? (midnight rollover)
 
