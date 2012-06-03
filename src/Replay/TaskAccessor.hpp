@@ -35,29 +35,29 @@ public:
     :task_manager(_task_manager), floor_alt(_floor_alt) {}
 
   gcc_pure
-  bool is_ordered() const {
+  bool IsOrdered() const {
     const TaskInterface *task = task_manager.GetActiveTask();
     return task != NULL && task->GetType() == TaskInterface::ORDERED;
   }
 
   gcc_pure
-  virtual bool is_empty() const {
+  virtual bool IsEmpty() const {
     const TaskInterface *task = task_manager.GetActiveTask();
     return task == NULL || task->TaskSize() == 0;
   }
 
   gcc_pure
-  bool is_finished() const {
+  bool IsFinished() const {
     return task_manager.GetCommonStats().task_finished;
   }
 
   gcc_pure
-  bool is_started() const {
+  bool IsStarted() const {
     return task_manager.GetCommonStats().task_started;
   }
 
   gcc_pure
-  GeoPoint random_oz_point(unsigned index, const fixed noise) const {
+  GeoPoint GetRandomOZPoint(unsigned index, const fixed noise) const {
     return task_manager.RandomPointInTask(index, noise);
   }
 
@@ -67,12 +67,12 @@ public:
   }
 
   gcc_pure
-  GeoPoint getActiveTaskPointLocation() const {
+  GeoPoint GetActiveTaskPointLocation() const {
     return task_manager.GetActiveTaskPoint()->GetLocation();
   }
 
   gcc_pure
-  bool has_entered(unsigned index) const {
+  bool HasEntered(unsigned index) const {
     const TaskInterface *task = task_manager.GetActiveTask();
     if (task == NULL || task->GetType() != TaskInterface::ORDERED)
       return true;
@@ -83,36 +83,35 @@ public:
   }
 
   gcc_pure
-  const ElementStat leg_stats() const {
+  const ElementStat GetLegStats() const {
     return task_manager.GetStats().current_leg;
   }
 
   gcc_pure
-  fixed target_height() const {
-    if (task_manager.GetActiveTaskPoint()) {
+  fixed GetTargetHeight() const {
+    if (task_manager.GetActiveTaskPoint())
       return max(floor_alt, task_manager.GetActiveTaskPoint()->GetElevation());
-    } else {
+    else
       return floor_alt;
-    }
   }
 
   gcc_pure
-  fixed remaining_alt_difference() const {
+  fixed GetRemainingAltitudeDifference() const {
     return task_manager.GetStats().total.solution_remaining.altitude_difference;
   }
 
   gcc_pure
-  GlidePolar get_glide_polar() const {
+  GlidePolar GetGlidePolar() const {
     return task_manager.GetGlidePolar();
   }
 
   gcc_pure
-  void setActiveTaskPoint(unsigned index) {
+  void SetActiveTaskPoint(unsigned index) {
     task_manager.SetActiveTaskPoint(index);
   }
 
   gcc_pure
-  unsigned getActiveTaskPointIndex() const {
+  unsigned GetActiveTaskPointIndex() const {
     return task_manager.GetActiveTaskPointIndex();
   }
 };

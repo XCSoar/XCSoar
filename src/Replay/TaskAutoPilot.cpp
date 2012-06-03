@@ -49,25 +49,25 @@ TaskAutoPilot::Start(const TaskAccessor& task)
   // we dont do this dynamically so it is remembered even if
   // the task is advanced/retreated.
 
-  if (task.is_ordered()) {
+  if (task.IsOrdered()) {
     // construct list
 
     // this pilot is inaccurate, he flies to a random point in the OZ,
     // and starts in the start OZ.
 
-    w[1] = task.random_oz_point(0, parms.target_noise);
-    w[0] = task.random_oz_point(1, parms.target_noise);
+    w[1] = task.GetRandomOZPoint(0, parms.target_noise);
+    w[0] = task.GetRandomOZPoint(1, parms.target_noise);
 
   } else {
     // for non-ordered tasks, start at the default location
 
     w[1] = location_start;
-    if (task.is_empty())
+    if (task.IsEmpty())
       // go somewhere nearby
       w[0] = location_previous;
     else
       // go directly to the target
-      w[0] = task.random_oz_point(0, parms.target_noise);
+      w[0] = task.GetRandomOZPoint(0, parms.target_noise);
   }
 
   // pick up the locations from the task to be used to initialise
@@ -88,7 +88,7 @@ TaskAutoPilot::Start(const TaskAccessor& task)
 GeoPoint
 TaskAutoPilot::GetStartLocation(const TaskAccessor& task, bool previous)
 {
-  if (!previous && (task.is_ordered())) {
+  if (!previous && (task.IsOrdered())) {
     // set start location to 200 meters directly behind start
     // (otherwise start may fail to trigger)
     Angle brg = w[0].Bearing(w[1]);
@@ -109,7 +109,7 @@ TaskAutoPilot::GetTarget(const TaskAccessor& task) const
 {
   if (HasTarget(task))
     // in this mode, we go directly to the target
-    return task.getActiveTaskPointLocation();
+    return task.GetActiveTaskPointLocation();
   else
     // head towards the rough location
     return w[0];
@@ -130,7 +130,7 @@ TaskAutoPilot::GetHeadingDeviation()
 fixed
 TaskAutoPilot::GetTargetHeight(const TaskAccessor& task) const
 {
-  return task.target_height();
+  return task.GetTargetHeight();
 }
 
 void
@@ -139,7 +139,7 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
   switch (acstate) {
   case Cruise:
     /* XXX this condition is probably broken */
-    if (awp > 0 && !negative(task.remaining_alt_difference())) {
+    if (awp > 0 && !negative(task.GetRemainingAltitudeDifference())) {
       acstate = FinalGlide;
       OnModeChange();
     } else if (state.altitude <= GetTargetHeight(task)) {
@@ -148,14 +148,14 @@ TaskAutoPilot::UpdateMode(const TaskAccessor& task, const AircraftState& state)
     }
     break;
   case FinalGlide:
-    if (task.remaining_alt_difference() < -fixed(20)) {
+    if (task.GetRemainingAltitudeDifference() < -fixed(20)) {
       acstate = Climb;
       OnModeChange();
     }
     break;
   case Climb:
     /* XXX this condition is probably broken */
-    if (awp > 0 && !negative(task.remaining_alt_difference())) {
+    if (awp > 0 && !negative(task.GetRemainingAltitudeDifference())) {
       acstate = FinalGlide;
       OnModeChange();
     } else if (state.altitude >= fixed(1500)) {
@@ -171,7 +171,7 @@ TaskAutoPilot::UpdateCruiseBearing(const TaskAccessor& task,
                                    const AircraftState& state,
                                    const fixed timestep)
 {
-  const ElementStat &stat = task.leg_stats();
+  const ElementStat &stat = task.GetLegStats();
   Angle bct = stat.solution_remaining.cruise_track_bearing;
   Angle bearing;
 
@@ -207,13 +207,13 @@ void
 TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
                            const fixed timestep)
 {
-  const GlidePolar &glide_polar = task.get_glide_polar();
+  const GlidePolar &glide_polar = task.GetGlidePolar();
 
   switch (acstate) {
   case Cruise:
   case FinalGlide:
   {
-    const ElementStat &stat = task.leg_stats();
+    const ElementStat &stat = task.GetLegStats();
     if (positive(stat.solution_remaining.v_opt))
       state.true_airspeed = stat.solution_remaining.v_opt * speed_factor;
     else
@@ -248,16 +248,16 @@ TaskAutoPilot::IsFarFromTarget(const TaskAccessor& task,
 {
   // are we considered close to the target?
 
-  if (task.is_empty() || !task.leg_stats().remaining.IsDefined())
+  if (task.IsEmpty() || !task.GetLegStats().remaining.IsDefined())
     return w[0].Distance(state.location) > state.ground_speed;
 
-  bool d_far = task.leg_stats().remaining.GetDistance() > fixed(100);
+  bool d_far = task.GetLegStats().remaining.GetDistance() > fixed(100);
 
-  if (!task.is_ordered())
+  if (!task.IsOrdered())
     // cheat for non-ordered tasks
     return d_far;
 
-  bool entered = awp >= task.size() || task.has_entered(awp);
+  bool entered = awp >= task.size() || task.HasEntered(awp);
 
   if (HasTarget(task))
     return d_far || !entered;
@@ -272,7 +272,7 @@ TaskAutoPilot::IsFarFromTarget(const TaskAccessor& task,
 bool
 TaskAutoPilot::DoAdvance(TaskAccessor& task)
 {
-  if (task.is_ordered() && awp == 0)
+  if (task.IsOrdered() && awp == 0)
     awp++;
 
   awp++;
@@ -280,7 +280,7 @@ TaskAutoPilot::DoAdvance(TaskAccessor& task)
   if (HasFinished(task))
     return false;
 
-  task.setActiveTaskPoint(awp);
+  task.SetActiveTaskPoint(awp);
   GetAWP(task);
 
   return true;
@@ -289,10 +289,10 @@ TaskAutoPilot::DoAdvance(TaskAccessor& task)
 bool
 TaskAutoPilot::HasFinished(TaskAccessor& task)
 {
-  if (task.is_finished())
+  if (task.IsFinished())
     return true;
 
-  if (task.is_ordered())
+  if (task.IsOrdered())
     return awp >= task.size();
   else
     return awp >= 1;
@@ -303,22 +303,22 @@ TaskAutoPilot::AdvanceIfRequired(TaskAccessor& task)
 {
   bool manual_start = false;
 
-  if (task.is_started() && (task.getActiveTaskPointIndex() == 0)) {
+  if (task.IsStarted() && (task.GetActiveTaskPointIndex() == 0)) {
     manual_start = true;
     awp++;
   }
 
   if (HasTarget(task) || manual_start) {
-    if (task.getActiveTaskPointIndex() < awp) {
+    if (task.GetActiveTaskPointIndex() < awp) {
       // manual advance
-      task.setActiveTaskPoint(awp);
+      task.SetActiveTaskPoint(awp);
       OnManualAdvance();
       GetAWP(task);
     }
   }
 
-  if (task.getActiveTaskPointIndex() > awp) {
-    awp = task.getActiveTaskPointIndex();
+  if (task.GetActiveTaskPointIndex() > awp) {
+    awp = task.GetActiveTaskPointIndex();
     GetAWP(task);
   }
 }
@@ -326,7 +326,7 @@ TaskAutoPilot::AdvanceIfRequired(TaskAccessor& task)
 void
 TaskAutoPilot::GetAWP(TaskAccessor& task)
 {
-  w[0] = task.random_oz_point(awp, parms.target_noise);
+  w[0] = task.GetRandomOZPoint(awp, parms.target_noise);
 }
 
 bool
