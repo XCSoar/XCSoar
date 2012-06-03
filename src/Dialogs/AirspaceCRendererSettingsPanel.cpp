@@ -128,7 +128,6 @@ AirspaceClassRendererSettingsPanel::Save(bool &changed, bool &_require_restart)
 
   const auto &border_width_df = GetDataField(BorderWidth);
   unsigned border_width = border_width_df.GetAsInteger();
-  printf("width %d\n", border_width);
   if (border_width != settings.border_width) {
     settings.border_width = border_width;
     Profile::SetAirspaceBorderWidth(type, border_width);
