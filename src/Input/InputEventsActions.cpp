@@ -592,7 +592,7 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
     Message::AddMessage(_("Map labels on"));
 
   /* trigger mode update by GlueMapWindow */
-  CommonInterface::main_window.full_redraw();
+  CommonInterface::main_window.FullRedraw();
 }
 
 void

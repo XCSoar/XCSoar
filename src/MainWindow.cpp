@@ -442,7 +442,7 @@ MainWindow::SetDefaultFocus()
 }
 
 void
-MainWindow::full_redraw()
+MainWindow::FullRedraw()
 {
   if (map != NULL)
     map->FullRedraw();
@@ -547,7 +547,7 @@ MainWindow::OnUser(unsigned id)
 {
   ProtectedAirspaceWarningManager *airspace_warnings;
 
-  switch ((enum cmd)id) {
+  switch ((enum Command)id) {
   case CMD_AIRSPACE_WARNING:
     airspace_warnings = GetAirspaceWarnings();
     if (!airspace_warning_pending || airspace_warnings == NULL)

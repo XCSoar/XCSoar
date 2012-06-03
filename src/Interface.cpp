@@ -238,7 +238,7 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
   main_window.SetMapSettings(GetMapSettings());
 
   if (trigger_draw) {
-    main_window.full_redraw();
+    main_window.FullRedraw();
     BroadcastUISettingsUpdate();
   }
 

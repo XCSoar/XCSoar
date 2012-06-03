@@ -64,7 +64,7 @@ TriggerVarioUpdate()
 void
 TriggerMapUpdate()
 {
-  CommonInterface::main_window.full_redraw();
+  CommonInterface::main_window.FullRedraw();
 }
 
 void

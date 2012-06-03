@@ -48,7 +48,7 @@ class MapWindowProjection;
  * The XCSoar main window.
  */
 class MainWindow : public SingleWindow {
-  enum cmd {
+  enum Command {
     /**
      * Check the airspace_warning_pending flag and show the airspace
      * warning dialog.
@@ -184,7 +184,7 @@ public:
   /**
    * Trigger a full redraw of the screen.
    */
-  void full_redraw();
+  void FullRedraw();
 
   bool GetFullScreen() const {
     return FullScreen;

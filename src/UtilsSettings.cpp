@@ -209,7 +209,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   operation.Hide();
   InfoBoxManager::SetDirty();
-  main_window.full_redraw();
+  main_window.FullRedraw();
   main_window.SetDefaultFocus();
 }
 
