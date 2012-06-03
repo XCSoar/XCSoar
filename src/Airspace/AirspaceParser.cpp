@@ -292,42 +292,46 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
       ++p;
   }
 
-  if (type == FL) {
+  switch (type) {
+  case FL:
     altitude.type = AirspaceAltitude::FL;
     altitude.flight_level = value;
     return;
-  }
 
-  if (type == UNLIMITED) {
+  case UNLIMITED:
     altitude.type = AirspaceAltitude::MSL;
     altitude.altitude = fixed(50000);
     return;
-  }
 
-  if (type == SFC) {
+  case SFC:
     altitude.type = AirspaceAltitude::AGL;
     altitude.altitude_above_terrain = fixed_minus_one;
     return;
+
+  default:
+    break;
   }
 
   // For MSL, AGL and STD we convert the altitude to meters
   value = Units::ToSysUnit(value, unit);
-  if (type == MSL) {
+  switch (type) {
+  case MSL:
     altitude.type = AirspaceAltitude::MSL;
     altitude.altitude = value;
     return;
-  }
 
-  if (type == AGL) {
+  case AGL:
     altitude.type = AirspaceAltitude::AGL;
     altitude.altitude_above_terrain = value;
     return;
-  }
 
-  if (type == STD) {
+  case STD:
     altitude.type = AirspaceAltitude::FL;
     altitude.flight_level = Units::ToUserUnit(value, Unit::FLIGHT_LEVEL);
     return;
+
+  default:
+    break;
   }
 }
 
