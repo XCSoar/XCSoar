@@ -827,14 +827,14 @@ MainWindow::ToggleForceFLARMRadar()
 #ifdef ANDROID
 
 void
-MainWindow::on_pause()
+MainWindow::OnPause()
 {
   if (!IsRunning() && HasDialog())
     /* suspending before initialization has finished doesn't leave
        anything worth resuming, so let's just quit now */
     CancelDialog();
 
-  SingleWindow::on_pause();
+  SingleWindow::OnPause();
 }
 
 #endif /* ANDROID */

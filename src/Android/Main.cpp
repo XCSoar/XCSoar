@@ -151,7 +151,7 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
                    _T("XCSoar has crashed recently"),
                    MB_OK|MB_ICONERROR);
 
-  CommonInterface::main_window.event_loop();
+  CommonInterface::main_window.RunEventLoop();
 }
 
 gcc_visibility_default
@@ -215,7 +215,7 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
        work - let's bail out, nothing is lost anyway */
     exit(0);
 
-  CommonInterface::main_window.pause();
+  CommonInterface::main_window.Pause();
 
   assert(num_textures == 0);
   assert(num_buffers == 0);
@@ -229,7 +229,7 @@ Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
     /* there is nothing here yet which can be resumed */
     exit(0);
 
-  CommonInterface::main_window.resume();
+  CommonInterface::main_window.Resume();
 }
 
 gcc_visibility_default

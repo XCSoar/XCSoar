@@ -184,7 +184,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.Set(PixelRect{0, 0, 160, 160});
 
   window.Show();
-  window.event_loop();
+  window.RunEventLoop();
 
   Fonts::Deinitialize();
 

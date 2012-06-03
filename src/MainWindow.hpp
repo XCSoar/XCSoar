@@ -291,7 +291,7 @@ protected:
   bool OnClose();
 
 #ifdef ANDROID
-  virtual void on_pause();
+  virtual void OnPause();
 #endif
 };
 

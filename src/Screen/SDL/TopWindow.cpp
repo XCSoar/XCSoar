@@ -226,7 +226,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 }
 
 int
-TopWindow::event_loop()
+TopWindow::RunEventLoop()
 {
   refresh();
 
@@ -239,7 +239,7 @@ TopWindow::event_loop()
 }
 
 void
-TopWindow::post_quit()
+TopWindow::PostQuit()
 {
   SDL_Event event;
   event.type = SDL_QUIT;

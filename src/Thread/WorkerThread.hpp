@@ -57,7 +57,7 @@ public:
   }
 
   /**
-   * Suspend execution until resume() is called.
+   * Suspend execution until Resume() is called.
    */
   void BeginSuspend() {
     SuspensibleThread::BeginSuspend();

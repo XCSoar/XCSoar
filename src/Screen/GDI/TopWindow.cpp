@@ -178,7 +178,7 @@ TopWindow::OnMessage(HWND _hWnd, UINT message,
 }
 
 int
-TopWindow::event_loop()
+TopWindow::RunEventLoop()
 {
   EventLoop loop;
   MSG msg;
@@ -189,7 +189,7 @@ TopWindow::event_loop()
 }
 
 void
-TopWindow::post_quit()
+TopWindow::PostQuit()
 {
   ::PostQuitMessage(0);
 }

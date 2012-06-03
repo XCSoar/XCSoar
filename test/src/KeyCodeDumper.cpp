@@ -193,7 +193,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.set(PixelRect{0, 0, 240, 100});
   window.Show();
 
-  window.event_loop();
+  window.RunEventLoop();
 
   return 0;
 }

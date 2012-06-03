@@ -60,7 +60,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   progress.set_range(0, 1024);
   progress.set_pos(768);
 
-  main_window.event_loop();
+  main_window.RunEventLoop();
 
   return 0;
 }

@@ -286,25 +286,25 @@ protected:
   /**
    * @see Event::PAUSE
    */
-  virtual void on_pause();
+  virtual void OnPause();
 
   /**
    * @see Event::RESUME
    */
-  virtual void on_resume();
+  virtual void OnResume();
 
 public:
-  void pause();
-  void resume();
+  void Pause();
+  void Resume();
 #endif
 
 public:
-  void post_quit();
+  void PostQuit();
 
   /**
    * Runs the event loop until the application quits.
    */
-  int event_loop();
+  int RunEventLoop();
 };
 
 #endif

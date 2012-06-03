@@ -65,5 +65,5 @@ void
 SingleWindow::OnDestroy()
 {
   TopWindow::OnDestroy();
-  post_quit();
+  PostQuit();
 }

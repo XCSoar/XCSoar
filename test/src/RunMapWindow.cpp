@@ -291,7 +291,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
   window.Show();
 
-  window.event_loop();
+  window.RunEventLoop();
   window.reset();
 
   Fonts::Deinitialize();

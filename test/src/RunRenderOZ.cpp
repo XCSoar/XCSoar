@@ -318,7 +318,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.set(*look, PixelRect{0, 0, 480, 480});
 
   window.Show();
-  window.event_loop();
+  window.RunEventLoop();
 
   delete airspace_look;
   delete task_look;

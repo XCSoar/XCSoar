@@ -133,7 +133,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
   if (XCSoarInterface::Startup())
-    ret = CommonInterface::main_window.event_loop();
+    ret = CommonInterface::main_window.RunEventLoop();
 
   CommonInterface::main_window.reset();
 
