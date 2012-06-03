@@ -31,8 +31,8 @@ public:
   ProgressBarStyle() = default;
   ProgressBarStyle(const WindowStyle &_style):WindowStyle(_style) {}
 
-  void vertical();
-  void smooth();
+  void Vertical();
+  void Smooth();
 };
 
 class ProgressBar : public Window {
@@ -55,10 +55,10 @@ public:
         style);
   }
 
-  void set_range(unsigned min_value, unsigned max_value);
-  void set_position(unsigned value);
-  void set_step(unsigned size);
-  void step();
+  void SetRange(unsigned min_value, unsigned max_value);
+  void SetValue(unsigned value);
+  void SetStep(unsigned size);
+  void Step();
 
 #ifndef USE_GDI
 protected:

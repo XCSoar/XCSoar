@@ -79,15 +79,15 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   message.InstallWndProc(); // needed for on_color()
 
   // Set progress bar step size and range
-  set_range(0, 1000);
-  set_step(50);
+  SetRange(0, 1000);
+  SetStep(50);
 
   // Show dialog
   ShowOnTop();
 }
 
 void
-ProgressWindow::set_message(const TCHAR *text)
+ProgressWindow::SetMessage(const TCHAR *text)
 {
   AssertNoneLocked();
   AssertThread();
@@ -96,19 +96,19 @@ ProgressWindow::set_message(const TCHAR *text)
 }
 
 void
-ProgressWindow::set_range(unsigned min_value, unsigned max_value)
+ProgressWindow::SetRange(unsigned min_value, unsigned max_value)
 {
-  progress_bar.set_range(min_value, max_value);
+  progress_bar.SetRange(min_value, max_value);
 }
 
 void
-ProgressWindow::set_step(unsigned size)
+ProgressWindow::SetStep(unsigned size)
 {
-  progress_bar.set_step(size);
+  progress_bar.SetStep(size);
 }
 
 void
-ProgressWindow::set_pos(unsigned value)
+ProgressWindow::SetValue(unsigned value)
 {
   AssertNoneLocked();
   AssertThread();
@@ -117,13 +117,13 @@ ProgressWindow::set_pos(unsigned value)
     return;
 
   position = value;
-  progress_bar.set_position(value);
+  progress_bar.SetValue(value);
 }
 
 void
-ProgressWindow::step()
+ProgressWindow::Step()
 {
-  progress_bar.step();
+  progress_bar.Step();
 }
 
 void

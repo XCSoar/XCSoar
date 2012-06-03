@@ -31,7 +31,7 @@ Copyright_License {
 #endif
 
 void
-ProgressBarStyle::vertical()
+ProgressBarStyle::Vertical()
 {
 #ifdef USE_GDI
   style |= PBS_VERTICAL;
@@ -39,7 +39,7 @@ ProgressBarStyle::vertical()
 }
 
 void
-ProgressBarStyle::smooth()
+ProgressBarStyle::Smooth()
 {
 #ifdef USE_GDI
   style |= PBS_SMOOTH;
@@ -61,7 +61,7 @@ ProgressBar::set(ContainerWindow &parent,
 }
 
 void
-ProgressBar::set_range(unsigned min_value, unsigned max_value)
+ProgressBar::SetRange(unsigned min_value, unsigned max_value)
 {
   AssertNoneLocked();
   AssertThread();
@@ -79,7 +79,7 @@ ProgressBar::set_range(unsigned min_value, unsigned max_value)
 }
 
 void
-ProgressBar::set_position(unsigned value)
+ProgressBar::SetValue(unsigned value)
 {
   AssertNoneLocked();
   AssertThread();
@@ -93,7 +93,7 @@ ProgressBar::set_position(unsigned value)
 }
 
 void
-ProgressBar::set_step(unsigned size)
+ProgressBar::SetStep(unsigned size)
 {
   AssertNoneLocked();
   AssertThread();
@@ -107,7 +107,7 @@ ProgressBar::set_step(unsigned size)
 }
 
 void
-ProgressBar::step()
+ProgressBar::Step()
 {
   AssertNoneLocked();
   AssertThread();

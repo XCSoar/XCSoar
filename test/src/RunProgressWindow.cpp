@@ -56,9 +56,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.Show();
 
   ProgressWindow progress(main_window);
-  progress.set_message(_T("Testing..."));
-  progress.set_range(0, 1024);
-  progress.set_pos(768);
+  progress.SetMessage(_T("Testing..."));
+  progress.SetRange(0, 1024);
+  progress.SetValue(768);
 
   main_window.RunEventLoop();
 

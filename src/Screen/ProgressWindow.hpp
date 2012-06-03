@@ -52,15 +52,16 @@ class ProgressWindow : public ContainerWindow {
 
   unsigned text_height;
   unsigned progress_border_height;
+
 public:
   explicit ProgressWindow(ContainerWindow &parent);
 
-  void set_message(const TCHAR *text);
+  void SetMessage(const TCHAR *text);
 
-  void set_range(unsigned min_value, unsigned max_value);
-  void set_step(unsigned size);
-  void set_pos(unsigned value);
-  void step();
+  void SetRange(unsigned min_value, unsigned max_value);
+  void SetStep(unsigned size);
+  void SetValue(unsigned value);
+  void Step();
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);

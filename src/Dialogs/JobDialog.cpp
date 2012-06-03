@@ -39,15 +39,15 @@ public:
     :ProgressWindow(parent) {}
 
   virtual void SetText(const TCHAR *text) {
-    set_message(text);
+    SetMessage(text);
   }
 
   virtual void SetProgressRange(unsigned range) {
-    set_range(0, range);
+    SetRange(0, range);
   }
 
   virtual void SetProgressPosition(unsigned position) {
-    set_pos(position);
+    SetValue(position);
   }
 };
 
