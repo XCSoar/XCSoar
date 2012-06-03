@@ -547,8 +547,8 @@ MainWindow::OnUser(unsigned id)
 {
   ProtectedAirspaceWarningManager *airspace_warnings;
 
-  switch ((enum Command)id) {
-  case CMD_AIRSPACE_WARNING:
+  switch ((Command)id) {
+  case Command::AIRSPACE_WARNING:
     airspace_warnings = GetAirspaceWarnings();
     if (!airspace_warning_pending || airspace_warnings == NULL)
       return true;
@@ -566,14 +566,14 @@ MainWindow::OnUser(unsigned id)
     dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
     return true;
 
-  case CMD_GPS_UPDATE:
+  case Command::GPS_UPDATE:
     XCSoarInterface::ReceiveGPS();
 
     /*
      * Update the infoboxes if no location is available
      *
      * (if the location is available the CalculationThread will send the
-     * CMD_CALCULATED_UPDATE message which will update them)
+     * Command::CALCULATED_UPDATE message which will update them)
      */
     if (!CommonInterface::Basic().location_available) {
       InfoBoxManager::SetDirty();
@@ -587,7 +587,7 @@ MainWindow::OnUser(unsigned id)
 
     return true;
 
-  case CMD_CALCULATED_UPDATE:
+  case Command::CALCULATED_UPDATE:
     XCSoarInterface::ReceiveCalculated();
 
     if (map != NULL)
