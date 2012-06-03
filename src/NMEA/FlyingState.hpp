@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Util/TypeTraits.hpp"
+#include "Navigation/GeoPoint.hpp"
 
 /**
  * Structure for flying state (takeoff/landing)
@@ -41,6 +42,12 @@ struct FlyingState
   fixed flight_time;
   /** Time of takeoff */
   fixed takeoff_time;
+
+  /**
+   * The location of the aircraft when it took off.  This attribute is
+   * only valid if #flying is true.
+   */
+  GeoPoint takeoff_location;
 
   /** Reset flying state as if never flown */
   void Reset();

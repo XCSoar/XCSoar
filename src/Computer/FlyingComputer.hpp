@@ -28,6 +28,7 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
+struct GeoPoint;
 struct AircraftState;
 struct FlyingState;
 
@@ -59,14 +60,14 @@ public:
                FlyingState &flying);
 
 protected:
-  void Check(FlyingState &state, fixed time);
+  void Check(FlyingState &state, fixed time, const GeoPoint &location);
 
   /**
    * Update flying state when moving 
    *
    * @param time Time the aircraft is moving
    */
-  void Moving(FlyingState &state, fixed time);
+  void Moving(FlyingState &state, fixed time, const GeoPoint &location);
 
   /**
    * Update flying state when stationary 
@@ -74,7 +75,7 @@ protected:
    * @param time Time the aircraft is stationary
    * @param on_ground Whether the aircraft is known to be on the ground
    */
-  void Stationary(FlyingState &state, fixed time);
+  void Stationary(FlyingState &state, fixed time, const GeoPoint &location);
 };
 
 #endif

@@ -35,7 +35,7 @@ FlyingComputer::Reset()
 }
 
 void
-FlyingComputer::Check(FlyingState &state, fixed time)
+FlyingComputer::Check(FlyingState &state, fixed time, const GeoPoint &location)
 {
   // Logic to detect takeoff and landing is as follows:
   //   detect takeoff when above threshold speed for 10 seconds
@@ -50,6 +50,7 @@ FlyingComputer::Check(FlyingState &state, fixed time)
 
       state.flying = true;
       state.takeoff_time = moving_since;
+      state.takeoff_location = location;
       state.flight_time = fixed_zero;
     }
   } else {
@@ -69,7 +70,8 @@ FlyingComputer::Check(FlyingState &state, fixed time)
 }
 
 void
-FlyingComputer::Moving(FlyingState &state, fixed time)
+FlyingComputer::Moving(FlyingState &state, fixed time,
+                       const GeoPoint &location)
 {
   // Increase InFlight countdown for further evaluation
   if (time_in_flight < 60)
@@ -82,11 +84,12 @@ FlyingComputer::Moving(FlyingState &state, fixed time)
   time_on_ground = 0;
 
   // Update flying state
-  Check(state, time);
+  Check(state, time, location);
 }
 
 void
-FlyingComputer::Stationary(FlyingState &state, fixed time)
+FlyingComputer::Stationary(FlyingState &state, fixed time,
+                           const GeoPoint &location)
 {
   // Decrease InFlight countdown for further evaluation
   if (time_in_flight > 0) {
@@ -100,7 +103,7 @@ FlyingComputer::Stationary(FlyingState &state, fixed time)
     time_on_ground++;
 
   // Update flying state
-  Check(state, time);
+  Check(state, time, location);
 }
 
 void
@@ -125,9 +128,9 @@ FlyingComputer::Compute(fixed takeoff_speed,
 
   if (speed > takeoff_speed ||
       (calculated.altitude_agl_valid && calculated.altitude_agl > fixed(300)))
-    Moving(flying, basic.time);
+    Moving(flying, basic.time, basic.location);
   else
-    Stationary(flying, basic.time);
+    Stationary(flying, basic.time, basic.location);
 }
 
 void
@@ -136,7 +139,7 @@ FlyingComputer::Compute(fixed takeoff_speed,
                         FlyingState &flying)
 {
   if (state.ground_speed > takeoff_speed)
-    Moving(flying, state.time);
+    Moving(flying, state.time, state.location);
   else
-    Stationary(flying, state.time);
+    Stationary(flying, state.time, state.location);
 }
