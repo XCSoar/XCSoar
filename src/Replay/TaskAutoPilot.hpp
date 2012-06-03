@@ -98,7 +98,7 @@ public:
   TaskAutoPilot(const AutopilotParameters &_parms);
 
   virtual void Start(const TaskAccessor& task);
-  virtual void Stop();
+  virtual void Stop() {}
   virtual void UpdateMode(const TaskAccessor& task,
                           const AircraftState& state);
 
