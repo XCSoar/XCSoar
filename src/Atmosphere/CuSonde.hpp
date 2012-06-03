@@ -36,9 +36,9 @@ struct DerivedInfo;
 class CuSonde {
 public:
   /** Meters between levels */
-  static const unsigned HEIGHT_STEP = 100;
+  static gcc_constexpr_data unsigned HEIGHT_STEP = 100;
   /** Number of levels */
-  static const unsigned NUM_LEVELS = 100;
+  static gcc_constexpr_data unsigned NUM_LEVELS = 100;
 
   struct Level {
     /** Environmental temperature in degrees C */
