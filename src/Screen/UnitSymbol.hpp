@@ -32,7 +32,7 @@ class Canvas;
 
 class UnitSymbol {
 public:
-  enum kind {
+  enum Kind {
     NORMAL = 0,
     INVERSE = 1,
     GRAY = 2,
@@ -44,12 +44,12 @@ protected:
   PixelSize size;
 
 public:
-  void load(unsigned id) {
+  void Load(unsigned id) {
     bitmap.Load(id, Bitmap::Type::MONO);
     size = bitmap.GetSize();
   }
 
-  void reset() {
+  void Reset() {
     bitmap.Reset();
   }
 
@@ -58,15 +58,15 @@ public:
     return bitmap.IsDefined();
   }
 
-  const PixelSize get_size() const {
+  const PixelSize GetSize() const {
     return size;
   }
 
   gcc_pure
   PixelSize GetScreenSize() const;
 
-  void draw(Canvas &canvas, PixelScalar x, PixelScalar y,
-            kind k=NORMAL) const;
+  void Draw(Canvas &canvas, PixelScalar x, PixelScalar y,
+            Kind kind = NORMAL) const;
 };
 
 #endif
