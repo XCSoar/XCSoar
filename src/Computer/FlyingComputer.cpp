@@ -31,6 +31,7 @@ void
 FlyingComputer::Reset()
 {
   time_on_ground = time_in_flight = 0;
+  moving_since = fixed_minus_one;
 }
 
 void
@@ -45,8 +46,10 @@ FlyingComputer::Check(FlyingState &state, fixed time)
     // We are moving for 10sec now
     if (time_in_flight > 10) {
       // We certainly must be flying after 10sec movement
+      assert(positive(moving_since));
+
       state.flying = true;
-      state.takeoff_time = time;
+      state.takeoff_time = moving_since;
       state.flight_time = fixed_zero;
     }
   } else {
@@ -72,6 +75,9 @@ FlyingComputer::Moving(FlyingState &state, fixed time)
   if (time_in_flight < 60)
     time_in_flight++;
 
+  if (negative(moving_since))
+    moving_since = time;
+
   // We are moving so we are certainly not on the ground
   time_on_ground = 0;
 
@@ -83,8 +89,12 @@ void
 FlyingComputer::Stationary(FlyingState &state, fixed time)
 {
   // Decrease InFlight countdown for further evaluation
-  if (time_in_flight)
+  if (time_in_flight > 0) {
     time_in_flight--;
+
+    if (time_in_flight == 0)
+      moving_since = fixed_minus_one;
+  }
 
   if (time_on_ground < 30)
     time_on_ground++;
