@@ -27,19 +27,11 @@
 #include "Screen/BufferWindow.hpp"
 #include "NMEA/Derived.hpp"
 
+struct ThermalAssistantLook;
+
 class ThermalAssistantWindow : public BufferWindow {
 protected:
-  static const Color hcBackground;
-  static const Color hcCircles;
-  static const Color hcStandard;
-  static const Color hcPolygonBrush;
-  static const Color hcPolygonPen;
-
-  Brush hbBackground, hbPolygon;
-  Pen hpPlane, hpRadar, hpPolygon;
-  Pen hpInnerCircle;
-  Pen hpOuterCircle;
-  Font hfLabels, hfNoTraffic;
+  const ThermalAssistantLook &look;
 
   /**
    * The distance of the biggest circle in meters.
@@ -67,7 +59,8 @@ protected:
   RasterPoint lift_point_avg;
 
 public:
-  ThermalAssistantWindow(unsigned _padding, bool _small = false);
+  ThermalAssistantWindow(const ThermalAssistantLook &look,
+                         unsigned _padding, bool _small = false);
 
 public:
   bool LeftTurn() const;
@@ -86,8 +79,6 @@ protected:
   void PaintNotCircling(Canvas &canvas) const;
 
 protected:
-  virtual void OnCreate();
-  virtual void OnDestroy();
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual void OnPaintBuffer(Canvas &canvas);
 };

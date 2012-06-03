@@ -28,14 +28,17 @@ Copyright_License {
 #include "Blackboard/BlackboardListener.hpp"
 
 class LiveBlackboard;
+struct ThermalAssistantLook;
 
 class BigThermalAssistantWidget
   : public OverlappedWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
+  const ThermalAssistantLook &look;
 
 public:
-  BigThermalAssistantWidget(LiveBlackboard &_blackboard)
-    :blackboard(_blackboard) {}
+  BigThermalAssistantWidget(LiveBlackboard &_blackboard,
+                            const ThermalAssistantLook &_look)
+    :blackboard(_blackboard), look(_look) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Unprepare();

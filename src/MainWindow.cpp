@@ -526,7 +526,8 @@ MainWindow::OnTimer(WindowTimer &_timer)
       thermal_assistant.Hide();
     } else if (!HasDialog()) {
       if (!thermal_assistant.IsDefined())
-        thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard()));
+        thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard(),
+                                                        look->thermal_assistant_gauge));
 
       if (!thermal_assistant.IsVisible()) {
         thermal_assistant.Show();

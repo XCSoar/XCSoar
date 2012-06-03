@@ -31,8 +31,9 @@ class GaugeThermalAssistantWindow : public ThermalAssistantWindow {
 public:
   GaugeThermalAssistantWindow(ContainerWindow &parent,
                               PixelRect rc,
+                              const ThermalAssistantLook &look,
                               WindowStyle style=WindowStyle())
-    :ThermalAssistantWindow(5, true)
+    :ThermalAssistantWindow(look, 5, true)
   {
     set(parent, rc, style);
   }
@@ -62,7 +63,7 @@ GaugeThermalAssistant::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.Hide();
 
   GaugeThermalAssistantWindow *window =
-    new GaugeThermalAssistantWindow(parent, rc, style);
+    new GaugeThermalAssistantWindow(parent, rc, look, style);
   SetWindow(window);
 }
 

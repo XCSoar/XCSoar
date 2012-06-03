@@ -1,5 +1,5 @@
 /*
-Copyright_License {
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -21,26 +21,31 @@ Copyright_License {
 }
 */
 
-#include "InputEvents.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
-#include "Widgets/BigThermalAssistantWidget.hpp"
-#include "UIGlobals.hpp"
-#include "Look/Look.hpp"
+#ifndef THERMAL_ASSISTANT_WINDOW_LOOK_HPP
+#define THERMAL_ASSISTANT_WINDOW_LOOK_HPP
 
-/**
- * Evil global variable - please refactor!
- */
-static BigThermalAssistantWidget *ta_widget;
+#include "Screen/Color.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Font.hpp"
 
-void
-InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
-{
-  if (IsFlavour(_T("TA")))
-    return;
+struct ThermalAssistantLook {
+  Color hcBackground;
+  Color hcCircles;
+  Color hcStandard;
+  Color hcPolygonBrush;
+  Color hcPolygonPen;
 
-  ta_widget = new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard(),
-                                            UIGlobals::GetLook().thermal_assistant_dialog);
-  CommonInterface::main_window.SetWidget(ta_widget);
-  SetFlavour(_T("TA"));
-}
+  Brush hbBackground, hbPolygon;
+
+  Pen hpPlane, hpRadar, hpPolygon;
+  Pen hpInnerCircle;
+  Pen hpOuterCircle;
+
+  Font hfLabels, hfNoTraffic;
+
+  void Initialise(bool small);
+  void Deinitialise();
+};
+
+#endif

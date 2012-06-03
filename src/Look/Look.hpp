@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxLook.hpp"
 #include "FinalGlideBarLook.hpp"
 #include "IconLook.hpp"
+#include "ThermalAssistantLook.hpp"
 
 struct UISettings;
 
@@ -61,6 +62,8 @@ struct Look {
   InfoBoxLook info_box;
   FinalGlideBarLook final_glide_bar;
   IconLook icon;
+  ThermalAssistantLook thermal_assistant_gauge;
+  ThermalAssistantLook thermal_assistant_dialog;
 
   void Initialise();
   void InitialiseConfigured(const UISettings &settings);

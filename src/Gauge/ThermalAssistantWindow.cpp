@@ -28,19 +28,16 @@
 #include "Screen/Fonts.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
+#include "Look/ThermalAssistantLook.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-const Color ThermalAssistantWindow::hcBackground(0xFF, 0xFF, 0xFF);
-const Color ThermalAssistantWindow::hcCircles(0xB0, 0xB0, 0xB0);
-const Color ThermalAssistantWindow::hcStandard(0x00, 0x00, 0x00);
-const Color ThermalAssistantWindow::hcPolygonBrush(0xCC, 0xCC, 0xFF);
-const Color ThermalAssistantWindow::hcPolygonPen(0x00, 0x00, 0xFF);
-
-ThermalAssistantWindow::ThermalAssistantWindow(unsigned _padding, bool _small)
-  :max_lift(fixed_one),
+ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
+                                               unsigned _padding, bool _small)
+  :look(_look),
+   max_lift(fixed_one),
    padding(_padding),
    small(_small),
    direction(Angle::Zero())
@@ -49,42 +46,6 @@ ThermalAssistantWindow::ThermalAssistantWindow(unsigned _padding, bool _small)
     lift_points[i].x = 0;
     lift_points[i].y = 0;
   }
-}
-
-void
-ThermalAssistantWindow::OnCreate()
-{
-  BufferWindow::OnCreate();
-
-  hbBackground.Set(hcBackground);
-
-#ifdef ENABLE_OPENGL
-  hbPolygon.Set(hcPolygonBrush.WithAlpha(128));
-#else /* !OPENGL */
-  hbPolygon.Set(hcPolygonBrush);
-#endif /* !OPENGL */
-
-  UPixelScalar width = Layout::FastScale(small ? 1 : 2);
-#ifdef ENABLE_OPENGL
-  hpPolygon.Set(width, hcPolygonPen.WithAlpha(128));
-#else /* !OPENGL */
-  hpPolygon.Set(width, hcPolygonPen);
-#endif /* !OPENGL */
-  hpInnerCircle.Set(1, hcCircles);
-  hpOuterCircle.Set(Pen::DASH, 1, hcCircles);
-  hpPlane.Set(width, COLOR_BLACK);
-
-  hfNoTraffic.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  hfLabels.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
-}
-
-void
-ThermalAssistantWindow::OnDestroy()
-{
-  hfNoTraffic.Reset();
-  hfLabels.Reset();
-
-  BufferWindow::OnDestroy();
 }
 
 void
@@ -169,7 +130,7 @@ ThermalAssistantWindow::RangeScale(fixed lift) const
 void
 ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 {
-  canvas.Select(hpPlane);
+  canvas.Select(look.hpPlane);
 
   PixelScalar x = mid.x + (LeftTurn() ? radius : -radius);
 
@@ -190,20 +151,20 @@ ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 void
 ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 {
-  canvas.Clear(hbBackground);
+  canvas.Clear(look.hbBackground);
   canvas.SelectHollowBrush();
 
-  canvas.Select(hpInnerCircle);
+  canvas.Select(look.hpInnerCircle);
   canvas.DrawCircle(mid.x, mid.y, radius / 2);
-  canvas.Select(hpOuterCircle);
+  canvas.Select(look.hpOuterCircle);
   canvas.DrawCircle(mid.x, mid.y, radius);
 
   if (small)
     return;
 
   canvas.SetTextColor(COLOR_BLACK);
-  canvas.Select(hfLabels);
-  canvas.SetBackgroundColor(hcBackground);
+  canvas.Select(look.hfLabels);
+  canvas.SetBackgroundColor(look.hcBackground);
   canvas.SetBackgroundOpaque();
 
   TCHAR lift_string[10];
@@ -229,8 +190,8 @@ ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
   canvas.SetMixMask();
 #endif /* GDI */
 
-  canvas.Select(hbPolygon);
-  canvas.Select(hpPolygon);
+  canvas.Select(look.hbPolygon);
+  canvas.Select(look.hpPolygon);
   canvas.DrawPolygon(lift_points, 36);
 }
 
@@ -247,9 +208,9 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
     return;
 
   const TCHAR* str = _("Not Circling");
-  canvas.Select(hfNoTraffic);
+  canvas.Select(look.hfNoTraffic);
   PixelSize ts = canvas.CalcTextSize(str);
-  canvas.SetTextColor(hcStandard);
+  canvas.SetTextColor(look.hcStandard);
   canvas.text(mid.x - (ts.cx / 2), mid.y - (radius / 2), str);
 }
 

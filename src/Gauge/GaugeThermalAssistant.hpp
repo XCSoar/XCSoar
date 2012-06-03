@@ -28,6 +28,7 @@ Copyright_License {
 #include "Blackboard/BlackboardListener.hpp"
 
 class LiveBlackboard;
+struct ThermalAssistantLook;
 
 /**
  * Widget to display a FLARM gauge
@@ -35,10 +36,12 @@ class LiveBlackboard;
 class GaugeThermalAssistant
   : public OverlappedWidget, private NullBlackboardListener {
   LiveBlackboard &blackboard;
+  const ThermalAssistantLook &look;
 
 public:
-  GaugeThermalAssistant(LiveBlackboard &_blackboard)
-    :blackboard(_blackboard) {}
+  GaugeThermalAssistant(LiveBlackboard &_blackboard,
+                        const ThermalAssistantLook &_look)
+    :blackboard(_blackboard), look(_look) {}
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Unprepare();

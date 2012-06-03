@@ -703,6 +703,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
 	$(SRC)/Look/UnitsLook.cpp \
+	$(SRC)/Look/ThermalAssistantLook.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \

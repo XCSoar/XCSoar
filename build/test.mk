@@ -2019,6 +2019,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/TrailLook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/FlarmTrafficLook.cpp \
+	$(SRC)/Look/ThermalAssistantLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \

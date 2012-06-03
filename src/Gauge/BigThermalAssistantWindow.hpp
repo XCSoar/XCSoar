@@ -28,8 +28,9 @@ Copyright_License {
 
 class BigThermalAssistantWindow : public ThermalAssistantWindow {
 public:
-  BigThermalAssistantWindow(UPixelScalar padding)
-    :ThermalAssistantWindow(padding, false) {}
+  BigThermalAssistantWindow(const ThermalAssistantLook &look,
+                            UPixelScalar padding)
+    :ThermalAssistantWindow(look, padding, false) {}
 
   void set(ContainerWindow &parent, PixelRect rc,
            WindowStyle window_style=WindowStyle()) {
