@@ -36,7 +36,7 @@ struct ThermalAssistantLook {
   Color hcPolygonBrush;
   Color hcPolygonPen;
 
-  Brush hbBackground, hbPolygon;
+  Brush hbPolygon;
 
   Pen hpPlane, hpRadar, hpPolygon;
   Pen hpInnerCircle;

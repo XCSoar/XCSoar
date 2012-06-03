@@ -151,7 +151,7 @@ ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 void
 ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 {
-  canvas.Clear(look.hbBackground);
+  canvas.Clear(look.hcBackground);
   canvas.SelectHollowBrush();
 
   canvas.Select(look.hpInnerCircle);

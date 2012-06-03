@@ -34,8 +34,6 @@ ThermalAssistantLook::Initialise(bool small)
   hcPolygonBrush = Color(0xCC, 0xCC, 0xFF);
   hcPolygonPen = Color(0x00, 0x00, 0xFF);
 
-  hbBackground.Set(hcBackground);
-
 #ifdef ENABLE_OPENGL
   hbPolygon.Set(hcPolygonBrush.WithAlpha(128));
 #else /* !OPENGL */
@@ -59,7 +57,6 @@ ThermalAssistantLook::Initialise(bool small)
 void
 ThermalAssistantLook::Deinitialise()
 {
-  hbBackground.Reset();
   hbPolygon.Reset();
 
   hpPlane.Reset();
