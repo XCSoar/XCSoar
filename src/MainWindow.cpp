@@ -675,7 +675,7 @@ MainWindow::GetDisplayMode() const
 {
   return map != NULL
     ? map->GetDisplayMode()
-    : DM_NONE;
+    : DisplayMode::NONE;
 }
 
 void

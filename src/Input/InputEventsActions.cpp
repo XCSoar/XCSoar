@@ -581,13 +581,13 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
   UIState &ui_state = CommonInterface::SetUIState();
 
   if (StringIsEqual(misc, _T("unforce")))
-    ui_state.force_display_mode = DM_NONE;
+    ui_state.force_display_mode = DisplayMode::NONE;
   else if (StringIsEqual(misc, _T("forceclimb")))
-    ui_state.force_display_mode = DM_CIRCLING;
+    ui_state.force_display_mode = DisplayMode::CIRCLING;
   else if (StringIsEqual(misc, _T("forcecruise")))
-    ui_state.force_display_mode = DM_CRUISE;
+    ui_state.force_display_mode = DisplayMode::CRUISE;
   else if (StringIsEqual(misc, _T("forcefinal")))
-    ui_state.force_display_mode = DM_FINAL_GLIDE;
+    ui_state.force_display_mode = DisplayMode::FINAL_GLIDE;
   else if (StringIsEqual(misc, _T("show")))
     Message::AddMessage(_("Map labels on"));
 

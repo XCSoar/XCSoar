@@ -237,7 +237,7 @@ public:
   }
 
   bool InCirclingMode() const {
-    return display_mode == DM_CIRCLING;
+    return display_mode == DisplayMode::CIRCLING;
   }
 };
 

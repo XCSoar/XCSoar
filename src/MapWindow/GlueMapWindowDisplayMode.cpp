@@ -155,8 +155,8 @@ GlueMapWindow::UpdateDisplayMode()
     GetNewDisplayMode(CommonInterface::GetUIState(),
                       CommonInterface::Calculated());
 
-  bool was_circling = (display_mode == DM_CIRCLING);
-  bool is_circling = (new_mode == DM_CIRCLING);
+  bool was_circling = (display_mode == DisplayMode::CIRCLING);
+  bool is_circling = (new_mode == DisplayMode::CIRCLING);
 
   if (!was_circling && is_circling)
     offset_history.Reset();

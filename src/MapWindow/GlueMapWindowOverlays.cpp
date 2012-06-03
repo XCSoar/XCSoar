@@ -186,9 +186,9 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   if (task != NULL && (task->GetMode() == TaskManager::MODE_ABORT))
     bmp = &look.abort_mode_icon;
-  else if (GetDisplayMode() == DM_CIRCLING)
+  else if (GetDisplayMode() == DisplayMode::CIRCLING)
     bmp = &look.climb_mode_icon;
-  else if (GetDisplayMode() == DM_FINAL_GLIDE)
+  else if (GetDisplayMode() == DisplayMode::FINAL_GLIDE)
     bmp = &look.final_glide_mode_icon;
   else
     bmp = &look.cruise_mode_icon;
@@ -360,7 +360,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 {
   if (Calculated().task_stats.total.solution_remaining.IsOk() &&
       Calculated().task_stats.total.solution_remaining.altitude_difference > fixed(50)
-      && GetDisplayMode() == DM_FINAL_GLIDE)
+      && GetDisplayMode() == DisplayMode::FINAL_GLIDE)
     return;
 
   PixelRect tb_rect;

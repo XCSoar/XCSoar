@@ -26,14 +26,16 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <stdint.h>
+
 struct UIState;
 struct DerivedInfo;
 
-enum DisplayMode {
-  DM_NONE,
-  DM_CIRCLING,
-  DM_CRUISE,
-  DM_FINAL_GLIDE,
+enum class DisplayMode: uint8_t {
+  NONE,
+  CIRCLING,
+  CRUISE,
+  FINAL_GLIDE,
 };
 
 gcc_pure

@@ -29,12 +29,12 @@ DisplayMode
 GetNewDisplayMode(const UIState &ui_state,
                   const DerivedInfo &derived_info)
 {
-  if (ui_state.force_display_mode != DM_NONE)
+  if (ui_state.force_display_mode != DisplayMode::NONE)
     return ui_state.force_display_mode;
   else if (derived_info.circling)
-    return DM_CIRCLING;
+    return DisplayMode::CIRCLING;
   else if (derived_info.task_stats.flight_mode_final_glide)
-    return DM_FINAL_GLIDE;
+    return DisplayMode::FINAL_GLIDE;
   else
-    return DM_CRUISE;
+    return DisplayMode::CRUISE;
 }

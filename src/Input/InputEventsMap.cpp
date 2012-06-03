@@ -246,7 +246,7 @@ InputEvents::sub_SetZoom(fixed value)
 
   DisplayMode displayMode = XCSoarInterface::main_window.GetDisplayMode();
   if (settings_map.auto_zoom_enabled &&
-      !(displayMode == DM_CIRCLING && settings_map.circle_zoom_enabled) &&
+      !(displayMode == DisplayMode::CIRCLING && settings_map.circle_zoom_enabled) &&
       !CommonInterface::IsPanning()) {
     settings_map.auto_zoom_enabled = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
@@ -257,7 +257,7 @@ InputEvents::sub_SetZoom(fixed value)
   fixed scale_2min_distance = vmin * fixed_int_constant(12);
   const fixed scale_500m = fixed_int_constant(50);
   const fixed scale_1600km = fixed_int_constant(1600*100);
-  fixed minreasonable = (displayMode == DM_CIRCLING) ?
+  fixed minreasonable = (displayMode == DisplayMode::CIRCLING) ?
                         scale_500m : max(scale_500m, scale_2min_distance);
 
   value = max(minreasonable, min(scale_1600km, value));
