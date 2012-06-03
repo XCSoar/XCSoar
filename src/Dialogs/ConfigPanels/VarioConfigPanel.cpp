@@ -65,32 +65,32 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Speed arrows"),
              _("Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, "
                  "arrows point up to command slow down; arrows point down to command speed up."),
-             settings.ShowSpeedToFly);
+             settings.show_speed_to_fly);
   SetExpertRow(AppGaugeVarioSpeedToFly);
 
   AddBoolean(_("Show average"),
              _("Whether to show the average climb rate.  In cruise mode, this switches to showing the "
                  "average netto airmass rate."),
-             settings.ShowAvgText);
+             settings.show_average);
   SetExpertRow(AppGaugeVarioAvgText);
 
-  AddBoolean(_("Show MacReady"), _("Whether to show the MacCready setting."), settings.ShowMc);
+  AddBoolean(_("Show MacReady"), _("Whether to show the MacCready setting."), settings.show_mc);
   SetExpertRow(AppGaugeVarioMc);
 
-  AddBoolean(_("Show bugs"), _("Whether to show the bugs percentage."), settings.ShowBugs);
+  AddBoolean(_("Show bugs"), _("Whether to show the bugs percentage."), settings.show_bugs);
   SetExpertRow(AppGaugeVarioBugs);
 
-  AddBoolean(_("Show ballast"), _("Whether to show the ballast percentage."), settings.ShowBallast);
+  AddBoolean(_("Show ballast"), _("Whether to show the ballast percentage."), settings.show_ballast);
   SetExpertRow(AppGaugeVarioBallast);
 
-  AddBoolean(_("Show gross"), _("Whether to show the gross climb rate."), settings.ShowGross);
+  AddBoolean(_("Show gross"), _("Whether to show the gross climb rate."), settings.show_gross);
   SetExpertRow(AppGaugeVarioGross);
 
   AddBoolean(_("Averager needle"),
              _("If true, the vario gauge will display a hollow averager needle.  During cruise, this "
                  "needle displays the average netto value.  During circling, this needle displays the "
                  "average gross value."),
-             settings.ShowAveNeedle);
+             settings.show_average_needle);
   SetExpertRow(AppAveNeedle);
 
 #ifdef HAVE_PCM_PLAYER
@@ -112,19 +112,19 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   VarioSettings &settings = CommonInterface::SetUISettings().vario;
 
-  changed |= SaveValue(AppGaugeVarioSpeedToFly, szProfileAppGaugeVarioSpeedToFly, settings.ShowSpeedToFly);
+  changed |= SaveValue(AppGaugeVarioSpeedToFly, szProfileAppGaugeVarioSpeedToFly, settings.show_speed_to_fly);
 
-  changed |= SaveValue(AppGaugeVarioAvgText, szProfileAppGaugeVarioAvgText, settings.ShowAvgText);
+  changed |= SaveValue(AppGaugeVarioAvgText, szProfileAppGaugeVarioAvgText, settings.show_average);
 
-  changed |= SaveValue(AppGaugeVarioMc, szProfileAppGaugeVarioMc, settings.ShowMc);
+  changed |= SaveValue(AppGaugeVarioMc, szProfileAppGaugeVarioMc, settings.show_mc);
 
-  changed |= SaveValue(AppGaugeVarioBugs, szProfileAppGaugeVarioBugs, settings.ShowBugs);
+  changed |= SaveValue(AppGaugeVarioBugs, szProfileAppGaugeVarioBugs, settings.show_bugs);
 
-  changed |= SaveValue(AppGaugeVarioBallast, szProfileAppGaugeVarioBallast, settings.ShowBallast);
+  changed |= SaveValue(AppGaugeVarioBallast, szProfileAppGaugeVarioBallast, settings.show_ballast);
 
-  changed |= SaveValue(AppGaugeVarioGross, szProfileAppGaugeVarioGross, settings.ShowGross);
+  changed |= SaveValue(AppGaugeVarioGross, szProfileAppGaugeVarioGross, settings.show_gross);
 
-  changed |= SaveValue(AppAveNeedle, szProfileAppAveNeedle, settings.ShowAveNeedle);
+  changed |= SaveValue(AppAveNeedle, szProfileAppAveNeedle, settings.show_average_needle);
 
 #ifdef HAVE_PCM_PLAYER
   SoundSettings &sound = CommonInterface::SetComputerSettings().sound;

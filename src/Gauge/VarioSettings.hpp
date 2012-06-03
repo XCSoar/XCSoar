@@ -25,13 +25,13 @@ Copyright_License {
 #define XCSOAR_VARIO_SETTINGS_HPP
 
 struct VarioSettings {
-  bool ShowAvgText;
-  bool ShowMc;
-  bool ShowSpeedToFly;
-  bool ShowBallast;
-  bool ShowBugs;
-  bool ShowGross;
-  bool ShowAveNeedle;
+  bool show_average;
+  bool show_mc;
+  bool show_speed_to_fly;
+  bool show_ballast;
+  bool show_bugs;
+  bool show_gross;
+  bool show_average_needle;
 
   void SetDefaults();
 };

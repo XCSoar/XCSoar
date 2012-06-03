@@ -95,7 +95,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     layout_initialised = true;
   }
 
-  if (Settings().ShowAvgText) {
+  if (Settings().show_average) {
     // JMW averager now displays netto average if not circling
     if (!Calculated().circling) {
       RenderValue(canvas, top_position.x, top_position.y, &value_top, &label_top,
@@ -108,7 +108,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
     }
   }
 
-  if (Settings().ShowMc) {
+  if (Settings().show_mc) {
     fixed mc = Units::ToUserVSpeed(Calculated().common_stats.current_mc);
     RenderValue(canvas, bottom_position.x, bottom_position.y,
                 &value_bottom, &label_bottom,
@@ -116,15 +116,15 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
                 GetComputerSettings().task.auto_mc ? _T("Auto MC") : _T("MC"));
   }
 
-  if (Settings().ShowSpeedToFly)
+  if (Settings().show_speed_to_fly)
     RenderSpeedToFly(canvas, rc.right - 11, (rc.top + rc.bottom) / 2);
   else
     RenderClimb(canvas);
 
-  if (Settings().ShowBallast)
+  if (Settings().show_ballast)
     RenderBallast(canvas);
 
-  if (Settings().ShowBugs)
+  if (Settings().show_bugs)
     RenderBugs(canvas);
 
   dirty = false;
@@ -136,7 +136,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   fixed vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Calculated().sink_rate);
-  if (Settings().ShowAveNeedle) {
+  if (Settings().show_average_needle) {
     if (!Calculated().circling)
       ival_av = ValueToNeedlePos(Calculated().netto_average);
     else
@@ -145,7 +145,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   // clear items first
 
-  if (Settings().ShowAveNeedle) {
+  if (Settings().show_average_needle) {
     if (!is_persistent() || ival_av != ival_last)
       RenderNeedle(canvas, ival_last, true, true);
 
@@ -164,12 +164,12 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
 
   // now draw items
   RenderVarioLine(canvas, ival, sval, false);
-  if (Settings().ShowAveNeedle)
+  if (Settings().show_average_needle)
     RenderNeedle(canvas, ival_av, true, false);
 
   RenderNeedle(canvas, ival, false, false);
 
-  if (Settings().ShowGross) {
+  if (Settings().show_gross) {
     fixed vvaldisplay = min(fixed(99.9), max(fixed(-99.9), Units::ToUserVSpeed(vval)));
 
     RenderValue(canvas, middle_position.x, middle_position.y,

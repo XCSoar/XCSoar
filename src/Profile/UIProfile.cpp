@@ -46,13 +46,13 @@ Profile::Load(DisplaySettings &settings)
 void
 Profile::Load(VarioSettings &settings)
 {
-  Get(szProfileAppGaugeVarioSpeedToFly, settings.ShowSpeedToFly);
-  Get(szProfileAppGaugeVarioAvgText, settings.ShowAvgText);
-  Get(szProfileAppGaugeVarioMc, settings.ShowMc);
-  Get(szProfileAppGaugeVarioBugs, settings.ShowBugs);
-  Get(szProfileAppGaugeVarioBallast, settings.ShowBallast);
-  Get(szProfileAppGaugeVarioGross, settings.ShowGross);
-  Get(szProfileAppAveNeedle, settings.ShowAveNeedle);
+  Get(szProfileAppGaugeVarioSpeedToFly, settings.show_speed_to_fly);
+  Get(szProfileAppGaugeVarioAvgText, settings.show_average);
+  Get(szProfileAppGaugeVarioMc, settings.show_mc);
+  Get(szProfileAppGaugeVarioBugs, settings.show_bugs);
+  Get(szProfileAppGaugeVarioBallast, settings.show_ballast);
+  Get(szProfileAppGaugeVarioGross, settings.show_gross);
+  Get(szProfileAppAveNeedle, settings.show_average_needle);
 }
 
 void
