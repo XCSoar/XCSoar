@@ -50,8 +50,8 @@ public:
     /** ThermalIndex in degrees C */
     fixed thermalIndex;
 
-    void updateTemps(fixed rh, fixed t);
-    void updateThermalIndex(fixed h_agl, fixed max_ground_temperature);
+    void UpdateTemps(fixed humidity, fixed temperature);
+    void UpdateThermalIndex(fixed h_agl, fixed max_ground_temperature);
 
     /** Number of measurements */
     unsigned nmeasurements;
@@ -84,11 +84,10 @@ public:
 
   void Reset();
 
-  void updateMeasurements(const NMEAInfo &basic,
-                          const DerivedInfo &calculated);
-  void findCloudBase(unsigned short level);
-  void findThermalHeight(unsigned short level);
-  void setForecastTemperature(fixed val);
+  void UpdateMeasurements(const NMEAInfo &basic, const DerivedInfo &calculated);
+  void FindCloudBase(unsigned short level);
+  void FindThermalHeight(unsigned short level);
+  void SetForecastTemperature(fixed val);
 };
 
 #endif
