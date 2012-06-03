@@ -29,7 +29,7 @@
 #include "FLARM/Friends.hpp"
 #include "TeamCodeSettings.hpp"
 #include "Math/FastRotation.hpp"
-#include "FlarmTrafficLook.hpp"
+#include "Look/FlarmTrafficLook.hpp"
 
 /**
  * A Window which renders FLARM traffic.

@@ -43,7 +43,7 @@
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
 #include "FLARM/Friends.hpp"
-#include "Gauge/FlarmTrafficLook.hpp"
+#include "Look/FlarmTrafficLook.hpp"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"

@@ -36,7 +36,7 @@ Copyright_License {
 #include "CrossSectionLook.hpp"
 #include "HorizonLook.hpp"
 #include "TrafficLook.hpp"
-#include "Gauge/FlarmTrafficLook.hpp"
+#include "FlarmTrafficLook.hpp"
 #include "InfoBoxLook.hpp"
 #include "FinalGlideBarLook.hpp"
 #include "IconLook.hpp"
