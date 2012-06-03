@@ -144,7 +144,8 @@ GlideComputerTask::ProcessAutoTask(const NMEAInfo &basic,
     return;
 
   ProtectedTaskManager::ExclusiveLease _task(task);
-  _task->TakeoffAutotask(basic.location, calculated.terrain_altitude);
+  _task->TakeoffAutotask(calculated.flight.takeoff_location,
+                         calculated.terrain_altitude);
 }
 
 void 
