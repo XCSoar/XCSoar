@@ -44,6 +44,20 @@ struct Result {
 static Trace full_trace(60, Trace::null_time, 256);
 static Trace sprint_trace(0, 9000, 64);
 
+static BrokenDateTime
+BreakTime(const NMEAInfo &basic, fixed time)
+{
+  assert(basic.time_available);
+  assert(basic.date_available);
+
+  BrokenDateTime broken = basic.date_time_utc;
+  (BrokenTime &)broken = BrokenTime::FromSecondOfDayChecked(time);
+
+  // XXX: what if "time" refers to yesterday/tomorrow? (midnight rollover)
+
+  return broken;
+}
+
 static void
 Update(const MoreData &basic, const DerivedInfo &calculated,
        Result &result)
@@ -52,7 +66,7 @@ Update(const MoreData &basic, const DerivedInfo &calculated,
     return;
 
   if (calculated.flight.flying && !result.takeoff_time.Plausible())
-    result.takeoff_time = basic.date_time_utc;
+    result.takeoff_time = BreakTime(basic, calculated.flight.takeoff_time);
 
   if (!calculated.flight.flying && result.takeoff_time.Plausible() &&
       !result.landing_time.Plausible())
