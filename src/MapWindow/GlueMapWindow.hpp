@@ -80,7 +80,7 @@ class GlueMapWindow : public MapWindow {
   } drag_mode;
 
   GeoPoint drag_start_geopoint;
-  RasterPoint drag_start, drag_last;
+  RasterPoint drag_start;
   TrackingGestureManager gestures;
   bool ignore_single_click;
 
