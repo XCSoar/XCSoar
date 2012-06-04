@@ -153,6 +153,13 @@ public:
   }
 
   /**
+   * Was there a failure on the #Port object?
+   */
+  bool HasPortFailed() const {
+    return config.IsAvailable() && config.UsesPort() && port == NULL;
+  }
+
+  /**
    * Wrapper for Driver::HasTimeout().  This method can't be inline
    * because the Driver struct is incomplete at this point.
    */
@@ -170,7 +177,7 @@ public:
    * Should the #Port be reopened?
    */
   bool ShouldReopen() const {
-    return !IsAlive() && ShouldReopenOnTimeout();
+    return HasPortFailed() || (!IsAlive() && ShouldReopenOnTimeout());
   }
 
   /**
