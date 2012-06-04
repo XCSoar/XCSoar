@@ -34,7 +34,7 @@ AirspaceFormatter::GetAltitudeShort(const AirspaceAltitude &altitude)
   StaticString<64> buffer;
 
   switch (altitude.type) {
-  case AirspaceAltitude::AGL:
+  case AirspaceAltitude::Type::AGL:
     if (!positive(altitude.altitude_above_terrain))
       buffer = _T("GND");
     else
@@ -42,14 +42,14 @@ AirspaceFormatter::GetAltitudeShort(const AirspaceAltitude &altitude)
                     iround(Units::ToUserAltitude(altitude.altitude_above_terrain)),
                     Units::GetAltitudeName());
     break;
-  case AirspaceAltitude::FL:
+  case AirspaceAltitude::Type::FL:
     buffer.Format(_T("FL%d"), (int)altitude.flight_level);
     break;
-  case AirspaceAltitude::MSL:
+  case AirspaceAltitude::Type::MSL:
     buffer.Format(_T("%d %s"), iround(Units::ToUserAltitude(altitude.altitude)),
                   Units::GetAltitudeName());
     break;
-  case AirspaceAltitude::UNDEFINED:
+  case AirspaceAltitude::Type::UNDEFINED:
     buffer.clear();
     break;
   }
@@ -61,7 +61,7 @@ tstring
 AirspaceFormatter::GetAltitude(const AirspaceAltitude &altitude)
 {
   StaticString<64> buffer;
-  if (altitude.type != AirspaceAltitude::MSL && positive(altitude.altitude))
+  if (altitude.type != AirspaceAltitude::Type::MSL && positive(altitude.altitude))
     buffer.Format(_T(" %d %s"), iround(Units::ToUserAltitude(altitude.altitude)),
                         Units::GetAltitudeName());
   else

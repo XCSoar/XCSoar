@@ -26,13 +26,15 @@
 #include "Math/fixed.hpp"
 #include "Util/tstring.hpp"
 
+#include <stdint.h>
+
 class AtmosphericPressure;
 struct AltitudeState;
 
 /** Structure to hold airspace altitude boundary data */
 struct AirspaceAltitude
 {
-  enum Type {
+  enum class Type: uint8_t {
     UNDEFINED,
     MSL,
     AGL,
@@ -56,7 +58,7 @@ struct AirspaceAltitude
   AirspaceAltitude():altitude(fixed_zero),
                  flight_level(fixed_zero),
                  altitude_above_terrain(fixed_zero),
-                 type(UNDEFINED) {};
+                 type(Type::UNDEFINED) {};
 
   /**
    * Get Altitude AMSL (m) resolved from type.
@@ -77,7 +79,7 @@ struct AirspaceAltitude
    * @return True if this altitude limit is the terrain
    */
   bool IsTerrain() const {
-    return !positive(altitude_above_terrain) && type == AGL;
+    return !positive(altitude_above_terrain) && type == Type::AGL;
   }
 
   /**
@@ -93,7 +95,7 @@ struct AirspaceAltitude
    * Is it necessary to call SetGroundLevel() for this AirspaceAltitude?
    */
   bool NeedGroundLevel() const {
-    return type == AGL;
+    return type == Type::AGL;
   }
 
   /**

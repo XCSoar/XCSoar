@@ -32,14 +32,14 @@ void
 AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
 {
   static const fixed fl_feet_to_m(30.48);
-  if (type == FL)
+  if (type == Type::FL)
     altitude = press.PressureAltitudeToQNHAltitude(flight_level * fl_feet_to_m);
 }
 
 void
 AirspaceAltitude::SetGroundLevel(const fixed alt)
 {
-  if (type == AGL)
+  if (type == Type::AGL)
     altitude = altitude_above_terrain + alt;
 }
 
@@ -49,25 +49,25 @@ AirspaceAltitude::GetAsText(const bool concise) const
   StaticString<64> buffer;
 
   switch (type) {
-  case AGL:
+  case Type::AGL:
     if (!positive(altitude_above_terrain))
       buffer = _T("GND");
     else
       buffer.Format(_T("%d AGL"), iround(altitude_above_terrain));
 
     break;
-  case FL:
+  case Type::FL:
     buffer.Format(_T("FL%d"), iround(flight_level));
     break;
-  case MSL:
+  case Type::MSL:
     buffer.Format(_T("%d"), iround(altitude));
     break;
-  case UNDEFINED:
+  case Type::UNDEFINED:
     buffer.clear();
     break;
   }
 
-  if (!concise && type != MSL && positive(altitude))
+  if (!concise && type != Type::MSL && positive(altitude))
     buffer.AppendFormat(_T(" %d"), iround(altitude));
 
   return tstring(buffer);
@@ -86,12 +86,12 @@ AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
     /* special case: GND is always "below" the aircraft, even if the
        aircraft's AGL altitude turns out to be negative due to terrain
        file inaccuracies */
-    (type == AGL && !positive(altitude_above_terrain));
+    (type == Type::AGL && !positive(altitude_above_terrain));
 }
 
 fixed
 AirspaceAltitude::GetAltitude(const AltitudeState& state) const
 {
-  return (type == AGL) ?
+  return (type == Type::AGL) ?
          altitude_above_terrain + (state.altitude - state.altitude_agl) : altitude;
 }

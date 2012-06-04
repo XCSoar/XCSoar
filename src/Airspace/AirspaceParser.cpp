@@ -294,17 +294,17 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
 
   switch (type) {
   case FL:
-    altitude.type = AirspaceAltitude::FL;
+    altitude.type = AirspaceAltitude::Type::FL;
     altitude.flight_level = value;
     return;
 
   case UNLIMITED:
-    altitude.type = AirspaceAltitude::MSL;
+    altitude.type = AirspaceAltitude::Type::MSL;
     altitude.altitude = fixed(50000);
     return;
 
   case SFC:
-    altitude.type = AirspaceAltitude::AGL;
+    altitude.type = AirspaceAltitude::Type::AGL;
     altitude.altitude_above_terrain = fixed_minus_one;
     return;
 
@@ -316,17 +316,17 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
   value = Units::ToSysUnit(value, unit);
   switch (type) {
   case MSL:
-    altitude.type = AirspaceAltitude::MSL;
+    altitude.type = AirspaceAltitude::Type::MSL;
     altitude.altitude = value;
     return;
 
   case AGL:
-    altitude.type = AirspaceAltitude::AGL;
+    altitude.type = AirspaceAltitude::Type::AGL;
     altitude.altitude_above_terrain = value;
     return;
 
   case STD:
-    altitude.type = AirspaceAltitude::FL;
+    altitude.type = AirspaceAltitude::Type::FL;
     altitude.flight_level = Units::ToUserUnit(value, Unit::FLIGHT_LEVEL);
     return;
 
