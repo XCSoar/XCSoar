@@ -119,7 +119,7 @@ OLCSprint::CalcScore() const
 }
 
 void
-OLCSprint::UpdateTrace() {
+OLCSprint::UpdateTrace(bool force) {
 
   // since this is online, all solutions must have start to end of trace
   // satisfy the finish altitude requirements.  otherwise there is no point
@@ -144,5 +144,5 @@ OLCSprint::UpdateTrace() {
     return;
   }
 
-  ContestDijkstra::UpdateTrace();
+  ContestDijkstra::UpdateTrace(force);
 }

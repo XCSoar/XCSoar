@@ -111,10 +111,11 @@ ContestDijkstra::UpdateTraceTail()
 }
 
 void
-ContestDijkstra::UpdateTrace()
+ContestDijkstra::UpdateTrace(bool force)
 {
   if (!IsMasterUpdated()) {
-    if (finished && append_serial != trace_master.GetAppendSerial()) {
+    if ((finished || force) &&
+        append_serial != trace_master.GetAppendSerial()) {
       const unsigned old_size = n_points;
       if (UpdateTraceTail())
         /* new data from the master trace, start incremental solver */
@@ -152,7 +153,7 @@ ContestDijkstra::Solve(bool exhaustive)
   }
 
   if (finished || dijkstra.IsEmpty()) {
-    UpdateTrace();
+    UpdateTrace(exhaustive);
 
     if (n_points < num_stages)
       return true;
@@ -162,7 +163,7 @@ ContestDijkstra::Solve(bool exhaustive)
       return true;
   } else if (exhaustive || n_points < num_stages ||
              modify_serial != trace_master.GetModifySerial()) {
-    UpdateTrace();
+    UpdateTrace(exhaustive);
     if (n_points < num_stages)
       return true;
   }
@@ -195,7 +196,7 @@ ContestDijkstra::Solve(bool exhaustive)
     if (solution_valid)
       SaveSolution();
 
-    UpdateTrace();
+    UpdateTrace(exhaustive);
     return true;
   }
 

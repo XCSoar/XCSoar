@@ -186,8 +186,13 @@ private:
   bool IsMasterUpdated() const;
 
 protected:
-  /** Update working trace from master --- never to be done during a solution! */
-  virtual void UpdateTrace();
+  /**
+   * Update working trace from master.
+   *
+   * @param force disable lazy updates, force the trace to be up to
+   * date before returning
+   */
+  virtual void UpdateTrace(bool force);
 
   /**
    * Perform actions required at start of new search

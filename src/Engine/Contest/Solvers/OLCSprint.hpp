@@ -50,7 +50,7 @@ protected:
   void AddEdges(ScanTaskPoint origin);
 
   /* methods from ContestDijkstra */
-  virtual void UpdateTrace();
+  virtual void UpdateTrace(bool force);
   virtual void AddStartEdges();
 };
 
