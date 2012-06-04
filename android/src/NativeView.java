@@ -96,7 +96,7 @@ class NativeView extends SurfaceView
   }
 
   private void start() {
-    thread = new Thread(this);
+    thread = new Thread(this, "NativeMain");
     thread.start();
   }
 

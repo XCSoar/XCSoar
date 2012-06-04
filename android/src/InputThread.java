@@ -42,6 +42,8 @@ class InputThread extends Thread {
   InputStream is;
 
   InputThread(String _name, InputListener _listener, InputStream _is) {
+    super("InputThread " + _name);
+
     name = _name;
     listener = _listener;
     is = _is;

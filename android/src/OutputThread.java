@@ -45,6 +45,8 @@ class OutputThread extends Thread {
   int head, tail;
 
   OutputThread(String _name, OutputStream _os) {
+    super("InputThread " + _name);
+
     name = _name;
     os = _os;
 
