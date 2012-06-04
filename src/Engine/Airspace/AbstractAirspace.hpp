@@ -165,6 +165,13 @@ public:
    */
   void SetGroundLevel(const fixed alt);
 
+  /**
+   * Is it necessary to call SetGroundLevel() for this AbstractAirspace?
+   */
+  bool NeedGroundLevel() const {
+    return altitude_base.NeedGroundLevel() || altitude_top.NeedGroundLevel();
+  }
+
   /** 
    * Set QNH pressure for FL-referenced airspace altitudes 
    * 

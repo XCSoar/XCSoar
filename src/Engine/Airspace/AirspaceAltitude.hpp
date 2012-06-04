@@ -90,6 +90,13 @@ struct AirspaceAltitude
   void SetGroundLevel(const fixed alt);
 
   /**
+   * Is it necessary to call SetGroundLevel() for this AirspaceAltitude?
+   */
+  bool NeedGroundLevel() const {
+    return type == AGL;
+  }
+
+  /**
    * Set atmospheric pressure (QNH) for flight-level based
    * airspace.  This sets Altitude and must be called before FL-referenced
    * airspace is considered initialised.

@@ -88,6 +88,15 @@ Airspace::SetGroundLevel(const fixed alt) const
     assert(1);
 }
 
+bool
+Airspace::NeedGroundLevel() const
+{
+  if (airspace)
+    return airspace->NeedGroundLevel();
+  else
+    return false;
+}
+
 void 
 Airspace::SetFlightLevel(const AtmosphericPressure &press) const
 {

@@ -27,6 +27,10 @@ void
 Airspaces::SetGroundLevels(const RasterTerrain &terrain)
 {
   for (auto v = airspace_tree.begin(); v != airspace_tree.end(); ++v) {
+    // If we don't need the ground level we don't have to calculate it
+    if (!v->NeedGroundLevel())
+      continue;
+
     FlatGeoPoint c_flat = v->GetCenter();
     GeoPoint g = task_projection.unproject(c_flat);
     short h = terrain.GetTerrainHeight(g);
