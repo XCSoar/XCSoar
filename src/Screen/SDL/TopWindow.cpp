@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "PeriodClock.hpp"
 
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
@@ -201,16 +200,19 @@ TopWindow::OnEvent(const SDL_Event &event)
     else if (event.button.button == SDL_BUTTON_WHEELDOWN)
       return OnMouseWheel(event.button.x, event.button.y, -1);
 
-    static PeriodClock double_click;
-    return double_click.CheckAlwaysUpdate(500)
-      ? OnMouseDown(event.button.x, event.button.y)
-      : OnMouseDouble(event.button.x, event.button.y);
+    return double_click.Check(RasterPoint{PixelScalar(event.button.x),
+                                          PixelScalar(event.button.y)})
+      ? OnMouseDouble(event.button.x, event.button.y)
+      : OnMouseDown(event.button.x, event.button.y);
 
   case SDL_MOUSEBUTTONUP:
     if (event.button.button == SDL_BUTTON_WHEELUP ||
         event.button.button == SDL_BUTTON_WHEELDOWN)
       /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
       return false;
+
+    double_click.Moved(RasterPoint{PixelScalar(event.button.x),
+                                   PixelScalar(event.button.y)});
 
     return OnMouseUp(event.button.x, event.button.y);
 

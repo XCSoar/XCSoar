@@ -78,6 +78,44 @@ DeviceConfig::IsAvailable() const
   return false;
 }
 
+bool
+DeviceConfig::ShouldReopenOnTimeout() const
+{
+  switch (port_type) {
+  case PortType::DISABLED:
+    return false;
+
+  case PortType::SERIAL:
+  case PortType::AUTO:
+    /* auto-reopen on Windows CE due to its quirks, but not Altair,
+       because Altair ports are known to be "kind of sane" (no flaky
+       Bluetooth drivers, because there's no Bluetooth) */
+    return IsWindowsCE() && !IsAltair();
+
+  case PortType::RFCOMM:
+  case PortType::IOIOUART:
+    /* errors on these are detected automatically by the driver */
+    return false;
+
+  case PortType::INTERNAL:
+    /* reopening the Android internal GPS doesn't help */
+    return false;
+
+  case PortType::TCP_LISTENER:
+    /* this is a server, and if no data gets received, this can just
+       mean that nobody connected to it, but reopening it periodically
+       doesn't help */
+    return false;
+
+  case PortType::PTY:
+    return false;
+  }
+
+  /* unreachable */
+  assert(false);
+  return false;
+}
+
 const TCHAR *
 DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 {

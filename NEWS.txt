@@ -23,6 +23,14 @@ Version 6.4 - not yet released
 * Android
   - support x86 and MIPS CPUs
 
+Version 6.3.6 - not yet released
+* user interface
+  - ignore double clicks when mouse/finger has moved
+* Android
+  - fix crash on IOIO reconnect (#2130)
+  - fix interference of two or more IOIO UARTs (#2107)
+  - eliminate delay from IOIO connect
+
 Version 6.3.5 - 2012/05/31
 * calculations
   - fix rounding error in task minimum search for finish lines (#2102)

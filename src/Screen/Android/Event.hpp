@@ -100,6 +100,11 @@ struct Event {
     :type(CALLBACK), ptr(_ptr), callback(_callback) {}
   Event(enum type _type, PixelScalar _x, PixelScalar _y)
     :type(_type), x(_x), y(_y) {}
+
+  gcc_constexpr_method
+  RasterPoint GetPoint() const {
+    return RasterPoint{x, y};
+  }
 };
 
 static inline bool

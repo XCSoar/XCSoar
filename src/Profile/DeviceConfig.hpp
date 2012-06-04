@@ -169,6 +169,14 @@ struct DeviceConfig {
   gcc_pure
   bool IsAvailable() const;
 
+  /**
+   * Should this device be reopened when no data has been received for
+   * a certain amount of time?  Some ports need this to recover from
+   * errors.
+   */
+  gcc_pure
+  bool ShouldReopenOnTimeout() const;
+
   static bool MaybeBluetooth(PortType port_type, const TCHAR *path) {
     if (port_type == PortType::RFCOMM)
       return true;
@@ -233,20 +241,6 @@ struct DeviceConfig {
 
   bool UsesTCPPort() const {
     return UsesTCPPort(port_type);
-  }
-
-  /**
-   * Is this port type a server?
-   *
-   * This is used to determine if the port should automatically be
-   * restarted after a certain time without GPS connection.
-   */
-  static bool IsServer(PortType port_type) {
-    return port_type == PortType::TCP_LISTENER;
-  }
-
-  bool IsServer() const {
-    return IsServer(port_type);
   }
 
   bool IsDriver(const TCHAR *name) const {

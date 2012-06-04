@@ -116,6 +116,12 @@ DeviceDescriptor::ClearConfig()
   config.Clear();
 }
 
+bool
+DeviceDescriptor::ShouldReopenDriverOnTimeout() const
+{
+  return driver == NULL || driver->HasTimeout();
+}
+
 #if defined(__clang__) || GCC_VERSION >= 40700
 /* no, OpenDeviceJob really doesn't need a virtual destructor */
 #pragma GCC diagnostic push
@@ -293,10 +299,8 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
   if (/* don't reopen a device that is occupied */
       IsOccupied() ||
-      IsAltair() || !config.IsAvailable() || config.IsServer() ||
-      /* reopening the Android internal GPS doesn't help */
-      config.IsAndroidInternalGPS() ||
-      IsAlive() || (driver != NULL && !driver->HasTimeout()) ||
+      !config.IsAvailable() ||
+      !ShouldReopen() ||
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.CheckUpdate(30000))
     return;

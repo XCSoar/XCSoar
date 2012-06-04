@@ -26,6 +26,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/Macros.hpp"
+#include "Util/CharUtil.hpp"
 
 bool
 CAI302Device::ReadGeneralInfo(CAI302::GeneralInfo &data,
@@ -240,18 +241,12 @@ CAI302Device::ReadNavpoint(unsigned index, CAI302::Navpoint &navpoint,
   return true;
 }
 
-static bool
-IsASCII(TCHAR ch)
-{
-  return ch >= 0x20 && (int8_t)ch >= 0x20;
-}
-
 static void
 ToASCII(char *dest, size_t dest_size, const TCHAR *src)
 {
   char *end = dest + dest_size - 1;
   while (*src != _T('\0') && dest < end)
-    if (IsASCII(*src))
+    if (IsPrintableASCII(*src))
       *dest++ = (char)*src++;
 
   *dest = 0;

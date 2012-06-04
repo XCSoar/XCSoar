@@ -30,6 +30,7 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
+gcc_constexpr_function
 static inline bool
 IsASCII(const char ch)
 {
@@ -37,6 +38,7 @@ IsASCII(const char ch)
 }
 
 #ifdef _UNICODE
+gcc_constexpr_function
 static inline bool
 IsASCII(const TCHAR ch)
 {
@@ -71,6 +73,22 @@ IsWhitespaceNotNull(const TCHAR ch)
 }
 
 #endif /* _UNICODE */
+
+gcc_constexpr_function
+static inline bool
+IsPrintableASCII(char ch)
+{
+  return (signed char)ch >= 0x20;
+}
+
+#ifdef _UNICODE
+gcc_constexpr_function
+static inline bool
+IsPrintableASCII(TCHAR ch)
+{
+  return IsASCII(ch) && ch >= 0x20;
+}
+#endif
 
 gcc_constexpr_function
 static inline bool
