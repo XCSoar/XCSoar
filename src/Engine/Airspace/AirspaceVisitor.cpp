@@ -40,5 +40,5 @@ AirspaceVisitor::Visit(const AbstractAirspace &aa)
 void
 AirspaceVisitor::Visit(const Airspace &as)
 {
-  Visit(*as.get_airspace());
+  Visit(*as.GetAirspace());
 }

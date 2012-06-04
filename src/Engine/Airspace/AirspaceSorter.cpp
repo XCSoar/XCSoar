@@ -40,7 +40,7 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
   m_airspaces_all.reserve(airspaces.size());
 
   for (auto it = airspaces.begin(); it != airspaces.end(); ++it) {
-    const AbstractAirspace &airspace = *it->get_airspace();
+    const AbstractAirspace &airspace = *it->GetAirspace();
     AirspaceSelectInfo info(airspace);
     m_airspaces_all.push_back(info);
   }

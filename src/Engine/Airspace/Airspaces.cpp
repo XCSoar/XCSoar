@@ -41,7 +41,7 @@ public:
     :predicate(&_predicate), visitor(&_visitor) {}
 
   void operator()(Airspace as) {
-    AbstractAirspace &aas = *as.get_airspace();
+    AbstractAirspace &aas = *as.GetAirspace();
     if (predicate->operator()(aas))
       visitor->Visit(as);
   }
@@ -82,7 +82,7 @@ public:
      visitor(&_visitor) {}
 
   void operator()(Airspace as) {
-    if (as.intersects(ray) &&
+    if (as.Intersects(ray) &&
         visitor->SetIntersections(as.Intersects(start, end, *projection)))
       visitor->Visit(as);
   }
@@ -116,7 +116,7 @@ struct AirspacePredicateAdapter {
     :condition(_condition) {}
 
   bool operator()(const Airspace &as) const {
-    return condition(*as.get_airspace());
+    return condition(*as.GetAirspace());
   }
 };
 
@@ -161,7 +161,7 @@ Airspaces::ScanNearest(const GeoPoint &location,
     if (found.second.is_zero())
       return ScanRange(location, fixed_zero, condition);
 
-    if (condition(*found.first->get_airspace()))
+    if (condition(*found.first->GetAirspace()))
       res.push_back(*found.first);
   }
 
@@ -190,13 +190,13 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
   AirspaceVector res;
 
   for (auto v = vectors.begin(); v != vectors.end(); ++v) {
-    if (!condition(*v->get_airspace()))
+    if (!condition(*v->GetAirspace()))
       continue;
 
     if (fixed((*v).Distance(bb_target)) > range)
       continue;
 
-    if ((*v).inside(location) || positive(range))
+    if ((*v).IsInside(location) || positive(range))
       res.push_back(*v);
   }
 
@@ -222,7 +222,7 @@ Airspaces::FindInside(const AircraftState &state,
     count_intersections++;
 #endif
     
-    if (!condition(*v->get_airspace()) || !(*v).inside(state))
+    if (!condition(*v->GetAirspace()) || !(*v).IsInside(state))
       vectors.erase(v);
     else
       ++v;
@@ -241,7 +241,7 @@ Airspaces::Optimise()
     // to re-build airspace envelopes
 
     for (auto it = airspace_tree.begin(); it != airspace_tree.end(); ++it)
-      tmp_as.push_back(it->get_airspace());
+      tmp_as.push_back(it->GetAirspace());
 
     airspace_tree.clear();
   }
@@ -297,7 +297,7 @@ Airspaces::clear()
   if (owns_children) {
     for (auto v = airspace_tree.begin(); v != airspace_tree.end(); ++v) {
       Airspace a = *v;
-      a.destroy();
+      a.Destroy();
     }
   }
 
@@ -329,7 +329,7 @@ Airspaces::SetFlightLevels(const AtmosphericPressure &press)
     qnh = press;
 
     for (auto v = airspace_tree.begin(); v != airspace_tree.end(); ++v)
-      v->set_flight_level(press);
+      v->SetFlightLevel(press);
   }
 }
 
@@ -340,7 +340,7 @@ Airspaces::SetActivity(const AirspaceActivity mask)
     activity_mask = mask;
 
     for (auto v = airspace_tree.begin(); v != airspace_tree.end(); ++v)
-      v->set_activity(mask);
+      v->SetActivity(mask);
   }
 }
 
@@ -368,7 +368,7 @@ void
 Airspaces::ClearClearances()
 {
   for (auto v = airspace_tree.begin(); v != airspace_tree.end(); ++v)
-    v->clear_clearance();
+    v->ClearClearance();
 }
 
 
@@ -390,11 +390,11 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
 
   // find items to add
   for (auto v = contents_master.begin(); v != contents_master.end(); ++v) {
-    const AbstractAirspace* other = v->get_airspace();
+    const AbstractAirspace* other = v->GetAirspace();
 
     bool found = false;
     for (auto s = contents_self.begin(); s != contents_self.end(); ++s) {
-      const AbstractAirspace* self = s->get_airspace();
+      const AbstractAirspace* self = s->GetAirspace();
       if (self == other) {
         found = true;
         contents_self.erase(s);
@@ -402,7 +402,7 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
       }
     }
     if (!found && other->IsActive()) {
-      Add(v->get_airspace());
+      Add(v->GetAirspace());
       changed = true;
     }
   }
@@ -411,7 +411,7 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
   for (auto v = contents_self.begin(); v != contents_self.end();) {
     bool found = false;
     for (auto t = airspace_tree.begin(); t != airspace_tree.end(); ) {
-      if (t->get_airspace() == v->get_airspace()) {
+      if (t->GetAirspace() == v->GetAirspace()) {
         AirspaceTree::const_iterator new_t = t;
         ++new_t;
         airspace_tree.erase_exact(*t);
@@ -422,7 +422,7 @@ Airspaces::SynchroniseInRange(const Airspaces& master,
       }
     }
     assert(found);
-    v->clear_clearance();
+    v->ClearClearance();
     v = contents_self.erase(v);
     changed = true;
   }
@@ -442,7 +442,7 @@ Airspaces::VisitInside(const GeoPoint &loc,
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));
 
   for (auto v = vectors.begin(); v != vectors.end(); ++v) {
-    if ((*v).inside(loc))
+    if ((*v).IsInside(loc))
       visitor.Visit(*v);
   }
 }

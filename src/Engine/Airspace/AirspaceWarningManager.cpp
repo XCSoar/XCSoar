@@ -375,7 +375,7 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
 
   Airspaces::AirspaceVector results = airspaces.FindInside(state, condition);
   for (auto it = results.begin(); it != results.end(); ++it) {
-    const AbstractAirspace& airspace = *it->get_airspace();
+    const AbstractAirspace& airspace = *it->GetAirspace();
 
     if (!airspace.IsActive())
       continue; // ignore inactive airspaces

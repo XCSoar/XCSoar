@@ -113,7 +113,7 @@ FindNearestHorizontalAirspace()
   if (airspace == NULL)
     return NearestAirspace();
 
-  const AbstractAirspace &as = *airspace->get_airspace();
+  const AbstractAirspace &as = *airspace->GetAirspace();
 
   /* calculate distance to the nearest point */
   const GeoPoint closest = as.ClosestPoint(basic.location,

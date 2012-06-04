@@ -13,7 +13,7 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
                          m_condition);
 
   for (auto v = vectors.begin(); v != vectors.end(); ++v) {
-    const AbstractAirspace *as = v->get_airspace();
+    const AbstractAirspace *as = v->GetAirspace();
     if (as != NULL) {
       const AirspaceInterceptSolution ais =
         solve_intercept(*as, airspaces.GetProjection());
@@ -54,7 +54,7 @@ AirspaceNearestSort::find_nearest(const Airspaces &airspaces,
   populate_queue(airspaces, range);
 
   if (!m_q.empty()) {
-    return m_q.top().second.second.get_airspace();
+    return m_q.top().second.second.GetAirspace();
   } else {
     return NULL;
   }
@@ -69,7 +69,7 @@ AirspaceNearestSort::visit_sorted(const Airspaces &airspaces,
   populate_queue(airspaces, range);
 
   while (!m_q.empty()) {
-    visitor.Visit(*m_q.top().second.second.get_airspace());
+    visitor.Visit(*m_q.top().second.second.GetAirspace());
     m_q.pop();
   } 
 }
