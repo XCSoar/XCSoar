@@ -42,9 +42,7 @@ class AirspaceAircraftPerformance;
 struct AirspaceInterceptSolution;
 class FlatBoundingBox;
 class TaskProjection;
-
-#include <vector>
-typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
+class AirspaceIntersectionVector;
 
 /** Abstract base class for airspace regions */
 class AbstractAirspace {

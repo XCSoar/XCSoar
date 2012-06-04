@@ -1,5 +1,6 @@
 #include "AirspaceIntersectSort.hpp"
 #include "AbstractAirspace.hpp"
+#include "AirspaceIntersectionVector.hpp"
 
 void 
 AirspaceIntersectSort::add(const fixed t, const GeoPoint &p)

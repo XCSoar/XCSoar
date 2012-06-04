@@ -27,6 +27,7 @@
 #include "Navigation/Flat/FlatLine.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "AirspaceIntersectSort.hpp"
+#include "AirspaceIntersectionVector.hpp"
 
 AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
   :AbstractAirspace(Shape::CIRCLE), m_center(loc), m_radius(_radius)

@@ -33,9 +33,7 @@ struct AircraftState;
 class AtmosphericPressure;
 class AbstractAirspace;
 class AirspaceActivity;
-
-#include <vector>
-typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
+class AirspaceIntersectionVector;
 
 /**
  * Single object container for actual airspaces, to be stored in Airspaces object

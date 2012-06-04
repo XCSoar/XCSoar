@@ -26,6 +26,7 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "AirspaceIntersectSort.hpp"
+#include "AirspaceIntersectionVector.hpp"
 
 #include <assert.h>
 

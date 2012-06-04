@@ -25,6 +25,7 @@
 
 #include "AirspaceVisitor.hpp"
 #include "AbstractAirspace.hpp"
+#include "AirspaceIntersectionVector.hpp"
 
 struct AircraftState;
 class AirspaceAircraftPerformance;

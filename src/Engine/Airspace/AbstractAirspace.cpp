@@ -26,6 +26,7 @@
 #include "AirspaceInterceptSolution.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "AirspaceIntersectionVector.hpp"
 
 #include <assert.h>
 
