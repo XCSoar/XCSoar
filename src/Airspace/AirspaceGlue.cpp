@@ -29,7 +29,28 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
-#include "IO/ConfiguredFile.hpp"
+#include "IO/FileLineReader.hpp"
+#include "Profile/Profile.hpp"
+
+#include <windef.h> /* for MAX_PATH */
+
+static bool
+ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
+                  OperationEnvironment &operation)
+{
+  FileLineReader reader(path, ConvertLineReader::AUTO);
+  if (reader.error()) {
+    LogStartUp(_T("Failed to open airspace file: %s"), path);
+    return false;
+  }
+
+  if (!parser.Parse(reader, operation)) {
+    LogStartUp(_T("Failed to parse airspace file: %s"), path);
+    return false;
+  }
+
+  return true;
+}
 
 void
 ReadAirspace(Airspaces &airspaces,
@@ -45,27 +66,16 @@ ReadAirspace(Airspaces &airspaces,
   AirspaceParser parser(airspaces);
 
   // Read the airspace filenames from the registry
-  TLineReader *reader =
-    OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"),
-                           ConvertLineReader::AUTO);
-  if (reader != NULL) {
-    if (!parser.Parse(*reader, operation))
-      LogStartUp(_T("No airspace file 1"));
-    else
-      airspace_ok =  true;
+  TCHAR path[MAX_PATH];
+  if (Profile::GetPath(szProfileAirspaceFile, path))
+    airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-    delete reader;
-  }
+  if (Profile::GetPath(szProfileAdditionalAirspaceFile, path))
+    airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile,
-                                  ConvertLineReader::AUTO);
-  if (reader != NULL) {
-    if (!parser.Parse(*reader, operation))
-      LogStartUp(_T("No airspace file 2"));
-    else
-      airspace_ok = true;
-
-    delete reader;
+  if (Profile::GetPath(szProfileMapFile, path)) {
+    _tcscat(path, _T("/airspace.txt"));
+    airspace_ok |= ParseAirspaceFile(parser, path, operation);
   }
 
   if (airspace_ok) {
