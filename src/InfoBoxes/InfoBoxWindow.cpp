@@ -195,7 +195,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   PixelSize unit_size;
   const UnitSymbol *unit_symbol = units_look.GetSymbol(data.value_unit);
   if (unit_symbol != NULL) {
-    unit_size = unit_symbol->get_size();
+    unit_size = unit_symbol->GetSize();
   } else {
     unit_size.cx = 0;
     unit_size.cy = 0;
@@ -217,7 +217,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
       return;
 #endif
 
-    unit_symbol->draw(canvas, x + value_size.cx,
+    unit_symbol->Draw(canvas, x + value_size.cx,
                       y + ascent_height - unit_symbol->GetScreenSize().cy,
                       look.inverse ? UnitSymbol::INVERSE : UnitSymbol::NORMAL);
   }

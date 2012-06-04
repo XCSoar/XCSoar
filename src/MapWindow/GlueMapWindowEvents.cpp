@@ -110,7 +110,6 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   drag_start.x = x;
   drag_start.y = y;
   drag_start_geopoint = visible_projection.ScreenToGeo(x, y);
-  drag_last = drag_start;
 
   switch (follow_mode) {
   case FOLLOW_SELF:
