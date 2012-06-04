@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3.6 - not yet released
 * Android
   - fix crash on IOIO reconnect (#2130)
+  - eliminate delay from IOIO connect
 
 Version 6.3.5 - 2012/05/31
 * calculations

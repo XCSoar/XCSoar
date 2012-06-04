@@ -91,6 +91,9 @@ final class IOIOHelper extends Thread {
   }
 
   private synchronized boolean waitCompletion(int timeout_ms) {
+    if (command == Command.NONE)
+      return true;
+
     try {
       wait(timeout_ms);
     } catch (InterruptedException e) {
