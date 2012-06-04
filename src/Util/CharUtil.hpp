@@ -74,6 +74,22 @@ IsWhitespaceNotNull(const char ch)
 
 gcc_constexpr_function
 static inline bool
+IsPrintableASCII(char ch)
+{
+  return (signed char)ch >= 0x20;
+}
+
+#ifdef _UNICODE
+gcc_constexpr_function
+static inline bool
+IsPrintableASCII(TCHAR ch)
+{
+  return IsASCII(ch) && ch >= 0x20;
+}
+#endif
+
+gcc_constexpr_function
+static inline bool
 IsDigitASCII(char ch)
 {
   return ch >= '0' && ch <= '9';
