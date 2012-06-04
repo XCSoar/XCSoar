@@ -293,9 +293,8 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
   if (/* don't reopen a device that is occupied */
       IsOccupied() ||
-      IsAltair() || !config.IsAvailable() || config.IsServer() ||
-      /* reopening the Android internal GPS doesn't help */
-      config.IsAndroidInternalGPS() ||
+      !config.IsAvailable() ||
+      !config.ShouldReopenOnTimeout() ||
       IsAlive() || (driver != NULL && !driver->HasTimeout()) ||
       /* attempt to reopen a failed device every 30 seconds */
       !reopen_clock.CheckUpdate(30000))
