@@ -65,6 +65,10 @@ abstract class AbstractAndroidPort implements AndroidPort {
   }
 
   public void close() {
+    /* clear the listener to allow reusing this object (e.g. by
+       IOIOHelper) */
+    listener = null;
+
     InputThread i = stealInput();
     if (i != null)
       i.close();
