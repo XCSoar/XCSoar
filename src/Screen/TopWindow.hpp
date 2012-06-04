@@ -33,6 +33,7 @@ Copyright_License {
 #ifndef USE_GDI
 #include "Thread/Mutex.hpp"
 #include "Screen/SDL/TopCanvas.hpp"
+#include "Screen/SDL/DoubleClick.hpp"
 #endif
 
 #ifdef ANDROID
@@ -133,6 +134,8 @@ class TopWindow : public ContainerWindow {
 
   UPixelScalar new_width, new_height;
 #endif
+
+  DoubleClick double_click;
 
 #else /* USE_GDI */
 

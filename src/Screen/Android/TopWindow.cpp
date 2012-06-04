@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
-#include "PeriodClock.hpp"
 
 void
 TopWindow::AnnounceResize(UPixelScalar width, UPixelScalar height)
@@ -191,10 +190,9 @@ TopWindow::OnEvent(const Event &event)
     return OnMouseMove(event.x, event.y, 0);
 
   case Event::MOUSE_DOWN:
-    static PeriodClock double_click;
-    return double_click.CheckAlwaysUpdate(500)
-      ? OnMouseDown(event.x, event.y)
-      : OnMouseDouble(event.x, event.y);
+    return double_click.Check()
+      ? OnMouseDouble(event.x, event.y)
+      : OnMouseDown(event.x, event.y);
 
   case Event::MOUSE_UP:
     return OnMouseUp(event.x, event.y);
