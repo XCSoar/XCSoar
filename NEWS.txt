@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.3.6 - not yet released
+
 Version 6.3.5 - 2012/05/31
 * calculations
   - fix rounding error in task minimum search for finish lines (#2102)
