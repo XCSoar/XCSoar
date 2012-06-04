@@ -48,7 +48,7 @@ class AirspaceIntersectionVector;
 class Airspace: 
   public FlatBoundingBox
 {
-  mutable AbstractAirspace *pimpl_airspace;
+  AbstractAirspace *pimpl_airspace;
 
 public:
 
