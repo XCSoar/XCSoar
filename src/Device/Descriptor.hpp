@@ -153,6 +153,27 @@ public:
   }
 
   /**
+   * Wrapper for Driver::HasTimeout().  This method can't be inline
+   * because the Driver struct is incomplete at this point.
+   */
+  bool ShouldReopenDriverOnTimeout() const;
+
+  /**
+   * Should the #Port be reopened automatically when a timeout occurs?
+   */
+  bool ShouldReopenOnTimeout() const {
+    return config.ShouldReopenOnTimeout() &&
+      ShouldReopenDriverOnTimeout();
+  }
+
+  /**
+   * Should the #Port be reopened?
+   */
+  bool ShouldReopen() const {
+    return !IsAlive() && ShouldReopenOnTimeout();
+  }
+
+  /**
    * Returns the Device object; may be NULL if the device is not open
    * or if the Device class is not applicable for this object.
    *
