@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3.6 - not yet released
+* user interface
+  - ignore double clicks when mouse/finger has moved
 * Android
   - fix crash on IOIO reconnect (#2130)
   - fix interference of two or more IOIO UARTs (#2107)

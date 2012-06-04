@@ -190,11 +190,13 @@ TopWindow::OnEvent(const Event &event)
     return OnMouseMove(event.x, event.y, 0);
 
   case Event::MOUSE_DOWN:
-    return double_click.Check()
+    return double_click.Check(event.GetPoint())
       ? OnMouseDouble(event.x, event.y)
       : OnMouseDown(event.x, event.y);
 
   case Event::MOUSE_UP:
+    double_click.Moved(event.GetPoint());
+
     return OnMouseUp(event.x, event.y);
 
   case Event::POINTER_DOWN:

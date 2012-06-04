@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_DOUBLE_CLICK_HPP
 
 #include "PeriodClock.hpp"
+#include "Screen/Point.hpp"
 
 /**
  * This class helps turning two "mouse down" events into a "double
@@ -36,7 +37,14 @@ class DoubleClick {
    */
   static const unsigned INTERVAL_MS = 500;
 
+  /**
+   * The maximum distance between two clicks.
+   */
+  static const unsigned MAX_DISTANCE_PX = 50;
+
   PeriodClock clock;
+
+  RasterPoint location;
 
 public:
   /**
@@ -48,12 +56,26 @@ public:
   }
 
   /**
+   * Call this in the "mouse up" handler.  It will take care for
+   * resetting this object when the mouse/finger has moved too much.
+   */
+  void Moved(RasterPoint _location) {
+    if (clock.IsDefined() &&
+        manhattan_distance(location, _location) > MAX_DISTANCE_PX)
+      Reset();
+  }
+
+  /**
    * Call this in the "mouse down" handler.
    *
    * @return true if a double click was detected
    */
-  bool Check() {
-    return !clock.CheckAlwaysUpdate(INTERVAL_MS);
+  bool Check(RasterPoint _location) {
+    const bool result = !clock.CheckAlwaysUpdate(INTERVAL_MS) &&
+      manhattan_distance(location, _location) <= MAX_DISTANCE_PX;
+
+    location = _location;
+    return result;
   }
 };
 
