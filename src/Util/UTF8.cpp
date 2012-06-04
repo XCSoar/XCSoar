@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Util/UTF8.hpp"
+#include "Util/CharUtil.hpp"
 
 #include <algorithm>
 
@@ -74,12 +75,6 @@ ValidateUTF8(const char *p)
   return true;
 }
 
-static bool
-IsASCII(char ch)
-{
-  return (ch & 0x80) == 0;
-}
-
 static const char *
 FindNonASCIIOrZero(const char *p)
 {
@@ -91,7 +86,7 @@ FindNonASCIIOrZero(const char *p)
 char *
 Latin1ToUTF8(unsigned char ch, char *buffer)
 {
-  if (IsASCII(ch)) {
+  if (IsASCII((char)ch)) {
     *buffer++ = ch;
   } else {
     *buffer++ = 0xc0 | (ch >> 6);
@@ -120,7 +115,7 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
   while (*p != 0) {
     unsigned char ch = *p++;
 
-    if (IsASCII(ch)) {
+    if (IsASCII((char)ch)) {
       *q++ = ch;
 
       if (q >= end)

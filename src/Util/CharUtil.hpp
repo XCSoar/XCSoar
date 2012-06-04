@@ -28,6 +28,22 @@ Copyright_License {
 
 #include <tchar.h>
 
+gcc_constexpr_function
+static inline bool
+IsASCII(const char ch)
+{
+  return (unsigned char)ch < 0x80;
+}
+
+#ifdef _UNICODE
+gcc_constexpr_function
+static inline bool
+IsASCII(const TCHAR ch)
+{
+  return (ch & ~0x7f) == 0;
+}
+#endif
+
 static inline bool
 IsWhitespaceOrNull(const TCHAR ch)
 {
