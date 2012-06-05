@@ -1486,6 +1486,7 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestFree.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestTriangle.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSISAT.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/NetCoupe.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
