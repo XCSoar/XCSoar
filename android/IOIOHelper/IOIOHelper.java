@@ -177,8 +177,10 @@ final class IOIOHelper extends Thread {
       }
     } catch (ConnectionLostException e) {
       Log.w(TAG, "IOIOJWaitConnect() Connection Lost", e);
+      ioio.disconnect();
     } catch (IncompatibilityException e) {
       Log.e(TAG, "IOIOJWaitConnect() Incompatibility detected", e);
+      ioio.disconnect();
     } finally {
       connecting = null;
     }
