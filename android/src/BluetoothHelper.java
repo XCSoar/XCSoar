@@ -56,6 +56,23 @@ final class BluetoothHelper {
   public static void Initialize() {
   }
 
+  /**
+   * Turns the #BluetoothDevice into a human-readable string.
+   */
+  public static String getDisplayString(BluetoothDevice device) {
+    String name = device.getName();
+    String address = device.getAddress();
+
+    if (name == null)
+      return address;
+
+    return name + " [" + address + "]";
+  }
+
+  public static String getDisplayString(BluetoothSocket socket) {
+    return getDisplayString(socket.getRemoteDevice());
+  }
+
   public static String[] list() {
     if (adapter == null)
       return null;

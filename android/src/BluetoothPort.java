@@ -34,7 +34,8 @@ class BluetoothPort extends AbstractAndroidPort {
 
   BluetoothPort(BluetoothSocket _socket)
     throws IOException {
-    super(_socket.getRemoteDevice().getAddress());
+    super("Bluetooth " + BluetoothHelper.getDisplayString(_socket));
+
     socket = _socket;
 
     super.set(socket.getInputStream(), socket.getOutputStream());
