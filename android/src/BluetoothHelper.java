@@ -25,19 +25,16 @@ package org.xcsoar;
 
 import java.util.UUID;
 import java.util.Set;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import android.util.Log;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
 /**
- * A utility class which wraps the Java API into an easier API for the
- * C++ code.
+ * A library that constructs Bluetooth ports.  It is called by C++
+ * code.
  */
-final class BluetoothHelper extends AbstractAndroidPort {
+final class BluetoothHelper {
   private static final String TAG = "XCSoar";
   private static final UUID THE_UUID =
         UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -58,35 +55,6 @@ final class BluetoothHelper extends AbstractAndroidPort {
   }
 
   public static void Initialize() {
-  }
-
-  BluetoothSocket socket;
-
-  BluetoothHelper(BluetoothSocket _socket)
-    throws IOException {
-    super(_socket.getRemoteDevice().getAddress());
-    socket = _socket;
-
-    super.set(socket.getInputStream(), socket.getOutputStream());
-  }
-
-  public void close() {
-    super.close();
-
-    try {
-      socket.close();
-    } catch (IOException e) {
-      /* ignore... what else should we do if closing the socket
-         fails? */
-    }
-  }
-
-  public int getBaudRate() {
-    return 19200;
-  }
-
-  public boolean setBaudRate(int baudRate) {
-    return true;
   }
 
   public static String[] list() {
@@ -119,7 +87,7 @@ final class BluetoothHelper extends AbstractAndroidPort {
       BluetoothSocket socket =
         device.createRfcommSocketToServiceRecord(THE_UUID);
       socket.connect();
-      return new BluetoothHelper(socket);
+      return new BluetoothPort(socket);
     } catch (Exception e) {
       Log.e(TAG, "Failed to connect to Bluetooth: " + e.getMessage());
       return null;
