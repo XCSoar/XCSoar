@@ -21,40 +21,20 @@ Copyright_License {
 }
 */
 
-#include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
-#include "Dispatcher.hpp"
+#ifndef XCSOAR_DEVICE_LINE_SPLITTER_HPP
+#define XCSOAR_DEVICE_LINE_SPLITTER_HPP
 
-DeviceDescriptor *device_list[NUMDEV];
+#include "Port.hpp"
+#include "LineHandler.hpp"
+#include "Util/FifoBuffer.hpp"
 
-static DeviceDispatcher *dispatchers[NUMDEV];
+class PortLineSplitter : public Port::Handler, protected PortLineHandler {
+  typedef FifoBuffer<char, 256u> Buffer;
 
-void
-DeviceListInitialise()
-{
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDispatcher *dispatcher = dispatchers[i] = new DeviceDispatcher(i);
+  Buffer buffer;
 
-    device_list[i] = new DeviceDescriptor(i);
-    device_list[i]->SetDispatcher(dispatcher);
-  }
-}
+public:
+  virtual void DataReceived(const void *data, size_t length);
+};
 
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, DeviceDescriptor really doesn't need a virtual destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
-void
-DeviceListDeinitialise()
-{
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    delete device_list[i];
-    delete dispatchers[i];
-  }
-}
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-#pragma GCC diagnostic pop
 #endif

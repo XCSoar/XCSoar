@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_EMULATOR_HPP
 
 #include "DeviceEmulator.hpp"
-#include "Device/Port/LineHandler.hpp"
+#include "Device/Port/LineSplitter.hpp"
 #include "Device/Driver/FLARM/BinaryProtocol.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/InputLine.hpp"
@@ -38,7 +38,7 @@ Copyright_License {
 #include <stdio.h>
 #include <string.h>
 
-class FLARMEmulator : public Emulator, PortLineHandler {
+class FLARMEmulator : public Emulator, PortLineSplitter {
   std::map<std::string, std::string> settings;
 
   bool binary;
@@ -205,7 +205,7 @@ protected:
       BinaryReceived(data, length);
     } else {
       fwrite(data, 1, length, stdout);
-      PortLineHandler::DataReceived(data, length);
+      PortLineSplitter::DataReceived(data, length);
     }
   }
 

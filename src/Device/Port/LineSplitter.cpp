@@ -21,13 +21,13 @@ Copyright_License {
 }
 */
 
-#include "LineHandler.hpp"
+#include "LineSplitter.hpp"
 #include "Util/CharUtil.hpp"
 
 #include <string.h>
 
 void
-PortLineHandler::DataReceived(const void *_data, size_t length)
+PortLineSplitter::DataReceived(const void *_data, size_t length)
 {
   assert(_data != NULL);
   assert(length > 0);

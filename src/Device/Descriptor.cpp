@@ -87,8 +87,7 @@ public:
 DeviceDescriptor::DeviceDescriptor(unsigned _index)
   :index(_index),
    open_job(NULL),
-   port(NULL), monitor(NULL),
-   pipe_to_device(NULL),
+   port(NULL), monitor(NULL), dispatcher(NULL),
    driver(NULL), device(NULL),
 #ifdef ANDROID
    internal_sensors(NULL),
@@ -170,8 +169,17 @@ DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
   port = &_port;
 
   assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
-  if (driver->CreateOnPort == NULL)
+  if (driver->CreateOnPort == NULL) {
+    assert(driver->IsNMEAOut());
+
+    /* start the Port thread for NMEA out; this is a kludge for
+       TCPPort, because TCPPort calls accept() only in the receive
+       thread.  Data received from NMEA out is discarded by our method
+       DataReceived().  Once TCPPort gets fixed, this kludge can be
+       removed. */
+    port->StartRxThread();
     return true;
+  }
 
   parser.Reset();
   parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
@@ -273,7 +281,6 @@ DeviceDescriptor::Close()
   port = NULL;
   delete old_port;
 
-  pipe_to_device = NULL;
   ticker = false;
 
   device_blackboard->mutex.Lock();
@@ -435,6 +442,18 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
   }
 
   return false;
+}
+
+void
+DeviceDescriptor::ForwardLine(const char *line)
+{
+  /* XXX make this method thread-safe; this method can be called from
+     any thread, and if the Port gets closed, bad things happen */
+
+  if (IsNMEAOut() && port != NULL) {
+    port->Write(line);
+    port->Write("\r\n");
+  }
 }
 
 bool
@@ -789,7 +808,8 @@ DeviceDescriptor::DataReceived(const void *data, size_t length)
     return;
   }
 
-  PortLineHandler::DataReceived(data, length);
+  if (!IsNMEAOut())
+    PortLineSplitter::DataReceived(data, length);
 }
 
 void
@@ -797,12 +817,8 @@ DeviceDescriptor::LineReceived(const char *line)
 {
   NMEALogger::Log(line);
 
-  if (pipe_to_device && pipe_to_device->port) {
-    // stream pipe, pass nmea to other device (NmeaOut)
-    // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-    pipe_to_device->port->Write(line);
-    pipe_to_device->port->Write("\r\n");
-  }
+  if (dispatcher != NULL)
+    dispatcher->LineReceived(line);
 
   if (ParseLine(line))
     device_blackboard->ScheduleMerge();

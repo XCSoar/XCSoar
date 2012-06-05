@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
 #include "Port/Port.hpp"
-#include "Port/LineHandler.hpp"
+#include "Port/LineSplitter.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
@@ -52,10 +52,15 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
 
-class DeviceDescriptor : private Notify, private PortLineHandler {
+class DeviceDescriptor : private Notify, private PortLineSplitter {
   /** the index of this device in the global list */
   const unsigned index;
 
+  /**
+   * This device's configuration.  It may differ from the instance in
+   * #SystemSettings, because overlapping devices might have been
+   * cleared.
+   */
   DeviceConfig config;
 
   /**
@@ -64,17 +69,45 @@ class DeviceDescriptor : private Notify, private PortLineHandler {
    */
   AsyncJobRunner async;
 
+  /**
+   * The #Job that currently opens the device.  NULL if the device is
+   * not currently being opened.
+   */
   OpenDeviceJob *open_job;
 
+  /**
+   * The #Port used by this device.  This is not applicable to some
+   * devices, and is NULL in that case.
+   */
   Port *port;
+
+  /**
+   * A handler that will receive all data, to display it on the
+   * screen.  Can be set with SetMonitor().
+   */
   Port::Handler *monitor;
 
-  DeviceDescriptor *pipe_to_device;
+  /**
+   * A handler that will receive all NMEA lines, to dispatch it to
+   * other devices.
+   */
+  PortLineHandler *dispatcher;
+
+  /**
+   * The device driver used to handle data to/from the device.
+   */
   const DeviceRegister *driver;
 
+  /**
+   * An instance of the driver.
+   */
   Device *device;
 
 #ifdef ANDROID
+  /**
+   * A pointer to the Java object managing all Android sensors (GPS,
+   * baro sensor and others).
+   */
   InternalSensors *internal_sensors;
 #endif
 
@@ -85,6 +118,10 @@ class DeviceDescriptor : private Notify, private PortLineHandler {
    */
   PeriodClock reopen_clock;
 
+  /**
+   * The generic NMEA parser for this device.  It may hold internal
+   * state.
+   */
   NMEAParser parser;
 
   /**
@@ -105,8 +142,15 @@ class DeviceDescriptor : private Notify, private PortLineHandler {
    */
   ExternalSettings settings_received;
 
+  /**
+   * Internal flag for OnSysTicker() for detecting link timeout.
+   */
   bool was_alive;
 
+  /**
+   * Internal flag for OnSysTicker() for calling Device::OnSysTicker()
+   * only every other time.
+   */
   bool ticker;
 
   /**
@@ -135,10 +179,6 @@ public:
 
   void SetConfig(const DeviceConfig &config);
   void ClearConfig();
-
-  void SetPipeTo(DeviceDescriptor *_pipe_to_device) {
-    pipe_to_device = _pipe_to_device;
-  }
 
   bool IsConfigured() const {
     return config.port_type != DeviceConfig::PortType::DISABLED;
@@ -323,6 +363,15 @@ public:
   void SetMonitor(Port::Handler *_monitor) {
     monitor = _monitor;
   }
+
+  void SetDispatcher(PortLineHandler *_dispatcher) {
+    dispatcher = _dispatcher;
+  }
+
+  /**
+   * Write a line to the device's port if it's a NMEA out port.
+   */
+  void ForwardLine(const char *line);
 
   bool WriteNMEA(const char *line, OperationEnvironment &env);
 #ifdef _UNICODE

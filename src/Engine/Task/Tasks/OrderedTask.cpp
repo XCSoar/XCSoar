@@ -1373,6 +1373,7 @@ OrderedTask::Clear()
 
   Reset();
   m_ordered_behaviour = task_behaviour.ordered_defaults;
+  active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
 }
 
 OrderedTaskPoint* 

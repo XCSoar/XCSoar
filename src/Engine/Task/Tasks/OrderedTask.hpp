@@ -135,7 +135,7 @@ public:
 
   /** 
    * Clear all points and restore default ordered task behaviour
-   * 
+   * for the active factory
    */
   void Clear();
 

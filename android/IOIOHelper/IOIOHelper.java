@@ -177,8 +177,10 @@ final class IOIOHelper extends Thread {
       }
     } catch (ConnectionLostException e) {
       Log.w(TAG, "IOIOJWaitConnect() Connection Lost", e);
+      ioio.disconnect();
     } catch (IncompatibilityException e) {
       Log.e(TAG, "IOIOJWaitConnect() Incompatibility detected", e);
+      ioio.disconnect();
     } finally {
       connecting = null;
     }
@@ -408,7 +410,13 @@ final class IOIOHelper extends Thread {
     public boolean setBaudRate(int baud) {
       doClose();
       baudrate = baud;
-      return doOpen();
+      boolean success = doOpen();
+
+      /* check if the IOIO connection can be closed, just in case
+         doOpen() has failed */
+      autoClose();
+
+      return success;
     }
 
     public int getBaudRate() {
