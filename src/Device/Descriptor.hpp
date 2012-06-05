@@ -93,8 +93,6 @@ class DeviceDescriptor : private Notify, private PortLineSplitter {
    */
   PortLineHandler *dispatcher;
 
-  DeviceDescriptor *pipe_to_device;
-
   /**
    * The device driver used to handle data to/from the device.
    */
@@ -181,10 +179,6 @@ public:
 
   void SetConfig(const DeviceConfig &config);
   void ClearConfig();
-
-  void SetPipeTo(DeviceDescriptor *_pipe_to_device) {
-    pipe_to_device = _pipe_to_device;
-  }
 
   bool IsConfigured() const {
     return config.port_type != DeviceConfig::PortType::DISABLED;

@@ -21,40 +21,22 @@ Copyright_License {
 }
 */
 
-#include "Device/List.hpp"
-#include "Device/Descriptor.hpp"
 #include "Dispatcher.hpp"
-
-DeviceDescriptor *device_list[NUMDEV];
-
-static DeviceDispatcher *dispatchers[NUMDEV];
+#include "Descriptor.hpp"
+#include "List.hpp"
 
 void
-DeviceListInitialise()
+DeviceDispatcher::LineReceived(const char *line)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDispatcher *dispatcher = dispatchers[i] = new DeviceDispatcher(i);
+    if (i == exclude)
+      /* don't loop back a device's input to itself */
+      continue;
 
-    device_list[i] = new DeviceDescriptor(i);
-    device_list[i]->SetDispatcher(dispatcher);
+    DeviceDescriptor *device = device_list[i];
+    if (device == NULL)
+      continue;
+
+    device->ForwardLine(line);
   }
 }
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-/* no, DeviceDescriptor really doesn't need a virtual destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
-void
-DeviceListDeinitialise()
-{
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    delete device_list[i];
-    delete dispatchers[i];
-  }
-}
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-#pragma GCC diagnostic pop
-#endif

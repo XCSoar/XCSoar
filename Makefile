@@ -703,6 +703,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/device.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Descriptor.cpp \
+	$(SRC)/Device/Dispatcher.cpp \
 	$(SRC)/Device/All.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Simulator.cpp \

@@ -88,7 +88,6 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
   :index(_index),
    open_job(NULL),
    port(NULL), monitor(NULL), dispatcher(NULL),
-   pipe_to_device(NULL),
    driver(NULL), device(NULL),
 #ifdef ANDROID
    internal_sensors(NULL),
@@ -282,7 +281,6 @@ DeviceDescriptor::Close()
   port = NULL;
   delete old_port;
 
-  pipe_to_device = NULL;
   ticker = false;
 
   device_blackboard->mutex.Lock();
@@ -821,9 +819,6 @@ DeviceDescriptor::LineReceived(const char *line)
 
   if (dispatcher != NULL)
     dispatcher->LineReceived(line);
-
-  if (pipe_to_device != NULL)
-    pipe_to_device->ForwardLine(line);
 
   if (ParseLine(line))
     device_blackboard->ScheduleMerge();

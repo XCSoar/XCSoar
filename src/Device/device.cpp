@@ -33,26 +33,13 @@ Copyright_License {
 #include <assert.h>
 
 static void
-devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
+devInitOne(DeviceDescriptor &device)
 {
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static PopupOperationEnvironment env;
 
   device.Open(env);
-
-  if (nmeaout == NULL && device.IsNMEAOut())
-    nmeaout = &device;
-}
-
-static void
-SetPipeTo(DeviceDescriptor &out)
-{
-  for (unsigned i = 0; i < NUMDEV; ++i) {
-    DeviceDescriptor *device = device_list[i];
-
-    device->SetPipeTo(device == &out ? NULL : &out);
-  }
 }
 
 /**
@@ -93,8 +80,6 @@ devStartup()
 {
   LogStartUp(_T("Register serial devices"));
 
-  DeviceDescriptor *pDevNmeaOut = NULL;
-
   const SystemSettings &settings = CommonInterface::GetSystemSettings();
 
   bool none_available = true;
@@ -119,7 +104,7 @@ devStartup()
     }
 
     device.SetConfig(config);
-    devInitOne(*device_list[i], pDevNmeaOut);
+    devInitOne(*device_list[i]);
   }
 
   if (none_available) {
@@ -134,12 +119,9 @@ devStartup()
 
     DeviceDescriptor &device = *device_list[0];
     device.SetConfig(config);
-    devInitOne(device, pDevNmeaOut);
+    devInitOne(device);
 #endif
   }
-
-  if (pDevNmeaOut != NULL)
-    SetPipeTo(*pDevNmeaOut);
 }
 
 bool
