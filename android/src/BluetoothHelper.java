@@ -46,8 +46,7 @@ final class BluetoothHelper {
     try {
       _adapter = BluetoothAdapter.getDefaultAdapter();
     } catch (Exception e) {
-      Log.e(TAG, "BluetoothAdapter.getDefaultAdapter() failed: " +
-            e.getMessage());
+      Log.e(TAG, "BluetoothAdapter.getDefaultAdapter() failed", e);
       _adapter = null;
     }
 
@@ -89,7 +88,7 @@ final class BluetoothHelper {
       socket.connect();
       return new BluetoothPort(socket);
     } catch (Exception e) {
-      Log.e(TAG, "Failed to connect to Bluetooth: " + e.getMessage());
+      Log.e(TAG, "Failed to connect to Bluetooth", e);
       return null;
     }
   }
