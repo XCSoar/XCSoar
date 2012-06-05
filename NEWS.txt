@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.4 - not yet released
+* calculations
+  - Contest: add FFVV NetCoupe (#1648)
 * devices
   - buffered serial port I/O
   - FLARM: new FLARM setup dialog
