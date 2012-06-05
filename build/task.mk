@@ -101,6 +101,7 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestFree.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestTriangle.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSISAT.cpp \
+	$(ENGINE_SRC_DIR)/Contest/Solvers/NetCoupe.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstraMin.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstraMax.cpp \
