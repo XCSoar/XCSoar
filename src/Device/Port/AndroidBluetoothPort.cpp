@@ -39,3 +39,13 @@ OpenAndroidBluetoothPort(const TCHAR *address, Port::Handler &handler)
 
   return new AndroidPort(handler, bridge);
 }
+
+Port *
+OpenAndroidBluetoothServerPort(Port::Handler &handler)
+{
+  PortBridge *bridge = BluetoothHelper::createServer(Java::GetEnv());
+  if (bridge == NULL)
+    return NULL;
+
+  return new AndroidPort(handler, bridge);
+}

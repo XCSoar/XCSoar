@@ -33,6 +33,7 @@ static const TCHAR *const port_type_strings[] = {
   _T("disabled"),
   _T("serial"),
   _T("rfcomm"),
+  _T("rfcomm_server"),
   _T("ioio_uart"),
   _T("auto"),
   _T("internal"),
@@ -52,6 +53,7 @@ DeviceConfig::IsAvailable() const
     return true;
 
   case PortType::RFCOMM:
+  case PortType::RFCOMM_SERVER:
     return IsAndroid();
 
   case PortType::IOIOUART:
@@ -93,6 +95,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
     return IsWindowsCE() && !IsAltair();
 
   case PortType::RFCOMM:
+  case PortType::RFCOMM_SERVER:
   case PortType::IOIOUART:
     /* errors on these are detected automatically by the driver */
     return false;
@@ -130,6 +133,9 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     _sntprintf(buffer, max_size, _T("Bluetooth %s"),
                bluetooth_mac.c_str());
     return buffer;
+
+  case PortType::RFCOMM_SERVER:
+    return _("Bluetooth server");
 
   case PortType::IOIOUART:
     _sntprintf(buffer, max_size, _T("IOIO UART %d"),

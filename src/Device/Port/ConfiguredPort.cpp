@@ -121,6 +121,14 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 #endif
 
+  case DeviceConfig::PortType::RFCOMM_SERVER:
+#ifdef ANDROID
+    return OpenAndroidBluetoothServerPort(handler);
+#else
+    LogStartUp(_T("Bluetooth not available on this platform"));
+    return NULL;
+#endif
+
   case DeviceConfig::PortType::IOIOUART:
 #if defined(ANDROID) && defined(IOIOLIB)
     if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {

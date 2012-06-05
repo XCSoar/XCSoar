@@ -33,4 +33,8 @@ gcc_malloc
 Port *
 OpenAndroidBluetoothPort(const TCHAR *address, Port::Handler &_handler);
 
+gcc_malloc
+Port *
+OpenAndroidBluetoothServerPort(Port::Handler &_handler);
+
 #endif

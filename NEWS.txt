@@ -24,6 +24,7 @@ Version 6.4 - not yet released
   - added automatic altitude infobox (baro. altitude with GPS fallback)
 * Android
   - support x86 and MIPS CPUs
+  - Bluetooth server for NMEA out
 
 Version 6.3.6 - not yet released
 * user interface

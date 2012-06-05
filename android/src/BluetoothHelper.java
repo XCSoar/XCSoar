@@ -109,4 +109,16 @@ final class BluetoothHelper {
       return null;
     }
   }
+
+  public static AndroidPort createServer() {
+    if (adapter == null)
+      return null;
+
+    try {
+      return new BluetoothServerPort(adapter, THE_UUID);
+    } catch (Exception e) {
+      Log.e(TAG, "Failed to create Bluetooth server", e);
+      return null;
+    }
+  }
 }

@@ -28,7 +28,7 @@ Copyright_License {
 
 namespace BluetoothHelper {
   static Java::TrivialClass cls;
-  static jmethodID list_method, connect_method;
+  static jmethodID list_method, connect_method, createServer_method;
 }
 
 bool
@@ -44,6 +44,8 @@ BluetoothHelper::Initialise(JNIEnv *env)
   list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
   connect_method = env->GetStaticMethodID(cls, "connect",
                                           "(Ljava/lang/String;)Lorg/xcsoar/AndroidPort;");
+  createServer_method = env->GetStaticMethodID(cls, "createServer",
+                                               "()Lorg/xcsoar/AndroidPort;");
   return true;
 }
 
@@ -75,6 +77,22 @@ BluetoothHelper::connect(JNIEnv *env, const char *address)
   const Java::String address2(env, address);
   jobject obj = env->CallStaticObjectMethod(cls, connect_method,
                                             address2.Get());
+  if (obj == NULL)
+    return NULL;
+
+  PortBridge *helper = new PortBridge(env, obj);
+  env->DeleteLocalRef(obj);
+
+  return helper;
+}
+
+PortBridge *
+BluetoothHelper::createServer(JNIEnv *env)
+{
+  if (cls == NULL)
+    return NULL;
+
+  jobject obj = env->CallStaticObjectMethod(cls, createServer_method);
   if (obj == NULL)
     return NULL;
 
