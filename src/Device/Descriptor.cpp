@@ -170,8 +170,17 @@ DeviceDescriptor::Open(Port &_port, OperationEnvironment &env)
   port = &_port;
 
   assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
-  if (driver->CreateOnPort == NULL)
+  if (driver->CreateOnPort == NULL) {
+    assert(driver->IsNMEAOut());
+
+    /* start the Port thread for NMEA out; this is a kludge for
+       TCPPort, because TCPPort calls accept() only in the receive
+       thread.  Data received from NMEA out is discarded by our method
+       DataReceived().  Once TCPPort gets fixed, this kludge can be
+       removed. */
+    port->StartRxThread();
     return true;
+  }
 
   parser.Reset();
   parser.SetReal(_tcscmp(driver->name, _T("Condor")) != 0);
@@ -789,7 +798,8 @@ DeviceDescriptor::DataReceived(const void *data, size_t length)
     return;
   }
 
-  PortLineSplitter::DataReceived(data, length);
+  if (!IsNMEAOut())
+    PortLineSplitter::DataReceived(data, length);
 }
 
 void
