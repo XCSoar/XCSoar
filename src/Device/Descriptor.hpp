@@ -87,6 +87,12 @@ class DeviceDescriptor : private Notify, private PortLineSplitter {
    */
   Port::Handler *monitor;
 
+  /**
+   * A handler that will receive all NMEA lines, to dispatch it to
+   * other devices.
+   */
+  PortLineHandler *dispatcher;
+
   DeviceDescriptor *pipe_to_device;
 
   /**
@@ -362,6 +368,10 @@ private:
 public:
   void SetMonitor(Port::Handler *_monitor) {
     monitor = _monitor;
+  }
+
+  void SetDispatcher(PortLineHandler *_dispatcher) {
+    dispatcher = _dispatcher;
   }
 
   bool WriteNMEA(const char *line);

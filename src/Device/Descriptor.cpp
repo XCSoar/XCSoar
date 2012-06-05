@@ -87,7 +87,7 @@ public:
 DeviceDescriptor::DeviceDescriptor(unsigned _index)
   :index(_index),
    open_job(NULL),
-   port(NULL), monitor(NULL),
+   port(NULL), monitor(NULL), dispatcher(NULL),
    pipe_to_device(NULL),
    driver(NULL), device(NULL),
 #ifdef ANDROID
@@ -806,6 +806,9 @@ void
 DeviceDescriptor::LineReceived(const char *line)
 {
   NMEALogger::Log(line);
+
+  if (dispatcher != NULL)
+    dispatcher->LineReceived(line);
 
   if (pipe_to_device && pipe_to_device->port) {
     // stream pipe, pass nmea to other device (NmeaOut)
