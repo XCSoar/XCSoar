@@ -56,6 +56,11 @@ class DeviceDescriptor : private Notify, private PortLineHandler {
   /** the index of this device in the global list */
   const unsigned index;
 
+  /**
+   * This device's configuration.  It may differ from the instance in
+   * #SystemSettings, because overlapping devices might have been
+   * cleared.
+   */
   DeviceConfig config;
 
   /**
@@ -64,17 +69,41 @@ class DeviceDescriptor : private Notify, private PortLineHandler {
    */
   AsyncJobRunner async;
 
+  /**
+   * The #Job that currently opens the device.  NULL if the device is
+   * not currently being opened.
+   */
   OpenDeviceJob *open_job;
 
+  /**
+   * The #Port used by this device.  This is not applicable to some
+   * devices, and is NULL in that case.
+   */
   Port *port;
+
+  /**
+   * A handler that will receive all data, to display it on the
+   * screen.  Can be set with SetMonitor().
+   */
   Port::Handler *monitor;
 
   DeviceDescriptor *pipe_to_device;
+
+  /**
+   * The device driver used to handle data to/from the device.
+   */
   const DeviceRegister *driver;
 
+  /**
+   * An instance of the driver.
+   */
   Device *device;
 
 #ifdef ANDROID
+  /**
+   * A pointer to the Java object managing all Android sensors (GPS,
+   * baro sensor and others).
+   */
   InternalSensors *internal_sensors;
 #endif
 
@@ -85,6 +114,10 @@ class DeviceDescriptor : private Notify, private PortLineHandler {
    */
   PeriodClock reopen_clock;
 
+  /**
+   * The generic NMEA parser for this device.  It may hold internal
+   * state.
+   */
   NMEAParser parser;
 
   /**
@@ -105,8 +138,15 @@ class DeviceDescriptor : private Notify, private PortLineHandler {
    */
   ExternalSettings settings_received;
 
+  /**
+   * Internal flag for OnSysTicker() for detecting link timeout.
+   */
   bool was_alive;
 
+  /**
+   * Internal flag for OnSysTicker() for calling Device::OnSysTicker()
+   * only every other time.
+   */
   bool ticker;
 
   /**
