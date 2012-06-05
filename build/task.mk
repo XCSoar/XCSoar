@@ -46,7 +46,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatEllipse.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatLine.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskAdvance.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskAdvanceLegacy.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskAdvanceSmart.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(ENGINE_SRC_DIR)/Task/OrderedTaskBehaviour.cpp \
