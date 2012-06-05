@@ -40,6 +40,10 @@ abstract class AbstractAndroidPort implements AndroidPort {
     name = _name;
   }
 
+  @Override public String toString() {
+    return name;
+  }
+
   private synchronized InputThread stealInput() {
     InputThread i = input;
     input = null;
