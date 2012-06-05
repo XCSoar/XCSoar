@@ -789,7 +789,7 @@ DeviceDescriptor::DataReceived(const void *data, size_t length)
     return;
   }
 
-  PortLineHandler::DataReceived(data, length);
+  PortLineSplitter::DataReceived(data, length);
 }
 
 void

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_VEGA_EMULATOR_HPP
 
 #include "DeviceEmulator.hpp"
-#include "Device/Port/LineHandler.hpp"
+#include "Device/Port/LineSplitter.hpp"
 #include "Device/Internal.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"
@@ -36,7 +36,7 @@ Copyright_License {
 #include <stdio.h>
 #include <string.h>
 
-class VegaEmulator : public Emulator, PortLineHandler {
+class VegaEmulator : public Emulator, PortLineSplitter {
   std::map<std::string, std::string> settings;
 
 public:
@@ -85,7 +85,7 @@ private:
 protected:
   virtual void DataReceived(const void *data, size_t length) {
     fwrite(data, 1, length, stdout);
-    PortLineHandler::DataReceived(data, length);
+    PortLineSplitter::DataReceived(data, length);
   }
 
   virtual void LineReceived(const char *_line) {

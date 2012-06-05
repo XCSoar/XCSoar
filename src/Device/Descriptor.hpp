@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
 #include "Port/Port.hpp"
-#include "Port/LineHandler.hpp"
+#include "Port/LineSplitter.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
@@ -52,7 +52,7 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 class OpenDeviceJob;
 
-class DeviceDescriptor : private Notify, private PortLineHandler {
+class DeviceDescriptor : private Notify, private PortLineSplitter {
   /** the index of this device in the global list */
   const unsigned index;
 
