@@ -35,7 +35,8 @@ enum Contests {
   OLC_Plus,
   OLC_XContest,
   OLC_DHVXC,
-  OLC_SISAT
+  OLC_SISAT,
+  OLC_NetCoupe,
 };
 
 gcc_const

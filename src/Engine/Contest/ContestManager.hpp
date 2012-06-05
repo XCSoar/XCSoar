@@ -31,6 +31,7 @@
 #include "Solvers/XContestFree.hpp"
 #include "Solvers/XContestTriangle.hpp"
 #include "Solvers/OLCSISAT.hpp"
+#include "Solvers/NetCoupe.hpp"
 #include "Solvers/Contests.hpp"
 #include "ContestStatistics.hpp"
 
@@ -60,6 +61,7 @@ class ContestManager
   XContestFree olc_dhvxc_free;
   XContestTriangle olc_dhvxc_triangle;
   OLCSISAT olc_sisat;
+  NetCoupe olc_netcoupe;
 
 public:
   /** 

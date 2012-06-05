@@ -133,6 +133,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { OLC_XContest, ContestToString(OLC_XContest), _T("tbd.") },
     { OLC_DHVXC, ContestToString(OLC_DHVXC), _T("tbd.") },
     { OLC_SISAT, ContestToString(OLC_SISAT), _T("tbd.") },
+    { OLC_NetCoupe, ContestToString(OLC_NetCoupe), N_("The FFVV NetCoupe \"libre\" competiton.") },
     { 0 }
   };
   AddEnum(_("On-Line Contest"),

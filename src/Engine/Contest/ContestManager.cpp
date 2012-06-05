@@ -39,7 +39,9 @@ ContestManager::ContestManager(const Contests _contest,
   olc_xcontest_triangle(trace_full, false),
   olc_dhvxc_free(trace_full, true),
   olc_dhvxc_triangle(trace_full, true),
-  olc_sisat(trace_full)
+  olc_sisat(trace_full),
+  olc_netcoupe(trace_full)
+
 {
   Reset();
 }
@@ -55,6 +57,7 @@ ContestManager::SetIncremental(bool incremental)
   olc_dhvxc_free.SetIncremental(incremental);
   olc_dhvxc_triangle.SetIncremental(incremental);
   olc_sisat.SetIncremental(incremental);
+  olc_netcoupe.SetIncremental(incremental);
 }
 
 void
@@ -70,6 +73,7 @@ ContestManager::SetHandicap(unsigned handicap)
   olc_dhvxc_free.SetHandicap(handicap);
   olc_dhvxc_triangle.SetHandicap(handicap);
   olc_sisat.SetHandicap(handicap);
+  olc_netcoupe.SetHandicap(handicap);
 }
 
 bool
@@ -164,6 +168,11 @@ ContestManager::UpdateIdle(bool exhaustive)
     retval = RunContest(olc_sisat, stats.result[0],
                          stats.solution[0], exhaustive);
     break;
+  case OLC_NetCoupe:
+    retval = RunContest(olc_netcoupe, stats.result[0],
+                         stats.solution[0], exhaustive);
+    break;
+
   };
 
   return retval;
@@ -183,6 +192,7 @@ ContestManager::Reset()
   olc_dhvxc_free.Reset();
   olc_dhvxc_triangle.Reset();
   olc_sisat.Reset();
+  olc_netcoupe.Reset();
 }
 
 /*

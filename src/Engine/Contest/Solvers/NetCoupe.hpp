@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -19,28 +18,25 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#include "Contests.hpp"
-#include "Util/Macros.hpp"
+#ifndef NETCOUPE_HPP
+#define NETCOUPE_HPP
 
-static const TCHAR *contest_to_string[] = {
-  _T("OLC Sprint"),
-  _T("OLC FAI"),
-  _T("OLC Classic"),
-  _T("OLC League"),
-  _T("OLC Plus"),
-  _T("XContest"),
-  _T("DHV-XC"),
-  _T("SIS-AT"),
-  _T("FFVV NetCoupe"),
+#include "ContestDijkstra.hpp"
+
+/**
+ * Specialisation of OLC Dijkstra for FFVV NetCoupe rules
+ */
+class NetCoupe:
+  public ContestDijkstra
+{
+public:
+  NetCoupe(const Trace &_trace);
+
+protected:
+  virtual fixed CalcScore() const;
+
 };
 
-const TCHAR*
-ContestToString(Contests contest)
-{
-  unsigned i = (unsigned)contest;
-  return i < ARRAY_SIZE(contest_to_string)
-    ? contest_to_string[i]
-    : NULL;
-}
+#endif
