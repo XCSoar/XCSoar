@@ -9,6 +9,8 @@ Version 6.3.6 - not yet released
   - fix crash on IOIO reconnect (#2130)
   - fix interference of two or more IOIO UARTs (#2107)
   - eliminate delay from IOIO connect
+ * task
+  - fix task start arming inconsistency
 
 Version 6.3.5 - 2012/05/31
 * calculations
