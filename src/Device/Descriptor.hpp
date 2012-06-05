@@ -374,6 +374,11 @@ public:
     dispatcher = _dispatcher;
   }
 
+  /**
+   * Write a line to the device's port if it's a NMEA out port.
+   */
+  void ForwardLine(const char *line);
+
   bool WriteNMEA(const char *line);
 #ifdef _UNICODE
   bool WriteNMEA(const TCHAR *line);

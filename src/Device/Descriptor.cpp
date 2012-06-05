@@ -446,6 +446,18 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
   return false;
 }
 
+void
+DeviceDescriptor::ForwardLine(const char *line)
+{
+  /* XXX make this method thread-safe; this method can be called from
+     any thread, and if the Port gets closed, bad things happen */
+
+  if (IsNMEAOut() && port != NULL) {
+    port->Write(line);
+    port->Write("\r\n");
+  }
+}
+
 bool
 DeviceDescriptor::WriteNMEA(const char *line)
 {
@@ -810,12 +822,8 @@ DeviceDescriptor::LineReceived(const char *line)
   if (dispatcher != NULL)
     dispatcher->LineReceived(line);
 
-  if (pipe_to_device && pipe_to_device->port) {
-    // stream pipe, pass nmea to other device (NmeaOut)
-    // TODO code: check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-    pipe_to_device->port->Write(line);
-    pipe_to_device->port->Write("\r\n");
-  }
+  if (pipe_to_device != NULL)
+    pipe_to_device->ForwardLine(line);
 
   if (ParseLine(line))
     device_blackboard->ScheduleMerge();
