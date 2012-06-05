@@ -43,7 +43,7 @@ BluetoothHelper::Initialise(JNIEnv *env)
 
   list_method = env->GetStaticMethodID(cls, "list", "()[Ljava/lang/String;");
   connect_method = env->GetStaticMethodID(cls, "connect",
-                                          "(Ljava/lang/String;)Lorg/xcsoar/BluetoothHelper;");
+                                          "(Ljava/lang/String;)Lorg/xcsoar/AndroidPort;");
   return true;
 }
 

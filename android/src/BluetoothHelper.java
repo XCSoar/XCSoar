@@ -107,7 +107,7 @@ final class BluetoothHelper extends AbstractAndroidPort {
     return addresses;
   }
 
-  public static BluetoothHelper connect(String address) {
+  public static AndroidPort connect(String address) {
     if (adapter == null)
       return null;
 
