@@ -408,7 +408,13 @@ final class IOIOHelper extends Thread {
     public boolean setBaudRate(int baud) {
       doClose();
       baudrate = baud;
-      return doOpen();
+      boolean success = doOpen();
+
+      /* check if the IOIO connection can be closed, just in case
+         doOpen() has failed */
+      autoClose();
+
+      return success;
     }
 
     public int getBaudRate() {
