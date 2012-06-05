@@ -62,6 +62,10 @@ abstract class AbstractAndroidPort implements AndroidPort {
     output.setTimeout(5000);
   }
 
+  protected void setWriteTimeout(int timeout_ms) {
+    output.setTimeout(timeout_ms);
+  }
+
   @Override public void setListener(InputListener _listener) {
     listener = _listener;
     if (input != null)
