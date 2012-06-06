@@ -62,17 +62,15 @@ public:
       name = (base_name != NULL) ? base_name : path;
 
       // If the task file holds more than one task
-      if (count > 1) {
-        if (i < task_file->namesuffixes.size() &&
-            task_file->namesuffixes[i]) {
+      if (i < task_file->namesuffixes.size() &&
+          task_file->namesuffixes[i]) {
 
-          name += _T(": ");
-          name += task_file->namesuffixes[i];
+        name += _T(": ");
+        name += task_file->namesuffixes[i];
 
-        } else {
-          // .. append " - Task #[n]" suffix to the task name
-          name.AppendFormat(_T(": %s #%2d"), _("Task"), i + 1);
-        }
+      } else if (count > 1) {
+        // .. append " - Task #[n]" suffix to the task name
+        name.AppendFormat(_T(": %s #%d"), _("Task"), i + 1);
       }
 
       // Add the task to the TaskStore
