@@ -134,7 +134,7 @@ Profile::Load(AirspaceComputerSettings &settings)
   unsigned value;
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
     MakeAirspaceSettingName(name, _T("AirspaceWarning"), i);
-    if (Get(name, settings.warnings.class_warnings[i])) {
+    if (!Get(name, settings.warnings.class_warnings[i])) {
       // Load setting from legacy key-value pair
       MakeAirspaceSettingName(name, _T("AirspaceMode"), i);
       if (Get(name, value))
