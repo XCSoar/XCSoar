@@ -73,7 +73,7 @@ RTTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
   to.is_closed = false;
   to.min_points = 2;
   to.max_points = 13;
-  to.start_requires_arm = true;
+  to.start_requires_arm = false;
 }
 
 AbstractTaskFactory::LegalPointType
