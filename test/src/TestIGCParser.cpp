@@ -171,20 +171,20 @@ TestFixTime()
   BrokenTime time;
   ok1(!IGCParseFixTime("", time));
 
-  ok1(IGCParseFixTime("B000000", time));
+  ok1(IGCParseFixTime("000000", time));
   ok1(time == BrokenTime(00, 00, 00));
 
-  ok1(IGCParseFixTime("B112238", time));
+  ok1(IGCParseFixTime("112238", time));
   ok1(time == BrokenTime(11, 22, 38));
 
-  ok1(IGCParseFixTime("B235959", time));
+  ok1(IGCParseFixTime("235959", time));
   ok1(time == BrokenTime(23, 59, 59));
 
-  ok1(!IGCParseFixTime("B235960", time));
-  ok1(!IGCParseFixTime("B236059", time));
-  ok1(!IGCParseFixTime("B240000", time));
+  ok1(!IGCParseFixTime("235960", time));
+  ok1(!IGCParseFixTime("236059", time));
+  ok1(!IGCParseFixTime("240000", time));
 
-  ok1(IGCParseFixTime("B0123375103117N00742367EV0049000487", time));
+  ok1(IGCParseFixTime("0123375103117N00742367EV0049000487", time));
   ok1(time == BrokenTime(01, 23, 37));
 }
 

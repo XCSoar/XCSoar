@@ -540,10 +540,11 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
     if (StringIsEmpty(buffer))
       break;
 
-    if (status_clock.CheckUpdate(250)) {
+    if (status_clock.CheckUpdate(250) &&
+        *buffer == 'B') {
       // Parse the fix time
       BrokenTime time;
-      if (IGCParseFixTime(buffer, time)) {
+      if (IGCParseFixTime(buffer + 1, time)) {
 
         unsigned time_sec = time.GetSecondOfDay();
         if (time_sec < start_sec)

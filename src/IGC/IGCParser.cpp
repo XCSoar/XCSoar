@@ -218,8 +218,11 @@ ParseExtensionValueN(const char *p, const char *end, size_t n,
 bool
 IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
 {
+  if (*buffer != 'B')
+    return false;
+
   BrokenTime time;
-  if (!IGCParseFixTime(buffer, time))
+  if (!IGCParseFixTime(buffer + 1, time))
     return false;
 
   char valid_char;
@@ -330,7 +333,7 @@ IGCParseFixTime(const char *buffer, BrokenTime &time)
 {
   unsigned hour, minute, second;
 
-  if (sscanf(buffer, "B%02u%02u%02u", &hour, &minute, &second) != 3)
+  if (sscanf(buffer, "%02u%02u%02u", &hour, &minute, &second) != 3)
     return false;
 
   if (hour >= 24 || minute >= 60 || second >= 60)

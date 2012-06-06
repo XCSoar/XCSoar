@@ -78,9 +78,9 @@ bool
 IGCParseFix(const char *buffer, IGCFix &fix);
 
 /**
- * Parse the time from an IGC "B" record.
+ * Parse a time in IGC file format (HHMMSS).
  *
- * @return true on success, false if the line was not recognized
+ * @return true on success, false if the time was not recognized
  */
 bool
 IGCParseFixTime(const char *buffer, BrokenTime &time);
