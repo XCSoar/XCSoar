@@ -8,6 +8,8 @@ Version 6.3.6 - not yet released
   - fix crash in thermal locator (#2137)
 * devices
   - fix NMEA out
+* data files
+  - added "ASW-28 (15m)" polar (#1919)
 * user interface
   - ignore double clicks when mouse/finger has moved
 * Android
