@@ -29,6 +29,7 @@ struct IGCHeader;
 struct IGCExtensions;
 struct BrokenDate;
 struct BrokenTime;
+struct GeoPoint;
 
 /**
  * Parse an IGC "A" record.
@@ -53,6 +54,14 @@ IGCParseDate(const char *line, BrokenDate &date);
  */
 bool
 IGCParseExtensions(const char *buffer, IGCExtensions &extensions);
+
+/**
+ * Parse a location in IGC file format. (DDMMmmm[N/S]DDDMMmmm[E/W])
+ *
+ * @return true on success, false if the location was not recognized
+ */
+bool
+IGCParseLocation(const char *buffer, GeoPoint &location);
 
 /**
  * Parse an IGC "B" record.

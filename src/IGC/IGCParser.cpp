@@ -222,22 +222,11 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
   if (!IGCParseFixTime(buffer, time))
     return false;
 
-  unsigned lat_degrees, lat_minutes, lon_degrees, lon_minutes;
-  char lat_char, lon_char, valid_char;
+  char valid_char;
   int gps_altitude, pressure_altitude;
 
-  if (sscanf(buffer + 7, "%02u%05u%c%03u%05u%c%c%05d%05d",
-             &lat_degrees, &lat_minutes, &lat_char,
-             &lon_degrees, &lon_minutes, &lon_char,
-             &valid_char, &pressure_altitude, &gps_altitude) != 9)
-    return false;
-
-  if (lat_degrees >= 90 || lat_minutes >= 60000 ||
-      (lat_char != 'N' && lat_char != 'S'))
-    return false;
-
-  if (lon_degrees >= 180 || lon_minutes >= 60000 ||
-      (lon_char != 'E' && lon_char != 'W'))
+  if (sscanf(buffer + 24, "%c%05d%05d",
+             &valid_char, &pressure_altitude, &gps_altitude) != 3)
     return false;
 
   if (valid_char == 'A')
@@ -247,18 +236,11 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
   else
     return false;
 
-  fix.location.latitude = Angle::Degrees(fixed(lat_degrees) +
-                                         fixed(lat_minutes) / 60000);
-  if (lat_char == 'S')
-    fix.location.latitude.Flip();
-
-  fix.location.longitude = Angle::Degrees(fixed(lon_degrees) +
-                                          fixed(lon_minutes) / 60000);
-  if (lon_char == 'W')
-    fix.location.longitude.Flip();
-
   fix.gps_altitude = gps_altitude;
   fix.pressure_altitude = pressure_altitude;
+
+  if (!IGCParseLocation(buffer + 7, fix.location))
+    return false;
 
   fix.time = time;
 
@@ -298,6 +280,38 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
     else if (strcmp(extension.code, "SIU") == 0)
       ParseExtensionValue(start, finish, fix.siu);
   }
+
+  return true;
+}
+
+bool
+IGCParseLocation(const char *buffer, GeoPoint &location)
+{
+  unsigned lat_degrees, lat_minutes, lon_degrees, lon_minutes;
+  char lat_char, lon_char;
+
+  if (sscanf(buffer, "%02u%05u%c%03u%05u%c",
+             &lat_degrees, &lat_minutes, &lat_char,
+             &lon_degrees, &lon_minutes, &lon_char) != 6)
+    return false;
+
+  if (lat_degrees >= 90 || lat_minutes >= 60000 ||
+      (lat_char != 'N' && lat_char != 'S'))
+    return false;
+
+  if (lon_degrees >= 180 || lon_minutes >= 60000 ||
+      (lon_char != 'E' && lon_char != 'W'))
+    return false;
+
+  location.latitude = Angle::Degrees(fixed(lat_degrees) +
+                                     fixed(lat_minutes) / 60000);
+  if (lat_char == 'S')
+    location.latitude.Flip();
+
+  location.longitude = Angle::Degrees(fixed(lon_degrees) +
+                                      fixed(lon_minutes) / 60000);
+  if (lon_char == 'W')
+    location.longitude.Flip();
 
   return true;
 }

@@ -102,6 +102,26 @@ TestDate()
 }
 
 static void
+TestLocation()
+{
+  GeoPoint location;
+  ok1(!IGCParseLocation("", location));
+  ok1(!IGCParseLocation("9103117N00742367E", location));
+  ok1(!IGCParseLocation("-203117N00742367E", location));
+  ok1(!IGCParseLocation("5103117N20742367E", location));
+
+  ok1(IGCParseLocation("5103117N00742367E", location));
+  ok1(equals(location, 51.05195, 7.706116667));
+
+  ok1(IGCParseLocation("1234500S12345678E", location));
+  ok1(equals(location, -12.575, 123.7613));
+  ok1(IGCParseLocation("1234500N12345678W", location));
+  ok1(equals(location, 12.575, -123.7613));
+  ok1(IGCParseLocation("1234500S12345678W", location));
+  ok1(equals(location, -12.575, -123.7613));
+}
+
+static void
 TestFix()
 {
   IGCFix fix;
@@ -170,10 +190,11 @@ TestFixTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(91);
+  plan_tests(103);
 
   TestHeader();
   TestDate();
+  TestLocation();
   TestExtensions();
   TestFix();
   TestFixTime();
