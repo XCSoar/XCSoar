@@ -24,6 +24,7 @@
 #include "IGC/IGCExtensions.hpp"
 #include "IGC/IGCFix.hpp"
 #include "IGC/IGCHeader.hpp"
+#include "IGC/IGCDeclaration.hpp"
 #include "DateTime.hpp"
 #include "TestUtil.hpp"
 
@@ -188,9 +189,64 @@ TestFixTime()
   ok1(time == BrokenTime(01, 23, 37));
 }
 
+static void
+TestDeclarationHeader()
+{
+  IGCDeclarationHeader header;
+  ok1(!IGCParseDeclarationHeader("", header));
+  ok1(!IGCParseDeclarationHeader("C0309111642280309110001-2", header));
+
+  ok1(IGCParseDeclarationHeader("C020811084345000000000002Task", header));
+  ok1(header.datetime.day == 2);
+  ok1(header.datetime.month == 8);
+  ok1(header.datetime.year == 2011);
+  ok1(header.datetime.hour == 8);
+  ok1(header.datetime.minute == 43);
+  ok1(header.datetime.second == 45);
+  ok1(!header.flight_date.Plausible());
+  ok1(header.num_turnpoints == 2);
+  ok1(header.task_id[0] == '0' &&
+      header.task_id[1] == '0' &&
+      header.task_id[2] == '0' &&
+      header.task_id[3] == '0');
+  ok1(header.task_name == "Task");
+
+  ok1(IGCParseDeclarationHeader("C210706120510210706000103", header));
+  ok1(header.datetime.day == 21);
+  ok1(header.datetime.month == 7);
+  ok1(header.datetime.year == 2006);
+  ok1(header.datetime.hour == 12);
+  ok1(header.datetime.minute == 5);
+  ok1(header.datetime.second == 10);
+  ok1(header.flight_date.day == 21);
+  ok1(header.flight_date.month == 7);
+  ok1(header.flight_date.year == 2006);
+  ok1(header.num_turnpoints == 3);
+  ok1(header.task_id[0] == '0' &&
+      header.task_id[1] == '0' &&
+      header.task_id[2] == '0' &&
+      header.task_id[3] == '1');
+  ok1(header.task_name.empty());
+}
+
+static void
+TestDeclarationTurnpoint()
+{
+  IGCDeclarationTurnpoint tp;
+  ok1(!IGCParseDeclarationTurnpoint("", tp));
+
+  ok1(IGCParseDeclarationTurnpoint("C5000633N01015083ESchweinfurtsued", tp));
+  ok1(equals(tp.location, 50.01055, 10.251383333));
+  ok1(tp.name == "Schweinfurtsued");
+
+  ok1(IGCParseDeclarationTurnpoint("C5100633S00015083W", tp));
+  ok1(equals(tp.location, -51.01055, -0.251383333));
+  ok1(tp.name.empty());
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(103);
+  plan_tests(136);
 
   TestHeader();
   TestDate();
@@ -198,6 +254,8 @@ int main(int argc, char **argv)
   TestExtensions();
   TestFix();
   TestFixTime();
+  TestDeclarationHeader();
+  TestDeclarationTurnpoint();
 
   return exit_status();
 }

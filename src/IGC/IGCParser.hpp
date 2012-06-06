@@ -27,6 +27,8 @@ Copyright_License {
 struct IGCFix;
 struct IGCHeader;
 struct IGCExtensions;
+struct IGCDeclarationHeader;
+struct IGCDeclarationTurnpoint;
 struct BrokenDate;
 struct BrokenTime;
 struct GeoPoint;
@@ -84,5 +86,21 @@ IGCParseFix(const char *buffer, IGCFix &fix);
  */
 bool
 IGCParseTime(const char *buffer, BrokenTime &time);
+
+/**
+ * Parse an IGC "C" header record.
+ *
+ * @return true on success, false if the line was not recognized
+ */
+bool
+IGCParseDeclarationHeader(const char *line, IGCDeclarationHeader &header);
+
+/**
+ * Parse an IGC "C" turnpoint record.
+ *
+ * @return true on success, false if the line was not recognized
+ */
+bool
+IGCParseDeclarationTurnpoint(const char *line, IGCDeclarationTurnpoint &tp);
 
 #endif

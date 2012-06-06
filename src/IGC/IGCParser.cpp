@@ -25,6 +25,7 @@ Copyright_License {
 #include "IGCHeader.hpp"
 #include "IGCFix.hpp"
 #include "IGCExtensions.hpp"
+#include "IGCDeclaration.hpp"
 #include "DateTime.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/Macros.hpp"
@@ -338,4 +339,54 @@ IGCParseTime(const char *buffer, BrokenTime &time)
 
   time = BrokenTime(hour, minute, second);
   return time.Plausible();
+}
+
+static bool
+IGCParseDate(const char *buffer, BrokenDate &date)
+{
+  unsigned day, month, year;
+
+  if (sscanf(buffer, "%02u%02u%02u", &day, &month, &year) != 3)
+    return false;
+
+  date = BrokenDate(year + 2000, month, day);
+  return date.Plausible();
+}
+
+bool
+IGCParseDeclarationHeader(const char *line, IGCDeclarationHeader &header)
+{
+  if (*line != 'C' || strlen(line) < 25)
+    return false;
+
+  if (!IGCParseDate(line + 1, header.datetime))
+    return false;
+
+  if (!IGCParseTime(line + 7, header.datetime))
+    return false;
+
+  if (!IGCParseDate(line + 13, header.flight_date))
+    header.flight_date.Clear();
+
+  if (!sscanf(line + 23, "%02u", &header.num_turnpoints) ||
+      header.num_turnpoints > 99)
+    return false;
+
+  std::copy(line + 19, line + 23, header.task_id);
+
+  header.task_name = line + 25;
+  return true;
+}
+
+bool
+IGCParseDeclarationTurnpoint(const char *line, IGCDeclarationTurnpoint &tp)
+{
+  if (*line != 'C' || strlen(line) < 18)
+    return false;
+
+  if (!IGCParseLocation(line + 1, tp.location))
+    return false;
+
+  tp.name = line + 18;
+  return true;
 }
