@@ -92,7 +92,6 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
     // Declared number of turnpoints is not matching parsed number of turnpoints
     return NULL;
 
-
   // Create a blank task
   OrderedTask *task = new OrderedTask(task_behaviour);
   AbstractTaskFactory &fact = task->GetFactory();
@@ -151,8 +150,20 @@ TaskFileIGC::Count()
     if (*line != 'C')
       continue;
 
-    return (IGCParseDeclarationHeader(line, header) &&
-            header.num_turnpoints > 0) ? 1 : 0;
+    if (!IGCParseDeclarationHeader(line, header) ||
+        header.num_turnpoints == 0)
+      return 0;
+
+    if (!header.task_name.empty() &&
+        !StringIsEqual(header.task_name, "Task")) {
+      // Remember the task name
+      StaticString<256> task_name;
+      task_name.clear();
+      task_name.UnsafeAppendASCII(header.task_name.c_str());
+      namesuffixes.append(_tcsdup(task_name.c_str()));
+    }
+
+    return 1;
   }
 
   return 0;
