@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.3.6 - not yet released
+Version 6.3.6 - 2012/06/06
 * calculations
   - fix task start arming inconsistency
   - fix crash in thermal locator (#2137)
