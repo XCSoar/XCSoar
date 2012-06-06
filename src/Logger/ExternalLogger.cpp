@@ -207,7 +207,7 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
     IGCParseHeader(line, header);
 
   line = reader.read();
-  if (line == NULL || !IGCParseDate(line, date))
+  if (line == NULL || !IGCParseDateRecord(line, date))
     date = BrokenDateTime::NowUTC();
 }
 

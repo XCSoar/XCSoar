@@ -88,7 +88,7 @@ IGCParseHeader(const char *line, IGCHeader &header)
 }
 
 bool
-IGCParseDate(const char *line, BrokenDate &date)
+IGCParseDateRecord(const char *line, BrokenDate &date)
 {
   if (memcmp(line, "HFDTE", 5) != 0)
     return false;

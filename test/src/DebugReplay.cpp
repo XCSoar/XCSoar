@@ -159,7 +159,7 @@ DebugReplayIGC::Next()
     } else if (line[0] == 'H') {
       BrokenDate date;
       if (memcmp(line, "HFDTE", 5) == 0 &&
-          IGCParseDate(line, date)) {
+          IGCParseDateRecord(line, date)) {
         (BrokenDate &)basic.date_time_utc = date;
         basic.date_available = true;
       }

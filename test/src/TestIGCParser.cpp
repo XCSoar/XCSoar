@@ -81,21 +81,21 @@ static void
 TestDate()
 {
   BrokenDate date;
-  ok1(!IGCParseDate("", date));
-  ok1(!IGCParseDate("B1122385103117N00742367EA004900048700000", date));
-  ok1(!IGCParseDate("HFDTEXXX", date));
+  ok1(!IGCParseDateRecord("", date));
+  ok1(!IGCParseDateRecord("B1122385103117N00742367EA004900048700000", date));
+  ok1(!IGCParseDateRecord("HFDTEXXX", date));
 
-  ok1(IGCParseDate("HFDTE040910", date));
+  ok1(IGCParseDateRecord("HFDTE040910", date));
   ok1(date.year == 2010);
   ok1(date.month == 9);
   ok1(date.day == 4);
 
-  ok1(IGCParseDate("HFDTE010100", date));
+  ok1(IGCParseDateRecord("HFDTE010100", date));
   ok1(date.year == 2000);
   ok1(date.month == 1);
   ok1(date.day == 1);
 
-  ok1(IGCParseDate("HFDTE311299", date));
+  ok1(IGCParseDateRecord("HFDTE311299", date));
   ok1(date.year == 2099);
   ok1(date.month == 12);
   ok1(date.day == 31);

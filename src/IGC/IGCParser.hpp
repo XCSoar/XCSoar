@@ -45,7 +45,7 @@ IGCParseHeader(const char *line, IGCHeader &header);
  * @return true on success, false if the line was not recognized
  */
 bool
-IGCParseDate(const char *line, BrokenDate &date);
+IGCParseDateRecord(const char *line, BrokenDate &date);
 
 /**
  * Parse an IGC "I" record.
