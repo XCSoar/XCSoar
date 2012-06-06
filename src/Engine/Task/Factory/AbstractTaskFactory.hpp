@@ -148,7 +148,10 @@ protected:
 public:
   virtual ~AbstractTaskFactory() {}
 
-  /// @todo should be abstract
+  /**
+   * Updates the OrderedTaskBehaviour with values required by
+   * the factory type of the task.
+   */
   virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 
   /**
