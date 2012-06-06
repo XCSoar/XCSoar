@@ -28,21 +28,20 @@
 #include "TaskPoints/AATPoint.hpp"
 #include "Util/StringUtil.hpp"
 
-// uses delegate pattern
-
-
-TaskManager::TaskManager(const Waypoints &wps)
+TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
+                         const Waypoints &wps)
   :glide_polar(fixed_zero), safety_polar(fixed_one),
+   task_behaviour(_task_behaviour),
    task_ordered(task_behaviour),
    task_goto(task_behaviour, wps),
    task_abort(task_behaviour, wps),
-  mode(MODE_NULL),
-  active_task(NULL) {
+   mode(MODE_NULL),
+   active_task(NULL) {
   null_stats.reset();
 }
 
 void
-TaskManager::SetTaskBehaviour(const TaskBehaviour& behaviour)
+TaskManager::SetTaskBehaviour(const TaskBehaviour &behaviour)
 {
   task_behaviour = behaviour;
 
@@ -53,7 +52,7 @@ TaskManager::SetTaskBehaviour(const TaskBehaviour& behaviour)
   task_abort.SetTaskBehaviour(behaviour);
 }
 
-TaskManager::TaskMode 
+TaskManager::TaskMode
 TaskManager::SetMode(const TaskMode _mode)
 {
   switch(_mode) {
@@ -84,14 +83,14 @@ TaskManager::SetMode(const TaskMode _mode)
   return mode;
 }
 
-void 
+void
 TaskManager::SetActiveTaskPoint(unsigned index)
 {
   if (active_task)
     active_task->SetActiveTaskPoint(index);
 }
 
-unsigned 
+unsigned
 TaskManager::GetActiveTaskPointIndex() const
 {
   if (active_task)
@@ -100,7 +99,7 @@ TaskManager::GetActiveTaskPointIndex() const
   return 0;
 }
 
-void 
+void
 TaskManager::IncrementActiveTaskPoint(int offset)
 {
   if (active_task) {
@@ -119,7 +118,7 @@ TaskManager::IncrementActiveTaskPoint(int offset)
 TaskWaypoint*
 TaskManager::GetActiveTaskPoint() const
 {
-  if (active_task) 
+  if (active_task)
     return active_task->GetActiveTaskPoint();
 
   return NULL;
@@ -256,24 +255,24 @@ TaskManager::UpdateCommonStatsPolar(const AircraftState &state)
   common_stats.current_bugs = glide_polar.GetBugs();
   common_stats.current_ballast = glide_polar.GetBallast();
 
-  common_stats.current_risk_mc = 
-    glide_polar.GetRiskMC(state.working_band_fraction, 
+  common_stats.current_risk_mc =
+    glide_polar.GetRiskMC(state.working_band_fraction,
                           task_behaviour.risk_gamma);
 
   GlidePolar risk_polar = glide_polar;
   risk_polar.SetMC(common_stats.current_risk_mc);
 
-  common_stats.V_block = 
+  common_stats.V_block =
     glide_polar.SpeedToFly(state,
-                               GetStats().current_leg.solution_remaining,
-                               true);
+                           GetStats().current_leg.solution_remaining,
+                           true);
 
   // note right now we only use risk mc for dolphin speeds
 
-  common_stats.V_dolphin = 
+  common_stats.V_dolphin =
     risk_polar.SpeedToFly(state,
-                            GetStats().current_leg.solution_remaining,
-                            false);
+                          GetStats().current_leg.solution_remaining,
+                          false);
 }
 
 void
@@ -285,16 +284,16 @@ TaskManager::UpdateCommonStats(const AircraftState &state)
   UpdateCommonStatsPolar(state);
 }
 
-bool 
-TaskManager::Update(const AircraftState &state, 
+bool
+TaskManager::Update(const AircraftState &state,
                     const AircraftState &state_last)
 {
-  // always update ordered task so even if we are temporarily
-  // in a different mode, so the task stats are still updated.
-  // Otherwise, the task stats would freeze and sampling etc would
-  // not be performed.  In actual use, even if you are in Abort/Goto
-  // you still may want to go back to the task and have it know where
-  // you went with respect to your task turnpoints etc.
+  /* always update ordered task so even if we are temporarily in a
+     different mode, so the task stats are still updated.  Otherwise,
+     the task stats would freeze and sampling etc would not be
+     performed.  In actual use, even if you are in Abort/Goto you
+     still may want to go back to the task and have it know where you
+     went with respect to your task turnpoints etc. */
 
   bool retval = false;
 
@@ -305,7 +304,7 @@ TaskManager::Update(const AircraftState &state,
     // always update ordered task
     retval |= task_ordered.Update(state, state_last, glide_polar);
 
-  // inform the abort task whether it is running as the task or not  
+  // inform the abort task whether it is running as the task or not
   task_abort.SetActive(active_task == &task_abort);
 
   // and tell it where the task destination is (if any)
@@ -325,9 +324,8 @@ TaskManager::Update(const AircraftState &state,
 
   retval |= task_abort.Update(state, state_last, GetReachPolar());
 
-  if (active_task 
-      && (active_task != &task_ordered)
-      && (active_task != &task_abort))
+  if (active_task && active_task != &task_ordered &&
+      active_task != &task_abort)
     // update mode task for any that have not yet run
     retval |= active_task->Update(state, state_last, glide_polar);
 
@@ -336,8 +334,8 @@ TaskManager::Update(const AircraftState &state,
   return retval;
 }
 
-bool 
-TaskManager::UpdateIdle(const AircraftState& state)
+bool
+TaskManager::UpdateIdle(const AircraftState &state)
 {
   bool retval = false;
 
@@ -352,7 +350,7 @@ TaskManager::UpdateIdle(const AircraftState& state)
   return retval;
 }
 
-const TaskStats& 
+const TaskStats&
 TaskManager::GetStats() const
 {
   if (active_task)
@@ -372,10 +370,10 @@ TaskManager::DoGoto(const Waypoint &wp)
   return false;
 }
 
-bool 
+bool
 TaskManager::CheckTask() const
 {
-  if (active_task) 
+  if (active_task)
     return active_task->CheckTask();
 
   return false;
@@ -391,7 +389,7 @@ TaskManager::Reset()
   glide_polar.SetCruiseEfficiency(fixed_one);
 }
 
-unsigned 
+unsigned
 TaskManager::TaskSize() const
 {
   if (active_task)
@@ -400,7 +398,7 @@ TaskManager::TaskSize() const
   return 0;
 }
 
-GeoPoint 
+GeoPoint
 TaskManager::RandomPointInTask(const unsigned index, const fixed mag) const
 {
   if (active_task == &task_ordered && task_ordered.IsValidIndex(index))
@@ -413,7 +411,7 @@ TaskManager::RandomPointInTask(const unsigned index, const fixed mag) const
   return null_location;
 }
 
-void 
+void
 TaskManager::SetGlidePolar(const GlidePolar &_glide_polar)
 {
   glide_polar = _glide_polar;
@@ -422,7 +420,7 @@ TaskManager::SetGlidePolar(const GlidePolar &_glide_polar)
   safety_polar.SetMC(task_behaviour.safety_mc);
 }
 
-fixed 
+fixed
 TaskManager::GetFinishHeight() const
 {
   if (active_task)
@@ -431,8 +429,8 @@ TaskManager::GetFinishHeight() const
   return fixed_zero;
 }
 
-bool 
-TaskManager::UpdateAutoMC(const AircraftState& state_now,
+bool
+TaskManager::UpdateAutoMC(const AircraftState &state_now,
                           const fixed fallback_mc)
 {
   if (active_task &&
@@ -470,7 +468,7 @@ TaskManager::IsInSector (const unsigned index, const AircraftState &ref,
 
 const GeoPoint&
 TaskManager::GetLocationTarget(const unsigned index,
-                               const GeoPoint& fallback_location) const
+                               const GeoPoint &fallback_location) const
 {
   if (!CheckOrderedTask())
     return fallback_location;
@@ -562,14 +560,14 @@ TaskManager::TargetLock(const unsigned index, bool do_lock)
   return true;
 }
 
-OrderedTask* 
+OrderedTask *
 TaskManager::Clone(const TaskBehaviour &tb) const
 {
   return task_ordered.Clone(tb);
 }
 
-bool 
-TaskManager::Commit(const OrderedTask& other)
+bool
+TaskManager::Commit(const OrderedTask &other)
 {
   bool retval = task_ordered.Commit(other);
 
@@ -599,7 +597,7 @@ TaskManager::Commit(const OrderedTask& other)
 }
 
 void
-TaskManager::TakeoffAutotask(const GeoPoint& loc, const fixed terrain_alt)
+TaskManager::TakeoffAutotask(const GeoPoint &loc, const fixed terrain_alt)
 {
   // create a goto task on takeoff
   if (!active_task && task_goto.TakeoffAutotask(loc, terrain_alt))

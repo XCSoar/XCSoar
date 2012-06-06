@@ -194,8 +194,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   blackboard.SetComputerSettings().SetDefaults();
   blackboard.SetUISettings().SetDefaults();
 
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
+
+  TaskManager task_manager(task_behaviour, way_points);
   GlideComputerTaskEvents task_events;
-  TaskManager task_manager(way_points);
   task_manager.SetTaskEvents(task_events);
 
   Airspaces airspace_database;

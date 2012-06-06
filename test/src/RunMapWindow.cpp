@@ -42,7 +42,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "Engine/Task/TaskManager.hpp"
 #include "LogFile.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Operation/Operation.hpp"

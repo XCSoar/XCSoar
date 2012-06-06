@@ -317,7 +317,7 @@ XCSoarInterface::Startup()
 #endif
 
   // Initialize main blackboard data
-  task_manager = new TaskManager(way_points);
+  task_manager = new TaskManager(GetComputerSettings().task, way_points);
   task_manager->SetTaskEvents(task_events);
   task_manager->Reset();
 

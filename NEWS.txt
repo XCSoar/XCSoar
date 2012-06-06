@@ -26,17 +26,24 @@ Version 6.4 - not yet released
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out
 
-Version 6.3.6 - not yet released
+Version 6.3.6 - 2012/06/06
+* calculations
+  - fix task start arming inconsistency
+  - fix crash in thermal locator (#2137)
+  - consider head wind in STF only if MacCready setting is zero
 * devices
   - fix NMEA out
+* data files
+  - added "ASW-28 (15m)" polar (#1919)
 * user interface
   - ignore double clicks when mouse/finger has moved
+  - the "back" key returns focus to map
+* Windows
+  - check for XCSoarData in the XCSoar.exe directory (#2136)
 * Android
   - fix crash on IOIO reconnect (#2130)
   - fix interference of two or more IOIO UARTs (#2107)
   - eliminate delay from IOIO connect
- * task
-  - fix task start arming inconsistency
 
 Version 6.3.5 - 2012/05/31
 * calculations

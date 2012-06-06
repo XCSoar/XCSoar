@@ -32,6 +32,10 @@ Copyright_License {
 #include "Android/Environment.hpp"
 #endif
 
+#ifdef WIN32
+#include "OS/PathName.hpp"
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -175,6 +179,25 @@ ContractLocalPath(TCHAR* filein)
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 }
+
+#ifdef WIN32
+
+/**
+ * Find a XCSoarData folder in the same location as the executable.
+ */
+static const TCHAR *
+FindDataPathAtModule(HMODULE hModule, TCHAR *buffer)
+{
+  if (GetModuleFileName(hModule, buffer, MAX_PATH) <= 0)
+    return NULL;
+
+  ReplaceBaseName(buffer, _T(XCSDATADIR));
+  return Directory::Exists(buffer)
+    ? buffer
+    : NULL;
+}
+
+#endif
 
 #ifdef _WIN32_WCE
 
@@ -353,6 +376,15 @@ FindDataPath()
     /* hard-coded path for Altair */
     return _tcsdup(_T("\\NOR Flash"));
   }
+
+#ifdef WIN32
+  {
+    TCHAR buffer[MAX_PATH];
+    const TCHAR *path = FindDataPathAtModule(NULL, buffer);
+    if (path != NULL)
+      return _tcsdup(path);
+  }
+#endif
 
   if (IsAndroid()) {
 #ifdef ANDROID

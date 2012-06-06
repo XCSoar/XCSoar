@@ -36,7 +36,6 @@ ProtectedTaskManager::ProtectedTaskManager(TaskManager &_task_manager,
   :Guard<TaskManager>(_task_manager),
    task_behaviour(tb)
 {
-  _task_manager.SetTaskBehaviour(task_behaviour);
 }
 
 ProtectedTaskManager::~ProtectedTaskManager() {

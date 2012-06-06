@@ -41,6 +41,13 @@ LastSeparator(const TCHAR *path)
   return p;
 }
 
+gcc_pure
+static TCHAR *
+LastSeparator(TCHAR *path)
+{
+  return const_cast<TCHAR *>(LastSeparator((const TCHAR *)path));
+}
+
 bool
 IsBaseName(const TCHAR *path)
 {
@@ -76,6 +83,17 @@ DirName(const TCHAR *gcc_restrict path, TCHAR *gcc_restrict buffer)
   TCHAR *end = std::copy(path, p, buffer);
   *end = _T('\0');
   return buffer;
+}
+
+void
+ReplaceBaseName(TCHAR *path, const TCHAR *new_base)
+{
+  TCHAR *q = LastSeparator(path);
+  if (q != NULL)
+    ++q;
+  else
+    q = path;
+  _tcscpy(q, new_base);
 }
 
 bool

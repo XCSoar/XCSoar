@@ -438,6 +438,11 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
     if (!HandleKey(InfoBoxContent::ibkEnter))
       InfoBoxManager::ShowDlgInfoBox(id);
     return true;
+
+  case VK_ESCAPE:
+    focus_timer.Cancel();
+    parent.SetFocus();
+    return true;
   }
 
   /* handle global hot key */

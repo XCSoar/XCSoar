@@ -36,30 +36,33 @@ int main(int argc, char** argv)
 
   GlidePolar glide_polar(fixed_two);
 
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
+
   Waypoints waypoints;
   setup_waypoints(waypoints);
 
   {
-    TaskManager task_manager(waypoints);
+    TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
     test_task_bad(task_manager,waypoints);
   }
 
   {
     for (unsigned i = 0; i < NUM_TYPE_MANIPS; i++) {
-      TaskManager task_manager(waypoints);
+      TaskManager task_manager(task_behaviour, waypoints);
       ok(test_task_type_manip(task_manager,waypoints, i+2), "construction: task type manip", 0);
     }
   }
 
   for (int i=0; i<NUM_TASKS+2; i++) {
-    TaskManager task_manager(waypoints);
+    TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
     ok(test_task(task_manager, waypoints, i),test_name("construction",i,0),0);
   }
 
   for (int i=0; i<NUM_RANDOM; i++) {
-    TaskManager task_manager(waypoints);
+    TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
     ok(test_task(task_manager, waypoints, 7),test_name("construction",7,0),0);
   }

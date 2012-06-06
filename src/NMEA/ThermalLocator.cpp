@@ -25,6 +25,8 @@ Copyright_License {
 #include "Engine/Navigation/SpeedVector.hpp"
 #include "Math/Earth.hpp"
 
+#include <algorithm>
+
 void
 ThermalLocatorInfo::Clear()
 {
@@ -32,23 +34,21 @@ ThermalLocatorInfo::Clear()
   sources.clear();
 }
 
+static inline bool
+CompareTime(const ThermalSource &a, const ThermalSource &b)
+{
+  return a.time < b.time;
+}
+
 ThermalSource &
-ThermalLocatorInfo::AllocateSource(fixed Time)
+ThermalLocatorInfo::AllocateSource()
 {
   if (!sources.full())
     return sources.append();
 
-  ThermalSource *oldest = NULL;
-  fixed oldest_dt = fixed_zero;
-  for (auto it = sources.begin(), end = sources.end(); it != end; ++it) {
-    fixed dt = Time - it->time;
-    if (dt > oldest_dt) {
-      oldest_dt = dt;
-      oldest = &(*it);
-    }
-  }
-
-  assert(oldest != NULL);
+  auto oldest = std::min_element(sources.begin(), sources.end(),
+                                 CompareTime);
+  assert(oldest != sources.end());
   return *oldest;
 }
 

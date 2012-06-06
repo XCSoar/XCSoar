@@ -35,17 +35,17 @@ test_olc(int n_wind, Contests olc_type)
   if (verbose)
     distance_counts();
 
-  TaskEventsPrint default_events(verbose);
-
-  TaskManager task_manager(waypoints);
-  task_manager.SetTaskEvents(default_events);
-
-  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
   task_behaviour.enable_olc = true;
   if (!verbose)
     task_behaviour.enable_trace = false;
-  task_manager.SetTaskBehaviour(task_behaviour);
+
+  TaskManager task_manager(task_behaviour, waypoints);
+
+  TaskEventsPrint default_events(verbose);
+  task_manager.SetTaskEvents(default_events);
 
   task_manager.SetGlidePolar(glide_polar);
   test_task(task_manager, waypoints, 1);
