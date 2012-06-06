@@ -74,18 +74,19 @@ test_replay()
   Waypoints waypoints;
   AircraftState state_last;
 
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
+  task_behaviour.auto_mc = true;
+  task_behaviour.enable_trace = false;
+
+  TaskManager task_manager(task_behaviour, waypoints);
+
   TaskEventsPrint default_events(verbose);
-  TaskManager task_manager(waypoints);
   task_manager.SetTaskEvents(default_events);
 
   glide_polar.SetBallast(fixed(1.0));
 
   task_manager.SetGlidePolar(glide_polar);
-
-  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
-  task_behaviour.auto_mc = true;
-  task_behaviour.enable_trace = false;
-  task_manager.SetTaskBehaviour(task_behaviour);
 
   OrderedTask* blank = new OrderedTask(task_manager.GetTaskBehaviour());
 

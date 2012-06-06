@@ -34,15 +34,15 @@ test_abort(int n_wind)
   if (verbose)
     distance_counts();
 
-  TaskEventsPrint default_events(verbose);
-
-  TaskManager task_manager(waypoints);
-  task_manager.SetTaskEvents(default_events);
-
-  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
   task_behaviour.enable_trace = false;
-  task_manager.SetTaskBehaviour(task_behaviour);
+
+  TaskManager task_manager(task_behaviour, waypoints);
+
+  TaskEventsPrint default_events(verbose);
+  task_manager.SetTaskEvents(default_events);
 
   task_manager.SetGlidePolar(glide_polar);
 
@@ -65,16 +65,16 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
   if (verbose)
     distance_counts();
 
-  TaskEventsPrint default_events(verbose);
-
-  TaskManager task_manager(waypoints);
-  task_manager.SetTaskEvents(default_events);
-
-  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.enable_trace = false;
-  task_manager.SetTaskBehaviour(task_behaviour);
+
+  TaskManager task_manager(task_behaviour, waypoints);
+
+  TaskEventsPrint default_events(verbose);
+  task_manager.SetTaskEvents(default_events);
 
   task_manager.SetGlidePolar(glide_polar);
 
@@ -99,15 +99,15 @@ test_null()
   if (verbose)
     distance_counts();
 
-  TaskEventsPrint default_events(verbose);
-
-  TaskManager task_manager(waypoints);
-  task_manager.SetTaskEvents(default_events);
-
-  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
   task_behaviour.enable_trace = false;
-  task_manager.SetTaskBehaviour(task_behaviour);
+
+  TaskManager task_manager(task_behaviour, waypoints);
+
+  TaskEventsPrint default_events(verbose);
+  task_manager.SetTaskEvents(default_events);
 
   task_manager.SetGlidePolar(glide_polar);
 

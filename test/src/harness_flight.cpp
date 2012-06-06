@@ -340,20 +340,21 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
   if (verbose)
     distance_counts();
 
-  TaskEventsPrint default_events(verbose);
-  TaskManager task_manager(waypoints);
-  task_manager.SetTaskEvents(default_events);
-  task_manager.SetGlidePolar(glide_polar);
-
-  task_manager.GetOrderedTaskBehaviour().aat_min_time = aat_min_time(test_num);
-
-  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
+  TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
   task_behaviour.enable_trace = false;
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.calc_glide_required = false;
   if ((test_num == 0) || (test_num == 2))
     task_behaviour.optimise_targets_bearing = false;
-  task_manager.SetTaskBehaviour(task_behaviour);
+
+  TaskManager task_manager(task_behaviour, waypoints);
+
+  TaskEventsPrint default_events(verbose);
+  task_manager.SetTaskEvents(default_events);
+  task_manager.SetGlidePolar(glide_polar);
+
+  task_manager.GetOrderedTaskBehaviour().aat_min_time = aat_min_time(test_num);
 
   bool goto_target = false;
 

@@ -25,8 +25,10 @@
 #include "Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Util/StringUtil.hpp"
 
-TaskManager::TaskManager(const Waypoints &wps)
+TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
+                         const Waypoints &wps)
   :glide_polar(fixed_zero), safety_polar(fixed_one),
+   task_behaviour(_task_behaviour),
    task_ordered(task_behaviour),
    task_goto(task_behaviour, wps),
    task_abort(task_behaviour, wps),

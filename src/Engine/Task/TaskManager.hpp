@@ -90,7 +90,7 @@ public:
    *
    * @return Initialised object
    */
-  TaskManager(const Waypoints &wps);
+  TaskManager(const TaskBehaviour &task_behaviour, const Waypoints &wps);
 
   void SetTaskEvents(TaskEvents &_task_events) {
     task_ordered.SetTaskEvents(_task_events);
