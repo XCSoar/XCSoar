@@ -43,11 +43,11 @@ TaskFile::Create(const TCHAR* path)
   if (StringIsEmpty(path) || !File::Exists(path))
     return NULL;
 
-  // If XCSoar task file -> return new XCSoarTaskFile
+  // If XCSoar task file -> return new TaskFileXCSoar
   if (MatchesExtension(path, _T(".tsk")))
     return new TaskFileXCSoar(path);
 
-  // If XCSoar task file -> return new XCSoarTaskFile
+  // If SeeYou task file -> return new TaskFileSeeYou
   if (MatchesExtension(path, _T(".cup")))
     return new TaskFileSeeYou(path);
 
