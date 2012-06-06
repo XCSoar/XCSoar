@@ -48,7 +48,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "Engine/Task/TaskManager.hpp"
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
@@ -70,8 +69,6 @@ void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}
 
 static Waypoints way_points;
-
-static TaskManager task_manager(way_points);
 
 static Airspaces airspace_database;
 
