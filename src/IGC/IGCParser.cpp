@@ -222,7 +222,7 @@ IGCParseFix(const char *buffer, const IGCExtensions &extensions, IGCFix &fix)
     return false;
 
   BrokenTime time;
-  if (!IGCParseFixTime(buffer + 1, time))
+  if (!IGCParseTime(buffer + 1, time))
     return false;
 
   char valid_char;
@@ -329,7 +329,7 @@ IGCParseFix(const char *buffer, IGCFix &fix)
 }
 
 bool
-IGCParseFixTime(const char *buffer, BrokenTime &time)
+IGCParseTime(const char *buffer, BrokenTime &time)
 {
   unsigned hour, minute, second;
 

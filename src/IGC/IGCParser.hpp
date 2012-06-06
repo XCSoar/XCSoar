@@ -83,6 +83,6 @@ IGCParseFix(const char *buffer, IGCFix &fix);
  * @return true on success, false if the time was not recognized
  */
 bool
-IGCParseFixTime(const char *buffer, BrokenTime &time);
+IGCParseTime(const char *buffer, BrokenTime &time);
 
 #endif

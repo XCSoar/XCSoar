@@ -169,22 +169,22 @@ static void
 TestFixTime()
 {
   BrokenTime time;
-  ok1(!IGCParseFixTime("", time));
+  ok1(!IGCParseTime("", time));
 
-  ok1(IGCParseFixTime("000000", time));
+  ok1(IGCParseTime("000000", time));
   ok1(time == BrokenTime(00, 00, 00));
 
-  ok1(IGCParseFixTime("112238", time));
+  ok1(IGCParseTime("112238", time));
   ok1(time == BrokenTime(11, 22, 38));
 
-  ok1(IGCParseFixTime("235959", time));
+  ok1(IGCParseTime("235959", time));
   ok1(time == BrokenTime(23, 59, 59));
 
-  ok1(!IGCParseFixTime("235960", time));
-  ok1(!IGCParseFixTime("236059", time));
-  ok1(!IGCParseFixTime("240000", time));
+  ok1(!IGCParseTime("235960", time));
+  ok1(!IGCParseTime("236059", time));
+  ok1(!IGCParseTime("240000", time));
 
-  ok1(IGCParseFixTime("0123375103117N00742367EV0049000487", time));
+  ok1(IGCParseTime("0123375103117N00742367EV0049000487", time));
   ok1(time == BrokenTime(01, 23, 37));
 }
 

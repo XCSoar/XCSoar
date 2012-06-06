@@ -544,7 +544,7 @@ FlytecDevice::DownloadFlight(const RecordedFlightInfo &flight,
         *buffer == 'B') {
       // Parse the fix time
       BrokenTime time;
-      if (IGCParseFixTime(buffer + 1, time)) {
+      if (IGCParseTime(buffer + 1, time)) {
 
         unsigned time_sec = time.GetSecondOfDay();
         if (time_sec < start_sec)
