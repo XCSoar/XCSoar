@@ -12,6 +12,8 @@ Version 6.3.6 - not yet released
 * user interface
   - ignore double clicks when mouse/finger has moved
   - the "back" key returns focus to map
+* Windows
+  - check for XCSoarData in the XCSoar.exe directory (#2136)
 * Android
   - fix crash on IOIO reconnect (#2130)
   - fix interference of two or more IOIO UARTs (#2107)
