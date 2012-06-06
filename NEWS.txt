@@ -9,6 +9,8 @@ Version 6.3.6 - not yet released
   - consider head wind in STF only if MacCready setting is zero
 * devices
   - fix NMEA out
+* data files
+  - added "ASW-28 (15m)" polar (#1919)
 * user interface
   - ignore double clicks when mouse/finger has moved
   - the "back" key returns focus to map
