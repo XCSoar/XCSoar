@@ -6,6 +6,7 @@ Version 6.3.6 - not yet released
 * calculations
   - fix task start arming inconsistency
   - fix crash in thermal locator (#2137)
+  - consider head wind in STF only if MacCready setting is zero
 * devices
   - fix NMEA out
 * user interface
