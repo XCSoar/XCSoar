@@ -61,7 +61,7 @@ struct ThermalLocatorInfo
    * Allocate a new #THERMAL_SOURCE_INFO slot; discard the oldest one
    * if the list is full.
    */
-  ThermalSource &AllocateSource(fixed Time);
+  ThermalSource &AllocateSource();
 };
 
 static_assert(is_trivial<ThermalLocatorInfo>::value,

@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3.6 - not yet released
 * calculations
   - fix task start arming inconsistency
+  - fix crash in thermal locator (#2137)
 * devices
   - fix NMEA out
 * user interface

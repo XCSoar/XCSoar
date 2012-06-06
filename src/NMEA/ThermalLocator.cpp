@@ -33,19 +33,15 @@ ThermalLocatorInfo::Clear()
 }
 
 ThermalSource &
-ThermalLocatorInfo::AllocateSource(fixed Time)
+ThermalLocatorInfo::AllocateSource()
 {
   if (!sources.full())
     return sources.append();
 
   ThermalSource *oldest = NULL;
-  fixed oldest_dt = fixed_zero;
   for (auto it = sources.begin(), end = sources.end(); it != end; ++it) {
-    fixed dt = Time - it->time;
-    if (dt > oldest_dt) {
-      oldest_dt = dt;
+    if (oldest == NULL || it->time < oldest->time)
       oldest = &(*it);
-    }
   }
 
   assert(oldest != NULL);

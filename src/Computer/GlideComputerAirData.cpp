@@ -569,8 +569,7 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
                       ground_altitude);
 
   if (positive(ground_altitude)) {
-    ThermalSource &source =
-      thermal_locator.AllocateSource(basic.time);
+    ThermalSource &source = thermal_locator.AllocateSource();
 
     source.lift_rate = calculated.last_thermal.lift_rate;
     source.location = ground_location;
