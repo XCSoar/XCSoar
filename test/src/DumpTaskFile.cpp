@@ -4,7 +4,7 @@
 int
 main(int argc, char **argv)
 {
-  Args args(argc, argv, "FILE.tsk|cup");
+  Args args(argc, argv, "FILE.tsk|cup|igc");
   tstring path = args.ExpectNextT();
   args.ExpectEnd();
 

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Task/TaskFile.hpp"
 #include "Task/TaskFileXCSoar.hpp"
 #include "Task/TaskFileSeeYou.hpp"
+#include "Task/TaskFileIGC.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
@@ -50,6 +51,10 @@ TaskFile::Create(const TCHAR* path)
   // If SeeYou task file -> return new TaskFileSeeYou
   if (MatchesExtension(path, _T(".cup")))
     return new TaskFileSeeYou(path);
+
+  // If IGC file -> return new TaskFileIGC
+  if (MatchesExtension(path, _T(".igc")))
+    return new TaskFileIGC(path);
 
   // unknown task file type
   return NULL;
