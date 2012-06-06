@@ -15,9 +15,9 @@ Version 6.4 - not yet released
   - added "Airspace On/Off" menu button
   - save Flarm team mates in the profile (#1997)
   - added para- and hang glider and aircraft symbols (#1626)
-  - audio vario
+  - audio vario (#1576)
   - improved airspace list rendering
-  - configurable map item list
+  - configurable map item list (#1936)
   - show corresponding waypoint file in waypoint details dialog (#1624)
   - show gesture path while dragging
 * infoboxes
