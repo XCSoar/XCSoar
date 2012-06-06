@@ -25,9 +25,6 @@
 #include "Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Util/StringUtil.hpp"
 
-// uses delegate pattern
-
-
 TaskManager::TaskManager(const Waypoints &wps)
   :glide_polar(fixed_zero), safety_polar(fixed_one),
    task_ordered(task_behaviour),
