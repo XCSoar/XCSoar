@@ -162,11 +162,6 @@ bool
 WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &waypoints)
 {
-  TCHAR ctemp[4096];
-  const TCHAR *params[20];
-  static const unsigned int max_params = ARRAY_SIZE(params);
-  size_t n_params;
-
   enum {
     iName = 0,
     iLatitude = 3,
@@ -189,6 +184,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     // -> return without error condition
     return true;
 
+  TCHAR ctemp[4096];
   if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
     return false;
@@ -205,7 +201,9 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     return true;
 
   // Get fields
-  n_params = ExtractParameters(line, ctemp, params, max_params, true, _T('"'));
+  const TCHAR *params[20];
+  size_t n_params = ExtractParameters(line, ctemp, params,
+                                      ARRAY_SIZE(params), true, _T('"'));
 
   // Check if the basic fields are provided
   if (iName >= n_params)
