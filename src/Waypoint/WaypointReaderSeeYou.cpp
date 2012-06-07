@@ -169,10 +169,17 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   static const unsigned int max_params = ARRAY_SIZE(params);
   size_t n_params;
 
-  const unsigned iName = 0;
-  const unsigned iLatitude = 3, iLongitude = 4, iElevation = 5;
-  const unsigned iStyle = 6, iRWDir = 7, iRWLen = 8;
-  const unsigned iFrequency = 9, iDescription = 10;
+  enum {
+    iName = 0,
+    iLatitude = 3,
+    iLongitude = 4,
+    iElevation = 5,
+    iStyle = 6,
+    iRWDir = 7,
+    iRWLen = 8,
+    iFrequency = 9,
+    iDescription = 10,
+  };
 
   static bool ignore_following;
   if (linenum == 0)
