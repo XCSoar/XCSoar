@@ -179,7 +179,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     iDescription = 10,
   };
 
-  static bool ignore_following;
   if (linenum == 0)
     ignore_following = false;
 

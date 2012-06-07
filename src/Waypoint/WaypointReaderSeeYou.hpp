@@ -30,6 +30,8 @@ Copyright_License {
 class WaypointReaderSeeYou: 
   public WaypointReaderBase 
 {
+  bool ignore_following;
+
 public:
   WaypointReaderSeeYou(const TCHAR* file_name, const int _file_num,
                      bool _compressed = false)
