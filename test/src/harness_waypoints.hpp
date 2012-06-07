@@ -26,6 +26,6 @@
 #include "Waypoint/Waypoints.hpp"
 
 const Waypoint* lookup_waypoint(const Waypoints& waypoints, unsigned id);
-bool setup_waypoints(Waypoints &waypoints, const unsigned n=150);
+bool SetupWaypoints(Waypoints &waypoints, const unsigned n=150);
 
 #endif

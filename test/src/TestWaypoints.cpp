@@ -45,16 +45,16 @@ public:
 };
 
 static unsigned
-test_location(const Waypoints& waypoints, bool good)
+TestLocation(const Waypoints& waypoints, bool good)
 {
   GeoPoint loc(Angle::Zero(), Angle::Zero());
   if (!good) {
     loc.longitude = Angle::Degrees(fixed(-23.4));
   }
-  const Waypoint *r = waypoints.LookupLocation(loc);
-  if (r) {
+  const Waypoint *wp = waypoints.LookupLocation(loc);
+  if (wp) {
     WaypointVisitorPrint v;
-    v.Visit(*r);
+    v.Visit(*wp);
     return good;
   } else {
     return !good;
@@ -63,12 +63,12 @@ test_location(const Waypoints& waypoints, bool good)
 
 
 static unsigned
-test_range(const Waypoints& waypoints, const double range)
+TestRange(const Waypoints& waypoints, const double range)
 {
-  const Waypoint *r = waypoints.LookupId(3);
-  if (r) {
+  const Waypoint *wp = waypoints.LookupId(3);
+  if (wp) {
     WaypointVisitorPrint v;
-    waypoints.VisitWithinRange(r->location, fixed(range), v);
+    waypoints.VisitWithinRange(wp->location, fixed(range), v);
     return v.count;
   } else {
     return 0;
@@ -76,49 +76,49 @@ test_range(const Waypoints& waypoints, const double range)
 }
 
 static bool
-test_nearest(const Waypoints& waypoints)
+TestNearest(const Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.LookupId(3);
-  if (!r)
+  const Waypoint *wp = waypoints.LookupId(3);
+  if (!wp)
     return false;
 
-  r = waypoints.GetNearest(r->location, fixed_zero);
-  if (!r)
+  wp = waypoints.GetNearest(wp->location, fixed_zero);
+  if (!wp)
     return false;
 
-  return r->id == 3;
+  return wp->id == 3;
 }
 
 static bool
-test_nearest_landable(const Waypoints& waypoints)
+TestNearestLandable(const Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.GetNearestLandable(GeoPoint(Angle::Degrees(fixed(0.99)),
-                                                              Angle::Degrees(fixed(1.1))),
-                                                     fixed(50000));
-  if (!r)
+  const Waypoint *wp = waypoints.GetNearestLandable(GeoPoint(Angle::Degrees(fixed(0.99)),
+                                                             Angle::Degrees(fixed(1.1))),
+                                                    fixed(50000));
+  if (!wp)
     return false;
 
-  return r->id == 3;
+  return wp->id == 3;
 }
 
 static unsigned
-test_copy(Waypoints& waypoints)
+TestCopy(Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.LookupId(5);
-  if (!r) {
+  const Waypoint *wp = waypoints.LookupId(5);
+  if (!wp) {
     return false;
   }
   unsigned size_old = waypoints.size();
-  Waypoint wp = *r;
-  wp.id = waypoints.size()+1;
-  waypoints.Append(wp);
+  Waypoint wp_copy = *wp;
+  wp_copy.id = waypoints.size()+1;
+  waypoints.Append(wp_copy);
   waypoints.Optimise();
   unsigned size_new = waypoints.size();
   return (size_new == size_old+1);
 }
 
 static bool
-test_lookup(const Waypoints& waypoints, unsigned id)
+TestLookup(const Waypoints& waypoints, unsigned id)
 {
   const Waypoint* wp;
   wp = waypoints.LookupId(id);
@@ -129,7 +129,7 @@ test_lookup(const Waypoints& waypoints, unsigned id)
 }
 
 static bool
-test_erase(Waypoints& waypoints, unsigned id)
+TestErase(Waypoints& waypoints, unsigned id)
 {
   waypoints.Optimise();
   const Waypoint* wp;
@@ -148,7 +148,7 @@ test_erase(Waypoints& waypoints, unsigned id)
 }
 
 static bool
-test_replace(Waypoints& waypoints, unsigned id)
+TestReplace(Waypoints& waypoints, unsigned id)
 {
   const Waypoint* wp;
   wp = waypoints.LookupId(id);
@@ -179,29 +179,29 @@ int main(int argc, char** argv)
 
   Waypoints waypoints;
 
-  ok(setup_waypoints(waypoints),"waypoint setup",0);
+  ok(SetupWaypoints(waypoints),"waypoint setup",0);
 
   unsigned size = waypoints.size();
 
-  ok(test_lookup(waypoints,3),"waypoint lookup",0);
-  ok(!test_lookup(waypoints,5000),"waypoint bad lookup",0);
-  ok(test_nearest(waypoints),"waypoint nearest",0);
-  ok(test_nearest_landable(waypoints),"waypoint nearest landable",0);
-  ok(test_location(waypoints,true),"waypoint location good",0);
-  ok(test_location(waypoints,false),"waypoint location bad",0);
-  ok(test_range(waypoints,100)==1,"waypoint visit range 100m",0);
-  ok(test_range(waypoints,500000)== waypoints.size(),"waypoint range 500000m",0);
+  ok(TestLookup(waypoints,3),"waypoint lookup",0);
+  ok(!TestLookup(waypoints,5000),"waypoint bad lookup",0);
+  ok(TestNearest(waypoints),"waypoint nearest",0);
+  ok(TestNearestLandable(waypoints),"waypoint nearest landable",0);
+  ok(TestLocation(waypoints,true),"waypoint location good",0);
+  ok(TestLocation(waypoints,false),"waypoint location bad",0);
+  ok(TestRange(waypoints,100)==1,"waypoint visit range 100m",0);
+  ok(TestRange(waypoints,500000)== waypoints.size(),"waypoint range 500000m",0);
 
   // test clear
   waypoints.Clear();
   ok(waypoints.size()==0,"waypoint clear",0);
-  setup_waypoints(waypoints);
+  SetupWaypoints(waypoints);
   ok(size == waypoints.size(),"waypoint setup after clear",0);
 
-  ok(test_copy(waypoints),"waypoint copy",0);
+  ok(TestCopy(waypoints),"waypoint copy",0);
 
-  ok(test_erase(waypoints,3),"waypoint erase",0);
-  ok(test_replace(waypoints,4),"waypoint replace",0);
+  ok(TestErase(waypoints,3),"waypoint erase",0);
+  ok(TestReplace(waypoints,4),"waypoint replace",0);
 
   return exit_status();
 }
