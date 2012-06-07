@@ -40,10 +40,6 @@ public:
   }
 
   unsigned count;
-
-  void reset() {
-    count = 0;
-  }
 };
 
 static unsigned
