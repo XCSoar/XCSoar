@@ -29,6 +29,8 @@
 #include <tchar.h>
 
 class WaypointVisitorPrint: public WaypointVisitor {
+  unsigned count;
+
 public:
   WaypointVisitorPrint():count(0) {}
 
@@ -39,7 +41,9 @@ public:
     count++;
   }
 
-  unsigned count;
+  unsigned NumberOfWaypoints() const {
+    return count;
+  }
 };
 
 static unsigned
@@ -67,7 +71,7 @@ TestRange(const Waypoints& waypoints, const double range)
 
   WaypointVisitorPrint v;
   waypoints.VisitWithinRange(wp->location, fixed(range), v);
-  return v.count;
+  return v.NumberOfWaypoints();
 }
 
 static bool
