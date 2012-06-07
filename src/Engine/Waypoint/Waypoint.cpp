@@ -34,10 +34,17 @@ Waypoint::Flags::SetDefaults()
 }
 
 Waypoint::Waypoint(const GeoPoint &_location):
-  location(_location),
-  type(Type::NORMAL),
-  file_num(-1)
+  location(_location)
 {
+  SetDefaults();
+}
+
+void
+Waypoint::SetDefaults()
+{
+  type = Type::NORMAL;
+  file_num = -1;
+
   flags.SetDefaults();
   runway.Clear();
   radio_frequency.Clear();

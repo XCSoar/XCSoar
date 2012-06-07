@@ -138,6 +138,12 @@ struct Waypoint {
    */
   Waypoint(const GeoPoint &_location);
 
+  /**
+   * Initializes type, file_num, flags, runway and
+   * radio_frequency with default/invalid values
+   */
+  void SetDefaults();
+
   /** 
    * Determine if waypoint is marked as able to be landed at
    * 
