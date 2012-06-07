@@ -107,7 +107,7 @@ ParseDistance(const TCHAR* src, fixed& dest)
 }
 
 static bool
-ParseStyle(const TCHAR* src, Waypoint &dest)
+ParseStyle(const TCHAR* src, Waypoint::Type &type)
 {
   // 1 - Normal
   // 2 - AirfieldGrass
@@ -124,34 +124,34 @@ ParseStyle(const TCHAR* src, Waypoint &dest)
   // Update flags
   switch (style) {
   case 3:
-    dest.type = Waypoint::Type::OUTLANDING;
+    type = Waypoint::Type::OUTLANDING;
     break;
   case 2:
   case 4:
   case 5:
-    dest.type = Waypoint::Type::AIRFIELD;
+    type = Waypoint::Type::AIRFIELD;
     break;
   case 6:
-    dest.type = Waypoint::Type::MOUNTAIN_PASS;
+    type = Waypoint::Type::MOUNTAIN_PASS;
     break;
   case 7:
-    dest.type = Waypoint::Type::MOUNTAIN_TOP;
+    type = Waypoint::Type::MOUNTAIN_TOP;
     break;
   case 8:
-    dest.type = Waypoint::Type::OBSTACLE;
+    type = Waypoint::Type::OBSTACLE;
     break;
   case 11:
   case 16:
-    dest.type = Waypoint::Type::TOWER;
+    type = Waypoint::Type::TOWER;
     break;
   case 13:
-    dest.type = Waypoint::Type::TUNNEL;
+    type = Waypoint::Type::TUNNEL;
     break;
   case 14:
-    dest.type = Waypoint::Type::BRIDGE;
+    type = Waypoint::Type::BRIDGE;
     break;
   case 15:
-    dest.type = Waypoint::Type::POWERPLANT;
+    type = Waypoint::Type::POWERPLANT;
     break;
   }
 
@@ -245,7 +245,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Style (e.g. 5)
   if (iStyle < n_params)
-    ParseStyle(params[iStyle], new_waypoint);
+    ParseStyle(params[iStyle], new_waypoint.type);
 
   new_waypoint.flags.turn_point = true;
 
