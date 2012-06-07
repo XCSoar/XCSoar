@@ -48,8 +48,6 @@ protected:
 public:
   virtual ~WaypointReaderBase() {}
 
-  typedef void (*StatusCallback)(unsigned percent);
-
   /**
    * Parses the waypoint file provided by SetFile() into the given waypoint list
    * @param way_points The waypoint list to fill
