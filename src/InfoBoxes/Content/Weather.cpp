@@ -164,3 +164,21 @@ InfoBoxContentHeadWind::Update(InfoBoxData &data)
   // Set Unit
   data.SetValueUnit(Units::current.wind_speed_unit);
 }
+
+void
+InfoBoxContentHeadWindSimplified::Update(InfoBoxData &data)
+{
+  const NMEAInfo &basic = XCSoarInterface::Basic();
+  if (!basic.ground_speed_available || !basic.airspeed_available) {
+    data.SetInvalid();
+    return;
+  }
+
+  fixed value = basic.true_airspeed - basic.ground_speed;
+
+  // Set Value
+  data.SetValue(_T("%2.0f"), Units::ToUserWindSpeed(value));
+
+  // Set Unit
+  data.SetValueUnit(Units::current.wind_speed_unit);
+}

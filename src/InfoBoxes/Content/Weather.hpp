@@ -71,4 +71,10 @@ public:
   virtual void Update(InfoBoxData &data);
 };
 
+class InfoBoxContentHeadWindSimplified: public InfoBoxContentWind
+{
+public:
+  virtual void Update(InfoBoxData &data);
+};
+
 #endif

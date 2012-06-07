@@ -141,6 +141,8 @@ namespace InfoBoxFactory
     NavAltitude,
     NextLegEqThermal,
 
+    HeadWindSimplified,
+
     e_NUM_TYPES /* Last item */
   };
 

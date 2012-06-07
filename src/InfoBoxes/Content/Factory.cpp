@@ -341,7 +341,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Wind Brng"),
     N_("Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust bearing when the InfoBox is active."),
     IBFHelper<InfoBoxContentWindBearing>::Create,
-    e_HeadWind,
+    HeadWindSimplified,
     e_WindSpeed_Est, // Wind V
   },
 
@@ -1006,7 +1006,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("The current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
     IBFHelper<InfoBoxContentHeadWind>::Create,
     e_Temperature, // OAT
-    e_WindBearing_Est,
+    HeadWindSimplified,
   },
 
   // TerrainCollision
@@ -1037,6 +1037,17 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_MacCready, // MC
     e_Act_Speed, // V Opt
   },
+
+  // HeadWindSimplified
+  {
+    N_("Head wind component (simplified)"),
+    N_("Head Wind *"),
+    N_("The current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from the TAS if airspeed is available from external device."),
+    IBFHelper<InfoBoxContentHeadWindSimplified>::Create,
+    e_HeadWind, // OAT
+    e_WindBearing_Est,
+  },
+
 };
 
 bool
