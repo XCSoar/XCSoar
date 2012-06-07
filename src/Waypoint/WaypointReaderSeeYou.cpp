@@ -155,8 +155,6 @@ ParseStyle(const TCHAR* src, Waypoint &dest)
     break;
   }
 
-  dest.flags.turn_point = true;
-
   return true;
 }
 
@@ -248,6 +246,8 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   // Style (e.g. 5)
   if (iStyle < n_params)
     ParseStyle(params[iStyle], new_waypoint);
+
+  new_waypoint.flags.turn_point = true;
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
