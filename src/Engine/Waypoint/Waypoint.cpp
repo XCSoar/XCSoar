@@ -24,21 +24,21 @@
 #include "Navigation/TaskProjection.hpp"
 
 void
-Waypoint::Flags::SetDefaults(bool turnpoint)
+Waypoint::Flags::SetDefaults()
 {
-  turn_point = turnpoint;
+  turn_point = false;
   home = false;
   start_point = false;
   finish_point = false;
   watched = false;
 }
 
-Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
+Waypoint::Waypoint(const GeoPoint &_location):
   location(_location),
   type(Type::NORMAL),
   file_num(-1)
 {
-  flags.SetDefaults(is_turnpoint);
+  flags.SetDefaults();
   runway.Clear();
   radio_frequency.Clear();
 }

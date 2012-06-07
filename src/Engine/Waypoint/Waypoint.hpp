@@ -82,7 +82,7 @@ struct Waypoint {
      *
      * @param turnpoint Whether the waypoint is a turnpoint
      */
-    void SetDefaults(bool turnpoint);
+    void SetDefaults();
   };
 
   /** Unique id */
@@ -134,10 +134,9 @@ struct Waypoint {
   /**
    * Constructor for real waypoints
    *
-   * @param is_turnpoint Whether newly created waypoint is a turnpoint
    * @return Uninitialised object
    */
-  Waypoint(const GeoPoint &_location, const bool is_turnpoint = false);
+  Waypoint(const GeoPoint &_location);
 
   /** 
    * Determine if waypoint is marked as able to be landed at
