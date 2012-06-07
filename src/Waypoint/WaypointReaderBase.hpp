@@ -70,6 +70,7 @@ public:
   }
 
 protected:
+  static bool CheckAltitude(Waypoint &new_waypoint, const RasterTerrain *terrain);
   bool CheckAltitude(Waypoint &new_waypoint) const;
 
   /**

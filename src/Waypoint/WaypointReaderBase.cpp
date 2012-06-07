@@ -140,7 +140,8 @@ WaypointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
 }
 
 bool
-WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
+WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint,
+                                  const RasterTerrain *terrain)
 {
   if (terrain == NULL)
     return false;
@@ -154,6 +155,12 @@ WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
     new_waypoint.elevation = (fixed)t_alt;
 
   return true;
+}
+
+bool
+WaypointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
+{
+  return CheckAltitude(new_waypoint, terrain);
 }
 
 void
