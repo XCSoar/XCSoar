@@ -206,11 +206,9 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
                                       ARRAY_SIZE(params), true, _T('"'));
 
   // Check if the basic fields are provided
-  if (iName >= n_params)
-    return false;
-  if (iLatitude >= n_params)
-    return false;
-  if (iLongitude >= n_params)
+  if (iName >= n_params ||
+      iLatitude >= n_params ||
+      iLongitude >= n_params)
     return false;
 
   Waypoint new_waypoint;
