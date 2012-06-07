@@ -131,5 +131,5 @@ WaypointReaderOzi::VerifyFormat(TLineReader &reader) const
   if (line == NULL)
     return false;
 
-  return (_tcsstr(line, _T("OziExplorer Waypoint File")) == line);
+  return StringStartsWith(line, _T("OziExplorer Waypoint File"));
 }

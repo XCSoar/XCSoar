@@ -211,6 +211,6 @@ WaypointReaderFS::VerifyFormat(TLineReader &reader) const
   if (line == NULL)
     return false;
 
-  return (_tcsstr(line, _T("$FormatUTM")) == line ||
-          _tcsstr(line, _T("$FormatGEO")) == line);
+  return StringStartsWith(line, _T("$FormatUTM")) ||
+         StringStartsWith(line, _T("$FormatGEO"));
 }
