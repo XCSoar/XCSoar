@@ -183,9 +183,9 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     ignore_following = false;
 
   // If (end-of-file or comment)
-  if (line[0] == '\0' || line[0] == 0x1a ||
-      _tcsstr(line, _T("**")) == line ||
-      _tcsstr(line, _T("*")) == line)
+  if (StringIsEmpty(line) || line[0] == 0x1a ||
+      StringStartsWith(line, _T("**")) ||
+      StringStartsWith(line, _T("*")))
     // -> return without error condition
     return true;
 
