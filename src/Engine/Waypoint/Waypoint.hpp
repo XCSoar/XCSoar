@@ -133,6 +133,13 @@ struct Waypoint {
    *
    * @return Uninitialised object
    */
+  Waypoint();
+
+  /**
+   * Constructor for real waypoints
+   *
+   * @return Uninitialised object
+   */
   Waypoint(const GeoPoint &_location);
 
   /**

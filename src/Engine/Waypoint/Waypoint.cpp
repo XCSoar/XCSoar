@@ -33,6 +33,11 @@ Waypoint::Flags::SetDefaults()
   watched = false;
 }
 
+Waypoint::Waypoint()
+{
+  SetDefaults();
+}
+
 Waypoint::Waypoint(const GeoPoint &_location):
   location(_location)
 {
