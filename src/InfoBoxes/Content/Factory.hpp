@@ -152,9 +152,9 @@ namespace InfoBoxFactory
     t_InfoBox next, previous;
   };
 
-  static const t_InfoBox NUM_TYPES = e_NUM_TYPES;
-  static const t_InfoBox MIN_TYPE_VAL = (t_InfoBox)0;
-  static const t_InfoBox MAX_TYPE_VAL = (t_InfoBox)(e_NUM_TYPES - 1);
+  static gcc_constexpr_data t_InfoBox NUM_TYPES = e_NUM_TYPES;
+  static gcc_constexpr_data t_InfoBox MIN_TYPE_VAL = (t_InfoBox)0;
+  static gcc_constexpr_data t_InfoBox MAX_TYPE_VAL = (t_InfoBox)(e_NUM_TYPES - 1);
 
   extern const InfoBoxMetaData MetaData[NUM_TYPES];
 
