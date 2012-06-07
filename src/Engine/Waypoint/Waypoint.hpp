@@ -82,7 +82,7 @@ struct Waypoint {
      *
      * @param turnpoint Whether the waypoint is a turnpoint
      */
-    void SetDefaultFlags(bool turnpoint);
+    void SetDefaults(bool turnpoint);
   };
 
   /** Unique id */

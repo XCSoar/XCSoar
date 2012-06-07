@@ -24,7 +24,7 @@
 #include "Navigation/TaskProjection.hpp"
 
 void
-Waypoint::Flags::SetDefaultFlags(bool turnpoint)
+Waypoint::Flags::SetDefaults(bool turnpoint)
 {
   turn_point = turnpoint;
   home = false;
@@ -38,7 +38,7 @@ Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
   type(Type::NORMAL),
   file_num(-1)
 {
-  flags.SetDefaultFlags(is_turnpoint);
+  flags.SetDefaults(is_turnpoint);
   runway.Clear();
   radio_frequency.Clear();
 }
