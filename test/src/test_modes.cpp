@@ -29,7 +29,7 @@ test_abort(int n_wind)
 {
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
-  setup_waypoints(waypoints);
+  SetupWaypoints(waypoints);
 
   if (verbose)
     distance_counts();
@@ -60,7 +60,7 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
 {
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
-  setup_waypoints(waypoints);
+  SetupWaypoints(waypoints);
 
   if (verbose)
     distance_counts();
@@ -94,7 +94,7 @@ test_null()
 {
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
-  setup_waypoints(waypoints);
+  SetupWaypoints(waypoints);
 
   if (verbose)
     distance_counts();

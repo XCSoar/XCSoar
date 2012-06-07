@@ -33,9 +33,8 @@
  *
  * @param waypoints waypoints class to add waypoints to
  */
-bool setup_waypoints(Waypoints &waypoints, const unsigned n) 
+bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
 {
-
   Waypoint wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_zero),
                                           Angle::Degrees(fixed_zero)));
   wp.type = Waypoint::Type::AIRFIELD;

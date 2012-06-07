@@ -30,7 +30,7 @@ test_olc(int n_wind, Contests olc_type)
 {
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
-  setup_waypoints(waypoints);
+  SetupWaypoints(waypoints);
 
   if (verbose)
     distance_counts();

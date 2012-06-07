@@ -3,7 +3,7 @@ name-to-bin = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(1))
 TESTFAST = \
 	test_normalise \
 	test_fixed \
-	test_waypoints \
+	TestWaypoints \
 	test_pressure \
 	test_mc \
 	test_task \
@@ -60,7 +60,7 @@ $(foreach name,$(HARNESS_PROGRAMS),$(eval $(call link-harness-program,$(name))))
 TEST_NAMES = \
 	test_fixed \
 	test_normalise \
-	test_waypoints \
+	TestWaypoints \
 	test_pressure \
 	test_task \
 	TestOverwritingRingBuffer \

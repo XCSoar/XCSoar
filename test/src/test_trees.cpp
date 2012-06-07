@@ -42,7 +42,7 @@ static bool
 test_wp(const unsigned n, std::ostream &fo)
 {
   Waypoints waypoints;
-  setup_waypoints(waypoints,n);
+  SetupWaypoints(waypoints,n);
 
   AircraftState state;
 

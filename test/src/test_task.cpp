@@ -40,7 +40,7 @@ int main(int argc, char** argv)
   task_behaviour.SetDefaults();
 
   Waypoints waypoints;
-  setup_waypoints(waypoints);
+  SetupWaypoints(waypoints);
 
   {
     TaskManager task_manager(task_behaviour, waypoints);

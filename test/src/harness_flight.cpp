@@ -335,7 +335,7 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
 
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
-  setup_waypoints(waypoints);
+  SetupWaypoints(waypoints);
 
   if (verbose)
     distance_counts();
