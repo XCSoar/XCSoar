@@ -218,19 +218,18 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if (iLongitude >= n_params)
     return false;
 
-  GeoPoint location;
+  Waypoint new_waypoint;
 
   // Latitude (e.g. 5115.900N)
-  if (!ParseAngle(params[iLatitude], location.latitude, true))
+  if (!ParseAngle(params[iLatitude], new_waypoint.location.latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!ParseAngle(params[iLongitude], location.longitude, false))
+  if (!ParseAngle(params[iLongitude], new_waypoint.location.longitude, false))
     return false;
 
-  location.Normalize(); // ensure longitude is within -180:180
+  new_waypoint.location.Normalize(); // ensure longitude is within -180:180
 
-  Waypoint new_waypoint(location);
   new_waypoint.file_num = file_num;
   new_waypoint.original_id = 0;
 
