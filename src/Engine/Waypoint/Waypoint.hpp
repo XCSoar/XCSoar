@@ -29,11 +29,8 @@
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
 #include "Runway.hpp"
-#include <forward_list>
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
+#include <forward_list>
 
 class TaskProjection;
 
@@ -243,10 +240,6 @@ struct Waypoint {
    */
   bool
   IsCloseTo(const GeoPoint &_location, const fixed range) const;
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, const Waypoint& wp);
-#endif
 };
 
 #endif

@@ -46,11 +46,14 @@ class RoutePlanner;
 class ReachFan;
 class FlatTriangleFanTree;
 class FlatTriangleFan;
+struct Waypoint;
 
 #ifdef FIXED_MATH
 #include "Math/fixed.hpp"
 std::ostream& operator<<(std::ostream& os,fixed const& value);
 #endif
+
+std::ostream &operator<< (std::ostream &f, const Waypoint &wp);
 
 class PrintHelper {
 public:

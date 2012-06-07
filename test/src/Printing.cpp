@@ -42,8 +42,8 @@ std::ostream& operator<<(std::ostream& os,fixed const& value)
 
 #include "Waypoint/Waypoint.hpp"
 
-std::ostream& operator<< (std::ostream& f, 
-                          const Waypoint& wp)
+std::ostream &
+operator<< (std::ostream& f, const Waypoint& wp)
 {
   f << wp.location.longitude << " " << wp.location.latitude << "\n";
   return f;
