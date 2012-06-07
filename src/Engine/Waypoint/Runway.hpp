@@ -49,8 +49,12 @@ public:
   }
 
   void Clear() {
-    direction = -1;
+    ClearDirection();
     length = 0;
+  }
+
+  void ClearDirection() {
+    direction = -1;
   }
 
   void SetDirection(Angle _direction) {
