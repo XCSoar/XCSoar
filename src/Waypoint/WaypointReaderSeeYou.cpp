@@ -240,7 +240,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     return false;
 
   // Style (e.g. 5)
-  /// @todo include peaks with peak symbols etc.
   if (iStyle < n_params)
     ParseStyle(params[iStyle], new_waypoint);
 
