@@ -151,7 +151,7 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
   // If (end-of-file or comment)
-  if (line[0] == '\0' || line[0] == 0x1a ||
+  if (line[0] == '\0' ||
       _tcsstr(line, _T("**")) == line ||
       _tcsstr(line, _T("*")) == line)
     // -> return without error condition

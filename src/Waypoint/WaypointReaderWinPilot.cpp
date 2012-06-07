@@ -201,7 +201,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
     welt2000_format = false;
 
   // If (end-of-file)
-  if (line[0] == '\0' || line[0] == 0x1a)
+  if (line[0] == '\0')
     // -> return without error condition
     return true;
 
