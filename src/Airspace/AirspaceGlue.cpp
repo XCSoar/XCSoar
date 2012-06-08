@@ -30,26 +30,36 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "IO/FileLineReader.hpp"
+#include "IO/ZipLineReader.hpp"
 #include "Profile/Profile.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
 static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
+                  TLineReader &reader, OperationEnvironment &operation)
+{
+  if (parser.Parse(reader, operation))
+    return true;
+
+  LogStartUp(_T("Failed to parse airspace file: %s"), path);
+  return false;
+}
+
+static bool
+ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
                   OperationEnvironment &operation)
 {
   FileLineReader reader(path, ConvertLineReader::AUTO);
-  if (reader.error()) {
-    LogStartUp(_T("Failed to open airspace file: %s"), path);
-    return false;
-  }
+  if (!reader.error())
+    return ParseAirspaceFile(parser, path, reader, operation);
 
-  if (!parser.Parse(reader, operation)) {
-    LogStartUp(_T("Failed to parse airspace file: %s"), path);
-    return false;
-  }
+  ZipLineReader zip_reader(path, ConvertLineReader::AUTO);
+  if (!zip_reader.error())
+    return ParseAirspaceFile(parser, path, zip_reader, operation);
 
-  return true;
+  LogStartUp(_T("Failed to open airspace file: %s"), path);
+  return false;
 }
 
 void
