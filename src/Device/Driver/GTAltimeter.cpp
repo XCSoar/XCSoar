@@ -36,29 +36,29 @@ static bool
 LK8EX1(NMEAInputLine &line, NMEAInfo &info)
 {
   unsigned pressure;
-  bool pressure_available = (line.read_checked(pressure) && pressure != 999999);
+  bool pressure_available = (line.ReadChecked(pressure) && pressure != 999999);
 
   if (pressure_available)
     info.ProvideStaticPressure(AtmosphericPressure::Pascal(fixed(pressure)));
 
   unsigned altitude;
-  bool altitude_available = (line.read_checked(altitude) && altitude != 99999);
+  bool altitude_available = (line.ReadChecked(altitude) && altitude != 99999);
 
   if (altitude_available && !pressure_available)
     info.ProvidePressureAltitude(fixed(altitude));
 
   int vario;
-  if (line.read_checked(vario) && vario != 9999)
+  if (line.ReadChecked(vario) && vario != 9999)
     info.ProvideNettoVario(fixed(vario) / 100);
 
   int temperature;
-  if (line.read_checked(temperature) && temperature != 99) {
+  if (line.ReadChecked(temperature) && temperature != 99) {
     info.temperature = fixed(temperature);
     info.temperature_available = true;
   }
 
   fixed battery_value;
-  if (line.read_checked(battery_value) &&
+  if (line.ReadChecked(battery_value) &&
       (unsigned)(battery_value + fixed_half) != 999) {
     if (battery_value > fixed(1000)) {
       info.battery_level = battery_value - fixed(1000);
@@ -80,7 +80,7 @@ GTAltimeterDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 
   NMEAInputLine line(_line);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$LK8EX1"))
     return LK8EX1(line, info);

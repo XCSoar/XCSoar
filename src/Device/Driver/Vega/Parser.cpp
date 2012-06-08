@@ -60,13 +60,13 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info)
   static long last_switchoutputs;
 
   fixed value;
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.settings.ProvideMacCready(value / 10, info.clock);
 
-  long switchinputs = line.read_hex(0L);
-  long switchoutputs = line.read_hex(0L);
+  long switchinputs = line.ReadHex(0L);
+  long switchoutputs = line.ReadHex(0L);
 
-  if (line.read_checked(value)) {
+  if (line.ReadChecked(value)) {
     info.voltage = value / 10;
     info.voltage_available.Update(info.clock);
   }
@@ -148,9 +148,9 @@ PDSWC(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PDAAV(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
-  gcc_unused unsigned short beepfrequency = line.read(0);
-  gcc_unused unsigned short soundfrequency = line.read(0);
-  gcc_unused unsigned char soundtype = line.read(0);
+  gcc_unused unsigned short beepfrequency = line.Read(0);
+  gcc_unused unsigned short soundfrequency = line.Read(0);
+  gcc_unused unsigned char soundtype = line.Read(0);
 
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
@@ -162,16 +162,16 @@ bool
 VegaDevice::PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   char responsetype[10];
-  line.read(responsetype, 10);
+  line.Read(responsetype, 10);
 
   char name[80];
-  line.read(name, 80);
+  line.Read(name, 80);
 
   if (strcmp(name, "ERROR") == 0)
     // ignore error responses...
     return true;
 
-  int value = line.read(0);
+  int value = line.Read(0);
 
   if (strcmp(name, "ToneDeadbandCruiseLow") == 0)
     value = std::max(value, -value);
@@ -193,17 +193,17 @@ PDVDV(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value / 10);
 
-  bool ias_available = line.read_checked(value);
-  fixed tas_ratio = line.read(fixed(1024)) / 1024;
+  bool ias_available = line.ReadChecked(value);
+  fixed tas_ratio = line.Read(fixed(1024)) / 1024;
   if (ias_available)
     info.ProvideBothAirspeeds(value / 10, value / 10 * tas_ratio);
 
   //hasVega = true;
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvidePressureAltitude(value);
 
   return true;
@@ -214,22 +214,22 @@ PDVDV(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PDVDS(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed AccelX = line.read(fixed_zero);
-  fixed AccelZ = line.read(fixed_zero);
+  fixed AccelX = line.Read(fixed_zero);
+  fixed AccelZ = line.Read(fixed_zero);
 
   fixed mag = SmallHypot(AccelX, AccelZ);
   info.acceleration.ProvideGLoad(fixed(mag) / 100, true);
 
   /*
-  double flap = line.read(0.0);
+  double flap = line.Read(0.0);
   */
-  line.skip();
+  line.Skip();
 
-  info.stall_ratio = line.read(fixed_zero);
+  info.stall_ratio = line.Read(fixed_zero);
   info.stall_ratio_available.Update(info.clock);
 
   fixed value;
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideNettoVario(value / 10);
 
   //hasVega = true;
@@ -241,11 +241,11 @@ static bool
 PDVVT(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
-  info.temperature_available = line.read_checked(value);
+  info.temperature_available = line.ReadChecked(value);
   if (info.temperature_available)
     info.temperature = value / 10;
 
-  info.humidity_available = line.read_checked(info.humidity);
+  info.humidity_available = line.ReadChecked(info.humidity);
 
   return true;
 }
@@ -257,9 +257,9 @@ PDTSM(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   /*
   int duration = (int)strtol(String, NULL, 10);
   */
-  line.skip();
+  line.Skip();
 
-  const char *message = line.rest();
+  const char *message = line.Rest();
 #ifdef _UNICODE
   TCHAR buffer[strlen(message)];
   if (MultiByteToWideChar(CP_ACP, 0, message, -1,
@@ -280,7 +280,7 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (memcmp(type, "$PD", 3) == 0)
     detected = true;
@@ -298,7 +298,7 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
   else if (strcmp(type, "$PDVVT") == 0)
     return PDVVT(line, info);
   else if (strcmp(type, "$PDVSD") == 0) {
-    const char *message = line.rest();
+    const char *message = line.Rest();
 #ifdef _UNICODE
     TCHAR buffer[strlen(message)];
     if (MultiByteToWideChar(CP_ACP, 0, message, -1,

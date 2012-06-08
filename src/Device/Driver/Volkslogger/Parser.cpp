@@ -33,14 +33,14 @@ Copyright_License {
 static bool
 vl_PGCS1(NMEAInputLine &line, NMEAInfo &info)
 {
-  if (line.read(1) != 1)
+  if (line.Read(1) != 1)
     return false;
 
   /* pressure sensor */
-  line.skip();
+  line.Skip();
 
   // four characers, hex, barometric altitude
-  long altitude = line.read_hex(0L);
+  long altitude = line.ReadHex(0L);
 
   if (altitude > 60000)
     /* Assuming that altitude has wrapped around.  60 000 m occurs at
@@ -65,7 +65,7 @@ VolksloggerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$PGCS"))
     return vl_PGCS1(line, info);

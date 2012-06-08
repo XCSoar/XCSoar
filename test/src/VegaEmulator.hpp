@@ -48,8 +48,8 @@ public:
 private:
   void PDVSC_S(NMEAInputLine &line) {
     char name[64], value[256];
-    line.read(name, ARRAY_SIZE(name));
-    line.read(value, ARRAY_SIZE(value));
+    line.Read(name, ARRAY_SIZE(name));
+    line.Read(value, ARRAY_SIZE(value));
 
     settings[name] = value;
 
@@ -62,7 +62,7 @@ private:
 
   void PDVSC_R(NMEAInputLine &line) {
     char name[64];
-    line.read(name, ARRAY_SIZE(name));
+    line.Read(name, ARRAY_SIZE(name));
 
     auto i = settings.find(name);
     if (i == settings.end())
@@ -79,7 +79,7 @@ private:
 
   void PDVSC(NMEAInputLine &line) {
     char command[4];
-    line.read(command, ARRAY_SIZE(command));
+    line.Read(command, ARRAY_SIZE(command));
 
     if (strcmp(command, "S") == 0)
       PDVSC_S(line);
@@ -98,7 +98,7 @@ protected:
       return;
 
     NMEAInputLine line(_line);
-    if (line.read_compare("$PDVSC"))
+    if (line.ReadCompare("$PDVSC"))
       PDVSC(line);
   }
 };

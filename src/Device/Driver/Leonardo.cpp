@@ -42,8 +42,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed norm, bearing;
 
-  bool norm_valid = line.read_checked(norm);
-  bool bearing_valid = line.read_checked(bearing);
+  bool norm_valid = line.ReadChecked(norm);
+  bool bearing_valid = line.ReadChecked(bearing);
 
   if (bearing_valid && norm_valid) {
     value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
@@ -64,20 +64,20 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
 
   // 0 = altitude [m]
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideBaroAltitudeTrue(value);
 
   // 1 = vario [dm/s]
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value / 10);
 
   // 2 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 3 = netto vario [dm/s]
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideNettoVario(value / 10);
   else
     /* short "$C" sentence ends after airspeed */
@@ -85,11 +85,11 @@ LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 
   // 4 = temperature [deg C]
   fixed oat;
-  info.temperature_available = line.read_checked(oat);
+  info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
     info.temperature = CelsiusToKelvin(oat);
 
-  line.skip(5);
+  line.Skip(5);
 
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
@@ -111,26 +111,26 @@ LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
 
   // 0 = vario [dm/s]
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value / 10);
 
   // 1 = air pressure [Pa]
-  if (line.skip() == 0)
+  if (line.Skip() == 0)
     /* short "$C" sentence ends after airspeed */
     return true;
 
   // 2 = netto vario [dm/s]
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideNettoVario(value / 10);
 
   // 3 = airspeed [km/h]
   /* XXX is that TAS or IAS? */
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTrueAirspeed(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 4 = temperature [deg C]
   fixed oat;
-  info.temperature_available = line.read_checked(oat);
+  info.temperature_available = line.ReadChecked(oat);
   if (info.temperature_available)
     info.temperature = CelsiusToKelvin(oat);
 
@@ -161,24 +161,24 @@ PDGFTL1(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
 
   //  Baro Altitude QNE(1013.25)     2025     meter        2025 mt
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvidePressureAltitude(value);
 
   //  Baro Altitude QNH  2000     meter        2000 mt
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideBaroAltitudeTrue(value);
 
   //  Vario  250      cm/sec       +2,50 m/s
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value / 100);
 
   //  Netto Vario  -14      dm/sec       -1,40 m/s
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideNettoVario(value / 10);
 
   //  Indicated Air Speed  45       km/h         45 km/h
   //  Ground Efficiency  134      ratio        13,4 : 1
-  line.skip(2);
+  line.Skip(2);
 
   //  Wind Speed  28       km/h         28 km/h
   //  Wind Direction  65       degree       65 degree
@@ -187,7 +187,7 @@ PDGFTL1(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideExternalWind(wind);
 
   //  Main Lithium Battery Voltage   382      0.01 volts   3,82 volts
-  if (line.read_checked(value)) {
+  if (line.ReadChecked(value)) {
     info.voltage = value / 100;
     info.voltage_available.Update(info.clock);
   }
@@ -202,7 +202,7 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
   NMEAInputLine line(_line);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$C") ||
       StringIsEqual(type, "$c"))

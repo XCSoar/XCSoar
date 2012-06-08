@@ -52,8 +52,8 @@ public:
 private:
   void PFLAC_S(NMEAInputLine &line) {
     char name[64];
-    line.read(name, ARRAY_SIZE(name));
-    const char *value = line.rest();
+    line.Read(name, ARRAY_SIZE(name));
+    const char *value = line.Rest();
 
     settings[name] = value;
 
@@ -64,7 +64,7 @@ private:
 
   void PFLAC_R(NMEAInputLine &line) {
     char name[64];
-    line.read(name, ARRAY_SIZE(name));
+    line.Read(name, ARRAY_SIZE(name));
 
     auto i = settings.find(name);
     if (i == settings.end())
@@ -79,7 +79,7 @@ private:
 
   void PFLAC(NMEAInputLine &line) {
     char command[4];
-    line.read(command, ARRAY_SIZE(command));
+    line.Read(command, ARRAY_SIZE(command));
 
     if (strcmp(command, "S") == 0)
       PFLAC_S(line);
@@ -219,7 +219,7 @@ protected:
 
     NMEAInputLine line(_line);
     char cmd[32];
-    line.read(cmd, ARRAY_SIZE(cmd));
+    line.Read(cmd, ARRAY_SIZE(cmd));
 
     if (strcmp(cmd, "$PFLAC") == 0)
       PFLAC(line);

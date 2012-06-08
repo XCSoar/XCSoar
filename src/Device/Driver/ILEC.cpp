@@ -42,8 +42,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed norm, bearing;
 
-  bool bearing_valid = line.read_checked(bearing);
-  bool norm_valid = line.read_checked(norm);
+  bool bearing_valid = line.ReadChecked(bearing);
+  bool norm_valid = line.ReadChecked(norm);
 
   if (bearing_valid && norm_valid) {
     value_r.norm = Units::ToSysUnit(norm, Unit::KILOMETER_PER_HOUR);
@@ -65,11 +65,11 @@ ParsePDA1(NMEAInputLine &line, NMEAInfo &info)
 
   // altitude [m]
   int altitude;
-  if (line.read_checked(altitude))
+  if (line.ReadChecked(altitude))
     info.ProvideBaroAltitudeTrue(fixed(altitude));
 
   // total energy vario [m/s]
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value);
 
   // wind direction [degrees, kph]
@@ -91,10 +91,10 @@ ILECDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 
   NMEAInputLine line(_line);
   char type[16];
-  line.read(type, sizeof(type));
+  line.Read(type, sizeof(type));
 
   if (StringIsEqual(type, "$PILC")) {
-    line.read(type, sizeof(type));
+    line.Read(type, sizeof(type));
     if (StringIsEqual(type, "PDA1"))
       return ParsePDA1(line, info);
     else

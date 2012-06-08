@@ -33,13 +33,13 @@ void
 ParsePFLAE(NMEAInputLine &line, FlarmError &error, fixed clock)
 {
   char type[2];
-  line.read(type, ARRAY_SIZE(type));
+  line.Read(type, ARRAY_SIZE(type));
   if (strcmp(type, "A") != 0)
     return;
 
   error.severity = (FlarmError::Severity)
-    line.read_hex((long)FlarmError::Severity::NO_ERROR);
-  error.code = (FlarmError::Code)line.read_hex(0);
+    line.ReadHex((long)FlarmError::Severity::NO_ERROR);
+  error.code = (FlarmError::Code)line.ReadHex(0);
 
   error.available.Update(clock);
 }
@@ -48,19 +48,19 @@ void
 ParsePFLAV(NMEAInputLine &line, FlarmVersion &version, fixed clock)
 {
   char type[2];
-  line.read(type, ARRAY_SIZE(type));
+  line.Read(type, ARRAY_SIZE(type));
   if (strcmp(type, "A") != 0)
     return;
 
-  line.read(version.hardware_version.buffer(),
+  line.Read(version.hardware_version.buffer(),
             version.hardware_version.MAX_SIZE);
   version.hardware_version.CleanASCII();
 
-  line.read(version.software_version.buffer(),
+  line.Read(version.software_version.buffer(),
             version.software_version.MAX_SIZE);
   version.software_version.CleanASCII();
 
-  line.read(version.obstacle_version.buffer(),
+  line.Read(version.obstacle_version.buffer(),
             version.obstacle_version.MAX_SIZE);
   version.obstacle_version.CleanASCII();
 
@@ -74,14 +74,14 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock)
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
-  flarm.rx = line.read(0);
-  flarm.tx = line.read(false);
+  flarm.rx = line.Read(0);
+  flarm.tx = line.Read(false);
   flarm.gps = (FlarmStatus::GPSStatus)
-    line.read((int)FlarmStatus::GPSStatus::NONE);
+    line.Read((int)FlarmStatus::GPSStatus::NONE);
 
-  line.skip();
+  line.Skip();
   flarm.alarm_level = (FlarmTraffic::AlarmType)
-    line.read((int)FlarmTraffic::AlarmType::NONE);
+    line.Read((int)FlarmTraffic::AlarmType::NONE);
 }
 
 void
@@ -91,34 +91,34 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   FlarmTraffic traffic;
   traffic.alarm_level = (FlarmTraffic::AlarmType)
-    line.read((int)FlarmTraffic::AlarmType::NONE);
+    line.Read((int)FlarmTraffic::AlarmType::NONE);
 
   fixed value;
   bool stealth = false;
 
-  if (!line.read_checked(value))
+  if (!line.ReadChecked(value))
     // Relative North is required !
     return;
   traffic.relative_north = value;
 
-  if (!line.read_checked(value))
+  if (!line.ReadChecked(value))
     // Relative East is required !
     return;
   traffic.relative_east = value;
 
-  if (!line.read_checked(value))
+  if (!line.ReadChecked(value))
     // Relative Altitude is required !
     return;
   traffic.relative_altitude = value;
 
-  line.skip(); /* id type */
+  line.Skip(); /* id type */
 
   // 5 id, 6 digit hex
   char id_string[16];
-  line.read(id_string, 16);
+  line.Read(id_string, 16);
   traffic.id = FlarmId::Parse(id_string, NULL);
 
-  traffic.track_received = line.read_checked(value);
+  traffic.track_received = line.ReadChecked(value);
   if (!traffic.track_received) {
     // Field is empty in stealth mode
     stealth = true;
@@ -126,14 +126,14 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   } else
     traffic.track = Angle::Degrees(value);
 
-  traffic.turn_rate_received = line.read_checked(value);
+  traffic.turn_rate_received = line.ReadChecked(value);
   if (!traffic.turn_rate_received) {
     // Field is empty in stealth mode
     traffic.turn_rate = fixed_zero;
   } else
     traffic.turn_rate = value;
 
-  traffic.speed_received = line.read_checked(value);
+  traffic.speed_received = line.ReadChecked(value);
   if (!traffic.speed_received) {
     // Field is empty in stealth mode
     stealth = true;
@@ -141,7 +141,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   } else
     traffic.speed = value;
 
-  traffic.climb_rate_received = line.read_checked(value);
+  traffic.climb_rate_received = line.ReadChecked(value);
   if (!traffic.climb_rate_received) {
     // Field is empty in stealth mode
     stealth = true;
@@ -151,7 +151,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
 
   traffic.stealth = stealth;
 
-  unsigned type = line.read(0);
+  unsigned type = line.Read(0);
   if (type > 15 || type == 14)
     traffic.type = FlarmTraffic::AircraftType::UNKNOWN;
   else

@@ -74,19 +74,19 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
 
   fixed vtas, value;
 
-  bool vtas_av = line.read_checked(vtas);
+  bool vtas_av = line.ReadChecked(vtas);
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(Units::ToSysUnit(value, Unit::KNOTS));
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.settings.ProvideMacCready(Units::ToSysUnit(value, Unit::KNOTS),
                                    info.clock);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(info.MacCready);
 
-  if (line.read_checked(value) && vtas_av)
+  if (line.ReadChecked(value) && vtas_av)
     info.ProvideBothAirspeeds(Units::ToSysUnit(sqrt(value), Unit::KNOTS),
                               Units::ToSysUnit(vtas, Unit::KNOTS));
   else if (vtas_av)
@@ -96,17 +96,17 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
   // the B50-string for Borgelt, it's % degradation, for us, it is %
   // of max performance
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.settings.ProvideBugs(fixed_one - max(fixed_zero,
                                               min(fixed(30), value)) / 100,
                               info.clock);
 
   fixed ballast_overload;
-  if (line.read_checked(ballast_overload))
+  if (line.ReadChecked(ballast_overload))
     info.settings.ProvideBallastOverload(ballast_overload, info.clock);
 
   // inclimb/incruise 1=cruise,0=climb, OAT
-  switch (line.read(-1)) {
+  switch (line.Read(-1)) {
   case 0:
     info.switch_state.flight_mode = SwitchInfo::FlightMode::CRUISE;
     break;
@@ -116,7 +116,7 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
     break;
   }
 
-  info.temperature_available = line.read_checked(value);
+  info.temperature_available = line.ReadChecked(value);
   if (info.temperature_available)
     info.temperature = CelsiusToKelvin(value);
 
@@ -131,7 +131,7 @@ B50Device::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$PBB50"))
     return PBB50(line, info);

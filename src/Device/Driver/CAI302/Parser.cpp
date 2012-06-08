@@ -32,8 +32,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed bearing, norm;
 
-  bool bearing_valid = line.read_checked(bearing);
-  bool norm_valid = line.read_checked(norm);
+  bool bearing_valid = line.ReadChecked(bearing);
+  bool norm_valid = line.ReadChecked(norm);
 
   if (bearing_valid && norm_valid) {
     value_r.bearing = Angle::Degrees(bearing);
@@ -66,14 +66,14 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 static bool
 cai_PCAID(NMEAInputLine &line, NMEAInfo &data)
 {
-  line.skip();
+  line.Skip();
 
   fixed value;
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     data.ProvidePressureAltitude(value);
 
   unsigned enl;
-  if (line.read_checked(enl)) {
+  if (line.ReadChecked(enl)) {
     data.engine_noise_level = enl;
     data.engine_noise_level_available.Update(data.clock);
   }
@@ -105,35 +105,35 @@ cai_w(NMEAInputLine &line, NMEAInfo &info)
   if (ReadSpeedVector(line, wind))
     info.ProvideExternalWind(wind.Reciprocal());
 
-  line.skip(2);
+  line.Skip(2);
 
   fixed value;
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideBaroAltitudeTrue(value - fixed(1000));
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.settings.ProvideQNH(AtmosphericPressure::HectoPascal(value),
                              info.clock);
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTrueAirspeed(value / 100);
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,
                                                   Unit::KNOTS));
 
-  line.skip(2);
+  line.Skip(2);
 
   int i;
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, Unit::KNOTS),
                                    info.clock);
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.settings.ProvideBallastFraction(fixed(i) / 100, info.clock);
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.settings.ProvideBugs(fixed(i) / 100, info.clock);
 
   return true;
@@ -147,7 +147,7 @@ CAI302Device::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$PCAIB"))
     return cai_PCAIB(line, info);

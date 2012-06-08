@@ -64,24 +64,24 @@ VARIO(NMEAInputLine &line, NMEAInfo &info)
   // TempSensor2 = temperature in ºC of external wireless sensor 2
 
   fixed value;
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideStaticPressure(AtmosphericPressure::HectoPascal(value));
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value / 10);
 
   unsigned battery_bank;
   fixed voltage[2];
-  if (line.read_checked(voltage[0]) &&
-      line.read_checked(voltage[1]) &&
-      line.read_checked(battery_bank) &&
+  if (line.ReadChecked(voltage[0]) &&
+      line.ReadChecked(voltage[1]) &&
+      line.ReadChecked(battery_bank) &&
       battery_bank != 0 &&
       battery_bank <= 2) {
     info.voltage = voltage[battery_bank - 1];
     info.voltage_available.Update(info.clock);
   }
 
-  if (line.read_checked(value)) {
+  if (line.ReadChecked(value)) {
     info.temperature = CelsiusToKelvin(value);
     info.temperature_available = true;
   }
@@ -97,7 +97,7 @@ FlymasterF1Device::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$VARIO"))
     return VARIO(line, info);

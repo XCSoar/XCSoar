@@ -30,17 +30,17 @@ bool
 FlarmDevice::ParsePFLAC(NMEAInputLine &line)
 {
   char responsetype[10];
-  line.read(responsetype, 10);
+  line.Read(responsetype, 10);
 
   char name[80];
-  line.read(name, 80);
+  line.Read(name, 80);
 
   if (strcmp(name, "ERROR") == 0)
     // ignore error responses...
     return true;
 
   char value[256];
-  line.read(value, ARRAY_SIZE(value));
+  line.Read(value, ARRAY_SIZE(value));
 
   settings_mutex.Lock();
   settings[name] = value;
@@ -57,7 +57,7 @@ FlarmDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 
   NMEAInputLine line(_line);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (strcmp(type, "$PFLAC") == 0)
     return ParsePFLAC(line);

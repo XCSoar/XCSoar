@@ -77,7 +77,7 @@ NMEAParser::ParseLine(const char *string, NMEAInfo &info)
   NMEAInputLine line(string);
 
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (IsAlphaASCII(type[1]) && IsAlphaASCII(type[2])) {
     if (StringIsEqual(type + 3, "GSA"))
@@ -149,7 +149,7 @@ static bool
 ReadPositiveAngle(NMEAInputLine &line, Angle &a)
 {
   char buffer[32], *endptr;
-  line.read(buffer, sizeof(buffer));
+  line.Read(buffer, sizeof(buffer));
 
   char *dot = strchr(buffer, '.');
   if (dot < buffer + 3)
@@ -171,8 +171,8 @@ ReadPositiveAngle(NMEAInputLine &line, Angle &a)
 static bool
 ReadFixedAndChar(NMEAInputLine &line, fixed &d, char &ch)
 {
-  bool success = line.read_checked(d);
-  ch = line.read_first_char();
+  bool success = line.ReadChecked(d);
+  ch = line.ReadFirstChar();
   return success;
 }
 
@@ -183,7 +183,7 @@ ReadLatitude(NMEAInputLine &line, Angle &value_r)
   if (!ReadPositiveAngle(line, value))
     return false;
 
-  if (line.read_first_char() == 'S')
+  if (line.ReadFirstChar() == 'S')
     value.Flip();
 
   value_r = value;
@@ -197,7 +197,7 @@ ReadLongitude(NMEAInputLine &line, Angle &value_r)
   if (!ReadPositiveAngle(line, value))
     return false;
 
-  if (line.read_first_char() == 'W')
+  if (line.ReadFirstChar() == 'W')
     value.Flip();
 
   value_r = value;
@@ -325,14 +325,14 @@ NMEAParser::GSA(NMEAInputLine &line, NMEAInfo &info)
    *  18) checksum
    */
 
-  line.skip();
+  line.Skip();
 
-  if (line.read(0) == 1)
+  if (line.Read(0) == 1)
     info.location_available.Clear();
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; i++)
-    info.gps.satellite_ids[i] = line.read(0);
+    info.gps.satellite_ids[i] = line.Read(0);
 
   info.gps.satellite_ids_available.Update(info.clock);
 
@@ -359,11 +359,11 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed this_time = TimeModify(line.read(fixed_zero), info.date_time_utc,
+  fixed this_time = TimeModify(line.Read(fixed_zero), info.date_time_utc,
                                info.date_available);
   this_time = TimeAdvanceTolerance(this_time);
 
-  bool gps_valid = !NAVWarn(line.read_first_char());
+  bool gps_valid = !NAVWarn(line.ReadFirstChar());
 
   if (!TimeHasAdvanced(this_time, info))
     return true;
@@ -388,7 +388,7 @@ static bool
 ReadDate(NMEAInputLine &line, BrokenDate &date)
 {
   char buffer[9];
-  line.read(buffer, 9);
+  line.Read(buffer, 9);
 
   if (strlen(buffer) != 6)
     return false;
@@ -429,18 +429,18 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
    * 13) Checksum
    */
 
-  fixed this_time = line.read(fixed_zero);
+  fixed this_time = line.Read(fixed_zero);
 
-  bool gps_valid = !NAVWarn(line.read_first_char());
+  bool gps_valid = !NAVWarn(line.ReadFirstChar());
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
   fixed speed;
-  bool ground_speed_available = line.read_checked(speed);
+  bool ground_speed_available = line.ReadChecked(speed);
 
   fixed track;
-  bool track_available = line.read_checked(track);
+  bool track_available = line.ReadChecked(track);
 
   // JMW get date info first so TimeModify is accurate
   if (ReadDate(line, info.date_time_utc))
@@ -517,7 +517,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
    */
   GPSState &gps = info.gps;
 
-  fixed this_time = TimeModify(line.read(fixed_zero), info.date_time_utc,
+  fixed this_time = TimeModify(line.Read(fixed_zero), info.date_time_utc,
                                info.date_available);
   this_time = TimeAdvanceTolerance(this_time);
 
@@ -525,13 +525,13 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   bool valid_location = ReadGeoPoint(line, location);
 
   unsigned fix_quality;
-  if (line.read_checked(fix_quality)) {
+  if (line.ReadChecked(fix_quality)) {
     gps.fix_quality = (FixQuality)fix_quality;
     gps.fix_quality_available.Update(info.clock);
   }
 
   unsigned satellites_used;
-  if (line.read_checked(satellites_used)) {
+  if (line.ReadChecked(satellites_used)) {
     info.gps.satellites_used = satellites_used;
     info.gps.satellites_used_available.Update(info.clock);
   }
@@ -555,7 +555,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   info.gps.android_internal_gps = false;
 #endif
 
-  gps.hdop = line.read(fixed_zero);
+  gps.hdop = line.Read(fixed_zero);
 
   bool altitude_available = ReadAltitude(line, info.gps_altitude);
   if (altitude_available)
@@ -650,18 +650,18 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
 
   // Parse current vario data
   fixed vario;
-  if (line.read_checked(vario)) {
+  if (line.ReadChecked(vario)) {
     // Properly convert to m/s
     vario = Units::ToSysUnit((vario - fixed(200)) / 10, Unit::KNOTS);
     info.ProvideTotalEnergyVario(vario);
   }
 
   // Skip average vario data
-  line.skip();
+  line.Skip();
 
   // Parse barometric altitude
   fixed baro_altitude;
-  if (line.read_checked(baro_altitude)) {
+  if (line.ReadChecked(baro_altitude)) {
     // Properly convert to meter
     baro_altitude = Units::ToSysUnit(baro_altitude - fixed(2000), Unit::FEET);
     info.ProvidePressureAltitude(baro_altitude);
@@ -669,7 +669,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
 
   // Parse true airspeed
   fixed vtas;
-  if (line.read_checked(vtas))
+  if (line.ReadChecked(vtas))
     info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KNOTS));
 
   return true;

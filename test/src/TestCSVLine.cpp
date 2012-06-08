@@ -35,46 +35,46 @@ main(int argc, char **argv)
 
     {
       // Test read(long)
-      int temp = line.read(-1);
+      int temp = line.Read(-1);
       ok1(temp == 1);
     }
 
     // Test rest()
-    ok1(strcmp(line.rest(), "2,x,4,5,6,7,8,9,10") == 0);
+    ok1(strcmp(line.Rest(), "2,x,4,5,6,7,8,9,10") == 0);
 
     // Test skip()
-    ok1(line.skip() == 1);
+    ok1(line.Skip() == 1);
 
     // Test skip(int)
-    line.skip(3);
-    ok1(line.read(-1) == 6);
+    line.Skip(3);
+    ok1(line.Read(-1) == 6);
 
     // Test read_first_char()
-    ok1(line.read_first_char() == '7');
+    ok1(line.ReadFirstChar() == '7');
 
     {
       // Test read(char)
       char temp[10];
-      line.read(temp, 10);
+      line.Read(temp, 10);
       ok1(strcmp(temp, "8") == 0);
     }
 
     // Test read_compare(char)
-    ok1(line.read_compare("9"));
+    ok1(line.ReadCompare("9"));
 
     {
       // Test read(long)
-      long temp = line.read(-1);
+      long temp = line.Read(-1);
       ok1(temp == 10);
     }
 
     // Test default-value at line-end
-    ok1(line.read(11) == 11);
+    ok1(line.Read(11) == 11);
 
     {
       // Test default-value at line-end
       int temp;
-      ok1(!line.read_checked(temp));
+      ok1(!line.ReadChecked(temp));
     }
   }
 
@@ -82,31 +82,31 @@ main(int argc, char **argv)
     CSVLine line("A0,4.5555,4.5555,42,0,1.337,42.42,42,xxx");
 
     // Test read_hex()
-    ok1(line.read_hex(-1) == 160);
+    ok1(line.ReadHex(-1) == 160);
 
     // Test read(double)
-    ok1(equals(fixed(line.read(0.0)), 4.5555));
+    ok1(equals(fixed(line.Read(0.0)), 4.5555));
 
     // Test read(fixed)
-    ok1(equals(line.read(fixed_zero), 4.5555));
+    ok1(equals(line.Read(fixed_zero), 4.5555));
 
     // Test read(bool)
-    ok1(line.read(false) == true);
-    ok1(line.read(false) == false);
+    ok1(line.Read(false) == true);
+    ok1(line.Read(false) == false);
 
     // Test read_checked()
     {
       double temp;
-      ok1(line.read_checked(temp) && equals(fixed(temp), 1.337));
+      ok1(line.ReadChecked(temp) && equals(fixed(temp), 1.337));
     }
     {
       fixed temp;
-      ok1(line.read_checked(temp) && equals(temp, 42.42));
+      ok1(line.ReadChecked(temp) && equals(temp, 42.42));
     }
     {
       int temp;
-      ok1(line.read_checked(temp) && temp == 42);
-      ok1(!line.read_checked(temp) && temp == 42);
+      ok1(line.ReadChecked(temp) && temp == 42);
+      ok1(!line.ReadChecked(temp) && temp == 42);
     }
   }
 

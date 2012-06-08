@@ -34,8 +34,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed bearing, norm;
 
-  bool bearing_valid = line.read_checked(bearing);
-  bool norm_valid = line.read_checked(norm);
+  bool bearing_valid = line.ReadChecked(bearing);
+  bool norm_valid = line.ReadChecked(norm);
 
   if (bearing_valid && norm_valid) {
     value_r.bearing = Angle::Degrees(bearing);
@@ -62,13 +62,13 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   fixed value;
 
-  line.skip();
+  line.Skip();
 
   fixed airspeed;
-  bool tas_available = line.read_checked(airspeed);
+  bool tas_available = line.ReadChecked(airspeed);
 
   fixed alt = fixed_zero;
-  if (line.read_checked(alt))
+  if (line.ReadChecked(alt))
     /* a dump on a LX7007 has confirmed that the LX sends uncorrected
        altitude above 1013.25hPa here */
     info.ProvidePressureAltitude(alt);
@@ -78,10 +78,10 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
                                                           Unit::KILOMETER_PER_HOUR),
                                          alt);
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value);
 
-  line.skip(6);
+  line.Skip(6);
 
   SpeedVector wind;
   if (ReadSpeedVector(line, wind))
@@ -120,15 +120,15 @@ LXWP2(NMEAInputLine &line, NMEAInfo &info)
 
   fixed value;
   // MacCready value
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.settings.ProvideMacCready(value, info.clock);
 
   // Ballast
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.settings.ProvideBallastOverload(value, info.clock);
 
   // Bugs
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.settings.ProvideBugs((fixed(100) - value) / 100, info.clock);
 
   return true;
@@ -163,17 +163,17 @@ LXWP3(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 static bool
 PLXVF(NMEAInputLine &line, NMEAInfo &info)
 {
-  line.skip(4);
+  line.Skip(4);
 
   fixed vario;
-  if (line.read_checked(vario))
+  if (line.ReadChecked(vario))
     info.ProvideNettoVario(vario);
 
   fixed ias;
-  bool have_ias = line.read_checked(ias);
+  bool have_ias = line.ReadChecked(ias);
 
   fixed altitude;
-  if (line.read_checked(altitude)) {
+  if (line.ReadChecked(altitude)) {
     info.ProvidePressureAltitude(altitude);
 
     if (have_ias)
@@ -196,13 +196,13 @@ static bool
 PLXVS(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed temperature;
-  if (line.read_checked(temperature)) {
+  if (line.ReadChecked(temperature)) {
     info.temperature = CelsiusToKelvin(temperature);
     info.temperature_available = true;
   }
 
   int mode;
-  if (line.read_checked(mode)) {
+  if (line.ReadChecked(mode)) {
     if (mode == 0) {
       info.switch_state.flight_mode = SwitchInfo::FlightMode::CIRCLING;
       info.switch_state.speed_command = false;
@@ -215,7 +215,7 @@ PLXVS(NMEAInputLine &line, NMEAInfo &info)
   }
 
   fixed voltage;
-  if (line.read_checked(voltage)) {
+  if (line.ReadChecked(voltage)) {
     info.voltage = voltage;
     info.voltage_available.Update(info.clock);
   }
@@ -231,7 +231,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$LXWP0"))
     return LXWP0(line, info);

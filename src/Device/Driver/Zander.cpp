@@ -39,7 +39,7 @@ static bool
 PZAN1(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed baro_altitude;
-  if (line.read_checked(baro_altitude))
+  if (line.ReadChecked(baro_altitude))
     /* the ZS1 documentation does not specify wheter the altitude is
        STD or QNH, but Franz Poeschl confirmed via email that it is
        the QNH altitude */
@@ -53,10 +53,10 @@ PZAN2(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed vtas, wnet;
 
-  if (line.read_checked(vtas))
+  if (line.ReadChecked(vtas))
     info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, Unit::KILOMETER_PER_HOUR));
 
-  if (line.read_checked(wnet))
+  if (line.ReadChecked(wnet))
     info.ProvideTotalEnergyVario((wnet - fixed(10000)) / 100);
 
   return true;
@@ -68,21 +68,21 @@ PZAN3(NMEAInputLine &line, NMEAInfo &info)
   // old: $PZAN3,+,026,V,321,035,A,321,035,V*cc
   // new: $PZAN3,+,026,A,321,035,V[,A]*cc
 
-  line.skip(3);
+  line.Skip(3);
 
   int direction, speed;
-  if (!line.read_checked(direction) || !line.read_checked(speed))
+  if (!line.ReadChecked(direction) || !line.ReadChecked(speed))
     return false;
 
-  char okay = line.read_first_char();
+  char okay = line.ReadFirstChar();
   if (okay == 'V') {
-    okay = line.read_first_char();
+    okay = line.ReadFirstChar();
     if (okay == 'V')
       return true;
 
     if (okay != 'A') {
-      line.skip();
-      okay = line.read_first_char();
+      line.Skip();
+      okay = line.ReadFirstChar();
     }
   }
 
@@ -101,7 +101,7 @@ PZAN4(NMEAInputLine &line, NMEAInfo &info)
   // $PZAN4,1.5,+,20,39,45*cc
 
   fixed mc;
-  if (line.read_checked(mc))
+  if (line.ReadChecked(mc))
     info.settings.ProvideMacCready(mc, info.clock);
 
   return true;
@@ -113,7 +113,7 @@ PZAN5(NMEAInputLine &line, NMEAInfo &info)
   // $PZAN5,VA,MUEHL,123.4,KM,T,234*cc
 
   char state[3];
-  line.read(state, 3);
+  line.Read(state, 3);
 
   if (strcmp(state, "SF") == 0) {
     info.switch_state.flight_mode = SwitchInfo::FlightMode::CRUISE;
@@ -136,7 +136,7 @@ ZanderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$PZAN1"))
     return PZAN1(line, info);

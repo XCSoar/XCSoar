@@ -65,8 +65,8 @@ static bool
 ReadAltitude(NMEAInputLine &line, fixed &value_r)
 {
   fixed value;
-  bool available = line.read_checked(value);
-  char unit = line.read_first_char();
+  bool available = line.ReadChecked(value);
+  char unit = line.ReadFirstChar();
   if (!available)
     return false;
 
@@ -85,7 +85,7 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$PGRMZ")) {
     fixed value;

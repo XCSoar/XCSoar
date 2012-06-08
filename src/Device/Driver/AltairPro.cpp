@@ -72,8 +72,8 @@ static bool
 ReadAltitude(NMEAInputLine &line, fixed &value_r)
 {
   fixed value;
-  bool available = line.read_checked(value);
-  char unit = line.read_first_char();
+  bool available = line.ReadChecked(value);
+  char unit = line.ReadFirstChar();
   if (!available)
     return false;
 
@@ -94,18 +94,18 @@ PTFRS(NMEAInputLine &line, NMEAInfo &info)
   //        <time>,<secpower>,<secpowerint>,<usup>,<ulit>,
   //        <chargerstate>,<antstate>*CS<CR><LF>
 
-  line.skip(8);
+  line.Skip(8);
 
   unsigned enl;
-  if (line.read_checked(enl)) {
+  if (line.ReadChecked(enl)) {
     info.engine_noise_level = enl;
     info.engine_noise_level_available.Update(info.clock);
   }
 
-  line.skip(7);
+  line.Skip(7);
 
   unsigned supply_voltage;
-  if (line.read_checked(supply_voltage) && supply_voltage != 0) {
+  if (line.ReadChecked(supply_voltage) && supply_voltage != 0) {
     info.voltage = fixed(supply_voltage) / 1000;
     info.voltage_available.Update(info.clock);
   }
@@ -121,7 +121,7 @@ AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   // no propriatary sentence
 

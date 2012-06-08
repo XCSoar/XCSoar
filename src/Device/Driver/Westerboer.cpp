@@ -57,27 +57,27 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
 {
   int i, k;
 
-  line.skip(); /* device */
+  line.Skip(); /* device */
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.ProvideTotalEnergyVario(fixed(i) / 10);
 
-  line.skip(); /* average vario */
+  line.Skip(); /* average vario */
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.ProvideNettoVario(fixed(i) / 10);
 
-  line.skip(); /* average netto vario */
-  line.skip(); /* speed to fly */
+  line.Skip(); /* average netto vario */
+  line.Skip(); /* speed to fly */
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.ProvidePressureAltitude(fixed(i));
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.ProvideBaroAltitudeTrue(fixed(i));
 
-  bool have_ias = line.read_checked(i);
-  bool have_tas = line.read_checked(k);
+  bool have_ias = line.ReadChecked(i);
+  bool have_tas = line.ReadChecked(k);
   if (have_ias && have_tas)
     info.ProvideBothAirspeeds(Units::ToSysUnit(fixed(i) / 10,
                                                Unit::KILOMETER_PER_HOUR),
@@ -88,12 +88,12 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
     info.ProvideTrueAirspeed(Units::ToSysUnit(fixed(k) / 10,
                                               Unit::KILOMETER_PER_HOUR));
 
-  if (line.read_checked(i)) {
+  if (line.ReadChecked(i)) {
     info.voltage = fixed(i) / 10;
     info.voltage_available.Update(info.clock);
   }
 
-  if (line.read_checked(i)) {
+  if (line.ReadChecked(i)) {
     info.temperature = CelsiusToKelvin(fixed(i) / 10);
     info.temperature_available = true;
   }
@@ -107,13 +107,13 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PWES1(NMEAInputLine &line, NMEAInfo &info)
 {
-  line.skip(); /* device */
+  line.Skip(); /* device */
 
   int i;
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.settings.ProvideMacCready(fixed(i) / 10, info.clock);
 
-  if (line.read_checked(i)) {
+  if (line.ReadChecked(i)) {
     if (i == 0) {
       info.switch_state.flight_mode = SwitchInfo::FlightMode::CIRCLING;
       info.switch_state.speed_command = false;
@@ -125,12 +125,12 @@ PWES1(NMEAInputLine &line, NMEAInfo &info)
     }
   }
 
-  line.skip(3);
+  line.Skip(3);
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.settings.ProvideWingLoading(fixed(i) / 10, info.clock);
 
-  if (line.read_checked(i))
+  if (line.ReadChecked(i))
     info.settings.ProvideBugs(fixed(100 - i) / 100, info.clock);
 
   return true;
@@ -144,7 +144,7 @@ WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$PWES0"))
     return PWES0(line, info);

@@ -53,10 +53,10 @@ public:
 static bool
 GPWIN(NMEAInputLine &line, NMEAInfo &info)
 {
-  line.skip(2);
+  line.Skip(2);
 
   fixed value;
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvidePressureAltitude(value / 10);
 
   return false;
@@ -67,7 +67,7 @@ PGDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   // $GPWIN ... Winpilot proprietary sentance includinh baro altitude
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E

@@ -63,7 +63,7 @@ FlytecParseBRSF(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
 
   // 0 = indicated or true airspeed [km/h]
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     // XXX is that TAS or IAS?  Documentation isn't clear.
     info.ProvideBothAirspeeds(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
@@ -89,24 +89,24 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
 
   // 0,1 = GPS altitude, unit
-  if (line.read_checked_compare(info.gps_altitude, "M"))
+  if (line.ReadCheckedCompare(info.gps_altitude, "M"))
     info.gps_altitude_available.Update(info.clock);
 
   // 2,3 = baro altitude, unit
-  if (line.read_checked_compare(value, "M"))
+  if (line.ReadCheckedCompare(value, "M"))
     info.ProvideBaroAltitudeTrue(value);
 
   // 4-7 = integrated vario, unit
-  line.skip(4);
+  line.Skip(4);
 
   // 8,9 = indicated or true airspeed, unit
-  if (line.read_checked_compare(value, "KH"))
+  if (line.ReadCheckedCompare(value, "KH"))
     // XXX is that TAS or IAS?  Documentation isn't clear.
     info.ProvideBothAirspeeds(Units::ToSysUnit(value, Unit::KILOMETER_PER_HOUR));
 
   // 10,11 = temperature, unit
   info.temperature_available =
-    line.read_checked_compare(value, "C");
+    line.ReadCheckedCompare(value, "C");
   if (info.temperature_available)
     info.temperature = CelsiusToKelvin(value);
 
@@ -126,14 +126,14 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   // V or A in field 9  -> 3.31-
   // V or A in field 10 -> 3.32+
 
-  NMEAInputLine line_copy(line.rest());
+  NMEAInputLine line_copy(line.Rest());
 
-  line_copy.skip(8);
+  line_copy.Skip(8);
 
   bool has_date_field = false;
-  char validity = line_copy.read_first_char();
+  char validity = line_copy.ReadFirstChar();
   if (validity != 'A' && validity != 'V') {
-    validity = line_copy.read_first_char();
+    validity = line_copy.ReadFirstChar();
     if (validity != 'A' && validity != 'V')
       return false;
 
@@ -142,15 +142,15 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 
   //  Date(ddmmyy),   6 Digits (only in firmware version 3.32+)
   if (has_date_field)
-    line.skip();
+    line.Skip();
 
   //  Time(hhmmss),   6 Digits
-  line.skip();
+  line.Skip();
 
   if (validity == 'V') {
     // In case of V (void=not valid) GPS data should not be used.
     // GPS altitude, position and speed should be ignored.
-    line.skip(7);
+    line.Skip(7);
 
   } else {
     //  Latitude(ddmm.mmm),   8 Digits incl. decimal
@@ -165,66 +165,66 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 
     //  Track (xxx Deg),   3 Digits
     fixed track;
-    if (line.read_checked(track)) {
+    if (line.ReadChecked(track)) {
       info.track = Angle::Degrees(track);
       info.track_available.Update(info.clock);
     }
 
     //  Speed over Ground (xxxxx dm/s), 5 Digits
     fixed ground_speed;
-    if (line.read_checked(ground_speed)) {
+    if (line.ReadChecked(ground_speed)) {
       info.ground_speed = ground_speed / 10;
       info.ground_speed_available.Update(info.clock);
     }
 
     //  GPS altitude (xxxxx meter),           5 Digits
     fixed gps_altitude;
-    if (line.read_checked(gps_altitude)) {
+    if (line.ReadChecked(gps_altitude)) {
       info.gps_altitude = gps_altitude;
       info.gps_altitude_available.Update(info.clock);
     }
   }
 
   //  Validity of 3 D fix A or V,           1 Digit
-  line.skip();
+  line.Skip();
 
   //  Satellites in Use (0 to 12),          2 Digits
   unsigned satellites_used;
-  if (line.read_checked(satellites_used)) {
+  if (line.ReadChecked(satellites_used)) {
     info.gps.satellites_used = satellites_used;
     info.gps.satellites_used_available.Update(info.clock);
   }
 
   //  Raw pressure (xxxxxx Pa),  6 Digits
   fixed pressure;
-  if (line.read_checked(pressure))
+  if (line.ReadChecked(pressure))
     info.ProvideStaticPressure(AtmosphericPressure::Pascal(pressure));
 
   //  Baro Altitude (xxxxx meter),          5 Digits (-xxxx to xxxxx) (Based on 1013.25hPa)
   fixed baro_altitude;
-  if (line.read_checked(baro_altitude))
+  if (line.ReadChecked(baro_altitude))
     info.ProvidePressureAltitude(baro_altitude);
 
   //  Variometer (xxxx cm/s),   4 or 5 Digits (-9999 to 9999)
   fixed vario;
-  if (line.read_checked(vario))
+  if (line.ReadChecked(vario))
     info.ProvideTotalEnergyVario(vario / 100);
 
   //  True airspeed (xxxxx dm/s), 5 Digits
   fixed tas;
-  if (line.read_checked(tas))
+  if (line.ReadChecked(tas))
     info.ProvideTrueAirspeed(tas / 10);
 
   //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
-  line.skip();
+  line.Skip();
 
   //  Temp. PCB (xxx °C),   3 Digits
   fixed pcb_temperature;
-  bool pcb_temperature_available = line.read_checked(pcb_temperature);
+  bool pcb_temperature_available = line.ReadChecked(pcb_temperature);
 
   //  Temp. Balloon Envelope (xxx °C),      3 Digits
   fixed balloon_temperature;
-  bool balloon_temperature_available = line.read_checked(balloon_temperature);
+  bool balloon_temperature_available = line.ReadChecked(balloon_temperature);
 
   if (balloon_temperature_available) {
     info.temperature = CelsiusToKelvin(balloon_temperature);
@@ -236,11 +236,11 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 
   //  Battery Capacity Bank 1 (0 to 100%)   3 Digits
   fixed battery_level_1;
-  bool battery_level_1_available = line.read_checked(battery_level_1);
+  bool battery_level_1_available = line.ReadChecked(battery_level_1);
 
   //  Battery Capacity Bank 2 (0 to 100%)   3 Digits
   fixed battery_level_2;
-  bool battery_level_2_available = line.read_checked(battery_level_2);
+  bool battery_level_2_available = line.ReadChecked(battery_level_2);
 
   if (battery_level_1_available) {
     if (battery_level_2_available)
@@ -271,7 +271,7 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 
   NMEAInputLine line(_line);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$BRSF"))
     return FlytecParseBRSF(line, info);
@@ -456,35 +456,35 @@ FlytecDevice::ReadFlightList(RecordedFlightList &flight_list,
     NMEAInputLine line(buffer);
 
     // Skip $PBRTL
-    line.skip();
+    line.Skip();
 
     if (tracks == 0) {
       // If number of tracks not read yet
       // .. read and save it
-      if (!line.read_checked(tracks))
+      if (!line.ReadChecked(tracks))
         continue;
 
       env.SetProgressRange(tracks);
     } else
-      line.skip();
+      line.Skip();
 
-    if (!line.read_checked(flight.internal.flytec))
+    if (!line.ReadChecked(flight.internal.flytec))
       continue;
 
     if (tracks != 0 && flight.internal.flytec < tracks)
       env.SetProgressPosition(flight.internal.flytec);
 
     char field_buffer[16];
-    line.read(field_buffer, ARRAY_SIZE(field_buffer));
+    line.Read(field_buffer, ARRAY_SIZE(field_buffer));
     if (!ParseDate(field_buffer, flight.date))
       continue;
 
-    line.read(field_buffer, ARRAY_SIZE(field_buffer));
+    line.Read(field_buffer, ARRAY_SIZE(field_buffer));
     if (!ParseTime(field_buffer, flight.start_time))
       continue;
 
     BrokenTime duration;
-    line.read(field_buffer, ARRAY_SIZE(field_buffer));
+    line.Read(field_buffer, ARRAY_SIZE(field_buffer));
     if (!ParseTime(field_buffer, duration))
       continue;
 

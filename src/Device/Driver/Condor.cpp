@@ -42,8 +42,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed bearing, norm;
 
-  bool bearing_valid = line.read_checked(bearing);
-  bool norm_valid = line.read_checked(norm);
+  bool bearing_valid = line.ReadChecked(bearing);
+  bool norm_valid = line.ReadChecked(norm);
 
   if (bearing_valid && norm_valid) {
     // Condor 1.1.4 outputs the direction that the wind is going to,
@@ -75,12 +75,12 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   fixed value;
 
-  line.skip();
+  line.Skip();
 
   fixed airspeed;
-  bool tas_available = line.read_checked(airspeed);
+  bool tas_available = line.ReadChecked(airspeed);
 
-  fixed alt = line.read(fixed_zero);
+  fixed alt = line.Read(fixed_zero);
 
   if (tas_available)
     info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
@@ -90,10 +90,10 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
   // ToDo check if QNH correction is needed!
   info.ProvideBaroAltitudeTrue(alt);
 
-  if (line.read_checked(value))
+  if (line.ReadChecked(value))
     info.ProvideTotalEnergyVario(value);
 
-  line.skip(6);
+  line.Skip(6);
 
   SpeedVector wind;
   if (ReadSpeedVector(line, wind))
@@ -122,7 +122,7 @@ CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   NMEAInputLine line(String);
   char type[16];
-  line.read(type, 16);
+  line.Read(type, 16);
 
   if (StringIsEqual(type, "$LXWP0"))
     return cLXWP0(line, info);
