@@ -26,6 +26,7 @@ Copyright_License {
 #include "Engine/Util/DataNodeXML.hpp"
 #include "Util/StringUtil.hpp"
 
+#include <memory>
 #include <assert.h>
 
 OrderedTask* 
@@ -35,15 +36,13 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
   assert(index == 0);
 
   // Load root node
-  DataNode *root = DataNodeXML::Load(path);
+  std::unique_ptr<DataNode> root(DataNodeXML::Load(path));
   if (!root)
     return NULL;
 
   // Check if root node is a <Task> node
-  if (!StringIsEqual(root->GetName(), _T("Task"))) {
-    delete root;
+  if (!StringIsEqual(root->GetName(), _T("Task")))
     return NULL;
-  }
 
   // Create a blank task
   OrderedTask *task = new OrderedTask(task_behaviour);
@@ -55,11 +54,9 @@ TaskFileXCSoar::GetTask(const TaskBehaviour &task_behaviour,
   // Check if the task is valid
   if (!task->CheckTask()) {
     delete task;
-    delete root;
     return NULL;
   }
 
   // Return the parsed task
-  delete root;
   return task;
 }
