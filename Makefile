@@ -76,6 +76,7 @@ include $(topdir)/build/manual.mk
 include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
+include $(topdir)/build/libos.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/zlib.mk
@@ -618,11 +619,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmDetails.cpp \
 	$(SRC)/UtilsSettings.cpp \
 	$(SRC)/UtilsSystem.cpp \
-	$(SRC)/OS/Clock.cpp \
-	$(SRC)/OS/SystemLoad.cpp \
-	$(SRC)/OS/FileUtil.cpp \
-	$(SRC)/OS/FileMapping.cpp \
-	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/LogError.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/Audio/Sound.cpp \
@@ -744,7 +740,6 @@ endif
 
 ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
-	$(SRC)/OS/MemInfo.cpp \
 	$(SRC)/Device/Windows/Enumerator.cpp
 endif
 
@@ -821,7 +816,7 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	DRIVER PORT \
 	IO ENGINE \
 	SHAPELIB JASPER ZZIP \
-	LIBNET \
+	LIBNET OS \
 	UTIL MATH
 
 ifeq ($(HAVE_POSIX),n)

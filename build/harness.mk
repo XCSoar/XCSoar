@@ -9,7 +9,6 @@ HARNESS_SOURCES = \
 	$(SRC)/Logger/Settings.cpp \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
-	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
