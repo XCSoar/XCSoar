@@ -63,12 +63,10 @@ public:
       name = (base_name != NULL) ? base_name : path;
 
       // If the task file holds more than one task
-      if (i < task_file->namesuffixes.size() &&
-          task_file->namesuffixes[i]) {
-
+      const TCHAR *saved_name = task_file->GetName(i);
+      if (saved_name != NULL) {
         name += _T(": ");
-        name += task_file->namesuffixes[i];
-
+        name += saved_name;
       } else if (count > 1) {
         // .. append " - Task #[n]" suffix to the task name
         name.AppendFormat(_T(": %s #%d"), _("Task"), i + 1);

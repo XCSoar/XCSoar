@@ -72,3 +72,12 @@ TaskFile::GetTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
   delete file;
   return task;
 }
+
+const TCHAR *
+TaskFile::GetName(unsigned index) const
+{
+  if (index >= namesuffixes.size())
+    return NULL;
+
+  return namesuffixes[index];
+}
