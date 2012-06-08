@@ -33,6 +33,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 
 #include <windef.h> /* for MAX_PATH */
+#include <memory>
 
 static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
@@ -49,16 +50,13 @@ static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
                   OperationEnvironment &operation)
 {
-  TLineReader *reader = OpenTextFile(path, ConvertLineReader::AUTO);
-  if (reader == NULL) {
+  std::unique_ptr<TLineReader> reader(OpenTextFile(path, ConvertLineReader::AUTO));
+  if (!reader) {
     LogStartUp(_T("Failed to open airspace file: %s"), path);
     return false;
   }
 
-  bool parsed = ParseAirspaceFile(parser, path, *reader, operation);
-
-  delete reader;
-  return parsed;
+  return ParseAirspaceFile(parser, path, *reader, operation);
 }
 
 void
