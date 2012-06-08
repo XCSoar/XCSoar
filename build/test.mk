@@ -590,6 +590,7 @@ TEST_DRIVER_DEPENDS = DRIVER MATH IO OS
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
 
 TEST_WAY_POINT_FILE_SOURCES = \
+	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Poco/RWLock.cpp \
@@ -1040,6 +1041,7 @@ RUN_INPUT_PARSER_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunInputParser,RUN_INPUT_PARSER))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
+	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
@@ -2299,6 +2301,7 @@ TASK_INFO_DEPENDS = ENGINE IO OS MATH UTIL
 $(eval $(call link-program,TaskInfo,TASK_INFO))
 
 DUMP_TASK_FILE_SOURCES = \
+	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
