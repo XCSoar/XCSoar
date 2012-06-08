@@ -14,7 +14,14 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  printf("count=%u\n", file->Count());
+  unsigned count = file->Count();
+  printf("Number of tasks: %u\n---\n", count);
+
+  for (unsigned i = 0; i < count; ++i) {
+    const TCHAR *saved_name = file->GetName(i);
+    _tprintf(_T("%u: %s\n"), i, saved_name != NULL ? saved_name : _T(""));
+  }
+
   delete file;
   return EXIT_SUCCESS;
 }
