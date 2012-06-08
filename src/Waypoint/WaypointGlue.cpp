@@ -82,73 +82,24 @@ WaypointGlue::IsWritable()
   return IsWritable(1) || IsWritable(2) || IsWritable(3);
 }
 
-bool
-WaypointGlue::LoadWaypointFile(int num, Waypoints &way_points,
-                               const RasterTerrain *terrain,
-                               OperationEnvironment &operation)
+static bool
+LoadWaypointFile(Waypoints &waypoints, const TCHAR *path, int file_num,
+                 const RasterTerrain *terrain, OperationEnvironment &operation)
 {
-  // Get waypoint filename
-  TCHAR path[MAX_PATH];
-  if (!GetPath(num, path))
-    return false;
-
-  WaypointReader reader(path, num);
-
-  // If waypoint file exists
-  if (!reader.Error()) {
-    // parse the file
-    reader.SetTerrain(terrain);
-
-    if (reader.Parse(way_points, operation))
-      return true;
-
-    LogStartUp(_T("Parse error in waypoint file %d"), num);
-  } else {
-    LogStartUp(_T("No waypoint file %d"), num);
-  }
-
-  return false;
-}
-
-bool
-WaypointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
-                                   Waypoints &way_points,
-                                   const RasterTerrain *terrain,
-                                   OperationEnvironment &operation)
-{
-  TCHAR path[MAX_PATH];
-
-  // Get the map filename
-  if (!Profile::GetPath(key, path))
-    /* no map file configured */
-    return true;
-
-  TCHAR *tail = path + _tcslen(path);
-
-  _tcscpy(tail, _T("/waypoints.xcw"));
-
-  WaypointReader reader(path, num);
-
-  // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
+  WaypointReader reader(path, file_num);
   if (reader.Error()) {
-    // Get the map filename
-    _tcscpy(tail, _T("/waypoints.cup"));
-    reader.Open(path, num);
+    LogStartUp(_T("Failed to open waypoint file: %s"), path);
+    return false;
   }
 
-  // If waypoint file inside map file exists
-  if (!reader.Error()) {
-    // parse the file
-    reader.SetTerrain(terrain);
-    if (reader.Parse(way_points, operation))
-      return true;
-
-    LogStartUp(_T("Parse error in map waypoint file"));
-  } else {
-    LogStartUp(_T("No waypoint file in the map file"));
+  // parse the file
+  reader.SetTerrain(terrain);
+  if (!reader.Parse(waypoints, operation)) {
+    LogStartUp(_T("Failed to parse waypoint file: %s"), path);
+    return false;
   }
 
-  return false;
+  return true;
 }
 
 bool
@@ -164,21 +115,32 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
   // Delete old waypoints
   way_points.Clear();
 
+  TCHAR path[MAX_PATH];
+
   // ### FIRST FILE ###
-  found |= LoadWaypointFile(1, way_points, terrain, operation);
+  if (Profile::GetPath(szProfileWaypointFile, path))
+    found |= LoadWaypointFile(way_points, path, 1, terrain, operation);
 
   // ### SECOND FILE ###
-  found |= LoadWaypointFile(2, way_points, terrain, operation);
+  if (Profile::GetPath(szProfileAdditionalWaypointFile, path))
+    found |= LoadWaypointFile(way_points, path, 2, terrain, operation);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  found |= LoadWaypointFile(3, way_points, terrain, operation);
+  if (Profile::GetPath(szProfileWatchedWaypointFile, path))
+    found |= LoadWaypointFile(way_points, path, 3, terrain, operation);
 
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
-  if (!found)
-    found = LoadMapFileWaypoints(0, szProfileMapFile, way_points, terrain,
-                                 operation);
+  if (!found && Profile::GetPath(szProfileMapFile, path)) {
+    TCHAR *tail = path + _tcslen(path);
+
+    _tcscpy(tail, _T("/waypoints.xcw"));
+    found |= LoadWaypointFile(way_points, path, 0, terrain, operation);
+
+    _tcscpy(tail, _T("/waypoints.cup"));
+    found |= LoadWaypointFile(way_points, path, 0, terrain, operation);
+  }
 
   // Optimise the waypoint list after attaching new waypoints
   way_points.Optimise();

@@ -104,12 +104,7 @@ namespace WaypointGlue {
   bool LoadWaypoints(Waypoints &way_points,
                      const RasterTerrain *terrain,
                      OperationEnvironment &operation);
-  bool LoadWaypointFile(int num, Waypoints &way_points,
-                        const RasterTerrain *terrain,
-                        OperationEnvironment &operation);
-  bool LoadMapFileWaypoints(int num, const TCHAR* key,
-                            Waypoints &way_points, const RasterTerrain *terrain,
-                            OperationEnvironment &operation);
+
   bool SaveWaypoints(const Waypoints &way_points);
   bool SaveWaypointFile(const Waypoints &way_points, int num);
 
