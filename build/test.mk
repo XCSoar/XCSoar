@@ -38,6 +38,7 @@ testfast: $(call name-to-bin,$(TESTFAST))
 TEST1_LDADD = $(HARNESS_LIBS) \
 	$(ENGINE_CORE_LIBS) \
 	$(IO_LIBS) \
+	$(OS_LIBS) \
 	$(ZZIP_LDADD) \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
@@ -143,7 +144,7 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestAirspaceParser.cpp
 TEST_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
-TEST_AIRSPACE_PARSER_DEPENDS = ENGINE IO ZZIP MATH UTIL
+TEST_AIRSPACE_PARSER_DEPENDS = IO OS ENGINE ZZIP MATH UTIL
 $(eval $(call link-program,TestAirspaceParser,TEST_AIRSPACE_PARSER))
 
 TEST_DATE_TIME_SOURCES = \
@@ -184,14 +185,14 @@ TEST_PLANES_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestPlanes.cpp
-TEST_PLANES_DEPENDS = MATH IO UTIL
+TEST_PLANES_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestPlanes,TEST_PLANES))
 
 TEST_ZEROFINDER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestZeroFinder.cpp
-TEST_ZEROFINDER_DEPENDS = MATH IO
+TEST_ZEROFINDER_DEPENDS = IO OS MATH
 $(eval $(call link-program,TestZeroFinder,TEST_ZEROFINDER))
 
 TEST_TASKPOINT_SOURCES = \
@@ -200,7 +201,7 @@ TEST_TASKPOINT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskPoint.cpp
-TEST_TASKPOINT_DEPENDS = MATH IO
+TEST_TASKPOINT_DEPENDS = IO OS MATH
 $(eval $(call link-program,TestTaskPoint,TEST_TASKPOINT))
 
 TEST_TASKWAYPOINT_SOURCES = \
@@ -211,7 +212,7 @@ TEST_TASKWAYPOINT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskWaypoint.cpp
-TEST_TASKWAYPOINT_DEPENDS = MATH IO UTIL
+TEST_TASKWAYPOINT_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestTaskWaypoint,TEST_TASKWAYPOINT))
 
 TEST_TROUTE_SOURCES = \
@@ -311,7 +312,7 @@ TEST_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/Database.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmNet.cpp
-TEST_FLARM_NET_DEPENDS = MATH IO UTIL
+TEST_FLARM_NET_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestFlarmNet,TEST_FLARM_NET))
 
 TEST_GEO_CLIP_SOURCES = \
@@ -419,7 +420,7 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestPolars.cpp
-TEST_POLARS_DEPENDS = MATH IO
+TEST_POLARS_DEPENDS = IO OS MATH
 $(eval $(call link-program,TestPolars,TEST_POLARS))
 
 TEST_GLIDE_POLAR_SOURCES = \
@@ -546,7 +547,7 @@ TEST_LOGGER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestLogger.cpp
-TEST_LOGGER_DEPENDS = IO MATH
+TEST_LOGGER_DEPENDS = IO OS MATH
 $(eval $(call link-program,TestLogger,TEST_LOGGER))
 
 TEST_DRIVER_SOURCES = \
@@ -624,7 +625,7 @@ TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
-TEST_TRACE_DEPENDS = IO ENGINE MATH UTIL
+TEST_TRACE_DEPENDS = IO OS ENGINE MATH UTIL
 $(eval $(call link-program,TestTrace,TEST_TRACE))
 
 FLIGHT_TABLE_SOURCES = \
@@ -800,7 +801,7 @@ $(eval $(call link-program,BenchmarkProjection,BENCHMARK_PROJECTION))
 DUMP_TEXT_FILE_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
-DUMP_TEXT_FILE_DEPENDS = IO ZZIP
+DUMP_TEXT_FILE_DEPENDS = IO OS ZZIP
 $(eval $(call link-program,DumpTextFile,DUMP_TEXT_FILE))
 
 DUMP_TEXT_ZIP_SOURCES = \
@@ -894,7 +895,7 @@ RUN_XML_PARSER_SOURCES = \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
 	$(TEST_SRC_DIR)/RunXMLParser.cpp
-RUN_XML_PARSER_DEPENDS = IO
+RUN_XML_PARSER_DEPENDS = IO OS
 $(eval $(call link-program,RunXMLParser,RUN_XML_PARSER))
 
 READ_MO_SOURCES = \
@@ -945,7 +946,7 @@ READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/ReadGRecord.cpp
-READ_GRECORD_DEPENDS = IO
+READ_GRECORD_DEPENDS = IO OS
 $(eval $(call link-program,ReadGRecord,READ_GRECORD))
 
 VERIFY_GRECORD_SOURCES = \
@@ -953,7 +954,7 @@ VERIFY_GRECORD_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/VerifyGRecord.cpp
-VERIFY_GRECORD_DEPENDS = IO
+VERIFY_GRECORD_DEPENDS = IO OS
 $(eval $(call link-program,VerifyGRecord,VERIFY_GRECORD))
 
 APPEND_GRECORD_SOURCES = \
@@ -961,7 +962,7 @@ APPEND_GRECORD_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
-APPEND_GRECORD_DEPENDS = IO
+APPEND_GRECORD_DEPENDS = IO OS
 $(eval $(call link-program,AppendGRecord,APPEND_GRECORD))
 
 ADD_CHECKSUM_SOURCES = \
@@ -1035,7 +1036,7 @@ RUN_INPUT_PARSER_SOURCES = \
 	$(SRC)/Menu/MenuData.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunInputParser.cpp
-RUN_INPUT_PARSER_DEPENDS = IO UTIL
+RUN_INPUT_PARSER_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunInputParser,RUN_INPUT_PARSER))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
@@ -1073,7 +1074,7 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceParser.cpp
 RUN_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
-RUN_AIRSPACE_PARSER_DEPENDS = ENGINE IO ZZIP MATH UTIL
+RUN_AIRSPACE_PARSER_DEPENDS = IO OS ENGINE ZZIP MATH UTIL
 $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
 
 READ_PORT_SOURCES = \
@@ -2294,7 +2295,7 @@ TASK_INFO_SOURCES = \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
 	$(TEST_SRC_DIR)/TaskInfo.cpp
-TASK_INFO_DEPENDS = ENGINE IO MATH UTIL
+TASK_INFO_DEPENDS = ENGINE IO OS MATH UTIL
 $(eval $(call link-program,TaskInfo,TASK_INFO))
 
 DUMP_TASK_FILE_SOURCES = \
@@ -2324,7 +2325,7 @@ DUMP_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/Record.cpp \
 	$(SRC)/FLARM/Database.cpp \
 	$(TEST_SRC_DIR)/DumpFlarmNet.cpp
-DUMP_FLARM_NET_DEPENDS = MATH IO UTIL
+DUMP_FLARM_NET_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,DumpFlarmNet,DUMP_FLARM_NET))
 
 IGC2NMEA_SOURCES = \

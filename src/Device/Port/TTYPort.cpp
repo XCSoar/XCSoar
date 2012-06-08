@@ -40,12 +40,8 @@ Copyright_License {
 
 TTYPort::~TTYPort()
 {
-  if (fd < 0)
-    return;
-
-  StopRxThread();
-
-  close(fd);
+  if (tty.IsDefined())
+    StopRxThread();
 }
 
 bool
@@ -57,19 +53,13 @@ TTYPort::IsValid() const
 bool
 TTYPort::Drain()
 {
-#ifdef __BIONIC__
-  /* bionic doesn't have tcdrain() */
-  return fd >= 0;
-#else
-  return fd >= 0 && tcdrain(fd) == 0;
-#endif
+  return tty.Drain();
 }
 
 bool
 TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 {
-  fd = open(path, O_RDWR | O_NOCTTY | O_NONBLOCK);
-  if (fd < 0) {
+  if (!tty.OpenNonBlocking(path)) {
     LogErrno(_T("Failed to open port '%s'"), path);
     return false;
   }
@@ -85,15 +75,11 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
 const char *
 TTYPort::OpenPseudo()
 {
-  fd = open("/dev/ptmx", O_RDWR | O_NOCTTY | O_NONBLOCK);
-  if (fd < 0)
-    return NULL;
-
-  if (unlockpt(fd) < 0)
+  if (!tty.OpenNonBlocking("/dev/ptmx") || !tty.Unlock())
     return NULL;
 
   valid.Set();
-  return ptsname(fd);
+  return tty.GetSlaveName();
 }
 
 void
@@ -102,7 +88,7 @@ TTYPort::Flush()
   if (!valid.Get())
     return;
 
-  tcflush(fd, TCIFLUSH);
+  tty.FlushInput();
 }
 
 void
@@ -139,7 +125,7 @@ TTYPort::Run()
       continue;
     }
 
-    ssize_t nbytes = read(fd, buffer, sizeof(buffer));
+    ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
     if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
       valid.Reset();
       return;
@@ -155,16 +141,12 @@ TTYPort::Run()
 Port::WaitResult
 TTYPort::WaitWrite(unsigned timeout_ms)
 {
-  assert(fd >= 0);
+  assert(tty.IsDefined());
 
   if (!valid.Get())
     return WaitResult::FAILED;
 
-  struct pollfd pfd;
-  pfd.fd = fd;
-  pfd.events = POLLOUT;
-
-  int ret = poll(&pfd, 1, timeout_ms);
+  int ret = tty.WaitWritable(timeout_ms);
   if (ret > 0)
     return WaitResult::READY;
   else if (ret == 0)
@@ -176,19 +158,19 @@ TTYPort::WaitWrite(unsigned timeout_ms)
 size_t
 TTYPort::Write(const void *data, size_t length)
 {
-  assert(fd >= 0);
+  assert(tty.IsDefined());
 
   if (!valid.Get())
     return 0;
 
-  ssize_t nbytes = write(fd, data, length);
+  ssize_t nbytes = tty.Write(data, length);
   if (nbytes < 0 && errno == EAGAIN) {
     /* the output fifo is full; wait until we can write (or until the
        timeout expires) */
     if (WaitWrite(5000) != Port::WaitResult::READY)
       return 0;
 
-    nbytes = write(fd, data, length);
+    nbytes = tty.Write(data, length);
   }
 
   return nbytes < 0 ? 0 : nbytes;
@@ -199,7 +181,7 @@ TTYPort::StopRxThread()
 {
   // Make sure the thread isn't terminating itself
   assert(!Thread::IsInside());
-  assert(fd >= 0);
+  assert(tty.IsDefined());
 
   // If the thread is not running, cancel the rest of the function
   if (!Thread::IsDefined())
@@ -215,7 +197,7 @@ TTYPort::StopRxThread()
 bool
 TTYPort::StartRxThread()
 {
-  assert(fd >= 0);
+  assert(tty.IsDefined());
 
   if (!valid.Get())
     return false;
@@ -265,8 +247,10 @@ speed_t_to_baud_rate(speed_t speed)
 unsigned
 TTYPort::GetBaudrate() const
 {
+  assert(tty.IsDefined());
+
   struct termios attr;
-  if (tcgetattr(fd, &attr) < 0)
+  if (!tty.GetAttr(attr))
     return 0;
 
   return speed_t_to_baud_rate(cfgetispeed(&attr));
@@ -312,7 +296,7 @@ baud_rate_to_speed_t(unsigned baud_rate)
 bool
 TTYPort::SetBaudrate(unsigned BaudRate)
 {
-  assert(fd >= 0);
+  assert(tty.IsDefined());
 
   speed_t speed = baud_rate_to_speed_t(BaudRate);
   if (speed == B0)
@@ -320,7 +304,7 @@ TTYPort::SetBaudrate(unsigned BaudRate)
     return false;
 
   struct termios attr;
-  if (tcgetattr(fd, &attr) < 0)
+  if (!tty.GetAttr(attr))
     return false;
 
   attr.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
@@ -332,10 +316,8 @@ TTYPort::SetBaudrate(unsigned BaudRate)
   attr.c_cc[VTIME] = 1;
   cfsetospeed(&attr, speed);
   cfsetispeed(&attr, speed);
-  if (tcsetattr(fd, TCSANOW, &attr) < 0) {
-    close(fd);
+  if (!tty.SetAttr(TCSANOW, attr))
     return false;
-  }
 
   baud_rate = BaudRate;
   return true;
@@ -344,27 +326,23 @@ TTYPort::SetBaudrate(unsigned BaudRate)
 int
 TTYPort::Read(void *Buffer, size_t Size)
 {
-  assert(fd >= 0);
+  assert(tty.IsDefined());
 
   if (!valid.Get())
     return -1;
 
-  return read(fd, Buffer, Size);
+  return tty.Read(Buffer, Size);
 }
 
 Port::WaitResult
 TTYPort::WaitRead(unsigned timeout_ms)
 {
-  assert(fd >= 0);
+  assert(tty.IsDefined());
 
   if (!valid.Get())
     return WaitResult::FAILED;
 
-  struct pollfd pfd;
-  pfd.fd = fd;
-  pfd.events = POLLIN;
-
-  int ret = poll(&pfd, 1, timeout_ms);
+  int ret = tty.WaitReadable(timeout_ms);
   if (ret > 0)
     return WaitResult::READY;
   else if (ret == 0)

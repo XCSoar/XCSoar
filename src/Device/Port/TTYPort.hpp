@@ -27,6 +27,7 @@ Copyright_License {
 #include "Thread/StoppableThread.hpp"
 #include "Thread/Flag.hpp"
 #include "Port.hpp"
+#include "OS/TTYDescriptor.hpp"
 
 /**
  * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
@@ -35,7 +36,7 @@ class TTYPort : public Port, protected StoppableThread
 {
   unsigned baud_rate;
 
-  int fd;
+  TTYDescriptor tty;
 
   Flag valid;
 

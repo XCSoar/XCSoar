@@ -32,28 +32,19 @@ Copyright_License {
 
 PosixFileSource::PosixFileSource(const char *path)
 {
-  fd = ::open(path, O_RDONLY);
-}
-
-PosixFileSource::~PosixFileSource()
-{
-  if (fd >= 0)
-    ::close(fd);
+  fd.OpenReadOnly(path);
 }
 
 long
 PosixFileSource::size() const
 {
-  struct stat st;
-  return ::fstat(fd, &st) >= 0
-    ? (long)st.st_size
-    : -1;
+  return (long)fd.GetSize();
 }
 
 unsigned
 PosixFileSource::read(char *p, unsigned n)
 {
-  ssize_t nbytes = ::read(fd, p, n);
+  ssize_t nbytes = fd.Read(p, n);
   return nbytes > 0 ? nbytes : 0;
 }
 

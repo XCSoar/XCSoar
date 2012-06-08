@@ -28,16 +28,17 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 
+#include "OS/FileDescriptor.hpp"
+
 class PosixFileSource : public BufferedSource<char, 4096u> {
 private:
-  int fd;
+  FileDescriptor fd;
 
 public:
   PosixFileSource(const char *path);
-  virtual ~PosixFileSource();
 
   bool error() const {
-    return fd < 0;
+    return !fd.IsDefined();
   }
 
 public:
