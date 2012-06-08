@@ -34,6 +34,7 @@ Copyright_License {
 
 #include <cstdio>
 #include <algorithm>
+#include <memory>
 
 class TaskFileVisitor: public File::Visitor
 {
@@ -47,8 +48,8 @@ public:
   void Visit(const TCHAR *path, const TCHAR *filename) {
     // Create a TaskFile instance to determine how many
     // tasks are inside of this task file
-    TaskFile* task_file = TaskFile::Create(path);
-    if (task_file == NULL)
+    std::unique_ptr<TaskFile> task_file(TaskFile::Create(path));
+    if (!task_file)
       return;
 
     // Get base name of the task file
@@ -75,9 +76,6 @@ public:
       // Add the task to the TaskStore
       store.push_back(TaskStore::Item(path, name.empty() ? path : name, i));
     }
-
-    // Remove temporary TaskFile instance
-    delete task_file;
   }
 };
 

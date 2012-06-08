@@ -1,6 +1,8 @@
 #include "OS/Args.hpp"
 #include "Task/TaskFile.hpp"
 
+#include <memory>
+
 int
 main(int argc, char **argv)
 {
@@ -8,8 +10,8 @@ main(int argc, char **argv)
   tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
-  TaskFile *file = TaskFile::Create(path.c_str());
-  if (file == NULL) {
+  std::unique_ptr<TaskFile> file(TaskFile::Create(path.c_str()));
+  if (!file) {
     fprintf(stderr, "TaskFile::Create() failed\n");
     return EXIT_FAILURE;
   }
@@ -22,7 +24,6 @@ main(int argc, char **argv)
     _tprintf(_T("%u: %s\n"), i, saved_name != NULL ? saved_name : _T(""));
   }
 
-  delete file;
   return EXIT_SUCCESS;
 }
 
