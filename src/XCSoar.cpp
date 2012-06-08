@@ -44,6 +44,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Simulator.hpp"
 #include "OS/Args.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #ifndef NDEBUG
 #include "Thread/Thread.hpp"
@@ -130,12 +131,16 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   AllowLanguage();
 
+  InitialiseIOThread();
+
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
   if (XCSoarInterface::Startup())
     ret = CommonInterface::main_window.RunEventLoop();
 
   CommonInterface::main_window.reset();
+
+  DeinitialiseIOThread();
 
   DisallowLanguage();
 

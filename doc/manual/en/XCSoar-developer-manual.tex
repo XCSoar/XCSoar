@@ -335,6 +335,12 @@ rendering):
   \path(merge.south)+(3,-2) node(device2)[thread]{Device 2};
   \draw[->] (device2.north) -- (merge.290)
   node[midway, above, sloped, font=\tiny]{sensor data};
+
+  \path(ui.south)+(0,-3) node(io)[thread]{I/O thread};
+  \draw[->] (io.north) -- (ui.south)
+  node[midway, above, sloped, font=\tiny]{data};
+  \draw[->] (io.east) -- (merge.west)
+  node[midway, above, sloped, font=\tiny]{sensor data};
 \end{tikzpicture}
 
 The UI thread is the main thread.  It starts the other threads and is

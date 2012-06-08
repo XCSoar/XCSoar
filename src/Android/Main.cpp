@@ -53,6 +53,7 @@ Copyright_License {
 #include "Java/URL.hpp"
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #ifdef IOIOLIB
 #include "Android/IOIOHelper.hpp"
@@ -93,6 +94,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint xdpi, jint ydpi,
                                             jint sdk_version, jstring product)
 {
+  InitialiseIOThread();
+
   Java::Init(env);
   Java::File::Initialise(env);
   Java::InputStream::Initialise(env);
@@ -188,6 +191,8 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   AndroidTimer::Deinitialise(env);
   Environment::Deinitialise(env);
   Java::URL::Deinitialise(env);
+
+  DeinitialiseIOThread();
 }
 
 gcc_visibility_default

@@ -85,6 +85,7 @@ include $(topdir)/build/jasper.mk
 include $(topdir)/build/libport.mk
 include $(topdir)/build/driver.mk
 include $(topdir)/build/io.mk
+include $(topdir)/build/libasync.mk
 include $(topdir)/build/shapelib.mk
 include $(topdir)/build/task.mk
 include $(topdir)/build/datafield.mk
@@ -815,7 +816,7 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	FORM DATA_FIELD \
 	AUDIO SCREEN \
 	DRIVER PORT \
-	IO ENGINE \
+	IO ASYNC ENGINE \
 	SHAPELIB JASPER ZZIP \
 	LIBNET OS \
 	UTIL MATH
