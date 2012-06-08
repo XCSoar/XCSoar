@@ -24,7 +24,6 @@ Copyright_License {
 #include "WaypointReaderWinPilot.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "IO/TextWriter.hpp"
 #include "Util/Macros.hpp"
 
 #include <stdlib.h>
