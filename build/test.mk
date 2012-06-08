@@ -1531,6 +1531,7 @@ $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
+	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Poco/RWLock.cpp \
@@ -2107,6 +2108,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/IO/ConfiguredFile.cpp \
+	$(SRC)/IO/TextFile.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
