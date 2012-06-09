@@ -29,6 +29,7 @@ struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
 struct ComputerSettings;
+struct FlyingState;
 
 /**
  * Detect when the aircraft begins or ends circling.
@@ -61,7 +62,8 @@ public:
   void PercentCircling(const MoreData &basic, const MoreData &last_basic,
                        CirclingInfo &circling_info);
 
-  void MaxHeightGain(const MoreData &basic, DerivedInfo &calculated);
+  void MaxHeightGain(const MoreData &basic, const FlyingState &flight,
+                     CirclingInfo &circling_info);
 };
 
 #endif
