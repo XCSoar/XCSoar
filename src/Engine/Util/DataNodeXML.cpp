@@ -25,17 +25,16 @@
 #include "XML/Parser.hpp"
 
 #include <stdio.h>
+#include <memory>
 
 DataNode *
 DataNodeXML::Load(const TCHAR* path)
 {
-  XMLNode *child = XML::OpenFileHelper(path);
-  if (child == NULL)
+  std::unique_ptr<XMLNode> child(XML::OpenFileHelper(path));
+  if (!child)
     return NULL;
 
-  DataNodeXML *data_node = new DataNodeXML(*child);
-  delete child;
-  return data_node;
+  return new DataNodeXML(*child);
 }
 
 DataNodeXML
