@@ -217,3 +217,19 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   else
     calculated.circling_percentage = fixed_zero;
 }
+
+void
+CirclingComputer::MaxHeightGain(const MoreData &basic, DerivedInfo &calculated)
+{
+  if (!basic.NavAltitudeAvailable() || !calculated.flight.flying)
+    return;
+
+  if (positive(calculated.min_altitude)) {
+    fixed height_gain = basic.nav_altitude - calculated.min_altitude;
+    calculated.max_height_gain = max(height_gain, calculated.max_height_gain);
+  } else {
+    calculated.min_altitude = basic.nav_altitude;
+  }
+
+  calculated.min_altitude = min(basic.nav_altitude, calculated.min_altitude);
+}

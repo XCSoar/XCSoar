@@ -124,7 +124,6 @@ private:
   void ResetLiftDatabase(DerivedInfo &calculated);
   void UpdateLiftDatabase(const MoreData &basic, DerivedInfo &calculated,
                           const DerivedInfo &last_calculated);
-  void MaxHeightGain(const MoreData &basic, DerivedInfo &calculated);
   void LD(const MoreData &basic, const MoreData &last_basic,
           const DerivedInfo &calculated, VarioInfo &vario_info);
   void CruiseLD(const MoreData &basic, DerivedInfo &calculated);

@@ -118,7 +118,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   AverageClimbRate(basic, calculated);
   CurrentThermal(basic, calculated, calculated.current_thermal);
   UpdateLiftDatabase(basic, calculated, last_calculated);
-  MaxHeightGain(basic, calculated);
+  circling_computer.MaxHeightGain(basic, calculated);
   NextLegEqThermal(basic, calculated, settings);
 }
 
@@ -303,23 +303,6 @@ GlideComputerAirData::ResetLiftDatabase(DerivedInfo &calculated)
   calculated.ClearLiftDatabase();
 
   calculated.trace_history.CirclingAverage.clear();
-}
-
-void
-GlideComputerAirData::MaxHeightGain(const MoreData &basic,
-                                    DerivedInfo &calculated)
-{
-  if (!basic.NavAltitudeAvailable() || !calculated.flight.flying)
-    return;
-
-  if (positive(calculated.min_altitude)) {
-    fixed height_gain = basic.nav_altitude - calculated.min_altitude;
-    calculated.max_height_gain = max(height_gain, calculated.max_height_gain);
-  } else {
-    calculated.min_altitude = basic.nav_altitude;
-  }
-
-  calculated.min_altitude = min(basic.nav_altitude, calculated.min_altitude);
 }
 
 void

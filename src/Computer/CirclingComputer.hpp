@@ -61,6 +61,7 @@ public:
   void PercentCircling(const MoreData &basic, const MoreData &last_basic,
                        DerivedInfo &calculated);
 
+  void MaxHeightGain(const MoreData &basic, DerivedInfo &calculated);
 };
 
 #endif
