@@ -35,6 +35,8 @@ Copyright_License {
 #include "IGC/IGCFix.hpp"
 #include "Units/System.hpp"
 
+#include <memory>
+
 static DeviceConfig config;
 static NullPort port;
 
@@ -76,13 +78,12 @@ DebugReplay::Compute()
 }
 
 class DebugReplayNMEA : public DebugReplay {
-  Device *device;
+  std::unique_ptr<Device> device;
 
   NMEAParser parser;
 
 public:
   DebugReplayNMEA(NLineReader *reader, const DeviceRegister *driver);
-  ~DebugReplayNMEA();
 
   virtual bool Next();
 };
@@ -96,11 +97,6 @@ DebugReplayNMEA::DebugReplayNMEA(NLineReader *_reader,
 {
 }
 
-DebugReplayNMEA::~DebugReplayNMEA()
-{
-  delete device;
-}
-
 bool
 DebugReplayNMEA::Next()
 {
@@ -111,7 +107,7 @@ DebugReplayNMEA::Next()
   while ((line = reader->read()) != NULL) {
     if (basic.time_available)
       basic.clock = basic.time;
-    if (device == NULL || !device->ParseNMEA(line, basic))
+    if (!device || !device->ParseNMEA(line, basic))
       parser.ParseLine(line, basic);
 
     if (basic.location_available != last_basic.location_available) {
