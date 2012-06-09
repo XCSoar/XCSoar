@@ -26,6 +26,8 @@ Copyright_License {
  * port 4353 and feeds NMEA data read from stdin to it.
  */
 
+#include "OS/SocketDescriptor.hpp"
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -34,19 +36,9 @@ Copyright_License {
 #include <stdlib.h>
 
 #ifdef HAVE_POSIX
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 #else
 #include <winsock2.h>
-#endif
-
-#ifdef HAVE_POSIX
-static inline void
-closesocket(int fd)
-{
-  close(fd);
-}
 #endif
 
 int main(int argc, char **argv)
@@ -71,8 +63,8 @@ int main(int argc, char **argv)
   }
 
   // Create socket for the outgoing connection
-  int sock;
-  if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+  SocketDescriptor sock;
+  if (!sock.CreateTCP()) {
     perror("Socket");
     exit(1);
   }
@@ -82,10 +74,9 @@ int main(int argc, char **argv)
   server_addr.sin_port = htons(tcp_port);
   memset(&(server_addr.sin_zero), 0, 8);
 
-  if (connect(sock, (struct sockaddr *)&server_addr,
-              sizeof(struct sockaddr)) == -1)
+  if (!sock.Connect((struct sockaddr *)&server_addr,
+                    sizeof(struct sockaddr)))
   {
-    closesocket(sock);
     perror("Connect");
     exit(1);
   }
@@ -122,9 +113,9 @@ int main(int argc, char **argv)
       fflush(stdout);
     }
 
-    send(sock,line,l, 0);
+    sock.Write(line, l);
   }
-  closesocket(sock);
+
   printf(">>>> Av %ld\n", c_count/l_count);
   return 0;
 }

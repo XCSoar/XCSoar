@@ -24,6 +24,7 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 #include "PeriodClock.hpp"
+#include "OS/SocketDescriptor.hpp"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -33,8 +34,6 @@ Copyright_License {
 #include <stdlib.h>
 
 #ifdef HAVE_POSIX
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <arpa/inet.h>
 #else
 #include <winsock2.h>
@@ -62,8 +61,8 @@ int main(int argc, char **argv)
   }
 
   // Create socket for the outgoing connection
-  int sock;
-  if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+  SocketDescriptor sock;
+  if (!sock.CreateTCP()) {
     perror("Socket");
     exit(EXIT_FAILURE);
   }
@@ -73,10 +72,9 @@ int main(int argc, char **argv)
   server_addr.sin_port = htons(tcp_port);
   memset(&(server_addr.sin_zero), 0, 8);
 
-  if (connect(sock, (struct sockaddr *)&server_addr,
-              sizeof(struct sockaddr)) == -1)
+  if (!sock.Connect((struct sockaddr *)&server_addr,
+                    sizeof(struct sockaddr)))
   {
-    close(sock);
     perror("Connect");
     exit(EXIT_FAILURE);
   }
@@ -106,7 +104,7 @@ int main(int argc, char **argv)
       sentence.AppendFormat("%08X", uround(pressure));
       sentence += "\n";
 
-      send(sock, sentence.c_str(), sentence.length(), 0);
+      sock.Write(sentence.c_str(), sentence.length());
     }
 
     if (battery_clock.CheckUpdate(11000)) {
@@ -119,7 +117,7 @@ int main(int argc, char **argv)
         sentence += "*";
 
       sentence += "\n";
-      send(sock, sentence.c_str(), sentence.length(), 0);
+      sock.Write(sentence.c_str(), sentence.length());
 
       if (battery_level == 0)
         battery_level = 11;
@@ -127,8 +125,6 @@ int main(int argc, char **argv)
         battery_level--;
     }
   }
-
-  close(sock);
 
   return EXIT_SUCCESS;
 }

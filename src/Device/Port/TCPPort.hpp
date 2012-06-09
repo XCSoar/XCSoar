@@ -26,13 +26,14 @@ Copyright_License {
 
 #include "Thread/StoppableThread.hpp"
 #include "Port.hpp"
+#include "OS/SocketDescriptor.hpp"
 
 /**
  * A TCP listener port class.
  */
 class TCPPort : public Port, protected StoppableThread
 {
-  int listener_fd, connection_fd;
+  SocketDescriptor listener, connection;
 
 public:
   /**

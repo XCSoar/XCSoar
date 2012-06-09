@@ -27,79 +27,51 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef XCSOAR_SOCKET_DESCRIPTOR_HPP
+#define XCSOAR_SOCKET_DESCRIPTOR_HPP
+
 #include "FileDescriptor.hpp"
+#include "Compiler.h"
 
-#include <sys/stat.h>
-#include <fcntl.h>
+struct sockaddr;
 
-#ifdef HAVE_POSIX
-#include <poll.h>
+/**
+ * An OO wrapper for a UNIX socket descriptor.
+ */
+class SocketDescriptor : public FileDescriptor {
+  SocketDescriptor(int _fd):FileDescriptor(_fd) {}
+
+public:
+  SocketDescriptor() {}
+
+#ifndef HAVE_POSIX
+  ~SocketDescriptor() {
+    Close();
+  }
+
+  /**
+   * This method replaces FileDescriptor::Close(), using closesocket()
+   * on Windows.  FileDescriptor::Close() is not virtual, so be
+   * careful when dealing with a FileDescriptor reference that is
+   * really a SocketDescriptor.
+   */
+  void Close();
 #endif
 
-#ifndef O_NOCTTY
-#define O_NOCTTY 0
+  bool CreateTCP();
+  bool CreateTCPListener(unsigned port, unsigned backlog=8);
+
+  SocketDescriptor Accept();
+
+  bool Connect(const struct sockaddr *address, size_t length);
+
+#ifndef HAVE_POSIX
+  ssize_t Read(void *buffer, size_t length);
+  ssize_t Write(const void *buffer, size_t length);
+
+  int WaitReadable(int timeout_ms) const;
+  int WaitWritable(int timeout_ms) const;
 #endif
-
-bool
-FileDescriptor::Open(const char *pathname, int flags)
-{
-  assert(!IsDefined());
-
-  fd = ::open(pathname, flags);
-  return IsDefined();
-}
-
-bool
-FileDescriptor::OpenReadOnly(const char *pathname)
-{
-  return Open(pathname, O_RDONLY | O_NOCTTY);
-}
-
-#ifdef HAVE_POSIX
-
-bool
-FileDescriptor::OpenNonBlocking(const char *pathname)
-{
-  return Open(pathname, O_RDWR | O_NOCTTY | O_NONBLOCK);
-}
-
-#endif
-
-off_t
-FileDescriptor::GetSize() const
-{
-  struct stat st;
-  return ::fstat(fd, &st) >= 0
-    ? (long)st.st_size
-    : -1;
-}
-
-#ifdef HAVE_POSIX
-
-int
-FileDescriptor::Poll(short events, int timeout) const
-{
-  assert(IsDefined());
-
-  struct pollfd pfd;
-  pfd.fd = fd;
-  pfd.events = events;
-  int result = poll(&pfd, 1, timeout);
-  return result > 0
-    ? pfd.revents
-    : result;
-}
-
-int
-FileDescriptor::WaitReadable(int timeout) const
-{
-  return Poll(POLLIN, timeout);
-}
-
-int
-FileDescriptor::WaitWritable(int timeout) const
-{
-  return Poll(POLLOUT, timeout);
-}
+};
 
 #endif

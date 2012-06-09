@@ -45,6 +45,12 @@ class FileDescriptor {
 public:
   FileDescriptor():fd(-1) {}
 
+protected:
+  FileDescriptor(int _fd):fd(_fd) {
+    assert(IsDefined());
+  }
+
+public:
   FileDescriptor(FileDescriptor &&other):fd(other.fd) {
     other.fd = -1;
   }
@@ -74,6 +80,23 @@ public:
     return fd;
   }
 
+protected:
+  void Set(int _fd) {
+    assert(!IsDefined());
+    assert(_fd >= 0);
+
+    fd = _fd;
+  }
+
+  int Steal() {
+    assert(IsDefined());
+
+    int _fd = fd;
+    fd = -1;
+    return _fd;
+  }
+
+public:
   bool Open(const char *pathname, int flags);
   bool OpenReadOnly(const char *pathname);
 

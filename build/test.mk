@@ -2271,6 +2271,7 @@ $(eval $(call link-program,EmulateDevice,EMULATE_DEVICE))
 
 FEED_TCP_SOURCES = \
 	$(TEST_SRC_DIR)/FeedTCP.cpp
+FEED_TCP_DEPENDS = OS
 
 ifeq ($(HAVE_POSIX),n)
 ifeq ($(HAVE_CE),y)
