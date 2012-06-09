@@ -53,8 +53,7 @@ int main(int argc, char **argv)
                               replay->Calculated(), replay->LastCalculated(),
                               replay->GetComputerSettings());
 
-    if ((!replay->LastCalculated().circling && replay->Calculated().circling) ||
-        (replay->LastCalculated().circling && !replay->Calculated().circling))
+    if (replay->LastCalculated().circling != replay->Calculated().circling)
       circling_wind.NewFlightMode(replay->Calculated());
 
     CirclingWind::Result result = circling_wind.NewSample(replay->Basic());
