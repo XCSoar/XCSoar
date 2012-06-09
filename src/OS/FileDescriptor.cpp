@@ -63,6 +63,15 @@ FileDescriptor::OpenNonBlocking(const char *pathname)
   return Open(pathname, O_RDWR | O_NOCTTY | O_NONBLOCK);
 }
 
+void
+FileDescriptor::SetNonBlocking()
+{
+  assert(IsDefined());
+
+  int flags = fcntl(fd, F_GETFL);
+  fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+}
+
 #endif
 
 off_t

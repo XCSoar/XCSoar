@@ -102,6 +102,11 @@ public:
 
 #ifdef HAVE_POSIX
   bool OpenNonBlocking(const char *pathname);
+
+  /**
+   * Enable non-blocking mode on this file descriptor.
+   */
+  void SetNonBlocking();
 #endif
 
   /**
