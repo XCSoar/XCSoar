@@ -59,7 +59,7 @@ public:
    * Calculate the circling time and percentage
    */
   void PercentCircling(const MoreData &basic, const MoreData &last_basic,
-                       DerivedInfo &calculated, const ComputerSettings &settings);
+                       DerivedInfo &calculated);
 
 };
 
