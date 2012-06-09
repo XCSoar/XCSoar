@@ -129,18 +129,6 @@ private:
           const DerivedInfo &calculated, VarioInfo &vario_info);
   void CruiseLD(const MoreData &basic, DerivedInfo &calculated);
 
-  /**
-   * Calculates the wind
-   */
-  void Wind(const MoreData &basic, DerivedInfo &calculated,
-            const ComputerSettings &settings_computer);
-
-  /**
-   * Choose a wind from: user input; external device; calculated.
-   */
-  void SelectWind(const NMEAInfo &basic, DerivedInfo &calculated,
-                  const ComputerSettings &settings);
-
   void TerrainHeight(const MoreData &basic, TerrainInfo &calculated);
   void FlightState(const NMEAInfo &basic, const NMEAInfo &last_basic,
                    const DerivedInfo &calculated, FlyingState &flying,

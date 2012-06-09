@@ -96,8 +96,9 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
                              calculated, last_calculated);
   Turning(basic, last_basic, calculated, last_calculated, settings);
 
-  Wind(basic, calculated, settings);
-  SelectWind(basic, calculated, settings);
+  wind_computer.Compute(settings.wind, settings.polar.glide_polar_task,
+                        basic, calculated);
+  wind_computer.Select(settings.wind, basic, calculated);
   wind_computer.ComputeHeadWind(basic, calculated);
 
   thermallocator.Process(calculated.circling,
@@ -119,22 +120,6 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   UpdateLiftDatabase(basic, calculated, last_calculated);
   MaxHeightGain(basic, calculated);
   NextLegEqThermal(basic, calculated, settings);
-}
-
-void
-GlideComputerAirData::Wind(const MoreData &basic, DerivedInfo &calculated,
-                           const ComputerSettings &settings)
-{
-  wind_computer.Compute(settings.wind, settings.polar.glide_polar_task,
-                        basic, calculated);
-}
-
-void
-GlideComputerAirData::SelectWind(const NMEAInfo &basic,
-                                 DerivedInfo &calculated,
-                                 const ComputerSettings &settings)
-{
-  wind_computer.Select(settings.wind, basic, calculated);
 }
 
 void
