@@ -67,34 +67,34 @@ namespace InfoBoxManager
   int GetInfoBoxBorder(unsigned i);
 }
 
-static bool InfoBoxesDirty = false;
-static bool InfoBoxesHidden = false;
+static bool infoboxes_dirty = false;
+static bool infoboxes_hidden = false;
 
-InfoBoxWindow *InfoBoxes[InfoBoxSettings::Panel::MAX_CONTENTS];
+InfoBoxWindow *infoboxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 
 // TODO locking
 void
 InfoBoxManager::Hide()
 {
-  if (InfoBoxesHidden)
+  if (infoboxes_hidden)
     return;
 
-  InfoBoxesHidden = true;
+  infoboxes_hidden = true;
 
   for (unsigned i = 0; i < layout.count; i++)
-    InfoBoxes[i]->FastHide();
+    infoboxes[i]->FastHide();
 }
 
 void
 InfoBoxManager::Show()
 {
-  if (!InfoBoxesHidden)
+  if (!infoboxes_hidden)
     return;
 
-  InfoBoxesHidden = false;
+  infoboxes_hidden = false;
 
   for (unsigned i = 0; i < layout.count; i++)
-    InfoBoxes[i]->Show();
+    infoboxes[i]->Show();
 
   SetDirty();
 }
@@ -103,7 +103,7 @@ int
 InfoBoxManager::GetFocused()
 {
   for (unsigned i = 0; i < layout.count; i++)
-    if (InfoBoxes[i]->HasFocus())
+    if (infoboxes[i]->HasFocus())
       return i;
 
   return -1;
@@ -124,7 +124,7 @@ InfoBoxManager::Event_Select(int i)
   }
 
   if (InfoFocus >= 0)
-    InfoBoxes[InfoFocus]->SetFocus();
+    infoboxes[InfoFocus]->SetFocus();
   else
     XCSoarInterface::main_window.SetDefaultFocus();
 }
@@ -185,8 +185,8 @@ InfoBoxManager::GetCurrentType(unsigned box)
 const TCHAR*
 InfoBoxManager::GetTitle(unsigned box)
 {
-  if (InfoBoxes[box] != NULL)
-    return InfoBoxes[box]->GetTitle();
+  if (infoboxes[box] != NULL)
+    return infoboxes[box]->GetTitle();
   else
     return NULL;
 }
@@ -227,7 +227,7 @@ InfoBoxManager::Event_Change(int i)
 
   panel.contents[InfoFocus] = j;
 
-  InfoBoxes[InfoFocus]->UpdateContent();
+  infoboxes[InfoFocus]->UpdateContent();
 }
 
 void
@@ -247,13 +247,13 @@ InfoBoxManager::DisplayInfoBox()
     bool needupdate = ((DisplayType != DisplayTypeLast[i]) || first);
 
     if (needupdate) {
-      InfoBoxes[i]->SetTitle(gettext(InfoBoxFactory::GetCaption(DisplayType)));
-      InfoBoxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType));
-      InfoBoxes[i]->SetID(i);
+      infoboxes[i]->SetTitle(gettext(InfoBoxFactory::GetCaption(DisplayType)));
+      infoboxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType));
+      infoboxes[i]->SetID(i);
       DisplayTypeLast[i] = DisplayType;
     }
 
-    InfoBoxes[i]->UpdateContent();
+    infoboxes[i]->UpdateContent();
   }
 
   first = false;
@@ -265,8 +265,8 @@ InfoBoxManager::GetDialogContent(const int id)
   if (id < 0)
     return NULL;
 
-  if (InfoBoxes[id] != NULL)
-    return InfoBoxes[id]->GetDialogContent();
+  if (infoboxes[id] != NULL)
+    return infoboxes[id]->GetDialogContent();
 
   return NULL;
 }
@@ -278,8 +278,8 @@ InfoBoxManager::ProcessQuickAccess(const int id, const TCHAR *Value)
     return;
 
   // do approciate action
-  if (InfoBoxes[id] != NULL)
-    InfoBoxes[id]->HandleQuickAccess(Value);
+  if (infoboxes[id] != NULL)
+    infoboxes[id]->HandleQuickAccess(Value);
 
   SetDirty();
 }
@@ -297,17 +297,17 @@ InfoBoxManager::InfoBoxDrawIfDirty()
   // This should save lots of battery power due to CPU usage
   // of drawing the screen
 
-  if (InfoBoxesDirty && !InfoBoxesHidden &&
+  if (infoboxes_dirty && !infoboxes_hidden &&
       !CommonInterface::GetUIState().screen_blanked) {
     DisplayInfoBox();
-    InfoBoxesDirty = false;
+    infoboxes_dirty = false;
   }
 }
 
 void
 InfoBoxManager::SetDirty()
 {
-  InfoBoxesDirty = true;
+  infoboxes_dirty = true;
 }
 
 void
@@ -453,22 +453,22 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
     const PixelRect &rc = layout.positions[i];
     int Border = GetInfoBoxBorder(i);
 
-    InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
+    infoboxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
                                      rc.left, rc.top,
                                      rc.right - rc.left, rc.bottom - rc.top,
                                      Border, settings, look, units_look,
                                      style);
   }
 
-  InfoBoxesHidden = true;
+  infoboxes_hidden = true;
 }
 
 void
 InfoBoxManager::Destroy()
 {
   for (unsigned i = 0; i < layout.count; i++) {
-    delete InfoBoxes[i];
-    InfoBoxes[i] = NULL;
+    delete infoboxes[i];
+    infoboxes[i] = NULL;
   }
 }
 
