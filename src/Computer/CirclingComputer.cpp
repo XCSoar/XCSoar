@@ -41,6 +41,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
       !calculated.flight.flying) {
     circling_info.turn_rate = fixed_zero;
     circling_info.turn_rate_heading = fixed_zero;
+    circling_info.turn_rate_smoothed = fixed_zero;
     return;
   }
 
@@ -55,6 +56,15 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
     (basic.track - last_basic.track).AsDelta().Degrees() / dt;
   circling_info.turn_rate_heading =
     (calculated.heading - last_calculated.heading).AsDelta().Degrees() / dt;
+
+  // JMW limit rate to 50 deg per second otherwise a big spike
+  // will cause spurious lock on circling for a long time
+  fixed turn_rate = max(fixed(-50), min(fixed(50), circling_info.turn_rate));
+
+  // Make the turn rate more smooth using the LowPassFilter
+  turn_rate = LowPassFilter(last_calculated.turn_rate_smoothed,
+                            turn_rate, fixed(0.3));
+  circling_info.turn_rate_smoothed = turn_rate;
 }
 
 void
@@ -68,15 +78,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   if (!calculated.flight.flying || !basic.HasTimeAdvancedSince(last_basic))
     return;
 
-  // JMW limit rate to 50 deg per second otherwise a big spike
-  // will cause spurious lock on circling for a long time
-  fixed turn_rate = max(fixed(-50), min(fixed(50), calculated.turn_rate));
-
-  // Make the turn rate more smooth using the LowPassFilter
-  turn_rate = LowPassFilter(last_calculated.turn_rate_smoothed,
-                            turn_rate, fixed(0.3));
-  circling_info.turn_rate_smoothed = turn_rate;
-  circling_info.turning = fabs(turn_rate) >= min_turn_rate;
+  circling_info.turning = fabs(calculated.turn_rate_smoothed) >= min_turn_rate;
 
   // Force cruise or climb mode if external device says so
   bool force_cruise = false;
