@@ -170,8 +170,8 @@ private:
    * Calculate the circling time percentage and call the thermal band calculation
    * @param Rate Current turn rate
    */
-  void PercentCircling(const MoreData &basic, DerivedInfo &calculated,
-                       const ComputerSettings &settings);
+  void PercentCircling(const MoreData &basic, const MoreData &last_basic,
+                       DerivedInfo &calculated, const ComputerSettings &settings);
 
   /**
    * Calculates the turn rate and the derived features.

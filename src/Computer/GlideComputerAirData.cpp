@@ -485,26 +485,30 @@ GlideComputerAirData::OnSwitchClimbMode(const ComputerSettings &settings)
 
 void
 GlideComputerAirData::PercentCircling(const MoreData &basic,
+                                      const MoreData &last_basic,
                                       DerivedInfo &calculated,
                                       const ComputerSettings &settings)
 {
-  // TODO accuracy: TB: this would only work right if called every ONE second!
+  if (!basic.time_available || !last_basic.time_available)
+    return;
 
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
+
+  fixed dt = basic.time - last_basic.time;
 
   // if (Circling)
   if (calculated.circling && calculated.turning) {
     // Add one second to the circling time
     // timeCircling += (Basic->Time-LastTime);
-    calculated.time_climb += fixed_one;
+    calculated.time_climb += dt;
 
     // Add the Vario signal to the total climb height
     calculated.total_height_gain += basic.gps_vario;
   } else {
     // Add one second to the cruise time
     // timeCruising += (Basic->Time-LastTime);
-    calculated.time_cruise += fixed_one;
+    calculated.time_cruise += dt;
   }
 
   // Calculate the circling percentage
@@ -533,7 +537,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
     OnSwitchClimbMode(settings);
 
   // Calculate circling time percentage and call thermal band calculation
-  PercentCircling(basic, calculated, settings);
+  PercentCircling(basic, last_basic, calculated, settings);
 
   thermal_band_computer.Compute(basic, calculated,
                                 calculated.thermal_band,
