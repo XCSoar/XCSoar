@@ -52,10 +52,8 @@ int main(int argc, char **argv)
                               replay->Calculated(), replay->LastCalculated(),
                               replay->GetComputerSettings());
 
-    if ((replay->LastCalculated().turn_mode == CirclingMode::POSSIBLE_CLIMB &&
-         replay->Calculated().turn_mode == CirclingMode::CLIMB) ||
-        (replay->LastCalculated().turn_mode == CirclingMode::POSSIBLE_CRUISE &&
-         replay->Calculated().turn_mode == CirclingMode::CRUISE))
+    if ((!replay->LastCalculated().circling && replay->Calculated().circling) ||
+        (replay->LastCalculated().circling && !replay->Calculated().circling))
       circling_wind.NewFlightMode(replay->Calculated());
 
     CirclingWind::Result result = circling_wind.NewSample(replay->Basic());
