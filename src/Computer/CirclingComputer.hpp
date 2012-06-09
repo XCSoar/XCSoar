@@ -59,7 +59,7 @@ public:
    * Calculate the circling time and percentage
    */
   void PercentCircling(const MoreData &basic, const MoreData &last_basic,
-                       DerivedInfo &calculated);
+                       CirclingInfo &circling_info);
 
   void MaxHeightGain(const MoreData &basic, DerivedInfo &calculated);
 };

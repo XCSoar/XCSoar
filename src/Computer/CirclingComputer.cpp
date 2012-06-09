@@ -186,7 +186,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
 void
 CirclingComputer::PercentCircling(const MoreData &basic,
                                   const MoreData &last_basic,
-                                  DerivedInfo &calculated)
+                                  CirclingInfo &circling_info)
 {
   if (!basic.time_available || !last_basic.time_available)
     return;
@@ -197,25 +197,25 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   fixed dt = basic.time - last_basic.time;
 
   // if (Circling)
-  if (calculated.circling && calculated.turning) {
+  if (circling_info.circling && circling_info.turning) {
     // Add one second to the circling time
     // timeCircling += (Basic->Time-LastTime);
-    calculated.time_climb += dt;
+    circling_info.time_climb += dt;
 
     // Add the Vario signal to the total climb height
-    calculated.total_height_gain += basic.gps_vario;
+    circling_info.total_height_gain += basic.gps_vario;
   } else {
     // Add one second to the cruise time
     // timeCruising += (Basic->Time-LastTime);
-    calculated.time_cruise += dt;
+    circling_info.time_cruise += dt;
   }
 
   // Calculate the circling percentage
-  if (calculated.time_cruise + calculated.time_climb > fixed_one)
-    calculated.circling_percentage = 100 * calculated.time_climb /
-        (calculated.time_cruise + calculated.time_climb);
+  if (circling_info.time_cruise + circling_info.time_climb > fixed_one)
+    circling_info.circling_percentage = 100 * circling_info.time_climb /
+        (circling_info.time_cruise + circling_info.time_climb);
   else
-    calculated.circling_percentage = fixed_zero;
+    circling_info.circling_percentage = fixed_zero;
 }
 
 void
