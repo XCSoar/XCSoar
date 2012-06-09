@@ -11,6 +11,11 @@ OS_SOURCES := \
 	$(OS_SRC_DIR)/PathName.cpp \
 	$(OS_SRC_DIR)/SystemLoad.cpp
 
+ifeq ($(HAVE_POSIX),y)
+OS_SOURCES += \
+	$(OS_SRC_DIR)/EventPipe.cpp
+endif
+
 ifeq ($(HAVE_CE),y)
 OS_SOURCES += $(OS_SRC_DIR)/MemInfo.cpp
 endif

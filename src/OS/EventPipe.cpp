@@ -27,100 +27,33 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "FileDescriptor.hpp"
-
-#include <sys/stat.h>
-#include <fcntl.h>
-
-#ifdef HAVE_POSIX
-#include <poll.h>
-#endif
-
-#ifndef O_NOCTTY
-#define O_NOCTTY 0
-#endif
+#include "EventPipe.hpp"
 
 bool
-FileDescriptor::Open(const char *pathname, int flags)
+EventPipe::Create()
 {
   assert(!IsDefined());
 
-  fd = ::open(pathname, flags);
-  return IsDefined();
-}
-
-bool
-FileDescriptor::OpenReadOnly(const char *pathname)
-{
-  return Open(pathname, O_RDONLY | O_NOCTTY);
-}
-
-#ifdef HAVE_POSIX
-
-bool
-FileDescriptor::OpenNonBlocking(const char *pathname)
-{
-  return Open(pathname, O_RDWR | O_NOCTTY | O_NONBLOCK);
-}
-
-bool
-FileDescriptor::CreatePipe(FileDescriptor &r, FileDescriptor &w)
-{
-  int fds[2];
-  if (pipe(fds) < 0)
+  if (!FileDescriptor::CreatePipe(r, w))
     return false;
 
-  r = FileDescriptor(fds[0]);
-  w = FileDescriptor(fds[1]);
+  r.SetNonBlocking();
+  w.SetNonBlocking();
+
   return true;
 }
 
 void
-FileDescriptor::SetNonBlocking()
+EventPipe::Signal()
 {
-  assert(IsDefined());
-
-  int flags = fcntl(fd, F_GETFL);
-  fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+  static const char dummy = 0;
+  w.Write(&dummy, 1);
 }
 
-#endif
-
-off_t
-FileDescriptor::GetSize() const
+bool
+EventPipe::Read()
 {
-  struct stat st;
-  return ::fstat(fd, &st) >= 0
-    ? (long)st.st_size
-    : -1;
+  char buffer[256];
+  ssize_t nbytes = r.Read(buffer, sizeof(buffer));
+  return nbytes > 0;
 }
-
-#ifdef HAVE_POSIX
-
-int
-FileDescriptor::Poll(short events, int timeout) const
-{
-  assert(IsDefined());
-
-  struct pollfd pfd;
-  pfd.fd = fd;
-  pfd.events = events;
-  int result = poll(&pfd, 1, timeout);
-  return result > 0
-    ? pfd.revents
-    : result;
-}
-
-int
-FileDescriptor::WaitReadable(int timeout) const
-{
-  return Poll(POLLIN, timeout);
-}
-
-int
-FileDescriptor::WaitWritable(int timeout) const
-{
-  return Poll(POLLOUT, timeout);
-}
-
-#endif

@@ -32,6 +32,8 @@
 
 #include "Compiler.h"
 
+#include <utility>
+
 #include <assert.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -102,6 +104,8 @@ public:
 
 #ifdef HAVE_POSIX
   bool OpenNonBlocking(const char *pathname);
+
+  static bool CreatePipe(FileDescriptor &r, FileDescriptor &w);
 
   /**
    * Enable non-blocking mode on this file descriptor.
