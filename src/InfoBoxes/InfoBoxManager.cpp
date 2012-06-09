@@ -58,7 +58,7 @@ namespace InfoBoxManager
    */
   static bool first;
 
-  InfoBoxFactory::t_InfoBox GetCurrentType(unsigned box);
+  InfoBoxFactory::Type GetCurrentType(unsigned box);
 
   void DisplayInfoBox();
   void InfoBoxDrawIfDirty();
@@ -163,7 +163,7 @@ InfoBoxManager::GetCurrentPanelName()
   return GetPanelName(GetCurrentPanel());
 }
 
-InfoBoxFactory::t_InfoBox
+InfoBoxFactory::Type
 InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
 {
   assert(box < InfoBoxSettings::Panel::MAX_CONTENTS);
@@ -175,10 +175,10 @@ InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
   return infoBoxManagerConfig.panels[panelIdx].contents[box];
 }
 
-InfoBoxFactory::t_InfoBox
+InfoBoxFactory::Type
 InfoBoxManager::GetCurrentType(unsigned box)
 {
-  InfoBoxFactory::t_InfoBox retval = GetType(box, GetCurrentPanel());
+  InfoBoxFactory::Type retval = GetType(box, GetCurrentPanel());
   return min(InfoBoxFactory::MAX_TYPE_VAL, retval);
 }
 
@@ -203,8 +203,8 @@ InfoBoxManager::IsEmpty(unsigned panelIdx)
 void
 InfoBoxManager::Event_Change(int i)
 {
-  InfoBoxFactory::t_InfoBox j = InfoBoxFactory::MIN_TYPE_VAL;
-  InfoBoxFactory::t_InfoBox k;
+  InfoBoxFactory::Type j = InfoBoxFactory::MIN_TYPE_VAL;
+  InfoBoxFactory::Type k;
 
   int InfoFocus = GetFocused();
   if (InfoFocus < 0)
@@ -242,7 +242,7 @@ InfoBoxManager::DisplayInfoBox()
     // should apply to the function DoCalculationsSlow()
     // Do not put calculations here!
 
-    InfoBoxFactory::t_InfoBox DisplayType = GetCurrentType(i);
+    InfoBoxFactory::Type DisplayType = GetCurrentType(i);
 
     bool needupdate = ((DisplayType != DisplayTypeLast[i]) || first);
 
@@ -477,7 +477,7 @@ static const ComboList *info_box_combo_list;
 static void
 OnInfoBoxHelp(unsigned item)
 {
-  t_InfoBox type = (t_InfoBox)(*info_box_combo_list)[item].DataFieldIndex;
+  Type type = (Type)(*info_box_combo_list)[item].DataFieldIndex;
 
   StaticString<100> caption;
   caption.Format(_T("%s: %s"), _("InfoBox"),
@@ -512,13 +512,13 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
   const unsigned panel_index = GetCurrentPanel();
   InfoBoxSettings::Panel &panel = settings.panels[panel_index];
 
-  const InfoBoxFactory::t_InfoBox old_type = panel.contents[i];
+  const InfoBoxFactory::Type old_type = panel.contents[i];
 
   ComboList list;
   for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++) {
-    const TCHAR * desc = InfoBoxFactory::GetDescription((t_InfoBox) j);
-    list.Append(j, gettext(InfoBoxFactory::GetName((t_InfoBox) j)),
-                gettext(InfoBoxFactory::GetName((t_InfoBox) j)),
+    const TCHAR * desc = InfoBoxFactory::GetDescription((Type) j);
+    list.Append(j, gettext(InfoBoxFactory::GetName((Type) j)),
+                gettext(InfoBoxFactory::GetName((Type) j)),
                 desc != NULL ? gettext(desc) : NULL);
   }
 
@@ -537,7 +537,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
 
   /* was there a modification? */
 
-  InfoBoxFactory::t_InfoBox new_type = (InfoBoxFactory::t_InfoBox)list[result].DataFieldIndex;
+  InfoBoxFactory::Type new_type = (InfoBoxFactory::Type)list[result].DataFieldIndex;
   if (new_type == old_type)
     return;
 

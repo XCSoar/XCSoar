@@ -38,10 +38,10 @@ GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
     _stprintf(profileKey + 4, _T("%u"), i);
     unsigned int temp = 0;
     if (Profile::Get(profileKey, temp)) {
-      settings.panels[0].contents[i] = (t_InfoBox)( temp       & 0xFF);
-      settings.panels[1].contents[i] = (t_InfoBox)((temp >> 8) & 0xFF);
-      settings.panels[2].contents[i] = (t_InfoBox)((temp >> 16) & 0xFF);
-      settings.panels[3].contents[i] = (t_InfoBox)((temp >> 24) & 0xFF);
+      settings.panels[0].contents[i] = (Type)( temp       & 0xFF);
+      settings.panels[1].contents[i] = (Type)((temp >> 8) & 0xFF);
+      settings.panels[2].contents[i] = (Type)((temp >> 16) & 0xFF);
+      settings.panels[3].contents[i] = (Type)((temp >> 24) & 0xFF);
     }
   }
 }

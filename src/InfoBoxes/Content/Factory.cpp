@@ -74,7 +74,7 @@ struct IBFHelperInt {
 //   Alternates: e_Alternate_1_Name,e_Alternate_2_Name,e_Alternate_1_GR
 //   Experimental: e_Experimental1,e_Experimental2
 //   Obstacles: e_NearestAirspaceHorizontal,e_NearestAirspaceVertical,TerrainCollision
-const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
+const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
   // e_HeightGPS
   {
     N_("Height GPS"),
@@ -1051,7 +1051,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 };
 
 bool
-InfoBoxFactory::Get(const TCHAR *key, InfoBoxFactory::t_InfoBox &val)
+InfoBoxFactory::Get(const TCHAR *key, InfoBoxFactory::Type &val)
 {
   unsigned _val = val;
   bool ret = ProfileMap::Get(key, _val);
@@ -1059,14 +1059,14 @@ InfoBoxFactory::Get(const TCHAR *key, InfoBoxFactory::t_InfoBox &val)
   if (_val >= e_NUM_TYPES)
     return false;
 
-  val = (InfoBoxFactory::t_InfoBox)_val;
+  val = (InfoBoxFactory::Type)_val;
   return ret;
 }
 
 InfoBoxContent*
-InfoBoxFactory::Create(t_InfoBox InfoBoxType)
+InfoBoxFactory::Create(Type infobox_type)
 {
-  assert(MetaData[InfoBoxType].Create != NULL);
+  assert(meta_data[infobox_type].Create != NULL);
 
-  return MetaData[InfoBoxType].Create();
+  return meta_data[infobox_type].Create();
 }

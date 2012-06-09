@@ -137,7 +137,7 @@ dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
   const unsigned panel_index = InfoBoxManager::GetCurrentPanel();
   InfoBoxSettings::Panel &panel = settings.panels[panel_index];
-  const InfoBoxFactory::t_InfoBox old_type = panel.contents[id];
+  const InfoBoxFactory::Type old_type = panel.contents[id];
 
   StaticString<32> buffer;
   buffer = gettext(InfoBoxFactory::GetName(old_type));

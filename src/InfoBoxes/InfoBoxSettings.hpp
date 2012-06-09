@@ -40,7 +40,7 @@ struct InfoBoxSettings {
     static const unsigned MAX_CONTENTS = 24;
 
     StaticString<32u> name;
-    InfoBoxFactory::t_InfoBox contents[MAX_CONTENTS];
+    InfoBoxFactory::Type contents[MAX_CONTENTS];
 
     void Clear();
 

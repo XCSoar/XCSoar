@@ -33,7 +33,7 @@ class InfoBoxContent;
 
 namespace InfoBoxFactory
 {
-  enum t_InfoBox {
+  enum Type {
     /* 0..9 */
     e_HeightGPS, /* This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn */
     e_HeightAGL, /* This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height */
@@ -146,29 +146,29 @@ namespace InfoBoxFactory
     e_NUM_TYPES /* Last item */
   };
 
-  struct InfoBoxMetaData {
+  struct MetaData {
     const TCHAR *name;
     const TCHAR *caption;
     const TCHAR *description;
     InfoBoxContent *(*Create)();
-    t_InfoBox next, previous;
+    Type next, previous;
   };
 
-  static gcc_constexpr_data t_InfoBox NUM_TYPES = e_NUM_TYPES;
-  static gcc_constexpr_data t_InfoBox MIN_TYPE_VAL = (t_InfoBox)0;
-  static gcc_constexpr_data t_InfoBox MAX_TYPE_VAL = (t_InfoBox)(e_NUM_TYPES - 1);
+  static gcc_constexpr_data Type NUM_TYPES = e_NUM_TYPES;
+  static gcc_constexpr_data Type MIN_TYPE_VAL = (Type)0;
+  static gcc_constexpr_data Type MAX_TYPE_VAL = (Type)(e_NUM_TYPES - 1);
 
-  extern const InfoBoxMetaData MetaData[NUM_TYPES];
+  extern const MetaData meta_data[NUM_TYPES];
 
   /**
    * Returns the human-readable name of the info box type.
    */
   static inline const TCHAR *
-  GetName(t_InfoBox type)
+  GetName(Type type)
   {
     assert(type < NUM_TYPES);
 
-    return MetaData[type].name;
+    return meta_data[type].name;
   }
 
   /**
@@ -177,45 +177,45 @@ namespace InfoBoxFactory
    * fit in the small #InfoBoxWindow.
    */
   static inline const TCHAR *
-  GetCaption(t_InfoBox type)
+  GetCaption(Type type)
   {
     assert(type < NUM_TYPES);
 
-    return MetaData[type].caption;
+    return meta_data[type].caption;
   }
 
   /**
    * Returns the long description (help text) of the info box type.
    */
   static inline const TCHAR *
-  GetDescription(t_InfoBox type)
+  GetDescription(Type type)
   {
     assert(type < NUM_TYPES);
 
-    return MetaData[type].description;
+    return meta_data[type].description;
   }
 
-  static inline t_InfoBox
-  GetNext(t_InfoBox type)
+  static inline Type
+  GetNext(Type type)
   {
     assert(type < NUM_TYPES);
 
-    return MetaData[type].next;
+    return meta_data[type].next;
   }
 
-  static inline t_InfoBox
-  GetPrevious(t_InfoBox type)
+  static inline Type
+  GetPrevious(Type type)
   {
     assert(type < NUM_TYPES);
 
-    return MetaData[type].previous;
+    return meta_data[type].previous;
   }
 
   bool
-  Get(const TCHAR *key, t_InfoBox &val);
+  Get(const TCHAR *key, Type &val);
 
   gcc_const
-  InfoBoxContent* Create(t_InfoBox InfoBoxType);
+  InfoBoxContent* Create(Type infobox_type);
 };
 
 #endif
