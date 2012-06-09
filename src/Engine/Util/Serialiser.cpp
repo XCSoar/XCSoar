@@ -34,6 +34,7 @@
 
 #include "Compiler.h"
 #include <assert.h>
+#include <memory>
 
 void
 Serialiser::Visit(const StartPoint &data)
@@ -68,20 +69,16 @@ void
 Serialiser::Serialise(const OrderedTaskPoint &data, const TCHAR* name)
 {
   // do nothing
-  DataNode *child = node.AppendChild(_T("Point"));
+  std::unique_ptr<DataNode> child(node.AppendChild(_T("Point")));
   child->SetAttribute(_T("type"), name);
 
-  DataNode *wchild = child->AppendChild(_T("Waypoint"));
+  std::unique_ptr<DataNode> wchild(child->AppendChild(_T("Waypoint")));
   Serialiser wser(*wchild);
   wser.Serialise(data.GetWaypoint());
-  delete wchild;
 
-  DataNode *ochild = child->AppendChild(_T("ObservationZone"));
+  std::unique_ptr<DataNode> ochild(child->AppendChild(_T("ObservationZone")));
   Serialiser oser(*ochild);
   oser.Serialise(*data.GetOZPoint());
-  delete ochild;
-
-  delete child;
 }
 
 void 
@@ -201,10 +198,9 @@ Serialiser::Serialise(const Waypoint &data)
   node.SetAttribute(_T("comment"), data.comment.c_str());
   node.SetAttribute(_T("altitude"), data.elevation);
 
-  DataNode *child = node.AppendChild(_T("Location"));
+  std::unique_ptr<DataNode> child(node.AppendChild(_T("Location")));
   Serialiser ser(*child);
   ser.Serialise(data.location);
-  delete child;
 }
 
 void 

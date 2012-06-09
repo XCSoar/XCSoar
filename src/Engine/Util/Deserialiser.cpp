@@ -39,6 +39,7 @@
 #include "Engine/Waypoint/Waypoints.hpp"
 
 #include <assert.h>
+#include <memory>
 
 void
 Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
@@ -49,23 +50,21 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
     return;
   }
 
-  DataNode *wp_node = node.GetChildNamed(_T("Waypoint"));
-  if (wp_node == NULL)
+  std::unique_ptr<DataNode> wp_node(node.GetChildNamed(_T("Waypoint")));
+  if (!wp_node)
     return;
 
   Deserialiser wser(*wp_node, waypoints);
-  Waypoint *wp = wser.DeserialiseWaypoint();
-  if (wp == NULL) {
-    delete wp_node;
+  std::unique_ptr<Waypoint> wp(wser.DeserialiseWaypoint());
+  if (!wp)
     return;
-  }
 
-  DataNode *oz_node = node.GetChildNamed(_T("ObservationZone"));
+  std::unique_ptr<DataNode> oz_node(node.GetChildNamed(_T("ObservationZone")));
 
   AbstractTaskFactory &fact = data.GetFactory();
 
   ObservationZonePoint* oz = NULL;
-  OrderedTaskPoint *pt = NULL;
+  std::unique_ptr<OrderedTaskPoint> pt;
 
   if (oz_node != NULL) {
     bool is_turnpoint = StringIsEqual(type.c_str(), _T("Turn")) ||
@@ -76,34 +75,29 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
   }
 
   if (StringIsEqual(type.c_str(), _T("Start"))) {
-    pt = (oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp);
+    pt.reset((oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
 
   } else if (StringIsEqual(type.c_str(), _T("OptionalStart"))) {
-    pt = (oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp);
+    pt.reset((oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
     fact.AppendOptionalStart(*pt);
-    delete pt; // don't let generic code below add it
-    pt = NULL;
+
+    // don't let generic code below add it
+    pt.reset();
 
   } else if (StringIsEqual(type.c_str(), _T("Turn"))) {
-    pt = (oz != NULL) ? fact.CreateASTPoint(oz, *wp)
-                      : fact.CreateIntermediate(*wp);
+    pt.reset((oz != NULL) ? fact.CreateASTPoint(oz, *wp)
+                          : fact.CreateIntermediate(*wp));
 
   } else if (StringIsEqual(type.c_str(), _T("Area"))) {
-    pt = (oz != NULL) ? fact.CreateAATPoint(oz, *wp)
-                      : fact.CreateIntermediate(*wp);
+    pt.reset((oz != NULL) ? fact.CreateAATPoint(oz, *wp)
+                          : fact.CreateIntermediate(*wp));
 
   } else if (StringIsEqual(type.c_str(), _T("Finish"))) {
-    pt = (oz != NULL) ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp);
+    pt.reset((oz != NULL) ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp));
   } 
 
-  if (pt != NULL) {
+  if (pt)
     fact.Append(*pt, false);
-    delete pt;
-  }
-
-  delete wp;
-  delete wp_node;
-  delete oz_node;
 }
 
 ObservationZonePoint*
@@ -177,14 +171,13 @@ Deserialiser::Deserialise(GeoPoint &data)
 Waypoint*
 Deserialiser::DeserialiseWaypoint()
 {
-  DataNode *loc_node = node.GetChildNamed(_T("Location"));
+  std::unique_ptr<DataNode> loc_node(node.GetChildNamed(_T("Location")));
   if (!loc_node)
     return NULL;
 
   GeoPoint loc;
   Deserialiser lser(*loc_node, waypoints);
   lser.Deserialise(loc);
-  delete loc_node;
 
   tstring name;
   if (!node.GetAttribute(_T("name"), name))
@@ -251,10 +244,9 @@ Deserialiser::Deserialise(OrderedTask &task)
 
   const DataNode::List children = node.ListChildrenNamed(_T("Point"));
   for (auto i = children.begin(), end = children.end(); i != end; ++i) {
-    DataNode *point_node = *i;
+    std::unique_ptr<DataNode>point_node(*i);
     Deserialiser pser(*point_node, waypoints);
     pser.DeserialiseTaskpoint(task);
-    delete point_node;
   }
 }
 
