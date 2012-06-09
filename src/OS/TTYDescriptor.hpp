@@ -32,6 +32,7 @@
 
 #include "FileDescriptor.hpp"
 
+#include <stdlib.h>
 #include <termios.h>
 
 /**
