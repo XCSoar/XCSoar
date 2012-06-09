@@ -28,12 +28,13 @@ Copyright_License {
 #include "Formatter/TimeFormatter.hpp"
 
 #include <stdio.h>
+#include <memory>
 
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "DRIVER FILE");
-  DebugReplay *replay = CreateDebugReplay(args);
-  if (replay == NULL)
+  std::unique_ptr<DebugReplay> replay(CreateDebugReplay(args));
+  if (!replay)
     return EXIT_FAILURE;
 
   args.ExpectEnd();
@@ -73,7 +74,5 @@ int main(int argc, char **argv)
                time_buffer, result.quality, (int)bearing.Degrees(), (double)mag);
     }
   }
-
-  delete replay;
 }
 
