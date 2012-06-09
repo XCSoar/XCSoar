@@ -27,9 +27,9 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Math/LowPassFilter.hpp"
 
-static const fixed min_turn_rate(4);
-static const fixed cruise_climb_switch(15);
-static const fixed climb_cruise_switch(10);
+static const fixed MIN_TURN_RATE(4);
+static const fixed CRUISE_CLIMB_SWITCH(15);
+static const fixed CLIMB_CRUISE_SWITCH(10);
 
 void
 CirclingComputer::TurnRate(CirclingInfo &circling_info,
@@ -78,7 +78,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   if (!calculated.flight.flying || !basic.HasTimeAdvancedSince(last_basic))
     return;
 
-  circling_info.turning = fabs(calculated.turn_rate_smoothed) >= min_turn_rate;
+  circling_info.turning = fabs(calculated.turn_rate_smoothed) >= MIN_TURN_RATE;
 
   // Force cruise or climb mode if external device says so
   bool force_cruise = false;
@@ -122,7 +122,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       break;
     }
     if (circling_info.turning || force_circling) {
-      if (((basic.time - calculated.turn_start_time) > cruise_climb_switch)
+      if (((basic.time - calculated.turn_start_time) > CRUISE_CLIMB_SWITCH)
           || force_circling) {
         // yes, we are certain now that we are circling
         circling_info.circling = true;
@@ -163,7 +163,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     }
 
     if (!circling_info.turning || force_cruise) {
-      if (((basic.time - circling_info.turn_start_time) > climb_cruise_switch)
+      if (((basic.time - circling_info.turn_start_time) > CLIMB_CRUISE_SWITCH)
           || force_cruise) {
         // yes, we are certain now that we are cruising again
         circling_info.circling = false;
