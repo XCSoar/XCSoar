@@ -54,6 +54,13 @@ public:
                const DerivedInfo &calculated,
                const DerivedInfo &last_calculated,
                const ComputerSettings &settings_computer);
+
+  /**
+   * Calculate the circling time and percentage
+   */
+  void PercentCircling(const MoreData &basic, const MoreData &last_basic,
+                       DerivedInfo &calculated, const ComputerSettings &settings);
+
 };
 
 #endif

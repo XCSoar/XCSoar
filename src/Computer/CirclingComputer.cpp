@@ -182,3 +182,39 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     break;
   }
 }
+
+void
+CirclingComputer::PercentCircling(const MoreData &basic,
+                                  const MoreData &last_basic,
+                                  DerivedInfo &calculated,
+                                  const ComputerSettings &settings)
+{
+  if (!basic.time_available || !last_basic.time_available)
+    return;
+
+  // JMW circling % only when really circling,
+  // to prevent bad stats due to flap switches and dolphin soaring
+
+  fixed dt = basic.time - last_basic.time;
+
+  // if (Circling)
+  if (calculated.circling && calculated.turning) {
+    // Add one second to the circling time
+    // timeCircling += (Basic->Time-LastTime);
+    calculated.time_climb += dt;
+
+    // Add the Vario signal to the total climb height
+    calculated.total_height_gain += basic.gps_vario;
+  } else {
+    // Add one second to the cruise time
+    // timeCruising += (Basic->Time-LastTime);
+    calculated.time_cruise += dt;
+  }
+
+  // Calculate the circling percentage
+  if (calculated.time_cruise + calculated.time_climb > fixed_one)
+    calculated.circling_percentage = 100 * calculated.time_climb /
+        (calculated.time_cruise + calculated.time_climb);
+  else
+    calculated.circling_percentage = fixed_zero;
+}
