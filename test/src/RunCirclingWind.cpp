@@ -25,6 +25,7 @@ Copyright_License {
 #include "Wind/CirclingWind.hpp"
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
+#include "Formatter/TimeFormatter.hpp"
 
 #include <stdio.h>
 
@@ -67,9 +68,11 @@ int main(int argc, char **argv)
       else
         bearing = Angle::Radians(atan2(result.wind.y, result.wind.x)).AsBearing();
 
-      printf("%d %d %d %g\n",
-             (int)replay->Basic().time,
-             result.quality, (int)bearing.Degrees(), (double)mag);
+      TCHAR time_buffer[32];
+      FormatTime(time_buffer, replay->Basic().time);
+
+      _tprintf(_T("%s %d %d %g\n"),
+               time_buffer, result.quality, (int)bearing.Degrees(), (double)mag);
     }
   }
 

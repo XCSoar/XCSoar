@@ -1346,6 +1346,8 @@ $(eval $(call link-program,RunFlightLogger,RUN_FLIGHT_LOGGER))
 
 RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
