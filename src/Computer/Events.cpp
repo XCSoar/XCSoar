@@ -31,7 +31,7 @@ void
 GlideComputerEvents::Reset()
 {
   last_flying = false;
-  possible_climb = possible_cruise = false;
+  last_circling = false;
   last_traffic = 0;
   last_new_traffic.Clear();
   last_teammate_in_sector = false;
@@ -53,13 +53,13 @@ GlideComputerEvents::OnCalculatedUpdate(const MoreData &basic,
 
   /* check the climb state */
 
-  if (possible_climb && calculated.turn_mode == CirclingMode::CLIMB)
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
-  else if (possible_cruise && calculated.turn_mode == CirclingMode::CRUISE)
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-
-  possible_climb = calculated.turn_mode == CirclingMode::POSSIBLE_CLIMB;
-  possible_cruise = calculated.turn_mode == CirclingMode::POSSIBLE_CRUISE;
+  if (calculated.circling != last_circling) {
+    last_circling = calculated.circling;
+    if (calculated.circling)
+      InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
+    else
+      InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+  }
 
   /* check for new traffic */
 

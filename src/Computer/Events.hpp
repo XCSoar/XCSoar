@@ -37,8 +37,7 @@ class GlideComputerEvents : public NullBlackboardListener {
   bool enable_team, last_teammate_in_sector;
 
   bool last_flying;
-
-  bool possible_climb, possible_cruise;
+  bool last_circling;
 
   unsigned last_traffic;
   Validity last_new_traffic;
