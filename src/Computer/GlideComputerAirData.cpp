@@ -538,21 +538,21 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
       !positive(calculated.climb_start_time))
     return;
 
-  fixed ThermalTime = calculated.cruise_start_time - calculated.climb_start_time;
-  if (ThermalTime < THERMAL_TIME_MIN)
+  fixed duration = calculated.cruise_start_time - calculated.climb_start_time;
+  if (duration < THERMAL_TIME_MIN)
     return;
 
-  fixed ThermalGain = calculated.cruise_start_altitude
+  fixed gain = calculated.cruise_start_altitude
     + basic.energy_height - calculated.climb_start_altitude;
-  if (!positive(ThermalGain))
+  if (!positive(gain))
     return;
 
   bool was_defined = calculated.last_thermal.IsDefined();
 
   calculated.last_thermal.start_time = calculated.climb_start_time;
   calculated.last_thermal.end_time = calculated.cruise_start_time;
-  calculated.last_thermal.gain = ThermalGain;
-  calculated.last_thermal.duration = ThermalTime;
+  calculated.last_thermal.gain = gain;
+  calculated.last_thermal.duration = duration;
   calculated.last_thermal.CalculateLiftRate();
 
   if (!was_defined)
