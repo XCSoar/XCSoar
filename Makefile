@@ -380,6 +380,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
+	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReaderOzi.cpp \

@@ -597,6 +597,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Geo/UTM.cpp \
+	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
 	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
@@ -1043,6 +1044,7 @@ $(eval $(call link-program,RunInputParser,RUN_INPUT_PARSER))
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Geo/UTM.cpp \
+	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
 	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
@@ -1636,6 +1638,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
+	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
@@ -2184,6 +2187,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Geo/UTM.cpp \
+	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \

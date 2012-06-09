@@ -29,15 +29,12 @@ Copyright_License {
 #include "WaypointReaderFS.hpp"
 #include "WaypointReaderOzi.hpp"
 #include "WaypointReaderCompeGPS.hpp"
+#include "WaypointFileType.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
 #include "IO/ZipSource.hpp"
-#include "IO/TextFile.hpp"
-
-#include <memory>
 
 bool
 WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
@@ -76,38 +73,32 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
       return;
   }
 
-  // If WinPilot waypoint file -> save type and return true
-  if (MatchesExtension(filename, _T(".dat")) ||
-      MatchesExtension(filename, _T(".xcw")))
+  switch (DetermineWaypointFileType(filename)) {
+  case WaypointFileType::WINPILOT:
     reader = new WaypointReaderWinPilot(filename, the_filenum, compressed);
+    break;
 
-  // If SeeYou waypoint file -> save type and return true
-  else if (MatchesExtension(filename, _T(".cup")))
+  case WaypointFileType::SEEYOU:
     reader = new WaypointReaderSeeYou(filename, the_filenum, compressed);
+    break;
 
-  // If Zander waypoint file -> save type and return true
-  else if (MatchesExtension(filename, _T(".wpz")))
+  case WaypointFileType::ZANDER:
     reader = new WaypointReaderZander(filename, the_filenum, compressed);
+    break;
 
-  // If FS waypoint file -> save type and return true
-  else if (MatchesExtension(filename, _T(".wpt"))) {
+  case WaypointFileType::FS:
+    reader = new WaypointReaderFS(filename, the_filenum, compressed);
+    break;
 
-    std::unique_ptr<TLineReader> file_reader(OpenTextFile(filename));
-    if (file_reader && WaypointReaderFS::VerifyFormat(*file_reader)) {
-      reader = new WaypointReaderFS(filename, the_filenum, compressed);
-      return;
-    }
+  case WaypointFileType::OZI_EXPLORER:
+    reader = new WaypointReaderOzi(filename, the_filenum, compressed);
+    break;
 
-    file_reader.reset(OpenTextFile(filename));
-    if (file_reader && WaypointReaderOzi::VerifyFormat(*file_reader)) {
-      reader = new WaypointReaderOzi(filename, the_filenum, compressed);
-      return;
-    }
+  case WaypointFileType::COMPE_GPS:
+    reader = new WaypointReaderCompeGPS(filename, the_filenum, compressed);
+    break;
 
-    file_reader.reset(OpenTextFile(filename));
-    if (file_reader && WaypointReaderCompeGPS::VerifyFormat(*file_reader)) {
-      reader = new WaypointReaderCompeGPS(filename, the_filenum, compressed);
-      return;
-    }
+  default:
+    break;
   }
 }
