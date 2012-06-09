@@ -195,17 +195,3 @@ WaypointReaderBase::Parse(Waypoints &way_points,
   Parse(way_points, *reader, operation);
   return true;
 }
-
-bool
-WaypointReaderBase::VerifyFormat() const
-{
-  // If no file loaded yet -> return false
-  if (file[0] == 0)
-    return false;
-
-  std::unique_ptr<TLineReader> reader(OpenTextFile(file));
-  if (!reader)
-    return false;
-
-  return VerifyFormat(*reader);
-}

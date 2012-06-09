@@ -35,6 +35,9 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "IO/ZipSource.hpp"
+#include "IO/TextFile.hpp"
+
+#include <memory>
 
 bool
 WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
@@ -88,21 +91,23 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
 
   // If FS waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".wpt"))) {
-    reader = new WaypointReaderFS(filename, the_filenum, compressed);
-    if (reader->VerifyFormat())
-      return;
 
-    delete reader;
-    reader = new WaypointReaderOzi(filename, the_filenum, compressed);
-    if (reader->VerifyFormat())
+    std::unique_ptr<TLineReader> file_reader(OpenTextFile(filename));
+    if (file_reader && WaypointReaderFS::VerifyFormat(*file_reader)) {
+      reader = new WaypointReaderFS(filename, the_filenum, compressed);
       return;
+    }
 
-    delete reader;
-    reader = new WaypointReaderCompeGPS(filename, the_filenum, compressed);
-    if (reader->VerifyFormat())
+    file_reader.reset(OpenTextFile(filename));
+    if (file_reader && WaypointReaderOzi::VerifyFormat(*file_reader)) {
+      reader = new WaypointReaderOzi(filename, the_filenum, compressed);
       return;
+    }
 
-    delete reader;
-    reader = NULL;
+    file_reader.reset(OpenTextFile(filename));
+    if (file_reader && WaypointReaderCompeGPS::VerifyFormat(*file_reader)) {
+      reader = new WaypointReaderCompeGPS(filename, the_filenum, compressed);
+      return;
+    }
   }
 }

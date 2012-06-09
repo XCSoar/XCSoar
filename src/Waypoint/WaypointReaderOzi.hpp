@@ -34,7 +34,7 @@ public:
                     bool _compressed = false)
     :WaypointReaderBase(file_name, _file_num, _compressed) {}
 
-  bool VerifyFormat(TLineReader &reader) const;
+  static bool VerifyFormat(TLineReader &reader);
 
 protected:
   bool ParseLine(const TCHAR* line, const unsigned linenum,

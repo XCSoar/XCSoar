@@ -237,7 +237,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
 }
 
 bool
-WaypointReaderCompeGPS::VerifyFormat(TLineReader &reader) const
+WaypointReaderCompeGPS::VerifyFormat(TLineReader &reader)
 {
   TCHAR* line = reader.read();
   if (line == NULL)

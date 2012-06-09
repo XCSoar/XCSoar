@@ -25,6 +25,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
 #include "IO/LineReader.hpp"
+#include "IO/TextFile.hpp"
 
 #include <stdio.h>
 
@@ -205,7 +206,7 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
 }
 
 bool
-WaypointReaderFS::VerifyFormat(TLineReader &reader) const
+WaypointReaderFS::VerifyFormat(TLineReader &reader)
 {
   TCHAR* line = reader.read();
   if (line == NULL)
