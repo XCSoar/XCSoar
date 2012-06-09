@@ -495,9 +495,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
                             calculated, last_calculated,
                             settings);
 
-  if (!last_calculated.circling && calculated.circling)
-    OnSwitchClimbMode(settings);
-  else if (last_calculated.circling && !calculated.circling)
+  if (last_calculated.circling != calculated.circling)
     OnSwitchClimbMode(settings);
 
   // Calculate circling time percentage and call thermal band calculation
