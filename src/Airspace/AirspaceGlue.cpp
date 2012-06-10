@@ -37,17 +37,6 @@ Copyright_License {
 
 static bool
 ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
-                  TLineReader &reader, OperationEnvironment &operation)
-{
-  if (parser.Parse(reader, operation))
-    return true;
-
-  LogStartUp(_T("Failed to parse airspace file: %s"), path);
-  return false;
-}
-
-static bool
-ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
                   OperationEnvironment &operation)
 {
   std::unique_ptr<TLineReader> reader(OpenTextFile(path, ConvertLineReader::AUTO));
@@ -56,7 +45,12 @@ ParseAirspaceFile(AirspaceParser &parser, const TCHAR *path,
     return false;
   }
 
-  return ParseAirspaceFile(parser, path, *reader, operation);
+  if (!parser.Parse(*reader, operation)) {
+    LogStartUp(_T("Failed to parse airspace file: %s"), path);
+    return false;
+  }
+
+  return true;
 }
 
 void
