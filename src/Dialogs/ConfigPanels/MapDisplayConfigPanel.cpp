@@ -42,6 +42,8 @@ enum ControlIndex {
 static const StaticEnumChoice orientation_list[] = {
   { TRACKUP, N_("Track up"),
     N_("The moving map display will be rotated so the glider's track is oriented up.") },
+  { HEADINGUP, N_("Heading up"),
+    N_("The moving map display will be rotated so the glider's heading is oriented up.") },
   { NORTHUP, N_("North up"),
     N_("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.") },
   { TARGETUP, N_("Target up"),

@@ -44,7 +44,8 @@ enum AircraftSymbol {
 enum DisplayOrientation {
   TRACKUP = 0,
   NORTHUP,
-  TARGETUP
+  TARGETUP,
+  HEADINGUP,
 };
 
 enum MapShiftBias {
