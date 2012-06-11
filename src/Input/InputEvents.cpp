@@ -68,6 +68,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory>
 
 namespace InputEvents
 {
@@ -116,11 +117,9 @@ InputEvents::readFile()
   LoadDefaults(input_config);
 
   // Read in user defined configuration file
-  TLineReader *reader = OpenConfiguredTextFile(szProfileInputFile);
-  if (reader != NULL) {
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfileInputFile));
+  if (reader)
     ::ParseInputFile(input_config, *reader);
-    delete reader;
-  }
 }
 
 void

@@ -30,6 +30,8 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 
+#include <memory>
+
 namespace PolarGlue
 {
   bool LoadFromOldProfile(PolarInfo &polar);
@@ -45,14 +47,8 @@ PolarGlue::GetDefault()
 static bool
 ReadPolarFileFromProfile(PolarInfo &polar)
 {
-  TLineReader *reader = OpenConfiguredTextFile(szProfilePolarFile);
-  if (reader == NULL)
-    return false;
-
-  bool success = PolarGlue::LoadFromFile(polar, *reader);
-  delete reader;
-
-  return success;
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfilePolarFile));
+  return reader && PolarGlue::LoadFromFile(polar, *reader);
 }
 
 bool

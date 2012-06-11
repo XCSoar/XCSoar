@@ -30,6 +30,7 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 
 #include <stdio.h>
+#include <memory>
 
 static gcc_constexpr_data StatusMessageSTRUCT StatusMessageDefaults[] = {
 #include "Status_defaults.cpp"
@@ -58,11 +59,9 @@ StatusMessageList::LoadFile()
 {
   LogStartUp(_T("Loading status file"));
 
-  TLineReader *reader = OpenConfiguredTextFile(szProfileStatusFile);
-  if (reader != NULL) {
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfileStatusFile));
+  if (reader)
     LoadFile(*reader);
-    delete reader;
-  }
 }
 
 static bool

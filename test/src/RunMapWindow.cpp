@@ -181,13 +181,11 @@ LoadFiles(ComputerSettings &settings)
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
   WaypointGlue::SetHome(way_points, terrain, settings, NULL, false);
 
-  TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile,
-                                               ConvertLineReader::AUTO);
-  if (reader != NULL) {
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfileAirspaceFile,
+                                                             ConvertLineReader::AUTO));
+  if (reader) {
     AirspaceParser parser(airspace_database);
     parser.Parse(*reader, operation);
-    delete reader;
-
     airspace_database.Optimise();
   }
 }

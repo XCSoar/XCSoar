@@ -44,6 +44,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Operation/Operation.hpp"
 
+#include <memory>
 #include <tchar.h>
 #include <stdio.h>
 
@@ -77,13 +78,11 @@ LoadFiles(Airspaces &airspace_database)
 {
   NullOperationEnvironment operation;
 
-  TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile,
-                                               ConvertLineReader::AUTO);
-  if (reader != NULL) {
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfileAirspaceFile,
+                                                             ConvertLineReader::AUTO));
+  if (reader) {
     AirspaceParser parser(airspace_database);
     parser.Parse(*reader, operation);
-    delete reader;
-
     airspace_database.Optimise();
   }
 }

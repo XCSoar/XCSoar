@@ -36,7 +36,7 @@ Copyright_License {
 #include <vector>
 
 static const Waypoint *
-find_waypoint(Waypoints &way_points, const TCHAR *name)
+FindWaypoint(Waypoints &way_points, const TCHAR *name)
 {
   const Waypoint *wp = way_points.LookupName(name);
   if (wp != NULL)
@@ -65,7 +65,7 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
                    const std::vector<tstring> &files_external,
                    const std::vector<tstring> &files_embed)
 {
-  const Waypoint *wp = find_waypoint(way_points, name);
+  const Waypoint *wp = FindWaypoint(way_points, name);
   if (wp == NULL)
     return;
 
@@ -161,12 +161,9 @@ WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
 {
   LogStartUp(_T("WaypointDetails::ReadFileFromProfile"));
 
-  TLineReader *reader =
-    OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"),
-                           ConvertLineReader::AUTO);
-  if (reader == NULL)
-    return;
-
-  ReadFile(*reader, way_points, operation);
-  delete reader;
+  std::unique_ptr<TLineReader>
+  reader(OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"),
+                                ConvertLineReader::AUTO));
+  if (reader)
+    ReadFile(*reader, way_points, operation);
 }
