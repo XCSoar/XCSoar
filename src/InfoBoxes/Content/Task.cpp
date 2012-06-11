@@ -242,7 +242,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
   // pilots want this to be assuming terminal flight to this wp
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
+  const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
 
   SetValueFromAltDiff(data, task_stats, next_solution);
 }
@@ -253,7 +253,7 @@ InfoBoxContentNextMC0AltitudeDiff::Update(InfoBoxData &data)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   SetValueFromAltDiff(data, task_stats,
-                      CommonInterface::Calculated().common_stats.next_solution_mc0);
+                      task_stats.current_leg.solution_mc0);
 }
 
 void
@@ -262,7 +262,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxData &data)
   // pilots want this to be assuming terminal flight to this wp
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
+  const GlideResult &next_solution = task_stats.current_leg.solution_remaining;
   if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;
@@ -278,7 +278,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
 
   const MoreData &basic = CommonInterface::Basic();
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  const GlideResult next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
+  const GlideResult next_solution = task_stats.current_leg.solution_remaining;
   if (!task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;

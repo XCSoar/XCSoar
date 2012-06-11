@@ -199,7 +199,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next altitude difference"),
     N_("WP AltD"),
-    N_("Arrival altitude at the next waypoint relative to the safety arrival height."),
+    N_("Arrival altitude at the next waypoint relative to the safety arrival height. For AAT tasks, the target within the AAT sector is used."),
     IBFHelper<InfoBoxContentNextAltitudeDiff>::Create,
     e_WP_MC0AltDiff, // WP MC0 AltD
     e_WP_Distance, // WP Dist
@@ -209,7 +209,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next altitude required"),
     N_("WP AltR"),
-    N_("Additional altitude required to reach the next turn point."),
+    N_("Additional altitude required to reach the next turn point. For AAT tasks, the target within the AAT sector is used."),
     IBFHelper<InfoBoxContentNextAltitudeRequire>::Create,
     e_Fin_AltDiff, // Fin AltD
     e_WP_AltDiff, // WP AltD
@@ -843,7 +843,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next altitude arrival"),
     N_("WP AltA"),
-    N_("Absolute arrival altitude at the next waypoint in final glide."),
+    N_("Absolute arrival altitude at the next waypoint in final glide.  For AAT tasks, the target within the AAT sector is used."),
     IBFHelper<InfoBoxContentNextAltitudeArrival>::Create,
     e_WP_AltReq, // WP AltR
     e_WP_AltDiff, // WP AltD
@@ -993,7 +993,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Next MC0 altitude difference"),
     N_("WP MC0 AltD"),
-    N_("Arrival altitude at the next waypoint with MC 0 setting relative to the safety arrival height."),
+    N_("Arrival altitude at the next waypoint with MC 0 setting relative to the safety arrival height.  For AAT tasks, the target within the AAT sector is used."),
     IBFHelper<InfoBoxContentNextMC0AltitudeDiff>::Create,
     e_WP_H, // WP AltA
     e_WP_AltDiff, // WP AltD
