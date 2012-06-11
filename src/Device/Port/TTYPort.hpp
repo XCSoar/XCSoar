@@ -26,13 +26,13 @@ Copyright_License {
 
 #include "Thread/StoppableThread.hpp"
 #include "Thread/Flag.hpp"
-#include "Port.hpp"
+#include "BufferedPort.hpp"
 #include "OS/TTYDescriptor.hpp"
 
 /**
  * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
  */
-class TTYPort : public Port, protected StoppableThread
+class TTYPort : public BufferedPort, protected StoppableThread
 {
   unsigned baud_rate;
 
@@ -47,7 +47,7 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  TTYPort(Handler &_handler):Port(_handler) {}
+  TTYPort(Port::Handler &_handler):BufferedPort(_handler) {}
 
   virtual ~TTYPort();
 
@@ -73,10 +73,6 @@ public:
   virtual void Flush();
   virtual bool SetBaudrate(unsigned baud_rate);
   virtual unsigned GetBaudrate() const;
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-  virtual int Read(void *Buffer, size_t Size);
-  virtual WaitResult WaitRead(unsigned timeout_ms);
   virtual size_t Write(const void *data, size_t length);
 
 protected:

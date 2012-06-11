@@ -40,8 +40,14 @@ Copyright_License {
 
 TTYPort::~TTYPort()
 {
-  if (tty.IsDefined())
-    StopRxThread();
+  BufferedPort::BeginClose();
+
+  if (IsDefined()) {
+    StoppableThread::BeginStop();
+    Thread::Join();
+  }
+
+  BufferedPort::EndClose();
 }
 
 bool
@@ -69,6 +75,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
     return false;
 
   valid.Set();
+  StoppableThread::Start();
   return true;
 }
 
@@ -79,6 +86,7 @@ TTYPort::OpenPseudo()
     return NULL;
 
   valid.Set();
+  StoppableThread::Start();
   return tty.GetSlaveName();
 }
 
@@ -89,6 +97,7 @@ TTYPort::Flush()
     return;
 
   tty.FlushInput();
+  BufferedPort::Flush();
 }
 
 void
@@ -98,32 +107,25 @@ TTYPort::Run()
 
   while (true) {
     /* wait for data to arrive on the port */
-    switch (WaitRead(200)) {
-    case WaitResult::READY:
-      /* linger for a few more milliseconds so the device can send
-         some more data; without this, we would be waking up for every
-         single byte */
-      if (WaitForStopped(10))
-        return;
-
-      break;
-
-    case WaitResult::FAILED:
-      if (errno != EAGAIN && errno != EINTR) {
+    int readable = tty.WaitReadable(200);
+    if (readable <= 0) {
+      if (readable < 0 && errno != EAGAIN && errno != EINTR) {
         valid.Reset();
-        return;
+        break;
       }
 
-      /* non-fatal error, fall through */
-
-    case WaitResult::TIMEOUT:
-    case WaitResult::CANCELLED:
       /* throttle */
       if (WaitForStopped(500))
         return;
 
       continue;
     }
+
+    /* linger for a few more milliseconds so the device can send
+       some more data; without this, we would be waking up for every
+       single byte */
+    if (WaitForStopped(10))
+      return;
 
     ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
     if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
@@ -132,10 +134,8 @@ TTYPort::Run()
     }
 
     if (nbytes > 0)
-      handler.DataReceived(buffer, nbytes);
+      BufferedPort::DataReceived(buffer, nbytes);
   }
-
-  Flush();
 }
 
 Port::WaitResult
@@ -174,41 +174,6 @@ TTYPort::Write(const void *data, size_t length)
   }
 
   return nbytes < 0 ? 0 : nbytes;
-}
-
-bool
-TTYPort::StopRxThread()
-{
-  // Make sure the thread isn't terminating itself
-  assert(!Thread::IsInside());
-  assert(tty.IsDefined());
-
-  // If the thread is not running, cancel the rest of the function
-  if (!Thread::IsDefined())
-    return true;
-
-  BeginStop();
-
-  Thread::Join();
-
-  return true;
-}
-
-bool
-TTYPort::StartRxThread()
-{
-  assert(tty.IsDefined());
-
-  if (!valid.Get())
-    return false;
-
-  if (Thread::IsDefined())
-    /* already running */
-    return true;
-
-  // Start the receive thread
-  StoppableThread::Start();
-  return true;
 }
 
 static unsigned
@@ -321,32 +286,4 @@ TTYPort::SetBaudrate(unsigned BaudRate)
 
   baud_rate = BaudRate;
   return true;
-}
-
-int
-TTYPort::Read(void *Buffer, size_t Size)
-{
-  assert(tty.IsDefined());
-
-  if (!valid.Get())
-    return -1;
-
-  return tty.Read(Buffer, Size);
-}
-
-Port::WaitResult
-TTYPort::WaitRead(unsigned timeout_ms)
-{
-  assert(tty.IsDefined());
-
-  if (!valid.Get())
-    return WaitResult::FAILED;
-
-  int ret = tty.WaitReadable(timeout_ms);
-  if (ret > 0)
-    return WaitResult::READY;
-  else if (ret == 0)
-    return WaitResult::TIMEOUT;
-  else
-    return WaitResult::FAILED;
 }
