@@ -25,6 +25,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "OS/LogError.hpp"
 #include "OS/Sleep.h"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <time.h>
 #include <fcntl.h>
@@ -42,10 +43,8 @@ TTYPort::~TTYPort()
 {
   BufferedPort::BeginClose();
 
-  if (IsDefined()) {
-    StoppableThread::BeginStop();
-    Thread::Join();
-  }
+  if (tty.IsDefined())
+    io_thread->LockRemove(tty.Get());
 
   BufferedPort::EndClose();
 }
@@ -75,7 +74,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
     return false;
 
   valid.Set();
-  StoppableThread::Start();
+  io_thread->LockAdd(tty.Get(), Poll::READ, *this);
   return true;
 }
 
@@ -86,7 +85,7 @@ TTYPort::OpenPseudo()
     return NULL;
 
   valid.Set();
-  StoppableThread::Start();
+  io_thread->LockAdd(tty.Get(), Poll::READ, *this);
   return tty.GetSlaveName();
 }
 
@@ -98,44 +97,6 @@ TTYPort::Flush()
 
   tty.FlushInput();
   BufferedPort::Flush();
-}
-
-void
-TTYPort::Run()
-{
-  char buffer[1024];
-
-  while (true) {
-    /* wait for data to arrive on the port */
-    int readable = tty.WaitReadable(200);
-    if (readable <= 0) {
-      if (readable < 0 && errno != EAGAIN && errno != EINTR) {
-        valid.Reset();
-        break;
-      }
-
-      /* throttle */
-      if (WaitForStopped(500))
-        return;
-
-      continue;
-    }
-
-    /* linger for a few more milliseconds so the device can send
-       some more data; without this, we would be waking up for every
-       single byte */
-    if (WaitForStopped(10))
-      return;
-
-    ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
-    if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
-      valid.Reset();
-      return;
-    }
-
-    if (nbytes > 0)
-      BufferedPort::DataReceived(buffer, nbytes);
-  }
 }
 
 Port::WaitResult
@@ -285,5 +246,22 @@ TTYPort::SetBaudrate(unsigned BaudRate)
     return false;
 
   baud_rate = BaudRate;
+  return true;
+}
+
+bool
+TTYPort::OnFileEvent(int fd, unsigned mask)
+{
+  char buffer[1024];
+
+  ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
+  if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
+    valid.Reset();
+    return false;
+  }
+
+  if (nbytes > 0)
+    BufferedPort::DataReceived(buffer, nbytes);
+
   return true;
 }

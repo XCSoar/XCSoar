@@ -26,6 +26,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,6 +36,8 @@ int main(int argc, char **argv)
   Args args(argc, argv, "PORT BAUD");
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
+
+  InitialiseIOThread();
 
   Port *port = OpenPort(config, *(Port::Handler *)NULL);
   if (port == NULL) {
@@ -71,5 +74,6 @@ int main(int argc, char **argv)
   }
 
   delete port;
+  DeinitialiseIOThread();
   return EXIT_SUCCESS;
 }

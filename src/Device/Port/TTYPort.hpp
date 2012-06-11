@@ -28,11 +28,12 @@ Copyright_License {
 #include "Thread/Flag.hpp"
 #include "BufferedPort.hpp"
 #include "OS/TTYDescriptor.hpp"
+#include "IO/Async/FileEventHandler.hpp"
 
 /**
  * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
  */
-class TTYPort : public BufferedPort, protected StoppableThread
+class TTYPort : public BufferedPort, protected FileEventHandler
 {
   unsigned baud_rate;
 
@@ -76,8 +77,8 @@ public:
   virtual size_t Write(const void *data, size_t length);
 
 protected:
-  /* virtual methods from class Thread */
-  virtual void Run();
+  /* virtual methods from class FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask);
 };
 
 #endif

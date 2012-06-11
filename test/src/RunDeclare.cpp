@@ -34,6 +34,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "DebugPort.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #define MORE_USAGE
 #include "OS/Args.hpp"
@@ -95,6 +96,8 @@ int main(int argc, char **argv)
   const TCHAR *driver_name = _driver_name.c_str();
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
+
+  InitialiseIOThread();
 
   Port *port = OpenPort(config, *(Port::Handler *)NULL);
   if (port == NULL) {
@@ -168,6 +171,7 @@ int main(int argc, char **argv)
   delete through_device;
   delete device;
   delete port;
+  DeinitialiseIOThread();
 
   return EXIT_SUCCESS;
 }

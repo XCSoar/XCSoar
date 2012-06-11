@@ -27,6 +27,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -35,6 +36,8 @@ int main(int argc, char **argv)
 {
   Args args(argc, argv, "PORT BAUD [NAME=VALUE] [NAME] ...");
   const DeviceConfig config = ParsePortArgs(args);
+
+  InitialiseIOThread();
 
   Port *port = OpenPort(config, *(Port::Handler *)NULL);
   if (port == NULL) {
@@ -63,5 +66,6 @@ int main(int argc, char **argv)
   }
 
   delete port;
+  DeinitialiseIOThread();
   return EXIT_SUCCESS;
 }

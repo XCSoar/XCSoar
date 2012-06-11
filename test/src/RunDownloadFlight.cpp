@@ -32,6 +32,7 @@ Copyright_License {
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "OS/Args.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <stdio.h>
 
@@ -76,6 +77,8 @@ int main(int argc, char **argv)
 
   unsigned flight_id = args.IsEmpty() ? 0 : atoi(args.GetNext());
   args.ExpectEnd();
+
+  InitialiseIOThread();
 
   Port *port = OpenPort(config, *(Port::Handler *)NULL);
   if (port == NULL) {
@@ -132,6 +135,7 @@ int main(int argc, char **argv)
 
   delete device;
     delete port;
+  DeinitialiseIOThread();
 
   printf("Flight downloaded successfully\n");
 

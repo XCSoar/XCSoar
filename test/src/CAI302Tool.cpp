@@ -28,6 +28,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Util/Macros.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <stdio.h>
 
@@ -161,6 +162,8 @@ int main(int argc, char **argv)
   const char *command = args.ExpectNext();
   args.ExpectEnd();
 
+  InitialiseIOThread();
+
   Port *port = OpenPort(config, *(Port::Handler *)NULL);
   if (port == NULL) {
     fprintf(stderr, "Failed to open port\n");
@@ -176,5 +179,6 @@ int main(int argc, char **argv)
   }
 
   delete port;
+  DeinitialiseIOThread();
   return EXIT_SUCCESS;
 }

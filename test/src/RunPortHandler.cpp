@@ -26,6 +26,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,6 +43,8 @@ int main(int argc, char **argv)
   Args args(argc, argv, "PORT BAUD");
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
+
+  InitialiseIOThread();
 
   MyHandler handler;
   Port *port = OpenPort(config, handler);
@@ -63,5 +66,6 @@ int main(int argc, char **argv)
     Sleep(10000);
 
   delete port;
+  DeinitialiseIOThread();
   return EXIT_SUCCESS;
 }

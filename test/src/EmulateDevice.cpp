@@ -36,6 +36,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "OS/Sleep.h"
 #include "Operation/ConsoleOperationEnvironment.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -61,6 +62,8 @@ main(int argc, char **argv)
   Emulator *emulator = LoadEmulator(args);
   const DeviceConfig config = ParsePortArgs(args);
   args.ExpectEnd();
+
+  InitialiseIOThread();
 
   Port *port = OpenPort(config, *emulator->handler);
   if (port == NULL) {
@@ -89,5 +92,6 @@ main(int argc, char **argv)
 
   delete port;
   delete emulator;
+  DeinitialiseIOThread();
   return EXIT_SUCCESS;
 }

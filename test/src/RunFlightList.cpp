@@ -34,6 +34,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "IO/Async/GlobalIOThread.hpp"
 
 #include <stdio.h>
 
@@ -82,6 +83,8 @@ int main(int argc, char **argv)
 
   assert(driver->CreateOnPort != NULL);
 
+  InitialiseIOThread();
+
   Port *port = OpenPort(config, *(Port::Handler *)NULL);
   if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
@@ -99,6 +102,7 @@ int main(int argc, char **argv)
 
   delete device;
   delete port;
+  DeinitialiseIOThread();
 
   for (auto i = flight_list.begin(); i != flight_list.end(); ++i) {
     const RecordedFlightInfo &flight = *i;
