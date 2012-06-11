@@ -186,30 +186,6 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
   common_stats.vector_home = task_abort.GetHomeVector(state);
 
   common_stats.landable_reachable = task_abort.HasReachableLandable();
-
-  const TaskWaypoint *tp = GetActiveTaskPoint();
-  if (tp != NULL) {
-    // must make an UnorderedTaskPoint here so we pick up arrival height requirements
-    const UnorderedTaskPoint fp(tp->GetWaypoint(), task_behaviour);
-
-    // @todo: consider change to task_abort.get_safety_polar();
-    GlidePolar glide_polar = GetGlidePolar();
-
-    common_stats.next_solution =
-      TaskSolution::GlideSolutionRemaining(fp, state, task_behaviour.glide,
-                                           glide_polar);
-
-    if (positive(glide_polar.GetMC())) {
-      glide_polar.SetMC(fixed_zero);
-      common_stats.next_solution_mc0 =
-        TaskSolution::GlideSolutionRemaining(fp, state, task_behaviour.glide,
-                                             glide_polar);
-    } else
-      common_stats.next_solution_mc0 = common_stats.next_solution;
-  } else {
-    common_stats.next_solution.Reset();
-    common_stats.next_solution_mc0.Reset();
-  }
 }
 
 void
