@@ -152,16 +152,16 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
         unsigned index((it->GetAltitude() - value_min) / (value_max - value_min)
                        * (TrailLook::NUMSNAILCOLORS - 1));
         index = max(0u, min(TrailLook::NUMSNAILCOLORS - 1, index));
-        canvas.Select(look.hpSnail[index]);
+        canvas.Select(look.trail_pens[index]);
       } else {
         const fixed colour_vario = negative(it->GetVario())
           ? - it->GetVario() / value_min
           : it->GetVario() / value_max ;
 
         if (!scaled_trail)
-          canvas.Select(look.hpSnail[GetSnailColorIndex(colour_vario)]);
+          canvas.Select(look.trail_pens[GetSnailColorIndex(colour_vario)]);
         else
-          canvas.Select(look.hpSnailVario[GetSnailColorIndex(colour_vario)]);
+          canvas.Select(look.scaled_trail_pens[GetSnailColorIndex(colour_vario)]);
       }
       canvas.DrawLinePiece(last_point, pt);
     }

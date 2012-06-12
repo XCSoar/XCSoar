@@ -32,8 +32,8 @@ struct TrailSettings;
 struct TrailLook {
   static gcc_constexpr_data unsigned NUMSNAILCOLORS = 15;
 
-  Pen hpSnail[NUMSNAILCOLORS];
-  Pen hpSnailVario[NUMSNAILCOLORS];
+  Pen trail_pens[NUMSNAILCOLORS];
+  Pen scaled_trail_pens[NUMSNAILCOLORS];
 
   Pen trace_pen;
 
