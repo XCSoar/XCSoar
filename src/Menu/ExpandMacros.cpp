@@ -433,19 +433,19 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(SnailTrailToggleName)"))) {
     switch (GetMapSettings().trail.length) {
-    case TRAIL_OFF:
+    case TrailSettings::TRAIL_OFF:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Long"), Size);
       break;
-    case TRAIL_LONG:
+    case TrailSettings::TRAIL_LONG:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Short"), Size);
       break;
-    case TRAIL_SHORT:
+    case TrailSettings::TRAIL_SHORT:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Full"), Size);
       break;
-    case TRAIL_FULL:
+    case TrailSettings::TRAIL_FULL:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Off"), Size);
       break;
@@ -575,16 +575,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(GetMapSettings().trail.length == TRAIL_OFF,
+  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::TRAIL_OFF,
                       OutBuffer, _T("$(SnailTrailOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail.length == TRAIL_SHORT,
+  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::TRAIL_SHORT,
                       OutBuffer, _T("$(SnailTrailShortShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail.length == TRAIL_LONG,
+  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::TRAIL_LONG,
                       OutBuffer, _T("$(SnailTrailLongShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail.length == TRAIL_FULL,
+  CondReplaceInString(GetMapSettings().trail.length == TrailSettings::TRAIL_FULL,
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 

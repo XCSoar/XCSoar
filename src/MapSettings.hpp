@@ -54,19 +54,6 @@ enum MapShiftBias {
   MAP_SHIFT_BIAS_TARGET
 };
 
-enum TrailLength {
-  TRAIL_OFF,
-  TRAIL_LONG,
-  TRAIL_SHORT,
-  TRAIL_FULL,
-};
-
-enum SnailType {
-  stStandardVario,
-  stSeeYouVario,
-  stAltitude,
-};
-
 enum DisplayTrackBearing {
   dtbOff,
   dtbOn,
@@ -88,9 +75,20 @@ struct TrailSettings {
   /** Snailtrail wind drifting in circling mode */
   bool wind_drift_enabled;
   bool scaling_enabled;
+
   /** 0: standard, 1: seeyou colors */
-  SnailType type;
-  TrailLength length;
+  enum Type {
+    stStandardVario,
+    stSeeYouVario,
+    stAltitude,
+  } type;
+
+  enum Length {
+    TRAIL_OFF,
+    TRAIL_LONG,
+    TRAIL_SHORT,
+    TRAIL_FULL,
+  } length;
 
   void SetDefaults();
 };

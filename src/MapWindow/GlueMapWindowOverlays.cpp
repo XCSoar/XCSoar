@@ -338,15 +338,15 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
   unsigned min_time;
   switch(GetMapSettings().trail.length) {
-  case TRAIL_OFF:
+  case TrailSettings::TRAIL_OFF:
     return;
-  case TRAIL_LONG:
+  case TrailSettings::TRAIL_LONG:
     min_time = max(0, (int)Basic().time - 3600);
     break;
-  case TRAIL_SHORT:
+  case TrailSettings::TRAIL_SHORT:
     min_time = max(0, (int)Basic().time - 600);
     break;
-  case TRAIL_FULL:
+  case TrailSettings::TRAIL_FULL:
     min_time = 0; // full
     break;
   }
