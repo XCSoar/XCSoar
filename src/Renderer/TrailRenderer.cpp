@@ -77,6 +77,29 @@ GetSnailColorIndex(fixed cv)
                            (short)((cv + fixed_one) / 2 * TrailLook::NUMSNAILCOLORS)));
 }
 
+static void
+GetMinMax(fixed &value_min, fixed &value_max, TrailSettings::Type type,
+          const TracePointVector &trace)
+{
+  if (type == TrailSettings::Type::ALTITUDE) {
+    value_max = fixed(1000);
+    value_min = fixed(500);
+    for (auto it = trace.begin(); it != trace.end(); ++it) {
+      value_max = max(it->GetAltitude(), value_max);
+      value_min = min(it->GetAltitude(), value_min);
+    }
+  } else {
+    value_max = fixed(0.75);
+    value_min = fixed(-2.0);
+    for (auto it = trace.begin(); it != trace.end(); ++it) {
+      value_max = max(it->GetVario(), value_max);
+      value_min = min(it->GetVario(), value_min);
+    }
+    value_max = min(fixed(7.5), value_max);
+    value_min = max(fixed(-5.0), value_min);
+  }
+}
+
 void
 TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const WindowProjection &projection, unsigned min_time,
@@ -102,24 +125,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   }
 
   fixed value_max, value_min;
-
-  if (settings.trail.type == TrailSettings::Type::ALTITUDE) {
-    value_max = fixed(1000);
-    value_min = fixed(500);
-    for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = max(it->GetAltitude(), value_max);
-      value_min = min(it->GetAltitude(), value_min);
-    }
-  } else {
-    value_max = fixed(0.75);
-    value_min = fixed(-2.0);
-    for (auto it = trace.begin(); it != trace.end(); ++it) {
-      value_max = max(it->GetVario(), value_max);
-      value_min = min(it->GetVario(), value_min);
-    }
-    value_max = min(fixed(7.5), value_max);
-    value_min = max(fixed(-5.0), value_min);
-  }
+  GetMinMax(value_min, value_max, settings.trail.type, trace);
 
   bool scaled_trail = settings.trail.scaling_enabled &&
                       projection.GetMapScale() <= fixed_int_constant(6000);
