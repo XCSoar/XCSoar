@@ -38,21 +38,15 @@ Profile::Load(MapSettings &settings)
 
   GetEnum(szProfileAircraftSymbol, settings.aircraft_symbol);
 
-  Get(szProfileTrailDrift, settings.trail.wind_drift_enabled);
   Get(szProfileDetourCostMarker, settings.detour_cost_markers_enabled);
   GetEnum(szProfileDisplayTrackBearing, settings.display_track_bearing);
   Get(szProfileAutoZoom, settings.auto_zoom_enabled);
-  Get(szProfileSnailWidthScale, settings.trail.scaling_enabled);
-
-  GetEnum(szProfileSnailType, settings.trail.type);
 
   unsigned Temp;
   if (Get(szProfileWindArrowStyle, Temp))
     settings.wind_arrow_style = Temp;
 
   settings.waypoint.LoadFromProfile();
-
-  GetEnum(szProfileSnailTrail, settings.trail.length);
 
   Load(settings.airspace);
 
@@ -133,7 +127,17 @@ Profile::Load(MapSettings &settings)
 
   Get(szProfileEnableThermalProfile, settings.show_thermal_profile);
 
+  Load(settings.trail);
   Load(settings.item_list);
+}
+
+void
+Profile::Load(TrailSettings &settings)
+{
+  Get(szProfileTrailDrift, settings.wind_drift_enabled);
+  Get(szProfileSnailWidthScale, settings.scaling_enabled);
+  GetEnum(szProfileSnailType, settings.type);
+  GetEnum(szProfileSnailTrail, settings.length);
 }
 
 void
