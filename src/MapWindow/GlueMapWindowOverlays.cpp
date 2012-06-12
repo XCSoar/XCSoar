@@ -337,7 +337,7 @@ void
 GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
 {
   unsigned min_time;
-  switch(GetMapSettings().trail_length) {
+  switch(GetMapSettings().trail.length) {
   case TRAIL_OFF:
     return;
   case TRAIL_LONG:
@@ -352,7 +352,7 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos)
   }
 
   DrawTrail(canvas, aircraft_pos, min_time,
-            GetMapSettings().trail_drift_enabled && InCirclingMode());
+            GetMapSettings().trail.wind_drift_enabled && InCirclingMode());
 }
 
 void

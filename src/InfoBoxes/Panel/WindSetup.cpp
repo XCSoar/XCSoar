@@ -98,7 +98,7 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Trail drift"),
              _("Determines whether the snail trail is drifted with the wind when displayed in circling mode."),
-             XCSoarInterface::GetMapSettings().trail_drift_enabled, this);
+             XCSoarInterface::GetMapSettings().trail.wind_drift_enabled, this);
 }
 
 
@@ -122,7 +122,7 @@ WindSetupPanel::OnAutoWind(DataFieldEnum &Sender)
 void
 WindSetupPanel::OnTrailDrift(DataFieldBoolean &Sender)
 {
-  XCSoarInterface::SetMapSettings().trail_drift_enabled = Sender.GetAsBoolean();
+  XCSoarInterface::SetMapSettings().trail.wind_drift_enabled = Sender.GetAsBoolean();
 }
 
 Widget *

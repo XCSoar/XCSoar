@@ -84,6 +84,17 @@ struct MapItemListSettings {
   void SetDefaults();
 };
 
+struct TrailSettings {
+  /** Snailtrail wind drifting in circling mode */
+  bool wind_drift_enabled;
+  bool scaling_enabled;
+  /** 0: standard, 1: seeyou colors */
+  SnailType type;
+  TrailLength length;
+
+  void SetDefaults();
+};
+
 // user interface options
 
 // where using these from Calculations or MapWindow thread, should
@@ -101,8 +112,6 @@ struct MapSettings {
 
   AircraftSymbol aircraft_symbol;
 
-  /** Snailtrail wind drifting in circling mode */
-  bool trail_drift_enabled;
   /** Indicate extra distance reqd. if deviating from target heading */
   bool detour_cost_markers_enabled;
   /** Render track bearing on map */
@@ -110,15 +119,9 @@ struct MapSettings {
 
   /** Automatic zoom when closing in on waypoint */
   bool auto_zoom_enabled;
-  bool snail_scaling_enabled;
-  /** 0: standard, 1: seeyou colors */
-  SnailType snail_type;
   int wind_arrow_style;
 
   WaypointRendererSettings waypoint;
-
-  TrailLength trail_length;
-
   AirspaceRendererSettings airspace;
 
   int glider_screen_position;
@@ -139,6 +142,7 @@ struct MapSettings {
   /** Display climb band on map */
   bool show_thermal_profile;
 
+  TrailSettings trail;
   MapItemListSettings item_list;
 
   void SetDefaults();

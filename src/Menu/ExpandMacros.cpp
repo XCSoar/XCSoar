@@ -432,7 +432,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _("Start"), Size);
 
   if (_tcsstr(OutBuffer, _T("$(SnailTrailToggleName)"))) {
-    switch (GetMapSettings().trail_length) {
+    switch (GetMapSettings().trail.length) {
     case TRAIL_OFF:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Long"), Size);
@@ -575,16 +575,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(GetMapSettings().trail_length == TRAIL_OFF,
+  CondReplaceInString(GetMapSettings().trail.length == TRAIL_OFF,
                       OutBuffer, _T("$(SnailTrailOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail_length == TRAIL_SHORT,
+  CondReplaceInString(GetMapSettings().trail.length == TRAIL_SHORT,
                       OutBuffer, _T("$(SnailTrailShortShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail_length == TRAIL_LONG,
+  CondReplaceInString(GetMapSettings().trail.length == TRAIL_LONG,
                       OutBuffer, _T("$(SnailTrailLongShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(GetMapSettings().trail_length == TRAIL_FULL,
+  CondReplaceInString(GetMapSettings().trail.length == TRAIL_FULL,
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 

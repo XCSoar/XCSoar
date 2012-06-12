@@ -31,6 +31,15 @@ MapItemListSettings::SetDefaults()
 }
 
 void
+TrailSettings::SetDefaults()
+{
+  wind_drift_enabled = true;
+  scaling_enabled = true;
+  type = stStandardVario;
+  length = TRAIL_LONG;
+}
+
+void
 MapSettings::SetDefaults()
 {
   circle_zoom_enabled = true;
@@ -38,15 +47,11 @@ MapSettings::SetDefaults()
   topography_enabled = true;
   terrain.SetDefaults();
   aircraft_symbol = acSimple;
-  trail_drift_enabled = true;
   detour_cost_markers_enabled = false;
   display_track_bearing = dtbAuto;
   auto_zoom_enabled = false;
-  snail_scaling_enabled = true;
-  snail_type = stStandardVario;
   wind_arrow_style = 0;
   waypoint.SetDefaults();
-  trail_length = TRAIL_LONG;
   airspace.SetDefaults();
   glider_screen_position = 20; // 20% from bottom
   circling_orientation = TRACKUP;
@@ -56,5 +61,6 @@ MapSettings::SetDefaults()
   show_flarm_on_map = true;
   show_thermal_profile = true;
 
+  trail.SetDefaults();
   item_list.SetDefaults();
 }

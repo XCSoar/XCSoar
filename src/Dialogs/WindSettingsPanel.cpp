@@ -67,7 +67,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Trail drift"),
              _("Determines whether the snail trail is drifted with the wind "
                "when displayed in circling mode."),
-             map_settings.trail_drift_enabled);
+             map_settings.trail.wind_drift_enabled);
 
   if (edit_manual_wind) {
     external_wind = settings.use_external_wind &&
@@ -115,7 +115,7 @@ WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
                        settings.use_external_wind);
 
   changed |= SaveValue(TrailDrift, szProfileTrailDrift,
-                       map_settings.trail_drift_enabled);
+                       map_settings.trail.wind_drift_enabled);
 
   if (edit_manual_wind && !external_wind) {
     settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));

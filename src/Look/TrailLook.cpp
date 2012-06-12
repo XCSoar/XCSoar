@@ -55,14 +55,14 @@ TrailLook::Initialise(const MapSettings &settings_map)
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; ++i) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings_map.snail_type == stAltitude) ?
+    Color color = (settings_map.trail.type == stAltitude) ?
                   ColorRampLookup(ih, snail_colors_alt, 5) :
-                  (settings_map.snail_type == stSeeYouVario) ?
+                  (settings_map.trail.type == stSeeYouVario) ?
                   ColorRampLookup(ih, snail_colors_vario2, 4) :
                   ColorRampLookup(ih, snail_colors_vario, 3);
 
     if (i < NUMSNAILCOLORS / 2 ||
-        !settings_map.snail_scaling_enabled)
+        !settings_map.trail.scaling_enabled)
       iwidth = minwidth;
     else
       iwidth = max(minwidth,

@@ -137,21 +137,21 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.show_flarm_on_map);
 
   AddEnum(_("Trail length"), NULL, trail_length_list,
-          settings_map.trail_length, this);
+          settings_map.trail.length, this);
   SetExpertRow(Trail);
 
   AddBoolean(_("Trail drift"),
              _("Determines whether the snail trail is drifted with the wind when displayed in "
                  "circling mode."),
-             settings_map.trail_drift_enabled);
+             settings_map.trail.wind_drift_enabled);
   SetExpertRow(TrailDrift);
 
-  AddEnum(_("Trail type"), NULL, trail_type_list, (int)settings_map.snail_type);
+  AddEnum(_("Trail type"), NULL, trail_type_list, (int)settings_map.trail.type);
   SetExpertRow(SnailType);
 
   AddBoolean(_("Trail scaled"),
              _("If set to ON the snail trail width is scaled according to the vario signal."),
-             settings_map.snail_scaling_enabled);
+             settings_map.trail.scaling_enabled);
   SetExpertRow(SnailWidthScale);
 
   AddBoolean(_("Detour cost markers"),
@@ -168,7 +168,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           wind_arrow_list, settings_map.wind_arrow_style);
   SetExpertRow(WindArrowStyle);
 
-  ShowTrailControls(settings_map.trail_length != TRAIL_OFF);
+  ShowTrailControls(settings_map.trail.length != TRAIL_OFF);
 }
 
 bool
@@ -184,14 +184,14 @@ SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(EnableFLARMMap, szProfileEnableFLARMMap,
                        settings_map.show_flarm_on_map);
 
-  changed |= SaveValueEnum(Trail, szProfileSnailTrail, settings_map.trail_length);
+  changed |= SaveValueEnum(Trail, szProfileSnailTrail, settings_map.trail.length);
 
-  changed |= SaveValue(TrailDrift, szProfileTrailDrift, settings_map.trail_drift_enabled);
+  changed |= SaveValue(TrailDrift, szProfileTrailDrift, settings_map.trail.wind_drift_enabled);
 
-  changed |= SaveValueEnum(SnailType, szProfileSnailType, settings_map.snail_type);
+  changed |= SaveValueEnum(SnailType, szProfileSnailType, settings_map.trail.type);
 
   changed |= SaveValue(SnailWidthScale, szProfileSnailWidthScale,
-                       settings_map.snail_scaling_enabled);
+                       settings_map.trail.scaling_enabled);
 
   changed |= SaveValue(DetourCostMarker, szProfileDetourCostMarker,
                        settings_map.detour_cost_markers_enabled);

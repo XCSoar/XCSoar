@@ -84,7 +84,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
                     const MapSettings &settings)
 {
-  if (settings.trail_length == TRAIL_OFF)
+  if (settings.trail.length == TRAIL_OFF)
     return;
 
   if (!LoadTrace(trace_computer, min_time, projection))
@@ -103,7 +103,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   fixed value_max, value_min;
 
-  if (settings.snail_type == stAltitude) {
+  if (settings.trail.type == stAltitude) {
     value_max = fixed(1000);
     value_min = fixed(500);
     for (auto it = trace.begin(); it != trace.end(); ++it) {
@@ -121,7 +121,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     value_min = max(fixed(-5.0), value_min);
   }
 
-  bool scaled_trail = settings.snail_scaling_enabled &&
+  bool scaled_trail = settings.trail.scaling_enabled &&
                       projection.GetMapScale() <= fixed_int_constant(6000);
 
   const GeoBounds bounds = projection.GetScreenBounds().Scale(fixed_four);
@@ -142,7 +142,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     RasterPoint pt = projection.GeoToScreen(gp);
 
     if (last_valid) {
-      if (settings.snail_type == stAltitude) {
+      if (settings.trail.type == stAltitude) {
         unsigned index((it->GetAltitude() - value_min) / (value_max - value_min)
                        * (TrailLook::NUMSNAILCOLORS - 1));
         index = max(0u, min(TrailLook::NUMSNAILCOLORS - 1, index));
