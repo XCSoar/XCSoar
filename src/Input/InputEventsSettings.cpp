@@ -76,28 +76,28 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
     trail_length = (trail_length + 1u) % 4u;
     settings_map.trail.length = (TrailSettings::Length)trail_length;
   } else if (StringIsEqual(misc, _T("off")))
-    settings_map.trail.length = TrailSettings::TRAIL_OFF;
+    settings_map.trail.length = TrailSettings::Length::OFF;
   else if (StringIsEqual(misc, _T("long")))
-    settings_map.trail.length = TrailSettings::TRAIL_LONG;
+    settings_map.trail.length = TrailSettings::Length::LONG;
   else if (StringIsEqual(misc, _T("short")))
-    settings_map.trail.length = TrailSettings::TRAIL_SHORT;
+    settings_map.trail.length = TrailSettings::Length::SHORT;
   else if (StringIsEqual(misc, _T("full")))
-    settings_map.trail.length = TrailSettings::TRAIL_FULL;
+    settings_map.trail.length = TrailSettings::Length::FULL;
   else if (StringIsEqual(misc, _T("show"))) {
     switch (settings_map.trail.length) {
-    case TrailSettings::TRAIL_OFF:
+    case TrailSettings::Length::OFF:
       Message::AddMessage(_("Snail trail off"));
       break;
 
-    case TrailSettings::TRAIL_LONG:
+    case TrailSettings::Length::LONG:
       Message::AddMessage(_("Long snail trail"));
       break;
 
-    case TrailSettings::TRAIL_SHORT:
+    case TrailSettings::Length::SHORT:
       Message::AddMessage(_("Short snail trail"));
       break;
 
-    case TrailSettings::TRAIL_FULL:
+    case TrailSettings::Length::FULL:
       Message::AddMessage(_("Full snail trail"));
       break;
     }

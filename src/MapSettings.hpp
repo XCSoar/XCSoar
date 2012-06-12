@@ -33,6 +33,8 @@ Copyright_License {
 #include "Renderer/WaypointRendererSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
+#include <stdint.h>
+
 enum AircraftSymbol {
   acSimple = 0,
   acDetailed,
@@ -77,17 +79,17 @@ struct TrailSettings {
   bool scaling_enabled;
 
   /** 0: standard, 1: seeyou colors */
-  enum Type {
-    stStandardVario,
-    stSeeYouVario,
-    stAltitude,
+  enum class Type: uint8_t {
+    VARIO_1,
+    VARIO_2,
+    ALTITUDE,
   } type;
 
-  enum Length {
-    TRAIL_OFF,
-    TRAIL_LONG,
-    TRAIL_SHORT,
-    TRAIL_FULL,
+  enum class Length: uint8_t {
+    OFF,
+    LONG,
+    SHORT,
+    FULL,
   } length;
 
   void SetDefaults();

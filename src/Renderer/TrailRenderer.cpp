@@ -84,7 +84,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                     const NMEAInfo &basic, const DerivedInfo &calculated,
                     const MapSettings &settings)
 {
-  if (settings.trail.length == TrailSettings::TRAIL_OFF)
+  if (settings.trail.length == TrailSettings::Length::OFF)
     return;
 
   if (!LoadTrace(trace_computer, min_time, projection))
@@ -103,7 +103,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
 
   fixed value_max, value_min;
 
-  if (settings.trail.type == TrailSettings::stAltitude) {
+  if (settings.trail.type == TrailSettings::Type::ALTITUDE) {
     value_max = fixed(1000);
     value_min = fixed(500);
     for (auto it = trace.begin(); it != trace.end(); ++it) {
@@ -142,7 +142,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
     RasterPoint pt = projection.GeoToScreen(gp);
 
     if (last_valid) {
-      if (settings.trail.type == TrailSettings::stAltitude) {
+      if (settings.trail.type == TrailSettings::Type::ALTITUDE) {
         unsigned index((it->GetAltitude() - value_min) / (value_max - value_min)
                        * (TrailLook::NUMSNAILCOLORS - 1));
         index = max(0u, min(TrailLook::NUMSNAILCOLORS - 1, index));

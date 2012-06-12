@@ -76,7 +76,7 @@ SymbolsConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(Trail, df)) {
     TrailSettings::Length trail_length = (TrailSettings::Length)df.GetAsInteger();
-    ShowTrailControls(trail_length != TrailSettings::TRAIL_OFF);
+    ShowTrailControls(trail_length != TrailSettings::Length::OFF);
   }
 }
 
@@ -89,10 +89,10 @@ static const StaticEnumChoice  track_bearing_mode_list[] = {
 
 const TCHAR *trail_length_help = N_("Determines whether and how long a snail trail is drawn behind the glider.");
 static const StaticEnumChoice  trail_length_list[] = {
-  { TrailSettings::TRAIL_OFF, N_("Off"), trail_length_help },
-  { TrailSettings::TRAIL_LONG, N_("Long"), trail_length_help },
-  { TrailSettings::TRAIL_SHORT, N_("Short"), trail_length_help },
-  { TrailSettings::TRAIL_FULL, N_("Full"), trail_length_help },
+  { (unsigned)TrailSettings::Length::OFF, N_("Off"), trail_length_help },
+  { (unsigned)TrailSettings::Length::LONG, N_("Long"), trail_length_help },
+  { (unsigned)TrailSettings::Length::SHORT, N_("Short"), trail_length_help },
+  { (unsigned)TrailSettings::Length::FULL, N_("Full"), trail_length_help },
   { 0 }
 };
 
@@ -137,7 +137,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.show_flarm_on_map);
 
   AddEnum(_("Trail length"), NULL, trail_length_list,
-          settings_map.trail.length, this);
+          (unsigned)settings_map.trail.length, this);
   SetExpertRow(Trail);
 
   AddBoolean(_("Trail drift"),
@@ -168,7 +168,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           wind_arrow_list, settings_map.wind_arrow_style);
   SetExpertRow(WindArrowStyle);
 
-  ShowTrailControls(settings_map.trail.length != TrailSettings::TRAIL_OFF);
+  ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }
 
 bool

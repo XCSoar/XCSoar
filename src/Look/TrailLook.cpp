@@ -55,9 +55,9 @@ TrailLook::Initialise(const TrailSettings &settings)
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; ++i) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings.type == TrailSettings::stAltitude) ?
+    Color color = (settings.type == TrailSettings::Type::ALTITUDE) ?
                   ColorRampLookup(ih, snail_colors_alt, 5) :
-                  (settings.type == TrailSettings::stSeeYouVario) ?
+                  (settings.type == TrailSettings::Type::VARIO_2) ?
                   ColorRampLookup(ih, snail_colors_vario2, 4) :
                   ColorRampLookup(ih, snail_colors_vario, 3);
 
