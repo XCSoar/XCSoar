@@ -27,7 +27,7 @@
 #include "Screen/Layout.hpp"
 
 void
-TrailLook::Initialise(const MapSettings &settings_map)
+TrailLook::Initialise(const TrailSettings &settings)
 {
   static gcc_constexpr_data ColorRamp snail_colors_vario[] = {
     {0,   0xc4, 0x80, 0x1e}, // sinkColor
@@ -55,14 +55,14 @@ TrailLook::Initialise(const MapSettings &settings_map)
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; ++i) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings_map.trail.type == stAltitude) ?
+    Color color = (settings.type == stAltitude) ?
                   ColorRampLookup(ih, snail_colors_alt, 5) :
-                  (settings_map.trail.type == stSeeYouVario) ?
+                  (settings.type == stSeeYouVario) ?
                   ColorRampLookup(ih, snail_colors_vario2, 4) :
                   ColorRampLookup(ih, snail_colors_vario, 3);
 
     if (i < NUMSNAILCOLORS / 2 ||
-        !settings_map.trail.scaling_enabled)
+        !settings.scaling_enabled)
       iwidth = minwidth;
     else
       iwidth = max(minwidth,

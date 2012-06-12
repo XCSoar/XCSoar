@@ -34,7 +34,7 @@ MapLook::Initialise(const MapSettings &settings)
   aircraft.Initialise();
   task.Initialise();
   marker.Initialise();
-  trail.Initialise(settings);
+  trail.Initialise(settings.trail);
   wind.Initialise();
 
 #ifdef HAVE_HATCHED_BRUSH
