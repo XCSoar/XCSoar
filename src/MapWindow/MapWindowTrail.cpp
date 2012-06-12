@@ -40,5 +40,5 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
     trail_renderer.Draw(canvas, glide_computer->GetTraceComputer(),
                         render_projection, min_time,
                         enable_traildrift, aircraft_pos,
-                        Basic(), Calculated(), GetMapSettings());
+                        Basic(), Calculated(), GetMapSettings().trail);
 }
