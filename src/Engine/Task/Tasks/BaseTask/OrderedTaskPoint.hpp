@@ -143,7 +143,11 @@ public:
    *
    * @return Previous task point
    */
-  OrderedTaskPoint* get_previous() const {
+  const OrderedTaskPoint *get_previous() const {
+    return tp_previous;
+  }
+
+  OrderedTaskPoint *get_previous() {
     return tp_previous;
   }
 
@@ -152,7 +156,11 @@ public:
    *
    * @return Next task point
    */
-  OrderedTaskPoint* get_next() const {
+  const OrderedTaskPoint *get_next() const {
+    return tp_next;
+  }
+
+  OrderedTaskPoint *get_next() {
     return tp_next;
   }
   

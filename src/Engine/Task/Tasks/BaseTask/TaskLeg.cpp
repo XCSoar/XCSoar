@@ -41,8 +41,14 @@ TaskLeg::origin() const
   return destination.get_previous();
 }
 
-OrderedTaskPoint* 
+const OrderedTaskPoint *
 TaskLeg::next() const
+{
+  return destination.get_next();
+}
+
+OrderedTaskPoint *
+TaskLeg::next()
 {
   return destination.get_next();
 }

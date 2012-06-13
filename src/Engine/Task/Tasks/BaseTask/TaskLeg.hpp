@@ -181,7 +181,10 @@ private:
   const OrderedTaskPoint* origin() const;
 
   gcc_pure
-  OrderedTaskPoint* next() const;
+  const OrderedTaskPoint *next() const;
+
+  gcc_pure
+  OrderedTaskPoint *next();
 };
 
 #endif
