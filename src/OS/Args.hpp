@@ -146,8 +146,12 @@ public:
     assert(!IsEmpty());
 
     const char *p = args.front();
-    args.pop_front();
+    Skip();
     return p;
+  }
+
+  void Skip() {
+    args.pop_front();
   }
 
   const char *PeekNext() const {
