@@ -236,10 +236,9 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
       ShowWaypointListDialog(wf.GetMainWindow(),
-                        ordered_task->TaskSize() > 0 ?
-                          ordered_task->get_tp(ordered_task->
-                              TaskSize() - 1)->GetLocation() :
-                          XCSoarInterface::Basic().location,
+                             ordered_task->TaskSize() > 0
+                             ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
+                             : XCSoarInterface::Basic().location,
                         ordered_task, ItemIndex);
     if (!way_point)
       return;

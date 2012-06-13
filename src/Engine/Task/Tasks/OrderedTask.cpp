@@ -1374,15 +1374,6 @@ OrderedTask::Clear()
   active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
 }
 
-OrderedTaskPoint* 
-OrderedTask::get_tp(const unsigned position)
-{
-  if (position >= TaskSize())
-    return NULL;
-
-  return task_points[position];
-}
-
 FlatBoundingBox 
 OrderedTask::get_bounding_box(const GeoBounds& bounds) const
 {

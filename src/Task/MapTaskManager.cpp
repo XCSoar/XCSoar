@@ -42,11 +42,8 @@ AppendToTask(OrderedTask *task, const Waypoint &waypoint)
   int i = task->TaskSize() - 1;
   // skip all finish points
   while (i >= 0) {
-    const OrderedTaskPoint *tp = task->get_tp(i);
-    if (tp == NULL)
-      break;
-
-    if (tp->successor_allowed()) {
+    const OrderedTaskPoint &tp = task->GetPoint(i);
+    if (tp.successor_allowed()) {
       ++i;
       break;
     }
@@ -153,8 +150,8 @@ InsertInTask(OrderedTask *task, const Waypoint &waypoint)
     if (i >= (int)task->TaskSize())
       return MapTaskManager::UNMODIFIED;
 
-    const OrderedTaskPoint *task_point = task->get_tp(i);
-    if (task_point == NULL || task_point->predecessor_allowed())
+    const OrderedTaskPoint &task_point = task->GetPoint(i);
+    if (task_point.predecessor_allowed())
       break;
 
     ++i;

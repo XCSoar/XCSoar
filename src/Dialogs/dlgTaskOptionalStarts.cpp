@@ -76,7 +76,7 @@ OnOptionalStartPaintListItem(Canvas &canvas, const PixelRect rc,
 
     const OrderedTaskPoint *tp;
     if (DrawListIndex == 0 && RealStartExists) {
-      tp = ordered_task->get_tp(0);
+      tp = &ordered_task->GetPoint(0);
       canvas.text(pt.x, pt.y, _T("*"));
       pt.x += canvas.CalcTextWidth(_T("*"));
     } else
@@ -103,9 +103,11 @@ OnOptionalStartListEnter(unsigned ItemIndex)
   const unsigned index_optional_starts = ItemIndex - (RealStartExists ? 1 : 0);
 
   if (index_optional_starts < ordered_task->optional_start_points_size()) {
+    const GeoPoint &location = ordered_task->TaskSize() > 0
+      ? ordered_task->GetPoint(0).GetLocation()
+      : XCSoarInterface::Basic().location;
     const Waypoint* way_point = ShowWaypointListDialog(wf->GetMainWindow(),
-        ordered_task->TaskSize() > 0 ? ordered_task->get_tp(0)->GetLocation()
-            : XCSoarInterface::Basic().location);
+                                                       location);
     if (!way_point)
       return;
 
@@ -114,15 +116,15 @@ OnOptionalStartListEnter(unsigned ItemIndex)
 
   } else if (!ordered_task->is_max_size()) {
 
-    AbstractTaskFactory &factory = ordered_task->GetFactory();
+    const GeoPoint &location = ordered_task->TaskSize() > 0
+      ? ordered_task->GetPoint(0).GetLocation()
+      : XCSoarInterface::Basic().location;
     const Waypoint* way_point =
-        ShowWaypointListDialog(wf->GetMainWindow(),
-                          ordered_task->TaskSize() > 0 ?
-                          ordered_task->get_tp(0)->GetLocation() :
-                          XCSoarInterface::Basic().location);
+      ShowWaypointListDialog(wf->GetMainWindow(), location);
     if (!way_point)
       return;
 
+    AbstractTaskFactory &factory = ordered_task->GetFactory();
     if (factory.AppendOptionalStart(*way_point)) {
       task_modified = true;
     }

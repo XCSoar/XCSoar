@@ -83,9 +83,7 @@ RefreshView()
 {
   wTaskView->Invalidate();
 
-  OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-  if (!tp)
-    return;
+  const OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
 
   Refreshing = true; // tell onChange routines not to save form!
 
@@ -93,7 +91,7 @@ RefreshView()
   ShowFormControl(*wf, _T("frmOZSector"), false);
   ShowFormControl(*wf, _T("frmOZCylinder"), false);
 
-  const ObservationZonePoint &oz = *tp->GetOZPoint();
+  const ObservationZonePoint &oz = *tp.GetOZPoint();
 
   switch (oz.shape) {
   case ObservationZonePoint::SECTOR:
@@ -138,7 +136,7 @@ RefreshView()
   WndFrame* wfrm = NULL;
   wfrm = ((WndFrame*)wf->FindByName(_T("lblType")));
   if (wfrm)
-    wfrm->SetCaption(OrderedTaskPointName(ordered_task->GetFactory().GetType(*tp)));
+    wfrm->SetCaption(OrderedTaskPointName(ordered_task->GetFactory().GetType(tp)));
 
   SetFormControlEnabled(*wf, _T("butPrevious"), active_index > 0);
   SetFormControlEnabled(*wf, _T("butNext"),
@@ -161,7 +159,7 @@ RefreshView()
 
   StaticString<100> name_prefix_buffer, type_buffer;
 
-  switch (tp->GetType()) {
+  switch (tp.GetType()) {
   case TaskPoint::START:
     type_buffer = _T("Start point");
     name_prefix_buffer = _T("Start: ");
@@ -193,7 +191,7 @@ RefreshView()
   if (wfrm) {
     StaticString<100> buffer;
     buffer.Format(_T("%s %s"), name_prefix_buffer.c_str(),
-                  tp->GetWaypoint().name.c_str());
+                  tp.GetWaypoint().name.c_str());
     wfrm->SetCaption(buffer);
   }
 
@@ -203,8 +201,8 @@ RefreshView()
 static void
 ReadValues()
 {
-  OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-  ObservationZonePoint &oz = *tp->GetOZPoint();
+  OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
+  ObservationZonePoint &oz = *tp.GetOZPoint();
 
   switch (oz.shape) {
   case ObservationZonePoint::ANNULAR_SECTOR: {
@@ -270,12 +268,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   PixelRect rc = Sender->GetClientRect();
 
-  OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-
-  if (!tp) {
-    canvas.ClearWhite();
-    return;
-  }
+  const OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
@@ -284,7 +277,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   const MapLook &look = UIGlobals::GetMapLook();
   const NMEAInfo &basic = CommonInterface::Basic();
-  PaintTaskPoint(canvas, rc, *ordered_task, *tp,
+  PaintTaskPoint(canvas, rc, *ordered_task, tp,
                  basic.location_available, basic.location,
                  XCSoarInterface::GetMapSettings(),
                  look.task, look.airspace,
@@ -308,18 +301,17 @@ OnRemoveClicked(gcc_unused WndButton &Sender)
 static void
 OnDetailsClicked(gcc_unused WndButton &Sender)
 {
-  OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
-  if (task_point)
-    dlgWaypointDetailsShowModal(wf->GetMainWindow(),
-                                task_point->GetWaypoint(), false);
+  const OrderedTaskPoint &task_point = ordered_task->GetPoint(active_index);
+  dlgWaypointDetailsShowModal(wf->GetMainWindow(),
+                              task_point.GetWaypoint(), false);
 }
 
 static void
 OnRelocateClicked(gcc_unused WndButton &Sender)
 {
-  const GeoPoint &gpBearing = (active_index ?
-                               ordered_task->get_tp(active_index - 1)->GetLocation() :
-                               XCSoarInterface::Basic().location);
+  const GeoPoint &gpBearing = active_index > 0
+    ? ordered_task->GetPoint(active_index - 1).GetLocation()
+    : CommonInterface::Basic().location;
 
   const Waypoint *wp = ShowWaypointListDialog(wf->GetMainWindow(), gpBearing,
                                          ordered_task, active_index);

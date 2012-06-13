@@ -86,19 +86,19 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
       return true;
 
     case 2:
-      return p.Distance(task->get_tp(1)->GetLocation()) > min_fai_leg;
+      return p.Distance(task->GetPoint(1).GetLocation()) > min_fai_leg;
 
     default: // size == 3 or 4
-      if (!IsFAIAngle(p, task->get_tp(1)->GetLocation(),
-                      task->get_tp(2)->GetLocation(), right))
+      if (!IsFAIAngle(p, task->GetPoint(1).GetLocation(),
+                      task->GetPoint(2).GetLocation(), right))
         return false;
       if (t_size == 3) {
-        return TestFAITriangle(p.Distance(task->get_tp(1)->GetLocation()),
+        return TestFAITriangle(p.Distance(task->GetPoint(1).GetLocation()),
                                leg2,
-                               task->get_tp(2)->GetLocation().Distance(p));
+                               task->GetPoint(2).GetLocation().Distance(p));
       } else if (t_size == 4) {
-        return (wp == task->get_tp(3)->GetWaypoint()) &&
-               TestFAITriangle(p.Distance(task->get_tp(1)->GetLocation()),
+        return (wp == task->GetPoint(3).GetWaypoint()) &&
+               TestFAITriangle(p.Distance(task->GetPoint(1).GetLocation()),
                                leg2,
                                leg3);
       }
@@ -109,52 +109,52 @@ FAITrianglePointValidator::IsFAITrianglePoint(const Waypoint& wp,
     assert(t_size > 0);
 
     if (t_size <= 2)
-      return p.Distance(task->get_tp(0)->GetLocation()) > min_fai_leg;
+      return p.Distance(task->GetPoint(0).GetLocation()) > min_fai_leg;
 
     // size == 3 or 4
-    if (!IsFAIAngle(task->get_tp(0)->GetLocation(),
+    if (!IsFAIAngle(task->GetPoint(0).GetLocation(),
                     p,
-                    task->get_tp(2)->GetLocation(), right))
+                    task->GetPoint(2).GetLocation(), right))
       return false;
 
     if (t_size == 3) {
-      return TestFAITriangle(p.Distance(task->get_tp(0)->GetLocation()),
-                             p.Distance(task->get_tp(2)->GetLocation()),
-                             task->get_tp(2)->GetLocation().
-                                Distance(task->get_tp(0)->GetLocation()));
+      return TestFAITriangle(p.Distance(task->GetPoint(0).GetLocation()),
+                             p.Distance(task->GetPoint(2).GetLocation()),
+                             task->GetPoint(2).GetLocation().
+                                Distance(task->GetPoint(0).GetLocation()));
     } else if (t_size == 4) {
-      return TestFAITriangle(p.Distance(task->get_tp(0)->GetLocation()),
-                             p.Distance(task->get_tp(2)->GetLocation()),
+      return TestFAITriangle(p.Distance(task->GetPoint(0).GetLocation()),
+                             p.Distance(task->GetPoint(2).GetLocation()),
                              leg3);
     }
   }
   // append or replace point #2
   if (t_index == 2) {
     assert(t_size >= 2);
-    if (!IsFAIAngle(task->get_tp(0)->GetLocation(),
-                    task->get_tp(1)->GetLocation(),
+    if (!IsFAIAngle(task->GetPoint(0).GetLocation(),
+                    task->GetPoint(1).GetLocation(),
                     p, right))
       return false;
 
     if (t_size < 4) { // no finish point yet
       return TestFAITriangle(leg1,
-                             p.Distance(task->get_tp(1)->GetLocation()),
-                             p.Distance(task->get_tp(0)->GetLocation()));
+                             p.Distance(task->GetPoint(1).GetLocation()),
+                             p.Distance(task->GetPoint(0).GetLocation()));
 
     } else { // already finish point(#3) exists
-      return (task->get_tp(0)->GetWaypoint() == task->get_tp(3)->GetWaypoint()) &&
-              TestFAITriangle(leg1,
-                              p.Distance(task->get_tp(1)->GetLocation()),
-                              p.Distance(task->get_tp(0)->GetLocation()));
+      return task->GetPoint(0).GetWaypoint() == task->GetPoint(3).GetWaypoint() &&
+        TestFAITriangle(leg1,
+                        p.Distance(task->GetPoint(1).GetLocation()),
+                        p.Distance(task->GetPoint(0).GetLocation()));
     }
   }
   // append or replace finish
   if (t_index == 3) {
     assert (t_size == 3 || t_size == 4);
-    return (wp == task->get_tp(0)->GetWaypoint()) &&
+    return (wp == task->GetPoint(0).GetWaypoint()) &&
             TestFAITriangle(leg1,
                             leg2,
-                            p.Distance(task->get_tp(2)->GetLocation()));
+                            p.Distance(task->GetPoint(2).GetLocation()));
   }
   return true;
 }

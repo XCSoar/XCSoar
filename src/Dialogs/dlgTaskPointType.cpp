@@ -126,14 +126,14 @@ SetPointType(AbstractTaskFactory::LegalPointType type)
     } else {
       if (factory.IsValidFinishType(type) &&
           ordered_task->get_ordered_task_behaviour().is_closed)
-        way_point = &(ordered_task->get_tp(0)->GetWaypoint());
-      else
+        way_point = &ordered_task->GetPoint(0).GetWaypoint();
+      else {
+        const GeoPoint &location = ordered_task->TaskSize() > 0
+          ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
+          : CommonInterface::Basic().location;
         way_point =
-          ShowWaypointListDialog(wf->GetMainWindow(),
-                              ordered_task->TaskSize() > 0 ?
-                              ordered_task->get_tp(ordered_task->
-                                  TaskSize() - 1)->GetLocation() :
-                              XCSoarInterface::Basic().location);
+          ShowWaypointListDialog(wf->GetMainWindow(), location);
+      }
       if (!way_point)
         return false;
 
@@ -200,11 +200,8 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   task_modified = false;
   active_index = index;
 
-  point = ordered_task->get_tp(active_index);
-  if (point)
-    way_point = &point->GetWaypoint();
-  else
-    way_point = NULL;
+  point = &ordered_task->GetPoint(active_index);
+  way_point = &point->GetWaypoint();
 
   if (Layout::landscape)
     wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE_L"));

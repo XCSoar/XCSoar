@@ -851,15 +851,6 @@ public:
    */
   void set_ordered_task_behaviour(const OrderedTaskBehaviour& ob);
 
-  /** 
-   * Retrieve task point by index
-   * 
-   * @param index index position of task point
-   * @return Task point or NULL if not found
-   */
-  gcc_pure
-  OrderedTaskPoint* get_tp(const unsigned index);
-
   gcc_pure
   OrderedTaskPoint &GetPoint(const unsigned i) {
     assert(i < task_points.size());
