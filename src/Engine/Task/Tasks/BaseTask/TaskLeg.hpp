@@ -38,8 +38,8 @@ class OrderedTaskPoint;
  * to various metrics.
  *  
  * All of the scan_ methods propagate forwards to the end of the task.
- * Some of these, e.g. scan_distance_remaining() can be called from
- * the current task point, whereas others (e.g. scan_distance_nominal)
+ * Some of these, e.g. ScanDistanceRemaining() can be called from
+ * the current task point, whereas others (e.g. ScanDistanceNominal)
  * should be called from the StartPoint.
  *
  * This class uses mementos to reduce expensive re-calculation of static data.
@@ -76,7 +76,8 @@ public:
    *
    * @return Distance (m) of nominal task
    */
-  fixed scan_distance_nominal() const;
+  gcc_pure
+  fixed ScanDistanceNominal() const;
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's
@@ -85,7 +86,8 @@ public:
    *
    * @return Distance (m) of planned task
    */
-  fixed scan_distance_planned();
+  gcc_pure
+  fixed ScanDistancePlanned();
 
   /**
    * Calculate distance of maximum achievable task (sum of distances from
@@ -94,7 +96,8 @@ public:
    *
    * @return Distance (m) of maximum achievable task
    */
-  fixed scan_distance_max() const;
+  gcc_pure
+  fixed ScanDistanceMax() const;
 
   /**
    * Calculate distance of minimum achievable task (sum of distances from
@@ -103,7 +106,7 @@ public:
    *
    * @return Distance (m) of minimum achievable task
    */
-  fixed scan_distance_min() const;
+  fixed ScanDistanceMin() const;
 
   /**
    * Calculate distance of planned task (sum of distances from aircraft to
@@ -114,7 +117,7 @@ public:
    *
    * @return Distance (m) remaining in the planned task
    */
-  fixed scan_distance_remaining(const GeoPoint &ref);
+  fixed ScanDistanceRemaining(const GeoPoint &ref);
 
   /**
    * Calculate scored distance of achieved part of task.
@@ -123,7 +126,7 @@ public:
    *
    * @return Distance (m) achieved adjusted for scoring
    */
-  fixed scan_distance_scored(const GeoPoint &ref) const;
+  fixed ScanDistanceScored(const GeoPoint &ref) const;
 
   /**
    * Calculate distance of achieved part of task.
@@ -135,7 +138,7 @@ public:
    *
    * @return Distance (m) achieved
    */
-  fixed scan_distance_travelled(const GeoPoint &ref);
+  fixed ScanDistanceTravelled(const GeoPoint &ref);
 
   /**
    * Retrieve maximum possible leg distance
@@ -143,7 +146,7 @@ public:
    * @return Distance (m)
    */
   gcc_pure
-  fixed leg_distance_max() const;
+  fixed GetMaximumLegDistance() const;
   
   /**
    * Retrieve min possible leg distance
@@ -151,7 +154,7 @@ public:
    * @return Distance (m)
    */
   gcc_pure
-  fixed leg_distance_min() const;
+  fixed GetMinimumLegDistance() const;
 
   /**
    * Retrieve nominal leg distance
@@ -159,32 +162,32 @@ public:
    * @return Distance (m)
    */
   gcc_pure
-  fixed leg_distance_nominal() const;
+  fixed GetNominalLegDistance() const;
 
   gcc_pure
-  GeoVector leg_vector_nominal() const;
+  GeoVector GetNominalLegVector() const;
 
 private:
   gcc_pure
-  GeoVector leg_vector_planned() const;
+  GeoVector GetPlannedVector() const;
   
   gcc_pure
-  GeoVector leg_vector_travelled(const GeoPoint &ref) const;
+  GeoVector GetTravelledVector(const GeoPoint &ref) const;
   
   gcc_pure
-  GeoVector leg_vector_remaining(const GeoPoint &ref) const;
+  GeoVector GetRemainingVector(const GeoPoint &ref) const;
 
   gcc_pure
-  fixed leg_distance_scored(const GeoPoint &ref) const;
+  fixed GetScoredDistance(const GeoPoint &ref) const;
 
   gcc_pure
-  const OrderedTaskPoint* origin() const;
+  const OrderedTaskPoint *GetOrigin() const;
 
   gcc_pure
-  const OrderedTaskPoint *next() const;
+  const OrderedTaskPoint *GetNext() const;
 
   gcc_pure
-  OrderedTaskPoint *next();
+  OrderedTaskPoint *GetNext();
 };
 
 #endif

@@ -43,7 +43,7 @@ AppendToTask(OrderedTask *task, const Waypoint &waypoint)
   // skip all finish points
   while (i >= 0) {
     const OrderedTaskPoint &tp = task->GetPoint(i);
-    if (tp.successor_allowed()) {
+    if (tp.IsSuccessorAllowed()) {
       ++i;
       break;
     }
@@ -151,7 +151,7 @@ InsertInTask(OrderedTask *task, const Waypoint &waypoint)
       return MapTaskManager::UNMODIFIED;
 
     const OrderedTaskPoint &task_point = task->GetPoint(i);
-    if (task_point.predecessor_allowed())
+    if (task_point.IsPredecessorAllowed())
       break;
 
     ++i;

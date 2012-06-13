@@ -225,8 +225,8 @@ Serialiser::Serialise(const OrderedTaskBehaviour &data)
 void 
 Serialiser::Serialise(const OrderedTask &task)
 {
-  node.SetAttribute(_T("type"), GetTaskFactoryType(task.get_factory_type()));
-  Serialise(task.get_ordered_task_behaviour());
+  node.SetAttribute(_T("type"), GetTaskFactoryType(task.GetFactoryType()));
+  Serialise(task.GetOrderedTaskBehaviour());
   mode_optional_start = false;
   task.AcceptTaskPointVisitor(*this);
   mode_optional_start = true;

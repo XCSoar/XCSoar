@@ -154,7 +154,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
   const TaskStats &stats = task->GetStats();
   TCHAR summary_shape[100];
   bool FAIShape = TaskSummaryShape(task, summary_shape);
-  if (FAIShape || task->get_factory_type() == TaskFactoryType::FAI_GENERAL) {
+  if (FAIShape || task->GetFactoryType() == TaskFactoryType::FAI_GENERAL) {
     if (!task->GetFactory().ValidateFAIOZs()) {
       _tcscat(summary_shape, _T("/ "));
       _tcscat(summary_shape, getTaskValidationErrors(
@@ -175,7 +175,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 
   if (!task->TaskSize()) {
     _stprintf(text, _("Task is empty (%s)"),
-             OrderedTaskFactoryName(task->get_factory_type()));
+             OrderedTaskFactoryName(task->GetFactoryType()));
   } else {
     if (task->HasTargets())
       _stprintf(text, _T("%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)"),
@@ -191,7 +191,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
                 _("min."),
                 (double)Units::ToUserDistance(stats.distance_min),
                 Units::GetDistanceName(),
-                OrderedTaskFactoryName(task->get_factory_type()));
+                OrderedTaskFactoryName(task->GetFactoryType()));
     else
       _stprintf(text, _T("%s%s%s %.0f %s (%s)"),
                 summary_shape,
@@ -199,7 +199,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
                 _("dist."),
                 (double)Units::ToUserDistance(stats.distance_nominal),
                 Units::GetDistanceName(),
-                OrderedTaskFactoryName(task->get_factory_type()));
+                OrderedTaskFactoryName(task->GetFactoryType()));
   }
 }
 

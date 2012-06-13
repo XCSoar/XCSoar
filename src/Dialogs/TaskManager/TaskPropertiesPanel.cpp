@@ -75,7 +75,7 @@ TaskPropertiesPanel::InitView()
       dfe->addEnumText(OrderedTaskFactoryName(factory_types[i]),
           (unsigned)factory_types[i], OrderedTaskFactoryDescription(
               factory_types[i]));
-      if (factory_types[i] == ordered_task->get_factory_type())
+      if (factory_types[i] == ordered_task->GetFactoryType())
         dfe->Set((unsigned)factory_types[i]);
     }
     wp->RefreshDisplay();
@@ -85,8 +85,8 @@ TaskPropertiesPanel::InitView()
 void
 TaskPropertiesPanel::RefreshView()
 {
-  const TaskFactoryType ftype = ordered_task->get_factory_type();
-  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+  const TaskFactoryType ftype = ordered_task->GetFactoryType();
+  const OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
 
   bool aat_types = (ftype == TaskFactoryType::AAT);
   bool fai_start_finish = p.fai_finish;
@@ -125,9 +125,9 @@ TaskPropertiesPanel::RefreshView()
 void
 TaskPropertiesPanel::ReadValues()
 {
-  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+  OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
 
-  TaskFactoryType newtype = ordered_task->get_factory_type();
+  TaskFactoryType newtype = ordered_task->GetFactoryType();
   *task_changed |= SaveFormPropertyEnum(form, _T("prpTaskType"), newtype);
 
   int min_time = GetFormValueInteger(form, _T("prpMinTime"));
@@ -175,7 +175,7 @@ TaskPropertiesPanel::ReadValues()
 void
 TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 {
-  OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
+  OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
   bool newvalue = df.GetAsBoolean();
   if (newvalue != p.fai_finish) {
     p.fai_finish = newvalue;
@@ -196,7 +196,7 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
 {
   const TaskFactoryType newtype =
     (TaskFactoryType)df.GetAsInteger();
-  if (newtype != ordered_task->get_factory_type()) {
+  if (newtype != ordered_task->GetFactoryType()) {
     ReadValues();
     ordered_task->SetFactory(newtype);
     *task_changed =true;
@@ -246,7 +246,7 @@ void
 TaskPropertiesPanel::Show(const PixelRect &rc)
 {
   ordered_task = *ordered_task_pointer;
-  orig_taskType = ordered_task->get_factory_type();
+  orig_taskType = ordered_task->GetFactoryType();
 
   LoadFormProperty(form, _T("prpTaskType"), (unsigned)orig_taskType);
   dlgTaskManager::TaskViewRestore(wTaskView);
@@ -259,7 +259,7 @@ bool
 TaskPropertiesPanel::Leave()
 {
   ReadValues();
-  if (orig_taskType != ordered_task->get_factory_type())
+  if (orig_taskType != ordered_task->GetFactoryType())
     ordered_task->GetFactory().MutateTPsToTaskType();
 
   return true;

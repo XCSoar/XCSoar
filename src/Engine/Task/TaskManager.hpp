@@ -321,7 +321,7 @@ public:
    * @return Task advance mechanism
    */
   const TaskAdvance &GetTaskAdvance() const {
-    return task_ordered.get_task_advance();
+    return task_ordered.GetTaskAdvance();
   }
 
   /**
@@ -330,7 +330,7 @@ public:
    * @return Task advance mechanism
    */
   TaskAdvance& GetTaskAdvance() {
-    return task_ordered.get_task_advance();
+    return task_ordered.GetTaskAdvance();
   }
 
   /**
@@ -514,7 +514,7 @@ public:
    * @return Read-only OrderedTaskBehaviour
    */
   const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const {
-    return task_ordered.get_ordered_task_behaviour();
+    return task_ordered.GetOrderedTaskBehaviour();
   }
 
   /** 
@@ -523,7 +523,7 @@ public:
    * @return OrderedTaskBehaviour reference
    */
   OrderedTaskBehaviour &GetOrderedTaskBehaviour() {
-    return task_ordered.get_ordered_task_behaviour();
+    return task_ordered.GetOrderedTaskBehaviour();
   }
 
   /** 

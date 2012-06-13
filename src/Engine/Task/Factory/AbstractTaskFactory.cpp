@@ -74,27 +74,27 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   switch (tp.GetType()) {
   case TaskPoint::START:
     if (!IsValidStartType(newtype)) {
-      newtype = m_behaviour.sector_defaults.start_type;
+      newtype = behaviour.sector_defaults.start_type;
       if (!IsValidStartType(newtype))
-        newtype = *m_start_types.begin();
+        newtype = *start_types.begin();
     }
     break;
 
   case TaskPoint::AST:
   case TaskPoint::AAT:
     if (!IsValidIntermediateType(newtype)) {
-      newtype = m_behaviour.sector_defaults.turnpoint_type;
+      newtype = behaviour.sector_defaults.turnpoint_type;
       if (!IsValidIntermediateType(newtype)) {
-        newtype = *m_intermediate_types.begin();
+        newtype = *intermediate_types.begin();
       }
     }
     break;
 
   case TaskPoint::FINISH:
     if (!IsValidFinishType(newtype)) {
-      newtype = m_behaviour.sector_defaults.finish_type;
+      newtype = behaviour.sector_defaults.finish_type;
       if (!IsValidFinishType(newtype))
-        newtype = *m_finish_types.begin();
+        newtype = *finish_types.begin();
     }
     break;
 
@@ -109,36 +109,36 @@ StartPoint*
 AbstractTaskFactory::CreateStart(ObservationZonePoint* oz,
                                  const Waypoint& wp) const
 {
-  return new StartPoint(oz, wp, m_behaviour, GetOrderedTaskBehaviour());
+  return new StartPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
 }
 
 FinishPoint*
 AbstractTaskFactory::CreateFinish(ObservationZonePoint* oz,
                                   const Waypoint& wp) const
 {
-  return new FinishPoint(oz, wp, m_behaviour, GetOrderedTaskBehaviour());
+  return new FinishPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
 }
 
 AATPoint*
 AbstractTaskFactory::CreateAATPoint(ObservationZonePoint* oz,
                                const Waypoint& wp) const
 {
-  return new AATPoint(oz, wp, m_behaviour, GetOrderedTaskBehaviour());
+  return new AATPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
 }
 
 ASTPoint*
 AbstractTaskFactory::CreateASTPoint(ObservationZonePoint* oz,
                                const Waypoint& wp) const
 {
-  return new ASTPoint(oz, wp, m_behaviour, GetOrderedTaskBehaviour());
+  return new ASTPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
 }
 
 StartPoint* 
 AbstractTaskFactory::CreateStart(const Waypoint &wp) const
 {
-  LegalPointType type = m_behaviour.sector_defaults.start_type;
+  LegalPointType type = behaviour.sector_defaults.start_type;
   if (!IsValidStartType(type))
-    type = *m_start_types.begin();
+    type = *start_types.begin();
 
   return CreateStart(type, wp);
 }
@@ -146,15 +146,15 @@ AbstractTaskFactory::CreateStart(const Waypoint &wp) const
 IntermediateTaskPoint* 
 AbstractTaskFactory::CreateIntermediate(const Waypoint &wp) const
 {
-  if (GetOrderedTaskBehaviour().homogeneous_tps && m_task.TaskSize() > 1) {
-    LegalPointType type = GetType(m_task.GetPoint(1));
+  if (GetOrderedTaskBehaviour().homogeneous_tps && task.TaskSize() > 1) {
+    LegalPointType type = GetType(task.GetPoint(1));
     if (IsValidIntermediateType(type))
       return CreateIntermediate(type, wp);
   }
 
-  LegalPointType type = m_behaviour.sector_defaults.turnpoint_type;
+  LegalPointType type = behaviour.sector_defaults.turnpoint_type;
   if (!IsValidIntermediateType(type))
-    type = *m_intermediate_types.begin();
+    type = *intermediate_types.begin();
 
   return CreateIntermediate(type, wp);
 }
@@ -162,9 +162,9 @@ AbstractTaskFactory::CreateIntermediate(const Waypoint &wp) const
 FinishPoint* 
 AbstractTaskFactory::CreateFinish(const Waypoint &wp) const
 {
-  LegalPointType type = m_behaviour.sector_defaults.finish_type;
+  LegalPointType type = behaviour.sector_defaults.finish_type;
   if (!IsValidFinishType(type))
-    type = *m_finish_types.begin();
+    type = *finish_types.begin();
 
   return CreateFinish(type, wp);
 }
@@ -281,7 +281,7 @@ AbstractTaskFactory::GetPointDefaultSizes(const LegalPointType type,
                                           fixed &turnpoint_radius,
                                           fixed &finish_radius) const
 {
-  TaskBehaviour ob = this->m_behaviour;
+  TaskBehaviour ob = this->behaviour;
 
   if (start_radius < fixed_zero)
     start_radius = ob.sector_defaults.start_radius;
@@ -374,19 +374,19 @@ bool
 AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
                             const bool auto_mutate)
 {
-  if (m_task.is_max_size())
+  if (task.IsFull())
     return false;
 
   if (auto_mutate) {
-    if (!m_task.TaskSize()) {
+    if (!task.TaskSize()) {
       // empty task, so add as a start point
-      if (IsValidType(new_tp, m_task.TaskSize())) {
+      if (IsValidType(new_tp, task.TaskSize())) {
         // candidate is ok, so add it
-        return m_task.Append(new_tp);
+        return task.Append(new_tp);
       } else {
         // candidate must be transformed into a startpoint
         StartPoint* sp = CreateStart(new_tp.GetWaypoint());
-        bool success = m_task.Append(*sp);
+        bool success = task.Append(*sp);
         delete sp;
         return success;
       }
@@ -394,27 +394,27 @@ AbstractTaskFactory::Append(const OrderedTaskPoint &new_tp,
 
     // non-empty task
 
-    if (m_task.HasFinish()) {
+    if (task.HasFinish()) {
       // old finish must be mutated into an intermediate point
       IntermediateTaskPoint* sp =
-        CreateIntermediate(m_task.GetTaskPoint(m_task.TaskSize() - 1).GetWaypoint());
+        CreateIntermediate(task.GetTaskPoint(task.TaskSize() - 1).GetWaypoint());
 
-      m_task.Replace(*sp, m_task.TaskSize()-1);
+      task.Replace(*sp, task.TaskSize()-1);
       delete sp;
     }
 
-    if (IsValidType(new_tp, m_task.TaskSize()))
+    if (IsValidType(new_tp, task.TaskSize()))
       // ok to append directly
-      return m_task.Append(new_tp);
+      return task.Append(new_tp);
 
     // this point must be mutated into a finish
     FinishPoint* sp = CreateFinish(new_tp.GetWaypoint());
-    bool success = m_task.Append(*sp);
+    bool success = task.Append(*sp);
     delete sp;
     return success;
   }
 
-  return m_task.Append(new_tp);
+  return task.Append(new_tp);
 }
 
 bool 
@@ -425,7 +425,7 @@ AbstractTaskFactory::Replace(const OrderedTaskPoint &new_tp,
   if (auto_mutate) {
     if (IsValidType(new_tp, position))
       // ok to replace directly
-      return m_task.Replace(new_tp, position);
+      return task.Replace(new_tp, position);
 
     // will need to convert type of candidate
     OrderedTaskPoint *tp;
@@ -433,7 +433,7 @@ AbstractTaskFactory::Replace(const OrderedTaskPoint &new_tp,
       // candidate must be transformed into a startpoint
       tp = CreateStart(new_tp.GetWaypoint());
     } else if (IsPositionFinish(position) &&
-               position + 1 == m_task.TaskSize()) {
+               position + 1 == task.TaskSize()) {
       // this point must be mutated into a finish
       tp = CreateFinish(new_tp.GetWaypoint());
     } else {
@@ -441,12 +441,12 @@ AbstractTaskFactory::Replace(const OrderedTaskPoint &new_tp,
       tp = CreateIntermediate(new_tp.GetWaypoint());
     }
 
-    bool success = m_task.Replace(*tp, position);
+    bool success = task.Replace(*tp, position);
     delete tp;
     return success;
   }
 
-  return m_task.Replace(new_tp, position);
+  return task.Replace(new_tp, position);
 }
 
 bool 
@@ -454,90 +454,91 @@ AbstractTaskFactory::Insert(const OrderedTaskPoint &new_tp,
                             const unsigned position,
                             const bool auto_mutate)
 {
-  if (position >= m_task.TaskSize())
+  if (position >= task.TaskSize())
     return Append(new_tp, auto_mutate);
 
   if (auto_mutate) {
     if (position == 0) {
-      if (m_task.HasStart()) {
+      if (task.HasStart()) {
         // old start must be mutated into an intermediate point
         IntermediateTaskPoint* sp =
-          CreateIntermediate(m_task.GetTaskPoint(0).GetWaypoint());
-        m_task.Replace(*sp, 0);
+          CreateIntermediate(task.GetTaskPoint(0).GetWaypoint());
+        task.Replace(*sp, 0);
         delete sp;
       }
 
       if (IsValidType(new_tp, 0)) {
-        return m_task.Insert(new_tp, 0);
+        return task.Insert(new_tp, 0);
       } else {
         // candidate must be transformed into a startpoint
         StartPoint* sp = CreateStart(new_tp.GetWaypoint());
-        bool success = m_task.Insert(*sp, 0);
+        bool success = task.Insert(*sp, 0);
         delete sp;
         return success;
       }
     } else {
       if (new_tp.IsIntermediatePoint()) {
         // candidate ok for direct insertion
-        return m_task.Insert(new_tp, position);
+        return task.Insert(new_tp, position);
       } else {
         // candidate must be transformed into a intermediatepoint
         IntermediateTaskPoint* sp = CreateIntermediate(new_tp.GetWaypoint());
-        bool success = m_task.Insert(*sp, position);
+        bool success = task.Insert(*sp, position);
         delete sp;
         return success;
       }
     }
   }
 
-  return m_task.Insert(new_tp, position);
+  return task.Insert(new_tp, position);
 }
 
 bool 
 AbstractTaskFactory::Remove(const unsigned position, 
                             const bool auto_mutate)
 {
-  if (position >= m_task.TaskSize())
+  if (position >= task.TaskSize())
     return false;
 
   if (auto_mutate) {
     if (position == 0) {
       // special case, remove start point..
-      if (m_task.TaskSize() == 1) {
-        return m_task.Remove(0);
+      if (task.TaskSize() == 1) {
+        return task.Remove(0);
       } else {
         // create new start point from next point
-        StartPoint* sp = CreateStart(m_task.GetTaskPoint(1).GetWaypoint());
-        bool success = m_task.Remove(0) && m_task.Replace(*sp, 0);
+        StartPoint* sp = CreateStart(task.GetTaskPoint(1).GetWaypoint());
+        bool success = task.Remove(0) && task.Replace(*sp, 0);
         delete sp;
         return success;
       }
-    } else if (IsPositionFinish(position - 1) && (position + 1 == m_task.TaskSize())) {
+    } else if (IsPositionFinish(position - 1) &&
+               position + 1 == task.TaskSize()) {
       // create new finish from previous point
       FinishPoint *sp =
-        CreateFinish(m_task.GetTaskPoint(position - 1).GetWaypoint());
-      bool success = m_task.Remove(position) &&
-        m_task.Replace(*sp, position - 1);
+        CreateFinish(task.GetTaskPoint(position - 1).GetWaypoint());
+      bool success = task.Remove(position) &&
+        task.Replace(*sp, position - 1);
       delete sp;
       return success;
     } else {
       // intermediate point deleted, nothing special to do
-      return m_task.Remove(position);
+      return task.Remove(position);
     }
   }
 
-  return m_task.Remove(position);
+  return task.Remove(position);
 }
 
 bool 
 AbstractTaskFactory::Swap(const unsigned position, const bool auto_mutate)
 {
-  if (m_task.TaskSize() <= 1)
+  if (task.TaskSize() <= 1)
     return false;
-  if (position >= m_task.TaskSize() - 1)
+  if (position >= task.TaskSize() - 1)
     return false;
 
-  const OrderedTaskPoint &orig = m_task.GetTaskPoint(position + 1);
+  const OrderedTaskPoint &orig = task.GetTaskPoint(position + 1);
   if (!Insert(orig, position, auto_mutate))
     return false;
 
@@ -548,14 +549,14 @@ const OrderedTaskPoint&
 AbstractTaskFactory::Relocate(const unsigned position, 
                               const Waypoint& waypoint)
 {
-  m_task.Relocate(position, waypoint);
-  return m_task.GetTaskPoint(position);
+  task.Relocate(position, waypoint);
+  return task.GetTaskPoint(position);
 }
 
-const OrderedTaskBehaviour& 
+const OrderedTaskBehaviour &
 AbstractTaskFactory::GetOrderedTaskBehaviour() const
 {
-  return m_task.get_ordered_task_behaviour();
+  return task.GetOrderedTaskBehaviour();
 }
 
 void 
@@ -575,10 +576,10 @@ AbstractTaskFactory::IsPositionIntermediate(const unsigned position) const
 
   if (GetOrderedTaskBehaviour().IsFixedSize())
     return (position + 1 < GetOrderedTaskBehaviour().max_points);
-  else if (m_task.TaskSize() < GetOrderedTaskBehaviour().min_points)
+  else if (task.TaskSize() < GetOrderedTaskBehaviour().min_points)
     return true;
   else
-    return (position <= m_task.TaskSize());
+    return (position <= task.TaskSize());
 }
 
 bool 
@@ -595,7 +596,7 @@ AbstractTaskFactory::IsPositionFinish(const unsigned position) const
   if (GetOrderedTaskBehaviour().IsFixedSize())
     return (position + 1 == GetOrderedTaskBehaviour().max_points);
   else
-    return (position + 1 >= m_task.TaskSize());
+    return (position + 1 >= task.TaskSize());
 }
 
 bool
@@ -662,22 +663,22 @@ AbstractTaskFactory::IsValidType(const OrderedTaskPoint &new_tp,
 bool
 AbstractTaskFactory::IsValidIntermediateType(LegalPointType type) const 
 {
-  return (std::find(m_intermediate_types.begin(), m_intermediate_types.end(), type) 
-          != m_intermediate_types.end());
+  return std::find(intermediate_types.begin(), intermediate_types.end(), type)
+    != intermediate_types.end();
 }
 
 bool
 AbstractTaskFactory::IsValidStartType(LegalPointType type) const 
 {
-  return (std::find(m_start_types.begin(), m_start_types.end(), type) 
-          != m_start_types.end());
+  return std::find(start_types.begin(), start_types.end(), type)
+    != start_types.end();
 }
 
 bool
 AbstractTaskFactory::IsValidFinishType(LegalPointType type) const 
 {
-  return (std::find(m_finish_types.begin(), m_finish_types.end(), type) 
-          != m_finish_types.end());
+  return std::find(finish_types.begin(), finish_types.end(), type)
+    != finish_types.end();
 }
 
 AbstractTaskFactory::LegalPointVector 
@@ -685,14 +686,14 @@ AbstractTaskFactory::GetValidTypes(unsigned position) const
 {
   LegalPointVector v;
   if (ValidAbstractType(POINT_START, position))
-    v.insert(v.end(), m_start_types.begin(), m_start_types.end());
+    v.insert(v.end(), start_types.begin(), start_types.end());
 
   LegalPointVector i = GetValidIntermediateTypes(position);
   if (!i.empty())
     v.insert(v.end(), i.begin(), i.end());
 
   if (ValidAbstractType(POINT_FINISH, position))
-    v.insert(v.end(), m_finish_types.begin(), m_finish_types.end());
+    v.insert(v.end(), finish_types.begin(), finish_types.end());
 
   return v;
 }
@@ -700,33 +701,33 @@ AbstractTaskFactory::GetValidTypes(unsigned position) const
 void
 AbstractTaskFactory::AddValidationError(TaskValidationErrorType e)
 {
-  m_validation_errors.push_back(e);
+  validation_errors.push_back(e);
 }
 
 void
 AbstractTaskFactory::ClearValidationErrors()
 {
-  m_validation_errors.clear();
+  validation_errors.clear();
 }
 
 AbstractTaskFactory::TaskValidationErrorVector
 AbstractTaskFactory::GetValidationErrors()
 {
-  return m_validation_errors;
+  return validation_errors;
 }
 
 bool
 AbstractTaskFactory::CheckAddFinish()
 {
- if (m_task.TaskSize() < 2)
+ if (task.TaskSize() < 2)
    return false;
 
- if (m_task.HasFinish())
+ if (task.HasFinish())
    return false;
 
- FinishPoint *fp = CreateFinish(m_task.GetPoint(m_task.TaskSize() - 1).GetWaypoint());
+ FinishPoint *fp = CreateFinish(task.GetPoint(task.TaskSize() - 1).GetWaypoint());
  assert(fp);
- Remove(m_task.TaskSize() - 1, false);
+ Remove(task.TaskSize() - 1, false);
  Append(*fp, false);
  delete fp;
 
@@ -739,8 +740,8 @@ AbstractTaskFactory::ValidateFAIOZs()
   ClearValidationErrors();
   bool valid = true;
 
-  for (unsigned i = 0; i < m_task.TaskSize() && valid; i++) {
-    const OrderedTaskPoint &tp = m_task.GetPoint(i);
+  for (unsigned i = 0; i < task.TaskSize() && valid; i++) {
+    const OrderedTaskPoint &tp = task.GetPoint(i);
     const fixed ozsize = GetOZSize(tp.GetOZPoint());
 
     switch (GetType(tp)) {
@@ -805,11 +806,11 @@ AbstractTaskFactory::Validate()
 
   bool valid = true;
 
-  if (!m_task.HasStart()) {
+  if (!task.HasStart()) {
     AddValidationError(NO_VALID_START);
     valid = false;
   }
-  if (!m_task.HasFinish()) {
+  if (!task.HasFinish()) {
     AddValidationError(NO_VALID_FINISH);
     valid = false;
   }
@@ -820,16 +821,16 @@ AbstractTaskFactory::Validate()
   }
 
   if (GetOrderedTaskBehaviour().IsFixedSize()) {
-    if (m_task.TaskSize() != GetOrderedTaskBehaviour().max_points) {
+    if (task.TaskSize() != GetOrderedTaskBehaviour().max_points) {
       AddValidationError(INCORRECT_NUMBER_TURNPOINTS);
       valid = false;
     }
   } else {
-    if (m_task.TaskSize() < GetOrderedTaskBehaviour().min_points) {
+    if (task.TaskSize() < GetOrderedTaskBehaviour().min_points) {
       AddValidationError(UNDER_MIN_TURNPOINTS);
       valid = false;
     }
-    if (m_task.TaskSize() > GetOrderedTaskBehaviour().max_points) {
+    if (task.TaskSize() > GetOrderedTaskBehaviour().max_points) {
       AddValidationError(EXCEEDS_MAX_TURNPOINTS);
       valid = false;
     }
@@ -852,8 +853,8 @@ AbstractTaskFactory::GetValidIntermediateTypes(unsigned position) const
     return v;
 
   if (GetOrderedTaskBehaviour().homogeneous_tps &&
-      position > 1 && m_task.TaskSize() > 1) {
-    LegalPointType type = GetType(m_task.GetPoint(1));
+      position > 1 && task.TaskSize() > 1) {
+    LegalPointType type = GetType(task.GetPoint(1));
     if (IsValidIntermediateType(type)) {
       v.push_back(type);
       return v;
@@ -862,7 +863,7 @@ AbstractTaskFactory::GetValidIntermediateTypes(unsigned position) const
 
   if (ValidAbstractType(POINT_AAT, position) ||
       ValidAbstractType(POINT_AST, position))
-    v.insert(v.end(), m_intermediate_types.begin(), m_intermediate_types.end());
+    v.insert(v.end(), intermediate_types.begin(), intermediate_types.end());
 
   return v;
 }
@@ -871,7 +872,7 @@ AbstractTaskFactory::LegalPointVector
 AbstractTaskFactory::GetValidStartTypes() const
 {
   LegalPointVector v;
-  v.insert(v.end(), m_start_types.begin(), m_start_types.end());
+  v.insert(v.end(), start_types.begin(), start_types.end());
   return v;
 }
 
@@ -879,7 +880,7 @@ AbstractTaskFactory::LegalPointVector
 AbstractTaskFactory::GetValidIntermediateTypes() const
 {
   LegalPointVector v;
-  v.insert(v.end(), m_intermediate_types.begin(), m_intermediate_types.end());
+  v.insert(v.end(), intermediate_types.begin(), intermediate_types.end());
   return v;
 }
 
@@ -887,19 +888,19 @@ AbstractTaskFactory::LegalPointVector
 AbstractTaskFactory::GetValidFinishTypes() const
 {
   LegalPointVector v;
-  v.insert(v.end(), m_finish_types.begin(), m_finish_types.end());
+  v.insert(v.end(), finish_types.begin(), finish_types.end());
   return v;
 }
 
 bool 
 AbstractTaskFactory::IsClosed() const
 {
-  if (m_task.TaskSize() < 3)
+  if (task.TaskSize() < 3)
     return false;
 
-  const Waypoint &wp_start = m_task.GetPoint(0).GetWaypoint();
+  const Waypoint &wp_start = task.GetPoint(0).GetWaypoint();
   const Waypoint& wp_finish =
-    m_task.GetPoint(m_task.TaskSize() - 1).GetWaypoint();
+    task.GetPoint(task.TaskSize() - 1).GetWaypoint();
 
   return (wp_start.location == wp_finish.location);
 }
@@ -907,15 +908,15 @@ AbstractTaskFactory::IsClosed() const
 bool 
 AbstractTaskFactory::IsUnique() const
 {
-  const unsigned size = m_task.TaskSize();
+  const unsigned size = task.TaskSize();
   for (unsigned i = 0; i + 1 < size; i++) {
-    const Waypoint &wp_0 = m_task.GetPoint(i).GetWaypoint();
+    const Waypoint &wp_0 = task.GetPoint(i).GetWaypoint();
 
     for (unsigned j = i + 1; j < size; j++) {
       if (i == 0 && j + 1 == size) {
         // start point can be similar to finish point
       } else {
-        const Waypoint &wp_1 = m_task.GetPoint(j).GetWaypoint();
+        const Waypoint &wp_1 = task.GetPoint(j).GetWaypoint();
         if (wp_1 == wp_0)
           return false;
       }
@@ -929,13 +930,13 @@ AbstractTaskFactory::IsHomogeneous() const
 {
   bool valid = true;
 
-  const unsigned size = m_task.TaskSize();
+  const unsigned size = task.TaskSize();
 
   if (size > 2) {
-    LegalPointType homogtype = GetType(m_task.GetPoint(1));
+    LegalPointType homogtype = GetType(task.GetPoint(1));
 
     for (unsigned i = 2; i < size; i++) {
-      const OrderedTaskPoint &tp = m_task.GetPoint(i);
+      const OrderedTaskPoint &tp = task.GetPoint(i);
       if (tp.GetType() == TaskPoint::FINISH) {
         ; // don't check a valid finish point
       } else {
@@ -955,7 +956,7 @@ AbstractTaskFactory::RemoveExcessTPsPerTaskType()
 {
   bool changed = false;
   unsigned maxtp = GetOrderedTaskBehaviour().max_points;
-  while (maxtp < m_task.TaskSize()) {
+  while (maxtp < task.TaskSize()) {
     Remove(maxtp, false);
     changed = true;
   }
@@ -967,18 +968,18 @@ AbstractTaskFactory::MutateTPsToTaskType()
 {
   bool changed = RemoveExcessTPsPerTaskType();
 
-  for (unsigned int i = 0; i < m_task.TaskSize(); i++) {
-    const OrderedTaskPoint &tp = m_task.GetPoint(i);
+  for (unsigned int i = 0; i < task.TaskSize(); i++) {
+    const OrderedTaskPoint &tp = task.GetPoint(i);
     if (!IsValidType(tp, i) ||
-        (m_task.get_factory_type() == TaskFactoryType::FAI_GENERAL)) {
+        task.GetFactoryType() == TaskFactoryType::FAI_GENERAL) {
 
       LegalPointType newtype = GetMutatedPointType(tp);
       if (IsPositionFinish(i)) {
 
         if (!IsValidFinishType(newtype)) {
-          newtype = m_behaviour.sector_defaults.finish_type;
+          newtype = behaviour.sector_defaults.finish_type;
           if (!IsValidFinishType(newtype))
-            newtype = *m_finish_types.begin();
+            newtype = *finish_types.begin();
         }
 
         FinishPoint *fp = (FinishPoint*)CreateMutatedPoint(tp, newtype);
@@ -989,9 +990,9 @@ AbstractTaskFactory::MutateTPsToTaskType()
 
       } else if (i == 0) {
         if (!IsValidStartType(newtype)) {
-          newtype = m_behaviour.sector_defaults.start_type;
+          newtype = behaviour.sector_defaults.start_type;
           if (!IsValidStartType(newtype))
-            newtype = *m_start_types.begin();
+            newtype = *start_types.begin();
         }
 
         StartPoint *sp = (StartPoint*)CreateMutatedPoint(tp, newtype);
@@ -1003,9 +1004,9 @@ AbstractTaskFactory::MutateTPsToTaskType()
       } else {
 
         if (!IsValidIntermediateType(newtype)) {
-          newtype = m_behaviour.sector_defaults.turnpoint_type;
+          newtype = behaviour.sector_defaults.turnpoint_type;
           if (!IsValidIntermediateType(newtype))
-            newtype = *m_intermediate_types.begin();
+            newtype = *intermediate_types.begin();
         }
         OrderedTaskPoint *tpnew = (OrderedTaskPoint*)CreateMutatedPoint(tp, newtype);
         if (Replace(*tpnew, i, true))
@@ -1022,21 +1023,21 @@ AbstractTaskFactory::MutateTPsToTaskType()
 bool
 AbstractTaskFactory::MutateClosedFinishPerTaskType()
 {
-  if (m_task.TaskSize() < 2)
+  if (task.TaskSize() < 2)
     return false;
 
-  if (!IsPositionFinish(m_task.TaskSize() - 1))
+  if (!IsPositionFinish(task.TaskSize() - 1))
     return false;
 
   bool changed = false;
 
   if (GetOrderedTaskBehaviour().is_closed) {
     if (!IsClosed()) {
-      const OrderedTaskPoint &tp = m_task.GetPoint(m_task.TaskSize() - 1);
+      const OrderedTaskPoint &tp = task.GetPoint(task.TaskSize() - 1);
       if (tp.GetType() == TaskPoint::FINISH) {
-        FinishPoint *fp = CreateFinish(m_task.GetPoint(0).GetWaypoint());
+        FinishPoint *fp = CreateFinish(task.GetPoint(0).GetWaypoint());
         assert(fp);
-        Remove(m_task.TaskSize() - 1, false);
+        Remove(task.TaskSize() - 1, false);
         Append(*fp, false);
         delete fp;
         changed = true;
@@ -1050,16 +1051,16 @@ bool
 AbstractTaskFactory::AppendOptionalStart(const Waypoint& wp)
 {
   OrderedTaskPoint* tp = NULL;
-  if (m_task.TaskSize())
-    tp = m_task.GetPoint(0).clone(m_behaviour,
-                                  m_task.get_ordered_task_behaviour(), &wp);
+  if (task.TaskSize())
+    tp = task.GetPoint(0).Clone(behaviour,
+                                  GetOrderedTaskBehaviour(), &wp);
   else
     tp = CreateStart(wp);
 
   if (!tp)
     return false; // should never happen
 
-  bool success = m_task.AppendOptionalStart(*tp);
+  bool success = task.AppendOptionalStart(*tp);
   delete tp;
   return success;
 }
@@ -1071,10 +1072,10 @@ AbstractTaskFactory::AppendOptionalStart(const OrderedTaskPoint &new_tp,
   if (auto_mutate && !IsValidType(new_tp, 0)) {
     // candidate must be transformed into a startpoint of appropriate type
     StartPoint* sp = CreateStart(new_tp.GetWaypoint());
-    bool success = m_task.AppendOptionalStart(*sp);
+    bool success = task.AppendOptionalStart(*sp);
     delete sp;
     return success;
   }
   // ok to add directly
-  return m_task.AppendOptionalStart(new_tp);
+  return task.AppendOptionalStart(new_tp);
 }

@@ -480,9 +480,9 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   task->SetFactory(task_info.wp_dis ?
                     TaskFactoryType::RACING : TaskFactoryType::AAT);
   AbstractTaskFactory& fact = task->GetFactory();
-  const TaskFactoryType factType = task->get_factory_type();
+  const TaskFactoryType factType = task->GetFactoryType();
 
-  OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
+  OrderedTaskBehaviour beh = task->GetOrderedTaskBehaviour();
   if (factType == TaskFactoryType::AAT) {
     beh.aat_min_time = task_info.task_time;
   }
@@ -491,7 +491,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     beh.start_max_height = (unsigned)task_info.max_start_altitude;
     beh.start_max_height_ref = HeightReferenceType::MSL;
   }
-  task->set_ordered_task_behaviour(beh);
+  task->SetOrderedTaskBehaviour(beh);
 
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {

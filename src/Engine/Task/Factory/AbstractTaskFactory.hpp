@@ -115,19 +115,19 @@ public:
 
 protected:
   /** task managed by this factory */
-  OrderedTask &m_task;
+  OrderedTask &task;
   /** behaviour (settings) */
-  const TaskBehaviour &m_behaviour;
+  const TaskBehaviour &behaviour;
 
   /** list of valid start types, for specialisation */
-  LegalPointConstArray m_start_types;
+  LegalPointConstArray start_types;
   /** list of valid intermediate types, for specialisation */
-  LegalPointConstArray m_intermediate_types;
+  LegalPointConstArray intermediate_types;
   /** list of valid finish types, for specialisation */
-  LegalPointConstArray m_finish_types;
+  LegalPointConstArray finish_types;
 
   /** list of errors returned by task validation */
-  TaskValidationErrorVector m_validation_errors;
+  TaskValidationErrorVector validation_errors;
 
 protected:
   /**
@@ -136,14 +136,14 @@ protected:
    * @param task Ordered task to be managed by this factory
    * @param behaviour Behaviour (options)
    */
-  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour,
+  AbstractTaskFactory(OrderedTask &_task, const TaskBehaviour &_behaviour,
                       const LegalPointConstArray _start_types,
                       const LegalPointConstArray _intermediate_types,
                       const LegalPointConstArray _finish_types)
-    :m_task(task), m_behaviour(behaviour),
-     m_start_types(_start_types),
-     m_intermediate_types(_intermediate_types),
-     m_finish_types(_finish_types) {}
+    :task(_task), behaviour(_behaviour),
+     start_types(_start_types),
+     intermediate_types(_intermediate_types),
+     finish_types(_finish_types) {}
 
 public:
   virtual ~AbstractTaskFactory() {}
@@ -260,7 +260,7 @@ public:
    * @return list of valid start types
    */
   const LegalPointConstArray &GetStartTypes() const {
-    return m_start_types;
+    return start_types;
   }
 
   /**
@@ -269,7 +269,7 @@ public:
    * @return list of valid intermediate types
    */
   const LegalPointConstArray &GetIntermediateTypes() const {
-    return m_intermediate_types;
+    return intermediate_types;
   }
 
   /**
@@ -278,7 +278,7 @@ public:
    * @return list of valid finish types
    */
   const LegalPointConstArray &GetFinishTypes() const {
-    return m_finish_types;
+    return finish_types;
   }
 
   /**
@@ -461,7 +461,7 @@ public:
 
   /**
    * Check whether task is complete and valid according to factory rules
-   * Adds error types to m_validation_errors
+   * Adds error types to validation_errors
    *
    * @return True if task is valid according to factory rules
    */
@@ -470,7 +470,7 @@ public:
   /**
    * Checks whether shapes of all OZs, start, finish are valid
    * for an FAI badge or record
-   * Appends warning message to m_validation_errors
+   * Appends warning message to validation_errors
    * This is used independently of check_task() validation
    *
    * @return True if all OZs are valid for a FAI badge or record

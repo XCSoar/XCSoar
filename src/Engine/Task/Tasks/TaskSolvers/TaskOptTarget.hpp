@@ -99,7 +99,7 @@ public:
 
 private:
   /** Sets target location along isoline */
-  void set_target(const fixed p);
+  void SetTarget(const fixed p);
 };
 
 

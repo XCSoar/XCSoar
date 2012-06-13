@@ -81,5 +81,5 @@ void
 TaskMinTarget::set_range(const fixed p)
 {
   tm.set_range(p, force_current);
-  tp_start->scan_distance_remaining(aircraft.location);
+  tp_start->ScanDistanceRemaining(aircraft.location);
 }

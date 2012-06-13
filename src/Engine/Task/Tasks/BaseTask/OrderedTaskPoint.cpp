@@ -37,20 +37,20 @@ OrderedTaskPoint::OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
                                    const OrderedTaskBehaviour &to,
                                    const bool b_scored)
   :TaskLeg(*this), ScoredTaskPoint(_type, wp, b_scored),
-   ObservationZoneClient(_oz), m_ordered_task_behaviour(to),
-   m_active_state(NOTFOUND_ACTIVE), tp_next(NULL), tp_previous(NULL),
+   ObservationZoneClient(_oz), ordered_task_behaviour(to),
+   active_state(NOTFOUND_ACTIVE), tp_next(NULL), tp_previous(NULL),
    flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
 {
 }
 
 void 
-OrderedTaskPoint::set_neighbours(OrderedTaskPoint* _prev,
-                                 OrderedTaskPoint* _next) 
+OrderedTaskPoint::SetNeighbours(OrderedTaskPoint *_previous,
+                                OrderedTaskPoint *_next)
 {
-  tp_previous = _prev;
+  tp_previous = _previous;
   tp_next = _next;
 
-  update_geometry();
+  UpdateGeometry();
 }
 
 /** 
@@ -58,7 +58,7 @@ OrderedTaskPoint::set_neighbours(OrderedTaskPoint* _prev,
  * previous/next turnpoint changes.
  */
 void
-OrderedTaskPoint::update_geometry()
+OrderedTaskPoint::UpdateGeometry()
 {
   SetLegs(tp_previous, this, tp_next);
 }
@@ -66,67 +66,66 @@ OrderedTaskPoint::update_geometry()
 void
 OrderedTaskPoint::UpdateOZ(const TaskProjection &projection)
 {
-  update_geometry();
+  UpdateGeometry();
 
   SampledTaskPoint::UpdateOZ(projection);
 }
 
 bool
-OrderedTaskPoint::scan_active(OrderedTaskPoint* atp)
+OrderedTaskPoint::ScanActive(const OrderedTaskPoint &atp)
 {
   // reset
-  m_active_state = NOTFOUND_ACTIVE;
+  active_state = NOTFOUND_ACTIVE;
 
-  if (atp == this)
-    m_active_state = CURRENT_ACTIVE;
+  if (&atp == this)
+    active_state = CURRENT_ACTIVE;
   else if (tp_previous &&
-           (get_previous()->getActiveState() == CURRENT_ACTIVE ||
-               get_previous()->getActiveState() == AFTER_ACTIVE))
-    m_active_state = AFTER_ACTIVE;
+           (GetPrevious()->GetActiveState() == CURRENT_ACTIVE ||
+            GetPrevious()->GetActiveState() == AFTER_ACTIVE))
+    active_state = AFTER_ACTIVE;
   else
-    m_active_state = BEFORE_ACTIVE;
+    active_state = BEFORE_ACTIVE;
 
   if (tp_next)
     // propagate to remainder of task
-    return get_next()->scan_active(atp);
+    return GetNext()->ScanActive(atp);
 
-  return m_active_state != BEFORE_ACTIVE &&
-         m_active_state != NOTFOUND_ACTIVE;
+  return active_state != BEFORE_ACTIVE && active_state != NOTFOUND_ACTIVE;
 }
 
 bool
 OrderedTaskPoint::SearchBoundaryPoints() const
 {
-  return m_active_state == AFTER_ACTIVE;
+  return active_state == AFTER_ACTIVE;
 }
 
 bool
 OrderedTaskPoint::SearchNominalIfUnsampled() const
 {
-  return m_active_state == BEFORE_ACTIVE;
+  return active_state == BEFORE_ACTIVE;
 }
 
 fixed 
-OrderedTaskPoint::double_leg_distance(const GeoPoint &ref) const
+OrderedTaskPoint::DoubleLegDistance(const GeoPoint &ref) const
 {
   assert(tp_previous);
   assert(tp_next);
 
-  return ::DoubleDistance(get_previous()->GetLocationRemaining(), 
-                          ref, get_next()->GetLocationRemaining());
+  return ::DoubleDistance(GetPrevious()->GetLocationRemaining(),
+                          ref, GetNext()->GetLocationRemaining());
 }
 
 bool 
-OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
+OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
 {
-  return GetWaypoint() == other->GetWaypoint() &&
-         GetType() == other->GetType() &&
-    GetOZPoint()->Equals(*other->GetOZPoint()) &&
-    other->GetOZPoint()->Equals(*GetOZPoint());
+  return GetWaypoint() == other.GetWaypoint() &&
+    GetType() == other.GetType() &&
+    GetOZPoint()->Equals(*other.GetOZPoint()) &&
+    other.GetOZPoint()->Equals(*GetOZPoint());
 }
 
 OrderedTaskPoint* 
-OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
+OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
                         const OrderedTaskBehaviour &ordered_task_behaviour,
                         const Waypoint* waypoint) const
 {
@@ -162,7 +161,7 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
 }
 
 void
-OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
+OrderedTaskPoint::ScanProjection(TaskProjection &task_projection) const
 {
   task_projection.scan_location(GetLocation());
   #define fixed_steps fixed(0.05)
@@ -173,7 +172,7 @@ OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
 }
 
 void
-OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
+OrderedTaskPoint::UpdateBoundingBox(const TaskProjection &task_projection)
 {
   flat_bb = FlatBoundingBox(task_projection.project(GetLocation()));
 
@@ -185,7 +184,7 @@ OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
 }
 
 bool
-OrderedTaskPoint::boundingbox_overlaps(const FlatBoundingBox &that) const
+OrderedTaskPoint::BoundingBoxOverlaps(const FlatBoundingBox &that) const
 {
   return flat_bb.Overlaps(that);
 }

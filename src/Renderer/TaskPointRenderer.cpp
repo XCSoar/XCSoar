@@ -65,7 +65,7 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 {
   switch (layer) {
   case LAYER_OZ_SHADE:
-    if (tp.boundingbox_overlaps(bb_screen))
+    if (tp.BoundingBoxOverlaps(bb_screen))
       // draw shaded part of observation zone
       DrawOZBackground(canvas, tp);
 
@@ -80,7 +80,7 @@ TaskPointRenderer::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
     break;
 
   case LAYER_OZ_OUTLINE:
-    if (tp.boundingbox_overlaps(bb_screen))
+    if (tp.BoundingBoxOverlaps(bb_screen))
       DrawOZForeground(tp);
 
     break;

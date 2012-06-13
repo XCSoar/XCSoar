@@ -36,7 +36,7 @@ FAITriangleTaskFactory::Validate()
 
   bool valid = FAITaskFactory::Validate();
 
-  return valid && FAITriangleValidator::Validate(m_task);
+  return valid && FAITriangleValidator::Validate(task);
 }
 
 void 

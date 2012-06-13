@@ -373,7 +373,7 @@ bool test_task_type_manip(TaskManager& task_manager,
     return false;
   }
 
-  if (task_manager.GetOrderedTask().get_factory_type() ==
+  if (task_manager.GetOrderedTask().GetFactoryType() ==
                                       TaskFactoryType::FAI_GENERAL) {
     test_note("# checking OZs for FAI task..\n");
     if (!fact.ValidateFAIOZs())
@@ -921,7 +921,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   if (!fact.Validate()) {
     return false;
   }
-  if (task_manager.GetOrderedTask().get_factory_type()
+  if (task_manager.GetOrderedTask().GetFactoryType()
       == TaskFactoryType::FAI_GENERAL)
   {
     test_note("# checking OZs for FAI General..\n");

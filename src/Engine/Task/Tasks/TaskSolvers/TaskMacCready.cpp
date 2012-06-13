@@ -24,37 +24,37 @@
 #include <algorithm>
 
 TaskMacCready::TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
-                             const unsigned _activeTaskPoint,
+                             const unsigned _active_index,
                              const GlideSettings &_settings,
                              const GlidePolar &gp):
-  m_tps(_tps.begin(), _tps.end()),
-  m_gs(_tps.size()),
-  m_activeTaskPoint(_activeTaskPoint),
-  m_start(0),
-  m_end(max((int)_tps.size(), 1) - 1),
+  points(_tps.begin(), _tps.end()),
+  leg_solutions(_tps.size()),
+  active_index(_active_index),
+  start_index(0),
+  end_index(max((int)_tps.size(), 1) - 1),
   settings(_settings),
-  m_glide_polar(gp) {}
+  glide_polar(gp) {}
 
 TaskMacCready::TaskMacCready(TaskPoint* tp, const GlideSettings &_settings,
                              const GlidePolar &gp):
-  m_tps(1, tp),
-  m_gs(1),
-  m_activeTaskPoint(0),
-  m_start(0),
-  m_end(0),
+  points(1, tp),
+  leg_solutions(1),
+  active_index(0),
+  start_index(0),
+  end_index(0),
   settings(_settings),
-  m_glide_polar(gp) {}
+  glide_polar(gp) {}
 
 TaskMacCready::TaskMacCready(const std::vector<TaskPoint*> &_tps,
                              const GlideSettings &_settings,
                              const GlidePolar &gp):
-  m_tps(_tps.begin(), _tps.end()),
-  m_gs(_tps.size()),
-  m_activeTaskPoint(0),
-  m_start(0),
-  m_end(max((int)_tps.size(), 1) - 1),
+  points(_tps.begin(), _tps.end()),
+  leg_solutions(_tps.size()),
+  active_index(0),
+  start_index(0),
+  end_index(max((int)_tps.size(), 1) - 1),
   settings(_settings),
-  m_glide_polar(gp) {}
+  glide_polar(gp) {}
 
 GlideResult 
 TaskMacCready::glide_solution(const AircraftState &aircraft) 
@@ -63,16 +63,16 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
   GlideResult acc_gr, gr;
   AircraftState aircraft_predict = get_aircraft_start(aircraft);
 
-  for (int i = m_start; i <= m_end; ++i) {
+  for (int i = start_index; i <= end_index; ++i) {
     const fixed tp_min_height = std::max(aircraft_min_height,
-                                         m_tps[i]->GetElevation());
+                                         points[i]->GetElevation());
 
     // perform estimate, ensuring that alt is above previous taskpoint  
     gr = tp_solution(i, aircraft_predict, tp_min_height);
-    m_gs[i] = gr;
+    leg_solutions[i] = gr;
 
     // update state
-    if (i == m_start)
+    if (i == start_index)
       acc_gr = gr;
     else
       acc_gr.Add(gr);
@@ -91,7 +91,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
        out */
     return acc_gr;
 
-  m_gs[m_activeTaskPoint].CalcDeferred();
+  leg_solutions[active_index].CalcDeferred();
   acc_gr.CalcDeferred();
   return acc_gr;
 }
@@ -102,11 +102,11 @@ TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S)
   AircraftState aircraft_predict = aircraft;
   GlideResult acc_gr;
 
-  for (int i = m_start; i <= m_end; ++i) {
+  for (int i = start_index; i <= end_index; ++i) {
     const GlideResult gr = tp_sink(i, aircraft_predict, S);
 
     aircraft_predict.altitude -= gr.height_glide;
-    if (i == m_start)
+    if (i == start_index)
       acc_gr = gr;
     else
       acc_gr.altitude_difference =
@@ -121,6 +121,6 @@ TaskMacCready::tp_sink(const unsigned i,
                        const AircraftState &aircraft, 
                        const fixed S) const
 {
-  return TaskSolution::GlideSolutionSink(*m_tps[i], aircraft,
-                                         settings, m_glide_polar, S);
+  return TaskSolution::GlideSolutionSink(*points[i], aircraft,
+                                         settings, glide_polar, S);
 }

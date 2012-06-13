@@ -238,9 +238,9 @@ Deserialiser::Deserialise(OrderedTask &task)
   task.SetFactory(GetTaskFactoryType());
   task.Reset();
 
-  OrderedTaskBehaviour beh = task.get_ordered_task_behaviour();
+  OrderedTaskBehaviour beh = task.GetOrderedTaskBehaviour();
   Deserialise(beh);
-  task.set_ordered_task_behaviour(beh);
+  task.SetOrderedTaskBehaviour(beh);
 
   const DataNode::List children = node.ListChildrenNamed(_T("Point"));
   for (auto i = children.begin(), end = children.end(); i != end; ++i) {

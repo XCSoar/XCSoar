@@ -29,8 +29,8 @@
 const GeoPoint&
 AATPoint::GetLocationRemaining() const
 {
-  if (getActiveState() != BEFORE_ACTIVE)
-    return m_target_location;
+  if (GetActiveState() != BEFORE_ACTIVE)
+    return target_location;
 
   if (HasSampled())
     return GetLocationMax();
@@ -45,7 +45,7 @@ AATPoint::UpdateSampleNear(const AircraftState& state,
 {
   bool retval = OrderedTaskPoint::UpdateSampleNear(state, task_events,
                                                    projection);
-  retval |= check_target(state, false);
+  retval |= CheckTarget(state, false);
 
   return retval;
 }
@@ -58,54 +58,54 @@ AATPoint::UpdateSampleFar(const AircraftState& state,
   // the orderedtaskpoint::update_sample_far does nothing for now
   // but we are calling this in case that changes.
   return OrderedTaskPoint::UpdateSampleFar(state, task_events, projection) ||
-         check_target(state, true);
+    CheckTarget(state, true);
 }
 
 bool
-AATPoint::check_target(const AircraftState &state, const bool known_outside)
+AATPoint::CheckTarget(const AircraftState &state, const bool known_outside)
 {
-  if (getActiveState() == CURRENT_ACTIVE && m_target_locked)
+  if (GetActiveState() == CURRENT_ACTIVE && target_locked)
     return false;
 
   bool moved = false;
   if (!known_outside && IsInSector(state))
-    moved = check_target_inside(state);
+    moved = CheckTargetInside(state);
   else
-    moved = check_target_outside(state);
+    moved = CheckTargetOutside(state);
 
   return moved;
 }
 
 bool 
-AATPoint::close_to_target(const AircraftState& state, const fixed threshold) const
+AATPoint::IsCloseToTarget(const AircraftState& state, const fixed threshold) const
 {
   if (!valid())
     return false;
 
-  return (double_leg_distance(state.location) -
-          double_leg_distance(m_target_location) > -threshold);
+  return DoubleLegDistance(state.location)
+    - DoubleLegDistance(target_location) > -threshold;
 }
 
 bool
-AATPoint::check_target_inside(const AircraftState& state) 
+AATPoint::CheckTargetInside(const AircraftState& state) 
 {
   // target must be moved if d(p_last,t)+d(t,p_next) 
   //    < d(p_last,state)+d(state,p_next)
 
-  if (!close_to_target(state))
+  if (!IsCloseToTarget(state))
     return false;
 
-  if (positive(double_leg_distance(state.location) -
-               double_leg_distance(GetLocationMax())))
+  if (positive(DoubleLegDistance(state.location)
+               - DoubleLegDistance(GetLocationMax())))
     // no improvement available
     return false;
 
-  m_target_location = state.location;
+  target_location = state.location;
   return true;
 }
 
 bool
-AATPoint::check_target_outside(const AircraftState& state) 
+AATPoint::CheckTargetOutside(const AircraftState& state) 
 {
   return false;
 /*
@@ -113,10 +113,10 @@ AATPoint::check_target_outside(const AircraftState& state)
   
   // now uses TaskOptTarget
 
-  if (!get_previous()->isInSector(state)) {
-    double b0s = get_previous()->get_location_remaining()
+  if (!GetPrevious()->isInSector(state)) {
+    double b0s = GetPrevious()->get_location_remaining()
       .bearing(state.Location);
-    GeoVector vst(state.Location,m_target_location);
+    GeoVector vst(state.Location,target_location);
     double da = ::AngleLimit180(b0s-vst.Bearing);
     if ((fabs(da)>2.0) && (vst.Distance>1.0)) {
       AATIsolineIntercept ai(*this);
@@ -126,7 +126,7 @@ AATPoint::check_target_outside(const AircraftState& state)
 
         // Note that this fights with auto-target
 
-        m_target_location = si.Location;
+        target_location = si.Location;
 
         return true;
       }
@@ -139,20 +139,20 @@ AATPoint::check_target_outside(const AircraftState& state)
 bool
 AATPoint::SetRange(const fixed p, const bool force_if_current)
 {
-  if (m_target_locked)
+  if (target_locked)
     return false;
 
-  switch (getActiveState()) {
+  switch (GetActiveState()) {
   case CURRENT_ACTIVE:
     if (!HasEntered() || force_if_current) {
-      m_target_location = GetLocationMin().Interpolate(GetLocationMax(),p);
+      target_location = GetLocationMin().Interpolate(GetLocationMax(),p);
       return true;
     }
     return false;
 
   case AFTER_ACTIVE:
-    if (getActiveState() == AFTER_ACTIVE) {
-      m_target_location = GetLocationMin().Interpolate(GetLocationMax(),p);
+    if (GetActiveState() == AFTER_ACTIVE) {
+      target_location = GetLocationMin().Interpolate(GetLocationMax(),p);
       return true;
     }
     return false;
@@ -163,21 +163,21 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
 }
 
 void 
-AATPoint::set_target(const GeoPoint &loc, const bool override_lock)
+AATPoint::SetTarget(const GeoPoint &loc, const bool override_lock)
 {
-  if (override_lock || !m_target_locked)
-    m_target_location = loc;
+  if (override_lock || !target_locked)
+    target_location = loc;
 }
 
 void
-AATPoint::set_target(const fixed range, const fixed radial,
-                     const TaskProjection &proj)
+AATPoint::SetTarget(const fixed range, const fixed radial,
+                    const TaskProjection &proj)
 {
   fixed oldrange = fixed_zero;
   fixed oldradial = fixed_zero;
-  get_target_range_radial(oldrange, oldradial);
+  GetTargetRangeRadial(oldrange, oldradial);
 
-  const FlatPoint fprev = proj.fproject(get_previous()->GetLocationRemaining());
+  const FlatPoint fprev = proj.fproject(GetPrevious()->GetLocationRemaining());
   const FlatPoint floc = proj.fproject(GetLocation());
   const FlatLine flb (fprev,floc);
   const FlatLine fradius (floc,proj.fproject(GetLocationMin()));
@@ -197,20 +197,20 @@ AATPoint::set_target(const fixed range, const fixed radial,
   const FlatPoint ftarget2 = floc + ftarget1;
   const GeoPoint targetG = proj.funproject(ftarget2);
 
-  set_target(targetG, true);
+  SetTarget(targetG, true);
 }
 
 void
-AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
+AATPoint::GetTargetRangeRadial(fixed &range, fixed &radial) const
 {
   const fixed oldrange = range;
 
-  const GeoPoint fprev = get_previous()->GetLocationRemaining();
+  const GeoPoint fprev = GetPrevious()->GetLocationRemaining();
   const GeoPoint floc = GetLocation();
-  const Angle radialraw = (floc.Bearing(get_location_target()) -
+  const Angle radialraw = (floc.Bearing(GetTargetLocation()) -
       fprev.Bearing(floc)).AsBearing();
 
-  const fixed d = floc.Distance(get_location_target());
+  const fixed d = floc.Distance(GetTargetLocation());
   const fixed radius = floc.Distance(GetLocationMin());
   const fixed rangeraw = min(fixed_one, d / radius);
 
@@ -224,13 +224,13 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
 }
 
 bool
-AATPoint::equals(const OrderedTaskPoint *other) const
+AATPoint::Equals(const OrderedTaskPoint &other) const
 {
-  const AATPoint &tp = (const AATPoint &)*other;
+  const AATPoint &tp = (const AATPoint &)other;
 
-  return OrderedTaskPoint::equals(other) &&
-         m_target_locked == tp.m_target_locked &&
-         m_target_location == tp.m_target_location;
+  return OrderedTaskPoint::Equals(other) &&
+    target_locked == tp.target_locked &&
+    target_location == tp.target_location;
 }
 
 void

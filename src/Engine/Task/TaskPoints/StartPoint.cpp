@@ -55,12 +55,11 @@ StartPoint::GetElevation() const
 
 
 void 
-StartPoint::set_neighbours(OrderedTaskPoint* _prev,
-                           OrderedTaskPoint* _next)
+StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 {
   assert(_prev==NULL);
   // should not ever have an inbound leg
-  OrderedTaskPoint::set_neighbours(_prev, _next);
+  OrderedTaskPoint::SetNeighbours(_prev, _next);
 }
 
 
@@ -70,7 +69,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
                                const TaskProjection &projection)
 {
   if (task_events != NULL && IsInSector(state) &&
-      !m_ordered_task_behaviour.CheckStartSpeed(state, margins))
+      !ordered_task_behaviour.CheckStartSpeed(state, margins))
     task_events->StartSpeedWarning();
 
   return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
@@ -82,22 +81,22 @@ StartPoint::find_best_start(const AircraftState &state,
                             const TaskProjection &projection)
 {
   class StartPointBestStart: public ZeroFinder {
-    const StartPoint& m_start;
-    const GeoPoint m_loc_from;
-    const GeoPoint m_loc_to;
+    const StartPoint &start;
+    const GeoPoint loc_from;
+    const GeoPoint loc_to;
     fixed p_offset;
 
   public:
     StartPointBestStart(const StartPoint& ts,
-                        const GeoPoint &loc_from,
-                        const GeoPoint &loc_to):
+                        const GeoPoint &_loc_from,
+                        const GeoPoint &_loc_to):
       ZeroFinder(-fixed_half, fixed_half, fixed(0.01)),
-      m_start(ts),
-      m_loc_from(loc_from),
-      m_loc_to(loc_to) {};
+      start(ts),
+      loc_from(_loc_from),
+      loc_to(_loc_to) {};
 
-    fixed f(const fixed p) {
-      return ::DoubleDistance(m_loc_from,parametric(p),m_loc_to);
+    virtual fixed f(const fixed p) {
+      return ::DoubleDistance(loc_from, parametric(p), loc_to);
     }
 
     GeoPoint solve() {
@@ -122,7 +121,7 @@ StartPoint::find_best_start(const AircraftState &state,
         pp+= fixed_one;
       }
       pp = fmod(pp,fixed_one);
-      return m_start.GetBoundaryParametric(pp);
+      return start.GetBoundaryParametric(pp);
     }
   };
 
@@ -138,8 +137,8 @@ StartPoint::IsInSector(const AircraftState &state) const
   if (!ObservationZoneClient::IsInSector(state)) 
     return false;
 
-  return m_ordered_task_behaviour.CheckStartHeight(state, margins,
-                                                     GetBaseElevation());
+  return ordered_task_behaviour.CheckStartHeight(state, margins,
+                                                 GetBaseElevation());
 }
 
 bool 
@@ -147,13 +146,11 @@ StartPoint::CheckExitTransition(const AircraftState & ref_now,
                                   const AircraftState & ref_last) const
 {
   const bool now_in_height = 
-    m_ordered_task_behaviour.CheckStartHeight(ref_now,
-                                                margins,
-                                                GetBaseElevation());
+    ordered_task_behaviour.CheckStartHeight(ref_now, margins,
+                                            GetBaseElevation());
   const bool last_in_height = 
-    m_ordered_task_behaviour.CheckStartHeight(ref_last,
-                                                margins,
-                                                GetBaseElevation());
+    ordered_task_behaviour.CheckStartHeight(ref_last, margins,
+                                            GetBaseElevation());
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks

@@ -45,29 +45,29 @@ PrintHelper::aatpoint_print(std::ostream& f,
   switch(item) {
   case 0:
     orderedtaskpoint_print(f, tp, state, item);
-    f << "#   Target " << tp.m_target_location.longitude << ","
-      << tp.m_target_location.latitude << "\n";
+    f << "#   Target " << tp.target_location.longitude << ","
+      << tp.target_location.latitude << "\n";
     break;
 
   case 1:
 
-    if (tp.valid() && (tp.getActiveState() != OrderedTaskPoint::BEFORE_ACTIVE)) {
-      assert(tp.get_previous());
-      assert(tp.get_next());
+    if (tp.valid() && (tp.GetActiveState() != OrderedTaskPoint::BEFORE_ACTIVE)) {
+      assert(tp.GetPrevious());
+      assert(tp.GetNext());
       // note in general this will only change if 
       // prev max or target changes
 
       AATIsolineSegment seg(tp, projection);
-      fixed tdist = tp.get_previous()->GetLocationRemaining().Distance(
+      fixed tdist = tp.GetPrevious()->GetLocationRemaining().Distance(
         tp.GetLocationMin());
-      fixed rdist = tp.get_previous()->GetLocationRemaining().Distance(
-        tp.get_location_target());
+      fixed rdist = tp.GetPrevious()->GetLocationRemaining().Distance(
+        tp.GetTargetLocation());
 
       bool filter_backtrack = true;
       if (seg.IsValid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
           GeoPoint ga = seg.Parametric(fixed(t));
-          fixed dthis = tp.get_previous()->GetLocationRemaining().Distance(ga);
+          fixed dthis = tp.GetPrevious()->GetLocationRemaining().Distance(ga);
           if (!filter_backtrack 
               || (dthis>=tdist)
               || (dthis>=rdist)) {

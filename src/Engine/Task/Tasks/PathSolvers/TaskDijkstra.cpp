@@ -42,7 +42,7 @@ TaskDijkstra::RefreshTask()
   active_stage = task.GetActiveTaskPointIndex();
 
   for (unsigned stage = 0; stage != num_stages; ++stage)
-    sp_sizes[stage] = task.get_tp_search_points(stage).size();
+    sp_sizes[stage] = task.GetPointSearchPoints(stage).size();
 
   return true;
 }
@@ -50,7 +50,7 @@ TaskDijkstra::RefreshTask()
 const SearchPoint &
 TaskDijkstra::GetPoint(const ScanTaskPoint sp) const
 {
-  return task.get_tp_search_points(sp.GetStageNumber())[sp.GetPointIndex()];
+  return task.GetPointSearchPoints(sp.GetStageNumber())[sp.GetPointIndex()];
 }
 
 void

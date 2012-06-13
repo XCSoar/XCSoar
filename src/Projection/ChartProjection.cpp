@@ -62,7 +62,7 @@ ChartProjection::Set(const PixelRect &rc, const OrderedTaskPoint &point,
 {
   TaskProjection task_projection;
   task_projection.reset(fallback_loc);
-  point.scan_projection(task_projection);
+  point.ScanProjection(task_projection);
 
   Set(rc, task_projection, fixed(1.3));
 }

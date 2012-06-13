@@ -76,8 +76,7 @@ public:
    * @param prev Previous task point (must be null!)
    * @param next Next task point in sequence
    */
-  void set_neighbours(OrderedTaskPoint* prev,
-                      OrderedTaskPoint* next);
+  virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
 
   /**
    * Test whether aircraft is inside observation zone.

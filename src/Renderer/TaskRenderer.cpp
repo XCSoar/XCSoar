@@ -50,7 +50,7 @@ TaskRenderer::Draw(const AbortTask &task)
 void 
 TaskRenderer::Draw(const OrderedTask &task)
 {
-  tpv.SetBoundingBox(task.get_bounding_box(screen_bounds));
+  tpv.SetBoundingBox(task.GetBoundingBox(screen_bounds));
   tpv.SetActiveIndex(task.GetActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
@@ -59,8 +59,8 @@ TaskRenderer::Draw(const OrderedTask &task)
         i != TaskPointRenderer::LAYER_LEG) {
       tpv.SetModeOptional(true);
 
-      for (unsigned j = 0, end = task.optional_start_points_size(); j < end; ++j)
-        tpv.Draw(*task.get_optional_start(j), (TaskPointRenderer::Layer)i);
+      for (unsigned j = 0, end = task.GetOptionalStartPointCount(); j < end; ++j)
+        tpv.Draw(task.GetOptionalStartPoint(j), (TaskPointRenderer::Layer)i);
     }
 
     tpv.SetModeOptional(false);

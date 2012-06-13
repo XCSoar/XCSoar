@@ -60,7 +60,7 @@ public:
 
   gcc_pure
   bool valid() const {
-    return get_previous() != NULL && get_next() != NULL;
+    return GetPrevious() != NULL && GetNext() != NULL;
   }
 
   /**

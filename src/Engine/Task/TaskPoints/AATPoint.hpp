@@ -39,11 +39,11 @@ class AATPoint: public IntermediateTaskPoint
   friend class PrintHelper;
 
   /** Location of target within OZ */
-  GeoPoint m_target_location;
+  GeoPoint target_location;
   /** Saved location of target within OZ */
-  GeoPoint m_target_save;
+  GeoPoint target_save;
   /** Whether target can float */
-  bool m_target_locked;
+  bool target_locked;
 
 public:
   /**
@@ -62,11 +62,11 @@ public:
            const TaskBehaviour &tb,
            const OrderedTaskBehaviour& to) : 
     IntermediateTaskPoint(AAT, _oz, wp, tb, to, true),
-    m_target_location(wp.location),
-    m_target_save(wp.location),
-    m_target_locked(false)
-    {
-    }
+    target_location(wp.location),
+    target_save(wp.location),
+    target_locked(false)
+  {
+  }
 
   virtual void Reset();
 
@@ -108,8 +108,8 @@ public:
    *
    * @param do_lock Whether to lock the target
    */
-  void target_lock(bool do_lock) {
-    m_target_locked = do_lock;
+  void LockTarget(bool do_lock) {
+    target_locked = do_lock;
   }
 
   /**
@@ -118,21 +118,21 @@ public:
    * @return True if target is locked
    */
   bool IsTargetLocked() const {
-    return m_target_locked;
+    return target_locked;
   }
 
   /**
    * Save local copy of target in case optimisation fails
    */
   void SaveTarget() {
-    m_target_save = m_target_location;
+    target_save = target_location;
   }
 
   /**
    * Set target from local copy
    */
   void RestoreTarget() {
-    m_target_location = m_target_save;
+    target_location = target_save;
   }
 
   /**
@@ -141,7 +141,7 @@ public:
    * @param loc Location of new target
    * @param override_lock If false, won't set the target if it is locked
    */
-  void set_target(const GeoPoint &loc, const bool override_lock=false);
+  void SetTarget(const GeoPoint &loc, const bool override_lock=false);
 
   /**
    * Set target location from a signed range & radial as bearing
@@ -153,8 +153,8 @@ public:
    *
    * @param radial the bearing in degrees of the target
    */
-  void set_target(const fixed range, const fixed radial,
-                  const TaskProjection &projection);
+  void SetTarget(const fixed range, const fixed radial,
+                 const TaskProjection &projection);
 
   /**
    * returns position of the target in signed range & radial as
@@ -167,15 +167,15 @@ public:
    * @param &radial returns the bearing in degrees of
    * the target
    */
-  void get_target_range_radial(fixed &range, fixed &radial) const;
+  void GetTargetRangeRadial(fixed &range, fixed &radial) const;
 
   /**
    * Accessor to get target location
    *
    * @return Target location
    */
-  const GeoPoint &get_location_target() const {
-    return m_target_location;
+  const GeoPoint &GetTargetLocation() const {
+    return target_location;
   }
 
   /**
@@ -198,7 +198,8 @@ public:
    *
    * @return True if double leg distance from state is within threshold of target
    */
-  bool close_to_target(const AircraftState& state,
+  gcc_pure
+  bool IsCloseToTarget(const AircraftState& state,
                        const fixed threshold=fixed_zero) const;
 
    /**
@@ -224,7 +225,7 @@ private:
    *
    * @return True if target was moved
    */
-  bool check_target(const AircraftState& state, bool known_outside);
+  bool CheckTarget(const AircraftState& state, bool known_outside);
 
   /**
    * Check whether target needs to be moved and if so, to
@@ -235,7 +236,7 @@ private:
    *
    * @return True if target was moved
    */
-  bool check_target_inside(const AircraftState& state);
+  bool CheckTargetInside(const AircraftState& state);
 
   /**
    * Check whether target needs to be moved and if so, to
@@ -246,7 +247,7 @@ private:
    *
    * @return True if target was moved
    */
-  bool check_target_outside(const AircraftState& state);
+  bool CheckTargetOutside(const AircraftState& state);
 
   /**
    * Test whether a taskpoint is equivalent to this one
@@ -255,6 +256,6 @@ private:
    *
    * @return True if same WP, type and OZ
    */
-  bool equals(const OrderedTaskPoint* other) const;
+  virtual bool Equals(const OrderedTaskPoint &other) const;
 };
 #endif

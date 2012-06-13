@@ -52,7 +52,7 @@ FinishPoint::Reset()
 bool 
 FinishPoint::EntryPrecondition() const
 {
-  return get_previous() != NULL && get_previous()->HasEntered();
+  return GetPrevious() != NULL && GetPrevious()->HasEntered();
 }
 
 fixed
@@ -60,23 +60,23 @@ FinishPoint::GetElevation() const
 {
   const fixed nominal_elevation = GetBaseElevation() + safety_height_arrival;
 
-  if (m_ordered_task_behaviour.fai_finish) {
+  if (ordered_task_behaviour.fai_finish) {
     return max(nominal_elevation, fai_finish_height);
   } else {
     return max(nominal_elevation,
-               fixed(m_ordered_task_behaviour.finish_min_height) +
-               (m_ordered_task_behaviour.finish_min_height_ref == HeightReferenceType::AGL ?
+               fixed(ordered_task_behaviour.finish_min_height) +
+               (ordered_task_behaviour.finish_min_height_ref == HeightReferenceType::AGL ?
                  GetBaseElevation() : fixed_zero));
   }
 }
 
 
 void 
-FinishPoint::set_neighbours(OrderedTaskPoint* _prev, OrderedTaskPoint* _next)
+FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 {
   assert(_next == NULL);
   // should not ever have an outbound leg
-  OrderedTaskPoint::set_neighbours(_prev, _next);
+  OrderedTaskPoint::SetNeighbours(_prev, _next);
 }
 
 void 
@@ -97,10 +97,10 @@ FinishPoint::IsInSector(const AircraftState &state) const
 bool
 FinishPoint::is_in_height_limit(const AircraftState &state) const
 {
-  if (!m_ordered_task_behaviour.CheckFinishHeight(state, GetBaseElevation()))
+  if (!ordered_task_behaviour.CheckFinishHeight(state, GetBaseElevation()))
     return false;
 
-  if (m_ordered_task_behaviour.fai_finish)
+  if (ordered_task_behaviour.fai_finish)
     return state.altitude > fai_finish_height;
 
   return true;

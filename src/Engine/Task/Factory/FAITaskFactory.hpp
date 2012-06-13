@@ -48,7 +48,7 @@ public:
 
   /**
    * Check whether task is complete and valid according to factory rules
-   * Adds error types to m_validation_errors
+   * Adds error types to validation_errors
    *
    * @return True if task is valid according to factory rules
    */

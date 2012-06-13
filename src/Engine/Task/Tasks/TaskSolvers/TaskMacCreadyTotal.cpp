@@ -36,15 +36,15 @@ TaskMacCreadyTotal::tp_solution(const unsigned i,
                                 const AircraftState &aircraft, 
                                 fixed minH) const
 {
-  return TaskSolution::GlideSolutionPlanned(*m_tps[i], aircraft,
-                                            settings, m_glide_polar, minH);
+  return TaskSolution::GlideSolutionPlanned(*points[i], aircraft,
+                                            settings, glide_polar, minH);
 }
 
 const AircraftState &
 TaskMacCreadyTotal::get_aircraft_start(const AircraftState &aircraft) const
 {
-  if (m_tps[0]->HasEntered()) {
-    return m_tps[0]->GetEnteredState();
+  if (points[0]->HasEntered()) {
+    return points[0]->GetEnteredState();
   } else {
     return aircraft;
   }
@@ -56,14 +56,17 @@ TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
 
   fixed t_total = fixed_zero;
   fixed d_total = fixed_zero;
-  for (int i=m_end; i>=m_start; i--) {
-    if (m_gs[i].IsOk() && positive(m_gs[i].time_elapsed)) {
-      fixed p = (time_remaining-t_total)/m_gs[i].time_elapsed;
+  for (int i = end_index; i >= start_index; i--) {
+    const GlideResult &result = leg_solutions[i];
+
+    if (result.IsOk() && positive(result.time_elapsed)) {
+      fixed p = (time_remaining - t_total) / result.time_elapsed;
       if ((p>=fixed_zero) && (p<=fixed_one)) {
-        return d_total+p*m_gs[i].vector.distance;
+        return d_total + p * result.vector.distance;
       }
-      d_total += m_gs[i].vector.distance;
-      t_total += m_gs[i].time_elapsed;
+
+      d_total += result.vector.distance;
+      t_total += result.time_elapsed;
     }
   }
   return d_total;
@@ -72,7 +75,8 @@ TaskMacCreadyTotal::effective_distance(const fixed time_remaining) const
 fixed 
 TaskMacCreadyTotal::effective_leg_distance(const fixed time_remaining) const
 {
-  fixed p = (time_remaining)/m_gs[m_activeTaskPoint].time_elapsed;
-  return p*m_gs[m_activeTaskPoint].vector.distance;
+  const GlideResult &result = get_active_solution();
+  fixed p = time_remaining / result.time_elapsed;
+  return p * result.vector.distance;
 }
 

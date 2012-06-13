@@ -54,7 +54,7 @@ public:
    * States each task point can be in
    * (with respect to which OrderedTaskPoint is active/selected).
    */
-  enum ActiveState_t {
+  enum ActiveState {
     /** Active task point was not found, ERROR! */
     NOTFOUND_ACTIVE = 0,
     /** This taskpoint is before the active one */
@@ -67,11 +67,11 @@ public:
 
 protected:
   /** Reference to ordered task behaviour (for task-specific options) */
-  const OrderedTaskBehaviour &m_ordered_task_behaviour;
+  const OrderedTaskBehaviour &ordered_task_behaviour;
 
 private:
-  /** ActiveState determined from scan_active() */
-  ActiveState_t m_active_state;
+  /** ActiveState determined from ScanActive() */
+  ActiveState active_state;
 
   OrderedTaskPoint* tp_next;
   OrderedTaskPoint* tp_previous;
@@ -106,7 +106,7 @@ public:
    * @param waypoint Waypoint to shift to (or NULL)
    */
   gcc_malloc
-  OrderedTaskPoint* clone(const TaskBehaviour &task_behaviour,
+  OrderedTaskPoint *Clone(const TaskBehaviour &task_behaviour,
                           const OrderedTaskBehaviour &ordered_task_behaviour,
                           const Waypoint* waypoint=NULL) const;
 
@@ -117,15 +117,15 @@ public:
    * Update observation zone geometry (or other internal data) when
    * previous/next turnpoint changes.
    */
-  void update_geometry();
+  void UpdateGeometry();
 
   /** Is it possible to insert a task point before this one? */
-  bool predecessor_allowed() const {
+  bool IsPredecessorAllowed() const {
     return GetType() != START;
   }
 
   /** Is it possible to insert a task point after this one? */
-  bool successor_allowed() const {
+  bool IsSuccessorAllowed() const {
     return GetType() != FINISH;
   }
 
@@ -135,19 +135,19 @@ public:
    * @param prev Previous (incoming leg's origin) task point
    * @param next Next (outgoing leg's destination) task point
    */
-  virtual void set_neighbours(OrderedTaskPoint* prev,
-                              OrderedTaskPoint* next);
+  virtual void SetNeighbours(OrderedTaskPoint *previous,
+                             OrderedTaskPoint *next);
 
   /**
    * Accessor for previous task point
    *
    * @return Previous task point
    */
-  const OrderedTaskPoint *get_previous() const {
+  const OrderedTaskPoint *GetPrevious() const {
     return tp_previous;
   }
 
-  OrderedTaskPoint *get_previous() {
+  OrderedTaskPoint *GetPrevious() {
     return tp_previous;
   }
 
@@ -156,22 +156,22 @@ public:
    *
    * @return Next task point
    */
-  const OrderedTaskPoint *get_next() const {
+  const OrderedTaskPoint *GetNext() const {
     return tp_next;
   }
 
-  OrderedTaskPoint *get_next() {
+  OrderedTaskPoint *GetNext() {
     return tp_next;
   }
   
   /**
    * Accessor for activation state of this task point.
-   * This is valid only after scan_active() has been called.
+   * This is valid only after ScanActive() has been called.
    *
    * @return Activation state of this task point
    */
-  ActiveState_t getActiveState() const {
-    return m_active_state;
+  ActiveState GetActiveState() const {
+    return active_state;
   }
 
   /**
@@ -183,7 +183,7 @@ public:
    *
    * @return True if the active task point is found
    */
-  bool scan_active(OrderedTaskPoint* atp);
+  bool ScanActive(const OrderedTaskPoint &atp);
 
   /**
    * Calculate vector remaining from aircraft state.
@@ -237,24 +237,25 @@ public:
    *
    * @return True if same WP, type and OZ
    */
-  virtual bool equals(const OrderedTaskPoint* other) const;
+  virtual bool Equals(const OrderedTaskPoint &other) const;
 
   /**
    * Update a TaskProjection to include this taskpoint and observation zone.
    *
    * @param task_projection Projection to update
    */
-  void scan_projection(TaskProjection &task_projection) const;
+  void ScanProjection(TaskProjection &task_projection) const;
 
   /**
    * Update the bounding box in flat projected coordinates
    */
-  void update_boundingbox(const TaskProjection &task_projection);
+  void UpdateBoundingBox(const TaskProjection &task_projection);
 
   /**
    * Test whether a boundingbox overlaps with this oz
    */
-  bool boundingbox_overlaps(const FlatBoundingBox &bb) const;
+  gcc_pure
+  bool BoundingBoxOverlaps(const FlatBoundingBox &bb) const;
 
 protected:
   /**
@@ -268,7 +269,7 @@ protected:
    * @return Distance (m)
    */
   gcc_pure
-  fixed double_leg_distance(const GeoPoint &ref) const;
+  fixed DoubleLegDistance(const GeoPoint &ref) const;
 
 private:
   bool SearchNominalIfUnsampled() const;

@@ -136,8 +136,8 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     common_stats.ordered_has_targets = task_ordered.HasTargets();
 
     common_stats.aat_time_remaining =
-        task_ordered.get_ordered_task_behaviour().aat_min_time -
-        task_stats.total.time_elapsed;
+      task_ordered.GetOrderedTaskBehaviour().aat_min_time -
+      task_stats.total.time_elapsed;
 
     if (task_stats.total.remaining.IsDefined() &&
         positive(common_stats.aat_time_remaining))
@@ -147,7 +147,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     else
       common_stats.aat_speed_remaining = -fixed_one;
 
-    fixed aat_min_time = task_ordered.get_ordered_task_behaviour().aat_min_time;
+    fixed aat_min_time = task_ordered.GetOrderedTaskBehaviour().aat_min_time;
 
     if (positive(aat_min_time)) {
       common_stats.aat_speed_max = task_stats.distance_max / aat_min_time;
@@ -161,10 +161,10 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     common_stats.task_time_elapsed = task_stats.total.time_elapsed;
 
     const fixed start_max_height =
-        fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +
-        (task_ordered.get_ordered_task_behaviour().start_max_height_ref == HeightReferenceType::MSL
-         ? fixed_zero
-         : task_ordered.GetPoint(0).GetElevation());
+      fixed(task_ordered.GetOrderedTaskBehaviour().start_max_height) +
+      (task_ordered.GetOrderedTaskBehaviour().start_max_height_ref == HeightReferenceType::MSL
+       ? fixed_zero
+       : task_ordered.GetPoint(0).GetElevation());
     if (positive(start_max_height) && state.flying) {
       if (!positive(common_stats.TimeUnderStartMaxHeight) &&
           state.altitude < start_max_height) {
@@ -177,7 +177,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
       common_stats.TimeUnderStartMaxHeight = -fixed_one;
     }
 
-    task_ordered.update_summary(common_stats.ordered_summary);
+    task_ordered.UpdateSummary(common_stats.ordered_summary);
 
   } else {
     common_stats.ResetTask();
@@ -476,7 +476,7 @@ TaskManager::GetLocationTarget(const unsigned index,
 
   const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
-    return ap->get_location_target();
+    return ap->GetTargetLocation();
 
  return fallback_location;
 }
@@ -515,7 +515,7 @@ TaskManager::SetTarget(const unsigned index, const GeoPoint &loc,
 
   AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
-    ap->set_target(loc, override_lock);
+    ap->SetTarget(loc, override_lock);
 
   return true;
 }
@@ -529,7 +529,7 @@ TaskManager::SetTarget(const unsigned index, const fixed range,
 
   AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
-    ap->set_target(range, radial, task_ordered.GetTaskProjection());
+    ap->SetTarget(range, radial, task_ordered.GetTaskProjection());
 
   return true;
 }
@@ -543,7 +543,7 @@ TaskManager::GetTargetRangeRadial(const unsigned index, fixed &range,
 
   const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
-    ap->get_target_range_radial(range, radial);
+    ap->GetTargetRangeRadial(range, radial);
 
   return true;
 }
@@ -556,7 +556,7 @@ TaskManager::TargetLock(const unsigned index, bool do_lock)
 
   AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
-    ap->target_lock(do_lock);
+    ap->LockTarget(do_lock);
 
   return true;
 }

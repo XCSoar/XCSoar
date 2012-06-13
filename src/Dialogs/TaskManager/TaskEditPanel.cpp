@@ -83,7 +83,7 @@ TaskEditPanel::RefreshView()
 {
   UpdateButtons();
 
-  if (!ordered_task->is_max_size())
+  if (!ordered_task->IsFull())
     wTaskPoints->SetLength(ordered_task->TaskSize()+1);
   else
     wTaskPoints->SetLength(ordered_task->TaskSize());
@@ -146,7 +146,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   }
 
   const OrderedTaskPoint &tp = ordered_task->GetTaskPoint(DrawListIndex);
-  GeoVector leg = tp.leg_vector_nominal();
+  GeoVector leg = tp.GetNominalLegVector();
   bool show_leg_info = leg.distance > fixed(0.01);
 
   // Draw icon
@@ -230,7 +230,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
       *task_modified = true;
       RefreshView();
     }
-  } else if (!ordered_task->is_max_size()) {
+  } else if (!ordered_task->IsFull()) {
 
     OrderedTaskPoint* point = NULL;
     AbstractTaskFactory &factory = ordered_task->GetFactory();

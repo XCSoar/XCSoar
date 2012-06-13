@@ -54,24 +54,24 @@ class TaskMacCready:
   private NonCopyable 
 {
 protected:
-  const std::vector<TaskPoint*> m_tps; /**< The TaskPoints in the task */
-  std::vector<GlideResult> m_gs; /**< Glide solutions for each leg */
-  const unsigned m_activeTaskPoint; /**< Active task point (local copy for speed) */
-  int m_start; /**< TaskPoint sequence index of first taskpoint included in scan */
-  int m_end; /**< TaskPoint sequence index of last taskpoint included in scan */
+  const std::vector<TaskPoint*> points; /**< The TaskPoints in the task */
+  std::vector<GlideResult> leg_solutions; /**< Glide solutions for each leg */
+  const unsigned active_index; /**< Active task point (local copy for speed) */
+  int start_index; /**< TaskPoint sequence index of first taskpoint included in scan */
+  int end_index; /**< TaskPoint sequence index of last taskpoint included in scan */
   const GlideSettings &settings;
-  GlidePolar m_glide_polar; /**< Glide polar used for computations */
+  GlidePolar glide_polar; /**< Glide polar used for computations */
 
 public:
 /** 
  * Constructor for ordered task points
  * 
  * @param _tps Vector of ordered task points comprising the task
- * @param _activeTaskPoint Current active task point in sequence
+ * @param _active_index Current active task point in sequence
  * @param gp Glide polar to copy for calculations
  */
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
-                const unsigned _activeTaskPoint,
+                const unsigned _active_index,
                 const GlideSettings &settings, const GlidePolar &gp);
 
 /** 
@@ -118,7 +118,7 @@ public:
  * @param mc MacCready value (m/s)
  */
   void set_mc(fixed mc) {
-    m_glide_polar.SetMC(mc);
+    glide_polar.SetMC(mc);
   };
 
 /** 
@@ -127,7 +127,7 @@ public:
  * @param ce Cruise efficiency
  */
   void set_cruise_efficiency(fixed ce) {
-    m_glide_polar.SetCruiseEfficiency(ce);
+    glide_polar.SetCruiseEfficiency(ce);
   };
 
 /** 
@@ -139,7 +139,7 @@ public:
  */
   gcc_pure
   const GlideResult& get_active_solution() const {
-    return m_gs[m_activeTaskPoint];
+    return leg_solutions[active_index];
   }
 
 protected:

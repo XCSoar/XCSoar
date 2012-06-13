@@ -146,16 +146,16 @@ RefreshView()
   wb = (WndButton*)wf->FindByName(_T("cmdOptionalStarts"));
   assert(wb);
   wb->SetVisible(active_index == 0);
-  if (ordered_task->optional_start_points_size() == 0)
+  if (ordered_task->GetOptionalStartPointCount() == 0)
     wb->SetCaption(_("Enable Alternate Starts"));
   else {
     StaticString<50> tmp;
     tmp.Format(_T("%s (%d)"), _("Edit Alternates"),
-               ordered_task->optional_start_points_size());
+               ordered_task->GetOptionalStartPointCount());
     wb->SetCaption(tmp);
   }
 
-  EnableSizeEdit(ordered_task->get_factory_type() != TaskFactoryType::FAI_GENERAL);
+  EnableSizeEdit(ordered_task->GetFactoryType() != TaskFactoryType::FAI_GENERAL);
 
   StaticString<100> name_prefix_buffer, type_buffer;
 
@@ -427,7 +427,7 @@ dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task,
     task_modified = true;
   } 
   if (task_modified) {
-    ordered_task->update_geometry();
+    ordered_task->UpdateGeometry();
   }
   return task_modified;
 }

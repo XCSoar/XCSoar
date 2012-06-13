@@ -47,7 +47,7 @@ fixed
 TaskOptTarget::f(const fixed p)
 {
   // set task targets
-  set_target(p);
+  SetTarget(p);
 
   res = tm.glide_solution(aircraft);
 
@@ -84,9 +84,9 @@ TaskOptTarget::search(const fixed tp)
 }
 
 void
-TaskOptTarget::set_target(const fixed p)
+TaskOptTarget::SetTarget(const fixed p)
 {
   const GeoPoint loc = iso.Parametric(min(xmax, max(xmin, p)));
-  tp_current.set_target(loc);
-  tp_start->scan_distance_remaining(aircraft.location);
+  tp_current.SetTarget(loc);
+  tp_start->ScanDistanceRemaining(aircraft.location);
 }

@@ -23,12 +23,12 @@
 #include "TaskSolution.hpp"
 
 TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
-                                               const unsigned _activeTaskPoint,
+                                               const unsigned _active_index,
                                                const GlideSettings &settings,
                                                const GlidePolar &_gp):
-  TaskMacCready(_tps,_activeTaskPoint, settings, _gp)
+  TaskMacCready(_tps, _active_index, settings, _gp)
 {
-  m_end = m_activeTaskPoint;
+  end_index = active_index;
 }
 
 
@@ -37,15 +37,15 @@ TaskMacCreadyTravelled::tp_solution(const unsigned i,
                                     const AircraftState &aircraft, 
                                     fixed minH) const
 {
-  return TaskSolution::GlideSolutionTravelled(*m_tps[i], aircraft,
-                                              settings, m_glide_polar, minH);
+  return TaskSolution::GlideSolutionTravelled(*points[i], aircraft,
+                                              settings, glide_polar, minH);
 }
 
 const AircraftState &
 TaskMacCreadyTravelled::get_aircraft_start(const AircraftState &aircraft) const
 {
-  if (m_tps[0]->HasEntered()) {
-    return m_tps[0]->GetEnteredState();
+  if (points[0]->HasEntered()) {
+    return points[0]->GetEnteredState();
   } else {
     return aircraft;
   }

@@ -73,11 +73,11 @@ private:
 
   TaskProjection task_projection;
 
-  GeoPoint m_location_min_last;
+  GeoPoint last_min_location;
 
   TaskFactoryType factory_mode;
   AbstractTaskFactory* active_factory;
-  OrderedTaskBehaviour m_ordered_behaviour;
+  OrderedTaskBehaviour ordered_behaviour;
   TaskAdvanceSmart task_advance;
   TaskDijkstraMin *dijkstra_min;
   TaskDijkstraMax *dijkstra_max;
@@ -413,8 +413,8 @@ public:
    *
    * @return True if task is full
    */
-  bool is_max_size() const {
-    return TaskSize() == m_ordered_behaviour.max_points;
+  bool IsFull() const {
+    return TaskSize() == ordered_behaviour.max_points;
   }
 
   /**
@@ -461,24 +461,19 @@ public:
    * This also updates planned/nominal distances so clients can use that
    * data during task construction.
    */
-  void update_geometry();
+  void UpdateGeometry();
 
   /**
    * Convert a GeoBounds into a flat bounding box projected
    * according to the task projection.
    */
-  FlatBoundingBox get_bounding_box(const GeoBounds& bounds) const;
-
-  /**
-   * Convert a GeoPoint into a flat bounding box projected
-   * according to the task projection.
-   */
-  FlatBoundingBox get_bounding_box(const GeoPoint& point) const;
+  gcc_pure
+  FlatBoundingBox GetBoundingBox(const GeoBounds &bounds) const;
 
   /**
    * Update summary task statistics (progress along path)
    */
-  void update_summary(TaskSummary& summary) const;
+  void UpdateSummary(TaskSummary &summary) const;
 
 protected:
   bool IsScored() const;
@@ -492,7 +487,7 @@ public:
    *
    * @return Vector of search point candidates
    */
-  const SearchPointVector& get_tp_search_points(unsigned tp) const;
+  const SearchPointVector &GetPointSearchPoints(unsigned tp) const;
 
 protected:
   /**
@@ -501,7 +496,7 @@ protected:
    * @param tp Index of task point to set min
    * @param sol Search point found to be minimum distance
    */
-  void set_tp_search_min(unsigned tp, const SearchPoint &sol);
+  void SetPointSearchMin(unsigned tp, const SearchPoint &sol);
 
   /**
    * Set task point's maximum distance value (by TaskDijkstra).
@@ -509,7 +504,7 @@ protected:
    * @param tp Index of task point to set max
    * @param sol Search point found to be maximum distance
    */
-  void set_tp_search_max(unsigned tp, const SearchPoint &sol);
+  void SetPointSearchMax(unsigned tp, const SearchPoint &sol);
 
   /**
    * Set task point's minimum distance achieved value
@@ -524,7 +519,7 @@ protected:
    *
    * @return True if start and finish found
    */
-  bool scan_start_finish();
+  bool ScanStartFinish();
 
   /**
    * Test whether (and how) transitioning into/out of task points should occur, typically
@@ -736,8 +731,8 @@ protected:
 
 private:
 
-  fixed scan_distance_min(const GeoPoint &ref, bool full);
-  fixed scan_distance_max();
+  fixed ScanDistanceMin(const GeoPoint &ref, bool full);
+  fixed ScanDistanceMax();
 
   /**
    * Sets previous/next taskpoint pointers for task point at specified
@@ -745,47 +740,48 @@ private:
    *
    * @param position Index of task point
    */
-  void set_neighbours(unsigned position);
+  void SetNeighbours(unsigned position);
 
   /**
    * Erase taskpoint in sequence (for internal use)
    *
    * @param i index of task point in sequence
    */
-  void erase(unsigned i);
+  void ErasePoint(unsigned i);
 
   /**
    * Erase optional start point (for internal use)
    *
    * @param i index of optional start point in sequence
    */
-  void erase_optional_start(unsigned i);
+  void EraseOptionalStartPoint(unsigned i);
 
-  void update_start_transition(const AircraftState &state, OrderedTaskPoint& start);
+  void UpdateStartTransition(const AircraftState &state,
+                             OrderedTaskPoint &start);
 
   gcc_pure
-  bool distance_is_significant(const GeoPoint &location,
-                               const GeoPoint &location_last) const;
+  bool DistanceIsSignificant(const GeoPoint &location,
+                             const GeoPoint &location_last) const;
 
-  bool allow_incremental_boundary_stats(const AircraftState &state) const;
+  gcc_pure
+  bool AllowIncrementalBoundaryStats(const AircraftState &state) const;
 
-  bool check_transition_point(OrderedTaskPoint& point,
-                              const AircraftState &state_now, 
-                              const AircraftState &state_last,
-                              const FlatBoundingBox& bb_now,
-                              const FlatBoundingBox& bb_last,
-                              bool &transition_enter,
-                              bool &transition_exit,
-                              bool &last_started,
-                              const bool is_start);
+  bool CheckTransitionPoint(OrderedTaskPoint &point,
+                            const AircraftState &state_now,
+                            const AircraftState &state_last,
+                            const FlatBoundingBox &bb_now,
+                            const FlatBoundingBox &bb_last,
+                            bool &transition_enter, bool &transition_exit,
+                            bool &last_started,
+                            const bool is_start);
 
-  bool check_transition_optional_start(const AircraftState &state_now, 
-                                       const AircraftState &state_last,
-                                       const FlatBoundingBox& bb_now,
-                                       const FlatBoundingBox& bb_last,
-                                       bool &transition_enter,
-                                       bool &transition_exit,
-                                       bool &last_started);
+  bool CheckTransitionOptionalStart(const AircraftState &state_now,
+                                    const AircraftState &state_last,
+                                    const FlatBoundingBox& bb_now,
+                                    const FlatBoundingBox& bb_last,
+                                    bool &transition_enter,
+                                    bool &transition_exit,
+                                    bool &last_started);
 
   /**
    * @param waypoints Active waypoint database
@@ -796,7 +792,7 @@ private:
                                OrderedTaskPointVector& points,
                                const bool is_task);
 
-  void select_optional_start(unsigned pos);
+  void SelectOptionalStart(unsigned pos);
 
 public:
   /**
@@ -804,7 +800,7 @@ public:
    *
    * @return Reference to TaskAdvance used by this task
    */
-  const TaskAdvance &get_task_advance() const {
+  const TaskAdvance &GetTaskAdvance() const {
     return task_advance;
   }
 
@@ -813,7 +809,7 @@ public:
    * 
    * @return Reference to TaskAdvance used by this task
    */
-  TaskAdvance& get_task_advance() {
+  TaskAdvance &GetTaskAdvance() {
     return task_advance;
   }
 
@@ -822,7 +818,7 @@ public:
    * 
    * @return Factory type
    */
-  TaskFactoryType get_factory_type() const {
+  TaskFactoryType GetFactoryType() const {
     return factory_mode;
   }
 
@@ -831,8 +827,8 @@ public:
    * 
    * @return Read-only OrderedTaskBehaviour
    */
-  const OrderedTaskBehaviour& get_ordered_task_behaviour() const {
-    return m_ordered_behaviour;
+  const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const {
+    return ordered_behaviour;
   }
 
   /** 
@@ -840,8 +836,8 @@ public:
    * 
    * @return Reference to OrderedTaskBehaviour
    */
-  OrderedTaskBehaviour& get_ordered_task_behaviour() {
-    return m_ordered_behaviour;
+  OrderedTaskBehaviour &GetOrderedTaskBehaviour() {
+    return ordered_behaviour;
   }
 
   /** 
@@ -849,7 +845,7 @@ public:
    * 
    * @param ob Value to set
    */
-  void set_ordered_task_behaviour(const OrderedTaskBehaviour& ob);
+  void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &ob);
 
   gcc_pure
   OrderedTaskPoint &GetPoint(const unsigned i) {
@@ -871,7 +867,7 @@ public:
    * @return number of optional start poitns
    */
   gcc_pure
-  unsigned optional_start_points_size() const {
+  unsigned GetOptionalStartPointCount() const {
     return optional_start_points.size();
   }
 
@@ -882,9 +878,11 @@ public:
    * @return NULL if index out of range, else optional start point
    */
   gcc_pure
-  const OrderedTaskPoint * get_optional_start(unsigned pos) const;
+  const OrderedTaskPoint &GetOptionalStartPoint(unsigned i) const {
+    assert(i < optional_start_points.size());
 
-
+    return *optional_start_points[i];
+  }
 
   /**
    * Accept a (const) task point visitor; makes the visitor visit

@@ -125,7 +125,7 @@ SetPointType(AbstractTaskFactory::LegalPointType type)
       delete point;
     } else {
       if (factory.IsValidFinishType(type) &&
-          ordered_task->get_ordered_task_behaviour().is_closed)
+          ordered_task->GetOrderedTaskBehaviour().is_closed)
         way_point = &ordered_task->GetPoint(0).GetWaypoint();
       else {
         const GeoPoint &location = ordered_task->TaskSize() > 0
