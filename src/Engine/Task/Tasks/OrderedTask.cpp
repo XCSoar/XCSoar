@@ -68,6 +68,35 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb):
   active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
 }
 
+OrderedTask::~OrderedTask()
+{
+  for (auto v = task_points.begin(); v != task_points.end();) {
+    delete *v;
+    task_points.erase(v);
+  }
+
+  for (auto v = optional_start_points.begin(); v != optional_start_points.end();) {
+    delete *v;
+    optional_start_points.erase(v);
+  }
+
+  delete active_factory;
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+  /* no, TaskDijkstra{Min,Max} really don't need a virtual
+     destructor */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+
+  delete dijkstra_min;
+  delete dijkstra_max;
+
+#if defined(__clang__) || GCC_VERSION >= 40700
+#pragma GCC diagnostic pop
+#endif
+}
+
 static void
 SetTaskBehaviour(OrderedTask::OrderedTaskPointVector &vector,
                  const TaskBehaviour &tb)
@@ -900,37 +929,6 @@ OrderedTask::CalcGradient(const AircraftState &state) const
 
   // Calculate gradient to the last turnpoint of the remaining task
   return (state.altitude - task_points[task_points.size() - 1]->GetElevation()) / distance;
-}
-
-// Constructors/destructors
-
-OrderedTask::~OrderedTask()
-{
-  for (auto v = task_points.begin(); v != task_points.end();) {
-    delete *v;
-    task_points.erase(v);
-  }
-
-  for (auto v = optional_start_points.begin(); v != optional_start_points.end();) {
-    delete *v;
-    optional_start_points.erase(v);
-  }
-
-  delete active_factory;
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-  /* no, TaskDijkstra{Min,Max} really don't need a virtual
-     destructor */
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-#endif
-
-  delete dijkstra_min;
-  delete dijkstra_max;
-
-#if defined(__clang__) || GCC_VERSION >= 40700
-#pragma GCC diagnostic pop
-#endif
 }
 
 static void
