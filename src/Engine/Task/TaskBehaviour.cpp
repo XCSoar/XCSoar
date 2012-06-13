@@ -79,6 +79,5 @@ TaskBehaviour::DisableAll()
   calc_cruise_efficiency = false;
   calc_glide_required = false;
   enable_olc = false;
-  ordered_defaults.AllOff();
   route_planner.mode = RoutePlannerConfig::Mode::NONE;
 }

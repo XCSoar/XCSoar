@@ -44,8 +44,6 @@ public:
 
   virtual ~FAITriangleTaskFactory() {};
 
-  virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
-
 /** 
  * Check whether task is complete and valid according to factory rules
  * 

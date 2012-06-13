@@ -41,10 +41,6 @@ public:
  */  
   MixedTaskFactory(OrderedTask& _task,
                    const TaskBehaviour &tb);
-
-  ~MixedTaskFactory() {};
-
-  void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 };
 
 #endif

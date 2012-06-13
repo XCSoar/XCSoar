@@ -21,8 +21,18 @@
  */
 
 #include "FAITaskFactory.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
+#include "TaskFactoryConstraints.hpp"
+#include "Task/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
+
+static gcc_constexpr_data TaskFactoryConstraints fai_constraints = {
+  true,
+  true,
+  false,
+  false,
+  false,
+  2, 13,
+};
 
 static gcc_constexpr_data TaskPointFactoryType fai_start_types[] = {
   TaskPointFactoryType::START_SECTOR,
@@ -39,9 +49,22 @@ static gcc_constexpr_data TaskPointFactoryType fai_finish_types[] = {
   TaskPointFactoryType::FINISH_LINE,
 };
 
+FAITaskFactory::FAITaskFactory(const TaskFactoryConstraints &_constraints,
+                               OrderedTask& _task,
+                               const TaskBehaviour &tb)
+  :AbstractTaskFactory(_constraints, _task, tb,
+                       LegalPointConstArray(fai_start_types,
+                                            ARRAY_SIZE(fai_start_types)),
+                       LegalPointConstArray(fai_im_types,
+                                            ARRAY_SIZE(fai_im_types)),
+                       LegalPointConstArray(fai_finish_types,
+                                            ARRAY_SIZE(fai_finish_types)))
+{
+}
+
 FAITaskFactory::FAITaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb)
-  :AbstractTaskFactory(_task, tb,
+  :AbstractTaskFactory(fai_constraints, _task, tb,
                        LegalPointConstArray(fai_start_types,
                                             ARRAY_SIZE(fai_start_types)),
                        LegalPointConstArray(fai_im_types,
@@ -66,18 +89,12 @@ FAITaskFactory::Validate()
 void 
 FAITaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
-  to.task_scored = true;
-  to.fai_finish = true;  
-  to.homogeneous_tps = false;
-  to.is_closed = false;
-  to.min_points = 2;
-  to.max_points = 13;
+  AbstractTaskFactory::UpdateOrderedTaskBehaviour(to);
 
   to.start_max_speed = fixed_zero;
   to.start_max_height = 0;
   to.start_max_height_ref = HeightReferenceType::AGL;
   to.finish_min_height = 0;
-  to.start_requires_arm = false;
 }
 
 TaskPointFactoryType

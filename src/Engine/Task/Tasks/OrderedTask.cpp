@@ -45,6 +45,7 @@
 #include "Task/Factory/AATTaskFactory.hpp"
 #include "Task/Factory/MixedTaskFactory.hpp"
 #include "Task/Factory/TouringTaskFactory.hpp"
+#include "Task/Factory/TaskFactoryConstraints.hpp"
 
 #include "Waypoint/Waypoints.hpp"
 
@@ -61,11 +62,11 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb):
   factory_mode(tb.task_type_default),
   active_factory(NULL),
   ordered_behaviour(tb.ordered_defaults),
-  task_advance(ordered_behaviour),
   dijkstra_min(NULL), dijkstra_max(NULL)
 {
   active_factory = new RTTaskFactory(*this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
+  task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 }
 
 OrderedTask::~OrderedTask()
@@ -95,6 +96,12 @@ OrderedTask::~OrderedTask()
 #if defined(__clang__) || GCC_VERSION >= 40700
 #pragma GCC diagnostic pop
 #endif
+}
+
+const TaskFactoryConstraints &
+OrderedTask::GetFactoryConstraints() const
+{
+  return GetFactory().GetConstraints();
 }
 
 static void
@@ -1081,6 +1088,12 @@ OrderedTask::TaskSize() const
   return task_points.size();
 }
 
+bool
+OrderedTask::IsFull() const
+{
+  return TaskSize() == GetFactory().GetConstraints().max_points;
+}
+
 unsigned 
 OrderedTask::GetActiveIndex() const
 {
@@ -1339,6 +1352,7 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
     break;
   };
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
+  task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 
   return factory_mode;
 }
@@ -1352,7 +1366,7 @@ OrderedTask::SetOrderedTaskBehaviour(const OrderedTaskBehaviour& ob)
 bool 
 OrderedTask::IsScored() const
 {
-  return ordered_behaviour.task_scored;
+  return GetFactoryConstraints().task_scored;
 }
 
 std::vector<TaskFactoryType>

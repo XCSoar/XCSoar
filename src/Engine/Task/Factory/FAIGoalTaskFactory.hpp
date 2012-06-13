@@ -39,10 +39,6 @@ public:
  */  
   FAIGoalTaskFactory(OrderedTask& _task,
                  const TaskBehaviour &tb);
-
-  virtual ~FAIGoalTaskFactory() {};
-
-  virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 };
 
 #endif

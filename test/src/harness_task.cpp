@@ -25,6 +25,7 @@
 
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/Factory/TaskFactoryConstraints.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
@@ -871,9 +872,11 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   }
 
   //max points includes start & finish
-  const unsigned num_points_total = (
-    max(task_manager.GetOrderedTaskBehaviour().min_points,
-        (_num_points % task_manager.GetOrderedTaskBehaviour().max_points) + 1));
+  const TaskFactoryConstraints &constraints =
+    task_manager.GetOrderedTask().GetFactoryConstraints();
+  const unsigned num_points_total =
+    max(constraints.min_points,
+        _num_points % constraints.max_points) + 1;
   const unsigned num_int_points = num_points_total - 2;
 
   test_note("# adding start\n");

@@ -19,7 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AbstractTaskFactory.hpp"
+#include "TaskFactoryConstraints.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
@@ -146,7 +148,7 @@ AbstractTaskFactory::CreateStart(const Waypoint &wp) const
 IntermediateTaskPoint* 
 AbstractTaskFactory::CreateIntermediate(const Waypoint &wp) const
 {
-  if (GetOrderedTaskBehaviour().homogeneous_tps && task.TaskSize() > 1) {
+  if (constraints.homogeneous_tps && task.TaskSize() > 1) {
     TaskPointFactoryType type = GetType(task.GetPoint(1));
     if (IsValidIntermediateType(type))
       return CreateIntermediate(type, wp);
@@ -562,6 +564,7 @@ AbstractTaskFactory::GetOrderedTaskBehaviour() const
 void 
 AbstractTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
+  to.fai_finish = constraints.fai_finish;
 }
 
 bool 
@@ -569,14 +572,14 @@ AbstractTaskFactory::IsPositionIntermediate(const unsigned position) const
 {
   if (IsPositionStart(position))
     return false;
-  if (position >= GetOrderedTaskBehaviour().max_points)
+  if (position >= constraints.max_points)
     return false;
-  if (position + 1 < GetOrderedTaskBehaviour().min_points)
+  if (position + 1 < constraints.min_points)
     return true;
 
-  if (GetOrderedTaskBehaviour().IsFixedSize())
-    return (position + 1 < GetOrderedTaskBehaviour().max_points);
-  else if (task.TaskSize() < GetOrderedTaskBehaviour().min_points)
+  if (constraints.IsFixedSize())
+    return (position + 1 < constraints.max_points);
+  else if (task.TaskSize() < constraints.min_points)
     return true;
   else
     return (position <= task.TaskSize());
@@ -588,13 +591,13 @@ AbstractTaskFactory::IsPositionFinish(const unsigned position) const
   if (IsPositionStart(position))
     return false;
 
-  if (position + 1 < GetOrderedTaskBehaviour().min_points)
+  if (position + 1 < constraints.min_points)
     return false;
-  if (position + 1 > GetOrderedTaskBehaviour().max_points)
+  if (position + 1 > constraints.max_points)
     return false;
 
-  if (GetOrderedTaskBehaviour().IsFixedSize())
-    return (position + 1 == GetOrderedTaskBehaviour().max_points);
+  if (constraints.IsFixedSize())
+    return (position + 1 == constraints.max_points);
   else
     return (position + 1 >= task.TaskSize());
 }
@@ -815,28 +818,28 @@ AbstractTaskFactory::Validate()
     valid = false;
   }
 
-  if (GetOrderedTaskBehaviour().is_closed && !IsClosed()) {
+  if (constraints.is_closed && !IsClosed()) {
     AddValidationError(TASK_NOT_CLOSED);
     valid = false;
   }
 
-  if (GetOrderedTaskBehaviour().IsFixedSize()) {
-    if (task.TaskSize() != GetOrderedTaskBehaviour().max_points) {
+  if (constraints.IsFixedSize()) {
+    if (task.TaskSize() != constraints.max_points) {
       AddValidationError(INCORRECT_NUMBER_TURNPOINTS);
       valid = false;
     }
   } else {
-    if (task.TaskSize() < GetOrderedTaskBehaviour().min_points) {
+    if (task.TaskSize() < constraints.min_points) {
       AddValidationError(UNDER_MIN_TURNPOINTS);
       valid = false;
     }
-    if (task.TaskSize() > GetOrderedTaskBehaviour().max_points) {
+    if (task.TaskSize() > constraints.max_points) {
       AddValidationError(EXCEEDS_MAX_TURNPOINTS);
       valid = false;
     }
   }
 
-  if (GetOrderedTaskBehaviour().homogeneous_tps && !IsHomogeneous()) {
+  if (constraints.homogeneous_tps && !IsHomogeneous()) {
     AddValidationError(TASK_NOT_HOMOGENEOUS);
     valid = false;
   }
@@ -852,7 +855,7 @@ AbstractTaskFactory::GetValidIntermediateTypes(unsigned position) const
   if (!IsPositionIntermediate(position))
     return v;
 
-  if (GetOrderedTaskBehaviour().homogeneous_tps &&
+  if (constraints.homogeneous_tps &&
       position > 1 && task.TaskSize() > 1) {
     TaskPointFactoryType type = GetType(task.GetPoint(1));
     if (IsValidIntermediateType(type)) {
@@ -955,7 +958,7 @@ bool
 AbstractTaskFactory::RemoveExcessTPsPerTaskType()
 {
   bool changed = false;
-  unsigned maxtp = GetOrderedTaskBehaviour().max_points;
+  unsigned maxtp = constraints.max_points;
   while (maxtp < task.TaskSize()) {
     Remove(maxtp, false);
     changed = true;
@@ -1031,7 +1034,7 @@ AbstractTaskFactory::MutateClosedFinishPerTaskType()
 
   bool changed = false;
 
-  if (GetOrderedTaskBehaviour().is_closed) {
+  if (constraints.is_closed) {
     if (!IsClosed()) {
       const OrderedTaskPoint &tp = task.GetPoint(task.TaskSize() - 1);
       if (tp.GetType() == TaskPoint::FINISH) {

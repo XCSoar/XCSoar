@@ -39,11 +39,6 @@ enum class HeightReferenceType: uint8_t {
  * the #AbstractTaskFactory but can be overriden
  */
 struct OrderedTaskBehaviour {
-  /**
-   * Option to enable calculation of scores, and protect against
-   * task changes if flight/task has started
-   */
-  bool task_scored;
   /** Desired AAT minimum task time (s) */
   fixed aat_min_time;
   /** Maximum ground speed (m/s) allowed in start sector */
@@ -56,19 +51,13 @@ struct OrderedTaskBehaviour {
   unsigned finish_min_height;
   /** Reference for min finish height */
   HeightReferenceType finish_min_height_ref;
-  /** Whether ordered task start and finish requires FAI height rules
-   *  and (no) speed rule */
+
+  /**
+   * Whether ordered task start and finish requires FAI height rules
+   * and (no) speed rule.  The default value is
+   * TaskFactoryConstraints::fai_finish.
+   */
   bool fai_finish;
-  /** Minimum number of turnpoints including start/finish */
-  unsigned min_points;
-  /** Maximum number of turnpoints including start/finish */
-  unsigned max_points;
-  /** Whether all turnpoints except start/finish are same type */
-  bool homogeneous_tps;
-  /** Whether start/finish turnpoints must be the same */
-  bool is_closed;
-  /** Whether start points needs to be armed */
-  bool start_requires_arm;
 
   void SetDefaults();
 
@@ -110,24 +99,6 @@ struct OrderedTaskBehaviour {
    */
   bool CheckFinishHeight(const AircraftState &state,
                          const fixed finish_elevation) const;
-
-
-  /**
-   * Convenience function (used primarily for testing) to disable
-   * all expensive task behaviour functions.
-   */
-  void AllOff() {
-    task_scored = false;
-  }
-
-  /**
-   * Determine if the task should have a fixed number of turnpoints
-   *
-   * @return True if task is fixed size
-   */
-  bool IsFixedSize() const {
-    return min_points == max_points;
-  }
 };
 
 #endif

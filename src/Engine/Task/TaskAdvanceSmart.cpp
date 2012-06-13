@@ -19,19 +19,25 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskAdvanceSmart.hpp"
 #include "Tasks/BaseTask/TaskPoint.hpp"
 #include "TaskPoints/StartPoint.hpp"
 #include "TaskPoints/AATPoint.hpp"
 #include "Tasks/BaseTask/IntermediatePoint.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "OrderedTaskBehaviour.hpp"
+#include "Factory/TaskFactoryConstraints.hpp"
 
-TaskAdvanceSmart::TaskAdvanceSmart(const OrderedTaskBehaviour &behaviour):
-  TaskAdvance(),
-  m_state(TaskAdvance::MANUAL),
-  m_task_behaviour(behaviour)
+TaskAdvanceSmart::TaskAdvanceSmart()
+  :m_state(TaskAdvance::MANUAL),
+   start_requires_arm(false)
 {
+}
+
+void
+TaskAdvanceSmart::SetFactoryConstraints(const TaskFactoryConstraints &constraints)
+{
+  start_requires_arm = constraints.start_requires_arm;
 }
 
 bool 
@@ -46,7 +52,7 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
 
   if (tp.GetType() == TaskPoint::START) {
     const StartPoint *sp = (const StartPoint *)&tp;
-    if (m_task_behaviour.start_requires_arm) {
+    if (start_requires_arm) {
       if (m_armed) {
         m_state = TaskAdvance::START_ARMED;
       } else {

@@ -25,7 +25,7 @@
 
 #include "TaskAdvance.hpp"
 
-struct OrderedTaskBehaviour;
+struct TaskFactoryConstraints;
 
 /** Class used to control advancement through an OrderedTask */
 class TaskAdvanceSmart: 
@@ -36,13 +36,15 @@ protected:
   TaskAdvanceState_t m_state;
 
 private:
-  const OrderedTaskBehaviour &m_task_behaviour;
+  bool start_requires_arm;
 
 public:
   /** 
    * Constructor.  Sets defaults to auto-mode
    */
-  TaskAdvanceSmart(const OrderedTaskBehaviour &task_behaviour);
+  TaskAdvanceSmart();
+
+  void SetFactoryConstraints(const TaskFactoryConstraints &constraints);
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 

@@ -44,6 +44,7 @@ class AATPoint;
 class FlatBoundingBox;
 struct GeoBounds;
 struct TaskSummary;
+struct TaskFactoryConstraints;
 
 /**
  * A task comprising an ordered sequence of task points, each with
@@ -108,6 +109,9 @@ public:
   AbstractTaskFactory& GetFactory() const {
     return *active_factory;
   }
+
+  gcc_pure
+  const TaskFactoryConstraints &GetFactoryConstraints() const;
 
   /**
    * Set type of task factory to be used for constructing tasks
@@ -414,9 +418,8 @@ public:
    *
    * @return True if task is full
    */
-  bool IsFull() const {
-    return TaskSize() == ordered_behaviour.max_points;
-  }
+  gcc_pure
+  bool IsFull() const;
 
   /**
    * Accessor for task projection, for use when creating task points

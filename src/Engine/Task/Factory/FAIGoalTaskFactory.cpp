@@ -21,19 +21,19 @@
  */
 
 #include "FAIGoalTaskFactory.hpp"
-#include "Task/OrderedTaskBehaviour.hpp"
+#include "TaskFactoryConstraints.hpp"
+
+static gcc_constexpr_data TaskFactoryConstraints fai_goal_constraints = {
+  true,
+  true,
+  false,
+  false,
+  false,
+  2, 2,
+};
 
 FAIGoalTaskFactory::FAIGoalTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb):
-  FAITaskFactory(_task, tb)
+  FAITaskFactory(fai_goal_constraints, _task, tb)
 {
-}
-
-void 
-FAIGoalTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
-{
-  FAITaskFactory::UpdateOrderedTaskBehaviour(to);
-  to.is_closed = false;
-  to.min_points = 2;
-  to.max_points = 2;
 }

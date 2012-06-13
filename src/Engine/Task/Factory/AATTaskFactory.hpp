@@ -45,8 +45,6 @@ public:
 
   ~AATTaskFactory() {};
 
-  void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
-
   /**
    * swaps non AAT OZs with either AAT_SEGMENT or AAT_CYLINDER
    * based on the shape of the input point

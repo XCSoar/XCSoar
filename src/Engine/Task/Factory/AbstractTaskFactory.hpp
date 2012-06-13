@@ -33,6 +33,7 @@ Copyright_License {
 #include <vector>
 #include <stdint.h>
 
+struct TaskFactoryConstraints;
 class AATPoint;
 class StartPoint;
 class IntermediateTaskPoint;
@@ -96,6 +97,8 @@ public:
   typedef std::vector<TaskValidationErrorType> TaskValidationErrorVector;
 
 protected:
+  const TaskFactoryConstraints &constraints;
+
   /** task managed by this factory */
   OrderedTask &task;
   /** behaviour (settings) */
@@ -118,17 +121,23 @@ protected:
    * @param task Ordered task to be managed by this factory
    * @param behaviour Behaviour (options)
    */
-  AbstractTaskFactory(OrderedTask &_task, const TaskBehaviour &_behaviour,
+  AbstractTaskFactory(const TaskFactoryConstraints &_constraints,
+                      OrderedTask &_task, const TaskBehaviour &_behaviour,
                       const LegalPointConstArray _start_types,
                       const LegalPointConstArray _intermediate_types,
                       const LegalPointConstArray _finish_types)
-    :task(_task), behaviour(_behaviour),
+    :constraints(_constraints),
+     task(_task), behaviour(_behaviour),
      start_types(_start_types),
      intermediate_types(_intermediate_types),
      finish_types(_finish_types) {}
 
 public:
   virtual ~AbstractTaskFactory() {}
+
+  const TaskFactoryConstraints &GetConstraints() const {
+    return constraints;
+  }
 
   /**
    * Updates the OrderedTaskBehaviour with values required by

@@ -32,6 +32,11 @@
 class FAITaskFactory: 
   public AbstractTaskFactory 
 {
+protected:
+  FAITaskFactory(const TaskFactoryConstraints &_constraints,
+                 OrderedTask& _task,
+                 const TaskBehaviour &tb);
+
 public:
 /** 
  * Constructor

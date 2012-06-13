@@ -206,7 +206,6 @@ Serialiser::Serialise(const Waypoint &data)
 void 
 Serialiser::Serialise(const OrderedTaskBehaviour &data)
 {
-  node.SetAttribute(_T("task_scored"), data.task_scored);
   node.SetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.SetAttribute(_T("start_max_speed"), data.start_max_speed);
   node.SetAttribute(_T("start_max_height"), data.start_max_height);
@@ -216,10 +215,6 @@ Serialiser::Serialise(const OrderedTaskBehaviour &data)
   node.SetAttribute(_T("finish_min_height_ref"),
                        GetHeightRef(data.finish_min_height_ref));
   node.SetAttribute(_T("fai_finish"), data.fai_finish);
-  node.SetAttribute(_T("min_points"), data.min_points);
-  node.SetAttribute(_T("max_points"), data.max_points);
-  node.SetAttribute(_T("homogeneous_tps"), data.homogeneous_tps);
-  node.SetAttribute(_T("is_closed"), data.is_closed);
 }
 
 void 

@@ -21,19 +21,19 @@
  */
 
 #include "FAIORTaskFactory.hpp"
-#include "Task/OrderedTaskBehaviour.hpp"
+#include "TaskFactoryConstraints.hpp"
+
+static gcc_constexpr_data TaskFactoryConstraints fai_or_constraints = {
+  true,
+  true,
+  false,
+  true,
+  false,
+  3, 3,
+};
 
 FAIORTaskFactory::FAIORTaskFactory(OrderedTask& _task,
-                               const TaskBehaviour &tb):
-  FAITaskFactory(_task, tb)
+                                   const TaskBehaviour &tb)
+  :FAITaskFactory(fai_or_constraints, _task, tb)
 {
-}
-
-void 
-FAIORTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
-{
-  FAITaskFactory::UpdateOrderedTaskBehaviour(to);
-  to.min_points = 3;
-  to.max_points = 3;
-  to.is_closed = true;
 }

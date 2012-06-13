@@ -22,8 +22,18 @@ Copyright_License {
  */
 
 #include "AATTaskFactory.hpp"
+#include "TaskFactoryConstraints.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Util/Macros.hpp"
+
+static gcc_constexpr_data TaskFactoryConstraints aat_constraints = {
+  true,
+  false,
+  false,
+  false,
+  true,
+  2, 13,
+};
 
 static gcc_constexpr_data TaskPointFactoryType aat_start_types[] = {
   TaskPointFactoryType::START_LINE,
@@ -45,7 +55,7 @@ static gcc_constexpr_data TaskPointFactoryType aat_finish_types[] = {
 };
 
 AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
-  :AbstractTaskFactory(_task, tb,
+  :AbstractTaskFactory(aat_constraints, _task, tb,
                        LegalPointConstArray(aat_start_types,
                                             ARRAY_SIZE(aat_start_types)),
                        LegalPointConstArray(aat_im_types,
@@ -53,17 +63,6 @@ AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
                        LegalPointConstArray(aat_finish_types,
                                             ARRAY_SIZE(aat_finish_types)))
 {
-}
-
-void 
-AATTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
-{
-  to.task_scored = true;
-  to.homogeneous_tps = false;
-  to.is_closed = false;
-  to.min_points = 2;
-  to.max_points = 13;
-  to.start_requires_arm = true;
 }
 
 TaskPointFactoryType

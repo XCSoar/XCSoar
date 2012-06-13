@@ -21,9 +21,18 @@
  */
 
 #include "MixedTaskFactory.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
+#include "TaskFactoryConstraints.hpp"
 #include "Task/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
+
+static gcc_constexpr_data TaskFactoryConstraints mixed_constraints = {
+  true,
+  false,
+  false,
+  false,
+  true,
+  2, 10,
+};
 
 static gcc_constexpr_data TaskPointFactoryType mixed_start_types[] = {
   TaskPointFactoryType::START_LINE,
@@ -51,7 +60,7 @@ static gcc_constexpr_data TaskPointFactoryType mixed_finish_types[] = {
 
 MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
                                    const TaskBehaviour &tb)
-  :AbstractTaskFactory(_task, tb,
+  :AbstractTaskFactory(mixed_constraints, _task, tb,
                        LegalPointConstArray(mixed_start_types,
                                             ARRAY_SIZE(mixed_start_types)),
                        LegalPointConstArray(mixed_im_types,
@@ -59,16 +68,4 @@ MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,
                        LegalPointConstArray(mixed_finish_types,
                                             ARRAY_SIZE(mixed_finish_types)))
 {
-}
-
-void 
-MixedTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
-{
-  to.task_scored = true;
-  to.fai_finish = false;  
-  to.homogeneous_tps = false;
-  to.is_closed = false;
-  to.min_points = 2;
-  to.max_points = 10;
-  to.start_requires_arm = true;
 }

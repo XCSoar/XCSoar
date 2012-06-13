@@ -217,7 +217,6 @@ Deserialiser::DeserialiseWaypoint()
 void 
 Deserialiser::Deserialise(OrderedTaskBehaviour &data)
 {
-  node.GetAttribute(_T("task_scored"), data.task_scored);
   node.GetAttribute(_T("aat_min_time"), data.aat_min_time);
   node.GetAttribute(_T("start_max_speed"), data.start_max_speed);
   node.GetAttribute(_T("start_max_height"), data.start_max_height);
@@ -225,10 +224,6 @@ Deserialiser::Deserialise(OrderedTaskBehaviour &data)
   node.GetAttribute(_T("finish_min_height"), data.finish_min_height);
   data.finish_min_height_ref = GetHeightRef(_T("finish_min_height_ref"));
   node.GetAttribute(_T("fai_finish"), data.fai_finish);
-  node.GetAttribute(_T("min_points"), data.min_points);
-  node.GetAttribute(_T("max_points"), data.max_points);
-  node.GetAttribute(_T("homogeneous_tps"), data.homogeneous_tps);
-  node.GetAttribute(_T("is_closed"), data.is_closed);
 }
 
 void 

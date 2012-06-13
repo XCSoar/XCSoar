@@ -31,6 +31,7 @@ Copyright_License {
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Engine/Task/Factory/TaskFactoryConstraints.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 
 #include <assert.h>
@@ -125,7 +126,7 @@ SetPointType(TaskPointFactoryType type)
       delete point;
     } else {
       if (factory.IsValidFinishType(type) &&
-          ordered_task->GetOrderedTaskBehaviour().is_closed)
+          ordered_task->GetFactoryConstraints().is_closed)
         way_point = &ordered_task->GetPoint(0).GetWaypoint();
       else {
         const GeoPoint &location = ordered_task->TaskSize() > 0

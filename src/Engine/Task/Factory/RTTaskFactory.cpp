@@ -21,8 +21,17 @@
  */
 
 #include "RTTaskFactory.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
+#include "TaskFactoryConstraints.hpp"
 #include "Util/Macros.hpp"
+
+static gcc_constexpr_data TaskFactoryConstraints rt_constraints = {
+  true,
+  false,
+  false,
+  false,
+  false,
+  2, 13,
+};
 
 static gcc_constexpr_data TaskPointFactoryType rt_start_types[] = {
   TaskPointFactoryType::START_LINE,
@@ -47,7 +56,7 @@ static gcc_constexpr_data TaskPointFactoryType rt_finish_types[] = {
 
 RTTaskFactory::RTTaskFactory(OrderedTask& _task,
                                const TaskBehaviour &tb)
-  :AbstractTaskFactory(_task, tb,
+  :AbstractTaskFactory(rt_constraints, _task, tb,
                        LegalPointConstArray(rt_start_types,
                                             ARRAY_SIZE(rt_start_types)),
                        LegalPointConstArray(rt_im_types,
@@ -63,17 +72,6 @@ RTTaskFactory::Validate()
   bool valid = AbstractTaskFactory::Validate();
 
   return valid;
-}
-
-void 
-RTTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
-{
-  to.task_scored = true;
-  to.homogeneous_tps = false;
-  to.is_closed = false;
-  to.min_points = 2;
-  to.max_points = 13;
-  to.start_requires_arm = false;
 }
 
 TaskPointFactoryType

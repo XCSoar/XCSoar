@@ -39,10 +39,6 @@ public:
  */  
   FAIORTaskFactory(OrderedTask& _task,
                  const TaskBehaviour &tb);
-
-  virtual ~FAIORTaskFactory() {};
-
-  virtual void UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to); 
 };
 
 #endif
