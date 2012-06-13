@@ -26,15 +26,19 @@
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
 
-void
-TrailLook::Initialise(const TrailSettings &settings)
-{
+static Color
+GetVario1Color(short ramp_h) {
   static gcc_constexpr_data ColorRamp snail_colors_vario[] = {
     {0,   0xc4, 0x80, 0x1e}, // sinkColor
     {100, 0xa0, 0xa0, 0xa0},
     {200, 0x1e, 0xf1, 0x73} // liftColor
   };
 
+  return ColorRampLookup(ramp_h, snail_colors_vario, 3);
+}
+
+static Color
+GetVario2Color(short ramp_h) {
   static gcc_constexpr_data ColorRamp snail_colors_vario2[] = {
     {0,   0x00, 0x00, 0xff},
     {99,  0x00, 0xff, 0xff},
@@ -42,6 +46,11 @@ TrailLook::Initialise(const TrailSettings &settings)
     {200, 0xff, 0x00, 0x00}
   };
 
+  return ColorRampLookup(ramp_h, snail_colors_vario2, 3);
+}
+
+static Color
+GetAltitudeColor(short ramp_h) {
   static gcc_constexpr_data ColorRamp snail_colors_alt[] = {
     {0,   0xff, 0x00, 0x00},
     {50,  0xff, 0xff, 0x00},
@@ -50,16 +59,30 @@ TrailLook::Initialise(const TrailSettings &settings)
     {200, 0x00, 0x00, 0xff},
   };
 
+  return ColorRampLookup(ramp_h, snail_colors_alt, 3);
+}
+
+static Color
+GetColor(TrailSettings::Type type, short ramp_h) {
+  switch (type) {
+  case TrailSettings::Type::ALTITUDE:
+    return GetAltitudeColor(ramp_h);
+  case TrailSettings::Type::VARIO_2:
+    return GetVario2Color(ramp_h);
+  default:
+    return GetVario1Color(ramp_h);
+  }
+}
+
+void
+TrailLook::Initialise(const TrailSettings &settings)
+{
   PixelScalar iwidth;
   PixelScalar minwidth = Layout::ScalePenWidth(2);
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; ++i) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
-    Color color = (settings.type == TrailSettings::Type::ALTITUDE) ?
-                  ColorRampLookup(ih, snail_colors_alt, 5) :
-                  (settings.type == TrailSettings::Type::VARIO_2) ?
-                  ColorRampLookup(ih, snail_colors_vario2, 4) :
-                  ColorRampLookup(ih, snail_colors_vario, 3);
+    Color color = GetColor(settings.type, ih);
 
     if (i < NUMSNAILCOLORS / 2 ||
         !settings.scaling_enabled)
