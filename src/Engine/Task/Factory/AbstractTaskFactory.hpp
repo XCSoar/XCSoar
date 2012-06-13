@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/ConstArray.hpp"
 #include "Compiler.h"
 #include "Math/fixed.hpp"
+#include "TaskPointFactoryType.hpp"
 
 #include <vector>
 #include <stdint.h>
@@ -71,29 +72,10 @@ public:
   /** Vector of legal abstract point types (non-OZ specific) */
   typedef std::vector<LegalAbstractPointType> LegalAbstractVector;
 
-  /** Legal types of points with observation zones */
-  enum LegalPointType: uint8_t {
-    START_SECTOR = 0,
-    START_LINE,
-    START_CYLINDER,
-    FAI_SECTOR,
-    KEYHOLE_SECTOR,
-    BGAFIXEDCOURSE_SECTOR,
-    BGAENHANCEDOPTION_SECTOR,
-    AST_CYLINDER,
-    AAT_CYLINDER,
-    AAT_SEGMENT,
-    FINISH_SECTOR,
-    FINISH_LINE,
-    FINISH_CYLINDER,
-    START_BGA,
-    AAT_ANNULAR_SECTOR,
-  };
-
   /** Vector of legal point types */
-  typedef std::vector<LegalPointType> LegalPointVector;
+  typedef std::vector<TaskPointFactoryType> LegalPointVector;
 
-  typedef ConstArray<LegalPointType> LegalPointConstArray;
+  typedef ConstArray<TaskPointFactoryType> LegalPointConstArray;
 
   /** Task Validation Error Types */
   enum TaskValidationErrorType: uint8_t {
@@ -290,7 +272,7 @@ public:
    */
   gcc_pure
   virtual void
-  GetPointDefaultSizes(const LegalPointType type, fixed &start_radius,
+  GetPointDefaultSizes(const TaskPointFactoryType type, fixed &start_radius,
                        fixed &turnpoint_radius, fixed &finish_radius) const;
 
   /** 
@@ -302,7 +284,7 @@ public:
    * @return Initialised object.  Transfers ownership to client.
    */
   gcc_malloc
-  OrderedTaskPoint* CreatePoint(const LegalPointType type,
+  OrderedTaskPoint* CreatePoint(const TaskPointFactoryType type,
                                 const Waypoint &wp) const;
 
   /**
@@ -317,7 +299,7 @@ public:
    * @return Initialised object.  Transfers ownership to client.
    */
   gcc_malloc
-  OrderedTaskPoint* CreatePoint(const LegalPointType type,
+  OrderedTaskPoint* CreatePoint(const TaskPointFactoryType type,
                                 const Waypoint &wp,
                                 const fixed start_radius,
                                 const fixed turnpoint_radius,
@@ -332,7 +314,7 @@ public:
    * @return Initialised StartPoint if valid, otherwise NULL
    */
   gcc_malloc
-  StartPoint* CreateStart(const LegalPointType type, const Waypoint &wp) const;
+  StartPoint* CreateStart(const TaskPointFactoryType type, const Waypoint &wp) const;
 
   /**
    * Create intermediate point of specified type
@@ -343,7 +325,7 @@ public:
    * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
   gcc_malloc
-  IntermediateTaskPoint* CreateIntermediate(const LegalPointType type,
+  IntermediateTaskPoint* CreateIntermediate(const TaskPointFactoryType type,
                                             const Waypoint &wp) const;
 
   /**
@@ -355,7 +337,7 @@ public:
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
   gcc_malloc
-  FinishPoint* CreateFinish(const LegalPointType type,
+  FinishPoint* CreateFinish(const TaskPointFactoryType type,
                             const Waypoint &wp) const;
 
   /**
@@ -408,7 +390,7 @@ public:
    */
   gcc_malloc
   OrderedTaskPoint* CreateMutatedPoint(const OrderedTaskPoint &tp,
-                                       const LegalPointType newtype) const;
+                                       const TaskPointFactoryType newtype) const;
 
   /**
   * Returns "suggested/best" type for the current factory based on the type
@@ -423,7 +405,7 @@ public:
   * @return The suggested mutated type for the current factory
   */
   virtual gcc_pure
-  LegalPointType GetMutatedPointType(const OrderedTaskPoint &tp) const;
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
 
 
   /**
@@ -552,7 +534,7 @@ public:
    * @return Type of supplied point
    */
   gcc_pure
-  LegalPointType GetType(const OrderedTaskPoint &point) const;
+  TaskPointFactoryType GetType(const OrderedTaskPoint &point) const;
 
   /**
    * Determines whether task is closed (finish same as start)
@@ -585,7 +567,7 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool IsValidFinishType(LegalPointType type) const;
+  bool IsValidFinishType(TaskPointFactoryType type) const;
 
   /**
    * Determine if a type is valid for a StartPoint
@@ -595,7 +577,7 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool IsValidStartType(LegalPointType type) const;
+  bool IsValidStartType(TaskPointFactoryType type) const;
 
   /**
    * Determine if a type is valid for an IntermediateTaskPoint
@@ -605,7 +587,7 @@ public:
    * @return True if type is valid
    */
   gcc_pure
-  bool IsValidIntermediateType(LegalPointType type) const;
+  bool IsValidIntermediateType(TaskPointFactoryType type) const;
 
   /**
    * removes excess turnpoints from end of task if the

@@ -25,23 +25,23 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType aat_start_types[] = {
-  AbstractTaskFactory::START_LINE,
-  AbstractTaskFactory::START_CYLINDER,
-  AbstractTaskFactory::START_SECTOR,
-  AbstractTaskFactory::START_BGA,
+static gcc_constexpr_data TaskPointFactoryType aat_start_types[] = {
+  TaskPointFactoryType::START_LINE,
+  TaskPointFactoryType::START_CYLINDER,
+  TaskPointFactoryType::START_SECTOR,
+  TaskPointFactoryType::START_BGA,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType aat_im_types[] = {
-  AbstractTaskFactory::AAT_CYLINDER,
-  AbstractTaskFactory::AAT_SEGMENT,
-  AbstractTaskFactory::AAT_ANNULAR_SECTOR,
+static gcc_constexpr_data TaskPointFactoryType aat_im_types[] = {
+  TaskPointFactoryType::AAT_CYLINDER,
+  TaskPointFactoryType::AAT_SEGMENT,
+  TaskPointFactoryType::AAT_ANNULAR_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType aat_finish_types[] = {
-  AbstractTaskFactory::FINISH_LINE,
-  AbstractTaskFactory::FINISH_CYLINDER,
-  AbstractTaskFactory::FINISH_SECTOR,
+static gcc_constexpr_data TaskPointFactoryType aat_finish_types[] = {
+  TaskPointFactoryType::FINISH_LINE,
+  TaskPointFactoryType::FINISH_CYLINDER,
+  TaskPointFactoryType::FINISH_SECTOR,
 };
 
 AATTaskFactory::AATTaskFactory(OrderedTask& _task, const TaskBehaviour &tb)
@@ -66,43 +66,42 @@ AATTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
   to.start_requires_arm = true;
 }
 
-AbstractTaskFactory::LegalPointType
+TaskPointFactoryType
 AATTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType oldtype = GetType(tp);
-  LegalPointType newtype = oldtype;
+  const TaskPointFactoryType oldtype = GetType(tp);
+  TaskPointFactoryType newtype = oldtype;
 
   switch (oldtype) {
-
-  case START_SECTOR:
-  case START_LINE:
-  case START_CYLINDER:
-  case START_BGA:
+  case TaskPointFactoryType::START_SECTOR:
+  case TaskPointFactoryType::START_LINE:
+  case TaskPointFactoryType::START_CYLINDER:
+  case TaskPointFactoryType::START_BGA:
     break;
 
-  case KEYHOLE_SECTOR:
-  case BGAFIXEDCOURSE_SECTOR:
-  case BGAENHANCEDOPTION_SECTOR:
+  case TaskPointFactoryType::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
+  case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     newtype = AbstractTaskFactory::GetMutatedPointType(tp);
     break;
 
-  case FINISH_SECTOR:
-  case FINISH_LINE:
-  case FINISH_CYLINDER:
+  case TaskPointFactoryType::FINISH_SECTOR:
+  case TaskPointFactoryType::FINISH_LINE:
+  case TaskPointFactoryType::FINISH_CYLINDER:
     break;
 
-  case FAI_SECTOR:
-    newtype = AAT_CYLINDER;
+  case TaskPointFactoryType::FAI_SECTOR:
+    newtype = TaskPointFactoryType::AAT_CYLINDER;
     //ToDo: create a 90 degree symmetric AAT sector
     break;
 
-  case AST_CYLINDER:
-    newtype = AAT_CYLINDER;
+  case TaskPointFactoryType::AST_CYLINDER:
+    newtype = TaskPointFactoryType::AAT_CYLINDER;
     break;
 
-  case AAT_SEGMENT:
-  case AAT_CYLINDER:
-  case AAT_ANNULAR_SECTOR:
+  case TaskPointFactoryType::AAT_SEGMENT:
+  case TaskPointFactoryType::AAT_CYLINDER:
+  case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     break;
   }
 

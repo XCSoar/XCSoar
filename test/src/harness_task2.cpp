@@ -37,13 +37,13 @@ bool test_task_bad(TaskManager& task_manager,
 
   const Waypoint* wp = random_waypoint(waypoints);
 
-  ok (!fact.CreateFinish((AbstractTaskFactory::LegalPointType)20,*wp),"bad finish type",0);
-  ok (!fact.CreateStart((AbstractTaskFactory::LegalPointType)20,*wp),"bad start type",0);
-  ok (!fact.CreateIntermediate((AbstractTaskFactory::LegalPointType)20,*wp),"bad intermediate type",0);
+  ok (!fact.CreateFinish((TaskPointFactoryType)20,*wp),"bad finish type",0);
+  ok (!fact.CreateStart((TaskPointFactoryType)20,*wp),"bad start type",0);
+  ok (!fact.CreateIntermediate((TaskPointFactoryType)20,*wp),"bad intermediate type",0);
 
   // now create a taskpoint from FAI
 
-  AbstractTaskFactory::LegalPointType s =
+  TaskPointFactoryType s =
     fact.GetIntermediateTypes()[(rand() % fact.GetIntermediateTypes().size())];
 
   // test it is bad for AAT

@@ -25,28 +25,28 @@
 #include "Task/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType mixed_start_types[] = {
-  AbstractTaskFactory::START_LINE,
-  AbstractTaskFactory::START_CYLINDER,
-  AbstractTaskFactory::START_BGA,
-  AbstractTaskFactory::START_SECTOR,
+static gcc_constexpr_data TaskPointFactoryType mixed_start_types[] = {
+  TaskPointFactoryType::START_LINE,
+  TaskPointFactoryType::START_CYLINDER,
+  TaskPointFactoryType::START_BGA,
+  TaskPointFactoryType::START_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType mixed_im_types[] = {
-  AbstractTaskFactory::FAI_SECTOR,
-  AbstractTaskFactory::AST_CYLINDER,
-  AbstractTaskFactory::AAT_CYLINDER,
-  AbstractTaskFactory::AAT_SEGMENT,
-  AbstractTaskFactory::AAT_ANNULAR_SECTOR,
-  AbstractTaskFactory::KEYHOLE_SECTOR,
-  AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR,
-  AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR,
+static gcc_constexpr_data TaskPointFactoryType mixed_im_types[] = {
+  TaskPointFactoryType::FAI_SECTOR,
+  TaskPointFactoryType::AST_CYLINDER,
+  TaskPointFactoryType::AAT_CYLINDER,
+  TaskPointFactoryType::AAT_SEGMENT,
+  TaskPointFactoryType::AAT_ANNULAR_SECTOR,
+  TaskPointFactoryType::KEYHOLE_SECTOR,
+  TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
+  TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType mixed_finish_types[] = {
-  AbstractTaskFactory::FINISH_SECTOR,
-  AbstractTaskFactory::FINISH_LINE,
-  AbstractTaskFactory::FINISH_CYLINDER,
+static gcc_constexpr_data TaskPointFactoryType mixed_finish_types[] = {
+  TaskPointFactoryType::FINISH_SECTOR,
+  TaskPointFactoryType::FINISH_LINE,
+  TaskPointFactoryType::FINISH_CYLINDER,
 };
 
 MixedTaskFactory::MixedTaskFactory(OrderedTask& _task,

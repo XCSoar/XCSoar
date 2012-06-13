@@ -84,7 +84,7 @@ TaskDefaultsConfigPanel::SetStartLabel()
 {
   WndProperty &wp = GetControl(StartRadius);
 
-  if (GetValueInteger(StartType) == AbstractTaskFactory::START_LINE)
+  if (GetValueInteger(StartType) == (int)TaskPointFactoryType::START_LINE)
     wp.SetCaption(gettext(Caption_GateWidth));
   else
     wp.SetCaption(gettext(Caption_Radius));
@@ -95,7 +95,7 @@ TaskDefaultsConfigPanel::SetFinishLabel()
 {
   WndProperty &wp = GetControl(FinishRadius);
 
-  if (GetValueInteger(FinishType) == AbstractTaskFactory::FINISH_LINE)
+  if (GetValueInteger(FinishType) == (int)TaskPointFactoryType::FINISH_LINE)
     wp.SetCaption(gettext(Caption_GateWidth));
   else
     wp.SetCaption(gettext(Caption_Radius));
@@ -123,7 +123,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     for (auto i = point_types.begin(), end = point_types.end();
          i != end; ++i) {
-      const AbstractTaskFactory::LegalPointType type = *i;
+      const TaskPointFactoryType type = *i;
       dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
                        OrderedTaskPointDescription(type));
       if (type == task_behaviour.sector_defaults.start_type)
@@ -148,7 +148,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     for (auto i = point_types.begin(), end = point_types.end();
          i != end; ++i) {
-      const AbstractTaskFactory::LegalPointType type = *i;
+      const TaskPointFactoryType type = *i;
       dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
                        OrderedTaskPointDescription(type));
       if (type == task_behaviour.sector_defaults.finish_type)
@@ -171,7 +171,7 @@ TaskDefaultsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     for (auto i = point_types.begin(), end = point_types.end();
          i != end; ++i) {
-      const AbstractTaskFactory::LegalPointType type = *i;
+      const TaskPointFactoryType type = *i;
       dfe->addEnumText(OrderedTaskPointName(type), (unsigned)type,
                        OrderedTaskPointDescription(type));
       if (type == task_behaviour.sector_defaults.turnpoint_type) {

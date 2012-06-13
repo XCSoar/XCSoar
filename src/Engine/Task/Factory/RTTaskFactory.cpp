@@ -24,25 +24,25 @@
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType rt_start_types[] = {
-  AbstractTaskFactory::START_LINE,
-  AbstractTaskFactory::START_CYLINDER,
-  AbstractTaskFactory::START_SECTOR,
-  AbstractTaskFactory::START_BGA,
+static gcc_constexpr_data TaskPointFactoryType rt_start_types[] = {
+  TaskPointFactoryType::START_LINE,
+  TaskPointFactoryType::START_CYLINDER,
+  TaskPointFactoryType::START_SECTOR,
+  TaskPointFactoryType::START_BGA,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType rt_im_types[] = {
-  AbstractTaskFactory::AST_CYLINDER,
-  AbstractTaskFactory::KEYHOLE_SECTOR,
-  AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR,
-  AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR,
-  AbstractTaskFactory::FAI_SECTOR,
+static gcc_constexpr_data TaskPointFactoryType rt_im_types[] = {
+  TaskPointFactoryType::AST_CYLINDER,
+  TaskPointFactoryType::KEYHOLE_SECTOR,
+  TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
+  TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
+  TaskPointFactoryType::FAI_SECTOR,
 };
 
-static gcc_constexpr_data AbstractTaskFactory::LegalPointType rt_finish_types[] = {
-  AbstractTaskFactory::FINISH_LINE,
-  AbstractTaskFactory::FINISH_CYLINDER,
-  AbstractTaskFactory::FINISH_SECTOR,
+static gcc_constexpr_data TaskPointFactoryType rt_finish_types[] = {
+  TaskPointFactoryType::FINISH_LINE,
+  TaskPointFactoryType::FINISH_CYLINDER,
+  TaskPointFactoryType::FINISH_SECTOR,
 };
 
 RTTaskFactory::RTTaskFactory(OrderedTask& _task,
@@ -76,36 +76,35 @@ RTTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
   to.start_requires_arm = false;
 }
 
-AbstractTaskFactory::LegalPointType
+TaskPointFactoryType
 RTTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType oldtype = GetType(tp);
-  LegalPointType newtype = oldtype;
+  const TaskPointFactoryType oldtype = GetType(tp);
+  TaskPointFactoryType newtype = oldtype;
 
   switch (oldtype) {
-
-  case START_SECTOR:
-  case START_LINE:
-  case START_CYLINDER:
-  case START_BGA:
+  case TaskPointFactoryType::START_SECTOR:
+  case TaskPointFactoryType::START_LINE:
+  case TaskPointFactoryType::START_CYLINDER:
+  case TaskPointFactoryType::START_BGA:
     break;
 
-  case KEYHOLE_SECTOR:
-  case BGAFIXEDCOURSE_SECTOR:
-  case BGAENHANCEDOPTION_SECTOR:
-  case FAI_SECTOR:
-  case AST_CYLINDER:
+  case TaskPointFactoryType::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
+  case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
+  case TaskPointFactoryType::FAI_SECTOR:
+  case TaskPointFactoryType::AST_CYLINDER:
     break;
 
-  case FINISH_SECTOR:
-  case FINISH_LINE:
-  case FINISH_CYLINDER:
+  case TaskPointFactoryType::FINISH_SECTOR:
+  case TaskPointFactoryType::FINISH_LINE:
+  case TaskPointFactoryType::FINISH_CYLINDER:
     break;
 
-  case AAT_SEGMENT:
-  case AAT_ANNULAR_SECTOR:
-  case AAT_CYLINDER:
-      newtype = AST_CYLINDER;
+  case TaskPointFactoryType::AAT_SEGMENT:
+  case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
+  case TaskPointFactoryType::AAT_CYLINDER:
+    newtype = TaskPointFactoryType::AST_CYLINDER;
     break;
   }
 

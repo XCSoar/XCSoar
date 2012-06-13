@@ -59,17 +59,17 @@ GetOZSize(ObservationZonePoint *oz)
 
 OrderedTaskPoint*
 AbstractTaskFactory::CreateMutatedPoint(const OrderedTaskPoint &tp,
-                                        const LegalPointType newtype) const
+                                        const TaskPointFactoryType newtype) const
 {
   fixed ozsize = GetOZSize(tp.GetOZPoint());
   return CreatePoint(newtype, tp.GetWaypoint(), ozsize, ozsize, ozsize);
 }
 
-AbstractTaskFactory::LegalPointType
+TaskPointFactoryType
 AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
 {
-  const LegalPointType oldtype = GetType(tp);
-  LegalPointType newtype = oldtype;
+  const TaskPointFactoryType oldtype = GetType(tp);
+  TaskPointFactoryType newtype = oldtype;
 
   switch (tp.GetType()) {
   case TaskPoint::START:
@@ -136,7 +136,7 @@ AbstractTaskFactory::CreateASTPoint(ObservationZonePoint* oz,
 StartPoint* 
 AbstractTaskFactory::CreateStart(const Waypoint &wp) const
 {
-  LegalPointType type = behaviour.sector_defaults.start_type;
+  TaskPointFactoryType type = behaviour.sector_defaults.start_type;
   if (!IsValidStartType(type))
     type = *start_types.begin();
 
@@ -147,12 +147,12 @@ IntermediateTaskPoint*
 AbstractTaskFactory::CreateIntermediate(const Waypoint &wp) const
 {
   if (GetOrderedTaskBehaviour().homogeneous_tps && task.TaskSize() > 1) {
-    LegalPointType type = GetType(task.GetPoint(1));
+    TaskPointFactoryType type = GetType(task.GetPoint(1));
     if (IsValidIntermediateType(type))
       return CreateIntermediate(type, wp);
   }
 
-  LegalPointType type = behaviour.sector_defaults.turnpoint_type;
+  TaskPointFactoryType type = behaviour.sector_defaults.turnpoint_type;
   if (!IsValidIntermediateType(type))
     type = *intermediate_types.begin();
 
@@ -162,14 +162,14 @@ AbstractTaskFactory::CreateIntermediate(const Waypoint &wp) const
 FinishPoint* 
 AbstractTaskFactory::CreateFinish(const Waypoint &wp) const
 {
-  LegalPointType type = behaviour.sector_defaults.finish_type;
+  TaskPointFactoryType type = behaviour.sector_defaults.finish_type;
   if (!IsValidFinishType(type))
     type = *finish_types.begin();
 
   return CreateFinish(type, wp);
 }
 
-AbstractTaskFactory::LegalPointType 
+TaskPointFactoryType 
 AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
 {
   const ObservationZonePoint* oz = point.GetOZPoint();
@@ -178,10 +178,10 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
   case TaskPoint::START:
     switch (oz->shape) {
     case ObservationZonePoint::FAI_SECTOR:
-      return START_SECTOR;
+      return TaskPointFactoryType::START_SECTOR;
 
     case ObservationZonePoint::LINE:
-      return START_LINE;
+      return TaskPointFactoryType::START_LINE;
 
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
@@ -189,10 +189,10 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::BGAFIXEDCOURSE:
     case ObservationZonePoint::BGAENHANCEDOPTION:
     case ObservationZonePoint::ANNULAR_SECTOR:
-      return START_CYLINDER;
+      return TaskPointFactoryType::START_CYLINDER;
 
     case ObservationZonePoint::BGA_START:
-      return START_BGA;
+      return TaskPointFactoryType::START_BGA;
     }
     break;
 
@@ -205,34 +205,34 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::BGAENHANCEDOPTION:
     case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::LINE:
-      return AAT_SEGMENT;
+      return TaskPointFactoryType::AAT_SEGMENT;
     case ObservationZonePoint::ANNULAR_SECTOR:
-      return AAT_ANNULAR_SECTOR;
+      return TaskPointFactoryType::AAT_ANNULAR_SECTOR;
     case ObservationZonePoint::CYLINDER:
-      return AAT_CYLINDER;
+      return TaskPointFactoryType::AAT_CYLINDER;
     }
     break;
 
   case TaskPoint::AST:
     switch (oz->shape) {
     case ObservationZonePoint::FAI_SECTOR:
-      return FAI_SECTOR;
+      return TaskPointFactoryType::FAI_SECTOR;
 
     case ObservationZonePoint::KEYHOLE:
-      return KEYHOLE_SECTOR;
+      return TaskPointFactoryType::KEYHOLE_SECTOR;
 
     case ObservationZonePoint::BGAFIXEDCOURSE:
-      return BGAFIXEDCOURSE_SECTOR;
+      return TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR;
 
     case ObservationZonePoint::BGAENHANCEDOPTION:
-      return BGAENHANCEDOPTION_SECTOR;
+      return TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR;
 
     case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::LINE:
     case ObservationZonePoint::ANNULAR_SECTOR:
-      return AST_CYLINDER;
+      return TaskPointFactoryType::AST_CYLINDER;
     }
     break;
 
@@ -240,10 +240,10 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     switch (oz->shape) {
     case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::FAI_SECTOR:
-      return FINISH_SECTOR;
+      return TaskPointFactoryType::FINISH_SECTOR;
 
     case ObservationZonePoint::LINE:
-      return FINISH_LINE;
+      return TaskPointFactoryType::FINISH_LINE;
 
     case ObservationZonePoint::CYLINDER:
     case ObservationZonePoint::SECTOR:
@@ -251,7 +251,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     case ObservationZonePoint::BGAFIXEDCOURSE:
     case ObservationZonePoint::BGAENHANCEDOPTION:
     case ObservationZonePoint::ANNULAR_SECTOR:
-      return FINISH_CYLINDER;
+      return TaskPointFactoryType::FINISH_CYLINDER;
     }
     break;
 
@@ -265,18 +265,18 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
 
   // fail, should never get here
   assert(1);
-  return START_LINE;
+  return TaskPointFactoryType::START_LINE;
 }
 
 OrderedTaskPoint* 
-AbstractTaskFactory::CreatePoint(const LegalPointType type,
+AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                  const Waypoint &wp) const
 {
   return CreatePoint(type, wp, fixed_minus_one, fixed_minus_one, fixed_minus_one);
 }
 
 void
-AbstractTaskFactory::GetPointDefaultSizes(const LegalPointType type,
+AbstractTaskFactory::GetPointDefaultSizes(const TaskPointFactoryType type,
                                           fixed &start_radius,
                                           fixed &turnpoint_radius,
                                           fixed &finish_radius) const
@@ -294,7 +294,7 @@ AbstractTaskFactory::GetPointDefaultSizes(const LegalPointType type,
 }
 
 OrderedTaskPoint*
-AbstractTaskFactory::CreatePoint(const LegalPointType type,
+AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                  const Waypoint &wp,
                                  fixed start_radius,
                                  fixed turnpoint_radius,
@@ -303,35 +303,35 @@ AbstractTaskFactory::CreatePoint(const LegalPointType type,
   GetPointDefaultSizes(type, start_radius, turnpoint_radius, finish_radius);
 
   switch (type) {
-  case START_SECTOR:
+  case TaskPointFactoryType::START_SECTOR:
     return CreateStart(new FAISectorZone(wp.location, false), wp);
-  case START_LINE:
+  case TaskPointFactoryType::START_LINE:
     return CreateStart(new LineSectorZone(wp.location, start_radius), wp);
-  case START_CYLINDER:
+  case TaskPointFactoryType::START_CYLINDER:
     return CreateStart(new CylinderZone(wp.location, start_radius), wp);
-  case START_BGA:
+  case TaskPointFactoryType::START_BGA:
     return CreateStart(new BGAStartSectorZone(wp.location), wp);
-  case FAI_SECTOR:
+  case TaskPointFactoryType::FAI_SECTOR:
     return CreateASTPoint(new FAISectorZone(wp.location, true), wp);
-  case KEYHOLE_SECTOR:
+  case TaskPointFactoryType::KEYHOLE_SECTOR:
     return CreateASTPoint(new KeyholeZone(wp.location), wp);
-  case BGAFIXEDCOURSE_SECTOR:
+  case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     return CreateASTPoint(new BGAFixedCourseZone(wp.location), wp);
-  case BGAENHANCEDOPTION_SECTOR:
+  case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     return CreateASTPoint(new BGAEnhancedOptionZone(wp.location), wp);
-  case AST_CYLINDER:
+  case TaskPointFactoryType::AST_CYLINDER:
     return CreateASTPoint(new CylinderZone(wp.location, turnpoint_radius), wp);
-  case AAT_CYLINDER:
+  case TaskPointFactoryType::AAT_CYLINDER:
     return CreateAATPoint(new CylinderZone(wp.location, turnpoint_radius), wp);
-  case AAT_SEGMENT:
+  case TaskPointFactoryType::AAT_SEGMENT:
     return CreateAATPoint(new SectorZone(wp.location, turnpoint_radius), wp);
-  case AAT_ANNULAR_SECTOR:
+  case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     return CreateAATPoint(new AnnularSectorZone(wp.location, turnpoint_radius), wp);
-  case FINISH_SECTOR:
+  case TaskPointFactoryType::FINISH_SECTOR:
     return CreateFinish(new FAISectorZone(wp.location, false), wp);
-  case FINISH_LINE:
+  case TaskPointFactoryType::FINISH_LINE:
     return CreateFinish(new LineSectorZone(wp.location, finish_radius), wp);
-  case FINISH_CYLINDER:
+  case TaskPointFactoryType::FINISH_CYLINDER:
     return CreateFinish(new CylinderZone(wp.location, finish_radius), wp);
   }
 
@@ -340,7 +340,7 @@ AbstractTaskFactory::CreatePoint(const LegalPointType type,
 }
 
 StartPoint* 
-AbstractTaskFactory::CreateStart(const LegalPointType type,
+AbstractTaskFactory::CreateStart(const TaskPointFactoryType type,
                                  const Waypoint &wp) const
 {
   if (!IsValidStartType(type))
@@ -351,7 +351,7 @@ AbstractTaskFactory::CreateStart(const LegalPointType type,
 }
 
 IntermediateTaskPoint* 
-AbstractTaskFactory::CreateIntermediate(const LegalPointType type,
+AbstractTaskFactory::CreateIntermediate(const TaskPointFactoryType type,
                                         const Waypoint &wp) const
 {
   if (!IsValidIntermediateType(type))
@@ -361,7 +361,7 @@ AbstractTaskFactory::CreateIntermediate(const LegalPointType type,
 }
 
 FinishPoint* 
-AbstractTaskFactory::CreateFinish(const LegalPointType type,
+AbstractTaskFactory::CreateFinish(const TaskPointFactoryType type,
                                   const Waypoint &wp) const
 {
   if (!IsValidFinishType(type))
@@ -614,16 +614,16 @@ AbstractTaskFactory::ValidAbstractType(LegalAbstractPointType type,
     return is_finish;
   case POINT_AST:
     return is_intermediate &&
-      (IsValidIntermediateType(FAI_SECTOR) 
-       || IsValidIntermediateType(AST_CYLINDER)
-       || IsValidIntermediateType(KEYHOLE_SECTOR)
-       || IsValidIntermediateType(BGAFIXEDCOURSE_SECTOR)
-       || IsValidIntermediateType(BGAENHANCEDOPTION_SECTOR));
+      (IsValidIntermediateType(TaskPointFactoryType::FAI_SECTOR) 
+       || IsValidIntermediateType(TaskPointFactoryType::AST_CYLINDER)
+       || IsValidIntermediateType(TaskPointFactoryType::KEYHOLE_SECTOR)
+       || IsValidIntermediateType(TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR)
+       || IsValidIntermediateType(TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR));
   case POINT_AAT:
     return is_intermediate &&
-      (IsValidIntermediateType(AAT_CYLINDER)
-       || IsValidIntermediateType(AAT_SEGMENT)
-       || IsValidIntermediateType(AAT_ANNULAR_SECTOR));
+      (IsValidIntermediateType(TaskPointFactoryType::AAT_CYLINDER)
+       || IsValidIntermediateType(TaskPointFactoryType::AAT_SEGMENT)
+       || IsValidIntermediateType(TaskPointFactoryType::AAT_ANNULAR_SECTOR));
   };
   return false;
 }
@@ -661,21 +661,21 @@ AbstractTaskFactory::IsValidType(const OrderedTaskPoint &new_tp,
 }
 
 bool
-AbstractTaskFactory::IsValidIntermediateType(LegalPointType type) const 
+AbstractTaskFactory::IsValidIntermediateType(TaskPointFactoryType type) const
 {
   return std::find(intermediate_types.begin(), intermediate_types.end(), type)
     != intermediate_types.end();
 }
 
 bool
-AbstractTaskFactory::IsValidStartType(LegalPointType type) const 
+AbstractTaskFactory::IsValidStartType(TaskPointFactoryType type) const
 {
   return std::find(start_types.begin(), start_types.end(), type)
     != start_types.end();
 }
 
 bool
-AbstractTaskFactory::IsValidFinishType(LegalPointType type) const 
+AbstractTaskFactory::IsValidFinishType(TaskPointFactoryType type) const
 {
   return std::find(finish_types.begin(), finish_types.end(), type)
     != finish_types.end();
@@ -745,49 +745,49 @@ AbstractTaskFactory::ValidateFAIOZs()
     const fixed ozsize = GetOZSize(tp.GetOZPoint());
 
     switch (GetType(tp)) {
-    case  START_BGA:
-    case  START_CYLINDER:
+    case TaskPointFactoryType::START_BGA:
+    case TaskPointFactoryType::START_CYLINDER:
       valid = false;
       break;
 
-    case  START_SECTOR:
+    case TaskPointFactoryType::START_SECTOR:
       if (ozsize > fixed(1000.01))
         valid = false;
 
       break;
-    case  START_LINE:
+    case TaskPointFactoryType::START_LINE:
       if (ozsize > fixed(2000.01))
         valid = false;
 
       break;
 
-    case  FAI_SECTOR:
+    case TaskPointFactoryType::FAI_SECTOR:
       break;
 
-    case  AST_CYLINDER:
+    case TaskPointFactoryType::AST_CYLINDER:
       if (ozsize > fixed(500.01))
         valid = false;
 
       break;
 
-    case  KEYHOLE_SECTOR:
-    case  BGAFIXEDCOURSE_SECTOR:
-    case  BGAENHANCEDOPTION_SECTOR:
-    case  AAT_CYLINDER:
-    case  AAT_SEGMENT:
-    case  AAT_ANNULAR_SECTOR:
+    case TaskPointFactoryType::KEYHOLE_SECTOR:
+    case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
+    case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
+    case TaskPointFactoryType::AAT_CYLINDER:
+    case TaskPointFactoryType::AAT_SEGMENT:
+    case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
       valid = false;
       break;
 
-    case  FINISH_SECTOR:
+    case TaskPointFactoryType::FINISH_SECTOR:
       break;
-    case  FINISH_LINE:
+    case TaskPointFactoryType::FINISH_LINE:
       if (ozsize > fixed(2000.01))
         valid = false;
 
       break;
 
-    case  FINISH_CYLINDER:
+    case TaskPointFactoryType::FINISH_CYLINDER:
       valid = false;
       break;
     }
@@ -854,7 +854,7 @@ AbstractTaskFactory::GetValidIntermediateTypes(unsigned position) const
 
   if (GetOrderedTaskBehaviour().homogeneous_tps &&
       position > 1 && task.TaskSize() > 1) {
-    LegalPointType type = GetType(task.GetPoint(1));
+    TaskPointFactoryType type = GetType(task.GetPoint(1));
     if (IsValidIntermediateType(type)) {
       v.push_back(type);
       return v;
@@ -933,7 +933,7 @@ AbstractTaskFactory::IsHomogeneous() const
   const unsigned size = task.TaskSize();
 
   if (size > 2) {
-    LegalPointType homogtype = GetType(task.GetPoint(1));
+    TaskPointFactoryType homogtype = GetType(task.GetPoint(1));
 
     for (unsigned i = 2; i < size; i++) {
       const OrderedTaskPoint &tp = task.GetPoint(i);
@@ -973,7 +973,7 @@ AbstractTaskFactory::MutateTPsToTaskType()
     if (!IsValidType(tp, i) ||
         task.GetFactoryType() == TaskFactoryType::FAI_GENERAL) {
 
-      LegalPointType newtype = GetMutatedPointType(tp);
+      TaskPointFactoryType newtype = GetMutatedPointType(tp);
       if (IsPositionFinish(i)) {
 
         if (!IsValidFinishType(newtype)) {

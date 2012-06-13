@@ -277,44 +277,44 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 }
 
 const TCHAR*
-OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType type)
+OrderedTaskPointDescription(TaskPointFactoryType type)
 {
   switch (type) {
-  case AbstractTaskFactory::START_SECTOR:
+  case TaskPointFactoryType::START_SECTOR:
     return _("A 90 degree sector with 1km radius. Cross corner edge from inside area to start.");
-  case AbstractTaskFactory::START_LINE:
+  case TaskPointFactoryType::START_LINE:
     return _("A straight line start gate.  Cross start gate from inside area to start.");
-  case AbstractTaskFactory::START_CYLINDER:
+  case TaskPointFactoryType::START_CYLINDER:
     return _("A cylinder.  Exit area to start.");
-  case AbstractTaskFactory::START_BGA:
+  case TaskPointFactoryType::START_BGA:
     return _("A 180 degree sector with 5km radius.  Exit area in any direction to start.");
-  case AbstractTaskFactory::FAI_SECTOR:
+  case TaskPointFactoryType::FAI_SECTOR:
     return _("A 90 degree sector with 'infinite' length sides.  Cross any edge, scored from "
         "corner point.");
-  case AbstractTaskFactory::AST_CYLINDER:
+  case TaskPointFactoryType::AST_CYLINDER:
     return _("A cylinder.  Any point within area scored from center.");
-  case AbstractTaskFactory::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::KEYHOLE_SECTOR:
     return _("(German rules) Any point within 1/2 km of center or 10km of a 90 degree sector.  "
         "Scored from center.");
-  case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
+  case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     return _("(British rules) Any point within 1/2 km of center or 20km of a 90 degree sector.  "
         "Scored from center.");
-  case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
+  case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     return _("(British rules) Any point within 1/2 km of center or 10km of a 180 degree sector.  "
         "Scored from center.");
-  case AbstractTaskFactory::AAT_CYLINDER:
+  case TaskPointFactoryType::AAT_CYLINDER:
     return _("A cylinder.  Scored by farthest point reached in area.");
-  case AbstractTaskFactory::AAT_SEGMENT:
+  case TaskPointFactoryType::AAT_SEGMENT:
     return _("A sector that can vary in angle and radius.  Scored by farthest point reached "
         "inside area.");
-  case AbstractTaskFactory::AAT_ANNULAR_SECTOR:
+  case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     return _("A sector that can vary in angle, inner and outer radius.  Scored by farthest point "
         "reached inside area.");
-  case AbstractTaskFactory::FINISH_SECTOR:
+  case TaskPointFactoryType::FINISH_SECTOR:
     return _("A 90 degree sector with 1km radius.  Cross edge to finish.");
-  case AbstractTaskFactory::FINISH_LINE:
+  case TaskPointFactoryType::FINISH_LINE:
     return _("Cross finish gate line into area to finish.");
-  case AbstractTaskFactory::FINISH_CYLINDER:
+  case TaskPointFactoryType::FINISH_CYLINDER:
     return _("Enter cylinder to finish.");
   }
 
@@ -323,38 +323,38 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType type)
 }
 
 const TCHAR*
-OrderedTaskPointName(AbstractTaskFactory::LegalPointType type)
+OrderedTaskPointName(TaskPointFactoryType type)
 {
   switch (type) {
-  case AbstractTaskFactory::START_SECTOR:
+  case TaskPointFactoryType::START_SECTOR:
     return _("FAI start quadrant");
-  case AbstractTaskFactory::START_LINE:
+  case TaskPointFactoryType::START_LINE:
     return _("Start line");
-  case AbstractTaskFactory::START_CYLINDER:
+  case TaskPointFactoryType::START_CYLINDER:
     return _("Start cylinder");
-  case AbstractTaskFactory::START_BGA:
+  case TaskPointFactoryType::START_BGA:
     return _("BGA start sector");
-  case AbstractTaskFactory::FAI_SECTOR:
+  case TaskPointFactoryType::FAI_SECTOR:
     return _("FAI quadrant");
-  case AbstractTaskFactory::KEYHOLE_SECTOR:
+  case TaskPointFactoryType::KEYHOLE_SECTOR:
     return _("Keyhole sector (DAeC)");
-  case AbstractTaskFactory::BGAFIXEDCOURSE_SECTOR:
+  case TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR:
     return _("BGA Fixed Course sector");
-  case AbstractTaskFactory::BGAENHANCEDOPTION_SECTOR:
+  case TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR:
     return _("BGA Enhanced Option Fixed Course sector");
-  case AbstractTaskFactory::AST_CYLINDER:
+  case TaskPointFactoryType::AST_CYLINDER:
     return _("Turn point cylinder");
-  case AbstractTaskFactory::AAT_CYLINDER:
+  case TaskPointFactoryType::AAT_CYLINDER:
     return _("Area cylinder");
-  case AbstractTaskFactory::AAT_SEGMENT:
+  case TaskPointFactoryType::AAT_SEGMENT:
     return _("Area sector");
-  case AbstractTaskFactory::AAT_ANNULAR_SECTOR:
+  case TaskPointFactoryType::AAT_ANNULAR_SECTOR:
     return _("Area sector with inner radius");
-  case AbstractTaskFactory::FINISH_SECTOR:
+  case TaskPointFactoryType::FINISH_SECTOR:
     return _("FAI finish quadrant");
-  case AbstractTaskFactory::FINISH_LINE:
+  case TaskPointFactoryType::FINISH_LINE:
     return _("Finish line");
-  case AbstractTaskFactory::FINISH_CYLINDER:
+  case TaskPointFactoryType::FINISH_CYLINDER:
     return _("Finish cylinder");
   }
 

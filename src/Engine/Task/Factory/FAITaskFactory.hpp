@@ -63,7 +63,7 @@ public:
    * similar to type of tp
    */
   virtual gcc_pure
-  LegalPointType GetMutatedPointType(const OrderedTaskPoint &tp) const;
+  TaskPointFactoryType GetMutatedPointType(const OrderedTaskPoint &tp) const;
 
 
   /**
@@ -78,7 +78,7 @@ public:
    * sets radiuses FAI defaults
    */
   virtual gcc_pure
-  void GetPointDefaultSizes(const LegalPointType type,
+  void GetPointDefaultSizes(const TaskPointFactoryType type,
                                             fixed &start_radius,
                                             fixed &turnpoint_radius,
                                             fixed &finish_radius) const;

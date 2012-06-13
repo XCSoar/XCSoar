@@ -51,14 +51,14 @@ static void OnCloseClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-static AbstractTaskFactory::LegalPointType
+static TaskPointFactoryType
 get_point_type() 
 {
   return ordered_task->GetFactory().GetType(*point);
 }
 
 
-static AbstractTaskFactory::LegalPointType
+static TaskPointFactoryType
 get_cursor_type() 
 {
   return point_types[wPointTypes->GetCursorIndex()];
@@ -95,7 +95,7 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 }
 
 static bool
-SetPointType(AbstractTaskFactory::LegalPointType type)
+SetPointType(TaskPointFactoryType type)
 {
   bool apply = false;
 
