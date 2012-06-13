@@ -301,7 +301,7 @@ public:
    * 
    * @return Initialised object.  Transfers ownership to client.
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   OrderedTaskPoint* CreatePoint(const LegalPointType type,
                                 const Waypoint &wp) const;
 
@@ -316,7 +316,7 @@ public:
    * @param finish_radius.  if < 0 then use default, else use for new point
    * @return Initialised object.  Transfers ownership to client.
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   OrderedTaskPoint* CreatePoint(const LegalPointType type,
                                 const Waypoint &wp,
                                 const fixed start_radius,
@@ -331,7 +331,7 @@ public:
    *
    * @return Initialised StartPoint if valid, otherwise NULL
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   StartPoint* CreateStart(const LegalPointType type, const Waypoint &wp) const;
 
   /**
@@ -342,7 +342,7 @@ public:
    *
    * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   IntermediateTaskPoint* CreateIntermediate(const LegalPointType type,
                                             const Waypoint &wp) const;
 
@@ -354,7 +354,7 @@ public:
    *
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   FinishPoint* CreateFinish(const LegalPointType type,
                             const Waypoint &wp) const;
 
@@ -365,7 +365,7 @@ public:
    *
    * @return Initialised StartPoint if valid, otherwise NULL
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   StartPoint* CreateStart(const Waypoint &wp) const;
 
   /**
@@ -375,7 +375,7 @@ public:
    *
    * @return Initialised IntermediateTaskPoint if valid, otherwise NULL
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   IntermediateTaskPoint* CreateIntermediate(const Waypoint &wp) const;
 
   /**
@@ -385,7 +385,7 @@ public:
    *
    * @return Initialised FinishPoint if valid, otherwise NULL
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   FinishPoint* CreateFinish(const Waypoint &wp) const;
 
   /**
@@ -396,7 +396,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   StartPoint* CreateStart(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
@@ -406,7 +406,7 @@ public:
    * @param tp
    * @return pointer to the point
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   OrderedTaskPoint* CreateMutatedPoint(const OrderedTaskPoint &tp,
                                        const LegalPointType newtype) const;
 
@@ -434,7 +434,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   ASTPoint* CreateASTPoint(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
@@ -445,7 +445,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   AATPoint* CreateAATPoint(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
@@ -456,7 +456,7 @@ public:
    *
    * @return Initialised object.  Ownership is transferred to client.
    */
-  gcc_pure gcc_malloc
+  gcc_malloc
   FinishPoint* CreateFinish(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
