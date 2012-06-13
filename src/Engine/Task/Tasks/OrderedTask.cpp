@@ -54,6 +54,20 @@
 #include "PathSolvers/TaskDijkstraMin.hpp"
 #include "PathSolvers/TaskDijkstraMax.hpp"
 
+OrderedTask::OrderedTask(const TaskBehaviour &tb):
+  AbstractTask(ORDERED, tb),
+  taskpoint_start(NULL),
+  taskpoint_finish(NULL),
+  factory_mode(tb.task_type_default),
+  active_factory(NULL),
+  m_ordered_behaviour(tb.ordered_defaults),
+  task_advance(m_ordered_behaviour),
+  dijkstra_min(NULL), dijkstra_max(NULL)
+{
+  active_factory = new RTTaskFactory(*this, task_behaviour);
+  active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
+}
+
 static void
 SetTaskBehaviour(OrderedTask::OrderedTaskPointVector &vector,
                  const TaskBehaviour &tb)
@@ -917,20 +931,6 @@ OrderedTask::~OrderedTask()
 #if defined(__clang__) || GCC_VERSION >= 40700
 #pragma GCC diagnostic pop
 #endif
-}
-
-OrderedTask::OrderedTask(const TaskBehaviour &tb):
-  AbstractTask(ORDERED, tb),
-  taskpoint_start(NULL),
-  taskpoint_finish(NULL),
-  factory_mode(tb.task_type_default),
-  active_factory(NULL),
-  m_ordered_behaviour(tb.ordered_defaults),
-  task_advance(m_ordered_behaviour),
-  dijkstra_min(NULL), dijkstra_max(NULL)
-{
-  active_factory = new RTTaskFactory(*this, task_behaviour);
-  active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
 }
 
 static void
