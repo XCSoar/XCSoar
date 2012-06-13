@@ -41,6 +41,19 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix)
     : NULL;
 }
 
+#ifdef _UNICODE
+const char *
+StringAfterPrefix(const char *string, const char *prefix)
+{
+  assert(string != NULL);
+  assert(prefix != NULL);
+
+  size_t prefix_length = strlen(prefix);
+  return strncmp(string, prefix, prefix_length) == 0
+    ? string + prefix_length
+    : NULL;
+}
+#endif
 
 const TCHAR *
 StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix)

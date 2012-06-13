@@ -146,6 +146,16 @@ StringFormatUnsafe(TCHAR *buffer, const TCHAR *fmt, Args&&... args)
 const TCHAR *
 StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
 
+#ifdef _UNICODE
+/**
+ * Returns the portion of the string after a prefix.  If the string
+ * does not begin with the specified prefix, this function returns
+ * NULL.
+ */
+const char *
+StringAfterPrefix(const char *string, const char *prefix);
+#endif
+
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
