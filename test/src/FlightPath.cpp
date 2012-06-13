@@ -28,14 +28,30 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
-  Args args(argc, argv, "DRIVER FILE");
+  unsigned max_points = 1000;
+
+  Args args(argc, argv, "[--max-points=1000] DRIVER FILE");
+
+  const char *arg;
+  while ((arg = args.PeekNext()) != NULL && *arg == '-') {
+    args.Skip();
+
+    const char *value;
+    if ((value = StringAfterPrefix(arg, "--max-points=")) != NULL) {
+      unsigned _max_points = strtol(value, NULL, 10);
+      if (_max_points > 0)
+        max_points = _max_points;
+    } else {
+      args.UsageError();
+    }
+  }
+
   DebugReplay *replay = CreateDebugReplay(args);
   if (replay == NULL)
     return EXIT_FAILURE;
 
   args.ExpectEnd();
 
-  const unsigned max_points = 1000;
   Trace trace(0, Trace::null_time, max_points);
 
   bool takeoff = false;
