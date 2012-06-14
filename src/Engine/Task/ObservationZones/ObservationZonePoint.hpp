@@ -113,17 +113,18 @@ public:
   }
 
   /**
-   * distance from this to the reference
-   */
-  fixed DistanceTo(const GeoPoint &ref) const {
-    return reference.Distance(ref);
-  }
-
-  /**
    * The actual location
    */
   const GeoPoint &GetReference() const {
     return reference;
+  }
+
+protected:
+  /**
+   * distance from this to the reference
+   */
+  fixed DistanceTo(const GeoPoint &ref) const {
+    return reference.Distance(ref);
   }
 };
 
