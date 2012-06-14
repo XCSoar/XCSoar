@@ -82,6 +82,8 @@ class Waypoints: private NonCopyable
   const Waypoint *home;
 
 public:
+  typedef WaypointTree::const_iterator const_iterator;
+
   /**
    * Constructor.  Task projection is updated after call to optimise().
    * As waypoints are added they are stored temporarily before applying
@@ -276,9 +278,6 @@ public:
                            TCHAR *dest, size_t max_length) const {
     return name_tree.suggest(prefix, dest, max_length);
   }
-
-public:
-  typedef WaypointTree::const_iterator const_iterator;
 
   /**
    * Looks up nearest waypoint to the search location.
