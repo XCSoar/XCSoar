@@ -115,10 +115,26 @@ public:
   const GeoPoint &GetLocationTravelled() const;
 
 protected:
+  /**
+   * Check if aircraft has transitioned to inside sector
+   *
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if aircraft now inside (and was outside)
+   */
   gcc_pure
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
                                     const AircraftState &ref_last) const = 0;
 
+  /**
+   * Check if aircraft has transitioned to outside sector
+   *
+   * @param ref_now Current aircraft state
+   * @param ref_last Previous aircraft state
+   *
+   * @return True if aircraft now outside (and was inside)
+   */
   gcc_pure
   virtual bool CheckExitTransition(const AircraftState &ref_now,
                                    const AircraftState &ref_last) const = 0;

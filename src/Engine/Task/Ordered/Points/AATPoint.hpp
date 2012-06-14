@@ -193,7 +193,7 @@ public:
                                TaskEvents *task_events,
                                const TaskProjection &projection);
 
-  /* virtual methods from class ObservationZone */
+  /* virtual methods from class ObservationZoneClient */
   virtual fixed ScoreAdjustment() const {
     return fixed_zero;
   }

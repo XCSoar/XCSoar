@@ -73,36 +73,6 @@ public:
   virtual bool TransitionConstraint(const AircraftState &ref_now,
                                     const AircraftState &ref_last) const = 0;
 
-  /** 
-   * Check if aircraft has transitioned to inside sector
-   * 
-   * @param ref_now Current aircraft state
-   * @param ref_last Previous aircraft state
-   *
-   * @return True if aircraft now inside (and was outside)
-   */
-  gcc_pure
-  virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const {
-    return IsInSector(ref_now) &&
-           !IsInSector(ref_last) &&
-           TransitionConstraint(ref_now, ref_last);
-  }
-
-  /** 
-   * Check if aircraft has transitioned to outside sector
-   * 
-   * @param ref_now Current aircraft state
-   * @param ref_last Previous aircraft state
-   *
-   * @return True if aircraft now outside (and was inside)
-   */
-  gcc_pure
-  virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const {
-    return CheckEnterTransition(ref_last, ref_now);
-  }
-
   /**
    * Get point on boundary from parametric representation
    *

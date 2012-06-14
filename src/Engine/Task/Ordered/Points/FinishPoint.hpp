@@ -72,7 +72,7 @@ public:
   /* virtual methods from class OrderedTaskPoint */
   virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
 
-  /* virtual methods from class ObservationZone */
+  /* virtual methods from class ObservationZoneClient */
   virtual bool IsInSector(const AircraftState &ref) const;
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
                                     const AircraftState &ref_last) const;

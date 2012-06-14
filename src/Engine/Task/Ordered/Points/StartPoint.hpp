@@ -83,7 +83,7 @@ public:
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
   virtual fixed GetElevation() const;
 
-  /* virtual methods from class ObservationZone */
+  /* virtual methods from class ObservationZoneClient */
   virtual bool IsInSector(const AircraftState &ref) const;
   virtual bool CheckExitTransition(const AircraftState &ref_now,
                                    const AircraftState &ref_last) const;

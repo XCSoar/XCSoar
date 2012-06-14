@@ -260,14 +260,14 @@ protected:
   /* virtual methods from class ScoredTaskPoint */
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
                                     const AircraftState &ref_last) const {
-    return ObservationZoneClient::CheckEnterTransition(ref_now, ref_last);
+    return IsInSector(ref_now) && !IsInSector(ref_last) &&
+      TransitionConstraint(ref_now, ref_last);
   }
 
   virtual bool CheckExitTransition(const AircraftState &ref_now,
                                    const AircraftState &ref_last) const {
-    return ObservationZoneClient::CheckExitTransition(ref_now, ref_last);
+    return CheckEnterTransition(ref_last, ref_now);
   }
 };
-
 
 #endif

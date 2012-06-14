@@ -31,7 +31,7 @@ class TaskPoint;
 /**
  * Class holding an ObzervationZonePoint, directing calls to it
  */
-class ObservationZoneClient : public ObservationZone {
+class ObservationZoneClient {
   ObservationZonePoint *oz_point;
 
 public:
@@ -42,7 +42,7 @@ public:
    */
   ObservationZoneClient(ObservationZonePoint* _oz_point):oz_point(_oz_point) {}
 
-  virtual ~ObservationZoneClient();
+  ~ObservationZoneClient();
 
   /**
    * Accessor for OZ (for modifying parameters etc)
@@ -53,19 +53,29 @@ public:
     return oz_point;
   }
 
-  /* virtual methods from class ObservationZone */
   virtual bool IsInSector(const AircraftState &ref) const;
-  virtual bool CanStartThroughTop() const;
-  virtual bool TransitionConstraint(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const;
-  virtual GeoPoint GetBoundaryParametric(fixed t) const;
-  virtual Boundary GetBoundary() const;
+
+  gcc_pure
+  bool CanStartThroughTop() const;
+
+  gcc_pure
+  bool TransitionConstraint(const AircraftState &ref_now,
+                            const AircraftState &ref_last) const;
+
+  gcc_pure
+  GeoPoint GetBoundaryParametric(fixed t) const;
+
+  gcc_pure
+  ObservationZone::Boundary GetBoundary() const;
+
   virtual fixed ScoreAdjustment() const;
 
   /* virtual methods from class ObservationZonePoint */
-  virtual void SetLegs(const TaskPoint *previous, const TaskPoint *current,
-                       const TaskPoint *next);
-  virtual GeoPoint GetRandomPointInSector(const fixed mag) const;
+  void SetLegs(const TaskPoint *previous, const TaskPoint *current,
+               const TaskPoint *next);
+
+  gcc_pure
+  GeoPoint GetRandomPointInSector(const fixed mag) const;
 };
 
 
