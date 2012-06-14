@@ -24,7 +24,7 @@
 #include "Task/Points/TaskWaypoint.hpp"
 #include "Math/Earth.hpp"
 #include "Task/TaskEvents.hpp"
-#include "Util/queue.hpp"
+#include "Util/ReservablePriorityQueue.hpp"
 
 #include <limits.h>
 

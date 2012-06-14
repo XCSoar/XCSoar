@@ -28,7 +28,7 @@
 #include "Task/TaskEvents.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
-#include "Util/queue.hpp"
+#include "Util/ReservablePriorityQueue.hpp"
 
 const unsigned AbortTask::max_abort = 10; 
 const fixed AbortTask::min_search_range(50000.0);

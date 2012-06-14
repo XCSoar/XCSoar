@@ -24,9 +24,10 @@ Copyright_License {
 #ifndef DIJKSTRA_HPP
 #define DIJKSTRA_HPP
 
-#include "Util/queue.hpp"
-#include <assert.h>
+#include "Util/ReservablePriorityQueue.hpp"
 #include "Compiler.h"
+
+#include <assert.h>
 
 #define DIJKSTRA_MINMAX_OFFSET 134217727
 
