@@ -260,6 +260,8 @@ TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
@@ -278,6 +280,8 @@ TEST_LOAD_TASK_SOURCES = \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
@@ -1666,6 +1670,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -1999,6 +2005,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
@@ -2318,6 +2326,8 @@ TASK_INFO_SOURCES = \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
 	$(TEST_SRC_DIR)/TaskInfo.cpp
 TASK_INFO_DEPENDS = ENGINE IO OS MATH UTIL
 $(eval $(call link-program,TaskInfo,TASK_INFO))
@@ -2330,6 +2340,8 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
