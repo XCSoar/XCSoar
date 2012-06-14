@@ -51,11 +51,9 @@ Copyright_License {
 
 using std::max;
 
-FlightStatisticsRenderer::FlightStatisticsRenderer(const FlightStatistics &_flight_statistics,
-                                                   const ChartLook &_chart_look,
+FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
                                                    const MapLook &_map_look)
-  :fs(_flight_statistics),
-   chart_look(_chart_look),
+  :chart_look(_chart_look),
    map_look(_map_look),
    trail_renderer(map_look.trail) {}
 

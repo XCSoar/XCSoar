@@ -44,15 +44,13 @@ struct ChartLook;
 struct MapLook;
 
 class FlightStatisticsRenderer {
-  const FlightStatistics &fs;
   const ChartLook &chart_look;
   const MapLook &map_look;
 
   mutable TrailRenderer trail_renderer;
 
 public:
-  FlightStatisticsRenderer(const FlightStatistics &_flight_statistics,
-                           const ChartLook &_chart_look,
+  FlightStatisticsRenderer(const ChartLook &_chart_look,
                            const MapLook &_map_look);
 
 public:
