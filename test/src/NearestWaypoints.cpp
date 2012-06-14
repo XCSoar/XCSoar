@@ -28,6 +28,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Operation/Operation.hpp"
 
+#include <stdint.h>
 #include <stdio.h>
 #include <tchar.h>
 
@@ -73,11 +74,48 @@ ParseGeopoint(const char *line, GeoPoint &location)
   return true;
 }
 
+enum class WaypointType: uint8_t {
+  ALL,
+  LANDABLE,
+  AIRPORT,
+};
+
+static bool
+AlwaysTrue(const Waypoint &waypoint)
+{
+  return true;
+}
+
+static bool
+IsLandable(const Waypoint &waypoint)
+{
+  return waypoint.IsLandable();
+}
+
+static bool
+IsAirport(const Waypoint &waypoint)
+{
+  return waypoint.IsAirport();
+}
+
 static const Waypoint *
 GetNearestWaypoint(const GeoPoint &location, const Waypoints &waypoints,
-                   fixed range)
+                   fixed range, WaypointType type)
 {
-  return waypoints.GetNearest(location, range);
+  std::function<bool(const Waypoint &)> predicate;
+  switch (type) {
+  case WaypointType::AIRPORT:
+    predicate = IsAirport;
+    break;
+  case WaypointType::LANDABLE:
+    predicate = IsLandable;
+    break;
+  default:
+    predicate = AlwaysTrue;
+    break;
+  }
+
+  return waypoints.GetNearestIf(location, range, predicate);
 }
 
 static void
@@ -95,6 +133,7 @@ PrintWaypoint(const Waypoint *waypoint)
 
 int main(int argc, char **argv)
 {
+  WaypointType type = WaypointType::ALL;
   fixed range = fixed_int_constant(100000);
 
   Args args(argc, argv,
@@ -116,6 +155,10 @@ int main(int argc, char **argv)
       double _range = strtod(value, NULL);
       if (_range > 0)
         range = fixed(_range);
+    } else if (StringStartsWith(arg, "--airports-only")) {
+      type = WaypointType::AIRPORT;
+    } else if (StringStartsWith(arg, "--landables-only")) {
+      type = WaypointType::LANDABLE;
     } else {
       args.UsageError();
     }
@@ -135,7 +178,8 @@ int main(int argc, char **argv)
     if (!ParseGeopoint(line, location))
       continue;
 
-    const Waypoint *waypoint = GetNearestWaypoint(location, waypoints, range);
+    const Waypoint *waypoint = GetNearestWaypoint(location, waypoints,
+                                                  range, type);
     PrintWaypoint(waypoint);
   }
 
