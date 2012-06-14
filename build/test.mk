@@ -36,7 +36,12 @@ testfast: $(call name-to-bin,$(TESTFAST))
 	$(Q)perl $(TEST_SRC_DIR)/testall.pl $(TESTFAST)
 
 TEST1_LDADD = $(HARNESS_LIBS) \
-	$(ENGINE_CORE_LIBS) \
+	$(TASK_LIBS) \
+	$(ROUTE_LIBS) \
+	$(GLIDE_LIBS) \
+	$(CONTEST_LIBS) \
+	$(WAYPOINT_LIBS) \
+	$(AIRSPACE_LIBS) \
 	$(IO_LIBS) \
 	$(OS_LIBS) \
 	$(ZZIP_LDADD) \
@@ -48,6 +53,11 @@ TEST1_LDLIBS = \
 
 define link-harness-program
 $(1)_SOURCES = \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
+	$(SRC)/Engine/Trace/Vector.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
@@ -145,7 +155,7 @@ TEST_AIRSPACE_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestAirspaceParser.cpp
 TEST_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
-TEST_AIRSPACE_PARSER_DEPENDS = IO OS ENGINE ZZIP GEO MATH UTIL
+TEST_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE ZZIP GEO MATH UTIL
 $(eval $(call link-program,TestAirspaceParser,TEST_AIRSPACE_PARSER))
 
 TEST_DATE_TIME_SOURCES = \
@@ -169,15 +179,17 @@ TEST_MAC_CREADY_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestMacCready.cpp
 TEST_MAC_CREADY_OBJS = $(call SRC_TO_OBJ,$(TEST_MAC_CREADY_SOURCES))
-TEST_MAC_CREADY_DEPENDS = ENGINE GEO MATH UTIL
+TEST_MAC_CREADY_DEPENDS = GLIDE GEO MATH UTIL
 $(eval $(call link-program,TestMacCready,TEST_MAC_CREADY))
 
 TEST_ORDERED_TASK_SOURCES = \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestOrderedTask.cpp
 TEST_ORDERED_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_ORDERED_TASK_SOURCES))
-TEST_ORDERED_TASK_DEPENDS = ENGINE GEO MATH UTIL
+TEST_ORDERED_TASK_DEPENDS = TASK ROUTE GLIDE WAYPOINT GEO MATH UTIL
 $(eval $(call link-program,TestOrderedTask,TEST_ORDERED_TASK))
 
 TEST_PLANES_SOURCES = \
@@ -233,6 +245,8 @@ TEST_REACH_DEPENDS = TEST1 JASPER OS GEO
 $(eval $(call link-program,test_reach,TEST_REACH))
 
 TEST_ROUTE_SOURCES = \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \
@@ -248,6 +262,8 @@ TEST_ROUTE_DEPENDS = TEST1 JASPER OS GEO
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
@@ -269,6 +285,8 @@ TEST_MATH_TABLES_DEPENDS = MATH
 $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
 
 TEST_LOAD_TASK_SOURCES = \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/XML/Node.cpp \
@@ -582,21 +600,21 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
-	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
-	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWaypointReader.cpp
-TEST_WAY_POINT_FILE_DEPENDS = GEO MATH IO UTIL ZZIP OS
+TEST_WAY_POINT_FILE_DEPENDS = WAYPOINT GEO MATH IO UTIL ZZIP OS
 $(eval $(call link-program,TestWaypointReader,TEST_WAY_POINT_FILE))
 
 TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
-TEST_TRACE_DEPENDS = IO OS ENGINE GEO MATH UTIL
+TEST_TRACE_DEPENDS = IO OS GEO MATH UTIL
 $(eval $(call link-program,TestTrace,TEST_TRACE))
 
 FLIGHT_TABLE_SOURCES = \
@@ -1019,7 +1037,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunWaypointParser.cpp
 RUN_WAY_POINT_PARSER_LDADD = $(FAKE_LIBS)
-RUN_WAY_POINT_PARSER_DEPENDS = ENGINE IO OS ZZIP GEO MATH UTIL
+RUN_WAY_POINT_PARSER_DEPENDS = WAYPOINT IO OS ZZIP GEO MATH UTIL
 $(eval $(call link-program,RunWaypointParser,RUN_WAY_POINT_PARSER))
 
 NEAREST_WAYPOINTS_SOURCES = \
@@ -1044,7 +1062,7 @@ NEAREST_WAYPOINTS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/NearestWaypoints.cpp
 NEAREST_WAYPOINTS_LDADD = $(FAKE_LIBS)
-NEAREST_WAYPOINTS_DEPENDS = ENGINE IO OS ZZIP GEO MATH UTIL
+NEAREST_WAYPOINTS_DEPENDS = WAYPOINT IO OS ZZIP GEO MATH UTIL
 $(eval $(call link-program,NearestWaypoints,NEAREST_WAYPOINTS))
 
 RUN_AIRSPACE_PARSER_SOURCES = \
@@ -1058,7 +1076,7 @@ RUN_AIRSPACE_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceParser.cpp
 RUN_AIRSPACE_PARSER_LDADD = $(FAKE_LIBS)
-RUN_AIRSPACE_PARSER_DEPENDS = IO OS ENGINE ZZIP GEO MATH UTIL
+RUN_AIRSPACE_PARSER_DEPENDS = IO OS AIRSPACE ZZIP GEO MATH UTIL
 $(eval $(call link-program,RunAirspaceParser,RUN_AIRSPACE_PARSER))
 
 READ_PORT_SOURCES = \
@@ -1163,7 +1181,7 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
-RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC IO OS ENGINE GEO MATH UTIL
+RUN_DECLARE_DEPENDS = DRIVER PORT ASYNC IO OS WAYPOINT GEO MATH UTIL
 $(eval $(call link-program,RunDeclare,RUN_DECLARE))
 
 RUN_VEGA_SETTINGS_SOURCES = \
@@ -1201,7 +1219,7 @@ RUN_FLARM_UTILS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlarmUtils.cpp
-RUN_FLARM_UTILS_DEPENDS = DRIVER PORT ASYNC IO OS ENGINE GEO MATH UTIL
+RUN_FLARM_UTILS_DEPENDS = DRIVER PORT ASYNC IO OS GEO MATH UTIL
 $(eval $(call link-program,RunFlarmUtils,RUN_FLARM_UTILS))
 
 RUN_FLIGHT_LIST_SOURCES = \
@@ -1231,7 +1249,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
-RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ASYNC IO OS ENGINE GEO MATH UTIL
+RUN_FLIGHT_LIST_DEPENDS = DRIVER PORT ASYNC IO OS GEO MATH UTIL
 $(eval $(call link-program,RunFlightList,RUN_FLIGHT_LIST))
 
 RUN_DOWNLOAD_FLIGHT_SOURCES = \
@@ -1261,7 +1279,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugPort.cpp \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
-RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC IO OS ENGINE GEO MATH UTIL
+RUN_DOWNLOAD_FLIGHT_DEPENDS = DRIVER PORT ASYNC IO OS GEO MATH UTIL
 $(eval $(call link-program,RunDownloadFlight,RUN_DOWNLOAD_FLIGHT))
 
 CAI302_TOOL_SOURCES = \
@@ -1455,6 +1473,11 @@ RUN_CANVAS_DEPENDS = SCREEN OS MATH UTIL
 $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 
 RUN_MAP_WINDOW_SOURCES = \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
+	$(SRC)/Engine/Trace/Vector.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(IO_SRC_DIR)/TextFile.cpp \
@@ -1625,7 +1648,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 RUN_MAP_WINDOW_LDADD = $(RESOURCE_BINARY)
-RUN_MAP_WINDOW_DEPENDS = PROFILE SCREEN SHAPELIB IO OS ENGINE JASPER ZZIP UTIL GEO MATH
+RUN_MAP_WINDOW_DEPENDS = PROFILE SCREEN SHAPELIB IO OS TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
 RUN_DIALOG_SOURCES = \
@@ -1718,7 +1741,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp
 RUN_RENDER_OZ_LDADD = $(RESOURCE_BINARY)
-RUN_RENDER_OZ_DEPENDS = ENGINE_CORE FORM SCREEN OS GEO MATH UTIL
+RUN_RENDER_OZ_DEPENDS = TASK FORM SCREEN OS GEO MATH UTIL
 $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
 
 RUN_WIND_ARROW_RENDERER_SOURCES = \
@@ -1742,7 +1765,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
 RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_WIND_ARROW_RENDERER_DEPENDS = ENGINE_CORE FORM SCREEN OS MATH UTIL
+RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN OS MATH UTIL
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
 
 RUN_HORIZON_RENDERER_SOURCES = \
@@ -1766,7 +1789,7 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
 RUN_HORIZON_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN OS ENGINE_CORE MATH UTIL
+RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN OS MATH UTIL
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
 
 RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
@@ -1802,7 +1825,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
 RUN_FINAL_GLIDE_BAR_RENDERER_LDADD = $(RESOURCE_BINARY)
-RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN OS ENGINE_CORE GEO MATH UTIL
+RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN OS TASK GLIDE GEO MATH UTIL
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \
@@ -1851,6 +1874,11 @@ RUN_JOB_DIALOG_DEPENDS = SCREEN OS MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
 
 RUN_ANALYSIS_SOURCES = \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
+	$(SRC)/Engine/Trace/Vector.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
@@ -2041,10 +2069,11 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_LDADD = \
 	$(RESOURCE_BINARY)
-RUN_ANALYSIS_DEPENDS = DRIVER PROFILE FORM SCREEN IO DATA_FIELD OS ENGINE JASPER ZZIP UTIL GEO MATH
+RUN_ANALYSIS_DEPENDS = DRIVER PROFILE FORM SCREEN IO DATA_FIELD OS CONTEST TASK ROUTE GLIDE WAYPOINT ROUTE AIRSPACE JASPER ZZIP UTIL GEO MATH
 $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/XML/Node.cpp \
@@ -2097,7 +2126,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
 	$(FAKE_LIBS) \
 	$(RESOURCE_BINARY)
-RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN IO OS ENGINE ZZIP UTIL GEO MATH
+RUN_AIRSPACE_WARNING_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN IO OS AIRSPACE ZZIP UTIL GEO MATH
 $(eval $(call link-program,RunAirspaceWarningDialog,RUN_AIRSPACE_WARNING_DIALOG))
 
 PLAY_TONE_SOURCES = \
@@ -2172,7 +2201,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 RUN_TASK_EDITOR_DIALOG_LDADD = \
 	$(FAKE_LIBS) \
 	$(RESOURCE_BINARY)
-RUN_TASK_EDITOR_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN ENGINE IO OS ZZIP UTIL GEO
+RUN_TASK_EDITOR_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN IO OS ZZIP UTIL GEO
 $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \
@@ -2263,6 +2292,7 @@ endif
 $(eval $(call link-program,FeedFlyNetData,FEED_FLYNET_DATA))
 
 TASK_INFO_SOURCES = \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Task/Serialiser.cpp \
 	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/XML/Node.cpp \
@@ -2271,10 +2301,11 @@ TASK_INFO_SOURCES = \
 	$(SRC)/XML/DataNode.cpp \
 	$(SRC)/XML/DataNodeXML.cpp \
 	$(TEST_SRC_DIR)/TaskInfo.cpp
-TASK_INFO_DEPENDS = ENGINE IO OS GEO MATH UTIL
+TASK_INFO_DEPENDS = TASK ROUTE GLIDE WAYPOINT IO OS GEO MATH UTIL
 $(eval $(call link-program,TaskInfo,TASK_INFO))
 
 DUMP_TASK_FILE_SOURCES = \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Units/Descriptor.cpp \
@@ -2297,7 +2328,7 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/DumpTaskFile.cpp
-DUMP_TASK_FILE_DEPENDS = ENGINE IO OS ZZIP GEO MATH UTIL
+DUMP_TASK_FILE_DEPENDS = TASK GLIDE WAYPOINT IO OS ZZIP GEO MATH UTIL
 $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 
 DUMP_FLARM_NET_SOURCES = \

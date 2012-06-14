@@ -88,7 +88,12 @@ include $(topdir)/build/driver.mk
 include $(topdir)/build/io.mk
 include $(topdir)/build/libasync.mk
 include $(topdir)/build/shapelib.mk
-include $(topdir)/build/task.mk
+include $(topdir)/build/libwaypoint.mk
+include $(topdir)/build/libairspace.mk
+include $(topdir)/build/libtask.mk
+include $(topdir)/build/libroute.mk
+include $(topdir)/build/libcontest.mk
+include $(topdir)/build/libglide.mk
 include $(topdir)/build/datafield.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/form.mk
@@ -271,6 +276,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/RadioFrequency.cpp \
 	\
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Engine/Trace/Point.cpp \
+	$(SRC)/Engine/Trace/Trace.cpp \
+	$(SRC)/Engine/Trace/Vector.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Renderer/TraceHistoryRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/TaskProgressRenderer.cpp \
@@ -819,7 +829,7 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	FORM DATA_FIELD \
 	AUDIO SCREEN \
 	DRIVER PORT \
-	IO ASYNC ENGINE \
+	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	SHAPELIB JASPER ZZIP \
 	LIBNET OS \
 	UTIL GEO MATH
