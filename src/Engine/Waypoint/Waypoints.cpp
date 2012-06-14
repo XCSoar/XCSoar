@@ -186,14 +186,20 @@ Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
 const Waypoint*
 Waypoints::GetNearestLandable(const GeoPoint &loc, fixed range) const
 {
+  return GetNearestIf(loc, range, LandablePredicate());
+}
+
+const Waypoint*
+Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
+                        std::function<bool(const Waypoint &)> predicate) const
+{
   if (IsEmpty())
     return NULL;
 
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
-  const auto found =
-    waypoint_tree.FindNearestIf(bb_target, mrange, LandablePredicate());
+  const auto found = waypoint_tree.FindNearestIf(bb_target, mrange, predicate);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;

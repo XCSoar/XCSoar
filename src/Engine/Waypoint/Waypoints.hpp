@@ -305,6 +305,20 @@ public:
   const Waypoint *GetNearestLandable(const GeoPoint &loc, fixed range) const;
 
   /**
+   * Looks up nearest waypoint to the search location.
+   * Performs search according to flat-earth internal representation,
+   * so is approximate.
+   *
+   * @param loc Location from which to search
+   * @param predicate Callback that checks whether the waypoint
+   * is suitable for the request
+   *
+   * @return Null if none found, otherwise pointer to nearest
+   */
+  const Waypoint *GetNearestIf(const GeoPoint &loc, fixed range,
+                               std::function<bool(const Waypoint &)> predicate) const;
+
+  /**
    * Access first waypoint in store, for use in iterators.
    *
    * @return First waypoint in store
