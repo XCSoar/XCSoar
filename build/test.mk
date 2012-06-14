@@ -695,7 +695,8 @@ DEBUG_PROGRAM_NAMES = \
 	RunTCPListener \
 	TaskInfo DumpTaskFile \
 	DumpFlarmNet \
-	IGC2NMEA
+	IGC2NMEA \
+	NearestWaypoints
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
@@ -1066,6 +1067,32 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 RUN_WAY_POINT_PARSER_LDADD = $(FAKE_LIBS)
 RUN_WAY_POINT_PARSER_DEPENDS = ENGINE IO OS ZZIP MATH UTIL
 $(eval $(call link-program,RunWaypointParser,RUN_WAY_POINT_PARSER))
+
+NEAREST_WAYPOINTS_SOURCES = \
+	$(IO_SRC_DIR)/TextFile.cpp \
+	$(SRC)/Geo/UTM.cpp \
+	$(SRC)/Waypoint/WaypointFileType.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReader.cpp \
+	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/Waypoint/WaypointReaderFS.cpp \
+	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointReaderCompeGPS.cpp \
+	$(SRC)/Waypoint/WaypointWriter.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(SRC)/Poco/RWLock.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/NearestWaypoints.cpp
+NEAREST_WAYPOINTS_LDADD = $(FAKE_LIBS)
+NEAREST_WAYPOINTS_DEPENDS = ENGINE IO OS ZZIP MATH UTIL
+$(eval $(call link-program,NearestWaypoints,NEAREST_WAYPOINTS))
 
 RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
