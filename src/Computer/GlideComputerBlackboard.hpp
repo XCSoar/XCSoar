@@ -37,8 +37,6 @@ class GlideComputerBlackboard:
   public BaseBlackboard,
   public ComputerSettingsBlackboard
 {
-  fixed ScreenDistanceMeters;
-
   DerivedInfo Finish_Derived_Info;
   MoreData last_gps_info;
   DerivedInfo last_calculated_info;
