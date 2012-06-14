@@ -42,9 +42,7 @@ struct GeoPoint;
  * - Currently undefined as to what happens to interior samples if observation 
  *   zone is modified (e.g. due to previous/next taskpoint moving) in update_oz
  */
-class SampledTaskPoint
-  : public TaskWaypoint, public virtual ObservationZone
-{
+class SampledTaskPoint : public TaskWaypoint {
   friend class OrderedTask;
   friend class PrintHelper;
 
@@ -191,6 +189,8 @@ private:
    */
   void UpdateProjection(const TaskProjection &projection);
 
+  virtual bool IsInSector(const AircraftState &ref) const = 0;
+
   /**
    * Determines whether to 'cheat' a missed OZ prior to the current active task point.
    *
@@ -206,6 +206,8 @@ private:
    */
   gcc_pure
   virtual bool SearchBoundaryPoints() const = 0;
+
+  virtual ObservationZone::Boundary GetBoundary() const = 0;
 
   /**
    * Retrieve interior sample polygon.

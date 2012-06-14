@@ -114,6 +114,15 @@ public:
   gcc_pure
   const GeoPoint &GetLocationTravelled() const;
 
+protected:
+  gcc_pure
+  virtual bool CheckEnterTransition(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const = 0;
+
+  gcc_pure
+  virtual bool CheckExitTransition(const AircraftState &ref_now,
+                                   const AircraftState &ref_last) const = 0;
+
 private:
   /**
    * Set OZ entry state
