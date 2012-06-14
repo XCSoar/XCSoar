@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-05-20 05:28+0000\n"
+"PO-Revision-Date: 2012-06-10 13:47+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-22 17:27+0000\n"
-"X-Generator: Launchpad (build 15275)\n"
+"X-Launchpad-Export-Date: 2012-06-14 07:41+0000\n"
+"X-Generator: Launchpad (build 15405)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -37,11 +37,11 @@ msgstr "空域ファイルをロード中..."
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Parse Error at Line"
-msgstr ""
+msgstr "通信エラー"
 
 #: src/Airspace/AirspaceParser.cpp:240
 msgid "Line skipped."
-msgstr ""
+msgstr "リンク　解除されました"
 
 #: src/Airspace/AirspaceParser.cpp:241 src/Dialogs/dlgAnalysis.cpp:378
 #: src/Dialogs/dlgConfiguration.cpp:91
@@ -72,11 +72,11 @@ msgstr "スタート　ルール違反"
 
 #: src/ConditionMonitor/ConditionMonitorSunset.cpp:61
 msgid "Expect arrival past sunset"
-msgstr "到着が日没後になる可能性があります"
+msgstr "到着が日没後になります"
 
 #: src/ConditionMonitor/ConditionMonitorWind.cpp:54
 msgid "Significant wind change"
-msgstr "顕著な風向変化"
+msgstr "急激な風向変化"
 
 #: src/Logger/Logger.cpp:110 src/Dialogs/ManageCAI302Dialog.cpp:72
 msgid "Start Logger"
@@ -227,13 +227,13 @@ msgstr "旋回点待機を解除"
 msgid ""
 "Advance\n"
 "(manual)"
-msgstr ""
+msgstr "上級"
 
 #: src/Menu/ExpandMacros.cpp:282
 msgid ""
 "Advance\n"
 "(auto)"
-msgstr ""
+msgstr "上級　（自動）"
 
 #: src/Menu/ExpandMacros.cpp:287
 msgid ""
@@ -925,7 +925,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
 msgid "AAT Vmin"
-msgstr ""
+msgstr "AATタスク　最小速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:391
 #, no-c-format
@@ -933,6 +933,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"AATタスクの場合で\r\n"
+"最小の時間で飛行可能な最大距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:399
 #, no-c-format
@@ -947,17 +949,17 @@ msgstr "対気速度"
 #: src/InfoBoxes/Content/Factory.cpp:401
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "対気速度　高機能バリオシステムからの信号"
 
 #: src/InfoBoxes/Content/Factory.cpp:409
 #, no-c-format
 msgid "Barometric altitude"
-msgstr ""
+msgstr "気圧高度計"
 
 #: src/InfoBoxes/Content/Factory.cpp:410
 #, no-c-format
 msgid "Alt. Baro."
-msgstr ""
+msgstr "気圧高度計"
 
 #: src/InfoBoxes/Content/Factory.cpp:411
 #, no-c-format
@@ -965,6 +967,8 @@ msgid ""
 "This is the barometric altitude obtained from a device equipped with a "
 "pressure sensor."
 msgstr ""
+"気圧高度\r\n"
+"圧力センサーからの信号"
 
 #: src/InfoBoxes/Content/Factory.cpp:419
 #, no-c-format
@@ -1515,38 +1519,40 @@ msgid ""
 "Displays percentage of device battery remaining (where applicable) and "
 "status/voltage of external power supply."
 msgstr ""
+"バッテリー残量表示　％\r\n"
+"外部バッテリー残量表示"
 
 #: src/InfoBoxes/Content/Factory.cpp:743
 #, no-c-format
 msgid "Final GR"
-msgstr ""
+msgstr "フィニッシュ到達高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:744
 #, no-c-format
 msgid "Fin GR"
-msgstr ""
+msgstr "フィニッシュ到達高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:745
 #, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the final waypoint. This is "
 "not adjusted for total energy."
-msgstr ""
+msgstr "現在に条件でフィニッシュした場合の予想到達高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:753
 #, no-c-format
 msgid "Alternate 1 name"
-msgstr ""
+msgstr "代替着陸地名　１"
 
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
 msgid "Altn 1"
-msgstr ""
+msgstr "代替着陸地名　１"
 
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
 msgid "Displays name and bearing to the best alternate landing location."
-msgstr ""
+msgstr "代替着陸地までの距離と方角"
 
 #: src/InfoBoxes/Content/Factory.cpp:763
 #, no-c-format

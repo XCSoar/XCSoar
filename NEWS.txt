@@ -25,6 +25,9 @@ Version 6.4 - not yet released
 * Android
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out
+Version 6.3.7 - not yet released
+* calculations
+  - show altitude difference to target point, not area centre
 
 Version 6.3.6 - 2012/06/06
 * calculations
