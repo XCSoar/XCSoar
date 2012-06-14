@@ -74,9 +74,9 @@ ParseGeopoint(const char *line, GeoPoint &location)
 }
 
 static const Waypoint *
-GetNearestWaypoint(const GeoPoint &location, const Waypoints &waypoints)
+GetNearestWaypoint(const GeoPoint &location, const Waypoints &waypoints,
+                   fixed range)
 {
-  const fixed range = fixed_int_constant(100000);
   return waypoints.GetNearest(location, range);
 }
 
@@ -95,6 +95,8 @@ PrintWaypoint(const Waypoint *waypoint)
 
 int main(int argc, char **argv)
 {
+  fixed range = fixed_int_constant(100000);
+
   Args args(argc, argv,
             "PATH\n\nPATH is expected to be any compatible waypoint file.\n"
             "Stdin expects a list of coordinates at floating point values\n"
@@ -104,6 +106,20 @@ int main(int argc, char **argv)
             "65.18234 -173.48307\n\n"
             "Output is in the format: LAT LON ELEV (in m) NAME\n\ne.g.\n"
             "50.823055 6.186384 189 Aachen Merzbruc");
+
+  const char *arg;
+  while ((arg = args.PeekNext()) != NULL && *arg == '-') {
+    args.Skip();
+
+    const char *value;
+    if ((value = StringAfterPrefix(arg, "--range=")) != NULL) {
+      double _range = strtod(value, NULL);
+      if (_range > 0)
+        range = fixed(_range);
+    } else {
+      args.UsageError();
+    }
+  }
 
   const char *path = args.ExpectNext();
   args.ExpectEnd();
@@ -119,7 +135,7 @@ int main(int argc, char **argv)
     if (!ParseGeopoint(line, location))
       continue;
 
-    const Waypoint *waypoint = GetNearestWaypoint(location, waypoints);
+    const Waypoint *waypoint = GetNearestWaypoint(location, waypoints, range);
     PrintWaypoint(waypoint);
   }
 
