@@ -44,7 +44,12 @@ class GlidePolar;
  */
 class MacCready 
 {
+#ifdef __clang__
+  /* This attribute is currently not used, but may be some day. */
+  gcc_unused
+#endif
   const GlideSettings &settings;
+
   const GlidePolar &glide_polar;
   const fixed cruise_efficiency;
 
