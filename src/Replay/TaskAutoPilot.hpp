@@ -92,7 +92,6 @@ private:
   Filter heading_filter;
   fixed climb_rate;
   fixed speed_factor;
-  bool short_flight;
   GeoPoint w[2];
 
 public:
