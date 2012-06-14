@@ -80,7 +80,7 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
 {
   const FlatRay ray(projection.project(start), projection.project(end));
 
-  AirspaceIntersectSort sorter(start, end, *this);
+  AirspaceIntersectSort sorter(start, *this);
 
   for (auto it = m_border.begin(); it + 1 != m_border.end(); ++it) {
 

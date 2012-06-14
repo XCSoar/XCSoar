@@ -76,7 +76,7 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
   const bool in_range = (t1 < mag) || (t2 < mag);
   // if at least one point is within range, capture both points
 
-  AirspaceIntersectSort sorter(start, end, *this);
+  AirspaceIntersectSort sorter(start, *this);
   if ((t1 >= fixed_zero) && in_range)
     sorter.add(t1 * inv_mag, projection.funproject(f_p1));
 
