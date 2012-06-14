@@ -106,22 +106,6 @@ char wait_prompt() {
   return 0;
 }
 
-
-/*
-  100, 1604 cycles
-  my ipaq: 
-  test 1: 27.7 seconds, 277ms/cycle
-  test 2: 117 seconds, 72ms/cycle
-  test 3: 45 seconds, 28ms/cycle
-
-  test 1  61209: 81 ms/c
-  test 2 116266: 72 ms/c
-  test 3  46122: 29 ms/c
-  test 4 111742: 70 ms/c
-
-*/
-
-
 bool parse_args(int argc, char** argv) 
 {
   // initialise random number generator once per test program
