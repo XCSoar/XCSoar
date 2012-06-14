@@ -24,8 +24,8 @@
 #define TASKLEG_H
 
 #include "Geo/GeoVector.hpp"
-#include "Navigation/Memento/DistanceMemento.hpp"
-#include "Navigation/Memento/GeoVectorMemento.hpp"
+#include "Geo/Memento/DistanceMemento.hpp"
+#include "Geo/Memento/GeoVectorMemento.hpp"
 #include "Compiler.h"
 
 struct AircraftState;

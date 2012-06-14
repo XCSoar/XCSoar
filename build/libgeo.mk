@@ -6,6 +6,8 @@ GEO_SRC_DIR = $(SRC)/Geo
 # global variables that needs explicit global initialisation
 
 GEO_SOURCES := \
+	$(GEO_SRC_DIR)/Memento/DistanceMemento.cpp \
+	$(GEO_SRC_DIR)/Memento/GeoVectorMemento.cpp \
 	$(GEO_SRC_DIR)/Math.cpp \
 	$(GEO_SRC_DIR)/GeoPoint.cpp \
 	$(GEO_SRC_DIR)/GeoVector.cpp \
