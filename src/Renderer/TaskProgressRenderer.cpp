@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TaskProgressRenderer.hpp"
 #include "Look/TaskLook.hpp"
-#include "Engine/Task/TaskStats/TaskSummary.hpp"
+#include "Engine/Task/Stats/TaskSummary.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Icon.hpp"

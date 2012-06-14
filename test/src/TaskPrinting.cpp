@@ -23,17 +23,14 @@
 #include <fstream>
 
 #include "Engine/Task/TaskManager.hpp"
-#include "Task/Tasks/AbortTask.hpp"
-#include "Task/Tasks/GotoTask.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/Tasks/AbstractTask.hpp"
-#include "Task/Tasks/BaseTask/TaskPoint.hpp"
-#include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
-#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
-
-
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/TaskPoints/AATIsolineSegment.hpp"
+#include "Task/Points/TaskPoint.hpp"
+#include "Task/Points/SampledTaskPoint.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/Points/AATPoint.hpp"
+#include "Engine/Task/Ordered/AATIsolineSegment.hpp"
+#include "Engine/Task/Unordered/GotoTask.hpp"
+#include "Engine/Task/Unordered/AbortTask.hpp"
 
 void 
 PrintHelper::aatpoint_print(std::ostream& f, 
@@ -362,7 +359,7 @@ std::ostream& operator<< (std::ostream& f,
   return f;
 }
 
-#include "Task/TaskStats/TaskStats.hpp"
+#include "Task/Stats/TaskStats.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
                           const DistanceStat& ds)
@@ -393,7 +390,7 @@ std::ostream& operator<< (std::ostream& f,
 }
 
 
-#include "Task/TaskStats/CommonStats.hpp"
+#include "Task/Stats/CommonStats.hpp"
 
 std::ostream& operator<< (std::ostream& f, 
                           const ElementStat& es)

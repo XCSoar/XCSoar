@@ -22,10 +22,10 @@
 
 #include "TaskManager.hpp"
 #include "Visitors/TaskPointVisitor.hpp"
-#include "Tasks/TaskSolvers/TaskSolution.hpp"
-#include "Tasks/BaseTask/UnorderedTaskPoint.hpp"
-#include "Tasks/BaseTask/OrderedTaskPoint.hpp"
-#include "TaskPoints/AATPoint.hpp"
+#include "Solvers/TaskSolution.hpp"
+#include "Engine/Task/Unordered/UnorderedTaskPoint.hpp"
+#include "Ordered/Points/OrderedTaskPoint.hpp"
+#include "Ordered/Points/AATPoint.hpp"
 #include "Util/StringUtil.hpp"
 
 TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,

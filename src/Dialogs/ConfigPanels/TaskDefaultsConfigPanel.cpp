@@ -28,7 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Engine/Task/Tasks/OrderedTask.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "TaskDefaultsConfigPanel.hpp"
 #include "UIGlobals.hpp"

@@ -21,7 +21,7 @@
  */
 
 #include "TaskPointVisitor.hpp"
-#include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
+#include "Engine/Task/Points/TaskPoint.hpp"
 #include <assert.h>
 
 void

@@ -22,11 +22,16 @@
 #ifndef DESERIALISER_HPP
 #define DESERIALISER_HPP
 
-#include "Task/Tasks/OrderedTask.hpp"
+#include "Task/Factory/TaskFactoryType.hpp"
+#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+
+#include <tchar.h>
 
 class DataNode;
+struct GeoPoint;
 struct Waypoint;
 class Waypoints;
+class OrderedTask;
 class ObservationZonePoint;
 
 /**

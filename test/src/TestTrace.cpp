@@ -25,7 +25,6 @@
 #include "IO/FileLineReader.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Trace/Vector.hpp"
-#include "Engine/Task/TaskStats/CommonStats.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
 #include "TestUtil.hpp"

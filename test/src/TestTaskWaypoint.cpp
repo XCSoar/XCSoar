@@ -20,7 +20,7 @@
 }
 */
 
-#include "Engine/Task/Tasks/BaseTask/TaskWaypoint.hpp"
+#include "Engine/Task/Points/TaskWaypoint.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "TestUtil.hpp"
 

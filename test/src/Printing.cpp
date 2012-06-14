@@ -22,14 +22,6 @@
 #include "Printing.hpp"
 #include <fstream>
 
-#include "Engine/Task/TaskManager.hpp"
-#include "Task/Tasks/AbortTask.hpp"
-#include "Task/Tasks/GotoTask.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/Tasks/AbstractTask.hpp"
-#include "Task/Tasks/BaseTask/TaskPoint.hpp"
-#include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
-#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Navigation/SearchPointVector.hpp"
 #include "Trace/Trace.hpp"
 

@@ -22,8 +22,7 @@
 
 #include "TouringTaskFactory.hpp"
 #include "TaskFactoryConstraints.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
 static gcc_constexpr_data TaskFactoryConstraints touring_constraints = {

@@ -22,7 +22,7 @@
 
 #include "ObservationZoneClient.hpp"
 #include "ObservationZonePoint.hpp"
-#include "Task/Tasks/BaseTask/TaskPoint.hpp"
+#include "Task/Points/TaskPoint.hpp"
 
 ObservationZoneClient::~ObservationZoneClient() {
   delete oz_point;

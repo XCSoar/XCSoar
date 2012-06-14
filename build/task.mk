@@ -45,13 +45,28 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatEllipse.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatLine.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskAdvance.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskAdvanceSmart.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
-	$(ENGINE_SRC_DIR)/Task/OrderedTaskBehaviour.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskManager.cpp \
+	$(ENGINE_SRC_DIR)/Task/AbstractTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/FAITriangleValidator.cpp \
 	$(ENGINE_SRC_DIR)/Task/FAITrianglePointValidator.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/OrderedTaskBehaviour.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/OrderedTask.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/TaskAdvance.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/TaskAdvanceSmart.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/Points/IntermediatePoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/Points/OrderedTaskPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/Points/StartPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/Points/FinishPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/Points/ASTPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/Points/AATPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/AATIsoline.cpp \
+	$(ENGINE_SRC_DIR)/Task/Ordered/AATIsolineSegment.cpp \
+	$(ENGINE_SRC_DIR)/Task/Unordered/UnorderedTask.cpp \
+	$(ENGINE_SRC_DIR)/Task/Unordered/UnorderedTaskPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Unordered/GotoTask.cpp \
+	$(ENGINE_SRC_DIR)/Task/Unordered/AbortTask.cpp \
+	$(ENGINE_SRC_DIR)/Task/Unordered/AlternateTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/AbstractTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/RTTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/FAITaskFactory.cpp \
@@ -61,25 +76,10 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/Factory/AATTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/MixedTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/TouringTaskFactory.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/AbortTask.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/AlternateTask.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/AbstractTask.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/GotoTask.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/OrderedTask.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/UnorderedTask.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/IntermediatePoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/OrderedTaskPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/SampledTaskPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ScoredTaskPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/TaskLeg.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/UnorderedTaskPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskPoints/StartPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskPoints/FinishPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskPoints/ASTPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATPoint.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATIsoline.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATIsolineSegment.cpp \
+	$(ENGINE_SRC_DIR)/Task/Points/SampledTaskPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Points/ScoredTaskPoint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Points/TaskLeg.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/ObservationZoneClient.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/ObservationZonePoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/CylinderZone.cpp \
@@ -101,27 +101,27 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestTriangle.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSISAT.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/NetCoupe.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstra.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstraMin.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstraMax.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/IsolineCrossingFinder.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCready.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyTravelled.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyRemaining.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyTotal.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskBestMc.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskSolveTravelled.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskCruiseEfficiency.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskEffectiveMacCready.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMinTarget.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskOptTarget.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskGlideRequired.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskSolution.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskStats/DistanceStat.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskStats/CommonStats.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskStats/ElementStat.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskStats/TaskStats.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskStats/TaskVario.cpp \
+	$(ENGINE_SRC_DIR)/Task/PathSolvers/TaskDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Task/PathSolvers/TaskDijkstraMin.cpp \
+	$(ENGINE_SRC_DIR)/Task/PathSolvers/TaskDijkstraMax.cpp \
+	$(ENGINE_SRC_DIR)/Task/PathSolvers/IsolineCrossingFinder.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskMacCready.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskMacCreadyTravelled.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskMacCreadyRemaining.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskMacCreadyTotal.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskBestMc.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskSolveTravelled.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskCruiseEfficiency.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskEffectiveMacCready.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskMinTarget.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskOptTarget.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskGlideRequired.cpp \
+	$(ENGINE_SRC_DIR)/Task/Solvers/TaskSolution.cpp \
+	$(ENGINE_SRC_DIR)/Task/Stats/DistanceStat.cpp \
+	$(ENGINE_SRC_DIR)/Task/Stats/CommonStats.cpp \
+	$(ENGINE_SRC_DIR)/Task/Stats/ElementStat.cpp \
+	$(ENGINE_SRC_DIR)/Task/Stats/TaskStats.cpp \
+	$(ENGINE_SRC_DIR)/Task/Stats/TaskVario.cpp \
 	$(ENGINE_SRC_DIR)/Task/Visitors/TaskPointVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Route/Config.cpp \
 	$(ENGINE_SRC_DIR)/Route/RoutePlanner.cpp \

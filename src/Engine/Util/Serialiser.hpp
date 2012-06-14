@@ -23,10 +23,16 @@
 #define SERIALISER_HPP
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
+#include "Task/Factory/TaskFactoryType.hpp"
+#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+
+#include <tchar.h>
 
 class DataNode;
+struct GeoPoint;
 struct Waypoint;
+class OrderedTask;
+class OrderedTaskPoint;
 class ObservationZonePoint;
 class FAISectorZone;
 class SectorZone;

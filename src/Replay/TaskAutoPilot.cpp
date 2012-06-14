@@ -22,7 +22,7 @@
 
 #include "TaskAutoPilot.hpp"
 #include "TaskAccessor.hpp"
-#include "Task/TaskStats/ElementStat.hpp"
+#include "Task/Stats/ElementStat.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 
 void

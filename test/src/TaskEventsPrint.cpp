@@ -21,7 +21,7 @@
  */
 
 #include "TaskEventsPrint.hpp"
-#include "Task/Tasks/BaseTask/TaskWaypoint.hpp"
+#include "Task/Points/TaskWaypoint.hpp"
 
 #include <stdio.h>
 

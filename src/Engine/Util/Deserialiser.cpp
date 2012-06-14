@@ -21,12 +21,12 @@
 */
 
 #include "Deserialiser.hpp"
-#include "Task/OrderedTaskBehaviour.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/TaskPoints/StartPoint.hpp"
-#include "Task/TaskPoints/FinishPoint.hpp"
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/TaskPoints/ASTPoint.hpp"
+#include "Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/OrderedTask.hpp"
+#include "Task/Ordered/Points/StartPoint.hpp"
+#include "Task/Ordered/Points/FinishPoint.hpp"
+#include "Task/Ordered/Points/AATPoint.hpp"
+#include "Task/Ordered/Points/ASTPoint.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"

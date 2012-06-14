@@ -21,9 +21,9 @@
  */
 
 #include "FAITriangleValidator.hpp"
-#include "Tasks/OrderedTask.hpp"
-#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
-#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
+#include "Ordered/OrderedTask.hpp"
+#include "Ordered/Points/OrderedTaskPoint.hpp"
+#include "Factory/AbstractTaskFactory.hpp"
 
 bool
 FAITriangleValidator::TestDistances(const fixed d1, const fixed d2, const fixed d3)

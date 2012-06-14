@@ -779,12 +779,12 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/GlideSolvers/GlideResult.cpp \
 	$(SRC)/Engine/Route/Config.cpp \
 	$(SRC)/Engine/Task/TaskBehaviour.cpp \
-	$(SRC)/Engine/Task/OrderedTaskBehaviour.cpp \
-	$(SRC)/Engine/Task/TaskStats/TaskStats.cpp \
-	$(SRC)/Engine/Task/TaskStats/CommonStats.cpp \
-	$(SRC)/Engine/Task/TaskStats/ElementStat.cpp \
-	$(SRC)/Engine/Task/TaskStats/DistanceStat.cpp \
-	$(SRC)/Engine/Task/TaskStats/TaskVario.cpp \
+	$(SRC)/Engine/Task/Ordered/OrderedTaskBehaviour.cpp \
+	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
+	$(SRC)/Engine/Task/Stats/CommonStats.cpp \
+	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
+	$(SRC)/Engine/Task/Stats/DistanceStat.cpp \
+	$(SRC)/Engine/Task/Stats/TaskVario.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \

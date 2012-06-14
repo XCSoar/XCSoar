@@ -26,8 +26,8 @@ Copyright_License {
 #include "Plane/Plane.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 gcc_pure
 static Declaration::TurnPoint::Shape

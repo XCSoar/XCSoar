@@ -22,7 +22,7 @@
 
 #include "FAITaskFactory.hpp"
 #include "TaskFactoryConstraints.hpp"
-#include "Task/OrderedTaskBehaviour.hpp"
+#include "Task/Ordered/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
 static gcc_constexpr_data TaskFactoryConstraints fai_constraints = {

@@ -46,7 +46,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/Layout.hpp"
 #include "Device/Declaration.hpp"
-#include "Engine/Task/Tasks/OrderedTask.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 #ifdef ENABLE_OPENGL

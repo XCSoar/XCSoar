@@ -19,9 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "ContestManager.hpp"
 
-#include "Task/TaskStats/CommonStats.hpp"
+#include "ContestManager.hpp"
 #include "Trace/Trace.hpp"
 
 ContestManager::ContestManager(const Contests _contest,

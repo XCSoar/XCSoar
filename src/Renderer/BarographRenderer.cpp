@@ -31,7 +31,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "FlightStatistics.hpp"
 #include "Language/Language.hpp"
-#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 void
 BarographCaption(TCHAR *sTmp, const FlightStatistics &fs)

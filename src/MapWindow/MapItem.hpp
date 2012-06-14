@@ -28,7 +28,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
-#include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
+#include "Engine/Task/Points/TaskPoint.hpp"
 #include "Markers/Markers.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/Friends.hpp"

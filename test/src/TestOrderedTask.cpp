@@ -22,11 +22,11 @@
 
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Task/TaskEvents.hpp"
-#include "Engine/Task/OrderedTaskBehaviour.hpp"
-#include "Engine/Task/Tasks/OrderedTask.hpp"
-#include "Engine/Task/TaskPoints/StartPoint.hpp"
-#include "Engine/Task/TaskPoints/ASTPoint.hpp"
-#include "Engine/Task/TaskPoints/FinishPoint.hpp"
+#include "Engine/Task/Ordered/OrderedTaskBehaviour.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/StartPoint.hpp"
+#include "Engine/Task/Ordered/Points/FinishPoint.hpp"
+#include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
 
 #ifdef FIXED_MATH

@@ -25,11 +25,11 @@
 
 #include "Compiler.h"
 #include "Util/NonCopyable.hpp"
-#include "Tasks/AlternateTask.hpp"
-#include "Tasks/GotoTask.hpp"
-#include "Tasks/OrderedTask.hpp"
-#include "TaskStats/TaskStats.hpp"
-#include "TaskStats/CommonStats.hpp"
+#include "Unordered/AlternateTask.hpp"
+#include "Unordered/GotoTask.hpp"
+#include "Ordered/OrderedTask.hpp"
+#include "Stats/TaskStats.hpp"
+#include "Stats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
 

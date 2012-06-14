@@ -28,8 +28,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
-#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 
 #include <assert.h>

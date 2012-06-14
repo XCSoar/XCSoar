@@ -29,8 +29,8 @@
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/TaskRenderer.hpp"
-#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
-#include "Engine/Task/Tasks/OrderedTask.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "MapSettings.hpp"
 
 #ifndef ENABLE_OPENGL

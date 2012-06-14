@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TaskBehaviour.hpp"
-#include "Task/Tasks/BaseTask/TaskPoint.hpp"
+#include "Task/Points/TaskPoint.hpp"
 
 class SingleWindow;
 

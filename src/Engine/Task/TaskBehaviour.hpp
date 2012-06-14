@@ -24,7 +24,7 @@
 #define TASK_BEHAVIOUR_HPP
 
 #include "Contest/Solvers/Contests.hpp"
-#include "OrderedTaskBehaviour.hpp"
+#include "Ordered/OrderedTaskBehaviour.hpp"
 #include "Task/Factory/TaskPointFactoryType.hpp"
 #include "Engine/Route/Config.hpp"
 #include "GlideSolvers/GlideSettings.hpp"

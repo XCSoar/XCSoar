@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "AATTaskFactory.hpp"
 #include "TaskFactoryConstraints.hpp"
-#include "Task/Tasks/OrderedTask.hpp"
 #include "Util/Macros.hpp"
 
 static gcc_constexpr_data TaskFactoryConstraints aat_constraints = {

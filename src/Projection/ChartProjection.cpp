@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ChartProjection.hpp"
 #include "Engine/Task/TaskManager.hpp"
-#include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 void
 ChartProjection::Set(const PixelRect &rc, const TaskManager &task_manager,

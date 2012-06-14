@@ -22,8 +22,8 @@
 
 #include "FAITrianglePointValidator.hpp"
 #include "FAITriangleValidator.hpp"
-#include "Tasks/OrderedTask.hpp"
-#include "Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Ordered/OrderedTask.hpp"
+#include "Ordered/Points/OrderedTaskPoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 
 FAITrianglePointValidator::FAITrianglePointValidator(

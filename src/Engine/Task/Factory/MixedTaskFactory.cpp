@@ -22,7 +22,6 @@
 
 #include "MixedTaskFactory.hpp"
 #include "TaskFactoryConstraints.hpp"
-#include "Task/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
 static gcc_constexpr_data TaskFactoryConstraints mixed_constraints = {
