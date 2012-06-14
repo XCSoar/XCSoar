@@ -112,13 +112,6 @@ Waypoints::Waypoints():
 {
 }
 
-class LandablePredicate {
-public:
-  bool operator()(const Waypoint &wp) const {
-    return wp.IsLandable();
-  }
-};
-
 void
 Waypoints::Optimise()
 {
@@ -183,10 +176,16 @@ Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
   return &*found.first;
 }
 
+static bool
+IsLandable(const Waypoint &wp)
+{
+  return wp.IsLandable();
+}
+
 const Waypoint*
 Waypoints::GetNearestLandable(const GeoPoint &loc, fixed range) const
 {
-  return GetNearestIf(loc, range, LandablePredicate());
+  return GetNearestIf(loc, range, IsLandable);
 }
 
 const Waypoint*
