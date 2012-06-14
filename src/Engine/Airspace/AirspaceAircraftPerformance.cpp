@@ -21,7 +21,7 @@
 */
 
 #include "AirspaceAircraftPerformance.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 
 #include <assert.h>

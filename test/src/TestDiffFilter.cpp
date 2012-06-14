@@ -20,8 +20,7 @@
  }
  */
 
-#include "Engine/Util/DiffFilter.hpp"
-
+#include "Math/DiffFilter.hpp"
 #include "TestUtil.hpp"
 
 #include <cstdio>

@@ -24,7 +24,7 @@
 #define TASKBESTMC_HPP
 
 #include "TaskMacCreadyRemaining.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 
 /**
  *  Class to solve for MacCready value, being the highest MC value to produce a

@@ -2,8 +2,8 @@
 #define TASK_VARIO_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/Filter.hpp"
-#include "Util/DiffFilter.hpp"
+#include "Math/Filter.hpp"
+#include "Math/DiffFilter.hpp"
 #include "Util/TypeTraits.hpp"
 
 struct GlideResult;

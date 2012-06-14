@@ -28,9 +28,9 @@
 #include <iostream>
 #endif
 
-#include "Util/Filter.hpp"
-#include "Util/AvFilter.hpp"
-#include "Util/DiffFilter.hpp"
+#include "Math/Filter.hpp"
+#include "Math/AvFilter.hpp"
+#include "Math/DiffFilter.hpp"
 
 #include <assert.h>
 

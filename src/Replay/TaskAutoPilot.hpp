@@ -23,9 +23,10 @@
 #define TASK_AUTOPILOT_HPP
 
 #include "Math/fixed.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "Math/Angle.hpp"
-#include "Util/Filter.hpp"
+#include "Math/Filter.hpp"
+#include "Navigation/Aircraft.hpp"
+
 #include <vector>
 
 struct AutopilotParameters {

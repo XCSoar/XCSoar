@@ -23,7 +23,7 @@
 #define TASKSOLVETRAVELLED_HPP
 
 #include "TaskMacCreadyTravelled.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 
 /**
  *  Abstract class to solve for travelled time.

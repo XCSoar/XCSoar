@@ -23,8 +23,8 @@
 #ifndef AIRCRAFT_STATE_FILTER_HPP
 #define AIRCRAFT_STATE_FILTER_HPP
 
-#include "Filter.hpp"
-#include "DiffFilter.hpp"
+#include "Math/Filter.hpp"
+#include "Math/DiffFilter.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "Math/fixed.hpp"
 

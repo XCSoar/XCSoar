@@ -31,7 +31,7 @@ Copyright_License {
 #include "ThermalBandComputer.hpp"
 #include "WindComputer.hpp"
 #include "ThermalLocator.hpp"
-#include "Util/WindowFilter.hpp"
+#include "Math/WindowFilter.hpp"
 
 struct VarioInfo;
 struct OneClimbInfo;

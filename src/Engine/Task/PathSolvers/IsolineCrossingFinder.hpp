@@ -23,7 +23,7 @@
 #ifndef ISOLINECROSSINGFINDER_HPP
 #define ISOLINECROSSINGFINDER_HPP
 
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 
 class GeoEllipse;
 class AATPoint;

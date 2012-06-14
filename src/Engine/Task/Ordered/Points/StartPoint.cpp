@@ -24,7 +24,7 @@
 #include "Task/Ordered/OrderedTaskBehaviour.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Task/TaskEvents.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 #include "Math/Earth.hpp"
 
 #include <assert.h>

@@ -24,8 +24,8 @@
 #define TASKOPTTARGET_HPP
 
 #include "TaskMacCreadyRemaining.hpp"
-#include "Util/ZeroFinder.hpp"
 #include "Task/Ordered/AATIsolineSegment.hpp"
+#include "Math/ZeroFinder.hpp"
 
 class StartPoint;
 

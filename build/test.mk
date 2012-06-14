@@ -189,7 +189,6 @@ TEST_PLANES_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestPlanes,TEST_PLANES))
 
 TEST_ZEROFINDER_SOURCES = \
-	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestZeroFinder.cpp
 TEST_ZEROFINDER_DEPENDS = IO OS MATH
@@ -415,7 +414,6 @@ TEST_POLARS_SOURCES = \
 	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
-	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -432,7 +430,6 @@ TEST_GLIDE_POLAR_SOURCES = \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
-	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -455,7 +452,6 @@ TEST_GEO_POINT_DEPENDS = MATH
 $(eval $(call link-program,TestGeoPoint,TEST_GEO_POINT))
 
 TEST_DIFF_FILTER_SOURCES = \
-	$(ENGINE_SRC_DIR)/Util/DiffFilter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestDiffFilter.cpp
 TEST_DIFF_FILTER_DEPENDS = MATH
@@ -766,9 +762,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
-	$(SRC)/Engine/Util/Filter.cpp \
-	$(SRC)/Engine/Util/DiffFilter.cpp \
-	$(SRC)/Engine/Util/ZeroFinder.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \

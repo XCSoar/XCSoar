@@ -20,7 +20,7 @@
 }
 */
 
-#include "Engine/Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 #include "TestUtil.hpp"
 
 class ZeroFinderTest: public ZeroFinder

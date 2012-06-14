@@ -24,10 +24,11 @@
 #include "GlideState.hpp"
 #include "GlideResult.hpp"
 #include "MacCready.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
+#include "Math/Quadratic.hpp"
 #include "Util/Tolerances.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Util/Quadratic.hpp"
+
 #include <assert.h>
 
 GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast) :

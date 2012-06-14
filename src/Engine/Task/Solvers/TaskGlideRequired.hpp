@@ -23,7 +23,7 @@
 #define TASKGLIDEREQUIRED_HPP
 
 #include "TaskMacCreadyRemaining.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 
 /**
  *  Class to solve for virtual sink rate such that pure glide at

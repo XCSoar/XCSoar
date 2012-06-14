@@ -23,7 +23,7 @@
 #define TASKMINTARGET_HPP
 
 #include "TaskMacCreadyRemaining.hpp"
-#include "Util/ZeroFinder.hpp"
+#include "Math/ZeroFinder.hpp"
 
 class StartPoint;
 
