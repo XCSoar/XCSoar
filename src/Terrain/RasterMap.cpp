@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Terrain/RasterMap.hpp"
-#include "Math/Earth.hpp"
 #include "Geo/GeoClip.hpp"
 #include "OS/PathName.hpp"
 #include "IO/FileCache.hpp"

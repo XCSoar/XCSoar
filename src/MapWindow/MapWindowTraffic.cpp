@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "Math/Screen.hpp"
-#include "Math/Earth.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"

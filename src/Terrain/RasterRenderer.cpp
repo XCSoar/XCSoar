@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Terrain/RasterRenderer.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Math/Earth.hpp"
 #include "Math/FastMath.h"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
