@@ -27,8 +27,6 @@
 class AircraftSim {
   AircraftState state, state_last;
 
-  fixed random_mag;
-
 public:
   const AircraftState& GetState() const {
     return state;
