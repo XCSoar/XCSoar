@@ -255,6 +255,8 @@ $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/NMEA/FlyingState.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -271,6 +273,8 @@ TEST_MATH_TABLES_DEPENDS = MATH
 $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
 
 TEST_LOAD_TASK_SOURCES = \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -1609,6 +1613,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileIGC.cpp \
@@ -1914,6 +1920,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/NMEA/FlyingState.cpp \
 	$(SRC)/FLARM/List.cpp \
 	$(SRC)/GestureManager.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
@@ -2305,6 +2313,8 @@ endif
 $(eval $(call link-program,FeedFlyNetData,FEED_FLYNET_DATA))
 
 TASK_INFO_SOURCES = \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -2321,6 +2331,8 @@ DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileIGC.cpp \

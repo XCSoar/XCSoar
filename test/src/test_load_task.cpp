@@ -5,7 +5,7 @@
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 #include "OS/PathName.hpp"
-#include "Util/Deserialiser.hpp"
+#include "Task/Deserialiser.hpp"
 #include "Util/DataNodeXML.hpp"
 
 static OrderedTask* task_load(OrderedTask* task) {

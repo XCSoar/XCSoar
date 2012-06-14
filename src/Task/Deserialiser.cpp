@@ -35,7 +35,7 @@
 #include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "DataNode.hpp"
+#include "Engine/Util/DataNode.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 #include <assert.h>
