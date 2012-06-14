@@ -20,84 +20,238 @@
 }
 */
 
-#include "harness_waypoints.hpp"
 #include "test_debug.hpp"
 
 #include "Waypoint/WaypointVisitor.hpp"
+#include "Waypoint/Waypoints.hpp"
+#include "Geo/GeoVector.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
 
-class WaypointVisitorPrint: public WaypointVisitor {
+class WaypointPredicateCounter: public WaypointVisitor
+{
+public:
+  typedef std::function<bool(const Waypoint &wp)> Predicate;
+
+private:
+  Predicate predicate;
   unsigned count;
 
 public:
-  WaypointVisitorPrint():count(0) {}
+  WaypointPredicateCounter(const Predicate &_predicate)
+    :predicate(_predicate), count(0) {}
 
-  virtual void Visit(const Waypoint& wp) {
-    if (verbose)
-      _tprintf(_T("# visiting wp %d, '%s'\n"), wp.id, wp.name.c_str());
-
-    count++;
+  virtual void Visit(const Waypoint &wp) {
+    if (predicate(wp))
+      count++;
   }
 
-  unsigned NumberOfWaypoints() const {
+  unsigned GetCounter() const {
     return count;
   }
 };
 
-static unsigned
-TestLocation(const Waypoints& waypoints, bool good)
+static void
+AddSpiralWaypoints(Waypoints &waypoints,
+                   const GeoPoint &center = GeoPoint(Angle::Degrees(fixed(51.4)),
+                                                     Angle::Degrees(fixed(7.85))),
+                   Angle angle_start = Angle::Degrees(fixed(0)),
+                   Angle angle_step = Angle::Degrees(fixed(15)),
+                   fixed distance_start = fixed(0),
+                   fixed distance_step = fixed(1000),
+                   fixed distance_max = fixed(150000))
 {
-  GeoPoint loc(Angle::Zero(), Angle::Zero());
-  if (!good)
-    loc.longitude = Angle::Degrees(fixed(-23.4));
+  assert(positive(distance_step));
 
-  const Waypoint *wp = waypoints.LookupLocation(loc);
-  if (!wp)
-    return !good;
+  for (unsigned i = 0;; ++i) {
+    GeoVector vector;
+    vector.distance = distance_start + distance_step * i;
+    if (vector.distance > distance_max)
+      break;
 
-  WaypointVisitorPrint v;
-  v.Visit(*wp);
-  return good;
+    vector.bearing = angle_start + angle_step * i;
+
+    Waypoint waypoint;
+    waypoint.location = vector.EndPoint(center);
+    waypoint.original_id = i;
+    waypoint.elevation = fixed(i * 10 - 500);
+
+    StaticString<256> buffer;
+
+    if (i % 7 == 0) {
+      buffer = _T("Airfield");
+      waypoint.type = Waypoint::Type::AIRFIELD;
+    } else if (i % 3 == 0) {
+      buffer = _T("Field");
+      waypoint.type = Waypoint::Type::OUTLANDING;
+    } else
+      buffer = _T("Waypoint");
+
+    buffer.AppendFormat(_T(" #%d"), i + 1);
+    waypoint.name = buffer;
+
+    waypoints.Append(waypoint);
+  }
+
+  waypoints.Optimise();
 }
 
-static unsigned
-TestRange(const Waypoints& waypoints, const double range)
+static void
+TestLookups(const Waypoints &waypoints, const GeoPoint &center)
 {
-  const Waypoint *wp = waypoints.LookupId(3);
-  if (!wp)
-    return 0;
+  const Waypoint *waypoint;
 
-  WaypointVisitorPrint v;
-  waypoints.VisitWithinRange(wp->location, fixed(range), v);
-  return v.NumberOfWaypoints();
+  ok1((waypoint = waypoints.LookupId(0)) == NULL);
+  ok1((waypoint = waypoints.LookupId(1)) != NULL);
+  ok1(waypoint->original_id == 0);
+  ok1((waypoint = waypoints.LookupId(151)) != NULL);
+  ok1(waypoint->original_id == 150);
+  ok1((waypoint = waypoints.LookupId(152)) == NULL);
+  ok1((waypoint = waypoints.LookupId(160)) == NULL);
+
+  ok1((waypoint = waypoints.LookupLocation(center, fixed(0))) != NULL);
+  ok1(waypoint->original_id == 0);
+
+  ok1((waypoint = waypoints.LookupName(_T("Waypoint #5"))) != NULL);
+  ok1(waypoint->original_id == 4);
+
+  ok1((waypoint = waypoints.LookupLocation(waypoint->location, fixed(10000))) != NULL);
+  ok1(waypoint->original_id == 4);
 }
 
-static bool
-TestNearest(const Waypoints& waypoints)
+class BeginsWith
 {
-  const Waypoint *wp = waypoints.LookupId(3);
-  if (!wp)
-    return false;
+  const TCHAR *prefix;
 
-  wp = waypoints.GetNearest(wp->location, fixed_zero);
-  if (!wp)
-    return false;
+public:
+  BeginsWith(const TCHAR *_prefix):prefix(_prefix) {}
 
-  return wp->id == 3;
+  bool operator()(const Waypoint &waypoint) {
+    return StringStartsWith(waypoint.name.c_str(), prefix);
+  }
+};
+
+static void
+TestNamePrefixVisitor(const Waypoints &waypoints, const TCHAR *prefix,
+                      unsigned expected_results)
+{
+  WaypointPredicateCounter::Predicate predicate = BeginsWith(prefix);
+  WaypointPredicateCounter prefix_counter(predicate);
+  waypoints.VisitNamePrefix(prefix, prefix_counter);
+  ok1(prefix_counter.GetCounter() == expected_results);
 }
 
-static bool
-TestNearestLandable(const Waypoints& waypoints)
+static void
+TestNamePrefixVisitor(const Waypoints &waypoints)
 {
-  const Waypoint *wp = waypoints.GetNearestLandable(GeoPoint(Angle::Degrees(fixed(0.99)),
-                                                             Angle::Degrees(fixed(1.1))),
-                                                    fixed(50000));
-  if (!wp)
-    return false;
+  TestNamePrefixVisitor(waypoints, _T(""), 151);
+  TestNamePrefixVisitor(waypoints, _T("Foo"), 0);
+  TestNamePrefixVisitor(waypoints, _T("a"), 0);
+  TestNamePrefixVisitor(waypoints, _T("A"), 22);
+  TestNamePrefixVisitor(waypoints, _T("Air"), 22);
+  TestNamePrefixVisitor(waypoints, _T("Field"), 51 - 8);
+}
 
-  return wp->id == 3;
+class CloserThan
+{
+  fixed distance;
+  GeoPoint location;
+
+public:
+  CloserThan(fixed _distance, const GeoPoint &_location)
+    :distance(_distance), location(_location) {}
+
+  bool operator()(const Waypoint &waypoint) {
+    return location.Distance(waypoint.location) < distance;
+  }
+};
+
+static void
+TestRangeVisitor(const Waypoints &waypoints, const GeoPoint &location,
+                      fixed distance, unsigned expected_results)
+{
+  WaypointPredicateCounter::Predicate predicate = CloserThan(distance, location);
+  WaypointPredicateCounter distance_counter(predicate);
+  waypoints.VisitWithinRange(location, distance, distance_counter);
+  ok1(distance_counter.GetCounter() == expected_results);
+}
+
+static void
+TestRangeVisitor(const Waypoints &waypoints, const GeoPoint &center)
+{
+  TestRangeVisitor(waypoints, center, fixed(1), 1);
+  TestRangeVisitor(waypoints, center, fixed(999), 1);
+  TestRangeVisitor(waypoints, center, fixed(1300), 2);
+  TestRangeVisitor(waypoints, center, fixed(10500), 11);
+  TestRangeVisitor(waypoints, center, fixed(1000000), 151);
+}
+
+class OriginalIDAbove
+{
+  unsigned threshold;
+
+public:
+  OriginalIDAbove(unsigned _threshold):threshold(_threshold) {}
+
+  bool operator()(const Waypoint &waypoint) {
+    return waypoint.original_id > threshold;
+  }
+};
+
+static void
+TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
+{
+  const Waypoint *waypoint;
+  GeoPoint near = GeoVector(fixed(250), Angle::Degrees(fixed(15))).EndPoint(center);
+  GeoPoint far = GeoVector(fixed(750), Angle::Degrees(fixed(15))).EndPoint(center);
+  GeoPoint further = GeoVector(fixed(4200), Angle::Degrees(fixed(48))).EndPoint(center);
+
+  ok1((waypoint = waypoints.GetNearest(center, fixed(1))) != NULL);
+  ok1(waypoint->original_id == 0);
+
+  ok1((waypoint = waypoints.GetNearest(center, fixed(10000))) != NULL);
+  ok1(waypoint->original_id == 0);
+
+  // Deactivated because GetNearest() does not respect the range parameter yet.
+  // ok1((waypoint = waypoints.GetNearest(near, fixed(1))) == NULL);
+
+  ok1((waypoint = waypoints.GetNearest(near, fixed(10000))) != NULL);
+  ok1(waypoint->original_id == 0);
+
+  // Deactivated because GetNearest() does not respect the range parameter yet.
+  // ok1((waypoint = waypoints.GetNearest(far, fixed(1))) == NULL);
+
+  ok1((waypoint = waypoints.GetNearest(far, fixed(10000))) != NULL);
+  ok1(waypoint->original_id == 1);
+
+  ok1((waypoint = waypoints.GetNearestLandable(center, fixed(1))) != NULL);
+  ok1(waypoint->original_id == 0);
+
+  ok1((waypoint = waypoints.GetNearestLandable(center, fixed(10000))) != NULL);
+  ok1(waypoint->original_id == 0);
+
+  // Deactivated because GetNearest() does not respect the range parameter yet.
+  // ok1((waypoint = waypoints.GetNearestLandable(further, fixed(1))) == NULL);
+
+  ok1((waypoint = waypoints.GetNearestLandable(further, fixed(10000))) != NULL);
+  ok1(waypoint->original_id == 3);
+
+  // Deactivated because GetNearest() does not respect the range parameter yet.
+  // ok1((waypoint = waypoints.GetNearestIf(center, fixed(1), OriginalIDAbove(5))) == NULL);
+
+  ok1((waypoint = waypoints.GetNearestIf(center, fixed(10000), OriginalIDAbove(5))) != NULL);
+  ok1(waypoint->original_id == 6);
+}
+
+static void
+TestIterator(const Waypoints &waypoints)
+{
+  unsigned count = 0;
+  for (auto it = waypoints.begin(), end = waypoints.end(); it != end; ++it)
+    count++;
+
+  ok1(count == 151);
 }
 
 static unsigned
@@ -114,14 +268,6 @@ TestCopy(Waypoints& waypoints)
   waypoints.Optimise();
   unsigned size_new = waypoints.size();
   return (size_new == size_old + 1);
-}
-
-static bool
-TestLookup(const Waypoints& waypoints, unsigned id)
-{
-  const Waypoint* wp;
-  wp = waypoints.LookupId(id);
-  return wp != NULL;
 }
 
 static bool
@@ -165,34 +311,32 @@ main(int argc, char** argv)
   if (!ParseArgs(argc, argv))
     return 0;
 
-  plan_tests(14);
+  plan_tests(48);
 
   Waypoints waypoints;
+  GeoPoint center(Angle::Degrees(fixed(51.4)), Angle::Degrees(fixed(7.85)));
 
-  ok(SetupWaypoints(waypoints), "waypoint setup", 0);
+  // AddSpiralWaypoints creates 151 waypoints from
+  // 0km to 150km distance in 1km steps
+  AddSpiralWaypoints(waypoints, center);
 
-  unsigned size = waypoints.size();
+  ok1(!waypoints.IsEmpty());
+  ok1(waypoints.size() == 151);
 
-  ok(TestLookup(waypoints, 3), "waypoint lookup", 0);
-  ok(!TestLookup(waypoints, 5000), "waypoint bad lookup", 0);
-  ok(TestNearest(waypoints), "waypoint nearest", 0);
-  ok(TestNearestLandable(waypoints), "waypoint nearest landable", 0);
-  ok(TestLocation(waypoints, true), "waypoint location good", 0);
-  ok(TestLocation(waypoints, false), "waypoint location bad", 0);
-  ok(TestRange(waypoints, 100) == 1, "waypoint visit range 100m", 0);
-  ok(TestRange(waypoints, 500000) == waypoints.size(),
-     "waypoint range 500000m", 0);
+  TestLookups(waypoints, center);
+  TestNamePrefixVisitor(waypoints);
+  TestRangeVisitor(waypoints, center);
+  TestGetNearest(waypoints, center);
+  TestIterator(waypoints);
+
+  ok(TestCopy(waypoints), "waypoint copy", 0);
+  ok(TestErase(waypoints, 3), "waypoint erase", 0);
+  ok(TestReplace(waypoints, 4), "waypoint replace", 0);
 
   // test clear
   waypoints.Clear();
-  ok(waypoints.size() == 0, "waypoint clear", 0);
-  SetupWaypoints(waypoints);
-  ok(size == waypoints.size(), "waypoint setup after clear", 0);
-
-  ok(TestCopy(waypoints), "waypoint copy", 0);
-
-  ok(TestErase(waypoints, 3), "waypoint erase", 0);
-  ok(TestReplace(waypoints, 4), "waypoint replace", 0);
+  ok1(waypoints.IsEmpty());
+  ok1(waypoints.size() == 0);
 
   return exit_status();
 }
