@@ -23,7 +23,7 @@ HOT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Route/RoutePolar.cpp \
 	$(ENGINE_SRC_DIR)/Route/RouteLink.cpp \
 	$(ENGINE_SRC_DIR)/Route/RoutePolars.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp
+	$(ENGINE_SRC_DIR)/Contest/Solvers/ContestDijkstra.cpp
 
 $(call SRC_TO_OBJ,$(HOT_SOURCES)): OPTIMIZE += -O3
 
