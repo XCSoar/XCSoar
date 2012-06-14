@@ -4,6 +4,7 @@ ifeq ($(DEBUG)$(CLANG),nn)
 # for speed, not for size.
 HOT_SOURCES = \
 	$(MATH_SOURCES) \
+	$(GEO_SOURCES) \
 	$(ZLIB_SOURCES) \
 	$(JASPER) \
 	$(SRC)/Topography/TopographyFileRenderer.cpp \
@@ -14,10 +15,8 @@ HOT_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Projection/Projection.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
-	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \

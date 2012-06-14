@@ -221,10 +221,9 @@ TEST_TROUTE_SOURCES = \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/test_troute.cpp
-TEST_TROUTE_DEPENDS = TEST1 JASPER OS
+TEST_TROUTE_DEPENDS = TEST1 JASPER OS GEO
 $(eval $(call link-program,test_troute,TEST_TROUTE))
 
 TEST_REACH_SOURCES = \
@@ -234,10 +233,9 @@ TEST_REACH_SOURCES = \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/test_reach.cpp
-TEST_REACH_DEPENDS = TEST1 JASPER OS
+TEST_REACH_DEPENDS = TEST1 JASPER OS GEO
 $(eval $(call link-program,test_reach,TEST_REACH))
 
 TEST_ROUTE_SOURCES = \
@@ -249,11 +247,10 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/test_route.cpp
-TEST_ROUTE_DEPENDS = TEST1 JASPER OS
+TEST_ROUTE_DEPENDS = TEST1 JASPER OS GEO
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
@@ -315,10 +312,9 @@ TEST_FLARM_NET_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestFlarmNet,TEST_FLARM_NET))
 
 TEST_GEO_CLIP_SOURCES = \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGeoClip.cpp
-TEST_GEO_CLIP_DEPENDS = MATH
+TEST_GEO_CLIP_DEPENDS = GEO MATH
 $(eval $(call link-program,TestGeoClip,TEST_GEO_CLIP))
 
 TEST_CLIMB_AV_CALC_SOURCES = \
@@ -359,10 +355,9 @@ $(eval $(call link-program,TestUnitsFormatter,TEST_UNITS_FORMATTER))
 TEST_GEO_POINT_FORMATTER_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
-	$(SRC)/Geo/UTM.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGeoPointFormatter.cpp
-TEST_GEO_POINT_FORMATTER_DEPENDS = MATH
+TEST_GEO_POINT_FORMATTER_DEPENDS = GEO MATH
 $(eval $(call link-program,TestGeoPointFormatter,TEST_GEO_POINT_FORMATTER))
 
 TEST_HEX_COLOR_FORMATTER_SOURCES = \
@@ -512,10 +507,9 @@ TEST_SUN_EPHEMERIS_DEPENDS = MATH
 $(eval $(call link-program,TestSunEphemeris,TEST_SUN_EPHEMERIS))
 
 TEST_UTM_SOURCES = \
-	$(SRC)/Geo/UTM.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestUTM.cpp
-TEST_UTM_DEPENDS = MATH
+TEST_UTM_DEPENDS = GEO MATH
 $(eval $(call link-program,TestUTM,TEST_UTM))
 
 TEST_VALIDITY_SOURCES = \
@@ -592,7 +586,6 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
@@ -614,7 +607,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWaypointReader.cpp
-TEST_WAY_POINT_FILE_DEPENDS = MATH IO UTIL ZZIP OS
+TEST_WAY_POINT_FILE_DEPENDS = GEO MATH IO UTIL ZZIP OS
 $(eval $(call link-program,TestWaypointReader,TEST_WAY_POINT_FILE))
 
 TEST_TRACE_SOURCES = \
@@ -862,12 +855,11 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/DateTime.cpp \
-	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Net/ToBuffer.cpp \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
-RUN_NOAA_DOWNLOADER_DEPENDS = IO MATH LIBNET
+RUN_NOAA_DOWNLOADER_DEPENDS = GEO IO MATH LIBNET
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
 
 RUN_LIVETRACK24_SOURCES = \
@@ -1014,7 +1006,6 @@ RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
@@ -1022,7 +1013,7 @@ RUN_HEIGHT_MATRIX_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
 RUN_HEIGHT_MATRIX_CPPFLAGS = $(SCREEN_CPPFLAGS)
-RUN_HEIGHT_MATRIX_DEPENDS = MATH IO OS JASPER ZZIP UTIL
+RUN_HEIGHT_MATRIX_DEPENDS = GEO MATH IO OS JASPER ZZIP UTIL
 $(eval $(call link-program,RunHeightMatrix,RUN_HEIGHT_MATRIX))
 
 RUN_INPUT_PARSER_SOURCES = \
@@ -1037,7 +1028,6 @@ $(eval $(call link-program,RunInputParser,RUN_INPUT_PARSER))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(IO_SRC_DIR)/TextFile.cpp \
-	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
@@ -1058,12 +1048,11 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunWaypointParser.cpp
 RUN_WAY_POINT_PARSER_LDADD = $(FAKE_LIBS)
-RUN_WAY_POINT_PARSER_DEPENDS = ENGINE IO OS ZZIP MATH UTIL
+RUN_WAY_POINT_PARSER_DEPENDS = ENGINE IO OS ZZIP GEO MATH UTIL
 $(eval $(call link-program,RunWaypointParser,RUN_WAY_POINT_PARSER))
 
 NEAREST_WAYPOINTS_SOURCES = \
 	$(IO_SRC_DIR)/TextFile.cpp \
-	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
@@ -1084,7 +1073,7 @@ NEAREST_WAYPOINTS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/NearestWaypoints.cpp
 NEAREST_WAYPOINTS_LDADD = $(FAKE_LIBS)
-NEAREST_WAYPOINTS_DEPENDS = ENGINE IO OS ZZIP MATH UTIL
+NEAREST_WAYPOINTS_DEPENDS = ENGINE IO OS ZZIP GEO MATH UTIL
 $(eval $(call link-program,NearestWaypoints,NEAREST_WAYPOINTS))
 
 RUN_AIRSPACE_PARSER_SOURCES = \
@@ -1550,7 +1539,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Projection/CompareProjection.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
@@ -1655,7 +1643,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/MapProfile.cpp \
 	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/Profile/Screen.cpp \
-	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/HomeGlue.cpp \
 	$(SRC)/Waypoint/LastUsed.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
@@ -1684,7 +1671,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 RUN_MAP_WINDOW_LDADD = $(RESOURCE_BINARY)
-RUN_MAP_WINDOW_DEPENDS = PROFILE SCREEN SHAPELIB IO OS ENGINE JASPER ZZIP UTIL MATH
+RUN_MAP_WINDOW_DEPENDS = PROFILE SCREEN SHAPELIB IO OS ENGINE JASPER ZZIP UTIL GEO MATH
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
 
 RUN_DIALOG_SOURCES = \
@@ -1947,7 +1934,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
@@ -2097,7 +2083,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_LDADD = \
 	$(RESOURCE_BINARY)
-RUN_ANALYSIS_DEPENDS = DRIVER PROFILE FORM SCREEN IO DATA_FIELD OS ENGINE JASPER ZZIP UTIL MATH
+RUN_ANALYSIS_DEPENDS = DRIVER PROFILE FORM SCREEN IO DATA_FIELD OS ENGINE JASPER ZZIP UTIL GEO MATH
 $(eval $(call link-program,RunAnalysis,RUN_ANALYSIS))
 
 RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
@@ -2206,7 +2192,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Formatter/Units.cpp \
-	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointGlue.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
@@ -2229,7 +2214,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 RUN_TASK_EDITOR_DIALOG_LDADD = \
 	$(FAKE_LIBS) \
 	$(RESOURCE_BINARY)
-RUN_TASK_EDITOR_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN ENGINE IO OS ZZIP UTIL
+RUN_TASK_EDITOR_DIALOG_DEPENDS = DATA_FIELD FORM SCREEN ENGINE IO OS ZZIP UTIL GEO
 $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 
 TEST_NOTIFY_SOURCES = \

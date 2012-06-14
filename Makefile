@@ -76,6 +76,7 @@ include $(topdir)/build/manual.mk
 include $(topdir)/build/libstdcxx.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
+include $(topdir)/build/libgeo.mk
 include $(topdir)/build/libos.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
@@ -477,8 +478,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/LogFile.cpp \
 	\
 	$(SRC)/Geo/Geoid.cpp \
-	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
 	$(SRC)/Projection/Projection.cpp \
@@ -819,7 +818,7 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	IO ASYNC ENGINE \
 	SHAPELIB JASPER ZZIP \
 	LIBNET OS \
-	UTIL MATH
+	UTIL GEO MATH
 
 ifeq ($(HAVE_POSIX),n)
 ifeq ($(HAVE_CE),y)
