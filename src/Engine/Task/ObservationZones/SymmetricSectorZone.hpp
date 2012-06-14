@@ -52,25 +52,6 @@ protected:
      sector_angle(other.sector_angle) {}
 
 public:
-  /**
-   * Update radials when previous/next legs are modified.
-   *
-   * @param previous Previous task point (origin of inbound leg)
-   * @param current Taskpoint this is located at
-   * @param next Following task point (destination of outbound leg)
-   */
-  virtual void SetLegs(const GeoPoint *previous, const GeoPoint *current,
-                       const GeoPoint *next);
-
-  /**
-   * Test whether an OZ is equivalent to this one
-   *
-   * @param other OZ to compare to
-   *
-   * @return True if same type and OZ parameters
-   */
-  virtual bool Equals(const ObservationZonePoint &other) const;
-
   /** 
    * Accessor for angle of sector (angle between start/end radials)
    * 
@@ -79,7 +60,11 @@ public:
   Angle GetSectorAngle() const {
     return sector_angle;
   }
-};
 
+  /* virtual methods from class ObservationZonePoint */
+  virtual void SetLegs(const GeoPoint *previous, const GeoPoint *current,
+                       const GeoPoint *next);
+  virtual bool Equals(const ObservationZonePoint &other) const;
+};
 
 #endif

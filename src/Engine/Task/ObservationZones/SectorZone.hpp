@@ -73,10 +73,6 @@ public:
     UpdateSector();
   }
 
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
-    return new SectorZone(*this, _reference);
-  }
-
   /**
    * Set start angle (most counter-clockwise) of sector
    *
@@ -108,50 +104,6 @@ public:
   Angle GetEndRadial() const {
     return end_radial;
   }
-
-  /**
-   * Set radius property
-   *
-   * @param new_radius Radius (m) of cylinder
-   */
-  virtual void SetRadius(fixed new_radius) {
-    CylinderZone::SetRadius(new_radius);
-    UpdateSector();
-  }
-
-  /** 
-   * Check whether observer is within OZ
-   *
-   * @return True if reference point is inside sector
-   */
-  virtual bool IsInSector(const AircraftState &ref) const;
-
-  /**
-   * Get point on boundary from parametric representation
-   *
-   * @param t T value [0,1]
-   *
-   * @return Point on boundary
-   */
-  GeoPoint GetBoundaryParametric(fixed t) const;  
-
-  virtual Boundary GetBoundary() const;
-
-  /**
-   * Distance reduction for scoring when outside this OZ
-   *
-   * @return Distance (m) to subtract from score
-   */
-  virtual fixed ScoreAdjustment() const;
-
-  /**
-   * Test whether an OZ is equivalent to this one
-   *
-   * @param other OZ to compare to
-   *
-   * @return True if same type and OZ parameters
-   */
-  virtual bool Equals(const ObservationZonePoint &other) const;
 
   /** 
    * Retrieve start radial endpoint
@@ -188,6 +140,25 @@ protected:
    */
   gcc_pure
   bool IsAngleInSector(const Angle that) const;
+
+public:
+  /* virtual methods from class ObservationZone */
+  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const;
+  virtual Boundary GetBoundary() const;
+  virtual fixed ScoreAdjustment() const;
+
+  /* virtual methods from class ObservationZonePoint */
+  virtual bool Equals(const ObservationZonePoint &other) const;
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new SectorZone(*this, _reference);
+  }
+
+  /* virtual methods from class CylinderZone */
+  virtual void SetRadius(fixed new_radius) {
+    CylinderZone::SetRadius(new_radius);
+    UpdateSector();
+  }
 };
 
 #endif

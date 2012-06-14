@@ -98,8 +98,6 @@ public:
   OrderedTask(const TaskBehaviour &tb);
   virtual ~OrderedTask();
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-
   /**
    * Accessor for factory system for constructing tasks
    *
@@ -133,12 +131,6 @@ public:
   std::vector<TaskFactoryType> GetFactoryTypes(bool all = true) const;
 
   /** 
-   * Reset the task (as if never flown)
-   * 
-   */
-  void Reset();
-
-  /** 
    * Clear all points and restore default ordered task behaviour
    * for the active factory
    */
@@ -165,14 +157,6 @@ public:
   bool Commit(const OrderedTask& other);
 
   /**
-   * Retrieves the active task point sequence.
-   *
-   * @return Active task point
-   */
-  gcc_pure
-  TaskWaypoint* GetActiveTaskPoint() const;
-
-  /**
    * Retrieves the active task point index.
    *
    * @return Index of active task point sequence
@@ -195,15 +179,6 @@ public:
   }
 
   /**
-   * Determine whether active task point optionally shifted points to
-   * a valid task point.
-   *
-   * @param index_offset offset (default 0)
-   */
-  gcc_pure
-  bool IsValidTaskPoint(const int index_offset=0) const;
-
-  /**
    * Check if task has a single StartPoint
    *
    * @return True if task has start
@@ -222,13 +197,6 @@ public:
   bool HasFinish() const {
     return taskpoint_finish != NULL;
   }
-
-  /**
-   * Set active task point index
-   *
-   * @param desired Desired active index of task sequence
-   */
-  void SetActiveTaskPoint(unsigned desired);
 
   /**
    * Cycle through optional start points, replacing actual task start point
@@ -340,13 +308,6 @@ public:
    */
   bool Relocate(const unsigned position, const Waypoint& waypoint);
 
-  /**
-   * Check if task is valid.  Calls task_event methods on failure.
-   *
-   * @return True if task is valid
-   */
-  bool CheckTask() const;
-
  /**
   * returns pointer to AATPoint accessed via TPIndex if exist
   *
@@ -356,48 +317,6 @@ public:
   */
  AATPoint* GetAATTaskPoint(unsigned index) const;
 
-  
-  /**
-   * Test if task has finished.  Used to determine whether
-   * or not to continue updating stats.
-   *
-   * @return True if task is finished
-   */
-  bool TaskFinished() const;
-
-  /**
-   * Test if task has started.  Used to determine whether
-   * or not update stats.
-   *
-   * @param soft If true, allow soft starts
-   *
-   * @return True if task has started
-   */
-  virtual bool TaskStarted(bool soft=false) const;
-
-  /**
-   * Update internal states when aircraft state advances.
-   *
-   * @param state_now Aircraft state at this time step
-   * @param full_update Force update due to task state change
-   *
-   * @return True if internal state changes
-   */
-  virtual bool UpdateSample(const AircraftState &state_now,
-                            const GlidePolar &glide_polar,
-                            const bool full_update);
-
-  /**
-   * Update internal states (non-essential) for housework, or where functions are slow
-   * and would cause loss to real-time performance.
-   *
-   * @param state_now Aircraft state at this time step
-   *
-   * @return True if internal state changed
-   */
-  virtual bool UpdateIdle(const AircraftState& state_now,
-                          const GlidePolar &glide_polar);
-
   /**
    * Check whether the task point with the specified index exists.
    */
@@ -405,13 +324,6 @@ public:
   bool IsValidIndex(unsigned i) const {
     return i < task_points.size();
   }
-
-  /**
-   * Return size of task
-   *
-   * @return Number of task points in task
-   */
-  unsigned TaskSize() const;
 
   /**
    * Determine whether the task is full according to the factory in use
@@ -448,13 +360,6 @@ public:
   gcc_pure
   AircraftState GetFinishState() const;
 
-  fixed GetFinishHeight() const;
-
-  GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
-  fixed GetTaskRadius(const GeoPoint& fallback_location) const;
-
-  bool HasTargets() const;
-
   void CheckDuplicateWaypoints(Waypoints& waypoints);
 
   /**
@@ -478,9 +383,6 @@ public:
    * Update summary task statistics (progress along path)
    */
   void UpdateSummary(TaskSummary &summary) const;
-
-protected:
-  bool IsScored() const;
 
 public:
   /**
@@ -524,214 +426,6 @@ protected:
    * @return True if start and finish found
    */
   bool ScanStartFinish();
-
-  /**
-   * Test whether (and how) transitioning into/out of task points should occur, typically
-   * according to task_advance mechanism.  This also may call the task_event callbacks.
-   *
-   * @param state_now Aircraft state at this time step
-   * @param state_last Aircraft state at previous time step
-   *
-   * @return True if transition occurred
-   */
-  bool CheckTransitions(const AircraftState &state_now, 
-                         const AircraftState &state_last);
-
-  /**
-   * Calculate distance of nominal task (sum of distances from each
-   * leg's consecutive reference point to reference point for entire task).
-   *
-   * @return Distance (m) of nominal task
-   */
-  fixed ScanDistanceNominal();
-
-  /**
-   * Calculate distance of planned task (sum of distances from each leg's
-   * achieved/scored reference points respectively for prior task points,
-   * and targets or reference points for active and later task points).
-   *
-   * @return Distance (m) of planned task
-   */
-  fixed ScanDistancePlanned();
-
-  /**
-   * Calculate distance of planned task (sum of distances from aircraft to
-   * current target/reference and for later task points from each leg's
-   * targets or reference points).
-   *
-   * @param ref Location of aircraft
-   *
-   * @return Distance (m) remaining in the planned task
-   */
-  fixed ScanDistanceRemaining(const GeoPoint &ref);
-
-  /**
-   * Calculate scored distance of achieved part of task.
-   *
-   * @param ref Location of aircraft
-   *
-   * @return Distance (m) achieved adjusted for scoring
-   */
-  fixed ScanDistanceScored(const GeoPoint &ref);
-
-  /**
-   * Calculate distance of achieved part of task.
-   * For previous taskpoints, the sum of distances of maximum distance
-   * points; for current, the distance from previous max distance point to
-   * the aircraft.
-   *
-   * @param ref Location of aircraft
-   *
-   * @return Distance (m) achieved
-   */
-  fixed ScanDistanceTravelled(const GeoPoint &ref);
-
-  /**
-   * Calculate maximum and minimum distances for task, achievable
-   * from the current aircraft state (assuming active taskpoint does not retreat).
-   *
-   * @param ref Aircraft location
-   * @param full Perform full search (if task state has changed)
-   * @param dmin Minimum distance (m) achievable of task
-   * @param dmax Maximum distance (m) achievable of task
-   */
-  void ScanDistanceMinMax(const GeoPoint &ref, 
-                            bool full,
-                            fixed *dmin, fixed *dmax);
-
-  /**
-   * Calculate task start time.
-   *
-   * @param state_now Aircraft state
-   *
-   * @return Time (s) of start of task
-   */
-  fixed ScanTotalStartTime(const AircraftState &state_now);
-
-  /**
-   * Calculate leg start time.
-   *
-   * @param state_now Aircraft state
-   *
-   * @return Time (s) of start of leg
-   */
-  fixed ScanLegStartTime(const AircraftState &state_now);
-
-
-  /**
-   * Calculate glide result for remainder of task
-   *
-   * @param state_now Aircraft state
-   * @param polar Glide polar used for calculation
-   * @param total Glide result accumulated for total remaining task
-   * @param leg Glide result for current leg of task
-   */
-  void GlideSolutionRemaining(const AircraftState &state_now, 
-                                const GlidePolar &polar,
-                                GlideResult &total,
-                                GlideResult &leg);
-
-  /**
-   * Calculate glide result from start of task to current state
-   *
-   * @param state_now Aircraft state
-   * @param total Glide result accumulated for total travelled task
-   * @param leg Glide result for current leg of task
-   */
-  void GlideSolutionTravelled(const AircraftState &state_now, 
-                              const GlidePolar &glide_polar,
-                                GlideResult &total,
-                                GlideResult &leg);
-
-  /**
-   * Calculate glide result from start of task to finish, and from this
-   * calculate the effective position of the aircraft along the task based
-   * on the remaining time.  This system therefore allows effective speeds
-   * to be calculated which take into account the time value of height.
-   *
-   * @param state_now Aircraft state
-   * @param total Glide result accumulated for total task
-   * @param leg Glide result for current leg of task
-   * @param total_remaining_effective
-   * @param leg_remaining_effective
-   * @param total_t_elapsed Total planned task time (s)
-   * @param leg_t_elapsed Leg planned task time (s)
-   */
-  virtual void GlideSolutionPlanned(const AircraftState &state_now,
-                                    const GlidePolar &glide_polar,
-                                    GlideResult &total,
-                                    GlideResult &leg,
-                                    DistanceStat &total_remaining_effective,
-                                    DistanceStat &leg_remaining_effective,
-                                    const GlideResult &solution_remaining_total,
-                                    const GlideResult &solution_remaining_leg);
-
-  /**
-   * Calculate/search for best MC, being the highest MC value to produce a
-   * pure glide solution for the remainder of the task.
-   *
-   * @param state_now Aircraft state
-   * @param best Best MC value found (m/s)
-   *
-   * @return true if solution is valid
-   */
-  virtual bool CalcBestMC(const AircraftState &state_now,
-                          const GlidePolar &glide_polar,
-                          fixed& best) const;
-
-  /**
-   * Calculate virtual sink rate of aircraft that allows a pure glide solution
-   * for the remainder of the task.  Glide is performed according to Mc theory
-   * speed with the current glide polar, neglecting effect of virtual sink rate.
-   *
-   * @param state_now Aircraft state
-   *
-   * @return Sink rate of aircraft (m/s)
-   */
-  virtual fixed CalcRequiredGlide(const AircraftState &state_now,
-                                  const GlidePolar &glide_polar) const;
-
-  /**
-   * Calculate cruise efficiency for the travelled part of the task.
-   * This is the ratio of the achieved inter-thermal cruise speed to that
-   * predicted by MacCready theory with the current glide polar.
-   *
-   * @param state_now Aircraft state
-   * @param value Output cruise efficiency value (0-)
-   *
-   * @return True if cruise efficiency is updated
-   */
-  virtual bool CalcCruiseEfficiency(const AircraftState &state_now,
-                                    const GlidePolar &glide_polar,
-                                    fixed &value) const;
-
-  virtual bool CalcEffectiveMC(const AircraftState &state_now,
-                               const GlidePolar &glide_polar,
-                               fixed &value) const;
-
-  /**
-   * Optimise target ranges (for adjustable tasks) to produce an estimated
-   * time remaining with the current glide polar equal to a target value.
-   * This adjusts the target locations for the remainder of the task.
-   *
-   * @param state_now Aircraft state
-   * @param t_target Desired time for remainder of task (s)
-   *
-   * @return Target range parameter (0-1)
-   */
-  fixed CalcMinTarget(const AircraftState &state_now, 
-                      const GlidePolar &glide_polar,
-                        const fixed t_target);
-
-  /**
-   * Calculate angle from aircraft to remainder of task (minimum of leg
-   * heights above turnpoints divided by distance to go for each leg).
-   *
-   * @param state_now Aircraft state
-   *
-   * @return Minimum gradient angle of remainder of task
-   */
-  fixed CalcGradient(const AircraftState &state_now) const;
 
 private:
 
@@ -888,24 +582,79 @@ public:
     return *optional_start_points[i];
   }
 
-  /**
-   * Accept a (const) task point visitor; makes the visitor visit
-   * all TaskPoint in the task
-   *
-   * @param visitor Visitor to accept
-   * @param reverse Visit task points in reverse order
-   */
-  void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+public:
+  /* virtual methods from class TaskInterface */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+  virtual unsigned TaskSize() const;
+  virtual void SetActiveTaskPoint(unsigned desired);
+  virtual TaskWaypoint *GetActiveTaskPoint() const;
+  virtual bool IsValidTaskPoint(const int index_offset=0) const;
+  virtual bool UpdateIdle(const AircraftState& state_now,
+                          const GlidePolar &glide_polar);
 
-  /**
-   * Accept a (const) task point visitor; makes the visitor visit
-   * all optional start points in the task
-   *
-   * @param visitor Visitor to accept
-   * @param reverse Visit task points in reverse order
-   */
-  void AcceptStartPointVisitor(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  /* virtual methods from class AbstractTask */
+  virtual void Reset();
+  virtual bool TaskFinished() const;
+  virtual bool TaskStarted(bool soft=false) const;
+  virtual bool CheckTask() const;
+  virtual fixed GetFinishHeight() const;
+  virtual GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
+  virtual fixed GetTaskRadius(const GeoPoint &fallback_location) const;
 
+protected:
+  /* virtual methods from class AbstractTask */
+  virtual bool UpdateSample(const AircraftState &state_now,
+                            const GlidePolar &glide_polar,
+                            const bool full_update);
+  virtual bool CheckTransitions(const AircraftState &state_now,
+                                const AircraftState &state_last);
+  virtual bool CalcBestMC(const AircraftState &state_now,
+                          const GlidePolar &glide_polar,
+                          fixed& best) const;
+  virtual fixed CalcRequiredGlide(const AircraftState &state_now,
+                                  const GlidePolar &glide_polar) const;
+  virtual bool CalcCruiseEfficiency(const AircraftState &state_now,
+                                    const GlidePolar &glide_polar,
+                                    fixed &value) const;
+  virtual bool CalcEffectiveMC(const AircraftState &state_now,
+                               const GlidePolar &glide_polar,
+                               fixed &value) const;
+  virtual fixed CalcMinTarget(const AircraftState &state_now,
+                              const GlidePolar &glide_polar,
+                              const fixed t_target);
+  virtual fixed CalcGradient(const AircraftState &state_now) const;
+  virtual fixed ScanTotalStartTime(const AircraftState &state_now);
+  virtual fixed ScanLegStartTime(const AircraftState &state_now);
+  virtual fixed ScanDistanceNominal();
+  virtual fixed ScanDistancePlanned();
+  virtual fixed ScanDistanceRemaining(const GeoPoint &ref);
+  virtual fixed ScanDistanceScored(const GeoPoint &ref);
+  virtual fixed ScanDistanceTravelled(const GeoPoint &ref);
+  virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
+                                  fixed *dmin, fixed *dmax);
+  virtual void GlideSolutionRemaining(const AircraftState &state_now,
+                                      const GlidePolar &polar,
+                                      GlideResult &total, GlideResult &leg);
+  virtual void GlideSolutionTravelled(const AircraftState &state_now,
+                                      const GlidePolar &glide_polar,
+                                      GlideResult &total, GlideResult &leg);
+  virtual void GlideSolutionPlanned(const AircraftState &state_now,
+                                    const GlidePolar &glide_polar,
+                                    GlideResult &total,
+                                    GlideResult &leg,
+                                    DistanceStat &total_remaining_effective,
+                                    DistanceStat &leg_remaining_effective,
+                                    const GlideResult &solution_remaining_total,
+                                    const GlideResult &solution_remaining_leg);
+public:
+  virtual bool HasTargets() const;
+protected:
+  virtual bool IsScored() const;
+public:
+  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
+                                      const bool reverse=false) const;
+  virtual void AcceptStartPointVisitor(TaskPointConstVisitor& visitor,
+                                       const bool reverse=false) const;
 };
 
 #endif //ORDEREDTASK_H

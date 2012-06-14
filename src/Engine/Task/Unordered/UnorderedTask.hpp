@@ -40,42 +40,33 @@ public:
   UnorderedTask(const enum Type _type,
                 const TaskBehaviour &tb);
 
-  fixed GetFinishHeight() const;
-
-  virtual GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
-  virtual fixed GetTaskRadius(const GeoPoint& fallback_location) const;
-
-  /**
-   * Accept a (const) task point visitor; makes the visitor visit
-   * all optional start points in the task
-   *
-   * @param visitor Visitor to accept
-   * @param reverse Visit task points in reverse order
-   */
-  virtual void AcceptStartPointVisitor(TaskPointConstVisitor& visitor,
-                                       const bool reverse = false) const;
-
-protected:
-
-  bool CheckTask() const;
-
+public:
+  /* virtual methods from class AbstractTask */
+  virtual bool CheckTask() const;
+  virtual fixed GetFinishHeight() const;
+  virtual GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
+  virtual fixed GetTaskRadius(const GeoPoint &fallback_location) const;
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
                           fixed& best) const;
-
   virtual fixed CalcRequiredGlide(const AircraftState &state_now,
                                   const GlidePolar &glide_polar) const;
-
-  void GlideSolutionRemaining(const AircraftState &state_now, 
-                                const GlidePolar &polar,
-                                GlideResult &total,
-                                GlideResult &leg);
-
+  virtual fixed CalcGradient(const AircraftState &state_now) const;
+  virtual fixed ScanTotalStartTime(const AircraftState &state_now);
+  virtual fixed ScanLegStartTime(const AircraftState &state_now);
+  virtual fixed ScanDistanceNominal();
+  virtual fixed ScanDistancePlanned();
+  virtual fixed ScanDistanceRemaining(const GeoPoint &ref);
+  virtual fixed ScanDistanceScored(const GeoPoint &ref);
+  virtual fixed ScanDistanceTravelled(const GeoPoint &ref);
+  virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
+                                  fixed *dmin, fixed *dmax);
+  virtual void GlideSolutionRemaining(const AircraftState &state_now,
+                                      const GlidePolar &polar,
+                                      GlideResult &total, GlideResult &leg);
   virtual void GlideSolutionTravelled(const AircraftState &state_now,
                                       const GlidePolar &glide_polar,
-                                        GlideResult &total,
-                                        GlideResult &leg);
-
+                                      GlideResult &total, GlideResult &leg);
   virtual void GlideSolutionPlanned(const AircraftState &state_now,
                                     const GlidePolar &glide_polar,
                                     GlideResult &total,
@@ -84,31 +75,10 @@ protected:
                                     DistanceStat &leg_remaining_effective,
                                     const GlideResult &solution_remaining_total,
                                     const GlideResult &solution_remaining_leg);
-
-  fixed ScanTotalStartTime(const AircraftState &state_now);
-
-  fixed ScanLegStartTime(const AircraftState &state_now);
-
-  fixed ScanDistanceNominal();
-  
-  fixed ScanDistancePlanned();
-
-  fixed ScanDistanceRemaining(const GeoPoint &ref);
-
-  fixed ScanDistanceScored(const GeoPoint &ref);
-
-  fixed ScanDistanceTravelled(const GeoPoint &ref);
-
-  void ScanDistanceMinMax(const GeoPoint &ref, 
-                            bool full,
-                            fixed *dmin, fixed *dmax);
-
-  fixed CalcGradient(const AircraftState &state_now) const;
-
-  bool HasTargets() const { return false; }
-
-  bool IsScored() const { return false; }
-
-}; 
+  virtual bool HasTargets() const { return false; }
+  virtual bool IsScored() const { return false; }
+  virtual void AcceptStartPointVisitor(TaskPointConstVisitor& visitor,
+                                       const bool reverse = false) const;
+};
 
 #endif

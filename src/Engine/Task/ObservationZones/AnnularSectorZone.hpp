@@ -66,10 +66,6 @@ public:
     UpdateSector();
   }
 
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
-    return new AnnularSectorZone(*this, _reference);
-  }
-
   /**
    * Set inner radius of annulus
    *
@@ -91,44 +87,24 @@ public:
     return inner_radius;
   }
 
-  /**
-   * Set radius property
-   *
-   * @param new_radius Radius (m) of cylinder
-   */
+  /* virtual methods from class ObservationZone */
+  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const;
+  virtual Boundary GetBoundary() const;
+
+  /* virtual methods from class ObservationZonePoint */
+  virtual bool Equals(const ObservationZonePoint &other) const;
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new AnnularSectorZone(*this, _reference);
+  }
+
+  /* virtual methods from class CylinderZone */
   virtual void SetRadius(fixed new_radius) {
     CylinderZone::SetRadius(new_radius);
     if (new_radius < inner_radius)
       inner_radius = new_radius;
     UpdateSector();
   }
-
-  /**
-   * Check whether observer is within OZ
-   *
-   * @return True if reference point is inside sector
-   */
-  virtual bool IsInSector(const AircraftState &ref) const;
-
-  /**
-   * Get point on boundary from parametric representation
-   *
-   * @param t T value [0,1]
-   *
-   * @return Point on boundary
-   */
-  GeoPoint GetBoundaryParametric(fixed t) const;
-
-  virtual Boundary GetBoundary() const;
-
-  /**
-   * Test whether an OZ is equivalent to this one
-   *
-   * @param other OZ to compare to
-   *
-   * @return True if same type and OZ parameters
-   */
-  virtual bool Equals(const ObservationZonePoint &other) const;
 };
 
 #endif

@@ -98,7 +98,7 @@ public:
    * @return Location
    */
   gcc_pure
-  virtual const GeoPoint& GetLocationRemaining() const {
+  virtual const GeoPoint &GetLocationRemaining() const {
     return location;
   }
 
@@ -131,13 +131,12 @@ public:
     *
     * @return Vector for task leg or GeoVector::Invalid() if there is no next leg
     */
-   gcc_pure
-   virtual const GeoVector GetNextLegVector() const {
-     return GeoVector::Invalid();
-   }
+  gcc_pure
+  virtual const GeoVector GetNextLegVector() const {
+    return GeoVector::Invalid();
+  }
 
   /**
-   * Dummy null method.
    * Set target to parametric value between min and max locations.
    * Targets are only moved for current or after taskpoints, unless
    * force_if_current is true.
@@ -198,7 +197,7 @@ public:
    * @return State at entry, or null if never entered
    */
   gcc_pure
-  virtual const AircraftState& GetEnteredState() const = 0;
+  virtual const AircraftState &GetEnteredState() const = 0;
 
   /**
    * Retrieve elevation of taskpoint, taking into account

@@ -67,59 +67,6 @@ public:
              const TaskBehaviour& tb,
              const OrderedTaskBehaviour& to);
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-
-  /**
-   * Set previous/next taskpoints in sequence.
-   * Specialises base method to check prev is NULL.
-   *
-   * @param prev Previous task point (must be null!)
-   * @param next Next task point in sequence
-   */
-  virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
-
-  /**
-   * Test whether aircraft is inside observation zone.
-   *
-   * @param ref Aircraft state to test
-   *
-   * @return True if aircraft is inside observation zone
-   */
-  bool IsInSector(const AircraftState &ref) const;
-
-
-  /**
-   * Check if aircraft has transitioned to outside sector
-   * This allows for exit through top of sector.
-   *
-   * @param ref_now Current aircraft state
-   * @param ref_last Previous aircraft state
-   *
-   * @return True if aircraft now outside (and was inside)
-   */
-  bool CheckExitTransition(const AircraftState & ref_now,
-                             const AircraftState & ref_last) const;
-
-  /**
-   * Update sample, specialisation to check start speed/height
-   *
-   * @param state Aircraft state
-   * @param task_events Callback class for feedback
-   *
-   * @return True if internal state changed
-   */
-  bool UpdateSampleNear(const AircraftState& state,
-                        TaskEvents *task_events,
-                          const TaskProjection &projection);
-
-  /**
-   * Retrieve elevation of taskpoint, taking into account
-   * rules and safety margins.
-   *
-   * @return Minimum allowable elevation of start point
-   */
-  fixed GetElevation() const;
-
   /**
    * Search for the min point on the boundary from
    * the aircraft state to the next point.  Should only
@@ -132,8 +79,26 @@ public:
                        const OrderedTaskPoint &next,
                        const TaskProjection &projection);
 
+  /* virtual methods from class TaskPoint */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+  virtual fixed GetElevation() const;
+
+  /* virtual methods from class ObservationZone */
+  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual bool CheckExitTransition(const AircraftState &ref_now,
+                                   const AircraftState &ref_last) const;
+
+  /* virtual methods from class SampledTaskPoint */
+  virtual bool UpdateSampleNear(const AircraftState &state,
+                                TaskEvents *task_events,
+                                const TaskProjection &projection);
+
+  /* virtual methods from class OrderedTaskPoint */
+  virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
+
 private:
-  bool ScoreLastExit() const {
+  /* virtual methods from class ScoredTaskPoint */
+  virtual bool ScoreLastExit() const {
     return true;
   }
 };

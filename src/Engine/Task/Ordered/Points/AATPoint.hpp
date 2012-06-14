@@ -68,41 +68,6 @@ public:
   {
   }
 
-  virtual void Reset();
-
-  /**
-   * Retrieve location to be used for remaining task
-   *
-   * @return Location
-   */
-  const GeoPoint& GetLocationRemaining() const;
-  
-  /**
-   * Update sample if nearby
-   *
-   * @param state Aircraft state
-   * @param task_events Callback class for feedback
-   *
-   * @return True if internal state changed
-   */
-  bool UpdateSampleNear(const AircraftState& state,
-                        TaskEvents *task_events,
-                          const TaskProjection &projection);
-
-  /**
-   * Update sample even if far, specialisation to move target for active
-   * task point based on task behaviour rules.  Only does the target
-   * move checks when this task point is currently active.
-   *
-   * @param state Aircraft state
-   * @param task_events Callback class for feedback
-   *
-   * @return True if internal state changed
-   */
-  bool UpdateSampleFar(const AircraftState& state,
-                       TaskEvents *task_events,
-                         const TaskProjection &projection);
-
   /**
    * Lock/unlock the target from automatic shifts
    *
@@ -110,29 +75,6 @@ public:
    */
   void LockTarget(bool do_lock) {
     target_locked = do_lock;
-  }
-
-  /**
-   * Accessor for locked state of target
-   *
-   * @return True if target is locked
-   */
-  bool IsTargetLocked() const {
-    return target_locked;
-  }
-
-  /**
-   * Save local copy of target in case optimisation fails
-   */
-  void SaveTarget() {
-    target_save = target_location;
-  }
-
-  /**
-   * Set target from local copy
-   */
-  void RestoreTarget() {
-    target_location = target_save;
   }
 
   /**
@@ -179,18 +121,6 @@ public:
   }
 
   /**
-   * Set target to parametric value between min and max locations.
-   * Targets are only moved for current or after taskpoints, unless
-   * force_if_current is true.
-   *
-   * @param p Parametric range (0:1) to set target
-   * @param force_if_current If current active, force range move (otherwise ignored)
-   *
-   * @return True if target was moved
-   */
-  bool SetRange(const fixed p, const bool force_if_current);
-
-  /**
    * Test whether aircraft has travelled close to isoline of target within threshold
    *
    * @param state Aircraft state
@@ -201,18 +131,6 @@ public:
   gcc_pure
   bool IsCloseToTarget(const AircraftState& state,
                        const fixed threshold=fixed_zero) const;
-
-   /**
-    * Calculate distance reduction for achieved task point,
-    * to calcuate scored distance.
-    * Specialisation from ObservationZoneClient to not adjust scoring distance
-    * for AAT Points.
-    *
-    * @return Distance reduction once achieved
-    */
-  virtual fixed ScoreAdjustment() const {
-    return fixed_zero;
-  }
 
 private:
   /**
@@ -249,13 +167,40 @@ private:
    */
   bool CheckTargetOutside(const AircraftState& state);
 
-  /**
-   * Test whether a taskpoint is equivalent to this one
-   *
-   * @param other Taskpoint to compare to
-   *
-   * @return True if same WP, type and OZ
-   */
+public:
+
+  /* virtual methods from class TaskPoint */
+  const GeoPoint& GetLocationRemaining() const;
+  virtual bool SetRange(const fixed p, const bool force_if_current);
+
+  virtual bool IsTargetLocked() const {
+    return target_locked;
+  }
+
+  virtual void SaveTarget() {
+    target_save = target_location;
+  }
+
+  virtual void RestoreTarget() {
+    target_location = target_save;
+  }
+
+  /* virtual methods from class SampledTaskPoint */
+  virtual void Reset();
+  virtual bool UpdateSampleNear(const AircraftState &state,
+                                TaskEvents *task_events,
+                                const TaskProjection &projection);
+  virtual bool UpdateSampleFar(const AircraftState &state,
+                               TaskEvents *task_events,
+                               const TaskProjection &projection);
+
+  /* virtual methods from class ObservationZone */
+  virtual fixed ScoreAdjustment() const {
+    return fixed_zero;
+  }
+
+private:
+  /* virtual methods from class OrderedTaskPoint */
   virtual bool Equals(const OrderedTaskPoint &other) const;
 };
 #endif

@@ -55,17 +55,19 @@ public:
   ScoredTaskPoint(Type _type, const Waypoint &wp, bool b_scored);
   virtual ~ScoredTaskPoint() {}
 
-  /** Reset the task (as if never flown) */
-  virtual void Reset();
+  /* virtual methods from class TaskPoint */
+  virtual const GeoPoint &GetLocationRemaining() const;
 
-  /** 
-   * Test whether aircraft has entered the OZ
-   * 
-   * @return True if aircraft has entered the OZ
-   */
-  bool HasEntered() const {
-    return state_entered.time > fixed_zero;
+  virtual bool HasEntered() const {
+    return positive(state_entered.time);
   }
+
+  const AircraftState &GetEnteredState() const {
+    return state_entered;
+  }
+
+  /* virtual methods from class SampledTaskPoint */
+  virtual void Reset();
 
   /**
    * Test whether aircraft has exited the OZ
@@ -74,15 +76,6 @@ public:
    */
   bool HasExited() const {
     return state_exited.time > fixed_zero;
-  }
-
-  /**
-   * Get entry state of aircraft
-   *
-   * @return State on entry
-   */
-  const AircraftState &GetEnteredState() const {
-    return state_entered;
   }
 
   /**
@@ -120,14 +113,6 @@ public:
    */
   gcc_pure
   const GeoPoint &GetLocationTravelled() const;
-
-  /**
-   * Retrieve location to be used for remaining task.
-   * This is either the reference location or target for post-active,
-   * or scored best location for prior-active task points.
-   */
-  gcc_pure
-  virtual const GeoPoint &GetLocationRemaining() const;
 
 private:
   /**

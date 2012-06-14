@@ -55,61 +55,34 @@ public:
               const TaskBehaviour &tb, const OrderedTaskBehaviour &to,
               bool boundary_scored=true);
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-
-  void Reset();
-
   /**
-   * Set previous/next taskpoints in sequence.
-   * Specialises base method to check next is NULL.
-   *
-   * @param prev Previous task point
-   * @param next Next task point (must be null!)
-   */
-  virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
-
-  /**
-   * Test whether aircraft is inside observation zone.
-   *
-   * @param ref Aircraft state to test
-   *
-   * @return True if aircraft is inside observation zone
-   */
-  bool IsInSector(const AircraftState &ref) const;
-
-  /** 
-   * Check if aircraft has transitioned to inside sector
-   * This ensures entry only when in height limits
-   * 
-   * @param ref_now Current aircraft state
-   * @param ref_last Previous aircraft state
-   *
-   * @return True if aircraft now inside (and was outside)
-   */
-  bool CheckEnterTransition(const AircraftState & ref_now, 
-                              const AircraftState & ref_last) const;
-
-  /**
-   * Retrieve elevation of taskpoint, taking into account
-   * rules and safety margins.
-   *
-   * @return Minimum allowable elevation of finish point
-   */
-  fixed GetElevation() const;
-
-  /** 
    * Set FAI finish height
-   * 
-   * @param height FAI finish height (m) 
+   *
+   * @param height FAI finish height (m)
    */
   void set_fai_finish_height(const fixed height);
 
+  /* virtual methods from class TaskPoint */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+  virtual fixed GetElevation() const;
+
+  /* virtual methods from class SampledTaskPoint */
+  virtual void Reset();
+
+  /* virtual methods from class OrderedTaskPoint */
+  virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
+
+  /* virtual methods from class ObservationZone */
+  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual bool CheckEnterTransition(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const;
+
 private:
-  bool ScoreFirstEntry() const {
+  /* virtual methods from class ScoredTaskPoint */
+  virtual bool EntryPrecondition() const;
+  virtual bool ScoreFirstEntry() const {
     return true;
   }
-
-  bool EntryPrecondition() const;
 
   /**
    * called by isInSector

@@ -56,21 +56,14 @@ public:
                         const OrderedTaskBehaviour &to,
                         const bool b_scored = false);
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-
   gcc_pure
   bool valid() const {
     return GetPrevious() != NULL && GetNext() != NULL;
   }
 
-  /**
-   * Retrieve elevation of taskpoint, taking into account
-   * rules and safety margins.
-   *
-   * @return Minimum allowable elevation of task point
-   */
-  gcc_pure
-  fixed GetElevation() const;
+  /* virtual methods from class TaskPoint */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+  virtual fixed GetElevation() const;
 };
 
 #endif //INTERMEDIATEPOINT_H

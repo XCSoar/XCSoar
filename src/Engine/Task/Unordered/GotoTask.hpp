@@ -52,37 +52,6 @@ public:
            const Waypoints &wps);
   ~GotoTask();
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-
-/** 
- * Size of task
- * 
- * @return Number of taskpoints in task
- */
-  unsigned TaskSize() const;
-
-/** 
- * Retrieves the active task point sequence.
- * 
- * @return Index of active task point sequence
- */
-  TaskWaypoint* GetActiveTaskPoint() const;
-
-/** 
- * Set active task point index
- * 
- * @param index Desired active index of task sequence
- */
-  void SetActiveTaskPoint(unsigned index);
-
-/**
- * Determine whether active task point optionally shifted points to
- * a valid task point.
- *
- * @param index_offset offset (default 0)
- */
-  bool IsValidTaskPoint(const int index_offset=0) const;
-
 /** 
  * Sets go to task point to specified waypoint. 
  * Obeys TaskBehaviour.goto_nonlandable, won't do anything
@@ -92,23 +61,6 @@ public:
  * @return True if successful
  */
   bool DoGoto(const Waypoint& wp);
-
-/** 
- * Resets (clears) the goto task
- */
-  void Reset();
-
-/** 
- * Update internal states when aircraft state advances.
- * 
- * @param state_now Aircraft state at this time step
- * @param full_update Force update due to task state change
- *
- * @return True if internal state changes
- */
-  virtual bool UpdateSample(const AircraftState &state_now,
-                            const GlidePolar &glide_polar,
-                            const bool full_update);
 
   /**
    * When called on takeoff, creates a default goto task
@@ -120,31 +72,25 @@ public:
    */
   bool TakeoffAutotask(const GeoPoint& loc, const fixed terrain_alt);
 
-protected:
-/** 
- * Test whether (and how) transitioning into/out of task points should occur, typically
- * according to task_advance mechanism.  This also may call the task_event callbacks.
- * 
- * @param state_now Aircraft state at this time step
- * @param state_last Aircraft state at previous time step
- * 
- * @return True if transition occurred
- */
-  bool CheckTransitions(const AircraftState& state_now, 
-                         const AircraftState& state_last);
-
 public:
-/** 
- * Accept a task point visitor; makes the visitor visit
- * all TaskPoint in the task
- * 
- * @param visitor Visitor to accept
- * @param reverse Visit task points in reverse order 
- *
- */
-  void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
-                  const bool reverse = false) const;
+  /* virtual methods from class TaskInterface */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+  virtual unsigned TaskSize() const;
+  virtual TaskWaypoint *GetActiveTaskPoint() const;
+  virtual void SetActiveTaskPoint(unsigned index);
+  virtual bool IsValidTaskPoint(const int index_offset) const;
 
+  /* virtual methods from class AbstractTask */
+  virtual void Reset();
+protected:
+  virtual bool UpdateSample(const AircraftState &state_now,
+                            const GlidePolar &glide_polar,
+                            const bool full_update);
+  virtual bool CheckTransitions(const AircraftState &state_now,
+                                const AircraftState &state_last);
+public:
+  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
+                                      const bool reverse = false) const;
 };
 
 #endif //GOTOTASK_H

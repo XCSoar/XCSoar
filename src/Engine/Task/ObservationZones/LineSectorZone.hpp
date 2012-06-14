@@ -53,36 +53,6 @@ public:
     UpdateSector();
   }
 
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
-    return new LineSectorZone(*this, _reference);
-  }
-
-  /**
-   * Check transition constraints -- for lines, both points have to
-   * be within radius of OZ (otherwise it is a circumference border crossing)
-   *
-   * @param ref_now Current aircraft state
-   * @param ref_last Previous aircraft state
-   *
-   * @return True if constraints are satisfied
-   */
-  bool TransitionConstraint(const AircraftState & ref_now, 
-                            const AircraftState & ref_last) const {
-    return CylinderZone::IsInSector(ref_now) &&
-           CylinderZone::IsInSector(ref_last);
-  }
-
-  GeoPoint GetBoundaryParametric(fixed t) const;  
-
-  virtual Boundary GetBoundary() const;
-
-  /**
-   * Distance reduction for scoring when outside this OZ
-   *
-   * @return Distance (m) to subtract from score
-   */
-  fixed ScoreAdjustment() const;
-
   /**
    * Set length property
    *
@@ -101,14 +71,24 @@ public:
     return Double(GetRadius());
   }
 
-  /**
-   * If zone when used for start can trigger start via vertical exit
-   *
-   * @return False for line start sectors
-   */
-  gcc_pure
+  /* virtual methods from class ObservationZone */
   virtual bool CanStartThroughTop() const {
     return false;
+  }
+
+  virtual bool TransitionConstraint(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const {
+    return CylinderZone::IsInSector(ref_now) &&
+      CylinderZone::IsInSector(ref_last);
+  }
+
+  virtual GeoPoint GetBoundaryParametric(fixed t) const;
+  virtual Boundary GetBoundary() const;
+  virtual fixed ScoreAdjustment() const;
+
+  /* virtual methods from class ObservationZonePoint */
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new LineSectorZone(*this, _reference);
   }
 };
 

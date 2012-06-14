@@ -64,34 +64,16 @@ public:
     UpdateSector();
   }
 
+  /* virtual methods from class ObservationZone */
+  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const;
+  // TODO: implement virtual Boundary GetBoundary() const;
+  virtual fixed ScoreAdjustment() const;
+
+  /* virtual methods from class ObservationZonePoint */
   virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
     return new KeyholeZone(*this, _reference);
   }
-
-  /** 
-   * Check whether observer is within OZ
-   *
-   * @return True if reference point is inside sector
-   */
-  virtual bool IsInSector(const AircraftState &ref) const;
-
-  /**
-   * Get point on boundary from parametric representation
-   *
-   * @param t T value [0,1]
-   *
-   * @return Point on boundary
-   */
-  GeoPoint GetBoundaryParametric(fixed t) const;  
-
-  // TODO: implement virtual Boundary GetBoundary() const;
-
-  /**
-   * Distance reduction for scoring when outside this OZ
-   *
-   * @return Distance (m) to subtract from score
-   */
-  virtual fixed ScoreAdjustment() const;
 };
 
 #endif

@@ -59,51 +59,6 @@ public:
   CylinderZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0))
     :ObservationZonePoint(CYLINDER, loc), radius(_radius) {}
 
-  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
-    return new CylinderZone(*this, _reference);
-  }
-
-  /** 
-   * Check whether observer is within OZ
-   *
-   * @return True if reference point is inside sector
-   */
-  virtual bool IsInSector(const AircraftState &ref) const
-  {
-    return DistanceTo(ref.location) <= radius;
-  }  
-
-  /**
-   * Get point on boundary from parametric representation
-   *
-   * @param t T value [0,1]
-   *
-   * @return Point on boundary
-   */
-  GeoPoint GetBoundaryParametric(fixed t) const;
-
-  virtual Boundary GetBoundary() const;
-
-  /**
-   * Distance reduction for scoring when outside this OZ
-   *
-   * @return Distance (m) to subtract from score
-   */
-  virtual fixed ScoreAdjustment() const;
-
-  /**
-   * Check transition constraints (always true for cylinders)
-   *
-   * @param ref_now Current aircraft state
-   * @param ref_last Previous aircraft state
-   *
-   * @return True if constraints are satisfied
-   */
-  virtual bool TransitionConstraint(const AircraftState & ref_now, 
-                                    const AircraftState & ref_last) const {
-    return true;
-  }
-
   /**
    * Set radius property
    *
@@ -123,23 +78,27 @@ public:
     return radius;
   }
 
-  /**
-   * Test whether an OZ is equivalent to this one
-   *
-   * @param other OZ to compare to
-   *
-   * @return True if same type and OZ parameters
-   */
-  virtual bool Equals(const ObservationZonePoint &other) const;
+  /* virtual methods from class ObservationZone */
+  virtual bool IsInSector(const AircraftState &ref) const {
+    return DistanceTo(ref.location) <= radius;
+  }
 
-  /**
-   * Generate a random location inside the OZ (to be used for testing)
-   *
-   * @param mag proportional magnitude of error from center (0-1)
-   *
-   * @return Location of point
-   */
+  virtual bool TransitionConstraint(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const {
+    return true;
+  }
+
+  virtual GeoPoint GetBoundaryParametric(fixed t) const;
+  virtual Boundary GetBoundary() const;
+  virtual fixed ScoreAdjustment() const;
+
+  /* virtual methods from class ObservationZonePoint */
+  virtual bool Equals(const ObservationZonePoint &other) const;
   virtual GeoPoint GetRandomPointInSector(const fixed mag) const;
+
+  virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
+    return new CylinderZone(*this, _reference);
+  }
 };
 
 #endif

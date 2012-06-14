@@ -122,27 +122,11 @@ public:
             const Waypoints &wps);
   virtual ~AbortTask();
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-
-  /**
-   * Size of task
-   *
-   * @return Number of taskpoints in task
-   */
-  unsigned TaskSize() const;
-
   const UnorderedTaskPoint &GetAlternate(unsigned i) const {
     assert(i < task_points.size());
 
     return task_points[i];
   }
-
-  /**
-   * Retrieves the active task point sequence.
-   *
-   * @return Index of active task point sequence
-   */
-  TaskWaypoint* GetActiveTaskPoint() const;
 
   /**
    * Retrieves the active task point index.
@@ -154,37 +138,6 @@ public:
   }
 
   /**
-   * Set active task point index
-   *
-   * @param index Desired active index of task sequence
-   */
-  void SetActiveTaskPoint(unsigned index);
-
-  /**
-   * Determine whether active task point optionally shifted points to
-   * a valid task point.
-   *
-   * @param index_offset offset (default 0)
-   */
-  bool IsValidTaskPoint(int index_offset = 0) const;
-
-  /**
-   * Update internal states when aircraft state advances.
-   * This performs a scan of reachable waypoints.
-   *
-   * \todo
-   * - check tracking of active waypoint
-   *
-   * @param state_now Aircraft state at this time step
-   * @param full_update Force update due to task state change
-   *
-   * @return True if internal state changes
-   */
-  virtual bool UpdateSample(const AircraftState &state_now,
-                            const GlidePolar &glide_polar,
-                            bool full_update);
-
-  /**
    * Determine if any landable reachable waypoints were found in the
    * last update.
    *
@@ -193,8 +146,6 @@ public:
   bool HasReachableLandable() const {
     return reachable_landable;
   }
-
-  virtual void Reset();
 
   /**
    * Calculate vector to home waypoint
@@ -205,22 +156,7 @@ public:
   GeoVector GetHomeVector(const AircraftState &state) const;
   const Waypoint *GetHome() const;
 
-  GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
-  fixed GetTaskRadius(const GeoPoint &fallback_location) const;
-
 protected:
-  /**
-   * Test whether (and how) transitioning into/out of task points should occur, typically
-   * according to task_advance mechanism.  This also may call the task_event callbacks.
-   *
-   * @param state_now Aircraft state at this time step
-   * @param state_last Aircraft state at previous time step
-   *
-   * @return True if transition occurred
-   */
-  bool CheckTransitions(const AircraftState &state_now,
-                        const AircraftState &state_last);
-
   /**
    * Clears task points in list
    */
@@ -298,6 +234,25 @@ public:
    */
   void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor,
                               bool reverse = false) const;
+
+public:
+  /* virtual methods from class TaskInterface */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+  virtual unsigned TaskSize() const;
+  virtual void SetActiveTaskPoint(unsigned index);
+  virtual TaskWaypoint *GetActiveTaskPoint() const;
+  virtual bool IsValidTaskPoint(int index_offset) const;
+
+  /* virtual methods from class AbstractTask */
+  virtual void Reset();
+  virtual GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
+  virtual fixed GetTaskRadius(const GeoPoint &fallback_location) const;
+protected:
+  virtual bool UpdateSample(const AircraftState &state_now,
+                            const GlidePolar &glide_polar,
+                            bool full_update);
+  virtual bool CheckTransitions(const AircraftState &state_now,
+                                const AircraftState &state_last);
 };
 
 #endif

@@ -65,8 +65,6 @@ public:
   AlternateTask(const TaskBehaviour &tb,
                 const Waypoints &wps);
 
-  void Reset();
-
   /**
    * Sets the target of the task.
    * Must be called before running update_sample!
@@ -85,8 +83,6 @@ public:
   }
 
 protected:
-  void Clear();
-  void ClientUpdate(const AircraftState &state_now, const bool reachable);
   void CheckAlternateChanged();
 
 private:
@@ -95,6 +91,15 @@ private:
    * alternate list.
    */
   bool IsWaypointInAlternates(const Waypoint &waypoint) const;
+
+public:
+  /* virtual methods from class AbstractTask */
+  virtual void Reset();
+
+protected:
+  /* virtual methods from class AbortTask */
+  virtual void Clear();
+  virtual void ClientUpdate(const AircraftState &state_now, bool reachable);
 };
 
 #endif //ALTERNATETASK_HPP

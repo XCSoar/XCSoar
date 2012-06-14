@@ -110,9 +110,6 @@ public:
                           const OrderedTaskBehaviour &ordered_task_behaviour,
                           const Waypoint* waypoint=NULL) const;
 
-  /** Call this when any geometry or OZ parameters are changed */
-  void UpdateOZ(const TaskProjection &projection);
-
   /** 
    * Update observation zone geometry (or other internal data) when
    * previous/next turnpoint changes.
@@ -186,49 +183,6 @@ public:
   bool ScanActive(const OrderedTaskPoint &atp);
 
   /**
-   * Calculate vector remaining from aircraft state.
-   * If this task point is after active, uses the planned reference points
-   *
-   * (This uses memento values)
-   *
-   * @param reference the aircraft position
-   * @return Vector remaining to this taskpoint (or next planned)
-   */
-  const GeoVector GetVectorRemaining(const GeoPoint &reference) const {
-    return vector_remaining;
-  }
-
-  /**
-   * Calculate vector from this task point to the aircraft.
-   * If this task point is after active, returns null;
-   * if this task point is before active, uses scored/best points.
-   *
-   * (This uses memento values)
-   *
-   * @return Vector from this taskpoint to aircraft (or next planned)
-   */
-  const GeoVector GetVectorTravelled() const {
-    return vector_travelled;
-  }
-
-  /**
-   * Calculate vector planned of next leg.
-   *
-   * @return Vector planned of following leg. If there is no next leg,
-   * returns GeoVector::Invalid()
-   */
-  const GeoVector GetNextLegVector() const;
-
-  /**
-   * Calculate vector around planned task with this task point as the destination.
-   *
-   * @return Vector planned to this taskpoint
-   */
-  const GeoVector GetVectorPlanned() const {
-    return vector_planned;
-  }
-
-  /**
    * Test whether a taskpoint is equivalent to this one
    *
    * For this abstract orderedtaskpoint, only compare OZ and WP
@@ -271,9 +225,26 @@ protected:
   gcc_pure
   fixed DoubleLegDistance(const GeoPoint &ref) const;
 
+public:
+  /* virtual methods from class TaskPoint */
+  virtual const GeoVector GetVectorRemaining(const GeoPoint &reference) const {
+    return vector_remaining;
+  }
+  virtual const GeoVector GetVectorPlanned() const {
+    return vector_planned;
+  }
+  virtual const GeoVector GetVectorTravelled() const {
+    return vector_travelled;
+  }
+  virtual const GeoVector GetNextLegVector() const;
+
+  /* virtual methods from class SampledTaskPoint */
+  virtual void UpdateOZ(const TaskProjection &projection);
+
 private:
-  bool SearchNominalIfUnsampled() const;
-  bool SearchBoundaryPoints() const;
+  /* virtual methods from class SampledTaskPoint */
+  virtual bool SearchNominalIfUnsampled() const;
+  virtual bool SearchBoundaryPoints() const;
 };
 
 

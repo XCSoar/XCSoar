@@ -89,10 +89,6 @@ public:
     task_events = &_task_events;
   }
 
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {
-    task_behaviour = tb;
-  }
-
   /** Reset the task (as if never flown) */
   virtual void Reset();
 
@@ -106,16 +102,6 @@ public:
    */
   gcc_pure
   unsigned GetActiveTaskPointIndex() const;
-
-  /**
-   * Accessor for task statistics for this task
-   *
-   * @return Task statistics reference
-   */
-  gcc_pure
-  virtual const TaskStats& GetStats() const {
-    return stats;
-  }
 
   /**
    * Test if task has finished.  Used to determine whether
@@ -142,31 +128,6 @@ public:
   virtual bool TaskStarted(bool soft = false) const {
     return true;
   }
-
-  /**
-   * Update internal states as flight progresses.  This may perform
-   * callbacks to the task_events, and advance the active task point
-   * based on task_behaviour.
-   *
-   * @param state_now Aircraft state at this time step
-   * @param state_last Aircraft state at previous time step
-   *
-   * @return True if internal state changed
-   */
-  virtual bool Update(const AircraftState &state_now,
-                      const AircraftState &state_last,
-                      const GlidePolar &glide_polar);
-    
-  /**
-   * Update internal states (non-essential) for housework, or where functions
-   * are slow and would cause loss to real-time performance.
-   *
-   * @param state_now Aircraft state at this time step
-   *
-   * @return True if internal state changed
-   */
-  virtual bool UpdateIdle(const AircraftState &state_now,
-                          const GlidePolar &glide_polar);
 
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings
@@ -487,8 +448,7 @@ protected:
    * @param location Location of observer
    * @param full_update Whether all calculations or minimal ones to be performed
    */
-  virtual void UpdateStatsDistances(const GeoPoint &location,
-                                    const bool full_update);
+  void UpdateStatsDistances(const GeoPoint &location, const bool full_update);
 
 private:
   void UpdateGlideSolutions(const AircraftState &state,
@@ -520,5 +480,22 @@ public:
    */
   virtual void AcceptStartPointVisitor(TaskPointConstVisitor &visitor,
                                        const bool reverse = false) const = 0;
+
+public:
+  /* virtual methods from class TaskInterface */
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {
+    task_behaviour = tb;
+  }
+
+  virtual const TaskStats& GetStats() const {
+    return stats;
+  }
+
+  virtual bool Update(const AircraftState &state_now,
+                      const AircraftState &state_last,
+                      const GlidePolar &glide_polar);
+  virtual bool UpdateIdle(const AircraftState &state_now,
+                          const GlidePolar &glide_polar);
 };
+
 #endif //ABSTRACTTASK_H

@@ -52,6 +52,7 @@ public:
     UpdateSector();
   }
 
+  /* virtual methods from class ObservationZonePoint */
   virtual ObservationZonePoint *Clone(const GeoPoint &_reference) const {
     return new BGAEnhancedOptionZone(*this, _reference);
   }

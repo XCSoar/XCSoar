@@ -55,72 +55,19 @@ public:
     return oz_point;
   }
 
-  /**
-   * Test whether aircraft is inside observation zone.
-   *
-   * @param ref Aircraft state to test
-   *
-   * @return True if aircraft is inside observation zone
-   */
+  /* virtual methods from class ObservationZone */
   virtual bool IsInSector(const AircraftState &ref) const;
-
-  /**
-   * If zone when used for start can trigger task start via vertical exit
-   *
-   * @return True if zone type can have a valid start through top
-   */
   virtual bool CanStartThroughTop() const;
-
-  /**
-   * Generate a random location inside the OZ (to be used for testing)
-   *
-   * @param mag proportional magnitude of error from center (0-1)
-   *
-   * @return Location of point
-   */
-  GeoPoint GetRandomPointInSector(const fixed mag) const;
-
-  /**
-   * Calculate distance reduction for achieved task point,
-   * to calcuate scored distance.
-   *
-   * @return Distance reduction once achieved
-   */
+  virtual bool TransitionConstraint(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const;
+  virtual Boundary GetBoundary() const;
   virtual fixed ScoreAdjustment() const;
 
-  /**
-   * Calculate boundary point from parametric border
-   *
-   * @param t t value (0,1) of parameter
-   *
-   * @return Boundary point
-   */
-  GeoPoint GetBoundaryParametric(fixed t) const;
-
-  virtual Boundary GetBoundary() const;
-
-protected:
-  /**
-   * Check transition constraints
-   *
-   * @param ref_now Current aircraft state
-   * @param ref_last Previous aircraft state
-   *
-   * @return True if constraints are satisfied
-   */
-  virtual bool TransitionConstraint(const AircraftState & ref_now, 
-                                    const AircraftState & ref_last) const;
-
-  /**
-   * Set previous/next taskpoints to allow OZ to update its geometry
-   *
-   * @param previous Origin tp of inbound leg
-   * @param current Tp of this OZ
-   * @param next Destination of outbound leg
-   */
-  virtual void SetLegs(const TaskPoint *previous,
-                       const TaskPoint *current,
+  /* virtual methods from class ObservationZonePoint */
+  virtual void SetLegs(const TaskPoint *previous, const TaskPoint *current,
                        const TaskPoint *next);
+  virtual GeoPoint GetRandomPointInSector(const fixed mag) const;
 };
 
 

@@ -95,7 +95,7 @@ public:
    * @param index_offset offset (default 0)
    */
   gcc_pure
-  virtual bool IsValidTaskPoint(const int index_offset = 0) const = 0;
+  virtual bool IsValidTaskPoint(const int index_offset) const = 0;
 
   /**
    * Accessor for task statistics for this task

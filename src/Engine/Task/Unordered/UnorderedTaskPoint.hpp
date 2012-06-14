@@ -46,22 +46,16 @@ public:
   UnorderedTaskPoint(const Waypoint & wp,
                      const TaskBehaviour &tb);
 
+  /* virtual methods from class TaskPoint */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-
-  const GeoVector GetVectorRemaining(const GeoPoint &reference) const;
-
-  const GeoVector GetVectorPlanned() const;
-
-  const GeoVector GetVectorTravelled() const;
-
-  bool HasEntered() const {
+  virtual const GeoVector GetVectorRemaining(const GeoPoint &reference) const;
+  virtual const GeoVector GetVectorPlanned() const;
+  virtual const GeoVector GetVectorTravelled() const;
+  virtual bool HasEntered() const {
     return false;
   }
-
-  const AircraftState& GetEnteredState() const;
-
-  gcc_pure
-  fixed GetElevation() const;
+  virtual const AircraftState &GetEnteredState() const;
+  virtual fixed GetElevation() const;
 };
 
 #endif
