@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_RENDER_TASK_POINT_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Compiler.h"
 

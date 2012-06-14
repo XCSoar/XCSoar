@@ -27,7 +27,7 @@
 #include "AirspaceClass.hpp"
 #include "AirspaceActivity.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Geo/SearchPointVector.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT

@@ -21,7 +21,7 @@
  */
 
 #include "IsolineCrossingFinder.hpp"
-#include "Navigation/Geometry/GeoEllipse.hpp"
+#include "Geo/GeoEllipse.hpp"
 #include "Task/Ordered/Points/AATPoint.hpp"
 #include "Util/Tolerances.hpp"
 

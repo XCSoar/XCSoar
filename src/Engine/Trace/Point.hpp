@@ -25,7 +25,7 @@ Copyright_License {
 #define TRACE_POINT_HPP
 
 #include "Util/TypeTraits.hpp"
-#include "Navigation/SearchPoint.hpp"
+#include "Geo/SearchPoint.hpp"
 #include "Rough/RoughAltitude.hpp"
 #include "Rough/RoughVSpeed.hpp"
 #include "Compiler.h"

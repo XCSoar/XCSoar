@@ -21,8 +21,8 @@
  */
 
 #include "AirspacePolygon.hpp"
-#include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatRay.hpp"
 #include "AirspaceIntersectSort.hpp"
 #include "AirspaceIntersectionVector.hpp"
 

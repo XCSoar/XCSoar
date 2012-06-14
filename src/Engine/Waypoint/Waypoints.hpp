@@ -28,8 +28,7 @@
 #include "Util/QuadTree.hpp"
 #include "Util/Serial.hpp"
 #include "Waypoint.hpp"
-
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 
 class WaypointVisitor;
 

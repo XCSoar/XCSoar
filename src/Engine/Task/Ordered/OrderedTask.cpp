@@ -49,7 +49,7 @@
 
 #include "Waypoint/Waypoints.hpp"
 
-#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Task/Stats/TaskSummary.hpp"
 #include "Task/PathSolvers/TaskDijkstraMin.hpp"

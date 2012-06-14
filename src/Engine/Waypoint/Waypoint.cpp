@@ -21,7 +21,7 @@
  */
 
 #include "Waypoint.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 
 void
 Waypoint::Flags::SetDefaults()

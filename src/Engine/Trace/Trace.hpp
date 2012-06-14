@@ -30,7 +30,7 @@ Copyright_License {
 #include "Util/ListHead.hpp"
 #include "Util/CastIterator.hpp"
 #include "Util/Serial.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 #include "Compiler.h"
 
 #include <set>

@@ -26,7 +26,7 @@
 #include "AirspaceActivity.hpp"
 #include "Predicate/AirspacePredicate.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Compiler.h"
 

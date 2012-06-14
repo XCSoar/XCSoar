@@ -27,7 +27,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Geo/SearchPointVector.hpp"
 
 void
 MapCanvas::DrawLine(GeoPoint a, GeoPoint b)

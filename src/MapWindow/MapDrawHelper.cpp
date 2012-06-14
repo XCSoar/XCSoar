@@ -28,7 +28,7 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "MapCanvas.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Geo/SearchPointVector.hpp"
 
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
                              const WindowProjection &_proj,

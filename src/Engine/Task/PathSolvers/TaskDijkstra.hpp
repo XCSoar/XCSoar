@@ -24,7 +24,7 @@
 #define TASK_DIJKSTRA_HPP
 
 #include "PathSolvers/NavDijkstra.hpp"
-#include "Navigation/SearchPoint.hpp"
+#include "Geo/SearchPoint.hpp"
 
 #include <assert.h>
 

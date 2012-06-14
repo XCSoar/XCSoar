@@ -24,8 +24,8 @@
 
 #include "FlatGeoPoint.hpp"
 #include "FlatRay.hpp"
-#include "Navigation/TaskProjection.hpp"
-#include "Navigation/Geometry/BoundingBoxDistance.hpp"
+#include "TaskProjection.hpp"
+#include "BoundingBoxDistance.hpp"
 #include "Compiler.h"
 
 /**

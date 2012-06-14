@@ -19,14 +19,13 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "SearchPointVector.hpp"
-#include "Navigation/ConvexHull/GrahamScan.hpp"
-#include "Navigation/Flat/FlatRay.hpp"
-#include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "Geo/GeoBounds.hpp"
+#include "GeoBounds.hpp"
+#include "ConvexHull/GrahamScan.hpp"
 #include "ConvexHull/PolygonInterior.hpp"
-#include <algorithm>
-#include <functional>
+#include "Flat/FlatRay.hpp"
+#include "Flat/FlatBoundingBox.hpp"
 
 bool 
 SearchPointVector::PruneInterior()

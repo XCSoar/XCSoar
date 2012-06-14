@@ -19,8 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "OLCTriangle.hpp"
-#include "Navigation/Flat/FlatRay.hpp"
 
 /*
  @todo potential to use 3d convex hull to speed search

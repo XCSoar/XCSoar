@@ -21,10 +21,8 @@
 */
 
 #include "AATPoint.hpp"
-#include "Navigation/TaskProjection.hpp"
-#include "Navigation/Flat/FlatLine.hpp"
-#include <math.h>
-#include <assert.h>
+#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/Flat/FlatLine.hpp"
 
 const GeoPoint&
 AATPoint::GetLocationRemaining() const

@@ -19,9 +19,8 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "Printing.hpp"
-#include <fstream>
 
+#include "Printing.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Task/Points/TaskPoint.hpp"
 #include "Task/Points/SampledTaskPoint.hpp"
@@ -31,6 +30,9 @@
 #include "Engine/Task/Ordered/AATIsolineSegment.hpp"
 #include "Engine/Task/Unordered/GotoTask.hpp"
 #include "Engine/Task/Unordered/AbortTask.hpp"
+#include "Geo/Math.hpp"
+
+#include <fstream>
 
 void 
 PrintHelper::aatpoint_print(std::ostream& f, 
@@ -305,11 +307,6 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AircraftState &stat
     }
   }
 }
-
-#include "Geo/Math.hpp"
-#include "Navigation/TaskProjection.hpp"
-
-
 
 /*
 std::ostream& operator<< (std::ostream& o, 

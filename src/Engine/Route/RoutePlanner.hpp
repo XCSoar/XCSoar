@@ -28,11 +28,12 @@
 #include "RoutePolar.hpp"
 #include "Route.hpp"
 #include "AStar.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/SearchPointVector.hpp"
+#include "ReachFan.hpp"
+
 #include <utility>
 #include <algorithm>
-#include "Navigation/TaskProjection.hpp"
-#include "Navigation/SearchPointVector.hpp"
-#include "ReachFan.hpp"
 
 class GlidePolar;
 

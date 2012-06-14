@@ -24,7 +24,6 @@
 #define OLC_SISAT_HPP
 
 #include "ContestDijkstra.hpp"
-#include "Navigation/TaskProjection.hpp"
 
 /**
  * Specialisation of Dijkstra for SIS-AT rules

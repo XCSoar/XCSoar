@@ -22,7 +22,7 @@
 #ifndef AIRSPACE_HPP
 #define AIRSPACE_HPP
 
-#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT

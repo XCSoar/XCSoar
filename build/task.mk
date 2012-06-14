@@ -29,18 +29,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoEllipse.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatBoundingBox.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatEllipse.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatLine.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskManager.cpp \
 	$(ENGINE_SRC_DIR)/Task/AbstractTask.cpp \

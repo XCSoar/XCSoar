@@ -23,8 +23,8 @@
 #ifndef GEOELLIPSE_HPP
 #define GEOELLIPSE_HPP
 
-#include "Navigation/TaskProjection.hpp"
-#include "Navigation/Flat/FlatEllipse.hpp"
+#include "Flat/TaskProjection.hpp"
+#include "Flat/FlatEllipse.hpp"
 #include "Compiler.h"
 
 /**

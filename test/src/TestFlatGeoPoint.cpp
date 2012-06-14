@@ -20,7 +20,7 @@
 }
 */
 
-#include "Engine/Navigation/Flat/FlatGeoPoint.hpp"
+#include "Geo/Flat/FlatGeoPoint.hpp"
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)

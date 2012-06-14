@@ -22,7 +22,7 @@
 
 #include "RoutePolars.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 #include "Terrain/RasterMap.hpp"
 
 #define MC_CEILING_PENALTY_FACTOR 5.0

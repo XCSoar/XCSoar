@@ -20,10 +20,9 @@
 }
 */
 #include "Printing.hpp"
-#include <fstream>
-
-#include "Navigation/SearchPointVector.hpp"
 #include "Trace/Trace.hpp"
+
+#include <fstream>
 
 #ifdef FIXED_MATH
 std::ostream& operator<<(std::ostream& os,fixed const& value)
@@ -41,9 +40,9 @@ operator<< (std::ostream& f, const Waypoint& wp)
   return f;
 }
 
-#include "Navigation/Flat/FlatBoundingBox.hpp"
-
 /*
+#include "Geo/Flat/FlatBoundingBox.hpp"
+
 void 
 FlatBoundingBox::print(std::ostream &f, const TaskProjection &task_projection) const {
   FlatGeoPoint ll(bb_ll.Longitude,bb_ll.Latitude);

@@ -23,8 +23,8 @@
 #ifndef ORDEREDTASK_H
 #define ORDEREDTASK_H
 
-#include "Navigation/TaskProjection.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
+#include "Geo/SearchPointVector.hpp"
 #include "Task/AbstractTask.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "TaskAdvanceSmart.hpp"

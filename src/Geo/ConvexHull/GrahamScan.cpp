@@ -21,7 +21,7 @@
  */
 
 #include "GrahamScan.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Geo/SearchPointVector.hpp"
 
 static bool
 sortleft

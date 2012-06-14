@@ -27,7 +27,7 @@
 #include "Task/Points/TaskLeg.hpp"
 #include "Task/Points/ScoredTaskPoint.hpp"
 #include "Task/ObservationZones/ObservationZoneClient.hpp"
-#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Compiler.h"
 
 struct OrderedTaskBehaviour;

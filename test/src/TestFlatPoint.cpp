@@ -20,7 +20,7 @@
 }
 */
 
-#include "Engine/Navigation/Flat/FlatPoint.hpp"
+#include "Geo/Flat/FlatPoint.hpp"
 #include "Math/Angle.hpp"
 #include "TestUtil.hpp"
 

@@ -202,7 +202,6 @@ TEST_TASKPOINT_DEPENDS = IO OS GEO MATH
 $(eval $(call link-program,TestTaskPoint,TEST_TASKPOINT))
 
 TEST_TASKWAYPOINT_SOURCES = \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTaskWaypoint.cpp
@@ -451,25 +450,21 @@ TEST_DIFF_FILTER_DEPENDS = MATH
 $(eval $(call link-program,TestDiffFilter,TEST_DIFF_FILTER))
 
 TEST_FLAT_POINT_SOURCES = \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatPoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlatPoint.cpp
-TEST_FLAT_POINT_DEPENDS = MATH
+TEST_FLAT_POINT_DEPENDS = GEO MATH
 $(eval $(call link-program,TestFlatPoint,TEST_FLAT_POINT))
 
 TEST_FLAT_GEO_POINT_SOURCES = \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlatGeoPoint.cpp
 TEST_FLAT_GEO_POINT_DEPENDS = GEO MATH
 $(eval $(call link-program,TestFlatGeoPoint,TEST_FLAT_GEO_POINT))
 
 TEST_FLAT_LINE_SOURCES = \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatLine.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlatLine.cpp
-TEST_FLAT_LINE_DEPENDS = MATH
+TEST_FLAT_LINE_DEPENDS = GEO MATH
 $(eval $(call link-program,TestFlatLine,TEST_FLAT_LINE))
 
 TEST_THERMALBASE_SOURCES = \
@@ -559,7 +554,6 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
@@ -588,8 +582,6 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
@@ -1368,9 +1360,6 @@ RUN_TRACE_SOURCES = \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/RunTrace.cpp
 RUN_TRACE_LDADD = $(DEBUG_REPLAY_LDADD)
@@ -1381,13 +1370,6 @@ RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
@@ -1420,13 +1402,6 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(SRC)/XML/Writer.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/DateTime.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
@@ -1458,9 +1433,6 @@ FLIGHT_PATH_SOURCES = \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/FlightPath.cpp
 FLIGHT_PATH_LDADD = $(DEBUG_REPLAY_LDADD)

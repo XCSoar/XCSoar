@@ -26,7 +26,7 @@
 #include "AATPoint.hpp"
 #include "FinishPoint.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Geo/Math.hpp"
 

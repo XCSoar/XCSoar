@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ThermalLocator.hpp"
 #include "Geo/Math.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 #include "Math/FastMath.h"
 #include "NMEA/Derived.hpp"
 

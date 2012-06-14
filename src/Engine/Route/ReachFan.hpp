@@ -23,7 +23,7 @@
 #ifndef REACHFAN_HPP
 #define REACHFAN_HPP
 
-#include "Navigation/TaskProjection.hpp"
+#include "Geo/Flat/TaskProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
 #include "Rough/RoughAltitude.hpp"
 

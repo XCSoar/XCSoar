@@ -19,35 +19,21 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+#ifndef POLYGON_INTERIOR_HPP
+#define POLYGON_INTERIOR_HPP
 
-#include "SearchPoint.hpp"
-#include "Navigation/TaskProjection.hpp"
+#include <vector>
+#include "Geo/SearchPoint.hpp"
+#include "Compiler.h"
 
-SearchPoint::SearchPoint(const GeoPoint &loc, const TaskProjection& tp):
-  reference(loc),
-  flatLocation(tp.project(loc))
-#ifndef NDEBUG
-  , projected(true)
+/**
+ * Note that this expects the vector to be closed, that is, starting point
+ * and ending point are the same
+ */
+gcc_pure bool
+PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V);
+
+gcc_pure bool
+PolygonInterior( const FlatGeoPoint &P, const std::vector<SearchPoint>& V);
+
 #endif
-{      
-}
-
-SearchPoint::SearchPoint(const FlatGeoPoint &floc,
-                         const TaskProjection& tp):
-  reference(tp.unproject(floc)),
-  flatLocation(floc)
-#ifndef NDEBUG
-  , projected(true)
-#endif
-{
-}
-
-void 
-SearchPoint::project(const TaskProjection& tp) 
-{
-  flatLocation = tp.project(reference);
-
-#ifndef NDEBUG
-  projected = true;
-#endif
-}

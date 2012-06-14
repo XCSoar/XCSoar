@@ -21,10 +21,9 @@
  */
 
 #include "TaskProjection.hpp"
-
-#include "Flat/FlatGeoPoint.hpp"
-#include "Flat/FlatPoint.hpp"
-#include "Flat/FlatBoundingBox.hpp"
+#include "FlatGeoPoint.hpp"
+#include "FlatPoint.hpp"
+#include "FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "Geo/Math.hpp"
 

@@ -26,7 +26,7 @@
 #include "Config.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
-#include "Navigation/SearchPoint.hpp"
+#include "Geo/SearchPoint.hpp"
 #include "Rough/RoughAltitude.hpp"
 
 #include <utility>

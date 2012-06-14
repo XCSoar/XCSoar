@@ -22,7 +22,7 @@
 
 #include "OLCSISAT.hpp"
 #include "Trace/Trace.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Geo/SearchPointVector.hpp"
 
 OLCSISAT::OLCSISAT(const Trace &_trace)
   :ContestDijkstra(_trace, true, 6, 1000) {}

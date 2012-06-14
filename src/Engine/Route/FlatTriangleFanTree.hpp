@@ -23,7 +23,7 @@
 #ifndef FLAT_TRIANGLE_FAN_TREE_HPP
 #define FLAT_TRIANGLE_FAN_TREE_HPP
 
-#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 #include "Util/SliceAllocator.hpp"
 #include "FlatTriangleFan.hpp"
 

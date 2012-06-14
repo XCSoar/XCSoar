@@ -23,8 +23,8 @@
 #ifndef FLAT_TRIANGLE_FAN_HPP
 #define FLAT_TRIANGLE_FAN_HPP
 
-#include "Navigation/Flat/FlatGeoPoint.hpp"
-#include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/Flat/FlatGeoPoint.hpp"
+#include "Geo/Flat/FlatBoundingBox.hpp"
 
 #include <vector>
 
