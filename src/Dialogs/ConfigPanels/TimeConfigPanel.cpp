@@ -47,9 +47,6 @@ public:
   TimeConfigPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-private:
-  bool loading;
-
 public:
   void SetLocalTime(int utc_offset);
 
