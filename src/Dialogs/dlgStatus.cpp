@@ -33,7 +33,6 @@ Copyright_License {
 #include "StatusPanels/TimesStatusPanel.hpp"
 #include "Screen/Key.h"
 #include "Protection.hpp"
-#include "Math/Earth.hpp"
 #include "Hardware/Battery.hpp"
 #include "Formatter/Units.hpp"
 #include "Logger/Logger.hpp"
@@ -41,7 +40,6 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
 #include "Compiler.h"
 
 #include "Form/TabBar.hpp"

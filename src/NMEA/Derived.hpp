@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_NMEA_DERIVED_H
 
 #include "Math/fixed.hpp"
-#include "Navigation/GeoPoint.hpp"
-#include "Navigation/SpeedVector.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Task/Stats/TaskStats.hpp"
 #include "Task/Stats/CommonStats.hpp"
 #include "Contest/ContestStatistics.hpp"

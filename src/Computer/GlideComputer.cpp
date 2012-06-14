@@ -30,7 +30,6 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
 #include "ComputerSettings.hpp"
-#include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "LocalTime.hpp"

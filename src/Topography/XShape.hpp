@@ -26,7 +26,7 @@ Copyright_License {
 #define TOPOGRAPHY_XSHAPE_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Geo/GeoBounds.hpp"
 #include "shapelib/mapserver.h"
 #include "shapelib/mapshape.h"

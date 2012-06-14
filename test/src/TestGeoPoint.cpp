@@ -20,8 +20,8 @@
 }
 */
 
-#include "Engine/Navigation/GeoPoint.hpp"
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Math/Angle.hpp"
 #include "Math/fixed.hpp"
 

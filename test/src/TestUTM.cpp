@@ -21,7 +21,7 @@
 */
 
 #include "Geo/UTM.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include "TestUtil.hpp"
 

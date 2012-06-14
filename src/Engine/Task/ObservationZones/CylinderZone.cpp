@@ -21,11 +21,7 @@
 */
 
 #include "CylinderZone.hpp"
-
-#include "Navigation/Geometry/GeoVector.hpp"
-
-#include <stdlib.h>
-#include <algorithm>
+#include "Geo/GeoVector.hpp"
 
 fixed
 CylinderZone::ScoreAdjustment() const

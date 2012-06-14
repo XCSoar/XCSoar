@@ -24,7 +24,7 @@ Copyright_License {
 #include "UserGeoPointFormatter.hpp"
 #include "GeoPointFormatter.hpp"
 #include "Math/Angle.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Interface.hpp"
 
 bool

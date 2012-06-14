@@ -23,7 +23,7 @@
 #define COMMON_STATS_HPP
 
 #include "Math/fixed.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "Util/TypeTraits.hpp"
 #include "TaskSummary.hpp"

@@ -20,7 +20,7 @@
 }
 */
 
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Engine/GlideSolvers/GlideSettings.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"

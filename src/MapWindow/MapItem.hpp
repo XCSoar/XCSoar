@@ -25,9 +25,9 @@ Copyright_License {
 #define XCSOAR_MAP_ITEM_HPP
 
 #include "Util/StaticArray.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Engine/Task/Points/TaskPoint.hpp"
 #include "Markers/Markers.hpp"
 #include "FLARM/Traffic.hpp"

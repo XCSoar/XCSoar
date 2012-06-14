@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_COMPUTER_SETTINGS_HPP
 #define XCSOAR_COMPUTER_SETTINGS_HPP
 
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Engine/Route/Config.hpp"
@@ -32,7 +32,7 @@ Copyright_License {
 #include "Util/TypeTraits.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "NMEA/Validity.hpp"
 #include "Logger/Settings.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"

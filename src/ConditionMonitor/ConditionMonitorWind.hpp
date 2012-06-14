@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_CONDITION_MONITOR_WIND_HPP
 
 #include "ConditionMonitor.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 
 /** #ConditionMonitor to track/warn on significant changes in wind speed */
 class ConditionMonitorWind: public ConditionMonitor

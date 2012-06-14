@@ -28,7 +28,8 @@
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
+
 #include <assert.h>
 #include <math.h>
 

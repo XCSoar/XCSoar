@@ -28,8 +28,6 @@
 
 #include <algorithm>
 
-#include "Navigation/GeoPoint.hpp"
-
 IgcReplay::IgcReplay() :
   AbstractReplay(),
   cli(fixed(0.98)),

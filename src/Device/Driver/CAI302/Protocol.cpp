@@ -24,7 +24,7 @@ Copyright_License {
 #include "Protocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "OS/ByteOrder.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include <algorithm>
 #include <assert.h>

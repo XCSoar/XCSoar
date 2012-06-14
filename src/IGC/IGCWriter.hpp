@@ -28,7 +28,6 @@ Copyright_License {
 #include "Logger/LoggerGRecord.hpp"
 #include "Util/BatchBuffer.hpp"
 #include "Math/fixed.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
 #include "IGCFix.hpp"
 
 #include <tchar.h>

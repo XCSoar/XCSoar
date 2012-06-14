@@ -306,7 +306,7 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AircraftState &stat
   }
 }
 
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "Navigation/TaskProjection.hpp"
 
 

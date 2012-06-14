@@ -23,7 +23,7 @@
 #include "RoutePlannerGlue.hpp"
 #include "Thread/Guard.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "NMEA/Derived.hpp"
 #include <assert.h>
 

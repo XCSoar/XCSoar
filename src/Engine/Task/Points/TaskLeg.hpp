@@ -23,7 +23,7 @@
 #ifndef TASKLEG_H
 #define TASKLEG_H
 
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Navigation/Memento/DistanceMemento.hpp"
 #include "Navigation/Memento/GeoVectorMemento.hpp"
 #include "Compiler.h"

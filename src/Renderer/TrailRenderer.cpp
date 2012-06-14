@@ -29,7 +29,7 @@ Copyright_License {
 #include "MapSettings.hpp"
 #include "Computer/TraceComputer.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "Engine/Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "Engine/Contest/ContestResult.hpp"
 
 #include <algorithm>

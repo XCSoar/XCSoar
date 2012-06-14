@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Geo/Geoid.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 fixed
 EGM96::LookupSeparation(gcc_unused const GeoPoint pt)

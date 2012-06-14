@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "TeamCode.hpp"
-#include "Math/Constants.h"
-#include "Engine/Math/Earth.hpp"
+#include "Geo/Math.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Math/Angle.hpp"
 #include "Util/StringUtil.hpp"
 

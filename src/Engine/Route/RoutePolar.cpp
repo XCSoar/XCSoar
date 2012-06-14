@@ -24,7 +24,7 @@
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "GlideSolvers/MacCready.hpp"
-#include "Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Math/FastMath.h"
 #include <assert.h>

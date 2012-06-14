@@ -19,8 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Printing.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 
 #include <fstream>

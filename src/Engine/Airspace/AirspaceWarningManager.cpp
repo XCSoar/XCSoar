@@ -20,7 +20,7 @@
 }
  */
 #include "AirspaceWarningManager.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Airspaces.hpp"
 #include "AirspaceCircle.hpp"
 #include "AirspacePolygon.hpp"

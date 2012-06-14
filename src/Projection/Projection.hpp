@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PROJECTION_HPP
 #define XCSOAR_PROJECTION_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Math/FastRotation.hpp"
 #include "Screen/Point.hpp"
 #include "Compiler.h"

@@ -21,9 +21,7 @@
  */
 
 #include "AirspaceCircle.hpp"
-
-#include "Navigation/Geometry/GeoVector.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Navigation/Flat/FlatLine.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "AirspaceIntersectSort.hpp"

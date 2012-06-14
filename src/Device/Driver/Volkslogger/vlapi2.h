@@ -21,7 +21,7 @@
 #include "vlapierr.h"
 #include "vla_support.h"
 #include "vlconv.h"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 class DBB;
 

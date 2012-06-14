@@ -27,7 +27,7 @@ Copyright_License {
 #include "Net/Session.hpp"
 #include "Net/Request.hpp"
 #include "Net/ToBuffer.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Util/StaticString.hpp"
 #include "DateTime.hpp"
 #include "Version.hpp"

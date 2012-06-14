@@ -23,7 +23,7 @@
 #ifndef XCSOAR_TEST_UTIL_HPP
 #define XCSOAR_TEST_UTIL_HPP
 
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Math/Angle.hpp"
 
 #ifndef ACCURACY

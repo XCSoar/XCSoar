@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef PARSED_METAR_HPP
 #define PARSED_METAR_HPP
 
-#include "Engine/Navigation/SpeedVector.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/SpeedVector.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Util/StaticString.hpp"
 

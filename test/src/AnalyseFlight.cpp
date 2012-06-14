@@ -20,7 +20,6 @@
 }
 */
 
-#include "Engine/Math/Earth.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Geo/UTM.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 static const double k0 = 0.9996;
 

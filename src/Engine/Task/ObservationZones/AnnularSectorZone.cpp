@@ -21,7 +21,7 @@
 */
 
 #include "AnnularSectorZone.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 
 GeoPoint
 AnnularSectorZone::GetBoundaryParametric(fixed t) const

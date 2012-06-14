@@ -1,12 +1,13 @@
 #ifndef AIRSPACE_NEAREST_SORT_HPP
 #define AIRSPACE_NEAREST_SORT_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Predicate/AirspacePredicate.hpp"
-#include <queue>
 #include "Navigation/Aircraft.hpp"
 #include "Airspace.hpp"
 #include "AirspaceInterceptSolution.hpp"
+
+#include <queue>
 
 class AirspaceVisitor;
 class Airspaces;

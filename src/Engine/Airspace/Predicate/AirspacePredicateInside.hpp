@@ -24,9 +24,9 @@
 #define AIRSPACE_PREDICATE_INSIDE_HPP
 
 #include "AirspacePredicate.hpp"
+#include "Geo/GeoPoint.hpp"
 
 class AbstractAirspace;
-struct GeoPoint;
 
 class AirspacePredicateInside: public AirspacePredicate
 {

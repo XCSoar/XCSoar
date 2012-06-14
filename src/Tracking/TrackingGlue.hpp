@@ -32,7 +32,7 @@ Copyright_License {
 #include "Thread/StandbyThread.hpp"
 #include "Tracking/LiveTrack24.hpp"
 #include "PeriodClock.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "DateTime.hpp"
 
 struct MoreData;

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "NMEA/Derived.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Engine/GlideSolvers/GlideState.hpp"
 #include "Engine/GlideSolvers/MacCready.hpp"
 #include "Engine/GlideSolvers/GlideSettings.hpp"

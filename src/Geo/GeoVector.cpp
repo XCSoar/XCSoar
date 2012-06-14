@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -19,38 +18,38 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef XCSOAR_IGC_DECLARATION_HPP
-#define XCSOAR_IGC_DECLARATION_HPP
+#include "GeoVector.hpp"
+#include "GeoPoint.hpp"
+#include "Math.hpp"
 
-#include "DateTime.hpp"
-#include "Util/StaticString.hpp"
-#include "Geo/GeoPoint.hpp"
+GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target)
+{
+  *this = source.DistanceBearing(target);
+}
 
-struct IGCDeclarationHeader {
-  /** Date and time of the declaration */
-  BrokenDateTime datetime;
+GeoPoint
+GeoVector::EndPoint(const GeoPoint &source) const
+{
+  if (!positive(distance))
+    return source;
 
-  /** Date of the flight */
-  BrokenDate flight_date;
+  return ::FindLatitudeLongitude(source, bearing, distance);
+}
 
-  /** Task number on the day */
-  char task_id[4];
+GeoPoint
+GeoVector::MidPoint(const GeoPoint &source) const
+{
+  if (!positive(distance))
+    return source;
 
-  /** Number of task turnpoints, excluding start and finish */
-  unsigned num_turnpoints;
+  return ::FindLatitudeLongitude(source, bearing, half(distance));
+}
 
-  /** Optional name of the task */
-  NarrowString<256> task_name;
-};
-
-struct IGCDeclarationTurnpoint {
-  /** Location of the turnpoint */
-  GeoPoint location;
-
-  /** Optional name of the turnpoint */
-  NarrowString<256> name;
-};
-
-#endif
+fixed
+GeoVector::MinimumDistance(const GeoPoint &source,
+                            const GeoPoint &ref) const
+{
+  return ::CrossTrackError(source, EndPoint(source), ref, NULL);
+}

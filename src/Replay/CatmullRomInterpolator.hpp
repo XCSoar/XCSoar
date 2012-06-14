@@ -22,8 +22,8 @@
 */
 
 #include "Math/fixed.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/GeoVector.hpp"
 
 #include <algorithm>
 #include <assert.h>

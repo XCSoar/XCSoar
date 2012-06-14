@@ -23,7 +23,6 @@
 #ifndef ROUTE_PLANNER_HPP
 #define ROUTE_PLANNER_HPP
 
-#include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "RoutePolars.hpp"
 #include "RoutePolar.hpp"

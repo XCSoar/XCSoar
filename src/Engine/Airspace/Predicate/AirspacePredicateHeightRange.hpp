@@ -24,6 +24,8 @@
 #define AIRSPACE_PREDICATE_HEIGHT_RANGE_HPP
 
 #include "AirspacePredicate.hpp"
+#include "Rough/RoughAltitude.hpp"
+#include "Geo/GeoPoint.hpp"
 
 class AbstractAirspace;
 

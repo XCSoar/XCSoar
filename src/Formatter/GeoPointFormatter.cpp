@@ -24,8 +24,8 @@ Copyright_License {
 #include "GeoPointFormatter.hpp"
 #include "Units/Units.hpp"
 #include "Math/Angle.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
 #include "Util/StringUtil.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Geo/UTM.hpp"
 
 #include <stdio.h>

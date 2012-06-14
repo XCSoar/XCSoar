@@ -27,7 +27,6 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Util/CharUtil.hpp"
 #include "Geo/Geoid.hpp"
-#include "Math/Earth.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"

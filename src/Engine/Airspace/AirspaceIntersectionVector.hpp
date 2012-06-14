@@ -23,7 +23,7 @@
 #ifndef AIRSPACE_INTERSECTION_VECTOR_HPP
 #define AIRSPACE_INTERSECTION_VECTOR_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include <vector>
 

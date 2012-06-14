@@ -25,7 +25,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 

@@ -22,7 +22,7 @@
 #ifndef SEARCH_POINT_HPP
 #define SEARCH_POINT_HPP
 
-#include "GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "Util/TypeTraits.hpp"
 

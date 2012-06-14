@@ -21,7 +21,7 @@
 */
 
 #include "SectorZone.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 
 GeoPoint
 SectorZone::GetBoundaryParametric(fixed t) const

@@ -30,10 +30,10 @@ Copyright_License {
 #include "NMEA/Acceleration.hpp"
 #include "NMEA/Attitude.hpp"
 #include "DateTime.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "FLARM/Data.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 
 /**
  * State of external switch devices (esp Vega)

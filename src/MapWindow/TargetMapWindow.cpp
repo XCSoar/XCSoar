@@ -34,7 +34,6 @@ Copyright_License {
 #include "Renderer/AircraftRenderer.hpp"
 #include "Renderer/TrailRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Engine/Math/Earth.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
 #include "Computer/GlideComputer.hpp"

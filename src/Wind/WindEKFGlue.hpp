@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "WindEKF.hpp"
 #include "NMEA/Validity.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;

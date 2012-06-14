@@ -22,7 +22,7 @@
 
 #include "Computer/ThermalBase.hpp"
 #include "TestUtil.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 
 int main(int argc, char **argv)
 {

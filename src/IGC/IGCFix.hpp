@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IGC_FIX_HPP
 #define XCSOAR_IGC_FIX_HPP
 
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "DateTime.hpp"
 
 struct IGCFix

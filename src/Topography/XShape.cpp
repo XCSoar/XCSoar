@@ -26,8 +26,8 @@ Copyright_License {
 #include "shapelib/mapserver.h"
 #ifdef ENABLE_OPENGL
 #include "Projection/Projection.hpp"
-#include "Math/Earth.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
+#include "Geo/Constants.hpp"
 #endif
 
 #include <algorithm>

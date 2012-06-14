@@ -25,7 +25,6 @@ Copyright_License {
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
 #include "Form/DataField/Base.hpp"

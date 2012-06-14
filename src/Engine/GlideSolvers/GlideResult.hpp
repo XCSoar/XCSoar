@@ -22,7 +22,7 @@
 #ifndef GLIDERESULT_HPP
 #define GLIDERESULT_HPP
 
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Util/TypeTraits.hpp"
 #include "GlideSettings.hpp"
 #include "Compiler.h"

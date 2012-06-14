@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_TERRAIN_RASTER_TERRAIN_HPP
 
 #include "RasterMap.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Thread/Guard.hpp"
 #include "Compiler.h"
 

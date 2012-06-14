@@ -20,9 +20,9 @@
 }
  */
 
-#include "Navigation/GeoPoint.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
-#include "Math/Earth.hpp"
+#include "GeoPoint.hpp"
+#include "GeoVector.hpp"
+#include "Math.hpp"
 
 GeoPoint 
 GeoPoint::Parametric(const GeoPoint &delta, const fixed t) const

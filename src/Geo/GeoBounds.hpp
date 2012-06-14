@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_GEO_RECT_HPP
 #define XCSOAR_GEO_RECT_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "GeoPoint.hpp"
 #include "Compiler.h"
 
 /**

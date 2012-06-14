@@ -25,7 +25,7 @@ Copyright_License {
 #define VECTOR_HPP
 
 #include "Math/fixed.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 
 struct Vector {
   fixed x;

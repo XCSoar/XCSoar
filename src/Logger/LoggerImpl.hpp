@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_LOGGER_IMPL_HPP
 
 #include "DateTime.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "IGC/IGCWriter.hpp"
 #include "Util/OverwritingRingBuffer.hpp"
 #include "Util/BatchBuffer.hpp"

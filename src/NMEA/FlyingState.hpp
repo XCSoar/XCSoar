@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Util/TypeTraits.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 /**
  * Structure for flying state (takeoff/landing)

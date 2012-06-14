@@ -22,7 +22,7 @@
 
 #include "UnorderedTaskPoint.hpp"
 #include "Task/TaskBehaviour.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 
 UnorderedTaskPoint::UnorderedTaskPoint(const Waypoint &wp,
                                        const TaskBehaviour &tb)

@@ -23,7 +23,7 @@
 #ifndef AIRSPACE_INTERCEPT_SOLUTION_HPP
 #define AIRSPACE_INTERCEPT_SOLUTION_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 #include "Util/TypeTraits.hpp"
 

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_CIRCLING_WIND_HPP
 
 #include "Vector.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Util/StaticArray.hpp"
 #include "NMEA/Validity.hpp"
 

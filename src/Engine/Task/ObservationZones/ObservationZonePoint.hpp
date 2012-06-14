@@ -26,9 +26,7 @@
 
 #include "ObservationZone.hpp"
 #include "Util/NonCopyable.hpp"
-#include "Navigation/GeoPoint.hpp"
-
-struct GeoPoint;
+#include "Geo/GeoPoint.hpp"
 
 /**
  * \todo 

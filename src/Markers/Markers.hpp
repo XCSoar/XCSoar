@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MARKS_HPP
 #define XCSOAR_MARKS_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "DateTime.hpp"
 
 #include <vector>

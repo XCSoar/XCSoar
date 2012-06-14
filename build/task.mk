@@ -29,7 +29,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
@@ -37,7 +36,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Memento/DistanceMemento.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Memento/GeoVectorMemento.cpp \
-	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoEllipse.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatBoundingBox.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
@@ -139,7 +137,6 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointVisitor.cpp \
-	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Util/AircraftStateFilter.cpp \
 	$(ENGINE_SRC_DIR)/Util/Gradient.cpp
 

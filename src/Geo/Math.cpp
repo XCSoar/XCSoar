@@ -21,7 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Math/Earth.hpp"
+#include "Math.hpp"
+#include "Constants.hpp"
+#include "GeoPoint.hpp"
+
 #include <assert.h>
 
 #ifdef INSTRUMENT_TASK

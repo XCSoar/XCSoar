@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include <stdio.h>
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_LIST_BUILDER_HPP
 #define XCSOAR_WAYPOINT_LIST_BUILDER_HPP
 
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Engine/Task/FAITrianglePointValidator.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 

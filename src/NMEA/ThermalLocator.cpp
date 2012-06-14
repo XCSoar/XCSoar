@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "NMEA/ThermalLocator.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/SpeedVector.hpp"
+#include "Geo/Math.hpp"
 
 #include <algorithm>
 

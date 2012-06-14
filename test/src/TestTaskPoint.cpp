@@ -21,7 +21,7 @@
 */
 
 #include "Engine/Task/Points/TaskPoint.hpp"
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "TestUtil.hpp"
 
 class DummyTaskPoint: public TaskPoint

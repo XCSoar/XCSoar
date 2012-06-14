@@ -22,8 +22,8 @@
 #ifndef ELEMENT_STAT_HPP
 #define ELEMENT_STAT_HPP
 
-#include "Navigation/GeoPoint.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #ifdef DO_PRINT
 #include <iostream>

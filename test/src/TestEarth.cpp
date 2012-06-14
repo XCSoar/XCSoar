@@ -20,7 +20,7 @@
 }
 */
 
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "TestUtil.hpp"
 
 static void

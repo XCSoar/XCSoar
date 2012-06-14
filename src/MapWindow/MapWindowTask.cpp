@@ -24,7 +24,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Renderer/TaskPointRenderer.hpp"

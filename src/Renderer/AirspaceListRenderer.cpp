@@ -31,7 +31,7 @@ Copyright_License {
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"
 

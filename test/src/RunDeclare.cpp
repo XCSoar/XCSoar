@@ -28,7 +28,6 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Logger/Settings.hpp"
 #include "Plane/Plane.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"

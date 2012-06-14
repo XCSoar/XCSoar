@@ -23,7 +23,7 @@
 #ifndef XCSOAR_ROUTE_HPP
 #define XCSOAR_ROUTE_HPP
 
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Util/TrivialArray.hpp"
 
 #include <vector>

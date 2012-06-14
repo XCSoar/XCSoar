@@ -27,8 +27,6 @@
 
 #include <algorithm>
 
-#include "Navigation/GeoPoint.hpp"
-
 NmeaReplay::NmeaReplay() :
   AbstractReplay(),
   reader(NULL)

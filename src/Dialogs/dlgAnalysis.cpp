@@ -31,7 +31,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "ComputerSettings.hpp"
 #include "Math/FastMath.h"
-#include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Look/Look.hpp"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Look/WaypointLook.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Language/Language.hpp"

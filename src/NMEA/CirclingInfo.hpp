@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_CIRCLING_INFO_HPP
 
 #include "Util/TypeTraits.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 
 /** Enumeration for cruise/circling mode detection */

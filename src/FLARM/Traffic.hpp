@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_TRAFFIC_HPP
 
 #include "FlarmId.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/TypeTraits.hpp"

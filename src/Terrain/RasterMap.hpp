@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "RasterProjection.hpp"
 #include "RasterTileCache.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 

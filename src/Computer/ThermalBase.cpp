@@ -24,9 +24,9 @@ Copyright_License {
 #include "ThermalBase.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Math/Earth.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
-#include "Engine/Navigation/SpeedVector.hpp"
+#include "Geo/Math.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/SpeedVector.hpp"
 
 static fixed
 GetElevation(RasterTerrain::Lease &map, const GeoPoint loc)

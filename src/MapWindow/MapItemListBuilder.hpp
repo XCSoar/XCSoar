@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_ITEM_LIST_BUILDER_HPP
 #define XCSOAR_MAP_ITEM_LIST_BUILDER_HPP
 
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 class MapItemList;
 class Angle;

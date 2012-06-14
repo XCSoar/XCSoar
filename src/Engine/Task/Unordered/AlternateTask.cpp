@@ -22,7 +22,7 @@
 
 #include "AlternateTask.hpp"
 #include "Task/Points/TaskWaypoint.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Util/ReservablePriorityQueue.hpp"
 

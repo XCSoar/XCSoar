@@ -26,7 +26,7 @@
 #include "Flat/FlatPoint.hpp"
 #include "Flat/FlatBoundingBox.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 
 #include <algorithm>
 #include <cassert>

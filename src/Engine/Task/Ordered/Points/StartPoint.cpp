@@ -25,7 +25,7 @@
 #include "Task/TaskBehaviour.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Math/ZeroFinder.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 
 #include <assert.h>
 

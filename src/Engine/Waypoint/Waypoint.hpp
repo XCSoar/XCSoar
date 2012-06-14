@@ -25,7 +25,7 @@
 
 #include "Util/tstring.hpp"
 #include "Util/DebugFlag.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
 #include "Runway.hpp"

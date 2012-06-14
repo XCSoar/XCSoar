@@ -21,7 +21,7 @@
  */
 
 #include "Navigation/Aircraft.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 
 AircraftState 
 AircraftState::GetPredictedState(const fixed &in_time) const

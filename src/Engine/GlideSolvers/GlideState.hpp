@@ -22,8 +22,8 @@
 #ifndef GLIDESTATE_HPP
 #define GLIDESTATE_HPP
 
-#include "Navigation/SpeedVector.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/SpeedVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Compiler.h"
 
 /**

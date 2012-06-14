@@ -26,7 +26,7 @@
 #include "AirspaceAltitude.hpp"
 #include "AirspaceClass.hpp"
 #include "AirspaceActivity.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Navigation/SearchPointVector.hpp"
 #include "Compiler.h"
 

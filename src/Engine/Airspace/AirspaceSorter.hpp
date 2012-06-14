@@ -1,7 +1,7 @@
 #ifndef AIRSPACE_SORTER_HPP
 #define AIRSPACE_SORTER_HPP
 
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Compiler.h"
 

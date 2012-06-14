@@ -30,7 +30,6 @@ Copyright_License {
 #include "Dialogs/Traffic.hpp"
 #include "Look/DialogLook.hpp"
 #include "Language/Language.hpp"
-#include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Terrain/RasterBuffer.hpp"
 #include "MapSettings.hpp"
 #include "MapWindow/MapItem.hpp"

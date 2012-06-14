@@ -22,7 +22,6 @@
 
 #include "GlideState.hpp"
 #include "Math/Quadratic.hpp"
-#include "Navigation/SpeedVector.hpp"
 
 /**
  * Quadratic function solver for MacCready theory constraint equation

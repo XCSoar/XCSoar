@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Projection.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Constants.hpp"
 #include "Math/Angle.hpp"
 
 Projection::Projection() :

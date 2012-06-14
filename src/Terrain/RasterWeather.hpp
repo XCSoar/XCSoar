@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 #define XCSOAR_TERRAIN_RASTER_WEATHER_HPP
 
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Poco/RWLock.h"
 #include "Compiler.h"
 

@@ -21,7 +21,7 @@
 */
 
 #include "Math/SunEphemeris.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "DateTime.hpp"
 #include "TestUtil.hpp"
 

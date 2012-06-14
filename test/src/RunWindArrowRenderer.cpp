@@ -30,7 +30,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
-#include "Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 
 #ifdef USE_GDI
 #include "ResourceLoader.hpp"

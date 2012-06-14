@@ -38,7 +38,7 @@
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Friends.hpp"
 #include "Screen/Layout.hpp"
-#include "Engine/Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"

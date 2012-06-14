@@ -21,7 +21,7 @@
 */
 
 #include "AircraftSim.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 
 void
 AircraftSim::Start(const GeoPoint& location_start,

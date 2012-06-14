@@ -19,8 +19,10 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AircraftStateFilter.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
+
 #include <assert.h>
 
 AircraftStateFilter::AircraftStateFilter(const fixed cutoff_wavelength)

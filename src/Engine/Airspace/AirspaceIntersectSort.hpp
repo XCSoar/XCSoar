@@ -23,10 +23,11 @@
 #ifndef AIRSPACE_INTERSECT_SORT_HPP
 #define AIRSPACE_INTERSECT_SORT_HPP
 
-#include <queue>
 #include "Math/fixed.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "AbstractAirspace.hpp"
+
+#include <queue>
 
 /**
  * Utility class to sort airspaces in ascending order of vector parameter (0,1)

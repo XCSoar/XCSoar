@@ -26,7 +26,7 @@
 
 #include "Compiler.h"
 #include "Navigation/Aircraft.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 
 struct TaskBehaviour;
 

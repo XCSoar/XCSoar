@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "DebugPort.hpp"
-#include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/PathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"

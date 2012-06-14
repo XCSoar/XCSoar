@@ -21,7 +21,7 @@
  */
 
 #include "SymmetricSectorZone.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 
 void
 SymmetricSectorZone::SetLegs(const GeoPoint *previous, const GeoPoint *current,

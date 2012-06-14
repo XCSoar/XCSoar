@@ -24,8 +24,8 @@
 
 #include "Util/TypeTraits.hpp"
 #include "NMEA/FlyingState.hpp"
-#include "GeoPoint.hpp"
-#include "SpeedVector.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "Compiler.h"
 
 /**

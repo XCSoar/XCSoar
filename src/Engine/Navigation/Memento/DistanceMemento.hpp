@@ -23,8 +23,8 @@
 #ifndef DISTANCE_MEMENTO_HPP
 #define DISTANCE_MEMENTO_HPP
 
-#include "Navigation/GeoPoint.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoPoint.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Compiler.h"
 
 /** Memento object to store results of previous distance calculations. */

@@ -26,7 +26,7 @@
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
 #include "Route/AirspaceRoute.hpp"
-#include "Navigation/SpeedVector.hpp"
+#include "Geo/SpeedVector.hpp"
 #include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Terrain/RasterMap.hpp"

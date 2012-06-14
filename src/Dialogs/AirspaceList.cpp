@@ -27,7 +27,6 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Airspace/AirspaceSorter.hpp"
 #include "Math/FastMath.h"
-#include "Math/Earth.hpp"
 #include "Form/DataField/String.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"

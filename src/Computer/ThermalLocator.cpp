@@ -22,10 +22,11 @@ Copyright_License {
 */
 
 #include "ThermalLocator.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Math.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Math/FastMath.h"
 #include "NMEA/Derived.hpp"
+
 #include <assert.h>
 
 void

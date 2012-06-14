@@ -23,7 +23,7 @@
 #ifndef TASKPROJECTION_H
 #define TASKPROJECTION_H
 
-#include "GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
 
 struct FlatPoint;

@@ -23,7 +23,6 @@
 #define AIRSPACE_PREDICATE_HPP
 
 #include "Compiler.h"
-#include "Navigation/GeoPoint.hpp"
 
 class AbstractAirspace;
 class AirspacePredicateTrue;

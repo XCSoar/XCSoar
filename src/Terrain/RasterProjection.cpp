@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "RasterProjection.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "Math/Earth.hpp"
+#include "Geo/Constants.hpp"
 
 void
 RasterProjection::set(const GeoBounds &bounds,

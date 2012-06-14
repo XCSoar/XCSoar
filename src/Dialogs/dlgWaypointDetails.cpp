@@ -33,7 +33,6 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
 #include "Form/DockWindow.hpp"
-#include "Math/Earth.hpp"
 #include "ComputerSettings.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Bitmap.hpp"

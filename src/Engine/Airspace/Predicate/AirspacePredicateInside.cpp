@@ -21,7 +21,7 @@
  */
 
 #include "AirspacePredicateInside.hpp"
-#include "Navigation/GeoPoint.hpp"
+#include "Geo/GeoPoint.hpp"
 #include "../AbstractAirspace.hpp"
 
 AirspacePredicateInside::AirspacePredicateInside(

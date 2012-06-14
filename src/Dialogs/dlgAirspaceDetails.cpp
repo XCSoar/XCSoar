@@ -29,8 +29,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Math/FastMath.h"
-#include "Math/Earth.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "Units/Units.hpp"
 #include "UIGlobals.hpp"
 
