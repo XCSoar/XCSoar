@@ -86,8 +86,6 @@ private:
   DrawInfo label_middle;
   DrawInfo label_bottom;
 
-  Unit unit;
-
   RasterPoint polys[(gmax * 2 + 1) * 3];
   RasterPoint lines[gmax * 2 + 1];
 

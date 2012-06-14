@@ -55,8 +55,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
    nwidth(Layout::Scale(4)),
    nline(Layout::Scale(8)),
    dirty(true), layout_initialised(false), needle_initialised(false),
-   ballast_initialised(false), bugs_initialised(false),
-   unit(Unit::UNDEFINED)
+   ballast_initialised(false), bugs_initialised(false)
 {
   value_top.initialised = false;
   value_middle.initialised = false;
