@@ -40,9 +40,6 @@ class TaskVarioComputer
   DiffFilter df;
   Filter v_lpf;
 
-private:
-  bool initialised;
-
 public:
   TaskVarioComputer();
 
