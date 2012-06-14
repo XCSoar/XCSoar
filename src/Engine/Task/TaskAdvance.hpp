@@ -30,6 +30,13 @@ struct AircraftState;
  */
 class TaskAdvance
 {
+protected:
+  /** arm state */
+  bool m_armed;
+
+  /** need to arm */
+  bool m_request_armed;
+
 public:
 
   /**
@@ -149,11 +156,6 @@ protected:
                    const AircraftState &state,
                    const bool x_enter, 
                    const bool x_exit) const;
-
-  /** arm state */
-  bool m_armed;
-  /** need to arm */
-  bool m_request_armed;
 };
 
 
