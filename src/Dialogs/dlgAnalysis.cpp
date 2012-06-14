@@ -103,9 +103,6 @@ protected:
 class ChartControl: public PaintWindow
 {
   const ChartLook &chart_look;
-  const AirspaceLook &airspace_look;
-  const AircraftLook &aircraft_look;
-  const TaskLook &task_look;
   const ThermalBandLook &thermal_band_look;
 
 public:
@@ -114,9 +111,6 @@ public:
                UPixelScalar Width, UPixelScalar Height,
                const WindowStyle style,
                const ChartLook &chart_look,
-               const AirspaceLook &airspace_look,
-               const AircraftLook &aircraft_look,
-               const TaskLook &task_look,
                const ThermalBandLook &thermal_band_look);
 
 protected:
@@ -132,13 +126,8 @@ ChartControl::ChartControl(ContainerWindow &parent,
                            UPixelScalar Width, UPixelScalar Height,
                            const WindowStyle style,
                            const ChartLook &_chart_look,
-                           const AirspaceLook &_airspace_look,
-                           const AircraftLook &_aircraft_look,
-                           const TaskLook &_task_look,
                            const ThermalBandLook &_thermal_band_look)
-  :chart_look(_chart_look), airspace_look(_airspace_look),
-   aircraft_look(_aircraft_look),
-   task_look(_task_look),
+  :chart_look(_chart_look),
    thermal_band_look(_thermal_band_look)
 {
   set(parent, X, Y, Width, Height, style);
@@ -573,8 +562,7 @@ OnCreateChartControl(ContainerWindow &parent,
                      const WindowStyle style)
 {
   return new ChartControl(parent, left, top, width, height, style,
-                          look->chart, look->map.airspace, look->map.aircraft,
-                          look->map.task,
+                          look->chart,
                           look->thermal_band);
 }
 
