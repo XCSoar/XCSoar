@@ -19,8 +19,11 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef TASKADVANCE_HPP
 #define TASKADVANCE_HPP
+
+#include "Compiler.h"
 
 class TaskPoint;
 struct AircraftState;
@@ -32,17 +35,17 @@ class TaskAdvance
 {
 protected:
   /** arm state */
-  bool m_armed;
+  bool armed;
 
   /** need to arm */
-  bool m_request_armed;
+  bool request_armed;
 
 public:
 
   /**
    * Enumeration of states the task advance mechanism can be in
    */
-  enum TaskAdvanceState_t {
+  enum State {
     /** Advance is manual (user must manually adjust) */
     MANUAL = 0,
     /** Advance is auto (no user input required) */
@@ -60,28 +63,27 @@ public:
   /**
    * Constructor.  Sets defaults to auto-mode
    */
-  TaskAdvance();
+  TaskAdvance():armed(false), request_armed(false) {}
 
   /**
    * Resets as if never flown
    */
-  virtual void reset();
+  virtual void Reset();
 
   /**
    * Set arming trigger
    *
    * @param do_armed True to arm trigger, false to clear
    */
-  void set_armed(const bool do_armed);
+  void SetArmed(const bool do_armed);
 
   /**
    * Accessor for arm state
    *
    * @return True if armed
    */
-  bool is_armed() const 
-  {
-    return m_armed;
+  bool IsArmed() const {
+    return armed;
   }
 
   /**
@@ -89,9 +91,8 @@ public:
    *
    * @return True if arm requested
    */
-  bool request_armed() const 
-  {
-    return m_request_armed;
+  bool NeedToArm() const  {
+    return request_armed;
   }
 
   /**
@@ -99,14 +100,14 @@ public:
    *
    * @return Arm state after toggle
    */
-  bool toggle_armed();
+  bool ToggleArmed();
 
   /** 
    * Retrieve current advance state
    * 
    * @return Advance state
    */
-  virtual TaskAdvanceState_t get_advance_state() const = 0;
+  virtual State GetState() const = 0;
 
   /**
    * Determine whether all conditions are satisfied for a turnpoint
@@ -120,16 +121,15 @@ public:
    *
    * @return true if this tp is ready to advance
    */
-  virtual bool ready_to_advance(const TaskPoint &tp,
-                                const AircraftState &state,
-                                const bool x_enter, 
-                                const bool x_exit) = 0;
+  virtual bool CheckReadyToAdvance(const TaskPoint &tp,
+                                   const AircraftState &state,
+                                   const bool x_enter, const bool x_exit) = 0;
 
 protected:
   /** 
    * Update state after external change to the arm state
    */
-  virtual void update_state() = 0;
+  virtual void UpdateState() = 0;
 
   /**
    * Determine whether, according to OZ entry, an AAT OZ is ready to advance
@@ -139,7 +139,7 @@ protected:
    *
    * @return True if ready to advance
    */
-  virtual bool aat_state_ready(const bool has_entered,
+  virtual bool IsAATStateReady(const bool has_entered,
                                const bool close_to_target) const;
 
   /**
@@ -152,10 +152,11 @@ protected:
    *
    * @return true if this tp is ready to advance
    */
-  bool state_ready(const TaskPoint &tp,
-                   const AircraftState &state,
-                   const bool x_enter, 
-                   const bool x_exit) const;
+  gcc_pure
+  bool IsStateReady(const TaskPoint &tp,
+                    const AircraftState &state,
+                    const bool x_enter,
+                    const bool x_exit) const;
 };
 
 

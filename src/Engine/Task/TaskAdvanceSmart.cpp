@@ -29,7 +29,7 @@
 #include "Factory/TaskFactoryConstraints.hpp"
 
 TaskAdvanceSmart::TaskAdvanceSmart()
-  :m_state(TaskAdvance::MANUAL),
+  :state(TaskAdvance::MANUAL),
    start_requires_arm(false)
 {
 }
@@ -41,75 +41,75 @@ TaskAdvanceSmart::SetFactoryConstraints(const TaskFactoryConstraints &constraint
 }
 
 bool 
-TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
-                                   const AircraftState &state,
-                                   const bool x_enter, const bool x_exit)
+TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
+                                      const AircraftState &aircraft,
+                                      const bool x_enter, const bool x_exit)
 {
-  const bool m_state_ready = state_ready(tp, state, x_enter, x_exit);
+  const bool state_ready = IsStateReady(tp, aircraft, x_enter, x_exit);
 
-  if (m_armed) 
-    m_request_armed = false;
+  if (armed)
+    request_armed = false;
 
   if (tp.GetType() == TaskPoint::START) {
     const StartPoint *sp = (const StartPoint *)&tp;
     if (start_requires_arm) {
-      if (m_armed) {
-        m_state = TaskAdvance::START_ARMED;
+      if (armed) {
+        state = TaskAdvance::START_ARMED;
       } else {
-        m_state = TaskAdvance::START_DISARMED;
-        if (sp->IsInSector(state)) 
-          m_request_armed = true;
+        state = TaskAdvance::START_DISARMED;
+        if (sp->IsInSector(aircraft))
+          request_armed = true;
       }
-      return m_armed && m_state_ready;
+      return armed && state_ready;
     } else {
-      m_state = TaskAdvance::AUTO;
-      return m_state_ready;
+      state = TaskAdvance::AUTO;
+      return state_ready;
     }
   } else if (tp.GetType() == TaskPoint::AAT) {
-    if (m_armed) {
-      m_state = TaskAdvance::TURN_ARMED;
+    if (armed) {
+      state = TaskAdvance::TURN_ARMED;
     } else {
-      m_state = TaskAdvance::TURN_DISARMED;
-      if (m_state_ready)
-        m_request_armed = true;
+      state = TaskAdvance::TURN_DISARMED;
+      if (state_ready)
+        request_armed = true;
     }
-    return m_armed && m_state_ready;
+    return armed && state_ready;
   } else if (tp.IsIntermediatePoint()) {
-    m_state = TaskAdvance::AUTO;
-    return m_state_ready;
+    state = TaskAdvance::AUTO;
+    return state_ready;
   } 
   
   return false;
 }
 
-TaskAdvance::TaskAdvanceState_t 
-TaskAdvanceSmart::get_advance_state() const
+TaskAdvance::State
+TaskAdvanceSmart::GetState() const
 {
-  return m_state;
+  return state;
 }
 
 void
-TaskAdvanceSmart::update_state()
+TaskAdvanceSmart::UpdateState()
 {
-  switch (m_state) {
+  switch (state) {
   case TaskAdvance::START_ARMED:
-    if (!m_armed)
-      m_state = TaskAdvance::START_DISARMED;
+    if (!armed)
+      state = TaskAdvance::START_DISARMED;
 
     return;
   case TaskAdvance::START_DISARMED:
-    if (m_armed)
-      m_state = TaskAdvance::START_ARMED;
+    if (armed)
+      state = TaskAdvance::START_ARMED;
 
     return;
   case TaskAdvance::TURN_ARMED:
-    if (!m_armed)
-      m_state = TaskAdvance::TURN_DISARMED;
+    if (!armed)
+      state = TaskAdvance::TURN_DISARMED;
 
     return;
   case TaskAdvance::TURN_DISARMED:
-    if (m_armed)
-      m_state = TaskAdvance::TURN_ARMED;
+    if (armed)
+      state = TaskAdvance::TURN_ARMED;
 
     return;
   default:

@@ -28,12 +28,9 @@
 struct TaskFactoryConstraints;
 
 /** Class used to control advancement through an OrderedTask */
-class TaskAdvanceSmart: 
-  public TaskAdvance
-{
-protected:
+class TaskAdvanceSmart : public TaskAdvance {
   /** active advance state */
-  TaskAdvanceState_t m_state;
+  State state;
 
 private:
   bool start_requires_arm;
@@ -46,7 +43,7 @@ public:
 
   void SetFactoryConstraints(const TaskFactoryConstraints &constraints);
 
-  TaskAdvance::TaskAdvanceState_t get_advance_state() const;
+  virtual State GetState() const;
 
   /** 
    * Determine whether all conditions are satisfied for a turnpoint
@@ -60,11 +57,12 @@ public:
    * 
    * @return true if this tp is ready to advance
    */
-  bool ready_to_advance(const TaskPoint &tp, const AircraftState &state,
-                        const bool x_enter, const bool x_exit);
+  virtual bool CheckReadyToAdvance(const TaskPoint &tp,
+                                   const AircraftState &state,
+                                   const bool x_enter, const bool x_exit);
 
 protected:
-  void update_state();
+  virtual void UpdateState();
 };
 
 #endif

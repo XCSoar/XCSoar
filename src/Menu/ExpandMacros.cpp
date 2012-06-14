@@ -216,7 +216,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       // Waypoint\nNext
 
-      switch (task_manager->GetTaskAdvance().get_advance_state()) {
+      switch (task_manager->GetTaskAdvance().GetState()) {
       case TaskAdvance::MANUAL:
       case TaskAdvance::AUTO:
       case TaskAdvance::START_ARMED:
@@ -239,7 +239,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
 
-      switch (task_manager->GetTaskAdvance().get_advance_state()) {
+      switch (task_manager->GetTaskAdvance().GetState()) {
       case TaskAdvance::MANUAL:
       case TaskAdvance::AUTO:
       case TaskAdvance::START_DISARMED:
@@ -271,7 +271,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
-    switch (task_manager->GetTaskAdvance().get_advance_state()) {
+    switch (task_manager->GetTaskAdvance().GetState()) {
     case TaskAdvance::MANUAL:
       ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
                       _("Advance\n(manual)"), Size);

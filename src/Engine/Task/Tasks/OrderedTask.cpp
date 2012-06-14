@@ -363,12 +363,12 @@ OrderedTask::CheckTransitions(const AircraftState &state,
                                         last_started, i == 0);
 
     if (i == (int)active_task_point) {
-      const bool last_request_armed = task_advance.request_armed();
+      const bool last_request_armed = task_advance.NeedToArm();
 
-      if (task_advance.ready_to_advance(*task_points[i], state,
-                                        transition_enter,
-                                        transition_exit)) {
-        task_advance.set_armed(false);
+      if (task_advance.CheckReadyToAdvance(*task_points[i], state,
+                                           transition_enter,
+                                           transition_exit)) {
+        task_advance.SetArmed(false);
         
         if (i + 1 < n_task) {
           i++;
@@ -382,7 +382,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
           // exit transition clears samples
           full_update = true;
         }
-      } else if (!last_request_armed && task_advance.request_armed()) {
+      } else if (!last_request_armed && task_advance.NeedToArm()) {
         if (task_events != NULL)
           task_events->RequestArm(*task_points[i]);
       }
@@ -761,7 +761,7 @@ OrderedTask::SetActiveTaskPoint(unsigned index)
 {
   if (index < task_points.size()) {
     if (active_task_point != index)
-      task_advance.set_armed(false);
+      task_advance.SetArmed(false);
 
     active_task_point = index;
   } else if (task_points.empty()) {
@@ -997,7 +997,7 @@ OrderedTask::Reset()
   AbstractTask::Reset();
   stats.task_finished = false;
   stats.task_started = false;
-  task_advance.reset();
+  task_advance.Reset();
   SetActiveTaskPoint(0);
 }
 

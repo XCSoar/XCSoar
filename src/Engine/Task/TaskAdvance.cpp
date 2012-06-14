@@ -19,36 +19,32 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskAdvance.hpp"
 #include "Tasks/BaseTask/TaskPoint.hpp"
-#include "TaskPoints/StartPoint.hpp"
 #include "TaskPoints/AATPoint.hpp"
 #include "Tasks/BaseTask/IntermediatePoint.hpp"
 #include "Navigation/Aircraft.hpp"
 
-TaskAdvance::TaskAdvance():
-    m_armed(false),
-    m_request_armed(false) {}
-
 void
-TaskAdvance::reset()
+TaskAdvance::Reset()
 {
-  m_armed = false;
-  m_request_armed = false;
+  armed = false;
+  request_armed = false;
 }
 
-bool 
-TaskAdvance::state_ready(const TaskPoint &tp,
-                         const AircraftState &state,
-                         const bool x_enter, 
-                         const bool x_exit) const
+bool
+TaskAdvance::IsStateReady(const TaskPoint &tp,
+                          const AircraftState &state,
+                          const bool x_enter,
+                          const bool x_exit) const
 {
   if (tp.GetType() == TaskPoint::START)
     return x_exit;
 
   if (tp.GetType() == TaskPoint::AAT) {
     const AATPoint *ap = (const AATPoint *)&tp;
-    return aat_state_ready(ap->HasEntered(), ap->IsCloseToTarget(state));
+    return IsAATStateReady(ap->HasEntered(), ap->IsCloseToTarget(state));
   } else if (tp.IsIntermediatePoint()) {
     const IntermediateTaskPoint *ip = (const IntermediateTaskPoint *)&tp;
     return ip->HasEntered();
@@ -56,28 +52,28 @@ TaskAdvance::state_ready(const TaskPoint &tp,
   return false;
 }
 
-bool 
-TaskAdvance::aat_state_ready(const bool has_entered,
+bool
+TaskAdvance::IsAATStateReady(const bool has_entered,
                              const bool close_to_target) const
 {
   return has_entered;
 }
 
-void 
-TaskAdvance::set_armed(const bool do_armed) 
+void
+TaskAdvance::SetArmed(const bool do_armed)
 {
-  m_armed = do_armed;
-  m_request_armed = false;
-  update_state();
+  armed = do_armed;
+  request_armed = false;
+  UpdateState();
 }
 
-bool 
-TaskAdvance::toggle_armed() 
+bool
+TaskAdvance::ToggleArmed()
 {
-  m_armed = !m_armed;
-  if (m_armed)
-    m_request_armed = false;
+  armed = !armed;
+  if (armed)
+    request_armed = false;
 
-  update_state();
-  return m_armed;
+  UpdateState();
+  return armed;
 }
