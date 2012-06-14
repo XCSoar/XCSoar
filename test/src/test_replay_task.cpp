@@ -5,11 +5,10 @@
 #include "Task/TaskManager.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "OS/PathName.hpp"
+#include "Task/Deserialiser.hpp"
+#include "XML/DataNodeXML.hpp"
 
 #include <fstream>
-
-#include "Task/Deserialiser.hpp"
-#include "Util/DataNodeXML.hpp"
 
 static OrderedTask* task_load(OrderedTask* task) {
   PathName szFilename(task_file.c_str());

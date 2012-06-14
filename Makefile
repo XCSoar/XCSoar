@@ -649,6 +649,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/SuspensibleThread.cpp \
 	$(SRC)/Thread/RecursivelySuspensibleThread.cpp \

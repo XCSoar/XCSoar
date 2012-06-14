@@ -6,7 +6,7 @@
 #include <windef.h> /* for MAX_PATH */
 #include "OS/PathName.hpp"
 #include "Task/Deserialiser.hpp"
-#include "Util/DataNodeXML.hpp"
+#include "XML/DataNodeXML.hpp"
 
 static OrderedTask* task_load(OrderedTask* task) {
   PathName szFilename(task_file.c_str());

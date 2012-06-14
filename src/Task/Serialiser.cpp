@@ -30,7 +30,7 @@
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Engine/Util/DataNode.hpp"
+#include "XML/DataNode.hpp"
 
 #include "Compiler.h"
 #include <assert.h>

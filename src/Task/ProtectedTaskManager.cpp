@@ -24,7 +24,7 @@ Copyright_License {
 #include "ProtectedTaskManager.hpp"
 #include "Serialiser.hpp"
 #include "Deserialiser.hpp"
-#include "Util/DataNodeXML.hpp"
+#include "XML/DataNodeXML.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"

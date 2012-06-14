@@ -141,9 +141,7 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Util/AircraftStateFilter.cpp \
-	$(ENGINE_SRC_DIR)/Util/Gradient.cpp \
-	$(ENGINE_SRC_DIR)/Util/DataNodeXML.cpp \
-	$(ENGINE_SRC_DIR)/Util/DataNode.cpp
+	$(ENGINE_SRC_DIR)/Util/Gradient.cpp
 
 $(eval $(call link-library,task,ENGINE_CORE))
 $(eval $(call link-library,taskglue,ENGINE_GLUE))
