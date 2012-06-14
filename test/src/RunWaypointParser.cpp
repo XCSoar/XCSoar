@@ -30,10 +30,6 @@ Copyright_License {
 #include <stdio.h>
 #include <tchar.h>
 
-/* what follows is a bunch of symbols needed by the linker - we don't
-   want to compile & link the original libraries, because that would
-   mean even more and more depencies */
-
 class DumpVisitor : public WaypointVisitor {
 public:
   void Visit(const Waypoint &wp) {
