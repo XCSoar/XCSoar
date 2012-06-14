@@ -54,13 +54,13 @@ int main(int argc, char **argv)
   WaypointReader parser(path, 0);
   if (parser.Error()) {
     fprintf(stderr, "WayPointParser::SetFile() has failed\n");
-    return 1;
+    return EXIT_FAILURE;
   }
 
   NullOperationEnvironment operation;
   if (!parser.Parse(way_points, operation)) {
     fprintf(stderr, "WayPointParser::Parse() has failed\n");
-    return 1;
+    return EXIT_FAILURE;
   }
 
   way_points.Optimise();
@@ -69,5 +69,5 @@ int main(int argc, char **argv)
   DumpVisitor visitor;
   way_points.VisitNamePrefix(_T(""), visitor);
 
-  return 0;
+  return EXIT_SUCCESS;
 }
