@@ -21,23 +21,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_NET_FEATURES_HPP
-#define XCSOAR_NET_FEATURES_HPP
+#ifndef XCSOAR_NET_DOWNLOAD_MANAGER_HPP
+#define XCSOAR_NET_DOWNLOAD_MANAGER_HPP
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
-#define HAVE_NET
-#define HAVE_WININET
-#endif
+#include "Net/Features.hpp"
+#include "Compiler.h"
 
-#if !defined(WIN32) && defined(HAVE_POSIX) && !defined(ANDROID) && !defined(__APPLE__)
-#define HAVE_NET
-#define HAVE_CURL
-#endif
+namespace Net {
+  class DownloadListener {
+  public:
+    virtual void OnDownloadComplete(const char *path_relative,
+                                    bool success) = 0;
+  };
+}
 
-#ifdef ANDROID
-#define HAVE_NET
-#define HAVE_JAVA_NET
-#define HAVE_DOWNLOAD_MANAGER
+namespace Net {
+  namespace DownloadManager {
+#ifdef HAVE_DOWNLOAD_MANAGER
+    bool Initialise();
+    void Deinitialise();
+
+    gcc_pure
+    bool IsAvailable();
+
+    void AddListener(DownloadListener &listener);
+    void RemoveListener(DownloadListener &listener);
+
+    void Enqueue(const char *uri, const char *relative_path);
+#else
+
+    static inline bool IsAvailable() {
+      return false;
+    }
 #endif
+  }
+}
 
 #endif

@@ -21,23 +21,45 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_NET_FEATURES_HPP
-#define XCSOAR_NET_FEATURES_HPP
+#ifndef XCSOAR_ANDROID_DOWNLOAD_MANAGER_HPP
+#define XCSOAR_ANDROID_DOWNLOAD_MANAGER_HPP
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
-#define HAVE_NET
-#define HAVE_WININET
-#endif
+#include "Java/Object.hpp"
+#include "Thread/Mutex.hpp"
 
-#if !defined(WIN32) && defined(HAVE_POSIX) && !defined(ANDROID) && !defined(__APPLE__)
-#define HAVE_NET
-#define HAVE_CURL
-#endif
+#include <list>
 
-#ifdef ANDROID
-#define HAVE_NET
-#define HAVE_JAVA_NET
-#define HAVE_DOWNLOAD_MANAGER
-#endif
+class Context;
+
+namespace Net {
+  class DownloadListener;
+}
+
+class AndroidDownloadManager {
+  Java::Object object;
+
+  /**
+   * Protects the #listeners attribute.
+   */
+  Mutex mutex;
+
+  std::list<Net::DownloadListener *> listeners;
+
+  AndroidDownloadManager(JNIEnv *env, jobject obj):object(env, obj) {}
+
+public:
+  static bool Initialise(JNIEnv *env);
+
+  gcc_pure
+  static bool IsAvailable();
+
+  static AndroidDownloadManager *Create(JNIEnv *env, Context &context);
+
+  void AddListener(Net::DownloadListener &listener);
+  void RemoveListener(Net::DownloadListener &listener);
+  void OnDownloadComplete(const char *path_relative, bool success);
+
+  void Enqueue(JNIEnv *env, const char *uri, const char *path_relative);
+};
 
 #endif

@@ -49,7 +49,7 @@ CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
-NATIVE_CLASSES = NativeView EventBridge Timer InternalGPS NonGPSSensors Settings NativeInputListener
+NATIVE_CLASSES = NativeView EventBridge Timer InternalGPS NonGPSSensors Settings NativeInputListener DownloadUtil
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
@@ -195,6 +195,7 @@ $(call SRC_TO_OBJ,$(SRC)/Android/Timer.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/InternalSensors.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeInputListener.cpp): $(NATIVE_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Android/DownloadUtil.cpp): $(NATIVE_HEADERS)
 
 ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp

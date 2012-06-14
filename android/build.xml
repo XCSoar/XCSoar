@@ -34,6 +34,7 @@ that have native methods, to prepare for calling "javah".
       <include name="SafeDestruct.java"/>
       <include name="InputListener.java"/>
       <include name="NativeInputListener.java"/>
+      <include name="DownloadUtil.java"/>
     </javac>
   </target>
 </project>

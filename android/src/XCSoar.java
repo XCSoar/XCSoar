@@ -105,6 +105,12 @@ public class XCSoar extends Activity {
       // Android < 2.0 doesn't have Bluetooth support
     }
 
+    try {
+      DownloadUtil.Initialise(this);
+    } catch (VerifyError e) {
+      // Android < 2.3 doesn't have the DownloadManager
+    }
+
     // fullscreen mode
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
