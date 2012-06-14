@@ -30,6 +30,7 @@ Copyright_License {
 #include "Task/Tasks/BaseTask/IntermediatePoint.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Language/Language.hpp"
 #include "Waypoint/Waypoint.hpp"
 

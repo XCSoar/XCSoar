@@ -37,6 +37,7 @@
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Engine/Task/Tasks/OrderedTask.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Operation/Operation.hpp"
 #include "Units/System.hpp"
 

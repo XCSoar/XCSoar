@@ -27,6 +27,7 @@
 class DataNode;
 struct Waypoint;
 class Waypoints;
+class ObservationZonePoint;
 
 /**
  * Class to serialise and de-serialise tasks to/from a #DataNode structure

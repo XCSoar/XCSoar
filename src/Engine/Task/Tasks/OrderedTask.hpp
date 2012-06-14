@@ -38,6 +38,7 @@ class FinishPoint;
 class AbstractTaskFactory;
 class TaskDijkstraMin;
 class TaskDijkstraMax;
+struct Waypoint;
 class Waypoints;
 class AATPoint;
 class FlatBoundingBox;
