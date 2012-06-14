@@ -214,7 +214,7 @@ test_replay(const Contests olc_type,
   contest_manager.SolveExhaustive();
 
   if (verbose) {
-    distance_counts();
+    PrintDistanceCounts();
   }
   return compare_scores(official_score, 
                         contest_manager.GetStats().GetResult(0));
@@ -223,7 +223,7 @@ test_replay(const Contests olc_type,
 
 int main(int argc, char** argv) 
 {
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 

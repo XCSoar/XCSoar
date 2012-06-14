@@ -43,7 +43,7 @@ test_bestcruisetrack(int test_num, int n_wind)
   autopilot_parms.enable_bestcruisetrack = false;
 
   bool fine = (t1 / t0 < 1.01);
-  ok(fine, test_name("faster flying with bestcruisetrack", test_num, n_wind),
+  ok(fine, GetTestName("faster flying with bestcruisetrack", test_num, n_wind),
      0);
 
   if (!fine || verbose)
@@ -58,7 +58,7 @@ main(int argc, char** argv)
   // default arguments
   autopilot_parms.SetIdeal();
 
-  if (!parse_args(argc, argv))
+  if (!ParseArgs(argc, argv))
     return 0;
 
   unsigned i = rand() % (NUM_WIND - 1) + 1;

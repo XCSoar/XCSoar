@@ -26,7 +26,7 @@
 
 int main(int argc, char** argv)
 {
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 
@@ -58,13 +58,13 @@ int main(int argc, char** argv)
   for (int i=0; i<NUM_TASKS+2; i++) {
     TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
-    ok(test_task(task_manager, waypoints, i),test_name("construction",i,0),0);
+    ok(test_task(task_manager, waypoints, i),GetTestName("construction",i,0),0);
   }
 
   for (int i=0; i<NUM_RANDOM; i++) {
     TaskManager task_manager(task_behaviour, waypoints);
     task_manager.SetGlidePolar(glide_polar);
-    ok(test_task(task_manager, waypoints, 7),test_name("construction",7,0),0);
+    ok(test_task(task_manager, waypoints, 7),GetTestName("construction",7,0),0);
   }
 
   return exit_status();

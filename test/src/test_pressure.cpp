@@ -110,7 +110,7 @@ test_isa_density(const fixed alt, const fixed prat)
 int main(int argc, char** argv)
 {
 
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 

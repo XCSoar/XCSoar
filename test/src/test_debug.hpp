@@ -36,9 +36,9 @@ extern "C" {
 #include "Replay/TaskAutoPilot.hpp"
 
 extern int n_samples;
-void distance_counts();
-void print_queries(unsigned n, std::ostream &fout);
-char wait_prompt();
+void PrintDistanceCounts();
+void PrintQueries(unsigned n, std::ostream &fout);
+char WaitPrompt();
 extern int interactive;
 extern int verbose;
 extern int output_skip;
@@ -46,10 +46,10 @@ extern int output_skip;
 extern AutopilotParameters autopilot_parms;
 
 extern int terrain_height;
-const char* test_name(const char* in, int task_num, int wind_num);
+const char* GetTestName(const char* in, int task_num, int wind_num);
 extern std::string replay_file;
 extern std::string task_file;
 
-bool parse_args(int argc, char** argv);
+bool ParseArgs(int argc, char** argv);
 
 #endif

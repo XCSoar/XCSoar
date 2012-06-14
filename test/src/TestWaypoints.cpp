@@ -162,7 +162,7 @@ TestReplace(Waypoints& waypoints, unsigned id)
 int
 main(int argc, char** argv)
 {
-  if (!parse_args(argc, argv))
+  if (!ParseArgs(argc, argv))
     return 0;
 
   plan_tests(14);

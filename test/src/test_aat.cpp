@@ -47,7 +47,7 @@ int main(int argc, char** argv)
   // default arguments
   autopilot_parms.SetIdeal();
 
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 
@@ -57,11 +57,11 @@ int main(int argc, char** argv)
 
   for (int i=0; i<NUM_FLIGHT; i++) {
     unsigned k = rand()%NUM_WIND;
-    ok (test_aat(2,k), test_name("target ",2,k),0);
+    ok (test_aat(2,k), GetTestName("target ",2,k),0);
   }
   for (int i=0; i<NUM_FLIGHT; i++) {
     unsigned k = rand()%NUM_WIND;
-    ok (test_aat(0,k), test_name("target ",0,k),0);
+    ok (test_aat(0,k), GetTestName("target ",0,k),0);
   }
   return exit_status();
 }

@@ -43,7 +43,7 @@ test_effective_mc(int test_num, int n_wind)
   if (ce0 <= ce1 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
 
-  ok(ce0 > ce1, test_name("emc wandering", test_num, n_wind), 0);
+  ok(ce0 > ce1, GetTestName("emc wandering", test_num, n_wind), 0);
 
   // flying too slow
   autopilot_parms.SetIdeal();
@@ -53,7 +53,7 @@ test_effective_mc(int test_num, int n_wind)
   if (ce0 <= ce2 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
 
-  ok(ce0 > ce2, test_name("emc speed slow", test_num, n_wind), 0);
+  ok(ce0 > ce2, GetTestName("emc speed slow", test_num, n_wind), 0);
 
   // flying too fast
   autopilot_parms.SetIdeal();
@@ -63,7 +63,7 @@ test_effective_mc(int test_num, int n_wind)
   if (ce0 <= ce3 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
 
-  ok(ce0 > ce3, test_name("emc speed fast", test_num, n_wind), 0);
+  ok(ce0 > ce3, GetTestName("emc speed fast", test_num, n_wind), 0);
 
   // higher than expected cruise sink
   autopilot_parms.sink_factor = fixed(1.2);
@@ -72,7 +72,7 @@ test_effective_mc(int test_num, int n_wind)
   if (ce0 <= ce4 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
 
-  ok(ce0 > ce4, test_name("emc high sink", test_num, n_wind), 0);
+  ok(ce0 > ce4, GetTestName("emc high sink", test_num, n_wind), 0);
   // effective mc of this should be lower than nominal
   autopilot_parms.sink_factor = fixed(1.0);
 
@@ -83,7 +83,7 @@ test_effective_mc(int test_num, int n_wind)
   if (ce0 <= ce5 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
 
-  ok(ce0 > ce5, test_name("emc slow climb", test_num, n_wind), 0);
+  ok(ce0 > ce5, GetTestName("emc slow climb", test_num, n_wind), 0);
   // effective mc of this should be lower than nominal
   autopilot_parms.climb_factor = fixed(1.0);
 
@@ -94,7 +94,7 @@ test_effective_mc(int test_num, int n_wind)
   if (ce0 >= ce6 || verbose)
     printf("# calc effective mc %g\n", result.calc_effective_mc);
 
-  ok(ce0 < ce6, test_name("emc low sink", test_num, n_wind), 0);
+  ok(ce0 < ce6, GetTestName("emc low sink", test_num, n_wind), 0);
   // effective mc of this should be greater than nominal
   autopilot_parms.sink_factor = fixed(1.0);
 
@@ -123,7 +123,7 @@ main(int argc, char** argv)
   // default arguments
   autopilot_parms.SetIdeal();
 
-  if (!parse_args(argc, argv)) {
+  if (!ParseArgs(argc, argv)) {
     return 0;
   }
 

@@ -102,7 +102,7 @@ protected:
     }
   }
   virtual void OnClose() {
-    wait_prompt();
+    WaitPrompt();
   }
 };
 
@@ -209,7 +209,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
           printf("# airspace warnings updated, size %d\n",
                  (int)airspace_warnings->size());
           print_warnings(*airspace_warnings);
-          wait_prompt();
+          WaitPrompt();
         }
       }
     }
@@ -248,7 +248,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
     f4.flush();
     task_report(task_manager, "end of task\n");
   }
-  wait_prompt();
+  WaitPrompt();
 
   result.time_elapsed = (double)task_manager.GetStats().total.time_elapsed;
   result.time_planned = (double)task_manager.GetStats().total.time_planned;
@@ -256,7 +256,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   result.calc_effective_mc = (double)task_manager.GetStats().effective_mc;
 
   if (verbose)
-    distance_counts();
+    PrintDistanceCounts();
 
   if (airspace_warnings)
     delete airspace_warnings;
@@ -284,7 +284,7 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
   SetupWaypoints(waypoints);
 
   if (verbose)
-    distance_counts();
+    PrintDistanceCounts();
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();

@@ -49,7 +49,7 @@ extern unsigned long zero_skipped;
 extern unsigned long zero_total;
 #endif
 
-void distance_counts() {
+void PrintDistanceCounts() {
   if (n_samples) {
     printf("# Instrumentation\n");
 #ifdef INSTRUMENT_TASK
@@ -81,7 +81,7 @@ void distance_counts() {
 #endif
 }
 
-void print_queries(unsigned n, std::ostream &fout) {
+void PrintQueries(unsigned n, std::ostream &fout) {
 #ifdef INSTRUMENT_TASK
   if (n_queries>0) {
     fout << n << " " << count_intersections/n_queries << "\n";
@@ -98,7 +98,8 @@ void print_queries(unsigned n, std::ostream &fout) {
  * 
  * @return character received by keyboard
  */
-char wait_prompt() {
+char
+WaitPrompt() {
   if (interactive) {
     puts("# [enter to continue]");
     return getchar();
@@ -106,7 +107,8 @@ char wait_prompt() {
   return 0;
 }
 
-bool parse_args(int argc, char** argv) 
+bool
+ParseArgs(int argc, char** argv)
 {
   // initialise random number generator once per test program
   srand(0);
@@ -213,7 +215,7 @@ bool parse_args(int argc, char** argv)
   return true;
 }
 
-const char* test_name(const char* in, int task_num, int wind_num)
+const char* GetTestName(const char* in, int task_num, int wind_num)
 {
   static char buffer[80];
   sprintf(buffer,"%s (task %s, wind %s)", in, task_name(task_num), wind_name(wind_num));

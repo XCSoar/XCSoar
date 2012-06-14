@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
   // default arguments
   autopilot_parms.SetRealistic();
 
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 

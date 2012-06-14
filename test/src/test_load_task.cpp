@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
   task_file = "test/data/apf-bug554.tsk";
 
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 

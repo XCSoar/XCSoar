@@ -43,7 +43,7 @@ test_cruise_efficiency(int test_num, int n_wind)
   if (ce0 <= ce1 || verbose)
     printf("# calc cruise efficiency %g\n", result.calc_cruise_efficiency);
 
-  ok(ce0 > ce1, test_name("ce wandering", test_num, n_wind), 0);
+  ok(ce0 > ce1, GetTestName("ce wandering", test_num, n_wind), 0);
 
   // flying too slow
   autopilot_parms.SetIdeal();
@@ -53,7 +53,7 @@ test_cruise_efficiency(int test_num, int n_wind)
   if (ce0 <= ce2 || verbose)
     printf("# calc cruise efficiency %g\n", result.calc_cruise_efficiency);
 
-  ok(ce0 > ce2, test_name("ce speed slow", test_num, n_wind), 0);
+  ok(ce0 > ce2, GetTestName("ce speed slow", test_num, n_wind), 0);
 
   // flying too fast
   autopilot_parms.SetIdeal();
@@ -63,7 +63,7 @@ test_cruise_efficiency(int test_num, int n_wind)
   if (ce0 <= ce3 || verbose)
     printf("# calc cruise efficiency %g\n", result.calc_cruise_efficiency);
 
-  ok(ce0 > ce3, test_name("ce speed fast", test_num, n_wind), 0);
+  ok(ce0 > ce3, GetTestName("ce speed fast", test_num, n_wind), 0);
 
   // higher than expected cruise sink
   autopilot_parms.sink_factor = fixed(1.2);
@@ -72,7 +72,7 @@ test_cruise_efficiency(int test_num, int n_wind)
   if (ce0 <= ce4 || verbose)
     printf("# calc cruise efficiency %g\n", result.calc_cruise_efficiency);
 
-  ok(ce0 > ce4, test_name("ce high sink", test_num, n_wind), 0);
+  ok(ce0 > ce4, GetTestName("ce high sink", test_num, n_wind), 0);
   // cruise efficiency of this should be lower than nominal
   autopilot_parms.sink_factor = fixed(1.0);
 
@@ -83,7 +83,7 @@ test_cruise_efficiency(int test_num, int n_wind)
   if (ce0 <= ce5 || verbose)
     printf("# calc cruise efficiency %g\n", result.calc_cruise_efficiency);
 
-  ok(ce0 > ce5, test_name("ce slow climb", test_num, n_wind), 0);
+  ok(ce0 > ce5, GetTestName("ce slow climb", test_num, n_wind), 0);
   // cruise efficiency of this should be lower than nominal
   autopilot_parms.climb_factor = fixed(1.0);
 
@@ -94,7 +94,7 @@ test_cruise_efficiency(int test_num, int n_wind)
   if (ce0 >= ce6 || verbose)
     printf("# calc cruise efficiency %g\n", result.calc_cruise_efficiency);
 
-  ok(ce0 < ce6, test_name("ce low sink", test_num, n_wind), 0);
+  ok(ce0 < ce6, GetTestName("ce low sink", test_num, n_wind), 0);
   // cruise efficiency of this should be greater than nominal
   autopilot_parms.sink_factor = fixed(1.0);
 
@@ -118,7 +118,7 @@ main(int argc, char** argv)
   // default arguments
   autopilot_parms.SetIdeal();
 
-  if (!parse_args(argc, argv))
+  if (!ParseArgs(argc, argv))
     return 0;
 
   unsigned i = rand() % NUM_WIND;

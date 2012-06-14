@@ -32,7 +32,7 @@ test_abort(int n_wind)
   SetupWaypoints(waypoints);
 
   if (verbose)
-    distance_counts();
+    PrintDistanceCounts();
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
@@ -63,7 +63,7 @@ test_goto(int n_wind, unsigned id, bool auto_mc)
   SetupWaypoints(waypoints);
 
   if (verbose)
-    distance_counts();
+    PrintDistanceCounts();
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
@@ -97,7 +97,7 @@ test_null()
   SetupWaypoints(waypoints);
 
   if (verbose)
-    distance_counts();
+    PrintDistanceCounts();
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
@@ -125,7 +125,7 @@ main(int argc, char** argv)
   // default arguments
   autopilot_parms.SetIdeal();
 
-  if (!parse_args(argc, argv))
+  if (!ParseArgs(argc, argv))
     return 0;
 
   plan_tests(4);

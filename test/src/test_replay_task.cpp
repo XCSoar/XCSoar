@@ -153,7 +153,7 @@ test_replay()
   sim.Stop();
 
   if (verbose) {
-    distance_counts();
+    PrintDistanceCounts();
     printf("# task elapsed %d (s)\n", (int)task_manager.GetStats().total.time_elapsed);
     printf("# task speed %3.1f (kph)\n", (int)task_manager.GetStats().total.travelled.GetSpeed()*3.6);
     printf("# travelled distance %4.1f (km)\n", 
@@ -176,7 +176,7 @@ int main(int argc, char** argv)
   replay_file = "test/data/apf-bug554.igc";
   task_file = "test/data/apf-bug554.tsk";
 
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 

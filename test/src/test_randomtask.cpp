@@ -28,7 +28,7 @@ int main(int argc, char** argv)
   // default arguments
   autopilot_parms.SetIdeal();
 
-  if (!parse_args(argc,argv)) {
+  if (!ParseArgs(argc,argv)) {
     return 0;
   }
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     if (j+1==NUM_TESTS) {
       verbose=1;
     }
-    ok (test_flight_times(7,i), test_name("flight times",7,i),0);
+    ok (test_flight_times(7,i), GetTestName("flight times",7,i),0);
   }
   return exit_status();
 }

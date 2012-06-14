@@ -33,7 +33,7 @@ test_olc(int n_wind, Contests olc_type)
   SetupWaypoints(waypoints);
 
   if (verbose)
-    distance_counts();
+    PrintDistanceCounts();
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
@@ -63,7 +63,7 @@ main(int argc, char** argv)
   autopilot_parms.SetRealistic();
   autopilot_parms.start_alt = fixed(400);
 
-  if (!parse_args(argc, argv))
+  if (!ParseArgs(argc, argv))
     return 0;
 
   plan_tests(3);
