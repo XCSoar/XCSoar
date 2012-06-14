@@ -158,7 +158,6 @@ class AirspaceAircraftPerformanceSimple:
   fixed v_ld;
   fixed s_ld;
   fixed climb_rate;
-  fixed descent_rate;
 
 protected:
   /**
@@ -166,7 +165,7 @@ protected:
    * Intended to be specialised for a real aircraft performance model.
    */
   AirspaceAircraftPerformanceSimple()
-    :v_ld(30.0), s_ld(2.0), climb_rate(10.0), descent_rate(10.0) {}
+    :v_ld(30.0), s_ld(2.0), climb_rate(10.0) {}
 
 public:
   virtual fixed GetCruiseSpeed() const {

@@ -89,7 +89,7 @@ public:
                                     const fixed &h_max)
     :ZeroFinder(h_min, h_max, fixed_one),
      m_perf(aap), m_distance(distance), m_alt(alt),
-     m_h_min(h_min), m_h_max(h_max) {}
+     m_h_min(h_min) {}
 
   fixed f(const fixed h) {
     return m_perf.SolutionGeneral(m_distance, m_alt-h);
@@ -117,7 +117,6 @@ private:
   const fixed &m_distance;
   const fixed &m_alt;
   const fixed &m_h_min;
-  const fixed &m_h_max;
 };
 
 fixed 
@@ -167,7 +166,7 @@ public:
                                       const fixed &distance_max,
                                       const fixed &dh)
     :ZeroFinder(distance_min, distance_max, fixed_one),
-     m_perf(aap), m_d_min(distance_min), m_d_max(distance_max), m_dh(dh) {}
+     m_perf(aap), m_d_min(distance_min), m_dh(dh) {}
 
   fixed f(const fixed distance) {
     return m_perf.SolutionGeneral(distance, m_dh);
@@ -193,7 +192,6 @@ public:
 private:
   const AirspaceAircraftPerformance &m_perf;
   const fixed &m_d_min;
-  const fixed &m_d_max;
   const fixed &m_dh;
 };
 
