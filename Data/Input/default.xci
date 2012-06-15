@@ -655,6 +655,14 @@ event=Mode default
 label=Setup Plane
 location=7
 
+mode=Config3
+type=key
+data=9
+event=FileManager
+event=Mode default
+label=File Manager
+location=8
+
 # -------------
 # mode=Vario1
 # -------------

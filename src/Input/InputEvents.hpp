@@ -184,6 +184,8 @@ namespace InputEvents
   void eventCredits(const TCHAR *misc);
   void eventWeather(const TCHAR *misc);
   void eventQuickMenu(const TCHAR *misc);
+  void eventFileManager(const TCHAR *misc);
+
   // -------
 };
 

@@ -62,6 +62,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Planes.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
+#include "Dialogs/FileManager.hpp"
 #include "Message.hpp"
 #include "Markers/ProtectedMarkers.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -678,4 +679,10 @@ void
 InputEvents::eventQuickMenu(gcc_unused const TCHAR *misc)
 {
  dlgQuickMenuShowModal(XCSoarInterface::main_window);
+}
+
+void
+InputEvents::eventFileManager(const TCHAR *misc)
+{
+  ShowFileManager();
 }

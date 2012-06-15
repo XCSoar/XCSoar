@@ -141,6 +141,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
+	$(SRC)/Dialogs/FileManager.cpp \
 	$(SRC)/Dialogs/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/PortMonitor.cpp \
 	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
