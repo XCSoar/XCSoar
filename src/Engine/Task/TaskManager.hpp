@@ -32,6 +32,7 @@
 #include "Stats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
+#include "Navigation/Aircraft.hpp"
 
 class AbstractTaskFactory;
 class TaskEvents;

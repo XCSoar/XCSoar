@@ -24,6 +24,7 @@
 #define SCOREDTASKPOINT_HPP
 
 #include "SampledTaskPoint.hpp"
+#include "Navigation/Aircraft.hpp"
 #include "Compiler.h"
 
 /**

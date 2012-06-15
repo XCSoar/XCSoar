@@ -32,6 +32,7 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Factory/AATTaskFactory.cpp \
 	$(TASK_SRC_DIR)/Factory/MixedTaskFactory.cpp \
 	$(TASK_SRC_DIR)/Factory/TouringTaskFactory.cpp \
+	$(TASK_SRC_DIR)/Points/TaskPoint.cpp \
 	$(TASK_SRC_DIR)/Points/SampledTaskPoint.cpp \
 	$(TASK_SRC_DIR)/Points/ScoredTaskPoint.cpp \
 	$(TASK_SRC_DIR)/Points/TaskLeg.cpp \

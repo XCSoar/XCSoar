@@ -21,6 +21,7 @@
 */
 
 #include "Engine/Task/Points/TaskPoint.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 #include "Geo/GeoVector.hpp"
 #include "TestUtil.hpp"
 

@@ -24,11 +24,11 @@
 #ifndef TASKPOINT_HPP
 #define TASKPOINT_HPP
 
+#include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
-#include "Navigation/Aircraft.hpp"
-#include "Geo/GeoVector.hpp"
 
 struct TaskBehaviour;
+struct AircraftState;
 
 /**
  * Base class for all task points 
@@ -132,9 +132,7 @@ public:
     * @return Vector for task leg or GeoVector::Invalid() if there is no next leg
     */
   gcc_pure
-  virtual GeoVector GetNextLegVector() const {
-    return GeoVector::Invalid();
-  }
+  virtual GeoVector GetNextLegVector() const;
 
   /**
    * Set target to parametric value between min and max locations.

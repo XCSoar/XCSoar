@@ -25,6 +25,7 @@
 #include "Geo/Math.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Util/ReservablePriorityQueue.hpp"
+#include "Navigation/Aircraft.hpp"
 
 #include <limits.h>
 
