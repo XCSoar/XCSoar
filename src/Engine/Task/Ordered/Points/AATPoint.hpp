@@ -186,7 +186,6 @@ public:
   }
 
   /* virtual methods from class SampledTaskPoint */
-  virtual void Reset();
   virtual bool UpdateSampleNear(const AircraftState &state,
                                 TaskEvents *task_events,
                                 const TaskProjection &projection);
