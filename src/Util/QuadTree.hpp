@@ -1288,7 +1288,7 @@ public:
   gcc_pure
   std::pair<const_iterator, distance_type>
   FindNearest(const Point location, distance_type range) const {
-    return root.FindNearestIf(bounds, location, range, AlwaysTrue());
+    return root.FindNearestIf(bounds, location, Square(range), AlwaysTrue());
   }
 
   gcc_pure
