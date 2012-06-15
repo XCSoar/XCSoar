@@ -35,7 +35,7 @@ UnorderedTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
   safety_height_arrival = tb.safety_height_arrival;
 }
 
-const GeoVector 
+GeoVector
 UnorderedTaskPoint::GetVectorRemaining(const GeoPoint &reference) const
 {
   return GeoVector(reference, GetLocationRemaining());
@@ -43,13 +43,13 @@ UnorderedTaskPoint::GetVectorRemaining(const GeoPoint &reference) const
 
 // These are dummies, never get called usually
 
-const GeoVector 
+GeoVector
 UnorderedTaskPoint::GetVectorPlanned() const
 {
   return GeoVector(fixed_zero);
 }
 
-const GeoVector 
+GeoVector
 UnorderedTaskPoint::GetVectorTravelled() const
 {
   return GeoVector(fixed_zero);

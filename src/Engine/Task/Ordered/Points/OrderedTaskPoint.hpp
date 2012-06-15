@@ -227,16 +227,16 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
-  virtual const GeoVector GetVectorRemaining(const GeoPoint &reference) const {
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
     return vector_remaining;
   }
-  virtual const GeoVector GetVectorPlanned() const {
+  virtual GeoVector GetVectorPlanned() const {
     return vector_planned;
   }
-  virtual const GeoVector GetVectorTravelled() const {
+  virtual GeoVector GetVectorTravelled() const {
     return vector_travelled;
   }
-  virtual const GeoVector GetNextLegVector() const;
+  virtual GeoVector GetNextLegVector() const;
 
   /* virtual methods from class SampledTaskPoint */
   virtual void UpdateOZ(const TaskProjection &projection);

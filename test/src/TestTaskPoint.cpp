@@ -35,15 +35,15 @@ public:
                  const fixed _elevation)
     :TaskPoint(_type, _location, _elevation) {}
 
-  virtual const GeoVector GetVectorRemaining(const GeoPoint &reference) const {
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
     return GeoVector();
   }
 
-  virtual const GeoVector GetVectorPlanned() const {
+  virtual GeoVector GetVectorPlanned() const {
     return GeoVector();
   }
 
-  virtual const GeoVector GetVectorTravelled() const {
+  virtual GeoVector GetVectorTravelled() const {
     return GeoVector();
   }
 

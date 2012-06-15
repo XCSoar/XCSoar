@@ -108,7 +108,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector GetVectorRemaining(const GeoPoint &reference) const = 0;
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const = 0;
 
   /**
    * Calculate vector from aircraft to destination
@@ -116,7 +116,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector GetVectorPlanned() const = 0;
+  virtual GeoVector GetVectorPlanned() const = 0;
 
   /**
    * Calculate vector travelled along this leg
@@ -124,7 +124,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector GetVectorTravelled() const = 0;
+  virtual GeoVector GetVectorTravelled() const = 0;
 
   /**
     * Calculate vector of next leg, if there is one
@@ -132,7 +132,7 @@ public:
     * @return Vector for task leg or GeoVector::Invalid() if there is no next leg
     */
   gcc_pure
-  virtual const GeoVector GetNextLegVector() const {
+  virtual GeoVector GetNextLegVector() const {
     return GeoVector::Invalid();
   }
 
