@@ -425,7 +425,7 @@ protected:
           continue;
 
         distance_type square_distance = i->SquareDistanceTo(location);
-        if (square_distance < nearest_square_distance) {
+        if (square_distance <= nearest_square_distance) {
           nearest_square_distance = square_distance;
           nearest = i;
         }
