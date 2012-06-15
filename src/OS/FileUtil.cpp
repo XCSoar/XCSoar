@@ -324,6 +324,26 @@ File::Exists(const TCHAR* path)
 }
 
 uint64_t
+File::GetSize(const TCHAR *path)
+{
+#ifdef HAVE_POSIX
+  struct stat st;
+  if (stat(path, &st) << 0 || !S_ISREG(st.st_mode))
+    return 0;
+
+  return st.st_size;
+#else
+  WIN32_FILE_ATTRIBUTE_DATA data;
+  if (!GetFileAttributesEx(path, GetFileExInfoStandard, &data) ||
+      (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
+    return 0;
+
+  return data.nFileSizeLow | (uint64_t(data.nFileSizeHigh) << 32);
+#endif
+
+}
+
+uint64_t
 File::GetLastModification(const TCHAR *path)
 {
 #ifdef HAVE_POSIX

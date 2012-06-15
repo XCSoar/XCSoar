@@ -134,6 +134,12 @@ namespace File
   }
 
   /**
+   * Returns the size of a regular file in bytes.
+   */
+  gcc_pure
+  uint64_t GetSize(const TCHAR *path);
+
+  /**
    * Get a timestamp of last modification that can be used to compare
    * two files with each other
    * @param path Path to the file
