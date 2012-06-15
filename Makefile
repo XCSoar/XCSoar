@@ -78,6 +78,7 @@ include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
 include $(topdir)/build/libgeo.mk
 include $(topdir)/build/libos.mk
+include $(topdir)/build/libthread.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/zlib.mk
@@ -284,8 +285,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/TraceHistoryRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/TaskProgressRenderer.cpp \
-	\
-	$(SRC)/Poco/RWLock.cpp \
 	\
 	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -661,14 +660,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/XML/Writer.cpp \
 	$(SRC)/XML/DataNode.cpp \
 	$(SRC)/XML/DataNodeXML.cpp \
-	$(SRC)/Thread/Thread.cpp \
-	$(SRC)/Thread/SuspensibleThread.cpp \
-	$(SRC)/Thread/RecursivelySuspensibleThread.cpp \
-	$(SRC)/Thread/WorkerThread.cpp \
-	$(SRC)/Thread/StandbyThread.cpp \
-	$(SRC)/Thread/Mutex.cpp \
-	$(SRC)/Thread/Debug.cpp \
-	$(SRC)/Thread/Notify.cpp \
 	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
@@ -831,7 +822,7 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	SHAPELIB JASPER ZZIP \
-	LIBNET OS \
+	LIBNET OS THREAD \
 	UTIL GEO MATH
 
 ifeq ($(HAVE_POSIX),n)
