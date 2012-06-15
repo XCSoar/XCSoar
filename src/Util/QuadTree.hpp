@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 Max Kellermann <max@duempel.org>
+ *               2012 Tobias Bieniek <tobias.bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -417,7 +418,7 @@ protected:
     FindNearestIf(const Point location, distance_type square_range,
                   const P &predicate) const {
       const Leaf *nearest = NULL;
-      distance_type nearest_square_distance = max_distance();
+      distance_type nearest_square_distance = square_range;
 
       for (const Leaf *i = head; i != NULL; i = i->next) {
         if (!predicate(i->value))
