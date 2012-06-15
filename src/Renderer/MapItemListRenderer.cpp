@@ -158,7 +158,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                      (PixelScalar)(rc.top + line_height / 2) };
 
   RasterPoint arrow[] = {
-      { -9, -4 }, { 0, 5 }, { 9, -4 }
+      { -7, -3 }, { 0, 4 }, { 7, -3 }
   };
 
   Angle arrow_angle = reachable ? Angle::Degrees(fixed_180) : Angle::Zero();
