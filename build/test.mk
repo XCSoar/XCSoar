@@ -84,7 +84,7 @@ TEST_NAMES = \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver TestClimbAvCalc \
 	TestWaypointReader TestThermalBase \
-	test_load_task TestFlarmNet \
+	TestFlarmNet \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
@@ -283,23 +283,6 @@ TEST_MATH_TABLES_SOURCES = \
 	$(TEST_SRC_DIR)/TestMathTables.cpp
 TEST_MATH_TABLES_DEPENDS = MATH
 $(eval $(call link-program,TestMathTables,TEST_MATH_TABLES))
-
-TEST_LOAD_TASK_SOURCES = \
-	$(SRC)/Engine/Navigation/Aircraft.cpp \
-	$(SRC)/Engine/Util/Gradient.cpp \
-	$(SRC)/Task/Serialiser.cpp \
-	$(SRC)/Task/Deserialiser.cpp \
-	$(SRC)/XML/Node.cpp \
-	$(SRC)/XML/Parser.cpp \
-	$(SRC)/XML/Writer.cpp \
-	$(SRC)/XML/DataNode.cpp \
-	$(SRC)/XML/DataNodeXML.cpp \
-	$(SRC)/Formatter/AirspaceFormatter.cpp \
-	$(SRC)/Atmosphere/Pressure.cpp \
-	$(SRC)/NMEA/FlyingState.cpp \
-	$(TEST_SRC_DIR)/test_load_task.cpp
-TEST_LOAD_TASK_DEPENDS = TEST1
-$(eval $(call link-program,test_load_task,TEST_LOAD_TASK))
 
 TEST_ANGLE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
