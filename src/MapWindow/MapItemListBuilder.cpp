@@ -258,10 +258,9 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
     if (!task_point.IsInSector(a))
       continue;
 
-    const ObservationZonePoint *oz = task_point.GetOZPoint();
-    if (oz)
-      list.checked_append(new TaskOZMapItem(i, *oz, task_point.GetType(),
-                                            task_point.GetWaypoint()));
+    const ObservationZonePoint &oz = task_point.GetObservationZone();
+    list.checked_append(new TaskOZMapItem(i, oz, task_point.GetType(),
+                                          task_point.GetWaypoint()));
   }
 }
 

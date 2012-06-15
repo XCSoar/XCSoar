@@ -142,8 +142,8 @@ OrderedTaskPoint::Equals(const OrderedTaskPoint &other) const
 {
   return GetWaypoint() == other.GetWaypoint() &&
     GetType() == other.GetType() &&
-    GetOZPoint()->Equals(*other.GetOZPoint()) &&
-    other.GetOZPoint()->Equals(*GetOZPoint());
+    GetObservationZone().Equals(other.GetObservationZone()) &&
+    other.GetObservationZone().Equals(GetObservationZone());
 }
 
 OrderedTaskPoint* 
@@ -156,19 +156,19 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
 
   switch (GetType()) {
   case START:
-    return new StartPoint(GetOZPoint()->Clone(waypoint->location),
+    return new StartPoint(GetObservationZone().Clone(waypoint->location),
                           *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AST:
-    return new ASTPoint(GetOZPoint()->Clone(waypoint->location),
+    return new ASTPoint(GetObservationZone().Clone(waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AAT:
-    return new AATPoint(GetOZPoint()->Clone(waypoint->location),
+    return new AATPoint(GetObservationZone().Clone(waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case FINISH:
-    return new FinishPoint(GetOZPoint()->Clone(waypoint->location),
+    return new FinishPoint(GetObservationZone().Clone(waypoint->location),
                            *waypoint, task_behaviour, ordered_task_behaviour,
                            boundary_scored);
 

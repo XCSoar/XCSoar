@@ -39,20 +39,20 @@
 #include <algorithm>
 
 static fixed
-GetOZSize(ObservationZonePoint *oz)
+GetOZSize(const ObservationZonePoint &oz)
 {
-  switch (oz->shape) {
+  switch (oz.shape) {
   case ObservationZonePoint::SECTOR:
-    return ((SectorZone *)oz)->GetRadius();
+    return ((const SectorZone &)oz).GetRadius();
 
   case ObservationZonePoint::LINE:
-    return ((LineSectorZone *)oz)->GetLength();
+    return ((const LineSectorZone &)oz).GetLength();
 
   case ObservationZonePoint::CYLINDER:
-    return ((CylinderZone *)oz)->GetRadius();
+    return ((const CylinderZone &)oz).GetRadius();
 
   case ObservationZonePoint::ANNULAR_SECTOR:
-    return ((AnnularSectorZone *)oz)->GetRadius();
+    return ((const AnnularSectorZone &)oz).GetRadius();
 
   default:
     return fixed_minus_one;
@@ -63,7 +63,7 @@ OrderedTaskPoint*
 AbstractTaskFactory::CreateMutatedPoint(const OrderedTaskPoint &tp,
                                         const TaskPointFactoryType newtype) const
 {
-  fixed ozsize = GetOZSize(tp.GetOZPoint());
+  fixed ozsize = GetOZSize(tp.GetObservationZone());
   return CreatePoint(newtype, tp.GetWaypoint(), ozsize, ozsize, ozsize);
 }
 
@@ -174,11 +174,11 @@ AbstractTaskFactory::CreateFinish(const Waypoint &wp) const
 TaskPointFactoryType 
 AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
 {
-  const ObservationZonePoint* oz = point.GetOZPoint();
+  const ObservationZonePoint &oz = point.GetObservationZone();
 
   switch (point.GetType()) {
   case TaskPoint::START:
-    switch (oz->shape) {
+    switch (oz.shape) {
     case ObservationZonePoint::FAI_SECTOR:
       return TaskPointFactoryType::START_SECTOR;
 
@@ -199,7 +199,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     break;
 
   case TaskPoint::AAT:
-    switch (oz->shape) {
+    switch (oz.shape) {
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::FAI_SECTOR:
     case ObservationZonePoint::KEYHOLE:
@@ -216,7 +216,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     break;
 
   case TaskPoint::AST:
-    switch (oz->shape) {
+    switch (oz.shape) {
     case ObservationZonePoint::FAI_SECTOR:
       return TaskPointFactoryType::FAI_SECTOR;
 
@@ -239,7 +239,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     break;
 
   case TaskPoint::FINISH:
-    switch (oz->shape) {
+    switch (oz.shape) {
     case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::FAI_SECTOR:
       return TaskPointFactoryType::FINISH_SECTOR;
@@ -745,7 +745,7 @@ AbstractTaskFactory::ValidateFAIOZs()
 
   for (unsigned i = 0; i < task.TaskSize() && valid; i++) {
     const OrderedTaskPoint &tp = task.GetPoint(i);
-    const fixed ozsize = GetOZSize(tp.GetOZPoint());
+    const fixed ozsize = GetOZSize(tp.GetObservationZone());
 
     switch (GetType(tp)) {
     case TaskPointFactoryType::START_BGA:

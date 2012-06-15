@@ -51,8 +51,8 @@ public:
    *
    * @return Observation zone
    */
-  ObservationZonePoint* GetOZPoint() const {
-    return oz_point;
+  ObservationZonePoint &GetObservationZone() const {
+    return *oz_point;
   }
 
   bool IsInSector(const GeoPoint &location) const;

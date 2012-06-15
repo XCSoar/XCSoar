@@ -91,7 +91,7 @@ RefreshView()
   ShowFormControl(*wf, _T("frmOZSector"), false);
   ShowFormControl(*wf, _T("frmOZCylinder"), false);
 
-  const ObservationZonePoint &oz = *tp.GetOZPoint();
+  const ObservationZonePoint &oz = tp.GetObservationZone();
 
   switch (oz.shape) {
   case ObservationZonePoint::SECTOR:
@@ -202,7 +202,7 @@ static void
 ReadValues()
 {
   OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
-  ObservationZonePoint &oz = *tp.GetOZPoint();
+  ObservationZonePoint &oz = tp.GetObservationZone();
 
   switch (oz.shape) {
   case ObservationZonePoint::ANNULAR_SECTOR: {

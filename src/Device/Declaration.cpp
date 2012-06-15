@@ -33,11 +33,8 @@ gcc_pure
 static Declaration::TurnPoint::Shape
 get_shape(const OrderedTaskPoint &tp)
 {
-  const ObservationZonePoint *oz = tp.GetOZPoint();
-  if (oz == NULL)
-    return Declaration::TurnPoint::SECTOR;
-
-  switch (oz->shape) {
+  const ObservationZonePoint &oz = tp.GetObservationZone();
+  switch (oz.shape) {
   case ObservationZonePoint::LINE:
     return Declaration::TurnPoint::LINE;
 
@@ -53,11 +50,8 @@ gcc_pure
 static unsigned
 get_radius(const OrderedTaskPoint &tp)
 {
-  const ObservationZonePoint *oz = tp.GetOZPoint();
-  if (oz == NULL)
-    return Declaration::TurnPoint::SECTOR;
-
-  return (unsigned)((const CylinderZone *)oz)->GetRadius();
+  const CylinderZone &oz = (const CylinderZone &)tp.GetObservationZone();
+  return (unsigned)oz.GetRadius();
 }
 
 Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)

@@ -159,7 +159,8 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                             - Layout::FastScale(4)),
                                 Layout::FastScale(10));
 
-  OZPreviewRenderer::Draw(canvas, *tp.GetOZPoint(), pt, radius, task_look,
+  OZPreviewRenderer::Draw(canvas, tp.GetObservationZone(),
+                          pt, radius, task_look,
                           CommonInterface::GetMapSettings().airspace,
                           airspace_look);
 
@@ -192,7 +193,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   // Draw details line
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
-  OrderedTaskPointRadiusLabel(*tp.GetOZPoint(), buffer);
+  OrderedTaskPointRadiusLabel(tp.GetObservationZone(), buffer);
   if (!StringIsEmpty(buffer))
     canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
 

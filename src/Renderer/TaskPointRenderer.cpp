@@ -188,7 +188,7 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 void
 TaskPointRenderer::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
 {
-  ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, *tp.GetOZPoint(),
+  ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, tp.GetObservationZone(),
            index - active_index);
 }
 
@@ -199,9 +199,9 @@ TaskPointRenderer::DrawOZForeground(const OrderedTaskPoint &tp)
   if (mode_optional_start)
     offset = -1; // render optional starts as deactivated
 
-  ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, m_proj, *tp.GetOZPoint(),
+  ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, m_proj, tp.GetObservationZone(),
            offset);
-  ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, m_proj, *tp.GetOZPoint(),
+  ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, m_proj, tp.GetObservationZone(),
            offset);
 }
 

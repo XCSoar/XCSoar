@@ -125,23 +125,23 @@ public:
   }
   virtual void Visit(const OrderedTaskPoint& tp) {
     printf("# got an otp\n");
-    ozv.Visit(*tp.GetOZPoint());
+    ozv.Visit(tp.GetObservationZone());
   }
   virtual void Visit(const FinishPoint& tp) {
     printf("# got an ftp\n");
-    ozv.Visit(*tp.GetOZPoint());
+    ozv.Visit(tp.GetObservationZone());
   }
   virtual void Visit(const StartPoint& tp) {
     printf("# got an stp\n");
-    ozv.Visit(*tp.GetOZPoint());
+    ozv.Visit(tp.GetObservationZone());
   }
   virtual void Visit(const AATPoint& tp) {
     printf("# got an aat\n");
-    ozv.Visit(*tp.GetOZPoint());
+    ozv.Visit(tp.GetObservationZone());
   }
   virtual void Visit(const ASTPoint& tp) {
     printf("# got an ast\n");
-    ozv.Visit(*tp.GetOZPoint());
+    ozv.Visit(tp.GetObservationZone());
   }
 private:
   ObservationZoneVisitorPrint ozv;
@@ -400,9 +400,9 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(1);
   if (wp) {
     tp = fact.CreateStart(TaskPointFactoryType::START_LINE,*wp);
-    if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
-      CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->SetRadius(fixed(5000.0));
+    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
+      cz.SetRadius(fixed(5000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
@@ -428,9 +428,9 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(3);
   if (wp) {
     tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
-      CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->SetRadius(fixed(30000.0));
+    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
+      cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
@@ -453,9 +453,9 @@ bool test_task_mixed(TaskManager& task_manager,
   wp = waypoints.LookupId(5);
   if (wp) {
     tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
-      CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->SetRadius(fixed(30000.0));
+    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
+      cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) return false;
@@ -575,9 +575,9 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.LookupId(2);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
-      CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->SetRadius(fixed(30000.0));
+    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
+      cz.SetRadius(fixed(30000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {
@@ -590,9 +590,9 @@ bool test_task_aat(TaskManager& task_manager,
   wp = waypoints.LookupId(3);
   if (wp) {
     OrderedTaskPoint* tp = fact.CreateIntermediate(TaskPointFactoryType::AAT_CYLINDER,*wp);
-    if (tp->GetOZPoint()->shape == ObservationZonePoint::CYLINDER) {
-      CylinderZone *cz = (CylinderZone *)tp->GetOZPoint();
-      cz->SetRadius(fixed(40000.0));
+    if (tp->GetObservationZone().shape == ObservationZonePoint::CYLINDER) {
+      CylinderZone &cz = (CylinderZone &)tp->GetObservationZone();
+      cz.SetRadius(fixed(40000.0));
       tp->UpdateOZ(projection);
     }
     if (!fact.Append(*tp,false)) {

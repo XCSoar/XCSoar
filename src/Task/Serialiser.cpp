@@ -78,7 +78,7 @@ Serialiser::Serialise(const OrderedTaskPoint &data, const TCHAR* name)
 
   std::unique_ptr<DataNode> ochild(child->AppendChild(_T("ObservationZone")));
   Serialiser oser(*ochild);
-  oser.Serialise(*data.GetOZPoint());
+  oser.Serialise(data.GetObservationZone());
 }
 
 void 

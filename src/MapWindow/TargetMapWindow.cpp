@@ -283,7 +283,7 @@ GetRadius(const ObservationZonePoint &oz)
 static fixed
 GetRadius(const OrderedTaskPoint &tp)
 {
-  return GetRadius(*tp.GetOZPoint());
+  return GetRadius(tp.GetObservationZone());
 }
 
 void
