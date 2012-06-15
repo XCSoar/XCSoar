@@ -153,17 +153,30 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
                        * (TrailLook::NUMSNAILCOLORS - 1));
         index = max(0u, min(TrailLook::NUMSNAILCOLORS - 1, index));
         canvas.Select(look.trail_pens[index]);
+        canvas.DrawLinePiece(last_point, pt);
       } else {
         const fixed colour_vario = negative(it->GetVario())
           ? - it->GetVario() / value_min
           : it->GetVario() / value_max ;
 
-        if (!scaled_trail)
-          canvas.Select(look.trail_pens[GetSnailColorIndex(colour_vario)]);
-        else
-          canvas.Select(look.scaled_trail_pens[GetSnailColorIndex(colour_vario)]);
+        unsigned color_index = GetSnailColorIndex(colour_vario);
+        if (negative(it->GetVario()) &&
+            (settings.type == TrailSettings::Type::VARIO_1_DOTS ||
+             settings.type == TrailSettings::Type::VARIO_2_DOTS)) {
+          canvas.SelectNullPen();
+          canvas.Select(look.trail_brushes[color_index]);
+          canvas.DrawCircle((pt.x + last_point.x) / 2, (pt.y + last_point.y) / 2,
+                            look.trail_widths[color_index]);
+
+        } else {
+          if (!scaled_trail)
+            canvas.Select(look.trail_pens[color_index]);
+          else
+            canvas.Select(look.scaled_trail_pens[color_index]);
+
+          canvas.DrawLinePiece(last_point, pt);
+        }
       }
-      canvas.DrawLinePiece(last_point, pt);
     }
     last_point = pt;
     last_valid = true;

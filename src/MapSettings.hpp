@@ -86,6 +86,8 @@ struct TrailSettings {
     VARIO_1,
     VARIO_2,
     ALTITUDE,
+    VARIO_1_DOTS,
+    VARIO_2_DOTS,
   } type;
 
   enum class Length: uint8_t {

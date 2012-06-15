@@ -99,7 +99,9 @@ static const StaticEnumChoice  trail_length_list[] = {
 const TCHAR *trail_type_help = N_("Sets the type of the snail trail display.");
 static const StaticEnumChoice  trail_type_list[] = {
   { (unsigned)TrailSettings::Type::VARIO_1, N_("Vario #1"), trail_type_help },
+  { (unsigned)TrailSettings::Type::VARIO_1_DOTS, N_("Vario #1 (with dots)"), trail_type_help },
   { (unsigned)TrailSettings::Type::VARIO_2, N_("Vario #2"), trail_type_help },
+  { (unsigned)TrailSettings::Type::VARIO_2_DOTS, N_("Vario #2 (with dots)"), trail_type_help },
   { (unsigned)TrailSettings::Type::ALTITUDE, N_("Altitude"), trail_type_help },
   { 0 }
 };

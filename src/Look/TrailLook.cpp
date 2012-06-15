@@ -68,6 +68,7 @@ GetColor(TrailSettings::Type type, short ramp_h) {
   case TrailSettings::Type::ALTITUDE:
     return GetAltitudeColor(ramp_h);
   case TrailSettings::Type::VARIO_2:
+  case TrailSettings::Type::VARIO_2_DOTS:
     return GetVario2Color(ramp_h);
   default:
     return GetVario1Color(ramp_h);
@@ -92,6 +93,8 @@ TrailLook::Initialise(const TrailSettings &settings)
                    UPixelScalar((i - NUMSNAILCOLORS / 2) *
                                 Layout::ScalePenWidth(16) / NUMSNAILCOLORS));
 
+    trail_widths[i] = iwidth;
+    trail_brushes[i].Set(color);
     trail_pens[i].Set(minwidth, color);
     scaled_trail_pens[i].Set(iwidth, color);
   }
