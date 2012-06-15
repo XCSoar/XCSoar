@@ -214,8 +214,8 @@ public:
       return Square(dx) + Square(dy);
     }
 
-    bool IsWithinSquareRange(const Point &other, distance_type range) const {
-      return SquareDistanceTo(other) <= range;
+    bool IsWithinSquareRange(const Point &other, distance_type square_range) const {
+      return SquareDistanceTo(other) <= square_range;
     }
 
     /**
