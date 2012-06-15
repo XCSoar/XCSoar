@@ -31,9 +31,7 @@ class TaskPoint;
 /**
  * Class holding an ObzervationZonePoint, directing calls to it
  */
-class ObservationZoneClient: 
-  public virtual ObservationZone
-{
+class ObservationZoneClient : public ObservationZone {
   ObservationZonePoint *oz_point;
 
 public:
