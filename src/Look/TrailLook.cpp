@@ -46,7 +46,7 @@ GetVario2Color(short ramp_h) {
     {200, 0xff, 0x00, 0x00}
   };
 
-  return ColorRampLookup(ramp_h, snail_colors_vario2, 3);
+  return ColorRampLookup(ramp_h, snail_colors_vario2, 4);
 }
 
 static Color
@@ -59,7 +59,7 @@ GetAltitudeColor(short ramp_h) {
     {200, 0x00, 0x00, 0xff},
   };
 
-  return ColorRampLookup(ramp_h, snail_colors_alt, 3);
+  return ColorRampLookup(ramp_h, snail_colors_alt, 5);
 }
 
 static Color
