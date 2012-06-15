@@ -24,12 +24,12 @@
 #define SAMPLEDTASKPOINT_H
 
 #include "Geo/SearchPointVector.hpp"
-#include "Task/ObservationZones/ObservationZone.hpp"
 #include "TaskWaypoint.hpp"
 #include "Compiler.h"
 
 class TaskEvents;
 class TaskProjection;
+class OZBoundary;
 struct GeoPoint;
 
 /**
@@ -207,7 +207,7 @@ private:
   gcc_pure
   virtual bool SearchBoundaryPoints() const = 0;
 
-  virtual ObservationZone::Boundary GetBoundary() const = 0;
+  virtual OZBoundary GetBoundary() const = 0;
 
   /**
    * Retrieve interior sample polygon.

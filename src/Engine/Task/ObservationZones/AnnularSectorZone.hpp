@@ -90,7 +90,7 @@ public:
   /* virtual methods from class ObservationZone */
   virtual bool IsInSector(const AircraftState &ref) const;
   virtual GeoPoint GetBoundaryParametric(fixed t) const;
-  virtual Boundary GetBoundary() const;
+  virtual OZBoundary GetBoundary() const;
 
   /* virtual methods from class ObservationZonePoint */
   virtual bool Equals(const ObservationZonePoint &other) const;

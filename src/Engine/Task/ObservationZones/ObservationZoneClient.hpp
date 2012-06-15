@@ -23,10 +23,13 @@
 #ifndef OBSERVATIONZONECLIENT_HPP
 #define OBSERVATIONZONECLIENT_HPP
 
-#include "ObservationZone.hpp"
+#include "Math/fixed.hpp"
 
 class ObservationZonePoint;
+class OZBoundary;
 class TaskPoint;
+struct GeoPoint;
+struct AircraftState;
 
 /**
  * Class holding an ObzervationZonePoint, directing calls to it
@@ -66,7 +69,7 @@ public:
   GeoPoint GetBoundaryParametric(fixed t) const;
 
   gcc_pure
-  ObservationZone::Boundary GetBoundary() const;
+  OZBoundary GetBoundary() const;
 
   virtual fixed ScoreAdjustment() const;
 

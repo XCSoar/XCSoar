@@ -89,7 +89,7 @@ public:
   }
 
   virtual GeoPoint GetBoundaryParametric(fixed t) const;
-  virtual Boundary GetBoundary() const;
+  virtual OZBoundary GetBoundary() const;
   virtual fixed ScoreAdjustment() const;
 
   /* virtual methods from class ObservationZonePoint */

@@ -21,6 +21,7 @@
 */
 
 #include "CylinderZone.hpp"
+#include "Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 
 fixed
@@ -36,10 +37,10 @@ CylinderZone::GetBoundaryParametric(fixed t) const
            EndPoint(GetReference());
 }
 
-ObservationZone::Boundary
+OZBoundary
 CylinderZone::GetBoundary() const
 {
-  Boundary boundary;
+  OZBoundary boundary;
 
   const unsigned steps = 20;
   const Angle delta = Angle::FullCircle() / steps;

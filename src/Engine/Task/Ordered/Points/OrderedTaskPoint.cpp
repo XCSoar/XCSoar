@@ -26,6 +26,7 @@
 #include "AATPoint.hpp"
 #include "FinishPoint.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
+#include "Task/ObservationZones/Boundary.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Geo/Math.hpp"
@@ -106,6 +107,12 @@ OrderedTaskPoint::SearchNominalIfUnsampled() const
   return active_state == BEFORE_ACTIVE;
 }
 
+OZBoundary
+OrderedTaskPoint::GetBoundary() const
+{
+  return ObservationZoneClient::GetBoundary();
+}
+
 fixed 
 OrderedTaskPoint::DoubleLegDistance(const GeoPoint &ref) const
 {
@@ -167,7 +174,7 @@ OrderedTaskPoint::ScanProjection(TaskProjection &task_projection) const
   task_projection.scan_location(GetLocation());
   #define fixed_steps fixed(0.05)
 
-  const ObservationZone::Boundary boundary = GetBoundary();
+  const OZBoundary boundary = GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
     task_projection.scan_location(*i);
 }
@@ -177,7 +184,7 @@ OrderedTaskPoint::UpdateBoundingBox(const TaskProjection &task_projection)
 {
   flat_bb = FlatBoundingBox(task_projection.project(GetLocation()));
 
-  const ObservationZone::Boundary boundary = GetBoundary();
+  const OZBoundary boundary = GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
     flat_bb.Expand(task_projection.project(*i));
 

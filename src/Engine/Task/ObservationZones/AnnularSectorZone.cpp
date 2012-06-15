@@ -21,6 +21,7 @@
 */
 
 #include "AnnularSectorZone.hpp"
+#include "Boundary.hpp"
 #include "Geo/GeoVector.hpp"
 
 GeoPoint
@@ -53,10 +54,10 @@ AnnularSectorZone::GetBoundaryParametric(fixed t) const
   return GeoVector(d, a).EndPoint(GetReference());
 }
 
-ObservationZone::Boundary
+OZBoundary
 AnnularSectorZone::GetBoundary() const
 {
-  Boundary boundary;
+  OZBoundary boundary;
 
   const unsigned steps = 20;
   const Angle delta = Angle::FullCircle() / steps;

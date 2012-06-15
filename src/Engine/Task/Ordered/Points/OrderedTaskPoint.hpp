@@ -252,9 +252,7 @@ public:
     return ObservationZoneClient::IsInSector(ref);
   }
 
-  virtual ObservationZone::Boundary GetBoundary() const {
-    return ObservationZoneClient::GetBoundary();
-  }
+  virtual OZBoundary GetBoundary() const;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
