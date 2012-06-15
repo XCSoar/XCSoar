@@ -23,10 +23,11 @@
 #include "Math/FastMath.h"
 #include "Printing.hpp"
 #define DO_PRINT
-#include "harness_flight.hpp"
+#include "test_debug.hpp"
 #include "harness_airspace.hpp"
 #include "Route/AirspaceRoute.hpp"
 #include "Geo/SpeedVector.hpp"
+#include "Geo/GeoVector.hpp"
 #include "GlideSolvers/GlideSettings.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Terrain/RasterMap.hpp"
@@ -163,13 +164,6 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 int
 main(int argc, char** argv)
 {
-  // default arguments
-  autopilot_parms.SetIdeal();
-
-  if (!ParseArgs(argc, argv)) {
-    return 0;
-  }
-
   const char hc_path[] = "tmp/terrain";
 
   TCHAR jp2_path[4096];

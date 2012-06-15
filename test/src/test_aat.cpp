@@ -22,6 +22,7 @@
 
 #include "Math/FastMath.h"
 #include "harness_flight.hpp"
+#include "harness_wind.hpp"
 
 static bool
 test_aat(int test_num, int n_wind)

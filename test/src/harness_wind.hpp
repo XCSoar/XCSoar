@@ -20,28 +20,35 @@
 }
 */
 
-#include "Math/FastMath.h"
-#include "harness_flight.hpp"
-#include "harness_wind.hpp"
+#include "Math/Angle.hpp"
 
-int main(int argc, char** argv) 
+#include <stdio.h>
+
+#define NUM_WIND 9
+
+static inline fixed
+wind_to_mag(int n_wind)
 {
-  // default arguments
-  autopilot_parms.SetIdeal();
+  if (n_wind)
+    return (fixed(n_wind - 1) / 4 + fixed_one) * 5;
 
-  if (!ParseArgs(argc,argv)) {
-    return 0;
-  }
+  return fixed_zero;
+}
 
-#define NUM_TERRAIN 5
+static inline Angle
+wind_to_dir(int n_wind)
+{
+  if (n_wind)
+    return Angle::Degrees(fixed(90 * ((n_wind - 1) % 4))).AsBearing();
 
-  plan_tests(NUM_TERRAIN);
+  return Angle::Zero();
+}
 
-  for (int j=0; j<NUM_TERRAIN; j++) {
-    terrain_height = (int)((800)*(j+1)/(NUM_TERRAIN*1.0));
-
-    unsigned i = rand()%NUM_WIND;
-    ok (test_flight_times(1,i), GetTestName("high terrain",7,i),0);
-  }
-  return exit_status();
+static inline const char*
+wind_name(int n_wind)
+{
+  static char buffer[80];
+  sprintf(buffer,"%d m/s @ %d", (int)wind_to_mag(n_wind),
+          (int)wind_to_dir(n_wind).Degrees());
+  return buffer;
 }

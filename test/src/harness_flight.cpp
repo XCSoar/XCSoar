@@ -22,6 +22,7 @@
 
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
+#include "harness_wind.hpp"
 #include "TaskEventsPrint.hpp"
 #include "Util/AircraftStateFilter.hpp"
 #include "Replay/TaskAutoPilot.hpp"
@@ -40,33 +41,6 @@ aat_min_time(int test_num)
   default:
     return beh.aat_min_time;
   }
-}
-
-static fixed
-wind_to_mag(int n_wind)
-{
-  if (n_wind)
-    return (fixed(n_wind - 1) / 4 + fixed_one) * 5;
-
-  return fixed_zero;
-}
-
-static Angle
-wind_to_dir(int n_wind)
-{
-  if (n_wind)
-    return Angle::Degrees(fixed(90 * ((n_wind - 1) % 4))).AsBearing();
-
-  return Angle::Zero();
-}
-
-const char*
-wind_name(int n_wind)
-{
-  static char buffer[80];
-  sprintf(buffer,"%d m/s @ %d", (int)wind_to_mag(n_wind),
-          (int)wind_to_dir(n_wind).Degrees());
-  return buffer;
 }
 
 #include "Task/TaskManager.hpp"

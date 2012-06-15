@@ -22,6 +22,7 @@
 
 #include "Math/FastMath.h"
 #include "harness_flight.hpp"
+#include "harness_wind.hpp"
 
 int main(int argc, char** argv) 
 {

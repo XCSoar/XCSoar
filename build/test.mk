@@ -229,8 +229,10 @@ TEST_TROUTE_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_troute.cpp
-TEST_TROUTE_DEPENDS = TEST1 JASPER OS GEO
+TEST_TROUTE_DEPENDS = JASPER IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_troute,TEST_TROUTE))
 
 TEST_REACH_SOURCES = \
@@ -241,8 +243,10 @@ TEST_REACH_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_reach.cpp
-TEST_REACH_DEPENDS = TEST1 JASPER OS GEO
+TEST_REACH_DEPENDS = JASPER IO ZZIP OS ROUTE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_reach,TEST_REACH))
 
 TEST_ROUTE_SOURCES = \
@@ -258,11 +262,16 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/AirspacePrinting.cpp \
+	$(TEST_SRC_DIR)/harness_airspace.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/test_route.cpp
-TEST_ROUTE_DEPENDS = TEST1 JASPER OS GEO
+TEST_ROUTE_DEPENDS = JASPER IO ZZIP OS ROUTE AIRSPACE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
+	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
@@ -273,10 +282,18 @@ TEST_REPLAY_TASK_SOURCES = \
 	$(SRC)/XML/Writer.cpp \
 	$(SRC)/XML/DataNode.cpp \
 	$(SRC)/XML/DataNodeXML.cpp \
-	$(SRC)/Formatter/AirspaceFormatter.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/Replay/IgcReplay.cpp \
+	$(SRC)/Replay/TaskAutoPilot.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/TaskPrinting.cpp \
+	$(TEST_SRC_DIR)/TaskEventsPrint.cpp \
+	$(TEST_SRC_DIR)/harness_task.cpp \
+	$(TEST_SRC_DIR)/test_debug.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
-TEST_REPLAY_TASK_DEPENDS = TEST1
+TEST_REPLAY_TASK_DEPENDS = TASK ROUTE WAYPOINT GLIDE GEO MATH IO OS UTIL
 $(eval $(call link-program,test_replay_task,TEST_REPLAY_TASK))
 
 TEST_MATH_TABLES_SOURCES = \
@@ -2114,8 +2131,9 @@ $(eval $(call link-program,RunTaskEditorDialog,RUN_TASK_EDITOR_DIALOG))
 TEST_NOTIFY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestNotify.cpp
-TEST_NOTIFY_DEPENDS = SCREEN TEST1 OS THREAD
+TEST_NOTIFY_DEPENDS = SCREEN MATH UTIL OS THREAD
 $(eval $(call link-program,TestNotify,TEST_NOTIFY))
 
 FEED_NMEA_SOURCES = \
