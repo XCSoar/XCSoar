@@ -130,11 +130,13 @@ public:
   AirspaceListBuilderVisitor(MapItemList &_list):list(_list) {}
 
   void Visit(const AirspacePolygon &airspace) {
-    list.checked_append(new AirspaceMapItem(airspace));
+    if (!list.full())
+      list.append(new AirspaceMapItem(airspace));
   }
 
   void Visit(const AirspaceCircle &airspace) {
-    list.checked_append(new AirspaceMapItem(airspace));
+    if (!list.full())
+      list.append(new AirspaceMapItem(airspace));
   }
 };
 
@@ -147,7 +149,8 @@ public:
   WaypointListBuilderVisitor(MapItemList &_list):list(_list) {}
 
   void Visit(const Waypoint &waypoint) {
-    list.checked_append(new WaypointMapItem(waypoint));
+    if (!list.full())
+      list.append(new WaypointMapItem(waypoint));
   }
 };
 
@@ -155,6 +158,9 @@ void
 MapItemListBuilder::AddLocation(const NMEAInfo &basic,
                                 const RasterTerrain *terrain)
 {
+  if (list.full())
+    return;
+
   GeoVector vector;
   if (basic.location_available)
     vector = basic.location.DistanceBearing(location);
@@ -167,7 +173,7 @@ MapItemListBuilder::AddLocation(const NMEAInfo &basic,
   else
     elevation = RasterBuffer::TERRAIN_INVALID;
 
-  list.checked_append(new LocationMapItem(vector, elevation));
+  list.append(new LocationMapItem(vector, elevation));
 }
 
 void
@@ -175,6 +181,9 @@ MapItemListBuilder::AddArrivalAltitudes(
     const ProtectedRoutePlanner &route_planner,
     const RasterTerrain *terrain, fixed safety_height)
 {
+  if (list.full())
+    return;
+
   // Calculate terrain elevation if possible
   short elevation;
   if (terrain != NULL)
@@ -201,15 +210,16 @@ MapItemListBuilder::AddArrivalAltitudes(
   arrival_height_direct -= RoughAltitude(safety_height);
   arrival_height_reach -= RoughAltitude(safety_height);
 
-  list.checked_append(new ArrivalAltitudeMapItem(
-      RoughAltitude(elevation), arrival_height_direct, arrival_height_reach));
+  list.append(new ArrivalAltitudeMapItem(RoughAltitude(elevation),
+                                         arrival_height_direct,
+                                         arrival_height_reach));
 }
 
 void
 MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, const Angle &bearing)
 {
-  if (location.Distance(self) < range)
-    list.checked_append(new SelfMapItem(self, bearing));
+  if (!list.full() && location.Distance(self) < range)
+    list.append(new SelfMapItem(self, bearing));
 }
 
 void
@@ -252,14 +262,17 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
   a.location = location;
 
   for (unsigned i = 0, size = ordered_task.TaskSize(); i < size; i++) {
+    if (list.full())
+      break;
+
     const OrderedTaskPoint &task_point = ordered_task.GetTaskPoint(i);
     if (!task_point.IsInSector(a))
       continue;
 
     const ObservationZonePoint *oz = task_point.GetOZPoint();
     if (oz)
-      list.checked_append(new TaskOZMapItem(i, *oz, task_point.GetType(),
-                                            task_point.GetWaypoint()));
+      list.append(new TaskOZMapItem(i, *oz, task_point.GetType(),
+                                    task_point.GetWaypoint()));
   }
 }
 
@@ -269,8 +282,11 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
   ProtectedMarkers::Lease lease(marks);
   unsigned i = 0;
   for (auto it = lease->begin(), it_end = lease->end(); it != it_end; ++it) {
+    if (list.full())
+      break;
+
     if (location.Distance(it->location) < range)
-      list.checked_append(new MarkerMapItem(i, *it));
+      list.append(new MarkerMapItem(i, *it));
 
     i++;
   }
@@ -280,8 +296,11 @@ void
 MapItemListBuilder::AddTraffic(const FlarmState &flarm)
 {
   for (auto it=flarm.traffic.begin(), end = flarm.traffic.end(); it != end; ++it) {
+    if (list.full())
+      break;
+
     if (location.Distance(it->location) < range)
-      list.checked_append(new TrafficMapItem(*it));
+      list.append(new TrafficMapItem(*it));
   }
 }
 
@@ -292,6 +311,9 @@ MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
 {
   for (auto it = thermals.sources.begin(), end = thermals.sources.end();
        it != end; ++it) {
+    if (list.full())
+      break;
+
     // find height difference
     if (basic.nav_altitude < it->ground_height)
       continue;
@@ -301,6 +323,6 @@ MapItemListBuilder::AddThermals(const ThermalLocatorInfo &thermals,
       it->location;
 
     if (location.Distance(loc) < range)
-      list.checked_append(new ThermalMapItem(*it));
+      list.append(new ThermalMapItem(*it));
   }
 }
