@@ -26,10 +26,16 @@ Copyright_License {
 #include "Java/Class.hpp"
 #include "Android/Main.hpp"
 
-Vibrator::Vibrator(JNIEnv *env, jclass cls, jobject obj)
-  :object(env, obj),
-   cancel_method(env->GetMethodID(cls, "cancel", "()V")),
-   vibrate_method(env->GetMethodID(cls, "vibrate", "(J)V")) {}
+jmethodID Vibrator::cancel_method, Vibrator::vibrate_method;
+
+void
+Vibrator::Initialise(JNIEnv *env)
+{
+  Java::Class cls(env, "android/os/Vibrator");
+
+  cancel_method = env->GetMethodID(cls, "cancel", "()V");
+  vibrate_method = env->GetMethodID(cls, "vibrate", "(J)V");
+}
 
 Vibrator *
 Vibrator::Create(JNIEnv *env, Context &context)
@@ -38,8 +44,7 @@ Vibrator::Create(JNIEnv *env, Context &context)
   if (obj == NULL)
     return NULL;
 
-  Java::Class cls(env, env->GetObjectClass(obj));
-  Vibrator *vibrator = new Vibrator(env, cls, obj);
+  Vibrator *vibrator = new Vibrator(env, obj);
   env->DeleteLocalRef(obj);
   return vibrator;
 }

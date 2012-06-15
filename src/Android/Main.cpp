@@ -128,6 +128,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   event_queue = new EventQueue();
 
   SoundUtil::Initialise(env);
+  Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
 
 #ifdef IOIOLIB
