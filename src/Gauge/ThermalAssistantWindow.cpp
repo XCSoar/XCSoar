@@ -66,10 +66,9 @@ ThermalAssistantWindow::LeftTurn() const
 }
 
 void
-ThermalAssistantWindow::Update(const Angle &_direction,
-                               const DerivedInfo &_derived)
+ThermalAssistantWindow::Update(const DerivedInfo &_derived)
 {
-  direction = _direction;
+  direction = _derived.heading;
   derived = _derived;
 
   UpdateLiftMax();

@@ -113,5 +113,5 @@ GaugeThermalAssistant::Update(const DerivedInfo &calculated)
   ThermalAssistantWindow *window =
     (ThermalAssistantWindow *)GetWindow();
 
-  window->Update(calculated.heading, calculated);
+  window->Update(calculated);
 }

@@ -65,7 +65,7 @@ public:
 public:
   bool LeftTurn() const;
 
-  void Update(const Angle &_direction, const DerivedInfo &_derived);
+  void Update(const DerivedInfo &_derived);
 
 protected:
   fixed RangeScale(fixed d) const;

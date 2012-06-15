@@ -31,7 +31,7 @@ BigThermalAssistantWidget::Update(const DerivedInfo &calculated)
 {
   BigThermalAssistantWindow *window =
     (BigThermalAssistantWindow *)OverlappedWidget::GetWindow();
-  window->Update(calculated.heading, calculated);
+  window->Update(calculated);
 }
 
 void
