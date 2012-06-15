@@ -30,6 +30,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
+#include "Formatter/UserUnits.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -146,6 +147,10 @@ InfoBoxContentWindBearing::Update(InfoBoxData &data)
   }
 
   data.SetValue(info.wind.bearing);
+
+  TCHAR buffer[16];
+  FormatUserWindSpeed(info.wind.norm, buffer);
+  data.SetComment(buffer);
 }
 
 void
