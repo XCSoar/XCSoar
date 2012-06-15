@@ -206,7 +206,7 @@
      transform="translate(0,-1)">
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 0.5,10 c 0,0 0,-8.25 0,-8.25 l 6,5.75 -6,0"
+       d="m 0.5,10 0,-8.5 6,6 -6,0"
        id="path2832"
        sodipodi:nodetypes="cccc" />
   </g>
