@@ -171,6 +171,9 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   ioio_helper = NULL;
 #endif
 
+  delete vibrator;
+  vibrator = NULL;
+
   SoundUtil::Deinitialise(env);
   delete event_queue;
   event_queue = NULL;
