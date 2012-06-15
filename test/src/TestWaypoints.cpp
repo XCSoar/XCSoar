@@ -214,14 +214,12 @@ TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
   ok1((waypoint = waypoints.GetNearest(center, fixed(10000))) != NULL);
   ok1(waypoint->original_id == 0);
 
-  // Deactivated because GetNearest() does not respect the range parameter yet.
-  // ok1((waypoint = waypoints.GetNearest(near, fixed(1))) == NULL);
+  ok1((waypoint = waypoints.GetNearest(near, fixed(1))) == NULL);
 
   ok1((waypoint = waypoints.GetNearest(near, fixed(10000))) != NULL);
   ok1(waypoint->original_id == 0);
 
-  // Deactivated because GetNearest() does not respect the range parameter yet.
-  // ok1((waypoint = waypoints.GetNearest(far, fixed(1))) == NULL);
+  ok1((waypoint = waypoints.GetNearest(far, fixed(1))) == NULL);
 
   ok1((waypoint = waypoints.GetNearest(far, fixed(10000))) != NULL);
   ok1(waypoint->original_id == 1);
@@ -232,8 +230,7 @@ TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
   ok1((waypoint = waypoints.GetNearestLandable(center, fixed(10000))) != NULL);
   ok1(waypoint->original_id == 0);
 
-  // Deactivated because GetNearest() does not respect the range parameter yet.
-  // ok1((waypoint = waypoints.GetNearestLandable(further, fixed(1))) == NULL);
+  ok1((waypoint = waypoints.GetNearestLandable(further, fixed(1))) == NULL);
 
   ok1((waypoint = waypoints.GetNearestLandable(further, fixed(10000))) != NULL);
   ok1(waypoint->original_id == 3);
@@ -306,7 +303,7 @@ main(int argc, char** argv)
   if (!parse_args(argc, argv))
     return 0;
 
-  plan_tests(46);
+  plan_tests(49);
 
   Waypoints waypoints;
   GeoPoint center(Angle::Degrees(fixed(51.4)), Angle::Degrees(fixed(7.85)));
