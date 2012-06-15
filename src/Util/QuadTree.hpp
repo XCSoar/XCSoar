@@ -92,7 +92,7 @@ public:
   }
 
   /**
-   * Overloda of Square(distance_type) which takes a signed integer.
+   * Overload of Square(distance_type) which takes a signed integer.
    * Without this overload, the square of a negative number cannot be
    * calculated.
    */
