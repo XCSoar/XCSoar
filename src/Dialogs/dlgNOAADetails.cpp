@@ -56,12 +56,12 @@ Update()
   StaticString<100> caption;
   caption.Format(_T("%s: "), _("METAR and TAF"));
 
-  ParsedMETAR parsed;
-  if (!station_iterator->GetParsedMETAR(parsed) ||
-      !parsed.name_available)
+  if (!station_iterator->parsed_metar_available ||
+      !station_iterator->parsed_metar.name_available)
     caption += station_iterator->GetCodeT();
   else
-    caption.AppendFormat(_T("%s (%s)"), parsed.name.c_str(),
+    caption.AppendFormat(_T("%s (%s)"),
+                         station_iterator->parsed_metar.name.c_str(),
                          station_iterator->GetCodeT());
 
   wf->SetCaption(caption);

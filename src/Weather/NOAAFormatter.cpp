@@ -273,25 +273,22 @@ NOAAFormatter::Format(NOAAStore::Item &station, tstring &output)
 {
   output.reserve(2048);
 
-  METAR metar;
-  ParsedMETAR parsed;
-  if (!station.GetMETAR(metar)) {
+  if (!station.metar_available) {
     output += _("No METAR available!");
   } else {
-    if (station.GetParsedMETAR(parsed))
-      FormatDecodedMETAR(metar, parsed, output);
+    if (station.parsed_metar_available)
+      FormatDecodedMETAR(station.metar, station.parsed_metar, output);
     else
-      output += metar.decoded.c_str();
+      output += station.metar.decoded.c_str();
 
     output += _T("\n\n");
-    output += metar.content.c_str();
+    output += station.metar.content.c_str();
   }
 
   output += _T("\n\n");
 
-  TAF taf;
-  if (!station.GetTAF(taf))
+  if (!station.taf_available)
     output += _("No TAF available!");
   else
-    output += taf.content.c_str();
+    output += station.taf.content.c_str();
 }

@@ -46,36 +46,6 @@ NOAAStore::Item::GetCodeT() const
 #endif
 
 bool
-NOAAStore::Item::GetMETAR(METAR &_metar) const
-{
-  if (!metar_available)
-    return false;
-
-  _metar = metar;
-  return true;
-}
-
-bool
-NOAAStore::Item::GetParsedMETAR(ParsedMETAR &_parsed_metar) const
-{
-  if (!parsed_metar_available)
-    return false;
-
-  _parsed_metar = parsed_metar;
-  return true;
-}
-
-bool
-NOAAStore::Item::GetTAF(TAF &_taf) const
-{
-  if (!taf_available)
-    return false;
-
-  _taf = taf;
-  return true;
-}
-
-bool
 NOAAStore::Item::Update(JobRunner &runner)
 {
   bool metar_downloaded = NOAADownloader::DownloadMETAR(code, metar, runner);

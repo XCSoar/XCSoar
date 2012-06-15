@@ -36,11 +36,12 @@ Copyright_License {
 static void
 DisplayParsedMETAR(const NOAAStore::Item &station)
 {
-  ParsedMETAR parsed;
-  if (!station.GetParsedMETAR(parsed)) {
+  if (!station.parsed_metar_available) {
     printf("METAR parsing failed!\n");;
     return;
   }
+
+  const ParsedMETAR &parsed = station.parsed_metar;
 
   printf("Parsed Data:\n");
 
@@ -92,11 +93,12 @@ DisplayParsedMETAR(const NOAAStore::Item &station)
 static void
 DisplayMETAR(const NOAAStore::Item &station)
 {
-  METAR metar;
-  if (!station.GetMETAR(metar)) {
+  if (!station.metar_available) {
     printf("METAR Download failed!\n");;
     return;
   }
+
+  const METAR &metar = station.metar;
 
   printf("%02d.%02d.%04d %02d:%02d:%02d\n",
          (unsigned)metar.last_update.day,
@@ -118,11 +120,12 @@ DisplayMETAR(const NOAAStore::Item &station)
 static void
 DisplayTAF(const NOAAStore::Item &station)
 {
-  TAF taf;
-  if (!station.GetTAF(taf)) {
+  if (!station.taf_available) {
     printf("TAF Download failed!\n");;
     return;
   }
+
+  const TAF &taf = station.taf;
 
   printf("%02d.%02d.%04d %02d:%02d:%02d\n",
          (unsigned)taf.last_update.day,

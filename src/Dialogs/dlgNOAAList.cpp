@@ -112,22 +112,20 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   StaticString<256> title;
   title = list[index].code;
-  ParsedMETAR parsed;
-  if (list[index].iterator->GetParsedMETAR(parsed) &&
-      parsed.name_available)
-    title.AppendFormat(_T(": %s"), parsed.name.c_str());
+  if (list[index].iterator->parsed_metar_available &&
+      list[index].iterator->parsed_metar.name_available)
+    title.AppendFormat(_T(": %s"), list[index].iterator->parsed_metar.name.c_str());
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc, title);
 
   canvas.Select(details_font);
 
-  METAR metar;
   const TCHAR *tmp;
-  if (!list[index].iterator->GetMETAR(metar))
+  if (!list[index].iterator->metar_available)
     tmp = _("No METAR available");
   else
-    tmp = metar.content.c_str();
+    tmp = list[index].iterator->metar.content.c_str();
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + code_font.GetHeight() + Layout::FastScale(4),
