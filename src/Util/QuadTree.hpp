@@ -811,7 +811,11 @@ protected:
                                  location, square_range,
                                  predicate);
 
-      square_range = result.second;
+      if (result.first != const_iterator()) {
+        assert(result.second <= square_range);
+        square_range = result.second;
+      }
+
       auto tmp =
         buckets[1].FindNearestIf(GetTopRight(bounds, middle),
                                  location, square_range,
@@ -819,14 +823,22 @@ protected:
       if (tmp.second < result.second)
         result = tmp;
 
-      square_range = result.second;
+      if (result.first != const_iterator()) {
+        assert(result.second <= square_range);
+        square_range = result.second;
+      }
+
       tmp = buckets[2].FindNearestIf(GetBottomLeft(bounds, middle),
                                      location, square_range,
                                      predicate);
       if (tmp.second < result.second)
         result = tmp;
 
-      square_range = result.second;
+      if (result.first != const_iterator()) {
+        assert(result.second <= square_range);
+        square_range = result.second;
+      }
+
       tmp = buckets[3].FindNearestIf(GetBottomRight(bounds, middle),
                                      location, square_range,
                                      predicate);
