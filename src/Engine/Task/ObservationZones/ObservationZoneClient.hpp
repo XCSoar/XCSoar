@@ -51,7 +51,11 @@ public:
    *
    * @return Observation zone
    */
-  ObservationZonePoint &GetObservationZone() const {
+  ObservationZonePoint &GetObservationZone() {
+    return *oz_point;
+  }
+
+  const ObservationZonePoint &GetObservationZone() const {
     return *oz_point;
   }
 
