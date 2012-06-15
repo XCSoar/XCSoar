@@ -1297,12 +1297,6 @@ public:
     return FindNearest(GetPosition(value), range);
   }
 
-  template<class O>
-  void FindWithinRange(const Point location, distance_type range,
-                       O &output) const {
-    root.FindWithinRange(location, Square(range), output);
-  }
-
   template<class V>
   void VisitWithinRange(const Point location, distance_type range,
                         V &visitor) const {
