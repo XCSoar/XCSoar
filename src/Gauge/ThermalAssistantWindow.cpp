@@ -98,10 +98,11 @@ ThermalAssistantWindow::UpdateLiftPoints()
   for (unsigned i = 0; i < 36; i++) {
     Angle d = Angle::Degrees(fixed(i * 10));
 
-    lift_points[i].x = (int)((d - direction).cos() *
-                       RangeScale(derived.lift_database[i]));
-    lift_points[i].y = (int)((d - direction).sin() *
-                       RangeScale(derived.lift_database[i]));
+    auto sincos = (d - direction).SinCos();
+    auto scale = RangeScale(derived.lift_database[i]);
+
+    lift_points[i].x = (int)(sincos.second * scale);
+    lift_points[i].y = (int)(sincos.first * scale);
 
     if (!LeftTurn()) {
       lift_points[i].x *= -1;
