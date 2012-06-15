@@ -31,6 +31,7 @@
 #include "Math/Screen.hpp"
 #include "Language/Language.hpp"
 #include "Util/Macros.hpp"
+#include "Look/FlarmTrafficLook.hpp"
 
 #include <assert.h>
 #include <stdio.h>

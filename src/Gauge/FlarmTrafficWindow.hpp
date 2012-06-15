@@ -29,7 +29,8 @@
 #include "FLARM/Friends.hpp"
 #include "TeamCodeSettings.hpp"
 #include "Math/FastRotation.hpp"
-#include "Look/FlarmTrafficLook.hpp"
+
+struct FlarmTrafficLook;
 
 /**
  * A Window which renders FLARM traffic.
