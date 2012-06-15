@@ -107,10 +107,24 @@ OrderedTaskPoint::SearchNominalIfUnsampled() const
   return active_state == BEFORE_ACTIVE;
 }
 
+bool
+OrderedTaskPoint::IsInSector(const AircraftState &ref) const
+{
+  return ObservationZoneClient::IsInSector(ref.location);
+}
+
 OZBoundary
 OrderedTaskPoint::GetBoundary() const
 {
   return ObservationZoneClient::GetBoundary();
+}
+
+bool
+OrderedTaskPoint::CheckEnterTransition(const AircraftState &ref_now,
+                                       const AircraftState &ref_last) const
+{
+  return IsInSector(ref_now) && !IsInSector(ref_last) &&
+    TransitionConstraint(ref_now.location, ref_last.location);
 }
 
 fixed 

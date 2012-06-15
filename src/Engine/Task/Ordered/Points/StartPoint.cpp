@@ -156,7 +156,7 @@ StartPoint::CheckExitTransition(const AircraftState & ref_now,
     // both within height limit, so use normal location checks
     return OrderedTaskPoint::CheckExitTransition(ref_now, ref_last);
   }
-  if (!TransitionConstraint(ref_now, ref_last)) {
+  if (!TransitionConstraint(ref_now.location, ref_last.location)) {
     // don't allow vertical crossings for line OZ's
     return false;
   }

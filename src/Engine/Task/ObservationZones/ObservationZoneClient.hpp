@@ -29,7 +29,6 @@ class ObservationZonePoint;
 class OZBoundary;
 class TaskPoint;
 struct GeoPoint;
-struct AircraftState;
 
 /**
  * Class holding an ObzervationZonePoint, directing calls to it
@@ -56,14 +55,14 @@ public:
     return oz_point;
   }
 
-  bool IsInSector(const AircraftState &ref) const;
+  bool IsInSector(const GeoPoint &location) const;
 
   gcc_pure
   bool CanStartThroughTop() const;
 
   gcc_pure
-  bool TransitionConstraint(const AircraftState &ref_now,
-                            const AircraftState &ref_last) const;
+  bool TransitionConstraint(const GeoPoint &location,
+                            const GeoPoint &last_location) const;
 
   gcc_pure
   GeoPoint GetBoundaryParametric(fixed t) const;

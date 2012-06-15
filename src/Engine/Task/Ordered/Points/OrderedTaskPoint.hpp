@@ -248,19 +248,13 @@ private:
 
 public:
   /* virtual methods from class SampledTaskPoint */
-  virtual bool IsInSector(const AircraftState &ref) const {
-    return ObservationZoneClient::IsInSector(ref);
-  }
-
+  virtual bool IsInSector(const AircraftState &ref) const;
   virtual OZBoundary GetBoundary() const;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const {
-    return IsInSector(ref_now) && !IsInSector(ref_last) &&
-      TransitionConstraint(ref_now, ref_last);
-  }
+                                    const AircraftState &ref_last) const;
 
   virtual bool CheckExitTransition(const AircraftState &ref_now,
                                    const AircraftState &ref_last) const {
