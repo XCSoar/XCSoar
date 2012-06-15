@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Engine/Task/ObservationZones/CylinderZone.hpp"
+#include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
@@ -46,7 +47,7 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
     scale = fixed(radius) / ((const CylinderZone &)oz).GetRadius();
     center = oz.GetReference();
   } else {
-    ObservationZone::Boundary boundary = oz.GetBoundary();
+    OZBoundary boundary = oz.GetBoundary();
 
     auto it = boundary.begin();
     GeoBounds bounds(*it);

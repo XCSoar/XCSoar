@@ -21,6 +21,7 @@
 */
 
 #include "SampledTaskPoint.hpp"
+#include "Task/ObservationZones/Boundary.hpp"
 
 SampledTaskPoint::SampledTaskPoint(Type _type, const Waypoint & wp,
                                    const bool b_scored)
@@ -87,7 +88,7 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
   boundary_points.clear();
 
   if (boundary_scored) {
-    const Boundary boundary = GetBoundary();
+    const OZBoundary boundary = GetBoundary();
     for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
       SearchPoint sp(*i);
       boundary_points.push_back(sp);

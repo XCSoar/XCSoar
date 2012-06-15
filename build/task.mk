@@ -90,6 +90,7 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/SymmetricSectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/KeyholeZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/AnnularSectorZone.cpp \
+	$(ENGINE_SRC_DIR)/Task/ObservationZones/FAISectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/Contests.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/AbstractContest.cpp \
 	$(ENGINE_SRC_DIR)/Contest/Solvers/ContestDijkstra.cpp \

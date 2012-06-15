@@ -21,6 +21,7 @@
 */
 
 #include "SectorZone.hpp"
+#include "Boundary.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
 GeoPoint
@@ -46,10 +47,10 @@ SectorZone::GetBoundaryParametric(fixed t) const
 }
 
 
-ObservationZone::Boundary
+OZBoundary
 SectorZone::GetBoundary() const
 {
-  Boundary boundary;
+  OZBoundary boundary;
 
   boundary.push_front(GetReference());
   boundary.push_front(GetSectorStart());

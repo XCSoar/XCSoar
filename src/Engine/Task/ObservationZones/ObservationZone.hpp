@@ -27,10 +27,9 @@
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-#include <forward_list>
-
 struct GeoPoint;
 struct AircraftState;
+class OZBoundary;
 
 /**
  * Abstract class giving properties of a zone which is used to measure
@@ -39,8 +38,6 @@ struct AircraftState;
 class ObservationZone
 {
 public:
-  typedef std::forward_list<GeoPoint> Boundary;
-
   virtual ~ObservationZone() {}
 
   /** 
@@ -126,7 +123,7 @@ public:
    * measurable advantage.
    */
   gcc_pure
-  virtual Boundary GetBoundary() const = 0;
+  virtual OZBoundary GetBoundary() const = 0;
 
   /**
    * Distance reduction for scoring when outside this OZ

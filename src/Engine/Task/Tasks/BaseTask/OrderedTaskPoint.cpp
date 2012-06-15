@@ -22,6 +22,7 @@
 
 #include "OrderedTaskPoint.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
+#include "Task/ObservationZones/Boundary.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
@@ -167,7 +168,7 @@ OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
   task_projection.scan_location(GetLocation());
   #define fixed_steps fixed(0.05)
 
-  const ObservationZone::Boundary boundary = GetBoundary();
+  const OZBoundary boundary = GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
     task_projection.scan_location(*i);
 }
@@ -177,7 +178,7 @@ OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
 {
   flat_bb = FlatBoundingBox(task_projection.project(GetLocation()));
 
-  const ObservationZone::Boundary boundary = GetBoundary();
+  const OZBoundary boundary = GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
     flat_bb.Expand(task_projection.project(*i));
 

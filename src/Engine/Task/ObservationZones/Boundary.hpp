@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -18,29 +19,16 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "LineSectorZone.hpp"
-#include "Boundary.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
+#ifndef XCSOAR_OBSERVATION_ZONE_BOUNDARY_HPP
+#define XCSOAR_OBSERVATION_ZONE_BOUNDARY_HPP
 
-GeoPoint LineSectorZone::GetBoundaryParametric(fixed t) const
-{ 
-  return GetSectorStart().Interpolate(GetSectorEnd(), t);
-}
+#include "Navigation/GeoPoint.hpp"
 
-OZBoundary
-LineSectorZone::GetBoundary() const
-{
-  OZBoundary boundary;
-  boundary.push_front(GetSectorEnd());
-  boundary.push_front(GetSectorStart());
-  boundary.push_front(GetReference());
-  return boundary;
-}
+#include <forward_list>
 
-fixed
-LineSectorZone::ScoreAdjustment() const
-{
-  return fixed_zero;
-}
+class OZBoundary : public std::forward_list<GeoPoint> {
+};
+
+#endif

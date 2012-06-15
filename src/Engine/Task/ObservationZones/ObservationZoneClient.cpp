@@ -22,6 +22,7 @@
 
 #include "ObservationZoneClient.hpp"
 #include "ObservationZonePoint.hpp"
+#include "Boundary.hpp"
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 ObservationZoneClient::~ObservationZoneClient() {
@@ -58,7 +59,7 @@ ObservationZoneClient::GetBoundaryParametric(fixed t) const
   return oz_point->GetBoundaryParametric(t);
 }
 
-ObservationZone::Boundary
+OZBoundary
 ObservationZoneClient::GetBoundary() const
 {
   return oz_point->GetBoundary();

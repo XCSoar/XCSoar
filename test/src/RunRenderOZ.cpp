@@ -45,6 +45,7 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Projection/Projection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "ResourceLoader.hpp"
@@ -176,7 +177,7 @@ OZWindow::OnPaint(Canvas &canvas)
   /* debugging for ObservationZone::GetBoundary() */
   Pen pen(1, COLOR_RED);
   canvas.Select(pen);
-  const ObservationZone::Boundary boundary = oz->GetBoundary();
+  const OZBoundary boundary = oz->GetBoundary();
   for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i) {
     RasterPoint p = projection.GeoToScreen(*i);
     canvas.line(p.x - 3, p.y - 3, p.x + 3, p.y + 3);

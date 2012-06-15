@@ -30,6 +30,7 @@
 
 class TaskEvents;
 class TaskProjection;
+class OZBoundary;
 struct GeoPoint;
 
 /**
