@@ -28,7 +28,7 @@ Copyright_License {
 
 class Context;
 
-class Vibrator : Java::Object {
+class Vibrator {
   Java::Object object;
   jmethodID cancel_method, vibrate_method;
 
