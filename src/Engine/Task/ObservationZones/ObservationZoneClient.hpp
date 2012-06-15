@@ -56,7 +56,7 @@ public:
     return oz_point;
   }
 
-  virtual bool IsInSector(const AircraftState &ref) const;
+  bool IsInSector(const AircraftState &ref) const;
 
   gcc_pure
   bool CanStartThroughTop() const;
