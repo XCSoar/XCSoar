@@ -78,7 +78,6 @@ include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
 include $(topdir)/build/libgeo.mk
 include $(topdir)/build/libos.mk
-include $(topdir)/build/libthread.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/zlib.mk
@@ -97,6 +96,7 @@ include $(topdir)/build/libcontest.mk
 include $(topdir)/build/libglide.mk
 include $(topdir)/build/datafield.mk
 include $(topdir)/build/screen.mk
+include $(topdir)/build/libthread.mk
 include $(topdir)/build/form.mk
 include $(topdir)/build/libaudio.mk
 include $(topdir)/build/harness.mk

@@ -13,4 +13,8 @@ THREAD_SOURCES = \
 	$(THREAD_SRC_DIR)/Debug.cpp \
 	$(THREAD_SRC_DIR)/Notify.cpp
 
+# this is needed to compile Notify.cpp, which depends on the screen
+# library's event queue
+THREAD_CPPFLAGS = $(SCREEN_CPPFLAGS)
+
 $(eval $(call link-library,libthread,THREAD))
