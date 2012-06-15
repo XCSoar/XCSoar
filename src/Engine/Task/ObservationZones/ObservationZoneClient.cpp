@@ -32,7 +32,7 @@ ObservationZoneClient::~ObservationZoneClient() {
 bool
 ObservationZoneClient::IsInSector(const AircraftState &ref) const
 {
-  return oz_point->IsInSector(ref);
+  return oz_point->IsInSector(ref.location);
 }
 
 bool
@@ -69,7 +69,7 @@ bool
 ObservationZoneClient::TransitionConstraint(const AircraftState & ref_now,
                                             const AircraftState & ref_last) const
 {
-  return oz_point->TransitionConstraint(ref_now, ref_last);
+  return oz_point->TransitionConstraint(ref_now.location, ref_last.location);
 }
 
 void 

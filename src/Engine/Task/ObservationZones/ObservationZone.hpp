@@ -28,7 +28,6 @@
 #include "Compiler.h"
 
 struct GeoPoint;
-struct AircraftState;
 class OZBoundary;
 
 /**
@@ -46,7 +45,7 @@ public:
    * @return True if reference point is inside sector
    */
   gcc_pure
-  virtual bool IsInSector(const AircraftState &ref) const = 0;
+  virtual bool IsInSector(const GeoPoint &location) const = 0;
 
   /**
    * If zone when used for start can trigger task start via vertical exit
@@ -67,8 +66,8 @@ public:
    * @return True if constraints are satisfied
    */
   gcc_pure
-  virtual bool TransitionConstraint(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const = 0;
+  virtual bool TransitionConstraint(const GeoPoint &location,
+                                    const GeoPoint &last_location) const = 0;
 
   /**
    * Get point on boundary from parametric representation

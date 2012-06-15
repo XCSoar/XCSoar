@@ -84,9 +84,9 @@ SectorZone::UpdateSector()
 }
 
 bool 
-SectorZone::IsInSector(const AircraftState &ref) const
+SectorZone::IsInSector(const GeoPoint &location) const
 {
-  GeoVector f(GetReference(), ref.location);
+  GeoVector f(GetReference(), location);
 
   return f.distance <= GetRadius() && IsAngleInSector(f.bearing);
 }

@@ -89,9 +89,9 @@ AnnularSectorZone::GetBoundary() const
 }
 
 bool
-AnnularSectorZone::IsInSector(const AircraftState &ref) const
+AnnularSectorZone::IsInSector(const GeoPoint &location) const
 {
-  GeoVector f(GetReference(), ref.location);
+  GeoVector f(GetReference(), location);
 
   return (f.distance <= GetRadius()) &&
     (f.distance >= inner_radius) &&

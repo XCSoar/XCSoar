@@ -76,10 +76,10 @@ public:
     return false;
   }
 
-  virtual bool TransitionConstraint(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const {
-    return CylinderZone::IsInSector(ref_now) &&
-      CylinderZone::IsInSector(ref_last);
+  virtual bool TransitionConstraint(const GeoPoint &location,
+                                    const GeoPoint &last_location) const {
+    return CylinderZone::IsInSector(location) &&
+      CylinderZone::IsInSector(last_location);
   }
 
   virtual GeoPoint GetBoundaryParametric(fixed t) const;

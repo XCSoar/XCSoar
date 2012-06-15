@@ -25,7 +25,6 @@
 #define CYLINDERZONE_HPP
 
 #include "ObservationZonePoint.hpp"
-#include "Navigation/Aircraft.hpp"
 
 #include <assert.h>
 
@@ -79,12 +78,12 @@ public:
   }
 
   /* virtual methods from class ObservationZone */
-  virtual bool IsInSector(const AircraftState &ref) const {
-    return DistanceTo(ref.location) <= radius;
+  virtual bool IsInSector(const GeoPoint &location) const {
+    return DistanceTo(location) <= radius;
   }
 
-  virtual bool TransitionConstraint(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const {
+  virtual bool TransitionConstraint(const GeoPoint &location,
+                                    const GeoPoint &last_location) const {
     return true;
   }
 

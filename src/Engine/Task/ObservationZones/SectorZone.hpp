@@ -143,7 +143,7 @@ protected:
 
 public:
   /* virtual methods from class ObservationZone */
-  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual bool IsInSector(const GeoPoint &location) const;
   virtual GeoPoint GetBoundaryParametric(fixed t) const;
   virtual OZBoundary GetBoundary() const;
   virtual fixed ScoreAdjustment() const;

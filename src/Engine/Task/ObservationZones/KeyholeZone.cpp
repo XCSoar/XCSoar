@@ -67,9 +67,9 @@ KeyholeZone::ScoreAdjustment() const
 }
 
 bool 
-KeyholeZone::IsInSector(const AircraftState &ref) const
+KeyholeZone::IsInSector(const GeoPoint &location) const
 {
-  GeoVector f(GetReference(), ref.location);
+  GeoVector f(GetReference(), location);
 
   return f.distance <= fixed(500) ||
     (f.distance <= GetRadius() && IsAngleInSector(f.bearing));
