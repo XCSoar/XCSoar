@@ -134,7 +134,7 @@ StartPoint::find_best_start(const AircraftState &state,
 bool 
 StartPoint::IsInSector(const AircraftState &state) const
 {
-  if (!ObservationZoneClient::IsInSector(state)) 
+  if (!OrderedTaskPoint::IsInSector(state))
     return false;
 
   return ordered_task_behaviour.CheckStartHeight(state, margins,
@@ -154,7 +154,7 @@ StartPoint::CheckExitTransition(const AircraftState & ref_now,
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks
-    return ObservationZone::CheckExitTransition(ref_now, ref_last);
+    return OrderedTaskPoint::CheckExitTransition(ref_now, ref_last);
   }
   if (!TransitionConstraint(ref_now, ref_last)) {
     // don't allow vertical crossings for line OZ's
@@ -163,6 +163,6 @@ StartPoint::CheckExitTransition(const AircraftState & ref_now,
 
   // transition inside sector to above 
   return !now_in_height && last_in_height 
-    && ObservationZoneClient::IsInSector(ref_last)
-    && ObservationZoneClient::CanStartThroughTop();
+    && OrderedTaskPoint::IsInSector(ref_last)
+    && CanStartThroughTop();
 }

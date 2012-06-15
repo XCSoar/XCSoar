@@ -88,7 +88,7 @@ FinishPoint::set_fai_finish_height(const fixed height)
 bool 
 FinishPoint::IsInSector(const AircraftState &state) const
 {
-  if (!ObservationZoneClient::IsInSector(state)) 
+  if (!OrderedTaskPoint::IsInSector(state))
     return false;
 
   return is_in_height_limit(state);
@@ -115,7 +115,7 @@ FinishPoint::CheckEnterTransition(const AircraftState & ref_now,
 
   if (now_in_height && last_in_height)
     // both within height limit, so use normal location checks
-    return ObservationZone::CheckEnterTransition(ref_now, ref_last);
+    return OrderedTaskPoint::CheckEnterTransition(ref_now, ref_last);
 
   return false;
 }
