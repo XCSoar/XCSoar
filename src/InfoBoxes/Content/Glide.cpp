@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentLDInstant::Update(InfoBoxData &data)
+InfoBoxContentGRInstant::Update(InfoBoxData &data)
 {
   const fixed ld = XCSoarInterface::Calculated().ld;
 
@@ -45,7 +45,7 @@ InfoBoxContentLDInstant::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentLDCruise::Update(InfoBoxData &data)
+InfoBoxContentGRCruise::Update(InfoBoxData &data)
 {
   const fixed cruise_ld = XCSoarInterface::Calculated().cruise_ld;
 
@@ -59,7 +59,7 @@ InfoBoxContentLDCruise::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentLDAvg::Update(InfoBoxData &data)
+InfoBoxContentGRAvg::Update(InfoBoxData &data)
 {
   const fixed average_ld = XCSoarInterface::Calculated().average_ld;
 
