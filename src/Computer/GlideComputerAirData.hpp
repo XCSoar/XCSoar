@@ -124,9 +124,9 @@ private:
   void ResetLiftDatabase(DerivedInfo &calculated);
   void UpdateLiftDatabase(const MoreData &basic, DerivedInfo &calculated,
                           const DerivedInfo &last_calculated);
-  void LD(const MoreData &basic, const MoreData &last_basic,
+  void GR(const MoreData &basic, const MoreData &last_basic,
           const DerivedInfo &calculated, VarioInfo &vario_info);
-  void CruiseLD(const MoreData &basic, DerivedInfo &calculated);
+  void CruiseGR(const MoreData &basic, DerivedInfo &calculated);
 
   void TerrainHeight(const MoreData &basic, TerrainInfo &calculated);
   void FlightState(const NMEAInfo &basic, const NMEAInfo &last_basic,

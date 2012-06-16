@@ -67,6 +67,6 @@ public:
 
 gcc_const
 fixed
-UpdateLD(fixed LD, fixed d, fixed h, fixed filter_factor);
+UpdateGR(fixed GR, fixed d, fixed h, fixed filter_factor);
 
 #endif

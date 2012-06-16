@@ -139,7 +139,7 @@ GlideRatioCalculator::Calculate() const
 // limit to reasonable values
 gcc_const
 static fixed
-LimitLD(fixed gr)
+LimitGR(fixed gr)
 {
   if (fabs(gr) > INVALID_GR)
     return INVALID_GR;
@@ -154,7 +154,7 @@ LimitLD(fixed gr)
 }
 
 fixed
-UpdateLD(fixed gr, fixed leg_distance, fixed height_above_leg,
+UpdateGR(fixed gr, fixed leg_distance, fixed height_above_leg,
          fixed filter_factor)
 {
   if (!positive(leg_distance))
