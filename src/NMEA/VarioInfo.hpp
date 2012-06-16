@@ -38,14 +38,14 @@ struct VarioInfo
   fixed netto_average;
 
   /** Instant glide ratio over ground */
-  fixed ld;
+  fixed gr;
   /** Glide ratio over ground while in Cruise mode */
-  fixed cruise_ld;
+  fixed cruise_gr;
 
   /**
    * Average glide ratio over ground.  Zero means the value is not available.
    */
-  fixed average_ld;
+  fixed average_gr;
 
   /** Instant lift/drag ratio */
   fixed ld_vario;

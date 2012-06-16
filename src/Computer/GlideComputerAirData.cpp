@@ -112,7 +112,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   CruiseLD(basic, calculated);
 
   if (calculated.flight.flying && !calculated.circling)
-    calculated.average_ld = gr_calculator.Calculate();
+    calculated.average_gr = gr_calculator.Calculate();
 
   Average30s(basic, last_basic, calculated, last_calculated);
   AverageClimbRate(basic, calculated);
@@ -311,13 +311,13 @@ GlideComputerAirData::LD(const MoreData &basic, const MoreData &last_basic,
 {
   if (!basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
     vario_info.ld_vario = INVALID_GR;
-    vario_info.ld = INVALID_GR;
+    vario_info.gr = INVALID_GR;
     return;
   }
 
   if (basic.HasTimeRetreatedSince(last_basic)) {
     vario_info.ld_vario = INVALID_GR;
-    vario_info.ld = INVALID_GR;
+    vario_info.gr = INVALID_GR;
   }
 
   const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
@@ -325,8 +325,8 @@ GlideComputerAirData::LD(const MoreData &basic, const MoreData &last_basic,
     fixed DistanceFlown = basic.location.Distance(last_basic.location);
 
     // Glide ratio over ground
-    vario_info.ld =
-      UpdateLD(vario_info.ld, DistanceFlown,
+    vario_info.gr =
+      UpdateLD(vario_info.gr, DistanceFlown,
                last_basic.nav_altitude - basic.nav_altitude, fixed(0.1));
 
     if (calculated.flight.flying && !calculated.circling)
@@ -356,8 +356,8 @@ GlideComputerAirData::CruiseLD(const MoreData &basic, DerivedInfo &calculated)
       fixed DistanceFlown =
         basic.location.Distance(calculated.cruise_start_location);
 
-      calculated.cruise_ld =
-          UpdateLD(calculated.cruise_ld, DistanceFlown,
+      calculated.cruise_gr =
+          UpdateLD(calculated.cruise_gr, DistanceFlown,
                    calculated.cruise_start_altitude - basic.nav_altitude,
                    fixed_half);
     }
