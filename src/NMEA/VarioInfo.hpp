@@ -37,16 +37,17 @@ struct VarioInfo
   /** Average vertical speed of the airmass based on 30s */
   fixed netto_average;
 
-  /** Instant glide ratio */
+  /** Instant glide ratio over ground */
   fixed ld;
-  /** Glide ratio while in Cruise mode */
+  /** Glide ratio over ground while in Cruise mode */
   fixed cruise_ld;
 
   /**
-   * Average glide ratio.  Zero means the value is not available.
+   * Average glide ratio over ground.  Zero means the value is not available.
    */
   fixed average_ld;
 
+  /** Instant lift/drag ratio */
   fixed ld_vario;
 
   /**

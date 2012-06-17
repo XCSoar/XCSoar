@@ -298,11 +298,11 @@ public:
   }
 
   /**
-   * Glide ratio function
+   * Glide ratio over ground function
    *
    * @param V Speed over ground (m/s)
    *
-   * @return MacCready-adjusted inverse glide ratio
+   * @return MacCready-adjusted inverse glide ratio over ground
    */
   fixed
   f(const fixed V)

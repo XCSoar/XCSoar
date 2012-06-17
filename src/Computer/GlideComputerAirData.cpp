@@ -324,6 +324,7 @@ GlideComputerAirData::LD(const MoreData &basic, const MoreData &last_basic,
   if (time_advanced) {
     fixed DistanceFlown = basic.location.Distance(last_basic.location);
 
+    // Glide ratio over ground
     vario_info.ld =
       UpdateLD(vario_info.ld, DistanceFlown,
                last_basic.nav_altitude - basic.nav_altitude, fixed(0.1));
@@ -332,7 +333,7 @@ GlideComputerAirData::LD(const MoreData &basic, const MoreData &last_basic,
       gr_calculator.Add((int)DistanceFlown, (int)basic.nav_altitude);
   }
 
-  // LD instantaneous from vario, updated every reading..
+  // Lift / drag instantaneous from vario, updated every reading..
   if (basic.total_energy_vario_available && basic.airspeed_available &&
       calculated.flight.flying) {
     vario_info.ld_vario =
