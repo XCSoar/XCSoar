@@ -22,14 +22,11 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
-#include "Profile/InfoBoxConfig.hpp"
 #include "Profile/SystemProfile.hpp"
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/UIProfile.hpp"
 #include "LogFile.hpp"
-#include "Dialogs/XML.hpp"
 #include "Interface.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 
 void
 Profile::Use()
