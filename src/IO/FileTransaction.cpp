@@ -33,6 +33,9 @@ MakeTemporaryPath(TCHAR *path)
 {
   assert(path != NULL);
 
+#ifdef HAVE_POSIX
+  _tcscat(path, _T(".tmp"));
+#else
   TCHAR *base = const_cast<TCHAR *>(BaseName(path));
   if (base == NULL) {
     /* dirty fallback */
@@ -47,6 +50,7 @@ MakeTemporaryPath(TCHAR *path)
   else
     /* append file name extension */
     _tcscat(base, _T(".tmp"));
+#endif
 }
 
 FileTransaction::FileTransaction(const TCHAR *_path)
