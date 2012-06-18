@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_LOCAL_PATH_HPP
 #define XCSOAR_LOCAL_PATH_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 namespace File {
@@ -72,6 +74,15 @@ void LocalPath(TCHAR* buf, const TCHAR *file);
 
 TCHAR *
 LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
+
+/**
+ * Return the portion of the specified path that is relative to the
+ * primary data path.  Returns NULL on failure (if the path is not
+ * inside the primary data path).
+ */
+gcc_pure
+const TCHAR *
+RelativePath(const TCHAR *path);
 
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to

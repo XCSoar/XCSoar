@@ -126,6 +126,17 @@ LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
   return buffer;
 }
 
+const TCHAR *
+RelativePath(const TCHAR *path)
+{
+  assert(data_path != NULL);
+
+  const TCHAR *p = StringAfterPrefix(path, data_path);
+  return p != NULL && IsDirSeparator(*p)
+    ? p + 1
+    : NULL;
+}
+
 /**
  * Convert backslashes to slashes on platforms where it matters.
  * @param p Pointer to the string to normalize
@@ -170,12 +181,12 @@ ContractLocalPath(TCHAR* filein)
   TCHAR output[MAX_PATH];
 
   // Get the relative file name and location (ptr)
-  const TCHAR *ptr = StringAfterPrefix(filein, data_path);
-  if (ptr == NULL || !IsDirSeparator(*ptr))
+  const TCHAR *relative = RelativePath(filein);
+  if (relative == NULL)
     return;
 
   // Replace the full local path by the code "%LOCAL_PATH%\\" (output)
-  _stprintf(output, _T("%s%s"), local_path_code, ptr + 1);
+  _stprintf(output, _T("%s%s"), local_path_code, relative);
   // ... and copy it to the buffer (filein)
   _tcscpy(filein, output);
 }
