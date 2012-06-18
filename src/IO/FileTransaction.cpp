@@ -84,3 +84,10 @@ FileTransaction::Commit()
 
   return success;
 }
+
+void
+FileTransaction::Abandon()
+{
+  assert(!temporary_path.empty());
+  temporary_path.clear();
+}

@@ -66,6 +66,12 @@ public:
    * @return true on success
    */
   bool Commit();
+
+  /**
+   * Abandon the transaction, i.e. close it, but don't clean up the
+   * temporary file.
+   */
+  void Abandon();
 };
 
 #endif
