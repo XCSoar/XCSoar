@@ -120,7 +120,7 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));
   jint nbytes = env->CallIntMethod(input_stream, read_method, array.Get());
-  if (nbytes <= 0)
+  if (Java::DiscardException(env) || nbytes <= 0)
     return 0;
 
   env->GetByteArrayRegion(array.Get(), 0, nbytes, (jbyte *)buffer);
