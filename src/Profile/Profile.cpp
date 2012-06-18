@@ -30,6 +30,7 @@ Copyright_License {
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
+#include "IO/FileTransaction.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
@@ -92,7 +93,8 @@ Profile::SaveFile(const TCHAR *szFile)
     return;
 
   // Try to open the file for writing
-  TextWriter writer(szFile);
+  FileTransaction transaction(szFile);
+  TextWriter writer(transaction.GetTemporaryPath());
   // ... on error -> return
   if (writer.error())
     return;
@@ -101,6 +103,8 @@ Profile::SaveFile(const TCHAR *szFile)
 
   LogStartUp(_T("Saving profile to %s"), szFile);
   Export(kvwriter);
+
+  transaction.Commit();
 }
 
 
