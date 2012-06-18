@@ -49,12 +49,24 @@ public:
 
   FileHandle(const FileHandle &other) = delete;
 
+  FileHandle(FileHandle &&other):file(other.file) {
+    other.file = NULL;
+  }
+
   ~FileHandle() {
     if (IsOpen())
       fclose(file);
   }
 
   FileHandle &operator=(const FileHandle &other) = delete;
+
+  FileHandle &operator=(FileHandle &&other) {
+    if (IsOpen())
+      fclose(file);
+    file = other.file;
+    other.file = NULL;
+    return *this;
+  }
 
   /**
    * Returns true if the file is open and waiting for further actions.
