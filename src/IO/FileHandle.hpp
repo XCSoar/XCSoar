@@ -47,10 +47,14 @@ public:
   }
 #endif
 
+  FileHandle(const FileHandle &other) = delete;
+
   ~FileHandle() {
     if (IsOpen())
       fclose(file);
   }
+
+  FileHandle &operator=(const FileHandle &other) = delete;
 
   /**
    * Returns true if the file is open and waiting for further actions.
