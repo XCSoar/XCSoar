@@ -95,7 +95,7 @@ IGCParseDate(const char *line, BrokenDate &date)
   if (endptr != line + 6)
     return false;
 
-  date.year = 2000 + value % 100; /* Y2100 bug! */
+  date.year = 1990 + (value + 10) % 100; /* Y2090 bug! */
   date.month = (value / 100) % 100;
   date.day = value / 10000;
 
