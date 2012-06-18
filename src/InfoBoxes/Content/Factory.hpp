@@ -39,8 +39,8 @@ namespace InfoBoxFactory
     e_HeightAGL, /* This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height */
     e_Thermal_30s, /* A 30 second rolling average climb rate based of the reported GPS altitude, or vario if available */
     e_Bearing, /* True bearing of the next waypoint.  For AAT tasks, this is the true bearing to the target within the AAT sector */
-    e_LD_Instantaneous, /* Instantaneous glide ratio, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---' */
-    e_LD_Cruise, /* The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---' */
+    e_GR_Instantaneous, /* Instantaneous glide ratio over ground, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---' */
+    e_GR_Cruise, /* The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---' */
     e_Speed_GPS, /* Ground speed measured by the GPS. If this infobox is active in simulation mode, pressing the up and down arrows adjusts the speed, and left and right turn the glider */
     e_TL_Avg, /* Total altitude gain/loss in the last thermal divided by the time spent circling */
     e_TL_Gain, /* Total altitude gain/loss in the last thermal */
@@ -55,7 +55,7 @@ namespace InfoBoxFactory
     e_Fin_AltReq, /* Additional altitude required to finish the task */
     e_SpeedTaskAvg, /* Average cross country speed while on current task, compensated for altitude */
     e_Fin_Distance, /* Distance to finish around remaining turn points */
-    e_Fin_LD, /* The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
+    e_Fin_GR_TE, /* The required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
     /* 20..29 */
     e_H_Terrain, /* This is the elevation of the terrain above mean sea level, obtained from the terrain file at the current GPS location */
     e_Thermal_Avg, /* Altitude gained/lost in the current thermal, divided by time spent thermaling */
@@ -76,7 +76,7 @@ namespace InfoBoxFactory
     e_Climb_Perc, /* Percentage of time spent in climb mode. These statistics are reset upon starting the task */
     e_TimeSinceTakeoff, /* Time elapsed since takeoff was detected */
     e_Load_G, /* Magnitude of G loading reported by a supported external intelligent vario. This value is negative for pitch-down manoeuvres */
-    e_WP_LD, /* The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
+    e_WP_GR, /* The required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best LD speeds */
     e_TimeLocal, /* GPS time expressed in local time zone */
     /* 40..49 */
     e_TimeUTC, /* GPS time expressed in UTC */
@@ -93,7 +93,7 @@ namespace InfoBoxFactory
     e_Home_Temperature, /* Forecast temperature of the ground at the home airfield, used in estimating convection height and cloud base in conjunction with outside air temperature and relative humidity probe. (Touchscreen/PC only) Pressing the up/down cursor keys adjusts this forecast temperature */
     e_Fin_AA_Distance, /* Assigned Area Task distance around target points for remainder of task */
     e_AA_SpeedAvg, /* Assigned Area Task average speed achievable around target points remaining in minimum AAT time */
-    e_LD, /* Instantaneous glide ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---' */
+    e_LD, /* Instantaneous lift/drag ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---' */
     e_Speed, /* True Airspeed reported by a supported external intelligent vario */
     e_Team_Code, /* The current Team code for this aircraft. Use this to report to other team members. The last team aircraft code entered is displayed underneath */
     e_Team_Bearing, /* The bearing to the team aircraft location at the last team code report */
@@ -113,7 +113,7 @@ namespace InfoBoxFactory
     e_Alternate_1_GR, /* Geometric gradient to the arrival height above the best alternate. This is not adjusted for total energy */
     /* 70..79 */
     e_H_QFE, /* Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude */
-    e_LD_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ . You can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. Notice that the distance is NOT the straight line between your old and current position: it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling */
+    e_GR_Avg, /* The distance made in the configured period of time divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of LD the value is shown as +++ . You can configure the period of averaging in the Special config menu. Suggested values for this configuration are 60, 90 or 120: lower values will be closed to LD INST, and higher values will be closed to LD Cruise. Notice that the distance is NOT the straight line between your old and current position: it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling */
     e_Experimental1, /* Experimental1 */
     e_OC_Distance, /* Online Contest Distance */
     e_Experimental2, /* Experimental2 */

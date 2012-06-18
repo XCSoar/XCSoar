@@ -289,7 +289,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
 
 
 void
-InfoBoxContentNextLD::Update(InfoBoxData &data)
+InfoBoxContentNextGR::Update(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp, and this
   // is what current_leg gradient does.
@@ -447,7 +447,7 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalLD::Update(InfoBoxData &data)
+InfoBoxContentFinalGRTE::Update(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {

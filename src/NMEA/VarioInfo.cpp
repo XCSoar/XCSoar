@@ -36,9 +36,9 @@ void
 VarioInfo::Clear()
 {
   sink_rate = fixed_zero;
-  cruise_ld = INVALID_GR;
-  average_ld = fixed_zero;
-  ld = INVALID_GR;
+  cruise_gr = INVALID_GR;
+  average_gr = fixed_zero;
+  gr = INVALID_GR;
   ld_vario = INVALID_GR;
 
   ClearLiftDatabase();

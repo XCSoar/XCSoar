@@ -63,7 +63,7 @@ struct IBFHelperInt {
 // Groups:
 //   Altitude: e_HeightGPS,e_HeightAGL,e_H_Terrain,e_H_Baro,e_H_QFE,e_FlightLevel,e_Barogram
 //   Aircraft info: e_Bearing,e_Speed_GPS,e_Track_GPS,e_AirSpeed_Ext,e_Load_G,e_WP_BearingDiff,e_Speed,e_Horizon
-//   LD: e_LD_Instantaneous,e_LD_Cruise,e_Fin_LD,e_Fin_GR,e_WP_LD,e_LD,e_LD_Avg
+//   LD: e_GR_Instantaneous,e_GR_Cruise,e_Fin_GR_TE,e_Fin_GR,e_WP_GR,e_LD,e_GR_Avg
 //   Vario: e_Thermal_30s,e_TL_Avg,e_TL_Gain,e_TL_Time,e_Thermal_Avg,e_Thermal_Gain,e_Climb_Avg,e_VerticalSpeed_GPS,e_VerticalSpeed_Netto,e_Vario_spark,e_NettoVario_spark,e_CirclingAverage_spark,e_ThermalBand
 //   Wind: e_WindSpeed_Est,e_WindBearing_Est,e_HeadWind,e_Temperature,e_HumidityRel,e_Home_Temperature
 //   MacCready: e_MacCready,e_WP_Speed_MC,e_Climb_Perc,e_Act_Speed,NextLegEqThermal
@@ -115,24 +115,24 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     e_Horizon,
   },
 
-  // e_LD_Instantaneous
+  // e_GR_Instantaneous
   {
-    N_("L/D instantaneous"),
-    N_("L/D Inst"),
-    N_("Instantaneous glide ratio, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'."),
-    IBFHelper<InfoBoxContentLDInstant>::Create,
-    e_LD_Cruise, // LD Cruise
-    e_LD_Avg, // LD Avg
+    N_("GR instantaneous"),
+    N_("GR Inst"),
+    N_("Instantaneous glide ratio over ground, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'."),
+    IBFHelper<InfoBoxContentGRInstant>::Create,
+    e_GR_Cruise, // GR Cruise
+    e_GR_Avg, // GR Avg
   },
 
-  // e_LD_Cruise
+  // e_GR_Cruise
   {
-    N_("L/D cruise"),
-    N_("L/D Cruise"),
+    N_("GR cruise"),
+    N_("GR Cruise"),
     N_("The distance from the top of the last thermal, divided by the altitude lost since the top of the last thermal. Negative values indicate climbing cruise (height gain since leaving the last thermal). If the vertical speed is close to zero, the displayed value is '---'."),
-    IBFHelper<InfoBoxContentLDCruise>::Create,
-    e_Fin_LD, // Final LD
-    e_LD_Instantaneous, // LD Inst
+    IBFHelper<InfoBoxContentGRCruise>::Create,
+    e_Fin_GR_TE, // Final LD
+    e_GR_Instantaneous, // LD Inst
   },
 
   // e_Speed_GPS
@@ -265,14 +265,14 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     e_CC_Speed, // V Task Ach
   },
 
-  // e_Fin_LD
+  // e_Fin_GR_TE
   {
-    N_("Final L/D"),
-    N_("Final L/D"),
-    N_("The required glide ratio to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best L/D speeds."),
-    IBFHelper<InfoBoxContentFinalLD>::Create,
+    N_("Final GR (TE Compensated)"),
+    N_("Fin GR-TE"),
+    N_("The required glide ratio over ground to finish the task, given by the distance to go divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to finish. If the height required is close to zero, the displayed value is '---'. Note that this calculation may be optimistic because it reduces the height required to finish by the excess energy height of the glider if its true airspeed is greater than the MacCready and best L/D speeds."),
+    IBFHelper<InfoBoxContentFinalGRTE>::Create,
     e_Fin_GR, // Final GR
-    e_LD_Cruise, // LD Cruise
+    e_GR_Cruise, // GR Cruise
   },
 
   // e_H_Terrain
@@ -455,12 +455,12 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     e_AirSpeed_Ext, // Track
   },
 
-  // e_WP_LD
+  // e_WP_GR
   {
-    N_("Next L/D"),
-    N_("WP L/D"),
-    N_("The required glide ratio to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best L/D speeds."),
-    IBFHelper<InfoBoxContentNextLD>::Create,
+    N_("Next GR (TE Compensated)"),
+    N_("WP GR-TE"),
+    N_("The required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best L/D speeds."),
+    IBFHelper<InfoBoxContentNextGR>::Create,
     e_LD, // LD Vario
     e_Fin_GR, // Final GR
   },
@@ -609,10 +609,10 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
   {
     N_("L/D vario"),
     N_("L/D vario"),
-    N_("Instantaneous glide ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
+    N_("Instantaneous lift/drag ratio, given by the indicated airspeed divided by the total energy vertical speed, when connected to an intelligent variometer. Negative values indicate climbing cruise. If the total energy vario speed is close to zero, the displayed value is '---'."),
     IBFHelper<InfoBoxContentLDVario>::Create,
-    e_LD_Avg, // LD Avg
-    e_WP_LD, // Next LD
+    e_GR_Avg, // GR Avg
+    e_WP_GR, // Next LD
   },
 
   // e_Speed
@@ -745,8 +745,8 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     N_("Fin GR"),
     N_("Geometric gradient to the arrival height above the final waypoint. This is not adjusted for total energy."),
     IBFHelper<InfoBoxContentFinalGR>::Create,
-    e_WP_LD, // Next LD
-    e_Fin_LD, // Fin LD
+    e_WP_GR, // Next LD
+    e_Fin_GR_TE, // Fin LD
   },
 
   // e_Alternate_1_Name
@@ -789,13 +789,13 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     e_H_Baro, // H Baro
   },
 
-  // e_LD_Avg
+  // e_GR_Avg
   {
-    N_("L/D average"),
-    N_("L/D Avg"),
+    N_("GR average"),
+    N_("GR Avg"),
     N_("The distance made in the configured period of time , divided by the altitude lost since then. Negative values are shown as ^^^ and indicate climbing cruise (height gain). Over 200 of L/D the value is shown as +++ . You can configure the period of averaging in the system setup. Suggested values are 60, 90 or 120. Lower values will be closed to L/D INST, and higher values will be closed to L/D Cruise. Notice that the distance is NOT the straight line between your old and current position, it's exactly the distance you have made even in a zigzag glide. This value is not calculated while circling."),
-    IBFHelper<InfoBoxContentLDAvg>::Create,
-    e_LD_Instantaneous, // LD Inst
+    IBFHelper<InfoBoxContentGRAvg>::Create,
+    e_GR_Instantaneous, // LD Inst
     e_LD, // LD Vario
   },
 

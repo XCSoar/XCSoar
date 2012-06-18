@@ -31,50 +31,50 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentLDInstant::Update(InfoBoxData &data)
+InfoBoxContentGRInstant::Update(InfoBoxData &data)
 {
-  const fixed ld = XCSoarInterface::Calculated().ld;
+  const fixed gr = XCSoarInterface::Calculated().gr;
 
-  if (!::GradientValid(ld)) {
+  if (!::GradientValid(gr)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValueFromGlideRatio(ld);
+  data.SetValueFromGlideRatio(gr);
 }
 
 void
-InfoBoxContentLDCruise::Update(InfoBoxData &data)
+InfoBoxContentGRCruise::Update(InfoBoxData &data)
 {
-  const fixed cruise_ld = XCSoarInterface::Calculated().cruise_ld;
+  const fixed cruise_gr = XCSoarInterface::Calculated().cruise_gr;
 
-  if (!::GradientValid(cruise_ld)) {
+  if (!::GradientValid(cruise_gr)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  data.SetValueFromGlideRatio(cruise_ld);
+  data.SetValueFromGlideRatio(cruise_gr);
 }
 
 void
-InfoBoxContentLDAvg::Update(InfoBoxData &data)
+InfoBoxContentGRAvg::Update(InfoBoxData &data)
 {
-  const fixed average_ld = XCSoarInterface::Calculated().average_ld;
+  const fixed average_gr = XCSoarInterface::Calculated().average_gr;
 
-  if (average_ld == fixed_zero) {
+  if (average_gr == fixed_zero) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  if (average_ld < fixed_zero)
+  if (average_gr < fixed_zero)
     data.SetValue(_T("^^^"));
-  else if (!::GradientValid(average_ld))
+  else if (!::GradientValid(average_gr))
     data.SetValue(_T("+++"));
   else
-    data.SetValueFromGlideRatio(average_ld);
+    data.SetValueFromGlideRatio(average_gr);
 }
 
 void

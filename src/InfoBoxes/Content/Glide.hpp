@@ -26,19 +26,19 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentLDInstant : public InfoBoxContent
+class InfoBoxContentGRInstant : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data);
 };
 
-class InfoBoxContentLDCruise : public InfoBoxContent
+class InfoBoxContentGRCruise : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data);
 };
 
-class InfoBoxContentLDAvg : public InfoBoxContent
+class InfoBoxContentGRAvg : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data);

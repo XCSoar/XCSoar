@@ -139,35 +139,35 @@ GlideRatioCalculator::Calculate() const
 // limit to reasonable values
 gcc_const
 static fixed
-LimitLD(fixed ld)
+LimitGR(fixed gr)
 {
-  if (fabs(ld) > INVALID_GR)
+  if (fabs(gr) > INVALID_GR)
     return INVALID_GR;
 
-  if (ld >= fixed_zero && ld < fixed_one)
+  if (gr >= fixed_zero && gr < fixed_one)
     return fixed_one;
 
-  if (ld < fixed_zero && ld > fixed_minus_one)
+  if (gr < fixed_zero && gr > fixed_minus_one)
     return fixed_minus_one;
 
-  return ld;
+  return gr;
 }
 
 fixed
-UpdateLD(fixed ld, fixed leg_distance, fixed height_above_leg,
+UpdateGR(fixed gr, fixed leg_distance, fixed height_above_leg,
          fixed filter_factor)
 {
   if (!positive(leg_distance))
-    return ld;
+    return gr;
 
   fixed glideangle = height_above_leg / leg_distance;
-  if (ld != INVALID_GR)
-    glideangle = LowPassFilter(fixed_one / ld, glideangle, filter_factor);
+  if (gr != INVALID_GR)
+    glideangle = LowPassFilter(fixed_one / gr, glideangle, filter_factor);
 
   if (fabs(glideangle) > fixed_one / INVALID_GR)
-    ld = LimitLD(fixed_one / glideangle);
+    gr = LimitGR(fixed_one / glideangle);
   else
-    ld = INVALID_GR;
+    gr = INVALID_GR;
 
-  return ld;
+  return gr;
 }
