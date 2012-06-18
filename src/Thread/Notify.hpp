@@ -61,6 +61,11 @@ public:
    */
   void SendNotification();
 
+  /**
+   * Clear any pending notification.
+   */
+  void ClearNotification();
+
 private:
   /**
    * Called by the event loop when the "notify" message is received.

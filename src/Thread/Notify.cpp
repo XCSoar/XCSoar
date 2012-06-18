@@ -68,6 +68,19 @@ Notify::SendNotification()
 }
 
 void
+Notify::ClearNotification()
+{
+  if (!pending.GetAndClear())
+    return;
+
+#ifdef ANDROID
+  event_queue->Purge(*this);
+#elif defined(ENABLE_SDL)
+  EventQueue::Purge(*this);
+#endif
+}
+
+void
 Notify::RunNotification()
 {
   if (pending.GetAndClear())
