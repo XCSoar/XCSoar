@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Point.hpp"
+#include "FBO.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -161,6 +162,11 @@ protected:
 public:
   void Bind() {
     glBindTexture(GL_TEXTURE_2D, id);
+  }
+
+  void AttachFramebuffer(GLenum attachment) {
+    FBO::FramebufferTexture2D(FBO::FRAMEBUFFER, attachment,
+                              GL_TEXTURE_2D, id, 0);
   }
 
   void Draw(PixelScalar dest_x, PixelScalar dest_y,
