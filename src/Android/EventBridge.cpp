@@ -54,6 +54,10 @@ gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
 {
+  if (event_queue == NULL)
+    /* XCSoar not yet initialised */
+    return;
+
   event_queue->Push(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
 }
 
@@ -61,6 +65,10 @@ gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
 {
+  if (event_queue == NULL)
+    /* XCSoar not yet initialised */
+    return;
+
   event_queue->Push(Event(Event::KEY_UP, TranslateKeyCode(key_code)));
 }
 
@@ -69,6 +77,10 @@ void
 Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
+  if (event_queue == NULL)
+    /* XCSoar not yet initialised */
+    return;
+
   event_queue->Push(Event(Event::MOUSE_DOWN, x, y));
 }
 
@@ -77,6 +89,10 @@ void
 Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
                                       jint x, jint y)
 {
+  if (event_queue == NULL)
+    /* XCSoar not yet initialised */
+    return;
+
   event_queue->Push(Event(Event::MOUSE_UP, x, y));
 }
 
@@ -85,6 +101,10 @@ void
 Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
                                         jint x, jint y)
 {
+  if (event_queue == NULL)
+    /* XCSoar not yet initialised */
+    return;
+
   event_queue->Purge(Event::MOUSE_MOTION);
   event_queue->Push(Event(Event::MOUSE_MOTION, x, y));
 }
@@ -93,6 +113,10 @@ gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onPointerDown(JNIEnv *env, jclass cls)
 {
+  if (event_queue == NULL)
+    /* XCSoar not yet initialised */
+    return;
+
   event_queue->Push(Event(Event::POINTER_DOWN));
 }
 
@@ -100,5 +124,9 @@ gcc_visibility_default
 void
 Java_org_xcsoar_EventBridge_onPointerUp(JNIEnv *env, jclass cls)
 {
+  if (event_queue == NULL)
+    /* XCSoar not yet initialised */
+    return;
+
   event_queue->Push(Event(Event::POINTER_UP));
 }

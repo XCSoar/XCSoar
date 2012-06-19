@@ -98,6 +98,14 @@ CompareMapItems(const MapItem *a, const MapItem *b)
     return ((const TaskOZMapItem *)a)->index <
            ((const TaskOZMapItem *)b)->index;
 
+  if (a->type == MapItem::TRAFFIC && b->type == MapItem::TRAFFIC)
+    return ((const TrafficMapItem *)a)->traffic.id <
+           ((const TrafficMapItem *)b)->traffic.id;
+
+  if (a->type == MapItem::THERMAL && b->type == MapItem::THERMAL)
+    return ((const ThermalMapItem *)a)->thermal.time >
+           ((const ThermalMapItem *)b)->thermal.time;
+
   if (a->type == MapItem::AIRSPACE && b->type == MapItem::AIRSPACE)
     return AirspaceAltitude::SortHighest(
         ((const AirspaceMapItem *)a)->airspace->GetBase(),

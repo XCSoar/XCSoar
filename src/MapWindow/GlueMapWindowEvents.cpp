@@ -157,14 +157,14 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
   switch (old_drag_mode) {
   case DRAG_NONE:
-    break;
+    /* skip the arm_mapitem_list check below */
+    return false;
 
 #ifdef HAVE_MULTI_TOUCH
   case DRAG_MULTI_TOUCH_PAN:
     follow_mode = FOLLOW_SELF;
     InputEvents::SetPan(true);
-    arm_mapitem_list = false;
-    break;
+    return true;
 #endif
 
   case DRAG_PAN:
@@ -291,6 +291,8 @@ GlueMapWindow::OnCancelMode()
     ReleaseCapture();
     drag_mode = DRAG_NONE;
   }
+
+  map_item_timer.Cancel();
 
   return false;
 }

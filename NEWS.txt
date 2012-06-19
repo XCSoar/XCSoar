@@ -29,6 +29,10 @@ Version 6.4 - not yet released
 Version 6.3.7 - not yet released
 * calculations
   - show altitude difference to target point, not area centre
+* replay
+  - fix parsing of flight date in IGC files
+* Android
+  - fix crash during METAR download (#2156)
 
 Version 6.3.6 - 2012/06/06
 * calculations
