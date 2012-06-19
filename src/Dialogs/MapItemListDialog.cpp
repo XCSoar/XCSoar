@@ -202,6 +202,8 @@ ShowMapItemListDialog(SingleWindow &parent,
 
   default:
     /* more than one map item: show a list */
+    assert(list == NULL);
+
     list = &_list;
 
     dialog_look = &_dialog_look,
@@ -211,6 +213,10 @@ ShowMapItemListDialog(SingleWindow &parent,
     airspace_warnings = _airspace_warnings;
 
     int i = ShowMapItemListDialog(parent);
+#ifndef NDEBUG
+    list = NULL;
+#endif
+
     assert(i >= -1 && i < (int)_list.size());
     if (i >= 0)
       ShowMapItemDialog(*_list[i], parent);
