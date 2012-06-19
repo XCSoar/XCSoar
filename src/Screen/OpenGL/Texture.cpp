@@ -329,7 +329,8 @@ void
 GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
 {
 #ifdef HAVE_OES_DRAW_TEXTURE
-  const GLint rect[4] = { src.left, src.top, src.right, src.bottom };
+  const GLint rect[4] = { src.left, src.top,
+                          src.right - src.left, src.bottom - src.top };
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
