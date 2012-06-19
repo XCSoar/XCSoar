@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-05-13 17:32+0000\n"
-"Last-Translator: Habdák Zoltán <hapci@msn.com>\n"
+"PO-Revision-Date: 2012-06-18 15:36+0000\n"
+"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-19 10:01+0000\n"
-"X-Generator: Launchpad (build 15259)\n"
+"X-Launchpad-Export-Date: 2012-06-19 10:08+0000\n"
+"X-Generator: Launchpad (build 15435)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -68,7 +68,7 @@ msgid ""
 "but within margin"
 msgstr ""
 "Indulási szabályok kissé megsértve\n"
-"de határon belűl"
+"de határon belül"
 
 #: src/ConditionMonitor/ConditionMonitorStartRules.cpp:61
 msgid "Start rules violated"
@@ -2132,7 +2132,7 @@ msgid ""
 "altitude."
 msgstr ""
 "Az útvonal aktuális szakaszán a földnek ütközésig megtehető távolság. Ezen a "
-"ponton a magasság kisebb lesz a beállított minimális talaj feletti "
+"ponton lesz a magasság kisebb a beállított minimális talaj feletti "
 "magasságnál."
 
 #: src/InfoBoxes/Content/Altitude.cpp:53
@@ -2513,7 +2513,7 @@ msgstr "Irány"
 #: src/Renderer/WaypointListRenderer.cpp:56
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:113
 msgid "Elevation"
-msgstr "Magasság"
+msgstr "Talajszint"
 
 #: src/Renderer/MapItemListRenderer.cpp:163
 #: src/Renderer/MapItemListRenderer.cpp:188
@@ -2601,7 +2601,7 @@ msgstr "Térképelemek ezen a helyen"
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:84
 msgid "Elevation: "
-msgstr "emelés "
+msgstr "Talajszint: "
 
 #: src/MapWindow/GlueMapWindowOverlays.cpp:126
 msgid "GPS not connected"
@@ -3583,7 +3583,7 @@ msgstr "Ellenőrző lista nincs betöltve"
 
 #: src/Dialogs/dlgChecklist.cpp:144
 msgid "Create xcsoar-checklist.txt\n"
-msgstr "xcsoar-checklist.txt létrehozása\n"
+msgstr "Hozzon létre xcsoar-checklist.txt fájlt!\n"
 
 #: src/Dialogs/dlgPlanes.cpp:121
 msgid "Active"
@@ -3610,7 +3610,7 @@ msgstr "Hiba"
 #: src/Dialogs/dlgPlanes.cpp:163
 #, c-format
 msgid "Loading of plane profile \"%s\" failed!"
-msgstr "Hiba a repülő tulajdonságok \"%s\" betöltésekor!"
+msgstr "Hiba a repülőgép tulajdonságok \"%s\" betöltésekor!"
 
 #: src/Dialogs/dlgPlanes.cpp:166 src/Dialogs/dlgPlanes.cpp:301
 #: Data/Dialogs/dlgPlanes.xml:10 Data/Dialogs/dlgPlanes_L.xml:10
@@ -3954,11 +3954,11 @@ msgstr "Irány és távolság"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:148
 msgid "Alt. diff. MC 0"
-msgstr "MagTblt MC0"
+msgstr "Mag.tblt.MC.nul"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:152
 msgid "Alt. diff. MC safety"
-msgstr "Mag.tbl.MC.bizt"
+msgstr "Mag.tblt.MC.biz"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:157
 msgid "Alt. diff. MC current"
@@ -4361,7 +4361,7 @@ msgstr "Emelések görgetett átlaga"
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:65
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
-msgstr ""
+msgstr "Az MC-t az összes emelésen alapuló görgetett átlaghoz igazítja."
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:67
 #, no-c-format
@@ -4455,6 +4455,9 @@ msgid ""
 "Account for wind drift for the predicted circling duration. This reduces the "
 "arrival height for legs with head wind."
 msgstr ""
+"Figyelembe veszi a körözés várható időtartama alatt a szél miatt "
+"bekövetkezett elsodródást. Ez csökkenti a szembeszeles útvonalszakaszok "
+"érkezési magasságát."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:84
 msgid "Fonts"
@@ -4562,6 +4565,7 @@ msgstr "Rezgő visszajelzés"
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:217
 msgid "Determines if haptic feedback like vibration is used."
 msgstr ""
+"Szabályozza a tapintható visszajelzések használatát, mint például a vibrálás."
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:49
 #, no-c-format
@@ -4707,7 +4711,7 @@ msgstr "Szöveg"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:117
 #, no-c-format
 msgid "Show text on tabbed dialogs."
-msgstr ""
+msgstr "Ablakok fülein szöveget mutat."
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:118
 #, no-c-format
@@ -4717,7 +4721,7 @@ msgstr "Ikonok"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:119
 #, no-c-format
 msgid "Show icons on tabbed dialogs."
-msgstr ""
+msgstr "Ablakok fülein ikont mutat."
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:124
 #, no-c-format
@@ -4983,7 +4987,7 @@ msgstr "Tájolás siklásban"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:103
 msgid "Determines how the screen is rotated with the glider"
-msgstr ""
+msgstr "Szabályozza, hogyan legyen forgatva a képernyő a gépnek megfelelően."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:108
 msgid "Circling orientation"
@@ -5012,6 +5016,7 @@ msgstr "Térképeltolás"
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:119
 msgid "Determines what is used to shift the glider from the map center"
 msgstr ""
+"Szabályozza, mi alapján kerüljön eltolásra a gép jele a térkép közepéről."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:125
 msgid "Glider position offset"
@@ -5099,7 +5104,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:130
 #, no-c-format
 msgid "Reach calculations disabled."
-msgstr "Számítások letiltva."
+msgstr "Elérhető terület kiszámítása letiltva."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:131
 #, no-c-format
@@ -5124,7 +5129,7 @@ msgstr "A terepakadályok megkerülésével elérhető terület."
 #. Spacer
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:140
 msgid "Reach mode"
-msgstr "Elérhető"
+msgstr "Elérhető számítása"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:141
 msgid ""
@@ -5135,7 +5140,7 @@ msgstr "Az elérhető terület kiszámításának módja."
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:146
 #, no-c-format
 msgid "Disables the reach display."
-msgstr ""
+msgstr "Letiltja az elérhetó terület megjelenítését."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:147
 #: src/Dialogs/dlgTaskHelpers.cpp:248
@@ -5160,7 +5165,7 @@ msgstr "A területen kívüli terep árnyékolva lesz."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:152
 msgid "Reach display"
-msgstr "Elérhető terület"
+msgstr "Elérhető kijelzése"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:157
 #, no-c-format
@@ -5180,7 +5185,7 @@ msgstr "A biztonsági MC értékkel."
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:163
 msgid "Reach polar"
-msgstr "Elérhető táv polárisa"
+msgstr "Elérhető polárisa"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:164
 msgid ""
@@ -5245,7 +5250,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:85
 msgid "Polar degradation"
-msgstr ""
+msgstr "Polárcsökkenés"
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:86
 #, no-c-format
@@ -5253,6 +5258,8 @@ msgid ""
 "A permanent polar degradation. 0% means no degradation, 50% indicates the "
 "glider's sink rate is doubled."
 msgstr ""
+"A poláris végleges csökkenése. A 0% jelenti ha nincs csökkenés, az 50% "
+"jelenti, ha a gép merülése megduplázódott."
 
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:95
 msgid ""
@@ -5274,6 +5281,11 @@ msgid ""
 "no compensation, 1.0 scales MC linearly with current height (with reference "
 "to height of the maximum climb). If considered, 0.3 is recommended."
 msgstr ""
+"Ez a kockázati tényező csökkenti a tartandó sebesség kiszámításához használt "
+"MacCready értéket ahogy a gép alacsonyra kerül, kompenzálva ezzel a növekvő "
+"kockázatot. Állítsa 0.0-ra ha nem akar kompenzálást, 1.0 érték lineárisan "
+"változtatja az MC-t a pillanatnyi magassággal (referenciaként a legnagyobb "
+"emelkedés magasságát használva). A javasolt érték: 0.3."
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:98
 msgid "Map database"
@@ -5566,6 +5578,8 @@ msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
 msgstr ""
+"A feladatkezdés maximális, a megadott startmagasságon alapuló (AGL vagy MSL) "
+"magassága. Állítsa nullára, ha nincs korlát."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:85
 msgid "Start max. height margin"
@@ -5583,12 +5597,16 @@ msgstr ""
 #, no-c-format
 msgid "Reference AGL for start maximum height rule (above start point)."
 msgstr ""
+"AGL referenciamagasság a feladatkezdés maximális magasságának szabályához "
+"(kezdőpont feletti)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:53
 #, no-c-format
 msgid "Reference MSL for start maximum height rule (above sea level)."
 msgstr ""
+"MSL referenciamagasság a feladatkezdés maximális magasságának szabályához "
+"(tengerszint feletti)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:96
 #: Data/Dialogs/pnlTaskProperties.xml:20
@@ -5609,18 +5627,24 @@ msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
 msgstr ""
+"A feladatbefejezés minimális, a megadott célmagasságon alapuló (AGL vagy "
+"MSL) magassága. Állítsa nullára, ha nincs korlát."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:60
 #, no-c-format
 msgid "Reference AGL for finish minimum height rule (above finish point)."
 msgstr ""
+"AGL referenciamagasság a feladatbefejezés minimális magasságának szabályához "
+"(kezdőpont feletti)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:61
 #, no-c-format
 msgid "Reference MSL for finish minimum height rule (above sea level)."
 msgstr ""
+"MSL referenciamagasság a feladatbefejezés minimális magasságának szabályához "
+"(tengerszint feletti)."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:115
 #: Data/Dialogs/pnlTaskProperties.xml:30
@@ -5635,6 +5659,10 @@ msgid ""
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
+"Megfelel a szabályos FAI háromszögnek. Három fordulópont, közös start és "
+"cél. Egyik szakasz sem lehet rövidebb a teljes táv 28%-ánál, kivéve a 500 km-"
+"nél hosszabb feladatokat, ahol egyik szakasz sem lehet rövidebb 25%-nál vagy "
+"hosszabb 45%-nál."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:127
 #, no-c-format
@@ -5642,11 +5670,13 @@ msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
 msgstr ""
+"Legfeljebb hét fordulópont, beleértve a startot és a célt, a befutó magasság "
+"nem lehet a startmagasságnál 1000 méterrel alacsonyabban."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:130
 #, no-c-format
 msgid "The most recent contest with Sprint task rules."
-msgstr ""
+msgstr "A legutolsó, Sprint szabályok szerinti verseny."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:132
 #, no-c-format
@@ -5666,6 +5696,9 @@ msgid ""
 "Select the rules used for calculating optimal points for the On-Line "
 "Contest. The implementation  conforms to the official release 2010, Sept.23."
 msgstr ""
+"Válassza ki az On-Line Verseny optimális fordulópontjainak kiszámításához "
+"használt szabályokat. A megvalósítás megfelel a 2010 szeptember 23-i  "
+"hivatalos kiadványnak."
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:79
 #, no-c-format
@@ -6053,6 +6086,9 @@ msgid ""
 "Arrival height considering terrain avoidance. Requires \"Reach mode: Turning"
 "\" in \"Glide Computer > Route\" settings."
 msgstr ""
+"Érkezési magasság a terep elkerülésének figyelembevételével. Szükséges hozzá "
+"a \"Siklókomputer > Útvonal\" beállításokban az \"Elérhető: Kerülőkkel\" "
+"érték."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:118
 #, no-c-format
@@ -6065,6 +6101,8 @@ msgid ""
 "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in "
 "\"Glide Computer > Route\" settings."
 msgstr ""
+"Mindkét érkezési magasság kijelzésre kerül. Szükséges hozzá a "
+"\"Siklókomputer > Útvonal\" beállításokban az \"Elérhető: Kerülőkkel\" érték."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:122
 #, no-c-format
@@ -6074,6 +6112,8 @@ msgstr "Szükséges siklószám"
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:126
 msgid "Determines how arrival height is displayed in waypoint labels"
 msgstr ""
+"Szabályozza, hogyan kerüljenek kijelzésre az érkezési magasságok a "
+"fordulópontok címkéiben."
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:130
 #, no-c-format
@@ -6133,6 +6173,8 @@ msgid ""
 "Determines what waypoint labels are displayed for each waypoint (space "
 "permitting)."
 msgstr ""
+"Szabályozza, milyen címkék kerülnek kijelzésre a fordulópontokon (a "
+"rendelkezésre álló hely függvényében)"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:161
 #, no-c-format
@@ -6227,6 +6269,8 @@ msgid ""
 "[Off] Display fixed length for runways.\n"
 "[On] Scale displayed runway length based on real length."
 msgstr ""
+"[KI] Egyforma hosszon jelzi a futópályákat\n"
+"[BE] A valós hossz arányában jelzi a futópályákat."
 
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:82
 #: src/Dialogs/TaskManager/TaskManagerDialog.cpp:172
@@ -6394,18 +6438,21 @@ msgid ""
 "FAI rules, allows only FAI start, finish and turn point types, for badges "
 "and records.  Enables FAI finish height for final glide calculation."
 msgstr ""
+"FAI szabályok, jelvényekhez és rekordokhoz. Csak FAI start, cél és "
+"fordulópontok engedélyezettek. A végsiklás kiszámítása során figyelembe "
+"veszi a FAI befutó magasságot."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:82
 msgid "FAI rules, path from a start to two turn points and return."
-msgstr ""
+msgstr "FAI szabályok, a startból két fordulópont érintésével és vissza."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:84
 msgid "FAI rules, path from start to a single turn point and return."
-msgstr ""
+msgstr "FAI szabályok, a startból egy fordulópont érintésével és vissza."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:86
 msgid "FAI rules, path from start to a goal destination."
-msgstr ""
+msgstr "FAI szabályok, a startból közvetlenül a célba."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:88
 msgid ""
@@ -6420,12 +6467,15 @@ msgid ""
 "Racing task with a mix of assigned areas and turn points, minimum task time "
 "applies."
 msgstr ""
+"Versenyfeladat, fordulópontok és hozzárendelt területek (HT) keverékével, "
+"minimális idő előírásával."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:93
 msgid ""
 "Casual touring task, uses start and finish cylinders and FAI sector turn "
 "points."
 msgstr ""
+"Egyéni túrafeladat, start- és célhengerekkel, FAI szektor fordulópontokkal."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:120
 msgid "Goal"
@@ -6488,15 +6538,15 @@ msgstr "Henger"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:260
 msgid "DAeC Keyhole"
-msgstr ""
+msgstr "DAeC kulcslyuk"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:264
 msgid "BGA Fixed Course"
-msgstr ""
+msgstr "BGA rögzített kurzus"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:268
 msgid "BGA Enhanced Option"
-msgstr ""
+msgstr "BGA bővített"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:272
 msgid "BGA Start Sector"
@@ -6530,44 +6580,56 @@ msgid ""
 "A 90 degree sector with 'infinite' length sides.  Cross any edge, scored "
 "from corner point."
 msgstr ""
+"Egy derékszögű szektor, 'végtelen' hosszú élekkel. Szelje át bármelyik, a "
+"fordulópontból húzott élt a fordulópont teljesítéséhez."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:295
 msgid "A cylinder.  Any point within area scored from center."
-msgstr ""
+msgstr "Egy henger. Érintse bármelyik pontját a fordulópont teljesítéséhez."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:297
 msgid ""
 "(German rules) Any point within 1/2 km of center or 10km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Német szabályok) Érintse a 0.5 km sugarú henger vagy a 10 km sugarú, "
+"derékszögű szektor bármely pontját a fordulópont teljesítéséhez."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:300
 msgid ""
 "(British rules) Any point within 1/2 km of center or 20km of a 90 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Brit szabályok) Érintse a 0.5 km sugarú henger vagy a 20 km sugarú, "
+"derékszögű szektor bármely pontját a fordulópont teljesítéséhez."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:303
 msgid ""
 "(British rules) Any point within 1/2 km of center or 10km of a 180 degree "
 "sector.  Scored from center."
 msgstr ""
+"(Brit szabályok) Érintse a 0.5 km sugarú henger vagy a 10 km sugarú, "
+"egyenesszögű szektor bármely pontját a fordulópont teljesítéséhez."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:306
 msgid "A cylinder.  Scored by farthest point reached in area."
-msgstr ""
+msgstr "Egy henger. A benne elért legtávolabbi pont kerül számításba."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:308
 msgid ""
 "A sector that can vary in angle and radius.  Scored by farthest point "
 "reached inside area."
 msgstr ""
+"Szektor, változatos szöggel és sugárral. A benne elért legtávolabbi pont "
+"kerül számításba."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:311
 msgid ""
 "A sector that can vary in angle, inner and outer radius.  Scored by farthest "
 "point reached inside area."
 msgstr ""
+"Szektor, változatos szöggel, belső és külső sugárral. A benne elért "
+"legtávolabbi pont kerül számításba."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:314
 msgid "A 90 degree sector with 1km radius.  Cross edge to finish."
@@ -6732,6 +6794,7 @@ msgid ""
 "Sorry, the waypoint editor is not yet available for the UTM coordinate "
 "format."
 msgstr ""
+"Sajnos a fordulópont szerkesztő még nem kezeli az  UTM koordináta formátumot."
 
 #: src/Dialogs/dlgWaypointEdit.cpp:382 Data/Dialogs/dlgWaypointEdit.xml:3
 #: Data/Dialogs/dlgWaypointEdit_L.xml:3
@@ -6851,7 +6914,7 @@ msgstr "Hőlég ballon"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:106
 msgid "Tracking Interval"
-msgstr ""
+msgstr "Nyomkövetési ütem"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
 msgid "Vehicle Type"
@@ -6950,7 +7013,7 @@ msgstr "Lépés"
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:34
 #, no-c-format
 msgid "Ramp"
-msgstr ""
+msgstr "Meredekség"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:41
 #, no-c-format
@@ -7664,7 +7727,7 @@ msgstr "GPS jel"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:46 Data/Dialogs/dlgPlaneDetails_L.xml:38
 msgid "Dump Time"
-msgstr ""
+msgstr "Ürítési idő"
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
@@ -8483,6 +8546,9 @@ msgid ""
 "[MSL] Reference is altitude above mean sea level\n"
 "[AGL] Reference is the height above the finish point"
 msgstr ""
+"A minimális célmagasság szabályához használt referencia\n"
+"[Tenger feletti] A magasságot a tengerszinthez képest kell értelmezni.\n"
+"[Föld feletti] A magasságot a talaj szintjéhez képest kell értelmezni."
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid "Task altitude difference"
