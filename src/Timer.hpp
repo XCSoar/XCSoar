@@ -27,6 +27,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Android/Timer.hpp"
 #elif defined(ENABLE_SDL)
+#include "Thread/Flag.hpp"
 #include <SDL_timer.h>
 #else
 #include "Screen/Window.hpp"
@@ -62,6 +63,13 @@ class Timer
   AndroidTimer *timer;
 #elif defined(ENABLE_SDL)
   SDL_TimerID id;
+
+  /**
+   * True when the timer event has been pushed to the event queue.
+   * This is used to prevent duplicate items stacking on the event
+   * queue.
+   */
+  Flag queued;
 #endif
 
 public:

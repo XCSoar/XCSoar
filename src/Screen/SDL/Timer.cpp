@@ -43,12 +43,14 @@ Timer::Cancel()
   id = NULL;
 
   EventQueue::Purge(Invoke, (void *)this);
+  queued.Reset();
 }
 
 void
 Timer::Invoke()
 {
   OnTimer();
+  queued.Reset();
 }
 
 void
@@ -61,7 +63,8 @@ Timer::Invoke(void *ctx)
 Uint32
 Timer::Callback(Uint32 interval)
 {
-  EventQueue::Push(Invoke, (void *)this);
+  if (!queued.GetAndSet(true))
+    EventQueue::Push(Invoke, (void *)this);
   return interval;
 }
 
