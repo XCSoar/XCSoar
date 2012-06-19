@@ -317,10 +317,11 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
 
   glVertexPointer(2, GL_VALUE, 0, vertices);
 
-  GLfloat x0 = (GLfloat)src_x / allocated_width;
-  GLfloat y0 = (GLfloat)src_y / allocated_height;
-  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated_width;
-  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated_height;
+  const PixelSize allocated = GetAllocatedSize();
+  GLfloat x0 = (GLfloat)src_x / allocated.cx;
+  GLfloat y0 = (GLfloat)src_y / allocated.cy;
+  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated.cx;
+  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated.cy;
 
   const GLfloat coord[] = {
     x0, y0,
@@ -359,10 +360,11 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
 
   glVertexPointer(2, GL_VALUE, 0, vertices);
 
-  GLfloat x0 = (GLfloat)src.left / allocated_width;
-  GLfloat y0 = (GLfloat)src.top / allocated_height;
-  GLfloat x1 = (GLfloat)src.right / allocated_width;
-  GLfloat y1 = (GLfloat)src.bottom / allocated_height;
+  const PixelSize allocated = GetAllocatedSize();
+  GLfloat x0 = (GLfloat)src.left / allocated.cx;
+  GLfloat y0 = (GLfloat)src.top / allocated.cy;
+  GLfloat x1 = (GLfloat)src.right / allocated.cx;
+  GLfloat y1 = (GLfloat)src.bottom / allocated.cy;
 
   const GLfloat coord[] = {
     x0, y1,
