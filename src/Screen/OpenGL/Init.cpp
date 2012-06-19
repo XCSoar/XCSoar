@@ -141,6 +141,7 @@ OpenGL::SetupContext()
   glDisable(GL_LIGHTING);
 
   glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
   InitShapes();
 }

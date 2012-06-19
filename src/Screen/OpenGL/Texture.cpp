@@ -308,8 +308,6 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
                 OpenGL::screen_height - OpenGL::translate_y - dest_y - dest_height,
                 0, dest_width, dest_height);
 #else
-  GLEnable scope(GL_TEXTURE_COORD_ARRAY);
-
   const PixelScalar vertices[] = {
     dest_x, dest_y,
     PixelScalar(dest_x + dest_width), dest_y,
@@ -331,8 +329,10 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
     x1, y1,
   };
 
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glTexCoordPointer(2, GL_FLOAT, 0, coord);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 #endif
 }
 
@@ -350,8 +350,6 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
                 OpenGL::screen_height - OpenGL::translate_y - dest.bottom,
                 0, dest.right - dest.left, dest.bottom - dest.top);
 #else
-  GLEnable scope(GL_TEXTURE_COORD_ARRAY);
-
   const PixelScalar vertices[] = {
     dest.left, dest.top,
     dest.right, dest.top,
@@ -373,7 +371,9 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
     x1, y0,
   };
 
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
   glTexCoordPointer(2, GL_FLOAT, 0, coord);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 #endif
 }
