@@ -36,6 +36,9 @@ Timer::Schedule(unsigned ms)
 void
 Timer::Cancel()
 {
+  if (!IsActive())
+    return;
+
   ::SDL_RemoveTimer(id);
   id = NULL;
 
