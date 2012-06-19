@@ -132,7 +132,10 @@ public:
   }
 #elif defined(ENABLE_SDL)
 private:
+  void Invoke();
   static void Invoke(void *ctx);
+
+  Uint32 Callback(Uint32 interval);
   static Uint32 Callback(Uint32 interval, void *param);
 #else
 private:
