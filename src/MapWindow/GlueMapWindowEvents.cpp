@@ -157,7 +157,8 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
   switch (old_drag_mode) {
   case DRAG_NONE:
-    break;
+    /* skip the arm_mapitem_list check below */
+    return false;
 
 #ifdef HAVE_MULTI_TOUCH
   case DRAG_MULTI_TOUCH_PAN:
