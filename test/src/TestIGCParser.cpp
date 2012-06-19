@@ -67,7 +67,7 @@ TestDate()
   ok1(date.day == 1);
 
   ok1(IGCParseDate("HFDTE311299", date));
-  ok1(date.year == 2099);
+  ok1(date.year == 1999);
   ok1(date.month == 12);
   ok1(date.day == 31);
 }
