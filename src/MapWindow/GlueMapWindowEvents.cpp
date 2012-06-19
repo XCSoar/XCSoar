@@ -288,6 +288,8 @@ GlueMapWindow::OnCancelMode()
     drag_mode = DRAG_NONE;
   }
 
+  map_item_timer.Cancel();
+
   return false;
 }
 
