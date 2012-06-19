@@ -816,7 +816,6 @@ Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
   assert(y_offset == OpenGL::translate_y);
 #endif
 
-  GLEnable scope(GL_TEXTURE_2D);
   texture.Bind();
   glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
                       OpenGL::translate_x + src_rc.left,
