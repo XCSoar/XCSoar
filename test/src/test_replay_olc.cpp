@@ -48,13 +48,12 @@ inline void load_score_file(std::ifstream& fscore,
   double tmp;
   fscore >> tmp; score.score = (fixed)tmp;
   fscore >> tmp; score.distance = (fixed)tmp;
-  fscore >> tmp; score.speed = (fixed)tmp;
-  if (score.speed>fixed_zero) {
-    score.time = fixed(3600)*score.distance/score.speed;
+  fscore >> tmp; fixed speed(tmp);
+  if (speed>fixed_zero) {
+    score.time = fixed(3600)*score.distance/speed;
   } else {
     score.time = fixed_zero;
   }
-  score.speed /= fixed(3.6);
   score.distance *= fixed(1000);
 }
 

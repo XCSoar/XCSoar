@@ -65,10 +65,6 @@ AbstractContest::SaveSolution()
   best_result.score = score;
   best_result.distance = CalcDistance();
   best_result.time = CalcTime();
-  if (positive(best_result.time))
-    best_result.speed = best_result.distance / best_result.time;
-  else
-    best_result.speed = fixed_zero;
 
   return true;
 }

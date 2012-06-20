@@ -35,18 +35,26 @@ struct ContestResult
   fixed distance;
   /** Time (s) of optimised OLC path */
   fixed time;
-  /** Speed (m/s) of optimised OLC path */
-  fixed speed;
 
   void Reset() {
     score = fixed_zero;
     distance = fixed_zero;
     time = fixed_zero;
-    speed = fixed_zero;
   }
 
   bool IsDefined() const {
     return positive(score);
+  }
+
+  /**
+   * Returns the average speed on the optimised path [m/s].  Returns
+   * zero if the result is invalid.
+   */
+  gcc_pure
+  fixed GetSpeed() const {
+    return positive(time)
+      ? distance / time
+      : fixed_zero;
   }
 };
 

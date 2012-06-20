@@ -110,7 +110,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     TCHAR distance_fai[100];
     FormatUserDistanceSmart(result_fai.distance, distance_fai, 100);
     TCHAR speed[100];
-    FormatUserTaskSpeed(result.speed, speed, ARRAY_SIZE(speed));
+    FormatUserTaskSpeed(result.GetSpeed(), speed, ARRAY_SIZE(speed));
     _stprintf(sTmp,
               (Layout::landscape
                ? _T("%s:\r\n%s\r\n%s (FAI)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %s\r\n")
@@ -134,7 +134,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     TCHAR distance_fai[100];
     FormatUserDistanceSmart(result_triangle.distance, distance_fai, 100);
     TCHAR speed[100];
-    FormatUserTaskSpeed(result_free.speed, speed, ARRAY_SIZE(speed));
+    FormatUserTaskSpeed(result_free.GetSpeed(), speed, ARRAY_SIZE(speed));
     _stprintf(sTmp,
               (Layout::landscape
                ? _T("%s:\r\n%s (Free)\r\n%s (Triangle)\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %s\r\n")
@@ -162,7 +162,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     TCHAR distance[100];
     FormatUserDistanceSmart(result_olc.distance, distance, 100);
     TCHAR speed[100];
-    FormatUserTaskSpeed(result_olc.speed, speed, ARRAY_SIZE(speed));
+    FormatUserTaskSpeed(result_olc.GetSpeed(), speed, ARRAY_SIZE(speed));
     _stprintf(sTmp,
               (Layout::landscape
                ? _T("%s:\r\n%s\r\n%s:\r\n%.1f %s\r\n%s: %s\r\n%s: %s\r\n")

@@ -175,7 +175,7 @@ Add(XMLNode &parent, const TCHAR *name,
   buffer.UnsafeFormat(_T("%u"), uround(result.time));
   node.AddAttribute(_T("duration"), buffer.c_str());
 
-  buffer.UnsafeFormat(_T("%1.2f"), (double)result.speed);
+  buffer.UnsafeFormat(_T("%1.2f"), (double)result.GetSpeed());
   node.AddAttribute(_T("speed"), buffer.c_str());
 
   const TracePoint *previous = NULL;
