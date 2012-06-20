@@ -214,52 +214,30 @@ ContestDijkstra::Reset()
   AbstractContest::Reset();
 }
 
-
-fixed
-ContestDijkstra::CalcTime() const
+ContestResult
+ContestDijkstra::CalculateResult() const
 {
   assert(num_stages <= MAX_STAGES);
   assert(solution_valid);
 
-  return fixed(GetPoint(solution[num_stages - 1])
-               .DeltaTime(GetPoint(solution[0])));
-}
+  ContestResult result;
+  result.time = fixed(GetPoint(solution[num_stages - 1])
+                      .DeltaTime(GetPoint(solution[0])));
+  result.distance = result.score = fixed_zero;
 
-fixed
-ContestDijkstra::CalcDistance() const
-{
-  assert(num_stages <= MAX_STAGES);
-  assert(solution_valid);
-
-  fixed dist = fixed_zero;
   GeoPoint previous = GetPoint(solution[0]).get_location();
   for (unsigned i = 1; i < num_stages; ++i) {
     const GeoPoint &current = GetPoint(solution[i]).get_location();
-    dist += current.Distance(previous);
-    previous = current;
-  }
-
-  return dist;
-}
-
-fixed
-ContestDijkstra::CalcScore() const
-{
-  assert(num_stages <= MAX_STAGES);
-  assert(solution_valid);
-
-  fixed score = fixed_zero;
-  GeoPoint previous = GetPoint(solution[0]).get_location();
-  for (unsigned i = 1; i < num_stages; ++i) {
-    const GeoPoint &current = GetPoint(solution[i]).get_location();
-    score += GetStageWeight(i - 1) * current.Distance(previous);
+    result.distance += current.Distance(previous);
+    result.score += GetStageWeight(i - 1) * current.Distance(previous);
     previous = current;
   }
 
   #define fixed_fifth fixed(0.0002)
-  score *= fixed_fifth;
+  result.score *= fixed_fifth;
+  result.score = ApplyHandicap(result.score);
 
-  return ApplyHandicap(score);
+  return result;
 }
 
 void

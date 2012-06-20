@@ -45,7 +45,7 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual fixed CalcScore() const;
+  virtual ContestResult CalculateResult() const;
 
   /* virtual methods from NavDijkstra */
   virtual void AddEdges(ScanTaskPoint origin);

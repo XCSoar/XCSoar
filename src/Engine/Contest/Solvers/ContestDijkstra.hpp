@@ -213,9 +213,7 @@ public:
 
 protected:
   /* protected virtual methods from AbstractContest */
-  virtual fixed CalcDistance() const;
-  virtual fixed CalcScore() const;
-  virtual fixed CalcTime() const;
+  virtual ContestResult CalculateResult() const;
   virtual bool SaveSolution();
 
 protected:

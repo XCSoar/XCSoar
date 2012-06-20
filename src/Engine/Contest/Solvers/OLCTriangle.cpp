@@ -262,30 +262,18 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
   }
 }
 
-fixed
-OLCTriangle::CalcDistance() const
+ContestResult
+OLCTriangle::CalculateResult() const
 {
-  if (is_complete) {
-    return CalcLegDistance(0) + CalcLegDistance(1) + CalcLegDistance(2);
-  } else {
-    return fixed_zero;
-  }
-}
-
-fixed
-OLCTriangle::CalcTime() const
-{
-  if (!n_points)
-    return fixed_zero;
-
-  return fixed(GetPoint(n_points - 1).DeltaTime(GetPoint(0)));
-}
-
-fixed
-OLCTriangle::CalcScore() const
-{
-  // one point per km
-  return ApplyHandicap(CalcDistance()*fixed(0.001));
+  ContestResult result;
+  result.time = n_points > 0
+    ? fixed(GetPoint(n_points - 1).DeltaTime(GetPoint(0)))
+    : fixed_zero;
+  result.distance = is_complete
+    ? CalcLegDistance(0) + CalcLegDistance(1) + CalcLegDistance(2)
+    : fixed_zero;
+  result.score = ApplyHandicap(result.distance * fixed(0.001));
+  return result;
 }
 
 void

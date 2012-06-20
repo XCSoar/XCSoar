@@ -40,8 +40,8 @@ OLCSISAT::OLCSISAT(const Trace &_trace)
               = (V + 3*S)/4
 */
 
-fixed
-OLCSISAT::CalcScore() const
+ContestResult
+OLCSISAT::CalculateResult() const
 {
   assert(solution_valid);
 
@@ -70,8 +70,8 @@ OLCSISAT::CalcScore() const
   const fixed V = G - R;
 
   // S = total distance
-  const fixed S = CalcDistance();
-
-  return ApplyHandicap((V + fixed(3) * S) * fixed(0.00025));
+  ContestResult result = ContestDijkstra::CalculateResult();
+  result.score = ApplyHandicap((V + fixed(3) * result.distance) * fixed(0.00025));
+  return result;
 }
 

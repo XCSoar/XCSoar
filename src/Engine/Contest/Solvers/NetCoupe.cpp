@@ -25,10 +25,12 @@
 NetCoupe::NetCoupe(const Trace &_trace)
   :ContestDijkstra(_trace, true, 4, 1000) {}
 
-fixed
-NetCoupe::CalcScore() const
+ContestResult
+NetCoupe::CalculateResult() const
 {
+  ContestResult result = ContestDijkstra::CalculateResult();
   // 0.8 factor for free distance and 1/1000 m -> km
-  return ApplyHandicap(CalcDistance()*fixed(0.0008));
+  result.score = ApplyHandicap(result.distance * fixed(0.0008));
+  return result;
 }
 

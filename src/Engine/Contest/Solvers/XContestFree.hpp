@@ -37,7 +37,7 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual fixed CalcScore() const;
+  virtual ContestResult CalculateResult() const;
 };
 
 #endif

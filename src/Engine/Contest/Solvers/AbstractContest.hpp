@@ -73,27 +73,9 @@ public:
 
 protected:
   /**
-   * Calculate distance of best path
-   *
-   * @return Distance (m)
+   * Calculate the result.
    */
-  virtual fixed CalcDistance() const = 0;
-
-  /**
-   * Calculate score of best path
-   * This is specialised by each contest type, defaults to
-   * speed in kph measured by weighted distance divided by time
-   * 
-   * @return Score (pts)
-   */
-  virtual fixed CalcScore() const = 0;
-
-  /**
-   * Calculate elapsed time of best path
-   *
-   * @return Distance (m)
-   */
-  virtual fixed CalcTime() const = 0;
+  virtual ContestResult CalculateResult() const = 0;
 
 public:
   /**

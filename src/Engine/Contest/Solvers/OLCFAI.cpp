@@ -27,9 +27,11 @@ OLCFAI::OLCFAI(const Trace &_trace)
 {
 }
 
-fixed
-OLCFAI::CalcScore() const
+ContestResult
+OLCFAI::CalculateResult() const
 {
+  ContestResult result = OLCTriangle::CalculateResult();
   // 0.3 points per km
-  return ApplyHandicap(CalcDistance() * fixed(0.0003));
+  result.score = ApplyHandicap(result.distance * fixed(0.0003));
+  return result;
 }

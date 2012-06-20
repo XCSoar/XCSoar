@@ -39,7 +39,8 @@ AbstractContest::Reset()
 bool
 AbstractContest::Score(ContestResult &result)
 {
-  if (positive(CalcTime())) {
+  /* XXX optimise this, don't call CalculateResult() */
+  if (positive(CalculateResult().time)) {
     result = best_result;
     return true;
   }
@@ -56,16 +57,13 @@ AbstractContest::UpdateScore()
 bool
 AbstractContest::SaveSolution()
 {
-  const fixed score = CalcScore();
-  const bool improved = (score > best_result.score);
+  ContestResult result = CalculateResult();
+  const bool improved = result.score > best_result.score;
 
   if (!improved)
     return false;
 
-  best_result.score = score;
-  best_result.distance = CalcDistance();
-  best_result.time = CalcTime();
-
+  best_result = result;
   return true;
 }
 

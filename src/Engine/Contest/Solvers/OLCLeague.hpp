@@ -48,9 +48,7 @@ public:
   }
 
 protected:
-  virtual fixed CalcDistance() const;
-  virtual fixed CalcScore() const;
-  virtual fixed CalcTime() const;
+  virtual ContestResult CalculateResult() const;
 
 public:
   /* virtual methods from class AbstractContest */

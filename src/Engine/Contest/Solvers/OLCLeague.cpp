@@ -98,26 +98,19 @@ OLCLeague::CopySolution(ContestTraceVector &vec) const
   vec = best_solution;
 }
 
-fixed
-OLCLeague::CalcDistance() const
+ContestResult
+OLCLeague::CalculateResult() const
 {
-  fixed dist = fixed_zero;
+  ContestResult result;
+  if (!solution[4].IsDefined()) {
+    result.Reset();
+    return result;
+  }
+
+  result.time = fixed(solution[4].DeltaTime(solution[0]));
+  result.distance = fixed_zero;
   for (unsigned i = 0; i < 4; ++i)
-    dist += solution[i].distance(solution[i + 1].get_location());
-
-  return dist;
-}
-
-fixed
-OLCLeague::CalcScore() const
-{
-  return ApplyShiftedHandicap(CalcDistance() / 2500);
-}
-
-fixed
-OLCLeague::CalcTime() const
-{
-  return solution[4].IsDefined()
-    ? fixed(solution[4].DeltaTime(solution[0]))
-    : fixed_zero;
+    result.distance += solution[i].distance(solution[i + 1].get_location());
+  result.score = ApplyShiftedHandicap(result.distance / 2500);
+  return result;
 }

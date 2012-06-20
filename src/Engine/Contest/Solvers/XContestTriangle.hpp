@@ -40,8 +40,7 @@ public:
 protected:
   /* virtual methods from AbstractContest */
   virtual bool Solve(bool exhaustive);
-  virtual fixed CalcScore() const;
-  virtual fixed CalcDistance() const;
+  virtual ContestResult CalculateResult() const;
 };
 
 #endif

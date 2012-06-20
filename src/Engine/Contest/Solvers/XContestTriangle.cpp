@@ -27,9 +27,25 @@ XContestTriangle::XContestTriangle(const Trace &_trace,
   :OLCTriangle(_trace),
    is_dhv(_is_dhv) {}
 
-fixed
-XContestTriangle::CalcScore() const
+ContestResult
+XContestTriangle::CalculateResult() const
 {
+  ContestResult result = OLCTriangle::CalculateResult();
+
+  if (positive(result.distance)) {
+    // approximation for now: gap is distance from start to finish
+    const fixed d_gap = GetPoint(0).get_location()
+      .Distance(GetPoint(n_points - 1).get_location());
+
+    // award no points if gap is >20% of triangle
+
+    if (d_gap > fixed(0.2) * result.distance)
+      result.distance = fixed_zero;
+    else
+      result.distance -= d_gap;
+  } else
+    result.distance = fixed_zero;
+
   // DHV-XC: 2.0 or 1.75 points per km for FAI vs non-FAI triangle
   // XContest: 1.4 or 1.2 points per km for FAI vs non-FAI triangle
 
@@ -37,26 +53,8 @@ XContestTriangle::CalcScore() const
     (is_fai? fixed(0.002): fixed(0.00175))
     :(is_fai? fixed(0.0014): fixed(0.0012));
 
-  return ApplyHandicap(CalcDistance()*score_factor);
-}
-
-fixed
-XContestTriangle::CalcDistance() const
-{
-  const fixed d_triangle = OLCTriangle::CalcDistance();
-  if (!positive(d_triangle))
-    return fixed_zero;
-
-  // approximation for now: gap is distance from start to finish
-  const fixed d_gap = GetPoint(0).get_location()
-    .Distance(GetPoint(n_points - 1).get_location());
-
-  // award no points if gap is >20% of triangle
-
-  if (d_gap > fixed(0.2)*d_triangle)
-    return fixed_zero;
-  else
-    return d_triangle - d_gap;
+  result.score = ApplyHandicap(result.distance * score_factor);
+  return result;
 }
 
 bool 

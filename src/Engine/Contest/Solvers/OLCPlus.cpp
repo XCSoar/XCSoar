@@ -50,21 +50,11 @@ OLCPlus::CopySolution(ContestTraceVector &vec) const
   vec = solution_classic;
 }
 
-fixed
-OLCPlus::CalcDistance() const
+ContestResult
+OLCPlus::CalculateResult() const
 {
-  return result_classic.distance;
-}
-
-fixed
-OLCPlus::CalcScore() const
-{
-  return ApplyHandicap((result_classic.distance +
-                        fixed(0.3) * result_fai.distance) * fixed(0.001));
-}
-
-fixed
-OLCPlus::CalcTime() const
-{
-  return result_classic.time;
+  ContestResult result = result_classic;
+  result.score = ApplyHandicap((result_classic.distance +
+                                fixed(0.3) * result_fai.distance) * fixed(0.001));
+  return result;
 }

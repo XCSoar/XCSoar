@@ -110,10 +110,12 @@ OLCSprint::AddEdges(const ScanTaskPoint origin)
     ContestDijkstra::AddEdges(origin);
 }
 
-fixed
-OLCSprint::CalcScore() const
+ContestResult
+OLCSprint::CalculateResult() const
 {
-  return ApplyShiftedHandicap(CalcDistance() / fixed(2500));
+  ContestResult result = ContestDijkstra::CalculateResult();
+  result.score = ApplyShiftedHandicap(result.distance / fixed(2500));
+  return result;
 }
 
 void
