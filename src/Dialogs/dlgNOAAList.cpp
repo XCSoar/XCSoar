@@ -27,9 +27,9 @@ Copyright_License {
 #include "Dialogs/JobDialog.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Language/Language.hpp"
-#include "Net/Features.hpp"
+#include "Weather/Features.hpp"
 
-#ifdef HAVE_NET
+#ifdef HAVE_NOAA
 
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
