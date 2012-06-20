@@ -30,7 +30,7 @@
  */
 class OLCTriangle : public ContestDijkstra {
 protected:
-  bool is_fai;
+  const bool is_fai;
   bool is_closed;
   bool is_complete;
   unsigned first_tp;
