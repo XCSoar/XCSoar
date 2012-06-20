@@ -134,12 +134,10 @@ OLCSprint::UpdateTrace(bool force)
     return;
   }
 
-  const TracePoint e[2] = {
-    trace_master.front(),
-    trace_master.back(),
-  };
+  const TracePoint &first = trace_master.front();
+  const TracePoint &last = trace_master.back();
 
-  if (!IsFinishAltitudeValid(e[0], e[1])) {
+  if (!IsFinishAltitudeValid(first, last)) {
     ClearTrace();
     return;
   }

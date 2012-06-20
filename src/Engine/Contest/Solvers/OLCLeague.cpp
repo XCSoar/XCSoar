@@ -57,17 +57,15 @@ OLCLeague::Solve(bool exhaustive)
   if (trace_master.size() < 2)
     return false;
 
-  const TracePoint trace[2] = {
-    trace_master.front(),
-    trace_master.back(),
-  };
+  const TracePoint &first = trace_master.front();
+  const TracePoint &last = trace_master.back();
 
-  if (!IsFinishAltitudeValid(trace[0], trace[1]))
+  if (!IsFinishAltitudeValid(first, last))
     return false;
 
   // solution found, so set start/finish points
-  solution[0] = trace[0];
-  solution[4] = trace[1];
+  solution[0] = first;
+  solution[4] = last;
 
   // scan through classic solution to find points there to add
 
@@ -76,7 +74,7 @@ OLCLeague::Solve(bool exhaustive)
   for (unsigned index_classic = 1; index_classic + 1 < solution_classic.size();
        ++index_classic) {
     if (solution_classic[index_classic].IsNewerThan(solution[index_fill - 1]) &&
-        solution_classic[index_classic].IsOlderThan(trace[1])) {
+        solution_classic[index_classic].IsOlderThan(last)) {
 
       solution[index_fill] = solution_classic[index_classic];
       index_fill++;
