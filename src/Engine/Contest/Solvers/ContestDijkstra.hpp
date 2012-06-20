@@ -31,6 +31,8 @@ Copyright_License {
 
 #include <assert.h>
 
+class Trace;
+
 /**
  * Abstract class for contest searches using dijkstra algorithm
  *
@@ -40,6 +42,10 @@ Copyright_License {
  *
  */
 class ContestDijkstra : public AbstractContest, protected NavDijkstra {
+protected:
+  const Trace &trace_master;
+
+private:
   /**
    * This attribute tracks Trace::GetAppendSerial().  It is updated
    * when appnew copy of the master Trace is obtained, and is used to

@@ -36,7 +36,7 @@ class OLCPlus : public AbstractContest {
   ContestResult result_fai;
 
 public:
-  OLCPlus(const Trace &_trace);
+  OLCPlus();
 
   ContestTraceVector &GetClassicSolution() {
     return solution_classic;

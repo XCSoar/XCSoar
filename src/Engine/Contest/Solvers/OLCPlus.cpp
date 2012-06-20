@@ -22,8 +22,8 @@
 
 #include "OLCPlus.hpp"
 
-OLCPlus::OLCPlus(const Trace &_trace)
-  :AbstractContest(_trace, 0)
+OLCPlus::OLCPlus()
+  :AbstractContest(0)
 {
   Reset();
 }

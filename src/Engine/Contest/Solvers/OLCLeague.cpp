@@ -24,7 +24,7 @@
 #include "Trace/Trace.hpp"
 
 OLCLeague::OLCLeague(const Trace &_trace)
-  :AbstractContest(_trace, 0)
+  :AbstractContest(0), trace(_trace)
 {
   Reset();
 }
@@ -54,11 +54,11 @@ OLCLeague::Reset()
 bool
 OLCLeague::Solve(bool exhaustive)
 {
-  if (trace_master.size() < 2)
+  if (trace.size() < 2)
     return false;
 
-  const TracePoint &first = trace_master.front();
-  const TracePoint &last = trace_master.back();
+  const TracePoint &first = trace.front();
+  const TracePoint &last = trace.back();
 
   if (!IsFinishAltitudeValid(first, last))
     return false;

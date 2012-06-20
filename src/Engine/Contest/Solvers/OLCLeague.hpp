@@ -25,12 +25,16 @@
 
 #include "AbstractContest.hpp"
 
+class Trace;
+
 /**
  * Abstract class for contest searches using dijkstra algorithm
  *
  */
 class OLCLeague : public AbstractContest
 {
+  const Trace &trace;
+
   ContestTraceVector solution_classic;
 
   ContestTraceVector best_solution;

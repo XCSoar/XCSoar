@@ -36,8 +36,9 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  bool _continuous,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff)
-  :AbstractContest(_trace, finish_alt_diff),
+  :AbstractContest(finish_alt_diff),
    NavDijkstra(n_legs + 1),
+   trace_master(_trace),
    continuous(_continuous),
    incremental(false)
 {

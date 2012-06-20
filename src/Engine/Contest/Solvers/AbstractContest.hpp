@@ -26,7 +26,6 @@
 #include "Math/fixed.hpp"
 #include "../ContestResult.hpp"
 
-class Trace;
 class TracePoint;
 
 /**
@@ -34,9 +33,6 @@ class TracePoint;
  *
  */
 class AbstractContest {
-protected:
-  const Trace &trace_master;
-
 private:
   unsigned handicap;
   const unsigned finish_alt_diff;
@@ -50,8 +46,7 @@ public:
    * @param _handicap Contest handicap factor
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  AbstractContest(const Trace &_trace,
-                  const unsigned _finish_alt_diff = 1000);
+  AbstractContest(const unsigned _finish_alt_diff = 1000);
 
   void SetHandicap(unsigned _handicap) {
     handicap = _handicap;
