@@ -127,9 +127,11 @@ GlideComputerAirData::Heading(const NMEAInfo &basic, DerivedInfo &calculated)
 {
   const SpeedVector wind = calculated.wind;
 
-  if (calculated.wind_available &&
-      (positive(basic.ground_speed) || wind.IsNonZero()) &&
-      calculated.flight.flying) {
+  if (basic.attitude.heading_available) {
+    calculated.heading = basic.attitude.heading;
+  } else if (calculated.wind_available &&
+             (positive(basic.ground_speed) || wind.IsNonZero()) &&
+             calculated.flight.flying) {
     fixed x0 = basic.track.fastsine() * basic.ground_speed;
     fixed y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += wind.bearing.fastsine() * wind.norm;
