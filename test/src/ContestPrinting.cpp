@@ -26,12 +26,14 @@
 #include "Trace/Trace.hpp"
 
 void
-PrintHelper::contestmanager_print(const ContestManager& man)  
+PrintHelper::contestmanager_print(const ContestManager &man,
+                                  const Trace &trace_full,
+                                  const Trace &trace_sprint)
 {
   {
     std::ofstream fs("results/res-olc-trace.txt");
     TracePointVector v;
-    man.trace_full.GetPoints(v);
+    trace_full.GetPoints(v);
 
     for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->get_location().longitude << " " << it->get_location().latitude
@@ -43,7 +45,7 @@ PrintHelper::contestmanager_print(const ContestManager& man)
     std::ofstream fs("results/res-olc-trace_sprint.txt");
 
     TracePointVector v;
-    man.trace_sprint.GetPoints(v);
+    trace_sprint.GetPoints(v);
 
     for (auto it = v.begin(); it != v.end(); ++it)
       fs << it->get_location().longitude << " " << it->get_location().latitude

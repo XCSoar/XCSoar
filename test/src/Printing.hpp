@@ -76,7 +76,9 @@ public:
                              const AircraftState &state,
                              const TaskProjection &projection,
                              const int item=0);
-  static void contestmanager_print(const ContestManager& cm);
+  static void contestmanager_print(const ContestManager& cm,
+                                   const Trace &trace_full,
+                                   const Trace &trace_sprint);
   static void trace_print(const Trace& trace, const GeoPoint &loc);
   static void print(const ContestResult& result);
   static void print_route(RoutePlanner& r);

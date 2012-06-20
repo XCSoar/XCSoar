@@ -48,9 +48,6 @@ class ContestManager
 
   ContestStatistics stats;
 
-  const Trace &trace_full;
-  const Trace &trace_sprint;
-
   OLCSprint olc_sprint;
   OLCFAI olc_fai;
   OLCClassic olc_classic;

@@ -27,8 +27,6 @@ ContestManager::ContestManager(const Contests _contest,
                                const Trace &trace_full,
                                const Trace &trace_sprint)
   :contest(_contest),
-   trace_full(trace_full),
-   trace_sprint(trace_sprint),
    olc_sprint(trace_sprint),
    olc_fai(trace_full),
    olc_classic(trace_full),
