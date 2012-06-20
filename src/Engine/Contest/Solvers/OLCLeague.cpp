@@ -19,9 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "OLCLeague.hpp"
 #include "Trace/Trace.hpp"
-#include <assert.h>
 
 OLCLeague::OLCLeague(const Trace &_trace)
   :AbstractContest(_trace, 0)
@@ -62,9 +62,8 @@ OLCLeague::Solve(bool exhaustive)
     trace_master.back(),
   };
 
-  if (!IsFinishAltitudeValid(trace[0], trace[1])) {
+  if (!IsFinishAltitudeValid(trace[0], trace[1]))
     return false;
-  }
 
   // solution found, so set start/finish points
   solution[0] = trace[0];
@@ -74,24 +73,22 @@ OLCLeague::Solve(bool exhaustive)
 
   unsigned index_fill = 1;
 
-  for (unsigned index_classic = 1; index_classic+1 < solution_classic.size();
+  for (unsigned index_classic = 1; index_classic + 1 < solution_classic.size();
        ++index_classic) {
-    if (solution_classic[index_classic].IsNewerThan(solution[index_fill-1]) &&
+    if (solution_classic[index_classic].IsNewerThan(solution[index_fill - 1]) &&
         solution_classic[index_classic].IsOlderThan(trace[1])) {
 
       solution[index_fill] = solution_classic[index_classic];
       index_fill++;
-      if (index_fill==4) {
+      if (index_fill == 4)
         break;
-      }
     }
   }
 
   // if insufficient points found, add repeats of previous points
 
-  for (; index_fill<4; ++index_fill) {
-    solution[index_fill] = solution[index_fill-1];
-  }
+  for (; index_fill < 4; ++index_fill)
+    solution[index_fill] = solution[index_fill - 1];
 
   SaveSolution();
   return true;
@@ -103,7 +100,6 @@ OLCLeague::CopySolution(ContestTraceVector &vec) const
   vec = best_solution;
 }
 
-
 fixed
 OLCLeague::CalcDistance() const
 {
@@ -114,19 +110,16 @@ OLCLeague::CalcDistance() const
   return dist;
 }
 
-
 fixed
 OLCLeague::CalcScore() const
 {
-  return ApplyHandicap(CalcDistance()/fixed(2500), true);
+  return ApplyHandicap(CalcDistance() / 2500, true);
 }
-
 
 fixed
 OLCLeague::CalcTime() const
 {
-  if (!solution[4].IsDefined())
-    return fixed_zero;
-  else
-    return fixed(solution[4].DeltaTime(solution[0]));
+  return solution[4].IsDefined()
+    ? fixed(solution[4].DeltaTime(solution[0]))
+    : fixed_zero;
 }

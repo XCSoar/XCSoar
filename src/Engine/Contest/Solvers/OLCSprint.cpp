@@ -101,16 +101,13 @@ void
 OLCSprint::AddEdges(const ScanTaskPoint origin)
 {
   const ScanTaskPoint destination(origin.GetStageNumber() + 1, n_points - 1);
-  if (!IsFinal(destination)) {
+  if (IsFinal(destination)) {
+    /* For final, only add last valid point */
+    const unsigned d = GetStageWeight(origin.GetStageNumber()) *
+      CalcEdgeDistance(origin, destination);
+    Link(destination, origin, d);
+  } else
     ContestDijkstra::AddEdges(origin);
-    return;
-  }
-  /*
-    For final, only add last valid point
-   */
-  const unsigned d = GetStageWeight(origin.GetStageNumber()) *
-    CalcEdgeDistance(origin, destination);
-  Link(destination, origin, d);
 }
 
 fixed
@@ -120,15 +117,17 @@ OLCSprint::CalcScore() const
 }
 
 void
-OLCSprint::UpdateTrace(bool force) {
+OLCSprint::UpdateTrace(bool force)
+{
+  /* since this is online, all solutions must have start to end of
+     trace satisfy the finish altitude requirements.  otherwise there
+     is no point even retrieving the full trace or starting a
+     search. */
 
-  // since this is online, all solutions must have start to end of trace
-  // satisfy the finish altitude requirements.  otherwise there is no point
-  // even retrieving the full trace or starting a search.
-
-  // assuming a bounded ceiling and very long flight, this would be expected to reduce
-  // the number of trace acquisitions and solution starts by 50%.  In practice the number
-  // will be lower than this but the fewer wasted cpu cycles the better.
+  /* assuming a bounded ceiling and very long flight, this would be
+     expected to reduce the number of trace acquisitions and solution
+     starts by 50%.  In practice the number will be lower than this
+     but the fewer wasted cpu cycles the better. */
 
   if (trace_master.size() < 2) {
     ClearTrace();
