@@ -100,7 +100,7 @@ protected:
   unsigned first_finish_candidate;
 
   /** Weightings applied to each leg distance */
-  unsigned m_weightings[MAX_STAGES];
+  unsigned stage_weights[MAX_STAGES];
 
   ContestTraceVector best_solution;
 
@@ -163,7 +163,7 @@ protected:
     assert(num_stages <= MAX_STAGES);
     assert(index + 1 < num_stages);
 
-    return m_weightings[index];
+    return stage_weights[index];
   }
 
   /**

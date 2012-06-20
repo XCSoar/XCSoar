@@ -23,9 +23,9 @@
 #include "XContestTriangle.hpp"
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
-                                   const bool _is_dhv):
-  OLCTriangle(_trace),
-  is_dhv(_is_dhv) {}
+                                   const bool _is_dhv)
+  :OLCTriangle(_trace),
+   is_dhv(_is_dhv) {}
 
 fixed
 XContestTriangle::CalcScore() const

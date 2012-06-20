@@ -42,13 +42,14 @@
 */
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
-                         const bool _is_fai):
-  ContestDijkstra(_trace, false, 3, 1000),
-  is_fai(_is_fai),
-  is_closed(false),
-  is_complete(false),
-  first_tp(0)
-{}
+                         const bool _is_fai)
+  :ContestDijkstra(_trace, false, 3, 1000),
+   is_fai(_is_fai),
+   is_closed(false),
+   is_complete(false),
+   first_tp(0)
+{
+}
 
 void
 OLCTriangle::Reset()
