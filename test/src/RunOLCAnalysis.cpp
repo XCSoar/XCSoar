@@ -64,6 +64,7 @@ TestOLC(DebugReplay &replay)
     sprint_trace.append(state);
 
     olc_sprint.UpdateIdle();
+    olc_league.UpdateIdle();
   }
 
   olc_classic.SolveExhaustive();
