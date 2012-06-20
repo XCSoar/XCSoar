@@ -35,8 +35,6 @@ struct FinalGlideBarLook;
 struct MapSettings;
 class ProtectedAirspaceWarningManager;
 
-void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
-
 void
 ShowMapItemListDialog(SingleWindow &parent,
                       const MapItemList &_list,

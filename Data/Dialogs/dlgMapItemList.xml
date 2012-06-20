@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<Form Caption="Map elements at this location">
-  <List Name="list" Height="-35"/>
-
-  <Button Name="details_button" Caption="Details" Y="-35" Width="-160" Height="35" OnClick="OnDetailsClicked"/>
-  <Button Caption="Settings" X="-160" Y="-35" Width="-80" Height="35" OnClick="OnSettingsClicked"/>
-  <Button Caption="Cancel" X="-80" Y="-35" Height="35" OnClick="OnCancelClicked"/>
-</Form>

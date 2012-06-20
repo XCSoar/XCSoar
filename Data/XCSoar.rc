@@ -239,8 +239,6 @@ IDR_XML_FONTEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFontEdit.xml.g
 IDR_XML_HELP XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgHelp.xml.gz"
 IDR_XML_HELP_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgHelp_L.xml.gz"
 IDR_XML_LOGGERREPLAY XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgLoggerReplay.xml.gz"
-IDR_XML_MAPITEMLIST_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgMapItemList_L.xml.gz"
-IDR_XML_MAPITEMLIST XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgMapItemList.xml.gz"
 IDR_XML_NOAA_DETAILS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgNOAADetails_L.xml.gz"
 IDR_XML_NOAA_DETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgNOAADetails.xml.gz"
 IDR_XML_NOAA_LIST_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgNOAAList_L.xml.gz"
