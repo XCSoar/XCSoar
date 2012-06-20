@@ -22,10 +22,6 @@ Copyright_License {
 */
 
 #include "NOAAGlue.hpp"
-#include "Net/Features.hpp"
-
-#ifdef HAVE_NET
-
 #include "NOAAStore.hpp"
 #include "Profile/Profile.hpp"
 
@@ -76,18 +72,3 @@ NOAAStore::SaveToProfile()
 
   Profile::Set(szProfileWeatherStations, buffer);
 }
-
-#else
-
-bool
-NOAAStore::LoadFromProfile()
-{
-  return false;
-}
-
-void
-NOAAStore::SaveToProfile()
-{
-}
-
-#endif
