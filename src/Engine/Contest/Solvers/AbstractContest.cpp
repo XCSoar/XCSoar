@@ -80,17 +80,3 @@ AbstractContest::IsFinishAltitudeValid(const TracePoint& start,
   return finish.GetIntegerAltitude() + (int)finish_alt_diff >=
     start.GetIntegerAltitude();
 }
-
-fixed
-AbstractContest::ApplyHandicap(const fixed& unhandicapped_score,
-                                const bool shifted) const
-{
-  assert(handicap != 0);
-  if (handicap == 0)
-    return unhandicapped_score;
-
-  if (shifted)
-    return (200 * unhandicapped_score / (100 + handicap));
-
-  return (100 * unhandicapped_score / handicap);
-}

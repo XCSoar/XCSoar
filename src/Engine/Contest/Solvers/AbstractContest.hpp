@@ -26,6 +26,8 @@
 #include "Math/fixed.hpp"
 #include "../ContestResult.hpp"
 
+#include <assert.h>
+
 class TracePoint;
 
 /**
@@ -149,7 +151,23 @@ protected:
    *
    * @return Handicap adjusted score
    */
-  fixed ApplyHandicap(const fixed& unhandicapped_score, const bool shifted=false) const;
+  gcc_pure
+  fixed ApplyHandicap(fixed unhandicapped_score) const {
+    assert(handicap != 0);
+
+    return 100 * unhandicapped_score / handicap;
+  }
+
+  /**
+   * Apply "shifted" handicap, i.e. according to OLC league/sprint
+   * rules.
+   */
+  gcc_pure
+  fixed ApplyShiftedHandicap(const fixed unhandicapped_score) const {
+    assert(handicap != 0);
+
+    return 200 * unhandicapped_score / (100 + handicap);
+  }
 };
 
 #endif

@@ -113,7 +113,7 @@ OLCSprint::AddEdges(const ScanTaskPoint origin)
 fixed
 OLCSprint::CalcScore() const
 {
-  return ApplyHandicap(CalcDistance()/fixed(2500), true);
+  return ApplyShiftedHandicap(CalcDistance() / fixed(2500));
 }
 
 void

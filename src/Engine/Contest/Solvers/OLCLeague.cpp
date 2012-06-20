@@ -111,7 +111,7 @@ OLCLeague::CalcDistance() const
 fixed
 OLCLeague::CalcScore() const
 {
-  return ApplyHandicap(CalcDistance() / 2500, true);
+  return ApplyShiftedHandicap(CalcDistance() / 2500);
 }
 
 fixed
