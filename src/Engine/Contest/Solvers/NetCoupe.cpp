@@ -22,14 +22,13 @@
 
 #include "NetCoupe.hpp"
 
-NetCoupe::NetCoupe(const Trace &_trace):
-  ContestDijkstra(_trace, true, 4, 1000) {}
-
+NetCoupe::NetCoupe(const Trace &_trace)
+  :ContestDijkstra(_trace, true, 4, 1000) {}
 
 fixed
 NetCoupe::CalcScore() const
 {
-  //  0.8 factor for free distance and 1/1000 m -> km
+  // 0.8 factor for free distance and 1/1000 m -> km
   return ApplyHandicap(CalcDistance()*fixed(0.0008));
 }
 

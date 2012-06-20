@@ -25,8 +25,8 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCPlus::OLCPlus(const Trace &_trace):
-  AbstractContest(_trace, 0)
+OLCPlus::OLCPlus(const Trace &_trace)
+  :AbstractContest(_trace, 0)
 {
   Reset();
 }
@@ -47,26 +47,26 @@ OLCPlus::Solve(bool exhaustive)
   return SaveSolution();
 }
 
-void 
+void
 OLCPlus::CopySolution(ContestTraceVector &vec) const
 {
   vec = solution_classic;
 }
 
-fixed 
-OLCPlus::CalcDistance() const 
+fixed
+OLCPlus::CalcDistance() const
 {
   return result_classic.distance;
 }
 
-fixed 
+fixed
 OLCPlus::CalcScore() const
 {
   return ApplyHandicap((result_classic.distance +
-                         fixed(0.3) * result_fai.distance) * fixed(0.001));
+                        fixed(0.3) * result_fai.distance) * fixed(0.001));
 }
 
-fixed 
+fixed
 OLCPlus::CalcTime() const
 {
   return result_classic.time;

@@ -23,15 +23,15 @@
 #include "XContestFree.hpp"
 
 XContestFree::XContestFree(const Trace &_trace,
-                           const bool _is_dhv):
-  ContestDijkstra(_trace, true, 4, 1000),
-  is_dhv(_is_dhv) {}
+                           const bool _is_dhv)
+  :ContestDijkstra(_trace, true, 4, 1000),
+   is_dhv(_is_dhv) {}
 
 fixed
 XContestFree::CalcScore() const
 {
   // DHV-XC: 1.5 points per km
-  // XContest: 1.0 points per km 
-  const fixed score_factor = is_dhv? fixed(0.0015): fixed(0.0010);
-  return ApplyHandicap(CalcDistance()*score_factor);
+  // XContest: 1.0 points per km
+  const fixed score_factor = is_dhv ? fixed(0.0015) : fixed(0.0010);
+  return ApplyHandicap(CalcDistance() * score_factor);
 }

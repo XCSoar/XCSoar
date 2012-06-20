@@ -64,11 +64,10 @@ class ContestManager
   NetCoupe olc_netcoupe;
 
 public:
-  /** 
+  /**
    * Base constructor.
-   * 
+   *
    * @param _contest Contests that shall be used
-   * @param _handicap Contest handicap factor
    * @param trace_full Trace object reference
    * containing full flight history for scanning
    * @param trace_sprint Trace object reference
@@ -99,7 +98,7 @@ public:
     return UpdateIdle(true);
   }
 
-  /** 
+  /**
    * Reset the task (as if never flown)
    */
   void Reset();

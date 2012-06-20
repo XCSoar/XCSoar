@@ -35,11 +35,11 @@ static gcc_constexpr_data unsigned CONTEST_QUEUE_SIZE = 5000;
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
                                  bool _continuous,
                                  const unsigned n_legs,
-                                 const unsigned finish_alt_diff):
-  AbstractContest(_trace, finish_alt_diff),
-  NavDijkstra(n_legs + 1),
-  continuous(_continuous),
-  incremental(false)
+                                 const unsigned finish_alt_diff)
+  :AbstractContest(_trace, finish_alt_diff),
+   NavDijkstra(n_legs + 1),
+   continuous(_continuous),
+   incremental(false)
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -83,7 +83,6 @@ ContestDijkstra::IsMasterUpdated() const
   return last_master.GetTime() > last_point.GetTime() + threshold_delta_t_trace &&
     last_master.flat_distance(last_point) > threshold_distance_trace;
 }
-
 
 void
 ContestDijkstra::ClearTrace()
@@ -400,7 +399,7 @@ FAI OLC:
 - weightings: 1 all
 
 OLC classic + FAI-OLC
-- min finish alt is 1000m below start altitude 
+- min finish alt is 1000m below start altitude
 - start altitude is lowest altitude before reaching start
 - start time is time at which start altitude is reached
 - The finish altitude is the highest altitude after reaching the finish point and before end of free flight.

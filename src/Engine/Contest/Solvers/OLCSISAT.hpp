@@ -18,7 +18,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
 #ifndef OLC_SISAT_HPP
 #define OLC_SISAT_HPP
@@ -28,16 +28,12 @@
 /**
  * Specialisation of Dijkstra for SIS-AT rules
  */
-class OLCSISAT:
-  public ContestDijkstra
-{
+class OLCSISAT : public ContestDijkstra {
 public:
-  /**
-   * Constructor
-   */
   OLCSISAT(const Trace &_trace);
 
 protected:
+  /* virtual methods from class AbstractContest */
   virtual fixed CalcScore() const;
 };
 

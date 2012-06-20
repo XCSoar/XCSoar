@@ -28,28 +28,29 @@
 /**
  * Specialisation of Dijkstra for OLC Sprint (also known as OLC League) rules
  */
-class OLCSprint: 
-  public ContestDijkstra
-{
+class OLCSprint : public ContestDijkstra {
 public:
   /**
    * Constructor
    */
   OLCSprint(const Trace &_trace);
 
-  void Reset();
-
 private:
-  unsigned find_start() const;
+  gcc_pure
+  unsigned FindStart() const;
+
+public:
+  /* virtual methods from AbstractContest */
+  virtual void Reset();
 
 protected:
-  /* methods from AbstractContest */
+  /* virtual methods from AbstractContest */
   virtual fixed CalcScore() const;
 
-  /* methods from NavDijkstra */
-  void AddEdges(ScanTaskPoint origin);
+  /* virtual methods from NavDijkstra */
+  virtual void AddEdges(ScanTaskPoint origin);
 
-  /* methods from ContestDijkstra */
+  /* virtual methods from ContestDijkstra */
   virtual void UpdateTrace(bool force);
   virtual void AddStartEdges();
 };

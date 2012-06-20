@@ -25,22 +25,21 @@
 
 ContestManager::ContestManager(const Contests _contest,
                                const Trace &trace_full,
-                               const Trace &trace_sprint):
-  contest(_contest),
-  trace_full(trace_full),
-  trace_sprint(trace_sprint),
-  olc_sprint(trace_sprint),
-  olc_fai(trace_full),
-  olc_classic(trace_full),
-  olc_league(trace_sprint),
-  olc_plus(trace_full),
-  olc_xcontest_free(trace_full, false),
-  olc_xcontest_triangle(trace_full, false),
-  olc_dhvxc_free(trace_full, true),
-  olc_dhvxc_triangle(trace_full, true),
-  olc_sisat(trace_full),
-  olc_netcoupe(trace_full)
-
+                               const Trace &trace_sprint)
+  :contest(_contest),
+   trace_full(trace_full),
+   trace_sprint(trace_sprint),
+   olc_sprint(trace_sprint),
+   olc_fai(trace_full),
+   olc_classic(trace_full),
+   olc_league(trace_sprint),
+   olc_plus(trace_full),
+   olc_xcontest_free(trace_full, false),
+   olc_xcontest_triangle(trace_full, false),
+   olc_dhvxc_free(trace_full, true),
+   olc_dhvxc_triangle(trace_full, true),
+   olc_sisat(trace_full),
+   olc_netcoupe(trace_full)
 {
   Reset();
 }
@@ -99,7 +98,7 @@ ContestManager::RunContest(AbstractContest &_contest,
   return true;
 }
 
-bool 
+bool
 ContestManager::UpdateIdle(bool exhaustive)
 {
   bool retval = false;
@@ -143,7 +142,7 @@ ContestManager::UpdateIdle(bool exhaustive)
     olc_plus.GetFAIResult() = stats.result[1];
     olc_plus.GetFAISolution() = stats.solution[1];
 
-    if (retval) 
+    if (retval)
       RunContest(olc_plus, stats.result[2],
                   stats.solution[2], exhaustive);
 

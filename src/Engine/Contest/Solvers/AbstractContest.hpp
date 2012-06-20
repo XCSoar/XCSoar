@@ -33,8 +33,7 @@ class TracePoint;
  * Abstract class for contest searches
  *
  */
-class AbstractContest
-{
+class AbstractContest {
 protected:
   const Trace &trace_master;
 
@@ -116,7 +115,6 @@ public:
   virtual bool Solve(bool exhaustive) = 0;
 
 protected:
-
   /**
    * Perform check on whether score needs to be
    * updated (even if score isn't improved, due to

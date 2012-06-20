@@ -28,9 +28,7 @@
 /**
  * Specialisation of OLC Dijkstra for OLC Classic rules
  */
-class OLCClassic: 
-  public ContestDijkstra
-{
+class OLCClassic : public ContestDijkstra {
 public:
   OLCClassic(const Trace &_trace);
 };

@@ -29,9 +29,7 @@
  * Abstract class for contest searches using dijkstra algorithm
  *
  */
-class OLCPlus:
-  public AbstractContest
-{
+class OLCPlus : public AbstractContest {
   ContestTraceVector solution_classic;
   ContestTraceVector solution_fai;
   ContestResult result_classic;
@@ -39,18 +37,6 @@ class OLCPlus:
 
 public:
   OLCPlus(const Trace &_trace);
-
-  virtual void CopySolution(ContestTraceVector &vec) const;
-
-protected:
-  virtual fixed CalcDistance() const;
-  virtual fixed CalcScore() const;
-  virtual fixed CalcTime() const;
-
-public:
-  virtual void Reset();
-
-  bool Solve(bool exhaustive);
 
   ContestTraceVector &GetClassicSolution() {
     return solution_classic;
@@ -67,6 +53,18 @@ public:
   ContestResult &GetFAIResult() {
     return result_fai;
   }
+
+public:
+  /* virtual methods from class AbstractContest */
+  virtual void Reset();
+  virtual bool Solve(bool exhaustive);
+  virtual void CopySolution(ContestTraceVector &vec) const;
+
+protected:
+  /* virtual methods from class AbstractContest */
+  virtual fixed CalcDistance() const;
+  virtual fixed CalcScore() const;
+  virtual fixed CalcTime() const;
 };
 
 #endif

@@ -28,15 +28,13 @@
 /**
  * Specialisation of OLC Dijkstra for FFVV NetCoupe rules
  */
-class NetCoupe:
-  public ContestDijkstra
-{
+class NetCoupe : public ContestDijkstra {
 public:
   NetCoupe(const Trace &_trace);
 
 protected:
+  /* virtual methods from class AbstractContest */
   virtual fixed CalcScore() const;
-
 };
 
 #endif

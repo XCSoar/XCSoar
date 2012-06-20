@@ -18,7 +18,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
 #ifndef OLC_FAI_HPP
 #define OLC_FAI_HPP
@@ -28,15 +28,13 @@
 /**
  * Specialisation of OLC Triangle with OLC FAI (triangle) rules
  */
-class OLCFAI: 
-  public OLCTriangle
-{
+class OLCFAI : public OLCTriangle {
 public:
   OLCFAI(const Trace &_trace);
 
 protected:
+  /* virtual methods from class AbstractContest */
   virtual fixed CalcScore() const;
-
 };
 
 #endif

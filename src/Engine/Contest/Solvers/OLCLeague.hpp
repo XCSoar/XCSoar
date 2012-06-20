@@ -29,8 +29,7 @@
  * Abstract class for contest searches using dijkstra algorithm
  *
  */
-class OLCLeague:
-  public AbstractContest
+class OLCLeague : public AbstractContest
 {
   ContestTraceVector solution_classic;
 
@@ -40,7 +39,9 @@ class OLCLeague:
 public:
   OLCLeague(const Trace &_trace);
 
-  virtual void CopySolution(ContestTraceVector &vec) const;
+  ContestTraceVector &GetSolutionClassic() {
+    return solution_classic;
+  }
 
 protected:
   virtual fixed CalcDistance() const;
@@ -48,24 +49,13 @@ protected:
   virtual fixed CalcTime() const;
 
 public:
-  /**
-   * Reset the optimiser as if never flown
-   */
+  /* virtual methods from class AbstractContest */
   virtual void Reset();
-
-  /**
-   * Update the solver.  The solver is incremental, so this method can
-   * be safely called every time step.
-   *
-   * @return True if solver completed in this call
-   */
   virtual bool Solve(bool exhaustive);
-
-  ContestTraceVector &GetSolutionClassic() {
-    return solution_classic;
-  }
+  virtual void CopySolution(ContestTraceVector &vec) const;
 
 protected:
+  /* virtual methods from class AbstractContest */
   virtual bool SaveSolution();
 };
 

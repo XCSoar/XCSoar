@@ -18,7 +18,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
 #ifndef XCONTEST_FREE_HPP
 #define XCONTEST_FREE_HPP
@@ -28,17 +28,15 @@
 /**
  * Specialisation of ContestDijkstra for XContest and DHV-XC free flight rules
  */
-class XContestFree: 
-  public ContestDijkstra
-{
+class XContestFree : public ContestDijkstra {
   const bool is_dhv;
 
 public:
-  friend class XContest;
   XContestFree(const Trace &_trace,
                const bool _is_dhv=false);
 
 protected:
+  /* virtual methods from AbstractContest */
   virtual fixed CalcScore() const;
 };
 

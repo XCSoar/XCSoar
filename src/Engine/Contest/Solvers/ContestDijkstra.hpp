@@ -39,10 +39,7 @@ Copyright_License {
  *
  *
  */
-class ContestDijkstra:
-  public AbstractContest,
-  protected NavDijkstra
-{
+class ContestDijkstra : public AbstractContest, protected NavDijkstra {
   /**
    * This attribute tracks Trace::GetAppendSerial().  It is updated
    * when appnew copy of the master Trace is obtained, and is used to
@@ -109,7 +106,7 @@ public:
    * @param n_legs Maximum number of legs in Contest task
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
-  ContestDijkstra(const Trace &_trace, 
+  ContestDijkstra(const Trace &_trace,
                   bool continuous,
                   const unsigned n_legs,
                   const unsigned finish_alt_diff = 1000);
@@ -163,16 +160,17 @@ protected:
     return m_weightings[index];
   }
 
-  /** 
+  /**
    * Distance function for edges
-   * 
+   *
    * @param s1 Origin node
    * @param s2 Destination node
-   * 
+   *
    * @return Distance (flat) from origin to destination
    */
   gcc_pure
-  unsigned CalcEdgeDistance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
+  unsigned CalcEdgeDistance(const ScanTaskPoint s1,
+                            const ScanTaskPoint s2) const {
     return GetPoint(s1).flat_distance(GetPoint(s2));
   }
 
@@ -215,7 +213,7 @@ protected:
   virtual bool SaveSolution();
 
 protected:
-  /* methods from NavDijkstra */
+  /* virtual methods from NavDijkstra */
   virtual void AddEdges(ScanTaskPoint curNode);
 };
 

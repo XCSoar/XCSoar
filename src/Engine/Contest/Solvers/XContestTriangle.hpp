@@ -30,13 +30,10 @@
  *
  * This solver alternates between searching for FAI and non-FAI triangles
  */
-class XContestTriangle: 
-  public OLCTriangle
-{
+class XContestTriangle : public OLCTriangle {
   const bool is_dhv;
 
 public:
-  friend class XContest;
   XContestTriangle(const Trace &_trace,
                    const bool _is_dhv=false);
 

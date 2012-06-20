@@ -23,8 +23,8 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCLeague::OLCLeague(const Trace &_trace):
-  AbstractContest(_trace, 0)
+OLCLeague::OLCLeague(const Trace &_trace)
+  :AbstractContest(_trace, 0)
 {
   Reset();
 }
@@ -74,7 +74,8 @@ OLCLeague::Solve(bool exhaustive)
 
   unsigned index_fill = 1;
 
-  for (unsigned index_classic = 1; index_classic+1 < solution_classic.size(); ++index_classic) {
+  for (unsigned index_classic = 1; index_classic+1 < solution_classic.size();
+       ++index_classic) {
     if (solution_classic[index_classic].IsNewerThan(solution[index_fill-1]) &&
         solution_classic[index_classic].IsOlderThan(trace[1])) {
 
@@ -96,15 +97,15 @@ OLCLeague::Solve(bool exhaustive)
   return true;
 }
 
-void 
+void
 OLCLeague::CopySolution(ContestTraceVector &vec) const
 {
   vec = best_solution;
 }
 
 
-fixed 
-OLCLeague::CalcDistance() const 
+fixed
+OLCLeague::CalcDistance() const
 {
   fixed dist = fixed_zero;
   for (unsigned i = 0; i < 4; ++i)
@@ -114,18 +115,18 @@ OLCLeague::CalcDistance() const
 }
 
 
-fixed 
+fixed
 OLCLeague::CalcScore() const
 {
   return ApplyHandicap(CalcDistance()/fixed(2500), true);
 }
 
 
-fixed 
+fixed
 OLCLeague::CalcTime() const
 {
   if (!solution[4].IsDefined())
     return fixed_zero;
-  else 
+  else
     return fixed(solution[4].DeltaTime(solution[0]));
 }

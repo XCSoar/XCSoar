@@ -24,10 +24,10 @@ Copyright_License {
 #include "ContestDijkstra.hpp"
 
 AbstractContest::AbstractContest(const Trace &_trace,
-                                 const unsigned _finish_alt_diff):
-  trace_master(_trace),
-  handicap(100),
-  finish_alt_diff(_finish_alt_diff)
+                                 const unsigned _finish_alt_diff)
+  :trace_master(_trace),
+   handicap(100),
+   finish_alt_diff(_finish_alt_diff)
 {
   Reset();
 }
@@ -48,7 +48,7 @@ AbstractContest::Score(ContestResult &result)
   return false;
 }
 
-bool 
+bool
 AbstractContest::UpdateScore()
 {
   // for normal contests, nothing needs to be done
@@ -83,7 +83,7 @@ AbstractContest::IsFinishAltitudeValid(const TracePoint& start,
     start.GetIntegerAltitude();
 }
 
-fixed 
+fixed
 AbstractContest::ApplyHandicap(const fixed& unhandicapped_score,
                                 const bool shifted) const
 {

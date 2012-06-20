@@ -18,7 +18,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
 #ifndef OLC_TRIANGLE_HPP
 #define OLC_TRIANGLE_HPP
@@ -28,21 +28,17 @@
 /**
  * Specialisation of OLC Dijkstra for OLC Triangle (triangle) rules
  */
-class OLCTriangle: 
-  public ContestDijkstra
-{
+class OLCTriangle : public ContestDijkstra {
 protected:
+  bool is_fai;
   bool is_closed;
   bool is_complete;
   unsigned first_tp;
   unsigned best_d;
-  bool is_fai;
 
 public:
   OLCTriangle(const Trace &_trace,
               const bool _is_fai=true);
-
-  void Reset();
 
 protected:
   gcc_pure
@@ -51,18 +47,22 @@ protected:
   gcc_pure
   bool IsPathClosed() const;
 
+public:
+  /* virtual methods from AbstractContest */
+  virtual void Reset();
+
 protected:
-  /* methods from AbstractContest */
+  /* virtual methods from AbstractContest */
   virtual bool UpdateScore();
   virtual fixed CalcScore() const;
   virtual fixed CalcDistance() const;
   virtual fixed CalcTime() const;
   virtual bool SaveSolution();
 
-  /* methods from NavDijkstra */
+  /* virtual methods from NavDijkstra */
   virtual void AddEdges(ScanTaskPoint curNode);
 
-  /* methods from ContestDijkstra */
+  /* virtual methods from ContestDijkstra */
   virtual void StartSearch();
   virtual void AddStartEdges();
 };
