@@ -22,8 +22,6 @@ Copyright_License {
 */
 
 #include "NOAAStore.hpp"
-#include "NOAADownloader.hpp"
-#include "METARParser.hpp"
 #include "ParsedMETAR.hpp"
 #include "Util/Macros.hpp"
 
@@ -44,24 +42,6 @@ NOAAStore::Item::GetCodeT() const
 }
 
 #endif
-
-bool
-NOAAStore::Item::Update(JobRunner &runner)
-{
-  bool metar_downloaded = NOAADownloader::DownloadMETAR(code, metar, runner);
-  if (metar_downloaded) {
-    metar_available = true;
-
-    if (METARParser::Parse(metar, parsed_metar))
-      parsed_metar_available = true;
-  }
-
-  bool taf_downloaded = NOAADownloader::DownloadTAF(code, taf, runner);
-  if (taf_downloaded)
-    taf_available = true;
-
-  return metar_downloaded && taf_downloaded;
-}
 
 bool
 NOAAStore::IsValidCode(const char *code)
@@ -127,13 +107,3 @@ NOAAStore::AddStation(const TCHAR *code)
   return AddStation(code2);
 }
 #endif
-
-bool
-NOAAStore::Update(JobRunner &runner)
-{
-  bool result = true;
-  for (auto i = begin(), e = end(); i != e; ++i)
-    result = i->Update(runner) && result;
-
-  return result;
-}

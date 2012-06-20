@@ -832,6 +832,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
+	$(SRC)/Weather/NOAAUpdater.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \

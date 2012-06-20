@@ -41,6 +41,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
+#include "Weather/NOAAUpdater.hpp"
 #include "Weather/METAR.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Compiler.h"
@@ -157,7 +158,8 @@ AddClicked(gcc_unused WndButton &button)
 
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  i->Update(runner);
+
+  NOAAUpdater::Update(*i, runner);
 
   UpdateList();
 }
@@ -167,7 +169,7 @@ UpdateClicked(gcc_unused WndButton &Sender)
 {
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  noaa_store->Update(runner);
+  NOAAUpdater::Update(*noaa_store, runner);
   UpdateList();
 }
 

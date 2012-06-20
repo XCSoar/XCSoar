@@ -804,7 +804,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAAFormatter.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
-	$(SRC)/Weather/NOAAStore.cpp
+	$(SRC)/Weather/NOAAStore.cpp \
+	$(SRC)/Weather/NOAAUpdater.cpp
 
 XCSOAR_SOURCES += \
 	$(SRC)/Tracking/LiveTrack24.cpp \

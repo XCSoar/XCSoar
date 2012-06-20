@@ -32,6 +32,7 @@ Copyright_License {
 
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
+#include "Weather/NOAAUpdater.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/ParsedMETAR.hpp"
 #include "Weather/TAF.hpp"
@@ -72,7 +73,7 @@ UpdateClicked(gcc_unused WndButton &Sender)
 {
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
-  station_iterator->Update(runner);
+  NOAAUpdater::Update(*station_iterator, runner);
   Update();
 }
 

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Weather/TAF.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/NOAAStore.hpp"
+#include "Weather/NOAAUpdater.hpp"
 #include "Net/Init.hpp"
 #include "ConsoleJobRunner.hpp"
 #include "Units/Units.hpp"
@@ -160,7 +161,7 @@ main(int argc, char *argv[])
 
   printf("Updating METAR and TAF ...\n");
   ConsoleJobRunner runner;
-  store.Update(runner);
+  NOAAUpdater::Update(store, runner);
 
   for (auto i = store.begin(), end = store.end(); i != end; ++i) {
     printf("---\n");
