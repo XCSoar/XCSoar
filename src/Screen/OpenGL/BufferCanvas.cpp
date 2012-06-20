@@ -24,7 +24,11 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Compatibility.hpp"
+#include "Globals.hpp"
 #include "Texture.hpp"
+#include "FrameBuffer.hpp"
+#include "RenderBuffer.hpp"
+#include "Init.hpp"
 
 #include <assert.h>
 
@@ -45,6 +49,21 @@ BufferCanvas::set(const Canvas &canvas,
 
   reset();
   texture = new GLTexture(_width, _height);
+
+  if (OpenGL::frame_buffer_object) {
+    frame_buffer = new GLFrameBuffer();
+
+    stencil_buffer = new GLRenderBuffer();
+    stencil_buffer->Bind();
+    PixelSize size = texture->GetAllocatedSize();
+#ifdef HAVE_GLES
+    stencil_buffer->Storage(GL_DEPTH24_STENCIL8_OES, size.cx, size.cy);
+#else
+    stencil_buffer->Storage(FBO::DEPTH_STENCIL, size.cx, size.cy);
+#endif
+    stencil_buffer->Unbind();
+  }
+
   Canvas::set(_width, _height);
   AddSurfaceListener(*this);
 }
@@ -56,6 +75,12 @@ BufferCanvas::reset()
 
   if (IsDefined()) {
     RemoveSurfaceListener(*this);
+
+    delete stencil_buffer;
+    stencil_buffer = NULL;
+
+    delete frame_buffer;
+    frame_buffer = NULL;
 
     delete texture;
     texture = NULL;
@@ -72,6 +97,18 @@ BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
 
   PixelSize new_size { PixelScalar(_width), PixelScalar(_height) };
   texture->ResizeDiscard(new_size);
+
+  if (stencil_buffer != NULL) {
+    stencil_buffer->Bind();
+    PixelSize size = texture->GetAllocatedSize();
+#ifdef HAVE_GLES
+    stencil_buffer->Storage(GL_DEPTH24_STENCIL8_OES, size.cx, size.cy);
+#else
+    stencil_buffer->Storage(FBO::DEPTH_STENCIL, size.cx, size.cy);
+#endif
+    stencil_buffer->Unbind();
+  }
+
   Canvas::set(_width, _height);
 }
 
@@ -81,10 +118,31 @@ BufferCanvas::Begin(Canvas &other)
   assert(IsDefined());
   assert(!active);
 
-  x_offset = other.x_offset;
-  y_offset = other.y_offset;
-
   resize(other.get_width(), other.get_height());
+
+  if (frame_buffer != NULL) {
+    /* activate the frame buffer */
+    frame_buffer->Bind();
+    texture->AttachFramebuffer(FBO::COLOR_ATTACHMENT0);
+
+    stencil_buffer->AttachFramebuffer(FBO::DEPTH_ATTACHMENT);
+    stencil_buffer->AttachFramebuffer(FBO::STENCIL_ATTACHMENT);
+
+    /* save the old viewport */
+    old_translate.x = OpenGL::translate_x;
+    old_translate.y = OpenGL::translate_y;
+    old_size.cx = OpenGL::screen_width;
+    old_size.cy = OpenGL::screen_height;
+    glPushMatrix();
+
+    /* configure a new viewport */
+    OpenGL::SetupViewport(get_width(), get_height());
+    OpenGL::translate_x = 0;
+    OpenGL::translate_y = 0;
+  } else {
+    x_offset = other.x_offset;
+    y_offset = other.y_offset;
+  }
 
   active = true;
 }
@@ -94,17 +152,38 @@ BufferCanvas::Commit(Canvas &other)
 {
   assert(IsDefined());
   assert(active);
-  assert(x_offset == other.x_offset);
-  assert(y_offset == other.y_offset);
   assert(get_width() == other.get_width());
   assert(get_height() == other.get_height());
 
-  PixelRect rc;
-  rc.left = 0;
-  rc.top = 0;
-  rc.right = get_width();
-  rc.bottom = get_height();
-  CopyToTexture(*texture, rc);
+  if (frame_buffer != NULL) {
+    frame_buffer->Unbind();
+
+    /* restore the old viewport */
+
+    assert(OpenGL::translate_x == 0);
+    assert(OpenGL::translate_y == 0);
+
+    OpenGL::SetupViewport(old_size.cx, old_size.cy);
+
+    OpenGL::translate_x = old_translate.x;
+    OpenGL::translate_y = old_translate.y;
+
+    glPopMatrix();
+
+    /* copy frame buffer to screen */
+    CopyTo(other);
+  } else {
+    assert(x_offset == other.x_offset);
+    assert(y_offset == other.y_offset);
+
+    /* copy screen to texture */
+    PixelRect rc;
+    rc.left = 0;
+    rc.top = 0;
+    rc.right = get_width();
+    rc.bottom = get_height();
+    CopyToTexture(*texture, rc);
+  }
 
   active = false;
 }
@@ -113,7 +192,7 @@ void
 BufferCanvas::CopyTo(Canvas &other)
 {
   assert(IsDefined());
-  assert(!active);
+  assert(!active || frame_buffer != NULL);
 
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 

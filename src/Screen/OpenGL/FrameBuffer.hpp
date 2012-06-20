@@ -21,63 +21,43 @@ Copyright_License {
 }
 */
 
-#include "Screen/Timer.hpp"
-#include "Screen/SDL/Event.hpp"
-#include "Screen/Window.hpp"
+#ifndef XCSOAR_OPENGL_FRAME_BUFFER_HPP
+#define XCSOAR_OPENGL_FRAME_BUFFER_HPP
 
-void
-Timer::Schedule(unsigned ms)
-{
-  Cancel();
+#include "FBO.hpp"
 
-  id = ::SDL_AddTimer(ms, Callback, this);
-}
+/**
+ * Wrapper for an OpenGL framebuffer object.  You must check
+ * OpenGL::frame_buffer_object before using this class.
+ */
+class GLFrameBuffer {
+  GLuint id;
 
-void
-Timer::Cancel()
-{
-  if (!IsActive())
-    return;
+public:
+  GLFrameBuffer() {
+    Gen();
+  }
 
-  ::SDL_RemoveTimer(id);
-  id = NULL;
+  ~GLFrameBuffer() {
+    Delete();
+  }
 
-  EventQueue::Purge(Invoke, (void *)this);
-  queued.Reset();
-}
+  void Bind() {
+    FBO::BindFramebuffer(FBO::FRAMEBUFFER, id);
+  }
 
-void
-Timer::Invoke()
-{
-  OnTimer();
-  queued.Reset();
-}
+  static void Unbind() {
+    FBO::BindFramebuffer(FBO::FRAMEBUFFER, 0);
+  }
 
-void
-Timer::Invoke(void *ctx)
-{
-  Timer *timer = (Timer *)ctx;
-  timer->Invoke();
-}
+protected:
+  void Gen() {
+    FBO::GenFramebuffers(1, &id);
+  }
 
-Uint32
-Timer::Callback(Uint32 interval)
-{
-  if (!queued.GetAndSet(true))
-    EventQueue::Push(Invoke, (void *)this);
-  return interval;
-}
+  void Delete() {
+    FBO::DeleteFramebuffers(1, &id);
+  }
+};
 
-Uint32
-Timer::Callback(Uint32 interval, void *param)
-{
-  Timer *timer = (Timer *)param;
-
-  return timer->Callback(interval);
-}
-
-void
-WindowTimer::OnTimer()
-{
-  window.OnTimer(*this);
-}
+#endif

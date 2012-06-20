@@ -29,6 +29,8 @@ Copyright_License {
 #include "Screen/OpenGL/Surface.hpp"
 
 class GLTexture;
+class GLFrameBuffer;
+class GLRenderBuffer;
 
 /**
  * An off-screen #Canvas implementation.
@@ -36,10 +38,18 @@ class GLTexture;
 class BufferCanvas : public Canvas, private GLSurfaceListener {
   GLTexture *texture;
 
+  GLFrameBuffer *frame_buffer;
+
+  GLRenderBuffer *stencil_buffer;
+
+  RasterPoint old_translate;
+  PixelSize old_size;
+
   DebugFlag active;
 
 public:
-  BufferCanvas():texture(NULL) {}
+  BufferCanvas()
+    :texture(NULL), frame_buffer(NULL), stencil_buffer(NULL) {}
   BufferCanvas(const Canvas &canvas,
                UPixelScalar _width, UPixelScalar _height);
   ~BufferCanvas() {

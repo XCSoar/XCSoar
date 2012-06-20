@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "Asset.hpp"
+#include "Scope.hpp"
 #include "Compiler.h"
 
 #ifdef HAVE_OES_DRAW_TEXTURE
@@ -307,21 +308,32 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
                 OpenGL::screen_height - OpenGL::translate_y - dest_y - dest_height,
                 0, dest_width, dest_height);
 #else
-  GLfloat x0 = (GLfloat)src_x / allocated_width;
-  GLfloat y0 = (GLfloat)src_y / allocated_height;
-  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated_width;
-  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated_height;
+  const PixelScalar vertices[] = {
+    dest_x, dest_y,
+    PixelScalar(dest_x + dest_width), dest_y,
+    dest_x, PixelScalar(dest_y + dest_height),
+    PixelScalar(dest_x + dest_width), PixelScalar(dest_y + dest_height),
+  };
 
-  glBegin(GL_QUADS);
-  glTexCoord2f(x0, y0);
-  glVertex2i(dest_x, dest_y);
-  glTexCoord2f(x1, y0);
-  glVertex2i(dest_x + dest_width, dest_y);
-  glTexCoord2f(x1, y1);
-  glVertex2i(dest_x + dest_width, dest_y + dest_height);
-  glTexCoord2f(x0, y1);
-  glVertex2i(dest_x, dest_y + dest_height);
-  glEnd();
+  glVertexPointer(2, GL_VALUE, 0, vertices);
+
+  const PixelSize allocated = GetAllocatedSize();
+  GLfloat x0 = (GLfloat)src_x / allocated.cx;
+  GLfloat y0 = (GLfloat)src_y / allocated.cy;
+  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated.cx;
+  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated.cy;
+
+  const GLfloat coord[] = {
+    x0, y0,
+    x1, y0,
+    x0, y1,
+    x1, y1,
+  };
+
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glTexCoordPointer(2, GL_FLOAT, 0, coord);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 #endif
 }
 
@@ -329,7 +341,8 @@ void
 GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
 {
 #ifdef HAVE_OES_DRAW_TEXTURE
-  const GLint rect[4] = { src.left, src.top, src.right, src.bottom };
+  const GLint rect[4] = { src.left, src.top,
+                          src.right - src.left, src.bottom - src.top };
   glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, rect);
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
@@ -338,20 +351,31 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
                 OpenGL::screen_height - OpenGL::translate_y - dest.bottom,
                 0, dest.right - dest.left, dest.bottom - dest.top);
 #else
-  GLfloat x0 = (GLfloat)src.left / allocated_width;
-  GLfloat y0 = (GLfloat)src.top / allocated_height;
-  GLfloat x1 = (GLfloat)src.right / allocated_width;
-  GLfloat y1 = (GLfloat)src.bottom / allocated_height;
+  const PixelScalar vertices[] = {
+    dest.left, dest.top,
+    dest.right, dest.top,
+    dest.left, dest.bottom,
+    dest.right, dest.bottom,
+  };
 
-  glBegin(GL_QUADS);
-  glTexCoord2f(x0, y1);
-  glVertex2i(dest.left, dest.top);
-  glTexCoord2f(x1, y1);
-  glVertex2i(dest.right, dest.top);
-  glTexCoord2f(x1, y0);
-  glVertex2i(dest.right, dest.bottom);
-  glTexCoord2f(x0, y0);
-  glVertex2i(dest.left, dest.bottom);
-  glEnd();
+  glVertexPointer(2, GL_VALUE, 0, vertices);
+
+  const PixelSize allocated = GetAllocatedSize();
+  GLfloat x0 = (GLfloat)src.left / allocated.cx;
+  GLfloat y0 = (GLfloat)src.top / allocated.cy;
+  GLfloat x1 = (GLfloat)src.right / allocated.cx;
+  GLfloat y1 = (GLfloat)src.bottom / allocated.cy;
+
+  const GLfloat coord[] = {
+    x0, y1,
+    x1, y1,
+    x0, y0,
+    x1, y0,
+  };
+
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glTexCoordPointer(2, GL_FLOAT, 0, coord);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 #endif
 }

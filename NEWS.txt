@@ -33,6 +33,7 @@ Version 6.3.7 - not yet released
   - fix parsing of flight date in IGC files
 * Android
   - fix crash during METAR download (#2156)
+  - fix map flipping (#2154)
 
 Version 6.3.6 - 2012/06/06
 * calculations

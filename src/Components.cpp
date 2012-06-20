@@ -102,7 +102,9 @@ Copyright_License {
 #include "Tracking/TrackingGlue.hpp"
 #include "Units/Units.hpp"
 
-#ifndef ENABLE_OPENGL
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Globals.hpp"
+#else
 #include "DrawThread.hpp"
 #endif
 
@@ -236,6 +238,20 @@ XCSoarInterface::Startup()
   main_window.Set(szTitle, SystemWindowSize(), style);
   if (!main_window.IsDefined())
     return false;
+
+#ifdef ENABLE_OPENGL
+  LogStartUp(_T("OpenGL: "
+#ifdef HAVE_EGL
+                "egl=%d "
+#endif
+                "npot=%d vbo=%d fbo=%d"),
+#ifdef HAVE_EGL
+             OpenGL::egl,
+#endif
+             OpenGL::texture_non_power_of_two,
+             OpenGL::vertex_buffer_object,
+             OpenGL::frame_buffer_object);
+#endif
 
   main_window.Initialise();
 

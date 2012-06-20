@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-06-10 13:47+0000\n"
+"PO-Revision-Date: 2012-06-18 15:48+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-14 07:41+0000\n"
-"X-Generator: Launchpad (build 15405)\n"
+"X-Launchpad-Export-Date: 2012-06-19 10:08+0000\n"
+"X-Generator: Launchpad (build 15435)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -130,15 +130,15 @@ msgstr "ファイルをダウンロード"
 
 #: src/Logger/ExternalLogger.cpp:279
 msgid "Logger is empty."
-msgstr ""
+msgstr "航跡がありません"
 
 #: src/Logger/ExternalLogger.cpp:296
 msgid "Failed to download flight."
-msgstr ""
+msgstr "航跡ダウンロード失敗"
 
 #: src/Logger/ExternalLogger.cpp:323
 msgid "Do you want to download another flight?"
-msgstr ""
+msgstr "他のフライトログをダウンロードしますか"
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -376,7 +376,7 @@ msgstr "全て"
 #: src/Menu/ExpandMacros.cpp:536 src/Input/InputEventsSettings.cpp:323
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "タスク　及び着陸可能場所"
 
 #: src/Menu/ExpandMacros.cpp:538 src/Input/InputEventsSettings.cpp:325
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:54
@@ -407,6 +407,9 @@ msgid ""
 "only: in simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"GPS高度　\r\n"
+"シュミレーターモードの場合で、タッチスクリーンPADまたはPCの場合\r\n"
+"UP/DOWNキーで高度を　Light/Left矢印で期待の進路を操作することができる"
 
 #: src/InfoBoxes/Content/Factory.cpp:89
 #, no-c-format
@@ -426,6 +429,9 @@ msgid ""
 "terrain file. The value is coloured red when the glider is below the terrain "
 "safety clearance height."
 msgstr ""
+"対地高度\r\n"
+"航路の高さから其の地点の標高を引いた数値、マージンを含む\r\n"
+"数値が赤の場合安全高度を下回っている。"
 
 #: src/InfoBoxes/Content/Factory.cpp:99
 #, no-c-format
@@ -435,7 +441,7 @@ msgstr "過去30秒のサーマル"
 #: src/InfoBoxes/Content/Factory.cpp:100
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "30秒間の平均上昇率"
 
 #: src/InfoBoxes/Content/Factory.cpp:101
 #, no-c-format
@@ -443,6 +449,8 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"30秒間の平均上昇率\r\n"
+"GPSのデーターまたはバリオメーターの信号より算出"
 
 #: src/InfoBoxes/Content/Factory.cpp:109 src/InfoBoxes/Content/Factory.cpp:110
 #: Data/Dialogs/dlgStatusAircraft.xml:10 Data/Dialogs/dlgTeamCode.xml:15
@@ -457,16 +465,18 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"次のウエイポイントの方角\r\n"
+"AATタスクの場合　次のAATセクターの方角"
 
 #: src/InfoBoxes/Content/Factory.cpp:119
 #, no-c-format
 msgid "L/D instantaneous"
-msgstr ""
+msgstr "滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:120
 #, no-c-format
 msgid "L/D Inst"
-msgstr ""
+msgstr "滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:121
 #, no-c-format
@@ -476,16 +486,19 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"20秒間の対地速度（GPS速度）を垂直高度変化で割った数値\r\n"
+"マイナス数値は上昇を意味します。\r\n"
+"高度変化がゼロに近い場合”－－－”と表示される"
 
 #: src/InfoBoxes/Content/Factory.cpp:129
 #, no-c-format
 msgid "L/D cruise"
-msgstr ""
+msgstr "巡航滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:130
 #, no-c-format
 msgid "L/D Cru"
-msgstr ""
+msgstr "巡航滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:131
 #, no-c-format
@@ -495,6 +508,9 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"前のサーマル離脱場所からの距離を巡航で使った高度で割った数値\r\n"
+"マイナス値の場合は上昇を意味する。\r\n"
+"数値がゼロに近い場合は”－－－”と表示される"
 
 #: src/InfoBoxes/Content/Factory.cpp:139
 #, no-c-format
@@ -513,16 +529,19 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"GPSが計測した対地速度\r\n"
+"シュミレーターモードの場合でボックスがある場合、UP/DOWN　矢印で速度、Right /"
+"Left矢印でヘディングを操作することができる"
 
 #: src/InfoBoxes/Content/Factory.cpp:149
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "前のサーマル平均上昇率"
 
 #: src/InfoBoxes/Content/Factory.cpp:150
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "前のサーマル平均上昇率"
 
 #: src/InfoBoxes/Content/Factory.cpp:151
 #, no-c-format
@@ -530,46 +549,48 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"前のサーマル平均上昇率\r\n"
+"サーマル旋回中の高度変化を所要時間で割った数値"
 
 #: src/InfoBoxes/Content/Factory.cpp:159
 #, no-c-format
 msgid "Last thermal gain"
-msgstr ""
+msgstr "前のサーマル獲得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
 msgid "TL Gain"
-msgstr ""
+msgstr "獲得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr ""
+msgstr "前のサーマル獲得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
 msgid "Last thermal time"
-msgstr ""
+msgstr "前のサーマル所要時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "TL Time"
-msgstr ""
+msgstr "前のサーマル所要時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr ""
+msgstr "前のサーマルで旋回していた時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "MacCready setting"
-msgstr ""
+msgstr "マクレデーセッティング"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
 msgid "MC"
-msgstr ""
+msgstr "MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:181
 #, no-c-format
@@ -578,11 +599,15 @@ msgid ""
 "manual or auto. (Touchscreen/PC only) Also used to adjust the MacCready "
 "Setting if the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"マクレディーセッティング　自動または手動\r\n"
+"マニュアルモードの場合で　このボックスが表示されている場合、タッチスクリーン"
+"PAD またはPC の場合\r\n"
+"UP/DOWNキーで変更することができる。"
 
 #: src/InfoBoxes/Content/Factory.cpp:189
 #, no-c-format
 msgid "Next distance"
-msgstr ""
+msgstr "次のポイントまでの距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:190 src/InfoBoxes/Content/Task.cpp:155
 #, no-c-format
@@ -595,42 +620,46 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"現在選択選択されている、次のウエイポイントまでの距離\r\n"
+"AATタスクの場合、次のAATセクターまでの距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:199
 #, no-c-format
 msgid "Next altitude difference"
-msgstr ""
+msgstr "ウエイポイント到着予想高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:200
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "ウエイポイント到着予想高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
+"次のウエイポイント到着予想高度\r\n"
+"安全高度を引いた値"
 
 #: src/InfoBoxes/Content/Factory.cpp:209
 #, no-c-format
 msgid "Next altitude required"
-msgstr ""
+msgstr "次のウエイポイントに到着するために必要な高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "次のウエイポイントに到着するために必要な高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
 msgid "Additional altitude required to reach the next turn point."
-msgstr ""
+msgstr "次のウエイポイントに到着するために必要な高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:219
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "次のウエイポイント"
 
 #: src/InfoBoxes/Content/Factory.cpp:220 src/InfoBoxes/Content/Task.cpp:83
 #, no-c-format
@@ -645,16 +674,20 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"現在選択されているウエイポイント\r\n"
+"このボックスが有る場合　Up/Downキーをそうさして　次のウエイポイントか前のウエ"
+"イポイントを選ぶことができる\r\n"
+"（タッチスクリーンPADまたはPCの場合）"
 
 #: src/InfoBoxes/Content/Factory.cpp:229
 #, no-c-format
 msgid "Final altitude difference"
-msgstr ""
+msgstr "フィニッシュ地点到達予想高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:230
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "フィニッシュ地点到達予想高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:231
 #, no-c-format
@@ -713,12 +746,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:269
 #, no-c-format
 msgid "Final L/D"
-msgstr ""
+msgstr "フィナル必要滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Fin LD"
-msgstr ""
+msgstr "フィナル必要滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -731,17 +764,24 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"フィナル必要滑空比\r\n"
+"安全到達高度を考慮したフィニッシュ地点までの距離を、現在の位置から到達するの"
+"に必要な高度で割った数値\r\n"
+"マイナス数値の場合上昇が必要\r\n"
+"数値がゼロに近い場合”－－－”と表示される。\r\n"
+"この数値は、飛行速度がマクレディセッティングと最良滑空比速度より大きい場合、"
+"楽観的な数値を表示する。"
 
 #: src/InfoBoxes/Content/Factory.cpp:279
 #, no-c-format
 msgid "Terrain elevation"
-msgstr ""
+msgstr "地点標高"
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr ""
+msgstr "地点標高"
 
 #: src/InfoBoxes/Content/Factory.cpp:281
 #, no-c-format
@@ -749,16 +789,18 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"標高\r\n"
+"GPS計測位置において、地形ファイルが持っている標高データーの数値"
 
 #: src/InfoBoxes/Content/Factory.cpp:289
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "サーマル平均上昇率"
 
 #: src/InfoBoxes/Content/Factory.cpp:290
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "サーマル平均上昇率"
 
 #: src/InfoBoxes/Content/Factory.cpp:291
 #, no-c-format
@@ -766,11 +808,13 @@ msgid ""
 "Altitude gained/lost in the current thermal, divided by time spent "
 "thermaling."
 msgstr ""
+"サーマル平均上昇率\r\n"
+"現在のサーマル旋回中の昇降高度を所要時間で割った数値"
 
 #: src/InfoBoxes/Content/Factory.cpp:299
 #, no-c-format
 msgid "Thermal gain"
-msgstr ""
+msgstr "サーマル獲得高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:300
 #, no-c-format
@@ -869,46 +913,52 @@ msgstr ""
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
+"AATタスク残り時間　\r\n"
+"ゲートクロース後の場合赤の数字"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #, no-c-format
 msgid "AAT max. distance "
-msgstr ""
+msgstr "AAT最大距離 "
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
 msgid "AAT Dmax"
-msgstr ""
+msgstr "AAT最大距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:361
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
 msgstr ""
+"AAT最大距離\r\n"
+"現在のタスクで可能な最大の距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
 msgid "AAT min. distance"
-msgstr ""
+msgstr "AAT最小距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:370
 #, no-c-format
 msgid "AAT Dmin"
-msgstr ""
+msgstr "AAT最小距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:371
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
 msgstr ""
+"AAT最小距離\r\n"
+"現在のタスクで可能な最小の距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:379
 #, no-c-format
 msgid "AAT speed max. distance"
-msgstr ""
+msgstr "AATタスク最大速度、距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:380
 #, no-c-format
 msgid "AAT Vmax"
-msgstr ""
+msgstr "AATタスク最大速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:381
 #, no-c-format
@@ -916,11 +966,13 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"AATタスク最大速度\r\n"
+"AATタスクで可能な最大平均速度を出すのに必要な最大距離。"
 
 #: src/InfoBoxes/Content/Factory.cpp:389
 #, no-c-format
 msgid "AAT speed min. distance"
-msgstr ""
+msgstr "AAT競技　最小距離における最小平均速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:390
 #, no-c-format
@@ -986,17 +1038,17 @@ msgid ""
 "The MacCready speed-to-fly for optimal flight to the next waypoint. In "
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
-msgstr ""
+msgstr "次のウエイポイントに到着に必要なマクレディ設定値"
 
 #: src/InfoBoxes/Content/Factory.cpp:429
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "旋回時間　％"
 
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid "% Climb"
-msgstr ""
+msgstr "旋回時間　％"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1004,6 +1056,8 @@ msgid ""
 "Percentage of time spent in climb mode. These statistics are reset upon "
 "starting the task."
 msgstr ""
+"旋回時間　％\r\n"
+"タスク開始飛行時間のうち上昇旋回に使用した時間（％）"
 
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
@@ -1013,7 +1067,7 @@ msgstr "飛行時間"
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Time Flt"
-msgstr ""
+msgstr "飛行時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1036,16 +1090,18 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
+"G　メーターの数値　（外部計器からの信号）またはバリオメーターの数値\r\n"
+"マイナス数値の場合はピッチダウン操作をした場合"
 
 #: src/InfoBoxes/Content/Factory.cpp:459
 #, no-c-format
 msgid "Next L/D"
-msgstr ""
+msgstr "次のウエイポント到達必要滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
 msgid "WP LD"
-msgstr ""
+msgstr "次のウエイポント到達必要滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:461
 #, no-c-format
@@ -1058,6 +1114,12 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
+"次のウエイポント到達必要滑空比\r\n"
+"安全高度を勘案した次のウエイポイント到達に必要な高度\r\n"
+"マイナス値の場合上昇が必要（高度不足）\r\n"
+"数値がゼロに近い場合”－－－”と表示される\r\n"
+"実際の飛行速度がマクレディ指示速度や、最良滑空速度より高い場合楽観的な数値に"
+"なる"
 
 #: src/InfoBoxes/Content/Factory.cpp:469
 #, no-c-format
@@ -1087,12 +1149,12 @@ msgstr "UTCで表したGPS時刻"
 #: src/InfoBoxes/Content/Factory.cpp:489
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "タスク　フィニッシュ見込時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:490
 #, no-c-format
 msgid "Fin ETE"
-msgstr ""
+msgstr "フィニッシュ見込時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:491
 #, no-c-format
@@ -1100,16 +1162,18 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"フィニッシュ見込時間\r\n"
+"現在のマクレディー設定による予想値"
 
 #: src/InfoBoxes/Content/Factory.cpp:499
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "次のウエイポイントまでの所要時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:500
 #, no-c-format
 msgid "WP ETE"
-msgstr ""
+msgstr "次のウエイポイントまでの所要時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:501
 #, no-c-format
@@ -1117,6 +1181,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"次のウエイポイントまでの見込所要時間\r\n"
+"現在のマクレディー設定による予想値"
 
 #: src/InfoBoxes/Content/Factory.cpp:509
 #, no-c-format
@@ -1139,16 +1205,24 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"現況マクレディー速度　\r\n"
+"巡航モードの場合で　ドルルフィン飛行の場合トータルエナジーバリオ数値、飛行"
+"コース、高度を維持しながら飛行する巡航速度\r\n"
+"\r\n"
+"ファイナルモードの場合　到着高度で到達する速度\r\n"
+"上昇モードの場合　現在の翼面加重条件での最小沈下速度\r\n"
+"\r\n"
+"切り替えスイッチが有る場合（MCブロック）マクレディー指示速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:519
 #, no-c-format
 msgid "Netto vario"
-msgstr ""
+msgstr "トータル　エナジーバリオ"
 
 #: src/InfoBoxes/Content/Factory.cpp:520 src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
 msgid "Netto"
-msgstr ""
+msgstr "トータル　エナジーバリオ"
 
 #: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
@@ -1158,6 +1232,10 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
+"現在飛行しているの空気の塊上昇速度\r\n"
+"バリオメーターの数値からグライダーの沈下率を引いた数値\r\n"
+"高機能バリオメーターを搭載している場合其の数値\r\n"
+"それ以外の場合はGPSの数値より算出"
 
 #: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format

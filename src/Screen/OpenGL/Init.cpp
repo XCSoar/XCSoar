@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/OpenGL/Extension.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
+#include "FBO.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -115,8 +116,11 @@ gcc_pure
 static bool
 CheckFBO()
 {
-  return OpenGL::IsExtensionSupported("GL_ARB_framebuffer_object") ||
-    (have_gles() && OpenGL::IsExtensionSupported("GL_OES_framebuffer_object"));
+  return have_gles()
+    ? (OpenGL::IsExtensionSupported("GL_OES_framebuffer_object") &&
+       OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
+    : (OpenGL::IsExtensionSupported("GL_EXT_framebuffer_object") &&
+       OpenGL::IsExtensionSupported("GL_EXT_packed_depth_stencil"));
 }
 
 void
@@ -134,7 +138,7 @@ OpenGL::SetupContext()
   vertex_buffer_object = EnableVBO();
 #endif
 
-  frame_buffer_object = CheckFBO();
+  frame_buffer_object = CheckFBO() && FBO::Initialise();
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
