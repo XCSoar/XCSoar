@@ -72,12 +72,22 @@ WidgetDialog::AutoSize()
   const PixelSize parent_size = GetPixelRectSize(parent_rc);
 
   widget.Prepare();
+  PixelSize min_size = widget.Get()->GetMinimumSize();
+  min_size.cy += GetTitleHeight();
   PixelSize max_size = widget.Get()->GetMaximumSize();
   max_size.cy += GetTitleHeight();
 
+  const PixelScalar min_height_with_buttons =
+    min_size.cy + Layout::GetMaximumControlHeight();
   const PixelScalar max_height_with_buttons =
     max_size.cy + Layout::GetMaximumControlHeight();
-  if (max_height_with_buttons >= parent_size.cy) {
+  if (/* need full dialog height even for minimum widget height? */
+      min_height_with_buttons >= parent_size.cy ||
+      /* try to avoid putting buttons left on portrait screens; try to
+         comply with maximum widget height only on landscape
+         screens */
+      (parent_size.cx > parent_size.cy &&
+       max_height_with_buttons >= parent_size.cy)) {
     /* need full height, buttons must be left */
     PixelRect rc = parent_rc;
     if (max_size.cy < parent_size.cy)

@@ -479,6 +479,12 @@ ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
 
   unsigned lat_min = _tcstoul(end, &end, 10);
 
+  unsigned lat_sec = 0;
+  if (*end == _T('-')) {
+    ++end;
+    lat_sec = _tcstoul(end, &end, 10);
+  }
+
   bool north;
   if (*end == _T('N') || *end == _T('n'))
     north = true;
@@ -500,6 +506,12 @@ ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
 
   unsigned lon_min = _tcstoul(end, &end, 10);
 
+  unsigned lon_sec = 0;
+  if (*end == _T('-')) {
+    ++end;
+    lon_sec = _tcstoul(end, &end, 10);
+  }
+
   bool east;
   if (*end == _T('E') || *end == _T('e'))
     east = true;
@@ -510,8 +522,12 @@ ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
   end++;
 
   GeoPoint location;
-  location.latitude = Angle::Degrees(fixed(lat_deg) + fixed(lat_min) / 60);
-  location.longitude = Angle::Degrees(fixed(lon_deg) + fixed(lon_min) / 60);
+  location.latitude = Angle::Degrees(fixed(lat_deg) +
+                                     fixed(lat_min) / 60 +
+                                     fixed(lat_sec) / 3600);
+  location.longitude = Angle::Degrees(fixed(lon_deg) +
+                                      fixed(lon_min) / 60 +
+                                      fixed(lon_sec) / 3600);
 
   if (!north)
     location.latitude.Flip();

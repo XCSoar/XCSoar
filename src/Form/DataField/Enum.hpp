@@ -50,6 +50,61 @@ public:
     Entry():string(NULL), display_string(NULL), mHelp(NULL) {}
     ~Entry();
 
+    Entry(Entry &&other)
+      :id(other.id), string(other.string),
+       display_string(other.display_string), mHelp(other.mHelp) {
+      other.string = other.display_string = other.mHelp = NULL;
+    }
+
+    Entry &operator=(Entry &&other) {
+        free(string);
+
+        if (display_string != string)
+          free(display_string);
+
+        free(mHelp);
+
+        id = other.id;
+        string = other.string;
+        display_string = other.display_string;
+        mHelp = other.mHelp;
+
+        other.string = other.display_string = other.mHelp = NULL;
+
+        return *this;
+    }
+
+#if GCC_VERSION < 40500
+    /* we need this copy constructor+operator because std::sort() does
+       not use "move" semantics in older libstdc++ versions */
+
+    Entry(const Entry &other)
+      :NonCopyable(), id(other.id),
+       string(other.string != NULL ? _tcsdup(other.string) : NULL),
+       display_string(other.display_string != NULL
+                      ? _tcsdup(other.display_string) : NULL),
+       mHelp(other.mHelp != NULL ? _tcsdup(other.mHelp) : NULL) {
+    }
+
+    Entry &operator=(const Entry &other) {
+        free(string);
+
+        if (display_string != string)
+          free(display_string);
+
+        free(mHelp);
+
+        id = other.id;
+
+        string = other.string != NULL ? _tcsdup(other.string) : NULL;
+        display_string = other.display_string != NULL
+          ? _tcsdup(other.display_string) : NULL;
+        mHelp = other.mHelp != NULL ? _tcsdup(other.mHelp) : NULL;
+
+        return *this;
+    }
+#endif
+
     unsigned GetId() const {
       return id;
     }

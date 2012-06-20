@@ -64,6 +64,7 @@ TestOLC(DebugReplay &replay)
     sprint_trace.push_back(state);
 
     olc_sprint.UpdateIdle();
+    olc_league.UpdateIdle();
   }
 
   olc_classic.SolveExhaustive();
@@ -77,13 +78,21 @@ TestOLC(DebugReplay &replay)
   std::cout << "classic\n";
   PrintHelper::print(olc_classic.GetStats().GetResult());
   std::cout << "league\n";
-  PrintHelper::print(olc_league.GetStats().GetResult());
+  std::cout << "# league\n";
+  PrintHelper::print(olc_league.GetStats().GetResult(0));
+  std::cout << "# classic\n";
+  PrintHelper::print(olc_league.GetStats().GetResult(1));
   std::cout << "fai\n";
   PrintHelper::print(olc_fai.GetStats().GetResult());
   std::cout << "sprint\n";
   PrintHelper::print(olc_sprint.GetStats().GetResult());
   std::cout << "plus\n";
-  PrintHelper::print(olc_plus.GetStats().GetResult());
+  std::cout << "# classic\n";
+  PrintHelper::print(olc_plus.GetStats().GetResult(0));
+  std::cout << "# triangle\n";
+  PrintHelper::print(olc_plus.GetStats().GetResult(1));
+  std::cout << "# plus\n";
+  PrintHelper::print(olc_plus.GetStats().GetResult(2));
   std::cout << "netcoupe\n";
   PrintHelper::print(olc_netcoupe.GetStats().GetResult());
 

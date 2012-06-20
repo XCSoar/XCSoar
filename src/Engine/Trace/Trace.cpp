@@ -260,13 +260,15 @@ Trace::push_back(const AircraftState& state)
     // only add one item per two seconds
     return;
 
+  TracePoint tp(state);
+  tp.project(task_projection);
+
+  EnforceTimeWindow(tp.GetTime());
+
   if (size() >= max_size)
     Thin();
 
   assert(size() < max_size);
-
-  TracePoint tp(state);
-  tp.project(task_projection);
 
   TraceDelta &td = Insert(tp);
   td.InsertBefore(chronological_list);
@@ -277,19 +279,6 @@ Trace::push_back(const AircraftState& state)
     UpdateDelta(td.GetPrevious());
 
   ++append_serial;
-}
-
-unsigned
-Trace::GetMinTime() const
-{
-  if (empty() || max_time == null_time)
-    return 0;
-
-  unsigned last_time = back().GetTime();
-  if (last_time == null_time || last_time <= max_time)
-    return 0;
-
-  return last_time - max_time;
 }
 
 unsigned
@@ -334,15 +323,26 @@ Trace::CalcAverageDeltaTime(const unsigned no_thin) const
 }
 
 void
+Trace::EnforceTimeWindow(unsigned latest_time)
+{
+  if (max_time == null_time)
+    /* no time window configured */
+    return;
+
+  if (latest_time <= max_time)
+    /* this can only happen if the flight launched shortly after
+       midnight; this check is just here to avoid unsigned integer
+       underflow */
+    return;
+
+  EraseEarlierThan(latest_time - max_time);
+}
+
+void
 Trace::Thin2()
 {
   const unsigned target_size = opt_size;
   assert(size() > target_size);
-
-  // first remove points outside max time range
-  EraseEarlierThan(GetMinTime());
-  if (size() <= target_size)
-    return;
 
   // if still too big, remove points based on line simplification
   EraseDelta(target_size, no_thin_time);

@@ -26,9 +26,11 @@ Version 6.4 - not yet released
 * Android
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out
+
 Version 6.3.7 - not yet released
 * calculations
   - show altitude difference to target point, not area centre
+  - enforce the 150 minutes limit for OLC league (#2174)
 * replay
   - fix parsing of flight date in IGC files
 * Android

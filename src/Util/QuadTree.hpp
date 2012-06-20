@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2011 Max Kellermann <max@duempel.org>
+ *               2012 Tobias Bieniek <tobias.bieniek@gmx.de>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -214,8 +215,8 @@ public:
       return Square(dx) + Square(dy);
     }
 
-    bool IsWithinSquareRange(const Point &other, distance_type range) const {
-      return SquareDistanceTo(other) <= range;
+    bool IsWithinSquareRange(const Point &other, distance_type square_range) const {
+      return SquareDistanceTo(other) <= square_range;
     }
 
     /**
@@ -417,14 +418,14 @@ protected:
     FindNearestIf(const Point location, distance_type square_range,
                   const P &predicate) const {
       const Leaf *nearest = NULL;
-      distance_type nearest_square_distance = max_distance();
+      distance_type nearest_square_distance = square_range;
 
       for (const Leaf *i = head; i != NULL; i = i->next) {
         if (!predicate(i->value))
           continue;
 
         distance_type square_distance = i->SquareDistanceTo(location);
-        if (square_distance < nearest_square_distance) {
+        if (square_distance <= nearest_square_distance) {
           nearest_square_distance = square_distance;
           nearest = i;
         }
@@ -810,7 +811,11 @@ protected:
                                  location, square_range,
                                  predicate);
 
-      square_range = result.second;
+      if (result.first != const_iterator()) {
+        assert(result.second <= square_range);
+        square_range = result.second;
+      }
+
       auto tmp =
         buckets[1].FindNearestIf(GetTopRight(bounds, middle),
                                  location, square_range,
@@ -818,14 +823,22 @@ protected:
       if (tmp.second < result.second)
         result = tmp;
 
-      square_range = result.second;
+      if (result.first != const_iterator()) {
+        assert(result.second <= square_range);
+        square_range = result.second;
+      }
+
       tmp = buckets[2].FindNearestIf(GetBottomLeft(bounds, middle),
                                      location, square_range,
                                      predicate);
       if (tmp.second < result.second)
         result = tmp;
 
-      square_range = result.second;
+      if (result.first != const_iterator()) {
+        assert(result.second <= square_range);
+        square_range = result.second;
+      }
+
       tmp = buckets[3].FindNearestIf(GetBottomRight(bounds, middle),
                                      location, square_range,
                                      predicate);
@@ -1288,7 +1301,7 @@ public:
   gcc_pure
   std::pair<const_iterator, distance_type>
   FindNearest(const Point location, distance_type range) const {
-    return root.FindNearestIf(bounds, location, range, AlwaysTrue());
+    return root.FindNearestIf(bounds, location, Square(range), AlwaysTrue());
   }
 
   gcc_pure

@@ -68,6 +68,11 @@ public:
     edit.SetListener(this);
   }
 
+  ~DevicesConfigPanel() {
+    if (IsDefined())
+      DeleteWindow();
+  }
+
   const DeviceConfig &GetDeviceConfig(unsigned i) const {
     assert(i < NUMDEV);
 
