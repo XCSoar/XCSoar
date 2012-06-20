@@ -146,7 +146,7 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     return _("GPS Intermediate Driver");
 
   case PortType::INTERNAL:
-    return _("Built-in GPS");
+    return _("Built-in GPS & sensors");
 
   case PortType::TCP_LISTENER:
     _sntprintf(buffer, max_size, _T("TCP port %d"), tcp_port);

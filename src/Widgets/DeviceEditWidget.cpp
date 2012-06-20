@@ -63,7 +63,7 @@ static gcc_constexpr_data struct {
   { DeviceConfig::PortType::AUTO, N_("GPS Intermediate Driver") },
 #endif
 #ifdef ANDROID
-  { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS") },
+  { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS & sensors") },
   { DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server") },
 #endif
 
