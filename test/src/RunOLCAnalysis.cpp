@@ -76,13 +76,21 @@ TestOLC(DebugReplay &replay)
   std::cout << "classic\n";
   PrintHelper::print(olc_classic.GetStats().GetResult());
   std::cout << "league\n";
-  PrintHelper::print(olc_league.GetStats().GetResult());
+  std::cout << "# league\n";
+  PrintHelper::print(olc_league.GetStats().GetResult(0));
+  std::cout << "# classic\n";
+  PrintHelper::print(olc_league.GetStats().GetResult(1));
   std::cout << "fai\n";
   PrintHelper::print(olc_fai.GetStats().GetResult());
   std::cout << "sprint\n";
   PrintHelper::print(olc_sprint.GetStats().GetResult());
   std::cout << "plus\n";
-  PrintHelper::print(olc_plus.GetStats().GetResult());
+  std::cout << "# classic\n";
+  PrintHelper::print(olc_plus.GetStats().GetResult(0));
+  std::cout << "# triangle\n";
+  PrintHelper::print(olc_plus.GetStats().GetResult(1));
+  std::cout << "# plus\n";
+  PrintHelper::print(olc_plus.GetStats().GetResult(2));
 
   olc_classic.Reset();
   olc_fai.Reset();
