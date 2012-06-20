@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3.7 - not yet released
 * calculations
   - show altitude difference to target point, not area centre
+  - enforce the 150 minutes limit for OLC league (#2174)
 * replay
   - fix parsing of flight date in IGC files
 * Android

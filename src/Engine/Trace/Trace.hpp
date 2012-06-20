@@ -387,6 +387,18 @@ public:
 
 private:
   /**
+   * Enforce the maximum duration, i.e. remove points that are too
+   * old.  This will be called before a new point is added, therefore
+   * the time stamp of the new point is passed to this method.
+   *
+   * This method is a no-op if no time window was configured.
+   *
+   * @param latest_time the latest time stamp which is/will be stored
+   * in this trace
+   */
+  void EnforceTimeWindow(unsigned latest_time);
+
+  /**
    * Helper function for Thin().
    */
   void Thin2();
@@ -408,9 +420,6 @@ private:
 
     return *static_cast<TraceDelta *>(chronological_list.GetPrevious());
   }
-
-  gcc_pure
-  unsigned get_min_time() const;
 
   gcc_pure
   unsigned calc_average_delta_distance(const unsigned no_thin) const;
