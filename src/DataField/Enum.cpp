@@ -25,11 +25,7 @@ Copyright_License {
 #include "DataField/ComboList.hpp"
 #include "Language/Language.hpp"
 
-#include <stdlib.h>
-
-#ifndef WIN32
-#define _cdecl
-#endif
+#include <algorithm>
 
 DataFieldEnum::Entry::~Entry()
 {
@@ -247,27 +243,17 @@ DataFieldEnum::Dec()
   }
 }
 
-#ifdef __WINE__
-/* this doesn't seem to be available with winegcc - this kludge will
-   be removed once we have switched to std::sort() */
-#define _cdecl
-#endif
-
-static int _cdecl
-DataFieldEnumCompare(const void *elem1, const void *elem2)
+static bool
+DataFieldEnumCompare(const DataFieldEnum::Entry &a,
+                     const DataFieldEnum::Entry &b)
 {
-  const DataFieldEnum::Entry *entry1 = (const DataFieldEnum::Entry *)elem1;
-  const DataFieldEnum::Entry *entry2 = (const DataFieldEnum::Entry *)elem2;
-
-  return _tcscmp(entry1->GetDisplayString(), entry2->GetDisplayString());
+  return _tcscmp(a.GetDisplayString(), b.GetDisplayString()) < 0;
 }
 
 void
 DataFieldEnum::Sort(int startindex)
 {
-  qsort(entries.begin() + startindex, entries.size() - startindex,
-        sizeof(entries[0]),
-        DataFieldEnumCompare);
+  std::sort(entries.begin() + startindex, entries.end(), DataFieldEnumCompare);
 }
 
 ComboList *
