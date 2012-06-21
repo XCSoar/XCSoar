@@ -49,11 +49,8 @@ struct PageSettings {
     }
 
     bool operator==(const InfoBoxConfig &other) const {
-      if (auto_switch != other.auto_switch)
-        return false;
-      if (panel != other.panel)
-        return false;
-      return true;
+      return auto_switch == other.auto_switch &&
+             panel == other.panel;
     }
 
     bool operator!=(const InfoBoxConfig &other) const {
@@ -86,11 +83,8 @@ struct PageSettings {
                    TCHAR *str, const bool concise=false) const;
 
     bool operator==(const PageLayout &other) const {
-      if (top_layout != other.top_layout)
-        return false;
-      if (infobox_config != other.infobox_config)
-        return false;
-      return true;
+      return top_layout == other.top_layout &&
+             infobox_config == other.infobox_config;
     }
 
     bool operator!=(const PageLayout &other) const {
