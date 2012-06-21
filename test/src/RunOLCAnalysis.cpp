@@ -43,11 +43,11 @@ static Trace full_trace(60, Trace::null_time, 512);
 static Trace sprint_trace(0, 9000, 128);
 #endif
 
-ContestManager olc_classic(OLC_Classic, full_trace, sprint_trace);
-ContestManager olc_fai(OLC_FAI, full_trace, sprint_trace);
-ContestManager olc_sprint(OLC_Sprint, full_trace, sprint_trace);
-ContestManager olc_league(OLC_League, full_trace, sprint_trace);
-ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
+static ContestManager olc_classic(OLC_Classic, full_trace, sprint_trace);
+static ContestManager olc_fai(OLC_FAI, full_trace, sprint_trace);
+static ContestManager olc_sprint(OLC_Sprint, full_trace, sprint_trace);
+static ContestManager olc_league(OLC_League, full_trace, sprint_trace);
+static ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
 
 static int
 TestOLC(DebugReplay &replay)
