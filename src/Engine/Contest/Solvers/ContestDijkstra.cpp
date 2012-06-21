@@ -337,7 +337,7 @@ ContestDijkstra::SaveSolution()
   assert(num_stages <= MAX_STAGES);
   assert(solution_valid);
 
-  if (solution_valid && AbstractContest::SaveSolution()) {
+  if (AbstractContest::SaveSolution()) {
     best_solution.clear();
     for (unsigned i=0; i<num_stages; ++i) {
       best_solution.append(GetPoint(solution[i]));
