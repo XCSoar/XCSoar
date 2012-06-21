@@ -58,6 +58,12 @@ SocketDescriptor::CreateTCP()
 }
 
 bool
+SocketDescriptor::CreateUDP()
+{
+  return Create(AF_INET, SOCK_DGRAM, 0);
+}
+
+bool
 SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
 {
   if (!CreateTCP())

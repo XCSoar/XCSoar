@@ -76,6 +76,11 @@ public:
    */
   bool BindPort(unsigned port);
 
+  /***
+   * Creates an UDP scoket
+   */
+  bool CreateUDP();
+
   bool CreateTCP();
   bool CreateTCPListener(unsigned port, unsigned backlog=8);
 
