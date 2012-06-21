@@ -64,6 +64,20 @@ SocketDescriptor::CreateUDP()
 }
 
 bool
+SocketDescriptor::CreateUDPListener(unsigned port)
+{
+  if (!CreateUDP())
+    return false;
+
+  // Bind socket to specified port number
+  if (!BindPort(port)){
+    Close();
+    return false;
+  }
+  return true;
+}
+
+bool
 SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
 {
   if (!CreateTCP())

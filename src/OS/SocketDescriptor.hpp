@@ -81,6 +81,11 @@ public:
    */
   bool CreateUDP();
 
+  /**
+   * Creates A BOUND udp socket
+   */
+  bool CreateUDPListener(unsigned port);
+
   bool CreateTCP();
   bool CreateTCPListener(unsigned port, unsigned backlog=8);
 
