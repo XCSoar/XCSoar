@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
+#include "MapSettings.hpp"
 
 enum ControlIndex {
   DisplayTrackBearing,
@@ -42,7 +43,7 @@ enum ControlIndex {
   SnailWidthScale,
   DetourCostMarker,
   AircraftSymbol,
-  WindArrowStyle
+  _WindArrowStyle
 };
 
 class SymbolsConfigPanel
@@ -121,8 +122,8 @@ static const StaticEnumChoice  aircraft_symbol_list[] = {
 };
 
 static const StaticEnumChoice  wind_arrow_list[] = {
-  { 0, N_("Arrow head"), N_("Draws an arrow head only.") },
-  { 1, N_("Full arrow"), N_("Draws an arrow head with a dashed arrow line.") },
+  { (unsigned)WindArrowStyle::ARROW_HEAD, N_("Arrow head"), N_("Draws an arrow head only.") },
+  { (unsigned)WindArrowStyle::FULL_ARROW, N_("Full arrow"), N_("Draws an arrow head with a dashed arrow line.") },
   { 0 }
 };
 
@@ -167,8 +168,8 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(AircraftSymbol);
 
   AddEnum(_("Wind arrow"), _("Determines the way the wind arrow is drawn on the map."),
-          wind_arrow_list, settings_map.wind_arrow_style);
-  SetExpertRow(WindArrowStyle);
+          wind_arrow_list, (unsigned)settings_map.wind_arrow_style);
+  SetExpertRow(_WindArrowStyle);
 
   ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }
@@ -200,7 +201,7 @@ SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(AircraftSymbol, szProfileAircraftSymbol, settings_map.aircraft_symbol);
 
-  changed |= SaveValueEnum(WindArrowStyle, szProfileWindArrowStyle, settings_map.wind_arrow_style);
+  changed |= SaveValueEnum(_WindArrowStyle, szProfileWindArrowStyle, settings_map.wind_arrow_style);
 
   _changed |= changed;
   _require_restart |= require_restart;

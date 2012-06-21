@@ -70,7 +70,7 @@ protected:
     canvas.SelectHollowBrush();
     canvas.DrawCircle(pt.x, pt.y, 2);
 
-    renderer.Draw(canvas, Angle::Zero(), wind, pt, rc, false);
+    renderer.Draw(canvas, Angle::Zero(), wind, pt, rc, WindArrowStyle::ARROW_HEAD);
   }
 };
 

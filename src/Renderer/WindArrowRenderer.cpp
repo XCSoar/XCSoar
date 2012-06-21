@@ -31,7 +31,6 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
-#include "MapSettings.hpp"
 #include "Util/Macros.hpp"
 
 #include <tchar.h>
@@ -39,7 +38,7 @@ Copyright_License {
 
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
-                             PixelScalar length, bool with_tail)
+                             PixelScalar length, WindArrowStyle arrow_style)
 {
   // Draw arrow
 
@@ -59,7 +58,7 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
   // Draw arrow tail
 
-  if (with_tail) {
+  if (arrow_style == WindArrowStyle::FULL_ARROW) {
     RasterPoint tail[] = {
       { 0, Layout::FastScale(-20) },
       { 0, Layout::FastScale(-26 - min(PixelScalar(20), length) * 3) },
@@ -76,12 +75,12 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 void
 WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const SpeedVector wind, const RasterPoint pos,
-                        const PixelRect rc, bool with_tail)
+                        const PixelRect rc, WindArrowStyle arrow_style)
 {
   // Draw arrow (and tail)
 
   PixelScalar length = iround(4 * wind.norm);
-  DrawArrow(canvas, pos, wind.bearing - screen_angle, length, with_tail);
+  DrawArrow(canvas, pos, wind.bearing - screen_angle, length, arrow_style);
 
   // Draw wind speed label
 
@@ -120,5 +119,5 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     return;
 
   WindArrowRenderer::Draw(canvas, screen_angle, calculated.wind, pos, rc,
-                          settings.wind_arrow_style == 1);
+                          settings.wind_arrow_style);
 }

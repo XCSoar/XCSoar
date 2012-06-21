@@ -25,13 +25,13 @@ Copyright_License {
 #define XCSOAR_WIND_ARROW_RENDERER_HPP
 
 #include "Screen/Point.hpp"
+#include "MapSettings.hpp"
 
 class Canvas;
 class Angle;
 struct WindArrowLook;
 struct SpeedVector;
 struct DerivedInfo;
-struct MapSettings;
 
 class WindArrowRenderer {
   const WindArrowLook &look;
@@ -40,7 +40,7 @@ public:
   WindArrowRenderer(const WindArrowLook &_look):look(_look) {}
 
   void Draw(Canvas &canvas, const Angle screen_angle, const SpeedVector wind,
-            const RasterPoint pos, const PixelRect rc, bool with_tail);
+            const RasterPoint pos, const PixelRect rc, WindArrowStyle arrow_style);
 
   void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos,
             const PixelRect rc, const DerivedInfo &calculated,
@@ -48,7 +48,7 @@ public:
 
 private:
   void DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
-                 PixelScalar length, bool with_tail);
+                 PixelScalar length, WindArrowStyle arrow_style);
 };
 
 #endif

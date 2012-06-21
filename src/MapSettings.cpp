@@ -50,7 +50,7 @@ MapSettings::SetDefaults()
   detour_cost_markers_enabled = false;
   display_track_bearing = dtbAuto;
   auto_zoom_enabled = false;
-  wind_arrow_style = 0;
+  wind_arrow_style = WindArrowStyle::ARROW_HEAD;
   waypoint.SetDefaults();
   airspace.SetDefaults();
   glider_screen_position = 20; // 20% from bottom

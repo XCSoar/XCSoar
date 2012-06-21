@@ -42,9 +42,7 @@ Profile::Load(MapSettings &settings)
   GetEnum(szProfileDisplayTrackBearing, settings.display_track_bearing);
   Get(szProfileAutoZoom, settings.auto_zoom_enabled);
 
-  unsigned Temp;
-  if (Get(szProfileWindArrowStyle, Temp))
-    settings.wind_arrow_style = Temp;
+  GetEnum(szProfileWindArrowStyle, settings.wind_arrow_style);
 
   settings.waypoint.LoadFromProfile();
 
@@ -54,7 +52,7 @@ Profile::Load(MapSettings &settings)
 
   bool orientation_found = false;
 
-  Temp = NORTHUP;
+  unsigned Temp = NORTHUP;
   if (Get(szProfileOrientationCircling, Temp))
     orientation_found = true;
 

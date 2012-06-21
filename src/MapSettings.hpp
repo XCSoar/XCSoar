@@ -107,6 +107,11 @@ static_assert(is_trivial<TrailSettings>::value, "type is not trivial");
 // where using these from Calculations or MapWindow thread, should
 // protect
 
+enum class WindArrowStyle: uint8_t {
+  ARROW_HEAD,
+  FULL_ARROW,
+};
+
 struct MapSettings {
   /** Map zooms in on circling */
   bool circle_zoom_enabled;
@@ -126,7 +131,7 @@ struct MapSettings {
 
   /** Automatic zoom when closing in on waypoint */
   bool auto_zoom_enabled;
-  int wind_arrow_style;
+  WindArrowStyle wind_arrow_style;
 
   WaypointRendererSettings waypoint;
   AirspaceRendererSettings airspace;
