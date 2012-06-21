@@ -38,10 +38,12 @@ OLCPlus::Reset()
   result_fai.Reset();
 }
 
-bool
+AbstractContest::SolverResult
 OLCPlus::Solve(bool exhaustive)
 {
-  return SaveSolution();
+  return SaveSolution()
+    ? SolverResult::VALID
+    : SolverResult::FAILED;
 }
 
 void

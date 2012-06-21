@@ -206,7 +206,7 @@ protected:
 
 public:
   /* public virtual methods from AbstractContest */
-  virtual bool Solve(bool exhaustive);
+  virtual SolverResult Solve(bool exhaustive);
   virtual bool Score(ContestResult &result);
   virtual void CopySolution(ContestTraceVector &vec) const;
   virtual void Reset();

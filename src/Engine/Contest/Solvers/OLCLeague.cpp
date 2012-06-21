@@ -51,17 +51,17 @@ OLCLeague::Reset()
   }
 }
 
-bool
+AbstractContest::SolverResult
 OLCLeague::Solve(bool exhaustive)
 {
   if (trace.size() < 2)
-    return false;
+    return SolverResult::FAILED;
 
   const TracePoint &first = trace.front();
   const TracePoint &last = trace.back();
 
   if (!IsFinishAltitudeValid(first, last))
-    return false;
+    return SolverResult::FAILED;
 
   // solution found, so set start/finish points
   solution[0] = first;
@@ -89,7 +89,7 @@ OLCLeague::Solve(bool exhaustive)
     solution[index_fill] = solution[index_fill - 1];
 
   SaveSolution();
-  return true;
+  return SolverResult::VALID;
 }
 
 void

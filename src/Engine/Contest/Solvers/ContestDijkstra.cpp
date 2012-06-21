@@ -53,9 +53,10 @@ bool
 ContestDijkstra::Score(ContestResult &result)
 {
   assert(num_stages <= MAX_STAGES);
+  assert(n_points >= num_stages);
+  assert(solution_valid);
 
-  return n_points >= num_stages && solution_valid &&
-    AbstractContest::Score(result);
+  return AbstractContest::Score(result);
 }
 
 bool
@@ -138,8 +139,7 @@ ContestDijkstra::UpdateTrace(bool force)
   if (n_points<2) return;
 }
 
-
-bool
+AbstractContest::SolverResult
 ContestDijkstra::Solve(bool exhaustive)
 {
   assert(num_stages <= MAX_STAGES);
@@ -149,23 +149,23 @@ ContestDijkstra::Solve(bool exhaustive)
   if (trace_master.size() < num_stages) {
     /* not enough data in master trace */
     ClearTrace();
-    return true;
+    return SolverResult::FAILED;
   }
 
   if (finished || dijkstra.IsEmpty()) {
     UpdateTrace(exhaustive);
 
     if (n_points < num_stages)
-      return true;
+      return SolverResult::FAILED;
 
     // don't re-start search unless we have had new data appear
     if (!trace_dirty && !finished)
-      return true;
+      return SolverResult::FAILED;
   } else if (exhaustive || n_points < num_stages ||
              modify_serial != trace_master.GetModifySerial()) {
     UpdateTrace(exhaustive);
     if (n_points < num_stages)
-      return true;
+      return SolverResult::FAILED;
   }
 
   assert(n_points >= num_stages);
@@ -179,9 +179,8 @@ ContestDijkstra::Solve(bool exhaustive)
 
     StartSearch();
     AddStartEdges();
-    if (dijkstra.IsEmpty()) {
-      return true;
-    }
+    if (dijkstra.IsEmpty())
+      return SolverResult::FAILED;
   }
 
   if (DistanceGeneral(exhaustive ? 0 - 1 : 25)) {
@@ -193,14 +192,17 @@ ContestDijkstra::Solve(bool exhaustive)
       /* start the next iteration from scratch */
       dijkstra.Clear();
 
-    if (solution_valid)
-      SaveSolution();
+    const SolverResult r = solution_valid && SaveSolution()
+      ? SolverResult::VALID
+      : SolverResult::FAILED;
 
     UpdateTrace(exhaustive);
-    return true;
+    return r;
   }
 
-  return !dijkstra.IsEmpty();
+  return dijkstra.IsEmpty()
+    ? SolverResult::FAILED
+    : SolverResult::INCOMPLETE;
 }
 
 void

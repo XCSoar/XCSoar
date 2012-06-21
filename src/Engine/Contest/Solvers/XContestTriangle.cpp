@@ -57,13 +57,12 @@ XContestTriangle::CalculateResult() const
   return result;
 }
 
-bool 
+AbstractContest::SolverResult
 XContestTriangle::Solve(bool exhaustive)
 {
-  if (!ContestDijkstra::Solve(exhaustive))
-    return false;
+  SolverResult result = ContestDijkstra::Solve(exhaustive);
+  if (result != SolverResult::FAILED)
+    best_d = 0; // reset heuristic
 
-  best_d = 0; // reset heuristic
-
-  return true;
+  return result;
 }

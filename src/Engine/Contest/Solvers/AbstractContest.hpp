@@ -42,6 +42,28 @@ private:
 
 public:
   /**
+   * Return type for Solve().
+   */
+  enum class SolverResult {
+    /**
+     * Still looking for a solution.
+     */
+    INCOMPLETE,
+
+    /**
+     * A valid solution was found.
+     */
+    VALID,
+
+    /**
+     * The solver has completed, but failed to find a valid solution,
+     * or the solution was not better than the previous one.  More
+     * data may be required.
+     */
+    FAILED,
+  };
+
+  /**
    * Constructor
    *
    * @param _trace Trace object reference to use to retrieve shorter trace for solving
@@ -89,9 +111,8 @@ public:
    *
    * @param exhaustive true to find the final solution, false stops
    * after a number of iterations (incremental search)
-   * @return True if solver completed in this call
    */
-  virtual bool Solve(bool exhaustive) = 0;
+  virtual SolverResult Solve(bool exhaustive) = 0;
 
 protected:
   /**

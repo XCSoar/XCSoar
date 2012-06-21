@@ -39,7 +39,7 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual bool Solve(bool exhaustive);
+  virtual SolverResult Solve(bool exhaustive);
   virtual ContestResult CalculateResult() const;
 };
 
