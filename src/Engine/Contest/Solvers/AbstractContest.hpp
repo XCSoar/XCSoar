@@ -84,7 +84,7 @@ public:
    *
    * @return True is solution was found, False otherwise
    */
-  virtual bool Score(ContestResult &result);
+  bool Score(ContestResult &result);
 
   /**
    * Copy the best Contest path solution

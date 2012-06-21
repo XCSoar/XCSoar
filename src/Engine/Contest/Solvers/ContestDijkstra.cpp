@@ -50,16 +50,6 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
 }
 
 bool
-ContestDijkstra::Score(ContestResult &result)
-{
-  assert(num_stages <= MAX_STAGES);
-  assert(n_points >= num_stages);
-  assert(solution_valid);
-
-  return AbstractContest::Score(result);
-}
-
-bool
 ContestDijkstra::IsMasterUpdated() const
 {
   assert(num_stages <= MAX_STAGES);
