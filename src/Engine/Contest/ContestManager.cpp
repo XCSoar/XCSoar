@@ -86,8 +86,7 @@ ContestManager::RunContest(AbstractContest &_contest,
 
   // if no improved solution was found, must have finished processing
   // with invalid data
-  if (!_contest.Score(result))
-    return true;
+  result = _contest.GetBestResult();
 
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.

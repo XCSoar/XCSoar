@@ -37,17 +37,6 @@ AbstractContest::Reset()
 }
 
 bool
-AbstractContest::Score(ContestResult &result)
-{
-  /* XXX optimise this, don't call CalculateResult() */
-  if (positive(CalculateResult().time)) {
-    result = best_result;
-    return true;
-  }
-  return false;
-}
-
-bool
 AbstractContest::UpdateScore()
 {
   // for normal contests, nothing needs to be done

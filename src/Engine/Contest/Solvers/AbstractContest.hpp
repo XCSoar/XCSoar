@@ -84,7 +84,9 @@ public:
    *
    * @return True is solution was found, False otherwise
    */
-  bool Score(ContestResult &result);
+  const ContestResult &GetBestResult() const {
+    return best_result;
+  }
 
   /**
    * Copy the best Contest path solution
