@@ -36,21 +36,21 @@ Load(PageSettings::PageLayout &_pl, const unsigned page)
 
   PageSettings::PageLayout pl;
   _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
-  if (!Profile::Get(profileKey, pl.infoBoxConfig.autoSwitch))
+  if (!Profile::Get(profileKey, pl.infobox_config.auto_switch))
     return;
   _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
-  if (!Profile::Get(profileKey, pl.infoBoxConfig.panel))
+  if (!Profile::Get(profileKey, pl.infobox_config.panel))
     return;
   _tcscpy(profileKey + prefixLen, _T("Layout"));
   unsigned temp = 0;
   if (!Profile::Get(profileKey, temp))
     return;
-  pl.topLayout = (PageSettings::PageLayout::eTopLayout) temp;
-  if (pl.topLayout > PageSettings::PageLayout::tlLAST)
+  pl.top_layout = (PageSettings::PageLayout::eTopLayout) temp;
+  if (pl.top_layout > PageSettings::PageLayout::tlLAST)
     return;
-  if (pl.infoBoxConfig.panel >= InfoBoxSettings::MAX_PANELS)
+  if (pl.infobox_config.panel >= InfoBoxSettings::MAX_PANELS)
     return;
-  if (page == 0 && pl.topLayout == PageSettings::PageLayout::tlEmpty)
+  if (page == 0 && pl.top_layout == PageSettings::PageLayout::tlEmpty)
     return;
 
   _pl = pl;
@@ -71,11 +71,11 @@ Profile::Save(const PageSettings::PageLayout &page, const unsigned i)
   if (prefixLen <= 0)
     return;
   _tcscpy(profileKey + prefixLen, _T("InfoBoxMode"));
-  Profile::Set(profileKey, page.infoBoxConfig.autoSwitch);
+  Profile::Set(profileKey, page.infobox_config.auto_switch);
   _tcscpy(profileKey + prefixLen, _T("InfoBoxPanel"));
-  Profile::Set(profileKey, page.infoBoxConfig.panel);
+  Profile::Set(profileKey, page.infobox_config.panel);
   _tcscpy(profileKey + prefixLen, _T("Layout"));
-  Profile::Set(profileKey, page.topLayout);
+  Profile::Set(profileKey, page.top_layout);
 }
 
 

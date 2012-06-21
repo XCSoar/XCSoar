@@ -31,7 +31,7 @@ void
 PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
                                     TCHAR *buffer, const bool concise) const
 {
-  switch (topLayout) {
+  switch (top_layout) {
   case PageSettings::PageLayout::tlMap:
     if (concise)
       _tcscpy(buffer, _("Info Hide"));
@@ -42,11 +42,11 @@ PageSettings::PageLayout::MakeTitle(const InfoBoxSettings &info_box_settings,
   case PageSettings::PageLayout::tlMapAndInfoBoxes:
     _tcscpy(buffer, concise ? _("Info") : _("Map and InfoBoxes"));
 
-    if (!infoBoxConfig.autoSwitch &&
-        infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
+    if (!infobox_config.auto_switch &&
+        infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
       _tcscat(buffer, _T(" "));
       _tcscat(buffer,
-              gettext(info_box_settings.panels[infoBoxConfig.panel].name));
+              gettext(info_box_settings.panels[infobox_config.panel].name));
     }
     else {
       if (concise) {

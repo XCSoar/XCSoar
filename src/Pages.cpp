@@ -33,37 +33,40 @@ Copyright_License {
 
 namespace Pages
 {
-  unsigned Current = 0;
+  unsigned current_page = 0;
+
   static PageSettings settings;
+
   const unsigned MAX_VALID_LAYOUTS =
     1 + // Nothing
     1 + // Map & Auto InfoBoxes
     1 + // Map (Full Screen)
     InfoBoxSettings::MAX_PANELS;
-  unsigned validLayoutsCnt = 0;
-  PageSettings::PageLayout validLayouts[MAX_VALID_LAYOUTS];
 
-  void addValidLayout(const PageSettings::PageLayout& pl);
+  unsigned num_valid_layouts = 0;
+  PageSettings::PageLayout valid_layouts[MAX_VALID_LAYOUTS];
+
+  void AddValidLayout(const PageSettings::PageLayout& pl);
 }
 
 
 void
 Pages::Update()
 {
-  if (settings.pages[Current].topLayout == PageSettings::PageLayout::tlEmpty)
-    Current = NextIndex();
+  if (settings.pages[current_page].top_layout == PageSettings::PageLayout::tlEmpty)
+    current_page = NextIndex();
 
-  OpenLayout(settings.pages[Current]);
+  OpenLayout(settings.pages[current_page]);
 }
 
 
 unsigned
 Pages::NextIndex()
 {
-  unsigned i = Current;
+  unsigned i = current_page;
   do {
     i = (i + 1) % PageSettings::MAX_PAGES;
-  } while (settings.pages[i].topLayout == PageSettings::PageLayout::tlEmpty);
+  } while (settings.pages[i].top_layout == PageSettings::PageLayout::tlEmpty);
   return i;
 }
 
@@ -71,7 +74,7 @@ Pages::NextIndex()
 void
 Pages::Next()
 {
-  Current = NextIndex();
+  current_page = NextIndex();
   Update();
 }
 
@@ -79,10 +82,10 @@ Pages::Next()
 unsigned
 Pages::PrevIndex()
 {
-  unsigned i = Current;
+  unsigned i = current_page;
   do {
     i = (i == 0) ? PageSettings::MAX_PAGES - 1 : i - 1;
-  } while (settings.pages[i].topLayout == PageSettings::PageLayout::tlEmpty);
+  } while (settings.pages[i].top_layout == PageSettings::PageLayout::tlEmpty);
   return i;
 }
 
@@ -90,7 +93,7 @@ Pages::PrevIndex()
 void
 Pages::Prev()
 {
-  Current = PrevIndex();
+  current_page = PrevIndex();
   Update();
 }
 
@@ -100,10 +103,10 @@ Pages::Open(unsigned page)
   if (page >= PageSettings::MAX_PAGES)
     return;
 
-  if (settings.pages[page].topLayout == PageSettings::PageLayout::tlEmpty)
+  if (settings.pages[page].top_layout == PageSettings::PageLayout::tlEmpty)
     return;
 
-  Current = page;
+  current_page = page;
   Update();
 }
 
@@ -113,18 +116,18 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 
-  switch (layout.topLayout) {
+  switch (layout.top_layout) {
   case PageSettings::PageLayout::tlMap:
     XCSoarInterface::main_window.SetFullScreen(true);
     ui_state.auxiliary_enabled = false;
     break;
 
   case PageSettings::PageLayout::tlMapAndInfoBoxes:
-    if (!layout.infoBoxConfig.autoSwitch &&
-        layout.infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
+    if (!layout.infobox_config.auto_switch &&
+        layout.infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
       XCSoarInterface::main_window.SetFullScreen(false);
       ui_state.auxiliary_enabled = true;
-      ui_state.auxiliary_index = layout.infoBoxConfig.panel;
+      ui_state.auxiliary_index = layout.infobox_config.panel;
     }
     else {
       XCSoarInterface::main_window.SetFullScreen(false);
@@ -151,7 +154,7 @@ Pages::SetLayout(unsigned page, const PageSettings::PageLayout &layout)
     settings.pages[page] = layout;
   }
 
-  if (page == Current)
+  if (page == current_page)
     Update();
 }
 
@@ -166,30 +169,30 @@ Pages::Initialise(const PageSettings &_settings)
 
 
 void
-Pages::addValidLayout(const PageSettings::PageLayout &pl)
+Pages::AddValidLayout(const PageSettings::PageLayout &pl)
 {
-  assert(validLayoutsCnt < MAX_VALID_LAYOUTS);
-  validLayouts[validLayoutsCnt++] = pl;
+  assert(num_valid_layouts < MAX_VALID_LAYOUTS);
+  valid_layouts[num_valid_layouts++] = pl;
 }
 
 
 void
 Pages::LoadDefault()
 {
-  addValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlEmpty,
+  AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlEmpty,
                                           PageSettings::InfoBoxConfig(true, 0)));
-  addValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
+  AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
                                           PageSettings::InfoBoxConfig(true, 0)));
-  addValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMap,
+  AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMap,
                                           PageSettings::InfoBoxConfig(true, 0)));
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++)
-    addValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
+    AddValidLayout(PageSettings::PageLayout(PageSettings::PageLayout::tlMapAndInfoBoxes,
                                             PageSettings::InfoBoxConfig(false, i)));
 }
 
 
 const PageSettings::PageLayout*
 Pages::PossiblePageLayout(unsigned i) {
-  return (i < validLayoutsCnt) ? &validLayouts[i] : NULL;
+  return (i < num_valid_layouts) ? &valid_layouts[i] : NULL;
 }
 
