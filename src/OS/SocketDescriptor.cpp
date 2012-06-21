@@ -54,14 +54,7 @@ SocketDescriptor::Close()
 bool
 SocketDescriptor::CreateTCP()
 {
-  assert(!IsDefined());
-
-  int fd = socket(AF_INET, SOCK_STREAM, 0);
-  if (fd < 0)
-    return false;
-
-  Set(fd);
-  return true;
+  return Create(AF_INET, SOCK_STREAM, 0);
 }
 
 bool
@@ -127,6 +120,18 @@ SocketDescriptor::Create(int domain, int type, int protocol)
 
   Set(fd);
   return true;
+}
+
+bool
+SocketDescriptor::BindPort(unsigned port)
+{
+  struct sockaddr_in address;
+  memset(&address, 0, sizeof(address));
+  address.sin_family = AF_INET;
+  address.sin_addr.s_addr = INADDR_ANY;
+  address.sin_port = htons((uint16_t)port);
+
+  return bind(Get(), (const struct sockaddr *)&address, sizeof(address)) == 0;
 }
 
 #ifndef HAVE_POSIX

@@ -69,6 +69,13 @@ public:
    */
   bool Create(int domain, int type, int protocol);
 
+  /**
+   * Binds the socket to the port on INADDR_ANY
+   * @param port is the port to bound
+   * @return True on success False on failure
+   */
+  bool BindPort(unsigned port);
+
   bool CreateTCP();
   bool CreateTCPListener(unsigned port, unsigned backlog=8);
 
