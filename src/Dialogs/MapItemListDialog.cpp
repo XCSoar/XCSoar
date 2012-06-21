@@ -36,6 +36,11 @@ Copyright_License {
 #include "Renderer/MapItemListRenderer.hpp"
 #include "Form/ListWidget.hpp"
 #include "Form/Button.hpp"
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_NOAA
+#include "Dialogs/Weather.hpp"
+#endif
 
 static bool
 HasDetails(const MapItem &item)
@@ -52,6 +57,9 @@ HasDetails(const MapItem &item)
   case MapItem::WAYPOINT:
   case MapItem::TASK_OZ:
   case MapItem::TRAFFIC:
+#ifdef HAVE_NOAA
+  case MapItem::WEATHER:
+#endif
     return true;
   }
 
@@ -225,6 +233,13 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
   case MapItem::TRAFFIC:
     dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).traffic.id);
     break;
+
+#ifdef HAVE_NOAA
+  case MapItem::WEATHER:
+    dlgNOAADetailsShowModal(parent,
+                            ((const WeatherStationMapItem &)item).station);
+    break;
+#endif
   }
 }
 

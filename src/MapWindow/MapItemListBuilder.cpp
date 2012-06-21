@@ -50,6 +50,10 @@ Copyright_License {
 #include "FLARM/FriendsGlue.hpp"
 #include "TeamCodeSettings.hpp"
 
+#ifdef HAVE_NOAA
+#include "Weather/NOAAStore.hpp"
+#endif
+
 class AirspaceWarningList
 {
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
@@ -292,6 +296,22 @@ MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks)
     i++;
   }
 }
+
+#ifdef HAVE_NOAA
+void
+MapItemListBuilder::AddWeatherStations(NOAAStore &store)
+{
+  for (auto it = store.begin(), end = store.end(); it != end; ++it) {
+    if (list.full())
+      break;
+
+    if (it->parsed_metar_available &&
+        it->parsed_metar.location_available &&
+        location.Distance(it->parsed_metar.location) < range)
+      list.checked_append(new WeatherStationMapItem(it));
+  }
+}
+#endif
 
 void
 MapItemListBuilder::AddTraffic(const TrafficList &flarm,

@@ -33,6 +33,11 @@ Copyright_License {
 #include "FLARM/Traffic.hpp"
 #include "FLARM/Friends.hpp"
 #include "NMEA/ThermalLocator.hpp"
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_NOAA
+#include "Weather/NOAAStore.hpp"
+#endif
 
 class AbstractAirspace;
 struct Waypoint;
@@ -44,6 +49,9 @@ struct MapItem
     ARRIVAL_ALTITUDE,
     SELF,
     TASK_OZ,
+#ifdef HAVE_NOAA
+    WEATHER,
+#endif
     AIRSPACE,
     MARKER,
     THERMAL,
@@ -143,6 +151,16 @@ struct MarkerMapItem: public MapItem
   MarkerMapItem(unsigned _id, const Markers::Marker &_marker)
     :MapItem(MARKER), id(_id), marker(_marker) {}
 };
+
+#ifdef HAVE_NOAA
+struct WeatherStationMapItem: public MapItem
+{
+  NOAAStore::iterator station;
+
+  WeatherStationMapItem(const NOAAStore::iterator &_station)
+    :MapItem(WEATHER), station(_station) {}
+};
+#endif
 
 struct TrafficMapItem: public MapItem
 {

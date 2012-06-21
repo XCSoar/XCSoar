@@ -50,6 +50,11 @@ Copyright_License {
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Record.hpp"
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_NOAA
+#include "Renderer/NOAAListRenderer.hpp"
+#endif
 
 #include <cstdio>
 
@@ -76,6 +81,11 @@ namespace MapItemListRenderer
 
   void Draw(Canvas &canvas, const PixelRect rc, const MarkerMapItem &item,
             const DialogLook &dialog_look, const MarkerLook &look);
+
+#ifdef HAVE_NOAA
+  void Draw(Canvas &canvas, const PixelRect rc, const WeatherStationMapItem &item,
+            const DialogLook &dialog_look, const NOAALook &look);
+#endif
 
   void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item,
             const DialogLook &dialog_look,
@@ -327,6 +337,18 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       rc, buffer);
 }
 
+#ifdef HAVE_NOAA
+void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const WeatherStationMapItem &item,
+                          const DialogLook &dialog_look,
+                          const NOAALook &look)
+{
+  const NOAAStore::Item &station = *item.station;
+  NOAAListRenderer::Draw(canvas, rc, station, look, dialog_look);
+}
+#endif
+
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const ThermalMapItem &item,
@@ -516,6 +538,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   case MapItem::MARKER:
     Draw(canvas, rc, (const MarkerMapItem &)item, dialog_look, look.marker);
     break;
+
+#ifdef HAVE_NOAA
+  case MapItem::WEATHER:
+    Draw(canvas, rc, (const WeatherStationMapItem &)item, dialog_look, look.noaa);
+    break;
+#endif
+
   case MapItem::TRAFFIC:
     Draw(canvas, rc, (const TrafficMapItem &)item, dialog_look, traffic_look);
     break;

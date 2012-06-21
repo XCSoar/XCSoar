@@ -31,6 +31,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
+#include "Weather/Features.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
@@ -70,6 +71,11 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
   if (waypoints)
     builder.AddWaypoints(*waypoints);
+
+#ifdef HAVE_NOAA
+  if (noaa_store)
+    builder.AddWeatherStations(*noaa_store);
+#endif
 
   builder.AddTraffic(Basic().flarm.traffic, GetComputerSettings().team_code);
 
