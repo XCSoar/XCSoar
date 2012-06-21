@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.3.7 - not yet released
+Version 6.3.7 - 2012/06/21
 * calculations
   - show altitude difference to target point, not area centre
   - enforce the 150 minutes limit for OLC league (#2174)
