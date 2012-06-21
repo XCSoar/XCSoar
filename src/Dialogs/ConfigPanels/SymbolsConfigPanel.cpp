@@ -82,9 +82,9 @@ SymbolsConfigPanel::OnModified(DataField &df)
 }
 
 static const StaticEnumChoice  track_bearing_mode_list[] = {
-  { 0, N_("Off"), N_("Disable display of track bearing.") },
-  { 1, N_("On"), N_("Always display track bearing.") },
-  { 2, N_("Auto"), N_("Display track bearing if there is a significant difference to plane heading.") },
+  { (unsigned)DisplayGroundTrack::OFF, N_("Off"), N_("Disable display of track bearing.") },
+  { (unsigned)DisplayGroundTrack::ON, N_("On"), N_("Always display track bearing.") },
+  { (unsigned)DisplayGroundTrack::AUTO, N_("Auto"), N_("Display track bearing if there is a significant difference to plane heading.") },
   { 0 }
 };
 
