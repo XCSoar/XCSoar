@@ -85,6 +85,14 @@ public:
   bool ReadChecked(unsigned &value_r);
 
   /**
+   * Tries to read a hexadecimal number from the next field
+   * @param value_r A reference to the variable that the
+   * number should be written into
+   * @return True if number was read successfully, False otherwise
+   */
+  bool ReadHexChecked(long &value_r);
+
+  /**
    * Read a #fixed only if the unit string which follows matches.
    */
   bool ReadCheckedCompare(fixed &value_r, const char *string);

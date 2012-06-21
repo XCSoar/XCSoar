@@ -196,6 +196,29 @@ CSVLine::ReadChecked(long &value_r)
 }
 
 bool
+CSVLine::ReadHexChecked(long &value_r)
+{
+  char *endptr;
+  long value = strtol(data, &endptr, 16);
+  assert(endptr >= data && endptr <= end);
+
+  bool success = endptr > data;
+  if (endptr >= end) {
+    data = end;
+  } else if (*endptr == ',') {
+    data = endptr + 1;
+  } else {
+    data = endptr;
+    Skip();
+    return false;
+  }
+
+  if (success)
+    value_r = value;
+  return success;
+}
+
+bool
 CSVLine::ReadChecked(unsigned long &value_r)
 {
   char *endptr;
