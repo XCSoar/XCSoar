@@ -134,7 +134,7 @@ public:
    * @return true if the connection has just expired, false if the
    * connection status has not changed
    */
-  void expire_wall_clock();
+  void ExpireWallClock();
 
   /**
    * Trigger the MergeThread, which will call Merge().  Call this

@@ -232,14 +232,13 @@ DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info)
  * InterfaceBlackboard
  */
 void
-DeviceBlackboard::ReadComputerSettings(const ComputerSettings
-					      &settings)
+DeviceBlackboard::ReadComputerSettings(const ComputerSettings &settings)
 {
   computer_settings = settings;
 }
 
 void
-DeviceBlackboard::expire_wall_clock()
+DeviceBlackboard::ExpireWallClock()
 {
   ScopeLock protect(mutex);
   if (!Basic().alive)

@@ -140,7 +140,7 @@ SystemProcessTimer()
 static void
 BlackboardProcessTimer()
 {
-  device_blackboard->expire_wall_clock();
+  device_blackboard->ExpireWallClock();
   XCSoarInterface::ExchangeBlackboard();
 }
 
