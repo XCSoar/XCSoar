@@ -149,7 +149,7 @@ InfoBoxContentWindBearing::Update(InfoBoxData &data)
   data.SetValue(info.wind.bearing);
 
   TCHAR buffer[16];
-  FormatUserWindSpeed(info.wind.norm, buffer);
+  FormatUserWindSpeed(info.wind.norm, buffer, true, false);
   data.SetComment(buffer);
 }
 
