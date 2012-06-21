@@ -54,11 +54,7 @@ LXDevice::EnableNMEA(gcc_unused OperationEnvironment &env)
   /* just in case the LX1600 is still in pass-through mode: */
   LX1600::ModeLX1600(port);
 
-  // This line initiates the Color Vario to send out LXWP2 and LXWP3
-  // LXWP0 once started, is repeated every second
-  // This is a copy of the initiation done in LK8000, realized by Lx developers
-  // We have no documentation and so we do not know what this exactly means
-  LX1600::EnableLXWP(port);
+  LX1600::SetupNMEA(port);
 
   if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);

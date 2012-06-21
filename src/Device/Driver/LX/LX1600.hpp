@@ -68,8 +68,13 @@ namespace LX1600 {
   }
 
   static bool
-  EnableLXWP(Port &port)
+  SetupNMEA(Port &port)
   {
+    /* This line initiates the Color Vario to send out LXWP2 and LXWP3
+       LXWP0 once started, is repeated every second.  This is a copy
+       of the initiation done in LK8000, realized by LX Navigation
+       developers We have no documentation and so we do not know what
+       this exactly means. */
     return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4");
   }
 }
