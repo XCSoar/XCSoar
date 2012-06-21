@@ -73,13 +73,7 @@ SocketDescriptor::CreateTCPListener(unsigned port, unsigned backlog)
   setsockopt(Get(), SOL_SOCKET, SO_REUSEADDR, optval, sizeof(reuse));
 
   // Bind socket to specified port number
-  struct sockaddr_in address;
-  memset(&address, 0, sizeof(address));
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons((uint16_t)port);
-
-  if (bind(Get(), (const struct sockaddr *)&address, sizeof(address)) < 0) {
+  if (!BindPort(port)){
     Close();
     return false;
   }
