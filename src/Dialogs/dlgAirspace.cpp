@@ -23,8 +23,10 @@ Copyright_License {
 
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/List.hpp"
+#include "Form/Button.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -40,6 +42,8 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Components.hpp"
 #include "Computer/GlideComputer.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 

@@ -30,9 +30,13 @@
  */
 
 #include "Dialogs/Traffic.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Button.hpp"
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FlarmDetails.hpp"
@@ -47,6 +51,7 @@
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
+#include "Interface.hpp"
 #include "Compiler.h"
 
 #include <math.h>

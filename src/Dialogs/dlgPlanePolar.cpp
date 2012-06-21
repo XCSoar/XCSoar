@@ -23,8 +23,12 @@ Copyright_License {
 
 #include "Dialogs/Planes.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Button.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Screen/Layout.hpp"
@@ -36,6 +40,8 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Units/Units.hpp"
 #include "UIGlobals.hpp"
+#include "Engine/GlideSolvers/PolarCoefficients.hpp"
+#include "Language/Language.hpp"
 
 #include <cstdio>
 

@@ -24,7 +24,13 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/FontEdit.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Button.hpp"
+#include "Form/Edit.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/FontConfig.hpp"
@@ -32,6 +38,8 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Util/StringUtil.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "Compiler.h"
 
 #include <assert.h>

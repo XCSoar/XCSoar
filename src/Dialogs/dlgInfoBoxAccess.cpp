@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Dialogs/Internal.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -35,6 +34,8 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Panel.hpp"
 #include "Form/PanelWidget.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>

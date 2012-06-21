@@ -23,15 +23,17 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
 #include "UIGlobals.hpp"
 #include "Form/TabMenu.hpp"
+#include "Form/CheckBox.hpp"
+#include "Form/Button.hpp"
+#include "Form/DataField/FileReader.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Key.h"
-#include "Form/CheckBox.hpp"
 #include "Screen/Layout.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/DataField/FileReader.hpp"
 #include "LogFile.hpp"
 #include "Util/Macros.hpp"
 #include "ConfigPanels/ConfigPanel.hpp"
@@ -61,6 +63,7 @@ Copyright_License {
 #include "ConfigPanels/InfoBoxesConfigPanel.hpp"
 #include "ConfigPanels/ExperimentalConfigPanel.hpp"
 #include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #ifdef HAVE_TRACKING
 #include "ConfigPanels/TrackingConfigPanel.hpp"

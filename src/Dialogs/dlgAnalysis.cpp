@@ -24,9 +24,12 @@ Copyright_License {
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Dialogs/Task.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Button.hpp"
 #include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "ComputerSettings.hpp"
@@ -47,6 +50,8 @@ Copyright_License {
 #include "Renderer/WindChartRenderer.hpp"
 #include "Renderer/CuRenderer.hpp"
 #include "GestureManager.hpp"
+#include "Blackboard/FullBlackboard.hpp"
+#include "Language/Language.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

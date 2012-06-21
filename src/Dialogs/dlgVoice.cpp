@@ -22,15 +22,19 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Button.hpp"
+#include "Form/DataField/Base.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Audio/VegaVoice.hpp"
-#include "Form/DataField/Base.hpp"
 #include "LogFile.hpp"
+#include "Interface.hpp"
 
 static WndForm *wf=NULL;
 

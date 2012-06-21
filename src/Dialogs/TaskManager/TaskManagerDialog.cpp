@@ -29,9 +29,10 @@ Copyright_License {
 #include "TaskClosePanel.hpp"
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
+#include "Dialogs/Message.hpp"
 #include "Dialogs/Task.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Dialogs/XML.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Components.hpp"
@@ -45,6 +46,9 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
+#include "Form/Draw.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

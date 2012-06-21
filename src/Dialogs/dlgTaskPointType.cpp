@@ -22,17 +22,23 @@ Copyright_License {
 */
 
 #include "Dialogs/Task.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/List.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
-
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/Factory/TaskFactoryConstraints.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>

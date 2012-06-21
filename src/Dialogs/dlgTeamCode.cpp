@@ -22,22 +22,28 @@
 */
 
 #include "Dialogs/Traffic.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "UIGlobals.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Button.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Form/DataField/Float.hpp"
+#include "UIGlobals.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "ComputerSettings.hpp"
 #include "Screen/Layout.hpp"
-#include "Form/DataField/Base.hpp"
 #include "Util/StringUtil.hpp"
 #include "TeamCode.hpp"
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Formatter/AngleFormatter.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <stdio.h>
 

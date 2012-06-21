@@ -23,7 +23,10 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
+#include "Form/Edit.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Components.hpp"

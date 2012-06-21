@@ -22,24 +22,28 @@ Copyright_License {
 */
 
 #include "Dialogs/Task.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/SymbolButton.hpp"
+#include "Form/CheckBox.hpp"
+#include "Form/Edit.hpp"
+#include "Form/DataField/Enum.hpp"
+#include "Form/DataField/Float.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Form/DataField/Enum.hpp"
-#include "Form/DataField/Float.hpp"
 #include "MapWindow/TargetMapWindow.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Units/Units.hpp"
-#include "Form/SymbolButton.hpp"
-#include "Form/CheckBox.hpp"
 #include "Asset.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
+#include "Interface.hpp"
 
 #include <stdio.h>
 

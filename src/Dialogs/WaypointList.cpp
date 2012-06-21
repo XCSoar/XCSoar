@@ -22,11 +22,15 @@ Copyright_License {
 */
 
 #include "Dialogs/Waypoint.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/FastMath.h"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
+#include "Form/List.hpp"
+#include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Profile/Profile.hpp"
@@ -49,6 +53,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <algorithm>
 #include <list>

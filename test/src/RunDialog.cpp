@@ -21,8 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/DialogSettings.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"

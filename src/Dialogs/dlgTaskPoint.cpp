@@ -22,13 +22,19 @@ Copyright_License {
 */
 
 #include "Dialogs/Task.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Frame.hpp"
+#include "Form/Draw.hpp"
+#include "Form/Button.hpp"
+#include "Form/DataField/Float.hpp"
 #include "Screen/Layout.hpp"
 #include "Components.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Form/DataField/Float.hpp"
 #include "Units/Units.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"
@@ -43,6 +49,8 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/DialogLook.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

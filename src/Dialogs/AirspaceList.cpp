@@ -23,10 +23,14 @@ Copyright_License {
 
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/XML.hpp"
 #include "Airspace/AirspaceSorter.hpp"
 #include "Math/FastMath.h"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
+#include "Form/List.hpp"
+#include "Form/Util.hpp"
+#include "Form/Edit.hpp"
 #include "Form/DataField/String.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
@@ -41,6 +45,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "UIGlobals.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdlib.h>

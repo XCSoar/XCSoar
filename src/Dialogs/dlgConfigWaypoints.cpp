@@ -23,8 +23,10 @@ Copyright_License {
 
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "UIGlobals.hpp"
 #include "Protection.hpp"
 #include "Screen/Layout.hpp"
@@ -33,6 +35,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "Compiler.h"
 
 #include <assert.h>

@@ -22,12 +22,14 @@ Copyright_License {
 */
 
 #include "VegaDialogs.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Device/device.hpp"
 #include "Math/FastMath.h"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Float.hpp"
 #include "PeriodClock.hpp"

@@ -23,10 +23,14 @@ Copyright_License {
 
 #include "Dialogs/Planes.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Plane/Plane.hpp"
+#include "Language/Language.hpp"
 
 #include <cstdio>
 

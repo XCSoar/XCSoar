@@ -23,10 +23,10 @@
 #include "Task/MapTaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
+#include "Interface.hpp"
 
 static const TaskBehaviour&
 GetTaskBehaviour()

@@ -23,8 +23,11 @@ Copyright_License {
 
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
+#include "Form/Edit.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
@@ -32,6 +35,8 @@ Copyright_License {
 #include "Geo/GeoVector.hpp"
 #include "Units/Units.hpp"
 #include "UIGlobals.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include "Compiler.h"
 

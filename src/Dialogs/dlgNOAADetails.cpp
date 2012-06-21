@@ -22,9 +22,13 @@ Copyright_License {
 */
 
 #include "Dialogs/Weather.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/Button.hpp"
+#include "Form/Edit.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 

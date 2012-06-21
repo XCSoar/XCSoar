@@ -22,20 +22,27 @@ Copyright_License {
 */
 
 #include "Dialogs/Waypoint.hpp"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Button.hpp"
+#include "Form/Edit.hpp"
+#include "Form/DataField/Enum.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Math/FastMath.h"
-#include "Form/DataField/Enum.hpp"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Util/StringUtil.hpp"
 #include "Compiler.h"
 #include "Sizes.h"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <stdio.h>
 

@@ -22,8 +22,10 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/TabBar.hpp"
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
 #include "StatusPanels/FlightStatusPanel.hpp"
@@ -31,6 +33,7 @@ Copyright_License {
 #include "StatusPanels/RulesStatusPanel.hpp"
 #include "StatusPanels/SystemStatusPanel.hpp"
 #include "StatusPanels/TimesStatusPanel.hpp"
+#include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Protection.hpp"
 #include "Hardware/Battery.hpp"
@@ -40,15 +43,16 @@ Copyright_License {
 #include "LocalTime.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 #include "Compiler.h"
-
-#include "Form/TabBar.hpp"
-#include "Screen/Layout.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
 #include <algorithm>
+
+class WndButton;
 
 static WndForm *wf = NULL;
 static TabBarControl *wTabBar;

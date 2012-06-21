@@ -23,7 +23,11 @@ Copyright_License {
 
 #include "Dialogs/Planes.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Internal.hpp"
+#include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
+#include "Form/Form.hpp"
+#include "Form/List.hpp"
+#include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Plane/Plane.hpp"
 #include "Plane/PlaneGlue.hpp"
@@ -37,6 +41,8 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
 
 #include <vector>
 #include <assert.h>

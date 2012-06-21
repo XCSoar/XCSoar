@@ -31,13 +31,15 @@
  */
 
 #include "Dialogs/Traffic.hpp"
-#include "Dialogs/Internal.hpp"
-#include "Dialogs/Dialogs.h"
 #include "Dialogs/CallBackTable.hpp"
+#include "Dialogs/XML.hpp"
+#include "Form/Form.hpp"
+#include "Form/Util.hpp"
+#include "Form/Button.hpp"
+#include "Form/CheckBox.hpp"
 #include "Math/Screen.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Form/CheckBox.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Profile/Profile.hpp"
@@ -50,6 +52,7 @@
 #include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
 #include "Renderer/UnitSymbolRenderer.hpp"
+#include "Interface.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
