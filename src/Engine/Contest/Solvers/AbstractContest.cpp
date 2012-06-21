@@ -53,6 +53,7 @@ AbstractContest::SaveSolution()
     return false;
 
   best_result = result;
+  CopySolution(best_solution);
   return true;
 }
 

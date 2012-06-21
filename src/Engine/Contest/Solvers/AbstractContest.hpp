@@ -39,6 +39,7 @@ private:
   unsigned handicap;
   const unsigned finish_alt_diff;
   ContestResult best_result;
+  ContestTraceVector best_solution;
 
 public:
   /**
@@ -88,18 +89,22 @@ public:
     return best_result;
   }
 
-  /**
-   * Copy the best Contest path solution
-   *
-   * @param vec output vector
-   */
-  virtual void CopySolution(ContestTraceVector &vec) const = 0;
+  const ContestTraceVector &GetBestSolution() const {
+    return best_solution;
+  }
 
 protected:
   /**
    * Calculate the result.
    */
   virtual ContestResult CalculateResult() const = 0;
+
+  /**
+   * Copy the best Contest path solution
+   *
+   * @param vec output vector
+   */
+  virtual void CopySolution(ContestTraceVector &vec) const = 0;
 
 public:
   /**

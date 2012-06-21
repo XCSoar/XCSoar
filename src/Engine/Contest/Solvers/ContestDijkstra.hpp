@@ -207,12 +207,12 @@ protected:
 public:
   /* public virtual methods from AbstractContest */
   virtual SolverResult Solve(bool exhaustive);
-  virtual void CopySolution(ContestTraceVector &vec) const;
   virtual void Reset();
 
 protected:
   /* protected virtual methods from AbstractContest */
   virtual ContestResult CalculateResult() const;
+  virtual void CopySolution(ContestTraceVector &vec) const;
   virtual bool SaveSolution();
 
 protected:

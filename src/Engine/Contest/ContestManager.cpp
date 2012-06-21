@@ -91,7 +91,7 @@ ContestManager::RunContest(AbstractContest &_contest,
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.
 
-  _contest.CopySolution(solution);
+  solution = _contest.GetBestSolution();
 
   return true;
 }
