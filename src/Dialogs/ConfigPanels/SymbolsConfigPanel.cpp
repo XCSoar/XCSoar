@@ -134,7 +134,7 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Track bearing"),
           _("Display the track bearing (ground track projection) on the map."),
-          track_bearing_mode_list, settings_map.display_track_bearing);
+          track_bearing_mode_list, (unsigned)settings_map.display_track_bearing);
 
   AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);

@@ -57,10 +57,10 @@ enum MapShiftBias {
   MAP_SHIFT_BIAS_TARGET
 };
 
-enum DisplayGroundTrack {
-  dtbOff,
-  dtbOn,
-  dtbAuto
+enum class DisplayGroundTrack: uint8_t {
+  OFF,
+  ON,
+  AUTO,
 };
 
 struct MapItemListSettings {
