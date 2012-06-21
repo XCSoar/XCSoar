@@ -99,7 +99,6 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "UIState.hpp"
-#include "Net/Features.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Units/Units.hpp"
 
@@ -403,7 +402,7 @@ XCSoarInterface::Startup()
     lease->SetConfig(CommonInterface::GetComputerSettings().airspace.warnings);
   }
 
-#ifdef HAVE_NET
+#ifdef HAVE_NOAA
   noaa_store = new NOAAStore();
   noaa_store->LoadFromProfile();
 #endif
@@ -623,7 +622,7 @@ XCSoarInterface::Shutdown()
   delete protected_task_manager;
   delete task_manager;
 
-#ifdef HAVE_NET
+#ifdef HAVE_NOAA
   delete noaa_store;
 #endif
 

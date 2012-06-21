@@ -89,7 +89,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Glue.hpp"
 #include "Compiler.h"
-#include "Net/Features.hpp"
+#include "Weather/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Simulator.hpp"
 
@@ -669,7 +669,7 @@ eventSounds			- Include Task and Modes sounds along with Vario
 void
 InputEvents::eventWeather(const TCHAR *misc)
 {
-#ifdef HAVE_NET
+#ifdef HAVE_NOAA
   if (StringIsEqual(misc, _T("list")))
     dlgNOAAListShowModal(XCSoarInterface::main_window);
 #endif
