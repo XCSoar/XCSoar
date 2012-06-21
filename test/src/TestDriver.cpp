@@ -25,6 +25,7 @@
 #include "Device/Driver/BorgeltB50.hpp"
 #include "Device/Driver/CAI302.hpp"
 #include "Device/Driver/Condor.hpp"
+#include "Device/Driver/CProbe.hpp"
 #include "Device/Driver/EW.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/FLARM.hpp"
@@ -375,6 +376,38 @@ TestCAI302()
   ok1(equals(nmea_info.settings.ballast_fraction, 0.5));
   ok1(nmea_info.settings.bugs_available);
   ok1(equals(nmea_info.settings.bugs, 0.9));
+
+  delete device;
+}
+
+static void
+TestCProbe()
+{
+  NullPort null;
+  Device *device = c_probe_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  ok1(device->ParseNMEA("$PCPROBE,T,FD92,FF93,00D9,FD18,017E,FEDB,0370,0075,00D6,0064,001C,000000,,",
+                        nmea_info));
+  ok1(nmea_info.attitude.pitch_angle_available);
+  ok1(equals(nmea_info.attitude.pitch_angle, 25.6034467702));
+  ok1(nmea_info.attitude.bank_angle_available);
+  ok1(equals(nmea_info.attitude.bank_angle, -11.9963939863));
+  ok1(nmea_info.attitude.heading_available);
+  ok1(equals(nmea_info.attitude.heading, 257.0554705429));
+  ok1(nmea_info.acceleration.available);
+  ok1(nmea_info.acceleration.real);
+  ok1(equals(nmea_info.acceleration.g_load, 1.0030817514));
+  ok1(nmea_info.temperature_available);
+  ok1(equals(nmea_info.temperature, 11.7));
+  ok1(nmea_info.humidity_available);
+  ok1(equals(nmea_info.humidity, 21.4));
+  ok1(nmea_info.battery_level_available);
+  ok1(equals(nmea_info.battery_level, 100.0));
 
   delete device;
 }
@@ -1022,7 +1055,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(515);
+  plan_tests(532);
 
   TestGeneric();
   TestTasman();
@@ -1031,6 +1064,7 @@ int main(int argc, char **argv)
   TestGTAltimeter();
   TestBorgeltB50();
   TestCAI302();
+  TestCProbe();
   TestFlymasterF1();
   TestFlytec();
   TestLeonardo();

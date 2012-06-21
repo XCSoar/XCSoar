@@ -48,6 +48,7 @@ Copyright_License {
 #include "Device/Driver/WesterboerVW921.hpp"
 #include "Device/Driver/FLARM.hpp"
 #include "Device/Driver/FlyNet.hpp"
+#include "Device/Driver/CProbe.hpp"
 #include "Util/Macros.hpp"
 
 /** NULL terminated array of available device drivers. */
@@ -78,6 +79,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &westerboer_vw921_device_driver,
   &flynet_driver,
   &gt_altimeter_device_driver,
+  &c_probe_driver,
   NULL
 };
 
