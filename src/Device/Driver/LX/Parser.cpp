@@ -90,17 +90,32 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
+template<size_t N>
+static void
+ReadString(NMEAInputLine &line, NarrowString<N> &value)
+{
+  line.Read(value.buffer(), value.MAX_SIZE);
+}
+
 static bool
-LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
+LXWP1(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
    * $LXWP1,
-   * serial number,
    * instrument ID,
+   * serial number,
    * software version,
    * hardware version,
    * license string
    */
+
+  DeviceInfo &device = info.device;
+
+  ReadString(line, device.product);
+  ReadString(line, device.serial);
+  ReadString(line, device.software_version);
+  ReadString(line, device.hardware_version);
+
   return true;
 }
 
