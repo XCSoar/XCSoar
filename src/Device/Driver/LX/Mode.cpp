@@ -101,6 +101,10 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
     return false;
   }
 
+  /* make sure the pass-through command has been sent to the device
+     before we continue sending commands */
+  port.Drain();
+
   if (bulk_baud_rate != 0) {
     old_baud_rate = port.GetBaudrate();
     if (old_baud_rate == bulk_baud_rate)
