@@ -81,10 +81,10 @@ SymbolsConfigPanel::OnModified(DataField &df)
   }
 }
 
-static const StaticEnumChoice  track_bearing_mode_list[] = {
-  { (unsigned)DisplayGroundTrack::OFF, N_("Off"), N_("Disable display of track bearing.") },
-  { (unsigned)DisplayGroundTrack::ON, N_("On"), N_("Always display track bearing.") },
-  { (unsigned)DisplayGroundTrack::AUTO, N_("Auto"), N_("Display track bearing if there is a significant difference to plane heading.") },
+static const StaticEnumChoice  ground_track_mode_list[] = {
+  { (unsigned)DisplayGroundTrack::OFF, N_("Off"), N_("Disable display of ground track line.") },
+  { (unsigned)DisplayGroundTrack::ON, N_("On"), N_("Always display ground track line.") },
+  { (unsigned)DisplayGroundTrack::AUTO, N_("Auto"), N_("Display ground track line if there is a significant difference to plane heading.") },
   { 0 }
 };
 
@@ -132,9 +132,9 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
 
-  AddEnum(_("Track bearing"),
-          _("Display the track bearing (ground track projection) on the map."),
-          track_bearing_mode_list, (unsigned)settings_map.display_track_bearing);
+  AddEnum(_("Ground track"),
+          _("Display the ground track as a grey line on the map."),
+          ground_track_mode_list, (unsigned)settings_map.display_ground_track);
 
   AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
@@ -182,7 +182,7 @@ SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
   changed |= SaveValueEnum(DISPLAY_TRACK_BEARING, szProfileDisplayTrackBearing,
-                           settings_map.display_track_bearing);
+                           settings_map.display_ground_track);
 
   changed |= SaveValue(ENABLE_FLARM_MAP, szProfileEnableFLARMMap,
                        settings_map.show_flarm_on_map);

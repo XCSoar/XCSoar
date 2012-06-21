@@ -127,7 +127,7 @@ struct MapSettings {
   /** Indicate extra distance reqd. if deviating from target heading */
   bool detour_cost_markers_enabled;
   /** Render track bearing on map */
-  DisplayGroundTrack display_track_bearing;
+  DisplayGroundTrack display_ground_track;
 
   /** Automatic zoom when closing in on waypoint */
   bool auto_zoom_enabled;

@@ -48,7 +48,7 @@ MapSettings::SetDefaults()
   terrain.SetDefaults();
   aircraft_symbol = acSimple;
   detour_cost_markers_enabled = false;
-  display_track_bearing = DisplayGroundTrack::AUTO;
+  display_ground_track = DisplayGroundTrack::AUTO;
   auto_zoom_enabled = false;
   wind_arrow_style = WindArrowStyle::ARROW_HEAD;
   waypoint.SetDefaults();

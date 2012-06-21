@@ -39,7 +39,7 @@ Profile::Load(MapSettings &settings)
   GetEnum(szProfileAircraftSymbol, settings.aircraft_symbol);
 
   Get(szProfileDetourCostMarker, settings.detour_cost_markers_enabled);
-  GetEnum(szProfileDisplayTrackBearing, settings.display_track_bearing);
+  GetEnum(szProfileDisplayTrackBearing, settings.display_ground_track);
   Get(szProfileAutoZoom, settings.auto_zoom_enabled);
 
   GetEnum(szProfileWindArrowStyle, settings.wind_arrow_style);
