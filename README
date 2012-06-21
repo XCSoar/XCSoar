@@ -72,14 +72,15 @@ For Mac OS X, you need:
 - SDL_image (http://www.libsdl.org/projects/SDL_image/)
 - libicns (http://icns.sourceforge.net/)
 
-To compile for the Mac, run
-
- ./configure
- make
-
 To compile, run:
 
  make TARGET=<target>
+
+To compile for the Mac, you may run the configure script to detect the
+build toolchain (optional):
+
+ ./configure
+ make
 
 Supported targets:
 
