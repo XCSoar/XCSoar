@@ -35,9 +35,10 @@ public:
   ConditionMonitorFinalGlide():ConditionMonitor(60 * 5, 1), tad(fixed_zero) {}
 
 protected:
-  bool CheckCondition(const GlideComputer &cmp);
-  void Notify();
-  void SaveLast();
+  virtual bool CheckCondition(const NMEAInfo &basic,
+                              const DerivedInfo &calculated);
+  virtual void Notify();
+  virtual void SaveLast();
 };
 
 #endif

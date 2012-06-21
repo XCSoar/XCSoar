@@ -106,7 +106,11 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
 }
 
 void dlgTaskManagerShowModal(SingleWindow &parent) {}
-void ConditionMonitorsUpdate(const GlideComputer &cmp) {}
+
+void
+ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated)
+{
+}
 
 bool InputEvents::processGlideComputer(unsigned) { return false; }
 

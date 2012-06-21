@@ -23,21 +23,22 @@ Copyright_License {
 */
 
 #include "ConditionMonitorStartRules.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "NMEA/Derived.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 
 bool
-ConditionMonitorStartRules::CheckCondition(const GlideComputer& cmp)
+ConditionMonitorStartRules::CheckCondition(const NMEAInfo &basic,
+                                           const DerivedInfo &calculated)
 {
 #ifdef OLD_TASK // start condition warnings
   if (!task.Valid()
-      || !cmp.Basic().flying
+      || !basic.flying
       || (task.getActiveIndex() > 0)
       || !task.ValidTaskPoint(task.getActiveIndex() + 1))
     return false;
 
-  if (cmp.Calculated().LegDistanceToGo > task.getSettings().StartRadius)
+  if (calculated.LegDistanceToGo > task.getSettings().StartRadius)
     return false;
 
   if (cmp.ValidStartSpeed(task.getSettings().StartMaxSpeedMargin)

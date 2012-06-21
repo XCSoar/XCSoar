@@ -32,9 +32,10 @@ public:
   ConditionMonitorSunset():ConditionMonitor(60 * 30, 60) {}
 
 protected:
-  bool CheckCondition(const GlideComputer& cmp);
-  void Notify();
-  void SaveLast() {}
+  virtual bool CheckCondition(const NMEAInfo &basic,
+                              const DerivedInfo &calculated);
+  virtual void Notify();
+  virtual void SaveLast() {}
 };
 
 #endif

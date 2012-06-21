@@ -23,25 +23,26 @@ Copyright_License {
 */
 
 #include "ConditionMonitorAATTime.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "NMEA/Derived.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 
 bool
-ConditionMonitorAATTime::CheckCondition(const GlideComputer& cmp)
+ConditionMonitorAATTime::CheckCondition(const NMEAInfo &basic,
+                                        const DerivedInfo &calculated)
 {
-  if (!cmp.Calculated().flight.flying ||
-      !cmp.Calculated().task_stats.task_valid ||
-      !cmp.Calculated().common_stats.mode_ordered ||
-      !cmp.Calculated().common_stats.ordered_valid ||
-      !cmp.Calculated().common_stats.ordered_has_targets ||
-      !cmp.Calculated().common_stats.task_started ||
-      !cmp.Calculated().common_stats.active_has_next ||
-      cmp.Calculated().common_stats.task_finished)
+  if (!calculated.flight.flying ||
+      !calculated.task_stats.task_valid ||
+      !calculated.common_stats.mode_ordered ||
+      !calculated.common_stats.ordered_valid ||
+      !calculated.common_stats.ordered_has_targets ||
+      !calculated.common_stats.task_started ||
+      !calculated.common_stats.active_has_next ||
+      calculated.common_stats.task_finished)
     return false;
 
-  return (cmp.Calculated().common_stats.task_time_remaining <
-          cmp.Calculated().common_stats.aat_time_remaining);
+  return calculated.common_stats.task_time_remaining <
+    calculated.common_stats.aat_time_remaining;
 }
 
 void

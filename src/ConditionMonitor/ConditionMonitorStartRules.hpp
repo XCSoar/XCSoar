@@ -37,9 +37,9 @@ public:
   ConditionMonitorStartRules():ConditionMonitor(60, 1), withinMargin(false) {}
 
 protected:
-  bool CheckCondition(const GlideComputer& cmp);
-  void Notify();
-  void SaveLast() {}
+  virtual bool CheckCondition(const NMEAInfo &basic, const DerivedInfo &calculated);
+  virtual void Notify();
+  virtual void SaveLast() {}
 };
 
 #endif

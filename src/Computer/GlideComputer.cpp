@@ -134,7 +134,7 @@ GlideComputer::ProcessGPS()
     calculated.trace_history.append(basic);
 
   // Update the ConditionMonitors
-  ConditionMonitorsUpdate(*this);
+  ConditionMonitorsUpdate(Basic(), Calculated());
 
   return idle_clock.CheckUpdate(500);
 }

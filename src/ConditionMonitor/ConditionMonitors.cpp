@@ -41,13 +41,13 @@ ConditionMonitorGlideTerrain cm_glideterrain;
 ConditionMonitorLandableReachable cm_landablereachable;
 
 void
-ConditionMonitorsUpdate(const GlideComputer& cmp)
+ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated)
 {
-  cm_wind.Update(cmp);
-  cm_finalglide.Update(cmp);
-  cm_sunset.Update(cmp);
-  cm_aattime.Update(cmp);
-  cm_startrules.Update(cmp);
-  cm_glideterrain.Update(cmp);
-  cm_landablereachable.Update(cmp);
+  cm_wind.Update(basic, calculated);
+  cm_finalglide.Update(basic, calculated);
+  cm_sunset.Update(basic, calculated);
+  cm_aattime.Update(basic, calculated);
+  cm_startrules.Update(basic, calculated);
+  cm_glideterrain.Update(basic, calculated);
+  cm_landablereachable.Update(basic, calculated);
 }

@@ -23,22 +23,23 @@ Copyright_License {
 */
 
 #include "ConditionMonitorGlideTerrain.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "NMEA/Derived.hpp"
 #include "Input/InputQueue.hpp"
 
 bool
-ConditionMonitorGlideTerrain::CheckCondition(const GlideComputer& cmp)
+ConditionMonitorGlideTerrain::CheckCondition(const NMEAInfo &basic,
+                                             const DerivedInfo &calculated)
 {
-  if (!cmp.Calculated().flight.flying ||
-      !cmp.Calculated().task_stats.task_valid)
+  if (!calculated.flight.flying ||
+      !calculated.task_stats.task_valid)
     return false;
 
-  const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
+  const GlideResult& res = calculated.task_stats.total.solution_remaining;
   if (!res.IsFinalGlide())
     // only give message about terrain warnings if above final glide
     return false;
 
-  return cmp.Calculated().terrain_warning;
+  return calculated.terrain_warning;
 }
 
 void

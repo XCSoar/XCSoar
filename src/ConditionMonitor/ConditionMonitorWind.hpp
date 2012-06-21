@@ -39,9 +39,10 @@ public:
      wind(SpeedVector::Zero()), last_wind(SpeedVector::Zero()) {}
 
 protected:
-  bool CheckCondition(const GlideComputer &cmp);
-  void Notify();
-  void SaveLast();
+  virtual bool CheckCondition(const NMEAInfo &basic,
+                              const DerivedInfo &calculated);
+  virtual void Notify();
+  virtual void SaveLast();
 };
 
 #endif

@@ -23,16 +23,17 @@ Copyright_License {
 */
 
 #include "ConditionMonitorFinalGlide.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "NMEA/Derived.hpp"
 #include "Input/InputQueue.hpp"
 
 bool
-ConditionMonitorFinalGlide::CheckCondition(const GlideComputer& cmp)
+ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
+                                           const DerivedInfo &calculated)
 {
-  if (!cmp.Calculated().flight.flying || !cmp.Calculated().task_stats.task_valid)
+  if (!calculated.flight.flying || !calculated.task_stats.task_valid)
     return false;
 
-  const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
+  const GlideResult &res = calculated.task_stats.total.solution_remaining;
 
   // TODO: use low pass filter
   tad = res.altitude_difference * fixed(0.2) + fixed(0.8) * tad;

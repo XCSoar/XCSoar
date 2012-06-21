@@ -23,17 +23,18 @@ Copyright_License {
 */
 
 #include "ConditionMonitorWind.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "NMEA/Derived.hpp"
 #include "Language/Language.hpp"
 #include "Units/System.hpp"
 #include "Message.hpp"
 
 bool
-ConditionMonitorWind::CheckCondition(const GlideComputer &cmp)
+ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
+                                     const DerivedInfo &calculated)
 {
-  wind = cmp.Calculated().GetWindOrZero();
+  wind = calculated.GetWindOrZero();
 
-  if (!cmp.Calculated().flight.flying) {
+  if (!calculated.flight.flying) {
     last_wind = wind;
     return false;
   }

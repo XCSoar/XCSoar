@@ -23,16 +23,17 @@ Copyright_License {
 */
 
 #include "ConditionMonitorLandableReachable.hpp"
-#include "Computer/GlideComputer.hpp"
+#include "NMEA/Derived.hpp"
 #include "Input/InputQueue.hpp"
 
 bool
-ConditionMonitorLandableReachable::CheckCondition(const GlideComputer& cmp)
+ConditionMonitorLandableReachable::CheckCondition(const NMEAInfo &basic,
+                                                  const DerivedInfo &calculated)
 {
-  if (!cmp.Calculated().flight.flying)
+  if (!calculated.flight.flying)
     return false;
 
-  now_reachable = cmp.Calculated().common_stats.landable_reachable;
+  now_reachable = calculated.common_stats.landable_reachable;
 
   // warn when becoming unreachable
   return (!now_reachable && last_reachable);
