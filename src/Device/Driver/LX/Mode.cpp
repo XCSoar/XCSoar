@@ -25,6 +25,7 @@ Copyright_License {
 #include "V7.hpp"
 #include "LX1600.hpp"
 #include "Device/Port/Port.hpp"
+#include "Operation/Operation.hpp"
 
 void
 LXDevice::LinkTimeout()
@@ -109,9 +110,17 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
     old_baud_rate = port.GetBaudrate();
     if (old_baud_rate == bulk_baud_rate)
       old_baud_rate = 0;
-    else if (!port.SetBaudrate(bulk_baud_rate)) {
-      mode = Mode::UNKNOWN;
-      return false;
+    else {
+      /* before changing the baud rate, we need an additional delay,
+         because Port::Drain() does not seem to work reliably on Linux
+         with a USB-RS232 converter; with a V7+Nano, 100ms is more
+         than enough */
+      env.Sleep(100);
+
+      if (!port.SetBaudrate(bulk_baud_rate)) {
+        mode = Mode::UNKNOWN;
+        return false;
+      }
     }
   } else
     old_baud_rate = 0;
