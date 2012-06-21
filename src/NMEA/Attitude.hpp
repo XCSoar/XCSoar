@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ATTITUDE_HPP
 
 #include "Math/Angle.hpp"
+#include "Validity.hpp"
 
 struct AttitudeState
 {
@@ -37,9 +38,14 @@ struct AttitudeState
   /** Estimated pitch angle */
   Angle pitch_angle;
 
+  /** Estimated heading */
+  Angle heading;
+  Validity heading_available;
+
   void Reset() {
     bank_angle_available = false;
     pitch_angle_available = false;
+    heading_available.Clear();
   }
 
   /**
@@ -47,6 +53,8 @@ struct AttitudeState
    * this one.
    */
   void Complement(const AttitudeState &add);
+
+  void Expire(fixed now);
 };
 
 #endif

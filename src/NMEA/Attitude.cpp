@@ -35,4 +35,13 @@ AttitudeState::Complement(const AttitudeState &add)
     pitch_angle = add.pitch_angle;
     pitch_angle_available = add.pitch_angle_available;
   }
+
+  if (heading_available.Complement(add.heading_available))
+    heading = add.heading;
+}
+
+void
+AttitudeState::Expire(fixed now)
+{
+  heading_available.Expire(now, fixed(5));
 }

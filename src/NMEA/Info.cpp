@@ -201,6 +201,7 @@ NMEAInfo::Expire()
   battery_level_available.Expire(clock, fixed(300));
   flarm.Expire(clock);
   gps.Expire(clock);
+  attitude.Expire(clock);
 }
 
 void
