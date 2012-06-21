@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/FontEdit.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Profile/ProfileKeys.hpp"

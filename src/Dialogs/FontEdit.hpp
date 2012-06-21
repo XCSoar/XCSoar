@@ -21,26 +21,16 @@ Copyright_License {
 }
 */
 
-/*
- * This header is included by all dialog sources, and includes all
- * headers which are common to all dialog implementations.
- *
- */
+#ifndef XCSOAR_DIALOGS_FONT_EDIT_HPP
+#define XCSOAR_DIALOGS_FONT_EDIT_HPP
 
-#ifndef XCSOAR_DIALOGS_INTERNAL_HPP
-#define XCSOAR_DIALOGS_INTERNAL_HPP
+#include <windef.h>
+#include <wingdi.h>
+#include <tchar.h>
 
-#include "Dialogs/XML.hpp"
-#include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/Frame.hpp"
-#include "Form/List.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Button.hpp"
-#include "Form/SymbolButton.hpp"
-#include "Form/Draw.hpp"
-#include "Form/Util.hpp"
-#include "Language/Language.hpp"
-#include "Interface.hpp"
+bool
+dlgFontEditShowModal(const TCHAR * FontDescription,
+                     LOGFONT &log_font,
+                     LOGFONT autoLogFont);
 
 #endif

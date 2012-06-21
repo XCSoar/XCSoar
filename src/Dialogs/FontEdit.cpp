@@ -21,8 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Internal.hpp"
+#include "FontEdit.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Form/Frame.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Screen/Layout.hpp"
@@ -30,6 +31,7 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Util/StringUtil.hpp"
 #include "UIGlobals.hpp"
+#include "Language/Language.hpp"
 #include "Compiler.h"
 
 #ifdef ENABLE_OPENGL
