@@ -61,8 +61,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
   if (arrow_style == WindArrowStyle::FULL_ARROW) {
     RasterPoint tail[] = {
-      { 0, Layout::FastScale(-offset + 3) },
-      { 0, Layout::FastScale(-offset - 3 - min(PixelScalar(20), length) * 3) },
+      { 0, (PixelScalar)(-offset + 3) },
+      { 0, (PixelScalar)(-offset - 3 - min(PixelScalar(20), length) * 3) },
     };
 
     PolygonRotateShift(tail, ARRAY_SIZE(tail),
