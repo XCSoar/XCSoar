@@ -177,6 +177,7 @@ Trace::erase_earlier_than(const unsigned p_time)
   if (!empty())
     erase_start(GetFront());
 
+  ++modify_serial;
   return true;
 }
 
