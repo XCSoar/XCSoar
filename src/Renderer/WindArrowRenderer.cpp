@@ -38,15 +38,16 @@ Copyright_License {
 
 void
 WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
-                             PixelScalar length, WindArrowStyle arrow_style)
+                             PixelScalar length, WindArrowStyle arrow_style,
+                             PixelScalar offset)
 {
   // Draw arrow
 
   RasterPoint arrow[] = {
-    { 0, -20 },
-    { -6, (PixelScalar)(-26 - length) },
-    { 0, (PixelScalar)(-20 - length) },
-    { 6, (PixelScalar)(-26 - length) },
+    { 0, (PixelScalar)(-offset + 3) },
+    { -6, (PixelScalar)(-offset - 3 - length) },
+    { 0, (PixelScalar)(-offset + 3 - length) },
+    { 6, (PixelScalar)(-offset - 3 - length) },
   };
 
   // Rotate the arrow
@@ -60,8 +61,8 @@ WindArrowRenderer::DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
 
   if (arrow_style == WindArrowStyle::FULL_ARROW) {
     RasterPoint tail[] = {
-      { 0, Layout::FastScale(-20) },
-      { 0, Layout::FastScale(-26 - min(PixelScalar(20), length) * 3) },
+      { 0, Layout::FastScale(-offset + 3) },
+      { 0, Layout::FastScale(-offset - 3 - min(PixelScalar(20), length) * 3) },
     };
 
     PolygonRotateShift(tail, ARRAY_SIZE(tail),

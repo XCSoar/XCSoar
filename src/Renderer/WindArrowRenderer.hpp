@@ -48,7 +48,8 @@ public:
 
 private:
   void DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
-                 PixelScalar length, WindArrowStyle arrow_style);
+                 PixelScalar length, WindArrowStyle arrow_style,
+                 PixelScalar offset = 23);
 };
 
 #endif
