@@ -213,10 +213,14 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
   writer.Write(_T("WingArea"), tmp);
 }
 
-void
+bool
 PlaneGlue::WriteFile(const Plane &plane, const TCHAR *path)
 {
   TextWriter writer(path);
+  if (writer.error())
+    return false;
+
   KeyValueFileWriter kvwriter(writer);
   Write(plane, kvwriter);
+  return true;
 }
