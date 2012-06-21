@@ -57,7 +57,7 @@ enum MapShiftBias {
   MAP_SHIFT_BIAS_TARGET
 };
 
-enum DisplayTrackBearing {
+enum DisplayGroundTrack {
   dtbOff,
   dtbOn,
   dtbAuto
@@ -127,7 +127,7 @@ struct MapSettings {
   /** Indicate extra distance reqd. if deviating from target heading */
   bool detour_cost_markers_enabled;
   /** Render track bearing on map */
-  DisplayTrackBearing display_track_bearing;
+  DisplayGroundTrack display_track_bearing;
 
   /** Automatic zoom when closing in on waypoint */
   bool auto_zoom_enabled;
