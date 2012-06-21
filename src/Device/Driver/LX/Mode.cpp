@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "LX1600.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Internal.hpp"
 
 void
 LXDevice::LinkTimeout()
@@ -33,48 +33,6 @@ LXDevice::LinkTimeout()
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
   busy = false;
-}
-
-/**
- * Enable pass-through mode on the LX1600.  This command was provided
- * by Crtomir Rojnik (LX Navigation) in an email without further
- * explanation.  Tests have shown that this command can be sent at
- * either 4800 baud or the current vario baud rate.  Since both works
- * equally well, we don't bother to switch.
- */
-static bool
-ModeColibri(Port &port)
-{
-  return PortWriteNMEA(port, "PFLX0,COLIBRI");
-}
-
-/**
- * Cancel pass-through mode on the LX1600.  This command was provided
- * by Crtomir Rojnik (LX Navigation) in an email.  It must always be
- * sent at 4800 baud.  After this command has been sent, we switch
- * back to the "real" baud rate.
- */
-static bool
-ModeLX1600(Port &port)
-{
-  unsigned old_baud_rate = port.GetBaudrate();
-  if (old_baud_rate == 4800)
-    old_baud_rate = 0;
-  else if (!port.SetBaudrate(4800))
-    return false;
-
-  const bool success = PortWriteNMEA(port, "PFLX0,LX1600");
-
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
-
-  return success;
-}
-
-static bool
-EnableLXWP(Port &port)
-{
-  return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4");
 }
 
 bool
@@ -94,13 +52,13 @@ LXDevice::EnableNMEA(gcc_unused OperationEnvironment &env)
   }
 
   /* just in case the LX1600 is still in pass-through mode: */
-  ModeLX1600(port);
+  LX1600::ModeLX1600(port);
 
   // This line initiates the Color Vario to send out LXWP2 and LXWP3
   // LXWP0 once started, is repeated every second
   // This is a copy of the initiation done in LK8000, realized by Lx developers
   // We have no documentation and so we do not know what this exactly means
-  EnableLXWP(port);
+  LX1600::EnableLXWP(port);
 
   if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);
@@ -125,7 +83,7 @@ LXDevice::OnSysTicker(const DerivedInfo &calculated)
 bool
 LXDevice::EnablePassThrough(OperationEnvironment &env)
 {
-  return ModeColibri(port);
+  return LX1600::ModeColibri(port);
 }
 
 bool
@@ -139,7 +97,7 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
 
   port.StopRxThread();
 
-  if (!ModeColibri(port)) {
+  if (!LX1600::ModeColibri(port)) {
     mode = Mode::UNKNOWN;
     return false;
   }
