@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "V7.hpp"
 #include "LX1600.hpp"
 #include "Device/Port/Port.hpp"
 
@@ -52,8 +53,10 @@ LXDevice::EnableNMEA(gcc_unused OperationEnvironment &env)
   }
 
   /* just in case the LX1600 is still in pass-through mode: */
+  V7::ModeVSeven(port);
   LX1600::ModeLX1600(port);
 
+  V7::SetupNMEA(port);
   LX1600::SetupNMEA(port);
 
   if (old_baud_rate != 0)
@@ -79,7 +82,7 @@ LXDevice::OnSysTicker(const DerivedInfo &calculated)
 bool
 LXDevice::EnablePassThrough(OperationEnvironment &env)
 {
-  return LX1600::ModeColibri(port);
+  return V7::ModeDirect(port) && LX1600::ModeColibri(port);
 }
 
 bool
@@ -93,7 +96,7 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
 
   port.StopRxThread();
 
-  if (!LX1600::ModeColibri(port)) {
+  if (!V7::ModeDirect(port) || !LX1600::ModeColibri(port)) {
     mode = Mode::UNKNOWN;
     return false;
   }
