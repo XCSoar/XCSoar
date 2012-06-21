@@ -35,15 +35,15 @@ Copyright_License {
 #include "MapSettings.hpp"
 
 enum ControlIndex {
-  DisplayTrackBearing,
-  EnableFLARMMap,
-  Trail,
-  TrailDrift,
-  SnailType,
-  SnailWidthScale,
-  DetourCostMarker,
-  AircraftSymbol,
-  _WindArrowStyle
+  DISPLAY_TRACK_BEARING,
+  ENABLE_FLARM_MAP,
+  TRAIL_LENGTH,
+  TRAIL_DRIFT,
+  TRAIL_TYPE,
+  TRAIL_WIDTH,
+  ENABLE_DETOUR_COST_MARKERS,
+  AIRCRAFT_SYMBOL,
+  WIND_ARROW_STYLE
 };
 
 class SymbolsConfigPanel
@@ -67,15 +67,15 @@ private:
 void
 SymbolsConfigPanel::ShowTrailControls(bool show)
 {
-  SetRowVisible(TrailDrift, show);
-  SetRowVisible(SnailType, show);
-  SetRowVisible(SnailWidthScale, show);
+  SetRowVisible(TRAIL_DRIFT, show);
+  SetRowVisible(TRAIL_TYPE, show);
+  SetRowVisible(TRAIL_WIDTH, show);
 }
 
 void
 SymbolsConfigPanel::OnModified(DataField &df)
 {
-  if (IsDataField(Trail, df)) {
+  if (IsDataField(TRAIL_LENGTH, df)) {
     TrailSettings::Length trail_length = (TrailSettings::Length)df.GetAsInteger();
     ShowTrailControls(trail_length != TrailSettings::Length::OFF);
   }
@@ -141,35 +141,35 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Trail length"), NULL, trail_length_list,
           (unsigned)settings_map.trail.length, this);
-  SetExpertRow(Trail);
+  SetExpertRow(TRAIL_LENGTH);
 
   AddBoolean(_("Trail drift"),
              _("Determines whether the snail trail is drifted with the wind when displayed in "
                  "circling mode."),
              settings_map.trail.wind_drift_enabled);
-  SetExpertRow(TrailDrift);
+  SetExpertRow(TRAIL_DRIFT);
 
   AddEnum(_("Trail type"), NULL, trail_type_list, (int)settings_map.trail.type);
-  SetExpertRow(SnailType);
+  SetExpertRow(TRAIL_TYPE);
 
   AddBoolean(_("Trail scaled"),
              _("If set to ON the snail trail width is scaled according to the vario signal."),
              settings_map.trail.scaling_enabled);
-  SetExpertRow(SnailWidthScale);
+  SetExpertRow(TRAIL_WIDTH);
 
   AddBoolean(_("Detour cost markers"),
              _("If the aircraft heading deviates from the current waypoint, markers are displayed "
                  "at points ahead of the aircraft. The value of each marker is the extra distance "
                  "required to reach that point as a percentage of straight-line distance to the waypoint."),
              settings_map.detour_cost_markers_enabled);
-  SetExpertRow(DetourCostMarker);
+  SetExpertRow(ENABLE_DETOUR_COST_MARKERS);
 
   AddEnum(_("Aircraft symbol"), NULL, aircraft_symbol_list, settings_map.aircraft_symbol);
-  SetExpertRow(AircraftSymbol);
+  SetExpertRow(AIRCRAFT_SYMBOL);
 
   AddEnum(_("Wind arrow"), _("Determines the way the wind arrow is drawn on the map."),
           wind_arrow_list, (unsigned)settings_map.wind_arrow_style);
-  SetExpertRow(_WindArrowStyle);
+  SetExpertRow(WIND_ARROW_STYLE);
 
   ShowTrailControls(settings_map.trail.length != TrailSettings::Length::OFF);
 }
@@ -181,27 +181,27 @@ SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  changed |= SaveValueEnum(DisplayTrackBearing, szProfileDisplayTrackBearing,
+  changed |= SaveValueEnum(DISPLAY_TRACK_BEARING, szProfileDisplayTrackBearing,
                            settings_map.display_track_bearing);
 
-  changed |= SaveValue(EnableFLARMMap, szProfileEnableFLARMMap,
+  changed |= SaveValue(ENABLE_FLARM_MAP, szProfileEnableFLARMMap,
                        settings_map.show_flarm_on_map);
 
-  changed |= SaveValueEnum(Trail, szProfileSnailTrail, settings_map.trail.length);
+  changed |= SaveValueEnum(TRAIL_LENGTH, szProfileSnailTrail, settings_map.trail.length);
 
-  changed |= SaveValue(TrailDrift, szProfileTrailDrift, settings_map.trail.wind_drift_enabled);
+  changed |= SaveValue(TRAIL_DRIFT, szProfileTrailDrift, settings_map.trail.wind_drift_enabled);
 
-  changed |= SaveValueEnum(SnailType, szProfileSnailType, settings_map.trail.type);
+  changed |= SaveValueEnum(TRAIL_TYPE, szProfileSnailType, settings_map.trail.type);
 
-  changed |= SaveValue(SnailWidthScale, szProfileSnailWidthScale,
+  changed |= SaveValue(TRAIL_WIDTH, szProfileSnailWidthScale,
                        settings_map.trail.scaling_enabled);
 
-  changed |= SaveValue(DetourCostMarker, szProfileDetourCostMarker,
+  changed |= SaveValue(ENABLE_DETOUR_COST_MARKERS, szProfileDetourCostMarker,
                        settings_map.detour_cost_markers_enabled);
 
-  changed |= SaveValueEnum(AircraftSymbol, szProfileAircraftSymbol, settings_map.aircraft_symbol);
+  changed |= SaveValueEnum(AIRCRAFT_SYMBOL, szProfileAircraftSymbol, settings_map.aircraft_symbol);
 
-  changed |= SaveValueEnum(_WindArrowStyle, szProfileWindArrowStyle, settings_map.wind_arrow_style);
+  changed |= SaveValueEnum(WIND_ARROW_STYLE, szProfileWindArrowStyle, settings_map.wind_arrow_style);
 
   _changed |= changed;
   _require_restart |= require_restart;
