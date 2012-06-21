@@ -72,10 +72,13 @@ Dump(const ExternalSettings &settings)
 static void
 Dump(const NMEAInfo &basic)
 {
-  printf("Date=%02u.%02u.%04u\n",
-         basic.date_time_utc.day, basic.date_time_utc.month, basic.date_time_utc.year);
-  printf("Time=%02u:%02u:%02u\n",
-         basic.date_time_utc.hour, basic.date_time_utc.minute, basic.date_time_utc.second);
+  if (basic.date_available)
+    printf("Date=%02u.%02u.%04u\n",
+           basic.date_time_utc.day, basic.date_time_utc.month, basic.date_time_utc.year);
+
+  if (basic.time_available)
+    printf("Time=%02u:%02u:%02u\n",
+           basic.date_time_utc.hour, basic.date_time_utc.minute, basic.date_time_utc.second);
 
   if (!basic.alive)
     printf("GPS not connected\n");
