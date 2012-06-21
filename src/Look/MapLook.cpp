@@ -37,6 +37,10 @@ MapLook::Initialise(const MapSettings &settings)
   trail.Initialise(settings.trail);
   wind.Initialise();
 
+#ifdef HAVE_NOAA
+  noaa.Initialise();
+#endif
+
 #ifdef HAVE_HATCHED_BRUSH
   above_terrain_bitmap.Load(IDB_ABOVETERRAIN);
   above_terrain_brush.Set(above_terrain_bitmap);

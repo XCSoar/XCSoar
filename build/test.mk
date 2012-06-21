@@ -1541,6 +1541,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
+	$(SRC)/Look/NOAALook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/ComputerSettings.cpp \
@@ -1611,6 +1612,13 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
+
+ifeq ($(HAVE_NET),y)
+RUN_MAP_WINDOW_SOURCES += \
+	$(SRC)/Weather/NOAAGlue.cpp \
+	$(SRC)/Weather/NOAAStore.cpp
+endif
+
 RUN_MAP_WINDOW_LDADD = $(RESOURCE_BINARY)
 RUN_MAP_WINDOW_DEPENDS = PROFILE SCREEN SHAPELIB IO OS THREAD TASK ROUTE GLIDE WAYPOINT AIRSPACE JASPER ZZIP UTIL GEO MATH
 $(eval $(call link-program,RunMapWindow,RUN_MAP_WINDOW))
@@ -1889,6 +1897,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/GestureLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
+	$(SRC)/Look/NOAALook.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/Look/TrailLook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \

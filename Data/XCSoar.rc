@@ -193,6 +193,8 @@ IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title_red
 IDB_TITLE             BITMAP  DISCARDABLE     "../output/data/graphics/title_110.bmp"
 IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title_320.bmp"
 #endif
+IDB_WEATHER_STATION     BITMAP  DISCARDABLE     "../output/data/icons/map_weather_station.bmp"
+IDB_WEATHER_STATION_HD  BITMAP  DISCARDABLE     "../output/data/icons/map_weather_station_160.bmp"
 // --- Audio ---
 
 IDR_FAIL                WAVE    DISCARDABLE     "sound/fail.wav"

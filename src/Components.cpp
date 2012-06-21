@@ -94,6 +94,7 @@ Copyright_License {
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Operation/VerboseOperationEnvironment.hpp"
 #include "Pages.hpp"
+#include "Weather/Features.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Plane/PlaneGlue.hpp"
@@ -437,6 +438,10 @@ XCSoarInterface::Startup()
     map_window->SetWeather(&RASP);
     map_window->SetMarks(protected_marks);
     map_window->SetLogger(&logger);
+
+#ifdef HAVE_NOAA
+    map_window->SetNOAAStore(noaa_store);
+#endif
 
     /* show map at home waypoint until GPS fix becomes available */
     if (GetComputerSettings().poi.home_location_available)

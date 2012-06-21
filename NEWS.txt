@@ -12,6 +12,7 @@ Version 6.4 - not yet released
 * map
   - configurable airspace rendering (#1847)
   - "dots for sink" trail styles
+  - weather stations on the map (#1487)
 * user interface
   - added "Airspace On/Off" menu button
   - save Flarm team mates in the profile (#1997)

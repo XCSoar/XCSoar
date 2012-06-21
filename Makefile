@@ -705,6 +705,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/MarkerLook.cpp \
+	$(SRC)/Look/NOAALook.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/IconLook.cpp \
 	$(SRC)/Look/UnitsLook.cpp \

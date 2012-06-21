@@ -52,6 +52,9 @@ MapWindow::MapWindow(const MapLook &_look,
    trail_renderer(look.trail),
    task(NULL), route_planner(NULL), glide_computer(NULL),
    marks(NULL),
+#ifdef HAVE_NOAA
+   noaa_store(NULL),
+#endif
    compass_visible(true)
 #ifndef ENABLE_OPENGL
    , ui_generation(1), buffer_generation(0),

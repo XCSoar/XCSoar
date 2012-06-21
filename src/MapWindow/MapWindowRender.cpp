@@ -29,6 +29,10 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 
+#ifdef HAVE_NOAA
+#include "Weather/NOAAStore.hpp"
+#endif
+
 void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
@@ -82,6 +86,21 @@ MapWindow::RenderMarkers(Canvas &canvas)
 }
 
 void
+MapWindow::RenderNOAAStations(Canvas &canvas)
+{
+#ifdef HAVE_NOAA
+  if (noaa_store == NULL)
+    return;
+
+  RasterPoint pt;
+  for (auto it = noaa_store->begin(), end = noaa_store->end(); it != end; ++it)
+    if (it->parsed_metar_available && it->parsed_metar.location_available &&
+        render_projection.GeoToScreenIfVisible(it->parsed_metar.location, pt))
+      look.noaa.icon.Draw(canvas, pt);
+#endif
+}
+
+void
 MapWindow::RenderGlide(Canvas &canvas)
 {
   // draw red cross on glide through terrain marker
@@ -128,6 +147,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   draw_sw.Mark(_T("DrawWaypoints"));
   DrawWaypoints(canvas);
+
+  draw_sw.Mark(_T("DrawNOAAStations"));
+  RenderNOAAStations(canvas);
 
   draw_sw.Mark(_T("RenderMisc1"));
   // Render weather/terrain max/min values

@@ -36,6 +36,11 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Features.hpp"
+#include "Weather/Features.hpp"
+
+#ifdef HAVE_NOAA
+#include "NOAALook.hpp"
+#endif
 
 struct MapSettings;
 
@@ -47,6 +52,10 @@ struct MapLook {
   MarkerLook marker;
   TrailLook trail;
   WindArrowLook wind;
+
+#ifdef HAVE_NOAA
+  NOAALook noaa;
+#endif
 
 #ifdef HAVE_HATCHED_BRUSH
   Bitmap above_terrain_bitmap;

@@ -31,6 +31,8 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #endif
 
+#include "Weather/Features.hpp"
+
 void
 MapWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
@@ -68,6 +70,9 @@ MapWindow::OnCreate()
 void
 MapWindow::OnDestroy()
 {
+#ifdef HAVE_NOAA
+  SetNOAAStore(NULL);
+#endif
   SetMarks(NULL);
   airspace_renderer.Clear();
   SetWaypoints(NULL);
