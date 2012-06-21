@@ -31,11 +31,11 @@ class Angle;
 
 void
 FormatBearing(TCHAR *buffer, size_t size, unsigned degrees_value,
-              const TCHAR *suffix=_T(""));
+              const TCHAR *suffix = NULL);
 
 void
 FormatBearing(TCHAR *buffer, size_t size, Angle value,
-              const TCHAR *suffix=_T(""));
+              const TCHAR *suffix = NULL);
 
 void
 FormatAngleDelta(TCHAR *buffer, size_t size, Angle value);

@@ -32,9 +32,11 @@ FormatBearing(TCHAR *buffer, size_t size, unsigned value_degrees,
 {
   assert(buffer != NULL);
   assert(size >= 8);
-  assert(suffix != NULL);
 
-  _sntprintf(buffer, size, _T("%u° %s"), value_degrees, suffix);
+  if (suffix != NULL)
+    _sntprintf(buffer, size, _T("%u° %s"), value_degrees, suffix);
+  else
+    _sntprintf(buffer, size, _T("%u°"), value_degrees);
 }
 
 void
