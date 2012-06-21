@@ -45,6 +45,7 @@ Copyright_License {
 #include "Weather/METAR.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Compiler.h"
+#include "Renderer/NOAAListRenderer.hpp"
 
 #include <stdio.h>
 
@@ -66,14 +67,6 @@ struct NOAAListItem
 };
 
 static TrivialArray<NOAAListItem, 20> list;
-
-gcc_pure
-static UPixelScalar
-GetRowHeight(const DialogLook &look)
-{
-  return look.list.font->GetHeight() + Layout::Scale(6)
-    + look.small_font->GetHeight();
-}
 
 static void
 UpdateList()
@@ -105,32 +98,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < list.size());
 
-  const DialogLook &look = UIGlobals::GetDialogLook();
-  const Font &code_font = *look.list.font;
-  const Font &details_font = *look.small_font;
-
-  canvas.Select(code_font);
-
-  StaticString<256> title;
-  title = list[index].code;
-  if (list[index].iterator->parsed_metar_available &&
-      list[index].iterator->parsed_metar.name_available)
-    title.AppendFormat(_T(": %s"), list[index].iterator->parsed_metar.name.c_str());
-
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc, title);
-
-  canvas.Select(details_font);
-
-  const TCHAR *tmp;
-  if (!list[index].iterator->metar_available)
-    tmp = _("No METAR available");
-  else
-    tmp = list[index].iterator->metar.content.c_str();
-
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + code_font.GetHeight() + Layout::FastScale(4),
-                      rc, tmp);
+  NOAAListRenderer::Draw(canvas, rc, *list[index].iterator,
+                         UIGlobals::GetDialogLook());
 }
 
 static void
@@ -241,7 +210,7 @@ dlgNOAAListShowModal(SingleWindow &parent)
 
   station_list = (ListControl *)wf->FindByName(_T("StationList"));
   assert(station_list != NULL);
-  station_list->SetItemHeight(GetRowHeight(UIGlobals::GetDialogLook()));
+  station_list->SetItemHeight(NOAAListRenderer::GetHeight(UIGlobals::GetDialogLook()));
   station_list->SetPaintItemCallback(PaintListItem);
   station_list->SetActivateCallback(ListItemSelected);
 
