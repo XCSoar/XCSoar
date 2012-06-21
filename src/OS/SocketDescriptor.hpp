@@ -58,6 +58,17 @@ public:
   void Close();
 #endif
 
+  /**
+   * Create a socket.
+   *
+   * @param domain is the address domain
+   * @param type is the sochet type
+   * @param protocol is the protocol
+   * @return True on success, False on failure
+   * See man 2 socket for detailed information
+   */
+  bool Create(int domain, int type, int protocol);
+
   bool CreateTCP();
   bool CreateTCPListener(unsigned port, unsigned backlog=8);
 

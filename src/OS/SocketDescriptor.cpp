@@ -116,6 +116,19 @@ SocketDescriptor::Connect(const struct sockaddr *address, size_t length)
   return ::connect(Get(), address, length) >= 0;
 }
 
+bool
+SocketDescriptor::Create(int domain, int type, int protocol)
+{
+  assert(!IsDefined());
+
+  int fd = socket(domain, type, protocol);
+  if (fd < 0)
+    return false;
+
+  Set(fd);
+  return true;
+}
+
 #ifndef HAVE_POSIX
 
 ssize_t
