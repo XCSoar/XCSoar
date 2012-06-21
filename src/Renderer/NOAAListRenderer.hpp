@@ -28,6 +28,7 @@ Copyright_License {
 #include "Weather/NOAAStore.hpp"
 
 class Canvas;
+struct NOAALook;
 struct DialogLook;
 
 namespace NOAAListRenderer
@@ -37,6 +38,9 @@ namespace NOAAListRenderer
 
   void Draw(Canvas &canvas, const PixelRect rc, const NOAAStore::Item &station,
             const DialogLook &dialog_look);
+
+  void Draw(Canvas &canvas, const PixelRect rc, const NOAAStore::Item &station,
+            const NOAALook &look, const DialogLook &dialog_look);
 }
 
 #endif

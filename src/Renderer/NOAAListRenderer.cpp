@@ -26,8 +26,15 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/NOAALook.hpp"
 #include "Util/StaticString.hpp"
 #include "Language/Language.hpp"
+
+namespace NOAAListRenderer
+{
+  static void Draw(Canvas &canvas, const PixelRect rc, PixelScalar padding_left,
+                   const NOAAStore::Item &station, const DialogLook &dialog_look);
+}
 
 UPixelScalar
 NOAAListRenderer::GetHeight(const DialogLook &look)
@@ -38,6 +45,7 @@ NOAAListRenderer::GetHeight(const DialogLook &look)
 
 void
 NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                       PixelScalar padding_left,
                        const NOAAStore::Item &station,
                        const DialogLook &dialog_look)
 {
@@ -52,7 +60,7 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
       station.parsed_metar.name_available)
     title.AppendFormat(_T(": %s"), station.parsed_metar.name.c_str());
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
+  canvas.text_clipped(rc.left + Layout::FastScale(2) + padding_left,
                       rc.top + Layout::FastScale(2), rc, title);
 
   canvas.Select(details_font);
@@ -63,7 +71,30 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   else
     tmp = station.metar.content.c_str();
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
+  canvas.text_clipped(rc.left + Layout::FastScale(2) + padding_left,
                       rc.top + code_font.GetHeight() + Layout::FastScale(4),
                       rc, tmp);
+}
+
+void
+NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                       const NOAAStore::Item &station,
+                       const DialogLook &dialog_look)
+{
+  Draw(canvas, rc, 0, station, dialog_look);
+}
+
+void
+NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                       const NOAAStore::Item &station,
+                       const NOAALook &look,
+                       const DialogLook &dialog_look)
+{
+  const PixelScalar line_height = rc.bottom - rc.top;
+
+  Draw(canvas, rc, line_height, station, dialog_look);
+
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
+  look.icon.Draw(canvas, pt);
 }
