@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script is optional, it is not an official part of the XCSoar
+# build scripts.
+
 # Configure script for XCSoar on Mac OS X.
 
 # We're not using Autoconf
