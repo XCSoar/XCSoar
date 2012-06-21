@@ -131,6 +131,16 @@ Dump(const NMEAInfo &basic)
   if (basic.humidity_available)
     printf("RelativeHumidity=%d\n", (int)basic.humidity);
 
+  const DeviceInfo &device = basic.device;
+  if (!device.product.empty())
+    printf("Device.Product=%s\n", device.product.c_str());
+  if (!device.serial.empty())
+    printf("Device.Serial=%s\n", device.serial.c_str());
+  if (!device.hardware_version.empty())
+    printf("Device.HardwareVersion=%s\n", device.hardware_version.c_str());
+  if (!device.software_version.empty())
+    printf("Device.SoftwareVersion=%s\n", device.software_version.c_str());
+
   const FlarmData &flarm = basic.flarm;
   if (flarm.status.available) {
     printf("FLARM rx=%u tx=%u\n", flarm.status.rx, flarm.status.tx);
