@@ -178,9 +178,9 @@ VegaDevice::PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   if (strcmp(name, "ToneDeadbandCirclingLow") == 0)
     value = std::max(value, -value);
 
-  settings_mutex.Lock();
-  settings[name] = value;
-  settings_mutex.Unlock();
+  settings.Lock();
+  settings.Set(name, value);
+  settings.Unlock();
 
   return true;
 }

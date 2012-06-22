@@ -40,9 +40,9 @@ FlarmDevice::SendSetting(const char *name, const char *value,
 
   /* erase the old value from the settings map, because we expect to
      receive the new one now */
-  settings_mutex.Lock();
+  settings.Lock();
   settings.erase(name);
-  settings_mutex.Unlock();
+  settings.Unlock();
 
   char buffer[64];
   sprintf(buffer, "PFLAC,S,%s,%s", name, value);
@@ -60,10 +60,10 @@ FlarmDevice::RequestSetting(const char *name, OperationEnvironment &env)
 std::pair<bool, std::string>
 FlarmDevice::GetSetting(const char *name) const
 {
-  ScopeLock protect(settings_mutex);
+  ScopeLock protect(settings);
   auto i = settings.find(name);
   if (i == settings.end())
     return std::make_pair(false, std::string());
 
-  return std::make_pair(true, i->second);
+  return std::make_pair(true, *i);
 }

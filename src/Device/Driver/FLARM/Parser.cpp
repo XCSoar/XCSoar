@@ -42,9 +42,9 @@ FlarmDevice::ParsePFLAC(NMEAInputLine &line)
   char value[256];
   line.Read(value, ARRAY_SIZE(value));
 
-  settings_mutex.Lock();
-  settings[name] = value;
-  settings_mutex.Unlock();
+  settings.Lock();
+  settings.Set(name, value);
+  settings.Unlock();
 
   return true;
 }
