@@ -147,6 +147,12 @@ Dump(const NMEAInfo &basic)
   if (basic.engine_noise_level_available)
     printf("ENL=%u\n", basic.engine_noise_level);
 
+  if (basic.voltage_available)
+    printf("Battery=%fV\n", (double)basic.voltage);
+
+  if (basic.battery_level_available)
+    printf("Battery=%f%%\n", (double)basic.battery_level);
+
   Dump(basic.settings);
 }
 
