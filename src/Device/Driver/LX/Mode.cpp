@@ -22,8 +22,10 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "V7.hpp"
+#include "LX1600.hpp"
 #include "Device/Port/Port.hpp"
-#include "Device/Internal.hpp"
+#include "Operation/Operation.hpp"
 
 void
 LXDevice::LinkTimeout()
@@ -33,48 +35,6 @@ LXDevice::LinkTimeout()
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
   busy = false;
-}
-
-/**
- * Enable pass-through mode on the LX1600.  This command was provided
- * by Crtomir Rojnik (LX Navigation) in an email without further
- * explanation.  Tests have shown that this command can be sent at
- * either 4800 baud or the current vario baud rate.  Since both works
- * equally well, we don't bother to switch.
- */
-static bool
-ModeColibri(Port &port, OperationEnvironment &env)
-{
-  return PortWriteNMEA(port, "PFLX0,COLIBRI", env);
-}
-
-/**
- * Cancel pass-through mode on the LX1600.  This command was provided
- * by Crtomir Rojnik (LX Navigation) in an email.  It must always be
- * sent at 4800 baud.  After this command has been sent, we switch
- * back to the "real" baud rate.
- */
-static bool
-ModeLX1600(Port &port, OperationEnvironment &env)
-{
-  unsigned old_baud_rate = port.GetBaudrate();
-  if (old_baud_rate == 4800)
-    old_baud_rate = 0;
-  else if (!port.SetBaudrate(4800))
-    return false;
-
-  const bool success = PortWriteNMEA(port, "PFLX0,LX1600", env);
-
-  if (old_baud_rate != 0)
-    port.SetBaudrate(old_baud_rate);
-
-  return success;
-}
-
-static bool
-EnableLXWP(Port &port, OperationEnvironment &env)
-{
-  return PortWriteNMEA(port, "PFLX0,LXWP0,1,LXWP2,3,LXWP3,4", env);
 }
 
 bool
@@ -94,13 +54,11 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
   }
 
   /* just in case the LX1600 is still in pass-through mode: */
-  ModeLX1600(port, env);
+  V7::ModeVSeven(port, env);
+  LX1600::ModeLX1600(port, env);
 
-  // This line initiates the Color Vario to send out LXWP2 and LXWP3
-  // LXWP0 once started, is repeated every second
-  // This is a copy of the initiation done in LK8000, realized by Lx developers
-  // We have no documentation and so we do not know what this exactly means
-  EnableLXWP(port, env);
+  V7::SetupNMEA(port, env);
+  LX1600::SetupNMEA(port, env);
 
   if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);
@@ -125,7 +83,7 @@ LXDevice::OnSysTicker(const DerivedInfo &calculated)
 bool
 LXDevice::EnablePassThrough(OperationEnvironment &env)
 {
-  return ModeColibri(port, env);
+  return V7::ModeDirect(port, env) && LX1600::ModeColibri(port, env);
 }
 
 bool
@@ -139,18 +97,30 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
 
   port.StopRxThread();
 
-  if (!ModeColibri(port, env)) {
+  if (!V7::ModeDirect(port, env) || !LX1600::ModeColibri(port, env)) {
     mode = Mode::UNKNOWN;
     return false;
   }
+
+  /* make sure the pass-through command has been sent to the device
+     before we continue sending commands */
+  port.Drain();
 
   if (bulk_baud_rate != 0) {
     old_baud_rate = port.GetBaudrate();
     if (old_baud_rate == bulk_baud_rate)
       old_baud_rate = 0;
-    else if (!port.SetBaudrate(bulk_baud_rate)) {
-      mode = Mode::UNKNOWN;
-      return false;
+    else {
+      /* before changing the baud rate, we need an additional delay,
+         because Port::Drain() does not seem to work reliably on Linux
+         with a USB-RS232 converter; with a V7+Nano, 100ms is more
+         than enough */
+      env.Sleep(100);
+
+      if (!port.SetBaudrate(bulk_baud_rate)) {
+        mode = Mode::UNKNOWN;
+        return false;
+      }
     }
   } else
     old_baud_rate = 0;

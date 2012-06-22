@@ -11,6 +11,7 @@ ifeq ($(CLANG),y)
 # what does this clang warning mean? it generates a lot of (false?)
 # positives.
 WARNINGS += -Wno-internal-linkage-in-inline
+WARNINGS += -Wno-null-conversion
 endif
 
 CXXFLAGS += $(WARNINGS)

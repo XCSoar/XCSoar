@@ -35,7 +35,7 @@ namespace PlaneGlue
   bool Read(Plane &plane, KeyValueFileReader &reader);
   bool ReadFile(Plane &plane, const TCHAR *path);
   void Write(const Plane &plane, KeyValueFileWriter &writer);
-  void WriteFile(const Plane &plane, const TCHAR *path);
+  bool WriteFile(const Plane &plane, const TCHAR *path);
 }
 
 #endif

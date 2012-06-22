@@ -29,10 +29,14 @@ Version 6.4 - not yet released
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out
 
-Version 6.3.7 - not yet released
+Version 6.3.7 - 2012/06/21
 * calculations
   - show altitude difference to target point, not area centre
   - enforce the 150 minutes limit for OLC league (#2174)
+  - fix airspace warnings on old ARM CPUs (#2127)
+* devices
+  - LX: improved LXNav V7 support
+  - skip failed devices for task declaration
 * replay
   - fix parsing of flight date in IGC files
 * Android

@@ -1007,6 +1007,26 @@ Double(fixed a)
 #endif
 
 /**
+ * Calculate the euclidian distance for "tiny" parameter values,
+ * i.e. all values below 3.
+ *
+ * This function was calibrated for small delta angles,
+ * e.g. reasonable distances on earth's surface.
+ */
+gcc_const
+inline fixed
+TinyHypot(fixed x, fixed y)
+{
+#ifdef FIXED_MATH
+  /* shift 15 bits left to avoid underflow and precision loss in
+     sqr() */
+  return sqrt(sqr(x << 15) + sqr(y << 15)) >> 15;
+#else
+  return hypot(x, y);
+#endif
+}
+
+/**
  * Calculate the euclidian distance for "small" parameter values,
  * i.e. values below 100,000.
  */
