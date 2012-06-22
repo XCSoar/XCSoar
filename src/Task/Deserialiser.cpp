@@ -66,7 +66,7 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
   ObservationZonePoint* oz = NULL;
   std::unique_ptr<OrderedTaskPoint> pt;
 
-  if (oz_node != NULL) {
+  if (oz_node) {
     bool is_turnpoint = StringIsEqual(type.c_str(), _T("Turn")) ||
                         StringIsEqual(type.c_str(), _T("Area"));
 
