@@ -1,8 +1,5 @@
-ifeq ($(WINHOST),y)
-  IM_PREFIX := im-
-else
-  IM_PREFIX :=
-endif
+include build/rsvg.mk
+include build/imagemagick.mk
 
 ####### market icons
 
@@ -10,11 +7,7 @@ SVG_MARKET_ICONS = Data/graphics/xcsoarswiftsplash.svg Data/graphics/xcsoarswift
 PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_market.png,$(SVG_MARKET_ICONS))
 
 market-icons: $(PNG_MARKET_ICONS)
-
-# render from SVG to PNG
-$(PNG_MARKET_ICONS): $(DATA)/graphics/%_market.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=512 $< -o $@
+$(eval $(call rsvg-convert,$(PNG_MARKET_ICONS),$(DATA)/graphics/%_market.png,Data/graphics/%.svg,--width=512))
 
 ####### icons
 
@@ -32,34 +25,13 @@ $(SVG_NOALIAS_ICONS): $(DATA)/icons/%.svg: build/svg_preprocess.xsl Data/icons/%
 
 # render from SVG to PNG
 # Default 100PPI (eg 320x240 4" display)
-$(PNG_ICONS): $(DATA)/icons/%.png: $(DATA)/icons/%.svg | $(DATA)/icons/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --x-zoom=1.0 --y-zoom=1.0 $< -o $@
+$(eval $(call rsvg-convert,$(PNG_ICONS),$(DATA)/icons/%.png,$(DATA)/icons/%.svg,--x-zoom=1.0 --y-zoom=1.0))
 
 #160PPI (eg 640x480 5" display)
-$(PNG_ICONS_160): $(DATA)/icons/%_160.png: $(DATA)/icons/%.svg | $(DATA)/icons/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --x-zoom=1.6316 --y-zoom=1.6316 $< -o $@
-
-# extract alpha channel
-%_alpha.png: %.png
-	$(Q)$(IM_PREFIX)convert $< -alpha Extract +matte +dither -colors 8 $@
-
-# extract RGB channels
-%_rgb.png: %.png
-	$(Q)$(IM_PREFIX)convert $< -background white -flatten +matte +dither -colors 64 $@
-
-# tile both images
-%_tile.png: %_alpha.png %_rgb.png
-	$(Q)$(IM_PREFIX)montage -tile 2x1 -geometry +0+0 $^ -depth 8 $@
+$(eval $(call rsvg-convert,$(PNG_ICONS_160),$(DATA)/icons/%_160.png,$(DATA)/icons/%.svg,--x-zoom=1.6316 --y-zoom=1.6316))
 
 # convert to uncompressed 8-bit BMP
-$(BMP_ICONS): %.bmp: %_tile.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< +dither -compress none -type optimize -colors 256 $@
-$(BMP_ICONS_160): %.bmp: %_tile.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< +dither -compress none -type optimize -colors 256 $@
+$(eval $(call convert-to-bmp,$(BMP_ICONS) $(BMP_ICONS_160),%.bmp,%_tile.png))
 
 ####### splash logo
 
@@ -72,23 +44,12 @@ PNG_SPLASH_128 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_128.png,$(SVG
 ICNS_SPLASH_128 = $(PNG_SPLASH_128:.png=.icns)
 
 # render from SVG to PNG
-$(PNG_SPLASH_160): $(DATA)/graphics/%_160.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=160 $< -o $@
-$(PNG_SPLASH_80): $(DATA)/graphics/%_80.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=80 $< -o $@
-$(PNG_SPLASH_128): $(DATA)/graphics/%_128.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=128 $< -o $@
+$(eval $(call rsvg-convert,$(PNG_SPLASH_160),$(DATA)/graphics/%_160.png,Data/graphics/%.svg,--width=160))
+$(eval $(call rsvg-convert,$(PNG_SPLASH_80),$(DATA)/graphics/%_80.png,Data/graphics/%.svg,--width=80))
+$(eval $(call rsvg-convert,$(PNG_SPLASH_128),$(DATA)/graphics/%_128.png,Data/graphics/%.svg,--width=128))
 
 # convert to uncompressed 8-bit BMP
-$(BMP_SPLASH_160): %.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
-$(BMP_SPLASH_80): %.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
+$(eval $(call convert-to-bmp-white,$(BMP_SPLASH_160) $(BMP_SPLASH_80),%.bmp,%.png))
 
 # convert to icns (mac os x icon)
 $(ICNS_SPLASH_128): %.icns: %.png
@@ -104,24 +65,11 @@ PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_320.png,$(SVG_
 BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
 
 # render from SVG to PNG
-$(PNG_TITLE_110): $(DATA)/graphics/%_110.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=110 $< -o $@
+$(eval $(call rsvg-convert,$(PNG_TITLE_110),$(DATA)/graphics/%_110.png,Data/graphics/%.svg,--width=110))
+$(eval $(call rsvg-convert,$(PNG_TITLE_320),$(DATA)/graphics/%_320.png,Data/graphics/%.svg,--width=320))
 
 # convert to uncompressed 8-bit BMP
-$(BMP_TITLE_110): %.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
-
-# render from SVG to PNG
-$(PNG_TITLE_320): $(DATA)/graphics/%_320.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=320 $< -o $@
-
-# convert to uncompressed 8-bit BMP
-$(BMP_TITLE_320): %.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
+$(eval $(call convert-to-bmp-white,$(BMP_TITLE_110) $(BMP_TITLE_320),%.bmp,%.png))
 
 ####### dialog title
 
@@ -130,14 +78,10 @@ PNG_DIALOG_TITLE = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.png,$(SVG_D
 BMP_DIALOG_TITLE = $(PNG_DIALOG_TITLE:.png=.bmp)
 
 # render from SVG to PNG
-$(PNG_DIALOG_TITLE): $(DATA)/graphics/%.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert $< -o $@
+$(eval $(call rsvg-convert,$(PNG_DIALOG_TITLE),$(DATA)/graphics/%.png,Data/graphics/%.svg,))
 
 # convert to uncompressed 8-bit BMP
-$(BMP_DIALOG_TITLE): %.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
+$(eval $(call convert-to-bmp-white,$(BMP_DIALOG_TITLE),%.bmp,%.png))
 
 ####### progress bar border
 
@@ -146,14 +90,10 @@ PNG_PROGRESS_BORDER = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%.png,$(SV
 BMP_PROGRESS_BORDER = $(PNG_PROGRESS_BORDER:.png=.bmp)
 
 # render from SVG to PNG
-$(PNG_PROGRESS_BORDER): $(DATA)/graphics/%.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert $< -o $@
+$(eval $(call rsvg-convert,$(PNG_PROGRESS_BORDER),$(DATA)/graphics/%.png,Data/graphics/%.svg,))
 
 # convert to uncompressed 8-bit BMP
-$(BMP_PROGRESS_BORDER): %.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
+$(eval $(call convert-to-bmp-white,$(BMP_PROGRESS_BORDER),%.bmp,%.png))
 
 ####### launcher graphics
 
@@ -165,29 +105,15 @@ BMP_LAUNCH_DLL_FLY_224 = $(PNG_LAUNCH_224:.png=_dll_1.bmp)
 BMP_LAUNCH_DLL_SIM_224 = $(PNG_LAUNCH_224:.png=_dll_2.bmp)
 
 # render from SVG to PNG
-$(PNG_LAUNCH_224): $(DATA)/graphics/%_224.png: Data/graphics/%.svg | $(DATA)/graphics/dirstamp
-	@$(NQ)echo "  SVG     $@"
-	$(Q)rsvg-convert --width=224 $< -o $@
+$(eval $(call rsvg-convert,$(PNG_LAUNCH_224),$(DATA)/graphics/%_224.png,Data/graphics/%.svg,--width=224))
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
-$(BMP_LAUNCH_FLY_224): %_1.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
-$(BMP_LAUNCH_SIM_224): %_2.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
-	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_FLY_224),%_1.bmp,%.png,-background white))
+$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_SIM_224),%_2.bmp,%.png,-background white))
 
 # split into two uncompressed 8-bit BMPs (single 'convert' operation)
-$(BMP_LAUNCH_DLL_FLY_224): %_dll_1.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
-	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
-$(BMP_LAUNCH_DLL_SIM_224): %_dll_2.bmp: %.png
-	@$(NQ)echo "  BMP     $@"
-	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
-	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_FLY_224),%_dll_1.bmp,%.png,-background blue))
+$(eval $(call convert-to-bmp-half,$(BMP_LAUNCH_DLL_SIM_224),%_dll_2.bmp,%.png,-background blue))
 
 #######
 
