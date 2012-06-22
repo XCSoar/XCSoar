@@ -34,7 +34,7 @@ Copyright_License {
  */
 class TimeoutClock : private PeriodClock {
 public:
-  TimeoutClock(unsigned max_duration_ms) {
+  explicit TimeoutClock(unsigned max_duration_ms) {
     UpdateWithOffset(max_duration_ms);
   }
 
