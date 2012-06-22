@@ -142,6 +142,7 @@ namespace InfoBoxFactory
     NextLegEqThermal,
     HeadWindSimplified,
     CruiseEfficiency,
+    WIND_ARROW,
 
     e_NUM_TYPES /* Last item */
   };

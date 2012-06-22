@@ -25,6 +25,7 @@ Version 6.4 - not yet released
   - file manager, can download data files
 * infoboxes
   - added automatic altitude infobox (baro. altitude with GPS fallback)
+  - added wind arrow infobox (#1598)
 * Android
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out

@@ -1058,6 +1058,16 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     CruiseEfficiency,
     CruiseEfficiency,
   },
+
+  {
+    N_("Wind arrow"),
+    N_("Wind"),
+    N_("Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust magnitude and left/right cursor keys to adjust bearing when the InfoBox is active. Pressing the enter cursor key saves the wind value as the initial value when XCSoar next starts."),
+    IBFHelper<InfoBoxContentWindArrow>::Create,
+    WIND_ARROW,
+    WIND_ARROW,
+  },
+
 };
 
 bool

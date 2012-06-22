@@ -46,7 +46,6 @@ public:
             const PixelRect rc, const DerivedInfo &calculated,
             const MapSettings &settings);
 
-private:
   void DrawArrow(Canvas &canvas, RasterPoint pos, Angle angle,
                  PixelScalar length, WindArrowStyle arrow_style,
                  PixelScalar offset = 23);
