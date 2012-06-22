@@ -57,7 +57,7 @@ namespace V7 {
    * - PLXVF at 2 Hz
    * - PLXVS every 5 seconds
    * - LXWP0 every second
-   * - LXWP1 disabled (we don't parse it yet)
+   * - LXWP1 every 60 seconds
    * - LXWP2 every 30 seconds
    * - LXWP3 disabled (we don't parse it)
    * - LXWP5 disabled (we don't parse it)
@@ -65,7 +65,7 @@ namespace V7 {
   static bool
   SetupNMEA(Port &port, OperationEnvironment &env)
   {
-    return PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,0,30,0,0", env);
+    return PortWriteNMEA(port, "PLXV0,NMEARATE,W,2,5,1,60,30,0,0", env);
   }
 }
 
