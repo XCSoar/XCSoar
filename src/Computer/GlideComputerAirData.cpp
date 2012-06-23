@@ -291,10 +291,11 @@ GlideComputerAirData::UpdateLiftDatabase(const MoreData &basic,
        (calculated.heading.Degrees()> fixed_270))) {
 
     fixed h_av = fixed_zero;
-    for (unsigned i=0; i<36; ++i) {
-      h_av += calculated.lift_database[i];
-    }
-    h_av/= 36;
+    for (auto it = calculated.lift_database.begin(),
+         it_end = calculated.lift_database.end(); it != it_end; ++it)
+      h_av += *it;
+
+    h_av /= calculated.lift_database.size();
     calculated.trace_history.CirclingAverage.push(h_av);
   }
 }

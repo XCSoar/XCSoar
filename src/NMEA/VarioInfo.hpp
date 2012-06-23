@@ -27,6 +27,8 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Util/TypeTraits.hpp"
 
+#include <array>
+
 /** Derived vario data */
 struct VarioInfo
 {
@@ -50,11 +52,13 @@ struct VarioInfo
   /** Instant lift/drag ratio */
   fixed ld_vario;
 
+  typedef std::array<fixed, 36> LiftDatabase;
+
   /**
    * The lift of each ten degrees while circling.
    * Index 1 equals 5 to 15 degrees.
    */
-  fixed lift_database[36];
+  LiftDatabase lift_database;
 
   void ClearLiftDatabase();
 

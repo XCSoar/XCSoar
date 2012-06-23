@@ -24,12 +24,10 @@ Copyright_License {
 #include "VarioInfo.hpp"
 #include "Computer/GlideRatioCalculator.hpp"
 
-#include <algorithm>
-
 void
 VarioInfo::ClearLiftDatabase()
 {
-  std::fill(lift_database, lift_database + 36, fixed_zero);
+  lift_database.fill(fixed_zero);
 }
 
 void

@@ -93,12 +93,9 @@ ThermalAssistantWindow::Update(const DerivedInfo &_derived)
 void
 ThermalAssistantWindow::UpdateLiftMax()
 {
-  max_lift = fixed_one;
-
-  for (unsigned i = 0; i < 36; i++)
-    max_lift = std::max(max_lift, fabs(derived.lift_database[i]));
-
-  max_lift = ceil(max_lift);
+  max_lift = ceil(std::max(fixed_one,
+                           *std::max_element(derived.lift_database.begin(),
+                                             derived.lift_database.end())));
 }
 
 void
