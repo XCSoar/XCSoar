@@ -162,7 +162,7 @@ WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
   LogStartUp(_T("WaypointDetails::ReadFileFromProfile"));
 
   std::unique_ptr<TLineReader>
-  reader(OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"),
+  reader(OpenConfiguredTextFile(ProfileKeys::AirfieldFile, _T("airfields.txt"),
                                 ConvertLineReader::AUTO));
   if (reader)
     ReadFile(*reader, way_points, operation);

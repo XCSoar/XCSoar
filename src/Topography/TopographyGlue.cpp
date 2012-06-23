@@ -46,7 +46,7 @@ LoadConfiguredTopographyFile(TopographyStore &store,
                              OperationEnvironment &operation)
 {
   TCHAR file[MAX_PATH];
-  if (!Profile::GetPath(szProfileTopographyFile, file))
+  if (!Profile::GetPath(ProfileKeys::TopographyFile, file))
     return false;
 
   FileLineReaderA reader(file);
@@ -73,7 +73,7 @@ LoadConfiguredTopographyZip(TopographyStore &store,
                             OperationEnvironment &operation)
 {
   TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(szProfileMapFile, path))
+  if (!Profile::GetPath(ProfileKeys::MapFile, path))
     return false;
 
   ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), NULL);

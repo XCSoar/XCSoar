@@ -71,15 +71,15 @@ GetAirspaceColor(unsigned i, Color &color)
 void
 Profile::Load(AirspaceRendererSettings &settings)
 {
-  Get(szProfileAirspaceBlackOutline, settings.black_outline);
-  GetEnum(szProfileAltMode, settings.altitude_mode);
-  Get(szProfileClipAlt, settings.clip_altitude);
+  Get(ProfileKeys::AirspaceBlackOutline, settings.black_outline);
+  GetEnum(ProfileKeys::AltMode, settings.altitude_mode);
+  Get(ProfileKeys::ClipAlt, settings.clip_altitude);
 
 #ifndef ENABLE_OPENGL
-  Get(szProfileAirspaceTransparency, settings.transparency);
+  Get(ProfileKeys::AirspaceTransparency, settings.transparency);
 #endif
 
-  GetEnum(szProfileAirspaceFillMode, settings.fill_mode);
+  GetEnum(ProfileKeys::AirspaceFillMode, settings.fill_mode);
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
     Load(i, settings.classes[i]);
@@ -125,10 +125,10 @@ Profile::Load(unsigned i, AirspaceClassRendererSettings &settings)
 void
 Profile::Load(AirspaceComputerSettings &settings)
 {
-  Get(szProfileAirspaceWarning, settings.enable_warnings);
-  Get(szProfileAltMargin, settings.warnings.altitude_warning_margin);
-  Get(szProfileWarningTime, settings.warnings.warning_time);
-  Get(szProfileAcknowledgementTime, settings.warnings.acknowledgement_time);
+  Get(ProfileKeys::AirspaceWarning, settings.enable_warnings);
+  Get(ProfileKeys::AltMargin, settings.warnings.altitude_warning_margin);
+  Get(ProfileKeys::WarningTime, settings.warnings.warning_time);
+  Get(ProfileKeys::AcknowledgementTime, settings.warnings.acknowledgement_time);
 
   TCHAR name[64];
   unsigned value;

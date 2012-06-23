@@ -53,10 +53,10 @@ MapItemListSettingsPanel::Save(bool &changed, bool &_require_restart)
 {
   MapSettings &settings = CommonInterface::SetMapSettings();
 
-  changed |= SaveValue(AddLocation, EnableLocationMapItemProfileKey,
+  changed |= SaveValue(AddLocation, ProfileKeys::EnableLocationMapItem,
                        settings.item_list.add_location);
 
-  changed |= SaveValue(AddArrivalAltitude, EnableArrivalAltitudeMapItemProfileKey,
+  changed |= SaveValue(AddArrivalAltitude, ProfileKeys::EnableArrivalAltitudeMapItem,
                        settings.item_list.add_arrival_altitude);
 
   return true;

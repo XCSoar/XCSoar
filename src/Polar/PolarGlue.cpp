@@ -47,7 +47,7 @@ PolarGlue::GetDefault()
 static bool
 ReadPolarFileFromProfile(PolarInfo &polar)
 {
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfilePolarFile));
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::PolarFile));
   return reader && PolarGlue::LoadFromFile(polar, *reader);
 }
 
@@ -55,7 +55,7 @@ bool
 PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 {
   unsigned polar_id;
-  if (!Profile::Get(szProfilePolarID, polar_id))
+  if (!Profile::Get(ProfileKeys::PolarID, polar_id))
     return false;
 
   if (polar_id == 6)
@@ -87,7 +87,7 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
-  const TCHAR *polar_string = Profile::Get(szProfilePolar);
+  const TCHAR *polar_string = Profile::Get(ProfileKeys::Polar);
   if (polar_string != NULL && !StringIsEmpty(polar_string) &&
       polar.ReadString(polar_string)) {
     return true;
@@ -101,7 +101,7 @@ PolarGlue::LoadFromProfile()
 {
   PolarInfo polar;
   if (!LoadFromProfile(polar) || !polar.IsValid()) {
-    if (Profile::Exists(szProfilePolar) || Profile::Exists(szProfilePolarID))
+    if (Profile::Exists(ProfileKeys::Polar) || Profile::Exists(ProfileKeys::PolarID))
       ShowMessageBox(_("Polar has invalid coefficients.\nUsing LS8 polar instead!"),
                   _("Warning"), MB_OK);
     polar = GetDefault();

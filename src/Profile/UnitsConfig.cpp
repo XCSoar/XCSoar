@@ -301,17 +301,17 @@ Profile::LoadUnits(UnitSetting &config)
 {
   config = Units::LoadFromOSLanguage();
 
-  GetSpeedUnit(szProfileSpeedUnitsValue, _T("Speed"), config.speed_unit);
+  GetSpeedUnit(ProfileKeys::SpeedUnitsValue, _T("Speed"), config.speed_unit);
   config.wind_speed_unit = config.speed_unit;
-  GetSpeedUnit(szProfileTaskSpeedUnitsValue, _T("TaskSpeed"),
+  GetSpeedUnit(ProfileKeys::TaskSpeedUnitsValue, _T("TaskSpeed"),
                config.task_speed_unit);
-  GetDistanceUnit(szProfileDistanceUnitsValue, _T("Distance"),
+  GetDistanceUnit(ProfileKeys::DistanceUnitsValue, _T("Distance"),
                   config.distance_unit);
-  GetAltitudeUnit(szProfileAltitudeUnitsValue, _T("Altitude"),
+  GetAltitudeUnit(ProfileKeys::AltitudeUnitsValue, _T("Altitude"),
                   config.altitude_unit);
-  GetTemperatureUnit(szProfileTemperatureUnitsValue, _T("Temperature"),
+  GetTemperatureUnit(ProfileKeys::TemperatureUnitsValue, _T("Temperature"),
                      config.temperature_unit);
-  GetVerticalSpeedUnit(szProfileLiftUnitsValue, _T("Lift"),
+  GetVerticalSpeedUnit(ProfileKeys::LiftUnitsValue, _T("Lift"),
                        config.vertical_speed_unit);
-  GetPressureUnit(szProfilePressureUnitsValue, config.pressure_unit);
+  GetPressureUnit(ProfileKeys::PressureUnitsValue, config.pressure_unit);
 }

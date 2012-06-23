@@ -106,15 +106,15 @@ WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
   bool changed = false;
 
   unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
-  if (SaveValueEnum(AutoWind, szProfileAutoWind, auto_wind_mode)) {
+  if (SaveValueEnum(AutoWind, ProfileKeys::AutoWind, auto_wind_mode)) {
     settings.SetLegacyAutoWindMode(auto_wind_mode);
     changed = true;
   }
 
-  changed |= SaveValue(ExternalWind, szProfileExternalWind,
+  changed |= SaveValue(ExternalWind, ProfileKeys::ExternalWind,
                        settings.use_external_wind);
 
-  changed |= SaveValue(TrailDrift, szProfileTrailDrift,
+  changed |= SaveValue(TrailDrift, ProfileKeys::TrailDrift,
                        map_settings.trail.wind_drift_enabled);
 
   if (edit_manual_wind && !external_wind) {

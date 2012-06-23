@@ -72,25 +72,25 @@ SaveFromForm(const WndForm &form, VoiceSettings &settings)
   return
     SaveFormProperty(form, _T("prpVoiceClimbRate"),
                      settings.voice_climb_rate_enabled,
-                     szProfileVoiceClimbRate) ||
+                     ProfileKeys::VoiceClimbRate) ||
     SaveFormProperty(form, _T("prpVoiceTerrain"),
-                     settings.voice_terrain_enabled, szProfileVoiceTerrain) ||
+                     settings.voice_terrain_enabled, ProfileKeys::VoiceTerrain) ||
     SaveFormProperty(form, _T("prpVoiceWaypointDistance"),
                      settings.voice_waypoint_distance_enabled,
-                     szProfileVoiceWaypointDistance) ||
+                     ProfileKeys::VoiceWaypointDistance) ||
     SaveFormProperty(form, _T("prpVoiceTaskAltitudeDifference"),
                      settings.voice_task_altitude_difference_enabled,
-                     szProfileVoiceTaskAltitudeDifference) ||
+                     ProfileKeys::VoiceTaskAltitudeDifference) ||
     SaveFormProperty(form, _T("prpVoiceMacCready"),
                      settings.voice_mac_cready_enabled,
-                     szProfileVoiceMacCready) ||
+                     ProfileKeys::VoiceMacCready) ||
     SaveFormProperty(form, _T("prpVoiceNewWaypoint"),
                      settings.voice_new_waypoint_enabled,
-                     szProfileVoiceNewWaypoint) ||
+                     ProfileKeys::VoiceNewWaypoint) ||
     SaveFormProperty(form, _T("prpVoiceInSector"),
-                     settings.voice_in_sector_enabled, szProfileVoiceInSector) ||
+                     settings.voice_in_sector_enabled, ProfileKeys::VoiceInSector) ||
     SaveFormProperty(form, _T("prpVoiceAirspace"),
-                     settings.voice_airspace_enabled, szProfileVoiceAirspace);
+                     settings.voice_airspace_enabled, ProfileKeys::VoiceAirspace);
 }
 
 

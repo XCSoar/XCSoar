@@ -29,18 +29,18 @@ Copyright_License {
 void
 Profile::LoadTerrainRendererSettings(TerrainRendererSettings &settings)
 {
-  Get(szProfileDrawTerrain, settings.enable);
+  Get(ProfileKeys::DrawTerrain, settings.enable);
 
   uint8_t Temp = (uint8_t)settings.slope_shading;
-  if (!Get(szProfileSlopeShadingType, Temp)) {
+  if (!Get(ProfileKeys::SlopeShadingType, Temp)) {
     bool old_profile_setting = true;
-    if (Get(szProfileSlopeShading, old_profile_setting))
+    if (Get(ProfileKeys::SlopeShading, old_profile_setting))
       // 0: OFF, 3: Wind
       Temp = old_profile_setting ? 3 : 0;
   }
   settings.slope_shading = (SlopeShading)Temp;
 
-  Get(szProfileTerrainContrast, settings.contrast);
-  Get(szProfileTerrainBrightness, settings.brightness);
-  Get(szProfileTerrainRamp, settings.ramp);
+  Get(ProfileKeys::TerrainContrast, settings.contrast);
+  Get(ProfileKeys::TerrainBrightness, settings.brightness);
+  Get(ProfileKeys::TerrainRamp, settings.ramp);
 }

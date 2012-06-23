@@ -30,7 +30,7 @@ WaypointRendererSettings::LoadFromProfile()
   using namespace Profile;
 
   // NOTE: WaypointLabelSelection must be loaded after this code
-  GetEnum(szProfileDisplayText, display_text_type);
+  GetEnum(ProfileKeys::DisplayText, display_text_type);
   if (display_text_type == DisplayTextType::OBSOLETE_DONT_USE_NAMEIFINTASK) {
     // pref migration. The migrated value of DisplayTextType and
     // WaypointLabelSelection will not be written to the config file
@@ -44,12 +44,12 @@ WaypointRendererSettings::LoadFromProfile()
 
   // NOTE: DisplayTextType must be loaded before this code
   //       due to pref migration dependencies!
-  GetEnum(szProfileWaypointLabelSelection, label_selection);
-  GetEnum(szProfileWaypointArrivalHeightDisplay, arrival_height_display);
-  GetEnum(szProfileWaypointLabelStyle, landable_render_mode);
+  GetEnum(ProfileKeys::WaypointLabelSelection, label_selection);
+  GetEnum(ProfileKeys::WaypointArrivalHeightDisplay, arrival_height_display);
+  GetEnum(ProfileKeys::WaypointLabelStyle, landable_render_mode);
 
-  GetEnum(szProfileAppIndLandable, landable_style);
-  Get(szProfileAppUseSWLandablesRendering, vector_landable_rendering);
-  Get(szProfileAppScaleRunwayLength, scale_runway_length);
-  Get(szProfileAppLandableRenderingScale, landable_rendering_scale);
+  GetEnum(ProfileKeys::AppIndLandable, landable_style);
+  Get(ProfileKeys::AppUseSWLandablesRendering, vector_landable_rendering);
+  Get(ProfileKeys::AppScaleRunwayLength, scale_runway_length);
+  Get(ProfileKeys::AppLandableRenderingScale, landable_rendering_scale);
 }

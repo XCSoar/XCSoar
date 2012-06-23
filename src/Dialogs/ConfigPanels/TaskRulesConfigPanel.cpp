@@ -152,24 +152,24 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
   TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
 
-  changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED, szProfileStartMaxSpeed, otb.start_max_speed);
+  changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED, ProfileKeys::StartMaxSpeed, otb.start_max_speed);
 
-  changed |= SaveValue(StartMaxSpeedMargin, UnitGroup::HORIZONTAL_SPEED, szProfileStartMaxSpeedMargin,
+  changed |= SaveValue(StartMaxSpeedMargin, UnitGroup::HORIZONTAL_SPEED, ProfileKeys::StartMaxSpeedMargin,
                        task_behaviour.start_max_speed_margin);
 
-  changed |= SaveValue(StartMaxHeight, UnitGroup::ALTITUDE, szProfileStartMaxHeight, otb.start_max_height);
+  changed |= SaveValue(StartMaxHeight, UnitGroup::ALTITUDE, ProfileKeys::StartMaxHeight, otb.start_max_height);
 
-  changed |= SaveValue(StartMaxHeightMargin, UnitGroup::ALTITUDE, szProfileStartMaxHeightMargin,
+  changed |= SaveValue(StartMaxHeightMargin, UnitGroup::ALTITUDE, ProfileKeys::StartMaxHeightMargin,
                        task_behaviour.start_max_height_margin);
 
-  changed |= SaveValueEnum(StartHeightRef, szProfileStartHeightRef, otb.start_max_height_ref);
+  changed |= SaveValueEnum(StartHeightRef, ProfileKeys::StartHeightRef, otb.start_max_height_ref);
 
-  changed |= SaveValue(FinishMinHeight, UnitGroup::ALTITUDE, szProfileFinishMinHeight,
+  changed |= SaveValue(FinishMinHeight, UnitGroup::ALTITUDE, ProfileKeys::FinishMinHeight,
                        otb.finish_min_height);
 
-  changed |= SaveValueEnum(FinishHeightRef, szProfileFinishHeightRef, otb.finish_min_height_ref);
+  changed |= SaveValueEnum(FinishHeightRef, ProfileKeys::FinishHeightRef, otb.finish_min_height_ref);
 
-  changed |= SaveValueEnum(Contests, szProfileOLCRules, task_behaviour.contest);
+  changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules, task_behaviour.contest);
 
   _changed |= changed;
   _require_restart |= require_restart;

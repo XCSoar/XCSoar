@@ -181,27 +181,27 @@ SymbolsConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  changed |= SaveValueEnum(DISPLAY_TRACK_BEARING, szProfileDisplayTrackBearing,
+  changed |= SaveValueEnum(DISPLAY_TRACK_BEARING, ProfileKeys::DisplayTrackBearing,
                            settings_map.display_ground_track);
 
-  changed |= SaveValue(ENABLE_FLARM_MAP, szProfileEnableFLARMMap,
+  changed |= SaveValue(ENABLE_FLARM_MAP, ProfileKeys::EnableFLARMMap,
                        settings_map.show_flarm_on_map);
 
-  changed |= SaveValueEnum(TRAIL_LENGTH, szProfileSnailTrail, settings_map.trail.length);
+  changed |= SaveValueEnum(TRAIL_LENGTH, ProfileKeys::SnailTrail, settings_map.trail.length);
 
-  changed |= SaveValue(TRAIL_DRIFT, szProfileTrailDrift, settings_map.trail.wind_drift_enabled);
+  changed |= SaveValue(TRAIL_DRIFT, ProfileKeys::TrailDrift, settings_map.trail.wind_drift_enabled);
 
-  changed |= SaveValueEnum(TRAIL_TYPE, szProfileSnailType, settings_map.trail.type);
+  changed |= SaveValueEnum(TRAIL_TYPE, ProfileKeys::SnailType, settings_map.trail.type);
 
-  changed |= SaveValue(TRAIL_WIDTH, szProfileSnailWidthScale,
+  changed |= SaveValue(TRAIL_WIDTH, ProfileKeys::SnailWidthScale,
                        settings_map.trail.scaling_enabled);
 
-  changed |= SaveValue(ENABLE_DETOUR_COST_MARKERS, szProfileDetourCostMarker,
+  changed |= SaveValue(ENABLE_DETOUR_COST_MARKERS, ProfileKeys::DetourCostMarker,
                        settings_map.detour_cost_markers_enabled);
 
-  changed |= SaveValueEnum(AIRCRAFT_SYMBOL, szProfileAircraftSymbol, settings_map.aircraft_symbol);
+  changed |= SaveValueEnum(AIRCRAFT_SYMBOL, ProfileKeys::AircraftSymbol, settings_map.aircraft_symbol);
 
-  changed |= SaveValueEnum(WIND_ARROW_STYLE, szProfileWindArrowStyle, settings_map.wind_arrow_style);
+  changed |= SaveValueEnum(WIND_ARROW_STYLE, ProfileKeys::WindArrowStyle, settings_map.wind_arrow_style);
 
   _changed |= changed;
   _require_restart |= require_restart;

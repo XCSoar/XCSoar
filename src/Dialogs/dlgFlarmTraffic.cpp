@@ -130,7 +130,7 @@ FlarmTrafficControl::OnCreate()
 
   const TrafficSettings &settings = CommonInterface::GetUISettings().traffic;
 
-  Profile::GetEnum(szProfileFlarmSideData, side_display_type);
+  Profile::GetEnum(ProfileKeys::FlarmSideData, side_display_type);
   enable_auto_zoom = settings.auto_zoom;
   enable_north_up = settings.north_up;
 }
@@ -158,7 +158,7 @@ FlarmTrafficControl::SetNorthUp(bool enabled)
 {
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.north_up = enable_north_up = enabled;
-  Profile::Set(szProfileFlarmNorthUp, enabled);
+  Profile::Set(ProfileKeys::FlarmNorthUp, enabled);
   north_up->SetState(enabled);
 }
 
@@ -167,7 +167,7 @@ FlarmTrafficControl::SetAutoZoom(bool enabled)
 {
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.auto_zoom = enable_auto_zoom = enabled;
-  Profile::Set(szProfileFlarmAutoZoom, enabled);
+  Profile::Set(ProfileKeys::FlarmAutoZoom, enabled);
   auto_zoom->SetState(enabled);
 }
 
@@ -594,7 +594,7 @@ SwitchData()
   else
     wdf->side_display_type = FlarmTrafficWindow::SIDE_INFO_VARIO;
 
-  Profile::SetEnum(szProfileFlarmSideData, wdf->side_display_type);
+  Profile::SetEnum(ProfileKeys::FlarmSideData, wdf->side_display_type);
 }
 
 /**

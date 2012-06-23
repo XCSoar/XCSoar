@@ -41,62 +41,62 @@ namespace Profile {
 void
 Profile::Load(DisplaySettings &settings)
 {
-  Get(szProfileAutoBlank, settings.enable_auto_blank);
-  GetEnum(szProfileDisplayOrientation, settings.orientation);
+  Get(ProfileKeys::AutoBlank, settings.enable_auto_blank);
+  GetEnum(ProfileKeys::DisplayOrientation, settings.orientation);
 }
 
 void
 Profile::Load(VarioSettings &settings)
 {
-  Get(szProfileAppGaugeVarioSpeedToFly, settings.show_speed_to_fly);
-  Get(szProfileAppGaugeVarioAvgText, settings.show_average);
-  Get(szProfileAppGaugeVarioMc, settings.show_mc);
-  Get(szProfileAppGaugeVarioBugs, settings.show_bugs);
-  Get(szProfileAppGaugeVarioBallast, settings.show_ballast);
-  Get(szProfileAppGaugeVarioGross, settings.show_gross);
-  Get(szProfileAppAveNeedle, settings.show_average_needle);
+  Get(ProfileKeys::AppGaugeVarioSpeedToFly, settings.show_speed_to_fly);
+  Get(ProfileKeys::AppGaugeVarioAvgText, settings.show_average);
+  Get(ProfileKeys::AppGaugeVarioMc, settings.show_mc);
+  Get(ProfileKeys::AppGaugeVarioBugs, settings.show_bugs);
+  Get(ProfileKeys::AppGaugeVarioBallast, settings.show_ballast);
+  Get(ProfileKeys::AppGaugeVarioGross, settings.show_gross);
+  Get(ProfileKeys::AppAveNeedle, settings.show_average_needle);
 }
 
 void
 Profile::Load(TrafficSettings &settings)
 {
-  Get(szProfileEnableFLARMGauge, settings.enable_gauge);
-  Get(szProfileAutoCloseFlarmDialog, settings.auto_close_dialog);
-  Get(szProfileFlarmAutoZoom, settings.auto_zoom);
-  Get(szProfileFlarmNorthUp, settings.north_up);
-  GetEnum(szProfileFlarmLocation, settings.gauge_location);
+  Get(ProfileKeys::EnableFLARMGauge, settings.enable_gauge);
+  Get(ProfileKeys::AutoCloseFlarmDialog, settings.auto_close_dialog);
+  Get(ProfileKeys::FlarmAutoZoom, settings.auto_zoom);
+  Get(ProfileKeys::FlarmNorthUp, settings.north_up);
+  GetEnum(ProfileKeys::FlarmLocation, settings.gauge_location);
 }
 
 void
 Profile::Load(DialogSettings &settings)
 {
-  GetEnum(szProfileAppDialogStyle, settings.dialog_style);
-  GetEnum(szProfileAppTextInputStyle, settings.text_input_style);
-  GetEnum(szProfileAppDialogTabStyle, settings.tab_style);
-  Get(szProfileUserLevel, settings.expert);
+  GetEnum(ProfileKeys::AppDialogStyle, settings.dialog_style);
+  GetEnum(ProfileKeys::AppTextInputStyle, settings.text_input_style);
+  GetEnum(ProfileKeys::AppDialogTabStyle, settings.tab_style);
+  Get(ProfileKeys::UserLevel, settings.expert);
 }
 
 void
 Profile::Load(VarioSoundSettings &settings)
 {
-  Get(szProfileSoundAudioVario, settings.enabled);
-  Get(szProfileSoundVolume, settings.volume);
-  Get(VarioDeadBandEnabledProfileKey, settings.dead_band_enabled);
+  Get(ProfileKeys::SoundAudioVario, settings.enabled);
+  Get(ProfileKeys::SoundVolume, settings.volume);
+  Get(ProfileKeys::VarioDeadBandEnabled, settings.dead_band_enabled);
 
-  Get(VarioMinFrequencyProfileKey, settings.min_frequency);
-  Get(VarioZeroFrequencyProfileKey, settings.zero_frequency);
-  Get(VarioMaxFrequencyProfileKey, settings.max_frequency);
+  Get(ProfileKeys::VarioMinFrequency, settings.min_frequency);
+  Get(ProfileKeys::VarioZeroFrequency, settings.zero_frequency);
+  Get(ProfileKeys::VarioMaxFrequency, settings.max_frequency);
 
-  Get(VarioMinPeriodProfileKey, settings.min_period_ms);
-  Get(VarioMaxPeriodProfileKey, settings.max_period_ms);
+  Get(ProfileKeys::VarioMinPeriod, settings.min_period_ms);
+  Get(ProfileKeys::VarioMaxPeriod, settings.max_period_ms);
 }
 
 void
 Profile::Load(SoundSettings &settings)
 {
-  Get(szProfileSoundTask, settings.sound_task_enabled);
-  Get(szProfileSoundModes, settings.sound_modes_enabled);
-  Get(szProfileSoundDeadband, settings.sound_deadband);
+  Get(ProfileKeys::SoundTask, settings.sound_task_enabled);
+  Get(ProfileKeys::SoundModes, settings.sound_modes_enabled);
+  Get(ProfileKeys::SoundDeadband, settings.sound_deadband);
 
   Load(settings.vario);
 }
@@ -106,18 +106,18 @@ Profile::Load(UISettings &settings)
 {
   Load(settings.display);
 
-  Get(szProfileMenuTimeout, settings.menu_timeout);
+  Get(ProfileKeys::MenuTimeout, settings.menu_timeout);
 
-  Get(szProfileUseCustomFonts, settings.custom_fonts);
+  Get(ProfileKeys::UseCustomFonts, settings.custom_fonts);
 
-  Get(szProfileEnableTAGauge, settings.enable_thermal_assistant_gauge);
-  Get(szProfileEnableFinalGlideBarMC0, settings.final_glide_bar_mc0_enabled);
+  Get(ProfileKeys::EnableTAGauge, settings.enable_thermal_assistant_gauge);
+  Get(ProfileKeys::EnableFinalGlideBarMC0, settings.final_glide_bar_mc0_enabled);
 
-  GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
+  GetEnum(ProfileKeys::AppStatusMessageAlignment, settings.popup_message_position);
 
-  GetEnum(szProfileHapticFeedback, settings.haptic_feedback);
+  GetEnum(ProfileKeys::HapticFeedback, settings.haptic_feedback);
 
-  GetEnum(szProfileLatLonUnits, settings.coordinate_format);
+  GetEnum(ProfileKeys::LatLonUnits, settings.coordinate_format);
 
   LoadUnits(settings.units);
   Load(settings.map);

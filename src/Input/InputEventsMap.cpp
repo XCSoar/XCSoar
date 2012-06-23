@@ -227,7 +227,7 @@ InputEvents::sub_AutoZoom(int vswitch)
   else
     settings_map.auto_zoom_enabled = (vswitch != 0); // 0 off, 1 on
 
-  Profile::Set(szProfileAutoZoom, settings_map.auto_zoom_enabled);
+  Profile::Set(ProfileKeys::AutoZoom, settings_map.auto_zoom_enabled);
 
   if (settings_map.auto_zoom_enabled &&
       CommonInterface::main_window.GetMap() != NULL)
@@ -249,7 +249,7 @@ InputEvents::sub_SetZoom(fixed value)
       !(displayMode == DisplayMode::CIRCLING && settings_map.circle_zoom_enabled) &&
       !CommonInterface::IsPanning()) {
     settings_map.auto_zoom_enabled = false;  // disable autozoom if user manually changes zoom
-    Profile::Set(szProfileAutoZoom, false);
+    Profile::Set(ProfileKeys::AutoZoom, false);
     Message::AddMessage(_("Auto. zoom off"));
   }
 

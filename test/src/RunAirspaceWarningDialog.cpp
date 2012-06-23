@@ -78,7 +78,7 @@ LoadFiles(Airspaces &airspace_database)
 {
   NullOperationEnvironment operation;
 
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfileAirspaceFile,
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
                                                              ConvertLineReader::AUTO));
   if (reader) {
     AirspaceParser parser(airspace_database);

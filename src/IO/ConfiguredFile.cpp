@@ -57,7 +57,7 @@ OpenMapTextFile(const TCHAR *in_map_file, ConvertLineReader::charset cs)
   assert(in_map_file != NULL);
 
   TCHAR path[MAX_PATH];
-  if (!Profile::GetPath(szProfileMapFile, path))
+  if (!Profile::GetPath(ProfileKeys::MapFile, path))
     return NULL;
 
   _tcscat(path, _T("/"));

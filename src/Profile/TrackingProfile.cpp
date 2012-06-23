@@ -30,9 +30,9 @@ Copyright_License {
 
 namespace Profile {
   static void Load(SkyLinesTracking::Settings &settings) {
-    Get(ProfileSkyLinesTrackingEnabled, settings.enabled);
+    Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
 
-    const TCHAR *key = Get(ProfileSkyLinesTrackingKey);
+    const TCHAR *key = Get(ProfileKeys::SkyLinesTrackingKey);
     if (key != NULL) {
 #ifdef _UNICODE
       settings.key = wcstoull(key, NULL, 16);
@@ -46,17 +46,17 @@ namespace Profile {
 void
 Profile::Load(LiveTrack24Settings &settings)
 {
-  Get(ProfileLiveTrack24Enabled, settings.enabled);
-  settings.server = Get(ProfileLiveTrack24Server, _T("www.livetrack24.com"));
-  settings.username = Get(ProfileLiveTrack24Username, _T(""));
-  settings.password = Get(ProfileLiveTrack24Password, _T(""));
+  Get(ProfileKeys::LiveTrack24Enabled, settings.enabled);
+  settings.server = Get(ProfileKeys::LiveTrack24Server, _T("www.livetrack24.com"));
+  settings.username = Get(ProfileKeys::LiveTrack24Username, _T(""));
+  settings.password = Get(ProfileKeys::LiveTrack24Password, _T(""));
 }
 
 void
 Profile::Load(TrackingSettings &settings)
 {
-  Get(ProfileTrackingInterval, settings.interval);
-  GetEnum(ProfileTrackingVehicleType, settings.vehicleType);
+  Get(ProfileKeys::TrackingInterval, settings.interval);
+  GetEnum(ProfileKeys::TrackingVehicleType, settings.vehicleType);
   Load(settings.skylines);
   Load(settings.livetrack24);
 }

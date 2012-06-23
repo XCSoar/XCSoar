@@ -176,22 +176,22 @@ RouteConfigPanel::Save(bool &_changed, bool &_require_restart)
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
-  changed |= SaveValueEnum(RoutePlannerMode, szProfileRoutePlannerMode,
+  changed |= SaveValueEnum(RoutePlannerMode, ProfileKeys::RoutePlannerMode,
                            route_planner.mode);
 
-  changed |= SaveValueEnum(ReachPolarMode, szProfileReachPolarMode,
+  changed |= SaveValueEnum(ReachPolarMode, ProfileKeys::ReachPolarMode,
                            route_planner.reach_polar_mode);
 
-  changed |= SaveValueEnum(FinalGlideTerrain, szProfileFinalGlideTerrain,
+  changed |= SaveValueEnum(FinalGlideTerrain, ProfileKeys::FinalGlideTerrain,
                            settings_computer.features.final_glide_terrain);
 
-  changed |= SaveValue(RoutePlannerAllowClimb, szProfileRoutePlannerAllowClimb,
+  changed |= SaveValue(RoutePlannerAllowClimb, ProfileKeys::RoutePlannerAllowClimb,
                        route_planner.allow_climb);
 
-  changed |= SaveValue(RoutePlannerUseCeiling, szProfileRoutePlannerUseCeiling,
+  changed |= SaveValue(RoutePlannerUseCeiling, ProfileKeys::RoutePlannerUseCeiling,
                        route_planner.use_ceiling);
 
-  changed |= SaveValueEnum(TurningReach, szProfileTurningReach,
+  changed |= SaveValueEnum(TurningReach, ProfileKeys::TurningReach,
                            route_planner.reach_calc_mode);
   _changed |= changed;
   _require_restart |= require_restart;

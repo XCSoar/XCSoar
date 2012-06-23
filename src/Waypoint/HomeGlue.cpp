@@ -129,10 +129,10 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 void
 WaypointGlue::SaveHome(const ComputerSettings &settings)
 {
-  Profile::Set(szProfileHomeWaypoint, settings.poi.home_waypoint);
+  Profile::Set(ProfileKeys::HomeWaypoint, settings.poi.home_waypoint);
   if (settings.poi.home_location_available)
-    Profile::SetGeoPoint(szProfileHomeLocation, settings.poi.home_location);
+    Profile::SetGeoPoint(ProfileKeys::HomeLocation, settings.poi.home_location);
 
-  Profile::Set(szProfileTeamcodeRefWaypoint,
+  Profile::Set(ProfileKeys::TeamcodeRefWaypoint,
                settings.team_code.team_code_reference_waypoint);
 }

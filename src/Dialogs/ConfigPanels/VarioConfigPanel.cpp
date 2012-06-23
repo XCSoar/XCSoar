@@ -112,26 +112,26 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   VarioSettings &settings = CommonInterface::SetUISettings().vario;
 
-  changed |= SaveValue(AppGaugeVarioSpeedToFly, szProfileAppGaugeVarioSpeedToFly, settings.show_speed_to_fly);
+  changed |= SaveValue(AppGaugeVarioSpeedToFly, ProfileKeys::AppGaugeVarioSpeedToFly, settings.show_speed_to_fly);
 
-  changed |= SaveValue(AppGaugeVarioAvgText, szProfileAppGaugeVarioAvgText, settings.show_average);
+  changed |= SaveValue(AppGaugeVarioAvgText, ProfileKeys::AppGaugeVarioAvgText, settings.show_average);
 
-  changed |= SaveValue(AppGaugeVarioMc, szProfileAppGaugeVarioMc, settings.show_mc);
+  changed |= SaveValue(AppGaugeVarioMc, ProfileKeys::AppGaugeVarioMc, settings.show_mc);
 
-  changed |= SaveValue(AppGaugeVarioBugs, szProfileAppGaugeVarioBugs, settings.show_bugs);
+  changed |= SaveValue(AppGaugeVarioBugs, ProfileKeys::AppGaugeVarioBugs, settings.show_bugs);
 
-  changed |= SaveValue(AppGaugeVarioBallast, szProfileAppGaugeVarioBallast, settings.show_ballast);
+  changed |= SaveValue(AppGaugeVarioBallast, ProfileKeys::AppGaugeVarioBallast, settings.show_ballast);
 
-  changed |= SaveValue(AppGaugeVarioGross, szProfileAppGaugeVarioGross, settings.show_gross);
+  changed |= SaveValue(AppGaugeVarioGross, ProfileKeys::AppGaugeVarioGross, settings.show_gross);
 
-  changed |= SaveValue(AppAveNeedle, szProfileAppAveNeedle, settings.show_average_needle);
+  changed |= SaveValue(AppAveNeedle, ProfileKeys::AppAveNeedle, settings.show_average_needle);
 
 #ifdef HAVE_PCM_PLAYER
   SoundSettings &sound = CommonInterface::SetUISettings().sound;
-  changed |= SaveValue(AudioVario, szProfileSoundAudioVario,
+  changed |= SaveValue(AudioVario, ProfileKeys::SoundAudioVario,
                        sound.vario.enabled);
   unsigned volume = sound.vario.volume;
-  if (SaveValue(Volume, szProfileSoundVolume, volume)) {
+  if (SaveValue(Volume, ProfileKeys::SoundVolume, volume)) {
     sound.vario.volume = volume;
     changed = true;
   }

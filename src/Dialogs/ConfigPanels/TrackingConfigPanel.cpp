@@ -130,20 +130,20 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
   TrackingSettings &settings =
     CommonInterface::SetComputerSettings().tracking;
 
-  changed |= SaveValue(TrackingInterval, ProfileTrackingInterval, settings.interval);
+  changed |= SaveValue(TrackingInterval, ProfileKeys::TrackingInterval, settings.interval);
 
-  changed |= SaveValueEnum(TrackingVehicleType, ProfileTrackingVehicleType,
+  changed |= SaveValueEnum(TrackingVehicleType, ProfileKeys::TrackingVehicleType,
                            settings.vehicleType);
 
-  changed |= SaveValue(LT24Enabled, ProfileLiveTrack24Enabled, settings.livetrack24.enabled);
+  changed |= SaveValue(LT24Enabled, ProfileKeys::LiveTrack24Enabled, settings.livetrack24.enabled);
 
-  changed |= SaveValue(LT24Server, ProfileLiveTrack24Server,
+  changed |= SaveValue(LT24Server, ProfileKeys::LiveTrack24Server,
                        settings.livetrack24.server.buffer(), settings.livetrack24.server.MAX_SIZE);
 
-  changed |= SaveValue(LT24Username, ProfileLiveTrack24Username,
+  changed |= SaveValue(LT24Username, ProfileKeys::LiveTrack24Username,
                        settings.livetrack24.username.buffer(), settings.livetrack24.username.MAX_SIZE);
 
-  changed |= SaveValue(LT24Password, ProfileLiveTrack24Password,
+  changed |= SaveValue(LT24Password, ProfileKeys::LiveTrack24Password,
                        settings.livetrack24.password.buffer(), settings.livetrack24.password.MAX_SIZE);
 
   _changed |= changed;

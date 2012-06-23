@@ -218,7 +218,7 @@ void ActionInterface::SetManualMacCready(fixed mc, bool to_devices)
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
   if (task_behaviour.auto_mc) {
     task_behaviour.auto_mc = false;
-    Profile::Set(szProfileAutoMc, false);
+    Profile::Set(ProfileKeys::AutoMc, false);
   }
 
   SetMacCready(mc, to_devices);

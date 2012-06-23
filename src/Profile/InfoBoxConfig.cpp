@@ -49,11 +49,11 @@ GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
 void
 Profile::Load(InfoBoxSettings &settings)
 {
-  GetEnum(szProfileInfoBoxGeometry, settings.geometry);
-  Get(szProfileAppInverseInfoBox, settings.inverse);
-  Get(szProfileAppInfoBoxColors, settings.use_colors);
+  GetEnum(ProfileKeys::InfoBoxGeometry, settings.geometry);
+  Get(ProfileKeys::AppInverseInfoBox, settings.inverse);
+  Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);
 
-  GetEnum(szProfileAppInfoBoxBorder, settings.border_style);
+  GetEnum(ProfileKeys::AppInfoBoxBorder, settings.border_style);
 
   GetV60InfoBoxManagerConfig(settings);
   TCHAR profileKey[32];

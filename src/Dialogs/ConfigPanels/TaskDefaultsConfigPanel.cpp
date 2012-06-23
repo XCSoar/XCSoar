@@ -225,36 +225,36 @@ TaskDefaultsConfigPanel::Save(bool &_changed, bool &_require_restart)
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
-  changed |= SaveValueEnum(StartType, szProfileStartType, task_behaviour.sector_defaults.start_type);
+  changed |= SaveValueEnum(StartType, ProfileKeys::StartType, task_behaviour.sector_defaults.start_type);
 
-  changed |= SaveValue(StartRadius, UnitGroup::DISTANCE, szProfileStartRadius,
+  changed |= SaveValue(StartRadius, UnitGroup::DISTANCE, ProfileKeys::StartRadius,
                        task_behaviour.sector_defaults.start_radius);
 
-  changed |= SaveValueEnum(TurnpointType, szProfileTurnpointType,
+  changed |= SaveValueEnum(TurnpointType, ProfileKeys::TurnpointType,
                            task_behaviour.sector_defaults.turnpoint_type);
 
-  changed |= SaveValue(TurnpointRadius, UnitGroup::DISTANCE, szProfileTurnpointRadius,
+  changed |= SaveValue(TurnpointRadius, UnitGroup::DISTANCE, ProfileKeys::TurnpointRadius,
                        task_behaviour.sector_defaults.turnpoint_radius);
 
-  changed |= SaveValueEnum(FinishType, szProfileFinishType,
+  changed |= SaveValueEnum(FinishType, ProfileKeys::FinishType,
                            task_behaviour.sector_defaults.finish_type);
 
-  changed |= SaveValue(FinishRadius, UnitGroup::DISTANCE, szProfileFinishRadius,
+  changed |= SaveValue(FinishRadius, UnitGroup::DISTANCE, ProfileKeys::FinishRadius,
                        task_behaviour.sector_defaults.finish_radius);
 
-  changed |= SaveValueEnum(TaskType, szProfileTaskType, task_behaviour.task_type_default);
+  changed |= SaveValueEnum(TaskType, ProfileKeys::TaskType, task_behaviour.task_type_default);
 
   unsigned aatminutes = (unsigned)task_behaviour.ordered_defaults.aat_min_time;
   if (SaveValue(AATMinTime, aatminutes)) {
     task_behaviour.ordered_defaults.aat_min_time = fixed(aatminutes);
-    Profile::Set(szProfileAATMinTime, aatminutes);
+    Profile::Set(ProfileKeys::AATMinTime, aatminutes);
     changed = true;
   }
 
   unsigned aatmargin = task_behaviour.optimise_targets_margin;
   if (SaveValue(AATTimeMargin, aatmargin)) {
     task_behaviour.optimise_targets_margin = aatmargin;
-    Profile::Set(szProfileAATTimeMargin, aatmargin);
+    Profile::Set(ProfileKeys::AATTimeMargin, aatmargin);
     changed = true;
   }
 

@@ -36,9 +36,9 @@ RasterTerrain::OpenTerrain(FileCache *cache, OperationEnvironment &operation)
   TCHAR szFile[MAX_PATH], world_file_buffer[MAX_PATH];
   const TCHAR *world_file;
 
-  if (Profile::GetPath(szProfileTerrainFile, szFile)) {
+  if (Profile::GetPath(ProfileKeys::TerrainFile, szFile)) {
     world_file = NULL;
-  } else if (Profile::GetPath(szProfileMapFile, szFile)) {
+  } else if (Profile::GetPath(ProfileKeys::MapFile, szFile)) {
     _tcscpy(world_file_buffer, szFile);
     _tcscat(world_file_buffer, _T(DIR_SEPARATOR_S "terrain.j2w"));
     world_file = world_file_buffer;

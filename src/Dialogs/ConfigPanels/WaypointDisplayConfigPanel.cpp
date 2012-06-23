@@ -206,26 +206,26 @@ WaypointDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   WaypointRendererSettings &settings = CommonInterface::SetMapSettings().waypoint;
 
-  changed |= SaveValueEnum(WaypointLabels, szProfileDisplayText, settings.display_text_type);
+  changed |= SaveValueEnum(WaypointLabels, ProfileKeys::DisplayText, settings.display_text_type);
 
-  changed |= SaveValueEnum(WaypointArrivalHeightDisplay, szProfileWaypointArrivalHeightDisplay,
+  changed |= SaveValueEnum(WaypointArrivalHeightDisplay, ProfileKeys::WaypointArrivalHeightDisplay,
                            settings.arrival_height_display);
 
-  changed |= SaveValueEnum(WaypointLabelStyle, szProfileWaypointLabelStyle,
+  changed |= SaveValueEnum(WaypointLabelStyle, ProfileKeys::WaypointLabelStyle,
                            settings.landable_render_mode);
 
-  changed |= SaveValueEnum(WaypointLabelSelection, szProfileWaypointLabelSelection,
+  changed |= SaveValueEnum(WaypointLabelSelection, ProfileKeys::WaypointLabelSelection,
                            settings.label_selection);
 
-  changed |= SaveValueEnum(AppIndLandable, szProfileAppIndLandable, settings.landable_style);
+  changed |= SaveValueEnum(AppIndLandable, ProfileKeys::AppIndLandable, settings.landable_style);
 
-  changed |= SaveValue(AppUseSWLandablesRendering, szProfileAppUseSWLandablesRendering,
+  changed |= SaveValue(AppUseSWLandablesRendering, ProfileKeys::AppUseSWLandablesRendering,
                        settings.vector_landable_rendering);
 
-  changed |= SaveValue(AppLandableRenderingScale, szProfileAppLandableRenderingScale,
+  changed |= SaveValue(AppLandableRenderingScale, ProfileKeys::AppLandableRenderingScale,
                        settings.landable_rendering_scale);
 
-  changed |= SaveValue(AppScaleRunwayLength, szProfileAppScaleRunwayLength,
+  changed |= SaveValue(AppScaleRunwayLength, ProfileKeys::AppScaleRunwayLength,
                        settings.scale_runway_length);
 
   _changed |= changed;

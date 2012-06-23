@@ -334,13 +334,13 @@ UpdateCaption(const TCHAR *waypoint_name, int8_t file_num)
     const TCHAR *key;
     switch (file_num) {
     case 1:
-      key = szProfileWaypointFile;
+      key = ProfileKeys::WaypointFile;
       break;
     case 2:
-      key = szProfileAdditionalWaypointFile;
+      key = ProfileKeys::AdditionalWaypointFile;
       break;
     case 3:
-      key = szProfileWatchedWaypointFile;
+      key = ProfileKeys::WatchedWaypointFile;
       break;
     }
 

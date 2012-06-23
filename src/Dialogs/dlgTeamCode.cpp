@@ -91,7 +91,7 @@ OnSetWaypointClicked(gcc_unused WndButton &button)
                                          XCSoarInterface::Basic().location);
   if (wp != NULL) {
     CommonInterface::SetComputerSettings().team_code.team_code_reference_waypoint = wp->id;
-    Profile::Set(szProfileTeamcodeRefWaypoint, wp->id);
+    Profile::Set(ProfileKeys::TeamcodeRefWaypoint, wp->id);
   }
 }
 

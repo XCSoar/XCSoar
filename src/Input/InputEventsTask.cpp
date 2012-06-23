@@ -142,13 +142,13 @@ InputEvents::eventMacCready(const TCHAR *misc)
     ActionInterface::SetManualMacCready(mc);
   } else if (StringIsEqual(misc, _T("auto toggle"))) {
     task_behaviour.auto_mc = !task_behaviour.auto_mc;
-    Profile::Set(szProfileAutoMc, task_behaviour.auto_mc);
+    Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
   } else if (StringIsEqual(misc, _T("auto on"))) {
     task_behaviour.auto_mc = true;
-    Profile::Set(szProfileAutoMc, true);
+    Profile::Set(ProfileKeys::AutoMc, true);
   } else if (StringIsEqual(misc, _T("auto off"))) {
     task_behaviour.auto_mc = false;
-    Profile::Set(szProfileAutoMc, false);
+    Profile::Set(ProfileKeys::AutoMc, false);
   } else if (StringIsEqual(misc, _T("auto show"))) {
     if (task_behaviour.auto_mc) {
       Message::AddMessage(_("Auto. MacCready on"));

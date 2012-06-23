@@ -68,13 +68,13 @@ ReadAirspace(Airspaces &airspaces,
 
   // Read the airspace filenames from the registry
   TCHAR path[MAX_PATH];
-  if (Profile::GetPath(szProfileAirspaceFile, path))
+  if (Profile::GetPath(ProfileKeys::AirspaceFile, path))
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  if (Profile::GetPath(szProfileAdditionalAirspaceFile, path))
+  if (Profile::GetPath(ProfileKeys::AdditionalAirspaceFile, path))
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
 
-  if (Profile::GetPath(szProfileMapFile, path)) {
+  if (Profile::GetPath(ProfileKeys::MapFile, path)) {
     _tcscat(path, _T("/airspace.txt"));
     airspace_ok |= ParseAirspaceFile(parser, path, operation);
   }

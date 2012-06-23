@@ -28,10 +28,10 @@ Copyright_License {
 void
 Profile::Load(RoutePlannerConfig &settings)
 {
-  Get(szProfileSafetyAltitudeTerrain, settings.safety_height_terrain);
-  GetEnum(szProfileRoutePlannerMode, settings.mode);
-  Get(szProfileRoutePlannerAllowClimb, settings.allow_climb);
-  Get(szProfileRoutePlannerUseCeiling, settings.use_ceiling);
-  GetEnum(szProfileTurningReach, settings.reach_calc_mode);
-  GetEnum(szProfileReachPolarMode, settings.reach_polar_mode);
+  Get(ProfileKeys::SafetyAltitudeTerrain, settings.safety_height_terrain);
+  GetEnum(ProfileKeys::RoutePlannerMode, settings.mode);
+  Get(ProfileKeys::RoutePlannerAllowClimb, settings.allow_climb);
+  Get(ProfileKeys::RoutePlannerUseCeiling, settings.use_ceiling);
+  GetEnum(ProfileKeys::TurningReach, settings.reach_calc_mode);
+  GetEnum(ProfileKeys::ReachPolarMode, settings.reach_polar_mode);
 }

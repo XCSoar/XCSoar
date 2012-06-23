@@ -63,7 +63,7 @@ InputEvents::eventSounds(const TCHAR *misc)
   }
 
   AudioVarioGlue::Configure(settings.vario);
-  Profile::Set(szProfileSoundAudioVario, settings.vario.enabled);
+  Profile::Set(ProfileKeys::SoundAudioVario, settings.vario.enabled);
 }
 
 void
@@ -163,7 +163,7 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
     --settings.sound_deadband;
   }
 
-  Profile::Set(szProfileSoundDeadband, settings.sound_deadband);
+  Profile::Set(ProfileKeys::SoundDeadband, settings.sound_deadband);
 
   // TODO feature: send to vario if available
 }
@@ -452,9 +452,9 @@ InputEvents::sub_TerrainTopography(int vswitch)
   }
 
   /* save new values to profile */
-  Profile::Set(szProfileDrawTopography,
+  Profile::Set(ProfileKeys::DrawTopography,
                settings_map.topography_enabled);
-  Profile::Set(szProfileDrawTerrain,
+  Profile::Set(ProfileKeys::DrawTerrain,
                settings_map.terrain.enable);
 
   XCSoarInterface::SendMapSettings(true);

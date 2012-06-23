@@ -244,33 +244,33 @@ AirspaceConfigPanel::Save(bool &_changed, bool &require_restart)
   AirspaceRendererSettings &renderer =
     CommonInterface::SetMapSettings().airspace;
 
-  changed |= SaveValueEnum(AirspaceDisplay, szProfileAltMode, renderer.altitude_mode);
+  changed |= SaveValueEnum(AirspaceDisplay, ProfileKeys::AltMode, renderer.altitude_mode);
 
-  changed |= SaveValue(ClipAltitude, UnitGroup::ALTITUDE, szProfileClipAlt, renderer.clip_altitude);
+  changed |= SaveValue(ClipAltitude, UnitGroup::ALTITUDE, ProfileKeys::ClipAlt, renderer.clip_altitude);
 
-  changed |= SaveValue(AltWarningMargin, UnitGroup::ALTITUDE, szProfileAltMargin, computer.warnings.altitude_warning_margin);
+  changed |= SaveValue(AltWarningMargin, UnitGroup::ALTITUDE, ProfileKeys::AltMargin, computer.warnings.altitude_warning_margin);
 
-  changed |= SaveValue(AirspaceWarnings, szProfileAirspaceWarning, computer.enable_warnings);
+  changed |= SaveValue(AirspaceWarnings, ProfileKeys::AirspaceWarning, computer.enable_warnings);
 
-  if (SaveValue(WarningTime, szProfileWarningTime, computer.warnings.warning_time)) {
+  if (SaveValue(WarningTime, ProfileKeys::WarningTime, computer.warnings.warning_time)) {
     changed = true;
     require_restart = true;
   }
 
-  if (SaveValue(AcknowledgeTime, szProfileAcknowledgementTime,
+  if (SaveValue(AcknowledgeTime, ProfileKeys::AcknowledgementTime,
                 computer.warnings.acknowledgement_time)) {
     changed = true;
     require_restart = true;
   }
 
-  changed |= SaveValue(UseBlackOutline, szProfileAirspaceBlackOutline, renderer.black_outline);
+  changed |= SaveValue(UseBlackOutline, ProfileKeys::AirspaceBlackOutline, renderer.black_outline);
 
-  changed |= SaveValueEnum(AirspaceFillMode, szProfileAirspaceFillMode, renderer.fill_mode);
+  changed |= SaveValueEnum(AirspaceFillMode, ProfileKeys::AirspaceFillMode, renderer.fill_mode);
 
 #ifndef ENABLE_OPENGL
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
-    changed |= SaveValue(AirspaceTransparency, szProfileAirspaceTransparency,
+    changed |= SaveValue(AirspaceTransparency, ProfileKeys::AirspaceTransparency,
                          renderer.transparency);
 #endif
 #endif /* !OpenGL */

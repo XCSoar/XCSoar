@@ -50,13 +50,13 @@ WaypointGlue::GetPath(int file_number, TCHAR *value)
 
   switch (file_number) {
   case 1:
-    key = szProfileWaypointFile;
+    key = ProfileKeys::WaypointFile;
     break;
   case 2:
-    key = szProfileAdditionalWaypointFile;
+    key = ProfileKeys::AdditionalWaypointFile;
     break;
   case 3:
-    key = szProfileWatchedWaypointFile;
+    key = ProfileKeys::WatchedWaypointFile;
     break;
   default:
     return false;
@@ -118,21 +118,21 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
   TCHAR path[MAX_PATH];
 
   // ### FIRST FILE ###
-  if (Profile::GetPath(szProfileWaypointFile, path))
+  if (Profile::GetPath(ProfileKeys::WaypointFile, path))
     found |= LoadWaypointFile(way_points, path, 1, terrain, operation);
 
   // ### SECOND FILE ###
-  if (Profile::GetPath(szProfileAdditionalWaypointFile, path))
+  if (Profile::GetPath(ProfileKeys::AdditionalWaypointFile, path))
     found |= LoadWaypointFile(way_points, path, 2, terrain, operation);
 
   // ### WATCHED WAYPOINT/THIRD FILE ###
-  if (Profile::GetPath(szProfileWatchedWaypointFile, path))
+  if (Profile::GetPath(ProfileKeys::WatchedWaypointFile, path))
     found |= LoadWaypointFile(way_points, path, 3, terrain, operation);
 
   // ### MAP/FOURTH FILE ###
 
   // If no waypoint file found yet
-  if (!found && Profile::GetPath(szProfileMapFile, path)) {
+  if (!found && Profile::GetPath(ProfileKeys::MapFile, path)) {
     TCHAR *tail = path + _tcslen(path);
 
     _tcscpy(tail, _T("/waypoints.xcw"));

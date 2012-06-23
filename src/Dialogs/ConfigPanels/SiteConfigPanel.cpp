@@ -95,44 +95,44 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFileReader(_("Map database"),
                 _("The name of the file (.xcm) containing terrain, topography, and optionally "
                     "waypoints, their details and airspaces."),
-                szProfileMapFile, _T("*.xcm\0*.lkm\0"));
+                ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"));
 
   AddFileReader(_("Waypoints"),
                 _("Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), "
                     "Zander files (.wpz) or SeeYou files (.cup)."),
-                szProfileWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+                ProfileKeys::WaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
 
   AddFileReader(_("More waypoints"),
                 _("Secondary waypoints file.  This may be used to add waypoints for a competition."),
-                szProfileAdditionalWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+                ProfileKeys::AdditionalWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
   SetExpertRow(AdditionalWaypointFile);
 
   AddFileReader(_("Watched waypoints"),
                 _("Waypoint file containing special waypoints for which additional computations like "
                     "calculation of arrival height in map display always takes place. Useful for "
                     "waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes."),
-                szProfileWatchedWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+                ProfileKeys::WatchedWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
   SetExpertRow(WatchedWaypointFile);
 
   AddFileReader(_("Airspaces"), _("The file name of the primary airspace file."),
-                szProfileAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+                ProfileKeys::AirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
 
   AddFileReader(_("More airspaces"), _("The file name of the secondary airspace file."),
-                szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
+                ProfileKeys::AdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
   SetExpertRow(AdditionalAirspaceFile);
 
   AddFileReader(_("Terrain file"), _("The name of the file containing digital elevation terrain data."),
-                szProfileTerrainFile, _T("*.jp2\0"));
+                ProfileKeys::TerrainFile, _T("*.jp2\0"));
   SetExpertRow(TerrainFile);
 
   AddFileReader(_("Topography file"), _("Specifies the file defining the topographical features."),
-                szProfileTopographyFile, _T("*.tpl\0"));
+                ProfileKeys::TopographyFile, _T("*.tpl\0"));
   SetExpertRow(TopographyFile);
 
   AddFileReader(_("Waypoint details"),
                 _("The file may contain extracts from enroute supplements or other contributed "
                     "information about individual waypoints and airfields."),
-                szProfileAirfieldFile, _T("*.txt\0"));
+                ProfileKeys::AirfieldFile, _T("*.txt\0"));
   SetExpertRow(AirfieldFile);
 }
 
@@ -141,21 +141,21 @@ SiteConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
   bool changed = false, require_restart = false;
 
-  MapFileChanged = SaveValueFileReader(MapFile, szProfileMapFile);
+  MapFileChanged = SaveValueFileReader(MapFile, ProfileKeys::MapFile);
 
   // WaypointFileChanged has already a meaningful value
-  WaypointFileChanged |= SaveValueFileReader(WaypointFile, szProfileWaypointFile);
-  WaypointFileChanged |= SaveValueFileReader(AdditionalWaypointFile, szProfileAdditionalWaypointFile);
-  WaypointFileChanged |= SaveValueFileReader(WatchedWaypointFile, szProfileWatchedWaypointFile);
+  WaypointFileChanged |= SaveValueFileReader(WaypointFile, ProfileKeys::WaypointFile);
+  WaypointFileChanged |= SaveValueFileReader(AdditionalWaypointFile, ProfileKeys::AdditionalWaypointFile);
+  WaypointFileChanged |= SaveValueFileReader(WatchedWaypointFile, ProfileKeys::WatchedWaypointFile);
 
-  AirspaceFileChanged = SaveValueFileReader(AirspaceFile, szProfileAirspaceFile);
-  AirspaceFileChanged |= SaveValueFileReader(AdditionalAirspaceFile, szProfileAdditionalAirspaceFile);
+  AirspaceFileChanged = SaveValueFileReader(AirspaceFile, ProfileKeys::AirspaceFile);
+  AirspaceFileChanged |= SaveValueFileReader(AdditionalAirspaceFile, ProfileKeys::AdditionalAirspaceFile);
 
-  TerrainFileChanged = SaveValueFileReader(TerrainFile, szProfileTerrainFile);
+  TerrainFileChanged = SaveValueFileReader(TerrainFile, ProfileKeys::TerrainFile);
 
-  TopographyFileChanged = SaveValueFileReader(TopographyFile, szProfileTopographyFile);
+  TopographyFileChanged = SaveValueFileReader(TopographyFile, ProfileKeys::TopographyFile);
 
-  AirfieldFileChanged = SaveValueFileReader(AirfieldFile, szProfileAirfieldFile);
+  AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
 
 
   changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||

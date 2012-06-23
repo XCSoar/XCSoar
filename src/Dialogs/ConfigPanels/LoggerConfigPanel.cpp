@@ -104,26 +104,26 @@ LoggerConfigPanel::Save(bool &changed, bool &require_restart)
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   LoggerSettings &logger = settings_computer.logger;
 
-  changed |= SaveValue(LoggerTimeStepCruise, szProfileLoggerTimeStepCruise,
+  changed |= SaveValue(LoggerTimeStepCruise, ProfileKeys::LoggerTimeStepCruise,
                        logger.time_step_cruise);
 
-  changed |= SaveValue(LoggerTimeStepCircling, szProfileLoggerTimeStepCircling,
+  changed |= SaveValue(LoggerTimeStepCircling, ProfileKeys::LoggerTimeStepCircling,
                        logger.time_step_circling);
 
-  changed |= SaveValue(LoggerShortName, szProfileLoggerShort,
+  changed |= SaveValue(LoggerShortName, ProfileKeys::LoggerShort,
                        logger.short_name);
 
   /* GUI label is "Enable Auto Logger" */
-  changed |= SaveValueEnum(DisableAutoLogger, szProfileAutoLogger,
+  changed |= SaveValueEnum(DisableAutoLogger, ProfileKeys::AutoLogger,
                            logger.auto_logger);
 
-  changed |= SaveValue(EnableNMEALogger, szProfileEnableNMEALogger,
+  changed |= SaveValue(EnableNMEALogger, ProfileKeys::EnableNMEALogger,
                        logger.enable_nmea_logger);
 
   if (logger.enable_nmea_logger)
     NMEALogger::enabled = true;
 
-  if (SaveValue(EnableFlightLogger, szProfileEnableFlightLogger,
+  if (SaveValue(EnableFlightLogger, ProfileKeys::EnableFlightLogger,
                 logger.enable_flight_logger)) {
     changed = true;
 

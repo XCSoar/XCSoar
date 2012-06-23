@@ -145,23 +145,23 @@ MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
 
   MapSettings &settings_map = CommonInterface::SetMapSettings();
 
-  changed |= SaveValueEnum(OrientationCruise, szProfileOrientationCruise,
+  changed |= SaveValueEnum(OrientationCruise, ProfileKeys::OrientationCruise,
                            settings_map.cruise_orientation);
 
-  changed |= SaveValueEnum(OrientationCircling, szProfileOrientationCircling,
+  changed |= SaveValueEnum(OrientationCircling, ProfileKeys::OrientationCircling,
                            settings_map.circling_orientation);
 
-  changed |= SaveValueEnum(MapShiftBias, szProfileMapShiftBias,
+  changed |= SaveValueEnum(MapShiftBias, ProfileKeys::MapShiftBias,
                            settings_map.map_shift_bias);
 
-  changed |= SaveValue(GliderScreenPosition, szProfileGliderScreenPosition,
+  changed |= SaveValue(GliderScreenPosition, ProfileKeys::GliderScreenPosition,
                        settings_map.glider_screen_position);
 
-  changed |= SaveValue(CirclingZoom, szProfileCircleZoom,
+  changed |= SaveValue(CirclingZoom, ProfileKeys::CircleZoom,
                        settings_map.circle_zoom_enabled);
 
   changed |= SaveValue(MaxAutoZoomDistance, UnitGroup::DISTANCE,
-                       szProfileMaxAutoZoomDistance,
+                       ProfileKeys::MaxAutoZoomDistance,
                        settings_map.max_auto_zoom_distance);
 
   _changed |= changed;

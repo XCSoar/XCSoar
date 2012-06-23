@@ -115,20 +115,20 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
   TaskBehaviour &task_behaviour = settings_computer.task;
 
   changed |= SaveValue(ArrivalHeight, UnitGroup::ALTITUDE,
-                       szProfileSafetyAltitudeArrival,
+                       ProfileKeys::SafetyAltitudeArrival,
                        task_behaviour.safety_height_arrival);
 
   changed |= SaveValue(TerrainHeight, UnitGroup::ALTITUDE,
-                       szProfileSafetyAltitudeTerrain,
+                       ProfileKeys::SafetyAltitudeTerrain,
                        task_behaviour.route_planner.safety_height_terrain);
 
-  changed |= SaveValueEnum(AlternateMode, szProfileAbortTaskMode,
+  changed |= SaveValueEnum(AlternateMode, ProfileKeys::AbortTaskMode,
                            task_behaviour.abort_task_mode);
 
   fixed degradation = (fixed_one - settings_computer.polar.degradation_factor) * 100;
   if (SaveValue(PolarDegradation, degradation)) {
     settings_computer.polar.SetDegradationFactor(fixed_one - degradation / 100);
-    Profile::Set(ProfilePolarDegradation,
+    Profile::Set(ProfileKeys::PolarDegradation,
                  settings_computer.polar.degradation_factor);
     if (protected_task_manager != NULL)
       protected_task_manager->SetGlidePolar(settings_computer.polar.glide_polar_task);
@@ -136,13 +136,13 @@ SafetyFactorsConfigPanel::Save(bool &_changed, bool &_require_restart)
   }
 
   if (SaveValue(SafetyMC, UnitGroup::VERTICAL_SPEED, task_behaviour.safety_mc)) {
-    Profile::Set(szProfileSafetyMacCready,
+    Profile::Set(ProfileKeys::SafetyMacCready,
                  iround(task_behaviour.safety_mc * 10));
     changed = true;
   }
 
   if (SaveValue(RiskFactor, task_behaviour.risk_gamma)) {
-    Profile::Set(szProfileRiskGamma,
+    Profile::Set(ProfileKeys::RiskGamma,
                  iround(task_behaviour.risk_gamma * 10));
     changed = true;
   }

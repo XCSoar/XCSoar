@@ -122,21 +122,21 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
 
-  changed |= SaveValueEnum(AutoMcMode, szProfileAutoMcMode, settings_computer.task.auto_mc_mode);
+  changed |= SaveValueEnum(AutoMcMode, ProfileKeys::AutoMcMode, settings_computer.task.auto_mc_mode);
 
-  changed |= SaveValue(BlockSTF, szProfileBlockSTF,
+  changed |= SaveValue(BlockSTF, ProfileKeys::BlockSTF,
                        settings_computer.features.block_stf_enabled);
 
-  changed |= SaveValue(EnableNavBaroAltitude, szProfileEnableNavBaroAltitude,
+  changed |= SaveValue(EnableNavBaroAltitude, ProfileKeys::EnableNavBaroAltitude,
                        settings_computer.features.nav_baro_altitude_enabled);
 
-  changed |= SaveValue(EnableExternalTriggerCruise, szProfileEnableExternalTriggerCruise,
+  changed |= SaveValue(EnableExternalTriggerCruise, ProfileKeys::EnableExternalTriggerCruise,
                        settings_computer.external_trigger_cruise_enabled);
 
   changed |= require_restart |=
-      SaveValueEnum(AverEffTime, szProfileAverEffTime, settings_computer.average_eff_time);
+      SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime, settings_computer.average_eff_time);
 
-  changed |= SaveValue(PredictWindDrift, szProfilePredictWindDrift,
+  changed |= SaveValue(PredictWindDrift, ProfileKeys::PredictWindDrift,
                        task_behaviour.glide.predict_wind_drift);
 
   _changed |= changed;

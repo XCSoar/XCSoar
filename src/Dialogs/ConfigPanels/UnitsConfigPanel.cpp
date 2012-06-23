@@ -244,22 +244,22 @@ UnitsConfigPanel::Save(bool &_changed, bool &_require_restart)
   /* the Units settings affect how other form values are read and translated
    * so changes to Units settings should be processed after all other form settings
    */
-  changed |= SaveValueEnum(UnitsSpeed, szProfileSpeedUnitsValue, config.speed_unit);
+  changed |= SaveValueEnum(UnitsSpeed, ProfileKeys::SpeedUnitsValue, config.speed_unit);
   config.wind_speed_unit = config.speed_unit; // Mapping the wind speed to the speed unit
 
-  changed |= SaveValueEnum(UnitsDistance, szProfileDistanceUnitsValue, config.distance_unit);
+  changed |= SaveValueEnum(UnitsDistance, ProfileKeys::DistanceUnitsValue, config.distance_unit);
 
-  changed |= SaveValueEnum(UnitsLift, szProfileLiftUnitsValue, config.vertical_speed_unit);
+  changed |= SaveValueEnum(UnitsLift, ProfileKeys::LiftUnitsValue, config.vertical_speed_unit);
 
-  changed |= SaveValueEnum(UnitsAltitude, szProfileAltitudeUnitsValue, config.altitude_unit);
+  changed |= SaveValueEnum(UnitsAltitude, ProfileKeys::AltitudeUnitsValue, config.altitude_unit);
 
-  changed |= SaveValueEnum(UnitsTemperature, szProfileTemperatureUnitsValue, config.temperature_unit);
+  changed |= SaveValueEnum(UnitsTemperature, ProfileKeys::TemperatureUnitsValue, config.temperature_unit);
 
-  changed |= SaveValueEnum(UnitsTaskSpeed, szProfileTaskSpeedUnitsValue, config.task_speed_unit);
+  changed |= SaveValueEnum(UnitsTaskSpeed, ProfileKeys::TaskSpeedUnitsValue, config.task_speed_unit);
 
-  changed |= SaveValueEnum(UnitsPressure, szProfilePressureUnitsValue, config.pressure_unit);
+  changed |= SaveValueEnum(UnitsPressure, ProfileKeys::PressureUnitsValue, config.pressure_unit);
 
-  changed |= SaveValueEnum(UnitsLatLon, szProfileLatLonUnits, coordinate_format);
+  changed |= SaveValueEnum(UnitsLatLon, ProfileKeys::LatLonUnits, coordinate_format);
 
   _changed |= changed;
   _require_restart |= require_restart;

@@ -358,7 +358,7 @@ ReadLanguageFile()
   LogStartUp(_T("Loading language file"));
 
   TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
-  const TCHAR *value = Profile::GetPath(szProfileLanguageFile, buffer)
+  const TCHAR *value = Profile::GetPath(ProfileKeys::LanguageFile, buffer)
     ? buffer : _T("");
 
   if (_tcscmp(value, _T("none")) == 0)

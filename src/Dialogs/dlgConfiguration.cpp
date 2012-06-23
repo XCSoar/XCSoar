@@ -154,7 +154,7 @@ OnUserLevel(CheckBoxControl &control)
 {
   const bool expert = control.GetState();
   CommonInterface::SetUISettings().dialog.expert = expert;
-  Profile::Set(szProfileUserLevel, expert);
+  Profile::Set(ProfileKeys::UserLevel, expert);
   wf->FilterAdvanced(expert);
   wTabMenu->UpdateLayout();
 }

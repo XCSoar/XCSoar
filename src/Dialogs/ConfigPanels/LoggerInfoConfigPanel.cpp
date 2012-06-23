@@ -74,7 +74,7 @@ LoggerInfoConfigPanel::Save(bool &changed, bool &require_restart)
   LoggerSettings &logger = settings_computer.logger;
   Plane &plane = settings_computer.plane;
 
-  changed |= SaveValue(PilotName, szProfilePilotName,
+  changed |= SaveValue(PilotName, ProfileKeys::PilotName,
                        logger.pilot_name.buffer(), logger.pilot_name.MAX_SIZE);
 
   plane_settings_changed |= SaveValue(AircraftType, plane.type.buffer(),
@@ -85,7 +85,7 @@ LoggerInfoConfigPanel::Save(bool &changed, bool &require_restart)
                                       plane.competition_id.MAX_SIZE);
   changed |= plane_settings_changed;
 
-  changed |= SaveValue(LoggerID, szProfileLoggerID,
+  changed |= SaveValue(LoggerID, ProfileKeys::LoggerID,
                        logger.logger_id.buffer(), logger.logger_id.MAX_SIZE);
 
   if (plane_settings_changed) {

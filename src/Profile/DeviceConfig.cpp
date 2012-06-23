@@ -299,7 +299,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
   if (!Get(buffer, config.ignore_checksum))
-    Get(szProfileIgnoreNMEAChecksum, config.ignore_checksum);
+    Get(ProfileKeys::IgnoreNMEAChecksum, config.ignore_checksum);
 }
 
 static const TCHAR *

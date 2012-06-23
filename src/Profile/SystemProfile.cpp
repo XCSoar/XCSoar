@@ -33,6 +33,6 @@ Profile::Load(SystemSettings &settings)
     GetDeviceConfig(i, settings.devices[i]);
 
 #ifdef HAVE_MODEL_TYPE
-  Profile::GetEnum(szProfileAppInfoBoxModel, settings.model_type);
+  Profile::GetEnum(ProfileKeys::AppInfoBoxModel, settings.model_type);
 #endif
 }

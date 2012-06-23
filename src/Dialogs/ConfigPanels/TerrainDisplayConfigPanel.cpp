@@ -232,13 +232,13 @@ TerrainDisplayConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed = (settings_map.terrain != terrain_settings);
 
   settings_map.terrain = terrain_settings;
-  Profile::Set(szProfileDrawTerrain, terrain_settings.enable);
-  Profile::Set(szProfileTerrainContrast, terrain_settings.contrast);
-  Profile::Set(szProfileTerrainBrightness, terrain_settings.brightness);
-  Profile::Set(szProfileTerrainRamp, terrain_settings.ramp);
-  Profile::SetEnum(szProfileSlopeShadingType, terrain_settings.slope_shading);
+  Profile::Set(ProfileKeys::DrawTerrain, terrain_settings.enable);
+  Profile::Set(ProfileKeys::TerrainContrast, terrain_settings.contrast);
+  Profile::Set(ProfileKeys::TerrainBrightness, terrain_settings.brightness);
+  Profile::Set(ProfileKeys::TerrainRamp, terrain_settings.ramp);
+  Profile::SetEnum(ProfileKeys::SlopeShadingType, terrain_settings.slope_shading);
 
-  changed |= SaveValue(EnableTopography, szProfileDrawTopography,
+  changed |= SaveValue(EnableTopography, ProfileKeys::DrawTopography,
                        settings_map.topography_enabled);
 
   _changed |= changed;

@@ -128,8 +128,8 @@ GlueMapWindow::SaveDisplayModeScales()
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
 
-  Profile::Set(szProfileClimbMapScale, (int)(settings.circling_scale * 10000));
-  Profile::Set(szProfileCruiseMapScale, (int)(settings.cruise_scale * 10000));
+  Profile::Set(ProfileKeys::ClimbMapScale, (int)(settings.circling_scale * 10000));
+  Profile::Set(ProfileKeys::CruiseMapScale, (int)(settings.cruise_scale * 10000));
 }
 
 void

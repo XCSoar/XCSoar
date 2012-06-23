@@ -36,36 +36,36 @@ namespace Profile {
 void
 Profile::Load(GlideSettings &settings)
 {
-  Get(szProfilePredictWindDrift, settings.predict_wind_drift);
+  Get(ProfileKeys::PredictWindDrift, settings.predict_wind_drift);
 }
 
 void
 Profile::Load(TaskStartMargins &settings)
 {
-  Get(szProfileStartMaxHeightMargin, settings.start_max_height_margin);
-  Get(szProfileStartMaxSpeedMargin, settings.start_max_speed_margin);
+  Get(ProfileKeys::StartMaxHeightMargin, settings.start_max_height_margin);
+  Get(ProfileKeys::StartMaxSpeedMargin, settings.start_max_speed_margin);
 }
 
 void
 Profile::Load(SectorDefaults &settings)
 {
-  GetEnum(szProfileStartType, settings.start_type);
-  Get(szProfileStartRadius, settings.start_radius);
-  GetEnum(szProfileTurnpointType, settings.turnpoint_type);
-  Get(szProfileTurnpointRadius, settings.turnpoint_radius);
-  GetEnum(szProfileFinishType, settings.finish_type);
-  Get(szProfileFinishRadius, settings.finish_radius);
+  GetEnum(ProfileKeys::StartType, settings.start_type);
+  Get(ProfileKeys::StartRadius, settings.start_radius);
+  GetEnum(ProfileKeys::TurnpointType, settings.turnpoint_type);
+  Get(ProfileKeys::TurnpointRadius, settings.turnpoint_radius);
+  GetEnum(ProfileKeys::FinishType, settings.finish_type);
+  Get(ProfileKeys::FinishRadius, settings.finish_radius);
 }
 
 void
 Profile::Load(OrderedTaskBehaviour &settings)
 {
-  GetEnum(szProfileFinishHeightRef, settings.finish_min_height_ref);
-  Get(szProfileFinishMinHeight, settings.finish_min_height);
-  GetEnum(szProfileStartHeightRef, settings.start_max_height_ref);
-  Get(szProfileStartMaxHeight, settings.start_max_height);
-  Get(szProfileStartMaxSpeed, settings.start_max_speed);
-  Get(szProfileAATMinTime, settings.aat_min_time);
+  GetEnum(ProfileKeys::FinishHeightRef, settings.finish_min_height_ref);
+  Get(ProfileKeys::FinishMinHeight, settings.finish_min_height);
+  GetEnum(ProfileKeys::StartHeightRef, settings.start_max_height_ref);
+  Get(ProfileKeys::StartMaxHeight, settings.start_max_height);
+  Get(ProfileKeys::StartMaxSpeed, settings.start_max_speed);
+  Get(ProfileKeys::AATMinTime, settings.aat_min_time);
 }
 
 void
@@ -74,30 +74,30 @@ Profile::Load(TaskBehaviour &settings)
   Load((TaskStartMargins &)settings);
   Load(settings.glide);
 
-  Get(szProfileAATTimeMargin, settings.optimise_targets_margin);
-  Get(szProfileAutoMc, settings.auto_mc);
-  GetEnum(szProfileAutoMcMode, settings.auto_mc_mode);
+  Get(ProfileKeys::AATTimeMargin, settings.optimise_targets_margin);
+  Get(ProfileKeys::AutoMc, settings.auto_mc);
+  GetEnum(ProfileKeys::AutoMcMode, settings.auto_mc_mode);
 
   unsigned Temp;
-  if (Get(szProfileRiskGamma, Temp))
+  if (Get(ProfileKeys::RiskGamma, Temp))
     settings.risk_gamma = fixed(Temp) / 10;
 
-  if (GetEnum(szProfileOLCRules, settings.contest)) {
+  if (GetEnum(ProfileKeys::OLCRules, settings.contest)) {
     /* handle out-dated Sprint rule in profile */
     if (settings.contest == OLC_Sprint)
       settings.contest = OLC_League;
   }
 
-  if (Get(szProfileSafetyMacCready, Temp))
+  if (Get(ProfileKeys::SafetyMacCready, Temp))
     settings.safety_mc = fixed(Temp) / 10;
 
-  Get(szProfileSafetyAltitudeArrival, settings.safety_height_arrival);
-  GetEnum(szProfileTaskType, settings.task_type_default);
+  Get(ProfileKeys::SafetyAltitudeArrival, settings.safety_height_arrival);
+  GetEnum(ProfileKeys::TaskType, settings.task_type_default);
 
   Load(settings.sector_defaults);
   Load(settings.ordered_defaults);
 
-  GetEnum(szProfileAbortTaskMode, settings.abort_task_mode);
+  GetEnum(ProfileKeys::AbortTaskMode, settings.abort_task_mode);
 
   Load(settings.route_planner);
 }

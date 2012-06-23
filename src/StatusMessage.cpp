@@ -59,7 +59,7 @@ StatusMessageList::LoadFile()
 {
   LogStartUp(_T("Loading status file"));
 
-  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(szProfileStatusFile));
+  std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::StatusFile));
   if (reader)
     LoadFile(*reader);
 }

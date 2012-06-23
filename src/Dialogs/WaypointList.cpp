@@ -203,11 +203,11 @@ PrepareData()
   data_field = (DataFieldEnum*)type_filter->GetDataField();
   data_field->addEnumTexts(type_filter_items);
 
-  const TCHAR *p = Profile::GetPathBase(szProfileWaypointFile);
+  const TCHAR *p = Profile::GetPathBase(ProfileKeys::WaypointFile);
   if (p != NULL)
     data_field->replaceEnumText((unsigned)TypeFilter::FILE_1, p);
 
-  p = Profile::GetPathBase(szProfileAdditionalWaypointFile);
+  p = Profile::GetPathBase(ProfileKeys::AdditionalWaypointFile);
   if (p != NULL)
     data_field->replaceEnumText((unsigned)TypeFilter::FILE_2, p);
 

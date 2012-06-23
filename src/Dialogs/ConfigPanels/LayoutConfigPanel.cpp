@@ -214,7 +214,7 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   if (Display::RotateSupported()) {
     orientation_changed =
-      SaveValueEnum(DisplayOrientation, szProfileDisplayOrientation,
+      SaveValueEnum(DisplayOrientation, ProfileKeys::DisplayOrientation,
                     ui_settings.display.orientation);
     changed |= orientation_changed;
   }
@@ -222,32 +222,32 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
   bool info_box_geometry_changed = false;
 
   info_box_geometry_changed |=
-    SaveValueEnum(AppInfoBoxGeom, szProfileInfoBoxGeometry,
+    SaveValueEnum(AppInfoBoxGeom, ProfileKeys::InfoBoxGeometry,
                   ui_settings.info_boxes.geometry);
 
   info_box_geometry_changed |=
-    SaveValueEnum(AppFlarmLocation, szProfileFlarmLocation,
+    SaveValueEnum(AppFlarmLocation, ProfileKeys::FlarmLocation,
                   ui_settings.traffic.gauge_location);
 
   changed |= info_box_geometry_changed;
 
-  changed |= SaveValueEnum(AppStatusMessageAlignment, szProfileAppStatusMessageAlignment,
+  changed |= SaveValueEnum(AppStatusMessageAlignment, ProfileKeys::AppStatusMessageAlignment,
                            ui_settings.popup_message_position);
 
-  changed |= SaveValueEnum(DialogStyle, szProfileAppDialogStyle,
+  changed |= SaveValueEnum(DialogStyle, ProfileKeys::AppDialogStyle,
                            ui_settings.dialog.dialog_style);
 
   changed |= require_restart |=
-    SaveValueEnum(AppInfoBoxBorder, szProfileAppInfoBoxBorder, ui_settings.info_boxes.border_style);
+    SaveValueEnum(AppInfoBoxBorder, ProfileKeys::AppInfoBoxBorder, ui_settings.info_boxes.border_style);
 
   changed |= require_restart |=
-    SaveValue(AppInverseInfoBox, szProfileAppInverseInfoBox, ui_settings.info_boxes.inverse);
+    SaveValue(AppInverseInfoBox, ProfileKeys::AppInverseInfoBox, ui_settings.info_boxes.inverse);
 
   changed |= require_restart |=
-    SaveValue(AppInfoBoxColors, szProfileAppInfoBoxColors, ui_settings.info_boxes.use_colors);
+    SaveValue(AppInfoBoxColors, ProfileKeys::AppInfoBoxColors, ui_settings.info_boxes.use_colors);
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
-  changed |= SaveValueEnum(TabDialogStyle, szProfileAppDialogTabStyle, dialog_settings.tab_style);
+  changed |= SaveValueEnum(TabDialogStyle, ProfileKeys::AppDialogTabStyle, dialog_settings.tab_style);
 
   if (orientation_changed) {
     assert(Display::RotateSupported());

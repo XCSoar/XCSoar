@@ -42,17 +42,17 @@ void
 Profile::Load(WindSettings &settings)
 {
   unsigned auto_wind_mode = settings.GetLegacyAutoWindMode();
-  if (Get(szProfileAutoWind, auto_wind_mode))
+  if (Get(ProfileKeys::AutoWind, auto_wind_mode))
     settings.SetLegacyAutoWindMode(auto_wind_mode);
 
-  Get(szProfileExternalWind, settings.use_external_wind);
+  Get(ProfileKeys::ExternalWind, settings.use_external_wind);
 }
 
 void
 Profile::Load(PolarSettings &settings)
 {
   fixed degradation;
-  if (Get(ProfilePolarDegradation, degradation) &&
+  if (Get(ProfileKeys::PolarDegradation, degradation) &&
       degradation >= fixed_half && degradation <= fixed_one)
     settings.SetDegradationFactor(degradation);
 }
@@ -60,61 +60,61 @@ Profile::Load(PolarSettings &settings)
 void
 Profile::Load(LoggerSettings &settings)
 {
-  Get(szProfileLoggerTimeStepCruise, settings.time_step_cruise);
-  Get(szProfileLoggerTimeStepCircling, settings.time_step_circling);
-  Get(szProfileLoggerShort, settings.short_name);
+  Get(ProfileKeys::LoggerTimeStepCruise, settings.time_step_cruise);
+  Get(ProfileKeys::LoggerTimeStepCircling, settings.time_step_circling);
+  Get(ProfileKeys::LoggerShort, settings.short_name);
 
-  if (!GetEnum(szProfileAutoLogger, settings.auto_logger)) {
+  if (!GetEnum(ProfileKeys::AutoLogger, settings.auto_logger)) {
     // Legacy
     bool disable_auto_logger;
-    if (Get(szProfileDisableAutoLogger, disable_auto_logger))
+    if (Get(ProfileKeys::DisableAutoLogger, disable_auto_logger))
       settings.auto_logger =
           disable_auto_logger ? LoggerSettings::AutoLogger::OFF :
                                 LoggerSettings::AutoLogger::ON;
   }
 
-  Get(szProfileLoggerID, settings.logger_id.buffer(),
+  Get(ProfileKeys::LoggerID, settings.logger_id.buffer(),
       settings.logger_id.MAX_SIZE);
-  Get(szProfilePilotName, settings.pilot_name.buffer(),
+  Get(ProfileKeys::PilotName, settings.pilot_name.buffer(),
       settings.pilot_name.MAX_SIZE);
-  Get(szProfileEnableFlightLogger, settings.enable_flight_logger);
-  Get(szProfileEnableNMEALogger, settings.enable_nmea_logger);
+  Get(ProfileKeys::EnableFlightLogger, settings.enable_flight_logger);
+  Get(ProfileKeys::EnableNMEALogger, settings.enable_nmea_logger);
 }
 
 void
 Profile::Load(TeamCodeSettings &settings)
 {
-  Get(szProfileTeamcodeRefWaypoint, settings.team_code_reference_waypoint);
+  Get(ProfileKeys::TeamcodeRefWaypoint, settings.team_code_reference_waypoint);
 }
 
 void
 Profile::Load(VoiceSettings &settings)
 {
-  Get(szProfileVoiceClimbRate, settings.voice_climb_rate_enabled);
-  Get(szProfileVoiceTerrain, settings.voice_terrain_enabled);
-  Get(szProfileVoiceWaypointDistance, settings.voice_waypoint_distance_enabled);
-  Get(szProfileVoiceTaskAltitudeDifference,
+  Get(ProfileKeys::VoiceClimbRate, settings.voice_climb_rate_enabled);
+  Get(ProfileKeys::VoiceTerrain, settings.voice_terrain_enabled);
+  Get(ProfileKeys::VoiceWaypointDistance, settings.voice_waypoint_distance_enabled);
+  Get(ProfileKeys::VoiceTaskAltitudeDifference,
       settings.voice_task_altitude_difference_enabled);
-  Get(szProfileVoiceMacCready, settings.voice_mac_cready_enabled);
-  Get(szProfileVoiceNewWaypoint, settings.voice_new_waypoint_enabled);
-  Get(szProfileVoiceInSector, settings.voice_in_sector_enabled);
-  Get(szProfileVoiceAirspace, settings.voice_airspace_enabled);
+  Get(ProfileKeys::VoiceMacCready, settings.voice_mac_cready_enabled);
+  Get(ProfileKeys::VoiceNewWaypoint, settings.voice_new_waypoint_enabled);
+  Get(ProfileKeys::VoiceInSector, settings.voice_in_sector_enabled);
+  Get(ProfileKeys::VoiceAirspace, settings.voice_airspace_enabled);
 }
 
 void
 Profile::Load(PlacesOfInterestSettings &settings)
 {
-  Get(szProfileHomeWaypoint, settings.home_waypoint);
+  Get(ProfileKeys::HomeWaypoint, settings.home_waypoint);
   settings.home_location_available =
-    GetGeoPoint(szProfileHomeLocation, settings.home_location);
+    GetGeoPoint(ProfileKeys::HomeLocation, settings.home_location);
 }
 
 void
 Profile::Load(FeaturesSettings &settings)
 {
-  GetEnum(szProfileFinalGlideTerrain, settings.final_glide_terrain);
-  Get(szProfileBlockSTF, settings.block_stf_enabled);
-  Get(szProfileEnableNavBaroAltitude, settings.nav_baro_altitude_enabled);
+  GetEnum(ProfileKeys::FinalGlideTerrain, settings.final_glide_terrain);
+  Get(ProfileKeys::BlockSTF, settings.block_stf_enabled);
+  Get(ProfileKeys::EnableNavBaroAltitude, settings.nav_baro_altitude_enabled);
 }
 
 void
@@ -128,18 +128,18 @@ Profile::Load(ComputerSettings &settings)
   Load(settings.features);
   Load(settings.airspace);
 
-  Get(szProfileEnableExternalTriggerCruise,
+  Get(ProfileKeys::EnableExternalTriggerCruise,
       settings.external_trigger_cruise_enabled);
 
-  GetEnum(szProfileAverEffTime, settings.average_eff_time);
+  GetEnum(ProfileKeys::AverEffTime, settings.average_eff_time);
 
-  Get(szProfileSetSystemTimeFromGPS, settings.set_system_time_from_gps);
+  Get(ProfileKeys::SetSystemTimeFromGPS, settings.set_system_time_from_gps);
 
   // NOTE: Until 6.2.4 utc_offset was stored as a positive int in the
   // settings file (with negative offsets stored as "utc_offset + 24 * 3600").
   // Later versions will create a new signed settings key.
-  if (!Get(szProfileUTCOffsetSigned, settings.utc_offset)) {
-    if (Get(szProfileUTCOffset, settings.utc_offset)) {
+  if (!Get(ProfileKeys::UTCOffsetSigned, settings.utc_offset)) {
+    if (Get(ProfileKeys::UTCOffset, settings.utc_offset)) {
       if (settings.utc_offset > 12 * 3600)
         settings.utc_offset = (settings.utc_offset % (24 * 3600)) - 24 * 3600;
     }

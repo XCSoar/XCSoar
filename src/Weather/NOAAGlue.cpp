@@ -51,7 +51,7 @@ NOAAStore::LoadFromString(const TCHAR *string)
 bool
 NOAAStore::LoadFromProfile()
 {
-  const TCHAR *stations = Profile::Get(szProfileWeatherStations);
+  const TCHAR *stations = Profile::Get(ProfileKeys::WeatherStations);
   if (stations == NULL)
     return false;
 
@@ -70,5 +70,5 @@ NOAAStore::SaveToProfile()
 
   *p = _T('\0');
 
-  Profile::Set(szProfileWeatherStations, buffer);
+  Profile::Set(ProfileKeys::WeatherStations, buffer);
 }
