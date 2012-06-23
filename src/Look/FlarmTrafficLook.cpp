@@ -36,6 +36,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   selection_color = COLOR_BLUE;
   background_color = COLOR_WHITE;
   radar_color = COLOR_LIGHT_GRAY;
+  Color team_color_green = Color(0x74, 0xFF, 0);
+  Color team_color_blue = Color(0, 0x90, 0xFF);
+  Color team_color_yellow = Color(0xFF, 0xE8, 0);
+  Color team_color_magenta = Color(0xFF, 0, 0xCB);
 
   warning_brush.Set(warning_color);
   alarm_brush.Set(alarm_color);
@@ -43,10 +47,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   passive_brush.Set(passive_color);
   selection_brush.Set(selection_color);
   radar_brush.Set(radar_color);
-  team_brush_green.Set(Color(0x74, 0xFF, 0));
-  team_brush_blue.Set(Color(0, 0x90, 0xFF));
-  team_brush_yellow.Set(Color(0xFF, 0xE8, 0));
-  team_brush_magenta.Set(Color(0xFF, 0, 0xCB));
+  team_brush_green.Set(team_color_green);
+  team_brush_blue.Set(team_color_blue);
+  team_brush_yellow.Set(team_color_yellow);
+  team_brush_magenta.Set(team_color_magenta);
 
   UPixelScalar width = Layout::FastScale(small ? 1 : 2);
   warning_pen.Set(width, warning_color);
@@ -54,10 +58,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   default_pen.Set(width, default_color);
   passive_pen.Set(width, passive_color);
   selection_pen.Set(width, selection_color);
-  team_pen_green.Set(width, Color(0x74, 0xFF, 0));
-  team_pen_blue.Set(width, Color(0, 0x90, 0xFF));
-  team_pen_yellow.Set(width, Color(0xFF, 0xE8, 0));
-  team_pen_magenta.Set(width, Color(0xFF, 0, 0xCB));
+  team_pen_green.Set(width, team_color_green);
+  team_pen_blue.Set(width, team_color_blue);
+  team_pen_yellow.Set(width, team_color_yellow);
+  team_pen_magenta.Set(width, team_color_magenta);
 
   plane_pen.Set(width, radar_color);
   radar_pen.Set(1, radar_color);
