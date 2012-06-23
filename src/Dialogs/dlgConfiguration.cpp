@@ -72,9 +72,9 @@ Copyright_License {
 #include <assert.h>
 
 static unsigned current_page;
-static WndForm *wf = NULL;
+static WndForm *dialog = NULL;
 
-static TabMenuControl* wTabMenu = NULL;
+static TabMenuControl* tab_menu = NULL;
 
 const TCHAR *main_menu_captions[] = {
   N_("Site Files"),
@@ -125,28 +125,28 @@ static const TabMenuControl::PageItem pages[] = {
 WndForm &
 ConfigPanel::GetForm()
 {
-  assert(wf != NULL);
+  assert(dialog != NULL);
 
-  return *wf;
+  return *dialog;
 }
 
 WndButton *
 ConfigPanel::GetExtraButton(unsigned number)
 {
-  assert(number>=1 && number<=2);
+  assert(number >= 1 && number <= 2);
 
-  WndButton *ExtraButton = NULL;
+  WndButton *extra_button = NULL;
 
   switch (number) {
   case 1:
-    ExtraButton = (WndButton *)wf->FindByName(_T("cmdExtra1"));
+    extra_button = (WndButton *)dialog->FindByName(_T("cmdExtra1"));
     break;
   case 2:
-    ExtraButton = (WndButton *)wf->FindByName(_T("cmdExtra2"));
+    extra_button = (WndButton *)dialog->FindByName(_T("cmdExtra2"));
     break;
   }
 
-  return ExtraButton;
+  return extra_button;
 }
 
 static void
@@ -155,20 +155,20 @@ OnUserLevel(CheckBoxControl &control)
   const bool expert = control.GetState();
   CommonInterface::SetUISettings().dialog.expert = expert;
   Profile::Set(ProfileKeys::UserLevel, expert);
-  wf->FilterAdvanced(expert);
-  wTabMenu->UpdateLayout();
+  dialog->FilterAdvanced(expert);
+  tab_menu->UpdateLayout();
 }
 
 static void
 OnNextClicked(gcc_unused WndButton &button)
 {
-  wTabMenu->NextPage();
+  tab_menu->NextPage();
 }
 
 static void
 OnPrevClicked(gcc_unused WndButton &button)
 {
-  wTabMenu->PreviousPage();
+  tab_menu->PreviousPage();
 }
 
 /**
@@ -177,10 +177,10 @@ OnPrevClicked(gcc_unused WndButton &button)
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
-  if (wTabMenu->IsCurrentPageTheMenu())
-    wf->SetModalResult(mrOK);
+  if (tab_menu->IsCurrentPageTheMenu())
+    dialog->SetModalResult(mrOK);
   else
-    wTabMenu->GotoMenuPage();
+    tab_menu->GotoMenuPage();
 }
 
 static bool
@@ -191,12 +191,12 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '6':
 #endif
-    if (wTabMenu->IsCurrentPageTheMenu()) {
-      wTabMenu->FocusMenuPage();
-      wTabMenu->HighlightPreviousMenuItem();
+    if (tab_menu->IsCurrentPageTheMenu()) {
+      tab_menu->FocusMenuPage();
+      tab_menu->HighlightPreviousMenuItem();
     } else {
-      wTabMenu->PreviousPage();
-      ((WndButton *)wf->FindByName(_T("cmdPrev")))->SetFocus();
+      tab_menu->PreviousPage();
+      ((WndButton *)dialog->FindByName(_T("cmdPrev")))->SetFocus();
     }
     return true;
 
@@ -204,12 +204,12 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
   case '7':
 #endif
-    if (wTabMenu->IsCurrentPageTheMenu()) {
-      wTabMenu->FocusMenuPage();
-      wTabMenu->HighlightNextMenuItem();
+    if (tab_menu->IsCurrentPageTheMenu()) {
+      tab_menu->FocusMenuPage();
+      tab_menu->HighlightNextMenuItem();
     } else {
-      wTabMenu->NextPage();
-      ((WndButton *)wf->FindByName(_T("cmdNext")))->SetFocus();
+      tab_menu->NextPage();
+      ((WndButton *)dialog->FindByName(_T("cmdNext")))->SetFocus();
     }
     return true;
 
@@ -221,11 +221,11 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 PrepareConfigurationMenu()
 {
-  assert (wf != NULL);
+  assert (dialog != NULL);
 
-  wTabMenu = (TabMenuControl*)wf->FindByName(_T("TabMenu"));
-  assert(wTabMenu != NULL);
-  wTabMenu->InitMenu(pages,
+  tab_menu = (TabMenuControl*)dialog->FindByName(_T("TabMenu"));
+  assert(tab_menu != NULL);
+  tab_menu->InitMenu(pages,
                      ARRAY_SIZE(pages),
                      main_menu_captions,
                      ARRAY_SIZE(main_menu_captions));
@@ -244,41 +244,41 @@ PrepareConfigurationDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+  dialog = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_CONFIGURATION_L") :
                                       _T("IDR_XML_CONFIGURATION"));
-  if (wf == NULL)
+  if (dialog == NULL)
     return;
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  dialog->SetKeyDownNotify(FormKeyDown);
 
   bool expert_mode = CommonInterface::GetUISettings().dialog.expert;
-  CheckBox *cb = (CheckBox *)wf->FindByName(_T("Expert"));
+  CheckBox *cb = (CheckBox *)dialog->FindByName(_T("Expert"));
   cb->SetState(expert_mode);
-  wf->FilterAdvanced(expert_mode);
+  dialog->FilterAdvanced(expert_mode);
 
   PrepareConfigurationMenu();
 
-  wTabMenu->GotoMenuPage();
+  tab_menu->GotoMenuPage();
   /* restore last selected menu item */
   static bool Initialized = false;
   if (!Initialized)
     Initialized = true;
   else
-    wTabMenu->SetLastContentPage(current_page);
+    tab_menu->SetLastContentPage(current_page);
 }
 
 static void
 Save()
 {
   /* save page number for next time this dialog is opened */
-  current_page = wTabMenu->GetLastContentPage();
+  current_page = tab_menu->GetLastContentPage();
 
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.
   bool changed = false;
   bool requirerestart = false;
-  wTabMenu->Save(changed, requirerestart);
+  tab_menu->Save(changed, requirerestart);
 
   if (changed) {
     Profile::Save();
@@ -293,12 +293,12 @@ void dlgConfigurationShowModal()
 {
   PrepareConfigurationDialog();
 
-  wf->ShowModal();
+  dialog->ShowModal();
 
-  if (wf->IsDefined()) {
+  if (dialog->IsDefined()) {
     /* hide the dialog, to avoid redraws inside Save() on a dialog
        that has already been deregistered from the SingleWindow */
-    wf->Hide();
+    dialog->Hide();
 
     Save();
   }
@@ -306,8 +306,8 @@ void dlgConfigurationShowModal()
   /* destroy the TabMenuControl first, to have a well-defined
      destruction order; this is necessary because some config panels
      refer to buttons belonging to the dialog */
-  wTabMenu->reset();
+  tab_menu->reset();
 
-  delete wf;
-  wf = NULL;
+  delete dialog;
+  dialog = NULL;
 }
