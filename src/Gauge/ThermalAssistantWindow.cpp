@@ -34,6 +34,22 @@
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
+RasterPoint
+ThermalAssistantWindow::LiftPoints::GetAverage() const
+{
+  RasterPoint avg = { 0, 0 };
+
+  for (auto it = begin(), it_end = end(); it != it_end; ++it) {
+    avg.x += it->x;
+    avg.y += it->y;
+  }
+
+  avg.x /= size();
+  avg.y /= size();
+
+  return avg;
+}
+
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
                                                unsigned _padding, bool _small)
   :look(_look),
@@ -88,9 +104,6 @@ ThermalAssistantWindow::UpdateLiftMax()
 void
 ThermalAssistantWindow::UpdateLiftPoints()
 {
-  lift_point_avg.x = 0;
-  lift_point_avg.y = 0;
-
   for (unsigned i = 0; i < lift_points.size(); i++) {
     Angle d = Angle::Degrees(fixed(i * 10));
 
@@ -107,13 +120,7 @@ ThermalAssistantWindow::UpdateLiftPoints()
 
     lift_points[i].x += mid.x;
     lift_points[i].y += mid.y;
-
-    lift_point_avg.x += lift_points[i].x;
-    lift_point_avg.y += lift_points[i].y;
   }
-
-  lift_point_avg.x /= 36;
-  lift_point_avg.y /= 36;
 }
 
 fixed
@@ -194,7 +201,7 @@ ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
 void
 ThermalAssistantWindow::PaintAdvisor(Canvas &canvas) const
 {
-  canvas.DrawLine(mid.x, mid.y, lift_point_avg.x, lift_point_avg.y);
+  canvas.DrawLine(mid, lift_points.GetAverage());
 }
 
 void

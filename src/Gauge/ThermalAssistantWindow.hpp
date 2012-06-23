@@ -31,7 +31,14 @@
 
 struct ThermalAssistantLook;
 
-class ThermalAssistantWindow : public BufferWindow {
+class ThermalAssistantWindow : public BufferWindow
+{
+  class LiftPoints: public std::array<RasterPoint, 36>
+  {
+  public:
+    RasterPoint GetAverage() const;
+  };
+
 protected:
   const ThermalAssistantLook &look;
 
@@ -57,8 +64,7 @@ protected:
 
   Angle direction;
   DerivedInfo derived;
-  std::array<RasterPoint, 36> lift_points;
-  RasterPoint lift_point_avg;
+  LiftPoints lift_points;
 
 public:
   ThermalAssistantWindow(const ThermalAssistantLook &look,
