@@ -21,32 +21,25 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
+#ifndef XCSOAR_SOUND_SETTINGS_HPP
+#define XCSOAR_SOUND_SETTINGS_HPP
 
-void
-UISettings::SetDefaults()
-{
-  display.SetDefaults();
+#include "Util/TypeTraits.hpp"
 
-  menu_timeout = 8 * 4;
+#include <stdint.h>
 
-  custom_fonts = false;
+struct SoundSettings {
+  // sound stuff not used?
+  bool sound_vario_enabled;
+  bool sound_task_enabled;
+  bool sound_modes_enabled;
+  uint8_t sound_volume;
+  uint8_t sound_deadband;
 
-  enable_thermal_assistant_gauge = true;
-  final_glide_bar_mc0_enabled = true;
+  void SetDefaults();
+};
 
-  popup_message_position = smAlignCenter;
+static_assert(is_trivial<SoundSettings>::value, "type is not trivial");
 
-  haptic_feedback = HapticFeedback::Default;
+#endif
 
-  coordinate_format = CoordinateFormat::DDMMSS;
-
-  units.SetDefaults();
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  traffic.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
-  sound.SetDefaults();
-}

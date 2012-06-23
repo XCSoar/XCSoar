@@ -34,17 +34,7 @@ Copyright_License {
 #include "Util/TypeTraits.hpp"
 #include "Geo/CoordinateFormat.hpp"
 #include "DisplaySettings.hpp"
-
-struct SoundSettings {
-  // sound stuff not used?
-  bool sound_vario_enabled;
-  bool sound_task_enabled;
-  bool sound_modes_enabled;
-  uint8_t sound_volume;
-  uint8_t sound_deadband;
-
-  void SetDefaults();
-};
+#include "Audio/Settings.hpp"
 
 /**
  * User interface settings.

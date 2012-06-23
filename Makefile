@@ -564,6 +564,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DisplaySettings.cpp \
 	$(SRC)/MapSettings.cpp \
 	$(SRC)/SystemSettings.cpp \
+	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/ComputerSettings.cpp \
 	$(SRC)/TeamCodeSettings.cpp \
 	$(SRC)/MergeThread.cpp \

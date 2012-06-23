@@ -21,32 +21,14 @@ Copyright_License {
 }
 */
 
-#include "UISettings.hpp"
+#include "Settings.hpp"
 
 void
-UISettings::SetDefaults()
+SoundSettings::SetDefaults()
 {
-  display.SetDefaults();
-
-  menu_timeout = 8 * 4;
-
-  custom_fonts = false;
-
-  enable_thermal_assistant_gauge = true;
-  final_glide_bar_mc0_enabled = true;
-
-  popup_message_position = smAlignCenter;
-
-  haptic_feedback = HapticFeedback::Default;
-
-  coordinate_format = CoordinateFormat::DDMMSS;
-
-  units.SetDefaults();
-  map.SetDefaults();
-  info_boxes.SetDefaults();
-  vario.SetDefaults();
-  traffic.SetDefaults();
-  pages.SetDefaults();
-  dialog.SetDefaults();
-  sound.SetDefaults();
+  sound_vario_enabled = false;
+  sound_task_enabled = true;
+  sound_modes_enabled = true;
+  sound_volume = 80;
+  sound_deadband = 5;
 }
