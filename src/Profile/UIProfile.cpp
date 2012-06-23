@@ -81,6 +81,14 @@ Profile::Load(VarioSoundSettings &settings)
 {
   Get(szProfileSoundAudioVario, settings.enabled);
   Get(szProfileSoundVolume, settings.volume);
+  Get(VarioDeadBandEnabledProfileKey, settings.dead_band_enabled);
+
+  Get(VarioMinFrequencyProfileKey, settings.min_frequency);
+  Get(VarioZeroFrequencyProfileKey, settings.zero_frequency);
+  Get(VarioMaxFrequencyProfileKey, settings.max_frequency);
+
+  Get(VarioMinPeriodProfileKey, settings.min_period_ms);
+  Get(VarioMaxPeriodProfileKey, settings.max_period_ms);
 }
 
 void

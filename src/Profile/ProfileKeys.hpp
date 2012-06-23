@@ -241,4 +241,11 @@ extern const TCHAR ProfileLiveTrack24Password[];
 extern const TCHAR EnableLocationMapItemProfileKey[];
 extern const TCHAR EnableArrivalAltitudeMapItemProfileKey[];
 
+extern const TCHAR VarioMinFrequencyProfileKey[];
+extern const TCHAR VarioZeroFrequencyProfileKey[];
+extern const TCHAR VarioMaxFrequencyProfileKey[];
+extern const TCHAR VarioMinPeriodProfileKey[];
+extern const TCHAR VarioMaxPeriodProfileKey[];
+extern const TCHAR VarioDeadBandEnabledProfileKey[];
+
 #endif

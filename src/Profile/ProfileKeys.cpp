@@ -243,3 +243,10 @@ const TCHAR ProfileLiveTrack24Password[] = _T("LiveTrack24Password");
 
 const TCHAR EnableLocationMapItemProfileKey[] = _T("EnableLocationMapItem");
 const TCHAR EnableArrivalAltitudeMapItemProfileKey[] = _T("EnableArrivalAltitudeMapItem");
+
+const TCHAR VarioMinFrequencyProfileKey[] = _T("VarioMinFrequency");
+const TCHAR VarioZeroFrequencyProfileKey[] = _T("VarioZeroFrequency");
+const TCHAR VarioMaxFrequencyProfileKey[] = _T("VarioMaxFrequency");
+const TCHAR VarioMinPeriodProfileKey[] = _T("VarioMinPeriod");
+const TCHAR VarioMaxPeriodProfileKey[] = _T("VarioMaxPeriod");
+const TCHAR VarioDeadBandEnabledProfileKey[] = _T("VarioDeadBandEnabled");
