@@ -93,6 +93,18 @@ public:
 
   bool Connect(const struct sockaddr *address, size_t length);
 
+#ifdef HAVE_POSIX
+  /**
+   * Create a UDP socket and connect it to the specified host and
+   * port.
+   *
+   * @param host a numeric IP address that will be parsed; host names
+   * that must be resolved using DNS should not be used
+   * @param port a numeric UDP port number
+   */
+  bool CreateConnectUDP(const char *host, const char *port);
+#endif
+
 #ifndef HAVE_POSIX
   ssize_t Read(void *buffer, size_t length);
   ssize_t Write(const void *buffer, size_t length);
