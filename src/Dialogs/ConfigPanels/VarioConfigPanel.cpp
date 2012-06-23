@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Features.hpp"
+#include "Audio/VarioGlue.hpp"
 
 enum ControlIndex {
   AppGaugeVarioSpeedToFly,
@@ -38,10 +39,8 @@ enum ControlIndex {
   AppGaugeVarioBallast,
   AppGaugeVarioGross,
   AppAveNeedle,
-#ifdef HAVE_PCM_PLAYER
   AudioVario,
   Volume,
-#endif
 };
 
 
@@ -93,16 +92,16 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings.show_average_needle);
   SetExpertRow(AppAveNeedle);
 
-#ifdef HAVE_PCM_PLAYER
-  const SoundSettings &sound = CommonInterface::GetUISettings().sound;
+  if (AudioVarioGlue::HaveAudioVario()) {
+    const SoundSettings &sound = CommonInterface::GetUISettings().sound;
 
-  AddBoolean(_("Audio vario"),
-             _("Emulate the sound of an electronic vario."),
-             sound.vario.enabled);
+    AddBoolean(_("Audio vario"),
+               _("Emulate the sound of an electronic vario."),
+               sound.vario.enabled);
 
-  AddInteger(_("Volume"), NULL, _T("%u %%"), _T("%u"),
-             0, 100, 1, sound.vario.volume);
-#endif
+    AddInteger(_("Volume"), NULL, _T("%u %%"), _T("%u"),
+               0, 100, 1, sound.vario.volume);
+  }
 }
 
 bool
@@ -126,16 +125,16 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValue(AppAveNeedle, ProfileKeys::AppAveNeedle, settings.show_average_needle);
 
-#ifdef HAVE_PCM_PLAYER
-  SoundSettings &sound = CommonInterface::SetUISettings().sound;
-  changed |= SaveValue(AudioVario, ProfileKeys::SoundAudioVario,
-                       sound.vario.enabled);
-  unsigned volume = sound.vario.volume;
-  if (SaveValue(Volume, ProfileKeys::SoundVolume, volume)) {
-    sound.vario.volume = volume;
-    changed = true;
+  if (AudioVarioGlue::HaveAudioVario()) {
+    SoundSettings &sound = CommonInterface::SetUISettings().sound;
+    changed |= SaveValue(AudioVario, ProfileKeys::SoundAudioVario,
+                         sound.vario.enabled);
+    unsigned volume = sound.vario.volume;
+    if (SaveValue(Volume, ProfileKeys::SoundVolume, volume)) {
+      sound.vario.volume = volume;
+      changed = true;
+    }
   }
-#endif
 
   _changed |= changed;
   _require_restart |= require_restart;
