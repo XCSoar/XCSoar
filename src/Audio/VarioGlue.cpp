@@ -82,6 +82,7 @@ AudioVarioGlue::Configure(const VarioSoundSettings &settings)
 
   if (settings.enabled) {
     synthesiser->SetVolume(settings.volume);
+    synthesiser->SetDeadBand(settings.dead_band_enabled);
     player->Start(*synthesiser, sample_rate);
   } else
     player->Stop();

@@ -28,4 +28,5 @@ VarioSoundSettings::SetDefaults()
 {
   enabled = false;
   volume = 80;
+  dead_band_enabled = true;
 }

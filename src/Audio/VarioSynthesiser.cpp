@@ -96,7 +96,7 @@ VarioSynthesiser::SetVario(unsigned sample_rate, fixed vario)
 {
   const int ivario = Clamp((int)(vario * 100), min_vario, max_vario);
 
-  if (InDeadBand(ivario)) {
+  if (dead_band_enabled && InDeadBand(ivario)) {
     /* inside the "dead band" */
     SetSilence();
     return;

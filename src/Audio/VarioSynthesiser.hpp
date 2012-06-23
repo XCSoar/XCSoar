@@ -50,10 +50,13 @@ class VarioSynthesiser : public ToneSynthesiser {
    */
   size_t audible_remaining, silence_remaining;
 
+  bool dead_band_enabled;
+
 public:
   VarioSynthesiser()
     :audible_count(0), silence_count(1),
-     audible_remaining(0), silence_remaining(0) {}
+     audible_remaining(0), silence_remaining(0),
+     dead_band_enabled(true) {}
 
   /**
    * Update the vario value.  This calculates a new tone frequency and
@@ -67,6 +70,10 @@ public:
    * Produce silence from now on.
    */
   void SetSilence();
+
+  void SetDeadBand(bool enabled) {
+    dead_band_enabled = enabled;
+  }
 
   /* methods from class PCMSynthesiser */
   virtual void Synthesise(int16_t *buffer, size_t n);

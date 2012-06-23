@@ -31,6 +31,7 @@ Copyright_License {
 struct VarioSoundSettings {
   bool enabled;
   uint8_t volume;
+  bool dead_band_enabled;
 
   void SetDefaults();
 };
