@@ -65,12 +65,19 @@ namespace AudioVarioGlue {
    */
   void NoValue();
 
+  /**
+   * Is the audio vario platform available on this platform?
+   * Must only be called after Initialise() has been called once before.
+   */
+  bool HaveAudioVario();
+
 #else
   static inline void Initialise() {}
   static inline void Deinitialise() {}
   static inline void Configure(const VarioSoundSettings &settings) {}
   static inline void SetValue(fixed vario) {}
   static inline void NoValue() {}
+  static inline bool HaveAudioVario() { return false; }
 #endif
 };
 

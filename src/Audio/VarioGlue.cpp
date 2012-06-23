@@ -41,6 +41,16 @@ static bool have_sles;
 static PCMPlayer *player;
 static VarioSynthesiser *synthesiser;
 
+bool
+AudioVarioGlue::HaveAudioVario()
+{
+#ifdef ANDROID
+  return have_sles;
+#else
+  return true;
+#endif
+}
+
 void
 AudioVarioGlue::Initialise()
 {
