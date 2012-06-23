@@ -84,12 +84,19 @@ VarioToFrequency(int ivario)
     : (zero_frequency - (unsigned)(ivario * (int)(zero_frequency - min_frequency) / min_vario));
 }
 
+gcc_const
+static bool
+InDeadBand(int ivario)
+{
+  return ivario >= min_dead && ivario <= max_dead;
+}
+
 void
 VarioSynthesiser::SetVario(unsigned sample_rate, fixed vario)
 {
   const int ivario = Clamp((int)(vario * 100), min_vario, max_vario);
 
-  if (ivario >= min_dead && ivario <= max_dead) {
+  if (InDeadBand(ivario)) {
     /* inside the "dead band" */
     SetSilence();
     return;
