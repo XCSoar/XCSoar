@@ -81,9 +81,9 @@ public:
   VarioSynthesiser()
     :audible_count(0), silence_count(1),
      audible_remaining(0), silence_remaining(0),
-     dead_band_enabled(true),
-     min_frequency(50), zero_frequency(400), max_frequency(2000),
-     min_period_ms(150), max_period_ms(800) {}
+     dead_band_enabled(false),
+     min_frequency(200), zero_frequency(500), max_frequency(1500),
+     min_period_ms(150), max_period_ms(600) {}
 
   /**
    * Update the vario value.  This calculates a new tone frequency and
