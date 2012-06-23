@@ -21,27 +21,21 @@ Copyright_License {
 }
 */
 
-#include "TrackingSettings.hpp"
+#ifndef XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
+#define XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
 
-#ifdef HAVE_TRACKING
+#include <stdint.h>
 
-void
-LiveTrack24Settings::SetDefaults()
-{
-  enabled = false;
-  server = _T("www.livetrack24.com");
-  username.clear();
-  password.clear();
+namespace SkyLinesTracking {
+  struct Settings {
+    bool enabled;
+    uint64_t key;
+
+    void SetDefaults() {
+      enabled = false;
+      key = 0;
+    }
+  };
 }
 
-void
-TrackingSettings::SetDefaults()
-{
-  interval = 60;
-  vehicleType = VehicleType::GLIDER;
-
-  skylines.SetDefaults();
-  livetrack24.SetDefaults();
-}
-
-#endif /* HAVE_TRACKING */
+#endif

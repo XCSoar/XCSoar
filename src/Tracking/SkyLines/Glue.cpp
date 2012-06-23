@@ -21,27 +21,14 @@ Copyright_License {
 }
 */
 
-#include "TrackingSettings.hpp"
-
-#ifdef HAVE_TRACKING
-
-void
-LiveTrack24Settings::SetDefaults()
-{
-  enabled = false;
-  server = _T("www.livetrack24.com");
-  username.clear();
-  password.clear();
-}
+#include "Glue.hpp"
+#include "NMEA/Info.hpp"
+#include "LogFile.hpp"
 
 void
-TrackingSettings::SetDefaults()
+SkyLinesTracking::Glue::SendFix(const NMEAInfo &basic)
 {
-  interval = 60;
-  vehicleType = VehicleType::GLIDER;
-
-  skylines.SetDefaults();
-  livetrack24.SetDefaults();
+  if (client.IsDefined() && basic.time_available &&
+      clock.CheckAdvance(basic.time))
+    client.SendFix(basic);
 }
-
-#endif /* HAVE_TRACKING */

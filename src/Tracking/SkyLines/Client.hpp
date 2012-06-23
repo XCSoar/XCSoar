@@ -21,27 +21,41 @@ Copyright_License {
 }
 */
 
-#include "TrackingSettings.hpp"
+#ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
+#define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
-#ifdef HAVE_TRACKING
+#include "OS/SocketDescriptor.hpp"
 
-void
-LiveTrack24Settings::SetDefaults()
-{
-  enabled = false;
-  server = _T("www.livetrack24.com");
-  username.clear();
-  password.clear();
+#include <stdint.h>
+
+struct NMEAInfo;
+
+namespace SkyLinesTracking {
+  class Client {
+    uint64_t key;
+    SocketDescriptor socket;
+
+  public:
+    Client():key(0) {}
+
+    bool IsDefined() const {
+      return socket.IsDefined();
+    }
+
+    void SetKey(uint64_t _key) {
+      key = _key;
+    }
+
+    bool Open(const char *host) {
+      return socket.CreateConnectUDP(host, "5597");
+    }
+
+    void Close() {
+      socket.Close();
+    }
+
+    bool SendFix(const NMEAInfo &basic);
+  };
 }
 
-void
-TrackingSettings::SetDefaults()
-{
-  interval = 60;
-  vehicleType = VehicleType::GLIDER;
-
-  skylines.SetDefaults();
-  livetrack24.SetDefaults();
-}
-
-#endif /* HAVE_TRACKING */
+#endif

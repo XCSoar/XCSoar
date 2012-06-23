@@ -28,6 +28,8 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
+#include "Tracking/SkyLines/Settings.hpp"
+
 #include "Util/StaticString.hpp"
 
 struct LiveTrack24Settings {
@@ -51,6 +53,7 @@ struct TrackingSettings {
   unsigned interval;
   VehicleType vehicleType;
 
+  SkyLinesTracking::Settings skylines;
   LiveTrack24Settings livetrack24;
 
   void SetDefaults();

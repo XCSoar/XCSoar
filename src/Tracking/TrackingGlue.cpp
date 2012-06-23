@@ -70,6 +70,8 @@ TrackingGlue::WaitStopped()
 void
 TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
+  skylines.SetSettings(_settings.skylines);
+
   if (_settings.livetrack24.server != settings.livetrack24.server ||
       _settings.livetrack24.username != settings.livetrack24.username ||
       _settings.livetrack24.password != settings.livetrack24.password) {
@@ -91,6 +93,8 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
+  skylines.SendFix(basic);
+
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */
     /* note that we are allowed to read "settings" without locking the

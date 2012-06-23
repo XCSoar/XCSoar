@@ -234,6 +234,8 @@ const TCHAR szProfileFlarmLocation[] = _T("FlarmLocation");
 
 const TCHAR ProfileTrackingInterval[] = _T("TrackingInterval");
 const TCHAR ProfileTrackingVehicleType[] = _T("TrackingVehicleType");
+const TCHAR ProfileSkyLinesTrackingEnabled[] = _T("SkyLinesTrackingEnabled");
+const TCHAR ProfileSkyLinesTrackingKey[] = _T("SkyLinesTrackingKey");
 const TCHAR ProfileLiveTrack24Enabled[] = _T("LiveTrack24Enabled");
 const TCHAR ProfileLiveTrack24Server[] = _T("LiveTrack24Server");
 const TCHAR ProfileLiveTrack24Username[] = _T("LiveTrack24Username");

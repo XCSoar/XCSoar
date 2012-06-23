@@ -29,6 +29,7 @@ Copyright_License {
 #ifdef HAVE_TRACKING
 
 #include "Tracking/TrackingSettings.hpp"
+#include "Tracking/SkyLines/Glue.hpp"
 #include "Thread/StandbyThread.hpp"
 #include "Tracking/LiveTrack24.hpp"
 #include "PeriodClock.hpp"
@@ -56,6 +57,9 @@ class TrackingGlue : protected StandbyThread {
   PeriodClock clock;
 
   TrackingSettings settings;
+
+  SkyLinesTracking::Glue skylines;
+
   LiveTrack24State state;
 
   /**

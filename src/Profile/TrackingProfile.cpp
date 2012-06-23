@@ -28,6 +28,21 @@ Copyright_License {
 
 #ifdef HAVE_TRACKING
 
+namespace Profile {
+  static void Load(SkyLinesTracking::Settings &settings) {
+    Get(ProfileSkyLinesTrackingEnabled, settings.enabled);
+
+    const TCHAR *key = Get(ProfileSkyLinesTrackingKey);
+    if (key != NULL) {
+#ifdef _UNICODE
+      settings.key = wcstoull(key, NULL, 16);
+#else
+      settings.key = strtoull(key, NULL, 16);
+#endif
+    }
+  }
+}
+
 void
 Profile::Load(LiveTrack24Settings &settings)
 {
@@ -42,6 +57,7 @@ Profile::Load(TrackingSettings &settings)
 {
   Get(ProfileTrackingInterval, settings.interval);
   GetEnum(ProfileTrackingVehicleType, settings.vehicleType);
+  Load(settings.skylines);
   Load(settings.livetrack24);
 }
 

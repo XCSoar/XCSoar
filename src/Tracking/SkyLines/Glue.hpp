@@ -21,27 +21,34 @@ Copyright_License {
 }
 */
 
-#include "TrackingSettings.hpp"
+#ifndef XCSOAR_TRACKING_SKYLINES_GLUE_HPP
+#define XCSOAR_TRACKING_SKYLINES_GLUE_HPP
 
-#ifdef HAVE_TRACKING
+#include "Settings.hpp"
+#include "Client.hpp"
+#include "GPSClock.hpp"
 
-void
-LiveTrack24Settings::SetDefaults()
-{
-  enabled = false;
-  server = _T("www.livetrack24.com");
-  username.clear();
-  password.clear();
+namespace SkyLinesTracking {
+  class Glue {
+    Client client;
+    GPSClock clock;
+
+  public:
+    // TODO: make the interval configurable
+    Glue():clock(fixed(10)) {}
+
+    void SetSettings(const Settings &settings) {
+      client.SetKey(settings.key);
+
+      if (!settings.enabled)
+        client.Close();
+      else if (!client.IsDefined())
+        // TODO: fix hard-coded IP address:
+        client.Open("78.47.50.46");
+    }
+
+    void SendFix(const NMEAInfo &basic);
+  };
 }
 
-void
-TrackingSettings::SetDefaults()
-{
-  interval = 60;
-  vehicleType = VehicleType::GLIDER;
-
-  skylines.SetDefaults();
-  livetrack24.SetDefaults();
-}
-
-#endif /* HAVE_TRACKING */
+#endif

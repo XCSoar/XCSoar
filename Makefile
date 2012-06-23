@@ -812,6 +812,8 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAAUpdater.cpp
 
 XCSOAR_SOURCES += \
+	$(SRC)/Tracking/SkyLines/Client.cpp \
+	$(SRC)/Tracking/SkyLines/Glue.cpp \
 	$(SRC)/Tracking/LiveTrack24.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp
 endif
