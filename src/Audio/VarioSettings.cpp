@@ -21,26 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SOUND_SETTINGS_HPP
-#define XCSOAR_SOUND_SETTINGS_HPP
-
 #include "VarioSettings.hpp"
-#include "Util/TypeTraits.hpp"
 
-#include <stdint.h>
-
-struct SoundSettings {
-  // sound stuff not used?
-  bool sound_task_enabled;
-  bool sound_modes_enabled;
-  uint8_t sound_deadband;
-
-  VarioSoundSettings vario;
-
-  void SetDefaults();
-};
-
-static_assert(is_trivial<SoundSettings>::value, "type is not trivial");
-
-#endif
-
+void
+VarioSoundSettings::SetDefaults()
+{
+  enabled = false;
+  volume = 80;
+}

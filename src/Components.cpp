@@ -408,7 +408,7 @@ XCSoarInterface::Startup()
 #endif
 
   AudioVarioGlue::Initialise();
-  AudioVarioGlue::Configure(GetUISettings().sound);
+  AudioVarioGlue::Configure(GetUISettings().sound.vario);
 
   // Start the device thread(s)
   operation.SetText(_("Starting devices"));

@@ -49,21 +49,21 @@ InputEvents::eventSounds(const TCHAR *misc)
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (StringIsEqual(misc, _T("toggle")))
-    settings.sound_vario_enabled = !settings.sound_vario_enabled;
+    settings.vario.enabled = !settings.vario.enabled;
   else if (StringIsEqual(misc, _T("on")))
-    settings.sound_vario_enabled = true;
+    settings.vario.enabled = true;
   else if (StringIsEqual(misc, _T("off")))
-    settings.sound_vario_enabled = false;
+    settings.vario.enabled = false;
   else if (StringIsEqual(misc, _T("show"))) {
-    if (settings.sound_vario_enabled)
+    if (settings.vario.enabled)
       Message::AddMessage(_("Vario sounds on"));
     else
       Message::AddMessage(_("Vario sounds off"));
     return;
   }
 
-  AudioVarioGlue::Configure(settings);
-  Profile::Set(szProfileSoundAudioVario, settings.sound_vario_enabled);
+  AudioVarioGlue::Configure(settings.vario);
+  Profile::Set(szProfileSoundAudioVario, settings.vario.enabled);
 }
 
 void

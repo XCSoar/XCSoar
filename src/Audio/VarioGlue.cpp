@@ -24,7 +24,7 @@ Copyright_License {
 #include "VarioGlue.hpp"
 #include "PCMPlayer.hpp"
 #include "VarioSynthesiser.hpp"
-#include "Settings.hpp"
+#include "VarioSettings.hpp"
 
 #ifdef ANDROID
 #include "SLES/Init.hpp"
@@ -70,7 +70,7 @@ AudioVarioGlue::Deinitialise()
 }
 
 void
-AudioVarioGlue::Configure(const SoundSettings &settings)
+AudioVarioGlue::Configure(const VarioSoundSettings &settings)
 {
 #ifdef ANDROID
   if (!have_sles)
@@ -80,8 +80,8 @@ AudioVarioGlue::Configure(const SoundSettings &settings)
   assert(player != NULL);
   assert(synthesiser != NULL);
 
-  if (settings.sound_vario_enabled) {
-    synthesiser->SetVolume(settings.sound_volume);
+  if (settings.enabled) {
+    synthesiser->SetVolume(settings.volume);
     player->Start(*synthesiser, sample_rate);
   } else
     player->Stop();

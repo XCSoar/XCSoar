@@ -98,10 +98,10 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("Audio vario"),
              _("Emulate the sound of an electronic vario."),
-             sound.sound_vario_enabled);
+             sound.vario.enabled);
 
   AddInteger(_("Volume"), NULL, _T("%u %%"), _T("%u"),
-             0, 100, 1, sound.sound_volume);
+             0, 100, 1, sound.vario.volume);
 #endif
 }
 
@@ -129,10 +129,10 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
 #ifdef HAVE_PCM_PLAYER
   SoundSettings &sound = CommonInterface::SetUISettings().sound;
   changed |= SaveValue(AudioVario, szProfileSoundAudioVario,
-                       sound.sound_vario_enabled);
-  unsigned volume = sound.sound_volume;
+                       sound.vario.enabled);
+  unsigned volume = sound.vario.volume;
   if (SaveValue(Volume, szProfileSoundVolume, volume)) {
-    sound.sound_volume = volume;
+    sound.vario.volume = volume;
     changed = true;
   }
 #endif

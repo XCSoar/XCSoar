@@ -26,9 +26,9 @@ Copyright_License {
 void
 SoundSettings::SetDefaults()
 {
-  sound_vario_enabled = false;
   sound_task_enabled = true;
   sound_modes_enabled = true;
-  sound_volume = 80;
   sound_deadband = 5;
+
+  vario.SetDefaults();
 }

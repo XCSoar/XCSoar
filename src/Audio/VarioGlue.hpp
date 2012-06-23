@@ -29,7 +29,7 @@ Copyright_License {
 #ifdef HAVE_PCM_PLAYER
 #include "Math/fixed.hpp"
 
-struct SoundSettings;
+struct VarioSoundSettings;
 #endif
 
 namespace AudioVarioGlue {
@@ -49,7 +49,7 @@ namespace AudioVarioGlue {
    * Update the configuration.  Must be called at least once, after
    * Initialise() and before SetValue().
    */
-  void Configure(const SoundSettings &settings);
+  void Configure(const VarioSoundSettings &settings);
 
   /**
    * Update the vario value.
@@ -68,7 +68,7 @@ namespace AudioVarioGlue {
 #else
   static inline void Initialise() {}
   static inline void Deinitialise() {}
-  static inline void Configure(const SoundSettings &settings) {}
+  static inline void Configure(const VarioSoundSettings &settings) {}
   static inline void SetValue(fixed vario) {}
   static inline void NoValue() {}
 #endif
