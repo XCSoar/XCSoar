@@ -81,7 +81,7 @@ public:
   }
 
 private:
-#define TabLineHeightInitUnscaled (unsigned)5
+  static gcc_constexpr_data unsigned TabLineHeightInitUnscaled = 5;
 
 public:
   unsigned AddTab(Widget *widget, const TCHAR *caption, const Bitmap *bmp = NULL);
