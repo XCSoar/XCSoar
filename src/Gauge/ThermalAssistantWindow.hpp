@@ -33,7 +33,8 @@ struct ThermalAssistantLook;
 
 class ThermalAssistantWindow : public BufferWindow
 {
-  class LiftPoints: public std::array<RasterPoint, 36>
+  class LiftPoints: public std::array<RasterPoint,
+                                      std::tuple_size<VarioInfo::LiftDatabase>::value>
   {
   public:
     RasterPoint GetAverage() const;
