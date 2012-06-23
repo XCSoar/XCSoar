@@ -75,14 +75,15 @@ ThermalAssistantWindow::OnResize(UPixelScalar width, UPixelScalar height)
 bool
 ThermalAssistantWindow::LeftTurn() const
 {
-  return derived.TurningLeft();
+  return circling.TurningLeft();
 }
 
 void
-ThermalAssistantWindow::Update(const DerivedInfo &_derived)
+ThermalAssistantWindow::Update(const DerivedInfo &derived)
 {
-  direction = _derived.heading;
-  derived = _derived;
+  direction = derived.heading;
+  circling = (CirclingInfo)derived;
+  vario = (VarioInfo)derived;
 
   UpdateLiftMax();
   UpdateLiftPoints();
@@ -94,8 +95,8 @@ void
 ThermalAssistantWindow::UpdateLiftMax()
 {
   max_lift = ceil(std::max(fixed_one,
-                           *std::max_element(derived.lift_database.begin(),
-                                             derived.lift_database.end())));
+                           *std::max_element(vario.lift_database.begin(),
+                                             vario.lift_database.end())));
 }
 
 void
@@ -105,7 +106,7 @@ ThermalAssistantWindow::UpdateLiftPoints()
     Angle d = Angle::Degrees(fixed(i * 10));
 
     auto sincos = (d - direction).SinCos();
-    auto scale = RangeScale(derived.lift_database[i]);
+    auto scale = RangeScale(vario.lift_database[i]);
 
     lift_points[i].x = (int)(sincos.second * scale);
     lift_points[i].y = (int)(sincos.first * scale);
@@ -218,7 +219,7 @@ void
 ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
   PaintRadarBackground(canvas);
-  if (!derived.circling) {
+  if (!circling.circling) {
     PaintNotCircling(canvas);
     return;
   }

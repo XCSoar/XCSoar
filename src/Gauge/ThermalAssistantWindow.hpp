@@ -25,11 +25,13 @@
 #define THERMAL_ASSISTENT_WINDOW_HPP
 
 #include "Screen/BufferWindow.hpp"
-#include "NMEA/Derived.hpp"
+#include "NMEA/CirclingInfo.hpp"
+#include "NMEA/VarioInfo.hpp"
 
 #include <array>
 
 struct ThermalAssistantLook;
+struct DerivedInfo;
 
 class ThermalAssistantWindow : public BufferWindow
 {
@@ -64,7 +66,8 @@ protected:
   bool small;
 
   Angle direction;
-  DerivedInfo derived;
+  CirclingInfo circling;
+  VarioInfo vario;
   LiftPoints lift_points;
 
 public:
