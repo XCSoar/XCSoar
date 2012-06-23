@@ -42,10 +42,7 @@ ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look
    small(_small),
    direction(Angle::Zero())
 {
-  for (unsigned i = 0; i <= 36; i++) {
-    lift_points[i].x = 0;
-    lift_points[i].y = 0;
-  }
+  lift_points.fill({ 0, 0 });
 }
 
 void
@@ -94,7 +91,7 @@ ThermalAssistantWindow::UpdateLiftPoints()
   lift_point_avg.x = 0;
   lift_point_avg.y = 0;
 
-  for (unsigned i = 0; i < 36; i++) {
+  for (unsigned i = 0; i < lift_points.size(); i++) {
     Angle d = Angle::Degrees(fixed(i * 10));
 
     auto sincos = (d - direction).SinCos();
@@ -191,7 +188,7 @@ ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
 
   canvas.Select(look.polygon_brush);
   canvas.Select(look.polygon_pen);
-  canvas.DrawPolygon(lift_points, 36);
+  canvas.DrawPolygon(lift_points.data(), lift_points.size());
 }
 
 void

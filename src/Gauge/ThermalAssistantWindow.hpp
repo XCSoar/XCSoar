@@ -27,6 +27,8 @@
 #include "Screen/BufferWindow.hpp"
 #include "NMEA/Derived.hpp"
 
+#include <array>
+
 struct ThermalAssistantLook;
 
 class ThermalAssistantWindow : public BufferWindow {
@@ -55,7 +57,7 @@ protected:
 
   Angle direction;
   DerivedInfo derived;
-  RasterPoint lift_points[36];
+  std::array<RasterPoint, 36> lift_points;
   RasterPoint lift_point_avg;
 
 public:
