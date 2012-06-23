@@ -87,10 +87,16 @@ public:
    */
   void SetSilence();
 
+  /**
+   * Enable/disable the dead band silence
+   */
   void SetDeadBand(bool enabled) {
     dead_band_enabled = enabled;
   }
 
+  /**
+   * Set the base frequencies for minimum, zero and maximum lift
+   */
   void SetFrequencies(unsigned min, unsigned zero, unsigned max) {
     min_frequency = min;
     zero_frequency = zero;
