@@ -53,18 +53,3 @@ ThermalAssistantLook::Initialise(bool small)
   overlay_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
   circle_label_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
 }
-
-void
-ThermalAssistantLook::Deinitialise()
-{
-  polygon_brush.Reset();
-
-  plane_pen.Reset();
-  hpRadar.Reset();
-  polygon_pen.Reset();
-  inner_circle_pen.Reset();
-  outer_circle_pen.Reset();
-
-  circle_label_font.Reset();
-  overlay_font.Reset();
-}
