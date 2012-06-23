@@ -149,7 +149,7 @@ SocketDescriptor::BindPort(unsigned port)
   return bind(Get(), (const struct sockaddr *)&address, sizeof(address)) == 0;
 }
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32_WCE
 
 bool
 SocketDescriptor::CreateConnectUDP(const char *host, const char *port)

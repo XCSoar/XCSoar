@@ -93,7 +93,7 @@ public:
 
   bool Connect(const struct sockaddr *address, size_t length);
 
-#ifdef HAVE_POSIX
+#ifndef _WIN32_WCE
   /**
    * Create a UDP socket and connect it to the specified host and
    * port.
