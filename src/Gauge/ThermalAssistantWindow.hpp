@@ -68,7 +68,6 @@ protected:
   Angle direction;
   CirclingInfo circling;
   VarioInfo vario;
-  LiftPoints lift_points;
 
 public:
   ThermalAssistantWindow(const ThermalAssistantLook &look,
@@ -82,12 +81,12 @@ public:
 protected:
   fixed RangeScale(fixed d) const;
 
-  void UpdateLiftPoints();
+  void CalculateLiftPoints(LiftPoints &lift_points) const;
   void UpdateLiftMax();
   void PaintRadarPlane(Canvas &canvas) const;
   void PaintRadarBackground(Canvas &canvas) const;
-  void PaintPoints(Canvas &canvas) const;
-  void PaintAdvisor(Canvas &canvas) const;
+  void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
+  void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintNotCircling(Canvas &canvas) const;
 
 protected:

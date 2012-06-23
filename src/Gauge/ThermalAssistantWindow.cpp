@@ -56,10 +56,7 @@ ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look
    max_lift(fixed_one),
    padding(_padding),
    small(_small),
-   direction(Angle::Zero())
-{
-  lift_points.fill({ 0, 0 });
-}
+   direction(Angle::Zero()) {}
 
 void
 ThermalAssistantWindow::OnResize(UPixelScalar width, UPixelScalar height)
@@ -86,8 +83,6 @@ ThermalAssistantWindow::Update(const DerivedInfo &derived)
   vario = (VarioInfo)derived;
 
   UpdateLiftMax();
-  UpdateLiftPoints();
-
   Invalidate();
 }
 
@@ -100,7 +95,7 @@ ThermalAssistantWindow::UpdateLiftMax()
 }
 
 void
-ThermalAssistantWindow::UpdateLiftPoints()
+ThermalAssistantWindow::CalculateLiftPoints(LiftPoints &lift_points) const
 {
   for (unsigned i = 0; i < lift_points.size(); i++) {
     Angle d = Angle::Degrees(fixed(i * 10));
@@ -183,7 +178,8 @@ ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
 }
 
 void
-ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
+ThermalAssistantWindow::PaintPoints(Canvas &canvas,
+                                    const LiftPoints &lift_points) const
 {
 #ifdef ENABLE_OPENGL
   GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -197,7 +193,8 @@ ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
 }
 
 void
-ThermalAssistantWindow::PaintAdvisor(Canvas &canvas) const
+ThermalAssistantWindow::PaintAdvisor(Canvas &canvas,
+                                     const LiftPoints &lift_points) const
 {
   canvas.DrawLine(mid, lift_points.GetAverage());
 }
@@ -225,6 +222,9 @@ ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
   }
 
   PaintRadarPlane(canvas);
-  PaintPoints(canvas);
-  PaintAdvisor(canvas);
+
+  LiftPoints lift_points;
+  CalculateLiftPoints(lift_points);
+  PaintPoints(canvas, lift_points);
+  PaintAdvisor(canvas, lift_points);
 }
