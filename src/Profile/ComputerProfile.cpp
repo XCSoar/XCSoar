@@ -32,7 +32,6 @@ namespace Profile {
   static void Load(WindSettings &settings);
   static void Load(PolarSettings &settings);
   static void Load(LoggerSettings &settings);
-  static void Load(SoundSettings &settings);
   static void Load(TeamCodeSettings &settings);
   static void Load(VoiceSettings &settings);
   static void Load(PlacesOfInterestSettings &settings);
@@ -83,16 +82,6 @@ Profile::Load(LoggerSettings &settings)
 }
 
 void
-Profile::Load(SoundSettings &settings)
-{
-  Get(szProfileSoundAudioVario, settings.sound_vario_enabled);
-  Get(szProfileSoundTask, settings.sound_task_enabled);
-  Get(szProfileSoundModes, settings.sound_modes_enabled);
-  Get(szProfileSoundVolume, settings.sound_volume);
-  Get(szProfileSoundDeadband, settings.sound_deadband);
-}
-
-void
 Profile::Load(TeamCodeSettings &settings)
 {
   Get(szProfileTeamcodeRefWaypoint, settings.team_code_reference_waypoint);
@@ -133,7 +122,6 @@ Profile::Load(ComputerSettings &settings)
 {
   Load(settings.wind);
   Load(settings.polar);
-  Load(settings.sound);
   Load(settings.team_code);
   Load(settings.voice);
   Load(settings.poi);

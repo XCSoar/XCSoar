@@ -34,6 +34,7 @@ namespace Profile {
   static void Load(VarioSettings &settings);
   static void Load(TrafficSettings &settings);
   static void Load(DialogSettings &settings);
+  static void Load(SoundSettings &settings);
 };
 
 void
@@ -75,6 +76,16 @@ Profile::Load(DialogSettings &settings)
 }
 
 void
+Profile::Load(SoundSettings &settings)
+{
+  Get(szProfileSoundAudioVario, settings.sound_vario_enabled);
+  Get(szProfileSoundTask, settings.sound_task_enabled);
+  Get(szProfileSoundModes, settings.sound_modes_enabled);
+  Get(szProfileSoundVolume, settings.sound_volume);
+  Get(szProfileSoundDeadband, settings.sound_deadband);
+}
+
+void
 Profile::Load(UISettings &settings)
 {
   Load(settings.display);
@@ -99,4 +110,5 @@ Profile::Load(UISettings &settings)
   Load(settings.traffic);
   Load(settings.pages);
   Load(settings.dialog);
+  Load(settings.sound);
 }

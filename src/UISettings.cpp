@@ -22,7 +22,16 @@ Copyright_License {
 */
 
 #include "UISettings.hpp"
-#include "Asset.hpp"
+
+void
+SoundSettings::SetDefaults()
+{
+  sound_vario_enabled = false;
+  sound_task_enabled = true;
+  sound_modes_enabled = true;
+  sound_volume = 80;
+  sound_deadband = 5;
+}
 
 void
 UISettings::SetDefaults()
@@ -49,4 +58,5 @@ UISettings::SetDefaults()
   traffic.SetDefaults();
   pages.SetDefaults();
   dialog.SetDefaults();
+  sound.SetDefaults();
 }

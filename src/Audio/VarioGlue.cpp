@@ -24,7 +24,7 @@ Copyright_License {
 #include "VarioGlue.hpp"
 #include "PCMPlayer.hpp"
 #include "VarioSynthesiser.hpp"
-#include "ComputerSettings.hpp"
+#include "UISettings.hpp"
 
 #ifdef ANDROID
 #include "SLES/Init.hpp"

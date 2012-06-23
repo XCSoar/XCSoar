@@ -155,17 +155,6 @@ struct PolarSettings {
   }
 };
 
-struct SoundSettings {
-  // sound stuff not used?
-  bool sound_vario_enabled;
-  bool sound_task_enabled;
-  bool sound_modes_enabled;
-  uint8_t sound_volume;
-  uint8_t sound_deadband;
-
-  void SetDefaults();
-};
-
 struct VoiceSettings {
   // vegavoice stuff
   bool voice_climb_rate_enabled;
@@ -233,8 +222,6 @@ struct ComputerSettings {
   WindSettings wind;
 
   PolarSettings polar;
-
-  SoundSettings sound;
 
   TeamCodeSettings team_code;
 

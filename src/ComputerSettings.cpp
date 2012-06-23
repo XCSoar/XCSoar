@@ -46,16 +46,6 @@ PolarSettings::SetDefaults()
 }
 
 void
-SoundSettings::SetDefaults()
-{
-  sound_vario_enabled = false;
-  sound_task_enabled = true;
-  sound_modes_enabled = true;
-  sound_volume = 80;
-  sound_deadband = 5;
-}
-
-void
 VoiceSettings::SetDefaults()
 {
   voice_climb_rate_enabled = false;
@@ -96,7 +86,6 @@ ComputerSettings::SetDefaults()
 {
   wind.SetDefaults();
   polar.SetDefaults();
-  sound.SetDefaults();
   team_code.SetDefaults();
   voice.SetDefaults();
   poi.SetDefaults();

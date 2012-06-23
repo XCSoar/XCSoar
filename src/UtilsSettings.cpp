@@ -205,7 +205,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   ActionInterface::SendMapSettings(true);
 
-  AudioVarioGlue::Configure(CommonInterface::GetComputerSettings().sound);
+  AudioVarioGlue::Configure(CommonInterface::GetUISettings().sound);
 
   operation.Hide();
   InfoBoxManager::SetDirty();

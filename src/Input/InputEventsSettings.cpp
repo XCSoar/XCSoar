@@ -45,7 +45,7 @@ trigger_redraw()
 void
 InputEvents::eventSounds(const TCHAR *misc)
 {
-  SoundSettings &settings = CommonInterface::SetComputerSettings().sound;
+  SoundSettings &settings = CommonInterface::SetUISettings().sound;
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (StringIsEqual(misc, _T("toggle")))
@@ -148,7 +148,7 @@ InputEvents::eventTerrainTopography(const TCHAR *misc)
 void
 InputEvents::eventAudioDeadband(const TCHAR *misc)
 {
-  SoundSettings &settings = CommonInterface::SetComputerSettings().sound;
+  SoundSettings &settings = CommonInterface::SetUISettings().sound;
 
   if (StringIsEqual(misc, _T("+"))) {
     if (settings.sound_deadband >= 40)

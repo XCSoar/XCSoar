@@ -122,7 +122,7 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   } else {
     protected_marks->MarkLocation(basic.location, basic.date_time_utc);
 
-    if (CommonInterface::GetComputerSettings().sound.sound_modes_enabled)
+    if (CommonInterface::GetUISettings().sound.sound_modes_enabled)
       PlayResource(_T("IDR_WAV_CLEAR"));
   }
 

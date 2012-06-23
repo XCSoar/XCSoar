@@ -35,6 +35,17 @@ Copyright_License {
 #include "Geo/CoordinateFormat.hpp"
 #include "DisplaySettings.hpp"
 
+struct SoundSettings {
+  // sound stuff not used?
+  bool sound_vario_enabled;
+  bool sound_task_enabled;
+  bool sound_modes_enabled;
+  uint8_t sound_volume;
+  uint8_t sound_deadband;
+
+  void SetDefaults();
+};
+
 /**
  * User interface settings.
  */
@@ -73,6 +84,7 @@ struct UISettings {
   TrafficSettings traffic;
   PageSettings pages;
   DialogSettings dialog;
+  SoundSettings sound;
 
   void SetDefaults();
 };

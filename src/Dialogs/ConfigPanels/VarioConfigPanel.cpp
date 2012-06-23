@@ -94,7 +94,7 @@ VarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(AppAveNeedle);
 
 #ifdef HAVE_PCM_PLAYER
-  const SoundSettings &sound = CommonInterface::GetComputerSettings().sound;
+  const SoundSettings &sound = CommonInterface::GetUISettings().sound;
 
   AddBoolean(_("Audio vario"),
              _("Emulate the sound of an electronic vario."),
@@ -127,7 +127,7 @@ VarioConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(AppAveNeedle, szProfileAppAveNeedle, settings.show_average_needle);
 
 #ifdef HAVE_PCM_PLAYER
-  SoundSettings &sound = CommonInterface::SetComputerSettings().sound;
+  SoundSettings &sound = CommonInterface::SetUISettings().sound;
   changed |= SaveValue(AudioVario, szProfileSoundAudioVario,
                        sound.sound_vario_enabled);
   unsigned volume = sound.sound_volume;
