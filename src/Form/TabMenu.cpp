@@ -433,7 +433,7 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
 bool
 TabMenuDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  drag_end();
+  DragEnd();
   RasterPoint Pos;
   Pos.x = x;
   Pos.y = y;
@@ -461,7 +461,7 @@ TabMenuDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   if (dragging) {
-    drag_end();
+    DragEnd();
     const TabMenuControl::MenuTabIndex di =
         GetTabMenuBar().IsPointOverButton(Pos, selected_index.main_index);
 
@@ -639,11 +639,11 @@ TabMenuDisplay::OnPaint(Canvas &canvas)
   canvas.Clear(look.background_color);
   canvas.Select(*look.button.font);
 
-  const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
+  const unsigned caption_style = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
-  PaintMainMenuItems(canvas, CaptionStyle);
-  PaintSubMenuItems(canvas, CaptionStyle);
+  PaintMainMenuItems(canvas, caption_style);
+  PaintSubMenuItems(canvas, caption_style);
 }
 
 void
@@ -661,7 +661,7 @@ TabMenuDisplay::OnSetFocus()
 }
 
 void
-TabMenuDisplay::drag_end()
+TabMenuDisplay::DragEnd()
 {
   if (dragging) {
     dragging = false;

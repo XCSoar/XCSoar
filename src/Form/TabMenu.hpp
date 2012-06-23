@@ -407,7 +407,7 @@ protected:
     return menu;
   }
 
-  void drag_end();
+  void DragEnd();
 
   /**
    * @return Rect of button holding down pointer capture
