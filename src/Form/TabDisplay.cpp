@@ -309,14 +309,10 @@ TabDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   EndDrag();
 
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
-
   // If possible -> Give focus to the Control
   SetFocus();
 
-  int i = GetButtonIndexAt(Pos);
+  int i = GetButtonIndexAt({ x, y });
   if (i >= 0) {
     dragging = true;
     down_index = i;
@@ -331,14 +327,10 @@ TabDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
-
   if (dragging) {
     EndDrag();
 
-    int i = GetButtonIndexAt(Pos);
+    int i = GetButtonIndexAt({ x, y });
     if (i == down_index)
       tab_bar.ClickPage(i);
 
@@ -358,13 +350,10 @@ TabDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     return false;
 
   const PixelRect rc = GetButtonSize(down_index);
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
 
-  const bool tmp = !PtInRect(&rc, Pos);
-  if (drag_off_button != tmp) {
-    drag_off_button = tmp;
+  bool not_on_button = !PtInRect(&rc, { x, y });
+  if (drag_off_button != not_on_button) {
+    drag_off_button = not_on_button;
     Invalidate(rc);
   }
   return true;
