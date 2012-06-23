@@ -38,16 +38,6 @@ static const int min_vario = -500, max_vario = 500;
  */
 static const int min_dead = -30, max_dead = 10;
 
-/**
- * The minimum silence+audible period for #max_vario.
- */
-static const unsigned min_period_ms = 150;
-
-/**
- * The maximum silence+audible period for #min_vario.
- */
-static const unsigned max_period_ms = 800;
-
 static int
 Clamp(int value, int min, int max)
 {

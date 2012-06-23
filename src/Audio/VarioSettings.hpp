@@ -37,6 +37,8 @@ struct VarioSoundSettings {
   unsigned zero_frequency;
   unsigned max_frequency;
 
+  unsigned min_period_ms;
+  unsigned max_period_ms;
 
   void SetDefaults();
 };

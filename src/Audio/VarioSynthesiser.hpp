@@ -67,12 +67,23 @@ class VarioSynthesiser : public ToneSynthesiser {
    */
   unsigned max_frequency;
 
+  /**
+   * The minimum silence+audible period for #max_vario.
+   */
+  unsigned min_period_ms;
+
+  /**
+   * The maximum silence+audible period for #min_vario.
+   */
+  unsigned max_period_ms;
+
 public:
   VarioSynthesiser()
     :audible_count(0), silence_count(1),
      audible_remaining(0), silence_remaining(0),
      dead_band_enabled(true),
-     min_frequency(50), zero_frequency(400), max_frequency(2000) {}
+     min_frequency(50), zero_frequency(400), max_frequency(2000),
+     min_period_ms(150), max_period_ms(800) {}
 
   /**
    * Update the vario value.  This calculates a new tone frequency and
@@ -101,6 +112,14 @@ public:
     min_frequency = min;
     zero_frequency = zero;
     max_frequency = max;
+  }
+
+  /**
+   * Set the time periods for minimum and maximum lift
+   */
+  void SetPeriods(unsigned min, unsigned max) {
+    min_period_ms = min;
+    max_period_ms = max;
   }
 
   /* methods from class PCMSynthesiser */

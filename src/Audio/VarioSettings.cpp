@@ -33,4 +33,7 @@ VarioSoundSettings::SetDefaults()
   min_frequency = 50;
   zero_frequency = 400;
   max_frequency = 2000;
+
+  min_period_ms = 150;
+  max_period_ms = 800;
 }
