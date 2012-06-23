@@ -39,21 +39,6 @@ static const int min_vario = -500, max_vario = 500;
 static const int min_dead = -30, max_dead = 10;
 
 /**
- * The tone frequency for #min_vario.
- */
-static const unsigned min_frequency = 50;
-
-/**
- * The tone frequency for stationary altitude.
- */
-static const unsigned zero_frequency = 400;
-
-/**
- * The tone frequency for #max_vario.
- */
-static const unsigned max_frequency = 2000;
-
-/**
  * The minimum silence+audible period for #max_vario.
  */
 static const unsigned min_period_ms = 150;
@@ -69,14 +54,8 @@ Clamp(int value, int min, int max)
   return std::max(std::min(value, max), min);
 }
 
-/**
- * Convert a vario value to a tone frequency.
- *
- * @param ivario the current vario value [cm/s]
- */
-gcc_const
-static unsigned
-VarioToFrequency(int ivario)
+unsigned
+VarioSynthesiser::VarioToFrequency(int ivario)
 {
   return ivario > 0
     ? (zero_frequency + (unsigned)ivario * (max_frequency - zero_frequency)

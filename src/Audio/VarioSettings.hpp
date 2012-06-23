@@ -33,6 +33,11 @@ struct VarioSoundSettings {
   uint8_t volume;
   bool dead_band_enabled;
 
+  unsigned min_frequency;
+  unsigned zero_frequency;
+  unsigned max_frequency;
+
+
   void SetDefaults();
 };
 

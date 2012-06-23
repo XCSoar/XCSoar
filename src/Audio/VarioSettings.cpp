@@ -29,4 +29,8 @@ VarioSoundSettings::SetDefaults()
   enabled = false;
   volume = 80;
   dead_band_enabled = true;
+
+  min_frequency = 50;
+  zero_frequency = 400;
+  max_frequency = 2000;
 }

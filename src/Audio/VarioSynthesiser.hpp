@@ -52,11 +52,27 @@ class VarioSynthesiser : public ToneSynthesiser {
 
   bool dead_band_enabled;
 
+  /**
+   * The tone frequency for #min_vario.
+   */
+  unsigned min_frequency;
+
+  /**
+   * The tone frequency for stationary altitude.
+   */
+  unsigned zero_frequency;
+
+  /**
+   * The tone frequency for #max_vario.
+   */
+  unsigned max_frequency;
+
 public:
   VarioSynthesiser()
     :audible_count(0), silence_count(1),
      audible_remaining(0), silence_remaining(0),
-     dead_band_enabled(true) {}
+     dead_band_enabled(true),
+     min_frequency(50), zero_frequency(400), max_frequency(2000) {}
 
   /**
    * Update the vario value.  This calculates a new tone frequency and
@@ -75,8 +91,23 @@ public:
     dead_band_enabled = enabled;
   }
 
+  void SetFrequencies(unsigned min, unsigned zero, unsigned max) {
+    min_frequency = min;
+    zero_frequency = zero;
+    max_frequency = max;
+  }
+
   /* methods from class PCMSynthesiser */
   virtual void Synthesise(int16_t *buffer, size_t n);
+
+private:
+  /**
+   * Convert a vario value to a tone frequency.
+   *
+   * @param ivario the current vario value [cm/s]
+   */
+  gcc_const
+  unsigned VarioToFrequency(int ivario);
 };
 
 #endif
