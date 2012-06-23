@@ -176,7 +176,7 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
 void
 TabDisplay::Add(const TCHAR *caption, bool button_only, const Bitmap *bmp)
 {
-  OneTabButton *b = new OneTabButton(caption, button_only, bmp);
+  TabButton *b = new TabButton(caption, button_only, bmp);
   buttons.append(b);
 }
 
@@ -203,7 +203,7 @@ TabDisplay::OnPaint(Canvas &canvas)
 
   const bool is_focused = HasFocus();
   for (unsigned i = 0; i < buttons.size(); i++) {
-    const OneTabButton &button = *buttons[i];
+    const TabButton &button = *buttons[i];
 
     const bool is_down = (int)i == down_index && !drag_off_button;
     const bool is_selected = i == tab_bar.GetCurrentPage();

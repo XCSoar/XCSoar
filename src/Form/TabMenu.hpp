@@ -31,8 +31,8 @@ Copyright_License {
 struct DialogLook;
 class WndForm;
 class TabMenuDisplay;
-class OneSubMenuButton;
-class OneMainMenuButton;
+class SubMenuButton;
+class MainMenuButton;
 class ContainerWindow;
 
 /** TabMenuControl is a two-level menu structure.
@@ -108,10 +108,10 @@ public:
 protected:
   TabbedControl pager;
 
-  StaticArray<OneSubMenuButton *, 32> buttons;
+  StaticArray<SubMenuButton *, 32> buttons;
 
   /* holds info and buttons for the main menu.  not on child menus */
-  StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
+  StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS> main_menu_buttons;
 
   TabMenuDisplay *tab_display;
 
@@ -144,7 +144,7 @@ public:
     pager.UpdateLayout();
   }
 
-  const StaticArray<OneSubMenuButton *, 32> &GetTabButtons() const {
+  const StaticArray<SubMenuButton *, 32> &GetTabButtons() const {
     return buttons;
   }
 
@@ -217,7 +217,7 @@ public:
    * @return pointer to button or NULL if index is out of range
    */
   gcc_pure
-  const OneMainMenuButton &GetMainMenuButton(unsigned main_menu_index) const {
+  const MainMenuButton &GetMainMenuButton(unsigned main_menu_index) const {
     assert(main_menu_index < main_menu_buttons.size());
     assert(main_menu_buttons[main_menu_index] != NULL);
 
@@ -229,7 +229,7 @@ public:
    * @return pointer to button or NULL if index is out of range
    */
   gcc_pure
-  const OneSubMenuButton &GetSubMenuButton(unsigned page) const {
+  const SubMenuButton &GetSubMenuButton(unsigned page) const {
     assert(page < GetNumPages() && page < buttons.size());
     assert(buttons[page] != NULL);
 
@@ -285,7 +285,7 @@ public:
     return last_content_page;
   }
 
-  const StaticArray<OneMainMenuButton *, MAX_MAIN_MENU_ITEMS>
+  const StaticArray<MainMenuButton *, MAX_MAIN_MENU_ITEMS>
       &GetMainMenuButtons() const { return main_menu_buttons; }
 
 protected:
@@ -435,17 +435,17 @@ protected:
   void PaintMainMenuBorder(Canvas &canvas) const;
   void PaintMainMenuItems(Canvas &canvas, const unsigned CaptionStyle) const;
   void PaintSubMenuBorder(Canvas &canvas,
-                          const OneMainMenuButton &main_button) const;
+                          const MainMenuButton &main_button) const;
   void PaintSubMenuItems(Canvas &canvas, const unsigned CaptionStyle) const;
 };
 
 /**
  * class that holds the child menu button and info for the menu
  */
-class OneSubMenuButton : public OneTabButton {
+class SubMenuButton : public TabButton {
 public:
-  OneSubMenuButton(const TCHAR* _Caption)
-    :OneTabButton(_Caption, false, NULL)
+  SubMenuButton(const TCHAR* _Caption)
+    :TabButton(_Caption, false, NULL)
   {
   }
 };
@@ -453,7 +453,7 @@ public:
 /**
  * class that holds the main menu button and info
  */
-class OneMainMenuButton : public OneTabButton {
+class MainMenuButton : public TabButton {
 public:
   /* index to Pages array of first page in submenu */
   const unsigned first_page_index;
@@ -461,10 +461,10 @@ public:
   /* index to Pages array of last page in submenu */
   const unsigned last_page_index;
 
-  OneMainMenuButton(const TCHAR* _Caption,
+  MainMenuButton(const TCHAR* _Caption,
                     unsigned _first_page_index,
                     unsigned _last_page_index)
-    :OneTabButton(_Caption, false, NULL),
+    :TabButton(_Caption, false, NULL),
      first_page_index(_first_page_index),
      last_page_index(_last_page_index)
   {

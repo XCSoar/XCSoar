@@ -133,7 +133,7 @@ TabMenuControl::SetCurrentPage(unsigned page)
   } else {
     const PageItem& theitem = GetPageItem(page);
     SetLastContentPage(page);
-    const OneMainMenuButton &main_button =
+    const MainMenuButton &main_button =
       GetMainMenuButton(theitem.main_menu_index);
     StaticString<128> caption;
     caption.Format(_T("%s > %s"),
@@ -158,7 +158,7 @@ TabMenuControl::GetPageNum(MenuTabIndex i) const
   assert(i.main_index < main_menu_buttons.size());
   assert(i.sub_index < GetNumPages());
 
-  const OneMainMenuButton &main_button = GetMainMenuButton(i.main_index);
+  const MainMenuButton &main_button = GetMainMenuButton(i.main_index);
   return main_button.first_page_index + i.sub_index;
 }
 
@@ -216,7 +216,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
     return buttons[page]->but_size;
 
   const PageItem &item = this->GetPageItem(page);
-  const OneMainMenuButton &main_button = GetMainMenuButton(item.main_menu_index);
+  const MainMenuButton &main_button = GetMainMenuButton(item.main_menu_index);
   const unsigned sub_index = page - main_button.first_page_index;
 
   PixelRect &rc = buttons[page]->but_size;
@@ -256,7 +256,7 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 
   // scan visible submenu
   if (mainIndex < GetNumMainMenuItems()) {
-    const OneMainMenuButton &main_button = GetMainMenuButton(mainIndex);
+    const MainMenuButton &main_button = GetMainMenuButton(mainIndex);
     for (unsigned i = main_button.first_page_index;
          i <= main_button.last_page_index; ++i) {
       if (PtInRect(&GetSubMenuButtonSize(i), Pos))
@@ -277,8 +277,8 @@ TabMenuControl::CreateSubMenuItem(const PageItem &item)
   Widget *widget = item.Load();
   pager.AddPage(widget);
 
-  OneSubMenuButton *b =
-    new OneSubMenuButton(item.menu_caption);
+  SubMenuButton *b =
+    new SubMenuButton(item.menu_caption);
   buttons.append(b);
 }
 
@@ -299,8 +299,8 @@ TabMenuControl::CreateSubMenu(const PageItem pages_in[], unsigned NumPages,
       subMenuIndex++;
     }
   }
-  OneMainMenuButton *b =
-      new OneMainMenuButton(main_menu_caption, firstPageIndex,
+  MainMenuButton *b =
+      new MainMenuButton(main_menu_caption, firstPageIndex,
                             firstPageIndex + subMenuIndex - 1);
   main_menu_buttons.append(b);
 }
@@ -320,7 +320,7 @@ TabMenuControl::InitMenu(const PageItem pages_in[],
     CreateSubMenu(pages_in, num_pages, main_menu_captions[i], i);
 
   pager.AddClient(tab_display);
-  buttons.append(new OneSubMenuButton(caption));
+  buttons.append(new SubMenuButton(caption));
 
   assert(GetNumPages() == num_pages);
 }
@@ -377,7 +377,7 @@ TabMenuDisplay::SetSelectedIndex(TabMenuControl::MenuTabIndex di)
   if (di == selected_index)
     return;
 
-  const OneMainMenuButton &main_button = menu.GetMainMenuButton(di.main_index);
+  const MainMenuButton &main_button = menu.GetMainMenuButton(di.main_index);
   if (SupportsPartialRedraw() && di.main_index == selected_index.main_index &&
       di.sub_index < main_button.NumSubMenus() &&
       selected_index.sub_index < main_button.NumSubMenus()) {
@@ -547,7 +547,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
   for (auto i = tb.GetMainMenuButtons().begin(),
          end = tb.GetMainMenuButtons().end(); i != end;
        ++i, ++main_menu_index) {
-    const OneMainMenuButton &button = **i;
+    const MainMenuButton &button = **i;
 
     bool inverse = false;
     const bool isDown = main_menu_index == down_index.main_index &&
@@ -570,7 +570,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
 
 void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
-                                   const OneMainMenuButton &main_button) const
+                                   const MainMenuButton &main_button) const
 {
   const TabMenuControl &tb = GetTabMenuBar();
   const UPixelScalar bwidth =  GetTabLineHeight();
@@ -594,7 +594,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
   if (selected_index.IsNone())
     return;
 
-  const OneMainMenuButton &main_button =
+  const MainMenuButton &main_button =
     tb.GetMainMenuButton(selected_index.main_index);
 
   PaintSubMenuBorder(canvas, main_button);
@@ -608,7 +608,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
          last_page_index = main_button.last_page_index,
          page_index = first_page_index;
        page_index <= last_page_index; ++page_index) {
-    const OneSubMenuButton &button = tb.GetSubMenuButton(page_index);
+    const SubMenuButton &button = tb.GetSubMenuButton(page_index);
     const unsigned sub_index = page_index - first_page_index;
 
     bool inverse = false;

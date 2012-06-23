@@ -34,9 +34,9 @@ class ContainerWindow;
 class TabBarControl;
 
 /**
- * OneTabButton class holds display and callbacks data for a single tab
+ * TabButton class holds display and callbacks data for a single tab
  */
-class OneTabButton {
+class TabButton {
 public:
   StaticString<32> caption;
   bool is_button_only;
@@ -44,7 +44,7 @@ public:
   PixelRect but_size;
 
 public:
-  OneTabButton(const TCHAR* _Caption,
+  TabButton(const TCHAR* _Caption,
                bool _IsButtonOnly,
                const Bitmap *_bmp)
     :is_button_only(_IsButtonOnly),
@@ -70,7 +70,7 @@ protected:
   TabBarControl& tab_bar;
   const DialogLook &look;
 
-  StaticArray<OneTabButton *, 32> buttons;
+  StaticArray<TabButton *, 32> buttons;
 
   bool dragging; // tracks that mouse is down and captured
   int down_index; // index of tab where mouse down occurred
