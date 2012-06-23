@@ -21,19 +21,9 @@ Copyright_License {
 }
 */
 
-/*
- * Based on code from libkfrgcs, original copyright notice:
- *
- * Copyright (c):  2002 by Garrecht Ingenieurgesellschaft
- *
- * This file is distributed under the terms of the General Public
- * Licence. See the file COPYING for more information.
- *
- */
+#include "CRC.hpp"
 
-#include "CRC16.hpp"
-
-const uint16_t Crc16Table[256] = {
+const uint16_t crc16ccitt_table[256] = {
   0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7,
   0x8108, 0x9129, 0xa14a, 0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef,
   0x1231, 0x0210, 0x3273, 0x2252, 0x52b5, 0x4294, 0x72f7, 0x62d6,

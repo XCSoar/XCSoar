@@ -21,41 +21,38 @@ Copyright_License {
 }
 */
 
-/*
- * Based on code from libkfrgcs, original copyright notice:
- *
- * Copyright (c):  2002 by Garrecht Ingenieurgesellschaft
- *
- * This file is distributed under the terms of the General Public
- * Licence. See the file COPYING for more information.
- *
- */
-
-#ifndef XCSOAR_VOLKSLOGGER_CRC16_HPP
-#define XCSOAR_VOLKSLOGGER_CRC16_HPP
+#ifndef XCSOAR_CRC_HPP
+#define XCSOAR_CRC_HPP
 
 #include "Compiler.h"
 
 #include <stdint.h>
 #include <stddef.h>
 
-extern const uint16_t Crc16Table[256];
+extern const uint16_t crc16ccitt_table[256];
 
 gcc_const
 static inline uint16_t
-UpdateCRC(uint8_t Octet, uint16_t CRC)
+UpdateCRC16CCITT(uint8_t octet, uint16_t crc)
 {
-  return (CRC << 8) ^ Crc16Table[(CRC >> 8) ^ Octet];
+  return (crc << 8) ^ crc16ccitt_table[(crc >> 8) ^ octet];
 }
 
 gcc_pure
 static inline uint16_t
-UpdateCRC(const void *data, size_t length, uint16_t crc)
+UpdateCRC16CCITT(const uint8_t *data, const uint8_t *end, uint16_t crc)
+{
+  while (data < end)
+    crc = UpdateCRC16CCITT(*data++, crc);
+  return crc;
+}
+
+gcc_pure
+static inline uint16_t
+UpdateCRC16CCITT(const void *data, size_t length, uint16_t crc)
 {
   const uint8_t *p = (const uint8_t *)data, *end = p + length;
-  while (p < end)
-    crc = UpdateCRC(*p++, crc);
-  return crc;
+  return UpdateCRC16CCITT(p, end, crc);
 }
 
 #endif

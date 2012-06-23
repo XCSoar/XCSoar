@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Protocol.hpp"
-#include "CRC16.hpp"
+#include "Util/CRC.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 #include "TimeoutClock.hpp"
@@ -110,7 +110,7 @@ SendWithCRC(Port &port, const void *data, size_t length,
   if (!port.FullWrite(data, length, env, 2000))
     return false;
 
-  uint16_t crc16 = UpdateCRC(data, length, 0);
+  uint16_t crc16 = UpdateCRC16CCITT(data, length, 0);
   return port.Write(crc16 >> 8) && port.Write(crc16 & 0xff);
 }
 
@@ -238,7 +238,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
           if(nbytes < max_length)
             *p++ = ch;
           nbytes++;
-          crc16 = UpdateCRC(ch, crc16);
+          crc16 = UpdateCRC16CCITT(ch, crc16);
         }
       }
       break;
@@ -249,7 +249,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
             *p++ = ch;
           }
           nbytes++;
-          crc16 = UpdateCRC(ch, crc16);
+          crc16 = UpdateCRC16CCITT(ch, crc16);
         };
       }
       else {
@@ -265,7 +265,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
           if(nbytes < max_length)
             *p++ = ch;
           nbytes++;
-          crc16 = UpdateCRC(ch, crc16);
+          crc16 = UpdateCRC16CCITT(ch, crc16);
         }
       }
       else {
@@ -279,7 +279,7 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
         if(nbytes < max_length)
           *p++ = ch;
         nbytes++;
-        crc16 = UpdateCRC(ch, crc16);
+        crc16 = UpdateCRC16CCITT(ch, crc16);
       }
       break;
     }
@@ -316,7 +316,7 @@ Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
     if (n == 0)
       return false;
 
-    crc16 = UpdateCRC(p, n, crc16);
+    crc16 = UpdateCRC16CCITT(p, n, crc16);
     p += n;
 
     env.SetProgressPosition(p - (const uint8_t *)buffer);
