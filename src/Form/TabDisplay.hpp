@@ -39,18 +39,18 @@ class TabBarControl;
 class TabButton {
 public:
   StaticString<32> caption;
-  const Bitmap *bmp;
-  PixelRect but_size;
+  const Bitmap *bitmap;
+  PixelRect rc;
 
 public:
-  TabButton(const TCHAR* _Caption, const Bitmap *_bmp)
-    :bmp(_bmp)
+  TabButton(const TCHAR* _caption, const Bitmap *_bitmap)
+    :bitmap(_bitmap)
   {
-    caption = _Caption;
-    but_size.left = 0;
-    but_size.top = 0;
-    but_size.right = 0;
-    but_size.bottom = 0;
+    caption = _caption;
+    rc.left = 0;
+    rc.top = 0;
+    rc.right = 0;
+    rc.bottom = 0;
   };
 };
 
@@ -158,7 +158,8 @@ protected:
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
-  void drag_end();
+
+  void EndDrag();
 };
 
 #endif

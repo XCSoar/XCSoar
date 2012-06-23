@@ -187,9 +187,9 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
 {
   assert(i < main_menu_buttons.size());
 
-  if (main_menu_buttons[i]->but_size.left < main_menu_buttons[i]->but_size.right)
-    return main_menu_buttons[i]->but_size;
-  PixelRect &rc = main_menu_buttons[i]->but_size;
+  if (main_menu_buttons[i]->rc.left < main_menu_buttons[i]->rc.right)
+    return main_menu_buttons[i]->rc;
+  PixelRect &rc = main_menu_buttons[i]->rc;
   const UPixelScalar margin = Layout::Scale(1);
   const UPixelScalar finalmargin = Layout::Scale(1);
   const UPixelScalar butHeight = GetMenuButtonHeight();
@@ -199,7 +199,7 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i) const
   rc.left = 0;
   rc.right = GetMenuButtonWidth();
 
-  return main_menu_buttons[i]->but_size;
+  return main_menu_buttons[i]->rc;
 }
 
 const PixelRect&
@@ -207,14 +207,14 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
 {
   assert(page < buttons.size());
 
-  if (buttons[page]->but_size.left < buttons[page]->but_size.right)
-    return buttons[page]->but_size;
+  if (buttons[page]->rc.left < buttons[page]->rc.right)
+    return buttons[page]->rc;
 
   const PageItem &item = this->GetPageItem(page);
   const MainMenuButton &main_button = GetMainMenuButton(item.main_menu_index);
   const unsigned sub_index = page - main_button.first_page_index;
 
-  PixelRect &rc = buttons[page]->but_size;
+  PixelRect &rc = buttons[page]->rc;
 
   const UPixelScalar margin = Layout::Scale(1);
   const UPixelScalar finalmargin = Layout::Scale(1);
@@ -237,7 +237,7 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page) const
   rc.left = GetMenuButtonWidth() + GetTabLineHeight();
   rc.right = rc.left + GetMenuButtonWidth();
 
-  return buttons[page]->but_size;
+  return buttons[page]->rc;
 }
 
 TabMenuControl::MenuTabIndex

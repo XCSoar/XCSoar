@@ -61,8 +61,8 @@ TabDisplay::GetButtonSize(unsigned i) const
 {
   assert(i < GetSize());
 
-  if (buttons[i]->but_size.left < buttons[i]->but_size.right)
-    return buttons[i]->but_size;
+  if (buttons[i]->rc.left < buttons[i]->rc.right)
+    return buttons[i]->rc;
 
   const UPixelScalar margin = 1;
 
@@ -113,8 +113,8 @@ TabDisplay::GetButtonSize(unsigned i) const
     rc.right = rc.left + but_width;
   }
 
-  buttons[i]->but_size = rc;
-  return buttons[i]->but_size;
+  buttons[i]->rc = rc;
+  return buttons[i]->rc;
 }
 
 void
@@ -207,7 +207,7 @@ TabDisplay::OnPaint(Canvas &canvas)
                                                            is_down));
 
     const PixelRect &rc = GetButtonSize(i);
-    PaintButton(canvas, CaptionStyle, button.caption, rc, button.bmp,
+    PaintButton(canvas, CaptionStyle, button.caption, rc, button.bitmap,
                 is_down, is_selected);
   }
 }
@@ -307,7 +307,7 @@ TabDisplay::OnKeyDown(unsigned key_code)
 bool
 TabDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  drag_end();
+  EndDrag();
 
   RasterPoint Pos;
   Pos.x = x;
@@ -336,7 +336,7 @@ TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
   Pos.y = y;
 
   if (dragging) {
-    drag_end();
+    EndDrag();
 
     int i = GetButtonIndexAt(Pos);
     if (i == down_index)
@@ -371,7 +371,7 @@ TabDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 }
 
 void
-TabDisplay::drag_end()
+TabDisplay::EndDrag()
 {
   if (dragging) {
     dragging = false;
