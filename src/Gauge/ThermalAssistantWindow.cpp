@@ -114,7 +114,6 @@ ThermalAssistantWindow::UpdateLiftPoints()
     lift_point_avg.x += lift_points[i].x;
     lift_point_avg.y += lift_points[i].y;
   }
-  lift_points[36] = lift_points[0];
 
   lift_point_avg.x /= 36;
   lift_point_avg.y /= 36;

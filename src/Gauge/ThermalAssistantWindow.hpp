@@ -55,7 +55,7 @@ protected:
 
   Angle direction;
   DerivedInfo derived;
-  RasterPoint lift_points[37];
+  RasterPoint lift_points[36];
   RasterPoint lift_point_avg;
 
 public:
