@@ -84,9 +84,7 @@ private:
 #define TabLineHeightInitUnscaled (unsigned)5
 
 public:
-  unsigned AddTab(Widget *widget, const TCHAR *caption,
-                  bool button_only=false,
-                  const Bitmap *bmp=NULL);
+  unsigned AddTab(Widget *widget, const TCHAR *caption, const Bitmap *bmp = NULL);
 
 public:
   gcc_pure

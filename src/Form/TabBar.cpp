@@ -95,11 +95,10 @@ TabBarControl::GetButtonCaption(unsigned i) const
 }
 
 unsigned
-TabBarControl::AddTab(Widget *widget, const TCHAR *caption,
-                      bool button_only, const Bitmap *bmp)
+TabBarControl::AddTab(Widget *widget, const TCHAR *caption, const Bitmap *bmp)
 {
   pager.Add(widget);
-  tab_display->Add(caption, button_only, bmp);
+  tab_display->Add(caption, bmp);
   return GetTabCount() - 1;
 }
 

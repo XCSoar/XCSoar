@@ -110,19 +110,19 @@ dlgStatusShowModal(int start_page)
   const Bitmap *TimesIcon = enable_icons ? &icons.hBmpTabTimes : NULL;
 
   Widget *flight_panel = new FlightStatusPanel(look, nearest_waypoint);
-  wTabBar->AddTab(flight_panel, _T("Flight"), false, FlightIcon);
+  wTabBar->AddTab(flight_panel, _T("Flight"), FlightIcon);
 
   Widget *system_panel = new SystemStatusPanel(look);
-  wTabBar->AddTab(system_panel, _T("System"), false, SystemIcon);
+  wTabBar->AddTab(system_panel, _T("System"), SystemIcon);
 
   Widget *task_panel = new TaskStatusPanel(look);
-  wTabBar->AddTab(task_panel, _T("Task"), false, TaskIcon);
+  wTabBar->AddTab(task_panel, _T("Task"), TaskIcon);
 
   Widget *rules_panel = new RulesStatusPanel(look);
-  wTabBar->AddTab(rules_panel, _T("Rules"), false, RulesIcon);
+  wTabBar->AddTab(rules_panel, _T("Rules"), RulesIcon);
 
   Widget *times_panel = new TimesStatusPanel(look);
-  wTabBar->AddTab(times_panel, _T("Times"), false, TimesIcon);
+  wTabBar->AddTab(times_panel, _T("Times"), TimesIcon);
 
   /* restore previous page */
 

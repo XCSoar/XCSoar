@@ -120,10 +120,8 @@ TabDisplay::GetButtonSize(unsigned i) const
 void
 TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
                         const TCHAR *caption, const PixelRect &rc,
-                        bool isButtonOnly, const Bitmap *bmp,
-                        const bool isDown, bool inverse)
+                        const Bitmap *bmp, const bool isDown, bool inverse)
 {
-
   PixelRect rcTextFinal = rc;
   const UPixelScalar buttonheight = rc.bottom - rc.top;
   const PixelSize text_size = canvas.CalcTextSize(caption);
@@ -138,14 +136,8 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
 
   rcTextFinal.top += textheightoffset;
 
-  //button-only formatting
-  if (isButtonOnly
-      && !isDown) {
-    canvas.DrawButton(rc, false);
-    canvas.SetBackgroundTransparent();
-  } else {
-    canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
-  }
+  canvas.DrawFilledRectangle(rc, canvas.GetBackgroundColor());
+
   if (bmp != NULL) {
     const PixelSize bitmap_size = bmp->GetSize();
     const int offsetx = (rc.right - rc.left - bitmap_size.cx / 2) / 2;
@@ -174,9 +166,9 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
 }
 
 void
-TabDisplay::Add(const TCHAR *caption, bool button_only, const Bitmap *bmp)
+TabDisplay::Add(const TCHAR *caption, const Bitmap *bmp)
 {
-  TabButton *b = new TabButton(caption, button_only, bmp);
+  TabButton *b = new TabButton(caption, bmp);
   buttons.append(b);
 }
 
@@ -215,11 +207,7 @@ TabDisplay::OnPaint(Canvas &canvas)
                                                            is_down));
 
     const PixelRect &rc = GetButtonSize(i);
-    PaintButton(canvas, CaptionStyle,
-                button.caption,
-                rc,
-                button.is_button_only,
-                button.bmp,
+    PaintButton(canvas, CaptionStyle, button.caption, rc, button.bmp,
                 is_down, is_selected);
   }
 }

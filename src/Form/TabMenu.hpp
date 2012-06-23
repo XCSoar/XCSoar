@@ -372,7 +372,7 @@ public:
 class SubMenuButton : public TabButton {
 public:
   SubMenuButton(const TCHAR* _Caption)
-    :TabButton(_Caption, false, NULL)
+    :TabButton(_Caption, NULL)
   {
   }
 };
@@ -391,7 +391,7 @@ public:
   MainMenuButton(const TCHAR* _Caption,
                     unsigned _first_page_index,
                     unsigned _last_page_index)
-    :TabButton(_Caption, false, NULL),
+    :TabButton(_Caption, NULL),
      first_page_index(_first_page_index),
      last_page_index(_last_page_index)
   {

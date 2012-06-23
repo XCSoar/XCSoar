@@ -39,16 +39,12 @@ class TabBarControl;
 class TabButton {
 public:
   StaticString<32> caption;
-  bool is_button_only;
   const Bitmap *bmp;
   PixelRect but_size;
 
 public:
-  TabButton(const TCHAR* _Caption,
-               bool _IsButtonOnly,
-               const Bitmap *_bmp)
-    :is_button_only(_IsButtonOnly),
-     bmp(_bmp)
+  TabButton(const TCHAR* _Caption, const Bitmap *_bmp)
+    :bmp(_bmp)
   {
     caption = _Caption;
     but_size.left = 0;
@@ -100,15 +96,13 @@ public:
    */
   static void PaintButton(Canvas &canvas, const unsigned CaptionStyle,
                           const TCHAR *caption, const PixelRect &rc,
-                          bool isButtonOnly, const Bitmap *bmp,
-                          const bool isDown, bool inverse);
+                          const Bitmap *bmp, const bool isDown, bool inverse);
 
   unsigned GetSize() const {
     return buttons.size();
   }
 
-  void Add(const TCHAR *caption, bool button_only=false,
-           const Bitmap *bmp=NULL);
+  void Add(const TCHAR *caption, const Bitmap *bmp = NULL);
 
   gcc_pure
   const TCHAR *GetCaption(unsigned i) const {

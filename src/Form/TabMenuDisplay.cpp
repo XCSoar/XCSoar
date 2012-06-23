@@ -247,7 +247,7 @@ TabMenuDisplay::PaintMainMenuItems(Canvas &canvas,
 
     const PixelRect rc = tb.GetMainMenuButtonSize(main_menu_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
-                            false, NULL, isDown, inverse);
+                            NULL, isDown, inverse);
   }
 }
 
@@ -310,8 +310,7 @@ TabMenuDisplay::PaintSubMenuItems(Canvas &canvas,
 
     const PixelRect &rc = tb.GetSubMenuButtonSize(page_index);
     TabDisplay::PaintButton(canvas, CaptionStyle, gettext(button.caption), rc,
-                            false, NULL,
-                            sub_index == selected_index.sub_index,
+                            NULL, sub_index == selected_index.sub_index,
                             inverse);
   }
 }

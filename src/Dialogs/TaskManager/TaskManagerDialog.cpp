@@ -252,29 +252,29 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : NULL;
   const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : NULL;
 
-  wTabBar->AddTab(wCalculator, _("Calculator"), false, CalcIcon);
+  wTabBar->AddTab(wCalculator, _("Calculator"), CalcIcon);
 
   if (Layout::landscape) {
-    wTabBar->AddTab(wEdit, _("Turn Points"), false, TurnPointIcon);
+    wTabBar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
     TurnpointTab = 1;
 
-    wTabBar->AddTab(list_tab, _("Manage"), false, BrowseIcon);
+    wTabBar->AddTab(list_tab, _("Manage"), BrowseIcon);
 
-    wTabBar->AddTab(wProps, _("Rules"), false, PropertiesIcon);
+    wTabBar->AddTab(wProps, _("Rules"), PropertiesIcon);
     PropertiesTab = 3;
 
-    wTabBar->AddTab(wClose, _("Close"), false);
+    wTabBar->AddTab(wClose, _("Close"));
 
     wTabBar->SetCurrentPage(0);
   } else {
-    wTabBar->AddTab(wClose, _("Close"), false);
+    wTabBar->AddTab(wClose, _("Close"));
 
-    wTabBar->AddTab(wEdit, _("Turn Points"), false, TurnPointIcon);
+    wTabBar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
     TurnpointTab = 2;
 
-    wTabBar->AddTab(list_tab, _("Manage"), false, BrowseIcon);
+    wTabBar->AddTab(list_tab, _("Manage"), BrowseIcon);
 
-    wTabBar->AddTab(wProps, _("Rules"), false, PropertiesIcon);
+    wTabBar->AddTab(wProps, _("Rules"), PropertiesIcon);
     PropertiesTab = 4;
 
     wTabBar->SetCurrentPage(0);
