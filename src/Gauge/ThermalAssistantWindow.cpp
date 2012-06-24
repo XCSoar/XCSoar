@@ -222,10 +222,10 @@ ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
     return;
   }
 
-  PaintRadarPlane(canvas);
-
   LiftPoints lift_points;
   CalculateLiftPoints(lift_points, max_lift);
   PaintPoints(canvas, lift_points);
   PaintAdvisor(canvas, lift_points);
+
+  PaintRadarPlane(canvas);
 }
