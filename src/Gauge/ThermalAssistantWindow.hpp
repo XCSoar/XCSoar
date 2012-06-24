@@ -79,7 +79,13 @@ public:
   void Update(const DerivedInfo &_derived);
 
 protected:
-  fixed RangeScale(fixed d) const;
+  /**
+   * Normalize the lift to the range of 0.0 to 1.0
+   * 0.0: lift = -max_lift
+   * 0.5: lift = zero lift
+   * 1.0: lift = max_lift
+   */
+  static fixed NormalizeLift(fixed lift, fixed max_lift);
 
   void CalculateLiftPoints(LiftPoints &lift_points) const;
   void UpdateLiftMax();

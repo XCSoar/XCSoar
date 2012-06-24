@@ -101,7 +101,7 @@ ThermalAssistantWindow::CalculateLiftPoints(LiftPoints &lift_points) const
     Angle d = Angle::Degrees(fixed(i * 10));
 
     auto sincos = (d - direction).SinCos();
-    auto scale = RangeScale(vario.lift_database[i]);
+    auto scale = NormalizeLift(vario.lift_database[i], max_lift) * fixed(radius);
 
     lift_points[i].x = (int)(sincos.second * scale);
     lift_points[i].y = (int)(sincos.first * scale);
@@ -117,10 +117,10 @@ ThermalAssistantWindow::CalculateLiftPoints(LiftPoints &lift_points) const
 }
 
 fixed
-ThermalAssistantWindow::RangeScale(fixed lift) const
+ThermalAssistantWindow::NormalizeLift(fixed lift, fixed max_lift)
 {
   lift = (lift + max_lift) / Double(max_lift);
-  return std::min(fixed_one, std::max(fixed_zero, lift)) * fixed(radius);
+  return std::min(fixed_one, std::max(fixed_zero, lift));
 }
 
 void
