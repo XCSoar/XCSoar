@@ -53,7 +53,6 @@ ThermalAssistantWindow::LiftPoints::GetAverage() const
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
                                                unsigned _padding, bool _small)
   :look(_look),
-   max_lift(fixed_one),
    padding(_padding),
    small(_small),
    direction(Angle::Zero()) {}
@@ -82,20 +81,20 @@ ThermalAssistantWindow::Update(const DerivedInfo &derived)
   circling = (CirclingInfo)derived;
   vario = (VarioInfo)derived;
 
-  UpdateLiftMax();
   Invalidate();
 }
 
-void
-ThermalAssistantWindow::UpdateLiftMax()
+fixed
+ThermalAssistantWindow::CalculateMaxLift() const
 {
-  max_lift = ceil(std::max(fixed_one,
-                           *std::max_element(vario.lift_database.begin(),
-                                             vario.lift_database.end())));
+  return std::max(fixed_one,
+                  *std::max_element(vario.lift_database.begin(),
+                                    vario.lift_database.end()));
 }
 
 void
-ThermalAssistantWindow::CalculateLiftPoints(LiftPoints &lift_points) const
+ThermalAssistantWindow::CalculateLiftPoints(LiftPoints &lift_points,
+                                            fixed max_lift) const
 {
   for (unsigned i = 0; i < lift_points.size(); i++) {
     Angle d = Angle::Degrees(fixed(i * 10));
@@ -145,7 +144,7 @@ ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 }
 
 void
-ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
+ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas, fixed max_lift) const
 {
   canvas.Clear(look.background_color);
   canvas.SelectHollowBrush();
@@ -215,7 +214,9 @@ ThermalAssistantWindow::PaintNotCircling(Canvas &canvas) const
 void
 ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
-  PaintRadarBackground(canvas);
+  fixed max_lift = ceil(CalculateMaxLift());
+
+  PaintRadarBackground(canvas, max_lift);
   if (!circling.circling) {
     PaintNotCircling(canvas);
     return;
@@ -224,7 +225,7 @@ ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
   PaintRadarPlane(canvas);
 
   LiftPoints lift_points;
-  CalculateLiftPoints(lift_points);
+  CalculateLiftPoints(lift_points, max_lift);
   PaintPoints(canvas, lift_points);
   PaintAdvisor(canvas, lift_points);
 }

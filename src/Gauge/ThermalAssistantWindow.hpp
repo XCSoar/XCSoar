@@ -45,11 +45,6 @@ class ThermalAssistantWindow : public BufferWindow
 protected:
   const ThermalAssistantLook &look;
 
-  /**
-   * The distance of the biggest circle in meters.
-   */
-  fixed max_lift;
-
   RasterPoint mid;
 
   /**
@@ -87,10 +82,10 @@ protected:
    */
   static fixed NormalizeLift(fixed lift, fixed max_lift);
 
-  void CalculateLiftPoints(LiftPoints &lift_points) const;
-  void UpdateLiftMax();
+  void CalculateLiftPoints(LiftPoints &lift_points, fixed max_lift) const;
+  fixed CalculateMaxLift() const;
   void PaintRadarPlane(Canvas &canvas) const;
-  void PaintRadarBackground(Canvas &canvas) const;
+  void PaintRadarBackground(Canvas &canvas, fixed max_lift) const;
   void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;
   void PaintNotCircling(Canvas &canvas) const;
