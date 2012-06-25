@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CSV_LINE_HPP
 #define XCSOAR_CSV_LINE_HPP
 
+#include "Util/Range.hpp"
 #include "Math/fixed.hpp"
 
 /**
@@ -36,8 +37,8 @@ protected:
 public:
   CSVLine(const char *line);
 
-  const char *Rest() const {
-    return data;
+  Range<const char *> Rest() const {
+    return Range<const char *>(data, end);
   }
 
   /**

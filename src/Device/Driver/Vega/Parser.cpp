@@ -259,15 +259,10 @@ PDTSM(NMEAInputLine &line, gcc_unused NMEAInfo &info)
   */
   line.Skip();
 
-  const char *message = line.Rest();
-#ifdef _UNICODE
-  TCHAR buffer[strlen(message)];
-  if (MultiByteToWideChar(CP_ACP, 0, message, -1,
-                          buffer, ARRAY_SIZE(buffer)) <= 0)
-    return false;
-#else
-  const char *buffer = message;
-#endif
+  const auto message = line.Rest();
+
+  StaticString<256> buffer;
+  buffer.SetASCII(message.begin(), message.end());
 
   // todo duration handling
   Message::AddMessage(_T("VEGA:"), buffer);
@@ -298,16 +293,9 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
   else if (strcmp(type, "$PDVVT") == 0)
     return PDVVT(line, info);
   else if (strcmp(type, "$PDVSD") == 0) {
-    const char *message = line.Rest();
-#ifdef _UNICODE
-    TCHAR buffer[strlen(message)];
-    if (MultiByteToWideChar(CP_ACP, 0, message, -1,
-                            buffer, ARRAY_SIZE(buffer)) <= 0)
-      return false;
-#else
-    const char *buffer = message;
-#endif
-
+    const auto message = line.Rest();
+    StaticString<256> buffer;
+    buffer.SetASCII(message.begin(), message.end());
     Message::AddMessage(buffer);
     return true;
   } else if (strcmp(type, "$PDTSM") == 0)

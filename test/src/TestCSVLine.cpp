@@ -34,7 +34,8 @@ Test1()
   ok1(line.Read(-1) == 1);
 
   // Test rest()
-  ok1(strcmp(line.Rest(), "2,x,4,5,6,7,8,9,10") == 0);
+  const auto rest = line.Rest();
+  ok1(std::string(rest.begin(), rest.end()) == "2,x,4,5,6,7,8,9,10");
 
   // Test skip()
   ok1(line.Skip() == 1);

@@ -53,12 +53,16 @@ private:
   void PFLAC_S(NMEAInputLine &line) {
     char name[64];
     line.Read(name, ARRAY_SIZE(name));
-    const char *value = line.Rest();
 
-    settings[name] = value;
+    const auto value = line.Rest();
+    NarrowString<256> value_buffer;
+    value_buffer.SetASCII(value.begin(), value.end());
+
+    settings[name] = value_buffer;
 
     char buffer[512];
-    snprintf(buffer, ARRAY_SIZE(buffer), "PFLAC,A,%s,%s", name, value);
+    snprintf(buffer, ARRAY_SIZE(buffer), "PFLAC,A,%s,%s", name,
+             value_buffer.c_str());
     PortWriteNMEA(*port, buffer, *env);
   }
 
