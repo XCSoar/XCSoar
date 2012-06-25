@@ -22,27 +22,14 @@
 
 #include "Profile/Profile.hpp"
 #include "LocalPath.hpp"
+#include "OS/Args.hpp"
 
 #include <stdio.h>
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s NAME\n", argv[0]);
-    return 1;
-  }
-
-#ifdef _UNICODE
-  TCHAR name[1024];
-  int length = ::MultiByteToWideChar(CP_ACP, 0, argv[1], -1, name, 1024);
-  if (length == 0)
-    return 2;
-#else
-  const char *name = argv[1];
-#endif
+  Args args(argc, argv, "NAME");
+  tstring name = args.ExpectNextT();
+  args.ExpectEnd();
 
   InitialiseDataPath();
   Profile::SetFiles(_T(""));
@@ -50,7 +37,7 @@ int main(int argc, char **argv) {
   DeinitialiseDataPath();
 
   int value;
-  if (Profile::Get(name, value)) {
+  if (Profile::Get(name.c_str(), value)) {
     printf("%d\n", value);
     return 0;
   } else {

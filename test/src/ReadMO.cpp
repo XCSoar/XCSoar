@@ -22,34 +22,20 @@
 
 #include "Language/MOLoader.hpp"
 #include "OS/PathName.hpp"
+#include "OS/Args.hpp"
 
 #include <stdio.h>
 
-#ifdef _UNICODE
-#include <windows.h>
-#include <syslimits.h>
-#endif
-
 int main(int argc, char **argv) {
-  if (argc != 3) {
-    fprintf(stderr, "Usage: %s FILE.mo STRING\n", argv[0]);
-    return 1;
-  }
+  Args args(argc, argv, "FILE.igc STRING");
+  const char *narrow_path = args.PeekNext();
+  tstring path = args.ExpectNextT();
+  const char *original = args.ExpectNext();
+  args.ExpectEnd();
 
-#ifdef _UNICODE
-  TCHAR path[PATH_MAX];
-  int length = ::MultiByteToWideChar(CP_ACP, 0, argv[1], -1, path, PATH_MAX);
-  if (length == 0)
-    return 2;
-#else
-  const char *path = argv[1];
-#endif
-
-  const char *original = argv[2];
-
-  MOLoader mo(path);
+  MOLoader mo(path.c_str());
   if (mo.error()) {
-    fprintf(stderr, "Failed to load %s\n", (const char *)NarrowPathName(path));
+    fprintf(stderr, "Failed to load %s\n", narrow_path);
     return 2;
   }
 

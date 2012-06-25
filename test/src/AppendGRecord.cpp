@@ -21,34 +21,20 @@
 */
 
 #include "Logger/LoggerGRecord.hpp"
+#include "OS/Args.hpp"
 
 #include <stdio.h>
-
-#ifdef _UNICODE
-#include <windows.h>
-#include <syslimits.h>
-#endif
 
 int
 main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s FILE.igc\n", argv[0]);
-    return 1;
-  }
-
-#ifdef _UNICODE
-  TCHAR path[PATH_MAX];
-  int length = ::MultiByteToWideChar(CP_ACP, 0, argv[1], -1, path, PATH_MAX);
-  if (length == 0)
-    return 2;
-#else
-  const char *path = argv[1];
-#endif
+  Args args(argc, argv, "FILE.igc");
+  tstring path = args.ExpectNextT();
+  args.ExpectEnd();
 
   GRecord g;
   g.Initialize();
-  g.SetFileName(path);
+  g.SetFileName(path.c_str());
 
   if (!g.LoadFileToBuffer()) {
     fprintf(stderr, "Failed to read file\n");
