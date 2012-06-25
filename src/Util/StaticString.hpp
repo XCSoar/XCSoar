@@ -90,6 +90,10 @@ public:
     *end = SENTINEL;
   }
 
+  void SetASCII(const char *src) {
+    SetASCII(src, src + strlen(src));
+  }
+
   /**
    * Eliminate all non-ASCII characters.
    */
