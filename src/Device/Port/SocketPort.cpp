@@ -31,24 +31,24 @@ SocketPort::~SocketPort()
 }
 
 void
-SocketPort::Set(SocketDescriptor &&socket)
+SocketPort::Set(SocketDescriptor &&_socket)
 {
-  assert(!connection.IsDefined());
+  assert(!socket.IsDefined());
   assert(socket.IsDefined());
 
-  connection = std::move(socket);
+  socket = std::move(_socket);
 }
 
 bool
 SocketPort::OpenUDPListener(unsigned port)
 {
-  return connection.CreateUDPListener(port);
+  return socket.CreateUDPListener(port);
 }
 
 bool
 SocketPort::IsValid() const
 {
-  return connection.IsDefined();
+  return socket.IsDefined();
 }
 
 bool
@@ -87,10 +87,10 @@ SocketPort::StopRxThread()
 size_t
 SocketPort::Write(const void *data, size_t length)
 {
-  if (!connection.IsDefined())
+  if (!socket.IsDefined())
     return 0;
 
-  ssize_t nbytes = connection.Write((const char *)data, length);
+  ssize_t nbytes = socket.Write((const char *)data, length);
   return nbytes < 0 ? 0 : nbytes;
 }
 
@@ -127,22 +127,22 @@ SocketPort::SetBaudrate(unsigned baud_rate)
 int
 SocketPort::Read(void *buffer, size_t length)
 {
-  if (!connection.IsDefined())
+  if (!socket.IsDefined())
     return -1;
 
-  if (connection.WaitReadable(0) <= 0)
+  if (socket.WaitReadable(0) <= 0)
     return -1;
 
-  return connection.Read(buffer, length);
+  return socket.Read(buffer, length);
 }
 
 Port::WaitResult
 SocketPort::WaitRead(unsigned timeout_ms)
 {
-  if (!connection.IsDefined())
+  if (!socket.IsDefined())
     return WaitResult::FAILED;
 
-  int ret = connection.WaitReadable(timeout_ms);
+  int ret = socket.WaitReadable(timeout_ms);
   if (ret > 0)
     return WaitResult::READY;
   else if (ret == 0)
@@ -157,11 +157,11 @@ SocketPort::Run()
   char buffer[1024];
 
   while (!CheckStopped()) {
-    assert(connection.IsDefined());
+    assert(socket.IsDefined());
 
-    int ret = connection.WaitReadable(250);
+    int ret = socket.WaitReadable(250);
     if (ret > 0) {
-      ssize_t nbytes = connection.Read(buffer, sizeof(buffer));
+      ssize_t nbytes = socket.Read(buffer, sizeof(buffer));
       if (nbytes <= 0) {
         break;
       }

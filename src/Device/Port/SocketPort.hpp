@@ -33,7 +33,7 @@ Copyright_License {
  */
 class SocketPort : public Port, protected StoppableThread
 {
-  SocketDescriptor connection;
+  SocketDescriptor socket;
 
 public:
   /**
@@ -63,7 +63,7 @@ protected:
    * because it does not take care for stopping the thread.
    */
   void Close() {
-    connection.Close();
+    socket.Close();
   }
 
 public:
