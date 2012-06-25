@@ -83,6 +83,60 @@ LXDevice::GetV7Setting(const char *name) const
 }
 
 bool
+LXDevice::SendNanoSetting(const char *name, const char *value,
+                        OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  nano_settings.Lock();
+  nano_settings.MarkOld(name);
+  nano_settings.Unlock();
+
+  char buffer[256];
+  sprintf(buffer, "PLXVC,SET,W,%s,%s", name, value);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  nano_settings.Lock();
+  nano_settings.MarkOld(name);
+  nano_settings.Unlock();
+
+  char buffer[256];
+  sprintf(buffer, "PLXVC,SET,R,%s", name);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+std::string
+LXDevice::WaitNanoSetting(const char *name, OperationEnvironment &env,
+                        unsigned timeout_ms)
+{
+  ScopeLock protect(nano_settings);
+  auto i = nano_settings.Wait(name, env, timeout_ms);
+  if (i == nano_settings.end())
+    return std::string();
+
+  return *i;
+}
+
+std::string
+LXDevice::GetNanoSetting(const char *name) const
+{
+  ScopeLock protect(nano_settings);
+  auto i = nano_settings.find(name);
+  if (i == nano_settings.end())
+    return std::string();
+
+  return *i;
+}
+
+bool
 LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {

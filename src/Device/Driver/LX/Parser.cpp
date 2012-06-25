@@ -190,6 +190,32 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
 }
 
 /**
+ * Parse the $PLXVC sentence (LXNAV Nano).
+ *
+ * $PLXVC,<key>,<type>,<values>*<checksum><cr><lf>
+ */
+static void
+PLXVC(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
+{
+  char key[64];
+  line.Read(key, ARRAY_SIZE(key));
+
+  char type[2];
+  line.Read(type, ARRAY_SIZE(type));
+  if (strcmp(key, "SET") == 0 && type[0] == 'A') {
+    char name[64];
+    line.Read(name, ARRAY_SIZE(name));
+
+    const auto value = line.Rest();
+    if (!StringIsEmpty(name)) {
+      settings.Lock();
+      settings.Set(name, std::string(value.begin(), value.end()));
+      settings.Unlock();
+    }
+  }
+}
+
+/**
  * Parse the $PLXVF sentence (LXNav V7).
  *
  * $PLXVF,time ,AccX,AccY,AccZ,Vario,IAS,PressAlt*CS<CR><LF>
@@ -290,6 +316,12 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (StringIsEqual(type, "$PLXV0")) {
     is_v7 = true;
     return PLXV0(line, v7_settings);
+  }
+
+  if (StringIsEqual(type, "$PLXVC")) {
+    is_nano = true;
+    PLXVC(line, nano_settings);
+    return true;
   }
 
   if (StringIsEqual(type, "$PLXVF")) {

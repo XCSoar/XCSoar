@@ -59,6 +59,11 @@ class LXDevice: public AbstractDevice
    */
   DeviceSettingsMap<std::string> v7_settings;
 
+  /**
+   * Settings that were received in PLXVC (LXNAV Nano) sentences.
+   */
+  DeviceSettingsMap<std::string> nano_settings;
+
   Mutex mutex;
   Mode mode;
   bool busy;
@@ -116,6 +121,39 @@ public:
    */
   gcc_pure
   std::string GetV7Setting(const char *name) const;
+
+  /**
+   * Write a setting to a LXNAV Nano.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the Nano has understood and processed it)
+   */
+  bool SendNanoSetting(const char *name, const char *value,
+                       OperationEnvironment &env);
+
+  /**
+   * Request a setting from a LXNAV Nano.  The Nano will send the
+   * value, but this method will not wait for that.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the Nano has understood and processed it)
+   */
+  bool RequestNanoSetting(const char *name, OperationEnvironment &env);
+
+  /**
+   * Wait for the specified setting to be received.  Returns the value
+   * on success, or an empty string on timeout.
+   */
+  std::string WaitNanoSetting(const char *name, OperationEnvironment &env,
+                              unsigned timeout_ms);
+
+  /**
+   * Look up the given setting in the table of received LXNAV Nano
+   * values.  If the value does not exist, an empty string is
+   * returned.
+   */
+  gcc_pure
+  std::string GetNanoSetting(const char *name) const;
 
 protected:
   bool EnableCommandMode(OperationEnvironment &env);
