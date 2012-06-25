@@ -126,7 +126,7 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   // V or A in field 9  -> 3.31-
   // V or A in field 10 -> 3.32+
 
-  NMEAInputLine line_copy(line.Rest());
+  NMEAInputLine line_copy(line);
 
   line_copy.Skip(8);
 
