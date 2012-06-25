@@ -28,6 +28,7 @@ Copyright_License {
 #include "Geo/SpeedVector.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
+#include "Util/Macros.hpp"
 
 static bool
 ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
@@ -165,6 +166,30 @@ LXWP3(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 }
 
 /**
+ * Parse the $PLXV0 sentence (LXNav V7).
+ */
+static bool
+PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
+{
+  char name[64];
+  line.Read(name, ARRAY_SIZE(name));
+  if (StringIsEmpty(name))
+    return true;
+
+  char type[2];
+  line.Read(type, ARRAY_SIZE(type));
+  if (type[0] != 'W')
+    return true;
+
+  const auto value = line.Rest();
+
+  settings.Lock();
+  settings.Set(name, std::string(value.begin(), value.end()));
+  settings.Unlock();
+  return true;
+}
+
+/**
  * Parse the $PLXVF sentence (LXNav V7).
  *
  * $PLXVF,time ,AccX,AccY,AccZ,Vario,IAS,PressAlt*CS<CR><LF>
@@ -260,6 +285,11 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (StringIsEqual(type, "$LXWP3"))
     return LXWP3(line, info);
+
+  if (StringIsEqual(type, "$PLXV0")) {
+    is_v7 = true;
+    return PLXV0(line, v7_settings);
+  }
 
   if (StringIsEqual(type, "$PLXVF")) {
     is_v7 = true;

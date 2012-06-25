@@ -29,6 +29,48 @@ Copyright_License {
 #include <cstdio>
 
 bool
+LXDevice::SendV7Setting(const char *name, const char *value,
+                        OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  v7_settings.Lock();
+  v7_settings.MarkOld(name);
+  v7_settings.Unlock();
+
+  char buffer[256];
+  sprintf(buffer, "PLXV0,%s,W,%s", name, value);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+bool
+LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
+{
+  if (!EnableNMEA(env))
+    return false;
+
+  v7_settings.Lock();
+  v7_settings.MarkOld(name);
+  v7_settings.Unlock();
+
+  char buffer[256];
+  sprintf(buffer, "PLXV0,%s,R", name);
+  return PortWriteNMEA(port, buffer, env);
+}
+
+std::string
+LXDevice::GetV7Setting(const char *name) const
+{
+  ScopeLock protect(v7_settings);
+  auto i = v7_settings.find(name);
+  if (i == v7_settings.end())
+    return std::string();
+
+  return *i;
+}
+
+bool
 LXDevice::PutBallast(gcc_unused fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {

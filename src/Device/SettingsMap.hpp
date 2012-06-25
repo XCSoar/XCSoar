@@ -105,7 +105,7 @@ public:
   template<typename K>
   void MarkOld(const K &key) {
     auto i = map.find(key);
-    if (i != map.end)
+    if (i != map.end())
       i->second.old = true;
   }
 

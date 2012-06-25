@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "Device/Driver.hpp"
+#include "Device/SettingsMap.hpp"
 #include "Thread/Mutex.hpp"
 
 #include <stdint.h>
@@ -48,6 +49,11 @@ class LXDevice: public AbstractDevice
    */
   bool is_v7;
 
+  /**
+   * Settings that were received in PLXV0 (LXNAV V7) sentences.
+   */
+  DeviceSettingsMap<std::string> v7_settings;
+
   Mutex mutex;
   Mode mode;
   bool busy;
@@ -65,6 +71,32 @@ public:
   bool IsV7() const {
     return is_v7;
   }
+
+  /**
+   * Write a setting to a LXNAV V7.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the V7 has understood and processed it)
+   */
+  bool SendV7Setting(const char *name, const char *value,
+                     OperationEnvironment &env);
+
+  /**
+   * Request a setting from a LXNAV V7.  The V7 will send the value,
+   * but this method will not wait for that.
+   *
+   * @return true if sending the command has succeeded (it does not
+   * indicate whether the V7 has understood and processed it)
+   */
+  bool RequestV7Setting(const char *name, OperationEnvironment &env);
+
+  /**
+   * Look up the given setting in the table of received LXNAV V7
+   * values.  If the value does not exist, an empty string is
+   * returned.
+   */
+  gcc_pure
+  std::string GetV7Setting(const char *name) const;
 
 protected:
   bool EnableCommandMode(OperationEnvironment &env);
