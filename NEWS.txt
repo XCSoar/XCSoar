@@ -9,7 +9,7 @@ Version 6.4 - not yet released
   - buffered serial port I/O
   - FLARM: new FLARM setup dialog
   - added drivers for GliderTools GT Altimeter and Compass C-Probe
-  - LXNAV V7 configuration dialog
+  - LXNAV V7 and Nano configuration dialog
 * map
   - configurable airspace rendering (#1847)
   - "dots for sink" trail styles

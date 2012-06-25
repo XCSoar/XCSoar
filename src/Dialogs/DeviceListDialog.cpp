@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Dialogs/ManageFlarmDialog.hpp"
 #include "Dialogs/LX/ManageV7Dialog.hpp"
+#include "Dialogs/LX/ManageNanoDialog.hpp"
 #include "Dialogs/PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
@@ -437,6 +438,8 @@ DeviceListWidget::ManageCurrent()
     LXDevice &lx_device = *(LXDevice *)device;
     if (lx_device.IsV7())
       ManageV7Dialog(lx_device, info);
+    else if (lx_device.IsNano())
+      ManageNanoDialog(lx_device, info);
   } else if (descriptor.IsDriver(_T("Vega")))
     dlgConfigurationVarioShowModal(*device);
 

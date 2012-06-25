@@ -150,6 +150,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ManageFlarmDialog.cpp \
 	$(SRC)/Dialogs/LX/ManageV7Dialog.cpp \
 	$(SRC)/Dialogs/LX/V7ConfigWidget.cpp \
+	$(SRC)/Dialogs/LX/ManageNanoDialog.cpp \
+	$(SRC)/Dialogs/LX/NanoConfigWidget.cpp \
 	$(SRC)/Dialogs/Vega/VegaParametersWidget.cpp \
 	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Vega/VegaDemoDialog.cpp \
