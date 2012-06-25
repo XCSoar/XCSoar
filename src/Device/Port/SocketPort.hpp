@@ -35,6 +35,7 @@ class SocketPort : public Port, protected StoppableThread
 {
 protected:
   SocketDescriptor connection;
+
 public:
   /**
    * Creates a new SocketPort object, but does not open it yet.
@@ -42,7 +43,6 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-
   SocketPort(Handler &handler):Port(handler) {}
 
   /**

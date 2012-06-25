@@ -25,8 +25,8 @@ Copyright_License {
 
 #include <assert.h>
 
-
-TCPPort::~TCPPort(){ 
+TCPPort::~TCPPort()
+{
   StopRxThread();
 }
 
@@ -57,16 +57,15 @@ TCPPort::Run()
       listener.Close();
       break;
     }
-    /* connection must be defined before calling 
-     * SocketPort::Run()
-     */
+
+    /* connection must be defined before calling SocketPort::Run() */
     if (!connection.IsDefined())
       continue;
-    /* reads from existing client connection, 
-     * SocketPort::Run() returns whenever the current
-     * connection fails, so it can be closed also on this Side.
-     */
-    SocketPort::Run();      
+
+    /* reads from existing client connection, SocketPort::Run()
+       returns whenever the current connection fails, so it can be
+       closed also on this side */
+    SocketPort::Run();
     connection.Close();
   }
 }

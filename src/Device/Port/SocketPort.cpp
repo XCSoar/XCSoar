@@ -30,19 +30,17 @@ SocketPort::~SocketPort()
   StopRxThread();
 }
 
-
-bool 
-SocketPort::OpenUDPListener(unsigned port){
+bool
+SocketPort::OpenUDPListener(unsigned port)
+{
   return connection.CreateUDPListener(port);
 }
-
 
 bool
 SocketPort::IsValid() const
 {
   return connection.IsDefined();
 }
-
 
 bool
 SocketPort::Drain()
@@ -51,12 +49,10 @@ SocketPort::Drain()
   return true;
 }
 
-
 void
 SocketPort::Flush()
 {
 }
-
 
 bool
 SocketPort::StopRxThread()
@@ -79,7 +75,6 @@ SocketPort::StopRxThread()
   return true;
 }
 
-
 size_t
 SocketPort::Write(const void *data, size_t length)
 {
@@ -89,7 +84,6 @@ SocketPort::Write(const void *data, size_t length)
   ssize_t nbytes = connection.Write((const char *)data, length);
   return nbytes < 0 ? 0 : nbytes;
 }
-
 
 bool
 SocketPort::StartRxThread()
@@ -121,7 +115,6 @@ SocketPort::SetBaudrate(unsigned baud_rate)
   return true;
 }
 
-
 int
 SocketPort::Read(void *buffer, size_t length)
 {
@@ -133,7 +126,6 @@ SocketPort::Read(void *buffer, size_t length)
 
   return connection.Read(buffer, length);
 }
-
 
 Port::WaitResult
 SocketPort::WaitRead(unsigned timeout_ms)
@@ -149,7 +141,6 @@ SocketPort::WaitRead(unsigned timeout_ms)
   else
     return WaitResult::FAILED;
 }
-
 
 void
 SocketPort::Run()
