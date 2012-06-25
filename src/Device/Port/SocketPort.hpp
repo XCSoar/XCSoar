@@ -21,40 +21,52 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_TCP_PORT_HPP
-#define XCSOAR_DEVICE_TCP_PORT_HPP
+#ifndef XCSOAR_DEVICE_SOCKET_PORT_HPP
+#define XCSOAR_DEVICE_SOCKET_PORT_HPP
 
-#include "SocketPort.hpp"
+#include "Thread/StoppableThread.hpp"
+#include "Port.hpp"
+#include "OS/SocketDescriptor.hpp"
 
 /**
- * A TCP listener port class.
+ * A UDP listener port class.
  */
-class TCPPort : public SocketPort
+class SocketPort : public Port, protected StoppableThread
 {
-  SocketDescriptor listener;
-
+protected:
+  SocketDescriptor connection;
 public:
   /**
-   * Creates a new TCPPort object, but does not open it yet.
+   * Creates a new SocketPort object, but does not open it yet.
    *
    * @param handler the callback object for input received on the
    * port
    */
-  TCPPort(Handler &handler):SocketPort(handler) {}
+
+  SocketPort(Handler &handler):Port(handler) {}
 
   /**
    * Closes the serial port (Destructor)
    */
-  virtual ~TCPPort();
+  virtual ~SocketPort();
 
   /**
-   * Opens the serial port
+   * Opens an UDP listener port
    * @return True on success, False on failure
    */
-  bool Open(unsigned port);
+  bool OpenUDPListener(unsigned port);
 
-  /* overrided virtual methods from SocketPort */
+  /* virtual methods from class Port */
   virtual bool IsValid() const;
+  virtual bool Drain();
+  virtual void Flush();
+  virtual bool SetBaudrate(unsigned baud_rate);
+  virtual unsigned GetBaudrate() const;
+  virtual bool StopRxThread();
+  virtual bool StartRxThread();
+  virtual int Read(void *buffer, size_t length);
+  virtual WaitResult WaitRead(unsigned timeout_ms);
+  virtual size_t Write(const void *data, size_t length);
 
 protected:
   /* virtual methods from class Thread */

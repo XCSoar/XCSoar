@@ -1090,6 +1090,7 @@ $(eval $(call link-program,RunPortHandler,RUN_PORT_HANDLER))
 
 RUN_TCP_LISTENER_SOURCES = \
 	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Port/SocketPort.cpp \
 	$(SRC)/Device/Port/TCPPort.cpp \
 	$(TEST_SRC_DIR)/RunTCPListener.cpp
 RUN_TCP_LISTENER_DEPENDS = OS THREAD
