@@ -182,15 +182,14 @@ ProfileMap::Get(const TCHAR *key, fixed &value)
   return true;
 }
 
-bool
+void
 ProfileMap::Set(const TCHAR *key, const TCHAR *value)
 {
   map[key] = value;
   modified = true;
-  return true;
 }
 
-bool
+void
 ProfileMap::Set(const TCHAR *key, int value)
 {
   TCHAR tmp[50];
@@ -198,7 +197,7 @@ ProfileMap::Set(const TCHAR *key, int value)
   return Set(key, tmp);
 }
 
-bool
+void
 ProfileMap::Set(const TCHAR *key, long value)
 {
   TCHAR tmp[50];
@@ -206,7 +205,7 @@ ProfileMap::Set(const TCHAR *key, long value)
   return Set(key, tmp);
 }
 
-bool
+void
 ProfileMap::Set(const TCHAR *key, unsigned value)
 {
   TCHAR tmp[50];
@@ -214,7 +213,7 @@ ProfileMap::Set(const TCHAR *key, unsigned value)
   return Set(key, tmp);
 }
 
-bool
+void
 ProfileMap::Set(const TCHAR *key, fixed value)
 {
   TCHAR tmp[50];

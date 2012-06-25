@@ -29,7 +29,6 @@ Copyright_License {
 
 #include <tchar.h>
 #include <stdint.h>
-#include <cstdio>
 
 class KeyValueFileWriter;
 
@@ -70,7 +69,7 @@ namespace ProfileMap {
    * @param key Name of the value that should be written
    * @param value Value that should be written
    */
-  bool Set(const TCHAR *key, const TCHAR *value);
+  void Set(const TCHAR *key, const TCHAR *value);
 
   bool Get(const TCHAR *key, int &value);
   bool Get(const TCHAR *key, short &value);
@@ -91,20 +90,20 @@ namespace ProfileMap {
       return false;
   }
 
-  static inline bool Set(const TCHAR *key, bool value)
+  static inline void Set(const TCHAR *key, bool value)
   {
-    return Set(key, value ? _T("1") : _T("0"));
+    Set(key, value ? _T("1") : _T("0"));
   }
 
-  bool Set(const TCHAR *key, int value);
-  bool Set(const TCHAR *key, long value);
-  bool Set(const TCHAR *key, unsigned value);
-  bool Set(const TCHAR *key, fixed value);
+  void Set(const TCHAR *key, int value);
+  void Set(const TCHAR *key, long value);
+  void Set(const TCHAR *key, unsigned value);
+  void Set(const TCHAR *key, fixed value);
 
   template<typename T>
-  static inline bool SetEnum(const TCHAR *key, T value)
+  static inline void SetEnum(const TCHAR *key, T value)
   {
-    return Set(key, (int)value);
+    Set(key, (int)value);
   }
 
   template<size_t max>

@@ -31,10 +31,6 @@ int main(int argc, char **argv) {
   tstring value = args.ExpectNextT();
   args.ExpectEnd();
 
-  if (!Profile::Set(name.c_str(), value.c_str())) {
-    fputs("Error\n", stderr);
-    return 2;
-  }
-
+  Profile::Set(name.c_str(), value.c_str());
   return 0;
 }

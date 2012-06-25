@@ -94,7 +94,7 @@ namespace Profile
    * longitude and latitude formatted in degrees separated by a space
    * character.
    */
-  bool SetGeoPoint(const TCHAR *key, const GeoPoint &value);
+  void SetGeoPoint(const TCHAR *key, const GeoPoint &value);
 
   /**
    * Load a Color from the profile.

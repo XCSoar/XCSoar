@@ -33,10 +33,7 @@ int main(int argc, char **argv) {
   args.ExpectEnd();
 
   int value = atoi(value_string);
-  if (!Profile::Set(name.c_str(), value)) {
-    fputs("Error\n", stderr);
-    return 2;
-  }
+  Profile::Set(name.c_str(), value);
 
   return 0;
 }

@@ -311,17 +311,17 @@ PortTypeToString(DeviceConfig::PortType type)
     : NULL;
 }
 
-static bool
+static void
 WritePortType(unsigned n, DeviceConfig::PortType type)
 {
   const TCHAR *value = PortTypeToString(type);
   if (value == NULL)
-    return false;
+    return;
 
   TCHAR name[64];
 
   MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
-  return Profile::Set(name, value);
+  Profile::Set(name, value);
 }
 
 void

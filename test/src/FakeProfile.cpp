@@ -47,10 +47,9 @@ ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
   return false;
 }
 
-bool
+void
 ProfileMap::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
-  return false;
 }
 
 bool
