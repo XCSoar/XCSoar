@@ -93,7 +93,7 @@ NanoConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     { 0 }
   };
 
-  AddEnum(_("Baudrate"), NULL, baud_list,
+  AddEnum(_("Baud rate"), NULL, baud_list,
           WaitUnsignedValue(device, "BAUDRATE", 115200));
 
   AddBoolean(_("Auto off"), NULL,

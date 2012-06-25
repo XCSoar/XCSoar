@@ -522,7 +522,7 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   baud_rate_df->SetListener(this);
   FillBaudRates(*baud_rate_df);
   baud_rate_df->Set(config.baud_rate);
-  Add(_("Baudrate"), NULL, baud_rate_df);
+  Add(_("Baud rate"), NULL, baud_rate_df);
 
   DataFieldEnum *bulk_baud_rate_df = new DataFieldEnum(NULL);
   bulk_baud_rate_df->SetListener(this);
