@@ -587,7 +587,7 @@ mode=Config2
 type=key
 data=6
 event=Mode Vario1
-label=Vario$(CheckVega)
+label=Vega$(CheckVega)
 location=5
 
 mode=Config2
@@ -671,7 +671,7 @@ mode=Vario1
 type=key
 data=APP3
 event=Mode Vario2
-label=Vario\n1/2
+label=Vega\n1/2
 location=3
 
 mode=Vario1
@@ -718,7 +718,7 @@ mode=Vario2
 type=key
 data=APP3
 event=Mode default
-label=Vario\n2/2
+label=Vega\n2/2
 location=3
 
 mode=Vario2
