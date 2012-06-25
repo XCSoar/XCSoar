@@ -144,10 +144,17 @@ private:
   bool Receive(const char *prefix, char *buffer, size_t length,
                OperationEnvironment &env, unsigned timeout_ms);
 
+  bool GetConfig(const char *setting, char *buffer, size_t length,
+                 OperationEnvironment &env);
+  bool SetConfig(const char *setting, const char *value,
+                 OperationEnvironment &env);
+
+#ifdef _UNICODE
   bool GetConfig(const char *setting, TCHAR *buffer, size_t length,
                  OperationEnvironment &env);
   bool SetConfig(const char *setting, const TCHAR *value,
                  OperationEnvironment &env);
+#endif
 
   bool DeclareInternal(const Declaration &declaration,
                        OperationEnvironment &env);
