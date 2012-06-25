@@ -30,6 +30,15 @@ SocketPort::~SocketPort()
   StopRxThread();
 }
 
+void
+SocketPort::Set(SocketDescriptor &&socket)
+{
+  assert(!connection.IsDefined());
+  assert(socket.IsDefined());
+
+  connection = std::move(socket);
+}
+
 bool
 SocketPort::OpenUDPListener(unsigned port)
 {

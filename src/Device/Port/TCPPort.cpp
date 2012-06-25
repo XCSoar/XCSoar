@@ -52,13 +52,14 @@ TCPPort::Run()
 
     int ret = listener.WaitReadable(250);
     if (ret > 0) {
-      connection = listener.Accept();
-      if (connection.IsDefined()) {
+      SocketDescriptor s = listener.Accept();
+      if (s.IsDefined()) {
+        SocketPort::Set(std::move(s));
         /* reads from existing client connection, SocketPort::Run()
            returns whenever the current connection fails, so it can be
            closed also on this side */
         SocketPort::Run();
-        connection.Close();
+        SocketPort::Close();
       }
     } else if (ret < 0) {
       listener.Close();

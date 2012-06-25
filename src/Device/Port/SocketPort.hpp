@@ -51,6 +51,24 @@ public:
   virtual ~SocketPort();
 
   /**
+   * Make the object use the specified socket.
+   */
+  void Set(SocketDescriptor &&socket);
+
+protected:
+  /**
+   * Close the socket.  This object can be reused afterwards by
+   * calling Set().
+   *
+   * This is an internal method, only to be used by derived classes,
+   * because it does not take care for stopping the thread.
+   */
+  void Close() {
+    connection.Close();
+  }
+
+public:
+  /**
    * Opens an UDP listener port
    * @return True on success, False on failure
    */
