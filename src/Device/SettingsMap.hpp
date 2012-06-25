@@ -159,6 +159,10 @@ public:
     item.old = false;
     if (!i.second)
       item.value = value;
+
+#ifdef HAVE_POSIX
+    cond.Broadcast();
+#endif
   }
 
   template<typename K>
