@@ -41,10 +41,11 @@ namespace NOAADownloader
    * @return Same as buffer if parsing failed,
    * otherwise the pointer to the next character after the parsed string portion
    */
-  const char *ParseDateTime(const char *buffer, BrokenDateTime &dest);
-  bool ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest);
+  static const char *ParseDateTime(const char *buffer, BrokenDateTime &dest);
+  static bool ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest);
 
-  void AppendToContentString(const char *buffer, METAR::ContentString &content);
+  static void AppendToContentString(const char *buffer,
+                                    METAR::ContentString &content);
 }
 
 const char *
