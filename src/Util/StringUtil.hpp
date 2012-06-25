@@ -198,12 +198,31 @@ CopyString(char *dest, const char *src, size_t size);
 void
 CopyASCII(char *dest, const char *src);
 
+/**
+ * Copy all ASCII characters to the destination string
+ * (i.e. 0x01..0x7f), ignoring the others.
+ *
+ * This function does not null-terminate the destination buffer.
+ *
+ * @param dest_size the size of the destination buffer
+ * @return a pointer to the written end of the destination buffer
+ */
+char *
+CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end);
+
 #ifdef _UNICODE
 void
 CopyASCII(TCHAR *dest, const TCHAR *src);
 
+TCHAR *
+CopyASCII(TCHAR *dest, size_t dest_size,
+          const TCHAR *src, const TCHAR *src_end);
+
 void
 CopyASCII(TCHAR *dest, const char *src);
+
+TCHAR *
+CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end);
 #endif
 
 /**

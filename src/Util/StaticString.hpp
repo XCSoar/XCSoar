@@ -85,6 +85,11 @@ public:
     data[new_length] = SENTINEL;
   }
 
+  void SetASCII(const char *src, const char *src_end) {
+    T *end = ::CopyASCII(data, MAX_SIZE - 1, src, src_end);
+    *end = SENTINEL;
+  }
+
   /**
    * Eliminate all non-ASCII characters.
    */

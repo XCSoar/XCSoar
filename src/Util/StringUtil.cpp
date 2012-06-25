@@ -103,6 +103,23 @@ CopyASCII(char *dest, const char *src)
   } while (*src++ != '\0');
 }
 
+char *
+CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
+{
+  assert(dest != NULL);
+  assert(dest_size > 0);
+  assert(src != NULL);
+  assert(src_end != NULL);
+  assert(src_end >= src);
+
+  const char *const dest_end = dest + dest_size;
+  while (dest != dest_end && src != src_end)
+    if (IsASCII(*src))
+      *dest++ = *src;
+
+  return dest;
+}
+
 #ifdef _UNICODE
 void
 CopyASCII(TCHAR *dest, const TCHAR *src)
@@ -113,6 +130,24 @@ CopyASCII(TCHAR *dest, const TCHAR *src)
   } while (*src++ != _T('\0'));
 }
 
+TCHAR *
+CopyASCII(TCHAR *dest, size_t dest_size,
+          const TCHAR *src, const TCHAR *src_end)
+{
+  assert(dest != NULL);
+  assert(dest_size > 0);
+  assert(src != NULL);
+  assert(src_end != NULL);
+  assert(src_end >= src);
+
+  const TCHAR *const dest_end = dest + dest_size;
+  while (dest != dest_end && src != src_end)
+    if (IsASCII(*src))
+      *dest++ = *src;
+
+  return dest;
+}
+
 void
 CopyASCII(TCHAR *dest, const char *src)
 {
@@ -120,6 +155,23 @@ CopyASCII(TCHAR *dest, const char *src)
     if (IsASCII(*src))
       *dest++ = (TCHAR)*src;
   } while (*src++ != '\0');
+}
+
+TCHAR *
+CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end)
+{
+  assert(dest != NULL);
+  assert(dest_size > 0);
+  assert(src != NULL);
+  assert(src_end != NULL);
+  assert(src_end >= src);
+
+  const TCHAR *const dest_end = dest + dest_size;
+  while (dest != dest_end && src != src_end)
+    if (IsASCII(*src))
+      *dest++ = *src;
+
+  return dest;
 }
 #endif
 
