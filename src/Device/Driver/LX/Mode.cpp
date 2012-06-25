@@ -32,7 +32,7 @@ LXDevice::LinkTimeout()
 {
   ScopeLock protect(mutex);
 
-  is_v7 = false;
+  is_v7 = is_nano = false;
 
   v7_settings.Lock();
   v7_settings.clear();

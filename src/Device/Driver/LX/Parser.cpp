@@ -277,6 +277,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (StringIsEqual(type, "$LXWP1")) {
     LXWP1(line, info);
     is_v7 = info.device.product.equals("V7");
+    is_nano = info.device.product.equals("NANO");
     return true;
   }
 
