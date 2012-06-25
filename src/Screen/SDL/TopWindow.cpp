@@ -28,6 +28,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #else
 #include "Screen/SDL/Event.hpp"
+#include "Util/ConvertString.hpp"
 #endif
 
 TopWindow::TopWindow()
@@ -56,15 +57,9 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
   ContainerWindow::set(NULL, 0, 0, width, height, style);
 
 #ifndef ANDROID
-#ifdef _UNICODE
-  char text2[_tcslen(text) * 4];
-  ::WideCharToMultiByte(CP_UTF8, 0, text, -1, text2, sizeof(text2),
-                        NULL, NULL);
-#else
-  const char *text2 = text;
-#endif
-
-  ::SDL_WM_SetCaption(text2, NULL);
+  UTF8ToWideConverter text2(text);
+  if (text2.IsValid())
+    ::SDL_WM_SetCaption(text2, NULL);
 #endif
 }
 

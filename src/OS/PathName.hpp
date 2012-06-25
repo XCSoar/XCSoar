@@ -25,13 +25,11 @@ Copyright_License {
 #define OS_PATH_HPP
 
 #include "Util/Macros.hpp"
+#include "Util/ConvertString.hpp"
 #include "Compiler.h"
 
 #ifdef _UNICODE
-#include "Util/StringUtil.hpp"
-
-#include <windows.h>
-#include <string.h>
+#include "Util/ConvertString.hpp"
 #endif
 
 #include <tchar.h>
@@ -54,23 +52,10 @@ public:
     :allocated(NULL), value(_value) {}
 
   explicit PathName(const char *_value)
-    :allocated(Convert(_value)), value(allocated) {}
+    :allocated(ConvertACPToWide(_value)), value(allocated) {}
 
   ~PathName() {
-    delete allocated;
-  }
-
-protected:
-  static TCHAR *Convert(const char *src) {
-    if (StringIsEmpty(src))
-      return _tcsdup(_T(""));
-
-    TCHAR dest[MAX_PATH];
-    int length = ::MultiByteToWideChar(CP_ACP, 0, src, -1, dest, ARRAY_SIZE(dest));
-    if (length == 0)
-      return NULL;
-
-    return _tcsdup(dest);
+    delete[] allocated;
   }
 #else /* !_UNICODE */
   explicit PathName(const TCHAR *_value):value(_value) {}
@@ -107,24 +92,10 @@ public:
     :allocated(NULL), value(_value) {}
 
   explicit NarrowPathName(const TCHAR *_value)
-    :allocated(Convert(_value)), value(allocated) {}
+    :allocated(ConvertWideToACP(_value)), value(allocated) {}
 
   ~NarrowPathName() {
-    delete allocated;
-  }
-
-protected:
-  static char *Convert(const TCHAR *src) {
-    if (StringIsEmpty(src))
-      return strdup("");
-
-    char dest[MAX_PATH];
-    int length = ::WideCharToMultiByte(CP_ACP, 0, src, -1, dest, ARRAY_SIZE(dest),
-                                       NULL, NULL);
-    if (length == 0)
-      return NULL;
-
-    return strdup(dest);
+    delete[] allocated;
   }
 #else /* !_UNICODE */
   explicit NarrowPathName(const char *_value):value(_value) {}

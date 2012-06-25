@@ -26,6 +26,8 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 #ifdef _UNICODE
+#include "Util/ConvertString.hpp"
+
 #include <windows.h>
 #endif
 
@@ -99,11 +101,8 @@ NOAAStore::AddStation(const TCHAR *code)
 {
   assert(IsValidCode(code));
 
-  size_t len = _tcslen(code);
-  char code2[len * 4 + 1];
-  ::WideCharToMultiByte(CP_UTF8, 0, code, len, code2, sizeof(code2), NULL, NULL);
-  code2[4] = 0;
-
+  WideToUTF8Converter code2(code);
+  assert(code2.IsValid());
   return AddStation(code2);
 }
 #endif

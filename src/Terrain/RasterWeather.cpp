@@ -27,8 +27,8 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
-#include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
+#include "Util/ConvertString.hpp"
 #include "Operation/Operation.hpp"
 #include "zzip/zzip.h"
 
@@ -171,8 +171,9 @@ void
 RasterWeather::NarrowWeatherFilename(char *filename, const TCHAR *name,
                                      unsigned time_index)
 {
+  const WideToACPConverter narrow_name(name);
   sprintf(filename, "%s.curr.%04dlst.d2.jp2",
-          (const char *)NarrowPathName(name), IndexToTime(time_index));
+          (const char *)narrow_name, IndexToTime(time_index));
 }
 
 void
@@ -225,7 +226,8 @@ RasterWeather::ScanAll(const GeoPoint &location,
   TCHAR fname[MAX_PATH];
   LocalPath(fname, _T("xcsoar-rasp.dat"));
 
-  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(fname), NULL);
+  const WideToACPConverter narrow_path(fname);
+  ZZIP_DIR *dir = zzip_dir_open(narrow_path, NULL);
   if (dir == NULL)
     return;
 

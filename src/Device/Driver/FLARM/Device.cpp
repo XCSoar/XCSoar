@@ -23,8 +23,9 @@ Copyright_License {
 
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
+#include "Util/ConvertString.hpp"
 #include "Util/StaticString.hpp"
-#include "OS/PathName.hpp"
+#include "Util/Macros.hpp"
 
 void
 FlarmDevice::LinkTimeout()
@@ -200,7 +201,8 @@ FlarmDevice::GetConfig(const char *setting, TCHAR *buffer, size_t length,
   if (!Receive(expected_answer, narrow_buffer, length, env, 2000))
     return false;
 
-  _tcscpy(buffer, PathName(narrow_buffer));
+  UTF8ToWideConverter wide(narrow_buffer);
+  CopyString(buffer, wide, length);
   return true;
 }
 
@@ -208,7 +210,7 @@ bool
 FlarmDevice::SetConfig(const char *setting, const TCHAR *value,
                        OperationEnvironment &env)
 {
-  NarrowPathName narrow_value(value);
+  WideToUTF8Converter narrow_value(value);
 
   NarrowString<256> buffer;
   buffer.Format("PFLAC,S,%s,", setting);

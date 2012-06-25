@@ -24,6 +24,7 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyFile.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/ConvertString.hpp"
 #include "IO/LineReader.hpp"
 #include "OS/PathName.hpp"
 #include "Operation/Operation.hpp"
@@ -78,7 +79,8 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
   // (shape_filename will be modified with the shape_filename_end pointer)
   char shape_filename[MAX_PATH];
   if (directory != NULL) {
-    strcpy(shape_filename, NarrowPathName(directory));
+    const WideToACPConverter narrow_directory(directory);
+    strcpy(shape_filename, narrow_directory);
     strcat(shape_filename, DIR_SEPARATOR_S);
   } else
     shape_filename[0] = 0;

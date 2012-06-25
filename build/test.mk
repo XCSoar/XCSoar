@@ -434,7 +434,7 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestPolars.cpp
-TEST_POLARS_DEPENDS = IO OS MATH
+TEST_POLARS_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,TestPolars,TEST_POLARS))
 
 TEST_GLIDE_POLAR_SOURCES = \
@@ -576,7 +576,7 @@ TEST_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeVega.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
-TEST_DRIVER_DEPENDS = DRIVER GEO MATH IO OS THREAD
+TEST_DRIVER_DEPENDS = DRIVER GEO MATH IO OS THREAD UTIL
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
 
 TEST_WAY_POINT_FILE_SOURCES = \
@@ -790,7 +790,7 @@ $(eval $(call link-program,DumpTextZip,DUMP_TEXT_ZIP))
 DUMP_HEX_COLOR_SOURCES = \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/DumpHexColor.cpp
-DUMP_HEX_COLOR_DEPENDS = SCREEN
+DUMP_HEX_COLOR_DEPENDS = SCREEN UTIL
 $(eval $(call link-program,DumpHexColor,DUMP_HEX_COLOR))
 
 DEBUG_DISPLAY_SOURCES = \
@@ -813,7 +813,7 @@ $(eval $(call link-program,RunTextWriter,RUN_TEXT_WRITER))
 DOWNLOAD_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(TEST_SRC_DIR)/DownloadFile.cpp
-DOWNLOAD_FILE_DEPENDS = IO LIBNET
+DOWNLOAD_FILE_DEPENDS = IO LIBNET UTIL
 $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
@@ -824,7 +824,7 @@ RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunDownloadToFile.cpp
-RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBNET
+RUN_DOWNLOAD_TO_FILE_DEPENDS = LIBNET UTIL
 $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
@@ -848,7 +848,7 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
-RUN_NOAA_DOWNLOADER_DEPENDS = GEO IO MATH LIBNET
+RUN_NOAA_DOWNLOADER_DEPENDS = GEO IO MATH LIBNET UTIL
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
 
 RUN_LIVETRACK24_SOURCES = \
@@ -872,13 +872,14 @@ RUN_XML_PARSER_SOURCES = \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
 	$(TEST_SRC_DIR)/RunXMLParser.cpp
-RUN_XML_PARSER_DEPENDS = IO OS
+RUN_XML_PARSER_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunXMLParser,RUN_XML_PARSER))
 
 READ_MO_SOURCES = \
 	$(SRC)/Language/MOFile.cpp \
 	$(SRC)/OS/FileMapping.cpp \
 	$(TEST_SRC_DIR)/ReadMO.cpp
+READ_MO_DEPENDS = UTIL
 $(eval $(call link-program,ReadMO,READ_MO))
 
 READ_PROFILE_STRING_SOURCES = \
@@ -923,7 +924,7 @@ READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/ReadGRecord.cpp
-READ_GRECORD_DEPENDS = IO OS
+READ_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,ReadGRecord,READ_GRECORD))
 
 VERIFY_GRECORD_SOURCES = \
@@ -931,7 +932,7 @@ VERIFY_GRECORD_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/VerifyGRecord.cpp
-VERIFY_GRECORD_DEPENDS = IO OS
+VERIFY_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,VerifyGRecord,VERIFY_GRECORD))
 
 APPEND_GRECORD_SOURCES = \
@@ -939,7 +940,7 @@ APPEND_GRECORD_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
-APPEND_GRECORD_DEPENDS = IO OS
+APPEND_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,AppendGRecord,APPEND_GRECORD))
 
 ADD_CHECKSUM_SOURCES = \
@@ -980,7 +981,7 @@ LOAD_TERRAIN_SOURCES = \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_CPPFLAGS = $(SCREEN_CPPFLAGS)
-LOAD_TERRAIN_DEPENDS = GEO MATH IO OS JASPER ZZIP
+LOAD_TERRAIN_DEPENDS = GEO MATH IO OS JASPER ZZIP UTIL
 $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
 
 RUN_HEIGHT_MATRIX_SOURCES = \

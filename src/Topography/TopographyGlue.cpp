@@ -32,6 +32,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <zzip/zzip.h>
 
@@ -76,7 +77,8 @@ LoadConfiguredTopographyZip(TopographyStore &store,
   if (!Profile::GetPath(ProfileKeys::MapFile, path))
     return false;
 
-  ZZIP_DIR *dir = zzip_dir_open(NarrowPathName(path), NULL);
+  const WideToACPConverter narrow_path(path);
+  ZZIP_DIR *dir = zzip_dir_open(narrow_path, NULL);
   if (dir == NULL)
     return false;
 

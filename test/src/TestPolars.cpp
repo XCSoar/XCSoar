@@ -28,12 +28,8 @@
 #include "Polar/Polar.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarStore.hpp"
+#include "Util/ConvertString.hpp"
 #include "Util/Macros.hpp"
-
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
 
 TLineReader*
 OpenConfiguredTextFile(const TCHAR *profile_key, ConvertLineReader::charset cs)
@@ -98,18 +94,9 @@ TestBuiltInPolars()
   unsigned count = PolarStore::Count();
   for(unsigned i = 0; i < count; i++) {
     PolarInfo polar = PolarStore::GetItem(i).ToPolarInfo();
-#ifdef _UNICODE
-  size_t wide_length = _tcslen(PolarStore::GetItem(i).name);
-  char narrow[wide_length * 4 + 1];
-  int narrow_length =
-      ::WideCharToMultiByte(CP_ACP, 0, PolarStore::GetItem(i).name, wide_length,
-                            narrow, sizeof(narrow), NULL, NULL);
-  narrow[narrow_length] = 0;
 
-  ok(polar.IsValid(), narrow);
-#else
-  ok(polar.IsValid(), PolarStore::GetItem(i).name);
-#endif
+    WideToUTF8Converter narrow(PolarStore::GetItem(i).name);
+    ok(polar.IsValid(), narrow);
   }
 }
 
@@ -165,16 +152,7 @@ TestBuiltInPolarsPlausibility()
                               polar.v1, polar.v2, polar.v3,
                               polar.w1, polar.w2, polar.w3);
 
-#ifdef _UNICODE
-    size_t wide_length = _tcslen(PolarStore::GetItem(i).name);
-    char polarName[wide_length * 4 + 1];
-    int narrow_length =
-        ::WideCharToMultiByte(CP_ACP, 0, PolarStore::GetItem(i).name, wide_length,
-                              polarName, sizeof(polarName), NULL, NULL);
-    polarName[narrow_length] = 0;
-#else
-    const char* polarName=PolarStore::GetItem(si).name;
-#endif
+    WideToUTF8Converter polarName(PolarStore::GetItem(i).name);
 
     ok(pc.IsValid(), polarName);
 

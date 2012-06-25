@@ -53,6 +53,7 @@ Copyright_License {
 #include "Form/CheckBox.hpp"
 #include "Form/DockWindow.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/ConvertString.hpp"
 #include "ResourceLoader.hpp"
 #include "Look/DialogLook.hpp"
 #include "Inflate.hpp"
@@ -304,24 +305,12 @@ LoadXMLFromResource(const TCHAR* resource, XML::Results *xml_results)
 
   char *buffer = InflateToString(data.first, data.second);
 
-#ifdef _UNICODE
-  int length = strlen(buffer);
-  TCHAR *buffer2 = new TCHAR[length + 1];
-  length = MultiByteToWideChar(CP_UTF8, 0, buffer, length,
-                               buffer2, length);
-  buffer2[length] = _T('\0');
-  delete[] buffer;
-#else
-  const char *buffer2 = buffer;
-#endif
+  UTF8ToWideConverter buffer2(buffer);
+  assert(buffer2.IsValid());
 
   XMLNode *x = XML::ParseString(buffer2, xml_results);
 
-#ifdef _UNICODE
-  delete[] buffer2;
-#else
   delete[] buffer;
-#endif
 
   return x;
 }

@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "OS/FileUtil.hpp"
-
-#include "OS/PathName.hpp"
+#include "Util/StringUtil.hpp"
+#include "Util/ConvertString.hpp"
 #include "Compatibility/path.h"
 
 #include <windef.h> /* for MAX_PATH */
@@ -54,8 +54,9 @@ bool
 Directory::Exists(const TCHAR* path)
 {
 #ifdef HAVE_POSIX
+  const WideToACPConverter narrow_path(path);
   struct stat st;
-  if (stat(NarrowPathName(path), &st) != 0)
+  if (stat(narrow_path, &st) != 0)
     return false;
 
   return (st.st_mode & S_IFDIR);
@@ -300,8 +301,9 @@ bool
 File::ExistsAny(const TCHAR *path)
 {
 #ifdef HAVE_POSIX
+  const WideToACPConverter narrow_path(path);
   struct stat st;
-  return stat(NarrowPathName(path), &st) == 0;
+  return stat(narrow_path, &st) == 0;
 #else
   return GetFileAttributes(path) != INVALID_FILE_ATTRIBUTES;
 #endif
@@ -311,8 +313,9 @@ bool
 File::Exists(const TCHAR* path)
 {
 #ifdef HAVE_POSIX
+  const WideToACPConverter narrow_path(path);
   struct stat st;
-  if (stat(NarrowPathName(path), &st) != 0)
+  if (stat(narrow_path, &st) != 0)
     return false;
 
   return (st.st_mode & S_IFREG);

@@ -48,6 +48,10 @@ Copyright_License {
 #include "Java/Object.hpp"
 #endif
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #include <windef.h> /* for MAX_PATH */
 
 #ifndef HAVE_NATIVE_GETTEXT

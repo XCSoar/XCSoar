@@ -23,16 +23,22 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Geo/GeoClip.hpp"
-#include "OS/PathName.hpp"
 #include "IO/FileCache.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <algorithm>
 #include <assert.h>
 #include <string.h>
 
+static char *
+ToNarrowPath(const TCHAR *src)
+{
+  return WideToACPConverter(src).StealDup();
+}
+
 RasterMap::RasterMap(const TCHAR *_path, const TCHAR *world_file,
                      FileCache *cache, OperationEnvironment &operation)
-  :path(strdup(NarrowPathName(_path)))
+  :path(ToNarrowPath(_path))
 {
   bool cache_loaded = false;
   if (cache != NULL) {
