@@ -51,22 +51,19 @@ TCPPort::Run()
     assert(!connection.IsDefined());
 
     int ret = listener.WaitReadable(250);
-    if (ret > 0)
+    if (ret > 0) {
       connection = listener.Accept();
-    else if (ret < 0) {
+      if (connection.IsDefined()) {
+        /* reads from existing client connection, SocketPort::Run()
+           returns whenever the current connection fails, so it can be
+           closed also on this side */
+        SocketPort::Run();
+        connection.Close();
+      }
+    } else if (ret < 0) {
       listener.Close();
       break;
     }
-
-    /* connection must be defined before calling SocketPort::Run() */
-    if (!connection.IsDefined())
-      continue;
-
-    /* reads from existing client connection, SocketPort::Run()
-       returns whenever the current connection fails, so it can be
-       closed also on this side */
-    SocketPort::Run();
-    connection.Close();
   }
 }
 
