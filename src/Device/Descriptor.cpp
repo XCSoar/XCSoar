@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Driver/FLARM/Device.hpp"
+#include "Driver/LX/Internal.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Register.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -372,7 +373,16 @@ DeviceDescriptor::IsNMEAOut() const
 bool
 DeviceDescriptor::IsManageable() const
 {
-  return driver != NULL && driver->IsManageable();
+  if (driver != NULL) {
+    if (driver->IsManageable())
+      return true;
+
+    if (_tcscmp(driver->name, _T("LX")) == 0 &&
+        device != NULL && ((LXDevice *)device)->IsV7())
+      return true;
+  }
+
+  return false;
 }
 
 bool

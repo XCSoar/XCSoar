@@ -91,6 +91,13 @@ public:
   bool RequestV7Setting(const char *name, OperationEnvironment &env);
 
   /**
+   * Wait for the specified setting to be received.  Returns the value
+   * on success, or an empty string on timeout.
+   */
+  std::string WaitV7Setting(const char *name, OperationEnvironment &env,
+                            unsigned timeout_ms);
+
+  /**
    * Look up the given setting in the table of received LXNAV V7
    * values.  If the value does not exist, an empty string is
    * returned.

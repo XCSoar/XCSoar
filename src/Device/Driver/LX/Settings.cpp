@@ -60,6 +60,18 @@ LXDevice::RequestV7Setting(const char *name, OperationEnvironment &env)
 }
 
 std::string
+LXDevice::WaitV7Setting(const char *name, OperationEnvironment &env,
+                        unsigned timeout_ms)
+{
+  ScopeLock protect(v7_settings);
+  auto i = v7_settings.Wait(name, env, timeout_ms);
+  if (i == v7_settings.end())
+    return std::string();
+
+  return *i;
+}
+
+std::string
 LXDevice::GetV7Setting(const char *name) const
 {
   ScopeLock protect(v7_settings);

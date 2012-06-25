@@ -148,6 +148,8 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/CAI302/UnitsEditor.cpp \
 	$(SRC)/Dialogs/CAI302/WaypointUploader.cpp \
 	$(SRC)/Dialogs/ManageFlarmDialog.cpp \
+	$(SRC)/Dialogs/LX/ManageV7Dialog.cpp \
+	$(SRC)/Dialogs/LX/V7ConfigWidget.cpp \
 	$(SRC)/Dialogs/Vega/VegaParametersWidget.cpp \
 	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Vega/VegaDemoDialog.cpp \

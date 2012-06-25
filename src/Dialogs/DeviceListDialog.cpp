@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/Vega/VegaDialogs.hpp"
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Dialogs/ManageFlarmDialog.hpp"
+#include "Dialogs/LX/ManageV7Dialog.hpp"
 #include "Dialogs/PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
@@ -36,6 +37,7 @@ Copyright_License {
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Register.hpp"
+#include "Device/Driver/LX/Internal.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Components.hpp"
@@ -426,6 +428,15 @@ DeviceListWidget::ManageCurrent()
     device_blackboard->mutex.Unlock();
 
     ManageFlarmDialog(*device, version);
+  } else if (descriptor.IsDriver(_T("LX"))) {
+    device_blackboard->mutex.Lock();
+    const NMEAInfo &basic = device_blackboard->RealState(current);
+    const DeviceInfo info = basic.device;
+    device_blackboard->mutex.Unlock();
+
+    LXDevice &lx_device = *(LXDevice *)device;
+    if (lx_device.IsV7())
+      ManageV7Dialog(lx_device, info);
   } else if (descriptor.IsDriver(_T("Vega")))
     dlgConfigurationVarioShowModal(*device);
 
