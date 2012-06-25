@@ -36,14 +36,10 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
-#include "Util/StringUtil.hpp"
+#include "Util/StaticString.hpp"
 
 #include <assert.h>
 #include <stdio.h>
-
-#ifdef _UNICODE
-#include <windows.h>
-#endif
 
 // Additional sentance for EW support
 
@@ -201,17 +197,10 @@ static bool
 WriteCleanString(Port &port, const TCHAR *p,
                  OperationEnvironment &env, unsigned timeout_ms)
 {
-  char buffer[256];
+  NarrowString<256> buffer;
+  buffer.SetASCII(p);
 
-#ifdef _UNICODE
-  if (::WideCharToMultiByte(CP_ACP, 0, p, -1, buffer, sizeof(buffer),
-                            NULL, NULL) <= 0)
-    return false;
-#else
-  CopyString(buffer, p, sizeof(buffer));
-#endif
-
-  CleanString(buffer);
+  CleanString(buffer.buffer());
 
   return port.FullWriteString(buffer, env, timeout_ms);
 }
