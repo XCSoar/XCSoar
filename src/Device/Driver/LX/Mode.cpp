@@ -24,6 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "V7.hpp"
 #include "LX1600.hpp"
+#include "Nano.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 
@@ -58,6 +59,8 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
     mode = Mode::NMEA;
     busy = false;
   }
+
+  Nano::RequestInfo(port, env);
 
   /* just in case the LX1600 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
