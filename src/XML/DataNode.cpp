@@ -39,32 +39,32 @@ DataNode::SetAttribute(const TCHAR *name, Angle value)
 void
 DataNode::SetAttribute(const TCHAR *name, fixed value)
 {
-  StaticString<100> buf;
-  buf.Format(_T("%g"), (double)value);
+  StaticString<48> buf;
+  buf.UnsafeFormat(_T("%g"), (double)value);
   SetAttribute(name, buf);
 }
 
 void
 DataNode::SetAttribute(const TCHAR *name, int value)
 {
-  StaticString<100> buf;
-  buf.Format(_T("%d"), value);
+  StaticString<24> buf;
+  buf.UnsafeFormat(_T("%d"), value);
   SetAttribute(name, buf);
 }
 
 void
 DataNode::SetAttribute(const TCHAR *name, unsigned value)
 {
-  StaticString<100> buf;
-  buf.Format(_T("%d"), value);
+  StaticString<24> buf;
+  buf.UnsafeFormat(_T("%d"), value);
   SetAttribute(name, buf);
 }
 
 void
 DataNode::SetAttribute(const TCHAR *name, bool &value)
 {
-  StaticString<100> buf;
-  buf.Format(_T("%d"), (int)value);
+  StaticString<4> buf;
+  buf.UnsafeFormat(_T("%d"), (int)value);
   SetAttribute(name, buf);
 }
 
