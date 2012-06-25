@@ -32,6 +32,7 @@ LXDevice::LinkTimeout()
 {
   ScopeLock protect(mutex);
 
+  is_v7 = false;
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
   busy = false;

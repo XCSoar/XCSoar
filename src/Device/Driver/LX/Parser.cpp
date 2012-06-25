@@ -97,7 +97,7 @@ ReadString(NMEAInputLine &line, NarrowString<N> &value)
   line.Read(value.buffer(), value.MAX_SIZE);
 }
 
-static bool
+static void
 LXWP1(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
@@ -115,8 +115,6 @@ LXWP1(NMEAInputLine &line, NMEAInfo &info)
   ReadString(line, device.serial);
   ReadString(line, device.software_version);
   ReadString(line, device.hardware_version);
-
-  return true;
 }
 
 static bool
@@ -251,8 +249,11 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (StringIsEqual(type, "$LXWP0"))
     return LXWP0(line, info);
 
-  if (StringIsEqual(type, "$LXWP1"))
-    return LXWP1(line, info);
+  if (StringIsEqual(type, "$LXWP1")) {
+    LXWP1(line, info);
+    is_v7 = info.device.product.equals("V7");
+    return true;
+  }
 
   if (StringIsEqual(type, "$LXWP2"))
     return LXWP2(line, info);
@@ -260,11 +261,15 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (StringIsEqual(type, "$LXWP3"))
     return LXWP3(line, info);
 
-  if (StringIsEqual(type, "$PLXVF"))
+  if (StringIsEqual(type, "$PLXVF")) {
+    is_v7 = true;
     return PLXVF(line, info);
+  }
 
-  if (StringIsEqual(type, "$PLXVS"))
+  if (StringIsEqual(type, "$PLXVS")) {
+    is_v7 = true;
     return PLXVS(line, info);
+  }
 
   return false;
 }

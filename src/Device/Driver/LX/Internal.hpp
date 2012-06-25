@@ -43,6 +43,11 @@ class LXDevice: public AbstractDevice
 
   unsigned bulk_baud_rate;
 
+  /**
+   * Was a LXNAV V7 detected?
+   */
+  bool is_v7;
+
   Mutex mutex;
   Mode mode;
   bool busy;
@@ -51,7 +56,15 @@ class LXDevice: public AbstractDevice
 public:
   LXDevice(Port &_port, unsigned _bulk_baud_rate)
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
+     is_v7(false),
      mode(Mode::UNKNOWN), old_baud_rate(0) {}
+
+  /**
+   * Was a LXNAV V7 detected?
+   */
+  bool IsV7() const {
+    return is_v7;
+  }
 
 protected:
   bool EnableCommandMode(OperationEnvironment &env);
