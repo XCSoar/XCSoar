@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TrackingConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
@@ -34,11 +35,15 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
+#include "Util/NumberParser.hpp"
 
 enum ControlIndex {
   TrackingInterval,
   TrackingVehicleType,
   Spacer,
+  SL_ENABLED,
+  SL_KEY,
+  SPACER2,
   LT24Enabled,
   LT24Server,
   LT24Username,
@@ -110,6 +115,17 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddSpacer();
 
+  AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
+
+  StaticString<64> buffer;
+  if (settings.skylines.key != 0)
+    buffer.UnsafeFormat(_T("%llX"), (unsigned long long)settings.skylines.key);
+  else
+    buffer.clear();
+  AddText(_T("Key"), NULL, buffer);
+
+  AddSpacer();
+
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
 
   WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
@@ -120,6 +136,20 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddPassword(_("Password"), _T(""), settings.livetrack24.password);
 
   SetEnabled(settings.livetrack24.enabled);
+}
+
+static bool
+SaveKey(const RowFormWidget &form, unsigned idx, const TCHAR *profile_key,
+        uint64_t &value_r)
+{
+  const TCHAR *const s = form.GetValueString(idx);
+  uint64_t value = ParseUint64(s, NULL, 16);
+  if (value == value_r)
+    return false;
+
+  value_r = value;
+  Profile::Set(profile_key, s);
+  return true;
 }
 
 bool
@@ -134,6 +164,12 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(TrackingVehicleType, ProfileKeys::TrackingVehicleType,
                            settings.vehicleType);
+
+  changed |= SaveValue(SL_ENABLED, ProfileKeys::SkyLinesTrackingEnabled,
+                       settings.skylines.enabled);
+
+  changed |= SaveKey(*this, SL_KEY, ProfileKeys::SkyLinesTrackingKey,
+                     settings.skylines.key);
 
   changed |= SaveValue(LT24Enabled, ProfileKeys::LiveTrack24Enabled, settings.livetrack24.enabled);
 
