@@ -48,7 +48,7 @@ TCPPort::Run()
   while (!CheckStopped()) {
     assert(listener.IsDefined());
     /* connection should never be defined here */
-    assert(!connection.IsDefined());
+    assert(!SocketPort::IsValid());
 
     int ret = listener.WaitReadable(250);
     if (ret > 0) {

@@ -33,7 +33,6 @@ Copyright_License {
  */
 class SocketPort : public Port, protected StoppableThread
 {
-protected:
   SocketDescriptor connection;
 
 public:
