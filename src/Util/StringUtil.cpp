@@ -112,8 +112,8 @@ CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
   assert(src_end != NULL);
   assert(src_end >= src);
 
-  const char *const dest_end = dest + dest_size;
-  while (dest != dest_end && src != src_end)
+  for (const char *const dest_end = dest + dest_size;
+       dest != dest_end && src != src_end; ++src)
     if (IsASCII(*src))
       *dest++ = *src;
 
