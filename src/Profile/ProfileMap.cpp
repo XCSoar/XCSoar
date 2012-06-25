@@ -72,11 +72,154 @@ ProfileMap::Get(const TCHAR *key, TCHAR *value, size_t max_size)
 }
 
 bool
+ProfileMap::Get(const TCHAR *key, int &value)
+{
+  // Try to read the profile map
+  const TCHAR *str = Get(key);
+  if (str == NULL)
+    return false;
+
+  // Parse the string for a number
+  TCHAR *endptr;
+  int tmp = _tcstol(str, &endptr, 0);
+  if (endptr == str)
+    return false;
+
+  // Save parsed value to output parameter value and return success
+  value = tmp;
+  return true;
+}
+
+bool
+ProfileMap::Get(const TCHAR *key, short &value)
+{
+  // Try to read the profile map
+  const TCHAR *str = Get(key);
+  if (str == NULL)
+    return false;
+
+  // Parse the string for a number
+  TCHAR *endptr;
+  short tmp = _tcstol(str, &endptr, 0);
+  if (endptr == str)
+    return false;
+
+  // Save parsed value to output parameter value and return success
+  value = tmp;
+  return true;
+}
+
+bool
+ProfileMap::Get(const TCHAR *key, bool &value)
+{
+  // Try to read the profile map
+  const TCHAR *str = Get(key);
+  if (str == NULL)
+    return false;
+
+  // Save value to output parameter value and return success
+  value = (str[0] != '0');
+  return true;
+}
+
+bool
+ProfileMap::Get(const TCHAR *key, unsigned &value)
+{
+  // Try to read the profile map
+  const TCHAR *str = Get(key);
+  if (str == NULL)
+    return false;
+
+  // Parse the string for a unsigned number
+  TCHAR *endptr;
+  unsigned tmp = _tcstoul(str, &endptr, 0);
+  if (endptr == str)
+    return false;
+
+  // Save parsed value to output parameter value and return success
+  value = tmp;
+  return true;
+}
+
+bool
+ProfileMap::Get(const TCHAR *key, uint16_t &value)
+{
+  unsigned value32;
+  if (!Get(key, value32) || value32 >= 0x10000)
+    return false;
+
+  value = (uint16_t)value32;
+  return true;
+}
+
+bool
+ProfileMap::Get(const TCHAR *key, uint8_t &value)
+{
+  unsigned value32;
+  if (!Get(key, value32) || value32 >= 0x100)
+    return false;
+
+  value = (uint8_t)value32;
+  return true;
+}
+
+bool
+ProfileMap::Get(const TCHAR *key, fixed &value)
+{
+  // Try to read the profile map
+  TCHAR str[50];
+  if (!Get(key, str, 50))
+    return false;
+
+  // Parse the string for a floating point number
+  TCHAR *endptr;
+  double tmp = _tcstod(str, &endptr);
+  if (endptr == str)
+    return false;
+
+  // Save parsed value to output parameter value and return success
+  value = fixed(tmp);
+  return true;
+}
+
+bool
 ProfileMap::Set(const TCHAR *key, const TCHAR *value)
 {
   map[key] = value;
   modified = true;
   return true;
+}
+
+bool
+ProfileMap::Set(const TCHAR *key, int value)
+{
+  TCHAR tmp[50];
+  _sntprintf(tmp, 50, _T("%d"), value);
+  return Set(key, tmp);
+}
+
+bool
+ProfileMap::Set(const TCHAR *key, long value)
+{
+  TCHAR tmp[50];
+  _sntprintf(tmp, 50, _T("%ld"), value);
+  return Set(key, tmp);
+}
+
+bool
+ProfileMap::Set(const TCHAR *key, unsigned value)
+{
+  TCHAR tmp[50];
+  _sntprintf(tmp, 50, _T("%u"), value);
+  return Set(key, tmp);
+}
+
+bool
+ProfileMap::Set(const TCHAR *key, fixed value)
+{
+  TCHAR tmp[50];
+  _sntprintf(tmp, 50, _T("%f"), (double)value);
+  return Set(key, tmp);
 }
 
 bool

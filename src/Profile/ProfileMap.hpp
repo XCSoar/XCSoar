@@ -72,109 +72,13 @@ namespace ProfileMap {
    */
   bool Set(const TCHAR *key, const TCHAR *value);
 
-  static inline bool Get(const TCHAR *key, int &value)
-  {
-    // Try to read the profile map
-    const TCHAR *str = Get(key);
-    if (str == NULL)
-      return false;
-
-    // Parse the string for a number
-    TCHAR *endptr;
-    int tmp = _tcstol(str, &endptr, 0);
-    if (endptr == str)
-      return false;
-
-    // Save parsed value to output parameter value and return success
-    value = tmp;
-    return true;
-  }
-
-  static inline bool Get(const TCHAR *key, short &value)
-  {
-    // Try to read the profile map
-    const TCHAR *str = Get(key);
-    if (str == NULL)
-      return false;
-
-    // Parse the string for a number
-    TCHAR *endptr;
-    short tmp = _tcstol(str, &endptr, 0);
-    if (endptr == str)
-      return false;
-
-    // Save parsed value to output parameter value and return success
-    value = tmp;
-    return true;
-  }
-
-  static inline bool Get(const TCHAR *key, bool &value)
-  {
-    // Try to read the profile map
-    const TCHAR *str = Get(key);
-    if (str == NULL)
-      return false;
-
-    // Save value to output parameter value and return success
-    value = (str[0] != '0');
-    return true;
-  }
-
-  static inline bool Get(const TCHAR *key, unsigned &value)
-  {
-    // Try to read the profile map
-    const TCHAR *str = Get(key);
-    if (str == NULL)
-      return false;
-
-    // Parse the string for a unsigned number
-    TCHAR *endptr;
-    unsigned tmp = _tcstoul(str, &endptr, 0);
-    if (endptr == str)
-      return false;
-
-    // Save parsed value to output parameter value and return success
-    value = tmp;
-    return true;
-  }
-
-  static inline bool Get(const TCHAR *key, uint16_t &value)
-  {
-    unsigned value32;
-    if (!Get(key, value32) || value32 >= 0x10000)
-      return false;
-
-    value = (uint16_t)value32;
-    return true;
-  }
-
-  static inline bool Get(const TCHAR *key, uint8_t &value)
-  {
-    unsigned value32;
-    if (!Get(key, value32) || value32 >= 0x100)
-      return false;
-
-    value = (uint8_t)value32;
-    return true;
-  }
-
-  static inline bool Get(const TCHAR *key, fixed &value)
-  {
-    // Try to read the profile map
-    TCHAR str[50];
-    if (!Get(key, str, 50))
-      return false;
-
-    // Parse the string for a floating point number
-    TCHAR *endptr;
-    double tmp = _tcstod(str, &endptr);
-    if (endptr == str)
-      return false;
-
-    // Save parsed value to output parameter value and return success
-    value = fixed(tmp);
-    return true;
-  }
+  bool Get(const TCHAR *key, int &value);
+  bool Get(const TCHAR *key, short &value);
+  bool Get(const TCHAR *key, bool &value);
+  bool Get(const TCHAR *key, unsigned &value);
+  bool Get(const TCHAR *key, uint16_t &value);
+  bool Get(const TCHAR *key, uint8_t &value);
+  bool Get(const TCHAR *key, fixed &value);
 
   template<typename T>
   static inline bool GetEnum(const TCHAR *key, T &value)
@@ -192,38 +96,15 @@ namespace ProfileMap {
     return Set(key, value ? _T("1") : _T("0"));
   }
 
-  static inline bool Set(const TCHAR *key, int value)
-  {
-    TCHAR tmp[50];
-    _sntprintf(tmp, 50, _T("%d"), value);
-    return Set(key, tmp);
-  }
-
-  static inline bool Set(const TCHAR *key, long value)
-  {
-    TCHAR tmp[50];
-    _sntprintf(tmp, 50, _T("%ld"), value);
-    return Set(key, tmp);
-  }
-
-  static inline bool Set(const TCHAR *key, unsigned value)
-  {
-    TCHAR tmp[50];
-    _sntprintf(tmp, 50, _T("%u"), value);
-    return Set(key, tmp);
-  }
+  bool Set(const TCHAR *key, int value);
+  bool Set(const TCHAR *key, long value);
+  bool Set(const TCHAR *key, unsigned value);
+  bool Set(const TCHAR *key, fixed value);
 
   template<typename T>
   static inline bool SetEnum(const TCHAR *key, T value)
   {
     return Set(key, (int)value);
-  }
-
-  static inline bool Set(const TCHAR *key, fixed value)
-  {
-    TCHAR tmp[50];
-    _sntprintf(tmp, 50, _T("%f"), (double)value);
-    return Set(key, tmp);
   }
 
   template<size_t max>
