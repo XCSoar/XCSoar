@@ -25,6 +25,7 @@ Copyright_License {
 #include "IO/KeyValueFileWriter.hpp"
 #include "Util/tstring.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/NumberParser.hpp"
 
 #include <map>
 
@@ -132,7 +133,7 @@ ProfileMap::Get(const TCHAR *key, unsigned &value)
 
   // Parse the string for a unsigned number
   TCHAR *endptr;
-  unsigned tmp = _tcstoul(str, &endptr, 0);
+  unsigned tmp = ParseUnsigned(str, &endptr, 0);
   if (endptr == str)
     return false;
 

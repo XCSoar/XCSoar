@@ -26,6 +26,7 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"
+#include "Util/NumberParser.hpp"
 
 void
 FlarmDevice::LinkTimeout()
@@ -64,7 +65,7 @@ FlarmDevice::GetRange(unsigned &range, OperationEnvironment &env)
     return false;
 
   TCHAR *end_ptr;
-  unsigned value = _tcstoul(buffer, &end_ptr, 10);
+  unsigned value = ParseUnsigned(buffer, &end_ptr, 10);
   if (end_ptr == buffer)
     return false;
 
@@ -88,7 +89,7 @@ FlarmDevice::GetBaudRate(unsigned &baud_id, OperationEnvironment &env)
     return false;
 
   TCHAR *end_ptr;
-  unsigned value = _tcstoul(buffer, &end_ptr, 10);
+  unsigned value = ParseUnsigned(buffer, &end_ptr, 10);
   if (end_ptr == buffer)
     return false;
 

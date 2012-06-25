@@ -28,6 +28,7 @@ Copyright_License {
 #include "IO/KeyValueFileWriter.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Util/NumberParser.hpp"
 
 #include <cstdio>
 
@@ -85,7 +86,7 @@ static bool
 ReadUnsigned(const TCHAR *string, unsigned &out)
 {
   TCHAR *endptr;
-  unsigned tmp = _tcstoul(string, &endptr, 0);
+  unsigned tmp = ParseUnsigned(string, &endptr, 0);
   if (endptr == string)
     return false;
 

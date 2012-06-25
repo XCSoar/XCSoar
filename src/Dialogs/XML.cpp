@@ -54,6 +54,7 @@ Copyright_License {
 #include "Form/DockWindow.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
+#include "Util/NumberParser.hpp"
 #include "ResourceLoader.hpp"
 #include "Look/DialogLook.hpp"
 #include "Inflate.hpp"
@@ -118,7 +119,7 @@ StringToIntDflt(const TCHAR *string, long _default)
 {
   if (string == NULL || StringIsEmpty(string))
     return _default;
-  return _tcstol(string, NULL, 0);
+  return ParseInt(string, NULL, 0);
 }
 
 /**

@@ -22,6 +22,7 @@
 
 #include "DataNode.hpp"
 #include "Util/StaticString.hpp"
+#include "Util/NumberParser.hpp"
 
 #include <stdio.h>
 
@@ -95,7 +96,7 @@ DataNode::GetAttribute(const TCHAR *name, int &value) const
 {
   tstring val;
   if (GetAttribute(name, val)) {
-    value = _tcstol(val.c_str(), NULL, 0);
+    value = ParseInt(val.c_str());
     return true;
   } else {
     return false;
@@ -107,7 +108,7 @@ DataNode::GetAttribute(const TCHAR *name, unsigned &value) const
 {
   tstring val;
   if (GetAttribute(name, val)) {
-    value = _tcstol(val.c_str(), NULL, 0);
+    value = ParseInt(val.c_str());
     return true;
   } else {
     return false;
@@ -119,7 +120,7 @@ DataNode::GetAttribute(const TCHAR *name, bool &value) const
 {
   tstring val;
   if (GetAttribute(name, val)) {
-    value = (_tcstol(val.c_str(), NULL, 0) > 0);
+    value = (ParseInt(val.c_str()) > 0);
     return true;
   } else {
     return false;

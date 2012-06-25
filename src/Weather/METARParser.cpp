@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
 #include "Util/CharUtil.hpp"
+#include "Util/NumberParser.hpp"
 #include "Compatibility/string.h"
 
 #include <tchar.h>
@@ -471,18 +472,18 @@ ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
 {
   // 51-18N 006-46E
   TCHAR *end;
-  unsigned lat_deg = _tcstoul(buffer, &end, 10);
+  unsigned lat_deg = ParseUnsigned(buffer, &end, 10);
 
   if (*end != '-')
     return false;
   end++;
 
-  unsigned lat_min = _tcstoul(end, &end, 10);
+  unsigned lat_min = ParseUnsigned(end, &end, 10);
 
   unsigned lat_sec = 0;
   if (*end == _T('-')) {
     ++end;
-    lat_sec = _tcstoul(end, &end, 10);
+    lat_sec = ParseUnsigned(end, &end, 10);
   }
 
   bool north;
@@ -498,18 +499,18 @@ ParseLocation(const TCHAR *buffer, ParsedMETAR &parsed)
     return false;
   end++;
 
-  unsigned lon_deg = _tcstoul(end, &end, 10);
+  unsigned lon_deg = ParseUnsigned(end, &end, 10);
 
   if (*end != '-')
     return false;
   end++;
 
-  unsigned lon_min = _tcstoul(end, &end, 10);
+  unsigned lon_min = ParseUnsigned(end, &end, 10);
 
   unsigned lon_sec = 0;
   if (*end == _T('-')) {
     ++end;
-    lon_sec = _tcstoul(end, &end, 10);
+    lon_sec = ParseUnsigned(end, &end, 10);
   }
 
   bool east;

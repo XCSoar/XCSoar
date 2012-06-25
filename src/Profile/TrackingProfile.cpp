@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile.hpp"
 #include "ProfileKeys.hpp"
 #include "Tracking/TrackingSettings.hpp"
+#include "Util/NumberParser.hpp"
 
 #ifdef HAVE_TRACKING
 
@@ -33,13 +34,8 @@ namespace Profile {
     Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
 
     const TCHAR *key = Get(ProfileKeys::SkyLinesTrackingKey);
-    if (key != NULL) {
-#ifdef _UNICODE
-      settings.key = wcstoull(key, NULL, 16);
-#else
-      settings.key = strtoull(key, NULL, 16);
-#endif
-    }
+    if (key != NULL)
+      settings.key = ParseUint64(key, NULL, 16);
   }
 }
 

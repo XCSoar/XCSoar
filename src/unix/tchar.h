@@ -80,7 +80,6 @@ typedef char TCHAR;
 #define _itot itoa
 #define _ttoi atoi
 #define _tcstol strtol
-#define _tcstoul strtoul
 #define _tcstod strtod
 #define _tcscspn strcspn
 

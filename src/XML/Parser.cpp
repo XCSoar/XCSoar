@@ -49,6 +49,7 @@
 #include "Node.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/NumberParser.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Compatibility/string.h"
 
@@ -158,7 +159,7 @@ FromXMLString(const TCHAR *ss, size_t lo)
         ++ss;
 
         TCHAR *endptr;
-        unsigned long i = _tcstoul(ss, &endptr, 10);
+        unsigned i = ParseUnsigned(ss, &endptr, 10);
         if (endptr == ss || endptr >= end || *endptr != ';') {
           free(result);
           XML::global_error = true;

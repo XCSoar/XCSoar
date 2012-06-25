@@ -24,9 +24,8 @@ Copyright_License {
 #include "WaypointReaderWinPilot.hpp"
 #include "Units/System.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Util/NumberParser.hpp"
 #include "Util/Macros.hpp"
-
-#include <stdlib.h>
 
 static bool
 ParseAngle(const TCHAR* src, Angle& dest, const bool lat)
@@ -234,7 +233,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
 
   Waypoint new_waypoint(location);
   new_waypoint.file_num = file_num;
-  new_waypoint.original_id = _tcstoul(params[0], NULL, 0);
+  new_waypoint.original_id = ParseUnsigned(params[0], NULL, 0);
 
   // Name (e.g. KAMPLI)
   if (*params[5] == _T('\0'))
