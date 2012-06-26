@@ -366,6 +366,10 @@ public:
     GetControl(i).SetReadOnly(read_only);
   }
 
+  void SetRowEnabled(unsigned i, bool enabled) {
+    GetControl(i).SetEnabled(enabled);
+  }
+
   /**
    * Modify the "available" flag on this row.
    */
