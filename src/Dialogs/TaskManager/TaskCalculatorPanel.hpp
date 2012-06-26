@@ -25,14 +25,13 @@ Copyright_License {
 #define XCSOAR_TASK_CALCULATOR_PANEL_HPP
 
 #include "Form/XMLWidget.hpp"
+#include "Blackboard/BlackboardListener.hpp"
 #include "Math/fixed.hpp"
 
 class WndForm;
 class WndButton;
 
-class TaskCalculatorPanel : public XMLWidget {
-  WndForm &wf;
-
+class TaskCalculatorPanel : public XMLWidget, private NullBlackboardListener {
   WndButton *target_button;
 
   const bool *task_modified;
@@ -41,8 +40,8 @@ class TaskCalculatorPanel : public XMLWidget {
   fixed cruise_efficiency;
 
 public:
-  TaskCalculatorPanel(WndForm &_wf, const bool *_task_modified)
-    :wf(_wf), target_button(NULL), task_modified(_task_modified) {}
+  TaskCalculatorPanel(const bool *_task_modified)
+    :target_button(NULL), task_modified(_task_modified) {}
 
   void SetTargetButton(WndButton *_target_button) {
     assert(target_button == NULL);
@@ -66,6 +65,13 @@ public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Show(const PixelRect &rc);
   virtual void Hide();
+
+private:
+  /* virtual methods from NullBlackboardListener */
+  virtual void OnCalculatedUpdate(const MoreData &basic,
+                                  const DerivedInfo &calculated) {
+    Refresh();
+  }
 };
 
 #endif

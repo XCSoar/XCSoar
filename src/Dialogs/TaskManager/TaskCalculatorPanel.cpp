@@ -125,12 +125,6 @@ OnTargetClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  instance->Refresh();
-}
-
-static void
 OnMacCreadyData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat *df = (DataFieldFloat *)Sender;
@@ -249,9 +243,9 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
   cruise_efficiency = polar.GetCruiseEfficiency();
   emc = XCSoarInterface::Calculated().task_stats.effective_mc;
 
-  wf.SetTimerNotify(OnTimerNotify);
-
   Refresh();
+
+  CommonInterface::GetLiveBlackboard().AddListener(*this);
 
   XMLWidget::Show(rc);
 }
@@ -262,6 +256,7 @@ TaskCalculatorPanel::Hide()
   if (target_button != NULL)
     target_button->Hide();
 
-  wf.SetTimerNotify(NULL);
+  CommonInterface::GetLiveBlackboard().RemoveListener(*this);
+
   XMLWidget::Hide();
 }
