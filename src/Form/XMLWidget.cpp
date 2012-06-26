@@ -27,6 +27,19 @@ Copyright_License {
 
 void
 XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,
+                      ContainerWindow &parent, const PixelRect &rc,
+                      const TCHAR *resource)
+{
+  WindowStyle style;
+  style.Hide();
+
+  Window *window = ::LoadWindow(callbacks, &form, parent, rc, resource, style);
+  assert(window != NULL);
+  SetWindow(window);
+}
+
+void
+XMLWidget::LoadWindow(const CallBackTableEntry *callbacks,
                       ContainerWindow &parent, const TCHAR *resource)
 {
   WindowStyle style;

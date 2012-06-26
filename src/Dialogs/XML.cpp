@@ -97,7 +97,7 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
                                           const WindowStyle style);
 
 static Window *
-LoadChild(SubForm &form, ContainerWindow &parent,
+LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
           const CallBackTableEntry *lookup_table, XMLNode node,
           int bottom_most = 0,
           WindowStyle style=WindowStyle());
@@ -355,8 +355,8 @@ InitScaleWidth(const PixelSize size, const PixelRect rc)
 
 Window *
 LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
-           ContainerWindow &parent, const TCHAR *resource,
-           WindowStyle style)
+           ContainerWindow &parent, const PixelRect &rc,
+           const TCHAR *resource, WindowStyle style)
 {
   if (!form)
     return NULL;
@@ -365,12 +365,21 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   assert(node != NULL);
 
   // load only one top-level control.
-  Window *window = LoadChild(*form, parent, lookup_table, *node, 0, style);
+  Window *window = LoadChild(*form, parent, rc, lookup_table, *node, 0, style);
   delete node;
 
   assert(!XML::global_error);
 
   return window;
+}
+
+Window *
+LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
+           ContainerWindow &parent, const TCHAR *resource,
+           WindowStyle style)
+{
+  return LoadWindow(lookup_table, form, parent, parent.GetClientRect(),
+                    resource, style);
 }
 
 WndForm *
@@ -514,7 +523,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
  * @param node The XMLNode that represents the control
  */
 static Window *
-LoadChild(SubForm &form, ContainerWindow &parent,
+LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
           const CallBackTableEntry *lookup_table, XMLNode node,
           int bottom_most,
           WindowStyle style)
@@ -525,12 +534,11 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   // and caption of the control
   const TCHAR* name = GetName(node);
   const TCHAR* caption = GetCaption(node);
-  PixelRect rc = parent.GetClientRect();
-  ControlPosition pos = GetPosition(node, rc, bottom_most);
+  ControlPosition pos = GetPosition(node, parent_rc, bottom_most);
   if (!pos.no_scaling)
     pos.x = ScaleWidth(pos.x);
 
-  ControlSize size = GetSize(node, rc, pos);
+  ControlSize size = GetSize(node, parent_rc, pos);
   if (!size.no_scaling)
     size.cx = ScaleWidth(size.cx);
 
@@ -540,6 +548,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
   if (StringToIntDflt(node.GetAttribute(_T("Border")), 0))
     style.Border();
 
+  PixelRect rc;
   rc.left = pos.x;
   rc.top = pos.y;
   rc.right = rc.left + size.cx;
@@ -792,7 +801,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     for (auto i = node.begin(), end = node.end(); i != end; ++i) {
       // Load each child control from the child nodes
-      Window *child = LoadChild(form, *tabbed,
+      Window *child = LoadChild(form, *tabbed, tabbed->GetClientRect(),
                                 lookup_table,
                                 *i);
       if (child != NULL)
@@ -874,9 +883,8 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
   // Iterate through the childnodes
   for (auto i = node->begin(), end = node->end(); i != end; ++i) {
     // Load each child control from the child nodes
-    Window *window = LoadChild(form, parent, lookup_table,
-                               *i,
-                               bottom_most);
+    Window *window = LoadChild(form, parent, parent.GetClientRect(),
+                               lookup_table, *i, bottom_most);
     if (window == NULL)
       continue;
 

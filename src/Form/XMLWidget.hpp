@@ -36,6 +36,10 @@ class XMLWidget : public WindowWidget {
 protected:
   SubForm form;
 
+  void LoadWindow(const CallBackTableEntry *callbacks,
+                  ContainerWindow &parent, const PixelRect &rc,
+                  const TCHAR *resource);
+
   /**
    * Called from Prepare()
    * Creates the window object

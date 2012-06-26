@@ -54,9 +54,15 @@ SetXMLDialogLook(const DialogLook &dialog_look);
  * @param parent The parent window of the control being created
  *    set parent to "form-GetClientRect()" to make top level control
  *    or to a PanelControl to add it to a tab window
+ * @param rc the rectangle within the parent for relative coordinates
  * @param FileName The XML filename
  * @return the pointer to the Window added to the form
  */
+Window *
+LoadWindow(const CallBackTableEntry *LookUpTable, SubForm *form,
+           ContainerWindow &parent, const PixelRect &rc,
+           const TCHAR *resource, WindowStyle style=WindowStyle());
+
 Window *
 LoadWindow(const CallBackTableEntry *LookUpTable, SubForm *form,
            ContainerWindow &parent, const TCHAR *resource,
