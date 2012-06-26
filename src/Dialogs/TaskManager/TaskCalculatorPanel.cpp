@@ -24,23 +24,33 @@ Copyright_License {
 #include "TaskCalculatorPanel.hpp"
 #include "Internal.hpp"
 #include "Dialogs/Task.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Form/Form.hpp"
+#include "Form/Draw.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
-#include "Form/Util.hpp"
-#include "Form/Edit.hpp"
 #include "Screen/Icon.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/MapLook.hpp"
 #include "Language/Language.hpp"
+
+enum Controls {
+  WARNING,
+  AAT_TIME,
+  AAT_ESTIMATED,
+  DISTANCE,
+  MC,
+  RANGE,
+  SPEED_REMAINING,
+  EFFECTIVE_MC,
+  SPEED_ACHIEVED,
+  CRUISE_EFFICIENCY,
+};
 
 class WndButton;
 
@@ -63,28 +73,26 @@ TaskCalculatorPanel::Refresh()
   if (target_button != NULL)
     target_button->SetVisible(common_stats.ordered_has_targets);
 
-  LoadFormProperty(form, _T("prpAATEst"),
-                   (common_stats.task_time_remaining
-                    + common_stats.task_time_elapsed) / 60);
+  LoadValue(AAT_ESTIMATED, (common_stats.task_time_remaining
+                            + common_stats.task_time_elapsed) / 60);
 
-  if (task_stats.has_targets) {
-    LoadFormProperty(form, _T("prpAATTime"),
-                     protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
-  } else {
-    ShowFormControl(form, _T("prpAATTime"), false);
-  }
+  SetRowVisible(AAT_TIME, task_stats.has_targets);
+  if (task_stats.has_targets)
+    LoadValue(AAT_TIME,
+              protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
 
   fixed rPlanned = task_stats.total.solution_planned.IsDefined()
     ? task_stats.total.solution_planned.vector.distance
     : fixed_zero;
 
   if (positive(rPlanned))
-    LoadFormProperty(form, _T("prpDistance"), UnitGroup::DISTANCE, rPlanned);
+    LoadValue(DISTANCE, rPlanned, UnitGroup::DISTANCE);
+  else
+    ClearValue(DISTANCE);
 
-  LoadFormProperty(form, _T("prpMacCready"), UnitGroup::VERTICAL_SPEED,
-                   CommonInterface::GetComputerSettings().polar.glide_polar_task.GetMC());
-  LoadFormProperty(form, _T("prpEffectiveMacCready"), UnitGroup::VERTICAL_SPEED,
-                   emc);
+  LoadValue(MC, CommonInterface::GetComputerSettings().polar.glide_polar_task.GetMC(),
+            UnitGroup::VERTICAL_SPEED);
+  LoadValue(EFFECTIVE_MC, emc, UnitGroup::VERTICAL_SPEED);
 
   if (positive(rPlanned)) {
     fixed rMax = task_stats.distance_max;
@@ -92,30 +100,25 @@ TaskCalculatorPanel::Refresh()
 
     if (rMin < rMax) {
       fixed range = Double((rPlanned - rMin) / (rMax - rMin)) - fixed_one;
-      LoadFormProperty(form, _T("prpRange"), range * 100);
-    }
-  }
-
-/*
-  fixed v1;
-  if (XCSoarInterface::Calculated().TaskTimeToGo>0) {
-    v1 = XCSoarInterface::Calculated().TaskDistanceToGo/
-      XCSoarInterface::Calculated().TaskTimeToGo;
-  } else {
-    v1 = 0;
-  }
-  */
+      LoadValue(RANGE, range * 100);
+    } else
+      ClearValue(RANGE);
+  } else
+    ClearValue(RANGE);
 
   if (task_stats.total.remaining_effective.IsDefined())
-    LoadFormProperty(form, _T("prpSpeedRemaining"), UnitGroup::TASK_SPEED,
-                     task_stats.total.remaining_effective.GetSpeed());
+    LoadValue(SPEED_REMAINING, task_stats.total.remaining_effective.GetSpeed(),
+              UnitGroup::TASK_SPEED);
+  else
+    ClearValue(SPEED_REMAINING);
 
   if (task_stats.total.travelled.IsDefined())
-    LoadFormProperty(form, _T("prpSpeedAchieved"), UnitGroup::TASK_SPEED,
-                     task_stats.total.travelled.GetSpeed());
+    LoadValue(SPEED_ACHIEVED, task_stats.total.travelled.GetSpeed(),
+              UnitGroup::TASK_SPEED);
+  else
+    ClearValue(SPEED_ACHIEVED);
 
-  LoadFormProperty(form, _T("prpCruiseEfficiency"),
-                   task_stats.cruise_efficiency * 100);
+  LoadValue(CRUISE_EFFICIENCY, task_stats.cruise_efficiency * 100);
 }
 
 static void
@@ -193,13 +196,6 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   }
 }
 
-static gcc_constexpr_data CallBackTableEntry task_calculator_callbacks[] = {
-  DeclareCallBackEntry(OnMacCreadyData),
-  DeclareCallBackEntry(OnCruiseEfficiencyData),
-  DeclareCallBackEntry(OnWarningPaint),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
@@ -210,28 +206,59 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (target_button != NULL)
     target_button->SetOnClickNotify(OnTargetClicked);
 
-  LoadWindow(task_calculator_callbacks, parent, rc,
-             _T("IDR_XML_TASKCALCULATOR"));
+  Add(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),
+                            PixelRect{0, 0, 100, Layout::Scale(17)},
+                            WindowStyle(), OnWarningPaint));
 
-  WndProperty *wp = (WndProperty *)form.FindByName(_T("prpMacCready"));
-  assert(wp != NULL);
+  AddFloat(_("Assigned task time"), NULL, _T("%.0f min"), _T("%.0f"),
+           fixed_zero, fixed(600), fixed_one, false, fixed_zero);
+  SetReadOnly(AAT_TIME);
 
-  DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-  assert(df != NULL);
+  AddFloat(_("Estimated task time"), NULL, _T("%.0f min"), _T("%.0f"),
+           fixed_zero, fixed(600), fixed_one, false, fixed_zero);
+  SetReadOnly(AAT_ESTIMATED);
 
-  df->SetFormat(GetUserVerticalSpeedFormat(false, false));
-  df->SetMin(fixed_zero);
-  df->SetMax(Units::ToUserVSpeed(fixed(5)));
-  df->SetStep(GetUserVerticalSpeedStep());
+  AddFloat(_("Task distance"), NULL, _T("%.0f %s"), _T("%.0f"),
+           fixed_zero, fixed(1000000), fixed_one, false, fixed_zero);
+  SetReadOnly(DISTANCE);
 
-  wp = (WndProperty *)form.FindByName(_T("prpEffectiveMacCready"));
-  assert(wp != NULL);
+  AddFloat(_("Set MacCready"),
+           _("Adjusts MC value used in the calculator.  "
+             "Use this to determine the effect on estimated task time due to changes in conditions.  "
+             "This value will not affect the main computer's setting if the dialog is exited with the Cancel button."),
+           _T("%.1f %s"), _T("%.1f"),
+           fixed_zero, Units::ToUserVSpeed(fixed(5)),
+           GetUserVerticalSpeedStep(), false, fixed_zero,
+           OnMacCreadyData);
+  DataFieldFloat &mc_df = (DataFieldFloat &)GetDataField(MC);
+  mc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
-  df = (DataFieldFloat *)wp->GetDataField();
-  assert(df != NULL);
+  AddFloat(_("AAT range"),
+           _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance."),
+           _T("%.0f %%"), _T("%.0f"),
+           fixed_zero, fixed(100), fixed_one, false, fixed_zero);
+  SetReadOnly(RANGE);
 
-  df->SetFormat(GetUserVerticalSpeedFormat(false, false));
+  AddFloat(_("Speed remaining"), NULL, _T("%.0f %s"), _T("%.0f"),
+           fixed_zero, fixed(100), fixed_one, false, fixed_zero);
+  SetReadOnly(SPEED_REMAINING);
 
+  AddFloat(_("Achieved MacCready"), NULL, _T("%.1f %s"), _T("%.1f"),
+           fixed_zero, fixed(10), fixed(0.1), false, fixed_zero);
+  SetReadOnly(EFFECTIVE_MC);
+  DataFieldFloat &emc_df = (DataFieldFloat &)GetDataField(EFFECTIVE_MC);
+  emc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
+
+  AddFloat(_("Achieved speed"), NULL, _T("%.0f %s"), _T("%.0f"),
+           fixed_zero, fixed(100), fixed_one, false, fixed_zero);
+  SetReadOnly(SPEED_ACHIEVED);
+
+  AddFloat(_("Cruise efficiency"),
+           _("Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started."),
+           _T("%.0f %%"), _T("%.0f"),
+           fixed_zero, fixed(100), fixed_one, false, fixed_zero,
+           OnCruiseEfficiencyData);
+  SetReadOnly(CRUISE_EFFICIENCY);
 }
 
 void
@@ -247,7 +274,7 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 
-  XMLWidget::Show(rc);
+  RowFormWidget::Show(rc);
 }
 
 void
@@ -258,5 +285,5 @@ TaskCalculatorPanel::Hide()
 
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 
-  XMLWidget::Hide();
+  RowFormWidget::Hide();
 }

@@ -252,7 +252,8 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   TaskClosePanel *wClose = new TaskClosePanel(&task_modified);
   wClose->SetTaskView(task_view);
 
-  TaskCalculatorPanel *wCalculator = new TaskCalculatorPanel(&task_modified);
+  TaskCalculatorPanel *wCalculator =
+    new TaskCalculatorPanel(UIGlobals::GetDialogLook(), &task_modified);
   wCalculator->SetTargetButton((WndButton *)wf->FindByName(_T("Target")));
 
   TaskEditPanel *wEdit = new TaskEditPanel(*wf, look.task, look.airspace,
