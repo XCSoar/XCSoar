@@ -101,6 +101,8 @@ void
 InputEvents::eventCalculator(gcc_unused const TCHAR *misc)
 {
   dlgTaskManagerShowModal(XCSoarInterface::main_window);
+
+  trigger_redraw();
 }
 
 void
