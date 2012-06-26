@@ -461,6 +461,15 @@ public:
   void LoadValue(unsigned i, fixed value);
   void LoadValue(unsigned i, fixed value, UnitGroup unit_group);
 
+  /**
+   * Clear the value of the specified row.  This bypasses the
+   * DataField which may be attached to the control.  Use this method
+   * to indicate that there's no valid value currently.
+   */
+  void ClearValue(unsigned i) {
+    GetControl(i).SetText(_T(""));
+  }
+
   gcc_pure
   bool GetValueBoolean(unsigned i) const;
 
