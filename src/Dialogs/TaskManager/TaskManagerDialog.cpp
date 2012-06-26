@@ -44,6 +44,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
+#include "Form/Form.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Draw.hpp"

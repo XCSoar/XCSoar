@@ -28,6 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -173,9 +174,11 @@ OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessMode Mode)
 static void
 OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
   if (instance->IsTaskModified()) {
     const TCHAR* message = _("Calculator excludes unsaved task changes!");
-    canvas.Select(*instance->GetLook().small_font);
+    canvas.Select(*look.small_font);
     const int textheight = canvas.CalcTextHeight(message);
 
     const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
@@ -192,7 +195,7 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
                 message);
   }
   else {
-    canvas.Clear(instance->GetLook().background_color);
+    canvas.Clear(look.background_color);
   }
 }
 

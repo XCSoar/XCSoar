@@ -25,9 +25,9 @@ Copyright_License {
 #define XCSOAR_TASK_CALCULATOR_PANEL_HPP
 
 #include "Form/XMLWidget.hpp"
-#include "Form/Form.hpp"
 #include "Math/fixed.hpp"
 
+class WndForm;
 class WndButton;
 
 class TaskCalculatorPanel : public XMLWidget {
@@ -49,10 +49,6 @@ public:
     assert(_target_button != NULL);
 
     target_button = _target_button;
-  }
-
-  const DialogLook &GetLook() {
-    return wf.GetLook();
   }
 
   bool IsTaskModified() const {
