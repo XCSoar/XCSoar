@@ -49,7 +49,9 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
 
   /* AIRCRAFT_STATE */
   aircraft.time = info.time;
-  aircraft.location = info.location;
+  aircraft.location = info.location_available
+    ? info.location
+    : GeoPoint::Invalid();
   aircraft.track = info.track;
   aircraft.g_load = info.acceleration.available
     ? info.acceleration.g_load

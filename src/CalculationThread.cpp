@@ -34,7 +34,7 @@ Copyright_License {
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
 CalculationThread::CalculationThread(GlideComputer &_glide_computer)
-  :WorkerThread(450, 100, 50), glide_computer(_glide_computer) {
+  :WorkerThread(450, 100, 50), force(false), glide_computer(_glide_computer) {
 }
 
 void
@@ -72,20 +72,26 @@ CalculationThread::Tick()
     glide_computer.ReadBlackboard(device_blackboard->Basic());
   }
 
+  bool force;
   {
     ScopeLock protect(mutex);
     // Copy settings form ComputerSettingsBlackboard to GlideComputerBlackboard
     glide_computer.ReadComputerSettings(settings_computer);
+
+    force = this->force;
+    if (force) {
+      this->force = false;
+      gps_updated = true;
+    }
   }
 
   glide_computer.Expire();
 
   bool do_idle = false;
 
-  if (gps_updated) {
+  if (gps_updated || force)
     // perform idle call if time advanced and slow calculations need to be updated
-    do_idle |= glide_computer.ProcessGPS();
-  }
+    do_idle |= glide_computer.ProcessGPS(force);
 
   // values changed, so copy them back now: ONLY CALCULATED INFO
   // should be changed in DoCalculations, so we only need to write
@@ -96,10 +102,9 @@ CalculationThread::Tick()
   }
 
   // if (new GPS data)
-  if (gps_updated) {
+  if (gps_updated || force)
     // inform map new data is ready
     TriggerCalculatedUpdate();
-  }
 
   if (do_idle) {
     // do slow calculations last, to minimise latency
@@ -116,4 +121,14 @@ CalculationThread::Tick()
       TriggerAirspaceWarning();
     }
   }
+}
+
+void
+CalculationThread::ForceTrigger()
+{
+  mutex.Lock();
+  force = true;
+  mutex.Unlock();
+
+  WorkerThread::Trigger();
 }

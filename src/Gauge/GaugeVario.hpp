@@ -110,6 +110,10 @@ protected:
     return blackboard.GetComputerSettings();
   }
 
+  const GlidePolar &GetGlidePolar() const {
+    return GetComputerSettings().polar.glide_polar_task;
+  }
+
   const VarioSettings &Settings() const {
     return blackboard.GetUISettings().vario;
   }

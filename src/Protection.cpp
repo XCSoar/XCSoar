@@ -56,6 +56,13 @@ TriggerGPSUpdate()
 }
 
 void
+ForceCalculation()
+{
+  if (calculation_thread != NULL)
+    calculation_thread->ForceTrigger();
+}
+
+void
 TriggerVarioUpdate()
 {
   CommonInterface::main_window.SendGPSUpdate();
@@ -95,7 +102,7 @@ CreateCalculationThread()
   /* initialise the GlideComputer and run the first iteration */
   glide_computer->ReadBlackboard(device_blackboard->Basic());
   glide_computer->ReadComputerSettings(device_blackboard->GetComputerSettings());
-  glide_computer->ProcessGPS();
+  glide_computer->ProcessGPS(true);
 
   /* copy GlideComputer results to DeviceBlackboard */
   device_blackboard->ReadBlackboard(glide_computer->Calculated());

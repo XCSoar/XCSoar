@@ -83,7 +83,7 @@ GlideComputer::Initialise()
  * Is called by the CalculationThread and processes the received GPS data in Basic()
  */
 bool
-GlideComputer::ProcessGPS()
+GlideComputer::ProcessGPS(bool force)
 {
   const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
@@ -99,7 +99,8 @@ GlideComputer::ProcessGPS()
   // Process basic task information
   task_computer.ProcessBasicTask(basic, LastBasic(),
                                  calculated, LastCalculated(),
-                                 GetComputerSettings());
+                                 GetComputerSettings(),
+                                 force);
   task_computer.ProcessMoreTask(basic, calculated, LastCalculated(),
                                 GetComputerSettings());
 

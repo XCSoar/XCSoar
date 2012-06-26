@@ -95,14 +95,8 @@ public:
   /** Dolphin speed to fly */
   fixed V_dolphin;
 
-  /** MC setting at last update (m/s) */
-  fixed current_mc;
   /** Risk MC setting (m/s) */
   fixed current_risk_mc;
-  /** Bugs setting at last update */
-  fixed current_bugs;
-  /** Ballast setting at last update */
-  fixed current_ballast;
 
   /** Summary of ordered task progress */
   TaskSummary ordered_summary;

@@ -102,7 +102,7 @@ static void
 trigger_redraw()
 {
   if (!XCSoarInterface::Basic().location_available)
-    TriggerGPSUpdate();
+    ForceCalculation();
   TriggerMapUpdate();
 }
 
