@@ -353,21 +353,6 @@ InitScaleWidth(const PixelSize size, const PixelRect rc)
     dialog_width_scale = 1024;
 }
 
-/**
- * Loads a stand-alone XML file as a single top-level XML node
- * into an existing SubForm object and sets its parent to the parent parameter
- * Ignores additional top-level XML nodes.
- * Scales based on the DialogStyle of the last XML form loaded by XCSoar.
- * The Window is destroyed by its Form's destructor
- *
- * @param LookUpTable The CallBackTable
- * @param form The WndForm into which the Window is added
- * @param parent The parent window of the control being created
- *    set parent to "form-GetClientRect()" to make top level control
- *    or to a PanelControl to add it to a tab window
- * @param FileName The XML filename
- * @return the pointer to the Window added to the form
- */
 Window *
 LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
            ContainerWindow &parent, const TCHAR *resource,
@@ -388,16 +373,6 @@ LoadWindow(const CallBackTableEntry *lookup_table, SubForm *form,
   return window;
 }
 
-/**
- * This function returns a WndForm created either from the ressources or
- * from the XML file in XCSoarData(if found)
- * @param LookUpTable The CallBackTable
- * @param FileName The XML filename to search for in XCSoarData
- * @param Parent The parent window (e.g. XCSoarInterface::main_window)
- * @param resource The resource to look for
- * @param targetRect The area where to move the dialog if not parent
- * @return The WndForm object
- */
 WndForm *
 LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
            const TCHAR *resource, const PixelRect *target_rc)
