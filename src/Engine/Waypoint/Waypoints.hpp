@@ -30,6 +30,8 @@
 #include "Waypoint.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
 
+#include <functional>
+
 class WaypointVisitor;
 
 /**
