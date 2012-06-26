@@ -38,6 +38,12 @@ private:
   Port &port;
 
   /**
+   * The most recent MacCready setting, written by PutMacCready(),
+   * read by VarioWriteSettings().
+   */
+  fixed mc;
+
+  /**
    * The most recent QNH value, written by SetQNH(), read by
    * VarioWriteSettings().
    */
@@ -57,7 +63,9 @@ private:
 
 public:
   VegaDevice(Port &_port)
-    :port(_port), qnh(AtmosphericPressure::Standard()), detected(false) {}
+    :port(_port),
+     mc(fixed_zero), qnh(AtmosphericPressure::Standard()),
+     detected(false) {}
 
   /**
    * Write an integer setting to the Vega.
@@ -92,6 +100,7 @@ protected:
 public:
   virtual void LinkTimeout();
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
+  virtual bool PutMacCready(fixed mc, OperationEnvironment &env);
   virtual bool PutQNH(const AtmosphericPressure& pres,
                       OperationEnvironment &env);
   virtual void OnSysTicker(const DerivedInfo &calculated);

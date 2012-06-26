@@ -70,13 +70,20 @@ VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
     char mcbuf[100];
 
     sprintf(mcbuf, "PDVMC,%d,%d,%d,%d,%d",
-            iround(calculated.common_stats.current_mc*10),
+            iround(mc * 10),
             iround(calculated.V_stf*10),
             calculated.circling,
             iround(calculated.terrain_altitude),
             uround(qnh.GetHectoPascal() * 10));
 
     PortWriteNMEA(port, mcbuf);
+}
+
+bool
+VegaDevice::PutMacCready(fixed _mc, OperationEnvironment &env)
+{
+  mc = _mc;
+  return true;
 }
 
 bool
