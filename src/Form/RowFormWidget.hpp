@@ -462,6 +462,11 @@ public:
   void LoadValue(unsigned i, fixed value, UnitGroup unit_group);
 
   /**
+   * Load a value into a control created by AddTime().
+   */
+  void LoadValueTime(unsigned i, int value);
+
+  /**
    * Clear the value of the specified row.  This bypasses the
    * DataField which may be attached to the control.  Use this method
    * to indicate that there's no valid value currently.

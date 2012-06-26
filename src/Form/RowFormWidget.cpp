@@ -520,6 +520,16 @@ RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
   control.RefreshDisplay();
 }
 
+void
+RowFormWidget::LoadValueTime(unsigned i, int value)
+{
+  WndProperty &control = GetControl(i);
+  DataFieldTime &df = *(DataFieldTime *)control.GetDataField();
+  assert(df.GetType() == DataField::Type::TIME);
+  df.Set(value);
+  control.RefreshDisplay();
+}
+
 bool
 RowFormWidget::GetValueBoolean(unsigned i) const
 {

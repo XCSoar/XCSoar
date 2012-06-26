@@ -78,6 +78,10 @@ public:
     max_tokens = _max_tokens;
   }
 
+  void Set(int _value) {
+    value = _value;
+  }
+
   /* virtual methods from class DataField */
   virtual void Inc();
   virtual void Dec();
