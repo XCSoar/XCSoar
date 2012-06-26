@@ -33,14 +33,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 
-static void
-trigger_redraw()
-{
-  if (!XCSoarInterface::Basic().location_available)
-    TriggerGPSUpdate();
-  TriggerMapUpdate();
-}
-
 void
 InputEvents::eventSounds(const TCHAR *misc)
 {
@@ -365,7 +357,7 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("off")))
     settings.altitude_mode = AirspaceDisplayMode::ALLOFF;
 
-  trigger_redraw();
+  TriggerMapUpdate();
 }
 
 void
