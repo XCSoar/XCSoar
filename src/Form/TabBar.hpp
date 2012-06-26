@@ -48,10 +48,6 @@ class TabBarControl : public ContainerWindow {
   TabDisplay * tab_display;
   const UPixelScalar tab_line_height;
   bool flip_orientation;
-  /** if false (default) Client rectangle is adjacent to tabs
-   *  if true, Client rectangle overlaps tabs (for advanced drawing)
-   */
-  bool client_overlap_tabs;
 
   PageFlippedCallback page_flipped_callback;
 
@@ -68,8 +64,7 @@ public:
                 PixelScalar x, PixelScalar y,
                 UPixelScalar width, UPixelScalar height,
                 const WindowStyle style = WindowStyle(),
-                bool _flipOrientation = false,
-                bool _clientOverlapTabs = false);
+                bool _flipOrientation = false);
 
   ~TabBarControl();
 
@@ -124,8 +119,6 @@ public:
   UPixelScalar GetTabLineHeight() const {
     return tab_line_height;
   }
-
-  void SetClientOverlapTabs(bool value);
 
 protected:
   virtual void OnCreate();
