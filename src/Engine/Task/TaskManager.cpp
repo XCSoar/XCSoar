@@ -224,10 +224,6 @@ TaskManager::UpdateCommonStatsTask()
 void
 TaskManager::UpdateCommonStatsPolar(const AircraftState &state)
 {
-  common_stats.current_mc = glide_polar.GetMC();
-  common_stats.current_bugs = glide_polar.GetBugs();
-  common_stats.current_ballast = glide_polar.GetBallast();
-
   common_stats.current_risk_mc =
     glide_polar.GetRiskMC(state.working_band_fraction,
                           task_behaviour.risk_gamma);

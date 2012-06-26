@@ -109,7 +109,7 @@ GaugeVario::OnPaintBuffer(Canvas &canvas)
   }
 
   if (Settings().ShowMc) {
-    fixed mc = Units::ToUserVSpeed(Calculated().common_stats.current_mc);
+    fixed mc = Units::ToUserVSpeed(GetGlidePolar().GetMC());
     RenderValue(canvas, bottom_position.x, bottom_position.y,
                 &value_bottom, &label_bottom,
                 mc,
@@ -597,7 +597,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     ballast_initialised = true;
   }
 
-  unsigned ballast = uround(Calculated().common_stats.current_ballast * 100);
+  unsigned ballast = uround(GetGlidePolar().GetBugs() * 100);
 
   if (!is_persistent() || ballast != last_ballast) {
     // ballast hase been changed
