@@ -28,8 +28,12 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Math/fixed.hpp"
 
+class WndButton;
+
 class TaskCalculatorPanel : public XMLWidget {
   WndForm &wf;
+
+  WndButton *target_button;
 
   const bool *task_modified;
 
@@ -38,7 +42,14 @@ class TaskCalculatorPanel : public XMLWidget {
 
 public:
   TaskCalculatorPanel(WndForm &_wf, const bool *_task_modified)
-    :wf(_wf), task_modified(_task_modified) {}
+    :wf(_wf), target_button(NULL), task_modified(_task_modified) {}
+
+  void SetTargetButton(WndButton *_target_button) {
+    assert(target_button == NULL);
+    assert(_target_button != NULL);
+
+    target_button = _target_button;
+  }
 
   const DialogLook &GetLook() {
     return wf.GetLook();

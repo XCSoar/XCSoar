@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
 <Form Caption="Task Manager">
+  <Button Name="Target" Caption="Target" X="5" Y="18" Width="73" Height="33" Visible="0"/>
+
   <TabBar Name="TabBar" X="0" Y="52" Width="80" Height="176">
   </TabBar>
 </Form>

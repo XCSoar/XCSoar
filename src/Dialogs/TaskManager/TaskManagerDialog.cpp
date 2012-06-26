@@ -234,7 +234,8 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   Widget *wClose = new TaskClosePanel(&task_modified);
 
-  Widget *wCalculator = new TaskCalculatorPanel(*wf, &task_modified);
+  TaskCalculatorPanel *wCalculator = new TaskCalculatorPanel(*wf, &task_modified);
+  wCalculator->SetTargetButton((WndButton *)wf->FindByName(_T("Target")));
 
   Widget *wEdit = new TaskEditPanel(*wf, look.task, look.airspace,
                                     &active_task, &task_modified);

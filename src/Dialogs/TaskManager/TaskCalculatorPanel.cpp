@@ -28,6 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Form/Button.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
@@ -58,7 +59,8 @@ TaskCalculatorPanel::Refresh()
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
 
-  ShowFormControl(form, _T("Target"), common_stats.ordered_has_targets);
+  if (target_button != NULL)
+    target_button->SetVisible(common_stats.ordered_has_targets);
 
   LoadFormProperty(form, _T("prpAATEst"),
                    (common_stats.task_time_remaining
@@ -196,7 +198,6 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 
 static gcc_constexpr_data CallBackTableEntry task_calculator_callbacks[] = {
   DeclareCallBackEntry(OnMacCreadyData),
-  DeclareCallBackEntry(OnTargetClicked),
   DeclareCallBackEntry(OnCruiseEfficiencyData),
   DeclareCallBackEntry(OnWarningPaint),
   DeclareCallBackEntry(NULL)
@@ -208,6 +209,9 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   assert(protected_task_manager != NULL);
 
   instance = this;
+
+  if (target_button != NULL)
+    target_button->SetOnClickNotify(OnTargetClicked);
 
   LoadWindow(task_calculator_callbacks, parent,
              Layout::landscape
@@ -253,6 +257,9 @@ TaskCalculatorPanel::Show(const PixelRect &rc)
 void
 TaskCalculatorPanel::Hide()
 {
+  if (target_button != NULL)
+    target_button->Hide();
+
   wf.SetTimerNotify(NULL);
   XMLWidget::Hide();
 }
