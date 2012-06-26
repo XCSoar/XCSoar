@@ -214,7 +214,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WindowStyle style;
     style.Border();
     AddRemaining(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),
-                                       0, 0, 100, 100,
+                                       {0, 0, 100, 100},
                                        style,
                                        ::OnPreviewPaint));
   }

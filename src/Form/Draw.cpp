@@ -25,14 +25,12 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 
 WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
-                                     PixelScalar X, PixelScalar Y,
-                                     UPixelScalar Width, UPixelScalar Height,
-                                     const WindowStyle style,
+                                     PixelRect rc, const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
   :mOnPaintCallback(OnPaintCallback),
    mOnMouseDownCallback(NULL)
 {
-  set(parent, X, Y, Width, Height, style);
+  set(parent, rc, style);
 }
 
 void

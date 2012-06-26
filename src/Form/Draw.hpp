@@ -40,9 +40,7 @@ public:
 
 public:
   WndOwnerDrawFrame(ContainerWindow &parent,
-                    PixelScalar x, PixelScalar y,
-                    UPixelScalar width, UPixelScalar height,
-                    const WindowStyle style,
+                    PixelRect rc, const WindowStyle style,
                     OnPaintCallback_t OnPaintCallback);
 
   /**

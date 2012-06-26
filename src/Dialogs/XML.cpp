@@ -732,8 +732,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     // Create the DrawControl
     WndOwnerDrawFrame* canvas =
-      new WndOwnerDrawFrame(parent, pos.x, pos.y, size.cx, size.cy,
-                            style, paint_callback);
+      new WndOwnerDrawFrame(parent, rc, style, paint_callback);
 
     window = canvas;
 
