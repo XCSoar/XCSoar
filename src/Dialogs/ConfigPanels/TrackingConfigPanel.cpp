@@ -57,6 +57,7 @@ public:
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
 public:
+  void SetSkyLinesEnabled(bool enabled);
   void SetEnabled(bool enabled);
 
   /* methods from Widget */
@@ -69,6 +70,12 @@ private:
 };
 
 void
+TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
+{
+  SetRowEnabled(SL_KEY, enabled);
+}
+
+void
 TrackingConfigPanel::SetEnabled(bool enabled)
 {
   SetRowEnabled(LT24Server, enabled);
@@ -79,7 +86,10 @@ TrackingConfigPanel::SetEnabled(bool enabled)
 void
 TrackingConfigPanel::OnModified(DataField &df)
 {
-  if (IsDataField(LT24Enabled, df)) {
+  if (IsDataField(SL_ENABLED, df)) {
+    const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
+    SetSkyLinesEnabled(dfb.GetAsBoolean());
+  } else if (IsDataField(LT24Enabled, df)) {
     const DataFieldBoolean &dfb = (const DataFieldBoolean &)df;
     SetEnabled(dfb.GetAsBoolean());
   }
@@ -135,6 +145,7 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddText(_("Username"), _T(""), settings.livetrack24.username);
   AddPassword(_("Password"), _T(""), settings.livetrack24.password);
 
+  SetSkyLinesEnabled(settings.skylines.enabled);
   SetEnabled(settings.livetrack24.enabled);
 }
 
