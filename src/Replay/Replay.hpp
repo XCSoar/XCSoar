@@ -49,10 +49,10 @@ class Replay
   DemoReplayGlue demo_replay;
 
 public:
-  Replay(Logger *_logger, ProtectedTaskManager& task_manager):
-    mode(MODE_NULL),
-    igc_replay(_logger),
-    demo_replay(task_manager) {}
+  Replay(Logger *_logger, ProtectedTaskManager& task_manager)
+    :mode(MODE_NULL),
+     igc_replay(_logger),
+     demo_replay(task_manager) {}
 
   bool Update();
   void Stop();

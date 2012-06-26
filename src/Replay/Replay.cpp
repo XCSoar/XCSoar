@@ -67,13 +67,15 @@ Replay::Start()
 const TCHAR*
 Replay::GetFilename()
 {
-  return (mode== MODE_IGC ? igc_replay.GetFilename() : nmea_replay.GetFilename());
+  return mode == MODE_IGC
+    ? igc_replay.GetFilename()
+    : nmea_replay.GetFilename();
 }
 
 void
 Replay::SetFilename(const TCHAR *name)
 {
-  if (!name || StringIsEmpty(name)) {
+  if (name == NULL || StringIsEmpty(name)) {
     mode = MODE_DEMO;
     return;
   }
@@ -102,7 +104,8 @@ Replay::Update()
     return demo_replay.Update();
   case MODE_NULL:
     break;
-  };
+  }
+
   return false;
 }
 
@@ -118,7 +121,8 @@ Replay::GetTimeScale()
     return demo_replay.time_scale;
   case MODE_NULL:
     break;
-  };
+  }
+
   return fixed_one;
 }
 
