@@ -42,8 +42,16 @@ class TaskPropertiesPanel : public XMLWidget {
 
 public:
   TaskPropertiesPanel(OrderedTask **_active_task, bool *_task_modified)
-    :ordered_task_pointer(_active_task), ordered_task(*ordered_task_pointer),
+    :wTaskView(NULL),
+     ordered_task_pointer(_active_task), ordered_task(*ordered_task_pointer),
      task_changed(_task_modified) {}
+
+  void SetTaskView(WndOwnerDrawFrame *_task_view) {
+    assert(wTaskView == NULL);
+    assert(_task_view != NULL);
+
+    wTaskView = _task_view;
+  }
 
   void OnFAIFinishHeightChange(DataFieldBoolean &df);
   void OnTaskTypeChange(DataFieldEnum &df);

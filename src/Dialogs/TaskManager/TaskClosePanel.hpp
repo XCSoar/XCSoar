@@ -40,7 +40,14 @@ class TaskClosePanel : public XMLWidget {
 
 public:
   TaskClosePanel(bool *_task_modified)
-    :task_modified(_task_modified) {}
+    :task_modified(_task_modified), wTaskView(NULL) {}
+
+  void SetTaskView(WndOwnerDrawFrame *_task_view) {
+    assert(wTaskView == NULL);
+    assert(_task_view != NULL);
+
+    wTaskView = _task_view;
+  }
 
   void RefreshStatus();
 
@@ -48,6 +55,7 @@ public:
   virtual bool Click();
   virtual void ReClick();
   virtual void Show(const PixelRect &rc);
+  virtual void Hide();
 };
 
 #endif

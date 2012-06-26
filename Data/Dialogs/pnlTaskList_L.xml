@@ -2,8 +2,6 @@
 
 
 <Panel Name="frmBrowse" Border="0">
-  <Canvas Name="frmTaskView1" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="OnTaskPaint" />
-  
   <Tabbed Name="tabbedManage" X="80" Y="0">
 
     <Panel Name="frmManageSub">

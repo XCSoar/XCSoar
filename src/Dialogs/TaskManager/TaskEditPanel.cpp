@@ -88,7 +88,9 @@ TaskEditPanel::RefreshView()
   else
     wTaskPoints->SetLength(ordered_task->TaskSize());
 
-  wTaskView->Invalidate();
+  if (wTaskView != NULL)
+    wTaskView->Invalidate();
+
   wTaskPoints->Invalidate();
 
   if (wSummary) {
@@ -373,8 +375,6 @@ OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 }
 
 static gcc_constexpr_data CallBackTableEntry task_edit_callbacks[] = {
-  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
-
   DeclareCallBackEntry(OnMakeFinish),
   DeclareCallBackEntry(OnMoveUpClicked),
   DeclareCallBackEntry(OnMoveDownClicked),
@@ -398,10 +398,6 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wTaskPoints = (ListControl*)form.FindByName(_T("frmTaskPoints"));
   assert(wTaskPoints != NULL);
 
-  wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskView"));
-  assert(wTaskView != NULL);
-  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
-
   wSummary = (WndFrame *)form.FindByName(_T("frmSummary"));
   assert(wSummary);
 
@@ -414,17 +410,21 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 TaskEditPanel::ReClick()
 {
-  dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+  if (wTaskView != NULL)
+    dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
 }
 
 void
 TaskEditPanel::Show(const PixelRect &rc)
 {
+  if (wTaskView != NULL)
+    wTaskView->Show();
+
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;
     wTaskPoints->SetCursorIndex(0);
   }
-  dlgTaskManager::TaskViewRestore(wTaskView);
+
   RefreshView();
 
   wf.SetKeyDownNotify(::OnKeyDown);
@@ -435,6 +435,9 @@ TaskEditPanel::Show(const PixelRect &rc)
 void
 TaskEditPanel::Hide()
 {
+  if (wTaskView != NULL)
+    dlgTaskManager::ResetTaskView(wTaskView);
+
   wf.SetKeyDownNotify(NULL);
 
   XMLWidget::Hide();

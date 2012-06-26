@@ -156,7 +156,9 @@ void
 TaskListPanel::RefreshView()
 {
   wTasks->SetLength(task_store->Size());
-  wTaskView->Invalidate();
+
+  if (wTaskView != NULL)
+    wTaskView->Invalidate();
 
   WndFrame* wSummary = (WndFrame*)form.FindByName(_T("frmSummary1"));
   assert(wSummary != NULL);
@@ -305,7 +307,9 @@ TaskListPanel::RenameTask()
 void
 TaskListPanel::OnManageClicked()
 {
-  dlgTaskManager::TaskViewRestore(wTaskView);
+  if (wTaskView != NULL)
+    dlgTaskManager::TaskViewRestore(wTaskView);
+
   browse_tabbed->SetCurrentPage(0);
   RefreshView();
 }
@@ -327,7 +331,8 @@ TaskListPanel::OnBrowseClicked()
     task_store->Scan();
   }
 
-  dlgTaskManager::TaskViewRestore(wTaskView);
+  if (wTaskView != NULL)
+    dlgTaskManager::TaskViewRestore(wTaskView);
   browse_tabbed->SetCurrentPage(1);
   RefreshView();
 }
@@ -417,36 +422,11 @@ OnDeclareClicked(gcc_unused WndButton &Sender)
 }
 
 void
-TaskListPanel::OnTaskViewClick()
-{
-  if (!fullscreen) {
-    const UPixelScalar xoffset = (Layout::landscape ? tab_bar.GetTabWidth() : 0);
-    const UPixelScalar yoffset = (!Layout::landscape ? tab_bar.GetTabHeight() : 0);
-    wTaskView->Move(xoffset, yoffset,
-                    wf.GetClientAreaWindow().GetWidth() - xoffset,
-                    wf.GetClientAreaWindow().GetHeight() - yoffset);
-    fullscreen = true;
-    wTaskView->ShowOnTop();
-  } else {
-    wTaskView->Move(TaskViewRect.left, TaskViewRect.top,
-                    TaskViewRect.right - TaskViewRect.left,
-                    TaskViewRect.bottom - TaskViewRect.top);
-    fullscreen = false;
-  }
-  wTaskView->Invalidate();
-}
-
-static bool
-OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
-                gcc_unused PixelScalar x, gcc_unused PixelScalar y)
-{
-  instance->OnTaskViewClick();
-  return true;
-}
-
-void
 TaskListPanel::ReClick()
 {
+  if (wTaskView == NULL)
+    return;
+
   if (browse_tabbed->GetCurrentPage() == 0) // manage page
     dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
   else {
@@ -465,7 +445,6 @@ static gcc_constexpr_data CallBackTableEntry task_list_callbacks[] = {
   DeclareCallBackEntry(OnDeleteClicked),
   DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(OnRenameClicked),
-  DeclareCallBackEntry(OnTaskPaint),
 
   DeclareCallBackEntry(NULL)
 };
@@ -490,13 +469,6 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     form.FindByName(_T("cmdDeclare"))->SetEnabled(false);
 
   // Save important control pointers
-  wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskView1"));
-  assert(wTaskView != NULL);
-
-  TaskViewRect = wTaskView->GetPosition();
-  wTaskView->SetOnMouseDownNotify(::OnTaskViewClick);
-  fullscreen = false;
-
   wTasks = (ListControl*)form.FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
 
@@ -516,9 +488,22 @@ TaskListPanel::Unprepare()
 void
 TaskListPanel::Show(const PixelRect &rc)
 {
+  if (wTaskView != NULL) {
+    wTaskView->SetOnPaintNotify(::OnTaskPaint);
+    wTaskView->Show();
+  }
+
   browse_tabbed->SetCurrentPage(0);
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
-  dlgTaskManager::TaskViewRestore(wTaskView);
   RefreshView();
   XMLWidget::Show(rc);
+}
+
+void
+TaskListPanel::Hide()
+{
+  if (wTaskView != NULL)
+    dlgTaskManager::ResetTaskView(wTaskView);
+
+  XMLWidget::Hide();
 }

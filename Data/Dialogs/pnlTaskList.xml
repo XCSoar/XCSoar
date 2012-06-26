@@ -20,6 +20,4 @@
       <Button Name="cmdManage" Caption="Back" X="180" Y="-35" Width="60" Height="35" OnClick="OnManageClicked"/>
     </Panel>
   </Tabbed>
-
-  <Canvas Name="frmTaskView1" X="0" Y="0" Width="61" Height="71" Border="0" OnPaint="OnTaskPaint" />
 </Panel>

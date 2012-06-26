@@ -116,7 +116,8 @@ TaskPropertiesPanel::RefreshView()
   ShowFormControl(form, _T("prpFinishHeightRef"), !fai_start_finish);
   LoadFormProperty(form, _T("prpFinishHeightRef"), (unsigned)p.finish_min_height_ref);
 
-  wTaskView->Invalidate();
+  if (wTaskView != NULL)
+    wTaskView->Invalidate();
 
   // fixed aat_min_time
   // finish_min_height
@@ -212,8 +213,6 @@ OnTaskTypeData(DataField *Sender, DataField::DataAccessMode Mode)
 }
 
 static gcc_constexpr_data CallBackTableEntry task_properties_callbacks[] = {
-  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
-
   DeclareCallBackEntry(OnTaskTypeData),
   DeclareCallBackEntry(OnFAIFinishHeightData),
 
@@ -229,30 +228,38 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              Layout::landscape
              ? _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
 
-  wTaskView = (WndOwnerDrawFrame*)form.FindByName(_T("frmTaskViewProperties"));
-  assert(wTaskView != NULL);
-  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
-
   InitView();
 }
 
 void
 TaskPropertiesPanel::ReClick()
 {
-  dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+  if (wTaskView != NULL)
+    dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
 }
 
 void
 TaskPropertiesPanel::Show(const PixelRect &rc)
 {
+  if (wTaskView != NULL)
+    wTaskView->Show();
+
   ordered_task = *ordered_task_pointer;
   orig_taskType = ordered_task->GetFactoryType();
 
   LoadFormProperty(form, _T("prpTaskType"), (unsigned)orig_taskType);
-  dlgTaskManager::TaskViewRestore(wTaskView);
   RefreshView();
 
   XMLWidget::Show(rc);
+}
+
+void
+TaskPropertiesPanel::Hide()
+{
+  if (wTaskView != NULL)
+    dlgTaskManager::ResetTaskView(wTaskView);
+
+  XMLWidget::Hide();
 }
 
 bool
@@ -263,10 +270,4 @@ TaskPropertiesPanel::Leave()
     ordered_task->GetFactory().MutateTPsToTaskType();
 
   return true;
-}
-
-void
-TaskPropertiesPanel::Hide()
-{
-  XMLWidget::Hide();
 }

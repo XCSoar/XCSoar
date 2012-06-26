@@ -12,6 +12,4 @@
     <SymbolButton Name="cmdUp" Caption="^" X="120" Y="-35" Width="60" Height="35" OnClick="OnMoveUpClicked"/>
     <Button Name="cmdNew" Caption="Clear All" X="180" Y="-35" Width="60" Height="35" OnClick="OnClearAllClicked"/>
   </Panel>
-  
-  <Canvas Name="frmTaskView" X="0" Y="0" Width="61" Height="71" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
-</Panel>
+  </Panel>

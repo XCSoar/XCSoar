@@ -60,6 +60,7 @@ public:
    * restores task view rect
    */
   static void TaskViewRestore(WndOwnerDrawFrame *wTaskView);
+  static void ResetTaskView(WndOwnerDrawFrame *task_view);
 
 public:
   /**

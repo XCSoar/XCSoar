@@ -64,8 +64,6 @@ OnRevertClicked(gcc_unused WndButton &Sender)
 }
 
 static gcc_constexpr_data CallBackTableEntry task_close_callbacks[] = {
-  DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
-
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRevertClicked),
 
@@ -80,10 +78,6 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   LoadWindow(task_close_callbacks, parent,
              Layout::landscape
              ? _T("IDR_XML_TASKMANAGERCLOSE_L") : _T("IDR_XML_TASKMANAGERCLOSE"));
-
-  wTaskView = (WndOwnerDrawFrame *)form.FindByName(_T("frmTaskViewClose"));
-  assert(wTaskView != NULL);
-  wTaskView->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
 
   wStatus = (WndFrame *)form.FindByName(_T("frmStatus"));
   assert(wStatus);
@@ -117,8 +111,19 @@ TaskClosePanel::ReClick()
 void
 TaskClosePanel::Show(const PixelRect &rc)
 {
-  dlgTaskManager::TaskViewRestore(wTaskView);
+  if (wTaskView != NULL)
+    wTaskView->Show();
+
   RefreshStatus();
 
   XMLWidget::Show(rc);
+}
+
+void
+TaskClosePanel::Hide()
+{
+  if (wTaskView != NULL)
+    dlgTaskManager::ResetTaskView(wTaskView);
+
+  XMLWidget::Hide();
 }

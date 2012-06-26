@@ -49,14 +49,20 @@ class TaskListPanel : public XMLWidget {
   ListControl *wTasks;
   WndOwnerDrawFrame* wTaskView;
   TabbedControl *browse_tabbed;
-  PixelRect TaskViewRect;
-  bool fullscreen;
 
 public:
   TaskListPanel(WndForm &_wf, TabBarControl &_tab_bar,
                 OrderedTask **_active_task, bool *_task_modified)
     :wf(_wf), tab_bar(_tab_bar),
-     active_task(_active_task), task_modified(_task_modified) {}
+     active_task(_active_task), task_modified(_task_modified),
+     wTaskView(NULL) {}
+
+  void SetTaskView(WndOwnerDrawFrame *_task_view) {
+    assert(wTaskView == NULL);
+    assert(_task_view != NULL);
+
+    wTaskView = _task_view;
+  }
 
   void RefreshView();
 
@@ -79,6 +85,7 @@ public:
   virtual void Unprepare();
   virtual void ReClick();
   virtual void Show(const PixelRect &rc);
+  virtual void Hide();
 
 protected:
   OrderedTask *get_cursor_task();

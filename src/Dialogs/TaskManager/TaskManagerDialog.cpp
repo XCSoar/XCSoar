@@ -128,6 +128,17 @@ dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
 }
 
 void
+dlgTaskManager::ResetTaskView(WndOwnerDrawFrame *task_view)
+{
+  assert(task_view != NULL);
+
+  task_view->Hide();
+  TaskViewRestore(task_view);
+  task_view->SetOnPaintNotify(OnTaskPaint);
+  task_view->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
+}
+
+void
 dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
@@ -230,18 +241,27 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   const MapLook &look = UIGlobals::GetMapLook();
 
-  Widget *wProps = new TaskPropertiesPanel(&active_task, &task_modified);
+  WndOwnerDrawFrame *task_view =
+    (WndOwnerDrawFrame *)wf->FindByName(_T("TaskView"));
+  assert(task_view != NULL);
+  ResetTaskView(task_view);
 
-  Widget *wClose = new TaskClosePanel(&task_modified);
+  TaskPropertiesPanel *wProps = new TaskPropertiesPanel(&active_task, &task_modified);
+  wProps->SetTaskView(task_view);
+
+  TaskClosePanel *wClose = new TaskClosePanel(&task_modified);
+  wClose->SetTaskView(task_view);
 
   TaskCalculatorPanel *wCalculator = new TaskCalculatorPanel(*wf, &task_modified);
   wCalculator->SetTargetButton((WndButton *)wf->FindByName(_T("Target")));
 
-  Widget *wEdit = new TaskEditPanel(*wf, look.task, look.airspace,
-                                    &active_task, &task_modified);
+  TaskEditPanel *wEdit = new TaskEditPanel(*wf, look.task, look.airspace,
+                                           &active_task, &task_modified);
+  wEdit->SetTaskView(task_view);
 
-  Widget *list_tab = new TaskListPanel(*wf, *wTabBar,
-                                       &active_task, &task_modified);
+  TaskListPanel *list_tab = new TaskListPanel(*wf, *wTabBar,
+                                              &active_task, &task_modified);
+  list_tab->SetTaskView(task_view);
 
   const bool enable_icons =
     CommonInterface::GetUISettings().dialog.tab_style

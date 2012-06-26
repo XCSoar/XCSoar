@@ -56,7 +56,15 @@ public:
                 OrderedTask **_active_task, bool *_task_modified)
     :wf(_wf),
      task_look(_task_look), airspace_look(_airspace_look),
-     ordered_task_pointer(_active_task), task_modified(_task_modified) {}
+     ordered_task_pointer(_active_task), task_modified(_task_modified),
+     wTaskView(NULL) {}
+
+  void SetTaskView(WndOwnerDrawFrame *_task_view) {
+    assert(wTaskView == NULL);
+    assert(_task_view != NULL);
+
+    wTaskView = _task_view;
+  }
 
   void UpdateButtons();
 

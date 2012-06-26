@@ -43,6 +43,4 @@
   </Edit>  
   
   </Panel>
-  <Canvas Name="frmTaskViewProperties" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
-
 </Panel>
