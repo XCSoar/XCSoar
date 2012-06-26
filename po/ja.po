@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-04-03 10:30+0200\n"
-"PO-Revision-Date: 2012-06-25 18:29+0000\n"
+"PO-Revision-Date: 2012-06-26 15:40+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-25 19:48+0000\n"
+"X-Launchpad-Export-Date: 2012-06-26 16:52+0000\n"
 "X-Generator: Launchpad (build 15482)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
@@ -5510,25 +5510,25 @@ msgstr ""
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:52
 #, no-c-format
 msgid "Reference AGL for start maximum height rule (above start point)."
-msgstr ""
+msgstr "最大スタート高度　対地高度　（スタート地点上空）"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:53
 #, no-c-format
 msgid "Reference MSL for start maximum height rule (above sea level)."
-msgstr ""
+msgstr "最大スタート高度　海面高度"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:96
 #: Data/Dialogs/pnlTaskProperties.xml:20
 #: Data/Dialogs/pnlTaskProperties_L.xml:21
 msgid "Start height ref."
-msgstr ""
+msgstr "スタート高度設定"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:103
 #: Data/Dialogs/pnlTaskProperties.xml:25
 #: Data/Dialogs/pnlTaskProperties_L.xml:26
 msgid "Finish min. height"
-msgstr ""
+msgstr "フィニッシュ最低高度"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:104
 #: Data/Dialogs/pnlTaskProperties.xml:25
@@ -5537,24 +5537,26 @@ msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
 msgstr ""
+"最小フィニッシュ高度　（AGLまたはMSL）\r\n"
+"制限が無い場合　０に設定"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:60
 #, no-c-format
 msgid "Reference AGL for finish minimum height rule (above finish point)."
-msgstr ""
+msgstr "最小フィニッシュ高度　対地高度（フィニッシュポイント上空」）"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:61
 #, no-c-format
 msgid "Reference MSL for finish minimum height rule (above sea level)."
-msgstr ""
+msgstr "最小フィニッシュ高度　（海面高度）"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:115
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
 msgid "Finish height ref."
-msgstr ""
+msgstr "フィニッシュ高度"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:124
 #, no-c-format
@@ -5563,6 +5565,9 @@ msgid ""
 "leg less than 28% of total except for tasks longer than 500km: No leg less "
 "than 25% or larger than 45%."
 msgstr ""
+"FAIターンポイントルールの確認してください\r\n"
+"3回の旋回の場合　最小レグが２８％以上\r\n"
+"500kｍ以上のタスクの場合２５％以上"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:127
 #, no-c-format
@@ -5570,6 +5575,8 @@ msgid ""
 "Up to seven points including start and finish, finish height must not be "
 "lower than start height less 1000 meters."
 msgstr ""
+"スタートからフィニッシュまで　7点以内\r\n"
+"フィニッシュ高度とスタート高度の差は１０００ｍ以内"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:130
 #, no-c-format
@@ -5585,18 +5592,20 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:138
 msgid "On-Line Contest"
-msgstr ""
+msgstr "オンラインコンテスト"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:139
 msgid ""
 "Select the rules used for calculating optimal points for the On-Line "
 "Contest. The implementation  conforms to the official release 2010, Sept.23."
 msgstr ""
+"オンラインコンテストのオプション　点数計算方法の選択\r\n"
+"2010年9月23日版のルール"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:79
 #, no-c-format
 msgid "Gate width"
-msgstr ""
+msgstr "ゲート幅"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:80
 #: src/Dialogs/dlgTaskHelpers.cpp:242 src/Dialogs/dlgTaskHelpers.cpp:254
@@ -5604,93 +5613,95 @@ msgstr ""
 #: Data/Dialogs/dlgTaskPoint_L.xml:29 Data/Dialogs/dlgTaskPoint_L.xml:35
 #, no-c-format
 msgid "Radius"
-msgstr ""
+msgstr "半径"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:116
 #: Data/Dialogs/pnlStatusRules.xml:7
 msgid "Start point"
-msgstr ""
+msgstr "スタート地点"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:117
 msgid "Default start type for new tasks you create."
-msgstr ""
+msgstr "スタート　タイプ標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:135
 msgid "Default radius or gate width of the start zone for new tasks."
-msgstr ""
+msgstr "ゲート幅　標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:141
 msgid "Finish point"
-msgstr ""
+msgstr "フィニッシュ地点"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:142
 msgid "Default finish type for new tasks you create."
-msgstr ""
+msgstr "フィニッシュタイプ標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:160
 msgid "Default radius or gate width of the finish zone in new tasks."
-msgstr ""
+msgstr "フィニッシュ　ゾーン　半径　標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:166
 msgid "Turn point"
-msgstr ""
+msgstr "旋回点"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:166
 msgid "Default turn point type for new tasks you create."
-msgstr ""
+msgstr "旋回点タイプ　標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:184
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
-msgstr ""
+msgstr "旋回点　半径標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:190
 msgid "Default task type for new tasks you create."
-msgstr ""
+msgstr "タスクの種類　標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:207
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "AAT min. time"
-msgstr ""
+msgstr "AAT　最小時間"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:207
 msgid "Default AAT min. time for new AAT tasks."
-msgstr ""
+msgstr "AAT　最小時間標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:210
 msgid "Optimisation margin"
-msgstr ""
+msgstr "最適マージン"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:211
 msgid ""
 "Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr ""
+"AATタスク　安全マージンの最適化\r\n"
+"最適タスクは最小時間＋マージン時間"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:159
 msgid "Terrain display"
-msgstr ""
+msgstr "地形表示"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:160
 msgid "Draw a digital elevation terrain on the map."
-msgstr ""
+msgstr "標高デジタルマップ"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:164
 msgid "Topography display"
-msgstr ""
+msgstr "地勢図　表示"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:165
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
-msgstr ""
+msgstr "地勢図　表示　道路,川,湖沼など"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:169
 #, no-c-format
 msgid "Low lands"
-msgstr ""
+msgstr "低地"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:170
 #, no-c-format
 msgid "Mountainous"
-msgstr ""
+msgstr "山"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:171
 #, no-c-format
@@ -5720,15 +5731,15 @@ msgstr "ICAO"
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:176
 #, no-c-format
 msgid "Grey"
-msgstr ""
+msgstr "グレー"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:180
 msgid "Terrain colors"
-msgstr ""
+msgstr "地形色"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:181
 msgid "Defines the color ramp used in terrain rendering."
-msgstr ""
+msgstr "地形表示色の設定"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:188
 #, no-c-format
@@ -5737,17 +5748,17 @@ msgstr "太陽"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:193
 msgid "Slope shading"
-msgstr ""
+msgstr "斜面の影"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:194
 msgid ""
 "The terrain can be shaded among slopes to indicate either wind direction, "
 "sun position or a fixed shading from north-east."
-msgstr ""
+msgstr "風または太陽光の影を設定した方向から投影することができる"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:199
 msgid "Terrain contrast"
-msgstr ""
+msgstr "地形　コントラスト"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:200
 msgid ""
@@ -5755,25 +5766,30 @@ msgid ""
 "values to emphasise terrain slope, smaller values if flying in steep "
 "mountains."
 msgstr ""
+"地形の陰影表示の設定\r\n"
+"大きな値は緩やかな斜面を\r\n"
+"小さな値は急斜面を使用する"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:206
 msgid "Terrain brightness"
-msgstr ""
+msgstr "地形の明るさ"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:207
 msgid ""
 "Defines the brightness (whiteness) of the terrain rendering.  This controls "
 "the average illumination of the terrain."
 msgstr ""
+"地形の表示の明るさを設定\r\n"
+"地形の平均的な場所の明るさを設定"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:125
 #, no-c-format
 msgid "Load a set of units."
-msgstr ""
+msgstr "単位設定読み込み"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:126
 msgid "Preset"
-msgstr ""
+msgstr "プリセット"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:130
 msgid "Custom"
@@ -5781,7 +5797,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:130
 msgid "My individual set of units."
-msgstr ""
+msgstr "単位の設定"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:141
 #, no-c-format
@@ -5789,30 +5805,32 @@ msgid ""
 "Units used for airspeed and ground speed.  A separate unit is available for "
 "task speeds."
 msgstr ""
+"対気速度と対地速度の単位\r\n"
+"タスク速度は単位を別に設定可能"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:145
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:167
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:199
 #, no-c-format
 msgid "knots"
-msgstr ""
+msgstr "ノット"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:149
 msgid "Aircraft/Wind speed"
-msgstr ""
+msgstr "航空機/風　の速度"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:153
 msgid ""
 "Units used for horizontal distances e.g. range to waypoint, distance to go."
-msgstr ""
+msgstr "水平距離　ウエイポイントまでの距離　目的地までの距離に使用"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:165
 msgid "Units used for vertical speeds (variometer)."
-msgstr ""
+msgstr "昇降速度の単位　（バリオメーター）"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:172
 msgid "Lift"
-msgstr ""
+msgstr "リフト"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:176
 msgid "Units used for altitude and heights."
@@ -5834,15 +5852,15 @@ msgstr "気温の単位"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:196
 msgid "Units used for task speeds."
-msgstr ""
+msgstr "タスク速度の単位"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:203
 msgid "Task speed"
-msgstr ""
+msgstr "タスク　速度"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:207
 msgid "Units used for pressures."
-msgstr ""
+msgstr "圧力単位"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:221
 msgid "Units used for latitude and longitude."
@@ -5856,7 +5874,7 @@ msgstr "緯度/経度"
 #: src/Dialogs/Vega/LoggerParameters.hpp:34
 #, no-c-format
 msgid "UTC offset"
-msgstr ""
+msgstr "UTC　時差"
 
 #: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:97
 msgid ""
@@ -5864,11 +5882,13 @@ msgid ""
 "local time is displayed below in order to make it easier to verify the "
 "correct offset has been entered."
 msgstr ""
+"現地時間の設定使用\r\n"
+"ローカルタイムは下部に表示される"
 
 #: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:102
 #: Data/Dialogs/dlgStatusAircraft.xml:7 Data/Dialogs/pnlStatusTimes.xml:4
 msgid "Local time"
-msgstr ""
+msgstr "現地時間"
 
 #: src/Dialogs/ConfigPanels/TimeConfigPanel.cpp:105
 msgid "Use GPS time"
@@ -5881,79 +5901,81 @@ msgid ""
 "battery backup or your computer frequently runs out of battery power or "
 "otherwise loses time."
 msgstr ""
+"一度設定すると　時計のバックアップバッテリーが無い場合\r\n"
+"バッテリーが無くなると再設定が必要"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:88
 #, no-c-format
 msgid "Full name"
-msgstr ""
+msgstr "フルネーム"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:89
 #, no-c-format
 msgid "The full name of each waypoint is displayed."
-msgstr ""
+msgstr "ウエイポイントの　フルネームが表示される"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:91
 #, no-c-format
 msgid "First word of name"
-msgstr ""
+msgstr "最初の名前"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:92
 #, no-c-format
 msgid "The first word of the waypoint name is displayed."
-msgstr ""
+msgstr "ウエイポイントの名前の最初の部分が表示される"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:94
 #, no-c-format
 msgid "First 3 letters"
-msgstr ""
+msgstr "最初の3文字"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:95
 #, no-c-format
 msgid "The first 3 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "ウエイポイント名の最初の3文字が表示される"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:97
 #, no-c-format
 msgid "First 5 letters"
-msgstr ""
+msgstr "最初の5文字"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:98
 #, no-c-format
 msgid "The first 5 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "ウエイポイントの最初の5文字が表示される"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:100
 #, no-c-format
 msgid "No waypoint name is displayed."
-msgstr ""
+msgstr "ウエイポイント名非表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
 msgid "Label format"
-msgstr ""
+msgstr "ラベル形式"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:103
 msgid "Determines how labels are displayed with each waypoint"
-msgstr ""
+msgstr "ウエイポイントのラベル表示選択"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:109
 #, no-c-format
 msgid "No arrival height is displayed."
-msgstr ""
+msgstr "到着硬度非表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:111
 #, no-c-format
 msgid "Straight glide"
-msgstr ""
+msgstr "直線滑空"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:112
 #, no-c-format
 msgid "Straight glide arrival height (no terrain is considered)."
-msgstr ""
+msgstr "直線で到着　地形の影響を考慮しない"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:114
 #, no-c-format
 msgid "Terrain avoidance glide"
-msgstr ""
+msgstr "地形を避けて　飛行する"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:115
 #, no-c-format
@@ -5961,11 +5983,13 @@ msgid ""
 "Arrival height considering terrain avoidance. Requires \"Reach mode: Turning"
 "\" in \"Glide Computer > Route\" settings."
 msgstr ""
+"到着高度の計算で地形を避けるモード\r\n"
+"”到着モード：旋回”　”グライ　ドコンピューター＞ルート　”　設定"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:118
 #, no-c-format
 msgid "Straight & terrain glide"
-msgstr ""
+msgstr "直線　＆　地形飛行"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:119
 #, no-c-format
@@ -5973,79 +5997,81 @@ msgid ""
 "Both arrival heights are displayed. Requires \"Reach mode: Turning\" in "
 "\"Glide Computer > Route\" settings."
 msgstr ""
+"両方の到着高度を表示\r\n"
+"”到着モード：旋回”　”グライ　ドコンピューター＞ルート　”　設定"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:122
 #, no-c-format
 msgid "Required glide ratio"
-msgstr ""
+msgstr "必要滑空比"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:126
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr ""
+msgstr "ウエイポイントラベルの到着高度表示設定"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:130
 #, no-c-format
 msgid "Select a label shape."
-msgstr ""
+msgstr "ラベルの形　設定"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:132
 #, no-c-format
 msgid "Rounded rectangle"
-msgstr ""
+msgstr "長方形丸肩"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:133
 #, no-c-format
 msgid "Outlined"
-msgstr ""
+msgstr "外枠"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:137
 msgid "Label style"
-msgstr ""
+msgstr "ラベルの形"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "All waypoint labels will be displayed."
-msgstr ""
+msgstr "すべてのウエイポイントのラベルを表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:144
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr ""
+msgstr "タスク　WP　＆　着陸可能地"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
 msgid "All waypoints part of a task and all landables will be displayed."
-msgstr ""
+msgstr "タスクで使用るすウエイポイント　及び着陸可能地を表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:147
 #, no-c-format
 msgid "Task waypoints"
-msgstr ""
+msgstr "タスク　WP"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:148
 #, no-c-format
 msgid "All waypoints part of a task will be displayed."
-msgstr ""
+msgstr "タスクで使用する　ウエイポイントのみ表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:150
 #, no-c-format
 msgid "No waypoint labels will be displayed."
-msgstr ""
+msgstr "ウエイポイントのラベルは表示しない"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:154
 msgid "Label visibility"
-msgstr ""
+msgstr "ラベルの表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:155
 msgid ""
 "Determines what waypoint labels are displayed for each waypoint (space "
 "permitting)."
-msgstr ""
+msgstr "選択されたウエイポイントのラベルを表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:161
 #, no-c-format
 msgid "Purple circle"
-msgstr ""
+msgstr "紫色丸印"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:162
 #, no-c-format
@@ -6055,6 +6081,9 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"飛行場　着陸可能地を紫色の丸で表示\r\n"
+"到着可能な場合緑色の大きな円で表示\r\n"
+"到着不可能な場合　赤色で表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:166
 #, no-c-format
@@ -6072,7 +6101,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:171
 #, no-c-format
 msgid "Traffic lights"
-msgstr ""
+msgstr "信号色"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:172
 #, no-c-format
@@ -6081,10 +6110,14 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
+"飛行場と着陸可能地点は信号の色で表示される\r\n"
+"グリーン　到達可能\r\n"
+"オレンジ　山でブロックされている\r\n"
+"レッド　到達不能"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:176
 msgid "Landable symbols"
-msgstr ""
+msgstr "着陸可能シンボル"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:177
 msgid ""
@@ -6092,28 +6125,32 @@ msgid ""
 "(monochrome) style, or orange. The rendering differs for landable field and "
 "airport. All styles mark the waypoints within reach green."
 msgstr ""
+"木の形、紫の丸、白黒の丸またはオレンジ色\r\n"
+"設定で共通しているのは到達可能な場合グリーン表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:182
 msgid "Detailed landables"
-msgstr ""
+msgstr "着陸可能地非表示"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:183
 msgid ""
 "[Off] Display fixed icons for landables.\n"
 "[On] Show landables with variable information like runway length and heading."
 msgstr ""
+"「OFF」アイコン固定\n"
+"「On」ラベルに情報を表示する　滑走路の長さ　方向等"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:188
 msgid "Landable size"
-msgstr ""
+msgstr "着陸帯のサイズ"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:189
 msgid "A percentage to select the size landables are displayed on the map."
-msgstr ""
+msgstr "ディスプレイに表示される　着陸可能地のサイズ"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:193
 msgid "Scale runway length"
-msgstr ""
+msgstr "着陸帯のスケール"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:194
 msgid ""
