@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_PROPERTIES_PANEL_HPP
 #define XCSOAR_TASK_PROPERTIES_PANEL_HPP
 
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
 #include "Engine/Task/TaskBehaviour.hpp"
 
 class WndOwnerDrawFrame;
@@ -32,7 +32,7 @@ class OrderedTask;
 class DataFieldBoolean;
 class DataFieldEnum;
 
-class TaskPropertiesPanel : public XMLWidget {
+class TaskPropertiesPanel : public RowFormWidget {
   WndOwnerDrawFrame *wTaskView;
 
   OrderedTask **ordered_task_pointer, *ordered_task;
@@ -41,8 +41,9 @@ class TaskPropertiesPanel : public XMLWidget {
   TaskFactoryType orig_taskType;
 
 public:
-  TaskPropertiesPanel(OrderedTask **_active_task, bool *_task_modified)
-    :wTaskView(NULL),
+  TaskPropertiesPanel(const DialogLook &look,
+                      OrderedTask **_active_task, bool *_task_modified)
+    :RowFormWidget(look), wTaskView(NULL),
      ordered_task_pointer(_active_task), ordered_task(*ordered_task_pointer),
      task_changed(_task_modified) {}
 
@@ -56,6 +57,7 @@ public:
   void OnFAIFinishHeightChange(DataFieldBoolean &df);
   void OnTaskTypeChange(DataFieldEnum &df);
 
+  /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void ReClick();
   virtual void Show(const PixelRect &rc);
@@ -69,7 +71,6 @@ public:
   virtual bool Leave();
 
 protected:
-  void InitView();
   void RefreshView();
   void ReadValues();
 };

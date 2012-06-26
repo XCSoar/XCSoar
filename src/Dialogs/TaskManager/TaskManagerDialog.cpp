@@ -246,7 +246,9 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   assert(task_view != NULL);
   ResetTaskView(task_view);
 
-  TaskPropertiesPanel *wProps = new TaskPropertiesPanel(&active_task, &task_modified);
+  TaskPropertiesPanel *wProps =
+    new TaskPropertiesPanel(UIGlobals::GetDialogLook(),
+                            &active_task, &task_modified);
   wProps->SetTaskView(task_view);
 
   TaskClosePanel *wClose = new TaskClosePanel(&task_modified);
