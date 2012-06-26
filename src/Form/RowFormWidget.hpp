@@ -362,6 +362,10 @@ public:
     return rows[i].GetWindow();
   }
 
+  void SetReadOnly(unsigned i, bool read_only=true) {
+    GetControl(i).SetReadOnly(read_only);
+  }
+
   /**
    * Modify the "available" flag on this row.
    */
