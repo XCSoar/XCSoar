@@ -200,7 +200,7 @@ XCSoarInterface::AfterStartup()
   main_window.Fullscreen();
   InfoBoxManager::SetDirty();
 
-  TriggerGPSUpdate();
+  ForceCalculation();
 
   status_messages.Startup(false);
 }

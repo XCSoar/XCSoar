@@ -35,6 +35,16 @@ void
 TriggerMergeThread();
 
 void TriggerGPSUpdate();
+
+/**
+ * Force a #CalculationThread run.  This should be called when
+ * important data has been modified, e.g. after the task has been
+ * edited.  Even if there is no new GPS position, the task must be
+ * recalculated.
+ */
+void
+ForceCalculation();
+
 void TriggerVarioUpdate();
 
 /**

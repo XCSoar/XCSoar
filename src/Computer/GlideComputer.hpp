@@ -81,7 +81,11 @@ public:
     SetCalculated().Expire(Basic().clock);
   }
 
-  bool ProcessGPS(); // returns true if idle needs processing
+  /**
+   * @param force forces calculation even if there was no new GPS fix
+   */
+  bool ProcessGPS(bool force=false); // returns true if idle needs processing
+
   void ProcessIdle(bool exhaustive=false);
 
   void ProcessExhaustive() {

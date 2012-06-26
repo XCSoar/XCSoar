@@ -42,6 +42,13 @@ class CalculationThread : public WorkerThread {
    */
   Mutex mutex;
 
+  /**
+   * This flag forces a full run of all calculations.  It is set after
+   * important non-GPS data has changed, e.g. the task has been
+   * edited.
+   */
+  bool force;
+
   ComputerSettings settings_computer;
 
   fixed screen_distance_meters;
@@ -62,6 +69,8 @@ public:
     SetLowPriority();
     return true;
   }
+
+  void ForceTrigger();
 
 protected:
   virtual void Tick();

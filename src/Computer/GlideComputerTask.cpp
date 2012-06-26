@@ -60,7 +60,8 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
                                     const MoreData &last_basic,
                                     DerivedInfo &calculated,
                                     const DerivedInfo &last_calculated,
-                                    const ComputerSettings &settings_computer)
+                                    const ComputerSettings &settings_computer,
+                                    bool force)
 {
   if (basic.HasTimeAdvancedSince(last_basic) && basic.location_available)
     trace.Update(settings_computer, ToAircraftState(basic, calculated));
@@ -69,7 +70,8 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
 
   _task->SetTaskBehaviour(settings_computer.task);
 
-  if (basic.HasTimeAdvancedSince(last_basic) && basic.location_available) {
+  if (force || (basic.HasTimeAdvancedSince(last_basic) &&
+                basic.location_available)) {
     const AircraftState current_as = ToAircraftState(basic, calculated);
     const AircraftState last_as = ToAircraftState(last_basic, last_calculated);
 
