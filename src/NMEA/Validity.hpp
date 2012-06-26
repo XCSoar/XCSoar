@@ -163,7 +163,7 @@ public:
   /**
    * Check this stored Validity object for a time warp and clear if it
    * one has occurred.  If this object is invalid, it is not
-   * considered a time wrap, even if the current object is valid.
+   * considered a time warp, even if the current object is valid.
    *
    * @param current the current "real" time stamp
    * @param max_period if time in "current" has advanced more than
