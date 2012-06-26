@@ -67,9 +67,10 @@ static gcc_constexpr_data struct {
   { DeviceConfig::PortType::RFCOMM_SERVER, N_("Bluetooth server") },
 #endif
 
-  /* label not translated for now, until we have a TCP port
+  /* label not translated for now, until we have a TCP/UDP port
      selection UI */
   { DeviceConfig::PortType::TCP_LISTENER, N_("TCP Port") },
+  { DeviceConfig::PortType::UDP_LISTENER, N_("UDP Port") },
 
   { DeviceConfig::PortType::SERIAL, NULL } /* sentinel */
 };
@@ -320,6 +321,7 @@ SetPort(DataFieldEnum &df, const DeviceConfig &config)
   case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::TCP_LISTENER:
+  case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::PTY:
   case DeviceConfig::PortType::RFCOMM_SERVER:
     break;
@@ -605,6 +607,7 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::TCP_LISTENER:
+  case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
     if (new_type == config.port_type)
       return false;

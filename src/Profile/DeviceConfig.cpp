@@ -38,6 +38,7 @@ static const TCHAR *const port_type_strings[] = {
   _T("auto"),
   _T("internal"),
   _T("tcp_listener"),
+  _T("udp_listener"),
   _T("pty"),
   NULL
 };
@@ -66,6 +67,7 @@ DeviceConfig::IsAvailable() const
     return IsAndroid();
 
   case PortType::TCP_LISTENER:
+  case PortType::UDP_LISTENER:
     return true;
 
   case PortType::PTY:
@@ -105,6 +107,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
     return false;
 
   case PortType::TCP_LISTENER:
+  case PortType::UDP_LISTENER:
     /* this is a server, and if no data gets received, this can just
        mean that nobody connected to it, but reopening it periodically
        doesn't help */
@@ -150,6 +153,10 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 
   case PortType::TCP_LISTENER:
     _sntprintf(buffer, max_size, _T("TCP port %d"), tcp_port);
+    return buffer;
+
+  case PortType::UDP_LISTENER:
+    _sntprintf(buffer, max_size, _T("UDP port %d"), tcp_port);
     return buffer;
 
   case PortType::PTY:

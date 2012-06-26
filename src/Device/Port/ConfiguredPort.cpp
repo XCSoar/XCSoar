@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ConfiguredPort.hpp"
 #include "NullPort.hpp"
+#include "SocketPort.hpp"
 #include "TCPPort.hpp"
 #include "K6BtPort.hpp"
 #include "Profile/DeviceConfig.hpp"
@@ -160,6 +161,16 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
   case DeviceConfig::PortType::TCP_LISTENER: {
     TCPPort *port = new TCPPort(handler);
     if (!port->Open(config.tcp_port)) {
+      delete port;
+      return NULL;
+    }
+
+    return port;
+  }
+
+  case DeviceConfig::PortType::UDP_LISTENER: {
+    SocketPort *port = new SocketPort(handler);
+    if (!port->OpenUDPListener(config.tcp_port)) {
       delete port;
       return NULL;
     }

@@ -54,6 +54,12 @@ ParsePortArgs(Args &args)
     return config;
   }
 
+  if (config.path.equals(_T("udp"))) {
+    config.port_type = DeviceConfig::PortType::UDP_LISTENER;
+    config.tcp_port = atoi(args.ExpectNext());
+    return config;
+  }
+
   if (config.UsesSpeed()) {
     char *endptr;
     config.baud_rate = strtoul(args.ExpectNext(), &endptr, 10);
