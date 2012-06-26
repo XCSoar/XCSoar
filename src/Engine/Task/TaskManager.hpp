@@ -582,7 +582,7 @@ private:
 
   void UpdateCommonStats(const AircraftState &state);
   void UpdateCommonStatsTimes(const AircraftState &state);
-  void UpdateCommonStatsTask(const AircraftState &state);
+  void UpdateCommonStatsTask();
   void UpdateCommonStatsWaypoints(const AircraftState &state);
   void UpdateCommonStatsPolar(const AircraftState &state);
 };

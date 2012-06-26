@@ -189,7 +189,7 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
 }
 
 void
-TaskManager::UpdateCommonStatsTask(const AircraftState &state)
+TaskManager::UpdateCommonStatsTask()
 {
   common_stats.mode_abort = (mode == MODE_ABORT);
   common_stats.mode_goto = (mode == MODE_GOTO);
@@ -252,7 +252,7 @@ void
 TaskManager::UpdateCommonStats(const AircraftState &state)
 {
   UpdateCommonStatsTimes(state);
-  UpdateCommonStatsTask(state);
+  UpdateCommonStatsTask();
   UpdateCommonStatsWaypoints(state);
   UpdateCommonStatsPolar(state);
 }
