@@ -11,7 +11,7 @@
   </Edit>
 
   <Edit Name="prpFltDirection" Caption="Direction" X="120" Height="36" CaptionWidth="-1">
-    <DataField DataType="enum""/>
+    <DataField DataType="enum"/>
   </Edit>
 
   <List Name="frmWaypointList" X="0" Y="72" Height="-35" />
