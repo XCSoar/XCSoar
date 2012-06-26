@@ -34,7 +34,7 @@ void
 SocketPort::Set(SocketDescriptor &&_socket)
 {
   assert(!socket.IsDefined());
-  assert(socket.IsDefined());
+  assert(_socket.IsDefined());
 
   socket = std::move(_socket);
 }
