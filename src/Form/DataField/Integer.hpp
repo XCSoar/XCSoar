@@ -57,7 +57,9 @@ public:
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
-  void Set(int value);
+  void Set(int _value) {
+    value = _value;
+  }
 
   int SetMin(int _min) {
     min = _min;

@@ -70,7 +70,10 @@ public:
   virtual const TCHAR *GetAsString() const;
   virtual const TCHAR *GetAsDisplayString() const;
 
-  void Set(fixed Value);
+  void Set(fixed _value) {
+    mValue = _value;
+  }
+
   fixed SetMin(fixed Value);
   fixed SetMax(fixed Value);
   fixed SetStep(fixed Value);

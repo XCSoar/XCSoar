@@ -55,12 +55,6 @@ DataFieldInteger::GetAsDisplayString() const
 }
 
 void
-DataFieldInteger::Set(int _value)
-{
-  value = _value;
-}
-
-void
 DataFieldInteger::SetAsInteger(int _value)
 {
   if (_value < min)

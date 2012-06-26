@@ -57,12 +57,6 @@ DataFieldFloat::GetAsDisplayString() const
   return mOutBuf;
 }
 
-void
-DataFieldFloat::Set(fixed Value)
-{
-  mValue = Value;
-}
-
 fixed
 DataFieldFloat::SetMin(fixed Value)
 {
