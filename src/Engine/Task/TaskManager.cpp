@@ -161,7 +161,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height_ref
               == HeightReferenceType::MSL ? fixed_zero : task_ordered.get_tp(0)->GetElevation());
-    if (positive(start_max_height) && state.flying) {
+    if (positive(start_max_height) && state.location.IsValid() && state.flying) {
       if (!positive(common_stats.TimeUnderStartMaxHeight) &&
           state.altitude < start_max_height) {
         common_stats.TimeUnderStartMaxHeight = state.time;
@@ -183,7 +183,9 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
 void
 TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
 {
-  common_stats.vector_home = task_abort.GetHomeVector(state);
+  common_stats.vector_home = state.location.IsValid()
+    ? task_abort.GetHomeVector(state)
+    : GeoVector::Invalid();
 
   common_stats.landable_reachable = task_abort.HasReachableLandable();
 }
@@ -224,6 +226,9 @@ TaskManager::UpdateCommonStatsTask()
 void
 TaskManager::UpdateCommonStatsPolar(const AircraftState &state)
 {
+  if (!state.location.IsValid())
+    return;
+
   common_stats.current_risk_mc =
     glide_polar.GetRiskMC(state.working_band_fraction,
                           task_behaviour.risk_gamma);
@@ -257,6 +262,13 @@ bool
 TaskManager::Update(const AircraftState &state,
                     const AircraftState &state_last)
 {
+  if (!state.location.IsValid()) {
+    /* in case of GPS failure or and during startup (before the first
+       GPS fix), update only the stats */
+    UpdateCommonStats(state);
+    return false;
+  }
+
   /* always update ordered task so even if we are temporarily in a
      different mode, so the task stats are still updated.  Otherwise,
      the task stats would freeze and sampling etc would not be
@@ -402,6 +414,9 @@ bool
 TaskManager::UpdateAutoMC(const AircraftState &state_now,
                           const fixed fallback_mc)
 {
+  if (!state_now.location.IsValid())
+    return false;
+
   if (active_task &&
       active_task->UpdateAutoMC(glide_polar, state_now, fallback_mc))
     return true;
