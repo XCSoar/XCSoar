@@ -7,15 +7,15 @@ else
 OPTIMIZE := -Os -DNDEBUG -Wuninitialized
 endif
 
-ifeq ($(TARGET),UNIX)
-  ifeq ($(CLANG),y)
-    OPTIMIZE += -g
-  else
-    OPTIMIZE += -ggdb
-  endif
+ifeq ($(CLANG),y)
+  OPTIMIZE += -g
 else
+ifeq ($(HAVE_WIN32),y))
   # WINE works best with stabs debug symbols
   OPTIMIZE += -gstabs
+else
+  OPTIMIZE += -g
+endif
 endif
 
 ifeq ($(LTO),y)
