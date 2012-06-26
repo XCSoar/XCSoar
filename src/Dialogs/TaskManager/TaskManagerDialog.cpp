@@ -236,7 +236,6 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
   assert(wTabBar != NULL);
 
-  wTabBar->SetClientOverlapTabs(true);
   wTabBar->SetPageFlippedCallback(SetTitle);
 
   const MapLook &look = UIGlobals::GetMapLook();

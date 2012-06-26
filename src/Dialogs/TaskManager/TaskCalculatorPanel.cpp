@@ -213,9 +213,8 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (target_button != NULL)
     target_button->SetOnClickNotify(OnTargetClicked);
 
-  LoadWindow(task_calculator_callbacks, parent,
-             Layout::landscape
-             ? _T("IDR_XML_TASKCALCULATOR_L") : _T("IDR_XML_TASKCALCULATOR"));
+  LoadWindow(task_calculator_callbacks, parent, rc,
+             _T("IDR_XML_TASKCALCULATOR"));
 
   WndProperty *wp = (WndProperty *)form.FindByName(_T("prpMacCready"));
   assert(wp != NULL);

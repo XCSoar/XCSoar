@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<Panel Name="frmBrowse" Border="0">
-  <Tabbed Name="tabbedManage" X="0" Y="76">
+<Panel Name="frmBrowse">
+  <Tabbed Name="tabbedManage">
     <Panel Name="frmManageSub">
       <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60" OnClick="OnNewTaskClicked"/>
       <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60" OnClick="OnDeclareClicked"/>
@@ -12,12 +12,12 @@
     <Panel Name="frmBrowseSub">
       <List Name="frmTasks" Height="-90" ItemHeight="18"/>
    
-      <Label Name="frmSummary1" Y="-90" Height="55" Border="0"/>
+      <Label Name="frmSummary1" Y="-90" Height="50" Border="0"/>
 
-      <Button Name="cmdLoad" Caption="Load" X="0" Y="-35" Width="55" Height="35" OnClick="OnLoadClicked"/>
-      <Button Name="cmdRename" Caption="Rename" X="55" Y="-35" Width="65" Height="35" OnClick="OnRenameClicked"/>
-      <Button Name="cmdDelete" Caption="Delete" X="120" Y="-35" Width="60" Height="35" OnClick="OnDeleteClicked"/>
-      <Button Name="cmdManage" Caption="Back" X="180" Y="-35" Width="60" Height="35" OnClick="OnManageClicked"/>
+      <Button Name="cmdLoad" Caption="Load" X="0" Y="-37" Width="55" Height="35" OnClick="OnLoadClicked"/>
+      <Button Name="cmdRename" Caption="Rename" X="55" Y="-37" Width="65" Height="35" OnClick="OnRenameClicked"/>
+      <Button Name="cmdDelete" Caption="Delete" X="120" Y="-37" Width="60" Height="35" OnClick="OnDeleteClicked"/>
+      <Button Name="cmdManage" Caption="Back" X="180" Y="-37" Width="60" Height="35" OnClick="OnManageClicked"/>
     </Panel>
   </Tabbed>
 </Panel>

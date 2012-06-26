@@ -389,9 +389,7 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   ordered_task = *ordered_task_pointer;;
 
-  LoadWindow(task_edit_callbacks, parent,
-             Layout::landscape
-             ? _T("IDR_XML_TASKEDIT_L") : _T("IDR_XML_TASKEDIT"));
+  LoadWindow(task_edit_callbacks, parent, rc, _T("IDR_XML_TASKEDIT"));
 
   instance = this;
 

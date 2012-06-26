@@ -224,9 +224,8 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   instance = this;
 
-  LoadWindow(task_properties_callbacks, parent,
-             Layout::landscape
-             ? _T("IDR_XML_TASKPROPERTIES_L") : _T("IDR_XML_TASKPROPERTIES"));
+  LoadWindow(task_properties_callbacks, parent, rc,
+             _T("IDR_XML_TASKPROPERTIES"));
 
   InitView();
 }

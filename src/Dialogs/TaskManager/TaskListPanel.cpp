@@ -452,9 +452,8 @@ static gcc_constexpr_data CallBackTableEntry task_list_callbacks[] = {
 void
 TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(task_list_callbacks, parent,
-             Layout::landscape
-             ? _T("IDR_XML_TASKLIST_L") : _T("IDR_XML_TASKLIST"));
+  LoadWindow(task_list_callbacks, parent, rc,
+             _T("IDR_XML_TASKLIST"));
 
   instance = this;
 

@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmTurnpoints" Border="0">
-  <Panel Name="TaskEditTabOffset" Border="0" X="0" Y="76">
-    <List Name="frmTaskPoints" Height="-90" ItemHeight="18"/>
+  <List Name="frmTaskPoints" Height="-90" ItemHeight="18"/>
 
-    <Label Name="frmSummary" Y="-90" Height="55" Border="0"/>
+  <Label Name="frmSummary" Y="-90" Height="50"/>
 
-    <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="0" Y="-35" Width="60" Height="35" OnClick="OnEditTurnpointClicked"/>
-    <Button Name="cmdMakeFinish" Caption="Make Finish" X="60" Y="-35" Width="60" Height="35" OnClick="OnMakeFinish"/>
-    <SymbolButton Name="cmdDown" Caption="v" X="60" Y="-35" Width="60" Height="35" OnClick="OnMoveDownClicked"/>
-    <SymbolButton Name="cmdUp" Caption="^" X="120" Y="-35" Width="60" Height="35" OnClick="OnMoveUpClicked"/>
-    <Button Name="cmdNew" Caption="Clear All" X="180" Y="-35" Width="60" Height="35" OnClick="OnClearAllClicked"/>
-  </Panel>
-  </Panel>
+  <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="2" Y="-37" Width="60" Height="35" OnClick="OnEditTurnpointClicked"/>
+  <Button Name="cmdMakeFinish" Caption="Make Finish" X="62" Y="-37" Width="58" Height="35" OnClick="OnMakeFinish"/>
+  <SymbolButton Name="cmdDown" Caption="v" X="62" Y="-37" Width="58" Height="35" OnClick="OnMoveDownClicked"/>
+  <SymbolButton Name="cmdUp" Caption="^" X="120" Y="-37" Width="60" Height="35" OnClick="OnMoveUpClicked"/>
+  <Button Name="cmdNew" Caption="Clear All" X="180" Y="-37" Width="60" Height="35" OnClick="OnClearAllClicked"/>
+</Panel>

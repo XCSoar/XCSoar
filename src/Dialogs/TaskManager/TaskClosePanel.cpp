@@ -75,9 +75,7 @@ TaskClosePanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   instance = this;
 
-  LoadWindow(task_close_callbacks, parent,
-             Layout::landscape
-             ? _T("IDR_XML_TASKMANAGERCLOSE_L") : _T("IDR_XML_TASKMANAGERCLOSE"));
+  LoadWindow(task_close_callbacks, parent, rc, _T("IDR_XML_TASKMANAGERCLOSE"));
 
   wStatus = (WndFrame *)form.FindByName(_T("frmStatus"));
   assert(wStatus);

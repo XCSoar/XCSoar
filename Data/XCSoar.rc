@@ -290,17 +290,12 @@ IDR_XML_INFOBOXALTITUDESETUP XMLDIALOG DISCARDABLE "../output/data/dialogs/Infob
 
 // new task editor
 IDR_XML_TASKEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskEdit.xml.gz"
-IDR_XML_TASKEDIT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskEdit_L.xml.gz"
 IDR_XML_TASKLIST XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskList.xml.gz"
-IDR_XML_TASKLIST_L XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskList_L.xml.gz"
 IDR_XML_TASKMANAGER XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskManager.xml.gz"
 IDR_XML_TASKMANAGER_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskManager_L.xml.gz"
 IDR_XML_TASKMANAGERCLOSE XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskManagerClose.xml.gz"
-IDR_XML_TASKMANAGERCLOSE_L XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskManagerClose_L.xml.gz"
 IDR_XML_TASKCALCULATOR XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskCalculator.xml.gz"
-IDR_XML_TASKCALCULATOR_L XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskCalculator_L.xml.gz"
 IDR_XML_TASKPROPERTIES XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskProperties.xml.gz"
-IDR_XML_TASKPROPERTIES_L XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskProperties_L.xml.gz"
 IDR_XML_TASKPOINT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskPoint.xml.gz"
 IDR_XML_TASKPOINT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskPoint_L.xml.gz"
 IDR_XML_TASKPOINTTYPE XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskPointType.xml.gz"
