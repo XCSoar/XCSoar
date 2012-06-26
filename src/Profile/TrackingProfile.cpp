@@ -32,6 +32,7 @@ Copyright_License {
 namespace Profile {
   static void Load(SkyLinesTracking::Settings &settings) {
     Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
+    Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
 
     const TCHAR *key = Get(ProfileKeys::SkyLinesTrackingKey);
     if (key != NULL)

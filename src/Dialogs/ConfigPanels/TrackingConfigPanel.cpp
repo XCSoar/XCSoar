@@ -42,6 +42,7 @@ enum ControlIndex {
   TrackingVehicleType,
   Spacer,
   SL_ENABLED,
+  SL_INTERVAL,
   SL_KEY,
   SPACER2,
   LT24Enabled,
@@ -72,6 +73,7 @@ private:
 void
 TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
 {
+  SetRowEnabled(SL_INTERVAL, enabled);
   SetRowEnabled(SL_KEY, enabled);
 }
 
@@ -126,6 +128,8 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddSpacer();
 
   AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
+  AddTime(_T("Tracking Interval"), NULL, 5, 1200, 5,
+          settings.skylines.interval);
 
   StaticString<64> buffer;
   if (settings.skylines.key != 0)
@@ -178,6 +182,9 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValue(SL_ENABLED, ProfileKeys::SkyLinesTrackingEnabled,
                        settings.skylines.enabled);
+
+  changed |= SaveValue(SL_INTERVAL, ProfileKeys::SkyLinesTrackingInterval,
+                       settings.skylines.interval);
 
   changed |= SaveKey(*this, SL_KEY, ProfileKeys::SkyLinesTrackingKey,
                      settings.skylines.key);

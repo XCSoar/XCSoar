@@ -31,14 +31,20 @@ Copyright_License {
 namespace SkyLinesTracking {
   class Glue {
     Client client;
+    unsigned interval;
     GPSClock clock;
 
   public:
     // TODO: make the interval configurable
-    Glue():clock(fixed(10)) {}
+    Glue():interval(0), clock(fixed(10)) {}
 
     void SetSettings(const Settings &settings) {
       client.SetKey(settings.key);
+
+      if (interval != settings.interval) {
+        interval = settings.interval;
+        clock = GPSClock(fixed(std::max(settings.interval, 1u)));
+      }
 
       if (!settings.enabled)
         client.Close();

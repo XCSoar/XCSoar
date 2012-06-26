@@ -29,10 +29,17 @@ Copyright_License {
 namespace SkyLinesTracking {
   struct Settings {
     bool enabled;
+
+    /**
+     * Tracking interval in seconds.
+     */
+    unsigned interval;
+
     uint64_t key;
 
     void SetDefaults() {
       enabled = false;
+      interval = 20;
       key = 0;
     }
   };

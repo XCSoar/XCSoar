@@ -234,6 +234,7 @@ extern const TCHAR FlarmLocation[];
 extern const TCHAR TrackingInterval[];
 extern const TCHAR TrackingVehicleType[];
 extern const TCHAR SkyLinesTrackingEnabled[];
+extern const TCHAR SkyLinesTrackingInterval[];
 extern const TCHAR SkyLinesTrackingKey[];
 extern const TCHAR LiveTrack24Enabled[];
 extern const TCHAR LiveTrack24Server[];
