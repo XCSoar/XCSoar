@@ -144,7 +144,6 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
   :look(_look), edit(this),
    caption_width(CaptionWidth),
    mOnDataChangeNotify(DataChangeNotify),
-   mOnClickUpNotify(NULL), mOnClickDownNotify(NULL),
    mDataField(NULL)
 {
   caption = Caption;
