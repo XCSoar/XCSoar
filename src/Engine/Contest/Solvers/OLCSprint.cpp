@@ -55,12 +55,6 @@
 OLCSprint::OLCSprint(const Trace &_trace)
   :ContestDijkstra(_trace, false, 4, 0) {}
 
-void
-OLCSprint::Reset()
-{
-  ContestDijkstra::Reset();
-}
-
 unsigned
 OLCSprint::FindStart() const
 {

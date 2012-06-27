@@ -25,7 +25,6 @@
 OLCPlus::OLCPlus()
   :AbstractContest(0)
 {
-  Reset();
 }
 
 void

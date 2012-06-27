@@ -26,7 +26,6 @@
 OLCLeague::OLCLeague(const Trace &_trace)
   :AbstractContest(0), trace(_trace)
 {
-  Reset();
 }
 
 void
@@ -34,7 +33,6 @@ OLCLeague::Reset()
 {
   AbstractContest::Reset();
   solution.clear();
-  solution_classic.clear();
   for (unsigned i=0; i<5; ++i) {
     solution.append().Clear();
   }

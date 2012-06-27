@@ -27,7 +27,6 @@ AbstractContest::AbstractContest(const unsigned _finish_alt_diff)
   :handicap(100),
    finish_alt_diff(_finish_alt_diff)
 {
-  Reset();
 }
 
 void

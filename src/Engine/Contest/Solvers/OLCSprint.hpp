@@ -39,10 +39,6 @@ private:
   gcc_pure
   unsigned FindStart() const;
 
-public:
-  /* virtual methods from AbstractContest */
-  virtual void Reset();
-
 protected:
   /* virtual methods from AbstractContest */
   virtual ContestResult CalculateResult() const;

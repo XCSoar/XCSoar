@@ -45,8 +45,6 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
   assert(num_stages <= MAX_STAGES);
 
   std::fill(stage_weights, stage_weights + num_stages - 1, 5);
-
-  Reset();
 }
 
 bool
