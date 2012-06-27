@@ -223,7 +223,6 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
   char NoS, EoW;
-  short EoW_Flag, NoS_Flag, EW_Flags;
 
   // check for max 6 TP's
   if (ewDecelTpIndex > 6)
@@ -263,24 +262,12 @@ EWDevice::AddWaypoint(const Waypoint &way_point, OperationEnvironment &env)
 
   //	Calc E/W and N/S flags
 
-  //	Clear flags
-  EoW_Flag = 0;
-  NoS_Flag = 0;
-  EW_Flags = 0;
-
   // prepare flags
-  if (EoW == 'W')
-    EoW_Flag = 0x08;
-  else
-    EoW_Flag = 0x04;
-
-  if (NoS == 'N')
-    NoS_Flag = 0x01;
-  else
-    NoS_Flag = 0x02;
+  const unsigned EoW_Flag = EoW == 'W' ? 0x08 : 0x04;
+  const unsigned NoS_Flag = NoS == 'N' ? 0x01 : 0x02;
 
   //  Do the calculation
-  EW_Flags = (short)(EoW_Flag | NoS_Flag);
+  const unsigned EW_Flags = (short)(EoW_Flag | NoS_Flag);
 
   // setup command string
   sprintf(EWRecord, "#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X",
