@@ -40,8 +40,8 @@ namespace LiveTrack24
 {
   StaticString<256> server;
 
-  const TCHAR *GetServer();
-  bool SendRequest(const TCHAR *url);
+  static const TCHAR *GetServer();
+  static bool SendRequest(const TCHAR *url);
 }
 
 LiveTrack24::UserID
