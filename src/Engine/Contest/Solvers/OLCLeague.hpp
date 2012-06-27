@@ -42,8 +42,12 @@ class OLCLeague : public AbstractContest
 public:
   OLCLeague(const Trace &_trace);
 
-  ContestTraceVector &GetSolutionClassic() {
-    return solution_classic;
+  /**
+   * Feed the result from OLCClassic.  This must be called
+   * before this class can do any calculation.
+   */
+  void Feed(const ContestTraceVector &_solution_classic) {
+    solution_classic = _solution_classic;
   }
 
 protected:

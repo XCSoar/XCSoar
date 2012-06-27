@@ -38,20 +38,18 @@ class OLCPlus : public AbstractContest {
 public:
   OLCPlus();
 
-  ContestTraceVector &GetClassicSolution() {
-    return solution_classic;
-  }
-
-  ContestTraceVector &GetFAISolution() {
-    return solution_fai;
-  }
-
-  ContestResult &GetClassicResult() {
-    return result_classic;
-  }
-
-  ContestResult &GetFAIResult() {
-    return result_fai;
+  /**
+   * Feed results from OLCClassic and OLCFAI.  This must be called
+   * before this class can do any calculation.
+   */
+  void Feed(const ContestResult &_result_classic,
+            const ContestTraceVector &_solution_classic,
+            const ContestResult &_result_fai,
+            const ContestTraceVector &_solution_fai) {
+    result_classic = _result_classic;
+    solution_classic = _solution_classic;
+    result_fai = _result_fai;
+    solution_fai = _solution_fai;
   }
 
 public:

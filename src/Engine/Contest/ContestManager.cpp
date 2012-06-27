@@ -120,7 +120,7 @@ ContestManager::UpdateIdle(bool exhaustive)
     retval = RunContest(olc_classic, stats.result[1],
                         stats.solution[1], exhaustive);
 
-    olc_league.GetSolutionClassic() = stats.solution[1];
+    olc_league.Feed(stats.solution[1]);
 
     retval |= RunContest(olc_league, stats.result[0],
                          stats.solution[0], exhaustive);
@@ -130,18 +130,16 @@ ContestManager::UpdateIdle(bool exhaustive)
     retval = RunContest(olc_classic, stats.result[0],
                         stats.solution[0], exhaustive);
 
-    olc_plus.GetClassicResult() = stats.result[0];
-    olc_plus.GetClassicSolution() = stats.solution[0];
-
     retval |= RunContest(olc_fai, stats.result[1],
                          stats.solution[1], exhaustive);
 
-    olc_plus.GetFAIResult() = stats.result[1];
-    olc_plus.GetFAISolution() = stats.solution[1];
+    if (retval) {
+      olc_plus.Feed(stats.result[0], stats.solution[0],
+                    stats.result[1], stats.solution[1]);
 
-    if (retval)
       RunContest(olc_plus, stats.result[2],
                  stats.solution[2], exhaustive);
+    }
 
     break;
 
