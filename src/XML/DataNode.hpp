@@ -24,13 +24,13 @@
 #define DATANODE_HPP
 
 #include "Math/fixed.hpp"
-#include "Math/Angle.hpp"
 #include "Util/NonCopyable.hpp"
 
 #include <list>
 
 #include <tchar.h>
 
+class Angle;
 class TextWriter;
 
 /**

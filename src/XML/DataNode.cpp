@@ -21,6 +21,7 @@
  */
 
 #include "DataNode.hpp"
+#include "Math/Angle.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/NumberParser.hpp"
 
