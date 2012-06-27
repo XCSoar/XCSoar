@@ -10,7 +10,7 @@ endif
 ifeq ($(CLANG),y)
   OPTIMIZE += -g
 else
-ifeq ($(HAVE_WIN32),y))
+ifeq ($(HAVE_WIN32),y)
   # WINE works best with stabs debug symbols
   OPTIMIZE += -gstabs
 else
