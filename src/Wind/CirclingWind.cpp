@@ -99,17 +99,15 @@ CirclingWind::NewSample(const MoreData &info)
 
   Vector curVector;
 
-  bool fullCircle = false;
-
   // Circle detection
   int diff = (int)(info.track - last_track).AsDelta().AbsoluteDegrees();
   circle_deg += diff;
   last_track = info.track;
 
-  if (circle_deg >= 360) {
+  const bool fullCircle = circle_deg >= 360;
+  if (fullCircle) {
     //full circle made!
 
-    fullCircle = true;
     circle_deg = 0;
     circle_count++; //increase the number of circles flown (used
     //to determine the quality)
@@ -139,8 +137,6 @@ CirclingWind::NewSample(const MoreData &info)
       // calculate the wind for this circle, only if it is valid
       result = CalcWind();
 
-    fullCircle = false;
-
     // should set each vector to average
 
     min_vector = max_vector = Vector((max_vector.x - min_vector.x) / 2,
@@ -148,8 +144,6 @@ CirclingWind::NewSample(const MoreData &info)
 
     first = true;
     samples.clear();
-
-    //no need to reset fullCircle, it will automaticly be reset in the next itteration.
   }
 
   first = false;
