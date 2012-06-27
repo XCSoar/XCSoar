@@ -41,6 +41,10 @@ endif
 
 ifeq ($(HAVE_NET),y)
 
+LIBNET_SOURCES += \
+	$(SRC)/Net/ToFile.cpp \
+	$(SRC)/Net/ToBuffer.cpp
+
 $(eval $(call link-library,libnet,LIBNET))
 
 endif

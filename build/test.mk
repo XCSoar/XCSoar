@@ -819,7 +819,6 @@ $(eval $(call link-program,DownloadFile,DOWNLOAD_FILE))
 
 RUN_DOWNLOAD_TO_FILE_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/Net/ToFile.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
@@ -845,7 +844,6 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/DateTime.cpp \
-	$(SRC)/Net/ToBuffer.cpp \
 	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
@@ -857,7 +855,6 @@ RUN_LIVETRACK24_SOURCES = \
 	$(SRC)/Tracking/LiveTrack24.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/DateTime.cpp \
-	$(SRC)/Net/ToBuffer.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/Settings.cpp \
 	$(SRC)/Units/Descriptor.cpp \

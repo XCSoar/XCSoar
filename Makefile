@@ -807,8 +807,6 @@ endif
 
 ifeq ($(HAVE_NET),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Net/ToBuffer.cpp \
-	$(SRC)/Net/ToFile.cpp \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/METARParser.cpp \
