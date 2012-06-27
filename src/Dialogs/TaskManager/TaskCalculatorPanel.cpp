@@ -217,6 +217,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   mc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
   AddReadOnly(_("AAT range"),
+              /* xgettext:no-c-format */
               _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance."),
               _T("%.0f %%"), fixed_zero);
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 18:37+0200\n"
+"POT-Creation-Date: 2012-06-27 19:04+0200\n"
 "PO-Revision-Date: 2012-04-10 12:28+0000\n"
 "Last-Translator: Tiago Silva <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
@@ -6579,34 +6579,34 @@ msgstr ""
 msgid "AAT range"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:220
-#, c-format
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:221
+#, no-c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
-"task you will fly relative to the minimum and maximum possible tasks. "
-"-100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  "
-"+100% is maximum AAT distance."
+"task you will fly relative to the minimum and maximum possible tasks. -100% "
+"indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
+"is maximum AAT distance."
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:223
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:224
 #: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:15
 #: Data/Dialogs/dlgTarget_L.xml:33
 msgid "Speed remaining"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:227
 msgid "Achieved MacCready"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:231
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:232
 msgid "Achieved speed"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:234
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:235
 msgid "Cruise efficiency"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:235
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:236
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "

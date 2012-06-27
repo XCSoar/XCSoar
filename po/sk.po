@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-27 18:37+0200\n"
+"POT-Creation-Date: 2012-06-27 19:04+0200\n"
 "PO-Revision-Date: 2012-05-24 13:44+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -6860,39 +6860,39 @@ msgstr ""
 msgid "AAT range"
 msgstr "AAT vzdialenosť"
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:220
-#, fuzzy, c-format
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:221
+#, fuzzy, no-c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
-"task you will fly relative to the minimum and maximum possible tasks. "
-"-100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  "
-"+100% is maximum AAT distance."
+"task you will fly relative to the minimum and maximum possible tasks. -100% "
+"indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
+"is maximum AAT distance."
 msgstr ""
 "Pre AAT úlohy - táto hodnota hovorí, akú vzdialenosť preletíte vzhľadom na "
 "minimálnu a maximálnu možnú dĺžku úlohy. Odhadovaná vzdialenosť je určená na "
 "základe určených otočných bodov vrámci oblastí. Hodnota -100% indikuje "
-"minimálnu možnú dĺžku AAT úlohy, 0% označuje nominálnu dĺžku a "
-"+100% maximálnu."
+"minimálnu možnú dĺžku AAT úlohy, 0% označuje nominálnu dĺžku a +100% "
+"maximálnu."
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:223
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:224
 #: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:15
 #: Data/Dialogs/dlgTarget_L.xml:33
 msgid "Speed remaining"
 msgstr "Zostávajúca rýchlosť"
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:227
 msgid "Achieved MacCready"
 msgstr "Dosiahnutá MacCready hodnota"
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:231
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:232
 msgid "Achieved speed"
 msgstr "Dosiahnutá rýchlosť"
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:234
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:235
 msgid "Cruise efficiency"
 msgstr "Efektívita preskoku"
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:235
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:236
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "
