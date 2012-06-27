@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_TASK_PROPERTIES_PANEL_HPP
 
 #include "Form/RowFormWidget.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Engine/Task/TaskBehaviour.hpp"
 
 class WndOwnerDrawFrame;
@@ -32,7 +33,8 @@ class OrderedTask;
 class DataFieldBoolean;
 class DataFieldEnum;
 
-class TaskPropertiesPanel : public RowFormWidget {
+class TaskPropertiesPanel : public RowFormWidget,
+                            private DataFieldListener {
   WndOwnerDrawFrame *wTaskView;
 
   OrderedTask **ordered_task_pointer, *ordered_task;
@@ -73,6 +75,10 @@ public:
 protected:
   void RefreshView();
   void ReadValues();
+
+private:
+  /* virtual methods from DataFieldListener */
+  virtual void OnModified(DataField &df);
 };
 
 #endif

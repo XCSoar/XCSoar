@@ -27,17 +27,12 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Float.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Form/Util.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Draw.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
-
-#include <assert.h>
-#include <stdio.h>
 
 enum Controls {
   MIN_TIME,
@@ -49,10 +44,6 @@ enum Controls {
   FAI_FINISH_HEIGHT,
   TASK_TYPE,
 };
-
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TaskPropertiesPanel *instance;
 
 void
 TaskPropertiesPanel::RefreshView()
@@ -144,13 +135,6 @@ TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
   }
 }
 
-static void
-OnFAIFinishHeightData(DataField *Sender, DataField::DataAccessMode Mode)
-{
-  if (Mode == DataField::daChange)
-    instance->OnFAIFinishHeightChange(*(DataFieldBoolean*)Sender);
-}
-
 void
 TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
 {
@@ -164,25 +148,18 @@ TaskPropertiesPanel::OnTaskTypeChange(DataFieldEnum &df)
   }
 }
 
-static void
-OnTaskTypeData(DataField *Sender, DataField::DataAccessMode Mode)
+void
+TaskPropertiesPanel::OnModified(DataField &df)
 {
-  if (Mode == DataField::daChange)
-    instance->OnTaskTypeChange(*(DataFieldEnum *)Sender);
+  if (IsDataField(FAI_FINISH_HEIGHT, df))
+    OnFAIFinishHeightChange((DataFieldBoolean &)df);
+  else if (IsDataField(TASK_TYPE, df))
+    OnTaskTypeChange((DataFieldEnum &)df);
 }
-
-static gcc_constexpr_data CallBackTableEntry task_properties_callbacks[] = {
-  DeclareCallBackEntry(OnTaskTypeData),
-  DeclareCallBackEntry(OnFAIFinishHeightData),
-
-  DeclareCallBackEntry(NULL)
-};
 
 void
 TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  instance = this;
-
   AddTime(_("AAT min. time"), _("Minimum AAT task time in minutes."),
           0, 36000, 60, 180);
 
@@ -226,9 +203,10 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddBoolean(_("FAI start / finish rules"),
              _("If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height."),
-             false, OnFAIFinishHeightData);
+             false, this);
 
-  DataFieldEnum *dfe = new DataFieldEnum(OnTaskTypeData);
+  DataFieldEnum *dfe = new DataFieldEnum(NULL);
+  dfe->SetListener(this);
   dfe->EnableItemHelp(true);
   const std::vector<TaskFactoryType> factory_types =
     ordered_task->GetFactoryTypes();
