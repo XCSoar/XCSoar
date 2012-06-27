@@ -234,6 +234,11 @@ CopyASCII(TCHAR *dest, const char *src);
 gcc_nonnull_all
 TCHAR *
 CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end);
+
+gcc_nonnull_all
+char *
+CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end);
+
 #endif
 
 /**

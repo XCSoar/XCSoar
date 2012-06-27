@@ -157,8 +157,9 @@ CopyASCII(TCHAR *dest, const char *src)
   } while (*src++ != '\0');
 }
 
-TCHAR *
-CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end)
+template<typename D, typename S>
+static D *
+TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
 {
   assert(dest != NULL);
   assert(dest_size > 0);
@@ -166,13 +167,26 @@ CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end)
   assert(src_end != NULL);
   assert(src_end >= src);
 
-  const TCHAR *const dest_end = dest + dest_size;
+  const D *const dest_end = dest + dest_size;
   while (dest != dest_end && src != src_end)
     if (IsASCII(*src))
       *dest++ = *src;
 
   return dest;
 }
+
+TCHAR *
+CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end)
+{
+  return TemplateCopyASCII(dest, dest_size, src, src_end);
+}
+
+char *
+CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end)
+{
+  return TemplateCopyASCII(dest, dest_size, src, src_end);
+}
+
 #endif
 
 const TCHAR *

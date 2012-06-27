@@ -91,8 +91,19 @@ public:
   }
 
   void SetASCII(const char *src) {
-    SetASCII(src, src + strlen(src));
+    SetASCII(src, src + StringLength(src));
   }
+
+#ifdef _UNICODE
+  void SetASCII(const TCHAR *src, const TCHAR *src_end) {
+    T *end = ::CopyASCII(data, MAX_SIZE - 1, src, src_end);
+    *end = SENTINEL;
+  }
+
+  void SetASCII(const TCHAR *src) {
+    SetASCII(src, src + StringLength(src));
+  }
+#endif
 
   /**
    * Eliminate all non-ASCII characters.
