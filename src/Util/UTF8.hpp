@@ -31,7 +31,7 @@ Copyright_License {
 /**
  * Is this a valid UTF-8 string?
  */
-gcc_pure
+gcc_pure  gcc_nonnull_all
 bool
 ValidateUTF8(const char *p);
 
@@ -42,7 +42,7 @@ ValidateUTF8(const char *p);
  * there are no non-ASCII characters; returns NULL if the destination
  * buffer is too small
  */
-gcc_pure
+gcc_pure  gcc_nonnull_all
 const char *
 Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size);
 
@@ -52,6 +52,7 @@ Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size);
  *
  * @return A pointer to the buffer plus the added character(s)
  */
+gcc_nonnull_all
 char *
 Latin1ToUTF8(unsigned char ch, char *buffer);
 
@@ -59,7 +60,7 @@ Latin1ToUTF8(unsigned char ch, char *buffer);
  * Returns the number of characters in the string.  This is different
  * from strlen(), which counts the number of bytes.
  */
-gcc_pure
+gcc_pure gcc_nonnull_all
 size_t
 LengthUTF8(const char *p);
 

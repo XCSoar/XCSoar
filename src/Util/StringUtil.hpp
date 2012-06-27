@@ -143,6 +143,7 @@ StringFormatUnsafe(TCHAR *buffer, const TCHAR *fmt, Args&&... args)
  * does not begin with the specified prefix, this function returns
  * NULL.
  */
+gcc_nonnull_all
 const TCHAR *
 StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
 
@@ -152,6 +153,7 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
  * does not begin with the specified prefix, this function returns
  * NULL.
  */
+gcc_nonnull_all
 const char *
 StringAfterPrefix(const char *string, const char *prefix);
 #endif
@@ -162,6 +164,7 @@ StringAfterPrefix(const char *string, const char *prefix);
  * NULL.
  * This function is case-independent.
  */
+gcc_nonnull_all
 const TCHAR *
 StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
 
@@ -173,6 +176,7 @@ StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
  * terminator)
  * @return a pointer to the null terminator
  */
+gcc_nonnull_all
 TCHAR *
 CopyString(TCHAR *dest, const TCHAR *src, size_t size);
 
@@ -185,6 +189,7 @@ CopyString(TCHAR *dest, const TCHAR *src, size_t size);
  * terminator)
  * @return a pointer to the null terminator
  */
+gcc_nonnull_all
 char *
 CopyString(char *dest, const char *src, size_t size);
 #endif
@@ -195,6 +200,7 @@ CopyString(char *dest, const char *src, size_t size);
  * destination buffer must be as large as the source buffer.  Can be
  * used for in-place operation.
  */
+gcc_nonnull_all
 void
 CopyASCII(char *dest, const char *src);
 
@@ -207,20 +213,25 @@ CopyASCII(char *dest, const char *src);
  * @param dest_size the size of the destination buffer
  * @return a pointer to the written end of the destination buffer
  */
+gcc_nonnull_all
 char *
 CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end);
 
 #ifdef _UNICODE
+gcc_nonnull_all
 void
 CopyASCII(TCHAR *dest, const TCHAR *src);
 
+gcc_nonnull_all
 TCHAR *
 CopyASCII(TCHAR *dest, size_t dest_size,
           const TCHAR *src, const TCHAR *src_end);
 
+gcc_nonnull_all
 void
 CopyASCII(TCHAR *dest, const char *src);
 
+gcc_nonnull_all
 TCHAR *
 CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end);
 #endif
@@ -231,12 +242,12 @@ CopyASCII(TCHAR *dest, size_t dest_size, const char *src, const char *src_end);
  * non-whitespace characters, then a pointer to the NULL terminator is
  * returned.
  */
-gcc_pure
+gcc_pure gcc_nonnull_all
 const TCHAR *
 TrimLeft(const TCHAR *p);
 
 #ifdef _UNICODE
-gcc_pure
+gcc_pure gcc_nonnull_all
 const char *
 TrimLeft(const char *p);
 #endif
@@ -244,9 +255,11 @@ TrimLeft(const char *p);
 /**
  * Strips trailing whitespace.
  */
+gcc_nonnull_all
 void TrimRight(TCHAR *p);
 
 #ifdef _UNICODE
+gcc_nonnull_all
 void
 TrimRight(char *p);
 #endif
@@ -261,6 +274,7 @@ TrimRight(char *p);
  * @param src the source string
  * @return the destination buffer
  */
+gcc_nonnull_all
 TCHAR *
 NormalizeSearchString(TCHAR *dest, const TCHAR *src);
 
@@ -313,7 +327,7 @@ DuplicateString(const char *p)
  * string.  The return value will be null-terminated and must be freed
  * with free().
  */
-gcc_malloc
+gcc_malloc gcc_nonnull_all
 char *
 DuplicateString(const char *p, size_t length);
 
@@ -326,7 +340,7 @@ DuplicateString(const TCHAR *p)
   return _tcsdup(p);
 }
 
-gcc_malloc
+gcc_malloc gcc_nonnull_all
 TCHAR *
 DuplicateString(const TCHAR *p, size_t length);
 

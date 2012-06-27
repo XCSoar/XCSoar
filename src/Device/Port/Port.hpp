@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PORT_HPP
 #define XCSOAR_DEVICE_PORT_HPP
 
+#include "Compiler.h"
+
 #include <stddef.h>
 
 class OperationEnvironment;
@@ -65,6 +67,7 @@ public:
    */
   class Handler {
   public:
+    gcc_nonnull_all
     virtual void DataReceived(const void *data, size_t length) = 0;
   };
 
@@ -92,6 +95,7 @@ public:
    * @param length Length of the string
    * @return the number of bytes written, or 0 on error
    */
+  gcc_nonnull_all
   virtual size_t Write(const void *data, size_t length) = 0;
 
   /**
@@ -99,6 +103,7 @@ public:
    * @param s The string to write
    * @return the number of bytes written, or 0 on error
    */
+  gcc_nonnull_all
   size_t Write(const char *s);
 
   /**
@@ -118,12 +123,14 @@ public:
    * @param timeout_ms give up after this number of milliseconds
    * @return true on success
    */
+  gcc_nonnull_all
   bool FullWrite(const void *buffer, size_t length,
                  OperationEnvironment &env, unsigned timeout_ms);
 
   /**
    * Just like FullWrite(), but write a null-terminated string
    */
+  gcc_nonnull_all
   bool FullWriteString(const char *s,
                        OperationEnvironment &env, unsigned timeout_ms);
 
@@ -176,6 +183,7 @@ public:
    * @param Size Size of the buffer
    * @return Number of bytes read from the serial port or -1 on failure
    */
+  gcc_nonnull_all
   virtual int Read(void *Buffer, size_t Size) = 0;
 
   /**
@@ -208,6 +216,7 @@ public:
    * @param timeout_ms give up after this number of milliseconds
    * @return true on success
    */
+  gcc_nonnull_all
   bool FullRead(void *buffer, size_t length, OperationEnvironment &env,
                 unsigned timeout_ms);
 
@@ -221,6 +230,7 @@ public:
    */
   WaitResult WaitRead(OperationEnvironment &env, unsigned timeout_ms);
 
+  gcc_nonnull_all
   bool ExpectString(const char *token, OperationEnvironment &env,
                     unsigned timeout_ms = 2000);
 

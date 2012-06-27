@@ -33,19 +33,19 @@ Copyright_License {
 
 #ifdef _UNICODE
 
-gcc_malloc
+gcc_malloc gcc_nonnull_all
 TCHAR *
 ConvertUTF8ToWide(const char *p);
 
-gcc_malloc
+gcc_malloc gcc_nonnull_all
 TCHAR *
 ConvertACPToWide(const char *p);
 
-gcc_malloc
+gcc_malloc gcc_nonnull_all
 char *
 ConvertWideToUTF8(const TCHAR *p);
 
-gcc_malloc
+gcc_malloc gcc_nonnull_all
 char *
 ConvertWideToACP(const TCHAR *p);
 

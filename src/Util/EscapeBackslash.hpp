@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
 #define XCSOAR_UTIL_ESCAPE_BACKSLASH_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 /**
@@ -32,6 +34,7 @@ Copyright_License {
  * @param old_string The old string with (or without) special characters
  * @return The new parsed string
  */
+gcc_nonnull_all
 TCHAR *
 UnescapeBackslash(const TCHAR *old_string);
 
