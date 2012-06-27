@@ -95,10 +95,6 @@ private:
 
   /** Function to call when the Editor data has changed */
   DataChangeCallback_t mOnDataChangeNotify;
-  /** Function to call when the "up" button has been pressed */
-  ClickUpCallback_t mOnClickUpNotify;
-  /** Function to call when the "down" button has been pressed */
-  ClickDownCallback_t mOnClickDownNotify;
 
   DataField *mDataField;
 
