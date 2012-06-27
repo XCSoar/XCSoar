@@ -72,11 +72,10 @@ ContestManager::SetHandicap(unsigned handicap)
   olc_netcoupe.SetHandicap(handicap);
 }
 
-bool
-ContestManager::RunContest(AbstractContest &_contest,
-                           ContestResult &result,
-                           ContestTraceVector &solution,
-                           bool exhaustive)
+static bool
+RunContest(AbstractContest &_contest,
+           ContestResult &result, ContestTraceVector &solution,
+           bool exhaustive)
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls

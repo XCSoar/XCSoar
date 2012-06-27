@@ -103,10 +103,6 @@ public:
   const ContestStatistics &GetStats() const {
     return stats;
   }
-
-private:
-  static bool RunContest(AbstractContest &_contest, ContestResult &result,
-                         ContestTraceVector &solution, bool exhaustive);
 };
 
 #endif
