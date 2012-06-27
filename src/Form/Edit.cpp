@@ -73,7 +73,7 @@ WndProperty::Editor::OnKeyCheck(unsigned key_code) const
 
   case VK_LEFT:
   case VK_RIGHT:
-    return true;
+    return !IsReadOnly();
 
   default:
     return EditWindow::OnKeyCheck(key_code);
@@ -89,9 +89,15 @@ WndProperty::Editor::OnKeyDown(unsigned key_code)
 
   switch (key_code) {
   case VK_RIGHT:
+    if (IsReadOnly())
+      break;
+
     parent->IncValue();
     return true;
   case VK_LEFT:
+    if (IsReadOnly())
+      break;
+
     parent->DecValue();
     return true;
   }
