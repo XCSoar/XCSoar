@@ -40,6 +40,11 @@ Net::DownloadManager::Initialise()
 }
 
 void
+Net::DownloadManager::BeginDeinitialise()
+{
+}
+
+void
 Net::DownloadManager::Deinitialise()
 {
   delete download_manager;

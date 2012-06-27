@@ -41,6 +41,7 @@ namespace Net {
   namespace DownloadManager {
 #ifdef HAVE_DOWNLOAD_MANAGER
     bool Initialise();
+    void BeginDeinitialise();
     void Deinitialise();
 
     gcc_pure

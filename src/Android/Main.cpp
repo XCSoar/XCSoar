@@ -165,6 +165,8 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
+  Net::DownloadManager::BeginDeinitialise();
+
   CommonInterface::main_window.reset();
   DisallowLanguage();
   Fonts::Deinitialize();
