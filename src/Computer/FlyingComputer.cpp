@@ -46,7 +46,7 @@ FlyingComputer::Check(FlyingState &state, fixed time, const GeoPoint &location)
     // We are moving for 10sec now
     if (time_in_flight > 10) {
       // We certainly must be flying after 10sec movement
-      assert(positive(moving_since));
+      assert(!negative(moving_since));
 
       state.flying = true;
       state.takeoff_time = moving_since;
