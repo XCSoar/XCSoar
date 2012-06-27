@@ -27,6 +27,8 @@ Copyright_License {
 #include "Net/Features.hpp"
 #include "Compiler.h"
 
+#include <tchar.h>
+
 namespace Net {
   class DownloadListener {
   public:
@@ -47,7 +49,7 @@ namespace Net {
     void AddListener(DownloadListener &listener);
     void RemoveListener(DownloadListener &listener);
 
-    void Enqueue(const char *uri, const char *relative_path);
+    void Enqueue(const char *uri, const TCHAR *relative_path);
 #else
 
     static inline bool IsAvailable() {
