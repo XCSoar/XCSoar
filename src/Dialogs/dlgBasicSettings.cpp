@@ -277,12 +277,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            fixed_zero,
            this);
 
-  WndProperty *wp =
-    AddFloat(_("Wing loading"), NULL,
-             _T("%.1f kg/m2"), _T("%.1f"),
-             fixed_zero, fixed_zero, fixed_zero, false,
-             fixed_zero);
-  wp->SetReadOnly();
+  AddReadOnly(_("Wing loading"), NULL, _T("%.1f kg/m2"), fixed_zero);
 
   AddFloat(_("Bugs"), /* xgettext:no-c-format */
            _("How clean the glider is. Set to 0% for clean, larger numbers as the wings "
@@ -292,6 +287,7 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            (fixed_one - polar_settings.bugs) * 100,
            this);
 
+  WndProperty *wp;
   wp = AddFloat(_("QNH"),
                 _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
                 GetUserPressureFormat(), GetUserPressureFormat(),
@@ -305,11 +301,8 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     wp->RefreshDisplay();
   }
 
-  wp = AddFloat(_("Altitude"), NULL,
-                _T("%.0f %s"), _T("%.0f"),
-                fixed_zero, fixed_zero, fixed_zero, false,
-                UnitGroup::ALTITUDE, fixed_zero);
-  wp->SetReadOnly();
+  AddReadOnly(_("Altitude"), NULL, _T("%.0f %s"),
+              UnitGroup::ALTITUDE, fixed_zero);
 
   wp = AddFloat(_("Max. temp."),
                 _("Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)"),

@@ -227,6 +227,53 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
     control->SetText(text);
 }
 
+void
+RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
+                           const TCHAR *display_format,
+                           fixed value)
+{
+  WndProperty *edit = Add(label, help, true);
+  DataFieldFloat *df = new DataFieldFloat(display_format, display_format,
+                                          fixed_zero, fixed_zero,
+                                          value, fixed_one, false, NULL);
+  edit->SetDataField(df);
+}
+
+void
+RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
+                           const TCHAR *display_format,
+                           UnitGroup unit_group, fixed value)
+{
+  WndProperty *edit = Add(label, help, true);
+  const Unit unit = Units::GetUserUnitByGroup(unit_group);
+  value = Units::ToUserUnit(value, unit);
+  DataFieldFloat *df = new DataFieldFloat(display_format, display_format,
+                                          fixed_zero, fixed_zero,
+                                          value, fixed_one, false, NULL);
+  df->SetUnits(Units::GetUnitName(unit));
+  edit->SetDataField(df);
+}
+
+WndProperty *
+RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
+                        const TCHAR *display_format,
+                        const TCHAR *edit_format,
+                        fixed min_value, fixed max_value,
+                        fixed step, bool fine,
+                        UnitGroup unit_group, fixed value,
+                        DataField::DataAccessCallback callback)
+{
+  WndProperty *edit = Add(label, help);
+  const Unit unit = Units::GetUserUnitByGroup(unit_group);
+  value = Units::ToUserUnit(value, unit);
+  DataFieldFloat *df = new DataFieldFloat(edit_format, display_format,
+                                          min_value, max_value,
+                                          value, step, fine, callback);
+  df->SetUnits(Units::GetUnitName(unit));
+  edit->SetDataField(df);
+  return edit;
+}
+
 WndProperty *
 RowFormWidget::Add(const TCHAR *label, const TCHAR *help,
                    DataField *df)
@@ -276,26 +323,6 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
   DataFieldFloat *df = new DataFieldFloat(edit_format, display_format,
                                           min_value, max_value,
                                           value, step, fine, callback);
-  edit->SetDataField(df);
-  return edit;
-}
-
-WndProperty *
-RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
-                        const TCHAR *display_format,
-                        const TCHAR *edit_format,
-                        fixed min_value, fixed max_value,
-                        fixed step, bool fine,
-                        UnitGroup unit_group, fixed value,
-                        DataField::DataAccessCallback callback)
-{
-  WndProperty *edit = Add(label, help);
-  const Unit unit = Units::GetUserUnitByGroup(unit_group);
-  value = Units::ToUserUnit(value, unit);
-  DataFieldFloat *df = new DataFieldFloat(edit_format, display_format,
-                                          min_value, max_value,
-                                          value, step, fine, callback);
-  df->SetUnits(Units::GetUnitName(unit));
   edit->SetDataField(df);
   return edit;
 }

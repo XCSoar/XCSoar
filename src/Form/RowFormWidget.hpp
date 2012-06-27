@@ -216,6 +216,22 @@ public:
   void AddReadOnly(const TCHAR *label, const TCHAR *help=NULL,
                    const TCHAR *text=NULL);
 
+  /**
+   * Add a read-only control displaying a floating-point value.  Use
+   * LoadValue() to update the displayed value.
+   */
+  void AddReadOnly(const TCHAR *label, const TCHAR *help,
+                   const TCHAR *display_format,
+                   fixed value);
+
+  /**
+   * Add a read-only control displaying a floating-point value.  Use
+   * LoadValue() to update the displayed value.
+   */
+  void AddReadOnly(const TCHAR *label, const TCHAR *help,
+                   const TCHAR *display_format,
+                   UnitGroup unit_group, fixed value);
+
   WndProperty *Add(const TCHAR *label, const TCHAR *help,
                    DataField *df);
 

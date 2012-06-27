@@ -210,17 +210,10 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                             PixelRect{0, 0, 100, Layout::Scale(17)},
                             WindowStyle(), OnWarningPaint));
 
-  AddFloat(_("Assigned task time"), NULL, _T("%.0f min"), _T("%.0f"),
-           fixed_zero, fixed(600), fixed_one, false, fixed_zero);
-  SetReadOnly(AAT_TIME);
-
-  AddFloat(_("Estimated task time"), NULL, _T("%.0f min"), _T("%.0f"),
-           fixed_zero, fixed(600), fixed_one, false, fixed_zero);
-  SetReadOnly(AAT_ESTIMATED);
-
-  AddFloat(_("Task distance"), NULL, _T("%.0f %s"), _T("%.0f"),
-           fixed_zero, fixed(1000000), fixed_one, false, fixed_zero);
-  SetReadOnly(DISTANCE);
+  AddReadOnly(_("Assigned task time"), NULL, _T("%.0f min"), fixed_zero);
+  AddReadOnly(_("Estimated task time"), NULL, _T("%.0f min"), fixed_zero);
+  AddReadOnly(_("Task distance"), NULL, _T("%.0f %s"),
+              UnitGroup::DISTANCE, fixed_zero);
 
   AddFloat(_("Set MacCready"),
            _("Adjusts MC value used in the calculator.  "
@@ -233,25 +226,20 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   DataFieldFloat &mc_df = (DataFieldFloat &)GetDataField(MC);
   mc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
-  AddFloat(_("AAT range"),
-           _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance."),
-           _T("%.0f %%"), _T("%.0f"),
-           fixed_zero, fixed(100), fixed_one, false, fixed_zero);
-  SetReadOnly(RANGE);
+  AddReadOnly(_("AAT range"),
+              _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance."),
+              _T("%.0f %%"), fixed_zero);
 
-  AddFloat(_("Speed remaining"), NULL, _T("%.0f %s"), _T("%.0f"),
-           fixed_zero, fixed(100), fixed_one, false, fixed_zero);
-  SetReadOnly(SPEED_REMAINING);
+  AddReadOnly(_("Speed remaining"), NULL, _T("%.0f %s"),
+              UnitGroup::TASK_SPEED, fixed_zero);
 
-  AddFloat(_("Achieved MacCready"), NULL, _T("%.1f %s"), _T("%.1f"),
-           fixed_zero, fixed(10), fixed(0.1), false, fixed_zero);
-  SetReadOnly(EFFECTIVE_MC);
+  AddReadOnly(_("Achieved MacCready"), NULL, _T("%.1f %s"),
+              UnitGroup::VERTICAL_SPEED, fixed_zero);
   DataFieldFloat &emc_df = (DataFieldFloat &)GetDataField(EFFECTIVE_MC);
   emc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
-  AddFloat(_("Achieved speed"), NULL, _T("%.0f %s"), _T("%.0f"),
-           fixed_zero, fixed(100), fixed_one, false, fixed_zero);
-  SetReadOnly(SPEED_ACHIEVED);
+  AddReadOnly(_("Achieved speed"), NULL, _T("%.0f %s"),
+              UnitGroup::TASK_SPEED, fixed_zero);
 
   AddFloat(_("Cruise efficiency"),
            _("Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started."),
