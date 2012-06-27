@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-26 20:46+0200\n"
+"POT-Creation-Date: 2012-06-27 18:37+0200\n"
 "PO-Revision-Date: 2012-06-27 15:17+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
 #: src/Task/TaskStore.cpp:72 src/Menu/ExpandMacros.cpp:534
-#: src/Input/InputEventsSettings.cpp:316 src/Dialogs/dlgAnalysis.cpp:350
+#: src/Input/InputEventsSettings.cpp:308 src/Dialogs/dlgAnalysis.cpp:350
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:156
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:76
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:190
@@ -396,8 +396,8 @@ msgstr "すべて"
 #: src/Menu/ExpandMacros.cpp:514 src/Menu/ExpandMacros.cpp:520
 #: src/Menu/ExpandMacros.cpp:523 src/Menu/ExpandMacros.cpp:526
 #: src/Menu/ExpandMacros.cpp:529 src/Menu/ExpandMacros.cpp:547
-#: src/Menu/ExpandMacros.cpp:600 src/Input/InputEventsSettings.cpp:445
-#: src/Input/InputEventsSettings.cpp:448 src/Dialogs/XML.cpp:493
+#: src/Menu/ExpandMacros.cpp:600 src/Input/InputEventsSettings.cpp:437
+#: src/Input/InputEventsSettings.cpp:440 src/Dialogs/XML.cpp:493
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:92
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:209
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:55
@@ -415,7 +415,7 @@ msgstr "オフ"
 #: src/Menu/ExpandMacros.cpp:520 src/Menu/ExpandMacros.cpp:523
 #: src/Menu/ExpandMacros.cpp:526 src/Menu/ExpandMacros.cpp:529
 #: src/Menu/ExpandMacros.cpp:547 src/Menu/ExpandMacros.cpp:600
-#: src/Input/InputEventsSettings.cpp:443 src/Input/InputEventsSettings.cpp:448
+#: src/Input/InputEventsSettings.cpp:435 src/Input/InputEventsSettings.cpp:440
 #: src/Dialogs/XML.cpp:493 src/Dialogs/StatusPanels/SystemStatusPanel.cpp:91
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:210
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:53
@@ -456,18 +456,18 @@ msgstr "手動"
 msgid "Auto"
 msgstr "自動"
 
-#: src/Menu/ExpandMacros.cpp:532 src/Input/InputEventsSettings.cpp:314
+#: src/Menu/ExpandMacros.cpp:532 src/Input/InputEventsSettings.cpp:306
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:142
 #, no-c-format
 msgid "All"
 msgstr "全て"
 
-#: src/Menu/ExpandMacros.cpp:533 src/Input/InputEventsSettings.cpp:315
+#: src/Menu/ExpandMacros.cpp:533 src/Input/InputEventsSettings.cpp:307
 #, no-c-format
 msgid "Task & Landables"
 msgstr "タスク＆着陸可能地"
 
-#: src/Menu/ExpandMacros.cpp:535 src/Input/InputEventsSettings.cpp:317
+#: src/Menu/ExpandMacros.cpp:535 src/Input/InputEventsSettings.cpp:309
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:55
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:101
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:100
@@ -1443,7 +1443,7 @@ msgstr ""
 "相対湿度　％\r\n"
 "バリオメーターからの信号が有る場合　単位％"
 
-#: src/InfoBoxes/Content/Factory.cpp:580 src/Input/InputEventsSettings.cpp:302
+#: src/InfoBoxes/Content/Factory.cpp:580 src/Input/InputEventsSettings.cpp:294
 #, no-c-format
 msgid "Forecast temperature"
 msgstr "予想気温"
@@ -2603,90 +2603,90 @@ msgstr "旋回準備完了"
 msgid "Hold turn"
 msgstr "旋回保留"
 
-#: src/Input/InputEventsTask.cpp:154
+#: src/Input/InputEventsTask.cpp:156
 msgid "Auto. MacCready on"
 msgstr "自動マクレディー オン"
 
-#: src/Input/InputEventsTask.cpp:156
+#: src/Input/InputEventsTask.cpp:158
 msgid "Auto. MacCready off"
 msgstr "自動マクレディー オフ"
 
-#: src/Input/InputEventsTask.cpp:161
+#: src/Input/InputEventsTask.cpp:163
 msgid "MacCready "
 msgstr "マクレディー "
 
-#: src/Input/InputEventsTask.cpp:214
+#: src/Input/InputEventsTask.cpp:216
 msgid "Task aborted"
 msgstr "タスク中止"
 
-#: src/Input/InputEventsTask.cpp:217
+#: src/Input/InputEventsTask.cpp:219
 msgid "Go to target"
 msgstr "ターゲットへ行く"
 
-#: src/Input/InputEventsTask.cpp:220
+#: src/Input/InputEventsTask.cpp:222
 msgid "Ordered task"
 msgstr "指示タスク"
 
-#: src/Input/InputEventsTask.cpp:223
+#: src/Input/InputEventsTask.cpp:225
 #: src/Renderer/FlightStatisticsRenderer.cpp:227
 msgid "No task"
 msgstr "タスクなし"
 
-#: src/Input/InputEventsTask.cpp:312
+#: src/Input/InputEventsTask.cpp:314
 msgid "Task start"
 msgstr "タスク スタート"
 
-#: src/Input/InputEventsTask.cpp:314
+#: src/Input/InputEventsTask.cpp:316
 msgid "Next turnpoint"
 msgstr "次の旋回点"
 
-#: src/Input/InputEventsTask.cpp:316
+#: src/Input/InputEventsTask.cpp:318
 msgid "Task finished"
 msgstr "タスク フィニッシュ"
 
-#: src/Input/InputEventsTask.cpp:318
+#: src/Input/InputEventsTask.cpp:320
 msgid "In sector, arm advance when ready"
 msgstr "セクター内　次に向かえ"
 
-#: src/Input/InputEventsSettings.cpp:59
+#: src/Input/InputEventsSettings.cpp:51
 msgid "Vario sounds on"
 msgstr "オーディオバリオ オン"
 
-#: src/Input/InputEventsSettings.cpp:61
+#: src/Input/InputEventsSettings.cpp:53
 msgid "Vario sounds off"
 msgstr "オーディオバリオ オフ"
 
-#: src/Input/InputEventsSettings.cpp:89
+#: src/Input/InputEventsSettings.cpp:81
 msgid "Snail trail off"
 msgstr "航跡表示　OFF"
 
-#: src/Input/InputEventsSettings.cpp:93
+#: src/Input/InputEventsSettings.cpp:85
 msgid "Long snail trail"
 msgstr "航跡表示　長い"
 
-#: src/Input/InputEventsSettings.cpp:97
+#: src/Input/InputEventsSettings.cpp:89
 msgid "Short snail trail"
 msgstr "航跡表示　短い"
 
-#: src/Input/InputEventsSettings.cpp:101
+#: src/Input/InputEventsSettings.cpp:93
 msgid "Full snail trail"
 msgstr "全航跡表示"
 
-#: src/Input/InputEventsSettings.cpp:203
+#: src/Input/InputEventsSettings.cpp:195
 msgid "Bugs performance"
 msgstr "バグの影響"
 
-#: src/Input/InputEventsSettings.cpp:246
+#: src/Input/InputEventsSettings.cpp:238
 #, no-c-format
 msgid "Ballast %"
 msgstr "バラスト[%]"
 
-#: src/Input/InputEventsSettings.cpp:330 Data/Dialogs/dlgConfigFonts.xml:19
+#: src/Input/InputEventsSettings.cpp:322 Data/Dialogs/dlgConfigFonts.xml:19
 #: Data/Dialogs/dlgConfigFonts_L.xml:19
 msgid "Waypoint labels"
 msgstr "ウエイポイント　ラベル"
 
-#: src/Input/InputEventsSettings.cpp:450
+#: src/Input/InputEventsSettings.cpp:442
 msgid "Topography/Terrain"
 msgstr "地勢図/地形図"
 
@@ -2735,8 +2735,8 @@ msgstr "標高"
 #: src/Renderer/MapItemListRenderer.cpp:231
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:92
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:111
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:200
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:217
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:177
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:194
 #, no-c-format
 msgid "AGL"
 msgstr "AGL（対地高度）"
@@ -2745,8 +2745,8 @@ msgstr "AGL（対地高度）"
 #: src/Renderer/MapItemListRenderer.cpp:237
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:93
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:201
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:218
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:178
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:195
 #, no-c-format
 msgid "MSL"
 msgstr "MSL（平均海面高度）"
@@ -2791,7 +2791,7 @@ msgid "FLARM Traffic"
 msgstr "FLARM　情報"
 
 #: src/Renderer/MapItemListRenderer.cpp:483
-#: src/Dialogs/CAI302/UnitsEditor.cpp:46 src/Dialogs/dlgBasicSettings.cpp:308
+#: src/Dialogs/CAI302/UnitsEditor.cpp:46 src/Dialogs/dlgBasicSettings.cpp:304
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:90
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:106
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:182
@@ -3066,7 +3066,7 @@ msgid "Mass"
 msgstr "質量"
 
 #: src/Renderer/GlidePolarRenderer.cpp:132
-#: src/Dialogs/dlgBasicSettings.cpp:281
+#: src/Dialogs/dlgBasicSettings.cpp:280
 msgid "Wing loading"
 msgstr "翼面加重"
 
@@ -3279,7 +3279,7 @@ msgstr "フライトログをダウンロード中"
 #: src/Dialogs/WidgetDialog.cpp:180
 #: src/Dialogs/MapItemListSettingsDialog.cpp:33
 #: src/Dialogs/AirspaceCRendererSettingsDialog.cpp:34
-#: src/Dialogs/dlgBasicSettings.cpp:369 src/Dialogs/WindSettingsDialog.cpp:33
+#: src/Dialogs/dlgBasicSettings.cpp:362 src/Dialogs/WindSettingsDialog.cpp:33
 #: src/Dialogs/FontEdit.cpp:188 Data/Dialogs/dlgPlaneDetails.xml:60
 #: Data/Dialogs/dlgPlaneDetails_L.xml:52 Data/Dialogs/dlgPlanePolar.xml:66
 #: Data/Dialogs/dlgPlanePolar_L.xml:54
@@ -3588,7 +3588,7 @@ msgid "Unkown"
 msgstr ""
 
 #: src/Dialogs/FLARM/ConfigWidget.cpp:123
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:96
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:108
 #, no-c-format
 msgid "Glider"
 msgstr ""
@@ -3619,13 +3619,13 @@ msgid "Hang glider"
 msgstr ""
 
 #: src/Dialogs/FLARM/ConfigWidget.cpp:129
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:97
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:109
 #, no-c-format
 msgid "Paraglider"
 msgstr ""
 
 #: src/Dialogs/FLARM/ConfigWidget.cpp:131
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:98
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:110
 #, no-c-format
 msgid "Powered aircraft"
 msgstr ""
@@ -3906,7 +3906,7 @@ msgstr "タスク計算"
 msgid "Warnings"
 msgstr "警告"
 
-#: src/Dialogs/dlgBasicSettings.cpp:127 src/Dialogs/dlgBasicSettings.cpp:368
+#: src/Dialogs/dlgBasicSettings.cpp:127 src/Dialogs/dlgBasicSettings.cpp:361
 msgid "Dump"
 msgstr "水ダンプ"
 
@@ -3925,11 +3925,11 @@ msgstr ""
 "搭載バラスト投棄量のカウントダウンはこのボタンを押す\r\n"
 "時間当たりの投棄量は予めCONFIGで設定しておく"
 
-#: src/Dialogs/dlgBasicSettings.cpp:287
+#: src/Dialogs/dlgBasicSettings.cpp:282
 msgid "Bugs"
 msgstr "バグ"
 
-#: src/Dialogs/dlgBasicSettings.cpp:288
+#: src/Dialogs/dlgBasicSettings.cpp:283
 #, no-c-format
 msgid ""
 "How clean the glider is. Set to 0% for clean, larger numbers as the wings "
@@ -3938,12 +3938,12 @@ msgstr ""
 "どんなにグライダーをー綺麗にしていてもバグが翼に５０％付着すると　沈下率は倍"
 "に増加する場合がある"
 
-#: src/Dialogs/dlgBasicSettings.cpp:295
+#: src/Dialogs/dlgBasicSettings.cpp:291
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
 msgid "QNH"
 msgstr "QNH"
 
-#: src/Dialogs/dlgBasicSettings.cpp:296
+#: src/Dialogs/dlgBasicSettings.cpp:292
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:4
 msgid ""
 "Area pressure for barometric altimeter calibration.  This is set "
@@ -3952,11 +3952,11 @@ msgstr ""
 "高度の気圧補正\r\n"
 "Vegaが接続されている場合　自動的にセットされる"
 
-#: src/Dialogs/dlgBasicSettings.cpp:314
+#: src/Dialogs/dlgBasicSettings.cpp:307
 msgid "Max. temp."
 msgstr "最高気温"
 
-#: src/Dialogs/dlgBasicSettings.cpp:315
+#: src/Dialogs/dlgBasicSettings.cpp:308
 msgid ""
 "Set to forecast ground temperature.  Used by convection estimator "
 "(temperature trace page of Analysis dialog)"
@@ -3964,7 +3964,7 @@ msgstr ""
 "地上予想気温のセット\r\n"
 "対流予報より（温度記録のページ）"
 
-#: src/Dialogs/dlgBasicSettings.cpp:366
+#: src/Dialogs/dlgBasicSettings.cpp:359
 msgid "Flight Setup"
 msgstr "フライトの設定"
 
@@ -4337,13 +4337,13 @@ msgid "Supply voltage"
 msgstr ""
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:98
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:213
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:203
 #: Data/Dialogs/dlgStatusTask.xml:4
 msgid "Assigned task time"
 msgstr ""
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:99
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:217
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:204
 #: Data/Dialogs/dlgStatusTask.xml:5
 msgid "Estimated task time"
 msgstr ""
@@ -4354,7 +4354,7 @@ msgid "Remaining time"
 msgstr "残り時間"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:101
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:221
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:205
 #: Data/Dialogs/dlgStatusTask.xml:8
 msgid "Task distance"
 msgstr ""
@@ -6093,12 +6093,12 @@ msgid "Determines the way the wind arrow is drawn on the map."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:64
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:189
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:166
 msgid "Start max. speed"
 msgstr "スタート　最大速度"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:64
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:190
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:167
 msgid ""
 "Maximum speed allowed in start observation zone.  Set to 0 for no limit."
 msgstr "スタートエリア内の最高速度　制限がない場合　ゼロにセット"
@@ -6114,12 +6114,12 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:78
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:194
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:171
 msgid "Start max. height"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:79
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:195
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:172
 msgid ""
 "Maximum height based on start height reference (AGL or MSL) while starting "
 "the task.  Set to 0 for no limit."
@@ -6136,29 +6136,29 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:92
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:200
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:177
 #, no-c-format
 msgid "Reference AGL for start maximum height rule (above start point)."
 msgstr "最大スタート高度　対地高度　（スタート地点上空）"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:93
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:201
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:178
 #, no-c-format
 msgid "Reference MSL for start maximum height rule (above sea level)."
 msgstr "最大スタート高度　海面高度"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:96
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:205
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:182
 msgid "Start height ref."
 msgstr "スタート高度設定"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:103
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:211
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:188
 msgid "Finish min. height"
 msgstr "フィニッシュ最低高度"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:104
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:212
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:189
 msgid ""
 "Minimum height based on finish height reference (AGL or MSL) while finishing "
 "the task.  Set to 0 for no limit."
@@ -6167,19 +6167,19 @@ msgstr ""
 "制限が無い場合　０に設定"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:111
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:217
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:194
 #, no-c-format
 msgid "Reference AGL for finish minimum height rule (above finish point)."
 msgstr "最小フィニッシュ高度　対地高度（フィニッシュポイント上空」）"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:112
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:218
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:195
 #, no-c-format
 msgid "Reference MSL for finish minimum height rule (above sea level)."
 msgstr "最小フィニッシュ高度　（海面高度）"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:115
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:221
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:198
 msgid "Finish height ref."
 msgstr "フィニッシュ高度"
 
@@ -6282,7 +6282,7 @@ msgid "Default task type for new tasks you create."
 msgstr "タスクの種類　標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:207
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:186
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:163
 msgid "AAT min. time"
 msgstr "AAT　最小時間"
 
@@ -6828,40 +6828,40 @@ msgstr ""
 msgid "Add Turnpoint"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:186
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:163
 msgid "Minimum AAT task time in minutes."
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:206
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:183
 msgid ""
 "Reference used for start max height rule\n"
 "[MSL] Reference is altitude above mean sea level\n"
 "[AGL] Reference is the height above the start point"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:222
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:199
 msgid ""
 "Reference used for finish min height rule\n"
 "[MSL] Reference is altitude above mean sea level\n"
 "[AGL] Reference is the height above the finish point"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:227
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:204
 msgid "FAI start / finish rules"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:228
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:205
 msgid ""
 "If enabled, has no max start height or max start speed and requires the "
 "minimum height above ground for finish to be greater than 1000m below the "
 "start height."
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:242
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:220
 msgid "Task type"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:242
+#: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:220
 msgid "Sets the behaviour for the current task."
 msgstr ""
 
@@ -6906,15 +6906,15 @@ msgstr "新しいタスクを作りますか？"
 msgid "Task New"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:177
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:167
 msgid "Calculator excludes unsaved task changes!"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:225
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:208
 msgid "Set MacCready"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:226
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:209
 msgid ""
 "Adjusts MC value used in the calculator.  Use this to determine the effect "
 "on estimated task time due to changes in conditions.  This value will not "
@@ -6922,11 +6922,11 @@ msgid ""
 "button."
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:236
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:219
 msgid "AAT range"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:237
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:220
 #, c-format
 msgid ""
 "For AAT tasks, this value tells you how far based on the targets of your "
@@ -6935,25 +6935,25 @@ msgid ""
 "+100% is maximum AAT distance."
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:242
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:223
 #: Data/Dialogs/dlgStatusTask.xml:10 Data/Dialogs/dlgTarget.xml:15
 #: Data/Dialogs/dlgTarget_L.xml:33
 msgid "Speed remaining"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:246
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:226
 msgid "Achieved MacCready"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:252
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:231
 msgid "Achieved speed"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:256
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:234
 msgid "Cruise efficiency"
 msgstr ""
 
-#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:257
+#: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:235
 msgid ""
 "Efficiency of cruise.  100 indicates perfect MacCready performance, greater "
 "than 100 indicates better than MacCready performance is achieved through "
@@ -7448,32 +7448,32 @@ msgstr ""
 msgid "METAR and TAF"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:99
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:111
 #, no-c-format
 msgid "Hot-air balloon"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:111
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:123
 msgid "Tracking Interval"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:113
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:125
 msgid "Vehicle Type"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:113
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:125
 msgid "Type of vehicle used."
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:131
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:145
 msgid "Server"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:135
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:149
 msgid "Username"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:136
+#: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:150
 msgid "Password"
 msgstr ""
 
@@ -8232,16 +8232,6 @@ msgstr ""
 msgid "Acknowledge"
 msgstr "了解"
 
-#: Data/Dialogs/dlgFlarmTrafficDetails.xml:25
-#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:10
-msgid "#FF00CB"
-msgstr ""
-
-#: Data/Dialogs/dlgFlarmTrafficDetails.xml:22
-#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:7
-msgid "#74FF00"
-msgstr ""
-
 #: Data/Dialogs/dlgStatusTask.xml:11
 msgid "Speed achieved"
 msgstr ""
@@ -8649,11 +8639,6 @@ msgstr ""
 msgid "MacCready"
 msgstr ""
 
-#: Data/Dialogs/dlgFlarmTrafficDetails.xml:24
-#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
-msgid "#FFE800"
-msgstr ""
-
 #: Data/Dialogs/dlgSimulatorPrompt.xml:8
 #: Data/Dialogs/dlgSimulatorPrompt_L.xml:8 Data/Dialogs/dlgStartup.xml:10
 #: Data/Dialogs/dlgStartup_L.xml:10 Data/Input/default.xci:946
@@ -8843,11 +8828,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgTaskPoint.xml:39 Data/Dialogs/dlgTaskPoint_L.xml:43
 msgid "Finish radial"
-msgstr ""
-
-#: Data/Dialogs/dlgFlarmTrafficDetails.xml:23
-#: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:8
-msgid "#0090FF"
 msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:11 Data/Dialogs/dlgTeamCode_L.xml:11
