@@ -104,7 +104,7 @@ public:
   virtual void OnAction(int id);
 
   /* virtual methods from class Net::DownloadListener */
-  virtual void OnDownloadComplete(const char *path_relative, bool success);
+  virtual void OnDownloadComplete(const TCHAR *path_relative, bool success);
 
   /* virtual methods from class Notify */
   virtual void OnNotification();
@@ -197,7 +197,7 @@ ManagedFileListWidget::Download()
     return;
 
   Net::DownloadManager::Enqueue("http://www.flarmnet.org/files/data.fln",
-                                "data.fln");
+                                _T("data.fln"));
 #endif
 }
 
@@ -212,7 +212,7 @@ ManagedFileListWidget::OnAction(int id)
 }
 
 void
-ManagedFileListWidget::OnDownloadComplete(const char *path_relative,
+ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
                                           bool success)
 {
   SendNotification();

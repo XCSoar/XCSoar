@@ -32,7 +32,7 @@ Copyright_License {
 namespace Net {
   class DownloadListener {
   public:
-    virtual void OnDownloadComplete(const char *path_relative,
+    virtual void OnDownloadComplete(const TCHAR *path_relative,
                                     bool success) = 0;
   };
 }

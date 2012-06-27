@@ -37,6 +37,9 @@ Copyright_License {
 #ifdef ANDROID
 #define HAVE_NET
 #define HAVE_JAVA_NET
+#endif
+
+#ifdef HAVE_NET
 #define HAVE_DOWNLOAD_MANAGER
 #endif
 

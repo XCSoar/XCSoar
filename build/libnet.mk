@@ -34,7 +34,6 @@ ifeq ($(TARGET),ANDROID)
 HAVE_NET := y
 
 LIBNET_SOURCES += \
-	$(SRC)/Net/DownloadManager.cpp \
 	$(SRC)/Net/Java/Session.cpp \
 	$(SRC)/Net/Java/Request.cpp
 endif
@@ -42,6 +41,7 @@ endif
 ifeq ($(HAVE_NET),y)
 
 LIBNET_SOURCES += \
+	$(SRC)/Net/DownloadManager.cpp \
 	$(SRC)/Net/ToFile.cpp \
 	$(SRC)/Net/ToBuffer.cpp
 
