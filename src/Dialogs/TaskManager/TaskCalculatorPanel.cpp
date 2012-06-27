@@ -258,7 +258,6 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _T("%.0f %%"), _T("%.0f"),
            fixed_zero, fixed(100), fixed_one, false, fixed_zero,
            OnCruiseEfficiencyData);
-  SetReadOnly(CRUISE_EFFICIENCY);
 }
 
 void
