@@ -34,7 +34,6 @@ Copyright_License {
 #include "Android/NativeInputListener.hpp"
 #include "Android/TextUtil.hpp"
 #include "Android/LogCat.hpp"
-#include "Net/DownloadManager.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
@@ -132,8 +131,6 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   Vibrator::Initialise(env);
   vibrator = Vibrator::Create(env, *context);
 
-  Net::DownloadManager::Initialise();
-
 #ifdef IOIOLIB
   ioio_helper = new IOIOHelper(env);
 #endif
@@ -165,8 +162,6 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
-  Net::DownloadManager::BeginDeinitialise();
-
   CommonInterface::main_window.reset();
   DisallowLanguage();
   Fonts::Deinitialize();
@@ -175,8 +170,6 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete ioio_helper;
   ioio_helper = NULL;
 #endif
-
-  Net::DownloadManager::Deinitialise();
 
   delete vibrator;
   vibrator = NULL;

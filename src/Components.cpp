@@ -76,6 +76,7 @@ Copyright_License {
 #include "Replay/Replay.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
+#include "Net/DownloadManager.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "Hardware/Display.hpp"
 #include "Hardware/DisplayGlue.hpp"
@@ -223,6 +224,10 @@ XCSoarInterface::Startup()
   //If "XCSoar" is already running, stop this instance
   if (MainWindow::find(szTitle))
     return false;
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  Net::DownloadManager::Initialise();
+#endif
 
   LogStartUp(_T("Display dpi=%u,%u"), Display::GetXDPI(), Display::GetYDPI());
 
@@ -550,6 +555,9 @@ XCSoarInterface::Shutdown()
 
   // Stop threads
   LogStartUp(_T("Stop threads"));
+#ifdef HAVE_DOWNLOAD_MANAGER
+  Net::DownloadManager::BeginDeinitialise();
+#endif
 #ifndef ENABLE_OPENGL
   draw_thread->BeginStop();
 #endif
@@ -631,6 +639,10 @@ XCSoarInterface::Shutdown()
     tracking->WaitStopped();
     delete tracking;
   }
+#endif
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  Net::DownloadManager::Deinitialise();
 #endif
 
   // Close the progress dialog
