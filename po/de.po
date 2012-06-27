@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-06-27 11:24+0000\n"
-"Last-Translator: Turbo <Unknown>\n"
+"PO-Revision-Date: 2012-06-27 21:03+0000\n"
+"Last-Translator: Wolfgang Feller <mail.wolfgang.feller@googlemail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-27 16:41+0000\n"
+"X-Launchpad-Export-Date: 2012-06-27 22:12+0000\n"
 "X-Generator: Launchpad (build 15490)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -876,6 +876,15 @@ msgid ""
 "required to finish by the excess energy height of the glider if its true "
 "airspeed is greater than the MacCready and best L/D speeds."
 msgstr ""
+"Erforderliche Gleitzahl um die Aufgabe zu beenden; berechnet aus der "
+"verbleibenden Strecke geteilt durch die benötigte Höhe, um auf "
+"Sicherheitshöhe anzukommen. Bei negative Werten ist ein Steigflug zum "
+"Beenden notwendig. Für Vertikalgeschwindigkeit nahe Null wird '---' "
+"angezeigt.\r\n"
+"Beachte, dass diese Berechnung optimistisch sein kann, da sie die "
+"erforderliche Endanflughöhe um die überschüssige Höhenenergie des "
+"Segelflugzeugs reduziert, wenn seine wahre Geschwindigkeit größer ist als "
+"die MacCready- und beste L/D-Geschwindigkeit."
 
 #: src/InfoBoxes/Content/Factory.cpp:280
 #, no-c-format
@@ -1222,6 +1231,15 @@ msgid ""
 "height of the glider if its true airspeed is greater than the MacCready and "
 "best L/D speeds."
 msgstr ""
+"Die erforderliche Gleitzahl über Grund um den nächsten Wegpunkt zu "
+"erreichen,  errechnet aus der Distanz zum nächsten Wegpunkt geteilt durch "
+"die erforderliche Höhe, um diesen auf Sicherheitshöhe zu erreichen. Negative "
+"Werte bedeuten, dass ein Steigen nötig ist, um den Wegpunkt zu erreichen. "
+"Wenn die erforderliche Höhe nahe bei Null ist, wird '---' angezeigt.\r\n"
+"Beachte, dass die Berechnung optimistisch sein könnte, da sie die zum "
+"Wegpunkt erforderliche Höhe um die überschüssige Höhenenergie des "
+"Segelflugzeugs reduziert, wenn die wahre Geschwindigkeit größer ist, als die "
+"MacCready- und die Geschwindigkeit des besten Gleiten."
 
 #: src/InfoBoxes/Content/Factory.cpp:470
 #, no-c-format
@@ -1742,7 +1760,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
 msgid "Alternate 1"
-msgstr ""
+msgstr "Alternative 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:755
 #, no-c-format
@@ -1758,7 +1776,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:764
 #, no-c-format
 msgid "Alternate 2"
-msgstr ""
+msgstr "Alternative 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:765
 #, no-c-format
@@ -2261,6 +2279,9 @@ msgid ""
 "subtracting GPS ground speed from the TAS if airspeed is available from "
 "external device."
 msgstr ""
+"Die aktuelle Gegenwindkomponente. Der vereinfachte Gegenwind wir als "
+"Differenz aus TAS (falls verfügbar) und der GPS Geschwindigkeit über Grund "
+"berechnet."
 
 #: src/InfoBoxes/Content/Factory.cpp:1052
 #, no-c-format
@@ -9440,12 +9461,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "#FF00CB"
-#~ msgstr "#FF00CB"
-
-#~ msgid "#74FF00"
-#~ msgstr "#74FF00"
-
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
 
@@ -11777,3 +11792,9 @@ msgstr ""
 
 #~ msgid "delta T"
 #~ msgstr "Zeit drüber"
+
+#~ msgid "#FF00CB"
+#~ msgstr "#FF00CB"
+
+#~ msgid "#74FF00"
+#~ msgstr "#74FF00"
