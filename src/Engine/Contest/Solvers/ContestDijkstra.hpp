@@ -102,8 +102,6 @@ protected:
   /** Weightings applied to each leg distance */
   unsigned stage_weights[MAX_STAGES];
 
-  ContestTraceVector best_solution;
-
 public:
   /**
    * Constructor
@@ -213,7 +211,6 @@ protected:
   /* protected virtual methods from AbstractContest */
   virtual ContestResult CalculateResult() const;
   virtual void CopySolution(ContestTraceVector &vec) const;
-  virtual bool SaveSolution();
 
 protected:
   /* virtual methods from NavDijkstra */

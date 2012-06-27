@@ -35,7 +35,6 @@ class TracePoint;
  *
  */
 class AbstractContest {
-private:
   unsigned handicap;
   const unsigned finish_alt_diff;
   ContestResult best_result;
@@ -151,7 +150,7 @@ protected:
    *
    * @return true if #best_result was updated
    */
-  virtual bool SaveSolution();
+  bool SaveSolution();
 
   /**
    * Apply handicap.

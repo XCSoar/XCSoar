@@ -299,20 +299,13 @@ OLCTriangle::UpdateScore()
   return false;
 }
 
-bool
-OLCTriangle::SaveSolution()
+void
+OLCTriangle::CopySolution(ContestTraceVector &result) const
 {
   assert(num_stages <= MAX_STAGES);
   assert(solution_valid);
 
-  if (AbstractContest::SaveSolution()) {
-    best_solution.clear();
-
-    for (int i = 3; i >= 0; --i)
-      best_solution.append(GetPoint(solution[i]));
-
-    return true;
-  }
-
-  return false;
+  result.clear();
+  for (int i = 3; i >= 0; --i)
+    result.append(GetPoint(solution[i]));
 }

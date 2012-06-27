@@ -29,21 +29,10 @@ OLCLeague::OLCLeague(const Trace &_trace)
   Reset();
 }
 
-bool
-OLCLeague::SaveSolution()
-{
-  if (AbstractContest::SaveSolution()) {
-    best_solution = solution;
-    return true;
-  }
-  return false;
-}
-
 void
 OLCLeague::Reset()
 {
   AbstractContest::Reset();
-  best_solution.clear();
   solution.clear();
   solution_classic.clear();
   for (unsigned i=0; i<5; ++i) {
@@ -95,7 +84,7 @@ OLCLeague::Solve(bool exhaustive)
 void
 OLCLeague::CopySolution(ContestTraceVector &vec) const
 {
-  vec = best_solution;
+  vec = solution;
 }
 
 ContestResult

@@ -37,7 +37,6 @@ class OLCLeague : public AbstractContest
 
   ContestTraceVector solution_classic;
 
-  ContestTraceVector best_solution;
   ContestTraceVector solution;
 
 public:
@@ -55,10 +54,6 @@ public:
   virtual void Reset();
   virtual SolverResult Solve(bool exhaustive);
   virtual void CopySolution(ContestTraceVector &vec) const;
-
-protected:
-  /* virtual methods from class AbstractContest */
-  virtual bool SaveSolution();
 };
 
 #endif

@@ -55,7 +55,7 @@ protected:
   /* virtual methods from AbstractContest */
   virtual bool UpdateScore();
   virtual ContestResult CalculateResult() const;
-  virtual bool SaveSolution();
+  virtual void CopySolution(ContestTraceVector &vec) const;
 
   /* virtual methods from NavDijkstra */
   virtual void AddEdges(ScanTaskPoint curNode);
