@@ -127,44 +127,34 @@ OnTargetClicked(gcc_unused WndButton &Sender)
   dlgTargetShowModal();
 }
 
-static void
-OnMacCreadyData(DataField *Sender, DataField::DataAccessMode Mode)
+void
+TaskCalculatorPanel::OnModified(DataField &df)
 {
-  DataFieldFloat *df = (DataFieldFloat *)Sender;
-
-  fixed MACCREADY;
-  switch (Mode) {
-  case DataField::daSpecial:
-    if (positive(XCSoarInterface::Calculated().time_climb)) {
-      MACCREADY = XCSoarInterface::Calculated().total_height_gain /
-                  XCSoarInterface::Calculated().time_climb;
-      df->Set(Units::ToUserVSpeed(MACCREADY));
-      ActionInterface::SetManualMacCready(MACCREADY);
-      instance->Refresh();
-    }
-    break;
-  case DataField::daChange:
-    MACCREADY = Units::ToSysVSpeed(df->GetAsFixed());
-    ActionInterface::SetManualMacCready(MACCREADY);
-    instance->Refresh();
-    break;
+  if (IsDataField(MC, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    fixed mc = Units::ToSysVSpeed(dff.GetAsFixed());
+    ActionInterface::SetManualMacCready(mc);
+    Refresh();
+  } else if (IsDataField(CRUISE_EFFICIENCY, df)) {
+    const DataFieldFloat &dff = (const DataFieldFloat &)df;
+    SetCruiseEfficiency(dff.GetAsFixed() / 100);
   }
 }
 
-static void
-OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessMode Mode)
+void
+TaskCalculatorPanel::OnSpecial(DataField &df)
 {
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
-  fixed clast = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetCruiseEfficiency();
-  (void)clast; // unused for now
-
-  switch (Mode) {
-  case DataField::daSpecial:
-    instance->GetCruiseEfficiency();
-    break;
-  case DataField::daChange:
-    instance->SetCruiseEfficiency(df.GetAsFixed() / 100);
-    break;
+  if (IsDataField(MC, df)) {
+    const DerivedInfo &calculated = CommonInterface::Calculated();
+    if (positive(calculated.time_climb)) {
+      fixed mc = calculated.total_height_gain / calculated.time_climb;
+      DataFieldFloat &dff = (DataFieldFloat &)df;
+      dff.Set(Units::ToUserVSpeed(mc));
+      ActionInterface::SetManualMacCready(mc);
+      Refresh();
+    }
+  } else if (IsDataField(CRUISE_EFFICIENCY, df)) {
+    GetCruiseEfficiency();
   }
 }
 
@@ -222,7 +212,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _T("%.1f %s"), _T("%.1f"),
            fixed_zero, Units::ToUserVSpeed(fixed(5)),
            GetUserVerticalSpeedStep(), false, fixed_zero,
-           OnMacCreadyData);
+           this);
   DataFieldFloat &mc_df = (DataFieldFloat &)GetDataField(MC);
   mc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
@@ -245,7 +235,7 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _("Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started."),
            _T("%.0f %%"), _T("%.0f"),
            fixed_zero, fixed(100), fixed_one, false, fixed_zero,
-           OnCruiseEfficiencyData);
+           this);
 }
 
 void
