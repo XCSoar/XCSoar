@@ -50,7 +50,7 @@ FlyingComputer::Check(FlyingState &state, fixed time, const GeoPoint &location)
 
       state.flying = true;
       state.takeoff_time = moving_since;
-      state.takeoff_location = location;
+      state.takeoff_location = moving_at;
       state.flight_time = fixed_zero;
     }
   } else {
@@ -77,8 +77,10 @@ FlyingComputer::Moving(FlyingState &state, fixed time,
   if (time_in_flight < 60)
     time_in_flight++;
 
-  if (negative(moving_since))
+  if (negative(moving_since)) {
     moving_since = time;
+    moving_at = location;
+  }
 
   // We are moving so we are certainly not on the ground
   time_on_ground = 0;

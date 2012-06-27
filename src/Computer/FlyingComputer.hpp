@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_FLYING_COMPUTER_HPP
 
 #include "Math/fixed.hpp"
+#include "Geo/GeoPoint.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;
-struct GeoPoint;
 struct AircraftState;
 struct FlyingState;
 
@@ -46,6 +46,13 @@ class FlyingComputer {
    * amount of time.
    */
   fixed moving_since;
+
+  /**
+   * If the aircraft is currently assumed to be moving, then this
+   * denotes the location when moving started initially.  This
+   * attribute is only valid if #moving_since is non-negative.
+   */
+  GeoPoint moving_at;
 
 public:
   void Reset();
