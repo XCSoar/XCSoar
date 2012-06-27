@@ -82,48 +82,44 @@ DataNode::GetAttribute(const TCHAR *name, Angle &value) const
 bool
 DataNode::GetAttribute(const TCHAR *name, fixed &value) const
 {
-  tstring val;
-  if (GetAttribute(name, val)) {
-    value = (fixed)_tcstod(val.c_str(), NULL);
-    return true;
-  } else {
+  const TCHAR *val = GetAttribute(name);
+  if (val == NULL)
     return false;
-  }
+
+  value = (fixed)_tcstod(val, NULL);
+  return true;
 }
 
 bool
 DataNode::GetAttribute(const TCHAR *name, int &value) const
 {
-  tstring val;
-  if (GetAttribute(name, val)) {
-    value = ParseInt(val.c_str());
-    return true;
-  } else {
+  const TCHAR *val = GetAttribute(name);
+  if (val == NULL)
     return false;
-  }
+
+  value = ParseInt(val);
+  return true;
 }
 
 bool
 DataNode::GetAttribute(const TCHAR *name, unsigned &value) const
 {
-  tstring val;
-  if (GetAttribute(name, val)) {
-    value = ParseInt(val.c_str());
-    return true;
-  } else {
+  const TCHAR *val = GetAttribute(name);
+  if (val == NULL)
     return false;
-  }
+
+  value = ParseInt(val);
+  return true;
 }
 
 bool
 DataNode::GetAttribute(const TCHAR *name, bool &value) const
 {
-  tstring val;
-  if (GetAttribute(name, val)) {
-    value = (ParseInt(val.c_str()) > 0);
-    return true;
-  } else {
+  const TCHAR *val = GetAttribute(name);
+  if (val == NULL)
     return false;
-  }
+
+  value = ParseInt(val) > 0;
+  return true;
 }
 

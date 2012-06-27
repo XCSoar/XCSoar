@@ -23,12 +23,13 @@
 #ifndef DATANODE_HPP
 #define DATANODE_HPP
 
-#include "Util/tstring.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Util/NonCopyable.hpp"
 
 #include <list>
+
+#include <tchar.h>
 
 class TextWriter;
 
@@ -135,11 +136,10 @@ public:
    * Retrieve named attribute value
    *
    * @param name Name of attribute
-   * @param value Value (written)
    *
-   * @return True if attribute exists
+   * @return the value or NULL if it does not exist
    */
-  virtual bool GetAttribute(const TCHAR *name, tstring &value) const = 0;
+  virtual const TCHAR *GetAttribute(const TCHAR *name) const = 0;
 
   /**
    * Retrieve named attribute value, with numeric conversion

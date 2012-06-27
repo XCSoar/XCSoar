@@ -44,11 +44,9 @@
 void
 Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
 {
-  tstring type;
-  if (!node.GetAttribute(_T("type"), type)) {
-    assert(1);
+  const TCHAR *type = node.GetAttribute(_T("type"));
+  if (type == NULL)
     return;
-  }
 
   std::unique_ptr<DataNode> wp_node(node.GetChildNamed(_T("Waypoint")));
   if (!wp_node)
@@ -67,32 +65,32 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
   std::unique_ptr<OrderedTaskPoint> pt;
 
   if (oz_node) {
-    bool is_turnpoint = StringIsEqual(type.c_str(), _T("Turn")) ||
-                        StringIsEqual(type.c_str(), _T("Area"));
+    bool is_turnpoint = StringIsEqual(type, _T("Turn")) ||
+      StringIsEqual(type, _T("Area"));
 
     Deserialiser oser(*oz_node, waypoints);
     oz = oser.DeserialiseOZ(*wp, is_turnpoint);
   }
 
-  if (StringIsEqual(type.c_str(), _T("Start"))) {
+  if (StringIsEqual(type, _T("Start"))) {
     pt.reset((oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
 
-  } else if (StringIsEqual(type.c_str(), _T("OptionalStart"))) {
+  } else if (StringIsEqual(type, _T("OptionalStart"))) {
     pt.reset((oz != NULL) ? fact.CreateStart(oz, *wp) : fact.CreateStart(*wp));
     fact.AppendOptionalStart(*pt);
 
     // don't let generic code below add it
     pt.reset();
 
-  } else if (StringIsEqual(type.c_str(), _T("Turn"))) {
+  } else if (StringIsEqual(type, _T("Turn"))) {
     pt.reset((oz != NULL) ? fact.CreateASTPoint(oz, *wp)
                           : fact.CreateIntermediate(*wp));
 
-  } else if (StringIsEqual(type.c_str(), _T("Area"))) {
+  } else if (StringIsEqual(type, _T("Area"))) {
     pt.reset((oz != NULL) ? fact.CreateAATPoint(oz, *wp)
                           : fact.CreateIntermediate(*wp));
 
-  } else if (StringIsEqual(type.c_str(), _T("Finish"))) {
+  } else if (StringIsEqual(type, _T("Finish"))) {
     pt.reset((oz != NULL) ? fact.CreateFinish(oz, *wp) : fact.CreateFinish(*wp));
   } 
 
@@ -103,13 +101,11 @@ Deserialiser::DeserialiseTaskpoint(OrderedTask &data)
 ObservationZonePoint*
 Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
 {
-  tstring type;
-  if (!node.GetAttribute(_T("type"), type)) {
-    assert(1);
+  const TCHAR *type = node.GetAttribute(_T("type"));
+  if (type == NULL)
     return NULL;
-  }
 
-  if (StringIsEqual(type.c_str(), _T("Line"))) {
+  if (StringIsEqual(type, _T("Line"))) {
     LineSectorZone *ls = new LineSectorZone(wp.location);
 
     fixed length;
@@ -117,7 +113,7 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
       ls->SetLength(length);
 
     return ls;
-  } else if (StringIsEqual(type.c_str(), _T("Cylinder"))) {
+  } else if (StringIsEqual(type, _T("Cylinder"))) {
     CylinderZone *ls = new CylinderZone(wp.location);
 
     fixed radius;
@@ -125,7 +121,7 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
       ls->SetRadius(radius);
 
     return ls;
-  } else if (StringIsEqual(type.c_str(), _T("Sector"))) {
+  } else if (StringIsEqual(type, _T("Sector"))) {
 
     fixed radius, inner_radius;
     Angle start, end;
@@ -146,15 +142,15 @@ Deserialiser::DeserialiseOZ(const Waypoint &wp, bool is_turnpoint)
       ls->SetEndRadial(end);
 
     return ls;
-  } else if (StringIsEqual(type.c_str(), _T("FAISector")))
+  } else if (StringIsEqual(type, _T("FAISector")))
     return new FAISectorZone(wp.location, is_turnpoint);
-  else if (StringIsEqual(type.c_str(), _T("Keyhole")))
+  else if (StringIsEqual(type, _T("Keyhole")))
     return new KeyholeZone(wp.location);
-  else if (StringIsEqual(type.c_str(), _T("BGAStartSector")))
+  else if (StringIsEqual(type, _T("BGAStartSector")))
     return new BGAStartSectorZone(wp.location);
-  else if (StringIsEqual(type.c_str(), _T("BGAFixedCourse")))
+  else if (StringIsEqual(type, _T("BGAFixedCourse")))
     return new BGAFixedCourseZone(wp.location);
-  else if (StringIsEqual(type.c_str(), _T("BGAEnhancedOption")))
+  else if (StringIsEqual(type, _T("BGAEnhancedOption")))
     return new BGAEnhancedOptionZone(wp.location);
 
   assert(1);
@@ -179,8 +175,8 @@ Deserialiser::DeserialiseWaypoint()
   Deserialiser lser(*loc_node, waypoints);
   lser.Deserialise(loc);
 
-  tstring name;
-  if (!node.GetAttribute(_T("name"), name))
+  const TCHAR *name = node.GetAttribute(_T("name"));
+  if (name == NULL)
     // Turnpoints need names
     return NULL;
 
@@ -207,8 +203,13 @@ Deserialiser::DeserialiseWaypoint()
   // Create a new waypoint from the original one
   Waypoint *wp = new Waypoint(loc);
   wp->name = name;
+
   node.GetAttribute(_T("id"), wp->id);
-  node.GetAttribute(_T("comment"), wp->comment);
+
+  const TCHAR *comment = node.GetAttribute(_T("comment"));
+  if (comment != NULL)
+    wp->comment.assign(comment);
+
   node.GetAttribute(_T("altitude"), wp->elevation);
 
   return wp;
@@ -248,9 +249,8 @@ Deserialiser::Deserialise(OrderedTask &task)
 HeightReferenceType
 Deserialiser::GetHeightRef(const TCHAR *nodename) const
 {
-  tstring type;
-  if (node.GetAttribute(nodename, type) &&
-      StringIsEqual(type.c_str(), _T("MSL")))
+  const TCHAR *type = node.GetAttribute(nodename);
+  if (type != NULL && StringIsEqual(type, _T("MSL")))
     return HeightReferenceType::MSL;
 
   return HeightReferenceType::AGL;
@@ -259,27 +259,25 @@ Deserialiser::GetHeightRef(const TCHAR *nodename) const
 TaskFactoryType
 Deserialiser::GetTaskFactoryType() const
 {
-  tstring type;
-  if (!node.GetAttribute(_T("type"),type)) {
-    assert(1);
+  const TCHAR *type = node.GetAttribute(_T("type"));
+  if (type == NULL)
     return TaskFactoryType::FAI_GENERAL;
-  }
 
-  if (StringIsEqual(type.c_str(), _T("FAIGeneral")))
+  if (StringIsEqual(type, _T("FAIGeneral")))
     return TaskFactoryType::FAI_GENERAL;
-  else if (StringIsEqual(type.c_str(), _T("FAITriangle")))
+  else if (StringIsEqual(type, _T("FAITriangle")))
     return TaskFactoryType::FAI_TRIANGLE;
-  else if (StringIsEqual(type.c_str(), _T("FAIOR")))
+  else if (StringIsEqual(type, _T("FAIOR")))
     return TaskFactoryType::FAI_OR;
-  else if (StringIsEqual(type.c_str(), _T("FAIGoal")))
+  else if (StringIsEqual(type, _T("FAIGoal")))
     return TaskFactoryType::FAI_GOAL;
-  else if (StringIsEqual(type.c_str(), _T("RT")))
+  else if (StringIsEqual(type, _T("RT")))
     return TaskFactoryType::RACING;
-  else if (StringIsEqual(type.c_str(), _T("AAT")))
+  else if (StringIsEqual(type, _T("AAT")))
     return TaskFactoryType::AAT;
-  else if (StringIsEqual(type.c_str(), _T("Mixed")))
+  else if (StringIsEqual(type, _T("Mixed")))
     return TaskFactoryType::MIXED;
-  else if (StringIsEqual(type.c_str(), _T("Touring")))
+  else if (StringIsEqual(type, _T("Touring")))
     return TaskFactoryType::TOURING;
 
   assert(1);

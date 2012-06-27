@@ -93,7 +93,7 @@ public:
   virtual List ListChildrenNamed(const TCHAR *name) const;
   virtual void Serialise(TextWriter &writer) const;
   virtual void SetAttribute(const TCHAR *name, const TCHAR *value);
-  virtual bool GetAttribute(const TCHAR *name, tstring &value) const;
+  virtual const TCHAR *GetAttribute(const TCHAR *name) const;
 };
 
 #endif

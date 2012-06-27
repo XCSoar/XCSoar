@@ -89,15 +89,10 @@ DataNodeXML::SetAttribute(const TCHAR *name, const TCHAR *value)
   node.AddAttribute(name, value);
 }
 
-bool
-DataNodeXML::GetAttribute(const TCHAR *name, tstring &value) const
+const TCHAR *
+DataNodeXML::GetAttribute(const TCHAR *name) const
 {
-  const TCHAR *v = node.GetAttribute(name);
-  if (v == NULL)
-    return false;
-
-  value.assign(v);
-  return true;
+  return node.GetAttribute(name);
 }
 
 bool
