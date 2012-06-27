@@ -1,6 +1,10 @@
 ifeq ($(CLANG),y)
+
+ifneq ($(ANALYZER),y)
 CXX = clang++
 CC = clang
+endif
+
 DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
 HOSTCC = $(CC)

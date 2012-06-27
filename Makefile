@@ -31,6 +31,8 @@
 #
 #   CLANG       "y" to use clang instead of gcc
 #
+#   ANALYZER    "y" to support the clang analyzer
+#
 #   LLVM        "y" to compile LLVM bitcode with clang
 #
 #   LIBCXX      The absolute path of the libc++ svn/git working directory.

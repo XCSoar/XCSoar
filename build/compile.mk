@@ -7,8 +7,10 @@ endif
 
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPREFIX)ar$(EXE)
+ifneq ($(ANALYZER),y)
 CXX = $(TCPREFIX)g++$(TCSUFFIX)$(EXE)
 CC = $(TCPREFIX)gcc$(TCSUFFIX)$(EXE)
+endif
 DLLTOOL = $(TCPREFIX)dlltool$(EXE)
 SIZE = $(TCPREFIX)size$(EXE)
 STRIP = $(TCPREFIX)strip$(EXE)
