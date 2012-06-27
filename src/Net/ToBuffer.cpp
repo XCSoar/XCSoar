@@ -31,7 +31,7 @@ Copyright_License {
 #ifdef HAVE_NET
 
 int
-Net::DownloadToBuffer(Session &session, const TCHAR *url,
+Net::DownloadToBuffer(Session &session, const char *url,
                       void *_buffer, size_t max_length,
                       OperationEnvironment &env)
 {

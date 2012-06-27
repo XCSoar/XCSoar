@@ -24,6 +24,7 @@ Copyright_License {
 #include "Net/Request.hpp"
 #include "Net/Session.hpp"
 #include "Net/Connection.hpp"
+#include "Util/ConvertString.hpp"
 
 #include <assert.h>
 #include <stdint.h>
@@ -41,13 +42,18 @@ RequestCallback(HINTERNET hInternet,
                     lpvStatusInformation, dwStatusInformationLength);
 }
 
-Net::Request::Request(Session &session, const TCHAR *url,
+Net::Request::Request(Session &session, const char *url,
                       unsigned long timeout)
   :last_error(ERROR_SUCCESS)
 {
   INTERNET_STATUS_CALLBACK old_callback =
     session.handle.SetStatusCallback(RequestCallback);
-  HINTERNET h = session.handle.OpenUrl(url, NULL, 0,
+
+  UTF8ToWideConverter url2(url);
+  if (!url2.IsValid())
+    return;
+
+  HINTERNET h = session.handle.OpenUrl(url2, NULL, 0,
                                        INTERNET_FLAG_NO_AUTH |
                                        INTERNET_FLAG_NO_AUTO_REDIRECT |
                                        INTERNET_FLAG_NO_CACHE_WRITE |

@@ -35,7 +35,7 @@ Copyright_License {
 #include <stdio.h>
 
 static bool
-DownloadToFile(Net::Session &session, const TCHAR *url, FILE *file,
+DownloadToFile(Net::Session &session, const char *url, FILE *file,
                char *md5_digest,
                OperationEnvironment &env)
 {
@@ -75,7 +75,7 @@ DownloadToFile(Net::Session &session, const TCHAR *url, FILE *file,
 }
 
 bool
-Net::DownloadToFile(Session &session, const TCHAR *url, const TCHAR *path,
+Net::DownloadToFile(Session &session, const char *url, const TCHAR *path,
                     char *md5_digest,
                     OperationEnvironment &env)
 {

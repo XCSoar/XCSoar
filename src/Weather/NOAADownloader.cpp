@@ -155,7 +155,6 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   char url[256] = "http://weather.noaa.gov/pub/data/observations/metar/decoded/";
   strcat(url, code);
   strcat(url, ".TXT");
-  PathName path(url);
 
   // Open download session
   Net::Session session;
@@ -164,7 +163,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 
   // Request the file
   char buffer[4096];
-  Net::DownloadToBufferJob job(session, path, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
   if (!runner.Run(job) || job.GetLength() < 0)
     return false;
 
@@ -251,7 +250,6 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
   char url[256] = "http://weather.noaa.gov/pub/data/forecasts/taf/stations/";
   strcat(url, code);
   strcat(url, ".TXT");
-  PathName path(url);
 
   // Open download session
   Net::Session session;
@@ -260,7 +258,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf,
 
   // Request the file
   char buffer[4096];
-  Net::DownloadToBufferJob job(session, path, buffer, sizeof(buffer) - 1);
+  Net::DownloadToBufferJob job(session, url, buffer, sizeof(buffer) - 1);
   if (!runner.Run(job) || job.GetLength() < 0)
     return false;
 

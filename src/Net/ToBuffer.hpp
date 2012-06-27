@@ -26,8 +26,8 @@ Copyright_License {
 
 #include "Job/Job.hpp"
 
-#include <tchar.h>
 #include <stdint.h>
+#include <stddef.h>
 
 class OperationEnvironment;
 
@@ -40,19 +40,19 @@ namespace Net {
    *
    * @return the number of bytes written, or -1 on error
    */
-  int DownloadToBuffer(Session &session, const TCHAR *url,
+  int DownloadToBuffer(Session &session, const char *url,
                        void *buffer, size_t max_length,
                        OperationEnvironment &env);
 
   class DownloadToBufferJob : public Job {
     Session &session;
-    const TCHAR *url;
+    const char *url;
     void *buffer;
     size_t max_length;
     int length;
 
   public:
-    DownloadToBufferJob(Session &_session, const TCHAR *_url,
+    DownloadToBufferJob(Session &_session, const char *_url,
                         void *_buffer, size_t _max_length)
       :session(_session), url(_url),
        buffer(_buffer), max_length(_max_length),

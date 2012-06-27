@@ -102,7 +102,7 @@ namespace LiveTrack24
   /** Sends the "start of track" packet to the tracking server */
   bool StartTracking(SessionID session, const TCHAR *username,
                      const TCHAR *password, unsigned tracking_interval,
-                     VehicleType vtype, const TCHAR *vname = NULL);
+                     VehicleType vtype, const char *vname = NULL);
 
   /**
    * Sends a "gps point" packet to the tracking server

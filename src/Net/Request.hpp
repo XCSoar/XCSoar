@@ -42,7 +42,7 @@ Copyright_License {
 #include <jni.h>
 #endif
 
-#include <tchar.h>
+#include <stddef.h>
 
 namespace Net {
   class Session;
@@ -89,7 +89,7 @@ namespace Net {
      * @param url the absolute URL of the request
      * @param timeout Timeout used for creating this request
      */
-    Request(Session &session, const TCHAR *url,
+    Request(Session &session, const char *url,
             unsigned long timeout = INFINITE);
 
 #ifdef HAVE_WININET

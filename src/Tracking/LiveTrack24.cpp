@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "LiveTrack24.hpp"
-
 #include "Util/StringUtil.hpp"
+#include "Util/ConvertString.hpp"
 #include "Net/Session.hpp"
 #include "Net/Request.hpp"
 #include "Net/ToBuffer.hpp"
@@ -38,10 +38,10 @@ Copyright_License {
 
 namespace LiveTrack24
 {
-  StaticString<256> server;
+  NarrowString<256> server;
 
-  static const TCHAR *GetServer();
-  static bool SendRequest(const TCHAR *url);
+  static const char *GetServer();
+  static bool SendRequest(const char *url);
 }
 
 LiveTrack24::UserID
@@ -54,9 +54,14 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password)
   assert(password != NULL);
   assert(!StringIsEmpty(password));
 
-  StaticString<1024> url;
-  url.Format(_T("http://%s/client.php?op=login&user=%s&pass=%s"),
-             GetServer(), username, password);
+  const WideToUTF8Converter username2(username);
+  const WideToUTF8Converter password2(password);
+  if (!username2.IsValid() || !password2.IsValid())
+    return 0;
+
+  NarrowString<1024> url;
+  url.Format("http://%s/client.php?op=login&user=%s&pass=%s",
+             GetServer(), (const char *)username2, (const char *)password);
 
   // Open download session
   Net::Session session;
@@ -99,19 +104,30 @@ LiveTrack24::GenerateSessionID(UserID user_id)
 bool
 LiveTrack24::StartTracking(SessionID session, const TCHAR *username,
                            const TCHAR *password, unsigned tracking_interval,
-                           VehicleType vtype, const TCHAR *vname)
+                           VehicleType vtype, const char *vname)
 {
   // http://www.livetrack24.com/track.php?leolive=2&sid=42664778&pid=1&
   //   client=YourProgramName&v=1&user=yourusername&pass=yourpass&
   //   phone=Nokia 2600c&gps=BT GPS&trk1=4&vtype=16388&
   //   vname=vehicle name and model
 
+  const WideToUTF8Converter username2(username);
+  const WideToUTF8Converter password2(password);
+  if (!username2.IsValid() || !password2.IsValid())
+    return 0;
 
-  StaticString<2048> url;
-  url.Format(_T("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
-                "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s"),
-             GetServer(), session, 1, _T("XCSoar"), XCSoar_VersionLong,
-             username, password, vtype, vname);
+#ifdef _UNICODE
+  NarrowString<32> version;
+  version.SetASCII(XCSoar_VersionLong);
+#else
+  const char *version = XCSoar_VersionLong;
+#endif
+
+  NarrowString<2048> url;
+  url.Format("http://%s/track.php?leolive=2&sid=%u&pid=%u&"
+             "client=%s&v=%s&user=%s&pass=%s&vtype=%u&vname=%s",
+             GetServer(), session, 1, "XCSoar", version,
+             (const char *)username2, (const char *)password, vtype, vname);
 
   return SendRequest(url);
 }
@@ -125,9 +141,9 @@ LiveTrack24::SendPosition(SessionID session, unsigned packet_id,
   // http://www.livetrack24.com/track.php?leolive=4&sid=42664778&pid=321&
   //   lat=22.3&lon=40.2&alt=23&sog=40&cog=160&tm=1241422845
 
-  StaticString<2048> url;
-  url.Format(_T("http://%s/track.php?leolive=4&sid=%u&pid=%u&"
-                "lat=%f&lon=%f&alt=%d&sog=%d&cog=%d&tm=%lld"),
+  NarrowString<2048> url;
+  url.Format("http://%s/track.php?leolive=4&sid=%u&pid=%u&"
+             "lat=%f&lon=%f&alt=%d&sog=%d&cog=%d&tm=%lld",
              GetServer(), session, packet_id,
              (double)position.latitude.Degrees(),
              (double)position.longitude.Degrees(),
@@ -143,8 +159,8 @@ LiveTrack24::EndTracking(SessionID session, unsigned packet_id)
 {
   // http://www.livetrack24.com/track.php?leolive=3&sid=42664778&pid=453&prid=0
 
-  StaticString<1024> url;
-  url.Format(_T("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0"),
+  NarrowString<1024> url;
+  url.Format("http://%s/track.php?leolive=3&sid=%u&pid=%u&prid=0",
              GetServer(), session, packet_id);
 
   return SendRequest(url);
@@ -153,17 +169,17 @@ LiveTrack24::EndTracking(SessionID session, unsigned packet_id)
 void
 LiveTrack24::SetServer(const TCHAR * _server)
 {
-  server = _server;
+  server.SetASCII(_server);
 }
 
-const TCHAR *
+const char *
 LiveTrack24::GetServer()
 {
   return server;
 }
 
 bool
-LiveTrack24::SendRequest(const TCHAR *url)
+LiveTrack24::SendRequest(const char *url)
 {
   // Open download session
   Net::Session session;

@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 {
 #ifdef HAVE_NET
   Args args(argc, argv, "URL PATH");
-  tstring url = args.ExpectNextT();
+  const char *url = args.ExpectNext();
   tstring path = args.ExpectNextT();
   args.ExpectEnd();
 
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   ConsoleOperationEnvironment env;
 
   Net::Session session;
-  if (!Net::DownloadToFile(session, url.c_str(), path.c_str(),
+  if (!Net::DownloadToFile(session, url, path.c_str(),
                            md5_digest, env)) {
     fprintf(stderr, "Error\n");
     return EXIT_FAILURE;
