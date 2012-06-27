@@ -27,6 +27,9 @@ sub handle_start {
         my ($name, $value) = (shift, shift);
 
         if ($name eq 'Caption' or $name eq 'Help') {
+            # skip color buttons
+            next if $value =~ /^#[0-9a-fA-F]+$/i;
+
             next unless $value =~ /[a-zA-Z]/;
 
             die "Malformed attribute at $path:" . $expat->current_line . "\n  -> \"" . $value . "\"\n"
