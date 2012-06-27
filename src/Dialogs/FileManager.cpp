@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FileManager.hpp"
 #include "WidgetDialog.hpp"
+#include "ListPicker.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
@@ -33,19 +34,108 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Thread/Notify.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/PathName.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "DateTime.hpp"
 #include "Net/DownloadManager.hpp"
+#include "Util/ConvertString.hpp"
 
+#include <assert.h> /* for MAX_PATH */
 #include <windef.h> /* for MAX_PATH */
+
+struct RemoteFile {
+  const char *uri;
+
+  gcc_pure
+  const char *GetName() const {
+    assert(uri != NULL);
+    const char *slash = strrchr(uri, '/');
+    assert(slash != NULL);
+    assert(slash[1] != 0);
+    return slash + 1;
+  }
+
+  bool LocalPath(TCHAR *buffer) const {
+    const char *base_narrow = GetName();
+    ACPToWideConverter base(base_narrow);
+    if (!base.IsValid())
+      return false;
+
+    ::LocalPath(buffer, base);
+    return true;
+  }
+};
+
+/**
+ * List of downloadable files.
+ *
+ * TODO: make the list dynamic, not hard-coded.
+ */
+static gcc_constexpr_data RemoteFile remote_files[] = {
+  { "http://www.flarmnet.org/files/data.fln",
+  },
+  { "http://download.xcsoar.org/waypoints/France.cup",
+  },
+  { "http://download.xcsoar.org/waypoints/Germany.cup",
+  },
+  { "http://download.xcsoar.org/waypoints/Netherlands.cup",
+  },
+  { "http://download.xcsoar.org/waypoints/Poland.cup",
+  },
+  { "http://www.daec.de/fileadmin/user_upload/files/2012/service/luftraumdaten/120312OpenAir.txt",
+  },
+  { "http://download.xcsoar.org/maps/ALPS.xcm",
+  },
+  { "http://download.xcsoar.org/maps/FRA_FULL.xcm",
+  },
+  { "http://download.xcsoar.org/maps/GER.xcm",
+  },
+  { "http://download.xcsoar.org/maps/POL.xcm",
+  },
+  { NULL }
+};
+
+static gcc_constexpr_data size_t N_REMOTE_FILES = ARRAY_SIZE(remote_files) - 1;
+
+gcc_pure
+static int
+FindRemoteFile(const char *name)
+{
+  for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
+    const char *base = remote_files[i].GetName();
+    if (StringIsEqual(base, name))
+      return i;
+  }
+
+  return -1;
+}
+
+#ifdef _UNICODE
+gcc_pure
+static int
+FindRemoteFile(const TCHAR *name)
+{
+  WideToACPConverter name2(name);
+  if (!name2.IsValid())
+    return -1;
+
+  return FindRemoteFile(name2);
+}
+#endif
+
+struct DownloadItem {
+  StaticString<64u> name;
+};
 
 struct FileItem {
   StaticString<64u> name;
   StaticString<32u> size;
   StaticString<32u> last_modified;
 
-  void Set(const TCHAR *_name) {
+  bool downloading;
+
+  void Set(const TCHAR *_name, bool _downloading) {
     name = _name;
 
     TCHAR path[MAX_PATH];
@@ -65,6 +155,8 @@ struct FileItem {
       size.clear();
       last_modified.clear();
     }
+
+    downloading = _downloading;
   }
 };
 
@@ -73,22 +165,28 @@ class ManagedFileListWidget
     private Net::DownloadListener, private Notify {
   enum Buttons {
     DOWNLOAD,
+    ADD,
   };
 
   UPixelScalar font_height;
 
-  WndButton *download_button;
+  WndButton *download_button, *add_button;
 
-  StaticArray<FileItem, 64u> items;
+  bool downloads[N_REMOTE_FILES];
+  TrivialArray<FileItem, 64u> items;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
 
 protected:
+  gcc_pure
+  int FindItem(const TCHAR *name) const;
+
   void RefreshList();
   void UpdateButtons();
 
   void Download();
+  void Add();
 
 public:
   /* virtual methods from class Widget */
@@ -113,6 +211,8 @@ public:
 void
 ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  std::fill(downloads, downloads + ARRAY_SIZE(downloads), false);
+
   const DialogLook &look = UIGlobals::GetDialogLook();
   UPixelScalar margin = Layout::Scale(2);
   font_height = look.list.font->GetHeight();
@@ -139,13 +239,27 @@ ManagedFileListWidget::Unprepare()
   DeleteWindow();
 }
 
+int
+ManagedFileListWidget::FindItem(const TCHAR *name) const
+{
+  for (auto i = items.begin(), end = items.end(); i != end; ++i)
+    if (StringIsEqual(i->name, name))
+      return std::distance(items.begin(), i);
+
+  return -1;
+}
+
 void
 ManagedFileListWidget::RefreshList()
 {
   items.clear();
-  items.append().Set(_T("data.fln"));
-  items.append().Set(_T("GER.xcm"));
-  items.append().Set(_T("Germany.cup"));
+
+  for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
+    TCHAR path[MAX_PATH];
+    if (remote_files[i].LocalPath(path) &&
+        (downloads[i] || File::Exists(path)))
+      items.append().Set(BaseName(path), downloads[i]);
+  }
 
   ListControl &list = GetList();
   list.SetLength(items.size());
@@ -156,6 +270,7 @@ void
 ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
 {
   download_button = dialog.AddButton(_("Download"), this, DOWNLOAD);
+  add_button = dialog.AddButton(_("Add"), this, ADD);
 }
 
 void
@@ -164,7 +279,10 @@ ManagedFileListWidget::UpdateButtons()
   const unsigned current = GetList().GetCursorIndex();
 
   download_button->SetEnabled(Net::DownloadManager::IsAvailable() &&
-                              current == 0);
+                              !items.empty() &&
+                              FindRemoteFile(items[current].name) >= 0);
+  add_button->SetEnabled(Net::DownloadManager::IsAvailable() &&
+                         items.size() < N_REMOTE_FILES);
 }
 
 void
@@ -176,6 +294,13 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const UPixelScalar margin = Layout::Scale(2);
 
   canvas.text(rc.left + margin, rc.top + margin, file.name.c_str());
+
+  if (file.downloading) {
+    const TCHAR *text = _("Downloading");
+    UPixelScalar width = canvas.CalcTextWidth(text);
+    canvas.text(rc.right - width - margin, rc.top + margin, text);
+  }
+
   canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
               file.size.c_str());
 
@@ -196,8 +321,95 @@ ManagedFileListWidget::Download()
   if (!Net::DownloadManager::IsAvailable())
     return;
 
-  Net::DownloadManager::Enqueue("http://www.flarmnet.org/files/data.fln",
-                                _T("data.fln"));
+  if (items.empty())
+    return;
+
+  const unsigned current = GetList().GetCursorIndex();
+  assert(current < items.size());
+
+  const FileItem &item = items[current];
+  const int remote_index = FindRemoteFile(item.name);
+  if (remote_index < 0)
+    return;
+
+  const RemoteFile &remote_file = remote_files[remote_index];
+  ACPToWideConverter base(remote_file.GetName());
+  if (!base.IsValid())
+    return;
+
+  Net::DownloadManager::Enqueue(remote_file.uri, base);
+
+  downloads[remote_index] = true;
+  RefreshList();
+#endif
+}
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+
+static TrivialArray<unsigned, N_REMOTE_FILES> add_list;
+
+static void
+OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
+{
+  assert(i < add_list.size());
+  assert(add_list[i] < N_REMOTE_FILES);
+
+  const RemoteFile &file = remote_files[add_list[i]];
+
+  ACPToWideConverter name(file.GetName());
+  if (name.IsValid())
+    canvas.text(rc.left + Layout::Scale(2), rc.top + Layout::Scale(2), name);
+}
+
+#endif
+
+void
+ManagedFileListWidget::Add()
+{
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (!Net::DownloadManager::IsAvailable())
+    return;
+
+  if (items.empty())
+    return;
+
+  add_list.clear();
+  for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
+    if (downloads[i])
+      /* already downloading this file */
+      continue;
+
+    ACPToWideConverter name(remote_files[i].GetName());
+    if (!name.IsValid())
+      continue;
+
+    if (FindItem(name) < 0)
+      add_list.append(i);
+  }
+
+  if (add_list.empty())
+    return;
+
+  int i = ListPicker(UIGlobals::GetMainWindow(), _("Select a file"),
+                     add_list.size(), 0, Layout::FastScale(18),
+                     OnPaintAddItem);
+  if (i < 0)
+    return;
+
+  const unsigned remote_index = add_list[i];
+
+  assert((unsigned)i < add_list.size());
+  assert(remote_index < N_REMOTE_FILES);
+
+  const RemoteFile &remote_file = remote_files[remote_index];
+  ACPToWideConverter base(remote_file.GetName());
+  if (!base.IsValid())
+    return;
+
+  Net::DownloadManager::Enqueue(remote_file.uri, base);
+
+  downloads[remote_index] = true;
+  RefreshList();
 #endif
 }
 
@@ -208,6 +420,10 @@ ManagedFileListWidget::OnAction(int id)
   case DOWNLOAD:
     Download();
     break;
+
+  case ADD:
+    Add();
+    break;
   }
 }
 
@@ -215,6 +431,13 @@ void
 ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
                                           bool success)
 {
+  const TCHAR *name = BaseName(path_relative);
+  if (name != NULL) {
+    const int remote_index = FindRemoteFile(name);
+    if (remote_index >= 0)
+      downloads[remote_index] = false;
+  }
+
   SendNotification();
 }
 
