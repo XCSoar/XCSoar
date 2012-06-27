@@ -131,6 +131,16 @@ protected:
   }
 
   /**
+   * Was the thread asked to stop?  The Tick() implementation should
+   * use this to check whether to cancel the operation.
+   *
+   * Caller must lock the mutex.
+   */
+  bool IsStopped() const {
+    return stop;
+  }
+
+  /**
    * Send the "stop" command to the thread.
    *
    * Caller must lock the mutex.
