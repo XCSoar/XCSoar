@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-06-27 06:24+0000\n"
-"Last-Translator: thomas <Unknown>\n"
+"PO-Revision-Date: 2012-06-27 19:58+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-27 16:41+0000\n"
+"X-Launchpad-Export-Date: 2012-06-27 22:12+0000\n"
 "X-Generator: Launchpad (build 15490)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
@@ -95,7 +95,7 @@ msgstr "Information"
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "Fonctionnalité réduite"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
@@ -123,7 +123,7 @@ msgstr ""
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "Liaison GPS"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
@@ -133,7 +133,7 @@ msgstr "Configuration GPS"
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "Liaison RF"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
@@ -143,32 +143,32 @@ msgstr ""
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Memoire flash"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Capteur de pression"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/ManageFlarmDialog.cpp:77
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Base de données d'obstacles"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
 msgid "Flight recorder"
-msgstr ""
+msgstr "Enregistreur de vol"
 
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr ""
+msgstr "Récepteur transpondeur"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Autres"
 
 #: src/Logger/Logger.cpp:110 src/Dialogs/ManageCAI302Dialog.cpp:72
 msgid "Start Logger"
