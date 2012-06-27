@@ -33,10 +33,14 @@
 
 struct Result {
   BrokenDateTime takeoff_time, landing_time;
+  GeoPoint takeoff_location, landing_location;
 
   Result() {
     takeoff_time.Clear();
     landing_time.Clear();
+
+    takeoff_location.SetInvalid();
+    landing_location.SetInvalid();
   }
 };
 
@@ -64,12 +68,18 @@ Update(const MoreData &basic, const DerivedInfo &calculated,
   if (!basic.time_available || !basic.date_available)
     return;
 
-  if (calculated.flight.flying && !result.takeoff_time.Plausible())
+  if (calculated.flight.flying && !result.takeoff_time.Plausible()) {
     result.takeoff_time = BreakTime(basic, calculated.flight.takeoff_time);
+    result.takeoff_location = calculated.flight.takeoff_location;
+  }
 
   if (!calculated.flight.flying && result.takeoff_time.Plausible() &&
-      !result.landing_time.Plausible())
+      !result.landing_time.Plausible()) {
     result.landing_time = basic.date_time_utc;
+
+    if (basic.location_available)
+      result.landing_location = basic.location;
+  }
 }
 
 static void
@@ -79,8 +89,12 @@ Finish(const MoreData &basic, const DerivedInfo &calculated,
   if (!basic.time_available || !basic.date_available)
     return;
 
-  if (result.takeoff_time.Plausible() && !result.landing_time.Plausible())
+  if (result.takeoff_time.Plausible() && !result.landing_time.Plausible()) {
     result.landing_time = basic.date_time_utc;
+
+    if (basic.location_available)
+      result.landing_location = basic.location;
+  }
 }
 
 static int
@@ -118,6 +132,32 @@ Add(XMLNode &root, const Result &result,
   if (result.landing_time.Plausible()) {
     FormatISO8601(buffer.buffer(), result.landing_time);
     times.AddAttribute(_T("landing"), buffer.c_str());
+  }
+
+  XMLNode &locations = root.AddChild(_T("locations"));
+
+  if (result.takeoff_location.IsValid()) {
+    XMLNode &node = locations.AddChild(_T("takeoff"));
+
+    buffer.UnsafeFormat(_T("%f"),
+                        (double)result.takeoff_location.longitude.Degrees());
+    node.AddAttribute(_T("longitude"), buffer.c_str());
+
+    buffer.UnsafeFormat(_T("%f"),
+                        (double)result.takeoff_location.latitude.Degrees());
+    node.AddAttribute(_T("latitude"), buffer.c_str());
+  }
+
+  if (result.landing_location.IsValid()) {
+    XMLNode &node = locations.AddChild(_T("landing"));
+
+    buffer.UnsafeFormat(_T("%f"),
+                        (double)result.landing_location.longitude.Degrees());
+    node.AddAttribute(_T("longitude"), buffer.c_str());
+
+    buffer.UnsafeFormat(_T("%f"),
+                        (double)result.landing_location.latitude.Degrees());
+    node.AddAttribute(_T("latitude"), buffer.c_str());
   }
 }
 
