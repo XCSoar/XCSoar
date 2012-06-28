@@ -110,7 +110,7 @@ CreateDataTextFile(const TCHAR *name, bool append)
   if (writer == NULL)
     return NULL;
 
-  if (writer->error()) {
+  if (!writer->IsOpen()) {
     delete writer;
     return NULL;
   }

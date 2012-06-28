@@ -100,7 +100,7 @@ DataNodeXML::Save(const TCHAR *path)
 {
   /// @todo make xml writing portable (unicode etc)
   TextWriter writer(path);
-  if (writer.error())
+  if (!writer.IsOpen())
     return false;
 
   Serialise(writer);

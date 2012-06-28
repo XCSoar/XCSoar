@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 
   const char *path = argv[1];
   TextWriter writer(path);
-  if (writer.error()) {
+  if (!writer.IsOpen()) {
     fprintf(stderr, "Failed to open %s\n", path);
     return 1;
   }
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
       --length;
     line[length] = 0;
 
-    writer.writeln(line);
+    writer.WriteLine(line);
   }
 
   return EXIT_SUCCESS;

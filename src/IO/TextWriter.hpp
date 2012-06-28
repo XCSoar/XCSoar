@@ -42,8 +42,8 @@ Copyright_License {
  * char *" arguments must be either valid UTF-8 or 7 bit ASCII.
  *
  * The end-of-line marker is platform specific, and must not be passed
- * to this class.  Use the methods newline(), writeln() or printfln()
- * to finish a line.
+ * to this class.  Use the methods NewLine(), WriteLine() or
+ * FormatLine() to finish a line.
  */
 class TextWriter {
 private:
@@ -66,10 +66,10 @@ public:
 #endif
 
   /**
-   * Returns true if opening the file has failed.  This must be
+   * Returns false if opening the file has failed.  This must be
    * checked before calling any other method.
    */
-  bool error() const {
+  bool IsOpen() const {
     return !file.IsOpen();
   }
 
@@ -79,7 +79,7 @@ public:
    * the physical device; they might still reside in the filesystem
    * cache.
    */
-  bool flush() {
+  bool Flush() {
     assert(file.IsOpen());
     return file.Flush();
   }
@@ -87,7 +87,7 @@ public:
   /**
    * Write one character.
    */
-  void write(char ch) {
+  void Write(char ch) {
     assert(file.IsOpen());
     assert(ch != '\r');
     assert(ch != '\n');
@@ -98,7 +98,7 @@ public:
   /**
    * Finish the current line.
    */
-  bool newline() {
+  bool NewLine() {
     assert(file.IsOpen());
 
 #ifndef HAVE_POSIX
@@ -111,7 +111,7 @@ public:
   /**
    * Write a chunk of text to the file.
    */
-  bool write(const char *s, size_t length) {
+  bool Write(const char *s, size_t length) {
     assert(file.IsOpen());
     assert(memchr(s, '\r', length) == NULL);
     assert(memchr(s, '\n', length) == NULL);
@@ -122,7 +122,7 @@ public:
   /**
    * Write a string to the file.
    */
-  bool write(const char *s) {
+  bool Write(const char *s) {
     assert(file.IsOpen());
     assert(strchr(s, '\r') == NULL);
     assert(strchr(s, '\n') == NULL);
@@ -133,22 +133,22 @@ public:
   /**
    * Write a string to the file, and finish the current line.
    */
-  bool writeln(const char *s) {
-    return write(s) && newline();
+  bool WriteLine(const char *s) {
+    return Write(s) && NewLine();
   }
 
 #ifdef _UNICODE
-  bool write(const TCHAR *s, size_t length);
+  bool Write(const TCHAR *s, size_t length);
 
-  bool write(const TCHAR *s);
+  bool Write(const TCHAR *s);
 
-  bool writeln(const TCHAR *s) {
-    return write(s) && newline();
+  bool WriteLine(const TCHAR *s) {
+    return Write(s) && NewLine();
   }
 #endif
 
   template<typename... Args>
-  void printf(const char *fmt, Args&&... args) {
+  void Format(const char *fmt, Args&&... args) {
     assert(file.IsOpen());
     assert(strchr(fmt, '\r') == NULL);
     assert(strchr(fmt, '\n') == NULL);
@@ -157,21 +157,21 @@ public:
   }
 
   template<typename... Args>
-  void printfln(const char *fmt, Args&&... args) {
+  void FormatLine(const char *fmt, Args&&... args) {
     assert(file.IsOpen());
     assert(strchr(fmt, '\r') == NULL);
     assert(strchr(fmt, '\n') == NULL);
 
     file.WriteFormatted(fmt, args...);
-    newline();
+    NewLine();
   }
 
 #ifdef _UNICODE
-  bool printf(const TCHAR *s, ...);
+  bool Format(const TCHAR *s, ...);
 
   template<typename... Args>
-  bool printfln(const TCHAR *fmt, Args&&... args) {
-    return printf(fmt, args...) && newline();
+  bool FormatLine(const TCHAR *fmt, Args&&... args) {
+    return Format(fmt, args...) && NewLine();
   }
 #endif
 };

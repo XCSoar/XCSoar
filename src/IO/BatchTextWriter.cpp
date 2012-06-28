@@ -29,9 +29,9 @@ Copyright_License {
 #endif
 
 bool
-BatchTextWriter::writeln(const char *line)
+BatchTextWriter::WriteLine(const char *line)
 {
-  if (buffer.IsFull() && !flush())
+  if (buffer.IsFull() && !Flush())
     return false;
 
   buffer.Append() = line;
@@ -40,9 +40,9 @@ BatchTextWriter::writeln(const char *line)
 
 #ifdef _UNICODE
 bool
-BatchTextWriter::writeln(const TCHAR *line)
+BatchTextWriter::WriteLine(const TCHAR *line)
 {
-  if (buffer.IsFull() && !flush())
+  if (buffer.IsFull() && !Flush())
     return false;
 
   size_t wide_length = _tcslen(line);
@@ -59,20 +59,20 @@ BatchTextWriter::writeln(const TCHAR *line)
 #endif
 
 bool
-BatchTextWriter::flush()
+BatchTextWriter::Flush()
 {
   if (buffer.IsEmpty())
     return true;
 
   TextWriter writer(path.c_str(), append);
-  if (writer.error())
+  if (!writer.IsOpen())
     return false;
 
   /* the following flush() calls will append */
   append = true;
 
   for (unsigned i = 0; i < buffer.Length(); ++i)
-    if (!writer.writeln(buffer[i].c_str()))
+    if (!writer.WriteLine(buffer[i].c_str()))
       return false;
 
   buffer.Clear();

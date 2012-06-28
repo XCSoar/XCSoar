@@ -39,5 +39,5 @@ KeyValueFileWriter::Write(const TCHAR *key, const TCHAR *value)
     value = _T("");
 
   // write the value to the output file
-  writer.printfln(_T("%s=\"%s\""), key, value);
+  writer.FormatLine(_T("%s=\"%s\""), key, value);
 }

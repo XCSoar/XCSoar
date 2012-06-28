@@ -36,16 +36,16 @@ int main(int argc, char **argv)
 
   const char *path = argv[1];
   TextWriter writer(path);
-  if (writer.error()) {
+  if (!writer.IsOpen()) {
     fprintf(stderr, "Failed to open %s\n", path);
     return 1;
   }
 
-  writer.writeln("An ASCII line: ü");
-  writer.writeln(_T("A UNICODE line: ü"));
-  writer.printfln("An ASCII line: ü%s", "ä");
-  writer.printfln(_T("A UNICODE line: ü%s"), _T("a"));
-  writer.printfln(_T("A UNICODE line: ü%s"), _T("ä"));
+  writer.WriteLine("An ASCII line: ü");
+  writer.WriteLine(_T("A UNICODE line: ü"));
+  writer.FormatLine("An ASCII line: ü%s", "ä");
+  writer.FormatLine(_T("A UNICODE line: ü%s"), _T("a"));
+  writer.FormatLine(_T("A UNICODE line: ü%s"), _T("ä"));
 
   return EXIT_SUCCESS;
 }

@@ -40,7 +40,7 @@ TextWriter::TextWriter(const TCHAR *path, bool append)
 #ifdef _UNICODE
 
 bool
-TextWriter::write(const TCHAR *s, size_t src_length)
+TextWriter::Write(const TCHAR *s, size_t src_length)
 {
   if (src_length == 0)
     /* empty string, nothing to do */
@@ -56,22 +56,22 @@ TextWriter::write(const TCHAR *s, size_t src_length)
   if (length == 0)
     return false;
 
-  return write(dest, length);
+  return Write(dest, length);
 }
 
 bool
-TextWriter::write(const TCHAR *s)
+TextWriter::Write(const TCHAR *s)
 {
   assert(_tcschr(s, _T('\r')) == NULL);
   assert(_tcschr(s, _T('\n')) == NULL);
 
-  return write(s, _tcslen(s));
+  return Write(s, _tcslen(s));
 }
 
 bool
-TextWriter::printf(const TCHAR *fmt, ...)
+TextWriter::Format(const TCHAR *fmt, ...)
 {
-  assert(!error());
+  assert(IsOpen());
   assert(fmt != NULL);
   assert(_tcschr(fmt, _T('\r')) == NULL);
   assert(_tcschr(fmt, _T('\n')) == NULL);
@@ -87,7 +87,7 @@ TextWriter::printf(const TCHAR *fmt, ...)
   _vsntprintf(buffer, buffer_size, fmt, ap);
   va_end(ap);
 
-  return write(buffer);
+  return Write(buffer);
 }
 
 #endif /* _UNICODE */

@@ -80,5 +80,5 @@ NMEALogger::Log(const char *text)
 
   ScopeLock protect(mutex);
   if (Start())
-    writer->writeln(text);
+    writer->WriteLine(text);
 }

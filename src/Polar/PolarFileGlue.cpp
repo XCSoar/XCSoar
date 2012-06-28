@@ -59,14 +59,14 @@ PolarGlue::SaveToFile(const PolarInfo &polar, TextWriter &writer)
 {
   TCHAR buffer[256];
   polar.GetString(buffer, 256);
-  return writer.writeln(buffer);
+  return writer.WriteLine(buffer);
 }
 
 bool
 PolarGlue::SaveToFile(const PolarInfo &polar, const TCHAR* path)
 {
   TextWriter writer(path);
-  if (writer.error())
+  if (!writer.IsOpen())
     return false;
 
   return SaveToFile(polar, writer);

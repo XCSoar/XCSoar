@@ -42,14 +42,14 @@ public:
   BatchTextWriter(const TCHAR *_path, bool _append=false)
     :path(_path), append(_append) {}
   ~BatchTextWriter() {
-    flush();
+    Flush();
   }
 
-  bool writeln(const char *line);
+  bool WriteLine(const char *line);
 #ifdef _UNICODE
-  bool writeln(const TCHAR *line);
+  bool WriteLine(const TCHAR *line);
 #endif
-  bool flush();
+  bool Flush();
 };
 
 #endif

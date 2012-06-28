@@ -96,7 +96,7 @@ Profile::SaveFile(const TCHAR *szFile)
   FileTransaction transaction(szFile);
   TextWriter writer(transaction.GetTemporaryPath());
   // ... on error -> return
-  if (writer.error())
+  if (!writer.IsOpen())
     return;
 
   KeyValueFileWriter kvwriter(writer);

@@ -70,17 +70,17 @@ IGCWriter::Flush()
     return true;
 
   TextWriter writer(path, true);
-  if (writer.error())
+  if (!writer.IsOpen())
     return false;
 
   for (unsigned i = 0; i < buffer.Length(); ++i) {
-    if (!writer.writeln(buffer[i]))
+    if (!writer.WriteLine(buffer[i]))
       return false;
 
     grecord.AppendRecordToBuffer(buffer[i]);
   }
 
-  if (!writer.flush())
+  if (!writer.Flush())
     return false;
 
   buffer.Clear();

@@ -169,7 +169,7 @@ bool
 GRecord::AppendGRecordToFile(bool valid)
 {
   TextWriter writer(filename, true);
-  if (writer.error())
+  if (!writer.IsOpen())
     return false;
 
   char digest[BUFF_LEN];
@@ -187,10 +187,10 @@ GRecord::AppendGRecordToFile(bool valid)
 
       digest16[chars_per_line + 1] = 0; // +1 is the initial "G"
 
-      writer.writeln(digest16);
+      writer.WriteLine(digest16);
     }
   } else {
-    writer.writeln("G Record Invalid");
+    writer.WriteLine("G Record Invalid");
   }
 
   return true;

@@ -66,7 +66,7 @@ Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 
   TextWriter *writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
   if (writer != NULL) {
-    writer->writeln(message);
+    writer->WriteLine(message);
     delete writer;
   }
 }

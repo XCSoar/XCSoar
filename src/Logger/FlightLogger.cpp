@@ -40,17 +40,17 @@ FlightLogger::LogEvent(const BrokenDateTime &date_time, const char *type)
   assert(type != NULL);
 
   TextWriter writer(path.c_str(), true);
-  if (writer.error())
+  if (!writer.IsOpen())
     /* Shall we log this error?  Not sure, because when this happens,
        usually the log file cannot be written either .. */
     return;
 
   /* XXX log pilot name, glider, airfield name */
 
-  writer.printfln("%04u-%02u-%02uT%02u:%02u:%02u %s",
-                  date_time.year, date_time.month, date_time.day,
-                  date_time.hour, date_time.minute, date_time.second,
-                  type);
+  writer.FormatLine("%04u-%02u-%02uT%02u:%02u:%02u %s",
+                    date_time.year, date_time.month, date_time.day,
+                    date_time.hour, date_time.minute, date_time.second,
+                    type);
 }
 
 void

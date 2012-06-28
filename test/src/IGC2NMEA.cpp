@@ -39,7 +39,7 @@ public:
   IGCConverterReplay(const char *input_file, const char *output_file);
 
   bool HasError() {
-    return writer.error();
+    return !writer.IsOpen();
   }
 
   virtual void OnReset() {}
@@ -91,7 +91,7 @@ IGCConverterReplay::OnAdvance(const GeoPoint &loc, const fixed speed,
   gprmc.AppendFormat(",%.0f", (double)bearing.Degrees());
   AppendNMEAChecksum(gprmc.buffer());
 
-  writer.writeln(gprmc);
+  writer.WriteLine(gprmc);
   printf("%s\n", gprmc.c_str());
 
   NarrowString<256> gpgga("$GPGGA");
@@ -104,14 +104,14 @@ IGCConverterReplay::OnAdvance(const GeoPoint &loc, const fixed speed,
   gpgga.AppendFormat(",%.0f,m", (double)alt);
   AppendNMEAChecksum(gpgga.buffer());
 
-  writer.writeln(gpgga);
+  writer.WriteLine(gpgga);
   printf("%s\n", gpgga.c_str());
 
   NarrowString<256> pgrmz("$PGRMZ");
   pgrmz.AppendFormat(",%.0f,m", (double)baroalt);
   AppendNMEAChecksum(pgrmz.buffer());
 
-  writer.writeln(pgrmz);
+  writer.WriteLine(pgrmz);
   printf("%s\n", pgrmz.c_str());
 }
 

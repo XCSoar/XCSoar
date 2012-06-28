@@ -114,9 +114,9 @@ FlarmDetails::SaveSecondary()
   for (unsigned i = 0; i < flarm_names.size(); i++) {
     assert(flarm_names[i].id.IsDefined());
 
-    writer->printfln(_T("%s=%s"),
-                     flarm_names[i].id.Format(id),
-                     flarm_names[i].name.c_str());
+    writer->FormatLine(_T("%s=%s"),
+                       flarm_names[i].id.Format(id),
+                       flarm_names[i].name.c_str());
   }
 
   delete writer;

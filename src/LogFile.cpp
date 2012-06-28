@@ -67,12 +67,12 @@ LogStartUp(const TCHAR *Str, ...)
 #endif
 
   TextWriter writer(szFileName, initialised);
-  if (writer.error())
+  if (!writer.IsOpen())
     return;
 
   StaticString<MAX_PATH> output_buffer;
   output_buffer.Format(_T("[%s] %s"), time_buffer, buf);
-  writer.writeln(output_buffer);
+  writer.WriteLine(output_buffer);
 
   if (!initialised)
     initialised = true;

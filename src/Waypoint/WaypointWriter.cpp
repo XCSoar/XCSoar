@@ -43,30 +43,30 @@ void
 WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint& wp)
 {
   // Write the waypoint id
-  writer.printf("%u,", wp.original_id > 0 ? wp.original_id : wp.id);
+  writer.Format("%u,", wp.original_id > 0 ? wp.original_id : wp.id);
 
   // Write the latitude
   WriteAngle(writer, wp.location.latitude, true);
-  writer.write(',');
+  writer.Write(',');
 
   // Write the longitude id
   WriteAngle(writer, wp.location.longitude, false);
-  writer.write(',');
+  writer.Write(',');
 
   // Write the altitude id
   WriteAltitude(writer, wp.elevation);
-  writer.write(',');
+  writer.Write(',');
 
   // Write the waypoint flags
   WriteFlags(writer, wp);
-  writer.write(',');
+  writer.Write(',');
 
   // Write the waypoint name
-  writer.write(wp.name.c_str());
-  writer.write(',');
+  writer.Write(wp.name.c_str());
+  writer.Write(',');
 
   // Write the waypoint description
-  writer.writeln(wp.comment.c_str());
+  writer.WriteLine(wp.comment.c_str());
 }
 
 void
@@ -79,36 +79,36 @@ WaypointWriter::WriteAngle(TextWriter &writer, const Angle &angle,
   angle.ToDMS(deg, min, sec, is_positive);
 
   // Save them into the buffer string
-  writer.printf(is_latitude ? "%02d:%02d:%02d" : "%03d:%02d:%02d", deg, min, sec);
+  writer.Format(is_latitude ? "%02d:%02d:%02d" : "%03d:%02d:%02d", deg, min, sec);
 
   // Attach the buffer string to the output
   if (is_latitude)
-    writer.write(is_positive ? "N" : "S");
+    writer.Write(is_positive ? "N" : "S");
   else
-    writer.write(is_positive ? "E" : "W");
+    writer.Write(is_positive ? "E" : "W");
 }
 
 void
 WaypointWriter::WriteAltitude(TextWriter &writer, fixed altitude)
 {
-  writer.printf("%dM", (int)altitude);
+  writer.Format("%dM", (int)altitude);
 }
 
 void
 WaypointWriter::WriteFlags(TextWriter &writer, const Waypoint &wp)
 {
   if (wp.IsAirport())
-    writer.write('A');
+    writer.Write('A');
   if (wp.flags.turn_point)
-    writer.write('T');
+    writer.Write('T');
   if (wp.IsLandable())
-    writer.write('L');
+    writer.Write('L');
   if (wp.flags.home)
-    writer.write('H');
+    writer.Write('H');
   if (wp.flags.start_point)
-    writer.write('S');
+    writer.Write('S');
   if (wp.flags.finish_point)
-    writer.write('F');
+    writer.Write('F');
 
   // set as turnpoint by default if nothing else
   if (!wp.flags.turn_point &&
@@ -116,6 +116,6 @@ WaypointWriter::WriteFlags(TextWriter &writer, const Waypoint &wp)
       !wp.flags.home &&
       !wp.flags.start_point &&
       !wp.flags.finish_point)
-    writer.write('T');
+    writer.Write('T');
 }
 

@@ -37,37 +37,37 @@ void
 Node::SerialiseIndent(TextWriter &writer, int indent)
 {
   for (int i = 0; i < indent; ++i)
-    writer.write('\t');
+    writer.Write('\t');
 }
 
 void
 None::Serialise(TextWriter &writer, gcc_unused int indent) const
 {
-  writer.write("null");
+  writer.Write("null");
 }
 
 void
 Bool::Serialise(TextWriter &writer, gcc_unused int indent) const
 {
-  writer.write(value ? "true": "false");
+  writer.Write(value ? "true": "false");
 }
 
 void
 Integer::Serialise(TextWriter &writer, gcc_unused int indent) const
 {
-  writer.printf("%d", value);
+  writer.Format("%d", value);
 }
 
 void
 Double::Serialise(TextWriter &writer, gcc_unused int indent) const
 {
-  writer.printf("%f", value);
+  writer.Format("%f", value);
 }
 
 void
 String::Serialise(TextWriter &writer, gcc_unused int indent) const
 {
-  writer.printf("\"%s\"", value.c_str());
+  writer.Format("\"%s\"", value.c_str());
 }
 
 Array::~Array()
@@ -127,9 +127,9 @@ Array::Add(Object* value)
 void
 Array::Serialise(TextWriter &writer, int indent) const
 {
-  writer.write('[');
+  writer.Write('[');
   if (indent >= 0)
-    writer.newline();
+    writer.NewLine();
 
   for (auto it = children.begin(), end = children.end(); it != end;) {
     if (indent >= 0) {
@@ -137,21 +137,21 @@ Array::Serialise(TextWriter &writer, int indent) const
       (*it)->Serialise(writer, indent + 1);
 
       if (++it != end)
-        writer.write(',');
+        writer.Write(',');
 
-      writer.newline();
+      writer.NewLine();
     } else {
       (*it)->Serialise(writer, indent);
 
       if (++it != end)
-        writer.write(',');
+        writer.Write(',');
     }
   }
 
   if (indent >= 0)
     SerialiseIndent(writer, indent);
 
-  writer.write(']');
+  writer.Write(']');
 }
 
 Object::~Object()
@@ -211,31 +211,30 @@ Object::Add(tstring key, Object* value)
 void
 Object::Serialise(TextWriter &writer, int indent) const
 {
-  writer.write('{');
+  writer.Write('{');
   if (indent >= 0)
-    writer.newline();
-
+    writer.NewLine();
 
   for (auto it = children.begin(), end = children.end(); it != end;) {
     if (indent >= 0) {
       SerialiseIndent(writer, indent + 1);
-      writer.printf("\"%s\": ", it->first.c_str());
+      writer.Format("\"%s\": ", it->first.c_str());
       it->second->Serialise(writer, indent + 1);
       if (++it != end)
-        writer.write(',');
-      writer.newline();
+        writer.Write(',');
+      writer.NewLine();
     } else {
-      writer.printf("\"%s\":", it->first.c_str());
+      writer.Format("\"%s\":", it->first.c_str());
       it->second->Serialise(writer, indent);
       if (++it != end)
-        writer.write(',');
+        writer.Write(',');
     }
   }
 
   if (indent >= 0)
     SerialiseIndent(writer, indent);
 
-  writer.write('}');
+  writer.Write('}');
 }
 
 }

@@ -161,7 +161,7 @@ WaypointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
   GetPath(num, file);
 
   TextWriter writer(file);
-  if (writer.error()) {
+  if (!writer.IsOpen()) {
     LogStartUp(_T("Waypoint file %d can not be written"), num);
     return false;
   }

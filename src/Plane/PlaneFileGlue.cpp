@@ -218,7 +218,7 @@ bool
 PlaneGlue::WriteFile(const Plane &plane, const TCHAR *path)
 {
   TextWriter writer(path);
-  if (writer.error())
+  if (!writer.IsOpen())
     return false;
 
   KeyValueFileWriter kvwriter(writer);
