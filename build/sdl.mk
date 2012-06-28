@@ -34,6 +34,11 @@ ifeq ($(TARGET_IS_DARWIN),y)
 # the pkg-config file on MacPorts is broken, we must filter out the
 # -lSDL flag manually
 SDL_LDLIBS := $(filter-out -l%,$(SDL_LDLIBS))
+
+# What's this -R flag?  On MacPorts, this is part of sdl.pc, but gcc
+# complains
+SDL_LDLIBS := $(filter-out -R%,$(SDL_LDLIBS))
+
 SDL_LDADD = /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a
 # SDL may be dynamically linked to these X11 libraries:
 SDL_LDADD += /usr/X11/lib/libX11.dylib /usr/X11/lib/libXext.dylib /usr/X11/lib/libXrandr.dylib
