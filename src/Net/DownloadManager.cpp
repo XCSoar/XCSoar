@@ -142,7 +142,9 @@ public:
   void Enqueue(const char *uri, const TCHAR *path_relative) {
     ScopeLock protect(mutex);
     queue.push_back(Item(uri, path_relative));
-    Trigger();
+
+    if (!IsBusy())
+      Trigger();
   }
 
 protected:
