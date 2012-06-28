@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-06-27 19:58+0000\n"
-"Last-Translator: Adrien Ott <Unknown>\n"
+"PO-Revision-Date: 2012-06-28 03:42+0000\n"
+"Last-Translator: AUDIER Daniel <osteocool@yahoo.fr>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-27 22:12+0000\n"
-"X-Generator: Launchpad (build 15490)\n"
+"X-Launchpad-Export-Date: 2012-06-28 13:52+0000\n"
+"X-Generator: Launchpad (build 15505)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -100,7 +100,7 @@ msgstr "Fonctionnalité réduite"
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Problème critique"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -113,7 +113,7 @@ msgstr "Inconnu"
 #: src/FLARM/Error.cpp:48
 #, no-c-format
 msgid "Firmware timeout"
-msgstr ""
+msgstr "Firmware  expiré"
 
 #: src/FLARM/Error.cpp:49
 #, no-c-format
@@ -138,7 +138,7 @@ msgstr "Liaison RF"
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "Communication"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
@@ -7700,7 +7700,7 @@ msgstr ""
 #: src/Dialogs/Vega/AlertParameters.hpp:43
 #, no-c-format
 msgid "Radio com. max. delay"
-msgstr ""
+msgstr "Radio com. retard max."
 
 #: src/Dialogs/Vega/AlertParameters.hpp:46
 #, no-c-format
@@ -8600,7 +8600,7 @@ msgstr "Appareils"
 
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
-msgstr ""
+msgstr "Commutateurs"
 
 #: Data/Dialogs/dlgTaskPoint.xml:25 Data/Dialogs/dlgTaskPoint_L.xml:29
 msgid "Radius of the OZ cylinder."
