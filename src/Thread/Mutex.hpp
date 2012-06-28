@@ -184,28 +184,29 @@ private:
 };
 
 class TemporaryUnlock : private NonCopyable {
+#ifndef NDEBUG
   Mutex &mutex;
 
 public:
   TemporaryUnlock(Mutex &_mutex):mutex(_mutex) {
-#ifndef NDEBUG
     mutex.debug_mutex.Lock();
     assert(mutex.locked);
     assert(mutex.owner.IsInside());
     mutex.locked = false;
     mutex.debug_mutex.Unlock();
-#endif
   }
 
   ~TemporaryUnlock() {
-#ifndef NDEBUG
     mutex.debug_mutex.Lock();
     assert(!mutex.locked);
     mutex.owner = ThreadHandle::GetCurrent();
     mutex.locked = true;
     mutex.debug_mutex.Unlock();
-#endif
   }
+#else
+public:
+  TemporaryUnlock(Mutex &_mutex) {}
+#endif
 };
 
 #endif
