@@ -204,6 +204,12 @@ Net::DownloadManager::BeginDeinitialise()
   thread->StopAsync();
 }
 
+#if defined(__clang__) || GCC_VERSION >= 40700
+/* no, DownloadManagerThread really doesn't need a virtual
+   destructor */
+#pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+#endif
+
 void
 Net::DownloadManager::Deinitialise()
 {
