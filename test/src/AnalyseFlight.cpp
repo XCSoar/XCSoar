@@ -26,10 +26,10 @@
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "NMEA/Aircraft.hpp"
-#include "XML/Node.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "JSON/json.hpp"
 
 struct Result {
   BrokenDateTime takeoff_time, landing_time;
@@ -117,123 +117,100 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
 }
 
 static void
-Add(XMLNode &root, const Result &result,
+Add(json::Object &root, const Result &result,
     const MoreData &basic, const DerivedInfo &calculated)
 {
   StaticString<64> buffer;
 
-  XMLNode &times = root.AddChild(_T("times"));
+  auto times = new json::Object();
+  root.Add(_T("times"), times);
 
   if (result.takeoff_time.Plausible()) {
     FormatISO8601(buffer.buffer(), result.takeoff_time);
-    times.AddAttribute(_T("takeoff"), buffer.c_str());
+    times->Add(_T("takeoff"), buffer.c_str());
   }
 
   if (result.landing_time.Plausible()) {
     FormatISO8601(buffer.buffer(), result.landing_time);
-    times.AddAttribute(_T("landing"), buffer.c_str());
+    times->Add(_T("landing"), buffer.c_str());
   }
 
-  XMLNode &locations = root.AddChild(_T("locations"));
+  auto locations = new json::Object();
+  root.Add(_T("locations"), locations);
 
   if (result.takeoff_location.IsValid()) {
-    XMLNode &node = locations.AddChild(_T("takeoff"));
+    auto node = new json::Object();
+    locations->Add(_T("takeoff"), node);
 
-    buffer.UnsafeFormat(_T("%f"),
-                        (double)result.takeoff_location.longitude.Degrees());
-    node.AddAttribute(_T("longitude"), buffer.c_str());
-
-    buffer.UnsafeFormat(_T("%f"),
-                        (double)result.takeoff_location.latitude.Degrees());
-    node.AddAttribute(_T("latitude"), buffer.c_str());
+    node->Add(_T("longitude"), (double)result.takeoff_location.longitude.Degrees());
+    node->Add(_T("latitude"), (double)result.takeoff_location.latitude.Degrees());
   }
 
   if (result.landing_location.IsValid()) {
-    XMLNode &node = locations.AddChild(_T("landing"));
+    auto node = new json::Object();
+    locations->Add(_T("landing"), node);
 
-    buffer.UnsafeFormat(_T("%f"),
-                        (double)result.landing_location.longitude.Degrees());
-    node.AddAttribute(_T("longitude"), buffer.c_str());
-
-    buffer.UnsafeFormat(_T("%f"),
-                        (double)result.landing_location.latitude.Degrees());
-    node.AddAttribute(_T("latitude"), buffer.c_str());
+    node->Add(_T("longitude"), (double)result.landing_location.longitude.Degrees());
+    node->Add(_T("latitude"), (double)result.landing_location.latitude.Degrees());
   }
 }
 
 static void
-Add(XMLNode &parent, const TracePoint &point, const TracePoint *previous)
+Add(json::Array &parent, const TracePoint &point, const TracePoint *previous)
 {
-  XMLNode &node = parent.AddChild(_T("point"));
+  auto node = new json::Object();
+  parent.Add(node);
 
-  StaticString<64> buffer;
-
-  buffer.UnsafeFormat(_T("%u"), point.GetTime());
-  node.AddAttribute(_T("time"), buffer.c_str());
-
-  buffer.UnsafeFormat(_T("%f"),
-                      (double)point.get_location().longitude.Degrees());
-  node.AddAttribute(_T("longitude"), buffer.c_str());
-
-  buffer.UnsafeFormat(_T("%f"),
-                      (double)point.get_location().latitude.Degrees());
-  node.AddAttribute(_T("latitude"), buffer.c_str());
+  node->Add(_T("time"), (long)point.GetTime());
+  node->Add(_T("longitude"), (double)point.get_location().longitude.Degrees());
+  node->Add(_T("latitude"), (double)point.get_location().latitude.Degrees());
 
   if (previous != NULL) {
     fixed distance = point.distance(previous->get_location());
-    buffer.UnsafeFormat(_T("%u"), uround(distance));
-    node.AddAttribute(_T("distance"), buffer.c_str());
+    node->Add(_T("distance"), (long)uround(distance));
 
     unsigned duration =
       std::max((int)point.GetTime() - (int)previous->GetTime(), 0);
-    buffer.UnsafeFormat(_T("%u"), duration);
-    node.AddAttribute(_T("duration"), buffer.c_str());
+    node->Add(_T("duration"), (long)duration);
 
     if (duration > 0) {
       fixed speed = distance / duration;
-      buffer.UnsafeFormat(_T("%1.2f"), (double)speed);
-      node.AddAttribute(_T("speed"), buffer.c_str());
+      node->Add(_T("speed"), (double)speed);
     }
   }
 }
 
 static void
-Add(XMLNode &parent, const TCHAR *name,
+Add(json::Object &parent, const TCHAR *name,
     const ContestResult &result, const ContestTraceVector &trace)
 {
-  XMLNode &node = parent.AddChild(_T("trace"));
-  node.AddAttribute(_T("name"), name);
+  auto node = new json::Object();
+  parent.Add(name, node);
 
-  StaticString<64> buffer;
+  node->Add(_T("score"), (double)result.score);
+  node->Add(_T("distance"), (double)result.distance);
+  node->Add(_T("duration"), (long)uround(result.time));
+  node->Add(_T("speed"), (double)result.GetSpeed());
 
-  buffer.UnsafeFormat(_T("%1.2f"), (double)result.score);
-  node.AddAttribute(_T("score"), buffer.c_str());
-
-  buffer.UnsafeFormat(_T("%1.2f"), (double)result.distance);
-  node.AddAttribute(_T("distance"), buffer.c_str());
-
-  buffer.UnsafeFormat(_T("%u"), uround(result.time));
-  node.AddAttribute(_T("duration"), buffer.c_str());
-
-  buffer.UnsafeFormat(_T("%1.2f"), (double)result.GetSpeed());
-  node.AddAttribute(_T("speed"), buffer.c_str());
+  auto turnpoints = new json::Array();
+  node->Add(_T("turnpoints"), turnpoints);
 
   const TracePoint *previous = NULL;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
-    Add(node, *i, previous);
+    Add(*turnpoints, *i, previous);
     previous = &*i;
   }
 }
 
 static void
-AddOLCPlus(XMLNode &parent, const ContestStatistics &stats)
+AddOLCPlus(json::Object &parent, const ContestStatistics &stats)
 {
-  XMLNode &node = parent.AddChild(_T("contest"));
-  node.AddAttribute(_T("name"), _T("olc_plus"));
+  auto node = new json::Object();
+  parent.Add(_T("olc_plus"), node);
 
-  Add(node, _T("classic"), stats.result[0], stats.solution[0]);
-  Add(node, _T("triangle"), stats.result[1], stats.solution[1]);
-  Add(node, _T("plus"), stats.result[2], stats.solution[2]);
+  Add(*node, _T("classic"), stats.result[0], stats.solution[0]);
+  Add(*node, _T("triangle"), stats.result[1], stats.solution[1]);
+  Add(*node, _T("plus"), stats.result[2], stats.solution[2]);
 }
 
 int main(int argc, char **argv)
@@ -249,12 +226,15 @@ int main(int argc, char **argv)
   Result result;
   Run(*replay, olc_plus, result);
 
-  XMLNode root = XMLNode::CreateRoot(_T("analysis"));
+  json::Object root;
   Add(root, result, replay->Basic(), replay->Calculated());
   delete replay;
 
-  AddOLCPlus(root, olc_plus.GetStats());
+  auto contests = new json::Object();
+  root.Add(_T("contests"), contests);
+
+  AddOLCPlus(*contests, olc_plus.GetStats());
 
   TextWriter writer("/dev/stdout", true);
-  root.Serialise(writer, true);
+  root.Serialise(writer, -1);
 }

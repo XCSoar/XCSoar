@@ -1397,8 +1397,7 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
-	$(SRC)/XML/Node.cpp \
-	$(SRC)/XML/Writer.cpp \
+	$(SRC)/JSON/json.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/DateTime.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
