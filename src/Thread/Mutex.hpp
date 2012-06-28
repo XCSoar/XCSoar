@@ -183,6 +183,12 @@ private:
   Mutex &scope_mutex;
 };
 
+/**
+ * A debug-only class that changes internal debug flags to indicate
+ * "not locked", even though you did lock it.  An instance of this
+ * class shall wrap function calls that will temporarily unlock the
+ * mutex, such as pthread_cond_wait().
+ */
 class TemporaryUnlock : private NonCopyable {
 #ifndef NDEBUG
   Mutex &mutex;
