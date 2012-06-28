@@ -155,6 +155,16 @@ protected:
   void WaitDone();
 
   /**
+   * Same as WaitDone(), but automatically lock and unlock the mutex.
+   *
+   * Caller must not lock the mutex.
+   */
+  void LockWaitDone() {
+    ScopeLock protect(mutex);
+    WaitDone();
+  }
+
+  /**
    * Wait until the thread has exited.
    *
    * Caller must lock the mutex.

@@ -76,7 +76,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
       _settings.livetrack24.username != settings.livetrack24.username ||
       _settings.livetrack24.password != settings.livetrack24.password) {
     /* wait for the current job to finish */
-    WaitDone();
+    LockWaitDone();
 
     /* now it's safe to access these variables without a lock */
     settings = _settings;
