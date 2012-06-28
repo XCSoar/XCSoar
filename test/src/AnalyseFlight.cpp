@@ -117,6 +117,13 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
 }
 
 static void
+Add(json::Object &object, const GeoPoint &gp)
+{
+  object.Add(_T("longitude"), (double)gp.longitude.Degrees());
+  object.Add(_T("latitude"), (double)gp.latitude.Degrees());
+}
+
+static void
 Add(json::Object &root, const Result &result,
     const MoreData &basic, const DerivedInfo &calculated)
 {
@@ -142,16 +149,14 @@ Add(json::Object &root, const Result &result,
     auto node = new json::Object();
     locations->Add(_T("takeoff"), node);
 
-    node->Add(_T("longitude"), (double)result.takeoff_location.longitude.Degrees());
-    node->Add(_T("latitude"), (double)result.takeoff_location.latitude.Degrees());
+    Add(*node, result.takeoff_location);
   }
 
   if (result.landing_location.IsValid()) {
     auto node = new json::Object();
     locations->Add(_T("landing"), node);
 
-    node->Add(_T("longitude"), (double)result.landing_location.longitude.Degrees());
-    node->Add(_T("latitude"), (double)result.landing_location.latitude.Degrees());
+    Add(*node, result.landing_location);
   }
 }
 
