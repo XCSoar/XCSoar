@@ -37,6 +37,7 @@ StandbyThread::Trigger()
 {
   assert(!IsInside());
   assert(!IsBusy());
+  assert(mutex.IsLockedByCurrent());
 
   stop = false;
   pending = true;
@@ -52,6 +53,7 @@ void
 StandbyThread::StopAsync()
 {
   assert(!IsInside());
+  assert(mutex.IsLockedByCurrent());
 
   stop = true;
 
@@ -65,6 +67,7 @@ void
 StandbyThread::WaitDone()
 {
   assert(!IsInside());
+  assert(mutex.IsLockedByCurrent());
 
   while (alive && IsBusy()) {
 #ifdef HAVE_POSIX
@@ -82,6 +85,7 @@ void
 StandbyThread::WaitStopped()
 {
   assert(!IsInside());
+  assert(mutex.IsLockedByCurrent());
   assert(stop);
 
   if (!IsDefined())
@@ -97,6 +101,7 @@ StandbyThread::WaitStopped()
 void
 StandbyThread::Run()
 {
+  assert(!mutex.IsLockedByCurrent());
   assert(!busy);
 
   mutex.Lock();

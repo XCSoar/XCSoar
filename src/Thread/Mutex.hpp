@@ -58,7 +58,7 @@ class Mutex : private NonCopyable {
   /**
    * Protect the attributes "locked" and "owner".
    */
-  FastMutex debug_mutex;
+  mutable FastMutex debug_mutex;
 
   bool locked;
   ThreadHandle owner;
@@ -86,6 +86,21 @@ public:
   }
 
 public:
+#ifndef NDEBUG
+  /**
+   * Determine if the current thread has locked this mutex.  This is a
+   * debug-only method meant for assert() calls, and is not available
+   * in optimised builds.
+   */
+  gcc_pure
+  bool IsLockedByCurrent() const {
+    debug_mutex.Lock();
+    bool result = locked && owner.IsInside();
+    debug_mutex.Unlock();
+    return result;
+  }
+#endif
+
   /**
    * Locks the Mutex
    */
@@ -96,9 +111,7 @@ public:
     if (!mutex.TryLock()) {
       /* locking has failed - at this point, "locked" and "owner" are
          either not yet update, or "owner" is set to another thread */
-      debug_mutex.Lock();
-      assert(!locked || !owner.IsInside());
-      debug_mutex.Unlock();
+      assert(!IsLockedByCurrent());
 
       mutex.Lock();
     }
@@ -121,9 +134,7 @@ public:
   bool TryLock() {
     if (!mutex.TryLock()) {
 #ifndef NDEBUG
-      debug_mutex.Lock();
-      assert(!locked || !owner.IsInside());
-      debug_mutex.Unlock();
+      assert(!IsLockedByCurrent());
 #endif
       return false;
     }

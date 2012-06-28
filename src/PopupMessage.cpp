@@ -275,6 +275,8 @@ PopupMessage::GetEmptySlot()
 void
 PopupMessage::AddMessage(int tshow, int type, const TCHAR *Text)
 {
+  assert(mutex.IsLockedByCurrent());
+
   int i;
   int fpsTime = clock.Elapsed();
   i = GetEmptySlot();

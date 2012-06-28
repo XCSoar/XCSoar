@@ -95,6 +95,8 @@ public:
 
 private:
   void TriggerCommand() {
+    assert(mutex.IsLockedByCurrent());
+
 #ifdef HAVE_POSIX
     cond.Signal();
 #else
@@ -103,6 +105,8 @@ private:
   }
 
   void TriggerDone() {
+    assert(mutex.IsLockedByCurrent());
+
 #ifdef HAVE_POSIX
     cond.Signal();
 #else
@@ -127,6 +131,8 @@ protected:
    */
   gcc_pure
   bool IsBusy() const {
+    assert(mutex.IsLockedByCurrent());
+
     return pending || busy;
   }
 
@@ -136,7 +142,10 @@ protected:
    *
    * Caller must lock the mutex.
    */
+  gcc_pure
   bool IsStopped() const {
+    assert(mutex.IsLockedByCurrent());
+
     return stop;
   }
 
@@ -177,6 +186,8 @@ protected:
    * Caller must lock the mutex.
    */
   void Stop() {
+    assert(mutex.IsLockedByCurrent());
+
     StopAsync();
     WaitStopped();
   }
