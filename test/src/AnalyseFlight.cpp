@@ -186,6 +186,16 @@ Add(json::Array &parent, const TracePoint &point, const TracePoint *previous)
 }
 
 static void
+Add(json::Array &parent, const ContestTraceVector &trace)
+{
+  const TracePoint *previous = NULL;
+  for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
+    Add(parent, *i, previous);
+    previous = &*i;
+  }
+}
+
+static void
 Add(json::Object &parent, const TCHAR *name,
     const ContestResult &result, const ContestTraceVector &trace)
 {
@@ -199,12 +209,7 @@ Add(json::Object &parent, const TCHAR *name,
 
   auto turnpoints = new json::Array();
   node->Add(_T("turnpoints"), turnpoints);
-
-  const TracePoint *previous = NULL;
-  for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
-    Add(*turnpoints, *i, previous);
-    previous = &*i;
-  }
+  Add(*turnpoints, trace);
 }
 
 static void
