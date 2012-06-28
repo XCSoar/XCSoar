@@ -29,7 +29,8 @@
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "JSON/json.hpp"
+#include "JSON/Writer.hpp"
+#include "JSON/GeoWriter.hpp"
 
 struct Result {
   BrokenDateTime takeoff_time, landing_time;
@@ -117,110 +118,112 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
 }
 
 static void
-Add(json::Object &object, const GeoPoint &gp)
+WriteTimes(TextWriter &writer, const Result &result)
 {
-  object.Add(_T("longitude"), (double)gp.longitude.Degrees());
-  object.Add(_T("latitude"), (double)gp.latitude.Degrees());
-}
-
-static void
-Add(json::Object &root, const Result &result,
-    const MoreData &basic, const DerivedInfo &calculated)
-{
-  StaticString<64> buffer;
-
-  auto times = new json::Object();
-  root.Add(_T("times"), times);
+  JSON::ObjectWriter object(writer);
+  NarrowString<64> buffer;
 
   if (result.takeoff_time.Plausible()) {
     FormatISO8601(buffer.buffer(), result.takeoff_time);
-    times->Add(_T("takeoff"), buffer.c_str());
+    object.WriteElement("takeoff", JSON::WriteString, buffer);
   }
 
   if (result.landing_time.Plausible()) {
     FormatISO8601(buffer.buffer(), result.landing_time);
-    times->Add(_T("landing"), buffer.c_str());
-  }
-
-  auto locations = new json::Object();
-  root.Add(_T("locations"), locations);
-
-  if (result.takeoff_location.IsValid()) {
-    auto node = new json::Object();
-    locations->Add(_T("takeoff"), node);
-
-    Add(*node, result.takeoff_location);
-  }
-
-  if (result.landing_location.IsValid()) {
-    auto node = new json::Object();
-    locations->Add(_T("landing"), node);
-
-    Add(*node, result.landing_location);
+    object.WriteElement("landing", JSON::WriteString, buffer);
   }
 }
 
 static void
-Add(json::Array &parent, const TracePoint &point, const TracePoint *previous)
+WriteLocations(TextWriter &writer, const Result &result)
 {
-  auto node = new json::Object();
-  parent.Add(node);
+  JSON::ObjectWriter object(writer);
 
-  node->Add(_T("time"), (long)point.GetTime());
-  node->Add(_T("longitude"), (double)point.get_location().longitude.Degrees());
-  node->Add(_T("latitude"), (double)point.get_location().latitude.Degrees());
+  if (result.takeoff_location.IsValid())
+    object.WriteElement("takeoff", JSON::WriteGeoPoint,
+                        result.takeoff_location);
+
+  if (result.landing_location.IsValid())
+    object.WriteElement("landing", JSON::WriteGeoPoint,
+                        result.landing_location);
+}
+
+static void
+WriteResult(JSON::ObjectWriter &root, const Result &result)
+{
+  root.WriteElement("times", WriteTimes, result);
+  root.WriteElement("locations", WriteLocations, result);
+}
+
+static void
+WritePoint(TextWriter &writer, const TracePoint &point,
+           const TracePoint *previous)
+{
+  JSON::ObjectWriter object(writer);
+
+  object.WriteElement("time", JSON::WriteLong, (long)point.GetTime());
+  JSON::WriteGeoPointAttributes(object, point.get_location());
 
   if (previous != NULL) {
     fixed distance = point.distance(previous->get_location());
-    node->Add(_T("distance"), (long)uround(distance));
+    object.WriteElement("distance", JSON::WriteUnsigned, uround(distance));
 
     unsigned duration =
       std::max((int)point.GetTime() - (int)previous->GetTime(), 0);
-    node->Add(_T("duration"), (long)duration);
+    object.WriteElement("duration", JSON::WriteUnsigned, duration);
 
     if (duration > 0) {
       fixed speed = distance / duration;
-      node->Add(_T("speed"), (double)speed);
+      object.WriteElement("speed", JSON::WriteFixed, speed);
     }
   }
 }
 
 static void
-Add(json::Array &parent, const ContestTraceVector &trace)
+WriteTrace(TextWriter &writer, const ContestTraceVector &trace)
 {
+  JSON::ArrayWriter array(writer);
+
   const TracePoint *previous = NULL;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
-    Add(parent, *i, previous);
+    array.WriteElement(WritePoint, *i, previous);
     previous = &*i;
   }
 }
 
 static void
-Add(json::Object &parent, const TCHAR *name,
-    const ContestResult &result, const ContestTraceVector &trace)
+WriteContest(TextWriter &writer,
+             const ContestResult &result, const ContestTraceVector &trace)
 {
-  auto node = new json::Object();
-  parent.Add(name, node);
+  JSON::ObjectWriter object(writer);
 
-  node->Add(_T("score"), (double)result.score);
-  node->Add(_T("distance"), (double)result.distance);
-  node->Add(_T("duration"), (long)uround(result.time));
-  node->Add(_T("speed"), (double)result.GetSpeed());
+  object.WriteElement("score", JSON::WriteFixed, result.score);
+  object.WriteElement("distance", JSON::WriteFixed, result.distance);
+  object.WriteElement("duration", JSON::WriteUnsigned, (unsigned)result.time);
+  object.WriteElement("speed", JSON::WriteFixed, result.GetSpeed());
 
-  auto turnpoints = new json::Array();
-  node->Add(_T("turnpoints"), turnpoints);
-  Add(*turnpoints, trace);
+  object.WriteElement("turnpoints", WriteTrace, trace);
 }
 
 static void
-AddOLCPlus(json::Object &parent, const ContestStatistics &stats)
+WriteOLCPlus(TextWriter &writer, const ContestStatistics &stats)
 {
-  auto node = new json::Object();
-  parent.Add(_T("olc_plus"), node);
+  JSON::ObjectWriter object(writer);
 
-  Add(*node, _T("classic"), stats.result[0], stats.solution[0]);
-  Add(*node, _T("triangle"), stats.result[1], stats.solution[1]);
-  Add(*node, _T("plus"), stats.result[2], stats.solution[2]);
+  object.WriteElement("classic", WriteContest,
+                      stats.result[0], stats.solution[0]);
+  object.WriteElement("triangle", WriteContest,
+                      stats.result[1], stats.solution[1]);
+  object.WriteElement("plus", WriteContest,
+                      stats.result[2], stats.solution[2]);
+}
+
+static void
+WriteContests(TextWriter &writer, const ContestStatistics &olc_plus)
+{
+  JSON::ObjectWriter object(writer);
+
+  object.WriteElement("olc_plus", WriteOLCPlus, olc_plus);
 }
 
 int main(int argc, char **argv)
@@ -235,16 +238,14 @@ int main(int argc, char **argv)
   ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
   Result result;
   Run(*replay, olc_plus, result);
-
-  json::Object root;
-  Add(root, result, replay->Basic(), replay->Calculated());
   delete replay;
 
-  auto contests = new json::Object();
-  root.Add(_T("contests"), contests);
-
-  AddOLCPlus(*contests, olc_plus.GetStats());
-
   TextWriter writer("/dev/stdout", true);
-  root.Serialise(writer, -1);
+
+  {
+    JSON::ObjectWriter root(writer);
+
+    WriteResult(root, result);
+    root.WriteElement("contests", WriteContests, olc_plus.GetStats());
+  }
 }
