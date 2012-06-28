@@ -4,7 +4,6 @@ VALI_XCS_SOURCES = \
 	$(SRC)/OS/FileDescriptor.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/VALI-XCS.cpp
 VALI_XCS_DEPENDS = IO UTIL

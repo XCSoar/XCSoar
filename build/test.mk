@@ -137,11 +137,10 @@ TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestMETARParser.cpp
-TEST_METAR_PARSER_DEPENDS = MATH
+TEST_METAR_PARSER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestMETARParser,TEST_METAR_PARSER))
 
 TEST_AIRSPACE_PARSER_SOURCES = \
@@ -364,65 +363,58 @@ TEST_UNITS_DEPENDS = MATH
 $(eval $(call link-program,TestUnits,TEST_UNITS))
 
 TEST_UNITS_FORMATTER_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Formatter/Units.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestUnitsFormatter.cpp
-TEST_UNITS_FORMATTER_DEPENDS = MATH
+TEST_UNITS_FORMATTER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestUnitsFormatter,TEST_UNITS_FORMATTER))
 
 TEST_GEO_POINT_FORMATTER_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGeoPointFormatter.cpp
-TEST_GEO_POINT_FORMATTER_DEPENDS = GEO MATH
+TEST_GEO_POINT_FORMATTER_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,TestGeoPointFormatter,TEST_GEO_POINT_FORMATTER))
 
 TEST_HEX_COLOR_FORMATTER_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Formatter/HexColor.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestHexColorFormatter.cpp
-TEST_HEX_COLOR_FORMATTER_DEPENDS = MATH SCREEN
+TEST_HEX_COLOR_FORMATTER_DEPENDS = MATH SCREEN UTIL
 $(eval $(call link-program,TestHexColorFormatter,TEST_HEX_COLOR_FORMATTER))
 
 TEST_BYTE_SIZE_FORMATTER_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestByteSizeFormatter.cpp
-TEST_BYTE_SIZE_FORMATTER_DEPENDS = MATH
+TEST_BYTE_SIZE_FORMATTER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestByteSizeFormatter,TEST_BYTE_SIZE_FORMATTER))
 
 TEST_TIME_FORMATTER_SOURCES = \
 	$(SRC)/DateTime.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestTimeFormatter.cpp
-TEST_TIME_FORMATTER_DEPENDS = MATH
+TEST_TIME_FORMATTER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestTimeFormatter,TEST_TIME_FORMATTER))
 
 TEST_IGC_FILENAME_FORMATTER_SOURCES = \
 	$(SRC)/DateTime.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestIGCFilenameFormatter.cpp
-TEST_IGC_FILENAME_FORMATTER_DEPENDS = MATH
+TEST_IGC_FILENAME_FORMATTER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestIGCFilenameFormatter,TEST_IGC_FILENAME_FORMATTER))
 
 TEST_STRINGS_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestStrings.cpp
+TEST_STRINGS_DEPENDS = UTIL
 $(eval $(call link-program,TestStrings,TEST_STRINGS))
 
 TEST_POLARS_SOURCES = \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -526,9 +518,9 @@ TEST_VALIDITY_SOURCES = \
 $(eval $(call link-program,TestValidity,TEST_VALIDITY))
 
 TEST_RADIX_TREE_SOURCES = \
-	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestRadixTree.cpp
+TEST_RADIX_TREE_DEPENDS = UTIL
 $(eval $(call link-program,TestRadixTree,TEST_RADIX_TREE))
 
 TEST_LOGGER_SOURCES = \
@@ -538,11 +530,10 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Version.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestLogger.cpp
-TEST_LOGGER_DEPENDS = IO OS GEO MATH
+TEST_LOGGER_DEPENDS = IO OS GEO MATH UTIL
 $(eval $(call link-program,TestLogger,TEST_LOGGER))
 
 TEST_DRIVER_SOURCES = \
@@ -565,7 +556,6 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -777,15 +767,13 @@ BENCHMARK_PROJECTION_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,BenchmarkProjection,BENCHMARK_PROJECTION))
 
 DUMP_TEXT_FILE_SOURCES = \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
-DUMP_TEXT_FILE_DEPENDS = IO OS ZZIP
+DUMP_TEXT_FILE_DEPENDS = IO OS ZZIP UTIL
 $(eval $(call link-program,DumpTextFile,DUMP_TEXT_FILE))
 
 DUMP_TEXT_ZIP_SOURCES = \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/DumpTextZip.cpp
-DUMP_TEXT_ZIP_DEPENDS = IO ZZIP
+DUMP_TEXT_ZIP_DEPENDS = IO ZZIP UTIL
 $(eval $(call link-program,DumpTextZip,DUMP_TEXT_ZIP))
 
 DUMP_HEX_COLOR_SOURCES = \
@@ -829,7 +817,6 @@ $(eval $(call link-program,RunDownloadToFile,RUN_DOWNLOAD_TO_FILE))
 
 RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Version.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
 	$(SRC)/Weather/NOAAUpdater.cpp \
@@ -864,8 +851,6 @@ RUN_LIVETRACK24_DEPENDS = LIBNET GEO MATH UTIL
 $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
 
 RUN_XML_PARSER_SOURCES = \
-	$(SRC)/Util/UTF8.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/XML/Node.cpp \
 	$(SRC)/XML/Parser.cpp \
 	$(SRC)/XML/Writer.cpp \
@@ -920,7 +905,6 @@ $(eval $(call link-program,RunMD5,RUN_MD5))
 READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/ReadGRecord.cpp
 READ_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,ReadGRecord,READ_GRECORD))
@@ -928,7 +912,6 @@ $(eval $(call link-program,ReadGRecord,READ_GRECORD))
 VERIFY_GRECORD_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/VerifyGRecord.cpp
 VERIFY_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,VerifyGRecord,VERIFY_GRECORD))
@@ -936,7 +919,6 @@ $(eval $(call link-program,VerifyGRecord,VERIFY_GRECORD))
 APPEND_GRECORD_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
 APPEND_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,AppendGRecord,APPEND_GRECORD))
@@ -976,7 +958,6 @@ LOAD_TERRAIN_SOURCES = \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
-	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_CPPFLAGS = $(SCREEN_CPPFLAGS)
 LOAD_TERRAIN_DEPENDS = GEO MATH IO OS JASPER ZZIP UTIL
@@ -2233,9 +2214,8 @@ $(eval $(call link-program,FeedTCP,FEED_TCP))
 
 FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Math/fixed.cpp \
-	$(SRC)/Util/StringUtil.cpp \
 	$(TEST_SRC_DIR)/FeedFlyNetData.cpp
-FEED_FLYNET_DATA_DEPENDS = OS
+FEED_FLYNET_DATA_DEPENDS = OS UTIL
 
 ifeq ($(HAVE_POSIX),n)
 ifeq ($(HAVE_CE),y)
