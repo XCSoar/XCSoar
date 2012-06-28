@@ -301,6 +301,76 @@ Following the guidline should prevent the GUI from mixtures of "ON" and "On" tex
 
 This chapter describes XCSoar's internal code architecture.
 
+\section{Source Organisation}
+
+XCSoar's source code is stored in the \texttt{src} directory.  This
+section tries to give a rough overview where you can find what.
+
+\begin{itemize}
+
+\item \texttt{Util/}: generic C++ utilities that do not depend on
+  external libraries, such as data structures, string operations
+
+\item \texttt{Math/}: math data types (fixed-point math, angles) and
+  generic formulas
+
+\item \texttt{Geo/}: geographic data structures and formulas
+
+\item \texttt{Formatter/}: code that formats internal values to
+  strings
+
+\item \texttt{Units/}: conversion from SI units (``System'' units) to
+  configured user units
+
+\item \texttt{NMEA/}: data structures for values parsed from NMEA
+
+\item \texttt{Profile/}: user profiles, loading from and saving to
+
+\item \texttt{IGC/}: support for the IGC file format
+
+\item \texttt{Logger/}: all loggers (NMEA, IGC, flights)
+
+\item \texttt{Thread/}: multi-threading support (OS specific)
+
+\item \texttt{Screen/}: base library for the graphical user interface
+
+\item \texttt{Renderer/}: various graphical renderers, for map and
+  analysis
+
+\item \texttt{MapWindow/}: the map
+
+\item \texttt{Form/}: modal dialogs and their controls (based on the
+  screen library)
+
+\item \texttt{Dialogs/}: modal dialogs implementations (based on the
+  form library)
+
+\item \texttt{Net/}: networking code (OS specific)
+
+\item \texttt{Operation/}: generic code to support cancellable
+  long-running operations
+
+\item \texttt{Android/}: code specific to Android (the native part
+  only; Java code is in \texttt{android/src/}
+
+\item \texttt{Engine/PathSolvers/}: an implementation of Dijkstra's
+  path finding algorithm, for task and contest optimisation
+
+\item \texttt{Engine/Airspace/}: airspace data structures and airspace
+  warnings
+
+\item \texttt{Engine/Waypoint/}: waypoint data structures
+
+\item \texttt{Engine/GlideSolvers/}: a MacCready implementation
+
+\item \texttt{Engine/Task/}: task data structures and calculations
+
+\item \texttt{Engine/Contest/}: contest optimisation
+
+\item \texttt{Engine/Route/}: the route planner (airspace and terrain)
+
+\end{itemize}
+
 \section{Threads and Locking}
 
 \subsection{Threads}
