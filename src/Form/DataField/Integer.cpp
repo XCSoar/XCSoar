@@ -24,7 +24,7 @@ Copyright_License {
 #include "Integer.hpp"
 #include "ComboList.hpp"
 #include "Math/FastMath.h"
-#include "Compatibility/string.h"
+#include "Util/NumberParser.hpp"
 #include "Asset.hpp"
 
 #include <stdlib.h>
@@ -70,7 +70,7 @@ DataFieldInteger::SetAsInteger(int _value)
 void
 DataFieldInteger::SetAsString(const TCHAR *_value)
 {
-  SetAsInteger(_ttoi(_value));
+  SetAsInteger(ParseInt(_value));
 }
 
 void

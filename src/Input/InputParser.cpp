@@ -29,8 +29,8 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/EscapeBackslash.hpp"
+#include "Util/NumberParser.hpp"
 #include "LogFile.hpp"
-#include "Compatibility/string.h" /* for _ttoi() */
 
 #include <string.h>
 #include <tchar.h>
@@ -253,7 +253,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
       } else if (StringIsEqual(key, _T("label"))) {
         current.label = value;
       } else if (StringIsEqual(key, _T("location"))) {
-        current.location = _ttoi(value);
+        current.location = ParseUnsigned(value);
 
       } else {
         LogStartUp(_T("Invalid key/value pair %s=%s at %i"), key, value, line);

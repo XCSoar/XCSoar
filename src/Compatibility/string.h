@@ -48,25 +48,6 @@ _strupr(char *p)
 #define _strnicmp strncasecmp
 #define _strdup strdup
 
-#else /* !HAVE_MSVCRT */
-
-#ifdef _WIN32_WCE
-
-#include <wchar.h>
-
-#if GCC_VERSION >= 40500
-
-gcc_pure
-static inline int
-_wtoi(const wchar_t *s)
-{
-  return (int)wcstol(s, NULL, 10);
-}
-
-#endif /* mingw32ce >= 4.5 */
-
-#endif /* _WIN32_WCE */
-
-#endif /* HAVE_MSVCRT */
+#endif /* !HAVE_MSVCRT */
 
 #endif

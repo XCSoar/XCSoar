@@ -31,7 +31,6 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Util/StringUtil.hpp"
-#include "Compatibility/string.h" /* for _ttoi() */
 #include "Units/System.hpp"
 #include "OS/Clock.hpp"
 #include "Driver/FLARM/StaticParser.hpp"

@@ -78,7 +78,6 @@ typedef char TCHAR;
 #define _tcstok strtok
 #define _totupper toupper
 #define _itot itoa
-#define _ttoi atoi
 #define _tcstol strtol
 #define _tcstod strtod
 #define _tcscspn strcspn

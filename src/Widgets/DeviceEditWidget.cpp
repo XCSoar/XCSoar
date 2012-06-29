@@ -25,8 +25,8 @@
 #include "UIGlobals.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
+#include "Util/NumberParser.hpp"
 #include "Language/Language.hpp"
-#include "Compatibility/string.h"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Device/Register.hpp"
@@ -639,11 +639,11 @@ FinishPortField(DeviceConfig &config, const DataFieldEnum &df)
   case DeviceConfig::PortType::IOIOUART:
     /* IOIO UART */
     if (new_type == config.port_type &&
-        config.ioio_uart_id == (unsigned)_ttoi(df.GetAsString()))
+        config.ioio_uart_id == (unsigned)ParseUnsigned(df.GetAsString()))
       return false;
 
     config.port_type = new_type;
-    config.ioio_uart_id = (unsigned)_ttoi(df.GetAsString());
+    config.ioio_uart_id = (unsigned)ParseUnsigned(df.GetAsString());
     return true;
   }
 
