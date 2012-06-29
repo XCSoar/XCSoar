@@ -35,11 +35,11 @@ class Angle;
 class TeamCode
 {
   /** The team code */
-  TCHAR code[10];
+  StaticString<10> code;
 
 public:
   void Clear() {
-    code[0] = 0;
+    code.clear();
   }
 
   /**

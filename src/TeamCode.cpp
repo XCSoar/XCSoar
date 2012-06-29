@@ -131,7 +131,7 @@ fixed
 TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
-  int val = GetValueFromTeamCode(&code[2], 3);
+  int val = GetValueFromTeamCode(code.begin() + 2, 3);
   return fixed(val * 100);
 }
 
@@ -139,17 +139,17 @@ void
 TeamCode::Update(Angle bearing, fixed range)
 {
   // Clear teamcode
-  memset(code, 0, sizeof(TCHAR) * 10);
+  std::fill(code.buffer(), code.buffer() + code.MAX_SIZE, _T('\0'));
   // Calculate bearing part of the teamcode
-  ConvertBearingToTeamCode(bearing, code);
+  ConvertBearingToTeamCode(bearing, code.buffer());
   // Calculate distance part of the teamcode
-  NumberToTeamCode(range / 100, &code[2], 0);
+  NumberToTeamCode(range / 100, code.buffer() + 2, 0);
 }
 
 void
 TeamCode::Update(const TCHAR* _code)
 {
-  CopyString(code, _code, 10);
+  code = _code;
 }
 
 GeoPoint
