@@ -154,6 +154,7 @@ protected:
 private:
   /* methods from class OperationEnvironment */
   virtual bool IsCancelled() const {
+    ScopeLock protect(const_cast<Mutex &>(mutex));
     return StandbyThread::IsStopped();
   }
 };
@@ -163,7 +164,7 @@ DownloadManagerThread::Tick()
 {
   Net::Session session;
 
-  while (!queue.empty() && !IsCancelled()) {
+  while (!queue.empty() && !StandbyThread::IsStopped()) {
     Item item(std::move(queue.front()));
     queue.pop_front();
     mutex.Unlock();
