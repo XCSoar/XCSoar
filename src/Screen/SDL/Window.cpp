@@ -128,6 +128,15 @@ Window::ClearFocus()
 }
 
 void
+Window::FocusParent()
+{
+  AssertThread();
+  assert(parent != NULL);
+
+  parent->SetFocus();
+}
+
+void
 Window::SetCapture()
 {
   AssertNoneLocked();

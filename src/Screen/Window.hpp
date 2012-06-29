@@ -631,6 +631,13 @@ public:
    */
   virtual void ClearFocus();
 
+  /**
+   * Send keyboard focus to this window's parent.  This should usually
+   * only be called when this window owns the keyboard focus, and
+   * doesn't want it anymore.
+   */
+  void FocusParent();
+
 #else /* USE_GDI */
 
   void SetFocus() {
@@ -638,6 +645,13 @@ public:
     AssertThread();
 
     ::SetFocus(hWnd);
+  }
+
+  void FocusParent() {
+    AssertNoneLocked();
+    AssertThread();
+
+    ::SetFocus(::GetParent(hWnd));
   }
 
 #endif /* USE_GDI */
