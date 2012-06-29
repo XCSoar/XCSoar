@@ -35,7 +35,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Profile/InfoBoxConfig.hpp"

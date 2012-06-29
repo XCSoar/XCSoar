@@ -25,7 +25,7 @@ Copyright_License {
 #include "Form/Internal.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/HelpDialog.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <stdlib.h>

@@ -1658,7 +1658,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
-	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
@@ -1939,7 +1939,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
-	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
@@ -2056,7 +2056,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
-	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
@@ -2111,7 +2111,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
-	$(SRC)/Dialogs/dlgHelp.cpp \
+	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/dlgTaskOverview.cpp \
 	$(SRC)/Dialogs/WaypointList.cpp \
 	$(SRC)/Dialogs/dlgWaypointDetails.cpp \

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Dialogs/dlgConfigInfoboxes.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"

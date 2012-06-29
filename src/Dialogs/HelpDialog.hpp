@@ -21,41 +21,15 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
+#ifndef XCSOAR_HELP_DIALOG_HPP
+#define XCSOAR_HELP_DIALOG_HPP
 
 #include <tchar.h>
 
 class SingleWindow;
 
-void dlgAlternatesListShowModal(SingleWindow &parent);
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-void dlgLoggerReplayShowModal();
-
-/**
- * @return true on success, false if the user has pressed the "Quit"
- * button
- */
-bool
-dlgStartupShowModal();
-
-void ShowWindSettingsDialog();
-
-void dlgStatusShowModal(int page);
-
-void dlgSwitchesShowModal();
-
-void dlgVoiceShowModal();
-
-void dlgCreditsShowModal(SingleWindow &parent);
-
-void dlgQuickMenuShowModal(SingleWindow &parent);
+void
+dlgHelpShowModal(SingleWindow &parent,
+                 const TCHAR *caption, const TCHAR *text);
 
 #endif
