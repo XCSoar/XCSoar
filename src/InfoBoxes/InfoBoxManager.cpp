@@ -161,18 +161,6 @@ InfoBoxManager::GetCurrentPanelName()
   return GetPanelName(GetCurrentPanel());
 }
 
-InfoBoxFactory::Type
-InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
-{
-  assert(box < InfoBoxSettings::Panel::MAX_CONTENTS);
-  assert(panelIdx < InfoBoxSettings::MAX_PANELS);
-
-  const InfoBoxSettings &infoBoxManagerConfig =
-    CommonInterface::GetUISettings().info_boxes;
-
-  return infoBoxManagerConfig.panels[panelIdx].contents[box];
-}
-
 const TCHAR*
 InfoBoxManager::GetTitle(unsigned box)
 {
@@ -230,12 +218,15 @@ InfoBoxManager::DisplayInfoBox()
 
   const unsigned panel = GetCurrentPanel();
 
+  const InfoBoxSettings::Panel &settings =
+    CommonInterface::GetUISettings().info_boxes.panels[panel];
+
   for (unsigned i = 0; i < layout.count; i++) {
     // All calculations are made in a separate thread. Slow calculations
     // should apply to the function DoCalculationsSlow()
     // Do not put calculations here!
 
-    InfoBoxFactory::Type DisplayType = GetType(i, panel);
+    InfoBoxFactory::Type DisplayType = settings.contents[i];
     if ((unsigned)DisplayType > (unsigned)InfoBoxFactory::MAX_TYPE_VAL)
       DisplayType = InfoBoxFactory::NavAltitude;
 

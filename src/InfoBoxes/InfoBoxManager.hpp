@@ -76,7 +76,6 @@ namespace InfoBoxManager
   const TCHAR* GetCurrentPanelName();
   const TCHAR* GetPanelName(unsigned panel);
 
-  InfoBoxFactory::Type GetType(unsigned box, unsigned panel);
   const TCHAR* GetTitle(unsigned box);
 
   bool IsEmpty(unsigned panel);
