@@ -58,11 +58,14 @@ namespace InfoBoxManager
    */
   static bool first;
 
-  InfoBoxFactory::Type GetCurrentType(unsigned box);
+  gcc_pure
+  static InfoBoxFactory::Type GetCurrentType(unsigned box);
 
-  void DisplayInfoBox();
-  void InfoBoxDrawIfDirty();
-  int GetFocused();
+  static void DisplayInfoBox();
+  static void InfoBoxDrawIfDirty();
+
+  gcc_pure
+  static int GetFocused();
 }
 
 static bool infoboxes_dirty = false;
