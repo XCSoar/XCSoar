@@ -92,7 +92,9 @@ namespace SkyLinesTracking {
     uint64_t key;
   };
 
+#ifdef __cplusplus
   static_assert(sizeof(Header) == 16, "Wrong struct size");
+#endif
 
   struct GeoPoint {
     /**
@@ -101,7 +103,9 @@ namespace SkyLinesTracking {
     int32_t latitude, longitude;
   };
 
+#ifdef __cplusplus
   static_assert(sizeof(GeoPoint) == 8, "Wrong struct size");
+#endif
 
   /**
    * A GPS fix being uploaded to the server.
@@ -155,7 +159,9 @@ namespace SkyLinesTracking {
     uint16_t engine_noise_level;
   };
 
+#ifdef __cplusplus
   static_assert(sizeof(FixPacket) == 48, "Wrong struct size");
+#endif
 };
 
 #endif
