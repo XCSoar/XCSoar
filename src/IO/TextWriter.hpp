@@ -70,7 +70,7 @@ public:
    * checked before calling any other method.
    */
   bool IsOpen() const {
-    return !file.IsOpen();
+    return file.IsOpen();
   }
 
   /**
