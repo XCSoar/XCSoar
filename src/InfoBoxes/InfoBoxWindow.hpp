@@ -47,11 +47,11 @@ private:
   const InfoBoxLook &look;
   const UnitsLook &units_look;
 
-  int border_kind;
+  const unsigned border_kind;
+
+  const unsigned id;
 
   InfoBoxData data;
-
-  int id;
 
   /**
    * draw the selector event if the InfoBox window is not the system focus
@@ -93,12 +93,6 @@ public:
                  UPixelScalar width, UPixelScalar height);
 
   /**
-   * Sets the InfoBox ID to the given Value
-   * @param id New value of the InfoBox ID
-   */
-  void SetID(const int id);
-  int GetID() { return id; };
-  /**
    * Sets the InfoBox title to the given Value
    * @param Value New value of the InfoBox title
    */
@@ -117,9 +111,10 @@ public:
    * @param Height Height of the InfoBox
    */
   InfoBoxWindow(ContainerWindow &parent, PixelScalar x, PixelScalar y,
-                UPixelScalar width, UPixelScalar height, int border_flags,
+                UPixelScalar width, UPixelScalar height, unsigned border_flags,
                 const InfoBoxSettings &settings, const InfoBoxLook &_look,
                 const UnitsLook &units_look,
+                unsigned id,
                 WindowStyle style=WindowStyle());
 
   ~InfoBoxWindow();

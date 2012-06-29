@@ -53,13 +53,16 @@ using std::max;
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar width, UPixelScalar height,
-                             int border_flags, const InfoBoxSettings &_settings,
+                             unsigned border_flags,
+                             const InfoBoxSettings &_settings,
                              const InfoBoxLook &_look,
                              const UnitsLook &_units_look,
+                             unsigned _id,
                              WindowStyle style)
   :content(NULL),
    settings(_settings), look(_look), units_look(_units_look),
    border_kind(border_flags),
+   id(_id),
    force_draw_selector(false),
    focus_timer(*this)
 {
@@ -67,19 +70,11 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent,
 
   style.EnableDoubleClicks();
   set(parent, x, y, width, height, style);
-
-  id = -1;
 }
 
 InfoBoxWindow::~InfoBoxWindow() {
   delete content;
   reset();
-}
-
-void
-InfoBoxWindow::SetID(const int _id)
-{
-  id = _id;
 }
 
 void

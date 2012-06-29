@@ -235,7 +235,6 @@ InfoBoxManager::DisplayInfoBox()
     if (needupdate) {
       infoboxes[i]->SetTitle(gettext(InfoBoxFactory::GetCaption(DisplayType)));
       infoboxes[i]->SetContentProvider(InfoBoxFactory::Create(DisplayType));
-      infoboxes[i]->SetID(i);
       DisplayTypeLast[i] = DisplayType;
     }
 
@@ -316,7 +315,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
                                      rc.left, rc.top,
                                      rc.right - rc.left, rc.bottom - rc.top,
                                      Border, settings, look, units_look,
-                                     style);
+                                     i, style);
   }
 
   infoboxes_hidden = true;
