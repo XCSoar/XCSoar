@@ -50,7 +50,7 @@ using std::max;
 
 #define SELECTORWIDTH Layout::Scale(5)
 
-InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
+InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent,
                              PixelScalar x, PixelScalar y,
                              UPixelScalar width, UPixelScalar height,
                              int border_flags, const InfoBoxSettings &_settings,
@@ -58,7 +58,6 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
                              const UnitsLook &_units_look,
                              WindowStyle style)
   :content(NULL),
-   parent(_parent),
    settings(_settings), look(_look), units_look(_units_look),
    border_kind(border_flags),
    force_draw_selector(false),
@@ -449,7 +448,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 
   case VK_ESCAPE:
     focus_timer.Cancel();
-    parent.SetFocus();
+    FocusParent();
     return true;
   }
 
@@ -549,7 +548,7 @@ InfoBoxWindow::OnTimer(WindowTimer &timer)
 {
   if (timer == focus_timer) {
     focus_timer.Cancel();
-    parent.SetFocus();
+    FocusParent();
     return true;
   } else
     return PaintWindow::OnTimer(timer);

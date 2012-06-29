@@ -42,7 +42,6 @@ class InfoBoxWindow : public PaintWindow
 
 private:
   InfoBoxContent *content;
-  ContainerWindow &parent;
 
   const InfoBoxSettings &settings;
   const InfoBoxLook &look;
