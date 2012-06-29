@@ -638,7 +638,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunHeightMatrix \
 	RunInputParser \
 	RunWaypointParser RunAirspaceParser \
-	ReadPort RunPortHandler \
+	ReadPort RunPortHandler LogPort \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunEnableNMEA \
 	CAI302Tool \
@@ -1067,6 +1067,15 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(TEST_SRC_DIR)/RunPortHandler.cpp
 RUN_PORT_HANDLER_DEPENDS = PORT ASYNC OS THREAD UTIL
 $(eval $(call link-program,RunPortHandler,RUN_PORT_HANDLER))
+
+LOG_PORT_SOURCES = \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
+	$(SRC)/OS/LogError.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/DebugPort.cpp \
+	$(TEST_SRC_DIR)/LogPort.cpp
+LOG_PORT_DEPENDS = PORT ASYNC OS THREAD UTIL
+$(eval $(call link-program,LogPort,LOG_PORT))
 
 RUN_TCP_LISTENER_SOURCES = \
 	$(SRC)/Device/Port/Port.cpp \
