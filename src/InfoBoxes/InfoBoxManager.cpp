@@ -260,18 +260,6 @@ InfoBoxManager::DisplayInfoBox()
   first = false;
 }
 
-const InfoBoxContent::DialogContent *
-InfoBoxManager::GetDialogContent(const int id)
-{
-  if (id < 0)
-    return NULL;
-
-  if (infoboxes[id] != NULL)
-    return infoboxes[id]->GetDialogContent();
-
-  return NULL;
-}
-
 void
 InfoBoxManager::ProcessQuickAccess(const int id, const TCHAR *Value)
 {

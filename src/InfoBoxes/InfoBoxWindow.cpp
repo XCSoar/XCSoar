@@ -346,7 +346,7 @@ InfoBoxWindow::ShowDialog()
 {
   force_draw_selector = true;
 
-  dlgInfoBoxAccessShowModeless(id);
+  dlgInfoBoxAccessShowModeless(id, GetDialogContent());
 
   force_draw_selector = false;
 }

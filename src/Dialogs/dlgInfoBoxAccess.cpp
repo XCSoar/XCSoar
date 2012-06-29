@@ -80,14 +80,12 @@ static WndForm *wf = NULL;
 static TabBarControl* wTabBar = NULL;
 
 void
-dlgInfoBoxAccessShowModeless(const int id)
+dlgInfoBoxAccessShowModeless(const int id,
+                             const InfoBoxContent::DialogContent *dlgContent)
 {
   // check for another instance of this window
   if (wf != NULL) return;
   assert (id > -1);
-
-  const InfoBoxContent::DialogContent *dlgContent;
-  dlgContent = InfoBoxManager::GetDialogContent(id);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 

@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef DLGINFOBOXACCESS_HPP
 #define DLGINFOBOXACCESS_HPP
 
+#include "InfoBoxes/Content/Base.hpp"
+
 class WndForm;
 
 class dlgInfoBoxAccess
@@ -36,6 +38,7 @@ public:
 };
 
 void
-dlgInfoBoxAccessShowModeless(const int id);
+dlgInfoBoxAccessShowModeless(int id,
+                             const InfoBoxContent::DialogContent *content);
 
 #endif /* DLGINFOBOXACCESS_H_ */
