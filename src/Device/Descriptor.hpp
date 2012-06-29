@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DESCRIPTOR_HPP
 #define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
-#include "Port/Port.hpp"
+#include "IO/DataHandler.hpp"
 #include "Port/LineSplitter.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
@@ -85,7 +85,7 @@ class DeviceDescriptor : private Notify, private PortLineSplitter {
    * A handler that will receive all data, to display it on the
    * screen.  Can be set with SetMonitor().
    */
-  Port::Handler *monitor;
+  DataHandler  *monitor;
 
   /**
    * A handler that will receive all NMEA lines, to dispatch it to
@@ -360,7 +360,7 @@ private:
   bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
 public:
-  void SetMonitor(Port::Handler *_monitor) {
+  void SetMonitor(DataHandler  *_monitor) {
     monitor = _monitor;
   }
 
@@ -415,7 +415,7 @@ private:
   /* virtual methods from class Notify */
   virtual void OnNotification();
 
-  /* virtual methods from Port::Handler */
+  /* virtual methods from DataHandler  */
   virtual void DataReceived(const void *data, size_t length);
 
   /* virtual methods from PortLineHandler */

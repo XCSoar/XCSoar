@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/CAI302/Internal.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "DebugPort.hpp"
 #include "OS/Args.hpp"
@@ -164,7 +165,7 @@ int main(int argc, char **argv)
 
   InitialiseIOThread();
 
-  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  Port *port = OpenPort(config, *(DataHandler *)NULL);
   if (port == NULL) {
     fprintf(stderr, "Failed to open port\n");
     return EXIT_FAILURE;

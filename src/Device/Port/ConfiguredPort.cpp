@@ -79,7 +79,7 @@ detect_gps(TCHAR *path, size_t path_max_size)
 }
 
 static Port *
-WrapPort(const DeviceConfig &config, Port::Handler &handler, Port *port)
+WrapPort(const DeviceConfig &config, DataHandler &handler, Port *port)
 {
   if (config.k6bt && config.MaybeBluetooth())
     port = new K6BtPort(port, config.baud_rate, handler);
@@ -93,7 +93,7 @@ WrapPort(const DeviceConfig &config, Port::Handler &handler, Port *port)
 }
 
 static Port *
-OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
+OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 {
   const TCHAR *path = NULL;
   TCHAR buffer[MAX_PATH];
@@ -222,7 +222,7 @@ OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
 }
 
 Port *
-OpenPort(const DeviceConfig &config, Port::Handler &handler)
+OpenPort(const DeviceConfig &config, DataHandler &handler)
 {
   Port *port = OpenPortInternal(config, handler);
   if (port != NULL)

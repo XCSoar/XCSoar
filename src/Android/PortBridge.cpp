@@ -56,7 +56,7 @@ PortBridge::PortBridge(JNIEnv *env, jobject obj)
 }
 
 void
-PortBridge::setListener(JNIEnv *env, Port::Handler *handler)
+PortBridge::setListener(JNIEnv *env, DataHandler *handler)
 {
   jobject listener = handler != NULL
     ? NativeInputListener::Create(env, *handler)

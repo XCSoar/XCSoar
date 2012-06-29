@@ -31,6 +31,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "DebugPort.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
 
   InitialiseIOThread();
 
-  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  Port *port = OpenPort(config, *(DataHandler *)NULL);
   if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;

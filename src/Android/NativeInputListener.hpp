@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_ANDROID_NATIVE_INPUT_LISTENER_HPP
 #define XCSOAR_ANDROID_NATIVE_INPUT_LISTENER_HPP
 
-#include "Device/Port/Port.hpp"
-
 #include <jni.h>
+
+class DataHandler;
 
 namespace NativeInputListener {
   void Initialise(JNIEnv *env);
@@ -36,7 +36,7 @@ namespace NativeInputListener {
    * Create a Java NativeInputListener instance.  It is not bound to a
    * handler yet; call Set() to do this.
    */
-  jobject Create(JNIEnv *env, Port::Handler &handler);
+  jobject Create(JNIEnv *env, DataHandler &handler);
 }
 
 #endif

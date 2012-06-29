@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DebugPort.hpp"
+#include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
@@ -394,7 +395,7 @@ main(int argc, char **argv)
 
   InitialiseIOThread();
 
-  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  Port *port = OpenPort(config, *(DataHandler *)NULL);
   if (port == NULL) {
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;

@@ -27,7 +27,7 @@ Copyright_License {
 #include <stdint.h>
 #include <stdio.h>
 
-DumpPort::DumpPort(Port *_port) :Port(*(Handler *)NULL), port(_port) {}
+DumpPort::DumpPort(Port *_port):Port(*(DataHandler *)NULL), port(_port) {}
 
 DumpPort::~DumpPort()
 {

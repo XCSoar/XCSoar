@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_LINE_SPLITTER_HPP
 #define XCSOAR_DEVICE_LINE_SPLITTER_HPP
 
-#include "Port.hpp"
+#include "IO/DataHandler.hpp"
 #include "LineHandler.hpp"
 #include "Util/FifoBuffer.hpp"
 
-class PortLineSplitter : public Port::Handler, protected PortLineHandler {
+class PortLineSplitter : public DataHandler, protected PortLineHandler {
   typedef FifoBuffer<char, 256u> Buffer;
 
   Buffer buffer;

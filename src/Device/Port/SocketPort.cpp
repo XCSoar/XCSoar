@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "SocketPort.hpp"
+#include "IO/DataHandler.hpp"
 
 #include <assert.h>
 

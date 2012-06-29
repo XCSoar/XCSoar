@@ -41,10 +41,10 @@ static TerminalWindow *terminal;
 static bool paused;
 
 /**
- * A bridge between Port::Handler and TerminalWindow: copy all data
+ * A bridge between DataHandler and TerminalWindow: copy all data
  * received from the Port to the TerminalWindow.
  */
-class PortTerminalBridge : public Port::Handler, Notify {
+class PortTerminalBridge : public DataHandler, Notify {
   TerminalWindow &terminal;
   Mutex mutex;
   FifoBuffer<char, 1024> buffer;

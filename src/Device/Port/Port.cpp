@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-Port::Port(Handler &_handler)
+Port::Port(DataHandler &_handler)
   :handler(_handler) {}
 
 Port::~Port() {}

@@ -31,10 +31,10 @@ Copyright_License {
 
 gcc_malloc
 Port *
-OpenAndroidBluetoothPort(const TCHAR *address, Port::Handler &_handler);
+OpenAndroidBluetoothPort(const TCHAR *address, DataHandler &_handler);
 
 gcc_malloc
 Port *
-OpenAndroidBluetoothServerPort(Port::Handler &_handler);
+OpenAndroidBluetoothServerPort(DataHandler &_handler);
 
 #endif

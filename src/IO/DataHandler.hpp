@@ -21,18 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_EMULATOR_HPP
-#define XCSOAR_DEVICE_EMULATOR_HPP
+#ifndef XCSOAR_IO_DATA_HANDLER_HPP
+#define XCSOAR_IO_DATA_HANDLER_HPP
 
-#include "Device/Port/Port.hpp"
-#include "Operation/Operation.hpp"
+#include "Compiler.h"
 
-struct Emulator {
-  Port *port;
-  DataHandler *handler;
-  OperationEnvironment *env;
+#include <stddef.h>
 
-  virtual ~Emulator() {}
+/**
+ * Interface with callbacks for the #Port class.
+ */
+class DataHandler {
+public:
+  gcc_nonnull_all
+  virtual void DataReceived(const void *data, size_t length) = 0;
 };
 
 #endif

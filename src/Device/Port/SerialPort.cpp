@@ -39,7 +39,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-SerialPort::SerialPort(Port::Handler &_handler)
+SerialPort::SerialPort(DataHandler &_handler)
   :BufferedPort(_handler)
 {
 }

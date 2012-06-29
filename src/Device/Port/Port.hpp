@@ -29,6 +29,7 @@ Copyright_License {
 #include <stddef.h>
 
 class OperationEnvironment;
+class DataHandler;
 
 /**
  * Generic Port thread handler class
@@ -62,20 +63,11 @@ public:
     CANCELLED,
   };
 
-  /**
-   * Interface with callbacks for the #Port class.
-   */
-  class Handler {
-  public:
-    gcc_nonnull_all
-    virtual void DataReceived(const void *data, size_t length) = 0;
-  };
-
 protected:
-  Handler &handler;
+  DataHandler &handler;
 
 public:
-  Port(Handler &_handler);
+  Port(DataHandler &_handler);
   virtual ~Port();
 
   /**

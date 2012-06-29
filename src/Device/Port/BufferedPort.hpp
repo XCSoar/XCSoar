@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_BUFFERED_PORT_HPP
 
 #include "Port.hpp"
+#include "IO/DataHandler.hpp"
 #include "Thread/Mutex.hpp"
 #include "Util/FifoBuffer.hpp"
 
@@ -39,10 +40,10 @@ Copyright_License {
 /**
  * An abstract #Port implementation which manages incoming data in a
  * FIFO buffer.  This buffer can be fed from another thread.  Derive
- * from this class and call DataReceived() (or use the Port::Handler
+ * from this class and call DataReceived() (or use the DataHandler
  * base class) whenever you get some data from the device.
  */
-class BufferedPort : public Port, protected Port::Handler {
+class BufferedPort : public Port, protected DataHandler {
   /**
    * Protects the buffer and the flags.
    */
@@ -65,7 +66,7 @@ class BufferedPort : public Port, protected Port::Handler {
   bool closing;
 
 public:
-  BufferedPort(Port::Handler &_handler);
+  BufferedPort(DataHandler &_handler);
 
 #ifndef NDEBUG
   virtual ~BufferedPort();
@@ -84,7 +85,7 @@ public:
   virtual bool StartRxThread();
 
 protected:
-  /* virtual methods from class Port::Handler */
+  /* virtual methods from class DataHandler */
   virtual void DataReceived(const void *data, size_t length);
 };
 

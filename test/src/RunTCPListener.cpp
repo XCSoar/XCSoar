@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "OS/Sleep.h"
-
 #include "Device/Port/TCPPort.hpp"
+#include "IO/DataHandler.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-class MyHandler : public Port::Handler {
+class MyHandler : public DataHandler {
 public:
   virtual void DataReceived(const void *data, size_t length) {
     fwrite(data, 1, length, stdout);

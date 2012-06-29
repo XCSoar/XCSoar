@@ -24,6 +24,7 @@ Copyright_License {
 #include "DebugPort.hpp"
 #include "OS/Args.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "IO/Async/GlobalIOThread.hpp"
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
 
   InitialiseIOThread();
 
-  Port *port = OpenPort(config, *(Port::Handler *)NULL);
+  Port *port = OpenPort(config, *(DataHandler *)NULL);
   if (port == NULL) {
     delete port;
     fprintf(stderr, "Failed to open COM port\n");

@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_CONFIGURED_PORT_HPP
 #define XCSOAR_DEVICE_CONFIGURED_PORT_HPP
 
-#include "Port.hpp"
-
+class Port;
+class DataHandler;
 struct DeviceConfig;
 
 Port *
-OpenPort(const DeviceConfig &config, Port::Handler &handler);
+OpenPort(const DeviceConfig &config, DataHandler &handler);
 
 #endif

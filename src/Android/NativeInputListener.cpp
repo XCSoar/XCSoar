@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "NativeInputListener.hpp"
+#include "IO/DataHandler.hpp"
 #include "Java/Class.hpp"
 #include "org_xcsoar_NativeInputListener.h"
 
@@ -42,7 +43,7 @@ Java_org_xcsoar_NativeInputListener_dataReceived(JNIEnv *env, jobject obj,
     /* not yet set */
     return;
 
-  Port::Handler &handler = *(Port::Handler *)(void *)ptr;
+  DataHandler &handler = *(DataHandler *)(void *)ptr;
 
   jbyte *data2 = env->GetByteArrayElements(data, NULL);
   handler.DataReceived(data2, length);
@@ -65,7 +66,7 @@ NativeInputListener::Deinitialise(JNIEnv *env)
 }
 
 jobject
-NativeInputListener::Create(JNIEnv *env, Port::Handler &handler)
+NativeInputListener::Create(JNIEnv *env, DataHandler &handler)
 {
   assert(cls != NULL);
 

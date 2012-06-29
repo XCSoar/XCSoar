@@ -26,11 +26,11 @@ Copyright_License {
 #include <stdio.h>
 
 NullPort::NullPort()
-  :Port(*(Port::Handler *)this)
+  :Port(*(DataHandler *)this)
 {
 }
 
-NullPort::NullPort(Port::Handler &_handler)
+NullPort::NullPort(DataHandler &_handler)
   :Port(_handler)
 {
 }

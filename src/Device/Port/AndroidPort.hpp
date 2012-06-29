@@ -37,7 +37,7 @@ class AndroidPort : public BufferedPort
   PortBridge *bridge;
 
 public:
-  AndroidPort(Port::Handler &_handler, PortBridge *bridge);
+  AndroidPort(DataHandler &_handler, PortBridge *bridge);
   virtual ~AndroidPort();
 
   virtual bool IsValid() const;

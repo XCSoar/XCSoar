@@ -989,7 +989,7 @@ TestZander()
 static void
 TestDeclare(const struct DeviceRegister &driver)
 {
-  FaultInjectionPort port(*(Port::Handler *)NULL);
+  FaultInjectionPort port(*(DataHandler *)NULL);
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 
@@ -1031,7 +1031,7 @@ TestDeclare(const struct DeviceRegister &driver)
 static void
 TestFlightList(const struct DeviceRegister &driver)
 {
-  FaultInjectionPort port(*(Port::Handler *)NULL);
+  FaultInjectionPort port(*(DataHandler *)NULL);
   Device *device = driver.CreateOnPort(dummy_config, port);
   ok1(device != NULL);
 

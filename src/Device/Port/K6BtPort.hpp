@@ -44,7 +44,7 @@ class K6BtPort : public Port {
   unsigned baud_rate;
 
 public:
-  K6BtPort(Port *port, unsigned baud_rate, Handler &handler);
+  K6BtPort(Port *port, unsigned baud_rate, DataHandler &handler);
 
   virtual ~K6BtPort();
 

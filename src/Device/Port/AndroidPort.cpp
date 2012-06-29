@@ -24,7 +24,7 @@ Copyright_License {
 #include "AndroidPort.hpp"
 #include "Android/PortBridge.hpp"
 
-AndroidPort::AndroidPort(Port::Handler &_handler, PortBridge *_bridge)
+AndroidPort::AndroidPort(DataHandler &_handler, PortBridge *_bridge)
   :BufferedPort(_handler), bridge(_bridge)
 {
   bridge->setListener(Java::GetEnv(), this);

@@ -37,7 +37,7 @@ public:
   bool running;
   unsigned baud_rate;
 
-  FaultInjectionPort(Handler &_handler)
+  FaultInjectionPort(DataHandler &_handler)
     :Port(_handler), running(true), baud_rate(DEFAULT_BAUD_RATE) {}
 
   virtual bool IsValid() const {
@@ -94,7 +94,7 @@ public:
   }
 };
 
-Port::Port(Handler &_handler)
+Port::Port(DataHandler &_handler)
   :handler(_handler) {}
 
 Port::~Port() {}

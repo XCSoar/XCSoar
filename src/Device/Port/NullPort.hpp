@@ -24,15 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_NULL_PORT_HPP
 #define XCSOAR_DEVICE_NULL_PORT_HPP
 
+#include "IO/DataHandler.hpp"
 #include "Port.hpp"
 
 /**
  * Generic NullPort thread handler class
  */
-class NullPort : public Port, private Port::Handler {
+class NullPort : public Port, private DataHandler  {
 public:
   NullPort();
-  NullPort(Port::Handler &_handler);
+  NullPort(DataHandler  &_handler);
 
   virtual bool IsValid() const;
   virtual size_t Write(const void *data, size_t length);

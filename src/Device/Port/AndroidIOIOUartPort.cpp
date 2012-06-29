@@ -31,7 +31,7 @@ Copyright_License {
 
 Port *
 OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
-                        Port::Handler &handler)
+                        DataHandler &handler)
 {
   assert(uart_id < AndroidIOIOUartPort::getNumberUarts());
 

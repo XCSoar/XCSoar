@@ -24,10 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 #define XCSOAR_DEVICE_ANDROID_IOIO_UART_PORT_HPP
 
-#include "Port.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
+
+class Port;
+class DataHandler;
 
 namespace AndroidIOIOUartPort
 {
@@ -52,6 +54,6 @@ namespace AndroidIOIOUartPort
 gcc_malloc
 Port *
 OpenAndroidIOIOUartPort(unsigned uart_id, unsigned baud_rate,
-                        Port::Handler &handler);
+                        DataHandler &handler);
 
 #endif

@@ -42,7 +42,7 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  SocketPort(Handler &handler):Port(handler) {}
+  SocketPort(DataHandler &handler):Port(handler) {}
 
   /**
    * Closes the serial port (Destructor)

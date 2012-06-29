@@ -58,7 +58,7 @@ public:
    * @param _handler the callback object for input received on the
    * port
    */
-  SerialPort(Port::Handler &_handler);
+  SerialPort(DataHandler &_handler);
 
   /**
    * Closes the serial port (Destructor)

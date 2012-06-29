@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 Port *
-OpenAndroidBluetoothPort(const TCHAR *address, Port::Handler &handler)
+OpenAndroidBluetoothPort(const TCHAR *address, DataHandler &handler)
 {
   assert(address != NULL);
 
@@ -41,7 +41,7 @@ OpenAndroidBluetoothPort(const TCHAR *address, Port::Handler &handler)
 }
 
 Port *
-OpenAndroidBluetoothServerPort(Port::Handler &handler)
+OpenAndroidBluetoothServerPort(DataHandler &handler)
 {
   PortBridge *bridge = BluetoothHelper::createServer(Java::GetEnv());
   if (bridge == NULL)

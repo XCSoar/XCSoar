@@ -27,7 +27,7 @@ Copyright_License {
 #include "Port/LineHandler.hpp"
 
 /**
- * A #Port::Handler that dispatches incoming data to all NMEA outputs.
+ * A #DataHandler that dispatches incoming data to all NMEA outputs.
  */
 class DeviceDispatcher : public PortLineHandler {
   /**
@@ -39,7 +39,7 @@ class DeviceDispatcher : public PortLineHandler {
 public:
   DeviceDispatcher(unsigned _exclude):exclude(_exclude) {}
 
-  /* virtual methods from Port::Handler */
+  /* virtual methods from DataHandler */
   virtual void LineReceived(const char *line);
 };
 
