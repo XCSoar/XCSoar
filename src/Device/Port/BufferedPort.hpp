@@ -56,20 +56,13 @@ class BufferedPort : public Port, protected Port::Handler {
    * buffer.
    */
   Trigger data_trigger;
-
-  /**
-   * Emitted by Read() when data from the buffer has been consumed.
-   */
-  Trigger consumed_trigger;
-
-  Trigger exited_trigger;
 #endif
 
-  FifoBuffer<uint8_t, 1024> buffer;
+  FifoBuffer<uint8_t, 16384> buffer;
 
   bool running;
 
-  bool waiting, closing;
+  bool closing;
 
 public:
   BufferedPort(Port::Handler &_handler);

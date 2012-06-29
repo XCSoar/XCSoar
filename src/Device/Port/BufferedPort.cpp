@@ -30,7 +30,7 @@ Copyright_License {
 
 BufferedPort::BufferedPort(Port::Handler &_handler)
   :Port(_handler),
-   running(false), waiting(false), closing(false)
+   running(false), closing(false)
 {
 }
 
@@ -39,7 +39,6 @@ BufferedPort::BufferedPort(Port::Handler &_handler)
 BufferedPort::~BufferedPort()
 {
   assert(closing);
-  assert(!waiting);
 }
 
 #endif
@@ -53,26 +52,12 @@ BufferedPort::BeginClose()
   cond.Signal();
 #else
   data_trigger.Signal();
-  consumed_trigger.Signal();
 #endif
 }
 
 void
 BufferedPort::EndClose()
 {
-  ScopeLock protect(mutex);
-  /* make sure the callback isn't running */
-  while (waiting) {
-#ifdef HAVE_POSIX
-    cond.Signal();
-    cond.Wait(mutex);
-#else
-    data_trigger.Signal();
-    mutex.Unlock();
-    consumed_trigger.WaitAndReset();
-    mutex.Lock();
-#endif
-  }
 }
 
 void
@@ -92,7 +77,6 @@ BufferedPort::StopRxThread()
   cond.Broadcast();
 #else
   data_trigger.Signal();
-  consumed_trigger.Signal();
 #endif
 
   return true;
@@ -111,7 +95,6 @@ BufferedPort::StartRxThread()
   cond.Broadcast();
 #else
   data_trigger.Signal();
-  consumed_trigger.Signal();
 #endif
 
   return true;
@@ -132,16 +115,6 @@ BufferedPort::Read(void *dest, size_t length)
   size_t nbytes = std::min(length, r.length);
   std::copy(r.data, r.data + nbytes, (uint8_t *)dest);
   buffer.Consume(nbytes);
-
-  if (waiting) {
-    /* wake up the thread that may be waiting in DataReceived() */
-#ifdef HAVE_POSIX
-    cond.Broadcast();
-#else
-    consumed_trigger.Signal();
-#endif
-  }
-
   return nbytes;
 }
 
@@ -175,62 +148,28 @@ BufferedPort::WaitRead(unsigned timeout_ms)
 void
 BufferedPort::DataReceived(const void *data, size_t length)
 {
-  assert(!waiting);
-
   if (running) {
     handler.DataReceived(data, length);
   } else {
     const uint8_t *p = (const uint8_t *)data;
 
-    while (length > 0) {
-      ScopeLock protect(mutex);
+    ScopeLock protect(mutex);
 
-      auto r = buffer.Write();
-      if (r.length > 0) {
-        size_t nbytes = std::min(length, r.length);
-        std::copy(p, p + nbytes, r.data);
-        buffer.Append(nbytes);
+    auto r = buffer.Write();
+    if (r.length == 0)
+      /* the buffer is already full, discard excess data */
+      return;
 
-        p += nbytes;
-        length -= nbytes;
+    /* discard excess data */
+    size_t nbytes = std::min(length, r.length);
+
+    std::copy(p, p + nbytes, r.data);
+    buffer.Append(nbytes);
 
 #ifdef HAVE_POSIX
-        cond.Broadcast();
+    cond.Broadcast();
 #else
-        data_trigger.Signal();
+    data_trigger.Signal();
 #endif
-      } else {
-        if (closing)
-          break;
-
-        /* buffer is full; wait for another thread to consume data
-           from it */
-        waiting = true;
-#ifdef HAVE_POSIX
-        cond.Wait(mutex);
-#else
-        mutex.Unlock();
-        consumed_trigger.WaitAndReset();
-        mutex.Lock();
-#endif
-        waiting = false;
-
-        if (closing) {
-          /* while we were waiting, the destructor got called, and it
-             is waiting for us to return  */
-#ifdef HAVE_POSIX
-          cond.Broadcast();
-#else
-          data_trigger.Signal();
-#endif
-          break;
-        }
-
-        if (!running)
-          /* while we were waiting, somebody else has called
-             StopRxThread() */
-          break;
-      }
-    }
   }
 }
