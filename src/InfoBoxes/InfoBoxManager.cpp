@@ -25,7 +25,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "Border.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "InfoBoxes/Content/Base.hpp"
@@ -64,8 +63,6 @@ namespace InfoBoxManager
   void DisplayInfoBox();
   void InfoBoxDrawIfDirty();
   int GetFocused();
-
-  int GetInfoBoxBorder(unsigned i);
 }
 
 static bool infoboxes_dirty = false;
@@ -317,125 +314,6 @@ InfoBoxManager::ProcessTimer()
   InfoBoxDrawIfDirty();
 }
 
-int
-InfoBoxManager::GetInfoBoxBorder(unsigned i)
-{
-  const InfoBoxSettings &settings =
-    CommonInterface::GetUISettings().info_boxes;
-
-  if (settings.border_style == apIbTab)
-    return 0;
-
-  unsigned border = 0;
-
-  /* layout.geometry is the effective layout, while settings.geometry
-     is the configured layout */
-  switch (layout.geometry) {
-  case InfoBoxSettings::Geometry::TOP_4_BOTTOM_4:
-    if (i < 4)
-      border |= BORDERBOTTOM;
-    else
-      border |= BORDERTOP;
-
-    if (i != 3 && i != 7)
-      border |= BORDERRIGHT;
-    break;
-
-  case InfoBoxSettings::Geometry::BOTTOM_8:
-  case InfoBoxSettings::Geometry::BOTTOM_8_VARIO:
-  case InfoBoxSettings::Geometry::BOTTOM_4:
-    border |= BORDERTOP;
-
-    if (i != 3 && i != 7)
-      border |= BORDERRIGHT;
-    break;
-
-  case InfoBoxSettings::Geometry::BOTTOM_12:
-    border |= BORDERTOP;
-
-    if (i != 5 && i != 11)
-      border |= BORDERRIGHT;
-    break;
-
-  case InfoBoxSettings::Geometry::TOP_8:
-  case InfoBoxSettings::Geometry::TOP_4:
-    border |= BORDERBOTTOM;
-
-    if (i != 3 && i != 7)
-      border |= BORDERRIGHT;
-    break;
-
-  case InfoBoxSettings::Geometry::TOP_12:
-    border |= BORDERBOTTOM;
-
-    if (i != 5 && i != 11)
-      border |= BORDERRIGHT;
-    break;
-
-  case InfoBoxSettings::Geometry::LEFT_4_RIGHT_4:
-    if (i != 3 && i != 7)
-      border |= BORDERBOTTOM;
-
-    if (i < 4)
-      border |= BORDERRIGHT;
-    else
-      border |= BORDERLEFT;
-    break;
-
-  case InfoBoxSettings::Geometry::LEFT_6_RIGHT_3_VARIO:
-    if ((i != 0) && (i != 6))
-      border |= BORDERTOP;
-    if (i < 6)
-      border |= BORDERRIGHT;
-    else
-      border |= BORDERLEFT;
-    break;
-
-  case InfoBoxSettings::Geometry::LEFT_8:
-  case InfoBoxSettings::Geometry::LEFT_4:
-    if (i != 3 && i != 7)
-      border |= BORDERBOTTOM;
-
-    border |= BORDERRIGHT;
-    break;
-
-  case InfoBoxSettings::Geometry::RIGHT_8:
-  case InfoBoxSettings::Geometry::RIGHT_4:
-    if (i != 3 && i != 7)
-      border |= BORDERBOTTOM;
-
-    border |= BORDERLEFT;
-    break;
-
-  case InfoBoxSettings::Geometry::RIGHT_9_VARIO:
-    if (i != 0)
-      border |= BORDERTOP;
-    if (i < 6)
-      border |= BORDERLEFT|BORDERRIGHT;
-    break;
-
-  case InfoBoxSettings::Geometry::RIGHT_5:
-    border |= BORDERLEFT;
-    if (i != 0)
-      border |= BORDERTOP;
-    break;
-
-  case InfoBoxSettings::Geometry::RIGHT_12:
-    if (i % 6 != 0)
-      border |= BORDERTOP;
-    border |= BORDERLEFT;
-    break;
-
-  case InfoBoxSettings::Geometry::RIGHT_24:
-    if (i % 8 != 0)
-      border |= BORDERTOP;
-    border |= BORDERLEFT;
-    break;
-  }
-
-  return border;
-}
-
 void
 InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
                        const InfoBoxLook &look, const UnitsLook &units_look)
@@ -452,7 +330,11 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
   // create infobox windows
   for (unsigned i = layout.count; i-- > 0;) {
     const PixelRect &rc = layout.positions[i];
-    int Border = GetInfoBoxBorder(i);
+    int Border = settings.border_style == apIbTab
+      ? 0
+      /* layout.geometry is the effective layout, while
+         settings.geometry is the configured layout */
+      : InfoBoxLayout::GetBorder(layout.geometry, i);
 
     infoboxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
                                      rc.left, rc.top,

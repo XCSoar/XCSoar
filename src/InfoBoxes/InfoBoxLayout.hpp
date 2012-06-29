@@ -56,6 +56,10 @@ namespace InfoBoxLayout
   gcc_pure
   Layout
   Calculate(PixelRect rc, InfoBoxSettings::Geometry geometry);
+
+  gcc_const
+  int
+  GetBorder(InfoBoxSettings::Geometry geometry, unsigned i);
 };
 
 #endif
