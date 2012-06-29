@@ -344,7 +344,11 @@ InfoBoxWindow::UpdateContent()
 void
 InfoBoxWindow::ShowDialog()
 {
+  force_draw_selector = true;
+
   dlgInfoBoxAccessShowModeless(id);
+
+  force_draw_selector = false;
 }
 
 bool
@@ -480,11 +484,8 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     ReleaseCapture();
 
     if ((unsigned)x < GetWidth() && (unsigned)y < GetHeight() &&
-        click_clock.Check(1000)) {
-      force_draw_selector = true;
+        click_clock.Check(1000))
       ShowDialog();
-      force_draw_selector = false;
-    }
 
     click_clock.Reset();
     return true;
