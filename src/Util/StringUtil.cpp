@@ -29,6 +29,32 @@ Copyright_License {
 #include <ctype.h>
 #include <algorithm>
 
+const char *
+StringAfterPrefix(const char *string, const char *prefix)
+{
+  assert(string != NULL);
+  assert(prefix != NULL);
+
+  size_t prefix_length = strlen(prefix);
+  return strncmp(string, prefix, prefix_length) == 0
+    ? string + prefix_length
+    : NULL;
+}
+
+const char *
+StringAfterPrefixCI(const char *string, const char *prefix)
+{
+  assert(string != NULL);
+  assert(prefix != NULL);
+
+  size_t prefix_length = StringLength(prefix);
+  return strncasecmp(string, prefix, prefix_length) == 0
+    ? string + prefix_length
+    : NULL;
+}
+
+#ifdef _UNICODE
+
 const TCHAR *
 StringAfterPrefix(const TCHAR *string, const TCHAR *prefix)
 {
@@ -41,20 +67,6 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix)
     : NULL;
 }
 
-#ifdef _UNICODE
-const char *
-StringAfterPrefix(const char *string, const char *prefix)
-{
-  assert(string != NULL);
-  assert(prefix != NULL);
-
-  size_t prefix_length = strlen(prefix);
-  return strncmp(string, prefix, prefix_length) == 0
-    ? string + prefix_length
-    : NULL;
-}
-#endif
-
 const TCHAR *
 StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix)
 {
@@ -66,6 +78,22 @@ StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix)
     ? string + prefix_length
     : NULL;
 }
+
+#endif
+
+char *
+CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
+{
+  size_t length = strlen(src);
+  if (length >= size)
+    length = size - 1;
+
+  char *p = std::copy(src, src + length, dest);
+  *p = '\0';
+  return p;
+}
+
+#ifdef _UNICODE
 
 TCHAR *
 CopyString(TCHAR *gcc_restrict dest, const TCHAR *gcc_restrict src,
@@ -80,18 +108,6 @@ CopyString(TCHAR *gcc_restrict dest, const TCHAR *gcc_restrict src,
   return p;
 }
 
-#ifdef _UNICODE
-char *
-CopyString(char *gcc_restrict dest, const char *gcc_restrict src, size_t size)
-{
-  size_t length = strlen(src);
-  if (length >= size)
-    length = size - 1;
-
-  char *p = std::copy(src, src + length, dest);
-  *p = '\0';
-  return p;
-}
 #endif
 
 void
@@ -189,15 +205,6 @@ CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end)
 
 #endif
 
-const TCHAR *
-TrimLeft(const TCHAR *p)
-{
-  while (IsWhitespaceNotNull(*p))
-    ++p;
-  return p;
-}
-
-#ifdef _UNICODE
 const char *
 TrimLeft(const char *p)
 {
@@ -205,20 +212,17 @@ TrimLeft(const char *p)
     ++p;
   return p;
 }
-#endif
-
-void
-TrimRight(TCHAR *p)
-{
-  size_t length = _tcslen(p);
-
-  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
-    --length;
-
-  p[length] = 0;
-}
 
 #ifdef _UNICODE
+const TCHAR *
+TrimLeft(const TCHAR *p)
+{
+  while (IsWhitespaceNotNull(*p))
+    ++p;
+  return p;
+}
+#endif
+
 void
 TrimRight(char *p)
 {
@@ -229,11 +233,39 @@ TrimRight(char *p)
 
   p[length] = 0;
 }
+
+#ifdef _UNICODE
+void
+TrimRight(TCHAR *p)
+{
+  size_t length = _tcslen(p);
+
+  while (length > 0 && IsWhitespaceOrNull(p[length - 1]))
+    --length;
+
+  p[length] = 0;
+}
 #endif
 
+char *
+NormalizeSearchString(char *gcc_restrict dest,
+                      const char *gcc_restrict src)
+{
+  char *retval = dest;
+
+  for (; !StringIsEmpty(src); ++src)
+    if (static_cast<unsigned>(*src) < 128 && isalnum(*src))
+      *dest++ = toupper(*src);
+
+  *dest = '\0';
+
+  return retval;
+}
+
+#ifdef _UNICODE
 TCHAR *
 NormalizeSearchString(TCHAR *gcc_restrict dest,
-                        const TCHAR *gcc_restrict src)
+                      const TCHAR *gcc_restrict src)
 {
   TCHAR *retval = dest;
 
@@ -245,6 +277,7 @@ NormalizeSearchString(TCHAR *gcc_restrict dest,
 
   return retval;
 }
+#endif
 
 char *
 DuplicateString(const char *p, size_t length)

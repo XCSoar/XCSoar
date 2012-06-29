@@ -26,20 +26,23 @@ Copyright_License {
 
 #include "Compiler.h"
 
-#include <tchar.h>
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
 
+#ifdef _UNICODE
+#include <tchar.h>
+#endif
+
 static inline bool
-StringIsEmpty(const TCHAR *string)
+StringIsEmpty(const char *string)
 {
   return *string == 0;
 }
 
 #ifdef _UNICODE
 static inline bool
-StringIsEmpty(const char *string)
+StringIsEmpty(const TCHAR *string)
 {
   return *string == 0;
 }
@@ -144,8 +147,18 @@ StringFormatUnsafe(TCHAR *buffer, const TCHAR *fmt, Args&&... args)
  * NULL.
  */
 gcc_nonnull_all
-const TCHAR *
-StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
+const char *
+StringAfterPrefix(const char *string, const char *prefix);
+
+/**
+ * Returns the portion of the string after a prefix.  If the string
+ * does not begin with the specified prefix, this function returns
+ * NULL.
+ * This function is case-independent.
+ */
+gcc_nonnull_all
+const char *
+StringAfterPrefixCI(const char *string, const char *prefix);
 
 #ifdef _UNICODE
 /**
@@ -154,9 +167,8 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
  * NULL.
  */
 gcc_nonnull_all
-const char *
-StringAfterPrefix(const char *string, const char *prefix);
-#endif
+const TCHAR *
+StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
 
 /**
  * Returns the portion of the string after a prefix.  If the string
@@ -167,20 +179,8 @@ StringAfterPrefix(const char *string, const char *prefix);
 gcc_nonnull_all
 const TCHAR *
 StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix);
+#endif
 
-/**
- * Copy a string.  If the buffer is too small, then the string is
- * truncated.  This is a safer version of strncpy().
- *
- * @param size the size of the destination buffer (including the null
- * terminator)
- * @return a pointer to the null terminator
- */
-gcc_nonnull_all
-TCHAR *
-CopyString(TCHAR *dest, const TCHAR *src, size_t size);
-
-#ifdef _UNICODE
 /**
  * Copy a string.  If the buffer is too small, then the string is
  * truncated.  This is a safer version of strncpy().
@@ -192,6 +192,19 @@ CopyString(TCHAR *dest, const TCHAR *src, size_t size);
 gcc_nonnull_all
 char *
 CopyString(char *dest, const char *src, size_t size);
+
+#ifdef _UNICODE
+/**
+ * Copy a string.  If the buffer is too small, then the string is
+ * truncated.  This is a safer version of strncpy().
+ *
+ * @param size the size of the destination buffer (including the null
+ * terminator)
+ * @return a pointer to the null terminator
+ */
+gcc_nonnull_all
+TCHAR *
+CopyString(TCHAR *dest, const TCHAR *src, size_t size);
 #endif
 
 /**
@@ -248,25 +261,26 @@ CopyASCII(char *dest, size_t dest_size, const TCHAR *src, const TCHAR *src_end);
  * returned.
  */
 gcc_pure gcc_nonnull_all
-const TCHAR *
-TrimLeft(const TCHAR *p);
+const char *
+TrimLeft(const char *p);
 
 #ifdef _UNICODE
 gcc_pure gcc_nonnull_all
-const char *
-TrimLeft(const char *p);
+const TCHAR *
+TrimLeft(const TCHAR *p);
 #endif
 
 /**
  * Strips trailing whitespace.
  */
 gcc_nonnull_all
-void TrimRight(TCHAR *p);
+void
+TrimRight(char *p);
 
 #ifdef _UNICODE
 gcc_nonnull_all
 void
-TrimRight(char *p);
+TrimRight(TCHAR *p);
 #endif
 
 /**
@@ -280,25 +294,15 @@ TrimRight(char *p);
  * @return the destination buffer
  */
 gcc_nonnull_all
-TCHAR *
-NormalizeSearchString(TCHAR *dest, const TCHAR *src);
-
-/**
- * Checks whether str1 and str2 are equal.
- * @param str1 String 1
- * @param str2 String 2
- * @return True if equal, False otherwise
- */
-static inline bool
-StringIsEqual(const TCHAR *str1, const TCHAR *str2)
-{
-  assert(str1 != NULL);
-  assert(str2 != NULL);
-
-  return _tcscmp(str1, str2) == 0;
-}
+char *
+NormalizeSearchString(char *dest, const char *src);
 
 #ifdef _UNICODE
+gcc_nonnull_all
+TCHAR *
+NormalizeSearchString(TCHAR *dest, const TCHAR *src);
+#endif
+
 /**
  * Checks whether str1 and str2 are equal.
  * @param str1 String 1
@@ -312,6 +316,22 @@ StringIsEqual(const char *str1, const char *str2)
   assert(str2 != NULL);
 
   return strcmp(str1, str2) == 0;
+}
+
+#ifdef _UNICODE
+/**
+ * Checks whether str1 and str2 are equal.
+ * @param str1 String 1
+ * @param str2 String 2
+ * @return True if equal, False otherwise
+ */
+static inline bool
+StringIsEqual(const TCHAR *str1, const TCHAR *str2)
+{
+  assert(str1 != NULL);
+  assert(str2 != NULL);
+
+  return _tcscmp(str1, str2) == 0;
 }
 #endif
 

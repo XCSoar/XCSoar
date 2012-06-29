@@ -32,9 +32,11 @@
 
 #include "Util/StringUtil.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 #include <stddef.h>
-#include <algorithm>
+#include <tchar.h>
 
 /**
  * A string with a maximum size known at compile time.

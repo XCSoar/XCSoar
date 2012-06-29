@@ -27,6 +27,7 @@
 #include "Util/StaticArray.hpp"
 
 #include <windef.h> // for MAX_PATH
+#include <tchar.h>
 
 struct TaskBehaviour;
 class Waypoints;

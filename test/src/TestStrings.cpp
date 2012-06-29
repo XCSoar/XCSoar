@@ -23,6 +23,8 @@
 #include "Util/StringUtil.hpp"
 #include "TestUtil.hpp"
 
+#include <tchar.h>
+
 int main(int argc, char **argv)
 {
   plan_tests(29);
