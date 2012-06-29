@@ -42,7 +42,8 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
   packet.header.key = ToBE64(key);
   packet.flags = 0;
 
-  packet.time = ToBE32(unsigned(basic.time));
+  packet.time = ToBE32(unsigned(basic.time * 1000));
+  packet.reserved = 0;
 
   if (basic.location_available) {
     packet.flags |= ToBE64(FixPacket::FLAG_LOCATION);

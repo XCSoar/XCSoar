@@ -60,10 +60,12 @@
  */
 
 namespace SkyLinesTracking {
-  static const uint32_t MAGIC = 0x5df4b67a;
+  static const uint32_t MAGIC = 0x5df4b67b;
 
   enum Type {
-    FIX = 1,
+    PING = 1,
+    PONG = 2,
+    FIX = 3,
   };
 
   /**
@@ -121,15 +123,20 @@ namespace SkyLinesTracking {
 
     Header header;
 
-    uint64_t flags;
+    uint32_t flags;
 
     /**
-     * Second of day (UTC).  May be bigger than 24*60*60 if the flight
-     * has wrapped midnight.
+     * Millisecond of day (UTC).  May be bigger than 24*60*60 if the
+     * flight has wrapped midnight.
      */
     uint32_t time;
 
     GeoPoint location;
+
+    /**
+     * Reserved for future use.  Set to zero.
+     */
+    uint32_t reserved;
 
     /**
      * Ground track in degrees (0..359).
@@ -156,6 +163,10 @@ namespace SkyLinesTracking {
      */
     int16_t vario;
 
+    /**
+     * Engine noise level value from the logger, valid range is
+     * 0..999.
+     */
     uint16_t engine_noise_level;
   };
 
