@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "InfoBoxes/InfoBoxWindow.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxWindow.hpp"
+#include "InfoBoxSettings.hpp"
 #include "Border.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Look/UnitsLook.hpp"
@@ -32,19 +32,14 @@ Copyright_License {
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/ContainerWindow.hpp"
 #include "Screen/Key.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Interface.hpp"
-#include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/SubCanvas.hpp"
 #endif
 
 #include <algorithm>
-#include <stdio.h>
-#include <assert.h>
 
 using std::max;
 
