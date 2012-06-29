@@ -32,7 +32,7 @@ namespace JSON {
    * Writer for a JSON floating/fixed point value.
    */
   static inline void WriteFixed(TextWriter &writer, fixed value) {
-    writer.Format("%f", value);
+    writer.Format("%f", (double)value);
   }
 
   static inline void WriteAngle(TextWriter &writer, Angle value) {
