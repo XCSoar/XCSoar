@@ -34,6 +34,7 @@ Copyright_License {
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Key.h"
+#include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Interface.hpp"
 #include "Asset.hpp"
 
@@ -340,6 +341,12 @@ InfoBoxWindow::UpdateContent()
   }
 }
 
+void
+InfoBoxWindow::ShowDialog()
+{
+  dlgInfoBoxAccessShowModeless(id);
+}
+
 bool
 InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
 {
@@ -433,7 +440,7 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
   case VK_RETURN:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     if (!HandleKey(InfoBoxContent::ibkEnter))
-      InfoBoxManager::ShowDlgInfoBox(id);
+      ShowDialog();
     return true;
 
   case VK_ESCAPE:
@@ -475,7 +482,7 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     if ((unsigned)x < GetWidth() && (unsigned)y < GetHeight() &&
         click_clock.Check(1000)) {
       force_draw_selector = true;
-      InfoBoxManager::ShowDlgInfoBox(id);
+      ShowDialog();
       force_draw_selector = false;
     }
 

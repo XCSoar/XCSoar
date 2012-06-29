@@ -37,7 +37,6 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/ComboPicker.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
@@ -376,12 +375,6 @@ OnInfoBoxHelp(unsigned item)
   else
     dlgHelpShowModal(XCSoarInterface::main_window, caption,
                      _("No help available on this item"));
-}
-
-void
-InfoBoxManager::ShowDlgInfoBox(const int id)
-{
-  dlgInfoBoxAccessShowModeless(id);
 }
 
 void

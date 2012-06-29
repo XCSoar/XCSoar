@@ -85,8 +85,6 @@ namespace InfoBoxManager
 
   bool HasFocus();
 
-  void ShowDlgInfoBox(const int id);
-
   /**
    * Opens a dialog to select the InfoBox contents for
    * the InfoBox indicated by id, or the focused InfoBox.

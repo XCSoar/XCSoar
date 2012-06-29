@@ -133,6 +133,8 @@ public:
   void UpdateContent();
 
 protected:
+  void ShowDialog();
+
   bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);
 
 public:
