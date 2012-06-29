@@ -46,53 +46,53 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
   packet.reserved = 0;
 
   if (basic.location_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_LOCATION);
+    packet.flags |= ToBE32(FixPacket::FLAG_LOCATION);
     packet.location.latitude = ToBE32(int(basic.location.latitude.Degrees() * 1000000));
     packet.location.longitude = ToBE32(int(basic.location.longitude.Degrees() * 1000000));
   } else
     packet.location.latitude = packet.location.longitude = 0;
 
   if (basic.track_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_TRACK);
+    packet.flags |= ToBE32(FixPacket::FLAG_TRACK);
     packet.track = ToBE16(unsigned(basic.track.AsBearing().Degrees()));
   } else
     packet.track = 0;
 
   if (basic.ground_speed_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_GROUND_SPEED);
+    packet.flags |= ToBE32(FixPacket::FLAG_GROUND_SPEED);
     packet.ground_speed = ToBE16(unsigned(basic.ground_speed * 16));
   } else
     packet.ground_speed = 0;
 
   if (basic.airspeed_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_AIRSPEED);
+    packet.flags |= ToBE32(FixPacket::FLAG_AIRSPEED);
     packet.airspeed = ToBE16(unsigned(basic.indicated_airspeed * 16));
   } else
     packet.airspeed = 0;
 
   if (basic.baro_altitude_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_ALTITUDE);
+    packet.flags |= ToBE32(FixPacket::FLAG_ALTITUDE);
     packet.altitude = ToBE16(int(basic.baro_altitude));
   } else if (basic.gps_altitude_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_ALTITUDE);
+    packet.flags |= ToBE32(FixPacket::FLAG_ALTITUDE);
     packet.altitude = ToBE16(int(basic.gps_altitude));
   } else
     packet.altitude = 0;
 
   if (basic.total_energy_vario_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_VARIO);
+    packet.flags |= ToBE32(FixPacket::FLAG_VARIO);
     packet.vario = ToBE16(int(basic.total_energy_vario * 256));
   } else if (basic.netto_vario_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_VARIO);
+    packet.flags |= ToBE32(FixPacket::FLAG_VARIO);
     packet.vario = ToBE16(int(basic.netto_vario * 256));
   } else if (basic.noncomp_vario_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_VARIO);
+    packet.flags |= ToBE32(FixPacket::FLAG_VARIO);
     packet.vario = ToBE16(int(basic.noncomp_vario * 256));
   } else
     packet.vario = 0;
 
   if (basic.engine_noise_level_available) {
-    packet.flags |= ToBE64(FixPacket::FLAG_ENL);
+    packet.flags |= ToBE32(FixPacket::FLAG_ENL);
     packet.engine_noise_level = ToBE16(basic.engine_noise_level);
   } else
     packet.engine_noise_level = 0;
