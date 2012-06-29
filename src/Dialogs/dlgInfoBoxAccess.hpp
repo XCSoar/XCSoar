@@ -29,14 +29,10 @@ class WndForm;
 class dlgInfoBoxAccess
 {
 public:
-  dlgInfoBoxAccess();
-
   /**
    * @returns True if validated, False if window shall remain open
    */
   static bool OnClose();
-
-  static void dlgInfoBoxAccessShowModeless(const int id);
 };
 
 void

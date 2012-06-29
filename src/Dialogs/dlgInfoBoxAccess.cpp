@@ -82,12 +82,6 @@ static TabBarControl* wTabBar = NULL;
 void
 dlgInfoBoxAccessShowModeless(const int id)
 {
-  dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(id);
-}
-
-void
-dlgInfoBoxAccess::dlgInfoBoxAccessShowModeless(const int id)
-{
   // check for another instance of this window
   if (wf != NULL) return;
   assert (id > -1);
