@@ -138,11 +138,11 @@ DetectWindToken(const TCHAR *token)
   if (length != 8 && length != 7)
     return false;
 
-  if (_tcsicmp(token + 5, _T("MPS")) != 0 &&
-      _tcsicmp(token + 5, _T("KT")) != 0)
+  if (!StringIsEqualIgnoreCase(token + 5, _T("MPS")) &&
+      !StringIsEqualIgnoreCase(token + 5, _T("KT")))
     return false;
 
-  bool variable = (_tcsnicmp(token, _T("VRB"), 3) == 0);
+  bool variable = (StringIsEqualIgnoreCase(token, _T("VRB"), 3));
 
   for (unsigned i = variable ? 3 : 0; i < 5; ++i)
     if (!IsDigitASCII(token[i]))
@@ -157,7 +157,7 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
   assert(DetectWindToken(token));
 
   // variable wind directions
-  if (_tcsnicmp(token, _T("VRB"), 3) == 0)
+  if (StringIsEqualIgnoreCase(token, _T("VRB"), 3))
     // parsing okay but don't provide wind
     return true;
 
@@ -169,9 +169,9 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
   unsigned bearing = (int)(wind_code / 100);
   wind_code -= bearing * 100;
 
-  if (_tcsicmp(endptr, _T("MPS")) == 0)
+  if (StringIsEqualIgnoreCase(endptr, _T("MPS")))
     parsed.wind.norm = fixed(wind_code);
-  else if (_tcsicmp(endptr, _T("KT")) == 0)
+  else if (StringIsEqualIgnoreCase(endptr, _T("KT")))
     parsed.wind.norm = Units::ToSysUnit(fixed(wind_code), Unit::KNOTS);
   else
     return false;
@@ -185,7 +185,7 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
 static bool
 DetectCAVOK(const TCHAR *token)
 {
-  return (_tcslen(token) == 5 && _tcsicmp(token, _T("CAVOK")) == 0);
+  return (_tcslen(token) == 5 && StringIsEqualIgnoreCase(token, _T("CAVOK")));
 }
 
 /** Detects a token with exactly 5 digits */

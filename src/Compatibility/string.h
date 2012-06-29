@@ -45,7 +45,6 @@ _strupr(char *p)
   #define _istalnum isalnum
 #endif
 
-#define _strnicmp strncasecmp
 #define _strdup strdup
 
 #endif /* !HAVE_MSVCRT */

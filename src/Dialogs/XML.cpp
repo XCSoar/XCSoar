@@ -477,10 +477,10 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   DataField::DataAccessCallback callback = (DataField::DataAccessCallback)
     GetCallBack(LookUpTable, node, _T("OnDataAccess"));
 
-  if (_tcsicmp(data_type, _T("enum")) == 0)
+  if (StringIsEqualIgnoreCase(data_type, _T("enum")))
     return new DataFieldEnum(callback);
 
-  if (_tcsicmp(data_type, _T("filereader")) == 0) {
+  if (StringIsEqualIgnoreCase(data_type, _T("filereader"))) {
     DataFieldFileReader *df = new DataFieldFileReader(callback);
 
     if (StringToIntDflt(node.GetAttribute(_T("Nullable")), true))
@@ -489,14 +489,14 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
     return df;
   }
 
-  if (_tcsicmp(data_type, _T("boolean")) == 0)
+  if (StringIsEqualIgnoreCase(data_type, _T("boolean")))
     return new DataFieldBoolean(false, _("On"), _("Off"), callback);
 
-  if (_tcsicmp(data_type, _T("double")) == 0)
+  if (StringIsEqualIgnoreCase(data_type, _T("double")))
     return new DataFieldFloat(edit_format, display_format, min, max,
                               fixed_zero, fixed(step), fine, callback);
 
-  if (_tcsicmp(data_type, _T("time")) == 0) {
+  if (StringIsEqualIgnoreCase(data_type, _T("time"))) {
     DataFieldTime *df = new DataFieldTime((int)min, (int)max, 0,
                                           (unsigned)step, callback);
     unsigned max_token = StringToIntDflt(node.GetAttribute(_T("MaxTokens")), 2);
@@ -504,11 +504,11 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
     return df;
   }
 
-  if (_tcsicmp(data_type, _T("integer")) == 0)
+  if (StringIsEqualIgnoreCase(data_type, _T("integer")))
     return new DataFieldInteger(edit_format, display_format, (int)min, (int)max,
                                 0, (int)step, callback);
 
-  if (_tcsicmp(data_type, _T("string")) == 0)
+  if (StringIsEqualIgnoreCase(data_type, _T("string")))
     return new DataFieldString(_T(""), callback);
 
   return NULL;

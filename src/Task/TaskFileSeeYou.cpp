@@ -435,7 +435,7 @@ AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
 
         count++;
       }
-    } else if (_tcsicmp(line, _T("-----Related Tasks-----")) == 0) {
+    } else if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----"))) {
       in_task_section = true;
     }
   }
@@ -591,7 +591,7 @@ TaskFileSeeYou::Count()
         // Increase the task counter
         count++;
       }
-    } else if (_tcsicmp(line, _T("-----Related Tasks-----")) == 0) {
+    } else if (StringIsEqualIgnoreCase(line, _T("-----Related Tasks-----"))) {
       // Found the marker -> all following lines are task lines
       in_task_section = true;
     }

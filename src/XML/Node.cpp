@@ -46,6 +46,7 @@
  */
 
 #include "Node.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 
@@ -147,7 +148,7 @@ XMLNode::GetChildNode(const TCHAR *name) const
 
   for (auto i = d->begin(), end = d->end(); i != end; ++i) {
     const XMLNode &node = *i;
-    if (_tcsicmp(node.d->name.c_str(), name) == 0)
+    if (StringIsEqualIgnoreCase(node.d->name.c_str(), name))
       return &node;
   }
 
@@ -162,7 +163,7 @@ XMLNode::GetAttribute(const TCHAR *name) const
 
   for (auto i = d->attributes.begin(), end = d->attributes.end();
        i != end; ++i)
-    if (_tcsicmp(i->name.c_str(), name) == 0)
+    if (StringIsEqualIgnoreCase(i->name.c_str(), name))
       return i->value.c_str();
 
   return NULL;

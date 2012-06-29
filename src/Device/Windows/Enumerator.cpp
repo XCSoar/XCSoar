@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Windows/Enumerator.hpp"
+#include "Util/StringUtil.hpp"
 
 gcc_pure
 static bool
@@ -30,7 +31,7 @@ CompareRegistryValue(const RegistryKey &registry,
 {
   TCHAR real_value[64];
   return registry.get_value(name, real_value, 64) &&
-    _tcsicmp(value, real_value) == 0;
+    StringIsEqualIgnoreCase(value, real_value);
 }
 
 gcc_pure

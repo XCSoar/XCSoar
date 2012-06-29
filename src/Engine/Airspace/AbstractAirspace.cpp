@@ -21,6 +21,7 @@
 */
 
 #include "AbstractAirspace.hpp"
+#include "Util/StringUtil.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceInterceptSolution.hpp"
@@ -219,7 +220,7 @@ AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const
                         name.c_str(), prefix_length,
                         prefix, prefix_length) == CSTR_EQUAL;
 #else
-  return _tcsnicmp(name.c_str(), prefix, prefix_length) == 0;
+  return StringIsEqualIgnoreCase(name.c_str(), prefix, prefix_length);
 #endif
 }
 

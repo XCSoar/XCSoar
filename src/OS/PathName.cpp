@@ -103,7 +103,8 @@ MatchesExtension(const TCHAR *filename, const TCHAR *extension)
   size_t extension_length = _tcslen(extension);
 
   return filename_length > extension_length &&
-    _tcsicmp(filename + filename_length - extension_length, extension) == 0;
+    StringIsEqualIgnoreCase(filename + filename_length - extension_length,
+                            extension);
 }
 
 #ifdef _UNICODE
@@ -115,7 +116,8 @@ MatchesExtension(const char *filename, const char *extension)
   size_t extension_length = strlen(extension);
 
   return filename_length > extension_length &&
-    strcasecmp(filename + filename_length - extension_length, extension) == 0;
+    StringIsEqualIgnoreCase(filename + filename_length - extension_length,
+                            extension);
 }
 
 #endif

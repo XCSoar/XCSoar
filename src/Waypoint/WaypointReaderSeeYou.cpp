@@ -95,11 +95,11 @@ ParseDistance(const TCHAR* src, fixed& dest)
 
   // Convert to system unit if necessary, assume m as default
   TCHAR* unit = endptr;
-  if (_tcsicmp(unit, _T("ml")) == 0)
+  if (StringIsEqualIgnoreCase(unit, _T("ml")))
     dest = Units::ToSysUnit(dest, Unit::STATUTE_MILES);
-  else if (_tcsicmp(unit, _T("nm")) == 0)
+  else if (StringIsEqualIgnoreCase(unit, _T("nm")))
     dest = Units::ToSysUnit(dest, Unit::NAUTICAL_MILES);
-  else if (_tcsicmp(unit, _T("ft")) == 0)
+  else if (StringIsEqualIgnoreCase(unit, _T("ft")))
     dest = Units::ToSysUnit(dest, Unit::FEET);
 
   // Save distance

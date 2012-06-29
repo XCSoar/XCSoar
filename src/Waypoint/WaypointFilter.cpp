@@ -99,7 +99,7 @@ WaypointFilter::CompareDirection(const Waypoint &waypoint,
 bool
 WaypointFilter::CompareName(const Waypoint &waypoint, const TCHAR *name)
 {
-  return _tcsnicmp(waypoint.name.c_str(), name, _tcslen(name)) == 0;
+  return StringIsEqualIgnoreCase(waypoint.name.c_str(), name, _tcslen(name));
 }
 
 bool

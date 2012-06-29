@@ -263,7 +263,7 @@ ClearSuffix(TCHAR *p, const TCHAR *suffix)
     return false;
 
   TCHAR *q = p + length - suffix_length;
-  if (_tcsicmp(q, suffix) != 0)
+  if (!StringIsEqualIgnoreCase(q, suffix))
     return false;
 
   *q = _T('\0');

@@ -258,14 +258,14 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
       TCHAR *endptr;
       value = fixed(_tcstod(p, &endptr));
       p = endptr;
-    } else if (_tcsnicmp(p, _T("GND"), 3) == 0 ||
-               _tcsnicmp(p, _T("AGL"), 3) == 0) {
+    } else if (StringIsEqualIgnoreCase(p, _T("GND"), 3) ||
+               StringIsEqualIgnoreCase(p, _T("AGL"), 3)) {
       type = AGL;
       p += 3;
-    } else if (_tcsnicmp(p, _T("SFC"), 3) == 0) {
+    } else if (StringIsEqualIgnoreCase(p, _T("SFC"), 3)) {
       type = SFC;
       p += 3;
-    } else if (_tcsnicmp(p, _T("FL"), 2) == 0) {
+    } else if (StringIsEqualIgnoreCase(p, _T("FL"), 2)) {
       type = FL;
       p += 2;
     } else if (*p == _T('F') || *p == _T('f')) {
@@ -274,16 +274,16 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
 
       if (*p == _T('T') || *p == _T('t'))
         ++p;
-    } else if (_tcsnicmp(p, _T("MSL"), 3) == 0) {
+    } else if (StringIsEqualIgnoreCase(p, _T("MSL"), 3)) {
       type = MSL;
       p += 3;
     } else if (*p == _T('M') || *p == _T('m')) {
       unit = Unit::METER;
       ++p;
-    } else if (_tcsnicmp(p, _T("STD"), 3) == 0) {
+    } else if (StringIsEqualIgnoreCase(p, _T("STD"), 3)) {
       type = STD;
       p += 3;
-    } else if (_tcsnicmp(p, _T("UNL"), 3) == 0) {
+    } else if (StringIsEqualIgnoreCase(p, _T("UNL"), 3)) {
       type = UNLIMITED;
       p += 3;
     } else if (*p == _T('\0'))
@@ -634,7 +634,7 @@ static AirspaceClass
 ParseTypeTNP(const TCHAR *buffer)
 {
   for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_type_strings); i++)
-    if (_tcsicmp(buffer, airspace_tnp_type_strings[i].string) == 0)
+    if (StringIsEqualIgnoreCase(buffer, airspace_tnp_type_strings[i].string))
       return airspace_tnp_type_strings[i].type;
 
   return OTHER;
@@ -749,9 +749,9 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
 
   const TCHAR* parameter;
   if ((parameter = StringAfterPrefixCI(line, _T("INCLUDE="))) != NULL) {
-    if (_tcsicmp(parameter, _T("YES")) == 0)
+    if (StringIsEqualIgnoreCase(parameter, _T("YES")))
       ignore = false;
-    else if (_tcsicmp(parameter, _T("NO")) == 0)
+    else if (StringIsEqualIgnoreCase(parameter, _T("NO")))
       ignore = true;
 
     return true;
@@ -806,11 +806,11 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
   } else if ((parameter = StringAfterPrefixCI(line, _T("RADIO="))) != NULL) {
     temp_area.radio = parameter;
   } else if ((parameter = StringAfterPrefixCI(line, _T("ACTIVE="))) != NULL) {
-    if (_tcsicmp(parameter, _T("WEEKEND")) == 0)
+    if (StringIsEqualIgnoreCase(parameter, _T("WEEKEND")))
       temp_area.days_of_operation.SetWeekend();
-    else if (_tcsicmp(parameter, _T("WEEKDAY")) == 0)
+    else if (StringIsEqualIgnoreCase(parameter, _T("WEEKDAY")))
       temp_area.days_of_operation.SetWeekdays();
-    else if (_tcsicmp(parameter, _T("EVERYDAY")) == 0)
+    else if (StringIsEqualIgnoreCase(parameter, _T("EVERYDAY")))
       temp_area.days_of_operation.SetAll();
   }
 

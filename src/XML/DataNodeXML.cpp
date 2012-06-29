@@ -21,6 +21,7 @@
  */
 
 #include "DataNodeXML.hpp"
+#include "Util/StringUtil.hpp"
 #include "IO/TextWriter.hpp"
 #include "XML/Parser.hpp"
 
@@ -78,7 +79,7 @@ DataNodeXML::ListChildrenNamed(const TCHAR *name) const
 {
   List list;
   for (auto i = node.begin(), end = node.end(); i != end; ++i)
-    if (_tcsicmp(i->GetName(), name) == 0)
+    if (StringIsEqualIgnoreCase(i->GetName(), name))
       list.push_back(new DataNodeXML(*i));
   return list;
 }

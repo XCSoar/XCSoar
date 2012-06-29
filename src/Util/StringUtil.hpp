@@ -335,6 +335,44 @@ StringIsEqual(const TCHAR *str1, const TCHAR *str2)
 }
 #endif
 
+static inline bool
+StringIsEqualIgnoreCase(const char *a, const char *b)
+{
+  assert(a != NULL);
+  assert(b != NULL);
+
+  return strcasecmp(a, b) == 0;
+}
+
+static inline bool
+StringIsEqualIgnoreCase(const char *a, const char *b, size_t size)
+{
+  assert(a != NULL);
+  assert(b != NULL);
+
+  return strncasecmp(a, b, size) == 0;
+}
+
+#ifdef _UNICODE
+static inline bool
+StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b)
+{
+  assert(a != NULL);
+  assert(b != NULL);
+
+  return _tcsicmp(a, b) == 0;
+}
+
+static inline bool
+StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b, size_t size)
+{
+  assert(a != NULL);
+  assert(b != NULL);
+
+  return _tcsnicmp(a, b, size) == 0;
+}
+#endif
+
 /**
  * Copy the string to a new allocation.  The return value must be
  * freed with free().
