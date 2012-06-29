@@ -58,9 +58,6 @@ namespace InfoBoxManager
    */
   static bool first;
 
-  gcc_pure
-  static InfoBoxFactory::Type GetCurrentType(unsigned box);
-
   static void DisplayInfoBox();
   static void InfoBoxDrawIfDirty();
 
@@ -176,13 +173,6 @@ InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
   return infoBoxManagerConfig.panels[panelIdx].contents[box];
 }
 
-InfoBoxFactory::Type
-InfoBoxManager::GetCurrentType(unsigned box)
-{
-  InfoBoxFactory::Type retval = GetType(box, GetCurrentPanel());
-  return min(InfoBoxFactory::MAX_TYPE_VAL, retval);
-}
-
 const TCHAR*
 InfoBoxManager::GetTitle(unsigned box)
 {
@@ -238,12 +228,16 @@ InfoBoxManager::DisplayInfoBox()
 
   // JMW note: this is updated every GPS time step
 
+  const unsigned panel = GetCurrentPanel();
+
   for (unsigned i = 0; i < layout.count; i++) {
     // All calculations are made in a separate thread. Slow calculations
     // should apply to the function DoCalculationsSlow()
     // Do not put calculations here!
 
-    InfoBoxFactory::Type DisplayType = GetCurrentType(i);
+    InfoBoxFactory::Type DisplayType = GetType(i, panel);
+    if ((unsigned)DisplayType > (unsigned)InfoBoxFactory::MAX_TYPE_VAL)
+      DisplayType = InfoBoxFactory::NavAltitude;
 
     bool needupdate = ((DisplayType != DisplayTypeLast[i]) || first);
 
