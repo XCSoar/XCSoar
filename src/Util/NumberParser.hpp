@@ -33,7 +33,7 @@ Copyright_License {
 #endif
 
 static inline unsigned
-ParseUnsigned(const char *p, char **endptr=NULL, int base=0)
+ParseUnsigned(const char *p, char **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
@@ -42,7 +42,7 @@ ParseUnsigned(const char *p, char **endptr=NULL, int base=0)
 
 #ifdef _UNICODE
 static inline unsigned
-ParseUnsigned(const TCHAR *p, TCHAR **endptr=NULL, int base=0)
+ParseUnsigned(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
@@ -51,7 +51,7 @@ ParseUnsigned(const TCHAR *p, TCHAR **endptr=NULL, int base=0)
 #endif
 
 static inline int
-ParseInt(const char *p, char **endptr=NULL, int base=0)
+ParseInt(const char *p, char **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
@@ -60,7 +60,7 @@ ParseInt(const char *p, char **endptr=NULL, int base=0)
 
 #ifdef _UNICODE
 static inline int
-ParseInt(const TCHAR *p, TCHAR **endptr=NULL, int base=0)
+ParseInt(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
@@ -69,7 +69,7 @@ ParseInt(const TCHAR *p, TCHAR **endptr=NULL, int base=0)
 #endif
 
 static inline uint64_t
-ParseUint64(const char *p, char **endptr=NULL, int base=0)
+ParseUint64(const char *p, char **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
@@ -78,7 +78,7 @@ ParseUint64(const char *p, char **endptr=NULL, int base=0)
 
 #ifdef _UNICODE
 static inline uint64_t
-ParseUint64(const TCHAR *p, TCHAR **endptr=NULL, int base=0)
+ParseUint64(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
@@ -87,7 +87,7 @@ ParseUint64(const TCHAR *p, TCHAR **endptr=NULL, int base=0)
 #endif
 
 static inline int64_t
-ParseInt64(const char *p, char **endptr=NULL, int base=0)
+ParseInt64(const char *p, char **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
@@ -96,7 +96,7 @@ ParseInt64(const char *p, char **endptr=NULL, int base=0)
 
 #ifdef _UNICODE
 static inline int64_t
-ParseInt64(const TCHAR *p, TCHAR **endptr=NULL, int base=0)
+ParseInt64(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
 {
   assert(p != NULL);
 
