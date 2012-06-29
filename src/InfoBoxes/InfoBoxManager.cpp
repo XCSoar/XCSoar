@@ -68,7 +68,7 @@ namespace InfoBoxManager
 static bool infoboxes_dirty = false;
 static bool infoboxes_hidden = false;
 
-InfoBoxWindow *infoboxes[InfoBoxSettings::Panel::MAX_CONTENTS];
+static InfoBoxWindow *infoboxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 
 // TODO locking
 void
