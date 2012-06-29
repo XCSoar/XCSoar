@@ -157,6 +157,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Vega/VegaParametersWidget.cpp \
 	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Vega/VegaDemoDialog.cpp \
+	$(SRC)/Dialogs/Vega/VoiceSettingsDialog.cpp \
 	$(SRC)/Dialogs/FLARM/ConfigWidget.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
@@ -247,7 +248,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
-	$(SRC)/Dialogs/dlgVoice.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
 	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
 	$(SRC)/Dialogs/dlgWaypointEdit.cpp \
