@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Border.hpp"
 #include "Look/InfoBoxLook.hpp"
 #include "Look/UnitsLook.hpp"
 #include "Input/InputEvents.hpp"
