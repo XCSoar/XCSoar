@@ -98,7 +98,7 @@ namespace SkyLinesTracking {
 
   struct GeoPoint {
     /**
-     * Angle in micro degrees.
+     * Angle in micro degrees.  Positive means north or east.
      */
     int32_t latitude, longitude;
   };
