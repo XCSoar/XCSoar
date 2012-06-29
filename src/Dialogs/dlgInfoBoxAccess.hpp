@@ -39,4 +39,7 @@ public:
   static void dlgInfoBoxAccessShowModeless(const int id);
 };
 
+void
+dlgInfoBoxAccessShowModeless(const int id);
+
 #endif /* DLGINFOBOXACCESS_H_ */
