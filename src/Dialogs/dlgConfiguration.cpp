@@ -61,12 +61,15 @@ Copyright_License {
 #include "ConfigPanels/TaskRulesConfigPanel.hpp"
 #include "ConfigPanels/TaskDefaultsConfigPanel.hpp"
 #include "ConfigPanels/InfoBoxesConfigPanel.hpp"
-#include "ConfigPanels/ExperimentalConfigPanel.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
 #ifdef HAVE_TRACKING
 #include "ConfigPanels/TrackingConfigPanel.hpp"
+#endif
+
+#ifdef HAVE_MODEL_TYPE
+#include "ConfigPanels/ExperimentalConfigPanel.hpp"
 #endif
 
 #include <assert.h>
