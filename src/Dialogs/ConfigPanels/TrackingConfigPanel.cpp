@@ -38,14 +38,13 @@ Copyright_License {
 #include "Util/NumberParser.hpp"
 
 enum ControlIndex {
-  TrackingInterval,
-  TrackingVehicleType,
-  Spacer,
   SL_ENABLED,
   SL_INTERVAL,
   SL_KEY,
-  SPACER2,
+  SPACER,
   LT24Enabled,
+  TrackingInterval,
+  TrackingVehicleType,
   LT24Server,
   LT24Username,
   LT24Password
@@ -80,6 +79,8 @@ TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
 void
 TrackingConfigPanel::SetEnabled(bool enabled)
 {
+  SetRowEnabled(TrackingInterval, enabled);
+  SetRowEnabled(TrackingVehicleType, enabled);
   SetRowEnabled(LT24Server, enabled);
   SetRowEnabled(LT24Username, enabled);
   SetRowEnabled(LT24Password, enabled);
@@ -120,13 +121,6 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.interval);
-
-  AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
-          (unsigned) settings.vehicleType);
-
-  AddSpacer();
-
   AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
   AddTime(_T("Tracking Interval"), NULL, 5, 1200, 5,
           settings.skylines.interval);
@@ -141,6 +135,11 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddSpacer();
 
   AddBoolean(_T("LiveTrack24"),  _T(""), settings.livetrack24.enabled, this);
+
+  AddTime(_("Tracking Interval"), _T(""), 5, 3600, 5, settings.interval);
+
+  AddEnum(_("Vehicle Type"), _("Type of vehicle used."), vehicle_type_list,
+          (unsigned) settings.vehicleType);
 
   WndProperty *edit = AddEnum(_("Server"), _T(""), server_list, 0);
   ((DataFieldEnum *)edit->GetDataField())->Set(settings.livetrack24.server);
