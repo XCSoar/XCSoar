@@ -34,6 +34,7 @@ Copyright_License {
 enum ControlIndex {
   Enabled,
   Volume,
+  DEAD_BAND_ENABLED,
 };
 
 
@@ -63,6 +64,10 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddInteger(_("Volume"), NULL, _T("%u %%"), _T("%u"),
              0, 100, 1, settings.volume);
+
+  AddBoolean(_("Enable Deadband"),
+             _("Mute the audio output in when the current lift is in a certain "
+               "range around zero"), settings.dead_band_enabled);
 }
 
 bool
@@ -81,6 +86,9 @@ AudioVarioConfigPanel::Save(bool &changed, bool &require_restart)
     settings.volume = volume;
     changed = true;
   }
+
+  changed |= SaveValue(DEAD_BAND_ENABLED, ProfileKeys::VarioDeadBandEnabled,
+                       settings.dead_band_enabled);
 
   return true;
 }
