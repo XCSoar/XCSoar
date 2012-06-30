@@ -21,6 +21,7 @@ Version 6.4 - not yet released
   - audio vario (#1576)
   - improved airspace list rendering
   - configurable map item list (#1936)
+  - "GoTo" button in map item list (#2069)
   - show corresponding waypoint file in waypoint details dialog (#1624)
   - show gesture path while dragging
   - file manager, can download data files

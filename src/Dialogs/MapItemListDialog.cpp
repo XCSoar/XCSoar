@@ -37,6 +37,8 @@ Copyright_License {
 #include "Form/ListWidget.hpp"
 #include "Form/Button.hpp"
 #include "Weather/Features.hpp"
+#include "Components.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather.hpp"
@@ -69,6 +71,7 @@ HasDetails(const MapItem &item)
 class MapItemListWidget : public ListWidget, private ActionListener {
   enum Buttons {
     SETTINGS,
+    GOTO,
   };
 
   const MapItemList &list;
@@ -79,7 +82,7 @@ class MapItemListWidget : public ListWidget, private ActionListener {
   const FinalGlideBarLook &final_glide_look;
   const MapSettings &settings;
 
-  WndButton *settings_button, *details_button;
+  WndButton *settings_button, *details_button, *cancel_button, *goto_button;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
@@ -103,6 +106,7 @@ protected:
   void UpdateButtons() {
     const unsigned current = GetCursorIndex();
     details_button->SetEnabled(HasDetails(*list[current]));
+    goto_button->SetEnabled(CanGotoItem(current));
   }
 
 public:
@@ -124,6 +128,11 @@ public:
     return HasDetails(*list[index]);
   }
 
+  bool CanGotoItem(unsigned index) const {
+    return protected_task_manager != NULL &&
+      list[index]->type == MapItem::WAYPOINT;
+  }
+
   virtual void OnActivateItem(unsigned index);
 
   /* virtual methods from class ActionListener */
@@ -134,8 +143,9 @@ void
 MapItemListWidget::CreateButtons(WidgetDialog &dialog)
 {
   settings_button = dialog.AddButton(_("Settings"), this, SETTINGS);
+  goto_button = dialog.AddButton(_("Goto"), this, GOTO);
   details_button = dialog.AddButton(_("Details"), mrOK);
-  dialog.AddButton(_("Close"), mrCancel);
+  cancel_button = dialog.AddButton(_("Close"), mrCancel);
 }
 
 void
@@ -181,6 +191,20 @@ MapItemListWidget::OnAction(int id)
   switch (id) {
   case SETTINGS:
     ShowMapItemListSettingsDialog();
+    break;
+  case GOTO:
+    if (protected_task_manager == NULL)
+      break;
+
+    unsigned index = GetCursorIndex();
+    auto const &item = *list[index];
+
+    assert(item.type == MapItem::WAYPOINT);
+
+    auto const &waypoint = ((const WaypointMapItem &)item).waypoint;
+    protected_task_manager->DoGoto(waypoint);
+    cancel_button->OnClicked();
+
     break;
   }
 }
