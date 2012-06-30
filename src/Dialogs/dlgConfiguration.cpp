@@ -63,6 +63,11 @@ Copyright_License {
 #include "ConfigPanels/InfoBoxesConfigPanel.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Audio/Features.hpp"
+
+#ifdef HAVE_PCM_PLAYER
+#include "ConfigPanels/AudioVarioConfigPanel.hpp"
+#endif
 
 #ifdef HAVE_TRACKING
 #include "ConfigPanels/TrackingConfigPanel.hpp"
@@ -102,6 +107,9 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Route"), 2, CreateRouteConfigPanel },
   {N_("FLARM, Other"), 3, CreateGaugesConfigPanel },
   {N_("Vario"), 3, CreateVarioConfigPanel },
+#ifdef HAVE_PCM_PLAYER
+  {N_("Audio Vario"), 3, CreateAudioVarioConfigPanel },
+#endif
   {N_("Task Rules"), 4, CreateTaskRulesConfigPanel },
   {N_("Turnpoint Types"), 4, CreateTaskDefaultsConfigPanel },
   {N_("Language, Input"), 5, CreateInterfaceConfigPanel },

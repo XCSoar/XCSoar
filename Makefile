@@ -257,6 +257,10 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 
+ifeq ($(HAVE_PCM_PLAYER),y)
+DIALOG_SOURCES += $(SRC)/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp
+endif
+
 ifeq ($(HAVE_NET),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/dlgNOAAList.cpp \
