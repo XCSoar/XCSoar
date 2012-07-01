@@ -188,7 +188,7 @@ WaypointReaderBase::Parse(Waypoints &way_points,
   if (file[0] == 0)
     return false;
 
-  std::unique_ptr<TLineReader> reader(OpenTextFile(file));
+  std::unique_ptr<TLineReader> reader(OpenTextFile(file, ConvertLineReader::AUTO));
   if (!reader)
     return false;
 
