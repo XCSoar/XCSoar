@@ -35,6 +35,10 @@ enum ControlIndex {
   Enabled,
   Volume,
   DEAD_BAND_ENABLED,
+  SPACER,
+  MIN_FREQUENCY,
+  ZERO_FREQUENCY,
+  MAX_FREQUENCY,
 };
 
 
@@ -68,6 +72,28 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Enable Deadband"),
              _("Mute the audio output in when the current lift is in a certain "
                "range around zero"), settings.dead_band_enabled);
+
+  AddSpacer();
+  SetExpertRow(SPACER);
+
+  AddInteger(_("Min. Frequency"),
+             _("The tone frequency that is played at maximum sink rate."),
+             _T("%u Hz"), _T("%u"),
+             50, 3000, 50, settings.min_frequency);
+  SetExpertRow(MIN_FREQUENCY);
+
+  AddInteger(_("Zero Frequency"),
+             _("The tone frequency that is played at zero climb rate."),
+             _T("%u Hz"), _T("%u"),
+             50, 3000, 50, settings.zero_frequency);
+  SetExpertRow(ZERO_FREQUENCY);
+
+  AddInteger(_("Max. Frequency"),
+             _("The tone frequency that is played at maximum climb rate."),
+             _T("%u Hz"), _T("%u"),
+             50, 3000, 50, settings.max_frequency);
+  SetExpertRow(MAX_FREQUENCY);
+
 }
 
 bool
@@ -89,6 +115,15 @@ AudioVarioConfigPanel::Save(bool &changed, bool &require_restart)
 
   changed |= SaveValue(DEAD_BAND_ENABLED, ProfileKeys::VarioDeadBandEnabled,
                        settings.dead_band_enabled);
+
+  changed |= SaveValue(MIN_FREQUENCY, ProfileKeys::VarioMinFrequency,
+                       settings.min_frequency);
+
+  changed |= SaveValue(ZERO_FREQUENCY, ProfileKeys::VarioZeroFrequency,
+                       settings.zero_frequency);
+
+  changed |= SaveValue(MAX_FREQUENCY, ProfileKeys::VarioMaxFrequency,
+                       settings.max_frequency);
 
   return true;
 }
