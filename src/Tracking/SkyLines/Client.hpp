@@ -55,6 +55,7 @@ namespace SkyLinesTracking {
     }
 
     bool SendFix(const NMEAInfo &basic);
+    bool SendPing(uint16_t id);
   };
 }
 

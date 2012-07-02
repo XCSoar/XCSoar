@@ -64,7 +64,7 @@ namespace SkyLinesTracking {
 
   enum Type {
     PING = 1,
-    PONG = 2,
+    ACK = 2,
     FIX = 3,
   };
 
@@ -96,6 +96,65 @@ namespace SkyLinesTracking {
 
 #ifdef __cplusplus
   static_assert(sizeof(Header) == 16, "Wrong struct size");
+#endif
+
+  /**
+   * Check the network connection and verify the key (#PING).  The
+   * server responds with #ACK.
+   */
+  struct PingPacket {
+    Header header;
+
+    /**
+     * An arbitrary number chosen by the client, usually a sequence
+     * number.
+     */
+    uint16_t id;
+
+    /**
+     * Reserved for future use.  Set to zero.
+     */
+    uint16_t reserved;
+
+    /**
+     * Reserved for future use.  Set to zero.
+     */
+    uint32_t reserved2;
+  };
+
+#ifdef __cplusplus
+  static_assert(sizeof(PingPacket) == 24, "Wrong struct size");
+#endif
+
+  /**
+   * A generic acknowledge packet sent by the server in response to
+   * certain request packets.
+   */
+  struct ACKPacket {
+    /**
+     * The key was not valid.  Usually, requests with bad keys are
+     * silently discarded, but the server may use this flag to respond
+     * to a bad key in a PING packet.
+     */
+    static const uint64_t FLAG_BAD_KEY = 0x1;
+
+    Header header;
+
+    /**
+     * Copy of the request's id value.
+     */
+    uint16_t id;
+
+    /**
+     * Reserved for future use.  Set to zero.
+     */
+    uint16_t reserved;
+
+    uint32_t flags;
+  };
+
+#ifdef __cplusplus
+  static_assert(sizeof(ACKPacket) == 24, "Wrong struct size");
 #endif
 
   struct GeoPoint {

@@ -51,6 +51,8 @@ main(int argc, char *argv[])
     basic.time_available.Update(basic.clock);
 
     return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
+  } else if (StringIsEqual(cmd, "ping")) {
+    client.SendPing(1);
   } else {
     fprintf(stderr, "Unknown command: %s\n", cmd);
     return EXIT_FAILURE;

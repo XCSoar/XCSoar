@@ -101,3 +101,23 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 
   return socket.Write(&packet, sizeof(packet)) == sizeof(packet);
 }
+
+bool
+SkyLinesTracking::Client::SendPing(uint16_t id)
+{
+  if (key == 0 || !socket.IsDefined())
+    return false;
+
+  PingPacket packet;
+  packet.header.magic = ToBE32(MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(Type::PING);
+  packet.header.key = ToBE64(key);
+  packet.id = ToBE16(id);
+  packet.reserved = 0;
+  packet.reserved2 = 0;
+
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+
+  return socket.Write(&packet, sizeof(packet)) == sizeof(packet);
+}
