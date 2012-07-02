@@ -682,7 +682,7 @@ DEBUG_PROGRAM_NAMES += FeedTCP \
 endif
 
 ifeq ($(HAVE_NET),y)
-DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunLiveTrack24
+DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
 ifeq ($(HAVE_PCM_PLAYER),y)
@@ -836,6 +836,16 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
 RUN_NOAA_DOWNLOADER_DEPENDS = GEO IO MATH LIBNET UTIL
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
+
+RUN_SL_TRACKING_SOURCES = \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/Tracking/SkyLines/Client.cpp \
+	$(TEST_SRC_DIR)/RunSkyLinesTracking.cpp
+RUN_SL_TRACKING_DEPENDS = LIBNET OS GEO MATH UTIL
+$(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 
 RUN_LIVETRACK24_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
