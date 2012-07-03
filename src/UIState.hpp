@@ -30,8 +30,15 @@ Copyright_License {
  * The state of the user interface.
  */
 struct UIState {
+  /**
+   * Is the display currently blanked?
+   */
   bool screen_blanked;
 
+  /**
+   * The display mode forced by the user.  If not NONE, it overrides
+   * the automatic display mode.
+   */
   DisplayMode force_display_mode;
 
   /**
