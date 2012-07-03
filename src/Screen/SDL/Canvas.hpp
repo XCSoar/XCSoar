@@ -360,7 +360,7 @@ public:
   }
 
   gcc_pure
-  UPixelScalar CalcTextHeight(const TCHAR *text) const {
+  UPixelScalar GetFontHeight() const {
     return font != NULL ? font->GetHeight() : 0;
   }
 

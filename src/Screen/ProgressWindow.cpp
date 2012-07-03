@@ -50,7 +50,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   text_height = font.GetHeight();
 #else
   VirtualCanvas canvas(1, 1);
-  text_height = canvas.CalcTextHeight(_T("W"));
+  text_height = canvas.GetFontHeight();
 #endif
 
   // Make progress bar height proportional to window height

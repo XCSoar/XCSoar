@@ -164,9 +164,9 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   if (instance->IsTaskModified()) {
+    const UPixelScalar textheight = canvas.GetFontHeight();
     const TCHAR* message = _("Calculator excludes unsaved task changes!");
     canvas.Select(*look.small_font);
-    const int textheight = canvas.CalcTextHeight(message);
 
     const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
     const MaskedIcon *bmp = &look.intercept_icon;

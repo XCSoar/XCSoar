@@ -114,7 +114,7 @@ Canvas::CalcTextSize(const TCHAR *text) const
 }
 
 UPixelScalar
-Canvas::CalcTextHeight(const TCHAR *text) const
+Canvas::GetFontHeight() const
 {
   assert(IsDefined());
 

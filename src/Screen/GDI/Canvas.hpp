@@ -381,7 +381,7 @@ public:
   }
 
   gcc_pure
-  UPixelScalar CalcTextHeight(const TCHAR *text) const;
+  UPixelScalar GetFontHeight() const;
 
   void text(PixelScalar x, PixelScalar y, const TCHAR *text);
   void text(PixelScalar x, PixelScalar y, const TCHAR *text, size_t length);

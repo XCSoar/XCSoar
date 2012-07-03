@@ -126,7 +126,7 @@ EditWindow::OnPaint(Canvas &canvas)
     canvas.TextAutoClipped(rc.left, rc.top, value.c_str());
   else {
     PixelScalar canvas_height = rc.bottom - rc.top;
-    UPixelScalar text_height = canvas.CalcTextHeight(value.c_str());
+    UPixelScalar text_height = canvas.GetFontHeight();
     PixelScalar top = rc.top + (canvas_height - text_height) / 2;
     canvas.TextAutoClipped(rc.left, top, value.c_str());
   }
