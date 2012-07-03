@@ -25,6 +25,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Button.hpp"
+#include "HLine.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
@@ -394,22 +395,16 @@ RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
   return edit;
 }
 
-WndProperty *
+void
 RowFormWidget::AddSpacer()
 {
   assert(IsDefined());
 
-  const PixelRect edit_rc = InitialControlRect(Layout::Scale(6));
-
-  WindowStyle style;
-  EditWindowStyle edit_style;
-  edit_style.SetVerticalCenter();
-  edit_style.SetReadOnly();
-
-  PanelControl &panel = *(PanelControl *)GetWindow();
-  WndProperty *edit = new WndProperty(panel, look, _T(""), edit_rc, 0, style, edit_style, NULL);
-  Add(edit);
-  return edit;
+  HLine *window = new HLine(GetLook());
+  ContainerWindow &panel = *(ContainerWindow *)GetWindow();
+  const PixelRect rc = InitialControlRect(Layout::Scale(3));
+  window->set(panel, rc);
+  Add(window);
 }
 
 WndProperty *
