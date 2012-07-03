@@ -52,7 +52,7 @@ class StatusMessageList;
 class PopupMessage : public EditWindow
 {
 public:
-  enum {
+  enum Type {
     MSG_UNKNOWN = 0,
     MSG_AIRSPACE = 1,
     MSG_USERINTERFACE = 2,
@@ -64,7 +64,7 @@ private:
   enum { MAXMESSAGES = 20 };
 
   struct Message {
-    int type;
+    Type type;
     unsigned tstart; // time message was created
     unsigned texpiry; // time message will expire
     unsigned tshow; // time message is visible for
@@ -92,7 +92,7 @@ private:
       return texpiry <= now && texpiry > tstart;
     }
 
-    void Set(int type, unsigned tshow, const TCHAR *text, unsigned now);
+    void Set(Type type, unsigned tshow, const TCHAR *text, unsigned now);
 
     /**
      * @return true if something was changed
@@ -131,19 +131,19 @@ public:
 
 protected:
   /** Caller must hold the lock. */
-  void AddMessage(unsigned tshow, int type, const TCHAR *Text);
+  void AddMessage(unsigned tshow, Type type, const TCHAR *Text);
 
 public:
   void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
 
   /**
    * Repeats last non-visible message of specified type
-   * (or any message type=0).
+   * (or any message type=MSG_UNKNOWN).
    */
-  void Repeat(int type);
+  void Repeat(Type type=MSG_UNKNOWN);
 
   /** Clears all visible messages (of specified type or if type=0, all). */
-  bool Acknowledge(int type);
+  bool Acknowledge(Type type=MSG_UNKNOWN);
 
 private:
   gcc_pure

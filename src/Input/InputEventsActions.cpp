@@ -189,7 +189,7 @@ void
 InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
 {
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
-  XCSoarInterface::main_window.popup.Acknowledge(0);
+  XCSoarInterface::main_window.popup.Acknowledge();
 }
 
 void
@@ -439,7 +439,7 @@ InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 {
   // new interface
   // TODO enhancement: display only by type specified in misc field
-  XCSoarInterface::main_window.popup.Repeat(0);
+  XCSoarInterface::main_window.popup.Repeat();
 }
 
 // NearestWaypointDetails

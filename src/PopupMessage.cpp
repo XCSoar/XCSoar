@@ -45,7 +45,7 @@ using std::min;
 using std::max;
 
 void
-PopupMessage::Message::Set(int _type, unsigned _tshow, const TCHAR *_text,
+PopupMessage::Message::Set(Type _type, unsigned _tshow, const TCHAR *_text,
                            unsigned now)
 {
   type = _type;
@@ -128,7 +128,7 @@ bool
 PopupMessage::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   // acknowledge with click/touch
-  Acknowledge(0);
+  Acknowledge(MSG_UNKNOWN);
 
   return true;
 }
@@ -267,7 +267,7 @@ PopupMessage::GetEmptySlot()
 }
 
 void
-PopupMessage::AddMessage(unsigned tshow, int type, const TCHAR *Text)
+PopupMessage::AddMessage(unsigned tshow, Type type, const TCHAR *Text)
 {
   assert(mutex.IsLockedByCurrent());
 
@@ -278,7 +278,7 @@ PopupMessage::AddMessage(unsigned tshow, int type, const TCHAR *Text)
 }
 
 void
-PopupMessage::Repeat(int type)
+PopupMessage::Repeat(Type type)
 {
   int imax = -1;
 
@@ -305,14 +305,14 @@ PopupMessage::Repeat(int type)
 }
 
 bool
-PopupMessage::Acknowledge(int type)
+PopupMessage::Acknowledge(Type type)
 {
   ScopeLock protect(mutex);
   const unsigned now = MonotonicClockMS();
 
   for (unsigned i = 0; i < MAXMESSAGES; i++) {
     if (messages[i].texpiry > messages[i].tstart &&
-        (type == 0 || type == messages[i].type)) {
+        (type == MSG_UNKNOWN || type == messages[i].type)) {
       // message was previously visible, so make it expire now.
       messages[i].texpiry = now - 1;
       return true;
