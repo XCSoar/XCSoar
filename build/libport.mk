@@ -35,11 +35,3 @@ ifeq ($(HAVE_POSIX),n)
 $(call SRC_TO_OBJ,$(SRC)/Device/Port/SocketPort.cpp): CXXFLAGS += -Wno-sign-compare
 $(call SRC_TO_OBJ,$(SRC)/Device/Port/TCPPort.cpp): CXXFLAGS += -Wno-sign-compare
 endif
-
-ifeq ($(HAVE_POSIX),n)
-ifeq ($(HAVE_CE),y)
-PORT_LDLIBS += -lwinsock
-else
-PORT_LDLIBS += -lws2_32
-endif
-endif

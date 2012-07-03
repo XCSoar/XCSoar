@@ -842,14 +842,6 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	LIBNET OS THREAD \
 	UTIL GEO MATH
 
-ifeq ($(HAVE_POSIX),n)
-ifeq ($(HAVE_CE),y)
-XCSOAR_LDLIBS += -lwinsock
-else
-XCSOAR_LDLIBS += -lws2_32
-endif
-endif
-
 XCSOAR_STRIP = y
 
 ifeq ($(TARGET),ANDROID)

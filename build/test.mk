@@ -1084,14 +1084,6 @@ RUN_TCP_LISTENER_SOURCES = \
 	$(TEST_SRC_DIR)/RunTCPListener.cpp
 RUN_TCP_LISTENER_DEPENDS = OS THREAD
 
-ifeq ($(HAVE_POSIX),n)
-ifeq ($(HAVE_CE),y)
-RUN_TCP_LISTENER_LDLIBS += -lwinsock
-else
-RUN_TCP_LISTENER_LDLIBS += -lws2_32
-endif
-endif
-
 $(eval $(call link-program,RunTCPListener,RUN_TCP_LISTENER))
 
 RUN_DEVICE_DRIVER_SOURCES = \
@@ -2210,28 +2202,12 @@ FEED_TCP_SOURCES = \
 	$(TEST_SRC_DIR)/FeedTCP.cpp
 FEED_TCP_DEPENDS = OS
 
-ifeq ($(HAVE_POSIX),n)
-ifeq ($(HAVE_CE),y)
-FEED_TCP_LDLIBS += -lwinsock
-else
-FEED_TCP_LDLIBS += -lws2_32
-endif
-endif
-
 $(eval $(call link-program,FeedTCP,FEED_TCP))
 
 FEED_FLYNET_DATA_SOURCES = \
 	$(SRC)/Math/fixed.cpp \
 	$(TEST_SRC_DIR)/FeedFlyNetData.cpp
 FEED_FLYNET_DATA_DEPENDS = OS UTIL
-
-ifeq ($(HAVE_POSIX),n)
-ifeq ($(HAVE_CE),y)
-FEED_FLYNET_DATA_LDLIBS += -lwinsock
-else
-FEED_FLYNET_DATA_LDLIBS += -lws2_32
-endif
-endif
 
 $(eval $(call link-program,FeedFlyNetData,FEED_FLYNET_DATA))
 
