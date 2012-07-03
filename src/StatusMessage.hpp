@@ -46,7 +46,7 @@ struct StatusMessage {
   int delay_ms;
 
   void Clear() {
-    key = _T("");
+    key = NULL;
     sound = NULL;
     delay_ms = 2500;
     visible = true;
