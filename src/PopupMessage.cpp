@@ -25,7 +25,6 @@ Copyright_License {
 
 #include "PopupMessage.hpp"
 #include "Protection.hpp"
-#include "Screen/AnyCanvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -168,14 +167,12 @@ PopupMessage::Resize()
   } else {
     SetText(msgText);
 
-    AnyCanvas canvas;
-    canvas.Select(Fonts::map_bold);
-    PixelSize tsize = canvas.CalcTextSize(msgText);
+    const UPixelScalar font_height = Fonts::map_bold.GetHeight();
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, GetRowCount()));
 
     PixelScalar height = min((PixelScalar)((rc.bottom-rc.top) * 0.8),
-                             (PixelScalar)(tsize.cy * (linecount + 1)));
+                             (PixelScalar)(font_height * (linecount + 1)));
 
     PixelRect rthis = GetRect(height);
 #ifdef USE_GDI
