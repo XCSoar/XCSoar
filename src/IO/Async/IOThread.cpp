@@ -210,6 +210,7 @@ IOThread::HandleReady(File *ready)
 
     if (!result && ready->mask != 0) {
       ready->mask = 0;
+      ready->modified = true;
       modified = true;
     }
 
