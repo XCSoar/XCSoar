@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.3.9 - not yet released
 * calculations
   - show AAT/target info before the first GPS fix (#2183)
+* data files
+  - fix crash in the "Status File" loader
 * devices
   - fixed Westerboer VW921 airspeed reading
 
