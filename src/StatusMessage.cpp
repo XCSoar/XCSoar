@@ -32,25 +32,25 @@ Copyright_License {
 #include <stdio.h>
 #include <memory>
 
-static gcc_constexpr_data StatusMessageSTRUCT StatusMessageDefaults[] = {
+static gcc_constexpr_data StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
   { NULL }
 };
 
 StatusMessageList::StatusMessageList()
-  :olddelay(2000)
+  :old_delay(2000)
 {
   // DEFAULT - 0 is loaded as default, and assumed to exist
-  StatusMessageSTRUCT &first = StatusMessageData.append();
+  StatusMessage &first = list.append();
   first.key = _T("DEFAULT");
-  first.doStatus = true;
+  first.visible = true;
   first.sound = _T("IDR_WAV_DRIP");
   first.delay_ms = 2500; // 2.5 s
 
   // Load up other defaults - allow overwrite in config file
-  const StatusMessageSTRUCT *src = &StatusMessageDefaults[0];
+  const StatusMessage *src = &default_status_messages[0];
   while (src->key != NULL)
-    StatusMessageData.append(*src++);
+    list.append(*src++);
 }
 
 void
@@ -86,8 +86,8 @@ StatusMessageList::LoadFile(TLineReader &reader)
   bool some_data; // Did we find some in the last loop...
 
   // Init first entry
-  StatusMessageSTRUCT current;
-  _init_Status(current);
+  StatusMessage current;
+  current.Clear();
   some_data = false;
 
   /* Read from the file */
@@ -98,11 +98,11 @@ StatusMessageList::LoadFile(TLineReader &reader)
     if (*buffer == _T('#') || !parse_assignment(buffer, key, value)) {
       // Global counter (only if the last entry had some data)
       if (some_data) {
-        StatusMessageData.append(current);
+        list.append(current);
         some_data = false;
-        _init_Status(current);
+        current.Clear();
 
-        if (StatusMessageData.full())
+        if (list.full())
           break;
       }
     } else {
@@ -120,7 +120,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
           current.delay_ms = ms;
       } else if (_tcscmp(key, _T("hide")) == 0) {
         if (_tcscmp(value, _T("yes")) == 0)
-          current.doStatus = false;
+          current.visible = false;
       }
 
       // Do we have somewhere to put this &&
@@ -132,7 +132,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
   }
 
   if (some_data)
-    StatusMessageData.append(current);
+    list.append(current);
 }
 
 void
@@ -140,29 +140,19 @@ StatusMessageList::Startup(bool first)
 {
   if (first) {
     // NOTE: Must show errors AFTER all windows ready
-    olddelay = StatusMessageData[0].delay_ms;
-    StatusMessageData[0].delay_ms = 20000; // 20 seconds
+    old_delay = list[0].delay_ms;
+    list[0].delay_ms = 20000; // 20 seconds
   } else {
-    StatusMessageData[0].delay_ms = olddelay;
+    list[0].delay_ms = old_delay;
   }
 }
 
-const StatusMessageSTRUCT *
+const StatusMessage *
 StatusMessageList::Find(const TCHAR *key) const
 {
-  for (int i = StatusMessageData.size() - 1; i > 0; i--)
-    if (_tcscmp(key, StatusMessageData[i].key) == 0)
-      return &StatusMessageData[i];
+  for (int i = list.size() - 1; i > 0; i--)
+    if (_tcscmp(key, list[i].key) == 0)
+      return &list[i];
 
   return NULL;
-}
-
-// Create a blank entry (not actually used)
-void
-StatusMessageList::_init_Status(StatusMessageSTRUCT &m)
-{
-  m.key = _T("");
-  m.doStatus = true;
-  m.sound = NULL;
-  m.delay_ms = 2500;  // 2.5 s
 }

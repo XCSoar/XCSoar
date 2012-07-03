@@ -350,8 +350,8 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 {
   ScopeLock protect(mutex);
 
-  StatusMessageSTRUCT LocalMessage = status_messages.First();
-  const StatusMessageSTRUCT *found = status_messages.Find(text);
+  StatusMessage LocalMessage = status_messages.First();
+  const StatusMessage *found = status_messages.Find(text);
   if (found != NULL)
     LocalMessage = *found;
 
@@ -360,7 +360,7 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 
   // TODO code: consider what is a sensible size?
   TCHAR msgcache[1024];
-  if (LocalMessage.doStatus) {
+  if (LocalMessage.visible) {
 
     _tcscpy(msgcache, text);
     if (data != NULL) {
