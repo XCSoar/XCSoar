@@ -101,7 +101,7 @@ PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
   :status_messages(_status_messages),
    parent(_parent),
    settings(_settings),
-   nvisible(0),
+   n_visible(0),
    enable_sound(true)
 {
 }
@@ -170,10 +170,10 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
 
     const UPixelScalar font_height = Fonts::map_bold.GetHeight();
 
-    unsigned linecount = max(nvisible, max(1u, GetRowCount()));
+    unsigned n_lines = max(n_visible, max(1u, GetRowCount()));
 
     PixelScalar height = min((PixelScalar)((rc.bottom-rc.top) * 0.8),
-                             (PixelScalar)(font_height * (linecount + 1)));
+                             (PixelScalar)(font_height * (n_lines + 1)));
 
     PixelRect rthis = GetRect(height);
 #ifdef USE_GDI
@@ -237,10 +237,10 @@ PopupMessage::Render()
 
   doresize = true;
   text.clear();
-  nvisible = 0;
+  n_visible = 0;
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
     if (messages[i].AppendTo(text, now))
-      nvisible++;
+      n_visible++;
 
   mutex.Unlock();
 
@@ -339,24 +339,23 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
 {
   ScopeLock protect(mutex);
 
-  StatusMessage LocalMessage = status_messages.First();
+  StatusMessage msg = status_messages.First();
   const StatusMessage *found = status_messages.Find(text);
   if (found != NULL)
-    LocalMessage = *found;
+    msg = *found;
 
-  if (enable_sound && LocalMessage.sound != NULL)
-    PlayResource(LocalMessage.sound);
+  if (enable_sound && msg.sound != NULL)
+    PlayResource(msg.sound);
 
   // TODO code: consider what is a sensible size?
-  TCHAR msgcache[1024];
-  if (LocalMessage.visible) {
-
+  if (msg.visible) {
+    TCHAR msgcache[1024];
     _tcscpy(msgcache, text);
     if (data != NULL) {
       _tcscat(msgcache, _T(" "));
       _tcscat(msgcache, data);
     }
 
-    AddMessage(LocalMessage.delay_ms, MSG_USERINTERFACE, msgcache);
+    AddMessage(msg.delay_ms, MSG_USERINTERFACE, msgcache);
   }
 }

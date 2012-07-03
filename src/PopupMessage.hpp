@@ -116,7 +116,7 @@ private:
   struct Message messages[MAXMESSAGES];
   StaticString<2000> text;
 
-  unsigned nvisible;
+  unsigned n_visible;
 
   bool enable_sound;
 
