@@ -30,6 +30,10 @@ Copyright_License {
  * The state of the user interface.
  */
 struct UIState {
+  bool screen_blanked;
+
+  DisplayMode force_display_mode;
+
   /**
    * Are the info boxes showing an "auxiliary" set?
    */
@@ -39,10 +43,6 @@ struct UIState {
    * Which "auxiliary" set is visible if #auxiliary_enabled is true?
    */
   unsigned auxiliary_index;
-
-  DisplayMode force_display_mode;
-
-  bool screen_blanked;
 
   void Clear();
 };

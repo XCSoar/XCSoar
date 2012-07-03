@@ -26,7 +26,7 @@ Copyright_License {
 void
 UIState::Clear()
 {
-  auxiliary_enabled = false;
-  force_display_mode = DisplayMode::NONE;
   screen_blanked = false;
+  force_display_mode = DisplayMode::NONE;
+  auxiliary_enabled = false;
 }
