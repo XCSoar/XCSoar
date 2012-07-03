@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Thread/Mutex.hpp"
 #include "Util/StaticString.hpp"
-#include "PeriodClock.hpp"
 #include "Screen/EditWindow.hpp"
 
 #include <tchar.h>
@@ -66,9 +65,9 @@ private:
 
   struct Message {
     int type;
-    int tstart; // time message was created
-    int texpiry; // time message will expire
-    int tshow; // time message is visible for
+    unsigned tstart; // time message was created
+    unsigned texpiry; // time message will expire
+    unsigned tshow; // time message is visible for
 
     StaticString<256u> text;
 
@@ -89,24 +88,22 @@ private:
     /**
      * Expired for the first time?
      */
-    bool IsNewlyExpired(int now) const {
+    bool IsNewlyExpired(unsigned now) const {
       return texpiry <= now && texpiry > tstart;
     }
 
-    void Set(int type, int tshow, const TCHAR *text, int now);
+    void Set(int type, unsigned tshow, const TCHAR *text, unsigned now);
 
     /**
      * @return true if something was changed
      */
-    bool Update(int now);
+    bool Update(unsigned now);
 
     /**
      * @return true if a message has been appended
      */
-    bool AppendTo(StaticString<2000> &buffer, int now);
+    bool AppendTo(StaticString<2000> &buffer, unsigned now);
   };
-
-  PeriodClock clock;
 
   const StatusMessageList &status_messages;
 
@@ -134,7 +131,7 @@ public:
 
 protected:
   /** Caller must hold the lock. */
-  void AddMessage(int tshow, int type, const TCHAR *Text);
+  void AddMessage(unsigned tshow, int type, const TCHAR *Text);
 
 public:
   void AddMessage(const TCHAR* text, const TCHAR *data=NULL);

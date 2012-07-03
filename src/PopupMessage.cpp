@@ -35,6 +35,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "StatusMessage.hpp"
 #include "UISettings.hpp"
+#include "OS/Clock.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -44,7 +45,8 @@ using std::min;
 using std::max;
 
 void
-PopupMessage::Message::Set(int _type, int _tshow, const TCHAR *_text, int now)
+PopupMessage::Message::Set(int _type, unsigned _tshow, const TCHAR *_text,
+                           unsigned now)
 {
   type = _type;
   tshow = _tshow;
@@ -54,7 +56,7 @@ PopupMessage::Message::Set(int _type, int _tshow, const TCHAR *_text, int now)
 }
 
 bool
-PopupMessage::Message::Update(int now)
+PopupMessage::Message::Update(unsigned now)
 {
   if (IsUnknown())
     // ignore unknown messages
@@ -76,7 +78,7 @@ PopupMessage::Message::Update(int now)
 }
 
 bool
-PopupMessage::Message::AppendTo(StaticString<2000> &buffer, int now)
+PopupMessage::Message::AppendTo(StaticString<2000> &buffer, unsigned now)
 {
   if (IsUnknown())
     // ignore unknown messages
@@ -102,7 +104,6 @@ PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
    nvisible(0),
    enable_sound(true)
 {
-  clock.Update();
 }
 
 void
@@ -204,7 +205,7 @@ PopupMessage::Render()
     return false;
   }
 
-  int fpsTime = clock.Elapsed();
+  const unsigned now = MonotonicClockMS();
 
   // this has to be done quickly, since it happens in GUI thread
   // at subsecond interval
@@ -215,7 +216,7 @@ PopupMessage::Render()
 
   bool changed = false;
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
-    changed = messages[i].Update(fpsTime) || changed;
+    changed = messages[i].Update(now) || changed;
 
   static bool doresize = false;
 
@@ -238,7 +239,7 @@ PopupMessage::Render()
   text.clear();
   nvisible = 0;
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
-    if (messages[i].AppendTo(text, fpsTime))
+    if (messages[i].AppendTo(text, now))
       nvisible++;
 
   mutex.Unlock();
@@ -255,10 +256,8 @@ PopupMessage::GetEmptySlot()
 
   // todo: make this more robust with respect to message types and if can't
   // find anything to remove..
-  int i;
-  int tmin = 0;
-  int imin = 0;
-  for (i = 0; i < MAXMESSAGES; i++) {
+  unsigned imin = 0;
+  for (unsigned i = 0, tmin = 0; i < MAXMESSAGES; i++) {
     if (i == 0 || messages[i].tstart < tmin) {
       tmin = messages[i].tstart;
       imin = i;
@@ -268,32 +267,28 @@ PopupMessage::GetEmptySlot()
 }
 
 void
-PopupMessage::AddMessage(int tshow, int type, const TCHAR *Text)
+PopupMessage::AddMessage(unsigned tshow, int type, const TCHAR *Text)
 {
   assert(mutex.IsLockedByCurrent());
 
-  int i;
-  int fpsTime = clock.Elapsed();
-  i = GetEmptySlot();
+  const unsigned now = MonotonicClockMS();
 
-  messages[i].Set(type, tshow, Text, fpsTime);
+  int i = GetEmptySlot();
+  messages[i].Set(type, tshow, Text, now);
 }
 
 void
 PopupMessage::Repeat(int type)
 {
-  int i;
-  int tmax = 0;
   int imax = -1;
 
   mutex.Lock();
-
-  int fpsTime = clock.Elapsed();
+  const unsigned now = MonotonicClockMS();
 
   // find most recent non-visible message
 
-  for (i = 0; i < MAXMESSAGES; i++) {
-    if (messages[i].texpiry < fpsTime &&
+  for (unsigned i = 0, tmax = 0; i < MAXMESSAGES; i++) {
+    if (messages[i].texpiry < now &&
         messages[i].tstart > tmax &&
         (messages[i].type == type || type == 0)) {
       imax = i;
@@ -302,7 +297,7 @@ PopupMessage::Repeat(int type)
   }
 
   if (imax >= 0) {
-    messages[imax].tstart = fpsTime;
+    messages[imax].tstart = now;
     messages[imax].texpiry = messages[imax].tstart;
   }
 
@@ -313,14 +308,13 @@ bool
 PopupMessage::Acknowledge(int type)
 {
   ScopeLock protect(mutex);
-  int i;
-  int fpsTime = clock.Elapsed();
+  const unsigned now = MonotonicClockMS();
 
-  for (i = 0; i < MAXMESSAGES; i++) {
+  for (unsigned i = 0; i < MAXMESSAGES; i++) {
     if (messages[i].texpiry > messages[i].tstart &&
         (type == 0 || type == messages[i].type)) {
       // message was previously visible, so make it expire now.
-      messages[i].texpiry = fpsTime - 1;
+      messages[i].texpiry = now - 1;
       return true;
     }
   }
