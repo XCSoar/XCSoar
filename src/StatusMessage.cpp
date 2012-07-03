@@ -27,6 +27,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "Util/EscapeBackslash.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/NumberParser.hpp"
 #include "IO/ConfiguredFile.hpp"
 
 #include <stdio.h>
@@ -81,8 +82,6 @@ parse_assignment(TCHAR *buffer, const TCHAR *&key, const TCHAR *&value)
 void
 StatusMessageList::LoadFile(TLineReader &reader)
 {
-  int ms; // Found ms for delay
-
   // Init first entry
   StatusMessage current;
   current.Clear();
@@ -110,7 +109,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
           current.sound = UnescapeBackslash(value);
       } else if (_tcscmp(key, _T("delay")) == 0) {
         TCHAR *endptr;
-        ms = _tcstol(value, &endptr, 10);
+        unsigned ms = ParseUnsigned(value, &endptr);
         if (endptr > value)
           current.delay_ms = ms;
       } else if (_tcscmp(key, _T("hide")) == 0) {
