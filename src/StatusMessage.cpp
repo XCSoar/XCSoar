@@ -82,7 +82,6 @@ void
 StatusMessageList::LoadFile(TLineReader &reader)
 {
   int ms; // Found ms for delay
-  const TCHAR **location; // Where to put the data
 
   // Init first entry
   StatusMessage current;
@@ -103,12 +102,12 @@ StatusMessageList::LoadFile(TLineReader &reader)
           break;
       }
     } else {
-      location = NULL;
-
       if (_tcscmp(key, _T("key")) == 0) {
-        location = &current.key;
+        if (current.key == NULL)
+          current.key = UnescapeBackslash(value);
       } else if (_tcscmp(key, _T("sound")) == 0) {
-        location = &current.sound;
+        if (current.sound == NULL)
+          current.sound = UnescapeBackslash(value);
       } else if (_tcscmp(key, _T("delay")) == 0) {
         TCHAR *endptr;
         ms = _tcstol(value, &endptr, 10);
@@ -118,11 +117,6 @@ StatusMessageList::LoadFile(TLineReader &reader)
         if (_tcscmp(value, _T("yes")) == 0)
           current.visible = false;
       }
-
-      // Do we have somewhere to put this &&
-      // is it currently empty ? (prevent lost at startup)
-      if (location != NULL && *location == NULL)
-        *location = UnescapeBackslash(value);
     }
   }
 
