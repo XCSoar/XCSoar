@@ -212,7 +212,7 @@ private:
   virtual void DrawThermalEstimate(Canvas &canvas) const;
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
 
-  void SwitchZoomClimb();
+  void SwitchZoomClimb(bool circling);
 
   void SaveDisplayModeScales();
 

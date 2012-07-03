@@ -133,7 +133,7 @@ GlueMapWindow::SaveDisplayModeScales()
 }
 
 void
-GlueMapWindow::SwitchZoomClimb()
+GlueMapWindow::SwitchZoomClimb(bool circling)
 {
   const MapSettings &settings = CommonInterface::GetMapSettings();
 
@@ -164,7 +164,7 @@ GlueMapWindow::UpdateDisplayMode()
   display_mode = new_mode;
 
   if (is_circling != was_circling)
-    SwitchZoomClimb();
+    SwitchZoomClimb(is_circling);
 }
 
 void
