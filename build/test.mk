@@ -663,7 +663,6 @@ DEBUG_PROGRAM_NAMES = \
 	DebugDisplay \
 	RunVegaSettings \
 	RunFlarmUtils \
-	RunTCPListener \
 	TaskInfo DumpTaskFile \
 	DumpFlarmNet \
 	IGC2NMEA \
@@ -1086,15 +1085,6 @@ LOG_PORT_SOURCES = \
 	$(TEST_SRC_DIR)/LogPort.cpp
 LOG_PORT_DEPENDS = PORT ASYNC OS THREAD UTIL
 $(eval $(call link-program,LogPort,LOG_PORT))
-
-RUN_TCP_LISTENER_SOURCES = \
-	$(SRC)/Device/Port/Port.cpp \
-	$(SRC)/Device/Port/SocketPort.cpp \
-	$(SRC)/Device/Port/TCPPort.cpp \
-	$(TEST_SRC_DIR)/RunTCPListener.cpp
-RUN_TCP_LISTENER_DEPENDS = OS THREAD
-
-$(eval $(call link-program,RunTCPListener,RUN_TCP_LISTENER))
 
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
