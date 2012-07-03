@@ -51,6 +51,10 @@ struct StatusMessage {
     delay_ms = 2500;
     visible = true;
   }
+
+  bool IsEmpty() const {
+    return key == NULL;
+  }
 };
 
 /**

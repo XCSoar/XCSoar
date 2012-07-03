@@ -83,12 +83,10 @@ StatusMessageList::LoadFile(TLineReader &reader)
 {
   int ms; // Found ms for delay
   const TCHAR **location; // Where to put the data
-  bool some_data; // Did we find some in the last loop...
 
   // Init first entry
   StatusMessage current;
   current.Clear();
-  some_data = false;
 
   /* Read from the file */
   TCHAR *buffer;
@@ -97,9 +95,8 @@ StatusMessageList::LoadFile(TLineReader &reader)
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if (*buffer == _T('#') || !parse_assignment(buffer, key, value)) {
       // Global counter (only if the last entry had some data)
-      if (some_data) {
+      if (!current.IsEmpty()) {
         list.append(current);
-        some_data = false;
         current.Clear();
 
         if (list.full())
@@ -109,7 +106,6 @@ StatusMessageList::LoadFile(TLineReader &reader)
       location = NULL;
 
       if (_tcscmp(key, _T("key")) == 0) {
-        some_data = true; // Success, we have a real entry
         location = &current.key;
       } else if (_tcscmp(key, _T("sound")) == 0) {
         location = &current.sound;
@@ -130,7 +126,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
     }
   }
 
-  if (some_data)
+  if (!current.IsEmpty())
     list.append(current);
 }
 
