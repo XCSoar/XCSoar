@@ -160,12 +160,12 @@ PopupMessage::GetRect(UPixelScalar height) const
 }
 
 void
-PopupMessage::Resize()
+PopupMessage::UpdateTextAndLayout(const TCHAR *text)
 {
-  if (*msgText == _T('\0')) {
+  if (StringIsEmpty(text)) {
     Hide();
   } else {
-    SetText(msgText);
+    SetText(text);
 
     const UPixelScalar font_height = Fonts::map_bold.GetHeight();
 
@@ -183,7 +183,7 @@ PopupMessage::Resize()
          create a new one */
       reset();
       set(rthis);
-      SetText(msgText);
+      SetText(text);
     } else
 #endif
       Move(rthis);
@@ -226,7 +226,7 @@ PopupMessage::Render()
       doresize = false;
       // do one extra resize after display so we are sure we get all
       // the text (workaround bug in getlinecount)
-      Resize();
+      UpdateTextAndLayout(msgText);
     }
     return false;
   }
@@ -243,7 +243,7 @@ PopupMessage::Render()
 
   mutex.Unlock();
 
-  Resize();
+  UpdateTextAndLayout(msgText);
 
   return true;
 }

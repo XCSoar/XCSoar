@@ -152,7 +152,7 @@ private:
   gcc_pure
   PixelRect GetRect(UPixelScalar height) const;
 
-  void Resize();
+  void UpdateTextAndLayout(const TCHAR *text);
   int GetEmptySlot();
 
 protected:
