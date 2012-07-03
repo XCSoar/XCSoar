@@ -168,7 +168,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddEnum(_("Display orientation"), NULL,
           display_orientation_list, (unsigned)ui_settings.display.orientation);
-  SetRowVisible(DisplayOrientation, Display::RotateSupported());
+  SetRowAvailable(DisplayOrientation, Display::RotateSupported());
 
   AddEnum(_("InfoBox geometry"),
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
