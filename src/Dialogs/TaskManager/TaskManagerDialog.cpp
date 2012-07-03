@@ -105,9 +105,7 @@ dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
     fullscreen = true;
     Sender->ShowOnTop();
   } else {
-    Sender->Move(TaskViewRect.left, TaskViewRect.top,
-                 TaskViewRect.right - TaskViewRect.left,
-                 TaskViewRect.bottom - TaskViewRect.top);
+    Sender->Move(TaskViewRect);
     fullscreen = false;
   }
   Sender->Invalidate();
@@ -123,9 +121,7 @@ dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
   }
 
   fullscreen = false;
-  wTaskView->Move(TaskViewRect.left, TaskViewRect.top,
-                  TaskViewRect.right - TaskViewRect.left,
-                  TaskViewRect.bottom - TaskViewRect.top);
+  wTaskView->Move(TaskViewRect);
 }
 
 void

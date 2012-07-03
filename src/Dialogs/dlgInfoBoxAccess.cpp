@@ -117,8 +117,7 @@ dlgInfoBoxAccessShowModeless(const int id,
 
   if (!wTabBar->GetTabCount()) {
     form_rc.top = form_rc.bottom - Layout::Scale(58);
-    wf->Move(form_rc.left, form_rc.top,
-             form_rc.right - form_rc.left, form_rc.bottom - form_rc.top);
+    wf->Move(form_rc);
 
     Widget *wSwitch = new SwitchInfoBox(id, *wf);
     wTabBar->AddTab(wSwitch, _("Switch InfoBox"));

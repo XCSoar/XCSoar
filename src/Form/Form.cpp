@@ -141,9 +141,7 @@ WndForm::UpdateLayout()
   client_rect.top = title_rect.bottom;
 
   if (client_area.IsDefined())
-    client_area.Move(client_rect.left, client_rect.top,
-                     client_rect.right - client_rect.left,
-                     client_rect.bottom - client_rect.top);
+    client_area.Move(client_rect);
 }
 
 ContainerWindow &

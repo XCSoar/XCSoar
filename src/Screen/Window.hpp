@@ -434,6 +434,10 @@ public:
 #endif
   }
 
+  void FastMove(const PixelRect rc) {
+    FastMove(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  }
+
   /**
    * Move the Window to the specified position within the parent
    * ContainerWindow and make it visible.

@@ -316,9 +316,7 @@ MainWindow::ReinitialiseLayout()
       InfoBoxManager::Show();
 
     const PixelRect &current_map = FullScreen ? rc : map_rect;
-    map->Move(current_map.left, current_map.top,
-              current_map.right - current_map.left,
-              current_map.bottom - current_map.top);
+    map->Move(current_map);
     map->FullRedraw();
   }
 
@@ -406,8 +404,7 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
 void
 MainWindow::ReinitialisePosition()
 {
-  PixelRect rc = SystemWindowSize();
-  FastMove(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  FastMove(SystemWindowSize());
 }
 
 void
@@ -654,7 +651,7 @@ MainWindow::SetFullScreen(bool _full_screen)
 
   if (map != NULL) {
     const PixelRect rc = FullScreen ? GetClientRect() : map_rect;
-    map->FastMove(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+    map->FastMove(rc);
   }
 
   // the repaint will be triggered by the DrawThread

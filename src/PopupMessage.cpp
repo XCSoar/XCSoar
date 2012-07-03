@@ -187,9 +187,7 @@ PopupMessage::Resize()
     }
 #endif
 
-    Move(rthis.left, rthis.top,
-         rthis.right - rthis.left,
-         rthis.bottom - rthis.top);
+    Move(rthis);
     ShowOnTop();
   }
 }
