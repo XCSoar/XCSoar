@@ -43,7 +43,7 @@ struct StatusMessage {
   bool visible;
 
   /** Delay for DoStatusMessage */
-  int delay_ms;
+  unsigned delay_ms;
 
   void Clear() {
     key = NULL;

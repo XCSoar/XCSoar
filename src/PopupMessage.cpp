@@ -170,7 +170,7 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
 
     const UPixelScalar font_height = Fonts::map_bold.GetHeight();
 
-    int linecount = max((unsigned)nvisible, max((unsigned)1, GetRowCount()));
+    unsigned linecount = max(nvisible, max(1u, GetRowCount()));
 
     PixelScalar height = min((PixelScalar)((rc.bottom-rc.top) * 0.8),
                              (PixelScalar)(font_height * (linecount + 1)));
