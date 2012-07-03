@@ -41,8 +41,6 @@ enum ControlIndex {
   WatchedWaypointFile,
   AirspaceFile,
   AdditionalAirspaceFile,
-  TerrainFile,
-  TopographyFile,
   AirfieldFile
 };
 
@@ -121,14 +119,6 @@ SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                 ProfileKeys::AdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
   SetExpertRow(AdditionalAirspaceFile);
 
-  AddFileReader(_("Terrain file"), _("The name of the file containing digital elevation terrain data."),
-                ProfileKeys::TerrainFile, _T("*.jp2\0"));
-  SetExpertRow(TerrainFile);
-
-  AddFileReader(_("Topography file"), _("Specifies the file defining the topographical features."),
-                ProfileKeys::TopographyFile, _T("*.tpl\0"));
-  SetExpertRow(TopographyFile);
-
   AddFileReader(_("Waypoint details"),
                 _("The file may contain extracts from enroute supplements or other contributed "
                     "information about individual waypoints and airfields."),
@@ -151,15 +141,10 @@ SiteConfigPanel::Save(bool &_changed, bool &_require_restart)
   AirspaceFileChanged = SaveValueFileReader(AirspaceFile, ProfileKeys::AirspaceFile);
   AirspaceFileChanged |= SaveValueFileReader(AdditionalAirspaceFile, ProfileKeys::AdditionalAirspaceFile);
 
-  TerrainFileChanged = SaveValueFileReader(TerrainFile, ProfileKeys::TerrainFile);
-
-  TopographyFileChanged = SaveValueFileReader(TopographyFile, ProfileKeys::TopographyFile);
-
   AirfieldFileChanged = SaveValueFileReader(AirfieldFile, ProfileKeys::AirfieldFile);
 
 
-  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged ||
-         TerrainFileChanged || TopographyFileChanged;
+  changed = WaypointFileChanged || AirfieldFileChanged || MapFileChanged;
 
   _changed |= changed;
   _require_restart |= require_restart;

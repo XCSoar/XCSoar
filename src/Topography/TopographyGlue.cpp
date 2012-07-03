@@ -27,43 +27,12 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "LogFile.hpp"
 #include "Operation/Operation.hpp"
-#include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "IO/FileLineReader.hpp"
-#include "OS/FileUtil.hpp"
-#include "OS/PathName.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <zzip/zzip.h>
 
 #include <windef.h> /* for MAX_PATH */
-
-/**
- * Load topography from a plain file, load the other files from the same
- * directory.
- */
-static bool
-LoadConfiguredTopographyFile(TopographyStore &store,
-                             OperationEnvironment &operation)
-{
-  TCHAR file[MAX_PATH];
-  if (!Profile::GetPath(ProfileKeys::TopographyFile, file))
-    return false;
-
-  FileLineReaderA reader(file);
-  if (reader.error()) {
-    LogStartUp(_T("No topography file: %s"), file);
-    return false;
-  }
-
-  TCHAR buffer[MAX_PATH];
-  const TCHAR *directory = DirName(file, buffer);
-  if (directory == NULL)
-    return false;
-
-  store.Load(operation, reader, directory);
-  return true;
-}
 
 /**
  * Load topography from the map file (ZIP), load the other files from
@@ -100,6 +69,5 @@ LoadConfiguredTopography(TopographyStore &store,
   LogStartUp(_T("Loading Topography File..."));
   operation.SetText(_("Loading Topography File..."));
 
-  return LoadConfiguredTopographyFile(store, operation) ||
-    LoadConfiguredTopographyZip(store, operation);
+  return LoadConfiguredTopographyZip(store, operation);
 }

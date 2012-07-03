@@ -64,8 +64,6 @@ bool MapFileChanged = false;
 bool AirspaceFileChanged = false;
 bool AirfieldFileChanged = false;
 bool WaypointFileChanged = false;
-bool TerrainFileChanged = false;
-bool TopographyFileChanged = false;
 bool PolarFileChanged = false;
 bool LanguageFileChanged = false;
 bool StatusFileChanged = false;
@@ -84,8 +82,6 @@ SettingsEnter()
   AirspaceFileChanged = false;
   AirfieldFileChanged = false;
   WaypointFileChanged = false;
-  TerrainFileChanged = false;
-  TopographyFileChanged = false;
   PolarFileChanged = false;
   LanguageFileChanged = false;
   StatusFileChanged = false;
@@ -109,6 +105,7 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (LanguageChanged)
     ReadLanguageFile();
 
+  bool TerrainFileChanged = false, TopographyFileChanged = false;
   if (MapFileChanged) {
     /* set these flags, because they may be loaded from the map
        file */

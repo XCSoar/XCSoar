@@ -252,9 +252,8 @@ InputEvents::eventProfileLoad(const TCHAR *misc)
   if (!StringIsEmpty(misc)) {
     Profile::LoadFile(misc);
 
+    MapFileChanged = true;
     WaypointFileChanged = true;
-    TerrainFileChanged = true;
-    TopographyFileChanged = true;
     AirspaceFileChanged = true;
     AirfieldFileChanged = true;
     PolarFileChanged = true;
