@@ -24,16 +24,25 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_SOCKET_PORT_HPP
 #define XCSOAR_DEVICE_SOCKET_PORT_HPP
 
-#include "Thread/StoppableThread.hpp"
-#include "Port.hpp"
+#include "BufferedPort.hpp"
 #include "OS/SocketDescriptor.hpp"
+#include "IO/Async/FileEventHandler.hpp"
+
+#ifndef HAVE_POSIX
+#include "IO/Async/SocketThread.hpp"
+#endif
 
 /**
  * A UDP listener port class.
  */
-class SocketPort : public Port, protected StoppableThread
-{
+class SocketPort : public BufferedPort, protected FileEventHandler {
   SocketDescriptor socket;
+
+#ifndef HAVE_POSIX
+  /* on WIN32, the IOThread class is not available; SocketThread
+     emulates it */
+  SocketThread thread;
+#endif
 
 public:
   /**
@@ -42,7 +51,12 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  SocketPort(DataHandler &handler):Port(handler) {}
+  SocketPort(DataHandler &handler)
+    :BufferedPort(handler)
+#ifndef HAVE_POSIX
+    , thread(socket, *this)
+#endif
+  {}
 
   /**
    * Closes the serial port (Destructor)
@@ -58,13 +72,8 @@ protected:
   /**
    * Close the socket.  This object can be reused afterwards by
    * calling Set().
-   *
-   * This is an internal method, only to be used by derived classes,
-   * because it does not take care for stopping the thread.
    */
-  void Close() {
-    socket.Close();
-  }
+  void Close();
 
 public:
   /**
@@ -76,18 +85,13 @@ public:
   /* virtual methods from class Port */
   virtual bool IsValid() const;
   virtual bool Drain();
-  virtual void Flush();
   virtual bool SetBaudrate(unsigned baud_rate);
   virtual unsigned GetBaudrate() const;
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-  virtual int Read(void *buffer, size_t length);
-  virtual WaitResult WaitRead(unsigned timeout_ms);
   virtual size_t Write(const void *data, size_t length);
 
 protected:
-  /* virtual methods from class Thread */
-  virtual void Run();
+  /* virtual methods from class FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask);
 };
 
 #endif

@@ -24,11 +24,40 @@ Copyright_License {
 #include "SocketPort.hpp"
 #include "IO/DataHandler.hpp"
 
+#ifdef HAVE_POSIX
+#include "IO/Async/GlobalIOThread.hpp"
+#endif
+
 #include <assert.h>
 
 SocketPort::~SocketPort()
 {
-  StopRxThread();
+  Close();
+}
+
+void
+SocketPort::Close()
+{
+  BufferedPort::BeginClose();
+
+#ifdef HAVE_POSIX
+  if (socket.IsDefined()) {
+    io_thread->LockRemove(socket.Get());
+    socket.Close();
+  }
+#else
+  assert(!thread.IsInside());
+
+  if (thread.IsDefined()) {
+    thread.BeginStop();
+    thread.Join();
+  }
+
+  if (socket.IsDefined())
+    socket.Close();
+#endif
+
+  BufferedPort::EndClose();
 }
 
 void
@@ -36,14 +65,29 @@ SocketPort::Set(SocketDescriptor &&_socket)
 {
   assert(!socket.IsDefined());
   assert(_socket.IsDefined());
+#ifndef HAVE_POSIX
+  assert(!thread.IsDefined());
+#endif
 
   socket = std::move(_socket);
+
+  /* register the socket in then IOThread or the SocketThread */
+#ifdef HAVE_POSIX
+  io_thread->LockAdd(socket.Get(), Poll::READ, *this);
+#else
+  thread.Start();
+#endif
 }
 
 bool
 SocketPort::OpenUDPListener(unsigned port)
 {
-  return socket.CreateUDPListener(port);
+  SocketDescriptor s;
+  if (!s.CreateUDPListener(port))
+    return false;
+
+  Set(std::move(s));
+  return true;
 }
 
 bool
@@ -59,32 +103,6 @@ SocketPort::Drain()
   return true;
 }
 
-void
-SocketPort::Flush()
-{
-}
-
-bool
-SocketPort::StopRxThread()
-{
-  // Make sure the thread isn't terminating itself
-  assert(!Thread::IsInside());
-
-  // Make sure the port is still open
-  if (!IsValid())
-    return false;
-
-  // If the thread is not running, cancel the rest of the function
-  if (!Thread::IsDefined())
-    return true;
-
-  BeginStop();
-
-  Thread::Join();
-
-  return true;
-}
-
 size_t
 SocketPort::Write(const void *data, size_t length)
 {
@@ -95,29 +113,11 @@ SocketPort::Write(const void *data, size_t length)
   return nbytes < 0 ? 0 : nbytes;
 }
 
-bool
-SocketPort::StartRxThread()
-{
-  if (Thread::IsDefined())
-    /* already running */
-    return true;
-
-  // Make sure the port was opened correctly
-  if (!IsValid())
-    return false;
-
-  // Start the receive thread
-  StoppableThread::Start();
-  return true;
-}
-
-
 unsigned
 SocketPort::GetBaudrate() const
 {
   return 0;
 }
-
 
 bool
 SocketPort::SetBaudrate(unsigned baud_rate)
@@ -125,51 +125,16 @@ SocketPort::SetBaudrate(unsigned baud_rate)
   return true;
 }
 
-int
-SocketPort::Read(void *buffer, size_t length)
+bool
+SocketPort::OnFileEvent(int fd, unsigned mask)
 {
-  if (!socket.IsDefined())
-    return -1;
+  assert(fd == socket.Get());
 
-  if (socket.WaitReadable(0) <= 0)
-    return -1;
-
-  return socket.Read(buffer, length);
-}
-
-Port::WaitResult
-SocketPort::WaitRead(unsigned timeout_ms)
-{
-  if (!socket.IsDefined())
-    return WaitResult::FAILED;
-
-  int ret = socket.WaitReadable(timeout_ms);
-  if (ret > 0)
-    return WaitResult::READY;
-  else if (ret == 0)
-    return WaitResult::TIMEOUT;
-  else
-    return WaitResult::FAILED;
-}
-
-void
-SocketPort::Run()
-{
   char buffer[1024];
+  ssize_t nbytes = socket.Read(buffer, sizeof(buffer));
+  if (nbytes <= 0)
+    return false;
 
-  while (!CheckStopped()) {
-    assert(socket.IsDefined());
-
-    int ret = socket.WaitReadable(250);
-    if (ret > 0) {
-      ssize_t nbytes = socket.Read(buffer, sizeof(buffer));
-      if (nbytes <= 0) {
-        break;
-      }
-      handler.DataReceived(buffer, nbytes);
-    } else if (ret < 0) {
-      break;
-    }
-  }
+  handler.DataReceived(buffer, nbytes);
+  return true;
 }
-

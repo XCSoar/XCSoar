@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_TCP_PORT_HPP
 
 #include "SocketPort.hpp"
+#include "Thread/Trigger.hpp"
 
 /**
  * A TCP listener port class.
@@ -33,6 +34,12 @@ class TCPPort : public SocketPort
 {
   SocketDescriptor listener;
 
+#ifndef HAVE_POSIX
+  SocketThread thread;
+#endif
+
+  Trigger closed_trigger;
+
 public:
   /**
    * Creates a new TCPPort object, but does not open it yet.
@@ -40,7 +47,12 @@ public:
    * @param handler the callback object for input received on the
    * port
    */
-  TCPPort(DataHandler &handler):SocketPort(handler) {}
+  TCPPort(DataHandler &handler)
+    :SocketPort(handler)
+#ifndef HAVE_POSIX
+    , thread(listener, *this)
+#endif
+  {}
 
   /**
    * Closes the serial port (Destructor)
@@ -57,8 +69,8 @@ public:
   virtual bool IsValid() const;
 
 protected:
-  /* virtual methods from class Thread */
-  virtual void Run();
+  /* virtual methods from class FileEventHandler */
+  virtual bool OnFileEvent(int fd, unsigned mask);
 };
 
 #endif
