@@ -560,9 +560,7 @@ MainWindow::OnUser(unsigned id)
 
     /* un-blank the display, play a sound and show the dialog */
     ResetDisplayTimeOut();
-#ifndef GNAV
     PlayResource(_T("IDR_WAV_BEEPBWEEP"));
-#endif
     dlgAirspaceWarningsShowModal(*this, *airspace_warnings, true);
     return true;
 
