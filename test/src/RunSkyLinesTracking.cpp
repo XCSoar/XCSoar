@@ -25,6 +25,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "OS/Args.hpp"
 #include "Util/NumberParser.hpp"
+#include "Util/StringUtil.hpp"
 
 int
 main(int argc, char *argv[])
@@ -32,6 +33,7 @@ main(int argc, char *argv[])
   Args args(argc, argv, "HOST KEY");
   const char *host = args.ExpectNext();
   const char *key = args.ExpectNext();
+  const char *cmd = args.IsEmpty() ? "fix" : args.GetNext();
   args.ExpectEnd();
 
   SkyLinesTracking::Client client;
@@ -41,11 +43,16 @@ main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
-  NMEAInfo basic;
-  basic.Reset();
-  basic.UpdateClock();
-  basic.time = fixed_one;
-  basic.time_available.Update(basic.clock);
+  if (StringIsEqual(cmd, "fix")) {
+    NMEAInfo basic;
+    basic.Reset();
+    basic.UpdateClock();
+    basic.time = fixed_one;
+    basic.time_available.Update(basic.clock);
 
-  return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
+    return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
+  } else {
+    fprintf(stderr, "Unknown command: %s\n", cmd);
+    return EXIT_FAILURE;
+  }
 }
