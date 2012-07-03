@@ -31,6 +31,8 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Form/DataField/Base.hpp"
+#include "Form/DockWindow.hpp"
+#include "Widgets/PolarShapeEditWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarStore.hpp"
@@ -48,6 +50,13 @@ Copyright_License {
 static WndForm *dialog = NULL;
 static Plane plane;
 static bool loading = false;
+
+static PolarShapeEditWidget &
+GetShapeEditor(SubForm &form)
+{
+  DockWindow &dock = *(DockWindow *)form.FindByName(_T("shape"));
+  return *(PolarShapeEditWidget *)dock.GetWidget();
+}
 
 static void
 UpdateCaption()
@@ -71,8 +80,11 @@ UpdatePolarLabel()
 static void
 UpdateInvalidLabel()
 {
-  const PolarCoefficients coeff = plane.polar_shape.CalculateCoefficients();
-  bool visible = !coeff.IsValid();
+  PolarShapeEditWidget &widget = GetShapeEditor(*dialog);
+  bool changed = false, require_restart = false;
+  bool valid = widget.Save(changed, require_restart) &&
+    widget.GetPolarShape().IsValid();
+  bool visible = !valid;
 
   WndFrame *label = ((WndFrame *)dialog->FindByName(_T("InvalidLabel")));
   assert(label != NULL);
@@ -82,23 +94,16 @@ UpdateInvalidLabel()
 static void
 LoadPolarShape(SubForm &form, const PolarShape &shape)
 {
-  LoadFormProperty(form, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, shape[0].v);
-  LoadFormProperty(form, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, shape[1].v);
-  LoadFormProperty(form, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, shape[2].v);
-  LoadFormProperty(form, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, shape[0].w);
-  LoadFormProperty(form, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, shape[1].w);
-  LoadFormProperty(form, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, shape[2].w);
+  GetShapeEditor(form).SetPolarShape(shape);
 }
 
 static void
 SavePolarShape(SubForm &form, PolarShape &shape)
 {
-  SaveFormProperty(form, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, shape[0].v);
-  SaveFormProperty(form, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, shape[1].v);
-  SaveFormProperty(form, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, shape[2].v);
-  SaveFormProperty(form, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, shape[0].w);
-  SaveFormProperty(form, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, shape[1].w);
-  SaveFormProperty(form, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, shape[2].w);
+  PolarShapeEditWidget &widget = GetShapeEditor(form);
+  bool changed = false, require_restart = false;
+  widget.Save(changed, require_restart);
+  shape = widget.GetPolarShape();
 }
 
 static void
@@ -266,6 +271,12 @@ dlgPlanePolarShowModal(SingleWindow &parent, Plane &_plane)
   dialog = LoadDialog(CallBackTable, parent, Layout::landscape ?
                       _T("IDR_XML_PLANE_POLAR_L") : _T("IDR_XML_PLANE_POLAR"));
   assert(dialog != NULL);
+
+  DockWindow &dock = *(DockWindow *)dialog->FindByName(_T("shape"));
+  PolarShapeEditWidget *shape_editor =
+    new PolarShapeEditWidget(plane.polar_shape);
+  dock.SetWidget(shape_editor);
+  shape_editor->SetDataAccessCallback(PolarChanged);
 
   Update();
   bool result = (dialog->ShowModal() == mrOK);

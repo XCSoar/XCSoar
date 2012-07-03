@@ -34,6 +34,8 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Form.hpp"
+#include "Form/DockWindow.hpp"
+#include "Widgets/PolarShapeEditWidget.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"
@@ -64,7 +66,6 @@ class PolarConfigPanel : public XMLWidget {
   bool loading;
   WndButton *buttonList, *buttonImport, *buttonExport;
 
-  void SetLiftFieldStepAndMax(const TCHAR *control);
   void UpdatePolarTitle();
   void UpdatePolarInvalidLabel();
   void SetVisible(bool active);
@@ -85,44 +86,17 @@ public:
     context pointer - please refactor! */
 static PolarConfigPanel *instance;
 
-void
-PolarConfigPanel::SetLiftFieldStepAndMax(const TCHAR *control)
+static PolarShapeEditWidget &
+GetShapeEditor(SubForm &form)
 {
-  WndProperty *ctl = (WndProperty *)form.FindByName(control);
-  DataFieldFloat* df = (DataFieldFloat*)ctl->GetDataField();
-  switch (Units::current.vertical_speed_unit) {
-    case Unit::FEET_PER_MINUTE:
-      df->SetStep(fixed_ten);
-      df->SetMin(fixed(-2000));
-      break;
-    case Unit::KNOTS:
-      df->SetStep(fixed(0.1));
-      df->SetMin(fixed(-20));
-      break;
-    case Unit::METER_PER_SECOND:
-      df->SetStep(fixed(0.05));
-      df->SetMin(fixed(-10));
-      break;
-    default:
-      break;
-  }
+  DockWindow &dock = *(DockWindow *)form.FindByName(_T("shape"));
+  return *(PolarShapeEditWidget *)dock.GetWidget();
 }
 
 static void
 LoadPolarShape(SubForm &form, const PolarShape &shape)
 {
-  LoadFormProperty(form, _T("prpPolarV1"),
-                   UnitGroup::HORIZONTAL_SPEED, shape[0].v);
-  LoadFormProperty(form, _T("prpPolarV2"),
-                   UnitGroup::HORIZONTAL_SPEED, shape[1].v);
-  LoadFormProperty(form, _T("prpPolarV3"),
-                   UnitGroup::HORIZONTAL_SPEED, shape[2].v);
-  LoadFormProperty(form, _T("prpPolarW1"),
-                   UnitGroup::VERTICAL_SPEED, shape[0].w);
-  LoadFormProperty(form, _T("prpPolarW2"),
-                   UnitGroup::VERTICAL_SPEED, shape[1].w);
-  LoadFormProperty(form, _T("prpPolarW3"),
-                   UnitGroup::VERTICAL_SPEED, shape[2].w);
+  GetShapeEditor(form).SetPolarShape(shape);
 }
 
 void
@@ -138,20 +112,13 @@ PolarConfigPanel::UpdatePolarTitle()
 static bool
 SavePolarShape(SubForm &form, PolarShape &shape)
 {
-  bool changed = false;
-  changed |= SaveFormProperty(form, _T("prpPolarV1"),
-                              UnitGroup::HORIZONTAL_SPEED, shape[0].v);
-  changed |= SaveFormProperty(form, _T("prpPolarV2"),
-                              UnitGroup::HORIZONTAL_SPEED, shape[1].v);
-  changed |= SaveFormProperty(form, _T("prpPolarV3"),
-                              UnitGroup::HORIZONTAL_SPEED, shape[2].v);
-  changed |= SaveFormProperty(form, _T("prpPolarW1"),
-                              UnitGroup::VERTICAL_SPEED, shape[0].w);
-  changed |= SaveFormProperty(form, _T("prpPolarW2"),
-                              UnitGroup::VERTICAL_SPEED, shape[1].w);
-  changed |= SaveFormProperty(form, _T("prpPolarW3"),
-                              UnitGroup::VERTICAL_SPEED, shape[2].w);
-  return changed;
+  PolarShapeEditWidget &widget = GetShapeEditor(form);
+  bool changed = false, require_restart = false;
+  if (!widget.Save(changed, require_restart))
+    return false;
+
+  shape = widget.GetPolarShape();
+  return true;
 }
 
 static bool
@@ -172,15 +139,9 @@ SaveFormToPolar(SubForm &form, PolarInfo &polar)
 void
 PolarConfigPanel::UpdatePolarInvalidLabel()
 {
-  fixed v1 = GetFormValueFixed(form, _T("prpPolarV1"));
-  fixed v2 = GetFormValueFixed(form, _T("prpPolarV2"));
-  fixed v3 = GetFormValueFixed(form, _T("prpPolarV3"));
-  fixed w1 = GetFormValueFixed(form, _T("prpPolarW1"));
-  fixed w2 = GetFormValueFixed(form, _T("prpPolarW2"));
-  fixed w3 = GetFormValueFixed(form, _T("prpPolarW3"));
-
-  PolarCoefficients coeff = PolarCoefficients::From3VW(v1, v2, v3, w1, w2, w3);
-  ((WndFrame *)form.FindByName(_T("lblPolarInvalid")))->SetVisible(!coeff.IsValid());
+  PolarShape shape;
+  bool valid = SavePolarShape(form, shape) && shape.IsValid();
+  ((WndFrame *)form.FindByName(_T("lblPolarInvalid")))->SetVisible(!valid);
 }
 
 void
@@ -387,12 +348,13 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   assert(buttonExport != NULL);
   buttonExport->SetOnClickNotify(OnExport);
 
-  SetLiftFieldStepAndMax(_T("prpPolarW1"));
-  SetLiftFieldStepAndMax(_T("prpPolarW2"));
-  SetLiftFieldStepAndMax(_T("prpPolarW3"));
-
   const ComputerSettings &settings = XCSoarInterface::GetComputerSettings();
-  LoadPolarShape(form, settings.plane.polar_shape);
+
+  DockWindow &dock = *(DockWindow *)form.FindByName(_T("shape"));
+  PolarShapeEditWidget *shape_editor =
+    new PolarShapeEditWidget(settings.plane.polar_shape);
+  dock.SetWidget(shape_editor);
+  shape_editor->SetDataAccessCallback(OnFieldData);
 
   LoadFormProperty(form, _T("prpPolarReferenceMass"),
                    settings.plane.reference_mass);
