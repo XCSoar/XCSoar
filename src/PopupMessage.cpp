@@ -76,7 +76,7 @@ PopupMessage::Message::Update(int now)
 }
 
 bool
-PopupMessage::Message::AppendTo(TCHAR *buffer, int now)
+PopupMessage::Message::AppendTo(StaticString<2000> &buffer, int now)
 {
   if (IsUnknown())
     // ignore unknown messages
@@ -88,9 +88,9 @@ PopupMessage::Message::AppendTo(TCHAR *buffer, int now)
     return false;
   }
 
-  if (buffer[0] != _T('\0'))
-    _tcscat(buffer, _T("\r\n"));
-  _tcscat(buffer, text);
+  if (!buffer.empty())
+    buffer.append(_T("\r\n"));
+  buffer.append(text);
   return true;
 }
 
@@ -226,7 +226,7 @@ PopupMessage::Render()
       doresize = false;
       // do one extra resize after display so we are sure we get all
       // the text (workaround bug in getlinecount)
-      UpdateTextAndLayout(msgText);
+      UpdateTextAndLayout(text);
     }
     return false;
   }
@@ -235,15 +235,15 @@ PopupMessage::Render()
   // text box
 
   doresize = true;
-  msgText[0] = _T('\0');
+  text.clear();
   nvisible = 0;
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
-    if (messages[i].AppendTo(msgText, fpsTime))
+    if (messages[i].AppendTo(text, fpsTime))
       nvisible++;
 
   mutex.Unlock();
 
-  UpdateTextAndLayout(msgText);
+  UpdateTextAndLayout(text);
 
   return true;
 }

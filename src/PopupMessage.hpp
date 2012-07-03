@@ -103,7 +103,7 @@ private:
     /**
      * @return true if a message has been appended
      */
-    bool AppendTo(TCHAR *buffer, int now);
+    bool AppendTo(StaticString<2000> &buffer, int now);
   };
 
   PeriodClock clock;
@@ -117,7 +117,7 @@ private:
 
   Mutex mutex;
   struct Message messages[MAXMESSAGES];
-  TCHAR msgText[2000];
+  StaticString<2000> text;
 
   unsigned nvisible;
 
