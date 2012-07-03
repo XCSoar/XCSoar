@@ -125,7 +125,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
 
       // Do we have somewhere to put this &&
       // is it currently empty ? (prevent lost at startup)
-      if (location && (_tcscmp(*location, _T("")) == 0)) {
+      if (location && (*location == NULL || _tcscmp(*location, _T("")) == 0)) {
         *location = UnescapeBackslash(value);
       }
     }
