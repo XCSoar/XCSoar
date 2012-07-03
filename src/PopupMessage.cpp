@@ -182,12 +182,12 @@ PopupMessage::Resize()
          after it has been created, so we have to destroy it and
          create a new one */
       reset();
-      set(rc);
+      set(rthis);
       SetText(msgText);
-    }
+    } else
 #endif
+      Move(rthis);
 
-    Move(rthis);
     ShowOnTop();
   }
 }
