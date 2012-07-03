@@ -151,17 +151,15 @@ GlueMapWindow::UpdateDisplayMode()
 {
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
-  enum DisplayMode new_mode =
-    GetNewDisplayMode(CommonInterface::GetUIState(),
-                      CommonInterface::Calculated());
+  enum DisplayMode new_mode = CommonInterface::GetUIState().display_mode;
 
-  bool was_circling = (display_mode == DisplayMode::CIRCLING);
-  bool is_circling = (new_mode == DisplayMode::CIRCLING);
+  const bool was_circling = last_display_mode == DisplayMode::CIRCLING;
+  const bool is_circling = new_mode == DisplayMode::CIRCLING;
 
   if (!was_circling && is_circling)
     offset_history.Reset();
 
-  display_mode = new_mode;
+  last_display_mode = new_mode;
 
   if (is_circling != was_circling)
     SwitchZoomClimb(is_circling);

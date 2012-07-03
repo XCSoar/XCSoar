@@ -590,8 +590,14 @@ MainWindow::OnUser(unsigned id)
   case Command::CALCULATED_UPDATE:
     XCSoarInterface::ReceiveCalculated();
 
-    if (map != NULL)
+    CommonInterface::SetUIState().display_mode =
+      GetNewDisplayMode(CommonInterface::GetUIState(),
+                        CommonInterface::Calculated());
+
+    if (map != NULL) {
+      map->SetUIState(CommonInterface::GetUIState());
       map->FullRedraw();
+    }
 
     InfoBoxManager::SetDirty();
     InfoBoxManager::ProcessTimer();
@@ -668,14 +674,6 @@ MainWindow::SetTopography(TopographyStore *topography)
 {
   if (map != NULL)
     map->SetTopography(topography);
-}
-
-DisplayMode
-MainWindow::GetDisplayMode() const
-{
-  return map != NULL
-    ? map->GetDisplayMode()
-    : DisplayMode::NONE;
 }
 
 void

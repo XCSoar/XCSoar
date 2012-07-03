@@ -35,7 +35,7 @@ GlueMapWindow::GlueMapWindow(const Look &look)
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
    arm_mapitem_list(false),
-   display_mode(DisplayMode::CRUISE),
+   last_display_mode(DisplayMode::NONE),
    thermal_band_renderer(look.thermal_band, look.chart),
    final_glide_bar_renderer(look.final_glide_bar, look.map.task),
    gesture_look(look.gesture),
@@ -78,6 +78,21 @@ GlueMapWindow::SetComputerSettings(const ComputerSettings &new_value)
 }
 
 void
+GlueMapWindow::SetUIState(const UIState &new_value)
+{
+  AssertThreadOrUndefined();
+
+#ifdef ENABLE_OPENGL
+  ReadUIState(new_value);
+#else
+  ScopeLock protect(next_mutex);
+  next_ui_state = new_value;
+#endif
+}
+
+  void SetUIState(const UIState &new_value);
+
+void
 GlueMapWindow::ExchangeBlackboard()
 {
   /* copy device_blackboard to MapWindow */
@@ -90,6 +105,7 @@ GlueMapWindow::ExchangeBlackboard()
   next_mutex.Lock();
   ReadMapSettings(next_settings_map);
   ReadComputerSettings(next_settings_computer);
+  ReadUIState(next_ui_state);
   next_mutex.Unlock();
 #endif
 }

@@ -31,7 +31,6 @@ Copyright_License {
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Screen/Timer.hpp"
 #include "Screen/Features.hpp"
-#include "DisplayMode.hpp"
 
 #include <array>
 
@@ -92,7 +91,7 @@ class GlueMapWindow : public MapWindow {
    */
   Projection drag_projection;
 
-  DisplayMode display_mode;
+  DisplayMode last_display_mode;
 
   OffsetHistory offset_history;
 
@@ -115,6 +114,8 @@ class GlueMapWindow : public MapWindow {
    * frame.
    */
   ComputerSettings next_settings_computer;
+
+  UIState next_ui_state;
 #endif
 
   ThermalBandRenderer thermal_band_renderer;
@@ -133,6 +134,7 @@ public:
 
   void SetMapSettings(const MapSettings &new_value);
   void SetComputerSettings(const ComputerSettings &new_value);
+  void SetUIState(const UIState &new_value);
 
   /**
    * Update the blackboard from DeviceBlackboard and
@@ -232,12 +234,13 @@ public:
   void UpdateDisplayMode();
   void SetMapScale(fixed scale);
 
+protected:
   DisplayMode GetDisplayMode() const {
-    return display_mode;
+    return GetUIState().display_mode;
   }
 
   bool InCirclingMode() const {
-    return display_mode == DisplayMode::CIRCLING;
+    return GetUIState().display_mode == DisplayMode::CIRCLING;
   }
 };
 

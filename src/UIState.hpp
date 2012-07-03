@@ -42,6 +42,11 @@ struct UIState {
   DisplayMode force_display_mode;
 
   /**
+   * The effective display mode.
+   */
+  DisplayMode display_mode;
+
+  /**
    * Are the info boxes showing an "auxiliary" set?
    */
   bool auxiliary_enabled;

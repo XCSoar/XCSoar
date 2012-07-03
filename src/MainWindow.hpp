@@ -29,7 +29,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
-#include "DisplayMode.hpp"
 #include "Form/ManagedWidget.hpp"
 
 #include <stdint.h>
@@ -213,9 +212,6 @@ public:
 
   void SetTerrain(RasterTerrain *terrain);
   void SetTopography(TopographyStore *topography);
-
-  gcc_pure
-  DisplayMode GetDisplayMode() const;
 
   const Look &GetLook() const {
     assert(look != NULL);

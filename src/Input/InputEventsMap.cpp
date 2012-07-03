@@ -31,6 +31,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Units/Units.hpp"
+#include "UIState.hpp"
 #include "Asset.hpp"
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
@@ -244,7 +245,7 @@ InputEvents::sub_SetZoom(fixed value)
   if (map_window == NULL)
     return;
 
-  DisplayMode displayMode = XCSoarInterface::main_window.GetDisplayMode();
+  const DisplayMode displayMode = CommonInterface::GetUIState().display_mode;
   if (settings_map.auto_zoom_enabled &&
       !(displayMode == DisplayMode::CIRCLING && settings_map.circle_zoom_enabled) &&
       !CommonInterface::IsPanning()) {

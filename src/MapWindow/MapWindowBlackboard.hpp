@@ -27,6 +27,7 @@ Copyright_License {
 #include "Blackboard/BaseBlackboard.hpp"
 #include "Blackboard/ComputerSettingsBlackboard.hpp"
 #include "Blackboard/MapSettingsBlackboard.hpp"
+#include "UIState.hpp"
 
 /**
  * Blackboard used by map window: provides read-only access to local
@@ -38,11 +39,21 @@ class MapWindowBlackboard:
   public ComputerSettingsBlackboard,
   public MapSettingsBlackboard
 {
+  UIState ui_state;
+
 protected:
+  const UIState GetUIState() const {
+    return ui_state;
+  }
+
   void ReadBlackboard(const MoreData &nmea_info,
                       const DerivedInfo &derived_info);
   void ReadComputerSettings(const ComputerSettings &settings);
   void ReadMapSettings(const MapSettings &settings);
+
+  void ReadUIState(const UIState &new_value) {
+    ui_state = new_value;
+  }
 };
 
 #endif
