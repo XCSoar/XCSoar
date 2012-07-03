@@ -355,7 +355,7 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
   if (found != NULL)
     LocalMessage = *found;
 
-  if (enable_sound && LocalMessage.doSound)
+  if (enable_sound && LocalMessage.sound != NULL)
     PlayResource(LocalMessage.sound);
 
   // TODO code: consider what is a sensible size?

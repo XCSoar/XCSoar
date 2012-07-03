@@ -37,7 +37,6 @@ struct StatusMessageSTRUCT {
 	const TCHAR *key;		/* English key */
 	const TCHAR *sound;		/* What sound entry to play */
 	bool doStatus;
-	bool doSound;
 	int delay_ms;		/* Delay for DoStatusMessage */
 };
 

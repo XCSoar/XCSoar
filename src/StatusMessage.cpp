@@ -44,7 +44,6 @@ StatusMessageList::StatusMessageList()
   StatusMessageSTRUCT &first = StatusMessageData.append();
   first.key = _T("DEFAULT");
   first.doStatus = true;
-  first.doSound = true;
   first.sound = _T("IDR_WAV_DRIP");
   first.delay_ms = 2500; // 2.5 s
 
@@ -113,7 +112,6 @@ StatusMessageList::LoadFile(TLineReader &reader)
         some_data = true; // Success, we have a real entry
         location = &current.key;
       } else if (_tcscmp(key, _T("sound")) == 0) {
-        current.doSound = true;
         location = &current.sound;
       } else if (_tcscmp(key, _T("delay")) == 0) {
         TCHAR *endptr;
@@ -170,7 +168,6 @@ StatusMessageList::_init_Status(StatusMessageSTRUCT &m)
 {
   m.key = _T("");
   m.doStatus = true;
-  m.doSound = false;
-  m.sound = _T("");
+  m.sound = NULL;
   m.delay_ms = 2500;  // 2.5 s
 }

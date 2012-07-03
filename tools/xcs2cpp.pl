@@ -35,7 +35,6 @@ while (<>) {
             print_element(c_string($rec{key}));
             print_element(c_string($rec{sound}));
             print_element(c_bool(not $rec{hide} or $rec{hide} ne "yes"));
-            print_element(c_bool($rec{sound}));
             print_element($rec{delay}) if exists $rec{delay};
             print "  },\n",
         }
