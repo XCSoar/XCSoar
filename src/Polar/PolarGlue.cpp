@@ -25,6 +25,7 @@ Copyright_License {
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarStore.hpp"
+#include "Parser.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Dialogs/Message.hpp"
@@ -89,7 +90,7 @@ PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
   const TCHAR *polar_string = Profile::Get(ProfileKeys::Polar);
   if (polar_string != NULL && !StringIsEmpty(polar_string) &&
-      polar.ReadString(polar_string)) {
+      ParsePolar(polar, polar_string)) {
     return true;
   }
 

@@ -21,17 +21,18 @@ Copyright_License {
 }
 */
 
-#include "Polar/Polar.hpp"
-#include "Engine/GlideSolvers/PolarCoefficients.hpp"
+#ifndef XCSOAR_POLAR_PARSER_HPP
+#define XCSOAR_POLAR_PARSER_HPP
 
-PolarCoefficients
-PolarInfo::CalculateCoefficients() const
-{
-  return PolarCoefficients::From3VW(v1, v2, v3, w1, w2, w3);
-}
+#include <tchar.h>
+
+struct PolarInfo;
 
 bool
-PolarInfo::IsValid() const
-{
-  return CalculateCoefficients().IsValid();
-}
+ParsePolar(PolarInfo &polar, const TCHAR *s);
+
+void
+FormatPolar(const PolarInfo &polar, TCHAR *buffer, size_t max_size,
+              bool include_v_no=false);
+
+#endif

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Plane.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
+#include "Polar/Parser.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "ComputerSettings.hpp"
 
@@ -103,7 +104,7 @@ PlaneGlue::ToProfile(const Plane &plane)
   polar.wing_area = plane.wing_area;
 
   TCHAR polar_string[255];
-  polar.GetString(polar_string, 255, true);
+  FormatPolar(polar, polar_string, 255, true);
   Profile::Set(ProfileKeys::Polar, polar_string);
   Profile::Set(ProfileKeys::DryMass, plane.dry_mass);
 

@@ -26,6 +26,7 @@
 #include "IO/ConfiguredFile.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
+#include "Polar/Parser.hpp"
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarStore.hpp"
 #include "Util/ConvertString.hpp"
@@ -42,7 +43,7 @@ TestBasic()
 {
   // Test ReadString()
   PolarInfo polar;
-  polar.ReadString(_T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918"));
+  ParsePolar(polar, _T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918"));
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.v1), 22.2222222));
@@ -53,7 +54,7 @@ TestBasic()
   ok1(equals(fixed(polar.w3), -1.918));
   ok1(equals(fixed(polar.wing_area), 0.0));
 
-  polar.ReadString(_T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8"));
+  ParsePolar(polar, _T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8"));
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.v1), 22.2222222));
@@ -66,7 +67,7 @@ TestBasic()
 
   // Test GetString()
   TCHAR polar_string[255];
-  polar.GetString(polar_string, 255);
+  FormatPolar(polar, polar_string, 255);
   ok(_tcscmp(_T("318,100,80.000,-0.606,120.000,-0.990,160.000,-1.918,9.800"),
              polar_string) == 0, "GetString()");
 }

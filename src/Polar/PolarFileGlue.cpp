@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Polar/PolarFileGlue.hpp"
-#include "Polar/Polar.hpp"
+#include "Parser.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 
@@ -31,7 +31,7 @@ PolarGlue::LoadFromFile(PolarInfo &polar, TLineReader &reader)
 {
   const TCHAR *line;
   while ((line = reader.read()) != NULL)
-    if (polar.ReadString(line))
+    if (ParsePolar(polar, line))
       return true;
 
   return false;
@@ -58,7 +58,7 @@ bool
 PolarGlue::SaveToFile(const PolarInfo &polar, TextWriter &writer)
 {
   TCHAR buffer[256];
-  polar.GetString(buffer, 256);
+  FormatPolar(polar, buffer, 256);
   return writer.WriteLine(buffer);
 }
 

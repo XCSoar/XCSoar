@@ -419,6 +419,7 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Polar/Polar.cpp \
+	$(SRC)/Polar/Parser.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
