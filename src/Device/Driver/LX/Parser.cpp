@@ -193,7 +193,8 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
  * $PLXVC,<key>,<type>,<values>*<checksum><cr><lf>
  */
 static void
-PLXVC(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
+PLXVC(NMEAInputLine &line, DeviceInfo &secondary_device,
+      DeviceSettingsMap<std::string> &settings)
 {
   char key[64];
   line.Read(key, ARRAY_SIZE(key));
@@ -209,6 +210,16 @@ PLXVC(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
       settings.Lock();
       settings.Set(name, std::string(value.begin(), value.end()));
       settings.Unlock();
+    }
+  } else if (strcmp(key, "GPSINFO") == 0 && type[0] == 'A') {
+    /* the LXNAV V7 (firmware >= 2.01) forwards the Nano's INFO
+       sentence with the "GPS" prefix */
+
+    char name[64];
+    line.Read(name, ARRAY_SIZE(name));
+
+    if (strcmp(name, "LXWP1") == 0) {
+      LXWP1(line, secondary_device);
     }
   }
 }
@@ -336,7 +347,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 
   if (StringIsEqual(type, "$PLXVC")) {
     is_nano = true;
-    PLXVC(line, nano_settings);
+    PLXVC(line, info.secondary_device, nano_settings);
     return true;
   }
 
