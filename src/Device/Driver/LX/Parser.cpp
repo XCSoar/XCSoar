@@ -116,12 +116,6 @@ LXWP1(NMEAInputLine &line, DeviceInfo &device)
   ReadString(line, device.hardware_version);
 }
 
-static void
-LXWP1(NMEAInputLine &line, NMEAInfo &info)
-{
-  LXWP1(line, info.device);
-}
-
 static bool
 LXWP2(NMEAInputLine &line, NMEAInfo &info)
 {
@@ -305,9 +299,27 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
     return LXWP0(line, info);
 
   if (StringIsEqual(type, "$LXWP1")) {
-    LXWP1(line, info);
-    is_v7 = info.device.product.equals("V7");
-    is_nano = info.device.product.equals("NANO");
+    /* if in pass-through mode, assume that this line was sent by the
+       secondary device */
+    DeviceInfo &device_info = mode == Mode::PASS_THROUGH
+      ? info.secondary_device
+      : info.device;
+    LXWP1(line, device_info);
+
+    const bool saw_v7 = device_info.product.equals("V7");
+    const bool saw_nano = device_info.product.equals("NANO");
+
+    if (mode == Mode::PASS_THROUGH) {
+      /* in pass-through mode, we should never clear the V7 flag,
+         because the V7 is still there, even though it's "hidden"
+         currently */
+      is_v7 |= saw_v7;
+      is_nano |= saw_nano;
+    } else {
+      is_v7 = saw_v7;
+      is_nano = saw_nano;
+    }
+
     return true;
   }
 
