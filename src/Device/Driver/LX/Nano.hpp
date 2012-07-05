@@ -41,6 +41,16 @@ namespace Nano {
   {
     return PortWriteNMEA(port, "PLXVC,INFO,R", env);
   }
+
+  /**
+   * Request basic Nano information through an LXNAV V7 (firmward >=
+   * 2.01).
+   */
+  static bool
+  RequestForwardedInfo(Port &port, OperationEnvironment &env)
+  {
+    return PortWriteNMEA(port, "PLXVC,GPSINFO,R", env);
+  }
 }
 
 #endif

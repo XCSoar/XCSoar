@@ -65,6 +65,7 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
   }
 
   Nano::RequestInfo(port, env);
+  Nano::RequestForwardedInfo(port, env);
 
   /* just in case the LX1600 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
