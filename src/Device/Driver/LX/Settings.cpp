@@ -86,7 +86,7 @@ bool
 LXDevice::SendNanoSetting(const char *name, const char *value,
                         OperationEnvironment &env)
 {
-  if (!EnableNMEA(env))
+  if (!EnableNanoNMEA(env))
     return false;
 
   nano_settings.Lock();
@@ -101,7 +101,7 @@ LXDevice::SendNanoSetting(const char *name, const char *value,
 bool
 LXDevice::RequestNanoSetting(const char *name, OperationEnvironment &env)
 {
-  if (!EnableNMEA(env))
+  if (!EnableNanoNMEA(env))
     return false;
 
   nano_settings.Lock();

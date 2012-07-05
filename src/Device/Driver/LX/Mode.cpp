@@ -111,6 +111,14 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
 }
 
 bool
+LXDevice::EnableNanoNMEA(OperationEnvironment &env)
+{
+  return IsV7()
+    ? EnablePassThrough(env)
+    : EnableNanoNMEA(env);
+}
+
+bool
 LXDevice::EnableCommandMode(OperationEnvironment &env)
 {
   {

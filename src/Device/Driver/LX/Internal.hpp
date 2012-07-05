@@ -161,6 +161,13 @@ public:
   std::string GetNanoSetting(const char *name) const;
 
 protected:
+  /**
+   * A variant of EnableNMEA() that attempts to put the Nano into NMEA
+   * mode.  If the Nano is connected through a LXNAV V7, it will
+   * enable pass-through mode on the V7.
+   */
+  bool EnableNanoNMEA(OperationEnvironment &env);
+
   bool EnableCommandMode(OperationEnvironment &env);
 
 public:
