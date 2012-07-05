@@ -326,6 +326,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
          currently */
       is_v7 |= saw_v7;
       is_nano |= saw_nano;
+      is_forwarded_nano = saw_nano;
     } else {
       is_v7 = saw_v7;
       is_nano = saw_nano;
@@ -348,6 +349,7 @@ LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
   if (StringIsEqual(type, "$PLXVC")) {
     is_nano = true;
     PLXVC(line, info.secondary_device, nano_settings);
+    is_forwarded_nano = info.secondary_device.product.equals("NANO");
     return true;
   }
 

@@ -55,6 +55,11 @@ class LXDevice: public AbstractDevice
   bool is_nano;
 
   /**
+   * Was a V7 with a Nano on the GPS port detected?
+   */
+  bool is_forwarded_nano;
+
+  /**
    * Settings that were received in PLXV0 (LXNAV V7) sentences.
    */
   DeviceSettingsMap<std::string> v7_settings;
@@ -72,7 +77,7 @@ class LXDevice: public AbstractDevice
 public:
   LXDevice(Port &_port, unsigned _bulk_baud_rate)
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
-     is_v7(false), is_nano(false),
+     is_v7(false), is_nano(false), is_forwarded_nano(false),
      mode(Mode::UNKNOWN), old_baud_rate(0) {}
 
   /**
@@ -86,7 +91,7 @@ public:
    * Was a LXNAV Nano detected?
    */
   bool IsNano() const {
-    return is_nano;
+    return is_nano || is_forwarded_nano;
   }
 
   /**
