@@ -40,6 +40,10 @@ Copyright_License {
 
 #define XCSPROFILE "xcsoar-registry.prf"
 
+namespace Profile {
+  static bool SaveFile(const FileTransaction &transaction);
+}
+
 static TCHAR startProfileFile[MAX_PATH];
 
 const TCHAR *
@@ -86,27 +90,33 @@ Profile::Save()
   SaveFile(startProfileFile);
 }
 
+bool
+Profile::SaveFile(const FileTransaction &transaction)
+{
+  TextWriter writer(transaction.GetTemporaryPath());
+  // ... on error -> return
+  if (!writer.IsOpen())
+    return false;
+
+  KeyValueFileWriter kvwriter(writer);
+  Export(kvwriter);
+
+  return writer.Flush();
+}
+
 void
 Profile::SaveFile(const TCHAR *szFile)
 {
   if (StringIsEmpty(szFile))
     return;
 
+  LogStartUp(_T("Saving profile to %s"), szFile);
+
   // Try to open the file for writing
   FileTransaction transaction(szFile);
-  TextWriter writer(transaction.GetTemporaryPath());
-  // ... on error -> return
-  if (!writer.IsOpen())
-    return;
-
-  KeyValueFileWriter kvwriter(writer);
-
-  LogStartUp(_T("Saving profile to %s"), szFile);
-  Export(kvwriter);
-
-  transaction.Commit();
+  if (SaveFile(transaction))
+    transaction.Commit();
 }
-
 
 void
 Profile::SetFiles(const TCHAR* override)
