@@ -110,7 +110,7 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
 
   port.StopRxThread();
 
-  if (!V7::ModeDirect(port, env) || !LX1600::ModeColibri(port, env)) {
+  if (!EnablePassThrough(env)) {
     mode = Mode::UNKNOWN;
     return false;
   }
