@@ -28,6 +28,7 @@ class Device;
 struct DeviceInfo;
 
 void
-ManageV7Dialog(Device &device, const DeviceInfo &info);
+ManageV7Dialog(Device &device, const DeviceInfo &info,
+               const DeviceInfo &secondary_info);
 
 #endif

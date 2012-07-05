@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ManageV7Dialog.hpp"
 #include "V7ConfigWidget.hpp"
+#include "ManageNanoDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
@@ -34,15 +35,19 @@ Copyright_License {
 class ManageV7Widget : public RowFormWidget, private ActionListener {
   enum Controls {
     SETUP,
+    NANO,
   };
 
   LXDevice &device;
   const DeviceInfo info;
+  const DeviceInfo secondary_info;
 
 public:
   ManageV7Widget(const DialogLook &look, LXDevice &_device,
-                 const DeviceInfo &info)
-    :RowFormWidget(look), device(_device), info(info) {}
+                 const DeviceInfo &info,
+                 const DeviceInfo &secondary_info)
+    :RowFormWidget(look), device(_device), info(info),
+     secondary_info(secondary_info) {}
 
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
@@ -82,11 +87,16 @@ ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   AddButton(_("Setup"), this, SETUP);
+
+  if (device.IsNano())
+    AddButton(_T("LXNAV Nano"), this, NANO);
 }
 
 void
 ManageV7Widget::OnAction(int id)
 {
+  MessageOperationEnvironment env;
+
   switch (id) {
   case SETUP:
     {
@@ -94,15 +104,25 @@ ManageV7Widget::OnAction(int id)
       DefaultWidgetDialog(_T("LXNAV V7"), widget);
     }
     break;
+
+  case NANO:
+    if (device.EnablePassThrough(env)) {
+      ManageNanoDialog(device, secondary_info);
+      device.EnableNMEA(env);
+    }
+
+    break;
   }
 }
 
 void
-ManageV7Dialog(Device &device, const DeviceInfo &info)
+ManageV7Dialog(Device &device, const DeviceInfo &info,
+               const DeviceInfo &secondary_info)
 {
   WidgetDialog dialog(_T("LXNAV V7"),
                       new ManageV7Widget(UIGlobals::GetDialogLook(),
-                                         (LXDevice &)device, info));
+                                         (LXDevice &)device, info,
+                                         secondary_info));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

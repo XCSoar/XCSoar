@@ -433,11 +433,12 @@ DeviceListWidget::ManageCurrent()
     device_blackboard->mutex.Lock();
     const NMEAInfo &basic = device_blackboard->RealState(current);
     const DeviceInfo info = basic.device;
+    const DeviceInfo secondary_info = basic.secondary_device;
     device_blackboard->mutex.Unlock();
 
     LXDevice &lx_device = *(LXDevice *)device;
     if (lx_device.IsV7())
-      ManageV7Dialog(lx_device, info);
+      ManageV7Dialog(lx_device, info, secondary_info);
     else if (lx_device.IsNano())
       ManageNanoDialog(lx_device, info);
   } else if (descriptor.IsDriver(_T("Vega")))
