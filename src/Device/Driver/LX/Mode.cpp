@@ -68,10 +68,12 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
 
   /* just in case the LX1600 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
-  LX1600::ModeLX1600(port, env);
+  if (!is_v7)
+    LX1600::ModeLX1600(port, env);
 
   V7::SetupNMEA(port, env);
-  LX1600::SetupNMEA(port, env);
+  if (!is_v7)
+    LX1600::SetupNMEA(port, env);
 
   if (old_baud_rate != 0)
     port.SetBaudrate(old_baud_rate);
@@ -96,7 +98,9 @@ LXDevice::OnSysTicker(const DerivedInfo &calculated)
 bool
 LXDevice::EnablePassThrough(OperationEnvironment &env)
 {
-  return V7::ModeDirect(port, env) && LX1600::ModeColibri(port, env);
+  return is_v7
+    ? V7::ModeDirect(port, env)
+    : LX1600::ModeColibri(port, env);
 }
 
 bool
