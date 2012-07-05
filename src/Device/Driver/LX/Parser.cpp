@@ -187,6 +187,15 @@ PLXV0(NMEAInputLine &line, DeviceSettingsMap<std::string> &settings)
   return true;
 }
 
+static void
+ParseNanoInfo(NMEAInputLine &line, DeviceInfo &device)
+{
+  ReadString(line, device.product);
+  ReadString(line, device.software_version);
+  line.Skip(); /* ver.date, e.g. "May 12 2012 21:38:28" */
+  ReadString(line, device.hardware_version);
+}
+
 /**
  * Parse the $PLXVC sentence (LXNAV Nano).
  *
@@ -220,6 +229,10 @@ PLXVC(NMEAInputLine &line, DeviceInfo &secondary_device,
 
     if (strcmp(name, "LXWP1") == 0) {
       LXWP1(line, secondary_device);
+    } else if (strcmp(name, "INFO") == 0) {
+      line.Read(type, ARRAY_SIZE(type));
+      if (type[0] == 'A')
+        ParseNanoInfo(line, secondary_device);
     }
   }
 }
