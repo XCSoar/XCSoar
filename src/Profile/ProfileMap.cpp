@@ -186,7 +186,17 @@ ProfileMap::Get(const TCHAR *key, fixed &value)
 void
 ProfileMap::Set(const TCHAR *key, const TCHAR *value)
 {
-  map[key] = value;
+  auto i = map.insert(std::make_pair(key, value));
+  if (!i.second) {
+    /* exists already */
+
+    if (i.first->second.compare(value) == 0)
+      /* not modified, don't set the "modified" flag */
+      return;
+
+    i.first->second.assign(value);
+  }
+
   modified = true;
 }
 
