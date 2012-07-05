@@ -39,6 +39,10 @@ LXDevice::LinkTimeout()
   v7_settings.clear();
   v7_settings.Unlock();
 
+  nano_settings.Lock();
+  nano_settings.clear();
+  nano_settings.Unlock();
+
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
   busy = false;
