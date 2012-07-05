@@ -46,18 +46,17 @@ enum ControlIndex {
   AppInfoBoxBorder
 };
 
-const TCHAR *display_orientation_help = N_("Rotate the display on devices that support it.");
 static const StaticEnumChoice display_orientation_list[] = {
   { (unsigned)DisplaySettings::Orientation::DEFAULT,
-    N_("Default"), display_orientation_help },
+    N_("Default") },
   { (unsigned)DisplaySettings::Orientation::PORTRAIT,
-    N_("Portrait"), display_orientation_help },
+    N_("Portrait") },
   { (unsigned)DisplaySettings::Orientation::LANDSCAPE,
-    N_("Landscape"), display_orientation_help },
+    N_("Landscape") },
   { (unsigned)DisplaySettings::Orientation::REVERSE_PORTRAIT,
-    N_("Reverse Portrait"), display_orientation_help },
+    N_("Reverse Portrait") },
   { (unsigned)DisplaySettings::Orientation::REVERSE_LANDSCAPE,
-    N_("Reverse Landscape"), display_orientation_help },
+    N_("Reverse Landscape") },
   { 0 }
 };
 
@@ -101,22 +100,21 @@ static const StaticEnumChoice info_box_geometry_list[] = {
   { 0 }
 };
 
-const TCHAR *flarm_display_help = N_("Choose a location for the FLARM display.");
 static const StaticEnumChoice flarm_display_location_list[] = {
   { (unsigned)TrafficSettings::GaugeLocation::Auto,
-    N_("Auto (follow infoboxes)"), flarm_display_help },
+    N_("Auto (follow infoboxes)") },
   { (unsigned)TrafficSettings::GaugeLocation::TopLeft,
-    N_("Top Left"), flarm_display_help },
+    N_("Top Left") },
   { (unsigned)TrafficSettings::GaugeLocation::TopRight,
-    N_("Top Right"), flarm_display_help },
+    N_("Top Right") },
   { (unsigned)TrafficSettings::GaugeLocation::BottomLeft,
-    N_("Bottom Left"), flarm_display_help },
+    N_("Bottom Left") },
   { (unsigned)TrafficSettings::GaugeLocation::BottomRight,
-    N_("Bottom Right"), flarm_display_help },
+    N_("Bottom Right") },
   { (unsigned)TrafficSettings::GaugeLocation::CentreTop,
-    N_("Centre Top"), flarm_display_help },
+    N_("Centre Top") },
   { (unsigned)TrafficSettings::GaugeLocation::CentreBottom,
-    N_("Centre Bottom"), flarm_display_help },
+    N_("Centre Bottom") },
   { 0 }
 };
 
@@ -134,12 +132,11 @@ static const StaticEnumChoice popup_msg_position_list[] = {
   { 0 }
 };
 
-const TCHAR *dialog_style_help = N_("Choose the display size of dialogs.");
 static const StaticEnumChoice dialog_style_list[] = {
-  { 0, N_("Full width"), dialog_style_help },
-  { 1, N_("Scaled"), dialog_style_help },
-  { 2, N_("Scaled centered"), dialog_style_help },
-  { 3, N_("Fixed"), dialog_style_help },
+  { 0, N_("Full width") },
+  { 1, N_("Scaled") },
+  { 2, N_("Scaled centered") },
+  { 3, N_("Fixed") },
   { 0 }
 };
 
@@ -167,7 +164,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   if (Display::RotateSupported())
-    AddEnum(_("Display orientation"), NULL,
+    AddEnum(_("Display orientation"), _("Rotate the display on devices that support it."),
             display_orientation_list, (unsigned)ui_settings.display.orientation);
   else
     AddDummy();
@@ -176,7 +173,8 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("A list of possible InfoBox layouts. Do some trials to find the best for your screen size."),
           info_box_geometry_list, (unsigned)ui_settings.info_boxes.geometry);
 
-  AddEnum(_("FLARM display"), NULL, flarm_display_location_list,
+  AddEnum(_("FLARM display"), _("Choose a location for the FLARM display."),
+          flarm_display_location_list,
           (unsigned)ui_settings.traffic.gauge_location);
   SetExpertRow(AppFlarmLocation);
 
@@ -187,7 +185,7 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           popup_msg_position_list, ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
 
-  AddEnum(_("Dialog size"), NULL,
+  AddEnum(_("Dialog size"), _("Choose the display size of dialogs."),
           dialog_style_list, ui_settings.dialog.dialog_style);
   SetExpertRow(DialogStyle);
 
