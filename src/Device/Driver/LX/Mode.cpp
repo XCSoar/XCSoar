@@ -64,9 +64,6 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
     busy = false;
   }
 
-  Nano::RequestInfo(port, env);
-  Nano::RequestForwardedInfo(port, env);
-
   /* just in case the LX1600 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
   if (!is_v7)
@@ -80,6 +77,10 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
     port.SetBaudrate(old_baud_rate);
 
   port.Flush();
+
+  Nano::RequestForwardedInfo(port, env);
+  if (!is_v7)
+    Nano::RequestInfo(port, env);
 
   return true;
 }
