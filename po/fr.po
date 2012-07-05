@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-03 11:17+0000\n"
-"Last-Translator: AUDIER Daniel <osteocool@yahoo.fr>\n"
+"PO-Revision-Date: 2012-07-04 16:03+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 17:24+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-07-05 09:41+0000\n"
+"X-Generator: Launchpad (build 15544)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1204,12 +1204,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
 msgid "Next GR (TE Compensated)"
-msgstr ""
+msgstr "Finesse nécessaire (avec altitude de sécurité)"
 
 #: src/InfoBoxes/Content/Factory.cpp:461
 #, no-c-format
 msgid "WP GR-TE"
-msgstr ""
+msgstr "Fin. prochain WP (avec sécurité)"
 
 #: src/InfoBoxes/Content/Factory.cpp:462
 #, no-c-format
@@ -1295,7 +1295,7 @@ msgstr "Vitesse de vol en dauphin"
 #: src/InfoBoxes/Content/Factory.cpp:511
 #, no-c-format
 msgid "Vopt"
-msgstr ""
+msgstr "Vopt"
 
 #: src/InfoBoxes/Content/Factory.cpp:512
 #, no-c-format
@@ -1660,6 +1660,10 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
+"Différence entre l'heure d'arrivée estimée et l'heure d'arrivée minimum de "
+"l'AAT. En rouge si négative (on arrive trop tôt) ou en bleu (si dans le "
+"secteur) et si on peut se diriger vers l'arrivée avec une heure d'arrivée "
+"supérieure de 5 minutes à l'heure d'arrivée AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:710
 #, no-c-format
@@ -1808,12 +1812,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:794
 #, no-c-format
 msgid "GR average"
-msgstr ""
+msgstr "Finesse moyenne"
 
 #: src/InfoBoxes/Content/Factory.cpp:795
 #, no-c-format
 msgid "GR Avg"
-msgstr ""
+msgstr "Fin. moyenne"
 
 #: src/InfoBoxes/Content/Factory.cpp:796
 #, no-c-format
@@ -1828,6 +1832,17 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"Distance parcourue durant la période définie divisée par l'altitude perdue "
+"durant cette période. Une valeur négative est représentée par '^^^' et "
+"indique un gain d'altitude. Une finesse supérieure à 200 est représentée par "
+"'+++'. \r\n"
+"La durée de la période de calcul de la finesse moyenne est réglable dans le "
+"menu Config 2/3 > Calculateur de vol > Tps Finesse Moy.\r\n"
+"Les valeurs 60 90 ou 120 sont préconisées: des valeurs inférieures seraient "
+"proches de la finesse instantanée et des valeurs supérieures proches de la "
+"finesse sur circuit. Notez que la distance utilisée pour le calcul n'est pas "
+"la ligne droite mais la distance réellement parcourue lors durant la "
+"précédente période. Il n'y a pas de calcul en spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:804
 #, no-c-format
@@ -1891,7 +1906,7 @@ msgstr "Altitude d'arrivée suivant"
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
 msgid "WP alt.A"
-msgstr ""
+msgstr "WP Alt. Abs"
 
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
@@ -1899,6 +1914,8 @@ msgid ""
 "Absolute arrival altitude at the next waypoint in final glide.  For AAT "
 "tasks, the target within the AAT sector is used."
 msgstr ""
+"Altitude d'arrivée absolue au prochain point de virage en arrivée directe. "
+"Pour les AAT le point cible du secteur est utilisé pour le calcul."
 
 #: src/InfoBoxes/Content/Factory.cpp:854 src/InfoBoxes/Content/Factory.cpp:855
 #, no-c-format
@@ -2160,6 +2177,9 @@ msgid ""
 "safety arrival height.  For AAT tasks, the target within the AAT sector is "
 "used."
 msgstr ""
+"Altitude d'arrivée au prochain point de virage avec MacReady calé à 0 tout "
+"en tenant compte de l'altitude de sécurité en arrivée. \r\n"
+"Pour les AAT le point cible du secteur est utilisé pour le calcul."
 
 #: src/InfoBoxes/Content/Factory.cpp:1004
 #, no-c-format
@@ -2220,16 +2240,18 @@ msgid ""
 "pressure sensor or the GPS altitude if the barometric altitude is not "
 "available."
 msgstr ""
+"Altitude barométrique si le terminal utilisé comporte un capteur de "
+"pression. Altitude GPS sinon."
 
 #: src/InfoBoxes/Content/Factory.cpp:1033
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr ""
+msgstr "Vz moyenne sur la prochaine branche."
 
 #: src/InfoBoxes/Content/Factory.cpp:1034
 #, no-c-format
 msgid "T Next Leg"
-msgstr ""
+msgstr "Vz Moy. après WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:1035
 #, no-c-format
@@ -2237,6 +2259,8 @@ msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
 "to the MacCready setting on current leg."
 msgstr ""
+"Vz moyenne prévue sur la prochaine branche. Equivalent au calage MacCready "
+"de la branche courante."
 
 #: src/InfoBoxes/Content/Factory.cpp:1043
 #, no-c-format
@@ -2467,6 +2491,11 @@ msgid ""
 "an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and "
 "circling."
 msgstr ""
+"Permet d'activer/désactiver l'algorithme de calcul automatique du vent. Si "
+"désactivé, le pilote est responsable de l'estimation du vent.\r\n"
+"Option thermique: Nécessite seulement une source GPS\r\n"
+"Option ZigZag: Nécessite un variomètre fournissant la vitesse air\r\n"
+"Option Les 2: Utilise ZigZag et Thermique"
 
 #: src/InfoBoxes/Panel/WindSetup.cpp:89 src/Dialogs/WindSettingsPanel.cpp:51
 #, no-c-format
@@ -3881,15 +3910,17 @@ msgstr ""
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:100
 #, no-c-format
 msgid "Not filled"
-msgstr ""
+msgstr "Transparent"
 
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:104
 msgid "Fill Mode"
-msgstr ""
+msgstr "Coloré"
 
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:105
 msgid "Defines how the airspace is filled with the configured color."
 msgstr ""
+"Défini comment les espaces aériens sont affichés avec la couleur choisie "
+"(rempli ou non)."
 
 #: src/Dialogs/dlgAirspaceWarnings.cpp:310
 msgid "No Warnings"
@@ -4232,7 +4263,7 @@ msgstr "Enregistr."
 #: src/Dialogs/dlgConfiguration.cpp:111
 #, no-c-format
 msgid "Logger Info"
-msgstr ""
+msgstr "Info logger"
 
 #: src/Dialogs/dlgConfiguration.cpp:118
 #, no-c-format
@@ -4907,11 +4938,11 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:98
 msgid "Audio vario"
-msgstr ""
+msgstr "Vario audio"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:99
 msgid "Emulate the sound of an electronic vario."
-msgstr ""
+msgstr "Son vario électronique"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:102
 msgid "Volume"
@@ -5245,22 +5276,22 @@ msgstr "24 Droite (Paysage)"
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
 #, no-c-format
 msgid "4 Top (Portrait)"
-msgstr ""
+msgstr "4 Haut (portrait)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:96
 #, no-c-format
 msgid "4 Bottom (Portrait)"
-msgstr ""
+msgstr "4 Bas (portrait)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:98
 #, no-c-format
 msgid "4 Left (Landscape)"
-msgstr ""
+msgstr "4 Gauche (portrait)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
 #, no-c-format
 msgid "4 Right (Landscape)"
-msgstr ""
+msgstr "4 Droite (portrait)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:104
 #, no-c-format
@@ -5498,13 +5529,15 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:90
 msgid "NMEA logger"
-msgstr ""
+msgstr "Enregistreur NMEA"
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:91
 msgid ""
 "Enable the NMEA logger on startup? If this option is disabled, the NMEA "
 "logger can still be started manually."
 msgstr ""
+"Démarre l'enregistrement NMEA au démarrage? Si cette option est désactivée, "
+"le logger NMEA peu toujours être démarré manuellement."
 
 #: src/Dialogs/ConfigPanels/LoggerConfigPanel.cpp:96
 msgid "Log book"
@@ -5548,7 +5581,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:45
 #, no-c-format
 msgid "Heading up"
-msgstr ""
+msgstr "Cap en haut"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:46
 #, no-c-format
@@ -5556,6 +5589,8 @@ msgid ""
 "The moving map display will be rotated so the glider's heading is oriented "
 "up."
 msgstr ""
+"La carte se déplace de façon à ce que la trajectoire du planeur soit "
+"orientée vers le haut."
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:47
 #: Data/Dialogs/dlgFlarmTraffic.xml:14 Data/Dialogs/dlgFlarmTraffic_L.xml:13
@@ -6014,12 +6049,12 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:85
 #, no-c-format
 msgid "Disable display of ground track line."
-msgstr ""
+msgstr "Trace sol OFF."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:86
 #, no-c-format
 msgid "Always display ground track line."
-msgstr ""
+msgstr "Trace sol ON."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:87
 #, no-c-format
@@ -6027,6 +6062,8 @@ msgid ""
 "Display ground track line if there is a significant difference to plane "
 "heading."
 msgstr ""
+"Affiche la trace au sol si il y a une différence significative entre entre "
+"la trace sol et le cap du planeur."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:91
 #, no-c-format
@@ -6089,22 +6126,26 @@ msgstr "Symbole du planeur détaillé."
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:117
 #, no-c-format
 msgid "HangGlider"
-msgstr ""
+msgstr "Delta plane"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:118
 #, no-c-format
 msgid "Simplified hang glider as line graphics, white with black contours."
 msgstr ""
+"La représentation simplifiée d'un delta plane est filaire: blanc et contours "
+"noirs."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:119
 #, no-c-format
 msgid "ParaGlider"
-msgstr ""
+msgstr "Para pente"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:120
 #, no-c-format
 msgid "Simplified para glider as line graphics, white with black contours."
 msgstr ""
+"La représentation simplifiée d'un para pente est filaire: blanc et contours "
+"noirs."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:125
 #, no-c-format
@@ -6128,11 +6169,11 @@ msgstr "Affiche la tête de la flèche et une ligne en pointillés."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:135
 msgid "Ground track"
-msgstr ""
+msgstr "Trace sol"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:136
 msgid "Display the ground track as a grey line on the map."
-msgstr ""
+msgstr "Affiche la trace sol en gris sur la carte."
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:139
 msgid "FLARM traffic"
@@ -6330,7 +6371,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:136
 #, no-c-format
 msgid "The FFVV NetCoupe \"libre\" competiton."
-msgstr ""
+msgstr "La NetCoupe"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:139
 msgid "On-Line Contest"
@@ -7739,7 +7780,7 @@ msgstr "Instrument compensé"
 #: src/Dialogs/Vega/AlertParameters.hpp:40
 #, no-c-format
 msgid "Interval; gear"
-msgstr ""
+msgstr "Intervalle"
 
 #: src/Dialogs/Vega/AlertParameters.hpp:43
 #, no-c-format
