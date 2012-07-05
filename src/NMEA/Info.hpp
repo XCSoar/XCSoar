@@ -394,6 +394,12 @@ struct NMEAInfo {
 
   DeviceInfo device;
 
+  /**
+   * Information about the "secondary" device, e.g. the GPS connected
+   * "behind" the LXNAV V7.
+   */
+  DeviceInfo secondary_device;
+
   FlarmData flarm;
 
   void UpdateClock();

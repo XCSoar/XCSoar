@@ -151,6 +151,7 @@ NMEAInfo::Reset()
   // XXX StallRatio
 
   device.Clear();
+  secondary_device.Clear();
   flarm.Clear();
 }
 

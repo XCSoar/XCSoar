@@ -144,6 +144,18 @@ Dump(const NMEAInfo &basic)
   if (!device.software_version.empty())
     printf("Device.SoftwareVersion=%s\n", device.software_version.c_str());
 
+  const DeviceInfo &device2 = basic.secondary_device;
+  if (!device2.product.empty())
+    printf("SecondaryDevice.Product=%s\n", device2.product.c_str());
+  if (!device2.serial.empty())
+    printf("SecondaryDevice.Serial=%s\n", device2.serial.c_str());
+  if (!device2.hardware_version.empty())
+    printf("SecondaryDevice.HardwareVersion=%s\n",
+           device2.hardware_version.c_str());
+  if (!device2.software_version.empty())
+    printf("SecondaryDevice.SoftwareVersion=%s\n",
+           device2.software_version.c_str());
+
   const FlarmData &flarm = basic.flarm;
   if (flarm.status.available) {
     printf("FLARM rx=%u tx=%u\n", flarm.status.rx, flarm.status.tx);
