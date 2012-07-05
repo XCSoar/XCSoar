@@ -49,6 +49,8 @@ InfoBoxSettings::Panel::IsEmpty() const
 void
 InfoBoxSettings::SetDefaults()
 {
+  use_final_glide = false;
+
   geometry = Geometry::TOP_4_BOTTOM_4;
 
   inverse = false;

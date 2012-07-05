@@ -210,6 +210,7 @@ const TCHAR FontAirspacePressFont[] = _T("AirspacePressFont");
 const TCHAR FontAirspaceColourDlgFont[] = _T("AirspaceColourDlgFont");
 const TCHAR FontTeamCodeFont[] = _T("TeamCodeFont");
 
+const TCHAR UseFinalGlideDisplayMode[] = _T("UseFinalGlideDisplayMode");
 const TCHAR InfoBoxGeometry[] = _T("InfoBoxGeometry");
 
 const TCHAR FlarmSideData[] = _T("FlarmRadarSideData");

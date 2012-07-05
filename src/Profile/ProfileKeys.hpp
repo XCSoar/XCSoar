@@ -207,6 +207,8 @@ extern const TCHAR FontAirspacePressFont[];
 extern const TCHAR FontAirspaceColourDlgFont[];
 extern const TCHAR FontTeamCodeFont[];
 
+extern const TCHAR UseFinalGlideDisplayMode[];
+
 extern const TCHAR InfoBoxGeometry[];
 
 extern const TCHAR FlarmSideData[];

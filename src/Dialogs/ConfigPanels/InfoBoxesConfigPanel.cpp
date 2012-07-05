@@ -84,11 +84,19 @@ InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     if (i>2)
       SetExpertRow(i);
   }
+
+  AddBoolean(_("Use final glide mode"),
+             _("Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" pages."),
+             settings.use_final_glide);
 }
 
 bool
 InfoBoxesConfigPanel::Save(bool &_changed, bool &_require_restart)
 {
+  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  SaveValue(InfoBoxSettings::MAX_PANELS, ProfileKeys::UseFinalGlideDisplayMode,
+            settings.use_final_glide);
+
   return true;
 }
 

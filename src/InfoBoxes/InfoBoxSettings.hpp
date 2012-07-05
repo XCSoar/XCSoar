@@ -51,6 +51,13 @@ struct InfoBoxSettings {
   static const unsigned int MAX_PANELS = 8;
   static const unsigned int PREASSIGNED_PANELS = 3;
 
+  /**
+   * Auto-switch to the "final glide" panel if above final glide?
+   * This setting affects the #DisplayMode, and is checked by
+   * GetNewDisplayMode().
+   */
+  bool use_final_glide;
+
   enum class Geometry : uint8_t {
     /** default, infoboxes along top and bottom, map in middle */
     TOP_4_BOTTOM_4 = 0,

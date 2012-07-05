@@ -586,7 +586,8 @@ MainWindow::OnUser(unsigned id)
     XCSoarInterface::ReceiveCalculated();
 
     CommonInterface::SetUIState().display_mode =
-      GetNewDisplayMode(CommonInterface::GetUIState(),
+      GetNewDisplayMode(CommonInterface::GetUISettings().info_boxes,
+                        CommonInterface::GetUIState(),
                         CommonInterface::Calculated());
 
     if (map != NULL) {

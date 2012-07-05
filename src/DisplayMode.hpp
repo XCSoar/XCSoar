@@ -28,6 +28,7 @@ Copyright_License {
 
 #include <stdint.h>
 
+struct InfoBoxSettings;
 struct UIState;
 struct DerivedInfo;
 
@@ -40,7 +41,7 @@ enum class DisplayMode: uint8_t {
 
 gcc_pure
 DisplayMode
-GetNewDisplayMode(const UIState &ui_state,
+GetNewDisplayMode(const InfoBoxSettings &settings, const UIState &ui_state,
                   const DerivedInfo &derived_info);
 
 #endif

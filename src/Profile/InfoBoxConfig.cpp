@@ -49,6 +49,12 @@ GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
 void
 Profile::Load(InfoBoxSettings &settings)
 {
+  if (!Get(ProfileKeys::UseFinalGlideDisplayMode, settings.use_final_glide))
+    /* default value is "false" for new users, and "true" for existing
+       users (to preserve old behaviour and avoid surprises); this is
+       a hack to check if this is a new user */
+    settings.use_final_glide = Exists(ProfileKeys::InfoBoxGeometry);
+
   GetEnum(ProfileKeys::InfoBoxGeometry, settings.geometry);
   Get(ProfileKeys::AppInverseInfoBox, settings.inverse);
   Get(ProfileKeys::AppInfoBoxColors, settings.use_colors);
