@@ -21,35 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_INFO_HPP
-#define XCSOAR_POLAR_INFO_HPP
+#include "Polar/Polar.hpp"
+#include "Engine/GlideSolvers/PolarCoefficients.hpp"
 
-#include "Shape.hpp"
-#include "Math/fixed.hpp"
-
-struct PolarCoefficients;
-
-/**
- * Struct for internally stored WinPilot-like polars
- */
-struct PolarInfo
+PolarCoefficients
+PolarShape::CalculateCoefficients() const
 {
-  // Using doubles here to simplify the code in PolarStore.cpp
-  //
-  fixed reference_mass; /**< Reference Mass (kg) */
-  fixed max_ballast;  /**< Max water ballast (l) */
+  return PolarCoefficients::From3VW(points[0].v, points[1].v, points[2].v,
+                                    points[0].w, points[1].w, points[2].w);
+}
 
-  PolarShape shape;
-
-  fixed wing_area;    /**< Reference wing area (m^2) */
-  fixed v_no;         /**< Maximum speed for normal operations (m/s) */
-
-  gcc_pure
-  PolarCoefficients CalculateCoefficients() const;
-
-  bool IsValid() const {
-    return shape.IsValid();
-  }
-};
-
-#endif
+bool
+PolarShape::IsValid() const
+{
+  return CalculateCoefficients().IsValid();
+}

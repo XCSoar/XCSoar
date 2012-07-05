@@ -26,10 +26,17 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct PolarShape;
 struct PolarInfo;
 
 bool
+ParsePolarShape(PolarShape &shape, const TCHAR *s);
+
+bool
 ParsePolar(PolarInfo &polar, const TCHAR *s);
+
+void
+FormatPolarShape(const PolarShape &shape, TCHAR *buffer, size_t max_size);
 
 void
 FormatPolar(const PolarInfo &polar, TCHAR *buffer, size_t max_size,

@@ -21,35 +21,44 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_POLAR_INFO_HPP
-#define XCSOAR_POLAR_INFO_HPP
+#ifndef XCSOAR_POLAR_SHAPE_HPP
+#define XCSOAR_POLAR_SHAPE_HPP
 
-#include "Shape.hpp"
 #include "Math/fixed.hpp"
+#include "Compiler.h"
+
+#include <array>
 
 struct PolarCoefficients;
 
-/**
- * Struct for internally stored WinPilot-like polars
- */
-struct PolarInfo
-{
-  // Using doubles here to simplify the code in PolarStore.cpp
-  //
-  fixed reference_mass; /**< Reference Mass (kg) */
-  fixed max_ballast;  /**< Max water ballast (l) */
+struct PolarPoint {
+  /**
+   * Speed of point [m/s].
+   */
+  fixed v;
 
-  PolarShape shape;
+  /**
+   * Sink rate of point [m/s].  Must be negative.
+   */
+  fixed w;
+};
 
-  fixed wing_area;    /**< Reference wing area (m^2) */
-  fixed v_no;         /**< Maximum speed for normal operations (m/s) */
+struct PolarShape {
+  std::array<PolarPoint, 3> points;
+
+  const PolarPoint &operator[](unsigned i) const {
+    return points[i];
+  }
+
+  PolarPoint &operator[](unsigned i) {
+    return points[i];
+  }
 
   gcc_pure
   PolarCoefficients CalculateCoefficients() const;
 
-  bool IsValid() const {
-    return shape.IsValid();
-  }
+  gcc_pure
+  bool IsValid() const;
 };
 
 #endif

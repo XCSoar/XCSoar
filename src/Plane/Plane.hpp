@@ -25,6 +25,7 @@ Copyright_License {
 #define PLANE_HPP
 
 #include "Util/StaticString.hpp"
+#include "Polar/Shape.hpp"
 #include "Math/fixed.hpp"
 
 struct Plane
@@ -35,8 +36,7 @@ struct Plane
 
   StaticString<32> polar_name;
 
-  fixed v1, v2, v3;
-  fixed w1, w2, w3;
+  PolarShape polar_shape;
 
   fixed reference_mass;
   fixed dry_mass;

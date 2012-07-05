@@ -725,6 +725,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
+	$(SRC)/Polar/Shape.cpp \
 	$(SRC)/Polar/Polar.cpp \
 	$(SRC)/Polar/Parser.cpp \
 	$(SRC)/Polar/PolarStore.cpp \

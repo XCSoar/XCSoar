@@ -29,6 +29,21 @@ Copyright_License {
 
 #include <assert.h>
 
+PolarShape
+PolarStore::Item::ToPolarShape() const
+{
+  PolarShape shape;
+
+  shape[0].v = Units::ToSysUnit(fixed(v1), Unit::KILOMETER_PER_HOUR);
+  shape[0].w = fixed(w1);
+  shape[1].v = Units::ToSysUnit(fixed(v2), Unit::KILOMETER_PER_HOUR);
+  shape[1].w = fixed(w2);
+  shape[2].v = Units::ToSysUnit(fixed(v3), Unit::KILOMETER_PER_HOUR);
+  shape[2].w = fixed(w3);
+
+  return shape;
+}
+
 PolarInfo
 PolarStore::Item::ToPolarInfo() const
 {
@@ -36,12 +51,7 @@ PolarStore::Item::ToPolarInfo() const
 
   polar.reference_mass = fixed(reference_mass);
   polar.max_ballast = fixed(max_ballast);
-  polar.v1 = Units::ToSysUnit(fixed(v1), Unit::KILOMETER_PER_HOUR);
-  polar.w1 = fixed(w1);
-  polar.v2 = Units::ToSysUnit(fixed(v2), Unit::KILOMETER_PER_HOUR);
-  polar.w2 = fixed(w2);
-  polar.v3 = Units::ToSysUnit(fixed(v3), Unit::KILOMETER_PER_HOUR);
-  polar.w3 = fixed(w3);
+  polar.shape = ToPolarShape();
   polar.wing_area = fixed(wing_area);
   polar.v_no = fixed(v_no);
 

@@ -28,6 +28,43 @@ Copyright_License {
 #include <cstdio>
 
 bool
+ParsePolarShape(PolarShape &shape, const TCHAR *s)
+{
+  TCHAR *p;
+  fixed v1 = Units::ToSysUnit(fixed(_tcstod(s, &p)), Unit::KILOMETER_PER_HOUR);
+  if (*p != _T(','))
+    return false;
+
+  fixed w1 = fixed(_tcstod(p + 1, &p));
+  if (*p != _T(','))
+    return false;
+
+  fixed v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  if (*p != _T(','))
+    return false;
+
+  fixed w2 = fixed(_tcstod(p + 1, &p));
+  if (*p != _T(','))
+    return false;
+
+  fixed v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  if (*p != _T(','))
+    return false;
+
+  fixed w3 = fixed(_tcstod(p + 1, &p));
+  if (*p != '\0')
+    return false;
+
+  shape[0].v = v1;
+  shape[0].w = w1;
+  shape[1].v = v2;
+  shape[1].w = w2;
+  shape[2].v = v3;
+  shape[2].w = w3;
+  return true;
+}
+
+bool
 ParsePolar(PolarInfo &polar_r, const TCHAR *s)
 {
   PolarInfo polar;
@@ -48,27 +85,27 @@ ParsePolar(PolarInfo &polar_r, const TCHAR *s)
   if (*p != _T(','))
     return false;
 
-  polar.v1 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[0].v = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.w1 = fixed(_tcstod(p + 1, &p));
+  polar.shape[0].w = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[1].v = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.w2 = fixed(_tcstod(p + 1, &p));
+  polar.shape[1].w = fixed(_tcstod(p + 1, &p));
   if (*p != _T(','))
     return false;
 
-  polar.v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
+  polar.shape[2].v = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
   if (*p != _T(','))
     return false;
 
-  polar.w3 = fixed(_tcstod(p + 1, &p));
+  polar.shape[2].w = fixed(_tcstod(p + 1, &p));
   polar.wing_area = (*p != _T(',')) ? fixed_zero : fixed(_tcstod(p + 1, &p));
   polar.v_no = (*p != _T(',')) ? fixed_zero : fixed(_tcstod(p + 1, &p));
 
@@ -77,28 +114,42 @@ ParsePolar(PolarInfo &polar_r, const TCHAR *s)
 }
 
 void
+FormatPolarShape(const PolarShape &shape, TCHAR *buffer, size_t max_size)
+{
+  fixed v1, v2, v3;
+  v1 = Units::ToUserUnit(shape[0].v, Unit::KILOMETER_PER_HOUR);
+  v2 = Units::ToUserUnit(shape[1].v, Unit::KILOMETER_PER_HOUR);
+  v3 = Units::ToUserUnit(shape[2].v, Unit::KILOMETER_PER_HOUR);
+
+  _sntprintf(buffer, max_size, _T("%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
+             (double)v1, (double)shape[0].w,
+             (double)v2, (double)shape[1].w,
+             (double)v3, (double)shape[2].w);
+}
+
+void
 FormatPolar(const PolarInfo &polar, TCHAR *buffer, size_t max_size,
             bool include_v_no)
 {
   fixed v1, v2, v3;
-  v1 = Units::ToUserUnit(polar.v1, Unit::KILOMETER_PER_HOUR);
-  v2 = Units::ToUserUnit(polar.v2, Unit::KILOMETER_PER_HOUR);
-  v3 = Units::ToUserUnit(polar.v3, Unit::KILOMETER_PER_HOUR);
+  v1 = Units::ToUserUnit(polar.shape[0].v, Unit::KILOMETER_PER_HOUR);
+  v2 = Units::ToUserUnit(polar.shape[1].v, Unit::KILOMETER_PER_HOUR);
+  v3 = Units::ToUserUnit(polar.shape[2].v, Unit::KILOMETER_PER_HOUR);
 
   if (include_v_no)
     _sntprintf(buffer, max_size,
                _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
                (double)polar.reference_mass, (double)polar.max_ballast,
-               (double)v1, (double)polar.w1,
-               (double)v2, (double)polar.w2,
-               (double)v3, (double)polar.w3,
+               (double)v1, (double)polar.shape[0].w,
+               (double)v2, (double)polar.shape[1].w,
+               (double)v3, (double)polar.shape[2].w,
                (double)polar.wing_area, (double)polar.v_no);
   else
     _sntprintf(buffer, max_size,
                _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
                (double)polar.reference_mass, (double)polar.max_ballast,
-               (double)v1, (double)polar.w1,
-               (double)v2, (double)polar.w2,
-               (double)v3, (double)polar.w3,
+               (double)v1, (double)polar.shape[0].w,
+               (double)v2, (double)polar.shape[1].w,
+               (double)v3, (double)polar.shape[2].w,
                (double)polar.wing_area);
 }

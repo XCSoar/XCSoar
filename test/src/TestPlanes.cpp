@@ -39,12 +39,15 @@ TestReader()
   ok1(plane.type == _T("Hornet"));
   ok1(plane.handicap == 100);
   ok1(plane.polar_name == _T("Hornet"));
-  ok1(equals(plane.v1, Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)));
-  ok1(equals(plane.v2, Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)));
-  ok1(equals(plane.v3, Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)));
-  ok1(equals(plane.w1, -0.606));
-  ok1(equals(plane.w2, -0.99));
-  ok1(equals(plane.w3, -1.918));
+  ok1(equals(plane.polar_shape[0].v,
+             Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)));
+  ok1(equals(plane.polar_shape[1].v,
+             Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR)));
+  ok1(equals(plane.polar_shape[2].v,
+             Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR)));
+  ok1(equals(plane.polar_shape[0].w, -0.606));
+  ok1(equals(plane.polar_shape[1].w, -0.99));
+  ok1(equals(plane.polar_shape[2].w, -1.918));
   ok1(equals(plane.reference_mass, 318));
   ok1(equals(plane.dry_mass, 302));
   ok1(equals(plane.max_ballast, 100));
@@ -62,12 +65,12 @@ TestWriter()
   plane.type = _T("Hornet");
   plane.handicap = 100;
   plane.polar_name = _T("Hornet");
-  plane.v1 = Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR);
-  plane.v2 = Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR);
-  plane.v3 = Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR);
-  plane.w1 = fixed(-0.606);
-  plane.w2 = fixed(-0.99);
-  plane.w3 = fixed(-1.918);
+  plane.polar_shape[0].v = Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR);
+  plane.polar_shape[1].v = Units::ToSysUnit(fixed(120), Unit::KILOMETER_PER_HOUR);
+  plane.polar_shape[2].v = Units::ToSysUnit(fixed(160), Unit::KILOMETER_PER_HOUR);
+  plane.polar_shape[0].w = fixed(-0.606);
+  plane.polar_shape[1].w = fixed(-0.99);
+  plane.polar_shape[2].w = fixed(-1.918);
   plane.reference_mass = fixed(318);
   plane.dry_mass = fixed(302);
   plane.max_ballast = fixed(100);

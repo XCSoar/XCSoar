@@ -28,6 +28,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct PolarShape;
 struct PolarInfo;
 
 namespace PolarStore
@@ -66,6 +67,7 @@ namespace PolarStore
     /** Contest handicap, 0 if unknown */
     unsigned contest_handicap;
 
+    PolarShape ToPolarShape() const;
     PolarInfo ToPolarInfo() const;
   };
 

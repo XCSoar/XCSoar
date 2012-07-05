@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "PlaneFileGlue.hpp"
 #include "Plane.hpp"
+#include "Polar/Parser.hpp"
 #include "Units/System.hpp"
 #include "IO/KeyValueFileReader.hpp"
 #include "IO/KeyValueFileWriter.hpp"
@@ -35,39 +36,7 @@ Copyright_License {
 static bool
 ReadPolar(const TCHAR *string, Plane &plane)
 {
-  TCHAR *p;
-
-  fixed v1 = Units::ToSysUnit(fixed(_tcstod(string, &p)), Unit::KILOMETER_PER_HOUR);
-  if (*p != _T(','))
-    return false;
-
-  fixed w1 = fixed(_tcstod(p + 1, &p));
-  if (*p != _T(','))
-    return false;
-
-  fixed v2 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
-  if (*p != _T(','))
-    return false;
-
-  fixed w2 = fixed(_tcstod(p + 1, &p));
-  if (*p != _T(','))
-    return false;
-
-  fixed v3 = Units::ToSysUnit(fixed(_tcstod(p + 1, &p)), Unit::KILOMETER_PER_HOUR);
-  if (*p != _T(','))
-    return false;
-
-  fixed w3 = fixed(_tcstod(p + 1, &p));
-  if (*p != '\0')
-    return false;
-
-  plane.v1 = v1;
-  plane.v2 = v2;
-  plane.v3 = v3;
-  plane.w1 = w1;
-  plane.w2 = w2;
-  plane.w3 = w3;
-  return true;
+  return ParsePolarShape(plane.polar_shape, string);
 }
 
 static bool
@@ -191,13 +160,7 @@ PlaneGlue::Write(const Plane &plane, KeyValueFileWriter &writer)
 
   writer.Write(_T("PolarName"), plane.polar_name);
 
-  fixed V1 = Units::ToUserUnit(plane.v1, Unit::KILOMETER_PER_HOUR);
-  fixed V2 = Units::ToUserUnit(plane.v2, Unit::KILOMETER_PER_HOUR);
-  fixed V3 = Units::ToUserUnit(plane.v3, Unit::KILOMETER_PER_HOUR);
-  tmp.Format(_T("%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-             (double)V1, (double)plane.w1,
-             (double)V2, (double)plane.w2,
-             (double)V3, (double)plane.w3);
+  FormatPolarShape(plane.polar_shape, tmp.buffer(), tmp.MAX_SIZE);
   writer.Write(_T("PolarInformation"), tmp);
 
   tmp.Format(_T("%f"), (double)plane.reference_mass);

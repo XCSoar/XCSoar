@@ -27,11 +27,5 @@ Copyright_License {
 PolarCoefficients
 PolarInfo::CalculateCoefficients() const
 {
-  return PolarCoefficients::From3VW(v1, v2, v3, w1, w2, w3);
-}
-
-bool
-PolarInfo::IsValid() const
-{
-  return CalculateCoefficients().IsValid();
+  return shape.CalculateCoefficients();
 }

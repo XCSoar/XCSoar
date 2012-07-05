@@ -46,23 +46,23 @@ TestBasic()
   ParsePolar(polar, _T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918"));
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.v1), 22.2222222));
-  ok1(equals(fixed(polar.w1), -0.606));
-  ok1(equals(fixed(polar.v2), 33.3333333));
-  ok1(equals(fixed(polar.w2), -0.99));
-  ok1(equals(fixed(polar.v3), 44.4444444));
-  ok1(equals(fixed(polar.w3), -1.918));
+  ok1(equals(fixed(polar.shape[0].v), 22.2222222));
+  ok1(equals(fixed(polar.shape[0].w), -0.606));
+  ok1(equals(fixed(polar.shape[1].v), 33.3333333));
+  ok1(equals(fixed(polar.shape[1].w), -0.99));
+  ok1(equals(fixed(polar.shape[2].v), 44.4444444));
+  ok1(equals(fixed(polar.shape[2].w), -1.918));
   ok1(equals(fixed(polar.wing_area), 0.0));
 
   ParsePolar(polar, _T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8"));
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.v1), 22.2222222));
-  ok1(equals(fixed(polar.w1), -0.606));
-  ok1(equals(fixed(polar.v2), 33.3333333));
-  ok1(equals(fixed(polar.w2), -0.99));
-  ok1(equals(fixed(polar.v3), 44.4444444));
-  ok1(equals(fixed(polar.w3), -1.918));
+  ok1(equals(fixed(polar.shape[0].v), 22.2222222));
+  ok1(equals(fixed(polar.shape[0].w), -0.606));
+  ok1(equals(fixed(polar.shape[1].v), 33.3333333));
+  ok1(equals(fixed(polar.shape[1].w), -0.99));
+  ok1(equals(fixed(polar.shape[2].v), 44.4444444));
+  ok1(equals(fixed(polar.shape[2].w), -1.918));
   ok1(equals(fixed(polar.wing_area), 9.8));
 
   // Test GetString()
@@ -80,12 +80,12 @@ TestFileImport()
   PolarGlue::LoadFromFile(polar, _T("test/data/test.plr"));
   ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
-  ok1(equals(fixed(polar.v1), 22.2222222));
-  ok1(equals(fixed(polar.w1), -0.606));
-  ok1(equals(fixed(polar.v2), 33.3333333));
-  ok1(equals(fixed(polar.w2), -0.99));
-  ok1(equals(fixed(polar.v3), 44.4444444));
-  ok1(equals(fixed(polar.w3), -1.918));
+  ok1(equals(fixed(polar.shape[0].v), 22.2222222));
+  ok1(equals(fixed(polar.shape[0].w), -0.606));
+  ok1(equals(fixed(polar.shape[1].v), 33.3333333));
+  ok1(equals(fixed(polar.shape[1].w), -0.99));
+  ok1(equals(fixed(polar.shape[2].v), 44.4444444));
+  ok1(equals(fixed(polar.shape[2].w), -1.918));
   ok1(equals(fixed(polar.wing_area), 9.8));
 }
 
@@ -149,9 +149,9 @@ TestBuiltInPolarsPlausibility()
     assert(i < PolarStore::Count());
     unsigned si = performanceData[i].storeIndex;
     PolarInfo polar = PolarStore::GetItem(si).ToPolarInfo();
-    PolarCoefficients pc = PolarCoefficients::From3VW(
-                              polar.v1, polar.v2, polar.v3,
-                              polar.w1, polar.w2, polar.w3);
+    PolarCoefficients pc =
+      PolarCoefficients::From3VW(polar.shape[0].v, polar.shape[1].v, polar.shape[2].v,
+                                 polar.shape[0].w, polar.shape[1].w, polar.shape[2].w);
 
     WideToUTF8Converter polarName(PolarStore::GetItem(i).name);
 

@@ -51,12 +51,7 @@ PlaneGlue::FromProfile(Plane &plane)
   plane.polar_name = Profile::Get(ProfileKeys::PolarName, _T(""));
 
   PolarInfo polar = PolarGlue::LoadFromProfile();
-  plane.v1 = polar.v1;
-  plane.v2 = polar.v2;
-  plane.v3 = polar.v3;
-  plane.w1 = polar.w1;
-  plane.w2 = polar.w2;
-  plane.w3 = polar.w3;
+  plane.polar_shape = polar.shape;
   plane.reference_mass = polar.reference_mass;
   plane.max_ballast = polar.max_ballast;
   plane.wing_area = polar.wing_area;
@@ -92,12 +87,7 @@ PlaneGlue::ToProfile(const Plane &plane)
   Profile::Set(ProfileKeys::PolarName, plane.polar_name);
 
   PolarInfo polar;
-  polar.v1 = plane.v1;
-  polar.v2 = plane.v2;
-  polar.v3 = plane.v3;
-  polar.w1 = plane.w1;
-  polar.w2 = plane.w2;
-  polar.w3 = plane.w3;
+  polar.shape = plane.polar_shape;
   polar.reference_mass = plane.reference_mass;
   polar.max_ballast = plane.max_ballast;
   polar.v_no = plane.max_speed;
@@ -118,8 +108,7 @@ PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
 {
   settings.task.contest_handicap = plane.handicap;
 
-  PolarCoefficients pc = PolarCoefficients::From3VW(plane.v1, plane.v2, plane.v3,
-                                                    plane.w1, plane.w2, plane.w3);
+  PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
   if (!pc.IsValid())
     return;
 

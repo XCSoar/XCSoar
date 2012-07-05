@@ -71,9 +71,7 @@ UpdatePolarLabel()
 static void
 UpdateInvalidLabel()
 {
-  PolarCoefficients coeff =
-      PolarCoefficients::From3VW(plane.v1, plane.v2, plane.v3,
-                                 plane.w1, plane.w2, plane.w3);
+  const PolarCoefficients coeff = plane.polar_shape.CalculateCoefficients();
   bool visible = !coeff.IsValid();
 
   WndFrame *label = ((WndFrame *)dialog->FindByName(_T("InvalidLabel")));
@@ -82,17 +80,34 @@ UpdateInvalidLabel()
 }
 
 static void
+LoadPolarShape(SubForm &form, const PolarShape &shape)
+{
+  LoadFormProperty(form, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, shape[0].v);
+  LoadFormProperty(form, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, shape[1].v);
+  LoadFormProperty(form, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, shape[2].v);
+  LoadFormProperty(form, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, shape[0].w);
+  LoadFormProperty(form, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, shape[1].w);
+  LoadFormProperty(form, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, shape[2].w);
+}
+
+static void
+SavePolarShape(SubForm &form, PolarShape &shape)
+{
+  SaveFormProperty(form, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, shape[0].v);
+  SaveFormProperty(form, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, shape[1].v);
+  SaveFormProperty(form, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, shape[2].v);
+  SaveFormProperty(form, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, shape[0].w);
+  SaveFormProperty(form, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, shape[1].w);
+  SaveFormProperty(form, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, shape[2].w);
+}
+
+static void
 Update()
 {
   UpdateCaption();
 
   loading = true;
-  LoadFormProperty(*dialog, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v1);
-  LoadFormProperty(*dialog, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v2);
-  LoadFormProperty(*dialog, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v3);
-  LoadFormProperty(*dialog, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, plane.w1);
-  LoadFormProperty(*dialog, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, plane.w2);
-  LoadFormProperty(*dialog, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, plane.w3);
+  LoadPolarShape(*dialog, plane.polar_shape);
 
   LoadFormProperty(*dialog, _T("ReferenceMassEdit"), plane.reference_mass);
   LoadFormProperty(*dialog, _T("DryMassEdit"), plane.dry_mass);
@@ -105,12 +120,7 @@ Update()
 static void
 UpdatePlane()
 {
-  SaveFormProperty(*dialog, _T("V1Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v1);
-  SaveFormProperty(*dialog, _T("V2Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v2);
-  SaveFormProperty(*dialog, _T("V3Edit"), UnitGroup::HORIZONTAL_SPEED, plane.v3);
-  SaveFormProperty(*dialog, _T("W1Edit"), UnitGroup::VERTICAL_SPEED, plane.w1);
-  SaveFormProperty(*dialog, _T("W2Edit"), UnitGroup::VERTICAL_SPEED, plane.w2);
-  SaveFormProperty(*dialog, _T("W3Edit"), UnitGroup::VERTICAL_SPEED, plane.w3);
+  SavePolarShape(*dialog, plane.polar_shape);
 
   SaveFormProperty(*dialog, _T("ReferenceMassEdit"), plane.reference_mass);
   SaveFormProperty(*dialog, _T("DryMassEdit"), plane.dry_mass);
@@ -158,12 +168,7 @@ ListClicked(gcc_unused WndButton &button)
   if (item.v_no > 0.0)
     plane.max_speed = fixed(item.v_no);
 
-  plane.v1 = Units::ToSysUnit(fixed(item.v1), Unit::KILOMETER_PER_HOUR);
-  plane.v2 = Units::ToSysUnit(fixed(item.v2), Unit::KILOMETER_PER_HOUR);
-  plane.v3 = Units::ToSysUnit(fixed(item.v3), Unit::KILOMETER_PER_HOUR);
-  plane.w1 = fixed(item.w1);
-  plane.w2 = fixed(item.w2);
-  plane.w3 = fixed(item.w3);
+  plane.polar_shape = item.ToPolarShape();
 
   plane.polar_name = list[result].StringValue;
 
@@ -219,12 +224,7 @@ ImportClicked(gcc_unused WndButton &button)
   if (positive(polar.v_no))
     plane.max_speed = polar.v_no;
 
-  plane.v1 = polar.v1;
-  plane.v2 = polar.v2;
-  plane.v3 = polar.v3;
-  plane.w1 = polar.w1;
-  plane.w2 = polar.w2;
-  plane.w3 = polar.w3;
+  plane.polar_shape = polar.shape;
 
   plane.polar_name = list[result].StringValueFormatted;
 

@@ -193,6 +193,7 @@ TEST_ORDERED_TASK_DEPENDS = TASK ROUTE GLIDE WAYPOINT GEO MATH UTIL
 $(eval $(call link-program,TestOrderedTask,TEST_ORDERED_TASK))
 
 TEST_PLANES_SOURCES = \
+	$(SRC)/Polar/Parser.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
@@ -418,6 +419,7 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
+	$(SRC)/Polar/Shape.cpp \
 	$(SRC)/Polar/Polar.cpp \
 	$(SRC)/Polar/Parser.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \

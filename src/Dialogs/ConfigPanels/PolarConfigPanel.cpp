@@ -65,8 +65,6 @@ class PolarConfigPanel : public XMLWidget {
   WndButton *buttonList, *buttonImport, *buttonExport;
 
   void SetLiftFieldStepAndMax(const TCHAR *control);
-  void UpdatePolarPoints(fixed v1, fixed v2, fixed v3,
-                         fixed w1, fixed w2, fixed w3);
   void UpdatePolarTitle();
   void UpdatePolarInvalidLabel();
   void SetVisible(bool active);
@@ -110,17 +108,21 @@ PolarConfigPanel::SetLiftFieldStepAndMax(const TCHAR *control)
   }
 }
 
-void
-PolarConfigPanel::UpdatePolarPoints(fixed v1, fixed v2, fixed v3,
-                                    fixed w1, fixed w2, fixed w3)
+static void
+LoadPolarShape(SubForm &form, const PolarShape &shape)
 {
-  LoadFormProperty(form, _T("prpPolarV1"), UnitGroup::HORIZONTAL_SPEED, v1);
-  LoadFormProperty(form, _T("prpPolarV2"), UnitGroup::HORIZONTAL_SPEED, v2);
-  LoadFormProperty(form, _T("prpPolarV3"), UnitGroup::HORIZONTAL_SPEED, v3);
-
-  LoadFormProperty(form, _T("prpPolarW1"), UnitGroup::VERTICAL_SPEED, w1);
-  LoadFormProperty(form, _T("prpPolarW2"), UnitGroup::VERTICAL_SPEED, w2);
-  LoadFormProperty(form, _T("prpPolarW3"), UnitGroup::VERTICAL_SPEED, w3);
+  LoadFormProperty(form, _T("prpPolarV1"),
+                   UnitGroup::HORIZONTAL_SPEED, shape[0].v);
+  LoadFormProperty(form, _T("prpPolarV2"),
+                   UnitGroup::HORIZONTAL_SPEED, shape[1].v);
+  LoadFormProperty(form, _T("prpPolarV3"),
+                   UnitGroup::HORIZONTAL_SPEED, shape[2].v);
+  LoadFormProperty(form, _T("prpPolarW1"),
+                   UnitGroup::VERTICAL_SPEED, shape[0].w);
+  LoadFormProperty(form, _T("prpPolarW2"),
+                   UnitGroup::VERTICAL_SPEED, shape[1].w);
+  LoadFormProperty(form, _T("prpPolarW3"),
+                   UnitGroup::VERTICAL_SPEED, shape[2].w);
 }
 
 void
@@ -134,15 +136,28 @@ PolarConfigPanel::UpdatePolarTitle()
 }
 
 static bool
+SavePolarShape(SubForm &form, PolarShape &shape)
+{
+  bool changed = false;
+  changed |= SaveFormProperty(form, _T("prpPolarV1"),
+                              UnitGroup::HORIZONTAL_SPEED, shape[0].v);
+  changed |= SaveFormProperty(form, _T("prpPolarV2"),
+                              UnitGroup::HORIZONTAL_SPEED, shape[1].v);
+  changed |= SaveFormProperty(form, _T("prpPolarV3"),
+                              UnitGroup::HORIZONTAL_SPEED, shape[2].v);
+  changed |= SaveFormProperty(form, _T("prpPolarW1"),
+                              UnitGroup::VERTICAL_SPEED, shape[0].w);
+  changed |= SaveFormProperty(form, _T("prpPolarW2"),
+                              UnitGroup::VERTICAL_SPEED, shape[1].w);
+  changed |= SaveFormProperty(form, _T("prpPolarW3"),
+                              UnitGroup::VERTICAL_SPEED, shape[2].w);
+  return changed;
+}
+
+static bool
 SaveFormToPolar(SubForm &form, PolarInfo &polar)
 {
-  bool changed = SaveFormProperty(form, _T("prpPolarV1"), UnitGroup::HORIZONTAL_SPEED, polar.v1);
-  changed |= SaveFormProperty(form, _T("prpPolarV2"), UnitGroup::HORIZONTAL_SPEED, polar.v2);
-  changed |= SaveFormProperty(form, _T("prpPolarV3"), UnitGroup::HORIZONTAL_SPEED, polar.v3);
-
-  changed |= SaveFormProperty(form, _T("prpPolarW1"), UnitGroup::VERTICAL_SPEED, polar.w1);
-  changed |= SaveFormProperty(form, _T("prpPolarW2"), UnitGroup::VERTICAL_SPEED, polar.w2);
-  changed |= SaveFormProperty(form, _T("prpPolarW3"), UnitGroup::VERTICAL_SPEED, polar.w3);
+  bool changed = SavePolarShape(form, polar.shape);
 
   changed |= SaveFormProperty(form, _T("prpPolarReferenceMass"), polar.reference_mass);
   changed |= SaveFormProperty(form, _T("prpPolarMaxBallast"), polar.max_ballast);
@@ -184,10 +199,7 @@ PolarConfigPanel::LoadInternal()
   if (result >= 0) {
     const PolarStore::Item &item = PolarStore::GetItem(list[result].DataFieldIndex);
 
-    UpdatePolarPoints(Units::ToSysUnit(fixed(item.v1), Unit::KILOMETER_PER_HOUR),
-                      Units::ToSysUnit(fixed(item.v2), Unit::KILOMETER_PER_HOUR),
-                      Units::ToSysUnit(fixed(item.v3), Unit::KILOMETER_PER_HOUR),
-                      fixed(item.w1), fixed(item.w2), fixed(item.w3));
+    LoadPolarShape(form, item.ToPolarShape());
 
     LoadFormProperty(form, _T("prpPolarReferenceMass"), fixed(item.reference_mass));
     LoadFormProperty(form, _T("prpPolarDryMass"), fixed(item.reference_mass));
@@ -248,7 +260,7 @@ PolarConfigPanel::LoadFromFile()
     PolarInfo polar;
     PolarGlue::LoadFromFile(polar, path);
 
-    UpdatePolarPoints(polar.v1, polar.v2, polar.v3, polar.w1, polar.w2, polar.w3);
+    LoadPolarShape(form, polar.shape);
 
     LoadFormProperty(form, _T("prpPolarReferenceMass"), polar.reference_mass);
     LoadFormProperty(form, _T("prpPolarDryMass"), polar.reference_mass);
@@ -380,8 +392,7 @@ PolarConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetLiftFieldStepAndMax(_T("prpPolarW3"));
 
   const ComputerSettings &settings = XCSoarInterface::GetComputerSettings();
-  UpdatePolarPoints(settings.plane.v1, settings.plane.v2, settings.plane.v3,
-                    settings.plane.w1, settings.plane.w2, settings.plane.w3);
+  LoadPolarShape(form, settings.plane.polar_shape);
 
   LoadFormProperty(form, _T("prpPolarReferenceMass"),
                    settings.plane.reference_mass);
@@ -413,19 +424,7 @@ PolarConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
 
-  changed |= SaveFormProperty(form, _T("prpPolarV1"), UnitGroup::HORIZONTAL_SPEED,
-                              settings_computer.plane.v1);
-  changed |= SaveFormProperty(form, _T("prpPolarV2"), UnitGroup::HORIZONTAL_SPEED,
-                              settings_computer.plane.v2);
-  changed |= SaveFormProperty(form, _T("prpPolarV3"), UnitGroup::HORIZONTAL_SPEED,
-                              settings_computer.plane.v3);
-
-  changed |= SaveFormProperty(form, _T("prpPolarW1"), UnitGroup::VERTICAL_SPEED,
-                              settings_computer.plane.w1);
-  changed |= SaveFormProperty(form, _T("prpPolarW2"), UnitGroup::VERTICAL_SPEED,
-                              settings_computer.plane.w2);
-  changed |= SaveFormProperty(form, _T("prpPolarW3"), UnitGroup::VERTICAL_SPEED,
-                              settings_computer.plane.w3);
+  changed |= SavePolarShape(form, settings_computer.plane.polar_shape);
 
   changed |= SaveFormProperty(form, _T("prpPolarReferenceMass"),
                               settings_computer.plane.reference_mass);
