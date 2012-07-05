@@ -99,7 +99,7 @@ ReadString(NMEAInputLine &line, NarrowString<N> &value)
 }
 
 static void
-LXWP1(NMEAInputLine &line, NMEAInfo &info)
+LXWP1(NMEAInputLine &line, DeviceInfo &device)
 {
   /*
    * $LXWP1,
@@ -110,12 +110,16 @@ LXWP1(NMEAInputLine &line, NMEAInfo &info)
    * license string
    */
 
-  DeviceInfo &device = info.device;
-
   ReadString(line, device.product);
   ReadString(line, device.serial);
   ReadString(line, device.software_version);
   ReadString(line, device.hardware_version);
+}
+
+static void
+LXWP1(NMEAInputLine &line, NMEAInfo &info)
+{
+  LXWP1(line, info.device);
 }
 
 static bool
