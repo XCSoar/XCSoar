@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-02 14:24+0000\n"
+"PO-Revision-Date: 2012-07-04 15:17+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-03 17:24+0000\n"
-"X-Generator: Launchpad (build 15531)\n"
+"X-Launchpad-Export-Date: 2012-07-05 09:41+0000\n"
+"X-Generator: Launchpad (build 15544)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -584,7 +584,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:130
 #, no-c-format
 msgid "GR cruise"
-msgstr ""
+msgstr "巡航滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:131
 #, no-c-format
@@ -1199,12 +1199,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
 msgid "Next GR (TE Compensated)"
-msgstr "NEXT　滑空比"
+msgstr "NEXT　滑空比 TE"
 
 #: src/InfoBoxes/Content/Factory.cpp:461
 #, no-c-format
 msgid "WP GR-TE"
-msgstr "WP　滑空比"
+msgstr "WP　滑空比 TE"
 
 #: src/InfoBoxes/Content/Factory.cpp:462
 #, no-c-format
@@ -1237,7 +1237,7 @@ msgstr "ローカル時間"
 #: src/InfoBoxes/Content/Factory.cpp:472
 #, no-c-format
 msgid "GPS time expressed in local time zone."
-msgstr "ローカルタイムで表したGPS時刻"
+msgstr "ローカルタイムで表したGPS時間"
 
 #: src/InfoBoxes/Content/Factory.cpp:480 src/InfoBoxes/Content/Factory.cpp:481
 #, no-c-format
@@ -1745,19 +1745,19 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:744
 #, no-c-format
 msgid "Final GR"
-msgstr "フィニッシュ高度"
+msgstr "フィニッシュ滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:745
 #, no-c-format
 msgid "Fin GR"
-msgstr "Fin到達高度"
+msgstr "Fin到達滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:746
 #, no-c-format
 msgid ""
 "Geometric gradient to the arrival height above the final waypoint. This is "
 "not adjusted for total energy."
-msgstr "現在に条件でフィニッシュした場合の予想到達高度"
+msgstr "現在の条件でのフィニッシュ予想到達高度"
 
 #: src/InfoBoxes/Content/Factory.cpp:754
 #, no-c-format
@@ -1797,7 +1797,7 @@ msgstr "代替地１　滑空比"
 #: src/InfoBoxes/Content/Factory.cpp:775
 #, no-c-format
 msgid "Altn1 GR"
-msgstr "代替地１　滑空比"
+msgstr "代替１　滑空比"
 
 #: src/InfoBoxes/Content/Factory.cpp:776
 #, no-c-format
@@ -1887,7 +1887,7 @@ msgstr "OLC"
 msgid ""
 "Instantaneous evaluation of the flown distance according to the configured "
 "On-Line Contest rule set."
-msgstr "オンラインコンテストルールにより計算した飛行距離"
+msgstr "OLCルールにより計算した飛行距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:824
 #, no-c-format
@@ -1989,7 +1989,7 @@ msgid ""
 "total energy vario value if connected to one."
 msgstr ""
 "GPS高度トレース\r\n"
-"高機能バリオメーターが接続されて居る場合その値"
+"高機能バリオメーターが接続されている場合その値"
 
 #: src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
@@ -4947,7 +4947,7 @@ msgstr "平均上昇率傾向予測"
 #, no-c-format
 msgid "Sets MC to the trending average climb rate based on all climbs."
 msgstr ""
-"上昇旋回モードの場合\r\n"
+"旋回モードの場合\r\n"
 "マクレディーセッティングは予想される平均の値を設定する"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:67
@@ -5926,8 +5926,8 @@ msgid ""
 "Primary waypoints file.  Supported file types are Cambridge/WinPilot files (."
 "dat), Zander files (.wpz) or SeeYou files (.cup)."
 msgstr ""
-"優先ウエイポインとファイル\r\n"
-"Cambridge/Win Pilot（.dat) Zander (.WPZ)  See You (.cup) を　サポート"
+"優先ウエイポイントファイル\r\n"
+"Cambridge/Win Pilot（.dat) Zander (.WPZ) See You (.cup) を　サポート"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:105
 msgid "More waypoints"
@@ -5939,7 +5939,7 @@ msgid ""
 "competition."
 msgstr ""
 "セコンダリーウエイポイント　ファイル\r\n"
-"競技用のウエイ　ポイントリスト"
+"競技用のウエイポイントリスト"
 
 #: src/Dialogs/ConfigPanels/SiteConfigPanel.cpp:110
 msgid "Watched waypoints"
@@ -6415,22 +6415,22 @@ msgstr "山"
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:171
 #, no-c-format
 msgid "Imhof 7"
-msgstr ""
+msgstr "Imhof 7"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:172
 #, no-c-format
 msgid "Imhof 4"
-msgstr ""
+msgstr "Imhof 4"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:173
 #, no-c-format
 msgid "Imhof 12"
-msgstr ""
+msgstr "Imhof 12"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:174
 #, no-c-format
 msgid "Imhof Atlas"
-msgstr ""
+msgstr "Imhof Atlas"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:175
 #, no-c-format
@@ -6740,7 +6740,7 @@ msgstr "すべてのウエイポイントのラベルを表示"
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:144
 #, no-c-format
 msgid "Task waypoints & landables"
-msgstr "タスク　WP　＆　着陸可能地"
+msgstr "タスク　WP＆着陸可能地"
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:145
 #, no-c-format
@@ -7482,7 +7482,7 @@ msgstr "タスク実行上の不明なエラー"
 #: src/Dialogs/dlgWaypointDetails.cpp:331 Data/Dialogs/dlgTaskPoint.xml:3
 #: Data/Dialogs/dlgTaskPoint_L.xml:3
 msgid "Waypoint"
-msgstr "ウェイポイント"
+msgstr "ウエイポイント"
 
 #: src/Dialogs/dlgWaypointEdit.cpp:62 src/Dialogs/dlgWaypointEdit.cpp:67
 msgid "(blank)"
@@ -7501,7 +7501,7 @@ msgstr "ウエイポイントの編集"
 
 #: src/Dialogs/WaypointList.cpp:321
 msgid "Waypoint name"
-msgstr "うウィポイントの名前"
+msgstr "ウエイポイントの名前"
 
 #: src/Dialogs/WaypointList.cpp:374
 msgid "Choose a filter or click here"
@@ -8322,7 +8322,7 @@ msgstr "重量設定"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "Enable voice announcement that the task waypoint has changed."
-msgstr "ウェイポイントを変更した場合の　音声案内を有効にする"
+msgstr "ウエイポイントを変更した場合の　音声案内を有効にする"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
@@ -8521,7 +8521,7 @@ msgstr "コールサイン"
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "New waypoint"
-msgstr "新規ウェイポイント"
+msgstr "新規ウエイポイント"
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:5
 msgid "Set WP"
@@ -9060,7 +9060,7 @@ msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
-"ウェイポイント\n"
+"ウエイポイント\n"
 "リスト"
 
 #: Data/Input/default.xci:534 Data/Input/default.xci:583
@@ -9142,7 +9142,7 @@ msgid ""
 "Waypoint\n"
 "Details"
 msgstr ""
-"ウェイポイント\n"
+"ウエイポイント\n"
 "の詳細"
 
 #: Data/Input/default.xci:639 Data/Input/default.xci:1182
