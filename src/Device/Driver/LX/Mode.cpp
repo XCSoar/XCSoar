@@ -98,9 +98,12 @@ LXDevice::OnSysTicker(const DerivedInfo &calculated)
 bool
 LXDevice::EnablePassThrough(OperationEnvironment &env)
 {
-  return is_v7
+  bool success = is_v7
     ? V7::ModeDirect(port, env)
     : LX1600::ModeColibri(port, env);
+  if (success)
+    mode = Mode::PASS_THROUGH;
+  return success;
 }
 
 bool
