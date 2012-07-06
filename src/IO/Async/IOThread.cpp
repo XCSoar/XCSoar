@@ -201,7 +201,7 @@ IOThread::HandleReady(File *ready)
     /* must check ready_mask, just in case some other handler has
        removed the current file descriptor */
     const unsigned mask = ready->ready_mask;
-    if (mask == 0) {
+    if (ready->mask == 0 || mask == 0) {
       ready = ready->next_ready;
       continue;
     }
