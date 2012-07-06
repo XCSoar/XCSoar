@@ -39,8 +39,8 @@ public:
 
 protected:
   /* virtual methods from AbstractContest */
-  virtual SolverResult Solve(bool exhaustive);
-  virtual ContestResult CalculateResult() const;
+  virtual SolverResult Solve(bool exhaustive) gcc_override;
+  virtual ContestResult CalculateResult() const gcc_override;
 };
 
 #endif

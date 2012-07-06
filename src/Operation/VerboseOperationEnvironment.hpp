@@ -28,16 +28,17 @@ Copyright_License {
 
 class VerboseOperationEnvironment : public MessageOperationEnvironment {
 public:
-  virtual void SetText(const TCHAR *text);
-  virtual void SetProgressRange(unsigned range);
-  virtual void SetProgressPosition(unsigned position);
-
   /**
    * Call after the main window has been resized.
    */
   void UpdateLayout();
 
   void Hide();
+
+  /* virtual methods from class OperationEnvironment */
+  virtual void SetText(const TCHAR *text) gcc_override;
+  virtual void SetProgressRange(unsigned range) gcc_override;
+  virtual void SetProgressPosition(unsigned position) gcc_override;
 };
 
 #endif

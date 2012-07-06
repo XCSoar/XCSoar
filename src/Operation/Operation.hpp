@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_OPERATION_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -74,17 +75,19 @@ public:
 
 class NullOperationEnvironment : public OperationEnvironment {
 public:
-  virtual bool IsCancelled() const;
-  virtual void Sleep(unsigned ms);
-  virtual void SetErrorMessage(const TCHAR *text);
-  virtual void SetText(const TCHAR *text);
-  virtual void SetProgressRange(unsigned range);
-  virtual void SetProgressPosition(unsigned position);
+  /* virtual methods from class OperationEnvironment */
+  virtual bool IsCancelled() const gcc_override;
+  virtual void Sleep(unsigned ms) gcc_override;
+  virtual void SetErrorMessage(const TCHAR *text) gcc_override;
+  virtual void SetText(const TCHAR *text) gcc_override;
+  virtual void SetProgressRange(unsigned range) gcc_override;
+  virtual void SetProgressPosition(unsigned position) gcc_override;
 };
 
 class QuietOperationEnvironment : public NullOperationEnvironment {
 public:
-  virtual void Sleep(unsigned ms);
+  /* virtual methods from class OperationEnvironment */
+  virtual void Sleep(unsigned ms) gcc_override;
 };
 
 #endif

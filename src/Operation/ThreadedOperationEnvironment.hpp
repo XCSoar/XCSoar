@@ -105,15 +105,17 @@ public:
   }
 
 public:
-  virtual bool IsCancelled() const;
-  virtual void Sleep(unsigned ms);
-  virtual void SetErrorMessage(const TCHAR *error);
-  virtual void SetText(const TCHAR *text);
-  virtual void SetProgressRange(unsigned range);
-  virtual void SetProgressPosition(unsigned position);
+  /* virtual methods from class OperationEnvironment */
+  virtual bool IsCancelled() const gcc_override;
+  virtual void Sleep(unsigned ms) gcc_override;
+  virtual void SetErrorMessage(const TCHAR *error) gcc_override;
+  virtual void SetText(const TCHAR *text) gcc_override;
+  virtual void SetProgressRange(unsigned range) gcc_override;
+  virtual void SetProgressPosition(unsigned position) gcc_override;
 
 protected:
-  virtual void OnNotification();
+  /* virtual methods from class Notify */
+  virtual void OnNotification() gcc_override;
 };
 
 #endif

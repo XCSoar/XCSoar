@@ -132,6 +132,13 @@ Copyright_License {
 #define gcc_constexpr_data const
 #define gcc_constexpr_ctor
 #endif
+
+#if GCC_VERSION >= 40700 || defined(__clang__)
+#define gcc_override override
+#else
+#define gcc_override
+#endif
+
 #endif
 
 #endif

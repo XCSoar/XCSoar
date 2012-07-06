@@ -39,12 +39,12 @@ public:
     :other(_other) {}
 
   /* virtual methods from class OperationEnvironment */
-  virtual bool IsCancelled() const;
-  virtual void Sleep(unsigned ms);
-  virtual void SetErrorMessage(const TCHAR *text);
-  virtual void SetText(const TCHAR *text);
-  virtual void SetProgressRange(unsigned range);
-  virtual void SetProgressPosition(unsigned position);
+  virtual bool IsCancelled() const gcc_override;
+  virtual void Sleep(unsigned ms) gcc_override;
+  virtual void SetErrorMessage(const TCHAR *text) gcc_override;
+  virtual void SetText(const TCHAR *text) gcc_override;
+  virtual void SetProgressRange(unsigned range) gcc_override;
+  virtual void SetProgressPosition(unsigned position) gcc_override;
 };
 
 #endif
