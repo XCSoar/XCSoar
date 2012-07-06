@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-06-28 07:51+0000\n"
-"Last-Translator: Remo Chiesa <launchpad@remo.li>\n"
+"PO-Revision-Date: 2012-07-06 07:35+0000\n"
+"Last-Translator: Piero <pieromissa@virgilio.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-06-28 13:52+0000\n"
-"X-Generator: Launchpad (build 15505)\n"
+"X-Launchpad-Export-Date: 2012-07-06 08:36+0000\n"
+"X-Generator: Launchpad (build 15558)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -161,7 +161,7 @@ msgstr "Registratore di volo"
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr "Ricettore transponder"
+msgstr "Ricevitore transponder"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
@@ -211,7 +211,7 @@ msgstr "Nessun logger collegato"
 
 #: src/Logger/ExternalLogger.cpp:272
 msgid "Failed to download flight list."
-msgstr "Download dei voli non riuscito."
+msgstr "Download della lista voli non riuscito."
 
 #: src/Logger/ExternalLogger.cpp:273 src/Logger/ExternalLogger.cpp:281
 #: src/Logger/ExternalLogger.cpp:298 src/Logger/ExternalLogger.cpp:325
@@ -228,7 +228,7 @@ msgstr "Download del volo non riuscito."
 
 #: src/Logger/ExternalLogger.cpp:324
 msgid "Do you want to download another flight?"
-msgstr "Vuoi scaricare un nuovo volo?"
+msgstr "Vuoi scaricare un'altro volo?"
 
 #: src/Replay/IgcReplayGlue.cpp:79
 msgid "Could not open IGC file!"
@@ -249,7 +249,7 @@ msgstr "Caricando waypoints..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:207
 msgid "Not Circling"
-msgstr ""
+msgstr "Non circuitando"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:221
 msgid "No Traffic"
@@ -262,32 +262,32 @@ msgstr "Caricando File Dettagli Campo Volo"
 #: src/Menu/ExpandMacros.cpp:122 src/Menu/ExpandMacros.cpp:132
 #: src/Menu/ExpandMacros.cpp:198 src/Menu/ExpandMacros.cpp:228
 msgid "Next Turnpoint"
-msgstr "Prox pilone"
+msgstr "Prossimo punto di virata"
 
 #: src/Menu/ExpandMacros.cpp:127 src/Menu/ExpandMacros.cpp:137
 #: src/Menu/ExpandMacros.cpp:210 src/Menu/ExpandMacros.cpp:256
 msgid "Previous Turnpoint"
-msgstr "Turnpoint Precedente"
+msgstr "Punto di virata precedente"
 
 #: src/Menu/ExpandMacros.cpp:149 src/Menu/ExpandMacros.cpp:169
 msgid "Furthest Landpoint"
-msgstr "Atterraggio più lontano"
+msgstr "Punto di atterraggio più lontano"
 
 #: src/Menu/ExpandMacros.cpp:150 src/Menu/ExpandMacros.cpp:170
 msgid "Next Landpoint"
-msgstr "Turnpoint Successivo"
+msgstr "Prossimo punto di atterraggio"
 
 #: src/Menu/ExpandMacros.cpp:159 src/Menu/ExpandMacros.cpp:179
 msgid "Closest Landpoint"
-msgstr "Atterraggio più vicino"
+msgstr "Punto di atterraggio più vicino"
 
 #: src/Menu/ExpandMacros.cpp:160 src/Menu/ExpandMacros.cpp:180
 msgid "Previous Landpoint"
-msgstr "Atterraggio Precedente"
+msgstr "Punto di atterraggio precedente"
 
 #: src/Menu/ExpandMacros.cpp:197 src/Menu/ExpandMacros.cpp:227
 msgid "Finish Turnpoint"
-msgstr "Pilone finale"
+msgstr "Punto di virata finale"
 
 #: src/Menu/ExpandMacros.cpp:203 src/Menu/ExpandMacros.cpp:249
 msgid "Next Startpoint"
@@ -299,19 +299,19 @@ msgstr "Pilone iniziale"
 
 #: src/Menu/ExpandMacros.cpp:233
 msgid "Arm start"
-msgstr "Arma start"
+msgstr "Armare partenza"
 
 #: src/Menu/ExpandMacros.cpp:236
 msgid "Arm turn"
-msgstr ""
+msgstr "Armare virata"
 
 #: src/Menu/ExpandMacros.cpp:264
 msgid "Disarm start"
-msgstr "Disarmare start"
+msgstr "Disarmare partenza"
 
 #: src/Menu/ExpandMacros.cpp:267
 msgid "Disarm turn"
-msgstr "Disarmare turn"
+msgstr "Disarmare virata"
 
 #: src/Menu/ExpandMacros.cpp:277
 msgid ""
@@ -342,18 +342,24 @@ msgid ""
 "Arm\n"
 "Start"
 msgstr ""
+"Armare\n"
+"Partenza"
 
 #: src/Menu/ExpandMacros.cpp:297
 msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
+"Abortire\n"
+"Virata"
 
 #: src/Menu/ExpandMacros.cpp:302
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Armare\n"
+"Virata"
 
 #: src/Menu/ExpandMacros.cpp:320 src/Menu/ExpandMacros.cpp:324
 #: src/Dialogs/PortMonitor.cpp:123
@@ -363,7 +369,7 @@ msgstr "Riprendi"
 #: src/Menu/ExpandMacros.cpp:320 src/Menu/ExpandMacros.cpp:324
 #: src/Dialogs/Message.cpp:152
 msgid "Abort"
-msgstr "Annulla"
+msgstr ""
 
 #: src/Menu/ExpandMacros.cpp:431 src/Dialogs/dlgBasicSettings.cpp:127
 #: Data/Dialogs/dlgLoggerReplay.xml:12
@@ -372,19 +378,19 @@ msgstr "Stop"
 
 #: src/Menu/ExpandMacros.cpp:432 Data/Dialogs/dlgLoggerReplay.xml:10
 msgid "Start"
-msgstr "INIZIO"
+msgstr "Avvio"
 
 #: src/Menu/ExpandMacros.cpp:438
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:94
 #, no-c-format
 msgid "Long"
-msgstr "Lunga"
+msgstr "Lungo"
 
 #: src/Menu/ExpandMacros.cpp:442
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:95
 #, no-c-format
 msgid "Short"
-msgstr "Corta"
+msgstr "Corto"
 
 #: src/Menu/ExpandMacros.cpp:446
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:96
@@ -439,7 +445,7 @@ msgstr "Terreno + Topografia"
 
 #: src/Menu/ExpandMacros.cpp:481 src/Menu/ExpandMacros.cpp:507
 msgid "Terrain Off"
-msgstr "Terreno Spento"
+msgstr "Terreno disattivato"
 
 #: src/Menu/ExpandMacros.cpp:517 src/Menu/ExpandMacros.cpp:544
 #: src/InfoBoxes/Panel/WindSetup.cpp:87 src/Dialogs/WindSettingsPanel.cpp:47
@@ -465,7 +471,7 @@ msgstr "Tutto"
 #: src/Menu/ExpandMacros.cpp:533 src/Input/InputEventsSettings.cpp:307
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Attività e Atterrabili"
 
 #: src/Menu/ExpandMacros.cpp:535 src/Input/InputEventsSettings.cpp:309
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:55
@@ -496,6 +502,10 @@ msgid ""
 "only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Questa è l'altezza riferita al livello medio del mare, riportata dal GPS. "
+"Touch-screen/Solo PC: In modalità simulazione, questo valore può essere "
+"variato con i tasti freccia su/giù mentre i tasti freccia destra/sinistra "
+"consentono la virata dell'aliante."
 
 #: src/InfoBoxes/Content/Factory.cpp:90
 #, no-c-format
@@ -544,7 +554,7 @@ msgstr ""
 #: Data/Dialogs/dlgTeamCode_L.xml:15
 #, no-c-format
 msgid "Bearing"
-msgstr "Rotta"
+msgstr "Rilevamento"
 
 #: src/InfoBoxes/Content/Factory.cpp:112
 #, no-c-format
@@ -573,6 +583,10 @@ msgid ""
 "indicate climbing cruise. If the vertical speed is close to zero, the "
 "displayed value is '---'."
 msgstr ""
+"Rateo di planata istantaneo rispetto al terreno, dato dalla velocità a terra "
+"divisa per la velocità verticale (velocità GPS) negli ultimi 20 secondi. "
+"Valori negativi indicano salita. Se la velocità verticale è prossima allo "
+"zero, il valore indicato è '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:130
 #, no-c-format
@@ -634,8 +648,8 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
-"Altezza Totale guadagnata/persa nell'ultima termica diviso il tempo "
-"trascorso termicando."
+"Altezza totale guadagnata/persa nell'ultima termica diviso il tempo "
+"trascorso circuitando."
 
 #: src/InfoBoxes/Content/Factory.cpp:160
 #, no-c-format
@@ -665,7 +679,7 @@ msgstr "TL tempo"
 #: src/InfoBoxes/Content/Factory.cpp:172
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Tempo trascorso termicando nell'ultima termica."
+msgstr "Tempo trascorso circuitando nell'ultima termica"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
@@ -684,6 +698,9 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Impostazione e modo MacCready (manuale o auto) correnti. (Touch-screen/Solo "
+"PC) Inoltre, se l'InfoBox è attiva, utilizzato per regolare l'impostazione "
+"MacCready, tramite i tasti cursore su/giù."
 
 #: src/InfoBoxes/Content/Factory.cpp:190
 #, no-c-format
@@ -701,8 +718,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"La distanza al pilone attualmente selezionato. Per i temi AAT, questa è la "
-"distanza all'obiettivo all'interno del settore AAT."
+"La distanza dall'attuale punto di virata selezionato. Per gli obiettivi AAT, "
+"questa è la distanza dall'obiettivo entro il settore AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:200
 #, no-c-format
@@ -737,6 +754,7 @@ msgid ""
 "Additional altitude required to reach the next turn point. For AAT tasks, "
 "the target within the AAT sector is used."
 msgstr ""
+"Altitudine addizionale richiesta per raggiungere il prossimo punto di virata"
 
 #: src/InfoBoxes/Content/Factory.cpp:220
 #, no-c-format
