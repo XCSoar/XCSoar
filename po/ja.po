@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-04 15:17+0000\n"
+"PO-Revision-Date: 2012-07-07 18:35+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-05 09:41+0000\n"
-"X-Generator: Launchpad (build 15544)\n"
+"X-Launchpad-Export-Date: 2012-07-09 09:48+0000\n"
+"X-Generator: Launchpad (build 15558)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -6526,7 +6526,7 @@ msgstr "ノット"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:149
 msgid "Aircraft/Wind speed"
-msgstr "航空機/風　の速度"
+msgstr "航空機/風の速度"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:153
 msgid ""
@@ -8363,7 +8363,7 @@ msgstr "投棄時間"
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
-msgstr ""
+msgstr "テキスト－"
 
 #: Data/Dialogs/WaypointList.xml:1 Data/Dialogs/WaypointList_L.xml:1
 msgid "Select Waypoint"
@@ -8373,7 +8373,7 @@ msgstr "ウエイポイントを選択"
 #: Data/Dialogs/dlgFontEdit.xml:22 Data/Dialogs/dlgTextEntry_Keyboard.xml:7
 #: Data/Dialogs/dlgTextEntry_Keyboard_L.xml:7
 msgid "Ok"
-msgstr ""
+msgstr "OK"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:53 Data/Dialogs/dlgPlaneDetails_L.xml:45
 msgid "Max. Cruise Speed"
@@ -8582,7 +8582,7 @@ msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
-"偽の速度信号発生\r\n"
+"にせの速度信号発生\r\n"
 "旋回中モード以外で速度音を発生する"
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
@@ -8797,7 +8797,7 @@ msgstr "保存"
 
 #: Data/Dialogs/dlgTextEntry.xml:7
 msgid "A+"
-msgstr ""
+msgstr "テキスト＋"
 
 #: Data/Dialogs/dlgConfiguration.xml:17 Data/Dialogs/dlgConfiguration_L.xml:8
 #: Data/Dialogs/dlgPlanePolar.xml:64 Data/Dialogs/dlgPlanePolar_L.xml:52
@@ -8985,11 +8985,11 @@ msgstr "経度"
 
 #: Data/Dialogs/pnlTaskEdit.xml:10
 msgid "v"
-msgstr ""
+msgstr "速度"
 
 #: Data/Dialogs/dlgSwitches.xml:45
 msgid "User middle"
-msgstr ""
+msgstr "ユーザー　中央"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:10
 #: Data/Dialogs/dlgWaypointDetails_L.xml:4 Data/Input/default.xci:1054
@@ -9220,7 +9220,7 @@ msgstr "ズーム"
 
 #: Data/Input/default.xci:728
 msgid "Vario ASI zeroed"
-msgstr ""
+msgstr "バリオ　速度0設定"
 
 #: Data/Input/default.xci:735
 msgid "Accelerometer leveled"
@@ -9240,7 +9240,7 @@ msgstr "離陸"
 
 #: Data/Input/default.xci:75
 msgid "Final glide through terrain"
-msgstr ""
+msgstr "地形ごしのファイナルグライド"
 
 #: Data/Input/default.xci:729
 msgid ""
