@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-04 16:03+0000\n"
-"Last-Translator: Adrien Ott <Unknown>\n"
+"PO-Revision-Date: 2012-07-07 09:47+0000\n"
+"Last-Translator: AUDIER Daniel <osteocool@yahoo.fr>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-05 09:41+0000\n"
-"X-Generator: Launchpad (build 15544)\n"
+"X-Launchpad-Export-Date: 2012-07-09 09:48+0000\n"
+"X-Generator: Launchpad (build 15558)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -504,6 +504,10 @@ msgid ""
 "only: In simulation mode, this value is adjustable with the up/down arrow "
 "keys and the right/left arrow keys also cause the glider to turn."
 msgstr ""
+"Altitude au dessus du niveau de la mer donnée par le GPS (MSL). \r\n"
+"Pour les terminaux à écran tactile et pour PC seulement: en mode simulation, "
+"cette valeur est ajustable à l'aide des boutons haut/bas. Les boutons droite/"
+"gauche permettent au planeur de virer."
 
 #: src/InfoBoxes/Content/Factory.cpp:90
 #, no-c-format
@@ -530,7 +534,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:100
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr ""
+msgstr "Vz moyenne sur les 30 dernières secondes."
 
 #: src/InfoBoxes/Content/Factory.cpp:101
 #, no-c-format
@@ -697,6 +701,10 @@ msgid ""
 "auto). (Touch-screen/PC only) Also used to adjust the MacCready setting if "
 "the InfoBox is active, by using the up/down cursor keys."
 msgstr ""
+"Le réglage MacReady actuel et le mode MacReady actuel (manuel/auto).\r\n"
+"Pour les terminaux à écran tactile et pour PC seulement: utilisé aussi pour "
+"pour le réglage du MacReady si l'InfoBox est active, en utilisant les "
+"boutons Haut/Bas."
 
 #: src/InfoBoxes/Content/Factory.cpp:190
 #, no-c-format
@@ -775,6 +783,11 @@ msgid ""
 "task. (Touch-screen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Nom du point de virage actuellement sélectionné. Quand cette InfoBox est "
+"active, les touches Haut/Bas permettent de sélectionner les autres points de "
+"virages du circuit en cours. \r\n"
+"Pour les terminaux à écran tactile et pour PC seulement: en cliquant sur le "
+"bouton Enter les détails du point de virage s'affichent."
 
 #: src/InfoBoxes/Content/Factory.cpp:230
 #, no-c-format
@@ -1223,6 +1236,15 @@ msgid ""
 "height of the glider if its true airspeed is greater than the MacCready and "
 "best L/D speeds."
 msgstr ""
+"Finesse nécessaire pour atteindre le prochain point de virage (distance au "
+"WP / hauteur nécessaire + hauteur de sécurité).\r\n"
+"Des valeurs négatives indiquent qu'il faut monter pour atteindre la hauteur "
+"nécessaire. Si la hauteur est voisine de zéro la valeur affichée est '---'."
+"\r\n"
+"Remarque: ce calcul peut-être optimiste car il déduit la hauteur due à "
+"l'énergie cinétique du planeur de la hauteur nécessaire pour atteindre le "
+"point de virage si la vitesse air est supérieur à celle du calage MacReady "
+"et de la finesse max."
 
 #: src/InfoBoxes/Content/Factory.cpp:470
 #, no-c-format
