@@ -15,12 +15,12 @@ that have native methods, to prepare for calling "javah".
   <property name="src.dir" location="../../../android/src"/>
   <property name="native.classes.dir" location="classes"/>
 
-  <target name="compile-jni-classes" depends="-setup">
+  <target name="compile-jni-classes" depends="-build-setup">
     <mkdir dir="${native.classes.dir}"/>
     <javac source="${java.source}" target="${java.target}"
            debug="true" extdirs=""
            destdir="${native.classes.dir}"
-           bootclasspathref="android.target.classpath"
+           bootclasspathref="project.target.class.path"
            verbose="${verbose}">
       <src path="${src.dir}" />
       <include name="DifferentTouchInput.java"/>
