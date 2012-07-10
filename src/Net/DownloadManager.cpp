@@ -167,8 +167,7 @@ DownloadManagerThread::Tick()
   Net::Session session;
 
   while (!queue.empty() && !StandbyThread::IsStopped()) {
-    Item item(std::move(queue.front()));
-    queue.pop_front();
+    const Item &item = queue.front();
     mutex.Unlock();
 
     TCHAR path[MAX_PATH];
@@ -183,6 +182,7 @@ DownloadManagerThread::Tick()
       File::Replace(tmp, path);
 
     mutex.Lock();
+    queue.pop_front();
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
       (*i)->OnDownloadComplete(item.path_relative.c_str(), success);
   }
