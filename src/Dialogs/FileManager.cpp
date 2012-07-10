@@ -33,6 +33,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "Thread/Notify.hpp"
+#include "Thread/Mutex.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
@@ -40,6 +41,8 @@ Copyright_License {
 #include "DateTime.hpp"
 #include "Net/DownloadManager.hpp"
 #include "Util/ConvertString.hpp"
+
+#include <set>
 
 #include <assert.h> /* for MAX_PATH */
 #include <windef.h> /* for MAX_PATH */
@@ -172,13 +175,30 @@ class ManagedFileListWidget
 
   WndButton *download_button, *add_button;
 
-  bool downloads[N_REMOTE_FILES];
+  /**
+   * This mutex protects the attribute "downloads".
+   */
+  mutable Mutex mutex;
+
+  /**
+   * The list of file names (base names) that are currently being
+   * downloaded.
+   */
+  std::set<std::string> downloads;
+
   TrivialArray<FileItem, 64u> items;
 
 public:
   void CreateButtons(WidgetDialog &dialog);
 
 protected:
+  gcc_pure
+  bool IsDownloading(const char *name) const {
+    ScopeLock protect(mutex);
+    return std::find(downloads.begin(), downloads.end(),
+                     name) != downloads.end();
+  }
+
   gcc_pure
   int FindItem(const TCHAR *name) const;
 
@@ -211,8 +231,6 @@ public:
 void
 ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  std::fill(downloads, downloads + ARRAY_SIZE(downloads), false);
-
   const DialogLook &look = UIGlobals::GetDialogLook();
   UPixelScalar margin = Layout::Scale(2);
   font_height = look.list.font->GetHeight();
@@ -255,10 +273,12 @@ ManagedFileListWidget::RefreshList()
   items.clear();
 
   for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
+    const bool is_downloading = IsDownloading(remote_files[i].GetName());
+
     TCHAR path[MAX_PATH];
     if (remote_files[i].LocalPath(path) &&
-        (downloads[i] || File::Exists(path)))
-      items.append().Set(BaseName(path), downloads[i]);
+        (is_downloading || File::Exists(path)))
+      items.append().Set(BaseName(path), is_downloading);
   }
 
   ListControl &list = GetList();
@@ -339,7 +359,10 @@ ManagedFileListWidget::Download()
 
   Net::DownloadManager::Enqueue(remote_file.uri, base);
 
-  downloads[remote_index] = true;
+  mutex.Lock();
+  downloads.insert(remote_file.GetName());
+  mutex.Unlock();
+
   RefreshList();
 #endif
 }
@@ -375,7 +398,7 @@ ManagedFileListWidget::Add()
 
   add_list.clear();
   for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
-    if (downloads[i])
+    if (IsDownloading(remote_files[i].GetName()))
       /* already downloading this file */
       continue;
 
@@ -408,7 +431,10 @@ ManagedFileListWidget::Add()
 
   Net::DownloadManager::Enqueue(remote_file.uri, base);
 
-  downloads[remote_index] = true;
+  mutex.Lock();
+  downloads.insert(remote_file.GetName());
+  mutex.Unlock();
+
   RefreshList();
 #endif
 }
@@ -433,9 +459,11 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
 {
   const TCHAR *name = BaseName(path_relative);
   if (name != NULL) {
-    const int remote_index = FindRemoteFile(name);
-    if (remote_index >= 0)
-      downloads[remote_index] = false;
+    WideToACPConverter name2(name);
+    if (name2.IsValid()) {
+      ScopeLock protect(mutex);
+      downloads.erase((const char *)name2);
+    }
   }
 
   SendNotification();
