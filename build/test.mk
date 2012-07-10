@@ -668,6 +668,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunFlarmUtils \
 	TaskInfo DumpTaskFile \
 	DumpFlarmNet \
+	RunRepositoryParser \
 	IGC2NMEA \
 	NearestWaypoints
 
@@ -861,6 +862,13 @@ RUN_LIVETRACK24_SOURCES = \
 RUN_LIVETRACK24_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_LIVETRACK24_DEPENDS = LIBNET GEO MATH UTIL
 $(eval $(call link-program,RunLiveTrack24,RUN_LIVETRACK24))
+
+RUN_REPOSITORY_PARSER_SOURCES = \
+	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/Parser.cpp \
+	$(TEST_SRC_DIR)/RunRepositoryParser.cpp
+RUN_REPOSITORY_PARSER_DEPENDS = LIBNET IO OS UTIL
+$(eval $(call link-program,RunRepositoryParser,RUN_REPOSITORY_PARSER))
 
 RUN_XML_PARSER_SOURCES = \
 	$(SRC)/XML/Node.cpp \
