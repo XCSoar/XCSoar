@@ -51,6 +51,8 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
+#define REPOSITORY_URI "http://download.xcsoar.org/repository"
+
 static bool
 LocalPath(TCHAR *buffer, const AvailableFile &file)
 {
@@ -133,7 +135,8 @@ class ManagedFileListWidget
   FileRepository repository;
 
   /**
-   * This mutex protects the attribute "downloads".
+   * This mutex protects the attributes "downloads" and
+   * "repository_modified".
    */
   mutable Mutex mutex;
 
@@ -142,6 +145,12 @@ class ManagedFileListWidget
    * downloaded.
    */
   std::set<std::string> downloads;
+
+  /**
+   * Was the repository file modified, and needs to be reloaded by
+   * LoadRepositoryFile()?
+   */
+  bool repository_modified;
 
   TrivialArray<FileItem, 64u> items;
 
@@ -207,6 +216,8 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::AddListener(*this);
+
+  Net::DownloadManager::Enqueue(REPOSITORY_URI, _T("repository"));
 #endif
 }
 
@@ -234,6 +245,10 @@ ManagedFileListWidget::FindItem(const TCHAR *name) const
 void
 ManagedFileListWidget::LoadRepositoryFile()
 {
+  mutex.Lock();
+  repository_modified = false;
+  mutex.Unlock();
+
   repository.Clear();
 
   TCHAR path[MAX_PATH];
@@ -443,6 +458,9 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
     if (name2.IsValid()) {
       ScopeLock protect(mutex);
       downloads.erase((const char *)name2);
+
+      if (StringIsEqual(name2, "repository"))
+        repository_modified = true;
     }
   }
 
@@ -452,6 +470,13 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
 void
 ManagedFileListWidget::OnNotification()
 {
+  mutex.Lock();
+  bool repository_modified2 = repository_modified;
+  mutex.Unlock();
+
+  if (repository_modified2)
+    LoadRepositoryFile();
+
   RefreshList();
 }
 
