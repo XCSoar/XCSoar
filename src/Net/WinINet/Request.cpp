@@ -63,7 +63,7 @@ Net::Request::Request(Session &session, const char *url,
 
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
-    completed_event.Wait(timeout);
+    opened_event.Wait(timeout);
 
   session.handle.SetStatusCallback(old_callback);
 }
@@ -111,17 +111,18 @@ Net::Request::Send(unsigned long timeout)
 size_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
 {
+  if (!completed_event.Wait(timeout))
+    /* response timeout */
+    return 0;
+
   INTERNET_BUFFERSA InetBuff;
   FillMemory(&InetBuff, sizeof(InetBuff), 0);
   InetBuff.dwStructSize = sizeof(InetBuff);
   InetBuff.lpvBuffer = buffer;
   InetBuff.dwBufferLength = buffer_size - 1;
 
-  // If InternetReadFileExA() failed or timeout occured in WaitForSingleObject()
-  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this) &&
-      (GetLastError() != ERROR_IO_PENDING ||
-       !completed_event.Wait(timeout)))
-    // return "0 bytes read"
+  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this))
+    /* error */
     return 0;
 
   ((uint8_t *)buffer)[InetBuff.dwBufferLength] = 0;
