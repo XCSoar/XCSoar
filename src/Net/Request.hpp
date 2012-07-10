@@ -67,9 +67,9 @@ namespace Net {
      */
     bool first_read;
 #elif defined(ANDROID)
-    static const unsigned long INFINITE = 0;
+    static const unsigned INFINITE = 0;
 #else
-    static const unsigned long INFINITE = (unsigned long)-1;
+    static const unsigned INFINITE = (unsigned)-1;
 #endif
 
 #ifdef HAVE_CURL
@@ -94,20 +94,20 @@ namespace Net {
      * Creates a Request that can be used to get data from a webserver.
      * @param session Session instance that is used for creating this Request
      * @param url the absolute URL of the request
-     * @param timeout Timeout used for creating this request
+     * @param timeout_ms Timeout used for creating this request
      */
     Request(Session &session, const char *url,
-            unsigned long timeout = INFINITE);
+            unsigned timeout_ms=INFINITE);
 
 #ifdef HAVE_WININET
     /**
      * Creates a Request that can be used to get data from a webserver.
      * @param connection Connection instance that is used for creating this Request
      * @param file The file to request (e.g. /downloads/index.htm)
-     * @param timeout Timeout used for creating this request
+     * @param timeout_ms Timeout used for creating this request
      */
     Request(Connection &connection, const char *file,
-            unsigned long timeout = INFINITE);
+            unsigned timeout_ms=INFINITE);
 #endif
 
 #if defined(HAVE_CURL) || defined(HAVE_JAVA_NET)
@@ -142,20 +142,21 @@ namespace Net {
      * Send the request to the server. If this function fails the server
      * can't be reached. If the file doesn't exists the webserver usually
      * returns a valid 404 page.
-     * @param timeout Timeout used for sending the request
+     * @param timeout_ms Timeout used for sending the request
      * @return True if the connection was established successfully and
      * the request was sent
      */
-    bool Send(unsigned long timeout = INFINITE);
+    bool Send(unsigned timeout_ms=INFINITE);
 #endif
 
     /**
      * Reads a number of bytes from the server.
      * This function must not be called before Send() !
-     * @param timeout Timeout used for retrieving the data chunk
+     * @param timeout_ms Timeout used for retrieving the data chunk
      * @return Number of bytes that were read from the server. 0 means EOF.
      */
-    size_t Read(void *buffer, size_t buffer_size, unsigned long timeout = INFINITE);
+    size_t Read(void *buffer, size_t buffer_size,
+                unsigned timeout_ms=INFINITE);
 
 #ifdef HAVE_WININET
     /** Internal callback function. Don't use this manually! */

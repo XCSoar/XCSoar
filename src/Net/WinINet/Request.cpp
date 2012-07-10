@@ -43,7 +43,7 @@ RequestCallback(HINTERNET hInternet,
 }
 
 Net::Request::Request(Session &session, const char *url,
-                      unsigned long timeout)
+                      unsigned timeout_ms)
   :first_read(true)
 {
   INTERNET_STATUS_CALLBACK old_callback =
@@ -63,13 +63,13 @@ Net::Request::Request(Session &session, const char *url,
 
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
-    opened_event.Wait(timeout);
+    opened_event.Wait(timeout_ms);
 
   session.handle.SetStatusCallback(old_callback);
 }
 
 Net::Request::Request(Connection &connection, const char *file,
-                      unsigned long timeout)
+                      unsigned timeout_ms)
   :first_read(true)
 {
   INTERNET_STATUS_CALLBACK old_callback =
@@ -80,7 +80,7 @@ Net::Request::Request(Connection &connection, const char *file,
 
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
-    opened_event.Wait(timeout);
+    opened_event.Wait(timeout_ms);
 
   connection.handle.SetStatusCallback(old_callback);
 }
@@ -92,7 +92,7 @@ Net::Request::Created() const
 }
 
 bool
-Net::Request::Send(unsigned long timeout)
+Net::Request::Send(unsigned timeout_ms)
 {
   assert(handle.IsDefined());
 
@@ -102,17 +102,17 @@ Net::Request::Send(unsigned long timeout)
 
   // If HttpSendRequestA() failed or timeout occured in WaitForSingleObject()
   if (GetLastError() != ERROR_IO_PENDING ||
-      !completed_event.Wait(timeout))
+      !completed_event.Wait(timeout_ms))
     return false;
   else
     return last_error == ERROR_SUCCESS;
 }
 
 size_t
-Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
+Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {
   if (first_read) {
-    if (!completed_event.Wait(timeout)) {
+    if (!completed_event.Wait(timeout_ms)) {
       /* response timeout */
       successful = false;
       return 0;

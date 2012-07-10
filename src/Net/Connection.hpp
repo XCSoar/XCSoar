@@ -47,9 +47,10 @@ namespace Net {
      * Opens a connection that can be used to create requests.
      * @param session A Session instance used for creating this Connection
      * @param server The server to connect to (e.g. www.xcsoar.org)
-     * @param timeout Timeout used for creating the connection handle
+     * @param timeout_ms Timeout used for creating the connection handle
      */
-    Connection(Session &session, const char *server, unsigned long timeout = INFINITE);
+    Connection(Session &session, const char *server,
+               unsigned timeout_ms=INFINITE);
 
     /**
      * Returns whether the Connection has been created successfully.

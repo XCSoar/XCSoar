@@ -38,7 +38,7 @@ ConnectionCallback(HINTERNET hInternet,
 }
 
 Net::Connection::Connection(Session &session, const char *server,
-                            unsigned long timeout)
+                            unsigned timeout_ms)
 {
   INTERNET_STATUS_CALLBACK old_callback =
     session.handle.SetStatusCallback(ConnectionCallback);
@@ -50,7 +50,7 @@ Net::Connection::Connection(Session &session, const char *server,
 
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the connection handle
-    event.Wait(timeout);
+    event.Wait(timeout_ms);
 }
 
 bool

@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 Net::Request::Request(Session &_session, const TCHAR *url,
-                      unsigned long timeout)
+                      unsigned timeout_ms)
   :session(_session), handle(curl_easy_init())
 {
   // XXX implement timeout
@@ -94,11 +94,11 @@ Net::Request::Created() const
 }
 
 size_t
-Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
+Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
 {
   assert(handle != NULL);
 
-  const int timeout_ms = timeout == INFINITE ? -1 : timeout;
+  const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 
   Buffer::Range range;
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
