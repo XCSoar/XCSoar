@@ -43,6 +43,7 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 
 #include <set>
+#include <vector>
 
 #include <assert.h> /* for MAX_PATH */
 #include <windef.h> /* for MAX_PATH */
@@ -369,15 +370,15 @@ ManagedFileListWidget::Download()
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 
-static TrivialArray<unsigned, N_REMOTE_FILES> add_list;
+static const std::vector<const RemoteFile *> *add_list;
 
 static void
 OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  assert(i < add_list.size());
-  assert(add_list[i] < N_REMOTE_FILES);
+  assert(add_list != NULL);
+  assert(i < add_list->size());
 
-  const RemoteFile &file = remote_files[add_list[i]];
+  const RemoteFile &file = *(*add_list)[i];
 
   ACPToWideConverter name(file.GetName());
   if (name.IsValid())
@@ -396,35 +397,36 @@ ManagedFileListWidget::Add()
   if (items.empty())
     return;
 
-  add_list.clear();
+  std::vector<const RemoteFile *> list;
   for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
-    if (IsDownloading(remote_files[i].GetName()))
+    const RemoteFile &remote_file = remote_files[i];
+
+    if (IsDownloading(remote_file.GetName()))
       /* already downloading this file */
       continue;
 
-    ACPToWideConverter name(remote_files[i].GetName());
+    ACPToWideConverter name(remote_file.GetName());
     if (!name.IsValid())
       continue;
 
     if (FindItem(name) < 0)
-      add_list.append(i);
+      list.push_back(&remote_file);
   }
 
-  if (add_list.empty())
+  if (list.empty())
     return;
 
+  add_list = &list;
   int i = ListPicker(UIGlobals::GetMainWindow(), _("Select a file"),
-                     add_list.size(), 0, Layout::FastScale(18),
+                     list.size(), 0, Layout::FastScale(18),
                      OnPaintAddItem);
+  add_list = NULL;
   if (i < 0)
     return;
 
-  const unsigned remote_index = add_list[i];
+  assert((unsigned)i < list.size());
 
-  assert((unsigned)i < add_list.size());
-  assert(remote_index < N_REMOTE_FILES);
-
-  const RemoteFile &remote_file = remote_files[remote_index];
+  const RemoteFile &remote_file = *list[i];
   ACPToWideConverter base(remote_file.GetName());
   if (!base.IsValid())
     return;
