@@ -120,6 +120,11 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
       /* I/O error */
       return 0;
 
+    unsigned status = handle.GetStatusCode();
+    if (status < 200 || status >= 300)
+      /* unsuccessful HTTP status */
+      return 0;
+
     first_read = false;
   }
 
