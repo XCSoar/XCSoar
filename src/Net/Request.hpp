@@ -61,6 +61,11 @@ namespace Net {
     Trigger opened_event, completed_event;
     /** The last error code that was retrieved by the Callback() function */
     DWORD last_error;
+
+    /**
+     * If true, then Read() will check for response errors.
+     */
+    bool first_read;
 #elif defined(ANDROID)
     static const unsigned long INFINITE = 0;
 #else

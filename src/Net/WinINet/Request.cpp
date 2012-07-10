@@ -44,6 +44,7 @@ RequestCallback(HINTERNET hInternet,
 
 Net::Request::Request(Session &session, const char *url,
                       unsigned long timeout)
+  :first_read(true)
 {
   INTERNET_STATUS_CALLBACK old_callback =
     session.handle.SetStatusCallback(RequestCallback);
@@ -69,6 +70,7 @@ Net::Request::Request(Session &session, const char *url,
 
 Net::Request::Request(Connection &connection, const char *file,
                       unsigned long timeout)
+  :first_read(true)
 {
   INTERNET_STATUS_CALLBACK old_callback =
     connection.handle.SetStatusCallback(RequestCallback);
@@ -109,9 +111,17 @@ Net::Request::Send(unsigned long timeout)
 size_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
 {
-  if (!completed_event.Wait(timeout))
-    /* response timeout */
-    return 0;
+  if (first_read) {
+    if (!completed_event.Wait(timeout))
+      /* response timeout */
+      return 0;
+
+    if (last_error != ERROR_SUCCESS)
+      /* I/O error */
+      return 0;
+
+    first_read = false;
+  }
 
   INTERNET_BUFFERSA InetBuff;
   FillMemory(&InetBuff, sizeof(InetBuff), 0);
