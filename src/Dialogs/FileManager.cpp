@@ -457,16 +457,21 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
                                           bool success)
 {
   const TCHAR *name = BaseName(path_relative);
-  if (name != NULL) {
-    WideToACPConverter name2(name);
-    if (name2.IsValid()) {
-      ScopeLock protect(mutex);
-      downloads.erase((const char *)name2);
+  if (name == NULL)
+    return;
 
-      if (StringIsEqual(name2, "repository"))
-        repository_modified = true;
-    }
-  }
+  WideToACPConverter name2(name);
+  if (!name2.IsValid())
+    return;
+
+  mutex.Lock();
+
+  downloads.erase((const char *)name2);
+
+  if (StringIsEqual(name2, "repository"))
+    repository_modified = true;
+
+  mutex.Unlock();
 
   SendNotification();
 }
