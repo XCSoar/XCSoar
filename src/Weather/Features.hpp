@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Net/Features.hpp"
 
-#ifdef HAVE_NET
+#ifdef HAVE_HTTP
 #define HAVE_NOAA
 #endif
 

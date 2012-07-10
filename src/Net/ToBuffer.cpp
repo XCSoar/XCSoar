@@ -28,8 +28,6 @@ Copyright_License {
 
 #include <stdint.h>
 
-#ifdef HAVE_NET
-
 int
 Net::DownloadToBuffer(Session &session, const char *url,
                       void *_buffer, size_t max_length,
@@ -59,5 +57,3 @@ Net::DownloadToBufferJob::Run(OperationEnvironment &env)
 {
   length = DownloadToBuffer(session, url, buffer, max_length, env);
 }
-
-#endif

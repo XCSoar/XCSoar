@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Net/ToFile.hpp"
 #include "Net/Session.hpp"
-#include "Net/Features.hpp"
 #include "OS/Args.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 
@@ -31,7 +30,6 @@ Copyright_License {
 
 int main(int argc, char **argv)
 {
-#ifdef HAVE_NET
   Args args(argc, argv, "URL PATH");
   const char *url = args.ExpectNext();
   tstring path = args.ExpectNextT();
@@ -50,8 +48,4 @@ int main(int argc, char **argv)
 
   puts(md5_digest);
   return EXIT_SUCCESS;
-#else
-  fprintf(stderr, "Networking not available on this platform\n");
-  return EXIT_FAILURE;
-#endif
 }

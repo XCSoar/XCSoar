@@ -23,9 +23,6 @@ Copyright_License {
 
 #include "Net/ToFile.hpp"
 #include "Net/Features.hpp"
-
-#ifdef HAVE_NET
-
 #include "Net/Request.hpp"
 #include "Operation/Operation.hpp"
 #include "OS/FileUtil.hpp"
@@ -107,5 +104,3 @@ Net::DownloadToFileJob::Run(OperationEnvironment &env)
 {
   success = DownloadToFile(session, url, path, md5_digest,env);
 }
-
-#endif

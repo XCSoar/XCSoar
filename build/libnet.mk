@@ -1,10 +1,10 @@
 # Build rules for the HTTP client library
 
 LIBNET_SOURCES =
-HAVE_NET := n
+HAVE_HTTP := n
 
 ifneq ($(findstring $(TARGET),PC WINE CYGWIN),)
-HAVE_NET := y
+HAVE_HTTP := y
 LIBNET_SOURCES += \
 	$(SRC)/Net/WinINet/Session.cpp \
 	$(SRC)/Net/WinINet/Connection.cpp \
@@ -16,7 +16,7 @@ endif
 # dependencies low
 ifeq ($(TARGET_IS_DARWIN),n)
 ifeq ($(TARGET),UNIX)
-HAVE_NET := y
+HAVE_HTTP := y
 
 LIBNET_SOURCES += \
 	$(SRC)/Net/CURL/Session.cpp \
@@ -31,14 +31,14 @@ endif
 endif
 
 ifeq ($(TARGET),ANDROID)
-HAVE_NET := y
+HAVE_HTTP := y
 
 LIBNET_SOURCES += \
 	$(SRC)/Net/Java/Session.cpp \
 	$(SRC)/Net/Java/Request.cpp
 endif
 
-ifeq ($(HAVE_NET),y)
+ifeq ($(HAVE_HTTP),y)
 
 LIBNET_SOURCES += \
 	$(SRC)/Net/DownloadManager.cpp \

@@ -261,7 +261,7 @@ ifeq ($(HAVE_PCM_PLAYER),y)
 DIALOG_SOURCES += $(SRC)/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp
 endif
 
-ifeq ($(HAVE_NET),y)
+ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/dlgNOAAList.cpp \
 	$(SRC)/Dialogs/dlgNOAADetails.cpp \
@@ -812,7 +812,7 @@ ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
 endif
 
-ifeq ($(HAVE_NET),y)
+ifeq ($(HAVE_HTTP),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Renderer/NOAAListRenderer.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \

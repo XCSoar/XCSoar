@@ -683,7 +683,7 @@ DEBUG_PROGRAM_NAMES += FeedTCP \
   FeedFlyNetData
 endif
 
-ifeq ($(HAVE_NET),y)
+ifeq ($(HAVE_HTTP),y)
 DEBUG_PROGRAM_NAMES += DownloadFile RunDownloadToFile RunNOAADownloader RunSkyLinesTracking RunLiveTrack24
 endif
 
@@ -1626,7 +1626,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 
-ifeq ($(HAVE_NET),y)
+ifeq ($(HAVE_HTTP),y)
 RUN_MAP_WINDOW_SOURCES += \
 	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/NOAAStore.cpp

@@ -414,7 +414,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckNet)"))) {
-#ifndef HAVE_NET
+#ifndef HAVE_HTTP
     invalid = true;
 #endif
 

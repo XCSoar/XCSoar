@@ -27,7 +27,7 @@ Copyright_License {
 #include "Net/Features.hpp"
 
 /* live tracking requires networking */
-#ifdef HAVE_NET
+#ifdef HAVE_HTTP
 #define HAVE_TRACKING
 #endif
 
