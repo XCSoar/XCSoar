@@ -63,15 +63,17 @@ Net::DownloadManager::IsAvailable()
 void
 Net::DownloadManager::AddListener(DownloadListener &listener)
 {
-  if (download_manager != NULL)
-    download_manager->AddListener(listener);
+  assert(download_manager != NULL);
+
+  download_manager->AddListener(listener);
 }
 
 void
 Net::DownloadManager::RemoveListener(DownloadListener &listener)
 {
-  if (download_manager != NULL)
-    download_manager->RemoveListener(listener);
+  assert(download_manager != NULL);
+
+  download_manager->RemoveListener(listener);
 }
 
 void

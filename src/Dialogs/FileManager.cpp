@@ -215,9 +215,11 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UpdateButtons();
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  Net::DownloadManager::AddListener(*this);
+  if (Net::DownloadManager::IsAvailable()) {
+    Net::DownloadManager::AddListener(*this);
 
-  Net::DownloadManager::Enqueue(REPOSITORY_URI, _T("repository"));
+    Net::DownloadManager::Enqueue(REPOSITORY_URI, _T("repository"));
+  }
 #endif
 }
 
@@ -225,7 +227,9 @@ void
 ManagedFileListWidget::Unprepare()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  Net::DownloadManager::RemoveListener(*this);
+  if (Net::DownloadManager::IsAvailable())
+    Net::DownloadManager::RemoveListener(*this);
+
   ClearNotification();
 #endif
 
