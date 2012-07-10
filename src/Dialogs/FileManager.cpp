@@ -36,95 +36,49 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
+#include "IO/FileLineReader.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "DateTime.hpp"
 #include "Net/DownloadManager.hpp"
 #include "Util/ConvertString.hpp"
+#include "Repository/FileRepository.hpp"
+#include "Repository/Parser.hpp"
 
 #include <set>
 #include <vector>
 
-#include <assert.h> /* for MAX_PATH */
+#include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
-struct RemoteFile {
-  const char *uri;
+static bool
+LocalPath(TCHAR *buffer, const AvailableFile &file)
+{
+  ACPToWideConverter base(file.GetName());
+  if (!base.IsValid())
+    return false;
 
-  gcc_pure
-  const char *GetName() const {
-    assert(uri != NULL);
-    const char *slash = strrchr(uri, '/');
-    assert(slash != NULL);
-    assert(slash[1] != 0);
-    return slash + 1;
-  }
-
-  bool LocalPath(TCHAR *buffer) const {
-    const char *base_narrow = GetName();
-    ACPToWideConverter base(base_narrow);
-    if (!base.IsValid())
-      return false;
-
-    ::LocalPath(buffer, base);
-    return true;
-  }
-};
-
-/**
- * List of downloadable files.
- *
- * TODO: make the list dynamic, not hard-coded.
- */
-static gcc_constexpr_data RemoteFile remote_files[] = {
-  { "http://www.flarmnet.org/files/data.fln",
-  },
-  { "http://download.xcsoar.org/waypoints/France.cup",
-  },
-  { "http://download.xcsoar.org/waypoints/Germany.cup",
-  },
-  { "http://download.xcsoar.org/waypoints/Netherlands.cup",
-  },
-  { "http://download.xcsoar.org/waypoints/Poland.cup",
-  },
-  { "http://www.daec.de/fileadmin/user_upload/files/2012/service/luftraumdaten/120312OpenAir.txt",
-  },
-  { "http://download.xcsoar.org/maps/ALPS.xcm",
-  },
-  { "http://download.xcsoar.org/maps/FRA_FULL.xcm",
-  },
-  { "http://download.xcsoar.org/maps/GER.xcm",
-  },
-  { "http://download.xcsoar.org/maps/POL.xcm",
-  },
-  { NULL }
-};
-
-static gcc_constexpr_data size_t N_REMOTE_FILES = ARRAY_SIZE(remote_files) - 1;
+  ::LocalPath(buffer, base);
+  return true;
+}
 
 gcc_pure
-static int
-FindRemoteFile(const char *name)
+static const AvailableFile *
+FindRemoteFile(const FileRepository &repository, const char *name)
 {
-  for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
-    const char *base = remote_files[i].GetName();
-    if (StringIsEqual(base, name))
-      return i;
-  }
-
-  return -1;
+  return repository.FindByName(name);
 }
 
 #ifdef _UNICODE
 gcc_pure
-static int
-FindRemoteFile(const TCHAR *name)
+static const AvailableFile *
+FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 {
   WideToACPConverter name2(name);
   if (!name2.IsValid())
-    return -1;
+    return NULL;
 
-  return FindRemoteFile(name2);
+  return FindRemoteFile(repository, name2);
 }
 #endif
 
@@ -176,6 +130,8 @@ class ManagedFileListWidget
 
   WndButton *download_button, *add_button;
 
+  FileRepository repository;
+
   /**
    * This mutex protects the attribute "downloads".
    */
@@ -201,8 +157,14 @@ protected:
   }
 
   gcc_pure
+  bool IsDownloading(const AvailableFile &file) const {
+    return IsDownloading(file.GetName());
+  }
+
+  gcc_pure
   int FindItem(const TCHAR *name) const;
 
+  void LoadRepositoryFile();
   void RefreshList();
   void UpdateButtons();
 
@@ -239,6 +201,7 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   UPixelScalar row_height = std::max(UPixelScalar(3 * margin + 2 * font_height),
                                      Layout::GetMaximumControlHeight());
   CreateList(parent, look, rc, row_height);
+  LoadRepositoryFile();
   RefreshList();
   UpdateButtons();
 
@@ -269,15 +232,30 @@ ManagedFileListWidget::FindItem(const TCHAR *name) const
 }
 
 void
+ManagedFileListWidget::LoadRepositoryFile()
+{
+  repository.Clear();
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("repository"));
+  FileLineReaderA reader(path);
+  if (reader.error())
+    return;
+
+  ParseFileRepository(repository, reader);
+}
+
+void
 ManagedFileListWidget::RefreshList()
 {
   items.clear();
 
-  for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
-    const bool is_downloading = IsDownloading(remote_files[i].GetName());
+  for (auto i = repository.begin(), end = repository.end(); i != end; ++i) {
+    const auto &remote_file = *i;
+    const bool is_downloading = IsDownloading(remote_file);
 
     TCHAR path[MAX_PATH];
-    if (remote_files[i].LocalPath(path) &&
+    if (LocalPath(path, remote_file) &&
         (is_downloading || File::Exists(path)))
       items.append().Set(BaseName(path), is_downloading);
   }
@@ -301,9 +279,9 @@ ManagedFileListWidget::UpdateButtons()
 
   download_button->SetEnabled(Net::DownloadManager::IsAvailable() &&
                               !items.empty() &&
-                              FindRemoteFile(items[current].name) >= 0);
-  add_button->SetEnabled(Net::DownloadManager::IsAvailable() &&
-                         items.size() < N_REMOTE_FILES);
+                              FindRemoteFile(repository,
+                                             items[current].name) != NULL);
+  add_button->SetEnabled(Net::DownloadManager::IsAvailable());
 }
 
 void
@@ -349,16 +327,16 @@ ManagedFileListWidget::Download()
   assert(current < items.size());
 
   const FileItem &item = items[current];
-  const int remote_index = FindRemoteFile(item.name);
-  if (remote_index < 0)
+  const AvailableFile *remote_file_p = FindRemoteFile(repository, item.name);
+  if (remote_file_p == NULL)
     return;
 
-  const RemoteFile &remote_file = remote_files[remote_index];
+  const AvailableFile &remote_file = *remote_file_p;
   ACPToWideConverter base(remote_file.GetName());
   if (!base.IsValid())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.uri, base);
+  Net::DownloadManager::Enqueue(remote_file.uri.c_str(), base);
 
   mutex.Lock();
   downloads.insert(remote_file.GetName());
@@ -370,7 +348,7 @@ ManagedFileListWidget::Download()
 
 #ifdef HAVE_DOWNLOAD_MANAGER
 
-static const std::vector<const RemoteFile *> *add_list;
+static const std::vector<AvailableFile> *add_list;
 
 static void
 OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
@@ -378,7 +356,7 @@ OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
   assert(add_list != NULL);
   assert(i < add_list->size());
 
-  const RemoteFile &file = *(*add_list)[i];
+  const AvailableFile &file = (*add_list)[i];
 
   ACPToWideConverter name(file.GetName());
   if (name.IsValid())
@@ -397,9 +375,9 @@ ManagedFileListWidget::Add()
   if (items.empty())
     return;
 
-  std::vector<const RemoteFile *> list;
-  for (unsigned i = 0; remote_files[i].uri != NULL; ++i) {
-    const RemoteFile &remote_file = remote_files[i];
+  std::vector<AvailableFile> list;
+  for (auto i = repository.begin(), end = repository.end(); i != end; ++i) {
+    const AvailableFile &remote_file = *i;
 
     if (IsDownloading(remote_file.GetName()))
       /* already downloading this file */
@@ -410,7 +388,7 @@ ManagedFileListWidget::Add()
       continue;
 
     if (FindItem(name) < 0)
-      list.push_back(&remote_file);
+      list.push_back(remote_file);
   }
 
   if (list.empty())
@@ -426,12 +404,12 @@ ManagedFileListWidget::Add()
 
   assert((unsigned)i < list.size());
 
-  const RemoteFile &remote_file = *list[i];
+  const AvailableFile &remote_file = list[i];
   ACPToWideConverter base(remote_file.GetName());
   if (!base.IsValid())
     return;
 
-  Net::DownloadManager::Enqueue(remote_file.uri, base);
+  Net::DownloadManager::Enqueue(remote_file.GetURI(), base);
 
   mutex.Lock();
   downloads.insert(remote_file.GetName());

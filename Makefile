@@ -674,6 +674,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/XML/DataNode.cpp \
 	$(SRC)/XML/DataNodeXML.cpp \
 	\
+	$(SRC)/Repository/FileRepository.cpp \
+	$(SRC)/Repository/Parser.cpp \
+	\
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Job/Async.cpp \
 	\
