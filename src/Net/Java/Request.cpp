@@ -92,8 +92,15 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));
   jint nbytes = Java::InputStream::read(env, input_stream, array.Get());
-  if (Java::DiscardException(env) || nbytes <= 0)
+  if (Java::DiscardException(env)) {
+    successful = false;
     return 0;
+  }
+
+  if (nbytes <= 0) {
+    successful = true;
+    return 0;
+  }
 
   env->GetByteArrayRegion(array.Get(), 0, nbytes, (jbyte *)buffer);
   return nbytes;

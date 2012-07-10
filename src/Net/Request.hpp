@@ -87,6 +87,8 @@ namespace Net {
     jobject connection, input_stream;
 #endif
 
+    bool successful;
+
   public:
     /**
      * Creates a Request that can be used to get data from a webserver.
@@ -126,6 +128,14 @@ namespace Net {
      * Note that this has nothing to do with a physical connection yet!
      */
     bool Created() const;
+
+    /**
+     * Check whether the request was successful.  This must not be
+     * called before the last Read() call has returned 0.
+     */
+    bool IsSuccessful() const {
+      return successful;
+    }
 
 #ifdef HAVE_WININET
     /**

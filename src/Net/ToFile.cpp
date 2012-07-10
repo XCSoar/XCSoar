@@ -63,6 +63,9 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
       return false;
   }
 
+  if (!request.IsSuccessful())
+    return false;
+
   if (md5_digest != NULL) {
     md5.Finalize();
     md5.GetDigest(md5_digest);

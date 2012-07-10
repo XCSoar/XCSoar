@@ -108,16 +108,22 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
       break;
 
     CURLcode code = session.InfoRead(handle);
-    if (code != CURLE_AGAIN)
+    if (code != CURLE_AGAIN) {
+      successful = code == CURLE_OK;
       return 0;
+    }
 
     if (mcode != CURLM_CALL_MULTI_PERFORM &&
-        !session.Select(timeout_ms))
+        !session.Select(timeout_ms)) {
+      successful = false;
       return 0;
+    }
 
     mcode = session.Perform();
-    if (mcode != CURLM_OK && mcode != CURLM_CALL_MULTI_PERFORM)
+    if (mcode != CURLM_OK && mcode != CURLM_CALL_MULTI_PERFORM) {
+      successful = false;
       return 0;
+    }
   }
 
   --buffer_size;
