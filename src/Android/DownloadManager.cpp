@@ -39,7 +39,7 @@ static AndroidDownloadManager *instance;
 
 static Java::TrivialClass util_class;
 
-static jmethodID enqueue_method;
+static jmethodID enumerate_method, enqueue_method;
 
 bool
 AndroidDownloadManager::Initialise(JNIEnv *env)
@@ -49,6 +49,9 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
 
   if (!util_class.FindOptional(env, "org/xcsoar/DownloadUtil"))
     return false;
+
+  enumerate_method = env->GetStaticMethodID(util_class, "enumerate",
+                                            "(Landroid/app/DownloadManager;J)V");
 
   enqueue_method = env->GetStaticMethodID(util_class, "enqueue",
                                           "(Landroid/app/DownloadManager;"
@@ -122,6 +125,26 @@ EraseSuffix(char *p, const char *suffix)
 }
 
 JNIEXPORT void JNICALL
+Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
+                                             jlong j_handler, jstring j_path)
+{
+  char tmp_path[MAX_PATH];
+  Java::String::CopyTo(env, j_path, tmp_path, ARRAY_SIZE(tmp_path));
+
+  char final_path[MAX_PATH];
+  strcpy(final_path, tmp_path);
+  if (!EraseSuffix(final_path, ".tmp"))
+    return;
+
+  const char *relative = RelativePath(final_path);
+  if (relative == NULL)
+    return;
+
+  Net::DownloadListener &handler = *(Net::DownloadListener *)(size_t)j_handler;
+  handler.OnDownloadAdded(relative);
+}
+
+JNIEXPORT void JNICALL
 Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jclass cls,
                                                 jstring j_path,
                                                 jboolean success)
@@ -144,6 +167,15 @@ Java_org_xcsoar_DownloadUtil_onDownloadComplete(JNIEnv *env, jclass cls,
   success = success && File::Replace(tmp_path, final_path);
 
   instance->OnDownloadComplete(relative, success);
+}
+
+void
+AndroidDownloadManager::Enumerate(JNIEnv *env, Net::DownloadListener &listener)
+{
+  assert(env != NULL);
+
+  env->CallStaticVoidMethod(util_class, enumerate_method,
+                            object.Get(), (jlong)(size_t)&listener);
 }
 
 void
@@ -170,4 +202,8 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
   env->CallStaticLongMethod(util_class, enqueue_method,
                             object.Get(), j_uri.Get(),
                             j_path.Get());
+
+  ScopeLock protect(mutex);
+  for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
+    (*i)->OnDownloadAdded(path_relative);
 }

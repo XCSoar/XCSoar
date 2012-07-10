@@ -59,6 +59,7 @@ public:
   void RemoveListener(Net::DownloadListener &listener);
   void OnDownloadComplete(const char *path_relative, bool success);
 
+  void Enumerate(JNIEnv *env, Net::DownloadListener &listener);
   void Enqueue(JNIEnv *env, const char *uri, const char *path_relative);
 };
 

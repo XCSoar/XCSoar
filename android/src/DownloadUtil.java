@@ -37,6 +37,34 @@ class DownloadUtil extends BroadcastReceiver {
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
   }
 
+  static void enumerate(DownloadManager dm, long handler) {
+    DownloadManager.Query query = new DownloadManager.Query();
+    query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
+                            DownloadManager.STATUS_PENDING |
+                            DownloadManager.STATUS_RUNNING);
+    Cursor c = dm.query(query);
+
+    if (!c.moveToFirst())
+      return;
+
+    final int columnLocalURI =
+      c.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI);
+
+    do {
+      final String uri = c.getString(columnLocalURI);
+      /* XXX this check is a kludge to identify downloads started
+         by XCSoar */
+      if (uri == null || !uri.startsWith("file:///") ||
+          uri.indexOf("/XCSoarData/") < 0)
+        continue;
+
+      /* strip the "file://" */
+      String path = uri.substring(7);
+
+      onDownloadAdded(handler, path);
+    } while (c.moveToNext());
+  }
+
   static long enqueue(DownloadManager dm, String uri, String path) {
     DownloadManager.Request request =
       new DownloadManager.Request(Uri.parse(uri));
@@ -46,6 +74,7 @@ class DownloadUtil extends BroadcastReceiver {
     return dm.enqueue(request);
   }
 
+  static native void onDownloadAdded(long handler, String path);
   static native void onDownloadComplete(String path, boolean success);
 
   static void checkComplete(DownloadManager dm) {

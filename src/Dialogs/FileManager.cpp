@@ -194,6 +194,7 @@ public:
   virtual void OnAction(int id);
 
   /* virtual methods from class Net::DownloadListener */
+  virtual void OnDownloadAdded(const TCHAR *path_relative);
   virtual void OnDownloadComplete(const TCHAR *path_relative, bool success);
 
   /* virtual methods from class Notify */
@@ -217,6 +218,7 @@ ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
     Net::DownloadManager::AddListener(*this);
+    Net::DownloadManager::Enumerate(*this);
 
     Net::DownloadManager::Enqueue(REPOSITORY_URI, _T("repository"));
   }
@@ -356,12 +358,6 @@ ManagedFileListWidget::Download()
     return;
 
   Net::DownloadManager::Enqueue(remote_file.uri.c_str(), base);
-
-  mutex.Lock();
-  downloads.insert(remote_file.GetName());
-  mutex.Unlock();
-
-  RefreshList();
 #endif
 }
 
@@ -429,12 +425,6 @@ ManagedFileListWidget::Add()
     return;
 
   Net::DownloadManager::Enqueue(remote_file.GetURI(), base);
-
-  mutex.Lock();
-  downloads.insert(remote_file.GetName());
-  mutex.Unlock();
-
-  RefreshList();
 #endif
 }
 
@@ -450,6 +440,24 @@ ManagedFileListWidget::OnAction(int id)
     Add();
     break;
   }
+}
+
+void
+ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative)
+{
+  const TCHAR *name = BaseName(path_relative);
+  if (name == NULL)
+    return;
+
+  WideToACPConverter name2(name);
+  if (!name2.IsValid())
+    return;
+
+  mutex.Lock();
+  downloads.insert((const char *)name2);
+  mutex.Unlock();
+
+  SendNotification();
 }
 
 void

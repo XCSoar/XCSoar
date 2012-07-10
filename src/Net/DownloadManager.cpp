@@ -77,6 +77,14 @@ Net::DownloadManager::RemoveListener(DownloadListener &listener)
 }
 
 void
+Net::DownloadManager::Enumerate(DownloadListener &listener)
+{
+  assert(download_manager != NULL);
+
+  download_manager->Enumerate(Java::GetEnv(), listener);
+}
+
+void
 Net::DownloadManager::Enqueue(const char *uri, const TCHAR *relative_path)
 {
   assert(download_manager != NULL);
@@ -141,9 +149,21 @@ public:
     listeners.erase(i);
   }
 
+  void Enumerate(Net::DownloadListener &listener) {
+    ScopeLock protect(mutex);
+
+    for (auto i = queue.begin(), end = queue.end(); i != end; ++i) {
+      const Item &item = *i;
+      listener.OnDownloadAdded(item.path_relative.c_str());
+    }
+  }
+
   void Enqueue(const char *uri, const TCHAR *path_relative) {
     ScopeLock protect(mutex);
     queue.push_back(Item(uri, path_relative));
+
+    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
+      (*i)->OnDownloadAdded(path_relative);
 
     if (!IsBusy())
       Trigger();
@@ -244,6 +264,14 @@ Net::DownloadManager::RemoveListener(DownloadListener &listener)
   assert(thread != NULL);
 
   thread->RemoveListener(listener);
+}
+
+void
+Net::DownloadManager::Enumerate(DownloadListener &listener)
+{
+  assert(thread != NULL);
+
+  thread->Enumerate(listener);
 }
 
 void

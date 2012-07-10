@@ -32,6 +32,12 @@ Copyright_License {
 namespace Net {
   class DownloadListener {
   public:
+    /**
+     * This is called by the #DownloadManager when a new download was
+     * added, and when DownloadManager::Enumerate() is called.
+     */
+    virtual void OnDownloadAdded(const TCHAR *path_relative) = 0;
+
     virtual void OnDownloadComplete(const TCHAR *path_relative,
                                     bool success) = 0;
   };
@@ -49,6 +55,12 @@ namespace Net {
 
     void AddListener(DownloadListener &listener);
     void RemoveListener(DownloadListener &listener);
+
+    /**
+     * Enumerate the download queue, and invoke
+     * DownloadListener::OnDownloadAdded() for each one.
+     */
+    void Enumerate(DownloadListener &listener);
 
     void Enqueue(const char *uri, const TCHAR *relative_path);
 #else
