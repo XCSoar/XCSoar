@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-05 11:22+0000\n"
-"Last-Translator: Bruc <d769487@rtrtr.com>\n"
+"PO-Revision-Date: 2012-07-09 13:15+0000\n"
+"Last-Translator: Niklas Fischer <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-06 08:36+0000\n"
-"X-Generator: Launchpad (build 15558)\n"
+"X-Launchpad-Export-Date: 2012-07-10 17:21+0000\n"
+"X-Generator: Launchpad (build 15584)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1927,6 +1927,8 @@ msgid ""
 "Absolute arrival altitude at the next waypoint in final glide.  For AAT "
 "tasks, the target within the AAT sector is used."
 msgstr ""
+"Ankunftshöhe am nächsten Wegpunkt im Endanflug. Bei AAT Aufgaben wird das "
+"Ziel aus dem AAT Sektor benutzt."
 
 #: src/InfoBoxes/Content/Factory.cpp:854 src/InfoBoxes/Content/Factory.cpp:855
 #, no-c-format
@@ -1960,7 +1962,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:874 src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
 msgid "Barogram"
-msgstr "Barogram"
+msgstr "Barogramm"
 
 #: src/InfoBoxes/Content/Factory.cpp:876
 #, no-c-format
