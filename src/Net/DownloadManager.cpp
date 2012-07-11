@@ -117,11 +117,20 @@ class DownloadManagerThread : protected StandbyThread,
       :uri(_uri), path_relative(_path_relative) {}
   };
 
+  /**
+   * Information about the current download, i.e. queue.front().
+   * Protected by StandbyThread::mutex.
+   */
+  int64_t current_size, current_position;
+
   std::list<Item> queue;
 
   std::list<Net::DownloadListener *> listeners;
 
 public:
+  DownloadManagerThread()
+    :current_size(-1), current_position(-1) {}
+
   void StopAsync() {
     ScopeLock protect(mutex);
     StandbyThread::StopAsync();
@@ -154,7 +163,14 @@ public:
 
     for (auto i = queue.begin(), end = queue.end(); i != end; ++i) {
       const Item &item = *i;
-      listener.OnDownloadAdded(item.path_relative.c_str());
+
+      int64_t size = -1, position = -1;
+      if (i == queue.begin()) {
+        size = current_size;
+        position = current_position;
+      }
+
+      listener.OnDownloadAdded(item.path_relative.c_str(), size, position);
     }
   }
 
@@ -163,7 +179,7 @@ public:
     queue.push_back(Item(uri, path_relative));
 
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      (*i)->OnDownloadAdded(path_relative);
+      (*i)->OnDownloadAdded(path_relative, -1, -1);
 
     if (!IsBusy())
       Trigger();
@@ -179,6 +195,16 @@ private:
     ScopeLock protect(const_cast<Mutex &>(mutex));
     return StandbyThread::IsStopped();
   }
+
+  virtual void SetProgressRange(unsigned range) gcc_override {
+    ScopeLock protect(mutex);
+    current_size = range;
+  }
+
+  virtual void SetProgressPosition(unsigned position) gcc_override {
+    ScopeLock protect(mutex);
+    current_position = position;
+  }
 };
 
 void
@@ -187,7 +213,11 @@ DownloadManagerThread::Tick()
   Net::Session session;
 
   while (!queue.empty() && !StandbyThread::IsStopped()) {
+    assert(current_size == -1);
+    assert(current_position == -1);
+
     const Item &item = queue.front();
+    current_position = 0;
     mutex.Unlock();
 
     TCHAR path[MAX_PATH];
@@ -202,6 +232,7 @@ DownloadManagerThread::Tick()
       File::Replace(tmp, path);
 
     mutex.Lock();
+    current_size = current_position = -1;
     queue.pop_front();
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
       (*i)->OnDownloadComplete(item.path_relative.c_str(), success);

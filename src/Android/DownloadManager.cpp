@@ -126,7 +126,8 @@ EraseSuffix(char *p, const char *suffix)
 
 JNIEXPORT void JNICALL
 Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
-                                             jlong j_handler, jstring j_path)
+                                             jlong j_handler, jstring j_path,
+                                             jlong size, jlong position)
 {
   char tmp_path[MAX_PATH];
   Java::String::CopyTo(env, j_path, tmp_path, ARRAY_SIZE(tmp_path));
@@ -141,7 +142,7 @@ Java_org_xcsoar_DownloadUtil_onDownloadAdded(JNIEnv *env, jclass cls,
     return;
 
   Net::DownloadListener &handler = *(Net::DownloadListener *)(size_t)j_handler;
-  handler.OnDownloadAdded(relative);
+  handler.OnDownloadAdded(relative, size, position);
 }
 
 JNIEXPORT void JNICALL
@@ -205,5 +206,5 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
 
   ScopeLock protect(mutex);
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnDownloadAdded(path_relative);
+    (*i)->OnDownloadAdded(path_relative, -1, -1);
 }

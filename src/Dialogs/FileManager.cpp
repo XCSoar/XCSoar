@@ -194,7 +194,8 @@ public:
   virtual void OnAction(int id);
 
   /* virtual methods from class Net::DownloadListener */
-  virtual void OnDownloadAdded(const TCHAR *path_relative);
+  virtual void OnDownloadAdded(const TCHAR *path_relative,
+                               int64_t size, int64_t position) gcc_override;
   virtual void OnDownloadComplete(const TCHAR *path_relative, bool success);
 
   /* virtual methods from class Notify */
@@ -443,7 +444,8 @@ ManagedFileListWidget::OnAction(int id)
 }
 
 void
-ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative)
+ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
+                                       int64_t size, int64_t position)
 {
   const TCHAR *name = BaseName(path_relative);
   if (name == NULL)

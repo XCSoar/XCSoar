@@ -28,6 +28,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
+#include <stdint.h>
 
 namespace Net {
   class DownloadListener {
@@ -35,8 +36,14 @@ namespace Net {
     /**
      * This is called by the #DownloadManager when a new download was
      * added, and when DownloadManager::Enumerate() is called.
+     *
+     * @param size the total size of the file when the download has
+     * been finished; -1 if unknown
+     * @param position the number of bytes already downloaded; -1 if
+     * the download is queued, but has not been started yet
      */
-    virtual void OnDownloadAdded(const TCHAR *path_relative) = 0;
+    virtual void OnDownloadAdded(const TCHAR *path_relative,
+                                 int64_t size, int64_t position) = 0;
 
     virtual void OnDownloadComplete(const TCHAR *path_relative,
                                     bool success) = 0;

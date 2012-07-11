@@ -49,6 +49,12 @@ class DownloadUtil extends BroadcastReceiver {
 
     final int columnLocalURI =
       c.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI);
+    final int columnStatus =
+      c.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS);
+    final int columnSize =
+      c.getColumnIndexOrThrow(DownloadManager.COLUMN_TOTAL_SIZE_BYTES);
+    final int columnPosition =
+      c.getColumnIndexOrThrow(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR);
 
     do {
       final String uri = c.getString(columnLocalURI);
@@ -60,8 +66,13 @@ class DownloadUtil extends BroadcastReceiver {
 
       /* strip the "file://" */
       String path = uri.substring(7);
+      int status = c.getInt(columnStatus);
+      long size = c.getLong(columnSize);
+      long position = status == DownloadManager.STATUS_RUNNING
+        ? c.getLong(columnPosition)
+        : -1;
 
-      onDownloadAdded(handler, path);
+      onDownloadAdded(handler, path, size, position);
     } while (c.moveToNext());
   }
 
@@ -74,7 +85,8 @@ class DownloadUtil extends BroadcastReceiver {
     return dm.enqueue(request);
   }
 
-  static native void onDownloadAdded(long handler, String path);
+  static native void onDownloadAdded(long handler, String path,
+                                     long size, long position);
   static native void onDownloadComplete(String path, boolean success);
 
   static void checkComplete(DownloadManager dm) {
