@@ -70,6 +70,7 @@ namespace Java {
   class URLConnection {
     static jmethodID setConnectTimeout_method;
     static jmethodID setReadTimeout_method;
+    static jmethodID getContentLength_method;
     static jmethodID getInputStream_method;
 
   public:
@@ -90,6 +91,14 @@ namespace Java {
       assert(setReadTimeout_method != NULL);
 
       env->CallVoidMethod(connection, setReadTimeout_method, timeout);
+    }
+
+    static int getContentLength(JNIEnv *env, jobject connection) {
+      assert(env != NULL);
+      assert(connection != NULL);
+      assert(getContentLength_method != NULL);
+
+      return env->CallIntMethod(connection, getContentLength_method);
     }
 
     static jobject getInputStream(JNIEnv *env, jobject connection) {

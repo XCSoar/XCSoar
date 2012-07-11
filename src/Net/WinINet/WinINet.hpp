@@ -35,6 +35,7 @@ Copyright_License {
 #include <wininet.h>
 #include <tchar.h>
 #include <assert.h>
+#include <stdint.h>
 
 namespace WinINet {
   class Handle : private NonCopyable {
@@ -215,6 +216,17 @@ namespace WinINet {
                        &status, &size)
         ? (unsigned)status
         : 0;
+    }
+
+    gcc_pure
+    int64_t GetContentLength() const {
+      DWORD value;
+      DWORD size = sizeof(value);
+
+      return QueryInfo(HTTP_QUERY_CONTENT_LENGTH|HTTP_QUERY_FLAG_NUMBER,
+                       &value, &size)
+        ? (int64_t)value
+        : -1;
     }
 
     bool SendRequest(LPCTSTR lpszHeaders, DWORD dwHeadersLength,

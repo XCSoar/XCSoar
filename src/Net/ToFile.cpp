@@ -43,6 +43,11 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
   if (!request.Send(10000))
     return false;
 
+  int64_t total = request.GetLength();
+  if (total >= 0)
+    env.SetProgressRange(total);
+  total = 0;
+
   MD5 md5;
   md5.InitKey();
 
@@ -64,6 +69,9 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
     size_t written = fwrite(buffer, 1, nbytes, file);
     if (written != (size_t)nbytes)
       return false;
+
+    total += nbytes;
+    env.SetProgressPosition(total);
   }
 
   if (md5_digest != NULL) {

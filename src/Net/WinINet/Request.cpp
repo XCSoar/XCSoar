@@ -105,6 +105,14 @@ Net::Request::Send(unsigned timeout_ms)
   return true;
 }
 
+int64_t
+Net::Request::GetLength() const
+{
+  assert(handle.IsDefined());
+
+  return handle.GetContentLength();
+}
+
 ssize_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {

@@ -43,6 +43,7 @@ Copyright_License {
 #endif
 
 #include <stddef.h>
+#include <stdint.h>
 #include <sys/types.h>
 
 namespace Net {
@@ -126,6 +127,13 @@ namespace Net {
      * @return true on success
      */
     bool Send(unsigned timeout_ms=INFINITE);
+
+    /**
+     * Returns the total length of the response body.  Returns -1 if
+     * the server did not announce a length, or if an error has
+     * occurred.
+     */
+    int64_t GetLength() const;
 
     /**
      * Reads a number of bytes from the server.

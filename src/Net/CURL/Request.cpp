@@ -113,6 +113,18 @@ Net::Request::Send(unsigned _timeout_ms)
   return true;
 }
 
+int64_t
+Net::Request::GetLength() const
+{
+  assert(handle != NULL);
+
+  double value;
+  return curl_easy_getinfo(handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD,
+                           &value) == CURLE_OK
+    ? (int64_t)value
+    : -1;
+}
+
 ssize_t
 Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
 {

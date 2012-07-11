@@ -81,6 +81,15 @@ Net::Request::Send(unsigned _timeout_ms)
   return input_stream != NULL;
 }
 
+int64_t
+Net::Request::GetLength() const
+{
+  assert(connection != NULL);
+  assert(input_stream != NULL);
+
+  return Java::URLConnection::getContentLength(env, connection);
+}
+
 ssize_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {

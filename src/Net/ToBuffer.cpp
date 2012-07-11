@@ -37,6 +37,11 @@ Net::DownloadToBuffer(Session &session, const char *url,
   if (!request.Send(10000))
     return -1;
 
+  int64_t total = request.GetLength();
+  if (total >= 0)
+    env.SetProgressRange(total);
+  total = 0;
+
   uint8_t *buffer = (uint8_t *)_buffer, *p = buffer, *end = buffer + max_length;
   while (p != end) {
     if (env.IsCancelled())
@@ -49,6 +54,9 @@ Net::DownloadToBuffer(Session &session, const char *url,
       break;
 
     p += nbytes;
+
+    total += nbytes;
+    env.SetProgressPosition(total);
   }
 
   return p - buffer;
