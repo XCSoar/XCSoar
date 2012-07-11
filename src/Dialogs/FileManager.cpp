@@ -23,34 +23,35 @@ Copyright_License {
 
 #include "FileManager.hpp"
 #include "WidgetDialog.hpp"
-#include "ListPicker.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
 #include "Form/ListWidget.hpp"
-#include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "LocalPath.hpp"
-#include "Thread/Notify.hpp"
-#include "Thread/Mutex.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Formatter/ByteSizeFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "DateTime.hpp"
-#include "Net/DownloadManager.hpp"
+#include "Net/Features.hpp"
 #include "Util/ConvertString.hpp"
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 
 #ifdef HAVE_DOWNLOAD_MANAGER
+#include "ListPicker.hpp"
+#include "Form/Button.hpp"
+#include "Net/DownloadManager.hpp"
+#include "Thread/Notify.hpp"
+#include "Thread/Mutex.hpp"
 #include "Timer.hpp"
-#endif
 
 #include <map>
 #include <vector>
+#endif
 
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
@@ -67,6 +68,8 @@ LocalPath(TCHAR *buffer, const AvailableFile &file)
   ::LocalPath(buffer, base);
   return true;
 }
+
+#ifdef HAVE_DOWNLOAD_MANAGER
 
 gcc_pure
 static const AvailableFile *
@@ -88,12 +91,14 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 }
 #endif
 
-class ManagedFileListWidget
-  : public ListWidget, private ActionListener,
-#ifdef HAVE_DOWNLOAD_MANAGER
-    private Timer,
 #endif
-    private Net::DownloadListener, private Notify {
+
+class ManagedFileListWidget
+  : public ListWidget,
+#ifdef HAVE_DOWNLOAD_MANAGER
+    private Timer, private Net::DownloadListener, private Notify,
+#endif
+    private ActionListener {
   enum Buttons {
     DOWNLOAD,
     ADD,
@@ -141,10 +146,13 @@ class ManagedFileListWidget
 
   UPixelScalar font_height;
 
+#ifdef HAVE_DOWNLOAD_MANAGER
   WndButton *download_button, *add_button;
+#endif
 
   FileRepository repository;
 
+#ifdef HAVE_DOWNLOAD_MANAGER
   /**
    * This mutex protects the attributes "downloads" and
    * "repository_modified".
@@ -162,6 +170,7 @@ class ManagedFileListWidget
    * LoadRepositoryFile()?
    */
   bool repository_modified;
+#endif
 
   TrivialArray<FileItem, 64u> items;
 
@@ -171,8 +180,12 @@ public:
 protected:
   gcc_pure
   bool IsDownloading(const char *name) const {
+#ifdef HAVE_DOWNLOAD_MANAGER
     ScopeLock protect(mutex);
     return downloads.find(name) != downloads.end();
+#else
+    return false;
+#endif
   }
 
   gcc_pure
@@ -182,6 +195,7 @@ protected:
 
   gcc_pure
   bool IsDownloading(const char *name, DownloadStatus &status_r) const {
+#ifdef HAVE_DOWNLOAD_MANAGER
     ScopeLock protect(mutex);
     auto i = downloads.find(name);
     if (i == downloads.end())
@@ -189,6 +203,9 @@ protected:
 
     status_r = i->second;
     return true;
+#else
+    return false;
+#endif
   }
 
   gcc_pure
@@ -220,10 +237,9 @@ public:
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id);
 
-  /* virtual methods from class Timer */
 #ifdef HAVE_DOWNLOAD_MANAGER
+  /* virtual methods from class Timer */
   virtual void OnTimer() gcc_override;
-#endif
 
   /* virtual methods from class Net::DownloadListener */
   virtual void OnDownloadAdded(const TCHAR *path_relative,
@@ -232,6 +248,7 @@ public:
 
   /* virtual methods from class Notify */
   virtual void OnNotification();
+#endif
 };
 
 void
@@ -286,9 +303,11 @@ ManagedFileListWidget::FindItem(const TCHAR *name) const
 void
 ManagedFileListWidget::LoadRepositoryFile()
 {
+#ifdef HAVE_DOWNLOAD_MANAGER
   mutex.Lock();
   repository_modified = false;
   mutex.Unlock();
+#endif
 
   repository.Clear();
 
@@ -334,20 +353,28 @@ ManagedFileListWidget::RefreshList()
 void
 ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  download_button = dialog.AddButton(_("Download"), this, DOWNLOAD);
-  add_button = dialog.AddButton(_("Add"), this, ADD);
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (Net::DownloadManager::IsAvailable()) {
+    download_button = dialog.AddButton(_("Download"), this, DOWNLOAD);
+    add_button = dialog.AddButton(_("Add"), this, ADD);
+  }
+#endif
 }
 
 void
 ManagedFileListWidget::UpdateButtons()
 {
-  const unsigned current = GetList().GetCursorIndex();
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (Net::DownloadManager::IsAvailable()) {
+    const unsigned current = GetList().GetCursorIndex();
 
-  download_button->SetEnabled(Net::DownloadManager::IsAvailable() &&
-                              !items.empty() &&
-                              FindRemoteFile(repository,
-                                             items[current].name) != NULL);
-  add_button->SetEnabled(Net::DownloadManager::IsAvailable());
+    download_button->SetEnabled(Net::DownloadManager::IsAvailable() &&
+                                !items.empty() &&
+                                FindRemoteFile(repository,
+                                               items[current].name) != NULL);
+    add_button->SetEnabled(Net::DownloadManager::IsAvailable());
+  }
+#endif
 }
 
 void
@@ -515,8 +542,6 @@ ManagedFileListWidget::OnTimer()
   }
 }
 
-#endif
-
 void
 ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
                                        int64_t size, int64_t position)
@@ -572,6 +597,8 @@ ManagedFileListWidget::OnNotification()
 
   RefreshList();
 }
+
+#endif
 
 void
 ShowFileManager()
