@@ -84,10 +84,6 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 }
 #endif
 
-struct DownloadItem {
-  StaticString<64u> name;
-};
-
 struct FileItem {
   StaticString<64u> name;
   StaticString<32u> size;
