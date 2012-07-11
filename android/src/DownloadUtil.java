@@ -96,6 +96,42 @@ class DownloadUtil extends BroadcastReceiver {
     return dm.enqueue(request);
   }
 
+  /**
+   * Find a download with the specified name.  Returns -1 if none was
+   * found.
+   */
+  static long findPath(DownloadManager dm, String path) {
+    DownloadManager.Query query = new DownloadManager.Query();
+    query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
+                            DownloadManager.STATUS_PENDING |
+                            DownloadManager.STATUS_RUNNING);
+    Cursor c = dm.query(query);
+
+    if (!c.moveToFirst())
+      return -1;
+
+    final int columnID =
+      c.getColumnIndexOrThrow(DownloadManager.COLUMN_ID);
+    final int columnLocalURI =
+      c.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI);
+
+    do {
+      final String uri = c.getString(columnLocalURI);
+      if (uri != null && uri.endsWith(path))
+        return c.getLong(columnID);
+    } while (c.moveToNext());
+
+    return -1;
+  }
+
+  static void cancel(DownloadManager dm, String path) {
+    long id = findPath(dm, path);
+    if (id >= 0) {
+      dm.remove(id);
+      onDownloadComplete(path, false);
+    }
+  }
+
   static native void onDownloadAdded(long handler, String path,
                                      long size, long position);
   static native void onDownloadComplete(String path, boolean success);

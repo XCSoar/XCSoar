@@ -39,7 +39,7 @@ static AndroidDownloadManager *instance;
 
 static Java::TrivialClass util_class;
 
-static jmethodID enumerate_method, enqueue_method;
+static jmethodID enumerate_method, enqueue_method, cancel_method;
 
 bool
 AndroidDownloadManager::Initialise(JNIEnv *env)
@@ -56,6 +56,11 @@ AndroidDownloadManager::Initialise(JNIEnv *env)
   enqueue_method = env->GetStaticMethodID(util_class, "enqueue",
                                           "(Landroid/app/DownloadManager;"
                                           "Ljava/lang/String;Ljava/lang/String;)J");
+
+  cancel_method = env->GetStaticMethodID(util_class, "cancel",
+                                         "(Landroid/app/DownloadManager;"
+                                         "Ljava/lang/String;)V");
+
   return true;
 }
 
@@ -207,4 +212,19 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
   ScopeLock protect(mutex);
   for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
     (*i)->OnDownloadAdded(path_relative, -1, -1);
+}
+
+void
+AndroidDownloadManager::Cancel(JNIEnv *env, const char *path_relative)
+{
+  assert(env != NULL);
+  assert(path_relative != NULL);
+
+  char tmp_absolute[MAX_PATH];
+  LocalPath(tmp_absolute, path_relative);
+  strcat(tmp_absolute, ".tmp");
+
+  Java::String j_path(env, tmp_absolute);
+  env->CallStaticVoidMethod(util_class, cancel_method,
+                            object.Get(), j_path.Get());
 }

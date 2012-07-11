@@ -61,6 +61,7 @@ public:
 
   void Enumerate(JNIEnv *env, Net::DownloadListener &listener);
   void Enqueue(JNIEnv *env, const char *uri, const char *path_relative);
+  void Cancel(JNIEnv *env, const char *path_relative);
 };
 
 #endif

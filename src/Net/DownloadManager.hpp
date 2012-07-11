@@ -70,6 +70,12 @@ namespace Net {
     void Enumerate(DownloadListener &listener);
 
     void Enqueue(const char *uri, const TCHAR *relative_path);
+
+    /**
+     * Cancel the download.  The download may however be already
+     * finished before this function attempts the cancellation.
+     */
+    void Cancel(const TCHAR *relative_path);
 #else
 
     static inline bool IsAvailable() {

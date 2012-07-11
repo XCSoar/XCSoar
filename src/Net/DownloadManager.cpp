@@ -92,6 +92,14 @@ Net::DownloadManager::Enqueue(const char *uri, const TCHAR *relative_path)
   download_manager->Enqueue(Java::GetEnv(), uri, relative_path);
 }
 
+void
+Net::DownloadManager::Cancel(const TCHAR *relative_path)
+{
+  assert(download_manager != NULL);
+
+  download_manager->Cancel(Java::GetEnv(), relative_path);
+}
+
 #else /* !ANDROID */
 
 #include "ToFile.hpp"
@@ -115,6 +123,11 @@ class DownloadManagerThread : protected StandbyThread,
 
     Item(const char *_uri, const TCHAR *_path_relative)
       :uri(_uri), path_relative(_path_relative) {}
+
+    gcc_pure
+    bool operator==(const TCHAR *relative_path) const {
+      return path_relative.compare(relative_path) == 0;
+    }
   };
 
   /**
@@ -183,6 +196,32 @@ public:
 
     if (!IsBusy())
       Trigger();
+  }
+
+  void Cancel(const TCHAR *relative_path) {
+    ScopeLock protect(mutex);
+
+    auto i = std::find(queue.begin(), queue.end(), relative_path);
+    if (i == queue.end())
+      return;
+
+    if (i == queue.begin()) {
+      /* current download; stop the thread to cancel the current file
+         and restart the thread to continue downloading the following
+         files */
+
+      StandbyThread::StopAsync();
+      StandbyThread::WaitStopped();
+
+      if (!queue.empty())
+        Trigger();
+    } else {
+      /* queued download; simply remove it from the list */
+      queue.erase(i);
+    }
+
+    for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
+      (*i)->OnDownloadComplete(relative_path, false);
   }
 
 protected:
@@ -311,6 +350,14 @@ Net::DownloadManager::Enqueue(const char *uri, const TCHAR *relative_path)
   assert(thread != NULL);
 
   thread->Enqueue(uri, relative_path);
+}
+
+void
+Net::DownloadManager::Cancel(const TCHAR *relative_path)
+{
+  assert(thread != NULL);
+
+  thread->Cancel(relative_path);
 }
 
 #endif
