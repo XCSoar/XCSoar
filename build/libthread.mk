@@ -11,6 +11,7 @@ THREAD_SOURCES = \
 	$(THREAD_SRC_DIR)/StandbyThread.cpp \
 	$(THREAD_SRC_DIR)/Mutex.cpp \
 	$(THREAD_SRC_DIR)/Debug.cpp \
+	$(THREAD_SRC_DIR)/DelayedNotify.cpp \
 	$(THREAD_SRC_DIR)/Notify.cpp
 
 # this is needed to compile Notify.cpp, which depends on the screen

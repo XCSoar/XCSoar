@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_THREAD_OPERATION_HPP
 
 #include "Operation/Operation.hpp"
-#include "Thread/Notify.hpp"
+#include "Thread/DelayedNotify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Trigger.hpp"
 #include "Util/StaticString.hpp"
@@ -38,7 +38,7 @@ Copyright_License {
  */
 class ThreadedOperationEnvironment
   : public OperationEnvironment,
-    protected Notify {
+    protected DelayedNotify {
   struct Data {
     StaticString<256u> error;
     StaticString<128u> text;
