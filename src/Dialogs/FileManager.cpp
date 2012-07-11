@@ -84,44 +84,44 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 }
 #endif
 
-struct FileItem {
-  StaticString<64u> name;
-  StaticString<32u> size;
-  StaticString<32u> last_modified;
-
-  bool downloading;
-
-  void Set(const TCHAR *_name, bool _downloading) {
-    name = _name;
-
-    TCHAR path[MAX_PATH];
-    LocalPath(path, name);
-
-    if (File::Exists(path)) {
-      FormatByteSize(size.buffer(), size.MAX_SIZE,
-                     File::GetSize(path));
-#ifdef HAVE_POSIX
-      FormatISO8601(last_modified.buffer(),
-                    BrokenDateTime::FromUnixTimeUTC(File::GetLastModification(path)));
-#else
-      // XXX implement
-      last_modified.clear();
-#endif
-    } else {
-      size.clear();
-      last_modified.clear();
-    }
-
-    downloading = _downloading;
-  }
-};
-
 class ManagedFileListWidget
   : public ListWidget, private ActionListener,
     private Net::DownloadListener, private Notify {
   enum Buttons {
     DOWNLOAD,
     ADD,
+  };
+
+  struct FileItem {
+    StaticString<64u> name;
+    StaticString<32u> size;
+    StaticString<32u> last_modified;
+
+    bool downloading;
+
+    void Set(const TCHAR *_name, bool _downloading) {
+      name = _name;
+
+      TCHAR path[MAX_PATH];
+      LocalPath(path, name);
+
+      if (File::Exists(path)) {
+        FormatByteSize(size.buffer(), size.MAX_SIZE,
+                       File::GetSize(path));
+#ifdef HAVE_POSIX
+        FormatISO8601(last_modified.buffer(),
+                      BrokenDateTime::FromUnixTimeUTC(File::GetLastModification(path)));
+#else
+        // XXX implement
+        last_modified.clear();
+#endif
+      } else {
+        size.clear();
+        last_modified.clear();
+      }
+
+      downloading = _downloading;
+    }
   };
 
   UPixelScalar font_height;
