@@ -45,7 +45,11 @@ Copyright_License {
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 
-#include <set>
+#ifdef HAVE_DOWNLOAD_MANAGER
+#include "Timer.hpp"
+#endif
+
+#include <map>
 #include <vector>
 
 #include <assert.h>
@@ -86,10 +90,17 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 
 class ManagedFileListWidget
   : public ListWidget, private ActionListener,
+#ifdef HAVE_DOWNLOAD_MANAGER
+    private Timer,
+#endif
     private Net::DownloadListener, private Notify {
   enum Buttons {
     DOWNLOAD,
     ADD,
+  };
+
+  struct DownloadStatus {
+    int64_t size, position;
   };
 
   struct FileItem {
@@ -99,7 +110,9 @@ class ManagedFileListWidget
 
     bool downloading;
 
-    void Set(const TCHAR *_name, bool _downloading) {
+    DownloadStatus download_status;
+
+    void Set(const TCHAR *_name, const DownloadStatus *_download_status) {
       name = _name;
 
       TCHAR path[MAX_PATH];
@@ -120,7 +133,9 @@ class ManagedFileListWidget
         last_modified.clear();
       }
 
-      downloading = _downloading;
+      downloading = _download_status != NULL;
+      if (downloading)
+        download_status = *_download_status;
     }
   };
 
@@ -140,7 +155,7 @@ class ManagedFileListWidget
    * The list of file names (base names) that are currently being
    * downloaded.
    */
-  std::set<std::string> downloads;
+  std::map<std::string, DownloadStatus> downloads;
 
   /**
    * Was the repository file modified, and needs to be reloaded by
@@ -157,13 +172,29 @@ protected:
   gcc_pure
   bool IsDownloading(const char *name) const {
     ScopeLock protect(mutex);
-    return std::find(downloads.begin(), downloads.end(),
-                     name) != downloads.end();
+    return downloads.find(name) != downloads.end();
   }
 
   gcc_pure
   bool IsDownloading(const AvailableFile &file) const {
     return IsDownloading(file.GetName());
+  }
+
+  gcc_pure
+  bool IsDownloading(const char *name, DownloadStatus &status_r) const {
+    ScopeLock protect(mutex);
+    auto i = downloads.find(name);
+    if (i == downloads.end())
+      return false;
+
+    status_r = i->second;
+    return true;
+  }
+
+  gcc_pure
+  bool IsDownloading(const AvailableFile &file,
+                     DownloadStatus &status_r) const {
+    return IsDownloading(file.GetName(), status_r);
   }
 
   gcc_pure
@@ -188,6 +219,11 @@ public:
 
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id);
+
+  /* virtual methods from class Timer */
+#ifdef HAVE_DOWNLOAD_MANAGER
+  virtual void OnTimer() gcc_override;
+#endif
 
   /* virtual methods from class Net::DownloadListener */
   virtual void OnDownloadAdded(const TCHAR *path_relative,
@@ -226,6 +262,8 @@ void
 ManagedFileListWidget::Unprepare()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
+  Timer::Cancel();
+
   if (Net::DownloadManager::IsAvailable())
     Net::DownloadManager::RemoveListener(*this);
 
@@ -268,19 +306,29 @@ ManagedFileListWidget::RefreshList()
 {
   items.clear();
 
+  bool download_active = false;
   for (auto i = repository.begin(), end = repository.end(); i != end; ++i) {
     const auto &remote_file = *i;
-    const bool is_downloading = IsDownloading(remote_file);
+    DownloadStatus download_status;
+    const bool is_downloading = IsDownloading(remote_file, download_status);
 
     TCHAR path[MAX_PATH];
     if (LocalPath(path, remote_file) &&
-        (is_downloading || File::Exists(path)))
-      items.append().Set(BaseName(path), is_downloading);
+        (is_downloading || File::Exists(path))) {
+      download_active |= is_downloading;
+      items.append().Set(BaseName(path),
+                         is_downloading ? &download_status : NULL);
+    }
   }
 
   ListControl &list = GetList();
   list.SetLength(items.size());
   list.Invalidate();
+
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (download_active && !Timer::IsActive())
+    Timer::Schedule(1000);
+#endif
 }
 
 void
@@ -313,7 +361,19 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   canvas.text(rc.left + margin, rc.top + margin, file.name.c_str());
 
   if (file.downloading) {
-    const TCHAR *text = _("Downloading");
+    StaticString<64> text;
+    if (file.download_status.position < 0) {
+      text = _("Queued");
+    } else if (file.download_status.size > 0) {
+      text.Format(_T("%s (%u%%)"), _("Downloading"),
+                    unsigned(file.download_status.position * 100
+                             / file.download_status.size));
+    } else {
+      TCHAR size[32];
+      FormatByteSize(size, ARRAY_SIZE(size), file.download_status.position);
+      text.Format(_T("%s (%s)"), _("Downloading"), size);
+    }
+
     UPixelScalar width = canvas.CalcTextWidth(text);
     canvas.text(rc.right - width - margin, rc.top + margin, text);
   }
@@ -439,6 +499,24 @@ ManagedFileListWidget::OnAction(int id)
   }
 }
 
+#ifdef HAVE_DOWNLOAD_MANAGER
+
+void
+ManagedFileListWidget::OnTimer()
+{
+  mutex.Lock();
+  const bool download_active = !downloads.empty();
+  mutex.Unlock();
+
+  if (download_active) {
+    Net::DownloadManager::Enumerate(*this);
+    RefreshList();
+    Timer::Schedule(1000);
+  }
+}
+
+#endif
+
 void
 ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
                                        int64_t size, int64_t position)
@@ -452,7 +530,7 @@ ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
     return;
 
   mutex.Lock();
-  downloads.insert((const char *)name2);
+  downloads[(const char *)name2] = DownloadStatus{size, position};
   mutex.Unlock();
 
   SendNotification();
