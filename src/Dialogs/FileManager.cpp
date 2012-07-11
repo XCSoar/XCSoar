@@ -534,6 +534,7 @@ ManagedFileListWidget::OnTimer()
   if (download_active) {
     Net::DownloadManager::Enumerate(*this);
     RefreshList();
+    UpdateButtons();
     Timer::Schedule(1000);
   }
 }
@@ -592,6 +593,7 @@ ManagedFileListWidget::OnNotification()
     LoadRepositoryFile();
 
   RefreshList();
+  UpdateButtons();
 }
 
 #endif
