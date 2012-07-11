@@ -368,11 +368,9 @@ ManagedFileListWidget::UpdateButtons()
   if (Net::DownloadManager::IsAvailable()) {
     const unsigned current = GetList().GetCursorIndex();
 
-    download_button->SetEnabled(Net::DownloadManager::IsAvailable() &&
-                                !items.empty() &&
+    download_button->SetEnabled(!items.empty() &&
                                 FindRemoteFile(repository,
                                                items[current].name) != NULL);
-    add_button->SetEnabled(Net::DownloadManager::IsAvailable());
   }
 #endif
 }
@@ -422,8 +420,7 @@ void
 ManagedFileListWidget::Download()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  if (!Net::DownloadManager::IsAvailable())
-    return;
+  assert(Net::DownloadManager::IsAvailable());
 
   if (items.empty())
     return;
@@ -468,8 +465,7 @@ void
 ManagedFileListWidget::Add()
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
-  if (!Net::DownloadManager::IsAvailable())
-    return;
+  assert(Net::DownloadManager::IsAvailable());
 
   if (items.empty())
     return;
