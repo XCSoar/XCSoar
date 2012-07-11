@@ -43,6 +43,7 @@ Copyright_License {
 #endif
 
 #include <stddef.h>
+#include <sys/types.h>
 
 namespace Net {
   class Session;
@@ -87,8 +88,6 @@ namespace Net {
     jobject connection, input_stream;
 #endif
 
-    bool successful;
-
   public:
     /**
      * Creates a Request that can be used to get data from a webserver.
@@ -129,14 +128,6 @@ namespace Net {
      */
     bool Created() const;
 
-    /**
-     * Check whether the request was successful.  This must not be
-     * called before the last Read() call has returned 0.
-     */
-    bool IsSuccessful() const {
-      return successful;
-    }
-
 #ifdef HAVE_WININET
     /**
      * Send the request to the server. If this function fails the server
@@ -153,10 +144,11 @@ namespace Net {
      * Reads a number of bytes from the server.
      * This function must not be called before Send() !
      * @param timeout_ms Timeout used for retrieving the data chunk
-     * @return Number of bytes that were read from the server. 0 means EOF.
+     * @return Number of bytes that were read from the server. 0 means
+     * EOF, -1 means error
      */
-    size_t Read(void *buffer, size_t buffer_size,
-                unsigned timeout_ms=INFINITE);
+    ssize_t Read(void *buffer, size_t buffer_size,
+                 unsigned timeout_ms=INFINITE);
 
 #ifdef HAVE_WININET
     /** Internal callback function. Don't use this manually! */

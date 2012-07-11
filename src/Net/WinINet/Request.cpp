@@ -108,28 +108,22 @@ Net::Request::Send(unsigned timeout_ms)
     return last_error == ERROR_SUCCESS;
 }
 
-size_t
+ssize_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {
   if (first_read) {
-    if (!completed_event.Wait(timeout_ms)) {
+    if (!completed_event.Wait(timeout_ms))
       /* response timeout */
-      successful = false;
-      return 0;
-    }
+      return -1;
 
-    if (last_error != ERROR_SUCCESS) {
+    if (last_error != ERROR_SUCCESS)
       /* I/O error */
-      successful = false;
-      return 0;
-    }
+      return -1;
 
     unsigned status = handle.GetStatusCode();
-    if (status < 200 || status >= 300) {
+    if (status < 200 || status >= 300)
       /* unsuccessful HTTP status */
-      successful = false;
-      return 0;
-    }
+      return -1;
 
     first_read = false;
   }
@@ -140,14 +134,9 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
   InetBuff.lpvBuffer = buffer;
   InetBuff.dwBufferLength = buffer_size - 1;
 
-  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this)) {
+  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this))
     /* error */
-    successful = false;
-    return 0;
-  }
-
-  if (InetBuff.dwBufferLength == 0)
-    successful = true;
+    return -1;
 
   ((uint8_t *)buffer)[InetBuff.dwBufferLength] = 0;
   return InetBuff.dwBufferLength;

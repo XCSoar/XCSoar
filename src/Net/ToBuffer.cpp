@@ -42,7 +42,9 @@ Net::DownloadToBuffer(Session &session, const char *url,
     if (env.IsCancelled())
       return -1;
 
-    size_t nbytes = request.Read(p, end - p, 5000);
+    ssize_t nbytes = request.Read(p, end - p, 5000);
+    if (nbytes < 0)
+      return -1;
     if (nbytes == 0)
       break;
 

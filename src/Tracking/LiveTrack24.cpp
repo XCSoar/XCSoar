@@ -74,8 +74,8 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password)
   if (!request.Created())
     return false;
 
-  unsigned size = request.Read(buffer, sizeof(buffer), 10000);
-  if (size == 0)
+  ssize_t size = request.Read(buffer, sizeof(buffer), 10000);
+  if (size <= 0)
     return 0;
 
   buffer[size] = 0;
@@ -192,6 +192,6 @@ LiveTrack24::SendRequest(const char *url)
     return false;
 
   char buffer[16];
-  unsigned size = request.Read(buffer, 16, 10000);
+  ssize_t size = request.Read(buffer, 16, 10000);
   return size >= 2 && buffer[0] == 'O' && buffer[1] == 'K';
 }

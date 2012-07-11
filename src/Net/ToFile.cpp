@@ -51,7 +51,10 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
     if (env.IsCancelled())
       return false;
 
-    size_t nbytes = request.Read(buffer, sizeof(buffer), 5000);
+    ssize_t nbytes = request.Read(buffer, sizeof(buffer), 5000);
+    if (nbytes < 0)
+      return false;
+
     if (nbytes == 0)
       break;
 
@@ -59,12 +62,9 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
       md5.Append(buffer, nbytes);
 
     size_t written = fwrite(buffer, 1, nbytes, file);
-    if (written != nbytes)
+    if (written != (size_t)nbytes)
       return false;
   }
-
-  if (!request.IsSuccessful())
-    return false;
 
   if (md5_digest != NULL) {
     md5.Finalize();

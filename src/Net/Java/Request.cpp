@@ -81,7 +81,7 @@ Net::Request::Created() const
   return input_stream != NULL;
 }
 
-size_t
+ssize_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {
   assert(connection != NULL);
@@ -92,15 +92,11 @@ Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));
   jint nbytes = Java::InputStream::read(env, input_stream, array.Get());
-  if (Java::DiscardException(env)) {
-    successful = false;
-    return 0;
-  }
+  if (Java::DiscardException(env))
+    return -1;
 
-  if (nbytes <= 0) {
-    successful = true;
+  if (nbytes <= 0)
     return 0;
-  }
 
   env->GetByteArrayRegion(array.Get(), 0, nbytes, (jbyte *)buffer);
   return nbytes;
