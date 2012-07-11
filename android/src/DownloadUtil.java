@@ -37,6 +37,20 @@ class DownloadUtil extends BroadcastReceiver {
                              new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
   }
 
+  /**
+   * Check if this local URI is within the XCSoarData directory, and
+   * returns the absolute path.  Returns null on mismatch.
+   */
+  static String matchPath(String uri) {
+    /* XXX this check is a kludge to identify downloads started
+       by XCSoar */
+    return uri != null && uri.startsWith("file:///") &&
+      uri.indexOf("/XCSoarData/") > 0
+      /* strip the "file://" */
+      ? uri.substring(7)
+      : null;
+  }
+
   static void enumerate(DownloadManager dm, long handler) {
     DownloadManager.Query query = new DownloadManager.Query();
     query.setFilterByStatus(DownloadManager.STATUS_PAUSED |
@@ -58,14 +72,11 @@ class DownloadUtil extends BroadcastReceiver {
 
     do {
       final String uri = c.getString(columnLocalURI);
-      /* XXX this check is a kludge to identify downloads started
-         by XCSoar */
-      if (uri == null || !uri.startsWith("file:///") ||
-          uri.indexOf("/XCSoarData/") < 0)
+      final String path = matchPath(uri);
+      if (path == null)
         continue;
 
       /* strip the "file://" */
-      String path = uri.substring(7);
       int status = c.getInt(columnStatus);
       long size = c.getLong(columnSize);
       long position = status == DownloadManager.STATUS_RUNNING
@@ -106,14 +117,9 @@ class DownloadUtil extends BroadcastReceiver {
 
     do {
       final String uri = c.getString(columnLocalURI);
-      /* XXX this check is a kludge to identify downloads started
-         by XCSoar */
-      if (uri == null || !uri.startsWith("file:///") ||
-          uri.indexOf("/XCSoarData/") < 0)
+      final String path = matchPath(uri);
+      if (path == null)
         continue;
-
-      /* strip the "file://" */
-      String path = uri.substring(7);
 
       final int status = c.getInt(columnStatus);
       final boolean success = status == DownloadManager.STATUS_SUCCESSFUL;
