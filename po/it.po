@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-10 15:19+0000\n"
+"PO-Revision-Date: 2012-07-10 22:07+0000\n"
 "Last-Translator: Piero <pieromissa@virgilio.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-10 17:21+0000\n"
-"X-Generator: Launchpad (build 15584)\n"
+"X-Launchpad-Export-Date: 2012-07-11 20:08+0000\n"
+"X-Generator: Launchpad (build 15593)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3056,12 +3056,12 @@ msgstr "AAT mancante"
 #: src/Renderer/FlightStatisticsRenderer.cpp:249
 #: src/Renderer/FlightStatisticsRenderer.cpp:259
 msgid "Distance to go"
-msgstr ""
+msgstr "Distanza rimanente"
 
 #: src/Renderer/FlightStatisticsRenderer.cpp:242
 #: src/Renderer/FlightStatisticsRenderer.cpp:252
 msgid "Target speed"
-msgstr ""
+msgstr "Velocità obiettivo"
 
 #: src/Renderer/BarographRenderer.cpp:44 src/Renderer/BarographRenderer.cpp:50
 msgid "Working band"
@@ -3095,24 +3095,24 @@ msgstr "Massa"
 #: src/Renderer/GlidePolarRenderer.cpp:132
 #: src/Dialogs/dlgBasicSettings.cpp:280
 msgid "Wing loading"
-msgstr ""
+msgstr "Carico alare"
 
 #: src/Renderer/CuRenderer.cpp:124
 msgid "Thermal height"
-msgstr "Quota termica"
+msgstr "Altezza termica"
 
 #: src/Renderer/CuRenderer.cpp:127
 msgid "Cloud base"
-msgstr "Base Cumulo"
+msgstr "Base della nuvola"
 
 #: src/Interface.cpp:261
 msgid "Quit program?"
-msgstr ""
+msgstr "Terminare programma?"
 
 #: src/Units/UnitsStore.cpp:37
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Europeo"
 
 #: src/Units/UnitsStore.cpp:47
 #, no-c-format
@@ -3127,7 +3127,7 @@ msgstr ""
 #: src/Units/UnitsStore.cpp:67
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Australiano"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:123 src/Components.cpp:345
@@ -3137,7 +3137,7 @@ msgstr "Caricando File del Terreno..."
 #: src/Profile/DeviceConfig.cpp:141 src/Widgets/DeviceEditWidget.cpp:67
 #, no-c-format
 msgid "Bluetooth server"
-msgstr ""
+msgstr "Server bluetooth"
 
 #: src/Profile/DeviceConfig.cpp:149 src/Widgets/DeviceEditWidget.cpp:63
 #, no-c-format
@@ -3154,24 +3154,26 @@ msgid ""
 "Polar has invalid coefficients.\n"
 "Using LS8 polar instead!"
 msgstr ""
+"La polare ha coefficienti invalidi.\n"
+"Utilizzo invece della polare LS8!"
 
 #: src/Polar/PolarGlue.cpp:106
 msgid "Warning"
-msgstr "Allarme"
+msgstr "Avvertimento"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
 msgid "Battery low"
-msgstr ""
+msgstr "Bassa carica batteria"
 
 #: src/Components.cpp:293
 msgid "Initialising"
-msgstr ""
+msgstr "Inizializando"
 
 #. Start the device thread(s)
 #: src/Components.cpp:414
 msgid "Starting devices"
-msgstr ""
+msgstr "Avviando i dispositivi"
 
 #.
 #. -- Reset polar in case devices need the data
@@ -3182,27 +3184,27 @@ msgstr ""
 #.
 #: src/Components.cpp:425
 msgid "Initialising display"
-msgstr ""
+msgstr "Inizializando display"
 
 #. Show progress dialog
 #: src/Components.cpp:516 src/Components.cpp:549 src/Components.cpp:591
 msgid "Shutdown, please wait..."
-msgstr ""
+msgstr "Spegnimento, attendere prego..."
 
 #. Stop logger and save igc file
 #: src/Components.cpp:531
 msgid "Shutdown, saving logs..."
-msgstr ""
+msgstr "Spegnimento, salvataggio registri..."
 
 #. Save settings to profile
 #: src/Components.cpp:542
 msgid "Shutdown, saving profile..."
-msgstr ""
+msgstr "Spegnimento, salvataggio profilo..."
 
 #. Save the task for the next time
 #: src/Components.cpp:582
 msgid "Shutdown, saving task..."
-msgstr ""
+msgstr "Spegnimento, salvataggio tema..."
 
 #: src/Widgets/TrafficWidget.cpp:343 src/Widgets/TrafficWidget.cpp:346
 #: src/Dialogs/dlgFlarmTraffic.cpp:391 src/Dialogs/dlgFlarmTraffic.cpp:392
@@ -3214,12 +3216,12 @@ msgstr ""
 #: src/Widgets/DeviceEditWidget.cpp:72 src/Widgets/DeviceEditWidget.cpp:542
 #, no-c-format
 msgid "TCP Port"
-msgstr ""
+msgstr "Porta TCP"
 
 #: src/Widgets/DeviceEditWidget.cpp:73
 #, no-c-format
 msgid "UDP Port"
-msgstr ""
+msgstr "Porta UDP"
 
 #: src/Widgets/DeviceEditWidget.cpp:521
 msgid "Port"
@@ -3228,17 +3230,19 @@ msgstr "Porta"
 #: src/Widgets/DeviceEditWidget.cpp:527 src/Dialogs/LX/NanoConfigWidget.cpp:96
 #: src/Dialogs/FLARM/ConfigWidget.cpp:116
 msgid "Baud rate"
-msgstr ""
+msgstr "Velocità baud"
 
 #: src/Widgets/DeviceEditWidget.cpp:534
 msgid "Bulk baud rate"
-msgstr ""
+msgstr "Velocità baud in blocco"
 
 #: src/Widgets/DeviceEditWidget.cpp:535
 msgid ""
 "The baud rate used for bulk transfers, such as task declaration or flight "
 "download."
 msgstr ""
+"La velocità baud utilizzata per trasferimenti in blocco, come dichiarazione "
+"del tema o download del volo."
 
 #: src/Widgets/DeviceEditWidget.cpp:554
 msgid "Driver"
@@ -3246,23 +3250,27 @@ msgstr ""
 
 #: src/Widgets/DeviceEditWidget.cpp:556
 msgid "Sync. from device"
-msgstr ""
+msgstr "Sincro dal dispositivo"
 
 #: src/Widgets/DeviceEditWidget.cpp:557
 msgid ""
 "This option lets you configure if XCSoar should use settings like the "
 "MacCready value, bugs and ballast from the device."
 msgstr ""
+"Questa opzione permette di configurare se XCSoar deve utilizzare dal "
+"dispositivo le impostazioni come il valore di MacCready, insetti e zavorra."
 
 #: src/Widgets/DeviceEditWidget.cpp:562
 msgid "Sync. to device"
-msgstr ""
+msgstr "SIncro. con dispositivo"
 
 #: src/Widgets/DeviceEditWidget.cpp:563
 msgid ""
 "This option lets you configure if XCSoar should send settings like the "
 "MacCready value, bugs and ballast to the device."
 msgstr ""
+"Questa opzione permette di configurare se XCSoar deve inviare al dispositivo "
+"le impostazioni come il valore di MacCready, insetti e zavorra."
 
 #: src/Widgets/DeviceEditWidget.cpp:569
 msgid "Enable this if you use a K6Bt to connect the device."
@@ -3271,16 +3279,19 @@ msgstr ""
 #: src/Widgets/DeviceEditWidget.cpp:576
 msgid "Enable this if you would like to log the communication with the device."
 msgstr ""
+"Abilitare questo se desideri registrare le comunicazioni con il dispositivo."
 
 #: src/Widgets/DeviceEditWidget.cpp:583
 msgid "Ignore checksum"
-msgstr ""
+msgstr "Ignora controllo integrità"
 
 #: src/Widgets/DeviceEditWidget.cpp:584
 msgid ""
 "If your GPS device outputs invalid NMEA checksums, this will allow it's data "
 "to be used anyway."
 msgstr ""
+"Se il tuo dispositivo GPS  trasmette controlli di integrità NMEA invalidi, "
+"questo permetterà ti utilizzare comunque i suoi dati."
 
 #: src/Device/Descriptor.cpp:230
 msgid "Unable to open port"
@@ -3288,15 +3299,15 @@ msgstr ""
 
 #: src/Device/Descriptor.cpp:665 src/Device/Descriptor.cpp:671
 msgid "Sending declaration"
-msgstr ""
+msgstr "Inviando dichiarazione"
 
 #: src/Device/Descriptor.cpp:708
 msgid "Reading flight list"
-msgstr ""
+msgstr "Lettura lista voli"
 
 #: src/Device/Descriptor.cpp:728
 msgid "Downloading flight log"
-msgstr ""
+msgstr "Scarico registro volo"
 
 #: src/Dialogs/Message.cpp:123 src/Dialogs/WidgetDialog.cpp:165
 #: src/Dialogs/WidgetDialog.cpp:180
@@ -3317,7 +3328,7 @@ msgstr "Si"
 
 #: src/Dialogs/Message.cpp:133
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: src/Dialogs/Message.cpp:140
 msgid "Retry"
