@@ -62,11 +62,6 @@ namespace Net {
     Trigger opened_event, completed_event;
     /** The last error code that was retrieved by the Callback() function */
     DWORD last_error;
-
-    /**
-     * If true, then Read() will check for response errors.
-     */
-    bool first_read;
 #elif defined(ANDROID)
     static const unsigned INFINITE = 0;
 #else
@@ -123,22 +118,14 @@ namespace Net {
 
   public:
     /**
-     * Returns whether the Request has been created successfully.
-     * Note that this has nothing to do with a physical connection yet!
-     */
-    bool Created() const;
-
-#ifdef HAVE_WININET
-    /**
-     * Send the request to the server. If this function fails the server
-     * can't be reached. If the file doesn't exists the webserver usually
-     * returns a valid 404 page.
+     * Send the request to the server and receive response headers.
+     * This function fails if the connection could not be established
+     * or if the response status is not successful.
+     *
      * @param timeout_ms Timeout used for sending the request
-     * @return True if the connection was established successfully and
-     * the request was sent
+     * @return true on success
      */
     bool Send(unsigned timeout_ms=INFINITE);
-#endif
 
     /**
      * Reads a number of bytes from the server.

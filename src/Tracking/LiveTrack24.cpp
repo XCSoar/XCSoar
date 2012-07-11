@@ -71,7 +71,7 @@ LiveTrack24::GetUserID(const TCHAR *username, const TCHAR *password)
   // Request the file
   char buffer[1024];
   Net::Request request(session, url, 3000);
-  if (!request.Created())
+  if (!request.Send(10000))
     return false;
 
   ssize_t size = request.Read(buffer, sizeof(buffer), 10000);
@@ -188,7 +188,7 @@ LiveTrack24::SendRequest(const char *url)
 
   // Request the file
   Net::Request request(session, url, 3000);
-  if (!request.Created())
+  if (!request.Send(10000))
     return false;
 
   char buffer[16];

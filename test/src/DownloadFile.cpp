@@ -41,9 +41,12 @@ Download(const char *url, const TCHAR *path)
 
   cout << "Creating Request ... ";
   Net::Request request(session, url);
-  cout << (!request.Created() ? "failed" : "done") << endl;
-  if (!request.Created())
+  if (!request.Send()) {
+    cout << "failed" << endl;
     return false;
+  }
+
+  cout << "done" << endl;
 
   cout << "Reading Response:" << endl;
   cout << "-------------------------------------------------" << endl;

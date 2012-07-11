@@ -44,7 +44,6 @@ RequestCallback(HINTERNET hInternet,
 
 Net::Request::Request(Session &session, const char *url,
                       unsigned timeout_ms)
-  :first_read(true)
 {
   INTERNET_STATUS_CALLBACK old_callback =
     session.handle.SetStatusCallback(RequestCallback);
@@ -70,7 +69,6 @@ Net::Request::Request(Session &session, const char *url,
 
 Net::Request::Request(Connection &connection, const char *file,
                       unsigned timeout_ms)
-  :first_read(true)
 {
   INTERNET_STATUS_CALLBACK old_callback =
     connection.handle.SetStatusCallback(RequestCallback);
@@ -86,48 +84,30 @@ Net::Request::Request(Connection &connection, const char *file,
 }
 
 bool
-Net::Request::Created() const
-{
-  return handle.IsDefined();
-}
-
-bool
 Net::Request::Send(unsigned timeout_ms)
 {
-  assert(handle.IsDefined());
-
-  // Send request
-  if (handle.SendRequest(NULL, 0, NULL, 0))
-    return true;
-
-  // If HttpSendRequestA() failed or timeout occured in WaitForSingleObject()
-  if (GetLastError() != ERROR_IO_PENDING ||
-      !completed_event.Wait(timeout_ms))
+  if (!handle.IsDefined())
     return false;
-  else
-    return last_error == ERROR_SUCCESS;
+
+  if (!completed_event.Wait(timeout_ms))
+    /* response timeout */
+    return false;
+
+  if (last_error != ERROR_SUCCESS)
+    /* I/O error */
+    return false;
+
+  unsigned status = handle.GetStatusCode();
+  if (status < 200 || status >= 300)
+    /* unsuccessful HTTP status */
+    return false;
+
+  return true;
 }
 
 ssize_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned timeout_ms)
 {
-  if (first_read) {
-    if (!completed_event.Wait(timeout_ms))
-      /* response timeout */
-      return -1;
-
-    if (last_error != ERROR_SUCCESS)
-      /* I/O error */
-      return -1;
-
-    unsigned status = handle.GetStatusCode();
-    if (status < 200 || status >= 300)
-      /* unsuccessful HTTP status */
-      return -1;
-
-    first_read = false;
-  }
-
   INTERNET_BUFFERSA InetBuff;
   FillMemory(&InetBuff, sizeof(InetBuff), 0);
   InetBuff.dwStructSize = sizeof(InetBuff);

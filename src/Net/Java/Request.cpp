@@ -76,7 +76,7 @@ Net::Request::~Request()
 }
 
 bool
-Net::Request::Created() const
+Net::Request::Send(unsigned _timeout_ms)
 {
   return input_stream != NULL;
 }

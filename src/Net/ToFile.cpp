@@ -40,7 +40,7 @@ DownloadToFile(Net::Session &session, const char *url, FILE *file,
   assert(file != NULL);
 
   Net::Request request(session, url, 10000);
-  if (!request.Created())
+  if (!request.Send(10000))
     return false;
 
   MD5 md5;

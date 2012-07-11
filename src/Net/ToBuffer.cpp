@@ -34,7 +34,7 @@ Net::DownloadToBuffer(Session &session, const char *url,
                       OperationEnvironment &env)
 {
   Request request(session, url, 10000);
-  if (!request.Created())
+  if (!request.Send(10000))
     return -1;
 
   uint8_t *buffer = (uint8_t *)_buffer, *p = buffer, *end = buffer + max_length;
