@@ -102,6 +102,7 @@ class ManagedFileListWidget
   enum Buttons {
     DOWNLOAD,
     ADD,
+    CANCEL,
   };
 
   struct DownloadStatus {
@@ -147,7 +148,7 @@ class ManagedFileListWidget
   UPixelScalar font_height;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
-  WndButton *download_button, *add_button;
+  WndButton *download_button, *add_button, *cancel_button;
 #endif
 
   FileRepository repository;
@@ -223,6 +224,7 @@ protected:
 
   void Download();
   void Add();
+  void Cancel();
 
 public:
   /* virtual methods from class Widget */
@@ -357,6 +359,7 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
   if (Net::DownloadManager::IsAvailable()) {
     download_button = dialog.AddButton(_("Download"), this, DOWNLOAD);
     add_button = dialog.AddButton(_("Add"), this, ADD);
+    cancel_button = dialog.AddButton(_("Cancel"), this, CANCEL);
   }
 #endif
 }
@@ -371,6 +374,7 @@ ManagedFileListWidget::UpdateButtons()
     download_button->SetEnabled(!items.empty() &&
                                 FindRemoteFile(repository,
                                                items[current].name) != NULL);
+    cancel_button->SetEnabled(!items.empty() && items[current].downloading);
   }
 #endif
 }
@@ -509,6 +513,23 @@ ManagedFileListWidget::Add()
 }
 
 void
+ManagedFileListWidget::Cancel()
+{
+#ifdef HAVE_DOWNLOAD_MANAGER
+  assert(Net::DownloadManager::IsAvailable());
+
+  if (items.empty())
+    return;
+
+  const unsigned current = GetList().GetCursorIndex();
+  assert(current < items.size());
+
+  const FileItem &item = items[current];
+  Net::DownloadManager::Cancel(item.name);
+#endif
+}
+
+void
 ManagedFileListWidget::OnAction(int id)
 {
   switch (id) {
@@ -518,6 +539,10 @@ ManagedFileListWidget::OnAction(int id)
 
   case ADD:
     Add();
+    break;
+
+  case CANCEL:
+    Cancel();
     break;
   }
 }
