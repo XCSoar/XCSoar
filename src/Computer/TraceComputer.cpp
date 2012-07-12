@@ -88,9 +88,9 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
     mutex.Lock();
     full.push_back(state);
     mutex.Unlock();
-  }
 
-  // only olc requires trace_sprint
-  if (settings_computer.task.enable_olc)
-    sprint.push_back(state);
+    // only olc requires trace_sprint
+    if (settings_computer.task.enable_olc)
+      sprint.push_back(state);
+  }
 }
