@@ -150,14 +150,6 @@ struct FlatGeoPoint {
     return FlatGeoPoint::Equals(other);
   };
 
-  /**
-   * Operator is required when SearchPoints are used in sets.
-   */
-  gcc_pure
-  bool operator< (const FlatGeoPoint &sp) const {
-    return Sort(sp);
-  }
-
   gcc_constexpr_method
   bool Equals(const FlatGeoPoint sp) const {
     return longitude == sp.longitude && latitude == sp.latitude;
@@ -220,8 +212,8 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    * @return true if lexicographically smaller
    */
   gcc_pure
-  bool operator< (const AFlatGeoPoint &sp) const {
-    if (!Sort(sp))
+  bool Sort(const AFlatGeoPoint &sp) const {
+    if (!FlatGeoPoint::Sort(sp))
       return false;
     else if (FlatGeoPoint::Equals(sp))
       return altitude > sp.altitude;

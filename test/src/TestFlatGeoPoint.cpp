@@ -53,9 +53,9 @@ int main(int argc, char **argv)
   ok1(p3 == FlatGeoPoint(3, 10));
 
   // test <
-  ok1(p2 < p1);
-  ok1(p3 < p1);
-  ok1(p3 < p2);
+  ok1(p2.Sort(p1));
+  ok1(p3.Sort(p1));
+  ok1(p3.Sort(p2));
 
   // test * (and ==)
   ok1(p1 * fixed_two == FlatGeoPoint(2, 2));

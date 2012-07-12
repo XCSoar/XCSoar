@@ -127,8 +127,16 @@ protected:
   RoughAltitude h_max;
 
 private:
+  struct CompareRoutePoint {
+    gcc_pure
+    bool operator()(const RoutePoint &a, const RoutePoint &b) const {
+      return a.Sort(b);
+    }
+  };
+
   /** A* search algorithm */
-  AStar<RoutePoint> planner;
+  AStar<RoutePoint, CompareRoutePoint> planner;
+
   /**
    * Convex hull of search to date, used by terrain node
    * generator to prevent backtracking

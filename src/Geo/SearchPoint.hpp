@@ -157,14 +157,6 @@ public:
   }
 
   /**
-   * Operator is required when SearchPoints are used in sets.
-   */
-  gcc_pure
-  bool operator< (const SearchPoint &other) const {
-    return sort(other);
-  }
-
-  /**
    * distance from this to the reference
    */
   fixed distance(const GeoPoint & ref) const {
