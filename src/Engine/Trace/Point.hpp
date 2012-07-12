@@ -66,14 +66,6 @@ public:
   TracePoint() = default;
 
   /**
-   * Constructor for a TracePoint which is only used as parameter to
-   * TraceTree::find_within_range().  It initializes only the
-   * SearchPoint base class.
-   */
-  TracePoint(const GeoPoint &location):
-    SearchPoint(location) {}
-
-  /**
    * Constructor for actual trace points
    *
    * @param state State of aircraft
