@@ -83,6 +83,17 @@ ContestDijkstra::ClearTrace()
   n_points = 0;
 }
 
+void
+ContestDijkstra::UpdateTraceFull()
+{
+  trace.reserve(trace_master.GetMaxSize());
+  trace_master.GetPoints(trace);
+  n_points = trace.size();
+
+  append_serial = trace_master.GetAppendSerial();
+  modify_serial = trace_master.GetModifySerial();
+}
+
 bool
 ContestDijkstra::UpdateTraceTail()
 {
@@ -118,11 +129,8 @@ ContestDijkstra::UpdateTrace(bool force)
     return;
   }
 
-  trace.reserve(trace_master.GetMaxSize());
-  trace_master.GetPoints(trace);
-  append_serial = trace_master.GetAppendSerial();
-  modify_serial = trace_master.GetModifySerial();
-  n_points = trace.size();
+  UpdateTraceFull();
+
   trace_dirty = true;
   finished = false;
 

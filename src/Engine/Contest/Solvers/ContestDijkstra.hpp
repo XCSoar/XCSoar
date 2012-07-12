@@ -135,6 +135,11 @@ protected:
   void ClearTrace();
 
   /**
+   * Obtain a new #Trace copy.
+   */
+  void UpdateTraceFull();
+
+  /**
    * Copy points that were added to the end of the master Trace.
    *
    * @return true if new points were added
