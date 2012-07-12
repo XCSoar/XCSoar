@@ -51,10 +51,9 @@ ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
   if (ScoreLastExit()) {
     ClearSampleAllButLast(ref_last, projection);
     state_entered = ref_last;
-    state_exited = ref_now;
-  } else {
-    state_exited = ref_last;
   }
+
+  has_exited = true;
 
   return true;
 }
@@ -85,5 +84,5 @@ ScoredTaskPoint::Reset()
 {
   SampledTaskPoint::Reset();
   state_entered.time = fixed_minus_one;
-  state_exited.time = fixed_minus_one;
+  has_exited = false;
 }

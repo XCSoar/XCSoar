@@ -41,7 +41,7 @@ class ScoredTaskPoint:
   public SampledTaskPoint
 {
   AircraftState state_entered;
-  AircraftState state_exited;
+  bool has_exited;
 
 public:
   /**
@@ -76,7 +76,7 @@ public:
    * @return True if aircraft has exited the OZ
    */
   bool HasExited() const {
-    return state_exited.time > fixed_zero;
+    return has_exited;
   }
 
   /**
@@ -148,15 +148,6 @@ private:
    */
   void SetStateEntered(const AircraftState &state) {
     state_entered = state;
-  }
-
-  /**
-   * Set OZ exit state
-   *
-   * @param state State at exit
-   */
-  void SetStateExited(const AircraftState &state) {
-    state_exited = state;
   }
 
   gcc_pure
