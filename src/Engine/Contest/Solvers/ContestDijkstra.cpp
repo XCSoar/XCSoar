@@ -127,8 +127,6 @@ ContestDijkstra::UpdateTrace(bool force)
   finished = false;
 
   first_finish_candidate = incremental ? n_points - 1 : 0;
-
-  if (n_points<2) return;
 }
 
 AbstractContest::SolverResult
