@@ -20,43 +20,15 @@
 }
 */
 
-#ifndef CONTEST_RESULT_HPP
-#define CONTEST_RESULT_HPP
+#ifndef XCSOAR_CONTEST_TRACE_HPP
+#define XCSOAR_CONTEST_TRACE_HPP
 
+#include "Trace/Point.hpp"
+#include "Util/TrivialArray.hpp"
 #include "Util/TypeTraits.hpp"
-#include "Math/fixed.hpp"
 
-struct ContestResult
-{
-  /** Score (pts) according to OLC rule */
-  fixed score;
-  /** Optimum distance (m) travelled according to OLC rule */
-  fixed distance;
-  /** Time (s) of optimised OLC path */
-  fixed time;
+class ContestTraceVector: public TrivialArray<TracePoint, 10> {};
 
-  void Reset() {
-    score = fixed_zero;
-    distance = fixed_zero;
-    time = fixed_zero;
-  }
-
-  bool IsDefined() const {
-    return positive(score);
-  }
-
-  /**
-   * Returns the average speed on the optimised path [m/s].  Returns
-   * zero if the result is invalid.
-   */
-  gcc_pure
-  fixed GetSpeed() const {
-    return positive(time)
-      ? distance / time
-      : fixed_zero;
-  }
-};
-
-static_assert(is_trivial<ContestResult>::value, "type is not trivial");
+static_assert(is_trivial_ndebug<ContestTraceVector>::value, "type is not trivial");
 
 #endif
