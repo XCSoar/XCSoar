@@ -43,8 +43,6 @@ class TraceComputer {
 
   Trace full, contest, sprint;
 
-  fixed last_time;
-
 public:
   TraceComputer();
 

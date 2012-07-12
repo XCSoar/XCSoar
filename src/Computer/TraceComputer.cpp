@@ -53,7 +53,6 @@ TraceComputer::Reset()
   mutex.Unlock();
 
   sprint.clear();
-  last_time = fixed_zero;
 }
 
 void
@@ -79,8 +78,6 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
                       const AircraftState &state)
 {
   /* time warps are handled by the Trace class */
-
-  last_time = state.time;
 
   if (!state.flying)
     return;
