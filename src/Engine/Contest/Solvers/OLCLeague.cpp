@@ -22,6 +22,7 @@
 
 #include "OLCLeague.hpp"
 #include "Trace/Trace.hpp"
+#include "Cast.hpp"
 
 OLCLeague::OLCLeague(const Trace &_trace)
   :AbstractContest(0), trace(_trace)
