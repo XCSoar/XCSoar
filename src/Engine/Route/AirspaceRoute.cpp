@@ -153,7 +153,7 @@ AirspaceRoute::FindClearingPair(const SearchPointVector& spv,
 
   int j=0;
   while ((i != end)&&(j<2)) {
-    AFlatGeoPoint pborder(i->get_flatLocation(), dest.altitude); // @todo alt!
+    AFlatGeoPoint pborder(i->GetFlatLocation(), dest.altitude); // @todo alt!
     const FlatRay ray(pborder, dest);
 
     if (spv.IntersectsWith(ray)) {
@@ -202,10 +202,10 @@ AirspaceRoute::GetBackupPairs(const SearchPointVector& spv,
   ClearingPair p(intc, intc);
 
   SearchPointVector::const_iterator i_left = spv.NextCircular(start);
-  p.first = AFlatGeoPoint(i_left->get_flatLocation(), _start.altitude); // @todo alt!
+  p.first = AFlatGeoPoint(i_left->GetFlatLocation(), _start.altitude); // @todo alt!
 
   SearchPointVector::const_iterator i_right = spv.PreviousCircular(start);
-  p.second = AFlatGeoPoint(i_right->get_flatLocation(), _start.altitude); // @todo alt!
+  p.second = AFlatGeoPoint(i_right->GetFlatLocation(), _start.altitude); // @todo alt!
 
   return p;
 }

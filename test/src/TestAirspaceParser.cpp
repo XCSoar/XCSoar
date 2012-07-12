@@ -108,19 +108,19 @@ TestOpenAir()
       if (!ok1(points.size() == 5))
         continue;
 
-      ok1(equals(points[0].get_location(),
+      ok1(equals(points[0].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
-      ok1(equals(points[1].get_location(),
+      ok1(equals(points[1].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)),
                  Angle::DMS(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[2].get_location(),
+      ok1(equals(points[2].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[3].get_location(),
+      ok1(equals(points[3].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
-      ok1(equals(points[4].get_location(),
+      ok1(equals(points[4].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
     } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {
@@ -213,19 +213,19 @@ TestTNP()
       if (!ok1(points.size() == 5))
         continue;
 
-      ok1(equals(points[0].get_location(),
+      ok1(equals(points[0].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
-      ok1(equals(points[1].get_location(),
+      ok1(equals(points[1].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)),
                  Angle::DMS(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[2].get_location(),
+      ok1(equals(points[2].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[3].get_location(),
+      ok1(equals(points[3].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
-      ok1(equals(points[4].get_location(),
+      ok1(equals(points[4].GetLocation(),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)),
                  Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
     } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {

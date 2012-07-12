@@ -57,14 +57,14 @@ OLCSISAT::CalculateResult() const
 
   if (spv.size() > 1) {
     for (unsigned i = 0; i + 1 < spv.size(); ++i)
-      G += spv[i].distance(spv[i + 1].get_location());
+      G += spv[i].DistanceTo(spv[i + 1].GetLocation());
 
     // closing leg (end to start)
-    G += spv[spv.size() - 1].distance(spv[0].get_location());
+    G += spv[spv.size() - 1].DistanceTo(spv[0].GetLocation());
   }
 
   // R distance (start to end)
-  const fixed R = GetPoint(solution[0]).distance(GetPoint(solution[num_stages - 1]).get_location());
+  const fixed R = GetPoint(solution[0]).DistanceTo(GetPoint(solution[num_stages - 1]).GetLocation());
 
   // V zigzag-free distance
   const fixed V = G - R;

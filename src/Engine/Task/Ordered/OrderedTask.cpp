@@ -1041,7 +1041,7 @@ static bool
 DistanceIsSignificant(const SearchPoint &a1, const SearchPoint &a2,
                       const unsigned dist_threshold = 1)
 {
-  return a1.FlatSquareDistance(a2) > (dist_threshold * dist_threshold);
+  return a1.FlatSquareDistanceTo(a2) > (dist_threshold * dist_threshold);
 }
 
 bool 

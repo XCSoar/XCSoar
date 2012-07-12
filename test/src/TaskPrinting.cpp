@@ -139,7 +139,7 @@ PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
   f << "#   Search points\n";
   if (tp.HasEntered()) {
     for (unsigned i=0; i<n; i++) {
-      const GeoPoint loc = tp.GetSearchPoints()[i].get_location();
+      const GeoPoint loc = tp.GetSearchPoints()[i].GetLocation();
       f << "     " << loc.longitude << " " << loc.latitude << "\n";
     }
   }

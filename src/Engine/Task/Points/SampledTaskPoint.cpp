@@ -108,9 +108,9 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
 void 
 SampledTaskPoint::UpdateProjection(const TaskProjection &projection)
 {
-  search_max.project(projection);
-  search_min.project(projection);
-  search_reference.project(projection);
+  search_max.Project(projection);
+  search_min.Project(projection);
+  search_reference.Project(projection);
   nominal_points.Project(projection);
   sampled_points.Project(projection);
   boundary_points.Project(projection);

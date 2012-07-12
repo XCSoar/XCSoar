@@ -136,9 +136,9 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   bool last_valid = false;
   for (auto it = trace.begin(), end = trace.end(); it != end; ++it) {
     const GeoPoint gp = enable_traildrift
-      ? it->get_location().Parametric(traildrift,
-                                      it->CalculateDrift(basic.time))
-      : it->get_location();
+      ? it->GetLocation().Parametric(traildrift,
+                                     it->CalculateDrift(basic.time))
+      : it->GetLocation();
     if (!bounds.IsInside(gp)) {
       /* the point is outside of the MapWindow; don't paint it */
       last_valid = false;
@@ -211,7 +211,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas,
 
   unsigned n = 0;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
-    points[n++] = projection.GeoToScreen(i->get_location());
+    points[n++] = projection.GeoToScreen(i->GetLocation());
 
   canvas.DrawPolyline(points.begin(), n);
 }
@@ -224,7 +224,7 @@ TrailRenderer::DrawTraceVector(Canvas &canvas, const Projection &projection,
 
   unsigned n = 0;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i)
-    points[n++] = projection.GeoToScreen(i->get_location());
+    points[n++] = projection.GeoToScreen(i->GetLocation());
 
   canvas.DrawPolyline(points.begin(), n);
 }

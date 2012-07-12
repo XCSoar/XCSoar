@@ -23,29 +23,26 @@
 #include "SearchPoint.hpp"
 #include "Flat/TaskProjection.hpp"
 
-SearchPoint::SearchPoint(const GeoPoint &loc, const TaskProjection& tp):
-  reference(loc),
-  flatLocation(tp.project(loc))
-#ifndef NDEBUG
-  , projected(true)
-#endif
-{      
-}
-
-SearchPoint::SearchPoint(const FlatGeoPoint &floc,
-                         const TaskProjection& tp):
-  reference(tp.unproject(floc)),
-  flatLocation(floc)
+SearchPoint::SearchPoint(const GeoPoint &loc, const TaskProjection &tp)
+  :location(loc), flat_location(tp.project(loc))
 #ifndef NDEBUG
   , projected(true)
 #endif
 {
 }
 
-void 
-SearchPoint::project(const TaskProjection& tp) 
+SearchPoint::SearchPoint(const FlatGeoPoint &floc, const TaskProjection &tp)
+  :location(tp.unproject(floc)), flat_location(floc)
+#ifndef NDEBUG
+  , projected(true)
+#endif
 {
-  flatLocation = tp.project(reference);
+}
+
+void
+SearchPoint::Project(const TaskProjection &tp)
+{
+  flat_location = tp.project(location);
 
 #ifndef NDEBUG
   projected = true;

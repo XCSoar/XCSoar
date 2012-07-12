@@ -265,7 +265,7 @@ AbstractAirspace::GetClearance(const TaskProjection &projection) const
   FlatGeoPoint center = bb.GetCenter();
 
   for (auto i= m_clearance.begin(); i != m_clearance.end(); ++i) {
-    FlatGeoPoint p = i->get_flatLocation();
+    FlatGeoPoint p = i->GetFlatLocation();
     FlatRay r(center, p);
     int mag = r.Magnitude();
     int mag_new = mag + RADIUS;

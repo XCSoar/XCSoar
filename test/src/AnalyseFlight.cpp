@@ -162,10 +162,10 @@ WritePoint(TextWriter &writer, const TracePoint &point,
   JSON::ObjectWriter object(writer);
 
   object.WriteElement("time", JSON::WriteLong, (long)point.GetTime());
-  JSON::WriteGeoPointAttributes(object, point.get_location());
+  JSON::WriteGeoPointAttributes(object, point.GetLocation());
 
   if (previous != NULL) {
-    fixed distance = point.distance(previous->get_location());
+    fixed distance = point.DistanceTo(previous->GetLocation());
     object.WriteElement("distance", JSON::WriteUnsigned, uround(distance));
 
     unsigned duration =

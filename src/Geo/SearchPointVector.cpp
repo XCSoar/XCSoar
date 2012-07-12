@@ -60,7 +60,7 @@ void
 SearchPointVector::Project(const TaskProjection& tp)
 {
   for (auto i = begin(); i != end(); ++i)
-    i->project(tp);
+    i->Project(tp);
 }
 
 gcc_pure
@@ -93,13 +93,13 @@ SegmentNearestPoint(const SearchPointVector& spv,
                       const FlatGeoPoint &p3)
 {
   if (i1+1 == spv.end()) {
-    return NearestPoint(i1->get_flatLocation(),
-                         spv.begin()->get_flatLocation(),
-                         p3);
+    return NearestPoint(i1->GetFlatLocation(),
+                        spv.begin()->GetFlatLocation(),
+                        p3);
   } else {
-    return NearestPoint(i1->get_flatLocation(),
-                         (i1+1)->get_flatLocation(),
-                         p3);
+    return NearestPoint(i1->GetFlatLocation(),
+                        (i1 + 1)->GetFlatLocation(),
+                        p3);
   }
 }
 
@@ -130,7 +130,7 @@ SearchPointVector::NearestIndexConvex(const FlatGeoPoint &p3) const
 
   // find nearest point in vector
   for (auto i = begin(); i != end(); ++i) {
-    unsigned d_this = p3.DistanceSquared(i->get_flatLocation());
+    unsigned d_this = p3.DistanceSquared(i->GetFlatLocation());
     if (d_this < distance_min) {
       distance_min = d_this;
       i_best = i;
@@ -147,7 +147,7 @@ SearchPointVector::NearestPoint(const FlatGeoPoint &p3) const
     return p3; // really should be error
 
   if (size() == 1)
-    return (*this)[0].get_flatLocation();
+    return (*this)[0].GetFlatLocation();
 
   return NearestPointNonConvex(*this, p3);
 }
@@ -156,7 +156,7 @@ bool
 SearchPointVector::IntersectsWith(const FlatRay &ray) const
 {
   for (auto it = begin(); it + 1 != end(); ++it) {
-    const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
+    const FlatRay r_seg(it->GetFlatLocation(), (it + 1)->GetFlatLocation());
 
     if (r_seg.IntersectsDistinct(ray))
       return true;
@@ -170,9 +170,9 @@ SearchPointVector::CalculateBoundingbox() const
   if (empty())
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
 
-  FlatBoundingBox bb((*this)[0].get_flatLocation());
+  FlatBoundingBox bb((*this)[0].GetFlatLocation());
   for (auto v = begin(); v != end(); ++v)
-    bb.Expand(v->get_flatLocation());
+    bb.Expand(v->GetFlatLocation());
   bb.ExpandByOne(); // add 1 to fix rounding
   return bb;
 }
@@ -183,9 +183,9 @@ SearchPointVector::CalculateGeoBounds() const
   if (empty())
     return GeoBounds(GeoPoint(Angle::Zero(), Angle::Zero()));
 
-  GeoBounds bb((*this)[0].get_location());
+  GeoBounds bb((*this)[0].GetLocation());
   for (auto v = begin(); v != end(); ++v)
-    bb.Extend(v->get_location());
+    bb.Extend(v->GetLocation());
 
   return bb;
 }

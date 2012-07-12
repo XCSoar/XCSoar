@@ -64,7 +64,7 @@ GetPolygonPoints(std::vector<RasterPoint> &pts,
 
   pts.reserve(border.size());
   for (auto it = border.begin(), it_end = border.end(); it != it_end; ++it)
-    pts.push_back(projection.GeoToScreen(it->get_location()));
+    pts.push_back(projection.GeoToScreen(it->GetLocation()));
 }
 
 bool

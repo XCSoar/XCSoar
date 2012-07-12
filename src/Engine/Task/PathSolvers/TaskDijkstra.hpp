@@ -109,7 +109,7 @@ protected:
   gcc_pure
   unsigned CalcDistance(const ScanTaskPoint curNode,
                         const SearchPoint &currentLocation) const {
-    return GetPoint(curNode).flat_distance(currentLocation);
+    return GetPoint(curNode).FlatDistanceTo(currentLocation);
   }
 
   /** 
@@ -122,7 +122,7 @@ protected:
    */
   gcc_pure
   unsigned CalcDistance(const ScanTaskPoint s1, const ScanTaskPoint s2) const {
-    return GetPoint(s1).flat_distance(GetPoint(s2));
+    return GetPoint(s1).FlatDistanceTo(GetPoint(s2));
   }
 
 private:

@@ -35,8 +35,8 @@ class TaskProjection;
  */
 class SearchPoint
 {
-  GeoPoint reference;
-  FlatGeoPoint flatLocation;
+  GeoPoint location;
+  FlatGeoPoint flat_location;
 
 #ifndef NDEBUG
   bool projected;
@@ -62,14 +62,14 @@ public:
    * @param tp Projection used
    */
   SearchPoint(const GeoPoint &loc)
-    :reference(loc)
+    :location(loc)
 #ifndef NDEBUG
     , projected(false)
 #endif
   {}
 
-  SearchPoint(const GeoPoint &_reference, const FlatGeoPoint &_flat)
-    :reference(_reference), flatLocation(_flat)
+  SearchPoint(const GeoPoint &_location, const FlatGeoPoint &_flat)
+    :location(_location), flat_location(_flat)
 #ifndef NDEBUG
     , projected(true)
 #endif
@@ -97,17 +97,24 @@ public:
    *
    * @param tp Projection used
    */
-  void project(const TaskProjection& tp);
+  void Project(const TaskProjection& tp);
+
+  /**
+   * The actual location
+   */
+  const GeoPoint &GetLocation() const {
+    return location;
+  }
 
   /**
    * Accessor for flat projected coordinate
    *
    * @return Flat projected coordinate
    */
-  const FlatGeoPoint& get_flatLocation() const {
+  const FlatGeoPoint &GetFlatLocation() const {
     assert(projected);
 
-    return flatLocation;
+    return flat_location;
   }
 
   /**
@@ -118,8 +125,8 @@ public:
    * @return True if points coincident
    */
   gcc_pure
-  bool equals(const SearchPoint& sp) const {
-    return sp.reference == reference;
+  bool Equals(const SearchPoint& sp) const {
+    return sp.location == location;
   }
 
   /**
@@ -130,8 +137,8 @@ public:
    * @return Distance in projected units
    */
   gcc_pure
-  unsigned flat_distance(const SearchPoint& sp) const {
-    return flatLocation.Distance(sp.flatLocation);
+  unsigned FlatDistanceTo(const SearchPoint &sp) const {
+    return flat_location.Distance(sp.flat_location);
   }
 
   /**
@@ -140,8 +147,8 @@ public:
    * root.
    */
   gcc_pure
-  unsigned FlatSquareDistance(const SearchPoint& sp) const {
-    return flatLocation.DistanceSquared(sp.flatLocation);
+  unsigned FlatSquareDistanceTo(const SearchPoint& sp) const {
+    return flat_location.DistanceSquared(sp.flat_location);
   }
 
   /**
@@ -152,22 +159,15 @@ public:
    * @return True if this point is further left (or if equal, lower) than the other
    */
   gcc_pure
-  bool sort (const SearchPoint &other) const {
-    return reference.Sort(other.reference);
+  bool Sort(const SearchPoint &other) const {
+    return location.Sort(other.location);
   }
 
   /**
    * distance from this to the reference
    */
-  fixed distance(const GeoPoint & ref) const {
-    return reference.Distance(ref);
-  }
-
-  /**
-   * The actual location
-   */
-  const GeoPoint & get_location() const {
-    return reference;
+  fixed DistanceTo(const GeoPoint &ref) const {
+    return location.Distance(ref);
   }
 };
 

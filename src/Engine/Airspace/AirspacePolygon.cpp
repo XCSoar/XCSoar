@@ -63,7 +63,7 @@ AirspacePolygon::GetCenter() const
   if (m_border.empty())
     return GeoPoint(Angle::Zero(), Angle::Zero());
 
-  return m_border[0].get_location();
+  return m_border[0].GetLocation();
 }
 
 bool 
@@ -82,7 +82,7 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoPoint &end,
 
   for (auto it = m_border.begin(); it + 1 != m_border.end(); ++it) {
 
-    const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
+    const FlatRay r_seg(it->GetFlatLocation(), (it + 1)->GetFlatLocation());
     fixed t = ray.DistinctIntersection(r_seg);
     if (!negative(t))
       sorter.add(t, projection.unproject(ray.Parametric(t)));

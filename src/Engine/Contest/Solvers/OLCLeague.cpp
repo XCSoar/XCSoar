@@ -97,7 +97,7 @@ OLCLeague::CalculateResult() const
   result.time = fixed(solution[4].DeltaTime(solution[0]));
   result.distance = fixed_zero;
   for (unsigned i = 0; i < 4; ++i)
-    result.distance += solution[i].distance(solution[i + 1].get_location());
+    result.distance += solution[i].DistanceTo(solution[i + 1].GetLocation());
   result.score = ApplyShiftedHandicap(result.distance / 2500);
   return result;
 }

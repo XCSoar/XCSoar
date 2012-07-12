@@ -88,7 +88,7 @@ public:
    */
   gcc_pure
   const GeoPoint &GetLocationMax() const {
-    return search_max.get_location();
+    return search_max.GetLocation();
   };
 
   /**
@@ -98,7 +98,7 @@ public:
    * @return Location of minimum distance node
    */
   const GeoPoint &GetLocationMin() const {
-    return search_min.get_location();
+    return search_min.GetLocation();
   };
 
   /**

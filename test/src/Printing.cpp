@@ -87,8 +87,8 @@ static void
 PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 {
   fs << point.GetTime()
-     << " " << point.get_location().longitude
-     << " " << point.get_location().latitude
+     << " " << point.GetLocation().longitude
+     << " " << point.GetLocation().latitude
      << " " << point.GetAltitude()
      << " " << point.GetVario()
      << "\n";

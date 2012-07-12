@@ -175,7 +175,7 @@ protected:
   gcc_pure
   unsigned CalcEdgeDistance(const ScanTaskPoint s1,
                             const ScanTaskPoint s2) const {
-    return GetPoint(s1).flat_distance(GetPoint(s2));
+    return GetPoint(s1).FlatDistanceTo(GetPoint(s2));
   }
 
   void Link(const ScanTaskPoint node, const ScanTaskPoint parent,

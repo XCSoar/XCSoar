@@ -69,7 +69,7 @@ MapCanvas::Project(const Projection &projection,
                    const SearchPointVector &points, RasterPoint *screen)
 {
   for (auto it = points.begin(); it != points.end(); ++it)
-    *screen++ = projection.GeoToScreen(it->get_location());
+    *screen++ = projection.GeoToScreen(it->GetLocation());
 }
 
 static void
@@ -112,7 +112,7 @@ MapCanvas::PreparePolygon(const SearchPointVector &points)
   /* copy all SearchPointVector elements to geo_points */
   geo_points.GrowDiscard(num_points * 3);
   for (unsigned i = 0; i < num_points; ++i)
-    geo_points[i] = points[i].get_location();
+    geo_points[i] = points[i].GetLocation();
 
   /* clip them */
   num_raster_points = clip.ClipPolygon(geo_points.begin(),

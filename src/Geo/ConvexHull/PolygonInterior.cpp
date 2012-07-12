@@ -76,16 +76,26 @@ PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
   int    wn = 0;    // the winding number counter
 
   // loop through all edges of the polygon
-  for (int i=0; i<n; ++i) {   // edge from V[i] to V[i+1]
-    if (V[i].get_location().latitude <= P.latitude) {         // start y <= P.latitude
-      if (V[i+1].get_location().latitude > P.latitude)      // an upward crossing
-        if (isLeft( V[i].get_location(), V[i+1].get_location(), P)>0)  // P left of edge
-          ++wn;            // have a valid up intersect
-    }
-    else {                       // start y > P.latitude (no test needed)
-      if (V[i+1].get_location().latitude <= P.latitude)     // a downward crossing
-        if (isLeft( V[i].get_location(), V[i+1].get_location(), P)<0)  // P right of edge
-          --wn;            // have a valid down intersect
+  for (int i = 0; i < n; ++i) {
+    // edge from V[i] to V[i+1]
+    if (V[i].GetLocation().latitude <= P.latitude) {
+      // start y <= P.latitude
+
+      if (V[i + 1].GetLocation().latitude > P.latitude)
+        // an upward crossing
+        if (isLeft(V[i].GetLocation(), V[i+1].GetLocation(), P) > 0)
+          // P left of edge
+          // have a valid up intersect
+          ++wn;
+    } else {
+      // start y > P.latitude (no test needed)
+
+      if (V[i + 1].GetLocation().latitude <= P.latitude)
+        // a downward crossing
+        if (isLeft(V[i].GetLocation(), V[i + 1].GetLocation(), P) < 0)
+          // P right of edge
+          // have a valid down intersect
+          --wn;
     }
   }
   return wn != 0;
@@ -103,16 +113,25 @@ PolygonInterior( const FlatGeoPoint &P, const std::vector<SearchPoint>& V)
   int    wn = 0;    // the winding number counter
 
   // loop through all edges of the polygon
-  for (int i=0; i<n; ++i) {   // edge from V[i] to V[i+1]
-    if (V[i].get_flatLocation().latitude <= P.latitude) {         // start y <= P.latitude
-      if (V[i+1].get_flatLocation().latitude > P.latitude)      // an upward crossing
-        if (isLeft( V[i].get_flatLocation(), V[i+1].get_flatLocation(), P)>0)  // P left of edge
-          ++wn;            // have a valid up intersect
-    }
-    else {                       // start y > P.latitude (no test needed)
-      if (V[i+1].get_flatLocation().latitude <= P.latitude)     // a downward crossing
-        if (isLeft( V[i].get_flatLocation(), V[i+1].get_flatLocation(), P)<0)  // P right of edge
-          --wn;            // have a valid down intersect
+  for (int i = 0; i < n; ++i) {
+    // edge from V[i] to V[i+1]
+    if (V[i].GetFlatLocation().latitude <= P.latitude) {
+      // start y <= P.latitude
+      if (V[i + 1].GetFlatLocation().latitude > P.latitude)
+        // an upward crossing
+        if (isLeft(V[i].GetFlatLocation(), V[i + 1].GetFlatLocation(), P) > 0)
+          // P left of edge
+          // have a valid up intersect
+          ++wn;
+    } else {
+      // start y > P.latitude (no test needed)
+
+      if (V[i + 1].GetFlatLocation().latitude <= P.latitude)
+        // a downward crossing
+        if (isLeft(V[i].GetFlatLocation(), V[i + 1].GetFlatLocation(), P) < 0)
+          // P right of edge
+          // have a valid down intersect
+          --wn;
     }
   }
   return wn != 0;

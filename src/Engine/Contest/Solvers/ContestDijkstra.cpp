@@ -71,7 +71,7 @@ ContestDijkstra::IsMasterUpdated() const
   // update trace if time and distance are greater than significance thresholds
 
   return last_master.GetTime() > last_point.GetTime() + threshold_delta_t_trace &&
-    last_master.flat_distance(last_point) > threshold_distance_trace;
+    last_master.FlatDistanceTo(last_point) > threshold_distance_trace;
 }
 
 void
@@ -214,9 +214,9 @@ ContestDijkstra::CalculateResult() const
                       .DeltaTime(GetPoint(solution[0])));
   result.distance = result.score = fixed_zero;
 
-  GeoPoint previous = GetPoint(solution[0]).get_location();
+  GeoPoint previous = GetPoint(solution[0]).GetLocation();
   for (unsigned i = 1; i < num_stages; ++i) {
-    const GeoPoint &current = GetPoint(solution[i]).get_location();
+    const GeoPoint &current = GetPoint(solution[i]).GetLocation();
     result.distance += current.Distance(previous);
     result.score += GetStageWeight(i - 1) * current.Distance(previous);
     previous = current;

@@ -115,7 +115,7 @@ class Trace : private NonCopyable
       :point(p),
        elim_time(TimeMetric(p_last, p, p_next)),
        elim_distance(DistanceMetric(p_last, p, p_next)),
-       delta_distance(p.flat_distance(p_last))
+       delta_distance(p.FlatDistanceTo(p_last))
     {
       assert(elim_distance != null_delta);
     }
@@ -146,7 +146,7 @@ class Trace : private NonCopyable
     void Update(const TracePoint &p_last, const TracePoint &p_next) {
       elim_time = TimeMetric(p_last, point, p_next);
       elim_distance = DistanceMetric(p_last, point, p_next);
-      delta_distance = point.flat_distance(p_last);
+      delta_distance = point.FlatDistanceTo(p_last);
     }
 
     /**
@@ -163,8 +163,8 @@ class Trace : private NonCopyable
     static unsigned DistanceMetric(const TracePoint &last,
                                    const TracePoint &node,
                                    const TracePoint &next) {
-      const int d_this = last.flat_distance(node) + node.flat_distance(next);
-      const int d_rem = last.flat_distance(next);
+      const int d_this = last.FlatDistanceTo(node) + node.FlatDistanceTo(next);
+      const int d_rem = last.FlatDistanceTo(next);
       return abs(d_this - d_rem);
     }
 
@@ -508,7 +508,7 @@ public:
           return *this;
 
         const TraceDelta &td = (const TraceDelta &)*iterator;
-        if (td.point.FlatSquareDistance(previous) >= sq_resolution)
+        if (td.point.FlatSquareDistanceTo(previous) >= sq_resolution)
           return *this;
       }
     }

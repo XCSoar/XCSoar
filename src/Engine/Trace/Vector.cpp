@@ -32,7 +32,7 @@ TracePointVector::GetBounds(const GeoPoint &fallback_location) const
 
   task_projection.reset(fallback_location);
   for (auto it = begin(); it != end(); ++it)
-    task_projection.scan_location(it->get_location());
+    task_projection.scan_location(it->GetLocation());
 
   task_projection.update_fast();
   return task_projection;

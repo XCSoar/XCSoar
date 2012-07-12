@@ -68,9 +68,9 @@ OLCTriangle::CalcLegDistance(const unsigned index) const
   // leg 1: 2-3
   // leg 2: 3-1
 
-  const GeoPoint &p_start = GetPoint(solution[index]).get_location();
+  const GeoPoint &p_start = GetPoint(solution[index]).GetLocation();
   const GeoPoint &p_dest =
-    GetPoint(solution[index < 2 ? index + 1 : 0]).get_location();
+    GetPoint(solution[index < 2 ? index + 1 : 0]).GetLocation();
 
   return p_start.Distance(p_dest);
 }
@@ -84,7 +84,7 @@ OLCTriangle::IsPathClosed() const
   // note this may fail if resolution of sampled trace is too low
   assert(n_points > 0);
 
-  const GeoPoint end_location = GetPoint(n_points - 1).get_location();
+  const GeoPoint end_location = GetPoint(n_points - 1).GetLocation();
 
   fixed d_min(-1);
 
@@ -92,7 +92,7 @@ OLCTriangle::IsPathClosed() const
 
   for (unsigned start_index = 0; start_index <= first_tp; ++start_index) {
     const fixed d_this =
-      GetPoint(start_index).get_location().Distance(end_location);
+      GetPoint(start_index).GetLocation().Distance(end_location);
 
     if (!positive(d_min) || d_this < d_min)
       d_min = d_this;
@@ -111,7 +111,7 @@ class TriangleSecondLeg {
 
 public:
   TriangleSecondLeg(bool _fai, const SearchPoint &_a, const SearchPoint &_b)
-    :is_fai(_fai), a(_a), b(_b), df_1(a.flat_distance(b)) {}
+    :is_fai(_fai), a(_a), b(_b), df_1(a.FlatDistanceTo(b)) {}
 
   struct Result {
     unsigned leg_distance, total_distance;
@@ -130,8 +130,8 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
   // this is a heuristic to remove invalid triangles
   // we do as much of this in flat projection for speed
 
-  const unsigned df_2 = b.flat_distance(c);
-  const unsigned df_3 = c.flat_distance(a);
+  const unsigned df_2 = b.FlatDistanceTo(c);
+  const unsigned df_3 = c.FlatDistanceTo(a);
   const unsigned df_total = df_1+df_2+df_3;
 
   // require some distance!
@@ -174,11 +174,11 @@ TriangleSecondLeg::Calculate(const SearchPoint &c, unsigned best) const
   // find accurate min leg distance
   fixed leg(0);
   if (df_1 == shortest)
-    leg = a.get_location().Distance(b.get_location());
+    leg = a.GetLocation().Distance(b.GetLocation());
   else if (df_2 == shortest)
-    leg = b.get_location().Distance(c.get_location());
+    leg = b.GetLocation().Distance(c.GetLocation());
   else if (df_3 == shortest)
-    leg = c.get_location().Distance(a.get_location());
+    leg = c.GetLocation().Distance(a.GetLocation());
 
   // estimate total distance by scaling.
   // this is a slight approximation, but saves having to do

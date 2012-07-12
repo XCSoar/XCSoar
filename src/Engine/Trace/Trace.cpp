@@ -262,7 +262,7 @@ Trace::push_back(const AircraftState& state)
     return;
 
   TracePoint tp(state);
-  tp.project(task_projection);
+  tp.Project(task_projection);
 
   EnforceTimeWindow(tp.GetTime());
 

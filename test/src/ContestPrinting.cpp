@@ -36,7 +36,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
     trace_full.GetPoints(v);
 
     for (auto it = v.begin(); it != v.end(); ++it)
-      fs << it->get_location().longitude << " " << it->get_location().latitude
+      fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
          << " " << it->GetAltitude() << " " << it->GetTime()
          << "\n";
   }
@@ -48,7 +48,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
     trace_sprint.GetPoints(v);
 
     for (auto it = v.begin(); it != v.end(); ++it)
-      fs << it->get_location().longitude << " " << it->get_location().latitude
+      fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
          << " " << it->GetAltitude() << " " << it->GetTime()
          << "\n";
   }
@@ -64,7 +64,7 @@ PrintHelper::contestmanager_print(const ContestManager &man,
 
     for (const TracePoint* it = man.stats.solution[0].begin();
          it != man.stats.solution[0].end(); ++it) {
-      fs << it->get_location().longitude << " " << it->get_location().latitude
+      fs << it->GetLocation().longitude << " " << it->GetLocation().latitude
          << " " << it->GetAltitude() << " " << it->GetTime()
          << "\n";
     }

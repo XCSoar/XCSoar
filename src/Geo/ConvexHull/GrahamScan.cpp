@@ -27,7 +27,7 @@ static bool
 sortleft
 (const SearchPoint& sp1, const SearchPoint& sp2)
 { 
-  return sp1.sort(sp2);
+  return sp1.Sort(sp2);
 }
 
 static int
@@ -90,18 +90,18 @@ GrahamScan::PartitionPoints()
   // Now put the remaining points in one of the two output sequences
   //
 
-  GeoPoint loclast = left->get_location();
+  GeoPoint loclast = left->GetLocation();
 
   upper_partition_points.reserve(size);
   lower_partition_points.reserve(size);
 
   for (auto i = raw_points.begin(); i != raw_points.end(); ++i) {
-    if (loclast.longitude != i->get_location().longitude ||
-        loclast.latitude != i->get_location().latitude) {
-      loclast = i->get_location();
+    if (loclast.longitude != i->GetLocation().longitude ||
+        loclast.latitude != i->GetLocation().latitude) {
+      loclast = i->GetLocation();
 
-      int dir = Direction(left->get_location(), right->get_location(),
-                          i->get_location(), tolerance);
+      int dir = Direction(left->GetLocation(), right->GetLocation(),
+                          i->GetLocation(), tolerance);
       SearchPoint* sp = &(*i);
       if (dir < 0)
         upper_partition_points.push_back(sp);
@@ -170,9 +170,9 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
     while (output.size() >= 3) {
       size_t end = output.size() - 1;
 
-      if (factor * Direction(output[end - 2]->get_location(),
-                             output[end]->get_location(),
-                             output[end - 1]->get_location(),
+      if (factor * Direction(output[end - 2]->GetLocation(),
+                             output[end]->GetLocation(),
+                             output[end - 1]->GetLocation(),
                              tolerance) > 0)
         break;
 

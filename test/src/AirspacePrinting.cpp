@@ -53,13 +53,13 @@ std::ostream& operator<< (std::ostream& f,
   f << "# polygon\n";
   for (auto v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
-    GeoPoint l = v->get_location();
+    GeoPoint l = v->GetLocation();
     f << l.longitude << " " << l.latitude << " " << as.GetBase().altitude << "\n";
   }
   f << "\n";
   for (auto v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
-    GeoPoint l = v->get_location();
+    GeoPoint l = v->GetLocation();
     f << l.longitude << " " << l.latitude << " " << as.GetTop().altitude << "\n";
   }
   f << "\n";
