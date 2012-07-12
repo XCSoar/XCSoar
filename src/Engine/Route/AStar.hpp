@@ -84,13 +84,13 @@ struct AStarPriorityValue
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template <class Node, bool m_min=true>
+template <class Node, class CompareNode=std::less<Node>, bool m_min=true>
 class AStar
 {
 #ifdef ASTAR_TR1
   typedef std::tr1::unordered_map<Node, AStarPriorityValue> node_value_map;
 #else
-  typedef std::map<Node, AStarPriorityValue> node_value_map;
+  typedef std::map<Node, AStarPriorityValue, CompareNode> node_value_map;
 #endif
 
   typedef typename node_value_map::iterator node_value_iterator;
@@ -99,7 +99,7 @@ class AStar
 #ifdef ASTAR_TR1
   typedef std::tr1::unordered_map<Node, Node> node_parent_map;
 #else
-  typedef std::map<Node, Node> node_parent_map;
+  typedef std::map<Node, Node, CompareNode> node_parent_map;
 #endif
 
   typedef typename node_parent_map::iterator node_parent_iterator;
