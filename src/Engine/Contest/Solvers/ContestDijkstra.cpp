@@ -98,8 +98,7 @@ bool
 ContestDijkstra::UpdateTraceTail()
 {
   assert(continuous);
-  assert(incremental);
-  assert(finished);
+  assert(incremental == finished);
   assert(modify_serial == trace_master.GetModifySerial());
 
   if (!trace_master.SyncPoints(trace))
@@ -125,11 +124,18 @@ ContestDijkstra::UpdateTrace(bool force)
     finished = false;
 
     first_finish_candidate = incremental ? n_points - 1 : 0;
-  } else if (finished || force) {
+  } else if (finished) {
     const unsigned old_size = n_points;
     if (UpdateTraceTail())
       /* new data from the master trace, start incremental solver */
       AddIncrementalEdges(old_size);
+  } else if (force) {
+    if (UpdateTraceTail()) {
+      /* new data from the master trace, restart the non-incremental
+         solver */
+      trace_dirty = true;
+      first_finish_candidate = incremental ? n_points - 1 : 0;
+    }
   }
 }
 
