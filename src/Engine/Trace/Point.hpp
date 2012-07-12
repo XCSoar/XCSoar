@@ -65,6 +65,13 @@ public:
    */
   TracePoint() = default;
 
+  template<typename A, typename V>
+  TracePoint(const GeoPoint &location, unsigned _time,
+             unsigned short _drift_factor,
+             const A &_altitude, const V &_vario)
+    :SearchPoint(location), time(_time),
+     drift_factor(_drift_factor), altitude(_altitude), vario(_vario) {}
+
   /**
    * Constructor for actual trace points
    *
