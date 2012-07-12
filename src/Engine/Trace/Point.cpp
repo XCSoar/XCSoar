@@ -30,7 +30,7 @@ TracePoint::TracePoint(const MoreData &basic)
    time((unsigned)basic.time),
    drift_factor(sigmoid(basic.nav_altitude / 100) * 256),
    altitude(basic.nav_altitude),
-   vario(basic.netto_vario)
+   vario(basic.netto_vario_available ? basic.netto_vario : fixed_zero)
 {
 }
 

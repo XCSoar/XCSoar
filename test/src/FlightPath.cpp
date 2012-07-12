@@ -24,7 +24,6 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Engine/Trace/Trace.hpp"
-#include "NMEA/Aircraft.hpp"
 
 int main(int argc, char **argv)
 {
@@ -64,8 +63,7 @@ int main(int argc, char **argv)
         !basic.NavAltitudeAvailable())
       continue;
 
-    const AircraftState state = ToAircraftState(basic, calculated);
-    trace.push_back(state);
+    trace.push_back(TracePoint(basic));
 
     if (calculated.flight.flying && !takeoff) {
       takeoff = true;

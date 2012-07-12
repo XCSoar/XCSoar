@@ -24,7 +24,6 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Engine/Trace/Trace.hpp"
-#include "NMEA/Aircraft.hpp"
 
 int main(int argc, char **argv)
 {
@@ -38,9 +37,10 @@ int main(int argc, char **argv)
   Trace trace;
 
   while (replay->Next()) {
-    const AircraftState state =
-      ToAircraftState(replay->Basic(), replay->Calculated());
-    trace.push_back(state);
+    const MoreData &basic = replay->Basic();
+    if (basic.time_available && basic.location_available &&
+        basic.NavAltitudeAvailable())
+      trace.push_back(TracePoint(basic));
   }
 
   delete replay;

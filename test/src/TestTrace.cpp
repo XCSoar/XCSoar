@@ -25,7 +25,6 @@
 #include "IO/FileLineReader.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Trace/Vector.hpp"
-#include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
 #include "TestUtil.hpp"
 
@@ -34,21 +33,12 @@
 #include <cstdio>
 
 static void
-OnAdvance(Trace &trace,
-           const GeoPoint &loc, const fixed speed,
-           const Angle bearing, const fixed alt,
-           const fixed baroalt, const fixed t)
+OnAdvance(Trace &trace, const GeoPoint &loc, const fixed alt, const fixed t)
 {
-  AircraftState new_state;
-  new_state.location = loc;
-  new_state.ground_speed = speed;
-  new_state.altitude = alt;
-  new_state.track = bearing;
-  new_state.time = t;
-  new_state.altitude_agl = alt;
-
   if (t>fixed_one) {
-    trace.push_back(new_state);
+    const TracePoint point(loc, unsigned(t), 0,
+                           alt, fixed_zero);
+    trace.push_back(point);
   }
 // get the trace, just so it's included in timing
   TracePointVector v;
@@ -83,8 +73,8 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
       continue;
 
     OnAdvance(trace,
-               fix.location, fixed(30), Angle::Zero(),
-               fixed(fix.gps_altitude), fixed(fix.pressure_altitude),
+               fix.location,
+               fixed(fix.gps_altitude),
                fixed(fix.time.GetSecondOfDay()));
   }
   putchar('\n');

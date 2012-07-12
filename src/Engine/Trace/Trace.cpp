@@ -237,41 +237,39 @@ Trace::EraseStart(TraceDelta &td_start) {
 }
 
 void
-Trace::push_back(const AircraftState& state)
+Trace::push_back(const TracePoint &point)
 {
   assert(cached_size == delta_list.size());
   assert(cached_size == chronological_list.Count());
 
   if (empty()) {
     // first point determines origin for flat projection
-    task_projection.reset(state.location);
+    task_projection.reset(point.GetLocation());
     task_projection.update_fast();
-  } else if (state.time < fixed(back().GetTime())) {
+  } else if (point.GetTime() < back().GetTime()) {
     // gone back in time
 
-    if (unsigned(state.time) + 180 < back().GetTime()) {
+    if (point.GetTime() + 180 < back().GetTime()) {
       /* not fixable, clear the trace and restart from scratch */
       clear();
       return;
     }
 
     /* not much, try to fix it */
-    EraseLaterThan(unsigned(state.time) - 10);
-  } else if ((unsigned)state.time - back().GetTime() < 2)
+    EraseLaterThan(point.GetTime() - 10);
+  } else if (point.GetTime() - back().GetTime() < 2)
     // only add one item per two seconds
     return;
 
-  TracePoint tp(state);
-  tp.Project(task_projection);
-
-  EnforceTimeWindow(tp.GetTime());
+  EnforceTimeWindow(point.GetTime());
 
   if (size() >= max_size)
     Thin();
 
   assert(size() < max_size);
 
-  TraceDelta &td = Insert(tp);
+  TraceDelta &td = Insert(point);
+  td.point.Project(task_projection);
   td.InsertBefore(chronological_list);
 
   ++cached_size;

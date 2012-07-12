@@ -37,7 +37,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-struct AircraftState;
 class TracePointVector;
 class TracePointerVector;
 
@@ -296,9 +295,9 @@ public:
    * Add trace to internal store.  Call optimise() periodically
    * to balance tree for faster queries
    *
-   * @param state Aircraft state to log point for
+   * @param a new point; its "flat" (projected) location is ignored
    */
-  void push_back(const AircraftState &state);
+  void push_back(const TracePoint &point);
 
   /**
    * Clear the trace store

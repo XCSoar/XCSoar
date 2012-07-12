@@ -22,11 +22,9 @@
 
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
-#include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
-#include "NMEA/Aircraft.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -60,10 +58,14 @@ TestOLC(DebugReplay &replay)
       fflush(stdout);
     }
 
-    const AircraftState state =
-      ToAircraftState(replay.Basic(), replay.Calculated());
-    full_trace.push_back(state);
-    sprint_trace.push_back(state);
+    const MoreData &basic = replay.Basic();
+    if (!basic.time_available || !basic.location_available ||
+        !basic.NavAltitudeAvailable())
+      continue;
+
+    const TracePoint point(basic);
+    full_trace.push_back(point);
+    sprint_trace.push_back(point);
 
     olc_sprint.UpdateIdle();
     olc_league.UpdateIdle();

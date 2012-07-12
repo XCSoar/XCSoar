@@ -22,10 +22,8 @@
 
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
-#include "Engine/Navigation/Aircraft.hpp"
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
-#include "NMEA/Aircraft.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -102,12 +100,17 @@ static int
 Run(DebugReplay &replay, ContestManager &contest, Result &result)
 {
   for (int i = 1; replay.Next(); i++) {
-    Update(replay.Basic(), replay.Calculated(), result);
+    const MoreData &basic = replay.Basic();
 
-    const AircraftState state =
-      ToAircraftState(replay.Basic(), replay.Calculated());
-    full_trace.push_back(state);
-    sprint_trace.push_back(state);
+    Update(basic, replay.Calculated(), result);
+
+    if (!basic.time_available || !basic.location_available ||
+        !basic.NavAltitudeAvailable())
+      continue;
+
+    const TracePoint point(basic);
+    full_trace.push_back(point);
+    sprint_trace.push_back(point);
   }
 
   contest.SolveExhaustive();
