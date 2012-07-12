@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-07 09:47+0000\n"
-"Last-Translator: AUDIER Daniel <osteocool@yahoo.fr>\n"
+"PO-Revision-Date: 2012-07-12 20:38+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-09 09:48+0000\n"
-"X-Generator: Launchpad (build 15558)\n"
+"X-Launchpad-Export-Date: 2012-07-12 22:52+0000\n"
+"X-Generator: Launchpad (build 15593)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1654,7 +1654,7 @@ msgstr "Vitesse sur le circuit achevé"
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
 msgid "V Task Ach"
-msgstr ""
+msgstr "V Circ Real"
 
 #: src/InfoBoxes/Content/Factory.cpp:692
 #, no-c-format
@@ -3911,23 +3911,25 @@ msgstr ""
 
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:92
 msgid "Border Width"
-msgstr ""
+msgstr "Epaisseur de bordure"
 
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:93
 msgid ""
 "The width of the border drawn around each airspace. Set this value to zero "
 "to hide the border."
 msgstr ""
+"Epaisseur de la bordure dessinan le contour de chaque espace aérien. Choisir "
+"zéro pour cacher la bordure."
 
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:98
 #, no-c-format
 msgid "Filled"
-msgstr ""
+msgstr "Rempli"
 
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:99
 #, no-c-format
 msgid "Only padding"
-msgstr ""
+msgstr "Remplissage seul"
 
 #: src/Dialogs/AirspaceCRendererSettingsPanel.cpp:100
 #, no-c-format
@@ -6108,7 +6110,7 @@ msgstr "Vario #1"
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:103
 #, no-c-format
 msgid "Vario #1 (with dots)"
-msgstr ""
+msgstr "Vario #1 (avec points)"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:104
 #, no-c-format
@@ -6118,7 +6120,7 @@ msgstr "Vario #2"
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:105
 #, no-c-format
 msgid "Vario #2 (with dots)"
-msgstr ""
+msgstr "Vario #2 (avec points)"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:112
 #, no-c-format
@@ -7954,7 +7956,7 @@ msgstr ""
 #: src/Dialogs/Vega/AudioModeParameters.hpp:93
 #, no-c-format
 msgid "Mean volume level in circling modes."
-msgstr ""
+msgstr "Niveau moyen du volume dans en spirale."
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:97
 #, no-c-format
@@ -7966,6 +7968,7 @@ msgstr "Volume en transition"
 msgid ""
 "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
 msgstr ""
+"Niveau moyen du volume en transition. A zéro, dépend de la vitesse air."
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:102
 #, no-c-format
@@ -7975,22 +7978,22 @@ msgstr "Fréquence de base"
 #: src/Dialogs/Vega/AudioModeParameters.hpp:103
 #, no-c-format
 msgid "Adjustment to base frequency of tones in all modes."
-msgstr ""
+msgstr "Réglage de la fréquence de base des sons dans tous les modes."
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:107
 #, no-c-format
 msgid "Filter circling"
-msgstr ""
+msgstr "Filtre en spirale"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:108
 #, no-c-format
 msgid "Variometer low pass filter time constant in circling mode."
-msgstr ""
+msgstr "Constante de temps du filtre passe-bas du variomètre en spirale."
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:112
 #, no-c-format
 msgid "Filter cruise"
-msgstr ""
+msgstr "Filtre en transition"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:113
 #, no-c-format
@@ -8311,7 +8314,7 @@ msgstr "Coupe le son des synthèses vocales"
 #: src/Dialogs/Vega/MixerParameters.hpp:39
 #, no-c-format
 msgid "Speaker threshold"
-msgstr ""
+msgstr "Seuil du haut-parleur"
 
 #: src/Dialogs/Vega/MixerParameters.hpp:41
 #, no-c-format
