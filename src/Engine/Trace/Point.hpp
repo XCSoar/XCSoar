@@ -73,7 +73,7 @@ public:
    *
    * @return Initialised object
    */
-  TracePoint(const AircraftState &state);
+  explicit TracePoint(const AircraftState &state);
 
   void Clear() {
     time = (unsigned)(0 - 1);
