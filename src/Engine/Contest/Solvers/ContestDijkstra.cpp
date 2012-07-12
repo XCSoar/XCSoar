@@ -103,9 +103,12 @@ ContestDijkstra::UpdateTraceTail()
 void
 ContestDijkstra::UpdateTrace(bool force)
 {
+  if (append_serial == trace_master.GetAppendSerial())
+    /* unmodified */
+    return;
+
   if (!IsMasterUpdated()) {
-    if ((finished || force) &&
-        append_serial != trace_master.GetAppendSerial()) {
+    if (finished || force) {
       const unsigned old_size = n_points;
       if (UpdateTraceTail())
         /* new data from the master trace, start incremental solver */

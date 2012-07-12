@@ -338,6 +338,10 @@ public:
   /**
    * Returns a #Serial that gets incremented when data gets appended
    * to the #Trace.
+   *
+   * It also gets incremented on any other change, which makes this
+   * method useful for checking whether the object is unmodified since
+   * the last call.
    */
   const Serial &GetAppendSerial() const {
     return append_serial;

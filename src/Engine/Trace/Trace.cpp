@@ -57,6 +57,7 @@ Trace::clear()
   assert(cached_size == chronological_list.Count());
 
   ++modify_serial;
+  ++append_serial;
 }
 
 unsigned
@@ -178,6 +179,7 @@ Trace::EraseEarlierThan(const unsigned p_time)
     EraseStart(GetFront());
 
   ++modify_serial;
+  ++append_serial;
   return true;
 }
 
@@ -370,6 +372,7 @@ Trace::Thin()
   average_delta_time = CalcAverageDeltaTime(no_thin_time);
 
   ++modify_serial;
+  ++append_serial;
 }
 
 void
