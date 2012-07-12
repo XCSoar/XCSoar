@@ -23,7 +23,8 @@ Copyright_License {
 
 #include "TraceComputer.hpp"
 #include "ComputerSettings.hpp"
-#include "Engine/Navigation/Aircraft.hpp"
+#include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 #include "Asset.hpp"
 
 static gcc_constexpr_data unsigned full_trace_size =
@@ -75,17 +76,19 @@ TraceComputer::LockedCopyTo(TracePointVector &v, unsigned min_time,
 
 void
 TraceComputer::Update(const ComputerSettings &settings_computer,
-                      const AircraftState &state)
+                      const MoreData &basic, const DerivedInfo &calculated)
 {
   /* time warps are handled by the Trace class */
 
-  if (!state.flying)
+  if (!basic.time_available || !basic.location_available ||
+      !basic.NavAltitudeAvailable() ||
+      !calculated.flight.flying)
     return;
 
   // either olc or basic trace requires trace_full
   if (settings_computer.task.enable_olc ||
       settings_computer.task.enable_trace) {
-    const TracePoint point(state);
+    const TracePoint point(basic);
 
     mutex.Lock();
     full.push_back(point);

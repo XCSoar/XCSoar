@@ -7,6 +7,8 @@
 #include "ComputerSettings.hpp"
 #include "OS/PathName.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "NMEA/MoreData.hpp"
+#include "NMEA/Derived.hpp"
 
 #include <fstream>
 
@@ -185,6 +187,15 @@ test_replay(const Contests olc_type,
                                  trace_computer.GetSprint());
   contest_manager.SetHandicap(settings_computer.task.contest_handicap);
 
+  MoreData basic;
+  basic.clock = fixed_one;
+  basic.time_available.Update(basic.clock);
+  basic.location_available.Update(basic.clock);
+  basic.gps_altitude_available.Update(basic.clock);
+  basic.baro_altitude_available.Update(basic.clock);
+
+  DerivedInfo calculated;
+
   while (sim.Update()) {
     if (sim.state.time>time_last) {
 
@@ -192,7 +203,12 @@ test_replay(const Contests olc_type,
 
       flying_computer.Compute(glide_polar.GetVTakeoff(), sim.state, sim.state);
 
-      trace_computer.Update(settings_computer, sim.state);
+      basic.time = sim.state.time;
+      basic.location = sim.state.location;
+      basic.gps_altitude = basic.baro_altitude = sim.state.altitude;
+      calculated.flight.flying = sim.state.flying;
+
+      trace_computer.Update(settings_computer, basic, calculated);
 
       contest_manager.UpdateIdle();
   

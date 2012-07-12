@@ -63,8 +63,7 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
                                     const ComputerSettings &settings_computer,
                                     bool force)
 {
-  if (basic.HasTimeAdvancedSince(last_basic) && basic.location_available)
-    trace.Update(settings_computer, ToAircraftState(basic, calculated));
+  trace.Update(settings_computer, basic, calculated);
 
   ProtectedTaskManager::ExclusiveLease _task(task);
 

@@ -28,7 +28,8 @@ Copyright_License {
 #include "Engine/Trace/Trace.hpp"
 
 struct ComputerSettings;
-struct AircraftState;
+struct MoreData;
+struct DerivedInfo;
 
 /**
  * Record a trace of the current flight.
@@ -94,7 +95,7 @@ public:
                             const GeoPoint &location, fixed resolution) const;
 
   void Update(const ComputerSettings &settings_computer,
-              const AircraftState &state);
+              const MoreData &basic, const DerivedInfo &calculated);
 };
 
 #endif
