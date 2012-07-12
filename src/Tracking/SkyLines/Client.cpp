@@ -47,8 +47,10 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 
   if (basic.location_available) {
     packet.flags |= ToBE32(FixPacket::FLAG_LOCATION);
-    packet.location.latitude = ToBE32(int(basic.location.latitude.Degrees() * 1000000));
-    packet.location.longitude = ToBE32(int(basic.location.longitude.Degrees() * 1000000));
+    ::GeoPoint location = basic.location;
+    location.Normalize();
+    packet.location.latitude = ToBE32(int(location.latitude.Degrees() * 1000000));
+    packet.location.longitude = ToBE32(int(location.longitude.Degrees() * 1000000));
   } else
     packet.location.latitude = packet.location.longitude = 0;
 
