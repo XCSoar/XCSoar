@@ -26,6 +26,7 @@
 #include "Math/fixed.hpp"
 #include "../ContestResult.hpp"
 #include "../ContestTrace.hpp"
+#include "Trace/Point.hpp"
 
 #include <assert.h>
 

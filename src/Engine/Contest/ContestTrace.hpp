@@ -23,11 +23,60 @@
 #ifndef XCSOAR_CONTEST_TRACE_HPP
 #define XCSOAR_CONTEST_TRACE_HPP
 
-#include "Trace/Point.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Util/TypeTraits.hpp"
+#include "Geo/GeoPoint.hpp"
 
-class ContestTraceVector: public TrivialArray<TracePoint, 10> {};
+class TracePoint;
+
+/**
+ * Similar to TracePoint, but without all the cruft that is not
+ * necessary for the contest trace.
+ */
+struct ContestTracePoint {
+  unsigned time;
+
+  GeoPoint location;
+
+  ContestTracePoint() = default;
+  ContestTracePoint(const TracePoint &src);
+
+  void Clear() {
+    time = (unsigned)(0 - 1);
+  }
+
+  bool IsDefined() const {
+    return time != (unsigned)(0 - 1);
+  }
+
+  unsigned GetTime() const {
+    return time;
+  }
+
+  bool IsOlderThan(const ContestTracePoint &other) const {
+    return time < other.time;
+  }
+
+  bool IsNewerThan(const ContestTracePoint &other) const {
+    return time > other.time;
+  }
+
+  unsigned DeltaTime(const ContestTracePoint &previous) const {
+    assert(!IsOlderThan(previous));
+
+    return time - previous.time;
+  }
+
+  const GeoPoint &GetLocation() const {
+    return location;
+  }
+
+  fixed DistanceTo(const GeoPoint &other) const {
+    return location.Distance(other);
+  }
+};
+
+class ContestTraceVector : public TrivialArray<ContestTracePoint, 10> {};
 
 static_assert(is_trivial_ndebug<ContestTraceVector>::value, "type is not trivial");
 

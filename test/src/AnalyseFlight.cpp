@@ -159,8 +159,8 @@ WriteResult(JSON::ObjectWriter &root, const Result &result)
 }
 
 static void
-WritePoint(TextWriter &writer, const TracePoint &point,
-           const TracePoint *previous)
+WritePoint(TextWriter &writer, const ContestTracePoint &point,
+           const ContestTracePoint *previous)
 {
   JSON::ObjectWriter object(writer);
 
@@ -187,7 +187,7 @@ WriteTrace(TextWriter &writer, const ContestTraceVector &trace)
 {
   JSON::ArrayWriter array(writer);
 
-  const TracePoint *previous = NULL;
+  const ContestTracePoint *previous = NULL;
   for (auto i = trace.begin(), end = trace.end(); i != end; ++i) {
     array.WriteElement(WritePoint, *i, previous);
     previous = &*i;

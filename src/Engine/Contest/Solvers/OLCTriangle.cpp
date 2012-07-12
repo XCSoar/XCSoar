@@ -21,6 +21,7 @@
 */
 
 #include "OLCTriangle.hpp"
+#include "Cast.hpp"
 
 /*
  @todo potential to use 3d convex hull to speed search

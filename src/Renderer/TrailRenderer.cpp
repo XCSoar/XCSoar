@@ -30,7 +30,7 @@ Copyright_License {
 #include "Computer/TraceComputer.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Geo/Math.hpp"
-#include "Engine/Contest/ContestResult.hpp"
+#include "Engine/Contest/ContestTrace.hpp"
 
 #include <algorithm>
 
