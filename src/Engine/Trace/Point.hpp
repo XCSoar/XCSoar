@@ -31,6 +31,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <assert.h>
+#include <stdint.h>
 
 struct MoreData;
 struct AircraftState;
@@ -43,12 +44,6 @@ class TracePoint : public SearchPoint
 {
   /** Time of sample */
   unsigned time;
-  /**
-   * Thermal drift factor:
-   * 256 indicates drift rate equal to wind speed
-   * 0 indicates no drift.
-   */
-  unsigned short drift_factor;
 
   /**
    * The NavAltitude [m].
@@ -60,6 +55,13 @@ class TracePoint : public SearchPoint
    */
   RoughVSpeed vario;
 
+  /**
+   * Thermal drift factor:
+   * 256 indicates drift rate equal to wind speed
+   * 0 indicates no drift.
+   */
+  uint16_t drift_factor;
+
 public:
   /**
    * Non-initialising constructor.
@@ -68,10 +70,10 @@ public:
 
   template<typename A, typename V>
   TracePoint(const GeoPoint &location, unsigned _time,
-             unsigned short _drift_factor,
-             const A &_altitude, const V &_vario)
+             const A &_altitude, const V &_vario,
+             unsigned _drift_factor)
     :SearchPoint(location), time(_time),
-     drift_factor(_drift_factor), altitude(_altitude), vario(_vario) {}
+     altitude(_altitude), vario(_vario), drift_factor(_drift_factor) {}
 
   explicit TracePoint(const MoreData &basic);
 

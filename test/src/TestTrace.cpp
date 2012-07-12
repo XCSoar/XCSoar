@@ -36,8 +36,7 @@ static void
 OnAdvance(Trace &trace, const GeoPoint &loc, const fixed alt, const fixed t)
 {
   if (t>fixed_one) {
-    const TracePoint point(loc, unsigned(t), 0,
-                           alt, fixed_zero);
+    const TracePoint point(loc, unsigned(t), alt, fixed_zero, 0);
     trace.push_back(point);
   }
 // get the trace, just so it's included in timing

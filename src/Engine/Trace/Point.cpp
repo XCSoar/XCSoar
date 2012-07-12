@@ -28,17 +28,17 @@ Copyright_License {
 TracePoint::TracePoint(const MoreData &basic)
   :SearchPoint(basic.location),
    time((unsigned)basic.time),
-   drift_factor(sigmoid(basic.nav_altitude / 100) * 256),
    altitude(basic.nav_altitude),
-   vario(basic.netto_vario_available ? basic.netto_vario : fixed_zero)
+   vario(basic.netto_vario_available ? basic.netto_vario : fixed_zero),
+   drift_factor(sigmoid(basic.nav_altitude / 100) * 256)
 {
 }
 
 TracePoint::TracePoint(const AircraftState &state):
   SearchPoint(state.location),
   time((unsigned)state.time),
-  drift_factor(sigmoid(state.altitude_agl / 100) * 256),
   altitude(state.altitude),
-  vario(state.netto_vario)
+  vario(state.netto_vario),
+  drift_factor(sigmoid(state.altitude_agl / 100) * 256)
 {
 }
