@@ -29,7 +29,7 @@ TracePoint::TracePoint(const MoreData &basic)
   :SearchPoint(basic.location),
    time((unsigned)basic.time),
    altitude(basic.nav_altitude),
-   vario(basic.netto_vario_available ? basic.netto_vario : fixed_zero),
+   vario(basic.netto_vario),
    drift_factor(sigmoid(basic.nav_altitude / 100) * 256)
 {
 }
