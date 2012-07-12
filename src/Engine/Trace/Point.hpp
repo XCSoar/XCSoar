@@ -56,6 +56,11 @@ class TracePoint : public SearchPoint
   RoughVSpeed vario;
 
   /**
+   * The engine noise level (0..999).
+   */
+  uint16_t engine_noise_level;
+
+  /**
    * Thermal drift factor:
    * 256 indicates drift rate equal to wind speed
    * 0 indicates no drift.
@@ -73,7 +78,8 @@ public:
              const A &_altitude, const V &_vario,
              unsigned _drift_factor)
     :SearchPoint(location), time(_time),
-     altitude(_altitude), vario(_vario), drift_factor(_drift_factor) {}
+     altitude(_altitude), vario(_vario),
+     engine_noise_level(0), drift_factor(_drift_factor) {}
 
   explicit TracePoint(const MoreData &basic);
 
@@ -120,6 +126,10 @@ public:
 
   fixed GetAltitude() const {
     return altitude;
+  }
+
+  unsigned GetEngineNoiseLevel() const {
+    return engine_noise_level;
   }
 
   /**

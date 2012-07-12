@@ -30,6 +30,9 @@ TracePoint::TracePoint(const MoreData &basic)
    time((unsigned)basic.time),
    altitude(basic.nav_altitude),
    vario(basic.netto_vario),
+   engine_noise_level(basic.engine_noise_level_available
+                      ? basic.engine_noise_level
+                      : 0u),
    drift_factor(sigmoid(basic.nav_altitude / 100) * 256)
 {
 }
@@ -39,6 +42,7 @@ TracePoint::TracePoint(const AircraftState &state):
   time((unsigned)state.time),
   altitude(state.altitude),
   vario(state.netto_vario),
+  engine_noise_level(0),
   drift_factor(sigmoid(state.altitude_agl / 100) * 256)
 {
 }
