@@ -40,7 +40,7 @@ RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
   RoutePolar::IndexToDXDY(safe_index, dx, dy);
   dx = (dx * steps) >> 7;
   dy = (dy * steps) >> 7;
-  const FlatGeoPoint dp(fp.Longitude + dx, fp.Latitude + dy);
+  const FlatGeoPoint dp(fp.longitude + dx, fp.latitude + dy);
   return proj.unproject(dp);
 }
 
@@ -168,11 +168,11 @@ RoutePolars::NeighbourLink(const RoutePoint &start, const RoutePoint &end,
     {256, 222, 241, 248, 251, 252, 253, 254, 254, 255, 255, 255, 255, 255 };
 
   const int index = std::min((int)8,
-                             std::max(abs(d.Longitude), abs(d.Latitude)) - 1);
+                             std::max(abs(d.longitude), abs(d.latitude)) - 1);
 
   FlatGeoPoint dr(
-      (d.Longitude * cosa[index] - d.Latitude * sina[index] * sign) >> 8,
-      (d.Longitude * sina[index] * sign + d.Latitude * cosa[index]) >> 8);
+      (d.longitude * cosa[index] - d.latitude * sina[index] * sign) >> 8,
+      (d.longitude * sina[index] * sign + d.latitude * cosa[index]) >> 8);
   RoutePoint pd(start + dr, start.altitude);
   pd.RoundLocation();
   return GenerateIntermediate(start, pd, proj);

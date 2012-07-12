@@ -47,8 +47,8 @@ public:
    */
   FlatRay(const FlatGeoPoint& from, const FlatGeoPoint& to)
     :point(from), vector(to - from),
-     fx(vector.Longitude != 0 ? 1.0 / vector.Longitude : 0),
-     fy(vector.Latitude != 0 ? 1.0 / vector.Latitude : 0) {}
+     fx(vector.longitude != 0 ? 1.0 / vector.longitude : 0),
+     fy(vector.latitude != 0 ? 1.0 / vector.latitude : 0) {}
 
   /**
    * Return the length of the ray.

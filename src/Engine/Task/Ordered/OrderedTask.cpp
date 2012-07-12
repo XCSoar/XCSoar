@@ -1401,15 +1401,18 @@ OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
     // undefined!
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
+
   FlatGeoPoint ll = task_projection.project(GeoPoint(bounds.west, bounds.south));
   FlatGeoPoint lr = task_projection.project(GeoPoint(bounds.east, bounds.south));
   FlatGeoPoint ul = task_projection.project(GeoPoint(bounds.west, bounds.north));
   FlatGeoPoint ur = task_projection.project(GeoPoint(bounds.east, bounds.north));
-  FlatGeoPoint fmin(min(ll.Longitude,ul.Longitude), min(ll.Latitude,lr.Latitude));
-  FlatGeoPoint fmax(max(lr.Longitude,ur.Longitude), max(ul.Latitude,ur.Latitude));
+  FlatGeoPoint fmin(min(ll.longitude, ul.longitude),
+                    min(ll.latitude, lr.latitude));
+  FlatGeoPoint fmax(max(lr.longitude, ur.longitude),
+                    max(ul.latitude, ur.latitude));
   // note +/- 1 to ensure rounding keeps bb valid 
-  fmin.Longitude-= 1; fmin.Latitude-= 1;
-  fmax.Longitude+= 1; fmax.Latitude+= 1;
+  fmin.longitude -= 1; fmin.latitude -= 1;
+  fmax.longitude += 1; fmax.latitude += 1;
   return FlatBoundingBox (fmin, fmax);
 }
 

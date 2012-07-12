@@ -47,12 +47,12 @@ class Waypoints: private NonCopyable
   struct WaypointAccessor {
     int GetX(const Waypoint &wp) const {
       assert(wp.flat_location_initialised);
-      return wp.flat_location.Longitude;
+      return wp.flat_location.longitude;
     }
 
     int GetY(const Waypoint &wp) const {
       assert(wp.flat_location_initialised);
-      return wp.flat_location.Latitude;
+      return wp.flat_location.latitude;
     }
   };
 

@@ -106,10 +106,7 @@ TaskProjection::project(const GeoPoint& tp) const
   assert(initialised);
 
   FlatPoint f = fproject(tp);
-  FlatGeoPoint fp;
-  fp.Longitude = iround(f.x);
-  fp.Latitude = iround(f.y);
-  return fp;
+  return FlatGeoPoint(iround(f.x), iround(f.y));
 }
 
 GeoPoint 
@@ -117,10 +114,10 @@ TaskProjection::unproject(const FlatGeoPoint& fp) const
 {
   assert(initialised);
 
-  GeoPoint tp;
-  tp.longitude = Angle::Native(fixed(fp.Longitude)*r_cos_midloc) + location_mid.longitude;
-  tp.latitude = Angle::Native(fixed(fp.Latitude)*inv_scale) + location_mid.latitude;
-  return tp;
+  return GeoPoint(Angle::Native(fp.longitude * r_cos_midloc)
+                  + location_mid.longitude,
+                  Angle::Native(fp.latitude * inv_scale)
+                  + location_mid.latitude);
 }
 
 fixed
@@ -156,8 +153,10 @@ TaskProjection::unproject(const FlatBoundingBox& bb) const
 {
   assert(initialised);
 
-  return GeoBounds (unproject(FlatGeoPoint(bb.bb_ll.Longitude, bb.bb_ur.Latitude)),
-                    unproject(FlatGeoPoint(bb.bb_ur.Longitude, bb.bb_ll.Latitude)));
+  return GeoBounds(unproject(FlatGeoPoint(bb.bb_ll.longitude,
+                                          bb.bb_ur.latitude)),
+                   unproject(FlatGeoPoint(bb.bb_ur.longitude,
+                                          bb.bb_ll.latitude)));
 }
 
 FlatBoundingBox

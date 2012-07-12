@@ -52,8 +52,8 @@ public:
    */
   gcc_constexpr_ctor
   FlatBoundingBox(const FlatGeoPoint ll, const FlatGeoPoint ur)
-    :bb_ll(ll.Longitude,ll.Latitude),
-     bb_ur(ur.Longitude,ur.Latitude) {}
+    :bb_ll(ll.longitude, ll.latitude),
+     bb_ur(ur.longitude, ur.latitude) {}
 
   /**
    * Constructor given center point and radius
@@ -64,8 +64,8 @@ public:
    */
   gcc_constexpr_ctor
   FlatBoundingBox(const FlatGeoPoint loc, const unsigned range = 0)
-    :bb_ll(loc.Longitude - range, loc.Latitude - range),
-     bb_ur(loc.Longitude + range, loc.Latitude + range) {}
+    :bb_ll(loc.longitude - range, loc.latitude - range),
+     bb_ur(loc.longitude + range, loc.latitude + range) {}
 
   /**
    * Calculate non-overlapping distance from one box to another.
@@ -104,13 +104,13 @@ public:
     int operator() ( const FlatBoundingBox &d, const unsigned k) const {
       switch(k) {
       case 0:
-        return d.bb_ll.Longitude;
+        return d.bb_ll.longitude;
       case 1:
-        return d.bb_ll.Latitude;
+        return d.bb_ll.latitude;
       case 2:
-        return d.bb_ur.Longitude;
+        return d.bb_ur.longitude;
       case 3:
-        return d.bb_ur.Latitude;
+        return d.bb_ur.latitude;
       };
       return 0; 
     };
@@ -168,20 +168,20 @@ public:
    * Expand the bounding box to include this point
    */
   void Expand(const FlatGeoPoint& p) {
-    bb_ll.Longitude = std::min(bb_ll.Longitude, p.Longitude);
-    bb_ur.Longitude = std::max(bb_ur.Longitude, p.Longitude);
-    bb_ll.Latitude = std::min(bb_ll.Latitude, p.Latitude);
-    bb_ur.Latitude = std::max(bb_ur.Latitude, p.Latitude);
+    bb_ll.longitude = std::min(bb_ll.longitude, p.longitude);
+    bb_ur.longitude = std::max(bb_ur.longitude, p.longitude);
+    bb_ll.latitude = std::min(bb_ll.latitude, p.latitude);
+    bb_ur.latitude = std::max(bb_ur.latitude, p.latitude);
   }
 
   /**
    * Expand the bounding box to include this bounding box
    */
   void Merge(const FlatBoundingBox& p) {
-    bb_ll.Longitude = std::min(bb_ll.Longitude, p.bb_ll.Longitude);
-    bb_ur.Longitude = std::max(bb_ur.Longitude, p.bb_ur.Longitude);
-    bb_ll.Latitude = std::min(bb_ll.Latitude, p.bb_ll.Latitude);
-    bb_ur.Latitude = std::max(bb_ur.Latitude, p.bb_ur.Latitude);
+    bb_ll.longitude = std::min(bb_ll.longitude, p.bb_ll.longitude);
+    bb_ur.longitude = std::max(bb_ur.longitude, p.bb_ur.longitude);
+    bb_ll.latitude = std::min(bb_ll.latitude, p.bb_ll.latitude);
+    bb_ur.latitude = std::max(bb_ur.latitude, p.bb_ur.latitude);
   }
 
   /**
@@ -196,10 +196,10 @@ public:
    * Expand the border by x amount
    */
   void ExpandByOne() {
-    bb_ll.Longitude--;
-    bb_ur.Longitude++;
-    bb_ll.Latitude--;
-    bb_ur.Latitude++;
+    --bb_ll.longitude;
+    ++bb_ur.longitude;
+    --bb_ll.latitude;
+    ++bb_ur.latitude;
   }
 };
 

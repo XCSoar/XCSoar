@@ -47,8 +47,8 @@ isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 inline static int
 isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 {
-  int p = ( (P1.Longitude - P0.Longitude) * (P2.Latitude - P0.Latitude)
-            - (P2.Longitude - P0.Longitude) * (P1.Latitude - P0.Latitude) );
+  int p = (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
+    - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude);
   if (p>0) {
     return 1;
   }
@@ -77,12 +77,12 @@ PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
 
   // loop through all edges of the polygon
   for (int i=0; i<n; ++i) {   // edge from V[i] to V[i+1]
-    if (V[i].get_location().latitude <= P.latitude) {         // start y <= P.Latitude
+    if (V[i].get_location().latitude <= P.latitude) {         // start y <= P.latitude
       if (V[i+1].get_location().latitude > P.latitude)      // an upward crossing
         if (isLeft( V[i].get_location(), V[i+1].get_location(), P)>0)  // P left of edge
           ++wn;            // have a valid up intersect
     }
-    else {                       // start y > P.Latitude (no test needed)
+    else {                       // start y > P.latitude (no test needed)
       if (V[i+1].get_location().latitude <= P.latitude)     // a downward crossing
         if (isLeft( V[i].get_location(), V[i+1].get_location(), P)<0)  // P right of edge
           --wn;            // have a valid down intersect
@@ -104,13 +104,13 @@ PolygonInterior( const FlatGeoPoint &P, const std::vector<SearchPoint>& V)
 
   // loop through all edges of the polygon
   for (int i=0; i<n; ++i) {   // edge from V[i] to V[i+1]
-    if (V[i].get_flatLocation().Latitude <= P.Latitude) {         // start y <= P.Latitude
-      if (V[i+1].get_flatLocation().Latitude > P.Latitude)      // an upward crossing
+    if (V[i].get_flatLocation().latitude <= P.latitude) {         // start y <= P.latitude
+      if (V[i+1].get_flatLocation().latitude > P.latitude)      // an upward crossing
         if (isLeft( V[i].get_flatLocation(), V[i+1].get_flatLocation(), P)>0)  // P left of edge
           ++wn;            // have a valid up intersect
     }
-    else {                       // start y > P.Latitude (no test needed)
-      if (V[i+1].get_flatLocation().Latitude <= P.Latitude)     // a downward crossing
+    else {                       // start y > P.latitude (no test needed)
+      if (V[i+1].get_flatLocation().latitude <= P.latitude)     // a downward crossing
         if (isLeft( V[i].get_flatLocation(), V[i+1].get_flatLocation(), P)<0)  // P right of edge
           --wn;            // have a valid down intersect
     }

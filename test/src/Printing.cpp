@@ -45,20 +45,20 @@ operator<< (std::ostream& f, const Waypoint& wp)
 
 void 
 FlatBoundingBox::print(std::ostream &f, const TaskProjection &task_projection) const {
-  FlatGeoPoint ll(bb_ll.Longitude,bb_ll.Latitude);
-  FlatGeoPoint lr(bb_ur.Longitude,bb_ll.Latitude);
-  FlatGeoPoint ur(bb_ur.Longitude,bb_ur.Latitude);
-  FlatGeoPoint ul(bb_ll.Longitude,bb_ur.Latitude);
+  FlatGeoPoint ll(bb_ll.longitude,bb_ll.latitude);
+  FlatGeoPoint lr(bb_ur.longitude,bb_ll.latitude);
+  FlatGeoPoint ur(bb_ur.longitude,bb_ur.latitude);
+  FlatGeoPoint ul(bb_ll.longitude,bb_ur.latitude);
   GeoPoint gll = task_projection.unproject(ll);
   GeoPoint glr = task_projection.unproject(lr);
   GeoPoint gur = task_projection.unproject(ur);
   GeoPoint gul = task_projection.unproject(ul);
   
-  f << gll.Longitude << " " << gll.Latitude << "\n";
-  f << glr.Longitude << " " << glr.Latitude << "\n";
-  f << gur.Longitude << " " << gur.Latitude << "\n";
-  f << gul.Longitude << " " << gul.Latitude << "\n";
-  f << gll.Longitude << " " << gll.Latitude << "\n";
+  f << gll.longitude << " " << gll.latitude << "\n";
+  f << glr.longitude << " " << glr.latitude << "\n";
+  f << gur.longitude << " " << gur.latitude << "\n";
+  f << gul.longitude << " " << gul.latitude << "\n";
+  f << gll.longitude << " " << gll.latitude << "\n";
   f << "\n";
 }
 */
@@ -168,14 +168,14 @@ PrintHelper::print(const FlatTriangleFan& r, const unsigned depth) {
     return;
 
   if (depth) {
-    printf("%d %d # fcorner\n", r.vs[0].Longitude, r.vs[0].Latitude);
+    printf("%d %d # fcorner\n", r.vs[0].longitude, r.vs[0].latitude);
   }
 
   for (auto it = r.vs.begin(); it != r.vs.end(); ++it) {
     const FlatGeoPoint p = (*it);
-    printf("%d %d # ftri\n", p.Longitude, p.Latitude);
+    printf("%d %d # ftri\n", p.longitude, p.latitude);
   }
-  printf("%d %d # ftri\n", r.vs[0].Longitude, r.vs[0].Latitude);
+  printf("%d %d # ftri\n", r.vs[0].longitude, r.vs[0].latitude);
   printf("# ftri\n");
 }
 

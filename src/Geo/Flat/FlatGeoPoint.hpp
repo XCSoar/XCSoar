@@ -33,9 +33,10 @@
  */
 struct FlatGeoPoint {
   /** Projected x (Longitude) value [undefined units] */
-  int Longitude;
+  int longitude;
+
   /** Projected y (Latitude) value [undefined units] */
-  int Latitude;
+  int latitude;
 
   /**
    * Non-initialising constructor.
@@ -51,8 +52,8 @@ struct FlatGeoPoint {
    * @return Initialised object at origin
    */
   gcc_constexpr_ctor
-  FlatGeoPoint(const int x, const int y):
-    Longitude(x),Latitude(y) {};
+  FlatGeoPoint(const int x, const int y)
+    :longitude(x), latitude(y) {};
 
   /**
    * Find distance from one point to another
@@ -83,8 +84,8 @@ struct FlatGeoPoint {
    */
   gcc_constexpr_method
   FlatGeoPoint operator+(const FlatGeoPoint other) const {
-    return FlatGeoPoint(Longitude + other.Longitude,
-                        Latitude + other.Latitude);
+    return FlatGeoPoint(longitude + other.longitude,
+                        latitude + other.latitude);
   }
 
   /**
@@ -96,8 +97,8 @@ struct FlatGeoPoint {
    */
   gcc_constexpr_method
   FlatGeoPoint operator-(const FlatGeoPoint other) const {
-    return FlatGeoPoint(Longitude - other.Longitude,
-                        Latitude - other.Latitude);
+    return FlatGeoPoint(longitude - other.longitude,
+                        latitude - other.latitude);
   }
 
   /**
@@ -109,10 +110,8 @@ struct FlatGeoPoint {
    */
   gcc_pure
   FlatGeoPoint operator* (const fixed t) const {
-    FlatGeoPoint res= *this;
-    res.Longitude = iround(res.Longitude*t);
-    res.Latitude = iround(res.Latitude*t);
-    return res;
+    return FlatGeoPoint(iround(longitude * t),
+                        iround(latitude * t));
   }
 
   /**
@@ -124,7 +123,7 @@ struct FlatGeoPoint {
    */
   gcc_pure
   int CrossProduct(const FlatGeoPoint &other) const {
-    return Longitude * other.Latitude - Latitude * other.Longitude;
+    return longitude * other.latitude - latitude * other.longitude;
   }
 
   /**
@@ -136,7 +135,7 @@ struct FlatGeoPoint {
    */
   gcc_pure
   int DotProduct(const FlatGeoPoint &other) const {
-    return Longitude * other.Longitude + Latitude * other.Latitude;
+    return longitude * other.longitude + latitude * other.latitude;
   }
 
   /**
@@ -161,15 +160,15 @@ struct FlatGeoPoint {
 
   gcc_constexpr_method
   bool Equals(const FlatGeoPoint sp) const {
-    return (Longitude == sp.Longitude) && (Latitude == sp.Latitude);
+    return longitude == sp.longitude && latitude == sp.latitude;
   }
 
   gcc_pure
   bool Sort(const FlatGeoPoint& sp) const {
-    if (Longitude < sp.Longitude)
+    if (longitude < sp.longitude)
       return false;
-    else if (Longitude == sp.Longitude)
-      return Latitude > sp.Latitude;
+    else if (longitude == sp.longitude)
+      return latitude > sp.latitude;
     else
       return true;
   }
@@ -197,8 +196,8 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   /** Rounds location to reduce state space */
   void RoundLocation() {
     // round point to correspond roughly with terrain step size
-    Longitude = (Longitude>>2)<<2;
-    Latitude = (Latitude>>2)<<2;
+    longitude = (longitude >> 2) << 2;
+    latitude = (latitude >> 2) << 2;
   }
 
   /**

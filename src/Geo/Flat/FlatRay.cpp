@@ -29,7 +29,7 @@
 int
 FlatRay::Magnitude() const
 {
-  return ihypot(vector.Longitude, vector.Latitude);
+  return ihypot(vector.longitude, vector.latitude);
 }
 
 /*
@@ -69,8 +69,8 @@ FlatGeoPoint
 FlatRay::Parametric(const fixed t) const
 {
   FlatGeoPoint p = point;
-  p.Longitude += iround(vector.Longitude * t);
-  p.Latitude += iround(vector.Latitude * t);
+  p.longitude += iround(vector.longitude * t);
+  p.latitude += iround(vector.latitude * t);
   return p;
 }
 
