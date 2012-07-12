@@ -96,6 +96,7 @@ ContestDijkstra::UpdateTraceTail()
     return false;
 
   n_points = trace.size();
+  append_serial = trace_master.GetAppendSerial();
   return true;
 }
 
