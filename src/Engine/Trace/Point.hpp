@@ -131,20 +131,8 @@ public:
   fixed GetVario() const {
     return vario;
   }
-
-  /** 
-   * Test match based on time (since time of a sample must be unique)
-   * 
-   * @param a Point to compare to
-   * 
-   * @return True if time matches
-   */
-  bool operator==(TracePoint const &a) const {
-    return time == a.time; 
-  }
 };
 
 static_assert(is_trivial_ndebug<TracePoint>::value, "type is not trivial");
 
 #endif
-
