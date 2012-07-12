@@ -22,7 +22,17 @@ Copyright_License {
 */
 
 #include "Point.hpp"
+#include "NMEA/MoreData.hpp"
 #include "Navigation/Aircraft.hpp"
+
+TracePoint::TracePoint(const MoreData &basic)
+  :SearchPoint(basic.location),
+   time((unsigned)basic.time),
+   drift_factor(sigmoid(basic.nav_altitude / 100) * 256),
+   altitude(basic.nav_altitude),
+   vario(basic.netto_vario)
+{
+}
 
 TracePoint::TracePoint(const AircraftState &state):
   SearchPoint(state.location),

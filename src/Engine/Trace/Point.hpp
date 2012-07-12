@@ -32,6 +32,7 @@ Copyright_License {
 
 #include <assert.h>
 
+struct MoreData;
 struct AircraftState;
 
 /**
@@ -71,6 +72,8 @@ public:
              const A &_altitude, const V &_vario)
     :SearchPoint(location), time(_time),
      drift_factor(_drift_factor), altitude(_altitude), vario(_vario) {}
+
+  explicit TracePoint(const MoreData &basic);
 
   /**
    * Constructor for actual trace points
