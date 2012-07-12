@@ -3,7 +3,6 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Predicate/AirspacePredicate.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "Airspace.hpp"
 #include "AirspaceInterceptSolution.hpp"
 

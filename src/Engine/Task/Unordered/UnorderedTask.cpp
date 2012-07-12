@@ -25,6 +25,7 @@
 #include "Task/Solvers/TaskGlideRequired.hpp"
 #include "Task/Solvers/TaskSolution.hpp"
 #include "Task/Points/TaskWaypoint.hpp"
+#include "Navigation/Aircraft.hpp"
 
 UnorderedTask::UnorderedTask(const enum Type _type,
                              const TaskBehaviour &tb):

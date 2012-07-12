@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_AIRCRAFT_HPP
 #define XCSOAR_NMEA_AIRCRAFT_HPP
 
-#include "Navigation/Aircraft.hpp"
+#include "Compiler.h"
 
 struct MoreData;
 struct DerivedInfo;
+struct AircraftState;
 
 gcc_pure
 const AircraftState

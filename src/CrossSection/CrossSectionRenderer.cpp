@@ -37,6 +37,7 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Aircraft.hpp"
+#include "Navigation/Aircraft.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"

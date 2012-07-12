@@ -23,6 +23,7 @@
 #include "TaskMacCreadyTravelled.hpp"
 #include "TaskSolution.hpp"
 #include "Task/Points/TaskPoint.hpp"
+#include "Navigation/Aircraft.hpp"
 
 TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoint*> &_tps,
                                                const unsigned _active_index,

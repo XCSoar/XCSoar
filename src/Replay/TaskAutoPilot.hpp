@@ -25,9 +25,11 @@
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Filter.hpp"
-#include "Navigation/Aircraft.hpp"
+#include "Geo/GeoPoint.hpp"
 
 #include <vector>
+
+struct AircraftState;
 
 struct AutopilotParameters {
   fixed bearing_noise;

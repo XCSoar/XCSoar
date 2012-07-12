@@ -23,12 +23,12 @@
 #define TASK_MACCREADY_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Navigation/Aircraft.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 
 #include <vector>
 
+struct AircraftState;
 struct GlideSettings;
 class TaskPoint;
 class OrderedTaskPoint;

@@ -24,6 +24,7 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "Navigation/Aircraft.hpp"
 
 const AircraftState
 ToAircraftState(const MoreData &info, const DerivedInfo &calculated)

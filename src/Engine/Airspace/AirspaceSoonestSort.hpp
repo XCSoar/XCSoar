@@ -2,6 +2,7 @@
 #define AIRSPACE_SOONEST_SORT_HPP
 
 #include "AirspaceNearestSort.hpp"
+#include "Navigation/Aircraft.hpp"
 
 class AirspaceAircraftPerformance;
 

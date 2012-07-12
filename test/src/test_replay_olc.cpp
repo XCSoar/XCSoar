@@ -6,6 +6,7 @@
 #include "Engine/Contest/ContestManager.hpp"
 #include "ComputerSettings.hpp"
 #include "OS/PathName.hpp"
+#include "Navigation/Aircraft.hpp"
 
 #include <fstream>
 
