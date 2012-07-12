@@ -118,23 +118,19 @@ ContestDijkstra::UpdateTrace(bool force)
     /* unmodified */
     return;
 
-  if (!IsMasterUpdated()) {
-    if (finished || force) {
-      const unsigned old_size = n_points;
-      if (UpdateTraceTail())
-        /* new data from the master trace, start incremental solver */
-        AddIncrementalEdges(old_size);
-    }
+  if (IsMasterUpdated()) {
+    UpdateTraceFull();
 
-    return;
+    trace_dirty = true;
+    finished = false;
+
+    first_finish_candidate = incremental ? n_points - 1 : 0;
+  } else if (finished || force) {
+    const unsigned old_size = n_points;
+    if (UpdateTraceTail())
+      /* new data from the master trace, start incremental solver */
+      AddIncrementalEdges(old_size);
   }
-
-  UpdateTraceFull();
-
-  trace_dirty = true;
-  finished = false;
-
-  first_finish_candidate = incremental ? n_points - 1 : 0;
 }
 
 AbstractContest::SolverResult
