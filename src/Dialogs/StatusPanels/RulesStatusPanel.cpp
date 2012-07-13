@@ -94,8 +94,7 @@ RulesStatusPanel::Refresh()
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
 
-    if (task_manager->GetMode() == TaskManager::MODE_ORDERED &&
-        task.TaskSize() > 0)
+    if (task.TaskSize() > 0)
       CopyString(Temp, task.GetTaskPoint(0).GetWaypoint().name.c_str(),
                  ARRAY_SIZE(Temp));
     else
