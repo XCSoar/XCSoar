@@ -90,8 +90,6 @@ GlueMapWindow::SetUIState(const UIState &new_value)
 #endif
 }
 
-  void SetUIState(const UIState &new_value);
-
 void
 GlueMapWindow::ExchangeBlackboard()
 {
