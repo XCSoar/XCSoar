@@ -37,10 +37,10 @@ void
 AircraftState::Reset()
 {
   AltitudeState::Reset();
-  FlyingState::Reset();
 
   g_load = fixed_one;
   wind = SpeedVector::Zero();
+  flying = false;
 }
 
 void

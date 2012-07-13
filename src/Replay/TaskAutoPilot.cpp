@@ -219,7 +219,6 @@ TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
     else
       state.true_airspeed = glide_polar.GetVBestLD();
 
-    state.indicated_airspeed = state.true_airspeed;
     state.vario = -glide_polar.SinkRate(state.true_airspeed) * parms.sink_factor;
     UpdateCruiseBearing(task, state, timestep);
     break;

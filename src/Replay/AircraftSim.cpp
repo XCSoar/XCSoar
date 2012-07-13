@@ -40,9 +40,6 @@ AircraftSim::Start(const GeoPoint& location_start,
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
   state.flying = true;
-  state.takeoff_time = state.time;
-  state.flight_time = fixed_zero;
-  state.on_ground = false;
 }
 
 

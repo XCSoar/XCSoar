@@ -180,6 +180,9 @@ test_replay(const Contests olc_type,
   FlyingComputer flying_computer;
   flying_computer.Reset();
 
+  FlyingState flying_state;
+  flying_state.Reset();
+
   TraceComputer trace_computer;
 
   ContestManager contest_manager(olc_type,
@@ -201,7 +204,9 @@ test_replay(const Contests olc_type,
 
       n_samples++;
 
-      flying_computer.Compute(glide_polar.GetVTakeoff(), sim.state, sim.state);
+      flying_computer.Compute(glide_polar.GetVTakeoff(),
+                              sim.state, flying_state);
+      sim.state.flying = flying_state.flying;
 
       basic.time = sim.state.time;
       basic.location = sim.state.location;

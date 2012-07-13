@@ -4,6 +4,7 @@
 #include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
 #include "Computer/FlyingComputer.hpp"
+#include "NMEA/FlyingState.hpp"
 #include "OS/PathName.hpp"
 #include "Task/Deserialiser.hpp"
 #include "XML/DataNodeXML.hpp"
@@ -125,12 +126,17 @@ test_replay()
   FlyingComputer flying_computer;
   flying_computer.Reset();
 
+  FlyingState flying_state;
+  flying_state.Reset();
+
   while (sim.Update()) {
     if (sim.state.time>time_last) {
 
       n_samples++;
 
-      flying_computer.Compute(glide_polar.GetVTakeoff(), sim.state, sim.state);
+      flying_computer.Compute(glide_polar.GetVTakeoff(),
+                              sim.state, flying_state);
+      sim.state.flying = flying_state.flying;
 
       task_manager.Update(sim.state, state_last);
       task_manager.UpdateIdle(sim.state);

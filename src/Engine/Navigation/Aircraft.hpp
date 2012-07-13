@@ -23,7 +23,6 @@
 #define AIRCRAFT_HPP
 
 #include "Util/TypeTraits.hpp"
-#include "NMEA/FlyingState.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Compiler.h"
@@ -61,14 +60,6 @@ struct SpeedState
    * @see IndicatedAirspeed
    */
   fixed true_airspeed;
-
-  /**
-   * Indicated air speed (m/s)
-   * @see Speed
-   * @see TrueAirspeed
-   * @see AirDensityRatio
-   */
-  fixed indicated_airspeed;
 };
 
 /**
@@ -116,8 +107,7 @@ struct VarioState
 struct AircraftState: 
   public AltitudeState,
   public SpeedState,
-  public VarioState,
-  public FlyingState
+  public VarioState
 {
   //##########
   //   Time
@@ -149,6 +139,8 @@ struct AircraftState:
 
   /** Wind speed, direction at aircraft */
   SpeedVector wind;
+
+  bool flying;
 
   /**
    * Calculate predicted state in future.
