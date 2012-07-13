@@ -50,13 +50,6 @@ ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar)
   lease->SetGlidePolar(glide_polar);
 }
 
-TaskManager::TaskMode 
-ProtectedTaskManager::GetMode() const
-{
-  Lease lease(*this);
-  return lease->GetMode();
-}
-
 const OrderedTaskBehaviour 
 ProtectedTaskManager::GetOrderedTaskBehaviour() const
 {
