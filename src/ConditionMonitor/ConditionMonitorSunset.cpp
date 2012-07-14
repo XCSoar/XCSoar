@@ -26,10 +26,10 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Device/device.hpp"
-#include "LocalTime.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Math/SunEphemeris.hpp"
+#include "ComputerSettings.hpp"
 
 bool
 ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
@@ -49,10 +49,11 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
 
   SunEphemeris::Result sun =
     SunEphemeris::CalcSunTimes(basic.location, basic.date_time_utc,
-                               fixed(GetUTCOffset()) / 3600);
+                               fixed(settings.utc_offset) / 3600);
 
-  fixed d1((res.time_elapsed + fixed(DetectCurrentTime(basic))) / 3600);
-  fixed d0(DetectCurrentTime(basic) / 3600);
+  const fixed time_local = basic.time + fixed(settings.utc_offset);
+  fixed d1((time_local + res.time_elapsed) / 3600);
+  fixed d0(time_local / 3600);
 
   bool past_sunset = (d1 > sun.time_of_sunset) && (d0 < sun.time_of_sunset);
   return past_sunset;

@@ -27,7 +27,6 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "LocalTime.hpp"
 #include "ThermalBase.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "NMEA/Aircraft.hpp"
@@ -77,7 +76,7 @@ GlideComputerAirData::ProcessBasic(const MoreData &basic,
                                    const ComputerSettings &settings)
 {
   TerrainHeight(basic, calculated);
-  ProcessSun(basic, calculated);
+  ProcessSun(basic, calculated, settings);
 
   NettoVario(basic, calculated.flight, calculated, settings);
 }
@@ -555,7 +554,8 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
 
 void
 GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
-                                 DerivedInfo &calculated)
+                                 DerivedInfo &calculated,
+                                 const ComputerSettings &settings)
 {
   if (!basic.location_available || !basic.date_available)
     return;
@@ -567,7 +567,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
   // Calculate new azimuth
   calculated.sun_azimuth =
     SunEphemeris::CalcAzimuth(basic.location, basic.date_time_utc,
-                              fixed(GetUTCOffset()) / 3600);
+                              fixed(settings.utc_offset) / 3600);
   calculated.sun_data_available.Update(basic.clock);
 }
 

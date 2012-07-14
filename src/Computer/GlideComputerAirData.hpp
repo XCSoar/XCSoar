@@ -160,7 +160,8 @@ private:
   void Turning(const MoreData &basic, const MoreData &last_basic,
                DerivedInfo &calculated, const DerivedInfo &last_calculated,
                const ComputerSettings &settings);
-  void ProcessSun(const NMEAInfo &basic, DerivedInfo &calculated);
+  void ProcessSun(const NMEAInfo &basic, DerivedInfo &calculated,
+                  const ComputerSettings &settings);
 
   /**
    * Calculates the thermal value of next leg that is equivalent (gives the

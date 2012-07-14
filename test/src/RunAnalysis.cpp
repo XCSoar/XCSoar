@@ -125,8 +125,6 @@ InputEvents::processNmea(unsigned key)
   return true;
 }
 
-int GetUTCOffset() { return 0; }
-
 /* done with fake symbols. */
 
 static RasterTerrain *terrain;

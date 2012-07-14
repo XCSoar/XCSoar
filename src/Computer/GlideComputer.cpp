@@ -32,7 +32,6 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "LocalTime.hpp"
 
 static PeriodClock last_team_code_update;
 
@@ -89,7 +88,7 @@ GlideComputer::ProcessGPS(bool force)
   DerivedInfo &calculated = SetCalculated();
   const ComputerSettings &settings = GetComputerSettings();
 
-  calculated.date_time_local = basic.date_time_utc + GetUTCOffset();
+  calculated.date_time_local = basic.date_time_utc + settings.utc_offset;
 
   calculated.Expire(basic.clock);
 
