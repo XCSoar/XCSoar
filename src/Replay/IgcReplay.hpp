@@ -53,7 +53,6 @@ public:
   bool Update();
   void Stop();
   void Start();
-  const TCHAR* GetFilename();
   void SetFilename(const TCHAR *name);
 
 protected:

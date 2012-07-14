@@ -99,12 +99,6 @@ IgcReplay::Start()
   enabled = true;
 }
 
-const TCHAR*
-IgcReplay::GetFilename()
-{
-  return file_name;
-}
-
 void
 IgcReplay::SetFilename(const TCHAR *name)
 {

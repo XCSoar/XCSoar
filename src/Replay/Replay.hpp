@@ -48,11 +48,15 @@ class Replay
   NmeaReplayGlue nmea_replay;
   DemoReplayGlue demo_replay;
 
+  TCHAR path[MAX_PATH];
+
 public:
   Replay(Logger *_logger, ProtectedTaskManager& task_manager)
     :mode(MODE_NULL),
      igc_replay(_logger),
-     demo_replay(task_manager) {}
+     demo_replay(task_manager) {
+    path[0] = _T('\0');
+  }
 
   bool Update();
   void Stop();

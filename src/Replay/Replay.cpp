@@ -69,15 +69,15 @@ Replay::Start()
 const TCHAR*
 Replay::GetFilename()
 {
-  return mode == MODE_IGC
-    ? igc_replay.GetFilename()
-    : nmea_replay.GetFilename();
+  return path;
 }
 
 void
 Replay::SetFilename(const TCHAR *name)
 {
   assert(name != NULL);
+
+  _tcscpy(path, name);
 
   if (StringIsEmpty(name)) {
     mode = MODE_DEMO;

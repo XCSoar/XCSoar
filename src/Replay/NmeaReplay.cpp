@@ -61,12 +61,6 @@ NmeaReplay::Start()
   enabled = true;
 }
 
-const TCHAR*
-NmeaReplay::GetFilename()
-{
-  return file_name;
-}
-
 void
 NmeaReplay::SetFilename(const TCHAR *name)
 {
