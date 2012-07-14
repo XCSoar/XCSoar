@@ -33,10 +33,7 @@
 void
 Replay::Stop()
 {
-  if (replay) {
-    replay->Stop();
-    replay.reset();
-  }
+  replay.reset();
 }
 
 void

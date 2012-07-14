@@ -40,6 +40,8 @@ NmeaReplayGlue::~NmeaReplayGlue()
 {
   delete device;
   delete parser;
+
+  device_blackboard->StopReplay();
 }
 
 void
@@ -67,19 +69,6 @@ NmeaReplayGlue::Start()
   }
 
   NmeaReplay::Start();
-}
-
-void
-NmeaReplayGlue::Stop()
-{
-  NmeaReplay::Stop();
-
-  delete device;
-  device = NULL;
-  delete parser;
-  parser = NULL;
-
-  device_blackboard->StopReplay();
 }
 
 void

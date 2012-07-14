@@ -156,7 +156,6 @@ test_replay()
     }
     time_last = sim.state.time;
   };
-  sim.Stop();
 
   if (verbose) {
     PrintDistanceCounts();

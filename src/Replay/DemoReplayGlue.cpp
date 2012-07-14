@@ -31,6 +31,11 @@
 
 #define fixed_300 fixed(300)
 
+DemoReplayGlue::~DemoReplayGlue()
+{
+  device_blackboard->StopReplay();
+}
+
 bool
 DemoReplayGlue::UpdateTime()
 {
@@ -59,12 +64,6 @@ DemoReplayGlue::Start()
 
   // get wind from aircraft
   aircraft.GetState().wind = device_blackboard->Calculated().GetWindOrZero();
-}
-
-void
-DemoReplayGlue::OnStop()
-{
-  device_blackboard->StopReplay();
 }
 
 bool

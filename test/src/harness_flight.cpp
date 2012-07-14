@@ -208,8 +208,6 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
 
   } while (autopilot.UpdateAutopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
 
-  autopilot.Stop();
-
   if (verbose) {
     PrintHelper::taskmanager_print(task_manager, aircraft.GetState());
 

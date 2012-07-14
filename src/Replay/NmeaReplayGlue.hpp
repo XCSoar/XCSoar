@@ -45,7 +45,6 @@ public:
   virtual ~NmeaReplayGlue();
 
   virtual void Start();
-  virtual void Stop();
 
 protected:
   virtual bool UpdateTime();

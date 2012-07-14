@@ -35,6 +35,14 @@ IgcReplayGlue::IgcReplayGlue(Logger *_logger)
 {
 }
 
+IgcReplayGlue::~IgcReplayGlue()
+{
+  device_blackboard->StopReplay();
+
+  if (logger != NULL)
+    logger->ClearBuffer();
+}
+
 bool
 IgcReplayGlue::UpdateTime(fixed time_scale)
 {
@@ -62,15 +70,6 @@ IgcReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
                           const fixed baroalt, const fixed t)
 {
   device_blackboard->SetLocation(loc, speed, bearing, alt, baroalt, t);
-}
-
-void
-IgcReplayGlue::OnStop()
-{
-  device_blackboard->StopReplay();
-
-  if (logger != NULL)
-    logger->ClearBuffer();
 }
 
 void

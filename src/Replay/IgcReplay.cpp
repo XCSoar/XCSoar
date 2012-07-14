@@ -36,6 +36,11 @@ IgcReplay::IgcReplay() :
   file_name[0] = _T('\0');
 }
 
+IgcReplay::~IgcReplay()
+{
+  delete reader;
+}
+
 bool
 IgcReplay::ScanBuffer(const char *buffer, IGCFix &fix)
 {
@@ -72,20 +77,9 @@ IgcReplay::ResetTime()
 }
 
 void
-IgcReplay::Stop()
-{
-  CloseFile();
-
-  OnStop();
-
-  enabled = false;
-}
-
-void
 IgcReplay::Start()
 {
-  if (enabled)
-    Stop();
+  assert(!enabled);
 
   if (!OpenFile()) {
     OnBadFile();
@@ -124,7 +118,7 @@ IgcReplay::Update(fixed time_scale)
   while (cli.NeedData(t_simulation)) {
     IGCFix fix;
     if (!ReadPoint(fix)) {
-      Stop();
+      enabled = false;
       return false;
     }
 
@@ -165,14 +159,4 @@ IgcReplay::OpenFile()
 
   reader = r;
   return true;
-}
-
-void
-IgcReplay::CloseFile()
-{
-  if (!reader)
-    return;
-
-  delete reader;
-  reader = NULL;
 }

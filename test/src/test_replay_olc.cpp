@@ -105,7 +105,6 @@ public:
 
 protected:
   virtual void OnReset() {}
-  virtual void OnStop() {}
   virtual void OnBadFile() {}
 
   void OnAdvance(const GeoPoint &loc,
@@ -230,7 +229,6 @@ test_replay(const Contests olc_type,
     }
     time_last = sim.state.time;
   };
-  sim.Stop();
 
   contest_manager.SolveExhaustive();
 

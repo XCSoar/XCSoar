@@ -51,11 +51,3 @@ DemoReplay::Update(fixed time_scale, TaskAccessor& task)
   }
   return true;
 }
-
-void
-DemoReplay::Stop()
-{
-  autopilot.Stop();
-  enabled = false;
-  OnStop();
-}

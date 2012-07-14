@@ -38,12 +38,12 @@ class IgcReplayGlue:
 
 public:
   IgcReplayGlue(Logger *_logger);
+  virtual ~IgcReplayGlue();
 
 protected:
   virtual bool UpdateTime(fixed time_scale) gcc_override;
   virtual void ResetTime();
   virtual void OnReset();
-  virtual void OnStop();
   virtual void OnBadFile();
   virtual void OnAdvance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,

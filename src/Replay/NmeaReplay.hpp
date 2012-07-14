@@ -41,7 +41,6 @@ public:
   ~NmeaReplay();
 
   virtual bool Update(fixed time_scale) gcc_override;
-  void Stop();
   void Start();
   void SetFilename(const TCHAR *name);
 
@@ -52,7 +51,6 @@ protected:
 
 private:
   bool OpenFile();
-  void CloseFile();
   bool ReadUntilRMC(bool ignore);
 };
 

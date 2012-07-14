@@ -40,18 +40,9 @@ NmeaReplay::~NmeaReplay()
 }
 
 void
-NmeaReplay::Stop()
-{
-  CloseFile();
-
-  enabled = false;
-}
-
-void
 NmeaReplay::Start()
 {
-  if (enabled)
-    Stop();
+  assert(!enabled);
 
   if (!OpenFile()) {
     OnBadFile();
@@ -92,18 +83,15 @@ NmeaReplay::ReadUntilRMC(bool ignore)
 bool
 NmeaReplay::Update(fixed time_scale)
 {
-  if (!enabled)
-    return false;
+  assert(enabled);
 
   if (!UpdateTime())
     return true;
 
   for (fixed i = fixed_one; i <= time_scale; i += fixed_one) {
     enabled = ReadUntilRMC(i != time_scale);
-    if (!enabled) {
-      Stop();
+    if (!enabled)
       return false;
-    }
   }
 
   assert(enabled);
@@ -121,18 +109,11 @@ NmeaReplay::OpenFile()
 
   reader = new FileLineReaderA(file_name);
   if (reader->error()) {
-    CloseFile();
+    delete reader;
     return false;
   }
 
   return true;
-}
-
-void
-NmeaReplay::CloseFile()
-{
-  delete reader;
-  reader = NULL;
 }
 
 bool

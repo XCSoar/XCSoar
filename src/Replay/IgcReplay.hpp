@@ -49,9 +49,9 @@ protected:
 
 public:
   IgcReplay();
+  virtual ~IgcReplay();
 
   virtual bool Update(fixed time_scale) gcc_override;
-  void Stop();
   void Start();
   void SetFilename(const TCHAR *name);
 
@@ -60,7 +60,6 @@ protected:
   virtual void ResetTime();
 
   virtual void OnReset() = 0;
-  virtual void OnStop() = 0;
   virtual void OnBadFile() = 0;
   virtual void OnAdvance(const GeoPoint &loc,
                          const fixed speed, const Angle bearing,
@@ -72,7 +71,6 @@ protected:
 
 private:
   bool OpenFile();
-  void CloseFile();
 };
 
 #endif

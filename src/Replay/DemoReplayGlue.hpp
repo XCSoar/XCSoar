@@ -38,6 +38,7 @@ class DemoReplayGlue:
 public:
   DemoReplayGlue(ProtectedTaskManager &_task_manager)
     :task_manager(&_task_manager) {}
+  virtual ~DemoReplayGlue();
 
   virtual void Start();
   virtual bool Update(fixed time_scale) gcc_override;
@@ -48,7 +49,6 @@ protected:
   virtual void OnAdvance(const GeoPoint &loc, const fixed speed,
                          const Angle bearing, const fixed alt,
                          const fixed baroalt, const fixed t);
-  virtual void OnStop();
 };
 
 #endif
