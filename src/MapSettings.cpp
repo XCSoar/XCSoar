@@ -59,6 +59,7 @@ MapSettings::SetDefaults()
   circling_scale = fixed_one / 2;
   cruise_scale = fixed_one / 60;
   show_flarm_on_map = true;
+  show_flarm_alarm_level = true;
   show_thermal_profile = true;
 
   trail.SetDefaults();

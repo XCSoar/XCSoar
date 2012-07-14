@@ -151,6 +151,16 @@ struct MapSettings {
 
   bool show_flarm_on_map;
 
+  /**
+   * This is an inverted copy of TrafficSettings::enable_gauge.  The
+   * map should not render the FLARM alarm level if the gauge already
+   * shows it, to declutter the map.  The copy is needed because
+   * MapWindowBlackboard only knows MapSettings, but not
+   * TrafficSettings, and DrawThread is not allowed to access
+   * InterfaceBlackboard.
+   */
+  bool show_flarm_alarm_level;
+
   /** Display climb band on map */
   bool show_thermal_profile;
 

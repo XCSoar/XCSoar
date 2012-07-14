@@ -227,6 +227,10 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
     InfoBoxManager::ProcessTimer();
   }
 
+  /* Don't show indicator when the gauge is indicating the traffic anyway */
+  SetMapSettings().show_flarm_alarm_level =
+    !GetUISettings().traffic.enable_gauge;
+
   main_window->SetMapSettings(GetMapSettings());
 
   if (trigger_draw) {
