@@ -42,7 +42,7 @@ class MapWindowBlackboard:
   UIState ui_state;
 
 protected:
-  const UIState GetUIState() const {
+  const UIState &GetUIState() const {
     return ui_state;
   }
 
