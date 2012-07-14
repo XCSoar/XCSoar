@@ -44,8 +44,6 @@ public:
   NmeaReplayGlue(NLineReader *reader);
   virtual ~NmeaReplayGlue();
 
-  virtual void Start();
-
 protected:
   virtual bool UpdateTime();
   virtual void OnSentence(const char *line);

@@ -36,11 +36,9 @@ class DemoReplayGlue:
   ProtectedTaskManager* task_manager;
 
 public:
-  DemoReplayGlue(ProtectedTaskManager &_task_manager)
-    :task_manager(&_task_manager) {}
+  DemoReplayGlue(ProtectedTaskManager &_task_manager);
   virtual ~DemoReplayGlue();
 
-  virtual void Start();
   virtual bool Update(fixed time_scale) gcc_override;
 
 protected:

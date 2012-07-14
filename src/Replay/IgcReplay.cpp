@@ -29,8 +29,10 @@
 IgcReplay::IgcReplay(NLineReader *_reader)
   :AbstractReplay(),
    cli(fixed(0.98)),
-   reader(_reader)
+   reader(_reader),
+   t_simulation(fixed_zero)
 {
+  cli.Reset();
 }
 
 IgcReplay::~IgcReplay()
@@ -65,20 +67,6 @@ IgcReplay::UpdateTime(fixed time_scale)
   t_simulation += fixed_one * time_scale;
 
   return (t_simulation > t_simulation_last);
-}
-
-void
-IgcReplay::ResetTime()
-{
-  t_simulation = fixed_zero;
-}
-
-void
-IgcReplay::Start()
-{
-  cli.Reset();
-  ResetTime();
-  OnReset();
 }
 
 bool

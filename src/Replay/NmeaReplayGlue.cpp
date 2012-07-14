@@ -32,25 +32,10 @@
 #include "Interface.hpp"
 
 NmeaReplayGlue::NmeaReplayGlue(NLineReader *reader)
-  :NmeaReplay(reader), parser(NULL), device(NULL)
+  :NmeaReplay(reader),
+   parser(new NMEAParser()),
+   device(NULL)
 {
-}
-
-NmeaReplayGlue::~NmeaReplayGlue()
-{
-  delete device;
-  delete parser;
-
-  device_blackboard->StopReplay();
-}
-
-void
-NmeaReplayGlue::Start()
-{
-  assert(parser == NULL);
-  assert(device == NULL);
-
-  parser = new NMEAParser();
   parser->SetReal(false);
 
   /* get the device driver name from the profile */
@@ -67,8 +52,14 @@ NmeaReplayGlue::Start()
     config.Clear();
     device = driver->CreateOnPort(config, port);
   }
+}
 
-  NmeaReplay::Start();
+NmeaReplayGlue::~NmeaReplayGlue()
+{
+  delete device;
+  delete parser;
+
+  device_blackboard->StopReplay();
 }
 
 void

@@ -37,7 +37,6 @@ public:
   ~NmeaReplay();
 
   virtual bool Update(fixed time_scale) gcc_override;
-  void Start();
 
 protected:
   virtual bool UpdateTime();

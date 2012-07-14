@@ -32,6 +32,8 @@
 IgcReplayGlue::IgcReplayGlue(NLineReader *_reader, Logger *_logger)
   :IgcReplay(_reader), logger(_logger)
 {
+  if (logger != NULL)
+    logger->ClearBuffer();
 }
 
 IgcReplayGlue::~IgcReplayGlue()
@@ -57,23 +59,9 @@ IgcReplayGlue::UpdateTime(fixed time_scale)
 }
 
 void
-IgcReplayGlue::ResetTime()
-{
-  clock.Reset();
-  t_simulation = fixed_zero;
-}
-
-void
 IgcReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
                           const Angle bearing, const fixed alt,
                           const fixed baroalt, const fixed t)
 {
   device_blackboard->SetLocation(loc, speed, bearing, alt, baroalt, t);
-}
-
-void
-IgcReplayGlue::OnReset()
-{
-  if (logger != NULL)
-    logger->ClearBuffer();
 }

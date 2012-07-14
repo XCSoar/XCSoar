@@ -32,7 +32,6 @@ public:
   virtual ~AbstractReplay() {}
 
   virtual bool Update(fixed time_scale) = 0;
-  virtual void Start() = 0;
 };
 
 #endif

@@ -169,8 +169,6 @@ test_replay(const Contests olc_type,
     }
   }
 
-  sim.Start();
-
   bool do_print = verbose;
   unsigned print_counter=0;
 

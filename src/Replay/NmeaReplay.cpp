@@ -36,11 +36,6 @@ NmeaReplay::~NmeaReplay()
   delete reader;
 }
 
-void
-NmeaReplay::Start()
-{
-}
-
 bool
 NmeaReplay::ReadUntilRMC(bool ignore)
 {

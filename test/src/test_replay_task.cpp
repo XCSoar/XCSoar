@@ -108,7 +108,6 @@ test_replay()
 
   ReplayLoggerSim sim(reader);
   sim.state.netto_vario = fixed_zero;
-  sim.Start();
 
   bool do_print = verbose;
   unsigned print_counter=0;

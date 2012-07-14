@@ -70,7 +70,6 @@ Replay::Start(const TCHAR *_path)
     replay.reset(r);
   }
 
-  replay->Start();
   return true;
 }
 

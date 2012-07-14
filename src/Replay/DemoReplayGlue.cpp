@@ -31,6 +31,19 @@
 
 #define fixed_300 fixed(300)
 
+DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)
+  :task_manager(&_task_manager)
+{
+  ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
+  const TaskAccessor ta(protected_task_manager, fixed_zero);
+  parms.SetRealistic();
+  parms.start_alt = device_blackboard->Basic().nav_altitude;
+  DemoReplay::Start(ta, device_blackboard->Basic().location);
+
+  // get wind from aircraft
+  aircraft.GetState().wind = device_blackboard->Calculated().GetWindOrZero();
+}
+
 DemoReplayGlue::~DemoReplayGlue()
 {
   device_blackboard->StopReplay();
@@ -51,19 +64,6 @@ DemoReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
                            const fixed baroalt, const fixed t)
 {
   device_blackboard->SetLocation(loc, speed, bearing, alt, baroalt, t);
-}
-
-void
-DemoReplayGlue::Start()
-{
-  ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
-  const TaskAccessor ta(protected_task_manager, fixed_zero);
-  parms.SetRealistic();
-  parms.start_alt = device_blackboard->Basic().nav_altitude;
-  DemoReplay::Start(ta, device_blackboard->Basic().location);
-
-  // get wind from aircraft
-  aircraft.GetState().wind = device_blackboard->Calculated().GetWindOrZero();
 }
 
 bool

@@ -36,7 +36,7 @@ public:
   AircraftSim aircraft;
 
   DemoReplay();
-  virtual void Start() = 0;
+
   virtual bool Update(fixed time_scale) gcc_override = 0;
 
 protected:
