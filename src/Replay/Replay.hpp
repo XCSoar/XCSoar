@@ -36,14 +36,6 @@ class ProtectedTaskManager;
 
 class Replay
 {
-  enum ReplayMode {
-    MODE_NULL,
-    MODE_IGC,
-    MODE_NMEA,
-    MODE_DEMO
-  };
-
-  ReplayMode mode;
   IgcReplayGlue igc_replay;
   NmeaReplayGlue nmea_replay;
   DemoReplayGlue demo_replay;
@@ -54,8 +46,7 @@ class Replay
 
 public:
   Replay(Logger *_logger, ProtectedTaskManager& task_manager)
-    :mode(MODE_NULL),
-     igc_replay(_logger),
+    :igc_replay(_logger),
      demo_replay(task_manager),
      replay(NULL) {
     path[0] = _T('\0');

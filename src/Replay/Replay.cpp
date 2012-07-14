@@ -64,11 +64,9 @@ Replay::SetFilename(const TCHAR *name)
   Stop();
 
   if (MatchesExtension(name, _T(".igc"))) {
-    mode = MODE_IGC;
     igc_replay.SetFilename(name);
     replay = &igc_replay;
   } else {
-    mode = MODE_NMEA;
     nmea_replay.SetFilename(name);
     replay = &nmea_replay;
   }
