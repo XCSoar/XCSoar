@@ -277,7 +277,8 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
   const MoreData &basic = CommonInterface::Basic();
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult next_solution = task_stats.current_leg.solution_remaining;
-  if (!task_stats.task_valid || !next_solution.IsAchievable()) {
+  if (!basic.NavAltitudeAvailable() ||
+      !task_stats.task_valid || !next_solution.IsAchievable()) {
     data.SetInvalid();
     return;
   }

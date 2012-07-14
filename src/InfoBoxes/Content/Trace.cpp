@@ -124,9 +124,12 @@ InfoBoxContentBarogram::Update(InfoBoxData &data)
   const MoreData &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  FormatUserAltitude(basic.nav_altitude, sTmp,
-                            ARRAY_SIZE(sTmp));
-  data.SetComment(sTmp);
+  if (basic.NavAltitudeAvailable()) {
+    FormatUserAltitude(basic.nav_altitude, sTmp,
+                       ARRAY_SIZE(sTmp));
+    data.SetComment(sTmp);
+  } else
+    data.SetCommentInvalid();
 
   data.SetCustom();
 }
