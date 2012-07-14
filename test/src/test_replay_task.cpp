@@ -6,6 +6,7 @@
 #include "Computer/FlyingComputer.hpp"
 #include "NMEA/FlyingState.hpp"
 #include "OS/PathName.hpp"
+#include "IO/FileLineReader.hpp"
 #include "Task/Deserialiser.hpp"
 #include "XML/DataNodeXML.hpp"
 
@@ -31,9 +32,9 @@ static OrderedTask* task_load(OrderedTask* task) {
 class ReplayLoggerSim: public IgcReplay
 {
 public:
-  ReplayLoggerSim(): 
-    IgcReplay(),
-    started(false) {}
+  ReplayLoggerSim(NLineReader *reader)
+    :IgcReplay(reader),
+     started(false) {}
 
   AircraftState state;
 
@@ -48,7 +49,6 @@ public:
 protected:
   virtual void OnReset() {}
   virtual void OnStop() {}
-  virtual void OnBadFile() {}
 
   void OnAdvance(const GeoPoint &loc,
                   const fixed speed, const Angle bearing,
@@ -100,12 +100,14 @@ test_replay()
 
   // task_manager.get_task_advance().get_advance_state() = TaskAdvance::AUTO;
 
-  ReplayLoggerSim sim;
+  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str());
+  if (reader->error()) {
+    delete reader;
+    return false;
+  }
+
+  ReplayLoggerSim sim(reader);
   sim.state.netto_vario = fixed_zero;
-
-  PathName szFilename(replay_file.c_str());
-  sim.SetFilename(szFilename);
-
   sim.Start();
 
   bool do_print = verbose;

@@ -41,14 +41,13 @@ class NmeaReplayGlue:
   PeriodClock clock;
 
 public:
-  NmeaReplayGlue();
+  NmeaReplayGlue(NLineReader *reader);
   virtual ~NmeaReplayGlue();
 
   virtual void Start();
 
 protected:
   virtual bool UpdateTime();
-  virtual void OnBadFile();
   virtual void OnSentence(const char *line);
 };
 

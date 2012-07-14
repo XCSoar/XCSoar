@@ -23,15 +23,14 @@
 
 #include "Replay/IgcReplayGlue.hpp"
 #include "Logger/Logger.hpp"
-#include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 
 #include <algorithm>
 
-IgcReplayGlue::IgcReplayGlue(Logger *_logger)
-  :logger(_logger)
+IgcReplayGlue::IgcReplayGlue(NLineReader *_reader, Logger *_logger)
+  :IgcReplay(_reader), logger(_logger)
 {
 }
 
@@ -70,13 +69,6 @@ IgcReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
                           const fixed baroalt, const fixed t)
 {
   device_blackboard->SetLocation(loc, speed, bearing, alt, baroalt, t);
-}
-
-void
-IgcReplayGlue::OnBadFile()
-{
-  ShowMessageBox(_("Could not open IGC file!"),
-              _("Flight replay"), MB_OK | MB_ICONINFORMATION);
 }
 
 void

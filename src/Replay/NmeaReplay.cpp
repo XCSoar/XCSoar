@@ -22,16 +22,13 @@
 */
 
 #include "Replay/NmeaReplay.hpp"
-#include "IO/FileLineReader.hpp"
-#include "Util/StringUtil.hpp"
+#include "IO/LineReader.hpp"
 
-#include <algorithm>
+#include <string.h>
 
-NmeaReplay::NmeaReplay() :
-  AbstractReplay(),
-  reader(NULL)
+NmeaReplay::NmeaReplay(NLineReader *_reader)
+  :reader(_reader)
 {
-  file_name[0] = _T('\0');
 }
 
 NmeaReplay::~NmeaReplay()
@@ -44,24 +41,7 @@ NmeaReplay::Start()
 {
   assert(!enabled);
 
-  if (!OpenFile()) {
-    OnBadFile();
-    return;
-  }
-
   enabled = true;
-}
-
-void
-NmeaReplay::SetFilename(const TCHAR *name)
-{
-  assert(name != NULL);
-
-  if (StringIsEmpty(name))
-    return;
-
-  if (_tcscmp(file_name, name) != 0)
-    _tcscpy(file_name, name);
 }
 
 bool
@@ -95,24 +75,6 @@ NmeaReplay::Update(fixed time_scale)
   }
 
   assert(enabled);
-  return true;
-}
-
-bool
-NmeaReplay::OpenFile()
-{
-  if (reader)
-    return true;
-
-  if (StringIsEmpty(file_name))
-    return false;
-
-  reader = new FileLineReaderA(file_name);
-  if (reader->error()) {
-    delete reader;
-    return false;
-  }
-
   return true;
 }
 

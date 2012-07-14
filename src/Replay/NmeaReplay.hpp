@@ -26,31 +26,24 @@ Copyright_License {
 
 #include "AbstractReplay.hpp"
 
-#include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
-
-class FileLineReaderA;
+class NLineReader;
 
 class NmeaReplay: public AbstractReplay
 {
-  TCHAR file_name[MAX_PATH];
-  FileLineReaderA *reader;
+  NLineReader *reader;
 
 public:
-  NmeaReplay();
+  NmeaReplay(NLineReader *reader);
   ~NmeaReplay();
 
   virtual bool Update(fixed time_scale) gcc_override;
   void Start();
-  void SetFilename(const TCHAR *name);
 
 protected:
   virtual bool UpdateTime();
-  virtual void OnBadFile() = 0;
   virtual void OnSentence(const char *line) = 0;
 
 private:
-  bool OpenFile();
   bool ReadUntilRMC(bool ignore);
 };
 

@@ -24,16 +24,13 @@
 #include "Replay/IgcReplay.hpp"
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
-#include "Util/StringUtil.hpp"
+#include "IO/LineReader.hpp"
 
-#include <algorithm>
-
-IgcReplay::IgcReplay() :
-  AbstractReplay(),
-  cli(fixed(0.98)),
-  reader(NULL)
+IgcReplay::IgcReplay(NLineReader *_reader)
+  :AbstractReplay(),
+   cli(fixed(0.98)),
+   reader(_reader)
 {
-  file_name[0] = _T('\0');
 }
 
 IgcReplay::~IgcReplay()
@@ -81,28 +78,11 @@ IgcReplay::Start()
 {
   assert(!enabled);
 
-  if (!OpenFile()) {
-    OnBadFile();
-    return;
-  }
-
   cli.Reset();
   ResetTime();
   OnReset();
 
   enabled = true;
-}
-
-void
-IgcReplay::SetFilename(const TCHAR *name)
-{
-  assert(name != NULL);
-
-  if (StringIsEmpty(name))
-    return;
-
-  if (_tcscmp(file_name, name) != 0)
-    _tcscpy(file_name, name);
 }
 
 bool
@@ -139,24 +119,5 @@ IgcReplay::Update(fixed time_scale)
   const GeoVector v = cli.GetVector(t_simulation);
   OnAdvance(r.location, v.distance, v.bearing, r.gps_altitude, r.baro_altitude, t_simulation);
 
-  return true;
-}
-
-bool
-IgcReplay::OpenFile()
-{
-  if (reader)
-    return true;
-
-  if (StringIsEmpty(file_name))
-    return false;
-
-  auto r = new FileLineReaderA(file_name);
-  if (r->error()) {
-    delete r;
-    return false;
-  }
-
-  reader = r;
   return true;
 }

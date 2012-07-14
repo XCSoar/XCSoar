@@ -55,7 +55,7 @@ public:
 
   bool Update();
   void Stop();
-  void Start(const TCHAR *_path);
+  bool Start(const TCHAR *_path);
 
   const TCHAR *GetFilename() const {
     return path;

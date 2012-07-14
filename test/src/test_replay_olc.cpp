@@ -6,6 +6,7 @@
 #include "Engine/Contest/ContestManager.hpp"
 #include "ComputerSettings.hpp"
 #include "OS/PathName.hpp"
+#include "IO/FileLineReader.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -89,9 +90,9 @@ inline void load_scores(unsigned &contest_handicap) {
 class ReplayLoggerSim: public IgcReplay
 {
 public:
-  ReplayLoggerSim(): 
-    IgcReplay(),
-    started(false) {}
+  ReplayLoggerSim(NLineReader *reader)
+    :IgcReplay(reader),
+     started(false) {}
 
   AircraftState state;
 
@@ -105,7 +106,6 @@ public:
 
 protected:
   virtual void OnReset() {}
-  virtual void OnBadFile() {}
 
   void OnAdvance(const GeoPoint &loc,
                   const fixed speed, const Angle bearing,
@@ -133,9 +133,13 @@ test_replay(const Contests olc_type,
   GlidePolar glide_polar(fixed_two);
   AircraftState state_last;
 
-  ReplayLoggerSim sim;
-  PathName szFilename(replay_file.c_str());
-  sim.SetFilename(szFilename);
+  FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str());
+  if (reader->error()) {
+    delete reader;
+    return false;
+  }
+
+  ReplayLoggerSim sim(reader);
 
   ComputerSettings settings_computer;
   settings_computer.SetDefaults();

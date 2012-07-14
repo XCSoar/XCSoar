@@ -31,8 +31,8 @@
 #include "Components.hpp"
 #include "Interface.hpp"
 
-NmeaReplayGlue::NmeaReplayGlue()
-  :parser(NULL), device(NULL)
+NmeaReplayGlue::NmeaReplayGlue(NLineReader *reader)
+  :NmeaReplay(reader), parser(NULL), device(NULL)
 {
 }
 
@@ -85,13 +85,6 @@ NmeaReplayGlue::OnSentence(const char *line)
     data.alive.Update(fixed(MonotonicClockMS()) / 1000);
     device_blackboard->ScheduleMerge();
   }
-}
-
-void
-NmeaReplayGlue::OnBadFile()
-{
-  ShowMessageBox(_("Could not open NMEA file!"),
-              _("Flight replay"), MB_OK | MB_ICONINFORMATION);
 }
 
 bool

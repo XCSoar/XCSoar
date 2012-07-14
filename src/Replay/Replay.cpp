@@ -27,6 +27,7 @@
 #include "DemoReplayGlue.hpp"
 #include "Util/StringUtil.hpp"
 #include "OS/PathName.hpp"
+#include "IO/FileLineReader.hpp"
 
 #include <assert.h>
 
@@ -36,7 +37,7 @@ Replay::Stop()
   replay.reset();
 }
 
-void
+bool
 Replay::Start(const TCHAR *_path)
 {
   assert(_path != NULL);
@@ -50,16 +51,27 @@ Replay::Start(const TCHAR *_path)
   if (StringIsEmpty(path)) {
     replay.reset(new DemoReplayGlue(task_manager));
   } else if (MatchesExtension(path, _T(".igc"))) {
-    auto r = new IgcReplayGlue(logger);
-    r->SetFilename(path);
+    auto reader = new FileLineReaderA(path);
+    if (reader->error()) {
+      delete reader;
+      return false;
+    }
+
+    auto r = new IgcReplayGlue(reader, logger);
     replay.reset(r);
   } else {
-    auto r = new NmeaReplayGlue();
-    r->SetFilename(path);
+    auto reader = new FileLineReaderA(path);
+    if (reader->error()) {
+      delete reader;
+      return false;
+    }
+
+    auto r = new NmeaReplayGlue(reader);
     replay.reset(r);
   }
 
   replay->Start();
+  return true;
 }
 
 bool

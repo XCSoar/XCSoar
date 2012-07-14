@@ -24,6 +24,7 @@ Copyright_License {
 #include "ReplayDialog.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
+#include "Dialogs/Message.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
@@ -34,6 +35,7 @@ Copyright_License {
 #include "Replay/Replay.hpp"
 #include "Form/DataField/FileReader.hpp"
 #include "Form/DataField/Float.hpp"
+#include "Language/Language.hpp"
 
 static WndForm *wf = NULL;
 
@@ -47,7 +49,9 @@ static void
 OnStartClicked(gcc_unused WndButton &Sender)
 {
   const TCHAR *path = GetFormValueFile(*wf, _T("prpFile"));
-  replay->Start(path);
+  if (!replay->Start(path))
+    ShowMessageBox(_("Could not open IGC file!"),
+                   _("Flight replay"), MB_OK | MB_ICONINFORMATION);
 }
 
 static void
