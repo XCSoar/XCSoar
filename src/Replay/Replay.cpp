@@ -44,6 +44,10 @@ Replay::Start(const TCHAR *_path)
 {
   assert(_path != NULL);
 
+  /* make sure the old AbstractReplay instance has cleaned up before
+     creating a new one */
+  replay.reset();
+
   _tcscpy(path, path);
 
   if (StringIsEmpty(path)) {
