@@ -54,6 +54,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "org_xcsoar_NativeView.h"
 #include "IO/Async/GlobalIOThread.hpp"
+#include "Thread/Debug.hpp"
 
 #ifdef IOIOLIB
 #include "Android/IOIOHelper.hpp"
@@ -94,6 +95,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint xdpi, jint ydpi,
                                             jint sdk_version, jstring product)
 {
+  InitThreadDebug();
+
   InitialiseIOThread();
 
   Java::Init(env);
@@ -144,6 +147,8 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
 {
+  InitThreadDebug();
+
   OpenGL::Initialise();
 
   if (CheckLogCat())
@@ -163,6 +168,8 @@ JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
   assert(CommonInterface::main_window == NULL);
+
+  InitThreadDebug();
 
   DisallowLanguage();
   Fonts::Deinitialize();

@@ -305,7 +305,9 @@ GlueMapWindow::OnPaint(Canvas &canvas)
   ExchangeBlackboard();
 
   /* update terrain, topography, ... */
+  EnterDrawThread();
   Idle();
+  LeaveDrawThread();
 #endif
 
   MapWindow::OnPaint(canvas);
@@ -320,11 +322,19 @@ GlueMapWindow::OnPaint(Canvas &canvas)
 void
 GlueMapWindow::OnPaintBuffer(Canvas &canvas)
 {
+#ifdef ENABLE_OPENGL
+  EnterDrawThread();
+#endif
+
   MapWindow::OnPaintBuffer(canvas);
 
   DrawMapScale(canvas, GetClientRect(), render_projection);
   if (IsPanning())
     DrawPanInfo(canvas);
+
+#ifdef ENABLE_OPENGL
+  LeaveDrawThread();
+#endif
 }
 
 bool

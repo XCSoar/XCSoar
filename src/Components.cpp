@@ -102,6 +102,7 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Units/Units.hpp"
+#include "Thread/Debug.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
@@ -685,3 +686,49 @@ GetAirspaceWarnings()
     : NULL;
 }
 
+#ifndef NDEBUG
+
+#ifdef ENABLE_OPENGL
+
+static gcc_constexpr_data ThreadHandle zero_thread_handle = ThreadHandle();
+static ThreadHandle draw_thread_handle;
+
+bool
+InDrawThread()
+{
+#ifdef ENABLE_OPENGL
+  return InMainThread() && draw_thread_handle.IsInside();
+#else
+  return draw_thread != NULL && draw_thread->IsInside();
+#endif
+}
+
+void
+EnterDrawThread()
+{
+  assert(InMainThread());
+  assert(draw_thread_handle == zero_thread_handle);
+
+  draw_thread_handle = ThreadHandle::GetCurrent();
+}
+
+void
+LeaveDrawThread()
+{
+  assert(InMainThread());
+  assert(draw_thread_handle.IsInside());
+
+  draw_thread_handle = zero_thread_handle;
+}
+
+#else
+
+bool
+InDrawThread()
+{
+  return draw_thread != NULL && draw_thread->IsInside();
+}
+
+#endif
+
+#endif

@@ -47,9 +47,20 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
+#include "Thread/Debug.hpp"
 
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt) {}
+
+#ifndef NDEBUG
+
+bool
+InDrawThread()
+{
+  return InMainThread();
+}
+
+#endif
 
 static Waypoints way_points;
 
