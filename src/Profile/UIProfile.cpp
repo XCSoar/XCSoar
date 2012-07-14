@@ -111,7 +111,6 @@ Profile::Load(UISettings &settings)
   Get(ProfileKeys::UseCustomFonts, settings.custom_fonts);
 
   Get(ProfileKeys::EnableTAGauge, settings.enable_thermal_assistant_gauge);
-  Get(ProfileKeys::EnableFinalGlideBarMC0, settings.final_glide_bar_mc0_enabled);
 
   GetEnum(ProfileKeys::AppStatusMessageAlignment, settings.popup_message_position);
 

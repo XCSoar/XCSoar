@@ -124,6 +124,8 @@ Profile::Load(MapSettings &settings)
   Get(ProfileKeys::EnableFLARMMap, settings.show_flarm_on_map);
 
   Get(ProfileKeys::EnableThermalProfile, settings.show_thermal_profile);
+  Get(ProfileKeys::EnableFinalGlideBarMC0,
+      settings.final_glide_bar_mc0_enabled);
 
   Load(settings.trail);
   Load(settings.item_list);

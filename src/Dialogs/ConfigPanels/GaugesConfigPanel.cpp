@@ -73,7 +73,7 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Final glide bar MC0"),
              _("If set to ON the final glide bar will show a second arrow indicating the required height "
                  "to reach the final waypoint at MC zero."),
-             ui_settings.final_glide_bar_mc0_enabled);
+             ui_settings.map.final_glide_bar_mc0_enabled);
   SetExpertRow(EnableFinalGlideBarMC0);
 }
 
@@ -97,7 +97,7 @@ GaugesConfigPanel::Save(bool &_changed, bool &_require_restart)
                        XCSoarInterface::SetMapSettings().show_thermal_profile);
 
   changed |= SaveValue(EnableFinalGlideBarMC0, ProfileKeys::EnableFinalGlideBarMC0,
-                       ui_settings.final_glide_bar_mc0_enabled);
+                       ui_settings.map.final_glide_bar_mc0_enabled);
 
   _changed |= changed;
   _require_restart |= require_restart;

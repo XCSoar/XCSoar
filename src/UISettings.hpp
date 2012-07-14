@@ -50,9 +50,6 @@ struct UISettings {
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
 
-  /** Show FinalGlideBar mc0 arrow */
-  bool final_glide_bar_mc0_enabled;
-
   enum StateMessageAlign_t {
     smAlignCenter = 0,
     smAlignTopLeft,
