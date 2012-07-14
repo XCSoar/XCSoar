@@ -59,16 +59,3 @@ DemoReplay::Stop()
   enabled = false;
   OnStop();
 }
-
-bool
-DemoReplay::UpdateTime()
-{
-  // nothing yet
-  return true;
-}
-
-void
-DemoReplay::ResetTime()
-{
-  // nothing yet
-}

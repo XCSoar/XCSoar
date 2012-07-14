@@ -43,10 +43,6 @@ public:
   bool IsEnabled() const {
     return enabled;
   }
-
-protected:
-  virtual bool UpdateTime() = 0;
-  virtual void ResetTime() = 0;
 };
 
 #endif

@@ -47,7 +47,6 @@ public:
 
 protected:
   virtual bool UpdateTime();
-  virtual void ResetTime() = 0;
   virtual void OnBadFile() = 0;
   virtual void OnSentence(const char *line) = 0;
 

@@ -43,8 +43,6 @@ protected:
   virtual void OnStop() = 0;
   void Start(const TaskAccessor& task, const GeoPoint& default_location);
   bool Update(TaskAccessor& task);
-  virtual bool UpdateTime();
-  virtual void ResetTime();
 };
 
 #endif

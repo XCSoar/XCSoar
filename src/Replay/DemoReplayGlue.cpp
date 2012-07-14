@@ -41,12 +41,6 @@ DemoReplayGlue::UpdateTime()
 }
 
 void
-DemoReplayGlue::ResetTime()
-{
-  clock.Reset();
-}
-
-void
 DemoReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
                            const Angle bearing, const fixed alt,
                            const fixed baroalt, const fixed t)

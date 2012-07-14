@@ -43,8 +43,8 @@ public:
   virtual bool Update();
 
 protected:
-  virtual bool UpdateTime();
-  virtual void ResetTime();
+  bool UpdateTime();
+
   virtual void OnAdvance(const GeoPoint &loc, const fixed speed,
                          const Angle bearing, const fixed alt,
                          const fixed baroalt, const fixed t);

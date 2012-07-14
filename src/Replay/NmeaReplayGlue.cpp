@@ -110,9 +110,3 @@ NmeaReplayGlue::UpdateTime()
 {
   return clock.CheckUpdate(1000);
 }
-
-void
-NmeaReplayGlue::ResetTime()
-{
-  clock.Reset();
-}
