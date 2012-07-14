@@ -69,9 +69,6 @@ DemoReplayGlue::Start()
 bool
 DemoReplayGlue::Update(fixed time_scale)
 {
-  if (!enabled)
-    return false;
-
   if (!UpdateTime())
     return true;
 

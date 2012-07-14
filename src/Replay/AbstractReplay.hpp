@@ -28,19 +28,11 @@ Copyright_License {
 
 class AbstractReplay 
 {
-protected:
-  bool enabled;
-
 public:
-  AbstractReplay():enabled(false) {}
   virtual ~AbstractReplay() {}
 
   virtual bool Update(fixed time_scale) = 0;
   virtual void Start() = 0;
-
-  bool IsEnabled() const {
-    return enabled;
-  }
 };
 
 #endif

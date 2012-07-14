@@ -39,9 +39,6 @@ NmeaReplay::~NmeaReplay()
 void
 NmeaReplay::Start()
 {
-  assert(!enabled);
-
-  enabled = true;
 }
 
 bool
@@ -63,18 +60,14 @@ NmeaReplay::ReadUntilRMC(bool ignore)
 bool
 NmeaReplay::Update(fixed time_scale)
 {
-  assert(enabled);
-
   if (!UpdateTime())
     return true;
 
   for (fixed i = fixed_one; i <= time_scale; i += fixed_one) {
-    enabled = ReadUntilRMC(i != time_scale);
-    if (!enabled)
+    if (!ReadUntilRMC(i != time_scale))
       return false;
   }
 
-  assert(enabled);
   return true;
 }
 

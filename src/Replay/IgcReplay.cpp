@@ -76,31 +76,22 @@ IgcReplay::ResetTime()
 void
 IgcReplay::Start()
 {
-  assert(!enabled);
-
   cli.Reset();
   ResetTime();
   OnReset();
-
-  enabled = true;
 }
 
 bool
 IgcReplay::Update(fixed time_scale)
 {
-  if (!enabled)
-    return false;
-
   if (positive(t_simulation) && !UpdateTime(time_scale))
     return true;
 
   // if need a new point
   while (cli.NeedData(t_simulation)) {
     IGCFix fix;
-    if (!ReadPoint(fix)) {
-      enabled = false;
+    if (!ReadPoint(fix))
       return false;
-    }
 
     if (fix.pressure_altitude == 0 && fix.gps_altitude > 0)
       /* no pressure altitude was recorded - fall back to GPS
