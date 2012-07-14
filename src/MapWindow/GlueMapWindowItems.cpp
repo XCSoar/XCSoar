@@ -32,25 +32,34 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
+#include "Interface.hpp"
 
 bool
 GlueMapWindow::ShowMapItems(const GeoPoint &location,
                             bool show_empty_message) const
 {
+  /* not using MapWindowBlackboard here because this method is called
+     by the main thread */
+  const ComputerSettings &computer_settings =
+    CommonInterface::GetComputerSettings();
+  const MapSettings &settings = CommonInterface::GetMapSettings();
+  const MoreData &basic = CommonInterface::Basic();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
+
   fixed range = visible_projection.DistancePixelsToMeters(Layout::GetHitRadius());
 
   MapItemList list;
   MapItemListBuilder builder(list, location, range);
 
-  if (GetMapSettings().item_list.add_location)
-      builder.AddLocation(Basic(), terrain);
+  if (settings.item_list.add_location)
+      builder.AddLocation(basic, terrain);
 
-  if (GetMapSettings().item_list.add_arrival_altitude && route_planner)
+  if (settings.item_list.add_arrival_altitude && route_planner)
     builder.AddArrivalAltitudes(*route_planner, terrain,
-                                GetComputerSettings().task.safety_height_arrival);
+                                computer_settings.task.safety_height_arrival);
 
-  if (Basic().location_available)
-    builder.AddSelfIfNear(Basic().location, Calculated().heading);
+  if (basic.location_available)
+    builder.AddSelfIfNear(basic.location, calculated.heading);
 
   if (task)
     builder.AddTaskOZs(*task);
@@ -59,15 +68,15 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
   if (airspace_database)
     builder.AddVisibleAirspace(*airspace_database,
                                airspace_renderer.GetWarningManager(),
-                               GetComputerSettings().airspace,
-                               GetMapSettings().airspace, Basic(),
-                               Calculated());
+                               computer_settings.airspace,
+                               settings.airspace, basic,
+                               calculated);
 
-  if (marks && render_projection.GetMapScale() <= fixed_int_constant(30000))
+  if (marks && visible_projection.GetMapScale() <= fixed_int_constant(30000))
     builder.AddMarkers(*marks);
 
-  if (render_projection.GetMapScale() <= fixed_int_constant(4000))
-    builder.AddThermals(Calculated().thermal_locator, Basic(), Calculated());
+  if (visible_projection.GetMapScale() <= fixed_int_constant(4000))
+    builder.AddThermals(calculated.thermal_locator, basic, calculated);
 
   if (waypoints)
     builder.AddWaypoints(*waypoints);
@@ -77,7 +86,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
     builder.AddWeatherStations(*noaa_store);
 #endif
 
-  builder.AddTraffic(Basic().flarm.traffic, GetComputerSettings().team_code);
+  builder.AddTraffic(basic.flarm.traffic, computer_settings.team_code);
 
   // Sort the list of map items
   list.Sort();
@@ -93,7 +102,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
 
   ShowMapItemListDialog(UIGlobals::GetMainWindow(), list,
                         UIGlobals::GetDialogLook(), look, traffic_look,
-                        final_glide_bar_renderer.GetLook(), GetMapSettings(),
+                        final_glide_bar_renderer.GetLook(), settings,
                         glide_computer != NULL
                         ? &glide_computer->GetAirspaceWarnings() : NULL);
   return true;
