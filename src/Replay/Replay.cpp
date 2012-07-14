@@ -25,6 +25,8 @@
 #include "Util/StringUtil.hpp"
 #include "OS/PathName.hpp"
 
+#include <assert.h>
+
 void
 Replay::Stop()
 {
@@ -75,7 +77,9 @@ Replay::GetFilename()
 void
 Replay::SetFilename(const TCHAR *name)
 {
-  if (name == NULL || StringIsEmpty(name)) {
+  assert(name != NULL);
+
+  if (StringIsEmpty(name)) {
     mode = MODE_DEMO;
     return;
   }

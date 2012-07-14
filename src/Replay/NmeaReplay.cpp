@@ -70,7 +70,9 @@ NmeaReplay::GetFilename()
 void
 NmeaReplay::SetFilename(const TCHAR *name)
 {
-  if (!name || StringIsEmpty(name))
+  assert(name != NULL);
+
+  if (StringIsEmpty(name))
     return;
 
   if (_tcscmp(file_name, name) != 0)
