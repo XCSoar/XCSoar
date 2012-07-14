@@ -157,11 +157,14 @@ IgcReplay::OpenFile()
   if (StringIsEmpty(file_name))
     return false;
 
-  reader = new FileLineReaderA(file_name);
-  if (!reader->error())
-    return true;
+  auto r = new FileLineReaderA(file_name);
+  if (r->error()) {
+    delete r;
+    return false;
+  }
 
-  return false;
+  reader = r;
+  return true;
 }
 
 void

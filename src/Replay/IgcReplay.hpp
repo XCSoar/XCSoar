@@ -42,7 +42,7 @@ class IgcReplay: public AbstractReplay
   CatmullRomInterpolator cli;
 
   TCHAR file_name[MAX_PATH];
-  FileLineReaderA *reader;
+  NLineReader *reader;
 
 protected:
   fixed t_simulation;
