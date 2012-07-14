@@ -33,6 +33,7 @@ protected:
 
 public:
   AbstractReplay():enabled(false) {}
+  virtual ~AbstractReplay() {}
 
   virtual bool Update(fixed time_scale) = 0;
   virtual void Stop() = 0;
