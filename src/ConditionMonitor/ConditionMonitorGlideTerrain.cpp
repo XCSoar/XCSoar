@@ -28,7 +28,8 @@ Copyright_License {
 
 bool
 ConditionMonitorGlideTerrain::CheckCondition(const NMEAInfo &basic,
-                                             const DerivedInfo &calculated)
+                                             const DerivedInfo &calculated,
+                                             const ComputerSettings &settings)
 {
   if (!calculated.flight.flying ||
       !calculated.task_stats.task_valid)

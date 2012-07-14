@@ -33,7 +33,8 @@ ConditionMonitor::ConditionMonitor(unsigned _interval_notification,
    Interval_Check(_interval_check) {}
 
 void
-ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated)
+ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+                         const ComputerSettings &settings)
 {
   if (!calculated.flight.flying)
     return;
@@ -42,7 +43,7 @@ ConditionMonitor::Update(const NMEAInfo &basic, const DerivedInfo &calculated)
   const fixed Time = basic.time;
   if (Ready_Time_Check(Time, &restart)) {
     LastTime_Check = Time;
-    if (CheckCondition(basic, calculated)) {
+    if (CheckCondition(basic, calculated, settings)) {
       if (Ready_Time_Notification(Time) && !restart) {
         LastTime_Notification = Time;
         Notify();

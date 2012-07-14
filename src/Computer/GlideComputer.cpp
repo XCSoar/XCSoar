@@ -87,6 +87,7 @@ GlideComputer::ProcessGPS(bool force)
 {
   const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
+  const ComputerSettings &settings = GetComputerSettings();
 
   calculated.date_time_local = basic.date_time_utc + GetUTCOffset();
 
@@ -135,7 +136,7 @@ GlideComputer::ProcessGPS(bool force)
     calculated.trace_history.append(basic);
 
   // Update the ConditionMonitors
-  ConditionMonitorsUpdate(Basic(), Calculated());
+  ConditionMonitorsUpdate(Basic(), Calculated(), settings);
 
   return idle_clock.CheckUpdate(500);
 }

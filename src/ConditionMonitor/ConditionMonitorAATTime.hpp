@@ -34,7 +34,8 @@ public:
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,
-                              const DerivedInfo &calculated);
+                              const DerivedInfo &calculated,
+                              const ComputerSettings &settings) gcc_override;
   virtual void Notify();
   virtual void SaveLast() {}
 };

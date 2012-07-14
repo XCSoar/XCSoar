@@ -28,7 +28,8 @@ Copyright_License {
 
 bool
 ConditionMonitorLandableReachable::CheckCondition(const NMEAInfo &basic,
-                                                  const DerivedInfo &calculated)
+                                                  const DerivedInfo &calculated,
+                                                  const ComputerSettings &settings)
 {
   if (!calculated.flight.flying)
     return false;

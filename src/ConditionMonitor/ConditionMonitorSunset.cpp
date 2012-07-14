@@ -33,7 +33,8 @@ Copyright_License {
 
 bool
 ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
-                                       const DerivedInfo &calculated)
+                                       const DerivedInfo &calculated,
+                                       const ComputerSettings &settings)
 {
   if (!basic.location_available ||
       !calculated.flight.flying || HaveCondorDevice() ||

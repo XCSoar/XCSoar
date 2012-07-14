@@ -37,7 +37,9 @@ public:
   ConditionMonitorStartRules():ConditionMonitor(60, 1), withinMargin(false) {}
 
 protected:
-  virtual bool CheckCondition(const NMEAInfo &basic, const DerivedInfo &calculated);
+  virtual bool CheckCondition(const NMEAInfo &basic,
+                              const DerivedInfo &calculated,
+                              const ComputerSettings &settings) gcc_override;
   virtual void Notify();
   virtual void SaveLast() {}
 };

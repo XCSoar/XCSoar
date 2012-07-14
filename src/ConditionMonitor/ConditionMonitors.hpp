@@ -26,8 +26,10 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
+struct ComputerSettings;
 
 void
-ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated);
+ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated,
+                        const ComputerSettings &settings);
 
 #endif

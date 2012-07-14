@@ -28,6 +28,7 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
+struct ComputerSettings;
 
 /**
  * Base class for system to monitor changes in state and issue
@@ -45,11 +46,13 @@ public:
   ConditionMonitor(unsigned _interval_notification,
                    unsigned _interval_check);
 
-  void Update(const NMEAInfo &basic, const DerivedInfo &calculated);
+  void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
+              const ComputerSettings &settings);
 
 private:
   virtual bool CheckCondition(const NMEAInfo &basic,
-                              const DerivedInfo &calculated) = 0;
+                              const DerivedInfo &calculated,
+                              const ComputerSettings &settings) = 0;
   virtual void Notify() = 0;
   virtual void SaveLast() = 0;
 

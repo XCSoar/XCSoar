@@ -30,7 +30,8 @@ Copyright_License {
 
 bool
 ConditionMonitorWind::CheckCondition(const NMEAInfo &basic,
-                                     const DerivedInfo &calculated)
+                                     const DerivedInfo &calculated,
+                                     const ComputerSettings &settings)
 {
   wind = calculated.GetWindOrZero();
 

@@ -29,7 +29,8 @@ Copyright_License {
 
 bool
 ConditionMonitorStartRules::CheckCondition(const NMEAInfo &basic,
-                                           const DerivedInfo &calculated)
+                                           const DerivedInfo &calculated,
+                                           const ComputerSettings &settings)
 {
 #ifdef OLD_TASK // start condition warnings
   if (!task.Valid()
