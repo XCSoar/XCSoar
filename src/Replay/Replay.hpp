@@ -24,17 +24,16 @@ Copyright_License {
 #ifndef REPLAY_HPP
 #define REPLAY_HPP
 
-#include "Replay/IgcReplayGlue.hpp"
-#include "Replay/NmeaReplayGlue.hpp"
-#include "Replay/DemoReplayGlue.hpp"
+#include "AbstractReplay.hpp"
 
 #include <memory>
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
-#include <stdio.h>
 
+class Logger;
 class ProtectedTaskManager;
+class AbstractReplay;
 
 class Replay
 {

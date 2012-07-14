@@ -21,7 +21,10 @@
 }
 */
 
-#include "Replay/Replay.hpp"
+#include "Replay.hpp"
+#include "IgcReplayGlue.hpp"
+#include "NmeaReplayGlue.hpp"
+#include "DemoReplayGlue.hpp"
 #include "Util/StringUtil.hpp"
 #include "OS/PathName.hpp"
 
