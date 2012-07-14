@@ -36,7 +36,7 @@ IgcReplayGlue::IgcReplayGlue(Logger *_logger)
 }
 
 bool
-IgcReplayGlue::UpdateTime()
+IgcReplayGlue::UpdateTime(fixed time_scale)
 {
   // Allow for poor time slicing, we never get called more
   // than 4 times per second, so this will yield 1 second updates

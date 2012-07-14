@@ -37,12 +37,12 @@ public:
 
   DemoReplay();
   virtual void Start() = 0;
-  virtual bool Update() = 0;
+  virtual bool Update(fixed time_scale) gcc_override = 0;
   void Stop();
 protected:
   virtual void OnStop() = 0;
   void Start(const TaskAccessor& task, const GeoPoint& default_location);
-  bool Update(TaskAccessor& task);
+  bool Update(fixed time_scale, TaskAccessor& task);
 };
 
 #endif

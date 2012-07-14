@@ -50,13 +50,13 @@ protected:
 public:
   IgcReplay();
 
-  bool Update();
+  virtual bool Update(fixed time_scale) gcc_override;
   void Stop();
   void Start();
   void SetFilename(const TCHAR *name);
 
 protected:
-  virtual bool UpdateTime();
+  virtual bool UpdateTime(fixed time_scale);
   virtual void ResetTime();
 
   virtual void OnReset() = 0;

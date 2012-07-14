@@ -40,7 +40,7 @@ public:
     :task_manager(&_task_manager) {}
 
   virtual void Start();
-  virtual bool Update();
+  virtual bool Update(fixed time_scale) gcc_override;
 
 protected:
   bool UpdateTime();

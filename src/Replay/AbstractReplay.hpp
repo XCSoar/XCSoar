@@ -28,15 +28,13 @@ Copyright_License {
 
 class AbstractReplay 
 {
-public:
-  fixed time_scale;
-
 protected:
   bool enabled;
 
 public:
-  AbstractReplay(): time_scale(fixed_one), enabled(false) {}
-  virtual bool Update() = 0;
+  AbstractReplay():enabled(false) {}
+
+  virtual bool Update(fixed time_scale) = 0;
   virtual void Stop() = 0;
   virtual void Start() = 0;
 

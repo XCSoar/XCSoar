@@ -68,7 +68,7 @@ DemoReplayGlue::OnStop()
 }
 
 bool
-DemoReplayGlue::Update()
+DemoReplayGlue::Update(fixed time_scale)
 {
   if (!enabled)
     return false;
@@ -83,7 +83,7 @@ DemoReplayGlue::Update()
 
   ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
   TaskAccessor ta(protected_task_manager, floor_alt);
-  bool retval = DemoReplay::Update(ta);
+  bool retval = DemoReplay::Update(time_scale, ta);
 
   const AircraftState s = aircraft.GetState();
   OnAdvance(s.location, s.ground_speed, s.track, s.altitude,

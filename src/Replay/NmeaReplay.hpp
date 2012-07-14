@@ -40,7 +40,7 @@ public:
   NmeaReplay();
   ~NmeaReplay();
 
-  bool Update();
+  virtual bool Update(fixed time_scale) gcc_override;
   void Stop();
   void Start();
   void SetFilename(const TCHAR *name);

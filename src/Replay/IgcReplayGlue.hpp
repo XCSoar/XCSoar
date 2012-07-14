@@ -40,7 +40,7 @@ public:
   IgcReplayGlue(Logger *_logger);
 
 protected:
-  virtual bool UpdateTime();
+  virtual bool UpdateTime(fixed time_scale) gcc_override;
   virtual void ResetTime();
   virtual void OnReset();
   virtual void OnStop();

@@ -90,7 +90,7 @@ NmeaReplay::ReadUntilRMC(bool ignore)
 }
 
 bool
-NmeaReplay::Update()
+NmeaReplay::Update(fixed time_scale)
 {
   if (!enabled)
     return false;

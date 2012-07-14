@@ -36,6 +36,8 @@ class ProtectedTaskManager;
 
 class Replay
 {
+  fixed time_scale;
+
   IgcReplayGlue igc_replay;
   NmeaReplayGlue nmea_replay;
   DemoReplayGlue demo_replay;
@@ -46,7 +48,8 @@ class Replay
 
 public:
   Replay(Logger *_logger, ProtectedTaskManager& task_manager)
-    :igc_replay(_logger),
+    :time_scale(fixed_one),
+     igc_replay(_logger),
      demo_replay(task_manager),
      replay(NULL) {
     path[0] = _T('\0');
@@ -58,8 +61,13 @@ public:
   const TCHAR* GetFilename();
   void SetFilename(const TCHAR *name);
 
-  fixed GetTimeScale();
-  void SetTimeScale(const fixed time_scale);
+  fixed GetTimeScale() const {
+    return time_scale;
+  }
+
+  void SetTimeScale(const fixed _time_scale) {
+    time_scale = _time_scale;
+  }
 };
 
 #endif

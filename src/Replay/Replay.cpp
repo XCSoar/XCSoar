@@ -77,23 +77,7 @@ bool
 Replay::Update()
 {
   if (replay != NULL)
-    replay->Update();
+    replay->Update(time_scale);
 
   return false;
-}
-
-fixed
-Replay::GetTimeScale()
-{
-  return replay != NULL
-    ? replay->time_scale
-    : fixed_one;
-}
-
-void
-Replay::SetTimeScale(const fixed time_scale)
-{
-  igc_replay.time_scale = time_scale;
-  nmea_replay.time_scale = time_scale;
-  demo_replay.time_scale = time_scale;
 }

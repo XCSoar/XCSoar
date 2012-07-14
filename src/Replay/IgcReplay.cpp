@@ -56,7 +56,7 @@ IgcReplay::ReadPoint(IGCFix &fix)
 }
 
 bool
-IgcReplay::UpdateTime()
+IgcReplay::UpdateTime(fixed time_scale)
 {
   const fixed t_simulation_last = t_simulation;
 
@@ -112,12 +112,12 @@ IgcReplay::SetFilename(const TCHAR *name)
 }
 
 bool
-IgcReplay::Update()
+IgcReplay::Update(fixed time_scale)
 {
   if (!enabled)
     return false;
 
-  if (positive(t_simulation) && !UpdateTime())
+  if (positive(t_simulation) && !UpdateTime(time_scale))
     return true;
 
   // if need a new point
