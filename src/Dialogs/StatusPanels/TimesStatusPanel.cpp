@@ -78,7 +78,7 @@ TimesStatusPanel::Refresh()
   }
 
   if (positive(flight.flight_time)) {
-    FormatSignedTimeHHMM(temp.buffer(), TimeLocal((long)flight.takeoff_time));
+    FormatSignedTimeHHMM(temp.buffer(), TimeLocal((int)flight.takeoff_time));
     SetText(TakeoffTime, temp);
   } else {
     SetText(TakeoffTime, _T(""));
