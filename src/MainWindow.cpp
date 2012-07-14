@@ -187,7 +187,7 @@ MainWindow::InitialiseConfigured()
   look->InitialiseConfigured(CommonInterface::GetUISettings());
 
   LogStartUp(_T("Create info boxes"));
-  InfoBoxManager::Create(rc, ib_layout, look->info_box, look->units);
+  InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   map_rect = ib_layout.remaining;
 
   LogStartUp(_T("Create button labels"));
@@ -297,7 +297,7 @@ MainWindow::ReinitialiseLayout()
 
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
-  InfoBoxManager::Create(rc, ib_layout, look->info_box, look->units);
+  InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 

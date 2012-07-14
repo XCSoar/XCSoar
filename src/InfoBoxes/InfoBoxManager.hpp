@@ -66,7 +66,7 @@ namespace InfoBoxManager
   void ProcessTimer();
   void SetDirty();
 
-  void Create(PixelRect rc, const InfoBoxLayout::Layout &layout,
+  void Create(ContainerWindow &parent, const InfoBoxLayout::Layout &layout,
               const InfoBoxLook &look, const UnitsLook &units_look);
   void Destroy();
   void Show();

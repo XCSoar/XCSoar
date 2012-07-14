@@ -124,7 +124,7 @@ InfoBoxManager::Event_Select(int i)
   if (InfoFocus >= 0)
     infoboxes[InfoFocus]->SetFocus();
   else
-    XCSoarInterface::main_window.SetDefaultFocus();
+    infoboxes[InfoFocus]->FocusParent();
 }
 
 unsigned
@@ -290,7 +290,8 @@ InfoBoxManager::ProcessTimer()
 }
 
 void
-InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
+InfoBoxManager::Create(ContainerWindow &parent,
+                       const InfoBoxLayout::Layout &_layout,
                        const InfoBoxLook &look, const UnitsLook &units_look)
 {
   const InfoBoxSettings &settings =
@@ -311,7 +312,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
          settings.geometry is the configured layout */
       : InfoBoxLayout::GetBorder(layout.geometry, i);
 
-    infoboxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
+    infoboxes[i] = new InfoBoxWindow(parent,
                                      rc.left, rc.top,
                                      rc.right - rc.left, rc.bottom - rc.top,
                                      Border, settings, look, units_look,
