@@ -28,7 +28,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
-#include "LocalTime.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/Units.hpp"
@@ -203,16 +202,15 @@ InfoBoxContentNextETA::Update(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
-  const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.current_leg.IsAchievable()) {
     data.SetInvalid();
     return;
   }
 
-  int dd = (int)(task_stats.current_leg.solution_remaining.time_elapsed) +
-    DetectCurrentTime(basic);
-  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+  const BrokenTime t = now_local +
+    unsigned(task_stats.current_leg.solution_remaining.time_elapsed);
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
@@ -362,9 +360,9 @@ InfoBoxContentFinalETA::Update(InfoBoxData &data)
     return;
   }
 
-  int dd = (int)task_stats.total.solution_remaining.time_elapsed +
-    DetectCurrentTime(XCSoarInterface::Basic());
-  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
+  const BrokenTime &now_local = CommonInterface::Calculated().date_time_local;
+  const BrokenTime t = now_local +
+    unsigned(task_stats.total.solution_remaining.time_elapsed);
 
   // Set Value
   data.UnsafeFormatValue(_T("%02u:%02u"), t.hour, t.minute);
