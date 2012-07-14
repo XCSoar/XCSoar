@@ -37,7 +37,6 @@ Copyright_License {
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "UIState.hpp"
-#include "Interface.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
 #include "Units/Units.hpp"
 #include "Terrain/RasterTerrain.hpp"
@@ -280,7 +279,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     break;
   }
 
-  const UIState &ui_state = CommonInterface::GetUIState();
+  const UIState &ui_state = GetUIState();
   if (ui_state.auxiliary_enabled) {
     buffer += InfoBoxManager::GetCurrentPanelName();
     buffer += _T(" ");
