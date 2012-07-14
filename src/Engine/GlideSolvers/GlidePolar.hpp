@@ -262,6 +262,7 @@ public:
    * Takeoff speed
    * @return Takeoff speed threshold (m/s)
    */
+  gcc_pure
   fixed GetVTakeoff() const;
 
   /**
@@ -336,6 +337,7 @@ public:
    * Retrieve ballast in litres
    * @return Ballast (l or kg)
    */
+  gcc_pure
   fixed GetBallastLitres() const;
 
   /**
@@ -343,6 +345,7 @@ public:
    *
    * @return True if glider can carry ballast
    */
+  gcc_pure
   bool IsBallastable() const;
 
   /**
@@ -378,6 +381,7 @@ public:
    *
    * @return Mass (kg) of aircraft including ballast
    */
+  gcc_pure
   fixed GetTotalMass() const;
 
   /**
@@ -385,6 +389,7 @@ public:
    *
    * @return Wing loading (all up mass divided by reference area, kg/m^2)
    */
+  gcc_pure
   fixed GetWingLoading() const;
 
   /**
@@ -439,6 +444,7 @@ public:
    *
    * @return True if a glide solution is feasible (optimistically)
    */
+  gcc_pure
   bool IsGlidePossible(const GlideState &task) const;
 
   /**
@@ -451,6 +457,7 @@ public:
    *
    * @return Speed to fly (true, m/s)
    */
+  gcc_pure
   fixed SpeedToFly(const AircraftState &state, const GlideResult &solution,
       const bool block_stf) const;
 
@@ -464,6 +471,7 @@ public:
    *
    * @return MC value adjusted for risk (m/s)
    */
+  gcc_pure
   fixed GetRiskMC(fixed height_fraction, const fixed riskGamma) const;
 
   /**
@@ -496,6 +504,7 @@ public:
    * @return Equivalent thermal strength. Normally a positive value, but in
    * some situations it can be negative.
    */
+  gcc_pure
   fixed GetNextLegEqThermal(fixed current_wind, fixed next_wind) const;
 
   /** Returns the wing area in m^2 */
