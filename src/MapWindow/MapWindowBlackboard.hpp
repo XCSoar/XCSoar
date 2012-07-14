@@ -27,6 +27,7 @@ Copyright_License {
 #include "Blackboard/BaseBlackboard.hpp"
 #include "Blackboard/ComputerSettingsBlackboard.hpp"
 #include "Blackboard/MapSettingsBlackboard.hpp"
+#include "Thread/Debug.hpp"
 #include "UIState.hpp"
 
 /**
@@ -42,7 +43,36 @@ class MapWindowBlackboard:
   UIState ui_state;
 
 protected:
+  gcc_const
+  const MoreData &Basic() const {
+    assert(InDrawThread());
+
+    return BaseBlackboard::Basic();
+  }
+
+  gcc_const
+  const DerivedInfo &Calculated() const {
+    assert(InDrawThread());
+
+    return BaseBlackboard::Calculated();
+  }
+
+  gcc_const
+  const ComputerSettings &GetComputerSettings() const {
+    assert(InDrawThread());
+
+    return ComputerSettingsBlackboard::GetComputerSettings();
+  }
+
+  gcc_const
+  const MapSettings &GetMapSettings() const {
+    return settings_map;
+  }
+
+  gcc_const
   const UIState &GetUIState() const {
+    assert(InDrawThread());
+
     return ui_state;
   }
 
