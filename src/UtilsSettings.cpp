@@ -73,7 +73,7 @@ bool LanguageChanged = false;
 static void
 SettingsEnter()
 {
-  CommonInterface::main_window.SuspendThreads();
+  CommonInterface::main_window->SuspendThreads();
 
   // This prevents the map and calculation threads from doing anything
   // with shared data while it is being changed (also prevents drawing)
@@ -100,7 +100,7 @@ SettingsLeave(const UISettings &old_ui_settings)
 
   VerboseOperationEnvironment operation;
 
-  MainWindow &main_window = XCSoarInterface::main_window;
+  MainWindow &main_window = *CommonInterface::main_window;
 
   if (LanguageChanged)
     ReadLanguageFile();
@@ -197,7 +197,7 @@ SettingsLeave(const UISettings &old_ui_settings)
     main_window.SetLook().map.waypoint.Initialise(settings_map.waypoint);
 
   ResumeAllThreads();
-  CommonInterface::main_window.ResumeThreads();
+  main_window.ResumeThreads();
   // allow map and calculations threads to continue
 
   ActionInterface::SendMapSettings(true);

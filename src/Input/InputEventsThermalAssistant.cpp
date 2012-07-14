@@ -41,6 +41,6 @@ InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
 
   ta_widget = new BigThermalAssistantWidget(CommonInterface::GetLiveBlackboard(),
                                             UIGlobals::GetLook().thermal_assistant_dialog);
-  CommonInterface::main_window.SetWidget(ta_widget);
+  CommonInterface::main_window->SetWidget(ta_widget);
   SetFlavour(_T("TA"));
 }

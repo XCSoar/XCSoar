@@ -28,5 +28,5 @@ Copyright_License {
 void
 Message::AddMessage(const TCHAR* text, const TCHAR *data)
 {
-  CommonInterface::main_window.popup.AddMessage(text, data);
+  CommonInterface::main_window->popup.AddMessage(text, data);
 }

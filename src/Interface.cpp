@@ -54,7 +54,7 @@ bool ActionInterface::force_shutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
 StatusMessageList CommonInterface::status_messages;
-MainWindow CommonInterface::main_window(status_messages);
+MainWindow *CommonInterface::main_window;
 
 void
 XCSoarInterface::ReceiveGPS()
@@ -110,10 +110,10 @@ ActionInterface::SendGetComputerSettings()
 {
   assert(calculation_thread != NULL);
 
-  main_window.SetComputerSettings(GetComputerSettings());
+  main_window->SetComputerSettings(GetComputerSettings());
 
   calculation_thread->SetComputerSettings(GetComputerSettings());
-  calculation_thread->SetScreenDistanceMeters(main_window.GetProjection().GetScreenDistanceMeters());
+  calculation_thread->SetScreenDistanceMeters(main_window->GetProjection().GetScreenDistanceMeters());
 }
 
 void
@@ -223,14 +223,14 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
   // (via ProcessTimer()) rather than waiting for the idle timer every 500ms
 
   if (trigger_draw) {
-    main_window.UpdateGaugeVisibility();
+    main_window->UpdateGaugeVisibility();
     InfoBoxManager::ProcessTimer();
   }
 
-  main_window.SetMapSettings(GetMapSettings());
+  main_window->SetMapSettings(GetMapSettings());
 
   if (trigger_draw) {
-    main_window.FullRedraw();
+    main_window->FullRedraw();
     BroadcastUISettingsUpdate();
   }
 
@@ -241,7 +241,7 @@ void
 ActionInterface::SignalShutdown(bool force)
 {
   force_shutdown = force;
-  main_window.close(); // signals close
+  main_window->close(); // signals close
 }
 
 bool

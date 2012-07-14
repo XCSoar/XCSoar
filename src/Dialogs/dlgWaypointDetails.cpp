@@ -187,7 +187,7 @@ OnGotoClicked(gcc_unused WndButton &button)
   protected_task_manager->DoGoto(*waypoint);
   wf->SetModalResult(mrOK);
 
-  CommonInterface::main_window.FullRedraw();
+  CommonInterface::main_window->FullRedraw();
 }
 
 #if 0

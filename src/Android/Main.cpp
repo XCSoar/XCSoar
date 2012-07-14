@@ -155,14 +155,15 @@ Java_org_xcsoar_NativeView_runNative(JNIEnv *env, jobject obj)
                    _T("XCSoar has crashed recently"),
                    MB_OK|MB_ICONERROR);
 
-  CommonInterface::main_window.RunEventLoop();
+  CommonInterface::main_window->RunEventLoop();
 }
 
 gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
-  CommonInterface::main_window.reset();
+  assert(CommonInterface::main_window == NULL);
+
   DisallowLanguage();
   Fonts::Deinitialize();
 
@@ -207,7 +208,7 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
   if (event_queue == NULL)
     return;
 
-  CommonInterface::main_window.AnnounceResize(width, height);
+  CommonInterface::main_window->AnnounceResize(width, height);
 
   event_queue->Purge(Event::RESIZE);
 
@@ -224,7 +225,7 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
        work - let's bail out, nothing is lost anyway */
     exit(0);
 
-  CommonInterface::main_window.Pause();
+  CommonInterface::main_window->Pause();
 
   assert(num_textures == 0);
   assert(num_buffers == 0);
@@ -238,7 +239,7 @@ Java_org_xcsoar_NativeView_resumeNative(JNIEnv *env, jobject obj)
     /* there is nothing here yet which can be resumed */
     exit(0);
 
-  CommonInterface::main_window.Resume();
+  CommonInterface::main_window->Resume();
 }
 
 gcc_visibility_default

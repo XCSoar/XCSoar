@@ -259,7 +259,7 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
         LogStartUp(_T("Display rotation failed"));
     }
   } else if (info_box_geometry_changed)
-    XCSoarInterface::main_window.ReinitialiseLayout();
+    CommonInterface::main_window->ReinitialiseLayout();
 
   _changed |= changed;
   _require_restart |= require_restart;

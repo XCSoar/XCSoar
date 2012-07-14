@@ -43,7 +43,7 @@ InputEvents::eventTraffic(const TCHAR *misc)
       return;
 
     traffic_widget = new TrafficWidget();
-    CommonInterface::main_window.SetWidget(traffic_widget);
+    CommonInterface::main_window->SetWidget(traffic_widget);
     SetFlavour(_T("Traffic"));
     return;
   }

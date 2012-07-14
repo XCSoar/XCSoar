@@ -453,7 +453,7 @@ InputEvents::GetMenu(const TCHAR *mode)
 void
 InputEvents::ProcessMenuTimer()
 {
-  if (CommonInterface::main_window.HasDialog())
+  if (CommonInterface::main_window->HasDialog())
     /* no menu updates while a dialog is visible */
     return;
 

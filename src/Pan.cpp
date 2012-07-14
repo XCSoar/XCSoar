@@ -28,44 +28,54 @@ Copyright_License {
 #include "Pages.hpp"
 #include "Input/InputEvents.hpp"
 
+#include <assert.h>
+
 bool
 IsPanning()
 {
-  const GlueMapWindow *map = CommonInterface::main_window.GetMapIfActive();
+  assert(CommonInterface::main_window != NULL);
+
+  const GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
   return map != NULL && map->IsPanning();
 }
 
 void
 EnterPan()
 {
-  GlueMapWindow *map = CommonInterface::main_window.ActivateMap();
+  assert(CommonInterface::main_window != NULL);
+
+  GlueMapWindow *map = CommonInterface::main_window->ActivateMap();
   if (map == NULL || map->IsPanning())
     return;
 
   map->SetPan(true);
 
   InputEvents::setMode(InputEvents::MODE_PAN);
-  CommonInterface::main_window.SetFullScreen(true);
+  CommonInterface::main_window->SetFullScreen(true);
 }
 
 bool
 PanTo(const GeoPoint &location)
 {
-  GlueMapWindow *map = CommonInterface::main_window.ActivateMap();
+  assert(CommonInterface::main_window != NULL);
+
+  GlueMapWindow *map = CommonInterface::main_window->ActivateMap();
   if (map == NULL)
     return false;
 
   map->PanTo(location);
 
   InputEvents::setMode(InputEvents::MODE_PAN);
-  CommonInterface::main_window.SetFullScreen(true);
+  CommonInterface::main_window->SetFullScreen(true);
   return true;
 }
 
 void
 LeavePan()
 {
-  GlueMapWindow *map = CommonInterface::main_window.GetMapIfActive();
+  assert(CommonInterface::main_window != NULL);
+
+  GlueMapWindow *map = CommonInterface::main_window->GetMapIfActive();
   if (map == NULL || !map->IsPanning())
     return;
 
@@ -78,7 +88,9 @@ LeavePan()
 void
 TogglePan()
 {
-  const GlueMapWindow *map = CommonInterface::main_window.GetMap();
+  assert(CommonInterface::main_window != NULL);
+
+  const GlueMapWindow *map = CommonInterface::main_window->GetMap();
   if (map == NULL)
     EnterPan();
   else if (map->IsPanning())

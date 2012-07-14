@@ -199,7 +199,7 @@ XCSoarInterface::AfterStartup()
 
   task_manager->Resume();
 
-  main_window.Fullscreen();
+  main_window->Fullscreen();
   InfoBoxManager::SetDirty();
 
   ForceCalculation();
@@ -240,8 +240,9 @@ XCSoarInterface::Startup()
   if (CommandLine::resizable)
     style.Resizable();
 
-  main_window.Set(szTitle, SystemWindowSize(), style);
-  if (!main_window.IsDefined())
+  main_window = new MainWindow(status_messages);
+  main_window->Set(szTitle, SystemWindowSize(), style);
+  if (!main_window->IsDefined())
     return false;
 
 #ifdef ENABLE_OPENGL
@@ -258,7 +259,7 @@ XCSoarInterface::Startup()
              OpenGL::frame_buffer_object);
 #endif
 
-  main_window.Initialise();
+  main_window->Initialise();
 
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
@@ -285,7 +286,7 @@ XCSoarInterface::Startup()
   }
 #endif
 
-  SetXMLDialogLook(main_window.GetLook().dialog);
+  SetXMLDialogLook(main_window->GetLook().dialog);
 
   SetSystemSettings().SetDefaults();
   SetComputerSettings().SetDefaults();
@@ -302,7 +303,7 @@ XCSoarInterface::Startup()
 
   Display::LoadOrientation(operation);
 
-  main_window.InitialiseConfigured();
+  main_window->InitialiseConfigured();
 
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("cache"));
@@ -323,18 +324,18 @@ XCSoarInterface::Startup()
   protected_marks = new ProtectedMarkers(*marks);
 
 #ifdef HAVE_AYGSHELL_DLL
-  const AYGShellDLL &ayg = main_window.ayg_shell_dll;
-  ayg.SHSetAppKeyWndAssoc(VK_APP1, main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP2, main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP3, main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP4, main_window);
+  const AYGShellDLL &ayg = main_window->ayg_shell_dll;
+  ayg.SHSetAppKeyWndAssoc(VK_APP1, *main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP2, *main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP3, *main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP4, *main_window);
   // Typical Record Button
   //	Why you can't always get this to work
   //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
   //	To do with the fact it is a global hotkey, but you can with code above
   //	Also APPA is record key on some systems
-  ayg.SHSetAppKeyWndAssoc(VK_APP5, main_window);
-  ayg.SHSetAppKeyWndAssoc(VK_APP6, main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP5, *main_window);
+  ayg.SHSetAppKeyWndAssoc(VK_APP6, *main_window);
 #endif
 
   // Initialize main blackboard data
@@ -429,7 +430,7 @@ XCSoarInterface::Startup()
 
   operation.SetText(_("Initialising display"));
 
-  GlueMapWindow *map_window = main_window.GetMap();
+  GlueMapWindow *map_window = main_window->GetMap();
   if (map_window != NULL) {
     map_window->SetWaypoints(&way_points);
     map_window->SetTask(protected_task_manager);
@@ -487,7 +488,7 @@ XCSoarInterface::Startup()
   LogStartUp(_T("ProgramStarted"));
 
   // Give focus to the map
-  main_window.SetDefaultFocus();
+  main_window->SetDefaultFocus();
 
   Pages::Initialise(GetUISettings().pages);
 
@@ -506,7 +507,7 @@ XCSoarInterface::Startup()
 
   operation.Hide();
 
-  main_window.ResumeThreads();
+  main_window->ResumeThreads();
 
   return true;
 }
@@ -584,7 +585,7 @@ XCSoarInterface::Shutdown()
 #endif
 
   LogStartUp(_T("delete MapWindow"));
-  main_window.Deinitialise();
+  main_window->Deinitialise();
 
   // Save the task for the next time
   operation.SetText(_("Shutdown, saving task..."));
@@ -664,7 +665,8 @@ XCSoarInterface::Shutdown()
   delete file_cache;
 
   LogStartUp(_T("Close Windows - main"));
-  main_window.reset();
+  delete main_window;
+  main_window = NULL;
 
   CloseLanguageFile();
 

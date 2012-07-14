@@ -48,7 +48,7 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
 
   LogStartUp(_T("Display rotated"));
 
-  XCSoarInterface::main_window.Initialise();
+  CommonInterface::main_window->Initialise();
 
   /* force the progress dialog to update its layout */
   env.UpdateLayout();

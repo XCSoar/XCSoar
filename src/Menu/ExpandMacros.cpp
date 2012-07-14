@@ -509,7 +509,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     }
   }
 
-  CondReplaceInString(CommonInterface::main_window.GetFullScreen(), OutBuffer,
+  CondReplaceInString(CommonInterface::main_window->GetFullScreen(), OutBuffer,
                       _T("$(FullScreenToggleActionName)"),
                       _("Off"), _("On"), Size);
   CondReplaceInString(GetMapSettings().auto_zoom_enabled, OutBuffer,

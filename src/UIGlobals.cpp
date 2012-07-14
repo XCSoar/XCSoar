@@ -29,53 +29,71 @@ Copyright_License {
 SingleWindow &
 UIGlobals::GetMainWindow()
 {
-  return CommonInterface::main_window;
+  assert(CommonInterface::main_window != NULL);
+
+  return *CommonInterface::main_window;
 }
 
 GlueMapWindow *
 UIGlobals::GetMap()
 {
-  return CommonInterface::main_window.GetMap();
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->GetMap();
 }
 
 GlueMapWindow *
 UIGlobals::GetMapIfActive()
 {
-  return CommonInterface::main_window.GetMapIfActive();
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->GetMapIfActive();
 }
 
 GlueMapWindow *
 UIGlobals::ActivateMap()
 {
-  return CommonInterface::main_window.ActivateMap();
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->ActivateMap();
 }
 
 const DialogSettings &
 UIGlobals::GetDialogSettings()
 {
+  assert(CommonInterface::main_window != NULL);
+
   return CommonInterface::GetUISettings().dialog;
 }
 
 const Look &
 UIGlobals::GetLook()
 {
-  return CommonInterface::main_window.GetLook();
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->GetLook();
 }
 
 const DialogLook &
 UIGlobals::GetDialogLook()
 {
-  return CommonInterface::main_window.GetLook().dialog;
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->GetLook().dialog;
 }
 
 const IconLook &
 UIGlobals::GetIconLook()
 {
-  return CommonInterface::main_window.GetLook().icon;
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->GetLook().icon;
 }
 
 const MapLook &
 UIGlobals::GetMapLook()
 {
-  return CommonInterface::main_window.GetLook().map;
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->GetLook().map;
 }

@@ -118,19 +118,19 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
 
   switch (layout.top_layout) {
   case PageSettings::PageLayout::tlMap:
-    XCSoarInterface::main_window.SetFullScreen(true);
+    CommonInterface::main_window->SetFullScreen(true);
     ui_state.auxiliary_enabled = false;
     break;
 
   case PageSettings::PageLayout::tlMapAndInfoBoxes:
     if (!layout.infobox_config.auto_switch &&
         layout.infobox_config.panel < InfoBoxSettings::MAX_PANELS) {
-      XCSoarInterface::main_window.SetFullScreen(false);
+      CommonInterface::main_window->SetFullScreen(false);
       ui_state.auxiliary_enabled = true;
       ui_state.auxiliary_index = layout.infobox_config.panel;
     }
     else {
-      XCSoarInterface::main_window.SetFullScreen(false);
+      CommonInterface::main_window->SetFullScreen(false);
       ui_state.auxiliary_enabled = false;
     }
     break;
