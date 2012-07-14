@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
+#include "Form/Util.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Components.hpp"
@@ -94,13 +95,6 @@ ShowReplayDialog()
 
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRate"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(replay->GetTimeScale());
-    wp->RefreshDisplay();
-  }
-
   wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
     DataFieldFileReader* dfe;
@@ -110,6 +104,8 @@ ShowReplayDialog()
     dfe->Lookup(replay->GetFilename());
     wp->RefreshDisplay();
   }
+
+  LoadFormProperty(*wf, _T("prpRate"), replay->GetTimeScale());
 
   wf->ShowModal();
 
