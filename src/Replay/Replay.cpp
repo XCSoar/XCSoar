@@ -30,40 +30,17 @@
 void
 Replay::Stop()
 {
-  switch (mode) {
-  case MODE_IGC:
-    igc_replay.Stop();
-    break;
-  case MODE_NMEA:
-    nmea_replay.Stop();
-    break;
-  case MODE_DEMO:
-    demo_replay.Stop();
-    mode = MODE_NULL;
-    break;
-  case MODE_NULL:
-    break;
-  };
+  if (replay != NULL)
+    replay->Stop();
 }
 
 void
 Replay::Start()
 {
-  switch (mode) {
-  case MODE_IGC:
-    igc_replay.Start();
-    break;
-  case MODE_NMEA:
-    nmea_replay.Start();
-    break;
-  case MODE_DEMO:
-    demo_replay.Start();
-    break;
-  case MODE_NULL:
-    demo_replay.Start();
-    mode = MODE_DEMO;
-    break;
-  };
+  if (replay == NULL)
+    replay = &demo_replay;
+
+  replay->Start();
 }
 
 const TCHAR*
@@ -80,7 +57,7 @@ Replay::SetFilename(const TCHAR *name)
   _tcscpy(path, name);
 
   if (StringIsEmpty(name)) {
-    mode = MODE_DEMO;
+    replay = &demo_replay;
     return;
   }
 
@@ -89,9 +66,11 @@ Replay::SetFilename(const TCHAR *name)
   if (MatchesExtension(name, _T(".igc"))) {
     mode = MODE_IGC;
     igc_replay.SetFilename(name);
+    replay = &igc_replay;
   } else {
     mode = MODE_NMEA;
     nmea_replay.SetFilename(name);
+    replay = &nmea_replay;
   }
 }
 
@@ -99,16 +78,8 @@ Replay::SetFilename(const TCHAR *name)
 bool
 Replay::Update()
 {
-  switch (mode) {
-  case MODE_IGC:
-    return igc_replay.Update();
-  case MODE_NMEA:
-    return nmea_replay.Update();
-  case MODE_DEMO:
-    return demo_replay.Update();
-  case MODE_NULL:
-    break;
-  }
+  if (replay != NULL)
+    replay->Update();
 
   return false;
 }
@@ -116,18 +87,9 @@ Replay::Update()
 fixed
 Replay::GetTimeScale()
 {
-  switch (mode) {
-  case MODE_IGC:
-    return igc_replay.time_scale;
-  case MODE_NMEA:
-    return nmea_replay.time_scale;
-  case MODE_DEMO:
-    return demo_replay.time_scale;
-  case MODE_NULL:
-    break;
-  }
-
-  return fixed_one;
+  return replay != NULL
+    ? replay->time_scale
+    : fixed_one;
 }
 
 void
