@@ -28,6 +28,8 @@ Copyright_License {
 #include "Replay/NmeaReplayGlue.hpp"
 #include "Replay/DemoReplayGlue.hpp"
 
+#include <memory>
+
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 #include <stdio.h>
@@ -38,20 +40,17 @@ class Replay
 {
   fixed time_scale;
 
-  IgcReplayGlue igc_replay;
-  NmeaReplayGlue nmea_replay;
-  DemoReplayGlue demo_replay;
+  std::unique_ptr<AbstractReplay> replay;
 
-  AbstractReplay *replay;
+  Logger *logger;
+  ProtectedTaskManager &task_manager;
 
   TCHAR path[MAX_PATH];
 
 public:
-  Replay(Logger *_logger, ProtectedTaskManager& task_manager)
+  Replay(Logger *_logger, ProtectedTaskManager &_task_manager)
     :time_scale(fixed_one),
-     igc_replay(_logger),
-     demo_replay(task_manager),
-     replay(NULL) {
+     logger(_logger), task_manager(_task_manager) {
     path[0] = _T('\0');
   }
 

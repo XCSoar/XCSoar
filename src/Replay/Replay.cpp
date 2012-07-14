@@ -30,15 +30,15 @@
 void
 Replay::Stop()
 {
-  if (replay != NULL)
+  if (replay)
     replay->Stop();
 }
 
 void
 Replay::Start()
 {
-  if (replay == NULL)
-    replay = &demo_replay;
+  if (!replay)
+    replay.reset(new DemoReplayGlue(task_manager));
 
   replay->Start();
 }
@@ -51,18 +51,20 @@ Replay::SetFilename(const TCHAR *name)
   _tcscpy(path, name);
 
   if (StringIsEmpty(name)) {
-    replay = &demo_replay;
+    replay.reset(new DemoReplayGlue(task_manager));
     return;
   }
 
   Stop();
 
   if (MatchesExtension(name, _T(".igc"))) {
-    igc_replay.SetFilename(name);
-    replay = &igc_replay;
+    auto r = new IgcReplayGlue(logger);
+    r->SetFilename(name);
+    replay.reset(r);
   } else {
-    nmea_replay.SetFilename(name);
-    replay = &nmea_replay;
+    auto r = new NmeaReplayGlue();
+    r->SetFilename(name);
+    replay.reset(r);
   }
 }
 
@@ -70,7 +72,7 @@ Replay::SetFilename(const TCHAR *name)
 bool
 Replay::Update()
 {
-  if (replay != NULL)
+  if (replay)
     replay->Update(time_scale);
 
   return false;
