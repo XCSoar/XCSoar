@@ -28,7 +28,7 @@ Copyright_License {
 #include "Pages.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Units/Units.hpp"
 #include "UIState.hpp"
@@ -162,7 +162,7 @@ InputEvents::eventPan(const TCHAR *misc)
 void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
-  GlueMapWindow *map_window = CommonInterface::main_window.GetMapIfActive();
+  GlueMapWindow *map_window = UIGlobals::GetMapIfActive();
   if (map_window == NULL || !map_window->IsPanning())
     return;
 
@@ -190,8 +190,8 @@ InputEvents::sub_AutoZoom(int vswitch)
   Profile::Set(ProfileKeys::AutoZoom, settings_map.auto_zoom_enabled);
 
   if (settings_map.auto_zoom_enabled &&
-      CommonInterface::main_window.GetMap() != NULL)
-    CommonInterface::main_window.GetMap()->SetPan(false);
+      UIGlobals::GetMap() != NULL)
+    UIGlobals::GetMap()->SetPan(false);
 
   ActionInterface::SendMapSettings(true);
 }
@@ -200,7 +200,7 @@ void
 InputEvents::sub_SetZoom(fixed value)
 {
   MapSettings &settings_map = CommonInterface::SetMapSettings();
-  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
+  GlueMapWindow *map_window = UIGlobals::ActivateMap();
   if (map_window == NULL)
     return;
 
@@ -228,7 +228,7 @@ InputEvents::sub_SetZoom(fixed value)
 void
 InputEvents::sub_ScaleZoom(int vswitch)
 {
-  const GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
+  const GlueMapWindow *map_window = UIGlobals::ActivateMap();
   if (map_window == NULL)
     return;
 
@@ -261,5 +261,5 @@ void
 InputEvents::eventMap(const TCHAR *misc)
 {
   if (StringIsEqual(misc, _T("show")))
-    CommonInterface::main_window.ActivateMap();
+    UIGlobals::ActivateMap();
 }

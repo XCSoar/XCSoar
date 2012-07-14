@@ -28,7 +28,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Dialogs/Dialogs.h"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 
 #include <stdio.h>
 #include <tchar.h>
@@ -81,7 +81,7 @@ InfoBoxContentAlternateName::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAlternatesListShowModal(XCSoarInterface::main_window);
+    dlgAlternatesListShowModal(UIGlobals::GetMainWindow());
     break;
   case ibkLeft:
   case ibkUp:
@@ -153,7 +153,7 @@ InfoBoxContentAlternateGR::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch (keycode) {
   case ibkEnter:
-    dlgAlternatesListShowModal(XCSoarInterface::main_window);
+    dlgAlternatesListShowModal(UIGlobals::GetMainWindow());
     break;
   case ibkLeft:
   case ibkUp:

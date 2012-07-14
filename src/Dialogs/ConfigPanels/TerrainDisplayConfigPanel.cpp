@@ -34,7 +34,6 @@ Copyright_License {
 #include "Projection/MapWindowProjection.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
-#include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
@@ -125,8 +124,11 @@ TerrainDisplayConfigPanel::OnPreviewPaint(Canvas &canvas)
   TerrainRenderer renderer(terrain);
   renderer.SetSettings(terrain_settings);
 
-  MapWindowProjection projection =
-    XCSoarInterface::main_window.GetProjection();
+  const GlueMapWindow *map = UIGlobals::GetMap();
+  if (map == NULL)
+    return;
+
+  MapWindowProjection projection = map->VisibleProjection();
   projection.SetScreenSize(canvas.get_width(), canvas.get_height());
   projection.SetScreenOrigin(canvas.get_width() / 2, canvas.get_height() / 2);
 

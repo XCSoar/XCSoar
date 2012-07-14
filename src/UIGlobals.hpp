@@ -27,6 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 class SingleWindow;
+class GlueMapWindow;
 struct DialogSettings;
 struct Look;
 struct DialogLook;
@@ -47,6 +48,14 @@ struct MapLook;
 namespace UIGlobals {
   gcc_const
   SingleWindow &GetMainWindow();
+
+  gcc_const
+  GlueMapWindow *GetMap();
+
+  gcc_pure
+  GlueMapWindow *GetMapIfActive();
+
+  GlueMapWindow *ActivateMap();
 
   gcc_const
   const DialogSettings &GetDialogSettings();

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "InputEvents.hpp"
 #include "Interface.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Dialogs/DeviceListDialog.hpp"
 #include "Device/device.hpp"
@@ -76,7 +76,7 @@ InputEvents::eventDevice(const TCHAR *misc)
   assert(misc != NULL);
 
   if (StringIsEqual(misc, _T("list")))
-    ShowDeviceList(CommonInterface::main_window,
-                   CommonInterface::main_window.GetLook().dialog,
-                   CommonInterface::main_window.GetLook().terminal);
+    ShowDeviceList(UIGlobals::GetMainWindow(),
+                   UIGlobals::GetDialogLook(),
+                   UIGlobals::GetLook().terminal);
 }

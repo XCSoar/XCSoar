@@ -32,6 +32,24 @@ UIGlobals::GetMainWindow()
   return CommonInterface::main_window;
 }
 
+GlueMapWindow *
+UIGlobals::GetMap()
+{
+  return CommonInterface::main_window.GetMap();
+}
+
+GlueMapWindow *
+UIGlobals::GetMapIfActive()
+{
+  return CommonInterface::main_window.GetMapIfActive();
+}
+
+GlueMapWindow *
+UIGlobals::ActivateMap()
+{
+  return CommonInterface::main_window.ActivateMap();
+}
+
 const DialogSettings &
 UIGlobals::GetDialogSettings()
 {

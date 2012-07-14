@@ -32,7 +32,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Hardware/Battery.hpp"
-#include "MainWindow.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Dialogs/HelpDialog.hpp"
@@ -40,6 +39,7 @@ Copyright_License {
 #include "Profile/InfoBoxConfig.hpp"
 #include "Interface.hpp"
 #include "UIState.hpp"
+#include "UIGlobals.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -344,9 +344,9 @@ OnInfoBoxHelp(unsigned item)
 
   const TCHAR* text = InfoBoxFactory::GetDescription(type);
   if (text)
-    dlgHelpShowModal(XCSoarInterface::main_window, caption, gettext(text));
+    dlgHelpShowModal(UIGlobals::GetMainWindow(), caption, gettext(text));
   else
-    dlgHelpShowModal(XCSoarInterface::main_window, caption,
+    dlgHelpShowModal(UIGlobals::GetMainWindow(), caption,
                      _("No help available on this item"));
 }
 
@@ -383,7 +383,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
   StaticString<20> caption;
   caption.Format(_T("%s: %d"), _("InfoBox"), i + 1);
   info_box_combo_list = &list;
-  int result = ComboPicker(XCSoarInterface::main_window, caption, list,
+  int result = ComboPicker(UIGlobals::GetMainWindow(), caption, list,
                            OnInfoBoxHelp, true);
   if (result < 0)
     return;

@@ -35,7 +35,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "LocalPath.hpp"
-#include "MainWindow.hpp"
+#include "UIGlobals.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -98,7 +98,7 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 void
 InputEvents::eventCalculator(gcc_unused const TCHAR *misc)
 {
-  dlgTaskManagerShowModal(XCSoarInterface::main_window);
+  dlgTaskManagerShowModal(UIGlobals::GetMainWindow());
 
   trigger_redraw();
 }
@@ -111,7 +111,7 @@ InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  const Waypoint* wp = ShowWaypointListDialog(XCSoarInterface::main_window,
+  const Waypoint* wp = ShowWaypointListDialog(UIGlobals::GetMainWindow(),
                                          basic.location);
   if (wp != NULL) {
     protected_task_manager->DoGoto(*wp);
