@@ -30,8 +30,10 @@
 void
 Replay::Stop()
 {
-  if (replay)
+  if (replay) {
     replay->Stop();
+    replay.reset();
+  }
 }
 
 void
