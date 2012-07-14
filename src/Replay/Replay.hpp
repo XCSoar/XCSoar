@@ -58,7 +58,11 @@ public:
   bool Update();
   void Stop();
   void Start();
-  const TCHAR* GetFilename();
+
+  const TCHAR *GetFilename() const {
+    return path;
+  }
+
   void SetFilename(const TCHAR *name);
 
   fixed GetTimeScale() const {

@@ -43,12 +43,6 @@ Replay::Start()
   replay->Start();
 }
 
-const TCHAR*
-Replay::GetFilename()
-{
-  return path;
-}
-
 void
 Replay::SetFilename(const TCHAR *name)
 {
