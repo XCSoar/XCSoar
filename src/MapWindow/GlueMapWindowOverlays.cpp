@@ -281,7 +281,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   const UIState &ui_state = GetUIState();
   if (ui_state.auxiliary_enabled) {
-    buffer += InfoBoxManager::GetCurrentPanelName();
+    buffer += ui_state.panel_name;
     buffer += _T(" ");
   }
 

@@ -590,6 +590,8 @@ MainWindow::OnUser(unsigned id)
       GetNewDisplayMode(CommonInterface::GetUISettings().info_boxes,
                         CommonInterface::GetUIState(),
                         CommonInterface::Calculated());
+    CommonInterface::SetUIState().panel_name =
+      InfoBoxManager::GetCurrentPanelName();
 
     if (map != NULL) {
       map->SetUIState(CommonInterface::GetUIState());

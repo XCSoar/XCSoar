@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_UI_STATE_HPP
 
 #include "DisplayMode.hpp"
+#include "Util/StaticString.hpp"
 
 /**
  * The state of the user interface.
@@ -55,6 +56,14 @@ struct UIState {
    * Which "auxiliary" set is visible if #auxiliary_enabled is true?
    */
   unsigned auxiliary_index;
+
+  /**
+   * A copy of the current InfoBox panel name.  This copy is necessary
+   * because the original name is in InfoBoxSettings, but MapWindow
+   * does not know InfoBoxSettings or UISettings, and needs to know
+   * the name for rendering the overlay.
+   */
+  StaticString<32u> panel_name;
 
   void Clear();
 };
