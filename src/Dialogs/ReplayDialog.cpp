@@ -46,13 +46,8 @@ OnStopClicked(gcc_unused WndButton &Sender)
 static void
 OnStartClicked(gcc_unused WndButton &Sender)
 {
-  WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpFile"));
-  if (wp) {
-    DataFieldFileReader* dfe;
-    dfe = (DataFieldFileReader*)wp->GetDataField();
-    replay->SetFilename(dfe->GetPathFile());
-  }
+  const TCHAR *path = GetFormValueFile(*wf, _T("prpFile"));
+  replay->SetFilename(path);
   replay->Start();
 }
 

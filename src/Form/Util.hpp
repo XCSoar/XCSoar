@@ -125,6 +125,10 @@ gcc_pure
 const TCHAR *
 GetFormValueString(const SubForm &form, const TCHAR *control_name);
 
+gcc_pure
+const TCHAR *
+GetFormValueFile(const SubForm &form, const TCHAR *control_name);
+
 template<typename T>
 static inline void
 GetFormValueEnum(const SubForm &form, const TCHAR *control_name,
