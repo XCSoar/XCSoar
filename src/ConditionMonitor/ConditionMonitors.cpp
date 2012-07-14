@@ -32,13 +32,13 @@ Copyright_License {
 #include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
 
-ConditionMonitorWind cm_wind;
-ConditionMonitorFinalGlide cm_finalglide;
-ConditionMonitorSunset cm_sunset;
-ConditionMonitorAATTime cm_aattime;
-ConditionMonitorStartRules cm_startrules;
-ConditionMonitorGlideTerrain cm_glideterrain;
-ConditionMonitorLandableReachable cm_landablereachable;
+static ConditionMonitorWind cm_wind;
+static ConditionMonitorFinalGlide cm_finalglide;
+static ConditionMonitorSunset cm_sunset;
+static ConditionMonitorAATTime cm_aattime;
+static ConditionMonitorStartRules cm_startrules;
+static ConditionMonitorGlideTerrain cm_glideterrain;
+static ConditionMonitorLandableReachable cm_landablereachable;
 
 void
 ConditionMonitorsUpdate(const NMEAInfo &basic, const DerivedInfo &calculated)
