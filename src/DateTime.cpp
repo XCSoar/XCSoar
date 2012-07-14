@@ -48,6 +48,23 @@ BrokenTime::FromSecondOfDayChecked(unsigned second_of_day)
   return FromSecondOfDay(second_of_day % (3600u * 24u));
 }
 
+BrokenTime
+BrokenTime::operator+(unsigned seconds) const
+{
+  seconds += GetSecondOfDay();
+  return FromSecondOfDayChecked(seconds);
+}
+
+BrokenTime
+BrokenTime::operator+(int seconds) const
+{
+  seconds += GetSecondOfDay();
+  while (seconds < 0)
+    seconds += 3600 * 24;
+
+  return FromSecondOfDayChecked(seconds);
+}
+
 #ifdef HAVE_POSIX
 
 static const BrokenDateTime

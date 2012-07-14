@@ -98,6 +98,12 @@ TestTime()
   ok1(BrokenTime(12, 15, 30).GetSecondOfDay() == 44130);
   ok1(BrokenTime::FromSecondOfDay(44130) == BrokenTime(12, 15, 30));
   ok1(BrokenTime::FromSecondOfDayChecked(130530) == BrokenTime(12, 15, 30));
+
+  ok1(BrokenTime(12, 15) + 120 == BrokenTime(12, 17));
+  ok1(BrokenTime(23, 59) + 120 == BrokenTime(0, 1));
+  ok1(BrokenTime(23, 59) + 120 == BrokenTime(0, 1));
+  ok1(BrokenTime(0, 1) - 120 == BrokenTime(23, 59));
+  ok1(BrokenTime(0, 1) - 120u == BrokenTime(23, 59));
 }
 
 static void
@@ -144,7 +150,7 @@ TestDateTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(81);
+  plan_tests(86);
 
   TestDate();
   TestTime();

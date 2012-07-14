@@ -164,6 +164,32 @@ struct BrokenTime {
    */
   gcc_const
   static BrokenTime FromSecondOfDayChecked(unsigned second_of_day);
+
+  /**
+   * Returns a BrokenTime that has the specified number of seconds
+   * added to it.  It properly wraps around midnight.
+   *
+   * @param seconds the number of seconds to add
+   */
+  gcc_pure
+  BrokenTime operator+(unsigned seconds) const;
+
+  /**
+   * Returns a BrokenTime that has the specified number of seconds
+   * added to it.  It properly wraps around midnight.
+   *
+   * @param seconds the number of seconds to add; may be negative
+   */
+  gcc_pure
+  BrokenTime operator+(int seconds) const;
+
+  BrokenTime operator-(int seconds) const {
+    return *this + (-seconds);
+  }
+
+  BrokenTime operator-(unsigned seconds) const {
+    return *this - int(seconds);
+  }
 };
 
 /**
