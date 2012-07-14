@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_INTERFACE_HPP
 
 #include "Blackboard/InterfaceBlackboard.hpp"
+#include "Thread/Debug.hpp"
 #include "Compiler.h"
 
 struct UIState;
@@ -59,22 +60,34 @@ public:
    * @return InterfaceBlackboard.Basic
    */
   gcc_const
-  static const MoreData &Basic() { return blackboard.Basic(); }
+  static const MoreData &Basic() {
+    assert(InMainThread());
+
+    return blackboard.Basic();
+  }
 
   /**
    * Returns InterfaceBlackboard.Calculated (DERIVED_INFO) (read-only)
    * @return InterfaceBlackboard.Calculated
    */
   gcc_const
-  static const DerivedInfo& Calculated() { return blackboard.Calculated(); }
+  static const DerivedInfo& Calculated() {
+    assert(InMainThread());
+
+    return blackboard.Calculated();
+  }
 
   gcc_const
   static const SystemSettings& GetSystemSettings() {
+    assert(InMainThread());
+
     return blackboard.GetSystemSettings();
   }
 
   gcc_const
   static SystemSettings &SetSystemSettings() {
+    assert(InMainThread());
+
     return blackboard.SetSystemSettings();
   }
 
@@ -83,19 +96,27 @@ public:
    * @return The InterfaceBlackboard.ComputerSettings
    */
   gcc_const
-  static const ComputerSettings& GetComputerSettings()
-  { return blackboard.GetComputerSettings(); }
+  static const ComputerSettings& GetComputerSettings() {
+    assert(InMainThread());
+
+    return blackboard.GetComputerSettings();
+  }
 
   /**
    * Returns the InterfaceBlackboard.ComputerSettings (read-write)
    * @return The InterfaceBlackboard.ComputerSettings
    */
   gcc_const
-  static ComputerSettings& SetComputerSettings()
-  { return blackboard.SetComputerSettings(); }
+  static ComputerSettings& SetComputerSettings() {
+    assert(InMainThread());
+
+    return blackboard.SetComputerSettings();
+  }
 
   gcc_const
   static const UISettings &GetUISettings() {
+    assert(InMainThread());
+
     return blackboard.GetUISettings();
   }
 
@@ -105,21 +126,29 @@ public:
    */
   gcc_const
   static const MapSettings& GetMapSettings() {
+    assert(InMainThread());
+
     return GetUISettings().map;
   }
 
   gcc_const
   static const FullBlackboard &Full() {
+    assert(InMainThread());
+
     return blackboard;
   }
 
   gcc_const
   static LiveBlackboard &GetLiveBlackboard() {
+    assert(InMainThread());
+
     return blackboard;
   }
 
   gcc_const
   static UISettings &SetUISettings() {
+    assert(InMainThread());
+
     return blackboard.SetUISettings();
   }
 
@@ -129,45 +158,67 @@ public:
    */
   gcc_const
   static MapSettings& SetMapSettings() {
+    assert(InMainThread());
+
     return SetUISettings().map;
   }
 
   static const UIState &GetUIState() {
+    assert(InMainThread());
+
     return ui_state;
   }
 
   static UIState &SetUIState() {
+    assert(InMainThread());
+
     return ui_state;
   }
 
   static void ReadBlackboardBasic(const MoreData &nmea_info) {
+    assert(InMainThread());
     blackboard.ReadBlackboardBasic(nmea_info);
   }
+
   static void ReadBlackboardCalculated(const DerivedInfo& derived_info) {
+    assert(InMainThread());
+
     blackboard.ReadBlackboardCalculated(derived_info);
   }
 
   static void AddListener(BlackboardListener &listener) {
+    assert(InMainThread());
+
     blackboard.AddListener(listener);
   }
 
   static void RemoveListener(BlackboardListener &listener) {
+    assert(InMainThread());
+
     blackboard.RemoveListener(listener);
   }
 
   static void BroadcastGPSUpdate() {
+    assert(InMainThread());
+
     blackboard.BroadcastGPSUpdate();
   }
 
   static void BroadcastCalculatedUpdate() {
+    assert(InMainThread());
+
     blackboard.BroadcastCalculatedUpdate();
   }
 
   static void BroadcastComputerSettingsUpdate() {
+    assert(InMainThread());
+
     blackboard.BroadcastComputerSettingsUpdate();
   }
 
   static void BroadcastUISettingsUpdate() {
+    assert(InMainThread());
+
     blackboard.BroadcastUISettingsUpdate();
   }
 };
