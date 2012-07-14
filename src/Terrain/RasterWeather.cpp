@@ -26,7 +26,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 #include "LocalPath.hpp"
-#include "LocalTime.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "Operation/Operation.hpp"
@@ -242,7 +241,7 @@ RasterWeather::ScanAll(const GeoPoint &location,
 }
 
 void
-RasterWeather::Reload(int day_time, OperationEnvironment &operation)
+RasterWeather::Reload(int day_time_local, OperationEnvironment &operation)
 {
   static unsigned last_weather_time;
   bool found = false;
@@ -255,7 +254,7 @@ RasterWeather::Reload(int day_time, OperationEnvironment &operation)
   Poco::ScopedRWLock protect(lock, true);
   if (_weather_time == 0) {
     // "Now" time, so find time in half hours
-    unsigned half_hours = (TimeLocal(day_time) / 1800) % 48;
+    unsigned half_hours = (day_time_local / 1800) % 48;
     _weather_time = max(_weather_time, half_hours);
     now = true;
   }

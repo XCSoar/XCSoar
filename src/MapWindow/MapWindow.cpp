@@ -167,7 +167,7 @@ MapWindow::UpdateWeather()
     return false;
 
   QuietOperationEnvironment operation;
-  weather->Reload((int)Basic().time, operation);
+  weather->Reload(Calculated().date_time_local.GetSecondOfDay(), operation);
   weather->SetViewCenter(visible_projection.GetGeoScreenCenter(),
                          visible_projection.GetScreenWidthMeters() / 2);
   return weather->IsDirty();

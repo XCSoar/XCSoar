@@ -84,9 +84,9 @@ public:
   void SetParameter(unsigned i);
 
   /**
-   * @param day_time the UTC time, in seconds since midnight
+   * @param day_time the local time, in seconds since midnight
    */
-  void Reload(int day_time, OperationEnvironment &operation);
+  void Reload(int day_time_local, OperationEnvironment &operation);
 
   void ScanAll(const GeoPoint &location, OperationEnvironment &operation);
   bool isWeatherAvailable(unsigned t) const;
