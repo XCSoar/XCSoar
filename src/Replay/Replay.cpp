@@ -46,7 +46,7 @@ Replay::Start(const TCHAR *_path)
      creating a new one */
   replay.reset();
 
-  _tcscpy(path, path);
+  _tcscpy(path, _path);
 
   if (StringIsEmpty(path)) {
     replay.reset(new DemoReplayGlue(task_manager));
