@@ -2271,11 +2271,7 @@ DUMP_FLARM_NET_DEPENDS = IO OS MATH UTIL
 $(eval $(call link-program,DumpFlarmNet,DUMP_FLARM_NET))
 
 IGC2NMEA_SOURCES = \
-	$(SRC)/Replay/IgcReplay.cpp \
-	$(SRC)/IGC/IGCParser.cpp \
-	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/Units/System.cpp \
-	$(SRC)/Units/Descriptor.cpp \
+	$(DEBUG_REPLAY_SOURCES) \
 	$(TEST_SRC_DIR)/IGC2NMEA.cpp
 IGC2NMEA_DEPENDS = GEO MATH UTIL
 IGC2NMEA_LDADD = $(DEBUG_REPLAY_LDADD)
