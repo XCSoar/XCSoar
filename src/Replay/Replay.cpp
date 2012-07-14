@@ -37,39 +37,26 @@ Replay::Stop()
 }
 
 void
-Replay::Start()
+Replay::Start(const TCHAR *_path)
 {
-  if (!replay)
+  assert(_path != NULL);
+
+  _tcscpy(path, path);
+
+  if (StringIsEmpty(path)) {
     replay.reset(new DemoReplayGlue(task_manager));
-
-  replay->Start();
-}
-
-void
-Replay::SetFilename(const TCHAR *name)
-{
-  assert(name != NULL);
-
-  _tcscpy(path, name);
-
-  if (StringIsEmpty(name)) {
-    replay.reset(new DemoReplayGlue(task_manager));
-    return;
-  }
-
-  Stop();
-
-  if (MatchesExtension(name, _T(".igc"))) {
+  } else if (MatchesExtension(path, _T(".igc"))) {
     auto r = new IgcReplayGlue(logger);
-    r->SetFilename(name);
+    r->SetFilename(path);
     replay.reset(r);
   } else {
     auto r = new NmeaReplayGlue();
-    r->SetFilename(name);
+    r->SetFilename(path);
     replay.reset(r);
   }
-}
 
+  replay->Start();
+}
 
 bool
 Replay::Update()

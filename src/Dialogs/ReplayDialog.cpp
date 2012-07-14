@@ -47,8 +47,7 @@ static void
 OnStartClicked(gcc_unused WndButton &Sender)
 {
   const TCHAR *path = GetFormValueFile(*wf, _T("prpFile"));
-  replay->SetFilename(path);
-  replay->Start();
+  replay->Start(path);
 }
 
 static void
