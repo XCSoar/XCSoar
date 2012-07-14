@@ -122,7 +122,7 @@ GlueMapWindow::OnMouseDown(PixelScalar x, PixelScalar y)
     break;
   }
 
-  if (Basic().gps.simulator && drag_mode == DRAG_NONE)
+  if (CommonInterface::Basic().gps.simulator && drag_mode == DRAG_NONE)
     if (compare_squared(visible_projection.GetScreenOrigin().x - x,
                         visible_projection.GetScreenOrigin().y - y,
                         Layout::Scale(30)) != 1)
@@ -185,12 +185,12 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
       double distance = hypot(drag_start.x - x, drag_start.y - y);
 
       // This drag moves the aircraft (changes speed and direction)
-      const Angle old_bearing = Basic().track;
+      const Angle old_bearing = CommonInterface::Basic().track;
       const fixed min_speed = fixed(1.1) *
         CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
       const Angle new_bearing = drag_start_geopoint.Bearing(location);
       if (((new_bearing - old_bearing).AsDelta().AbsoluteDegrees() < fixed(30)) ||
-          (Basic().ground_speed < min_speed))
+          (CommonInterface::Basic().ground_speed < min_speed))
         device_blackboard->SetSpeed(
             min(fixed(100.0), max(min_speed, fixed(distance / (Layout::FastScale(3))))));
 
