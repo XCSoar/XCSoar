@@ -21,37 +21,10 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
+#ifndef XCSOAR_REPLAY_DIALOG_HPP
+#define XCSOAR_REPLAY_DIALOG_HPP
 
-#include <tchar.h>
-
-class SingleWindow;
-
-void dlgAlternatesListShowModal(SingleWindow &parent);
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-/**
- * @return true on success, false if the user has pressed the "Quit"
- * button
- */
-bool
-dlgStartupShowModal();
-
-void ShowWindSettingsDialog();
-
-void dlgStatusShowModal(int page);
-
-void dlgSwitchesShowModal();
-
-void dlgCreditsShowModal(SingleWindow &parent);
-
-void dlgQuickMenuShowModal(SingleWindow &parent);
+void
+ShowReplayDialog();
 
 #endif

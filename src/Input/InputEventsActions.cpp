@@ -64,6 +64,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
+#include "Dialogs/ReplayDialog.hpp"
 #include "Message.hpp"
 #include "Markers/ProtectedMarkers.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -521,7 +522,7 @@ InputEvents::eventSetup(const TCHAR *misc)
     dlgWeatherShowModal();
   else if (StringIsEqual(misc, _T("Replay"))) {
     if (!CommonInterface::MovementDetected())
-      dlgLoggerReplayShowModal();
+      ShowReplayDialog();
   } else if (StringIsEqual(misc, _T("Switches")))
     dlgSwitchesShowModal();
   else if (StringIsEqual(misc, _T("Voice")))

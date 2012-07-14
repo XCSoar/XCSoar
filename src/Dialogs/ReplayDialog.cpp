@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Dialogs.h"
+#include "ReplayDialog.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
@@ -85,7 +85,7 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgLoggerReplayShowModal()
+ShowReplayDialog()
 {
   wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   _T("IDR_XML_LOGGERREPLAY"));
