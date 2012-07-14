@@ -61,6 +61,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Projection/MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Language/Language.hpp"
+#include "Pan.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -428,7 +429,7 @@ InputEvents::processGo(unsigned eventid)
 void
 InputEvents::HideMenu()
 {
-  setMode(CommonInterface::IsPanning() ? MODE_PAN : MODE_DEFAULT);
+  setMode(IsPanning() ? MODE_PAN : MODE_DEFAULT);
 }
 
 void

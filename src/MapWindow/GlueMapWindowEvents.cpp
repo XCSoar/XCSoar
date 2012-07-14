@@ -37,6 +37,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
+#include "Pan.hpp"
 
 #include <algorithm>
 
@@ -163,7 +164,7 @@ GlueMapWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 #ifdef HAVE_MULTI_TOUCH
   case DRAG_MULTI_TOUCH_PAN:
     follow_mode = FOLLOW_SELF;
-    InputEvents::SetPan(true);
+    EnterPan();
     return true;
 #endif
 

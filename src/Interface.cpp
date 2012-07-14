@@ -56,14 +56,6 @@ InterfaceBlackboard CommonInterface::blackboard;
 StatusMessageList CommonInterface::status_messages;
 MainWindow CommonInterface::main_window(status_messages);
 
-bool
-CommonInterface::IsPanning()
-{
-  const GlueMapWindow *map = main_window.GetMapIfActive();
-  return map != NULL && map->IsPanning();
-
-}
-
 void
 XCSoarInterface::ReceiveGPS()
 {

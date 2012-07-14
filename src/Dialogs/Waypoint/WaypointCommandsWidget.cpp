@@ -28,12 +28,11 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/MapTaskManager.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "MainWindow.hpp"
 #include "Interface.hpp"
-#include "Input/InputEvents.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
 #include "Waypoint/WaypointGlue.hpp"
+#include "Pan.hpp"
 
 enum Commands {
   REPLACE_IN_TASK,
@@ -194,14 +193,7 @@ SetHome(const Waypoint &waypoint)
 static bool
 ActivatePan(const Waypoint &waypoint)
 {
-  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
-  if (map_window == NULL)
-    return false;
-
-  map_window->PanTo(waypoint.location);
-  XCSoarInterface::main_window.SetFullScreen(true);
-  InputEvents::setMode(InputEvents::MODE_PAN);
-  return true;
+  return PanTo(waypoint.location);
 }
 
 void

@@ -33,6 +33,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "UIState.hpp"
 #include "Asset.hpp"
+#include "Pan.hpp"
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
@@ -130,10 +131,10 @@ InputEvents::eventPan(const TCHAR *misc)
     TogglePan();
 
   else if (StringIsEqual(misc, _T("on")))
-    SetPan(true);
+    EnterPan();
 
   else if (StringIsEqual(misc, _T("off")))
-    SetPan(false);
+    LeavePan();
 
   else if (StringIsEqual(misc, _T("up")))
     if (IsHP31X())
@@ -156,48 +157,6 @@ InputEvents::eventPan(const TCHAR *misc)
     sub_PanCursor(-1, 0);
 
   XCSoarInterface::SendMapSettings(true);
-}
-
-void
-InputEvents::SetPan(bool enable)
-{
-  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
-  if (map_window == NULL)
-    return;
-
-  if (enable == map_window->IsPanning())
-    return;
-
-  map_window->SetPan(enable);
-
-  if (enable) {
-    setMode(MODE_PAN);
-    XCSoarInterface::main_window.SetFullScreen(true);
-  } else {
-    setMode(MODE_DEFAULT);
-    Pages::Update();
-  }
-}
-
-void
-InputEvents::TogglePan()
-{
-  const GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
-  if (map_window == NULL)
-    return;
-
-  SetPan(!map_window->IsPanning());
-}
-
-void
-InputEvents::LeavePan()
-{
-  const GlueMapWindow *map_window =
-    CommonInterface::main_window.GetMapIfActive();
-  if (map_window == NULL)
-    return;
-
-  SetPan(false);
 }
 
 void
@@ -248,7 +207,7 @@ InputEvents::sub_SetZoom(fixed value)
   const DisplayMode displayMode = CommonInterface::GetUIState().display_mode;
   if (settings_map.auto_zoom_enabled &&
       !(displayMode == DisplayMode::CIRCLING && settings_map.circle_zoom_enabled) &&
-      !CommonInterface::IsPanning()) {
+      !IsPanning()) {
     settings_map.auto_zoom_enabled = false;  // disable autozoom if user manually changes zoom
     Profile::Set(ProfileKeys::AutoZoom, false);
     Message::AddMessage(_("Auto. zoom off"));
