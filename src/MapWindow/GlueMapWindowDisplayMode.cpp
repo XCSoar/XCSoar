@@ -112,9 +112,11 @@ GlueMapWindow::SetMapScale(fixed scale)
 {
   MapWindow::SetMapScale(scale);
 
+  const bool circling =
+    CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
   MapSettings &settings = CommonInterface::SetMapSettings();
 
-  if (InCirclingMode() && settings.circle_zoom_enabled)
+  if (circling && settings.circle_zoom_enabled)
     // save cruise scale
     settings.circling_scale = visible_projection.GetScale();
   else
@@ -140,7 +142,7 @@ GlueMapWindow::SwitchZoomClimb(bool circling)
   if (!settings.circle_zoom_enabled)
     return;
 
-  if (InCirclingMode())
+  if (circling)
     visible_projection.SetScale(settings.circling_scale);
   else
     visible_projection.SetScale(settings.cruise_scale);
@@ -173,10 +175,12 @@ GlueMapWindow::UpdateScreenAngle()
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const MapSettings &settings = CommonInterface::GetMapSettings();
+  const UIState &ui_state = CommonInterface::GetUIState();
 
   DisplayOrientation orientation =
-      InCirclingMode() ?
-          settings.circling_orientation : settings.cruise_orientation;
+    ui_state.display_mode == DisplayMode::CIRCLING
+    ? settings.circling_orientation
+    : settings.cruise_orientation;
 
   if (orientation == TARGETUP &&
       calculated.task_stats.current_leg.vector_remaining.IsValid())
@@ -200,8 +204,10 @@ GlueMapWindow::UpdateMapScale()
      called by the main thread */
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const MapSettings &settings = CommonInterface::GetMapSettings();
+  const bool circling =
+    CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
-  if (InCirclingMode() && settings.circle_zoom_enabled)
+  if (circling && settings.circle_zoom_enabled)
     return;
 
   if (!IsNearSelf())
@@ -211,8 +217,10 @@ GlueMapWindow::UpdateMapScale()
   if (settings.auto_zoom_enabled && positive(distance)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
-    int auto_zoom_factor = InCirclingMode() ?
-                           50 : 100 - settings.glider_screen_position;
+    int auto_zoom_factor = circling
+      ? 50
+      : 100 - settings.glider_screen_position;
+
     // Leave 5% of full distance for target display
     auto_zoom_factor -= 5;
     // Adjust to account for map scale units
@@ -249,12 +257,14 @@ GlueMapWindow::UpdateProjection()
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const MapSettings &settings_map = CommonInterface::GetMapSettings();
+  const bool circling =
+    CommonInterface::GetUIState().display_mode == DisplayMode::CIRCLING;
 
   RasterPoint center;
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.top + rc.bottom) / 2;
 
-  if (InCirclingMode() || !IsNearSelf())
+  if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.cruise_orientation == NORTHUP) {
     RasterPoint offset{0, 0};
@@ -292,7 +302,7 @@ GlueMapWindow::UpdateProjection()
 
   if (!IsNearSelf()) {
     /* no-op - the Projection's location is updated manually */
-  } else if (InCirclingMode() && calculated.thermal_locator.estimate_valid) {
+  } else if (circling && calculated.thermal_locator.estimate_valid) {
     const fixed d_t = calculated.thermal_locator.estimate_location.Distance(basic.location);
     if (!positive(d_t)) {
       SetLocationLazy(basic.location);
