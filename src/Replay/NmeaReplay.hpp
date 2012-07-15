@@ -25,20 +25,31 @@ Copyright_License {
 #define NMEA_REPLAY_HPP
 
 #include "AbstractReplay.hpp"
+#include "Device/Port/NullPort.hpp"
 
 class NLineReader;
+class NMEAParser;
+class Device;
+struct DeviceConfig;
+struct NMEAInfo;
 
 class NmeaReplay: public AbstractReplay
 {
   NLineReader *reader;
 
+  NMEAParser *parser;
+  NullPort port;
+  Device *device;
+
 public:
-  NmeaReplay(NLineReader *reader);
+  NmeaReplay(NLineReader *reader, const DeviceConfig &config);
   ~NmeaReplay();
 
   virtual bool Update(fixed time_scale) gcc_override;
 
 protected:
+  bool ParseLine(const char *line, NMEAInfo &data);
+
   virtual bool UpdateTime();
   virtual void OnSentence(const char *line) = 0;
 

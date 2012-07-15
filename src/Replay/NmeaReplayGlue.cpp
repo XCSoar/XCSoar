@@ -22,60 +22,28 @@
 */
 
 #include "Replay/NmeaReplayGlue.hpp"
-#include "Device/Parser.hpp"
-#include "Device/Driver.hpp"
-#include "Device/Register.hpp"
-#include "Language/Language.hpp"
-#include "Dialogs/Message.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 
 NmeaReplayGlue::NmeaReplayGlue(NLineReader *reader)
-  :NmeaReplay(reader),
-   parser(new NMEAParser()),
-   device(NULL)
+  :NmeaReplay(reader, CommonInterface::GetSystemSettings().devices[0])
 {
-  parser->SetReal(false);
-
-  /* get the device driver name from the profile */
-  const DeviceConfig &config =
-    CommonInterface::GetSystemSettings().devices[0];
-
-  parser->SetIgnoreChecksum(config.ignore_checksum);
-
-  /* instantiate it */
-  const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
-  assert(driver != NULL);
-  if (driver->CreateOnPort != NULL) {
-    DeviceConfig config;
-    config.Clear();
-    device = driver->CreateOnPort(config, port);
-  }
 }
 
 NmeaReplayGlue::~NmeaReplayGlue()
 {
-  delete device;
-  delete parser;
-
   device_blackboard->StopReplay();
 }
 
 void
 NmeaReplayGlue::OnSentence(const char *line)
 {
-  assert(device != NULL);
-
   ScopeLock protect(device_blackboard->mutex);
   NMEAInfo &data = device_blackboard->SetReplayState();
 
-  if ((device != NULL && device->ParseNMEA(line, data)) ||
-      (parser != NULL && parser->ParseLine(line, data))) {
-    data.gps.replay = true;
-    data.alive.Update(fixed(MonotonicClockMS()) / 1000);
+  if (ParseLine(line, data))
     device_blackboard->ScheduleMerge();
-  }
 }
 
 bool

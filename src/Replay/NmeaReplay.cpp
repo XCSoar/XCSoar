@@ -23,17 +23,50 @@
 
 #include "Replay/NmeaReplay.hpp"
 #include "IO/LineReader.hpp"
+#include "Device/Parser.hpp"
+#include "Device/Driver.hpp"
+#include "Device/Register.hpp"
+#include "Profile/DeviceConfig.hpp"
+#include "OS/Clock.hpp"
+#include "NMEA/Info.hpp"
 
 #include <string.h>
 
-NmeaReplay::NmeaReplay(NLineReader *_reader)
-  :reader(_reader)
+NmeaReplay::NmeaReplay(NLineReader *_reader, const DeviceConfig &config)
+  :reader(_reader),
+   parser(new NMEAParser()),
+   device(NULL)
 {
+  parser->SetReal(false);
+  parser->SetIgnoreChecksum(config.ignore_checksum);
+
+  const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
+  assert(driver != NULL);
+  if (driver->CreateOnPort != NULL) {
+    DeviceConfig config;
+    config.Clear();
+    device = driver->CreateOnPort(config, port);
+  }
 }
 
 NmeaReplay::~NmeaReplay()
 {
+  delete device;
+  delete parser;
   delete reader;
+}
+
+bool
+NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
+{
+  if ((device != NULL && device->ParseNMEA(line, data)) ||
+      (parser != NULL && parser->ParseLine(line, data))) {
+    data.gps.replay = true;
+    data.alive.Update(fixed(MonotonicClockMS()) / 1000);
+
+    return true;
+  } else
+    return false;
 }
 
 bool
