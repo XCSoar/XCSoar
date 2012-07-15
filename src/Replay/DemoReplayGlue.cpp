@@ -80,7 +80,7 @@ DemoReplayGlue::Update(fixed time_scale)
     retval = DemoReplay::Update(time_scale, ta);
   }
 
-  const AircraftState s = aircraft.GetState();
+  const AircraftState &s = aircraft.GetState();
   OnAdvance(s.location, s.ground_speed, s.track, s.altitude,
              s.altitude, s.time);
 
