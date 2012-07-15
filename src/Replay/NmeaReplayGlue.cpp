@@ -31,11 +31,6 @@ NmeaReplayGlue::NmeaReplayGlue(NLineReader *reader)
 {
 }
 
-NmeaReplayGlue::~NmeaReplayGlue()
-{
-  device_blackboard->StopReplay();
-}
-
 void
 NmeaReplayGlue::OnSentence(const char *line)
 {

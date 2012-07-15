@@ -34,7 +34,6 @@ class NmeaReplayGlue:
 
 public:
   NmeaReplayGlue(NLineReader *reader);
-  virtual ~NmeaReplayGlue();
 
 protected:
   virtual bool UpdateTime();

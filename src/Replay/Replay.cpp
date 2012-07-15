@@ -28,14 +28,21 @@
 #include "Util/StringUtil.hpp"
 #include "OS/PathName.hpp"
 #include "IO/FileLineReader.hpp"
+#include "Blackboard/DeviceBlackboard.hpp"
+#include "Components.hpp"
 
 #include <assert.h>
 
 void
 Replay::Stop()
 {
+  if (replay == NULL)
+    return;
+
   delete replay;
   replay = NULL;
+
+  device_blackboard->StopReplay();
 }
 
 bool

@@ -44,11 +44,6 @@ DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)
   aircraft.GetState().wind = device_blackboard->Calculated().GetWindOrZero();
 }
 
-DemoReplayGlue::~DemoReplayGlue()
-{
-  device_blackboard->StopReplay();
-}
-
 bool
 DemoReplayGlue::UpdateTime()
 {

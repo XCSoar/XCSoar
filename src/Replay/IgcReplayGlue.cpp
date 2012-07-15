@@ -38,8 +38,6 @@ IgcReplayGlue::IgcReplayGlue(NLineReader *_reader, Logger *_logger)
 
 IgcReplayGlue::~IgcReplayGlue()
 {
-  device_blackboard->StopReplay();
-
   if (logger != NULL)
     logger->ClearBuffer();
 }

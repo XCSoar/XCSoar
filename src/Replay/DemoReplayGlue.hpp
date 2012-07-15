@@ -37,7 +37,6 @@ class DemoReplayGlue:
 
 public:
   DemoReplayGlue(ProtectedTaskManager &_task_manager);
-  virtual ~DemoReplayGlue();
 
   virtual bool Update(fixed time_scale) gcc_override;
 
