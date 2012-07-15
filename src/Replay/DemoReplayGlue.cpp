@@ -72,9 +72,13 @@ DemoReplayGlue::Update(fixed time_scale)
     floor_alt += device_blackboard->Calculated().terrain_altitude;
   }
 
-  ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
-  TaskAccessor ta(protected_task_manager, floor_alt);
-  bool retval = DemoReplay::Update(time_scale, ta);
+  bool retval;
+
+  {
+    ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
+    TaskAccessor ta(protected_task_manager, floor_alt);
+    retval = DemoReplay::Update(time_scale, ta);
+  }
 
   const AircraftState s = aircraft.GetState();
   OnAdvance(s.location, s.ground_speed, s.track, s.altitude,
