@@ -20,6 +20,7 @@ GEO_SOURCES := \
 	$(GEO_SRC_DIR)/Math.cpp \
 	$(GEO_SRC_DIR)/GeoPoint.cpp \
 	$(GEO_SRC_DIR)/GeoVector.cpp \
+	$(GEO_SRC_DIR)/GeoBounds.cpp \
 	$(GEO_SRC_DIR)/GeoClip.cpp \
 	$(GEO_SRC_DIR)/SearchPoint.cpp \
 	$(GEO_SRC_DIR)/SearchPointVector.cpp \

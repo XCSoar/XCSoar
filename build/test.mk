@@ -318,7 +318,7 @@ $(eval $(call link-program,TestCSVLine,TEST_CSV_LINE))
 TEST_GEO_BOUNDS_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestGeoBounds.cpp
-TEST_GEO_BOUNDS_DEPENDS = MATH
+TEST_GEO_BOUNDS_DEPENDS = GEO MATH
 $(eval $(call link-program,TestGeoBounds,TEST_GEO_BOUNDS))
 
 TEST_FLARM_NET_SOURCES = \
@@ -968,7 +968,7 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
-LOAD_TOPOGRAPHY_DEPENDS = MATH IO UTIL SHAPELIB ZZIP
+LOAD_TOPOGRAPHY_DEPENDS = GEO MATH IO UTIL SHAPELIB ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 
