@@ -22,20 +22,6 @@
 */
 
 #include "Replay/IgcReplayGlue.hpp"
-#include "Logger/Logger.hpp"
-
-IgcReplayGlue::IgcReplayGlue(NLineReader *_reader, Logger *_logger)
-  :IgcReplay(_reader), logger(_logger)
-{
-  if (logger != NULL)
-    logger->ClearBuffer();
-}
-
-IgcReplayGlue::~IgcReplayGlue()
-{
-  if (logger != NULL)
-    logger->ClearBuffer();
-}
 
 bool
 IgcReplayGlue::UpdateTime(fixed time_scale)

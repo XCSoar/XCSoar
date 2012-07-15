@@ -27,18 +27,13 @@ Copyright_License {
 #include "Replay/IgcReplay.hpp"
 #include "PeriodClock.hpp"
 
-class Logger;
-
 class IgcReplayGlue: 
   public IgcReplay
 {
   PeriodClock clock;
 
-  Logger *logger;
-
 public:
-  IgcReplayGlue(NLineReader *_reader, Logger *_logger);
-  virtual ~IgcReplayGlue();
+  IgcReplayGlue(NLineReader *_reader):IgcReplay(_reader) {}
 
 protected:
   virtual bool UpdateTime(fixed time_scale) gcc_override;

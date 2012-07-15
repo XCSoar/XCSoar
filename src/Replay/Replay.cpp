@@ -29,6 +29,7 @@
 #include "OS/PathName.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
+#include "Logger/Logger.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
 
@@ -44,6 +45,9 @@ Replay::Stop()
   replay = NULL;
 
   device_blackboard->StopReplay();
+
+  if (logger != NULL)
+    logger->ClearBuffer();
 }
 
 bool
@@ -67,7 +71,7 @@ Replay::Start(const TCHAR *_path)
       return false;
     }
 
-    replay = new IgcReplayGlue(reader, logger);
+    replay = new IgcReplayGlue(reader);
   } else {
     auto reader = new FileLineReaderA(path);
     if (reader->error()) {
@@ -77,6 +81,9 @@ Replay::Start(const TCHAR *_path)
 
     replay = new NmeaReplayGlue(reader);
   }
+
+  if (logger != NULL)
+    logger->ClearBuffer();
 
   return true;
 }
