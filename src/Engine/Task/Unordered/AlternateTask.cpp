@@ -43,7 +43,7 @@ void
 AlternateTask::Reset()
 {
   AbortTask::Reset();
-  destination = GeoPoint(Angle::Zero(), Angle::Zero());
+  destination.SetInvalid();
   best_alternate_id = UINT_MAX;
 }
 
@@ -93,6 +93,9 @@ AlternateTask::ClientUpdate(const AircraftState &state_now,
   // this is done in separate stages so we can add the reachable ones
   // before the unreachable ones, without the sort criteria affecting
   // the reachability.
+
+  if (!destination.IsValid())
+    return;
 
   reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
   q.reserve(task_points.size());
