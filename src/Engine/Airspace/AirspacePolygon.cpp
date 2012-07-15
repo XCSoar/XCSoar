@@ -61,7 +61,7 @@ const GeoPoint
 AirspacePolygon::GetCenter() const
 {
   if (m_border.empty())
-    return GeoPoint(Angle::Zero(), Angle::Zero());
+    return GeoPoint::Invalid();
 
   return m_border[0].GetLocation();
 }
