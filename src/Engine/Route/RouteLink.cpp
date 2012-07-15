@@ -65,7 +65,7 @@ RouteLink::RouteLink (const RoutePoint& _destination, const RoutePoint& _origin,
 void
 RouteLink::CalcSpeedups(const TaskProjection& proj)
 {
-  const fixed scale = proj.get_approx_scale();
+  const fixed scale = proj.GetApproximateScale();
   const fixed dx = fixed(first.longitude - second.longitude);
   const fixed dy = fixed(first.latitude - second.latitude);
   if (!positive(fabs(dx)) && !positive(fabs(dy))) {

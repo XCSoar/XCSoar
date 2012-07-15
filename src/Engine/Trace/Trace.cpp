@@ -246,8 +246,8 @@ Trace::push_back(const TracePoint &point)
 
   if (empty()) {
     // first point determines origin for flat projection
-    task_projection.reset(point.GetLocation());
-    task_projection.update_fast();
+    task_projection.Reset(point.GetLocation());
+    task_projection.Update();
   } else if (point.GetTime() < back().GetTime()) {
     // gone back in time
 

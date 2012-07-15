@@ -26,26 +26,27 @@ GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
                        const GeoPoint &p, const TaskProjection &_task_projection)
   :task_projection(_task_projection)
 {
-  ell = FlatEllipse(task_projection.fproject(f1), task_projection.fproject(f2),
-                    task_projection.fproject(p));
+  ell = FlatEllipse(task_projection.ProjectFloat(f1),
+                    task_projection.ProjectFloat(f2),
+                    task_projection.ProjectFloat(p));
 }
 
 GeoPoint 
 GeoEllipse::Parametric(const fixed t) const
 {
   const FlatPoint fp = ell.Parametric(t);
-  return task_projection.funproject(fp);
+  return task_projection.Unproject(fp);
 }
 
 bool 
 GeoEllipse::IntersectExtended(const GeoPoint &p, GeoPoint &i1,
                               GeoPoint &i2) const
 {
-  const FlatPoint pf = task_projection.fproject(p);
+  const FlatPoint pf = task_projection.ProjectFloat(p);
   FlatPoint i1f, i2f;
   if (ell.IntersectExtended(pf,i1f,i2f)) {
-    i1 = task_projection.funproject(i1f);
-    i2 = task_projection.funproject(i2f);
+    i1 = task_projection.Unproject(i1f);
+    i2 = task_projection.Unproject(i2f);
     return true;
   }
 

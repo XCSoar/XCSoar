@@ -73,13 +73,13 @@ public:
    * 
    * @return dummy airspace envelope
    */
-  Airspace(const GeoPoint&loc, const TaskProjection& task_projection, const
-    fixed range=fixed_zero):
-    FlatBoundingBox(task_projection.project(loc),
-                    task_projection.project_range(loc,range)),
-    airspace(NULL)
+  Airspace(const GeoPoint&loc, const TaskProjection& task_projection,
+           const fixed range=fixed_zero)
+    :FlatBoundingBox(task_projection.ProjectInteger(loc),
+                     task_projection.ProjectRangeInteger(loc, range)),
+     airspace(NULL)
   {
-  };
+  }
 
   /** 
    * Constructor for virtual airspaces for use in bounding-box
@@ -91,14 +91,13 @@ public:
    * 
    * @return dummy airspace envelope
    */
-  Airspace(const GeoPoint &ll, 
-           const GeoPoint &ur,
-           const TaskProjection& task_projection):
-    FlatBoundingBox(task_projection.project(ll),
-                    task_projection.project(ur)), 
-    airspace(NULL)
+  Airspace(const GeoPoint &ll, const GeoPoint &ur,
+           const TaskProjection& task_projection)
+    :FlatBoundingBox(task_projection.ProjectInteger(ll),
+                     task_projection.ProjectInteger(ur)),
+     airspace(NULL)
   {
-  };
+  }
 
   /** 
    * Checks whether an aircraft is inside the airspace. 

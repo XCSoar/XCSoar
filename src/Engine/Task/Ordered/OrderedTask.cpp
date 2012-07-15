@@ -141,7 +141,7 @@ OrderedTask::UpdateGeometry()
   for (auto begin = task_points.cbegin(), end = task_points.cend(), i = begin;
        i != end; ++i) {
     if (i == begin)
-      task_projection.reset((*i)->GetLocation());
+      task_projection.Reset((*i)->GetLocation());
 
     (*i)->ScanProjection(task_projection);
   }
@@ -151,7 +151,7 @@ OrderedTask::UpdateGeometry()
     (*i)->ScanProjection(task_projection);
 
   // projection can now be determined
-  task_projection.update_fast();
+  task_projection.Update();
 
   // update OZ's for items that depend on next-point geometry 
   UpdateObservationZones(task_points, task_projection);
@@ -334,8 +334,10 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   if (!n_task)
     return false;
 
-  FlatBoundingBox bb_last(task_projection.project(state_last.location),1);
-  FlatBoundingBox bb_now(task_projection.project(state.location),1);
+  FlatBoundingBox bb_last(task_projection.ProjectInteger(state_last.location),
+                          1);
+  FlatBoundingBox bb_now(task_projection.ProjectInteger(state.location),
+                         1);
 
   bool last_started = TaskStarted();
   const bool last_finished = TaskFinished();
@@ -1163,7 +1165,7 @@ OrderedTask::GetTaskCenter(const GeoPoint& fallback_location) const
   if (!HasStart() || !task_points[0])
     return fallback_location;
 
-  return task_projection.get_center();
+  return task_projection.GetCenter();
 }
 
 fixed 
@@ -1402,10 +1404,14 @@ OrderedTask::GetBoundingBox(const GeoBounds &bounds) const
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
 
-  FlatGeoPoint ll = task_projection.project(GeoPoint(bounds.west, bounds.south));
-  FlatGeoPoint lr = task_projection.project(GeoPoint(bounds.east, bounds.south));
-  FlatGeoPoint ul = task_projection.project(GeoPoint(bounds.west, bounds.north));
-  FlatGeoPoint ur = task_projection.project(GeoPoint(bounds.east, bounds.north));
+  FlatGeoPoint ll = task_projection.ProjectInteger(GeoPoint(bounds.west,
+                                                            bounds.south));
+  FlatGeoPoint lr = task_projection.ProjectInteger(GeoPoint(bounds.east,
+                                                            bounds.south));
+  FlatGeoPoint ul = task_projection.ProjectInteger(GeoPoint(bounds.west,
+                                                            bounds.north));
+  FlatGeoPoint ur = task_projection.ProjectInteger(GeoPoint(bounds.east,
+                                                            bounds.north));
   FlatGeoPoint fmin(min(ll.longitude, ul.longitude),
                     min(ll.latitude, lr.latitude));
   FlatGeoPoint fmax(max(lr.longitude, ur.longitude),

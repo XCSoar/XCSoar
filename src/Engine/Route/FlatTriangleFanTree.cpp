@@ -148,7 +148,7 @@ void
 FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin, const int index_low,
                                const int index_high, ReachFanParms &parms)
 {
-  const AGeoPoint ao(parms.task_proj.unproject(origin), origin.altitude);
+  const AGeoPoint ao(parms.task_proj.Unproject(origin), origin.altitude);
   height = origin.altitude;
 
   // fill vector
@@ -211,7 +211,7 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint &o,
 
   for (auto x = vs.cbegin(), end = vs.cend(); x != end; ++x) {
     const FlatGeoPoint av = (o + (*x)) * fixed_half;
-    const GeoPoint p = parms.task_proj.unproject(av);
+    const GeoPoint p = parms.task_proj.Unproject(av);
     short h = parms.terrain->GetHeight(p);
 
     if (RasterBuffer::IsWater(h))
@@ -337,7 +337,7 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
   if (bb.Overlaps(bounding_box)) {
     visitor.StartFan();
     for (auto it = vs.cbegin(), end = vs.cend(); it != end; ++it)
-      visitor.AddPoint(task_proj.unproject(*it));
+      visitor.AddPoint(task_proj.Unproject(*it));
 
     visitor.EndFan();
   }

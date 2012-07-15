@@ -52,10 +52,10 @@ AirspaceIntersectionVector
 AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
                            const TaskProjection &projection) const
 {
-  const fixed f_radius = projection.fproject_range(m_center, m_radius);
-  const FlatPoint f_center = projection.fproject(m_center);
-  const FlatPoint f_start = projection.fproject(start);
-  const FlatPoint f_end = projection.fproject(end);
+  const fixed f_radius = projection.ProjectRangeFloat(m_center, m_radius);
+  const FlatPoint f_center = projection.ProjectFloat(m_center);
+  const FlatPoint f_start = projection.ProjectFloat(start);
+  const FlatPoint f_end = projection.ProjectFloat(end);
   const FlatLine line(f_start, f_end);
 
   FlatPoint f_p1, f_p2;
@@ -76,10 +76,10 @@ AirspaceCircle::Intersects(const GeoPoint &start, const GeoPoint &end,
 
   AirspaceIntersectSort sorter(start, *this);
   if ((t1 >= fixed_zero) && in_range)
-    sorter.add(t1 * inv_mag, projection.funproject(f_p1));
+    sorter.add(t1 * inv_mag, projection.Unproject(f_p1));
 
   if ((t2 >= fixed_zero) && in_range)
-    sorter.add(t2 * inv_mag, projection.funproject(f_p2));
+    sorter.add(t2 * inv_mag, projection.Unproject(f_p2));
 
   return sorter.all();
 }

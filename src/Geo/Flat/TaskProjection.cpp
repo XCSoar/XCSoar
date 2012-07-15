@@ -38,8 +38,8 @@ static const int fixed_scale = 1000;
 #endif
 static const fixed inv_scale(1.0/fixed_scale);
 
-void 
-TaskProjection::reset(const GeoPoint &ref) 
+void
+TaskProjection::Reset(const GeoPoint &ref)
 {
   location_min = ref;
   location_max = ref;
@@ -50,7 +50,8 @@ TaskProjection::reset(const GeoPoint &ref)
 #endif
 }
 
-void TaskProjection::scan_location(const GeoPoint &ref) 
+void
+TaskProjection::Scan(const GeoPoint &ref)
 {
   assert(initialised);
 
@@ -61,7 +62,7 @@ void TaskProjection::scan_location(const GeoPoint &ref)
 }
 
 bool
-TaskProjection::update_fast()
+TaskProjection::Update()
 {
   assert(initialised);
 
@@ -73,13 +74,13 @@ TaskProjection::update_fast()
     location_max.latitude.Fraction(location_min.latitude, fixed_half);
   cos_midloc = location_mid.latitude.fastcosine() * fixed_scale;
   r_cos_midloc = fixed_one/cos_midloc;
-  approx_scale = unproject(FlatGeoPoint(0,-1)).Distance(unproject(FlatGeoPoint(0,1))) / 2;
+  approx_scale = Unproject(FlatGeoPoint(0,-1)).Distance(Unproject(FlatGeoPoint(0,1))) / 2;
 
   return !(old_loc == location_mid);
 }
 
 FlatPoint
-TaskProjection::fproject(const GeoPoint& tp) const
+TaskProjection::ProjectFloat(const GeoPoint& tp) const
 {
   assert(initialised);
 
@@ -90,7 +91,7 @@ TaskProjection::fproject(const GeoPoint& tp) const
 }
 
 GeoPoint 
-TaskProjection::funproject(const FlatPoint& fp) const
+TaskProjection::Unproject(const FlatPoint& fp) const
 {
   assert(initialised);
 
@@ -101,16 +102,16 @@ TaskProjection::funproject(const FlatPoint& fp) const
 }
 
 FlatGeoPoint 
-TaskProjection::project(const GeoPoint& tp) const
+TaskProjection::ProjectInteger(const GeoPoint& tp) const
 {
   assert(initialised);
 
-  FlatPoint f = fproject(tp);
+  FlatPoint f = ProjectFloat(tp);
   return FlatGeoPoint(iround(f.x), iround(f.y));
 }
 
 GeoPoint 
-TaskProjection::unproject(const FlatGeoPoint& fp) const
+TaskProjection::Unproject(const FlatGeoPoint& fp) const
 {
   assert(initialised);
 
@@ -121,22 +122,22 @@ TaskProjection::unproject(const FlatGeoPoint& fp) const
 }
 
 fixed
-TaskProjection::fproject_range(const GeoPoint &tp, const fixed range) const
+TaskProjection::ProjectRangeFloat(const GeoPoint &tp, const fixed range) const
 {
   assert(initialised);
 
   GeoPoint fr = ::FindLatitudeLongitude(tp, Angle::Zero(), range);
-  FlatPoint f = fproject(fr);
-  FlatPoint p = fproject(tp);
+  FlatPoint f = ProjectFloat(fr);
+  FlatPoint p = ProjectFloat(tp);
   return fabs(f.y - p.y);
 }
 
 unsigned
-TaskProjection::project_range(const GeoPoint &tp, const fixed range) const
+TaskProjection::ProjectRangeInteger(const GeoPoint &tp, const fixed range) const
 {
   assert(initialised);
 
-  return iround(fproject_range(tp, range));
+  return iround(ProjectRangeFloat(tp, range));
 }
 
 fixed
@@ -149,23 +150,23 @@ TaskProjection::ApproxRadius() const
 }
 
 GeoBounds
-TaskProjection::unproject(const FlatBoundingBox& bb) const
+TaskProjection::Unproject(const FlatBoundingBox& bb) const
 {
   assert(initialised);
 
-  return GeoBounds(unproject(FlatGeoPoint(bb.bb_ll.longitude,
+  return GeoBounds(Unproject(FlatGeoPoint(bb.bb_ll.longitude,
                                           bb.bb_ur.latitude)),
-                   unproject(FlatGeoPoint(bb.bb_ur.longitude,
+                   Unproject(FlatGeoPoint(bb.bb_ur.longitude,
                                           bb.bb_ll.latitude)));
 }
 
 FlatBoundingBox
-TaskProjection::project(const GeoBounds& bb) const
+TaskProjection::Project(const GeoBounds& bb) const
 {
   assert(initialised);
 
-  FlatBoundingBox fb(project(GeoPoint(bb.west, bb.south)),
-                     project(GeoPoint(bb.east, bb.north)));
+  FlatBoundingBox fb(ProjectInteger(GeoPoint(bb.west, bb.south)),
+                     ProjectInteger(GeoPoint(bb.east, bb.north)));
   fb.ExpandByOne(); // prevent rounding
   return fb;
 }

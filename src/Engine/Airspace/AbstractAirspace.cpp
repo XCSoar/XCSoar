@@ -270,7 +270,7 @@ AbstractAirspace::GetClearance(const TaskProjection &projection) const
     int mag = r.Magnitude();
     int mag_new = mag + RADIUS;
     p = r.Parametric((fixed)mag_new / mag);
-    *i = SearchPoint(projection.unproject(p), p);
+    *i = SearchPoint(projection.Unproject(p), p);
   }
 
   return m_clearance;

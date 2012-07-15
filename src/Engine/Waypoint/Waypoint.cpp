@@ -64,7 +64,7 @@ Waypoint::IsCloseTo(const GeoPoint &_location, const fixed range) const
 void
 Waypoint::Project(const TaskProjection &task_projection)
 {
-  flat_location = task_projection.project(location);
+  flat_location = task_projection.ProjectInteger(location);
 
 #ifndef NDEBUG
   flat_location_initialised = true;

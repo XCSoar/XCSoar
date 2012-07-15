@@ -75,10 +75,10 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
                           h_ceiling);
 
   {
-    const AFlatGeoPoint s_origin(task_projection.project(origin),
+    const AFlatGeoPoint s_origin(task_projection.ProjectInteger(origin),
                                  origin.altitude);
 
-    const AFlatGeoPoint s_destination(task_projection.project(destination),
+    const AFlatGeoPoint s_destination(task_projection.ProjectInteger(destination),
                                       destination.altitude);
 
     if (!(s_origin == origin_last) || !(s_destination == destination_last))
@@ -169,7 +169,7 @@ RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
     assert(solution_route.size()>=2);
     for (auto i = solution_route.begin(), end = solution_route.end();
          i != end; ++i) {
-      FlatGeoPoint p(task_projection.project(*i));
+      FlatGeoPoint p(task_projection.ProjectInteger(*i));
       if (p == origin_last) {
         *i = AGeoPoint(origin, i->altitude);
       } else if (p == destination_last) {
@@ -199,7 +199,7 @@ RoutePlanner::FindSolution(const RoutePoint &final, Route &this_route) const
   bool finished = false;
 
   this_route.insert(this_route.begin(),
-                    AGeoPoint(task_projection.unproject(p), p.altitude));
+                    AGeoPoint(task_projection.Unproject(p), p.altitude));
 
   do {
     p_last = p;
@@ -219,20 +219,20 @@ RoutePlanner::FindSolution(const RoutePoint &final, Route &this_route) const
       assert(vh.IsPositive());
       if (vh > p_last.altitude - p.altitude) { // climb was cut off
         const fixed f = (p_last.altitude - p.altitude) / vh;
-        const GeoPoint gp(task_projection.unproject(p));
-        const GeoPoint gp_last(task_projection.unproject(p_last));
+        const GeoPoint gp(task_projection.Unproject(p));
+        const GeoPoint gp_last(task_projection.Unproject(p_last));
         const AGeoPoint gp_int(gp.Interpolate(gp_last, f), p_last.altitude);
         this_route.insert(this_route.begin(), gp_int);
         // @todo: assert check_clearance?
       }
     } else if (p.altitude > p_last.altitude) {
       // create intermediate point for jump at end
-      const AGeoPoint gp_int(task_projection.unproject(p_last), p.altitude);
+      const AGeoPoint gp_int(task_projection.Unproject(p_last), p.altitude);
       this_route.insert(this_route.begin(), gp_int);
     }
 
     this_route.insert(this_route.begin(),
-                      AGeoPoint(task_projection.unproject(p), p.altitude));
+                      AGeoPoint(task_projection.Unproject(p), p.altitude));
     // @todo: assert check_clearance
   } while (!finished);
 
@@ -472,8 +472,8 @@ RoutePlanner::AddNearbyTerrain(const RoutePoint &p, const RouteLink& e)
 void
 RoutePlanner::OnSolve(const AGeoPoint &origin, const AGeoPoint &destination)
 {
-  task_projection.reset(origin);
-  task_projection.update_fast();
+  task_projection.Reset(origin);
+  task_projection.Update();
 }
 
 bool
@@ -493,8 +493,8 @@ RoutePlanner::Intersection(const AGeoPoint& origin,
                            const AGeoPoint& destination, GeoPoint& intx) const
 {
   TaskProjection proj;
-  proj.reset(origin);
-  proj.update_fast();
+  proj.Reset(origin);
+  proj.Update();
   return rpolars_route.Intersection(origin, destination, terrain, proj, intx);
 }
 

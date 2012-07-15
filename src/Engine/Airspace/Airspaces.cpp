@@ -57,7 +57,7 @@ Airspaces::VisitWithinRange(const GeoPoint &location, fixed range,
     return;
 
   Airspace bb_target(location, task_projection);
-  int projected_range = task_projection.project_range(location, range);
+  int projected_range = task_projection.ProjectRangeInteger(location, range);
   AirspacePredicateVisitorAdapter adapter(predicate, visitor);
   airspace_tree.visit_within_range(bb_target, -projected_range, adapter);
 
@@ -78,7 +78,7 @@ public:
                                      const TaskProjection &_projection,
                                      AirspaceIntersectionVisitor &_visitor)
     :start(_loc), end(_end), projection(&_projection),
-     ray(projection->project(start), projection->project(end)),
+     ray(projection->ProjectInteger(start), projection->ProjectInteger(end)),
      visitor(&_visitor) {}
 
   void operator()(Airspace as) {
@@ -98,7 +98,7 @@ Airspaces::VisitIntersecting(const GeoPoint &loc, const GeoPoint &end,
 
   const GeoPoint c = loc.Middle(end);
   Airspace bb_target(c, task_projection);
-  int projected_range = task_projection.project_range(c, loc.Distance(end) / 2);
+  int projected_range = task_projection.ProjectRangeInteger(c, loc.Distance(end) / 2);
   IntersectingAirspaceVisitorAdapter adapter(loc, end, task_projection, visitor);
   airspace_tree.visit_within_range(bb_target, -projected_range, adapter);
 
@@ -128,7 +128,8 @@ Airspaces::FindNearest(const GeoPoint &location,
     return NULL;
 
   const Airspace bb_target(location, task_projection);
-  int projected_range = task_projection.project_range(location, fixed(30000));
+  const int projected_range =
+    task_projection.ProjectRangeInteger(location, fixed(30000));
   const AirspacePredicateAdapter predicate(condition);
   std::pair<AirspaceTree::const_iterator, AirspaceTree::distance_type> found =
     airspace_tree.find_nearest_if(bb_target, BBDist(0, projected_range),
@@ -177,7 +178,7 @@ Airspaces::ScanRange(const GeoPoint &location, fixed range,
     return AirspaceVector();
 
   Airspace bb_target(location, task_projection);
-  int projected_range = task_projection.project_range(location, range);
+  int projected_range = task_projection.ProjectRangeInteger(location, range);
   
   std::deque< Airspace > vectors;
   airspace_tree.find_within_range(bb_target, -projected_range,
@@ -234,7 +235,7 @@ Airspaces::FindInside(const AircraftState &state,
 void 
 Airspaces::Optimise()
 {
-  if (!owns_children || task_projection.update_fast()) {
+  if (!owns_children || task_projection.Update()) {
     // dont update task_projection if not owner!
 
     // task projection changed, so need to push items back onto stack
@@ -273,9 +274,9 @@ Airspaces::Add(AbstractAirspace *airspace)
 
   if (owns_children) {
     if (empty())
-      task_projection.reset(airspace->GetCenter());
+      task_projection.Reset(airspace->GetCenter());
 
-    task_projection.scan_location(airspace->GetCenter());
+    task_projection.Scan(airspace->GetCenter());
   }
 
   tmp_as.push_back(airspace);

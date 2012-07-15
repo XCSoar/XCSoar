@@ -343,12 +343,12 @@ AbortTask::GetTaskCenter(const GeoPoint& fallback_location) const
   for (unsigned i = 0; i < task_points.size(); ++i) {
     const GeoPoint location = task_points[i].GetLocation();
     if (i == 0)
-      task_projection.reset(location);
+      task_projection.Reset(location);
     else
-      task_projection.scan_location(location);
+      task_projection.Scan(location);
   }
-  task_projection.update_fast();
-  return task_projection.get_center();
+  task_projection.Update();
+  return task_projection.GetCenter();
 }
 
 fixed 
@@ -361,10 +361,10 @@ AbortTask::GetTaskRadius(const GeoPoint& fallback_location) const
   for (unsigned i = 0; i < task_points.size(); ++i) {
     const GeoPoint location = task_points[i].GetLocation();
     if (i == 0)
-      task_projection.reset(location);
+      task_projection.Reset(location);
     else
-      task_projection.scan_location(location);
+      task_projection.Scan(location);
   }
-  task_projection.update_fast();
+  task_projection.Update();
   return task_projection.ApproxRadius();
 }

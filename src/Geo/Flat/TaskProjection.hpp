@@ -70,7 +70,7 @@ public:
    *
    * @param ref Default value for initial search bounds
    */
-  void reset(const GeoPoint &ref);
+  void Reset(const GeoPoint &ref);
 
   /**
    * Check a location against bounds and update them if outside.
@@ -78,14 +78,14 @@ public:
    *
    * @param ref Point to check against bounds
    */
-  void scan_location(const GeoPoint &ref);
+  void Scan(const GeoPoint &ref);
 
   /**
    * Update projection.
    *
    * @return True if projection changed
    */
-  bool update_fast();
+  bool Update();
 
   /**
    * Project a Geodetic point to an integer 2-d representation
@@ -95,7 +95,7 @@ public:
    * @return Projected point
    */
   gcc_pure
-  FlatGeoPoint project(const GeoPoint& tp) const;
+  FlatGeoPoint ProjectInteger(const GeoPoint &tp) const;
 
   /**
    * Projects a GeoBounds to integer 2-d representation bounding box
@@ -105,7 +105,7 @@ public:
    * @return Projected bounds
    */
   gcc_pure
-  FlatBoundingBox project(const GeoBounds& bb) const;
+  FlatBoundingBox Project(const GeoBounds &bb) const;
 
   /**
    * Projects an integer 2-d representation to a Geodetic point
@@ -115,7 +115,7 @@ public:
    * @return Projected point
    */
   gcc_pure
-  GeoPoint unproject(const FlatGeoPoint& tp) const;
+  GeoPoint Unproject(const FlatGeoPoint &tp) const;
 
   /**
    * Projects a integer 2-d representation bounding box to a GeoBounds
@@ -125,7 +125,7 @@ public:
    * @return Projected bounds
    */
   gcc_pure
-  GeoBounds unproject(const FlatBoundingBox& bb) const;
+  GeoBounds Unproject(const FlatBoundingBox &bb) const;
 
   /**
    * Project a Geodetic point to an floating point 2-d representation
@@ -135,7 +135,7 @@ public:
    * @return Projected point
    */
   gcc_pure
-  FlatPoint fproject(const GeoPoint& tp) const;
+  FlatPoint ProjectFloat(const GeoPoint &tp) const;
 
   /**
    * Projects an integer 2-d representation to a Geodetic point
@@ -145,7 +145,7 @@ public:
    * @return Projected point
    */
   gcc_pure
-  GeoPoint funproject(const FlatPoint& tp) const;
+  GeoPoint Unproject(const FlatPoint &tp) const;
 
   /**
    * Calculates the integer flat earth distance from an actual distance
@@ -157,7 +157,7 @@ public:
    * @return Distance in flat earth projected units
    */
   gcc_pure
-  unsigned project_range(const GeoPoint &tp, const fixed range) const;
+  unsigned ProjectRangeInteger(const GeoPoint &tp, const fixed range) const;
 
   /**
    * Calculates the floating point flat earth distance from an actual distance
@@ -169,7 +169,7 @@ public:
    * @return Distance in flat earth projected units
    */
   gcc_pure
-  fixed fproject_range(const GeoPoint &tp, const fixed range) const;
+  fixed ProjectRangeFloat(const GeoPoint &tp, const fixed range) const;
 
   /** 
    * Return center point (projection reference)
@@ -177,7 +177,7 @@ public:
    * @return Center point of task projection
    */
   gcc_pure
-  const GeoPoint& get_center() const {
+  const GeoPoint &GetCenter() const {
     return location_mid;
   }
   
@@ -196,7 +196,7 @@ public:
    * Return approximate grid to flat earth scale in meters
    */
   gcc_pure
-  fixed get_approx_scale() const {
+  fixed GetApproximateScale() const {
     return approx_scale;
   }
 

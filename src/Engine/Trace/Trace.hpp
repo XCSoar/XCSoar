@@ -601,7 +601,7 @@ public:
 
   gcc_pure
   unsigned ProjectRange(const GeoPoint &location, fixed distance) const {
-    return task_projection.project_range(location, distance);
+    return task_projection.ProjectRangeInteger(location, distance);
   }
 };
 

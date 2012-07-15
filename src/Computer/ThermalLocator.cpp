@@ -42,7 +42,7 @@ ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
   GeoPoint p = location + wind_drift * dt;
 
   // convert to flat earth coordinates
-  loc_drift = projection.fproject(p);
+  loc_drift = projection.ProjectFloat(p);
 }
 
 ThermalLocator::ThermalLocator()
@@ -85,8 +85,8 @@ ThermalLocator::Update(const fixed t_0,
   GeoPoint dloc = FindLatitudeLongitude(location_0, wind.bearing, wind.norm);
 
   TaskProjection projection;
-  projection.reset(location_0);
-  projection.update_fast();
+  projection.Reset(location_0);
+  projection.Update();
 
   // drift points 
   Drift(t_0, projection, location_0 - dloc);
@@ -109,7 +109,7 @@ ThermalLocator::Update(const fixed t_0,
   }
   f0 = f0 * (fixed_one/acc) + av;
 
-  therm.estimate_location = projection.funproject(f0);
+  therm.estimate_location = projection.Unproject(f0);
   therm.estimate_valid = true;
 }
 

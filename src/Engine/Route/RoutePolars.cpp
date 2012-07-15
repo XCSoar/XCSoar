@@ -32,16 +32,16 @@ RoutePolars::MSLIntercept(const int index, const AGeoPoint& p,
                            const TaskProjection& proj) const
 {
   const unsigned safe_index = ((unsigned)index) % ROUTEPOLAR_POINTS;
-  const FlatGeoPoint fp = proj.project(p);
+  const FlatGeoPoint fp = proj.ProjectInteger(p);
   const fixed d = p.altitude * polar_glide.GetPoint(safe_index).inv_gradient;
-  const fixed scale = proj.get_approx_scale();
+  const fixed scale = proj.GetApproximateScale();
   const int steps = int(d / scale) + 1;
   int dx, dy;
   RoutePolar::IndexToDXDY(safe_index, dx, dy);
   dx = (dx * steps) >> 7;
   dy = (dy * steps) >> 7;
   const FlatGeoPoint dp(fp.longitude + dx, fp.latitude + dy);
-  return proj.unproject(dp);
+  return proj.Unproject(dp);
 }
 
 void
@@ -115,8 +115,8 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
 
   GeoPoint int_x;
   short int_h;
-  GeoPoint start = proj.unproject(e.first);
-  GeoPoint dest = proj.unproject(e.second);
+  GeoPoint start = proj.Unproject(e.first);
+  GeoPoint dest = proj.Unproject(e.second);
 
   assert(map);
 
@@ -126,7 +126,7 @@ RoutePolars::CheckClearance(const RouteLink &e, const RasterMap* map,
                               int_x, int_h))
     return true;
 
-  inp = RoutePoint(proj.project(int_x), RoughAltitude(int_h));
+  inp = RoutePoint(proj.ProjectInteger(int_x), RoughAltitude(int_h));
   return false;
 }
 
@@ -221,8 +221,9 @@ RoutePolars::Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
   if (!map || !map->isMapLoaded())
     return false;
 
-  RouteLink e(RoutePoint(proj.project(destination), destination.altitude),
-              RoutePoint(proj.project(origin), origin.altitude), proj);
+  RouteLink e(RoutePoint(proj.ProjectInteger(destination),
+                         destination.altitude),
+              RoutePoint(proj.ProjectInteger(origin), origin.altitude), proj);
   if (!positive(e.d))
     return false;
 
@@ -252,5 +253,5 @@ RoutePolars::ReachIntercept(const int index, const AGeoPoint& origin,
   const GeoPoint dest = MSLIntercept(index, m_origin, proj);
   const GeoPoint p = valid ?
     map->Intersection(m_origin, (short)altitude, (short)altitude, dest) : dest;
-  return proj.project(p);
+  return proj.ProjectInteger(p);
 }

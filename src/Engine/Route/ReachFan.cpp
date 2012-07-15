@@ -39,8 +39,8 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
   Reset();
 
   // initialise task_proj
-  task_proj.reset(origin);
-  task_proj.update_fast();
+  task_proj.Reset(origin);
+  task_proj.Update();
 
   const short h = terrain
     ? terrain->GetHeight(origin)
@@ -48,7 +48,7 @@ ReachFan::Solve(const AGeoPoint origin, const RoutePolars &rpolars,
   const RoughAltitude h2(RasterBuffer::IsSpecial(h) ? 0 : h);
 
   ReachFanParms parms(rpolars, task_proj, (int)terrain_base, terrain);
-  const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
+  const AFlatGeoPoint ao(task_proj.ProjectInteger(origin), origin.altitude);
 
   if (!RasterBuffer::IsInvalid(h) &&
       (origin.altitude <= h2 + rpolars.GetSafetyHeight())) {
@@ -84,7 +84,7 @@ ReachFan::IsInside(const GeoPoint origin, const bool turning) const
   if (root.IsEmpty())
     return false;
 
-  const FlatGeoPoint p = task_proj.project(origin);
+  const FlatGeoPoint p = task_proj.ProjectInteger(origin);
   return root.IsInsideTree(p, turning);
 }
 
@@ -99,7 +99,7 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
   if (root.IsEmpty())
     return true;
 
-  const FlatGeoPoint d(task_proj.project(dest));
+  const FlatGeoPoint d(task_proj.ProjectInteger(dest));
   const ReachFanParms parms(rpolars, task_proj, (int)terrain_base);
 
   // first calculate direct (terrain-independent height)
@@ -125,6 +125,6 @@ ReachFan::AcceptInRange(const GeoBounds &bounds,
   if (root.IsEmpty())
     return;
 
-  const FlatBoundingBox bb = task_proj.project(bounds);
+  const FlatBoundingBox bb = task_proj.Project(bounds);
   root.AcceptInRange(bb, task_proj, visitor);
 }

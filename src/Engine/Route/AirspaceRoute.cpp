@@ -55,7 +55,7 @@ public:
     min_distance(-fixed_one),
     proj(_proj),
     rpolar(_rpolar),
-    origin(proj.unproject(_e.first)),
+    origin(proj.Unproject(_e.first)),
     nearest((const AbstractAirspace *)NULL, _e.first)
     {
     }
@@ -70,9 +70,11 @@ public:
 
     GeoPoint point = intersections[0].first;
 
-    RouteLink l = rpolar.GenerateIntermediate(link.first,
-                                               RoutePoint(proj.project(point), link.second.altitude),
-                                               proj);
+    RouteLink l =
+      rpolar.GenerateIntermediate(link.first,
+                                  RoutePoint(proj.ProjectInteger(point),
+                                             link.second.altitude),
+                                  proj);
 
     if (l.second.altitude < RoughAltitude(as.GetBase().altitude) ||
         l.second.altitude > RoughAltitude(as.GetTop().altitude))
@@ -117,8 +119,8 @@ protected:
 AirspaceRoute::RouteAirspaceIntersection
 AirspaceRoute::FirstIntersecting(const RouteLink& e) const
 {
-  const GeoPoint origin(task_projection.unproject(e.first));
-  const GeoPoint dest(task_projection.unproject(e.second));
+  const GeoPoint origin(task_projection.Unproject(e.first));
+  const GeoPoint dest(task_projection.Unproject(e.second));
   AIV visitor(e, task_projection, rpolars_route);
   m_airspaces.VisitIntersecting(origin, dest, visitor);
   const AIV::AIVResult res (visitor.get_nearest());
@@ -164,7 +166,7 @@ AirspaceRoute::FindClearingPair(const SearchPointVector& spv,
         continue;
       }
     } else {
-      AGeoPoint gborder(task_projection.unproject(pborder), dest.altitude); // @todo alt!
+      AGeoPoint gborder(task_projection.Unproject(pborder), dest.altitude); // @todo alt!
       if (!check_others || !InsideOthers(gborder)) {
         if (j==0) {
           p.first = pborder;
@@ -329,8 +331,8 @@ AirspaceRoute::OnSolve(const AGeoPoint& origin,
                         const AGeoPoint& destination)
 {
   if (m_airspaces.empty()) {
-    task_projection.reset(origin);
-    task_projection.update_fast();
+    task_projection.Reset(origin);
+    task_projection.Update();
   } else {
     task_projection = m_airspaces.GetProjection();
   }

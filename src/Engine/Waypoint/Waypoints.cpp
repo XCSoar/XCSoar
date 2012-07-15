@@ -119,7 +119,7 @@ Waypoints::Optimise()
     /* empty or already optimised */
     return;
 
-  task_projection.update_fast();
+  task_projection.Update();
 
   for (auto it = waypoint_tree.begin(); it != waypoint_tree.end(); ++it)
     it->Project(task_projection);
@@ -140,11 +140,11 @@ Waypoints::Append(const Waypoint &_wp)
       waypoint_tree.ClearBounds();
     }
   } else if (IsEmpty())
-    task_projection.reset(wp.location);
+    task_projection.Reset(wp.location);
 
   wp.flags.watched = (wp.file_num == 3);
 
-  task_projection.scan_location(wp.location);
+  task_projection.Scan(wp.location);
   wp.id = next_id++;
 
   const Waypoint &new_wp = waypoint_tree.Add(wp);
@@ -163,7 +163,7 @@ Waypoints::GetNearest(const GeoPoint &loc, fixed range) const
 
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
-  const unsigned mrange = task_projection.project_range(loc, range);
+  const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
   const auto found = waypoint_tree.FindNearest(bb_target, mrange);
 
 #ifdef INSTRUMENT_TASK
@@ -197,7 +197,7 @@ Waypoints::GetNearestIf(const GeoPoint &loc, fixed range,
 
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
-  const unsigned mrange = task_projection.project_range(loc, range);
+  const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
   const auto found = waypoint_tree.FindNearestIf(bb_target, mrange, predicate);
 
 #ifdef INSTRUMENT_TASK
@@ -278,7 +278,7 @@ Waypoints::VisitWithinRange(const GeoPoint &loc, const fixed range,
 
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
-  const unsigned mrange = task_projection.project_range(loc, range);
+  const unsigned mrange = task_projection.ProjectRangeInteger(loc, range);
 
   WaypointEnvelopeVisitor wve(&visitor);
 
