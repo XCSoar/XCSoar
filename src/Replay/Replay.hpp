@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef REPLAY_HPP
 #define REPLAY_HPP
 
-#include "AbstractReplay.hpp"
-
-#include <memory>
+#include "Math/fixed.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -39,7 +37,7 @@ class Replay
 {
   fixed time_scale;
 
-  std::unique_ptr<AbstractReplay> replay;
+  AbstractReplay *replay;
 
   Logger *logger;
   ProtectedTaskManager &task_manager;
@@ -51,6 +49,10 @@ public:
     :time_scale(fixed_one),
      logger(_logger), task_manager(_task_manager) {
     path[0] = _T('\0');
+  }
+
+  ~Replay() {
+    Stop();
   }
 
   bool Update();

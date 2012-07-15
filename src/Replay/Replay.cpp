@@ -34,7 +34,8 @@
 void
 Replay::Stop()
 {
-  replay.reset();
+  delete replay;
+  replay = NULL;
 }
 
 bool
@@ -44,12 +45,13 @@ Replay::Start(const TCHAR *_path)
 
   /* make sure the old AbstractReplay instance has cleaned up before
      creating a new one */
-  replay.reset();
+  delete replay;
+  replay = NULL;
 
   _tcscpy(path, _path);
 
   if (StringIsEmpty(path)) {
-    replay.reset(new DemoReplayGlue(task_manager));
+    replay = new DemoReplayGlue(task_manager);
   } else if (MatchesExtension(path, _T(".igc"))) {
     auto reader = new FileLineReaderA(path);
     if (reader->error()) {
@@ -57,8 +59,7 @@ Replay::Start(const TCHAR *_path)
       return false;
     }
 
-    auto r = new IgcReplayGlue(reader, logger);
-    replay.reset(r);
+    replay = new IgcReplayGlue(reader, logger);
   } else {
     auto reader = new FileLineReaderA(path);
     if (reader->error()) {
@@ -66,8 +67,7 @@ Replay::Start(const TCHAR *_path)
       return false;
     }
 
-    auto r = new NmeaReplayGlue(reader);
-    replay.reset(r);
+    replay = new NmeaReplayGlue(reader);
   }
 
   return true;
@@ -76,7 +76,7 @@ Replay::Start(const TCHAR *_path)
 bool
 Replay::Update()
 {
-  if (replay)
+  if (replay != NULL)
     replay->Update(time_scale);
 
   return false;
