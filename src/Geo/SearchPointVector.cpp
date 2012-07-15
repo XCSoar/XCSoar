@@ -180,10 +180,7 @@ SearchPointVector::CalculateBoundingbox() const
 GeoBounds
 SearchPointVector::CalculateGeoBounds() const
 {
-  if (empty())
-    return GeoBounds(GeoPoint(Angle::Zero(), Angle::Zero()));
-
-  GeoBounds bb((*this)[0].GetLocation());
+  GeoBounds bb = GeoBounds::Invalid();
   for (auto v = begin(); v != end(); ++v)
     bb.Extend(v->GetLocation());
 

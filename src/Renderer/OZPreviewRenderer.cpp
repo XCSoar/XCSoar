@@ -49,10 +49,9 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
   } else {
     OZBoundary boundary = oz.GetBoundary();
 
-    auto it = boundary.begin();
-    GeoBounds bounds(*it);
-    for (auto it_end = boundary.end(); it != it_end; ++it)
-      bounds.Extend(*it);
+    GeoBounds bounds = GeoBounds::Invalid();
+    for (auto i = boundary.begin(), end = boundary.end(); i != end; ++i)
+      bounds.Extend(*i);
 
     center = bounds.GetCenter();
 

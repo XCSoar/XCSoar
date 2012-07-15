@@ -26,19 +26,30 @@ Copyright_License {
 void
 GeoBounds::Extend(const GeoPoint pt)
 {
-  if (pt.longitude < west)
-    west = pt.longitude;
-  if (pt.latitude > north)
-    north = pt.latitude;
-  if (pt.longitude > east)
-    east = pt.longitude;
-  if (pt.latitude < south)
-    south = pt.latitude;
+  if (!pt.IsValid())
+    return;
+
+  if (IsValid()) {
+    if (pt.longitude < west)
+      west = pt.longitude;
+    if (pt.latitude > north)
+      north = pt.latitude;
+    if (pt.longitude > east)
+      east = pt.longitude;
+    if (pt.latitude < south)
+      south = pt.latitude;
+  } else {
+    west = east = pt.longitude;
+    north = south = pt.latitude;
+  }
 }
 
 GeoPoint
 GeoBounds::GetCenter() const
 {
+  if (!IsValid())
+    return GeoPoint::Invalid();
+
   return GeoPoint(west.Fraction(east, fixed_half),
                   south.Fraction(north, fixed_half));
 }
@@ -46,6 +57,9 @@ GeoBounds::GetCenter() const
 GeoBounds
 GeoBounds::Scale(fixed factor) const
 {
+  if (!IsValid())
+    return Invalid();
+
   Angle diff_lat_half =
     (north - south).AsBearing() / fixed_two * (factor - fixed_one);
   Angle diff_lon_half =
