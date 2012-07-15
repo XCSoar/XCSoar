@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef DEMO_REPLAY_HPP
 #define DEMO_REPLAY_HPP
 
-#include "AbstractReplay.hpp"
 #include "TaskAutoPilot.hpp"
 #include "AircraftSim.hpp"
 
-class DemoReplay: public AbstractReplay
+class DemoReplay
 {
 public:
   AutopilotParameters parms;
@@ -36,8 +35,6 @@ public:
   AircraftSim aircraft;
 
   DemoReplay();
-
-  virtual bool Update(fixed time_scale) gcc_override = 0;
 
 protected:
   void Start(const TaskAccessor& task, const GeoPoint& default_location);

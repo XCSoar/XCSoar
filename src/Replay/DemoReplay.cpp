@@ -23,7 +23,6 @@ Copyright_License {
 #include "DemoReplay.hpp"
 
 DemoReplay::DemoReplay():
-  AbstractReplay(),
   parms(),
   autopilot(parms),
   aircraft()

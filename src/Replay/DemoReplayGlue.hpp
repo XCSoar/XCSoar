@@ -24,13 +24,14 @@ Copyright_License {
 #ifndef DEMO_REPLAY_GLUE_HPP
 #define DEMO_REPLAY_GLUE_HPP
 
+#include "AbstractReplay.hpp"
 #include "Replay/DemoReplay.hpp"
 #include "PeriodClock.hpp"
 
 class ProtectedTaskManager;
 
-class DemoReplayGlue:
-  public DemoReplay
+class DemoReplayGlue
+  : public AbstractReplay, private DemoReplay
 {
   PeriodClock clock;
   ProtectedTaskManager* task_manager;
