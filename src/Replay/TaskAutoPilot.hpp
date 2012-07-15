@@ -120,9 +120,13 @@ public:
 private:
   bool DoAdvance(TaskAccessor& task);
   void AdvanceIfRequired(TaskAccessor& task);
-  bool HasFinished(TaskAccessor& task);
-  void GetAWP(TaskAccessor& task);
 
+  gcc_pure
+  bool HasFinished(const TaskAccessor &task) const;
+
+  void GetAWP(const TaskAccessor &task);
+
+  gcc_pure
   bool HasTarget(const TaskAccessor& task) const;
 
   virtual GeoPoint GetStartLocation(const TaskAccessor& task,

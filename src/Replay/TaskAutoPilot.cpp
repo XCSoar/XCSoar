@@ -286,7 +286,7 @@ TaskAutoPilot::DoAdvance(TaskAccessor& task)
 }
 
 bool
-TaskAutoPilot::HasFinished(TaskAccessor& task)
+TaskAutoPilot::HasFinished(const TaskAccessor &task) const
 {
   if (task.IsFinished())
     return true;
@@ -323,7 +323,7 @@ TaskAutoPilot::AdvanceIfRequired(TaskAccessor& task)
 }
 
 void
-TaskAutoPilot::GetAWP(TaskAccessor& task)
+TaskAutoPilot::GetAWP(const TaskAccessor &task)
 {
   w[0] = task.GetRandomOZPoint(awp, parms.target_noise);
 }
