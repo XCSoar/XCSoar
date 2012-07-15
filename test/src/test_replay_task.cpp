@@ -9,6 +9,7 @@
 #include "IO/FileLineReader.hpp"
 #include "Task/Deserialiser.hpp"
 #include "XML/DataNodeXML.hpp"
+#include "NMEA/Info.hpp"
 
 #include <fstream>
 
@@ -112,7 +113,10 @@ test_replay()
   bool do_print = verbose;
   unsigned print_counter=0;
 
-  while (sim.Update(fixed_one) && !sim.started) {
+  NMEAInfo basic;
+  basic.Reset();
+
+  while (sim.Update(basic, fixed_one) && !sim.started) {
   }
   state_last = sim.state;
 
@@ -130,7 +134,7 @@ test_replay()
   FlyingState flying_state;
   flying_state.Reset();
 
-  while (sim.Update(fixed_one)) {
+  while (sim.Update(basic, fixed_one)) {
     if (sim.state.time>time_last) {
 
       n_samples++;

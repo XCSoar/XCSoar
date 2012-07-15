@@ -26,12 +26,14 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+struct NMEAInfo;
+
 class AbstractReplay 
 {
 public:
   virtual ~AbstractReplay() {}
 
-  virtual bool Update(fixed time_scale) = 0;
+  virtual bool Update(NMEAInfo &data, fixed time_scale) = 0;
 };
 
 #endif

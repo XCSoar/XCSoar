@@ -112,8 +112,6 @@ public:
   }
 
   void SetStartupLocation(const GeoPoint &loc, const fixed alt);
-  void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,
-                   const fixed alt, const fixed baroalt, const fixed t);
   void ProcessSimulation();
   void StopReplay();
   void SetTrack(Angle val);

@@ -23,11 +23,6 @@
 
 #include "Replay/IgcReplayGlue.hpp"
 #include "Logger/Logger.hpp"
-#include "Language/Language.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
-
-#include <algorithm>
 
 IgcReplayGlue::IgcReplayGlue(NLineReader *_reader, Logger *_logger)
   :IgcReplay(_reader), logger(_logger)
@@ -54,12 +49,4 @@ IgcReplayGlue::UpdateTime(fixed time_scale)
   clock.Update();
 
   return true;
-}
-
-void
-IgcReplayGlue::OnAdvance(const GeoPoint &loc, const fixed speed,
-                          const Angle bearing, const fixed alt,
-                          const fixed baroalt, const fixed t)
-{
-  device_blackboard->SetLocation(loc, speed, bearing, alt, baroalt, t);
 }

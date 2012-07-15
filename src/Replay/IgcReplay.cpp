@@ -25,6 +25,7 @@
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCFix.hpp"
 #include "IO/LineReader.hpp"
+#include "NMEA/Info.hpp"
 
 IgcReplay::IgcReplay(NLineReader *_reader)
   :AbstractReplay(),
@@ -70,7 +71,7 @@ IgcReplay::UpdateTime(fixed time_scale)
 }
 
 bool
-IgcReplay::Update(fixed time_scale)
+IgcReplay::Update(NMEAInfo &data, fixed time_scale)
 {
   if (positive(t_simulation) && !UpdateTime(time_scale))
     return true;
@@ -96,7 +97,23 @@ IgcReplay::Update(fixed time_scale)
 
   const CatmullRomInterpolator::Record r = cli.Interpolate(t_simulation);
   const GeoVector v = cli.GetVector(t_simulation);
-  OnAdvance(r.location, v.distance, v.bearing, r.gps_altitude, r.baro_altitude, t_simulation);
+
+  data.clock = t_simulation;
+  data.alive.Update(data.clock);
+  data.ProvideTime(t_simulation);
+  data.location = r.location;
+  data.location_available.Update(data.clock);
+  data.ground_speed = v.distance;
+  data.ground_speed_available.Update(data.clock);
+  data.track = v.bearing;
+  data.track_available.Update(data.clock);
+  data.gps_altitude = r.gps_altitude;
+  data.gps_altitude_available.Update(data.clock);
+  data.ProvidePressureAltitude(r.baro_altitude);
+  data.ProvideBaroAltitudeTrue(r.baro_altitude);
+  data.gps.real = false;
+  data.gps.replay = true;
+  data.gps.simulator = false;
 
   return true;
 }

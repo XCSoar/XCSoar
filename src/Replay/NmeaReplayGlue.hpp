@@ -37,7 +37,6 @@ public:
 
 protected:
   virtual bool UpdateTime();
-  virtual void OnSentence(const char *line);
 };
 
 #endif

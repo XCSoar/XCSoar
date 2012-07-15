@@ -30,6 +30,7 @@
 #include "IO/FileLineReader.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
+#include "Interface.hpp"
 
 #include <assert.h>
 
@@ -83,8 +84,17 @@ Replay::Start(const TCHAR *_path)
 bool
 Replay::Update()
 {
-  if (replay != NULL)
-    replay->Update(time_scale);
+  if (replay != NULL) {
+    ScopeLock protect(device_blackboard->mutex);
+
+    NMEAInfo &data = device_blackboard->SetReplayState();
+    const Validity old_alive = data.alive;
+
+    replay->Update(data, time_scale);
+
+    if (data.alive.Modified(old_alive))
+      device_blackboard->ScheduleMerge();
+  }
 
   return false;
 }

@@ -22,23 +22,11 @@
 */
 
 #include "Replay/NmeaReplayGlue.hpp"
-#include "Blackboard/DeviceBlackboard.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 
 NmeaReplayGlue::NmeaReplayGlue(NLineReader *reader)
   :NmeaReplay(reader, CommonInterface::GetSystemSettings().devices[0])
 {
-}
-
-void
-NmeaReplayGlue::OnSentence(const char *line)
-{
-  ScopeLock protect(device_blackboard->mutex);
-  NMEAInfo &data = device_blackboard->SetReplayState();
-
-  if (ParseLine(line, data))
-    device_blackboard->ScheduleMerge();
 }
 
 bool

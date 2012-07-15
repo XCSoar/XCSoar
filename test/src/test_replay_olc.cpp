@@ -172,7 +172,10 @@ test_replay(const Contests olc_type,
   bool do_print = verbose;
   unsigned print_counter=0;
 
-  while (sim.Update(fixed_one) && !sim.started) {
+  MoreData basic;
+  basic.Reset();
+
+  while (sim.Update(basic, fixed_one) && !sim.started) {
   }
   state_last = sim.state;
 
@@ -191,28 +194,17 @@ test_replay(const Contests olc_type,
                                  trace_computer.GetSprint());
   contest_manager.SetHandicap(settings_computer.task.contest_handicap);
 
-  MoreData basic;
-  basic.clock = fixed_one;
-  basic.time_available.Update(basic.clock);
-  basic.location_available.Update(basic.clock);
-  basic.gps_altitude_available.Update(basic.clock);
-  basic.baro_altitude_available.Update(basic.clock);
-
   DerivedInfo calculated;
 
-  while (sim.Update(fixed_one)) {
+  while (sim.Update(basic, fixed_one)) {
     if (sim.state.time>time_last) {
 
       n_samples++;
 
       flying_computer.Compute(glide_polar.GetVTakeoff(),
                               sim.state, flying_state);
-      sim.state.flying = flying_state.flying;
 
-      basic.time = sim.state.time;
-      basic.location = sim.state.location;
-      basic.gps_altitude = basic.baro_altitude = sim.state.altitude;
-      calculated.flight.flying = sim.state.flying;
+      calculated.flight.flying = flying_state.flying;
 
       trace_computer.Update(settings_computer, basic, calculated);
 

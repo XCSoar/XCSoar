@@ -90,55 +90,6 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 }
 
 /**
- * Sets the location, altitude and other basic parameters
- *
- * Used by the IgcReplay
- * @param loc New location
- * @param speed New speed
- * @param bearing New bearing
- * @param alt New altitude
- * @param baroalt New barometric altitude
- * @param t New time
- * @see IgcReplay::UpdateInternal()
- */
-void
-DeviceBlackboard::SetLocation(const GeoPoint &loc,
-                              const fixed speed, const Angle bearing,
-                              const fixed alt, const fixed baroalt,
-                              const fixed t)
-{
-  ScopeLock protect(mutex);
-  NMEAInfo &basic = SetReplayState();
-
-  basic.clock = t;
-  basic.alive.Update(basic.clock);
-  basic.ProvideTime(t);
-  basic.gps.satellites_used_available.Clear();
-  basic.acceleration.Reset();
-  basic.location = loc;
-  basic.location_available.Update(t);
-  basic.ground_speed = speed;
-  basic.ground_speed_available.Update(t);
-  basic.airspeed_available.Clear(); // Clear airspeed as it is not given by any value.
-  basic.airspeed_real = false;
-  basic.track = bearing;
-  basic.track_available.Update(t);
-  basic.gps_altitude = alt;
-  basic.gps_altitude_available.Update(t);
-  basic.ProvidePressureAltitude(baroalt);
-  basic.ProvideBaroAltitudeTrue(baroalt);
-  basic.noncomp_vario_available.Clear();
-  basic.total_energy_vario_available.Clear();
-  basic.netto_vario_available.Clear();
-  basic.external_wind_available.Clear();
-  basic.gps.real = false;
-  basic.gps.replay = true;
-  basic.gps.simulator = false;
-
-  ScheduleMerge();
-};
-
-/**
  * Stops the replay
  */
 void DeviceBlackboard::StopReplay() {

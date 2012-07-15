@@ -271,6 +271,10 @@ TEST_ROUTE_DEPENDS = JASPER IO ZZIP OS ROUTE AIRSPACE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Attitude.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \

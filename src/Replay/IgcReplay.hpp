@@ -46,14 +46,10 @@ public:
   IgcReplay(NLineReader *reader);
   virtual ~IgcReplay();
 
-  virtual bool Update(fixed time_scale) gcc_override;
+  virtual bool Update(NMEAInfo &data, fixed time_scale) gcc_override;
 
 protected:
   virtual bool UpdateTime(fixed time_scale);
-
-  virtual void OnAdvance(const GeoPoint &loc,
-                         const fixed speed, const Angle bearing,
-                         const fixed alt, const fixed baroalt, const fixed t) = 0;
 
   bool ScanBuffer(const char *buffer, IGCFix &fix);
 

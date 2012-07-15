@@ -70,13 +70,13 @@ NmeaReplay::ParseLine(const char *line, NMEAInfo &data)
 }
 
 bool
-NmeaReplay::ReadUntilRMC(bool ignore)
+NmeaReplay::ReadUntilRMC(NMEAInfo &data, bool ignore)
 {
   char *buffer;
 
   while ((buffer = reader->read()) != NULL) {
     if (!ignore)
-      OnSentence(buffer);
+      ParseLine(buffer, data);
 
     if (strstr(buffer, "$GPRMC") == buffer)
       return true;
@@ -86,13 +86,13 @@ NmeaReplay::ReadUntilRMC(bool ignore)
 }
 
 bool
-NmeaReplay::Update(fixed time_scale)
+NmeaReplay::Update(NMEAInfo &data, fixed time_scale)
 {
   if (!UpdateTime())
     return true;
 
   for (fixed i = fixed_one; i <= time_scale; i += fixed_one) {
-    if (!ReadUntilRMC(i != time_scale))
+if (!ReadUntilRMC(data, i != time_scale))
       return false;
   }
 
