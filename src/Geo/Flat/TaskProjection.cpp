@@ -55,6 +55,9 @@ TaskProjection::Scan(const GeoPoint &ref)
 {
   assert(initialised);
 
+  if (!ref.IsValid())
+    return;
+
   location_min.longitude = min(ref.longitude, location_min.longitude);
   location_max.longitude = max(ref.longitude, location_max.longitude);
   location_min.latitude = min(ref.latitude, location_min.latitude);
