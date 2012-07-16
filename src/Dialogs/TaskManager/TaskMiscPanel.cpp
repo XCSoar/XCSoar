@@ -33,7 +33,7 @@ TaskMiscPanel::TaskMiscPanel(TabBarControl &_tab_bar,
   Add(actions_panel);
 
   TaskListPanel *list_panel =
-    new TaskListPanel(*this, _tab_bar, _active_task, _task_modified);
+    new TaskListPanel(_tab_bar, _active_task, _task_modified);
   Add(list_panel);
 
   actions_panel->SetListPanel(list_panel);

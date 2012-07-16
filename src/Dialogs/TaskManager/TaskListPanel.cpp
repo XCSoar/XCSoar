@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"
@@ -161,7 +162,7 @@ void
 TaskListPanel::DirtyList()
 {
   if (task_store != NULL) {
-    task_store->Scan();
+    task_store->Scan(more);
     RefreshView();
   }
 }
@@ -175,7 +176,7 @@ TaskListPanel::SaveTask()
     if (!OrderedTaskSave(UIGlobals::GetMainWindow(), **active_task))
       return;
 
-    task_store->Scan();
+    task_store->Scan(more);
     RefreshView();
   } else {
     ShowMessageBox(getTaskValidationErrors(
@@ -241,7 +242,7 @@ TaskListPanel::DeleteTask()
 
   File::Delete(task_store->GetPath(cursor_index));
 
-  task_store->Scan();
+  task_store->Scan(more);
   RefreshView();
 }
 
@@ -291,25 +292,27 @@ TaskListPanel::RenameTask()
 
   File::Rename(task_store->GetPath(cursor_index), newpath);
 
-  task_store->Scan();
+  task_store->Scan(more);
   RefreshView();
 }
 
 void
-TaskListPanel::OnManageClicked()
+TaskListPanel::OnMoreClicked()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::TaskViewRestore(wTaskView);
+  more = !more;
 
-  parent.ReClick();
+  more_button->SetCaption(more ? _("Less") : _("More"));
+
+  task_store->Scan(more);
+  RefreshView();
 }
 
 class WndButton;
 
 static void
-OnManageClicked(gcc_unused WndButton &Sender)
+OnMoreClicked(gcc_unused WndButton &Sender)
 {
-  instance->OnManageClicked();
+  instance->OnMoreClicked();
 }
 
 static void
@@ -331,7 +334,7 @@ OnRenameClicked(gcc_unused WndButton &Sender)
 }
 
 static gcc_constexpr_data CallBackTableEntry task_list_callbacks[] = {
-  DeclareCallBackEntry(OnManageClicked),
+  DeclareCallBackEntry(OnMoreClicked),
   DeclareCallBackEntry(OnLoadClicked),
   DeclareCallBackEntry(OnDeleteClicked),
   DeclareCallBackEntry(OnRenameClicked),
@@ -354,6 +357,9 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wTasks = (ListControl*)form.FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
   wTasks->SetHandler(this);
+
+  more_button = (WndButton *)form.FindByName(_T("more"));
+  assert(more_button != NULL);
 }
 
 void
@@ -369,7 +375,7 @@ TaskListPanel::Show(const PixelRect &rc)
   if (!lazy_loaded) {
     lazy_loaded = true;
     // Scan XCSoarData for available tasks
-    task_store->Scan();
+    task_store->Scan(more);
   }
 
   if (wTaskView != NULL) {

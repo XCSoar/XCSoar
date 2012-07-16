@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/List.hpp"
 
 class TabBarControl;
+class WndButton;
 class WndOwnerDrawFrame;
 class TabbedControl;
 class Canvas;
@@ -35,8 +36,6 @@ class OrderedTask;
 class TaskStore;
 
 class TaskListPanel : public XMLWidget, private ListControl::Handler {
-  Widget &parent;
-
   TabBarControl &tab_bar;
 
   OrderedTask **active_task;
@@ -46,14 +45,21 @@ class TaskListPanel : public XMLWidget, private ListControl::Handler {
 
   bool lazy_loaded; // if store has been loaded first time tab displayed
 
+  /**
+   * Showing all task files?  (including *.igc, *.cup)
+   */
+  bool more;
+
   ListControl *wTasks;
+  WndButton *more_button;
   WndOwnerDrawFrame* wTaskView;
 
 public:
-  TaskListPanel(Widget &_parent, TabBarControl &_tab_bar,
+  TaskListPanel(TabBarControl &_tab_bar,
                 OrderedTask **_active_task, bool *_task_modified)
-    :parent(_parent), tab_bar(_tab_bar),
+    :tab_bar(_tab_bar),
      active_task(_active_task), task_modified(_task_modified),
+     more(false),
      wTaskView(NULL) {}
 
   void SetTaskView(WndOwnerDrawFrame *_task_view) {
@@ -73,7 +79,7 @@ public:
 
   void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
 
-  void OnManageClicked();
+  void OnMoreClicked();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Unprepare();
