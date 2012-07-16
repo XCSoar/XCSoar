@@ -85,8 +85,11 @@ private:
 public:
   /**
    * Scan the XCSoarData folder for .tsk files and add them to the TaskStore
+   *
+   * @param extra scan all "extra" (non-XCSoar) task files, e.g. *.cup
+   * and task declarations from *.igc
    */
-  void Scan();
+  void Scan(bool extra=false);
 
   /**
    * Clear all the tasks from the TaskStore

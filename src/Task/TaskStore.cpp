@@ -28,7 +28,6 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
-#include "Asset.hpp"
 
 #include <cstdio>
 #include <algorithm>
@@ -81,18 +80,18 @@ TaskStore::Clear()
 }
 
 void
-TaskStore::Scan()
+TaskStore::Scan(bool extra)
 {
   Clear();
 
   // scan files
   TaskFileVisitor tfv(store);
   VisitDataFiles(_T("*.tsk"), tfv);
-  VisitDataFiles(_T("*.cup"), tfv);
 
-  // Disable IGC file scanning on old hardware with low IO speeds
-  if (!IsAncientHardware())
+  if (extra) {
+    VisitDataFiles(_T("*.cup"), tfv);
     VisitDataFiles(_T("*.igc"), tfv);
+  }
 
   std::sort(store.begin(), store.end());
 }
