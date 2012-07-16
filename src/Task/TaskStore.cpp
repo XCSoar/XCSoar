@@ -25,7 +25,6 @@ Copyright_License {
 #include "Task/TaskFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
-#include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
 #include "Language/Language.hpp"
@@ -44,23 +43,19 @@ public:
   TaskFileVisitor(TaskStore::ItemVector &_store):
     store(_store) {}
 
-  void Visit(const TCHAR *path, const TCHAR *filename) {
+  void Visit(const TCHAR *path, const TCHAR *base_name) {
     // Create a TaskFile instance to determine how many
     // tasks are inside of this task file
     std::unique_ptr<TaskFile> task_file(TaskFile::Create(path));
     if (!task_file)
       return;
 
-    // Get base name of the task file
-    const TCHAR* base_name = BaseName(path);
-
     // Count the tasks in the task file
     unsigned count = task_file->Count();
     // For each task in the task file
     for (unsigned i = 0; i < count; i++) {
       // Copy base name of the file into task name
-      StaticString<256> name;
-      name = (base_name != NULL) ? base_name : path;
+      StaticString<256> name(base_name);
 
       // If the task file holds more than one task
       const TCHAR *saved_name = task_file->GetName(i);
