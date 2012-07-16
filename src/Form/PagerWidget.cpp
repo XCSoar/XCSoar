@@ -274,13 +274,7 @@ PagerWidget::Save(bool &changed, bool &require_restart)
 bool
 PagerWidget::Click()
 {
-  assert(initialised);
-  assert(prepared);
-  assert(visible);
-  assert(!children.empty());
-  assert(children[current].prepared);
-
-  return children[current].widget->Click();
+  return children.empty() || children[current].widget->Click();
 }
 
 void
