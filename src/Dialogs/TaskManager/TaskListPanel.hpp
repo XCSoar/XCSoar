@@ -27,7 +27,6 @@ Copyright_License {
 #include "Form/XMLWidget.hpp"
 #include "Form/List.hpp"
 
-class WndForm;
 class TabBarControl;
 class WndOwnerDrawFrame;
 class TabbedControl;
@@ -38,7 +37,6 @@ class TaskStore;
 class TaskListPanel : public XMLWidget, private ListControl::Handler {
   Widget &parent;
 
-  WndForm &wf;
   TabBarControl &tab_bar;
 
   OrderedTask **active_task;
@@ -52,9 +50,9 @@ class TaskListPanel : public XMLWidget, private ListControl::Handler {
   WndOwnerDrawFrame* wTaskView;
 
 public:
-  TaskListPanel(Widget &_parent, WndForm &_wf, TabBarControl &_tab_bar,
+  TaskListPanel(Widget &_parent, TabBarControl &_tab_bar,
                 OrderedTask **_active_task, bool *_task_modified)
-    :parent(_parent), wf(_wf), tab_bar(_tab_bar),
+    :parent(_parent), tab_bar(_tab_bar),
      active_task(_active_task), task_modified(_task_modified),
      wTaskView(NULL) {}
 

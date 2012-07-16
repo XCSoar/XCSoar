@@ -26,14 +26,13 @@ Copyright_License {
 
 #include "Form/PagerWidget.hpp"
 
-class WndForm;
 class TabBarControl;
 class WndOwnerDrawFrame;
 class OrderedTask;
 
 class TaskMiscPanel : public PagerWidget {
 public:
-  TaskMiscPanel(WndForm &_wf, TabBarControl &_tab_bar,
+  TaskMiscPanel(TabBarControl &_tab_bar,
                 OrderedTask **_active_task, bool *_task_modified);
 
   void SetTaskView(WndOwnerDrawFrame *_task_view);

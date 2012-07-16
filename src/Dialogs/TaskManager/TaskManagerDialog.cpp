@@ -258,7 +258,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                                            &active_task, &task_modified);
   wEdit->SetTaskView(task_view);
 
-  TaskMiscPanel *list_tab = new TaskMiscPanel(*wf, *wTabBar,
+  TaskMiscPanel *list_tab = new TaskMiscPanel(*wTabBar,
                                               &active_task, &task_modified);
   list_tab->SetTaskView(task_view);
 

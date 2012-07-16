@@ -29,7 +29,6 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
-#include "Form/Form.hpp"
 #include "Form/Draw.hpp"
 #include "Form/TabBar.hpp"
 #include "Components.hpp"
@@ -52,7 +51,7 @@ TaskActionsPanel::SaveTask()
   (*active_task)->GetFactory().CheckAddFinish();
 
   if ((*active_task)->CheckTask()) {
-    if (!OrderedTaskSave(*(SingleWindow *)wf.GetRootOwner(), **active_task))
+    if (!OrderedTaskSave(UIGlobals::GetMainWindow(), **active_task))
       return;
 
     if (list_panel != NULL)

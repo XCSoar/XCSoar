@@ -25,15 +25,15 @@ Copyright_License {
 #include "TaskActionsPanel.hpp"
 #include "TaskListPanel.hpp"
 
-TaskMiscPanel::TaskMiscPanel(WndForm &_wf, TabBarControl &_tab_bar,
+TaskMiscPanel::TaskMiscPanel(TabBarControl &_tab_bar,
                              OrderedTask **_active_task, bool *_task_modified)
 {
   TaskActionsPanel *actions_panel =
-    new TaskActionsPanel(*this, _wf, _tab_bar, _active_task, _task_modified);
+    new TaskActionsPanel(*this, _tab_bar, _active_task, _task_modified);
   Add(actions_panel);
 
   TaskListPanel *list_panel =
-    new TaskListPanel(*this, _wf, _tab_bar, _active_task, _task_modified);
+    new TaskListPanel(*this, _tab_bar, _active_task, _task_modified);
   Add(list_panel);
 
   actions_panel->SetListPanel(list_panel);
