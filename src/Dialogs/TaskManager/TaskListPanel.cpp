@@ -135,8 +135,8 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 void
-TaskListPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                                   unsigned DrawListIndex)
+TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned DrawListIndex)
 {
   assert(DrawListIndex <= task_store->Size());
 
@@ -144,12 +144,6 @@ TaskListPanel::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   canvas.text(rc.left + Layout::FastScale(2),
               rc.top + Layout::FastScale(2), name);
-}
-
-static void
-OnTaskPaintListItem(Canvas &canvas, const PixelRect rc, unsigned DrawListIndex)
-{
-  instance->OnTaskPaintListItem(canvas, rc, DrawListIndex);
 }
 
 void
@@ -387,18 +381,6 @@ OnRenameClicked(gcc_unused WndButton &Sender)
   instance->RenameTask();
 }
 
-static void
-OnTaskListEnter(gcc_unused unsigned ItemIndex)
-{
-  instance->LoadTask();
-}
-
-static void
-OnTaskCursorCallback(gcc_unused unsigned i)
-{
-  instance->RefreshView();
-}
-
 void
 TaskListPanel::OnDeclareClicked()
 {
@@ -470,11 +452,7 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   // Save important control pointers
   wTasks = (ListControl*)form.FindByName(_T("frmTasks"));
   assert(wTasks != NULL);
-
-  // Set callbacks
-  wTasks->SetActivateCallback(OnTaskListEnter);
-  wTasks->SetPaintItemCallback(::OnTaskPaintListItem);
-  wTasks->SetCursorCallback(OnTaskCursorCallback);
+  wTasks->SetHandler(this);
 }
 
 void

@@ -25,17 +25,17 @@ Copyright_License {
 #define XCSOAR_TASK_LIST_PANEL_HPP
 
 #include "Form/XMLWidget.hpp"
+#include "Form/List.hpp"
 
 class WndForm;
 class TabBarControl;
-class ListControl;
 class WndOwnerDrawFrame;
 class TabbedControl;
 class Canvas;
 class OrderedTask;
 class TaskStore;
 
-class TaskListPanel : public XMLWidget {
+class TaskListPanel : public XMLWidget, private ListControl::Handler {
   WndForm &wf;
   TabBarControl &tab_bar;
 
@@ -72,8 +72,6 @@ public:
   void RenameTask();
 
   void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-  void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
-                           unsigned DrawListIndex);
 
   void OnManageClicked();
   void OnBrowseClicked();
@@ -94,6 +92,23 @@ protected:
   const TCHAR *get_cursor_name();
 
   OrderedTask *get_task_to_display();
+
+private:
+  /* virtual methods from class ListControl::Handler */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  virtual void OnCursorMoved(unsigned index) gcc_override {
+    RefreshView();
+  }
+
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
+      return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override {
+    LoadTask();
+  }
 };
 
 #endif
