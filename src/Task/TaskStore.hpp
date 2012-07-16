@@ -46,7 +46,7 @@ public:
     OrderedTask* task;
     bool valid;
 
-    Item(const tstring &the_filename, const tstring _task_name,
+    Item(const TCHAR *the_filename, const TCHAR *_task_name,
          unsigned _task_index = 0)
       :task_name(_task_name),
        filename(the_filename),
@@ -97,7 +97,10 @@ public:
    * Return the number of tasks in the TaskStore
    * @return The number of tasks in the TaskStore
    */
-  size_t Size() const;
+  gcc_pure
+  size_t Size() const {
+    return store.size();
+  }
 
   /**
    * Return the filename of the task defined by the given index
@@ -105,6 +108,7 @@ public:
    * @param index TaskStore index of the desired Task
    * @return Filename of the task defined by the given index
    */
+  gcc_pure
   const TCHAR *GetName(unsigned index) const;
 
   /**
@@ -113,6 +117,7 @@ public:
    * @param index TaskStore index of the desired Task
    * @return pathname of the task defined by the given index
    */
+  gcc_pure
   const TCHAR *GetPath(unsigned index) const;
 
   /**

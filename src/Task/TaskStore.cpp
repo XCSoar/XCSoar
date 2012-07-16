@@ -102,12 +102,6 @@ TaskStore::Scan()
   std::sort(store.begin(), store.end());
 }
 
-size_t
-TaskStore::Size() const
-{
-  return store.size();
-}
-
 TaskStore::Item::~Item()
 {
   if (!filename.empty())
