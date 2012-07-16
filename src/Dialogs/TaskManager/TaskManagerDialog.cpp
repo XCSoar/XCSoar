@@ -25,7 +25,7 @@ Copyright_License {
 #include "TaskCalculatorPanel.hpp"
 #include "TaskEditPanel.hpp"
 #include "TaskPropertiesPanel.hpp"
-#include "TaskListPanel.hpp"
+#include "TaskMiscPanel.hpp"
 #include "TaskClosePanel.hpp"
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
@@ -258,7 +258,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                                            &active_task, &task_modified);
   wEdit->SetTaskView(task_view);
 
-  TaskListPanel *list_tab = new TaskListPanel(*wf, *wTabBar,
+  TaskMiscPanel *list_tab = new TaskMiscPanel(*wf, *wTabBar,
                                               &active_task, &task_modified);
   list_tab->SetTaskView(task_view);
 

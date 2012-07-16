@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "TaskListPanel.hpp"
+#include "TaskMiscPanel.hpp"
 #include "Internal.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
@@ -31,23 +32,18 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"
-#include "Form/Tabbed.hpp"
 #include "Form/TabBar.hpp"
 #include "Task/TaskStore.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 #include "Gauge/TaskView.hpp"
 #include "OS/FileUtil.hpp"
-#include "Logger/ExternalLogger.hpp"
 #include "UIGlobals.hpp"
 #include "Look/MapLook.hpp"
-#include "Simulator.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Screen/Layout.hpp"
-#include "Device/Declaration.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -96,18 +92,10 @@ TaskListPanel::get_cursor_name()
   return task_store->GetName(cursor_index);
 }
 
-OrderedTask *
-TaskListPanel::get_task_to_display()
-{
-  return (browse_tabbed->GetCurrentPage() == 0) ?
-          *active_task :
-          get_cursor_task();
-}
-
 void
 TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  OrderedTask* ordered_task = get_task_to_display();
+  OrderedTask *ordered_task = get_cursor_task();
 
   if (ordered_task == NULL) {
     canvas.ClearWhite();
@@ -157,7 +145,7 @@ TaskListPanel::RefreshView()
   WndFrame* wSummary = (WndFrame*)form.FindByName(_T("frmSummary1"));
   assert(wSummary != NULL);
 
-  OrderedTask* ordered_task = get_task_to_display();
+  OrderedTask* ordered_task = get_cursor_task();
 
   if (ordered_task == NULL) {
     wSummary->SetCaption(_T(""));
@@ -167,6 +155,15 @@ TaskListPanel::RefreshView()
   TCHAR text[300];
   OrderedTaskSummary(ordered_task, text, false);
   wSummary->SetCaption(text);
+}
+
+void
+TaskListPanel::DirtyList()
+{
+  if (task_store != NULL) {
+    task_store->Scan();
+    RefreshView();
+  }
 }
 
 void
@@ -304,8 +301,7 @@ TaskListPanel::OnManageClicked()
   if (wTaskView != NULL)
     dlgTaskManager::TaskViewRestore(wTaskView);
 
-  browse_tabbed->SetCurrentPage(0);
-  RefreshView();
+  parent.ReClick();
 }
 
 class WndButton;
@@ -314,53 +310,6 @@ static void
 OnManageClicked(gcc_unused WndButton &Sender)
 {
   instance->OnManageClicked();
-}
-
-void
-TaskListPanel::OnBrowseClicked()
-{
-  if (!lazy_loaded) {
-    lazy_loaded = true;
-    // Scan XCSoarData for available tasks
-    task_store->Scan();
-  }
-
-  if (wTaskView != NULL)
-    dlgTaskManager::TaskViewRestore(wTaskView);
-  browse_tabbed->SetCurrentPage(1);
-  RefreshView();
-}
-
-static void
-OnBrowseClicked(gcc_unused WndButton &Sender)
-{
-  instance->OnBrowseClicked();
-}
-
-void
-TaskListPanel::OnNewTaskClicked()
-{
-  if (((*active_task)->TaskSize() < 2) ||
-      (ShowMessageBox(_("Create new task?"), _("Task New"),
-                   MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-    (*active_task)->Clear();
-    (*active_task)->SetFactory(XCSoarInterface::GetComputerSettings().task.task_type_default);
-    *task_modified = true;
-    tab_bar.SetCurrentPage(dlgTaskManager::GetPropertiesTab());
-    tab_bar.SetFocus();
-  }
-}
-
-static void
-OnNewTaskClicked(gcc_unused WndButton &Sender)
-{
-  instance->OnNewTaskClicked();
-}
-
-static void
-OnSaveClicked(gcc_unused WndButton &Sender)
-{
-  instance->SaveTask();
 }
 
 static void
@@ -381,51 +330,10 @@ OnRenameClicked(gcc_unused WndButton &Sender)
   instance->RenameTask();
 }
 
-void
-TaskListPanel::OnDeclareClicked()
-{
-  if (!(*active_task)->CheckTask()) {
-    const AbstractTaskFactory::TaskValidationErrorVector errors =
-      (*active_task)->GetFactory().GetValidationErrors();
-    ShowMessageBox(getTaskValidationErrors(errors), _("Declare task"),
-                MB_ICONEXCLAMATION);
-    return;
-  }
-
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  Declaration decl(settings.logger, settings.plane, *active_task);
-  ExternalLogger::Declare(decl, way_points.GetHome());
-}
-
-static void
-OnDeclareClicked(gcc_unused WndButton &Sender)
-{
-  instance->OnDeclareClicked();
-}
-
-void
-TaskListPanel::ReClick()
-{
-  if (wTaskView == NULL)
-    return;
-
-  if (browse_tabbed->GetCurrentPage() == 0) // manage page
-    dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
-  else {
-    browse_tabbed->SetCurrentPage(0);
-    dlgTaskManager::TaskViewRestore(wTaskView);
-  }
-  RefreshView();
-}
-
 static gcc_constexpr_data CallBackTableEntry task_list_callbacks[] = {
-  DeclareCallBackEntry(OnBrowseClicked),
-  DeclareCallBackEntry(OnNewTaskClicked),
-  DeclareCallBackEntry(OnSaveClicked),
   DeclareCallBackEntry(OnManageClicked),
   DeclareCallBackEntry(OnLoadClicked),
   DeclareCallBackEntry(OnDeleteClicked),
-  DeclareCallBackEntry(OnDeclareClicked),
   DeclareCallBackEntry(OnRenameClicked),
 
   DeclareCallBackEntry(NULL)
@@ -441,13 +349,6 @@ TaskListPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   task_store = new TaskStore();
   lazy_loaded = false;
-
-  browse_tabbed = ((TabbedControl *)form.FindByName(_T("tabbedManage")));
-  assert(browse_tabbed != NULL);
-
-  if (is_simulator())
-    /* cannot communicate with real devices in simulator mode */
-    form.FindByName(_T("cmdDeclare"))->SetEnabled(false);
 
   // Save important control pointers
   wTasks = (ListControl*)form.FindByName(_T("frmTasks"));
@@ -465,12 +366,17 @@ TaskListPanel::Unprepare()
 void
 TaskListPanel::Show(const PixelRect &rc)
 {
+  if (!lazy_loaded) {
+    lazy_loaded = true;
+    // Scan XCSoarData for available tasks
+    task_store->Scan();
+  }
+
   if (wTaskView != NULL) {
     wTaskView->SetOnPaintNotify(::OnTaskPaint);
     wTaskView->Show();
   }
 
-  browse_tabbed->SetCurrentPage(0);
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
   RefreshView();
   XMLWidget::Show(rc);

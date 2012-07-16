@@ -21,22 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TASK_LIST_PANEL_HPP
-#define XCSOAR_TASK_LIST_PANEL_HPP
+#ifndef XCSOAR_TASK_ACTIONS_PANEL_HPP
+#define XCSOAR_TASK_ACTIONS_PANEL_HPP
 
 #include "Form/XMLWidget.hpp"
-#include "Form/List.hpp"
 
+class TaskMiscPanel;
 class WndForm;
 class TabBarControl;
 class WndOwnerDrawFrame;
 class TabbedControl;
-class Canvas;
 class OrderedTask;
-class TaskStore;
+class TaskListPanel;
 
-class TaskListPanel : public XMLWidget, private ListControl::Handler {
-  Widget &parent;
+class TaskActionsPanel : public XMLWidget {
+  TaskMiscPanel &parent;
 
   WndForm &wf;
   TabBarControl &tab_bar;
@@ -44,19 +43,17 @@ class TaskListPanel : public XMLWidget, private ListControl::Handler {
   OrderedTask **active_task;
   bool *task_modified;
 
-  TaskStore *task_store;
-
-  bool lazy_loaded; // if store has been loaded first time tab displayed
-
-  ListControl *wTasks;
   WndOwnerDrawFrame* wTaskView;
 
+  TaskListPanel *list_panel;
+
 public:
-  TaskListPanel(Widget &_parent, WndForm &_wf, TabBarControl &_tab_bar,
-                OrderedTask **_active_task, bool *_task_modified)
+  TaskActionsPanel(TaskMiscPanel &_parent,
+                   WndForm &_wf, TabBarControl &_tab_bar,
+                   OrderedTask **_active_task, bool *_task_modified)
     :parent(_parent), wf(_wf), tab_bar(_tab_bar),
      active_task(_active_task), task_modified(_task_modified),
-     wTaskView(NULL) {}
+     wTaskView(NULL), list_panel(NULL) {}
 
   void SetTaskView(WndOwnerDrawFrame *_task_view) {
     assert(wTaskView == NULL);
@@ -65,45 +62,25 @@ public:
     wTaskView = _task_view;
   }
 
-  void RefreshView();
-  void DirtyList();
+  void SetListPanel(TaskListPanel *_list_panel) {
+    assert(list_panel == NULL);
+    assert(_list_panel != NULL);
+
+    list_panel = _list_panel;
+  }
 
   void SaveTask();
-  void LoadTask();
-  void DeleteTask();
-  void RenameTask();
 
-  void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
+  void OnBrowseClicked();
+  void OnNewTaskClicked();
+  void OnDeclareClicked();
 
-  void OnManageClicked();
-
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-
-protected:
-  OrderedTask *get_cursor_task();
-
-  gcc_pure
-  const TCHAR *get_cursor_name();
-
-private:
-  /* virtual methods from class ListControl::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
-
-  virtual void OnCursorMoved(unsigned index) gcc_override {
-    RefreshView();
-  }
-
-  virtual bool CanActivateItem(unsigned index) const gcc_override {
-      return true;
-  }
-
-  virtual void OnActivateItem(unsigned index) gcc_override {
-    LoadTask();
-  }
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void ReClick() gcc_override;
+  virtual void Show(const PixelRect &rc) gcc_override;
+  virtual void Hide() gcc_override;
 };
 
 #endif
