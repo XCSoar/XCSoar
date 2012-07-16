@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef TASK_STORE_HPP
 #define TASK_STORE_HPP
 
+#include "Compiler.h"
 #include "Util/tstring.hpp"
+
 #include <vector>
 
 struct TaskBehaviour;
@@ -45,14 +47,31 @@ public:
     bool valid;
 
     Item(const tstring &the_filename, const tstring _task_name,
-         unsigned _task_index = 0);
+         unsigned _task_index = 0)
+      :task_name(_task_name),
+       filename(the_filename),
+       task_index(_task_index),
+       task(NULL),
+       valid(true) {}
+
     ~Item();
 
-    const TCHAR* GetName() const;
-    const TCHAR* GetPath() const;
+    gcc_pure
+    const TCHAR *GetName() const {
+      return task_name.c_str();
+    }
+
+    gcc_pure
+    const TCHAR *GetPath() const {
+      return filename.c_str();
+    }
+
     OrderedTask *GetTask(const TaskBehaviour &task_behaviour);
 
-    bool operator<(const TaskStore::Item &other) const;
+    gcc_pure
+    bool operator<(const TaskStore::Item &other) const {
+      return task_name.compare(other.task_name) < 0;
+    }
   };
 
   typedef std::vector<TaskStore::Item> ItemVector;

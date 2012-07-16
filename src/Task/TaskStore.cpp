@@ -108,16 +108,6 @@ TaskStore::Size() const
   return store.size();
 }
 
-TaskStore::Item::Item(const tstring &_filename, const tstring _task_name,
-                      unsigned _task_index):
-  task_name(_task_name),
-  filename(_filename),
-  task_index(_task_index),
-  task(NULL),
-  valid(true)
-{        
-}
-
 TaskStore::Item::~Item()
 {
   if (!filename.empty())
@@ -138,24 +128,6 @@ TaskStore::Item::GetTask(const TaskBehaviour &task_behaviour)
     valid = false;
 
   return task;
-}
-
-const TCHAR *
-TaskStore::Item::GetName() const
-{
-  return task_name.c_str();
-}
-
-const TCHAR *
-TaskStore::Item::GetPath() const
-{
-  return filename.c_str();
-}
-
-bool
-TaskStore::Item::operator<(const Item &other) const
-{
-  return _tcscmp(GetName(), other.GetName()) < 0;
 }
 
 const TCHAR *
