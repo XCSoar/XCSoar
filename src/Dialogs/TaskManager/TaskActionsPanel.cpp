@@ -147,7 +147,7 @@ void
 TaskActionsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   LoadWindow(task_list_callbacks, parent, rc,
-             _T("IDR_XML_TASKMISC"));
+             _T("IDR_XML_TASKACTIONS"));
 
   instance = this;
 
