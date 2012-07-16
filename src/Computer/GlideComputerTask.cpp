@@ -53,6 +53,8 @@ GlideComputerTask::ResetFlight(const bool full)
   route.ResetFlight();
   trace.Reset();
   contest.Reset();
+
+  last_flying = false;
 }
 
 void
@@ -133,12 +135,19 @@ GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
 
 void 
 GlideComputerTask::ProcessAutoTask(const NMEAInfo &basic,
-                                   const DerivedInfo &calculated,
-                                   const DerivedInfo &last_calculated)
+                                   const DerivedInfo &calculated)
 {
-  if (!calculated.flight.flying || last_calculated.flight.flying)
-    /* no takeoff detected */
+  if (!calculated.flight.flying) {
+    /* not flying (yet) */
+    last_flying = false;
     return;
+  }
+
+  if (last_flying)
+    /* still flying, not a takeoff */
+    return;
+
+  last_flying = true;
 
   if (calculated.altitude_agl_valid &&
       calculated.altitude_agl > fixed(500))

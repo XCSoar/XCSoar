@@ -41,6 +41,8 @@ class GlideComputerTask
 
   ContestComputer contest;
 
+  bool last_flying;
+
 public:
   GlideComputerTask(ProtectedTaskManager &_task,
                     const Airspaces &airspace_database);
@@ -82,8 +84,7 @@ public:
   /**
    * Auto-create a task on takeoff that leads back home.
    */
-  void ProcessAutoTask(const NMEAInfo &basic, const DerivedInfo &calculated,
-                       const DerivedInfo &last_calculated);
+  void ProcessAutoTask(const NMEAInfo &basic, const DerivedInfo &calculated);
 
   void ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
                    const ComputerSettings &settings_computer,
