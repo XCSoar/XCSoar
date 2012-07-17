@@ -144,9 +144,9 @@ protected:
     return IsFinal(sp.GetStageNumber());
   }
 
-  void Link(const ScanTaskPoint node, const ScanTaskPoint parent,
+  bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
             unsigned value) {
-    dijkstra.Link(node, parent, value);
+    return dijkstra.Link(node, parent, value);
   }
 
   void LinkStart(const ScanTaskPoint node, unsigned value=0) {

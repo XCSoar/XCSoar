@@ -167,9 +167,10 @@ public:
    * @param n Destination node to add
    * @param pn Predecessor of destination node
    * @param e Edge distance
+   * @return false if this link was worse than an existing one
    */
-  void Link(const Node node, const Node parent, unsigned edge_value) {
-    Push(node, parent, current_value + edge_value);
+  bool Link(const Node node, const Node parent, unsigned edge_value) {
+    return Push(node, parent, current_value + edge_value);
   }
 
   /**
@@ -220,8 +221,9 @@ private:
    * @param n Destination node to add
    * @param pn Previous node
    * @param e Edge distance (previous to this)
+   * @return false if this link was worse than an existing one
    */
-  void Push(const Node node, const Node parent, unsigned edge_value = 0) {
+  bool Push(const Node node, const Node parent, unsigned edge_value = 0) {
     // Try to find the given node n in the EdgeMap
     edge_iterator it = edges.find(node);
     if (it == edges.end())
@@ -236,9 +238,10 @@ private:
     else
       // If the node was found but the new value is higher or equal
       // -> Don't use this new leg
-      return;
+      return false;
 
     q.push(Value(edge_value, it));
+    return true;
   }
 };
 

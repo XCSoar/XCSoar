@@ -88,12 +88,12 @@ protected:
    */
   bool RefreshTask();
 
-  void Link(const ScanTaskPoint node, const ScanTaskPoint parent,
+  bool Link(const ScanTaskPoint node, const ScanTaskPoint parent,
             unsigned value) {
     if (!is_min)
       value = DIJKSTRA_MINMAX_OFFSET - value;
 
-    NavDijkstra::Link(node, parent, value);
+    return NavDijkstra::Link(node, parent, value);
   }
 
   void AddStartEdges(const SearchPoint &loc);
