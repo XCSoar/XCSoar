@@ -207,6 +207,54 @@ OLCTriangle::AddStartEdges()
 }
 
 void
+OLCTriangle::AddTurn1Edges(const ScanTaskPoint origin)
+{
+  // add points up to finish
+
+  const ScanTaskPoint begin(origin.GetStageNumber() + 1, 0);
+  const ScanTaskPoint end(origin.GetStageNumber() + 1, origin.GetPointIndex());
+
+  for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
+    const unsigned d = CalcEdgeDistance(origin, i);
+
+    if (!is_fai || 4 * d >= best_d)
+      /* no reason to add candidate if worse than 25% rule for FAI
+         tasks */
+      Link(i, origin, GetStageWeight(origin.GetStageNumber()) * d);
+  }
+}
+
+void
+OLCTriangle::AddTurn2Edges(const ScanTaskPoint origin)
+{
+  ScanTaskPoint previous = dijkstra.GetPredecessor(origin);
+
+  // give first leg points to penultimate node
+  TriangleSecondLeg sl(is_fai, GetPoint(previous), GetPoint(origin));
+
+  const ScanTaskPoint begin(origin.GetStageNumber() + 1,
+                            origin.GetPointIndex() + 1);
+  const ScanTaskPoint end(origin.GetStageNumber() + 1, n_points - 1);
+
+  for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex()) {
+    TriangleSecondLeg::Result result = sl.Calculate(GetPoint(i), best_d);
+    const unsigned d = result.leg_distance;
+    if (d > 0) {
+      best_d = result.total_distance;
+
+      Link(i, origin, GetStageWeight(origin.GetStageNumber()) * d);
+
+      // we have an improved solution
+      is_complete = true;
+
+      // need to scan again whether path is closed
+      is_closed = false;
+      first_tp = origin.GetPointIndex();
+    }
+  }
+}
+
+void
 OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
 {
   assert(IsFinal(origin.GetStageNumber() + 1));
@@ -244,45 +292,11 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
 
   switch (origin.GetStageNumber()) {
   case 0:
-    // add points up to finish
-    for (ScanTaskPoint destination(origin.GetStageNumber() + 1, 0),
-           end(origin.GetStageNumber() + 1, origin.GetPointIndex());
-         destination != end; destination.IncrementPointIndex()) {
-      const unsigned d = CalcEdgeDistance(origin, destination);
-
-      if (!is_fai || 4 * d >= best_d)
-        /* no reason to add candidate if worse than 25% rule for FAI
-           tasks */
-        Link(destination, origin, GetStageWeight(origin.GetStageNumber()) * d);
-    }
+    AddTurn1Edges(origin);
     break;
 
-  case 1: {
-    ScanTaskPoint previous = dijkstra.GetPredecessor(origin);
-
-    // give first leg points to penultimate node
-    TriangleSecondLeg sl(is_fai, GetPoint(previous), GetPoint(origin));
-    for (ScanTaskPoint destination(origin.GetStageNumber() + 1,
-                                   origin.GetPointIndex() + 1),
-           end(origin.GetStageNumber() + 1, n_points - 1);
-         destination != end; destination.IncrementPointIndex()) {
-      TriangleSecondLeg::Result result = sl.Calculate(GetPoint(destination),
-                                                      best_d);
-      const unsigned d = result.leg_distance;
-      if (d > 0) {
-        best_d = result.total_distance;
-
-        Link(destination, origin, GetStageWeight(origin.GetStageNumber()) * d);
-
-        // we have an improved solution
-        is_complete = true;
-
-        // need to scan again whether path is closed
-        is_closed = false;
-        first_tp = origin.GetPointIndex();
-      }
-    }
-  }
+  case 1:
+    AddTurn2Edges(origin);
     break;
 
   case 2:

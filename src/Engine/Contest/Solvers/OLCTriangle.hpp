@@ -59,6 +59,8 @@ protected:
   gcc_pure
   bool IsPathClosed() const;
 
+  void AddTurn1Edges(const ScanTaskPoint origin);
+  void AddTurn2Edges(const ScanTaskPoint origin);
   void AddFinishEdges(const ScanTaskPoint origin);
 
 public:
