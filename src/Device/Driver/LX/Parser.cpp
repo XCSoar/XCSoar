@@ -66,6 +66,9 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
 
   fixed airspeed;
   bool tas_available = line.read_checked(airspeed);
+  if (tas_available && (airspeed < fixed(-50) || airspeed > fixed(250)))
+    /* implausible */
+    return false;
 
   fixed alt = fixed_zero;
   if (line.read_checked(alt))
