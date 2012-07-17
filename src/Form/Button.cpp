@@ -191,11 +191,12 @@ WndButton::OnPaint(Canvas &canvas)
   else
     canvas.SetTextColor(look.button.standard.foreground_color);
 
+  canvas.Select(*(look.button.font));
+
 #ifndef USE_GDI
   canvas.formatted_text(&rc, caption.c_str(), get_text_style());
 #else
   unsigned style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
-  canvas.Select(*(look.button.font));
 
   PixelRect text_rc = rc;
   canvas.formatted_text(&text_rc, caption.c_str(), style | DT_CALCRECT);
