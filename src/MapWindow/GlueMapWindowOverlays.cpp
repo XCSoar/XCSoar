@@ -198,7 +198,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
             rc.bottom - bmp->GetSize().cy - Layout::Scale(4));
 
   // draw flarm status
-  if (!MapSettings().show_flarm_alarm_level)
+  if (!GetMapSettings().show_flarm_alarm_level)
     // Don't show indicator when the gauge is indicating the traffic anyway
     return;
 
@@ -231,7 +231,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 {
   final_glide_bar_renderer.Draw(canvas, rc, Calculated(),
                                 GetComputerSettings().task.glide,
-                                MapSettings().final_glide_bar_mc0_enabled);
+                                GetMapSettings().final_glide_bar_mc0_enabled);
 }
 
 void
