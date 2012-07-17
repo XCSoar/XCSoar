@@ -66,6 +66,8 @@ protected:
 
   gcc_const
   const MapSettings &GetMapSettings() const {
+    assert(InDrawThread());
+
     return settings_map;
   }
 
