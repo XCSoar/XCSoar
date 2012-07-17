@@ -131,7 +131,7 @@ NAVWarn(char c)
  * seconds are 0..999.
  */
 static bool
-ReadPositiveAngle(NMEAInputLine &line, Angle &a)
+ReadGeoAngle(NMEAInputLine &line, Angle &a)
 {
   char buffer[32], *endptr;
   line.read(buffer, sizeof(buffer));
@@ -165,7 +165,7 @@ static bool
 ReadLatitude(NMEAInputLine &line, Angle &value_r)
 {
   Angle value;
-  if (!ReadPositiveAngle(line, value))
+  if (!ReadGeoAngle(line, value))
     return false;
 
   if (line.read_first_char() == 'S')
@@ -179,7 +179,7 @@ static bool
 ReadLongitude(NMEAInputLine &line, Angle &value_r)
 {
   Angle value;
-  if (!ReadPositiveAngle(line, value))
+  if (!ReadGeoAngle(line, value))
     return false;
 
   if (line.read_first_char() == 'W')
