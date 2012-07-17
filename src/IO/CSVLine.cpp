@@ -57,6 +57,13 @@ CSVLine::read_first_char()
   return skip() > 0 ? ch : '\0';
 }
 
+char
+CSVLine::ReadOneChar()
+{
+  char ch = *data;
+  return skip() == 1 ? ch : '\0';
+}
+
 void
 CSVLine::read(char *dest, size_t size)
 {

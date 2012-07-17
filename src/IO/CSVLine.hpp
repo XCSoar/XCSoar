@@ -55,6 +55,12 @@ public:
       skip();
   }
 
+  /**
+   * Read a column, expect it to be exactly one character.  Returns 0
+   * on failure.
+   */
+  char ReadOneChar();
+
   char read_first_char();
 
   void read(char *dest, size_t size);
