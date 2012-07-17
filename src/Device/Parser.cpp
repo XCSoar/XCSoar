@@ -168,8 +168,11 @@ ReadLatitude(NMEAInputLine &line, Angle &value_r)
   if (!ReadGeoAngle(line, value))
     return false;
 
-  if (line.read_first_char() == 'S')
+  char ch = line.ReadOneChar();
+  if (ch == 'S')
     value.Flip();
+  else if (ch != 'N')
+    return false;
 
   value_r = value;
   return true;
@@ -182,8 +185,11 @@ ReadLongitude(NMEAInputLine &line, Angle &value_r)
   if (!ReadGeoAngle(line, value))
     return false;
 
-  if (line.read_first_char() == 'W')
+  char ch = line.ReadOneChar();
+  if (ch == 'W')
     value.Flip();
+  else if (ch != 'E')
+    return false;
 
   value_r = value;
   return true;
