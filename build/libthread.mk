@@ -16,6 +16,6 @@ THREAD_SOURCES = \
 
 # this is needed to compile Notify.cpp, which depends on the screen
 # library's event queue
-THREAD_CPPFLAGS = $(SCREEN_CPPFLAGS)
+THREAD_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
 $(eval $(call link-library,libthread,THREAD))

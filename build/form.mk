@@ -42,6 +42,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/HLine.cpp \
 	$(FORM_SRC_DIR)/Util.cpp
 
-FORM_CPPFLAGS = $(SCREEN_CPPFLAGS)
+FORM_CPPFLAGS_INTERNAL = $(SCREEN_CPPFLAGS)
 
 $(eval $(call link-library,form,FORM))
