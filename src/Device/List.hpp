@@ -30,7 +30,11 @@ Copyright_License {
 #define XCSOAR_DEVICE_LIST_HPP
 
 enum {
+#ifdef WIN32
   NUMDEV = 4,
+#else
+  NUMDEV = 6,
+#endif
 };
 
 class DeviceDescriptor;
