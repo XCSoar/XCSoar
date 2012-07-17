@@ -437,7 +437,9 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
    * 13) Checksum
    */
 
-  fixed this_time = line.read(fixed_zero);
+  fixed this_time;
+  if (!line.read_checked(this_time))
+    return false;
 
   bool gps_valid = !NAVWarn(line.read_first_char());
 
@@ -523,10 +525,15 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
    * 14) Differential reference station ID, 0000-1023
    * 15) Checksum
    */
+
   GPSState &gps = info.gps;
 
-  fixed this_time = TimeModify(line.read(fixed_zero), info.date_time_utc,
-                               info.date_available);
+  fixed this_time;
+  if (!line.read_checked(this_time))
+    return false;
+
+  this_time = TimeModify(this_time, info.date_time_utc,
+                         info.date_available);
   this_time = TimeAdvanceTolerance(this_time);
 
   GeoPoint location;
