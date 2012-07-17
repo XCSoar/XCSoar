@@ -146,7 +146,7 @@ ReadGeoAngle(NMEAInputLine &line, Angle &a)
 
   dot[-2] = 0;
   long y = strtol(buffer, &endptr, 10);
-  if (y < 0 || endptr == buffer || *endptr != 0)
+  if (y < 0 || y > 180 || endptr == buffer || *endptr != 0)
     return false;
 
   a = Angle::Degrees(fixed(y) + fixed(x) / 60);
