@@ -16,6 +16,6 @@
   <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-70" Width="70" Height="35" OnClick="OnPrevClicked" />
   <Button Name="cmdClose" Caption="Close" Y="-35" Width="70" Height="35" OnClick="OnCloseClicked"/>
 
-  <TabMenu Name="TabMenu" Caption="Configuration Menu" X="75" Y="5" Width="-5" Height="-5">
+  <TabMenu Name="TabMenu" Caption="Configuration Menu" X="75" Y="0">
   </TabMenu>
 </Form>
