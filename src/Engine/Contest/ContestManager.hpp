@@ -69,9 +69,12 @@ public:
    * containing full flight history for scanning
    * @param trace_sprint Trace object reference
    * containing 2.5 hour flight history for scanning
+   * @param predict_triangle assume the the pilot will close the
+   * triangle?
    */
   ContestManager(const Contests _contest,
-                 const Trace &trace_full, const Trace &trace_sprint);
+                 const Trace &trace_full, const Trace &trace_sprint,
+                 bool predict_triangle=false);
 
   void SetIncremental(bool incremental);
 

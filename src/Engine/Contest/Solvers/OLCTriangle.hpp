@@ -33,6 +33,15 @@ protected:
   const bool is_fai;
 
 private:
+  /**
+   * Assume the the pilot will reach the start point?  This is useful
+   * for continuous (live) calculation, to give the pilot an estimate
+   * what his score will be.  Without this, this class is not useful
+   * for continuous calculation, as you will only see the result after
+   * the pilot has successfully finished the task.
+   */
+  const bool predict;
+
   bool is_closed;
   bool is_complete;
   unsigned first_tp;
@@ -41,8 +50,7 @@ protected:
   unsigned best_d;
 
 public:
-  OLCTriangle(const Trace &_trace,
-              const bool _is_fai=true);
+  OLCTriangle(const Trace &_trace, bool is_fai, bool predict);
 
 protected:
   gcc_pure

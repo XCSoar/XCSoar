@@ -22,8 +22,8 @@
 
 #include "OLCFAI.hpp"
 
-OLCFAI::OLCFAI(const Trace &_trace)
-  :OLCTriangle(_trace, true)
+OLCFAI::OLCFAI(const Trace &_trace, bool predict)
+  :OLCTriangle(_trace, true, predict)
 {
 }
 

@@ -22,6 +22,7 @@
 
 #include "OLCTriangle.hpp"
 #include "Cast.hpp"
+#include "Trace/Trace.hpp"
 
 /*
  @todo potential to use 3d convex hull to speed search
@@ -43,9 +44,9 @@
 */
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
-                         const bool _is_fai)
+                         const bool _is_fai, bool _predict)
   :ContestDijkstra(_trace, false, 3, 1000),
-   is_fai(_is_fai),
+   is_fai(_is_fai), predict(_predict),
    is_closed(false),
    is_complete(false),
    first_tp(0)
@@ -211,7 +212,30 @@ OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
   assert(IsFinal(origin.GetStageNumber() + 1));
 
   // dummy just to close the triangle
-  Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), origin, 0);
+  if (predict) {
+    // dummy just to close the triangle
+    Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), origin, 0);
+  } else {
+    const ScanTaskPoint start = FindStart(origin);
+    const TracePoint &start_point = GetPoint(start);
+    const TracePoint &origin_point = GetPoint(origin);
+
+    /* according to FAI-OLC 2012 rules, the finish point must not be
+       more distant than 1 km */
+    const fixed max_distance(1000);
+    const unsigned max_range =
+      trace_master.ProjectRange(origin_point.GetLocation(), max_distance);
+
+    /* check all remaining points, see which ones match the
+       conditions */
+    const ScanTaskPoint begin(origin.GetStageNumber() + 1, 0);
+    const ScanTaskPoint end(origin.GetStageNumber() + 1,
+                            origin.GetPointIndex());
+    for (ScanTaskPoint i = begin; i != end; i.IncrementPointIndex())
+      if (CalcEdgeDistance(start, i) <= max_range &&
+          start_point.GetLocation().Distance(GetPoint(i).GetLocation()) < max_distance)
+        Link(i, origin, CalcEdgeDistance(origin, i));
+  }
 }
 
 void

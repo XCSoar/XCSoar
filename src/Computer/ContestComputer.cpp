@@ -27,7 +27,7 @@ Copyright_License {
 
 ContestComputer::ContestComputer(const Trace &trace_full,
                                  const Trace &trace_sprint)
-  :contest_manager(OLC_Sprint, trace_full, trace_sprint)
+  :contest_manager(OLC_Sprint, trace_full, trace_sprint, true)
 {
   contest_manager.SetIncremental(true);
 }

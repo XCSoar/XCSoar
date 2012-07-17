@@ -23,8 +23,8 @@
 #include "XContestTriangle.hpp"
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
-                                   const bool _is_dhv)
-  :OLCTriangle(_trace),
+                                   bool predict, bool _is_dhv)
+  :OLCTriangle(_trace, true, predict),
    is_dhv(_is_dhv) {}
 
 ContestResult

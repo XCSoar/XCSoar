@@ -30,7 +30,7 @@
  */
 class OLCFAI : public OLCTriangle {
 public:
-  OLCFAI(const Trace &_trace);
+  OLCFAI(const Trace &_trace, bool predict);
 
 protected:
   /* virtual methods from class AbstractContest */
