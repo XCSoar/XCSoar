@@ -127,6 +127,23 @@ NAVWarn(char c)
 }
 
 /**
+ * Parses non-negative floating-point angle value in degrees.
+ */
+static bool
+ReadBearing(NMEAInputLine &line, Angle &value_r)
+{
+  fixed value;
+  if (!line.read_checked(value))
+    return false;
+
+  if (negative(value) || value > fixed(360))
+    return false;
+
+  value_r = Angle::Degrees(value).AsBearing();
+  return true;
+}
+
+/**
  * Parses an angle in the form "DDDMM.SSS".  Minutes are 0..59, and
  * seconds are 0..999.
  */
@@ -430,8 +447,8 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   fixed speed;
   bool ground_speed_available = line.read_checked(speed);
 
-  fixed track;
-  bool track_available = line.read_checked(track);
+  Angle track;
+  bool track_available = ReadBearing(line, track);
 
   // JMW get date info first so TimeModify is accurate
   if (ReadDate(line, info.date_time_utc))
@@ -458,7 +475,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 
   if (track_available && info.MovementDetected()) {
     // JMW don't update bearing unless we're moving
-    info.track = Angle::Degrees(track).AsBearing();
+    info.track = track;
     info.track_available.Update(info.clock);
   }
 
@@ -715,13 +732,14 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
   line.read(id_string, 16);
   traffic.id.Parse(id_string, NULL);
 
-  traffic.track_received = line.read_checked(value);
+  Angle track;
+  traffic.track_received = ReadBearing(line, track);
   if (!traffic.track_received) {
     // Field is empty in stealth mode
     stealth = true;
     traffic.track = Angle::Zero();
   } else
-    traffic.track = Angle::Degrees(value);
+    traffic.track = track;
 
   traffic.turn_rate_received = line.read_checked(value);
   if (!traffic.turn_rate_received) {

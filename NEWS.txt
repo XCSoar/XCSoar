@@ -8,6 +8,7 @@ Version 6.3.9 - not yet released
 * data files
   - fix crash in the "Status File" loader
 * devices
+  - plausibility tests for NMEA input
   - fixed Westerboer VW921 airspeed reading
 
 Version 6.3.8 - 2012/06/22
