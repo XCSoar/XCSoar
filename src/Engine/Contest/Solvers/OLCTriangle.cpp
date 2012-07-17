@@ -206,6 +206,15 @@ OLCTriangle::AddStartEdges()
 }
 
 void
+OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
+{
+  assert(IsFinal(origin.GetStageNumber() + 1));
+
+  // dummy just to close the triangle
+  Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), origin, 0);
+}
+
+void
 OLCTriangle::AddEdges(const ScanTaskPoint origin)
 {
   assert(origin.GetPointIndex() < n_points);
@@ -255,7 +264,7 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
 
   case 2:
     // dummy just to close the triangle
-    Link(ScanTaskPoint(origin.GetStageNumber() + 1, n_points - 1), origin, 0);
+    AddFinishEdges(origin);
     break;
 
   default:

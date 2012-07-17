@@ -51,6 +51,8 @@ protected:
   gcc_pure
   bool IsPathClosed() const;
 
+  void AddFinishEdges(const ScanTaskPoint origin);
+
 public:
   /* virtual methods from AbstractContest */
   virtual void Reset();
