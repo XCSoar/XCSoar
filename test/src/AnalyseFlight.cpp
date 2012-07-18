@@ -113,6 +113,8 @@ Finish(const MoreData &basic, const DerivedInfo &calculated,
 static int
 Run(DebugReplay &replay, ContestManager &contest, Result &result)
 {
+  bool released = false;
+
   for (int i = 1; replay.Next(); i++) {
     const MoreData &basic = replay.Basic();
 
@@ -121,6 +123,13 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
     if (!basic.time_available || !basic.location_available ||
         !basic.NavAltitudeAvailable())
       continue;
+
+    if (!released && !negative(replay.Calculated().flight.release_time)) {
+      released = true;
+
+      full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
+      sprint_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
+    }
 
     const TracePoint point(basic);
     full_trace.push_back(point);
