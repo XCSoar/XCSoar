@@ -58,6 +58,12 @@ public:
 
   char ReadFirstChar();
 
+  /**
+   * Read a column, expect it to be exactly one character.  Returns 0
+   * on failure.
+   */
+  char ReadOneChar();
+
   void Read(char *dest, size_t size);
   bool ReadCompare(const char *value);
 

@@ -84,6 +84,23 @@ ParsePFLAU(NMEAInputLine &line, FlarmStatus &flarm, fixed clock)
     line.Read((int)FlarmTraffic::AlarmType::NONE);
 }
 
+/**
+ * Parses non-negative floating-point angle value in degrees.
+ */
+static bool
+ReadBearing(NMEAInputLine &line, Angle &value_r)
+{
+  fixed value;
+  if (!line.ReadChecked(value))
+    return false;
+
+  if (negative(value) || value > fixed(360))
+    return false;
+
+  value_r = Angle::Degrees(value).AsBearing();
+  return true;
+}
+
 void
 ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
 {
@@ -118,13 +135,14 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   line.Read(id_string, 16);
   traffic.id = FlarmId::Parse(id_string, NULL);
 
-  traffic.track_received = line.ReadChecked(value);
+  Angle track;
+  traffic.track_received = ReadBearing(line, track);
   if (!traffic.track_received) {
     // Field is empty in stealth mode
     stealth = true;
     traffic.track = Angle::Zero();
   } else
-    traffic.track = Angle::Degrees(value);
+    traffic.track = track;
 
   traffic.turn_rate_received = line.ReadChecked(value);
   if (!traffic.turn_rate_received) {

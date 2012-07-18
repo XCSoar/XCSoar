@@ -36,9 +36,14 @@ Version 6.4 - not yet released
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out
 
-Version 6.3.9 - not yet released
+Version 6.3.9 - 2012/07/18
 * calculations
   - show AAT/target info before the first GPS fix (#2183)
+* data files
+  - fix crash in the "Status File" loader
+* devices
+  - plausibility tests for NMEA input
+  - fixed Westerboer VW921 airspeed reading
 
 Version 6.3.8 - 2012/06/22
 * fix broken graphics (#2182, #2184, #2185)

@@ -26,6 +26,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Util/FifoBuffer.hpp"
 #include "OS/ByteOrder.hpp"
+#include "Units/System.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -266,9 +267,12 @@ WesterboerVW921Device::SentenceZero(const void *_data, size_t length,
   // 31     Int   Groundspeed GS (0,1 m/s)
   // 00 00 e6 00
 
+  // Flight tests by Kimmo Hytönen have shown that the Westerboer documentation
+  // is wrong and that the TAS is actually transmitted in 0.1 km/h instead.
   int16_t tas =
       ReadUnalignedLE16((const uint16_t *)(const void *)(data + 29));
-  info.ProvideTrueAirspeed(fixed(tas) / 10);
+  info.ProvideTrueAirspeed(Units::ToSysUnit(fixed(tas) / 10,
+                                            Unit::KILOMETER_PER_HOUR));
 
   int16_t ground_speed =
       ReadUnalignedLE16((const uint16_t *)(const void *)(data + 31));
