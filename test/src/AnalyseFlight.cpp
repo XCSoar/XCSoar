@@ -61,24 +61,31 @@ BreakTime(const NMEAInfo &basic, fixed time)
 }
 
 static void
-Update(const MoreData &basic, const DerivedInfo &calculated,
+Update(const MoreData &basic, const FlyingState &state,
        Result &result)
 {
   if (!basic.time_available || !basic.date_available)
     return;
 
-  if (calculated.flight.flying && !result.takeoff_time.Plausible()) {
-    result.takeoff_time = BreakTime(basic, calculated.flight.takeoff_time);
-    result.takeoff_location = calculated.flight.takeoff_location;
+  if (state.flying && !result.takeoff_time.Plausible()) {
+    result.takeoff_time = BreakTime(basic, state.takeoff_time);
+    result.takeoff_location = state.takeoff_location;
   }
 
-  if (!calculated.flight.flying && result.takeoff_time.Plausible() &&
+  if (!state.flying && result.takeoff_time.Plausible() &&
       !result.landing_time.Plausible()) {
     result.landing_time = basic.date_time_utc;
 
     if (basic.location_available)
       result.landing_location = basic.location;
   }
+}
+
+static void
+Update(const MoreData &basic, const DerivedInfo &calculated,
+       Result &result)
+{
+  Update(basic, calculated.flight, result);
 }
 
 static void
