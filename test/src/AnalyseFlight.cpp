@@ -31,15 +31,17 @@
 #include "JSON/GeoWriter.hpp"
 
 struct Result {
-  BrokenDateTime takeoff_time, landing_time;
-  GeoPoint takeoff_location, landing_location;
+  BrokenDateTime takeoff_time, release_time, landing_time;
+  GeoPoint takeoff_location, release_location, landing_location;
 
   Result() {
     takeoff_time.Clear();
     landing_time.Clear();
+    release_time.Clear();
 
     takeoff_location.SetInvalid();
     landing_location.SetInvalid();
+    release_location.SetInvalid();
   }
 };
 
@@ -78,6 +80,11 @@ Update(const MoreData &basic, const FlyingState &state,
 
     if (basic.location_available)
       result.landing_location = basic.location;
+  }
+
+  if (!negative(state.release_time) && !result.release_time.Plausible()) {
+    result.release_time = BreakTime(basic, state.release_time);
+    result.release_location = state.release_location;
   }
 }
 
@@ -188,6 +195,7 @@ WriteEvents(TextWriter &writer, const Result &result)
   JSON::ObjectWriter object(writer);
 
   WriteEvent(object, "takeoff", result.takeoff_time, result.takeoff_location);
+  WriteEvent(object, "release", result.release_time, result.release_location);
   WriteEvent(object, "landing", result.landing_time, result.landing_location);
 }
 

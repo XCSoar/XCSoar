@@ -30,4 +30,6 @@ FlyingState::Reset()
   on_ground = false;
   flight_time = takeoff_time = fixed_zero;
   takeoff_location.SetInvalid();
+  release_time = fixed_minus_one;
+  release_location.SetInvalid();
 }

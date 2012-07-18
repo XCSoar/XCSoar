@@ -39,6 +39,8 @@ class FlyingComputer {
   unsigned short time_on_ground;
   unsigned short time_in_flight;
 
+  unsigned short sinking_count;
+
   /**
    * If the aircraft is currenly assumed to be moving, then this
    * denotes the initial moving time stamp.  This gets reset to a
@@ -54,6 +56,12 @@ class FlyingComputer {
    */
   GeoPoint moving_at;
 
+  fixed sinking_since;
+
+  GeoPoint sinking_location;
+
+  fixed sinking_altitude;
+
 public:
   void Reset();
 
@@ -67,6 +75,9 @@ public:
                FlyingState &flying);
 
 protected:
+  void CheckRelease(FlyingState &state, fixed time, const GeoPoint &location,
+                    fixed altitude);
+
   void Check(FlyingState &state, fixed time, const GeoPoint &location);
 
   /**

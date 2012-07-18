@@ -32,6 +32,39 @@ FlyingComputer::Reset()
 {
   time_on_ground = time_in_flight = 0;
   moving_since = fixed_minus_one;
+  sinking_since = fixed_minus_one;
+}
+
+void
+FlyingComputer::CheckRelease(FlyingState &state, fixed time,
+                             const GeoPoint &location, fixed altitude)
+{
+  if (!state.flying || !negative(state.release_time) || time_on_ground > 0)
+    return;
+
+  if (negative(sinking_since)) {
+    sinking_since = time;
+    sinking_location = location;
+    sinking_altitude = altitude;
+    sinking_count = 0;
+    return;
+  }
+
+  if (time < sinking_since || altitude >= sinking_altitude) {
+    /* cancel release detection when the aircraft has been climbing
+       more than it has lost recently */
+    sinking_since = fixed_minus_one;
+    return;
+  }
+
+  if (time - sinking_since >= fixed(10)) {
+    /* assume release from tow if aircraft has not gained any height
+       for 10 seconds; there will be false negatives if the glider
+       enters a thermal right after releasing */
+    state.release_time = sinking_since;
+    state.release_location = sinking_location;
+
+  }
 }
 
 void
@@ -52,6 +85,9 @@ FlyingComputer::Check(FlyingState &state, fixed time, const GeoPoint &location)
       state.takeoff_time = moving_since;
       state.takeoff_location = moving_at;
       state.flight_time = fixed_zero;
+
+      /* when a new flight starts, forget the old release time */
+      state.release_time = fixed_minus_one;
     }
   } else {
     // update time of flight
@@ -133,6 +169,15 @@ FlyingComputer::Compute(fixed takeoff_speed,
     Moving(flying, basic.time, basic.location);
   else
     Stationary(flying, basic.time, basic.location);
+
+  if (basic.pressure_altitude_available)
+    CheckRelease(flying, basic.time, basic.location, basic.pressure_altitude);
+  else if (basic.baro_altitude_available)
+    CheckRelease(flying, basic.time, basic.location, basic.baro_altitude);
+  else if (basic.gps_altitude_available)
+    CheckRelease(flying, basic.time, basic.location, basic.gps_altitude);
+  else
+    sinking_since = fixed_minus_one;
 }
 
 void
