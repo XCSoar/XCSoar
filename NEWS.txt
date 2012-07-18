@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.3.9 - not yet released
+Version 6.3.9 - 2012/07/18
 * calculations
   - show AAT/target info before the first GPS fix (#2183)
 * data files
