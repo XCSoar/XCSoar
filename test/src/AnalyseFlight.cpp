@@ -121,6 +121,30 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
 }
 
 static void
+WriteEventAttributes(TextWriter &writer,
+                     const BrokenDateTime &time, const GeoPoint &location)
+{
+  JSON::ObjectWriter object(writer);
+
+  if (time.Plausible()) {
+    NarrowString<64> buffer;
+    FormatISO8601(buffer.buffer(), time);
+    object.WriteElement("time", JSON::WriteString, buffer);
+  }
+
+  if (location.IsValid())
+    JSON::WriteGeoPointAttributes(object, location);
+}
+
+static void
+WriteEvent(JSON::ObjectWriter &object, const char *name,
+           const BrokenDateTime &time, const GeoPoint &location)
+{
+  if (time.Plausible() || location.IsValid())
+    object.WriteElement(name, WriteEventAttributes, time, location);
+}
+
+static void
 WriteTimes(TextWriter &writer, const Result &result)
 {
   JSON::ObjectWriter object(writer);
@@ -152,8 +176,21 @@ WriteLocations(TextWriter &writer, const Result &result)
 }
 
 static void
+WriteEvents(TextWriter &writer, const Result &result)
+{
+  JSON::ObjectWriter object(writer);
+
+  WriteEvent(object, "takeoff", result.takeoff_time, result.takeoff_location);
+  WriteEvent(object, "landing", result.landing_time, result.landing_location);
+}
+
+static void
 WriteResult(JSON::ObjectWriter &root, const Result &result)
 {
+  root.WriteElement("events", WriteEvents, result);
+
+  /* the following code is obsolete and is only here for compatibility
+     with old SkyLines code: */
   root.WriteElement("times", WriteTimes, result);
   root.WriteElement("locations", WriteLocations, result);
 }
