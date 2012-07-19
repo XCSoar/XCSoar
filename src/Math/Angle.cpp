@@ -127,12 +127,6 @@ Angle::Reciprocal() const
 }
 
 Angle
-Angle::BiSector(const Angle out_bound) const
-{
-  return Reciprocal().HalfAngle(out_bound);
-}
-
-Angle
 Angle::HalfAngle(const Angle end) const
 {
   if (value == end.value) {
