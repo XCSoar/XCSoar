@@ -41,11 +41,15 @@ class CylinderZone : public ObservationZonePoint
 protected:
   CylinderZone(Shape _shape, const GeoPoint &loc,
                const fixed _radius = fixed(10000.0))
-    :ObservationZonePoint(_shape, loc), radius(_radius) {}
+    :ObservationZonePoint(_shape, loc), radius(_radius) {
+    assert(positive(radius));
+  }
 
   CylinderZone(const CylinderZone &other, const GeoPoint &reference)
     :ObservationZonePoint((const ObservationZonePoint &)other, reference),
-     radius(other.radius) {}
+     radius(other.radius) {
+    assert(positive(radius));
+  }
 
 public:
   /**
