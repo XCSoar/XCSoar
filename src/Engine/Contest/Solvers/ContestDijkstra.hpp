@@ -120,6 +120,10 @@ public:
   }
 
 protected:
+  bool IsIncremental() const {
+    return incremental;
+  }
+
   gcc_pure
   const TracePoint &GetPoint(unsigned i) const {
     assert(i < n_points);
