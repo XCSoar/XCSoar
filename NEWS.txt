@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3.10 - not yet released
+* calculations
+  - fix rounding error in sector angle calculation (#2102, #2209)
 
 Version 6.3.9 - 2012/07/18
 * calculations
