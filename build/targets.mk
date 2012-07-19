@@ -192,10 +192,13 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_ABI2 = arm-linux-androideabi
   ANDROID_ABI3 = armeabi
   ANDROID_ABI4 = $(ANDROID_ABI2)
-  ANDROID_GCC_VERSION = 4.4.3
+  ANDROID_ABI_SUBDIR = .
+  ANDROID_GCC_VERSION = 4.6
+  ANDROID_GCC_VERSION2 = $(ANDROID_GCC_VERSION).x-google
 
   ifeq ($(ARMV7),y)
     ANDROID_ABI3 = armeabi-v7a
+    ANDROID_ABI_SUBDIR = armv7-a
   endif
 
   ifeq ($(X86),y)
@@ -436,7 +439,7 @@ endif
 ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lc -lm
   TARGET_LDLIBS += -llog
-  TARGET_LDADD += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION)/libgcc.a
+  TARGET_LDADD += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION2)/$(ANDROID_ABI_SUBDIR)/libgcc.a
 endif
 
 ######## output files
