@@ -119,7 +119,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     LineSectorZone *ls = new LineSectorZone(wp.location);
 
     fixed length;
-    if (m_node.GetAttribute(_T("length"), length))
+    if (m_node.GetAttribute(_T("length"), length) && positive(length))
       ls->SetLength(length);
 
     return ls;
@@ -127,7 +127,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     CylinderZone *ls = new CylinderZone(wp.location);
 
     fixed radius;
-    if (m_node.GetAttribute(_T("radius"), radius))
+    if (m_node.GetAttribute(_T("radius"), radius) && positive(radius))
       ls->SetRadius(radius);
 
     return ls;
@@ -144,7 +144,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     } else
       ls = new SectorZone(wp.location);
 
-    if (m_node.GetAttribute(_T("radius"), radius))
+    if (m_node.GetAttribute(_T("radius"), radius) && positive(radius))
       ls->SetRadius(radius);
     if (m_node.GetAttribute(_T("start_radial"), start))
       ls->SetStartRadial(start);
