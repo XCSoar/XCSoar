@@ -206,7 +206,7 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ARCH = x86
     ANDROID_ABI2 = x86
     ANDROID_ABI3 = x86
-    ANDROID_ABI4 = i686-android-linux
+    ANDROID_ABI4 = i686-linux-android
   endif
 
   ifeq ($(MIPS),y)
