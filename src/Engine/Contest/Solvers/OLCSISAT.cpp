@@ -41,10 +41,8 @@ OLCSISAT::OLCSISAT(const Trace &_trace)
 */
 
 ContestResult
-OLCSISAT::CalculateResult() const
+OLCSISAT::CalculateResult(const ContestTraceVector &solution) const
 {
-  const ContestTraceVector &solution = GetSolution();
-
   // build convex hull from solution
   SearchPointVector spv;
   for (unsigned i = 0; i < num_stages; ++i)
@@ -70,7 +68,7 @@ OLCSISAT::CalculateResult() const
   const fixed V = G - R;
 
   // S = total distance
-  ContestResult result = ContestDijkstra::CalculateResult();
+  ContestResult result = ContestDijkstra::CalculateResult(solution);
   result.score = ApplyHandicap((V + fixed(3) * result.distance) * fixed(0.00025));
   return result;
 }

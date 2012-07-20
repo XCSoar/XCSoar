@@ -74,14 +74,14 @@ OLCTriangle::Reset()
   best_d = 0;
 }
 
-fixed
-OLCTriangle::CalcLegDistance(const unsigned index) const
+gcc_pure
+static fixed
+CalcLegDistance(const ContestTraceVector &solution, const unsigned index)
 {
   // leg 0: 1-2
   // leg 1: 2-3
   // leg 2: 3-1
 
-  const ContestTraceVector &solution = GetSolution();
   const GeoPoint &p_start = solution[index].GetLocation();
   const GeoPoint &p_dest = solution[index < 2 ? index + 1 : 0].GetLocation();
 
@@ -317,14 +317,14 @@ OLCTriangle::AddEdges(const ScanTaskPoint origin)
 }
 
 ContestResult
-OLCTriangle::CalculateResult() const
+OLCTriangle::CalculateResult(const ContestTraceVector &solution) const
 {
   ContestResult result;
   result.time = n_points > 0
     ? fixed(GetPoint(n_points - 1).DeltaTime(GetPoint(0)))
     : fixed_zero;
   result.distance = is_complete
-    ? CalcLegDistance(0) + CalcLegDistance(1) + CalcLegDistance(2)
+    ? CalcLegDistance(solution, 0) + CalcLegDistance(solution, 1) + CalcLegDistance(solution, 2)
     : fixed_zero;
   result.score = ApplyHandicap(result.distance * fixed(0.001));
   return result;
@@ -358,9 +358,8 @@ OLCTriangle::CopySolution(ContestTraceVector &result) const
 {
   assert(num_stages <= MAX_STAGES);
 
-  const ContestTraceVector &solution = GetSolution();
-
-  result.clear();
-  for (int i = 3; i >= 0; --i)
-    result.append(solution[i]);
+  ContestDijkstra::CopySolution(result);
+  assert(result.size() == 4);
+  std::swap(result[0], result[3]);
+  std::swap(result[1], result[2]);
 }

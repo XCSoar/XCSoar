@@ -220,7 +220,7 @@ ContestDijkstra::SaveSolution()
 }
 
 ContestResult
-ContestDijkstra::CalculateResult() const
+ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -241,6 +241,12 @@ ContestDijkstra::CalculateResult() const
   result.score = ApplyHandicap(result.score);
 
   return result;
+}
+
+ContestResult
+ContestDijkstra::CalculateResult() const
+{
+  return CalculateResult(solution);
 }
 
 void

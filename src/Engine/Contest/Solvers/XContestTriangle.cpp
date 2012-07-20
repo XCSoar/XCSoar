@@ -28,9 +28,9 @@ XContestTriangle::XContestTriangle(const Trace &_trace,
    is_dhv(_is_dhv) {}
 
 ContestResult
-XContestTriangle::CalculateResult() const
+XContestTriangle::CalculateResult(const ContestTraceVector &solution) const
 {
-  ContestResult result = OLCTriangle::CalculateResult();
+  ContestResult result = OLCTriangle::CalculateResult(solution);
 
   if (positive(result.distance)) {
     // approximation for now: gap is distance from start to finish

@@ -54,9 +54,6 @@ public:
 
 protected:
   gcc_pure
-  fixed CalcLegDistance(unsigned i) const;
-
-  gcc_pure
   bool IsPathClosed() const;
 
   void AddTurn1Edges(const ScanTaskPoint origin);
@@ -70,7 +67,6 @@ public:
 protected:
   /* virtual methods from AbstractContest */
   virtual bool UpdateScore() gcc_override;
-  virtual ContestResult CalculateResult() const gcc_override;
   virtual void CopySolution(ContestTraceVector &vec) const gcc_override;
 
   /* virtual methods from NavDijkstra */
@@ -79,6 +75,7 @@ protected:
   /* virtual methods from ContestDijkstra */
   virtual void StartSearch() gcc_override;
   virtual void AddStartEdges() gcc_override;
+  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const gcc_override;
 };
 
 #endif

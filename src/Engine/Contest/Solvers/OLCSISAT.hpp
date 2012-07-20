@@ -33,8 +33,8 @@ public:
   OLCSISAT(const Trace &_trace);
 
 protected:
-  /* virtual methods from class AbstractContest */
-  virtual ContestResult CalculateResult() const gcc_override;
+  /* virtual methods from class ContestDijkstra */
+  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const gcc_override;
 };
 
 #endif

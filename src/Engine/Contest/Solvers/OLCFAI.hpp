@@ -33,8 +33,8 @@ public:
   OLCFAI(const Trace &_trace, bool predict);
 
 protected:
-  /* virtual methods from class AbstractContest */
-  virtual ContestResult CalculateResult() const gcc_override;
+  /* virtual methods from class ContestDijkstra */
+  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const gcc_override;
 };
 
 #endif

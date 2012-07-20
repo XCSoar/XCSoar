@@ -141,11 +141,6 @@ protected:
     return GetPoint(sp.GetPointIndex());
   }
 
-  gcc_const
-  const ContestTraceVector &GetSolution() const {
-    return solution;
-  }
-
   void ClearTrace();
 
   /**
@@ -222,6 +217,7 @@ protected:
    */
   virtual void StartSearch();
   virtual void AddStartEdges();
+  virtual ContestResult CalculateResult(const ContestTraceVector &solution) const;
 
 public:
   /* public virtual methods from AbstractContest */
