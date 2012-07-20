@@ -78,6 +78,11 @@ public:
 
   void SetIncremental(bool incremental);
 
+  /**
+   * @see ContestDijkstra::SetPredicted()
+   */
+  void SetPredicted(const TracePoint &predicted);
+
   void SetContest(Contests _contest) {
     contest = _contest;
   }

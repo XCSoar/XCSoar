@@ -88,6 +88,8 @@ Profile::Load(TaskBehaviour &settings)
       settings.contest = OLC_League;
   }
 
+  Get(ProfileKeys::PredictContest, settings.predict_contest);
+
   if (Get(ProfileKeys::SafetyMacCready, Temp))
     settings.safety_mc = fixed(Temp) / 10;
 

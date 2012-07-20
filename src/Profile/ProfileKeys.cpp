@@ -181,6 +181,7 @@ const TCHAR AutoMcMode[] = _T("AutoMcMode");
 const TCHAR AutoMc[] = _T("AutoMc");
 const TCHAR EnableExternalTriggerCruise[] = _T("EnableExternalTriggerCruise");
 const TCHAR OLCRules[] = _T("OLCRules");
+const TCHAR PredictContest[] = _T("PredictContest");
 const TCHAR Handicap[] = _T("Handicap");
 const TCHAR SnailWidthScale[] = _T("SnailWidthScale");
 const TCHAR SnailType[] = _T("SnailType");

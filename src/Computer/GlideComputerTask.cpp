@@ -117,11 +117,34 @@ GlideComputerTask::ProcessMoreTask(const MoreData &basic,
   }
 }
 
+gcc_pure
+static TracePoint
+Predicted(const TaskBehaviour &settings,
+          const MoreData &basic,
+          const ElementStat &current_leg)
+{
+  if (!basic.time_available || !basic.gps_altitude_available ||
+      !settings.predict_contest ||
+      !current_leg.location_remaining.IsValid() ||
+      !current_leg.solution_remaining.IsDefined())
+    return TracePoint::Invalid();
+
+  /* predict that the next task point will be reached, using the
+     calculated remaining time and the minimum arrival altitude */
+  return TracePoint(current_leg.location_remaining,
+                    unsigned(basic.time + current_leg.time_remaining),
+                    current_leg.solution_remaining.min_arrival_altitude,
+                    fixed_zero, 0);
+}
+
 void
 GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
                                const ComputerSettings &settings_computer,
                                bool exhaustive)
 {
+  contest.SetPredicted(Predicted(settings_computer.task, basic,
+                                 calculated.task_stats.current_leg));
+
   if (exhaustive)
     contest.SolveExhaustive(settings_computer, calculated);
   else

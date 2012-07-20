@@ -40,7 +40,8 @@ enum ControlIndex {
   FinishMinHeight,
   FinishHeightRef,
   spacer_3,
-  Contests
+  Contests,
+  PREDICT_CONTEST,
 };
 
 class TaskRulesConfigPanel : public RowFormWidget {
@@ -140,6 +141,11 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       _("Select the rules used for calculating optimal points for the On-Line Contest. "
           "The implementation  conforms to the official release 2010, Sept.23."),
           contests_list, task_behaviour.contest);
+
+  AddBoolean(_("Predict Contest"),
+             _("If enabled, then the next task point is included in the "
+               "score calculation, assuming that you will reach it."),
+             task_behaviour.predict_contest);
 }
 
 
@@ -170,6 +176,8 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValueEnum(FinishHeightRef, ProfileKeys::FinishHeightRef, otb.finish_min_height_ref);
 
   changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules, task_behaviour.contest);
+  changed |= SaveValueEnum(PREDICT_CONTEST, ProfileKeys::PredictContest,
+                           task_behaviour.predict_contest);
 
   _changed |= changed;
   _require_restart |= require_restart;

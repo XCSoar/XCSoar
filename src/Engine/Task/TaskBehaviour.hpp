@@ -117,6 +117,12 @@ struct TaskBehaviour : public TaskStartMargins {
   /** Whether to do online OLC optimisation */
   bool enable_olc;
 
+  /**
+   * For the contest score, predict that the aircraft will reach the
+   * next turn point?
+   */
+  bool predict_contest;
+
   /** Rule set to scan for in OLC */
   Contests contest;
   /** Handicap factor */

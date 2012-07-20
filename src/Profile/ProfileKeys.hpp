@@ -176,6 +176,7 @@ extern const TCHAR AutoMcMode[];
 extern const TCHAR AutoMc[];
 extern const TCHAR EnableExternalTriggerCruise[];
 extern const TCHAR OLCRules[];
+extern const TCHAR PredictContest[];
 extern const TCHAR Handicap[];
 extern const TCHAR SnailWidthScale[];
 extern const TCHAR SnailType[];

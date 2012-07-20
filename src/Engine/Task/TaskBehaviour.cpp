@@ -58,6 +58,7 @@ TaskBehaviour::SetDefaults()
   goto_nonlandable = true;
   risk_gamma = fixed_zero;
   enable_olc = true;
+  predict_contest = false;
   contest = OLC_Plus;
   contest_handicap = 100;
   safety_mc = fixed_half;

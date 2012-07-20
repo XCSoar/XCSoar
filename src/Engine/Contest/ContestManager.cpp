@@ -58,6 +58,18 @@ ContestManager::SetIncremental(bool incremental)
 }
 
 void
+ContestManager::SetPredicted(const TracePoint &predicted)
+{
+  if (olc_classic.SetPredicted(predicted)) {
+    olc_league.Reset();
+    olc_plus.Reset();
+
+    if (contest == OLC_Classic || contest == OLC_League || contest == OLC_Plus)
+      stats.Reset();
+  }
+}
+
+void
 ContestManager::SetHandicap(unsigned handicap)
 {
   olc_sprint.SetHandicap(handicap);

@@ -40,6 +40,13 @@ public:
     contest_manager.Reset();
   }
 
+  /**
+   * @see ContestDijkstra::SetPredicted()
+   */
+  void SetPredicted(const TracePoint &predicted) {
+    contest_manager.SetPredicted(predicted);
+  }
+
   void Solve(const ComputerSettings &settings_computer,
              DerivedInfo &calculated);
 

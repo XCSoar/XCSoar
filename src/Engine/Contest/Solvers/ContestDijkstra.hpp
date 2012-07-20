@@ -94,6 +94,10 @@ private:
    */
   ContestTraceVector solution;
 
+  TracePoint predicted;
+
+  static const unsigned predicted_index = 0xffff;
+
 protected:
   /** Number of points in current trace set */
   unsigned n_points;
@@ -123,6 +127,16 @@ public:
   void SetIncremental(bool _incremental) {
     incremental = _incremental;
   }
+
+  /**
+   * Sets the location of the "predicted" finish location.  If
+   * defined, then the algorithm will assume that you will reach it.
+   * Pass an "invalid" #TracePoint to disable this prediction (see
+   * TracePoint::Invalid()).
+   *
+   * @return true if the object was reset
+   */
+  bool SetPredicted(const TracePoint &_predicted);
 
 protected:
   bool IsIncremental() const {

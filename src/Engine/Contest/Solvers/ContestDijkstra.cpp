@@ -41,11 +41,38 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
    NavDijkstra(n_legs + 1),
    trace_master(_trace),
    continuous(_continuous),
-   incremental(false)
+   incremental(false),
+   predicted(TracePoint::Invalid())
 {
   assert(num_stages <= MAX_STAGES);
 
   std::fill(stage_weights, stage_weights + num_stages - 1, 5);
+}
+
+bool
+ContestDijkstra::SetPredicted(const TracePoint &_predicted)
+{
+  TracePoint n(_predicted);
+  if (n.IsDefined() && !trace_master.empty())
+    n.Project(trace_master.GetProjection());
+
+  bool result = false;
+  if (predicted.IsDefined() && n_points > 0) {
+    if (n.IsDefined() && !trace_master.empty() &&
+        n.GetFlatLocation() == predicted.GetFlatLocation()) {
+      /* no change since last call, but update time stamp */
+      predicted = n;
+      return false;
+    }
+
+    /* the predicted location has changed, and the solver must be
+       restarted */
+    Reset();
+    result = true;
+  }
+
+  predicted = n;
+  return result;
 }
 
 bool
@@ -92,6 +119,9 @@ ContestDijkstra::UpdateTraceFull()
   trace_master.GetPoints(trace);
   n_points = trace.size();
 
+  if (n_points > 0 && predicted.IsDefined())
+    predicted.Project(trace_master.GetProjection());
+
   append_serial = trace_master.GetAppendSerial();
   modify_serial = trace_master.GetModifySerial();
 }
@@ -108,6 +138,10 @@ ContestDijkstra::UpdateTraceTail()
     return false;
 
   n_points = trace.size();
+
+  if (n_points > 0 && predicted.IsDefined())
+    predicted.Project(trace_master.GetProjection());
+
   append_serial = trace_master.GetAppendSerial();
   return true;
 }
@@ -205,6 +239,7 @@ ContestDijkstra::Reset()
 {
   dijkstra.Clear();
   ClearTrace();
+  predicted = TracePoint::Invalid();
 
   AbstractContest::Reset();
 }
@@ -215,7 +250,14 @@ ContestDijkstra::SaveSolution()
   solution.resize(num_stages);
 
   for (unsigned i = 0; i < num_stages; ++i)
-    solution[i] = GetPoint(NavDijkstra::solution[i]);
+    solution[i] =
+      NavDijkstra::solution[i] == predicted_index
+      ? (predicted.IsDefined()
+         ? predicted
+         /* fallback, just in case somebody has deleted the prediction
+            meanwhile */
+         : GetPoint(n_points - 1))
+      : GetPoint(NavDijkstra::solution[i]);
 
   return AbstractContest::SaveSolution();
 }
@@ -296,6 +338,11 @@ ContestDijkstra::AddEdges(const ScanTaskPoint origin,
     }
   }
 
+  if (IsFinal(destination) && predicted.IsDefined()) {
+    const unsigned d = weight * GetPoint(origin).FlatDistanceTo(predicted);
+    destination.SetPointIndex(predicted_index);
+    Link(destination, origin, d);
+  }
 }
 
 void

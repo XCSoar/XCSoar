@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4 - not yet released
 * calculations
   - Contest: add FFVV NetCoupe (#1648)
+  - Contest: optionally include next task point in OLC classic/plus
+    score calculation (#1561)
 * devices
   - support up to 6 devices
   - buffered serial port I/O
