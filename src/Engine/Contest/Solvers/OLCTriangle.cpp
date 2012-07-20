@@ -46,8 +46,13 @@
 /**
  * Maximum allowed distance between start end finish.  According to
  * FAI-OLC 2012 rules, this is 1 km.
+ *
+ * TODO: due to trace thinning, our TracePoints are sometimes not
+ * close enough for this check to succeed.  To work around this for
+ * now, we allow up to 5 km until this library has been implemented
+ * properly.
  */
-static gcc_constexpr_data fixed max_distance(1000);
+static gcc_constexpr_data fixed max_distance(5000);
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
                          const bool _is_fai, bool _predict)
