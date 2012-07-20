@@ -158,9 +158,9 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Degrees(fixed_360).fastcosine(), 1));
 
   // Test BiSector()
-  ok1(equals(Angle::Degrees(fixed_90).BiSector(Angle::Degrees(fixed_180)), 45));
-  ok1(equals(Angle::Degrees(fixed_270).BiSector(Angle::Degrees(fixed_zero)), 225));
-  ok1(equals(Angle::Degrees(fixed_270).BiSector(Angle::Degrees(fixed_180)), 315));
+  ok1(equals(Angle::Degrees(fixed_270).HalfAngle(Angle::Degrees(fixed_180)), 45));
+  ok1(equals(Angle::Degrees(fixed_90).HalfAngle(Angle::Degrees(fixed_zero)), 225));
+  ok1(equals(Angle::Degrees(fixed_90).HalfAngle(Angle::Degrees(fixed_180)), 315));
 
   // Test Fraction()
   ok1(equals(Angle::Degrees(fixed_zero).Fraction(

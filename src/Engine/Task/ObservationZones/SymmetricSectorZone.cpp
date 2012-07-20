@@ -27,22 +27,29 @@ void
 SymmetricSectorZone::SetLegs(const GeoPoint *previous, const GeoPoint *current,
                              const GeoPoint *next)
 {
+  /* Important: all bearings must be calculated from "current" as the
+     primary reference, because this is the turn point we're currently
+     calculating, therefore we need the extra call to Reciprocal().
+     Reversing the formula would not work, because the bearing on a
+     "Great Circle" is not constant, and we would get a different
+     result. */
   Angle biSector;
   if (!next && previous)
     // final
-    biSector = previous->Bearing(*current);
+    biSector = current->Bearing(*previous).Reciprocal();
   else if (next && previous)
     // intermediate
-    biSector = previous->Bearing(*current).BiSector(current->Bearing(*next));
+    biSector = current->Bearing(*previous).HalfAngle(current->Bearing(*next));
   else if (next && !previous)
     // start
-    biSector = next->Bearing(*current);
+    biSector = current->Bearing(*next).Reciprocal();
   else
     // single point
     biSector = Angle::Zero();
 
-  SetStartRadial((biSector - sector_angle.Half()).AsBearing());
-  SetEndRadial((biSector + sector_angle.Half()).AsBearing());
+  const Angle half = sector_angle.Half();
+  SetStartRadial((biSector - half).AsBearing());
+  SetEndRadial((biSector + half).AsBearing());
 }
 
 bool

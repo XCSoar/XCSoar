@@ -32,6 +32,18 @@ Copyright_License {
 #define GCC_VERSION 0
 #endif
 
+#ifdef __clang__
+#  if __clang_major__ < 3
+#    error Sorry, your clang version is too old.  You need at least version 3.1.
+#  endif
+#elif defined(__GNUC__)
+#  if GCC_VERSION < 40600
+#    error Sorry, your gcc version is too old.  You need at least version 4.6.
+#  endif
+#else
+#  warning Untested compiler.  Use at your own risk!
+#endif
+
 #if GCC_VERSION >= 30000
 
 /* GCC 4.x */

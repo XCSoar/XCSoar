@@ -289,9 +289,6 @@ public:
   Angle Reciprocal() const;
 
   gcc_pure
-  Angle BiSector(const Angle out_bound) const;
-
-  gcc_pure
   Angle HalfAngle(const Angle end) const;
 
   gcc_pure
