@@ -93,6 +93,14 @@ public:
    */
   explicit TracePoint(const AircraftState &state);
 
+  gcc_const
+  static TracePoint Invalid() {
+    TracePoint point;
+    point.Clear();
+    ((SearchPoint &)point).SetInvalid();
+    return point;
+  }
+
   void Clear() {
     time = (unsigned)(0 - 1);
   }
