@@ -46,6 +46,6 @@ OLCPlus::CalculateResult() const
 {
   ContestResult result = result_classic;
   result.score = ApplyHandicap((result_classic.distance +
-                                fixed(0.3) * result_fai.distance) * fixed(0.001));
+                                fixed(0.3) * result_fai.distance) / 1000);
   return result;
 }
