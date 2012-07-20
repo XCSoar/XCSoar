@@ -112,7 +112,11 @@ struct GlideResult {
    */
   fixed pure_glide_altitude_difference;
 
-  /** Track bearing in cruise for optimal drift compensation (deg true) */
+  /**
+   * Track bearing in cruise for optimal drift compensation.
+   *
+   * This attribute is only valid when validity==OK.
+   */
   Angle cruise_track_bearing;
 
   /**
