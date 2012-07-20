@@ -151,6 +151,11 @@ struct FlatGeoPoint {
   };
 
   gcc_constexpr_method
+  bool operator!=(const FlatGeoPoint other) const {
+    return !FlatGeoPoint::Equals(other);
+  };
+
+  gcc_constexpr_method
   bool Equals(const FlatGeoPoint sp) const {
     return longitude == sp.longitude && latitude == sp.latitude;
   }
