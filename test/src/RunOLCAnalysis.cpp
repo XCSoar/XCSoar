@@ -52,6 +52,8 @@ static ContestManager olc_netcoupe(OLC_NetCoupe, full_trace, sprint_trace);
 static int
 TestOLC(DebugReplay &replay)
 {
+  bool released = false;
+
   for (int i = 1; replay.Next(); i++) {
     if (i % 500 == 0) {
       putchar('.');
@@ -62,6 +64,13 @@ TestOLC(DebugReplay &replay)
     if (!basic.time_available || !basic.location_available ||
         !basic.NavAltitudeAvailable())
       continue;
+
+    if (!released && !negative(replay.Calculated().flight.release_time)) {
+      released = true;
+
+      full_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
+      sprint_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
+    }
 
     const TracePoint point(basic);
     full_trace.push_back(point);
