@@ -194,8 +194,6 @@ ContestDijkstra::Solve(bool exhaustive)
 
     if (result == SolverResult::VALID && !SaveSolution())
       result = SolverResult::FAILED;
-
-    UpdateTrace(exhaustive);
   }
 
   return result;
