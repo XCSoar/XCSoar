@@ -33,6 +33,7 @@ void
 OLCLeague::Reset()
 {
   AbstractContest::Reset();
+  solution_classic.clear();
   solution.clear();
   for (unsigned i=0; i<5; ++i) {
     solution.append().Clear();

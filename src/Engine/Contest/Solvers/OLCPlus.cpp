@@ -27,6 +27,16 @@ OLCPlus::OLCPlus()
 {
 }
 
+void
+OLCPlus::Reset()
+{
+  AbstractContest::Reset();
+  solution_classic.clear();
+  solution_fai.clear();
+  result_classic.Reset();
+  result_fai.Reset();
+}
+
 SolverResult
 OLCPlus::Solve(bool exhaustive)
 {
