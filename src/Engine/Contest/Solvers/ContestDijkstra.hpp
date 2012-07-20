@@ -89,6 +89,11 @@ private:
    */
   TracePointerVector trace;
 
+  /**
+   * The last solution.  Use only if Solve() has returned VALID.
+   */
+  ContestTraceVector solution;
+
 protected:
   /** Number of points in current trace set */
   unsigned n_points;
@@ -134,6 +139,11 @@ protected:
   gcc_pure
   const TracePoint &GetPoint(const ScanTaskPoint sp) const {
     return GetPoint(sp.GetPointIndex());
+  }
+
+  gcc_const
+  const ContestTraceVector &GetSolution() const {
+    return solution;
   }
 
   void ClearTrace();
@@ -195,6 +205,8 @@ protected:
 private:
   gcc_pure
   bool IsMasterUpdated() const;
+
+  bool SaveSolution();
 
 protected:
   /**

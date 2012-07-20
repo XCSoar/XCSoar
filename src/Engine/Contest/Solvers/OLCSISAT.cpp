@@ -43,10 +43,12 @@ OLCSISAT::OLCSISAT(const Trace &_trace)
 ContestResult
 OLCSISAT::CalculateResult() const
 {
+  const ContestTraceVector &solution = GetSolution();
+
   // build convex hull from solution
   SearchPointVector spv;
   for (unsigned i = 0; i < num_stages; ++i)
-    spv.push_back(GetPoint(solution[i]));
+    spv.push_back(SearchPoint(solution[i].location));
 
   spv.PruneInterior();
 
@@ -62,7 +64,7 @@ OLCSISAT::CalculateResult() const
   }
 
   // R distance (start to end)
-  const fixed R = GetPoint(solution[0]).DistanceTo(GetPoint(solution[num_stages - 1]).GetLocation());
+  const fixed R = solution[0].DistanceTo(solution[num_stages - 1].GetLocation());
 
   // V zigzag-free distance
   const fixed V = G - R;

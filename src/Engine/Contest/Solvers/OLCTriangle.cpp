@@ -81,9 +81,9 @@ OLCTriangle::CalcLegDistance(const unsigned index) const
   // leg 1: 2-3
   // leg 2: 3-1
 
-  const GeoPoint &p_start = GetPoint(solution[index]).GetLocation();
-  const GeoPoint &p_dest =
-    GetPoint(solution[index < 2 ? index + 1 : 0]).GetLocation();
+  const ContestTraceVector &solution = GetSolution();
+  const GeoPoint &p_start = solution[index].GetLocation();
+  const GeoPoint &p_dest = solution[index < 2 ? index + 1 : 0].GetLocation();
 
   return p_start.Distance(p_dest);
 }
@@ -358,7 +358,9 @@ OLCTriangle::CopySolution(ContestTraceVector &result) const
 {
   assert(num_stages <= MAX_STAGES);
 
+  const ContestTraceVector &solution = GetSolution();
+
   result.clear();
   for (int i = 3; i >= 0; --i)
-    result.append(GetPoint(solution[i]));
+    result.append(solution[i]);
 }

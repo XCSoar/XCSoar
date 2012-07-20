@@ -208,19 +208,29 @@ ContestDijkstra::Reset()
   AbstractContest::Reset();
 }
 
+bool
+ContestDijkstra::SaveSolution()
+{
+  solution.resize(num_stages);
+
+  for (unsigned i = 0; i < num_stages; ++i)
+    solution[i] = GetPoint(NavDijkstra::solution[i]);
+
+  return AbstractContest::SaveSolution();
+}
+
 ContestResult
 ContestDijkstra::CalculateResult() const
 {
   assert(num_stages <= MAX_STAGES);
 
   ContestResult result;
-  result.time = fixed(GetPoint(solution[num_stages - 1])
-                      .DeltaTime(GetPoint(solution[0])));
+  result.time = fixed(solution[num_stages - 1].DeltaTime(solution[0]));
   result.distance = result.score = fixed_zero;
 
-  GeoPoint previous = GetPoint(solution[0]).GetLocation();
+  GeoPoint previous = solution[0].GetLocation();
   for (unsigned i = 1; i < num_stages; ++i) {
-    const GeoPoint &current = GetPoint(solution[i]).GetLocation();
+    const GeoPoint &current = solution[i].GetLocation();
     result.distance += current.Distance(previous);
     result.score += GetStageWeight(i - 1) * current.Distance(previous);
     previous = current;
@@ -329,9 +339,7 @@ ContestDijkstra::CopySolution(ContestTraceVector &result) const
 {
   assert(num_stages <= MAX_STAGES);
 
-  result.clear();
-  for (unsigned i = 0; i < num_stages; ++i)
-    result.append(GetPoint(solution[i]));
+  result = solution;
 }
 
 void 
