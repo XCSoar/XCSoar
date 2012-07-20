@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Dijkstra.hpp"
 #include "ScanTaskPoint.hpp"
+#include "SolverResult.hpp"
 #include "Compiler.h"
 
 #include <unordered_map>
@@ -79,8 +80,6 @@ protected:
    */
   unsigned solution[MAX_STAGES];
 
-  bool solution_valid;
-
 protected:
   /** 
    * Constructor
@@ -90,7 +89,6 @@ protected:
    * @return Initialised object
    */
   NavDijkstra(const unsigned _num_stages)
-    :solution_valid(false)
   {
     SetStageCount(_num_stages);
   }
@@ -161,29 +159,32 @@ protected:
    * 
    * @return True if algorithm returns a terminal path or no path found
    */
-  bool DistanceGeneral(unsigned max_steps = 0 - 1) {
+  SolverResult DistanceGeneral(unsigned max_steps = 0 - 1) {
     while (!dijkstra.IsEmpty()) {
       const ScanTaskPoint destination = dijkstra.Pop();
 
       if (IsFinal(destination)) {
         FindSolution(destination);
-        if (IsFinishSatisfied(destination)) {
-          solution_valid = true;
-          return true;
-        }
+        if (IsFinishSatisfied(destination))
+          return SolverResult::VALID;
       } else {
         AddEdges(destination);
         if (dijkstra.IsEmpty())
-          return true; // error, no way to reach final
+          /* error, no way to reach final */
+          return SolverResult::FAILED;
       }
 
       if (max_steps)
         --max_steps;
       else
-        return false; // Reached limit
+        /* reached limit */
+        return dijkstra.IsEmpty()
+          ? SolverResult::FAILED
+          : SolverResult::INCOMPLETE;
     }
 
-    return false; // No path found
+    /* no path found */
+    return SolverResult::FAILED;
   }
 
   /**

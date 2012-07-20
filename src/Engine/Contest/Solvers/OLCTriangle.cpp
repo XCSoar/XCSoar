@@ -357,7 +357,6 @@ void
 OLCTriangle::CopySolution(ContestTraceVector &result) const
 {
   assert(num_stages <= MAX_STAGES);
-  assert(solution_valid);
 
   result.clear();
   for (int i = 3; i >= 0; --i)

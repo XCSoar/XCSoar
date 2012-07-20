@@ -78,8 +78,7 @@ TaskDijkstra::AddStartEdges(const SearchPoint &currentLocation)
 bool
 TaskDijkstra::Run()
 {
-  solution_valid = false;
-  const bool retval = DistanceGeneral() && solution_valid;
+  const bool retval = DistanceGeneral() == SolverResult::VALID;
   dijkstra.Clear();
   return retval;
 }

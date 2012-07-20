@@ -145,8 +145,6 @@ ContestDijkstra::Solve(bool exhaustive)
 {
   assert(num_stages <= MAX_STAGES);
 
-  solution_valid = false;
-
   if (trace_master.size() < num_stages) {
     /* not enough data in master trace */
     ClearTrace();
@@ -184,7 +182,8 @@ ContestDijkstra::Solve(bool exhaustive)
       return SolverResult::FAILED;
   }
 
-  if (DistanceGeneral(exhaustive ? 0 - 1 : 25)) {
+  SolverResult result = DistanceGeneral(exhaustive ? 0 - 1 : 25);
+  if (result != SolverResult::INCOMPLETE) {
     if (incremental && continuous)
       /* enable the incremental solver, which considers the existing
          Dijkstra edge map */
@@ -193,24 +192,19 @@ ContestDijkstra::Solve(bool exhaustive)
       /* start the next iteration from scratch */
       dijkstra.Clear();
 
-    const SolverResult r = solution_valid && SaveSolution()
-      ? SolverResult::VALID
-      : SolverResult::FAILED;
+    if (result == SolverResult::VALID && !SaveSolution())
+      result = SolverResult::FAILED;
 
     UpdateTrace(exhaustive);
-    return r;
   }
 
-  return dijkstra.IsEmpty()
-    ? SolverResult::FAILED
-    : SolverResult::INCOMPLETE;
+  return result;
 }
 
 void
 ContestDijkstra::Reset()
 {
   dijkstra.Clear();
-  solution_valid = false;
   ClearTrace();
 
   AbstractContest::Reset();
@@ -220,7 +214,6 @@ ContestResult
 ContestDijkstra::CalculateResult() const
 {
   assert(num_stages <= MAX_STAGES);
-  assert(solution_valid);
 
   ContestResult result;
   result.time = fixed(GetPoint(solution[num_stages - 1])
@@ -337,7 +330,6 @@ void
 ContestDijkstra::CopySolution(ContestTraceVector &result) const
 {
   assert(num_stages <= MAX_STAGES);
-  assert(solution_valid);
 
   result.clear();
   for (unsigned i = 0; i < num_stages; ++i)
