@@ -43,6 +43,12 @@
   4: end
 */
 
+/**
+ * Maximum allowed distance between start end finish.  According to
+ * FAI-OLC 2012 rules, this is 1 km.
+ */
+static gcc_constexpr_data fixed max_distance(1000);
+
 OLCTriangle::OLCTriangle(const Trace &_trace,
                          const bool _is_fai, bool _predict)
   :ContestDijkstra(_trace, false, 3, 1000),
@@ -99,7 +105,7 @@ OLCTriangle::IsPathClosed() const
     if (!positive(d_min) || d_this < d_min)
       d_min = d_this;
 
-    if (d_this<= fixed_int_constant(1000))
+    if (d_this <= max_distance)
       return true;
   }
 
@@ -267,9 +273,6 @@ OLCTriangle::AddFinishEdges(const ScanTaskPoint origin)
     const TracePoint &start_point = GetPoint(start);
     const TracePoint &origin_point = GetPoint(origin);
 
-    /* according to FAI-OLC 2012 rules, the finish point must not be
-       more distant than 1 km */
-    const fixed max_distance(1000);
     const unsigned max_range =
       trace_master.ProjectRange(origin_point.GetLocation(), max_distance);
 
