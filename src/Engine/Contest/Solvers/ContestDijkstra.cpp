@@ -88,6 +88,7 @@ ContestDijkstra::IsMasterUpdated() const
 void
 ContestDijkstra::ClearTrace()
 {
+  append_serial = modify_serial = Serial();
   trace_dirty = true;
   finished = false;
   trace.clear();
