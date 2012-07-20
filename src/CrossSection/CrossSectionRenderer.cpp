@@ -102,8 +102,11 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 void
 CrossSectionRenderer::UpdateTerrain(short *elevations) const
 {
-  if (terrain == NULL)
+  if (terrain == NULL) {
+    const auto invalid = RasterBuffer::TERRAIN_INVALID;
+    std::fill(elevations, elevations + NUM_SLICES, invalid);
     return;
+  }
 
   const GeoPoint point_diff = vec.EndPoint(start) - start;
 
