@@ -38,6 +38,10 @@ Version 6.4 - not yet released
   - support x86 and MIPS CPUs
   - Bluetooth server for NMEA out
 
+Version 6.3.11 - not yet released
+* calculations
+  - fix freeze in glide solver
+
 Version 6.3.10 - 2012/07/20
 * calculations
   - fix rounding error in sector angle calculation (#2102, #2209)

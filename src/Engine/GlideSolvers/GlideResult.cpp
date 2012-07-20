@@ -51,6 +51,9 @@ GlideResult::CalcDeferred()
 void
 GlideResult::CalcCruiseBearing()
 {
+  if (!IsOk())
+    return;
+
   cruise_track_bearing = vector.bearing;
   if (!positive(effective_wind_speed))
     return;

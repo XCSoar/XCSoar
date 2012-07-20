@@ -89,11 +89,6 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
       aircraft_predict.altitude += gr.altitude_difference;
   }
 
-  if (!acc_gr.IsOk())
-    /* no values - cannot do the additional calculations below, bail
-       out */
-    return acc_gr;
-
   leg_solutions[active_index].CalcDeferred();
   acc_gr.CalcDeferred();
   return acc_gr;
