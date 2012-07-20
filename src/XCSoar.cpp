@@ -138,7 +138,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (XCSoarInterface::Startup())
     ret = CommonInterface::main_window->RunEventLoop();
 
-  assert(CommonInterface::main_window == NULL);
+  delete CommonInterface::main_window;
 
   DeinitialiseIOThread();
 
