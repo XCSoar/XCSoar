@@ -599,6 +599,10 @@ public:
     return chronological_list.rend();
   }
 
+  const TaskProjection &GetProjection() const {
+    return task_projection;
+  }
+
   gcc_pure
   unsigned ProjectRange(const GeoPoint &location, fixed distance) const {
     return task_projection.ProjectRangeInteger(location, distance);
