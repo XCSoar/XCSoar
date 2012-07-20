@@ -57,7 +57,7 @@ XContestTriangle::CalculateResult() const
   return result;
 }
 
-AbstractContest::SolverResult
+SolverResult
 XContestTriangle::Solve(bool exhaustive)
 {
   SolverResult result = ContestDijkstra::Solve(exhaustive);

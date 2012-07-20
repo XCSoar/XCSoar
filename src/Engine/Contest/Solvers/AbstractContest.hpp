@@ -27,6 +27,7 @@
 #include "../ContestResult.hpp"
 #include "../ContestTrace.hpp"
 #include "Trace/Point.hpp"
+#include "PathSolvers/SolverResult.hpp"
 
 #include <assert.h>
 
@@ -43,28 +44,6 @@ class AbstractContest {
   ContestTraceVector best_solution;
 
 public:
-  /**
-   * Return type for Solve().
-   */
-  enum class SolverResult {
-    /**
-     * Still looking for a solution.
-     */
-    INCOMPLETE,
-
-    /**
-     * A valid solution was found.
-     */
-    VALID,
-
-    /**
-     * The solver has completed, but failed to find a valid solution,
-     * or the solution was not better than the previous one.  More
-     * data may be required.
-     */
-    FAILED,
-  };
-
   /**
    * Constructor
    *

@@ -80,9 +80,9 @@ RunContest(AbstractContest &_contest,
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
-  AbstractContest::SolverResult r = _contest.Solve(exhaustive);
-  if (r != AbstractContest::SolverResult::VALID)
-    return r != AbstractContest::SolverResult::INCOMPLETE;
+  SolverResult r = _contest.Solve(exhaustive);
+  if (r != SolverResult::VALID)
+    return r != SolverResult::INCOMPLETE;
 
   // if no improved solution was found, must have finished processing
   // with invalid data

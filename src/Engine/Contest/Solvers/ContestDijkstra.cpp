@@ -140,7 +140,7 @@ ContestDijkstra::UpdateTrace(bool force)
   }
 }
 
-AbstractContest::SolverResult
+SolverResult
 ContestDijkstra::Solve(bool exhaustive)
 {
   assert(num_stages <= MAX_STAGES);

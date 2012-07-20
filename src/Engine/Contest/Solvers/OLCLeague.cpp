@@ -39,7 +39,7 @@ OLCLeague::Reset()
   }
 }
 
-AbstractContest::SolverResult
+SolverResult
 OLCLeague::Solve(bool exhaustive)
 {
   if (trace.size() < 2)

@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -20,32 +21,29 @@
 }
 */
 
-#include "OLCPlus.hpp"
+#ifndef XCSOAR_SOLVER_RESULT_HPP
+#define XCSOAR_SOLVER_RESULT_HPP
 
-OLCPlus::OLCPlus()
-  :AbstractContest(0)
-{
-}
+/**
+ * Return type for path solver methods.
+ */
+enum class SolverResult {
+  /**
+   * Still looking for a solution.
+   */
+  INCOMPLETE,
 
-SolverResult
-OLCPlus::Solve(bool exhaustive)
-{
-  return SaveSolution()
-    ? SolverResult::VALID
-    : SolverResult::FAILED;
-}
+  /**
+   * A valid solution was found.
+   */
+  VALID,
 
-void
-OLCPlus::CopySolution(ContestTraceVector &vec) const
-{
-  vec = solution_classic;
-}
+  /**
+   * The solver has completed, but failed to find a valid solution,
+   * or the solution was not better than the previous one.  More
+   * data may be required.
+   */
+  FAILED,
+};
 
-ContestResult
-OLCPlus::CalculateResult() const
-{
-  ContestResult result = result_classic;
-  result.score = ApplyHandicap((result_classic.distance +
-                                fixed(0.3) * result_fai.distance) * fixed(0.001));
-  return result;
-}
+#endif
