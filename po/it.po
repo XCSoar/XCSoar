@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-27 19:04+0200\n"
-"PO-Revision-Date: 2012-07-12 22:38+0000\n"
+"PO-Revision-Date: 2012-07-13 23:00+0000\n"
 "Last-Translator: Piero <pieromissa@virgilio.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-12 22:52+0000\n"
-"X-Generator: Launchpad (build 15593)\n"
+"X-Launchpad-Export-Date: 2012-07-20 23:44+0000\n"
+"X-Generator: Launchpad (build 15654)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -4012,24 +4012,24 @@ msgstr ""
 
 #: src/Dialogs/dlgBasicSettings.cpp:359
 msgid "Flight Setup"
-msgstr ""
+msgstr "Configurazione volo"
 
 #: src/Dialogs/dlgChecklist.cpp:68 Data/Dialogs/dlgChecklist.xml:3
 #: Data/Dialogs/dlgChecklist_L.xml:3
 msgid "Checklist"
-msgstr ""
+msgstr "Checklist"
 
 #: src/Dialogs/dlgChecklist.cpp:148
 msgid "No checklist loaded"
-msgstr ""
+msgstr "Nessuna checklist caricata"
 
 #: src/Dialogs/dlgChecklist.cpp:148
 msgid "Create xcsoar-checklist.txt\n"
-msgstr ""
+msgstr "Crea xcsoar-checklist.txt\n"
 
 #: src/Dialogs/dlgPlanes.cpp:127
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 #: src/Dialogs/dlgPlanes.cpp:168 src/Dialogs/dlgPlanes.cpp:203
 #: src/Dialogs/dlgPlanes.cpp:243 src/Dialogs/dlgConfigWaypoints.cpp:57
@@ -4064,7 +4064,7 @@ msgstr "Carica"
 #: src/Dialogs/dlgPlanes.cpp:173
 #, c-format
 msgid "Plane profile \"%s\" activated."
-msgstr ""
+msgstr "Profilo aliante \"%s\" attivato."
 
 #: src/Dialogs/dlgPlanes.cpp:202 src/Dialogs/dlgPlanes.cpp:242
 msgid "Please enter the registration of the plane!"
@@ -4073,16 +4073,16 @@ msgstr ""
 #: src/Dialogs/dlgPlanes.cpp:215 src/Dialogs/dlgPlanes.cpp:258
 #, c-format
 msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Un profilo aliante \"%s\" già esiste. Vuoi sovrascriverlo?"
 
 #: src/Dialogs/dlgPlanes.cpp:218 src/Dialogs/dlgPlanes.cpp:261
 msgid "Overwrite"
-msgstr ""
+msgstr "Sovrascrivere"
 
 #: src/Dialogs/dlgPlanes.cpp:289
 #, c-format
 msgid "Do you really want to delete plane profile \"%s\"?"
-msgstr ""
+msgstr "Vuoi veramente cancellare il profilo aliante \"%s\"?"
 
 #: src/Dialogs/dlgPlanes.cpp:291 Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9 Data/Dialogs/dlgPlanes.xml:9
@@ -4093,17 +4093,17 @@ msgstr "Cancella"
 #: src/Dialogs/dlgPlanes.cpp:304
 #, c-format
 msgid "Do you want to load plane profile \"%s\"?"
-msgstr ""
+msgstr "Vuoi caricare il profilo aliante \"%s\"?"
 
 #: src/Dialogs/dlgPlaneDetails.cpp:44 Data/Dialogs/dlgPlaneDetails.xml:3
 #: Data/Dialogs/dlgPlaneDetails_L.xml:3
 msgid "Plane Details"
-msgstr ""
+msgstr "Dettaglio aliante"
 
 #: src/Dialogs/dlgPlanePolar.cpp:56 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
 msgid "Plane Polar"
-msgstr ""
+msgstr "Polare aliante"
 
 #: src/Dialogs/dlgPlanePolar.cpp:64 src/Dialogs/dlgConfiguration.cpp:109
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:129
@@ -4113,23 +4113,23 @@ msgstr ""
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:5
 #, no-c-format
 msgid "Polar"
-msgstr ""
+msgstr "Polare"
 
 #. let the user select
 #: src/Dialogs/dlgPlanePolar.cpp:143
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:183
 msgid "Load Polar"
-msgstr ""
+msgstr "Carica polare"
 
 #: src/Dialogs/dlgPlanePolar.cpp:202
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:245
 msgid "Load Polar From File"
-msgstr ""
+msgstr "Carica polare da file"
 
 #: src/Dialogs/dlgConfiguration.cpp:80 src/Dialogs/dlgConfiguration.cpp:90
 #, no-c-format
 msgid "Site Files"
-msgstr ""
+msgstr "Files del sito"
 
 #: src/Dialogs/dlgConfiguration.cpp:81
 #, no-c-format
@@ -4150,7 +4150,7 @@ msgstr "Indicatori analogici"
 #: src/Dialogs/dlgConfiguration.cpp:84
 #, no-c-format
 msgid "Task Defaults"
-msgstr ""
+msgstr "Tema di default"
 
 #: src/Dialogs/dlgConfiguration.cpp:85
 #, no-c-format
@@ -4160,12 +4160,12 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:91
 #, no-c-format
 msgid "Orientation"
-msgstr ""
+msgstr "Orientamento"
 
 #: src/Dialogs/dlgConfiguration.cpp:92
 #, no-c-format
 msgid "Elements"
-msgstr ""
+msgstr "Elementi"
 
 #: src/Dialogs/dlgConfiguration.cpp:96
 #, no-c-format
@@ -4175,12 +4175,12 @@ msgstr "Fattori di Sicurezza"
 #: src/Dialogs/dlgConfiguration.cpp:99
 #, no-c-format
 msgid "Route"
-msgstr ""
+msgstr "Itinerario"
 
 #: src/Dialogs/dlgConfiguration.cpp:100
 #, no-c-format
 msgid "FLARM, Other"
-msgstr ""
+msgstr "FLARM, altro"
 
 #: src/Dialogs/dlgConfiguration.cpp:102
 #, no-c-format
@@ -4205,12 +4205,12 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:106
 #, no-c-format
 msgid "InfoBox Pages"
-msgstr ""
+msgstr "Pagine InfoBoxes"
 
 #: src/Dialogs/dlgConfiguration.cpp:107
 #, no-c-format
 msgid "InfoBox Modes"
-msgstr ""
+msgstr "Modi InfoBoxes"
 
 #: src/Dialogs/dlgConfiguration.cpp:110
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:115
@@ -4218,26 +4218,28 @@ msgstr ""
 #: Data/Input/default.xci:1175
 #, no-c-format
 msgid "Logger"
-msgstr ""
+msgstr "Registro"
 
 #: src/Dialogs/dlgConfiguration.cpp:111
 #, no-c-format
 msgid "Logger Info"
-msgstr ""
+msgstr "Informazioni registro"
 
 #: src/Dialogs/dlgConfiguration.cpp:118
 #, no-c-format
 msgid "Tracking"
-msgstr ""
+msgstr "Tracciamento"
 
 #: src/Dialogs/dlgConfiguration.cpp:121
 #, no-c-format
 msgid "Experimental Features"
-msgstr ""
+msgstr "Caratteristiche sperimentali"
 
 #: src/Dialogs/dlgConfiguration.cpp:287 src/Dialogs/dlgConfigFonts.cpp:306
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
 msgstr ""
+"Cambiamenti della configurazione salvati. Riavvia XCSoar per applicare le "
+"modifiche."
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:115
 msgid "Overwrite?"
@@ -4252,7 +4254,7 @@ msgstr "Incolla InfoBox"
 #: Data/Dialogs/Configuration/PolarConfigPanel.xml:6
 #: Data/Dialogs/Configuration/PolarConfigPanel_L.xml:6
 msgid "Invalid"
-msgstr ""
+msgstr "Invalido"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:353 src/Dialogs/dlgWaypointEdit.cpp:60
 #: Data/Dialogs/AirspaceList.xml:8 Data/Dialogs/AirspaceList_L.xml:6
@@ -4264,7 +4266,7 @@ msgstr "Nome"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:384
 msgid "Content"
-msgstr ""
+msgstr "Contenuto"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:427
 msgid "Copy"
@@ -4296,16 +4298,16 @@ msgstr "Piloni Editati"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:3
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:3
 msgid "FLARM Traffic Details"
-msgstr ""
+msgstr "Dettaglio dei traffici FLARM"
 
 #. Ask for confirmation
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:217
 msgid "Do you want to set this FLARM contact as your new teammate?"
-msgstr ""
+msgstr "Vuoi impostare questo contatto FLARM come nuovo compagno del Team?"
 
 #: src/Dialogs/dlgFlarmTrafficDetails.cpp:218
 msgid "New Teammate"
-msgstr ""
+msgstr "Nuovo compagno di Team"
 
 #: src/Dialogs/dlgHelp.cpp:64 Data/Dialogs/dlgComboPicker.xml:8
 #: Data/Dialogs/dlgComboPicker_L.xml:7 Data/Dialogs/dlgHelp.xml:3
@@ -4317,7 +4319,7 @@ msgstr "Aiuto"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml:8
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:5
 msgid "Switch InfoBox"
-msgstr ""
+msgstr "Commutare InfoBox"
 
 #: src/Dialogs/dlgStatus.cpp:65 Data/Dialogs/dlgStatus.xml:2
 #: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:826
@@ -4329,11 +4331,11 @@ msgstr "Stato"
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
 #: Data/Dialogs/dlgTaskPoint.xml:7 Data/Dialogs/dlgTaskPoint_L.xml:11
 msgid "Location"
-msgstr ""
+msgstr "Posizione"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:91
 msgid "Max. height gain"
-msgstr ""
+msgstr "Massimo guadagno di altezza"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:92
 #: Data/Dialogs/dlgStatusAircraft.xml:9
@@ -4355,12 +4357,12 @@ msgstr "Fix invalido"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:48
 #, no-c-format
 msgid "2D fix"
-msgstr ""
+msgstr "Fix 2D"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:50
 #, no-c-format
 msgid "3D fix"
-msgstr ""
+msgstr "Fix 3D"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:111
 #: Data/Dialogs/dlgStatusSystem.xml:4
@@ -4375,12 +4377,12 @@ msgstr "Satelliti in vista"
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:113
 #: Data/Dialogs/dlgStatusSystem.xml:6
 msgid "Variometer"
-msgstr ""
+msgstr "Variometro"
 
 #: src/Dialogs/StatusPanels/SystemStatusPanel.cpp:116
 #: Data/Dialogs/dlgStatusSystem.xml:9
 msgid "Supply voltage"
-msgstr "Voltaggio"
+msgstr "Voltaggio di alimentazione"
 
 #: src/Dialogs/StatusPanels/TaskStatusPanel.cpp:98
 #: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:203
@@ -4425,11 +4427,11 @@ msgstr "Start valido"
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:112
 #: Data/Dialogs/dlgStatusTask.xml:7
 msgid "Start time"
-msgstr "Tempo start"
+msgstr "Ora di inizio"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:113
 msgid "Start alt."
-msgstr ""
+msgstr "Altezza di partenza"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:114
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:116
@@ -4442,7 +4444,7 @@ msgstr "Velocita start"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:116
 msgid "Finish min. alt."
-msgstr ""
+msgstr "Altezza minima di arrivo"
 
 #: src/Dialogs/StatusPanels/RulesStatusPanel.cpp:117
 msgid "Valid finish"
@@ -4456,11 +4458,11 @@ msgstr "Ora locale"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:108
 msgid "UTC time"
-msgstr ""
+msgstr "Ora UTC"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:109
 msgid "UTC date"
-msgstr ""
+msgstr "Data UTC"
 
 #: src/Dialogs/StatusPanels/TimesStatusPanel.cpp:110
 #: Data/Dialogs/dlgStatusAircraft.xml:6
@@ -4483,11 +4485,11 @@ msgstr "Tramonto"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:54
 msgid "Too much wind"
-msgstr ""
+msgstr "Troppo vento"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:57
 msgid "No solution"
-msgstr ""
+msgstr "Nessuna soluzione"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:86
 #: src/Dialogs/dlgWaypointEdit.cpp:65 Data/Dialogs/dlgWaypointEdit.xml:8
@@ -4499,15 +4501,15 @@ msgstr "Commento"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:18
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:26
 msgid "Radio frequency"
-msgstr ""
+msgstr "Frequenza radio"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:111
 msgid "Runway"
-msgstr ""
+msgstr "Pista"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:142
 msgid "Bearing and Distance"
-msgstr ""
+msgstr "Distanza e direzione"
 
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:154
 msgid "Alt. diff. MC 0"
@@ -4526,11 +4528,11 @@ msgstr ""
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:123
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:157
 msgid "No task defined."
-msgstr ""
+msgstr "Nessun tema definito."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:62
 msgid "No active task point."
-msgstr ""
+msgstr "Nessun punto del tema attivo."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:62
 msgid "Replace in task"
@@ -4541,7 +4543,7 @@ msgstr "Sostit.nel tema"
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:129
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:167
 msgid "Task would not be valid after the change."
-msgstr ""
+msgstr "Il tema non sarà valido dopo la modifica."
 
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:100
 #: src/Dialogs/Waypoint/WaypointCommandsWidget.cpp:134
@@ -4600,7 +4602,7 @@ msgstr "Tutto ON"
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:53
 #, no-c-format
 msgid "All airspaces are displayed."
-msgstr ""
+msgstr "Tutti gli spazi aerei sono visualizzati."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:54
 #, no-c-format
@@ -4615,7 +4617,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:57
 #, no-c-format
 msgid "Display airspaces within a margin of the glider."
-msgstr ""
+msgstr "Visualizza gli spazi aerei entro una distanza dall'aliante."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:58
 #, no-c-format
@@ -4625,19 +4627,19 @@ msgstr "Tutti sotto"
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:59
 #, no-c-format
 msgid "Display airspaces below the glider or within a margin."
-msgstr ""
+msgstr "Visualizza gli spazi aerei sotto o entro una distanza dall'aliante."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:64
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:190
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:52
 #, no-c-format
 msgid "Default"
-msgstr ""
+msgstr "Predefinito"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:66
 #, no-c-format
 msgid "Fill all"
-msgstr ""
+msgstr "Riempi tutto"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:68
 #, no-c-format
@@ -4662,6 +4664,9 @@ msgid ""
 "filter button also allows filtering of display and warnings independently "
 "for each airspace class."
 msgstr ""
+"Controlla i filtri degli spazi aerei per la visualizzazione e avvisi. Il "
+"pulsante filtro spazi aerei consente il filtraggio delle visualizzazioni e "
+"avvisi, indipendentemente per ogni classe di spazio aereo."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:187
 msgid "Clip altitude"
@@ -4682,24 +4687,28 @@ msgid ""
 "For auto and all below airspace mode, this is the altitude above/below which "
 "airspace is included."
 msgstr ""
+"Per le modalità spazio aereo auto e tutto sotto, questa è l'altitudine al di "
+"sopra/sotto la quale lo spazio aereo è incluso."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:195
 msgid "Enable/disable all airspace warnings."
-msgstr ""
+msgstr "Abilita/disabilita tutti gli avvisi degli spazi aerei"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:198
 msgid "Warning time"
-msgstr "Tempo allarme"
+msgstr "Orario di avviso"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:199
 msgid ""
 "This is the time before an airspace incursion is estimated at which the "
 "system will warn the pilot."
 msgstr ""
+"Questa è l'orario prima dell'incursione stimata di uno spazio aereo in cui "
+"il sistema avviserà il pilota."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:203
 msgid "Acknowledge time"
-msgstr "Tempo Silenziato"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:204
 msgid ""
@@ -4715,27 +4724,29 @@ msgstr "Usa riquadro nero"
 msgid ""
 "Draw a black outline around each airspace rather than the airspace color."
 msgstr ""
+"Disegna un bordo nero attorno ad ogni spazio aereo anziché il colore dello "
+"spazio aereo."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:213
 msgid "Airspace fill mode"
-msgstr ""
+msgstr "Modalità riempimento dello spazio aereo"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:214
 msgid "Specifies the mode for filling the airspace area."
-msgstr ""
+msgstr "Specifica la modalità di riempimento dell'area dello spazio aereo."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:220
 msgid "Airspace transparency"
-msgstr ""
+msgstr "Trasparenza dello spazio aereo."
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:220
 msgid "If enabled, then airspaces are filled transparently."
-msgstr ""
+msgstr "Se abilitato, gli spazi aerei sono riempiti in trasparenza."
 
 #: src/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp:41
 #, no-c-format
 msgid "Generic"
-msgstr ""
+msgstr "Generico"
 
 #: src/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp:69
 msgid "Device model"
@@ -4746,10 +4757,13 @@ msgid ""
 "Select your PNA model to make full use of its hardware capabilities. If it "
 "is not included, use Generic type."
 msgstr ""
+"Seleziona il tuo dispositivo di navigazione per permettere il massimo "
+"utilizzo delle sue capacità hardware. Se non è incluso, utilizza il tipo "
+"Generico."
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:56
 msgid "FLARM radar"
-msgstr ""
+msgstr "Radar FLARM"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:57
 msgid ""
@@ -4762,25 +4776,28 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:60
 msgid "Auto close FLARM"
-msgstr ""
+msgstr "Spegnimento automatico del FLARM."
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:61
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
 msgstr ""
+"Impostando questo su \"On\" chiuderà automaticamente il dialogo FLARM se non "
+"c'è traffico. \"Off\" manterrà la finestra di dialogo anche senza traffico "
+"presente."
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:65
 msgid "Thermal assistant"
-msgstr ""
+msgstr "Assistente termica"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:66
 msgid "This enables the display of the thermal assistant gauge."
-msgstr ""
+msgstr "Questo abilita la visualizzazione dell'indicatore assistente termica"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:69
 msgid "Thermal band"
-msgstr ""
+msgstr "Fascia termica"
 
 #: src/Dialogs/ConfigPanels/GaugesConfigPanel.cpp:70
 msgid ""
@@ -4800,7 +4817,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:64
 msgid "Speed arrows"
-msgstr ""
+msgstr "Frecce velocità"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:65
 msgid ""
@@ -4811,7 +4828,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:70
 msgid "Show average"
-msgstr ""
+msgstr "Visualizza media"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:71
 msgid ""
@@ -4821,7 +4838,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:76
 msgid "Show MacReady"
-msgstr ""
+msgstr "Mostra MacCready"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:76
 msgid "Whether to show the MacCready setting."
@@ -4829,7 +4846,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:79
 msgid "Show bugs"
-msgstr ""
+msgstr "Mostra insetti"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:79
 msgid "Whether to show the bugs percentage."
@@ -4837,7 +4854,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:82
 msgid "Show ballast"
-msgstr ""
+msgstr "Mostra zavorra"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:82
 msgid "Whether to show the ballast percentage."
@@ -4864,15 +4881,15 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:98
 msgid "Audio vario"
-msgstr ""
+msgstr "Audio variometro"
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:99
 msgid "Emulate the sound of an electronic vario."
-msgstr ""
+msgstr "Emula il suono di un variometro elettronico."
 
 #: src/Dialogs/ConfigPanels/VarioConfigPanel.cpp:102
 msgid "Volume"
-msgstr ""
+msgstr "Volume"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:61
 #, no-c-format
@@ -4906,11 +4923,13 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:71
 msgid "Auto MC mode"
-msgstr ""
+msgstr "Modalità MC automatica"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:72
 msgid "This option defines which auto MacCready algorithm is used."
 msgstr ""
+"Questa opzione definisce quale algoritmo automatico di MacCready viene "
+"utilizzato."
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:75
 msgid "Block speed to fly"
@@ -4964,16 +4983,21 @@ msgid ""
 "done. Normally for gliders a good value is 90-120 seconds, and for "
 "paragliders 15 seconds."
 msgstr ""
+"Qui puoi decidere su quanti secondi di volo questo calcolo deve essere "
+"eseguito. Di norma per gli alianti un buon valore è di 90-120 secondi, e per "
+"i parapendio 15 secondi."
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:111
 msgid "Predict wind drift"
-msgstr ""
+msgstr "Prevedi deriva del vento"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:112
 msgid ""
 "Account for wind drift for the predicted circling duration. This reduces the "
 "arrival height for legs with head wind."
 msgstr ""
+"Per la prevista durata della circuitazione considera la deriva del vento. "
+"Questo riduce l'altezza di arrivo per tratte con vento frontale."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:82
 msgid "Fonts"
@@ -4981,17 +5005,19 @@ msgstr "Caratteri"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:128
 msgid "Auto. blank"
-msgstr ""
+msgstr "Blank automatico"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:129
 msgid ""
 "This determines whether to blank the display after a long period of "
 "inactivity when operating on internal battery power."
 msgstr ""
+"Quando operando con l'alimentazione interna delle batterie, questo determina "
+"se disattivare lo schermo dopo un lungo periodo di inattività."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:134
 msgid "Events"
-msgstr ""
+msgstr "Eventi"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:135
 msgid ""
@@ -5001,7 +5027,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:142
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:143
 msgid ""
@@ -5009,14 +5035,17 @@ msgid ""
 "languages. Select English for a native interface or Automatic to localise "
 "XCSoar according to the system settings."
 msgstr ""
+"L'opzione linguaggio seleziona la traduzione per i testi in inglese in altre "
+"lingue. Seleziona inglese per una interfaccia originale o Automatico per "
+"localizzare XCSoar secondo le impostazioni di sistema."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:148
 msgid "Automatic"
-msgstr ""
+msgstr "Automatico"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:149
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:177
 msgid "Status message"
@@ -5027,6 +5056,9 @@ msgid ""
 "The status file can be used to define sounds to be played when certain "
 "events occur, and how long various status messages will appear on screen."
 msgstr ""
+"Il file di stato può essere utilizzato per definire suoni da riprodurre "
+"quanto occorrono certi eventi. e per quanto a lungo i vari messaggi di stati "
+"appaiono sullo schermo."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:183
 msgid "Menu timeout"
@@ -5037,6 +5069,8 @@ msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
 msgstr ""
+"Questo determina per quanto a lungo i menu appaiono sullo schermo se "
+"l'utilizzatore non esegue pressioni di bottone o interagisce con il computer."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:191
 #, no-c-format
