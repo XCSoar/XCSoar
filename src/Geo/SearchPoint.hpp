@@ -92,6 +92,23 @@ public:
    */
   SearchPoint(const FlatGeoPoint &floc, const TaskProjection& tp);
 
+  gcc_const
+  static SearchPoint Invalid() {
+    return SearchPoint(GeoPoint::Invalid());
+  }
+
+  gcc_pure
+  bool IsValid() const {
+    return location.IsValid();
+  }
+
+  void SetInvalid() {
+    location.SetInvalid();
+#ifndef NDEBUG
+    projected = false;
+#endif
+  }
+
   /**
    * Calculate projected value of geodetic coordinate
    *
