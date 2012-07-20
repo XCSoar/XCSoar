@@ -69,7 +69,7 @@ OLCSISAT::CalculateResult(const ContestTraceVector &solution) const
 
   // S = total distance
   ContestResult result = ContestDijkstra::CalculateResult(solution);
-  result.score = ApplyHandicap((V + fixed(3) * result.distance) * fixed(0.00025));
+  result.score = ApplyHandicap((V + 3 * result.distance) / 4000);
   return result;
 }
 
