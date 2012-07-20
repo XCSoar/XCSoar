@@ -3,12 +3,6 @@ CXX_FEATURES += -std=gnu++0x
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 
-ifeq ($(TARGET),ANDROID)
-# Temporary workaround for a libstdc++ 4.4 bug.  Disable this as soon
-# as we have an Android NDK with gcc 4.5+.
-CXX_FEATURES += -frtti
-endif
-
 # Another instance of the libstdc++ 4.4 workaround.  This command-line
 # option is used by debian/rules, to allow building on old Debian
 # versions.
