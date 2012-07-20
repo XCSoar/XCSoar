@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.3.11 - not yet released
+* calculations
+  - fix freeze in glide solver
 
 Version 6.3.10 - 2012/07/20
 * calculations
