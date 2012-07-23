@@ -652,6 +652,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunIGCWriter \
 	RunFlightLogger \
 	RunCirclingWind RunWindZigZag RunWindEKF \
+	RunTask \
 	RunCanvas RunMapWindow \
 	RunDialog RunListControl \
 	RunTerminal \
@@ -1364,6 +1365,32 @@ RUN_WIND_EKF_SOURCES = \
 RUN_WIND_EKF_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_WIND_EKF_DEPENDS = GEO MATH UTIL
 $(eval $(call link-program,RunWindEKF,RUN_WIND_EKF))
+
+RUN_TASK_SOURCES = \
+	$(SRC)/DateTime.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/Task/TaskFile.cpp \
+	$(SRC)/Task/TaskFileXCSoar.cpp \
+	$(SRC)/Task/TaskFileSeeYou.cpp \
+	$(SRC)/Task/TaskFileIGC.cpp \
+	$(SRC)/Task/Serialiser.cpp \
+	$(SRC)/Task/Deserialiser.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/RadioFrequency.cpp \
+	$(SRC)/XML/Node.cpp \
+	$(SRC)/XML/Parser.cpp \
+	$(SRC)/XML/Writer.cpp \
+	$(SRC)/XML/DataNode.cpp \
+	$(SRC)/XML/DataNodeXML.cpp \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/RunTask.cpp
+RUN_TASK_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_TASK_DEPENDS = TASK WAYPOINT GLIDE GEO MATH UTIL IO
+$(eval $(call link-program,RunTask,RUN_TASK))
 
 RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
