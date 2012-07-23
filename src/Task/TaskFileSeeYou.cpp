@@ -446,19 +446,21 @@ OrderedTask*
 TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
                         const Waypoints *waypoints, unsigned index) const
 {
+  // Create FileReader for reading the task
+  FileLineReader reader(path, ConvertLineReader::AUTO);
+  if (reader.error())
+    return NULL;
+
   // Read waypoints from the CUP file
   Waypoints file_waypoints;
   {
     WaypointReaderSeeYou waypoint_file(path, 0);
     NullOperationEnvironment operation;
-    if (!waypoint_file.Parse(file_waypoints, operation))
-      return NULL;
+    waypoint_file.Parse(file_waypoints, reader, operation);
   }
   file_waypoints.Optimise();
 
-  // Create FileReader for reading the task
-  FileLineReader reader(path, ConvertLineReader::AUTO);
-  if (reader.error())
+  if (!reader.Rewind())
     return NULL;
 
   TCHAR *line = AdvanceReaderToTask(reader, index);
