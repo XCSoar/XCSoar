@@ -33,7 +33,7 @@
 #include "FileDescriptor.hpp"
 #include "Compiler.h"
 
-struct sockaddr;
+class SocketAddress;
 
 /**
  * An OO wrapper for a UNIX socket descriptor.
@@ -91,9 +91,9 @@ public:
 
   SocketDescriptor Accept();
 
-  bool Connect(const struct sockaddr *address, size_t length);
-
 #ifndef _WIN32_WCE
+  bool Connect(const SocketAddress &address);
+
   /**
    * Create a UDP socket and connect it to the specified host and
    * port.

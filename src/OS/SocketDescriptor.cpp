@@ -28,6 +28,7 @@
  */
 
 #include "SocketDescriptor.hpp"
+#include "SocketAddress.hpp"
 
 #include <stdint.h>
 #include <string.h>
@@ -35,7 +36,6 @@
 #ifdef HAVE_POSIX
 #include <netinet/in.h>
 #include <sys/socket.h>
-#include <netdb.h>
 #else
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -116,13 +116,17 @@ SocketDescriptor::Accept()
     : SocketDescriptor();
 }
 
-bool
-SocketDescriptor::Connect(const struct sockaddr *address, size_t length)
-{
-  assert(address != NULL);
+#ifndef _WIN32_WCE
 
-  return ::connect(Get(), address, length) >= 0;
+bool
+SocketDescriptor::Connect(const SocketAddress &address)
+{
+  assert(address.IsDefined());
+
+  return ::connect(Get(), address, address.GetLength()) >= 0;
 }
+
+#endif
 
 bool
 SocketDescriptor::Create(int domain, int type, int protocol)
@@ -154,20 +158,13 @@ SocketDescriptor::BindPort(unsigned port)
 bool
 SocketDescriptor::CreateConnectUDP(const char *host, const char *port)
 {
-  struct addrinfo hints;
-  memset(&hints, 0, sizeof(hints));
-  hints.ai_family = AF_UNSPEC;
-  hints.ai_socktype = SOCK_DGRAM;
+  const int socktype = SOCK_DGRAM;
 
-  struct addrinfo *ai;
-  if (getaddrinfo(host, port, &hints, &ai) != 0)
+  SocketAddress address;
+  if (!address.Lookup(host, port, socktype))
     return false;
 
-  bool success = Create(ai->ai_family, ai->ai_socktype, ai->ai_protocol) &&
-    Connect(ai->ai_addr, ai->ai_addrlen);
-
-  freeaddrinfo(ai);
-  return success;
+  return Create(address.GetFamily(), socktype, 0) && Connect(address);
 }
 
 #endif

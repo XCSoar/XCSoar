@@ -19,6 +19,8 @@ endif
 
 ifeq ($(HAVE_CE),y)
 OS_SOURCES += $(OS_SRC_DIR)/MemInfo.cpp
+else
+OS_SOURCES += $(OS_SRC_DIR)/SocketAddress.cpp
 endif
 
 $(eval $(call link-library,libos,OS))
