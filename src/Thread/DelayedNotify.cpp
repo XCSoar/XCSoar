@@ -33,8 +33,7 @@ Copyright_License {
 
 DelayedNotify::~DelayedNotify()
 {
-  if (pending.Get())
-    Cancel();
+  Cancel();
 }
 
 void
