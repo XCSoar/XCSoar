@@ -167,8 +167,6 @@ gcc_visibility_default
 JNIEXPORT void JNICALL
 Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 {
-  assert(CommonInterface::main_window == NULL);
-
   InitThreadDebug();
 
   delete CommonInterface::main_window;
