@@ -68,6 +68,11 @@ public:
     address.ss_family = AF_UNSPEC;
   }
 
+  /**
+   * Set up a wildcard address with the specified port.
+   */
+  void Port(unsigned port);
+
   bool Lookup(const char *host, const char *service, int socktype);
 };
 
