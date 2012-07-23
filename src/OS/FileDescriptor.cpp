@@ -86,6 +86,14 @@ FileDescriptor::SetNonBlocking()
 
 #endif
 
+bool
+FileDescriptor::Rewind()
+{
+  assert(IsDefined());
+
+  return lseek(fd, 0, SEEK_SET) == 0;
+}
+
 off_t
 FileDescriptor::GetSize() const
 {

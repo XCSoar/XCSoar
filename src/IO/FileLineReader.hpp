@@ -49,6 +49,17 @@ public:
     return file.error();
   }
 
+  /**
+   * Rewind the file to the beginning.
+   */
+  bool Rewind() {
+    if (!file.Rewind())
+      return false;
+
+    splitter.ResetBuffer();
+    return true;
+  }
+
 public:
   virtual char *read();
   virtual long size() const;
@@ -78,6 +89,17 @@ public:
 
   bool error() const {
     return file.error();
+  }
+
+  /**
+   * Rewind the file to the beginning.
+   */
+  bool Rewind() {
+    if (!file.Rewind())
+      return false;
+
+    splitter.ResetBuffer();
+    return true;
   }
 
 public:

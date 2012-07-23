@@ -126,6 +126,11 @@ public:
   }
 
   /**
+   * Rewind the pointer to the beginning of the file.
+   */
+  bool Rewind();
+
+  /**
    * Returns the size of the file in bytes, or -1 on error.
    */
   gcc_pure

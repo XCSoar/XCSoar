@@ -56,6 +56,15 @@ public:
   LineSplitter(Source<char> &_source)
     :source(_source), remaining((char *)NULL, 0) {}
 
+  /**
+   * Discards the buffer that holds the data after the last line.
+   * This can be used to implement Source::Rewind(): after rewinding
+   * the Source object, the LineSplitter must forget the buffer.
+   */
+  void ResetBuffer() {
+    remaining.length = 0;
+  }
+
   virtual char *read();
   virtual long size() const;
   virtual long tell() const;
