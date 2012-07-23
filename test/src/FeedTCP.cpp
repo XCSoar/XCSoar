@@ -27,6 +27,7 @@ Copyright_License {
  */
 
 #include "OS/SocketDescriptor.hpp"
+#include "OS/SocketAddress.hpp"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -35,30 +36,24 @@ Copyright_License {
 #include <errno.h>
 #include <stdlib.h>
 
-#ifdef HAVE_POSIX
-#include <arpa/inet.h>
-#else
-#include <winsock2.h>
-#endif
-
 int main(int argc, char **argv)
 {
   // Determine on which TCP port to connect to the server
-  int tcp_port;
+  const char *tcp_port;
   if (argc < 2) {
     fprintf(stderr, "This program opens a TCP connection to a server which is assumed ");
     fprintf(stderr, "to be at 127.0.0.1, and sends NMEA data which is read from stdin.\n\n");
     fprintf(stderr, "Usage: %s PORT\n", argv[0]);
     fprintf(stderr, "Defaulting to port 4353\n");
-    tcp_port = 4353;
+    tcp_port = "4353";
   } else {
-    tcp_port = atoi(argv[1]);
+    tcp_port = argv[1];
   }
 
   // Convert IP address to binary form
-  struct sockaddr_in server_addr;
-  if ((server_addr.sin_addr.s_addr = inet_addr("127.0.0.1")) == INADDR_NONE) {
-    perror("IP");
+  SocketAddress server_address;
+  if (!server_address.Lookup("127.0.0.1", tcp_port, AF_INET)) {
+    fprintf(stderr, "Failed to look up address\n");
     exit(1);
   }
 
@@ -70,13 +65,7 @@ int main(int argc, char **argv)
   }
 
   // Connect to the specified server
-  server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(tcp_port);
-  memset(&(server_addr.sin_zero), 0, 8);
-
-  if (!sock.Connect((struct sockaddr *)&server_addr,
-                    sizeof(struct sockaddr)))
-  {
+  if (!sock.Connect(server_address)) {
     perror("Connect");
     exit(1);
   }
