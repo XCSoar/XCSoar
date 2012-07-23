@@ -166,10 +166,19 @@ ContestDijkstra::UpdateTrace(bool force)
       /* new data from the master trace, start incremental solver */
       AddIncrementalEdges(old_size);
   } else if (force) {
-    if (UpdateTraceTail()) {
-      /* new data from the master trace, restart the non-incremental
-         solver */
+    if (incremental && continuous) {
+      if (UpdateTraceTail()) {
+        /* new data from the master trace, restart the non-incremental
+           solver */
+        trace_dirty = true;
+        first_finish_candidate = incremental ? n_points - 1 : 0;
+      }
+    } else {
+      UpdateTraceFull();
+
       trace_dirty = true;
+      finished = false;
+
       first_finish_candidate = incremental ? n_points - 1 : 0;
     }
   }
