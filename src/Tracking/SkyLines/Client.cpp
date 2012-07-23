@@ -101,7 +101,7 @@ SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 
   packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
 
-  return socket.Write(&packet, sizeof(packet)) == sizeof(packet);
+  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
 }
 
 bool
@@ -121,5 +121,5 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
 
   packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
 
-  return socket.Write(&packet, sizeof(packet)) == sizeof(packet);
+  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
 }

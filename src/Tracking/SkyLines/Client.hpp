@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
+#include "OS/SocketAddress.hpp"
 #include "OS/SocketDescriptor.hpp"
 
 #include <stdint.h>
@@ -33,6 +34,7 @@ struct NMEAInfo;
 namespace SkyLinesTracking {
   class Client {
     uint64_t key;
+    SocketAddress address;
     SocketDescriptor socket;
 
   public:
@@ -47,7 +49,7 @@ namespace SkyLinesTracking {
     }
 
     bool Open(const char *host) {
-      return socket.CreateConnectUDP(host, "5597");
+      return address.Lookup(host, "5597", SOCK_DGRAM) && socket.CreateUDP();
     }
 
     void Close() {
