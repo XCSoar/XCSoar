@@ -222,3 +222,20 @@ SocketDescriptor::WaitWritable(int timeout_ms) const
 }
 
 #endif
+
+#ifndef _WIN32_WCE
+
+ssize_t
+SocketDescriptor::Write(const void *buffer, size_t length,
+                        const SocketAddress &address)
+{
+  return ::sendto(Get(), (const char *)buffer, length,
+#ifdef HAVE_POSIX
+                  MSG_DONTWAIT|MSG_NOSIGNAL,
+#else
+                  0,
+#endif
+                  address, address.GetLength());
+}
+
+#endif

@@ -111,6 +111,16 @@ public:
 
   int WaitReadable(int timeout_ms) const;
   int WaitWritable(int timeout_ms) const;
+#else
+  using FileDescriptor::Write;
+#endif
+
+#ifndef _WIN32_WCE
+  /**
+   * Send a datagram to the specified address.
+   */
+  ssize_t Write(const void *buffer, size_t length,
+                const SocketAddress &address);
 #endif
 };
 
