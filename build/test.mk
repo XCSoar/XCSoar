@@ -577,7 +577,6 @@ TEST_DRIVER_DEPENDS = DRIVER GEO MATH IO OS THREAD UTIL
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
 
 TEST_WAY_POINT_FILE_SOURCES = \
-	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
@@ -1013,7 +1012,6 @@ RUN_INPUT_PARSER_DEPENDS = IO OS UTIL
 $(eval $(call link-program,RunInputParser,RUN_INPUT_PARSER))
 
 RUN_WAY_POINT_PARSER_SOURCES = \
-	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
@@ -1036,7 +1034,6 @@ RUN_WAY_POINT_PARSER_DEPENDS = WAYPOINT IO OS THREAD ZZIP GEO MATH UTIL
 $(eval $(call link-program,RunWaypointParser,RUN_WAY_POINT_PARSER))
 
 NEAREST_WAYPOINTS_SOURCES = \
-	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Waypoint/WaypointFileType.cpp \
 	$(SRC)/Waypoint/WaypointReaderBase.cpp \
 	$(SRC)/Waypoint/WaypointReader.cpp \
@@ -1473,7 +1470,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
-	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
@@ -2011,7 +2007,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/IO/ConfiguredFile.cpp \
-	$(SRC)/IO/TextFile.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -2241,7 +2236,6 @@ $(eval $(call link-program,TaskInfo,TASK_INFO))
 
 DUMP_TASK_FILE_SOURCES = \
 	$(SRC)/Engine/Util/Gradient.cpp \
-	$(IO_SRC_DIR)/TextFile.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/XML/Node.cpp \

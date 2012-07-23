@@ -13,6 +13,7 @@ IO_SOURCES = \
 	$(IO_SRC_DIR)/KeyValueFileReader.cpp \
 	$(IO_SRC_DIR)/KeyValueFileWriter.cpp \
 	$(IO_SRC_DIR)/ZipLineReader.cpp \
+	$(IO_SRC_DIR)/TextFile.cpp \
 	$(IO_SRC_DIR)/CSVLine.cpp \
 	$(IO_SRC_DIR)/BatchTextWriter.cpp \
 	$(IO_SRC_DIR)/BinaryWriter.cpp \
