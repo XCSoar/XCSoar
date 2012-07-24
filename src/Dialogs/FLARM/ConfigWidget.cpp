@@ -104,7 +104,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   acft = GetUnsignedValue(device, "ACFT", 0);
   log_int = GetUnsignedValue(device, "LOGINT", 2);
 
-  static gcc_constexpr_data StaticEnumChoice baud_list[] = {
+  static constexpr StaticEnumChoice baud_list[] = {
     { 0, _T("4800"), NULL },
     { 1, _T("9600"), NULL },
     { 2, _T("19200"), NULL },
@@ -118,7 +118,7 @@ FLARMConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddInteger(_("Threshold"), NULL, _T("%d m/s"), _T("%d"), 1, 10, 1, thre);
   AddInteger(_("Range"), NULL, _T("%d m"), _T("%d"), 2000, 25500, 100, range);
 
-  static gcc_constexpr_data StaticEnumChoice acft_list[] = {
+  static constexpr StaticEnumChoice acft_list[] = {
     { (unsigned)FlarmTraffic::AircraftType::UNKNOWN, N_("Unkown") },
     { (unsigned)FlarmTraffic::AircraftType::GLIDER, N_("Glider") },
     { (unsigned)FlarmTraffic::AircraftType::TOW_PLANE, N_("Tow plane") },

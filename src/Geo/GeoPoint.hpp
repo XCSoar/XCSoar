@@ -52,7 +52,7 @@ struct GeoPoint {
    *
    * @return Initialised object
    */
-  gcc_constexpr_ctor
+  constexpr
   GeoPoint(const Angle _longitude, const Angle _latitude) :
     longitude(_longitude), latitude(_latitude) {}
 
@@ -63,7 +63,7 @@ struct GeoPoint {
    * simulator when XCSoar is launched for the first time with an
    * empty profile; it is pretty useless for anything else.
    */
-  gcc_constexpr_function
+  constexpr
   static GeoPoint Zero() {
     return GeoPoint(Angle::Zero(), Angle::Zero());
   }
@@ -74,7 +74,7 @@ struct GeoPoint {
    * calculation.  This method may be used to explicitly declare a
    * GeoPoint attribute as "invalid".
    */
-  gcc_constexpr_function
+  constexpr
   static GeoPoint Invalid() {
     return GeoPoint(Angle::Zero(), Angle::FullCircle());
   }
@@ -96,7 +96,7 @@ struct GeoPoint {
    * check; it is only designed to catch instances created by
    * Invalid().
    */
-  gcc_constexpr_method
+  constexpr
   bool IsValid() const {
     return latitude <= Angle::HalfCircle();
   }
@@ -262,7 +262,7 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  gcc_constexpr_method
+  constexpr
   bool Equals(const GeoPoint other) const {
     return longitude == other.longitude && latitude == other.latitude;
   }
@@ -274,7 +274,7 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  gcc_constexpr_method
+  constexpr
   bool operator== (const GeoPoint other) const {
     return Equals(other);
   }
@@ -286,7 +286,7 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  gcc_constexpr_method
+  constexpr
   bool operator !=(const GeoPoint &other) const {
     return !Equals(other);
   }
@@ -313,7 +313,7 @@ struct AGeoPoint: public GeoPoint {
 
   AGeoPoint() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   AGeoPoint(const GeoPoint p, const RoughAltitude alt)
     :GeoPoint(p),altitude(alt) {};
 };

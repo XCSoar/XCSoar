@@ -39,12 +39,12 @@ Copyright_License {
 class RoughVSpeed {
   int16_t value;
 
-  gcc_constexpr_function
+  constexpr
   static int16_t Import(fixed x) {
     return (int16_t)(x * 256);
   }
 
-  gcc_constexpr_function
+  constexpr
   static fixed Export(int16_t x) {
     return fixed(x) / 256;
   }
@@ -52,7 +52,7 @@ class RoughVSpeed {
 public:
   RoughVSpeed() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   RoughVSpeed(fixed _value):value(Import(_value)) {}
 
   RoughVSpeed &operator=(fixed other) {
@@ -60,7 +60,7 @@ public:
     return *this;
   }
 
-  gcc_constexpr_method
+  constexpr
   operator fixed() const {
     return Export(value);
   }

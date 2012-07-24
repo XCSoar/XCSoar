@@ -74,7 +74,7 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   if (external_wind) {
-    static gcc_constexpr_data StaticEnumChoice external_wind_list[] = {
+    static constexpr StaticEnumChoice external_wind_list[] = {
       { 0, N_("External") },
       { 0 }
     };
@@ -83,7 +83,7 @@ WindSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
             external_wind_list, settings.GetLegacyAutoWindMode(), this);
   } else {
 
-    static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
+    static constexpr StaticEnumChoice auto_wind_list[] = {
       { AUTOWIND_NONE, N_("Manual") },
       { AUTOWIND_CIRCLING, N_("Circling") },
       { AUTOWIND_ZIGZAG, N_("ZigZag") },

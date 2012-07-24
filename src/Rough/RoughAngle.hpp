@@ -48,7 +48,7 @@ class RoughAngle {
     return Angle::Radians(fixed(x) / 4096);
   }
 
-  gcc_constexpr_ctor
+  constexpr
   RoughAngle(int16_t _value):value(_value) {}
 
 public:
@@ -64,7 +64,7 @@ public:
     return Export(value);
   }
 
-  gcc_constexpr_method
+  constexpr
   RoughAngle operator-(RoughAngle other) const {
     return RoughAngle(value - other.value);
   }

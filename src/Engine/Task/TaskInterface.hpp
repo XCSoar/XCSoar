@@ -53,10 +53,10 @@ private:
   const Type type;
 
 public:
-  gcc_constexpr_ctor
+  constexpr
   TaskInterface(const Type _type):type(_type) {}
 
-  gcc_constexpr_method
+  constexpr
   Type GetType() const {
     return type;
   }

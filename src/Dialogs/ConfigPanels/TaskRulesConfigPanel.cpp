@@ -89,7 +89,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            fixed(task_behaviour.start_max_height_margin));
   SetExpertRow(StartMaxHeightMargin);
 
-  static gcc_constexpr_data StaticEnumChoice start_max_height_ref_list[] = {
+  static constexpr StaticEnumChoice start_max_height_ref_list[] = {
     { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
     { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
     { 0 }
@@ -108,7 +108,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            fixed(task_behaviour.ordered_defaults.finish_min_height));
   SetExpertRow(FinishMinHeight);
 
-  static gcc_constexpr_data StaticEnumChoice finish_min_height_ref_list[] = {
+  static constexpr StaticEnumChoice finish_min_height_ref_list[] = {
     { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
     { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
     { 0 }

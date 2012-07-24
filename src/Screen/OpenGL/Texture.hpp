@@ -92,7 +92,7 @@ public:
   /**
    * Returns the standard pixel format of the platform.
    */
-  gcc_constexpr_function
+  constexpr
   static GLenum GetType() {
     return have_gles()
       ? GL_UNSIGNED_SHORT_5_6_5

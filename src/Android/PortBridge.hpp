@@ -36,7 +36,7 @@ class PortBridge : protected Java::Object {
   static jmethodID getBaudRate_method, setBaudRate_method;
   static jmethodID write_method;
 
-  static gcc_constexpr_data size_t write_buffer_size = 4096;
+  static constexpr size_t write_buffer_size = 4096;
   Java::GlobalRef<jbyteArray> write_buffer;
 
 public:

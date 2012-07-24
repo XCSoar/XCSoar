@@ -24,7 +24,7 @@
 #include "TaskFactoryConstraints.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints rt_constraints = {
+static constexpr TaskFactoryConstraints rt_constraints = {
   true,
   false,
   false,
@@ -33,14 +33,14 @@ static gcc_constexpr_data TaskFactoryConstraints rt_constraints = {
   2, 13,
 };
 
-static gcc_constexpr_data TaskPointFactoryType rt_start_types[] = {
+static constexpr TaskPointFactoryType rt_start_types[] = {
   TaskPointFactoryType::START_LINE,
   TaskPointFactoryType::START_CYLINDER,
   TaskPointFactoryType::START_SECTOR,
   TaskPointFactoryType::START_BGA,
 };
 
-static gcc_constexpr_data TaskPointFactoryType rt_im_types[] = {
+static constexpr TaskPointFactoryType rt_im_types[] = {
   TaskPointFactoryType::AST_CYLINDER,
   TaskPointFactoryType::KEYHOLE_SECTOR,
   TaskPointFactoryType::BGAFIXEDCOURSE_SECTOR,
@@ -48,7 +48,7 @@ static gcc_constexpr_data TaskPointFactoryType rt_im_types[] = {
   TaskPointFactoryType::FAI_SECTOR,
 };
 
-static gcc_constexpr_data TaskPointFactoryType rt_finish_types[] = {
+static constexpr TaskPointFactoryType rt_finish_types[] = {
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,
   TaskPointFactoryType::FINISH_SECTOR,

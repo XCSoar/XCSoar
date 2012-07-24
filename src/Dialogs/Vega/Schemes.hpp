@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_VEGA_SCHEMES_HPP
 
 #include "Types.hpp"
-#include "Compiler.h"
 
 struct VEGA_SCHEME
 {
@@ -37,7 +36,7 @@ struct VEGA_SCHEME
   } audio[6];
 };
 
-static gcc_constexpr_data VEGA_SCHEME VegaSchemes[4]= {
+static constexpr VEGA_SCHEME VegaSchemes[4]= {
   // Vega
   {X_NONE, Y_RELATIVE_MACCREADY_HALF,
    {

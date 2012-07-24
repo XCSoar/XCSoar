@@ -27,16 +27,15 @@ Copyright_License {
 #include "VegaParametersWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data StaticEnumChoice needle_gauge_types[] = {
+static constexpr StaticEnumChoice needle_gauge_types[] = {
   { 0, _T("None") },
   { 1, _T("LX") },
   { 2, _T("Analog") },
   { 0 },
 };
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter display_parameters[] = {
   { DataField::Type::ENUM, "NeedleGaugeType", N_("Needle gauge type"),
     NULL, needle_gauge_types },

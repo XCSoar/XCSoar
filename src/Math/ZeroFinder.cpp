@@ -26,11 +26,11 @@
 #include <limits>
 
 #ifdef FIXED_MATH
-static gcc_constexpr_data fixed epsilon(fixed::internal(), 2);
+static constexpr fixed epsilon(fixed::internal(), 2);
 static const fixed sqrt_epsilon = sqrt(epsilon);
 #else
 /** machine tolerance */
-static gcc_constexpr_data fixed epsilon(std::numeric_limits<fixed>::epsilon());
+static constexpr fixed epsilon(std::numeric_limits<fixed>::epsilon());
 /** sqrt of machine tolerance */
 static const fixed sqrt_epsilon = sqrt(epsilon);
 #endif

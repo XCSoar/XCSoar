@@ -39,13 +39,13 @@ class FlarmId {
 
   uint32_t value;
 
-  gcc_constexpr_ctor
+  constexpr
   FlarmId(uint32_t _value):value(_value) {}
 
 public:
   FlarmId() = default;
 
-  gcc_constexpr_function
+  constexpr
   static FlarmId Undefined() {
     return FlarmId(UNDEFINED_VALUE);
   }

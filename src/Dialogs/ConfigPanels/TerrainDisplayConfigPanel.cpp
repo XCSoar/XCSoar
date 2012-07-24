@@ -167,7 +167,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              _("Draw topographical features (roads, rivers, lakes etc.) on the map."),
              settings_map.topography_enabled);
 
-  static gcc_constexpr_data StaticEnumChoice terrain_ramp_list[] = {
+  static constexpr StaticEnumChoice terrain_ramp_list[] = {
     { 0, N_("Low lands"), },
     { 1, N_("Mountainous"), },
     { 2, N_("Imhof 7"), },
@@ -184,7 +184,7 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           terrain_ramp_list, terrain.ramp);
   GetDataField(TerrainColors).SetListener(this);
 
-  static gcc_constexpr_data StaticEnumChoice slope_shading_list[] = {
+  static constexpr StaticEnumChoice slope_shading_list[] = {
     { (unsigned)SlopeShading::OFF, N_("Off"), },
     { (unsigned)SlopeShading::FIXED, N_("Fixed"), },
     { (unsigned)SlopeShading::SUN, N_("Sun"), },

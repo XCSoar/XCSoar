@@ -93,7 +93,7 @@ PnlSetupOnSetup(gcc_unused WndButton &Sender)
   instance->Setup();
 }
 
-static gcc_constexpr_data
+static constexpr
 CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PnlSetupOnQNH),
   DeclareCallBackEntry(PnlSetupOnSetup),

@@ -71,7 +71,7 @@ V7ConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   brgps = WaitUnsignedValue(device, "BRGPS", 5);
   brpda = WaitUnsignedValue(device, "BRPDA", 5);
 
-  static gcc_constexpr_data StaticEnumChoice baud_list[] = {
+  static constexpr StaticEnumChoice baud_list[] = {
     { 0, _T("4800"), NULL },
     { 1, _T("9600"), NULL },
     { 2, _T("19200"), NULL },

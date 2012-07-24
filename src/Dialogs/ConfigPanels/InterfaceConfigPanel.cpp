@@ -186,7 +186,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           1, 60, 1, settings.menu_timeout / 2);
   SetExpertRow(MenuTimeout);
 
-  static gcc_constexpr_data StaticEnumChoice text_input_list[] = {
+  static constexpr StaticEnumChoice text_input_list[] = {
     { (unsigned)DialogSettings::TextInputStyle::Default, N_("Default") },
     { (unsigned)DialogSettings::TextInputStyle::Keyboard, N_("Keyboard") },
     { (unsigned)DialogSettings::TextInputStyle::HighScore,
@@ -204,7 +204,7 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetRowVisible(TextInput, HasPointer());
 
 #ifdef HAVE_VIBRATOR
-  static gcc_constexpr_data StaticEnumChoice haptic_feedback_list[] = {
+  static constexpr StaticEnumChoice haptic_feedback_list[] = {
     { (unsigned) UISettings::HapticFeedback::Default, N_("OS settings") },
     { (unsigned) UISettings::HapticFeedback::Off, N_("Off") },
     { (unsigned) UISettings::HapticFeedback::On, N_("On") },

@@ -30,8 +30,6 @@
 #ifndef XCSOAR_CAST_ITERATOR_HPP
 #define XCSOAR_CAST_ITERATOR_HPP
 
-#include "Compiler.h"
-
 #include <iterator>
 
 template<typename VT, typename IT>
@@ -47,7 +45,7 @@ public:
 
   CastIterator() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   CastIterator(const IT _iterator):iterator(_iterator) {}
 
   reference operator*() const {

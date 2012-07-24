@@ -32,8 +32,8 @@ struct BrokenTime;
 class LoggerFRecord
 {
   /* 4.5 minutes */
-  static gcc_constexpr_data int DEFAULT_UPDATE_TIME = 270;
-  static gcc_constexpr_data int ACCELERATED_UPDATE_TIME = 30;
+  static constexpr int DEFAULT_UPDATE_TIME = 270;
+  static constexpr int ACCELERATED_UPDATE_TIME = 30;
 
   GPSClock clock;
   bool update_needed;

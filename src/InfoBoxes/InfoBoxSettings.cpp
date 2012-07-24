@@ -60,9 +60,9 @@ InfoBoxSettings::SetDefaults()
   for (unsigned i = 0; i < MAX_PANELS; ++i)
     panels[i].Clear();
 
-  static gcc_constexpr_data unsigned DFLT_CONFIG_BOXES = 9;
-  static gcc_constexpr_data unsigned DFLT_CONFIG_PANELS = 4;
-  static gcc_constexpr_data Type contents[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
+  static constexpr unsigned DFLT_CONFIG_BOXES = 9;
+  static constexpr unsigned DFLT_CONFIG_PANELS = 4;
+  static constexpr Type contents[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
     { e_WP_Distance,   e_TL_Avg,          NavAltitude,        e_HeightAGL,   e_TL_Gain,
       e_MacCready,     e_TL_Time,         e_Thermal_30s,      e_TimeLocal },
     { e_WP_Distance,   e_Alternate_1_GR,  NavAltitude,        e_HeightAGL,   e_WP_AltDiff,

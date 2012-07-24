@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_HPP
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
-#include "Compiler.h"
-
 #include <tchar.h>
 
 struct InfoBoxData;
@@ -63,7 +61,7 @@ public:
   virtual bool HandleQuickAccess(const TCHAR *misc);
 
   struct PanelContent {
-    gcc_constexpr_ctor
+    constexpr
     PanelContent(const TCHAR* _name,
                         Widget *(*_load)(unsigned id)) :
                         name(_name),

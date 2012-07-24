@@ -25,7 +25,7 @@
 #include "Task/Ordered/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints fai_constraints = {
+static constexpr TaskFactoryConstraints fai_constraints = {
   true,
   true,
   false,
@@ -34,17 +34,17 @@ static gcc_constexpr_data TaskFactoryConstraints fai_constraints = {
   2, 13,
 };
 
-static gcc_constexpr_data TaskPointFactoryType fai_start_types[] = {
+static constexpr TaskPointFactoryType fai_start_types[] = {
   TaskPointFactoryType::START_SECTOR,
   TaskPointFactoryType::START_LINE,
 };
 
-static gcc_constexpr_data TaskPointFactoryType fai_im_types[] = {
+static constexpr TaskPointFactoryType fai_im_types[] = {
   TaskPointFactoryType::FAI_SECTOR,
   TaskPointFactoryType::AST_CYLINDER,
 };
 
-static gcc_constexpr_data TaskPointFactoryType fai_finish_types[] = {
+static constexpr TaskPointFactoryType fai_finish_types[] = {
   TaskPointFactoryType::FINISH_SECTOR,
   TaskPointFactoryType::FINISH_LINE,
 };

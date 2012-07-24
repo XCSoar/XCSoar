@@ -60,7 +60,7 @@ protected:
   int text_style;
 
 public:
-  gcc_constexpr_ctor
+  constexpr
   WindowStyle()
     :visible(true), enabled(true),
      tab_stop(false), control_parent(false),
@@ -79,7 +79,7 @@ protected:
 #endif
 
 public:
-  gcc_constexpr_ctor
+  constexpr
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
      ex_style(0), double_clicks(false), custom_painting(false)

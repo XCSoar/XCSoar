@@ -29,11 +29,10 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
 #include "Util/StaticString.hpp"
-#include "Compiler.h"
 
 #include <stdio.h>
 
-static gcc_constexpr_data StaticEnumChoice beep_types[] = {
+static constexpr StaticEnumChoice beep_types[] = {
   { 0, _T("Silence") },
   { 1, _T("Short") },
   { 2, _T("Medium") },
@@ -43,7 +42,7 @@ static gcc_constexpr_data StaticEnumChoice beep_types[] = {
   { 0 }
 };
 
-static gcc_constexpr_data StaticEnumChoice pitch_schemes[] = {
+static constexpr StaticEnumChoice pitch_schemes[] = {
   { 0, _T("Constant high") },
   { 1, _T("Constant medium") },
   { 2, _T("Constant low") },
@@ -56,7 +55,7 @@ static gcc_constexpr_data StaticEnumChoice pitch_schemes[] = {
   { 0 }
 };
 
-static gcc_constexpr_data StaticEnumChoice period_schemes[] = {
+static constexpr StaticEnumChoice period_schemes[] = {
   { 0, _T("Constant high") },
   { 1, _T("Constant medium") },
   { 2, _T("Constant low") },
@@ -70,7 +69,7 @@ static gcc_constexpr_data StaticEnumChoice period_schemes[] = {
   { 0 }
 };
 
-static gcc_constexpr_data StaticEnumChoice pitch_and_period_scales[] = {
+static constexpr StaticEnumChoice pitch_and_period_scales[] = {
   { 0, _T("+Linear") },
   { 1, _T("+Low end") },
   { 2, _T("+High end") },

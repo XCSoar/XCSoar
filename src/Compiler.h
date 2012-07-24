@@ -124,26 +124,8 @@ Copyright_License {
 #endif
 
 /* C++11 features */
-#if defined(__cplusplus) && (GCC_VERSION >= 40500 || defined(__clang__))
-/* explicit conversion operators are supported since gcc 4.5 */
-#define gcc_explicit explicit
-#else
-#define gcc_explicit
-#endif
 
 #if defined(__cplusplus)
-#if GCC_VERSION >= 40602 && !defined(__clang__)
-/* constexpr is supported since gcc 4.6 */
-#define gcc_constexpr_function constexpr gcc_const
-#define gcc_constexpr_method constexpr gcc_pure
-#define gcc_constexpr_data constexpr
-#define gcc_constexpr_ctor constexpr
-#else
-#define gcc_constexpr_function gcc_const
-#define gcc_constexpr_method gcc_pure
-#define gcc_constexpr_data const
-#define gcc_constexpr_ctor
-#endif
 
 #if GCC_VERSION >= 40700 || defined(__clang__)
 #define gcc_override override

@@ -30,8 +30,6 @@
 #ifndef XCSOAR_CONST_ARRAY_HPP
 #define XCSOAR_CONST_ARRAY_HPP
 
-#include "Compiler.h"
-
 #include <assert.h>
 #include <stddef.h>
 
@@ -53,16 +51,16 @@ protected:
   size_type the_size;
 
 public:
-  gcc_constexpr_ctor
+  constexpr
   ConstArray(const_pointer _data, size_type _size)
     :data(_data), the_size(_size) {}
 
-  gcc_constexpr_method
+  constexpr
   size_type size() const {
     return the_size;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool empty() const {
     return size() == 0;
   }

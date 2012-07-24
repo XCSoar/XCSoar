@@ -94,7 +94,7 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent, const Pixel
                "Set this value to zero to hide the border."),
              _T("%d"), _T("%d"), 0, 5, 1, settings.border_width);
 
-  static gcc_constexpr_data StaticEnumChoice fill_mode_list[] = {
+  static constexpr StaticEnumChoice fill_mode_list[] = {
     { (unsigned)AirspaceClassRendererSettings::FillMode::ALL, N_("Filled"), },
     { (unsigned)AirspaceClassRendererSettings::FillMode::PADDING, N_("Only padding"), },
     { (unsigned)AirspaceClassRendererSettings::FillMode::NONE, N_("Not filled"), },

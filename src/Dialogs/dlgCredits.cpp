@@ -184,7 +184,7 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
   delete[] buffer;
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnClose),
   DeclareCallBackEntry(OnNext),
   DeclareCallBackEntry(OnPrev),

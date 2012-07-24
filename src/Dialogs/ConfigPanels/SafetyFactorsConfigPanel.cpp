@@ -71,7 +71,7 @@ SafetyFactorsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            fixed_zero, fixed(10000), fixed(100), false,
            UnitGroup::ALTITUDE, task_behaviour.route_planner.safety_height_terrain);
 
-  static gcc_constexpr_data StaticEnumChoice abort_task_mode_list[] = {
+  static constexpr StaticEnumChoice abort_task_mode_list[] = {
     { (unsigned)AbortTaskMode::SIMPLE, N_("Simple") },
     { (unsigned)AbortTaskMode::TASK, N_("Task") },
     { (unsigned)AbortTaskMode::HOME, N_("Home") },

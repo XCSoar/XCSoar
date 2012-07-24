@@ -57,7 +57,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  static gcc_constexpr_data StaticEnumChoice auto_mc_list[] = {
+  static constexpr StaticEnumChoice auto_mc_list[] = {
     { (unsigned)TaskBehaviour::AutoMCMode::FINALGLIDE, N_("Final glide"),
       N_("Adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in "
           "order to cover the greatest distance in the remaining time and reach the finish height.") },
@@ -92,7 +92,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_computer.external_trigger_cruise_enabled);
   SetExpertRow(EnableExternalTriggerCruise);
 
-  static gcc_constexpr_data StaticEnumChoice aver_eff_list[] = {
+  static constexpr StaticEnumChoice aver_eff_list[] = {
     { ae15seconds, _T("15 s"), N_("Preferred period for paragliders.") },
     { ae30seconds, _T("30 s") },
     { ae60seconds, _T("60 s") },

@@ -25,7 +25,7 @@ Copyright_License {
 #include "TaskFactoryConstraints.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints aat_constraints = {
+static constexpr TaskFactoryConstraints aat_constraints = {
   true,
   false,
   false,
@@ -34,20 +34,20 @@ static gcc_constexpr_data TaskFactoryConstraints aat_constraints = {
   2, 13,
 };
 
-static gcc_constexpr_data TaskPointFactoryType aat_start_types[] = {
+static constexpr TaskPointFactoryType aat_start_types[] = {
   TaskPointFactoryType::START_LINE,
   TaskPointFactoryType::START_CYLINDER,
   TaskPointFactoryType::START_SECTOR,
   TaskPointFactoryType::START_BGA,
 };
 
-static gcc_constexpr_data TaskPointFactoryType aat_im_types[] = {
+static constexpr TaskPointFactoryType aat_im_types[] = {
   TaskPointFactoryType::AAT_CYLINDER,
   TaskPointFactoryType::AAT_SEGMENT,
   TaskPointFactoryType::AAT_ANNULAR_SECTOR,
 };
 
-static gcc_constexpr_data TaskPointFactoryType aat_finish_types[] = {
+static constexpr TaskPointFactoryType aat_finish_types[] = {
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,
   TaskPointFactoryType::FINISH_SECTOR,

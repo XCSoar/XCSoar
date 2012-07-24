@@ -31,7 +31,7 @@ struct Text2EventSTRUCT {
   pt2Event event;
 };
 
-static gcc_constexpr_data Text2EventSTRUCT Text2Event[] = {
+static constexpr Text2EventSTRUCT Text2Event[] = {
 #include "InputEvents_Text2Event.cpp"
   { NULL, NULL }
 };

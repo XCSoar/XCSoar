@@ -54,7 +54,7 @@ enum ControlIndex {
   IgnoreCheckSum,
 };
 
-static gcc_constexpr_data struct {
+static constexpr struct {
   DeviceConfig::PortType type;
   const TCHAR *label;
 } port_types[] = {
@@ -76,7 +76,7 @@ static gcc_constexpr_data struct {
 };
 
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
-static gcc_constexpr_data unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
+static constexpr unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
 
 static unsigned
 AddPort(DataFieldEnum &df, DeviceConfig::PortType type,

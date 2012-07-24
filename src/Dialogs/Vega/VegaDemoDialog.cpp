@@ -110,7 +110,7 @@ OnVegaDemoAudioClimb(DataField *Sender, DataField::DataAccessMode Mode)
   }
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
+static constexpr CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnVegaDemoW),
   DeclareCallBackEntry(OnVegaDemoV),
   DeclareCallBackEntry(OnVegaDemoAudioClimb),

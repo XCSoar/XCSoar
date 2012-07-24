@@ -48,7 +48,7 @@ public:
   typedef typename AllocatedArray<T>::iterator iterator;
   typedef typename AllocatedArray<T>::const_iterator const_iterator;
 
-  gcc_constexpr_ctor AllocatedGrid():width(0), height(0) {}
+  constexpr AllocatedGrid():width(0), height(0) {}
   AllocatedGrid(unsigned _width, unsigned _height)
     :array(_width * _height), width(_width), height(_height) {}
 

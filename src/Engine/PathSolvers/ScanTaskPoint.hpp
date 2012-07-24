@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef SCANTASKPOINT_HPP
 #define SCANTASKPOINT_HPP
 
-#include "Compiler.h"
-
 #include <stdint.h>
 
 /**
@@ -37,7 +35,7 @@ class ScanTaskPoint {
   uint32_t value;
 
 public:
-  gcc_constexpr_ctor
+  constexpr
   ScanTaskPoint(unsigned stage_number, unsigned point_index)
     :value((stage_number << 16) | point_index) {}
 
@@ -45,32 +43,32 @@ public:
    * Generate a unique key that is used for the std::map comparison
    * operator.
    */
-  gcc_constexpr_method
+  constexpr
   uint32_t Key() const {
     return value;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool operator==(const ScanTaskPoint other) const {
     return Key() == other.Key();
   }
 
-  gcc_constexpr_method
+  constexpr
   bool operator!=(const ScanTaskPoint other) const {
     return Key() != other.Key();
   }
 
-  gcc_constexpr_method
+  constexpr
   bool operator<(const ScanTaskPoint other) const {
     return Key() < other.Key();
   }
 
-  gcc_constexpr_method
+  constexpr
   unsigned GetStageNumber() const {
     return value >> 16;
   }
 
-  gcc_constexpr_method
+  constexpr
   unsigned GetPointIndex() const {
     return value & 0xffff;
   }
@@ -86,7 +84,7 @@ public:
   /**
    * Determine whether a point is a starting point (no previous edges).
    */
-  gcc_pure
+  constexpr
   bool IsFirst() const {
     return GetStageNumber() == 0;
   }

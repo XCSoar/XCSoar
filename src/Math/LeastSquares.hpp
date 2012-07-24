@@ -113,7 +113,7 @@ public:
 
     Slot() = default;
 
-    gcc_constexpr_ctor
+    constexpr
     Slot(fixed _x, fixed _y, fixed _weight)
       :x(_x), y(_y)
 #ifdef LEASTSQS_WEIGHT_STORE

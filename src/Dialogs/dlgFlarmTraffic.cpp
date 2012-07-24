@@ -774,7 +774,7 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent,
   return wdf;
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateFlarmTrafficControl),
   DeclareCallBackEntry(OnDetailsClicked),
   DeclareCallBackEntry(OnZoomInClicked),

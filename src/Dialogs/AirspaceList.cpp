@@ -55,7 +55,7 @@ Copyright_License {
 /**
  * Special enum integer value for "filter disabled".
  */
-static gcc_constexpr_data unsigned WILDCARD = 0x7fff;
+static constexpr unsigned WILDCARD = 0x7fff;
 
 static const Airspaces *airspaces;
 static ProtectedAirspaceWarningManager *airspace_warnings;
@@ -71,7 +71,7 @@ static ListControl *airspace_list_control;
 
 static Angle last_heading;
 
-static gcc_constexpr_data StaticEnumChoice type_filter_list[] = {
+static constexpr StaticEnumChoice type_filter_list[] = {
   { WILDCARD, _T("*") },
   { OTHER, _T("Other") },
   { RESTRICT, _T("Restricted areas") },
@@ -294,7 +294,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 
 #endif /* GNAV */
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(CloseClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -304,7 +304,7 @@ FillDistanceEnum(DataFieldEnum &df)
 {
   df.AddChoice(0, _T("*"));
 
-  static gcc_constexpr_data unsigned distances[] = {
+  static constexpr unsigned distances[] = {
     25, 50, 75, 100, 150, 250, 500, 1000
   };
 
@@ -326,7 +326,7 @@ FillDirectionEnum(DataFieldEnum &df)
   df.AddChoice(WILDCARD, _T("*"));
   df.AddChoice(0, GetHeadingString(buffer));
 
-  static gcc_constexpr_data unsigned directions[] = {
+  static constexpr unsigned directions[] = {
     360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
   };
 

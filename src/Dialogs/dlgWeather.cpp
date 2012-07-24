@@ -69,7 +69,7 @@ OnWeatherHelp(WindowControl * Sender)
   dlgHelpShowModal(UIGlobals::GetMainWindow(), caption, help);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnWeatherHelp),
   DeclareCallBackEntry(NULL)

@@ -54,7 +54,7 @@ struct SpeedVector {
    * @param _norm Magnitude of vector (m/s)
    * @return Initialised object
    */
-  gcc_constexpr_ctor
+  constexpr
   SpeedVector(Angle _bearing, fixed _norm):bearing(_bearing), norm(_norm) {}
 
   /** 
@@ -70,7 +70,7 @@ struct SpeedVector {
   /**
    * Returns the null vector.
    */
-  static gcc_constexpr_function SpeedVector Zero() {
+  static constexpr SpeedVector Zero() {
     return SpeedVector(Angle::Zero(), fixed_zero);
   }
 

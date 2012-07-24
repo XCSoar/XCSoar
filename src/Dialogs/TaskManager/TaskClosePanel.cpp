@@ -63,7 +63,7 @@ OnRevertClicked(gcc_unused WndButton &Sender)
   instance->RefreshStatus();
 }
 
-static gcc_constexpr_data CallBackTableEntry task_close_callbacks[] = {
+static constexpr CallBackTableEntry task_close_callbacks[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRevertClicked),
 

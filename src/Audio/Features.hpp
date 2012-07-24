@@ -30,13 +30,11 @@ Copyright_License {
 #ifndef XCSOAR_AUDIO_FEATURES_HPP
 #define XCSOAR_AUDIO_FEATURES_HPP
 
-#include "Compiler.h"
-
 #if !defined(WIN32)
 #define HAVE_PCM_PLAYER
 #endif
 
-gcc_constexpr_function
+constexpr
 static inline bool
 HavePCMPlayer()
 {

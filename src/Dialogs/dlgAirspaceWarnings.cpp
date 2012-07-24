@@ -77,10 +77,10 @@ static WndButton *ack_space_button = NULL;
 static WndButton *enable_button = NULL; // Enable
 
 static ListControl *warning_list_frame = NULL;
-static gcc_constexpr_data Color inside_color(254,50,50);
-static gcc_constexpr_data Color near_color(254,254,50);
-static gcc_constexpr_data Color inside_ack_color(254,100,100);
-static gcc_constexpr_data Color near_ack_color(254,254,100);
+static constexpr Color inside_color(254,50,50);
+static constexpr Color near_color(254,254,50);
+static constexpr Color inside_ack_color(254,100,100);
+static constexpr Color near_ack_color(254,254,100);
 static bool auto_close = true;
 
 static WarningList warning_list;
@@ -479,7 +479,7 @@ dlgAirspaceWarningVisible()
   return (dialog != NULL);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAckClicked),
   DeclareCallBackEntry(OnAck1Clicked),
   DeclareCallBackEntry(OnAck2Clicked),

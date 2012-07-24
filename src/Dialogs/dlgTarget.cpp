@@ -432,7 +432,7 @@ OnTaskPointData(DataField *Sender, DataField::DataAccessMode Mode)
   }
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateMap),
   DeclareCallBackEntry(OnTaskPointData),
   DeclareCallBackEntry(OnRangeData),

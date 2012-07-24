@@ -44,7 +44,7 @@ protected:
 public:
   ReusableArray() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   ReusableArray(size_type _length):array(_length) {}
 
   /**

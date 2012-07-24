@@ -26,9 +26,8 @@ Copyright_License {
 
 #include "VegaParametersWidget.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter limit_parameters[] = {
   { DataField::Type::INTEGER, "VelocityNeverExceed", N_("VNE"), NULL,
     NULL, 0, 2000, 10, _T("%d (0.1 m/s)") },

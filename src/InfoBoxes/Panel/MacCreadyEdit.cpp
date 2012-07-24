@@ -75,7 +75,7 @@ PnlEditOnMinusBig(gcc_unused WndButton &Sender)
   instance->QuickAccess(_T("-0.5"));
 }
 
-static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
+static constexpr CallBackTableEntry call_back_table[] = {
   DeclareCallBackEntry(PnlEditOnPlusSmall),
   DeclareCallBackEntry(PnlEditOnPlusBig),
   DeclareCallBackEntry(PnlEditOnMinusSmall),

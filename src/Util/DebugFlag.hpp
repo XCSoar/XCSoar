@@ -30,8 +30,6 @@
 #ifndef XCSOAR_UTIL_DEBUG_FLAG_HPP
 #define XCSOAR_UTIL_DEBUG_FLAG_HPP
 
-#include "Compiler.h"
-
 /**
  * A flag that is only available in the debug build (#ifndef NDEBUG).
  * It is initialised to false.  In the release build, this type
@@ -41,15 +39,15 @@ struct DebugFlag {
 #ifdef NDEBUG
   DebugFlag() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   DebugFlag(bool _value) {}
 #else
   bool value;
 
-  gcc_constexpr_ctor
+  constexpr
   DebugFlag():value(false) {}
 
-  gcc_constexpr_ctor
+  constexpr
   DebugFlag(bool _value):value(_value) {}
 
   operator bool() const {

@@ -26,9 +26,8 @@ Copyright_License {
 
 #include "VegaParametersWidget.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter mixer_parameters[] = {
   { DataField::Type::BOOLEAN, "MuteVarioOnPlay", N_("Mute vario on voice") },
   { DataField::Type::BOOLEAN, "MuteVarioOnCom", N_("Mute vario on radio") },

@@ -28,16 +28,15 @@ Copyright_License {
 #include "Schemes.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data StaticEnumChoice tone_climb_comparisons[] = {
+static constexpr StaticEnumChoice tone_climb_comparisons[] = {
   { 0, N_("None") },
   { 1, _T("Gross>MacCready") },
   { 2, _T("Gross>Average") },
   { 0 }
 };
 
-static gcc_constexpr_data StaticEnumChoice tone_cruise_lift_detection_types[] = {
+static constexpr StaticEnumChoice tone_cruise_lift_detection_types[] = {
   { 0, N_("Disabled") },
   { 1, _T("Relative>0") },
   { 2, _T("Relative>MacCready/2") },
@@ -48,7 +47,7 @@ static gcc_constexpr_data StaticEnumChoice tone_cruise_lift_detection_types[] = 
   { 0 }
 };
 
-static gcc_constexpr_data StaticEnumChoice time_scales[] = {
+static constexpr StaticEnumChoice time_scales[] = {
   { 0, _T(" 0.0s") },
   { 1, _T(" 0.8s") },
   { 2, _T(" 1.7s") },
@@ -59,7 +58,7 @@ static gcc_constexpr_data StaticEnumChoice time_scales[] = {
   { 0 }
 };
 
-static gcc_constexpr_data StaticEnumChoice filter_time[] = {
+static constexpr StaticEnumChoice filter_time[] = {
   { 0, _T(" 1.0s") },
   { 1, _T(" 1.3s") },
   { 2, _T(" 1.8s") },
@@ -67,7 +66,7 @@ static gcc_constexpr_data StaticEnumChoice filter_time[] = {
   { 0 }
 };
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter audio_mode_parameters[] = {
   { DataField::Type::ENUM, "ToneClimbComparisonType",
     N_("Climb fast trigger"),

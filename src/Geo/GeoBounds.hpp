@@ -38,12 +38,12 @@ struct GeoBounds {
 
   GeoBounds() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   GeoBounds(const GeoPoint pt)
     :west(pt.longitude), north(pt.latitude),
      east(pt.longitude), south(pt.latitude) {}
 
-  gcc_constexpr_ctor
+  constexpr
   GeoBounds(const GeoPoint _north_west, const GeoPoint _south_east)
     :west(_north_west.longitude), north(_north_west.latitude),
      east(_south_east.longitude), south(_south_east.latitude) {}
@@ -53,7 +53,7 @@ struct GeoBounds {
    * return false.  The return value must not be used in any
    * calculation.
    */
-  gcc_constexpr_function
+  constexpr
   static GeoBounds Invalid() {
     return GeoBounds(GeoPoint::Invalid());
   }
@@ -72,7 +72,7 @@ struct GeoBounds {
    * check; it is only designed to catch instances created by
    * Invalid().
    */
-  gcc_constexpr_method
+  constexpr
   bool IsValid() const {
     return north <= Angle::HalfCircle();
   }

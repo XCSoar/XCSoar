@@ -42,7 +42,7 @@ public:
     event = 0;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool IsDefined() const {
     return event > 0;
   }

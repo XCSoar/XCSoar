@@ -39,7 +39,7 @@ class AtmosphericPressure
   /**
    * @param qnh the QNH in hPa
    */
-  explicit gcc_constexpr_ctor
+  explicit constexpr
   AtmosphericPressure(fixed _qnh):qnh(_qnh) {}
 
 public:
@@ -54,7 +54,7 @@ public:
    * it may be used internally to mark an instance of this class
    * "invalid" (IsPlausible() returns false).
    */
-  static gcc_constexpr_function
+  static constexpr
   AtmosphericPressure Zero() {
     return AtmosphericPressure(fixed_zero);
   }
@@ -63,17 +63,17 @@ public:
    * Returns an object representing the standard pressure (1013.25
    * hPa).
    */
-  static gcc_constexpr_function
+  static constexpr
   AtmosphericPressure Standard() {
     return AtmosphericPressure(fixed(1013.25));
   }
 
-  static gcc_constexpr_function
+  static constexpr
   AtmosphericPressure Pascal(fixed value) {
     return AtmosphericPressure(value / 100);
   }
 
-  static gcc_constexpr_function
+  static constexpr
   AtmosphericPressure HectoPascal(fixed value) {
     return AtmosphericPressure(value);
   }
@@ -81,7 +81,7 @@ public:
   /**
    * Is this a plausible value?
    */
-  gcc_constexpr_method
+  constexpr
   bool IsPlausible() const {
     return qnh > fixed(100) && qnh < fixed(1200);
   }

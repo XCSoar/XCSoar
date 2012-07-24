@@ -42,7 +42,7 @@ class PagerWidget : public Widget {
 
     Child() = default;
 
-    gcc_constexpr_ctor
+    constexpr
     Child(Widget *_widget):widget(_widget), prepared(false) {}
   };
 

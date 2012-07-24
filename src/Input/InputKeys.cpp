@@ -32,7 +32,7 @@ struct string_to_key {
   unsigned key;
 };
 
-static gcc_constexpr_data struct string_to_key string_to_key[] = {
+static constexpr struct string_to_key string_to_key[] = {
   { _T("APP1"), VK_APP1 },
   { _T("APP2"), VK_APP2 },
   { _T("APP3"), VK_APP3 },

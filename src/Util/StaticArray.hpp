@@ -31,7 +31,6 @@
 #define XCSOAR_STATIC_ARRAY_HPP
 
 #include "TrivialArray.hpp"
-#include "Compiler.h"
 
 /**
  * An array with a maximum size known at compile time.  It keeps track
@@ -40,7 +39,7 @@
 template<class T, unsigned max>
 class StaticArray: public TrivialArray<T, max> {
 public:
-  gcc_constexpr_ctor
+  constexpr
   StaticArray(): TrivialArray<T, max>(0) {}
 };
 

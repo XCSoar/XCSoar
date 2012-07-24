@@ -313,7 +313,7 @@ OnFileListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 }
 #endif
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnMagnifyClicked),
     DeclareCallBackEntry(OnShrinkClicked),
     DeclareCallBackEntry(OnNextClicked),

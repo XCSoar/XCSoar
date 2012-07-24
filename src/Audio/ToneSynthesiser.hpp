@@ -34,7 +34,7 @@ class ToneSynthesiser : public PCMSynthesiser {
   unsigned volume, angle, increment;
 
 public:
-  gcc_constexpr_ctor
+  constexpr
   ToneSynthesiser():volume(100), angle(0), increment(0) {}
 
   /**

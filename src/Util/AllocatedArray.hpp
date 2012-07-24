@@ -53,7 +53,7 @@ public:
   typedef const T *const_iterator;
 
 public:
-  gcc_constexpr_ctor AllocatedArray():the_size(0), data(NULL) {}
+  constexpr AllocatedArray():the_size(0), data(NULL) {}
 
   explicit AllocatedArray(size_type _size)
     :the_size(_size), data(new T[the_size]) {

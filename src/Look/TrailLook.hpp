@@ -27,12 +27,11 @@
 #include "Screen/Point.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/Pen.hpp"
-#include "Compiler.h"
 
 struct TrailSettings;
 
 struct TrailLook {
-  static gcc_constexpr_data unsigned NUMSNAILCOLORS = 15;
+  static constexpr unsigned NUMSNAILCOLORS = 15;
 
   UPixelScalar trail_widths[NUMSNAILCOLORS];
   Brush trail_brushes[NUMSNAILCOLORS];

@@ -26,9 +26,8 @@ Copyright_License {
 
 #include "VegaParametersWidget.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter calibration_parameters[] = {
   { DataField::Type::INTEGER, "TotalEnergyMixingRatio",
     N_("TE mixing"),

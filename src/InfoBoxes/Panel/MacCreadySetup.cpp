@@ -76,7 +76,7 @@ PnlSetupOnMode(gcc_unused WndButton &Sender)
   instance->QuickAccess(_T("mode"));
 }
 
-static gcc_constexpr_data CallBackTableEntry call_back_table[] = {
+static constexpr CallBackTableEntry call_back_table[] = {
   DeclareCallBackEntry(PnlSetupOnSetup),
   DeclareCallBackEntry(PnlSetupOnMode),
   DeclareCallBackEntry(NULL)

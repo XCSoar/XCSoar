@@ -74,31 +74,31 @@ public:
     unsigned main_index;
     unsigned sub_index;
 
-    gcc_constexpr_ctor
+    constexpr
     explicit MenuTabIndex(unsigned mainNum, unsigned subNum=NO_SUB_MENU)
       :main_index(mainNum), sub_index(subNum) {}
 
-    gcc_constexpr_function
+    constexpr
     static MenuTabIndex None() {
       return MenuTabIndex(NO_MAIN_MENU, NO_SUB_MENU);
     }
 
-    gcc_constexpr_method
+    constexpr
     bool IsNone() const {
       return main_index == NO_MAIN_MENU;
     }
 
-    gcc_constexpr_method
+    constexpr
     bool IsMain() const {
       return main_index != NO_MAIN_MENU && sub_index == NO_SUB_MENU;
     }
 
-    gcc_constexpr_method
+    constexpr
     bool IsSub() const {
       return sub_index != NO_SUB_MENU;
     }
 
-    gcc_constexpr_method
+    constexpr
     bool operator==(const MenuTabIndex &other) const {
       return main_index == other.main_index &&
         sub_index == other.sub_index;

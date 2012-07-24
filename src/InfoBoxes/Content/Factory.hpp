@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_FACTORY_HPP
 #define XCSOAR_INFOBOX_FACTORY_HPP
 
-#include "Compiler.h"
-
 #include <assert.h>
 #include <tchar.h>
 
@@ -155,9 +153,9 @@ namespace InfoBoxFactory
     Type next, previous;
   };
 
-  static gcc_constexpr_data Type NUM_TYPES = e_NUM_TYPES;
-  static gcc_constexpr_data Type MIN_TYPE_VAL = (Type)0;
-  static gcc_constexpr_data Type MAX_TYPE_VAL = (Type)(e_NUM_TYPES - 1);
+  static constexpr Type NUM_TYPES = e_NUM_TYPES;
+  static constexpr Type MIN_TYPE_VAL = (Type)0;
+  static constexpr Type MAX_TYPE_VAL = (Type)(e_NUM_TYPES - 1);
 
   extern const MetaData meta_data[NUM_TYPES];
 
@@ -215,7 +213,6 @@ namespace InfoBoxFactory
   bool
   Get(const TCHAR *key, Type &val);
 
-  gcc_const
   InfoBoxContent* Create(Type infobox_type);
 };
 

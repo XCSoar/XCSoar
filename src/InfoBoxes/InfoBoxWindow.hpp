@@ -38,7 +38,7 @@ struct UnitsLook;
 class InfoBoxWindow : public PaintWindow
 {
   /** timeout of infobox focus [ms] */
-  static gcc_constexpr_data unsigned FOCUS_TIMEOUT_MAX = 20 * 1000;
+  static constexpr unsigned FOCUS_TIMEOUT_MAX = 20 * 1000;
 
 private:
   InfoBoxContent *content;

@@ -179,7 +179,7 @@ foreach my $m (@modes) {
 print "  NULL\n";
 print "};\n";
 
-print "static gcc_constexpr_data InputConfig::Event default_events[] = {\n";
+print "static constexpr InputConfig::Event default_events[] = {\n";
 foreach my $e (@events) {
     my ($handler, $misc, $next_id) = @$e;
     $misc = '' unless defined $misc;
@@ -188,7 +188,7 @@ foreach my $e (@events) {
 }
 print "};\n";
 
-print "static gcc_constexpr_data struct flat_event_map default_key2event[] = {\n";
+print "static constexpr struct flat_event_map default_key2event[] = {\n";
 foreach my $k (@keys) {
     my ($mode, $key, $event) = @$k;
     print "  { $mode, $key, $event },\n";
@@ -196,7 +196,7 @@ foreach my $k (@keys) {
 print "  { 0, 0, 0 },\n";
 print "};\n";
 
-print "static gcc_constexpr_data struct flat_event_map default_gc2event[] = {\n";
+print "static constexpr struct flat_event_map default_gc2event[] = {\n";
 foreach my $k (@gc) {
     my ($mode, $key, $event) = @$k;
     print "  { $mode, GCE_$key, $event },\n";
@@ -204,7 +204,7 @@ foreach my $k (@gc) {
 print "  { 0, 0, 0 },\n";
 print "};\n";
 
-print "static gcc_constexpr_data struct flat_event_map default_n2event[] = {\n";
+print "static constexpr struct flat_event_map default_n2event[] = {\n";
 foreach my $k (@nmea) {
     my ($mode, $key, $event) = @$k;
     print "  { $mode, $key, $event },\n";
@@ -212,7 +212,7 @@ foreach my $k (@nmea) {
 print "  { 0, 0, 0 },\n";
 print "};\n";
 
-print "static gcc_constexpr_data struct flat_label default_labels[] = {\n";
+print "static constexpr struct flat_label default_labels[] = {\n";
 foreach my $l (@labels) {
     my ($mode, $label, $location, $event) = @$l;
     print qq|  { $mode, $location, $event, _T("$label") },\n|;
@@ -220,7 +220,7 @@ foreach my $l (@labels) {
 print "  { 0, 0, 0, NULL },\n";
 print "};\n";
 
-print "static gcc_constexpr_data struct flat_gesture_map default_gesture2event[] = {\n";
+print "static constexpr struct flat_gesture_map default_gesture2event[] = {\n";
 foreach my $g (@gestures) {
     my ($mode, $event, $data) = @$g;
     print "  { $mode, $event, _T(\"$data\") },\n";

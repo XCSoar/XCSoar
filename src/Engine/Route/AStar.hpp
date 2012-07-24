@@ -110,7 +110,7 @@ class AStar
 
     node_value_iterator iterator;
 
-    gcc_constexpr_ctor
+    constexpr
     NodeValue(const AStarPriorityValue &_priority,
               node_value_iterator _iterator)
       :priority(_priority), iterator(_iterator) {}

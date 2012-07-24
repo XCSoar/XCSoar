@@ -61,7 +61,7 @@ PolarStore::Item::ToPolarInfo() const
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static gcc_constexpr_data PolarStore::Item internal_polars[] =
+static constexpr PolarStore::Item internal_polars[] =
 {
   // 0
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100 },

@@ -242,7 +242,7 @@ PrepareConfigurationMenu()
                      ARRAY_SIZE(main_menu_captions));
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnUserLevel),

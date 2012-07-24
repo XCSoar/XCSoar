@@ -24,7 +24,7 @@
 #include "TaskFactoryConstraints.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints mixed_constraints = {
+static constexpr TaskFactoryConstraints mixed_constraints = {
   true,
   false,
   false,
@@ -33,14 +33,14 @@ static gcc_constexpr_data TaskFactoryConstraints mixed_constraints = {
   2, 10,
 };
 
-static gcc_constexpr_data TaskPointFactoryType mixed_start_types[] = {
+static constexpr TaskPointFactoryType mixed_start_types[] = {
   TaskPointFactoryType::START_LINE,
   TaskPointFactoryType::START_CYLINDER,
   TaskPointFactoryType::START_BGA,
   TaskPointFactoryType::START_SECTOR,
 };
 
-static gcc_constexpr_data TaskPointFactoryType mixed_im_types[] = {
+static constexpr TaskPointFactoryType mixed_im_types[] = {
   TaskPointFactoryType::FAI_SECTOR,
   TaskPointFactoryType::AST_CYLINDER,
   TaskPointFactoryType::AAT_CYLINDER,
@@ -51,7 +51,7 @@ static gcc_constexpr_data TaskPointFactoryType mixed_im_types[] = {
   TaskPointFactoryType::BGAENHANCEDOPTION_SECTOR,
 };
 
-static gcc_constexpr_data TaskPointFactoryType mixed_finish_types[] = {
+static constexpr TaskPointFactoryType mixed_finish_types[] = {
   TaskPointFactoryType::FINISH_SECTOR,
   TaskPointFactoryType::FINISH_LINE,
   TaskPointFactoryType::FINISH_CYLINDER,

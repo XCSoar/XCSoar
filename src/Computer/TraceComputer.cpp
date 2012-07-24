@@ -27,16 +27,16 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Asset.hpp"
 
-static gcc_constexpr_data unsigned full_trace_size =
+static constexpr unsigned full_trace_size =
   HasLittleMemory() ? 512 : 1024;
 
-static gcc_constexpr_data unsigned contest_trace_size =
+static constexpr unsigned contest_trace_size =
   HasLittleMemory() ? 256 : 512;
 
-static gcc_constexpr_data unsigned sprint_trace_size =
+static constexpr unsigned sprint_trace_size =
   IsAncientHardware() ? 96 : 128;
 
-static gcc_constexpr_data unsigned full_trace_no_thin_time =
+static constexpr unsigned full_trace_no_thin_time =
   HasLittleMemory() ? 60 : 120;
 
 TraceComputer::TraceComputer()

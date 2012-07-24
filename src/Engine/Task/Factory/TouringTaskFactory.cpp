@@ -25,7 +25,7 @@
 #include "Task/Ordered/OrderedTaskBehaviour.hpp"
 #include "Util/Macros.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints touring_constraints = {
+static constexpr TaskFactoryConstraints touring_constraints = {
   false,
   false,
   true,
@@ -34,15 +34,15 @@ static gcc_constexpr_data TaskFactoryConstraints touring_constraints = {
   2, 10,
 };
 
-static gcc_constexpr_data TaskPointFactoryType touring_start_types[] = {
+static constexpr TaskPointFactoryType touring_start_types[] = {
   TaskPointFactoryType::START_CYLINDER,
 };
 
-static gcc_constexpr_data TaskPointFactoryType touring_im_types[] = {
+static constexpr TaskPointFactoryType touring_im_types[] = {
   TaskPointFactoryType::FAI_SECTOR,
 };
 
-static gcc_constexpr_data TaskPointFactoryType touring_finish_types[] = {
+static constexpr TaskPointFactoryType touring_finish_types[] = {
   TaskPointFactoryType::FINISH_CYLINDER,
 };
 

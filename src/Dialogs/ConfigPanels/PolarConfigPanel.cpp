@@ -317,7 +317,7 @@ PolarConfigPanel::Hide()
   PolarConfigPanel::SetVisible(false);
 }
 
-static gcc_constexpr_data CallBackTableEntry polar_callbacks[] = {
+static constexpr CallBackTableEntry polar_callbacks[] = {
   DeclareCallBackEntry(OnFieldData),
   DeclareCallBackEntry(NULL)
 };

@@ -29,7 +29,7 @@ struct KeyMap {
   unsigned from, to;
 };
 
-static gcc_constexpr_data KeyMap altair_key_map[] = {
+static constexpr KeyMap altair_key_map[] = {
   { VK_F1, VK_APP1 },
   { VK_F2, VK_APP2 },
   { VK_F3, VK_APP3 },
@@ -42,26 +42,26 @@ static gcc_constexpr_data KeyMap altair_key_map[] = {
   { 0 }
 };
 
-static gcc_constexpr_data KeyMap hp31x_key_map[] = {
+static constexpr KeyMap hp31x_key_map[] = {
   { VK_F12, VK_ESCAPE },
   { 0 }
 };
 
-static gcc_constexpr_data KeyMap medion_p5_key_map[] = {
+static constexpr KeyMap medion_p5_key_map[] = {
   { VK_F6, 0x26 }, // + key = pg up
   { VK_F7, 0x28 }, // - key = pg down
   { VK_F8, VK_RETURN }, // middle key = enter
   { 0 }
 };
 
-static gcc_constexpr_data KeyMap nokia_500_key_map[] = {
+static constexpr KeyMap nokia_500_key_map[] = {
   { 0xc1, VK_RETURN }, // middle key = enter
   { 0xc5, 0x26 }, // + key = pg down
   { 0xc6, 0x28 }, // - key = pg up
   { 0 }
 };
 
-static gcc_constexpr_data KeyMap pn_6000_key_map[] = {
+static constexpr KeyMap pn_6000_key_map[] = {
   { VK_F10, VK_APP1 }, // Upper Silver key short press
   { VK_F12, VK_APP2 }, // Lower Silver key short press
   { VK_F3, VK_APP3 }, // Back key plus
@@ -71,7 +71,7 @@ static gcc_constexpr_data KeyMap pn_6000_key_map[] = {
   { 0 }
 };
 
-static gcc_constexpr_data KeyMap lx_mm_key_map[] = {
+static constexpr KeyMap lx_mm_key_map[] = {
   { 'L', VK_APP1 }, // NAV
   { 'N', VK_APP2 }, // TSK/TRG
   { 'C', VK_APP3 }, // SET/SYS

@@ -134,7 +134,7 @@ TaskActionsPanel::ReClick()
     dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
 }
 
-static gcc_constexpr_data CallBackTableEntry task_list_callbacks[] = {
+static constexpr CallBackTableEntry task_list_callbacks[] = {
   DeclareCallBackEntry(OnBrowseClicked),
   DeclareCallBackEntry(OnNewTaskClicked),
   DeclareCallBackEntry(OnSaveClicked),

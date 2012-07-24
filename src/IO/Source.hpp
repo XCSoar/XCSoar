@@ -47,10 +47,10 @@ public:
 
     Range() = default;
 
-    gcc_constexpr_ctor
+    constexpr
     Range(T *_data, unsigned _length):data(_data), length(_length) {}
 
-    gcc_constexpr_method
+    constexpr
     bool IsEmpty() const {
       return length == 0;
     }

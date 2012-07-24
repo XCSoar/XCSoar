@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
 #include "Screen/OpenGL/Features.hpp"
-#include "Compiler.h"
 
 #ifdef HAVE_GLES
 #include <GLES/gl.h>
@@ -46,15 +45,15 @@ struct Color {
 #ifdef HAVE_GLES
   GLfixed r, g, b, a;
 
-  gcc_constexpr_ctor Color(GLubyte _r, GLubyte _g, GLubyte _b)
+  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b)
     :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(1u << 16u) {}
-  gcc_constexpr_ctor Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
+  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
     :r(_r << 8u), g(_g << 8u), b(_b << 8u), a(_a << 8u) {}
 #else
   GLubyte r, g, b, a;
 
-  gcc_constexpr_ctor Color(GLubyte _r, GLubyte _g, GLubyte _b):r(_r), g(_g), b(_b), a(255) {}
-  gcc_constexpr_ctor Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
+  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b):r(_r), g(_g), b(_b), a(255) {}
+  constexpr Color(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a)
     :r(_r), g(_g), b(_b), a(_a) {}
 #endif
 
@@ -64,7 +63,7 @@ struct Color {
    * Returns the red part of the color
    * @return The red part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t
   Red() const
   {
@@ -79,7 +78,7 @@ struct Color {
    * Returns the green part of the color
    * @return The green part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t
   Green() const
   {
@@ -94,7 +93,7 @@ struct Color {
    * Returns the blue part of the color
    * @return The blue part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t
   Blue() const
   {
@@ -122,7 +121,7 @@ struct Color {
   }
 #endif
 
-  gcc_constexpr_method
+  constexpr
   Color
   WithAlpha(GLubyte alpha) const {
     return Color(Red(), Green(), Blue(), alpha);
@@ -131,7 +130,7 @@ struct Color {
   /**
    * Returns the highlighted version of this color.
    */
-  gcc_constexpr_method
+  constexpr
   Color
   Highlight() const
   {
@@ -162,7 +161,7 @@ struct Color {
    * @param b Color 2
    * @return True if colors match, False otherwise
    */
-  gcc_constexpr_method
+  constexpr
   bool operator ==(const Color other) const
   {
     return r == other.r
@@ -176,7 +175,7 @@ struct Color {
    * @param b Color 2
    * @return True if color do not match, False otherwise
    */
-  gcc_constexpr_method
+  constexpr
   bool operator !=(const Color other) const
   {
     return !(*this == other);

@@ -101,7 +101,7 @@ struct Event {
   Event(enum type _type, PixelScalar _x, PixelScalar _y)
     :type(_type), x(_x), y(_y) {}
 
-  gcc_constexpr_method
+  constexpr
   RasterPoint GetPoint() const {
     return RasterPoint{x, y};
   }

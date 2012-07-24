@@ -25,17 +25,16 @@ Copyright_License {
 #define XCSOAR_ATMOSPHERE_TEMPERATURE_HPP
 
 #include "Math/fixed.hpp"
-#include "Compiler.h"
 
 /**
  * The offset between 0 Kelvin and 0 degrees Celsius [K].
  */
-static gcc_constexpr_data fixed CELSIUS_OFFSET(273.15);
+static constexpr fixed CELSIUS_OFFSET(273.15);
 
 /**
  * Convert a temperature from Kelvin to degrees Celsius.
  */
-gcc_constexpr_function
+constexpr
 static inline fixed
 KelvinToCelsius(fixed kelvin)
 {
@@ -45,7 +44,7 @@ KelvinToCelsius(fixed kelvin)
 /**
  * Convert a temperature from degrees Celsius to Kelvin.
  */
-gcc_constexpr_function
+constexpr
 static inline fixed
 CelsiusToKelvin(fixed celsius)
 {

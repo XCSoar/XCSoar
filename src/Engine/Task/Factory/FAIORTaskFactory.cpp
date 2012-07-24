@@ -23,7 +23,7 @@
 #include "FAIORTaskFactory.hpp"
 #include "TaskFactoryConstraints.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints fai_or_constraints = {
+static constexpr TaskFactoryConstraints fai_or_constraints = {
   true,
   true,
   false,

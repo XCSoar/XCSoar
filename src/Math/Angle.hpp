@@ -36,7 +36,7 @@ class Angle
 {
   fixed value;
 
-  gcc_constexpr_ctor
+  constexpr
   explicit Angle(const fixed &_value): value(_value) {};
 
 public:
@@ -46,12 +46,12 @@ public:
    */
   Angle() = default;
 
-  gcc_constexpr_function
+  constexpr
   static Angle Zero() {
     return Native(fixed_zero);
   }
 
-  gcc_constexpr_function
+  constexpr
   static Angle Native(const fixed _value) {
     return Angle(_value);
   }
@@ -60,7 +60,7 @@ public:
    * Construct an instance that describes a "full circle" (360
    * degrees).
    */
-  gcc_constexpr_function
+  constexpr
   static Angle FullCircle() {
 #ifdef RADIANS
     return Native(fixed_two_pi);
@@ -73,7 +73,7 @@ public:
    * Construct an instance that describes a "half circle" (180
    * degrees).
    */
-  gcc_constexpr_function
+  constexpr
   static Angle HalfCircle() {
 #ifdef RADIANS
     return Native(fixed_pi);
@@ -86,7 +86,7 @@ public:
    * Construct an instance that describes a "quarter circle" 90
    * degrees).
    */
-  gcc_constexpr_function
+  constexpr
   static Angle QuarterCircle() {
 #ifdef RADIANS
     return Native(fixed_half_pi);
@@ -95,7 +95,7 @@ public:
 #endif
   }
 
-  gcc_constexpr_method
+  constexpr
   fixed Native() const {
     return value;
   }
@@ -106,7 +106,7 @@ public:
     return Angle(_value * fixed_deg_to_rad);
   }
 
-  gcc_constexpr_function
+  constexpr
   static Angle Radians(const fixed _value) {
     return Angle(_value);
   }
@@ -116,7 +116,7 @@ public:
     return value * fixed_rad_to_deg;
   }
 
-  gcc_constexpr_method
+  constexpr
   fixed Radians() const {
     return value;
   }
@@ -126,7 +126,7 @@ public:
     return value * fixed(24) / fixed_two_pi;
   }
 #else
-  gcc_constexpr_function
+  constexpr
   static Angle Degrees(const fixed _value) {
     return Angle(_value);
   }
@@ -136,7 +136,7 @@ public:
     return Angle(_value * fixed_rad_to_deg);
   }
 
-  gcc_constexpr_method
+  constexpr
   fixed Degrees() const {
     return value;
   }
@@ -276,7 +276,7 @@ public:
    * Returns half of this angle.  This is only useful (and valid) when
    * the angle has been normalized with AsDelta().
    */
-  gcc_constexpr_method
+  constexpr
   Angle Half() const {
     return Angle(::half(value));
   }
@@ -343,21 +343,21 @@ public:
     return Angle(value / x);
   }
 
-  gcc_constexpr_method
+  constexpr
   Angle
   operator+(const Angle x) const
   {
     return Angle(value + x.value);
   }
 
-  gcc_constexpr_method
+  constexpr
   Angle
   operator-(const Angle x) const
   {
     return Angle(value - x.value);
   }
 
-  gcc_constexpr_method
+  constexpr
   Angle
   operator-() const
   {
@@ -385,37 +385,37 @@ public:
     return *this;
   }
 
-  gcc_constexpr_method bool
+  constexpr bool
   operator==(const Angle x) const
   {
     return value == x.value;
   }
 
-  gcc_constexpr_method bool
+  constexpr bool
   operator!=(const Angle x) const
   {
     return value != x.value;
   }
 
-  gcc_constexpr_method bool
+  constexpr bool
   operator<(const Angle x) const
   {
     return value < x.value;
   }
 
-  gcc_constexpr_method bool
+  constexpr bool
   operator>(const Angle x) const
   {
     return value > x.value;
   }
 
-  gcc_constexpr_method bool
+  constexpr bool
   operator<=(const Angle x) const
   {
     return value <= x.value;
   }
 
-  gcc_constexpr_method bool
+  constexpr bool
   operator>=(const Angle x) const
   {
     return value >= x.value;

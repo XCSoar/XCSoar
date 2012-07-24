@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_MODEL_TYPE_HPP
 #define XCSOAR_MODEL_TYPE_HPP
 
-#include "Compiler.h"
-
 #include <stdint.h>
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
@@ -42,7 +40,7 @@ enum class ModelType : uint8_t {
   LX_MINI_MAP,
 };
 
-gcc_constexpr_function
+constexpr
 static inline bool
 HasModelType()
 {

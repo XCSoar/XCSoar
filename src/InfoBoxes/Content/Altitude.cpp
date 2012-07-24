@@ -47,7 +47,7 @@ Copyright_License {
  * Subpart callback function pointers
  */
 
-static gcc_constexpr_data
+static constexpr
 InfoBoxContentAltitude::PanelContent Panels[] = {
   InfoBoxContentAltitude::PanelContent (
     N_("Simulator"),
@@ -62,7 +62,7 @@ InfoBoxContentAltitude::PanelContent Panels[] = {
     LoadAltitudeSetupPanel)
 };
 
-static gcc_constexpr_data
+static constexpr
 InfoBoxContentAltitude::DialogContent dlgContent = {
   ARRAY_SIZE(Panels), &Panels[0],
 };

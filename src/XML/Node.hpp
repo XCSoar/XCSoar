@@ -240,7 +240,7 @@ public:
     return *this;
   }
 
-  gcc_constexpr_ctor
+  constexpr
   XMLNode(): d(NULL) {}
 
   // The strings given as parameters for these 4 methods will be free'd by the XMLNode class:

@@ -55,7 +55,7 @@ ButtonPanel::UpdateLayout()
   return UpdateLayout(parent.GetClientRect());
 }
 
-static gcc_constexpr_data PixelRect dummy_rc = { 0, 0, 100, 40 };
+static constexpr PixelRect dummy_rc = { 0, 0, 100, 40 };
 
 WndButton *
 ButtonPanel::Add(const TCHAR *caption,

@@ -81,7 +81,7 @@ OnPointCursorCallback(unsigned i)
   wItemHelp->SetText(itemhelp);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
   DeclareCallBackEntry(OnHelpClicked),

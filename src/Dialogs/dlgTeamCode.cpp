@@ -177,7 +177,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
   Update();
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnFlarmLockClicked),
   DeclareCallBackEntry(OnCodeClicked),

@@ -53,7 +53,7 @@ public:
 #ifndef USE_GDI
   Brush():hollow(true) {}
 
-  gcc_constexpr_ctor
+  constexpr
   explicit Brush(const Color _color):hollow(false), color(_color)  {}
 #else
   /** Base Constructor of the Brush class */

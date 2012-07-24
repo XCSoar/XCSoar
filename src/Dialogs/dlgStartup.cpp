@@ -83,7 +83,7 @@ SelectProfile(const TCHAR *path)
   File::Touch(path);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnQuitClicked),

@@ -162,9 +162,9 @@ RoutePolars::NeighbourLink(const RoutePoint &start, const RoutePoint &end,
   // a = asin(sina/256)
   // cosa = 256*cos(a)
 
-  static gcc_constexpr_data int sina[] =
+  static constexpr int sina[] =
     {256, 128, 85, 64, 51, 43, 37, 32, 28, 26, 23, 21, 20, 18 };
-  static gcc_constexpr_data int cosa[] =
+  static constexpr int cosa[] =
     {256, 222, 241, 248, 251, 252, 253, 254, 254, 255, 255, 255, 255, 255 };
 
   const int index = std::min((int)8,

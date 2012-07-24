@@ -53,7 +53,7 @@ SetVSpeed(InfoBoxData &data, fixed value)
  * Subpart callback function pointers
  */
 
-static gcc_constexpr_data InfoBoxContentMacCready::PanelContent panels[] = {
+static constexpr InfoBoxContentMacCready::PanelContent panels[] = {
   InfoBoxContentMacCready::PanelContent (
     N_("Edit"),
     LoadMacCreadyEditPanel),

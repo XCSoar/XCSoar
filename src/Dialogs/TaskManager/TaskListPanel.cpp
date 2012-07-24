@@ -333,7 +333,7 @@ OnRenameClicked(gcc_unused WndButton &Sender)
   instance->RenameTask();
 }
 
-static gcc_constexpr_data CallBackTableEntry task_list_callbacks[] = {
+static constexpr CallBackTableEntry task_list_callbacks[] = {
   DeclareCallBackEntry(OnMoreClicked),
   DeclareCallBackEntry(OnLoadClicked),
   DeclareCallBackEntry(OnDeleteClicked),

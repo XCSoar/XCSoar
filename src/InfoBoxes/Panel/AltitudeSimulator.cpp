@@ -84,7 +84,7 @@ PnlSimulatorOnMinusBig(gcc_unused WndButton &Sender)
   ChangeAltitude(fixed(-100));
 }
 
-static gcc_constexpr_data
+static constexpr
 CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PnlSimulatorOnPlusBig),
   DeclareCallBackEntry(PnlSimulatorOnPlusSmall),

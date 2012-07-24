@@ -27,9 +27,8 @@ Copyright_License {
 #include "VegaParametersWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data StaticEnumChoice flarm_user_interfaces[] = {
+static constexpr StaticEnumChoice flarm_user_interfaces[] = {
   { 0, _T("LED+Buzzer") },
   { 1, _T("None") },
   { 2, _T("Buzzer") },
@@ -37,7 +36,7 @@ static gcc_constexpr_data StaticEnumChoice flarm_user_interfaces[] = {
   { 0 }
 };
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter flarm_alert_parameters[] = {
   { DataField::Type::INTEGER, "FlarmMaxObjectsReported",
     N_("Max. objects reported"), NULL, NULL, 0, 15, 1, _T("%d") },

@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_COLOR_HPP
 #define XCSOAR_SCREEN_GDI_COLOR_HPP
 
-#include "Compiler.h"
-
 #include <windows.h>
 #include <stdint.h>
 
@@ -44,20 +42,20 @@ struct Color {
    * Constructor (creates a Color object based on the given COLORREF)
    * @param c COLORREF (e.g. 0xFF6677)
    */
-  explicit gcc_constexpr_ctor Color(COLORREF c) : value(c) {}
+  explicit constexpr Color(COLORREF c) : value(c) {}
   /**
    * Constructor (creates a Color object based on the given color parts)
    * @param r Red part
    * @param g Green part
    * @param b Blue part
    */
-  gcc_constexpr_ctor Color(uint8_t r, uint8_t g, uint8_t b) : value(RGB(r, g, b)) {}
+  constexpr Color(uint8_t r, uint8_t g, uint8_t b) : value(RGB(r, g, b)) {}
 
   /**
    * Returns the red part of the color
    * @return The red part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t Red() const
   {
     return GetRValue(value);
@@ -67,7 +65,7 @@ struct Color {
    * Returns the green part of the color
    * @return The green part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t Green() const
   {
     return GetGValue(value);
@@ -77,7 +75,7 @@ struct Color {
    * Returns the blue part of the color
    * @return The blue part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t Blue() const
   {
     return GetBValue(value);
@@ -90,13 +88,13 @@ struct Color {
     return *this;
   }
 
-  gcc_constexpr_method
+  constexpr
   operator COLORREF() const { return value; }
 
   /**
    * Returns the highlighted version of this color.
    */
-  gcc_constexpr_method
+  constexpr
   Color
   Highlight() const
   {
@@ -112,7 +110,7 @@ struct Color {
  * @param b Color 2
  * @return True if colors match, False otherwise
  */
-static inline gcc_constexpr_function bool
+static inline constexpr bool
 operator ==(const Color a, const Color b)
 {
   return a.value == b.value;
@@ -124,7 +122,7 @@ operator ==(const Color a, const Color b)
  * @param b Color 2
  * @return True if color do not match, False otherwise
  */
-static inline gcc_constexpr_function bool
+static inline constexpr bool
 operator !=(const Color a, const Color b)
 {
   return !(a == b);
@@ -139,10 +137,10 @@ operator !=(const Color a, const Color b)
 struct HWColor {
   COLORREF value;
 
-  gcc_constexpr_ctor HWColor():value(0) {}
-  explicit gcc_constexpr_ctor HWColor(COLORREF c):value(c) {}
+  constexpr HWColor():value(0) {}
+  explicit constexpr HWColor(COLORREF c):value(c) {}
 
-  gcc_constexpr_method operator COLORREF() const { return value; }
+  constexpr operator COLORREF() const { return value; }
 };
 
 #endif

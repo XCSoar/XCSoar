@@ -35,7 +35,7 @@ class AirspaceRoute: public RoutePlanner {
 
     RouteAirspaceIntersection() = default;
 
-    gcc_constexpr_ctor
+    constexpr
     RouteAirspaceIntersection(const AbstractAirspace *_airspace,
                               RoutePoint _point)
       :airspace(_airspace), point(_point) {}

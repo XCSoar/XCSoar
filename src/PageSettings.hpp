@@ -25,14 +25,13 @@ Copyright_License {
 #define XCSOAR_PAGE_SETTINGS_HPP
 
 #include "Util/TypeTraits.hpp"
-#include "Compiler.h"
 
 #include <tchar.h>
 
 struct InfoBoxSettings;
 
 struct PageSettings {
-  static gcc_constexpr_data unsigned MAX_PAGES = 8;
+  static constexpr unsigned MAX_PAGES = 8;
 
   struct InfoBoxConfig {
     bool auto_switch;

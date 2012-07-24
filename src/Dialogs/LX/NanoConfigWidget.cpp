@@ -82,7 +82,7 @@ NanoConfigWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   RequestAllSettings(device);
 
-  static gcc_constexpr_data StaticEnumChoice baud_list[] = {
+  static constexpr StaticEnumChoice baud_list[] = {
     { 2400, _T("2400"), NULL },
     { 4800, _T("4800"), NULL },
     { 9600, _T("9600"), NULL },

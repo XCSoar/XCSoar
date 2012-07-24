@@ -30,8 +30,6 @@
 #ifndef XCSOAR_OVERWRITING_RING_BUFFER_HPP
 #define XCSOAR_OVERWRITING_RING_BUFFER_HPP
 
-#include "Compiler.h"
-
 #include <algorithm>
 #include <cassert>
 
@@ -84,7 +82,7 @@ protected:
   T data[size];
   unsigned head, tail;
 
-  gcc_constexpr_ctor
+  constexpr
   TrivialOverwritingRingBuffer(unsigned _head, unsigned _tail)
     :head(_head), tail(_tail) {}
 

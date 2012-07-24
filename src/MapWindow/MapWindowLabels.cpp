@@ -32,7 +32,7 @@ Copyright_License {
 #define _cdecl
 #endif
 
-static gcc_constexpr_data PixelScalar WPCIRCLESIZE = 2;
+static constexpr PixelScalar WPCIRCLESIZE = 2;
 
 static int _cdecl
 MapWaypointLabelListCompare(const void *elem1, const void *elem2)

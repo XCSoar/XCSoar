@@ -103,7 +103,7 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
  * Subpart callback function pointers
  */
 
-static gcc_constexpr_data InfoBoxContentWind::PanelContent Panels[] = {
+static constexpr InfoBoxContentWind::PanelContent Panels[] = {
 InfoBoxContentWind::PanelContent (
   N_("Edit"),
   LoadWindEditPanel),

@@ -27,9 +27,8 @@ Copyright_License {
 #include "VegaParametersWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data StaticEnumChoice flarm_aircraft_types[] = {
+static constexpr StaticEnumChoice flarm_aircraft_types[] = {
   { 0, _T("Undefined") },
   { 1, _T("Glider") },
   { 2, _T("Tow plane") },
@@ -48,7 +47,7 @@ static gcc_constexpr_data StaticEnumChoice flarm_aircraft_types[] = {
   { 0 }
 };
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter flarm_id_parameters[] = {
   { DataField::Type::BOOLEAN, "FlarmPrivacyFlag", N_("Privacy") },
   { DataField::Type::ENUM, "FlarmAircraftType",

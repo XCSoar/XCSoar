@@ -189,7 +189,7 @@ ListItemSelected(unsigned index)
   OpenDetails(index);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PaintListItem),
   DeclareCallBackEntry(ListItemSelected),
   DeclareCallBackEntry(AddClicked),

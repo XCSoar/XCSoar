@@ -51,7 +51,7 @@ VibrateShort();
 
 #else
 
-gcc_constexpr_function
+constexpr
 static inline bool
 HaveVibrator()
 {

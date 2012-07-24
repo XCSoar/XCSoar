@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef TASK_FACTORY_CONSTRAINTS_HPP
 #define TASK_FACTORY_CONSTRAINTS_HPP
 
-#include "Compiler.h"
-
 /**
  * This struct describes the constraints imposed by the rules of an
  * #AbstractTaskFactory implementation.  Each #AbstractTaskFactory
@@ -76,7 +74,7 @@ struct TaskFactoryConstraints {
    *
    * @return True if task is fixed size
    */
-  gcc_constexpr_method
+  constexpr
   bool IsFixedSize() const {
     return min_points == max_points;
   }

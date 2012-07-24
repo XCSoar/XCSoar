@@ -309,7 +309,7 @@ ListItemSelected(unsigned i)
       dialog->SetModalResult(mrOK);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
    DeclareCallBackEntry(LoadClicked),
    DeclareCallBackEntry(CloseClicked),
    DeclareCallBackEntry(NewClicked),

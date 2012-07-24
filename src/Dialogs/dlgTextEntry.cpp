@@ -203,7 +203,7 @@ OnDownClicked(gcc_unused WndButton &button)
   FormKeyDown(*wf, !IsAltair()? VK_DOWN : VK_RIGHT);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnTextPaint),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLeftClicked),

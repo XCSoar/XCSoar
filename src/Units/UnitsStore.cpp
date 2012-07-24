@@ -32,7 +32,7 @@ struct UnitStoreItem
   UnitSetting Units;
 };
 
-static gcc_constexpr_data UnitStoreItem Presets[] =
+static constexpr UnitStoreItem Presets[] =
 {
   { N_("European"), {
     Unit::KILOMETER,

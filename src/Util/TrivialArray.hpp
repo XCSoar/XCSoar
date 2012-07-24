@@ -30,8 +30,6 @@
 #ifndef XCSOAR_TRIVIAL_ARRAY_HPP
 #define XCSOAR_TRIVIAL_ARRAY_HPP
 
-#include "Compiler.h"
-
 #include <assert.h>
 #include <algorithm>
 
@@ -52,7 +50,7 @@ protected:
   size_type the_size;
   T data[max];
 
-  gcc_constexpr_ctor
+  constexpr
   TrivialArray(size_type _size):the_size(_size) {}
 
 public:
@@ -61,10 +59,10 @@ public:
    */
   TrivialArray() = default;
 
-  gcc_constexpr_method
+  constexpr
   size_type capacity() const { return max; }
 
-  gcc_constexpr_method
+  constexpr
   size_type max_size() const {
     return max;
   }
@@ -82,7 +80,7 @@ public:
   /**
    * Returns the number of allocated elements.
    */
-  gcc_constexpr_method
+  constexpr
   size_type size() const {
     return the_size;
   }
@@ -93,12 +91,12 @@ public:
     the_size = _size;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool empty() const {
     return the_size == 0;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool full() const {
     return the_size == max;
   }

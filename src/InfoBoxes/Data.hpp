@@ -31,7 +31,7 @@ Copyright_License {
 class Angle;
 
 struct InfoBoxData {
-  static gcc_constexpr_data unsigned COLOR_COUNT = 6;
+  static constexpr unsigned COLOR_COUNT = 6;
 
   StaticString<32> title;
   StaticString<32> value;

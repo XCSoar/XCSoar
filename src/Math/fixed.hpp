@@ -72,14 +72,14 @@ sin_cos(const fixed thetha)
 #define negative(x) (x < 0)
 #define sigmoid(x) (2.0 / (1.0 + exp(-x)) - 1.0)
 
-gcc_constexpr_function
+constexpr
 static inline fixed
 half(fixed a)
 {
   return a * 0.5;
 }
 
-gcc_constexpr_function
+constexpr
 static inline fixed
 Double(fixed a)
 {
@@ -98,18 +98,18 @@ inline fixed fast_sqrt(fixed a) {
   return sqrt(a);
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed sqr(fixed a) {
   return a*a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed fast_mult(fixed a, int a_bits, fixed b, int b_bits)
 {
   return a * b;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed fast_mult(fixed a, fixed b, int b_bits)
 {
   return a * b;
@@ -159,7 +159,7 @@ public:
 
   fixed() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   fixed(internal, value_t nVal)
     :m_nVal(nVal) {}
 
@@ -167,15 +167,15 @@ public:
 //        m_nVal(nVal<<resolution_shift)
 //    {}
 
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(long nVal)
     :m_nVal((value_t)(nVal)<<resolution_shift) {}
 
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(int nVal)
     :m_nVal((value_t)(nVal)<<resolution_shift) {}
 
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(short nVal)
     :m_nVal((value_t)(nVal)<<resolution_shift) {}
 
@@ -184,118 +184,118 @@ public:
         m_nVal(nVal<<resolution_shift)
     {}
 */  
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(unsigned long nVal)
     :m_nVal((value_t)(nVal)<<resolution_shift) {}
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(unsigned int nVal)
     :m_nVal((value_t)(nVal)<<resolution_shift) {}
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(unsigned short nVal)
     :m_nVal((value_t)(nVal)<<resolution_shift) {}
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(double nVal)
     :m_nVal(static_cast<value_t>(nVal*static_cast<double>(resolution))) {}
-  gcc_constexpr_ctor explicit
+  constexpr explicit
   fixed(float nVal)
     :m_nVal(static_cast<value_t>(nVal*static_cast<float>(resolution))) {}
 
-  gcc_constexpr_function
+  constexpr
   friend bool operator==(const fixed lhs, const fixed rhs) {
     return lhs.m_nVal==rhs.m_nVal;
   }
 
-  gcc_constexpr_function
+  constexpr
   friend bool operator!=(const fixed lhs, const fixed rhs) {
     return lhs.m_nVal!=rhs.m_nVal;
   }
 
-  gcc_constexpr_function
+  constexpr
   friend bool operator<(const fixed lhs, const fixed rhs) {
     return lhs.m_nVal<rhs.m_nVal;
   }
 
-  gcc_constexpr_function
+  constexpr
   friend bool operator>(const fixed lhs, const fixed rhs) {
     return lhs.m_nVal>rhs.m_nVal;
   }
 
-  gcc_constexpr_function
+  constexpr
   friend bool operator<=(const fixed lhs, const fixed rhs) {
     return lhs.m_nVal<=rhs.m_nVal;
   }
 
-  gcc_constexpr_function
+  constexpr
   friend bool operator>=(const fixed lhs, const fixed rhs) {
     return lhs.m_nVal>=rhs.m_nVal;
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   operator bool() const {
     return m_nVal != 0;
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   inline operator double() const {
     return as_double();
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   inline operator float() const {
     return as_float();
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   inline operator short() const {
     return as_short();
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   inline operator int() const {
     return as_int();
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   inline operator unsigned() const {
     return (unsigned)as_int();
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   inline operator unsigned short() const {
     return as_unsigned_short();
   }
 
-  gcc_constexpr_method gcc_explicit
+  constexpr explicit
   inline operator long() const {
     return as_long();
   }
 
-  gcc_constexpr_method
+  constexpr
   float as_float() const {
     return m_nVal/(float)resolution;
   }
 
-  gcc_constexpr_method
+  constexpr
   double as_double() const {
     return m_nVal/(double)resolution;
   }
 
-  gcc_constexpr_method
+  constexpr
   long as_long() const {
     return (long)(m_nVal >> resolution_shift);
   }
 
-  gcc_constexpr_method
+  constexpr
   int64_t as_int64() const {
     return m_nVal >> resolution_shift;
   }
 
-  gcc_constexpr_method
+  constexpr
   int as_int() const {
     return (int)(m_nVal >> resolution_shift);
   }
 
-  gcc_constexpr_method
+  constexpr
   unsigned long as_unsigned_long() const {
     return (unsigned long)(m_nVal >> resolution_shift);
   }
@@ -306,30 +306,30 @@ public:
   }
   */
 
-  gcc_constexpr_method
+  constexpr
   unsigned int as_unsigned_int() const {
     return (unsigned int)(m_nVal >> resolution_shift);
   }
 
-  gcc_constexpr_method
+  constexpr
   short as_short() const {
     return (short)(m_nVal >> resolution_shift);
   }
 
-  gcc_constexpr_method
+  constexpr
   unsigned short as_unsigned_short() const {
     return (unsigned short)(m_nVal >> resolution_shift);
   }
 
   // TODO: be more generic
-  gcc_constexpr_method
+  constexpr
   long as_glfixed() const {
     //assert(resolution_shift >= 16);
     return m_nVal >> (resolution_shift - 16);
   }
 
   // TODO: be more generic
-  gcc_constexpr_method
+  constexpr
   long as_glfixed_scale() const {
     //assert(resolution_shift <= 32);
     return m_nVal << (32 - resolution_shift);
@@ -345,18 +345,18 @@ public:
     return *this;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool positive() const;
 
-  gcc_constexpr_method
+  constexpr
   bool negative() const;
 
-  gcc_constexpr_method
+  constexpr
   fixed Half() const {
     return fixed(internal(), m_nVal >> 1);
   }
 
-  gcc_constexpr_method
+  constexpr
   fixed Double() const {
     return fixed(internal(), m_nVal << 1);
   }
@@ -394,92 +394,92 @@ public:
   gcc_pure
   fixed log() const;
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator+(const fixed a, const fixed b) {
     return fixed(fixed::internal(), a.m_nVal + b.m_nVal);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator-(const fixed a, const fixed b) {
     return fixed(fixed::internal(), a.m_nVal - b.m_nVal);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const long b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const unsigned long b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const int b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const unsigned int b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const short b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const unsigned short b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const char b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator*(const fixed a, const unsigned char b) {
     return fixed(fixed::internal(), a.m_nVal * b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const long b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const unsigned long b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const int b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const unsigned int b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const short b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const unsigned short b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const char b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
 
-  gcc_constexpr_function
+  constexpr
   friend fixed operator/(const fixed a, const unsigned char b) {
     return fixed(fixed::internal(), a.m_nVal / b);
   }
@@ -553,7 +553,7 @@ public:
     return *this;
   }
 
-  gcc_constexpr_function
+  constexpr
   static fixed fast_mult(fixed a, int a_shift, fixed b, int b_shift) {
     return fixed(internal(),
                  ((a.m_nVal >> a_shift) * (b.m_nVal >> b_shift))
@@ -616,12 +616,12 @@ public:
     return *this;
   }
 
-  gcc_constexpr_method
+  constexpr
   fixed operator>>(int bits) const {
     return fixed(fixed::internal(), m_nVal >> bits);
   }
 
-  gcc_constexpr_method
+  constexpr
   fixed operator<<(int bits) const {
     return fixed(fixed::internal(), m_nVal << bits);
   }
@@ -636,7 +636,7 @@ public:
     return *this;
   }
 
-  gcc_constexpr_method bool operator!() const {
+  constexpr bool operator!() const {
     return m_nVal==0;
   }
 
@@ -678,70 +678,70 @@ public:
   gcc_pure
   fixed accurate_half_sin() const;
 
-  gcc_constexpr_method
+  constexpr
   fixed operator-() const;
 
-  gcc_constexpr_method
+  constexpr
   fixed abs() const;
 };
 
 static_assert(is_trivial<fixed>::value, "type is not trivial");
 
-gcc_constexpr_method
+constexpr
 inline bool fixed::positive() const
 {
   return (m_nVal>0);
 }
 
-gcc_constexpr_method
+constexpr
 inline bool fixed::negative() const
 {
   return (m_nVal<0);
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(unsigned long a, const fixed b)
 {
   return b * a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(long a, const fixed b)
 {
   return b * a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(unsigned a, const fixed b)
 {
   return b * a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(int a, const fixed b)
 {
   return b * a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(unsigned short a, const fixed b)
 {
   return b * a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(short a, const fixed b)
 {
   return b * a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(unsigned char a, const fixed b)
 {
   return b * a;
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed operator*(char a, const fixed b)
 {
   return b * a;
@@ -763,14 +763,14 @@ inline fixed operator*(fixed const& a,fixed const& b)
  * @param b second coefficient
  * @param b_shift number of bits to discard from the second coefficient
  */
-gcc_constexpr_function
+constexpr
 inline fixed
 fast_mult(fixed a, int a_shift, fixed b, int b_shift)
 {
   return fixed::fast_mult(a, a_shift, b, b_shift);
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed fast_mult(fixed a, fixed b, int b_bits)
 {
   return fixed::fast_mult(a, 0, b, b_bits);
@@ -881,7 +881,7 @@ inline fixed ceil(fixed const& x)
   return x.ceil();
 }
 
-gcc_constexpr_function
+constexpr
 inline fixed fabs(fixed const x)
 {
   return x.abs();
@@ -920,13 +920,13 @@ inline fixed fixed::floor() const
   return res;
 }
 
-gcc_constexpr_method
+constexpr
 inline fixed fixed::operator-() const
 {
   return fixed(internal(),-m_nVal);
 }
 
-gcc_constexpr_method
+constexpr
 inline fixed fixed::abs() const
 {
   return fixed(internal(),m_nVal<0?-m_nVal:m_nVal);
@@ -980,24 +980,24 @@ inline fixed fixed::sigmoid(const fixed&x) {
   return fixed_two/(fixed_one+(-x).exp())-fixed_one;
 }
 
-gcc_constexpr_function
+constexpr
 inline bool positive(const fixed f) {
   return f.positive();
 }
 
-gcc_constexpr_function
+constexpr
 inline bool negative(const fixed f) {
   return f.negative();
 }
 
-gcc_constexpr_function
+constexpr
 static inline fixed
 half(fixed a)
 {
   return a.Half();
 }
 
-gcc_constexpr_function
+constexpr
 static inline fixed
 Double(fixed a)
 {

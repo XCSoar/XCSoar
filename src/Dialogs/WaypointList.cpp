@@ -76,11 +76,11 @@ static WndProperty *type_filter;
 static OrderedTask *ordered_task;
 static unsigned ordered_task_index;
 
-static gcc_constexpr_data unsigned distance_filter_items[] = {
+static constexpr unsigned distance_filter_items[] = {
   0, 25, 50, 75, 100, 150, 250, 500, 1000
 };
 
-static gcc_constexpr_data int direction_filter_items[] = {
+static constexpr int direction_filter_items[] = {
   -1, -1, 0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
@@ -456,7 +456,7 @@ FormKeyDown(WndForm &sender, unsigned key_code)
 
 #endif /* GNAV */
 
-static gcc_constexpr_data CallBackTableEntry callback_table[] = {
+static constexpr CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnFilterNameButton),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnSelectClicked),

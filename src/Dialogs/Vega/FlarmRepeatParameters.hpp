@@ -26,9 +26,8 @@ Copyright_License {
 
 #include "VegaParametersWidget.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter flarm_repeat_parameters[] = {
   { DataField::Type::INTEGER, "FlarmInfoRepeatTime",
     N_("Interval; info"), NULL,

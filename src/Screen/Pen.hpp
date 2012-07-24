@@ -27,7 +27,6 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
-#include "Compiler.h"
 
 /**
  * A pen draws lines and borders.
@@ -68,7 +67,7 @@ public:
 #ifndef USE_GDI
   Pen():width(0) {}
 
-  gcc_constexpr_ctor
+  constexpr
   Pen(Style _style, unsigned _width, const Color _color)
     :width(_width), color(_color)
 #if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)
@@ -76,7 +75,7 @@ public:
 #endif
   {}
 
-  gcc_constexpr_ctor
+  constexpr
   Pen(unsigned _width, const Color _color)
     :width(_width), color(_color)
 #if defined(ENABLE_OPENGL) && !defined(HAVE_GLES)

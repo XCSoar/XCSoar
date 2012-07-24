@@ -41,7 +41,7 @@ class RoughDistance {
 public:
   RoughDistance() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   RoughDistance(fixed _value):value(_value) {}
 
   RoughDistance &operator=(fixed other) {
@@ -49,22 +49,22 @@ public:
     return *this;
   }
 
-  gcc_constexpr_method
+  constexpr
   operator fixed() const {
     return fixed(value);
   }
 
-  gcc_constexpr_method
+  constexpr
   bool operator <(const RoughDistance other) const {
     return value < other.value;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool operator >(const RoughDistance other) const {
     return value > other.value;
   }
 
-  gcc_constexpr_method
+  constexpr
   bool IsZero() const {
     return value == 0;
   }

@@ -27,16 +27,15 @@ Copyright_License {
 #include "VegaParametersWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data StaticEnumChoice tri_state[] = {
+static constexpr StaticEnumChoice tri_state[] = {
   { 0, N_("Off") },
   { 1, N_("On") },
   { 255, N_("Auto") },
   { 0 },
 };
 
-static gcc_constexpr_data StaticEnumChoice baud_rates[] = {
+static constexpr StaticEnumChoice baud_rates[] = {
   { 0, _T("Auto") },
   { 1, _T("4800") },
   { 2, _T("9600") },
@@ -47,7 +46,7 @@ static gcc_constexpr_data StaticEnumChoice baud_rates[] = {
   { 0 },
 };
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter hardware_parameters[] = {
   { DataField::Type::BOOLEAN, "HasPressureTE",
     N_("TE port"), N_("Whether the Total Energy port is connected."),

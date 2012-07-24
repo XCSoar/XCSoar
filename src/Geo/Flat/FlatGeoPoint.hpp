@@ -51,7 +51,7 @@ struct FlatGeoPoint {
    *
    * @return Initialised object at origin
    */
-  gcc_constexpr_ctor
+  constexpr
   FlatGeoPoint(const int x, const int y)
     :longitude(x), latitude(y) {};
 
@@ -82,7 +82,7 @@ struct FlatGeoPoint {
    *
    * @return Added value
    */
-  gcc_constexpr_method
+  constexpr
   FlatGeoPoint operator+(const FlatGeoPoint other) const {
     return FlatGeoPoint(longitude + other.longitude,
                         latitude + other.latitude);
@@ -95,7 +95,7 @@ struct FlatGeoPoint {
    *
    * @return Subtracted value
    */
-  gcc_constexpr_method
+  constexpr
   FlatGeoPoint operator-(const FlatGeoPoint other) const {
     return FlatGeoPoint(longitude - other.longitude,
                         latitude - other.latitude);
@@ -145,17 +145,17 @@ struct FlatGeoPoint {
    *
    * @return True if coincident
    */
-  gcc_constexpr_method
+  constexpr
   bool operator==(const FlatGeoPoint other) const {
     return FlatGeoPoint::Equals(other);
   };
 
-  gcc_constexpr_method
+  constexpr
   bool operator!=(const FlatGeoPoint other) const {
     return !FlatGeoPoint::Equals(other);
   };
 
-  gcc_constexpr_method
+  constexpr
   bool Equals(const FlatGeoPoint sp) const {
     return longitude == sp.longitude && latitude == sp.latitude;
   }
@@ -179,15 +179,15 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   /** Nav reference altitude (m) */
   RoughAltitude altitude;
 
-  gcc_constexpr_ctor
+  constexpr
   AFlatGeoPoint(const int x, const int y, const RoughAltitude alt):
     FlatGeoPoint(x,y),altitude(alt) {};
 
-  gcc_constexpr_ctor
+  constexpr
   AFlatGeoPoint(const FlatGeoPoint p, const RoughAltitude alt)
     :FlatGeoPoint(p), altitude(alt) {};
 
-  gcc_constexpr_ctor
+  constexpr
   AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
 
   /** Rounds location to reduce state space */
@@ -204,7 +204,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    *
    * @return true if location and altitude are equal
    */
-  gcc_constexpr_method
+  constexpr
   bool operator==(const AFlatGeoPoint other) const {
     return FlatGeoPoint::Equals(other) && (altitude == other.altitude);
   };

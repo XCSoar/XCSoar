@@ -34,7 +34,7 @@ Copyright_License {
  * FLARM.
  */
 struct TrafficList {
-  static gcc_constexpr_data size_t MAX_COUNT = 25;
+  static constexpr size_t MAX_COUNT = 25;
 
   /**
    * When was the last new traffic received?

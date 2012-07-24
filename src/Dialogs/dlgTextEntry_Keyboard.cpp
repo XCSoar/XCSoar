@@ -156,7 +156,7 @@ OnCharacter(TCHAR character)
   DoCharacter(character);
 }
 
-static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCharacter),
   DeclareCallBackEntry(OnBackspace),
   DeclareCallBackEntry(OnClear),

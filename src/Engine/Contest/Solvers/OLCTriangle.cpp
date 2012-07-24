@@ -52,7 +52,7 @@
  * now, we allow up to 5 km until this library has been implemented
  * properly.
  */
-static gcc_constexpr_data fixed max_distance(5000);
+static constexpr fixed max_distance(5000);
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
                          const bool _is_fai, bool _predict)

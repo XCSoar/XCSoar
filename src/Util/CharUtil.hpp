@@ -24,13 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_CHAR_UTIL_HPP
 #define XCSOAR_CHAR_UTIL_HPP
 
-#include "Compiler.h"
-
 #ifdef _UNICODE
 #include <tchar.h>
 #endif
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsASCII(const char ch)
 {
@@ -38,7 +36,7 @@ IsASCII(const char ch)
 }
 
 #ifdef _UNICODE
-gcc_constexpr_function
+constexpr
 static inline bool
 IsASCII(const TCHAR ch)
 {
@@ -74,7 +72,7 @@ IsWhitespaceNotNull(const TCHAR ch)
 
 #endif /* _UNICODE */
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsPrintableASCII(char ch)
 {
@@ -82,7 +80,7 @@ IsPrintableASCII(char ch)
 }
 
 #ifdef _UNICODE
-gcc_constexpr_function
+constexpr
 static inline bool
 IsPrintableASCII(TCHAR ch)
 {
@@ -90,35 +88,35 @@ IsPrintableASCII(TCHAR ch)
 }
 #endif
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsDigitASCII(char ch)
 {
   return ch >= '0' && ch <= '9';
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsUpperAlphaASCII(char ch)
 {
   return ch >= 'A' && ch <= 'Z';
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsLowerAlphaASCII(char ch)
 {
   return ch >= 'a' && ch <= 'z';
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsAlphaASCII(char ch)
 {
   return IsUpperAlphaASCII(ch) || IsLowerAlphaASCII(ch);
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsAlphaNumericASCII(char ch)
 {
@@ -127,35 +125,35 @@ IsAlphaNumericASCII(char ch)
 
 #ifdef _UNICODE
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsDigitASCII(TCHAR ch)
 {
   return ch >= _T('0') && ch <= _T('9');
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsUpperAlphaASCII(TCHAR ch)
 {
   return ch >= _T('A') && ch <= _T('Z');
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsLowerAlphaASCII(TCHAR ch)
 {
   return ch >= _T('a') && ch <= _T('z');
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsAlphaASCII(TCHAR ch)
 {
   return IsUpperAlphaASCII(ch) || IsLowerAlphaASCII(ch);
 }
 
-gcc_constexpr_function
+constexpr
 static inline bool
 IsAlphaNumericASCII(TCHAR ch)
 {
@@ -168,7 +166,7 @@ IsAlphaNumericASCII(TCHAR ch)
  * Convert the specified ASCII character (0x00..0x7f) to upper case.
  * Unlike toupper(), it ignores the system locale.
  */
-gcc_constexpr_function
+constexpr
 static inline bool
 ToUpperASCII(char ch)
 {

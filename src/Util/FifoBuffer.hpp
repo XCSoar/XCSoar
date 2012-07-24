@@ -31,7 +31,6 @@
 #define XCSOAR_FIFO_BUFFER_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Compiler.h"
 
 #include <utility>
 #include <algorithm>
@@ -57,10 +56,10 @@ public:
 
     Range() = default;
 
-    gcc_constexpr_ctor
+    constexpr
     Range(T *_data, size_type _length):data(_data), length(_length) {}
 
-    gcc_constexpr_method
+    constexpr
     bool IsEmpty() const {
       return length == 0;
     }
@@ -71,7 +70,7 @@ protected:
   T data[size];
 
 public:
-  gcc_constexpr_ctor
+  constexpr
   FifoBuffer():head(0), tail(0) {}
 
 protected:

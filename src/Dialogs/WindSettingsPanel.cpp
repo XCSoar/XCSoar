@@ -43,7 +43,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const WindSettings &settings = CommonInterface::GetComputerSettings().wind;
   const MapSettings &map_settings = CommonInterface::GetMapSettings();
 
-  static gcc_constexpr_data StaticEnumChoice auto_wind_list[] = {
+  static constexpr StaticEnumChoice auto_wind_list[] = {
     { AUTOWIND_NONE, N_("Manual"),
       N_("When the algorithm is switched off, the pilot is responsible for setting the wind estimate.") },
     { AUTOWIND_CIRCLING, N_("Circling"),

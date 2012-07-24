@@ -27,15 +27,14 @@ Copyright_License {
 #include "VegaParametersWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Language/Language.hpp"
-#include "Compiler.h"
 
-static gcc_constexpr_data StaticEnumChoice deadband_types[] = {
+static constexpr StaticEnumChoice deadband_types[] = {
   { 0, N_("Step") },
   { 1, N_("Ramp") },
   { 0 }
 };
 
-static gcc_constexpr_data
+static constexpr
 VegaParametersWidget::StaticParameter audio_deadband_parameters[] = {
   { DataField::Type::ENUM, "ToneDeadbandCirclingType",
     N_("Circling deadband type"),

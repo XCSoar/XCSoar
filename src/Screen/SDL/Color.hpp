@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_COLOR_HPP
 #define XCSOAR_SCREEN_SDL_COLOR_HPP
 
-#include "Compiler.h"
-
 #include <SDL_video.h>
 #include <stdint.h>
 
@@ -39,7 +37,7 @@ struct Color {
 
   Color() = default;
 
-  gcc_constexpr_ctor
+  constexpr
   Color(uint8_t r, uint8_t g, uint8_t b)
     :value({r, g, b,
           /* alpha for SDL_gfx, see GFXColor() */
@@ -49,7 +47,7 @@ struct Color {
    * Returns the red part of the color
    * @return The red part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t Red() const
   {
     return value.r;
@@ -59,7 +57,7 @@ struct Color {
    * Returns the green part of the color
    * @return The green part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t Green() const
   {
     return value.g;
@@ -69,18 +67,18 @@ struct Color {
    * Returns the blue part of the color
    * @return The blue part of the color (0-255)
    */
-  gcc_constexpr_method
+  constexpr
   uint8_t Blue() const
   {
     return value.b;
   }
 
-  gcc_constexpr_method
+  constexpr
   operator const SDL_Color&() const {
     return value;
   }
 
-  gcc_constexpr_method
+  constexpr
   Uint32 GFXColor() const {
     return ((Uint32)value.r << 24) | ((Uint32)value.g << 16) |
       ((Uint32)value.b << 8) | (Uint32)value.unused;
@@ -89,7 +87,7 @@ struct Color {
   /**
    * Returns the highlighted version of this color.
    */
-  gcc_constexpr_method
+  constexpr
   Color
   Highlight() const
   {
@@ -104,7 +102,7 @@ struct Color {
    * @param b Color 2
    * @return True if colors match, False otherwise
    */
-  gcc_constexpr_method
+  constexpr
   bool operator ==(const Color other) const
   {
     return value.r == other.value.r
@@ -118,7 +116,7 @@ struct Color {
    * @param b Color 2
    * @return True if color do not match, False otherwise
    */
-  gcc_constexpr_method
+  constexpr
   bool operator !=(const Color other) const
   {
     return !(*this == other);
@@ -136,10 +134,10 @@ struct Color {
 struct HWColor {
   Uint32 value;
 
-  gcc_constexpr_ctor HWColor():value(0) {}
-  explicit gcc_constexpr_ctor HWColor(Uint32 c):value(c) {}
+  constexpr HWColor():value(0) {}
+  explicit constexpr HWColor(Uint32 c):value(c) {}
 
-  gcc_constexpr_method
+  constexpr
   operator Uint32() const { return value; }
 };
 

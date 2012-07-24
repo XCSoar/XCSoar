@@ -41,12 +41,12 @@ namespace FBO {
 #ifdef HAVE_GLES
   /* on GLES, the functions will be looked up dynamically */
 
-  static gcc_constexpr_data GLenum RENDERBUFFER = GL_RENDERBUFFER_OES;
-  static gcc_constexpr_data GLenum FRAMEBUFFER = GL_FRAMEBUFFER_OES;
-  static gcc_constexpr_data GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0_OES;
-  static gcc_constexpr_data GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT_OES;
-  static gcc_constexpr_data GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT_OES;
-  static gcc_constexpr_data GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_OES;
+  static constexpr GLenum RENDERBUFFER = GL_RENDERBUFFER_OES;
+  static constexpr GLenum FRAMEBUFFER = GL_FRAMEBUFFER_OES;
+  static constexpr GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0_OES;
+  static constexpr GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT_OES;
+  static constexpr GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT_OES;
+  static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_OES;
 
   gcc_pure
   bool Initialise();
@@ -71,18 +71,18 @@ namespace FBO {
 #else
   /* on OpenGL, we assume that the extension is built-in */
 
-  static gcc_constexpr_data GLenum RENDERBUFFER = GL_RENDERBUFFER_EXT;
-  static gcc_constexpr_data GLenum FRAMEBUFFER = GL_FRAMEBUFFER_EXT;
-  static gcc_constexpr_data GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0_EXT;
-  static gcc_constexpr_data GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT_EXT;
-  static gcc_constexpr_data GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT_EXT;
+  static constexpr GLenum RENDERBUFFER = GL_RENDERBUFFER_EXT;
+  static constexpr GLenum FRAMEBUFFER = GL_FRAMEBUFFER_EXT;
+  static constexpr GLenum COLOR_ATTACHMENT0 = GL_COLOR_ATTACHMENT0_EXT;
+  static constexpr GLenum DEPTH_ATTACHMENT = GL_DEPTH_ATTACHMENT_EXT;
+  static constexpr GLenum STENCIL_ATTACHMENT = GL_STENCIL_ATTACHMENT_EXT;
 
 #ifdef GL_DEPTH_STENCIL
-  static gcc_constexpr_data GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL;
+  static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL;
 #elif defined(GL_DEPTH_STENCIL_EXT)
-  static gcc_constexpr_data GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_EXT;
+  static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_EXT;
 #elif defined(GL_DEPTH_STENCIL_NV)
-  static gcc_constexpr_data GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_NV;
+  static constexpr GLenum DEPTH_STENCIL = GL_DEPTH_STENCIL_NV;
 #else
 #error No GL_DEPTH_STENCIL found
 #endif

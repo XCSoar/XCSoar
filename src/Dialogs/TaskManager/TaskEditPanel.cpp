@@ -374,7 +374,7 @@ OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   return instance->OnKeyDown(key_code);
 }
 
-static gcc_constexpr_data CallBackTableEntry task_edit_callbacks[] = {
+static constexpr CallBackTableEntry task_edit_callbacks[] = {
   DeclareCallBackEntry(OnMakeFinish),
   DeclareCallBackEntry(OnMoveUpClicked),
   DeclareCallBackEntry(OnMoveDownClicked),

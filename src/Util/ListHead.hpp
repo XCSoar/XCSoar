@@ -290,7 +290,7 @@ public:
 
     const ListHead *current;
 
-    gcc_constexpr_ctor
+    constexpr
     const_iterator(const ListHead *_current):current(_current) {}
 
   public:
@@ -358,7 +358,7 @@ public:
 
     const ListHead *current;
 
-    gcc_constexpr_ctor
+    constexpr
     const_reverse_iterator(const ListHead *_current):current(_current) {}
 
   public:

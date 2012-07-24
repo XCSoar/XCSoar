@@ -36,7 +36,6 @@ class WindowWidget : public NullWidget {
   Window *window;
 
 public:
-  gcc_constexpr_ctor
   WindowWidget():window(NULL) {}
 
   WindowWidget(Window *_window);

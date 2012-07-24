@@ -33,7 +33,7 @@ Copyright_License {
 #include <stdio.h>
 #include <memory>
 
-static gcc_constexpr_data StatusMessage default_status_messages[] = {
+static constexpr StatusMessage default_status_messages[] = {
 #include "Status_defaults.cpp"
   { NULL }
 };

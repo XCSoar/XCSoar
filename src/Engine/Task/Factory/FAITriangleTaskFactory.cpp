@@ -24,7 +24,7 @@
 #include "TaskFactoryConstraints.hpp"
 #include "Task/FAITriangleValidator.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints fai_triangle_constraints = {
+static constexpr TaskFactoryConstraints fai_triangle_constraints = {
   true,
   true,
   false,

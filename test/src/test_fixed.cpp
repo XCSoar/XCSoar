@@ -72,7 +72,7 @@ static void test_hypot() {
   }
 }
 
-static gcc_constexpr_data double tiny_hypot_test_values[][2] = {
+static constexpr double tiny_hypot_test_values[][2] = {
   { 3, 3 },
   { 2, 2 },
   { 1.5, 1.5 },

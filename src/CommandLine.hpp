@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_OS_COMMAND_LINE_HPP
 #define XCSOAR_OS_COMMAND_LINE_HPP
 
-#include "Compiler.h"
-
 #include <tchar.h>
 
 class Args;
@@ -39,14 +37,14 @@ namespace CommandLine {
 #define HAVE_CMDLINE_FULLSCREEN
   extern bool full_screen;
 #else
-  static gcc_constexpr_data bool full_screen = false;
+  static constexpr bool full_screen = false;
 #endif
 
 #if (defined(ENABLE_SDL) && !defined(ANDROID)) || defined(USE_GDI)
 #define HAVE_CMDLINE_RESIZABLE
   extern bool resizable;
 #else
-  static gcc_constexpr_data bool resizable = false;
+  static constexpr bool resizable = false;
 #endif
 
 /**

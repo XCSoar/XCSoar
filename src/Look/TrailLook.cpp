@@ -28,7 +28,7 @@
 
 static Color
 GetVario1Color(short ramp_h) {
-  static gcc_constexpr_data ColorRamp snail_colors_vario[] = {
+  static constexpr ColorRamp snail_colors_vario[] = {
     {0,   0xc4, 0x80, 0x1e}, // sinkColor
     {100, 0xa0, 0xa0, 0xa0},
     {200, 0x1e, 0xf1, 0x73} // liftColor
@@ -39,7 +39,7 @@ GetVario1Color(short ramp_h) {
 
 static Color
 GetVario2Color(short ramp_h) {
-  static gcc_constexpr_data ColorRamp snail_colors_vario2[] = {
+  static constexpr ColorRamp snail_colors_vario2[] = {
     {0,   0x00, 0x00, 0xff},
     {99,  0x00, 0xff, 0xff},
     {100, 0xff, 0xff, 0x00},
@@ -51,7 +51,7 @@ GetVario2Color(short ramp_h) {
 
 static Color
 GetAltitudeColor(short ramp_h) {
-  static gcc_constexpr_data ColorRamp snail_colors_alt[] = {
+  static constexpr ColorRamp snail_colors_alt[] = {
     {0,   0xff, 0x00, 0x00},
     {50,  0xff, 0xff, 0x00},
     {100, 0x00, 0xff, 0x00},

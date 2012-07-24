@@ -86,7 +86,7 @@ public:
         window_style);
   }
 
-  gcc_constexpr_function
+  constexpr
   static bool SupportsPartialRedraw() {
 #ifdef USE_GDI
     /* we can use the GDI function InvalidateRect() with a non-NULL

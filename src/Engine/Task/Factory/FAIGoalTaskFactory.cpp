@@ -23,7 +23,7 @@
 #include "FAIGoalTaskFactory.hpp"
 #include "TaskFactoryConstraints.hpp"
 
-static gcc_constexpr_data TaskFactoryConstraints fai_goal_constraints = {
+static constexpr TaskFactoryConstraints fai_goal_constraints = {
   true,
   true,
   false,
