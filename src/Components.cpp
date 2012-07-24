@@ -689,7 +689,7 @@ GetAirspaceWarnings()
 
 #ifdef ENABLE_OPENGL
 
-static gcc_constexpr_data ThreadHandle zero_thread_handle = ThreadHandle();
+static const ThreadHandle zero_thread_handle = ThreadHandle();
 static ThreadHandle draw_thread_handle;
 
 bool
