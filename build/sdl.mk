@@ -3,7 +3,13 @@ ENABLE_SDL ?= $(call bool_not,$(HAVE_WIN32))
 ifeq ($(ENABLE_SDL),y)
 ifeq ($(TARGET),UNIX)
 OPENGL ?= y
-$(eval $(call pkg-config-library,SDL,sdl SDL_image SDL_ttf))
+$(eval $(call pkg-config-library,SDL,sdl SDL_image))
+
+ifndef SDL_TTF_LDLIBS
+$(eval $(call pkg-config-library,SDL_TTF,SDL_ttf))
+endif
+SDL_LDLIBS += $(SDL_TTF_LDLIBS)
+
 else
 ifeq ($(TARGET),ANDROID)
 OPENGL = y
