@@ -23,12 +23,15 @@
 #include "Engine/Trace/Trace.hpp"
 #include "Contest/ContestManager.hpp"
 #include "OS/Args.hpp"
+#include "Computer/CirclingComputer.hpp"
 #include "DebugReplay.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "JSON/Writer.hpp"
 #include "JSON/GeoWriter.hpp"
+#include "FlightPhaseDetector.hpp"
+#include "FlightPhaseJSON.hpp"
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;
@@ -47,6 +50,9 @@ struct Result {
 
 static Trace full_trace(60, Trace::null_time, 256);
 static Trace sprint_trace(0, 9000, 64);
+
+static CirclingComputer circling_computer;
+static FlightPhaseDetector flight_phase_detector;
 
 static void
 Update(const MoreData &basic, const FlyingState &state,
@@ -82,6 +88,20 @@ Update(const MoreData &basic, const DerivedInfo &calculated,
 }
 
 static void
+ComputeCircling(DebugReplay &replay)
+{
+  circling_computer.TurnRate(replay.SetCalculated(),
+                             replay.Basic(),
+                             replay.LastBasic(),
+                             replay.Calculated().flight);
+  circling_computer.Turning(replay.SetCalculated(),
+                            replay.Basic(),
+                            replay.LastBasic(),
+                            replay.Calculated().flight,
+                            replay.GetComputerSettings());
+}
+
+static void
 Finish(const MoreData &basic, const DerivedInfo &calculated,
        Result &result)
 {
@@ -102,9 +122,12 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
   bool released = false;
 
   for (int i = 1; replay.Next(); i++) {
+    ComputeCircling(replay);
+
     const MoreData &basic = replay.Basic();
 
     Update(basic, replay.Calculated(), result);
+    flight_phase_detector.Update(replay.Basic(), replay.Calculated());
 
     if (!basic.time_available || !basic.location_available ||
         !basic.NavAltitudeAvailable())
@@ -125,6 +148,7 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
   contest.SolveExhaustive();
 
   Finish(replay.Basic(), replay.Calculated(), result);
+  flight_phase_detector.Finish();
 
   return 0;
 }
@@ -296,6 +320,10 @@ int main(int argc, char **argv)
     JSON::ObjectWriter root(writer);
 
     WriteResult(root, result);
+    root.WriteElement("phases", WritePhaseList,
+                      flight_phase_detector.GetPhases());
+    root.WriteElement("performance", WritePerformanceStats,
+                      flight_phase_detector.GetTotals());
     root.WriteElement("contests", WriteContests, olc_plus.GetStats());
   }
 }

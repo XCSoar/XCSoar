@@ -1456,6 +1456,7 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(SRC)/JSON/Writer.cpp \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/DateTime.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
@@ -1475,6 +1476,8 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseJSON.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
 	$(TEST_SRC_DIR)/AnalyseFlight.cpp
 ANALYSE_FLIGHT_LDADD = $(DEBUG_REPLAY_LDADD)
 ANALYSE_FLIGHT_DEPENDS = UTIL GEO MATH
