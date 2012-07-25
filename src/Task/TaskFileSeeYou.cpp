@@ -426,7 +426,7 @@ AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
   // Skip lines until n-th task
   unsigned count = 0;
   bool in_task_section = false;
-  static TCHAR *line;
+  TCHAR *line;
   for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
     if (in_task_section) {
       if (line[0] == _T('\"') || line[0] == _T(',')) {
