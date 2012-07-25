@@ -462,6 +462,8 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
     return NULL;
 
   TCHAR *line = AdvanceReaderToTask(reader, index);
+  if (line == NULL)
+    return NULL;
 
   // Read waypoint list
   // e.g. "Club day 4 Racing task","085PRI","083BOJ","170D_K","065SKY","0844YY", "0844YY"
