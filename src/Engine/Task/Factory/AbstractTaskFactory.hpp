@@ -279,7 +279,6 @@ public:
    *
    * sets radiuses to the correct default for that task type or general defaults
    */
-  gcc_pure
   virtual void
   GetPointDefaultSizes(const TaskPointFactoryType type, fixed &start_radius,
                        fixed &turnpoint_radius, fixed &finish_radius) const;
