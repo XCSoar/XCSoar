@@ -518,9 +518,6 @@ ManagedFileListWidget::Add()
 #ifdef HAVE_DOWNLOAD_MANAGER
   assert(Net::DownloadManager::IsAvailable());
 
-  if (items.empty())
-    return;
-
   std::vector<AvailableFile> list;
   for (auto i = repository.begin(), end = repository.end(); i != end; ++i) {
     const AvailableFile &remote_file = *i;
