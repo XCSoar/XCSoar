@@ -60,7 +60,9 @@ public:
    * @return Initialised object
    */
   CylinderZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0))
-    :ObservationZonePoint(CYLINDER, loc), radius(_radius) {}
+    :ObservationZonePoint(CYLINDER, loc), radius(_radius) {
+    assert(positive(radius));
+  }
 
   /**
    * Set radius property
