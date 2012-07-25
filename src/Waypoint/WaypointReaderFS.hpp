@@ -32,9 +32,9 @@ class WaypointReaderFS:
   bool is_utm;
 
 public:
-  WaypointReaderFS(const TCHAR* file_name, const int _file_num,
+  WaypointReaderFS(const int _file_num,
                  bool _compressed = false)
-    :WaypointReaderBase(file_name, _file_num, _compressed), is_utm(false) {}
+    :WaypointReaderBase(_file_num, _compressed), is_utm(false) {}
 
   static bool VerifyFormat(TLineReader &reader);
 

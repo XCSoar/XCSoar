@@ -35,6 +35,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "OS/FileUtil.hpp"
 #include "IO/ZipSource.hpp"
+#include "IO/TextFile.hpp"
 
 bool
 WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
@@ -42,7 +43,13 @@ WaypointReader::Parse(Waypoints &way_points, OperationEnvironment &operation)
   if (reader == NULL)
     return false;
 
-  return reader->Parse(way_points, operation);
+  TLineReader *line_reader = OpenTextFile(path, ConvertLineReader::AUTO);
+  if (line_reader == nullptr)
+    return false;
+
+  reader->Parse(way_points, *line_reader, operation);
+  delete line_reader;
+  return true;
 }
 
 void
@@ -62,6 +69,8 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
   if (StringIsEmpty(filename))
     return;
 
+  _tcscpy(path, filename);
+
   // Test if file exists
   bool compressed = false;
   if (!File::Exists(filename)) {
@@ -75,27 +84,27 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
 
   switch (DetermineWaypointFileType(filename)) {
   case WaypointFileType::WINPILOT:
-    reader = new WaypointReaderWinPilot(filename, the_filenum, compressed);
+    reader = new WaypointReaderWinPilot(the_filenum, compressed);
     break;
 
   case WaypointFileType::SEEYOU:
-    reader = new WaypointReaderSeeYou(filename, the_filenum, compressed);
+    reader = new WaypointReaderSeeYou(the_filenum, compressed);
     break;
 
   case WaypointFileType::ZANDER:
-    reader = new WaypointReaderZander(filename, the_filenum, compressed);
+    reader = new WaypointReaderZander(the_filenum, compressed);
     break;
 
   case WaypointFileType::FS:
-    reader = new WaypointReaderFS(filename, the_filenum, compressed);
+    reader = new WaypointReaderFS(the_filenum, compressed);
     break;
 
   case WaypointFileType::OZI_EXPLORER:
-    reader = new WaypointReaderOzi(filename, the_filenum, compressed);
+    reader = new WaypointReaderOzi(the_filenum, compressed);
     break;
 
   case WaypointFileType::COMPE_GPS:
-    reader = new WaypointReaderCompeGPS(filename, the_filenum, compressed);
+    reader = new WaypointReaderCompeGPS(the_filenum, compressed);
     break;
 
   default:

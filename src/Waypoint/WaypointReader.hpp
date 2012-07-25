@@ -29,6 +29,7 @@ Copyright_License {
 
 #include <algorithm>
 #include <tchar.h>
+#include <windef.h> /* for MAX_PATH */
 
 class Waypoints;
 class RasterTerrain;
@@ -38,6 +39,8 @@ class WaypointReader
 {
   /** The internal reader implementation depending on the file format */
   WaypointReaderBase* reader;
+
+  TCHAR path[MAX_PATH];
 
 public:
   /** Non-initializing constructor */

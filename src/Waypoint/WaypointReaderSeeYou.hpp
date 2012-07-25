@@ -33,9 +33,9 @@ class WaypointReaderSeeYou:
   bool ignore_following;
 
 public:
-  WaypointReaderSeeYou(const TCHAR* file_name, const int _file_num,
+  WaypointReaderSeeYou(const int _file_num,
                      bool _compressed = false)
-    :WaypointReaderBase(file_name, _file_num, _compressed) {}
+    :WaypointReaderBase(_file_num, _compressed) {}
 
 protected:
   /**
