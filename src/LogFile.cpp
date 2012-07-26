@@ -37,9 +37,8 @@ Copyright_License {
 #include <android/log.h>
 #endif
 
-
 void
-LogStartUp(const TCHAR *Str, ...)
+LogFormat(const TCHAR *Str, ...)
 {
   static bool initialised = false;
   static TCHAR szFileName[MAX_PATH];

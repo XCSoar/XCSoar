@@ -28,6 +28,23 @@ Copyright_License {
 
 #include <tchar.h>
 
+/**
+ * Write a formatted line to the log file.
+ *
+ * @param fmt the format string, which must not contain newline or
+ * carriage return characters
+ */
+#ifndef _UNICODE
+gcc_printf(1, 2)
+#endif
+void
+LogFormat(const TCHAR *fmt, ...);
+
+/**
+ * Deprecated, don't use in new code.
+ */
+#define LogStartUp(...) LogFormat(__VA_ARGS__)
+
 #if !defined(NDEBUG) && !defined(GNAV)
 
 #define LogDebug(...) LogStartUp(__VA_ARGS__)
@@ -39,14 +56,5 @@ Copyright_License {
 #define LogDebug(...)
 
 #endif /* NDEBUG */
-
-/**
- * Saves the given string (Str) to the logfile
- * @param Str String to be logged
- */
-#ifndef _UNICODE
-gcc_printf(1, 2)
-#endif
-void LogStartUp(const TCHAR *Str, ...);
 
 #endif
