@@ -385,6 +385,15 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
+  if (1 == 1) {
+    /* TODO: switched to the unoptimised generic implementation due to
+       TRAC #2221, caused by rounding error of start/end radial;
+       should reimplement GLDonutVertices to use the exact start/end
+       radial */
+    ::Annulus(*this, x, y, big_radius, start, end, small_radius);
+    return;
+  }
+
   GLDonutVertices vertices(x, y, small_radius, big_radius);
 
   const std::pair<unsigned,unsigned> i = AngleToDonutVertices(start, end);

@@ -10,6 +10,8 @@ Version 6.3.11 - not yet released
   - fix AAT buttons in new tasks (#2183)
 * data files
   - fix crash in CUP task loader
+* map
+  - fix rounding error in annulus renderer (#2221)
 
 Version 6.3.10 - 2012/07/20
 * calculations
