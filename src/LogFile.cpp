@@ -26,7 +26,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
-#include "OS/Clock.hpp"
+#include "DateTime.hpp"
 #include "Util/StaticString.hpp"
 
 #include <stdio.h>
@@ -54,9 +54,6 @@ LogFormat(const TCHAR *Str, ...)
   _vstprintf(buf, Str, ap);
   va_end(ap);
 
-  TCHAR time_buffer[32];
-  FormatTimeLong(time_buffer, fixed(MonotonicClockMS()) / 1000);
-
 #ifdef ANDROID
   __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", buf);
 #endif
@@ -68,6 +65,9 @@ LogFormat(const TCHAR *Str, ...)
   TextWriter writer(szFileName, initialised);
   if (!writer.IsOpen())
     return;
+
+  TCHAR time_buffer[32];
+  FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
 
   StaticString<MAX_PATH> output_buffer;
   output_buffer.Format(_T("[%s] %s"), time_buffer, buf);
