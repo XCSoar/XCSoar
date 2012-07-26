@@ -81,7 +81,7 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   const int iend = NATIVE_TO_INT(end.Native());
 
   int npoly = 0;
-  RasterPoint pt[66];
+  RasterPoint pt[67];
 
   // add center point
   if (!horizon) {
