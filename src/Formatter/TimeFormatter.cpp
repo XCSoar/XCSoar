@@ -30,12 +30,22 @@ Copyright_License {
 #include <stdlib.h>
 
 void
+FormatISO8601(char *buffer, const BrokenDateTime &stamp)
+{
+  sprintf(buffer, "%04u-%02u-%02uT%02u:%02u:%02uZ",
+          stamp.year, stamp.month, stamp.day,
+          stamp.hour, stamp.minute, stamp.second);
+}
+
+#ifdef _UNICODE
+void
 FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
 {
   _stprintf(buffer, _T("%04u-%02u-%02uT%02u:%02u:%02uZ"),
             stamp.year, stamp.month, stamp.day,
             stamp.hour, stamp.minute, stamp.second);
 }
+#endif
 
 void
 FormatTime(TCHAR* buffer, fixed _time)

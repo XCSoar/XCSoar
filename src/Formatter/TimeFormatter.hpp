@@ -34,7 +34,15 @@ struct BrokenDateTime;
  * Format a UTC time stamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ).
  */
 void
+FormatISO8601(char *buffer, const BrokenDateTime &stamp);
+
+#ifdef _UNICODE
+/**
+ * Format a UTC time stamp in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ).
+ */
+void
 FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp);
+#endif
 
 void FormatTime(TCHAR* buffer, fixed time);
 void FormatTimeLong(TCHAR* buffer, fixed time);
