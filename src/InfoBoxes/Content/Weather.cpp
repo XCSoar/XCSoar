@@ -210,7 +210,7 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data)
   FormatBearing(bearing_buffer, ARRAY_SIZE(bearing_buffer), info.wind.bearing);
 
   StaticString<32> buffer;
-  buffer.Format(_T("%s - %s"), bearing_buffer, speed_buffer);
+  buffer.Format(_T("%s / %s"), bearing_buffer, speed_buffer);
   data.SetComment(buffer);
 }
 
