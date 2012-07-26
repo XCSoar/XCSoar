@@ -53,7 +53,7 @@ OpenLog()
 }
 
 static void
-LogString(const TCHAR *p)
+LogString(const char *p)
 {
 #ifdef ANDROID
   __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", p);
@@ -61,6 +61,33 @@ LogString(const TCHAR *p)
   fprintf(stderr, "%s\n", p);
 #endif
 
+  TextWriter writer(OpenLog());
+  if (!writer.IsOpen())
+    return;
+
+  char time_buffer[32];
+  FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
+  writer.FormatLine("[%s] %s", time_buffer, p);
+}
+
+void
+LogFormat(const char *fmt, ...)
+{
+  char buf[MAX_PATH];
+  va_list ap;
+
+  va_start(ap, fmt);
+  vsprintf(buf, fmt, ap);
+  va_end(ap);
+
+  LogString(buf);
+}
+
+#ifdef _UNICODE
+
+static void
+LogString(const TCHAR *p)
+{
   TextWriter writer(OpenLog());
   if (!writer.IsOpen())
     return;
@@ -82,3 +109,5 @@ LogFormat(const TCHAR *Str, ...)
 
   LogString(buf);
 }
+
+#endif

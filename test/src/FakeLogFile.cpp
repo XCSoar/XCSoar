@@ -27,7 +27,21 @@ Copyright_License {
 #include <cstdio>
 
 void
-LogStartUp(const TCHAR *fmt, ...)
+LogFormat(const char *fmt, ...)
+{
+  va_list ap;
+
+  va_start(ap, fmt);
+  vfprintf(stderr, fmt, ap);
+  va_end(ap);
+
+  fputc('\n', stderr);
+}
+
+#ifdef _UNICODE
+
+void
+LogFormat(const TCHAR *fmt, ...)
 {
   va_list ap;
 
@@ -38,3 +52,4 @@ LogStartUp(const TCHAR *fmt, ...)
   fputc('\n', stderr);
 }
 
+#endif

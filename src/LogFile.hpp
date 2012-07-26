@@ -26,7 +26,9 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#ifdef _UNICODE
 #include <tchar.h>
+#endif
 
 /**
  * Write a formatted line to the log file.
@@ -34,11 +36,14 @@ Copyright_License {
  * @param fmt the format string, which must not contain newline or
  * carriage return characters
  */
-#ifndef _UNICODE
 gcc_printf(1, 2)
-#endif
+void
+LogFormat(const char *fmt, ...);
+
+#ifdef _UNICODE
 void
 LogFormat(const TCHAR *fmt, ...);
+#endif
 
 /**
  * Deprecated, don't use in new code.
