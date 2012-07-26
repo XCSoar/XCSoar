@@ -357,7 +357,7 @@ AngleToDonutVertices(Angle start, Angle end)
 
   const Angle delta = end - start;
 
-  if (delta >= Angle::FullCircle() - epsilon)
+  if (fabs(delta.AsDelta().Native()) <= epsilon.Native())
     /* full circle */
     return std::make_pair(0, 64);
 
