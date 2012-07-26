@@ -65,6 +65,23 @@ public:
   TextWriter(const TCHAR *path, bool append=false);
 #endif
 
+  TextWriter(TextWriter &&other)
+    :file(std::move(other.file))
+#ifdef _UNICODE
+    , format_buffer(std::move(other.format_buffer)),
+     convert_buffer(std::move(other.convert_buffer))
+#endif
+  {}
+
+  TextWriter &operator=(TextWriter &&other) {
+    file = std::move(other.file);
+#ifdef _UNICODE
+    format_buffer = std::move(other.format_buffer);
+    convert_buffer = std::move(other.convert_buffer);
+#endif
+    return *this;
+  }
+
   /**
    * Returns false if opening the file has failed.  This must be
    * checked before calling any other method.
