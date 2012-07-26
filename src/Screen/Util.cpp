@@ -30,9 +30,12 @@ Copyright_License {
 
 static void
 segment_poly(RasterPoint* pt, const int x, const int y,
-             const int radius, const int istart, const int iend,
+             const int radius, const unsigned istart, const unsigned iend,
              unsigned &npoly, const bool forward=true)
 {
+  assert(istart < ARRAY_SIZE(ISINETABLE));
+  assert(iend < ARRAY_SIZE(ISINETABLE));
+
   // add start node
   pt[npoly].x = x + ISINETABLE[istart] * radius / 1024;
   pt[npoly].y = y - ICOSTABLE[istart] * radius / 1024;
@@ -40,9 +43,9 @@ segment_poly(RasterPoint* pt, const int x, const int y,
 
   // add intermediate nodes (if any)
   if (forward) {
-    int ilast = istart < iend ? iend : iend + 4096;
-    for (int i = istart + 4096 / 64; i < ilast; i += 4096 / 64) {
-      int angle = i & 0xfff;
+    const unsigned ilast = istart < iend ? iend : iend + 4096;
+    for (unsigned i = istart + 4096 / 64; i < ilast; i += 4096 / 64) {
+      const unsigned angle = i & 0xfff;
       pt[npoly].x = x + ISINETABLE[angle] * radius / 1024;
       pt[npoly].y = y - ICOSTABLE[angle] * radius / 1024;
       
@@ -50,9 +53,9 @@ segment_poly(RasterPoint* pt, const int x, const int y,
         npoly++;
     }
   } else {
-    int ilast = istart > iend ? iend : iend - 4096;
-    for (int i = istart + 4096 / 64; i > ilast; i -= 4096 / 64) {
-      int angle = i & 0xfff;
+    const unsigned ilast = istart > iend ? iend : iend - 4096;
+    for (unsigned i = istart + 4096 / 64; i > ilast; i -= 4096 / 64) {
+      const unsigned angle = i & 0xfff;
       pt[npoly].x = x + ISINETABLE[angle] * radius / 1024;
       pt[npoly].y = y - ICOSTABLE[angle] * radius / 1024;
       
