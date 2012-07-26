@@ -63,7 +63,7 @@ segment_poly(RasterPoint* pt, const int x, const int y,
     }
   } else {
     const unsigned ilast = istart > iend ? iend : iend - 4096;
-    for (unsigned i = istart + 4096 / 64; i > ilast; i -= 4096 / 64) {
+    for (int i = istart + 4096 / 64; i > (int)ilast; i -= 4096 / 64) {
       const unsigned angle = i & 0xfff;
       pt[npoly] = CirclePoint(x, y, radius, angle);
 
