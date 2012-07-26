@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-07-20 16:31+0000\n"
+"PO-Revision-Date: 2012-07-23 07:28+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-20 23:44+0000\n"
-"X-Generator: Launchpad (build 15654)\n"
+"X-Launchpad-Export-Date: 2012-07-26 19:12+0000\n"
+"X-Generator: Launchpad (build 15679)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3414,17 +3414,15 @@ msgstr "Hozzáadás"
 
 #: src/Dialogs/FileManager.cpp:395
 msgid "Queued"
-msgstr ""
+msgstr "Sorba állítva"
 
 #: src/Dialogs/FileManager.cpp:397 src/Dialogs/FileManager.cpp:403
-#, fuzzy
 msgid "Downloading"
 msgstr "Letöltés"
 
 #: src/Dialogs/FileManager.cpp:497
-#, fuzzy
 msgid "Select a file"
-msgstr "Válassz mintát"
+msgstr "Válasszon egy fájlt"
 
 #: src/Dialogs/FileManager.cpp:630 Data/Input/default.xci:663
 msgid "File Manager"
@@ -4250,7 +4248,7 @@ msgid "FLARM, Other"
 msgstr "FLARM, egyebek"
 
 #: src/Dialogs/dlgConfiguration.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio Vario"
 msgstr "Audió varió"
 
@@ -5097,15 +5095,15 @@ msgstr ""
 "érkezési magasságát."
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:88
-#, fuzzy
 msgid "Use final glide mode"
-msgstr "Végsiklás pálya felett"
+msgstr "Használd a végsiklás üzemmódot"
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:89
 msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
 msgstr ""
+"A 'végsiklás' kijelző használatát szabályozza az 'automatikus' oldalakon."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:82
 msgid "Fonts"
@@ -6385,15 +6383,16 @@ msgstr ""
 "hivatalos kiadványnak."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:145
-#, fuzzy
 msgid "Predict Contest"
-msgstr "OnLine Verseny"
+msgstr "Előrejelzi a végeredményt"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:146
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
 msgstr ""
+"Engedélyezésével a következő fordulópont beleszámít a pontszámításokba, "
+"feltételezve, hogy eléri azt."
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:79
 #, no-c-format
@@ -7098,12 +7097,12 @@ msgstr "Átnevezési hiba"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:304
 msgid "Less"
-msgstr ""
+msgstr "Kevesebb"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:304
 #: Data/Dialogs/pnlTaskList.xml:11
 msgid "More"
-msgstr ""
+msgstr "Több"
 
 #: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:168
 msgid "Calculator excludes unsaved task changes!"
@@ -7664,40 +7663,39 @@ msgstr "Térfogat"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:72
 msgid "Enable Deadband"
-msgstr ""
+msgstr "Holtsáv engedélyezése"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:73
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
 msgstr ""
+"Elnémítja a hangjelzést, ha a pillanatnyi emelés egy nulla körüli bizonyos "
+"tartományba esik."
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:79
-#, fuzzy
 msgid "Min. Frequency"
-msgstr "Rádiófrekvencia"
+msgstr "Min. frekvencia"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:80
 msgid "The tone frequency that is played at maximum sink rate."
-msgstr ""
+msgstr "A legnagyobb merülés során hallható hang frekvenciája"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:85
-#, fuzzy
 msgid "Zero Frequency"
-msgstr "Alapfrekvencia"
+msgstr "Nulla frekvencia"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at zero climb rate."
-msgstr ""
+msgstr "A nulla emelés során hallható hang frekvenciája"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:91
-#, fuzzy
 msgid "Max. Frequency"
-msgstr "Alapfrekvencia"
+msgstr "Max. frekvencia"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at maximum climb rate."
-msgstr ""
+msgstr "A legnagyobb emelés során hallható hang frekvenciája"
 
 #: src/Dialogs/dlgNOAAList.cpp:110
 msgid "Airport ICAO code"
@@ -9497,29 +9495,14 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Could not open NMEA file!"
-#~ msgstr "Az NMEA file-t nem lehetett megnyitni!"
-
-#~ msgid "Terrain file"
-#~ msgstr "Domborzat"
-
-#~ msgid "The name of the file containing digital elevation terrain data."
-#~ msgstr "A terep digitális magasságadatait tartalmazó fájl neve."
-
-#~ msgid "Topography file"
-#~ msgstr "Térképjelek"
-
-#~ msgid "Specifies the file defining the topographical features."
-#~ msgstr "A topográfiai adatokat tartalmazó fájl."
-
-#~ msgid "Back"
-#~ msgstr "Vissza"
-
 #~ msgid "Unknown Filetype."
 #~ msgstr "Ismeretlen file típus."
 
 #~ msgid "OK to invalidate declaration?"
 #~ msgstr "Törli a feladatot?"
+
+#~ msgid "Could not open NMEA file!"
+#~ msgstr "Az NMEA file-t nem lehetett megnyitni!"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
@@ -9709,6 +9692,9 @@ msgstr ""
 
 #~ msgid "Temp trace"
 #~ msgstr "Hőmérséklet görbe"
+
+#~ msgid "OnLine Contest"
+#~ msgstr "OnLine Verseny"
 
 #~ msgid "Site"
 #~ msgstr "Repülési terület"
@@ -10324,6 +10310,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Az elsődleges eszköz típusa. A legmegbízhatóbb GPS jelforrás legyen az "
 #~ "elsődleges eszköz."
+
+#~ msgid "The name of the file containing digital elevation terrain data."
+#~ msgstr "A terep digitális magasságadatait tartalmazó fájl neve."
 
 #~ msgid "Cambridge"
 #~ msgstr "Cambridge"
