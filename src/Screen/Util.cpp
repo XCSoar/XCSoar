@@ -29,13 +29,13 @@ Copyright_License {
 #include <winuser.h>
 
 static void
-segment_poly(RasterPoint* pt, const PixelScalar x, const PixelScalar y,
-             const UPixelScalar radius, const int istart, const int iend,
+segment_poly(RasterPoint* pt, const int x, const int y,
+             const int radius, const int istart, const int iend,
              unsigned &npoly, const bool forward=true)
 {
   // add start node
-  pt[npoly].x = x + ISINETABLE[istart] * (PixelScalar)radius / 1024;
-  pt[npoly].y = y - ICOSTABLE[istart] * (PixelScalar)radius / 1024;
+  pt[npoly].x = x + ISINETABLE[istart] * radius / 1024;
+  pt[npoly].y = y - ICOSTABLE[istart] * radius / 1024;
   npoly++;
 
   // add intermediate nodes (if any)
@@ -43,8 +43,8 @@ segment_poly(RasterPoint* pt, const PixelScalar x, const PixelScalar y,
     int ilast = istart < iend ? iend : iend + 4096;
     for (int i = istart + 4096 / 64; i < ilast; i += 4096 / 64) {
       int angle = i & 0xfff;
-      pt[npoly].x = x + ISINETABLE[angle] * (PixelScalar)radius / 1024;
-      pt[npoly].y = y - ICOSTABLE[angle] * (PixelScalar)radius / 1024;
+      pt[npoly].x = x + ISINETABLE[angle] * radius / 1024;
+      pt[npoly].y = y - ICOSTABLE[angle] * radius / 1024;
       
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
@@ -53,8 +53,8 @@ segment_poly(RasterPoint* pt, const PixelScalar x, const PixelScalar y,
     int ilast = istart > iend ? iend : iend - 4096;
     for (int i = istart + 4096 / 64; i > ilast; i -= 4096 / 64) {
       int angle = i & 0xfff;
-      pt[npoly].x = x + ISINETABLE[angle] * (PixelScalar)radius / 1024;
-      pt[npoly].y = y - ICOSTABLE[angle] * (PixelScalar)radius / 1024;
+      pt[npoly].x = x + ISINETABLE[angle] * radius / 1024;
+      pt[npoly].y = y - ICOSTABLE[angle] * radius / 1024;
       
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
@@ -62,8 +62,8 @@ segment_poly(RasterPoint* pt, const PixelScalar x, const PixelScalar y,
   }
 
   // and end node
-  pt[npoly].x = x + ISINETABLE[iend] * (PixelScalar)radius / 1024;
-  pt[npoly].y = y - ICOSTABLE[iend] * (PixelScalar)radius / 1024;
+  pt[npoly].x = x + ISINETABLE[iend] * radius / 1024;
+  pt[npoly].y = y - ICOSTABLE[iend] * radius / 1024;
   npoly++;
 }
 
