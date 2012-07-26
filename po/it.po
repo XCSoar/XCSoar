@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-07-13 23:00+0000\n"
+"PO-Revision-Date: 2012-07-23 20:55+0000\n"
 "Last-Translator: Piero <pieromissa@virgilio.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-20 23:44+0000\n"
-"X-Generator: Launchpad (build 15654)\n"
+"X-Launchpad-Export-Date: 2012-07-26 19:12+0000\n"
+"X-Generator: Launchpad (build 15679)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3367,14 +3367,12 @@ msgid "Queued"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:397 src/Dialogs/FileManager.cpp:403
-#, fuzzy
 msgid "Downloading"
-msgstr "Scarica volo"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:497
-#, fuzzy
 msgid "Select a file"
-msgstr "Selez. Motivo"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:630 Data/Input/default.xci:663
 msgid "File Manager"
@@ -4203,9 +4201,9 @@ msgid "FLARM, Other"
 msgstr "FLARM, altro"
 
 #: src/Dialogs/dlgConfiguration.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio Vario"
-msgstr "Audio variometro"
+msgstr ""
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -5021,9 +5019,8 @@ msgstr ""
 "Questo riduce l'altezza di arrivo per tratte con vento frontale."
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:88
-#, fuzzy
 msgid "Use final glide mode"
-msgstr "Sopra Planata Finale"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:89
 msgid ""
@@ -5101,7 +5098,7 @@ msgid ""
 "This determines how long menus will appear on screen if the user does not "
 "make any button presses or interacts with the computer."
 msgstr ""
-"Questo determina per quanto a lungo i menu appaiono sullo schermo se "
+"Questo determina quanto a lungo i menu appaiono sullo schermo se "
 "l'utilizzatore non esegue pressioni di bottone o interagisce con il computer."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:191
@@ -6212,9 +6209,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:145
-#, fuzzy
 msgid "Predict Contest"
-msgstr "Prevedi deriva del vento"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:146
 msgid ""
@@ -7405,27 +7401,24 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:79
-#, fuzzy
 msgid "Min. Frequency"
-msgstr "Frequenza radio"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:80
 msgid "The tone frequency that is played at maximum sink rate."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:85
-#, fuzzy
 msgid "Zero Frequency"
-msgstr "Frequenza radio"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at zero climb rate."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:91
-#, fuzzy
 msgid "Max. Frequency"
-msgstr "Frequenza radio"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at maximum climb rate."
@@ -9137,12 +9130,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Could not open NMEA file!"
-#~ msgstr "Impossibile aprire il file NMEA!"
-
-#~ msgid "Terrain file"
-#~ msgstr "File Terreno"
-
 #~ msgid "Declare Task?"
 #~ msgstr "Dichiara Tema?"
 
@@ -9519,3 +9506,6 @@ msgstr ""
 
 #~ msgid "Time of flight"
 #~ msgstr "Tempo di volo"
+
+#~ msgid "Could not open NMEA file!"
+#~ msgstr "Impossibile aprire il file NMEA!"
