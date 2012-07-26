@@ -29,6 +29,7 @@ static bool
 test_load_task()
 {
   TaskBehaviour task_behaviour;
+  task_behaviour.SetDefaults();
 
   OrderedTask *blank = new OrderedTask(task_behaviour);
 
