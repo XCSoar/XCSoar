@@ -66,6 +66,9 @@ Profile::Load(MapSettings &settings)
   case TARGETUP:
     settings.circling_orientation = TARGETUP;
     break;
+  case HEADINGUP:
+    settings.circling_orientation = HEADINGUP;
+    break;
   }
 
   Temp = NORTHUP;
@@ -81,6 +84,9 @@ Profile::Load(MapSettings &settings)
     break;
   case TARGETUP:
     settings.cruise_orientation = TARGETUP;
+    break;
+  case HEADINGUP:
+    settings.cruise_orientation = HEADINGUP;
     break;
   }
 
