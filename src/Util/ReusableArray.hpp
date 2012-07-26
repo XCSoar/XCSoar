@@ -31,10 +31,9 @@
 #define XCSOAR_REUSABLE_ARRAY_HPP
 
 #include "Util/AllocatedArray.hpp"
-#include "Util/NonCopyable.hpp"
 
 template<class T>
-class ReusableArray : private NonCopyable {
+class ReusableArray {
 public:
   typedef typename AllocatedArray<T>::size_type size_type;
 
@@ -46,6 +45,14 @@ public:
 
   constexpr
   ReusableArray(size_type _length):array(_length) {}
+
+  ReusableArray(ReusableArray<T> &&other)
+    :array(std::move(other.array)) {}
+
+  ReusableArray<T> &operator=(ReusableArray<T> &&other) {
+    array = std::move(other.array);
+    return *this;
+  }
 
   /**
    * Obtains an array.  Its values are undefined.
