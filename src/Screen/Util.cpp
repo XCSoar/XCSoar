@@ -30,7 +30,7 @@ Copyright_License {
 static void
 segment_poly(RasterPoint* pt, const PixelScalar x, const PixelScalar y,
              const UPixelScalar radius, const int istart, const int iend,
-             int &npoly, const bool forward=true)
+             unsigned &npoly, const bool forward=true)
 {
   // add start node
   pt[npoly].x = x + ISINETABLE[istart] * (PixelScalar)radius / 1024;
@@ -80,7 +80,7 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   const int istart = NATIVE_TO_INT(start.Native());
   const int iend = NATIVE_TO_INT(end.Native());
 
-  int npoly = 0;
+  unsigned npoly = 0;
   RasterPoint pt[67];
 
   // add center point
@@ -114,7 +114,7 @@ Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   const int istart = NATIVE_TO_INT(start.Native());
   const int iend = NATIVE_TO_INT(end.Native());
 
-  int npoly = 0;
+  unsigned npoly = 0;
   RasterPoint pt[66*2];
 
   segment_poly(pt, x, y, radius, istart, iend, npoly);
@@ -141,7 +141,7 @@ KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   const int istart = NATIVE_TO_INT(start.Native());
   const int iend = NATIVE_TO_INT(end.Native());
 
-  int npoly = 0;
+  unsigned npoly = 0;
   RasterPoint pt[66*2];
 
   segment_poly(pt, x, y, radius, istart, iend, npoly);
@@ -158,7 +158,7 @@ void
 RoundRect(Canvas &canvas, PixelScalar left, PixelScalar top,
           PixelScalar right, PixelScalar bottom, UPixelScalar radius)
 {
-  int npoly = 0;
+  unsigned npoly = 0;
   RasterPoint pt[66*4];
 
   segment_poly(pt, left + radius, top + radius, radius, 3072, 4095, npoly);
