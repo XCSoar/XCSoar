@@ -82,6 +82,7 @@ ENGINE_CORE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATPoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATIsoline.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskPoints/AATIsolineSegment.cpp \
+	$(ENGINE_SRC_DIR)/Task/ObservationZones/Boundary.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/ObservationZoneClient.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/ObservationZonePoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/CylinderZone.cpp \

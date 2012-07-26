@@ -56,16 +56,8 @@ SectorZone::GetBoundary() const
   boundary.push_front(GetSectorStart());
   boundary.push_front(GetSectorEnd());
 
-  const unsigned steps = 20;
-  const Angle delta = Angle::FullCircle() / steps;
-  const Angle start = GetStartRadial().AsBearing();
-  Angle end = GetEndRadial().AsBearing();
-  if (end <= start + Angle::FullCircle() / 512)
-    end += Angle::FullCircle();
-
-  GeoVector vector(GetRadius(), start + delta);
-  for (; vector.bearing < end; vector.bearing += delta)
-    boundary.push_front(vector.EndPoint(GetReference()));
+  boundary.GenerateArcExcluding(GetReference(), GetRadius(),
+                                GetStartRadial(), GetEndRadial());
 
   return boundary;
 }
