@@ -28,6 +28,18 @@ Copyright_License {
 
 #include <winuser.h>
 
+gcc_const
+static RasterPoint
+CirclePoint(int x, int y, int radius, unsigned angle)
+{
+  assert(angle < ARRAY_SIZE(ISINETABLE));
+
+  return RasterPoint {
+    PixelScalar(x + ISINETABLE[angle] * radius / 1024),
+    PixelScalar(y - ICOSTABLE[angle] * radius / 1024),
+  };
+}
+
 static void
 segment_poly(RasterPoint* pt, const int x, const int y,
              const int radius, const unsigned istart, const unsigned iend,
@@ -37,18 +49,15 @@ segment_poly(RasterPoint* pt, const int x, const int y,
   assert(iend < ARRAY_SIZE(ISINETABLE));
 
   // add start node
-  pt[npoly].x = x + ISINETABLE[istart] * radius / 1024;
-  pt[npoly].y = y - ICOSTABLE[istart] * radius / 1024;
-  npoly++;
+  pt[npoly++] = CirclePoint(x, y, radius, istart);
 
   // add intermediate nodes (if any)
   if (forward) {
     const unsigned ilast = istart < iend ? iend : iend + 4096;
     for (unsigned i = istart + 4096 / 64; i < ilast; i += 4096 / 64) {
       const unsigned angle = i & 0xfff;
-      pt[npoly].x = x + ISINETABLE[angle] * radius / 1024;
-      pt[npoly].y = y - ICOSTABLE[angle] * radius / 1024;
-      
+      pt[npoly] = CirclePoint(x, y, radius, angle);
+
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
     }
@@ -56,18 +65,15 @@ segment_poly(RasterPoint* pt, const int x, const int y,
     const unsigned ilast = istart > iend ? iend : iend - 4096;
     for (unsigned i = istart + 4096 / 64; i > ilast; i -= 4096 / 64) {
       const unsigned angle = i & 0xfff;
-      pt[npoly].x = x + ISINETABLE[angle] * radius / 1024;
-      pt[npoly].y = y - ICOSTABLE[angle] * radius / 1024;
-      
+      pt[npoly] = CirclePoint(x, y, radius, angle);
+
       if (pt[npoly].x != pt[npoly-1].x || pt[npoly].y != pt[npoly-1].y)
         npoly++;
     }
   }
 
   // and end node
-  pt[npoly].x = x + ISINETABLE[iend] * radius / 1024;
-  pt[npoly].y = y - ICOSTABLE[iend] * radius / 1024;
-  npoly++;
+  pt[npoly++] = CirclePoint(x, y, radius, iend);
 }
 
 bool
