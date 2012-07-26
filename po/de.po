@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-07-09 13:15+0000\n"
-"Last-Translator: Niklas Fischer <Unknown>\n"
+"PO-Revision-Date: 2012-07-23 22:06+0000\n"
+"Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-10 17:21+0000\n"
-"X-Generator: Launchpad (build 15584)\n"
+"X-Launchpad-Export-Date: 2012-07-26 19:12+0000\n"
+"X-Generator: Launchpad (build 15679)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -565,7 +565,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:120
 #, no-c-format
 msgid "GR instantaneous"
-msgstr "aktuelle GZ"
+msgstr "Gleitzahl - aktuell"
 
 #: src/InfoBoxes/Content/Factory.cpp:121
 #, no-c-format
@@ -587,12 +587,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:130
 #, no-c-format
 msgid "GR cruise"
-msgstr "GZ im Vorflug"
+msgstr "Gleitzahl - im Vorflug"
 
 #: src/InfoBoxes/Content/Factory.cpp:131
 #, no-c-format
 msgid "GR Cruise"
-msgstr "GZ im Vorflug"
+msgstr "GZ Vorflug"
 
 #: src/InfoBoxes/Content/Factory.cpp:132
 #, no-c-format
@@ -819,7 +819,7 @@ msgstr "Aufgabe - Durchschnittsgeschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:251
 #, no-c-format
 msgid "V Task Avg"
-msgstr "V AUFG Schnitt"
+msgstr "V Aufgabe mittl"
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
@@ -846,7 +846,7 @@ msgstr "Verbleibende Strecke  um alle Wenden."
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Final GR (TE Compensated)"
-msgstr "EndA GZ (TE Kompensiert)"
+msgstr "Endanflug - GZ (TE Kompensiert)"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -941,6 +941,9 @@ msgid ""
 "is active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Magnetischer Kurs vom GPS (Nur auf Touch-screen/PC). Wenn diese InfoBox im "
+"Simulatormodus aktiv ist, wird mit den hoch und runter Pfeilen der Kurs "
+"verändert."
 
 #: src/InfoBoxes/Content/Factory.cpp:320 src/InfoBoxes/Content/Factory.cpp:321
 #: src/Renderer/MapItemListRenderer.cpp:488 src/Widgets/TrafficWidget.cpp:321
@@ -1323,7 +1326,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
 msgid "Netto vario"
-msgstr "Thermik - netto Vario"
+msgstr "Vario - netto Steigen"
 
 #: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
@@ -1515,6 +1518,10 @@ msgid ""
 "variometer. Negative values indicate climbing cruise. If the total energy "
 "vario speed is close to zero, the displayed value is '---'."
 msgstr ""
+"Momentane Gleitzahl, gegeben durch die angezeigten Geschwindigkeit geteilt "
+"durch den TE Variowert, laut angeschlossenem Sensor. Negative Werte zeigen "
+"ein ansteigenden Vorflug an. Wenn der TE Variowert nahe Null ist, wird '---' "
+"angezeigt."
 
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
@@ -1641,7 +1648,7 @@ msgstr "Aufgabe - erreichte Geschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:691
 #, no-c-format
 msgid "V Task Ach"
-msgstr ""
+msgstr "V Aufg. errcht."
 
 #: src/InfoBoxes/Content/Factory.cpp:692
 #, no-c-format
@@ -1824,7 +1831,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:794
 #, no-c-format
 msgid "GR average"
-msgstr "GZ - Mittelwert"
+msgstr "Gleitzahl - Mittelwert"
 
 #: src/InfoBoxes/Content/Factory.cpp:795
 #, no-c-format
@@ -1844,6 +1851,16 @@ msgid ""
 "have made even in a zigzag glide. This value is not calculated while "
 "circling."
 msgstr ""
+"Die zurückgelegte Distanz über eine definierte Zeit, geteilt durch die "
+"seither verlorene Höhe. Negative Werte werden als ^^^ angezeigt und zeigen, "
+"dass man im Vorflug Höhe gewonnen hat. Bei einer Gleitzahl über 200 wird +++ "
+"angezeigt. Die Durchschnittszeit kann in den Systemeinstellungen eingestellt "
+"werden. Empfohlene Werte sind 60, 90, 120. Niedrigere Werte ergeben quasi "
+"die momentane Gleitzahl, höhere Werte ergeben eine Gleitzahl nahe der "
+"Überlandgleitzahl. Bitte drauf achten, dass die Entfernung nicht der gerade "
+"Liene zwischen der alten und der aktuellen Position entspricht, sondern "
+"exakt dem zurückgelegten Weg (incl. Zick-Zack o.ä.). Der Wert wird im "
+"Kreisflug nicht berechnet."
 
 #: src/InfoBoxes/Content/Factory.cpp:804
 #, no-c-format
@@ -1907,7 +1924,7 @@ msgstr "Nächster Wegpunkt - Ankunftshöhe (MSL)"
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
 msgid "WP alt.A"
-msgstr ""
+msgstr "WP H Ankunft"
 
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
@@ -1960,7 +1977,7 @@ msgstr "Spur der Flughöhe während des Flugs"
 #: src/InfoBoxes/Content/Factory.cpp:884
 #, no-c-format
 msgid "Vario trace"
-msgstr "Spur - Vario"
+msgstr "Vario - brutto Variospur"
 
 #: src/InfoBoxes/Content/Factory.cpp:885
 #, no-c-format
@@ -1979,12 +1996,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:894
 #, no-c-format
 msgid "Netto vario trace"
-msgstr "Spur - Nettovario"
+msgstr "Vario - netto Variospur"
 
 #: src/InfoBoxes/Content/Factory.cpp:895
 #, no-c-format
 msgid "Netto Trace"
-msgstr "Netto Vario Graph"
+msgstr "Netto Spur"
 
 #: src/InfoBoxes/Content/Factory.cpp:896
 #, no-c-format
@@ -1996,12 +2013,12 @@ msgstr "Spur aus der vertikalen Luftbewegung, gleich dem netto Variowert."
 #: src/InfoBoxes/Content/Factory.cpp:904
 #, no-c-format
 msgid "Thermal climb trace"
-msgstr "Thermikstärke Graph"
+msgstr "Thermik - Steigen Historie"
 
 #: src/InfoBoxes/Content/Factory.cpp:905
 #, no-c-format
 msgid "TC Trace"
-msgstr ""
+msgstr "Steig Spur"
 
 #: src/InfoBoxes/Content/Factory.cpp:906
 #, no-c-format
@@ -2015,7 +2032,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:914
 #, no-c-format
 msgid "Climb band"
-msgstr "Thermik Profil"
+msgstr "Thermik - Vertikalprofil"
 
 #: src/InfoBoxes/Content/Factory.cpp:915
 #, no-c-format
@@ -2246,12 +2263,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1033
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr "Entsprechendes Steigen nächster Schenkel"
+msgstr "Entsprechendes Steigen auf dem nächster Schenkel"
 
 #: src/InfoBoxes/Content/Factory.cpp:1034
 #, no-c-format
 msgid "T Next Leg"
-msgstr ""
+msgstr "T nächs. Schenkel"
 
 #: src/InfoBoxes/Content/Factory.cpp:1035
 #, no-c-format
@@ -2259,6 +2276,8 @@ msgid ""
 "The thermal rate of climb on next leg which is equivalent to a thermal equal "
 "to the MacCready setting on current leg."
 msgstr ""
+"Gleichwertiges Steigen auf dem nächsten Schenkel, welches zum MacCready Wert "
+"des aktuellen Schenkels passt."
 
 #: src/InfoBoxes/Content/Factory.cpp:1043
 #, no-c-format
@@ -2289,7 +2308,7 @@ msgstr "Vorflugeffizienz"
 #: src/InfoBoxes/Content/Factory.cpp:1053
 #, no-c-format
 msgid "Cruise Eff"
-msgstr ""
+msgstr "Vorflug Eff."
 
 #: src/InfoBoxes/Content/Factory.cpp:1054
 #, no-c-format
@@ -2298,6 +2317,10 @@ msgid ""
 "value estimates your cruise efficiency according to the current flight "
 "history with the set MC value.  Calculation begins after task is started."
 msgstr ""
+"Vorflug Effizienz . 100 bedeutet perfekter Vorflug nach MacCready. Dieser "
+"Wert schätzt die Effizienz des Vorflugs unter Berücksichtigung der aktuellen "
+"Flughistorie bei gegebener MC Einstellung. Die Berechnung beginnt, sobald "
+"die Aufgabe gestartet wird."
 
 #: src/InfoBoxes/Content/Factory.cpp:1063
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:170
@@ -3406,17 +3429,15 @@ msgstr "Hinzufügen"
 
 #: src/Dialogs/FileManager.cpp:395
 msgid "Queued"
-msgstr ""
+msgstr "In der Warteschlange"
 
 #: src/Dialogs/FileManager.cpp:397 src/Dialogs/FileManager.cpp:403
-#, fuzzy
 msgid "Downloading"
-msgstr "Download"
+msgstr "Lädt herunter"
 
 #: src/Dialogs/FileManager.cpp:497
-#, fuzzy
 msgid "Select a file"
-msgstr "Wähle ein Muster"
+msgstr "Datei auswählen"
 
 #: src/Dialogs/FileManager.cpp:630 Data/Input/default.xci:663
 msgid "File Manager"
@@ -3645,7 +3666,7 @@ msgstr "Flug automatisch abschliessen"
 
 #: src/Dialogs/LX/NanoConfigWidget.cpp:105
 msgid "Always run"
-msgstr ""
+msgstr "Immer Ein"
 
 #: src/Dialogs/LX/NanoConfigWidget.cpp:108
 msgid "Enable NMEA"
@@ -3786,7 +3807,7 @@ msgstr "Details"
 
 #: src/Dialogs/MapItemListSettingsDialog.cpp:32
 msgid "Map Item List Settings"
-msgstr ""
+msgstr "Einstellungen Kartenobjektliste"
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:40
 msgid "Show Location row"
@@ -3797,6 +3818,8 @@ msgid ""
 "If enabled a row at the top will be added showing you the distance and "
 "bearing to the location and the elevation."
 msgstr ""
+"Wenn aktiviert wird oben eine Zeile eingefügt, die Informationen über "
+"Entfernung, Kurs zum Ort und seine Höhe anzeigt."
 
 #: src/Dialogs/MapItemListSettingsPanel.cpp:45
 msgid "Show Arrival Altitude"
@@ -4244,9 +4267,9 @@ msgid "FLARM, Other"
 msgstr "FLARM, etc."
 
 #: src/Dialogs/dlgConfiguration.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio Vario"
-msgstr "Tonvario"
+msgstr "Audio-Vario"
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -5092,15 +5115,16 @@ msgstr ""
 "reduziert die Ankunftshöhe für Gegenwindschenkel."
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:88
-#, fuzzy
 msgid "Use final glide mode"
-msgstr "Über dem Gleitpfad"
+msgstr "Endanflugmodus verwenden"
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:89
 msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
 msgstr ""
+"Bestimmt, ob das \"Endanflug\" InfoBox-Set für fur \"Auto\" Seite gezeigt "
+"wird."
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:82
 msgid "Fonts"
@@ -6399,15 +6423,16 @@ msgstr ""
 "Implementierung entspricht der offiziellen Ausgabe vom 23. Sept. 2010."
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:145
-#, fuzzy
 msgid "Predict Contest"
-msgstr "Online Contest"
+msgstr "Wertungs-Vorhersage"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:146
 msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
 msgstr ""
+"Wenn aktiviert wird der nächste Wegpunkt in die Punkteberechnung mit "
+"eingeschlossen und angenommen er wird erreicht."
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:79
 #, no-c-format
@@ -7118,12 +7143,12 @@ msgstr "Fehler beim Umbenennen"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:304
 msgid "Less"
-msgstr ""
+msgstr "Weniger"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:304
 #: Data/Dialogs/pnlTaskList.xml:11
 msgid "More"
-msgstr ""
+msgstr "Mehr"
 
 #: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:168
 msgid "Calculator excludes unsaved task changes!"
@@ -7687,40 +7712,39 @@ msgstr "Volumen"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:72
 msgid "Enable Deadband"
-msgstr ""
+msgstr "Tonausblendung Ein"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:73
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
 msgstr ""
+"Unterdrücke die Audio-Ausgabe, wenn das Steigen in einem bestimmten Bereich "
+"um Null ist."
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:79
-#, fuzzy
 msgid "Min. Frequency"
-msgstr "Funkfrequenz"
+msgstr "Niedrigster Ton"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:80
 msgid "The tone frequency that is played at maximum sink rate."
-msgstr ""
+msgstr "Die Ton-Frequenz bei der größten Sinkrate."
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:85
-#, fuzzy
 msgid "Zero Frequency"
-msgstr "Basis Frequenz"
+msgstr "Null-Ton"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at zero climb rate."
-msgstr ""
+msgstr "Die Ton-Frequenz für Nullschieber."
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:91
-#, fuzzy
 msgid "Max. Frequency"
-msgstr "Basis Frequenz"
+msgstr "Höchster Ton"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at maximum climb rate."
-msgstr ""
+msgstr "Die Ton-Frequenz bei der größten Steigrate."
 
 #: src/Dialogs/dlgNOAAList.cpp:110
 msgid "Airport ICAO code"
@@ -9537,24 +9561,6 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Could not open NMEA file!"
-#~ msgstr "Konnte NMEA-Datei nicht öffnen!"
-
-#~ msgid "Terrain file"
-#~ msgstr "Gelände"
-
-#~ msgid "The name of the file containing digital elevation terrain data."
-#~ msgstr "Der Name der Datei mit dem digitalisierten Gelände."
-
-#~ msgid "Topography file"
-#~ msgstr "Topographie"
-
-#~ msgid "Specifies the file defining the topographical features."
-#~ msgstr "Die Datei mit den topografischen Angaben."
-
-#~ msgid "Back"
-#~ msgstr "Zurück"
-
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
 
@@ -9648,6 +9654,9 @@ msgstr ""
 
 #~ msgid "Set wind"
 #~ msgstr "Wind einstellen"
+
+#~ msgid "OnLine Contest"
+#~ msgstr "Online Contest"
 
 #~ msgid "Terrain Display"
 #~ msgstr "Gelände Anzeige"
@@ -10758,6 +10767,9 @@ msgstr ""
 #~ msgid "SnailTrail ON Full"
 #~ msgstr "Vollständige Flugspur"
 
+#~ msgid "The name of the file containing digital elevation terrain data."
+#~ msgstr "Der Name der Datei mit dem digitalisierten Gelände."
+
 #~ msgid "Length of the OZ line."
 #~ msgstr "Länge der OZ Linie."
 
@@ -11835,6 +11847,9 @@ msgstr ""
 #~ "minimaler AAT Zeit. Der Wert wird rot gefärbt wenn die Ankunft zu früh "
 #~ "erwartet wird, oder blau wenn im Sektor gewendet werden kann und die "
 #~ "geschätzte Ankunftszeit mehr als 5 Minuten nach der AAT Zeit liegt."
+
+#~ msgid "Could not open NMEA file!"
+#~ msgstr "Konnte NMEA-Datei nicht öffnen!"
 
 #~ msgid "Time of flight"
 #~ msgstr "Zeit - Flugdauer"
