@@ -7,6 +7,7 @@ Version 6.3.11 - not yet released
   - fix freeze in glide solver
   - fix transition in small cylinder for key hole observation zones
     (e.g. BGA, #2229)
+  - fix AAT buttons in new tasks (#2183)
 * data files
   - fix crash in CUP task loader
 

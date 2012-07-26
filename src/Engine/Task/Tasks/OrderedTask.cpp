@@ -38,7 +38,7 @@
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
 #include "Task/Factory/Create.hpp"
-#include "Task/Factory/RTTaskFactory.hpp"
+#include "Task/Factory/AbstractTaskFactory.hpp"
 
 #include "Waypoint/Waypoints.hpp"
 
@@ -923,7 +923,7 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb):
   task_advance(m_ordered_behaviour),
   dijkstra_min(NULL), dijkstra_max(NULL)
 {
-  active_factory = new RTTaskFactory(*this, task_behaviour);
+  active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(m_ordered_behaviour);
 }
 
