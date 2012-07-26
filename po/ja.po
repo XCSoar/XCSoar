@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-07-19 17:56+0000\n"
-"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
+"PO-Revision-Date: 2012-07-25 03:11+0000\n"
+"Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-20 23:44+0000\n"
-"X-Generator: Launchpad (build 15654)\n"
+"X-Launchpad-Export-Date: 2012-07-26 19:12+0000\n"
+"X-Generator: Launchpad (build 15679)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3387,14 +3387,12 @@ msgid "Queued"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:397 src/Dialogs/FileManager.cpp:403
-#, fuzzy
 msgid "Downloading"
-msgstr "ダウンロード"
+msgstr "ダウンロード中"
 
 #: src/Dialogs/FileManager.cpp:497
-#, fuzzy
 msgid "Select a file"
-msgstr "パターンの選択"
+msgstr "ファイルを選択してください"
 
 #: src/Dialogs/FileManager.cpp:630 Data/Input/default.xci:663
 msgid "File Manager"
@@ -3465,7 +3463,7 @@ msgstr "表示項目"
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:184
 #, c-format
 msgid "%s on %s"
-msgstr ""
+msgstr "%2$s 上の %1$s"
 
 #: src/Dialogs/DeviceListDialog.cpp:280
 msgid "GPS fix"
@@ -3752,7 +3750,7 @@ msgstr "設定"
 
 #: src/Dialogs/MapItemListDialog.cpp:146
 msgid "Goto"
-msgstr ""
+msgstr "Goto"
 
 #: src/Dialogs/MapItemListDialog.cpp:147 Data/Dialogs/dlgFlarmTraffic.xml:4
 #: Data/Dialogs/dlgFlarmTraffic_L.xml:4 Data/Dialogs/dlgNOAAList.xml:10
@@ -4218,9 +4216,9 @@ msgid "FLARM, Other"
 msgstr "FLARM　その他"
 
 #: src/Dialogs/dlgConfiguration.cpp:111
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Audio Vario"
-msgstr "オーデオバリオ"
+msgstr "オーディオバリオ"
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -5065,15 +5063,14 @@ msgstr ""
 "向かい風の場合到着高度は低くなる"
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:88
-#, fuzzy
 msgid "Use final glide mode"
-msgstr "ファイナル　グライド　ライン上"
+msgstr "ファイナルグライド　モードを使用"
 
 #: src/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp:89
 msgid ""
 "Controls whether the \"final glide\" InfoBox mode should be used on \"auto\" "
 "pages."
-msgstr ""
+msgstr "ファイナルグライド　モードを自動モードで使用するかどうか"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:82
 msgid "Fonts"
@@ -6330,9 +6327,8 @@ msgstr ""
 "2010年9月23日版のルール"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:145
-#, fuzzy
 msgid "Predict Contest"
-msgstr "風成分"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:146
 msgid ""
@@ -6359,7 +6355,7 @@ msgstr "スタート　タイプ標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:135
 msgid "Default radius or gate width of the start zone for new tasks."
-msgstr "ゲート幅　標準設定"
+msgstr "ゲート半径　または幅　標準設定"
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:141
 msgid "Finish point"
@@ -7030,12 +7026,12 @@ msgstr "ファイル名変更エラー"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:304
 msgid "Less"
-msgstr ""
+msgstr "少なく"
 
 #: src/Dialogs/TaskManager/TaskListPanel.cpp:304
 #: Data/Dialogs/pnlTaskList.xml:11
 msgid "More"
-msgstr ""
+msgstr "多く"
 
 #: src/Dialogs/TaskManager/TaskCalculatorPanel.cpp:168
 msgid "Calculator excludes unsaved task changes!"
@@ -7591,40 +7587,37 @@ msgstr "音量"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:72
 msgid "Enable Deadband"
-msgstr ""
+msgstr "使用不能帯を設定する"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:73
 msgid ""
 "Mute the audio output in when the current lift is in a certain range around "
 "zero"
-msgstr ""
+msgstr "リフトがゼロの近い場合オーディオ音量を出さないよう設定"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:79
-#, fuzzy
 msgid "Min. Frequency"
-msgstr "無線周波数"
+msgstr "最少周波数（音質）"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:80
 msgid "The tone frequency that is played at maximum sink rate."
-msgstr ""
+msgstr "最大沈下の場合の音質"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:85
-#, fuzzy
 msgid "Zero Frequency"
-msgstr "基本音質"
+msgstr "ゼロ　周波数"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at zero climb rate."
-msgstr ""
+msgstr "リフトがゼロの場合の音質"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:91
-#, fuzzy
 msgid "Max. Frequency"
-msgstr "基本音質"
+msgstr "最大　周波数"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:92
 msgid "The tone frequency that is played at maximum climb rate."
-msgstr ""
+msgstr "最大上昇の場合の音質"
 
 #: src/Dialogs/dlgNOAAList.cpp:110
 msgid "Airport ICAO code"
@@ -9416,29 +9409,14 @@ msgstr ""
 "METAR\n"
 "TAF"
 
-#~ msgid "Could not open NMEA file!"
-#~ msgstr "NMEAファイルが開けません"
-
-#~ msgid "Terrain file"
-#~ msgstr "地形図ファイル"
-
-#~ msgid "The name of the file containing digital elevation terrain data."
-#~ msgstr "標高データーを持っているデジタルマップファイル名"
-
-#~ msgid "Topography file"
-#~ msgstr "地勢図"
-
-#~ msgid "Specifies the file defining the topographical features."
-#~ msgstr "地勢図のファイル名"
-
-#~ msgid "Back"
-#~ msgstr "戻る"
-
 #~ msgid "Unknown Filetype."
 #~ msgstr "対応していない種類のファイルです"
 
 #~ msgid "Task declared"
 #~ msgstr "タスクを設定しました"
+
+#~ msgid "Could not open NMEA file!"
+#~ msgstr "NMEAファイルが開けません"
 
 #~ msgid "System"
 #~ msgstr "システム"
@@ -9628,3 +9606,6 @@ msgstr ""
 
 #~ msgid "WP AltA"
 #~ msgstr "WP到着高度"
+
+#~ msgid "The name of the file containing digital elevation terrain data."
+#~ msgstr "標高データーを持っているデジタルマップファイル名"
