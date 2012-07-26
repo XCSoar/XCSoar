@@ -37,32 +37,21 @@ Copyright_License {
 #include <android/log.h>
 #endif
 
-void
-LogFormat(const TCHAR *Str, ...)
+static void
+LogString(const TCHAR *p)
 {
-  static bool initialised = false;
-  static TCHAR szFileName[MAX_PATH];
-
-  if (!initialised) {
-    LocalPath(szFileName, _T("xcsoar-startup.log"));
-  }
-
-  TCHAR buf[MAX_PATH];
-  va_list ap;
-
-  va_start(ap, Str);
-  _vstprintf(buf, Str, ap);
-  va_end(ap);
-
 #ifdef ANDROID
-  __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", buf);
+  __android_log_print(ANDROID_LOG_INFO, "XCSoar", "%s", p);
+#elif defined(HAVE_POSIX) && !defined(NDEBUG)
+  fprintf(stderr, "%s\n", p);
 #endif
 
-#if defined(HAVE_POSIX) && !defined(ANDROID) && !defined(NDEBUG)
-  fprintf(stderr, "%s\n", buf);
-#endif
+  static bool initialised = false;
+  static TCHAR path[MAX_PATH];
+  if (!initialised)
+    LocalPath(path, _T("xcsoar-startup.log"));
 
-  TextWriter writer(szFileName, initialised);
+  TextWriter writer(path, initialised);
   if (!writer.IsOpen())
     return;
 
@@ -70,9 +59,22 @@ LogFormat(const TCHAR *Str, ...)
   FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
 
   StaticString<MAX_PATH> output_buffer;
-  output_buffer.Format(_T("[%s] %s"), time_buffer, buf);
+  output_buffer.Format(_T("[%s] %s"), time_buffer, p);
   writer.WriteLine(output_buffer);
 
   if (!initialised)
     initialised = true;
+}
+
+void
+LogFormat(const TCHAR *Str, ...)
+{
+  TCHAR buf[MAX_PATH];
+  va_list ap;
+
+  va_start(ap, Str);
+  _vstprintf(buf, Str, ap);
+  va_end(ap);
+
+  LogString(buf);
 }
