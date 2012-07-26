@@ -21,6 +21,7 @@
  */
 
 #include "KeyholeZone.hpp"
+#include "Boundary.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
 GeoPoint
@@ -58,6 +59,28 @@ KeyholeZone::GetBoundaryParametric(fixed t) const
     a = GetEndRadial() + Angle::Radians((tt - l - l - c1) / c2 * small_sweep);
   }
   return GeoVector(d, a).EndPoint(GetReference());
+}
+
+OZBoundary
+KeyholeZone::GetBoundary() const
+{
+  OZBoundary boundary;
+  boundary.push_front(GetSectorStart());
+  boundary.push_front(GetSectorEnd());
+
+  boundary.GenerateArcExcluding(GetReference(), GetRadius(),
+                                GetStartRadial(), GetEndRadial());
+
+  const fixed small_radius = fixed(500);
+  GeoVector small_vector(small_radius, GetStartRadial());
+  boundary.push_front(small_vector.EndPoint(GetReference()));
+  small_vector.bearing = GetEndRadial();
+  boundary.push_front(small_vector.EndPoint(GetReference()));
+
+  boundary.GenerateArcExcluding(GetReference(), small_radius,
+                                GetEndRadial(), GetStartRadial());
+
+  return std::move(boundary);
 }
 
 fixed
