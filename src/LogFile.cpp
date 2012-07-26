@@ -67,10 +67,7 @@ LogString(const TCHAR *p)
 
   TCHAR time_buffer[32];
   FormatISO8601(time_buffer, BrokenDateTime::NowUTC());
-
-  StaticString<MAX_PATH> output_buffer;
-  output_buffer.Format(_T("[%s] %s"), time_buffer, p);
-  writer.WriteLine(output_buffer);
+  writer.FormatLine(_T("[%s] %s"), time_buffer, p);
 }
 
 void
