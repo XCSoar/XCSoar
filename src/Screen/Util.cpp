@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Util.hpp"
 #include "Screen/Canvas.hpp"
+#include "Util/Macros.hpp"
 #include "Math/FastMath.h"
 
 #include <winuser.h>
@@ -92,7 +93,7 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 
   segment_poly(pt, x, y, radius, istart, iend, npoly);
 
-  assert(npoly <= 66);
+  assert(npoly < ARRAY_SIZE(pt));
   if (npoly)
     canvas.DrawTriangleFan(pt, npoly);
 
@@ -120,7 +121,7 @@ Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   segment_poly(pt, x, y, radius, istart, iend, npoly);
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly, false);
 
-  assert(npoly <= 66*2);
+  assert(npoly < ARRAY_SIZE(pt));
   if (npoly)
     canvas.polygon(pt, npoly);
 
@@ -147,7 +148,7 @@ KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   segment_poly(pt, x, y, radius, istart, iend, npoly);
   segment_poly(pt, x, y, inner_radius, iend, istart, npoly);
 
-  assert(npoly <= 66*2);
+  assert(npoly < ARRAY_SIZE(pt));
   if (npoly)
     canvas.polygon(pt, npoly);
 
@@ -166,7 +167,7 @@ RoundRect(Canvas &canvas, PixelScalar left, PixelScalar top,
   segment_poly(pt, right - radius, bottom - radius, radius, 1024, 2047, npoly);
   segment_poly(pt, left + radius, bottom - radius, radius, 2048, 3071, npoly);
 
-  assert(npoly <= 66*4);
+  assert(npoly < ARRAY_SIZE(pt));
   if (npoly)
     canvas.polygon(pt, npoly);
 }
