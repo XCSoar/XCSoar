@@ -40,38 +40,42 @@ FormatISO8601(TCHAR *buffer, const BrokenDateTime &stamp)
 void
 FormatTime(TCHAR* buffer, fixed _time)
 {
-  bool _negative = negative(_time);
-  const BrokenTime time =
-      BrokenTime::FromSecondOfDayChecked((unsigned)fabs(_time));
+  if (negative(_time)) {
+    *buffer++ = _T('-');
+    _time = -_time;
+  }
 
-  _stprintf(buffer, _negative ? _T("-%02u:%02u:%02u") : _T("%02u:%02u:%02u"),
+  const BrokenTime time = BrokenTime::FromSecondOfDayChecked((unsigned)_time);
+  _stprintf(buffer, _T("%02u:%02u:%02u"),
             time.hour, time.minute, time.second);
 }
 
 void
 FormatTimeLong(TCHAR* buffer, fixed _time)
 {
-  bool _negative = negative(_time);
-  _time = fabs(_time);
+  if (negative(_time)) {
+    *buffer++ = _T('-');
+    _time = -_time;
+  }
 
-  const BrokenTime time =
-      BrokenTime::FromSecondOfDayChecked((unsigned)_time);
-
+  const BrokenTime time = BrokenTime::FromSecondOfDayChecked((unsigned)_time);
   _time -= fixed((int)_time);
   unsigned millisecond = uround(_time * 1000);
 
-  _stprintf(buffer, _negative ? _T("-%02u:%02u:%02u.%03u") :
-                                _T("%02u:%02u:%02u.%03u"),
+  _stprintf(buffer, _T("%02u:%02u:%02u.%03u"),
             time.hour, time.minute, time.second, millisecond);
 }
 
 void
 FormatSignedTimeHHMM(TCHAR* buffer, int _time)
 {
-  bool negative = (_time < 0);
-  const BrokenTime time = BrokenTime::FromSecondOfDayChecked(abs(_time));
-  _stprintf(buffer, negative ? _T("-%02u:%02u") : _T("%02u:%02u"),
-            time.hour, time.minute);
+  if (_time < 0) {
+    *buffer++ = _T('-');
+    _time = -_time;
+  }
+
+  const BrokenTime time = BrokenTime::FromSecondOfDayChecked(_time);
+  _stprintf(buffer, _T("%02u:%02u"), time.hour, time.minute);
 }
 
 void
