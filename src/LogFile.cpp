@@ -37,6 +37,21 @@ Copyright_License {
 #include <android/log.h>
 #endif
 
+static TextWriter
+OpenLog()
+{
+  static bool initialised = false;
+  static TCHAR path[MAX_PATH];
+
+  const bool append = initialised;
+  if (!initialised) {
+    initialised = true;
+    LocalPath(path, _T("xcsoar-startup.log"));
+  }
+
+  return TextWriter(path, append);
+}
+
 static void
 LogString(const TCHAR *p)
 {
@@ -46,12 +61,7 @@ LogString(const TCHAR *p)
   fprintf(stderr, "%s\n", p);
 #endif
 
-  static bool initialised = false;
-  static TCHAR path[MAX_PATH];
-  if (!initialised)
-    LocalPath(path, _T("xcsoar-startup.log"));
-
-  TextWriter writer(path, initialised);
+  TextWriter writer(OpenLog());
   if (!writer.IsOpen())
     return;
 
@@ -61,9 +71,6 @@ LogString(const TCHAR *p)
   StaticString<MAX_PATH> output_buffer;
   output_buffer.Format(_T("[%s] %s"), time_buffer, p);
   writer.WriteLine(output_buffer);
-
-  if (!initialised)
-    initialised = true;
 }
 
 void
