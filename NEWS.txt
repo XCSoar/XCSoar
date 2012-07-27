@@ -14,6 +14,7 @@ Version 6.3.11 - not yet released
   - fix rounding error in annulus renderer (#2221)
   - redraw map after target was moved (#2216)
   - fix bogus "around terrain: -1" map element (#2205)
+  - fix waypoint label style when no map is loaded
 
 Version 6.3.10 - 2012/07/20
 * calculations
