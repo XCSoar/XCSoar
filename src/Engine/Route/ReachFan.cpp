@@ -93,11 +93,8 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
                               RoughAltitude &arrival_height_reach,
                               RoughAltitude &arrival_height_direct) const
 {
-  arrival_height_reach = -1;
-  arrival_height_direct = -1;
-
   if (root.IsEmpty())
-    return true;
+    return false;
 
   const FlatGeoPoint d(task_proj.project(dest));
   const ReachFanParms parms(rpolars, task_proj, (int)terrain_base);
