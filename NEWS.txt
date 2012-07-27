@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.3.11 - not yet released
+Version 6.3.11 - 2012/07/27
 * calculations
   - fix freeze in glide solver
   - fix transition in small cylinder for key hole observation zones
