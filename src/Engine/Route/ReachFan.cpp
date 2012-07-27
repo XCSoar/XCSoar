@@ -104,6 +104,10 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
   // first calculate direct (terrain-independent height)
   result_r.direct = root.DirectArrival(d, parms);
 
+  if (root.IsDummy())
+    /* terrain reach is not available, stop here */
+    return true;
+
   // if can't reach even with no terrain, exit early
   if (std::min(root.GetHeight(), result_r.direct) < dest.altitude) {
     result_r.terrain = result_r.direct;
