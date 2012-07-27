@@ -152,15 +152,18 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   bool elevation_available =
       !RasterBuffer::IsSpecial((short)item.elevation);
 
-  bool reach_relevant =
-      (item.arrival_altitude_reach != item.arrival_altitude_direct);
+  bool reach_relevant = item.reach.IsReachRelevant();
 
-  RoughAltitude arrival_altitude = item.arrival_altitude_reach;
+  RoughAltitude arrival_altitude =
+    item.reach.terrain_valid == ReachResult::Validity::VALID
+    ? item.reach.terrain
+    : item.reach.direct;
   if (elevation_available)
     arrival_altitude -= item.elevation;
 
-  bool reachable = arrival_altitude.IsPositive();
-
+  bool reachable =
+    item.reach.terrain_valid != ReachResult::Validity::UNREACHABLE &&
+    arrival_altitude.IsPositive();
 
   // Draw final glide arrow icon
 
@@ -198,7 +201,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   if (elevation_available) {
     RoughAltitude relative_arrival_altitude =
-        item.arrival_altitude_direct - item.elevation;
+      item.reach.direct - item.elevation;
 
     FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
                                altitude_buffer, ARRAY_SIZE(altitude_buffer));
@@ -206,7 +209,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
   }
 
-  FormatUserAltitude(fixed((short)item.arrival_altitude_direct),
+  FormatUserAltitude(fixed(item.reach.direct),
                      altitude_buffer, ARRAY_SIZE(altitude_buffer));
 
   buffer.AppendFormat(_T("%s %s"), altitude_buffer, _("MSL"));
@@ -223,7 +226,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
     if (elevation_available) {
       RoughAltitude relative_arrival_altitude =
-          item.arrival_altitude_reach - item.elevation;
+          item.reach.terrain - item.elevation;
 
       FormatRelativeUserAltitude(fixed((short)relative_arrival_altitude),
                                  altitude_buffer, ARRAY_SIZE(altitude_buffer));
@@ -231,10 +234,14 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
      buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("AGL"));
     }
 
-    FormatUserAltitude(fixed((short)item.arrival_altitude_reach),
+    FormatUserAltitude(fixed(item.reach.terrain),
                        altitude_buffer, ARRAY_SIZE(altitude_buffer));
 
     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("MSL"));
+  } else if (elevation_available &&
+             (int)item.reach.direct >= (int)item.elevation &&
+             item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
+    buffer.UnsafeFormat(_T("%s "), _("Unreachable through terrain."));
   } else {
     buffer.clear();
   }

@@ -21,21 +21,21 @@
 }
 */
 
-#ifndef XCSOAR_OBSERVATION_ZONE_BOUNDARY_HPP
-#define XCSOAR_OBSERVATION_ZONE_BOUNDARY_HPP
+#include "Boundary.hpp"
+#include "Geo/GeoVector.hpp"
 
-#include "Geo/GeoPoint.hpp"
+void
+OZBoundary::GenerateArcExcluding(const GeoPoint &center, fixed radius,
+                                 Angle start_radial, Angle end_radial)
+{
+  const unsigned steps = 20;
+  const Angle delta = Angle::FullCircle() / steps;
+  const Angle start = start_radial.AsBearing();
+  Angle end = end_radial.AsBearing();
+  if (end <= start + Angle::FullCircle() / 512)
+    end += Angle::FullCircle();
 
-#include <forward_list>
-
-class OZBoundary : public std::forward_list<GeoPoint> {
-public:
-  /**
-   * Generate boundary points for the arc described by the parameters.
-   * This excludes the points at the start/end angle.
-   */
-  void GenerateArcExcluding(const GeoPoint &center, fixed radius,
-                            Angle start_radial, Angle end_radial);
-};
-
-#endif
+  GeoVector vector(radius, start + delta);
+  for (; vector.bearing < end; vector.bearing += delta)
+    push_front(vector.EndPoint(center));
+}

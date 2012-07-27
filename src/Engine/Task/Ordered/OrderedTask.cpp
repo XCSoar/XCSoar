@@ -37,14 +37,8 @@
 #include "Task/Solvers/TaskOptTarget.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 
-#include "Task/Factory/RTTaskFactory.hpp"
-#include "Task/Factory/FAITaskFactory.hpp"
-#include "Task/Factory/FAITriangleTaskFactory.hpp"
-#include "Task/Factory/FAIORTaskFactory.hpp"
-#include "Task/Factory/FAIGoalTaskFactory.hpp"
-#include "Task/Factory/AATTaskFactory.hpp"
-#include "Task/Factory/MixedTaskFactory.hpp"
-#include "Task/Factory/TouringTaskFactory.hpp"
+#include "Task/Factory/Create.hpp"
+#include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
 
 #include "Waypoint/Waypoints.hpp"
@@ -64,7 +58,7 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb):
   ordered_behaviour(tb.ordered_defaults),
   dijkstra_min(NULL), dijkstra_max(NULL)
 {
-  active_factory = new RTTaskFactory(*this, task_behaviour);
+  active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
   task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 }
@@ -1326,35 +1320,8 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   factory_mode = the_factory;
 
   delete active_factory;
-
-  switch (factory_mode) {
-  case TaskFactoryType::RACING:
-    active_factory = new RTTaskFactory(*this, task_behaviour);
-    break;
-  case TaskFactoryType::FAI_GENERAL:
-    active_factory = new FAITaskFactory(*this, task_behaviour);
-    break;
-  case TaskFactoryType::FAI_TRIANGLE:
-    active_factory = new FAITriangleTaskFactory(*this, task_behaviour);
-    break;
-  case TaskFactoryType::FAI_OR:
-    active_factory = new FAIORTaskFactory(*this, task_behaviour);
-    break;
-  case TaskFactoryType::FAI_GOAL:
-    active_factory = new FAIGoalTaskFactory(*this, task_behaviour);
-    break;
-  case TaskFactoryType::AAT:
-    active_factory = new AATTaskFactory(*this, task_behaviour);
-    break;
-  case TaskFactoryType::MIXED:
-    active_factory = new MixedTaskFactory(*this, task_behaviour);
-    break;
-  case TaskFactoryType::TOURING:
-    active_factory = new TouringTaskFactory(*this, task_behaviour);
-    break;
-  };
+  active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
-  task_advance.SetFactoryConstraints(active_factory->GetConstraints());
 
   return factory_mode;
 }

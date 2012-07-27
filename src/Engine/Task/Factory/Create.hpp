@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -19,23 +19,21 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef XCSOAR_OBSERVATION_ZONE_BOUNDARY_HPP
-#define XCSOAR_OBSERVATION_ZONE_BOUNDARY_HPP
+#ifndef XCSOAR_TASK_FACTORY_CREATE_HPP
+#define XCSOAR_TASK_FACTORY_CREATE_HPP
 
-#include "Geo/GeoPoint.hpp"
+#include "TaskFactoryType.hpp"
+#include "Compiler.h"
 
-#include <forward_list>
+class AbstractTaskFactory;
+class OrderedTask;
+struct TaskBehaviour;
 
-class OZBoundary : public std::forward_list<GeoPoint> {
-public:
-  /**
-   * Generate boundary points for the arc described by the parameters.
-   * This excludes the points at the start/end angle.
-   */
-  void GenerateArcExcluding(const GeoPoint &center, fixed radius,
-                            Angle start_radial, Angle end_radial);
-};
+gcc_malloc
+AbstractTaskFactory *
+CreateTaskFactory(TaskFactoryType type, OrderedTask &task,
+                  const TaskBehaviour &task_behaviour);
 
 #endif

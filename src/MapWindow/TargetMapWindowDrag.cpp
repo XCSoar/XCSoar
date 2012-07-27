@@ -40,11 +40,16 @@ TargetMapWindow::TargetDragged(const int x, const int y)
   assert(task != NULL);
 
   GeoPoint gp = projection.ScreenToGeo(x, y);
-  ProtectedTaskManager::ExclusiveLease task_manager(*task);
-  if (!task_manager->TargetIsLocked(target_index))
-    task_manager->TargetLock(target_index, true);
 
-  task_manager->SetTarget(target_index, gp, true);
+  {
+    ProtectedTaskManager::ExclusiveLease task_manager(*task);
+    if (!task_manager->TargetIsLocked(target_index))
+      task_manager->TargetLock(target_index, true);
+
+    task_manager->SetTarget(target_index, gp, true);
+  }
+
+  Invalidate();
   return true;
 }
 

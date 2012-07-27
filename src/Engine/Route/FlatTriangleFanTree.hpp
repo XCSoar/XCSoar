@@ -79,6 +79,16 @@ public:
   void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms);
   void DummyReach(const AFlatGeoPoint &origin);
 
+  /**
+   * Basic check for a state created by DummyReach().  If this method
+   * returns true, then calls to FindPositiveArrival() are supposed to
+   * be useless.
+   */
+  gcc_pure
+  bool IsDummy() const {
+    return vs.size() == 1 && children.empty();
+  }
+
   void FillReach(const AFlatGeoPoint &origin,
                  const int index_low, const int index_high,
                  ReachFanParms &parms);

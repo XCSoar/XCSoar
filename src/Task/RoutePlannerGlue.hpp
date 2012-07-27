@@ -72,9 +72,7 @@ public:
   void SolveReach(const AGeoPoint &origin, const RoutePlannerConfig &config,
                   RoughAltitude h_ceiling, bool do_solve);
 
-  bool FindPositiveArrival(const AGeoPoint &dest,
-                           RoughAltitude &arrival_height_reach,
-                           RoughAltitude &arrival_height_direct) const;
+  bool FindPositiveArrival(const AGeoPoint &dest, ReachResult &result_r) const;
 
   void AcceptInRange(const GeoBounds &bounds, TriangleFanVisitor &visitor) const;
 

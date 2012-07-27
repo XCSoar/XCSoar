@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_VERTEX_ARRAY_HPP
 
 #include "Screen/OpenGL/Point.hpp"
+#include "Compiler.h"
 
 template<unsigned n>
 struct GLVertexArray {
@@ -46,7 +47,28 @@ struct GLCircleVertices : public GLVertexArray<32> {
 struct GLDonutVertices : public GLVertexArray<66> {
   enum {
     CIRCLE_SIZE = (SIZE - 2) / 2,
+    MAX_ANGLE = CIRCLE_SIZE * 2u,
   };
+
+  gcc_const
+  static unsigned FixAngle(unsigned angle) {
+    return angle & ((CIRCLE_SIZE - 1u) * 2u);
+  }
+
+  gcc_const
+  static unsigned PreviousAngle(unsigned angle) {
+    return FixAngle(angle - 2u);
+  }
+
+  gcc_const
+  static unsigned NextAngle(unsigned angle) {
+    return FixAngle(angle + 2u);
+  }
+
+  gcc_const
+  static unsigned ImportAngle(unsigned other_angle, unsigned other_max) {
+    return ((other_angle * CIRCLE_SIZE / other_max) % CIRCLE_SIZE) * 2u;
+  }
 
   GLDonutVertices(GLvalue center_x, GLvalue center_y,
                   GLvalue radius_inner, GLvalue radius_outer);

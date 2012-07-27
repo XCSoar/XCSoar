@@ -32,10 +32,12 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/Factory/AATTaskFactory.cpp \
 	$(TASK_SRC_DIR)/Factory/MixedTaskFactory.cpp \
 	$(TASK_SRC_DIR)/Factory/TouringTaskFactory.cpp \
+	$(TASK_SRC_DIR)/Factory/Create.cpp \
 	$(TASK_SRC_DIR)/Points/TaskPoint.cpp \
 	$(TASK_SRC_DIR)/Points/SampledTaskPoint.cpp \
 	$(TASK_SRC_DIR)/Points/ScoredTaskPoint.cpp \
 	$(TASK_SRC_DIR)/Points/TaskLeg.cpp \
+	$(TASK_SRC_DIR)/ObservationZones/Boundary.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/ObservationZoneClient.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/ObservationZonePoint.cpp \
 	$(TASK_SRC_DIR)/ObservationZones/CylinderZone.cpp \

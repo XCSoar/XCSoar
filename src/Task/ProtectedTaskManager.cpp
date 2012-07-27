@@ -28,6 +28,7 @@ Copyright_License {
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
+#include "Engine/Route/ReachResult.hpp"
 
 #include <windef.h> // for MAX_PATH
 
@@ -227,9 +228,14 @@ ReachIntersectionTest::Intersects(const AGeoPoint& destination)
 {
   if (!route)
     return false;
-  RoughAltitude h, h_dummy;
-  route->FindPositiveArrival(destination, h, h_dummy);
+
+  ReachResult result;
+  if (!route->FindPositiveArrival(destination, result))
+    return false;
+
   // we use find_positive_arrival here instead of is_inside, because may use
   // arrival height for sorting later
-  return (h< destination.altitude);
+  return result.terrain_valid == ReachResult::Validity::UNREACHABLE ||
+    (result.terrain_valid == ReachResult::Validity::VALID &&
+     result.terrain < destination.altitude);
 }

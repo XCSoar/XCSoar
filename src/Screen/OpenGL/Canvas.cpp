@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Compatibility.hpp"
 #include "Screen/Util.hpp"
+#include "Util/Macros.hpp"
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
@@ -346,20 +347,23 @@ gcc_const
 static unsigned
 AngleToDonutVertex(Angle angle)
 {
-  return (NATIVE_TO_INT(angle.Native()) * 64 / 4096 + 48) & 0x3e;
+  return GLDonutVertices::ImportAngle(NATIVE_TO_INT(angle.Native())
+                                      + ARRAY_SIZE(ISINETABLE) * 3u / 4u,
+                                      ARRAY_SIZE(ISINETABLE));
 }
 
 gcc_const
 static std::pair<unsigned,unsigned>
 AngleToDonutVertices(Angle start, Angle end)
 {
-  static const Angle epsilon = Angle::FullCircle() / 64 / 2;
+  static const Angle epsilon = Angle::FullCircle()
+    / (GLDonutVertices::CIRCLE_SIZE * 4u);
 
   const Angle delta = end - start;
 
-  if (delta >= Angle::FullCircle() - epsilon)
+  if (fabs(delta.AsDelta().Native()) <= epsilon.Native())
     /* full circle */
-    return std::make_pair(0, 64);
+    return std::make_pair(0, GLDonutVertices::MAX_ANGLE);
 
   const unsigned istart = AngleToDonutVertex(start);
   unsigned iend = AngleToDonutVertex(end);
@@ -367,10 +371,10 @@ AngleToDonutVertices(Angle start, Angle end)
   if (istart == iend && delta > epsilon) {
     if (end - start >= Angle::HalfCircle())
       /* nearly full circle, round down the end */
-      iend = (iend - 2) & 0x3e;
+      iend = GLDonutVertices::PreviousAngle(iend);
     else
       /* slightly larger than epsilon: draw at least two indices */
-      iend = (iend + 2) & 0x3e;
+      iend = GLDonutVertices::NextAngle(iend);
   }
 
   return std::make_pair(istart, iend);
@@ -381,6 +385,15 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
                 UPixelScalar small_radius, UPixelScalar big_radius,
                 Angle start, Angle end)
 {
+  if (1 == 1) {
+    /* TODO: switched to the unoptimised generic implementation due to
+       TRAC #2221, caused by rounding error of start/end radial;
+       should reimplement GLDonutVertices to use the exact start/end
+       radial */
+    ::Annulus(*this, x, y, big_radius, start, end, small_radius);
+    return;
+  }
+
   GLDonutVertices vertices(x, y, small_radius, big_radius);
 
   const std::pair<unsigned,unsigned> i = AngleToDonutVertices(start, end);
@@ -392,7 +405,8 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
     vertices.bind();
 
     if (istart > iend) {
-      glDrawArrays(GL_TRIANGLE_STRIP, istart, 64 - istart + 2);
+      glDrawArrays(GL_TRIANGLE_STRIP, istart,
+                   GLDonutVertices::MAX_ANGLE - istart + 2);
       glDrawArrays(GL_TRIANGLE_STRIP, 0, iend + 2);
     } else {
       glDrawArrays(GL_TRIANGLE_STRIP, istart, iend - istart + 2);
@@ -402,7 +416,7 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
   if (pen_over_brush()) {
     pen.Bind();
 
-    if (istart != iend && iend != 64) {
+    if (istart != iend && iend != GLDonutVertices::MAX_ANGLE) {
       if (brush.IsHollow())
         vertices.bind();
 
@@ -417,7 +431,8 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
     if (pstart < pend) {
       glDrawArrays(GL_LINE_STRIP, pstart, pend - pstart + 1);
     } else {
-      glDrawArrays(GL_LINE_STRIP, pstart, 32 - pstart + 1);
+      glDrawArrays(GL_LINE_STRIP, pstart,
+                   GLDonutVertices::CIRCLE_SIZE - pstart + 1);
       glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
     }
 
@@ -425,7 +440,8 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
     if (pstart < pend) {
       glDrawArrays(GL_LINE_STRIP, pstart, pend - pstart + 1);
     } else {
-      glDrawArrays(GL_LINE_STRIP, pstart, 32 - pstart + 1);
+      glDrawArrays(GL_LINE_STRIP, pstart,
+                   GLDonutVertices::CIRCLE_SIZE - pstart + 1);
       glDrawArrays(GL_LINE_STRIP, 0, pend + 1);
     }
 

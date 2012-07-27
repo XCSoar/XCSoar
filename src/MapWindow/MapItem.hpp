@@ -34,6 +34,7 @@ Copyright_License {
 #include "FLARM/Friends.hpp"
 #include "NMEA/ThermalLocator.hpp"
 #include "Weather/Features.hpp"
+#include "Engine/Route/ReachResult.hpp"
 
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
@@ -87,18 +88,13 @@ struct ArrivalAltitudeMapItem: public MapItem
   /** Elevation of the point in MSL */
   RoughAltitude elevation;
 
-  /** Arrival altitude for straight glide in MSL */
-  RoughAltitude arrival_altitude_direct;
-  /** Arrival altitude around terrain in MSL */
-  RoughAltitude arrival_altitude_reach;
+  /** Arrival altitudes [m MSL] */
+  ReachResult reach;
 
   ArrivalAltitudeMapItem(RoughAltitude _elevation,
-                         RoughAltitude _arrival_altitude_direct,
-                         RoughAltitude _arrival_altitude_reach)
+                         ReachResult _reach)
     :MapItem(ARRIVAL_ALTITUDE),
-     elevation(_elevation),
-     arrival_altitude_direct(_arrival_altitude_direct),
-     arrival_altitude_reach(_arrival_altitude_reach) {}
+     elevation(_elevation), reach(_reach) {}
 };
 
 struct SelfMapItem: public MapItem
