@@ -191,6 +191,10 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                        altitude_buffer, ARRAY_SIZE(altitude_buffer));
 
     buffer.AppendFormat(_T("%s %s, "), altitude_buffer, _("MSL"));
+  } else if (elevation_available &&
+             (int)item.reach.direct >= (int)item.elevation &&
+             item.reach.terrain_valid == ReachResult::Validity::UNREACHABLE) {
+    buffer.UnsafeFormat(_T("%s "), _("Unreachable through terrain."));
   } else {
     buffer.clear();
   }

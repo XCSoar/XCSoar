@@ -26,12 +26,19 @@ Copyright_License {
 
 #include "Rough/RoughAltitude.hpp"
 
+#include <stdint.h>
 #include <stdlib.h>
 
 /**
  * The result of a reach calculation.
  */
 struct ReachResult {
+  enum class Validity : uint8_t {
+    INVALID,
+    VALID,
+    UNREACHABLE,
+  };
+
   /**
    * The arrival altitude for straight glide, ignoring terrain
    * obstacles.
@@ -40,12 +47,19 @@ struct ReachResult {
 
   /**
    * The arrival altitude considering detour to avoid terrain
-   * obstacles.
+   * obstacles.  This attribute may only be used if #terrain_valid is
+   * #VALID.
    */
   RoughAltitude terrain;
 
+  /**
+   * This attribute describes whether the #terrain attribute is valid.
+   */
+  Validity terrain_valid;
+
   void Clear() {
     direct = terrain = -1;
+    terrain_valid = Validity::INVALID;
   }
 
   bool IsReachableDirect() const {
@@ -53,16 +67,19 @@ struct ReachResult {
   }
 
   bool IsReachableTerrain() const {
-    return terrain.IsPositive();
+    return terrain_valid == Validity::VALID && terrain.IsPositive();
   }
 
   bool IsDeltaConsiderable() const {
+    if (terrain_valid != Validity::VALID)
+      return false;
+
     const int delta = abs((int)direct - (int)terrain);
     return delta >= 10 && delta * 100 / (int)direct > 5;
   }
 
   bool IsReachRelevant() const {
-    return terrain != direct;
+    return terrain_valid == Validity::VALID && terrain != direct;
   }
 
   void Add(RoughAltitude delta) {

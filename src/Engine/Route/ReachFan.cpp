@@ -99,18 +99,23 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
   const FlatGeoPoint d(task_proj.project(dest));
   const ReachFanParms parms(rpolars, task_proj, (int)terrain_base);
 
+  result_r.Clear();
+
   // first calculate direct (terrain-independent height)
   result_r.direct = root.DirectArrival(d, parms);
 
   // if can't reach even with no terrain, exit early
   if (std::min(root.GetHeight(), result_r.direct) < dest.altitude) {
     result_r.terrain = result_r.direct;
+    result_r.terrain_valid = ReachResult::Validity::UNREACHABLE;
     return true;
   }
 
   // now calculate turning solution
   result_r.terrain = dest.altitude - RoughAltitude(1);
-  root.FindPositiveArrival(d, parms, result_r.terrain);
+  result_r.terrain_valid = root.FindPositiveArrival(d, parms, result_r.terrain)
+    ? ReachResult::Validity::VALID
+    : ReachResult::Validity::UNREACHABLE;
 
   return true;
 }

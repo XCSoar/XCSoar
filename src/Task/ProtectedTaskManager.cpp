@@ -242,5 +242,7 @@ ReachIntersectionTest::Intersects(const AGeoPoint& destination)
 
   // we use find_positive_arrival here instead of is_inside, because may use
   // arrival height for sorting later
-  return result.terrain < destination.altitude;
+  return result.terrain_valid == ReachResult::Validity::UNREACHABLE ||
+    (result.terrain_valid == ReachResult::Validity::VALID &&
+     result.terrain < destination.altitude);
 }
