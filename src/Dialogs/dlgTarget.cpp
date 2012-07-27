@@ -340,9 +340,13 @@ OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
     if (target_point >= ActiveTaskPointOnEntry) {
       const fixed RangeNew = df.GetAsFixed() / fixed(100);
       if (RangeNew != Range) {
-        ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-        lease->SetTarget(target_point, RangeNew, Radial);
-        lease->GetTargetRangeRadial(target_point, Range, Radial);
+        {
+          ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+          lease->SetTarget(target_point, RangeNew, Radial);
+          lease->GetTargetRangeRadial(target_point, Range, Radial);
+        }
+
+        map->Invalidate();
       }
     }
     break;
@@ -377,6 +381,7 @@ OnRadialData(DataField *Sender, DataField::DataAccessMode Mode)
       if (Radial != RadialNew) {
         protected_task_manager->SetTarget(target_point, Range, RadialNew);
         Radial = RadialNew;
+        map->Invalidate();
       }
     }
     break;

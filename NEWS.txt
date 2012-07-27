@@ -12,6 +12,7 @@ Version 6.3.11 - not yet released
   - fix crash in CUP task loader
 * map
   - fix rounding error in annulus renderer (#2221)
+  - redraw map after target was moved (#2216)
 
 Version 6.3.10 - 2012/07/20
 * calculations
