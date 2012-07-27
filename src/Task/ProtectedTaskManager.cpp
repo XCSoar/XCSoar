@@ -235,7 +235,9 @@ ReachIntersectionTest::Intersects(const AGeoPoint& destination)
   if (!route)
     return false;
   RoughAltitude h, h_dummy;
-  route->FindPositiveArrival(destination, h, h_dummy);
+  if (!route->FindPositiveArrival(destination, h, h_dummy))
+    return false;
+
   // we use find_positive_arrival here instead of is_inside, because may use
   // arrival height for sorting later
   return (h< destination.altitude);
