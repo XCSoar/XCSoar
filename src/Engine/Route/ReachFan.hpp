@@ -30,6 +30,7 @@
 class RoutePolars;
 class RasterMap;
 struct GeoBounds;
+struct ReachResult;
 
 class ReachFan
 {
@@ -52,8 +53,7 @@ public:
              const RasterMap *terrain, const bool do_solve = true);
 
   bool FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
-                           RoughAltitude &arrival_height_reach,
-                           RoughAltitude &arrival_height_direct) const;
+                           ReachResult &result_r) const;
 
   bool IsInside(const GeoPoint origin, const bool turning = true) const;
 

@@ -274,10 +274,8 @@ public:
    * @return true if check was successful
    */
   bool FindPositiveArrival(const AGeoPoint &dest,
-                           RoughAltitude &arrival_height_reach,
-                           RoughAltitude &arrival_height_direct) const {
-    return reach.FindPositiveArrival(dest, rpolars_reach, arrival_height_reach,
-                                       arrival_height_direct);
+                           ReachResult &result_r) const {
+    return reach.FindPositiveArrival(dest, rpolars_reach, result_r);
   }
 
   RoughAltitude GetTerrainBase() const {

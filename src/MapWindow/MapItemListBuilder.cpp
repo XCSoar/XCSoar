@@ -200,19 +200,15 @@ MapItemListBuilder::AddArrivalAltitudes(
   const AGeoPoint destination(location, safety_elevation);
 
   // Calculate arrival altitudes
-  RoughAltitude arrival_height_direct(0), arrival_height_reach(0);
+  ReachResult reach;
 
   ProtectedRoutePlanner::Lease leased_route_planner(route_planner);
-  if (!leased_route_planner->FindPositiveArrival(
-      destination, arrival_height_reach, arrival_height_direct))
+  if (!leased_route_planner->FindPositiveArrival(destination, reach))
     return;
 
-  arrival_height_direct -= RoughAltitude(safety_height);
-  arrival_height_reach -= RoughAltitude(safety_height);
+  reach.Subtract(RoughAltitude(safety_height));
 
-  list.append(new ArrivalAltitudeMapItem(RoughAltitude(elevation),
-                                         arrival_height_direct,
-                                         arrival_height_reach));
+  list.append(new ArrivalAltitudeMapItem(RoughAltitude(elevation), reach));
 }
 
 void

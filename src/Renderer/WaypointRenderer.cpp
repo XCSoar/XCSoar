@@ -53,6 +53,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
+#include "Engine/Route/ReachResult.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -65,8 +66,7 @@ struct VisibleWaypoint {
 
   RasterPoint point;
 
-  RoughAltitude arrival_height_glide;
-  RoughAltitude arrival_height_terrain;
+  ReachResult reach;
 
   WaypointRenderer::Reachability reachable;
 
@@ -76,8 +76,7 @@ struct VisibleWaypoint {
            bool _in_task) {
     waypoint = &_waypoint;
     point = _point;
-    arrival_height_glide = 0;
-    arrival_height_terrain = 0;
+    reach.Clear();
     reachable = WaypointRenderer::Unreachable;
     in_task = _in_task;
   }
@@ -98,7 +97,7 @@ struct VisibleWaypoint {
     if (!result.IsOk())
       return;
 
-    arrival_height_glide = result.pure_glide_altitude_difference;
+    reach.direct = result.pure_glide_altitude_difference;
   }
 
   void CalculateRouteArrival(const RoutePlannerGlue &route_planner,
@@ -106,11 +105,8 @@ struct VisibleWaypoint {
     const RoughAltitude elevation(waypoint->elevation +
                                   task_behaviour.safety_height_arrival);
     const AGeoPoint p_dest (waypoint->location, elevation);
-    if (route_planner.FindPositiveArrival(p_dest, arrival_height_terrain,
-                                            arrival_height_glide)) {
-      arrival_height_terrain -= elevation;
-      arrival_height_glide -= elevation;
-    }
+    if (route_planner.FindPositiveArrival(p_dest, reach))
+      reach.Subtract(elevation);
   }
 
   void CalculateReachability(const RoutePlannerGlue &route_planner,
@@ -118,10 +114,10 @@ struct VisibleWaypoint {
   {
     CalculateRouteArrival(route_planner, task_behaviour);
 
-    if (!arrival_height_glide.IsPositive())
+    if (!reach.IsReachableDirect())
       reachable = WaypointRenderer::Unreachable;
     else if (task_behaviour.route_planner.IsReachEnabled() &&
-             !arrival_height_terrain.IsPositive())
+             !reach.IsReachableTerrain())
       reachable = WaypointRenderer::ReachableStraight;
     else
       reachable = WaypointRenderer::ReachableTerrain;
@@ -220,7 +216,7 @@ protected:
 
   void
   FormatLabel(TCHAR *buffer, const Waypoint &way_point,
-              const int arrival_height_glide, const int arrival_height_terrain)
+              const ReachResult &reach)
   {
     FormatTitle(buffer, way_point);
 
@@ -250,18 +246,18 @@ protected:
       return;
     }
 
-    if (arrival_height_glide <= 0 && !way_point.flags.watched)
+    if (!reach.IsReachableDirect() && !way_point.flags.watched)
       return;
 
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::NONE)
       return;
 
     size_t length = _tcslen(buffer);
-    int uah_glide = (int)Units::ToUserAltitude(fixed(arrival_height_glide));
-    int uah_terrain = (int)Units::ToUserAltitude(fixed(arrival_height_terrain));
+    int uah_glide = (int)Units::ToUserAltitude(fixed(reach.direct));
+    int uah_terrain = (int)Units::ToUserAltitude(fixed(reach.terrain));
 
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::TERRAIN) {
-      if (arrival_height_terrain > 0) {
+      if (reach.IsReachableTerrain()) {
         if (length > 0)
           buffer[length++] = _T(':');
         _stprintf(buffer + length, _T("%d%s"), uah_terrain, sAltUnit);
@@ -273,13 +269,11 @@ protected:
       buffer[length++] = _T(':');
 
     if (settings.arrival_height_display == WaypointRendererSettings::ArrivalHeightDisplay::GLIDE_AND_TERRAIN &&
-        arrival_height_glide > 0 && arrival_height_terrain > 0) {
-      int altd = abs(int(fixed(arrival_height_glide - arrival_height_terrain)));
-      if (altd >= 10 && (altd * 100) / arrival_height_glide > 5) {
-        _stprintf(buffer + length, _T("%d/%d%s"), uah_glide,
-                  uah_terrain, sAltUnit);
-        return;
-      }
+        reach.IsReachableDirect() && reach.IsReachableTerrain() &&
+        reach.IsDeltaConsiderable()) {
+      _stprintf(buffer + length, _T("%d/%d%s"), uah_glide,
+                uah_terrain, sAltUnit);
+      return;
     }
 
     _stprintf(buffer + length, _T("%d%s"), uah_glide, sAltUnit);
@@ -331,9 +325,7 @@ protected:
     }
 
     TCHAR Buffer[NAME_SIZE+1];
-    FormatLabel(Buffer, way_point,
-                (int)vwp.arrival_height_glide,
-                (int)vwp.arrival_height_terrain);
+    FormatLabel(Buffer, way_point, vwp.reach);
 
     RasterPoint sc = vwp.point;
     if ((vwp.reachable != WaypointRenderer::Unreachable &&
@@ -342,7 +334,7 @@ protected:
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, vwp.arrival_height_glide,
+    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, vwp.reach.direct,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }

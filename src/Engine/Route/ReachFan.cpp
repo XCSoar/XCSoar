@@ -24,6 +24,7 @@
 #include "Route/RoutePolar.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
+#include "ReachResult.hpp"
 
 void
 ReachFan::Reset()
@@ -90,8 +91,7 @@ ReachFan::IsInside(const GeoPoint origin, const bool turning) const
 
 bool
 ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
-                              RoughAltitude &arrival_height_reach,
-                              RoughAltitude &arrival_height_direct) const
+                              ReachResult &result_r) const
 {
   if (root.IsEmpty())
     return false;
@@ -100,17 +100,17 @@ ReachFan::FindPositiveArrival(const AGeoPoint dest, const RoutePolars &rpolars,
   const ReachFanParms parms(rpolars, task_proj, (int)terrain_base);
 
   // first calculate direct (terrain-independent height)
-  arrival_height_direct = root.DirectArrival(d, parms);
+  result_r.direct = root.DirectArrival(d, parms);
 
   // if can't reach even with no terrain, exit early
-  if (std::min(root.GetHeight(), arrival_height_direct) < dest.altitude) {
-    arrival_height_reach = arrival_height_direct;
+  if (std::min(root.GetHeight(), result_r.direct) < dest.altitude) {
+    result_r.terrain = result_r.direct;
     return true;
   }
 
   // now calculate turning solution
-  arrival_height_reach = dest.altitude - RoughAltitude(1);
-  root.FindPositiveArrival(d, parms, arrival_height_reach);
+  result_r.terrain = dest.altitude - RoughAltitude(1);
+  root.FindPositiveArrival(d, parms, result_r.terrain);
 
   return true;
 }

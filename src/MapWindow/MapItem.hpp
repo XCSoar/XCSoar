@@ -32,6 +32,7 @@ Copyright_License {
 #include "Markers/Markers.hpp"
 #include "FLARM/Traffic.hpp"
 #include "NMEA/ThermalLocator.hpp"
+#include "Engine/Route/ReachResult.hpp"
 
 class AbstractAirspace;
 struct Waypoint;
@@ -78,18 +79,13 @@ struct ArrivalAltitudeMapItem: public MapItem
   /** Elevation of the point in MSL */
   RoughAltitude elevation;
 
-  /** Arrival altitude for straight glide in MSL */
-  RoughAltitude arrival_altitude_direct;
-  /** Arrival altitude around terrain in MSL */
-  RoughAltitude arrival_altitude_reach;
+  /** Arrival altitudes [m MSL] */
+  ReachResult reach;
 
   ArrivalAltitudeMapItem(RoughAltitude _elevation,
-                         RoughAltitude _arrival_altitude_direct,
-                         RoughAltitude _arrival_altitude_reach)
+                         ReachResult _reach)
     :MapItem(ARRIVAL_ALTITUDE),
-     elevation(_elevation),
-     arrival_altitude_direct(_arrival_altitude_direct),
-     arrival_altitude_reach(_arrival_altitude_reach) {}
+     elevation(_elevation), reach(_reach) {}
 };
 
 struct SelfMapItem: public MapItem

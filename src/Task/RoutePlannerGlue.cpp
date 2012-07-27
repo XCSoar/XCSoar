@@ -72,10 +72,9 @@ RoutePlannerGlue::SolveReach(const AGeoPoint &origin,
 
 bool
 RoutePlannerGlue::FindPositiveArrival(const AGeoPoint &dest,
-                                        RoughAltitude &arrival_height_reach,
-                                        RoughAltitude &arrival_height_direct) const
+                                      ReachResult &result_r) const
 {
-  return planner.FindPositiveArrival(dest, arrival_height_reach, arrival_height_direct);
+  return planner.FindPositiveArrival(dest, result_r);
 }
 
 void

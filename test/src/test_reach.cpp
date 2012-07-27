@@ -25,6 +25,7 @@
 #define DO_PRINT
 #include "TestUtil.hpp"
 #include "Route/TerrainRoute.hpp"
+#include "Engine/Route/ReachResult.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
@@ -78,15 +79,15 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
                    origin.latitude+Angle::Degrees(fixed(0.6)*fy));
         short h = map.GetInterpolatedHeight(x);
         AGeoPoint adest(x, RoughAltitude(h));
-        RoughAltitude ha, hd;
-        route.FindPositiveArrival(adest, ha, hd);
+        ReachResult reach;
+        route.FindPositiveArrival(adest, reach);
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, RoughAltitude(h + 1000));
           route.SolveReach(ao2, config, RoughAltitude::Max());
         }
         fout << x.longitude.Degrees() << " "
              << x.latitude.Degrees() << " "
-             << h << " " << (int)ha << "\n";
+             << h << " " << (int)reach.terrain << "\n";
       }
       fout << "\n";
     }
