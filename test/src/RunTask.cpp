@@ -35,11 +35,14 @@ Copyright_License {
 static void
 Run(DebugReplay &replay, TaskManager &task_manager)
 {
+  if (!replay.Next())
+    return;
+
   MoreData last_basic;
-  last_basic.Reset();
+  last_basic = replay.Basic();
 
   DerivedInfo last_calculated;
-  last_calculated.Reset();
+  last_calculated = replay.Calculated();
 
   unsigned active_taskpoint_index(-1);
 
