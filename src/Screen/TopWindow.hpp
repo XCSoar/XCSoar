@@ -218,7 +218,10 @@ public:
 #ifndef USE_GDI
   virtual void Invalidate();
 
-  virtual void Expose();
+protected:
+  void Expose();
+
+public:
 #endif /* !USE_GDI */
 
   /**

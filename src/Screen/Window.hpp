@@ -811,11 +811,6 @@ public:
   void Setup(Canvas &canvas);
 
   virtual void Invalidate();
-
-  /**
-   * Ensures that the window is updated on the physical screen.
-   */
-  virtual void Expose();
 #else /* USE_GDI */
   HDC BeginPaint(PAINTSTRUCT *ps) {
     AssertThread();

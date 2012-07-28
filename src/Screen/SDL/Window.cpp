@@ -181,16 +181,6 @@ Window::Invalidate()
 }
 
 void
-Window::Expose()
-{
-  if (!visible)
-    return;
-
-  if (parent != NULL)
-    parent->Expose();
-}
-
-void
 Window::Show()
 {
   AssertThread();
