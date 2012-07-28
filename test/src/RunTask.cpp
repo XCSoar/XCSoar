@@ -125,6 +125,7 @@ int main(int argc, char **argv)
   delete task;
 
   Run(*replay, task_manager);
+  delete replay;
 
   return EXIT_SUCCESS;
 }
