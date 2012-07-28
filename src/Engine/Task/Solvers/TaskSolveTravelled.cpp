@@ -48,7 +48,7 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
 fixed 
 TaskSolveTravelled::time_error() 
 {
-  res = tm.glide_solution(aircraft);
+  GlideResult res = tm.glide_solution(aircraft);
 #ifdef SOLVE_ZERO
   fixed d = res.time_elapsed-dt;
 #else

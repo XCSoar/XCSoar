@@ -31,7 +31,6 @@
 class TaskSolveTravelled: 
   public ZeroFinder
 {
-  GlideResult res;
   const AircraftState &aircraft;
   fixed inv_dt;
   fixed dt;
