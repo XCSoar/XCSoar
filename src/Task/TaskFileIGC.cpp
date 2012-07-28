@@ -114,6 +114,9 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
     Waypoint wp(it->location);
     wp.name = waypoint_name.c_str();
 
+    /* we don't know the elevation, so we just set it to zero; this is
+       not correct, but better than leaving it uninitialised */
+    wp.elevation = fixed_zero;
 
     OrderedTaskPoint *tp;
 
