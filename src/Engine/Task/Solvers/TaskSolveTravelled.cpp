@@ -49,13 +49,18 @@ fixed
 TaskSolveTravelled::time_error() 
 {
   GlideResult res = tm.glide_solution(aircraft);
+  if (!res.IsOk())
+    /* what can we do if there's no solution?  This is an attempt to
+       make ZeroFinder ignore this call, by returning a large value.
+       I'm not sure if this kludge is correct. */
+    return fixed(999999);
+
 #ifdef SOLVE_ZERO
   fixed d = res.time_elapsed-dt;
 #else
   fixed d = fabs(res.time_elapsed-dt);
 #endif
-  if (res.validity != GlideResult::Validity::OK)
-    d += res.time_virtual;
+  d += res.time_virtual;
 
   return d*inv_dt;
 }
