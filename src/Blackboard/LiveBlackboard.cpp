@@ -53,8 +53,8 @@ LiveBlackboard::BroadcastGPSUpdate()
 {
   calling_listeners = true;
 
-  for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnGPSUpdate(Basic());
+  for (BlackboardListener *listener : listeners)
+    listener->OnGPSUpdate(Basic());
 
   calling_listeners = false;
 }
@@ -64,8 +64,8 @@ LiveBlackboard::BroadcastCalculatedUpdate()
 {
   calling_listeners = true;
 
-  for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnCalculatedUpdate(Basic(), Calculated());
+  for (BlackboardListener *listener : listeners)
+    listener->OnCalculatedUpdate(Basic(), Calculated());
 
   calling_listeners = false;
 }
@@ -75,8 +75,8 @@ LiveBlackboard::BroadcastComputerSettingsUpdate()
 {
   calling_listeners = true;
 
-  for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnComputerSettingsUpdate(GetComputerSettings());
+  for (BlackboardListener *listener : listeners)
+    listener->OnComputerSettingsUpdate(GetComputerSettings());
 
   calling_listeners = false;
 }
@@ -86,8 +86,8 @@ LiveBlackboard::BroadcastUISettingsUpdate()
 {
   calling_listeners = true;
 
-  for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-    (*i)->OnUISettingsUpdate(GetUISettings());
+  for (BlackboardListener *listener : listeners)
+    listener->OnUISettingsUpdate(GetUISettings());
 
   calling_listeners = false;
 }

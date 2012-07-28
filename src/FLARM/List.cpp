@@ -28,9 +28,7 @@ TrafficList::FindMaximumAlert() const
 {
   const FlarmTraffic *alert = NULL;
 
-  for (auto it = list.begin(), end = list.end(); it != end; ++it) {
-    const FlarmTraffic &traffic = *it;
-
+  for (const auto &traffic : list)
     if (traffic.HasAlarm() &&
         (alert == NULL ||
          ((unsigned)traffic.alarm_level > (unsigned)alert->alarm_level ||
@@ -39,7 +37,6 @@ TrafficList::FindMaximumAlert() const
               distance wins) */
            traffic.distance < alert->distance))))
       alert = &traffic;
-  }
 
   return alert;
 }

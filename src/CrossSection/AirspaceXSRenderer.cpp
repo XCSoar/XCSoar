@@ -147,9 +147,9 @@ public:
       rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 
     // Iterate through the intersections
-    for (auto it = intersections.begin(); it != intersections.end(); ++it) {
-      const GeoPoint &p_start = it->first;
-      const GeoPoint &p_end = it->second;
+    for (const auto &i : intersections) {
+      const GeoPoint &p_start = i.first;
+      const GeoPoint &p_end = i.second;
 
       rcd.left = chart.ScreenX(start.Distance(p_start));
 

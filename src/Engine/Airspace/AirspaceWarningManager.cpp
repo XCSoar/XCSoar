@@ -96,9 +96,9 @@ AirspaceWarningManager::GetWarning(const AbstractAirspace &airspace)
 AirspaceWarning* 
 AirspaceWarningManager::GetWarningPtr(const AbstractAirspace &airspace)
 {
-  for (auto it = warnings.begin(), end = warnings.end(); it != end; ++it)
-    if (&(it->GetAirspace()) == &airspace)
-      return &(*it);
+  for (auto &w : warnings)
+    if (&(w.GetAirspace()) == &airspace)
+      return &w;
 
   return NULL;
 }
@@ -120,8 +120,8 @@ AirspaceWarningManager::Update(const AircraftState& state,
   }
 
   // save old state
-  for (auto it = warnings.begin(), end = warnings.end(); it != end; ++it)
-    it->SaveState();
+  for (auto &w : warnings)
+    w.SaveState();
 
   // check from strongest to weakest alerts
   UpdateInside(state, glide_polar);
@@ -374,8 +374,8 @@ AirspaceWarningManager::UpdateInside(const AircraftState& state,
   AirspacePredicateAircraftInside condition(state);
 
   Airspaces::AirspaceVector results = airspaces.FindInside(state, condition);
-  for (auto it = results.begin(); it != results.end(); ++it) {
-    const AbstractAirspace& airspace = *it->GetAirspace();
+  for (const auto &i : results) {
+    const AbstractAirspace& airspace = *i.GetAirspace();
 
     if (!airspace.IsActive())
       continue; // ignore inactive airspaces
@@ -431,8 +431,8 @@ AirspaceWarningManager::GetAckDay(const AbstractAirspace &airspace) const
 void 
 AirspaceWarningManager::AcknowledgeAll()
 {
-  for (auto it = warnings.begin(), end = warnings.end(); it != end; ++it) {
-    it->AcknowledgeWarning(true);
-    it->AcknowledgeInside(true);
+  for (auto &w : warnings) {
+    w.AcknowledgeWarning(true);
+    w.AcknowledgeInside(true);
   }
 }

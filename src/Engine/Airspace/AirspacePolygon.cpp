@@ -37,8 +37,8 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
   } else {
     m_border.reserve(pts.size() + 1);
 
-    for (auto v = pts.begin(); v != pts.end(); ++v)
-      m_border.push_back(SearchPoint(*v));
+    for (const GeoPoint &pt : pts)
+      m_border.push_back(SearchPoint(pt));
 
     // ensure airspace is closed
     GeoPoint p_start = pts[0];

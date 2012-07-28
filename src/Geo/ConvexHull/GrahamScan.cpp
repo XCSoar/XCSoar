@@ -95,18 +95,17 @@ GrahamScan::PartitionPoints()
   upper_partition_points.reserve(size);
   lower_partition_points.reserve(size);
 
-  for (auto i = raw_points.begin(); i != raw_points.end(); ++i) {
-    if (loclast.longitude != i->GetLocation().longitude ||
-        loclast.latitude != i->GetLocation().latitude) {
-      loclast = i->GetLocation();
+  for (auto &i : raw_points) {
+    if (loclast.longitude != i.GetLocation().longitude ||
+        loclast.latitude != i.GetLocation().latitude) {
+      loclast = i.GetLocation();
 
       int dir = Direction(left->GetLocation(), right->GetLocation(),
-                          i->GetLocation(), tolerance);
-      SearchPoint* sp = &(*i);
+                          i.GetLocation(), tolerance);
       if (dir < 0)
-        upper_partition_points.push_back(sp);
+        upper_partition_points.push_back(&i);
       else
-        lower_partition_points.push_back(sp);
+        lower_partition_points.push_back(&i);
     }
   };
 
@@ -158,14 +157,14 @@ GrahamScan::BuildHalfHull(std::vector<SearchPoint*> input,
   //
   // The construction loop runs until the input is exhausted
   //
-  for (auto i = input.begin(); i != input.end(); ++i) {
+  for (const auto &i : input) {
     //
     // Repeatedly add the leftmost point to the hull, then test to see
     // if a convexity violation has occured. If it has, fix things up
     // by removing the next-to-last point in the output sequence until
     // convexity is restored.
     //
-    output.push_back(*i);
+    output.push_back(i);
 
     while (output.size() >= 3) {
       size_t end = output.size() - 1;

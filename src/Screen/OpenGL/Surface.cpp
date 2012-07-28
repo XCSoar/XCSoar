@@ -53,16 +53,16 @@ SurfaceCreated()
   surface_valid = true;
 
   const GLSurfaceListenerList copy(surface_listeners);
-  for (auto i = copy.begin(); i != copy.end(); ++i)
-    (*i)->surface_created();
+  for (GLSurfaceListener *listener : copy)
+    listener->surface_created();
 }
 
 void
 SurfaceDestroyed()
 {
   const GLSurfaceListenerList copy(surface_listeners);
-  for (auto i = copy.begin(); i != copy.end(); ++i)
-    (*i)->surface_destroyed();
+  for (GLSurfaceListener *listener : copy)
+    listener->surface_destroyed();
 
   surface_valid = false;
 }

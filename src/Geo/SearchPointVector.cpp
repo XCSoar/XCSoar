@@ -59,8 +59,8 @@ SearchPointVector::IsConvex() const
 void 
 SearchPointVector::Project(const TaskProjection& tp)
 {
-  for (auto i = begin(); i != end(); ++i)
-    i->Project(tp);
+  for (auto &i : *this)
+    i.Project(tp);
 }
 
 gcc_pure
@@ -109,6 +109,7 @@ NearestPointNonConvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
 {
   unsigned distance_min = 0-1;
   FlatGeoPoint point_best;
+
   for (auto i = spv.begin(); i!= spv.end(); ++i) {
 
     FlatGeoPoint pa = SegmentNearestPoint(spv,i,p3);
@@ -171,8 +172,8 @@ SearchPointVector::CalculateBoundingbox() const
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
 
   FlatBoundingBox bb((*this)[0].GetFlatLocation());
-  for (auto v = begin(); v != end(); ++v)
-    bb.Expand(v->GetFlatLocation());
+  for (const auto &i : *this)
+    bb.Expand(i.GetFlatLocation());
   bb.ExpandByOne(); // add 1 to fix rounding
   return bb;
 }
@@ -181,8 +182,8 @@ GeoBounds
 SearchPointVector::CalculateGeoBounds() const
 {
   GeoBounds bb = GeoBounds::Invalid();
-  for (auto v = begin(); v != end(); ++v)
-    bb.Extend(v->GetLocation());
+  for (const auto &i : *this)
+    bb.Extend(i.GetLocation());
 
   return bb;
 }

@@ -94,16 +94,16 @@ FlarmFriends::Save()
   TCHAR id[16];
   tstring ids[4];
 
-  for (auto it = friends.begin(), it_end = friends.end(); it != it_end; ++it) {
-    assert(it->first.IsDefined());
-    assert((int)it->second < (int)Color::COUNT);
+  for (const auto &i : friends) {
+    assert(i.first.IsDefined());
+    assert((int)i.second < (int)Color::COUNT);
 
-    if (it->second == Color::NONE)
+    if (i.second == Color::NONE)
       continue;
 
-    unsigned color_index = (int)it->second - 1;
+    unsigned color_index = (int)i.second - 1;
 
-    it->first.Format(id);
+    i.first.Format(id);
     ids[color_index] += id;
     ids[color_index] += ',';
   }

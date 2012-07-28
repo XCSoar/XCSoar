@@ -98,12 +98,11 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
   AbstractTaskFactory &fact = task->GetFactory();
 
   unsigned i = 0;
-  for (auto it = turnpoints.begin(), it_end = turnpoints.end();
-       it != it_end; ++it) {
+  for (const auto &it : turnpoints) {
     StaticString<256> waypoint_name;
-    if (!it->name.empty()) {
+    if (!it.name.empty()) {
       waypoint_name.clear();
-      waypoint_name.UnsafeAppendASCII(it->name);
+      waypoint_name.UnsafeAppendASCII(it.name);
     } else if (i == 0)
       waypoint_name = _T("Start");
     else if (i == num_turnpoints - 1)
@@ -111,7 +110,7 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
     else
       waypoint_name.Format(_T("%s #%u"), _T("Turnpoint"), i);
 
-    Waypoint wp(it->location);
+    Waypoint wp(it.location);
     wp.name = waypoint_name.c_str();
 
     /* we don't know the elevation, so we just set it to zero; this is

@@ -40,10 +40,10 @@ FlarmDatabase::Insert(const FlarmRecord &record)
 const FlarmRecord *
 FlarmDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 {
-  for (auto i = map.begin(), end = map.end(); i != end; ++i) {
-    assert(i->first.IsDefined());
+  for (const auto &i : map) {
+    assert(i.first.IsDefined());
 
-    const FlarmRecord &record = i->second;
+    const FlarmRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       return &record;
   }
@@ -57,10 +57,11 @@ FlarmDatabase::FindRecordsByCallSign(const TCHAR *cn,
                                      unsigned size) const
 {
   unsigned count = 0;
-  for (auto i = map.begin(), end = map.end(); i != end; ++i) {
-    assert(i->first.IsDefined());
 
-    const FlarmRecord &record = i->second;
+  for (const auto &i : map) {
+    assert(i.first.IsDefined());
+
+    const FlarmRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
       array[count++] = &record;
   }
@@ -73,12 +74,13 @@ FlarmDatabase::FindIdsByCallSign(const TCHAR *cn, FlarmId array[],
                                  unsigned size) const
 {
   unsigned count = 0;
-  for (auto i = map.begin(), end = map.end(); i != end; ++i) {
-    assert(i->first.IsDefined());
 
-    const FlarmRecord &record = i->second;
+  for (const auto &i : map) {
+    assert(i.first.IsDefined());
+
+    const FlarmRecord &record = i.second;
     if (StringIsEqual(record.callsign, cn))
-      array[count++] = i->first;
+      array[count++] = i.first;
   }
 
   return count;

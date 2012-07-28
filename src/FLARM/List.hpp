@@ -81,9 +81,9 @@ struct TrafficList {
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FlarmTraffic *FindTraffic(FlarmId id) {
-    for (auto it = list.begin(), end = list.end(); it != end; ++it)
-      if (it->id == id)
-        return it;
+    for (auto &traffic : list)
+      if (traffic.id == id)
+        return &traffic;
 
     return NULL;
   }
@@ -95,9 +95,9 @@ struct TrafficList {
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FlarmTraffic *FindTraffic(FlarmId id) const {
-    for (auto it = list.begin(), end = list.end(); it != end; ++it)
-      if (it->id == id)
-        return it;
+    for (const auto &traffic : list)
+      if (traffic.id == id)
+        return &traffic;
 
     return NULL;
   }
@@ -109,9 +109,9 @@ struct TrafficList {
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   FlarmTraffic *FindTraffic(const TCHAR *name) {
-    for (auto it = list.begin(), end = list.end(); it != end; ++it)
-      if (it->name.equals(name))
-        return it;
+    for (auto &traffic : list)
+      if (traffic.name.equals(name))
+        return &traffic;
 
     return NULL;
   }
@@ -123,9 +123,9 @@ struct TrafficList {
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
   const FlarmTraffic *FindTraffic(const TCHAR *name) const {
-    for (auto it = list.begin(), end = list.end(); it != end; ++it)
-      if (it->name.equals(name))
-        return it;
+    for (const auto &traffic : list)
+      if (traffic.name.equals(name))
+        return &traffic;
 
     return NULL;
   }

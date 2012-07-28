@@ -239,8 +239,8 @@ Deserialiser::Deserialise(OrderedTask &task)
   task.SetOrderedTaskBehaviour(beh);
 
   const DataNode::List children = node.ListChildrenNamed(_T("Point"));
-  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
-    std::unique_ptr<DataNode>point_node(*i);
+  for (const auto &i : children) {
+    std::unique_ptr<DataNode> point_node(i);
     Deserialiser pser(*point_node, waypoints);
     pser.DeserialiseTaskpoint(task);
   }

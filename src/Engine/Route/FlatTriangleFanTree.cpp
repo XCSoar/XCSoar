@@ -63,9 +63,9 @@ FlatTriangleFanTree::CalcBB()
 
   bb_children = bounding_box;
 
-  for (auto it = children.begin(), end = children.end(); it != end; ++it) {
-    it->CalcBB();
-    bb_children.Merge(it->bb_children);
+  for (auto &child : children) {
+    child.CalcBB();
+    bb_children.Merge(child.bb_children);
   }
 }
 
@@ -87,8 +87,8 @@ FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint &p,
   if (!include_children)
     return false;
 
-  for (auto it = children.cbegin(), end = children.cend(); it != end; ++it)
-    if (it->IsInsideTree(p, true))
+  for (const auto &child : children)
+    if (child.IsInsideTree(p, true))
       return true;
 
   // should never get here!
@@ -137,8 +137,8 @@ FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
 
     FillGaps(origin, parms);
   } else if (depth < parms.set_depth) {
-    for (auto it = children.begin(), end = children.end(); it != end; ++it)
-      if (!it->FillDepth(origin, parms))
+    for (auto &child : children)
+      if (!child.FillDepth(origin, parms))
         return false; // stop searching
   }
   return true;
@@ -209,8 +209,8 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint &o,
     return;
   }
 
-  for (auto x = vs.cbegin(), end = vs.cend(); x != end; ++x) {
-    const FlatGeoPoint av = (o + (*x)) * fixed_half;
+  for (const auto &x : vs) {
+    const FlatGeoPoint av = (o + x) * fixed_half;
     const GeoPoint p = parms.task_proj.Unproject(av);
     short h = parms.terrain->GetHeight(p);
 
@@ -319,8 +319,8 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint &n,
   }
 
   bool retval = false;
-  for (auto it = children.cbegin(), end = children.cend(); it != end; ++it)
-    if (it->FindPositiveArrival(n, parms, arrival_height))
+  for (const auto &child : children)
+    if (child.FindPositiveArrival(n, parms, arrival_height))
       retval = true;
 
   return retval;
@@ -336,12 +336,12 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
 
   if (bb.Overlaps(bounding_box)) {
     visitor.StartFan();
-    for (auto it = vs.cbegin(), end = vs.cend(); it != end; ++it)
-      visitor.AddPoint(task_proj.Unproject(*it));
+    for (const auto &v : vs)
+      visitor.AddPoint(task_proj.Unproject(v));
 
     visitor.EndFan();
   }
 
-  for (auto it = children.cbegin(), end = children.cend(); it != end; ++it)
-    it->AcceptInRange(bb, task_proj, visitor);
+  for (const auto &child : children)
+    child.AcceptInRange(bb, task_proj, visitor);
 }

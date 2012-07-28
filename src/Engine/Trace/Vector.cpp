@@ -31,8 +31,8 @@ TracePointVector::GetBounds(const GeoPoint &fallback_location) const
   TaskProjection task_projection;
 
   task_projection.Reset(fallback_location);
-  for (auto it = begin(); it != end(); ++it)
-    task_projection.Scan(it->GetLocation());
+  for (const auto &i : *this)
+    task_projection.Scan(i.GetLocation());
 
   task_projection.Update();
   return task_projection;

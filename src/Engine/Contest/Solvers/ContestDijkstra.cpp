@@ -378,17 +378,17 @@ ContestDijkstra::AddIncrementalEdges(unsigned first_point)
   /* establish links between each old node and each new node, to
      initiate the follow-up search, hoping a better solution will be
      found here */
-  for (auto i = edges.begin(), end = edges.end(); i != end; ++i) {
-    if (IsFinal(i->first))
+  for (const auto &i : edges) {
+    if (IsFinal(i.first))
       /* ignore final nodes */
       continue;
 
     /* "seek" the Dijkstra object to the current "old" node */
-    dijkstra.SetCurrentValue(i->second.value);
+    dijkstra.SetCurrentValue(i.second.value);
 
     /* add edges from the current "old" node to all "new" nodes
        (first_point .. n_points-1) */
-    AddEdges(i->first, first_point);
+    AddEdges(i.first, first_point);
   }
 
   /* see if new start points are possible now (due to relaxed start

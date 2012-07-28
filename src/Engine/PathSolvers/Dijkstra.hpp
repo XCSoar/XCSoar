@@ -210,8 +210,8 @@ public:
     while (!q.empty())
       q.pop();
 
-    for (auto i = edges.begin(), end = edges.end(); i != end; ++i)
-      q.push(Value(i->second.value, i));
+    for (const auto &i : edges)
+      q.push(Value(i.second.value, i));
   }
 
 private:
