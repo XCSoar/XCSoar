@@ -52,14 +52,15 @@ Run(DebugReplay &replay, TaskManager &task_manager)
     const MoreData &basic = replay.Basic();
     DerivedInfo &calculated = replay.SetCalculated();
 
-    if (basic.HasTimeAdvancedSince(last_basic) &&
-        basic.location_available) {
-      const AircraftState current_as = ToAircraftState(basic, calculated);
-      const AircraftState last_as = ToAircraftState(last_basic,
-                                                    last_calculated);
-      task_manager.Update(current_as, last_as);
-      task_manager.UpdateIdle(current_as);
-    }
+    if (!basic.HasTimeAdvancedSince(last_basic) ||
+        !basic.location_available)
+      continue;
+
+    const AircraftState current_as = ToAircraftState(basic, calculated);
+    const AircraftState last_as = ToAircraftState(last_basic,
+                                                  last_calculated);
+    task_manager.Update(current_as, last_as);
+    task_manager.UpdateIdle(current_as);
 
     const CommonStats &common_stats = task_manager.GetCommonStats();
     if (common_stats.active_taskpoint_index != active_taskpoint_index) {
