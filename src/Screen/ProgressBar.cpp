@@ -71,7 +71,7 @@ ProgressBar::SetRange(unsigned min_value, unsigned max_value)
   this->max_value = max_value;
   value = 0;
   step_size = 1;
-  Expose();
+  Invalidate();
 #else
   ::SendMessage(hWnd, PBM_SETRANGE, (WPARAM)0,
                 (LPARAM)MAKELPARAM(min_value, max_value));
@@ -86,7 +86,7 @@ ProgressBar::SetValue(unsigned value)
 
 #ifndef USE_GDI
   this->value = value;
-  Expose();
+  Invalidate();
 #else
   ::SendMessage(hWnd, PBM_SETPOS, value, 0);
 #endif
@@ -100,7 +100,7 @@ ProgressBar::SetStep(unsigned size)
 
 #ifndef USE_GDI
   step_size = size;
-  Expose();
+  Invalidate();
 #else
   ::SendMessage(hWnd, PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
 #endif
@@ -114,7 +114,7 @@ ProgressBar::Step()
 
 #ifndef USE_GDI
   value += step_size;
-  Expose();
+  Invalidate();
 #else
   ::SendMessage(hWnd, PBM_STEPIT, (WPARAM)0, (LPARAM)0);
 #endif
