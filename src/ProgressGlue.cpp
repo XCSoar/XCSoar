@@ -46,7 +46,7 @@ ProgressGlue::Create(const TCHAR *text)
   global_progress_window->SetMessage(text);
   global_progress_window->SetValue(0);
 
-  UIGlobals::GetMainWindow().refresh();
+  UIGlobals::GetMainWindow().Refresh();
   throttle_clock.Reset();
 }
 
@@ -78,7 +78,7 @@ ProgressGlue::Step()
 
   global_progress_window->Step();
   UIGlobals::GetMainWindow().RefreshSize();
-  UIGlobals::GetMainWindow().refresh();
+  UIGlobals::GetMainWindow().Refresh();
 }
 
 void
@@ -92,7 +92,7 @@ ProgressGlue::SetValue(unsigned value)
 
   global_progress_window->SetValue(value);
   UIGlobals::GetMainWindow().RefreshSize();
-  UIGlobals::GetMainWindow().refresh();
+  UIGlobals::GetMainWindow().Refresh();
 }
 
 void

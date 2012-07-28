@@ -156,7 +156,7 @@ EventLoop::Get(Event &event)
       return event.type != Event::QUIT;
 
     /* that was the last event for now, refresh the screen now */
-    top_window.refresh();
+    top_window.Refresh();
     bulk = false;
   }
 

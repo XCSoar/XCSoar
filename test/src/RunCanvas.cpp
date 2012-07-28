@@ -209,7 +209,7 @@ protected:
   virtual bool OnCommand(unsigned id, unsigned code) {
     switch (id) {
     case ID_CLOSE:
-      close();
+      Close();
       return true;
 
 #ifndef ENABLE_OPENGL

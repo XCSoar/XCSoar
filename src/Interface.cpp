@@ -245,7 +245,7 @@ void
 ActionInterface::SignalShutdown(bool force)
 {
   force_shutdown = force;
-  main_window->close(); // signals close
+  main_window->Close(); // signals close
 }
 
 bool

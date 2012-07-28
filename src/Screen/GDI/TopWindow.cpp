@@ -124,7 +124,7 @@ TopWindow::Fullscreen()
 }
 
 void
-TopWindow::refresh()
+TopWindow::Refresh()
 {
   EventQueue::HandlePaintMessages();
 }

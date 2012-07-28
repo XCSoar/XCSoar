@@ -376,7 +376,7 @@ WndForm::ShowModal()
   main_window.AddDialog(this);
 
 #ifndef USE_GDI
-  main_window.refresh();
+  main_window.Refresh();
 #endif
 
 #ifdef ANDROID

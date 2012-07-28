@@ -240,7 +240,7 @@ TopWindow::OnEvent(const Event &event)
 int
 TopWindow::RunEventLoop()
 {
-  refresh();
+  Refresh();
 
   EventLoop loop(*event_queue, *this);
   Event event;

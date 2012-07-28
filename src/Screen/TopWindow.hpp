@@ -106,8 +106,8 @@ class TopWindow : public ContainerWindow {
 #ifndef USE_GDI
   TopCanvas screen;
 
-  Mutex Invalidated_lock;
-  bool Invalidated;
+  Mutex invalidated_lock;
+  bool invalidated;
 
 #ifdef ANDROID
   Mutex paused_mutex;
@@ -225,9 +225,9 @@ public:
    * Synchronously refresh the screen by handling all pending repaint
    * requests.
    */
-  void refresh();
+  void Refresh();
 
-  void close() {
+  void Close() {
     AssertNoneLocked();
 
 #ifndef USE_GDI

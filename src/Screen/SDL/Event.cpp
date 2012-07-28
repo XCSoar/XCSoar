@@ -36,7 +36,7 @@ EventLoop::Get(SDL_Event &event)
       return true;
 
     /* that was the last event for now, refresh the screen now */
-    top_window.refresh();
+    top_window.Refresh();
     bulk = false;
   }
 

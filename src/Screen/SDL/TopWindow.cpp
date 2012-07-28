@@ -32,7 +32,7 @@ Copyright_License {
 #endif
 
 TopWindow::TopWindow()
-  :Invalidated(true)
+  :invalidated(true)
 #ifdef ANDROID
   , paused(false), resumed(false), resized(false)
 #endif
@@ -78,15 +78,15 @@ TopWindow::Fullscreen()
 void
 TopWindow::Invalidate()
 {
-  Invalidated_lock.Lock();
-  if (Invalidated) {
-    /* already Invalidated, don't send the event twice */
-    Invalidated_lock.Unlock();
+  invalidated_lock.Lock();
+  if (invalidated) {
+    /* already invalidated, don't send the event twice */
+    invalidated_lock.Unlock();
     return;
   }
 
-  Invalidated = true;
-  Invalidated_lock.Unlock();
+  invalidated = true;
+  invalidated_lock.Unlock();
 
   /* wake up the event loop */
 #ifdef ANDROID
@@ -109,7 +109,7 @@ TopWindow::Expose() {
 }
 
 void
-TopWindow::refresh()
+TopWindow::Refresh()
 {
 #ifdef ANDROID
   if (!CheckResumeSurface())
@@ -118,14 +118,14 @@ TopWindow::refresh()
     return;
 #endif
 
-  Invalidated_lock.Lock();
-  if (!Invalidated) {
-    Invalidated_lock.Unlock();
+  invalidated_lock.Lock();
+  if (!invalidated) {
+    invalidated_lock.Unlock();
     return;
   }
 
-  Invalidated = false;
-  Invalidated_lock.Unlock();
+  invalidated = false;
+  invalidated_lock.Unlock();
 
   Expose();
 }
@@ -158,9 +158,9 @@ TopWindow::OnEvent(const SDL_Event &event)
     Window *w;
 
   case SDL_VIDEOEXPOSE:
-    Invalidated_lock.Lock();
-    Invalidated = false;
-    Invalidated_lock.Unlock();
+    invalidated_lock.Lock();
+    invalidated = false;
+    invalidated_lock.Unlock();
 
     Expose();
     return true;
@@ -225,7 +225,7 @@ TopWindow::OnEvent(const SDL_Event &event)
 int
 TopWindow::RunEventLoop()
 {
-  refresh();
+  Refresh();
 
   EventLoop loop(*this);
   SDL_Event event;
