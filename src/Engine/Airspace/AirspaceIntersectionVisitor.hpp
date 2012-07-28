@@ -50,8 +50,8 @@ public:
    *
    * @return True if more than one intersection pair
    */
-  bool SetIntersections(const AirspaceIntersectionVector &p) {
-    intersections = p;
+  bool SetIntersections(AirspaceIntersectionVector &&p) {
+    intersections.swap(p);
     return !intersections.empty();
   }
 
