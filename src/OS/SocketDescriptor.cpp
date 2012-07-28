@@ -231,7 +231,11 @@ SocketDescriptor::Write(const void *buffer, size_t length,
 {
   return ::sendto(Get(), (const char *)buffer, length,
 #ifdef HAVE_POSIX
+#ifdef __linux__
                   MSG_DONTWAIT|MSG_NOSIGNAL,
+#else
+                  MSG_DONTWAIT,
+#endif
 #else
                   0,
 #endif
