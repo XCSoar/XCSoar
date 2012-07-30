@@ -331,7 +331,7 @@ UpdateCaption(const TCHAR *waypoint_name, int8_t file_num)
   buffer.Format(_T("%s: %s"), _("Waypoint"), waypoint_name);
 
   if (file_num > 0) {
-    const TCHAR *key;
+    const TCHAR *key = NULL;
     switch (file_num) {
     case 1:
       key = ProfileKeys::WaypointFile;
@@ -344,9 +344,11 @@ UpdateCaption(const TCHAR *waypoint_name, int8_t file_num)
       break;
     }
 
-    const TCHAR *filename = Profile::GetPathBase(key);
-    if (filename != NULL)
-      buffer.AppendFormat(_T(" (%s)"), filename);
+    if (key != NULL) {
+      const TCHAR *filename = Profile::GetPathBase(key);
+      if (filename != NULL)
+        buffer.AppendFormat(_T(" (%s)"), filename);
+    }
   }
 
   wf->SetCaption(buffer);
