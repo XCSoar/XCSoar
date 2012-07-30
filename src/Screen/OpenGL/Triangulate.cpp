@@ -314,8 +314,6 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
   unsigned strip_size = 0;
   unsigned triangles_left = index_count / 3;
   while (triangles_left > 1) {
-    bool found_something = false;
-
     vcount[v[0]]--;
     vcount[v[1]]--;
     vcount[v[2]]--;
@@ -339,6 +337,8 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
 
     // search for a shared edge
     if (vcount[strip[1]] > 0 && vcount[strip[2]] > 0) {
+      bool found_something = false;
+
       for (v = t; v < t_end; v += 3) {
         if ((strip[1] == v[0] || strip[1] == v[1] || strip[1] == v[2]) &&
             (strip[2] == v[0] || strip[2] == v[1] || strip[2] == v[2])) {
@@ -351,11 +351,13 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
           break;
         }
       }
+
+      if (found_something)
+        continue;
     }
-    if (found_something)
-      continue;
 
     // search for a single shared vertex
+    bool found_something = false;
     if (vcount[strip[1]] + vcount[strip[2]] > 0) {
       for (v = t; v < t_end; v++) {
         if (strip[2] == *v) {
