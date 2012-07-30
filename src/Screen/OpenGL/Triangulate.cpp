@@ -366,9 +366,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
         }
         if (strip_size == 0 && strip[1] == *v) {
           // swap the last two indices
-          GLushort tmp = strip[1];
-          strip[1] = strip[2];
-          strip[2] = tmp;
+          std::swap(strip[1], strip[2]);
           found_something = true;
           break;
         }
