@@ -27,6 +27,8 @@ Copyright_License {
  */
 
 #include "Topography/TopographyStore.hpp"
+#include "Topography/TopographyFile.hpp"
+#include "Topography/XShape.hpp"
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
@@ -37,31 +39,25 @@ Copyright_License {
 #include <tchar.h>
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Triangulate.hpp"
 
-unsigned
-PolygonToTriangles(const RasterPoint *points, unsigned num_points,
-                   AllocatedArray<GLushort> &triangles,
-                   unsigned min_distance)
+static void
+TriangulateAll(const TopographyFile &file)
 {
-  return 0;
+  const unsigned short *count;
+  for (const XShape &shape : file)
+    if (shape.get_type() == MS_SHAPE_POLYGON)
+      for (unsigned i = 0; i < 4; ++i)
+        shape.get_indices(i, 1, count);
 }
 
-unsigned
-PolygonToTriangles(const ShapePoint *points, unsigned num_points,
-                   GLushort *triangles, unsigned min_distance)
+static void
+TriangulateAll(const TopographyStore &store)
 {
-  return 0;
+  for (unsigned i = 0; i < store.size(); ++i)
+    TriangulateAll(store[i]);
 }
 
-unsigned
-TriangleToStrip(GLushort *triangles, unsigned index_count,
-                unsigned vertex_count, unsigned polygon_count)
-{
-  return 0;
-}
-
-#endif /* OpenGL */
+#endif
 
 int main(int argc, char **argv)
 {
@@ -90,6 +86,10 @@ int main(int argc, char **argv)
   zzip_dir_close(dir);
 
   topography.LoadAll();
+
+#ifdef ENABLE_OPENGL
+  TriangulateAll(topography);
+#endif
 
   return EXIT_SUCCESS;
 }

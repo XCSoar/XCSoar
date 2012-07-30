@@ -972,6 +972,10 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
+ifeq ($(OPENGL),y)
+LOAD_TOPOGRAPHY_SOURCES += \
+	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
+endif
 LOAD_TOPOGRAPHY_DEPENDS = GEO MATH IO UTIL SHAPELIB ZZIP
 LOAD_TOPOGRAPHY_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
