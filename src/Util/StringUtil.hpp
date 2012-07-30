@@ -144,7 +144,7 @@ StringFormatUnsafe(TCHAR *buffer, const TCHAR *fmt, Args&&... args)
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
- * NULL.
+ * nullptr.
  */
 gcc_nonnull_all
 const char *
@@ -153,7 +153,7 @@ StringAfterPrefix(const char *string, const char *prefix);
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
- * NULL.
+ * nullptr.
  * This function is case-independent.
  */
 gcc_nonnull_all
@@ -164,7 +164,7 @@ StringAfterPrefixCI(const char *string, const char *prefix);
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
- * NULL.
+ * nullptr.
  */
 gcc_nonnull_all
 const TCHAR *
@@ -173,7 +173,7 @@ StringAfterPrefix(const TCHAR *string, const TCHAR *prefix);
 /**
  * Returns the portion of the string after a prefix.  If the string
  * does not begin with the specified prefix, this function returns
- * NULL.
+ * nullptr.
  * This function is case-independent.
  */
 gcc_nonnull_all
@@ -312,8 +312,8 @@ NormalizeSearchString(TCHAR *dest, const TCHAR *src);
 static inline bool
 StringIsEqual(const char *str1, const char *str2)
 {
-  assert(str1 != NULL);
-  assert(str2 != NULL);
+  assert(str1 != nullptr);
+  assert(str2 != nullptr);
 
   return strcmp(str1, str2) == 0;
 }
@@ -328,8 +328,8 @@ StringIsEqual(const char *str1, const char *str2)
 static inline bool
 StringIsEqual(const TCHAR *str1, const TCHAR *str2)
 {
-  assert(str1 != NULL);
-  assert(str2 != NULL);
+  assert(str1 != nullptr);
+  assert(str2 != nullptr);
 
   return _tcscmp(str1, str2) == 0;
 }
@@ -338,8 +338,8 @@ StringIsEqual(const TCHAR *str1, const TCHAR *str2)
 static inline bool
 StringIsEqualIgnoreCase(const char *a, const char *b)
 {
-  assert(a != NULL);
-  assert(b != NULL);
+  assert(a != nullptr);
+  assert(b != nullptr);
 
   return strcasecmp(a, b) == 0;
 }
@@ -347,8 +347,8 @@ StringIsEqualIgnoreCase(const char *a, const char *b)
 static inline bool
 StringIsEqualIgnoreCase(const char *a, const char *b, size_t size)
 {
-  assert(a != NULL);
-  assert(b != NULL);
+  assert(a != nullptr);
+  assert(b != nullptr);
 
   return strncasecmp(a, b, size) == 0;
 }
@@ -357,8 +357,8 @@ StringIsEqualIgnoreCase(const char *a, const char *b, size_t size)
 static inline bool
 StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b)
 {
-  assert(a != NULL);
-  assert(b != NULL);
+  assert(a != nullptr);
+  assert(b != nullptr);
 
   return _tcsicmp(a, b) == 0;
 }
@@ -366,8 +366,8 @@ StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b)
 static inline bool
 StringIsEqualIgnoreCase(const TCHAR *a, const TCHAR *b, size_t size)
 {
-  assert(a != NULL);
-  assert(b != NULL);
+  assert(a != nullptr);
+  assert(b != nullptr);
 
   return _tcsnicmp(a, b, size) == 0;
 }

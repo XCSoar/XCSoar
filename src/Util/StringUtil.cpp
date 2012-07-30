@@ -32,25 +32,25 @@ Copyright_License {
 const char *
 StringAfterPrefix(const char *string, const char *prefix)
 {
-  assert(string != NULL);
-  assert(prefix != NULL);
+  assert(string != nullptr);
+  assert(prefix != nullptr);
 
   size_t prefix_length = strlen(prefix);
   return strncmp(string, prefix, prefix_length) == 0
     ? string + prefix_length
-    : NULL;
+    : nullptr;
 }
 
 const char *
 StringAfterPrefixCI(const char *string, const char *prefix)
 {
-  assert(string != NULL);
-  assert(prefix != NULL);
+  assert(string != nullptr);
+  assert(prefix != nullptr);
 
   size_t prefix_length = StringLength(prefix);
   return strncasecmp(string, prefix, prefix_length) == 0
     ? string + prefix_length
-    : NULL;
+    : nullptr;
 }
 
 #ifdef _UNICODE
@@ -58,25 +58,25 @@ StringAfterPrefixCI(const char *string, const char *prefix)
 const TCHAR *
 StringAfterPrefix(const TCHAR *string, const TCHAR *prefix)
 {
-  assert(string != NULL);
-  assert(prefix != NULL);
+  assert(string != nullptr);
+  assert(prefix != nullptr);
 
   size_t prefix_length = _tcslen(prefix);
   return _tcsncmp(string, prefix, prefix_length) == 0
     ? string + prefix_length
-    : NULL;
+    : nullptr;
 }
 
 const TCHAR *
 StringAfterPrefixCI(const TCHAR *string, const TCHAR *prefix)
 {
-  assert(string != NULL);
-  assert(prefix != NULL);
+  assert(string != nullptr);
+  assert(prefix != nullptr);
 
   size_t prefix_length = _tcslen(prefix);
   return _tcsnicmp(string, prefix, prefix_length) == 0
     ? string + prefix_length
-    : NULL;
+    : nullptr;
 }
 
 #endif
@@ -122,10 +122,10 @@ CopyASCII(char *dest, const char *src)
 char *
 CopyASCII(char *dest, size_t dest_size, const char *src, const char *src_end)
 {
-  assert(dest != NULL);
+  assert(dest != nullptr);
   assert(dest_size > 0);
-  assert(src != NULL);
-  assert(src_end != NULL);
+  assert(src != nullptr);
+  assert(src_end != nullptr);
   assert(src_end >= src);
 
   for (const char *const dest_end = dest + dest_size;
@@ -150,10 +150,10 @@ TCHAR *
 CopyASCII(TCHAR *dest, size_t dest_size,
           const TCHAR *src, const TCHAR *src_end)
 {
-  assert(dest != NULL);
+  assert(dest != nullptr);
   assert(dest_size > 0);
-  assert(src != NULL);
-  assert(src_end != NULL);
+  assert(src != nullptr);
+  assert(src_end != nullptr);
   assert(src_end >= src);
 
   const TCHAR *const dest_end = dest + dest_size;
@@ -177,10 +177,10 @@ template<typename D, typename S>
 static D *
 TemplateCopyASCII(D *dest, size_t dest_size, const S *src, const S *src_end)
 {
-  assert(dest != NULL);
+  assert(dest != nullptr);
   assert(dest_size > 0);
-  assert(src != NULL);
-  assert(src_end != NULL);
+  assert(src != nullptr);
+  assert(src_end != nullptr);
   assert(src_end >= src);
 
   const D *const dest_end = dest + dest_size;
@@ -283,7 +283,7 @@ char *
 DuplicateString(const char *p, size_t length)
 {
   char *q = (char *)malloc((length + 1) * sizeof(*p));
-  if (q != NULL)
+  if (q != nullptr)
     *std::copy(p, p + length, q) = '\0';
   return q;
 }
@@ -293,7 +293,7 @@ TCHAR *
 DuplicateString(const TCHAR *p, size_t length)
 {
   TCHAR *q = (TCHAR *)malloc((length + 1) * sizeof(*p));
-  if (q != NULL)
+  if (q != nullptr)
     *std::copy(p, p + length, q) = _T('\0');
   return q;
 }

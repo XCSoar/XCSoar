@@ -291,7 +291,7 @@ public:
   const Data *Get(const Key &key) {
     typename KeyMap::iterator i = map.find(key);
     if (i == map.end())
-      return NULL;
+      return nullptr;
 
     Item &item = *i->second;
     assert(item.GetIterator() == i);

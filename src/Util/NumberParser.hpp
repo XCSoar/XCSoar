@@ -33,72 +33,72 @@ Copyright_License {
 #endif
 
 static inline unsigned
-ParseUnsigned(const char *p, char **endptr=NULL, int base=10)
+ParseUnsigned(const char *p, char **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return (unsigned)strtoul(p, endptr, base);
 }
 
 #ifdef _UNICODE
 static inline unsigned
-ParseUnsigned(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
+ParseUnsigned(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return (unsigned)wcstoul(p, endptr, base);
 }
 #endif
 
 static inline int
-ParseInt(const char *p, char **endptr=NULL, int base=10)
+ParseInt(const char *p, char **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return (int)strtol(p, endptr, base);
 }
 
 #ifdef _UNICODE
 static inline int
-ParseInt(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
+ParseInt(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return (int)wcstol(p, endptr, base);
 }
 #endif
 
 static inline uint64_t
-ParseUint64(const char *p, char **endptr=NULL, int base=10)
+ParseUint64(const char *p, char **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return strtoull(p, endptr, base);
 }
 
 #ifdef _UNICODE
 static inline uint64_t
-ParseUint64(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
+ParseUint64(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return wcstoull(p, endptr, base);
 }
 #endif
 
 static inline int64_t
-ParseInt64(const char *p, char **endptr=NULL, int base=10)
+ParseInt64(const char *p, char **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return strtoll(p, endptr, base);
 }
 
 #ifdef _UNICODE
 static inline int64_t
-ParseInt64(const TCHAR *p, TCHAR **endptr=NULL, int base=10)
+ParseInt64(const TCHAR *p, TCHAR **endptr=nullptr, int base=10)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
   return wcstoll(p, endptr, base);
 }

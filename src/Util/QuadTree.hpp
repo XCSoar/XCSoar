@@ -283,19 +283,19 @@ protected:
   typedef typename Alloc::template rebind<Leaf>::other LeafAllocator;
 
   struct LeafList {
-    /* a linked list of values, or NULL if this is a splitted bucket */
+    /* a linked list of values, or nullptr if this is a splitted bucket */
     Leaf *head;
     unsigned size;
 
-    LeafList():head(NULL), size(0) {}
+    LeafList():head(nullptr), size(0) {}
 
     ~LeafList() {
-      assert(head == NULL);
+      assert(head == nullptr);
       assert(size == 0);
     }
 
     bool IsEmpty() const {
-      return head == NULL;
+      return head == nullptr;
     }
 
     unsigned GetSize() const {
@@ -320,7 +320,7 @@ protected:
 
       Leaf **p = &head;
       while (*p != leaf) {
-        assert(*p != NULL);
+        assert(*p != nullptr);
         p = &(*p)->next;
       }
 
@@ -350,14 +350,14 @@ protected:
      */
     void Clear(LeafAllocator &allocator) {
       Leaf *leaf = head;
-      while (leaf != NULL) {
+      while (leaf != nullptr) {
         Leaf *next = leaf->next;
         allocator.destroy(leaf);
         allocator.deallocate(leaf, 1);
         leaf = next;
       }
 
-      head = NULL;
+      head = nullptr;
       size = 0;
     }
 
@@ -366,7 +366,7 @@ protected:
       Leaf **p = &head;
       while (true) {
         Leaf *leaf = *p;
-        if (leaf == NULL)
+        if (leaf == nullptr)
           break;
 
         if (predicate(leaf->value)) {
@@ -386,22 +386,22 @@ protected:
      */
     void MoveAllFrom(LeafList &other) {
       Leaf *last = other.head;
-      if (last == NULL)
+      if (last == nullptr)
         return;
 
-      while (last->next != NULL)
+      while (last->next != nullptr)
         last = last->next;
 
       last->next = head;
       head = other.head;
       size += other.size;
-      other.head = NULL;
+      other.head = nullptr;
       other.size = 0;
     }
 
     gcc_pure
     const Leaf &FindPointer(const T *value) const {
-      assert(value != NULL);
+      assert(value != nullptr);
 
       const Leaf *i = head;
       while (true) {
@@ -409,7 +409,7 @@ protected:
           return *i;
 
         i = i->next;
-        assert(i != NULL);
+        assert(i != nullptr);
       }
     }
 
@@ -417,10 +417,10 @@ protected:
     std::pair<const Leaf *, distance_type>
     FindNearestIf(const Point location, distance_type square_range,
                   const P &predicate) const {
-      const Leaf *nearest = NULL;
+      const Leaf *nearest = nullptr;
       distance_type nearest_square_distance = square_range;
 
-      for (const Leaf *i = head; i != NULL; i = i->next) {
+      for (const Leaf *i = head; i != nullptr; i = i->next) {
         if (!predicate(i->value))
           continue;
 
@@ -437,7 +437,7 @@ protected:
     template<class V>
     void VisitWithinRange(const Point location, distance_type square_range,
                           V &visitor) const {
-      for (Leaf *leaf = head; leaf != NULL; leaf = leaf->next)
+      for (Leaf *leaf = head; leaf != nullptr; leaf = leaf->next)
         if (leaf->InSquareRange(location, square_range))
           visitor((const T &)leaf->value);
     }
@@ -457,25 +457,25 @@ protected:
     /* the parent bucket */
     Bucket *parent;
 
-    /* exactly 4 child buckets, or NULL if this is a leaf bucket */
+    /* exactly 4 child buckets, or nullptr if this is a leaf bucket */
     QuadBucket *children;
 
     /* a list of values; must be empty in a "splitted" bucket */
     LeafList leaves;
 
     Bucket()
-      :parent(NULL), children(NULL) {}
+      :parent(nullptr), children(nullptr) {}
 
     ~Bucket() {
       assert(IsEmpty());
     }
 
     bool IsEmpty() const {
-      return children == NULL && leaves.IsEmpty();
+      return children == nullptr && leaves.IsEmpty();
     }
 
     bool IsSplitted() const {
-      return children != NULL;
+      return children != nullptr;
     }
 
     /**
@@ -490,7 +490,7 @@ protected:
 
     const Bucket *GetRoot() const {
       const Bucket *bucket = this;
-      while (bucket->parent != NULL)
+      while (bucket->parent != nullptr)
         bucket = bucket->parent;
       return bucket;
     }
@@ -500,13 +500,13 @@ protected:
      */
     void Clear(BucketAllocator &bucket_allocator,
                LeafAllocator &leaf_allocator) {
-      assert(children == NULL || leaves.IsEmpty());
+      assert(children == nullptr || leaves.IsEmpty());
 
       if (IsSplitted()) {
         children->Clear(bucket_allocator, leaf_allocator);
         bucket_allocator.destroy(children);
         bucket_allocator.deallocate(children, 1);
-        children = NULL;
+        children = nullptr;
       } else
         leaves.Clear(leaf_allocator);
     }
@@ -568,7 +568,7 @@ protected:
     }
 
     Leaf *Remove(const Leaf *leaf) {
-      assert(leaf != NULL);
+      assert(leaf != nullptr);
 
       return leaves.Remove(leaf);
     }
@@ -583,7 +583,7 @@ protected:
     void EraseIf(const P &predicate, LeafAllocator &leaf_allocator) {
       leaves.EraseIf(predicate, leaf_allocator);
 
-      if (children != NULL)
+      if (children != nullptr)
         children->EraseIf(predicate, leaf_allocator);
     }
 
@@ -592,17 +592,17 @@ protected:
      * (unsplitted) root bucket.
      */
     void Scan(Rectangle &bounds) {
-      assert(parent == NULL);
+      assert(parent == nullptr);
       assert(!IsSplitted());
 
       Leaf *leaf = leaves.head;
-      if (leaf == NULL) {
+      if (leaf == nullptr) {
         bounds.Clear();
         return;
       }
 
       bounds.Set(GetPosition(leaf->value));
-      for (leaf = leaf->next; leaf != NULL; leaf = leaf->next)
+      for (leaf = leaf->next; leaf != nullptr; leaf = leaf->next)
         bounds.Scan(GetPosition(leaf->value));
     }
 
@@ -618,7 +618,7 @@ protected:
 
       bucket_allocator.destroy(children);
       bucket_allocator.deallocate(children, 1);
-      children = NULL;
+      children = nullptr;
     }
 
     void Optimise(const Rectangle &bounds,
@@ -637,35 +637,35 @@ protected:
       if (!leaves.IsEmpty())
         return this;
 
-      if (children == NULL)
-        return NULL;
+      if (children == nullptr)
+        return nullptr;
 
       for (unsigned i = 0; i < QuadBucket::N; ++i) {
         const Bucket *bucket = children->buckets[i].FindFirstLeafBucket();
-        if (bucket != NULL)
+        if (bucket != nullptr)
           return bucket;
       }
 
-      return NULL;
+      return nullptr;
     }
 
     const Bucket *FindNextLeafBucket() const {
-      assert(children == NULL);
+      assert(children == nullptr);
 
       const Bucket *current = this, *parent;
-      while ((parent = current->parent) != NULL) {
+      while ((parent = current->parent) != nullptr) {
         const Bucket *sibling = current;
-        while ((sibling = parent->children->GetNext(sibling)) != NULL) {
+        while ((sibling = parent->children->GetNext(sibling)) != nullptr) {
           assert(sibling->parent == parent);
           const Bucket *bucket = sibling->FindFirstLeafBucket();
-          if (bucket != NULL)
+          if (bucket != nullptr)
             return bucket;
         }
 
         current = parent;
       }
 
-      return NULL;
+      return nullptr;
     }
 
     Bucket *FindFirstLeafBucket() {
@@ -679,9 +679,9 @@ protected:
     }
 
     const_iterator FindPointer(Rectangle &bounds, const T *value) const {
-      assert(value != NULL);
+      assert(value != nullptr);
       assert(bounds.IsEmpty() || bounds.IsInside(GetPosition(*value)));
-      assert(!bounds.IsEmpty() || parent == NULL);
+      assert(!bounds.IsEmpty() || parent == nullptr);
 
       if (IsSplitted()) {
         Bucket &child = GetChildAt(bounds, GetPosition(*value));
@@ -706,7 +706,7 @@ protected:
       } else {
         const auto result =
           leaves.FindNearestIf(location, square_range, predicate);
-        if (result.first == NULL)
+        if (result.first == nullptr)
           return std::make_pair(const_iterator(), max_distance());
 
         return std::make_pair(const_iterator(this, result.first),
@@ -743,13 +743,13 @@ protected:
     }
 
     const Bucket *GetNext(const Bucket *bucket) {
-      assert(bucket != NULL);
-      assert(bucket->parent != NULL);
+      assert(bucket != nullptr);
+      assert(bucket->parent != nullptr);
       assert(this == bucket->parent->children);
       unsigned i = bucket - buckets;
       assert(i < N);
 
-      return ++i < N ? &buckets[i] : NULL;
+      return ++i < N ? &buckets[i] : nullptr;
     }
 
     gcc_pure
@@ -869,7 +869,7 @@ protected:
    * Safely deconstify a bucket pointer.  This is a hack.
    */
   Bucket *DeconstifyBucket(const Bucket *bucket) {
-    assert(bucket != NULL);
+    assert(bucket != nullptr);
     assert(bucket->GetRoot() == &root);
 
     return const_cast<Bucket *>(bucket);
@@ -879,7 +879,7 @@ protected:
    * Safely deconstify a leaf pointer.  This is a hack.
    */
   Leaf *DeconstifyLeaf(const Leaf *leaf) {
-    assert(leaf != NULL);
+    assert(leaf != nullptr);
 
     return const_cast<Leaf *>(leaf);
   }
@@ -1077,7 +1077,7 @@ public:
     Leaf *leaf;
 
     iterator()
-      :bucket(NULL), leaf(NULL) {}
+      :bucket(nullptr), leaf(nullptr) {}
 
     iterator(Bucket *_bucket)
       :bucket(_bucket), leaf(bucket->leaves.head) {}
@@ -1098,27 +1098,27 @@ public:
     }
 
     iterator &operator++() {
-      assert(leaf != NULL);
+      assert(leaf != nullptr);
 
       leaf = leaf->next;
-      if (leaf == NULL) {
+      if (leaf == nullptr) {
         bucket = bucket->FindNextLeafBucket();
-        leaf = bucket != NULL
+        leaf = bucket != nullptr
           ? bucket->leaves.head
-          : NULL;
+          : nullptr;
       }
 
       return *this;
     }
 
     reference operator*() const {
-      assert(leaf != NULL);
+      assert(leaf != nullptr);
 
       return leaf->value;
     }
 
     pointer operator->() const {
-      assert(leaf != NULL);
+      assert(leaf != nullptr);
 
       return &leaf->value;
     }
@@ -1126,7 +1126,7 @@ public:
 
   iterator begin() {
     Bucket *bucket = root.FindFirstLeafBucket();
-    return bucket != NULL
+    return bucket != nullptr
       ? iterator(bucket)
       : iterator();
   }
@@ -1142,7 +1142,7 @@ public:
     const Leaf *leaf;
 
     const_iterator()
-      :bucket(NULL), leaf(NULL) {}
+      :bucket(nullptr), leaf(nullptr) {}
 
     const_iterator(const Bucket *_bucket)
       :bucket(_bucket), leaf(bucket->leaves.head) {}
@@ -1169,27 +1169,27 @@ public:
     }
 
     const_iterator &operator++() {
-      assert(leaf != NULL);
+      assert(leaf != nullptr);
 
       leaf = leaf->next;
-      if (leaf == NULL) {
+      if (leaf == nullptr) {
         bucket = bucket->FindNextLeafBucket();
-        leaf = bucket != NULL
+        leaf = bucket != nullptr
           ? bucket->leaves.head
-          : NULL;
+          : nullptr;
       }
 
       return *this;
     }
 
     reference operator*() const {
-      assert(leaf != NULL);
+      assert(leaf != nullptr);
 
       return leaf->value;
     }
 
     pointer operator->() const {
-      assert(leaf != NULL);
+      assert(leaf != nullptr);
 
       return &leaf->value;
     }
@@ -1197,7 +1197,7 @@ public:
 
   const_iterator begin() const {
     const Bucket *bucket = root.FindFirstLeafBucket();
-    return bucket != NULL
+    return bucket != nullptr
       ? const_iterator(bucket)
       : const_iterator();
   }
@@ -1207,7 +1207,7 @@ public:
   }
 
   const_iterator FindPointer(const T *value) const {
-    assert(value != NULL);
+    assert(value != nullptr);
     assert(IsWithinKnownBounds(*value));
 
     Rectangle bounds = this->bounds;
@@ -1227,9 +1227,9 @@ public:
   }
 
   void erase(const_iterator it) {
-    assert(it.bucket != NULL);
+    assert(it.bucket != nullptr);
     assert(it.bucket->GetRoot() == &root);
-    assert(it.leaf != NULL);
+    assert(it.leaf != nullptr);
 
     Bucket *bucket = DeconstifyBucket(it.bucket);
     bucket->Erase(it.leaf, leaf_allocator);
@@ -1254,9 +1254,9 @@ public:
    * position has been modified).
    */
   void Replace(const_iterator it, const T &value) {
-    assert(it.bucket != NULL);
+    assert(it.bucket != nullptr);
     assert(it.bucket->GetRoot() == &root);
-    assert(it.leaf != NULL);
+    assert(it.leaf != nullptr);
 
     Leaf *leaf = DeconstifyLeaf(it.leaf);
     if (bounds.IsEmpty()) {

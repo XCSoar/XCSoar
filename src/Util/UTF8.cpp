@@ -107,7 +107,7 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
 
   if ((size_t)(p - src) >= buffer_size)
     /* buffer too small */
-    return NULL;
+    return nullptr;
 
   const char *const end = buffer + buffer_size;
   char *q = std::copy(src, p, buffer);
@@ -120,11 +120,11 @@ Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
 
       if (q >= end)
         /* buffer too small */
-        return NULL;
+        return nullptr;
     } else {
       if (q + 2 >= end)
         /* buffer too small */
-        return NULL;
+        return nullptr;
 
       *q++ = 0xc0 | (ch >> 6);
       *q++ = 0x80 | (ch & 0x3f);

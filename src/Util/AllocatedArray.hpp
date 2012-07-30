@@ -33,7 +33,6 @@
 #include "Compiler.h"
 
 #include <assert.h>
-#include <stddef.h>
 #include <algorithm>
 
 /**
@@ -53,17 +52,17 @@ public:
   typedef const T *const_iterator;
 
 public:
-  constexpr AllocatedArray():the_size(0), data(NULL) {}
+  constexpr AllocatedArray():the_size(0), data(nullptr) {}
 
   explicit AllocatedArray(size_type _size)
     :the_size(_size), data(new T[the_size]) {
-    assert(size() == 0 || data != NULL);
+    assert(size() == 0 || data != nullptr);
   }
 
   explicit AllocatedArray(const AllocatedArray &other)
     :the_size(other.size()), data(new T[the_size]) {
-    assert(size() == 0 || data != NULL);
-    assert(other.size() == 0 || other.data != NULL);
+    assert(size() == 0 || data != nullptr);
+    assert(other.size() == 0 || other.data != nullptr);
 
     std::copy(other.data, other.data + the_size, data);
   }
@@ -71,7 +70,7 @@ public:
   explicit AllocatedArray(AllocatedArray &&other)
     :the_size(other.the_size), data(other.data) {
     other.the_size = 0;
-    other.data = NULL;
+    other.data = nullptr;
   }
 
   ~AllocatedArray() {
@@ -79,8 +78,8 @@ public:
   }
 
   AllocatedArray &operator=(const AllocatedArray &other) {
-    assert(size() == 0 || data != NULL);
-    assert(other.size() == 0 || other.data != NULL);
+    assert(size() == 0 || data != nullptr);
+    assert(other.size() == 0 || other.data != nullptr);
 
     if (&other == this)
       return *this;
@@ -155,7 +154,7 @@ public:
     the_size = _size;
     data = new T[the_size];
 
-    assert(size() == 0 || data != NULL);
+    assert(size() == 0 || data != nullptr);
   }
 
   /**
@@ -177,7 +176,7 @@ public:
       return;
 
     T *new_data = new T[_size];
-    assert(_size == 0 || new_data != NULL);
+    assert(_size == 0 || new_data != nullptr);
 
     std::move(data, data + preserve, new_data);
 

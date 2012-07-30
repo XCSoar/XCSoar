@@ -73,7 +73,7 @@ public:
   }
 #else
   UTF8ToWideConverter(const char *_value):value(_value) {
-    assert(_value != NULL);
+    assert(_value != nullptr);
   }
 #endif
 
@@ -83,16 +83,16 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return value != NULL;
+    return value != nullptr;
 #else
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return ValidateUTF8(value);
 #endif
   }
 
   operator const TCHAR *() const {
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return value;
   }
@@ -119,7 +119,7 @@ public:
   }
 #else
   WideToUTF8Converter(const char *_value):value(_value) {
-    assert(_value != NULL);
+    assert(_value != nullptr);
   }
 #endif
 
@@ -129,16 +129,16 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return value != NULL;
+    return value != nullptr;
 #else
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return true;
 #endif
   }
 
   operator const char *() const {
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return value;
   }
@@ -166,7 +166,7 @@ public:
   }
 #else
   ACPToWideConverter(const char *_value):value(_value) {
-    assert(_value != NULL);
+    assert(_value != nullptr);
   }
 #endif
 
@@ -176,16 +176,16 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return value != NULL;
+    return value != nullptr;
 #else
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return true;
 #endif
   }
 
   operator const TCHAR *() const {
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return value;
   }
@@ -195,11 +195,11 @@ public:
    */
   gcc_malloc
   TCHAR *StealDup() {
-    assert(value != NULL);
+    assert(value != nullptr);
 
 #ifdef _UNICODE
     TCHAR *result = value;
-    value = NULL;
+    value = nullptr;
     return result;
 #else
     return strdup(value);
@@ -229,7 +229,7 @@ public:
   }
 #else
   WideToACPConverter(const char *_value):value(_value) {
-    assert(_value != NULL);
+    assert(_value != nullptr);
   }
 #endif
 
@@ -239,16 +239,16 @@ public:
   gcc_pure
   bool IsValid() const {
 #ifdef _UNICODE
-    return value != NULL;
+    return value != nullptr;
 #else
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return true;
 #endif
   }
 
   operator const char *() const {
-    assert(value != NULL);
+    assert(value != nullptr);
 
     return value;
   }
@@ -258,11 +258,11 @@ public:
    */
   gcc_malloc
   char *StealDup() {
-    assert(value != NULL);
+    assert(value != nullptr);
 
 #ifdef _UNICODE
     char *result = value;
-    value = NULL;
+    value = nullptr;
     return result;
 #else
     return strdup(value);

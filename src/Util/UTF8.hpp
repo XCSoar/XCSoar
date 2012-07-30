@@ -39,7 +39,7 @@ ValidateUTF8(const char *p);
  * Convert the specified string from ISO-8859-1 to UTF-8.
  *
  * @return the UTF-8 version of the source string; may return #src if
- * there are no non-ASCII characters; returns NULL if the destination
+ * there are no non-ASCII characters; returns nullptr if the destination
  * buffer is too small
  */
 gcc_pure  gcc_nonnull_all

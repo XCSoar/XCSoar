@@ -29,17 +29,17 @@ Copyright_License {
 static TCHAR *
 ConvertToWide(const char *p, UINT codepage)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
-  int length = MultiByteToWideChar(codepage, 0, p, -1, NULL, 0);
+  int length = MultiByteToWideChar(codepage, 0, p, -1, nullptr, 0);
   if (length <= 0)
-    return NULL;
+    return nullptr;
 
   TCHAR *buffer = new TCHAR[length];
   length = MultiByteToWideChar(codepage, 0, p, -1, buffer, length);
   if (length <= 0) {
     delete[] buffer;
-    return NULL;
+    return nullptr;
   }
 
   return buffer;
@@ -60,17 +60,19 @@ ConvertACPToWide(const char *p)
 static char *
 ConvertFromWide(const TCHAR *p, UINT codepage)
 {
-  assert(p != NULL);
+  assert(p != nullptr);
 
-  int length = WideCharToMultiByte(codepage, 0, p, -1, NULL, 0, NULL, NULL);
+  int length = WideCharToMultiByte(codepage, 0, p, -1, nullptr, 0,
+                                   nullptr, nullptr);
   if (length <= 0)
-    return NULL;
+    return nullptr;
 
   char *buffer = new char[length];
-  length = WideCharToMultiByte(codepage, 0, p, -1, buffer, length, NULL, NULL);
+  length = WideCharToMultiByte(codepage, 0, p, -1, buffer, length,
+                               nullptr, nullptr);
   if (length <= 0) {
     delete[] buffer;
-    return NULL;
+    return nullptr;
   }
 
   return buffer;
