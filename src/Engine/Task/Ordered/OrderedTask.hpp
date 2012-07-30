@@ -651,10 +651,8 @@ public:
 protected:
   virtual bool IsScored() const;
 public:
-  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
-                                      const bool reverse=false) const;
-  virtual void AcceptStartPointVisitor(TaskPointConstVisitor& visitor,
-                                       const bool reverse=false) const;
+  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const gcc_override;
+  virtual void AcceptStartPointVisitor(TaskPointConstVisitor &visitor) const gcc_override;
 };
 
 #endif //ORDEREDTASK_H

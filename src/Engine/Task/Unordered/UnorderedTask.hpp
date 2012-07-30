@@ -77,8 +77,7 @@ public:
                                     const GlideResult &solution_remaining_leg);
   virtual bool HasTargets() const { return false; }
   virtual bool IsScored() const { return false; }
-  virtual void AcceptStartPointVisitor(TaskPointConstVisitor& visitor,
-                                       const bool reverse = false) const;
+  virtual void AcceptStartPointVisitor(TaskPointConstVisitor& visitor) const gcc_override;
 };
 
 #endif

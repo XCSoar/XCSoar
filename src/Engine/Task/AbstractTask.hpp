@@ -468,8 +468,7 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Perform scan in reverse sequence
    */
-  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor,
-                                      const bool reverse = false) const = 0;
+  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const = 0;
 
   /**
    * Accept a (const) task point visitor; makes the visitor visit
@@ -478,8 +477,7 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
    */
-  virtual void AcceptStartPointVisitor(TaskPointConstVisitor &visitor,
-                                       const bool reverse = false) const = 0;
+  virtual void AcceptStartPointVisitor(TaskPointConstVisitor &visitor) const = 0;
 
 public:
   /* virtual methods from class TaskInterface */

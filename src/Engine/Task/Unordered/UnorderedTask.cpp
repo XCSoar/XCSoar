@@ -223,7 +223,7 @@ UnorderedTask::GetTaskRadius(const GeoPoint& fallback_location) const
 }
 
 void 
-UnorderedTask::AcceptStartPointVisitor(TaskPointConstVisitor& visitor, const bool reverse) const
+UnorderedTask::AcceptStartPointVisitor(TaskPointConstVisitor &visitor) const
 {
   // do nothing!
 }

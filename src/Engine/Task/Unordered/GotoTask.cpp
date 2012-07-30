@@ -96,8 +96,7 @@ GotoTask::DoGoto(const Waypoint & wp)
 }
 
 void 
-GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
-                     gcc_unused const bool reverse) const
+GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
 {
   if (tp)
     visitor.Visit(*tp);

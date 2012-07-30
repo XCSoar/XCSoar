@@ -232,8 +232,7 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
    */
-  void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor,
-                              bool reverse = false) const;
+  void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const gcc_override;
 
 public:
   /* virtual methods from class TaskInterface */

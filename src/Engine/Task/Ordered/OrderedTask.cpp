@@ -948,32 +948,16 @@ Visit(const OrderedTask::OrderedTaskPointVector &points,
     visitor.Visit(**it);
 }
 
-static void
-VisitReverse(const OrderedTask::OrderedTaskPointVector &points,
-             TaskPointConstVisitor &visitor)
+void 
+OrderedTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
 {
-  for (auto it = points.rbegin(), end = points.rend(); it != end; ++it)
-    visitor.Visit(**it);
+  Visit(task_points, visitor);
 }
 
 void 
-OrderedTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, const bool reverse) const
+OrderedTask::AcceptStartPointVisitor(TaskPointConstVisitor& visitor) const
 {
-  if (!reverse) {
-    Visit(task_points, visitor);
-  } else {
-    VisitReverse(task_points, visitor);
-  }
-}
-
-void 
-OrderedTask::AcceptStartPointVisitor(TaskPointConstVisitor& visitor, const bool reverse) const
-{
-  if (!reverse) {
-    Visit(optional_start_points, visitor);
-  } else {
-    VisitReverse(optional_start_points, visitor);
-  }
+  Visit(optional_start_points, visitor);
 }
 
 static void

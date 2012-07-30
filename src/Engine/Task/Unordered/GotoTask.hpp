@@ -89,8 +89,7 @@ protected:
   virtual bool CheckTransitions(const AircraftState &state_now,
                                 const AircraftState &state_last);
 public:
-  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
-                                      const bool reverse = false) const;
+  virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const gcc_override;
 };
 
 #endif //GOTOTASK_H

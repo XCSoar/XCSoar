@@ -299,15 +299,10 @@ AbortTask::CheckTransitions(const AircraftState &, const AircraftState&)
 }
 
 void 
-AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, bool reverse) const
+AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
 {
-  if (!reverse) {
-    for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i)
-      visitor.Visit((const TaskPoint &)*i);
-  } else {
-    for (auto i = task_points.rbegin(), end = task_points.rend(); i != end; ++i)
-      visitor.Visit((const TaskPoint &)*i);
-  }
+  for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i)
+    visitor.Visit((const TaskPoint &)*i);
 }
 
 void
