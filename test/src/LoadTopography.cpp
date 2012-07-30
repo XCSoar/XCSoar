@@ -29,7 +29,6 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "Projection/WindowProjection.hpp"
 #include "Operation/Operation.hpp"
 
 #include <zzip/zzip.h>
@@ -64,18 +63,6 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
 
 #endif /* OpenGL */
 
-class TestProjection : public WindowProjection {
-public:
-  TestProjection() {
-    SetScreenOrigin(0, 0);
-    SetScale(fixed(640) / (fixed(100) * 2));
-    SetGeoLocation(GeoPoint(Angle::Degrees(fixed(7.7061111111111114)),
-                            Angle::Degrees(fixed(51.051944444444445))));
-    SetScreenSize(640, 480);
-    UpdateScreenBounds();
-  }
-};
-
 int main(int argc, char **argv)
 {
   if (argc != 2) {
@@ -102,9 +89,7 @@ int main(int argc, char **argv)
   topography.Load(operation, reader, NULL, dir);
   zzip_dir_close(dir);
 
-  TestProjection projection;
-
-  topography.ScanVisibility(projection);
+  topography.LoadAll();
 
   return EXIT_SUCCESS;
 }

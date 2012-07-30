@@ -158,6 +158,26 @@ TopographyFile::Update(const WindowProjection &map_projection)
   return true;
 }
 
+void
+TopographyFile::LoadAll()
+{
+  // Iterate through the shapefile entries
+  const ShapeList **current = &first;
+  auto it = shapes.begin();
+  for (int i = 0; i < file.numshapes; ++i, ++it) {
+    if (it->shape == NULL)
+      // shape isn't cached yet -> cache the shape
+      it->shape = new XShape(&file, i, label_field);
+    // update list pointer
+    *current = it;
+    current = &it->next;
+  }
+  // end of list marker
+  *current = NULL;
+
+  ++serial;
+}
+
 unsigned
 TopographyFile::GetSkipSteps(fixed map_scale) const
 {

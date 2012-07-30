@@ -67,6 +67,12 @@ public:
   unsigned ScanVisibility(const WindowProjection &m_projection,
                           unsigned max_update=1024);
 
+  /**
+   * Load all shapes of all files into memory.  For debugging
+   * purposes.
+   */
+  void LoadAll();
+
   void Load(OperationEnvironment &operation, NLineReader &reader,
             const TCHAR *directory, struct zzip_dir *zdir = NULL);
   void Reset();

@@ -221,6 +221,11 @@ public:
    */
   bool Update(const WindowProjection &map_projection);
 
+  /**
+   * Load all shapes into memory.  For debugging purposes.
+   */
+  void LoadAll();
+
 protected:
   void ClearCache();
 };

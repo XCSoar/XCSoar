@@ -64,6 +64,13 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
   return num_updated;
 }
 
+void
+TopographyStore::LoadAll()
+{
+  for (const auto &i : files)
+    i->LoadAll();
+}
+
 TopographyStore::~TopographyStore()
 {
   Reset();
