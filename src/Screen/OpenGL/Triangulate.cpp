@@ -290,7 +290,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
     return 0;
 
   // count the number of occurrences for each vertex
-  GLushort *vcount = new GLushort[vertex_count]();
+  unsigned *vcount = new unsigned[vertex_count]();
   GLushort *t = triangles;
   GLushort *v;
   const GLushort * const t_end = triangles + index_count;
