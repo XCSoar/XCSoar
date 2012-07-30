@@ -402,8 +402,7 @@ TriangleToStrip(GLushort *triangles, unsigned index_count,
   strip += 3;
 
   // copy strip over triangles
-  for (t = triangles, v = triangle_strip; v < strip; v++, t++)
-    *t = *v;
+  std::copy(triangle_strip, strip, triangles);
 
   //LogDebug(_T("triangle_to_strip: indices=%u strip indices=%u (%u%%)"),
   //         index_count, strip - triangle_strip,
