@@ -114,8 +114,8 @@ RowFormWidget::~RowFormWidget()
   }
 
   /* destroy all rows */
-  for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
-    i->Delete();
+  for (auto &i : rows)
+    i.Delete();
 }
 
 void
@@ -772,12 +772,12 @@ RowFormWidget::GetRecommendedCaptionWidth() const
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
   UPixelScalar w = 0;
-  for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
-    if (!i->available || (i->expert && !expert))
+  for (const auto &i : rows) {
+    if (!i.available || (i.expert && !expert))
       continue;
 
-    if (i->type == Row::Type::EDIT) {
-      unsigned x = i->GetControl().GetRecommendedCaptionWidth();
+    if (i.type == Row::Type::EDIT) {
+      unsigned x = i.GetControl().GetRecommendedCaptionWidth();
       if (x > w)
         w = x;
     }
@@ -801,16 +801,17 @@ RowFormWidget::UpdateLayout()
   unsigned min_height = 0;
   unsigned n_elastic = 0;
   unsigned caption_width = 0;
-  for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
-    if (!i->available || (i->expert && !expert))
+
+  for (const auto &i : rows) {
+    if (!i.available || (i.expert && !expert))
       continue;
 
-    min_height += i->GetMinimumHeight();
-    if (i->IsElastic())
+    min_height += i.GetMinimumHeight();
+    if (i.IsElastic())
       ++n_elastic;
 
-    if (i->type == Row::Type::EDIT) {
-      unsigned cw = i->GetControl().GetRecommendedCaptionWidth();
+    if (i.type == Row::Type::EDIT) {
+      unsigned cw = i.GetControl().GetRecommendedCaptionWidth();
       if (cw > caption_width)
         caption_width = cw;
     }
@@ -825,41 +826,41 @@ RowFormWidget::UpdateLayout()
     : 0;
 
   /* second row traversal: now move and resize the rows */
-  for (auto i = rows.begin(), end = rows.end(); i != end; ++i) {
-    if (i->type == Row::Type::DUMMY)
+  for (auto &i : rows) {
+    if (i.type == Row::Type::DUMMY)
       continue;
 
-    Window &window = i->GetWindow();
+    Window &window = i.GetWindow();
 
-    if (!i->available) {
+    if (!i.available) {
       window.Hide();
       continue;
     }
 
-    if (i->expert) {
+    if (i.expert) {
       if (!expert) {
         window.Hide();
         continue;
       }
 
-      if (i->visible)
+      if (i.visible)
         window.Show();
     }
 
-    if (caption_width > 0 && i->type == Row::Type::EDIT &&
-        i->GetControl().HasCaption())
-      i->GetControl().SetCaptionWidth(caption_width);
+    if (caption_width > 0 && i.type == Row::Type::EDIT &&
+        i.GetControl().HasCaption())
+      i.GetControl().SetCaptionWidth(caption_width);
 
     /* determine this row's height */
-    UPixelScalar height = i->GetMinimumHeight();
-    if (excess_height > 0 && i->IsElastic()) {
+    UPixelScalar height = i.GetMinimumHeight();
+    if (excess_height > 0 && i.IsElastic()) {
       assert(n_elastic > 0);
 
       /* distribute excess height among all elastic rows */
       unsigned grow_height = excess_height / n_elastic;
       if (grow_height > 0) {
         height += grow_height;
-        const UPixelScalar max_height = i->GetMaximumHeight();
+        const UPixelScalar max_height = i.GetMaximumHeight();
         if (height > max_height) {
           /* never grow beyond declared maximum height */
           height = max_height;
@@ -889,9 +890,9 @@ RowFormWidget::GetMinimumSize() const
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
   PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
-  for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
-    if (i->available && (!i->expert || expert))
-      size.cy += i->GetMinimumHeight();
+  for (const auto &i : rows)
+    if (i.available && (!i.expert || expert))
+      size.cy += i.GetMinimumHeight();
 
   return size;
 }
@@ -903,8 +904,8 @@ RowFormWidget::GetMaximumSize() const
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx * 2;
 
   PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
-  for (auto i = rows.begin(), end = rows.end(); i != end; ++i)
-    size.cy += i->GetMaximumHeight();
+  for (const auto &i : rows)
+    size.cy += i.GetMaximumHeight();
 
   return size;
 }

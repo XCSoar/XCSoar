@@ -54,12 +54,11 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
 
 TabMenuControl::~TabMenuControl()
 {
-  for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
-    delete *i;
+  for (const auto i : buttons)
+    delete i;
 
-  for (auto i = main_menu_buttons.begin(), end = main_menu_buttons.end();
-       i != end; ++i)
-    delete *i;
+  for (const auto i : main_menu_buttons)
+    delete i;
 
   delete tab_display;
 }

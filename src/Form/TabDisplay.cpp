@@ -52,8 +52,8 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
 
 TabDisplay::~TabDisplay()
 {
-  for (auto i = buttons.begin(), end = buttons.end(); i != end; ++i)
-    delete *i;
+  for (const auto i : buttons)
+    delete i;
 }
 
 const PixelRect &

@@ -54,8 +54,8 @@ AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
 {
   UnorderedTask::SetTaskBehaviour(tb);
 
-  for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i)
-    i->SetTaskBehaviour(tb);
+  for (auto &tp : task_points)
+    tp.SetTaskBehaviour(tb);
 }
 
 void 
@@ -301,8 +301,8 @@ AbortTask::CheckTransitions(const AircraftState &, const AircraftState&)
 void 
 AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
 {
-  for (auto i = task_points.begin(), end = task_points.end(); i != end; ++i)
-    visitor.Visit((const TaskPoint &)*i);
+  for (const TaskPoint &tp : task_points)
+    visitor.Visit(tp);
 }
 
 void

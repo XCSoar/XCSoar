@@ -799,11 +799,11 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     window = tabbed;
 
-    for (auto i = node.begin(), end = node.end(); i != end; ++i) {
+    for (const auto &i : node) {
       // Load each child control from the child nodes
       Window *child = LoadChild(form, *tabbed, tabbed->GetClientRect(),
                                 lookup_table,
-                                *i);
+                                i);
       if (child != NULL)
         tabbed->AddClient(child);
     }

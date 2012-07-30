@@ -60,10 +60,10 @@ PagerWidget::Clear()
 {
   assert(!initialised || !prepared);
 
-  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
-    assert(!i->prepared);
+  for (auto &i : children) {
+    assert(!i.prepared);
 
-    delete i->widget;
+    delete i.widget;
   }
 
   children.clear();
@@ -180,8 +180,8 @@ PagerWidget::GetMinimumSize() const
 
   PixelSize result{0, 0};
 
-  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
-    PixelSize size = i->widget->GetMinimumSize();
+  for (const auto &i : children) {
+    PixelSize size = i.widget->GetMinimumSize();
     if (size.cx > result.cx)
       result.cx = size.cx;
     if (size.cy > result.cy)
@@ -198,8 +198,8 @@ PagerWidget::GetMaximumSize() const
 
   PixelSize result{0, 0};
 
-  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
-    PixelSize size = i->widget->GetMaximumSize();
+  for (const auto &i : children) {
+    PixelSize size = i.widget->GetMaximumSize();
     if (size.cx > result.cx)
       result.cx = size.cx;
     if (size.cy > result.cy)
@@ -219,8 +219,8 @@ PagerWidget::Initialise(ContainerWindow &_parent, const PixelRect &rc)
   parent = &_parent;
   position = rc;
 
-  for (auto i = children.begin(), end = children.end(); i != end; ++i)
-    i->widget->Initialise(*parent, position);
+  for (auto &i : children)
+    i.widget->Initialise(*parent, position);
 }
 
 void
@@ -234,10 +234,10 @@ PagerWidget::Prepare(ContainerWindow &_parent, const PixelRect &rc)
   parent = &_parent;
   position = rc;
 
-  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
-    assert(!i->prepared);
-    i->prepared = true;
-    i->widget->Prepare(*parent, position);
+  for (auto &i : children) {
+    assert(!i.prepared);
+    i.prepared = true;
+    i.widget->Prepare(*parent, position);
   }
 }
 
@@ -250,10 +250,10 @@ PagerWidget::Unprepare()
 
   prepared = false;
 
-  for (auto i = children.begin(), end = children.end(); i != end; ++i) {
-    if (i->prepared) {
-      i->prepared = false;
-      i->widget->Unprepare();
+  for (auto &i : children) {
+    if (i.prepared) {
+      i.prepared = false;
+      i.widget->Unprepare();
     }
   }
 }
@@ -264,8 +264,8 @@ PagerWidget::Save(bool &changed, bool &require_restart)
   assert(initialised);
   assert(prepared);
 
-  for (auto i = children.begin(), end = children.end(); i != end; ++i)
-    if (i->prepared && !i->widget->Save(changed, require_restart))
+  for (auto &i : children)
+    if (i.prepared && !i.widget->Save(changed, require_restart))
       return false;
 
   return true;

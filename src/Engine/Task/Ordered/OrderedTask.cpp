@@ -140,9 +140,8 @@ OrderedTask::UpdateGeometry()
     (*i)->ScanProjection(task_projection);
   }
   // ... and optional start points
-  for (auto i = optional_start_points.cbegin(),
-         end = optional_start_points.cend(); i != end; ++i)
-    (*i)->ScanProjection(task_projection);
+  for (const OrderedTaskPoint *tp : optional_start_points)
+    tp->ScanProjection(task_projection);
 
   // projection can now be determined
   task_projection.Update();
@@ -153,12 +152,11 @@ OrderedTask::UpdateGeometry()
 
   // now that the task projection is stable, and oz is stable,
   // calculate the bounding box in projected coordinates
-  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
-    (*i)->UpdateBoundingBox(task_projection);
+  for (const auto tp : task_points)
+    tp->UpdateBoundingBox(task_projection);
 
-  for (auto i = optional_start_points.cbegin(),
-         end = optional_start_points.cend(); i != end; ++i)
-    (*i)->UpdateBoundingBox(task_projection);
+  for (const auto tp : optional_start_points)
+    tp->UpdateBoundingBox(task_projection);
 
   // update stats so data can be used during task construction
   /// @todo this should only be done if not flying! (currently done with has_entered)
@@ -539,9 +537,8 @@ OrderedTask::SetNeighbours(unsigned position)
   task_points[position]->SetNeighbours(prev, next);
 
   if (position==0) {
-    for (auto i = optional_start_points.begin(),
-           end = optional_start_points.end(); i != end; ++i)
-      (*i)->SetNeighbours(prev, next);
+    for (const auto tp : optional_start_points)
+      tp->SetNeighbours(prev, next);
   }
 }
 
@@ -929,9 +926,9 @@ OrderedTask::CalcGradient(const AircraftState &state) const
 
   // Iterate through remaining turnpoints
   fixed distance = fixed_zero;
-  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
+  for (const OrderedTaskPoint *tp : optional_start_points)
     // Sum up the leg distances
-    distance += (*i)->GetVectorRemaining(state.location).distance;
+    distance += tp->GetVectorRemaining(state.location).distance;
 
   if (!distance)
     return fixed_zero;
@@ -944,8 +941,8 @@ static void
 Visit(const OrderedTask::OrderedTaskPointVector &points,
       TaskPointConstVisitor &visitor)
 {
-  for (auto it = points.begin(), end = points.end(); it != end; ++it)
-    visitor.Visit(**it);
+  for (const TaskPoint *tp : points)
+    visitor.Visit(*tp);
 }
 
 void 
@@ -1121,8 +1118,8 @@ OrderedTask::GetFinishState() const
 bool
 OrderedTask::HasTargets() const
 {
-  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
-    if ((*i)->HasTarget())
+  for (const OrderedTaskPoint *tp : task_points)
+    if (tp->HasTarget())
       return true;
 
   return false;
@@ -1163,12 +1160,11 @@ OrderedTask::Clone(const TaskBehaviour &tb) const
   new_task->ordered_behaviour = ordered_behaviour;
 
   new_task->SetFactory(factory_mode);
-  for (auto i = task_points.cbegin(), end = task_points.cend(); i != end; ++i)
-    new_task->Append(**i);
+  for (const OrderedTaskPoint *tp : task_points)
+    new_task->Append(*tp);
 
-  for (auto i = optional_start_points.cbegin(),
-         end = optional_start_points.cend(); i != end; ++i)
-    new_task->AppendOptionalStart(**i);
+  for (const OrderedTaskPoint *tp : optional_start_points)
+    new_task->AppendOptionalStart(*tp);
 
   new_task->active_task_point = active_task_point;
   new_task->UpdateGeometry();

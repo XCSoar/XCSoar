@@ -33,8 +33,8 @@ ButtonPanel::ButtonPanel(ContainerWindow &_parent, const DialogLook &_look)
 
 ButtonPanel::~ButtonPanel()
 {
-  for (auto it = buttons.begin(), end = buttons.end(); it != end; ++it)
-    delete *it;
+  for (const auto i : buttons)
+    delete i;
 }
 
 PixelRect

@@ -60,9 +60,9 @@ struct TaskSummary {
 
     p_remaining = d_remaining/d_planned;
     fixed p = fixed_zero;
-    for (auto it = pts.begin(); it != pts.end(); ++it) {
-      p+= it->d_planned / d_planned;
-      it->p = p;
+    for (auto &i : pts) {
+      p += i.d_planned / d_planned;
+      i.p = p;
     }
   }
 };
