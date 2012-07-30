@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-07-22 06:52+0000\n"
-"Last-Translator: Christophe Bougault <suspente@free.fr>\n"
+"PO-Revision-Date: 2012-07-27 22:27+0000\n"
+"Last-Translator: Thierry F. <nebulos@gmail.com>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-26 19:12+0000\n"
-"X-Generator: Launchpad (build 15679)\n"
+"X-Launchpad-Export-Date: 2012-07-30 04:16+0000\n"
+"X-Generator: Launchpad (build 15702)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -7738,7 +7738,7 @@ msgstr "Neutraliser le vario sonore quand le taux de montée est proche de zéro
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:79
 msgid "Min. Frequency"
-msgstr ""
+msgstr "Fréquence min."
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:80
 msgid "The tone frequency that is played at maximum sink rate."
@@ -7746,7 +7746,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:85
 msgid "Zero Frequency"
-msgstr ""
+msgstr "Fréquence nulle"
 
 #: src/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp:86
 msgid "The tone frequency that is played at zero climb rate."
