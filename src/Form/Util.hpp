@@ -72,6 +72,9 @@ void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value);
 
 void
+LoadFormPropertyEnum(SubForm &form, const TCHAR *control_name, int value);
+
+void
 LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const StaticEnumChoice *list, unsigned value);
 

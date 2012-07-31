@@ -53,7 +53,6 @@ using std::max;
 static WndForm *wf = NULL;
 static TargetMapWindow *map;
 static CheckBoxControl *chkbOptimized = NULL;
-static WndSymbolButton *btnNext = NULL, *btnPrev = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
 static unsigned TaskSize = 0;
 
@@ -209,15 +208,8 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 LockCalculatorUI()
 {
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp)
-    wp->SetEnabled(IsLocked);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
-  if (wp)
-    wp->SetEnabled(IsLocked);
+  SetFormControlEnabled(*wf, _T("prpRange"), IsLocked);
+  SetFormControlEnabled(*wf, _T("prpRadial"), IsLocked);
 }
 
 /**
@@ -226,7 +218,6 @@ LockCalculatorUI()
 static void
 RefreshCalculator()
 {
-  WndProperty* wp = NULL;
   bool nodisplay = false;
   bool bAAT;
   fixed aatTime;
@@ -253,26 +244,18 @@ RefreshCalculator()
 
   LockCalculatorUI();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp) {
-    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set(Range * fixed(100));
-    wp->RefreshDisplay();
-    wp->SetVisible(!nodisplay);
-  }
+  ShowOptionalFormControl(*wf, _T("prpRange"), !nodisplay);
+  ShowOptionalFormControl(*wf, _T("prpRadial"), !nodisplay);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRadial"));
-  if (wp) {
+  if (!nodisplay) {
+    LoadFormProperty(*wf, _T("prpRange"), Range * 100);
+
     fixed rTemp = Radial;
     if (rTemp < fixed(-90))
       rTemp += fixed(180);
     else if (rTemp > fixed(90))
       rTemp -= fixed(180);
-
-    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set(rTemp);
-    wp->RefreshDisplay();
-    wp->SetVisible(!nodisplay);
+    LoadFormProperty(*wf, _T("prpRadial"), rTemp);
   }
 
   // update outputs
@@ -311,11 +294,10 @@ OnNextClicked(gcc_unused WndButton &Sender)
     target_point++;
   else
     target_point = ActiveTaskPointOnEntry;
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->Set(target_point - ActiveTaskPointOnEntry);
+
+  LoadFormPropertyEnum(*wf, _T("prpTaskPoint"),
+                       target_point - ActiveTaskPointOnEntry);
   RefreshTargetPoint();
-  wp->RefreshDisplay();
 }
 
 static void
@@ -326,11 +308,9 @@ OnPrevClicked(gcc_unused WndButton &Sender)
   else
     target_point = TaskSize - 1;
 
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->Set(target_point - ActiveTaskPointOnEntry);
+  LoadFormPropertyEnum(*wf, _T("prpTaskPoint"),
+                       target_point - ActiveTaskPointOnEntry);
   RefreshTargetPoint();
-  wp->RefreshDisplay();
 }
 
 static void
@@ -505,19 +485,11 @@ InitTargetPoints()
 static void
 drawBtnNext()
 {
-  btnNext = (WndSymbolButton*)wf->FindByName(_T("btnNext"));
-  assert(btnNext != NULL);
-
-  if (IsAltair())
+  if (IsAltair()) {
     // altair already has < and > buttons on WndProperty
-    btnNext->SetVisible(false);
-
-  btnPrev = (WndSymbolButton*)wf->FindByName(_T("btnPrev"));
-  assert(btnPrev != NULL);
-
-  if (IsAltair())
-    // altair already has < and > buttons on WndProperty
-    btnPrev->SetVisible(false);
+    ShowFormControl(*wf, _T("btnNext"), false);
+    ShowFormControl(*wf, _T("btnPrev"), false);
+  }
 }
 
 void

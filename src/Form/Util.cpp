@@ -112,6 +112,20 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value)
 }
 
 void
+LoadFormPropertyEnum(SubForm &form, const TCHAR *control_name, int value)
+{
+  assert(control_name != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  assert(ctl != NULL);
+
+  DataFieldEnum &df = *(DataFieldEnum *)ctl->GetDataField();
+  assert(df.GetType() == DataField::Type::ENUM);
+  df.Set(value);
+  ctl->RefreshDisplay();
+}
+
+void
 LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const StaticEnumChoice *list, unsigned value)
 {
