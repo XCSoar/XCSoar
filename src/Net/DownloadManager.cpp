@@ -121,8 +121,16 @@ class DownloadManagerThread : protected StandbyThread,
     std::string uri;
     tstring path_relative;
 
+    Item(const Item &other) = delete;
+
+    Item(Item &&other)
+      :uri(std::move(other.uri)),
+       path_relative(std::move(other.path_relative)) {}
+
     Item(const char *_uri, const TCHAR *_path_relative)
       :uri(_uri), path_relative(_path_relative) {}
+
+    Item &operator=(const Item &other) = delete;
 
     gcc_pure
     bool operator==(const TCHAR *relative_path) const {
@@ -272,9 +280,10 @@ DownloadManagerThread::Tick()
 
     mutex.Lock();
     current_size = current_position = -1;
+    const Item copy(std::move(queue.front()));
     queue.pop_front();
     for (auto i = listeners.begin(), end = listeners.end(); i != end; ++i)
-      (*i)->OnDownloadComplete(item.path_relative.c_str(), success);
+      (*i)->OnDownloadComplete(copy.path_relative.c_str(), success);
   }
 }
 
