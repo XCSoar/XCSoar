@@ -45,11 +45,6 @@ class StartPoint:
 
   TaskStartMargins margins;
 
-   /**
-    * For use with multiple start points, whether enabled.
-    */
-  bool enabled;
-
 public:
   /**
    * Constructor.  Sets task area to non-scorable; distances

@@ -35,8 +35,7 @@ StartPoint::StartPoint(ObservationZonePoint* _oz,
                        const OrderedTaskBehaviour& to): 
   OrderedTaskPoint(START, _oz, wp, to),
   safety_height_terrain(tb.route_planner.safety_height_terrain),
-  margins(tb),
-  enabled(true) 
+  margins(tb)
 {
 }
 
