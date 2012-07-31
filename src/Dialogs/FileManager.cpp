@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FileManager.hpp"
 #include "WidgetDialog.hpp"
+#include "Message.hpp"
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
@@ -662,6 +663,7 @@ ManagedFileListWidget::OnNotification()
 {
   mutex.Lock();
   bool repository_modified2 = repository_modified;
+  const bool repository_failed2 = repository_failed;
   mutex.Unlock();
 
   if (repository_modified2)
@@ -669,6 +671,10 @@ ManagedFileListWidget::OnNotification()
 
   RefreshList();
   UpdateButtons();
+
+  if (repository_failed2)
+    ShowMessageBox(_("Failed to download the repository index."),
+                   _("Error"), MB_OK);
 }
 
 #endif
