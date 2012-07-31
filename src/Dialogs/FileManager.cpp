@@ -50,6 +50,7 @@ Copyright_License {
 #include "Timer.hpp"
 
 #include <map>
+#include <set>
 #include <vector>
 #endif
 
@@ -121,11 +122,12 @@ class ManagedFileListWidget
     StaticString<32u> size;
     StaticString<32u> last_modified;
 
-    bool downloading;
+    bool downloading, failed;
 
     DownloadStatus download_status;
 
-    void Set(const TCHAR *_name, const DownloadStatus *_download_status) {
+    void Set(const TCHAR *_name, const DownloadStatus *_download_status,
+             bool _failed) {
       name = _name;
 
       TCHAR path[MAX_PATH];
@@ -149,6 +151,8 @@ class ManagedFileListWidget
       downloading = _download_status != NULL;
       if (downloading)
         download_status = *_download_status;
+
+      failed = _failed;
     }
   };
 
@@ -172,6 +176,11 @@ class ManagedFileListWidget
    * downloaded.
    */
   std::map<std::string, DownloadStatus> downloads;
+
+  /**
+   * Each item in this set is a failed download.
+   */
+  std::set<std::string> failures;
 
   /**
    * Was the repository file modified, and needs to be reloaded by
@@ -220,6 +229,21 @@ protected:
   bool IsDownloading(const AvailableFile &file,
                      DownloadStatus &status_r) const {
     return IsDownloading(file.GetName(), status_r);
+  }
+
+  gcc_pure
+  bool HasFailed(const char *name) const {
+#ifdef HAVE_DOWNLOAD_MANAGER
+    ScopeLock protect(mutex);
+    return failures.find(name) != failures.end();
+#else
+    return false;
+#endif
+  }
+
+  gcc_pure
+  bool HasFailed(const AvailableFile &file) const {
+    return HasFailed(file.GetName());
   }
 
   gcc_pure
@@ -345,7 +369,8 @@ ManagedFileListWidget::RefreshList()
         (is_downloading || File::Exists(path))) {
       download_active |= is_downloading;
       items.append().Set(BaseName(path),
-                         is_downloading ? &download_status : NULL);
+                         is_downloading ? &download_status : NULL,
+                         HasFailed(remote_file));
     }
   }
 
@@ -409,6 +434,10 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
       text.Format(_T("%s (%s)"), _("Downloading"), size);
     }
 
+    UPixelScalar width = canvas.CalcTextWidth(text);
+    canvas.text(rc.right - width - margin, rc.top + margin, text);
+  } else if (file.failed) {
+    const TCHAR *text = _("Error");
     UPixelScalar width = canvas.CalcTextWidth(text);
     canvas.text(rc.right - width - margin, rc.top + margin, text);
   }
@@ -582,8 +611,11 @@ ManagedFileListWidget::OnDownloadAdded(const TCHAR *path_relative,
   if (!name2.IsValid())
     return;
 
+  const std::string name3(name2);
+
   mutex.Lock();
-  downloads[(const char *)name2] = DownloadStatus{size, position};
+  downloads[name3] = DownloadStatus{size, position};
+  failures.erase(name3);
   mutex.Unlock();
 
   SendNotification();
@@ -601,9 +633,14 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
   if (!name2.IsValid())
     return;
 
+  const std::string name3(name2);
+
   mutex.Lock();
 
-  downloads.erase((const char *)name2);
+  downloads.erase(name3);
+
+  if (!success)
+    failures.insert(name3);
 
   if (StringIsEqual(name2, "repository"))
     repository_modified = true;
