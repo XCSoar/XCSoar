@@ -91,6 +91,13 @@ FindRemoteFile(const FileRepository &repository, const TCHAR *name)
 }
 #endif
 
+gcc_pure
+static bool
+CanDownload(const FileRepository &repository, const TCHAR *name)
+{
+  return FindRemoteFile(repository, name) != NULL;
+}
+
 #endif
 
 class ManagedFileListWidget
@@ -372,8 +379,7 @@ ManagedFileListWidget::UpdateButtons()
     const unsigned current = GetList().GetCursorIndex();
 
     download_button->SetEnabled(!items.empty() &&
-                                FindRemoteFile(repository,
-                                               items[current].name) != NULL);
+                                CanDownload(repository, items[current].name));
     cancel_button->SetEnabled(!items.empty() && items[current].downloading);
   }
 #endif
