@@ -50,6 +50,20 @@ Copyright_License {
 using std::min;
 using std::max;
 
+class TargetDialogMapWindow : public TargetMapWindow {
+public:
+  TargetDialogMapWindow(const WaypointLook &waypoint_look,
+                        const AirspaceLook &airspace_look,
+                        const TrailLook &trail_look,
+                        const TaskLook &task_look,
+                        const AircraftLook &aircraft_look)
+    :TargetMapWindow(waypoint_look, airspace_look, trail_look,
+                     task_look, aircraft_look) {}
+
+protected:
+  virtual void OnTaskModified();
+};
+
 static WndForm *wf = NULL;
 static TargetMapWindow *map;
 static CheckBoxControl *chkbOptimized = NULL;
@@ -67,8 +81,8 @@ OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
             const WindowStyle style)
 {
   const MapLook &look = UIGlobals::GetMapLook();
-  map = new TargetMapWindow(look.waypoint, look.airspace,
-                            look.trail, look.task, look.aircraft);
+  map = new TargetDialogMapWindow(look.waypoint, look.airspace,
+                                  look.trail, look.task, look.aircraft);
   map->SetTerrain(terrain);
   map->SetTopograpgy(topography);
   map->SetAirspaces(&airspace_database);
@@ -277,6 +291,13 @@ RefreshCalculator()
   if (total.travelled.IsDefined())
     LoadOptionalFormProperty(*wf, _T("prpSpeedAchieved"), UnitGroup::TASK_SPEED,
                              total.travelled.GetSpeed());
+}
+
+void
+TargetDialogMapWindow::OnTaskModified()
+{
+  TargetMapWindow::OnTaskModified();
+  RefreshCalculator();
 }
 
 static void
