@@ -642,7 +642,7 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
   if (!success)
     failures.insert(name3);
 
-  if (StringIsEqual(name2, "repository"))
+  if (success && StringIsEqual(name2, "repository"))
     repository_modified = true;
 
   mutex.Unlock();
