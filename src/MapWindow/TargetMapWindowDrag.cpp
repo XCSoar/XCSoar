@@ -29,6 +29,12 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
+TargetMapWindow::OnTaskModified()
+{
+  Invalidate();
+}
+
+void
 TargetMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 {
   task_look.target_icon.Draw(canvas, drag_last.x, drag_last.y);
@@ -49,7 +55,7 @@ TargetMapWindow::TargetDragged(const int x, const int y)
     task_manager->SetTarget(target_index, gp, true);
   }
 
-  Invalidate();
+  OnTaskModified();
   return true;
 }
 

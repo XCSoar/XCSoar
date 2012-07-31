@@ -199,6 +199,9 @@ private:
   bool TargetDragged(const int x, const int y);
 
 protected:
+  virtual void OnTaskModified();
+
+protected:
   virtual void OnCreate();
   virtual void OnDestroy();
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
