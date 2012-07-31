@@ -42,6 +42,11 @@ Copyright_License {
 #include "Repository/FileRepository.hpp"
 #include "Repository/Parser.hpp"
 
+#ifdef ANDROID
+#include "Android/NativeView.hpp"
+#include "Android/Main.hpp"
+#endif
+
 #ifdef HAVE_DOWNLOAD_MANAGER
 #include "ListPicker.hpp"
 #include "Form/Button.hpp"
@@ -677,10 +682,8 @@ ManagedFileListWidget::OnNotification()
                    _("Error"), MB_OK);
 }
 
-#endif
-
-void
-ShowFileManager()
+static void
+ShowFileManager2()
 {
   ManagedFileListWidget widget;
   WidgetDialog dialog(_("File Manager"), &widget);
@@ -689,4 +692,26 @@ ShowFileManager()
 
   dialog.ShowModal();
   dialog.StealWidget();
+}
+
+#endif
+
+void
+ShowFileManager()
+{
+#ifdef HAVE_DOWNLOAD_MANAGER
+  if (Net::DownloadManager::IsAvailable()) {
+    ShowFileManager2();
+    return;
+  }
+#endif
+
+  const TCHAR *message =
+    _("The file manager is not available on this device.");
+#ifdef ANDROID
+  if (native_view->GetAPILevel() < 9)
+    message = _("The file manager requires Android 2.3.");
+#endif
+
+  ShowMessageBox(message, _("File Manager"), MB_OK);
 }
