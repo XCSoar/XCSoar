@@ -187,6 +187,11 @@ class ManagedFileListWidget
    * LoadRepositoryFile()?
    */
   bool repository_modified;
+
+  /**
+   * Has the repository file download failed?
+   */
+  bool repository_failed;
 #endif
 
   TrivialArray<FileItem, 64u> items;
@@ -339,6 +344,7 @@ ManagedFileListWidget::LoadRepositoryFile()
 #ifdef HAVE_DOWNLOAD_MANAGER
   mutex.Lock();
   repository_modified = false;
+  repository_failed = false;
   mutex.Unlock();
 #endif
 
@@ -639,11 +645,12 @@ ManagedFileListWidget::OnDownloadComplete(const TCHAR *path_relative,
 
   downloads.erase(name3);
 
-  if (!success)
+  if (StringIsEqual(name2, "repository")) {
+    repository_failed = !success;
+    if (success)
+      repository_modified = true;
+  } else if (!success)
     failures.insert(name3);
-
-  if (success && StringIsEqual(name2, "repository"))
-    repository_modified = true;
 
   mutex.Unlock();
 
