@@ -122,6 +122,7 @@ static const StaticEnumChoice  aircraft_symbol_list[] = {
 };
 
 static const StaticEnumChoice  wind_arrow_list[] = {
+  { (unsigned)WindArrowStyle::NO_ARROW, N_("Off"), N_("No wind arrow is drawn.") },
   { (unsigned)WindArrowStyle::ARROW_HEAD, N_("Arrow head"), N_("Draws an arrow head only.") },
   { (unsigned)WindArrowStyle::FULL_ARROW, N_("Full arrow"), N_("Draws an arrow head with a dashed arrow line.") },
   { 0 }

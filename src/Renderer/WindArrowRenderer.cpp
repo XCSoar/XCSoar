@@ -112,7 +112,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const DerivedInfo &calculated,
                         const MapSettings &settings)
 {
-  if (!calculated.wind_available)
+  if (!calculated.wind_available ||
+      settings.wind_arrow_style == WindArrowStyle::NO_ARROW)
     return;
 
   // don't bother drawing it if not significant
