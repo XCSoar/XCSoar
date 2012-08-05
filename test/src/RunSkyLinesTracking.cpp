@@ -57,6 +57,18 @@ public:
     printf("received ack %u\n", id);
     Done();
   }
+
+  virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
+                         const GeoPoint &location, int altitude) gcc_override {
+    BrokenTime time = BrokenTime::FromSecondOfDay(time_of_day_ms / 1000);
+
+    printf("received traffic pilot=%u time=%02u:%02u:%02u location=%f/%f altitude=%d\n",
+           pilot_id, time.hour, time.minute, time.second,
+           (double)location.longitude.Degrees(),
+           (double)location.latitude.Degrees(),
+           altitude);
+    Done();
+  }
 };
 
 #endif
@@ -97,6 +109,12 @@ main(int argc, char *argv[])
     return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
   } else if (StringIsEqual(args.PeekNext(), "ping")) {
     client.SendPing(1);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    handler.Wait();
+#endif
+  } else if (StringIsEqual(args.PeekNext(), "traffic")) {
+    client.SendTrafficRequest(true, true);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     handler.Wait();

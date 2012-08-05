@@ -21,24 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TRACKING_SKYLINES_HANDLER_HPP
-#define XCSOAR_TRACKING_SKYLINES_HANDLER_HPP
+#ifndef XCSOAR_TRACKING_SKYLINES_FEATURES_HPP
+#define XCSOAR_TRACKING_SKYLINES_FEATURES_HPP
 
-#include "Features.hpp"
-
-#ifdef HAVE_SKYLINES_TRACKING_HANDLER
-
-struct GeoPoint;
-
-namespace SkyLinesTracking {
-  class Handler {
-  public:
-    virtual void OnAck(unsigned id) {}
-    virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
-                           const ::GeoPoint &location, int altitude) {}
-  };
-}
-
+#ifdef HAVE_POSIX
+#define HAVE_SKYLINES_TRACKING_HANDLER
 #endif
 
 #endif

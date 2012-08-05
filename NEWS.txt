@@ -28,6 +28,7 @@ Version 6.5 - not yet released
   - faster map initialisation during startup
 * infoboxes
   - added thermal assistant infobox
+* track friends via internet connection (SkyLines live tracking)
 
 Version 6.4.5 - not yet released
 * user interface

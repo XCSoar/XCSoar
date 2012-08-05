@@ -186,7 +186,47 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
   return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
 }
 
+bool
+SkyLinesTracking::Client::SendTrafficRequest(bool followees, bool club)
+{
+  if (key == 0 || !socket.IsDefined())
+    return false;
+
+  TrafficRequestPacket packet;
+  packet.header.magic = ToBE32(MAGIC);
+  packet.header.crc = 0;
+  packet.header.type = ToBE16(Type::TRAFFIC_REQUEST);
+  packet.header.key = ToBE64(key);
+  packet.flags = ToBE32((followees ? packet.FLAG_FOLLOWEES : 0)
+                        | (club ? packet.FLAG_CLUB : 0));
+  packet.reserved = 0;
+
+  packet.header.crc = ToBE16(UpdateCRC16CCITT(&packet, sizeof(packet), 0));
+
+  return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
+}
+
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
+inline void
+SkyLinesTracking::Client::OnTrafficReceived(const TrafficResponsePacket &packet,
+                                            size_t length)
+{
+  const unsigned n = packet.traffic_count;
+  const TrafficResponsePacket::Traffic *traffic =
+    (const TrafficResponsePacket::Traffic *)(&packet + 1);
+
+  if (length != sizeof(packet) + n * sizeof(*traffic))
+    return;
+
+  const TrafficResponsePacket::Traffic *end = traffic + n;
+  for (; traffic != end; ++traffic)
+    handler->OnTraffic(FromBE32(traffic->pilot_id),
+                       FromBE32(traffic->time),
+                       ::GeoPoint(Angle::Degrees(fixed(FromBE32(traffic->location.longitude)) / 1000000),
+                                  Angle::Degrees(fixed(FromBE32(traffic->location.latitude)) / 1000000)),
+                       FromBE16(traffic->altitude));
+}
 
 inline void
 SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
@@ -203,14 +243,20 @@ SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
     return;
 
   const ACKPacket &ack = *(const ACKPacket *)data;
+  const TrafficResponsePacket &traffic = *(const TrafficResponsePacket *)data;
 
   switch ((Type)FromBE16(header.type)) {
   case PING:
   case FIX:
+  case TRAFFIC_REQUEST:
     break;
 
   case ACK:
     handler->OnAck(FromBE16(ack.id));
+    break;
+
+  case TRAFFIC_RESPONSE:
+    OnTrafficReceived(traffic, length);
     break;
   }
 }

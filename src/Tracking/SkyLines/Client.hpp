@@ -35,6 +35,8 @@ struct NMEAInfo;
 class IOThread;
 
 namespace SkyLinesTracking {
+  struct TrafficResponsePacket;
+
   class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     : private FileEventHandler
@@ -77,9 +79,11 @@ namespace SkyLinesTracking {
 
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);
+    bool SendTrafficRequest(bool followees, bool club);
 
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
   private:
+    void OnTrafficReceived(const TrafficResponsePacket &packet, size_t length);
     void OnDatagramReceived(void *data, size_t length);
 
     /* virtual methods from FileEventHandler */

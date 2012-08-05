@@ -66,6 +66,8 @@ namespace SkyLinesTracking {
     PING = 1,
     ACK = 2,
     FIX = 3,
+    TRAFFIC_REQUEST = 4,
+    TRAFFIC_RESPONSE = 5,
   };
 
   /**
@@ -234,6 +236,93 @@ namespace SkyLinesTracking {
 
 #ifdef __cplusplus
   static_assert(sizeof(FixPacket) == 48, "Wrong struct size");
+#endif
+
+  /**
+   * The client requests traffic information.
+   */
+  struct TrafficRequestPacket {
+    /**
+     * The client wants to receive information about all pilots he
+     * follows on the SkyLines web site.
+     */
+    static const uint32_t FLAG_FOLLOWEES = 0x1;
+
+    /**
+     * The client wants to receive information about all members in
+     * the same club.
+     */
+    static const uint32_t FLAG_CLUB = 0x2;
+
+    Header header;
+
+    uint32_t flags;
+
+    uint32_t reserved;
+  };
+
+#ifdef __cplusplus
+  static_assert(sizeof(TrafficRequestPacket) == 24, "Wrong struct size");
+#endif
+
+  /**
+   * The responds to #TrafficRequestPacket.  This packet has a dynamic
+   * length.  If there are many records being sent, the packet should
+   * be split at a reasonable size, to avoid implicit UDP datagram
+   * fragmentation.
+   */
+  struct TrafficResponsePacket {
+    struct Traffic {
+      uint32_t pilot_id;
+
+      uint32_t time;
+
+      GeoPoint location;
+
+      int16_t altitude;
+
+      /**
+       * Reserved for future use.
+       */
+      uint16_t reserved;
+
+      /**
+       * Reserved for future use.
+       */
+      uint32_t reserved2;
+    };
+
+#ifdef __cplusplus
+    static_assert(sizeof(Traffic) == 24, "Wrong struct size");
+#endif
+
+    Header header;
+
+    /**
+     * Reserved for future use.
+     */
+    uint16_t reserved;
+
+    /**
+     * Reserved for future use.
+     */
+    uint8_t reserved2;
+
+    /**
+     * The number of #Traffic instances following this struct.
+     */
+    uint8_t traffic_count;
+
+    /**
+     * Reserved for future use.
+     */
+    uint32_t reserved3;
+
+    /* followed by a number of #Traffic instances */
+  };
+
+#ifdef __cplusplus
+  static_assert(sizeof(TrafficRequestPacket) == 24, "Wrong struct size");
 #endif
 };
 
