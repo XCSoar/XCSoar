@@ -136,7 +136,7 @@ namespace SkyLinesTracking {
      * silently discarded, but the server may use this flag to respond
      * to a bad key in a PING packet.
      */
-    static const uint64_t FLAG_BAD_KEY = 0x1;
+    static const uint32_t FLAG_BAD_KEY = 0x1;
 
     Header header;
 
@@ -172,13 +172,13 @@ namespace SkyLinesTracking {
    * A GPS fix being uploaded to the server.
    */
   struct FixPacket {
-    static const uint64_t FLAG_LOCATION = 0x1;
-    static const uint64_t FLAG_TRACK = 0x2;
-    static const uint64_t FLAG_GROUND_SPEED = 0x4;
-    static const uint64_t FLAG_AIRSPEED = 0x8;
-    static const uint64_t FLAG_ALTITUDE = 0x10;
-    static const uint64_t FLAG_VARIO = 0x20;
-    static const uint64_t FLAG_ENL = 0x40;
+    static const uint32_t FLAG_LOCATION = 0x1;
+    static const uint32_t FLAG_TRACK = 0x2;
+    static const uint32_t FLAG_GROUND_SPEED = 0x4;
+    static const uint32_t FLAG_AIRSPEED = 0x8;
+    static const uint32_t FLAG_ALTITUDE = 0x10;
+    static const uint32_t FLAG_VARIO = 0x20;
+    static const uint32_t FLAG_ENL = 0x40;
 
     Header header;
 
