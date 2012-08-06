@@ -50,7 +50,7 @@ public:
     return mask.value == _mask.mask.value;
   }
 
-  AirspaceActivity(unsigned char day_of_week) {
+  AirspaceActivity(int8_t day_of_week) {
     // setter from BrokenDate format day
     mask.value = 0;
     switch(day_of_week) {

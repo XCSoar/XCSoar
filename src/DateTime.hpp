@@ -49,9 +49,10 @@ struct BrokenDate {
   uint8_t day;
 
   /**
-   * Day of the week (0-6, 0: sunday)
+   * Day of the week (0-6, 0: sunday).  -1 means the value has not
+   * been determined.
    */
-  unsigned char day_of_week;
+  int8_t day_of_week;
 
   /**
    * Non-initializing default constructor.
