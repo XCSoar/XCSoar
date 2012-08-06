@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-07-23 22:06+0000\n"
+"PO-Revision-Date: 2012-07-30 23:01+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-07-26 19:12+0000\n"
-"X-Generator: Launchpad (build 15679)\n"
+"X-Launchpad-Export-Date: 2012-08-06 08:36+0000\n"
+"X-Generator: Launchpad (build 15745)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -529,7 +529,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:100
 #, no-c-format
 msgid "Thermal climb, last 30 s"
-msgstr "Steigen, letzte 30s"
+msgstr "Thermik - Mittel über letzte 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:101
 #, no-c-format
@@ -846,7 +846,7 @@ msgstr "Verbleibende Strecke  um alle Wenden."
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
 msgid "Final GR (TE Compensated)"
-msgstr "Endanflug - GZ (TE Kompensiert)"
+msgstr "Endanflug - GZ (TE kompensiert)"
 
 #: src/InfoBoxes/Content/Factory.cpp:271
 #, no-c-format
@@ -1169,7 +1169,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
 msgid "Flight Duration"
-msgstr "Flugzeit"
+msgstr "Zeit - Dauer des Fluges"
 
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
@@ -1203,7 +1203,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:460
 #, no-c-format
 msgid "Next GR (TE Compensated)"
-msgstr "Nächste GZ (TE compensiert)"
+msgstr "Nächster Wegpunkt - GZ (TE kompensiert)"
 
 #: src/InfoBoxes/Content/Factory.cpp:461
 #, no-c-format
@@ -1235,7 +1235,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:470
 #, no-c-format
 msgid "Time local"
-msgstr "Lokalzeit"
+msgstr "Zeit - lokale Uhrzeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:471
 #, no-c-format
@@ -1298,7 +1298,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:510
 #, no-c-format
 msgid "Speed dolphin"
-msgstr "Sollfahrt (Delphin-Stil)"
+msgstr "McCready - Sollfahrt (Delphin-Stil)"
 
 #: src/InfoBoxes/Content/Factory.cpp:511
 #, no-c-format
@@ -1894,7 +1894,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:824
 #, no-c-format
 msgid "Experimental 2"
-msgstr "Experimental 2"
+msgstr "Experimentell 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:825
 #, no-c-format
@@ -1967,7 +1967,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:874 src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
 msgid "Barogram"
-msgstr "Barogramm"
+msgstr "Höhe - Barogramm"
 
 #: src/InfoBoxes/Content/Factory.cpp:876
 #, no-c-format
@@ -2145,7 +2145,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:974
 #, no-c-format
 msgid "Nearest airspace horizontal"
-msgstr "Luftraum - horizontal nächster"
+msgstr "Luftraum - horizontal Nächster"
 
 #: src/InfoBoxes/Content/Factory.cpp:975
 #, no-c-format
@@ -2160,7 +2160,7 @@ msgstr "Die Horizontale Distanz zum nächsten Luftraum."
 #: src/InfoBoxes/Content/Factory.cpp:984
 #, no-c-format
 msgid "Nearest airspace vertical"
-msgstr "Luftraum - vertikal nächster"
+msgstr "Luftraum - vertikal Nächster"
 
 #: src/InfoBoxes/Content/Factory.cpp:985
 #, no-c-format
@@ -2263,7 +2263,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:1033
 #, no-c-format
 msgid "Thermal next leg equivalent"
-msgstr "Entsprechendes Steigen auf dem nächster Schenkel"
+msgstr "Thermik - Entsprechende auf nächstem Schenkel"
 
 #: src/InfoBoxes/Content/Factory.cpp:1034
 #, no-c-format
@@ -2326,7 +2326,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:170
 #, no-c-format
 msgid "Wind arrow"
-msgstr "Windpfeil"
+msgstr "Wind - Pfeil"
 
 #: src/InfoBoxes/Content/Factory.cpp:1064 src/Dialogs/dlgConfiguration.cpp:106
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:191
