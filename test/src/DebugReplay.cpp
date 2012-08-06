@@ -171,8 +171,11 @@ void
 DebugReplayIGC::CopyFromFix(const IGCFix &fix)
 {
   if (basic.time_available && basic.date_time_utc.hour >= 23 &&
-      fix.time.hour == 0)
+      fix.time.hour == 0) {
+    /* midnight roll-over */
     ++day;
+    basic.date_time_utc.IncrementDay();
+  }
 
   basic.clock = basic.time =
     fixed(day * 24 * 3600 + fix.time.GetSecondOfDay());

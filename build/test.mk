@@ -1320,6 +1320,7 @@ $(eval $(call link-program,lxn2igc,LXN2IGC))
 RUN_IGC_WRITER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Version.cpp \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
@@ -1335,6 +1336,7 @@ $(eval $(call link-program,RunIGCWriter,RUN_IGC_WRITER))
 
 RUN_FLIGHT_LOGGER_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Logger/FlightLogger.cpp \
 	$(TEST_SRC_DIR)/RunFlightLogger.cpp
@@ -1355,6 +1357,7 @@ $(eval $(call link-program,RunCirclingWind,RUN_CIRCLING_WIND))
 
 RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/Wind/WindZigZag.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_LDADD = $(DEBUG_REPLAY_LDADD)
@@ -1363,6 +1366,7 @@ $(eval $(call link-program,RunWindZigZag,RUN_WIND_ZIG_ZAG))
 
 RUN_WIND_EKF_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/Wind/WindEKF.cpp \
 	$(SRC)/Wind/WindEKFGlue.cpp \
 	$(TEST_SRC_DIR)/RunWindEKF.cpp
@@ -1398,6 +1402,7 @@ $(eval $(call link-program,RunTask,RUN_TASK))
 
 RUN_TRACE_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
@@ -1411,6 +1416,7 @@ $(eval $(call link-program,RunTrace,RUN_TRACE))
 
 RUN_OLC_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
@@ -1470,6 +1476,7 @@ $(eval $(call link-program,AnalyseFlight,ANALYSE_FLIGHT))
 
 FLIGHT_PATH_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
@@ -2126,6 +2133,7 @@ $(eval $(call link-program,PlayTone,PLAY_TONE))
 
 PLAY_VARIO_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(TEST_SRC_DIR)/PlayVario.cpp
 PLAY_VARIO_LDADD = $(filter-out $(OS_LIBS),$(DEBUG_REPLAY_LDADD))
 PLAY_VARIO_DEPENDS = AUDIO GEO MATH SCREEN UTIL OS
@@ -2133,6 +2141,7 @@ $(eval $(call link-program,PlayVario,PLAY_VARIO))
 
 DUMP_VARIO_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(TEST_SRC_DIR)/DumpVario.cpp
 DUMP_VARIO_LDADD = $(DEBUG_REPLAY_LDADD)
 DUMP_VARIO_DEPENDS = AUDIO GEO MATH SCREEN UTIL OS
@@ -2301,6 +2310,7 @@ $(eval $(call link-program,DumpFlarmNet,DUMP_FLARM_NET))
 
 IGC2NMEA_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/DateTime.cpp \
 	$(TEST_SRC_DIR)/IGC2NMEA.cpp
 IGC2NMEA_DEPENDS = GEO MATH UTIL
 IGC2NMEA_LDADD = $(DEBUG_REPLAY_LDADD)
