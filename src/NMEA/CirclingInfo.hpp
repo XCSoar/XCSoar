@@ -56,6 +56,11 @@ struct CirclingInfo
   GeoPoint climb_start_location;
 
   /**
+   * Start altitude of the current/last climb.
+   */
+  fixed climb_start_altitude;
+
+  /**
    * Start altitude of the current/last climb (total energy).
    */
   fixed climb_start_altitude_te;

@@ -140,7 +140,7 @@ GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated)
   case CirclingMode::CLIMB:
     if (calculated.climb_start_time > last_climb_start_time)
       // set altitude for start of circling (as base of climb)
-      OnClimbBase(calculated, calculated.turn_start_altitude);
+      OnClimbBase(calculated, calculated.climb_start_altitude);
     break;
 
   case CirclingMode::CRUISE:
