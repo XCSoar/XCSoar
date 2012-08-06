@@ -83,6 +83,14 @@ struct BrokenDate {
   }
 
   /**
+   * Returns an instance that fails the Plausible() check.
+   */
+  constexpr
+  static BrokenDate Invalid() {
+    return BrokenDate(0, 0, 0);
+  }
+
+  /**
    * Does this object contain plausible values?
    */
   constexpr
@@ -134,6 +142,14 @@ struct BrokenTime {
     return hour > other.hour ||
       (hour == other.hour && (minute > other.minute ||
                               (minute == other.minute && second > other.second)));
+  }
+
+  /**
+   * Returns an instance that fails the Plausible() check.
+   */
+  constexpr
+  static BrokenTime Invalid() {
+    return BrokenTime(24, 60, 60);
   }
 
   /**
@@ -214,9 +230,21 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
     :BrokenDate(_year, _month, _day), BrokenTime(0, 0) {}
 
   constexpr
+  BrokenDateTime(const BrokenDate &date, const BrokenTime &time)
+    :BrokenDate(date), BrokenTime(time) {}
+
+  constexpr
   bool operator==(const BrokenDateTime other) const {
     return (const BrokenDate &)*this == (const BrokenDate &)other &&
       (const BrokenTime &)*this == (const BrokenTime &)other;
+  }
+
+  /**
+   * Returns an instance that fails the Plausible() check.
+   */
+  constexpr
+  static BrokenDateTime Invalid() {
+    return BrokenDateTime(BrokenDate::Invalid(), BrokenTime::Invalid());
   }
 
   /**
