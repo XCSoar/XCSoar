@@ -131,8 +131,9 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
 
         // Remember the start values of the climbing period
         circling_info.climb_start_location = circling_info.turn_start_location;
-        circling_info.climb_start_altitude = circling_info.turn_start_altitude
-            + circling_info.turn_start_energy_height;
+        circling_info.climb_start_altitude_te =
+          circling_info.turn_start_altitude
+          + circling_info.turn_start_energy_height;
         circling_info.climb_start_time = circling_info.turn_start_time;
       }
     } else {

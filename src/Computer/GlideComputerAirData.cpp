@@ -216,7 +216,8 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
   if (positive(circling.climb_start_time)) {
     current_thermal.start_time = circling.climb_start_time;
     current_thermal.end_time = basic.time;
-    current_thermal.gain = basic.TE_altitude - circling.climb_start_altitude;
+    current_thermal.gain =
+      basic.TE_altitude - circling.climb_start_altitude_te;
     current_thermal.CalculateAll();
   } else
     current_thermal.Clear();
@@ -529,7 +530,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
     return;
 
   fixed gain = calculated.cruise_start_altitude
-    + basic.energy_height - calculated.climb_start_altitude;
+    + basic.energy_height - calculated.climb_start_altitude_te;
   if (!positive(gain))
     return;
 
