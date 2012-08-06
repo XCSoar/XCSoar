@@ -91,6 +91,8 @@ struct BrokenDate {
       month >= 1 && month <= 12 &&
       day >= 1 && day <= 31;
   }
+
+  void IncrementDay();
 };
 
 /**

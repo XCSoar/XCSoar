@@ -65,6 +65,58 @@ BrokenTime::operator+(int seconds) const
   return FromSecondOfDayChecked(seconds);
 }
 
+gcc_const
+static bool
+IsLeapYear(unsigned y)
+{
+    y += 1900;
+    return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
+}
+
+gcc_const
+static unsigned
+DaysInFebruary(unsigned year)
+{
+  return IsLeapYear(year) ? 29 : 28;
+}
+
+gcc_const
+static unsigned
+DaysInMonth(unsigned month, unsigned year)
+{
+  if (month == 4 || month == 6 || month == 9 || month == 11)
+    return 30;
+  else if (month != 2)
+    return 31;
+  else
+    return DaysInFebruary(year);
+}
+
+void
+BrokenDate::IncrementDay()
+{
+  const unsigned max_day = DaysInMonth(month, year);
+
+  ++day;
+
+  if (day > max_day) {
+    /* roll over to next month */
+    day = 1;
+    ++month;
+    if (month > 12) {
+      /* roll over to next year */
+      month = 1;
+      ++year;
+    }
+  }
+
+  if (day_of_week >= 0) {
+    ++day_of_week;
+    if (day_of_week >= 7)
+      day_of_week = 0;
+  }
+}
+
 #ifdef HAVE_POSIX
 
 static const BrokenDateTime
@@ -170,13 +222,6 @@ ToFileTime(const BrokenDateTime &dt)
   FILETIME ft;
   SystemTimeToFileTime(&st, &ft);
   return ft;
-}
-
-static bool
-IsLeapYear(unsigned y)
-{
-    y += 1900;
-    return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
 }
 
 static time_t

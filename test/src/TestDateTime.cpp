@@ -59,6 +59,24 @@ TestDate()
   ok1(!BrokenDate(2011, 0, 1).Plausible());
   ok1(!BrokenDate(2011, 13, 1).Plausible());
   ok1(!BrokenDate(2011, 1, 32).Plausible());
+
+  BrokenDate d(2010, 2, 27);
+  d.IncrementDay();
+  ok1(d == BrokenDate(2010, 2, 28));
+  d.IncrementDay();
+  ok1(d == BrokenDate(2010, 3, 1));
+
+  d = BrokenDate(2010, 12, 31);
+  d.IncrementDay();
+  ok1(d == BrokenDate(2011, 1, 1));
+
+  d = BrokenDate(2012, 2, 27);
+  d.IncrementDay();
+  ok1(d == BrokenDate(2012, 2, 28));
+  d.IncrementDay();
+  ok1(d == BrokenDate(2012, 2, 29));
+  d.IncrementDay();
+  ok1(d == BrokenDate(2012, 3, 1));
 }
 
 static void
@@ -150,7 +168,7 @@ TestDateTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(86);
+  plan_tests(92);
 
   TestDate();
   TestTime();
