@@ -72,6 +72,19 @@ NMEAInfo::UpdateClock()
   clock = fixed(MonotonicClockMS()) / 1000;
 }
 
+BrokenDateTime
+NMEAInfo::GetDateTimeAt(fixed other_time) const
+{
+  if (negative(other_time))
+    return BrokenDateTime::Invalid();
+
+  if (!time_available || !date_available)
+    return BrokenDateTime(BrokenDate::Invalid(),
+                          BrokenTime::FromSecondOfDayChecked(int(other_time)));
+
+  return date_time_utc + int(other_time - time);
+}
+
 void
 NMEAInfo::ProvideTime(fixed _time)
 {

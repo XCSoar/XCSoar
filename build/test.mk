@@ -271,6 +271,7 @@ TEST_ROUTE_DEPENDS = JASPER IO ZZIP OS ROUTE AIRSPACE GLIDE GEO MATH UTIL
 $(eval $(call link-program,test_route,TEST_ROUTE))
 
 TEST_REPLAY_TASK_SOURCES = \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
@@ -544,6 +545,7 @@ TEST_LOGGER_DEPENDS = IO OS GEO MATH UTIL
 $(eval $(call link-program,TestLogger,TEST_LOGGER))
 
 TEST_DRIVER_SOURCES = \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -845,6 +847,7 @@ RUN_NOAA_DOWNLOADER_DEPENDS = GEO IO MATH LIBNET UTIL
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
 
 RUN_SL_TRACKING_SOURCES = \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
@@ -1104,6 +1107,7 @@ LOG_PORT_DEPENDS = PORT ASYNC OS THREAD UTIL
 $(eval $(call link-program,LogPort,LOG_PORT))
 
 RUN_DEVICE_DRIVER_SOURCES = \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \

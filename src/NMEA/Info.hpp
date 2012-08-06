@@ -414,6 +414,16 @@ struct NMEAInfo {
     return !last.time_available || (time_available && time < last.time);
   }
 
+  /**
+   * Returns a #BrokenDate referring to the given time stamp (all
+   * UTC).  This object's #date_time_utc and #time attributes are used
+   * to calculate the date.
+   *
+   * @param other_time the time stamp (see attribute #time)
+   */
+  gcc_pure
+  BrokenDateTime GetDateTimeAt(fixed other_time) const;
+
   bool MovementDetected() const {
     return ground_speed_available && ground_speed > fixed_two;
   }

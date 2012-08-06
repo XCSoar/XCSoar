@@ -48,20 +48,6 @@ struct Result {
 static Trace full_trace(60, Trace::null_time, 256);
 static Trace sprint_trace(0, 9000, 64);
 
-static BrokenDateTime
-BreakTime(const NMEAInfo &basic, fixed time)
-{
-  assert(basic.time_available);
-  assert(basic.date_available);
-
-  BrokenDateTime broken = basic.date_time_utc;
-  (BrokenTime &)broken = BrokenTime::FromSecondOfDayChecked((unsigned)time);
-
-  // XXX: what if "time" refers to yesterday/tomorrow? (midnight rollover)
-
-  return broken;
-}
-
 static void
 Update(const MoreData &basic, const FlyingState &state,
        Result &result)
@@ -70,7 +56,7 @@ Update(const MoreData &basic, const FlyingState &state,
     return;
 
   if (state.flying && !result.takeoff_time.Plausible()) {
-    result.takeoff_time = BreakTime(basic, state.takeoff_time);
+    result.takeoff_time = basic.GetDateTimeAt(state.takeoff_time);
     result.takeoff_location = state.takeoff_location;
   }
 
@@ -83,7 +69,7 @@ Update(const MoreData &basic, const FlyingState &state,
   }
 
   if (!negative(state.release_time) && !result.release_time.Plausible()) {
-    result.release_time = BreakTime(basic, state.release_time);
+    result.release_time = basic.GetDateTimeAt(state.release_time);
     result.release_location = state.release_location;
   }
 }
