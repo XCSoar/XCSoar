@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.4.1 - not yet released
+
 Version 6.4 - 2012/07/31
 * calculations
   - Contest: add FFVV NetCoupe (#1648)
