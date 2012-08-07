@@ -298,6 +298,7 @@ void
 GlideComputer::OnStartTask()
 {
   GlideComputerBlackboard::StartTask();
+  air_data_computer.ResetStats();
   stats_computer.StartTask(Basic());
 }
 

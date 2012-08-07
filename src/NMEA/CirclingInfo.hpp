@@ -75,15 +75,6 @@ struct CirclingInfo
   /** StartTime of the current/last cruise */
   fixed cruise_start_time;
 
-  /** Start/End time of the turn (used for flight mode determination) */
-  fixed turn_start_time;
-  /** Start/End location of the turn (used for flight mode determination) */
-  GeoPoint turn_start_location;
-  /** Start/End altitude of the turn (used for flight mode determination) */
-  fixed turn_start_altitude;
-  /** Start/End energy height of the turn (used for flight mode determination) */
-  fixed turn_start_energy_height;
-
   /** Current TurnMode (Cruise, Climb or somewhere between) */
   CirclingMode turn_mode;
 
@@ -102,9 +93,6 @@ struct CirclingInfo
   fixed time_cruise;
   /** Time spent in circling mode */
   fixed time_climb;
-
-  /** Minimum altitude since start of task */
-  fixed min_altitude;
 
   /** Maximum height gain (from MinAltitude) during task */
   fixed max_height_gain;

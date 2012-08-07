@@ -38,7 +38,6 @@ CirclingInfo::Clear()
   cruise_start_time = fixed_minus_one;
   climb_start_time = fixed_minus_one;
 
-  min_altitude = fixed_zero;
   max_height_gain = fixed_zero;
 
   turn_rate_smoothed = fixed_zero;

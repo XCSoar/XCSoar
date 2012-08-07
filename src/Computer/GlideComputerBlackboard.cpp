@@ -59,7 +59,6 @@ GlideComputerBlackboard::StartTask()
 
   // reset max height gain stuff on task start
   calculated_info.max_height_gain = fixed_zero;
-  calculated_info.min_altitude = fixed_zero;
 }
 
 void

@@ -32,6 +32,18 @@ static const fixed CRUISE_CLIMB_SWITCH(15);
 static const fixed CLIMB_CRUISE_SWITCH(10);
 
 void
+CirclingComputer::Reset()
+{
+  ResetStats();
+}
+
+void
+CirclingComputer::ResetStats()
+{
+  min_altitude = fixed_zero;
+}
+
+void
 CirclingComputer::TurnRate(CirclingInfo &circling_info,
                            const NMEAInfo &basic, const NMEAInfo &last_basic,
                            const DerivedInfo &calculated,
@@ -106,10 +118,10 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     // If (in cruise mode and beginning of circling detected)
     if (circling_info.turning || force_circling) {
       // Remember the start values of the turn
-      circling_info.turn_start_time = basic.time;
-      circling_info.turn_start_location = basic.location;
-      circling_info.turn_start_altitude = basic.nav_altitude;
-      circling_info.turn_start_energy_height = basic.energy_height;
+      turn_start_time = basic.time;
+      turn_start_location = basic.location;
+      turn_start_altitude = basic.nav_altitude;
+      turn_start_energy_height = basic.energy_height;
       circling_info.turn_mode = CirclingMode::POSSIBLE_CLIMB;
     }
     if (!force_circling)
@@ -121,7 +133,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       break;
     }
     if (circling_info.turning || force_circling) {
-      if (((basic.time - calculated.turn_start_time) > CRUISE_CLIMB_SWITCH)
+      if (((basic.time - turn_start_time) > CRUISE_CLIMB_SWITCH)
           || force_circling) {
         // yes, we are certain now that we are circling
         circling_info.circling = true;
@@ -130,12 +142,11 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
         circling_info.turn_mode = CirclingMode::CLIMB;
 
         // Remember the start values of the climbing period
-        circling_info.climb_start_location = circling_info.turn_start_location;
-        circling_info.climb_start_altitude = circling_info.turn_start_altitude;
+        circling_info.climb_start_location = turn_start_location;
+        circling_info.climb_start_altitude = turn_start_altitude;
         circling_info.climb_start_altitude_te =
-          circling_info.turn_start_altitude
-          + circling_info.turn_start_energy_height;
-        circling_info.climb_start_time = circling_info.turn_start_time;
+          turn_start_altitude + turn_start_energy_height;
+        circling_info.climb_start_time = turn_start_time;
       }
     } else {
       // nope, not turning, so go back to cruise
@@ -146,10 +157,10 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   case CirclingMode::CLIMB:
     if (!circling_info.turning || force_cruise) {
       // Remember the end values of the turn
-      circling_info.turn_start_time = basic.time;
-      circling_info.turn_start_location = basic.location;
-      circling_info.turn_start_altitude = basic.nav_altitude;
-      circling_info.turn_start_energy_height = basic.energy_height;
+      turn_start_time = basic.time;
+      turn_start_location = basic.location;
+      turn_start_altitude = basic.nav_altitude;
+      turn_start_energy_height = basic.energy_height;
 
       // JMW Transition to cruise, due to not properly turning
       circling_info.turn_mode = CirclingMode::POSSIBLE_CRUISE;
@@ -164,16 +175,15 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     }
 
     if (!circling_info.turning || force_cruise) {
-      if (((basic.time - circling_info.turn_start_time) > CLIMB_CRUISE_SWITCH)
-          || force_cruise) {
+      if (basic.time - turn_start_time > CLIMB_CRUISE_SWITCH || force_cruise) {
         // yes, we are certain now that we are cruising again
         circling_info.circling = false;
 
         // Transition to cruise
         circling_info.turn_mode = CirclingMode::CRUISE;
-        circling_info.cruise_start_location = circling_info.turn_start_location;
-        circling_info.cruise_start_altitude = circling_info.turn_start_altitude;
-        circling_info.cruise_start_time = circling_info.turn_start_time;
+        circling_info.cruise_start_location = turn_start_location;
+        circling_info.cruise_start_altitude = turn_start_altitude;
+        circling_info.cruise_start_time = turn_start_time;
       }
     } else {
       // nope, we are circling again
@@ -227,12 +237,12 @@ CirclingComputer::MaxHeightGain(const MoreData &basic,
   if (!basic.NavAltitudeAvailable() || !flight.flying)
     return;
 
-  if (positive(circling_info.min_altitude)) {
-    fixed height_gain = basic.nav_altitude - circling_info.min_altitude;
+  if (positive(min_altitude)) {
+    fixed height_gain = basic.nav_altitude - min_altitude;
     circling_info.max_height_gain = max(height_gain, circling_info.max_height_gain);
   } else {
-    circling_info.min_altitude = basic.nav_altitude;
+    min_altitude = basic.nav_altitude;
   }
 
-  circling_info.min_altitude = min(basic.nav_altitude, circling_info.min_altitude);
+  min_altitude = min(basic.nav_altitude, min_altitude);
 }

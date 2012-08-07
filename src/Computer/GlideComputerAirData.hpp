@@ -80,6 +80,10 @@ public:
   void ResetFlight(DerivedInfo &calculated, const ComputerSettings &settings,
                    const bool full=true);
 
+  void ResetStats() {
+    circling_computer.ResetStats();
+  }
+
   /**
    * Calculates some basic values
    */

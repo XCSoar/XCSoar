@@ -24,6 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_CIRCLING_COMPUTER_HPP
 #define XCSOAR_CIRCLING_COMPUTER_HPP
 
+#include "Math/fixed.hpp"
+#include "Geo/GeoPoint.hpp"
+
 struct CirclingInfo;
 struct NMEAInfo;
 struct MoreData;
@@ -37,7 +40,44 @@ struct FlyingState;
  * Dependencies: #FlyingComputer.
  */
 class CirclingComputer {
+  /**
+   * Start/end time of the turn.
+   */
+  fixed turn_start_time;
+
+  /**
+   * Start/end location of the turn.
+   */
+  GeoPoint turn_start_location;
+
+  /**
+   * Start/end energy height of the turn.
+   */
+  fixed turn_start_energy_height;
+
+  /**
+   * Start/end altitude of the turn.
+   */
+  fixed turn_start_altitude;
+
+  /**
+   * Minimum altitude since start of task.
+   */
+  fixed min_altitude;
+
 public:
+  /**
+   * Reset this computer, as if a new flight starts.
+   */
+  void Reset();
+
+  /**
+   * Reset only statistics, to be called when the task starts, to
+   * eliminate the portion of the flight that is irrelevant to the
+   * task.
+   */
+  void ResetStats();
+
   /**
    * Calculates the turn rate
    */

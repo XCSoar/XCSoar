@@ -66,6 +66,8 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
   if (full)
     flying_computer.Reset();
 
+  circling_computer.Reset();
+
   thermal_band_computer.Reset();
   wind_computer.Reset();
 }
