@@ -48,12 +48,14 @@ GlideComputerRoute::ResetFlight()
   route_clock.Reset();
   reach_clock.Reset();
   protected_route_planner.Reset();
+
+  last_active_tp = 0;
+  last_mode_abort = last_mode_goto = last_mode_ordered = false;
 }
 
 void
 GlideComputerRoute::ProcessRoute(const MoreData &basic,
                                  DerivedInfo &calculated,
-                                 const DerivedInfo &last_calculated,
                                  const GlideSettings &settings,
                                  const RoutePlannerConfig &config,
                                  const GlidePolar &glide_polar,
@@ -66,13 +68,12 @@ GlideComputerRoute::ProcessRoute(const MoreData &basic,
                                     calculated.GetWindOrZero());
 
   Reach(basic, calculated, config);
-  TerrainWarning(basic, calculated, last_calculated, config);
+  TerrainWarning(basic, calculated, config);
 }
 
 void
 GlideComputerRoute::TerrainWarning(const MoreData &basic,
                                    DerivedInfo &calculated,
-                                   const DerivedInfo &last_calculated,
                                    const RoutePlannerConfig &config)
 {
   const AircraftState as = ToAircraftState(basic, calculated);
@@ -100,16 +101,22 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
       bool dirty = route_clock.CheckAdvance(basic.time);
 
       if (!dirty) {
-        dirty = calculated.common_stats.active_taskpoint_index != last_calculated.common_stats.active_taskpoint_index;
-        dirty |= calculated.common_stats.mode_abort != last_calculated.common_stats.mode_abort;
-        dirty |= calculated.common_stats.mode_goto != last_calculated.common_stats.mode_goto;
-        dirty |= calculated.common_stats.mode_ordered != last_calculated.common_stats.mode_ordered;
+        dirty =
+          calculated.common_stats.active_taskpoint_index != last_active_tp ||
+          calculated.common_stats.mode_abort != last_mode_abort ||
+          calculated.common_stats.mode_goto != last_mode_goto ||
+          calculated.common_stats.mode_ordered != last_mode_ordered;
         if (dirty) {
           // restart clock
           route_clock.CheckAdvance(basic.time);
           route_clock.Reset();
         }
       }
+
+      last_active_tp = calculated.common_stats.active_taskpoint_index;
+      last_mode_abort = calculated.common_stats.mode_abort;
+      last_mode_goto = calculated.common_stats.mode_goto;
+      last_mode_ordered = calculated.common_stats.mode_ordered;
 
       if (dirty) {
         protected_route_planner.SolveRoute(dest, start, config, h_ceiling);

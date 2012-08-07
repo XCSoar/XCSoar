@@ -74,7 +74,6 @@ public:
                         const ComputerSettings &settings_computer,
                         bool force);
   void ProcessMoreTask(const MoreData &basic, DerivedInfo &calculated,
-                       const DerivedInfo &last_calculated,
                        const ComputerSettings &settings_computer);
 
   void ResetFlight(const bool full=true);

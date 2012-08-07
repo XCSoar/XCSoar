@@ -46,6 +46,9 @@ class GlideComputerRoute {
 
   const RasterTerrain *terrain;
 
+  unsigned last_active_tp;
+  bool last_mode_abort, last_mode_goto, last_mode_ordered;
+
 public:
   GlideComputerRoute(const Airspaces &airspace_database);
 
@@ -71,7 +74,6 @@ public:
 
   void ResetFlight();
   void ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
-                    const DerivedInfo &last_calculated,
                     const GlideSettings &settings,
                     const RoutePlannerConfig &config,
                     const GlidePolar &glide_polar,
@@ -82,7 +84,6 @@ public:
 private:
   void TerrainWarning(const MoreData &basic,
                       DerivedInfo &calculated,
-                      const DerivedInfo &last_calculated,
                       const RoutePlannerConfig &config);
 
   void Reach(const MoreData &basic, DerivedInfo &calculated,

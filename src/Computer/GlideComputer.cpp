@@ -101,8 +101,7 @@ GlideComputer::ProcessGPS(bool force)
                                  calculated, LastCalculated(),
                                  GetComputerSettings(),
                                  force);
-  task_computer.ProcessMoreTask(basic, calculated, LastCalculated(),
-                                GetComputerSettings());
+  task_computer.ProcessMoreTask(basic, calculated, GetComputerSettings());
 
   // Check if everything is okay with the gps time and process it
   if (!air_data_computer.FlightTimes(Basic(), LastBasic(), SetCalculated(),

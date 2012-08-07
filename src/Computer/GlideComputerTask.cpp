@@ -95,13 +95,12 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
 void
 GlideComputerTask::ProcessMoreTask(const MoreData &basic,
                                    DerivedInfo &calculated,
-                                   const DerivedInfo &last_calculated,
                                    const ComputerSettings &settings_computer)
 {
   const GlidePolar &glide_polar = settings_computer.polar.glide_polar_task;
   const GlidePolar &safety_polar = calculated.glide_polar_safety;
 
-  route.ProcessRoute(basic, calculated, last_calculated,
+  route.ProcessRoute(basic, calculated,
                      settings_computer.task.glide,
                      settings_computer.task.route_planner,
                      glide_polar, safety_polar);
