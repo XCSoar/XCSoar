@@ -223,7 +223,7 @@ ChartControl::OnPaint(Canvas &canvas)
         ? &glide_computer->GetTraceComputer()
         : NULL;
       const FlightStatisticsRenderer fs(chart_look, look->map);
-      fs.RenderTask(canvas, rcgfx, basic, calculated,
+      fs.RenderTask(canvas, rcgfx, basic,
                     settings_computer, settings_map,
                     *protected_task_manager,
                     trace_computer);
@@ -232,7 +232,7 @@ ChartControl::OnPaint(Canvas &canvas)
   case AnalysisPage::OLC:
     if (glide_computer != NULL) {
       const FlightStatisticsRenderer fs(chart_look, look->map);
-      fs.RenderOLC(canvas, rcgfx, basic, calculated,
+      fs.RenderOLC(canvas, rcgfx, basic,
                    settings_computer, settings_map,
                    calculated.contest_stats,
                    glide_computer->GetTraceComputer());

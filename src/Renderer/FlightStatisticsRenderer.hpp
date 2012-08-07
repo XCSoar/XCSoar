@@ -56,7 +56,6 @@ public:
 public:
   void RenderOLC(Canvas &canvas, const PixelRect rc,
                  const NMEAInfo &nmea_info,
-                 const DerivedInfo &calculated,
                  const ComputerSettings &settings_computer,
                  const MapSettings &settings_map,
                  const ContestStatistics &contest,
@@ -64,7 +63,6 @@ public:
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEAInfo &nmea_info,
-                  const DerivedInfo &derived_info,
                   const ComputerSettings &settings_computer,
                   const MapSettings &settings_map,
                   const ProtectedTaskManager &task,

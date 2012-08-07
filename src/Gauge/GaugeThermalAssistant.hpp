@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/OverlappedWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
+struct AttitudeState;
 class LiveBlackboard;
 struct ThermalAssistantLook;
 
@@ -50,7 +51,7 @@ public:
   virtual bool SetFocus();
 
 private:
-  void Update(const DerivedInfo &calculated);
+  void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
 
   virtual void OnCalculatedUpdate(const MoreData &basic,
                                   const DerivedInfo &calculated);

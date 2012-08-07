@@ -23,6 +23,7 @@
 
 #include "ThermalAssistantWindow.hpp"
 #include "Util/Macros.hpp"
+#include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -75,9 +76,10 @@ ThermalAssistantWindow::LeftTurn() const
 }
 
 void
-ThermalAssistantWindow::Update(const DerivedInfo &derived)
+ThermalAssistantWindow::Update(const AttitudeState &attitude,
+                               const DerivedInfo &derived)
 {
-  direction = derived.heading;
+  direction = attitude.heading;
   circling = (CirclingInfo)derived;
   vario = (VarioInfo)derived;
 

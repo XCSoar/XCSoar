@@ -80,7 +80,7 @@ GaugeThermalAssistant::Unprepare()
 void
 GaugeThermalAssistant::Show(const PixelRect &rc)
 {
-  Update(blackboard.Calculated());
+  Update(blackboard.Basic().attitude, blackboard.Calculated());
 
   OverlappedWidget::Show(rc);
 
@@ -104,14 +104,15 @@ void
 GaugeThermalAssistant::OnCalculatedUpdate(const MoreData &basic,
                                           const DerivedInfo &calculated)
 {
-  Update(calculated);
+  Update(basic.attitude, calculated);
 }
 
 void
-GaugeThermalAssistant::Update(const DerivedInfo &calculated)
+GaugeThermalAssistant::Update(const AttitudeState &attitude,
+                              const DerivedInfo &calculated)
 {
   ThermalAssistantWindow *window =
     (ThermalAssistantWindow *)GetWindow();
 
-  window->Update(calculated);
+  window->Update(attitude, calculated);
 }

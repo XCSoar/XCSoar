@@ -126,6 +126,31 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
     basic.track = v.bearing;
 }
 
+/**
+ * Fallback heading calculation if no compass is connected.
+ */
+static void
+ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
+               const DerivedInfo &calculated)
+{
+  if (attitude.heading_available)
+    /* compass connected, don't need to calculate it */
+    return;
+
+  if (calculated.wind_available &&
+      (positive(basic.ground_speed) || calculated.wind.IsNonZero()) &&
+      calculated.flight.flying) {
+    fixed x0 = basic.track.fastsine() * basic.ground_speed;
+    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
+    x0 += calculated.wind.bearing.fastsine() * calculated.wind.norm;
+    y0 += calculated.wind.bearing.fastcosine() * calculated.wind.norm;
+
+    attitude.heading = Angle::Radians(atan2(x0, y0)).AsBearing();
+  } else {
+    attitude.heading = basic.track;
+  }
+}
+
 static void
 ComputeGroundSpeed(NMEAInfo &basic, const NMEAInfo &last)
 {
@@ -366,6 +391,8 @@ BasicComputer::Compute(MoreData &data,
     ComputeGroundSpeed(data, last_gps);
     ComputeAirspeed(data, calculated);
   }
+
+  ComputeHeading(data.attitude, data, calculated);
 
   ComputeEnergyHeight(data);
   ComputeGPSVario(data, last, last_gps);

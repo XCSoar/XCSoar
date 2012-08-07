@@ -113,10 +113,6 @@ public:
                    const ComputerSettings &settings);
 
 private:
-  /**
-   * Calculates the heading
-   */
-  void Heading(const NMEAInfo &basic, DerivedInfo &calculated);
   void EnergyHeight();
   void NettoVario(const NMEAInfo &basic, const FlyingState &flight,
                   VarioInfo &vario, const ComputerSettings &settings_computer);
@@ -126,7 +122,8 @@ private:
   void CurrentThermal(const MoreData &basic, const CirclingInfo &circling,
                       OneClimbInfo &current_thermal);
   void ResetLiftDatabase(DerivedInfo &calculated);
-  void UpdateLiftDatabase(const MoreData &basic, DerivedInfo &calculated,
+  void UpdateLiftDatabase(const MoreData &basic, const NMEAInfo &last_basic,
+                          DerivedInfo &calculated,
                           const DerivedInfo &last_calculated);
   void GR(const MoreData &basic, const MoreData &last_basic,
           const DerivedInfo &calculated, VarioInfo &vario_info);

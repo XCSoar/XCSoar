@@ -92,7 +92,6 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
 {
   auto_qnh.Process(basic, calculated, settings, waypoints);
 
-  Heading(basic, calculated);
   circling_computer.TurnRate(calculated, basic, last_basic,
                              calculated, last_calculated);
   Turning(basic, last_basic, calculated, last_calculated, settings);
@@ -118,30 +117,9 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   Average30s(basic, last_basic, calculated, last_calculated);
   AverageClimbRate(basic, calculated);
   CurrentThermal(basic, calculated, calculated.current_thermal);
-  UpdateLiftDatabase(basic, calculated, last_calculated);
+  UpdateLiftDatabase(basic, last_basic, calculated, last_calculated);
   circling_computer.MaxHeightGain(basic, calculated.flight, calculated);
   NextLegEqThermal(basic, calculated, settings);
-}
-
-void
-GlideComputerAirData::Heading(const NMEAInfo &basic, DerivedInfo &calculated)
-{
-  const SpeedVector wind = calculated.wind;
-
-  if (basic.attitude.heading_available) {
-    calculated.heading = basic.attitude.heading;
-  } else if (calculated.wind_available &&
-             (positive(basic.ground_speed) || wind.IsNonZero()) &&
-             calculated.flight.flying) {
-    fixed x0 = basic.track.fastsine() * basic.ground_speed;
-    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
-    x0 += wind.bearing.fastsine() * wind.norm;
-    y0 += wind.bearing.fastcosine() * wind.norm;
-
-    calculated.heading = Angle::Radians(atan2(x0, y0)).AsBearing();
-  } else {
-    calculated.heading = basic.track;
-  }
 }
 
 void
@@ -252,6 +230,7 @@ heading_to_index(Angle &heading)
 
 void
 GlideComputerAirData::UpdateLiftDatabase(const MoreData &basic,
+                                         const NMEAInfo &last_basic,
                                          DerivedInfo &calculated,
                                          const DerivedInfo &last_calculated)
 {
@@ -267,6 +246,9 @@ GlideComputerAirData::UpdateLiftDatabase(const MoreData &basic,
   // following loop
   Angle heading_step = Angle::Degrees(fixed(left ? -10 : 10));
 
+  const Angle heading = basic.attitude.heading;
+  const Angle last_heading = last_basic.attitude.heading;
+
   // Start at the last heading and add heading_step until the current heading
   // is reached. For each heading save the current lift value into the
   // LiftDatabase. Last and current heading are included since they are
@@ -279,18 +261,18 @@ GlideComputerAirData::UpdateLiftDatabase(const MoreData &basic,
   // Depending on the circling direction the current heading will be
   // smaller or bigger then the last one, because of that negative() is
   // tested against the left variable.
-  for (Angle h = last_calculated.heading;
-       left == negative((calculated.heading - h).AsDelta().Degrees());
+  for (Angle h = last_heading;
+       left == negative((heading - h).AsDelta().Degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
     calculated.lift_database[index] = basic.brutto_vario;
   }
 
   // detect zero crossing
-  if (((calculated.heading.Degrees()< fixed_90) && 
-       (last_calculated.heading.Degrees()> fixed_270)) ||
-      ((last_calculated.heading.Degrees()< fixed_90) && 
-       (calculated.heading.Degrees()> fixed_270))) {
+  if ((heading < Angle::QuarterCircle() &&
+       last_heading.Degrees() > fixed_270) ||
+      (last_heading < Angle::QuarterCircle() &&
+       heading.Degrees() > fixed_270)) {
 
     fixed h_av = fixed_zero;
     for (auto it = calculated.lift_database.begin(),

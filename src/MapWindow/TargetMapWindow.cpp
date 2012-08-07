@@ -232,7 +232,7 @@ TargetMapWindow::OnPaintBuffer(Canvas &canvas)
   // Finally, draw you!
   if (Basic().alive)
     AircraftRenderer::Draw(canvas, GetMapSettings(), aircraft_look,
-                           Calculated().heading - projection.GetScreenAngle(),
+                           Basic().attitude.heading - projection.GetScreenAngle(),
                            aircraft_pos);
 }
 

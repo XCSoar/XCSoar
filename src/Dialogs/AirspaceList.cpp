@@ -137,7 +137,7 @@ UpdateList()
   if (dialog_state.direction != WILDCARD) {
     sort_distance = true;
     Angle a = dialog_state.direction == 0
-      ? CommonInterface::Calculated().heading
+      ? CommonInterface::Basic().attitude.heading
       : Angle::Degrees(fixed(dialog_state.direction));
     airspace_sorter->FilterByDirection(airspace_list, a);
   }
@@ -235,7 +235,7 @@ GetHeadingString(TCHAR *buffer)
 {
   TCHAR heading[32];
   FormatBearing(heading, ARRAY_SIZE(heading),
-                CommonInterface::Calculated().heading);
+                CommonInterface::Basic().attitude.heading);
 
   _stprintf(buffer, _T("%s (%s)"), _("Heading"), heading);
   return buffer;
@@ -245,9 +245,10 @@ static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
   if (dialog_state.direction == 0 && !CommonInterface::Calculated().circling) {
-    Angle a = last_heading - CommonInterface::Calculated().heading;
+    const Angle heading = CommonInterface::Basic().attitude.heading;
+    Angle a = last_heading - heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(10)) {
-      last_heading = CommonInterface::Calculated().heading;
+      last_heading = heading;
 
       UpdateList();
 

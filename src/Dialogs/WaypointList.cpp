@@ -411,9 +411,10 @@ static void
 OnTimerNotify(gcc_unused WndForm &sender)
 {
   if (dialog_state.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
-    Angle a = last_heading - CommonInterface::Calculated().heading;
+    const Angle heading = CommonInterface::Basic().attitude.heading;
+    Angle a = last_heading - heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
-      last_heading = CommonInterface::Calculated().heading;
+      last_heading = heading;
       UpdateList();
       InitializeDirection(true);
     }
@@ -504,7 +505,7 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
   location = _location;
   ordered_task = _ordered_task;
   ordered_task_index = _ordered_task_index;
-  last_heading = CommonInterface::Calculated().heading;
+  last_heading = CommonInterface::Basic().attitude.heading;
 
   PrepareData();
   UpdateList();

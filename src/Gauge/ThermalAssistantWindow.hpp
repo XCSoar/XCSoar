@@ -31,6 +31,7 @@
 #include <array>
 
 struct ThermalAssistantLook;
+struct AttitudeState;
 struct DerivedInfo;
 
 class ThermalAssistantWindow : public BufferWindow
@@ -71,7 +72,7 @@ public:
 public:
   bool LeftTurn() const;
 
-  void Update(const DerivedInfo &_derived);
+  void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
 protected:
   /**

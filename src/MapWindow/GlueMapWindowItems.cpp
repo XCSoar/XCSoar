@@ -59,7 +59,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location,
                                 computer_settings.task.safety_height_arrival);
 
   if (basic.location_available)
-    builder.AddSelfIfNear(basic.location, calculated.heading);
+    builder.AddSelfIfNear(basic.location, basic.attitude.heading);
 
   if (task)
     builder.AddTaskOZs(*task);

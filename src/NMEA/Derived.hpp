@@ -144,9 +144,6 @@ struct DerivedInfo:
   /** Speed to fly block/dolphin (m/s) */
   fixed V_stf;
 
-  /** Bearing including wind factor */
-  Angle heading;
-
   /** Auto QNH calculation result. */
   AtmosphericPressure pressure;
   Validity pressure_available;

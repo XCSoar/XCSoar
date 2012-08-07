@@ -67,7 +67,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
   circling_info.turn_rate =
     (basic.track - last_basic.track).AsDelta().Degrees() / dt;
   circling_info.turn_rate_heading =
-    (calculated.heading - last_calculated.heading).AsDelta().Degrees() / dt;
+    (basic.attitude.heading - last_basic.attitude.heading).AsDelta().Degrees() / dt;
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time

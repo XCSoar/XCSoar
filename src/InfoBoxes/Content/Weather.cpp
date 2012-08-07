@@ -231,7 +231,7 @@ InfoBoxContentWindArrow::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
   if (size > padding)
     size -= padding;
 
-  auto angle = info.wind.bearing - info.heading;
+  auto angle = info.wind.bearing - CommonInterface::Basic().attitude.heading;
   auto length = std::min(size, (UPixelScalar)std::max(10, iround(info.wind.norm * 4)));
 
   auto offset = -length / 2;

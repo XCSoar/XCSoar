@@ -60,7 +60,6 @@ FlightStatisticsRenderer::FlightStatisticsRenderer(const ChartLook &_chart_look,
 void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const NMEAInfo &nmea_info, 
-                            const DerivedInfo &calculated,
                             const ComputerSettings &settings_computer,
                             const MapSettings &settings_map,
                             const ContestStatistics &contest,
@@ -88,7 +87,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
   AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
-                         calculated.heading, aircraft_pos);
+                         nmea_info.attitude.heading, aircraft_pos);
 
   trail_renderer.Draw(canvas, proj);
 
@@ -189,7 +188,6 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
 void
 FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                              const NMEAInfo &nmea_info, 
-                             const DerivedInfo &calculated,
                              const ComputerSettings &settings_computer,
                              const MapSettings &settings_map,
                                      const ProtectedTaskManager &_task_manager,
@@ -225,7 +223,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
   if (nmea_info.location_available) {
     RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
     AircraftRenderer::Draw(canvas, settings_map, map_look.aircraft,
-                           calculated.heading, aircraft_pos);
+                           nmea_info.attitude.heading, aircraft_pos);
   }
 }
 

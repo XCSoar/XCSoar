@@ -90,7 +90,8 @@ WindComputer::ComputeHeadWind(const NMEAInfo &basic, DerivedInfo &info)
     // .. calculate headwind from given wind information
 
     info.head_wind =
-        (info.wind.bearing - info.heading).fastcosine() * info.wind.norm;
+      (info.wind.bearing - basic.attitude.heading).fastcosine()
+      * info.wind.norm;
     info.head_wind_available.Update(basic.clock);
   } else {
     // No information available that let us calculate the head wind

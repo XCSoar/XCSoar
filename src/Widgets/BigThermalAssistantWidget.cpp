@@ -27,11 +27,12 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-BigThermalAssistantWidget::Update(const DerivedInfo &calculated)
+BigThermalAssistantWidget::Update(const AttitudeState &attitude,
+                                  const DerivedInfo &calculated)
 {
   BigThermalAssistantWindow *window =
     (BigThermalAssistantWindow *)OverlappedWidget::GetWindow();
-  window->Update(calculated);
+  window->Update(attitude, calculated);
 }
 
 void
@@ -60,7 +61,7 @@ BigThermalAssistantWidget::Unprepare()
 void
 BigThermalAssistantWidget::Show(const PixelRect &rc)
 {
-  Update(blackboard.Calculated());
+  Update(blackboard.Basic().attitude, blackboard.Calculated());
 
   OverlappedWidget::Show(rc);
 
@@ -84,5 +85,5 @@ void
 BigThermalAssistantWidget::OnCalculatedUpdate(const MoreData &basic,
                                            const DerivedInfo &calculated)
 {
-  Update(calculated);
+  Update(basic.attitude, calculated);
 }
