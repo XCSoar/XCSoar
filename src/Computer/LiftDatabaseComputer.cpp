@@ -30,7 +30,7 @@ Copyright_License {
 void
 LiftDatabaseComputer::Clear(DerivedInfo &calculated)
 {
-  calculated.ClearLiftDatabase();
+  calculated.lift_database.Clear();
 
   calculated.trace_history.CirclingAverage.clear();
 }

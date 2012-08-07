@@ -31,7 +31,7 @@ struct MoreData;
 struct DerivedInfo;
 
 /**
- * This computer manages the VarioInfo::LiftDatabase and
+ * This computer manages the LiftDatabase and
  * TraceHistory::CirclingAverage.
  *
  * Dependencies: #CirclingComputer.

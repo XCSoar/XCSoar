@@ -25,12 +25,6 @@ Copyright_License {
 #include "Computer/GlideRatioCalculator.hpp"
 
 void
-VarioInfo::ClearLiftDatabase()
-{
-  lift_database.fill(fixed_zero);
-}
-
-void
 VarioInfo::Clear()
 {
   sink_rate = fixed_zero;
@@ -39,5 +33,5 @@ VarioInfo::Clear()
   gr = INVALID_GR;
   ld_vario = INVALID_GR;
 
-  ClearLiftDatabase();
+  lift_database.Clear();
 }

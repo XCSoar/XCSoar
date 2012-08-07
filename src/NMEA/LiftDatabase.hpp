@@ -21,45 +21,37 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_VARIO_INFO_HPP
-#define XCSOAR_VARIO_INFO_HPP
+#ifndef XCSOAR_LIFT_DATABASE_HPP
+#define XCSOAR_LIFT_DATABASE_HPP
 
 #include "Math/fixed.hpp"
 #include "Util/TypeTraits.hpp"
-#include "LiftDatabase.hpp"
 
-/** Derived vario data */
-struct VarioInfo
-{
-  fixed sink_rate;
+#include <array>
 
-  /** Average vertical speed based on 30s */
-  fixed average;
-  /** Average vertical speed of the airmass based on 30s */
-  fixed netto_average;
-
-  /** Instant glide ratio over ground */
-  fixed gr;
-  /** Glide ratio over ground while in Cruise mode */
-  fixed cruise_gr;
-
-  /**
-   * Average glide ratio over ground.  Zero means the value is not available.
-   */
-  fixed average_gr;
-
-  /** Instant lift/drag ratio */
-  fixed ld_vario;
-
-  /**
-   * The lift of each ten degrees while circling.
-   * Index 1 equals 5 to 15 degrees.
-   */
-  LiftDatabase lift_database;
-
-  void Clear();
+class LiftDatabase : public std::array<fixed, 36> {
+public:
+  void Clear() {
+    fill(fixed_zero);
+  }
 };
 
-static_assert(is_trivial<VarioInfo>::value, "type is not trivial");
+static_assert(is_trivial<LiftDatabase>::value, "type is not trivial");
+
+#ifdef __clang__
+#pragma GCC diagnostic push
+/* necessary with clang due to bug in libstdc++ */
+#pragma GCC diagnostic ignored "-Wmismatched-tags"
+#endif
+
+namespace std {
+  template<>
+  class tuple_size<LiftDatabase> : public integral_constant<size_t, 36> {
+  };
+}
+
+#ifdef __clang__
+#pragma GCC diagnostic pop
+#endif
 
 #endif
