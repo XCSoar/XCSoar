@@ -83,8 +83,7 @@ public:
    */
   void TurnRate(CirclingInfo &circling_info,
                 const NMEAInfo &basic, const NMEAInfo &last_basic,
-                const DerivedInfo &calculated,
-                const DerivedInfo &last_calculated);
+                const FlyingState &flight);
 
   /**
    * Calculates the turn rate and the derived features.
@@ -92,7 +91,7 @@ public:
    */
   void Turning(CirclingInfo &circling_info,
                const MoreData &basic, const MoreData &last_basic,
-               const DerivedInfo &calculated,
+               const FlyingState &flight,
                const ComputerSettings &settings_computer);
 
   /**

@@ -47,10 +47,10 @@ int main(int argc, char **argv)
   while (replay->Next()) {
     circling_computer.TurnRate(replay->SetCalculated(),
                                replay->Basic(), replay->LastBasic(),
-                               replay->Calculated(), replay->LastCalculated());
+                               replay->Calculated().flight);
     circling_computer.Turning(replay->SetCalculated(),
                               replay->Basic(), replay->LastBasic(),
-                              replay->Calculated(),
+                              replay->Calculated().flight,
                               replay->GetComputerSettings());
 
     if (replay->LastCalculated().circling != replay->Calculated().circling)

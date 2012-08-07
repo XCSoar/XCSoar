@@ -46,11 +46,10 @@ CirclingComputer::ResetStats()
 void
 CirclingComputer::TurnRate(CirclingInfo &circling_info,
                            const NMEAInfo &basic, const NMEAInfo &last_basic,
-                           const DerivedInfo &calculated,
-                           const DerivedInfo &last_calculated)
+                           const FlyingState &flight)
 {
   if (!basic.time_available || !last_basic.time_available ||
-      !calculated.flight.flying) {
+      !flight.flying) {
     circling_info.turn_rate = fixed_zero;
     circling_info.turn_rate_heading = fixed_zero;
     circling_info.turn_rate_smoothed = fixed_zero;
@@ -74,7 +73,7 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
   fixed turn_rate = max(fixed(-50), min(fixed(50), circling_info.turn_rate));
 
   // Make the turn rate more smooth using the LowPassFilter
-  turn_rate = LowPassFilter(last_calculated.turn_rate_smoothed,
+  turn_rate = LowPassFilter(circling_info.turn_rate_smoothed,
                             turn_rate, fixed(0.3));
   circling_info.turn_rate_smoothed = turn_rate;
 }
@@ -82,14 +81,15 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 void
 CirclingComputer::Turning(CirclingInfo &circling_info,
                           const MoreData &basic, const MoreData &last_basic,
-                          const DerivedInfo &calculated,
+                          const FlyingState &flight,
                           const ComputerSettings &settings_computer)
 {
   // You can't be circling unless you're flying
-  if (!calculated.flight.flying || !basic.HasTimeAdvancedSince(last_basic))
+  if (!flight.flying || !basic.HasTimeAdvancedSince(last_basic))
     return;
 
-  circling_info.turning = fabs(calculated.turn_rate_smoothed) >= MIN_TURN_RATE;
+  circling_info.turning =
+    fabs(circling_info.turn_rate_smoothed) >= MIN_TURN_RATE;
 
   // Force cruise or climb mode if external device says so
   bool force_cruise = false;
@@ -113,7 +113,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     }
   }
 
-  switch (calculated.turn_mode) {
+  switch (circling_info.turn_mode) {
   case CirclingMode::CRUISE:
     // If (in cruise mode and beginning of circling detected)
     if (circling_info.turning || force_circling) {

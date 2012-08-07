@@ -93,7 +93,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   auto_qnh.Process(basic, calculated, settings, waypoints);
 
   circling_computer.TurnRate(calculated, basic, last_basic,
-                             calculated, last_calculated);
+                             calculated.flight);
   Turning(basic, last_basic, calculated, last_calculated, settings);
 
   wind_computer.Compute(settings.wind, settings.polar.glide_polar_task,
@@ -448,7 +448,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
 {
   circling_computer.Turning(calculated,
                             basic, last_basic,
-                            calculated,
+                            calculated.flight,
                             settings);
 
   if (last_calculated.circling != calculated.circling)
