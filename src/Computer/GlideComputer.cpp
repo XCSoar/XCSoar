@@ -116,7 +116,7 @@ GlideComputer::ProcessGPS(bool force)
 
   // Process extended information
   air_data_computer.ProcessVertical(Basic(), LastBasic(),
-                                    SetCalculated(), LastCalculated(),
+                                    SetCalculated(),
                                     GetComputerSettings());
 
   if (!time_retreated())

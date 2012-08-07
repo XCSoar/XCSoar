@@ -88,14 +88,18 @@ void
 GlideComputerAirData::ProcessVertical(const MoreData &basic,
                                       const MoreData &last_basic,
                                       DerivedInfo &calculated,
-                                      const DerivedInfo &last_calculated,
                                       const ComputerSettings &settings)
 {
+  /* the "circling" flag may be modified by
+     CirclingComputer::Turning(); remember the old state so this
+     method can check for modifications */
+  const bool last_circling = calculated.circling;
+
   auto_qnh.Process(basic, calculated, settings, waypoints);
 
   circling_computer.TurnRate(calculated, basic, last_basic,
                              calculated.flight);
-  Turning(basic, last_basic, calculated, last_calculated, settings);
+  Turning(basic, last_basic, calculated, settings);
 
   wind_computer.Compute(settings.wind, settings.polar.glide_polar_task,
                         basic, calculated);
@@ -108,14 +112,14 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
                          calculated.GetWindOrZero(),
                          calculated.thermal_locator);
 
-  LastThermalStats(basic, calculated, last_calculated);
+  LastThermalStats(basic, calculated, last_circling);
   GR(basic, last_basic, calculated, calculated);
   CruiseGR(basic, calculated);
 
   if (calculated.flight.flying && !calculated.circling)
     calculated.average_gr = gr_calculator.Calculate();
 
-  Average30s(basic, last_basic, calculated, last_calculated);
+  Average30s(basic, last_basic, calculated, last_circling);
   AverageClimbRate(basic, calculated);
   CurrentThermal(basic, calculated, calculated.current_thermal);
   lift_database_computer.Compute(calculated.lift_database,
@@ -165,11 +169,10 @@ GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
 void
 GlideComputerAirData::Average30s(const MoreData &basic,
                                  const NMEAInfo &last_basic,
-                                 DerivedInfo &calculated,
-                                 const DerivedInfo &last_calculated)
+                                 DerivedInfo &calculated, bool last_circling)
 {
   const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
-  if (!time_advanced || calculated.circling != last_calculated.circling) {
+  if (!time_advanced || calculated.circling != last_circling) {
     vario_30s_filter.Reset();
     netto_30s_filter.Reset();
     calculated.average = basic.brutto_vario;
@@ -357,15 +360,16 @@ void
 GlideComputerAirData::Turning(const MoreData &basic,
                               const MoreData &last_basic,
                               DerivedInfo &calculated,
-                              const DerivedInfo &last_calculated,
                               const ComputerSettings &settings)
 {
+  const bool last_circling = calculated.circling;
+
   circling_computer.Turning(calculated,
                             basic, last_basic,
                             calculated.flight,
                             settings);
 
-  if (last_calculated.circling != calculated.circling)
+  if (calculated.circling != last_circling)
     OnSwitchClimbMode(settings);
 
   // Calculate circling time percentage and call thermal band calculation
@@ -416,9 +420,9 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
 void
 GlideComputerAirData::LastThermalStats(const MoreData &basic,
                                        DerivedInfo &calculated,
-                                       const DerivedInfo &last_calculated)
+                                       bool last_circling)
 {
-  if (calculated.circling || !last_calculated.circling ||
+  if (calculated.circling || !last_circling ||
       !positive(calculated.climb_start_time))
     return;
 

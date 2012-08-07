@@ -97,7 +97,6 @@ public:
    */
   void ProcessVertical(const MoreData &basic, const MoreData &last_basic,
                        DerivedInfo &calculated,
-                       const DerivedInfo &last_calculated,
                        const ComputerSettings &settings);
 
 protected:
@@ -120,7 +119,7 @@ private:
                   VarioInfo &vario, const ComputerSettings &settings_computer);
   void AverageClimbRate(const NMEAInfo &basic, DerivedInfo &calculated);
   void Average30s(const MoreData &basic, const NMEAInfo &last_basic,
-                  DerivedInfo &calculated, const DerivedInfo &last_calculated);
+                  DerivedInfo &calculated, bool last_circling);
   void CurrentThermal(const MoreData &basic, const CirclingInfo &circling,
                       OneClimbInfo &current_thermal);
   void GR(const MoreData &basic, const MoreData &last_basic,
@@ -150,15 +149,14 @@ private:
    *  LastThermalAverageSmooth
    */
   void LastThermalStats(const MoreData &basic, DerivedInfo &calculated,
-                        const DerivedInfo &last_calculated);
+                        bool last_circling);
 
   /**
    * Calculates the turn rate and the derived features.
    * Determines the current flight mode (cruise/circling).
    */
   void Turning(const MoreData &basic, const MoreData &last_basic,
-               DerivedInfo &calculated, const DerivedInfo &last_calculated,
-               const ComputerSettings &settings);
+               DerivedInfo &calculated, const ComputerSettings &settings);
   void ProcessSun(const NMEAInfo &basic, DerivedInfo &calculated,
                   const ComputerSettings &settings);
 
