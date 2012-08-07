@@ -150,8 +150,12 @@ void
 InfoBoxContentThermalRatio::Update(InfoBoxData &data)
 {
   // Set Value
-  data.SetValue(_T("%2.0f%%"),
-                    XCSoarInterface::Calculated().circling_percentage);
+
+  if (negative(XCSoarInterface::Calculated().circling_percentage))
+    data.SetInvalid();
+  else
+    data.SetValue(_T("%2.0f%%"),
+                  XCSoarInterface::Calculated().circling_percentage);
 }
 
 void

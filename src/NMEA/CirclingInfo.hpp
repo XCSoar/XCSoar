@@ -86,7 +86,10 @@ struct CirclingInfo
   /** True if in circling mode, False otherwise */
   bool circling;
 
-  /** Circling/Cruise ratio in percent */
+  /**
+   * Circling/Cruise ratio in percent.  Negative value means
+   * "unknown".
+   */
   fixed circling_percentage;
 
   /** Time spent in cruise mode */

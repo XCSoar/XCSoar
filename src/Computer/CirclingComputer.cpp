@@ -226,7 +226,7 @@ CirclingComputer::PercentCircling(const MoreData &basic,
     circling_info.circling_percentage = 100 * circling_info.time_climb /
         (circling_info.time_cruise + circling_info.time_climb);
   else
-    circling_info.circling_percentage = fixed_zero;
+    circling_info.circling_percentage = fixed_minus_one;
 }
 
 void

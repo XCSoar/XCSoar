@@ -42,4 +42,6 @@ CirclingInfo::Clear()
 
   turn_rate_smoothed = fixed_zero;
   turn_mode = CirclingMode::CRUISE;
+
+  circling_percentage = fixed_minus_one;
 }
