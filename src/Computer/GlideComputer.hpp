@@ -135,7 +135,7 @@ protected:
   /**
    * Detects takeoff and landing events
    */
-  void TakeoffLanding();
+  void TakeoffLanding(bool last_flying);
 
 private:
 

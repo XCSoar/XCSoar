@@ -88,6 +88,8 @@ GlideComputer::ProcessGPS(bool force)
   DerivedInfo &calculated = SetCalculated();
   const ComputerSettings &settings = GetComputerSettings();
 
+  const bool last_flying = calculated.flight.flying;
+
   calculated.date_time_local = basic.date_time_utc + settings.utc_offset;
 
   calculated.Expire(basic.clock);
@@ -108,7 +110,7 @@ GlideComputer::ProcessGPS(bool force)
                                      GetComputerSettings()))
     return false;
 
-  TakeoffLanding();
+  TakeoffLanding(last_flying);
 
   if (!time_retreated())
     task_computer.ProcessAutoTask(basic, calculated);
@@ -285,11 +287,11 @@ GlideComputer::OnLanding()
 }
 
 void
-GlideComputer::TakeoffLanding()
+GlideComputer::TakeoffLanding(bool last_flying)
 {
-  if (Calculated().flight.flying && !LastCalculated().flight.flying)
+  if (Calculated().flight.flying && !last_flying)
     OnTakeoff();
-  else if (!Calculated().flight.flying && LastCalculated().flight.flying)
+  else if (!Calculated().flight.flying && last_flying)
     OnLanding();
 }
 
