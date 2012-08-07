@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4.1 - not yet released
 * map
   - new option to disable the wind arrow
+* devices
+  - fix potential crash in I/O thread
 
 Version 6.4 - 2012/07/31
 * calculations
