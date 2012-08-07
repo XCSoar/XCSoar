@@ -54,6 +54,7 @@ GlideComputerTask::ResetFlight(const bool full)
   trace.Reset();
   contest.Reset();
 
+  valid_last_state = false;
   last_flying = false;
 }
 
@@ -61,7 +62,6 @@ void
 GlideComputerTask::ProcessBasicTask(const MoreData &basic,
                                     const MoreData &last_basic,
                                     DerivedInfo &calculated,
-                                    const DerivedInfo &last_calculated,
                                     const ComputerSettings &settings_computer,
                                     bool force)
 {
@@ -74,9 +74,12 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
   if (force || (basic.HasTimeAdvancedSince(last_basic) &&
                 basic.location_available)) {
     const AircraftState current_as = ToAircraftState(basic, calculated);
-    const AircraftState last_as = ToAircraftState(last_basic, last_calculated);
+    const AircraftState &last_as = valid_last_state ? last_state : current_as;
 
     _task->Update(current_as, last_as);
+
+    last_state = current_as;
+    valid_last_state = true;
 
     const fixed fallback_mc = calculated.last_thermal.IsDefined() &&
       positive(calculated.last_thermal_average_smooth)

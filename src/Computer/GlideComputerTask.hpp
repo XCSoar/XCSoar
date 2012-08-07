@@ -27,6 +27,7 @@ Copyright_License {
 #include "GlideComputerRoute.hpp"
 #include "TraceComputer.hpp"
 #include "ContestComputer.hpp"
+#include "Engine/Navigation/Aircraft.hpp"
 
 struct NMEAInfo;
 class ProtectedTaskManager;
@@ -40,6 +41,9 @@ class GlideComputerTask
   TraceComputer trace;
 
   ContestComputer contest;
+
+  AircraftState last_state;
+  bool valid_last_state;
 
   bool last_flying;
 
@@ -70,7 +74,6 @@ public:
 
   void ProcessBasicTask(const MoreData &basic, const MoreData &last_basic,
                         DerivedInfo &calculated,
-                        const DerivedInfo &last_calculated,
                         const ComputerSettings &settings_computer,
                         bool force);
   void ProcessMoreTask(const MoreData &basic, DerivedInfo &calculated,
