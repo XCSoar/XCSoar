@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_LIFT_DATABASE_COMPUTER_HPP
 #define XCSOAR_LIFT_DATABASE_COMPUTER_HPP
 
+#include "Math/Angle.hpp"
+
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
@@ -35,6 +37,10 @@ struct DerivedInfo;
  * Dependencies: #CirclingComputer.
  */
 class LiftDatabaseComputer {
+  bool last_circling;
+
+  Angle last_heading;
+
   /**
    * Clear the attributes managed by this computer.
    */
@@ -46,8 +52,7 @@ public:
    */
   void Reset(DerivedInfo &calculated);
 
-  void Compute(const MoreData &basic, const NMEAInfo &last_basic,
-               DerivedInfo &calculated, const DerivedInfo &last_calculated);
+  void Compute(const MoreData &basic, DerivedInfo &calculated);
 };
 
 #endif

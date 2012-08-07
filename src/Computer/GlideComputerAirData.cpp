@@ -117,8 +117,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   Average30s(basic, last_basic, calculated, last_calculated);
   AverageClimbRate(basic, calculated);
   CurrentThermal(basic, calculated, calculated.current_thermal);
-  lift_database_computer.Compute(basic, last_basic,
-                                 calculated, last_calculated);
+  lift_database_computer.Compute(basic, calculated);
   circling_computer.MaxHeightGain(basic, calculated.flight, calculated);
   NextLegEqThermal(basic, calculated, settings);
 }

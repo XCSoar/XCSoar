@@ -38,6 +38,9 @@ LiftDatabaseComputer::Clear(DerivedInfo &calculated)
 void
 LiftDatabaseComputer::Reset(DerivedInfo &calculated)
 {
+  last_circling = false;
+  last_heading = Angle::Zero();
+
   Clear(calculated);
 }
 
@@ -68,13 +71,11 @@ heading_to_index(Angle &heading)
 
 void
 LiftDatabaseComputer::Compute(const MoreData &basic,
-                              const NMEAInfo &last_basic,
-                              DerivedInfo &calculated,
-                              const DerivedInfo &last_calculated)
+                              DerivedInfo &calculated)
 {
   // If we just started circling
   // -> reset the database because this is a new thermal
-  if (!calculated.circling && last_calculated.circling)
+  if (!calculated.circling && last_circling)
     Clear(calculated);
 
   // Determine the direction in which we are circling
@@ -85,7 +86,6 @@ LiftDatabaseComputer::Compute(const MoreData &basic,
   Angle heading_step = Angle::Degrees(fixed(left ? -10 : 10));
 
   const Angle heading = basic.attitude.heading;
-  const Angle last_heading = last_basic.attitude.heading;
 
   // Start at the last heading and add heading_step until the current heading
   // is reached. For each heading save the current lift value into the
@@ -120,4 +120,7 @@ LiftDatabaseComputer::Compute(const MoreData &basic,
     h_av /= calculated.lift_database.size();
     calculated.trace_history.CirclingAverage.push(h_av);
   }
+
+  last_circling = calculated.circling;
+  last_heading = basic.attitude.heading;
 }
