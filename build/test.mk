@@ -2015,6 +2015,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/ContestComputer.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/WarningComputer.cpp \
+	$(SRC)/Computer/LiftDatabaseComputer.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerTask.cpp \

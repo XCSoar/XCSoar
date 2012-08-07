@@ -57,7 +57,7 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
   vario_30s_filter.Reset();
   netto_30s_filter.Reset();
 
-  ResetLiftDatabase(calculated);
+  lift_database_computer.Reset(calculated);
 
   thermallocator.Reset();
 
@@ -117,7 +117,8 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   Average30s(basic, last_basic, calculated, last_calculated);
   AverageClimbRate(basic, calculated);
   CurrentThermal(basic, calculated, calculated.current_thermal);
-  UpdateLiftDatabase(basic, last_basic, calculated, last_calculated);
+  lift_database_computer.Compute(basic, last_basic,
+                                 calculated, last_calculated);
   circling_computer.MaxHeightGain(basic, calculated.flight, calculated);
   NextLegEqThermal(basic, calculated, settings);
 }
@@ -201,95 +202,6 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
     current_thermal.CalculateAll();
   } else
     current_thermal.Clear();
-}
-
-/**
- * This function converts a heading into an unsigned index for the LiftDatabase.
- *
- * This is calculated with Angles to deal with the 360 degree limit.
- *
- * 357 = 0
- * 4 = 0
- * 5 = 1
- * 14 = 1
- * 15 = 2
- * ...
- * @param heading The heading to convert
- * @return The index for the LiftDatabase array
- */
-static unsigned
-heading_to_index(Angle &heading)
-{
-  static const Angle afive = Angle::Degrees(fixed(5));
-
-  unsigned index = (unsigned)
-      floor((heading + afive).AsBearing().Degrees() / 10);
-
-  return std::max(0u, std::min(35u, index));
-}
-
-void
-GlideComputerAirData::UpdateLiftDatabase(const MoreData &basic,
-                                         const NMEAInfo &last_basic,
-                                         DerivedInfo &calculated,
-                                         const DerivedInfo &last_calculated)
-{
-  // If we just started circling
-  // -> reset the database because this is a new thermal
-  if (!calculated.circling && last_calculated.circling)
-    ResetLiftDatabase(calculated);
-
-  // Determine the direction in which we are circling
-  bool left = calculated.TurningLeft();
-
-  // Depending on the direction set the step size sign for the
-  // following loop
-  Angle heading_step = Angle::Degrees(fixed(left ? -10 : 10));
-
-  const Angle heading = basic.attitude.heading;
-  const Angle last_heading = last_basic.attitude.heading;
-
-  // Start at the last heading and add heading_step until the current heading
-  // is reached. For each heading save the current lift value into the
-  // LiftDatabase. Last and current heading are included since they are
-  // a part of the ten degree interval most of the time.
-  //
-  // This is done with Angles to deal with the 360 degrees limit.
-  // e.g. last heading 348 degrees, current heading 21 degrees
-  //
-  // The loop condition stops until the current heading is reached.
-  // Depending on the circling direction the current heading will be
-  // smaller or bigger then the last one, because of that negative() is
-  // tested against the left variable.
-  for (Angle h = last_heading;
-       left == negative((heading - h).AsDelta().Degrees());
-       h += heading_step) {
-    unsigned index = heading_to_index(h);
-    calculated.lift_database[index] = basic.brutto_vario;
-  }
-
-  // detect zero crossing
-  if ((heading < Angle::QuarterCircle() &&
-       last_heading.Degrees() > fixed_270) ||
-      (last_heading < Angle::QuarterCircle() &&
-       heading.Degrees() > fixed_270)) {
-
-    fixed h_av = fixed_zero;
-    for (auto it = calculated.lift_database.begin(),
-         it_end = calculated.lift_database.end(); it != it_end; ++it)
-      h_av += *it;
-
-    h_av /= calculated.lift_database.size();
-    calculated.trace_history.CirclingAverage.push(h_av);
-  }
-}
-
-void
-GlideComputerAirData::ResetLiftDatabase(DerivedInfo &calculated)
-{
-  calculated.ClearLiftDatabase();
-
-  calculated.trace_history.CirclingAverage.clear();
 }
 
 void

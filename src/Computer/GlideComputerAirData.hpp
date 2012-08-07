@@ -30,6 +30,7 @@ Copyright_License {
 #include "CirclingComputer.hpp"
 #include "ThermalBandComputer.hpp"
 #include "WindComputer.hpp"
+#include "LiftDatabaseComputer.hpp"
 #include "ThermalLocator.hpp"
 #include "Math/WindowFilter.hpp"
 
@@ -60,6 +61,7 @@ class GlideComputerAirData {
   CirclingComputer circling_computer;
   ThermalBandComputer thermal_band_computer;
   WindComputer wind_computer;
+  LiftDatabaseComputer lift_database_computer;
 
   ThermalLocator thermallocator;
 
@@ -121,10 +123,6 @@ private:
                   DerivedInfo &calculated, const DerivedInfo &last_calculated);
   void CurrentThermal(const MoreData &basic, const CirclingInfo &circling,
                       OneClimbInfo &current_thermal);
-  void ResetLiftDatabase(DerivedInfo &calculated);
-  void UpdateLiftDatabase(const MoreData &basic, const NMEAInfo &last_basic,
-                          DerivedInfo &calculated,
-                          const DerivedInfo &last_calculated);
   void GR(const MoreData &basic, const MoreData &last_basic,
           const DerivedInfo &calculated, VarioInfo &vario_info);
   void CruiseGR(const MoreData &basic, DerivedInfo &calculated);
