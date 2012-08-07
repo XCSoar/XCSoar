@@ -47,7 +47,7 @@ protected:
 
   ComputerSettings settings_computer;
   MoreData basic, last_basic;
-  DerivedInfo calculated, last_calculated;
+  DerivedInfo calculated;
 
 public:
   DebugReplay(NLineReader *reader);
@@ -75,10 +75,6 @@ public:
 
   const DerivedInfo &Calculated() const {
     return calculated;
-  }
-
-  const DerivedInfo &LastCalculated() const {
-    return last_calculated;
   }
 
   DerivedInfo &SetCalculated() {

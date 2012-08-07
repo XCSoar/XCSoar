@@ -101,7 +101,6 @@ bool
 DebugReplayNMEA::Next()
 {
   last_basic = basic;
-  last_calculated = calculated;
 
   const char *line;
   while ((line = reader->read()) != NULL) {
@@ -140,7 +139,6 @@ bool
 DebugReplayIGC::Next()
 {
   last_basic = basic;
-  last_calculated = calculated;
 
   const char *line;
   while ((line = reader->read()) != NULL) {
