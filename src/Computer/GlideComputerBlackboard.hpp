@@ -39,7 +39,6 @@ class GlideComputerBlackboard:
 {
   DerivedInfo Finish_Derived_Info;
   MoreData last_gps_info;
-  DerivedInfo last_calculated_info;
   bool _time_retreated;
 
 public:
@@ -48,7 +47,6 @@ public:
   void ReadBlackboard(const MoreData &nmea_info);
   void ReadComputerSettings(const ComputerSettings &settings);
   const MoreData &LastBasic() const { return last_gps_info; }
-  const DerivedInfo& LastCalculated() const { return last_calculated_info; }
 
 protected:
   bool time_advanced() const {
