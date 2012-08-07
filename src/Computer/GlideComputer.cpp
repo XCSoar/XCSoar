@@ -120,7 +120,7 @@ GlideComputer::ProcessGPS(bool force)
                                     GetComputerSettings());
 
   if (!time_retreated())
-    stats_computer.ProcessClimbEvents(calculated, LastCalculated());
+    stats_computer.ProcessClimbEvents(calculated);
 
   // Calculate the team code
   CalculateOwnTeamCode();
@@ -148,7 +148,7 @@ GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  stats_computer.DoLogging(Basic(), LastBasic(), Calculated(),
+  stats_computer.DoLogging(Basic(), Calculated(),
                            GetComputerSettings().logger);
 
   task_computer.ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),

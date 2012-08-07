@@ -38,6 +38,11 @@ GlideComputerStats::GlideComputerStats() :
 void
 GlideComputerStats::ResetFlight(const bool full)
 {
+  last_location = GeoPoint::Invalid();
+  last_climb_start_time = fixed_minus_one;
+  last_cruise_start_time = fixed_minus_one;
+  last_thermal_end_time = fixed_minus_one;
+
   fast_log_num = 0;
   if (full)
     flightstats.Reset();
@@ -58,15 +63,17 @@ GlideComputerStats::StartTask(const NMEAInfo &basic)
  */
 bool
 GlideComputerStats::DoLogging(const MoreData &basic,
-                              const NMEAInfo &last_basic,
                               const DerivedInfo &calculated,
                               const LoggerSettings &settings_logger)
 {
   /// @todo consider putting this sanity check inside Parser
-  if (basic.location_available && last_basic.location_available &&
-      basic.location.Distance(last_basic.location) > fixed(200))
+  if (basic.location_available && last_location.IsValid() &&
+      basic.location.Distance(last_location) > fixed(200))
     // prevent bad fixes from being logged or added to OLC store
     return false;
+
+  last_location = basic.location_available
+    ? basic.location : GeoPoint::Invalid();
 
   // log points more often in circling mode
   if (calculated.circling)
@@ -127,18 +134,17 @@ GlideComputerStats::OnDepartedThermal(const DerivedInfo &calculated)
 }
 
 void
-GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated,
-                                       const DerivedInfo &last_calculated)
+GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated)
 {
   switch (calculated.turn_mode) {
   case CirclingMode::CLIMB:
-    if (calculated.climb_start_time > last_calculated.climb_start_time)
+    if (calculated.climb_start_time > last_climb_start_time)
       // set altitude for start of circling (as base of climb)
       OnClimbBase(calculated, calculated.turn_start_altitude);
     break;
 
   case CirclingMode::CRUISE:
-    if (calculated.cruise_start_time > last_calculated.cruise_start_time)
+    if (calculated.cruise_start_time > last_cruise_start_time)
       OnClimbCeiling(calculated);
     break;
 
@@ -147,9 +153,14 @@ GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated,
   }
 
   if (calculated.last_thermal.IsDefined() &&
-      (!last_calculated.last_thermal.IsDefined() ||
-       calculated.last_thermal.end_time > last_calculated.last_thermal.end_time))
+      (negative(last_thermal_end_time) ||
+       calculated.last_thermal.end_time > last_thermal_end_time))
     OnDepartedThermal(calculated);
+
+  last_climb_start_time = calculated.climb_start_time;
+  last_cruise_start_time = calculated.cruise_start_time;
+  last_thermal_end_time = calculated.last_thermal.IsDefined()
+    ? calculated.last_thermal.end_time : fixed_minus_one;
 }
 
 void

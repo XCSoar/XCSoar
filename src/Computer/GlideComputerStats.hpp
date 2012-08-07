@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_GLIDECOMPUTER_STATS_HPP
 #define XCSOAR_GLIDECOMPUTER_STATS_HPP
 
+#include "Geo/GeoPoint.hpp"
 #include "FlightStatistics.hpp"
 #include "GPSClock.hpp"
 
@@ -36,6 +37,11 @@ struct LoggerSettings;
 class Logger;
 
 class GlideComputerStats {
+  GeoPoint last_location;
+
+  fixed last_climb_start_time, last_cruise_start_time;
+  fixed last_thermal_end_time;
+
   FlightStatistics flightstats;
   GPSClock log_clock;
   GPSClock stats_clock;
@@ -61,8 +67,7 @@ public:
 
   void ResetFlight(const bool full = true);
   void StartTask(const NMEAInfo &basic);
-  bool DoLogging(const MoreData &basic, const NMEAInfo &last_basic,
-                 const DerivedInfo &calculated,
+  bool DoLogging(const MoreData &basic, const DerivedInfo &calculated,
                  const LoggerSettings &settings_logger);
   void SetFastLogging();
 
@@ -76,8 +81,7 @@ public:
    * Check of climbing has started or ended, and collect statistics
    * about that.
    */
-  void ProcessClimbEvents(const DerivedInfo &calculated,
-                          const DerivedInfo &last_calculated);
+  void ProcessClimbEvents(const DerivedInfo &calculated);
 };
 
 #endif
