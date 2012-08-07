@@ -463,7 +463,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
 {
   circling_computer.Turning(calculated,
                             basic, last_basic,
-                            calculated, last_calculated,
+                            calculated,
                             settings);
 
   if (last_calculated.circling != calculated.circling)

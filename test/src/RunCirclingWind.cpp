@@ -50,7 +50,7 @@ int main(int argc, char **argv)
                                replay->Calculated(), replay->LastCalculated());
     circling_computer.Turning(replay->SetCalculated(),
                               replay->Basic(), replay->LastBasic(),
-                              replay->Calculated(), replay->LastCalculated(),
+                              replay->Calculated(),
                               replay->GetComputerSettings());
 
     if (replay->LastCalculated().circling != replay->Calculated().circling)

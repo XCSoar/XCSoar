@@ -71,7 +71,6 @@ void
 CirclingComputer::Turning(CirclingInfo &circling_info,
                           const MoreData &basic, const MoreData &last_basic,
                           const DerivedInfo &calculated,
-                          const DerivedInfo &last_calculated,
                           const ComputerSettings &settings_computer)
 {
   // You can't be circling unless you're flying
