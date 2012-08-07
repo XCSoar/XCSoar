@@ -137,7 +137,14 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
     /* compass connected, don't need to calculate it */
     return;
 
-  if (calculated.wind_available &&
+  if (!basic.track_available) {
+    /* calculation not possible; set a dummy value (heading north) to
+       avoid accessing uninitialised memory */
+    attitude.heading = Angle::Zero();
+    return;
+  }
+
+  if (basic.ground_speed_available && calculated.wind_available &&
       (positive(basic.ground_speed) || calculated.wind.IsNonZero()) &&
       calculated.flight.flying) {
     fixed x0 = basic.track.fastsine() * basic.ground_speed;
