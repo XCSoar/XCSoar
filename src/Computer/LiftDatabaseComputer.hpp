@@ -28,7 +28,9 @@ Copyright_License {
 
 struct NMEAInfo;
 struct MoreData;
-struct DerivedInfo;
+struct CirclingInfo;
+class LiftDatabase;
+class TraceVariableHistory;
 
 /**
  * This computer manages the LiftDatabase and
@@ -44,15 +46,19 @@ class LiftDatabaseComputer {
   /**
    * Clear the attributes managed by this computer.
    */
-  void Clear(DerivedInfo &calculated);
+  void Clear(LiftDatabase &lift_database,
+             TraceVariableHistory &circling_average_trace);
 
 public:
   /**
    * Reset this computer and clear the attributes.
    */
-  void Reset(DerivedInfo &calculated);
+  void Reset(LiftDatabase &lift_database,
+             TraceVariableHistory &circling_average_trace);
 
-  void Compute(const MoreData &basic, DerivedInfo &calculated);
+  void Compute(LiftDatabase &lift_database,
+               TraceVariableHistory &circling_average_trace,
+               const MoreData &basic, const CirclingInfo &circling_info);
 };
 
 #endif

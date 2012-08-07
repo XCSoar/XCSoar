@@ -22,26 +22,28 @@ Copyright_License {
 */
 
 #include "LiftDatabaseComputer.hpp"
+#include "Engine/Navigation/TraceHistory.hpp"
+#include "NMEA/LiftDatabase.hpp"
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
-#include "ComputerSettings.hpp"
-#include "Math/LowPassFilter.hpp"
+#include "NMEA/CirclingInfo.hpp"
 
 void
-LiftDatabaseComputer::Clear(DerivedInfo &calculated)
+LiftDatabaseComputer::Clear(LiftDatabase &lift_database,
+                            TraceVariableHistory &circling_average_trace)
 {
-  calculated.lift_database.Clear();
+  lift_database.Clear();
 
-  calculated.trace_history.CirclingAverage.clear();
+  circling_average_trace.clear();
 }
 
 void
-LiftDatabaseComputer::Reset(DerivedInfo &calculated)
+LiftDatabaseComputer::Reset(LiftDatabase &lift_database,
+                            TraceVariableHistory &circling_average_trace)
 {
   last_circling = false;
   last_heading = Angle::Zero();
 
-  Clear(calculated);
+  Clear(lift_database, circling_average_trace);
 }
 
 /**
@@ -70,16 +72,18 @@ heading_to_index(Angle &heading)
 }
 
 void
-LiftDatabaseComputer::Compute(const MoreData &basic,
-                              DerivedInfo &calculated)
+LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
+                              TraceVariableHistory &circling_average_trace,
+                              const MoreData &basic,
+                              const CirclingInfo &circling_info)
 {
   // If we just started circling
   // -> reset the database because this is a new thermal
-  if (!calculated.circling && last_circling)
-    Clear(calculated);
+  if (!circling_info.circling && last_circling)
+    Clear(lift_database, circling_average_trace);
 
   // Determine the direction in which we are circling
-  bool left = calculated.TurningLeft();
+  bool left = circling_info.TurningLeft();
 
   // Depending on the direction set the step size sign for the
   // following loop
@@ -103,7 +107,7 @@ LiftDatabaseComputer::Compute(const MoreData &basic,
        left == negative((heading - h).AsDelta().Degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    calculated.lift_database[index] = basic.brutto_vario;
+    lift_database[index] = basic.brutto_vario;
   }
 
   // detect zero crossing
@@ -113,14 +117,13 @@ LiftDatabaseComputer::Compute(const MoreData &basic,
        heading.Degrees() > fixed_270)) {
 
     fixed h_av = fixed_zero;
-    for (auto it = calculated.lift_database.begin(),
-         it_end = calculated.lift_database.end(); it != it_end; ++it)
-      h_av += *it;
+    for (auto i : lift_database)
+      h_av += i;
 
-    h_av /= calculated.lift_database.size();
-    calculated.trace_history.CirclingAverage.push(h_av);
+    h_av /= lift_database.size();
+    circling_average_trace.push(h_av);
   }
 
-  last_circling = calculated.circling;
+  last_circling = circling_info.circling;
   last_heading = basic.attitude.heading;
 }
