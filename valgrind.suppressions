@@ -50,6 +50,33 @@
 }
 
 #
+# ALSA suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   fun:_snd_config_make
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   ...
+   fun:snd_config_load1
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   ...
+   fun:snd1_dlobj_cache_get
+}
+
+#
 # libSDL suppressions
 #
 
