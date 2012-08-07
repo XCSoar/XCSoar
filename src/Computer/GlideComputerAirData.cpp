@@ -418,8 +418,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
                                        DerivedInfo &calculated,
                                        const DerivedInfo &last_calculated)
 {
-  if (calculated.circling != false ||
-      last_calculated.circling != true ||
+  if (calculated.circling || !last_calculated.circling ||
       !positive(calculated.climb_start_time))
     return;
 
