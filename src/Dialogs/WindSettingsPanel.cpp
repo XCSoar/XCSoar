@@ -30,9 +30,11 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 
-WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind)
+WindSettingsPanel::WindSettingsPanel(bool _edit_manual_wind,
+                                     bool _edit_trail_drift)
   :RowFormWidget(UIGlobals::GetDialogLook()),
-   edit_manual_wind(_edit_manual_wind) {}
+   edit_manual_wind(_edit_manual_wind),
+   edit_trail_drift(_edit_trail_drift) {}
 
 void
 WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
@@ -64,10 +66,13 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                  "XCSoar's internal wind calculation."),
              settings.use_external_wind);
 
-  AddBoolean(_("Trail drift"),
-             _("Determines whether the snail trail is drifted with the wind "
-               "when displayed in circling mode."),
-             map_settings.trail.wind_drift_enabled);
+  if (edit_trail_drift)
+    AddBoolean(_("Trail drift"),
+               _("Determines whether the snail trail is drifted with the wind "
+                 "when displayed in circling mode."),
+               map_settings.trail.wind_drift_enabled);
+  else
+    AddDummy();
 
   if (edit_manual_wind) {
     external_wind = settings.use_external_wind &&
@@ -114,8 +119,9 @@ WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(ExternalWind, ProfileKeys::ExternalWind,
                        settings.use_external_wind);
 
-  changed |= SaveValue(TrailDrift, ProfileKeys::TrailDrift,
-                       map_settings.trail.wind_drift_enabled);
+  if (edit_trail_drift)
+    changed |= SaveValue(TrailDrift, ProfileKeys::TrailDrift,
+                         map_settings.trail.wind_drift_enabled);
 
   if (edit_manual_wind && !external_wind) {
     settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));

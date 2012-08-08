@@ -24,10 +24,10 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "IO/BatchTextWriter.hpp"
 #include "LocalPath.hpp"
-#include "NMEA/Info.hpp"
+#include "DateTime.hpp"
 #include "Thread/Mutex.hpp"
-#include "Interface.hpp"
 #include "OS/FileUtil.hpp"
+#include "Util/StaticString.hpp"
 
 #include <windef.h> // for MAX_PATH
 #include <stdio.h>
@@ -48,7 +48,7 @@ NMEALogger::Start()
   if (writer != NULL)
     return true;
 
-  BrokenDateTime dt = XCSoarInterface::Basic().date_time_utc;
+  BrokenDateTime dt = BrokenDateTime::NowUTC();
   assert(dt.Plausible());
 
   StaticString<64> name;

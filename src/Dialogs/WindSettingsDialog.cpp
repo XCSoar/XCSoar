@@ -29,7 +29,7 @@ Copyright_License {
 void
 ShowWindSettingsDialog()
 {
-  WidgetDialog dialog(_("Wind Settings"), new WindSettingsPanel(true));
+  WidgetDialog dialog(_("Wind Settings"), new WindSettingsPanel(true, true));
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();
