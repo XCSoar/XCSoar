@@ -7,6 +7,8 @@ Version 6.4.1 - not yet released
   - new option to disable the wind arrow
 * devices
   - fix potential crash in I/O thread
+* user interface
+  - remove duplicate "trail drift" setting (#2252)
 
 Version 6.4 - 2012/07/31
 * calculations

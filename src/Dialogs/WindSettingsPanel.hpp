@@ -35,7 +35,7 @@ class WindSettingsPanel : public RowFormWidget {
     Direction,
   };
 
-  const bool edit_manual_wind;
+  const bool edit_manual_wind, edit_trail_drift;
 
   bool external_wind;
 
@@ -43,7 +43,7 @@ public:
   /**
    * @param manual_wind edit the manual wind setting
    */
-  WindSettingsPanel(bool edit_manual_wind);
+  WindSettingsPanel(bool edit_manual_wind, bool edit_trail_drift);
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual bool Save(bool &changed, bool &require_restart);
