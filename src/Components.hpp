@@ -64,7 +64,7 @@ extern DeviceBlackboard *device_blackboard;
 extern MergeThread *merge_thread;
 extern CalculationThread *calculation_thread;
 
-extern Logger logger;
+extern Logger *logger;
 extern GlueFlightLogger *flight_logger;
 
 extern TrackingGlue *tracking;

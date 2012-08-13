@@ -87,7 +87,7 @@ SystemStatusPanel::Refresh()
 
   SetText(FLARM, Temp);
 
-  SetText(Logger, logger.IsLoggerActive()
+  SetText(Logger, logger != nullptr && logger->IsLoggerActive()
           ? _("On")
           : _("Off"));
 

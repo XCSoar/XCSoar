@@ -388,7 +388,7 @@ InputEvents::eventAutoLogger(const TCHAR *misc)
 void
 InputEvents::eventLogger(const TCHAR *misc)
 {
-  if (protected_task_manager == NULL)
+  if (logger == nullptr || protected_task_manager == nullptr)
     return;
 
   // TODO feature: start logger without requiring feedback
@@ -399,21 +399,21 @@ InputEvents::eventLogger(const TCHAR *misc)
     CommonInterface::GetComputerSettings();
 
   if (StringIsEqual(misc, _T("start ask")))
-    logger.GUIStartLogger(basic, settings_computer,
-                          *protected_task_manager);
-  else if (StringIsEqual(misc, _T("start")))
-    logger.GUIStartLogger(basic, settings_computer,
-                          *protected_task_manager, true);
-  else if (StringIsEqual(misc, _T("stop ask")))
-    logger.GUIStopLogger(basic);
-  else if (StringIsEqual(misc, _T("stop")))
-    logger.GUIStopLogger(basic, true);
-  else if (StringIsEqual(misc, _T("toggle ask")))
-    logger.GUIToggleLogger(basic, settings_computer,
+    logger->GUIStartLogger(basic, settings_computer,
                            *protected_task_manager);
-  else if (StringIsEqual(misc, _T("toggle")))
-    logger.GUIToggleLogger(basic, settings_computer,
+  else if (StringIsEqual(misc, _T("start")))
+    logger->GUIStartLogger(basic, settings_computer,
                            *protected_task_manager, true);
+  else if (StringIsEqual(misc, _T("stop ask")))
+    logger->GUIStopLogger(basic);
+  else if (StringIsEqual(misc, _T("stop")))
+    logger->GUIStopLogger(basic, true);
+  else if (StringIsEqual(misc, _T("toggle ask")))
+    logger->GUIToggleLogger(basic, settings_computer,
+                            *protected_task_manager);
+  else if (StringIsEqual(misc, _T("toggle")))
+    logger->GUIToggleLogger(basic, settings_computer,
+                            *protected_task_manager, true);
   else if (StringIsEqual(misc, _T("nmea"))) {
     NMEALogger::enabled = !NMEALogger::enabled;
     if (NMEALogger::enabled) {
@@ -422,14 +422,14 @@ InputEvents::eventLogger(const TCHAR *misc)
       Message::AddMessage(_("NMEA log off"));
     }
   } else if (StringIsEqual(misc, _T("show")))
-    if (logger.IsLoggerActive()) {
+    if (logger->IsLoggerActive()) {
       Message::AddMessage(_("Logger on"));
     } else {
       Message::AddMessage(_("Logger off"));
     }
   else if (_tcsncmp(misc, _T("note"), 4))
     // add note to logger file if available..
-    logger.LoggerNote(misc + 4);
+    logger->LoggerNote(misc + 4);
 }
 
 // RepeatStatusMessage

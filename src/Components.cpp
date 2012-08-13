@@ -126,7 +126,7 @@ DeviceBlackboard *device_blackboard;
 MergeThread *merge_thread;
 CalculationThread *calculation_thread;
 
-Logger logger;
+Logger *logger;
 GlueFlightLogger *flight_logger;
 Replay *replay;
 
@@ -353,15 +353,17 @@ XCSoarInterface::Startup()
   LogStartUp(_T("OpenTerrain"));
   terrain = RasterTerrain::OpenTerrain(file_cache, operation);
 
+  logger = new Logger();
+
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
                                      task_events);
   glide_computer->ReadComputerSettings(GetComputerSettings());
   glide_computer->SetTerrain(terrain);
-  glide_computer->SetLogger(&logger);
+  glide_computer->SetLogger(logger);
   glide_computer->Initialise();
 
-  replay = new Replay(&logger, *protected_task_manager);
+  replay = new Replay(logger, *protected_task_manager);
 
   // Load the EGM96 geoid data
   EGM96::Load();
@@ -443,7 +445,7 @@ XCSoarInterface::Startup()
     map_window->SetTerrain(terrain);
     map_window->SetWeather(&RASP);
     map_window->SetMarks(protected_marks);
-    map_window->SetLogger(&logger);
+    map_window->SetLogger(logger);
 
 #ifdef HAVE_NOAA
     map_window->SetNOAAStore(noaa_store);
@@ -536,7 +538,7 @@ XCSoarInterface::Shutdown()
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
-  logger.GUIStopLogger(Basic(), true);
+  logger->GUIStopLogger(Basic(), true);
 
   delete flight_logger;
   flight_logger = NULL;
@@ -655,6 +657,7 @@ XCSoarInterface::Shutdown()
   EGM96::Close();
 
   delete glide_computer;
+  delete logger;
 
   // Clear airspace database
   LogStartUp(_T("Close airspace"));

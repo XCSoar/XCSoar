@@ -427,7 +427,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     ReplaceInString(OutBuffer, _T("$(CheckTerrain)"), _T(""), Size);
   }
 
-  CondReplaceInString(logger.IsLoggerActive(), OutBuffer,
+  CondReplaceInString(logger != nullptr && logger->IsLoggerActive(), OutBuffer,
                       _T("$(LoggerActive)"), _("Stop"),
                       _("Start"), Size);
 
