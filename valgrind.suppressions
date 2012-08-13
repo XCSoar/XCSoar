@@ -193,6 +193,14 @@
    fun:InitDefaults
 }
 
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:*alloc
+   ...
+   fun:_XlcCreateLocaleDataBase
+}
+
 #
 # libXext
 #

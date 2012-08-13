@@ -20,7 +20,7 @@
 }
 */
 
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/GRecord.hpp"
 #include "OS/Args.hpp"
 
 #include <stdio.h>
@@ -34,16 +34,15 @@ main(int argc, char **argv)
 
   GRecord g;
   g.Initialize();
-  g.SetFileName(path.c_str());
 
-  if (!g.LoadFileToBuffer()) {
+  if (!g.LoadFileToBuffer(path.c_str())) {
     fprintf(stderr, "Failed to read file\n");
     return 2;
   }
 
   g.FinalizeBuffer();
 
-  if (!g.AppendGRecordToFile(true)) {
+  if (!g.AppendGRecordToFile(path.c_str())) {
     fprintf(stderr, "Failed to write file\n");
     return 2;
   }

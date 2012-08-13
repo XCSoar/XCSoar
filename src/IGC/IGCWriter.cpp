@@ -53,14 +53,13 @@ FormatIGCLocation(char *buffer, const GeoPoint &location)
   return buffer + strlen(buffer);
 }
 
-IGCWriter::IGCWriter(const TCHAR *_path, bool simulator)
+IGCWriter::IGCWriter(const TCHAR *_path)
 {
   _tcscpy(path, _path);
 
-  last_valid_point_initialized = false;
+  fix.Clear();
 
-  if (!simulator)
-    grecord.Initialize();
+  grecord.Initialize();
 }
 
 bool
@@ -73,24 +72,15 @@ IGCWriter::Flush()
   if (!writer.IsOpen())
     return false;
 
-  for (unsigned i = 0; i < buffer.Length(); ++i) {
-    if (!writer.WriteLine(buffer[i]))
+  for (const char *i : buffer)
+    if (!writer.WriteLine(i))
       return false;
-
-    grecord.AppendRecordToBuffer(buffer[i]);
-  }
 
   if (!writer.Flush())
     return false;
 
   buffer.Clear();
   return true;
-}
-
-void
-IGCWriter::Finish()
-{
-  Flush();
 }
 
 static void
@@ -117,6 +107,7 @@ IGCWriter::WriteLine(const char *line)
   dest[MAX_IGC_BUFF - 1] = '\0';
 
   ReplaceNonIGCChars(dest);
+  grecord.AppendRecordToBuffer(dest);
 
   return true;
 }
@@ -306,33 +297,8 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  if (!last_valid_point_initialized &&
-      ((gps_info.gps_altitude < fixed(-100))
-       || (gps_info.baro_altitude < fixed(-100))
-          || !gps_info.location_available))
-    return;
-
-  IGCFix fix;
-  if (!gps_info.location_available) {
-    fix = last_valid_point;
-    fix.gps_valid = false;
-  } else {
-    fix.gps_valid = true;
-    fix.location = gps_info.location;
-    fix.gps_altitude = (int)gps_info.gps_altitude;
-
-    // save last active fix location
-    last_valid_point = fix;
-    last_valid_point_initialized = true;
-  }
-
-  fix.time = gps_info.date_time_utc;
-  fix.pressure_altitude =
-      gps_info.baro_altitude_available ? (int)gps_info.baro_altitude :
-                                         /* fall back to GPS altitude */
-                                         fix.gps_altitude;
-
-  LogPoint(fix, (int)GetEPE(gps_info.gps), GetSIU(gps_info.gps));
+  if (fix.Apply(gps_info))
+    LogPoint(fix, (int)GetEPE(gps_info.gps), GetSIU(gps_info.gps));
 }
 
 void
@@ -391,20 +357,6 @@ IGCWriter::LogFRecord(const BrokenTime &time, const int *satellite_ids)
 void
 IGCWriter::Sign()
 {
-  // buffer is appended w/ each igc file write
   grecord.FinalizeBuffer();
-  // read record built by individual file writes
-  char OldGRecordBuff[MAX_IGC_BUFF];
-  grecord.GetDigest(OldGRecordBuff);
-
-  // now calc from whats in the igc file on disk
-  grecord.Initialize();
-  grecord.SetFileName(path);
-  grecord.LoadFileToBuffer();
-  grecord.FinalizeBuffer();
-  char NewGRecordBuff[MAX_IGC_BUFF];
-  grecord.GetDigest(NewGRecordBuff);
-
-  bool bFileValid = strcmp(OldGRecordBuff, NewGRecordBuff) == 0;
-  grecord.AppendGRecordToFile(bFileValid);
+  grecord.AppendGRecordToFile(path);
 }

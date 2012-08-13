@@ -85,13 +85,9 @@ static const char *const expect[] = {
   NULL
 };
 
-int main(int argc, char **argv)
+static void
+Run(IGCWriter &writer)
 {
-  plan_tests(51);
-
-  const TCHAR *path = _T("output/test/test.igc");
-  File::Delete(path);
-
   static const GeoPoint home(Angle::Degrees(fixed(7.7061111111111114)),
                              Angle::Degrees(fixed(51.051944444444445)));
   static const GeoPoint tp(Angle::Degrees(fixed(10.726111111111111)),
@@ -111,9 +107,8 @@ int main(int argc, char **argv)
   i.location_available.Update(i.clock);
   i.gps_altitude = fixed(487);
   i.gps_altitude_available.Update(i.clock);
-  i.ProvideBaroAltitudeTrue(fixed(490));
-
-  IGCWriter writer(path, false);
+  i.ProvidePressureAltitude(fixed(490));
+  i.ProvideBaroAltitudeTrue(fixed(400));
 
   writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
                      _T("D-1234"), _T("34"), "FOO", _T("bar"), false);
@@ -147,15 +142,31 @@ int main(int argc, char **argv)
                         Angle::Degrees(fixed(-51.051944444444445)));
   writer.LogPoint(i);
 
-  writer.Finish();
+  writer.Flush();
   writer.Sign();
+}
+
+static void
+Run(const TCHAR *path)
+{
+  IGCWriter writer(path);
+  Run(writer);
+}
+
+int main(int argc, char **argv)
+{
+  plan_tests(51);
+
+  const TCHAR *path = _T("output/test/test.igc");
+  File::Delete(path);
+
+  Run(path);
 
   CheckTextFile(path, expect);
 
   GRecord grecord;
   grecord.Initialize();
-  grecord.SetFileName(path);
-  ok1(grecord.VerifyGRecordInFile());
+  ok1(grecord.VerifyGRecordInFile(path));
 
   return exit_status();
 }

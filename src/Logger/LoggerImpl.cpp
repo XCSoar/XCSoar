@@ -33,6 +33,7 @@
 #include "Interface.hpp"
 #include "Util/CharUtil.hpp"
 #include "IGCFileCleanup.hpp"
+#include "IGC/IGCWriter.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
@@ -44,14 +45,25 @@
 const struct LoggerImpl::PreTakeoffBuffer &
 LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 {
-  location = src.location;
+  location = src.location_available
+    ? src.location
+    : GeoPoint::Invalid();
+
+  if (src.pressure_altitude_available) {
+    pressure_altitude = src.pressure_altitude;
+    pressure_altitude_available = true;
+  } else if (src.baro_altitude_available) {
+    pressure_altitude = src.baro_altitude;
+    pressure_altitude_available = true;
+  } else
+    pressure_altitude_available = false;
+
   altitude_gps = src.gps_altitude;
-  altitude_baro = src.GetAltitudeBaroPreferred();
+  gps_altitude_available = src.gps_altitude_available;
 
   date_time_utc = src.date_time_utc;
   time = src.time;
 
-  nav_warning = !src.location_available;
   fix_quality = src.gps.fix_quality;
 
   satellites_used_available = src.gps.satellites_used_available;
@@ -88,10 +100,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (writer == NULL)
     return;
 
-  if (gps_info.alive && !gps_info.gps.real)
-    simulator = true;
-
-  writer->Finish();
+  writer->Flush();
 
   if (!simulator)
     writer->Sign();
@@ -103,8 +112,8 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   writer = NULL;
 
   // Make space for logger file, if unsuccessful -> cancel
-  if (!IGCFileCleanup(gps_info.date_time_utc.year))
-    return;
+  if (gps_info.gps.real && gps_info.date_available)
+    IGCFileCleanup(gps_info.date_time_utc.year);
 
   pre_takeoff_buffer.clear();
 }
@@ -112,8 +121,8 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 void
 LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
 {
-  if (!gps_info.alive && pre_takeoff_buffer.empty())
-    return;
+  assert(gps_info.alive);
+  assert(gps_info.time_available);
 
   PreTakeoffBuffer item;
   item = gps_info;
@@ -144,26 +153,36 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
   while (!pre_takeoff_buffer.empty()) {
     const struct PreTakeoffBuffer &src = pre_takeoff_buffer.shift();
     NMEAInfo tmp_info;
-    tmp_info.location = src.location;
-    tmp_info.gps_altitude = src.altitude_gps;
-    tmp_info.baro_altitude = src.altitude_baro;
-    tmp_info.date_time_utc = src.date_time_utc;
-    tmp_info.time = src.time;
+    tmp_info.Reset();
 
     // NOTE: clock is only used to set the validity of valid objects to true
     //       for which "1" is sufficient. This kludge needs to be rewritten.
     tmp_info.clock = fixed_one;
 
-    if (src.nav_warning)
-      tmp_info.location_available.Clear();
-    else
+    tmp_info.alive.Update(tmp_info.clock);
+
+    if (src.location.IsValid()) {
+      tmp_info.location = src.location;
       tmp_info.location_available.Update(tmp_info.clock);
+    }
+
+    if (src.gps_altitude_available) {
+      tmp_info.gps_altitude = src.altitude_gps;
+      tmp_info.gps_altitude_available.Update(tmp_info.clock);
+    }
+
+    if (src.pressure_altitude_available) {
+      tmp_info.pressure_altitude = src.pressure_altitude;
+      tmp_info.pressure_altitude_available.Update(tmp_info.clock);
+    }
+
+    tmp_info.date_time_utc = src.date_time_utc;
+    tmp_info.time = src.time;
+    tmp_info.time_available.Update(tmp_info.clock);
 
     tmp_info.gps.fix_quality = src.fix_quality;
 
-    if (!src.satellites_used_available)
-      tmp_info.gps.satellites_used_available.Clear();
-    else {
+    if (src.satellites_used_available) {
       tmp_info.gps.satellites_used_available.Update(tmp_info.clock);
       tmp_info.gps.satellites_used = src.satellites_used;
     }
@@ -171,9 +190,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     tmp_info.gps.hdop = src.hdop;
     tmp_info.gps.real = src.real;
 
-    if (!src.satellite_ids_available)
-      tmp_info.gps.satellite_ids_available.Clear();
-    else {
+    if (src.satellite_ids_available) {
       tmp_info.gps.satellite_ids_available.Update(tmp_info.clock);
       for (unsigned i = 0; i < GPSState::MAXSATELLITES; i++)
         tmp_info.gps.satellite_ids[i] = src.satellite_ids[i];
@@ -188,7 +205,10 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 void
 LoggerImpl::WritePoint(const NMEAInfo &gps_info)
 {
-  if (gps_info.alive && !gps_info.gps.real)
+  assert(gps_info.alive);
+  assert(gps_info.time_available);
+
+  if (!gps_info.gps.real)
     simulator = true;
 
   if (!simulator && frecord.Update(gps_info.gps, gps_info.time,
@@ -210,16 +230,25 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   assert(logger_id != NULL);
   assert(strlen(logger_id) == 3);
 
+  /* finish the previous IGC file */
+  StopLogger(gps_info);
+
+  assert(writer == NULL);
+
   LocalPath(filename, _T("logs"));
   Directory::Create(filename);
+
+  const BrokenDate today = gps_info.date_available
+    ? gps_info.date_time_utc
+    : BrokenDateTime::NowUTC();
 
   StaticString<64> name;
   for (int i = 1; i < 99; i++) {
     if (!settings.short_name)
-      FormatIGCFilenameLong(name.buffer(), gps_info.date_time_utc,
+      FormatIGCFilenameLong(name.buffer(), today,
                             "XCS", logger_id, i);
     else
-      FormatIGCFilename(name.buffer(), gps_info.date_time_utc,
+      FormatIGCFilename(name.buffer(), today,
                         'X', logger_id, i);
 
     LocalPath(filename, _T("logs"), name);
@@ -227,11 +256,8 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
       break;  // file not exist, we'll use this name
   }
 
-  delete writer;
-
   frecord.Reset();
-  simulator = gps_info.alive && !gps_info.gps.real;
-  writer = new IGCWriter(filename, simulator);
+  writer = new IGCWriter(filename);
 
   LogStartUp(_T("Logger Started: %s"), filename);
 }
@@ -278,6 +304,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   StartLogger(gps_info, settings, logger_id);
 
+  simulator = gps_info.alive && !gps_info.gps.real;
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,

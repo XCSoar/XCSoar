@@ -20,20 +20,15 @@
 }
  */
 
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/GRecord.hpp"
 #include "Logger/MD5.hpp"
 #include "IO/FileSource.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <string.h>
-
-const TCHAR *
-GRecord::GetVersion() const
-{
-  return _T("Version 1.0.2");
-}
 
 void
 GRecord::Initialize()
@@ -72,20 +67,15 @@ GRecord::FinalizeBuffer()
 }
 
 void
-GRecord::GetDigest(char *output)
+GRecord::GetDigest(char *output) const
 {
-  for (int i = 0; i <= 3; i++)
-    md5[i].GetDigest(output + i * 32);
-
-  output[128] = '\0';
+  for (int i = 0; i <= 3; i++, output += MD5::DIGEST_LENGTH)
+    md5[i].GetDigest(output);
 }
 
 void
 GRecord::Initialize(int key_id)
 {
-  for (unsigned i = 0; i < BUFF_LEN; i++)
-    filename[i] = 0;
-
   // 4 different 512 bit keys
   switch (key_id)
   {
@@ -114,12 +104,6 @@ GRecord::Initialize(int key_id)
     md5[3].InitKey( 0xc8e899e8, 0x9321c28a, 0x438eba12, 0x8cbe0aee);
     break;
   }
-}
-
-void
-GRecord::SetFileName(const TCHAR *_filename)
-{
-  _tcscpy(filename, _filename);
 }
 
 bool
@@ -151,7 +135,7 @@ GRecord::IncludeRecordInGCalc(const unsigned char *in)
 }
 
 bool
-GRecord::LoadFileToBuffer()
+GRecord::LoadFileToBuffer(const TCHAR *filename)
 {
   FileLineReaderA reader(filename);
   if (reader.error())
@@ -165,39 +149,37 @@ GRecord::LoadFileToBuffer()
   return true;
 }
 
+void
+GRecord::WriteTo(TextWriter &writer) const
+{
+  char digest[DIGEST_LENGTH + 1];
+  GetDigest(digest);
+
+  static constexpr size_t chars_per_line = 16;
+  static_assert(DIGEST_LENGTH % chars_per_line == 0, "wrong digest length");
+
+  for (const char *i = digest, *end = digest + DIGEST_LENGTH;
+       i != end; i += chars_per_line) {
+    writer.Write('G');
+    writer.Write(i, chars_per_line);
+    writer.NewLine();
+  }
+}
+
 bool
-GRecord::AppendGRecordToFile(bool valid)
+GRecord::AppendGRecordToFile(const TCHAR *filename)
 {
   TextWriter writer(filename, true);
   if (!writer.IsOpen())
     return false;
 
-  char digest[BUFF_LEN];
-  GetDigest(digest);
-
-  static const unsigned chars_per_line = 16;
-
-  if (valid) {
-    static char digest16[BUFF_LEN];
-    digest16[0] = 'G';
-    // 0 - 15
-    for (unsigned line = 0; line < (128 / chars_per_line); line++) {
-      for (unsigned i = 0; i < chars_per_line; i++)
-        digest16[i + 1] = digest[i + chars_per_line * line];
-
-      digest16[chars_per_line + 1] = 0; // +1 is the initial "G"
-
-      writer.WriteLine(digest16);
-    }
-  } else {
-    writer.WriteLine("G Record Invalid");
-  }
-
+  WriteTo(writer);
   return true;
 }
 
 bool
-GRecord::ReadGRecordFromFile(char *output, size_t max_length)
+GRecord::ReadGRecordFromFile(const TCHAR *filename,
+                             char *output, size_t max_length)
 {
   FileLineReaderA reader(filename);
   if (reader.error())
@@ -222,21 +204,21 @@ GRecord::ReadGRecordFromFile(char *output, size_t max_length)
 }
 
 bool
-GRecord::VerifyGRecordInFile()
+GRecord::VerifyGRecordInFile(const TCHAR *path)
 {
   // assumes FileName member is set
   // Load File into Buffer (assume name is already set)
-  LoadFileToBuffer();
+  LoadFileToBuffer(path);
 
   // load Existing Digest "old"
-  char old_g_record[BUFF_LEN];
-  if (!ReadGRecordFromFile(old_g_record, BUFF_LEN))
+  char old_g_record[DIGEST_LENGTH + 1];
+  if (!ReadGRecordFromFile(path, old_g_record, ARRAY_SIZE(old_g_record)))
     return false;
 
   // recalculate digest from buffer
   FinalizeBuffer();
 
-  char new_g_record[BUFF_LEN];
+  char new_g_record[DIGEST_LENGTH + 1];
   GetDigest(new_g_record);
 
   return strcmp(old_g_record, new_g_record) == 0;

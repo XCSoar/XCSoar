@@ -54,7 +54,7 @@ main(int argc, char **argv)
 
   md5.Finalize();
 
-  char digest[33];
+  char digest[MD5::DIGEST_LENGTH + 1];
   md5.GetDigest(digest);
 
   puts(digest);

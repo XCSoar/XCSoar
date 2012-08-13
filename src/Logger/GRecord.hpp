@@ -30,52 +30,51 @@
 
 #define XCSOAR_IGC_CODE "XCS"
 
+class TextWriter;
+
 class GRecord
 {
 public:
-  enum {
-    DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH + 1,
-  };
+  static constexpr size_t DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH;
 
 private:
   MD5 md5[4];
 
-  enum {
-    BUFF_LEN = 255,
-  };
-
-  TCHAR filename[BUFF_LEN];
-
 public:
 
   void Initialize();
-  const TCHAR *GetVersion() const;
 
   /**
    * @return returns true if record is appended, false if skipped
    */
   bool AppendRecordToBuffer(const char *szIn);
   void FinalizeBuffer();
-  void GetDigest(char *buffer);
+
+  /**
+   * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
+   */
+  void GetDigest(char *buffer) const;
 
   gcc_const
   static bool IsValidIGCChar(char c) {
     return MD5::IsValidIGCChar(c);
   }
 
-  // File specific functions
-  void SetFileName(const TCHAR *szIn);
   /** loads a file into the data buffer */
-  bool LoadFileToBuffer();
-  /// writes error if invalid G Record
-  bool AppendGRecordToFile(bool bValid);
+  bool LoadFileToBuffer(const TCHAR *path);
+
+  void WriteTo(TextWriter &writer) const;
+
+  bool AppendGRecordToFile(const TCHAR *path);
+
   /**
-   * returns in szOutput the G Record from the file referenced by
-   * filename member
+   * returns in szOutput the G Record from the file
    */
-  bool ReadGRecordFromFile(char *buffer, size_t max_length);
+  static bool ReadGRecordFromFile(const TCHAR *path,
+                                  char *buffer, size_t max_length);
+
   /// returns 0 if false, 1 if true
-  bool VerifyGRecordInFile();
+  bool VerifyGRecordInFile(const TCHAR *path);
 
 private:
   void Initialize(int iKey);

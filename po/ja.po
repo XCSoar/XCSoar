@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-08-05 15:32+0000\n"
+"PO-Revision-Date: 2012-08-08 10:16+0000\n"
 "Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-06 08:28+0000\n"
-"X-Generator: Launchpad (build 15745)\n"
+"X-Launchpad-Export-Date: 2012-08-13 06:41+0000\n"
+"X-Generator: Launchpad (build 15791)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -3721,7 +3721,7 @@ msgstr "飛行船"
 #: src/Dialogs/FLARM/ConfigWidget.cpp:138
 #, no-c-format
 msgid "Unmanned aerial vehicle"
-msgstr "無人飛行物体"
+msgstr "不明な飛行物体"
 
 #: src/Dialogs/FLARM/ConfigWidget.cpp:140
 #, no-c-format
@@ -7670,11 +7670,11 @@ msgstr "記録間隔"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:141
 msgid "Vehicle Type"
-msgstr "車両タイプ"
+msgstr "飛行体タイプ"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:141
 msgid "Type of vehicle used."
-msgstr "使用する車両のタイプ"
+msgstr "使用する　飛行体のタイプ"
 
 #: src/Dialogs/ConfigPanels/TrackingConfigPanel.cpp:144
 msgid "Server"
@@ -9187,9 +9187,7 @@ msgstr ""
 msgid ""
 "What's\n"
 "here?"
-msgstr ""
-"何ですか\n"
-"これ"
+msgstr "現在位置は何処？"
 
 #: Data/Input/default.xci:409 Data/Input/default.xci:1086
 msgid "Dropped marker"

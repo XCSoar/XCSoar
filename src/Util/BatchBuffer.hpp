@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 Max Kellermann <max@duempel.org>
+ * Copyright (C) 2010-2012 Max Kellermann <max@duempel.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,6 +30,8 @@
 #ifndef XCSOAR_BATCH_BUFFER_HPP
 #define XCSOAR_BATCH_BUFFER_HPP
 
+#include "StaticArray.hpp"
+
 #include <algorithm>
 #include <stddef.h>
 
@@ -41,38 +43,33 @@
  */
 template<class T, size_t size>
 class BatchBuffer {
+  typedef class StaticArray<T, size> Array;
+
 public:
-  typedef size_t size_type;
+  typedef typename Array::size_type size_type;
+  typedef typename Array::const_iterator const_iterator;
 
 protected:
-  T data[size];
-  size_type tail;
+  Array data;
 
 public:
-  BatchBuffer()
-    :tail(0) {}
+  BatchBuffer() = default;
 
-  BatchBuffer(const BatchBuffer<T,size> &other)
-    :tail(other.tail) {
-    std::copy(other.data, other.data + tail, data);
+  BatchBuffer(const BatchBuffer<T,size> &other) {
+    data.resize(other.Length());
+    std::copy(other.data.begin(), other.data.end(), data.begin());
   }
 
-protected:
-  static size_type Next(size_type i) {
-    return (i + 1) % size;
-  }
-
-public:
   bool IsEmpty() const {
-    return tail == 0;
+    return data.empty();
   }
 
   bool IsFull() const {
-    return tail == size;
+    return data.full();
   }
 
   size_type Length() const {
-    return tail;
+    return data.size();
   }
 
   const T &operator[](size_type i) const {
@@ -80,11 +77,19 @@ public:
   }
 
   T &Append() {
-    return data[tail++];
+    return data.append();
   }
 
   void Clear() {
-    tail = 0;
+    data.clear();
+  }
+
+  const_iterator begin() const {
+    return data.begin();
+  }
+
+  const_iterator end() const {
+    return data.end();
   }
 };
 

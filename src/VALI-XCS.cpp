@@ -26,7 +26,7 @@
  */
 
 #include "OS/PathName.hpp"
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/GRecord.hpp"
 #include "Version.hpp"
 
 #include <stdio.h>
@@ -64,8 +64,7 @@ ValidateXCS(const TCHAR *FileName, GRecord &oGRecord)
   eStatus = eValidationFailed;
 
   oGRecord.Initialize();
-  oGRecord.SetFileName(FileName);
-  if (oGRecord.VerifyGRecordInFile())
+  if (oGRecord.VerifyGRecordInFile(FileName))
     eStatus = eValidationPassed;
 
   return eStatus;

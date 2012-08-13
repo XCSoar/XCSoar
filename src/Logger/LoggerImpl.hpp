@@ -24,12 +24,10 @@ Copyright_License {
 #if !defined(XCSOAR_LOGGER_IMPL_HPP)
 #define XCSOAR_LOGGER_IMPL_HPP
 
+#include "LoggerFRecord.hpp"
 #include "DateTime.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "IGC/IGCWriter.hpp"
 #include "Util/OverwritingRingBuffer.hpp"
-#include "Util/BatchBuffer.hpp"
-#include "NMEA/Info.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -38,6 +36,7 @@ struct NMEAInfo;
 struct LoggerSettings;
 struct Declaration;
 class OrderedTask;
+class IGCWriter;
 
 /**
  * Implementation of logger
@@ -55,10 +54,10 @@ public:
   {
     /** Location of fix */
     GeoPoint location;
+    /** Barometric altitude (m STD) */
+    fixed pressure_altitude;
     /** GPS Altitude (m) */
     fixed altitude_gps;
-    /** Barometric altitude (m) */
-    fixed altitude_baro;
     /** Date and time of fix */
     BrokenDateTime date_time_utc;
     /** IDs of satellites in fix */
@@ -66,8 +65,6 @@ public:
     bool satellite_ids_available;
     /** Time of fix (s) */
     fixed time;
-    /** GPS fix state */
-    int nav_warning;
     /** GPS fix quality */
     FixQuality fix_quality;
     /** GPS fix state */
@@ -80,6 +77,9 @@ public:
      * Is the fix real? (no replay, no simulator)
      */
     bool real;
+
+    bool pressure_altitude_available;
+    bool gps_altitude_available;
 
     /** 
      * Set buffer value from NMEA_INFO structure
