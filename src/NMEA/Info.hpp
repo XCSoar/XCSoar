@@ -276,7 +276,9 @@ struct NMEAInfo {
   /** GPS date and time (UTC) */
   BrokenDateTime date_time_utc;
 
-  /** Is the BrokenDate part of DateTime available? */
+  /**
+   * Is the BrokenDate part of #date_time_utc available?
+   */
   bool date_available;
 
   //###########
