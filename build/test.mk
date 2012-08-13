@@ -532,6 +532,7 @@ TEST_RADIX_TREE_DEPENDS = UTIL
 $(eval $(call link-program,TestRadixTree,TEST_RADIX_TREE))
 
 TEST_LOGGER_SOURCES = \
+	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \
@@ -1327,6 +1328,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
 	$(SRC)/Logger/LoggerGRecord.cpp \

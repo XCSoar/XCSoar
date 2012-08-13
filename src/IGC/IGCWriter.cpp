@@ -300,28 +300,8 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  if (!gps_info.time_available)
-    return;
-
-  if (!fix.IsDefined() &&
-      !gps_info.location_available)
-    return;
-
-  if (!gps_info.location_available) {
-    fix.gps_valid = false;
-  } else {
-    fix.gps_valid = true;
-    fix.location = gps_info.location;
-    fix.gps_altitude = (int)gps_info.gps_altitude;
-  }
-
-  fix.time = gps_info.date_time_utc;
-  fix.pressure_altitude =
-      gps_info.baro_altitude_available ? (int)gps_info.baro_altitude :
-                                         /* fall back to GPS altitude */
-                                         fix.gps_altitude;
-
-  LogPoint(fix, (int)GetEPE(gps_info.gps), GetSIU(gps_info.gps));
+  if (fix.Apply(gps_info))
+    LogPoint(fix, (int)GetEPE(gps_info.gps), GetSIU(gps_info.gps));
 }
 
 void

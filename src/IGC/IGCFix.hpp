@@ -27,6 +27,8 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "DateTime.hpp"
 
+struct NMEAInfo;
+
 struct IGCFix
 {
   BrokenTime time;
@@ -105,6 +107,13 @@ struct IGCFix
   bool IsDefined() const {
     return time.Plausible();
   }
+
+  /**
+   * Copy data from the #NMEAInfo object into this.
+   *
+   * @return true if this object is a valid new fix
+   */
+  bool Apply(const NMEAInfo &basic);
 };
 
 #endif
