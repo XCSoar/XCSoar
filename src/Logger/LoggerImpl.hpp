@@ -78,6 +78,9 @@ public:
      */
     bool real;
 
+    bool gps_altitude_available;
+    bool baro_altitude_available;
+
     /** 
      * Set buffer value from NMEA_INFO structure
      * 

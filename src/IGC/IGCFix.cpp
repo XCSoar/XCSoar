@@ -38,10 +38,14 @@ IGCFix::Apply(const NMEAInfo &basic)
   } else {
     gps_valid = true;
     location = basic.location;
-    gps_altitude = (int)basic.gps_altitude;
   }
 
   time = basic.date_time_utc;
+
+  gps_altitude = basic.gps_altitude_available
+    ? (int)basic.gps_altitude
+    : 0;
+
   pressure_altitude = basic.baro_altitude_available
     ? (int)basic.baro_altitude
     /* fall back to GPS altitude */
