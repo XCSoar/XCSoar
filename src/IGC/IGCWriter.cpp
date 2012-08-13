@@ -300,6 +300,9 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
+  if (!gps_info.time_available)
+    return;
+
   if (!fix.IsDefined() &&
       !gps_info.location_available)
     return;
