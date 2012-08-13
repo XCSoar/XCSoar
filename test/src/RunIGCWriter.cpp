@@ -58,5 +58,7 @@ int main(int argc, char **argv)
 
   writer.Flush();
 
+  delete replay;
+
   return EXIT_SUCCESS;
 }
