@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_IGC_WRITER_HPP
 #define XCSOAR_IGC_WRITER_HPP
 
-#include "Logger/LoggerFRecord.hpp"
 #include "Logger/LoggerGRecord.hpp"
 #include "Util/BatchBuffer.hpp"
 #include "Math/fixed.hpp"
@@ -33,6 +32,7 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
 
+struct GPSState;
 struct BrokenDateTime;
 struct NMEAInfo;
 struct Declaration;
