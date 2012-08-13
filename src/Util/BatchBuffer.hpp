@@ -57,12 +57,6 @@ public:
     std::copy(other.data, other.data + tail, data);
   }
 
-protected:
-  static size_type Next(size_type i) {
-    return (i + 1) % size;
-  }
-
-public:
   bool IsEmpty() const {
     return tail == 0;
   }
