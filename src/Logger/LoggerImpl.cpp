@@ -148,6 +148,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
   while (!pre_takeoff_buffer.empty()) {
     const struct PreTakeoffBuffer &src = pre_takeoff_buffer.shift();
     NMEAInfo tmp_info;
+    tmp_info.Reset();
 
     // NOTE: clock is only used to set the validity of valid objects to true
     //       for which "1" is sufficient. This kludge needs to be rewritten.
@@ -158,8 +159,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     if (src.location.IsValid()) {
       tmp_info.location = src.location;
       tmp_info.location_available.Update(tmp_info.clock);
-    } else
-      tmp_info.location_available.Clear();
+    }
 
     if (src.gps_altitude_available) {
       tmp_info.gps_altitude = src.altitude_gps;
@@ -177,9 +177,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 
     tmp_info.gps.fix_quality = src.fix_quality;
 
-    if (!src.satellites_used_available)
-      tmp_info.gps.satellites_used_available.Clear();
-    else {
+    if (src.satellites_used_available) {
       tmp_info.gps.satellites_used_available.Update(tmp_info.clock);
       tmp_info.gps.satellites_used = src.satellites_used;
     }
@@ -187,9 +185,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     tmp_info.gps.hdop = src.hdop;
     tmp_info.gps.real = src.real;
 
-    if (!src.satellite_ids_available)
-      tmp_info.gps.satellite_ids_available.Clear();
-    else {
+    if (src.satellite_ids_available) {
       tmp_info.gps.satellite_ids_available.Update(tmp_info.clock);
       for (unsigned i = 0; i < GPSState::MAXSATELLITES; i++)
         tmp_info.gps.satellite_ids[i] = src.satellite_ids[i];
