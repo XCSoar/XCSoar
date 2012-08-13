@@ -85,13 +85,9 @@ static const char *const expect[] = {
   NULL
 };
 
-int main(int argc, char **argv)
+static void
+Run(IGCWriter &writer)
 {
-  plan_tests(51);
-
-  const TCHAR *path = _T("output/test/test.igc");
-  File::Delete(path);
-
   static const GeoPoint home(Angle::Degrees(fixed(7.7061111111111114)),
                              Angle::Degrees(fixed(51.051944444444445)));
   static const GeoPoint tp(Angle::Degrees(fixed(10.726111111111111)),
@@ -113,8 +109,6 @@ int main(int argc, char **argv)
   i.gps_altitude_available.Update(i.clock);
   i.ProvidePressureAltitude(fixed(490));
   i.ProvideBaroAltitudeTrue(fixed(400));
-
-  IGCWriter writer(path, false);
 
   writer.WriteHeader(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"),
                      _T("D-1234"), _T("34"), "FOO", _T("bar"), false);
@@ -150,6 +144,23 @@ int main(int argc, char **argv)
 
   writer.Flush();
   writer.Sign();
+}
+
+static void
+Run(const TCHAR *path)
+{
+  IGCWriter writer(path, false);
+  Run(writer);
+}
+
+int main(int argc, char **argv)
+{
+  plan_tests(51);
+
+  const TCHAR *path = _T("output/test/test.igc");
+  File::Delete(path);
+
+  Run(path);
 
   CheckTextFile(path, expect);
 
