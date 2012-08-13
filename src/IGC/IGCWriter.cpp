@@ -361,14 +361,15 @@ IGCWriter::Sign()
   // buffer is appended w/ each igc file write
   grecord.FinalizeBuffer();
   // read record built by individual file writes
-  char OldGRecordBuff[MAX_IGC_BUFF];
+  char OldGRecordBuff[GRecord::DIGEST_LENGTH + 1];
   grecord.GetDigest(OldGRecordBuff);
 
   // now calc from whats in the igc file on disk
   grecord.Initialize();
   grecord.LoadFileToBuffer(path);
   grecord.FinalizeBuffer();
-  char NewGRecordBuff[MAX_IGC_BUFF];
+
+  char NewGRecordBuff[GRecord::DIGEST_LENGTH + 1];
   grecord.GetDigest(NewGRecordBuff);
 
   bool bFileValid = strcmp(OldGRecordBuff, NewGRecordBuff) == 0;

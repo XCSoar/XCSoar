@@ -33,14 +33,10 @@
 class GRecord
 {
 public:
-  static constexpr size_t DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH + 1;
+  static constexpr size_t DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH;
 
 private:
   MD5 md5[4];
-
-  enum {
-    BUFF_LEN = 255,
-  };
 
 public:
 
@@ -52,6 +48,10 @@ public:
    */
   bool AppendRecordToBuffer(const char *szIn);
   void FinalizeBuffer();
+
+  /**
+   * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
+   */
   void GetDigest(char *buffer);
 
   gcc_const

@@ -25,6 +25,7 @@
 #include "IO/FileSource.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <string.h>
@@ -74,10 +75,8 @@ GRecord::FinalizeBuffer()
 void
 GRecord::GetDigest(char *output)
 {
-  for (int i = 0; i <= 3; i++)
-    md5[i].GetDigest(output + i * 32);
-
-  output[128] = '\0';
+  for (int i = 0; i <= 3; i++, output += MD5::DIGEST_LENGTH)
+    md5[i].GetDigest(output);
 }
 
 void
@@ -163,22 +162,24 @@ GRecord::AppendGRecordToFile(const TCHAR *filename, bool valid)
   if (!writer.IsOpen())
     return false;
 
-  char digest[BUFF_LEN];
+  char digest[DIGEST_LENGTH + 1];
   GetDigest(digest);
 
-  static const unsigned chars_per_line = 16;
+  static constexpr size_t chars_per_line = 16;
+  static_assert(DIGEST_LENGTH % chars_per_line == 0, "wrong digest length");
+  static constexpr unsigned num_lines = DIGEST_LENGTH / chars_per_line;
 
   if (valid) {
-    static char digest16[BUFF_LEN];
+    char digest16[1 + chars_per_line];
     digest16[0] = 'G';
+
+    const char *src = digest;
+
     // 0 - 15
-    for (unsigned line = 0; line < (128 / chars_per_line); line++) {
-      for (unsigned i = 0; i < chars_per_line; i++)
-        digest16[i + 1] = digest[i + chars_per_line * line];
-
-      digest16[chars_per_line + 1] = 0; // +1 is the initial "G"
-
-      writer.WriteLine(digest16);
+    for (unsigned line = 0; line < num_lines; ++line, src += chars_per_line) {
+      memcpy(digest16 + 1, src, chars_per_line);
+      writer.Write(digest16, sizeof(digest16));
+      writer.NewLine();
     }
   } else {
     writer.WriteLine("G Record Invalid");
@@ -221,14 +222,14 @@ GRecord::VerifyGRecordInFile(const TCHAR *path)
   LoadFileToBuffer(path);
 
   // load Existing Digest "old"
-  char old_g_record[BUFF_LEN];
-  if (!ReadGRecordFromFile(path, old_g_record, BUFF_LEN))
+  char old_g_record[DIGEST_LENGTH + 1];
+  if (!ReadGRecordFromFile(path, old_g_record, ARRAY_SIZE(old_g_record)))
     return false;
 
   // recalculate digest from buffer
   FinalizeBuffer();
 
-  char new_g_record[BUFF_LEN];
+  char new_g_record[DIGEST_LENGTH + 1];
   GetDigest(new_g_record);
 
   return strcmp(old_g_record, new_g_record) == 0;

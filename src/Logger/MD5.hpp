@@ -29,7 +29,7 @@
 class MD5
 {
 public:
-  static constexpr size_t DIGEST_LENGTH = 16;
+  static constexpr size_t DIGEST_LENGTH = 32;
 
 private:
   uint8_t buff512bits[64];
@@ -54,7 +54,12 @@ public:
   void AppendString(const unsigned char *in, bool skip_invalid_igc_chars); // must be NULL-terminated string!
 
   void Finalize();
+
+  /**
+   * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
+   */
   void GetDigest(char *buffer);
+
   static bool IsValidIGCChar(char c);
 };
 
