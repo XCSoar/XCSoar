@@ -301,9 +301,7 @@ void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
   if (!fix.IsDefined() &&
-      (gps_info.gps_altitude < fixed(-100) ||
-       gps_info.baro_altitude < fixed(-100) ||
-       !gps_info.location_available))
+      !gps_info.location_available)
     return;
 
   if (!gps_info.location_available) {
