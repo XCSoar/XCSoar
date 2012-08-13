@@ -89,9 +89,6 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (writer == NULL)
     return;
 
-  if (gps_info.alive && !gps_info.gps.real)
-    simulator = true;
-
   writer->Finish();
 
   if (!simulator)
