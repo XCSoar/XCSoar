@@ -33,12 +33,12 @@ IGCFix::Apply(const NMEAInfo &basic)
   if (!IsDefined() && !basic.location_available)
     return false;
 
-  if (!basic.location_available) {
-    gps_valid = false;
-  } else {
-    gps_valid = true;
+  /* "Use A for a 3D fix and V for a 2D fix (no GPS altitude) or for
+     no GPS data" */
+  gps_valid = basic.location_available && basic.gps_altitude_available;
+
+  if (basic.location_available)
     location = basic.location;
-  }
 
   time = basic.date_time_utc;
 
