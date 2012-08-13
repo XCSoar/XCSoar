@@ -101,9 +101,8 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   writer = NULL;
 
   // Make space for logger file, if unsuccessful -> cancel
-  if (gps_info.gps.real && gps_info.date_available &&
-      !IGCFileCleanup(gps_info.date_time_utc.year))
-    return;
+  if (gps_info.gps.real && gps_info.date_available)
+    IGCFileCleanup(gps_info.date_time_utc.year);
 
   pre_takeoff_buffer.clear();
 }
