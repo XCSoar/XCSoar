@@ -11,6 +11,7 @@ Version 6.4.1 - not yet released
   - remove duplicate "trail drift" setting (#2252)
 * logger
   - IGC B record is invalid ("V") with just 2D fix
+  - log pressure altitude in IGC files
 
 Version 6.4 - 2012/07/31
 * calculations

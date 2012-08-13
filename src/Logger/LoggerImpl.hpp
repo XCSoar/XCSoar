@@ -54,10 +54,10 @@ public:
   {
     /** Location of fix */
     GeoPoint location;
+    /** Barometric altitude (m STD) */
+    fixed pressure_altitude;
     /** GPS Altitude (m) */
     fixed altitude_gps;
-    /** Barometric altitude (m) */
-    fixed altitude_baro;
     /** Date and time of fix */
     BrokenDateTime date_time_utc;
     /** IDs of satellites in fix */
@@ -78,8 +78,8 @@ public:
      */
     bool real;
 
+    bool pressure_altitude_available;
     bool gps_altitude_available;
-    bool baro_altitude_available;
 
     /** 
      * Set buffer value from NMEA_INFO structure

@@ -111,7 +111,8 @@ int main(int argc, char **argv)
   i.location_available.Update(i.clock);
   i.gps_altitude = fixed(487);
   i.gps_altitude_available.Update(i.clock);
-  i.ProvideBaroAltitudeTrue(fixed(490));
+  i.ProvidePressureAltitude(fixed(490));
+  i.ProvideBaroAltitudeTrue(fixed(400));
 
   IGCWriter writer(path, false);
 

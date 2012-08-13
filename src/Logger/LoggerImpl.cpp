@@ -49,9 +49,14 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
     ? src.location
     : GeoPoint::Invalid();
 
-  baro_altitude_available = src.baro_altitude_available;
-  if (src.baro_altitude_available)
-    altitude_baro = src.baro_altitude;
+  if (src.pressure_altitude_available) {
+    pressure_altitude = src.pressure_altitude;
+    pressure_altitude_available = true;
+  } else if (src.baro_altitude_available) {
+    pressure_altitude = src.baro_altitude;
+    pressure_altitude_available = true;
+  } else
+    pressure_altitude_available = false;
 
   altitude_gps = src.gps_altitude;
   gps_altitude_available = src.gps_altitude_available;
@@ -166,9 +171,9 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
       tmp_info.gps_altitude_available.Update(tmp_info.clock);
     }
 
-    if (src.baro_altitude_available) {
-      tmp_info.baro_altitude = src.altitude_baro;
-      tmp_info.baro_altitude_available.Update(tmp_info.clock);
+    if (src.pressure_altitude_available) {
+      tmp_info.pressure_altitude = src.pressure_altitude;
+      tmp_info.pressure_altitude_available.Update(tmp_info.clock);
     }
 
     tmp_info.date_time_utc = src.date_time_utc;
