@@ -307,9 +307,9 @@ void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
   if (!last_valid_point_initialized &&
-      ((gps_info.gps_altitude < fixed(-100))
-       || (gps_info.baro_altitude < fixed(-100))
-          || !gps_info.location_available))
+      (gps_info.gps_altitude < fixed(-100) ||
+       gps_info.baro_altitude < fixed(-100) ||
+       !gps_info.location_available))
     return;
 
   IGCFix fix;
