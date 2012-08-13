@@ -30,6 +30,8 @@
 
 #define XCSOAR_IGC_CODE "XCS"
 
+class TextWriter;
+
 class GRecord
 {
 public:
@@ -60,6 +62,8 @@ public:
 
   /** loads a file into the data buffer */
   bool LoadFileToBuffer(const TCHAR *path);
+
+  void WriteTo(TextWriter &writer) const;
 
   bool AppendGRecordToFile(const TCHAR *path);
 

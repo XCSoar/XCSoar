@@ -149,13 +149,9 @@ GRecord::LoadFileToBuffer(const TCHAR *filename)
   return true;
 }
 
-bool
-GRecord::AppendGRecordToFile(const TCHAR *filename)
+void
+GRecord::WriteTo(TextWriter &writer) const
 {
-  TextWriter writer(filename, true);
-  if (!writer.IsOpen())
-    return false;
-
   char digest[DIGEST_LENGTH + 1];
   GetDigest(digest);
 
@@ -174,7 +170,16 @@ GRecord::AppendGRecordToFile(const TCHAR *filename)
     writer.Write(digest16, sizeof(digest16));
     writer.NewLine();
   }
+}
 
+bool
+GRecord::AppendGRecordToFile(const TCHAR *filename)
+{
+  TextWriter writer(filename, true);
+  if (!writer.IsOpen())
+    return false;
+
+  WriteTo(writer);
   return true;
 }
 
