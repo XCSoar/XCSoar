@@ -30,12 +30,6 @@
 #include <tchar.h>
 #include <string.h>
 
-const TCHAR *
-GRecord::GetVersion() const
-{
-  return _T("Version 1.0.2");
-}
-
 void
 GRecord::Initialize()
 {

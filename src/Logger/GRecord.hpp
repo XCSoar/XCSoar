@@ -41,7 +41,6 @@ private:
 public:
 
   void Initialize();
-  const TCHAR *GetVersion() const;
 
   /**
    * @return returns true if record is appended, false if skipped
