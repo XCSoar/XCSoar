@@ -47,6 +47,7 @@ class BatchBuffer {
 
 public:
   typedef typename Array::size_type size_type;
+  typedef typename Array::const_iterator const_iterator;
 
 protected:
   Array data;
@@ -81,6 +82,14 @@ public:
 
   void Clear() {
     data.clear();
+  }
+
+  const_iterator begin() const {
+    return data.begin();
+  }
+
+  const_iterator end() const {
+    return data.end();
   }
 };
 

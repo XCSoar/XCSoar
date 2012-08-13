@@ -73,8 +73,8 @@ IGCWriter::Flush()
   if (!writer.IsOpen())
     return false;
 
-  for (unsigned i = 0; i < buffer.Length(); ++i)
-    if (!writer.WriteLine(buffer[i]))
+  for (const char *i : buffer)
+    if (!writer.WriteLine(i))
       return false;
 
   if (!writer.Flush())
