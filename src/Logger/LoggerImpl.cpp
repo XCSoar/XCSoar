@@ -145,6 +145,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
   while (!pre_takeoff_buffer.empty()) {
     const struct PreTakeoffBuffer &src = pre_takeoff_buffer.shift();
     NMEAInfo tmp_info;
+    tmp_info.alive = gps_info.alive;
     tmp_info.location = src.location;
     tmp_info.gps_altitude = src.altitude_gps;
     tmp_info.baro_altitude = src.altitude_baro;
