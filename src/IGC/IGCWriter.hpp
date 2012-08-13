@@ -50,7 +50,7 @@ class IGCWriter {
 
   GRecord grecord;
 
-  IGCFix last_valid_point;
+  IGCFix fix;
 
 public:
   IGCWriter(const TCHAR *_path, bool simulator);
