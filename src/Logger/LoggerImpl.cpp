@@ -212,6 +212,11 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   assert(logger_id != NULL);
   assert(strlen(logger_id) == 3);
 
+  /* finish the previous IGC file */
+  StopLogger(gps_info);
+
+  assert(writer == NULL);
+
   LocalPath(filename, _T("logs"));
   Directory::Create(filename);
 
@@ -232,8 +237,6 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     if (!File::Exists(filename))
       break;  // file not exist, we'll use this name
   }
-
-  delete writer;
 
   frecord.Reset();
   simulator = gps_info.alive && !gps_info.gps.real;
