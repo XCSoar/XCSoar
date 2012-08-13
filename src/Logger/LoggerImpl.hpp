@@ -65,8 +65,6 @@ public:
     bool satellite_ids_available;
     /** Time of fix (s) */
     fixed time;
-    /** GPS fix state */
-    int nav_warning;
     /** GPS fix quality */
     FixQuality fix_quality;
     /** GPS fix state */

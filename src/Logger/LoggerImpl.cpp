@@ -45,14 +45,15 @@
 const struct LoggerImpl::PreTakeoffBuffer &
 LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
 {
-  location = src.location;
+  location = src.location_available
+    ? src.location
+    : GeoPoint::Invalid();
   altitude_gps = src.gps_altitude;
   altitude_baro = src.GetAltitudeBaroPreferred();
 
   date_time_utc = src.date_time_utc;
   time = src.time;
 
-  nav_warning = !src.location_available;
   fix_quality = src.gps.fix_quality;
 
   satellites_used_available = src.gps.satellites_used_available;
@@ -148,17 +149,18 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
     tmp_info.clock = fixed_one;
 
     tmp_info.alive.Update(tmp_info.clock);
-    tmp_info.location = src.location;
+
+    if (src.location.IsValid()) {
+      tmp_info.location = src.location;
+      tmp_info.location_available.Update(tmp_info.clock);
+    } else
+      tmp_info.location_available.Clear();
+
     tmp_info.gps_altitude = src.altitude_gps;
     tmp_info.baro_altitude = src.altitude_baro;
     tmp_info.date_time_utc = src.date_time_utc;
     tmp_info.time = src.time;
     tmp_info.time_available.Update(tmp_info.clock);
-
-    if (src.nav_warning)
-      tmp_info.location_available.Clear();
-    else
-      tmp_info.location_available.Update(tmp_info.clock);
 
     tmp_info.gps.fix_quality = src.fix_quality;
 
