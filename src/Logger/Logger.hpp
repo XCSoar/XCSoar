@@ -53,11 +53,11 @@ public:
   bool LoggerClearFreeSpace(unsigned current_year);
   void GUIStartLogger(const NMEAInfo& gps_info,
                       const ComputerSettings& settings,
-                      const ProtectedTaskManager &protected_task_manager,
+                      const ProtectedTaskManager *protected_task_manager,
                       bool noAsk = false);
   void GUIToggleLogger(const NMEAInfo& gps_info,
                        const ComputerSettings& settings,
-                       const ProtectedTaskManager &protected_task_manager,
+                       const ProtectedTaskManager *protected_task_manager,
                        bool noAsk = false);
   void GUIStopLogger(const NMEAInfo &gps_info,
                      bool noAsk = false);

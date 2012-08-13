@@ -388,7 +388,7 @@ InputEvents::eventAutoLogger(const TCHAR *misc)
 void
 InputEvents::eventLogger(const TCHAR *misc)
 {
-  if (logger == nullptr || protected_task_manager == nullptr)
+  if (logger == nullptr)
     return;
 
   // TODO feature: start logger without requiring feedback
@@ -400,20 +400,20 @@ InputEvents::eventLogger(const TCHAR *misc)
 
   if (StringIsEqual(misc, _T("start ask")))
     logger->GUIStartLogger(basic, settings_computer,
-                           *protected_task_manager);
+                           protected_task_manager);
   else if (StringIsEqual(misc, _T("start")))
     logger->GUIStartLogger(basic, settings_computer,
-                           *protected_task_manager, true);
+                           protected_task_manager, true);
   else if (StringIsEqual(misc, _T("stop ask")))
     logger->GUIStopLogger(basic);
   else if (StringIsEqual(misc, _T("stop")))
     logger->GUIStopLogger(basic, true);
   else if (StringIsEqual(misc, _T("toggle ask")))
     logger->GUIToggleLogger(basic, settings_computer,
-                            *protected_task_manager);
+                            protected_task_manager);
   else if (StringIsEqual(misc, _T("toggle")))
     logger->GUIToggleLogger(basic, settings_computer,
-                            *protected_task_manager, true);
+                            protected_task_manager, true);
   else if (StringIsEqual(misc, _T("nmea"))) {
     NMEALogger::enabled = !NMEALogger::enabled;
     if (NMEALogger::enabled) {

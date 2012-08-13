@@ -82,13 +82,15 @@ Logger::LoggerClearFreeSpace(unsigned current_year)
 void
 Logger::GUIStartLogger(const NMEAInfo& gps_info,
                     const ComputerSettings& settings,
-                       const ProtectedTaskManager &protected_task_manager,
+                       const ProtectedTaskManager *protected_task_manager,
                     bool noAsk)
 {
   if (IsLoggerActive() || gps_info.gps.replay)
     return;
 
-  OrderedTask* task = protected_task_manager.TaskClone();
+  OrderedTask* task = protected_task_manager != nullptr
+    ? protected_task_manager->TaskClone()
+    : nullptr;
   const Declaration decl(settings.logger, settings.plane, task);
 
   if (task) {
@@ -127,7 +129,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
 void
 Logger::GUIToggleLogger(const NMEAInfo& gps_info,
                      const ComputerSettings& settings,
-                      const ProtectedTaskManager &protected_task_manager,
+                      const ProtectedTaskManager *protected_task_manager,
                      bool noAsk)
 {
   if (IsLoggerActive())
