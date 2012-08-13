@@ -49,12 +49,12 @@ LoggerImpl::PreTakeoffBuffer::operator=(const NMEAInfo &src)
     ? src.location
     : GeoPoint::Invalid();
 
+  baro_altitude_available = src.baro_altitude_available;
+  if (src.baro_altitude_available)
+    altitude_baro = src.baro_altitude;
+
   altitude_gps = src.gps_altitude;
   gps_altitude_available = src.gps_altitude_available;
-
-  altitude_baro = src.GetAltitudeBaroPreferred();
-  baro_altitude_available =
-    src.baro_altitude_available || src.gps_altitude_available;
 
   date_time_utc = src.date_time_utc;
   time = src.time;
