@@ -73,12 +73,9 @@ IGCWriter::Flush()
   if (!writer.IsOpen())
     return false;
 
-  for (unsigned i = 0; i < buffer.Length(); ++i) {
+  for (unsigned i = 0; i < buffer.Length(); ++i)
     if (!writer.WriteLine(buffer[i]))
       return false;
-
-    grecord.AppendRecordToBuffer(buffer[i]);
-  }
 
   if (!writer.Flush())
     return false;
@@ -111,6 +108,7 @@ IGCWriter::WriteLine(const char *line)
   dest[MAX_IGC_BUFF - 1] = '\0';
 
   ReplaceNonIGCChars(dest);
+  grecord.AppendRecordToBuffer(dest);
 
   return true;
 }
