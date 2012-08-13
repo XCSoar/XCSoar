@@ -157,14 +157,11 @@ GRecord::WriteTo(TextWriter &writer) const
 
   static constexpr size_t chars_per_line = 16;
   static_assert(DIGEST_LENGTH % chars_per_line == 0, "wrong digest length");
-  static constexpr unsigned num_lines = DIGEST_LENGTH / chars_per_line;
 
-  const char *src = digest;
-
-  // 0 - 15
-  for (unsigned line = 0; line < num_lines; ++line, src += chars_per_line) {
+  for (const char *i = digest, *end = digest + DIGEST_LENGTH;
+       i != end; i += chars_per_line) {
     writer.Write('G');
-    writer.Write(src, chars_per_line);
+    writer.Write(i, chars_per_line);
     writer.NewLine();
   }
 }
