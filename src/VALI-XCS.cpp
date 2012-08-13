@@ -26,7 +26,7 @@
  */
 
 #include "OS/PathName.hpp"
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/GRecord.hpp"
 #include "Version.hpp"
 
 #include <stdio.h>

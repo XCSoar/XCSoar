@@ -20,7 +20,7 @@
 }
 */
 
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/GRecord.hpp"
 #include "Util/Macros.hpp"
 #include "OS/Args.hpp"
 

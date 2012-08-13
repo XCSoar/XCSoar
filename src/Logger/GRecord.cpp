@@ -20,7 +20,7 @@
 }
  */
 
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/GRecord.hpp"
 #include "Logger/MD5.hpp"
 #include "IO/FileSource.hpp"
 #include "IO/FileLineReader.hpp"

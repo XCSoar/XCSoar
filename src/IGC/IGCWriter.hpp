@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IGC_WRITER_HPP
 #define XCSOAR_IGC_WRITER_HPP
 
-#include "Logger/LoggerGRecord.hpp"
+#include "Logger/GRecord.hpp"
 #include "Util/BatchBuffer.hpp"
 #include "Math/fixed.hpp"
 #include "IGCFix.hpp"

@@ -535,7 +535,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
-	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Version.cpp \
@@ -931,21 +931,21 @@ RUN_MD5_SOURCES = \
 $(eval $(call link-program,RunMD5,RUN_MD5))
 
 READ_GRECORD_SOURCES = \
-	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(TEST_SRC_DIR)/ReadGRecord.cpp
 READ_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,ReadGRecord,READ_GRECORD))
 
 VERIFY_GRECORD_SOURCES = \
-	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(TEST_SRC_DIR)/VerifyGRecord.cpp
 VERIFY_GRECORD_DEPENDS = IO OS UTIL
 $(eval $(call link-program,VerifyGRecord,VERIFY_GRECORD))
 
 APPEND_GRECORD_SOURCES = \
-	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
 APPEND_GRECORD_DEPENDS = IO OS UTIL
@@ -1331,7 +1331,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
-	$(SRC)/Logger/LoggerGRecord.cpp \
+	$(SRC)/Logger/GRecord.cpp \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Operation/Operation.cpp \
