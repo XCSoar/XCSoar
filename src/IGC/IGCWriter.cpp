@@ -358,20 +358,6 @@ IGCWriter::LogFRecord(const BrokenTime &time, const int *satellite_ids)
 void
 IGCWriter::Sign()
 {
-  // buffer is appended w/ each igc file write
   grecord.FinalizeBuffer();
-  // read record built by individual file writes
-  char OldGRecordBuff[GRecord::DIGEST_LENGTH + 1];
-  grecord.GetDigest(OldGRecordBuff);
-
-  // now calc from whats in the igc file on disk
-  grecord.Initialize();
-  grecord.LoadFileToBuffer(path);
-  grecord.FinalizeBuffer();
-
-  char NewGRecordBuff[GRecord::DIGEST_LENGTH + 1];
-  grecord.GetDigest(NewGRecordBuff);
-
-  bool bFileValid = strcmp(OldGRecordBuff, NewGRecordBuff) == 0;
-  grecord.AppendGRecordToFile(path, bFileValid);
+  grecord.AppendGRecordToFile(path, true);
 }
