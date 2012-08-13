@@ -44,8 +44,6 @@ private:
     BUFF_LEN = 255,
   };
 
-  TCHAR filename[BUFF_LEN];
-
 public:
 
   void Initialize();
@@ -63,19 +61,20 @@ public:
     return MD5::IsValidIGCChar(c);
   }
 
-  // File specific functions
-  void SetFileName(const TCHAR *szIn);
   /** loads a file into the data buffer */
-  bool LoadFileToBuffer();
+  bool LoadFileToBuffer(const TCHAR *path);
+
   /// writes error if invalid G Record
-  bool AppendGRecordToFile(bool bValid);
+  bool AppendGRecordToFile(const TCHAR *path, bool bValid);
+
   /**
-   * returns in szOutput the G Record from the file referenced by
-   * filename member
+   * returns in szOutput the G Record from the file
    */
-  bool ReadGRecordFromFile(char *buffer, size_t max_length);
+  static bool ReadGRecordFromFile(const TCHAR *path,
+                                  char *buffer, size_t max_length);
+
   /// returns 0 if false, 1 if true
-  bool VerifyGRecordInFile();
+  bool VerifyGRecordInFile(const TCHAR *path);
 
 private:
   void Initialize(int iKey);

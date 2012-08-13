@@ -35,10 +35,9 @@ main(int argc, char **argv)
 
   GRecord g;
   g.Initialize();
-  g.SetFileName(path.c_str());
 
   char data[1024];
-  if (!g.ReadGRecordFromFile(data, ARRAY_SIZE(data))) {
+  if (!g.ReadGRecordFromFile(path.c_str(), data, ARRAY_SIZE(data))) {
     fprintf(stderr, "Error\n");
     return 2;
   }

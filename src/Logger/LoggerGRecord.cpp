@@ -83,9 +83,6 @@ GRecord::GetDigest(char *output)
 void
 GRecord::Initialize(int key_id)
 {
-  for (unsigned i = 0; i < BUFF_LEN; i++)
-    filename[i] = 0;
-
   // 4 different 512 bit keys
   switch (key_id)
   {
@@ -114,12 +111,6 @@ GRecord::Initialize(int key_id)
     md5[3].InitKey( 0xc8e899e8, 0x9321c28a, 0x438eba12, 0x8cbe0aee);
     break;
   }
-}
-
-void
-GRecord::SetFileName(const TCHAR *_filename)
-{
-  _tcscpy(filename, _filename);
 }
 
 bool
@@ -151,7 +142,7 @@ GRecord::IncludeRecordInGCalc(const unsigned char *in)
 }
 
 bool
-GRecord::LoadFileToBuffer()
+GRecord::LoadFileToBuffer(const TCHAR *filename)
 {
   FileLineReaderA reader(filename);
   if (reader.error())
@@ -166,7 +157,7 @@ GRecord::LoadFileToBuffer()
 }
 
 bool
-GRecord::AppendGRecordToFile(bool valid)
+GRecord::AppendGRecordToFile(const TCHAR *filename, bool valid)
 {
   TextWriter writer(filename, true);
   if (!writer.IsOpen())
@@ -197,7 +188,8 @@ GRecord::AppendGRecordToFile(bool valid)
 }
 
 bool
-GRecord::ReadGRecordFromFile(char *output, size_t max_length)
+GRecord::ReadGRecordFromFile(const TCHAR *filename,
+                             char *output, size_t max_length)
 {
   FileLineReaderA reader(filename);
   if (reader.error())
@@ -222,15 +214,15 @@ GRecord::ReadGRecordFromFile(char *output, size_t max_length)
 }
 
 bool
-GRecord::VerifyGRecordInFile()
+GRecord::VerifyGRecordInFile(const TCHAR *path)
 {
   // assumes FileName member is set
   // Load File into Buffer (assume name is already set)
-  LoadFileToBuffer();
+  LoadFileToBuffer(path);
 
   // load Existing Digest "old"
   char old_g_record[BUFF_LEN];
-  if (!ReadGRecordFromFile(old_g_record, BUFF_LEN))
+  if (!ReadGRecordFromFile(path, old_g_record, BUFF_LEN))
     return false;
 
   // recalculate digest from buffer

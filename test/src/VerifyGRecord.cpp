@@ -34,9 +34,8 @@ main(int argc, char **argv)
 
   GRecord g;
   g.Initialize();
-  g.SetFileName(path.c_str());
 
-  if (g.VerifyGRecordInFile()) {
+  if (g.VerifyGRecordInFile(path.c_str())) {
     fprintf(stderr, "G record is ok\n");
     return 0;
   } else {

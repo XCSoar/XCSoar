@@ -368,12 +368,11 @@ IGCWriter::Sign()
 
   // now calc from whats in the igc file on disk
   grecord.Initialize();
-  grecord.SetFileName(path);
-  grecord.LoadFileToBuffer();
+  grecord.LoadFileToBuffer(path);
   grecord.FinalizeBuffer();
   char NewGRecordBuff[MAX_IGC_BUFF];
   grecord.GetDigest(NewGRecordBuff);
 
   bool bFileValid = strcmp(OldGRecordBuff, NewGRecordBuff) == 0;
-  grecord.AppendGRecordToFile(bFileValid);
+  grecord.AppendGRecordToFile(path, bFileValid);
 }
