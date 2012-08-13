@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/BatchBuffer.hpp"
 #include "Math/fixed.hpp"
 #include "IGCFix.hpp"
+#include "IO/TextWriter.hpp"
 
 #include <tchar.h>
 #include <windef.h> /* for MAX_PATH */
@@ -45,7 +46,8 @@ class IGCWriter {
     MAX_IGC_BUFF = 255,
   };
 
-  TCHAR path[MAX_PATH];
+  TextWriter file;
+
   BatchBuffer<char[MAX_IGC_BUFF],LOGGER_DISK_BUFFER_NUM_RECS> buffer;
 
   GRecord grecord;
@@ -53,7 +55,7 @@ class IGCWriter {
   IGCFix fix;
 
 public:
-  IGCWriter(const TCHAR *_path);
+  IGCWriter(const TCHAR *path);
 
   bool Flush();
   void Sign();

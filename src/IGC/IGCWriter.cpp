@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "IGC/IGCWriter.hpp"
-#include "IO/TextWriter.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 #include "Compatibility/string.h"
@@ -53,10 +52,9 @@ FormatIGCLocation(char *buffer, const GeoPoint &location)
   return buffer + strlen(buffer);
 }
 
-IGCWriter::IGCWriter(const TCHAR *_path)
+IGCWriter::IGCWriter(const TCHAR *path)
+  :file(path)
 {
-  _tcscpy(path, _path);
-
   fix.Clear();
 
   grecord.Initialize();
@@ -68,15 +66,14 @@ IGCWriter::Flush()
   if (buffer.IsEmpty())
     return true;
 
-  TextWriter writer(path, true);
-  if (!writer.IsOpen())
+  if (!file.IsOpen())
     return false;
 
   for (const char *i : buffer)
-    if (!writer.WriteLine(i))
+    if (!file.WriteLine(i))
       return false;
 
-  if (!writer.Flush())
+  if (!file.Flush())
     return false;
 
   buffer.Clear();
@@ -357,6 +354,9 @@ IGCWriter::LogFRecord(const BrokenTime &time, const int *satellite_ids)
 void
 IGCWriter::Sign()
 {
+  if (!file.IsOpen())
+    return;
+
   grecord.FinalizeBuffer();
-  grecord.AppendGRecordToFile(path);
+  grecord.WriteTo(file);
 }
