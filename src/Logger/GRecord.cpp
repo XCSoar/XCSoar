@@ -67,7 +67,7 @@ GRecord::FinalizeBuffer()
 }
 
 void
-GRecord::GetDigest(char *output)
+GRecord::GetDigest(char *output) const
 {
   for (int i = 0; i <= 3; i++, output += MD5::DIGEST_LENGTH)
     md5[i].GetDigest(output);

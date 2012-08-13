@@ -51,7 +51,7 @@ public:
   /**
    * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
    */
-  void GetDigest(char *buffer);
+  void GetDigest(char *buffer) const;
 
   gcc_const
   static bool IsValidIGCChar(char c) {
