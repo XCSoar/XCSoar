@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Logger/LoggerFRecord.hpp"
-#include "DateTime.hpp"
 
 /*
  * From FAI_Tech_Spec_Gnss.pdf 
