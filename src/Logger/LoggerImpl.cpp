@@ -110,8 +110,8 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 void
 LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
 {
-  if (!gps_info.alive && pre_takeoff_buffer.empty())
-    return;
+  assert(gps_info.alive);
+  assert(gps_info.time_available);
 
   PreTakeoffBuffer item;
   item = gps_info;
@@ -187,7 +187,10 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 void
 LoggerImpl::WritePoint(const NMEAInfo &gps_info)
 {
-  if (gps_info.alive && !gps_info.gps.real)
+  assert(gps_info.alive);
+  assert(gps_info.time_available);
+
+  if (!gps_info.gps.real)
     simulator = true;
 
   if (!simulator && frecord.Update(gps_info.gps, gps_info.time,
