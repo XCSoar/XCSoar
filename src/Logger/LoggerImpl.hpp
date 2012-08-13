@@ -24,12 +24,10 @@ Copyright_License {
 #if !defined(XCSOAR_LOGGER_IMPL_HPP)
 #define XCSOAR_LOGGER_IMPL_HPP
 
+#include "LoggerFRecord.hpp"
 #include "DateTime.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "IGC/IGCWriter.hpp"
 #include "Util/OverwritingRingBuffer.hpp"
-#include "Util/BatchBuffer.hpp"
-#include "NMEA/Info.hpp"
 
 #include <tchar.h>
 #include <windef.h>
@@ -38,6 +36,7 @@ struct NMEAInfo;
 struct LoggerSettings;
 struct Declaration;
 class OrderedTask;
+class IGCWriter;
 
 /**
  * Implementation of logger

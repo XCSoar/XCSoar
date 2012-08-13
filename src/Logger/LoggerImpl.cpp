@@ -33,6 +33,7 @@
 #include "Interface.hpp"
 #include "Util/CharUtil.hpp"
 #include "IGCFileCleanup.hpp"
+#include "IGC/IGCWriter.hpp"
 
 #ifdef HAVE_POSIX
 #include <unistd.h>
