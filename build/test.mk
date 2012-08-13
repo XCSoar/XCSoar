@@ -2025,6 +2025,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideComputerAirData.cpp \
 	$(SRC)/Computer/GlideComputerStats.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
+	$(SRC)/Computer/LogComputer.cpp \
 	$(SRC)/Computer/CuComputer.cpp \
 	$(SRC)/Audio/Settings.cpp \
 	$(SRC)/Audio/VarioSettings.cpp \

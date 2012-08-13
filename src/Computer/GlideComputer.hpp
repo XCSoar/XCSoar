@@ -31,6 +31,7 @@ Copyright_License {
 #include "GlideComputerAirData.hpp"
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
+#include "LogComputer.hpp"
 #include "WarningComputer.hpp"
 #include "CuComputer.hpp"
 #include "Compiler.h"
@@ -49,6 +50,7 @@ class GlideComputer : public GlideComputerBlackboard
   GlideComputerAirData air_data_computer;
   GlideComputerTask task_computer;
   GlideComputerStats stats_computer;
+  LogComputer log_computer;
   CuComputer cu_computer;
   WarningComputer warning_computer;
 
@@ -71,7 +73,7 @@ public:
   void SetTerrain(RasterTerrain *_terrain);
 
   void SetLogger(Logger *logger) {
-    stats_computer.SetLogger(logger);
+    log_computer.SetLogger(logger);
   }
 
   void ResetFlight(const bool full=true);

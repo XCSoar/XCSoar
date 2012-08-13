@@ -23,17 +23,11 @@ Copyright_License {
 */
 
 #include "GlideComputerStats.hpp"
-#include "ComputerSettings.hpp"
-#include "NMEA/Info.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "Logger/Logger.hpp"
-#include "GPSClock.hpp"
 
-GlideComputerStats::GlideComputerStats() :
-  log_clock(fixed(5)),
-  stats_clock(fixed(60)),
-  logger(NULL) {}
+GlideComputerStats::GlideComputerStats()
+  :stats_clock(fixed(60)) {}
 
 void
 GlideComputerStats::ResetFlight(const bool full)
@@ -43,7 +37,6 @@ GlideComputerStats::ResetFlight(const bool full)
   last_cruise_start_time = fixed_minus_one;
   last_thermal_end_time = fixed_minus_one;
 
-  fast_log_num = 0;
   if (full)
     flightstats.Reset();
 }
@@ -52,9 +45,6 @@ void
 GlideComputerStats::StartTask(const NMEAInfo &basic)
 {
   flightstats.StartTask();
-
-  if (logger != NULL)
-    logger->LogStartEvent(basic);
 }
 
 /**
@@ -63,8 +53,7 @@ GlideComputerStats::StartTask(const NMEAInfo &basic)
  */
 bool
 GlideComputerStats::DoLogging(const MoreData &basic,
-                              const DerivedInfo &calculated,
-                              const LoggerSettings &settings_logger)
+                              const DerivedInfo &calculated)
 {
   /// @todo consider putting this sanity check inside Parser
   if (basic.location_available && last_location.IsValid() &&
@@ -74,20 +63,6 @@ GlideComputerStats::DoLogging(const MoreData &basic,
 
   last_location = basic.location_available
     ? basic.location : GeoPoint::Invalid();
-
-  // log points more often in circling mode
-  if (calculated.circling)
-    log_clock.SetDT(fixed(settings_logger.time_step_circling));
-  else
-    log_clock.SetDT(fixed(settings_logger.time_step_cruise));
-
-  if (fast_log_num) {
-    log_clock.SetDT(fixed_one);
-    fast_log_num--;
-  }
-
-  if (log_clock.CheckAdvance(basic.time) && logger != NULL)
-      logger->LogPoint(basic);
 
   if (calculated.flight.flying &&
       stats_clock.CheckAdvance(basic.time)) {
@@ -161,10 +136,4 @@ GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated)
   last_cruise_start_time = calculated.cruise_start_time;
   last_thermal_end_time = calculated.last_thermal.IsDefined()
     ? calculated.last_thermal.end_time : fixed_minus_one;
-}
-
-void
-GlideComputerStats::SetFastLogging()
-{
-  fast_log_num = 5;
 }

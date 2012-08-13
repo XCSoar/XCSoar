@@ -21,48 +21,48 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_GLIDECOMPUTER_STATS_HPP
-#define XCSOAR_GLIDECOMPUTER_STATS_HPP
+#ifndef XCSOAR_LOG_COMPUTER_HPP
+#define XCSOAR_LOG_COMPUTER_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "FlightStatistics.hpp"
 #include "GPSClock.hpp"
+
+#include <assert.h>
 
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
+struct LoggerSettings;
+class Logger;
 
-class GlideComputerStats {
+class LogComputer {
   GeoPoint last_location;
 
-  fixed last_climb_start_time, last_cruise_start_time;
-  fixed last_thermal_end_time;
+  GPSClock log_clock;
 
-  FlightStatistics flightstats;
-  GPSClock stats_clock;
+  /** number of points to log at high rate */
+  unsigned fast_log_num;
+
+  Logger *logger;
 
 public:
-  GlideComputerStats();
+  LogComputer();
 
-  /** Returns the FlightStatistics object */
-  FlightStatistics &GetFlightStats() { return flightstats; }
-  const FlightStatistics &GetFlightStats() const { return flightstats; }
+  void SetLogger(Logger *_logger) {
+    assert(logger == NULL);
+    assert(_logger != NULL);
 
-  void ResetFlight(const bool full = true);
+    logger = _logger;
+  }
+
+  void Reset();
   void StartTask(const NMEAInfo &basic);
-  bool DoLogging(const MoreData &basic, const DerivedInfo &calculated);
+  bool Run(const MoreData &basic, const DerivedInfo &calculated,
+           const LoggerSettings &settings_logger);
 
-private:
-  void OnClimbBase(const DerivedInfo &calculated, fixed StartAlt);
-  void OnClimbCeiling(const DerivedInfo &calculated);
-  void OnDepartedThermal(const DerivedInfo &calculated);
-
-public:
-  /**
-   * Check of climbing has started or ended, and collect statistics
-   * about that.
-   */
-  void ProcessClimbEvents(const DerivedInfo &calculated);
+  void SetFastLogging() {
+    fast_log_num = 5;
+  }
 };
 
 #endif

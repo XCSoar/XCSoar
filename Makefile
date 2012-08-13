@@ -350,6 +350,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/ThermalLocator.cpp \
 	$(SRC)/Computer/ThermalBase.cpp \
 	$(SRC)/Computer/LiftDatabaseComputer.cpp \
+	$(SRC)/Computer/LogComputer.cpp \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \

@@ -64,6 +64,7 @@ GlideComputer::ResetFlight(const bool full)
   air_data_computer.ResetFlight(SetCalculated(), GetComputerSettings(), full);
   task_computer.ResetFlight(full);
   stats_computer.ResetFlight(full);
+  log_computer.Reset();
 
   cu_computer.Reset();
   warning_computer.Reset(Basic(), Calculated());
@@ -149,8 +150,8 @@ GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  stats_computer.DoLogging(Basic(), Calculated(),
-                           GetComputerSettings().logger);
+  stats_computer.DoLogging(Basic(), Calculated());
+  log_computer.Run(Basic(), Calculated(), GetComputerSettings().logger);
 
   task_computer.ProcessIdle(Basic(), SetCalculated(), GetComputerSettings(),
                             exhaustive);
@@ -301,6 +302,7 @@ GlideComputer::OnStartTask()
   GlideComputerBlackboard::StartTask();
   air_data_computer.ResetStats();
   stats_computer.StartTask(Basic());
+  log_computer.StartTask(Basic());
 }
 
 void 
@@ -312,7 +314,7 @@ GlideComputer::OnFinishTask()
 void
 GlideComputer::OnTransitionEnter()
 {
-  stats_computer.SetFastLogging();
+  log_computer.SetFastLogging();
 }
 
 
