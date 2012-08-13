@@ -29,9 +29,7 @@
 class MD5
 {
 public:
-  enum {
-    DIGEST_LENGTH = 16,
-  };
+  static constexpr size_t DIGEST_LENGTH = 16;
 
 private:
   uint8_t buff512bits[64];

@@ -33,9 +33,7 @@
 class GRecord
 {
 public:
-  enum {
-    DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH + 1,
-  };
+  static constexpr size_t DIGEST_LENGTH = 4 * MD5::DIGEST_LENGTH + 1;
 
 private:
   MD5 md5[4];
