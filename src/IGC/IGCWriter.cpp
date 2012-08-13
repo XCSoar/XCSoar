@@ -359,5 +359,5 @@ void
 IGCWriter::Sign()
 {
   grecord.FinalizeBuffer();
-  grecord.AppendGRecordToFile(path, true);
+  grecord.AppendGRecordToFile(path);
 }

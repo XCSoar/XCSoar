@@ -150,7 +150,7 @@ GRecord::LoadFileToBuffer(const TCHAR *filename)
 }
 
 bool
-GRecord::AppendGRecordToFile(const TCHAR *filename, bool valid)
+GRecord::AppendGRecordToFile(const TCHAR *filename)
 {
   TextWriter writer(filename, true);
   if (!writer.IsOpen())
@@ -163,20 +163,16 @@ GRecord::AppendGRecordToFile(const TCHAR *filename, bool valid)
   static_assert(DIGEST_LENGTH % chars_per_line == 0, "wrong digest length");
   static constexpr unsigned num_lines = DIGEST_LENGTH / chars_per_line;
 
-  if (valid) {
-    char digest16[1 + chars_per_line];
-    digest16[0] = 'G';
+  char digest16[1 + chars_per_line];
+  digest16[0] = 'G';
 
-    const char *src = digest;
+  const char *src = digest;
 
-    // 0 - 15
-    for (unsigned line = 0; line < num_lines; ++line, src += chars_per_line) {
-      memcpy(digest16 + 1, src, chars_per_line);
-      writer.Write(digest16, sizeof(digest16));
-      writer.NewLine();
-    }
-  } else {
-    writer.WriteLine("G Record Invalid");
+  // 0 - 15
+  for (unsigned line = 0; line < num_lines; ++line, src += chars_per_line) {
+    memcpy(digest16 + 1, src, chars_per_line);
+    writer.Write(digest16, sizeof(digest16));
+    writer.NewLine();
   }
 
   return true;

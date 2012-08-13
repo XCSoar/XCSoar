@@ -61,8 +61,7 @@ public:
   /** loads a file into the data buffer */
   bool LoadFileToBuffer(const TCHAR *path);
 
-  /// writes error if invalid G Record
-  bool AppendGRecordToFile(const TCHAR *path, bool bValid);
+  bool AppendGRecordToFile(const TCHAR *path);
 
   /**
    * returns in szOutput the G Record from the file

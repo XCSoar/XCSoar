@@ -42,7 +42,7 @@ main(int argc, char **argv)
 
   g.FinalizeBuffer();
 
-  if (!g.AppendGRecordToFile(path.c_str(), true)) {
+  if (!g.AppendGRecordToFile(path.c_str())) {
     fprintf(stderr, "Failed to write file\n");
     return 2;
   }
