@@ -87,12 +87,6 @@ IGCWriter::Flush()
   return true;
 }
 
-void
-IGCWriter::Finish()
-{
-  Flush();
-}
-
 static void
 ReplaceNonIGCChars(char *p)
 {

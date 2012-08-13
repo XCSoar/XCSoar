@@ -147,7 +147,7 @@ int main(int argc, char **argv)
                         Angle::Degrees(fixed(-51.051944444444445)));
   writer.LogPoint(i);
 
-  writer.Finish();
+  writer.Flush();
   writer.Sign();
 
   CheckTextFile(path, expect);

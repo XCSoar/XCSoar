@@ -89,7 +89,7 @@ LoggerImpl::StopLogger(const NMEAInfo &gps_info)
   if (writer == NULL)
     return;
 
-  writer->Finish();
+  writer->Flush();
 
   if (!simulator)
     writer->Sign();

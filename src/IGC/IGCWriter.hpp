@@ -57,7 +57,6 @@ public:
   IGCWriter(const TCHAR *_path, bool simulator);
 
   bool Flush();
-  void Finish();
   void Sign();
 
   bool WriteLine(const char *line);
