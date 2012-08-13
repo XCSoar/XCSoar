@@ -57,7 +57,7 @@ IGCWriter::IGCWriter(const TCHAR *_path, bool simulator)
 {
   _tcscpy(path, _path);
 
-  last_valid_point_initialized = false;
+  last_valid_point.Clear();
 
   if (!simulator)
     grecord.Initialize();
@@ -300,7 +300,7 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
 void
 IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
-  if (!last_valid_point_initialized &&
+  if (!last_valid_point.IsDefined() &&
       (gps_info.gps_altitude < fixed(-100) ||
        gps_info.baro_altitude < fixed(-100) ||
        !gps_info.location_available))
@@ -314,10 +314,6 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
     fix.gps_valid = true;
     fix.location = gps_info.location;
     fix.gps_altitude = (int)gps_info.gps_altitude;
-
-    // save last active fix location
-    last_valid_point = fix;
-    last_valid_point_initialized = true;
   }
 
   fix.time = gps_info.date_time_utc;
@@ -325,6 +321,9 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
       gps_info.baro_altitude_available ? (int)gps_info.baro_altitude :
                                          /* fall back to GPS altitude */
                                          fix.gps_altitude;
+
+  // save last active fix location
+  last_valid_point = fix;
 
   LogPoint(fix, (int)GetEPE(gps_info.gps), GetSIU(gps_info.gps));
 }

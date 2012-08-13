@@ -96,6 +96,15 @@ struct IGCFix
     gsp = ias = tas = -1;
     siu = -1;
   }
+
+  void Clear() {
+    time = BrokenTime::Invalid();
+    ClearExtensions();
+  }
+
+  bool IsDefined() const {
+    return time.Plausible();
+  }
 };
 
 #endif
