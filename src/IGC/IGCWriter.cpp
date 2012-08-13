@@ -53,14 +53,13 @@ FormatIGCLocation(char *buffer, const GeoPoint &location)
   return buffer + strlen(buffer);
 }
 
-IGCWriter::IGCWriter(const TCHAR *_path, bool simulator)
+IGCWriter::IGCWriter(const TCHAR *_path)
 {
   _tcscpy(path, _path);
 
   fix.Clear();
 
-  if (!simulator)
-    grecord.Initialize();
+  grecord.Initialize();
 }
 
 bool

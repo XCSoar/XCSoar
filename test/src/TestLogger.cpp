@@ -149,7 +149,7 @@ Run(IGCWriter &writer)
 static void
 Run(const TCHAR *path)
 {
-  IGCWriter writer(path, false);
+  IGCWriter writer(path);
   Run(writer);
 }
 

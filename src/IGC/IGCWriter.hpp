@@ -53,7 +53,7 @@ class IGCWriter {
   IGCFix fix;
 
 public:
-  IGCWriter(const TCHAR *_path, bool simulator);
+  IGCWriter(const TCHAR *_path);
 
   bool Flush();
   void Sign();

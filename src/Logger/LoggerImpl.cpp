@@ -257,8 +257,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   }
 
   frecord.Reset();
-  simulator = gps_info.alive && !gps_info.gps.real;
-  writer = new IGCWriter(filename, simulator);
+  writer = new IGCWriter(filename);
 
   LogStartUp(_T("Logger Started: %s"), filename);
 }
@@ -305,6 +304,7 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   StartLogger(gps_info, settings, logger_id);
 
+  simulator = gps_info.alive && !gps_info.gps.real;
   writer->WriteHeader(gps_info.date_time_utc, decl.pilot_name,
                       decl.aircraft_type, decl.aircraft_registration,
                       decl.competition_id,
