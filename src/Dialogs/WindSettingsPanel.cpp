@@ -61,7 +61,7 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           _("This allows switching on or off the automatic wind algorithm."),
           auto_wind_list, settings.GetLegacyAutoWindMode());
 
-  AddBoolean(_("External wind"),
+  AddBoolean(_("Prefer external wind"),
              _("If enabled, then the wind vector received from external devices overrides "
                  "XCSoar's internal wind calculation."),
              settings.use_external_wind);
