@@ -24,6 +24,7 @@ Copyright_License {
 #include "HexColor.hpp"
 #include "Screen/Color.hpp"
 #include "Util/NumberParser.hpp"
+#include "Compiler.h"
 
 #include <stdio.h>
 #include <stdlib.h>
