@@ -37,7 +37,7 @@ void
 GlidePolarCaption(TCHAR *sTmp, const GlidePolar &glide_polar)
 {
   if (!glide_polar.IsValid()) {
-    sTmp = _T('\0');
+    *sTmp = _T('\0');
     return;
   }
 
