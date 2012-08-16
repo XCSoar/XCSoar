@@ -78,7 +78,7 @@ NmeaReplay::ReadUntilRMC(NMEAInfo &data, bool ignore)
     if (!ignore)
       ParseLine(buffer, data);
 
-    if (strstr(buffer, "$GPRMC") == buffer)
+    if (StringStartsWith(buffer, "$GPRMC"))
       return true;
   }
 
