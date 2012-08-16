@@ -92,7 +92,7 @@ NmeaReplay::Update(NMEAInfo &data, fixed time_scale)
     return true;
 
   for (fixed i = fixed_one; i <= time_scale; i += fixed_one) {
-if (!ReadUntilRMC(data, i != time_scale))
+    if (!ReadUntilRMC(data, i != time_scale))
       return false;
   }
 
