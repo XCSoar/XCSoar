@@ -115,7 +115,7 @@ Finish(const MoreData &basic, const DerivedInfo &calculated,
   }
 }
 
-static int
+static void
 Run(DebugReplay &replay, ContestManager &contest, Result &result)
 {
   CirclingSettings circling_settings;
@@ -151,8 +151,6 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
 
   Finish(replay.Basic(), replay.Calculated(), result);
   flight_phase_detector.Finish();
-
-  return 0;
 }
 
 static void
