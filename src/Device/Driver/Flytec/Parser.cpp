@@ -95,8 +95,8 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
  *
  * @see http://www.flytec.ch/public/Special%20NMEA%20sentence.pdf
  */
-static bool
-FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
+bool
+FlytecDevice::ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 {
   // Detect firmware/sentence version
   //
@@ -256,7 +256,7 @@ FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
   else if (StringIsEqual(type, "$VMVABD"))
     return FlytecParseVMVABD(line, info);
   else if (StringIsEqual(type, "$FLYSEN"))
-    return FlytecParseFLYSEN(line, info);
+    return ParseFLYSEN(line, info);
   else
     return false;
 }

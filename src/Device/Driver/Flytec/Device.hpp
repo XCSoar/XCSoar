@@ -32,6 +32,7 @@ struct NMEAInfo;
 class OperationEnvironment;
 class RecordedFlightList;
 struct RecordedFlightInfo;
+class NMEAInputLine;
 
 class FlytecDevice : public AbstractDevice
 {
@@ -47,6 +48,9 @@ public:
 
   bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
                       OperationEnvironment &env);
+
+private:
+  bool ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info);
 };
 
 #endif
