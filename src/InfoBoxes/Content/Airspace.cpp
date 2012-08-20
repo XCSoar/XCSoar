@@ -135,7 +135,6 @@ InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxData &data)
 }
 
 class VerticalAirspaceVisitor : public AirspaceVisitor {
-  GeoPoint location;
   AltitudeState altitude;
 
   const AbstractAirspace *nearest;
@@ -144,8 +143,7 @@ class VerticalAirspaceVisitor : public AirspaceVisitor {
 public:
   VerticalAirspaceVisitor(const MoreData &basic,
                           const DerivedInfo &calculated)
-    :location(basic.location),
-     nearest(NULL), nearest_delta(100000) {
+    :nearest(NULL), nearest_delta(100000) {
     assert(basic.baro_altitude_available || basic.gps_altitude_available);
     altitude.altitude = basic.nav_altitude;
     altitude.altitude_agl = calculated.altitude_agl;
