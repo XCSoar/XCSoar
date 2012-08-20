@@ -26,7 +26,7 @@
 #include "harness_airspace.hpp"
 
 static bool
-test_olc(int n_wind, Contests olc_type)
+test_olc(int n_wind, Contest olc_type)
 {
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
@@ -67,9 +67,9 @@ main(int argc, char** argv)
 
   plan_tests(3);
 
-  ok(test_olc(0, OLC_Sprint), "olc sprint", 0);
-  ok(test_olc(0, OLC_Classic), "olc classic", 0);
-  ok(test_olc(0, OLC_FAI), "olc fai", 0);
+  ok(test_olc(0, Contest::OLC_SPRINT), "olc sprint", 0);
+  ok(test_olc(0, Contest::OLC_CLASSIC), "olc classic", 0);
+  ok(test_olc(0, Contest::OLC_FAI), "olc fai", 0);
 
   return exit_status();
 }

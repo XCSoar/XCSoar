@@ -30,8 +30,8 @@ Profile::Load(ContestSettings &settings)
 {
   if (GetEnum(ProfileKeys::OLCRules, settings.contest)) {
     /* handle out-dated Sprint rule in profile */
-    if (settings.contest == OLC_Sprint)
-      settings.contest = OLC_League;
+    if (settings.contest == Contest::OLC_SPRINT)
+      settings.contest = Contest::OLC_LEAGUE;
   }
 
   Get(ProfileKeys::PredictContest, settings.predict);

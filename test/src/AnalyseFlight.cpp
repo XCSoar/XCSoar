@@ -311,7 +311,7 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
+  ContestManager olc_plus(Contest::OLC_PLUS, full_trace, sprint_trace);
   Result result;
   Run(*replay, olc_plus, result);
   delete replay;

@@ -125,7 +125,7 @@ protected:
 };
 
 static bool
-test_replay(const Contests olc_type, 
+test_replay(const Contest olc_type,
             const ContestResult &official_score)
 {
   std::ofstream f("results/res-sample.txt");
@@ -148,19 +148,19 @@ test_replay(const Contests olc_type,
 
   if (verbose) {
     switch (olc_type) {
-    case OLC_League:
+    case Contest::OLC_LEAGUE:
       std::cout << "# OLC-League\n";
       break;
-    case OLC_Sprint:
+    case Contest::OLC_SPRINT:
       std::cout << "# OLC-Sprint\n";
       break;
-    case OLC_FAI:
+    case Contest::OLC_FAI:
       std::cout << "# OLC-FAI\n";
       break;
-    case OLC_Classic:
+    case Contest::OLC_CLASSIC:
       std::cout << "# OLC-Classic\n";
       break;
-    case OLC_Plus:
+    case Contest::OLC_PLUS:
       std::cout << "# OLC-Plus\n";
       break;
     default:
@@ -242,11 +242,16 @@ int main(int argc, char** argv)
 
   plan_tests(5);
 
-  ok(test_replay(OLC_League, official_score_sprint),"replay league",0);
-  ok(test_replay(OLC_FAI, official_score_fai),"replay fai",0);
-  ok(test_replay(OLC_Classic, official_score_classic),"replay classic",0);
-  ok(test_replay(OLC_Sprint, official_score_sprint),"replay sprint",0);
-  ok(test_replay(OLC_Plus, official_score_plus),"replay plus",0);
+  ok(test_replay(Contest::OLC_LEAGUE, official_score_sprint),
+     "replay league", 0);
+  ok(test_replay(Contest::OLC_FAI, official_score_fai),
+     "replay fai", 0);
+  ok(test_replay(Contest::OLC_CLASSIC, official_score_classic),
+     "replay classic", 0);
+  ok(test_replay(Contest::OLC_SPRINT, official_score_sprint),
+     "replay sprint", 0);
+  ok(test_replay(Contest::OLC_PLUS, official_score_plus),
+     "replay plus", 0);
 
   return exit_status();
 }

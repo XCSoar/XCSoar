@@ -104,7 +104,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
                                      const ContestSettings &settings,
                                      const DerivedInfo &derived)
 {
-  if (settings.contest == OLC_Plus) {
+  if (settings.contest == Contest::OLC_PLUS) {
     const ContestResult& result =
         derived.contest_stats.GetResult(2);
 
@@ -130,8 +130,8 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
               _("Score"), (double)result.score, _("pts"),
               _("Time"), timetext1,
               _("Speed"), speed);
-  } else if (settings.contest == OLC_DHVXC ||
-             settings.contest == OLC_XContest) {
+  } else if (settings.contest == Contest::DHV_XC ||
+             settings.contest == Contest::XCONTEST) {
     const ContestResult& result_free =
         derived.contest_stats.GetResult(0);
 
@@ -157,12 +157,13 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
   } else {
     unsigned result_index;
     switch (settings.contest) {
-      case OLC_League:
-        result_index = 0;
-        break;
-      default:
-        result_index = -1;
-        break;
+    case Contest::OLC_LEAGUE:
+      result_index = 0;
+      break;
+
+    default:
+      result_index = -1;
+      break;
     }
 
     const ContestResult& result_olc =

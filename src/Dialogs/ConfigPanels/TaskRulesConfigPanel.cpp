@@ -123,26 +123,30 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(spacer_3);
 
   const StaticEnumChoice contests_list[] = {
-    { OLC_FAI, ContestToString(OLC_FAI),
+    { (unsigned)Contest::OLC_FAI, ContestToString(Contest::OLC_FAI),
       N_("Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% "
           "of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.") },
-    { OLC_Classic, ContestToString(OLC_Classic),
+    { (unsigned)Contest::OLC_CLASSIC, ContestToString(Contest::OLC_CLASSIC),
       N_("Up to seven points including start and finish, finish height must not be lower than "
           "start height less 1000 meters.") },
-    { OLC_League, ContestToString(OLC_League),
+    { (unsigned)Contest::OLC_LEAGUE, ContestToString(Contest::OLC_LEAGUE),
       N_("The most recent contest with Sprint task rules.") },
-    { OLC_Plus, ContestToString(OLC_Plus),
+    { (unsigned)Contest::OLC_PLUS, ContestToString(Contest::OLC_PLUS),
       N_("A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.") },
-    { OLC_XContest, ContestToString(OLC_XContest), _T("tbd.") },
-    { OLC_DHVXC, ContestToString(OLC_DHVXC), _T("tbd.") },
-    { OLC_SISAT, ContestToString(OLC_SISAT), _T("tbd.") },
-    { OLC_NetCoupe, ContestToString(OLC_NetCoupe), N_("The FFVV NetCoupe \"libre\" competiton.") },
+    { (unsigned)Contest::XCONTEST, ContestToString(Contest::XCONTEST),
+      _T("tbd.") },
+    { (unsigned)Contest::DHV_XC, ContestToString(Contest::DHV_XC),
+      _T("tbd.") },
+    { (unsigned)Contest::SIS_AT, ContestToString(Contest::SIS_AT),
+      _T("tbd.") },
+    { (unsigned)Contest::NET_COUPE, ContestToString(Contest::NET_COUPE),
+      N_("The FFVV NetCoupe \"libre\" competiton.") },
     { 0 }
   };
   AddEnum(_("On-Line Contest"),
       _("Select the rules used for calculating optimal points for the On-Line Contest. "
           "The implementation  conforms to the official release 2010, Sept.23."),
-          contests_list, contest_settings.contest);
+          contests_list, (unsigned)contest_settings.contest);
 
   AddBoolean(_("Predict Contest"),
              _("If enabled, then the next task point is included in the "

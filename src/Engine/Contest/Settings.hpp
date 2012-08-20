@@ -25,16 +25,22 @@
 
 #include "Util/TypeTraits.hpp"
 
-enum Contests {
-  OLC_Sprint = 0,
+#include <stdint.h>
+
+enum class Contest : uint8_t {
+  /**
+   * Deprecated.  Use #OLC_LEAGUE instead.
+   */
+  OLC_SPRINT = 0,
+
   OLC_FAI,
-  OLC_Classic,
-  OLC_League,
-  OLC_Plus,
-  OLC_XContest,
-  OLC_DHVXC,
-  OLC_SISAT,
-  OLC_NetCoupe,
+  OLC_CLASSIC,
+  OLC_LEAGUE,
+  OLC_PLUS,
+  XCONTEST,
+  DHV_XC,
+  SIS_AT,
+  NET_COUPE,
 };
 
 struct ContestSettings {
@@ -48,7 +54,7 @@ struct ContestSettings {
   bool predict;
 
   /** Rule set to scan for in OLC */
-  Contests contest;
+  Contest contest;
 
   /** Handicap factor */
   unsigned handicap;

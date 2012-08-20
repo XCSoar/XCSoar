@@ -40,14 +40,19 @@ static Trace full_trace(60, Trace::null_time, 512);
 static Trace sprint_trace(0, 9000, 128);
 #endif
 
-static ContestManager olc_classic(OLC_Classic, full_trace, sprint_trace);
-static ContestManager olc_fai(OLC_FAI, full_trace, sprint_trace);
-static ContestManager olc_sprint(OLC_Sprint, full_trace, sprint_trace);
-static ContestManager olc_league(OLC_League, full_trace, sprint_trace);
-static ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
-static ContestManager xcontest(OLC_XContest, full_trace, sprint_trace);
-static ContestManager sis_at(OLC_SISAT, full_trace, sprint_trace);
-static ContestManager olc_netcoupe(OLC_NetCoupe, full_trace, sprint_trace);
+static ContestManager olc_classic(Contest::OLC_CLASSIC,
+                                  full_trace, sprint_trace);
+static ContestManager olc_fai(Contest::OLC_FAI, full_trace, sprint_trace);
+static ContestManager olc_sprint(Contest::OLC_SPRINT,
+                                 full_trace, sprint_trace);
+static ContestManager olc_league(Contest::OLC_LEAGUE,
+                                 full_trace, sprint_trace);
+static ContestManager olc_plus(Contest::OLC_PLUS, full_trace, sprint_trace);
+static ContestManager xcontest(Contest::XCONTEST,
+                               full_trace, sprint_trace);
+static ContestManager sis_at(Contest::SIS_AT, full_trace, sprint_trace);
+static ContestManager olc_netcoupe(Contest::NET_COUPE,
+                                   full_trace, sprint_trace);
 
 static int
 TestOLC(DebugReplay &replay)

@@ -44,7 +44,7 @@ class ContestManager
 {
   friend class PrintHelper;
 
-  Contests contest;
+  Contest contest;
 
   ContestStatistics stats;
 
@@ -64,7 +64,7 @@ public:
   /**
    * Base constructor.
    *
-   * @param _contest Contests that shall be used
+   * @param _contest Contest that shall be used
    * @param trace_full Trace object reference
    * containing full flight history for scanning
    * @param trace_sprint Trace object reference
@@ -72,7 +72,7 @@ public:
    * @param predict_triangle assume the the pilot will close the
    * triangle?
    */
-  ContestManager(const Contests _contest,
+  ContestManager(const Contest _contest,
                  const Trace &trace_full, const Trace &trace_sprint,
                  bool predict_triangle=false);
 
@@ -83,7 +83,7 @@ public:
    */
   void SetPredicted(const TracePoint &predicted);
 
-  void SetContest(Contests _contest) {
+  void SetContest(Contest _contest) {
     contest = _contest;
   }
 

@@ -37,7 +37,7 @@ static const TCHAR *contest_to_string[] = {
 };
 
 const TCHAR*
-ContestToString(Contests contest)
+ContestToString(Contest contest)
 {
   unsigned i = (unsigned)contest;
   return i < ARRAY_SIZE(contest_to_string)

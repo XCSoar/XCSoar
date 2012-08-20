@@ -27,6 +27,6 @@ ContestSettings::SetDefaults()
 {
   enable = true;
   predict = false;
-  contest = OLC_Plus;
+  contest = Contest::OLC_PLUS;
   handicap = 100;
 }

@@ -23,7 +23,7 @@
 #include "ContestManager.hpp"
 #include "Trace/Trace.hpp"
 
-ContestManager::ContestManager(const Contests _contest,
+ContestManager::ContestManager(const Contest _contest,
                                const Trace &trace_full,
                                const Trace &trace_sprint,
                                bool predict_triangle)
@@ -64,7 +64,8 @@ ContestManager::SetPredicted(const TracePoint &predicted)
     olc_league.Reset();
     olc_plus.Reset();
 
-    if (contest == OLC_Classic || contest == OLC_League || contest == OLC_Plus)
+    if (contest == Contest::OLC_CLASSIC || contest == Contest::OLC_LEAGUE ||
+        contest == Contest::OLC_PLUS)
       stats.Reset();
   }
 }
@@ -114,22 +115,22 @@ ContestManager::UpdateIdle(bool exhaustive)
   bool retval = false;
 
   switch (contest) {
-  case OLC_Sprint:
+  case Contest::OLC_SPRINT:
     retval = RunContest(olc_sprint, stats.result[0],
                         stats.solution[0], exhaustive);
     break;
 
-  case OLC_FAI:
+  case Contest::OLC_FAI:
     retval = RunContest(olc_fai, stats.result[0],
                         stats.solution[0], exhaustive);
     break;
 
-  case OLC_Classic:
+  case Contest::OLC_CLASSIC:
     retval = RunContest(olc_classic, stats.result[0],
                         stats.solution[0], exhaustive);
     break;
 
-  case OLC_League:
+  case Contest::OLC_LEAGUE:
     retval = RunContest(olc_classic, stats.result[1],
                         stats.solution[1], exhaustive);
 
@@ -139,7 +140,7 @@ ContestManager::UpdateIdle(bool exhaustive)
                          stats.solution[0], exhaustive);
     break;
 
-  case OLC_Plus:
+  case Contest::OLC_PLUS:
     retval = RunContest(olc_classic, stats.result[0],
                         stats.solution[0], exhaustive);
 
@@ -156,25 +157,26 @@ ContestManager::UpdateIdle(bool exhaustive)
 
     break;
 
-  case OLC_XContest:
+  case Contest::XCONTEST:
     retval = RunContest(olc_xcontest_free, stats.result[0],
                         stats.solution[0], exhaustive);
     retval |= RunContest(olc_xcontest_triangle, stats.result[1],
                          stats.solution[1], exhaustive);
     break;
 
-  case OLC_DHVXC:
+  case Contest::DHV_XC:
     retval = RunContest(olc_dhvxc_free, stats.result[0],
                         stats.solution[0], exhaustive);
     retval |= RunContest(olc_dhvxc_triangle, stats.result[1],
                          stats.solution[1], exhaustive);
     break;
 
-  case OLC_SISAT:
+  case Contest::SIS_AT:
     retval = RunContest(olc_sisat, stats.result[0],
                         stats.solution[0], exhaustive);
     break;
-  case OLC_NetCoupe:
+
+  case Contest::NET_COUPE:
     retval = RunContest(olc_netcoupe, stats.result[0],
                         stats.solution[0], exhaustive);
     break;
