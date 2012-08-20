@@ -69,10 +69,8 @@ Update(const MoreData &basic, const FlyingState &state,
 
   if (!state.flying && result.takeoff_time.Plausible() &&
       !result.landing_time.Plausible()) {
-    result.landing_time = basic.date_time_utc;
-
-    if (basic.location_available)
-      result.landing_location = basic.location;
+    result.landing_time = basic.GetDateTimeAt(state.landing_time);
+    result.landing_location = state.landing_location;
   }
 
   if (!negative(state.release_time) && !result.release_time.Plausible()) {

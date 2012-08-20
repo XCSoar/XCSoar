@@ -34,6 +34,7 @@ FlyingComputer::Reset()
 
   time_on_ground = time_in_flight = 0;
   moving_since = fixed_minus_one;
+  stationary_since = fixed_minus_one;
   climbing_since = fixed_minus_one;
   sinking_since = fixed_minus_one;
 }
@@ -71,7 +72,7 @@ FlyingComputer::CheckRelease(FlyingState &state, fixed time,
 }
 
 void
-FlyingComputer::Check(FlyingState &state, fixed time, const GeoPoint &location)
+FlyingComputer::Check(FlyingState &state, fixed time)
 {
   // Logic to detect takeoff and landing is as follows:
   //   detect takeoff when above threshold speed for 10 seconds
@@ -97,9 +98,15 @@ FlyingComputer::Check(FlyingState &state, fixed time, const GeoPoint &location)
     state.flight_time = time - state.takeoff_time;
 
     // We are not moving anymore for 60sec now
-    if (time_in_flight == 0)
+    if (time_in_flight == 0) {
       // We are probably not flying anymore
+      assert(!negative(stationary_since));
+
       state.flying = false;
+      state.flight_time = stationary_since - state.takeoff_time;
+      state.landing_time = stationary_since;
+      state.landing_location = stationary_at;
+    }
   }
 
   // If we are not certainly flying we are probably on the ground
@@ -123,9 +130,10 @@ FlyingComputer::Moving(FlyingState &state, fixed time,
 
   // We are moving so we are certainly not on the ground
   time_on_ground = 0;
+  stationary_since = fixed_minus_one;
 
   // Update flying state
-  Check(state, time, location);
+  Check(state, time);
 }
 
 void
@@ -143,8 +151,13 @@ FlyingComputer::Stationary(FlyingState &state, fixed time,
   if (time_on_ground < 30)
     time_on_ground++;
 
+  if (negative(stationary_since)) {
+    stationary_since = time;
+    stationary_at = location;
+  }
+
   // Update flying state
-  Check(state, time, location);
+  Check(state, time);
 }
 
 gcc_pure

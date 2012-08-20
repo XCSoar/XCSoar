@@ -64,6 +64,13 @@ struct FlyingState
    */
   GeoPoint release_location;
 
+  /**
+   * Time stamp of the landing.  Invalid if negative.
+   */
+  fixed landing_time;
+
+  GeoPoint landing_location;
+
   /** Reset flying state as if never flown */
   void Reset();
 

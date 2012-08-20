@@ -59,6 +59,9 @@ class FlyingComputer {
    */
   GeoPoint moving_at;
 
+  fixed stationary_since;
+  GeoPoint stationary_at;
+
   fixed climbing_since;
   fixed climbing_altitude;
 
@@ -94,7 +97,7 @@ protected:
    */
   bool CheckClimbing(fixed time, fixed altitude);
 
-  void Check(FlyingState &state, fixed time, const GeoPoint &location);
+  void Check(FlyingState &state, fixed time);
 
   /**
    * Update flying state when moving 
