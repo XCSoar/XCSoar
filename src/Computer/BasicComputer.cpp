@@ -389,8 +389,7 @@ BasicComputer::Fill(MoreData &data, const ComputerSettings &settings_computer)
 void
 BasicComputer::Compute(MoreData &data,
                        const MoreData &last, const MoreData &last_gps,
-                       const DerivedInfo &calculated,
-                       const ComputerSettings &settings_computer)
+                       const DerivedInfo &calculated)
 {
   ComputeTrack(data, last_gps);
 
