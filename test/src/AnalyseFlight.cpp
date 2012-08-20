@@ -180,37 +180,6 @@ WriteEvent(JSON::ObjectWriter &object, const char *name,
 }
 
 static void
-WriteTimes(TextWriter &writer, const Result &result)
-{
-  JSON::ObjectWriter object(writer);
-  NarrowString<64> buffer;
-
-  if (result.takeoff_time.Plausible()) {
-    FormatISO8601(buffer.buffer(), result.takeoff_time);
-    object.WriteElement("takeoff", JSON::WriteString, buffer);
-  }
-
-  if (result.landing_time.Plausible()) {
-    FormatISO8601(buffer.buffer(), result.landing_time);
-    object.WriteElement("landing", JSON::WriteString, buffer);
-  }
-}
-
-static void
-WriteLocations(TextWriter &writer, const Result &result)
-{
-  JSON::ObjectWriter object(writer);
-
-  if (result.takeoff_location.IsValid())
-    object.WriteElement("takeoff", JSON::WriteGeoPoint,
-                        result.takeoff_location);
-
-  if (result.landing_location.IsValid())
-    object.WriteElement("landing", JSON::WriteGeoPoint,
-                        result.landing_location);
-}
-
-static void
 WriteEvents(TextWriter &writer, const Result &result)
 {
   JSON::ObjectWriter object(writer);
@@ -224,11 +193,6 @@ static void
 WriteResult(JSON::ObjectWriter &root, const Result &result)
 {
   root.WriteElement("events", WriteEvents, result);
-
-  /* the following code is obsolete and is only here for compatibility
-     with old SkyLines code: */
-  root.WriteElement("times", WriteTimes, result);
-  root.WriteElement("locations", WriteLocations, result);
 }
 
 static void
