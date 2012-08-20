@@ -51,10 +51,9 @@ FillVario(MoreData &data)
 }
 
 static void
-ComputePressure(NMEAInfo &basic, const ComputerSettings &settings_computer)
+ComputePressure(NMEAInfo &basic, const AtmosphericPressure qnh)
 {
-  const AtmosphericPressure &qnh = settings_computer.pressure;
-  const bool qnh_available = settings_computer.pressure_available;
+  const bool qnh_available = qnh.IsPlausible();
   const bool static_pressure_available = basic.static_pressure_available;
   const bool pressure_altitude_available = basic.pressure_altitude_available;
 
@@ -103,10 +102,9 @@ ComputePressure(NMEAInfo &basic, const ComputerSettings &settings_computer)
 }
 
 static void
-ComputeNavAltitude(MoreData &basic,
-                   const ComputerSettings &settings_computer)
+ComputeNavAltitude(MoreData &basic, const FeaturesSettings &features)
 {
-  basic.nav_altitude = settings_computer.features.nav_baro_altitude_enabled &&
+  basic.nav_altitude = features.nav_baro_altitude_enabled &&
     basic.baro_altitude_available
     ? basic.baro_altitude
     : basic.gps_altitude;
@@ -379,11 +377,21 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 }
 
 void
-BasicComputer::Fill(MoreData &data, const ComputerSettings &settings_computer)
+BasicComputer::Fill(MoreData &data, const AtmosphericPressure qnh,
+                    const FeaturesSettings &features)
 {
   FillVario(data);
-  ComputePressure(data, settings_computer);
-  ComputeNavAltitude(data, settings_computer);
+  ComputePressure(data, qnh);
+  ComputeNavAltitude(data, features);
+}
+
+void
+BasicComputer::Fill(MoreData &data, const ComputerSettings &settings_computer)
+{
+  const AtmosphericPressure qnh = settings_computer.pressure_available
+    ? settings_computer.pressure
+    : AtmosphericPressure::Zero();
+  Fill(data, qnh, settings_computer.features);
 }
 
 void

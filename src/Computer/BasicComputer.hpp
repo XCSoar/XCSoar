@@ -26,6 +26,8 @@ Copyright_License {
 
 struct MoreData;
 struct DerivedInfo;
+class AtmosphericPressure;
+struct FeaturesSettings;
 struct ComputerSettings;
 
 /**
@@ -38,6 +40,9 @@ public:
   /**
    * Fill the missing attributes with a fallback.
    */
+  void Fill(MoreData &data, const AtmosphericPressure qnh,
+            const FeaturesSettings &features);
+
   void Fill(MoreData &data, const ComputerSettings &settings_computer);
 
   /**
