@@ -116,7 +116,7 @@ Finish(const MoreData &basic, const DerivedInfo &calculated,
 }
 
 static void
-Run(DebugReplay &replay, ContestManager &contest, Result &result)
+Run(DebugReplay &replay, Result &result)
 {
   CirclingSettings circling_settings;
   circling_settings.SetDefaults();
@@ -147,10 +147,17 @@ Run(DebugReplay &replay, ContestManager &contest, Result &result)
     sprint_trace.push_back(point);
   }
 
-  contest.SolveExhaustive();
-
   Finish(replay.Basic(), replay.Calculated(), result);
   flight_phase_detector.Finish();
+}
+
+gcc_pure
+static ContestStatistics
+SolveContest(Contest contest)
+{
+  ContestManager manager(contest, full_trace, sprint_trace);
+  manager.SolveExhaustive();
+  return manager.GetStats();
 }
 
 static void
@@ -273,10 +280,11 @@ int main(int argc, char **argv)
 
   args.ExpectEnd();
 
-  ContestManager olc_plus(Contest::OLC_PLUS, full_trace, sprint_trace);
   Result result;
-  Run(*replay, olc_plus, result);
+  Run(*replay, result);
   delete replay;
+
+  const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS);
 
   TextWriter writer("/dev/stdout", true);
 
@@ -288,6 +296,6 @@ int main(int argc, char **argv)
                       flight_phase_detector.GetPhases());
     root.WriteElement("performance", WritePerformanceStats,
                       flight_phase_detector.GetTotals());
-    root.WriteElement("contests", WriteContests, olc_plus.GetStats());
+    root.WriteElement("contests", WriteContests, olc_plus);
   }
 }
