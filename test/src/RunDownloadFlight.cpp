@@ -48,6 +48,19 @@ NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
   return false;
 }
 
+bool
+NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+{
+  return false;
+}
+
+fixed
+NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
+                       bool date_available)
+{
+  return fixed_zero;
+}
+
 static void
 PrintFlightList(const RecordedFlightList &flight_list)
 {

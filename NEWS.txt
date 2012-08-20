@@ -7,6 +7,7 @@ Version 6.4.1 - not yet released
   - new option to disable the wind arrow
 * devices
   - fix potential crash in I/O thread
+  - fix date/time parsing in Flytec device driver
 * user interface
   - remove duplicate "trail drift" setting (#2252)
 * logger

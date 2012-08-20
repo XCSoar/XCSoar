@@ -313,6 +313,12 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
 bool
 NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
 {
+  return TimeHasAdvanced(this_time, last_time, info);
+}
+
+bool
+NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+{
   if (this_time < last_time) {
     last_time = this_time;
     start_day = -1; // reset search for the first day
