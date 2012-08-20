@@ -1419,26 +1419,12 @@ RUN_OLC_SOURCES = \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/Contests.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/AbstractContest.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/ContestDijkstra.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCLeague.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSprint.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCClassic.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCFAI.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCPlus.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestFree.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSISAT.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/NetCoupe.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
 	$(TEST_SRC_DIR)/RunOLCAnalysis.cpp
 RUN_OLC_LDADD = $(DEBUG_REPLAY_LDADD)
-RUN_OLC_DEPENDS = UTIL GEO MATH
+RUN_OLC_DEPENDS = CONTEST UTIL GEO MATH
 $(eval $(call link-program,RunOLCAnalysis,RUN_OLC))
 
 ANALYSE_FLIGHT_SOURCES = \
@@ -1451,20 +1437,6 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
-	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/Contests.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/AbstractContest.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/ContestDijkstra.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCLeague.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSprint.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCClassic.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCFAI.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCPlus.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestFree.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/XContestTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/OLCSISAT.cpp \
-	$(ENGINE_SRC_DIR)/Contest/Solvers/NetCoupe.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \
@@ -1472,7 +1444,7 @@ ANALYSE_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
 	$(TEST_SRC_DIR)/AnalyseFlight.cpp
 ANALYSE_FLIGHT_LDADD = $(DEBUG_REPLAY_LDADD)
-ANALYSE_FLIGHT_DEPENDS = UTIL GEO MATH
+ANALYSE_FLIGHT_DEPENDS = CONTEST UTIL GEO MATH
 $(eval $(call link-program,AnalyseFlight,ANALYSE_FLIGHT))
 
 FLIGHT_PATH_SOURCES = \
