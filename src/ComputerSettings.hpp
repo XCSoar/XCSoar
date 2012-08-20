@@ -209,6 +209,14 @@ struct FeaturesSettings {
   void SetDefaults();
 };
 
+struct CirclingSettings {
+  bool external_trigger_cruise_enabled;
+
+  void SetDefaults() {
+    external_trigger_cruise_enabled = false;
+  }
+};
+
 enum AverageEffTime {
   ae15seconds,
   ae30seconds,
@@ -231,7 +239,7 @@ struct ComputerSettings {
 
   FeaturesSettings features;
 
-  bool external_trigger_cruise_enabled;
+  CirclingSettings circling;
 
   AverageEffTime average_eff_time;
 

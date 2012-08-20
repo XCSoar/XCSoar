@@ -98,7 +98,7 @@ ComputeCircling(DebugReplay &replay)
                             replay.Basic(),
                             replay.LastBasic(),
                             replay.Calculated().flight,
-                            replay.GetComputerSettings());
+                            replay.GetComputerSettings().circling);
 }
 
 static void

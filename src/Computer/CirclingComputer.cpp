@@ -82,7 +82,7 @@ void
 CirclingComputer::Turning(CirclingInfo &circling_info,
                           const MoreData &basic, const MoreData &last_basic,
                           const FlyingState &flight,
-                          const ComputerSettings &settings_computer)
+                          const CirclingSettings &settings)
 {
   // You can't be circling unless you're flying
   if (!flight.flying || !basic.HasTimeAdvancedSince(last_basic))
@@ -94,7 +94,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   // Force cruise or climb mode if external device says so
   bool force_cruise = false;
   bool force_circling = false;
-  if (settings_computer.external_trigger_cruise_enabled && !basic.gps.replay) {
+  if (settings.external_trigger_cruise_enabled && !basic.gps.replay) {
     switch (basic.switch_state.flight_mode) {
     case SwitchInfo::FlightMode::UNKNOWN:
       force_circling = false;

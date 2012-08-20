@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     circling_computer.Turning(replay->SetCalculated(),
                               replay->Basic(), replay->LastBasic(),
                               replay->Calculated().flight,
-                              replay->GetComputerSettings());
+                              replay->GetComputerSettings().circling);
 
     if (replay->Calculated().circling != last_circling)
       circling_wind.NewFlightMode(replay->Calculated());

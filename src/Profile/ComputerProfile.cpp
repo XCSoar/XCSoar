@@ -36,6 +36,7 @@ namespace Profile {
   static void Load(VoiceSettings &settings);
   static void Load(PlacesOfInterestSettings &settings);
   static void Load(FeaturesSettings &settings);
+  static void Load(CirclingSettings &settings);
 };
 
 void
@@ -118,6 +119,13 @@ Profile::Load(FeaturesSettings &settings)
 }
 
 void
+Profile::Load(CirclingSettings &settings)
+{
+  Get(ProfileKeys::EnableExternalTriggerCruise,
+      settings.external_trigger_cruise_enabled);
+}
+
+void
 Profile::Load(ComputerSettings &settings)
 {
   Load(settings.wind);
@@ -127,9 +135,7 @@ Profile::Load(ComputerSettings &settings)
   Load(settings.poi);
   Load(settings.features);
   Load(settings.airspace);
-
-  Get(ProfileKeys::EnableExternalTriggerCruise,
-      settings.external_trigger_cruise_enabled);
+  Load(settings.circling);
 
   GetEnum(ProfileKeys::AverEffTime, settings.average_eff_time);
 

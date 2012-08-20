@@ -89,7 +89,7 @@ GlideComputerConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("Flap forces cruise"),
              _("When Vega variometer is connected and this option is true, the positive flap "
                  "setting switches the flight mode between circling and cruise."),
-             settings_computer.external_trigger_cruise_enabled);
+             settings_computer.circling.external_trigger_cruise_enabled);
   SetExpertRow(EnableExternalTriggerCruise);
 
   static constexpr StaticEnumChoice aver_eff_list[] = {
@@ -131,7 +131,7 @@ GlideComputerConfigPanel::Save(bool &_changed, bool &_require_restart)
                        settings_computer.features.nav_baro_altitude_enabled);
 
   changed |= SaveValue(EnableExternalTriggerCruise, ProfileKeys::EnableExternalTriggerCruise,
-                       settings_computer.external_trigger_cruise_enabled);
+                       settings_computer.circling.external_trigger_cruise_enabled);
 
   changed |= require_restart |=
       SaveValueEnum(AverEffTime, ProfileKeys::AverEffTime, settings_computer.average_eff_time);

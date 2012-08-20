@@ -367,7 +367,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
   circling_computer.Turning(calculated,
                             basic, last_basic,
                             calculated.flight,
-                            settings);
+                            settings.circling);
 
   if (calculated.circling != last_circling)
     OnSwitchClimbMode(settings);

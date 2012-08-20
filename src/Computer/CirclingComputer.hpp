@@ -31,7 +31,7 @@ struct CirclingInfo;
 struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
-struct ComputerSettings;
+struct CirclingSettings;
 struct FlyingState;
 
 /**
@@ -92,7 +92,7 @@ public:
   void Turning(CirclingInfo &circling_info,
                const MoreData &basic, const MoreData &last_basic,
                const FlyingState &flight,
-               const ComputerSettings &settings_computer);
+               const CirclingSettings &settings);
 
   /**
    * Calculate the circling time and percentage

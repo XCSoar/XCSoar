@@ -90,8 +90,8 @@ ComputerSettings::SetDefaults()
   voice.SetDefaults();
   poi.SetDefaults();
   features.SetDefaults();
+  circling.SetDefaults();
 
-  external_trigger_cruise_enabled =false;
   average_eff_time = ae30seconds;
   set_system_time_from_gps = IsAltair() && IsEmbedded();
   utc_offset = GetSystemUTCOffset();
