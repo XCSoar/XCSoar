@@ -33,6 +33,7 @@ ContestManager::ContestManager(const Contest _contest,
    olc_classic(trace_full),
    olc_league(trace_sprint),
    olc_plus(),
+   dmst_quad(trace_full),
    xcontest_free(trace_full, false),
    xcontest_triangle(trace_full, predict_triangle, false),
    dhv_xc_free(trace_full, true),
@@ -49,6 +50,7 @@ ContestManager::SetIncremental(bool incremental)
   olc_sprint.SetIncremental(incremental);
   olc_fai.SetIncremental(incremental);
   olc_classic.SetIncremental(incremental);
+  dmst_quad.SetIncremental(incremental);
   xcontest_free.SetIncremental(incremental);
   xcontest_triangle.SetIncremental(incremental);
   dhv_xc_free.SetIncremental(incremental);
@@ -68,6 +70,10 @@ ContestManager::SetPredicted(const TracePoint &predicted)
         contest == Contest::OLC_PLUS)
       stats.Reset();
   }
+
+  if (dmst_quad.SetPredicted(predicted) &&
+      contest == Contest::DMST)
+    stats.Reset();
 }
 
 void
@@ -78,6 +84,7 @@ ContestManager::SetHandicap(unsigned handicap)
   olc_classic.SetHandicap(handicap);
   olc_league.SetHandicap(handicap);
   olc_plus.SetHandicap(handicap);
+  dmst_quad.SetHandicap(handicap);
   xcontest_free.SetHandicap(handicap);
   xcontest_triangle.SetHandicap(handicap);
   dhv_xc_free.SetHandicap(handicap);
@@ -157,6 +164,11 @@ ContestManager::UpdateIdle(bool exhaustive)
 
     break;
 
+  case Contest::DMST:
+    retval = RunContest(dmst_quad, stats.result[0],
+                        stats.solution[0], exhaustive);
+    break;
+
   case Contest::XCONTEST:
     retval = RunContest(xcontest_free, stats.result[0],
                         stats.solution[0], exhaustive);
@@ -195,6 +207,7 @@ ContestManager::Reset()
   olc_classic.Reset();
   olc_league.Reset();
   olc_plus.Reset();
+  dmst_quad.Reset();
   xcontest_free.Reset();
   xcontest_triangle.Reset();
   dhv_xc_free.Reset();

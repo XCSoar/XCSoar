@@ -264,11 +264,22 @@ WriteOLCPlus(TextWriter &writer, const ContestStatistics &stats)
 }
 
 static void
-WriteContests(TextWriter &writer, const ContestStatistics &olc_plus)
+WriteDMSt(TextWriter &writer, const ContestStatistics &stats)
+{
+  JSON::ObjectWriter object(writer);
+
+  object.WriteElement("quadrilateral", WriteContest,
+                      stats.result[0], stats.solution[0]);
+}
+
+static void
+WriteContests(TextWriter &writer, const ContestStatistics &olc_plus,
+              const ContestStatistics &dmst)
 {
   JSON::ObjectWriter object(writer);
 
   object.WriteElement("olc_plus", WriteOLCPlus, olc_plus);
+  object.WriteElement("dmst", WriteDMSt, dmst);
 }
 
 int main(int argc, char **argv)
@@ -285,6 +296,7 @@ int main(int argc, char **argv)
   delete replay;
 
   const ContestStatistics olc_plus = SolveContest(Contest::OLC_PLUS);
+  const ContestStatistics dmst = SolveContest(Contest::DMST);
 
   TextWriter writer("/dev/stdout", true);
 
@@ -296,6 +308,6 @@ int main(int argc, char **argv)
                       flight_phase_detector.GetPhases());
     root.WriteElement("performance", WritePerformanceStats,
                       flight_phase_detector.GetTotals());
-    root.WriteElement("contests", WriteContests, olc_plus);
+    root.WriteElement("contests", WriteContests, olc_plus, dmst);
   }
 }

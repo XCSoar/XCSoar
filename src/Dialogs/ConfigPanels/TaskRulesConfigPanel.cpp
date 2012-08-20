@@ -133,6 +133,9 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
       N_("The most recent contest with Sprint task rules.") },
     { (unsigned)Contest::OLC_PLUS, ContestToString(Contest::OLC_PLUS),
       N_("A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.") },
+    { (unsigned)Contest::DMST, ContestToString(Contest::DMST),
+      /* German competition, no translation */
+      _T("Deutsche Meisterschaft im Streckensegelflug.") },
     { (unsigned)Contest::XCONTEST, ContestToString(Contest::XCONTEST),
       _T("tbd.") },
     { (unsigned)Contest::DHV_XC, ContestToString(Contest::DHV_XC),

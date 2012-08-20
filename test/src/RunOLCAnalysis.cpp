@@ -48,6 +48,7 @@ static ContestManager olc_sprint(Contest::OLC_SPRINT,
 static ContestManager olc_league(Contest::OLC_LEAGUE,
                                  full_trace, sprint_trace);
 static ContestManager olc_plus(Contest::OLC_PLUS, full_trace, sprint_trace);
+static ContestManager dmst(Contest::DMST, full_trace, sprint_trace);
 static ContestManager xcontest(Contest::XCONTEST,
                                full_trace, sprint_trace);
 static ContestManager sis_at(Contest::SIS_AT, full_trace, sprint_trace);
@@ -89,6 +90,7 @@ TestOLC(DebugReplay &replay)
   olc_fai.SolveExhaustive();
   olc_league.SolveExhaustive();
   olc_plus.SolveExhaustive();
+  dmst.SolveExhaustive();
   xcontest.SolveExhaustive();
   sis_at.SolveExhaustive();
   olc_netcoupe.SolveExhaustive();
@@ -114,6 +116,9 @@ TestOLC(DebugReplay &replay)
   std::cout << "# plus\n";
   PrintHelper::print(olc_plus.GetStats().GetResult(2));
 
+  std::cout << "dmst\n";
+  PrintHelper::print(dmst.GetStats().GetResult());
+
   std::cout << "xcontest\n";
   std::cout << "# free\n";
   PrintHelper::print(xcontest.GetStats().GetResult(0));
@@ -131,6 +136,7 @@ TestOLC(DebugReplay &replay)
   olc_sprint.Reset();
   olc_league.Reset();
   olc_plus.Reset();
+  dmst.Reset();
   olc_netcoupe.Reset();
   full_trace.clear();
   sprint_trace.clear();

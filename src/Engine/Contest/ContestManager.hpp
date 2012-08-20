@@ -29,6 +29,7 @@
 #include "Solvers/OLCClassic.hpp"
 #include "Solvers/OLCLeague.hpp"
 #include "Solvers/OLCPlus.hpp"
+#include "Solvers/DMStQuad.hpp"
 #include "Solvers/XContestFree.hpp"
 #include "Solvers/XContestTriangle.hpp"
 #include "Solvers/OLCSISAT.hpp"
@@ -53,6 +54,7 @@ class ContestManager
   OLCClassic olc_classic;
   OLCLeague olc_league;
   OLCPlus olc_plus;
+  DMStQuad dmst_quad;
   XContestFree xcontest_free;
   XContestTriangle xcontest_triangle;
   XContestFree dhv_xc_free;
