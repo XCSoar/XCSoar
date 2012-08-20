@@ -79,7 +79,7 @@ DebugReplay::Compute()
 
   computer.Compute(computed_basic, last_basic, last_basic, calculated);
   flying_computer.Compute(glide_polar.GetVTakeoff(),
-                          computed_basic, last_basic, calculated,
+                          computed_basic, calculated,
                           calculated.flight);
 }
 

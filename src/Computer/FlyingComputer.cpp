@@ -30,6 +30,8 @@ Copyright_License {
 void
 FlyingComputer::Reset()
 {
+  delta_time.Reset();
+
   time_on_ground = time_in_flight = 0;
   moving_since = fixed_minus_one;
   sinking_since = fixed_minus_one;
@@ -146,17 +148,20 @@ FlyingComputer::Stationary(FlyingState &state, fixed time,
 
 void
 FlyingComputer::Compute(fixed takeoff_speed,
-                        const NMEAInfo &basic, const NMEAInfo &last_basic,
+                        const NMEAInfo &basic,
                         const DerivedInfo &calculated,
                         FlyingState &flying)
 {
-  if (basic.HasTimeRetreatedSince(last_basic)) {
+  if (!basic.time_available || !basic.location_available)
+    return;
+
+  const fixed dt = delta_time.Update(basic.time, fixed_half, fixed(20));
+  if (negative(dt)) {
     Reset();
     flying.Reset();
   }
 
-  // GPS not lost
-  if (!basic.location_available)
+  if (!positive(dt))
     return;
 
   // Speed too high for being on the ground

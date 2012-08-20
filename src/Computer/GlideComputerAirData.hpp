@@ -127,7 +127,7 @@ private:
   void CruiseGR(const MoreData &basic, DerivedInfo &calculated);
 
   void TerrainHeight(const MoreData &basic, TerrainInfo &calculated);
-  void FlightState(const NMEAInfo &basic, const NMEAInfo &last_basic,
+  void FlightState(const NMEAInfo &basic,
                    const DerivedInfo &calculated, FlyingState &flying,
                    const GlidePolar &glide_polar);
 

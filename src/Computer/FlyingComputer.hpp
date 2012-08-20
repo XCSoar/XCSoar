@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Geo/GeoPoint.hpp"
+#include "DeltaTime.hpp"
 
 struct NMEAInfo;
 struct DerivedInfo;
@@ -36,6 +37,8 @@ struct FlyingState;
  * Detect takeoff and landing.
  */
 class FlyingComputer {
+  DeltaTime delta_time;
+
   unsigned short time_on_ground;
   unsigned short time_in_flight;
 
@@ -66,7 +69,7 @@ public:
   void Reset();
 
   void Compute(fixed takeoff_speed,
-               const NMEAInfo &basic, const NMEAInfo &last_basic,
+               const NMEAInfo &basic,
                const DerivedInfo &calculated,
                FlyingState &flying);
 

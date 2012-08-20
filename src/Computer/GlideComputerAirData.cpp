@@ -327,7 +327,7 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
     return false;
   }
 
-  FlightState(basic, last_basic, calculated, calculated.flight,
+  FlightState(basic, calculated, calculated.flight,
               settings.polar.glide_polar_task);
 
   return true;
@@ -335,7 +335,6 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
 
 void
 GlideComputerAirData::FlightState(const NMEAInfo &basic,
-                                  const NMEAInfo &last_basic,
                                   const DerivedInfo &calculated,
                                   FlyingState &flying,
                                   const GlidePolar &glide_polar)
@@ -346,7 +345,7 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
        arbitrary value, but better than nothing */
     : fixed(10);
 
-  flying_computer.Compute(v_takeoff, basic, last_basic,
+  flying_computer.Compute(v_takeoff, basic,
                           calculated, flying);
 }
 
