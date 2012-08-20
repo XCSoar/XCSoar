@@ -119,7 +119,11 @@ CuSonde::UpdateMeasurements(const NMEAInfo &basic,
     return;
 
   // find appropriate level
-  unsigned short level = (unsigned short)((int)max(basic.GetAltitudeBaroPreferred(),
+  const auto any_altitude = basic.GetAnyAltitude();
+  if (!any_altitude.first)
+    return;
+
+  unsigned short level = (unsigned short)((int)max(any_altitude.second,
                                                    fixed(0.0))
                                           / HEIGHT_STEP);
 

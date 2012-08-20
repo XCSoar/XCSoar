@@ -519,13 +519,20 @@ struct NMEAInfo {
   }
 
   /**
-   * Returns the barometric altitude, and falls back to the GPS
-   * altitude.
+   * Returns the pressure altitude, and falls back to the barometric
+   * altitude or the GPS altitude.  The "first" element is false if no
+   * altitude is available.  The "second" element contains the
+   * altitude value [m] if "first" is true.
    */
-  fixed GetAltitudeBaroPreferred() const {
-    return baro_altitude_available
-      ? baro_altitude
-      : gps_altitude;
+  gcc_pure
+  std::pair<bool, fixed> GetAnyAltitude() const {
+    return pressure_altitude_available
+      ? std::make_pair(true, pressure_altitude)
+      : (baro_altitude_available
+         ? std::make_pair(true, baro_altitude)
+         : (gps_altitude_available
+            ? std::make_pair(true, gps_altitude)
+            : std::make_pair(false, fixed_zero)));
   }
 
   /**
@@ -579,7 +586,13 @@ struct NMEAInfo {
    * from it, using the current altitude.
    */
   void ProvideTrueAirspeed(fixed tas) {
-    ProvideTrueAirspeedWithAltitude(tas, GetAltitudeBaroPreferred());
+    auto any_altitude = GetAnyAltitude();
+
+    if (any_altitude.first)
+      ProvideTrueAirspeedWithAltitude(tas, any_altitude.second);
+    else
+      /* no altitude; dirty fallback */
+      ProvideBothAirspeeds(tas, tas);
   }
 
   /**

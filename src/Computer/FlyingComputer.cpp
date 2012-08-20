@@ -175,12 +175,9 @@ FlyingComputer::Compute(fixed takeoff_speed,
   else
     Stationary(flying, basic.time, basic.location);
 
-  if (basic.pressure_altitude_available)
-    CheckRelease(flying, basic.time, basic.location, basic.pressure_altitude);
-  else if (basic.baro_altitude_available)
-    CheckRelease(flying, basic.time, basic.location, basic.baro_altitude);
-  else if (basic.gps_altitude_available)
-    CheckRelease(flying, basic.time, basic.location, basic.gps_altitude);
+  const auto any_altitude = basic.GetAnyAltitude();
+  if (any_altitude.first)
+    CheckRelease(flying, basic.time, basic.location, any_altitude.second);
   else
     sinking_since = fixed_minus_one;
 }

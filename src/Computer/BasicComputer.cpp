@@ -206,8 +206,12 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   }
 
   basic.true_airspeed = TrueAirspeedEstimated;
-  basic.indicated_airspeed = TrueAirspeedEstimated
-    / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
+
+  const auto any_altitude = basic.GetAnyAltitude();
+  basic.indicated_airspeed = TrueAirspeedEstimated;
+  if (any_altitude.first)
+    basic.indicated_airspeed /= AtmosphericPressure::AirDensityRatio(any_altitude.second);
+
   basic.airspeed_available.Update(basic.clock);
   basic.airspeed_real = false;
 }
