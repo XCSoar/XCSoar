@@ -1,6 +1,7 @@
 CONTEST_SRC_DIR = $(SRC)/Engine/Contest
 
 CONTEST_SOURCES = \
+	$(CONTEST_SRC_DIR)/Settings.cpp \
 	$(CONTEST_SRC_DIR)/ContestManager.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/Contests.cpp \
 	$(CONTEST_SRC_DIR)/Solvers/AbstractContest.cpp \

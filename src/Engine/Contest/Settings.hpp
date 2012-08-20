@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -19,39 +18,44 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef XCSOAR_CONTEST_COMPUTER_HPP
-#define XCSOAR_CONTEST_COMPUTER_HPP
+#ifndef XCSOAR_CONTEST_SETTINGS_HPP
+#define XCSOAR_CONTEST_SETTINGS_HPP
 
-#include "Engine/Contest/ContestManager.hpp"
+#include "Util/TypeTraits.hpp"
 
-struct ContestSettings;
-struct DerivedInfo;
-class Trace;
+enum Contests {
+  OLC_Sprint = 0,
+  OLC_FAI,
+  OLC_Classic,
+  OLC_League,
+  OLC_Plus,
+  OLC_XContest,
+  OLC_DHVXC,
+  OLC_SISAT,
+  OLC_NetCoupe,
+};
 
-class ContestComputer {
-  ContestManager contest_manager;
-
-public:
-  ContestComputer(const Trace &trace_full, const Trace &trace_sprint);
-
-  void Reset() {
-    contest_manager.Reset();
-  }
+struct ContestSettings {
+  /** Whether to do online OLC optimisation */
+  bool enable;
 
   /**
-   * @see ContestDijkstra::SetPredicted()
+   * For the contest score, predict that the aircraft will reach the
+   * next turn point?
    */
-  void SetPredicted(const TracePoint &predicted) {
-    contest_manager.SetPredicted(predicted);
-  }
+  bool predict;
 
-  void Solve(const ContestSettings &settings_computer,
-             DerivedInfo &calculated);
+  /** Rule set to scan for in OLC */
+  Contests contest;
 
-  bool SolveExhaustive(const ContestSettings &settings_computer,
-                       DerivedInfo &calculated);
+  /** Handicap factor */
+  unsigned handicap;
+
+  void SetDefaults();
 };
+
+static_assert(is_trivial<ContestSettings>::value, "type is not trivial");
 
 #endif

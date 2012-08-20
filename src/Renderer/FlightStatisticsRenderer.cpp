@@ -101,10 +101,10 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
 void
 FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
-                                     const TaskBehaviour &task_behaviour,
+                                     const ContestSettings &settings,
                                      const DerivedInfo &derived)
 {
-  if (task_behaviour.contest == OLC_Plus) {
+  if (settings.contest == OLC_Plus) {
     const ContestResult& result =
         derived.contest_stats.GetResult(2);
 
@@ -130,8 +130,8 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
               _("Score"), (double)result.score, _("pts"),
               _("Time"), timetext1,
               _("Speed"), speed);
-  } else if (task_behaviour.contest == OLC_DHVXC ||
-             task_behaviour.contest == OLC_XContest) {
+  } else if (settings.contest == OLC_DHVXC ||
+             settings.contest == OLC_XContest) {
     const ContestResult& result_free =
         derived.contest_stats.GetResult(0);
 
@@ -156,7 +156,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
               _("Speed"), speed);
   } else {
     unsigned result_index;
-    switch (task_behaviour.contest) {
+    switch (settings.contest) {
       case OLC_League:
         result_index = 0;
         break;

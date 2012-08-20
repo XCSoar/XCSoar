@@ -106,7 +106,7 @@ void
 PlaneGlue::Synchronize(const Plane &plane, ComputerSettings &settings,
                        GlidePolar &gp)
 {
-  settings.task.contest_handicap = plane.handicap;
+  settings.contest.handicap = plane.handicap;
 
   PolarCoefficients pc = plane.polar_shape.CalculateCoefficients();
   if (!pc.IsValid())

@@ -100,6 +100,7 @@ ComputerSettings::SetDefaults()
   pressure_available.Clear();
   airspace.SetDefaults();
   task.SetDefaults();
+  contest.SetDefaults();
   logger.SetDefaults();
 
 #ifdef HAVE_TRACKING

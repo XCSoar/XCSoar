@@ -24,20 +24,9 @@ Copyright_License {
 #ifndef OLC_RULES_HPP
 #define OLC_RULES_HPP
 
+#include "../Settings.hpp"
 #include "Compiler.h"
 #include "tchar.h"
-
-enum Contests {
-  OLC_Sprint = 0,
-  OLC_FAI,
-  OLC_Classic,
-  OLC_League,
-  OLC_Plus,
-  OLC_XContest,
-  OLC_DHVXC,
-  OLC_SISAT,
-  OLC_NetCoupe,
-};
 
 gcc_const
 const TCHAR* ContestToString(Contests contest);

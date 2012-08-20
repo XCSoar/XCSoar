@@ -23,6 +23,7 @@
 #ifndef ONLINE_CONTEST_HPP
 #define ONLINE_CONTEST_HPP
 
+#include "Settings.hpp"
 #include "Solvers/OLCSprint.hpp"
 #include "Solvers/OLCFAI.hpp"
 #include "Solvers/OLCClassic.hpp"
@@ -32,7 +33,6 @@
 #include "Solvers/XContestTriangle.hpp"
 #include "Solvers/OLCSISAT.hpp"
 #include "Solvers/NetCoupe.hpp"
-#include "Solvers/Contests.hpp"
 #include "ContestStatistics.hpp"
 
 class Trace;

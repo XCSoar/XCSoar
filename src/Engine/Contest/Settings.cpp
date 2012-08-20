@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -19,39 +18,15 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#ifndef XCSOAR_CONTEST_COMPUTER_HPP
-#define XCSOAR_CONTEST_COMPUTER_HPP
+#include "Settings.hpp"
 
-#include "Engine/Contest/ContestManager.hpp"
-
-struct ContestSettings;
-struct DerivedInfo;
-class Trace;
-
-class ContestComputer {
-  ContestManager contest_manager;
-
-public:
-  ContestComputer(const Trace &trace_full, const Trace &trace_sprint);
-
-  void Reset() {
-    contest_manager.Reset();
-  }
-
-  /**
-   * @see ContestDijkstra::SetPredicted()
-   */
-  void SetPredicted(const TracePoint &predicted) {
-    contest_manager.SetPredicted(predicted);
-  }
-
-  void Solve(const ContestSettings &settings_computer,
-             DerivedInfo &calculated);
-
-  bool SolveExhaustive(const ContestSettings &settings_computer,
-                       DerivedInfo &calculated);
-};
-
-#endif
+void
+ContestSettings::SetDefaults()
+{
+  enable = true;
+  predict = false;
+  contest = OLC_Plus;
+  handicap = 100;
+}

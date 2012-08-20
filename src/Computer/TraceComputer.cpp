@@ -86,7 +86,7 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
     return;
 
   // either olc or basic trace requires trace_full
-  if (settings_computer.task.enable_olc ||
+  if (settings_computer.contest.enable ||
       settings_computer.task.enable_trace) {
     const TracePoint point(basic);
 
@@ -95,7 +95,7 @@ TraceComputer::Update(const ComputerSettings &settings_computer,
     mutex.Unlock();
 
     // only olc requires trace_sprint
-    if (settings_computer.task.enable_olc)
+    if (settings_computer.contest.enable)
       sprint.push_back(point);
   }
 }

@@ -20,7 +20,7 @@
 }
 */
 
-#include "Math/FastMath.h"
+#include "Engine/Contest/Settings.hpp"
 #include "TaskEventsPrint.hpp"
 #include "harness_flight.hpp"
 #include "harness_airspace.hpp"
@@ -38,7 +38,6 @@ test_olc(int n_wind, Contests olc_type)
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();
   task_behaviour.DisableAll();
-  task_behaviour.enable_olc = true;
   if (!verbose)
     task_behaviour.enable_trace = false;
 

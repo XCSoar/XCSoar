@@ -143,8 +143,8 @@ test_replay(const Contests olc_type,
 
   ComputerSettings settings_computer;
   settings_computer.SetDefaults();
-  settings_computer.task.enable_olc = true;
-  load_scores(settings_computer.task.contest_handicap);
+  settings_computer.contest.enable = true;
+  load_scores(settings_computer.contest.handicap);
 
   if (verbose) {
     switch (olc_type) {
@@ -192,7 +192,7 @@ test_replay(const Contests olc_type,
   ContestManager contest_manager(olc_type,
                                  trace_computer.GetFull(),
                                  trace_computer.GetSprint());
-  contest_manager.SetHandicap(settings_computer.task.contest_handicap);
+  contest_manager.SetHandicap(settings_computer.contest.handicap);
 
   DerivedInfo calculated;
 

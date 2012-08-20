@@ -21,37 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CONTEST_COMPUTER_HPP
-#define XCSOAR_CONTEST_COMPUTER_HPP
-
-#include "Engine/Contest/ContestManager.hpp"
+#ifndef XCSOAR_CONTEST_PROFILE_HPP
+#define XCSOAR_CONTEST_PROFILE_HPP
 
 struct ContestSettings;
-struct DerivedInfo;
-class Trace;
 
-class ContestComputer {
-  ContestManager contest_manager;
-
-public:
-  ContestComputer(const Trace &trace_full, const Trace &trace_sprint);
-
-  void Reset() {
-    contest_manager.Reset();
-  }
-
-  /**
-   * @see ContestDijkstra::SetPredicted()
-   */
-  void SetPredicted(const TracePoint &predicted) {
-    contest_manager.SetPredicted(predicted);
-  }
-
-  void Solve(const ContestSettings &settings_computer,
-             DerivedInfo &calculated);
-
-  bool SolveExhaustive(const ContestSettings &settings_computer,
-                       DerivedInfo &calculated);
+namespace Profile {
+  void Load(ContestSettings &settings);
 };
 
 #endif

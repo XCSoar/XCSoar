@@ -28,6 +28,7 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Engine/Route/Config.hpp"
+#include "Engine/Contest/Settings.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/TypeTraits.hpp"
 #include "Task/TaskBehaviour.hpp"
@@ -264,6 +265,8 @@ struct ComputerSettings {
   Plane plane;
 
   TaskBehaviour task;
+
+  ContestSettings contest;
 
   LoggerSettings logger;
 

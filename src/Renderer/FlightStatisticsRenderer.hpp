@@ -31,6 +31,7 @@ Copyright_License {
 
 struct NMEAInfo;
 struct DerivedInfo;
+struct ContestSettings;
 struct TaskBehaviour;
 struct ComputerSettings;
 struct MapSettings;
@@ -69,7 +70,7 @@ public:
                   const TraceComputer *trace_computer) const;
 
   static void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived);
-  static void CaptionOLC(TCHAR *sTmp, const TaskBehaviour &task_behaviour,
+  static void CaptionOLC(TCHAR *sTmp, const ContestSettings &settings,
                          const DerivedInfo &derived);
 };
 

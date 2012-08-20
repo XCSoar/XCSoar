@@ -23,7 +23,6 @@
 #ifndef TASK_BEHAVIOUR_HPP
 #define TASK_BEHAVIOUR_HPP
 
-#include "Contest/Solvers/Contests.hpp"
 #include "Ordered/OrderedTaskBehaviour.hpp"
 #include "Task/Factory/TaskPointFactoryType.hpp"
 #include "Engine/Route/Config.hpp"
@@ -113,20 +112,6 @@ struct TaskBehaviour : public TaskStartMargins {
 
   /** Compensation factor for risk at low altitude */
   fixed risk_gamma;
-
-  /** Whether to do online OLC optimisation */
-  bool enable_olc;
-
-  /**
-   * For the contest score, predict that the aircraft will reach the
-   * next turn point?
-   */
-  bool predict_contest;
-
-  /** Rule set to scan for in OLC */
-  Contests contest;
-  /** Handicap factor */
-  unsigned contest_handicap;
 
   /** Safety MacCready value (m/s) used by abort task */
   fixed safety_mc;

@@ -57,10 +57,6 @@ TaskBehaviour::SetDefaults()
   calc_glide_required = true;
   goto_nonlandable = true;
   risk_gamma = fixed_zero;
-  enable_olc = true;
-  predict_contest = false;
-  contest = OLC_Plus;
-  contest_handicap = 100;
   safety_mc = fixed_half;
   safety_height_arrival = fixed(300);
   task_type_default = TaskFactoryType::RACING;
@@ -79,6 +75,5 @@ TaskBehaviour::DisableAll()
   auto_mc = false;
   calc_cruise_efficiency = false;
   calc_glide_required = false;
-  enable_olc = false;
   route_planner.mode = RoutePlannerConfig::Mode::NONE;
 }

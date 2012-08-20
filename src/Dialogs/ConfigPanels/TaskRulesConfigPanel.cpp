@@ -28,6 +28,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
+#include "Engine/Contest/Solvers/Contests.hpp"
 
 enum ControlIndex {
   StartMaxSpeed,
@@ -59,6 +60,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const ComputerSettings &settings_computer = XCSoarInterface::GetComputerSettings();
   const TaskBehaviour &task_behaviour = settings_computer.task;
+  const ContestSettings &contest_settings = settings_computer.contest;
 
   RowFormWidget::Prepare(parent, rc);
 
@@ -140,12 +142,12 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("On-Line Contest"),
       _("Select the rules used for calculating optimal points for the On-Line Contest. "
           "The implementation  conforms to the official release 2010, Sept.23."),
-          contests_list, task_behaviour.contest);
+          contests_list, contest_settings.contest);
 
   AddBoolean(_("Predict Contest"),
              _("If enabled, then the next task point is included in the "
                "score calculation, assuming that you will reach it."),
-             task_behaviour.predict_contest);
+             contest_settings.predict);
 }
 
 
@@ -157,6 +159,7 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
   ComputerSettings &settings_computer = XCSoarInterface::SetComputerSettings();
   TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
+  ContestSettings &contest_settings = settings_computer.contest;
 
   changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED, ProfileKeys::StartMaxSpeed, otb.start_max_speed);
 
@@ -175,9 +178,10 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValueEnum(FinishHeightRef, ProfileKeys::FinishHeightRef, otb.finish_min_height_ref);
 
-  changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules, task_behaviour.contest);
+  changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules,
+                           contest_settings.contest);
   changed |= SaveValueEnum(PREDICT_CONTEST, ProfileKeys::PredictContest,
-                           task_behaviour.predict_contest);
+                           contest_settings.predict);
 
   _changed |= changed;
   _require_restart |= require_restart;

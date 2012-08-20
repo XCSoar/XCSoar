@@ -26,6 +26,7 @@ Copyright_License {
 #include "Profile/TaskProfile.hpp"
 #include "Profile/TrackingProfile.hpp"
 #include "Profile/Profile.hpp"
+#include "ContestProfile.hpp"
 #include "ComputerSettings.hpp"
 
 namespace Profile {
@@ -155,6 +156,7 @@ Profile::Load(ComputerSettings &settings)
     settings.utc_offset = 0;
 
   Load(settings.task);
+  Load(settings.contest);
   Load(settings.logger);
 
 #ifdef HAVE_TRACKING

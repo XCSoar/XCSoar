@@ -52,6 +52,7 @@ Copyright_License {
 #include "GestureManager.hpp"
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
+#include "Engine/Contest/Solvers/Contests.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -356,10 +357,11 @@ Update()
 
   case AnalysisPage::OLC:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-              ContestToString(settings_computer.task.contest));
+              ContestToString(settings_computer.contest.contest));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
-    FlightStatisticsRenderer::CaptionOLC(sTmp, settings_computer.task, calculated);
+    FlightStatisticsRenderer::CaptionOLC(sTmp, settings_computer.contest,
+                                         calculated);
     wInfo->SetCaption(sTmp);
     break;
 

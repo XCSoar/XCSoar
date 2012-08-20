@@ -1502,6 +1502,7 @@ RUN_CANVAS_DEPENDS = SCREEN OS THREAD MATH UTIL
 $(eval $(call link-program,RunCanvas,RUN_CANVAS))
 
 RUN_MAP_WINDOW_SOURCES = \
+	$(CONTEST_SRC_DIR)/Settings.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
 	$(SRC)/Engine/Trace/Point.cpp \
 	$(SRC)/Engine/Trace/Trace.cpp \
@@ -1638,6 +1639,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/ComputerProfile.cpp \
 	$(SRC)/Profile/TaskProfile.cpp \
 	$(SRC)/Profile/RouteProfile.cpp \
+	$(SRC)/Profile/ContestProfile.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
 	$(SRC)/Profile/TrackingProfile.cpp \
 	$(SRC)/Profile/MapProfile.cpp \

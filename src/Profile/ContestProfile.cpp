@@ -21,37 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CONTEST_COMPUTER_HPP
-#define XCSOAR_CONTEST_COMPUTER_HPP
+#include "ContestProfile.hpp"
+#include "Profile.hpp"
+#include "Engine/Contest/Settings.hpp"
 
-#include "Engine/Contest/ContestManager.hpp"
-
-struct ContestSettings;
-struct DerivedInfo;
-class Trace;
-
-class ContestComputer {
-  ContestManager contest_manager;
-
-public:
-  ContestComputer(const Trace &trace_full, const Trace &trace_sprint);
-
-  void Reset() {
-    contest_manager.Reset();
+void
+Profile::Load(ContestSettings &settings)
+{
+  if (GetEnum(ProfileKeys::OLCRules, settings.contest)) {
+    /* handle out-dated Sprint rule in profile */
+    if (settings.contest == OLC_Sprint)
+      settings.contest = OLC_League;
   }
 
-  /**
-   * @see ContestDijkstra::SetPredicted()
-   */
-  void SetPredicted(const TracePoint &predicted) {
-    contest_manager.SetPredicted(predicted);
-  }
-
-  void Solve(const ContestSettings &settings_computer,
-             DerivedInfo &calculated);
-
-  bool SolveExhaustive(const ContestSettings &settings_computer,
-                       DerivedInfo &calculated);
-};
-
-#endif
+  Get(ProfileKeys::PredictContest, settings.predict);
+}

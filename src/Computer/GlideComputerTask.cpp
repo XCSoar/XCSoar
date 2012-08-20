@@ -121,12 +121,12 @@ GlideComputerTask::ProcessMoreTask(const MoreData &basic,
 
 gcc_pure
 static TracePoint
-Predicted(const TaskBehaviour &settings,
+Predicted(const ContestSettings &settings,
           const MoreData &basic,
           const ElementStat &current_leg)
 {
   if (!basic.time_available || !basic.gps_altitude_available ||
-      !settings.predict_contest ||
+      !settings.predict ||
       !current_leg.location_remaining.IsValid() ||
       !current_leg.solution_remaining.IsDefined())
     return TracePoint::Invalid();
@@ -144,13 +144,13 @@ GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
                                const ComputerSettings &settings_computer,
                                bool exhaustive)
 {
-  contest.SetPredicted(Predicted(settings_computer.task, basic,
+  contest.SetPredicted(Predicted(settings_computer.contest, basic,
                                  calculated.task_stats.current_leg));
 
   if (exhaustive)
-    contest.SolveExhaustive(settings_computer, calculated);
+    contest.SolveExhaustive(settings_computer.contest, calculated);
   else
-    contest.Solve(settings_computer, calculated);
+    contest.Solve(settings_computer.contest, calculated);
 
   const AircraftState as = ToAircraftState(basic, calculated);
 

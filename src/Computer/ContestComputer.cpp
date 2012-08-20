@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ContestComputer.hpp"
-#include "ComputerSettings.hpp"
+#include "Engine/Contest/Settings.hpp"
 #include "NMEA/Derived.hpp"
 
 ContestComputer::ContestComputer(const Trace &trace_full,
@@ -33,14 +33,14 @@ ContestComputer::ContestComputer(const Trace &trace_full,
 }
 
 void
-ContestComputer::Solve(const ComputerSettings &settings_computer,
+ContestComputer::Solve(const ContestSettings &settings,
                        DerivedInfo &calculated)
 {
-  if (!settings_computer.task.enable_olc)
+  if (!settings.enable)
     return;
 
-  contest_manager.SetHandicap(settings_computer.task.contest_handicap);
-  contest_manager.SetContest(settings_computer.task.contest);
+  contest_manager.SetHandicap(settings.handicap);
+  contest_manager.SetContest(settings.contest);
 
   contest_manager.UpdateIdle();
 
@@ -48,14 +48,14 @@ ContestComputer::Solve(const ComputerSettings &settings_computer,
 }
 
 bool
-ContestComputer::SolveExhaustive(const ComputerSettings &settings_computer,
+ContestComputer::SolveExhaustive(const ContestSettings &settings,
                                  DerivedInfo &calculated)
 {
-  if (!settings_computer.task.enable_olc)
+  if (!settings.enable)
     return false;
 
-  contest_manager.SetHandicap(settings_computer.task.contest_handicap);
-  contest_manager.SetContest(settings_computer.task.contest);
+  contest_manager.SetHandicap(settings.handicap);
+  contest_manager.SetContest(settings.contest);
 
   bool result = contest_manager.SolveExhaustive();
 

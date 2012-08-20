@@ -82,14 +82,6 @@ Profile::Load(TaskBehaviour &settings)
   if (Get(ProfileKeys::RiskGamma, Temp))
     settings.risk_gamma = fixed(Temp) / 10;
 
-  if (GetEnum(ProfileKeys::OLCRules, settings.contest)) {
-    /* handle out-dated Sprint rule in profile */
-    if (settings.contest == OLC_Sprint)
-      settings.contest = OLC_League;
-  }
-
-  Get(ProfileKeys::PredictContest, settings.predict_contest);
-
   if (Get(ProfileKeys::SafetyMacCready, Temp))
     settings.safety_mc = fixed(Temp) / 10;
 
