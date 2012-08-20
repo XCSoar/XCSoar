@@ -33,12 +33,12 @@ ContestManager::ContestManager(const Contest _contest,
    olc_classic(trace_full),
    olc_league(trace_sprint),
    olc_plus(),
-   olc_xcontest_free(trace_full, false),
-   olc_xcontest_triangle(trace_full, predict_triangle, false),
-   olc_dhvxc_free(trace_full, true),
-   olc_dhvxc_triangle(trace_full, predict_triangle, true),
-   olc_sisat(trace_full),
-   olc_netcoupe(trace_full)
+   xcontest_free(trace_full, false),
+   xcontest_triangle(trace_full, predict_triangle, false),
+   dhv_xc_free(trace_full, true),
+   dhv_xc_triangle(trace_full, predict_triangle, true),
+   sis_at(trace_full),
+   net_coupe(trace_full)
 {
   Reset();
 }
@@ -49,12 +49,12 @@ ContestManager::SetIncremental(bool incremental)
   olc_sprint.SetIncremental(incremental);
   olc_fai.SetIncremental(incremental);
   olc_classic.SetIncremental(incremental);
-  olc_xcontest_free.SetIncremental(incremental);
-  olc_xcontest_triangle.SetIncremental(incremental);
-  olc_dhvxc_free.SetIncremental(incremental);
-  olc_dhvxc_triangle.SetIncremental(incremental);
-  olc_sisat.SetIncremental(incremental);
-  olc_netcoupe.SetIncremental(incremental);
+  xcontest_free.SetIncremental(incremental);
+  xcontest_triangle.SetIncremental(incremental);
+  dhv_xc_free.SetIncremental(incremental);
+  dhv_xc_triangle.SetIncremental(incremental);
+  sis_at.SetIncremental(incremental);
+  net_coupe.SetIncremental(incremental);
 }
 
 void
@@ -78,12 +78,12 @@ ContestManager::SetHandicap(unsigned handicap)
   olc_classic.SetHandicap(handicap);
   olc_league.SetHandicap(handicap);
   olc_plus.SetHandicap(handicap);
-  olc_xcontest_free.SetHandicap(handicap);
-  olc_xcontest_triangle.SetHandicap(handicap);
-  olc_dhvxc_free.SetHandicap(handicap);
-  olc_dhvxc_triangle.SetHandicap(handicap);
-  olc_sisat.SetHandicap(handicap);
-  olc_netcoupe.SetHandicap(handicap);
+  xcontest_free.SetHandicap(handicap);
+  xcontest_triangle.SetHandicap(handicap);
+  dhv_xc_free.SetHandicap(handicap);
+  dhv_xc_triangle.SetHandicap(handicap);
+  sis_at.SetHandicap(handicap);
+  net_coupe.SetHandicap(handicap);
 }
 
 static bool
@@ -158,26 +158,26 @@ ContestManager::UpdateIdle(bool exhaustive)
     break;
 
   case Contest::XCONTEST:
-    retval = RunContest(olc_xcontest_free, stats.result[0],
+    retval = RunContest(xcontest_free, stats.result[0],
                         stats.solution[0], exhaustive);
-    retval |= RunContest(olc_xcontest_triangle, stats.result[1],
+    retval |= RunContest(xcontest_triangle, stats.result[1],
                          stats.solution[1], exhaustive);
     break;
 
   case Contest::DHV_XC:
-    retval = RunContest(olc_dhvxc_free, stats.result[0],
+    retval = RunContest(dhv_xc_free, stats.result[0],
                         stats.solution[0], exhaustive);
-    retval |= RunContest(olc_dhvxc_triangle, stats.result[1],
+    retval |= RunContest(dhv_xc_triangle, stats.result[1],
                          stats.solution[1], exhaustive);
     break;
 
   case Contest::SIS_AT:
-    retval = RunContest(olc_sisat, stats.result[0],
+    retval = RunContest(sis_at, stats.result[0],
                         stats.solution[0], exhaustive);
     break;
 
   case Contest::NET_COUPE:
-    retval = RunContest(olc_netcoupe, stats.result[0],
+    retval = RunContest(net_coupe, stats.result[0],
                         stats.solution[0], exhaustive);
     break;
 
@@ -195,12 +195,12 @@ ContestManager::Reset()
   olc_classic.Reset();
   olc_league.Reset();
   olc_plus.Reset();
-  olc_xcontest_free.Reset();
-  olc_xcontest_triangle.Reset();
-  olc_dhvxc_free.Reset();
-  olc_dhvxc_triangle.Reset();
-  olc_sisat.Reset();
-  olc_netcoupe.Reset();
+  xcontest_free.Reset();
+  xcontest_triangle.Reset();
+  dhv_xc_free.Reset();
+  dhv_xc_triangle.Reset();
+  sis_at.Reset();
+  net_coupe.Reset();
 }
 
 /*
