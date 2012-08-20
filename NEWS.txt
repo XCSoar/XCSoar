@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.5 - not yet released
+* calculations
+  - don't detect landing while climbing in a wave (#1330, #2289)
 
 Version 6.4.1 - not yet released
 * map

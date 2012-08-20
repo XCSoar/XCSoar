@@ -59,6 +59,9 @@ class FlyingComputer {
    */
   GeoPoint moving_at;
 
+  fixed climbing_since;
+  fixed climbing_altitude;
+
   fixed sinking_since;
 
   GeoPoint sinking_location;
@@ -80,6 +83,16 @@ public:
 protected:
   void CheckRelease(FlyingState &state, fixed time, const GeoPoint &location,
                     fixed altitude);
+
+  /**
+   * Check for monotonic climb.  This check is used for "flying"
+   * detection in a wave, when ground speed is low, no airspeed is
+   * available and no map was loaded.
+   *
+   * @return true if the aircraft has been climbing for more than 10
+   * seconds
+   */
+  bool CheckClimbing(fixed time, fixed altitude);
 
   void Check(FlyingState &state, fixed time, const GeoPoint &location);
 

@@ -34,6 +34,7 @@ FlyingComputer::Reset()
 
   time_on_ground = time_in_flight = 0;
   moving_since = fixed_minus_one;
+  climbing_since = fixed_minus_one;
   sinking_since = fixed_minus_one;
 }
 
@@ -165,6 +166,19 @@ CheckAltitudeAGL(const DerivedInfo &calculated)
   return calculated.altitude_agl_valid && calculated.altitude_agl >= fixed(300);
 }
 
+bool
+FlyingComputer::CheckClimbing(fixed time, fixed altitude)
+{
+  if (negative(climbing_since) || altitude <= climbing_altitude) {
+    climbing_since = time;
+    climbing_altitude = altitude;
+    return false;
+  } else {
+    climbing_altitude = altitude;
+    return time >= climbing_since + fixed_ten;
+  }
+}
+
 void
 FlyingComputer::Compute(fixed takeoff_speed,
                         const NMEAInfo &basic,
@@ -183,13 +197,15 @@ FlyingComputer::Compute(fixed takeoff_speed,
   if (!positive(dt))
     return;
 
+  const auto any_altitude = basic.GetAnyAltitude();
+
   if (CheckTakeOffSpeed(takeoff_speed, basic) ||
+      (any_altitude.first && CheckClimbing(basic.time, any_altitude.second)) ||
       CheckAltitudeAGL(calculated))
     Moving(flying, basic.time, basic.location);
   else
     Stationary(flying, basic.time, basic.location);
 
-  const auto any_altitude = basic.GetAnyAltitude();
   if (any_altitude.first)
     CheckRelease(flying, basic.time, basic.location, any_altitude.second);
   else
