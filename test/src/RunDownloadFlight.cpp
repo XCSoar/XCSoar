@@ -42,6 +42,12 @@ NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
   return false;
 }
 
+bool
+NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
+{
+  return false;
+}
+
 static void
 PrintFlightList(const RecordedFlightList &flight_list)
 {

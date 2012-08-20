@@ -64,6 +64,12 @@ NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
   return false;
 }
 
+bool
+NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
+{
+  return false;
+}
+
 static Waypoint
 MakeWaypoint(const TCHAR *name, int altitude,
              double longitude, double latitude)

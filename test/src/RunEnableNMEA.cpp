@@ -52,6 +52,12 @@ NMEAParser::ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
   return false;
 }
 
+bool
+NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
+{
+  return false;
+}
+
 int main(int argc, char **argv)
 {
   Args args(argc, argv, "DRIVER PORT BAUD");

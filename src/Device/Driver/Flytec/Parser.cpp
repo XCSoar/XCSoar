@@ -118,8 +118,9 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
   }
 
   //  Date(ddmmyy),   6 Digits (only in firmware version 3.32+)
-  if (has_date_field)
-    line.Skip();
+  if (has_date_field &&
+      NMEAParser::ReadDate(line, info.date_time_utc))
+    info.date_available = true;
 
   //  Time(hhmmss),   6 Digits
   line.Skip();
