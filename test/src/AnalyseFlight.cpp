@@ -32,6 +32,7 @@
 #include "JSON/GeoWriter.hpp"
 #include "FlightPhaseDetector.hpp"
 #include "FlightPhaseJSON.hpp"
+#include "ComputerSettings.hpp"
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;
@@ -88,7 +89,7 @@ Update(const MoreData &basic, const DerivedInfo &calculated,
 }
 
 static void
-ComputeCircling(DebugReplay &replay)
+ComputeCircling(DebugReplay &replay, const CirclingSettings &circling_settings)
 {
   circling_computer.TurnRate(replay.SetCalculated(),
                              replay.Basic(),
@@ -98,7 +99,7 @@ ComputeCircling(DebugReplay &replay)
                             replay.Basic(),
                             replay.LastBasic(),
                             replay.Calculated().flight,
-                            replay.GetComputerSettings().circling);
+                            circling_settings);
 }
 
 static void
@@ -119,10 +120,13 @@ Finish(const MoreData &basic, const DerivedInfo &calculated,
 static int
 Run(DebugReplay &replay, ContestManager &contest, Result &result)
 {
+  CirclingSettings circling_settings;
+  circling_settings.SetDefaults();
+
   bool released = false;
 
   for (int i = 1; replay.Next(); i++) {
-    ComputeCircling(replay);
+    ComputeCircling(replay, circling_settings);
 
     const MoreData &basic = replay.Basic();
 

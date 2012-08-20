@@ -715,13 +715,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
-	$(SRC)/ComputerSettings.cpp \
-	$(SRC)/TeamCodeSettings.cpp \
-	$(SRC)/Logger/Settings.cpp \
-	$(SRC)/Tracking/TrackingSettings.cpp \
-	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
-	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
@@ -752,8 +746,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/GlideSolvers/PolarCoefficients.cpp \
 	$(SRC)/Engine/GlideSolvers/GlideResult.cpp \
 	$(SRC)/Engine/Route/Config.cpp \
-	$(SRC)/Engine/Task/TaskBehaviour.cpp \
-	$(SRC)/Engine/Task/Ordered/OrderedTaskBehaviour.cpp \
 	$(SRC)/Engine/Task/Stats/TaskStats.cpp \
 	$(SRC)/Engine/Task/Stats/CommonStats.cpp \
 	$(SRC)/Engine/Task/Stats/ElementStat.cpp \

@@ -34,6 +34,7 @@ Copyright_License {
 #include "IGC/IGCExtensions.hpp"
 #include "IGC/IGCFix.hpp"
 #include "Units/System.hpp"
+#include "ComputerSettings.hpp"
 
 #include <memory>
 
@@ -43,7 +44,6 @@ static NullPort port;
 DebugReplay::DebugReplay(NLineReader *_reader)
   :reader(_reader), glide_polar(fixed_one)
 {
-  settings_computer.SetDefaults();
   raw_basic.Reset();
   calculated.Reset();
 
@@ -73,7 +73,10 @@ DebugReplay::Compute()
   computed_basic.Reset();
   (NMEAInfo &)computed_basic = raw_basic;
 
-  computer.Fill(computed_basic, settings_computer);
+  FeaturesSettings features;
+  features.nav_baro_altitude_enabled = true;
+  computer.Fill(computed_basic, AtmosphericPressure::Standard(), features);
+
   computer.Compute(computed_basic, last_basic, last_basic, calculated);
   flying_computer.Compute(glide_polar.GetVTakeoff(),
                           computed_basic, last_basic, calculated,

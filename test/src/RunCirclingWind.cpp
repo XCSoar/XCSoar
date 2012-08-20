@@ -26,6 +26,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "DebugReplay.hpp"
 #include "Formatter/TimeFormatter.hpp"
+#include "ComputerSettings.hpp"
 
 #include <stdio.h>
 #include <memory>
@@ -41,6 +42,9 @@ int main(int argc, char **argv)
 
   printf("# time quality wind_bearing (deg) wind_speed (m/s)\n");
 
+  CirclingSettings circling_settings;
+  circling_settings.SetDefaults();
+
   CirclingComputer circling_computer;
   CirclingWind circling_wind;
 
@@ -53,7 +57,7 @@ int main(int argc, char **argv)
     circling_computer.Turning(replay->SetCalculated(),
                               replay->Basic(), replay->LastBasic(),
                               replay->Calculated().flight,
-                              replay->GetComputerSettings().circling);
+                              circling_settings);
 
     if (replay->Calculated().circling != last_circling)
       circling_wind.NewFlightMode(replay->Calculated());

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DEBUG_REPLAY_HPP
 #define XCSOAR_DEBUG_REPLAY_HPP
 
-#include "ComputerSettings.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Computer/BasicComputer.hpp"
@@ -44,8 +43,6 @@ protected:
 
   BasicComputer computer;
   FlyingComputer flying_computer;
-
-  ComputerSettings settings_computer;
 
   /**
    * Raw values parsed from the NMEA/IGC file.
@@ -75,10 +72,6 @@ public:
   long Tell() const;
 
   virtual bool Next() = 0;
-
-  const ComputerSettings &GetComputerSettings() const {
-    return settings_computer;
-  }
 
   const MoreData &Basic() const {
     return computed_basic;
