@@ -30,6 +30,7 @@ struct NMEAInfo;
 struct BrokenDateTime;
 class NMEAInputLine;
 struct GeoPoint;
+struct BrokenDate;
 
 class NMEAParser
 {
@@ -80,6 +81,8 @@ public:
   static bool NMEAChecksum(const char *string);
 
   static bool ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r);
+
+  static bool ReadDate(NMEAInputLine &line, BrokenDate &date);
 
 private:
 

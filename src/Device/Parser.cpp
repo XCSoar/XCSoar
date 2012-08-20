@@ -405,8 +405,8 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-static bool
-ReadDate(NMEAInputLine &line, BrokenDate &date)
+bool
+NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 {
   char buffer[9];
   line.Read(buffer, 9);
