@@ -44,7 +44,7 @@ DebugReplay::DebugReplay(NLineReader *_reader)
   :reader(_reader), glide_polar(fixed_one)
 {
   settings_computer.SetDefaults();
-  basic.Reset();
+  raw_basic.Reset();
   calculated.Reset();
 
   flying_computer.Reset();
@@ -70,9 +70,13 @@ DebugReplay::Tell() const
 void
 DebugReplay::Compute()
 {
-  computer.Fill(basic, settings_computer);
-  computer.Compute(basic, last_basic, last_basic, calculated);
-  flying_computer.Compute(glide_polar.GetVTakeoff(), basic, last_basic, calculated,
+  computed_basic.Reset();
+  (NMEAInfo &)computed_basic = raw_basic;
+
+  computer.Fill(computed_basic, settings_computer);
+  computer.Compute(computed_basic, last_basic, last_basic, calculated);
+  flying_computer.Compute(glide_polar.GetVTakeoff(),
+                          computed_basic, last_basic, calculated,
                           calculated.flight);
 }
 
@@ -99,16 +103,16 @@ DebugReplayNMEA::DebugReplayNMEA(NLineReader *_reader,
 bool
 DebugReplayNMEA::Next()
 {
-  last_basic = basic;
+  last_basic = computed_basic;
 
   const char *line;
   while ((line = reader->read()) != NULL) {
-    if (basic.time_available)
-      basic.clock = basic.time;
-    if (!device || !device->ParseNMEA(line, basic))
-      parser.ParseLine(line, basic);
+    if (raw_basic.time_available)
+      raw_basic.clock = raw_basic.time;
+    if (!device || !device->ParseNMEA(line, raw_basic))
+      parser.ParseLine(line, raw_basic);
 
-    if (basic.location_available != last_basic.location_available) {
+    if (raw_basic.location_available != last_basic.location_available) {
       Compute();
       return true;
     }
@@ -137,7 +141,7 @@ protected:
 bool
 DebugReplayIGC::Next()
 {
-  last_basic = basic;
+  last_basic = computed_basic;
 
   const char *line;
   while ((line = reader->read()) != NULL) {
@@ -153,8 +157,8 @@ DebugReplayIGC::Next()
       BrokenDate date;
       if (memcmp(line, "HFDTE", 5) == 0 &&
           IGCParseDateRecord(line, date)) {
-        (BrokenDate &)basic.date_time_utc = date;
-        basic.date_available = true;
+        (BrokenDate &)raw_basic.date_time_utc = date;
+        raw_basic.date_available = true;
       }
     } else if (line[0] == 'I') {
       IGCParseExtensions(line, extensions);
@@ -167,11 +171,13 @@ DebugReplayIGC::Next()
 void
 DebugReplayIGC::CopyFromFix(const IGCFix &fix)
 {
+  NMEAInfo &basic = raw_basic;
+
   if (basic.time_available && basic.date_time_utc.hour >= 23 &&
       fix.time.hour == 0) {
     /* midnight roll-over */
     ++day;
-    basic.date_time_utc.IncrementDay();
+    raw_basic.date_time_utc.IncrementDay();
   }
 
   basic.clock = basic.time =

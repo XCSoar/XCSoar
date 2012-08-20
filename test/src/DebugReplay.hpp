@@ -46,7 +46,22 @@ protected:
   FlyingComputer flying_computer;
 
   ComputerSettings settings_computer;
-  MoreData basic, last_basic;
+
+  /**
+   * Raw values parsed from the NMEA/IGC file.
+   */
+  NMEAInfo raw_basic;
+
+  /**
+   * A copy of #raw_basic with #BasicComputer changes.
+   */
+  MoreData computed_basic;
+
+  /**
+   * The #computed_basic value from the previous iteration.
+   */
+  MoreData last_basic;
+
   DerivedInfo calculated;
 
 public:
@@ -66,7 +81,7 @@ public:
   }
 
   const MoreData &Basic() const {
-    return basic;
+    return computed_basic;
   }
 
   const MoreData &LastBasic() const {
