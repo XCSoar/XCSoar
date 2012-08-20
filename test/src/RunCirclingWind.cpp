@@ -52,10 +52,10 @@ int main(int argc, char **argv)
     const bool last_circling = replay->Calculated().circling;
 
     circling_computer.TurnRate(replay->SetCalculated(),
-                               replay->Basic(), replay->LastBasic(),
+                               replay->Basic(),
                                replay->Calculated().flight);
     circling_computer.Turning(replay->SetCalculated(),
-                              replay->Basic(), replay->LastBasic(),
+                              replay->Basic(),
                               replay->Calculated().flight,
                               circling_settings);
 

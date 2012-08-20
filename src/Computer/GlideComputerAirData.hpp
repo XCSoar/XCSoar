@@ -155,7 +155,7 @@ private:
    * Calculates the turn rate and the derived features.
    * Determines the current flight mode (cruise/circling).
    */
-  void Turning(const MoreData &basic, const MoreData &last_basic,
+  void Turning(const MoreData &basic,
                DerivedInfo &calculated, const ComputerSettings &settings);
   void ProcessSun(const NMEAInfo &basic, DerivedInfo &calculated,
                   const ComputerSettings &settings);

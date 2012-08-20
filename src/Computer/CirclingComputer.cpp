@@ -34,6 +34,10 @@ static const fixed CLIMB_CRUISE_SWITCH(10);
 void
 CirclingComputer::Reset()
 {
+  turn_rate_delta_time.Reset();
+  turning_delta_time.Reset();
+  percent_delta_time.Reset();
+
   ResetStats();
 }
 
@@ -45,28 +49,34 @@ CirclingComputer::ResetStats()
 
 void
 CirclingComputer::TurnRate(CirclingInfo &circling_info,
-                           const NMEAInfo &basic, const NMEAInfo &last_basic,
+                           const NMEAInfo &basic,
                            const FlyingState &flight)
 {
-  if (!basic.time_available || !last_basic.time_available ||
-      !flight.flying) {
+  if (!basic.time_available || !flight.flying) {
     circling_info.turn_rate = fixed_zero;
     circling_info.turn_rate_heading = fixed_zero;
     circling_info.turn_rate_smoothed = fixed_zero;
     return;
   }
 
-  if (!basic.HasTimeAdvancedSince(last_basic))
+  const fixed dt = turn_rate_delta_time.Update(basic.time,
+                                               fixed_third, fixed_ten);
+  if (negative(dt)) {
+    circling_info.turn_rate = fixed_zero;
+    circling_info.turn_rate_heading = fixed_zero;
+    circling_info.turn_rate_smoothed = fixed_zero;
+  }
+
+  if (!positive(dt))
     return;
 
-  // Calculate time passed since last calculation
-  const fixed dt = basic.time - last_basic.time;
-  assert(positive(dt));
-
   circling_info.turn_rate =
-    (basic.track - last_basic.track).AsDelta().Degrees() / dt;
+    (basic.track - last_track).AsDelta().Degrees() / dt;
   circling_info.turn_rate_heading =
-    (basic.attitude.heading - last_basic.attitude.heading).AsDelta().Degrees() / dt;
+    (basic.attitude.heading - last_heading).AsDelta().Degrees() / dt;
+
+  last_track = basic.track;
+  last_heading = basic.attitude.heading;
 
   // JMW limit rate to 50 deg per second otherwise a big spike
   // will cause spurious lock on circling for a long time
@@ -80,12 +90,17 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
 
 void
 CirclingComputer::Turning(CirclingInfo &circling_info,
-                          const MoreData &basic, const MoreData &last_basic,
+                          const MoreData &basic,
                           const FlyingState &flight,
                           const CirclingSettings &settings)
 {
   // You can't be circling unless you're flying
-  if (!flight.flying || !basic.HasTimeAdvancedSince(last_basic))
+  if (!basic.time_available || !flight.flying)
+    return;
+
+  const fixed dt = turning_delta_time.Update(basic.time,
+                                             fixed_zero, fixed_zero);
+  if (!positive(dt))
     return;
 
   circling_info.turning =
@@ -196,16 +211,18 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
 
 void
 CirclingComputer::PercentCircling(const MoreData &basic,
-                                  const MoreData &last_basic,
                                   CirclingInfo &circling_info)
 {
-  if (!basic.time_available || !last_basic.time_available)
+  if (!basic.time_available)
     return;
 
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
 
-  fixed dt = basic.time - last_basic.time;
+  const fixed dt = percent_delta_time.Update(basic.time,
+                                             fixed_zero, fixed_zero);
+  if (!positive(dt))
+    return;
 
   // if (Circling)
   if (circling_info.circling && circling_info.turning) {

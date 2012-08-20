@@ -97,9 +97,9 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
 
   auto_qnh.Process(basic, calculated, settings, waypoints);
 
-  circling_computer.TurnRate(calculated, basic, last_basic,
+  circling_computer.TurnRate(calculated, basic,
                              calculated.flight);
-  Turning(basic, last_basic, calculated, settings);
+  Turning(basic, calculated, settings);
 
   wind_computer.Compute(settings.wind, settings.polar.glide_polar_task,
                         basic, calculated);
@@ -357,14 +357,13 @@ GlideComputerAirData::OnSwitchClimbMode(const ComputerSettings &settings)
 
 void
 GlideComputerAirData::Turning(const MoreData &basic,
-                              const MoreData &last_basic,
                               DerivedInfo &calculated,
                               const ComputerSettings &settings)
 {
   const bool last_circling = calculated.circling;
 
   circling_computer.Turning(calculated,
-                            basic, last_basic,
+                            basic,
                             calculated.flight,
                             settings.circling);
 
@@ -372,7 +371,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
     OnSwitchClimbMode(settings);
 
   // Calculate circling time percentage and call thermal band calculation
-  circling_computer.PercentCircling(basic, last_basic, calculated);
+  circling_computer.PercentCircling(basic, calculated);
 
   thermal_band_computer.Compute(basic, calculated,
                                 calculated.thermal_band,
