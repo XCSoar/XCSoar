@@ -180,7 +180,8 @@ protected:
 };
 
 static void
-LoadFiles(ComputerSettings &settings)
+LoadFiles(PlacesOfInterestSettings &poi_settings,
+          TeamCodeSettings &team_code_settings)
 {
   NullOperationEnvironment operation;
 
@@ -190,7 +191,8 @@ LoadFiles(ComputerSettings &settings)
   terrain = RasterTerrain::OpenTerrain(NULL, operation);
 
   WaypointGlue::LoadWaypoints(way_points, terrain, operation);
-  WaypointGlue::SetHome(way_points, terrain, settings, NULL, false);
+  WaypointGlue::SetHome(way_points, terrain, poi_settings, team_code_settings,
+                        NULL, false);
 
   std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::AirspaceFile,
                                                              ConvertLineReader::AUTO));
@@ -268,7 +270,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   settings_map.SetDefaults();
   Profile::Load(settings_map);
 
-  LoadFiles(settings_computer);
+  LoadFiles(settings_computer.poi, settings_computer.team_code);
 
   ScreenGlobalInit screen_init;
 

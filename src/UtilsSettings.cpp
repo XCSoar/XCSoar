@@ -154,9 +154,11 @@ SettingsLeave(const UISettings &old_ui_settings)
   if (WaypointFileChanged || TerrainFileChanged) {
     // re-set home
     WaypointGlue::SetHome(way_points, terrain,
-                          XCSoarInterface::SetComputerSettings(),
+                          CommonInterface::SetComputerSettings().poi,
+                          CommonInterface::SetComputerSettings().team_code,
                           device_blackboard, WaypointFileChanged);
-    WaypointGlue::SaveHome(CommonInterface::GetComputerSettings());
+    WaypointGlue::SaveHome(CommonInterface::GetComputerSettings().poi,
+                           CommonInterface::GetComputerSettings().team_code);
   }
 
   if (TopographyFileChanged) {

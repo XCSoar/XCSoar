@@ -387,7 +387,9 @@ XCSoarInterface::Startup()
   WaypointDetails::ReadFileFromProfile(way_points, operation);
 
   // Set the home waypoint
-  WaypointGlue::SetHome(way_points, terrain, SetComputerSettings(),
+  WaypointGlue::SetHome(way_points, terrain,
+                        SetComputerSettings().poi,
+                        SetComputerSettings().team_code,
                         device_blackboard, false);
 
   // ReSynchronise the blackboards here since SetHome touches them

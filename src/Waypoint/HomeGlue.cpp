@@ -82,24 +82,25 @@ WaypointGlue::FindFlaggedHome(Waypoints &waypoints,
 
 void
 WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
-                      ComputerSettings &settings,
+                      PlacesOfInterestSettings &poi_settings,
+                      TeamCodeSettings &team_code_settings,
                       DeviceBlackboard *device_blackboard,
                       const bool reset)
 {
   LogStartUp(_T("SetHome"));
 
   if (reset)
-    settings.poi.home_waypoint = -1;
+    poi_settings.home_waypoint = -1;
 
   // check invalid home waypoint or forced reset due to file change
-  const Waypoint *wp = FindHomeId(way_points, settings.poi);
+  const Waypoint *wp = FindHomeId(way_points, poi_settings);
   if (wp == NULL) {
     /* fall back to HomeLocation, try to find it in the waypoint
        database */
-    wp = FindHomeLocation(way_points, settings.poi);
+    wp = FindHomeLocation(way_points, poi_settings);
     if (wp == NULL)
       // search for home in waypoint list, if we don't have a home
-      wp = FindFlaggedHome(way_points, settings.poi);
+      wp = FindFlaggedHome(way_points, poi_settings);
   }
 
   if (wp != NULL)
@@ -107,9 +108,9 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 
   // check invalid task ref waypoint or forced reset due to file change
   if (reset || way_points.IsEmpty() ||
-      !way_points.LookupId(settings.team_code.team_code_reference_waypoint))
+      !way_points.LookupId(team_code_settings.team_code_reference_waypoint))
     // set team code reference waypoint if we don't have one
-    settings.team_code.team_code_reference_waypoint = settings.poi.home_waypoint;
+    team_code_settings.team_code_reference_waypoint = poi_settings.home_waypoint;
 
   if (device_blackboard != NULL) {
     if (wp != NULL) {
@@ -127,12 +128,13 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 void
-WaypointGlue::SaveHome(const ComputerSettings &settings)
+WaypointGlue::SaveHome(const PlacesOfInterestSettings &poi_settings,
+                       const TeamCodeSettings &team_code_settings)
 {
-  Profile::Set(ProfileKeys::HomeWaypoint, settings.poi.home_waypoint);
-  if (settings.poi.home_location_available)
-    Profile::SetGeoPoint(ProfileKeys::HomeLocation, settings.poi.home_location);
+  Profile::Set(ProfileKeys::HomeWaypoint, poi_settings.home_waypoint);
+  if (poi_settings.home_location_available)
+    Profile::SetGeoPoint(ProfileKeys::HomeLocation, poi_settings.home_location);
 
   Profile::Set(ProfileKeys::TeamcodeRefWaypoint,
-               settings.team_code.team_code_reference_waypoint);
+               team_code_settings.team_code_reference_waypoint);
 }

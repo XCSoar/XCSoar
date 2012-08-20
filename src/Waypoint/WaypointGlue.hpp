@@ -30,8 +30,8 @@ struct Waypoint;
 class Waypoints;
 class RasterTerrain;
 class OperationEnvironment;
-struct ComputerSettings;
 struct PlacesOfInterestSettings;
+struct TeamCodeSettings;
 
 class WaypointReaderBase;
 class DeviceBlackboard;
@@ -85,7 +85,8 @@ namespace WaypointGlue {
    * it resets all special waypoints indices
    */
   void SetHome(Waypoints &way_points, const RasterTerrain *terrain,
-               ComputerSettings &settings,
+               PlacesOfInterestSettings &poi_settings,
+               TeamCodeSettings &team_code_settings,
                DeviceBlackboard *device_blackboard,
                const bool reset);
 
@@ -93,7 +94,8 @@ namespace WaypointGlue {
    * Save the home waypoint and the teamcode reference location to the
    * profile.
    */
-  void SaveHome(const ComputerSettings &settings);
+  void SaveHome(const PlacesOfInterestSettings &poi_settings,
+                const TeamCodeSettings &team_code_settings);
 
   /**
    * Reads the waypoints out of the two waypoint files and appends them to the
