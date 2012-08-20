@@ -235,3 +235,12 @@ FlyingComputer::Compute(fixed takeoff_speed,
   else
     Stationary(flying, state.time, state.location);
 }
+
+void
+FlyingComputer::Finish(FlyingState &flying, fixed time)
+{
+  if (flying.flying && time_on_ground >= 5)
+    time_in_flight = 0;
+
+  Check(flying, time);
+}

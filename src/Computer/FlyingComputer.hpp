@@ -83,6 +83,13 @@ public:
                const AircraftState &state,
                FlyingState &flying);
 
+  /**
+   * Finish the landing detection.  If landing has not been detected,
+   * but the aircraft has not been moving, this force-detects the
+   * landing now.  Call at the end of a replay.
+   */
+  void Finish(FlyingState &flying, fixed time);
+
 protected:
   void CheckRelease(FlyingState &state, fixed time, const GeoPoint &location,
                     fixed altitude);

@@ -145,6 +145,7 @@ Run(DebugReplay &replay, Result &result)
     sprint_trace.push_back(point);
   }
 
+  Update(replay.Basic(), replay.Calculated(), result);
   Finish(replay.Basic(), replay.Calculated(), result);
   flight_phase_detector.Finish();
 }

@@ -121,6 +121,9 @@ DebugReplayNMEA::Next()
     }
   }
 
+  if (computed_basic.time_available)
+    flying_computer.Finish(calculated.flight, computed_basic.time);
+
   return false;
 }
 
@@ -167,6 +170,9 @@ DebugReplayIGC::Next()
       IGCParseExtensions(line, extensions);
     }
   }
+
+  if (computed_basic.time_available)
+    flying_computer.Finish(calculated.flight, computed_basic.time);
 
   return false;
 }
