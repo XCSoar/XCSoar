@@ -146,6 +146,25 @@ FlyingComputer::Stationary(FlyingState &state, fixed time,
   Check(state, time, location);
 }
 
+gcc_pure
+static bool
+CheckTakeOffSpeed(fixed takeoff_speed, const NMEAInfo &basic)
+{
+  const fixed speed = basic.airspeed_available
+    ? std::max(basic.true_airspeed, basic.ground_speed)
+    : basic.ground_speed;
+
+  // Speed too high for being on the ground
+  return speed >= takeoff_speed;
+}
+
+gcc_pure
+static bool
+CheckAltitudeAGL(const DerivedInfo &calculated)
+{
+  return calculated.altitude_agl_valid && calculated.altitude_agl >= fixed(300);
+}
+
 void
 FlyingComputer::Compute(fixed takeoff_speed,
                         const NMEAInfo &basic,
@@ -164,13 +183,8 @@ FlyingComputer::Compute(fixed takeoff_speed,
   if (!positive(dt))
     return;
 
-  // Speed too high for being on the ground
-  const fixed speed = basic.airspeed_available
-    ? std::max(basic.true_airspeed, basic.ground_speed)
-    : basic.ground_speed;
-
-  if (speed > takeoff_speed ||
-      (calculated.altitude_agl_valid && calculated.altitude_agl > fixed(300)))
+  if (CheckTakeOffSpeed(takeoff_speed, basic) ||
+      CheckAltitudeAGL(calculated))
     Moving(flying, basic.time, basic.location);
   else
     Stationary(flying, basic.time, basic.location);
