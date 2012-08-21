@@ -926,7 +926,7 @@ OrderedTask::CalcGradient(const AircraftState &state) const
 
   // Iterate through remaining turnpoints
   fixed distance = fixed_zero;
-  for (const OrderedTaskPoint *tp : optional_start_points)
+  for (const OrderedTaskPoint *tp : task_points)
     // Sum up the leg distances
     distance += tp->GetVectorRemaining(state.location).distance;
 
