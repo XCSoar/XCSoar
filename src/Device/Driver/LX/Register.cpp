@@ -28,7 +28,7 @@ Copyright_License {
 static Device *
 LXCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  return new LXDevice(com_port, config.bulk_baud_rate);
+  return new LXDevice(com_port, config.baud_rate, config.bulk_baud_rate);
 }
 
 const struct DeviceRegister lxDevice = {
