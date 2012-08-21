@@ -23,10 +23,12 @@
 #define TASK_MACCREADY_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/StaticArray.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 
 #include <vector>
+#include <array>
 
 struct AircraftState;
 struct GlideSettings;
@@ -54,16 +56,18 @@ class OrderedTaskPoint;
  */
 class TaskMacCready : private NonCopyable
 {
+  static constexpr unsigned MAX_SIZE = 16;
+
 protected:
    /**
     * The TaskPoints in the task.
     */
-  const std::vector<TaskPoint*> points;
+  StaticArray<TaskPoint *, MAX_SIZE> points;
 
   /**
    * Glide solutions for each leg.
    */
-  std::vector<GlideResult> leg_solutions;
+  std::array<GlideResult, MAX_SIZE> leg_solutions;
 
   /**
    * Active task point (local copy for speed).
