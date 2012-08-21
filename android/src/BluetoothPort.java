@@ -53,7 +53,7 @@ class BluetoothPort extends AbstractAndroidPort {
   }
 
   public int getBaudRate() {
-    return 19200;
+    return 0;
   }
 
   public boolean setBaudRate(int baudRate) {
