@@ -28,12 +28,17 @@ bool
 LX::CommandMode(Port &port, OperationEnvironment &env)
 {
   /* switch to command mode, first attempt */
-  SendSYN(port);
+
+  if (!SendSYN(port) || !port.FullFlush(env, 10, 20))
+    return false;
 
   /* the port is clean now; try the SYN/ACK procedure up to three
      times */
-  return port.FullFlush(env, 10, 20) &&
-    (Connect(port, env) || Connect(port, env) || Connect(port, env));
+  for (unsigned i = 0; i < 100 && !env.IsCancelled(); ++i)
+    if (Connect(port, env))
+      return true;
+
+  return false;
 }
 
 void
