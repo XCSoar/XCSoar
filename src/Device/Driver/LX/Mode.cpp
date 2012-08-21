@@ -143,7 +143,7 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
     old_baud_rate = port.GetBaudrate();
     if (old_baud_rate == bulk_baud_rate)
       old_baud_rate = 0;
-    else {
+    else if (old_baud_rate != 0) {
       /* before changing the baud rate, we need an additional delay,
          because Port::Drain() does not seem to work reliably on Linux
          with a USB-RS232 converter; with a V7+Nano, 100ms is more
