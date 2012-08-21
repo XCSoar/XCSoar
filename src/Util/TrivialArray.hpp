@@ -59,6 +59,19 @@ public:
    */
   TrivialArray() = default;
 
+  TrivialArray(size_type _size, const T &value):the_size(_size) {
+    std::fill(begin(), end(), value);
+  }
+
+  /**
+   * Initialise the array with values from the iterator range.
+   */
+  template<typename I>
+  TrivialArray(I _begin, I _end):the_size(0) {
+    for (I i = _begin; i != _end; ++i)
+      push_back(*i);
+  }
+
   constexpr
   size_type capacity() const { return max; }
 
