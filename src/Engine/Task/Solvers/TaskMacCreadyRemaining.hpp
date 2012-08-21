@@ -24,62 +24,60 @@
 
 #include "TaskMacCready.hpp"
 
-/** 
+/**
  * Specialisation of TaskMacCready for task remaining
  */
-class TaskMacCreadyRemaining: 
-  public TaskMacCready
-{
+class TaskMacCreadyRemaining : public TaskMacCready {
 public:
-/** 
- * Constructor for ordered task points
- * 
- * @param _tps Vector of ordered task points comprising the task
- * @param _activeTaskPoint Current active task point in sequence
- * @param _gp Glide polar to copy for calculations
- */
+  /**
+   * Constructor for ordered task points
+   *
+   * @param _tps Vector of ordered task points comprising the task
+   * @param _activeTaskPoint Current active task point in sequence
+   * @param _gp Glide polar to copy for calculations
+   */
   TaskMacCreadyRemaining(const std::vector<OrderedTaskPoint*> &_tps,
                          const unsigned _activeTaskPoint,
                          const GlideSettings &settings, const GlidePolar &_gp);
 
-/** 
- * Constructor for single task points (non-ordered ones)
- * 
- * @param tp Task point comprising the task
- * @param gp Glide polar to copy for calculations
- */
+  /**
+   * Constructor for single task points (non-ordered ones)
+   *
+   * @param tp Task point comprising the task
+   * @param gp Glide polar to copy for calculations
+   */
   TaskMacCreadyRemaining(TaskPoint* tp,
                          const GlideSettings &settings, const GlidePolar &gp);
 
-/** 
- * Set ranges of all remaining task points
- * 
- * @param tp Range parameter [0,1]
- * @param force_current If true, will force active AAT point (even if inside) to move
- */
+  /**
+   * Set ranges of all remaining task points
+   *
+   * @param tp Range parameter [0,1]
+   * @param force_current If true, will force active AAT point (even if inside) to move
+   */
   void set_range(const fixed tp, const bool force_current);
 
-/** 
- * Determine if any of the remaining TaskPoints have an adjustable target
- * 
- * @return True if adjustable targets
- */
+  /**
+   * Determine if any of the remaining TaskPoints have an adjustable target
+   *
+   * @return True if adjustable targets
+   */
   bool has_targets() const;
 
-/**
- * Save targets in case optimisation fails
- */
-    void target_save();
-/**
- * Restore target from copy
- */
-    void target_restore();
+  /**
+   * Save targets in case optimisation fails
+   */
+  void target_save();
+  /**
+   * Restore target from copy
+   */
+  void target_restore();
 
 private:
 
   virtual GlideResult tp_solution(const unsigned i,
-                                   const AircraftState &aircraft, 
-                                   fixed minH) const;
+                                  const AircraftState &aircraft,
+                                  fixed minH) const;
   virtual fixed get_min_height(const AircraftState &aircraft) const {
     return fixed_zero;
   }

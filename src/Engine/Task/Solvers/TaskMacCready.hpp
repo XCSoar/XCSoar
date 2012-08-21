@@ -47,13 +47,12 @@ class OrderedTaskPoint;
  * true minimum height.
  *
  * This system also uses a local copy of the glide polar so it can be used
- * for algorithms that adjust glide polar parameters.  
+ * for algorithms that adjust glide polar parameters.
  *
  * The class is not intended to be used directly, but to be specialised.
  *
  */
-class TaskMacCready:
-  private NonCopyable 
+class TaskMacCready : private NonCopyable
 {
 protected:
   const std::vector<TaskPoint*> points; /**< The TaskPoints in the task */
@@ -65,138 +64,138 @@ protected:
   GlidePolar glide_polar; /**< Glide polar used for computations */
 
 public:
-/** 
- * Constructor for ordered task points
- * 
- * @param _tps Vector of ordered task points comprising the task
- * @param _active_index Current active task point in sequence
- * @param gp Glide polar to copy for calculations
- */
+  /**
+   * Constructor for ordered task points
+   *
+   * @param _tps Vector of ordered task points comprising the task
+   * @param _active_index Current active task point in sequence
+   * @param gp Glide polar to copy for calculations
+   */
   TaskMacCready(const std::vector<OrderedTaskPoint*> &_tps,
                 const unsigned _active_index,
                 const GlideSettings &settings, const GlidePolar &gp);
 
-/** 
- * Constructor for single task points (non-ordered ones)
- * 
- * @param tp Task point comprising the task
- * @param gp Glide polar to copy for calculations
- */
+  /**
+   * Constructor for single task points (non-ordered ones)
+   *
+   * @param tp Task point comprising the task
+   * @param gp Glide polar to copy for calculations
+   */
   TaskMacCready(TaskPoint* tp,
                 const GlideSettings &settings, const GlidePolar &gp);
 
-/**
- * Constructor for sequence of task points, starting from first point
- *
- * @param _tps Vector of ordered task points comprising the task
- * @param gp Glide polar to copy for calculations
- */
+  /**
+   * Constructor for sequence of task points, starting from first point
+   *
+   * @param _tps Vector of ordered task points comprising the task
+   * @param gp Glide polar to copy for calculations
+   */
   TaskMacCready(const std::vector<TaskPoint*> &_tps,
                 const GlideSettings &settings, const GlidePolar &gp);
 
-/** 
- * Calculate glide solution
- * 
- * @param aircraft Aircraft state
- * 
- * @return Glide result for entire task
- */
+  /**
+   * Calculate glide solution
+   *
+   * @param aircraft Aircraft state
+   *
+   * @return Glide result for entire task
+   */
   GlideResult glide_solution(const AircraftState &aircraft);
 
-/** 
- * Calculate glide solution for externally specified aircraft sink rate
- * 
- * @param aircraft Aircraft state
- * @param S Sink rate (m/s, positive down)
- * 
- * @return Glide result for entire task with virtual sink rate
- */
+  /**
+   * Calculate glide solution for externally specified aircraft sink rate
+   *
+   * @param aircraft Aircraft state
+   * @param S Sink rate (m/s, positive down)
+   *
+   * @return Glide result for entire task with virtual sink rate
+   */
   GlideResult glide_sink(const AircraftState &aircraft,
                          const fixed S);
 
-/** 
- * Adjust MacCready value of internal glide polar
- * 
- * @param mc MacCready value (m/s)
- */
+  /**
+   * Adjust MacCready value of internal glide polar
+   *
+   * @param mc MacCready value (m/s)
+   */
   void set_mc(fixed mc) {
     glide_polar.SetMC(mc);
   };
 
-/** 
- * Adjust cruise efficiency of internal glide polar
- * 
- * @param ce Cruise efficiency
- */
+  /**
+   * Adjust cruise efficiency of internal glide polar
+   *
+   * @param ce Cruise efficiency
+   */
   void set_cruise_efficiency(fixed ce) {
     glide_polar.SetCruiseEfficiency(ce);
   };
 
-/** 
- * Return glide solution for current leg.
- * This method is provided since glide_solution() and
- * glide_sink() both return the solutions for the entire task.
- * 
- * @return Glide solution of current leg
- */
+  /**
+   * Return glide solution for current leg.
+   * This method is provided since glide_solution() and
+   * glide_sink() both return the solutions for the entire task.
+   *
+   * @return Glide solution of current leg
+   */
   gcc_pure
-  const GlideResult& get_active_solution() const {
+  const GlideResult &get_active_solution() const {
     return leg_solutions[active_index];
   }
 
 protected:
 
-/** 
- * Calculate glide solution for specified index, given
- * aircraft state and virtual sink rate.
- * 
- * @param index Index of task point
- * @param state Aircraft state at origin
- * @param S Sink rate (m/s, positive down)
- * 
- * @return Glide result for segment
- */
+  /**
+   * Calculate glide solution for specified index, given
+   * aircraft state and virtual sink rate.
+   *
+   * @param index Index of task point
+   * @param state Aircraft state at origin
+   * @param S Sink rate (m/s, positive down)
+   *
+   * @return Glide result for segment
+   */
   GlideResult tp_sink(const unsigned index,
-                       const AircraftState &state, 
-                       const fixed S) const;
+                      const AircraftState &state,
+                      const fixed S) const;
 
 private:
 
-/** 
- * Pure virtual method to retrieve the absolute minimum height of
- * aircraft for entire task.
- * This is used to provide alternate methods for different perspectives
- * on the task, e.g. planned/remaining/travelled
- * 
- * @param state Aircraft state
- * 
- * @return Min height (m) of entire task
- */
+  /**
+   * Pure virtual method to retrieve the absolute minimum height of
+   * aircraft for entire task.
+   * This is used to provide alternate methods for different perspectives
+   * on the task, e.g. planned/remaining/travelled
+   *
+   * @param state Aircraft state
+   *
+   * @return Min height (m) of entire task
+   */
   virtual fixed get_min_height(const AircraftState &state) const = 0;
 
-/** 
- * Pure virtual method to calculate glide solution for specified index, given
- * aircraft state and height constraint.
- * This is used to provide alternate methods for different perspectives
- * on the task, e.g. planned/remaining/travelled
- * 
- * @param index Index of task point
- * @param state Aircraft state at origin
- * @param minH Minimum height at destination
- * 
- * @return Glide result for segment
- */
+  /**
+   * Pure virtual method to calculate glide solution for specified index, given
+   * aircraft state and height constraint.
+   * This is used to provide alternate methods for different perspectives
+   * on the task, e.g. planned/remaining/travelled
+   *
+   * @param index Index of task point
+   * @param state Aircraft state at origin
+   * @param minH Minimum height at destination
+   *
+   * @return Glide result for segment
+   */
   virtual GlideResult tp_solution(const unsigned index,
-                                  const AircraftState& state, 
+                                  const AircraftState &state,
                                   fixed minH) const = 0;
 
-/** 
- * Pure virtual method to obtain aircraft state at start of task.
- * This is used to provide alternate methods for different perspectives
- * on the task, e.g. planned/remaining/travelled
- * 
- * @param state Actual aircraft state
- * 
+  /**
+   * Pure virtual method to obtain aircraft state at start of task.
+   * This is used to provide alternate methods for different perspectives
+   * on the task, e.g. planned/remaining/travelled
+   *
+   * @param state Actual aircraft state
+   *
  * @return Aircraft state at start of task
  */
   virtual const AircraftState &
