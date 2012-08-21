@@ -200,7 +200,7 @@ EWDevice::Declare(const struct Declaration &declaration,
   unsigned old_baud_rate = port.GetBaudrate();
   if (old_baud_rate == 9600)
     old_baud_rate = 0;
-  else if (!port.SetBaudrate(9600))
+  else if (old_baud_rate != 0 && !port.SetBaudrate(9600))
     return false;
 
   bool success = DeclareInner(declaration, env);

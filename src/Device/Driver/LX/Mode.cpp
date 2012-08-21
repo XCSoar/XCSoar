@@ -64,6 +64,10 @@ LXDevice::EnableNMEA(OperationEnvironment &env)
     busy = false;
   }
 
+  if (is_colibri)
+    /* avoid confusing a Colibri with new protocol commands */
+    return true;
+
   /* just in case the LX1600 is still in pass-through mode: */
   V7::ModeVSeven(port, env);
   if (!is_v7)
@@ -102,6 +106,12 @@ LXDevice::EnablePassThrough(OperationEnvironment &env)
 {
   if (mode == Mode::PASS_THROUGH)
     return true;
+
+  if (is_colibri) {
+    /* avoid confusing a Colibri with new protocol commands */
+    mode = Mode::PASS_THROUGH;
+    return true;
+  }
 
   bool success = is_v7
     ? V7::ModeDirect(port, env)
@@ -143,7 +153,7 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
     old_baud_rate = port.GetBaudrate();
     if (old_baud_rate == bulk_baud_rate)
       old_baud_rate = 0;
-    else {
+    else if (old_baud_rate != 0) {
       /* before changing the baud rate, we need an additional delay,
          because Port::Drain() does not seem to work reliably on Linux
          with a USB-RS232 converter; with a V7+Nano, 100ms is more

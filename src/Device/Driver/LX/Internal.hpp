@@ -45,6 +45,15 @@ class LXDevice: public AbstractDevice
   unsigned bulk_baud_rate;
 
   /**
+   * Is this ia Colibri or LX20 or a similar "old" logger?  This is
+   * initialised to true if the NMEA baud rate is configured to 4800,
+   * which disables the advanced V7/Nano protocol, to avoid confusing
+   * the Colibri.  It is cleared as soon as a "modern" LX product is
+   * detected (passively).
+   */
+  bool is_colibri;
+
+  /**
    * Was a LXNAV V7 detected?
    */
   bool is_v7;
@@ -75,8 +84,9 @@ class LXDevice: public AbstractDevice
   unsigned old_baud_rate;
 
 public:
-  LXDevice(Port &_port, unsigned _bulk_baud_rate)
+  LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate)
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
+     is_colibri(baud_rate == 4800),
      is_v7(false), is_nano(false), is_forwarded_nano(false),
      mode(Mode::UNKNOWN), old_baud_rate(0) {}
 

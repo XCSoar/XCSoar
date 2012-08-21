@@ -21,22 +21,37 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/LX.hpp"
-#include "Device/Driver/LX/Internal.hpp"
-#include "Profile/DeviceConfig.hpp"
+#ifndef XCSOAR_FLYTEC_DEVICE_HPP
+#define XCSOAR_FLYTEC_DEVICE_HPP
 
-static Device *
-LXCreateOnPort(const DeviceConfig &config, Port &com_port)
+#include "tchar.h"
+#include "Device/Driver.hpp"
+
+class Port;
+struct NMEAInfo;
+class OperationEnvironment;
+class RecordedFlightList;
+struct RecordedFlightInfo;
+class NMEAInputLine;
+
+class FlytecDevice : public AbstractDevice
 {
-  return new LXDevice(com_port, config.baud_rate, config.bulk_baud_rate);
-}
+  Port &port;
+  fixed last_time;
 
-const struct DeviceRegister lxDevice = {
-  _T("LX"),
-  _T("LX / Colibri"),
-  DeviceRegister::DECLARE | DeviceRegister::LOGGER |
-  DeviceRegister::PASS_THROUGH |
-  DeviceRegister::BULK_BAUD_RATE |
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
-  LXCreateOnPort,
+public:
+  FlytecDevice(Port &_port):port(_port), last_time(fixed_zero) {}
+
+  virtual bool ParseNMEA(const char *line, NMEAInfo &info);
+
+  bool ReadFlightList(RecordedFlightList &flight_list,
+                      OperationEnvironment &env);
+
+  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+                      OperationEnvironment &env);
+
+private:
+  bool ParseFLYSEN(NMEAInputLine &line, NMEAInfo &info);
 };
+
+#endif

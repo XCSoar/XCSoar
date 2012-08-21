@@ -149,9 +149,9 @@ namespace LX {
   }
 
   static inline bool
-  ExpectACK(Port &port, OperationEnvironment &env)
+  ExpectACK(Port &port, OperationEnvironment &env, unsigned timeout_ms=2000)
   {
-    return port.WaitForChar(ACK, env, 2000) == Port::WaitResult::READY;
+    return port.WaitForChar(ACK, env, timeout_ms) == Port::WaitResult::READY;
   }
 
   /**
@@ -160,9 +160,9 @@ namespace LX {
    * @return true on success
    */
   static inline bool
-  Connect(Port &port, OperationEnvironment &env)
+  Connect(Port &port, OperationEnvironment &env, unsigned timeout_ms=500)
   {
-    return SendSYN(port) && ExpectACK(port, env);
+    return SendSYN(port) && ExpectACK(port, env, timeout_ms);
   }
 
   /**

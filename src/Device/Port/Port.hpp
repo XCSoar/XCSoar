@@ -147,7 +147,9 @@ public:
 
   /**
    * Gets the current baud rate of the serial port
-   * @return The current baud rate or 0 on error
+   *
+   * @return the current baud rate, or 0 on error or if a baud rate is
+   * not applicable to this #Port implementation
    */
   virtual unsigned GetBaudrate() const = 0;
 

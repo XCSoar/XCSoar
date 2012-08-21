@@ -531,6 +531,8 @@ TestFlytec()
 
   ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*72",
                         nmea_info));
+  ok1(!nmea_info.date_available);
+  ok1(!nmea_info.time_available);
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 101450));
   ok1(nmea_info.pressure_altitude_available);
@@ -545,6 +547,8 @@ TestFlytec()
 
   ok1(device->ParseNMEA("$FLYSEN,,,,,,,,,,V,,101450,02341,0334,02000,,,,,,,,,*5e",
                         nmea_info));
+  ok1(!nmea_info.date_available);
+  ok1(!nmea_info.time_available);
   ok1(nmea_info.static_pressure_available);
   ok1(equals(nmea_info.static_pressure.GetPascal(), 101450));
   ok1(nmea_info.pressure_altitude_available);
@@ -564,6 +568,14 @@ TestFlytec()
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,A,09,097517,01321,-001,01030,P,023,,038,"
                         "088,00090,00088,800,,*29", nmea_info));
+  ok1(nmea_info.date_available);
+  ok1(nmea_info.date_time_utc.day == 24);
+  ok1(nmea_info.date_time_utc.month == 12);
+  ok1(nmea_info.date_time_utc.year == 2011);
+  ok1(nmea_info.time_available);
+  ok1(nmea_info.date_time_utc.hour == 20);
+  ok1(nmea_info.date_time_utc.minute == 15);
+  ok1(nmea_info.date_time_utc.second == 00);
   ok1(nmea_info.location_available);
   ok1(equals(nmea_info.location, 47.014, 8.307616667));
   ok1(nmea_info.track_available);
@@ -593,6 +605,14 @@ TestFlytec()
   ok1(device->ParseNMEA("$FLYSEN,241211,201500,4700.840,N,00818.457,E,092,"
                         "01100,01234,V,09,097517,01321,-001,01030,P,023,017,038,"
                         ",00090,00088,800,,*38", nmea_info));
+  ok1(nmea_info.date_available);
+  ok1(nmea_info.date_time_utc.day == 24);
+  ok1(nmea_info.date_time_utc.month == 12);
+  ok1(nmea_info.date_time_utc.year == 2011);
+  ok1(nmea_info.time_available);
+  ok1(nmea_info.date_time_utc.hour == 20);
+  ok1(nmea_info.date_time_utc.minute == 15);
+  ok1(nmea_info.date_time_utc.second == 00);
   ok1(!nmea_info.location_available);
   ok1(!nmea_info.track_available);
   ok1(!nmea_info.ground_speed_available);
@@ -1055,7 +1075,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(532);
+  plan_tests(552);
 
   TestGeneric();
   TestTasman();

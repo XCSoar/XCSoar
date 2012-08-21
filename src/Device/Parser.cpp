@@ -313,6 +313,12 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
 bool
 NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
 {
+  return TimeHasAdvanced(this_time, last_time, info);
+}
+
+bool
+NMEAParser::TimeHasAdvanced(fixed this_time, fixed &last_time, NMEAInfo &info)
+{
   if (this_time < last_time) {
     last_time = this_time;
     start_day = -1; // reset search for the first day
@@ -405,8 +411,8 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   return true;
 }
 
-static bool
-ReadDate(NMEAInputLine &line, BrokenDate &date)
+bool
+NMEAParser::ReadDate(NMEAInputLine &line, BrokenDate &date)
 {
   char buffer[9];
   line.Read(buffer, 9);

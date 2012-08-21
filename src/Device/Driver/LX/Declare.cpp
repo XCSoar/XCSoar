@@ -220,15 +220,6 @@ LXDevice::Declare(const Declaration &declaration,
   if (!EnableCommandMode(env))
     return false;
 
-  unsigned old_baud_rate = 0;
-  if (bulk_baud_rate != 0) {
-    old_baud_rate = port.GetBaudrate();
-    if (old_baud_rate == bulk_baud_rate)
-      old_baud_rate = 0;
-    else if (!port.SetBaudrate(bulk_baud_rate))
-      return false;
-  }
-
   bool success = DeclareInner(port, declaration, env);
 
   LX::CommandModeQuick(port, env);

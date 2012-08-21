@@ -21,22 +21,17 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver/LX.hpp"
-#include "Device/Driver/LX/Internal.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "Device/Driver/Flytec.hpp"
+#include "Device.hpp"
 
 static Device *
-LXCreateOnPort(const DeviceConfig &config, Port &com_port)
+FlytecCreateOnPort(const DeviceConfig &config, Port &com_port)
 {
-  return new LXDevice(com_port, config.baud_rate, config.bulk_baud_rate);
+  return new FlytecDevice(com_port);
 }
 
-const struct DeviceRegister lxDevice = {
-  _T("LX"),
-  _T("LX / Colibri"),
-  DeviceRegister::DECLARE | DeviceRegister::LOGGER |
-  DeviceRegister::PASS_THROUGH |
-  DeviceRegister::BULK_BAUD_RATE |
-  DeviceRegister::RECEIVE_SETTINGS | DeviceRegister::SEND_SETTINGS,
-  LXCreateOnPort,
+const struct DeviceRegister flytec_device_driver = {
+  _T("Flytec"), _T("Flytec 5030 / Brauniger"),
+  0 /* DeviceRegister::LOGGER deactivated until current firmware supports this */,
+  FlytecCreateOnPort,
 };

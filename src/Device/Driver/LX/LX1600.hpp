@@ -56,7 +56,7 @@ namespace LX1600 {
     unsigned old_baud_rate = port.GetBaudrate();
     if (old_baud_rate == 4800)
       old_baud_rate = 0;
-    else if (!port.SetBaudrate(4800))
+    else if (old_baud_rate != 0 && !port.SetBaudrate(4800))
       return false;
 
     const bool success = PortWriteNMEA(port, "PFLX0,LX1600", env);
