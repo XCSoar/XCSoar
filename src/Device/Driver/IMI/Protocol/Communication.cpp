@@ -83,7 +83,8 @@ IMI::Receive(Port &port, OperationEnvironment &env,
   // set timeout
   unsigned baudrate = port.GetBaudrate();
   if (baudrate == 0)
-    return NULL;
+    /* fallback for timeout calculation */
+    baudrate = 9600;
 
   const TimeoutClock timeout(extraTimeout + 10000 *
                              (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate);
@@ -123,7 +124,8 @@ IMI::SendRet(Port &port, OperationEnvironment &env,
 {
   unsigned baudRate = port.GetBaudrate();
   if (baudRate == 0)
-    return NULL;
+    /* fallback for timeout calculation */
+    baudRate = 9600;
 
   extraTimeout += 10000 * (payloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10)
       / baudRate;
