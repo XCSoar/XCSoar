@@ -55,13 +55,37 @@ class OrderedTaskPoint;
 class TaskMacCready : private NonCopyable
 {
 protected:
-  const std::vector<TaskPoint*> points; /**< The TaskPoints in the task */
-  std::vector<GlideResult> leg_solutions; /**< Glide solutions for each leg */
-  const unsigned active_index; /**< Active task point (local copy for speed) */
-  int start_index; /**< TaskPoint sequence index of first taskpoint included in scan */
-  int end_index; /**< TaskPoint sequence index of last taskpoint included in scan */
+   /**
+    * The TaskPoints in the task.
+    */
+  const std::vector<TaskPoint*> points;
+
+  /**
+   * Glide solutions for each leg.
+   */
+  std::vector<GlideResult> leg_solutions;
+
+  /**
+   * Active task point (local copy for speed).
+   */
+  const unsigned active_index;
+
+  /**
+   * TaskPoint sequence index of first taskpoint included in scan.
+   */
+  int start_index;
+
+  /**
+   * TaskPoint sequence index of last taskpoint included in scan.
+   */
+  int end_index;
+
   const GlideSettings &settings;
-  GlidePolar glide_polar; /**< Glide polar used for computations */
+
+  /**
+   * Glide polar used for computations.
+   */
+  GlidePolar glide_polar;
 
 public:
   /**
