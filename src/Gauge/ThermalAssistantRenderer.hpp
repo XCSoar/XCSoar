@@ -70,8 +70,6 @@ public:
                            unsigned _padding, bool _small = false);
 
 public:
-  bool LeftTurn() const;
-
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
   void Paint(Canvas &canvas, PixelRect rc);

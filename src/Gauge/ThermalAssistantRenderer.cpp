@@ -58,12 +58,6 @@ ThermalAssistantRenderer::ThermalAssistantRenderer(const ThermalAssistantLook &_
    small(_small),
    direction(Angle::Zero()) {}
 
-bool
-ThermalAssistantRenderer::LeftTurn() const
-{
-  return circling.TurningLeft();
-}
-
 void
 ThermalAssistantRenderer::Update(const AttitudeState &attitude,
                                const DerivedInfo &derived)
@@ -94,7 +88,7 @@ ThermalAssistantRenderer::CalculateLiftPoints(LiftPoints &lift_points,
     lift_points[i].x = (int)(sincos.second * scale);
     lift_points[i].y = (int)(sincos.first * scale);
 
-    if (!LeftTurn()) {
+    if (!circling.TurningLeft()) {
       lift_points[i].x *= -1;
       lift_points[i].y *= -1;
     }
@@ -116,7 +110,7 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.Select(look.plane_pen);
 
-  PixelScalar x = mid.x + (LeftTurn() ? radius : -radius);
+  PixelScalar x = mid.x + (circling.TurningLeft() ? radius : -radius);
 
   canvas.DrawLine(x + Layout::FastScale(small ? 5 : 10),
               mid.y - Layout::FastScale(small ? 1 : 2),
