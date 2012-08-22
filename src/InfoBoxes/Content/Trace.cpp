@@ -53,8 +53,7 @@ GetSparkRect(const InfoBoxWindow &infobox)
 
 void
 InfoBoxContentSpark::Paint(InfoBoxWindow &infobox, Canvas &canvas,
-                              const TraceVariableHistory& var,
-                              const bool center)
+                           const TraceVariableHistory &var, const bool center)
 {
   if (var.empty())
     return;
@@ -86,7 +85,7 @@ InfoBoxContentCirclingAverageSpark::OnCustomPaint(InfoBoxWindow &infobox, Canvas
 
 void
 InfoBoxContentSpark::SetVSpeedComment(InfoBoxData &data,
-                                  const TraceVariableHistory& var)
+                                      const TraceVariableHistory &var)
 {
   if (var.empty())
     return;
@@ -116,7 +115,6 @@ InfoBoxContentCirclingAverageSpark::Update(InfoBoxData &data)
 {
   SetVSpeedComment(data, CommonInterface::Calculated().trace_history.CirclingAverage);
 }
-
 
 void
 InfoBoxContentBarogram::Update(InfoBoxData &data)
@@ -168,7 +166,6 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
   return false;
 }
 
-
 void
 InfoBoxContentThermalBand::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
@@ -187,7 +184,6 @@ InfoBoxContentThermalBand::Update(InfoBoxData &data)
 {
   data.SetCustom();
 }
-
 
 void
 InfoBoxContentTaskProgress::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
