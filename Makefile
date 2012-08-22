@@ -429,6 +429,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	\
+	$(SRC)/Gauge/ThermalAssistantRenderer.cpp \
 	$(SRC)/Gauge/ThermalAssistantWindow.cpp \
 	$(SRC)/Gauge/BigThermalAssistantWindow.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \

@@ -25,71 +25,19 @@
 #define THERMAL_ASSISTENT_WINDOW_HPP
 
 #include "Screen/BufferWindow.hpp"
-#include "NMEA/CirclingInfo.hpp"
-#include "NMEA/VarioInfo.hpp"
-
-#include <array>
+#include "ThermalAssistantRenderer.hpp"
 
 struct ThermalAssistantLook;
-struct AttitudeState;
-struct DerivedInfo;
 
 class ThermalAssistantWindow : public BufferWindow
 {
-  class LiftPoints: public std::array<RasterPoint,
-                                      std::tuple_size<LiftDatabase>::value>
-  {
-  public:
-    RasterPoint GetAverage() const;
-  };
-
-protected:
-  const ThermalAssistantLook &look;
-
-  RasterPoint mid;
-
-  /**
-   * The minimum distance between the window boundary and the biggest
-   * circle in pixels.
-   */
-  unsigned padding;
-
-  /**
-   * The radius of the biggest circle in pixels.
-   */
-  unsigned radius;
-
-  bool small;
-
-  Angle direction;
-  CirclingInfo circling;
-  VarioInfo vario;
+  ThermalAssistantRenderer renderer;
 
 public:
   ThermalAssistantWindow(const ThermalAssistantLook &look,
                          unsigned _padding, bool _small = false);
 
-public:
-  bool LeftTurn() const;
-
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
-
-protected:
-  /**
-   * Normalize the lift to the range of 0.0 to 1.0
-   * 0.0: lift = -max_lift
-   * 0.5: lift = zero lift
-   * 1.0: lift = max_lift
-   */
-  static fixed NormalizeLift(fixed lift, fixed max_lift);
-
-  void CalculateLiftPoints(LiftPoints &lift_points, fixed max_lift) const;
-  fixed CalculateMaxLift() const;
-  void PaintRadarPlane(Canvas &canvas) const;
-  void PaintRadarBackground(Canvas &canvas, fixed max_lift) const;
-  void PaintPoints(Canvas &canvas, const LiftPoints &lift_points) const;
-  void PaintAdvisor(Canvas &canvas, const LiftPoints &lift_points) const;
-  void PaintNotCircling(Canvas &canvas) const;
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
