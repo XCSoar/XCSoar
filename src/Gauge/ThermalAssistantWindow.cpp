@@ -22,6 +22,7 @@
 */
 
 #include "ThermalAssistantWindow.hpp"
+#include "Look/ThermalAssistantLook.hpp"
 
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
                                                unsigned _padding, bool _small)
@@ -38,5 +39,6 @@ ThermalAssistantWindow::Update(const AttitudeState &attitude,
 void
 ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
+  canvas.Clear(renderer.GetLook().background_color);
   renderer.Paint(canvas, GetClientRect());
 }

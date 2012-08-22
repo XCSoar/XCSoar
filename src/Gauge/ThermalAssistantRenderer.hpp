@@ -74,6 +74,10 @@ public:
 
   void Paint(Canvas &canvas, PixelRect rc);
 
+  const ThermalAssistantLook &GetLook() {
+    return look;
+  }
+
 protected:
   /**
    * Normalize the lift to the range of 0.0 to 1.0

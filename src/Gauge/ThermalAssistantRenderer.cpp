@@ -129,7 +129,6 @@ ThermalAssistantRenderer::PaintRadarPlane(Canvas &canvas) const
 void
 ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) const
 {
-  canvas.Clear(look.background_color);
   canvas.SelectHollowBrush();
 
   canvas.Select(look.inner_circle_pen);
