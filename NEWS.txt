@@ -13,6 +13,7 @@ Version 6.4.1 - not yet released
   - Volkslogger: fix task declaration over Bluetooth
   - CAI GPS-NAV: work around timing problem
   - LX: fix Colibri/LX20 declaration problems
+  - Westerboer: support for smaller steps in MC value setting
 * user interface
   - remove duplicate "trail drift" setting (#2252)
   - fix flarm teamcolor saving (#2291)
