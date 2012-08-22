@@ -6,6 +6,8 @@ Version 6.5 - not yet released
 * calculations
   - don't detect landing while climbing in a wave (#1330, #2289)
   - basic support for the contest "DMSt" (#2208)
+* infoboxes
+  - added thermal assistant infobox
 
 Version 6.4.1 - not yet released
 * map

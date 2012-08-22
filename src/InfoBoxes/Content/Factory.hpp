@@ -141,6 +141,7 @@ namespace InfoBoxFactory
     HeadWindSimplified,
     CruiseEfficiency,
     WIND_ARROW,
+    THERMAL_ASSISTANT,
 
     e_NUM_TYPES /* Last item */
   };

@@ -1068,6 +1068,15 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
     WIND_ARROW,
   },
 
+  {
+    N_("Thermal assistant"),
+    N_("Thermal"),
+    N_("A circular thermal assistant that shows the lift distribution over each part of the circle."),
+    IBFHelper<InfoBoxContentThermalAssistant>::Create,
+    THERMAL_ASSISTANT,
+    THERMAL_ASSISTANT,
+  },
+
 };
 
 bool

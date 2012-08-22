@@ -23,12 +23,15 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "UIGlobals.hpp"
+#include "Look/Look.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -185,4 +188,28 @@ InfoBoxContentNextLegEqThermal::Update(InfoBoxData &data)
   }
 
   SetVSpeed(data, next_leg_eq_thermal);
+}
+
+InfoBoxContentThermalAssistant::InfoBoxContentThermalAssistant()
+  :renderer(UIGlobals::GetLook().thermal_assistant_gauge, 0, true) {}
+
+void
+InfoBoxContentThermalAssistant::Update(InfoBoxData &data)
+{
+  if (!XCSoarInterface::Calculated().circling) {
+    data.SetInvalid();
+    return;
+  }
+
+  data.SetCustom();
+
+  renderer.Update(XCSoarInterface::Basic().attitude,
+                  XCSoarInterface::Calculated());
+}
+
+void
+InfoBoxContentThermalAssistant::OnCustomPaint(InfoBoxWindow &infobox,
+                                              Canvas &canvas)
+{
+  renderer.Paint(canvas, infobox.GetValueAndCommentRect());
 }

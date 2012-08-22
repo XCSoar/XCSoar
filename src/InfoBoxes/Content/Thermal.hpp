@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_THERMAL_HPP
 
 #include "InfoBoxes/Content/Base.hpp"
+#include "Gauge/ThermalAssistantRenderer.hpp"
 
 class InfoBoxContentVario : public InfoBoxContent
 {
@@ -96,6 +97,17 @@ class InfoBoxContentNextLegEqThermal : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data);
+};
+
+class InfoBoxContentThermalAssistant: public InfoBoxContent
+{
+  ThermalAssistantRenderer renderer;
+
+public:
+  InfoBoxContentThermalAssistant();
+
+  virtual void Update(InfoBoxData &data);
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
 };
 
 #endif
