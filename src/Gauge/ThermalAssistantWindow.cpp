@@ -28,13 +28,6 @@ ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look
   :renderer(_look, _padding, _small) {}
 
 void
-ThermalAssistantWindow::OnResize(UPixelScalar width, UPixelScalar height)
-{
-  BufferWindow::OnResize(width, height);
-  renderer.Resize(width, height);
-}
-
-void
 ThermalAssistantWindow::Update(const AttitudeState &attitude,
                                const DerivedInfo &derived)
 {
@@ -45,5 +38,5 @@ ThermalAssistantWindow::Update(const AttitudeState &attitude,
 void
 ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
-  renderer.Paint(canvas);
+  renderer.Paint(canvas, GetClientRect());
 }

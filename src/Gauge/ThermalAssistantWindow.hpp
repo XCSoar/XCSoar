@@ -40,7 +40,6 @@ public:
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual void OnPaintBuffer(Canvas &canvas);
 };
 

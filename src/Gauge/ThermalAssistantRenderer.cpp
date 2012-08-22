@@ -58,15 +58,6 @@ ThermalAssistantRenderer::ThermalAssistantRenderer(const ThermalAssistantLook &_
    small(_small),
    direction(Angle::Zero()) {}
 
-void
-ThermalAssistantRenderer::Resize(UPixelScalar width, UPixelScalar height)
-{
-  // Calculate Radar size
-  radius = min(height, width) / 2 - padding;
-  mid.x = width / 2;
-  mid.y = height / 2;
-}
-
 bool
 ThermalAssistantRenderer::LeftTurn() const
 {
@@ -210,8 +201,12 @@ ThermalAssistantRenderer::PaintNotCircling(Canvas &canvas) const
 }
 
 void
-ThermalAssistantRenderer::Paint(Canvas &canvas)
+ThermalAssistantRenderer::Paint(Canvas &canvas, PixelRect rc)
 {
+  radius = min(rc.right - rc.left, rc.bottom - rc.top) / 2 - padding;
+  mid.x = (rc.left + rc.right) / 2;
+  mid.y = (rc.top + rc.bottom) / 2;
+
   fixed max_lift = ceil(CalculateMaxLift());
 
   PaintRadarBackground(canvas, max_lift);

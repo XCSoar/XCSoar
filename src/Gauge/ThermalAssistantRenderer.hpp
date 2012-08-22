@@ -74,8 +74,7 @@ public:
 
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
-  void Resize(UPixelScalar width, UPixelScalar height);
-  void Paint(Canvas &canvas);
+  void Paint(Canvas &canvas, PixelRect rc);
 
 protected:
   /**
