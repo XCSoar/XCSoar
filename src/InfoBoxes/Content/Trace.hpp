@@ -32,10 +32,10 @@ class TraceVariableHistory;
 class InfoBoxContentSpark: public InfoBoxContent
 {
 protected:
-  void do_paint(InfoBoxWindow &infobox, Canvas &canvas,
+  void Paint(InfoBoxWindow &infobox, Canvas &canvas,
                 const TraceVariableHistory& var,
                 const bool center = true);
-  void label_vspeed(InfoBoxData &data,
+  void SetVSpeedComment(InfoBoxData &data,
                     const TraceVariableHistory& var);
 
 };

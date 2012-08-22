@@ -42,7 +42,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 static PixelRect
-get_spark_rect(const InfoBoxWindow &infobox)
+GetSparkRect(const InfoBoxWindow &infobox)
 {
   PixelRect rc = infobox.GetValueRect();
   rc.top += Layout::FastScale(2);
@@ -52,7 +52,7 @@ get_spark_rect(const InfoBoxWindow &infobox)
 }
 
 void
-InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
+InfoBoxContentSpark::Paint(InfoBoxWindow &infobox, Canvas &canvas,
                               const TraceVariableHistory& var,
                               const bool center)
 {
@@ -61,31 +61,31 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
 
   const Look &look = UIGlobals::GetLook();
   TraceHistoryRenderer renderer(look.trace_history, look.vario, look.chart);
-  renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
+  renderer.RenderVario(canvas, GetSparkRect(infobox), var, center,
                        CommonInterface::GetComputerSettings().polar.glide_polar_task.GetMC());
 }
 
 void
 InfoBoxContentVarioSpark::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.BruttoVario);
+  Paint(infobox, canvas, CommonInterface::Calculated().trace_history.BruttoVario);
 }
 
 void
 InfoBoxContentNettoVarioSpark::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.NettoVario);
+  Paint(infobox, canvas, CommonInterface::Calculated().trace_history.NettoVario);
 }
 
 void
 InfoBoxContentCirclingAverageSpark::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  do_paint(infobox, canvas, CommonInterface::Calculated().trace_history.CirclingAverage,
+  Paint(infobox, canvas, CommonInterface::Calculated().trace_history.CirclingAverage,
     false);
 }
 
 void
-InfoBoxContentSpark::label_vspeed(InfoBoxData &data,
+InfoBoxContentSpark::SetVSpeedComment(InfoBoxData &data,
                                   const TraceVariableHistory& var)
 {
   if (var.empty())
@@ -102,19 +102,19 @@ InfoBoxContentSpark::label_vspeed(InfoBoxData &data,
 void
 InfoBoxContentVarioSpark::Update(InfoBoxData &data)
 {
-  label_vspeed(data, CommonInterface::Calculated().trace_history.BruttoVario);
+  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.BruttoVario);
 }
 
 void
 InfoBoxContentNettoVarioSpark::Update(InfoBoxData &data)
 {
-  label_vspeed(data, CommonInterface::Calculated().trace_history.NettoVario);
+  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.NettoVario);
 }
 
 void
 InfoBoxContentCirclingAverageSpark::Update(InfoBoxData &data)
 {
-  label_vspeed(data, CommonInterface::Calculated().trace_history.CirclingAverage);
+  SetVSpeedComment(data, CommonInterface::Calculated().trace_history.CirclingAverage);
 }
 
 
@@ -138,7 +138,7 @@ void
 InfoBoxContentBarogram::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = UIGlobals::GetLook();
-  RenderBarographSpark(canvas, get_spark_rect(infobox),
+  RenderBarographSpark(canvas, GetSparkRect(infobox),
                        look.chart, look.cross_section,
                        infobox.GetLook().inverse,
                        glide_computer->GetFlightStats(),
