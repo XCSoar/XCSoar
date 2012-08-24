@@ -215,10 +215,10 @@ InputEvents::sub_SetZoom(fixed value)
 
   fixed vmin = CommonInterface::GetComputerSettings().polar.glide_polar_task.GetVMin();
   fixed scale_2min_distance = vmin * fixed_int_constant(12);
-  const fixed scale_500m = fixed_int_constant(50);
+  const fixed scale_100m = fixed_int_constant(10);
   const fixed scale_1600km = fixed_int_constant(1600*100);
   fixed minreasonable = (displayMode == DisplayMode::CIRCLING) ?
-                        scale_500m : max(scale_500m, scale_2min_distance);
+                        scale_100m : max(scale_100m, scale_2min_distance);
 
   value = max(minreasonable, min(scale_1600km, value));
   map_window->SetMapScale(value);

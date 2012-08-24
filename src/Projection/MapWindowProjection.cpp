@@ -31,6 +31,9 @@ Copyright_License {
 #include <assert.h>
 
 static const unsigned ScaleList[] = {
+  100,
+  200,
+  300,
   500,
   1000,
   2000,
