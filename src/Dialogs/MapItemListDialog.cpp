@@ -163,6 +163,14 @@ MapItemListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   GetList().SetLength(list.size());
   UpdateButtons();
+
+  for (unsigned i = 0; i < list.size(); ++i) {
+    const MapItem &item = *list[i];
+    if (HasDetails(item) || CanGotoItem(item)) {
+      GetList().SetCursorIndex(i);
+      break;
+    }
+  }
 }
 
 void
