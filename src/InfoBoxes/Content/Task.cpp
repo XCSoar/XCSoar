@@ -483,7 +483,7 @@ InfoBoxContentFinalGR::Update(InfoBoxData &data)
     return;
   }
   if (::GradientValid(gradient)) {
-    data.UnsafeFormatValue(_T("%d"), (int)gradient);
+    data.SetValueFromGlideRatio(gradient);
   } else {
     data.SetInvalid();
   }
