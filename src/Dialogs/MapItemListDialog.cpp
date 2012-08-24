@@ -129,8 +129,12 @@ public:
   }
 
   bool CanGotoItem(unsigned index) const {
+    return CanGotoItem(*list[index]);
+  }
+
+  static bool CanGotoItem(const MapItem &item) {
     return protected_task_manager != NULL &&
-      list[index]->type == MapItem::WAYPOINT;
+      item.type == MapItem::WAYPOINT;
   }
 
   virtual void OnActivateItem(unsigned index);
