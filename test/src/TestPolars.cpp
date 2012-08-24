@@ -149,9 +149,7 @@ TestBuiltInPolarsPlausibility()
     assert(i < PolarStore::Count());
     unsigned si = performanceData[i].storeIndex;
     PolarInfo polar = PolarStore::GetItem(si).ToPolarInfo();
-    PolarCoefficients pc =
-      PolarCoefficients::From3VW(polar.shape[0].v, polar.shape[1].v, polar.shape[2].v,
-                                 polar.shape[0].w, polar.shape[1].w, polar.shape[2].w);
+    PolarCoefficients pc = polar.CalculateCoefficients();
 
     WideToUTF8Converter polarName(PolarStore::GetItem(i).name);
 
