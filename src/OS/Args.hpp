@@ -178,6 +178,18 @@ public:
     return result;
   }
 
+  double ExpectNextDouble() {
+    const char *p = ExpectNext();
+    assert(p != NULL);
+
+    char *endptr;
+    double result = ParseDouble(p, &endptr);
+    if (p == endptr)
+      UsageError();
+
+    return result;
+  }
+
   tstring ExpectNextT() {
     const char *p = ExpectNext();
     assert(p != NULL);
