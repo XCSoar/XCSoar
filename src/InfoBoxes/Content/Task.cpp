@@ -460,11 +460,10 @@ InfoBoxContentFinalGRTE::Update(InfoBoxData &data)
     data.SetValue(_T("+++"));
     return;
   }
-  if (::GradientValid(gradient)) {
+  if (::GradientValid(gradient))
     data.SetValueFromGlideRatio(gradient);
-  } else {
+  else
     data.SetInvalid();
-  }
 }
 
 void
@@ -482,11 +481,10 @@ InfoBoxContentFinalGR::Update(InfoBoxData &data)
     data.SetValue(_T("+++"));
     return;
   }
-  if (::GradientValid(gradient)) {
+  if (::GradientValid(gradient))
     data.SetValueFromGlideRatio(gradient);
-  } else {
+  else
     data.SetInvalid();
-  }
 }
 
 void
