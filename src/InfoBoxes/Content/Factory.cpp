@@ -457,9 +457,9 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
 
   // e_WP_GR
   {
-    N_("Next GR (TE Compensated)"),
-    N_("WP GR-TE"),
-    N_("The required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height. Negative values indicate a climb is necessary to reach the waypoint. If the height required is close to zero, the displayed value is '---'.   Note that this calculation may be optimistic because it reduces the height required to reach the waypoint by the excess energy height of the glider if its true airspeed is greater than the MacCready and best L/D speeds."),
+    N_("Next GR"),
+    N_("WP GR"),
+    N_("The required glide ratio over ground to reach the next waypoint, given by the distance to next waypoint divided by the height required to arrive at the safety arrival height."),
     IBFHelper<InfoBoxContentNextGR>::Create,
     e_LD, // LD Vario
     e_Fin_GR, // Final GR
