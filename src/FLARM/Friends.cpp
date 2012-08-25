@@ -31,6 +31,7 @@ Copyright_License {
 
 namespace FlarmFriends
 {
+  bool loaded = false;
   std::map<FlarmId, Color> friends;
 
   void LoadColor(const TCHAR *key, Color color);
@@ -86,11 +87,16 @@ FlarmFriends::Load()
   LoadColor(_T("FriendsBlue"), Color::BLUE);
   LoadColor(_T("FriendsYellow"), Color::YELLOW);
   LoadColor(_T("FriendsMagenta"), Color::MAGENTA);
+
+  loaded = true;
 }
 
 void
 FlarmFriends::Save()
 {
+  if (!loaded)
+    return;
+
   TCHAR id[16];
   tstring ids[4];
 

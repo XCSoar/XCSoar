@@ -158,8 +158,8 @@ WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 bool
 WesterboerDevice::PutMacCready(fixed _mac_cready, OperationEnvironment &env)
 {
-  /* "0 .. 60 in 5-er Schritten" */
-  unsigned mac_cready = std::min(uround(_mac_cready * 10 / 5) * 5, 60u);
+  /* 0 .. 60 -> 0.0 .. 6.0 m/s */
+  unsigned mac_cready = std::min(uround(_mac_cready * 10), 60u);
 
   char buffer[64];
   sprintf(buffer, "$PWES4,,%02u,,,,,,,", mac_cready);

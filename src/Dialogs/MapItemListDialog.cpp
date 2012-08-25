@@ -39,6 +39,7 @@ Copyright_License {
 #include "Weather/Features.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Interface.hpp"
 
 #ifdef HAVE_NOAA
 #include "Dialogs/Weather.hpp"
@@ -180,7 +181,8 @@ MapItemListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const MapItem &item = *list[idx];
   MapItemListRenderer::Draw(canvas, rc, item,
                             dialog_look, look, traffic_look,
-                            final_glide_look, settings);
+                            final_glide_look, settings,
+                            &XCSoarInterface::Basic().flarm.traffic);
 
   if ((settings.item_list.add_arrival_altitude &&
        item.type == MapItem::Type::ARRIVAL_ALTITUDE) ||
@@ -267,7 +269,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent,
     dlgTargetShowModal(((const TaskOZMapItem &)item).index);
     break;
   case MapItem::TRAFFIC:
-    dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).traffic.id);
+    dlgFlarmTrafficDetailsShowModal(((const TrafficMapItem &)item).id);
     break;
 
 #ifdef HAVE_NOAA

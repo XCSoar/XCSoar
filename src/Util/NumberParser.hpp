@@ -32,6 +32,24 @@ Copyright_License {
 #include <tchar.h>
 #endif
 
+static inline double
+ParseDouble(const char *p, char **endptr=nullptr)
+{
+  assert(p != nullptr);
+
+  return (double)strtod(p, endptr);
+}
+
+#ifdef _UNICODE
+static inline double
+ParseDouble(const TCHAR *p, TCHAR **endptr=nullptr)
+{
+  assert(p != nullptr);
+
+  return (double)wcstod(p, endptr);
+}
+#endif
+
 static inline unsigned
 ParseUnsigned(const char *p, char **endptr=nullptr, int base=10)
 {

@@ -33,6 +33,7 @@ struct MapLook;
 struct TrafficLook;
 struct FinalGlideBarLook;
 struct MapSettings;
+struct TrafficList;
 
 namespace MapItemListRenderer
 {
@@ -41,7 +42,8 @@ namespace MapItemListRenderer
             const MapLook &look,
             const TrafficLook &traffic_look,
             const FinalGlideBarLook &final_glide_look,
-            const MapSettings &settings);
+            const MapSettings &settings,
+            const TrafficList *traffic_list = NULL);
 }
 
 #endif

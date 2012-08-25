@@ -160,11 +160,11 @@ struct WeatherStationMapItem: public MapItem
 
 struct TrafficMapItem: public MapItem
 {
-  const FlarmTraffic &traffic;
+  FlarmId id;
   FlarmFriends::Color color;
 
   TrafficMapItem(const FlarmTraffic &_traffic, FlarmFriends::Color _color)
-    :MapItem(TRAFFIC), traffic(_traffic), color(_color) {}
+    :MapItem(TRAFFIC), id(_traffic.id), color(_color) {}
 };
 
 struct ThermalMapItem: public MapItem

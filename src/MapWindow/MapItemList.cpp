@@ -100,8 +100,8 @@ CompareMapItems(const MapItem *a, const MapItem *b)
            ((const TaskOZMapItem *)b)->index;
 
   if (a->type == MapItem::TRAFFIC && b->type == MapItem::TRAFFIC)
-    return ((const TrafficMapItem *)a)->traffic.id <
-           ((const TrafficMapItem *)b)->traffic.id;
+    return ((const TrafficMapItem *)a)->id <
+           ((const TrafficMapItem *)b)->id;
 
   if (a->type == MapItem::THERMAL && b->type == MapItem::THERMAL)
     return ((const ThermalMapItem *)a)->thermal.time >

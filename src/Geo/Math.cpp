@@ -305,16 +305,11 @@ FindLatitudeLongitude(const GeoPoint loc, const Angle bearing,
   loc_out.latitude = Angle::Radians(earth_asin(
       sin_latitude * cos_distance + cos_latitude * sin_distance * cos_bearing));
 
-  fixed result = loc.longitude.Radians();
-  if (cos_latitude != fixed_zero) {
-    fixed s = sin_bearing * sin_distance / cos_latitude;
-    assert(s >= fixed_minus_one);
-    assert(s <= fixed_one);
+  loc_out.longitude =
+      Angle::Radians(loc.longitude.Radians() +
+                     atan2(sin_bearing * sin_distance * cos_latitude,
+                           cos_distance - sin_latitude * loc_out.latitude.sin()));
 
-    result += earth_asin(s);
-  }
-
-  loc_out.longitude = Angle::Radians(result);
   loc_out.Normalize(); // ensure longitude is within -180:180
 
 #ifdef INSTRUMENT_TASK
