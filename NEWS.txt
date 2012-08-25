@@ -8,6 +8,8 @@ Version 6.4.1 - not yet released
   - improved great circle vector calculation precision
 * map
   - new option to disable the wind arrow
+* data files
+  - increased arc airspace resolution for large radiuses
 * devices
   - fix potential crash in I/O thread
   - fix date/time parsing in Flytec device driver
