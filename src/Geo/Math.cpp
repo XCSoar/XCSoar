@@ -35,13 +35,13 @@ unsigned count_distbearing = 0;
 #define fixed_double_earth_r fixed(REARTH * 2)
 
 static inline fixed
-earth_asin(const fixed a)
+EarthASin(const fixed a)
 {
   return asin(a);
 }
 
 static inline fixed
-earth_distance_function(const fixed a)
+EarthDistance(const fixed a)
 {
   if (!positive(a))
     return fixed_zero;
@@ -50,7 +50,7 @@ earth_distance_function(const fixed a)
   // acos(1-x) = 2*asin(sqrt(x/2))
   // acos(1-2*x) = 2*asin(sqrt(x))
   //    = 2*atan2(sqrt(x), sqrt(fixed_one-x));
-  return Double(earth_asin(sqrt(a) / (1 << fixed::accurate_cordic_shift)));
+  return Double(EarthASin(sqrt(a) / (1 << fixed::accurate_cordic_shift)));
 #else
   return acos(fixed_one - Double(a));
 #endif
@@ -73,22 +73,22 @@ IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, fixed dthis,
   const fixed B = sin(dthis);
 
   const auto sc1 = loc1.latitude.SinCos();
-  const fixed sinLoc1Latitude = sc1.first, cosLoc1Latitude = sc1.second;
+  const fixed sin_loc1_lat = sc1.first, cos_loc1_lat = sc1.second;
 
   const auto sc2 = loc2.latitude.SinCos();
-  const fixed sinLoc2Latitude = sc2.first, cosLoc2Latitude = sc2.second;
+  const fixed sin_loc2_lat = sc2.first, cos_loc2_lat = sc2.second;
 
   const auto sc3 = loc1.longitude.SinCos();
-  const fixed sinLoc1Longitude = sc3.first, cosLoc1Longitude = sc3.second;
+  const fixed sin_loc1_lon = sc3.first, cos_loc1_lon = sc3.second;
 
   const auto sc4 = loc2.longitude.SinCos();
-  const fixed sinLoc2Longitude = sc4.first, cosLoc2Longitude = sc4.second;
+  const fixed sin_loc2_lon = sc4.first, cos_loc2_lon = sc4.second;
 
-  const fixed x = A * cosLoc1Latitude * cosLoc1Longitude +
-                  B * cosLoc2Latitude * cosLoc2Longitude;
-  const fixed y = A * cosLoc1Latitude * sinLoc1Longitude +
-                  B * cosLoc2Latitude * sinLoc2Longitude;
-  const fixed z = A * sinLoc1Latitude + B * sinLoc2Latitude;
+  const fixed x = A * cos_loc1_lat * cos_loc1_lon +
+                  B * cos_loc2_lat * cos_loc2_lon;
+  const fixed y = A * cos_loc1_lat * sin_loc1_lon +
+                  B * cos_loc2_lat * sin_loc2_lon;
+  const fixed z = A * sin_loc1_lat + B * sin_loc2_lat;
 
   GeoPoint loc3;
   loc3.latitude = Angle::Radians(atan2(z, TinyHypot(x, y)));
@@ -145,7 +145,7 @@ DistanceBearingS(const GeoPoint loc1, const GeoPoint loc2,
     const fixed s2 = accurate_half_sin(dlon);
     const fixed a = sqr(s1) + cos_lat1 * cos_lat2 * sqr(s2);
 
-    fixed distance2 = earth_distance_function(a);
+    fixed distance2 = EarthDistance(a);
     assert(!negative(distance2));
     *distance = Angle::Radians(distance2);
   }
@@ -197,14 +197,14 @@ CrossTrackError(const GeoPoint loc1, const GeoPoint loc2,
 
   // cross track distance
   const fixed cross_track_distance =
-    earth_asin(sindist_AD * (crs_AD - crs_AB).sin());
+    EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
 
   if (loc4) {
     const auto sc = sin_cos(cross_track_distance);
     const fixed sinXTD = sc.first, cosXTD = sc.second;
 
     const fixed along_track_distance =
-      earth_asin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
+      EarthASin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
 
     *loc4 = IntermediatePoint(loc1, loc2, along_track_distance, dist_AB.Radians());
   }
@@ -238,14 +238,14 @@ ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
 
   const fixed sindist_AD = dist_AD.sin();
   const fixed cross_track_distance =
-      earth_asin(sindist_AD * (crs_AD - crs_AB).sin());
+      EarthASin(sindist_AD * (crs_AD - crs_AB).sin());
 
   const auto sc = sin_cos(cross_track_distance);
   const fixed sinXTD = sc.first, cosXTD = sc.second;
 
   // along track distance
   const fixed along_track_distance =
-    earth_asin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
+    EarthASin(sqrt(sqr(sindist_AD) - sqr(sinXTD)) / cosXTD);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
@@ -258,24 +258,24 @@ ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
 fixed
 DoubleDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
 {
-  const fixed cloc1Latitude = loc1.latitude.cos();
-  const fixed cloc2Latitude = loc2.latitude.cos();
-  const fixed cloc3Latitude = loc3.latitude.cos();
+  const fixed cos_loc1_lat = loc1.latitude.cos();
+  const fixed cos_loc2_lat = loc2.latitude.cos();
+  const fixed cos_loc3_lat = loc3.latitude.cos();
 
   const fixed s21 = (loc2.latitude - loc1.latitude).accurate_half_sin();
   const fixed sl21 = (loc2.longitude - loc1.longitude).accurate_half_sin();
   const fixed s32 = (loc3.latitude - loc2.latitude).accurate_half_sin();
   const fixed sl32 = (loc3.longitude - loc2.longitude).accurate_half_sin();
 
-  const fixed a12 = sqr(s21) + cloc1Latitude * cloc2Latitude * sqr(sl21);
-  const fixed a23 = sqr(s32) + cloc2Latitude * cloc3Latitude * sqr(sl32);
+  const fixed a12 = sqr(s21) + cos_loc1_lat * cos_loc2_lat * sqr(sl21);
+  const fixed a23 = sqr(s32) + cos_loc2_lat * cos_loc3_lat * sqr(sl32);
 
 #ifdef INSTRUMENT_TASK
   count_distbearing++;
 #endif
 
   return fixed_double_earth_r * 
-    (earth_distance_function(a12) + earth_distance_function(a23));
+    (EarthDistance(a12) + EarthDistance(a23));
 }
 
 GeoPoint
@@ -298,7 +298,7 @@ FindLatitudeLongitude(const GeoPoint loc, const Angle bearing,
   const auto scl = loc.latitude.SinCos();
   const fixed sin_latitude = scl.first, cos_latitude = scl.second;
 
-  loc_out.latitude = Angle::Radians(earth_asin(
+  loc_out.latitude = Angle::Radians(EarthASin(
       sin_latitude * cos_distance + cos_latitude * sin_distance * cos_bearing));
 
   loc_out.longitude =
