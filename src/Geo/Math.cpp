@@ -47,7 +47,6 @@ earth_distance_function(const fixed a)
     return fixed_zero;
 
 #ifdef FIXED_MATH
-  // static const fixed fixed_shrink(fixed_two/(1<<(EXPAND_BITS*2)));
   // acos(1-x) = 2*asin(sqrt(x/2))
   // acos(1-2*x) = 2*asin(sqrt(x))
   //    = 2*atan2(sqrt(x), sqrt(fixed_one-x));
@@ -70,11 +69,8 @@ IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, fixed dthis,
 
   assert(dthis <= dtotal && dthis >= fixed_zero);
 
-  // const fixed inv_sind = fixed_one / sin(dtotal);
-  // JMW remove inv_sind?
-
-  const fixed A = sin(dtotal - dthis);// * inv_sind;
-  const fixed B = sin(dthis);// * inv_sind;
+  const fixed A = sin(dtotal - dthis);
+  const fixed B = sin(dthis);
 
   const auto sc1 = loc1.latitude.SinCos();
   const fixed sinLoc1Latitude = sc1.first, cosLoc1Latitude = sc1.second;
