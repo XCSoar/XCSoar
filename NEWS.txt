@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4.1 - not yet released
 * calculations
   - fix "final GR" calculation (#2256)
+  - improved great circle vector calculation precision
 * map
   - new option to disable the wind arrow
 * devices
