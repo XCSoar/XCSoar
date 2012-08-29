@@ -148,8 +148,11 @@ SerialPort::IsValid() const
 bool
 SerialPort::Drain()
 {
-  if (hPort == INVALID_HANDLE_VALUE)
+  int nbytes = GetDataQueued();
+  if (nbytes < 0)
     return false;
+  else if (nbytes == 0)
+    return true;
 
   ::SetCommMask(hPort, EV_ERR|EV_TXEMPTY);
   DWORD events;
@@ -162,6 +165,19 @@ SerialPort::Flush()
 {
   PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   BufferedPort::Flush();
+}
+
+int
+SerialPort::GetDataQueued() const
+{
+  if (hPort == INVALID_HANDLE_VALUE)
+    return -1;
+
+  COMSTAT com_stat;
+  DWORD errors;
+  return ::ClearCommError(hPort, &errors, &com_stat)
+    ? (int)com_stat.cbOutQue
+    : -1;
 }
 
 int

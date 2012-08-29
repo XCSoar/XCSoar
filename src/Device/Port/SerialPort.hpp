@@ -83,6 +83,14 @@ protected:
   }
 
   /**
+   * Determine the number of bytes in the driver's send buffer.
+   *
+   * @return the number of bytes, or -1 on error
+   */
+  gcc_pure
+  int GetDataQueued() const;
+
+  /**
    * Determine the number of bytes in the driver's receive buffer.
    *
    * @return the number of bytes, or -1 on error
