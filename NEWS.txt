@@ -17,6 +17,7 @@ Version 6.4.1 - not yet released
   - CAI GPS-NAV: work around timing problem
   - LX: fix Colibri/LX20 declaration problems
   - Westerboer: support for smaller steps in MC value setting
+  - improved Bluetooth support on Windows CE
 * user interface
   - remove duplicate "trail drift" setting (#2252)
   - fix flarm teamcolor saving (#2291)
