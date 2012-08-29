@@ -24,6 +24,7 @@ Version 6.4.1 - not yet released
 * logger
   - IGC B record is invalid ("V") with just 2D fix
   - log pressure altitude in IGC files
+* fix crash on low battery in simulator mode (#2306)
 
 Version 6.4 - 2012/07/31
 * calculations
