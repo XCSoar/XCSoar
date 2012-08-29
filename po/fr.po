@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-08-12 15:26+0000\n"
-"Last-Translator: Thierry F. <nebulos@gmail.com>\n"
+"PO-Revision-Date: 2012-08-21 19:34+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-13 06:40+0000\n"
-"X-Generator: Launchpad (build 15791)\n"
+"X-Launchpad-Export-Date: 2012-08-29 12:48+0000\n"
+"X-Generator: Launchpad (build 15864)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -222,7 +222,7 @@ msgstr "Téléchargement du vol."
 
 #: src/Logger/ExternalLogger.cpp:280
 msgid "Logger is empty."
-msgstr "Logger ext. vide"
+msgstr "Aucun enregistrement"
 
 #: src/Logger/ExternalLogger.cpp:297
 msgid "Failed to download flight."
@@ -1591,7 +1591,7 @@ msgstr "Distance équipier"
 #: src/InfoBoxes/Content/Factory.cpp:661
 #, no-c-format
 msgid "Team Dist"
-msgstr ""
+msgstr "Dist Eqp"
 
 #: src/InfoBoxes/Content/Factory.cpp:662
 #, no-c-format
@@ -1608,7 +1608,7 @@ msgstr "Vitesse instantanée sur le circuit"
 #: src/InfoBoxes/Content/Factory.cpp:671
 #, no-c-format
 msgid "V Task Inst"
-msgstr ""
+msgstr "V Circ Inst"
 
 #: src/InfoBoxes/Content/Factory.cpp:672
 #, no-c-format
@@ -3659,7 +3659,7 @@ msgstr "Auto off"
 
 #: src/Dialogs/LX/NanoConfigWidget.cpp:102
 msgid "Auto finish flight"
-msgstr ""
+msgstr "Fin automatique du vol"
 
 #: src/Dialogs/LX/NanoConfigWidget.cpp:105
 msgid "Always run"
@@ -4267,7 +4267,7 @@ msgstr "FLARM, Autres"
 #: src/Dialogs/dlgConfiguration.cpp:111
 #, no-c-format
 msgid "Audio Vario"
-msgstr ""
+msgstr "Vario sonore"
 
 #: src/Dialogs/dlgConfiguration.cpp:113
 #, no-c-format
@@ -7931,47 +7931,47 @@ msgstr ""
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:47
 #, no-c-format
 msgid "High limit of circling dead band"
-msgstr ""
+msgstr "Limite haute de la bande muette en spirale"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:51
 #, no-c-format
 msgid "Circling low cutoff"
-msgstr ""
+msgstr "Coupure basse en spirale"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:52
 #, no-c-format
 msgid "Low limit of circling dead band"
-msgstr ""
+msgstr "Limite basse de la bande muette en spirale"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:57
 #, no-c-format
 msgid "Cruise deadband type"
-msgstr ""
+msgstr "Type de bande muette en transition"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:58
 #, no-c-format
 msgid "Type of dead band used in cruise mode."
-msgstr ""
+msgstr "Type de bande muette en transition"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:62
 #, no-c-format
 msgid "Cruise hi cutoff"
-msgstr ""
+msgstr "Coupure haute en transition"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:63
 #, no-c-format
 msgid "High limit of cruise dead band"
-msgstr ""
+msgstr "Limite haute de la bande muette en transition"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:67
 #, no-c-format
 msgid "Cruise low cutoff"
-msgstr ""
+msgstr "Coupure basse en transition"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:68
 #, no-c-format
 msgid "Low limit of cruise dead band"
-msgstr ""
+msgstr "Limite basse de la bande muette en transition"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:73
 #, no-c-format
@@ -7987,11 +7987,15 @@ msgid ""
 "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
 "vario value."
 msgstr ""
+"Méthode de comparaison pour détecter le passage en ascendance (Haut/Bas).\n"
+"[AUCUN] : Etat Bas désactivé\n"
+"[MACCREADY] : Etat Haut si le vario est supérieur au calage MacCready.\n"
+"[MOYEN] : Etat Haut si le vario est supérieur au vario moyen."
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:78
 #, no-c-format
 msgid "Cruise lift trigger"
-msgstr ""
+msgstr "Déclencheur de montée en transition"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:79
 #, no-c-format
@@ -8008,7 +8012,7 @@ msgstr ""
 #: src/Dialogs/Vega/AudioModeParameters.hpp:83
 #, no-c-format
 msgid "Climb averager scale"
-msgstr ""
+msgstr "Intervalle de lissage en montée"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:83
 #, no-c-format
@@ -8018,17 +8022,18 @@ msgstr "Échelle de temps utilisée pour la moyenne du vario."
 #: src/Dialogs/Vega/AudioModeParameters.hpp:87
 #, no-c-format
 msgid "Cruise averager scale"
-msgstr ""
+msgstr "Intervalle de lissage en transition"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:88
 #, no-c-format
 msgid "Time scale used for cruise speed command averager."
 msgstr ""
+"Echelle de temps utilisée pour lisser vitesse de consigne en transition."
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:92
 #, no-c-format
 msgid "Circling volume"
-msgstr ""
+msgstr "Volume en spirale"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:93
 #, no-c-format
@@ -8080,12 +8085,12 @@ msgstr "Constante de temps du filtre du variomètre en mode transition"
 #: src/Dialogs/Vega/AudioModeParameters.hpp:117
 #, no-c-format
 msgid "Tone pitch scale"
-msgstr ""
+msgstr "Echelle de tonalité"
 
 #: src/Dialogs/Vega/AudioModeParameters.hpp:118
 #, no-c-format
 msgid "Adjustment to base pitch scale of tones in all modes."
-msgstr ""
+msgstr "Réglage de l'échelle de tonalité de base dans tous les modes."
 
 #: src/Dialogs/Vega/AudioParameters.hpp:106
 msgid "Beep type"
@@ -8110,7 +8115,7 @@ msgstr ""
 #: src/Dialogs/Vega/CalibrationParameters.hpp:34
 #, no-c-format
 msgid "TE mixing"
-msgstr ""
+msgstr "Mélange Energie Totale"
 
 #: src/Dialogs/Vega/CalibrationParameters.hpp:35
 #, no-c-format
@@ -8118,6 +8123,8 @@ msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
 msgstr ""
+"Part de la sonde de compensation utilisée dans la détermination de l'énergie "
+"totale avec l'énergie totale provenant les prises pitots et statiques"
 
 #: src/Dialogs/Vega/CalibrationParameters.hpp:39
 #, no-c-format
@@ -8149,7 +8156,7 @@ msgstr ""
 #: src/Dialogs/Vega/CalibrationParameters.hpp:49
 #, no-c-format
 msgid "TE dynamic cal."
-msgstr ""
+msgstr "Calc. EnTot dynamique"
 
 #: src/Dialogs/Vega/CalibrationParameters.hpp:50
 #, no-c-format
@@ -8371,7 +8378,7 @@ msgstr "Enregistrement IGC"
 #: src/Dialogs/Vega/MixerParameters.hpp:33
 #, no-c-format
 msgid "Mute vario on voice"
-msgstr ""
+msgstr "Taire le vario lors d'un appel"
 
 #: src/Dialogs/Vega/MixerParameters.hpp:34
 #, no-c-format
@@ -8686,6 +8693,10 @@ msgid ""
 "in circling mode to demonstrate the lift tones.  When not in circling mode, "
 "set this to a realistic negative value so speed command tones are produced."
 msgstr ""
+"Ceci produit une fausse valeur de vario à énergie totale. Cela peut être "
+"utilisé en mode spirale pour tester les tonalités. Or du mode spirale, le "
+"régler à une valeur réaliste négative de façon à produire des sons "
+"correspondants à la consigne de vitesse."
 
 #: Data/Dialogs/dlgStatusAircraft.xml:5 Data/Dialogs/dlgWaypointEdit_L.xml:34
 msgid "Latitude"
@@ -8792,6 +8803,8 @@ msgid ""
 "This produces a fake airspeed.  It can be used when not in circling mode to "
 "demonstrate the speed command tones."
 msgstr ""
+"Ceci produit une fausse valeur de vitesse air. Cela peut être utilisé en "
+"mode spirale pour tester les sons correspondants à la consigne de vitesse."
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
 msgid "InfoBox values, normal"
@@ -8881,7 +8894,7 @@ msgstr "Volets landing"
 
 #: Data/Dialogs/dlgTarget.xml:15 Data/Dialogs/dlgTarget_L.xml:33
 msgid "V rem."
-msgstr ""
+msgstr "V rest."
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:6
 msgid "ACK Warn"
