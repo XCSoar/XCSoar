@@ -46,8 +46,6 @@ Copyright_License {
 #include <stdio.h>
 #include <windef.h> /* for MAX_PATH */
 
-#define fixed_7_5 fixed(7.5)
-
 enum AirspaceFileType {
   AFT_UNKNOWN,
   AFT_OPENAIR,
@@ -185,16 +183,32 @@ struct TempAirspaceType
     airspace_database.Add(as);
   }
 
+  static fixed
+  ArcStepWidth(fixed radius)
+  {
+    if (radius > fixed_int_constant(50000))
+      return fixed_int_constant(1);
+    if (radius > fixed_int_constant(25000))
+      return fixed_int_constant(2);
+    if (radius > fixed_int_constant(10000))
+      return fixed_int_constant(3);
+
+    return fixed_int_constant(5);
+  }
+
   void
   AppendArc(const GeoPoint start, const GeoPoint end)
   {
-    // 5 or -5, depending on direction
-    const Angle step = Angle::Degrees(rotation * fixed(5));
 
     // Determine start bearing and radius
     const GeoVector v = center.DistanceBearing(start);
     Angle start_bearing = v.bearing;
     const fixed radius = v.distance;
+
+    // 5 or -5, depending on direction
+    const fixed _step = ArcStepWidth(radius);
+    const Angle step = Angle::Degrees(rotation * _step);
+    const fixed threshold = _step * fixed(1.5);
 
     // Determine end bearing
     Angle end_bearing = center.Bearing(end);
@@ -203,7 +217,7 @@ struct TempAirspaceType
     points.push_back(start);
 
     // Add intermediate polygon points
-    while ((end_bearing - start_bearing).AbsoluteDegrees() > fixed_7_5) {
+    while ((end_bearing - start_bearing).AbsoluteDegrees() > threshold) {
       start_bearing = (start_bearing + step).AsBearing();
       points.push_back(FindLatitudeLongitude(center, start_bearing, radius));
     }
@@ -216,13 +230,15 @@ struct TempAirspaceType
   AppendArc(Angle start, Angle end)
   {
     // 5 or -5, depending on direction
-    const Angle step = Angle::Degrees(rotation * fixed(5));
+    const fixed _step = ArcStepWidth(radius);
+    const Angle step = Angle::Degrees(rotation * _step);
+    const fixed threshold = _step * fixed(1.5);
 
     // Add first polygon point
     points.push_back(FindLatitudeLongitude(center, start, radius));
 
     // Add intermediate polygon points
-    while ((end - start).AbsoluteDegrees() > fixed_7_5) {
+    while ((end - start).AbsoluteDegrees() > threshold) {
       start = (start + step).AsBearing();
       points.push_back(FindLatitudeLongitude(center, start, radius));
     }

@@ -33,7 +33,9 @@ Copyright_License {
  */
 class PortEnumerator {
   RegistryKey drivers_active;
-  unsigned i;
+  RegistryKey bluetooth_ports;
+  RegistryKey bluetooth_device;
+  unsigned i, j;
 
   StaticString<64> name;
   StaticString<256> display_name;

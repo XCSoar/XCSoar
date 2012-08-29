@@ -22,6 +22,7 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Geo/Math.hpp"
 #include "Math/Angle.hpp"
 #include "Math/fixed.hpp"
 
@@ -32,7 +33,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(65);
+  plan_tests(66);
 
   // test constructor
   GeoPoint p1(Angle::Degrees(fixed(345.32)), Angle::Degrees(fixed(-6.332)));
@@ -155,6 +156,14 @@ int main(int argc, char **argv)
   ok1(l4.IsValid());
   l4.SetInvalid();
   ok1(!l4.IsValid());
+
+  bool find_lat_lon_okay = true;
+  for (Angle bearing = Angle::Zero(); bearing < Angle::FullCircle();
+      bearing += Angle::Degrees(fixed(5))) {
+    GeoPoint p_test = FindLatitudeLongitude(p1, bearing, fixed(50000));
+    find_lat_lon_okay = equals(p_test.Distance(p1), 50000) && find_lat_lon_okay;
+  }
+  ok1(find_lat_lon_okay);
 
   v = l1.DistanceBearing(l2);
   printf("Dist %g bearing %d\n",

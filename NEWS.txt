@@ -14,11 +14,14 @@ Version 6.5 - not yet released
 * infoboxes
   - added thermal assistant infobox
 
-Version 6.4.1 - not yet released
+Version 6.4.1 - 2012/08/30
 * calculations
   - fix "final GR" calculation (#2256)
+  - improved great circle vector calculation precision
 * map
   - new option to disable the wind arrow
+* data files
+  - increased arc airspace resolution for large radiuses
 * devices
   - fix potential crash in I/O thread
   - fix date/time parsing in Flytec device driver
@@ -26,6 +29,9 @@ Version 6.4.1 - not yet released
   - CAI GPS-NAV: work around timing problem
   - LX: fix Colibri/LX20 declaration problems
   - Westerboer: support for smaller steps in MC value setting
+  - improved Bluetooth support on Windows CE
+  - work around Windows CE serial port driver bug, fixes freeze during
+    Nano task declaration (#2255)
 * user interface
   - remove duplicate "trail drift" setting (#2252)
   - fix flarm teamcolor saving (#2291)
@@ -33,6 +39,7 @@ Version 6.4.1 - not yet released
 * logger
   - IGC B record is invalid ("V") with just 2D fix
   - log pressure altitude in IGC files
+* fix crash on low battery in simulator mode (#2306)
 
 Version 6.4 - 2012/07/31
 * calculations

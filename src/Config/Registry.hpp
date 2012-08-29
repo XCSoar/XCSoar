@@ -54,6 +54,16 @@ public:
       ::RegCloseKey(hKey);
   }
 
+  RegistryKey &operator=(RegistryKey &&other) {
+    if (hKey != 0)
+      ::RegCloseKey(hKey);
+
+    hKey = other.hKey;
+    other.hKey = 0;
+
+    return *this;
+  }
+
   bool error() const {
     return hKey == 0;
   }

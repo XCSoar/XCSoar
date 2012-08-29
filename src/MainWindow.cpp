@@ -511,8 +511,6 @@ MainWindow::OnTimer(WindowTimer &_timer)
     return SingleWindow::OnTimer(_timer);
 
   if (globalRunningEvent.Test()) {
-    battery_timer.Process();
-
     ProcessTimer();
 
     UpdateGaugeVisibility();
@@ -535,6 +533,8 @@ MainWindow::OnTimer(WindowTimer &_timer)
         widget->Raise();
       }
     }
+
+    battery_timer.Process();
   }
 
   return true;

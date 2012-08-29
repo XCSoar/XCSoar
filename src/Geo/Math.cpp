@@ -287,7 +287,7 @@ FindLatitudeLongitude(const GeoPoint loc, const Angle bearing,
     return loc;
 
   GeoPoint loc_out;
-  distance *= fixed_inv_earth_r;
+  distance /= REARTH;
 
   const auto scd = sin_cos(distance);
   const fixed sin_distance = scd.first, cos_distance = scd.second;

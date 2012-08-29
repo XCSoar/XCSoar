@@ -677,7 +677,8 @@ DEBUG_PROGRAM_NAMES = \
 	DumpFlarmNet \
 	RunRepositoryParser \
 	IGC2NMEA \
-	NearestWaypoints
+	NearestWaypoints \
+	ArcApprox
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
@@ -772,6 +773,12 @@ DUMP_TEXT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
 DUMP_TEXT_FILE_DEPENDS = IO OS ZZIP UTIL
 $(eval $(call link-program,DumpTextFile,DUMP_TEXT_FILE))
+
+ARC_APPROX_SOURCES = \
+	$(SRC)/Formatter/GeoPointFormatter.cpp \
+	$(TEST_SRC_DIR)/ArcApprox.cpp
+ARC_APPROX_DEPENDS = UTIL GEO MATH
+$(eval $(call link-program,ArcApprox,ARC_APPROX))
 
 DUMP_TEXT_ZIP_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextZip.cpp

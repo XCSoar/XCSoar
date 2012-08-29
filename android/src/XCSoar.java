@@ -125,14 +125,18 @@ public class XCSoar extends Activity {
   }
 
   private void quit() {
+    Log.d(TAG, "in quit()");
+
     nativeView = null;
 
+    Log.d(TAG, "stopping service");
     stopService(new Intent(this, serviceClass));
 
     TextView tv = new TextView(XCSoar.this);
     tv.setText("Shutting down XCSoar...");
     setContentView(tv);
 
+    Log.d(TAG, "finish()");
     finish();
   }
 
@@ -194,6 +198,8 @@ public class XCSoar extends Activity {
 
   @Override protected void onDestroy()
   {
+    Log.d(TAG, "in onDestroy()");
+
     if (nativeView != null) {
       nativeView.exitApp();
       nativeView = null;
@@ -205,6 +211,7 @@ public class XCSoar extends Activity {
     }
 
     super.onDestroy();
+    Log.d(TAG, "System.exit()");
     System.exit(0);
   }
 
