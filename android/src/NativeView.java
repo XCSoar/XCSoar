@@ -246,8 +246,10 @@ class NativeView extends SurfaceView
                          (int)metrics.xdpi, (int)metrics.ydpi,
                          Build.VERSION.SDK_INT, Build.PRODUCT))
         runNative();
+    Log.d(TAG, "deinitializeNative()");
     deinitializeNative();
 
+    Log.d(TAG, "sending message to quitHandler");
     quitHandler.sendMessage(quitHandler.obtainMessage());
   }
 
