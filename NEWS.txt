@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.4.1 - not yet released
+Version 6.4.1 - 2012/08/30
 * calculations
   - fix "final GR" calculation (#2256)
   - improved great circle vector calculation precision
