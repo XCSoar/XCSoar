@@ -18,7 +18,7 @@ The moving map shows:
 \item The active task, observation zones, turnpoints
 \item The bearing (or route\footnote{The line to the next waypoint may be a {\em route}, as described in Section~\ref{sec:route}.})
   to the next waypoint, heading
-\item Special Use Airspace
+\item Airspaces
 \item Markers, thermals history, snail trail
 \item Glide range\footnote{The glide range is also referred to as the {\em reach}, as described in Section~\ref{sec:reach}.}
 \end{enumerate}
@@ -66,7 +66,7 @@ in or out.
 On Altair, the rotary knob can be used to zoom in and out.
 
 The map scale is displayed in the lower left corner of the moving map
-display. The incicated distance is measured from the left to the right boarder
+display. The indicated distance is measured from the left to the right boarder
 of the map display.
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoom.png}}
 
@@ -120,7 +120,7 @@ is particularly useful when task planning.
 \end{enumerate} 
 
 When pan is active, the text 'PAN' appears next to the map scale.  While
-pannig the location of the focus stays in the middle of the display under the
+panning the location of the focus stays in the middle of the display under the
 cross hairs.
 
 A special menu of buttons in pan mode is also displayed when in pan
@@ -182,11 +182,11 @@ either that of the task\config{reachpolar}, or at a safety MacCready value.
 \section{Active task}
 
 The active task course is drawn on the map as a green dashed line.
-Assigned area tasks also show the task sectors or areas as a yellow shaded
+Assigned area tasks also show the turn point sectors or areas as a yellow shaded
 region.  
 Circles are always drawn around start and finish points, lines are
 only drawn if the start/finish points are of line type.  Task
-observation sectors are drawn as segments.
+observation sectors are drawn as circle segments.
 
 At all times a thick black line is drawn from the glider to the next
 waypoint in the task.  This line may be the direct path to the waypoint,
@@ -257,7 +257,7 @@ labels and non-task waypoint labels by toggling:
 
 Other options for display decluttering include:
 
-\jindent{\bmenut{Labels}{Task \& Landables}}{  Shows labels for the waypoints in  the active task and any landable fields (based on the waypoint attributes in the waypoints file).  Other waypoints are shown bu not labeled. }
+\jindent{\bmenut{Labels}{Task \& Landables}}{  Shows labels for the waypoints in  the active task and any landable fields (based on the waypoint attributes in the waypoints file).  Other waypoints are shown but not labeled. }
 \jindent{\bmenut{Labels}{Task}}{ Shows labels only for waypoints in the active task}
 \jindent{\bmenut{Labels}{All}}{ Shows labels for all waypoints. }
 
@@ -339,7 +339,7 @@ Markers are dropped by the menu:
 
 While climbing in thermals automatically a mark is generated and stored up 
 \sketch{figures/thermalhistory.png}
-to the end of the flight. This thermal history is accesible through the map 
+to the end of the flight. This thermal history is accessible through the map 
 element functions in the same way as markers or waypoints.
 \\
 
