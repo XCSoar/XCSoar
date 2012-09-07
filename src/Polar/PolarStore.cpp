@@ -260,6 +260,9 @@ static constexpr PolarStore::Item internal_polars[] =
 
   // from SeeYou
   { _T("ASW-28 (15m)"), 310, 200, 92.6, -0.571, 120.38, -0.875, 148.16, -1.394, 10.5, 55.555, 108 },
+
+  // from factory polar (flight manual)
+  { _T("Blanik L13-AC"), 500, 0, 70, -0.85, 110, -1.25, 160, -3.2, 17.44, 44.44, 0 },
 };
 
 const PolarStore::Item &
