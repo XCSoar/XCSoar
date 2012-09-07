@@ -263,6 +263,9 @@ static constexpr PolarStore::Item internal_polars[] =
 
   // idaflieg measurement, 23.08.2012 at Aalen Elchingen (preliminary result)
   { _T("AK-8"), 360 , 100, 87.3 , -0.658 , 130.0, -0.973 , 170.0, -1.957 , 9.75 , 50.0 , 107 },
+
+  // from factory polar (flight manual)
+  { _T("Blanik L13-AC"), 500, 0, 70, -0.85, 110, -1.25, 160, -3.2, 17.44, 44.44, 0 },
 };
 
 const PolarStore::Item &
