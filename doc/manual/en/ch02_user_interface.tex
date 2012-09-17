@@ -137,7 +137,9 @@ Nav 1/2 & \ref{cha:tasks}\bmenus{Task}
  & {\bmenut{Previous}{Turnpoint}} & {\bmenut{Next}{Turnpoint}}
  & \ref{sec:waypoint-selector-dialog}\bmenut{Waypoint}{List}
  & \ref{sec:alternates}\bmenus{Alternates} \\ \\
-Nav 2/2 & \ref{sec:taskabort}\bmenut{Task}{Abort} & \bmenus{GoTo}
+Nav 2/2 & \ref{sec:taskabort}\bmenut{Task}{Abort}
+ & \ref{sec:markers}\bmenut{Mark}{Drop}
+ & {}
  & \bmenus{Target}
  & \ref{sec:waypointdetails}\bmenut{Waypoint}{Details}
 
@@ -153,12 +155,13 @@ country flight and certainly the second step.
 
 Display 1/2 & \ref{sec:zooming}\bmenut{Zoom}{In}
  & \bmenut{Zoom}{Out} & \bmenut{Zoom}{Auto}
- & \ref{sec:markers}\bmenut{Mark}{Drop}
+ & \bmenus{Info Cruise}
  & \ref{sec:panning}\bmenut{Pan}{On} \\ \\
 Display 2/2 &  \ref{sec:maplabels}\bmenut{Labels}{All/...}
  & \ref{sec:trail}\bmenut{Trail}{Full/...}
- & \bmenut{Terrain}{On/Off} & \ref{sec:terrain_topo}\bmenut{Topography}{On/Off}
- & \bmenut{Info}{Auto}
+ & \bmenut{Terrain}{On/Off}
+ & \ref{sec:terrain_topo}\bmenut{Topo.}{On/Off}
+ 
 
 \end{tabularx}}
 
@@ -174,7 +177,7 @@ Config 1/3 & \bmenut{MacCready}{$+$} & \ref{sec:stf}\bmenut{MacCready}{$-$}
  & \ref{sec:auto-maccready}\bmenut{MacCready}{Auto}
  & \ref{sec:flight-setup}\bmenut{Flight}{Setup}
  & \ref{sec:wind-setup}\bmenut{Setup}{Wind} \\ \\
-Config 2/3 & \bmenus{Vario}
+Config 2/3 & \bmenus{Vega}
  & \ref{cha:configuration}\bmenut{Setup}{System}
  & \ref{sec:airspace-filter}\bmenut{Settings}{Airspace}
  & \ref{sec:logger}\bmenut{Logger}{Start}
@@ -182,13 +185,14 @@ Config 2/3 & \bmenus{Vario}
 Config 3/3 & \ref{sec:raw-logger}\bmenus{Raw Logger}
  & \ref{conf:comdevices}\bmenus{Devices}
  & \bmenus{Setup Plane}
+ & \bmenut{File}{Manager}
 
 \end{tabularx}}
 
 The configuration menu is typically part of the ground interaction with 
 XCSoar. You are not expected to spend much time in-flight with tweaking 
 the configuration, except you manually adjust wind or MacCready settings. 
-The `Vario' item gives control over the  Vega intelligent variometer. This 
+The `Vega' item gives control over the  Vega intelligent variometer. This 
 comprises a sub-menu.
 
 
@@ -220,9 +224,9 @@ larger scope tactical decision on your flight is requested.
 \noindent\makebox[\textwidth]{%
 \begin{tabularx}{1.8\textwidth}{l|ccccc}
 
-Vario 1/2 & \bmenut{Airframe}{Switches} & \bmenut{Setup}{Audio}
+Vega 1/2 & \bmenut{Airframe}{Switches} & \bmenut{Setup}{Audio}
  & \bmenut{Manual}{Demo} & \bmenut{Setup}{Stall} & \bmenus{Accel} \\ \\
-Vario 2/2 & \bmenut{ASI}{Zero} & \bmenut{Accel}{Zero}
+Vega 2/2 & \bmenut{ASI}{Zero} & \bmenut{Accel}{Zero}
  & \bmenus{Store} & \bmenut{Cruise}{Demo} & \bmenut{Climb}{Demo}
 
 \end{tabularx}}
@@ -253,9 +257,9 @@ of buttons in Altair perform the following functions (from left to right):
 \begin{tabular}{c c c c c c}
  PC: & 6 & 7 & 8 & 9 & 0 \\
  Altair: & F5 & F6 & F7 & F8 & F9 \\
-& \bmenut{Flight}{Setup} & \bmenut{Task}{Calc} & \bmenut{Task}{Edit} &
-\bmenut{Arm}{Advance} & \bmenut{Drop}{Mark} \\
-\end{tabular}
+& \bmenut{Flight}{Setup} & \bmenut{Task}{Manager} & {} &
+\bmenus{Target} & \bmenut{Drop}{Mark} \\
+\end{tabular}	
 \end{center}
 
 Pressing ESC on Altair displays labels for these default menu buttons.
@@ -396,7 +400,7 @@ be adjusted include MacCready setting, wind speed, and height (QNH).
 \subsection*{Changing InfoBox sets}
 An InfoBox set can either be composed by calling the configuration dialogue 
 from the menu: \begin{center}
-\bmenu{Config ..}\blink\bmenu{Setup System}
+\bmenu{Config 2}\blink\bmenu{Setup System}
 \end{center}
 on the `Look / InfoBox Modes' setup page or by
 performing a long press on the InfoBox that should be changed. In the second 
@@ -426,7 +430,7 @@ messages are buffered and displayed as soon as the dialogue is exited.
 
 \section{Dialogue windows}\label{sec:dialog-windows}
 
-XCSoar contains several dialog windows that can be activated to bring up
+XCSoar contains several dialogue windows that can be activated to bring up
 additional information and are also used for more complex interactions with the
 user, such as editing tasks and configuring settings.
 
@@ -452,7 +456,7 @@ Dialogues are typically started from the button menu.
 
 Many of the dialogue windows have multiple pages of information and are controlled
 in a consistent fashion. Press the \button{$<$} or \button{$>$} buttons to
-select the next or previous page of the dialog and the \button{Close} button to
+select the next or previous page of the dialogue and the \button{Close} button to
 make the dialogue disappear.
 
 The escape key on a PC or the PWR/ESC button on Altair, can also be used to
@@ -493,10 +497,10 @@ These dialogues are described in later chapters. with the exception of the
 check-list, status and text entry dialogues, which are described below.
 
 \subsection*{Check-list (dialogue example)}\label{sec:checklist}
-The checklist dialog can display several pages of user-defined free text.
+The checklist dialogue can display several pages of user-defined free text.
 Typically this is used for check-lists. It can be accessed via the menu under 
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Check list}
+\bmenu{Info 1}\blink\bmenu{Check list}
 \end{quote}
 
 These check-lists may include: daily inspection, preflight, out-landing,
@@ -511,7 +515,7 @@ knob on Altair) may be used to scroll through the text. Clicking the
 
 
 \subsection*{Text entry} \label{sec:textentry}
-A text entry dialog is used for entering text.  This is used for team
+A text entry dialogue is used for entering text.  This is used for team
 code entry, setting file names, waypoint editing, as well as entering
 other configuration options, such as pilot name for the logger.
 
@@ -567,7 +571,7 @@ For Altair the control of the screen hardware
 brightness can be controlled from the brightness dialogue
 accessible from the menu:
 \begin{quote}
-\bmenu{Display ..}\blink\bmenu{Bright}
+\bmenu{Display 2}\blink\bmenu{Bright}
 \end{quote}
 \sketch{figures/brightness.png}
 

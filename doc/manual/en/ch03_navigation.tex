@@ -58,18 +58,20 @@ Then use mouse wheel, or the Pocket PC up/down key to either zoom
 in or out.
 \item A PNA with a button wheel let you also change the zoom. 
 \item Android devices have the +/- rocker that let you change the zoom. 
-\item You can also gesture to change the zoom level. Gesture \gesture{Up/Down}
+\gesture{Up/Down}
+\item You can also gesture to change the zoom level. Gesture 
 ``Up'' zooms in, ``Down'' zooms out.
-\item Or select the function from the menus:
+\item Or select the function from the menu.
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Zoom In} and \bmenu{Display}\blink\bmenu{Zoom Out}
+\bmenu{Display 1}\blink\bmenu{Zoom In} and \bmenu{Zoom Out}
 \end{quote}
+\item On Altair, the rotary knob can be used to zoom in and out.
 \end{enumerate}
-On Altair, the rotary knob can be used to zoom in and out.
 
 The map scale is displayed in the lower left corner of the moving map
 display. The indicated distance is measured from the left to the right boarder
 of the map display.
+%\sketch{figures/zoom.png}
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoom.png}}
 
 Compaq Aero Users. If you enable the Compaq Aero Game Keys (On the
@@ -84,16 +86,12 @@ mode's zoom setting only, so when leaving the mode the previous mode's
 zoom setting is used.  If ``Circling Zoom'' is not enabled,
 there is only a single zoom level.
 
+\marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
 Auto-zoom automatically zooms in when approaching a waypoint to keep
+\menulabel{\bmenu{Display 1}\blink\bmenut{Zoom}{Auto}}
 the waypoint at a reasonable screen distance. When auto-zoom is active,
 'AUTO' appears next to the map scale. The user can still zoom
 in and out if desired, zoom will be switch to manual control automatically.
-\marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
-
-To turn auto zoom on or off, select from the menu
-\begin{quote}
-\bmenu{Display}\blink\bmenu{Zoom Auto} 
-\end{quote}
 
 When a waypoint changes (automatically, via the task selector, or by
 manually switching waypoints), auto-zoom adjusts the zoom level
@@ -109,7 +107,7 @@ is particularly useful when task planning.
 \begin{enumerate}
 \item Enable pan mode by pressing,  \gesture{Up - Right - Down - Left}
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Pan On}
+\bmenu{Display 1}\blink\bmenu{Pan On}
 \end{quote}
 by gesture, or on Android devices by a two finger touch and swish over the map.
 
@@ -229,11 +227,10 @@ brightness is configurable.  Support for a sun ephemeris is underway.
 Terrain shading and brightness can be configured \config{shading}.
 
 Both terrain and topography display can be switched on or off from the
-menu:
-\begin{quote}
-\bmenu{Display ..}\blink\bmenu{Terrain On} \\
-\bmenu{Display ..}\blink\bmenu{Topo. On}
-\end{quote}
+menu.
+\menulabel{\bmenu{Display 2}\blink\bmenut{Terrain}{On/Off}}
+
+\menulabel{\bmenu{Display 2}\blink\bmenut{Topo.}{On/Off}}
 
 \begin{center}
 \begin{tabular}{c c}
@@ -241,7 +238,6 @@ Topography & Terrain \\
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-topo.png} &
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-terrain.png} \\
 \end{tabular}
-
 \end{center}
 
 If the terrain data is not available (or terrain display is turned
@@ -252,14 +248,12 @@ terrain region, the background colour will be white.
 \subsection*{Map labels}\label{sec:maplabels}
 
 The screen can be de-cluttered, turning off the display of topography
-labels and non-task waypoint labels by toggling:
-\begin{quote}
-\bmenu{Display ..}\blink\bmenu{Labels None}
-\end{quote}
+labels and non-task waypoint labels by toggling the {\it Labels} menu.
+\menulabel{\bmenu{Display 2}\blink\bmenut{Labels}{None}}
 
 Other options for display decluttering include:
 
-\jindent{\bmenut{Labels}{Task \& Landables}}{  Shows labels for the waypoints in 
+\jindent{\bmenuth{Labels}{Task \&}{Landables}}{  Shows labels for the waypoints in 
   the active task and any landable fields (based on the waypoint attributes in 
   the waypoints file).  Other waypoints are shown but not labeled. }
 \jindent{\bmenut{Labels}{Task}}{ Shows labels only for waypoints in the active task}
@@ -273,10 +267,10 @@ Note that in all cases, the label format is configurable in the
 
 An optional 'snail trail' is drawn on the map showing the glider's
 path history.  The colour and thickness of the trail depends on the height or
-on the variometer value. \config{snailtype} 
+on the variometer value. 
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/snail.pdf}
+\includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/snail.pdf}
 \end{center}
 
 If Vega or an intelligent variometer is connected with Netto output,
@@ -284,14 +278,13 @@ the Netto vario value is used; hence the colours and thickness of the
 trail indicates the air-mass vertical movement rather than the glider's
 vertical movement	.
 
-The snail trail display can be toggled between off, a short trail
-(about ten minutes), a long trail (about one hour) or a full trail
+\config{snailtrail}
+The snail trail display can be toggled between {\bf Off}, a {\bf Short} trail
+(about ten minutes), a {\bf Long} trail (about one hour) or a {\bf Full} trail
 which displays the entire flight.  This can be performed permanently
-through the configuration \config{snailtrail} settings or temporarily by the
-menu:
-\begin{quote}
-\bmenu{Display ..}\blink\bmenu{Trail}
-\end{quote}
+through the configuration settings or temporarily by the
+menu.
+\menulabel{\bmenu{Display 2}\blink\bmenut{Trail}{Full}}
 
 Note that for all of these modes, the snail trail is short in
 circling mode in order to reduce screen clutter.
@@ -309,21 +302,19 @@ compensation is active (right picture), the glider appears to be
 circling in a column rather than an elongated spiral (left picture).
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/traildrift.png}
+\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/traildrift.png}
 \end{center}
 
+\config{traildrift}
 Enabling trail drift compensation is performed through the
-configuration settings \config{traildrift}.  The compensation is only performed
+configuration settings.  The compensation is only performed
 whilst in circling mode; the display of the trail in cruise mode is unaffected.
-This can also be performed from the wind settings dialog:
-\begin{quote}
-\bmenu{Config}\blink\bmenu{Setup Wind}
-\end{quote}
+This can also be performed from the wind settings dialogue.
+\menulabel{\bmenu{Config 1}\blink\bmenut{Setup}{Wind}}
 
 The trail drift display is useful also to show more clearly when thermals
-are cranked due to wind shear.
-
-The trail width can optionally be scaled according to the variometer display\config{trailscaled}.
+are cranked due to wind shear.\\
+The trail width can optionally be scaled according to the variometer display.
 
 \section{Markers}\label{sec:markers}
 
@@ -332,13 +323,9 @@ manually, by pressing a button, or automatically.  An example use of
 automatic markers is to drop markers when entering circling mode, as a
 simple way of showing all thermals encountered.
 
+\menulabel{\bmenu{Nav 2}\blink\bmenut{Mark}{Drop}}
 Markers are not preserved after XCSoar is exited, however the location
 of all marks are appended to the file \verb|xcsoar-marks.txt|.
-
-Markers are dropped by the menu: 
-\begin{quote}
-\bmenu{Display}\blink\bmenu{Mark Drop}
-\end{quote}
 
 \section{Thermals}
 
@@ -346,7 +333,7 @@ While climbing in thermals automatically a mark is generated and stored up
 \sketch{figures/thermalhistory.png}
 to the end of the flight. This thermal history is accessible through the map 
 element functions in the same way as markers or waypoints.
-\\
+
 
 \section{Glide range line}\label{sec:reach}
 
@@ -402,7 +389,7 @@ calculations --- for example, heights required as shown in the final
 glide bar or task data as displayed in infoboxes do not take reach into account.
 
 Furthermore, the reach calculations are used for footprint, landable
-waypoint arrival heights, abort mode and the alternates dialog.  The glider
+waypoint arrival heights, abort mode and the alternates dialogue.  The glider
 performance and MacCready setting used in these calculations are configurable\config{reachpolar}:
 \begin{description}
 \item[Task] The MC value is that used in the task.
@@ -413,16 +400,16 @@ performance and MacCready setting used in these calculations are configurable\co
 
 \section{Flight status}\label{sec:flight-status}
 
-The status dialog is a multi-tabular dialog giving overview information on the 
+The status dialogue is a multi-tabular dialogue giving overview information on the 
 flight, system, task, rules and times.
 It is accessed via the gesture "S", or with the menu under: \gesture{Left - Down - Right - Down - Left}
 \begin{quote}
-\bmenu{Info ..}\blink\bmenu{Status}
+\bmenu{Info 2}\blink\bmenu{Status}
 \end{quote}
 and then selecting the page `Flight'. 
 
 \subsection*{Position}
-The flight status dialog shows the status of the aircraft's locality, and can 
+The flight status dialogue shows the status of the aircraft's locality, and can 
 be useful when giving position reports. It shows the location of the aircraft, the
 maximum height gain, and nearest waypoint it's bearing and distance.
 \sketch{figures/status-flight.png}
@@ -434,12 +421,12 @@ location to others.
 Shows the local time, flight time, takeoff and landing time and
 the local sunset time.
 
-Note that the values in the Status dialog 
-are static once the particular dialog page is displayed. 
+Note that the values in the Status dialogue 
+are static once the particular dialogue page is displayed. 
 \sketch{figures/status-times.png}s
 That is, position, times, etc. do not update while the page is displayed. 
 To see the updated values, it is necessary to select a different tabular, 
-then return to the previous dialog to see the new values.
+then return to the previous dialogue to see the new values.
 
 \section{Route}\label{sec:route}
 

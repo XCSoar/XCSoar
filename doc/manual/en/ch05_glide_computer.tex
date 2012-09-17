@@ -55,11 +55,8 @@ flight modes (this is called `circling zoom').
 In addition to these display modes, an auxiliary set of InfoBoxes may
 be displayed in any flight mode.  This is useful if the pilot has
 information he wants to be able to view no matter what mode the
-computer is in.  This is accessed from the menu
-\begin{quote}
-\bmenu{Info ..}\blink\bmenu{Aux Info On}
-\end{quote}
-
+glide computer is in.  This is accessed from the menu,
+\menulabel{\bmenu{Info 2}\blink\bmenut{Info}{\it MySet}}
 which toggles between the normal mode-specific InfoBoxes and
 the auxiliary set of InfoBoxes.
 
@@ -78,7 +75,7 @@ may well be above final glide turning the penultimate waypoint.
 
 The MacCready setting may be adjusted several ways:
 \begin{itemize}
-\item With \bmenu{Config}\blink\bmenu{MC $+$/$-$}
+\item With \bmenu{Config 1}\blink\bmenu{MC $+$/$-$}
 \item For touchscreen/mouse devices, select the MacCready InfoBox field, then
   use the up and down arrow keys.
 \item When connected to a supported intelligent variometer, adjusting
@@ -99,7 +96,7 @@ accurate results, it is advisable to use the correct glide polar for your partic
 aircraft type. 
 Besides the aircraft type the correct over all mass of the glider is important for 
 accurate results. 
-\marginpar{\bmenu{Config}\blink\bmenu{Flight Setup}}
+\menulabel{\bmenu{Config 1}\blink\bmenut{Flight}{Setup}}
 The preflight check of your tactical glide computer certainly 
 includes a check of the correct settings for water ballast, with regard to the 
 configured dry mass. Because XCSoar does not offer a setting for the pilots 
@@ -120,7 +117,7 @@ performs as a clean glider, and at 50\% bugs value, the glider's
 sink rate is doubled when compared to a clean glider. The calculation 
 scales linearly in-between. 
 
-\marginpar{\bmenu{Info}\blink\bmenu{Analysis}}
+\menulabel{\bmenu{Info 1}\blink\bmenu{Analysis}}
 \begin{center}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/cut-clean-dirty-polar.png}
 \end{center}
@@ -137,7 +134,7 @@ may set a ballast value of perhaps 15 l so that the polar is
 appropriately adjusted for the increased cockpit weight.
 
 \begin{center}
-\marginpar{\bmenu{Info}\blink\bmenu{Analysis}}
+\menulabel{\bmenu{Info 1}\blink\bmenu{Analysis}}
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/overlay-non-balasted-polar.png}
 \end{center}
 
@@ -148,7 +145,7 @@ before and during flight, as well as to set the QNH pressure.
 
 %This is accessed via the menu under 
 %\begin{quote}
-\marginpar{\bmenu{Config}\blink\bmenu{Flight Setup}}
+\menulabel{\bmenu{Config 1}\blink\bmenut{Flight}{Setup}}
 %\end{quote}
 \begin{center}
 \includegraphics[angle=0,width=0.45\linewidth,keepaspectratio='true']{figures/dialog-basicsettings.png}
@@ -523,7 +520,7 @@ MacCready flight would produce the same task speed as has been
 achieved.  This value is higher than the actual MacCready setting when
 the glider has climbed faster than the MacCready setting or when the
 glider has flown in cloud streets etc.  The achieved MacCready is used
-in the task calculator dialog.
+in the task calculator dialogue.
 
 Task speed estimates for achieved speed, are compensated for altitude
 variations, such that the effects of climbs are taken into account in
@@ -604,13 +601,10 @@ Additionally, both methods may be used, so that before reaching final glide,
 the MacCready setting is adjusted to the average climb rate, and during final
 glide it adjusts the setting to give minimum time to arrival.
 
-The method that is used is defined in the configuration settings dialog as the
+The method that is used is defined in the configuration settings dialogue as the
 field ``Auto MC Mode''.  The default setting is ``Both''.
-
-To enable/disable Auto MacCready, use the menu
-\begin{quote}
-\bmenu{Config}\blink\bmenu{MC Auto}
-\end{quote}
+To enable/disable Auto MacCready, use the menu.
+\menulabel{\bmenu{Config 1}\blink\bmenut{MacCready}{Auto}}
 
 When Auto MacCready is enabled, the MacCready infobox displays `AUTO'
 instead of `MANUAL'; and the MacCready indicator in the variometer
@@ -663,13 +657,10 @@ and may therefore encourage the pilot to continue to select weak thermals.
 As a result of these limitations, the pilot should be aware of how the
 system operates and adjust his decision-making accordingly.
 
-\section{Analysis dialog}
+\section{Analysis dialogue}
 
-The analysis dialog can be used to check the glide polar.  This is
-accessed via the menu 
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Analysis}
-\end{quote}
+The analysis dialogue can be used to check the glide polar.  
+\menulabel{\bmenu{Info 1}\blink\bmenu{Analysis}}
 
 The polar page shows a graph of the glide polar at the current bugs
 and ballast setting.  It also shows the calculated best LD and the
@@ -681,10 +672,10 @@ title.
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-glidepolar.png}
 \end{center}
 
-In this dialog page, the `Settings' button opens the flight settings
-dialog (e.g.\ to adjust the bugs/ballast).
+In this dialogue page, the `Settings' button opens the flight settings
+dialogue (e.g.\ to adjust the bugs/ballast).
 
-The glide polar page of the analysis dialog shows the average total
+The glide polar page of the analysis dialogue shows the average total
 energy sink rate at each speed achieved in flight, when connected to a
 supported intelligent variometer (e.g.\ Vega).  This facility allows
 pilots to perform test flights in stable atmospheric conditions, such

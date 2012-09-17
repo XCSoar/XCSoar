@@ -21,9 +21,9 @@ later, preserving any statistics about achievement in the task.
 \section{Goto tasks}
 
 Goto tasks may be established by selecting a waypoint from the map,
-the waypoint list, or any other mechanism e.g. the alternates dialog,
+the waypoint list, or any other mechanism e.g. the alternates dialogue,
 \gesture{Down - Left} and select ``Goto''.  In goto task mode, selecting
-\bmenu{Nav}\blink\bmenu{Task resume} resumes the ordered task (if
+\bmenu{Nav 2}\blink\bmenu{Task Resume} resumes the ordered task (if
 any).
 
 \subsection*{Automatic goto}
@@ -51,13 +51,13 @@ useful for casual cross-country touring.
 
 The main ways of setting tasks are the following:
 \begin{itemize}
-\item Using the task editor dialog
+\item Using the task editor dialogue
 \item Selecting waypoints from the map and adding them to the task from the
- waypoint details dialog
+ waypoint details dialogue
 \item Loading the task from a file
 \end{itemize}
 
-%Selecting the Task menu item will produce the Task dialog box.  The
+%Selecting the Task menu item will produce the Task dialogue box.  The
 %list box on the left displays all of the turn points loaded into the
 %system. Highlight the desired entries and using the "-$>$" and "$<$-"
 %buttons assemble the desired task in the Task list box. As each turn
@@ -94,33 +94,32 @@ for any waypoints that are missing in the new waypoint file.
 %\item If the waypoint is in the active task, highlight the waypoint {\InfoBox}, 
 %  then use the up/down arrow keys to select the desired waypoint, and press the
 %enter key.
-%\item From the Task dialog, find and highlight the waypoint in
+%\item From the Task dialogue, find and highlight the waypoint in
 % the waypoint list, then press the 'Details' button.
 %\end{itemize}
-%The display will now show the waypoint details dialog.
+%The display will now show the waypoint details dialogue.
 
-The waypoint info. dialog describes a waypoint in detail and has
+The waypoint info. dialogue describes a waypoint in detail and has
 navigation functions such as GoTo, insert, append to the task, or set the 
 waypoint as the new home.
 
 This may be accessed several ways:
 \begin{itemize}
 \item
-From the task editor, menu \bmenu{Nav}\blink\bmenu{Task}\blink\bmenu{Turn Points}
+From the task manager, menu \bmenu{Nav 1}\blink\bmenu{Task} \todonum{descr. tabular "Turn Points"}
 and highligh a waypoint, then tap the highlighted waypoint again to display the 
-Task point dialog, then press the \bmenu{Details} \InfoBox.
+Task point dialogue, then press the \bmenu{Details} \InfoBox.
 
 \item 
-From the menu \bmenu{Info}\blink\bmenu{Waypoint details} to show the
-details for the active waypoint.
+From the {\it What's here?} function to show the
+item list under the cross-hair, or your index finger on the map.
 
 \item
-From the menu \bmenu{Info}\blink\bmenu{Nearest waypoint} to show the
-details of the waypoint nearest the aircraft, or if in pan mode,
-nearest the pan cursor.
+From the menu \bmenu{Nav 1}\blink\bmenu{Alternates} to show the
+details of the landables nearest to the aircraft.
 
 \item
-From the waypoint selector, menu \bmenu{Nav}\blink\bmenu{Waypoint
+From the waypoint selector, menu \bmenu{Nav 1}\blink\bmenu{Waypoint
 List} and select a waypoint to show the details of that waypoint.
 
 \item
@@ -129,7 +128,7 @@ If the waypoint is visible on the screen, touch its name or the waypoint symbol
 
 \end{itemize}
 
-The waypoint details dialog contains two major pages (accessed via the
+The waypoint details dialogue contains two major pages (accessed via the
 \button{$>$} and \button{$<$} buttons). Depending on the availability of further
 details to the waypoint they will by shown on extra pages.
 
@@ -144,7 +143,7 @@ navigating to this waypoint. The button cancels the current task.
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
 \end{center}
 
-As mentioned above, the Waypoint info dialog also shows three forms of altitude 
+As mentioned above, the Waypoint info dialogue also shows three forms of altitude 
 difference (additional
 altitude required to reach the waypoint at the safety height) for
 the corresponding waypoint:
@@ -173,12 +172,10 @@ This page contains a column of buttons allowing various actions to be performed:
 \item[\button{Pan to waypoint}] switches to pan mode and pans to that waypoint.
 %\item[\button{Set teamcode}] sets the waypoint as reference waypoint for
 %  team code coordinates.
-
-
 \end{description}
 
 It is a good idea to set your home waypoint from the waypoint details
-dialog. This causes XCSoar to start up at the home location regardless
+dialogue. This causes XCSoar to start up at the home location regardless
 of whether a GPS fix is received.  If no home is set, then XCSoar
 starts in the center of the terrain map.
 
@@ -203,15 +200,15 @@ waypoint.
 \end{center}
 
 
-\section{Waypoint selector dialog}\label{sec:waypoint-selector-dialog}
-The waypoint selector is a dialog that allows waypoints to be easily selected
+\section{Waypoint selector dialogue}\label{sec:waypoint-selector-dialog}
+The waypoint selector is a dialogue that allows waypoints to be easily selected
 from a potentially large database.
 
 This may be accessed several ways:
 \begin{itemize}
-\item  From the menu \bmenu{Nav}\blink\bmenu{Waypoint List}
-\item  From the task editor, menu \bmenu{Nav ..}\blink\bmenu{Task
-Edit} and selecting a waypoint and open the details.
+\item  From the menu \bmenu{Nav 1}\blink\bmenu{Waypoint List}
+\item  From the task editor, menu \bmenu{Nav 1}\blink\bmenu{Task} 
+  and selecting a waypoint and open the details.
 \item  Or just by gesture\gesture{Down - Right}.
 \end{itemize}
 
@@ -246,7 +243,7 @@ move to the bottom (or top) of the list with the cursor.
 
 Selecting an item will result in different behaviour
 depending on what function opened the waypoint selector.  In typical
-use it brings up the waypoint details dialog for the selected
+use it brings up the waypoint details dialogue for the selected
 waypoint.
 
 \section{Task manager}\label{sec:task-manager-dialog}
@@ -256,7 +253,7 @@ earlier versions of XC Soar.\end{it}
 The task manager is used to edit, view, load, save to file, and declare cross
 country tasks. It is accessed via the menu
 \begin{quote}
-\bmenu{Nav}\blink\bmenu{Task}
+\bmenu{Nav 1}\blink\bmenu{Task}
 \end{quote} 
 
 The task manager's primary page is an calculator. It shows various calculations 
@@ -537,8 +534,8 @@ will potentially brought back in a next release.
 %\end{center}
   
 %  To edit the start points, move the cursor to an item in the list on
-%  the right side of the dialog, and press enter.  This opens the
-%  waypoint selector dialog, to allow selection of the waypoint.  This
+%  the right side of the dialogue, and press enter.  This opens the
+%  waypoint selector dialogue, to allow selection of the waypoint.  This
 %  process can be repeated several times for several alternate start
 %  waypoints.  Press the `clear' button to clear all alternate start
 %  points.
@@ -574,7 +571,7 @@ will potentially brought back in a next release.
 %  the previous waypoint will cycle through all alternate start points.
 
 \section{Task calculator dialog}\label{sec:task-calc-dial}
-The task calculator dialog allows the pilot to see the effect of
+The task calculator dialogue allows the pilot to see the effect of
 various changes to the task on final performance.
 
 This may be accessed several ways: \gesture{Right - Down}
@@ -583,7 +580,7 @@ This may be accessed several ways: \gesture{Right - Down}
 \begin{quote}
 \bmenu{Nav}\blink\bmenu{Task calc}
 \end{quote}
-\item From the analysis dialog, menu \bmenu{Info}\blink\bmenu{Analysis} and select
+\item From the analysis dialogue, menu \bmenu{Info}\blink\bmenu{Analysis} and select
  the button \button{Task Calc}
 \end{itemize}
 
@@ -612,7 +609,7 @@ with the set MC value. Calculation begins after task is started.
 See Section~\ref{sec:task-speed-estim} for more details on task speed
 and achieved MacCready calculations.
 
-On closing the dialog the entered MacCready value is used as the MacCready 
+On closing the dialogue the entered MacCready value is used as the MacCready 
 setting. If the \button{Cancel} button is pressed, the MacCready setting is 
 unaffected.
 
@@ -626,10 +623,10 @@ the assigned task time, thereby reducing pilot workload.
 
 \section{Task status}\label{sec:task-status}
 
-The status dialog gives a
+The status dialogue gives a
 summary of important task information.  It can be useful to give a
 good overview of the task status while freeing up InfoBoxes for other
-purposes.  The status dialog can be referred to in order to confirm
+purposes.  The status dialogue can be referred to in order to confirm
 that a valid start was detected, as well as the progress against the
 task. This is accessed via the menu:
 \begin{quote}
@@ -682,9 +679,9 @@ Zero range yields a nominal task distance: for sectors the target is
 half way along the bisector radial; for cylinders the target is in the
 center of the cylinder.
 
-The task calculator dialog (see Section~\ref{sec:task-calc-dial}), shows the
+The task calculator dialogue (see Section~\ref{sec:task-calc-dial}), shows the
 average percentage over all turns in the AAT Range field.
-The targets can be individually modified from the target dialog of the task
+The targets can be individually modified from the target dialogue of the task
 calculator.
 
 
@@ -693,7 +690,7 @@ calculator.
 The typical use of targets in flying AAT is as follows:
 \begin{itemize}
 \item Set the expected MacCready, bugs/ballast and wind settings
-  for the flight using the flight settings and wind settings dialogs.
+  for the flight using the flight settings and wind settings dialogues.
 \item Define the task as normal from the task editor.
 \item Based on the pilot's judgement of how good the weather is,
   and whether some areas are likely to me more or less difficult than
@@ -720,7 +717,7 @@ finish the task later than the assigned minimum time.
 \item What will happen if I leave the AAT area now?  By pressing \button{Arm
 turn} the take over of the current position into the optimisation can
 be forced. The repositioning of subsequent turns can be reviewed in the task calculation
-dialog.
+dialogue.
 \end{itemize}
 
 \subsection*{Target projection}
@@ -807,7 +804,7 @@ Best scored targets found &  \\
 
 \section{OnLine Contest}
 
-The analysis dialog contains a page `OnLine Contest' which can be
+The analysis dialogue contains a page `OnLine Contest' which can be
 used to show the optimal path and estimated score.  The configuration settings \config{taskrules} 
 (task rules page) allows the selection of which set of rules to be used for the
 OLC optimisation.
@@ -843,9 +840,9 @@ then help you reach a safe landing site.
 \subsection*{Task Abort}\label{sec:taskabort}
 The task is aborted by any of those actions:
 \begin{itemize}
-\item Pressing \bmenu{Nav ..}\blink\bmenu{Task Abort}
+\item Pressing \bmenu{Nav 2}\blink\bmenu{Task Abort}
 \item Choosing an alternate from the list under  \gesture{Down - Left}
- \bmenu{Nav}\blink\bmenu{Alternates}
+ \bmenu{Nav 1}\blink\bmenu{Alternates}
 \item Or selecting a waypoint from the map and start a `Goto task'.
 \end{itemize}
 
@@ -926,7 +923,7 @@ If you choose the auto start only logger you have to stop the logger manually.
 To turn the logger on (or off) manually, select from the menu:
 \sketch{figures/logger-startdeclare.png}
 \begin{quote}
-\bmenu{Config ..}\blink\bmenu{Logger Start}
+\bmenu{Config 2}\blink\bmenu{Logger Start}
 \end{quote}
 
 When the internal software logger is active, a small `green status led' in the
@@ -961,7 +958,7 @@ Flight logs in the IGC format generated by XCSoar or other loggers can
 be replayed.  The logger replay dialogue can be accessed via the
 menu:
 \begin{quote}
-\bmenu{Config ..}\blink\bmenu{Replay}
+\bmenu{Config 2}\blink\bmenu{Replay}
 \end{quote}
 \sketch{figures/loggerreplay.png}
 
@@ -995,16 +992,16 @@ For the pure reason of tracking down error prone behaviour of XCSoar
 there is a `Raw Logger'. In case you are able to reproduce an error you can 
 activate the raw log file creation by:
 \begin{quote}
-\bmenu{Config ...}\blink\bmenu{Raw Logger}
+\bmenu{Config 3}\blink\bmenu{Raw Logger}
 \end{quote}
 Developers will appreciate very much any detailed error description including a log file like this. It really facilitates the root cause analysis and saves time to fix an error.
 
 \section{Flight analysis} \label{sec:analysis-climb}
 
-The analysis dialog is very useful in planning and conducting
+The analysis dialogue is very useful in planning and conducting
 cross-country flights.  It is accessed via the menu:  \gesture{Up - Right - Down}
 \begin{quote}
-\bmenu{Info}\blink\bmenu{Analysis}
+\bmenu{Info 1}\blink\bmenu{Analysis}
 \end{quote}
 
 Several pages are of interest:
@@ -1015,7 +1012,7 @@ Several pages are of interest:
   changing over time.  The base and ceiling lines are drawn on the
   barograph.
 
-  The `Settings' button opens the flight settings dialog
+  The `Settings' button opens the flight settings dialogue
   (e.g.\ to adjust the QNH)
 
 \begin{center}
@@ -1055,14 +1052,14 @@ Several pages are of interest:
 \section{Sunlight and time}
 
 A sun ephemeris computes the time of sunset, which is displayed in the
-Aircraft Status dialog (see Section~\ref{sec:status}).  Note that
+Aircraft Status dialogue (see Section~\ref{sec:status}).  Note that
 local terrain and atmospheric conditions may result in poor visibility
 before the displayed sunset time.
 
 For PDA systems, the clock is adjusted for daylight saving time according
 to the settings in the operating system.  For Altair, the clock UTC offset
 must be adjusted manually for daylight saving time in the configuration
-settings dialog.
+settings dialogue.
 
 If the expected arrival time at the final waypoint in the task is past
 sunset, a status message warning is issued.
