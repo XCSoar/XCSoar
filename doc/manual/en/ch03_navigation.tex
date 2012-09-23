@@ -60,7 +60,7 @@ in or out.
 \item Android devices have the +/- rocker that let you change the zoom. 
 \gesture{Up/Down}
 \item You can also gesture to change the zoom level. Gesture 
-``Up'' zooms in, ``Down'' zooms out.
+`{\it Up}' zooms in, `{\it Down}' zooms out.
 \item Or select the function from the menu.
 \begin{quote}
 \bmenu{Display 1}\blink\bmenu{Zoom In} and \bmenu{Zoom Out}
@@ -78,23 +78,23 @@ Compaq Aero Users. If you enable the Compaq Aero Game Keys (On the
 Q-menu) the centre two front buttons become the up/down keys.
 
 There is a facility to have two zoom settings; one when the glider is
-in circling mode, and one in the cruise or final mode.  This is the ``Circling
-zoom'' option in the \config{circlingzoom} configuration settings.  
+in circling mode, and one in the cruise or final mode.  This is the `{\it Circling zoom}' 
+option in the \config{circlingzoom} configuration settings.  
 By default, the circling zoom is set to about 2.5 km - 5.0 km, depending on the
 display size. When the user zooms in or out, it affects the current
 mode's zoom setting only, so when leaving the mode the previous mode's
-zoom setting is used.  If ``Circling Zoom'' is not enabled,
+zoom setting is used.  If `{\it Circling Zoom}' is not enabled,
 there is only a single zoom level.
 
 \marginpar{\includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/zoomauto.png}}
-Auto-zoom automatically zooms in when approaching a waypoint to keep
+`{\it Auto Zoom}' automatically zooms in when approaching a waypoint to keep
 \menulabel{\bmenu{Display 1}\blink\bmenut{Zoom}{Auto}}
-the waypoint at a reasonable screen distance. When auto-zoom is active,
+the waypoint at a reasonable screen distance. When `{\it Auto Zoom}' is active,
 'AUTO' appears next to the map scale. The user can still zoom
 in and out if desired, zoom will be switch to manual control automatically.
 
 When a waypoint changes (automatically, via the task selector, or by
-manually switching waypoints), auto-zoom adjusts the zoom level
+manually switching waypoints), `{\it Auto Zoom}' adjusts the zoom level
 automatically so that the next waypoint is visible on the map.
 
 During circling, if a thermal has been detected, then the map is centered about
@@ -105,19 +105,14 @@ the thermal or part-way such that the glider is still visible.
 A pan mode allows the user to explore areas beyond the glider.  This
 is particularly useful when task planning.
 \begin{enumerate}
-\item Enable pan mode by pressing,  \gesture{Up - Right - Down - Left}
-\begin{quote}
-\bmenu{Display 1}\blink\bmenu{Pan On}
-\end{quote}
-by gesture, or on Android devices by a two finger touch and swish over the map.
-
+\menulabel{\bmenu{Display 1}\blink\bmenu{Pan On}}
+\item Enable pan mode by button menu, by gesture, or, on Android devices, 
+  by a two finger touch and swish over the map.
+\gesture{Up - Right - Down - Left}
 \item The map can then be panned by dragging the screen or using the cursor
   keys.  For Altair, panning is performed with the inner/outer rotary knob.
-\item When done, pan mode has to be disabled manually, by pressing
-\begin{quote}
-\bmenu{Pan Off}
-\end{quote}
-from the special sub-menu of buttons in pan mode.
+\item When done, pan mode has to be disabled manually, by pressing `{\it Pan Off}' 
+  from the special sub-menu of buttons in pan mode.
 \end{enumerate} 
 
 \sketch{figures/pan.png}
@@ -126,7 +121,7 @@ panning the location of the focus stays in the middle of the display under the
 cross hairs. 
 
 Despite the focus under the cross-hairs (for Altair users) the map 
-still offers the "What's here?" feature just by touching any 
+still offers the `{\it What's here?}' feature just by touching any 
 position on the map (presuming a touch-screen).
 
 
@@ -135,42 +130,63 @@ Waypoints are displayed with different symbols depending on the
 waypoint type; the major distinction being landable and non-landable
 waypoints.
 
+\subsection*{Landables}
 The waypoint symbols are drawn as shown below There are three icon sets for
 landable waypoints. \config{waypointicons}
 
-\begin{tabular}{c|c|cc|cc|}
-Icon set &\begin{sideways}Simple waypoint\end{sideways}
+\begin{tabular}{c|ccc|ccc|}
+Icon set 
 &\begin{sideways}Landable field\end{sideways}
+&\begin{sideways}Marginal\end{sideways}
 &\begin{sideways}Reachable\end{sideways}
 &\begin{sideways}Airfield\end{sideways}
+&\begin{sideways}Marginal\end{sideways}
 &\begin{sideways}Reachable\end{sideways}\\
 \hline
 Purple Circle &
-\includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
 \includegraphics[width=0.8cm]{icons/winpilot_landable.pdf} &
+\includegraphics[width=0.8cm]{icons/winpilot_marginal.pdf} &
 \includegraphics[width=0.8cm]{icons/winpilot_reachable.pdf} &
-\colorbox{white}{\includegraphics[width=0.8cm]{icons/winpilot_landable.pdf}}
-& \includegraphics[width=0.8cm]{icons/winpilot_reachable.pdf} \\
+\colorbox{white}{\includegraphics[width=0.8cm]{icons/winpilot_landable.pdf}} &
+\includegraphics[width=0.8cm]{icons/winpilot_marginal.pdf} &
+\includegraphics[width=0.8cm]{icons/winpilot_reachable.pdf} \\
 \hline
-B/W Icon & 
-\includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
+B/W & 
 \includegraphics[width=0.9cm]{icons/alt_landable_field.pdf} &
+\includegraphics[width=0.9cm]{icons/alt_marginal_field.pdf} &
 \includegraphics[width=0.9cm]{icons/alt_reachable_field.pdf} &
-\colorbox[rgb]{0.94,0.94,0.94}{\includegraphics[width=0.9cm]{icons/alt_landable_airport.pdf}}
-& \includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
+\colorbox[rgb]{0.94,0.94,0.94}{\includegraphics[width=0.9cm]{icons/alt_landable_airport.pdf}} &
+\includegraphics[width=0.9cm]{icons/alt_marginal_airport.pdf} &
+\includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
 \hline
-Orange Icon & 
-\includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
+Traffic lights & 
 \includegraphics[width=0.9cm]{icons/alt2_landable_field.pdf} &
+\includegraphics[width=0.9cm]{icons/alt2_marginal_field.pdf} &
 \includegraphics[width=0.9cm]{icons/alt_reachable_field.pdf} &
-\colorbox{white}{\includegraphics[width=0.9cm]{icons/alt2_landable_airport.pdf}}
-& \includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
+\colorbox{white}{\includegraphics[width=0.9cm]{icons/alt2_landable_airport.pdf}} &
+\includegraphics[width=0.9cm]{icons/alt2_marginal_airport.pdf} &
+\includegraphics[width=0.9cm]{icons/alt_reachable_airport.pdf} \\
 \hline
-\end{tabular}
+\end{tabular} \\
 
-
+The {\it marginal} icons are drawn for those waypoints which are principally in the 
+reach, but it is not possible to approach them directly. E.g. a mountain prohibits a direct approach.
+  
 Waypoints are optionally labelled according to one of several
 abbreviation schemes \config{labels} and visibility.
+
+On top of this landable waypoints can be displayed more detailed. If 
+`{\it Detailed landables}' is switched on you get additionally information 
+encoded in the appearance of it's icon. 
+\begin{enumerate}
+\item  Landable fields get a square-shaped icon despite what is shown in the table.
+  The square is drawn like a diamond standing on one corner. Airfields stay with the 
+  circle shape, so that they become easy to distinguish.
+\item  All icon sets, including the `Purple Circle' icon set, get the 
+  runway turned into their actual direction. The runway direction has to be available in 
+  the waypoint data. E.g. the SeeYou waypoint file format (\verb|.cup|) does 
+  include this information.  
+\end{enumerate}
 
 XCSoar continually calculates which landing points are within gliding
 range using the current wind estimate.  The estimated arrival altitude
@@ -179,9 +195,39 @@ displayed next to the waypoint.  This arrival altitude is calculated
 with the glider performance and MacCready setting configurable as
 either that of the task\config{reachpolar}, or at a safety MacCready value.
 
+\subsection*{Non-Landables}
+As far as your waypoint file contains information on the nature of the 
+non-landable waypoints, the map will then display specific icons accordingly. 
+The table contains a collection of the currently supported map icons:
+
+\begin{center}
+\vspace{2cm}
+\begin{tabular}{cc|cc|cc|cc}
+\begin{rotate}{60}Simple waypoint\end{rotate} &
+\begin{rotate}{60}Mountain top\end{rotate} &
+\begin{rotate}{60}Obstacle\end{rotate} &
+\begin{rotate}{60}Pass\end{rotate} &
+\begin{rotate}{60}Power plant\end{rotate} &
+\begin{rotate}{60}Tower\end{rotate} &
+\begin{rotate}{60}Tunnel\end{rotate} &
+\begin{rotate}{60}Weather station\end{rotate}\\
+\hline
+\includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
+\includegraphics[width=0.8cm]{icons/map_mountain_top.pdf} &
+\includegraphics[width=0.8cm]{icons/map_obstacle.pdf} &
+\includegraphics[width=0.8cm]{icons/map_pass.pdf} &
+\includegraphics[width=0.8cm]{icons/map_power_plant.pdf} &
+\includegraphics[width=0.8cm]{icons/map_tower.pdf} &
+\includegraphics[width=0.8cm]{icons/map_tunnel.pdf} &
+\includegraphics[width=0.8cm]{icons/map_weather_station.pdf}\\
+\hline
+\end{tabular}
+\end{center}
+
+
 \section{Active task}
 
-The active task course is drawn on the map as a green dashed line.
+The active task course is drawn on the map as a blue (dashed) line.
 Assigned area tasks also show the turn point sectors or areas as a yellow shaded
 region.  
 Circles are always drawn around start and finish points, lines are
@@ -194,7 +240,6 @@ or may be a {\em route} path clearing terrain and airspace obstacles, described 
 further detail in Section~\ref{sec:route}.
 
 \begin{center}
-
 \begin{tabular}{c c c}
 {\it Start/finish} & {\it Sector} & {\it Cylinder} \\
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-startfinish.png} &
@@ -202,6 +247,7 @@ further detail in Section~\ref{sec:route}.
 \includegraphics[angle=0,width=0.3\linewidth,keepaspectratio='true']{figures/cut-barrel.png} \\
 \end{tabular}
 \end{center}
+
 
 \section{Terrain and Topography}\label{sec:terrain_topo}
 
@@ -215,30 +261,29 @@ The following topographical features are drawn on the map:
 \end{itemize}
 Cities and small population areas are labeled in italics.
 
-Terrain is coloured according to height, and optionally shaded by sun
-direction or lift-generating slope.  Invalid terrain, or terrain below
+Terrain is coloured according to height, and optionally shaded by sun, or 
+wind direction.  Invalid terrain, or terrain below
 sea level is coloured blue.
 
-Terrain is shaded to improve visibility.  Currently the shading
+\menulabel{\bmenu{Display 2}\blink\bmenut{Terrain}{On/Off}}
+\menulabel{\vspace{1cm}\bmenu{Display 2}\blink\bmenut{Topo.}{On/Off}}
+
+Terrain is shaded to improve visibility.  The default shading
 is set up so that the virtual lighting position is the wind bearing,
 thus brighter areas are on the upwind side of hills and dark areas in
-the lee of the hill.  The amount of shading and overall terrain
-brightness is configurable.  Support for a sun ephemeris is underway.
-Terrain shading and brightness can be configured \config{shading}.
+the lee of the hill.  
+Support for a sun ephemeris is also implemented. If the slope shading is set 
+to `Sun', the brightness of a slope follows the day time in a very natural way.
+The amount of shading and overall terrain brightness is configurable \config{shading}.
 
 Both terrain and topography display can be switched on or off from the
 menu.
-\menulabel{\bmenu{Display 2}\blink\bmenut{Terrain}{On/Off}}
 
-\menulabel{\bmenu{Display 2}\blink\bmenut{Topo.}{On/Off}}
-
-\begin{center}
 \begin{tabular}{c c}
 Topography & Terrain \\
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-topo.png} &
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/cut-terrain.png} \\
 \end{tabular}
-\end{center}
 
 If the terrain data is not available (or terrain display is turned
 off), the background colour of the map window is white.  All terrain
@@ -248,7 +293,7 @@ terrain region, the background colour will be white.
 \subsection*{Map labels}\label{sec:maplabels}
 
 The screen can be de-cluttered, turning off the display of topography
-labels and non-task waypoint labels by toggling the {\it Labels} menu.
+labels and non-task waypoint labels by toggling the `{\it Labels}' menu.
 \menulabel{\bmenu{Display 2}\blink\bmenut{Labels}{None}}
 
 Other options for display decluttering include:
@@ -260,7 +305,7 @@ Other options for display decluttering include:
 \jindent{\bmenut{Labels}{All}}{ Shows labels for all waypoints. }
 
 Note that in all cases, the label format is configurable in the 
-"Waypoint Display" configuration menu.  \config{labels}
+`{\it Waypoint Display}' configuration menu.  \config{labels}
 
 
 \section{Trail}\label{sec:trail}
@@ -352,9 +397,8 @@ Reach calculations may be configured \config{turningreach} to two levels of deta
  turning.  This reach appears as a closed ring around the glider.
 
 \begin{center}
-\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/reach1.png}
-%{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOGRAPHY,
-%FULLSCREEN, NO TASK. TURNING=FALSE}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/reach1.png}
+% CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOGRAPHY, FULLSCREEN, NO TASK. TURNING=FALSE
 \end{center}
 
 \item[Turning] If turning reach is enabled, then the reach shows the
@@ -366,9 +410,8 @@ Reach calculations may be configured \config{turningreach} to two levels of deta
   without further climb.
 
 \begin{center}
-\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/reach2.png}
-%{\it DIAGRAM CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOGRAPHY,
-%FULLSCREEN, NO TASK. TURNING=TRUE}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/reach2.png}
+% CUTOUT SHOWING GLIDE RANGE FOOTPRINT.  NO TOPOGRAPHY, FULLSCREEN, NO TASK. TURNING=TRUE
 \end{center}
 
 \end{description}
@@ -395,22 +438,24 @@ performance and MacCready setting used in these calculations are configurable\co
 \begin{description}
 \item[Task] The MC value is that used in the task.
 \item[Safety MC] A configurable, typically low MC value is set by the user to set
- performance near, but slightly degraded to, best glide performance.
-
+  performance near, but slightly degraded, to best glide performance. The amount of safety 
+  in the reach calculation is then the gap between best glide performance and the glide
+  performance following the safety MC speed to fly. 
 \end{description}
 
-\section{Flight status}\label{sec:flight-status}
+\section{Status tabs `{\it Flight}' and `{\it Time}'}\label{sec:flight-status}
 
 The status dialogue is a multi-tabular dialogue giving overview information on the 
 flight, system, task, rules and times.
-It is accessed via the gesture "S", or with the menu under: \gesture{Left - Down - Right - Down - Left}
+It is accessed via the gesture "S", or with the button menu. 
+\gesture{Left - Down - Right - Down - Left}
 \begin{quote}
 \bmenu{Info 2}\blink\bmenu{Status}
 \end{quote}
-and then selecting the page `Flight'. 
 
-\subsection*{Position}
-The flight status dialogue shows the status of the aircraft's locality, and can 
+\subsection*{Flight}
+Select the tabular page `{\it Flight}'. 
+The flight status dialogue shows the status of the aircraft's locality and can 
 be useful when giving position reports. It shows the location of the aircraft, the
 maximum height gain, and nearest waypoint it's bearing and distance.
 \sketch{figures/status-flight.png}
@@ -419,7 +464,8 @@ You may find this function useful when you need to report your
 location to others.
 
 \subsection*{Times}
-Shows the local time, flight time, takeoff and landing time and
+Select the tabular page `{\it Times}'. 
+It shows the local time, flight time, takeoff and landing time and
 the local sunset time.
 
 Note that the values in the Status dialogue 
@@ -428,6 +474,7 @@ are static once the particular dialogue page is displayed.
 That is, position, times, etc. do not update while the page is displayed. 
 To see the updated values, it is necessary to select a different tabular, 
 then return to the previous dialogue to see the new values.
+
 
 \section{Route}\label{sec:route}
 
@@ -440,7 +487,7 @@ planning functions in normal ordered task mode, abort mode and goto
 mode.
 
 \begin{center}
-\includegraphics[angle=0,width=1.0\linewidth,keepaspectratio='true']{figures/route3.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/route3.png}
 \end{center}
 
 Routes take into account the glider polar performance and are
@@ -459,7 +506,7 @@ with no additional vertical clearance imposed.  Valid routes may fly
 below or above airspace.
 
 If MacCready is positive, then climbs are optionally allowed
-\config{routeceiling} in the computed routes.  The top of the climb
+ in the computed routes.  The top of the climb
 may be limited to 500 m above the heigher of the start and destination
 ceiling, or increased to the ceiling defined by the thermal ceiling
 \config{routeceiling}.  Climbs above the higher of the start and
