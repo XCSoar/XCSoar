@@ -101,10 +101,22 @@ public:
   }
 
 #ifdef RADIANS
+  constexpr
+  static Angle Degrees(int value) {
+    return Angle(fixed(value * DEG_TO_RAD));
+  }
+
+  constexpr
+  static Angle Degrees(double value) {
+    return Angle(fixed(value * DEG_TO_RAD));
+  }
+
+#ifdef FIXED_MATH
   gcc_const
   static Angle Degrees(const fixed _value) {
     return Angle(_value * fixed_deg_to_rad);
   }
+#endif
 
   constexpr
   static Angle Radians(const fixed _value) {
@@ -131,10 +143,22 @@ public:
     return Angle(_value);
   }
 
+  constexpr
+  static Angle Radians(int value) {
+    return Angle(fixed(value * RAD_TO_DEG));
+  }
+
+  constexpr
+  static Angle Radians(double value) {
+    return Angle(fixed(value * RAD_TO_DEG));
+  }
+
+#ifdef FIXED_MATH
   gcc_const
   static Angle Radians(const fixed _value) {
     return Angle(_value * fixed_rad_to_deg);
   }
+#endif
 
   constexpr
   fixed Degrees() const {
