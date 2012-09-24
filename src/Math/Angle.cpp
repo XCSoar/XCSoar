@@ -71,13 +71,13 @@ Angle::Flip()
 fixed
 Angle::AbsoluteDegrees() const 
 {
-  return fabs(Degrees());
+  return Absolute().Degrees();
 }
 
 fixed
 Angle::AbsoluteRadians() const 
 {
-  return fabs(Radians());
+  return Absolute().Radians();
 }
 
 Angle

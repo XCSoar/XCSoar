@@ -168,6 +168,11 @@ public:
    */
   void ToDMS(int &dd, int &mm, int &ss, bool &is_positive) const;
 
+  gcc_pure
+  Angle Absolute() const {
+    return Angle(fabs(Native()));
+  }
+
   /**
    * Calculates the tangent of the Angle.
    */
