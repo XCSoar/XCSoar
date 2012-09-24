@@ -40,7 +40,7 @@ areas.
 
 Both the display and warning of airspace classes can be individually
 enabled or disabled by the user as described in
-Section~\ref{sec:airsp-filt-dial}.
+Section~\ref{sec:airspace-filter}.
 
 The default colouring of Class C, D, E and F airspace is consistent
 with ICAO charts.
@@ -236,7 +236,7 @@ or disabled for each class of airspace.
 
 This may be accessed several ways:
 \begin{itemize}
-\item From the main menu \bmenu{Config ..}\blink\bmenu{Settings
+\item From the main menu \bmenu{Config 2}\blink\bmenu{Settings
 Airspace}.
 \item Or at the system configuration page for airspacees, press the \button{Filter} button.
 \end{itemize}
@@ -259,10 +259,8 @@ airspace management dialogue it is possible to re-enable it again.
 \section{Analysis dialogue}
 
 The analysis dialogue contains a page showing a cross-section of the
-airspace.  This is accessed via the menu under
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Analysis}
-\end{quote}
+airspace. 
+\menulabel{\bmenu{Info 1}\blink\bmenu{Analysis}}
 
 The display shows along the horizontal direction, the
 distance from the glider out to 50 km in the direction of the glider's
@@ -274,7 +272,7 @@ visualise complex layering of airspace.
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/analysis-airspace.png}
 \end{center}
 
-The ``Warnings'' button opens the airspace warning dialog if close to
+The ``Warnings'' button opens the airspace warning dialogue if close to
 airspace.
 
 \section{FLARM traffic}
@@ -325,7 +323,7 @@ is 2000 meters.  Traffic further away than 2000 meters is drawn at the 2000 mete
 \sketch{figures/flarmrose.png}
 
 All the FLARM displays shows FLARM traffic in colours according to
-the threat level, or team and dialog status.  The traffic is coloured:
+the threat level, or team and dialogue status.  The traffic is coloured:
 \begin{itemize}
 \definecolor{warning}{rgb}{1,0.64,0}
 \definecolor{teammate}{rgb}{0.45,1,0}
@@ -348,13 +346,13 @@ suppression and the radar is shown again.  When new traffic appears in
 the radar, or if the FLARM issues a collision warning, the suppression
 is cancelled.
 
-\subsection*{FLARM Traffic dialog}\label{sec:flarm-traffic}
+\subsection*{FLARM Traffic dialogue}\label{sec:flarm-traffic}
 
 Once FLARM has reported traffic and the small radar-style view of the FLARM
 traffic gets activated  \config{flarmdisplay} you can tap on the FLARM radar to
-enlarge the view to fullscreen size.  This is also accessed via the menu under 
-\bmenu{Info ...}\blink\bmenu{FLARM Radar}.
+enlarge the view to fullscreen size.  
 The fullscreen FLARM display offers all available information
+\menulabel{\bmenu{Info 1}\blink\bmenut{FLARM}{Radar}}
 about the FLARM traffic and depending on the setup it closes by itself, when all
 traffic has been gone.
 
@@ -362,7 +360,7 @@ traffic has been gone.
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-flarm1.png}
 \end{center}
 
-Only a few controls are on the dialog, from top down:
+Only a few controls are on the dialogue, from top down:
 \begin{description}
 \item[North up]  If checked the radar screen is oriented North up, if not the
 orientation is Track up.
@@ -371,7 +369,7 @@ that the targets are perfectly visible. If not checked, the screen must be
 zoomed manually. The Up-Down gesture activates the automatic zoom. 
 \item[Avg/Alt]  \gesture{Right - Left} The button toggles in-between average
 vario and altitude displayed next to the target.
-\item[Details]  \gesture{Down - Right} Through the button a separate dialog with
+\item[Details]  \gesture{Down - Right} Through the button a separate dialogue with
 all details to the selected target is accessed. 
 \item[+/-]  \gesture{Up/Down} Manually change the zoom from 500 meter to
 10000 meter radar range. The zoom gestures also apply here.
@@ -418,8 +416,9 @@ these codes, and entering the codes into the computer allows their
 mates to be located accurately by the computer. 
 
 To use the team code, all pilots in the team should select a waypoint to 
-be used as the reference.  This is all done on the team code dialogue 
-\bmenu{Info ..}\blink\bmenu{Team Code}.  The reference waypoint is set 
+be used as the reference.  This is all done on the team code dialogue. 
+\menulabel{\bmenu{Info 2}\blink\bmenut{Team}{Code}}
+The reference waypoint is set 
 via the \button{Set WP} button. Select a waypoint from the lookup dialogue 
 and it will be the team reference.
 
@@ -443,5 +442,5 @@ but any number of `friends' with a known FLARM ID. In case you get closer to
 your flying college, just pick a colour on the FLARM dialogue and identify this 
 FLARM response in the future as your buddy.
 
-\todo{flarm detail dialog}
+\todo{flarm detail dialogue}
 

@@ -53,65 +53,61 @@ connect to an external device:
 \subsection*{Supported external devices and features}
 \label{sec:supported-varios}
 
+\newcommand{\y}[0]{{ $\surd$ }}
+%{0.8\textwidth}
 \noindent\makebox[\textwidth]{%
-\begin{tabularx}{1.2\textwidth}{l|cccc}
-
-NMEA & Feature \\
-Device & Airspeed & Vario & Declaration & Download \\
+\begin{tabular}{l|ccc|cc|cc|c}
+       \multicolumn{1}{r}{Supported:} & \multicolumn{3}{c|}{-Features} & \multicolumn{5}{c}{-Stream Data} \\
+NMEA Device & 
+  \begin{sideways} Declaration\end{sideways} & 
+  \begin{sideways} Remote ctrl.\end{sideways} & 
+  \begin{sideways} Download\end{sideways} &
+  \begin{sideways} Airspeed\end{sideways} & 
+  \begin{sideways} Vario\end{sideways} & 
+  \begin{sideways} Baro. altitude\end{sideways} & 
+  \begin{sideways} Wind\end{sideways} &
+  \begin{sideways} G-Sensor\end{sideways} \\
 \hline
 
-Borgelt B50 & $\surd$ \\
-
-CAI 302 & $\surd$ & $\surd$ & $\surd$ & $\surd$ \\
-
-CAI GPS Nav \\
-
-Condor & $\surd$ \\
+%                    _Decl_Remo_Down_Airs_Vari_Baro_Wind_Gsen_
+Borgelt B50          &    & \y &    & \y & \y & \y &    &    \\
+CAI 302              & \y & \y & \y & \y & \y & \y & \y & \y \\
+CAI GPS Nav          &    &    &    &    &    &    &    &    \\
+Condor               &    &    &    & \y & \y & \y & \y &    \\
 \hline
-
-Digifly Leonardo & $\surd$ & $\surd$ \\
-
-EW Logger &&& $\surd$ \\
-
-EW microRecorder &&& $\surd$ \\
-
-Flarm &&& $\surd$ & $\surd$ \\
+Digifly Leonardo     &    &    &    & \y & \y & \y & \y &    \\
+EW Logger            & \y &    &    &    &    & \y &    &    \\
+EW microRecorder     & \y &    &    &    &    & \y &    &    \\
+FLARM                & \y &   & \y  &    &    &    &    &    \\
 \hline
-
-Flymaster F1 && $\surd$ \\
-
-Flytec 5030 & $\surd$ & $\surd$ \\
-
-ILEC SN10 & & $\surd$ \\
-
-IMI ERIXX &&& $\surd$ & $\surd$ \\
+%                    _Decl_Remo_Down_Airs_Vari_Baro_Wind_Gsen_
+Flymaster F1         &    &    &    &    & \y & \y &    &    \\
+Flytec 5030          &    &    &    & \y & \y &    &    &    \\
+GTAltimeter          &    &    &    &    &(\y)& \y &    &    \\
+ILEC SN10            &    &    &    &    & \y & \y & \y &    \\
 \hline
+IMI ERIXX            & \y &    & \y &    &    &    &    &    \\
+LX20, Colibri        & \y &    & \y &    &    & \y &    &    \\
+LX Vario \footnote{LX Navigation offers a variety of intelligent vario 
+  devices such as LX1600, LX5000, LX7000. They all share their NMEA functionality. 
+  The offered functionality depends on e.g. the vario's firmware revision, whereas 
+  XCSoar will support functionality as provided from the vario. }
+                     & \y & \y &    & \y & \y & \y & \y & \y \\
 
-LX20, Colibri &&& $\surd$ & $\surd$ \\
-
-LX 5000, 7000 & $\surd$ & $\surd$ & $\surd$ \\
-
-LXNAV Nano &&& $\surd$ \\
-
-LXNAV V7 & $\surd$ & $\surd$ \\
-
-PosiGraph &&& $\surd$ \\
-
-Triadis Altair &&& $\surd$ \\
+LXNAV Nano           & \y &    &    &    &    &    &    &    \\
 \hline
-
-Triadis Vega & $\surd$ & $\surd$ \\
-
-Volkslogger &&& $\surd$ \\
-
-Westerboer VW1150 & $\surd$ & $\surd$ \\
-
-Westerboer VW921, 922 & $\surd$ & $\surd$ \\
+%                    _Decl_Remo_Down_Airs_Vari_Baro_Wind_Gsen_
+LXNAV V7             &    & \y &    & \y & \y &    &    &    \\
+PosiGraph            & \y &    &    &    &    & \y &    &    \\
+Triadis Altair (pro) & \y &    &    &    &    & \y &    &    \\
+Triadis Vega         &    & \y &    & \y & \y & \y &    & \y \\
 \hline
-
-Zander / SDI & $\surd$ & $\surd$ \\
-
-\end{tabularx}}
+Volkslogger          & \y &    &    &    &    & \y &    &    \\
+Westerboer VW1150    &    & \y &    & \y & \y & \y &    &    \\
+Westerboer VW921, 922
+                     &    & \y &    & \y & \y & \y &    &    \\
+Zander / SDI         &    & \y &    & \y & \y & \y & \y &    \\
+\end{tabular}}
 
 
 While most Windows CE based devices have a serial port, such legacy
@@ -277,7 +273,7 @@ The first time that XCSoar is run, it does not automatically load the
 data files that you placed in the \verb|XCSoarData| directory.  
 To tell XCSoar which files to load, double click/tap the map (the large,
 blank white part with the glider symbol in the center),
-choose the menu \bmenu{Config} (click/tap it twice), then select
+choose the menu \bmenu{Config 2} (click/tap it twice), then select the item 
 \bmenu{System Setup}.  The System Setup screen should be displayed:
 \sketch{figures/config-basic.png}
 The first page allows you to choose the map, 

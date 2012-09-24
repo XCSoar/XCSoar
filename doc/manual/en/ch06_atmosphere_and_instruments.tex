@@ -42,7 +42,11 @@ adjusting the MacCready setting on one device should be kept in sync
 with the other, by the software and to not require additional input from
 the pilot.
 
-Pilots abuse the device synchronisation (see \ref{conf:comdevices}) for various reasons. You may have  different MacCready settings on PDA and inteligent vario to cross-check the results. You may do computations with different ballast settings and cross-chsck the results. You may choose on one of the devices manually a different wind setting and cross-check the results, etc.
+Pilots abuse the device synchronisation (see \ref{conf:comdevices}) for various 
+reasons. You may have  different MacCready settings on PDA and inteligent vario 
+to cross-check the results. You may do computations with different ballast 
+settings and cross-chsck the results. You may choose on one of the devices 
+manually a different wind setting and cross-check the results, etc.
 
 A list of supported variometers is maintained in
 Section~\ref{sec:supported-varios}.
@@ -108,7 +112,7 @@ XCSoar offers two ways of estimating wind during flight.
 \end{description}
 
 The wind magnitude and direction can also be adjusted manually from the
-wind settings dialog (see below).  
+wind settings dialogue (see below).  
 
 Statistics are gathered so that winds are recorded at different
 heights and times.  When the glider's altitude changes significantly,
@@ -120,7 +124,7 @@ also do this by highlighting the wind {\InfoBox} and using the cursor
 keys (up and down increase and decrease the magnitude, left and right
 rotate the wind direction).
 
-The configuration \config{autowind} settings dialog allows control of which
+The configuration \config{autowind} settings dialogue allows control of which
 estimation method is used for wind updates, via the field `Auto Wind':
 \begin{itemize}
 \item Manual
@@ -178,31 +182,27 @@ magnetic heading and airspeed is being developed.  This provides
 another method of updating the wind estimate during cruise and does
 not require zig-zag manoeuvres.
 
-\section{Wind settings dialog}\label{sec:wind-setup}
+\section{Wind settings dialogue}\label{sec:wind-setup}
 
-The wind dialog allows the initial estimate of the wind speed and
+The wind dialogue allows the initial estimate of the wind speed and
 direction to be entered, usually prior to flight.
-
-This is accessed via the menu under:
-\begin{quote}
-\bmenu{Config}\blink\bmenu{Wind}
-\end{quote}
+\menulabel{\bmenu{Config 1}\blink\bmenut{Setup}{Wind}}
 
 \begin{center}
 \includegraphics[angle=0,width=0.4\linewidth,keepaspectratio='true']{figures/dialog-wind2.png}
 \end{center}
 
 At any time during flight, the pilot can make corrections to the wind
-estimate by entering the correction in the wind settings dialog.  Once the
-dialog get closed , the internal estimate is ignored until a new internal
+estimate by entering the correction in the wind settings dialogue.  Once the
+dialogue get closed , the internal estimate is ignored until a new internal
 estimate is obtained from the circling or zigzag algorithm.
 
 The automatic wind algorithm may also be switched on or off (or
-between modes) in this dialog.  See Section~\ref{sec:wind-estimation}
+between modes) in this dialogue.  See Section~\ref{sec:wind-estimation}
 for details on these algorithms.
 
 The compensation of wind drift of the snail trail can also be switched
-on or off in this dialog.  See Section~\ref{sec:trail} for details on
+on or off in this dialogue.  See Section~\ref{sec:trail} for details on
 how this affects the display of the snail trail.
 
 \section{Thermal profile}
@@ -316,7 +316,7 @@ find the ceiling.  If the atmosphere is stable, the convection ceiling
 is reported as zero altitude.
 
 The maximum forecast temperature on the ground is entered using the
-flight settings dialog described in Section~\ref{sec:flight-setup}.
+flight settings dialogue described in Section~\ref{sec:flight-setup}.
 
 
 %{\it DIAGRAM SHOWING THERMAL FORECAST, STABLE WITH CLOUD}
@@ -330,13 +330,10 @@ rate.  If no clouds are forecast, the cloud base is reported as zero.
 
 %{\it DIAGRAM SHOWING THERMAL FORECAST, STABLE WITH NO CLOUDS}
 
-\section{Analysis dialog}
+\section{Analysis dialogue}
 
-The analysis dialog is used to see several aspects of the atmosphere.
-This is accessed via the menu under:
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Analysis}
-\end{quote}
+The analysis dialogue is used to see several aspects of the atmosphere.
+\menulabel{\bmenu{Info 1}\blink\bmenu{Analysis}}
 
 Several pages of interest:
 \begin{description}
@@ -345,7 +342,7 @@ Several pages of interest:
   This shows a graph of the wind speed versus height, and shows the
   wind vector at several heights.
 
-The `Set wind' button opens the wind settings dialog (e.g.\ to
+The `Set wind' button opens the wind settings dialogue (e.g.\ to
 manually set the wind).
 
 \begin{center}
@@ -378,13 +375,11 @@ into the XCSoarData directory for this function to be available.
 
 This section of the documentation is intended to describe the basic
 functionality; the reader is referred to the RASP website
-\url{www.drjack.info} for more details on how RASP forecasts work, from where they are available, and their use and limitations.
+\url{www.drjack.info} for more details on how RASP forecasts work, from where 
+they are available, and their use and limitations.
 
-The forecast overlays are accessed by the weather dialog.  This is
-performed by selecting the menu:
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Weather}
-\end{quote}
+The forecast overlays are accessed by the weather dialogue. 
+\menulabel{\bmenu{Info 2}\blink\bmenu{Weather}}
 
 \begin{center}
 \includegraphics[angle=0,width=0.5\linewidth,keepaspectratio='true']{figures/dialog-weather.png}
@@ -392,7 +387,7 @@ performed by selecting the menu:
 
 The Field setting determines which data field is displayed on the map.
 The Time setting determines at which forecast time the data field will
-be displayed.  Upon entering the weather dialog, the Time setting is
+be displayed.  Upon entering the weather dialogue, the Time setting is
 advanced to the next nearest forecast time available in the RASP file.
 
 When a field is not available in the RASP file, the background is left blank.

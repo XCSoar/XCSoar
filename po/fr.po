@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-08-21 19:34+0000\n"
-"Last-Translator: Adrien Ott <Unknown>\n"
+"PO-Revision-Date: 2012-09-16 15:25+0000\n"
+"Last-Translator: Matthieu GAULON <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-29 12:48+0000\n"
-"X-Generator: Launchpad (build 15864)\n"
+"X-Launchpad-Export-Date: 2012-09-23 09:01+0000\n"
+"X-Generator: Launchpad (build 15985)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -655,7 +655,7 @@ msgstr "Th Gain"
 #: src/InfoBoxes/Content/Factory.cpp:162
 #, no-c-format
 msgid "Total altitude gain/loss in the last thermal."
-msgstr "Gain (ou perte) d'altitude total(e) dans le dernier thermique."
+msgstr "Gain/perte d'altitude total(e) dans le dernier thermique."
 
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
@@ -697,7 +697,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:190
 #, no-c-format
 msgid "Next distance"
-msgstr "Prochaine distance"
+msgstr "Distance prochain waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:191 src/InfoBoxes/Content/Task.cpp:154
 #, no-c-format
@@ -717,7 +717,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:200
 #, no-c-format
 msgid "Next altitude difference"
-msgstr "Prochaine différence d'altitude"
+msgstr "Différence d'altitude prochain waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:201
 #, no-c-format
@@ -737,7 +737,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:210
 #, no-c-format
 msgid "Next altitude required"
-msgstr "Prochaine altitude nécessaire"
+msgstr "Altitude nécessaire prochain waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:211
 #, no-c-format
@@ -1364,7 +1364,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
 msgid "Next arrival time"
-msgstr "Prochaine heure d'arrivée."
+msgstr "Heure d'arrivée prochain waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:541
 #, no-c-format
@@ -1502,7 +1502,7 @@ msgstr "Vitesse moyenne réalisable sur l'AAT dans le minimum de temps restant."
 #: src/InfoBoxes/Content/Factory.cpp:610 src/InfoBoxes/Content/Factory.cpp:611
 #, no-c-format
 msgid "L/D vario"
-msgstr "L/D vario"
+msgstr "Finesse vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:612
 #, no-c-format
@@ -1581,7 +1581,7 @@ msgstr ""
 msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
-msgstr "Le gisement (relèvemfnt moins le cap) vers l'équipier"
+msgstr "Le gisement vers l'équipier à sa dernière position."
 
 #: src/InfoBoxes/Content/Factory.cpp:660
 #, no-c-format
@@ -1911,7 +1911,7 @@ msgstr "Charge CPU consommée par XCSoar en moyenne sur 5 secondes."
 #: src/InfoBoxes/Content/Factory.cpp:844
 #, no-c-format
 msgid "Next altitude arrival"
-msgstr "Altitude d'arrivée suivant"
+msgstr "Altitude d'arrivée prochain waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:845
 #, no-c-format
@@ -2173,7 +2173,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:994
 #, no-c-format
 msgid "Next MC0 altitude difference"
-msgstr "Prochaine différence d'altitude au calage MC 0"
+msgstr "Différence d'altitude prochain waypoint à MC0"
 
 #: src/InfoBoxes/Content/Factory.cpp:995
 #, no-c-format
@@ -9436,7 +9436,7 @@ msgstr ""
 
 #: Data/Input/default.xci:735
 msgid "Accelerometer leveled"
-msgstr ""
+msgstr "Accéléromètre lissé"
 
 #: Data/Input/default.xci:476 Data/Input/default.xci:1096
 msgid ""

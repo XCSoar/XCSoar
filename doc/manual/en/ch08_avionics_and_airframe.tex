@@ -12,7 +12,9 @@ covered in Chapter~\ref{cha:atmosph}.
 Most modern PDAs are designed for short sporadic use and so do not
 have a very good battery capacity when considering the duration of
 cross-country soaring flights.  It is recommended that the PDA be powered
-externally, via an appropriate voltage converter connected to the glider battery.  This installation should be performed by appropriately qualified personnel, and should contain a fuse and a manual isolation switch.
+externally, via an appropriate voltage converter connected to the glider battery. 
+This installation should be performed by appropriately qualified personnel, 
+and should contain a fuse and a manual isolation switch.
 
 The greatest cause of power drain by the PDA is the LCD back-light,
 however domestic PDAs are not particularly bright so they may need to
@@ -35,7 +37,9 @@ and long snail trails contribute significantly to the CPU load.
 For Altair/Vega systems, the external supply voltage is displayed on
 the system status dialogue (see Section~\ref{sec:system-status}).
 
-For other embedded platforms, a \infobox{Battery} InfoBox is available that displays the available battery life remaining, as well as the charge state (AC on--charging, or AC Off--operating off internal battery power).
+For other embedded platforms, a \infobox{Battery} InfoBox is available that 
+displays the available battery life remaining, as well as the charge state 
+(AC on--charging, or AC Off--operating off internal battery power).
 
 \section{GPS connection}
 
@@ -60,11 +64,20 @@ map display to indicate:
   be disconnected or switched off.
 \end{description}
 
-When the GPS is not connected for more than one minute, XCSoar automatically attempts to restart communication with the device and will then resume waiting.  This method has shown to provide the most reliable way of recovering from communication errors.
+When the GPS is not connected for more than one minute, XCSoar automatically 
+attempts to restart communication with the device and will then resume waiting. 
+This method has shown to provide the most reliable way of recovering from 
+communication errors.
 
-XCSoar can handle up to two GPS sources and it uses them to provide redundancy.  The sources are configured on the System Configuration screen, on the page entitled "Devices".  Device A is the primary GPS data source and Device B is the secondary source.
+XCSoar can handle up to two GPS sources and it uses them to provide redundancy. 
+The sources are configured on the System Configuration screen, on the page 
+entitled "Devices".  Device A is the primary GPS data source and Device B is 
+the secondary source.
 
-During operation, if the primary GPS source drops out, XCSoar will use the GPS data from the secondary source.  If both sources have valid fixes, the secondary source is ignored.  For this reason, it is recommended to have the GPS source with the best antenna or most reliable operation as the primary source (i.e. Device A).
+During operation, if the primary GPS source drops out, XCSoar will use the GPS 
+data from the secondary source.  If both sources have valid fixes, the secondary 
+source is ignored.  For this reason, it is recommended to have the GPS source 
+with the best antenna or most reliable operation as the primary source (i.e. Device A).
 
 \subsection*{GPS altitude}
 
@@ -115,14 +128,12 @@ example ``airbrake extended and gear retracted''.
 Refer to the Vega documentation %and {\em XCSoar Advanced Configuration Manual}
 for more details on switch inputs and how they may be used.
 
-\section{Switch dialogue}
+\section{Vega switch dialogue}
 
 A dialogue displaying switch states for the Vega variometer
-is available from the menu:
-\begin{quote}
-\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Vario}\blink\bmenu{Airframe
-Switches}
-\end{quote}
+is available from the menu.
+\menulabel{\bmenu{Config 2}\blink\bmenu{Vario}\\
+\bmenut{Airframe}{Switches}}
 
 This dialogue is updated in real-time, allowing the pilot
 to check the correct functioning of switches during daily
@@ -149,13 +160,11 @@ Master's GPS and connected instruments (Vega, FLARM etc).
 \section{System status}\label{sec:system-status}
 
 The system status dialogue is
-used primarily as a systems check, to see how the host computer and
-connected devices are performing.  This is accessed via the menu under:
+\menulabel{\bmenu{Info 2}\blink\bmenu{Status}}
+used primarily as a systems check, to see how the glide computer and the 
+connected devices are performing.  This is accessed via the menu 
+and then selecting the tabular {\bf System}.
 \sketch{figures/status-system.png}
-\begin{quote}
-\bmenu{Info ..}\blink\bmenu{Status}
-\end{quote}
-and then selecting the tabular `System'.
 
 All dynamic values (e.g.\ battery voltage, number of satellites in
 view) are updated continuously.

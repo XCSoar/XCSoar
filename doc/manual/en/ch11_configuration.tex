@@ -9,15 +9,16 @@ There are several ways XCSoar can be customised:
 \begin{itemize}
 
 \item Modifying configuration settings.  This is the sort of configuration
- most likely to be performed by users; and this is given the greatest attention in this document.
+  most likely to be performed by users; and this is given the greatest attention 
+  in this document.
 \item Changing the language, or even just to change the wording
   of text in the user interface.
 \item Changing the button assignments and button menus.  This allows 
-the content and structure of the button menu to be changed. 
+  the content and structure of the button menu to be changed. 
 \item Changing or adding actions performed when glide computer events
- take place.
+  take place.
 \item Defining how long status messages appear and sounds to be played
- when those messages occur.
+  when those messages occur.
 \end{itemize}
 Describing all of these in a detail level like a reference manual would 
 do is beyond the scope of this document. The user is referred to browse 
@@ -27,10 +28,8 @@ through the XCSoar Wiki for more details.
 \section{Modifying settings}
 
 There is a large set of configuration settings that may be customised
-from the Settings dialogue accessible from the menu under
-\begin{quote}
-\bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup system}
-\end{quote}
+from the Settings dialogue accessible from the menu.
+\menulabel{\bmenu{Config 2}\blink\bmenut{Setup}{System}}
 The configuration can be accessed through a two layer structured menu 
 or just sequentially through the back and forward buttons.
 
@@ -78,23 +77,25 @@ configured when flying at a new site.
   terrain data, topography, and optionally waypoints, airspace etc. A good
   prepared database file covers all the needs for this page.
 \item[Waypoints]  Primary waypoints file.  If left blank, waypoints are loaded
-from the map file (if available).
-\item[More waypoints*]  Secondary waypoints file.  This may be used to add waypoints for a competition.
-\item[Watched waypoints*]  Waypoint file containing special waypoints for which additional computations 
-  like calculation of arrival height in map display always takes place. Useful for waypoints 
-  like known reliable thermal sources (e.g. powerplants) or mountain passes.
+  from the map file (if available).
+\item[More waypoints*]  Secondary waypoints file.  This may be used to add 
+  waypoints for a competition.
+\item[Watched waypoints*]  Waypoint file containing special waypoints for 
+  which additional computations   like calculation of arrival height in map 
+  display always takes place. Useful for waypoints   like known reliable 
+  thermal sources (e.g. powerplants) or mountain passes.
 \item[Airspaces]  The file name of the primary airspace file.  If left blank,
-airspaces are loaded from the map file (if available).
+  airspaces are loaded from the map file (if available).
 \item[More airspaces*]  The file name of the secondary airspace file.
 \item[Terrain file*]  The name of the file containing digital elevation
   terrain data.  Typically left blank, because terrain is loaded from the map
   file.
 \item[Topography file*]  Specifies the file defining the topographical features.
-The topography file defines the map topography in terms of points, lines
-and areas with optional labels.  Typically left blank, because topography is
-loaded from the map file.
-\item[Waypoint details*]  The airfields file may contain extracts from Enroute Supplements or
-other contributed information about individual airfields.
+  The topography file defines the map topography in terms of points, lines
+  and areas with optional labels.  Typically left blank, because topography is
+  loaded from the map file.
+\item[Waypoint details*]  The airfields file may contain extracts from 
+  Enroute Supplements or other contributed information about individual airfields.
 \end{description}
 
 Airspace files define Special Use Airspace.  Up to two files may be
@@ -248,16 +249,16 @@ changed terrain settings are directly visible at the small preview below.
 \begin{description}
 \item[Terrain display]  Draws digital elevation terrain on the map.
 \item[Topography display]  Draws topographical features (roads, rivers, lakes etc.) on
- the map.
+  the map.
 \item[Terrain colours]  Defines the colour ramp used in terrain rendering.  Various 
- schemes are available, which works best for you will depend on how mountainous your region is.
+  schemes are available, which works best for you will depend on how mountainous your region is.
 \item[Slope shading*]  \label{conf:shading} The terrain can be shaded among slopes 
- to indicate either wind direction, sun position or a fixed shading from north-east. 
- Slopes faced to the wind (or sun) get displayed brighter and the averted slopes get darker.
+  to indicate either wind direction, sun position or a fixed shading from north-east. 
+  Slopes faced to the wind (or sun) get displayed brighter and the averted slopes get darker.
 \item[Terrain contrast*]  Defines the amount of Phong shading in the terrain rendering. 
- Use large values to emphasise terrain slope, smaller values if flying in steep mountains.
+  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.
 \item[Terrain brightness*]  Defines the brightness (whiteness) of the terrain rendering. 
- This controls the average illumination of the terrain.
+  This controls the average illumination of the terrain.
 \end{description}
 
 
@@ -290,11 +291,14 @@ displayed and how warnings are issued.
   of display and warnings independently for each airspace class. \\
   {\bf All on}: All the airspace information is displayed at the same time. \\
   {\bf Clip}: Only airspace below a user determined altitude is shown. \\
-  {\bf Auto}: Only airspace at the current altitude plus or minus a user definable margin is shown. \\
+  {\bf Auto}: Only airspace at the current altitude plus or minus a user 
+    definable margin is shown. \\
 \sketch{figures/config-airspace.png}
   {\bf All below}:  Like auto plus every airspace below the glider is shown.
-\item[Clip altitude] For clip mode, this is the altitude below which airspace is displayed.
-\item[Margin]  For auto and all below airspace mode, this is the height above/below which airspace is included.
+\item[Clip altitude] For clip mode, this is the altitude below which airspace 
+  is displayed.
+\item[Margin]  For auto and all below airspace mode, this is the height 
+  above/below which airspace is included.
 \item[Warnings]  Determines whether warnings are enabled or disabled.
 \item[Warning time*]  This is the time before an incursion is estimated at
   which the system will warn the pilot.
@@ -303,7 +307,8 @@ displayed and how warnings are issued.
 \item[Use black outline*]  Draws a black outline around each airspace.
 \item[Airspace fill mode*]  Specifies the mode for filling the airspace area. \\
   {\bf Fill all}:  Transparently fills the airspace colour over the whole area. \\
-  {\bf Fill padding}: Draws a solid outline with a half transparent border around the airspace. \\
+  {\bf Fill padding}: Draws a solid outline with a half transparent border 
+    around the airspace. \\
   {\bf Default}:  This selects the best performing option for your hardware. In fact 
   it favours "fill padding" except for PPC 2000 system.
 \item[Airspace transparency*]  If enabled, then airspaces are filled transparently.
@@ -335,8 +340,8 @@ This page allows the safety heights and behaviour for the alternates mode to be 
 \begin{description}
 \item[Arrival height]  The height above terrain that the glider
   should arrive at for a safe landing.
-\item[Terrain height]  \label{conf:safetyterrain} The height above terrain that the glider must
-  clear during final glide.
+\item[Terrain height]  \label{conf:safetyterrain} The height above terrain that 
+  the glider must clear during final glide.
 \\
 See Section~\ref{sec:safety-heights} for more details on the meanings
 of the safety heights.
@@ -462,16 +467,17 @@ glide reach is drawn as a line resp.\ a shade on the map area.
 
 \begin{description}
 \item[FLARM radar]  \label{conf:flarmdisplay} This enables the display of the FLARM 
- radar gauge. The track bearing of the target relative to the track bearing of the 
- aircraft is displayed as an arrow head, and a triangle pointing up or down shows 
+  radar gauge. The track bearing of the target relative to the track bearing of the 
+  aircraft is displayed as an arrow head, and a triangle pointing up or down shows 
 \sketch{figures/flarmrose.png}
- the relative altitude of the target relative to you.
+  the relative altitude of the target relative to you.
 \\
-\item[Auto close FLARM*]  This will close the FLARM radar view when all FLARM traffic has gone.
+\item[Auto close FLARM*]  This will close the FLARM radar view when all FLARM 
+  traffic has gone.
 \item[Thermal assistant] \label{conf:thermalassistant} Enables the display of the
-ThermalAssistant gauge.
+  ThermalAssistant gauge.
 \item[Thermal band] \label{conf:thermalband} Enables the display of the
-thermal profile (climb band) overlay on the map.
+  thermal profile (climb band) overlay on the map.
 
 In all FLARM environment, the colour of the target indicates the threat level.
 
@@ -834,15 +840,18 @@ Separate selections are available for all items. Once you changed a given preset
 will be referenced as `Custom' set and will also be stored in your profile.
 
 \begin{description}
-\item[Aircraft/Wind speed*]  Units used for airspeed and ground speed: mph, knots, km/h.
-  A separate unit is available for task speeds.
-\item[Distance*]  Units used for horizontal distances e.g. range to waypoint, distance to go: sm, nm, km.
+\item[Aircraft/Wind speed*]  Units used for airspeed and ground speed: mph, 
+  knots, km/h. A separate unit is available for task speeds.
+\item[Distance*]  Units used for horizontal distances e.g. range to waypoint, 
+  distance to go: sm, nm, km.
 \item[Lift*]  Units used for vertical speeds (variometer): knots, m/s, ft/min.
 \item[Altitude*] Units used for altitude and heights: foot/meter.
 \item[Temperature*]  Units used for temperature: \degree C, \degree F.
 \item[Task speed*] Units used for task speed: mph, knots, km/h.
 \item[Pressure*]  Units used for pressures: hPa, mb, inHg.
-\item[Lat./Lon.*]  Units, or better formats used for latitude and longitude. Supported are several `degree/minutes/seconds' formats, respectively their decimal fraction, and the  UTM WGS 84 format.
+\item[Lat./Lon.*]  Units, or better formats used for latitude and longitude. 
+  Supported are several `degree/minutes/seconds' formats, respectively 
+  their decimal fraction, and the  UTM WGS 84 format.
 \end{description}
 
 

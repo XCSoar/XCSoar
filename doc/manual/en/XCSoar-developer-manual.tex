@@ -234,7 +234,9 @@ excessive template use may bloat the binary.
 \section{Graphical User Interface}
 \subsection{Letter Cases}
 
-Following the guidline should prevent the GUI from mixtures of "ON" and "On" text elements, and lead to a systematic GUI text presentation. The goal is to recognize GUI text fast and reliable.
+Following the guidline should prevent the GUI from mixtures of "ON" and 
+"On" text elements, and lead to a systematic GUI text presentation. 
+The goal is to recognize GUI text fast and reliable.
 
 \begin{description}
   \item[Captions] Captions (button captions, windows titles) to use
@@ -468,22 +470,28 @@ they are allowed in \texttt{LDLIBS}, too.
 
 \begin{itemize}
 \item Minimise the number of colours, and re-use colour groups already defined.
-\item Too much use of colour where it is not required serves only to reduce the effectiveness of bright colours for important items.
+\item Too much use of colour where it is not required serves only to reduce 
+ the effectiveness of bright colours for important items.
 \item High colour saturation elements should be reserved for high importance items
 \item High contrast against background should be reserved for high importance items
 \item Attempt to adopt colours that are intuitive based the function of the item
-\item Minimise the clutter where possible --- readibility is essential for use in flight
-\item Use colours defined in \verb|Graphics| according to functional name, not their actual colour.
-\item Try to maintain consistent use of colours in all uses of that function, such as dialog graphics as well as map overlays and infoboxes.
+\item Minimise the clutter where possible --- readibility is essential for use 
+ in flight
+\item Use colours defined in \verb|Graphics| according to functional name, not 
+ their actual colour.
+\item Try to maintain consistent use of colours in all uses of that function, 
+ such as dialogue graphics as well as map overlays and infoboxes.
 \item Text should always be monochrome.
 \end{itemize}
 
 Use aviation conventions or adopt best aviation human factors
 standards where possible, in particular:
 \begin{itemize}
-\item ICAO Internation Standards and Recommended Practices, Annex 4 to the Convention on International Civil Aviation (Aeronautical Charts).
+\item ICAO Internation Standards and Recommended Practices, Annex 4 to the 
+ Convention on International Civil Aviation (Aeronautical Charts).
 \item NASA Colour Usage recommendations and design guidelines: \verb|http://colorusage.arc.nasa.gov/|
-\item DOT/FAA/AR-03/67 {\em Human Factors Considerations in the Design and Evaluation of Electronic Flight Bags (EFBs)} \verb|http://www.volpe.dot.gov/hf/aviation/efb/docs/efb_version2.pdf|
+\item DOT/FAA/AR-03/67 {\em Human Factors Considerations in the Design and 
+ Evaluation of Electronic Flight Bags (EFBs)} \verb|http://www.volpe.dot.gov/hf/aviation/efb/docs/efb_version2.pdf|
 \item FAA Human Factors Design Standards \verb|http://hf.tc.faa.gov/hfds/|.
 \item DOT/FAA/AM-01/17 {\em Human Factors Design Guidelines for Multifunction Displays}
 \end{itemize}
@@ -493,9 +501,11 @@ This site has a useful tool that can be used to convert screenshots
 to how they would look to a person with common color blindness:
 \verb|http://www.etre.com/tools/colourcheck/|.
 
-{\bf For safety purposes, avoid use of elements that may encourage or require the user to stare at the screen continuously.}
+{\bf For safety purposes, avoid use of elements that may encourage or require 
+the user to stare at the screen continuously.}
 
-{\bf For safety purposes, avoid user controls that have significant risk of producing unsafe results if misconfigured by the pilot.}
+{\bf For safety purposes, avoid user controls that have significant risk of 
+producing unsafe results if misconfigured by the pilot.}
 
 \subsection{General colour conventions}
 Colour conventions generally in use throughout the program:
@@ -524,27 +534,28 @@ Colour conventions in use are:
 \item Buttons and other widgets rendered with an evenly shaded border
 \item Yellow for clicked items
 \item Light blue for the key focused item
-\item Medium blue for dialog title bar
+\item Medium blue for dialogue title bar
 \item Text is black if the item is enabled
 \item Text is greyed out (but still visible) if the item is disabled
 \end{itemize}
 
-\subsection{Dialog types and navigation buttons}
+\subsection{dialogue types and navigation buttons}
 There are four types of dialogs in XCSoar, and the navigation 
 buttons for each are different.  
 Navigation buttons are the Close, OK, Cancel and Select buttons.
 \begin{itemize}
-\item Dialogs that modify and save data when the dialog closes.
+\item Dialogs that modify and save data when the dialogue closes.
 
 These shall usually have a Close button (no Cancel) and may have context specific 
 function buttons
 \item Dialogs that modify data where Cancel would be important for the user.
 
 These shall have OK and Cancel buttons.  This may include dialogs with 
-children dialogs where hitting Cancel from the parent dialog cancels 
+children dialogs where hitting Cancel from the parent dialogue cancels 
 all the changes made in the children dialogs
 
-\item Dialogs that have a list of values, one of which can be selected to return to the parent dialog.
+\item Dialogs that have a list of values, one of which can be selected to 
+ return to the parent dialogue.
 
 These shall have Select and Cancel buttons
 \item Dialogs that display information that cannot be modified.
@@ -552,9 +563,10 @@ These shall have Select and Cancel buttons
 These shall have a Close button
 \end{itemize}
 
-\subsection{Dialog button placement and size}
+\subsection{dialogue button placement and size}
 \begin{itemize}
-\item The Close and Cancel buttons will never appear in the same dialog and are always located in the same place.  This location will be:
+\item The Close and Cancel buttons will never appear in the same dialogue and 
+ are always located in the same place.  This location will be:
 
 For portrait: lower right
 
@@ -565,11 +577,17 @@ For portrait: Select in lower left, Cancel in lower right
 
 For landscape: Cancel in lower left, Select immediately above it
 \item Buttons will be 35 (scaled) pixels high
-\item Buttons will be flush with the bottom of the screen and with the sides of the screen and against each other (no margins)
+\item Buttons will be flush with the bottom of the screen and with the sides of 
+ the screen and against each other (no margins)
 \item In portrait, buttons will be 33% or 50% or 100% width of the screen
-\item In landscape, buttons will be 65 to 80 (scaled) pixels wide, as wide as the frame permits.  They will generally be a vertical row of buttons flush left of the screen
-\item If text won't fit on a button, the buttons can be made larger consistently for a screen, but this should be the exception because if it must contain that much text consider using a different type of control.
-\item Exceptions to all the dialog concepts above are encouraged, but should be mocked up and reviewed with the development community prior to implementing and possibly documenting in the developers guide.
+\item In landscape, buttons will be 65 to 80 (scaled) pixels wide, as wide as the 
+ frame permits.  They will generally be a vertical row of buttons flush left of the screen
+\item If text won't fit on a button, the buttons can be made larger consistently 
+ for a screen, but this should be the exception because if it must contain that 
+ much text consider using a different type of control.
+\item Exceptions to all the dialogue concepts above are encouraged, but should be 
+ mocked up and reviewed with the development community prior to implementing and 
+ possibly documenting in the developers guide.
 \end{itemize}
 
 \subsection{Usability}
@@ -616,7 +634,8 @@ informational widgets (final glide bar, wind, north arrow) should be rendered
 so as to help those elements be visually separated from the map:
 
 \begin{itemize}
-\item Generally adopt higher contrast (higher colour saturation or darker shade) than the background map layer elements.
+\item Generally adopt higher contrast (higher colour saturation or darker shade) 
+ than the background map layer elements.
 
 \item For elements covering an area (non line), draw the entire element or a border
 with a luminosity contrasting pen, of width \verb|IBLSCALE(1)|.
@@ -635,13 +654,20 @@ priority, particularly with alert warning items above caution items above non-al
 
 \section{Terminology}
 \subsection{Glide Ratio}
-'Glide ratio' is a non-specific term which can refer to the ratio of horizontal to vertical motion with reference to either the surrounding airmass or the ground.
+'Glide ratio' is a non-specific term which can refer to the ratio of horizontal to 
+vertical motion with reference to either the surrounding airmass or the ground.
 
-To reduce confusion, ground-referenced glide ratios (eg distance travelled over ground vs altitude lost) should be referred to by the term 'glide ratio over ground' when space allows, or 'glide ratio' / 'GR'.
+To reduce confusion, ground-referenced glide ratios (eg distance travelled over 
+ground vs altitude lost) should be referred to by the term 'glide ratio over 
+ground' when space allows, or 'glide ratio' / 'GR'.
 
-Air-referenced glide ratios (eg airspeed vs sink rate) should be specified as 'lift/drag ratio' / 'L/D ratio' / 'LD'. The lift/drag ratio is numerically equal to the air-referenced glide ratio when flying at constant speed.
+Air-referenced glide ratios (eg airspeed vs sink rate) should be specified as 
+'lift/drag ratio' / 'L/D ratio' / 'LD'. The lift/drag ratio is numerically equal 
+to the air-referenced glide ratio when flying at constant speed.
 
-If usage spans both air-referenced and ground-referenced glide ratios, the non-specific term 'glide ratio' / 'GR' should be used. 'Lift/drag ratio' should never be used to refer to ground-referenced glide ratios.
+If usage spans both air-referenced and ground-referenced glide ratios, the 
+non-specific term 'glide ratio' / 'GR' should be used. 'Lift/drag ratio' should 
+never be used to refer to ground-referenced glide ratios.
 
 \chapter{File formats}\label{cha:file_formats}
 

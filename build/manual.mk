@@ -7,14 +7,25 @@ FIGURES_EN = $(DOC)/manual/en/figures/*.png $(DOC)/manual/en/figures/*.pdf
 SVG_ICON_LIST = \
 	alt2_landable_airport \
 	alt2_landable_field \
+	alt2_marginal_airport \
+	alt2_marginal_field \
 	alt_landable_airport \
 	alt_landable_field \
+	alt_marginal_airport \
+	alt_marginal_field \
 	alt_reachable_airport \
 	alt_reachable_field \
 	winpilot_landable \
 	winpilot_marginal \
 	winpilot_reachable \
 	map_turnpoint \
+	map_mountain_top \
+	map_obstacle \
+	map_pass \
+	map_power_plant \
+	map_tower \
+	map_tunnel \
+	map_weather_station \
 	mode_abort \
 	mode_climb \
 	mode_cruise \
