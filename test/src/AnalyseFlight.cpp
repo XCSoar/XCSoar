@@ -121,7 +121,7 @@ Run(DebugReplay &replay, Result &result)
 
   bool released = false;
 
-  for (int i = 1; replay.Next(); i++) {
+  while (replay.Next()) {
     ComputeCircling(replay, circling_settings);
 
     const MoreData &basic = replay.Basic();
