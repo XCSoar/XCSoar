@@ -121,6 +121,10 @@ Run(DebugReplay &replay, Result &result)
 
   bool released = false;
 
+  GeoPoint last_location = GeoPoint::Invalid();
+  constexpr Angle max_longitude_change = Angle::Degrees(30);
+  constexpr Angle max_latitude_change = Angle::Degrees(1);
+
   while (replay.Next()) {
     ComputeCircling(replay, circling_settings);
 
@@ -132,6 +136,17 @@ Run(DebugReplay &replay, Result &result)
     if (!basic.time_available || !basic.location_available ||
         !basic.NavAltitudeAvailable())
       continue;
+
+    if (last_location.IsValid() &&
+        ((last_location.latitude - basic.location.latitude).Absolute() > max_latitude_change ||
+         (last_location.longitude - basic.location.longitude).Absolute() > max_longitude_change))
+      /* there was an implausible warp, which is usually triggered by
+         an invalid point declared "valid" by a bugged logger; if that
+         happens, we stop the analysis, because the IGC file is
+         obviously broken */
+      break;
+
+    last_location = basic.location;
 
     if (!released && !negative(replay.Calculated().flight.release_time)) {
       released = true;
