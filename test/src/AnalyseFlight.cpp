@@ -140,6 +140,12 @@ Run(DebugReplay &replay, Result &result)
       sprint_trace.EraseEarlierThan(replay.Calculated().flight.release_time);
     }
 
+    if (released && !replay.Calculated().flight.flying)
+      /* the aircraft has landed, stop here */
+      /* TODO: at some point, we might want to emit the analysis of
+         all flights in this IGC file */
+      break;
+
     const TracePoint point(basic);
     full_trace.push_back(point);
     sprint_trace.push_back(point);
