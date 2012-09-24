@@ -45,7 +45,7 @@ struct Result {
   }
 };
 
-static Trace full_trace(60, Trace::null_time, 256);
+static Trace full_trace(0, Trace::null_time, 256);
 static Trace sprint_trace(0, 9000, 64);
 
 static void
