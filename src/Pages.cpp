@@ -33,20 +33,20 @@ Copyright_License {
 
 namespace Pages
 {
-  unsigned current_page = 0;
+  static unsigned current_page = 0;
 
   static PageSettings settings;
 
-  const unsigned MAX_VALID_LAYOUTS =
+  static constexpr unsigned MAX_VALID_LAYOUTS =
     1 + // Nothing
     1 + // Map & Auto InfoBoxes
     1 + // Map (Full Screen)
     InfoBoxSettings::MAX_PANELS;
 
-  unsigned num_valid_layouts = 0;
-  PageSettings::PageLayout valid_layouts[MAX_VALID_LAYOUTS];
+  static unsigned num_valid_layouts = 0;
+  static PageSettings::PageLayout valid_layouts[MAX_VALID_LAYOUTS];
 
-  void AddValidLayout(const PageSettings::PageLayout& pl);
+  static void AddValidLayout(const PageSettings::PageLayout& pl);
 }
 
 
