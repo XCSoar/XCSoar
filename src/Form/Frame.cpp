@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/Frame.hpp"
 #include "Screen/AnyCanvas.hpp"
+#include "Screen/Layout.hpp"
 #include "Look/DialogLook.hpp"
 
 #include <winuser.h>
@@ -88,7 +89,8 @@ WndFrame::OnPaint(Canvas &canvas)
   canvas.Select(*font);
 
   PixelRect rc = GetClientRect();
-  InflateRect(&rc, -2, -2); // todo border width
+  const int padding = Layout::GetTextPadding();
+  InflateRect(&rc, -padding, -padding);
 
   canvas.formatted_text(&rc, text.c_str(), mCaptionStyle);
 }

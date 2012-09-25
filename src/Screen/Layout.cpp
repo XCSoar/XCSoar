@@ -37,6 +37,7 @@ namespace Layout
   unsigned scale_1024 = 1024;
   unsigned small_scale = 1024;
   unsigned pen_width_scale = 1024;
+  UPixelScalar text_padding = 2;
   UPixelScalar minimum_control_height = 22, maximum_control_height = 44;
   UPixelScalar hit_radius = 10;
 }
@@ -61,6 +62,8 @@ Layout::Initialize(unsigned width, unsigned height)
   small_scale = (scale_1024 - 1024) / 2 + 1024;
 
   pen_width_scale = std::max(1024u, x_dpi * 1024u / 80u);
+
+  text_padding = Scale(2);
 
   minimum_control_height = Scale(22);
 

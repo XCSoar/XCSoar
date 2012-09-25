@@ -246,8 +246,9 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   FormatUserMapScale(map_width, buffer.buffer(), true);
   PixelSize text_size = canvas.CalcTextSize(buffer);
 
-  const PixelScalar text_padding_x = Layout::Scale(2);
-  const PixelScalar height = Fonts::map_bold.GetCapitalHeight() + Layout::Scale(2);
+  const PixelScalar text_padding_x = Layout::GetTextPadding();
+  const PixelScalar height = Fonts::map_bold.GetCapitalHeight()
+    + Layout::GetTextPadding();
 
   PixelScalar x = 0;
   look.map_scale_left_icon.Draw(canvas, 0, rc.bottom - height);

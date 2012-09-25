@@ -169,7 +169,7 @@ DevicesConfigPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const DeviceConfig &config = GetListItemConfig(idx);
 
-  const UPixelScalar margin = Layout::Scale(2);
+  const UPixelScalar margin = Layout::GetTextPadding();
 
   TCHAR port_name_buffer[128];
   const TCHAR *port_name =

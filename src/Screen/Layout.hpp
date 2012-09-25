@@ -49,6 +49,11 @@ namespace Layout
 
   extern unsigned pen_width_scale;
 
+  /**
+   * Recommended padding from Window boundary to text.
+   */
+  extern UPixelScalar text_padding;
+
   extern UPixelScalar minimum_control_height, maximum_control_height;
 
   extern UPixelScalar hit_radius;
@@ -133,6 +138,16 @@ namespace Layout
   ScaleY(PixelScalar y)
   {
     return y;
+  }
+
+  gcc_const
+  static inline UPixelScalar
+  GetTextPadding()
+  {
+    if (!ScaleSupported())
+      return 2;
+
+    return text_padding;
   }
 
   /**

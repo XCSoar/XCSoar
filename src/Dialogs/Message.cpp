@@ -88,14 +88,14 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
 
   // Create text element
   WndFrame *text_frame = new WndFrame(client_area, dialog_look,
-                                      0, Layout::Scale(2),
+                                      0, 0,
                                       dialog_width, dialog_height);
 
   text_frame->SetCaption(text);
   text_frame->SetAlignCenter();
 
   UPixelScalar text_height = text_frame->GetTextHeight();
-  text_frame->Resize(dialog_width, text_height + Layout::Scale(2));
+  text_frame->Resize(dialog_width, text_height + Layout::GetTextPadding());
 
   const PixelSize root_size = main_window.GetSize();
 

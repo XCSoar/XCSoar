@@ -299,7 +299,7 @@ void
 ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  UPixelScalar margin = Layout::Scale(2);
+  const UPixelScalar margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
 
   UPixelScalar row_height = std::max(UPixelScalar(3 * margin + 2 * font_height),
@@ -428,7 +428,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 {
   const FileItem &file = items[i];
 
-  const UPixelScalar margin = Layout::Scale(2);
+  const UPixelScalar margin = Layout::GetTextPadding();
 
   canvas.text(rc.left + margin, rc.top + margin, file.name.c_str());
 
@@ -507,7 +507,8 @@ OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   ACPToWideConverter name(file.GetName());
   if (name.IsValid())
-    canvas.text(rc.left + Layout::Scale(2), rc.top + Layout::Scale(2), name);
+    canvas.text(rc.left + Layout::GetTextPadding(),
+                rc.top + Layout::GetTextPadding(), name);
 }
 
 #endif

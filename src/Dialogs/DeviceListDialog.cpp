@@ -180,7 +180,7 @@ void
 DeviceListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  UPixelScalar margin = Layout::Scale(2);
+  const UPixelScalar margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
   CreateList(parent, look, rc, 3 * margin + 2 * font_height).SetLength(NUMDEV);
 
@@ -252,7 +252,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     CommonInterface::SetSystemSettings().devices[idx];
   const Flags flags(*items[idx]);
 
-  const UPixelScalar margin = Layout::Scale(2);
+  const UPixelScalar margin = Layout::GetTextPadding();
 
   TCHAR port_name_buffer[128];
   const TCHAR *port_name =

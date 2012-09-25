@@ -101,7 +101,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   if (settings.border_style == apIbTab && halftextwidth > Layout::Scale(3)) {
     PixelScalar ytop = title_rect.top + font.GetCapitalHeight() / 2;
-    PixelScalar ytopedge = ytop + Layout::Scale(2);
+    PixelScalar ytopedge = ytop + Layout::GetTextPadding();
     PixelScalar ybottom = title_rect.top + Layout::Scale(6)
       + font.GetCapitalHeight();
 
@@ -110,10 +110,10 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
     RasterPoint tab[8];
     tab[0].x = tab[1].x = title_rect.left;
     tab[0].y = tab[7].y = ybottom;
-    tab[2].x = title_rect.left + Layout::Scale(2);
+    tab[2].x = title_rect.left + Layout::GetTextPadding();
     tab[2].y = tab[5].y = tab[3].y = tab[4].y = ytop;
     tab[1].y = tab[6].y = ytopedge;
-    tab[5].x = title_rect.right - Layout::Scale(2);
+    tab[5].x = title_rect.right - Layout::GetTextPadding();
     tab[6].x = tab[7].x = title_rect.right;
     tab[3].x = title_rect.left + halftextwidth - Layout::Scale(1);
     tab[4].x = title_rect.right - halftextwidth + Layout::Scale(1);

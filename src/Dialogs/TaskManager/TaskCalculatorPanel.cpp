@@ -177,7 +177,7 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 
     canvas.SetBackgroundColor(COLOR_YELLOW);
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.text(offsetx * 2 + Layout::Scale(2),
+    canvas.text(offsetx * 2 + Layout::GetTextPadding(),
                 (int)(canvas.get_height() - textheight) / 2,
                 message);
   }
