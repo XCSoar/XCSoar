@@ -1001,6 +1001,13 @@ event=Traffic northup toggle
 label=$(TrafficNorthUpToggleActionName)
 location=8
 
+mode=Display1.TA Display1.Traffic
+type=key
+data=0
+event=Map show
+label=Map
+location=9
+
 # -------------
 # mode=RemoteStick
 # -------------
