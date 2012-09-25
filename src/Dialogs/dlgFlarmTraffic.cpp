@@ -467,6 +467,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   FlarmTraffic traffic = data.list[WarningMode() ? warning : selection];
   assert(traffic.IsDefined());
 
+  const UPixelScalar padding = Layout::GetTextPadding();
   PixelRect rc;
   rc.left = padding;
   rc.top = padding;
