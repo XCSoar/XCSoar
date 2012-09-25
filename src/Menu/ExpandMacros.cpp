@@ -27,6 +27,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
+#include "Widgets/TrafficWidget.hpp"
 #include "ComputerSettings.hpp"
 #include "Components.hpp"
 #include "Compatibility/string.h"
@@ -327,6 +328,22 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   return invalid;
 }
 
+static void
+ExpandTrafficMacros(TCHAR *buffer, size_t size)
+{
+  TrafficWidget *widget = (TrafficWidget *)
+    CommonInterface::main_window->GetFlavourWidget(_T("Traffic"));
+  if (widget == nullptr)
+    return;
+
+  CondReplaceInString(widget->GetAutoZoom(), buffer,
+                      _T("$(TrafficZoomAutoToggleActionName)"),
+                      _("Manual"), _("Auto"), size);
+  CondReplaceInString(widget->GetNorthUp(), buffer,
+                      _T("$(TrafficNorthUpToggleActionName)"),
+                      _("Track up"), _("North up"), size);
+}
+
 static const NMEAInfo &
 Basic()
 {
@@ -377,6 +394,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   invalid |= ExpandTaskMacros(OutBuffer, Size,
                               Calculated(), GetComputerSettings());
 
+  ExpandTrafficMacros(OutBuffer, Size);
 
   if (_tcsstr(OutBuffer, _T("$(CheckFLARM)"))) {
     if (!Basic().flarm.status.available)
@@ -598,6 +616,10 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(CommonInterface::GetUISettings().traffic.enable_gauge,
                       OutBuffer, _T("$(FlarmDispToggleActionName)"),
                       _("Off"), _("On"), Size);
+
+  CondReplaceInString(GetMapSettings().auto_zoom_enabled, OutBuffer,
+                      _T("$(ZoomAutoToggleActionName)"),
+                      _("Manual"), _("Auto"), Size);
 
   if (_tcsstr(OutBuffer, _T("$(NextPageName)"))) {
     TCHAR label[30];

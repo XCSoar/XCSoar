@@ -43,9 +43,13 @@ public:
   void NextTarget();
   void SwitchData();
 
+  gcc_pure
+  bool GetAutoZoom() const;
   void SetAutoZoom(bool value);
   void ToggleAutoZoom();
 
+  gcc_pure
+  bool GetNorthUp() const;
   void SetNorthUp(bool value);
   void ToggleNorthUp();
 

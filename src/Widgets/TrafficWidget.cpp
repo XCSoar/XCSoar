@@ -462,6 +462,12 @@ TrafficWidget::SwitchData()
   Profile::SetEnum(ProfileKeys::FlarmSideData, view->side_display_type);
 }
 
+bool
+TrafficWidget::GetAutoZoom() const
+{
+  return view->GetAutoZoom();
+}
+
 void
 TrafficWidget::SetAutoZoom(bool value)
 {
@@ -472,6 +478,12 @@ void
 TrafficWidget::ToggleAutoZoom()
 {
   view->ToggleAutoZoom();
+}
+
+bool
+TrafficWidget::GetNorthUp() const
+{
+  return view->GetNorthUp();
 }
 
 void
