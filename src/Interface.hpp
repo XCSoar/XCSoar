@@ -310,9 +310,6 @@ public:
    * Copy data from and to the DeviceBlackboard.
    */
   static void ExchangeDeviceBlackboard();
-
-private:
-  static bool LoadProfile();
 };
 
 #endif

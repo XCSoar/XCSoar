@@ -151,8 +151,8 @@ static GlideComputerEvents glide_computer_events;
 AltairControl altair_control;
 #endif
 
-bool
-XCSoarInterface::LoadProfile()
+static bool
+LoadProfile()
 {
   if (StringIsEmpty(Profile::GetPath()) &&
       !dlgStartupShowModal())
@@ -161,10 +161,10 @@ XCSoarInterface::LoadProfile()
   Profile::Load();
   Profile::Use();
 
-  Units::SetConfig(GetUISettings().units);
+  Units::SetConfig(CommonInterface::GetUISettings().units);
 
 #ifdef HAVE_MODEL_TYPE
-  global_model_type = GetSystemSettings().model_type;
+  global_model_type = CommonInterface::GetSystemSettings().model_type;
 #endif
 
   return true;
