@@ -56,7 +56,7 @@ SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
                                        const PixelRect &rc,
                                        const FlarmTrafficLook &look,
                                        const WindowStyle style)
-  :FlarmTrafficWindow(look, 1, true)
+  :FlarmTrafficWindow(look, 1, 1, true)
 {
   set(parent, rc, style);
 }
