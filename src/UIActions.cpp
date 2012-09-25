@@ -26,6 +26,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
+#include "FLARM/Glue.hpp"
+#include "Dialogs/Traffic.hpp"
 
 static bool force_shutdown = false;
 
@@ -45,4 +47,12 @@ UIActions::CheckShutdown()
   return ShowMessageBox(_("Quit program?"), _T("XCSoar"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES;
 
+}
+
+void
+UIActions::ShowTrafficRadar()
+{
+  LoadFlarmDatabases();
+
+  dlgFlarmTrafficShowModal();
 }

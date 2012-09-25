@@ -34,6 +34,11 @@ namespace UIActions {
   void SignalShutdown(bool force);
 
   bool CheckShutdown();
+
+  /**
+   * Switch to the traffic radar page.
+   */
+  void ShowTrafficRadar();
 };
 
 #endif

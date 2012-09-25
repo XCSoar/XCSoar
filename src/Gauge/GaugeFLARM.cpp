@@ -27,7 +27,7 @@ Copyright_License {
 #include "Blackboard/LiveBlackboard.hpp"
 #include "NMEA/MoreData.hpp"
 #include "ComputerSettings.hpp"
-#include "Dialogs/Traffic.hpp"
+#include "UIActions.hpp"
 
 /**
  * Widget to display a FLARM gauge
@@ -77,7 +77,7 @@ SmallTrafficWindow::Update(const NMEAInfo &gps_info,
 bool
 SmallTrafficWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  dlgFlarmTrafficShowModal();
+  UIActions::ShowTrafficRadar();
   return true;
 }
 

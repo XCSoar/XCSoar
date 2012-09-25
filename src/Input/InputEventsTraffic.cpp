@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
+#include "UIActions.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Widgets/TrafficWidget.hpp"
@@ -47,9 +48,7 @@ InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 {
-  LoadFlarmDatabases();
-
-  dlgFlarmTrafficShowModal();
+  UIActions::ShowTrafficRadar();
 }
 
 void
