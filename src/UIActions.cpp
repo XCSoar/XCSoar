@@ -23,11 +23,12 @@ Copyright_License {
 
 #include "UIActions.hpp"
 #include "Interface.hpp"
+#include "Input/InputEvents.hpp"
 #include "MainWindow.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
 #include "FLARM/Glue.hpp"
-#include "Dialogs/Traffic.hpp"
+#include "Widgets/TrafficWidget.hpp"
 
 static bool force_shutdown = false;
 
@@ -52,7 +53,11 @@ UIActions::CheckShutdown()
 void
 UIActions::ShowTrafficRadar()
 {
+  if (InputEvents::IsFlavour(_T("Traffic")))
+    return;
+
   LoadFlarmDatabases();
 
-  dlgFlarmTrafficShowModal();
+  CommonInterface::main_window->SetWidget(new TrafficWidget());
+  InputEvents::SetFlavour(_T("Traffic"));
 }
