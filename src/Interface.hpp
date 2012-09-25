@@ -35,23 +35,23 @@ class StatusMessageList;
 /** 
  * Class to hold data/methods accessible by all interface subsystems
  */
-class CommonInterface {
-  static UIState ui_state;
-  static InterfaceBlackboard blackboard;
+namespace CommonInterface {
+  namespace Private {
+    extern UIState ui_state;
+    extern InterfaceBlackboard blackboard;
 
-protected:
-  /**
-   * True if movement was detected on a real GPS.
-   */
-  static bool movement_detected;
+    /**
+     * True if movement was detected on a real GPS.
+     */
+    extern bool movement_detected;
+  }
 
-public:
   // window.. make this protected TODO so have to subclass to get access
-  static StatusMessageList status_messages;
-  static MainWindow *main_window;
+  extern StatusMessageList status_messages;
+  extern MainWindow *main_window;
 
-  static bool MovementDetected() {
-    return movement_detected;
+  static inline bool MovementDetected() {
+    return Private::movement_detected;
   }
 
   // TODO: make this protected
@@ -60,10 +60,10 @@ public:
    * @return InterfaceBlackboard.Basic
    */
   gcc_const
-  static const MoreData &Basic() {
+  static inline const MoreData &Basic() {
     assert(InMainThread());
 
-    return blackboard.Basic();
+    return Private::blackboard.Basic();
   }
 
   /**
@@ -71,24 +71,24 @@ public:
    * @return InterfaceBlackboard.Calculated
    */
   gcc_const
-  static const DerivedInfo& Calculated() {
+  static inline const DerivedInfo &Calculated() {
     assert(InMainThread());
 
-    return blackboard.Calculated();
+    return Private::blackboard.Calculated();
   }
 
   gcc_const
-  static const SystemSettings& GetSystemSettings() {
+  static inline const SystemSettings &GetSystemSettings() {
     assert(InMainThread());
 
-    return blackboard.GetSystemSettings();
+    return Private::blackboard.GetSystemSettings();
   }
 
   gcc_const
-  static SystemSettings &SetSystemSettings() {
+  static inline SystemSettings &SetSystemSettings() {
     assert(InMainThread());
 
-    return blackboard.SetSystemSettings();
+    return Private::blackboard.SetSystemSettings();
   }
 
   /**
@@ -96,10 +96,10 @@ public:
    * @return The InterfaceBlackboard.ComputerSettings
    */
   gcc_const
-  static const ComputerSettings& GetComputerSettings() {
+  static inline const ComputerSettings& GetComputerSettings() {
     assert(InMainThread());
 
-    return blackboard.GetComputerSettings();
+    return Private::blackboard.GetComputerSettings();
   }
 
   /**
@@ -107,17 +107,17 @@ public:
    * @return The InterfaceBlackboard.ComputerSettings
    */
   gcc_const
-  static ComputerSettings& SetComputerSettings() {
+  static inline ComputerSettings &SetComputerSettings() {
     assert(InMainThread());
 
-    return blackboard.SetComputerSettings();
+    return Private::blackboard.SetComputerSettings();
   }
 
   gcc_const
-  static const UISettings &GetUISettings() {
+  static inline const UISettings &GetUISettings() {
     assert(InMainThread());
 
-    return blackboard.GetUISettings();
+    return Private::blackboard.GetUISettings();
   }
 
   /**
@@ -125,31 +125,31 @@ public:
    * @return The InterfaceBlackboard.MapSettings
    */
   gcc_const
-  static const MapSettings& GetMapSettings() {
+  static inline const MapSettings& GetMapSettings() {
     assert(InMainThread());
 
     return GetUISettings().map;
   }
 
   gcc_const
-  static const FullBlackboard &Full() {
+  static inline const FullBlackboard &Full() {
     assert(InMainThread());
 
-    return blackboard;
+    return Private::blackboard;
   }
 
   gcc_const
-  static LiveBlackboard &GetLiveBlackboard() {
+  static inline LiveBlackboard &GetLiveBlackboard() {
     assert(InMainThread());
 
-    return blackboard;
+    return Private::blackboard;
   }
 
   gcc_const
-  static UISettings &SetUISettings() {
+  static inline UISettings &SetUISettings() {
     assert(InMainThread());
 
-    return blackboard.SetUISettings();
+    return Private::blackboard.SetUISettings();
   }
 
   /**
@@ -157,69 +157,70 @@ public:
    * @return The InterfaceBlackboard.MapSettings
    */
   gcc_const
-  static MapSettings& SetMapSettings() {
+  static inline MapSettings &SetMapSettings() {
     assert(InMainThread());
 
     return SetUISettings().map;
   }
 
-  static const UIState &GetUIState() {
+  static inline const UIState &GetUIState() {
     assert(InMainThread());
 
-    return ui_state;
+    return Private::ui_state;
   }
 
-  static UIState &SetUIState() {
+  static inline UIState &SetUIState() {
     assert(InMainThread());
 
-    return ui_state;
+    return Private::ui_state;
   }
 
-  static void ReadBlackboardBasic(const MoreData &nmea_info) {
+  static inline void ReadBlackboardBasic(const MoreData &nmea_info) {
     assert(InMainThread());
-    blackboard.ReadBlackboardBasic(nmea_info);
+
+    Private::blackboard.ReadBlackboardBasic(nmea_info);
   }
 
-  static void ReadBlackboardCalculated(const DerivedInfo& derived_info) {
+  static inline void ReadBlackboardCalculated(const DerivedInfo &derived_info) {
     assert(InMainThread());
 
-    blackboard.ReadBlackboardCalculated(derived_info);
+    Private::blackboard.ReadBlackboardCalculated(derived_info);
   }
 
-  static void AddListener(BlackboardListener &listener) {
+  static inline void AddListener(BlackboardListener &listener) {
     assert(InMainThread());
 
-    blackboard.AddListener(listener);
+    Private::blackboard.AddListener(listener);
   }
 
-  static void RemoveListener(BlackboardListener &listener) {
+  static inline void RemoveListener(BlackboardListener &listener) {
     assert(InMainThread());
 
-    blackboard.RemoveListener(listener);
+    Private::blackboard.RemoveListener(listener);
   }
 
-  static void BroadcastGPSUpdate() {
+  static inline void BroadcastGPSUpdate() {
     assert(InMainThread());
 
-    blackboard.BroadcastGPSUpdate();
+    Private::blackboard.BroadcastGPSUpdate();
   }
 
-  static void BroadcastCalculatedUpdate() {
+  static inline void BroadcastCalculatedUpdate() {
     assert(InMainThread());
 
-    blackboard.BroadcastCalculatedUpdate();
+    Private::blackboard.BroadcastCalculatedUpdate();
   }
 
-  static void BroadcastComputerSettingsUpdate() {
+  static inline void BroadcastComputerSettingsUpdate() {
     assert(InMainThread());
 
-    blackboard.BroadcastComputerSettingsUpdate();
+    Private::blackboard.BroadcastComputerSettingsUpdate();
   }
 
-  static void BroadcastUISettingsUpdate() {
+  static inline void BroadcastUISettingsUpdate() {
     assert(InMainThread());
 
-    blackboard.BroadcastUISettingsUpdate();
+    Private::blackboard.BroadcastUISettingsUpdate();
   }
 };
 
@@ -227,20 +228,16 @@ public:
  * Class to hold data/methods accessible by interface subsystems
  * that can perform actions
  */
-class ActionInterface: public CommonInterface {
-  friend class ProcessTimer;
+namespace ActionInterface {
+  using namespace CommonInterface;
 
-protected:
-  static void SendGetComputerSettings();
-
-public:
   /**
    * Configure a new Ballast setting in #ComputerSettings, and
    * forward it to all XCSoar modules that want it.
    *
    * @param to_devices send the new settings to all devices?
    */
-  static void SetBallast(fixed ballast, bool to_devices=true);
+  void SetBallast(fixed ballast, bool to_devices=true);
 
   /**
    * Configure a new Bugs setting in #ComputerSettings, and
@@ -248,7 +245,7 @@ public:
    *
    * @param to_devices send the new settings to all devices?
    */
-  static void SetBugs(fixed mc, bool to_devices=true);
+  void SetBugs(fixed mc, bool to_devices=true);
 
   /**
    * Configure a new MacCready setting in #ComputerSettings, and
@@ -256,7 +253,7 @@ public:
    *
    * @param to_devices send the new settings to all devices?
    */
-  static void SetMacCready(fixed mc, bool to_devices=true);
+  void SetMacCready(fixed mc, bool to_devices=true);
 
   /**
    * Configure a new MacCready setting in #ComputerSettings, and
@@ -265,7 +262,7 @@ public:
    *
    * @param to_devices send the new settings to all devices?
    */
-  static void SetManualMacCready(fixed mc, bool to_devices=true);
+  void SetManualMacCready(fixed mc, bool to_devices=true);
 
   /**
    * Call this after MapSettings has been modified with
@@ -273,41 +270,41 @@ public:
    * and optionally forces a redraw.
    * @param trigger_draw Triggers the draw event after sending if true
    */
-  static void SendMapSettings(const bool trigger_draw = false);
+  void SendMapSettings(const bool trigger_draw = false);
 
-public:
   // ideally these should be protected
-  static void SignalShutdown(bool force);
+  void SignalShutdown(bool force);
 };
 
 /** 
  * Class to hold data/methods accessible by interface subsystems
  * of main program
  */
-class XCSoarInterface: public ActionInterface {
-public:
-  static bool CheckShutdown();
+namespace XCSoarInterface {
+  using namespace ActionInterface;
 
-  static void AfterStartup();
-  static void Shutdown();
-  static bool Startup();
+  bool CheckShutdown();
+
+  void AfterStartup();
+  void Shutdown();
+  bool Startup();
 
   /**
    * Receive GPS data (#MoreData) from the DeviceBlackboard.
    */
-  static void ReceiveGPS();
+  void ReceiveGPS();
 
   /**
    * Receive calculated data (#DerivedInfo) from the DeviceBlackboard.
    */
-  static void ReceiveCalculated();
+  void ReceiveCalculated();
 
-  static void ExchangeBlackboard();
+  void ExchangeBlackboard();
 
   /**
    * Copy data from and to the DeviceBlackboard.
    */
-  static void ExchangeDeviceBlackboard();
+  void ExchangeDeviceBlackboard();
 };
 
 #endif

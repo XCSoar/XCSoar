@@ -46,15 +46,20 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
-UIState CommonInterface::ui_state;
+UIState CommonInterface::Private::ui_state;
 
-bool CommonInterface::movement_detected = false;
+bool CommonInterface::Private::movement_detected = false;
 
 static bool force_shutdown = false;
 
-InterfaceBlackboard CommonInterface::blackboard;
+InterfaceBlackboard CommonInterface::Private::blackboard;
+
 StatusMessageList CommonInterface::status_messages;
 MainWindow *CommonInterface::main_window;
+
+namespace ActionInterface {
+  static void SendGetComputerSettings();
+}
 
 void
 XCSoarInterface::ReceiveGPS()
@@ -65,7 +70,7 @@ XCSoarInterface::ReceiveGPS()
     ReadBlackboardBasic(device_blackboard->Basic());
 
     const NMEAInfo &real = device_blackboard->RealState();
-    movement_detected = real.alive && real.gps.real &&
+    Private::movement_detected = real.alive && real.gps.real &&
       real.MovementDetected();
   }
 

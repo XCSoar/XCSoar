@@ -48,7 +48,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-InterfaceBlackboard CommonInterface::blackboard;
+InterfaceBlackboard CommonInterface::Private::blackboard;
 
 ProtectedAirspaceWarningManager *airspace_warnings;
 
