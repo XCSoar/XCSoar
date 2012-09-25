@@ -233,8 +233,6 @@ IDR_XML_CONFIG_WAYPOINTS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfig
 IDR_XML_CONFIG_WAYPOINTS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfigWaypoints_L.xml.gz"
 IDR_XML_CREDITS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgCredits.xml.gz"
 IDR_XML_CREDITS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgCredits_L.xml.gz"
-IDR_XML_FLARMTRAFFIC XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFlarmTraffic.xml.gz"
-IDR_XML_FLARMTRAFFIC_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFlarmTraffic_L.xml.gz"
 IDR_XML_FLARMTRAFFICDETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFlarmTrafficDetails.xml.gz"
 IDR_XML_FLARMTRAFFICDETAILS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFlarmTrafficDetails_L.xml.gz"
 IDR_XML_FONTEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFontEdit.xml.gz"

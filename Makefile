@@ -186,7 +186,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgConfigFonts.cpp \
 	$(SRC)/Dialogs/dlgConfigInfoboxes.cpp \
 	$(SRC)/Dialogs/dlgConfigWaypoints.cpp \
-	$(SRC)/Dialogs/dlgFlarmTraffic.cpp \
 	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
