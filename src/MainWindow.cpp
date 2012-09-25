@@ -748,6 +748,14 @@ MainWindow::SetWidget(Widget *_widget)
     SetFocus();
 }
 
+Widget *
+MainWindow::GetFlavourWidget(const TCHAR *flavour)
+{
+  return InputEvents::IsFlavour(flavour)
+    ? widget
+    : nullptr;
+}
+
 void
 MainWindow::UpdateGaugeVisibility()
 {

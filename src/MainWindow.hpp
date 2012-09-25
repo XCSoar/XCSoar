@@ -264,6 +264,15 @@ public:
    */
   void SetWidget(Widget *_widget);
 
+  /**
+   * Returns the current #Widget, but only if the specified flavour is
+   * active.
+   *
+   * @see InputEvents::IsFlavour(), InputEvents::SetFlavour()
+   */
+  gcc_pure
+  Widget *GetFlavourWidget(const TCHAR *flavour);
+
   void UpdateGaugeVisibility();
 
   gcc_pure
