@@ -50,7 +50,7 @@ UIState CommonInterface::ui_state;
 
 bool CommonInterface::movement_detected = false;
 
-bool ActionInterface::force_shutdown = false;
+static bool force_shutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
 StatusMessageList CommonInterface::status_messages;

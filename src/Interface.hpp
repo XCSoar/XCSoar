@@ -233,8 +233,6 @@ class ActionInterface: public CommonInterface {
 protected:
   static void SendGetComputerSettings();
 
-  static bool force_shutdown;
-
 public:
   /**
    * Configure a new Ballast setting in #ComputerSettings, and
