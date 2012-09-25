@@ -98,6 +98,11 @@ type=key
 data=ESCAPE
 event=Map show
 
+mode=default.Traffic
+type=key
+data=RETURN
+event=Traffic details
+
 ###### pan mode
 
 mode=pan

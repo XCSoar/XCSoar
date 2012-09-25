@@ -78,6 +78,8 @@ InputEvents::eventTraffic(const TCHAR *misc)
     traffic_widget->ZoomOut();
   } else if (StringIsEqual(misc, _T("northup toggle"))) {
     traffic_widget->ToggleNorthUp();
+  } else if (StringIsEqual(misc, _T("details"))) {
+    traffic_widget->OpenDetails();
   }
 }
 
