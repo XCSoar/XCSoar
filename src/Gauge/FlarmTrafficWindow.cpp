@@ -33,6 +33,8 @@
 #include "Util/Macros.hpp"
 #include "Look/FlarmTrafficLook.hpp"
 
+#include <algorithm>
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -66,7 +68,7 @@ FlarmTrafficWindow::OnResize(UPixelScalar width, UPixelScalar height)
   PaintWindow::OnResize(width, height);
 
   // Calculate Radar size
-  radius = min(height, width) / 2 - padding;
+  radius = std::min(height, width) / 2 - padding;
   radar_mid.x = width / 2;
   radar_mid.y = height / 2;
 }
@@ -205,7 +207,7 @@ fixed
 FlarmTrafficWindow::RangeScale(fixed d) const
 {
   d = d / distance;
-  return min(d, fixed_one) * radius;
+  return std::min(d, fixed_one) * radius;
 }
 
 /**
