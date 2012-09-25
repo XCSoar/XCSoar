@@ -610,12 +610,11 @@ TrafficWidget::Update()
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
-#if 0
-  if (XCSoarInterface::GetUISettings().auto_close_flarm_dialog &&
-      (!basic.flarm.available ||
-       basic.flarm.GetActiveTrafficCount() == 0))
-    wf->SetModalResult(mrOK);
-#endif
+  if (CommonInterface::GetUISettings().traffic.auto_close_dialog &&
+      basic.flarm.traffic.IsEmpty()) {
+    UIGlobals::ActivateMap();
+    return;
+  }
 
   view->Update(basic.track,
                basic.flarm.traffic,
