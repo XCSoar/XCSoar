@@ -22,6 +22,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Widget.cpp \
 	$(FORM_SRC_DIR)/WindowWidget.cpp \
 	$(FORM_SRC_DIR)/ListWidget.cpp \
+	$(FORM_SRC_DIR)/ContainerWidget.cpp \
 	$(FORM_SRC_DIR)/PanelWidget.cpp \
 	$(FORM_SRC_DIR)/OverlappedWidget.cpp \
 	$(FORM_SRC_DIR)/TwoWidgets.cpp \
