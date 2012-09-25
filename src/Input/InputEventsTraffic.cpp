@@ -33,11 +33,6 @@ Copyright_License {
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/Glue.hpp"
 
-/**
- * Evil global variable - please refactor!
- */
-static TrafficWidget *traffic_widget;
-
 void
 InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
 {
@@ -68,16 +63,15 @@ InputEvents::eventTraffic(const TCHAR *misc)
         IsFlavour(_T("Traffic")))
       return;
 
-    traffic_widget = new TrafficWidget();
-    CommonInterface::main_window->SetWidget(traffic_widget);
+    CommonInterface::main_window->SetWidget(new TrafficWidget());
     SetFlavour(_T("Traffic"));
     return;
   }
 
-  if (!IsFlavour(_T("Traffic")))
+  TrafficWidget *traffic_widget = (TrafficWidget *)
+    CommonInterface::main_window->GetFlavourWidget(_T("Traffic"));
+  if (traffic_widget == nullptr)
     return;
-
-  assert(traffic_widget != NULL);
 
   if (StringIsEqual(misc, _T("zoom auto toggle"))) {
     traffic_widget->ToggleAutoZoom();
