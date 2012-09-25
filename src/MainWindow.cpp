@@ -28,6 +28,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
+#include "UIActions.hpp"
 #include "Input/InputEvents.hpp"
 #include "Menu/ButtonLabel.hpp"
 #include "Screen/Layout.hpp"
@@ -631,7 +632,7 @@ bool MainWindow::OnClose() {
        yet (e.g. if we are in the simulator prompt) */
     return SingleWindow::OnClose();
 
-  if (XCSoarInterface::CheckShutdown()) {
+  if (UIActions::CheckShutdown()) {
     XCSoarInterface::Shutdown();
   }
   return true;

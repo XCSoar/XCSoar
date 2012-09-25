@@ -74,6 +74,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Profile/ProfileKeys.hpp"
 #include "Util/StringUtil.hpp"
 #include "Audio/Sound.hpp"
+#include "UIActions.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Language/Language.hpp"
@@ -524,7 +525,7 @@ InputEvents::eventBrightness(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventExit(gcc_unused const TCHAR *misc)
 {
-  XCSoarInterface::SignalShutdown(false);
+  UIActions::SignalShutdown(false);
 }
 
 void

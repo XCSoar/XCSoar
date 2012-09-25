@@ -271,9 +271,6 @@ namespace ActionInterface {
    * @param trigger_draw Triggers the draw event after sending if true
    */
   void SendMapSettings(const bool trigger_draw = false);
-
-  // ideally these should be protected
-  void SignalShutdown(bool force);
 };
 
 /** 
@@ -282,8 +279,6 @@ namespace ActionInterface {
  */
 namespace XCSoarInterface {
   using namespace ActionInterface;
-
-  bool CheckShutdown();
 
   void AfterStartup();
   void Shutdown();

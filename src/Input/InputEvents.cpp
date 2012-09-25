@@ -47,6 +47,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InputEvents.hpp"
 #include "InputConfig.hpp"
 #include "InputParser.hpp"
+#include "UIActions.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Protection.hpp"
@@ -304,7 +305,7 @@ bool
 InputEvents::ProcessKey(Mode mode, unsigned key_code)
 {
   if (IsAltair() && key_code == 0xF5) {
-    XCSoarInterface::SignalShutdown(false);
+    UIActions::SignalShutdown(false);
     return true;
   }
 

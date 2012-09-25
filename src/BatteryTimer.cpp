@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "BatteryTimer.hpp"
 #include "Hardware/Battery.hpp"
-#include "Interface.hpp"
+#include "UIActions.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"
 #include "Language/Language.hpp"
@@ -52,7 +52,7 @@ BatteryTimer::Process()
         Power::Battery::RemainingPercent < BATTERY_EXIT) {
       LogStartUp(_T("Battery low exit..."));
       // TODO feature: Warning message on battery shutdown
-      XCSoarInterface::SignalShutdown(true);
+      UIActions::SignalShutdown(true);
     } else {
       if (Power::Battery::RemainingPercentValid &&
           Power::Battery::RemainingPercent < BATTERY_WARNING) {

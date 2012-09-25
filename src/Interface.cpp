@@ -26,7 +26,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Language/Language.hpp"
-#include "Dialogs/Message.hpp"
 #include "StatusMessage.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -49,8 +48,6 @@ Copyright_License {
 UIState CommonInterface::Private::ui_state;
 
 bool CommonInterface::Private::movement_detected = false;
-
-static bool force_shutdown = false;
 
 InterfaceBlackboard CommonInterface::Private::blackboard;
 
@@ -244,21 +241,4 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
   }
 
   // TODO: trigger refresh if the settings are changed
-}
-
-void
-ActionInterface::SignalShutdown(bool force)
-{
-  force_shutdown = force;
-  main_window->Close(); // signals close
-}
-
-bool
-XCSoarInterface::CheckShutdown()
-{
-  if (force_shutdown)
-    return true;
-
-  return ShowMessageBox(_("Quit program?"), _T("XCSoar"),
-                     MB_YESNO | MB_ICONQUESTION) == IDYES;
 }

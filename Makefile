@@ -626,6 +626,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Language/Language.cpp \
 	$(SRC)/Language/LanguageGlue.cpp \
 	$(SRC)/LocalPath.cpp \
+	$(SRC)/UIActions.cpp \
 	$(SRC)/Interface.cpp \
 	$(SRC)/ProgressGlue.cpp \
 	$(SRC)/LocalTime.cpp \
