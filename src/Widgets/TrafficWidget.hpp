@@ -24,16 +24,39 @@
 #ifndef XCSOAR_TRAFFIC_WIDGET_HPP
 #define XCSOAR_TRAFFIC_WIDGET_HPP
 
-#include "Form/WindowWidget.hpp"
+#include "Form/ContainerWidget.hpp"
+#include "Form/ActionListener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Compiler.h"
 
+class WndButton;
+class WndSymbolButton;
 class FlarmTrafficControl2;
 
-class TrafficWidget : public WindowWidget, private NullBlackboardListener {
+class TrafficWidget : public ContainerWidget,
+#ifndef GNAV
+                      private ActionListener,
+#endif
+                      private NullBlackboardListener {
+#ifndef GNAV
+  enum Action {
+    ZOOM_IN,
+    ZOOM_OUT,
+    PREVIOUS_ITEM,
+    NEXT_ITEM,
+    DETAILS,
+  };
+
+  WndSymbolButton *zoom_in_button, *zoom_out_button;
+  WndSymbolButton *previous_item_button, *next_item_button;
+  WndButton *details_button;
+#endif
+
   FlarmTrafficControl2 *view;
 
-  //CheckBox *auto_zoom, *north_up;
+protected:
+  void UpdateLayout();
+  void SetButtonsEnabled(bool enabled);
 
 public:
   void Update();
@@ -60,9 +83,15 @@ public:
   virtual void Unprepare() gcc_override;
   virtual void Show(const PixelRect &rc) gcc_override;
   virtual void Hide() gcc_override;
+  virtual void Move(const PixelRect &rc) gcc_override;
   virtual bool SetFocus() gcc_override;
 
 private:
+#ifndef GNAV
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) gcc_override;
+#endif
+
   /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic);
 };

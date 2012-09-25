@@ -27,8 +27,7 @@
 #include "Math/Screen.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Form/CheckBox.hpp"
-#include "Form/Button.hpp"
+#include "Form/SymbolButton.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 #include "Profile/Profile.hpp"
@@ -42,6 +41,7 @@
 #include "Renderer/UnitSymbolRenderer.hpp"
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -55,7 +55,8 @@ protected:
 
 public:
   FlarmTrafficControl2(const FlarmTrafficLook &look)
-    :FlarmTrafficWindow(look, Layout::Scale(10), Layout::Scale(10)),
+    :FlarmTrafficWindow(look, Layout::Scale(10),
+                        Layout::GetMinimumControlHeight() + Layout::Scale(2)),
      enable_auto_zoom(true),
      zoom(2),
      task_direction(Angle::Degrees(fixed_minus_one)) {}
@@ -624,6 +625,8 @@ TrafficWidget::Update()
                             calculated.task_stats.current_leg.solution_remaining.IsOk(),
                             calculated.task_stats.
                             current_leg.solution_remaining.cruise_track_bearing);
+
+  SetButtonsEnabled(!view->WarningMode());
 }
 
 bool
@@ -736,27 +739,122 @@ FlarmTrafficControl2::OnKeyDown(unsigned key_code)
 }
 
 void
-TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+TrafficWidget::UpdateLayout()
+{
+  const PixelRect rc = GetContainer().GetClientRect();
+  view->Move(rc);
+
+#ifndef GNAV
+  const UPixelScalar margin = Layout::Scale(1);
+  const UPixelScalar button_height = Layout::GetMinimumControlHeight();
+  const UPixelScalar button_width = std::max(UPixelScalar(rc.right / 6),
+                                             button_height);
+
+  const PixelScalar x1 = rc.right / 2;
+  const PixelScalar x0 = x1 - button_width;
+  const PixelScalar x2 = x1 + button_width;
+
+  const PixelScalar y0 = margin;
+  const PixelScalar y1 = y0 + button_height;
+  const PixelScalar y3 = rc.bottom - margin;
+  const PixelScalar y2 = y3 - button_height;
+
+  PixelRect button_rc;
+
+  button_rc.left = x0;
+  button_rc.top = y0;
+  button_rc.right = x1 - margin;
+  button_rc.bottom = y1;
+  zoom_in_button->Move(button_rc);
+
+  button_rc.left = x1;
+  button_rc.right = x2 - margin;
+  zoom_out_button->Move(button_rc);
+
+  button_rc.left = x0;
+  button_rc.top = y2;
+  button_rc.right = x1 - margin;
+  button_rc.bottom = y3;
+  previous_item_button->Move(button_rc);
+
+  button_rc.left = x1;
+  button_rc.right = x2 - margin;
+  next_item_button->Move(button_rc);
+
+  button_rc.left = margin;
+  button_rc.top = button_height * 3 / 2;
+  button_rc.right = button_rc.left + Layout::Scale(50);
+  button_rc.bottom = button_rc.top + button_height;
+  details_button->Move(button_rc);
+#endif
+}
+
+void
+TrafficWidget::SetButtonsEnabled(bool enabled)
+{
+#ifndef GNAV
+  zoom_in_button->SetEnabled(enabled);
+  zoom_out_button->SetEnabled(enabled);
+  previous_item_button->SetEnabled(enabled);
+  next_item_button->SetEnabled(enabled);
+  details_button->SetEnabled(enabled);
+#endif
+}
+
+void
+TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 {
   instance = this;
 
-  WindowStyle style;
-  style.Hide();
-  style.EnableDoubleClicks();
+  ContainerWidget::Prepare(parent, _rc);
 
   const Look &look = UIGlobals::GetLook();
+
+  const PixelRect rc = GetContainer().GetClientRect();
+
+#ifndef GNAV
+  zoom_in_button = new WndSymbolButton(GetContainer(), look.dialog,
+                                       _T("+"), rc, ButtonWindowStyle(),
+                                       this, ZOOM_IN);
+  zoom_out_button = new WndSymbolButton(GetContainer(), look.dialog,
+                                        _T("-"), rc, ButtonWindowStyle(),
+                                        this, ZOOM_OUT);
+  previous_item_button = new WndSymbolButton(GetContainer(), look.dialog,
+                                             _T("<"), rc, ButtonWindowStyle(),
+                                             this, PREVIOUS_ITEM);
+  next_item_button = new WndSymbolButton(GetContainer(), look.dialog,
+                                         _T(">"), rc, ButtonWindowStyle(),
+                                         this, NEXT_ITEM);
+  details_button = new WndButton(GetContainer(), look.dialog,
+                                 _T("Details"), rc, ButtonWindowStyle(),
+                                 this, DETAILS);
+#endif
+
+  WindowStyle style;
+  style.EnableDoubleClicks();
+
   view = new FlarmTrafficControl2(look.flarm_dialog);
-  view->set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+  view->set(GetContainer(),
+            rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
             style);
-  SetWindow(view);
+
+  UpdateLayout();
 }
 
 void
 TrafficWidget::Unprepare()
 {
+#ifndef GNAV
+  delete zoom_in_button;
+  delete zoom_out_button;
+  delete previous_item_button;
+  delete next_item_button;
+  delete details_button;
+#endif
+
   delete view;
 
-  WindowWidget::Unprepare();
+  ContainerWidget::Unprepare();
 }
 
 void
@@ -765,16 +863,8 @@ TrafficWidget::Show(const PixelRect &rc)
   // Update Radar and Selection for the first time
   Update();
 
-#if 0
-  // Get the last chosen Side Data configuration
-  auto_zoom = (CheckBox *)form.FindByName(_T("AutoZoom"));
-  auto_zoom->SetState(view->GetAutoZoom());
-
-  north_up = (CheckBox *)form.FindByName(_T("NorthUp"));
-  north_up->SetState(view->GetNorthUp());
-#endif
-
-  WindowWidget::Show(rc);
+  ContainerWidget::Show(rc);
+  UpdateLayout();
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
@@ -783,15 +873,54 @@ void
 TrafficWidget::Hide()
 {
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
-  WindowWidget::Hide();
+  ContainerWidget::Hide();
 }
+
+void
+TrafficWidget::Move(const PixelRect &rc)
+{
+  ContainerWidget::Move(rc);
+
+  UpdateLayout();
+}
+
 
 bool
 TrafficWidget::SetFocus()
 {
-  GetWindow()->SetFocus();
+  view->SetFocus();
   return true;
 }
+
+#ifndef GNAV
+
+void
+TrafficWidget::OnAction(int id)
+{
+  switch ((Action)id) {
+  case DETAILS:
+    OpenDetails();
+    break;
+
+  case PREVIOUS_ITEM:
+    PreviousTarget();
+    break;
+
+  case NEXT_ITEM:
+    NextTarget();
+    break;
+
+  case ZOOM_IN:
+    ZoomIn();
+    break;
+
+  case ZOOM_OUT:
+    ZoomIn();
+    break;
+  }
+}
+
+#endif
 
 void
 TrafficWidget::OnGPSUpdate(const MoreData &basic)
