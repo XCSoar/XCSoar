@@ -26,6 +26,7 @@
 
 #include "Form/WindowWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
+#include "Compiler.h"
 
 class FlarmTrafficControl2;
 
@@ -53,13 +54,16 @@ public:
   void SetNorthUp(bool value);
   void ToggleNorthUp();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-  virtual bool SetFocus();
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
+  virtual void Show(const PixelRect &rc) gcc_override;
+  virtual void Hide() gcc_override;
+  virtual bool SetFocus() gcc_override;
 
 private:
+  /* virtual methods from class BlackboardListener */
   virtual void OnGPSUpdate(const MoreData &basic);
 };
 
