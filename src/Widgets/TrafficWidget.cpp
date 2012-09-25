@@ -695,7 +695,7 @@ FlarmTrafficControl2::OnMouseGesture(const TCHAR* gesture)
     return true;
   }
 
-  return false;
+  return InputEvents::processGesture(gesture);
 }
 
 bool
