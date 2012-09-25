@@ -39,11 +39,13 @@
 #include <stdio.h>
 
 FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
-                                       unsigned _padding, bool _small)
+                                       unsigned _h_padding,
+                                       unsigned _v_padding,
+                                       bool _small)
   :look(_look),
    distance(2000),
    selection(-1), warning(-1),
-   padding(_padding),
+   h_padding(_h_padding), v_padding(_v_padding),
    small(_small),
    enable_north_up(false),
    heading(Angle::Zero()),
@@ -68,7 +70,7 @@ FlarmTrafficWindow::OnResize(UPixelScalar width, UPixelScalar height)
   PaintWindow::OnResize(width, height);
 
   // Calculate Radar size
-  radius = std::min(height, width) / 2 - padding;
+  radius = std::min(height / 2 - h_padding, width / 2 - v_padding);
   radar_mid.x = width / 2;
   radar_mid.y = height / 2;
 }

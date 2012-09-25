@@ -55,7 +55,7 @@ protected:
 
 public:
   FlarmTrafficControl2(const FlarmTrafficLook &look)
-    :FlarmTrafficWindow(look, Layout::Scale(10)),
+    :FlarmTrafficWindow(look, Layout::Scale(10), Layout::Scale(10)),
      enable_auto_zoom(true),
      zoom(2),
      task_direction(Angle::Degrees(fixed_minus_one)) {}

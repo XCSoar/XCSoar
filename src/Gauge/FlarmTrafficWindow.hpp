@@ -52,7 +52,7 @@ protected:
    * The minimum distance between the window boundary and the biggest
    * circle in pixels.
    */
-  unsigned padding;
+  const UPixelScalar h_padding, v_padding;
 
   /**
    * The radius of the biggest circle in pixels.
@@ -78,7 +78,8 @@ public:
 
 public:
   FlarmTrafficWindow(const FlarmTrafficLook &_look,
-                     unsigned _padding, bool _small = false);
+                     unsigned _h_padding, unsigned _v_padding,
+                     bool _small = false);
 
 public:
   bool WarningMode() const;

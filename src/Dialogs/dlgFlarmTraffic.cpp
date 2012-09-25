@@ -66,7 +66,7 @@ protected:
 
 public:
   FlarmTrafficControl(const FlarmTrafficLook &look)
-    :FlarmTrafficWindow(look, Layout::Scale(10)),
+    :FlarmTrafficWindow(look, Layout::Scale(10), Layout::Scale(10)),
      enable_auto_zoom(true),
      zoom(2),
      task_direction(Angle::Degrees(fixed_minus_one)) {}
@@ -469,8 +469,8 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   const UPixelScalar padding = Layout::GetTextPadding();
   PixelRect rc;
-  rc.left = padding;
-  rc.top = padding;
+  rc.left = h_padding;
+  rc.top = v_padding;
   rc.right = canvas.get_width() - padding;
   rc.bottom = canvas.get_height() - padding;
 
