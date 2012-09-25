@@ -26,11 +26,37 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Widgets/TrafficWidget.hpp"
 #include "FLARM/Glue.hpp"
+#include "Dialogs/Message.hpp"
+#include "Dialogs/TextEntry.hpp"
+#include "Dialogs/Traffic.hpp"
+#include "Language/Language.hpp"
+#include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Glue.hpp"
 
 /**
  * Evil global variable - please refactor!
  */
 static TrafficWidget *traffic_widget;
+
+void
+InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
+{
+  if (StringIsEqual(misc, _T("ForceToggle"))) {
+    CommonInterface::main_window->ToggleForceFLARMRadar();
+  } else
+    CommonInterface::main_window->ToggleSuppressFLARMRadar();
+}
+
+// FLARM Traffic
+// Displays the FLARM traffic dialog
+void
+InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
+{
+  LoadFlarmDatabases();
+
+  if (!XCSoarInterface::Basic().flarm.traffic.IsEmpty())
+    dlgFlarmTrafficShowModal();
+}
 
 void
 InputEvents::eventTraffic(const TCHAR *misc)
@@ -61,5 +87,32 @@ InputEvents::eventTraffic(const TCHAR *misc)
     traffic_widget->ZoomOut();
   } else if (StringIsEqual(misc, _T("northup toggle"))) {
     traffic_widget->ToggleNorthUp();
+  }
+}
+
+void
+InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
+{
+  LoadFlarmDatabases();
+
+  StaticString<4> callsign;
+  callsign.clear();
+  if (!TextEntryDialog(*CommonInterface::main_window, callsign,
+                       _("Competition ID")) ||
+      callsign.empty())
+    return;
+
+  FlarmId ids[30];
+  unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
+
+  if (count > 0) {
+    FlarmId id = dlgFlarmDetailsListShowModal(*CommonInterface::main_window,
+                                              _("Show details:"), ids, count);
+
+    if (id.IsDefined())
+      dlgFlarmTrafficDetailsShowModal(id);
+  } else {
+    ShowMessageBox(_("Unknown competition number"),
+                _("Not found"), MB_OK | MB_ICONINFORMATION);
   }
 }

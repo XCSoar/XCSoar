@@ -59,7 +59,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Weather.hpp"
-#include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Planes.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
@@ -88,8 +87,6 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Pages.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "NMEA/Aircraft.hpp"
-#include "FLARM/FlarmDetails.hpp"
-#include "FLARM/Glue.hpp"
 #include "Compiler.h"
 #include "Weather/Features.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
@@ -193,15 +190,6 @@ InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
   CommonInterface::main_window->popup.Acknowledge();
 }
 
-void
-InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
-{
-  if (StringIsEqual(misc, _T("ForceToggle"))) {
-    CommonInterface::main_window->ToggleForceFLARMRadar();
-  } else
-    CommonInterface::main_window->ToggleSuppressFLARMRadar();
-}
-
 // Mode
 // Sets the current event mode.
 //  The argument is the label of the mode to activate.
@@ -230,45 +218,6 @@ void
 InputEvents::eventChecklist(gcc_unused const TCHAR *misc)
 {
   dlgChecklistShowModal();
-}
-
-// FLARM Traffic
-// Displays the FLARM traffic dialog
-//  See the checklist dialog section of the reference manual for more info.
-void
-InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
-{
-  LoadFlarmDatabases();
-
-  if (!XCSoarInterface::Basic().flarm.traffic.IsEmpty())
-    dlgFlarmTrafficShowModal();
-}
-
-void
-InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
-{
-  LoadFlarmDatabases();
-
-  StaticString<4> callsign;
-  callsign.clear();
-  if (!TextEntryDialog(*CommonInterface::main_window, callsign,
-                       _("Competition ID")) ||
-      callsign.empty())
-    return;
-
-  FlarmId ids[30];
-  unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
-
-  if (count > 0) {
-    FlarmId id = dlgFlarmDetailsListShowModal(*CommonInterface::main_window,
-                                              _("Show details:"), ids, count);
-
-    if (id.IsDefined())
-      dlgFlarmTrafficDetailsShowModal(id);
-  } else {
-    ShowMessageBox(_("Unknown competition number"),
-                _("Not found"), MB_OK | MB_ICONINFORMATION);
-  }
 }
 
 // Status
