@@ -39,6 +39,7 @@
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Renderer/UnitSymbolRenderer.hpp"
 #include "Input/InputEvents.hpp"
 #include "Interface.hpp"
 
@@ -99,6 +100,11 @@ public:
 
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
+  void PaintClimbRate(Canvas &canvas, PixelRect rc, fixed climb_rate) const;
+  void PaintDistance(Canvas &canvas, PixelRect rc, fixed distance) const;
+  void PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
+                             fixed relative_altitude) const;
+  void PaintID(Canvas &canvas, PixelRect rc, const FlarmTraffic &traffic) const;
   void PaintTaskDirection(Canvas &canvas) const;
 
 protected:
@@ -267,6 +273,184 @@ FlarmTrafficControl2::PaintTaskDirection(Canvas &canvas) const
   canvas.DrawPolygon(triangle, 4);
 }
 
+void
+FlarmTrafficControl2::PaintClimbRate(Canvas &canvas, PixelRect rc,
+                                     fixed climb_rate) const
+{
+  // Paint label
+  canvas.Select(look.info_labels_font);
+  PixelScalar label_width = canvas.CalcTextSize(_("Vario")).cx;
+  canvas.text(rc.right - label_width, rc.top, _("Vario"));
+
+  // Format climb rate
+  TCHAR buffer[20];
+  Unit unit = Units::GetUserVerticalSpeedUnit();
+  FormatUserVerticalSpeed(climb_rate, buffer, false);
+
+  // Calculate unit size
+  canvas.Select(look.info_units_font);
+  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  UPixelScalar unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
+
+  UPixelScalar space_width = unit_width / 3;
+
+  // Calculate value size
+  canvas.Select(look.info_values_font);
+  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
+  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
+
+  // Calculate positions
+  PixelScalar max_height = max(unit_height, value_height);
+  PixelScalar y = rc.top + look.info_units_font.GetHeight() + max_height;
+
+  // Paint value
+  canvas.text(rc.right - unit_width - space_width - value_width, y - value_height, buffer);
+
+  // Paint unit
+  canvas.Select(look.info_units_font);
+  UnitSymbolRenderer::Draw(
+      canvas, { PixelScalar(rc.right - unit_width), PixelScalar(y - unit_height) }, unit, look.unit_fraction_pen);
+}
+
+void
+FlarmTrafficControl2::PaintDistance(Canvas &canvas, PixelRect rc,
+                                    fixed distance) const
+{
+  // Format distance
+  TCHAR buffer[20];
+  Unit unit = FormatUserDistanceSmart(distance, buffer, false, fixed(1000));
+
+  // Calculate unit size
+  canvas.Select(look.info_units_font);
+  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  UPixelScalar unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
+
+  UPixelScalar space_width = unit_width / 3;
+
+  // Calculate value size
+  canvas.Select(look.info_values_font);
+  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
+  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
+
+  // Calculate positions
+  PixelScalar max_height = max(unit_height, value_height);
+
+  // Paint value
+  canvas.text(rc.left, rc.bottom - value_height, buffer);
+
+  // Paint unit
+  canvas.Select(look.info_units_font);
+  UnitSymbolRenderer::Draw(
+      canvas, { PixelScalar(rc.left + value_width + space_width), PixelScalar(rc.bottom - unit_height) }, unit, look.unit_fraction_pen);
+
+
+  // Paint label
+  canvas.Select(look.info_labels_font);
+  canvas.text(rc.left, rc.bottom - max_height - look.info_labels_font.GetHeight(), _("Distance"));
+}
+
+void
+FlarmTrafficControl2::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
+                                            fixed relative_altitude) const
+{
+  // Format relative altitude
+  TCHAR buffer[20];
+  Unit unit = Units::GetUserAltitudeUnit();
+  FormatRelativeUserAltitude(relative_altitude, buffer, false);
+
+  // Calculate unit size
+  canvas.Select(look.info_units_font);
+  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  UPixelScalar unit_height =
+      UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
+
+  UPixelScalar space_width = unit_width / 3;
+
+  // Calculate value size
+  canvas.Select(look.info_values_font);
+  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
+  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
+
+  // Calculate positions
+  PixelScalar max_height = max(unit_height, value_height);
+
+  // Paint value
+  canvas.text(rc.right - unit_width - space_width - value_width, rc.bottom - value_height, buffer);
+
+  // Paint unit
+  canvas.Select(look.info_units_font);
+  UnitSymbolRenderer::Draw(
+      canvas, { PixelScalar(rc.right - unit_width), PixelScalar(rc.bottom - unit_height) }, unit, look.unit_fraction_pen);
+
+
+  // Paint label
+  canvas.Select(look.info_labels_font);
+  PixelScalar label_width = canvas.CalcTextSize(_("Rel. Alt.")).cx;
+  canvas.text(rc.right - label_width, rc.bottom - max_height - look.info_labels_font.GetHeight(), _("Rel. Alt."));
+}
+
+void
+FlarmTrafficControl2::PaintID(Canvas &canvas, PixelRect rc,
+                              const FlarmTraffic &traffic) const
+{
+  TCHAR buffer[20];
+
+  unsigned font_size;
+  if (traffic.HasName()) {
+    canvas.Select(look.call_sign_font);
+    font_size = look.call_sign_font.GetHeight();
+
+    _tcscpy(buffer, traffic.name);
+  } else {
+    canvas.Select(look.info_labels_font);
+    font_size = look.info_labels_font.GetHeight();
+
+    traffic.id.Format(buffer);
+  }
+
+  if (!WarningMode()) {
+    // Team color dot
+    FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(traffic.id);
+
+    // If no color found but target is teammate
+    if (team_color == FlarmFriends::Color::NONE &&
+        settings.team_flarm_tracking &&
+        traffic.id == settings.team_flarm_id)
+      // .. use green color
+      team_color = FlarmFriends::Color::GREEN;
+
+    // If team color found -> draw a colored circle in front of the name
+    if (team_color != FlarmFriends::Color::NONE) {
+      switch (team_color) {
+      case FlarmFriends::Color::GREEN:
+        canvas.Select(look.team_brush_green);
+        break;
+      case FlarmFriends::Color::BLUE:
+        canvas.Select(look.team_brush_blue);
+        break;
+      case FlarmFriends::Color::YELLOW:
+        canvas.Select(look.team_brush_yellow);
+        break;
+      case FlarmFriends::Color::MAGENTA:
+        canvas.Select(look.team_brush_magenta);
+        break;
+      default:
+        break;
+      }
+
+      canvas.SelectNullPen();
+      canvas.DrawCircle(rc.left + Layout::FastScale(7), rc.top + (font_size / 2),
+                    Layout::FastScale(7));
+
+      rc.left += Layout::FastScale(16);
+    }
+  }
+
+  canvas.text(rc.left, rc.top, buffer);
+}
+
 /**
  * Paints the basic info for the selected target on the given canvas
  * @param canvas The canvas to paint on
@@ -281,11 +465,6 @@ FlarmTrafficControl2::PaintTrafficInfo(Canvas &canvas) const
   // Shortcut to the selected traffic
   FlarmTraffic traffic = data.list[WarningMode() ? warning : selection];
   assert(traffic.IsDefined());
-
-  // Temporary string
-  TCHAR tmp[20];
-  // Temporary string size
-  PixelSize sz;
 
   PixelRect rc;
   rc.left = padding;
@@ -311,94 +490,20 @@ FlarmTrafficControl2::PaintTrafficInfo(Canvas &canvas) const
   canvas.SetBackgroundTransparent();
 
   // Climb Rate
-  if (!WarningMode() && traffic.climb_rate_avg30s_available) {
-    FormatUserVerticalSpeed(traffic.climb_rate_avg30s, tmp, 20);
-    canvas.Select(look.info_values_font);
-    sz = canvas.CalcTextSize(tmp);
-    canvas.text(rc.right - sz.cx, rc.top + look.info_labels_font.GetHeight(), tmp);
-
-    canvas.Select(look.info_labels_font);
-    sz = canvas.CalcTextSize(_("Vario"));
-    canvas.text(rc.right - sz.cx, rc.top, _("Vario"));
-  }
+  if (!WarningMode() && traffic.climb_rate_avg30s_available)
+    PaintClimbRate(canvas, rc, traffic.climb_rate_avg30s);
 
   // Distance
-  FormatUserDistanceSmart(traffic.distance, tmp, 20, fixed(1000));
-  canvas.Select(look.info_values_font);
-  sz = canvas.CalcTextSize(tmp);
-  canvas.text(rc.left, rc.bottom - sz.cy, tmp);
-
-  canvas.Select(look.info_labels_font);
-  canvas.text(rc.left,
-              rc.bottom - look.info_values_font.GetHeight() - look.info_labels_font.GetHeight(),
-              _("Distance"));
+  PaintDistance(canvas, rc, traffic.distance);
 
   // Relative Height
-  FormatRelativeUserAltitude(traffic.relative_altitude, tmp, 20);
-  canvas.Select(look.info_values_font);
-  sz = canvas.CalcTextSize(tmp);
-  canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
-
-  canvas.Select(look.info_labels_font);
-  sz = canvas.CalcTextSize(_("Rel. Alt."));
-  canvas.text(rc.right - sz.cx,
-              rc.bottom - look.info_values_font.GetHeight() - look.info_labels_font.GetHeight(),
-              _("Rel. Alt."));
+  PaintRelativeAltitude(canvas, rc, traffic.relative_altitude);
 
   // ID / Name
-  unsigned font_size;
-  if (traffic.HasName()) {
-    canvas.Select(look.call_sign_font);
-    font_size = look.call_sign_font.GetHeight();
+  if (!traffic.HasAlarm())
+    canvas.SetTextColor(look.selection_color);
 
-    if (!traffic.HasAlarm())
-      canvas.SetTextColor(look.selection_color);
-
-    _tcscpy(tmp, traffic.name);
-  } else {
-    font_size = look.info_labels_font.GetHeight();
-    traffic.id.Format(tmp);
-  }
-
-  if (!WarningMode()) {
-    // Team color dot
-    FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(traffic.id);
-
-    // If no color found but target is teammate
-    if (team_color == FlarmFriends::Color::NONE &&
-        settings.team_flarm_tracking &&
-        traffic.id == settings.team_flarm_id)
-      // .. use yellow color
-      team_color = FlarmFriends::Color::GREEN;
-
-    // If team color found -> draw a colored circle around the target
-    if (team_color != FlarmFriends::Color::NONE) {
-      switch (team_color) {
-      case FlarmFriends::Color::GREEN:
-        canvas.Select(look.team_brush_green);
-        break;
-      case FlarmFriends::Color::BLUE:
-        canvas.Select(look.team_brush_blue);
-        break;
-      case FlarmFriends::Color::YELLOW:
-        canvas.Select(look.team_brush_green);
-        break;
-      case FlarmFriends::Color::MAGENTA:
-        canvas.Select(look.team_brush_magenta);
-        break;
-      default:
-        break;
-      }
-
-      canvas.SelectNullPen();
-      canvas.DrawCircle(rc.left + Layout::FastScale(7), rc.top + (font_size / 2),
-                    Layout::FastScale(7));
-
-      rc.left += Layout::FastScale(16);
-    }
-  }
-
-  canvas.text(rc.left, rc.top, tmp);
+  PaintID(canvas, rc, traffic);
 }
 
 void
