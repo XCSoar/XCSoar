@@ -93,6 +93,11 @@ type=key
 data=ESCAPE
 event=Pan off
 
+mode=default.TA default.Traffic
+type=key
+data=ESCAPE
+event=Map show
+
 ###### pan mode
 
 mode=pan
