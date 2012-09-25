@@ -142,6 +142,9 @@ namespace Layout
   static inline UPixelScalar
   GetMinimumControlHeight()
   {
+    if (IsAltair())
+      return 22;
+
     return minimum_control_height;
   }
 
@@ -152,6 +155,9 @@ namespace Layout
   static inline UPixelScalar
   GetMaximumControlHeight()
   {
+    if (IsAltair())
+      return 22;
+
     return maximum_control_height;
   }
 
@@ -163,6 +169,9 @@ namespace Layout
   static inline UPixelScalar
   GetHitRadius()
   {
+    if (!HasPointer())
+      return 0;
+
     return hit_radius;
   }
 }

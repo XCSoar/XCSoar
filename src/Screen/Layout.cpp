@@ -44,10 +44,13 @@ namespace Layout
 void
 Layout::Initialize(unsigned width, unsigned height)
 {
-  const unsigned x_dpi = Display::GetXDPI();
-
   landscape = width > height;
   square = width == height;
+
+  if (!ScaleSupported())
+    return;
+
+  const unsigned x_dpi = Display::GetXDPI();
 
   unsigned minsize = min(width, height);
   // always start w/ shortest dimension
