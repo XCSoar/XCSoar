@@ -49,8 +49,7 @@ InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 {
   LoadFlarmDatabases();
 
-  if (!XCSoarInterface::Basic().flarm.traffic.IsEmpty())
-    dlgFlarmTrafficShowModal();
+  dlgFlarmTrafficShowModal();
 }
 
 void
@@ -59,8 +58,7 @@ InputEvents::eventTraffic(const TCHAR *misc)
   LoadFlarmDatabases();
 
   if (StringIsEqual(misc, _T("show"))) {
-    if (CommonInterface::Basic().flarm.traffic.IsEmpty() ||
-        IsFlavour(_T("Traffic")))
+    if (IsFlavour(_T("Traffic")))
       return;
 
     CommonInterface::main_window->SetWidget(new TrafficWidget());
