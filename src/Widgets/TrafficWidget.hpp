@@ -31,7 +31,7 @@
 
 class WndButton;
 class WndSymbolButton;
-class FlarmTrafficControl2;
+class FlarmTrafficControl;
 
 class TrafficWidget : public ContainerWidget,
 #ifndef GNAV
@@ -52,7 +52,7 @@ class TrafficWidget : public ContainerWidget,
   WndButton *details_button;
 #endif
 
-  FlarmTrafficControl2 *view;
+  FlarmTrafficControl *view;
 
 protected:
   void UpdateLayout();

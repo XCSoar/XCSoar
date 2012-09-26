@@ -46,7 +46,7 @@
 /**
  * A Window which renders FLARM traffic, with user interaction.
  */
-class FlarmTrafficControl2 : public FlarmTrafficWindow {
+class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
   bool enable_auto_zoom;
   unsigned zoom;
@@ -54,7 +54,7 @@ protected:
   GestureManager gestures;
 
 public:
-  FlarmTrafficControl2(const FlarmTrafficLook &look)
+  FlarmTrafficControl(const FlarmTrafficLook &look)
     :FlarmTrafficWindow(look, Layout::Scale(10),
                         Layout::GetMinimumControlHeight() + Layout::Scale(2)),
      enable_auto_zoom(true),
@@ -124,7 +124,7 @@ protected:
 static TrafficWidget *instance;
 
 void
-FlarmTrafficControl2::OnCreate()
+FlarmTrafficControl::OnCreate()
 {
   FlarmTrafficWindow::OnCreate();
 
@@ -136,7 +136,7 @@ FlarmTrafficControl2::OnCreate()
 }
 
 unsigned
-FlarmTrafficControl2::GetZoomDistance(unsigned zoom)
+FlarmTrafficControl::GetZoomDistance(unsigned zoom)
 {
   switch (zoom) {
   case 0:
@@ -154,7 +154,7 @@ FlarmTrafficControl2::GetZoomDistance(unsigned zoom)
 }
 
 void
-FlarmTrafficControl2::SetNorthUp(bool enabled)
+FlarmTrafficControl::SetNorthUp(bool enabled)
 {
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.north_up = enable_north_up = enabled;
@@ -163,7 +163,7 @@ FlarmTrafficControl2::SetNorthUp(bool enabled)
 }
 
 void
-FlarmTrafficControl2::SetAutoZoom(bool enabled)
+FlarmTrafficControl::SetAutoZoom(bool enabled)
 {
   TrafficSettings &settings = CommonInterface::SetUISettings().traffic;
   settings.auto_zoom = enable_auto_zoom = enabled;
@@ -172,7 +172,7 @@ FlarmTrafficControl2::SetAutoZoom(bool enabled)
 }
 
 void
-FlarmTrafficControl2::CalcAutoZoom()
+FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
   RoughDistance zoom_dist = fixed_zero;
@@ -195,7 +195,7 @@ FlarmTrafficControl2::CalcAutoZoom()
 }
 
 void
-FlarmTrafficControl2::Update(Angle new_direction, const TrafficList &new_data,
+FlarmTrafficControl::Update(Angle new_direction, const TrafficList &new_data,
                             const TeamCodeSettings &new_settings)
 {
   FlarmTrafficWindow::Update(new_direction, new_data, new_settings);
@@ -205,7 +205,7 @@ FlarmTrafficControl2::Update(Angle new_direction, const TrafficList &new_data,
 }
 
 void
-FlarmTrafficControl2::UpdateTaskDirection(bool show_task_direction, Angle bearing)
+FlarmTrafficControl::UpdateTaskDirection(bool show_task_direction, Angle bearing)
 {
   if (!show_task_direction)
     task_direction = Angle::Degrees(fixed_minus_one);
@@ -217,7 +217,7 @@ FlarmTrafficControl2::UpdateTaskDirection(bool show_task_direction, Angle bearin
  * Zoom out one step
  */
 void
-FlarmTrafficControl2::ZoomOut()
+FlarmTrafficControl::ZoomOut()
 {
   if (WarningMode())
     return;
@@ -232,7 +232,7 @@ FlarmTrafficControl2::ZoomOut()
  * Zoom in one step
  */
 void
-FlarmTrafficControl2::ZoomIn()
+FlarmTrafficControl::ZoomIn()
 {
   if (WarningMode())
     return;
@@ -248,7 +248,7 @@ FlarmTrafficControl2::ZoomIn()
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficControl2::PaintTaskDirection(Canvas &canvas) const
+FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 {
   if (negative(task_direction.Degrees()))
     return;
@@ -275,8 +275,8 @@ FlarmTrafficControl2::PaintTaskDirection(Canvas &canvas) const
 }
 
 void
-FlarmTrafficControl2::PaintClimbRate(Canvas &canvas, PixelRect rc,
-                                     fixed climb_rate) const
+FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
+                                    fixed climb_rate) const
 {
   // Paint label
   canvas.Select(look.info_labels_font);
@@ -315,8 +315,8 @@ FlarmTrafficControl2::PaintClimbRate(Canvas &canvas, PixelRect rc,
 }
 
 void
-FlarmTrafficControl2::PaintDistance(Canvas &canvas, PixelRect rc,
-                                    fixed distance) const
+FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
+                                   fixed distance) const
 {
   // Format distance
   TCHAR buffer[20];
@@ -353,8 +353,8 @@ FlarmTrafficControl2::PaintDistance(Canvas &canvas, PixelRect rc,
 }
 
 void
-FlarmTrafficControl2::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
-                                            fixed relative_altitude) const
+FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
+                                           fixed relative_altitude) const
 {
   // Format relative altitude
   TCHAR buffer[20];
@@ -393,8 +393,8 @@ FlarmTrafficControl2::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
 }
 
 void
-FlarmTrafficControl2::PaintID(Canvas &canvas, PixelRect rc,
-                              const FlarmTraffic &traffic) const
+FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
+                             const FlarmTraffic &traffic) const
 {
   TCHAR buffer[20];
 
@@ -457,7 +457,7 @@ FlarmTrafficControl2::PaintID(Canvas &canvas, PixelRect rc,
  * @param canvas The canvas to paint on
  */
 void
-FlarmTrafficControl2::PaintTrafficInfo(Canvas &canvas) const
+FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 {
   // Don't paint numbers if no plane selected
   if (selection == -1 && !WarningMode())
@@ -509,7 +509,7 @@ FlarmTrafficControl2::PaintTrafficInfo(Canvas &canvas) const
 }
 
 void
-FlarmTrafficControl2::OnPaint(Canvas &canvas)
+FlarmTrafficControl::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
 
@@ -630,8 +630,8 @@ TrafficWidget::Update()
 }
 
 bool
-FlarmTrafficControl2::OnMouseMove(PixelScalar x, PixelScalar y,
-                                   gcc_unused unsigned keys)
+FlarmTrafficControl::OnMouseMove(PixelScalar x, PixelScalar y,
+                                 gcc_unused unsigned keys)
 {
   gestures.Update(x, y);
 
@@ -639,7 +639,7 @@ FlarmTrafficControl2::OnMouseMove(PixelScalar x, PixelScalar y,
 }
 
 bool
-FlarmTrafficControl2::OnMouseDown(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseDown(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
 
@@ -647,7 +647,7 @@ FlarmTrafficControl2::OnMouseDown(PixelScalar x, PixelScalar y)
 }
 
 bool
-FlarmTrafficControl2::OnMouseUp(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   const TCHAR *gesture = gestures.Finish();
   if (gesture && OnMouseGesture(gesture))
@@ -660,14 +660,14 @@ FlarmTrafficControl2::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 bool
-FlarmTrafficControl2::OnMouseDouble(PixelScalar x, PixelScalar y)
+FlarmTrafficControl::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
   InputEvents::ShowMenu();
   return true;
 }
 
 bool
-FlarmTrafficControl2::OnMouseGesture(const TCHAR* gesture)
+FlarmTrafficControl::OnMouseGesture(const TCHAR* gesture)
 {
   if (StringIsEqual(gesture, _T("U"))) {
     ZoomIn();
@@ -702,7 +702,7 @@ FlarmTrafficControl2::OnMouseGesture(const TCHAR* gesture)
 }
 
 bool
-FlarmTrafficControl2::OnKeyDown(unsigned key_code)
+FlarmTrafficControl::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case VK_UP:
@@ -833,7 +833,7 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   WindowStyle style;
   style.EnableDoubleClicks();
 
-  view = new FlarmTrafficControl2(look.flarm_dialog);
+  view = new FlarmTrafficControl(look.flarm_dialog);
   view->set(GetContainer(),
             rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
             style);
