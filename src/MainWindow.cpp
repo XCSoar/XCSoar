@@ -318,15 +318,12 @@ MainWindow::ReinitialiseLayout()
     else
       InfoBoxManager::Show();
 
-    const PixelRect &current_map = FullScreen ? rc : map_rect;
-    map->Move(current_map);
+    map->Move(GetMainRect(rc));
     map->FullRedraw();
   }
 
-  if (widget != NULL) {
-    const PixelRect &current_map = FullScreen ? rc : map_rect;
-    widget->Move(current_map);
-  }
+  if (widget != NULL)
+    widget->Move(GetMainRect(rc));
 
 #ifdef ANDROID
   // move topmost dialog to fit into the current layout, or close it
@@ -658,12 +655,10 @@ MainWindow::SetFullScreen(bool _full_screen)
     InfoBoxManager::Show();
 
   if (widget != NULL)
-    widget->Move(FullScreen ? GetClientRect() : map_rect);
+    widget->Move(GetMainRect());
 
-  if (map != NULL) {
-    const PixelRect rc = FullScreen ? GetClientRect() : map_rect;
-    map->FastMove(rc);
-  }
+  if (map != NULL)
+    map->FastMove(GetMainRect());
 
   // the repaint will be triggered by the DrawThread
 }
@@ -760,7 +755,7 @@ MainWindow::SetWidget(Widget *_widget)
 
   widget = _widget;
 
-  const PixelRect rc = FullScreen ? GetClientRect() : map_rect;
+  const PixelRect rc = GetMainRect();
   widget->Initialise(*this, rc);
   widget->Prepare(*this, rc);
   widget->Show(rc);

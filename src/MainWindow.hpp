@@ -149,6 +149,16 @@ public:
   void Deinitialise();
 
 private:
+  gcc_pure
+  const PixelRect &GetMainRect(const PixelRect &full_rc) const {
+    return FullScreen ? full_rc : map_rect;
+  }
+
+  gcc_pure
+  PixelRect GetMainRect() const {
+    return FullScreen ? GetClientRect() : map_rect;
+  }
+
   /**
    * Adjust the flarm radar position
    */
