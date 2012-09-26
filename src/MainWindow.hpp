@@ -65,6 +65,11 @@ class MainWindow : public SingleWindow {
      * are available.  This updates the map and the info boxes.
      */
     CALCULATED_UPDATE,
+
+    /**
+     * @see DeferredActivateMap()
+     */
+    ACTIVATE_MAP,
   };
 
   Look *look;
@@ -95,6 +100,8 @@ private:
 
   PixelRect map_rect;
   bool FullScreen;
+
+  bool activate_map_pending;
 
   bool airspace_warning_pending;
 
@@ -256,6 +263,13 @@ public:
    * there is no map.
    */
   GlueMapWindow *ActivateMap();
+
+  /**
+   * Similar to ActivateMap(), but schedule the switch, do it
+   * asynchronously.  The function returns immediately, and designedly
+   * returns void.  There is no guarantee that this function succeeds.
+   */
+  void DeferredActivateMap();
 
   /**
    * Replace the map with a #Widget.  The Widget instance gets deleted

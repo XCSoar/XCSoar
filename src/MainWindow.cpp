@@ -74,6 +74,7 @@ MainWindow::MainWindow(const StatusMessageList &status_messages)
    popup(status_messages, *this, CommonInterface::GetUISettings()),
    timer(*this),
    FullScreen(false),
+   activate_map_pending(false),
    airspace_warning_pending(false)
 {
 }
@@ -603,6 +604,11 @@ MainWindow::OnUser(unsigned id)
     InfoBoxManager::ProcessTimer();
 
     return true;
+
+  case Command::ACTIVATE_MAP:
+    if (activate_map_pending)
+      ActivateMap();
+    return true;
   }
 
   return false;
@@ -699,6 +705,8 @@ MainWindow::GetMapIfActive()
 GlueMapWindow *
 MainWindow::ActivateMap()
 {
+  activate_map_pending = false;
+
   if (map == NULL)
     return NULL;
 
@@ -709,6 +717,16 @@ MainWindow::ActivateMap()
   }
 
   return map;
+}
+
+void
+MainWindow::DeferredActivateMap()
+{
+  if (IsMapActive() || activate_map_pending)
+    return;
+
+  activate_map_pending = true;
+  SendUser((unsigned)Command::ACTIVATE_MAP);
 }
 
 void
@@ -730,6 +748,8 @@ void
 MainWindow::SetWidget(Widget *_widget)
 {
   assert(_widget != NULL);
+
+  activate_map_pending = false;
 
   /* delete the old widget */
   KillWidget();

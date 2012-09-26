@@ -57,6 +57,11 @@ namespace UIGlobals {
 
   GlueMapWindow *ActivateMap();
 
+  /**
+   * @see MainWindow::DeferredActivateMap()
+   */
+  void DeferredActivateMap();
+
   gcc_const
   const DialogSettings &GetDialogSettings();
 

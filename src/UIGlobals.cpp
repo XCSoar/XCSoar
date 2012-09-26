@@ -58,6 +58,14 @@ UIGlobals::ActivateMap()
   return CommonInterface::main_window->ActivateMap();
 }
 
+void
+UIGlobals::DeferredActivateMap()
+{
+  assert(CommonInterface::main_window != NULL);
+
+  return CommonInterface::main_window->DeferredActivateMap();
+}
+
 const DialogSettings &
 UIGlobals::GetDialogSettings()
 {
