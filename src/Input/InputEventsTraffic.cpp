@@ -76,6 +76,8 @@ InputEvents::eventTraffic(const TCHAR *misc)
     traffic_widget->ToggleNorthUp();
   } else if (StringIsEqual(misc, _T("details"))) {
     traffic_widget->OpenDetails();
+  } else if (StringIsEqual(misc, _T("label toggle"))) {
+    traffic_widget->SwitchData();
   }
 }
 

@@ -1013,6 +1013,13 @@ event=Map show
 label=Map
 location=9
 
+mode=Display2.Traffic
+type=key
+data=6
+event=Traffic label toggle
+label=AVG/ALT
+location=5
+
 # -------------
 # mode=RemoteStick
 # -------------
