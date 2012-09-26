@@ -122,10 +122,6 @@ protected:
   bool OnMouseGesture(const TCHAR* gesture);
 };
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TrafficWidget *instance;
-
 void
 FlarmTrafficControl::OnCreate()
 {
@@ -819,8 +815,6 @@ TrafficWidget::SetButtonsEnabled(bool enabled)
 void
 TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 {
-  instance = this;
-
   ContainerWidget::Prepare(parent, _rc);
 
   const Look &look = UIGlobals::GetLook();
