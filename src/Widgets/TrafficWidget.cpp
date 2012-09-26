@@ -800,6 +800,10 @@ TrafficWidget::UpdateLayout()
   button_rc.right = button_rc.left + Layout::Scale(50);
   button_rc.bottom = button_rc.top + button_height;
   details_button->Move(button_rc);
+
+  button_rc.right = rc.right - margin;
+  button_rc.left = button_rc.right - Layout::Scale(50);
+  close_button->Move(button_rc);
 #endif
 }
 
@@ -840,6 +844,9 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   details_button = new WndButton(GetContainer(), look.dialog,
                                  _("Details"), rc, ButtonWindowStyle(),
                                  this, DETAILS);
+  close_button = new WndButton(GetContainer(), look.dialog,
+                               _("Close"), rc, ButtonWindowStyle(),
+                               this, CLOSE);
 #endif
 
   WindowStyle style;
@@ -910,6 +917,10 @@ void
 TrafficWidget::OnAction(int id)
 {
   switch ((Action)id) {
+  case CLOSE:
+    UIGlobals::ActivateMap();
+    break;
+
   case DETAILS:
     OpenDetails();
     break;

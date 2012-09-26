@@ -40,6 +40,7 @@ class TrafficWidget : public ContainerWidget,
                       private NullBlackboardListener {
 #ifndef GNAV
   enum Action {
+    CLOSE,
     ZOOM_IN,
     ZOOM_OUT,
     PREVIOUS_ITEM,
@@ -50,6 +51,7 @@ class TrafficWidget : public ContainerWidget,
   WndSymbolButton *zoom_in_button, *zoom_out_button;
   WndSymbolButton *previous_item_button, *next_item_button;
   WndButton *details_button;
+  WndButton *close_button;
 #endif
 
   FlarmTrafficControl *view;
