@@ -133,12 +133,6 @@ Window::OnMessage(HWND _hWnd, UINT message,
     OnDestroy();
     return 0;
 
-  case WM_CLOSE:
-    if (OnClose())
-      /* true returned: message was handled */
-      return 0;
-    break;
-
   case WM_SIZE:
     OnResize(LOWORD(lParam), HIWORD(lParam));
     return 0;

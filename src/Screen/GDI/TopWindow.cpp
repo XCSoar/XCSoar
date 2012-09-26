@@ -154,11 +154,23 @@ TopWindow::OnDeactivate()
   return false;
 }
 
+bool
+TopWindow::OnClose()
+{
+  return false;
+}
+
 LRESULT
 TopWindow::OnMessage(HWND _hWnd, UINT message,
                       WPARAM wParam, LPARAM lParam)
 {
   switch (message) {
+  case WM_CLOSE:
+    if (OnClose())
+      /* true returned: message was handled */
+      return 0;
+    break;
+
   case WM_ACTIVATE:
 #ifdef HAVE_AYGSHELL_DLL
     ayg_shell_dll.SHHandleWMActivate(_hWnd, wParam, lParam, &s_sai, FALSE);

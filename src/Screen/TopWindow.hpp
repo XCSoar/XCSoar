@@ -277,9 +277,9 @@ protected:
   virtual bool OnActivate();
   virtual bool OnDeactivate();
 
-#ifdef ENABLE_SDL
   virtual bool OnClose();
-#else
+
+#ifndef ENABLE_SDL
   virtual LRESULT OnMessage(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */

@@ -901,7 +901,6 @@ public:
    */
   virtual void OnCreate();
   virtual void OnDestroy();
-  virtual bool OnClose();
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y);

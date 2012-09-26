@@ -161,12 +161,6 @@ Window::OnDestroy()
 #endif /* USE_GDI */
 }
 
-bool
-Window::OnClose()
-{
-  return false;
-}
-
 void
 Window::OnResize(UPixelScalar width, UPixelScalar height)
 {
