@@ -146,8 +146,8 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 #ifdef ENABLE_OPENGL
   /* enable clipping */
   GLScissor scissor(OpenGL::translate_x,
-                    OpenGL::screen_height - OpenGL::translate_y - canvas.get_height() - 1,
-                    scroll_bar.GetLeft(GetSize()), canvas.get_height());
+                    OpenGL::screen_height - OpenGL::translate_y - canvas.GetHeight() - 1,
+                    scroll_bar.GetLeft(GetSize()), canvas.GetHeight());
 #endif
 
   unsigned last_item = min(length, end);
@@ -177,7 +177,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   }
 
   /* paint the bottom part below the last item */
-  rc.bottom = canvas.get_height();
+  rc.bottom = canvas.GetHeight();
   if (rc.bottom > rc.top)
     canvas.DrawFilledRectangle(rc, look.list.background_color);
 }

@@ -98,8 +98,8 @@ MapCanvas::IsVisible(const Canvas &canvas,
   for (unsigned i = 0; i < num; ++i)
     UpdateBounds(bounds, screen[i]);
 
-  return bounds.left < (int)canvas.get_width() && bounds.right >= 0 &&
-    bounds.top < (int)canvas.get_height() && bounds.bottom >= 0;
+  return bounds.left < (int)canvas.GetWidth() && bounds.right >= 0 &&
+    bounds.top < (int)canvas.GetHeight() && bounds.bottom >= 0;
 }
 
 bool

@@ -217,7 +217,7 @@ protected:
       buffered = !buffered;
       if (buffered) {
         WindowCanvas canvas(*this);
-        buffer.set(canvas, canvas.get_width(), canvas.get_height());
+        buffer.set(canvas, canvas.GetWidth(), canvas.GetHeight());
       } else
         buffer.reset();
       update();

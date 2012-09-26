@@ -59,7 +59,7 @@ protected:
     canvas.ClearWhite();
 
     PixelRect rc = {
-      0, 0, (PixelScalar)canvas.get_width(), (PixelScalar)canvas.get_height()
+      0, 0, (PixelScalar)canvas.GetWidth(), (PixelScalar)canvas.GetHeight()
     };
 
     RasterPoint pt = {

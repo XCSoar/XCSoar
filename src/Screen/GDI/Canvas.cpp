@@ -222,12 +222,12 @@ Canvas::copy_transparent_black(const Canvas &src)
   assert(src.IsDefined());
 
 #ifdef _WIN32_WCE
-  ::TransparentImage(dc, 0, 0, get_width(), get_height(),
-                     src.dc, 0, 0, get_width(), get_height(),
+  ::TransparentImage(dc, 0, 0, GetWidth(), GetHeight(),
+                     src.dc, 0, 0, GetWidth(), GetHeight(),
                      COLOR_BLACK);
 #else
-  ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
-                   src.dc, 0, 0, get_width(), get_height(),
+  ::TransparentBlt(dc, 0, 0, GetWidth(), GetHeight(),
+                   src.dc, 0, 0, GetWidth(), GetHeight(),
                    COLOR_BLACK);
 #endif
 }
@@ -239,12 +239,12 @@ Canvas::copy_transparent_white(const Canvas &src)
   assert(src.IsDefined());
 
 #ifdef _WIN32_WCE
-  ::TransparentImage(dc, 0, 0, get_width(), get_height(),
-                     src.dc, 0, 0, get_width(), get_height(),
+  ::TransparentImage(dc, 0, 0, GetWidth(), GetHeight(),
+                     src.dc, 0, 0, GetWidth(), GetHeight(),
                      COLOR_WHITE);
 #else
-  ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
-                   src.dc, 0, 0, get_width(), get_height(),
+  ::TransparentBlt(dc, 0, 0, GetWidth(), GetHeight(),
+                   src.dc, 0, 0, GetWidth(), GetHeight(),
                    COLOR_WHITE);
 #endif
 }
@@ -260,11 +260,11 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 
   const PixelSize size = src.GetSize();
 #ifdef _WIN32_WCE
-  ::TransparentImage(dc, 0, 0, get_width(), get_height(),
+  ::TransparentImage(dc, 0, 0, GetWidth(), GetHeight(),
                      virtual_dc, 0, 0, size.cx, size.cy,
                      key);
 #else
-  ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
+  ::TransparentBlt(dc, 0, 0, GetWidth(), GetHeight(),
                    virtual_dc, 0, 0, size.cx, size.cy,
                    key);
 #endif
@@ -288,11 +288,11 @@ Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
   ::SelectObject(virtual_dc, old);
 
 #ifdef _WIN32_WCE
-  ::TransparentImage(dc, 0, 0, get_width(), get_height(),
+  ::TransparentImage(dc, 0, 0, GetWidth(), GetHeight(),
                      inverted, 0, 0, size.cx, size.cy,
                      key);
 #else
-  ::TransparentBlt(dc, 0, 0, get_width(), get_height(),
+  ::TransparentBlt(dc, 0, 0, GetWidth(), GetHeight(),
                    inverted, 0, 0, size.cx, size.cy,
                    key);
 #endif

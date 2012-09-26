@@ -171,14 +171,14 @@ OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
     const AirspaceLook &look = UIGlobals::GetMapLook().airspace;
     const MaskedIcon *bmp = &look.intercept_icon;
     const int offsetx = bmp->GetSize().cx;
-    const int offsety = canvas.get_height() - bmp->GetSize().cy;
+    const int offsety = canvas.GetHeight() - bmp->GetSize().cy;
     canvas.Clear(COLOR_YELLOW);
     bmp->Draw(canvas, offsetx, offsety);
 
     canvas.SetBackgroundColor(COLOR_YELLOW);
     canvas.SetTextColor(COLOR_BLACK);
     canvas.text(offsetx * 2 + Layout::GetTextPadding(),
-                (int)(canvas.get_height() - textheight) / 2,
+                (int)(canvas.GetHeight() - textheight) / 2,
                 message);
   }
   else {

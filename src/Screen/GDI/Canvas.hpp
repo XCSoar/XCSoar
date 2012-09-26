@@ -98,13 +98,13 @@ public:
     return dc;
   }
 
-  UPixelScalar get_width() const {
+  UPixelScalar GetWidth() const {
     assert(IsDefined());
 
     return width;
   }
 
-  UPixelScalar get_height() const {
+  UPixelScalar GetHeight() const {
     assert(IsDefined());
 
     return height;
@@ -591,7 +591,7 @@ public:
   }
 
   void CopyOr(const Canvas &src) {
-    CopyOr(0, 0, get_width(), get_height(), src, 0, 0);
+    CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
   void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
@@ -630,7 +630,7 @@ public:
   }
 
   void CopyAnd(const Canvas &src) {
-    CopyAnd(0, 0, get_width(), get_height(), src, 0, 0);
+    CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
   void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,

@@ -128,7 +128,7 @@ OnClose(gcc_unused WndButton &button)
 static void
 OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  const UPixelScalar width = canvas.get_width();
+  const UPixelScalar width = canvas.GetWidth();
   PixelScalar x = Layout::FastScale(10), y = x;
 
   canvas.ClearWhite();

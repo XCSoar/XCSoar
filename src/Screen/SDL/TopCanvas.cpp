@@ -107,7 +107,7 @@ TopCanvas::Resume()
 void
 TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  if (width == get_width() && height == get_height())
+  if (width == GetWidth() && height == GetHeight())
     return;
 
 #ifndef ANDROID

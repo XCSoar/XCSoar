@@ -390,8 +390,8 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
 #endif
 
     for (; lines < end_lines; ++lines) {
-      int minx = canvas.get_width();
-      int miny = canvas.get_height();
+      int minx = canvas.GetWidth();
+      int miny = canvas.GetHeight();
 
 #ifdef ENABLE_OPENGL
       const ShapePoint *end = points + *lines;

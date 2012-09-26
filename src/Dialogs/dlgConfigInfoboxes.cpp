@@ -192,7 +192,7 @@ InfoBoxPreview::OnPaint(Canvas &canvas)
 
   canvas.SelectHollowBrush();
   canvas.SelectBlackPen();
-  canvas.Rectangle(0, 0, canvas.get_width() - 1, canvas.get_height() - 1);
+  canvas.Rectangle(0, 0, canvas.GetWidth() - 1, canvas.GetHeight() - 1);
 
   InfoBoxFactory::Type type = data.contents[i];
   const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES

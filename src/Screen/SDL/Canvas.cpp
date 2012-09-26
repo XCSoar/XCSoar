@@ -432,7 +432,7 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
 void
 Canvas::copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y)
 {
-  copy(0, 0, src.get_width(), src.get_height(), src, src_x, src_y);
+  copy(0, 0, src.GetWidth(), src.GetHeight(), src, src_x, src_y);
 }
 
 void
@@ -501,8 +501,8 @@ Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
   const UPixelScalar src_width = src_surface->w;
   const UPixelScalar src_height = src_surface->h;
   const UPixelScalar dest_x = 0, dest_y = 0;
-  const UPixelScalar dest_width = get_width();
-  const UPixelScalar dest_height = get_height();
+  const UPixelScalar dest_width = GetWidth();
+  const UPixelScalar dest_height = GetHeight();
 
   SDL_Surface *zoomed =
     ::zoomSurface(src_surface, (double)dest_width / (double)src_width,
@@ -565,7 +565,7 @@ Canvas::Stretch(const Canvas &src,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
   // XXX
-  Stretch(0, 0, get_width(), get_height(),
+  Stretch(0, 0, GetWidth(), GetHeight(),
           src, src_x, src_y, src_width, src_height);
 }
 

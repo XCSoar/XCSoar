@@ -253,34 +253,34 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
     RasterPoint img_pos, screen_pos;
     PixelSize screen_size;
     PixelSize img_size = img.GetSize();
-    fixed scale = std::min((fixed)canvas.get_width() / (fixed)img_size.cx,
-                           (fixed)canvas.get_height() / (fixed)img_size.cy) *
+    fixed scale = std::min((fixed)canvas.GetWidth() / (fixed)img_size.cx,
+                           (fixed)canvas.GetHeight() / (fixed)img_size.cy) *
                   zoom_factors[zoom];
 
     // centered image and optionally zoomed into the center of the image
     fixed scaled_size = img_size.cx * scale;
-    if (scaled_size <= (fixed)canvas.get_width()) {
+    if (scaled_size <= (fixed)canvas.GetWidth()) {
       img_pos.x = 0;
-      screen_pos.x = (int) (((fixed)canvas.get_width() - scaled_size) / 2);
+      screen_pos.x = (int) (((fixed)canvas.GetWidth() - scaled_size) / 2);
       screen_size.cx = (int) scaled_size;
     } else {
-      scaled_size = (fixed)canvas.get_width() / scale;
+      scaled_size = (fixed)canvas.GetWidth() / scale;
       img_pos.x = (int) (((fixed)img_size.cx - scaled_size) / 2);
       img_size.cx = (int) scaled_size;
       screen_pos.x = 0;
-      screen_size.cx = canvas.get_width();
+      screen_size.cx = canvas.GetWidth();
     }
     scaled_size = img_size.cy * scale;
-    if (scaled_size <= (fixed)canvas.get_height()) {
+    if (scaled_size <= (fixed)canvas.GetHeight()) {
       img_pos.y = 0;
-      screen_pos.y = (int) (((fixed)canvas.get_height() - scaled_size) / 2);
+      screen_pos.y = (int) (((fixed)canvas.GetHeight() - scaled_size) / 2);
       screen_size.cy = (int) scaled_size;
     } else {
-      scaled_size = (fixed)canvas.get_height() / scale;
+      scaled_size = (fixed)canvas.GetHeight() / scale;
       img_pos.y = (int) (((fixed)img_size.cy - scaled_size) / 2);
       img_size.cy = (int) scaled_size;
       screen_pos.y = 0;
-      screen_size.cy = canvas.get_height();
+      screen_size.cy = canvas.GetHeight();
     }
     canvas.Stretch(screen_pos.x, screen_pos.y, screen_size.cx, screen_size.cy,
                    img, img_pos.x, img_pos.y, img_size.cx, img_size.cy);

@@ -162,7 +162,7 @@ CheckBox::OnPaint(Canvas &canvas)
   else
     canvas.Select(Pen(1, COLOR_GRAY));
 
-  unsigned size = canvas.get_height() - 4;
+  unsigned size = canvas.GetHeight() - 4;
   canvas.Rectangle(2, 2, size, size);
 
   if (checked) {
@@ -182,7 +182,7 @@ CheckBox::OnPaint(Canvas &canvas)
       {-9, 2},
     };
 
-    unsigned top = canvas.get_height() / 2;
+    unsigned top = canvas.GetHeight() / 2;
     for (unsigned i = 0; i < ARRAY_SIZE(check_mark); ++i) {
       check_mark[i].x = (check_mark[i].x * (int)size) / 24 + top;
       check_mark[i].y = (check_mark[i].y * (int)size) / 24 + top;
@@ -195,7 +195,7 @@ CheckBox::OnPaint(Canvas &canvas)
                       ? (HasFocus() ? COLOR_WHITE : COLOR_BLACK)
                       : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
-  canvas.text(canvas.get_height() + 2, 2, text.c_str());
+  canvas.text(canvas.GetHeight() + 2, 2, text.c_str());
 }
 
 bool

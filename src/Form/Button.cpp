@@ -168,8 +168,8 @@ void
 WndButton::OnPaint(Canvas &canvas)
 {
   PixelRect rc = {
-    PixelScalar(0), PixelScalar(0), PixelScalar(canvas.get_width()),
-    PixelScalar(canvas.get_height())
+    PixelScalar(0), PixelScalar(0), PixelScalar(canvas.GetWidth()),
+    PixelScalar(canvas.GetHeight())
   };
 
   const bool focused = HasFocus();

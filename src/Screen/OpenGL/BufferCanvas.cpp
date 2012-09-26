@@ -118,7 +118,7 @@ BufferCanvas::Begin(Canvas &other)
   assert(IsDefined());
   assert(!active);
 
-  resize(other.get_width(), other.get_height());
+  resize(other.GetWidth(), other.GetHeight());
 
   if (frame_buffer != NULL) {
     /* activate the frame buffer */
@@ -136,7 +136,7 @@ BufferCanvas::Begin(Canvas &other)
     glPushMatrix();
 
     /* configure a new viewport */
-    OpenGL::SetupViewport(get_width(), get_height());
+    OpenGL::SetupViewport(GetWidth(), GetHeight());
     OpenGL::translate_x = 0;
     OpenGL::translate_y = 0;
   } else {
@@ -152,8 +152,8 @@ BufferCanvas::Commit(Canvas &other)
 {
   assert(IsDefined());
   assert(active);
-  assert(get_width() == other.get_width());
-  assert(get_height() == other.get_height());
+  assert(GetWidth() == other.GetWidth());
+  assert(GetHeight() == other.GetHeight());
 
   if (frame_buffer != NULL) {
     frame_buffer->Unbind();
@@ -180,8 +180,8 @@ BufferCanvas::Commit(Canvas &other)
     PixelRect rc;
     rc.left = 0;
     rc.top = 0;
-    rc.right = get_width();
-    rc.bottom = get_height();
+    rc.right = GetWidth();
+    rc.bottom = GetHeight();
     CopyToTexture(*texture, rc);
   }
 
@@ -199,8 +199,8 @@ BufferCanvas::CopyTo(Canvas &other)
   GLEnable scope(GL_TEXTURE_2D);
   texture->Bind();
 
-  texture->DrawFlipped({ 0, 0, PixelScalar(other.get_width()), PixelScalar(other.get_height()) },
-                       { 0, 0, PixelScalar(get_width()), PixelScalar(get_height()) });
+  texture->DrawFlipped({ 0, 0, PixelScalar(other.GetWidth()), PixelScalar(other.GetHeight()) },
+                       { 0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight()) });
 }
 
 void

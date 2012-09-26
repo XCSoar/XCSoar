@@ -129,8 +129,8 @@ TerrainDisplayConfigPanel::OnPreviewPaint(Canvas &canvas)
     return;
 
   MapWindowProjection projection = map->VisibleProjection();
-  projection.SetScreenSize(canvas.get_width(), canvas.get_height());
-  projection.SetScreenOrigin(canvas.get_width() / 2, canvas.get_height() / 2);
+  projection.SetScreenSize(canvas.GetWidth(), canvas.GetHeight());
+  projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);
 
   Angle sun_azimuth(Angle::Degrees(fixed(-45)));
   if (terrain_settings.slope_shading == SlopeShading::SUN &&

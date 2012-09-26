@@ -203,7 +203,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   if (unit_symbol != NULL) {
 #ifndef HAVE_CLIPPING
     /* sort-of clipping */
-    if (x + value_size.cx >= (int)canvas.get_width())
+    if (x + value_size.cx >= (int)canvas.GetWidth())
       return;
 #endif
 
@@ -254,8 +254,8 @@ InfoBoxWindow::Paint(Canvas &canvas)
   if (border_kind != 0) {
     canvas.Select(look.border_pen);
 
-    const UPixelScalar width = canvas.get_width(),
-      height = canvas.get_height();
+    const UPixelScalar width = canvas.GetWidth(),
+      height = canvas.GetHeight();
 
     if (border_kind & BORDERTOP) {
       canvas.DrawLine(0, 0, width - 1, 0);

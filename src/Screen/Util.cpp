@@ -82,7 +82,7 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 {
   // dont draw if out of view
   PixelRect rc, bounds;
-  SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
+  SetRect(&rc, 0, 0, canvas.GetWidth(), canvas.GetHeight());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
@@ -116,7 +116,7 @@ Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 {
   // dont draw if out of view
   PixelRect rc, bounds;
-  SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
+  SetRect(&rc, 0, 0, canvas.GetWidth(), canvas.GetHeight());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
@@ -143,7 +143,7 @@ KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
 {
   // dont draw if out of view
   PixelRect rc, bounds;
-  SetRect(&rc, 0, 0, canvas.get_width(), canvas.get_height());
+  SetRect(&rc, 0, 0, canvas.GetWidth(), canvas.GetHeight());
   SetRect(&bounds, x - radius, y - radius, x + radius, y + radius);
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;

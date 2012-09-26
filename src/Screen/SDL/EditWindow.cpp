@@ -105,8 +105,8 @@ EditWindow::OnPaint(Canvas &canvas)
   }
 
   PixelRect rc = {
-    0, 0, PixelScalar(canvas.get_width() - 1),
-    PixelScalar(canvas.get_height() - 1),
+    0, 0, PixelScalar(canvas.GetWidth() - 1),
+    PixelScalar(canvas.GetHeight() - 1),
   };
 
   canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_BLACK);

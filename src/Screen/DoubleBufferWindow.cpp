@@ -94,7 +94,7 @@ DoubleBufferWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (!buffer.IsDefined()) {
-    buffer.set(canvas, canvas.get_width(), canvas.get_height());
+    buffer.set(canvas, canvas.GetWidth(), canvas.GetHeight());
     dirty = true;
   }
 

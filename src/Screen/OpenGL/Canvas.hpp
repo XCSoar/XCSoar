@@ -103,11 +103,11 @@ public:
     return true;
   }
 
-  UPixelScalar get_width() const {
+  UPixelScalar GetWidth() const {
     return width;
   }
 
-  UPixelScalar get_height() const {
+  UPixelScalar GetHeight() const {
     return height;
   }
 
@@ -234,15 +234,15 @@ public:
   void FadeToWhite(GLubyte alpha);
 
   void Clear() {
-    Rectangle(0, 0, get_width(), get_height());
+    Rectangle(0, 0, GetWidth(), GetHeight());
   }
 
   void Clear(const Color color) {
-    DrawFilledRectangle(0, 0, get_width(), get_height(), color);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
   }
 
   void Clear(const Brush &brush) {
-    DrawFilledRectangle(0, 0, get_width(), get_height(), brush);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), brush);
   }
 
   void ClearWhite() {
@@ -344,8 +344,8 @@ public:
    * Render text, clip it within the bounds of this Canvas.
    */
   void TextAutoClipped(PixelScalar x, PixelScalar y, const TCHAR *t) {
-    if (x < (int)get_width() && y < (int)get_height())
-      TextClipped(x, y, get_width() - x, get_height() - y, t);
+    if (x < (int)GetWidth() && y < (int)GetHeight())
+      TextClipped(x, y, GetWidth() - x, GetHeight() - y, t);
   }
 
   void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);
@@ -419,7 +419,7 @@ public:
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyOr(const Bitmap &src) {
-    CopyOr(0, 0, get_width(), get_height(), src, 0, 0);
+    CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
   void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
@@ -435,7 +435,7 @@ public:
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyAnd(const Bitmap &src) {
-    CopyAnd(0, 0, get_width(), get_height(), src, 0, 0);
+    CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
   void ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,

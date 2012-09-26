@@ -110,7 +110,7 @@ VirtualCanvas::set(const Canvas &canvas,
 void
 VirtualCanvas::set(const Canvas &canvas)
 {
-  set(canvas, canvas.get_width(), canvas.get_height());
+  set(canvas, canvas.GetWidth(), canvas.GetHeight());
 }
 
 #ifndef ENABLE_SDL

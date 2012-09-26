@@ -155,8 +155,8 @@ ProgressWindow::OnPaint(Canvas &canvas)
   canvas.Clear(background_color);
 
   // Determine window size
-  UPixelScalar window_width = canvas.get_width();
-  UPixelScalar window_height = canvas.get_height();
+  const UPixelScalar window_width = canvas.GetWidth();
+  const UPixelScalar window_height = canvas.GetHeight();
 
   PixelRect logo_rect;
   logo_rect.left = 0;

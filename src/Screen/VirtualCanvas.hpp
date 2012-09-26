@@ -53,7 +53,7 @@ public:
 
 #ifdef ENABLE_SDL
   void resize(UPixelScalar _width, UPixelScalar _height) {
-    if (_width != get_width() || _height != get_height())
+    if (_width != GetWidth() || _height != GetHeight())
       set(*this, _width, _height);
   }
 

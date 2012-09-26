@@ -52,7 +52,7 @@ void BufferCanvas::set(const Canvas &canvas,
 void
 BufferCanvas::set(const Canvas &canvas)
 {
-  set(canvas, canvas.get_width(), canvas.get_height());
+  set(canvas, canvas.GetWidth(), canvas.GetHeight());
 }
 
 void BufferCanvas::reset()

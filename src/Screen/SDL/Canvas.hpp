@@ -108,11 +108,11 @@ public:
     return surface != NULL;
   }
 
-  UPixelScalar get_width() const {
+  UPixelScalar GetWidth() const {
     return width;
   }
 
-  UPixelScalar get_height() const {
+  UPixelScalar GetHeight() const {
     return height;
   }
 
@@ -242,19 +242,19 @@ public:
   }
 
   void Clear() {
-    Rectangle(0, 0, get_width(), get_height());
+    Rectangle(0, 0, GetWidth(), GetHeight());
   }
 
   void Clear(const HWColor color) {
-    DrawFilledRectangle(0, 0, get_width(), get_height(), color);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
   }
 
   void Clear(const Color color) {
-    DrawFilledRectangle(0, 0, get_width(), get_height(), color);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), color);
   }
 
   void Clear(const Brush &brush) {
-    DrawFilledRectangle(0, 0, get_width(), get_height(), brush);
+    DrawFilledRectangle(0, 0, GetWidth(), GetHeight(), brush);
   }
 
   void ClearWhite() {
@@ -429,7 +429,7 @@ public:
                UPixelScalar src_width, UPixelScalar src_height);
 
   void Stretch(SDL_Surface *src) {
-    Stretch(0, 0, get_width(), get_height(),
+    Stretch(0, 0, GetWidth(), GetHeight(),
             src, 0, 0, src->w, src->h);
   }
 
@@ -484,7 +484,7 @@ public:
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyOr(const Bitmap &src) {
-    CopyOr(0, 0, get_width(), get_height(), src, 0, 0);
+    CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
   void CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
@@ -507,7 +507,7 @@ public:
   }
 
   void CopyAnd(const Canvas &src) {
-    CopyAnd(0, 0, src.get_width(), src.get_height(), src, 0, 0);
+    CopyAnd(0, 0, src.GetWidth(), src.GetHeight(), src, 0, 0);
   }
 
   void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
@@ -515,7 +515,7 @@ public:
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyAnd(const Bitmap &src) {
-    CopyAnd(0, 0, get_width(), get_height(), src, 0, 0);
+    CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
   void ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,

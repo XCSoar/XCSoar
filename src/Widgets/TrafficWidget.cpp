@@ -471,8 +471,8 @@ FlarmTrafficControl2::PaintTrafficInfo(Canvas &canvas) const
   PixelRect rc;
   rc.left = padding;
   rc.top = padding;
-  rc.right = canvas.get_width() - padding;
-  rc.bottom = canvas.get_height() - padding;
+  rc.right = canvas.GetWidth() - padding;
+  rc.bottom = canvas.GetHeight() - padding;
 
   // Set the text color and background
   switch (traffic.alarm_level) {

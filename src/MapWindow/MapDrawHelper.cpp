@@ -112,9 +112,9 @@ MapDrawHelper::BufferRenderFinish()
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable())
-      canvas.AlphaBlend(0, 0, canvas.get_width(), canvas.get_height(),
+      canvas.AlphaBlend(0, 0, canvas.GetWidth(), canvas.GetHeight(),
                            buffer,
-                           0, 0, canvas.get_width(), canvas.get_height(),
+                           0, 0, canvas.GetWidth(), canvas.GetHeight(),
                            60);
     else
 #endif

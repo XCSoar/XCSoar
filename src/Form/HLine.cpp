@@ -31,8 +31,8 @@ HLine::OnPaint(Canvas &canvas)
   canvas.Clear(look.background_color);
 #endif
 
-  const UPixelScalar width = canvas.get_width();
-  const UPixelScalar height = canvas.get_height();
+  const UPixelScalar width = canvas.GetWidth();
+  const UPixelScalar height = canvas.GetHeight();
   const UPixelScalar middle = height / 2;
 
   canvas.SelectBlackPen();
