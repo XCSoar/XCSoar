@@ -99,6 +99,9 @@ public:
   void ZoomOut();
   void ZoomIn();
 
+  void SwitchData();
+  void OpenDetails();
+
 protected:
   void PaintTrafficInfo(Canvas &canvas) const;
   void PaintClimbRate(Canvas &canvas, PixelRect rc, fixed climb_rate) const;
@@ -519,19 +522,25 @@ FlarmTrafficControl::OnPaint(Canvas &canvas)
 }
 
 void
-TrafficWidget::OpenDetails()
+FlarmTrafficControl::OpenDetails()
 {
   // If warning is displayed -> prevent from opening details dialog
-  if (view->WarningMode())
+  if (WarningMode())
     return;
 
   // Don't open the details dialog if no plane selected
-  const FlarmTraffic *traffic = view->GetTarget();
+  const FlarmTraffic *traffic = GetTarget();
   if (traffic == NULL)
     return;
 
   // Show the details dialog
   dlgFlarmTrafficDetailsShowModal(traffic->id);
+}
+
+void
+TrafficWidget::OpenDetails()
+{
+  view->OpenDetails();
 }
 
 void
@@ -559,14 +568,20 @@ TrafficWidget::NextTarget()
 }
 
 void
+FlarmTrafficControl::SwitchData()
+{
+  if (side_display_type == FlarmTrafficWindow::SIDE_INFO_VARIO)
+    side_display_type = FlarmTrafficWindow::SIDE_INFO_RELATIVE_ALTITUDE;
+  else
+    side_display_type = FlarmTrafficWindow::SIDE_INFO_VARIO;
+
+  Profile::SetEnum(ProfileKeys::FlarmSideData, side_display_type);
+}
+
+void
 TrafficWidget::SwitchData()
 {
-  if (view->side_display_type == FlarmTrafficWindow::SIDE_INFO_VARIO)
-    view->side_display_type = FlarmTrafficWindow::SIDE_INFO_RELATIVE_ALTITUDE;
-  else
-    view->side_display_type = FlarmTrafficWindow::SIDE_INFO_VARIO;
-
-  Profile::SetEnum(ProfileKeys::FlarmSideData, view->side_display_type);
+  view->SwitchData();
 }
 
 bool
@@ -690,11 +705,11 @@ FlarmTrafficControl::OnMouseGesture(const TCHAR* gesture)
     return true;
   }
   if (StringIsEqual(gesture, _T("DR"))) {
-    instance->OpenDetails();
+    OpenDetails();
     return true;
   }
   if (StringIsEqual(gesture, _T("RL"))) {
-    instance->SwitchData();
+    SwitchData();
     return true;
   }
 
