@@ -70,7 +70,7 @@ FlarmTrafficWindow::OnResize(UPixelScalar width, UPixelScalar height)
   PaintWindow::OnResize(width, height);
 
   // Calculate Radar size
-  radius = std::min(height / 2 - h_padding, width / 2 - v_padding);
+  radius = std::min(width / 2 - h_padding, height / 2 - v_padding);
   radar_mid.x = width / 2;
   radar_mid.y = height / 2;
 }
