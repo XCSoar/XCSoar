@@ -189,16 +189,18 @@ WindowList::Paint(Canvas &canvas)
 {
   const auto &list = this->list;
 
+  auto begin = list.rbegin(), end = list.rend();
+
   /* find the last full window which covers all the other windows
      behind it */
   Window *full = NULL;
-  for (auto i = list.rbegin(); i != list.rend(); ++i) {
+  for (auto i = begin; i != end; ++i) {
     Window &child = **i;
     if (IsFullWindow(child, canvas.GetWidth(), canvas.GetHeight()))
       full = &child;
   }
 
-  for (auto i = list.rbegin(); i != list.rend(); ++i) {
+  for (auto i = begin; i != end; ++i) {
     Window &child = **i;
     if (!child.IsVisible())
       continue;
