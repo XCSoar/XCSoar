@@ -301,18 +301,21 @@ private:
   void UpdateTrafficGaugeVisibility();
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  bool OnActivate();
-  void OnSetFocus();
-  virtual bool OnKeyDown(unsigned key_code);
-  bool OnTimer(WindowTimer &timer);
-  virtual bool OnUser(unsigned id);
-  void OnCreate();
-  void OnDestroy();
-  bool OnClose();
+  /* virtual methods from class Window */
+  virtual void OnCreate() gcc_override;
+  virtual void OnDestroy() gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnSetFocus() gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
+  virtual bool OnUser(unsigned id) gcc_override;
+  virtual bool OnTimer(WindowTimer &timer) gcc_override;
+
+  /* virtual methods from class TopWindow */
+  virtual bool OnClose() gcc_override;
+  virtual bool OnActivate() gcc_override;
 
 #ifdef ANDROID
-  virtual void OnPause();
+  virtual void OnPause() gcc_override;
 #endif
 };
 
