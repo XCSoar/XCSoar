@@ -58,7 +58,7 @@ class TrafficWidget : public ContainerWidget,
 
 protected:
   void UpdateLayout();
-  void SetButtonsEnabled(bool enabled);
+  void UpdateButtons();
 
 public:
   void Update();

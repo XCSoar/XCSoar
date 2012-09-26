@@ -96,6 +96,14 @@ public:
     SetAutoZoom(!GetAutoZoom());
   }
 
+  bool CanZoomOut() const {
+    return zoom < 4;
+  }
+
+  bool CanZoomIn() const {
+    return zoom > 0;
+  }
+
   void ZoomOut();
   void ZoomIn();
 
@@ -543,12 +551,14 @@ void
 TrafficWidget::ZoomIn()
 {
   view->ZoomIn();
+  UpdateButtons();
 }
 
 void
 TrafficWidget::ZoomOut()
 {
   view->ZoomOut();
+  UpdateButtons();
 }
 
 void
@@ -640,7 +650,7 @@ TrafficWidget::Update()
                             calculated.task_stats.
                             current_leg.solution_remaining.cruise_track_bearing);
 
-  SetButtonsEnabled(!view->WarningMode());
+  UpdateButtons();
 }
 
 bool
@@ -808,14 +818,19 @@ TrafficWidget::UpdateLayout()
 }
 
 void
-TrafficWidget::SetButtonsEnabled(bool enabled)
+TrafficWidget::UpdateButtons()
 {
 #ifndef GNAV
-  zoom_in_button->SetEnabled(enabled);
-  zoom_out_button->SetEnabled(enabled);
-  previous_item_button->SetEnabled(enabled);
-  next_item_button->SetEnabled(enabled);
-  details_button->SetEnabled(enabled);
+  const bool unlocked = !view->WarningMode();
+  const TrafficList &traffic = CommonInterface::Basic().flarm.traffic;
+  const bool not_empty = !traffic.IsEmpty();
+  const bool two_or_more = traffic.GetActiveTrafficCount() >= 2;
+
+  zoom_in_button->SetEnabled(unlocked && view->CanZoomIn());
+  zoom_out_button->SetEnabled(unlocked && view->CanZoomOut());
+  previous_item_button->SetEnabled(unlocked && two_or_more);
+  next_item_button->SetEnabled(unlocked && two_or_more);
+  details_button->SetEnabled(unlocked && not_empty);
 #endif
 }
 
