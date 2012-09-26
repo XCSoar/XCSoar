@@ -94,12 +94,7 @@ public:
 protected:
   void OnPaint(Canvas &canvas) {
     canvas.ClearWhite();
-    
-    PixelRect rc = {
-      0, 0, (PixelScalar)canvas.GetWidth(), (PixelScalar)canvas.GetHeight()
-    };
-
-    renderer.Draw(canvas, rc, calculated, glide_settings, true);
+    renderer.Draw(canvas, canvas.GetRect(), calculated, glide_settings, true);
   }
 };
 

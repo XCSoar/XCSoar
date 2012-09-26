@@ -111,6 +111,11 @@ public:
     return height;
   }
 
+  gcc_pure
+  PixelRect GetRect() const {
+    return PixelRect{0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight())};
+  }
+
   void SelectNullPen() {
     pen = Pen(0, COLOR_BLACK);
   }

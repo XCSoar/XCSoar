@@ -110,6 +110,11 @@ public:
     return height;
   }
 
+  gcc_pure
+  PixelRect GetRect() const {
+    return PixelRect{0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight())};
+  }
+
   void resize(UPixelScalar _width, UPixelScalar _height) {
     width = _width;
     height = _height;

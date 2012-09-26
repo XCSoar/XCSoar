@@ -58,9 +58,7 @@ protected:
   void OnPaint(Canvas &canvas) {
     canvas.ClearWhite();
 
-    PixelRect rc = {
-      0, 0, (PixelScalar)canvas.GetWidth(), (PixelScalar)canvas.GetHeight()
-    };
+    const PixelRect rc = canvas.GetRect();
 
     RasterPoint pt = {
       (PixelScalar)(rc.right / 2), (PixelScalar)(rc.bottom / 2)

@@ -117,6 +117,11 @@ public:
   }
 
   gcc_pure
+  PixelRect GetRect() const {
+    return PixelRect{0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight())};
+  }
+
+  gcc_pure
   const HWColor map(const Color color) const
   {
     return HWColor(::SDL_MapRGB(surface->format, color.value.r,

@@ -177,12 +177,7 @@ BufferCanvas::Commit(Canvas &other)
     assert(y_offset == other.y_offset);
 
     /* copy screen to texture */
-    PixelRect rc;
-    rc.left = 0;
-    rc.top = 0;
-    rc.right = GetWidth();
-    rc.bottom = GetHeight();
-    CopyToTexture(*texture, rc);
+    CopyToTexture(*texture, GetRect());
   }
 
   active = false;
@@ -198,9 +193,7 @@ BufferCanvas::CopyTo(Canvas &other)
 
   GLEnable scope(GL_TEXTURE_2D);
   texture->Bind();
-
-  texture->DrawFlipped({ 0, 0, PixelScalar(other.GetWidth()), PixelScalar(other.GetHeight()) },
-                       { 0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight()) });
+  texture->DrawFlipped(other.GetRect(), GetRect());
 }
 
 void

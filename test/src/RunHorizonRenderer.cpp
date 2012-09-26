@@ -53,12 +53,7 @@ public:
 protected:
   void OnPaint(Canvas &canvas) {
     canvas.ClearWhite();
-
-    PixelRect rc = {
-      0, 0, (PixelScalar)canvas.GetWidth(), (PixelScalar)canvas.GetHeight()
-    };
-
-    HorizonRenderer::Draw(canvas, rc, look, attitude);
+    HorizonRenderer::Draw(canvas, canvas.GetRect(), look, attitude);
   }
 };
 

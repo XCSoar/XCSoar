@@ -167,14 +167,10 @@ WndButton::OnKeyDown(unsigned key_code)
 void
 WndButton::OnPaint(Canvas &canvas)
 {
-  PixelRect rc = {
-    PixelScalar(0), PixelScalar(0), PixelScalar(canvas.GetWidth()),
-    PixelScalar(canvas.GetHeight())
-  };
-
   const bool focused = HasFocus();
   const bool pressed = is_down();
 
+  PixelRect rc = canvas.GetRect();
   renderer.DrawButton(canvas, rc, focused, pressed);
 
   // If button has text on it
