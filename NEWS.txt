@@ -7,6 +7,8 @@ Version 6.4.2 - not yet released
   - contest: relax altitude difference check (#2348)
 * data files
   - added polars of "AK-8" and "Blanik L13-AC" (#2329)
+* map
+  - suspend the map renderer while thermal assistant is shown
 
 Version 6.4.1 - 2012/08/30
 * calculations
