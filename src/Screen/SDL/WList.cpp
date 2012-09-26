@@ -175,6 +175,15 @@ WindowList::FindPreviousChildControl(Window *reference)
   return FindControl(++i, list.rend());
 }
 
+gcc_pure
+static bool
+IsFullWindow(const Window &w, int width, int height)
+{
+  return w.IsVisible() &&
+    w.GetLeft() <= 0 && w.GetRight() >= (int)width &&
+    w.GetTop() <= 0 && w.GetBottom() >= (int)height;
+}
+
 void
 WindowList::Paint(Canvas &canvas)
 {
@@ -185,9 +194,7 @@ WindowList::Paint(Canvas &canvas)
   Window *full = NULL;
   for (auto i = list.rbegin(); i != list.rend(); ++i) {
     Window &child = **i;
-    if (child.IsVisible() &&
-        child.GetLeft() <= 0 && child.GetRight() >= (int)canvas.GetWidth() &&
-        child.GetTop() <= 0 && child.GetBottom() >= (int)canvas.GetHeight())
+    if (IsFullWindow(child, canvas.GetWidth(), canvas.GetHeight()))
       full = &child;
   }
 
