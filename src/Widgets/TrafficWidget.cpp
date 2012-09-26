@@ -927,7 +927,7 @@ TrafficWidget::OnAction(int id)
     break;
 
   case ZOOM_OUT:
-    ZoomIn();
+    ZoomOut();
     break;
   }
 }
