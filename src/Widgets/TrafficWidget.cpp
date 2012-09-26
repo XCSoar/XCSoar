@@ -838,7 +838,7 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
                                          _T(">"), rc, ButtonWindowStyle(),
                                          this, NEXT_ITEM);
   details_button = new WndButton(GetContainer(), look.dialog,
-                                 _T("Details"), rc, ButtonWindowStyle(),
+                                 _("Details"), rc, ButtonWindowStyle(),
                                  this, DETAILS);
 #endif
 
