@@ -624,7 +624,10 @@ TrafficWidget::Update()
 
   if (CommonInterface::GetUISettings().traffic.auto_close_dialog &&
       basic.flarm.traffic.IsEmpty()) {
-    UIGlobals::ActivateMap();
+    /* this must be deferred, because this method is called from
+       within the BlackboardListener, and we must not unregister the
+       listener in this context */
+    UIGlobals::DeferredActivateMap();
     return;
   }
 
