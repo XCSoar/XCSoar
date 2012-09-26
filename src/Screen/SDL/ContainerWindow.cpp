@@ -38,96 +38,6 @@ ContainerWindow::~ContainerWindow()
   reset();
 }
 
-gcc_pure
-Window *
-ContainerWindow::FindControl(std::list<Window*>::const_iterator i,
-                             std::list<Window*>::const_iterator end)
-{
-  for (; i != end; ++i) {
-    Window &child = **i;
-    if (!child.IsVisible() || !child.IsEnabled())
-      continue;
-
-    if (child.IsTabStop())
-      return &child;
-
-    if (child.IsControlParent()) {
-      ContainerWindow &container = (ContainerWindow &)child;
-      Window *control = container.FindFirstControl();
-      if (control != NULL)
-        return control;
-    }
-  }
-
-  return NULL;
-}
-
-gcc_pure
-Window *
-ContainerWindow::FindControl(std::list<Window*>::const_reverse_iterator i,
-                             std::list<Window*>::const_reverse_iterator end)
-{
-  for (; i != end; ++i) {
-    Window &child = **i;
-    if (!child.IsVisible() || !child.IsEnabled())
-      continue;
-
-    if (child.IsTabStop())
-      return &child;
-
-    if (child.IsControlParent()) {
-      ContainerWindow &container = (ContainerWindow &)child;
-      Window *control = container.FindLastControl();
-      if (control != NULL)
-        return control;
-    }
-  }
-
-  return NULL;
-}
-
-Window *
-ContainerWindow::FindFirstControl()
-{
-  return FindControl(children.begin(), children.end());
-}
-
-Window *
-ContainerWindow::FindLastControl()
-{
-  return FindControl(children.rbegin(), children.rend());
-}
-
-Window *
-ContainerWindow::FindNextChildControl(Window *reference)
-{
-  assert(reference != NULL);
-  assert(reference->GetParent() == this);
-
-  std::list<Window*>::const_iterator i =
-    std::find(children.begin(), children.end(), reference);
-  assert(i != children.end());
-
-  return FindControl(++i, children.end());
-}
-
-Window *
-ContainerWindow::FindPreviousChildControl(Window *reference)
-{
-  assert(reference != NULL);
-  assert(reference->GetParent() == this);
-
-  std::list<Window*>::const_reverse_iterator i =
-    std::find(children.rbegin(), children.rend(), reference);
-#ifndef ANDROID
-  /* Android's NDK r5b ships a cxx-stl which does not allow comparing
-     two const_reverse_iterator objects for inequality */
-  assert(i != children.rend());
-#endif
-
-  return FindControl(++i, children.rend());
-}
-
 Window *
 ContainerWindow::FindNextControl(Window *reference)
 {
@@ -140,7 +50,7 @@ ContainerWindow::FindNextControl(Window *reference)
     ContainerWindow *container = reference->parent;
     assert(container != NULL);
 
-    Window *control = container->FindNextChildControl(reference);
+    Window *control = container->children.FindNextChildControl(reference);
     if (control != NULL)
       return control;
 
@@ -163,7 +73,7 @@ ContainerWindow::FindPreviousControl(Window *reference)
     ContainerWindow *container = reference->parent;
     assert(container != NULL);
 
-    Window *control = container->FindPreviousChildControl(reference);
+    Window *control = container->children.FindPreviousChildControl(reference);
     if (control != NULL)
       return control;
 
@@ -177,7 +87,7 @@ ContainerWindow::FindPreviousControl(Window *reference)
 bool
 ContainerWindow::FocusFirstControl()
 {
-  Window *control = FindFirstControl();
+  Window *control = children.FindFirstControl();
   if (control == NULL)
     return false;
 
@@ -208,7 +118,7 @@ ContainerWindow::FocusPreviousControl()
     ? FindPreviousControl(focused)
     : NULL;
   if (control == NULL) {
-    control = FindLastControl();
+    control = children.FindLastControl();
     if (control == NULL)
       return false;
   }
@@ -220,16 +130,7 @@ ContainerWindow::FocusPreviousControl()
 void
 ContainerWindow::OnDestroy()
 {
-  /* destroy all child windows */
-  std::list<Window*>::const_iterator i;
-  while ((i = children.begin()) != children.end()) {
-    Window *w = *i;
-    w->reset();
-
-    assert(std::find(children.begin(), children.end(), w) == children.end());
-  }
-
-  assert(children.empty());
+  children.Clear();
 
   PaintWindow::OnDestroy();
 }
@@ -337,41 +238,7 @@ ContainerWindow::OnMultiTouchUp()
 void
 ContainerWindow::OnPaint(Canvas &canvas)
 {
-  Window *full = NULL;
-
-  const std::list<Window*> &children = this->children;
-
-  /* find the last full window, which covers all the other windows
-     behind it */
-  for (auto i = children.rbegin(); i != children.rend(); ++i) {
-    Window &child = **i;
-    if (child.IsVisible() &&
-        child.GetLeft() <= 0 && child.GetRight() >= (int)GetWidth() &&
-        child.GetTop() <= 0 && child.GetBottom() >= (int)GetHeight())
-      full = &child;
-  }
-
-  for (auto i = children.rbegin(); i != children.rend(); ++i) {
-    Window &child = **i;
-    if (!child.IsVisible())
-      continue;
-
-    if (full != NULL) {
-      if (&child == full)
-        full = NULL;
-      else
-        /* don't bother to draw the children "behind" the last full
-           window */
-        continue;
-    }
-
-    SubCanvas sub_canvas(canvas, child.GetLeft(), child.GetTop(),
-                         child.GetWidth(), child.GetHeight());
-    child.Setup(sub_canvas);
-    child.OnPaint(sub_canvas);
-  }
-
-  assert(full == NULL);
+  children.Paint(canvas);
 
   if (HasBorder()) {
     canvas.SelectBlackPen();
@@ -382,46 +249,19 @@ ContainerWindow::OnPaint(Canvas &canvas)
 
 void
 ContainerWindow::AddChild(Window &child) {
-  children.push_back(&child);
+  children.Add(child);
 
   Invalidate();
 }
 
 void
 ContainerWindow::Removehild(Window &child) {
-  children.remove(&child);
+  children.Remove(child);
 
   if (active_child == &child)
     active_child = NULL;
 
   Invalidate();
-}
-
-bool
-ContainerWindow::HasChild(const Window &child) const
-{
-  return std::find(children.begin(), children.end(), &child) != children.end();
-}
-
-void
-ContainerWindow::BringChildToTop(Window &child) {
-  children.remove(&child);
-  children.insert(children.begin(), &child);
-  Invalidate();
-}
-
-Window *
-ContainerWindow::ChildAt(PixelScalar x, PixelScalar y)
-{
-  for (auto i = children.begin(); i != children.end(); ++i) {
-    Window &child = **i;
-    if (child.IsVisible() &&
-        x >= child.GetLeft() && x < child.GetRight() &&
-        y >= child.GetTop() && y < child.GetBottom())
-      return child.IsEnabled() ? &child : NULL;
-  }
-
-  return NULL;
 }
 
 Window *

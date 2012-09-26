@@ -23,6 +23,7 @@ SCREEN_SOURCES = \
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
+	$(SCREEN_SRC_DIR)/SDL/WList.cpp \
 	$(SCREEN_SRC_DIR)/SDL/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/CheckBox.cpp \

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 
 #ifndef USE_GDI
-#include <list>
+#include "Screen/SDL/WList.hpp"
 #endif
 
 class WindowReference;
@@ -40,7 +40,8 @@ class WindowReference;
 class ContainerWindow : public PaintWindow {
 protected:
 #ifndef USE_GDI
-  std::list<Window*> children;
+  friend class WindowList;
+  WindowList children;
 
   /**
    * The active child window is used to find the focused window.  If
@@ -88,21 +89,25 @@ public:
   void Removehild(Window &child);
 
   gcc_pure
-  bool HasChild(const Window &child) const;
+  bool HasChild(const Window &w) const {
+    return children.Contains(w);
+  }
 
-  void BringChildToTop(Window &child);
+  void BringChildToTop(Window &child) {
+    children.BringToTop(child);
+  }
 
   void BringChildToBottom(Window &child) {
-    children.remove(&child);
-    children.push_back(&child);
-    Invalidate();
+    children.BringToBottom(child);
   }
 
   /**
    * Locate a child window by its relative coordinates.
    */
   gcc_pure
-  Window *ChildAt(PixelScalar x, PixelScalar y);
+  Window *ChildAt(PixelScalar x, PixelScalar y) {
+    return children.FindAt(x, y);
+  }
 
   /**
    * Locates the child which should get a mouse event.  Prefers the
@@ -130,26 +135,6 @@ public:
   virtual void ClearCapture();
 
 protected:
-  gcc_pure
-  static Window *FindControl(std::list<Window*>::const_iterator i,
-                             std::list<Window*>::const_iterator end);
-
-  gcc_pure
-  static Window *FindControl(std::list<Window*>::const_reverse_iterator i,
-                             std::list<Window*>::const_reverse_iterator end);
-
-  gcc_pure
-  Window *FindFirstControl();
-
-  gcc_pure
-  Window *FindLastControl();
-
-  gcc_pure
-  Window *FindNextChildControl(Window *reference);
-
-  gcc_pure
-  Window *FindPreviousChildControl(Window *reference);
-
   gcc_pure
   Window *FindNextControl(Window *reference);
 

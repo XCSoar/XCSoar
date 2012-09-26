@@ -1,0 +1,215 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2012 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+*/
+
+#include "WList.hpp"
+#include "Screen/ContainerWindow.hpp"
+#include "Screen/SubCanvas.hpp"
+
+#include <algorithm>
+
+void
+WindowList::Clear()
+{
+  /* destroy all child windows */
+  std::list<Window *>::const_iterator i;
+  while ((i = list.begin()) != list.end()) {
+    Window &w = **i;
+    w.reset();
+
+    assert(!Contains(w));
+  }
+
+  assert(list.empty());
+}
+
+bool
+WindowList::Contains(const Window &w) const
+{
+  return std::find(list.begin(), list.end(), &w) != list.end();
+}
+
+void
+WindowList::BringToTop(Window &w)
+{
+  assert(Contains(w));
+
+  list.remove(&w);
+  list.insert(list.begin(), &w);
+}
+
+void
+WindowList::BringToBottom(Window &w)
+{
+  assert(Contains(w));
+
+  list.remove(&w);
+  list.push_back(&w);
+}
+
+gcc_pure
+static bool
+IsAt(Window &w, PixelScalar x, PixelScalar y)
+{
+  return w.IsVisible() &&
+    x >= w.GetLeft() && x < w.GetRight() &&
+    y >= w.GetTop() && y < w.GetBottom();
+}
+
+Window *
+WindowList::FindAt(PixelScalar x, PixelScalar y)
+{
+  for (Window *w : list)
+    if (IsAt(*w, x, y))
+      return w->IsEnabled() ? w : nullptr;
+
+  return NULL;
+}
+
+gcc_pure
+Window *
+WindowList::FindControl(std::list<Window*>::const_iterator i,
+                        std::list<Window*>::const_iterator end)
+{
+  for (; i != end; ++i) {
+    Window &child = **i;
+    if (!child.IsVisible() || !child.IsEnabled())
+      continue;
+
+    if (child.IsTabStop())
+      return &child;
+
+    if (child.IsControlParent()) {
+      ContainerWindow &container = (ContainerWindow &)child;
+      Window *control = container.children.FindFirstControl();
+      if (control != NULL)
+        return control;
+    }
+  }
+
+  return NULL;
+}
+
+gcc_pure
+Window *
+WindowList::FindControl(std::list<Window*>::const_reverse_iterator i,
+                        std::list<Window*>::const_reverse_iterator end)
+{
+  for (; i != end; ++i) {
+    Window &child = **i;
+    if (!child.IsVisible() || !child.IsEnabled())
+      continue;
+
+    if (child.IsTabStop())
+      return &child;
+
+    if (child.IsControlParent()) {
+      ContainerWindow &container = (ContainerWindow &)child;
+      Window *control = container.children.FindLastControl();
+      if (control != NULL)
+        return control;
+    }
+  }
+
+  return NULL;
+}
+
+Window *
+WindowList::FindFirstControl()
+{
+  return FindControl(list.begin(), list.end());
+}
+
+Window *
+WindowList::FindLastControl()
+{
+  return FindControl(list.rbegin(), list.rend());
+}
+
+Window *
+WindowList::FindNextChildControl(Window *reference)
+{
+  assert(reference != NULL);
+  assert(Contains(*reference));
+
+  std::list<Window*>::const_iterator i =
+    std::find(list.begin(), list.end(), reference);
+  assert(i != list.end());
+
+  return FindControl(++i, list.end());
+}
+
+Window *
+WindowList::FindPreviousChildControl(Window *reference)
+{
+  assert(reference != NULL);
+  assert(Contains(*reference));
+
+  std::list<Window*>::const_reverse_iterator i =
+    std::find(list.rbegin(), list.rend(), reference);
+#ifndef ANDROID
+  /* Android's NDK r5b ships a cxx-stl which does not allow comparing
+     two const_reverse_iterator objects for inequality */
+  assert(i != list.rend());
+#endif
+
+  return FindControl(++i, list.rend());
+}
+
+void
+WindowList::Paint(Canvas &canvas)
+{
+  const auto &list = this->list;
+
+  /* find the last full window which covers all the other windows
+     behind it */
+  Window *full = NULL;
+  for (auto i = list.rbegin(); i != list.rend(); ++i) {
+    Window &child = **i;
+    if (child.IsVisible() &&
+        child.GetLeft() <= 0 && child.GetRight() >= (int)canvas.GetWidth() &&
+        child.GetTop() <= 0 && child.GetBottom() >= (int)canvas.GetHeight())
+      full = &child;
+  }
+
+  for (auto i = list.rbegin(); i != list.rend(); ++i) {
+    Window &child = **i;
+    if (!child.IsVisible())
+      continue;
+
+    if (full != NULL) {
+      if (&child == full)
+        full = NULL;
+      else
+        /* don't bother to draw the children "behind" the last full
+           window */
+        continue;
+    }
+
+    SubCanvas sub_canvas(canvas, child.GetLeft(), child.GetTop(),
+                         child.GetWidth(), child.GetHeight());
+    child.Setup(sub_canvas);
+    child.OnPaint(sub_canvas);
+  }
+
+  assert(full == NULL);
+}
