@@ -748,6 +748,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Components.cpp \
 	\
 	$(SRC)/Widgets/TrafficWidget.cpp \
+	$(SRC)/Widgets/CrossSectionWidget.cpp \
 	$(SRC)/Widgets/BigThermalAssistantWidget.cpp \
 	$(SRC)/Widgets/DeviceEditWidget.cpp \
 	$(SRC)/Widgets/PolarShapeEditWidget.cpp \
