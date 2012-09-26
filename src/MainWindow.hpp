@@ -137,6 +137,8 @@ public:
   void Set(const TCHAR *text, PixelRect rc,
            TopWindowStyle style=TopWindowStyle());
 
+  void reset();
+
   void Initialise();
   void InitialiseConfigured();
 
@@ -146,12 +148,7 @@ public:
    */
   void Deinitialise();
 
-  /**
-   * Destroy and re-create all info boxes, and adjust the map
-   * position/size.
-   */
-  void ReinitialiseLayout();
-
+private:
   /**
    * Adjust the flarm radar position
    */
@@ -170,7 +167,12 @@ public:
    */
   void ReinitialisePosition();
 
-  void reset();
+public:
+  /**
+   * Destroy and re-create all info boxes, and adjust the map
+   * position/size.
+   */
+  void ReinitialiseLayout();
 
   /**
    * Suspend threads that are owned by this object.
