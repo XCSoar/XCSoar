@@ -95,10 +95,12 @@ public:
 
   void BringChildToTop(Window &child) {
     children.BringToTop(child);
+    Invalidate();
   }
 
   void BringChildToBottom(Window &child) {
     children.BringToBottom(child);
+    Invalidate();
   }
 
   /**
