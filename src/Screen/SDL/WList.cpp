@@ -193,11 +193,10 @@ WindowList::Paint(Canvas &canvas)
 
   /* find the last full window which covers all the other windows
      behind it */
-  Window *full = NULL;
   for (auto i = begin; i != end; ++i) {
     Window &child = **i;
     if (IsFullWindow(child, canvas.GetWidth(), canvas.GetHeight()))
-      full = &child;
+      begin = i;
   }
 
   for (auto i = begin; i != end; ++i) {
@@ -205,20 +204,9 @@ WindowList::Paint(Canvas &canvas)
     if (!child.IsVisible())
       continue;
 
-    if (full != NULL) {
-      if (&child == full)
-        full = NULL;
-      else
-        /* don't bother to draw the children "behind" the last full
-           window */
-        continue;
-    }
-
     SubCanvas sub_canvas(canvas, child.GetLeft(), child.GetTop(),
                          child.GetWidth(), child.GetHeight());
     child.Setup(sub_canvas);
     child.OnPaint(sub_canvas);
   }
-
-  assert(full == NULL);
 }
