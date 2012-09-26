@@ -65,9 +65,40 @@ Copyright_License {
 #include <unistd.h> /* for execl() */
 #endif
 
+gcc_pure
+static PixelRect
+GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
+{
+  if (bottom_widget == nullptr)
+    return rc;
+
+  const UPixelScalar requested_height = bottom_widget->GetMinimumSize().cy;
+  UPixelScalar height;
+  if (requested_height > 0) {
+    const UPixelScalar max_height = (rc.bottom - rc.top) / 2;
+    height = std::min(max_height, requested_height);
+  } else {
+    const UPixelScalar recommended_height = (rc.bottom - rc.top) / 3;
+    height = recommended_height;
+  }
+
+  PixelRect result = rc;
+  result.top = result.bottom - height;
+  return result;
+}
+
+gcc_pure
+static PixelRect
+GetMapRectAbove(const PixelRect &rc, const PixelRect &bottom_rect)
+{
+  PixelRect result = rc;
+  result.bottom = bottom_rect.top;
+  return result;
+}
+
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
-   map(NULL), widget(NULL), vario(*this),
+   map(nullptr), bottom_widget(nullptr), widget(nullptr), vario(*this),
    traffic_gauge(*this),
    suppress_traffic_gauge(false), force_traffic_gauge(false),
    thermal_assistant(*this),
@@ -318,7 +349,14 @@ MainWindow::ReinitialiseLayout()
     else
       InfoBoxManager::Show();
 
-    map->Move(GetMainRect(rc));
+    const PixelRect main_rect = GetMainRect();
+    const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
+                                                      bottom_widget);
+
+    if (bottom_widget != nullptr)
+      bottom_widget->Move(bottom_rect);
+
+    map->Move(GetMapRectAbove(main_rect, bottom_rect));
     map->FullRedraw();
   }
 
@@ -709,6 +747,10 @@ MainWindow::ActivateMap()
     KillWidget();
     map->Show();
     map->SetFocus();
+
+    if (bottom_widget != nullptr)
+      bottom_widget->Show(GetBottomWidgetRect(GetMainRect(),
+                                              bottom_widget));
   }
 
   return map;
@@ -740,6 +782,43 @@ MainWindow::KillWidget()
 }
 
 void
+MainWindow::SetBottomWidget(Widget *_widget)
+{
+  if (bottom_widget == nullptr && _widget == nullptr)
+    return;
+
+  if (map == nullptr) {
+    /* this doesn't work without a map */
+    delete _widget;
+    return;
+  }
+
+  if (bottom_widget != nullptr) {
+    if (widget == nullptr)
+      bottom_widget->Hide();
+    bottom_widget->Unprepare();
+    delete bottom_widget;
+  }
+
+  bottom_widget = _widget;
+
+  const PixelRect main_rect = GetMainRect();
+  const PixelRect bottom_rect = GetBottomWidgetRect(main_rect,
+                                                    bottom_widget);
+
+  if (bottom_widget != nullptr) {
+    bottom_widget->Initialise(*this, bottom_rect);
+    bottom_widget->Prepare(*this, bottom_rect);
+
+    if (widget == nullptr)
+      bottom_widget->Show(bottom_rect);
+  }
+
+  map->Move(GetMapRectAbove(main_rect, bottom_rect));
+  map->FullRedraw();
+}
+
+void
 MainWindow::SetWidget(Widget *_widget)
 {
   assert(_widget != NULL);
@@ -752,6 +831,9 @@ MainWindow::SetWidget(Widget *_widget)
   /* hide the map (might be hidden already) */
   if (map != NULL)
     map->FastHide();
+
+  if (bottom_widget != nullptr)
+    bottom_widget->Hide();
 
   widget = _widget;
 

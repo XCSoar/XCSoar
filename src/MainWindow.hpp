@@ -77,6 +77,11 @@ class MainWindow : public SingleWindow {
   GlueMapWindow *map;
 
   /**
+   * A #Widget that is shown below the map.
+   */
+  Widget *bottom_widget;
+
+  /**
    * A #Widget that is shown instead of the map.  The #GlueMapWindow
    * is hidden and the DrawThread is suspended while this attribute is
    * non-NULL.
@@ -282,6 +287,13 @@ public:
    * returns void.  There is no guarantee that this function succeeds.
    */
   void DeferredActivateMap();
+
+  /**
+   * Show this #Widget below the map.  This replaces (deletes) the
+   * previous bottom widget, if any.  To disable this feature, call
+   * this method with widget==nullptr.
+   */
+  void SetBottomWidget(Widget *widget);
 
   /**
    * Replace the map with a #Widget.  The Widget instance gets deleted
