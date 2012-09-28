@@ -6,6 +6,7 @@ Version 6.4.2 - not yet released
 * calculations
   - contest: relax altitude difference check (#2348)
 * data files
+  - added polar of "Ka 6E" and corrected the "Ka 6CR" one (#2327)
   - added polars of "AK-8" and "Blanik L13-AC" (#2329)
 * map
   - suspend the map renderer while thermal assistant is shown
