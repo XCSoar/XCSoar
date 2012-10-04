@@ -43,10 +43,7 @@ SingleWindow::CancelDialog()
 {
   AssertThread();
 
-  assert(!dialogs.empty());
-
-  Window *dialog = dialogs.top();
-  dialog->reset();
+  GetTopDialog().SetModalResult(mrCancel);
 }
 
 bool

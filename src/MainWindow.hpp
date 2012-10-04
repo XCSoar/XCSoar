@@ -106,6 +106,14 @@ private:
   PixelRect map_rect;
   bool FullScreen;
 
+#ifndef ENABLE_OPENGL
+  /**
+   * This variable tracks whether the #DrawThread was suspended
+   * because the map was replaced by a #Widget.
+   */
+  bool draw_suspended;
+#endif
+
   bool activate_map_pending;
 
   bool airspace_warning_pending;

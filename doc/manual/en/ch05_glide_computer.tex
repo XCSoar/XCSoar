@@ -17,8 +17,9 @@ seconds of straight line flight the software will switch from climb to
 cruise mode.
 
 The cruise modes are further divided into final glide and normal
-cruise.  Final glide is active when the last waypoint in the task is
-active, or when the task is in abort mode.
+cruise.  Final glide becomes active when the glider is above final glide 
+altitude with respect to the last waypoint in the task, or when 
+in abort mode.
 
 Switching between the different flight modes is automatic.  Circling
 is enabled when the glider turns (typically three quarters of a turn).
@@ -346,6 +347,7 @@ specified in the configuration settings.  This safety value is set to
 zero by default.  Larger values make the arrival height calculation
 more conservative.
 
+
 \section{Final glide calculator}
 
 The final glide calculator uses many sources of information when
@@ -358,7 +360,7 @@ waypoint. These are:
 \item The distance and bearing of the goal or waypoint;
 \item The MacCready setting;
 \item The altitude of the waypoint or goal;
-\item A user specified safety margin (arrival height).
+\item A user specified safety margin (arrival height and terrain clearance).
 \item The glider's total energy if XCSoar is connected to
   an instrument with an air speed indicator.
 \end{itemize}
@@ -409,42 +411,42 @@ bar is coloured amber.
 \begin{center}
 \begin{tabular}{c c}
 {\it Above} & {\it Below} \\
-\includegraphics[angle=0,width=0.15\linewidth,keepaspectratio='true']{figures/cut-fg-above.png} &
-\includegraphics[angle=0,width=0.2\linewidth,keepaspectratio='true']{figures/cut-fg-below.png} \\
+\includegraphics[angle=0,keepaspectratio='true']{figures/cut-fg-above.png} &
+\includegraphics[angle=0,keepaspectratio='true']{figures/cut-fg-below.png} \\
+\multicolumn{2}{l}{The scale of the final glide bar is $+/-$ 500 meters.} \\
+\multicolumn{2}{l}{A bar beyond this scale is indicated by a chopped of tip.}
 \end{tabular}
+\tip
 \end{center}
 
-The scale of the final glide bar is $+/-$ 500 meters.
 
 \subsection*{Dual height required bars}
 
-The final glide bar has been modified to show the effect of MacCready
+The final glide bar has been extended to show the effect of MacCready
 setting on the altitude difference to complete the task.  The display
-shows in an arrow outline the altitude difference calculated at zero
-MacCready, as well as the usual filled arrow that displays the
+shows with a brighter split arrow the {\em altitude difference calculated at zero
+MacCready}, as well as the usual arrow that displays the
 altitude difference calculated at the current MacCready setting.
 
 The number shown in the box next to the final glide bar still shows
 the altitude difference at the current MacCready setting.
 
-Examples of the appearance in various configurations is shown below:
+Examples of the appearance in various configurations with the additional {\em MC=0} 
+bar display is shown below:
 
 \begin{description}
-
-\item[Above final glide at MC$=M$ and MC$=0$]
+\item[Above final glide] (current MC=0.7)
+\smallsketch{figures/fig-finalglide-allabove.png}
   Here the display shows that at the current MacCready setting, the aircraft
-  is above final glide (filled arrow).  The hollow arrow shows the additional
+  is above final glide (filled arrow).  The split arrow shows the additional
   excess height.
 
-\begin{center}
-\includegraphics[angle=0,width=1.6cm,keepaspectratio='true']{figures/fig-finalglide-allabove.png}
-\end{center}
-
-\item[Below final glide at MC$=M$, and above at MC$=0$]
+\item[Below/above final glide] (e.g. MC=1.8)
   Here the display shows that at the current MacCready setting, the aircraft
-  is below final glide (filled red arrow).  The hollow green arrow
+  is below final glide (filled amber arrow).  The split green arrow
   shows that at MC$=0$, the aircraft is above final glide.
 
+\smallsketch{figures/fig-finalglide-halfabove.png}
   In this situation, if the glider is climbing, the pilot can assess
   whether to leave the thermal early and commence a final glide
   descent at a reduced MacCready setting; or continue to climb.  It is
@@ -454,28 +456,21 @@ Examples of the appearance in various configurations is shown below:
   rate with the MacCready value.  When the achieved lift rate drops
   below the MacCready value, the thermal should be left.
 
-\begin{center}
-\includegraphics[angle=0,width=1.6cm,keepaspectratio='true']{figures/fig-finalglide-halfabove.png}
-\end{center}
-
-\item[Below final glide at MC$=M$, and just below at MC$=0$]
+\item[Below final glide] (e.g. MC=2.5 and with less heigth)
+\smallsketch{figures/fig-finalglide-littlebelow.png}
   Here the display shows that at the current MacCready setting, the aircraft
-  is below final glide (filled red arrow).  The hollow red arrow
-  shows that by reducing the MacCready setting to zero, the aircraft is
-  nearly at final glide.
-\begin{center}
-\includegraphics[angle=0,width=2cm,keepaspectratio='true']{figures/fig-finalglide-littlebelow.png}
-\end{center}
+  is below final glide (filled red arrow).  The tip of the red arrow is chopped off
+  to show that the needed height exceeds the 500 meter limit the arrow can scale on.
+  The split slightly brighter red arrow shows that by reducing the MacCready 
+  setting to zero, the aircraft still is far from final glide.
 
-\item[Below final glide at MC$=M$, and at MC$=0$]
+\item[Below final glide] 
   Here the display shows that at the current MacCready setting, the aircraft
-  is below final glide (filled red arrow).  No hollow red arrow
+  is below final glide (red arrow).  The split brighter red arrow
+\smallsketch{figures/fig-finalglide-allbelow.png}
   shows that even at MC$=0$ the aircraft is well below final glide.
-\begin{center}
-\includegraphics[angle=0,width=2cm,keepaspectratio='true']{figures/fig-finalglide-allbelow.png}
-\end{center}
-
 \end{description}
+
 
 \section{Task speed estimation}\label{sec:task-speed-estim}
 

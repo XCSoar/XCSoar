@@ -52,6 +52,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "ProgressGlue.hpp"
 #include "UIState.hpp"
+#include "DrawThread.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
@@ -105,6 +106,9 @@ MainWindow::MainWindow(const StatusMessageList &status_messages)
    popup(status_messages, *this, CommonInterface::GetUISettings()),
    timer(*this),
    FullScreen(false),
+#ifndef ENABLE_OPENGL
+   draw_suspended(false),
+#endif
    activate_map_pending(false),
    airspace_warning_pending(false)
 {
@@ -668,7 +672,7 @@ MainWindow::OnDestroy()
 }
 
 bool MainWindow::OnClose() {
-  if (!IsRunning())
+  if (HasDialog() || !IsRunning())
     /* no shutdown dialog if XCSoar hasn't completed initialization
        yet (e.g. if we are in the simulator prompt) */
     return SingleWindow::OnClose();
@@ -751,6 +755,13 @@ MainWindow::ActivateMap()
     if (bottom_widget != nullptr)
       bottom_widget->Show(GetBottomWidgetRect(GetMainRect(),
                                               bottom_widget));
+
+#ifndef ENABLE_OPENGL
+    if (draw_suspended) {
+      draw_suspended = false;
+      draw_thread->Resume();
+    }
+#endif
   }
 
   return map;
@@ -829,8 +840,16 @@ MainWindow::SetWidget(Widget *_widget)
   KillWidget();
 
   /* hide the map (might be hidden already) */
-  if (map != NULL)
+  if (map != NULL) {
     map->FastHide();
+
+#ifndef ENABLE_OPENGL
+    if (!draw_suspended) {
+      draw_suspended = true;
+      draw_thread->BeginSuspend();
+    }
+#endif
+  }
 
   if (bottom_widget != nullptr)
     bottom_widget->Hide();
