@@ -37,7 +37,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   PixelRect rc = parent.GetClientRect();
   WindowStyle style;
   style.Hide();
-  set(parent, rc, style);
+  Create(parent, rc, style);
 
   UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
 
@@ -61,9 +61,9 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   // Initialize message text field
   TextWindowStyle message_style;
   message_style.center();
-  message.set(*this, NULL, 0,
-              height - progress_border_height - text_height - (height/48),
-              width, text_height, message_style);
+  message.Create(*this, NULL, 0,
+                 height - progress_border_height - text_height - (height/48),
+                 width, text_height, message_style);
 
 #ifndef USE_GDI
   message.SetFont(font);
@@ -71,10 +71,10 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Initialize progress bar
   ProgressBarStyle pb_style;
-  progress_bar.set(*this, progress_horizontal_border,
-                   height - progress_border_height + progress_horizontal_border,
-                   width - progress_height,
-                   progress_height, pb_style);
+  progress_bar.Create(*this, progress_horizontal_border,
+                      height - progress_border_height + progress_horizontal_border,
+                      width - progress_height,
+                      progress_height, pb_style);
 
   message.InstallWndProc(); // needed for on_color()
 

@@ -64,12 +64,12 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent,
   data.Clear();
 
   style.EnableDoubleClicks();
-  set(parent, x, y, width, height, style);
+  Create(parent, x, y, width, height, style);
 }
 
 InfoBoxWindow::~InfoBoxWindow() {
   delete content;
-  reset();
+  Destroy();
 }
 
 void

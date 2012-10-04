@@ -46,15 +46,15 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
 }
 
 void
-TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
-               TopWindowStyle style)
+TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+                  TopWindowStyle style)
 {
   const UPixelScalar width = rc.right - rc.left;
   const UPixelScalar height = rc.bottom - rc.top;
 
   screen.Set(width, height, style.GetFullScreen(), style.GetResizable());
 
-  ContainerWindow::set(NULL, 0, 0, width, height, style);
+  ContainerWindow::Create(NULL, 0, 0, width, height, style);
 
 #ifndef ANDROID
   UTF8ToWideConverter text2(text);
@@ -145,7 +145,7 @@ TopWindow::OnDeactivate()
 bool
 TopWindow::OnClose()
 {
-  reset();
+  Destroy();
   return true;
 }
 

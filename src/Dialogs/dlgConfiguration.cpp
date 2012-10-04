@@ -317,7 +317,7 @@ void dlgConfigurationShowModal()
   /* destroy the TabMenuControl first, to have a well-defined
      destruction order; this is necessary because some config panels
      refer to buttons belonging to the dialog */
-  tab_menu->reset();
+  tab_menu->Destroy();
 
   delete dialog;
   dialog = NULL;

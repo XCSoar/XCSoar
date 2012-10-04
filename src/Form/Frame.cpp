@@ -38,7 +38,7 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
 {
   text.clear();
 
-  set(parent, X, Y, Width, Height, style);
+  Create(parent, X, Y, Width, Height, style);
 }
 
 void

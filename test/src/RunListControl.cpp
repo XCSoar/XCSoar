@@ -62,7 +62,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                           bold_font, bold_font);
 
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunListControl"), screen_rc);
+  main_window.Create(_T("STATIC"), _T("RunListControl"), screen_rc);
   main_window.Show();
 
   WndForm form(main_window, *dialog_look, main_window.GetClientRect(),

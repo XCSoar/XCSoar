@@ -61,14 +61,14 @@ class CheckBox : public PaintWindow {
 public:
   CheckBox():checked(false), dragging(false), pressed(false) {}
 
-  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           const PixelRect &rc,
-           const CheckBoxStyle style=CheckBoxStyle());
+  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+              const PixelRect &rc,
+              const CheckBoxStyle style=CheckBoxStyle());
 
-  void set(ContainerWindow &parent, const TCHAR *text,
-           const PixelRect &rc,
-           const CheckBoxStyle style=CheckBoxStyle()) {
-    set(parent, text, 0, rc, style);
+  void Create(ContainerWindow &parent, const TCHAR *text,
+              const PixelRect &rc,
+              const CheckBoxStyle style=CheckBoxStyle()) {
+    Create(parent, text, 0, rc, style);
   }
 
   bool GetState() const {
@@ -101,16 +101,16 @@ protected:
  */
 class CheckBox : public BaseButtonWindow {
 public:
-  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           const PixelRect &rc,
-           const CheckBoxStyle style=CheckBoxStyle()) {
-    BaseButtonWindow::set(parent, text, id, rc, style);
+  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+              const PixelRect &rc,
+              const CheckBoxStyle style=CheckBoxStyle()) {
+    BaseButtonWindow::Create(parent, text, id, rc, style);
   }
 
-  void set(ContainerWindow &parent, const TCHAR *text,
-           const PixelRect &rc,
-           const CheckBoxStyle style=CheckBoxStyle()) {
-    BaseButtonWindow::set(parent, text, rc, style);
+  void Create(ContainerWindow &parent, const TCHAR *text,
+              const PixelRect &rc,
+              const CheckBoxStyle style=CheckBoxStyle()) {
+    BaseButtonWindow::Create(parent, text, rc, style);
   }
 
   bool GetState() const {

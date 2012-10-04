@@ -239,16 +239,16 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(const DialogLook &look, PixelRect _rc) {
-    SingleWindow::set(_T("RunRenderOZ"), _T("RunRenderOZ"), _rc);
+  void Create(const DialogLook &look, PixelRect _rc) {
+    SingleWindow::Create(_T("RunRenderOZ"), _T("RunRenderOZ"), _rc);
 
     const PixelRect rc = GetClientRect();
 
     WindowStyle with_border;
     with_border.Border();
 
-    oz.set(*this, rc.right / 2, 0, rc.right - (rc.right / 2), rc.bottom,
-           with_border);
+    oz.Create(*this, rc.right / 2, 0, rc.right - (rc.right / 2), rc.bottom,
+              with_border);
     oz_window = &oz;
 
     const PixelRect list_rc = {
@@ -264,7 +264,7 @@ public:
     PixelRect button_rc = rc;
     button_rc.right = (rc.left + rc.right) / 2;
     button_rc.top = button_rc.bottom - 30;
-    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
 
     oz.set_shape(ObservationZonePoint::LINE);
 
@@ -316,7 +316,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   airspace_look->Initialise(airspace_renderer_settings);
 
   TestWindow window(*task_look, *airspace_look);
-  window.set(*look, PixelRect{0, 0, 480, 480});
+  window.Create(*look, PixelRect{0, 0, 480, 480});
 
   window.Show();
   window.RunEventLoop();

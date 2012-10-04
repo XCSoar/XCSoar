@@ -33,10 +33,10 @@ Copyright_License {
 #endif
 
 void
-Window::set(ContainerWindow *parent,
-            PixelScalar left, PixelScalar top,
-            UPixelScalar width, UPixelScalar height,
-            const WindowStyle window_style)
+Window::Create(ContainerWindow *parent,
+               PixelScalar left, PixelScalar top,
+               UPixelScalar width, UPixelScalar height,
+               const WindowStyle window_style)
 {
   assert(IsScreenInitialized());
   assert(width < 0x8000);

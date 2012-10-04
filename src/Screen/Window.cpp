@@ -40,7 +40,7 @@ Copyright_License {
 
 Window::~Window()
 {
-  reset();
+  Destroy();
 }
 
 #ifndef NDEBUG
@@ -71,7 +71,7 @@ Window::AssertThreadOrUndefined() const
 #endif /* !NDEBUG */
 
 void
-Window::reset()
+Window::Destroy()
 {
   if (!IsDefined())
     return;

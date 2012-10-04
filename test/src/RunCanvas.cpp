@@ -80,8 +80,8 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelRect _rc) {
-    SingleWindow::set(_T("RunCanvas"), _T("RunCanvas"), _rc);
+  void Create(PixelRect _rc) {
+    SingleWindow::Create(_T("RunCanvas"), _T("RunCanvas"), _rc);
 
     PixelRect rc = GetClientRect();
 
@@ -93,13 +93,13 @@ public:
     button_rc.left += 5;
     button_rc.right = button_rc.left + 65;
 
-    buffer_button.set(*this, _T("Buffer"), ID_BUFFER, button_rc);
+    buffer_button.Create(*this, _T("Buffer"), ID_BUFFER, button_rc);
 #endif
 
     button_rc.right = rc.right - 5;
     button_rc.left = button_rc.right - 65;
 
-    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
   }
 
 private:
@@ -264,7 +264,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   TestWindow window;
-  window.set(PixelRect{0, 0, 250, 250});
+  window.Create(PixelRect{0, 0, 250, 250});
   window.Show();
 
   window.RunEventLoop();

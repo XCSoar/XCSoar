@@ -231,8 +231,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Layout::Initialize(640, 480);
 
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunAnalysis"),
-                  PixelRect{0, 0, 640, 480});
+  main_window.Create(_T("STATIC"), _T("RunAnalysis"),
+                     PixelRect{0, 0, 640, 480});
 
   Fonts::Initialize();
 

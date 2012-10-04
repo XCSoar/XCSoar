@@ -107,7 +107,7 @@ PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
 }
 
 void
-PopupMessage::set(const PixelRect _rc)
+PopupMessage::Create(const PixelRect _rc)
 {
   rc = _rc;
 
@@ -118,7 +118,7 @@ PopupMessage::set(const PixelRect _rc)
   style.SetReadOnly();
   style.Hide();
 
-  EditWindow::set(parent, GetRect(100), style);
+  EditWindow::Create(parent, GetRect(100), style);
 
   SetFont(Fonts::map_bold);
   InstallWndProc();
@@ -182,8 +182,8 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
       /* on Windows, the TEXT control can never change its text style
          after it has been created, so we have to destroy it and
          create a new one */
-      reset();
-      set(rthis);
+      Destroy();
+      Create(rthis);
       SetText(text);
     } else
 #endif

@@ -51,7 +51,7 @@ TabMenuDisplay::TabMenuDisplay(TabMenuControl& _theTabBar,
 {
   WindowStyle mystyle;
   mystyle.TabStop();
-  set(parent, rc, mystyle);
+  Create(parent, rc, mystyle);
 }
 
 void

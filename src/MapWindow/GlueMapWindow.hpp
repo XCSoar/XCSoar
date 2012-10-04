@@ -163,7 +163,7 @@ public:
 
   virtual void Render(Canvas &canvas, const PixelRect &rc);
 
-  virtual void set(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Create(ContainerWindow &parent, const PixelRect &rc);
 
   void SetPan(bool enable);
   void TogglePan();

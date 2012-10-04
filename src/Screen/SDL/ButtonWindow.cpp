@@ -28,13 +28,13 @@ Copyright_License {
 #include "Hardware/Vibrator.hpp"
 
 void
-ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-                  const PixelRect &rc,
-                  const ButtonWindowStyle style)
+ButtonWindow::Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+                     const PixelRect &rc,
+                     const ButtonWindowStyle style)
 {
-  reset();
+  Destroy();
 
-  PaintWindow::set(parent, rc, style);
+  PaintWindow::Create(parent, rc, style);
 
   this->text = text;
   this->id = id;

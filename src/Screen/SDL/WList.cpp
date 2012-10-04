@@ -34,7 +34,7 @@ WindowList::Clear()
   std::list<Window *>::const_iterator i;
   while ((i = list.begin()) != list.end()) {
     Window &w = **i;
-    w.reset();
+    w.Destroy();
 
     assert(!Contains(w));
   }

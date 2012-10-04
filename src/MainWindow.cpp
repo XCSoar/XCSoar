@@ -120,7 +120,7 @@ MainWindow::MainWindow(const StatusMessageList &status_messages)
  */
 MainWindow::~MainWindow()
 {
-  reset();
+  Destroy();
 }
 
 #ifdef USE_GDI
@@ -147,9 +147,9 @@ MainWindow::register_class(HINSTANCE hInstance)
 #endif /* USE_GDI */
 
 void
-MainWindow::Set(const TCHAR* text, PixelRect rc, TopWindowStyle style)
+MainWindow::Create(const TCHAR* text, PixelRect rc, TopWindowStyle style)
 {
-  SingleWindow::set(_T("XCSoarMain"), text, rc, style);
+  SingleWindow::Create(_T("XCSoarMain"), text, rc, style);
 }
 
 gcc_noreturn
@@ -180,7 +180,7 @@ MainWindow::Initialise()
 
   LogStartUp(_T("Initialise fonts"));
   if (!Fonts::Initialize()) {
-    reset();
+    Destroy();
     NoFontsAvailable();
   }
 
@@ -208,7 +208,7 @@ MainWindow::InitialiseConfigured()
     if (!Fonts::LoadCustom()) {
       LogStartUp(_T("Failed to load custom fonts"));
       if (!Fonts::Initialize()) {
-        reset();
+        Destroy();
         NoFontsAvailable();
       }
     }
@@ -245,11 +245,11 @@ MainWindow::InitialiseConfigured()
   map->SetComputerSettings(CommonInterface::GetComputerSettings());
   map->SetMapSettings(CommonInterface::GetMapSettings());
   map->SetUIState(CommonInterface::GetUIState());
-  map->set(*this, map_rect);
+  map->Create(*this, map_rect);
   map->SetFont(Fonts::map);
 
   LogStartUp(_T("Initialise message system"));
-  popup.set(rc);
+  popup.Create(rc);
 }
 
 void
@@ -258,7 +258,7 @@ MainWindow::Deinitialise()
   InfoBoxManager::Destroy();
   ButtonLabel::Destroy();
 
-  popup.reset();
+  popup.Destroy();
 
   // During destruction of GlueMapWindow WM_SETFOCUS gets called for
   // MainWindow which tries to set the focus to GlueMapWindow. Prevent
@@ -338,8 +338,8 @@ MainWindow::ReinitialiseLayout()
   InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 
-  popup.reset();
-  popup.set(rc);
+  popup.Destroy();
+  popup.Create(rc);
 
   ReinitialiseLayout_vario(ib_layout);
 
@@ -450,11 +450,11 @@ MainWindow::ReinitialisePosition()
 }
 
 void
-MainWindow::reset()
+MainWindow::Destroy()
 {
   Deinitialise();
 
-  TopWindow::reset();
+  TopWindow::Destroy();
 }
 
 void

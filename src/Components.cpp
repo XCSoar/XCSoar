@@ -242,7 +242,7 @@ XCSoarInterface::Startup()
     style.Resizable();
 
   main_window = new MainWindow(status_messages);
-  main_window->Set(szTitle, SystemWindowSize(), style);
+  main_window->Create(szTitle, SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;
 
@@ -671,7 +671,7 @@ XCSoarInterface::Shutdown()
   delete file_cache;
 
   LogStartUp(_T("Close Windows - main"));
-  main_window->reset();
+  main_window->Destroy();
 
   CloseLanguageFile();
 

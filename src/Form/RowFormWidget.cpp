@@ -403,7 +403,7 @@ RowFormWidget::AddSpacer()
   HLine *window = new HLine(GetLook());
   ContainerWindow &panel = *(ContainerWindow *)GetWindow();
   const PixelRect rc = InitialControlRect(Layout::Scale(3));
-  window->set(panel, rc);
+  window->Create(panel, rc);
   Add(window);
 }
 

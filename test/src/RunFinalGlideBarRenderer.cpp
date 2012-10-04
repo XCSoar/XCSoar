@@ -143,20 +143,22 @@ public:
   }
 #endif /* USE_GDI */
 
-  void Set(PixelRect _rc) {
-    SingleWindow::set(_T("RunFinalGlideBarRenderer"), _T("RunFinalGlideBarRenderer"),
-                      _rc);
+  void Create(PixelRect _rc) {
+    SingleWindow::Create(_T("RunFinalGlideBarRenderer"),
+                         _T("RunFinalGlideBarRenderer"),
+                         _rc);
 
     const PixelRect rc = GetClientRect();
 
     WindowStyle with_border;
     with_border.Border();
 
-    final_glide.set(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
+    final_glide.Create(*this, rc.left, rc.top, rc.right, rc.bottom,
+                       with_border);
 
     PixelRect button_rc = rc;
     button_rc.top = button_rc.bottom - 30;
-    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
   }
 
 protected:
@@ -233,7 +235,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   task_look.Initialise();
 
   TestWindow window(final_glide_look, task_look);
-  window.Set(PixelRect{0, 0, 60, 320});
+  window.Create(PixelRect{0, 0, 60, 320});
 
   window.Show();
   window.RunEventLoop();

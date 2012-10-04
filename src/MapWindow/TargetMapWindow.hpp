@@ -100,8 +100,8 @@ public:
                   const AircraftLook &aircraft_look);
   virtual ~TargetMapWindow();
 
-  void set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height, WindowStyle style);
+  void Create(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height, WindowStyle style);
 
   void SetTerrain(RasterTerrain *terrain);
   void SetTopograpgy(TopographyStore *topography);

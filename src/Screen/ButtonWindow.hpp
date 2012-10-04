@@ -78,14 +78,14 @@ public:
   ButtonWindow():dragging(false), down(false) {}
 
 public:
-  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           const PixelRect &rc,
-           const ButtonWindowStyle style=ButtonWindowStyle());
+  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+              const PixelRect &rc,
+              const ButtonWindowStyle style=ButtonWindowStyle());
 
-  void set(ContainerWindow &parent, const TCHAR *text,
-           const PixelRect &rc,
-           const ButtonWindowStyle style=ButtonWindowStyle()) {
-    set(parent, text, 0, rc, style);
+  void Create(ContainerWindow &parent, const TCHAR *text,
+              const PixelRect &rc,
+              const ButtonWindowStyle style=ButtonWindowStyle()) {
+    Create(parent, text, 0, rc, style);
   }
 
   unsigned GetID() const {
@@ -151,14 +151,14 @@ public:
   };
 
 public:
-  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           const PixelRect &rc,
-           const WindowStyle style);
+  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+              const PixelRect &rc,
+              const WindowStyle style);
 
-  void set(ContainerWindow &parent, const TCHAR *text,
-           const PixelRect &rc,
-           const WindowStyle style) {
-    set(parent, text, COMMAND_BOUNCE_ID, rc, style);
+  void Create(ContainerWindow &parent, const TCHAR *text,
+              const PixelRect &rc,
+              const WindowStyle style) {
+    Create(parent, text, COMMAND_BOUNCE_ID, rc, style);
   }
 
   gcc_pure
@@ -183,16 +183,16 @@ protected:
  */
 class ButtonWindow : public BaseButtonWindow {
 public:
-  void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           const PixelRect &rc,
-           const ButtonWindowStyle style=ButtonWindowStyle()) {
-    BaseButtonWindow::set(parent, text, id, rc, style);
+  void Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+              const PixelRect &rc,
+              const ButtonWindowStyle style=ButtonWindowStyle()) {
+    BaseButtonWindow::Create(parent, text, id, rc, style);
   }
 
-  void set(ContainerWindow &parent, const TCHAR *text,
-           const PixelRect &rc,
-           const ButtonWindowStyle style=ButtonWindowStyle()) {
-    BaseButtonWindow::set(parent, text, rc, style);
+  void Create(ContainerWindow &parent, const TCHAR *text,
+              const PixelRect &rc,
+              const ButtonWindowStyle style=ButtonWindowStyle()) {
+    BaseButtonWindow::Create(parent, text, rc, style);
   }
 
   bool is_down() const {

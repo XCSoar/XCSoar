@@ -110,12 +110,12 @@ class EditWindow : public Window {
 #endif
 
 public:
-  void set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const EditWindowStyle style);
+  void Create(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const EditWindowStyle style);
 
-  void set(ContainerWindow &parent, const PixelRect rc,
-           const EditWindowStyle style);
+  void Create(ContainerWindow &parent, const PixelRect rc,
+              const EditWindowStyle style);
 
 #ifndef USE_GDI
   gcc_pure

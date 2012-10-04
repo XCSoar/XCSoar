@@ -52,7 +52,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      screen_rc.bottom - screen_rc.top);
 
   SingleWindow main_window;
-  main_window.set(_T("STATIC"), _T("RunProgressWindow"), screen_rc);
+  main_window.Create(_T("STATIC"), _T("RunProgressWindow"), screen_rc);
   main_window.Show();
 
   ProgressWindow progress(main_window);

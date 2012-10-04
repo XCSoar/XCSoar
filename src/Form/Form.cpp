@@ -93,15 +93,15 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
 {
   caption = Caption;
 
-  set(main_window, rc, add_border(style));
+  Create(main_window, rc, add_border(style));
 
   // Create ClientWindow
 
   WindowStyle client_style;
   client_style.ControlParent();
-  client_area.set(*this, client_rect.left, client_rect.top,
-                  client_rect.right - client_rect.left,
-                  client_rect.bottom - client_rect.top, client_style);
+  client_area.Create(*this, client_rect.left, client_rect.top,
+                     client_rect.right - client_rect.left,
+                     client_rect.bottom - client_rect.top, client_style);
 
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, caption.c_str());
@@ -124,7 +124,7 @@ WndForm::~WndForm()
   /* we must override the ~Window() reset call, because in ~Window(),
      our own OnDestroy() method won't be called (during object
      destruction, this object loses its identity) */
-  reset();
+  Destroy();
   SubForm::Clear();
 }
 

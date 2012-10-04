@@ -44,9 +44,9 @@ GlueMapWindow::GlueMapWindow(const Look &look)
 }
 
 void
-GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)
+GlueMapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
 {
-  MapWindow::set(parent, rc);
+  MapWindow::Create(parent, rc);
 
   visible_projection.SetScale(CommonInterface::GetMapSettings().cruise_scale);
 }

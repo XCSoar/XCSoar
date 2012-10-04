@@ -35,7 +35,7 @@ ContainerWindow::ContainerWindow()
 
 ContainerWindow::~ContainerWindow()
 {
-  reset();
+  Destroy();
 }
 
 Window *

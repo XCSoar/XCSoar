@@ -43,7 +43,7 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
    flip_orientation(_flipOrientation),
    page_flipped_callback(NULL)
 {
-  set(_parent, 0, 0, _parent.GetWidth(), _parent.GetHeight(), style),
+  Create(_parent, 0, 0, _parent.GetWidth(), _parent.GetHeight(), style),
 
   tab_display = new TabDisplay(*this, look, *this,
                                  x, y, _width, _height,
@@ -62,7 +62,7 @@ TabBarControl::~TabBarControl()
 {
   delete tab_display;
 
-  reset();
+  Destroy();
 }
 
 const TCHAR*

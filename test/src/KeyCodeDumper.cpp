@@ -135,19 +135,19 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelRect _rc) {
-    SingleWindow::set(_T("KeyCodeDumper"), _T("KeyCodeDumper"), _rc);
+  void Create(PixelRect _rc) {
+    SingleWindow::Create(_T("KeyCodeDumper"), _T("KeyCodeDumper"), _rc);
 
     PixelRect rc = GetClientRect();
 
     PixelRect d_rc = rc;
     d_rc.bottom = (rc.top + rc.bottom + 1) / 2;
-    key_code_dumper.set(*this, d_rc);
+    key_code_dumper.Create(*this, d_rc);
 
     PixelRect button_rc = rc;
     button_rc.top = (rc.top + rc.bottom + 1) / 2;
 
-    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
 
     key_code_dumper.SetFocus();
   }
@@ -190,7 +190,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   TestWindow window;
-  window.set(PixelRect{0, 0, 240, 100});
+  window.Create(PixelRect{0, 0, 240, 100});
   window.Show();
 
   window.RunEventLoop();

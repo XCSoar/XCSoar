@@ -70,10 +70,10 @@ class TextWindow : public Window {
 #endif
 
 public:
-  void set(ContainerWindow &parent, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const TextWindowStyle style=TextWindowStyle());
+  void Create(ContainerWindow &parent, const TCHAR *text,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const TextWindowStyle style=TextWindowStyle());
 
   void set_text(const TCHAR *_text) {
     AssertNoneLocked();

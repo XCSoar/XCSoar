@@ -32,10 +32,10 @@ public:
                             UPixelScalar padding)
     :ThermalAssistantWindow(look, padding, false) {}
 
-  void set(ContainerWindow &parent, PixelRect rc,
+  void Create(ContainerWindow &parent, PixelRect rc,
            WindowStyle window_style=WindowStyle()) {
     window_style.EnableDoubleClicks();
-    ThermalAssistantWindow::set(parent, rc, window_style);
+    ThermalAssistantWindow::Create(parent, rc, window_style);
   }
 
 protected:

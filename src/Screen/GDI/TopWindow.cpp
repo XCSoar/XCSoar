@@ -60,18 +60,18 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
 }
 
 void
-TopWindow::set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
-               TopWindowStyle style)
+TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+                  TopWindowStyle style)
 {
-  Window::set(NULL, cls, text, rc, style);
+  Window::Create(NULL, cls, text, rc, style);
 }
 
 #ifdef _WIN32_WCE
 
 void
-TopWindow::reset()
+TopWindow::Destroy()
 {
-  ContainerWindow::reset();
+  ContainerWindow::Destroy();
 
   if (task_bar != NULL) {
     /* restore the task bar */

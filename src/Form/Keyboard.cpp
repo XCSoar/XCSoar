@@ -44,7 +44,7 @@ KeyboardControl::KeyboardControl(ContainerWindow &parent,
   button_width(50), button_height(50),
   mOnCharacter(function)
 {
-  set(parent, x, y, width, height, _style);
+  Create(parent, x, y, width, height, _style);
   set_buttons_size();
 
   TCHAR caption[] = _T(" ");
@@ -220,6 +220,6 @@ KeyboardControl::add_button(const TCHAR* caption)
   rc.bottom = button_height;
 
   ButtonWindow *button = &buttons[num_buttons++];
-  button->set(*this, caption, (unsigned)caption[0], rc);
+  button->Create(*this, caption, (unsigned)caption[0], rc);
   button->SetFont(*look.button.font);
 }

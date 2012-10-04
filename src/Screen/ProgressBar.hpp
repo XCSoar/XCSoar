@@ -44,15 +44,15 @@ public:
 #endif
 
 public:
-  void set(ContainerWindow &parent,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const ProgressBarStyle style=ProgressBarStyle());
+  void Create(ContainerWindow &parent,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const ProgressBarStyle style=ProgressBarStyle());
 
-  void set(ContainerWindow &parent, const PixelRect rc,
-           const ProgressBarStyle style=ProgressBarStyle()) {
-    set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-        style);
+  void Create(ContainerWindow &parent, const PixelRect rc,
+              const ProgressBarStyle style=ProgressBarStyle()) {
+    Create(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+           style);
   }
 
   void SetRange(unsigned min_value, unsigned max_value);

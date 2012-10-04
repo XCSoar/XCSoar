@@ -167,11 +167,11 @@ public:
 
   static bool find(const TCHAR *cls, const TCHAR *text);
 
-  void set(const TCHAR *cls, const TCHAR *text, PixelRect rc,
-           TopWindowStyle style=TopWindowStyle());
+  void Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+              TopWindowStyle style=TopWindowStyle());
 
 #ifdef _WIN32_WCE
-  void reset();
+  void Destroy();
 #endif
 
   /**

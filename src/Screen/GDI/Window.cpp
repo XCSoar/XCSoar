@@ -32,10 +32,10 @@ Copyright_License {
 #include <windowsx.h>
 
 void
-Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-            PixelScalar left, PixelScalar top,
-            UPixelScalar width, UPixelScalar height,
-            const WindowStyle window_style)
+Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
+               PixelScalar left, PixelScalar top,
+               UPixelScalar width, UPixelScalar height,
+               const WindowStyle window_style)
 {
   assert(IsScreenInitialized());
   assert(width > 0);

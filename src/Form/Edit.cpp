@@ -154,9 +154,9 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 {
   caption = Caption;
 
-  set(parent, rc, style);
+  Create(parent, rc, style);
 
-  edit.set(*this, edit_rc, edit_style);
+  edit.Create(*this, edit_rc, edit_style);
   edit.InstallWndProc();
 
   edit.SetFont(*look.text_font);

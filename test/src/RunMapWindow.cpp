@@ -133,14 +133,14 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelRect _rc) {
+  void Create(PixelRect _rc) {
     TopWindowStyle style;
     style.Resizable();
 
-    SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"), _rc, style);
+    SingleWindow::Create(_T("RunMapWindow"), _T("RunMapWindow"), _rc, style);
 
     PixelRect rc = GetClientRect();
-    map.set(*this, rc);
+    map.Create(*this, rc);
     map.SetWaypoints(&way_points);
     map.SetAirspaces(&airspace_database);
     map.SetTopography(topography);
@@ -152,7 +152,7 @@ public:
     rc.top = 5;
     rc.right = rc.left + 60;
     rc.bottom = rc.top + 20;
-    close_button.set(*this, _T("Close"), ID_CLOSE, rc);
+    close_button.Create(*this, _T("Close"), ID_CLOSE, rc);
     close_button.SetFont(Fonts::map);
     close_button.BringToTop();
   }
@@ -289,7 +289,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   traffic_look->Initialise();
 
   TestWindow window(*map_look, *traffic_look);
-  window.set(PixelRect{0, 0, 640, 480});
+  window.Create(PixelRect{0, 0, 640, 480});
 
   GenerateBlackboard(window.map, settings_computer, settings_map);
   Fonts::Initialize();
@@ -302,7 +302,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.Show();
 
   window.RunEventLoop();
-  window.reset();
+  window.Destroy();
 
   Fonts::Deinitialize();
 

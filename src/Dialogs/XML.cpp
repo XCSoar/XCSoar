@@ -650,7 +650,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     EditWindow *edit;
     window = edit = new EditWindow();
-    edit->set(parent, pos.x, pos.y, size.cx, size.cy, edit_style);
+    edit->Create(parent, pos.x, pos.y, size.cx, size.cy, edit_style);
     edit->InstallWndProc();
     edit->SetFont(*xml_dialog_look->text_font);
 
@@ -848,7 +848,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   } else if (StringIsEqual(node.GetName(), _T("Widget"))) {
     style.ControlParent();
     DockWindow *dock = new DockWindow();
-    dock->set(parent, rc, style);
+    dock->Create(parent, rc, style);
     window = dock;
   }
 

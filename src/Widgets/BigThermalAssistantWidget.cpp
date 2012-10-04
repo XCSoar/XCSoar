@@ -44,7 +44,7 @@ BigThermalAssistantWidget::Prepare(ContainerWindow &parent,
 
   BigThermalAssistantWindow *window =
     new BigThermalAssistantWindow(look, Layout::FastScale(10));
-  window->set(parent, rc, style);
+  window->Create(parent, rc, style);
   SetWindow(window);
 }
 

@@ -68,13 +68,13 @@ MapWindow::~MapWindow()
 }
 
 void
-MapWindow::set(ContainerWindow &parent, const PixelRect &rc)
+MapWindow::Create(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
   style.EnableDoubleClicks();
-  DoubleBufferWindow::set(parent, rc.left, rc.top,
-                          rc.right - rc.left, rc.bottom - rc.top,
-                          style);
+  DoubleBufferWindow::Create(parent, rc.left, rc.top,
+                             rc.right - rc.left, rc.bottom - rc.top,
+                             style);
 
   // initialize other systems
   visible_projection.SetMapScale(fixed_int_constant(5000));

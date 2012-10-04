@@ -59,7 +59,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    , kinetic_timer(*this)
 #endif
 {
-  set(parent, rc, style);
+  Create(parent, rc, style);
 }
 
 bool

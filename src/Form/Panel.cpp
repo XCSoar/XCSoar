@@ -31,7 +31,7 @@ PanelControl::PanelControl(ContainerWindow &parent, const DialogLook &look,
   :background_color(look.background_color)
 #endif
 {
-  set(parent, rc, style);
+  Create(parent, rc, style);
 }
 
 /* don't need to erase the background when it has been done by the

@@ -107,8 +107,7 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
     rc.left = rc.right - Layout::Scale(78);
     rc.top += Layout::Scale(2);
     rc.bottom = rc.top + Layout::Scale(35);
-    cancel_button.set(client_area, _("Cancel"), rc,
-                      style);
+    cancel_button.Create(client_area, _("Cancel"), rc, style);
     cancel_button.SetFont(*dialog_look.button.font);
     cancel_button.BringToTop();
   }

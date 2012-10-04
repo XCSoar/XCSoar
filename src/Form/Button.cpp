@@ -41,7 +41,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
    right_callback(_right_callback)
 {
   style.EnableCustomPainting();
-  set(parent, Caption, rc, style);
+  Create(parent, Caption, rc, style);
   SetFont(*look.button.font);
 }
 
@@ -60,10 +60,10 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
   style.EnableCustomPainting();
 #ifdef USE_GDI
   /* use BaseButtonWindow::COMMAND_BOUNCE_ID */
-  set(parent, caption, rc, style);
+  Create(parent, caption, rc, style);
 #else
   /* our custom SDL/OpenGL button doesn't need this hack */
-  set(parent, caption, _id, rc, style);
+  Create(parent, caption, _id, rc, style);
 #endif
   SetFont(*look.button.font);
 }

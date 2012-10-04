@@ -28,10 +28,10 @@ Copyright_License {
 #endif
 
 void
-TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
-                PixelScalar left, PixelScalar top,
-                UPixelScalar width, UPixelScalar height,
-                const TextWindowStyle style)
+TextWindow::Create(ContainerWindow &parent, const TCHAR *_text,
+                   PixelScalar left, PixelScalar top,
+                   UPixelScalar width, UPixelScalar height,
+                   const TextWindowStyle style)
 {
 #ifndef USE_GDI
   if (_text != NULL)
@@ -40,12 +40,12 @@ TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
     text.clear();
 #endif
 
-  Window::set(&parent,
+  Window::Create(&parent,
 #ifdef USE_GDI
-              WC_STATIC, _text,
+                 WC_STATIC, _text,
 #endif
-              left, top, width, height,
-              style);
+                 left, top, width, height,
+                 style);
 }
 
 #ifndef USE_GDI

@@ -58,13 +58,13 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(PixelRect _rc) {
-    SingleWindow::set(_T("RunTerminal"), _T("RunTerminal"), _rc);
+  void Create(PixelRect _rc) {
+    SingleWindow::Create(_T("RunTerminal"), _T("RunTerminal"), _rc);
 
     PixelRect rc = GetClientRect();
 
-    terminal.set(*this, rc.left, rc.top,
-                 rc.right - rc.left, rc.bottom - rc.top);
+    terminal.Create(*this, rc.left, rc.top,
+                    rc.right - rc.left, rc.bottom - rc.top);
   }
 
 protected:
@@ -117,7 +117,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   look.Initialise(Fonts::monospace);
 
   TestWindow window(look);
-  window.set(PixelRect{0, 0, 400, 400});
+  window.Create(PixelRect{0, 0, 400, 400});
   window.Show();
 
   window.RunEventLoop();

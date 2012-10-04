@@ -48,42 +48,42 @@ public:
 #endif
 
 #ifndef USE_GDI
-  using Window::set;
+  using Window::Create;
 
-  void set(ContainerWindow &parent,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const WindowStyle style=WindowStyle()) {
-    set(&parent, left, top, width, height, style);
+  void Create(ContainerWindow &parent,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle style=WindowStyle()) {
+    Create(&parent, left, top, width, height, style);
   }
 #else /* USE_GDI */
-  void set(ContainerWindow *parent, const TCHAR *cls,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const WindowStyle style=WindowStyle()) {
-    Window::set(parent, cls, NULL,
-                left, top, width, height, style);
+  void Create(ContainerWindow *parent, const TCHAR *cls,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle style=WindowStyle()) {
+    Window::Create(parent, cls, NULL,
+                   left, top, width, height, style);
   }
 
-  void set(ContainerWindow &parent, const TCHAR *cls,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const WindowStyle style=WindowStyle()) {
-    set(&parent, cls, left, top, width, height, style);
+  void Create(ContainerWindow &parent, const TCHAR *cls,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle style=WindowStyle()) {
+    Create(&parent, cls, left, top, width, height, style);
   }
 
-  void set(ContainerWindow &parent,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const WindowStyle style=WindowStyle()) {
-    set(parent, _T("PaintWindow"), left, top, width, height, style);
+  void Create(ContainerWindow &parent,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle style=WindowStyle()) {
+    Create(parent, _T("PaintWindow"), left, top, width, height, style);
   }
 #endif /* USE_GDI */
 
-  void set(ContainerWindow &parent, PixelRect rc,
-           const WindowStyle window_style=WindowStyle()) {
-    set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-        window_style);
+  void Create(ContainerWindow &parent, PixelRect rc,
+              const WindowStyle window_style=WindowStyle()) {
+    Create(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+           window_style);
   }
 
   constexpr

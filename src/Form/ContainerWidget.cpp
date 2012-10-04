@@ -29,7 +29,7 @@ ContainerWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   WindowStyle style;
   style.Hide();
-  container.set(parent, rc, style);
+  container.Create(parent, rc, style);
   SetWindow(&container);
 }
 

@@ -30,7 +30,7 @@ WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
   :mOnPaintCallback(OnPaintCallback),
    mOnMouseDownCallback(NULL)
 {
-  set(parent, rc, style);
+  Create(parent, rc, style);
 }
 
 void

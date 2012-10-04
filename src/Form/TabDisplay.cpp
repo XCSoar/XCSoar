@@ -47,7 +47,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
 {
   WindowStyle mystyle;
   mystyle.TabStop();
-  set(parent, left, top, width, height, mystyle);
+  Create(parent, left, top, width, height, mystyle);
 }
 
 TabDisplay::~TabDisplay()

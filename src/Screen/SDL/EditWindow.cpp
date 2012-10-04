@@ -28,24 +28,24 @@ Copyright_License {
 #include "Screen/Key.h"
 
 void
-EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
-                UPixelScalar width, UPixelScalar height,
-                const EditWindowStyle style)
+EditWindow::Create(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+                   UPixelScalar width, UPixelScalar height,
+                   const EditWindowStyle style)
 {
   read_only = style.is_read_only;
   origin = 0;
 
-  Window::set(&parent, left, top, width, height, style);
+  Window::Create(&parent, left, top, width, height, style);
 }
 
 void
-EditWindow::set(ContainerWindow &parent, const PixelRect rc,
-                const EditWindowStyle style)
+EditWindow::Create(ContainerWindow &parent, const PixelRect rc,
+                   const EditWindowStyle style)
 {
   read_only = style.is_read_only;
   origin = 0;
 
-  Window::set(&parent, rc, style);
+  Window::Create(&parent, rc, style);
 }
 
 void

@@ -135,7 +135,7 @@ ChartControl::ChartControl(ContainerWindow &parent,
   :chart_look(_chart_look),
    thermal_band_look(_thermal_band_look)
 {
-  set(parent, X, Y, Width, Height, style);
+  Create(parent, X, Y, Width, Height, style);
 }
 
 static void
@@ -554,7 +554,7 @@ OnCreateCrossSectionControl(ContainerWindow &parent,
 {
   csw = new CrossSectionControl(look->cross_section, look->map.airspace,
                                 look->chart);
-  csw->set(parent, left, top, width, height, style);
+  csw->Create(parent, left, top, width, height, style);
   csw->SetAirspaces(airspaces);
   csw->SetTerrain(terrain);
   UpdateCrossSection();

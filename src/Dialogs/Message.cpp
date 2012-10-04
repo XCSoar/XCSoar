@@ -173,7 +173,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   for (unsigned i = 0; i < buttons.size(); ++i)
     delete buttons[i];
 
-  wf.reset();
+  wf.Destroy();
 
   return res;
 }

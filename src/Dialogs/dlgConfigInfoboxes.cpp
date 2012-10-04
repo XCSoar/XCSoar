@@ -319,9 +319,9 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   preview_style.EnableDoubleClicks();
   for (unsigned i = 0; i < info_box_layout.count; ++i) {
     rc = info_box_layout.positions[i];
-    previews[i].set(client_area, rc.left, rc.top,
-                    rc.right - rc.left, rc.bottom - rc.top,
-                    preview_style);
+    previews[i].Create(client_area, rc.left, rc.top,
+                       rc.right - rc.left, rc.bottom - rc.top,
+                       preview_style);
   }
 
   rc = info_box_layout.remaining;

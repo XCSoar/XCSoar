@@ -58,7 +58,7 @@ SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
                                        const WindowStyle style)
   :FlarmTrafficWindow(look, 1, 1, true)
 {
-  set(parent, rc, style);
+  Create(parent, rc, style);
 }
 
 void

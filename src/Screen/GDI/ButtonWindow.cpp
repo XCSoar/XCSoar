@@ -27,11 +27,12 @@ Copyright_License {
 #include <commctrl.h>
 
 void
-BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-                      const PixelRect &rc,
-                      const WindowStyle style)
+BaseButtonWindow::Create(ContainerWindow &parent,
+                         const TCHAR *text, unsigned id,
+                         const PixelRect &rc,
+                         const WindowStyle style)
 {
-  Window::set(&parent, WC_BUTTON, text, rc, style);
+  Window::Create(&parent, WC_BUTTON, text, rc, style);
 
   SetWindowLong(GWL_ID, id);
 

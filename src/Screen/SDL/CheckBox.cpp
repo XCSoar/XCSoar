@@ -30,13 +30,13 @@ Copyright_License {
 #include <algorithm>
 
 void
-CheckBox::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-              const PixelRect &rc,
-              const CheckBoxStyle style)
+CheckBox::Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
+                 const PixelRect &rc,
+                 const CheckBoxStyle style)
 {
-  reset();
+  Destroy();
 
-  PaintWindow::set(parent, rc, style);
+  PaintWindow::Create(parent, rc, style);
 
   this->text = text;
   this->id = id;

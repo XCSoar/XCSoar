@@ -114,23 +114,24 @@ public:
   }
 #endif /* USE_GDI */
 
-  void Set(PixelRect _rc) {
+  void Create(PixelRect _rc) {
     TopWindowStyle style;
     style.Resizable();
 
-    SingleWindow::set(_T("RunWindArrowRenderer"), _T("RunWindArrowRenderer"),
-                      _rc, style);
+    SingleWindow::Create(_T("RunWindArrowRenderer"),
+                         _T("RunWindArrowRenderer"),
+                         _rc, style);
 
     const PixelRect rc = GetClientRect();
 
     WindowStyle with_border;
     with_border.Border();
 
-    wind.set(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
+    wind.Create(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
 
     PixelRect button_rc = rc;
     button_rc.top = button_rc.bottom - 30;
-    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
   }
 
 protected:
@@ -192,7 +193,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   wind_look.Initialise();
 
   TestWindow window(wind_look);
-  window.Set(PixelRect{0, 0, 160, 160});
+  window.Create(PixelRect{0, 0, 160, 160});
 
   window.Show();
   window.RunEventLoop();

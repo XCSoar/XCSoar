@@ -99,23 +99,23 @@ public:
   }
 #endif /* USE_GDI */
 
-  void Set(PixelRect _rc) {
+  void Create(PixelRect _rc) {
     TopWindowStyle style;
     style.Resizable();
 
-    SingleWindow::set(_T("RunHorizonRenderer"), _T("RunHorizonRenderer"),
-                      _rc, style);
+    SingleWindow::Create(_T("RunHorizonRenderer"), _T("RunHorizonRenderer"),
+                         _rc, style);
 
     const PixelRect rc = GetClientRect();
 
     WindowStyle with_border;
     with_border.Border();
 
-    horizon.set(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
+    horizon.Create(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
 
     PixelRect button_rc = rc;
     button_rc.top = button_rc.bottom - 30;
-    close_button.set(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
   }
 
 protected:
@@ -176,7 +176,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   horizon_look.Initialise();
 
   TestWindow window(horizon_look);
-  window.Set(PixelRect{0, 0, 160, 160});
+  window.Create(PixelRect{0, 0, 160, 160});
 
   window.Show();
   window.RunEventLoop();

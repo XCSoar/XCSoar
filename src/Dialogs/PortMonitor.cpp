@@ -163,8 +163,8 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   /* create the terminal */
 
   terminal = new TerminalWindow(terminal_look);
-  terminal->set(dialog->GetClientAreaWindow(), rc.left, rc.top,
-                rc.right - rc.left, rc.bottom - rc.top);
+  terminal->Create(dialog->GetClientAreaWindow(), rc.left, rc.top,
+                   rc.right - rc.left, rc.bottom - rc.top);
 
   bridge = new PortTerminalBridge(*terminal);
   device->SetMonitor(bridge);

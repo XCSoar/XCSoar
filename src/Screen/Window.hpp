@@ -340,27 +340,28 @@ public:
 #endif
 
 #ifndef USE_GDI
-  void set(ContainerWindow *parent,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const WindowStyle window_style=WindowStyle());
+  void Create(ContainerWindow *parent,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle window_style=WindowStyle());
 
-  void set(ContainerWindow *parent, const PixelRect rc,
-           const WindowStyle window_style=WindowStyle()) {
-    set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-        window_style);
+  void Create(ContainerWindow *parent, const PixelRect rc,
+              const WindowStyle window_style=WindowStyle()) {
+    Create(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+           window_style);
   }
 #else
-  void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-           PixelScalar left, PixelScalar top,
-           UPixelScalar width, UPixelScalar height,
-           const WindowStyle window_style=WindowStyle());
+  void Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
+              const WindowStyle window_style=WindowStyle());
 
-  void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-           const PixelRect rc, const WindowStyle window_style=WindowStyle()) {
-    set(parent, cls, text, rc.left, rc.top,
-        rc.right - rc.left, rc.bottom - rc.top,
-        window_style);
+  void Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
+              const PixelRect rc,
+              const WindowStyle window_style=WindowStyle()) {
+    Create(parent, cls, text, rc.left, rc.top,
+           rc.right - rc.left, rc.bottom - rc.top,
+           window_style);
   }
 
   /**
@@ -373,7 +374,7 @@ public:
   void Created(HWND _hWnd);
 #endif
 
-  void reset();
+  void Destroy();
 
   /**
    * Determines the root owner window of this Window.  This is

@@ -124,7 +124,7 @@ public:
   PopupMessage(const StatusMessageList &_status_messages,
                SingleWindow &_parent, const UISettings &settings);
 
-  void set(const PixelRect _rc);
+  void Create(const PixelRect _rc);
 
   /** returns true if messages have changed */
   bool Render();

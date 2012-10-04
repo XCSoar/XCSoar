@@ -35,7 +35,8 @@ GridView::GridView(ContainerWindow &parent,
                    const WindowStyle style)
  :look(_look)
 {
-  set(parent, x, y, width, height, style);
+  Create(parent, x, y, width, height, style);
+
   column_width = Layout::Scale(78);
   row_height = Layout::Scale(42);
   horizontal_spacing = Layout::Scale(0);

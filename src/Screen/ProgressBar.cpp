@@ -47,17 +47,17 @@ ProgressBarStyle::Smooth()
 }
 
 void
-ProgressBar::set(ContainerWindow &parent,
-                 PixelScalar left, PixelScalar top,
-                 UPixelScalar width, UPixelScalar height,
-                 const ProgressBarStyle style)
+ProgressBar::Create(ContainerWindow &parent,
+                    PixelScalar left, PixelScalar top,
+                    UPixelScalar width, UPixelScalar height,
+                    const ProgressBarStyle style)
 {
-  Window::set(&parent,
+  Window::Create(&parent,
 #ifdef USE_GDI
-              PROGRESS_CLASS, NULL,
+                 PROGRESS_CLASS, NULL,
 #endif
-              left, top, width, height,
-              style);
+                 left, top, width, height,
+                 style);
 }
 
 void

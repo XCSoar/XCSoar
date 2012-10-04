@@ -147,10 +147,10 @@ protected:
   void KillWidget();
 
 public:
-  void Set(const TCHAR *text, PixelRect rc,
-           TopWindowStyle style=TopWindowStyle());
+  void Create(const TCHAR *text, PixelRect rc,
+              TopWindowStyle style=TopWindowStyle());
 
-  void reset();
+  void Destroy();
 
   void Initialise();
   void InitialiseConfigured();

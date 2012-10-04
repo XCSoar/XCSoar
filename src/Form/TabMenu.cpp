@@ -41,13 +41,13 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
    caption(_caption),
    form(_form)
 {
-  set(_parent, x, y, _width, _height, style);
+  Create(_parent, x, y, _width, _height, style);
 
   const PixelRect rc = GetClientRect();
   WindowStyle pager_style;
   pager_style.ControlParent();
-  pager.set(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-            pager_style);
+  pager.Create(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+               pager_style);
 
   tab_display = new TabMenuDisplay(*this, look, pager, rc);
 }

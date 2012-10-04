@@ -98,14 +98,14 @@ TargetMapWindow::~TargetMapWindow()
 }
 
 void
-TargetMapWindow::set(ContainerWindow &parent,
-                     PixelScalar left, PixelScalar top,
-                     UPixelScalar width, UPixelScalar height,
-                     WindowStyle style)
+TargetMapWindow::Create(ContainerWindow &parent,
+                        PixelScalar left, PixelScalar top,
+                        UPixelScalar width, UPixelScalar height,
+                        WindowStyle style)
 {
   projection.SetScale(fixed(0.01));
 
-  BufferWindow::set(parent, left, top, width, height, style);
+  BufferWindow::Create(parent, left, top, width, height, style);
 }
 
 void

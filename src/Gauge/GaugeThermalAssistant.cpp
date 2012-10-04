@@ -35,7 +35,7 @@ public:
                               WindowStyle style=WindowStyle())
     :ThermalAssistantWindow(look, 5, true)
   {
-    set(parent, rc, style);
+    Create(parent, rc, style);
   }
 
 protected:

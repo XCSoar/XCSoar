@@ -32,12 +32,12 @@ TabbedControl::TabbedControl(ContainerWindow &parent,
                              const WindowStyle style)
   :page_flipped_callback(NULL)
 {
-  set(parent, x, y, width, height, style);
+  Create(parent, x, y, width, height, style);
 }
 
 TabbedControl::~TabbedControl()
 {
-  reset();
+  Destroy();
 }
 
 void
