@@ -243,11 +243,11 @@ XCSoarInterface::Startup()
     return false;
 
 #ifdef ENABLE_OPENGL
-  LogStartUp(_T("OpenGL: "
+  LogFormat("OpenGL: "
 #ifdef HAVE_EGL
-                "egl=%d "
+            "egl=%d "
 #endif
-                "npot=%d vbo=%d fbo=%d"),
+            "npot=%d vbo=%d fbo=%d",
 #ifdef HAVE_EGL
              OpenGL::egl,
 #endif
@@ -346,7 +346,7 @@ XCSoarInterface::Startup()
 
   // Read the terrain file
   operation.SetText(_("Loading Terrain File..."));
-  LogStartUp(_T("OpenTerrain"));
+  LogFormat("OpenTerrain");
   terrain = RasterTerrain::OpenTerrain(file_cache, operation);
 
   logger = new Logger();
@@ -393,7 +393,7 @@ XCSoarInterface::Startup()
   ReadBlackboardBasic(device_blackboard->Basic());
 
   // Scan for weather forecast
-  LogStartUp(_T("RASP load"));
+  LogFormat("RASP load");
   RASP.ScanAll(Basic().location, operation);
 
   // Reads the airspace files
@@ -482,7 +482,7 @@ XCSoarInterface::Startup()
   if (CommonInterface::GetComputerSettings().logger.enable_nmea_logger)
     NMEALogger::enabled = true;
 
-  LogStartUp(_T("ProgramStarted"));
+  LogFormat("ProgramStarted");
 
   // Give focus to the map
   main_window->SetDefaultFocus();
@@ -519,7 +519,7 @@ XCSoarInterface::Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Log shutdown information
-  LogStartUp(_T("Entering shutdown..."));
+  LogFormat("Entering shutdown...");
   StartupLogFreeRamAndStorage();
 
   // Turn off all displays
@@ -552,7 +552,7 @@ XCSoarInterface::Shutdown()
   operation.SetText(_("Shutdown, please wait..."));
 
   // Stop threads
-  LogStartUp(_T("Stop threads"));
+  LogFormat("Stop threads");
 #ifdef HAVE_DOWNLOAD_MANAGER
   Net::DownloadManager::BeginDeinitialise();
 #endif
@@ -563,7 +563,7 @@ XCSoarInterface::Shutdown()
   merge_thread->BeginStop();
 
   // Wait for the calculations thread to finish
-  LogStartUp(_T("Waiting for calculation thread"));
+  LogFormat("Waiting for calculation thread");
 
   merge_thread->Join();
   delete merge_thread;
@@ -575,19 +575,19 @@ XCSoarInterface::Shutdown()
 
   //  Wait for the drawing thread to finish
 #ifndef ENABLE_OPENGL
-  LogStartUp(_T("Waiting for draw thread"));
+  LogFormat("Waiting for draw thread");
 
   draw_thread->Join();
   delete draw_thread;
 #endif
 
-  LogStartUp(_T("delete MapWindow"));
+  LogFormat("delete MapWindow");
   main_window->Deinitialise();
 
   // Save the task for the next time
   operation.SetText(_("Shutdown, saving task..."));
 
-  LogStartUp(_T("Save default task"));
+  LogFormat("Save default task");
   protected_task_manager->TaskSaveDefault();
 
   // Clear waypoint database
@@ -639,7 +639,7 @@ XCSoarInterface::Shutdown()
 #endif
 
   // Close the progress dialog
-  LogStartUp(_T("Close Progress Dialog"));
+  LogFormat("Close Progress Dialog");
   operation.Hide();
 
   // Clear the EGM96 database
@@ -656,7 +656,7 @@ XCSoarInterface::Shutdown()
 
   delete file_cache;
 
-  LogStartUp(_T("Close Windows - main"));
+  LogFormat("Close Windows - main");
   main_window->Destroy();
 
   CloseLanguageFile();
@@ -665,7 +665,7 @@ XCSoarInterface::Shutdown()
 
   StartupLogFreeRamAndStorage();
 
-  LogStartUp(_T("Finished shutdown"));
+  LogFormat("Finished shutdown");
 }
 
 ProtectedAirspaceWarningManager *

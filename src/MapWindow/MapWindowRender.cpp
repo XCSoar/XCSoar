@@ -124,34 +124,34 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   label_block.reset();
 
   // Render terrain, groundline and topography
-  draw_sw.Mark(_T("RenderTerrain"));
+  draw_sw.Mark("RenderTerrain");
   RenderTerrain(canvas);
 
-  draw_sw.Mark(_T("RenderTopography"));
+  draw_sw.Mark("RenderTopography");
   RenderTopography(canvas);
 
-  draw_sw.Mark(_T("RenderFinalGlideShading"));
+  draw_sw.Mark("RenderFinalGlideShading");
   RenderFinalGlideShading(canvas);
 
   // Render track bearing (ground track)
-  draw_sw.Mark(_T("DrawTrackBearing"));
+  draw_sw.Mark("DrawTrackBearing");
   DrawTrackBearing(canvas, aircraft_pos);
 
   // Render airspace
-  draw_sw.Mark(_T("RenderAirspace"));
+  draw_sw.Mark("RenderAirspace");
   RenderAirspace(canvas);
 
   // Render task, waypoints
-  draw_sw.Mark(_T("DrawTask"));
+  draw_sw.Mark("DrawTask");
   DrawTask(canvas);
 
-  draw_sw.Mark(_T("DrawWaypoints"));
+  draw_sw.Mark("DrawWaypoints");
   DrawWaypoints(canvas);
 
-  draw_sw.Mark(_T("DrawNOAAStations"));
+  draw_sw.Mark("DrawNOAAStations");
   RenderNOAAStations(canvas);
 
-  draw_sw.Mark(_T("RenderMisc1"));
+  draw_sw.Mark("RenderMisc1");
   // Render weather/terrain max/min values
   if (!background.DrawSpotHeights(canvas, label_block))
     DrawTaskOffTrackIndicator(canvas);
@@ -166,14 +166,14 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   DrawThermalEstimate(canvas);
 
   // Render topography on top of airspace, to keep the text readable
-  draw_sw.Mark(_T("RenderTopographyLabels"));
+  draw_sw.Mark("RenderTopographyLabels");
   RenderTopographyLabels(canvas);
 
   // Render glide through terrain range
-  draw_sw.Mark(_T("RenderGlide"));
+  draw_sw.Mark("RenderGlide");
   RenderGlide(canvas);
 
-  draw_sw.Mark(_T("RenderMisc2"));
+  draw_sw.Mark("RenderMisc2");
 
   DrawBestCruiseTrack(canvas, aircraft_pos);
 

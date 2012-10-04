@@ -93,7 +93,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 bool
 dlgStartupShowModal()
 {
-  LogStartUp(_T("Startup dialog"));
+  LogFormat("Startup dialog");
 
   logo = new LogoView();
 

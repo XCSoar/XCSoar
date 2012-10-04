@@ -38,8 +38,6 @@ Copyright_License {
 
 #endif /* STOP_WATCH */
 
-#include <tchar.h>
-
 #ifdef ENABLE_OPENGL
 #ifdef ANDROID
 #include <GLES/gl.h>
@@ -59,11 +57,11 @@ class ScreenStopWatch {
   typedef uint64_t cpu_stamp_t;
 
   struct Marker {
-    const TCHAR *text;
+    const char *text;
     clock_stamp_t clock;
     cpu_stamp_t cpu;
 
-    void Set(const TCHAR *_text) {
+    void Set(const char *_text) {
       text = _text;
       clock = GetCurrentClock();
       cpu = GetCurrentCPU();
@@ -129,7 +127,7 @@ private:
   }
 
 public:
-  void Mark(const TCHAR *text) {
+  void Mark(const char *text) {
     FlushScreen();
     markers.append().Set(text);
   }
@@ -145,23 +143,23 @@ public:
       const Marker &start = markers[i];
       const Marker &end = markers[i + 1];
 
-      LogStartUp(_T("StopWatch '%s': clock=%lu cpu=%lu"), start.text,
-                 (unsigned long)(end.clock - start.clock),
-                 (unsigned long)(end.cpu - start.cpu));
+      LogFormat("StopWatch '%s': clock=%lu cpu=%lu", start.text,
+                (unsigned long)(end.clock - start.clock),
+                (unsigned long)(end.cpu - start.cpu));
     }
 
     const Marker &start = markers.front();
     const Marker &end = markers.back();
-    LogStartUp(_T("StopWatch total: clock=%lu cpu=%lu"),
-               (unsigned long)(end.clock - start.clock),
-               (unsigned long)(end.cpu - start.cpu));
+    LogFormat("StopWatch total: clock=%lu cpu=%lu",
+              (unsigned long)(end.clock - start.clock),
+              (unsigned long)(end.cpu - start.cpu));
 
     markers.clear();
   }
 
 #else /* !STOP_WATCH */
 public:
-  void Mark(const TCHAR *text) {}
+  void Mark(const char *text) {}
   void Finish() {}
 #endif /* !STOP_WATCH */
 };

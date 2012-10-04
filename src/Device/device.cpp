@@ -80,7 +80,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 void
 devStartup()
 {
-  LogStartUp(_T("Register serial devices"));
+  LogFormat("Register serial devices");
 
   const SystemSettings &settings = CommonInterface::GetSystemSettings();
 
@@ -113,7 +113,7 @@ devStartup()
 #ifdef ANDROID
     /* fall back to built-in GPS when no configured device is
        available on this platform */
-    LogStartUp(_T("Falling back to built-in GPS"));
+    LogFormat("Falling back to built-in GPS");
 
     DeviceConfig config;
     config.Clear();
@@ -160,7 +160,7 @@ devShutdown()
   int i;
 
   // Stop COM devices
-  LogStartUp(_T("Stop COM devices"));
+  LogFormat("Stop COM devices");
 
   for (i = 0; i < NUMDEV; i++) {
     device_list[i]->Close();
@@ -170,7 +170,7 @@ devShutdown()
 void
 devRestart()
 {
-  LogStartUp(_T("RestartCommPorts"));
+  LogFormat("RestartCommPorts");
 
   devShutdown();
 

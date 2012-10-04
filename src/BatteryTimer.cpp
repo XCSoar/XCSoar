@@ -50,7 +50,7 @@ BatteryTimer::Process()
   if (Power::External::Status == Power::External::OFF) {
     if (is_simulator() && Power::Battery::RemainingPercentValid &&
         Power::Battery::RemainingPercent < BATTERY_EXIT) {
-      LogStartUp(_T("Battery low exit..."));
+      LogFormat("Battery low exit...");
       // TODO feature: Warning message on battery shutdown
       UIActions::SignalShutdown(true);
     } else {

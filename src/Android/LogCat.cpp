@@ -49,7 +49,7 @@ CheckLogCat()
 
   /* run logcat, save to a temporary file */
 
-  LogStartUp(_T("Launching logcat"));
+  LogFormat("Launching logcat");
 
   pid_t pid = fork();
   if (pid == 0) {
@@ -60,7 +60,7 @@ CheckLogCat()
   }
 
   if (pid < 0) {
-    LogStartUp(_T("Launching logcat has failed: %s"), strerror(errno));
+    LogFormat("Launching logcat has failed: %s", strerror(errno));
     unlink(path);
     return false;
   }
@@ -73,13 +73,13 @@ CheckLogCat()
   }
 
   if (WIFSIGNALED(status)) {
-    LogStartUp(_T("logcat was killed by signal %d"), WTERMSIG(status));
+    LogFormat("logcat was killed by signal %d", WTERMSIG(status));
     unlink(path);
     return false;
   }
 
   if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
-    LogStartUp(_T("logcat has failed"));
+    LogFormat("logcat has failed");
     unlink(path);
     return false;
   }

@@ -183,7 +183,7 @@ MainWindow::Initialise()
 
   Layout::Initialize(rc.right - rc.left, rc.bottom - rc.top);
 
-  LogStartUp(_T("Initialise fonts"));
+  LogFormat("Initialise fonts");
   if (!Fonts::Initialize()) {
     Destroy();
     NoFontsAvailable();
@@ -208,9 +208,9 @@ MainWindow::InitialiseConfigured()
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
   if (ui_settings.custom_fonts) {
-    LogStartUp(_T("Load custom fonts"));
+    LogFormat("Load custom fonts");
     if (!Fonts::LoadCustom()) {
-      LogStartUp(_T("Failed to load custom fonts"));
+      LogFormat("Failed to load custom fonts");
       if (!Fonts::Initialize()) {
         Destroy();
         NoFontsAvailable();

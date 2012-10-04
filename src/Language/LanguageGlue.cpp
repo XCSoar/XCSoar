@@ -224,7 +224,7 @@ detect_language()
      mingw32ce, we have to look it up dynamically */
   DynamicLibrary coreloc_dll(_T("coredll"));
   if (!coreloc_dll.IsDefined()) {
-    LogStartUp(_T("Language: coredll.dll not found"));
+    LogFormat("Language: coredll.dll not found");
     return NULL;
   }
 
@@ -233,14 +233,14 @@ detect_language()
     (GetUserDefaultUILanguage_t)
     coreloc_dll.Lookup(_T("GetUserDefaultUILanguage"));
   if (GetUserDefaultUILanguage == NULL) {
-    LogStartUp(_T("Language: GetUserDefaultUILanguage() not available"));
+    LogFormat("Language: GetUserDefaultUILanguage() not available");
     return NULL;
   }
 #endif
 
   // Retrieve the default user language identifier from the OS
   LANGID lang_id = GetUserDefaultUILanguage();
-  LogStartUp(_T("Language: GetUserDefaultUILanguage()=0x%x"), (int)lang_id);
+  LogFormat("Language: GetUserDefaultUILanguage()=0x%x", (int)lang_id);
   if (lang_id == 0)
     return NULL;
 
@@ -359,7 +359,7 @@ ReadLanguageFile()
 {
   CloseLanguageFile();
 
-  LogStartUp(_T("Loading language file"));
+  LogFormat("Loading language file");
 
   TCHAR buffer[MAX_PATH], second_buffer[MAX_PATH];
   const TCHAR *value = Profile::GetPath(ProfileKeys::LanguageFile, buffer)

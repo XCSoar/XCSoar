@@ -247,7 +247,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
               LogStartUp(_T("Invalid event type: %s at %i"), d_event, line);
             }
           } else {
-            LogStartUp(_T("Invalid event type at %i"), line);
+            LogFormat("Invalid event type at %i", line);
           }
         }
       } else if (StringIsEqual(key, _T("label"))) {
@@ -259,7 +259,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
         LogStartUp(_T("Invalid key/value pair %s=%s at %i"), key, value, line);
       }
     } else  {
-      LogStartUp(_T("Invalid line at %i"), line);
+      LogFormat("Invalid line at %i", line);
     }
 
   }

@@ -113,12 +113,12 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
   if (device_blackboard != NULL) {
     if (wp != NULL) {
       // OK, passed all checks now
-      LogStartUp(_T("Start at home waypoint"));
+      LogFormat("Start at home waypoint");
       device_blackboard->SetStartupLocation(wp->location, wp->elevation);
     } else if (terrain != NULL) {
       // no home at all, so set it from center of terrain if available
       GeoPoint loc = terrain->GetTerrainCenter();
-      LogStartUp(_T("Start at terrain center"));
+      LogFormat("Start at terrain center");
       device_blackboard->SetStartupLocation(loc,
                                             fixed(terrain->GetTerrainHeight(loc)));
     }

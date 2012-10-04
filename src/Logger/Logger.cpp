@@ -118,7 +118,7 @@ Logger::GUIStartLogger(const NMEAInfo& gps_info,
   if (!LoggerClearFreeSpace(gps_info.date_time_utc.year)) {
     ShowMessageBox(_("Logger inactive, insufficient storage!"),
                 _("Logger Error"), MB_OK| MB_ICONERROR);
-    LogStartUp(_T("Logger not started: Insufficient Storage"));
+    LogFormat("Logger not started: Insufficient Storage");
     return;
   }
 

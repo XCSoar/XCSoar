@@ -112,13 +112,13 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
   case DeviceConfig::PortType::RFCOMM:
 #ifdef ANDROID
     if (config.bluetooth_mac.empty()) {
-      LogStartUp(_T("No Bluetooth MAC configured"));
+      LogFormat("No Bluetooth MAC configured");
       return NULL;
     }
 
     return OpenAndroidBluetoothPort(config.bluetooth_mac, handler);
 #else
-    LogStartUp(_T("Bluetooth not available on this platform"));
+    LogFormat("Bluetooth not available on this platform");
     return NULL;
 #endif
 
@@ -126,27 +126,27 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 #ifdef ANDROID
     return OpenAndroidBluetoothServerPort(handler);
 #else
-    LogStartUp(_T("Bluetooth not available on this platform"));
+    LogFormat("Bluetooth not available on this platform");
     return NULL;
 #endif
 
   case DeviceConfig::PortType::IOIOUART:
 #if defined(ANDROID) && defined(IOIOLIB)
     if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
-      LogStartUp(_T("No IOIOUart configured in profile"));
+      LogFormat("No IOIOUart configured in profile");
       return NULL;
     }
 
     return OpenAndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate,
                                    handler);
 #else
-    LogStartUp(_T("IOIO Uart not available on this platform or version"));
+    LogFormat("IOIO Uart not available on this platform or version");
     return NULL;
 #endif
 
   case DeviceConfig::PortType::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
-      LogStartUp(_T("no GPS detected"));
+      LogFormat("no GPS detected");
       return NULL;
     }
 

@@ -46,7 +46,7 @@ static TrivialArray<FlarmIdNameCouple, 200> flarm_names;
 void
 FlarmDetails::Load()
 {
-  LogStartUp(_T("FlarmDetails::Load"));
+  LogFormat("FlarmDetails::Load");
 
   LoadSecondary();
   LoadFLARMnet();
@@ -63,7 +63,7 @@ FlarmDetails::LoadFLARMnet()
   delete reader;
 
   if (num_records > 0)
-    LogStartUp(_T("%u FLARMnet ids found"), num_records);
+    LogFormat("%u FLARMnet ids found", num_records);
 }
 
 static void
@@ -89,7 +89,7 @@ LoadSecondaryFile(TLineReader &reader)
 void
 FlarmDetails::LoadSecondary()
 {
-  LogStartUp(_T("OpenFLARMDetails"));
+  LogFormat("OpenFLARMDetails");
 
   // if (FLARM Details already there) delete them;
   if (!flarm_names.empty())

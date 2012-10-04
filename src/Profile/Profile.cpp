@@ -55,7 +55,7 @@ Profile::GetPath()
 void
 Profile::Load()
 {
-  LogStartUp(_T("Loading profiles"));
+  LogFormat("Loading profiles");
   LoadFile(startProfileFile);
   SetModified(false);
 }
@@ -84,7 +84,7 @@ Profile::Save()
   if (!IsModified())
     return;
 
-  LogStartUp(_T("Saving profiles"));
+  LogFormat("Saving profiles");
   if (StringIsEmpty(startProfileFile))
     SetFiles(_T(""));
   SaveFile(startProfileFile);

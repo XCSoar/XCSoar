@@ -42,11 +42,11 @@ Display::LoadOrientation(VerboseOperationEnvironment &env)
     return;
 
   if (!Display::Rotate(orientation)) {
-    LogStartUp(_T("Display rotation failed"));
+    LogFormat("Display rotation failed");
     return;
   }
 
-  LogStartUp(_T("Display rotated"));
+  LogFormat("Display rotated");
 
   CommonInterface::main_window->Initialise();
 

@@ -354,7 +354,7 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
   MapWindow::Render(canvas, rc);
 
   if (IsNearSelf()) {
-    draw_sw.Mark(_T("DrawGlueMisc"));
+    draw_sw.Mark("DrawGlueMisc");
     if (GetMapSettings().show_thermal_profile)
       DrawThermalBand(canvas, rc);
     DrawStallRatio(canvas, rc);

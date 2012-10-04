@@ -107,7 +107,7 @@ WaypointGlue::LoadWaypoints(Waypoints &way_points,
                             const RasterTerrain *terrain,
                             OperationEnvironment &operation)
 {
-  LogStartUp(_T("ReadWaypoints"));
+  LogFormat("ReadWaypoints");
   operation.SetText(_("Loading Waypoints..."));
 
   bool found = false;
@@ -153,7 +153,7 @@ bool
 WaypointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
 {
   if (!IsWritable(num)) {
-    LogStartUp(_T("Waypoint file %d can not be written"), num);
+    LogFormat("Waypoint file %d can not be written", num);
     return false;
   }
 
@@ -162,14 +162,14 @@ WaypointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
 
   TextWriter writer(file);
   if (!writer.IsOpen()) {
-    LogStartUp(_T("Waypoint file %d can not be written"), num);
+    LogFormat("Waypoint file %d can not be written", num);
     return false;
   }
 
   WaypointWriter wp_writer(way_points, num);
   wp_writer.Save(writer);
 
-  LogStartUp(_T("Waypoint file %d saved"), num);
+  LogFormat("Waypoint file %d saved", num);
   return true;
 }
 

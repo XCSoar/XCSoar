@@ -256,7 +256,7 @@ LayoutConfigPanel::Save(bool &_changed, bool &_require_restart)
       Display::RotateRestore();
     else {
       if (!Display::Rotate(ui_settings.display.orientation))
-        LogStartUp(_T("Display rotation failed"));
+        LogFormat("Display rotation failed");
     }
   } else if (info_box_geometry_changed)
     CommonInterface::main_window->ReinitialiseLayout();

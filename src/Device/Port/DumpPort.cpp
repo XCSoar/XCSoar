@@ -43,9 +43,9 @@ DumpPort::IsValid() const
 size_t
 DumpPort::Write(const void *data, size_t length)
 {
-  LogStartUp(_T("Write(%u)"), (unsigned)length);
+  LogFormat("Write(%u)", (unsigned)length);
   size_t nbytes = port->Write(data, length);
-  LogStartUp(_T("Write(%u)=%u"), (unsigned)length, (unsigned)nbytes);
+  LogFormat("Write(%u)=%u", (unsigned)length, (unsigned)nbytes);
   HexDump(_T("W "), data, nbytes);
   return nbytes;
 }
@@ -53,14 +53,14 @@ DumpPort::Write(const void *data, size_t length)
 bool
 DumpPort::Drain()
 {
-  LogStartUp(_T("Drain"));
+  LogFormat("Drain");
   return port->Drain();
 }
 
 void
 DumpPort::Flush()
 {
-  LogStartUp(_T("Flush"));
+  LogFormat("Flush");
   port->Flush();
 }
 
@@ -73,30 +73,30 @@ DumpPort::GetBaudrate() const
 bool
 DumpPort::SetBaudrate(unsigned baud_rate)
 {
-  LogStartUp(_T("SetBaudrate %u"), baud_rate);
+  LogFormat("SetBaudrate %u", baud_rate);
   return port->SetBaudrate(baud_rate);
 }
 
 bool
 DumpPort::StopRxThread()
 {
-  LogStartUp(_T("StopRxThread"));
+  LogFormat("StopRxThread");
   return port->StopRxThread();
 }
 
 bool
 DumpPort::StartRxThread()
 {
-  LogStartUp(_T("StartRxThread"));
+  LogFormat("StartRxThread");
   return port->StartRxThread();
 }
 
 int
 DumpPort::Read(void *buffer, size_t size)
 {
-  LogStartUp(_T("Read(%u)"), (unsigned)size);
+  LogFormat("Read(%u)", (unsigned)size);
   int nbytes = port->Read(buffer, size);
-  LogStartUp(_T("Read(%u)=%d"), (unsigned)size, nbytes);
+  LogFormat("Read(%u)=%d", (unsigned)size, nbytes);
   if (nbytes > 0)
     HexDump(_T("R "), buffer, nbytes);
   return nbytes;
@@ -105,8 +105,8 @@ DumpPort::Read(void *buffer, size_t size)
 Port::WaitResult
 DumpPort::WaitRead(unsigned timeout_ms)
 {
-  LogStartUp(_T("WaitRead %u"), timeout_ms);
+  LogFormat("WaitRead %u", timeout_ms);
   Port::WaitResult result = port->WaitRead(timeout_ms);
-  LogStartUp(_T("WaitRead %u = %d"), timeout_ms, (int)result);
+  LogFormat("WaitRead %u = %d", timeout_ms, (int)result);
   return result;
 }
