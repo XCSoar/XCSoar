@@ -54,7 +54,6 @@ namespace Net {
 #endif
 
   class Request {
-  public:
 #ifdef HAVE_WININET
     /** Internal connection handle */
     WinINet::HttpRequestHandle handle;
