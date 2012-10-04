@@ -28,18 +28,7 @@ Copyright_License {
 #include "Screen/Key.h"
 
 void
-EditWindow::Create(ContainerWindow &parent, PixelScalar left, PixelScalar top,
-                   UPixelScalar width, UPixelScalar height,
-                   const EditWindowStyle style)
-{
-  read_only = style.is_read_only;
-  origin = 0;
-
-  Window::Create(&parent, left, top, width, height, style);
-}
-
-void
-EditWindow::Create(ContainerWindow &parent, const PixelRect rc,
+EditWindow::Create(ContainerWindow &parent, PixelRect rc,
                    const EditWindowStyle style)
 {
   read_only = style.is_read_only;

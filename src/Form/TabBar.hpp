@@ -55,14 +55,11 @@ public:
   /**
    * Constructor used for stand-alone TabBarControl
    * @param parent
-   * @param x, y Location of the tab bar (unused)
-   * @param width, height.  Size of the tab bar
    * @param style
    * @return
    */
   TabBarControl(ContainerWindow &parent, const DialogLook &look,
-                PixelScalar x, PixelScalar y,
-                UPixelScalar width, UPixelScalar height,
+                PixelRect tab_rc,
                 const WindowStyle style = WindowStyle(),
                 bool _flipOrientation = false);
 

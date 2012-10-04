@@ -247,8 +247,9 @@ public:
     WindowStyle with_border;
     with_border.Border();
 
-    oz.Create(*this, rc.right / 2, 0, rc.right - (rc.right / 2), rc.bottom,
-              with_border);
+    PixelRect oz_rc = rc;
+    oz_rc.left = oz_rc.right / 2;
+    oz.Create(*this, oz_rc, with_border);
     oz_window = &oz;
 
     const PixelRect list_rc = {

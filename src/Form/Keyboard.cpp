@@ -35,8 +35,7 @@ static const TCHAR keyboard_letters[] =
 
 KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  const DialogLook &_look,
-                                 PixelScalar x, PixelScalar y,
-                                 UPixelScalar width, UPixelScalar height,
+                                 PixelRect rc,
                                  OnCharacterCallback_t function,
                                  const WindowStyle _style)
   :look(_look),
@@ -44,7 +43,7 @@ KeyboardControl::KeyboardControl(ContainerWindow &parent,
   button_width(50), button_height(50),
   mOnCharacter(function)
 {
-  Create(parent, x, y, width, height, _style);
+  Create(parent, rc, _style);
   set_buttons_size();
 
   TCHAR caption[] = _T(" ");

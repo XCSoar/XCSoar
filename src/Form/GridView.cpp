@@ -28,20 +28,17 @@ Copyright_License {
 
 #include <assert.h>
 
-GridView::GridView(ContainerWindow &parent,
-                   PixelScalar x, PixelScalar y,
-                   UPixelScalar width, UPixelScalar height,
+GridView::GridView(ContainerWindow &parent, PixelRect rc,
                    const DialogLook &_look,
                    const WindowStyle style)
  :look(_look)
 {
-  Create(parent, x, y, width, height, style);
+  Create(parent, rc, style);
 
   column_width = Layout::Scale(78);
   row_height = Layout::Scale(42);
   horizontal_spacing = Layout::Scale(0);
   vertical_spacing = Layout::Scale(0);
-  const PixelRect rc = GetClientRect();
   num_columns = (rc.right - rc.left + horizontal_spacing)
     / (column_width + horizontal_spacing);
   if (num_columns == 0)

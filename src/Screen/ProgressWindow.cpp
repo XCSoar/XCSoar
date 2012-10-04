@@ -59,22 +59,25 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   progress_border_height = progress_height * 2;
 
   // Initialize message text field
+  PixelRect message_rc = rc;
+  message_rc.bottom -= progress_border_height + height / 48;
+  message_rc.top = message_rc.bottom - text_height;
   TextWindowStyle message_style;
   message_style.center();
-  message.Create(*this, NULL, 0,
-                 height - progress_border_height - text_height - (height/48),
-                 width, text_height, message_style);
+  message.Create(*this, NULL, message_rc, message_style);
 
 #ifndef USE_GDI
   message.SetFont(font);
 #endif
 
   // Initialize progress bar
+  PixelRect pb_rc;
+  pb_rc.left = progress_horizontal_border;
+  pb_rc.right = pb_rc.left + width - progress_height;
+  pb_rc.top = height - progress_border_height + progress_horizontal_border;
+  pb_rc.bottom = pb_rc.top + progress_height;
   ProgressBarStyle pb_style;
-  progress_bar.Create(*this, progress_horizontal_border,
-                      height - progress_border_height + progress_horizontal_border,
-                      width - progress_height,
-                      progress_height, pb_style);
+  progress_bar.Create(*this, pb_rc, pb_style);
 
   message.InstallWndProc(); // needed for on_color()
 

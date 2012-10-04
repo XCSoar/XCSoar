@@ -128,15 +128,12 @@ public:
   /**
    * @param parent
    * @param Caption the page caption shown on the menu page
-   * @param x, y Location of the tab bar. (frame of the content windows)
-   * @param width, height.  Size of the tab bar
    * @param style
    * @return
    */
   TabMenuControl(ContainerWindow &parent, WndForm &_form,
                  const DialogLook &look, const TCHAR * Caption,
-                 PixelScalar x, PixelScalar y,
-                 UPixelScalar width, UPixelScalar height,
+                 PixelRect rc,
                  const WindowStyle style = WindowStyle());
   ~TabMenuControl();
 

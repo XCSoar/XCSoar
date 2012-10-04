@@ -42,10 +42,6 @@ public:
    * @param Parent Parent window/ContainerControl
    * @param Name Name of the button
    * @param Caption Text on the button
-   * @param X x-Coordinate relative to the parent
-   * @param Y y-Coordinate relative to the parent
-   * @param Width Width of the button
-   * @param Height Height of the button
    * @param Function The function that should be called
    * when the button is clicked
    */

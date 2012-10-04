@@ -70,9 +70,7 @@ class TextWindow : public Window {
 #endif
 
 public:
-  void Create(ContainerWindow &parent, const TCHAR *text,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
+  void Create(ContainerWindow &parent, const TCHAR *text, PixelRect rc,
               const TextWindowStyle style=TextWindowStyle());
 
   void set_text(const TCHAR *_text) {

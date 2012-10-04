@@ -91,9 +91,7 @@ struct ControlPosition: public RasterPoint
  * Callback type for the "Custom" element, attribute "OnCreate".
  */
 typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
-                                          PixelScalar left, PixelScalar top,
-                                          UPixelScalar width,
-                                          UPixelScalar height,
+                                          PixelRect rc,
                                           const WindowStyle style);
 
 static Window *
@@ -650,7 +648,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     EditWindow *edit;
     window = edit = new EditWindow();
-    edit->Create(parent, pos.x, pos.y, size.cx, size.cy, edit_style);
+    edit->Create(parent, rc, edit_style);
     edit->InstallWndProc();
     edit->SetFont(*xml_dialog_look->text_font);
 
@@ -727,8 +725,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     // Create the KeyboardControl
     KeyboardControl *kb =
-      new KeyboardControl(parent, *xml_dialog_look,
-                          pos.x, pos.y, size.cx, size.cy,
+      new KeyboardControl(parent, *xml_dialog_look, rc,
                           character_callback, style);
 
     window = kb;
@@ -748,9 +745,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   // FrameControl (WndFrame)
   } else if (StringIsEqual(node.GetName(), _T("Label"))){
     // Create the FrameControl
-    WndFrame* frame = new WndFrame(parent, *xml_dialog_look,
-                                   pos.x, pos.y, size.cx, size.cy,
-                                   style);
+    WndFrame* frame = new WndFrame(parent, *xml_dialog_look, rc, style);
 
     // Set the caption
     frame->SetCaption(caption);
@@ -793,9 +788,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     style.ControlParent();
 
-    TabbedControl *tabbed = new TabbedControl(parent,
-                                              pos.x, pos.y, size.cx, size.cy,
-                                              style);
+    TabbedControl *tabbed = new TabbedControl(parent, rc, style);
 
     window = tabbed;
 
@@ -817,8 +810,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       flip_orientation = true;
 
     style.ControlParent();
-    TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look,
-                                              pos.x, pos.y, size.cx, size.cy,
+    TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look, rc,
                                               style, flip_orientation);
     window = tabbar;
 
@@ -833,8 +825,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
                                                     Please rewrite: */
                                                  (WndForm &)form,
                                                  *xml_dialog_look, caption,
-                                                 pos.x, pos.y, size.cx, size.cy,
-                                                 style);
+                                                 rc, style);
     window = tabmenu;
 
   } else if (StringIsEqual(node.GetName(), _T("Custom"))) {
@@ -844,7 +835,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     if (create_callback == NULL)
       return NULL;
 
-    window = create_callback(parent, pos.x, pos.y, size.cx, size.cy, style);
+    window = create_callback(parent, rc, style);
   } else if (StringIsEqual(node.GetName(), _T("Widget"))) {
     style.ControlParent();
     DockWindow *dock = new DockWindow();

@@ -34,9 +34,7 @@ Copyright_License {
 #include <winuser.h>
 
 TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
-                       ContainerWindow &parent,
-                       PixelScalar left, PixelScalar top,
-                       UPixelScalar width, UPixelScalar height,
+                       ContainerWindow &parent, PixelRect rc,
                        bool _flipOrientation)
   :tab_bar(_theTabBar),
    look(_look),
@@ -47,7 +45,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
 {
   WindowStyle mystyle;
   mystyle.TabStop();
-  Create(parent, left, top, width, height, mystyle);
+  Create(parent, rc, mystyle);
 }
 
 TabDisplay::~TabDisplay()

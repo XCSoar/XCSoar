@@ -78,15 +78,9 @@ public:
    *
    * @param parent
    * @param _theTabBar. An existing TabBar object
-   * @param left. Left position of the tab bar box in the parent window
-   * @param top Top position of the tab bar box in the parent window
-   * @param width Width of tab bar box in the parent window
-   * @param height Height of tab bar box in the parent window
    */
   TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
-             ContainerWindow &parent,
-             PixelScalar left, PixelScalar top,
-             UPixelScalar width, UPixelScalar height,
+             ContainerWindow &parent, PixelRect rc,
              bool _flipOrientation = false);
 
   virtual ~TabDisplay();

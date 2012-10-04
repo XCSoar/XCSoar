@@ -40,7 +40,7 @@ class WndFrame : public PaintWindow {
 
 public:
   WndFrame(ContainerWindow &parent, const DialogLook &look,
-           int X, int Y, int Width, int Height,
+           PixelRect rc,
            const WindowStyle style=WindowStyle());
 
   void SetAlignCenter();

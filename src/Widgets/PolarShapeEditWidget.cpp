@@ -137,7 +137,9 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   edit_style.SetVerticalCenter();
   edit_style.TabStop();
 
-  v_label = new WndFrame(panel, look, 0, 0, label_width, row_height);
+  PixelRect label_rc { 0, 0, PixelScalar(label_width),
+      PixelScalar(row_height) };
+  v_label = new WndFrame(panel, look, label_rc);
   v_label->SetText(v_text);
 
   PixelRect rc;
@@ -155,7 +157,9 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
     points[i].v->SetDataField(df);
   }
 
-  w_label = new WndFrame(panel, look, 0, row_height, label_width, row_height);
+  label_rc.top += row_height;
+  label_rc.bottom += row_height;
+  w_label = new WndFrame(panel, look, label_rc);
   w_label->SetText(w_text);
 
   rc.left = label_width;

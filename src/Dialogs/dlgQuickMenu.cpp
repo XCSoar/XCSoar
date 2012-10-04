@@ -149,9 +149,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   WindowStyle grid_view_style;
   grid_view_style.ControlParent();
 
-  grid_view = new GridView(client_area,
-                           r.left, r.top,
-                           r.right - r.left, r.bottom - r.top,
+  grid_view = new GridView(client_area, r,
                            dialog_look, grid_view_style);
 
   WindowStyle buttonStyle;

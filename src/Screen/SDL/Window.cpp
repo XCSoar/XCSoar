@@ -33,22 +33,22 @@ Copyright_License {
 #endif
 
 void
-Window::Create(ContainerWindow *parent,
-               PixelScalar left, PixelScalar top,
-               UPixelScalar width, UPixelScalar height,
+Window::Create(ContainerWindow *parent, PixelRect rc,
                const WindowStyle window_style)
 {
   assert(IsScreenInitialized());
-  assert(width < 0x8000);
-  assert(height < 0x8000);
+  assert(rc.left <= rc.right);
+  assert(rc.right - rc.left < 0x8000);
+  assert(rc.top <= rc.bottom);
+  assert(rc.bottom - rc.top < 0x8000);
 
   double_clicks = window_style.double_clicks;
 
   this->parent = parent;
-  this->left = left;
-  this->top = top;
-  this->width = width;
-  this->height = height;
+  this->left = rc.left;
+  this->top = rc.top;
+  this->width = rc.right - rc.left;
+  this->height = rc.bottom - rc.top;
 
   tab_stop = window_style.tab_stop;
   control_parent = window_style.control_parent;

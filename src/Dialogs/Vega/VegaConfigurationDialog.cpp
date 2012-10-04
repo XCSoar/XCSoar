@@ -230,14 +230,12 @@ public:
 };
 
 static Window *
-OnCreatePager(ContainerWindow &parent,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
+OnCreatePager(ContainerWindow &parent, PixelRect rc,
               WindowStyle style)
 {
   style.ControlParent();
 
-  tabbed = new TabbedControl(parent, left, top, width, height, style);
+  tabbed = new TabbedControl(parent, rc, style);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 

@@ -103,10 +103,6 @@ public:
    * Constructor of the WndProperty
    * @param Parent The parent ContainerControl
    * @param Caption Caption of the Control
-   * @param X x-Coordinate of the Control
-   * @param Y y-Coordinate of the Control
-   * @param Width Width of the Control
-   * @param Height Heigth of the Control
    * @param CaptionWidth Width of the Caption of the Control
    * @param DataChangeNotify Function to call when the data changed
    * @param MultiLine If true, the Control can handle mutliple lines

@@ -76,9 +76,7 @@ static unsigned target_point = 0;
 static bool IsLocked = true;
 
 static Window *
-OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
-            UPixelScalar width, UPixelScalar height,
-            const WindowStyle style)
+OnCreateMap(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
 {
   const MapLook &look = UIGlobals::GetMapLook();
   map = new TargetDialogMapWindow(look.waypoint, look.airspace,
@@ -89,7 +87,7 @@ OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
   map->SetWaypoints(&way_points);
   map->SetTask(protected_task_manager);
   map->SetGlideComputer(glide_computer);
-  map->Create(parent, left, top, width, height, style);
+  map->Create(parent, rc, style);
 
   return map;
 }

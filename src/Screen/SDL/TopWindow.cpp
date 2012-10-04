@@ -49,12 +49,13 @@ void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
                   TopWindowStyle style)
 {
-  const UPixelScalar width = rc.right - rc.left;
-  const UPixelScalar height = rc.bottom - rc.top;
+  rc.right -= rc.left;
+  rc.bottom -= rc.top;
+  rc.left = rc.top = 0;
 
-  screen.Set(width, height, style.GetFullScreen(), style.GetResizable());
+  screen.Set(rc.right, rc.bottom, style.GetFullScreen(), style.GetResizable());
 
-  ContainerWindow::Create(NULL, 0, 0, width, height, style);
+  ContainerWindow::Create(NULL, rc, style);
 
 #ifndef ANDROID
   UTF8ToWideConverter text2(text);

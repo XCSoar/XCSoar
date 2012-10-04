@@ -99,9 +99,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
 
   WindowStyle client_style;
   client_style.ControlParent();
-  client_area.Create(*this, client_rect.left, client_rect.top,
-                     client_rect.right - client_rect.left,
-                     client_rect.bottom - client_rect.top, client_style);
+  client_area.Create(*this, client_rect, client_style);
 
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, caption.c_str());

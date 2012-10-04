@@ -63,8 +63,7 @@ public:
 
     PixelRect rc = GetClientRect();
 
-    terminal.Create(*this, rc.left, rc.top,
-                    rc.right - rc.left, rc.bottom - rc.top);
+    terminal.Create(*this, rc);
   }
 
 protected:

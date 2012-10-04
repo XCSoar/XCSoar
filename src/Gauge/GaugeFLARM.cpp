@@ -47,10 +47,6 @@ protected:
 /**
  * Constructor of the SmallTrafficWindow class
  * @param parent Parent window
- * @param left Left edge of window pixel location
- * @param top Top edge of window pixel location
- * @param width Width of window (pixels)
- * @param height Height of window (pixels)
  */
 SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
                                        const PixelRect &rc,

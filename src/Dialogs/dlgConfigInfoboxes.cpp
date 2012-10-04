@@ -319,9 +319,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   preview_style.EnableDoubleClicks();
   for (unsigned i = 0; i < info_box_layout.count; ++i) {
     rc = info_box_layout.positions[i];
-    previews[i].Create(client_area, rc.left, rc.top,
-                       rc.right - rc.left, rc.bottom - rc.top,
-                       preview_style);
+    previews[i].Create(client_area, rc, preview_style);
   }
 
   rc = info_box_layout.remaining;
@@ -403,10 +401,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   control_rc.top += height;
   control_rc.bottom += height * 5;
   edit_content_description = new WndFrame(client_area, dialog_look,
-                                          control_rc.left, control_rc.top,
-                                          control_rc.right - control_rc.left,
-                                          control_rc.bottom - control_rc.top,
-                                          style);
+                                          control_rc, style);
 
   RefreshEditContent();
 

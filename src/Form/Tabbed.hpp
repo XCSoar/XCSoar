@@ -46,9 +46,7 @@ public:
    */
   TabbedControl():page_flipped_callback(NULL) {};
 
-  TabbedControl(ContainerWindow &parent,
-                PixelScalar x, PixelScalar y,
-                UPixelScalar width, UPixelScalar height,
+  TabbedControl(ContainerWindow &parent, PixelRect rc,
                 const WindowStyle style=WindowStyle());
 
   virtual ~TabbedControl();

@@ -45,9 +45,7 @@ using std::max;
 
 #define SELECTORWIDTH Layout::Scale(5)
 
-InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent,
-                             PixelScalar x, PixelScalar y,
-                             UPixelScalar width, UPixelScalar height,
+InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
                              unsigned border_flags,
                              const InfoBoxSettings &_settings,
                              const InfoBoxLook &_look,
@@ -64,7 +62,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent,
   data.Clear();
 
   style.EnableDoubleClicks();
-  Create(parent, x, y, width, height, style);
+  Create(parent, rc, style);
 }
 
 InfoBoxWindow::~InfoBoxWindow() {

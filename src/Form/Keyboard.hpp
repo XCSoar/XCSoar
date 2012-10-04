@@ -53,14 +53,9 @@ public:
   /**
    * Constructor of the KeyboardControl class
    * @param parent the parent window
-   * @param x x-Coordinate of the Control
-   * @param y y-Coordinate of the Control
-   * @param width Width of the Control
-   * @param height Height of the Control
    */
   KeyboardControl(ContainerWindow &parent, const DialogLook &look,
-                  PixelScalar x, PixelScalar y,
-                  UPixelScalar width, UPixelScalar height,
+                  PixelRect rc,
                   OnCharacterCallback_t function,
                   const WindowStyle _style = WindowStyle());
 

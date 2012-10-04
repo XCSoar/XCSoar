@@ -340,29 +340,12 @@ public:
 #endif
 
 #ifndef USE_GDI
-  void Create(ContainerWindow *parent,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
-              const WindowStyle window_style=WindowStyle());
-
   void Create(ContainerWindow *parent, const PixelRect rc,
-              const WindowStyle window_style=WindowStyle()) {
-    Create(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-           window_style);
-  }
+              const WindowStyle window_style=WindowStyle());
 #else
   void Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
-              const WindowStyle window_style=WindowStyle());
-
-  void Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
               const PixelRect rc,
-              const WindowStyle window_style=WindowStyle()) {
-    Create(parent, cls, text, rc.left, rc.top,
-           rc.right - rc.left, rc.bottom - rc.top,
-           window_style);
-  }
+              const WindowStyle window_style=WindowStyle());
 
   /**
    * Create a message-only window.

@@ -33,8 +33,7 @@ Copyright_License {
 #include <winuser.h>
 
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
-                             PixelScalar x, PixelScalar y,
-                             UPixelScalar _width, UPixelScalar _height,
+                             PixelRect tab_rc,
                              const WindowStyle style, bool _flipOrientation)
   :tab_display(NULL),
    tab_line_height((Layout::landscape ^ _flipOrientation)
@@ -43,11 +42,9 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
    flip_orientation(_flipOrientation),
    page_flipped_callback(NULL)
 {
-  Create(_parent, 0, 0, _parent.GetWidth(), _parent.GetHeight(), style),
+  Create(_parent, _parent.GetClientRect(), style);
 
-  tab_display = new TabDisplay(*this, look, *this,
-                                 x, y, _width, _height,
-                                 flip_orientation);
+  tab_display = new TabDisplay(*this, look, *this, tab_rc, flip_orientation);
 
   PixelRect rc = GetClientRect();
   if (Layout::landscape ^ flip_orientation)

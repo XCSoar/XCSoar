@@ -41,10 +41,6 @@ public:
   /**
    * Constructor of the PanelControl class
    * @param owner Parent ContainerControl
-   * @param x x-Coordinate of the Control
-   * @param y y-Coordinate of the Control
-   * @param width Width of the Control
-   * @param height Height of the Control
    */
   PanelControl(ContainerWindow &parent, const DialogLook &look,
                const PixelRect &rc,

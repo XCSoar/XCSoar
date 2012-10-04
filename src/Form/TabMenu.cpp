@@ -34,20 +34,18 @@ Copyright_License {
 
 TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
                                const DialogLook &look, const TCHAR * _caption,
-                               PixelScalar x, PixelScalar y,
-                               UPixelScalar _width, UPixelScalar _height,
+                               PixelRect rc,
                                const WindowStyle style)
   :last_content_page(-1),
    caption(_caption),
    form(_form)
 {
-  Create(_parent, x, y, _width, _height, style);
+  Create(_parent, rc, style);
 
-  const PixelRect rc = GetClientRect();
+  rc = GetClientRect();
   WindowStyle pager_style;
   pager_style.ControlParent();
-  pager.Create(*this, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-               pager_style);
+  pager.Create(*this, rc, pager_style);
 
   tab_display = new TabMenuDisplay(*this, look, pager, rc);
 }

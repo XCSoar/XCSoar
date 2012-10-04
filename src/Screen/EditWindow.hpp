@@ -110,11 +110,7 @@ class EditWindow : public Window {
 #endif
 
 public:
-  void Create(ContainerWindow &parent, PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
-              const EditWindowStyle style);
-
-  void Create(ContainerWindow &parent, const PixelRect rc,
+  void Create(ContainerWindow &parent, PixelRect rc,
               const EditWindowStyle style);
 
 #ifndef USE_GDI

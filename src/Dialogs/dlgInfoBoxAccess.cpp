@@ -97,9 +97,9 @@ dlgInfoBoxAccessShowModeless(const int id,
   WindowStyle tab_style;
   tab_style.ControlParent();
   ContainerWindow &client_area = wf->GetClientAreaWindow();
-  const PixelRect rc = client_area.GetClientRect();
-  wTabBar = new TabBarControl(client_area, look, rc.left, rc.top,
-                              rc.right - rc.left, Layout::Scale(45),
+  PixelRect tab_rc = client_area.GetClientRect();
+  tab_rc.bottom = tab_rc.top + Layout::Scale(45);
+  wTabBar = new TabBarControl(client_area, look, tab_rc,
                               tab_style, Layout::landscape);
 
   if (dlgContent != NULL) {

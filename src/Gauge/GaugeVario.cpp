@@ -46,9 +46,7 @@ using std::max;
 GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
                        ContainerWindow &parent, const VarioLook &_look,
                        const UnitsLook &_units_look,
-                       PixelScalar left, PixelScalar top,
-                       UPixelScalar width, UPixelScalar height,
-                       const WindowStyle style)
+                       PixelRect rc, const WindowStyle style)
   :blackboard(_blackboard), look(_look), units_look(_units_look),
    nlength0(Layout::Scale(15)),
    nlength1(Layout::Scale(6)),
@@ -64,7 +62,7 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
   label_middle.initialised = false;
   label_bottom.initialised = false;
 
-  Create(parent, left, top, width, height, style);
+  Create(parent, rc, style);
 }
 
 void

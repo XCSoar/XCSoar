@@ -93,9 +93,7 @@ public:
   GaugeVario(const FullBlackboard &blackboard,
              ContainerWindow &parent, const VarioLook &look,
              const UnitsLook &units_look,
-             PixelScalar left, PixelScalar top,
-             UPixelScalar width, UPixelScalar height,
-             const WindowStyle style=WindowStyle());
+             PixelRect rc, const WindowStyle style=WindowStyle());
 
 protected:
   const MoreData &Basic() const {

@@ -56,9 +56,7 @@ protected:
   const DialogLook &look;
 
 public:
-  GridView(ContainerWindow &parent,
-           PixelScalar x, PixelScalar y,
-           UPixelScalar width, UPixelScalar height,
+  GridView(ContainerWindow &parent, PixelRect rc,
            const DialogLook &look,
            const WindowStyle style=WindowStyle());
 

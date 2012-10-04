@@ -111,7 +111,7 @@ public:
     WindowStyle with_border;
     with_border.Border();
 
-    horizon.Create(*this, rc.left, rc.top, rc.right, rc.bottom, with_border);
+    horizon.Create(*this, rc, with_border);
 
     PixelRect button_rc = rc;
     button_rc.top = button_rc.bottom - 30;

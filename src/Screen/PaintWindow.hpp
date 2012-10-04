@@ -50,41 +50,26 @@ public:
 #ifndef USE_GDI
   using Window::Create;
 
-  void Create(ContainerWindow &parent,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
+  void Create(ContainerWindow &parent, PixelRect rc,
               const WindowStyle style=WindowStyle()) {
-    Create(&parent, left, top, width, height, style);
+    Create(&parent, rc, style);
   }
 #else /* USE_GDI */
-  void Create(ContainerWindow *parent, const TCHAR *cls,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
+  void Create(ContainerWindow *parent, const TCHAR *cls, PixelRect rc,
               const WindowStyle style=WindowStyle()) {
-    Window::Create(parent, cls, NULL,
-                   left, top, width, height, style);
+    Window::Create(parent, cls, nullptr, rc, style);
   }
 
-  void Create(ContainerWindow &parent, const TCHAR *cls,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
+  void Create(ContainerWindow &parent, const TCHAR *cls, PixelRect rc,
               const WindowStyle style=WindowStyle()) {
-    Create(&parent, cls, left, top, width, height, style);
+    Create(&parent, cls, rc, style);
   }
-
-  void Create(ContainerWindow &parent,
-              PixelScalar left, PixelScalar top,
-              UPixelScalar width, UPixelScalar height,
-              const WindowStyle style=WindowStyle()) {
-    Create(parent, _T("PaintWindow"), left, top, width, height, style);
-  }
-#endif /* USE_GDI */
 
   void Create(ContainerWindow &parent, PixelRect rc,
-              const WindowStyle window_style=WindowStyle()) {
-    Create(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-           window_style);
+              const WindowStyle style=WindowStyle()) {
+    Create(parent, _T("PaintWindow"), rc, style);
   }
+#endif /* USE_GDI */
 
   constexpr
   static bool SupportsPartialRedraw() {

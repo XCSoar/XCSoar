@@ -111,9 +111,7 @@ class ChartControl: public PaintWindow
   const ThermalBandLook &thermal_band_look;
 
 public:
-  ChartControl(ContainerWindow &parent,
-               PixelScalar x, PixelScalar y,
-               UPixelScalar Width, UPixelScalar Height,
+  ChartControl(ContainerWindow &parent, PixelRect rc,
                const WindowStyle style,
                const ChartLook &chart_look,
                const ThermalBandLook &thermal_band_look);
@@ -126,16 +124,14 @@ protected:
   virtual void OnPaint(Canvas &canvas);
 };
 
-ChartControl::ChartControl(ContainerWindow &parent,
-                           PixelScalar X, PixelScalar Y,
-                           UPixelScalar Width, UPixelScalar Height,
+ChartControl::ChartControl(ContainerWindow &parent, PixelRect rc,
                            const WindowStyle style,
                            const ChartLook &_chart_look,
                            const ThermalBandLook &_thermal_band_look)
   :chart_look(_chart_look),
    thermal_band_look(_thermal_band_look)
 {
-  Create(parent, X, Y, Width, Height, style);
+  Create(parent, rc, style);
 }
 
 static void
@@ -547,14 +543,12 @@ OnCalcClicked(gcc_unused WndButton &Sender)
 }
 
 static Window *
-OnCreateCrossSectionControl(ContainerWindow &parent,
-                            PixelScalar left, PixelScalar top,
-                            UPixelScalar width, UPixelScalar height,
+OnCreateCrossSectionControl(ContainerWindow &parent, PixelRect rc,
                             const WindowStyle style)
 {
   csw = new CrossSectionControl(look->cross_section, look->map.airspace,
                                 look->chart);
-  csw->Create(parent, left, top, width, height, style);
+  csw->Create(parent, rc, style);
   csw->SetAirspaces(airspaces);
   csw->SetTerrain(terrain);
   UpdateCrossSection();
@@ -562,12 +556,10 @@ OnCreateCrossSectionControl(ContainerWindow &parent,
 }
 
 static Window *
-OnCreateChartControl(ContainerWindow &parent,
-                     PixelScalar left, PixelScalar top,
-                     UPixelScalar width, UPixelScalar height,
+OnCreateChartControl(ContainerWindow &parent, PixelRect rc,
                      const WindowStyle style)
 {
-  return new ChartControl(parent, left, top, width, height, style,
+  return new ChartControl(parent, rc, style,
                           look->chart,
                           look->thermal_band);
 }

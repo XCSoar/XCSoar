@@ -87,9 +87,7 @@ ShowMessageBox(const TCHAR *text, const TCHAR *caption, unsigned flags)
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
   // Create text element
-  WndFrame *text_frame = new WndFrame(client_area, dialog_look,
-                                      0, 0,
-                                      dialog_width, dialog_height);
+  WndFrame *text_frame = new WndFrame(client_area, dialog_look, form_rc);
 
   text_frame->SetCaption(text);
   text_frame->SetAlignCenter();

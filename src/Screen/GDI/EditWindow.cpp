@@ -27,18 +27,8 @@ Copyright_License {
 #include <windowsx.h>
 
 void
-EditWindow::Create(ContainerWindow &parent,
-                   PixelScalar left, PixelScalar top,
-                   UPixelScalar width, UPixelScalar height,
+EditWindow::Create(ContainerWindow &parent, PixelRect rc,
                    const EditWindowStyle style) {
-  Window::Create(&parent, WC_EDIT, NULL,
-                 left, top, width, height, style);
-}
-
-void
-EditWindow::Create(ContainerWindow &parent, const PixelRect rc,
-                   const EditWindowStyle style)
-{
   Window::Create(&parent, WC_EDIT, NULL, rc, style);
 }
 

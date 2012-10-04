@@ -105,13 +105,8 @@ public:
   /**
    * Constructor of the InfoBoxWindow class
    * @param Parent The parent ContainerWindow (usually MainWindow)
-   * @param X x-Coordinate of the InfoBox
-   * @param Y y-Coordinate of the InfoBox
-   * @param Width Width of the InfoBox
-   * @param Height Height of the InfoBox
    */
-  InfoBoxWindow(ContainerWindow &parent, PixelScalar x, PixelScalar y,
-                UPixelScalar width, UPixelScalar height, unsigned border_flags,
+  InfoBoxWindow(ContainerWindow &parent, PixelRect rc, unsigned border_flags,
                 const InfoBoxSettings &settings, const InfoBoxLook &_look,
                 const UnitsLook &units_look,
                 unsigned id,

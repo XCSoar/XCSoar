@@ -33,15 +33,13 @@ Copyright_License {
 
 void
 Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-               PixelScalar left, PixelScalar top,
-               UPixelScalar width, UPixelScalar height,
-               const WindowStyle window_style)
+               PixelRect rc, const WindowStyle window_style)
 {
   assert(IsScreenInitialized());
-  assert(width > 0);
-  assert(width < 0x1000000);
-  assert(height > 0);
-  assert(height < 0x1000000);
+  assert(rc.left <= rc.right);
+  assert(rc.right - rc.left < 0x1000000);
+  assert(rc.top <= rc.bottom);
+  assert(rc.bottom - rc.top < 0x1000000);
 
   double_clicks = window_style.double_clicks;
 
@@ -51,7 +49,8 @@ Window::Create(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
     EnableCustomPainting();
 
   hWnd = ::CreateWindowEx(ex_style, cls, text, style,
-                          left, top, width, height,
+                          rc.left, rc.top,
+                          rc.right - rc.left, rc.bottom - rc.top,
                           parent != NULL ? parent->hWnd : NULL,
                           NULL, NULL, this);
 

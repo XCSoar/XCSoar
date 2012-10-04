@@ -151,9 +151,9 @@ FontEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_T("Bold"), NULL, false, this);
   AddBoolean(_T("Italic"), NULL, false, this);
 
+  PixelRect preview_rc { 0, 0, Layout::Scale(250), Layout::Scale(100) };
   WndFrame *preview = new WndFrame(*(ContainerWindow *)GetWindow(),
-                                   UIGlobals::GetDialogLook(),
-                                   0, 0, Layout::Scale(250), Layout::Scale(100));
+                                   UIGlobals::GetDialogLook(), preview_rc);
   preview->SetText(_("My Sample"));
   Add(preview);
 

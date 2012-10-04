@@ -868,9 +868,7 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   style.EnableDoubleClicks();
 
   view = new FlarmTrafficControl(look.flarm_dialog);
-  view->Create(GetContainer(),
-               rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
-               style);
+  view->Create(GetContainer(), rc, style);
 
   UpdateLayout();
 }

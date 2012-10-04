@@ -153,8 +153,7 @@ public:
     WindowStyle with_border;
     with_border.Border();
 
-    final_glide.Create(*this, rc.left, rc.top, rc.right, rc.bottom,
-                       with_border);
+    final_glide.Create(*this, rc, with_border);
 
     PixelRect button_rc = rc;
     button_rc.top = button_rc.bottom - 30;

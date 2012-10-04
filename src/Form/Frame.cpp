@@ -29,7 +29,7 @@ Copyright_License {
 #include <winuser.h>
 
 WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
-                   int X, int Y, int Width, int Height,
+                   PixelRect rc,
                    const WindowStyle style)
   :look(_look),
    caption_color(look.text_color),
@@ -38,7 +38,7 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
 {
   text.clear();
 
-  Create(parent, X, Y, Width, Height, style);
+  Create(parent, rc, style);
 }
 
 void

@@ -312,9 +312,7 @@ InfoBoxManager::Create(ContainerWindow &parent,
          settings.geometry is the configured layout */
       : InfoBoxLayout::GetBorder(layout.geometry, i);
 
-    infoboxes[i] = new InfoBoxWindow(parent,
-                                     rc.left, rc.top,
-                                     rc.right - rc.left, rc.bottom - rc.top,
+    infoboxes[i] = new InfoBoxWindow(parent, rc,
                                      Border, settings, look, units_look,
                                      i, style);
   }

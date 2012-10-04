@@ -118,10 +118,6 @@ public:
    * Constructor of the WndForm class
    * @param _main_window
    * @param Caption Titlebar text of the Window
-   * @param X x-Coordinate of the Window
-   * @param Y y-Coordinate of the Window
-   * @param Width Width of the Window
-   * @param Height Height of the Window
    */
   WndForm(SingleWindow &_main_window, const DialogLook &_look,
           const PixelRect &rc,

@@ -26,13 +26,11 @@ Copyright_License {
 
 #include <assert.h>
 
-TabbedControl::TabbedControl(ContainerWindow &parent,
-                             PixelScalar x, PixelScalar y,
-                             UPixelScalar width, UPixelScalar height,
+TabbedControl::TabbedControl(ContainerWindow &parent, PixelRect rc,
                              const WindowStyle style)
   :page_flipped_callback(NULL)
 {
-  Create(parent, x, y, width, height, style);
+  Create(parent, rc, style);
 }
 
 TabbedControl::~TabbedControl()
