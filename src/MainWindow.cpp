@@ -70,8 +70,13 @@ gcc_pure
 static PixelRect
 GetBottomWidgetRect(const PixelRect &rc, const Widget *bottom_widget)
 {
-  if (bottom_widget == nullptr)
-    return rc;
+  if (bottom_widget == nullptr) {
+    /* no bottom widget: return empty rectangle, map uses the whole
+       main area */
+    PixelRect result = rc;
+    result.top = result.bottom;
+    return result;
+  }
 
   const UPixelScalar requested_height = bottom_widget->GetMinimumSize().cy;
   UPixelScalar height;
