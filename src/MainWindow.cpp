@@ -202,7 +202,6 @@ MainWindow::InitialiseConfigured()
 
   PixelRect rc = GetClientRect();
 
-  LogStartUp(_T("InfoBox geometry"));
   const InfoBoxLayout::Layout ib_layout =
     InfoBoxLayout::Calculate(rc, ui_settings.info_boxes.geometry);
 
@@ -228,11 +227,9 @@ MainWindow::InitialiseConfigured()
   assert(look != NULL);
   look->InitialiseConfigured(CommonInterface::GetUISettings());
 
-  LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   map_rect = ib_layout.remaining;
 
-  LogStartUp(_T("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
   ButtonLabel::SetFont(Fonts::map_bold);
 
@@ -253,7 +250,6 @@ MainWindow::InitialiseConfigured()
   map->Create(*this, map_rect);
   map->SetFont(Fonts::map);
 
-  LogStartUp(_T("Initialise message system"));
   popup.Create(rc);
 }
 

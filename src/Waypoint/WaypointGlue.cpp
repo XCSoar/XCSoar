@@ -177,7 +177,6 @@ bool
 WaypointGlue::SaveWaypoints(const Waypoints &way_points)
 {
   bool result = false;
-  LogStartUp(_T("SaveWaypoints"));
 
   // ### FIRST FILE ###
   result |= SaveWaypointFile(way_points, 1);

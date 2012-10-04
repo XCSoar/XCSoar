@@ -116,9 +116,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   ScreenGlobalInit screen_init;
 
-  // Write initialization note to logfile
-  LogStartUp(_T("Initialise application instance"));
-
 #ifdef WIN32
   /* try to make the UI most responsive */
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);

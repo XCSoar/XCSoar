@@ -25,14 +25,11 @@ Copyright_License {
 #include "Profile/SystemProfile.hpp"
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/UIProfile.hpp"
-#include "LogFile.hpp"
 #include "Interface.hpp"
 
 void
 Profile::Use()
 {
-  LogStartUp(_T("Read registry settings"));
-
   Load(CommonInterface::SetSystemSettings());
   Load(CommonInterface::SetComputerSettings());
   Load(CommonInterface::SetUISettings());

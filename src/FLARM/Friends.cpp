@@ -25,7 +25,6 @@ Copyright_License {
 #include "FLARM/FlarmId.hpp"
 #include "Profile/Profile.hpp"
 #include "Util/tstring.hpp"
-#include "LogFile.hpp"
 
 #include <map>
 
@@ -81,8 +80,6 @@ FlarmFriends::LoadColor(const TCHAR *key, Color color)
 void
 FlarmFriends::Load()
 {
-  LogStartUp(_T("Loading FLARM friends database"));
-
   LoadColor(_T("FriendsGreen"), Color::GREEN);
   LoadColor(_T("FriendsBlue"), Color::BLUE);
   LoadColor(_T("FriendsYellow"), Color::YELLOW);

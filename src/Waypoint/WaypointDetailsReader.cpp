@@ -25,7 +25,6 @@ Copyright_License {
 #include "WaypointDetailsReader.hpp"
 #include "Language/Language.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "LogFile.hpp"
 #include "Interface.hpp"
 #include "Util/StringUtil.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -150,7 +149,6 @@ void
 WaypointDetails::ReadFile(TLineReader &reader, Waypoints &way_points,
                           OperationEnvironment &operation)
 {
-  LogStartUp(_T("WaypointDetails::ReadFile"));
   operation.SetText(_("Loading Airfield Details File..."));
   ParseAirfieldDetails(way_points, reader, operation);
 }
@@ -159,8 +157,6 @@ void
 WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
                                      OperationEnvironment &operation)
 {
-  LogStartUp(_T("WaypointDetails::ReadFileFromProfile"));
-
   std::unique_ptr<TLineReader>
   reader(OpenConfiguredTextFile(ProfileKeys::AirfieldFile, _T("airfields.txt"),
                                 ConvertLineReader::AUTO));

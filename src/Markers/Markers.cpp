@@ -24,7 +24,6 @@ Copyright_License {
 #include "Markers.hpp"
 #include "Compatibility/string.h"
 #include "LocalPath.hpp"
-#include "LogFile.hpp"
 #include "resource.h"
 #include "IO/TextWriter.hpp"
 #include "IO/DataFile.hpp"
@@ -33,7 +32,6 @@ Copyright_License {
 
 Markers::Markers()
 {
-  LogStartUp(_T("Initialise marks"));
   Reset();
 }
 
@@ -45,7 +43,6 @@ Markers::Reset()
 
 Markers::~Markers()
 {
-  LogStartUp(_T("CloseMarks"));
   marker_store.clear();
 }
 

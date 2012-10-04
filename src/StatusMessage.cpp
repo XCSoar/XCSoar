@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "StatusMessage.hpp"
 #include "Profile/Profile.hpp"
-#include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "Util/EscapeBackslash.hpp"
 #include "Util/StringUtil.hpp"
@@ -57,8 +56,6 @@ StatusMessageList::StatusMessageList()
 void
 StatusMessageList::LoadFile()
 {
-  LogStartUp(_T("Loading status file"));
-
   std::unique_ptr<TLineReader> reader(OpenConfiguredTextFile(ProfileKeys::StatusFile));
   if (reader)
     LoadFile(*reader);

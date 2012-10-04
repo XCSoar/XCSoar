@@ -173,16 +173,13 @@ LoadProfile()
 void
 XCSoarInterface::AfterStartup()
 {
-  LogStartUp(_T("ProgramStarted = 3"));
   StartupLogFreeRamAndStorage();
 
   status_messages.Startup(true);
 
   if (is_simulator()) {
-    LogStartUp(_T("GCE_STARTUP_SIMULATOR"));
     InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
   } else {
-    LogStartUp(_T("GCE_STARTUP_REAL"));
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
@@ -230,10 +227,9 @@ XCSoarInterface::Startup()
   Net::DownloadManager::Initialise();
 #endif
 
-  LogStartUp(_T("Display dpi=%u,%u"), Display::GetXDPI(), Display::GetYDPI());
+  LogFormat("Display dpi=%u,%u", Display::GetXDPI(), Display::GetYDPI());
 
   // Creates the main window
-  LogStartUp(_T("Create main window"));
 
   TopWindowStyle style;
   if (CommandLine::full_screen)
@@ -427,7 +423,6 @@ XCSoarInterface::Startup()
 
 /*
   -- Reset polar in case devices need the data
-  LogStartUp(_T("GlidePolar::UpdatePolar"));
   GlidePolar::UpdatePolar(true, GetComputerSettings());
 
   This should be done inside devStartup if it is really required
@@ -462,17 +457,14 @@ XCSoarInterface::Startup()
 
   // Create the drawing thread
 #ifndef ENABLE_OPENGL
-  LogStartUp(_T("CreateDrawingThread"));
   draw_thread = new DrawThread(*map_window);
   draw_thread->Start(true);
 #endif
 
   // Show the infoboxes
-  LogStartUp(_T("ShowInfoBoxes"));
   InfoBoxManager::Show();
 
   // Create the calculation thread
-  LogStartUp(_T("CreateCalculationThread"));
   CreateCalculationThread();
 
   // Find unique ID of this PDA
@@ -599,21 +591,16 @@ XCSoarInterface::Shutdown()
   protected_task_manager->TaskSaveDefault();
 
   // Clear waypoint database
-  LogStartUp(_T("Close waypoints"));
   way_points.Clear();
 
   operation.SetText(_("Shutdown, please wait..."));
 
   // Clear weather database
-  LogStartUp(_T("CloseRASP"));
   RASP.Close();
 
   // Clear terrain database
-  LogStartUp(_T("CloseTerrain"));
 
   delete terrain;
-
-  LogStartUp(_T("CloseTopography"));
   delete topography;
 
   delete protected_marks;
@@ -662,7 +649,6 @@ XCSoarInterface::Shutdown()
   delete logger;
 
   // Clear airspace database
-  LogStartUp(_T("Close airspace"));
   airspace_database.clear();
 
   // Destroy FlarmNet records

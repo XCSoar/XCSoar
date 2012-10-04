@@ -87,8 +87,6 @@ WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                       DeviceBlackboard *device_blackboard,
                       const bool reset)
 {
-  LogStartUp(_T("SetHome"));
-
   if (reset)
     poi_settings.home_waypoint = -1;
 
