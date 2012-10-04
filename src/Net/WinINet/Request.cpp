@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Net/Request.hpp"
 #include "Net/Session.hpp"
-#include "Net/Connection.hpp"
 #include "Util/ConvertString.hpp"
 
 #include <assert.h>
@@ -65,22 +64,6 @@ Net::Request::Request(Session &session, const char *url,
     opened_event.Wait(timeout_ms);
 
   session.handle.SetStatusCallback(old_callback);
-}
-
-Net::Request::Request(Connection &connection, const char *file,
-                      unsigned timeout_ms)
-{
-  INTERNET_STATUS_CALLBACK old_callback =
-    connection.handle.SetStatusCallback(RequestCallback);
-  HINTERNET h = connection.handle.OpenRequest("GET", file, NULL, NULL, NULL,
-                                              INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE,
-                                              (DWORD_PTR)this);
-
-  if (h == NULL && GetLastError() == ERROR_IO_PENDING)
-    // Wait until we get the Request handle
-    opened_event.Wait(timeout_ms);
-
-  connection.handle.SetStatusCallback(old_callback);
 }
 
 bool

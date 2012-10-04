@@ -7,7 +7,6 @@ ifneq ($(findstring $(TARGET),PC WINE CYGWIN),)
 HAVE_HTTP := y
 LIBNET_SOURCES += \
 	$(SRC)/Net/WinINet/Session.cpp \
-	$(SRC)/Net/WinINet/Connection.cpp \
 	$(SRC)/Net/WinINet/Request.cpp
 LIBNET_LDLIBS = -lwininet
 endif

@@ -94,17 +94,6 @@ namespace Net {
     Request(Session &session, const char *url,
             unsigned timeout_ms=INFINITE);
 
-#ifdef HAVE_WININET
-    /**
-     * Creates a Request that can be used to get data from a webserver.
-     * @param connection Connection instance that is used for creating this Request
-     * @param file The file to request (e.g. /downloads/index.htm)
-     * @param timeout_ms Timeout used for creating this request
-     */
-    Request(Connection &connection, const char *file,
-            unsigned timeout_ms=INFINITE);
-#endif
-
 #if defined(HAVE_CURL) || defined(HAVE_JAVA_NET)
     ~Request();
 #endif
