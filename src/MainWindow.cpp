@@ -630,7 +630,7 @@ MainWindow::OnDestroy()
 }
 
 bool MainWindow::OnClose() {
-  if (!IsRunning())
+  if (HasDialog() || !IsRunning())
     /* no shutdown dialog if XCSoar hasn't completed initialization
        yet (e.g. if we are in the simulator prompt) */
     return SingleWindow::OnClose();

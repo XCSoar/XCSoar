@@ -391,13 +391,6 @@ WndForm::ShowModal()
 #endif
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
-#if defined(ENABLE_SDL) && !defined(ANDROID)
-    if (event.type == SDL_QUIT) {
-      modal_result = mrCancel;
-      continue;
-    }
-#endif
-
     if (!main_window.FilterEvent(event, this)) {
       if (modeless && is_mouse_down(event))
         break;
