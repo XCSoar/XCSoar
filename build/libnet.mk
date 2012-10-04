@@ -18,6 +18,7 @@ ifeq ($(TARGET),UNIX)
 HAVE_HTTP := y
 
 LIBNET_SOURCES += \
+	$(SRC)/Net/CURL/Multi.cpp \
 	$(SRC)/Net/CURL/Session.cpp \
 	$(SRC)/Net/CURL/Request.cpp \
 	$(SRC)/Net/CURL/Init.cpp

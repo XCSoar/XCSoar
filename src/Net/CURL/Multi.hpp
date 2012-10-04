@@ -21,73 +21,63 @@ Copyright_License {
 }
 */
 
-#ifndef NET_SESSION_HPP
-#define NET_SESSION_HPP
+#ifndef NET_CURL_MULTI_HPP
+#define NET_CURL_MULTI_HPP
 
-#include "Net/Features.hpp"
+#include "Compiler.h"
 
-#ifdef HAVE_WININET
-#include "Net/WinINet/WinINet.hpp"
-#endif
+#include <map>
 
-#ifdef HAVE_CURL
-#include "Net/CURL/Multi.hpp"
-#endif
+#include <curl/curl.h>
 
 namespace Net {
-  class Session {
-#ifdef HAVE_WININET
-    /** Internal session handle */
-    WinINet::SessionHandle handle;
-#endif
+  /**
+   * Wrapper for a CURLM object.  This class is not thread-safe.
+   */
+  class CurlMulti {
+    CURLM *multi;
 
-#ifdef HAVE_CURL
-    CurlMulti multi;
-#endif
+    std::map<const CURL *, CURLcode> results;
 
   public:
-#ifdef HAVE_WININET
-    friend class Connection;
-    friend class Request;
-#endif
-
-#ifndef HAVE_CURL
     /**
      * Opens a session that can be used for
      * connections and registers the necessary callback.
      */
-    Session();
-#endif
+    CurlMulti();
+    ~CurlMulti();
 
-    /**
-     * Was the session created successfully
-     * @return True if session was created successfully
-     */
-#ifdef HAVE_CURL
-    bool Error() const {
-      return !multi.IsDefined();
+    bool IsDefined() const {
+      return multi != nullptr;
     }
 
     bool Add(CURL *easy) {
-      return multi.Add(easy);
+      return ::curl_multi_add_handle(multi, easy) == CURLM_OK;
     }
 
-    void Remove(CURL *easy) {
-      return multi.Remove(easy);
+    void Remove(CURL *easy);
+
+    bool FdSet(fd_set *read_fd_set, fd_set *write_fd_set, fd_set *exc_fd_set,
+               int *max_fd) const {
+      return ::curl_multi_fdset(multi, read_fd_set, write_fd_set, exc_fd_set,
+                                max_fd) == CURLM_OK;
     }
 
-    bool Select(int timeout_ms);
+    gcc_pure
+    long GetTimeout() const {
+      long timeout;
+      return ::curl_multi_timeout(multi, &timeout) == CURLM_OK
+          ? timeout
+          : -1;
+    }
 
     CURLMcode Perform() {
-      return multi.Perform();
+      int running_handles;
+      return ::curl_multi_perform(multi, &running_handles);
     }
 
-    CURLcode InfoRead(const CURL *easy) {
-      return multi.InfoRead(easy);
-    }
-#else
-    bool Error() const;
-#endif
+    gcc_pure
+    CURLcode InfoRead(const CURL *easy);
   };
 }
 

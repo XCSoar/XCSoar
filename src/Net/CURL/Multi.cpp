@@ -21,45 +21,51 @@ Copyright_License {
 }
 */
 
-#include "Net/Session.hpp"
+#include "Multi.hpp"
 
-#include <algorithm>
 #include <assert.h>
 #include <sys/select.h>
 
-bool
-Net::Session::Select(int timeout_ms)
+Net::CurlMulti::CurlMulti()
+  :multi(curl_multi_init())
 {
-  fd_set rfds, wfds, efds;
-  FD_ZERO(&rfds);
-  FD_ZERO(&wfds);
-  FD_ZERO(&efds);
+}
 
-  int max_fd;
+Net::CurlMulti::~CurlMulti()
+{
+  assert(results.empty());
 
-  if (!multi.FdSet(&rfds, &wfds, &efds, &max_fd))
-    return false;
+  if (multi != NULL)
+    curl_multi_cleanup(multi);
+}
 
-  bool using_curl_timeout = false;
-  long curl_timeout = multi.GetTimeout();
-  if (curl_timeout >= 0) {
-    if (curl_timeout < 50)
-      curl_timeout = 50;
+void
+Net::CurlMulti::Remove(CURL *easy)
+{
+  auto i = results.find(easy);
+  if (i != results.end())
+    results.erase(i);
 
-    if (timeout_ms < 0 || curl_timeout < (long)timeout_ms) {
-      timeout_ms = curl_timeout;
-      using_curl_timeout = true;
+  curl_multi_remove_handle(multi, easy);
+}
+
+CURLcode
+Net::CurlMulti::InfoRead(const CURL *easy)
+{
+  auto i = results.find(easy);
+  if (i != results.end())
+    return i->second;
+
+  const CURLMsg *msg;
+  int msgs_in_queue;
+  while ((msg = curl_multi_info_read(multi, &msgs_in_queue)) != NULL) {
+    if (msg->msg == CURLMSG_DONE) {
+      if (msg->easy_handle == easy)
+        return msg->data.result;
+
+      results.insert(std::make_pair(easy, msg->data.result));
     }
   }
 
-  struct timeval timeout, *timeout_p;
-  if (timeout_ms >= 0) {
-    timeout.tv_sec = timeout_ms / 1000;
-    timeout.tv_usec = (timeout_ms % 1000) * 1000;
-    timeout_p = &timeout;
-  } else
-    timeout_p = NULL;
-
-  int ret = select(max_fd + 1, &rfds, &wfds, &efds, timeout_p);
-  return ret > 0 || (using_curl_timeout && ret == 0);
+  return CURLE_AGAIN;
 }
