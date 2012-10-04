@@ -32,7 +32,6 @@ Copyright_License {
 #include "FileEventHandler.hpp"
 
 #include <map>
-#include <forward_list>
 
 class FileEventHandler;
 
