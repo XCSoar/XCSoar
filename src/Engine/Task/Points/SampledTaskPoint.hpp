@@ -240,9 +240,6 @@ private:
   void SetSearchMin(const SearchPoint &locmin) {
     search_min = locmin;
   }
-
-  /** Clear all sample points. */
-  void ClearSamplePoints();
 };
 
 #endif //SAMPLEDOBSERVATIONZONE_H
