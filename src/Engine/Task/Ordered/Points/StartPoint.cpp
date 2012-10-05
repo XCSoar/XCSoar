@@ -126,7 +126,7 @@ StartPoint::find_best_start(const AircraftState &state,
 
   StartPointBestStart solver(*this, state.location,
                              next.GetLocationRemaining());
-  SetSearchMin(solver.solve(), projection);
+  SetSearchMin(SearchPoint(solver.solve(), projection));
 }
 
 

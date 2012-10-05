@@ -136,11 +136,3 @@ SampledTaskPoint::GetSearchPoints() const
 
   return boundary_points;
 }
-
-void 
-SampledTaskPoint::SetSearchMin(const GeoPoint &location,
-                                 const TaskProjection &projection)
-{
-  SearchPoint sp(location, projection);
-  SetSearchMin(sp);
-}

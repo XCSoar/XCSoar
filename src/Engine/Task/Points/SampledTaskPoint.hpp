@@ -164,13 +164,6 @@ protected:
                              const TaskProjection &projection);
 
   /**
-   * Set minimum distance point based on location.
-   *
-   * @param location Location of min point
-   */
-  void SetSearchMin(const GeoPoint &location, const TaskProjection &projection);
-
-  /**
    * Retrieve boundary points polygon
    */
   const SearchPointVector& GetBoundaryPoints() const {
