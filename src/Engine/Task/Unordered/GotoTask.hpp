@@ -33,8 +33,6 @@
 class GotoTask : 
   public UnorderedTask 
 {
-  friend class PrintHelper;
-
   TaskWaypoint* tp;
   const Waypoints &waypoints;
 

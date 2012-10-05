@@ -46,9 +46,6 @@ class OrderedTaskPoint :
   public ScoredTaskPoint,
   public ObservationZoneClient
 {
-  friend class Serialiser;
-  friend class PrintHelper;
-
 public:
   /**
    * States each task point can be in

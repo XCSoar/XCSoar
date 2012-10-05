@@ -41,8 +41,6 @@ class GlidePolar;
 class AbstractTask: 
   public TaskInterface 
 {
-  friend class PrintHelper;
-
 protected:
   /** task point sequence index */
   unsigned active_task_point;

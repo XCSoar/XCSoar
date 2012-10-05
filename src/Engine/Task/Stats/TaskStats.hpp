@@ -25,10 +25,6 @@
 #include "ElementStat.hpp"
 #include "Util/TypeTraits.hpp"
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 struct TaskBehaviour;
 
 /** Container for common task statistics */
@@ -95,11 +91,6 @@ public:
    * @return True if is mode changed
    */
   bool calc_flight_mode(const TaskBehaviour &settings);
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const TaskStats& ts);
-#endif
 };
 
 static_assert(is_trivial<TaskStats>::value, "type is not trivial");

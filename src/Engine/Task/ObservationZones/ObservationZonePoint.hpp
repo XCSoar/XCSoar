@@ -37,8 +37,6 @@ class ObservationZonePoint:
   public NonCopyable
 {
 public:
-  friend class Serialiser;
-
   enum Shape {
     LINE,
     CYLINDER,

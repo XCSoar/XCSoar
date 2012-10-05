@@ -24,10 +24,6 @@
 
 #include "Math/fixed.hpp"
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 #include "Math/Filter.hpp"
 #include "Math/AvFilter.hpp"
 #include "Math/DiffFilter.hpp"
@@ -104,11 +100,6 @@ public:
 
     return speed_incremental;
   }
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const DistanceStat& ds);
-#endif
 };
 
 /**

@@ -36,8 +36,6 @@ struct AircraftState;
 class TaskPoint
 {
 public:
-  friend class PrintHelper;
-
   enum Type: uint8_t {
     UNORDERED,
     START,

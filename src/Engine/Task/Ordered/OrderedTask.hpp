@@ -61,9 +61,6 @@ class OrderedTask:
   public AbstractTask
 {
 public:
-  friend class Serialiser;
-  friend class PrintHelper;
-
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
 
 private:

@@ -28,10 +28,6 @@
 #include "Util/TypeTraits.hpp"
 #include "TaskSummary.hpp"
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 /** 
  * Task statistics that are common across all managed tasks.
  * This is used for statistics for which it makes no sense to
@@ -110,10 +106,6 @@ public:
    * Reset the task stats
    */
   void ResetTask();
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, const CommonStats& ts);
-#endif
 };
 
 static_assert(is_trivial<CommonStats>::value, "type is not trivial");

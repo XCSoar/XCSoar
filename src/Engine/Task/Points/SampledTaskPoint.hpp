@@ -43,9 +43,6 @@ struct GeoPoint;
  *   zone is modified (e.g. due to previous/next taskpoint moving) in update_oz
  */
 class SampledTaskPoint : public TaskWaypoint {
-  friend class OrderedTask;
-  friend class PrintHelper;
-
   /**
    * Whether boundaries are used in scoring distance,
    * or just the reference point
@@ -207,6 +204,7 @@ private:
 
   virtual OZBoundary GetBoundary() const = 0;
 
+public:
   /**
    * Retrieve interior sample polygon.
    * Because sometimes an OZ will be skipped (by accident, true miss, or

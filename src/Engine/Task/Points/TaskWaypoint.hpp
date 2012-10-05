@@ -32,8 +32,6 @@
 class TaskWaypoint :
   public TaskPoint
 {
-  friend class PrintHelper;
-
   /** local copy of waypoint */
   Waypoint waypoint;
 

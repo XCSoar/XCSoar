@@ -79,9 +79,6 @@ private:
   CommonStats common_stats;
 
 public:
-  friend class Serialiser;
-  friend class PrintHelper;
-
   /**
    * Constructor for task manager
    *

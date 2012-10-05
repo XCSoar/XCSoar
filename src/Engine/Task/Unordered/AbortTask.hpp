@@ -56,8 +56,6 @@ public:
 class AbortTask: public UnorderedTask
 {
 public:
-  friend class PrintHelper;
-
   /** max number of items in list */
   static const unsigned max_abort;
   /** min search range in m */

@@ -36,8 +36,6 @@
  */
 class AATPoint: public IntermediateTaskPoint
 {
-  friend class PrintHelper;
-
   /** Location of target within OZ */
   GeoPoint target_location;
   /** Saved location of target within OZ */

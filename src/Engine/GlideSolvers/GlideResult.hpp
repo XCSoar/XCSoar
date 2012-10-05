@@ -27,10 +27,6 @@
 #include "GlideSettings.hpp"
 #include "Compiler.h"
 
-#ifdef DO_PRINT
-#include <iostream>
-#endif
-
 struct GlideState;
 struct AircraftState;
 
@@ -312,11 +308,6 @@ struct GlideResult {
 
   /** Reset/clear the solution */
   void Reset();
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const GlideResult& gl);
-#endif
 
 private:
   /**

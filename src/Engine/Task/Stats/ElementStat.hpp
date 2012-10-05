@@ -25,9 +25,6 @@
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
-#ifdef DO_PRINT
-#include <iostream>
-#endif
 #include "DistanceStat.hpp"
 #include "TaskVario.hpp"
 #include "Util/TypeTraits.hpp"
@@ -117,10 +114,6 @@ struct ElementStat
   bool IsAchievable() const {
     return solution_remaining.IsAchievable();
   }
-
-#ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream &o, const ElementStat &es);
-#endif
 };
 
 static_assert(is_trivial<ElementStat>::value, "type is not trivial");
