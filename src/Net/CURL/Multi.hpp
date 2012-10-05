@@ -41,7 +41,11 @@ namespace Net {
 
   public:
     CurlMulti();
+    CurlMulti(const CurlMulti &other) = delete;
+
     ~CurlMulti();
+
+    CurlMulti &operator=(const CurlMulti &other) = delete;
 
     bool IsDefined() const {
       return multi != nullptr;

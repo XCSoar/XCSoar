@@ -40,11 +40,14 @@ namespace Net {
 
   public:
     CurlEasy():handle(::curl_easy_init()) {}
+    CurlEasy(const CurlEasy &other) = delete;
 
     ~CurlEasy() {
       if (handle != nullptr)
         ::curl_easy_cleanup(handle);
     }
+
+    CurlEasy &operator=(const CurlEasy &other) = delete;
 
     bool IsDefined() const {
       return handle != nullptr;
