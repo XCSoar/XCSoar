@@ -29,41 +29,35 @@ Copyright_License {
 
 Net::Request::Request(Session &_session, const TCHAR *url,
                       unsigned timeout_ms)
-  :session(_session), handle(curl_easy_init())
+  :session(_session)
 {
   // XXX implement timeout
 
-  if (handle == NULL)
+  if (!handle.IsDefined())
     return;
 
   char user_agent[32];
   snprintf(user_agent, 32, "XCSoar/%s", XCSoar_Version);
 
-  curl_easy_setopt(handle, CURLOPT_USERAGENT, user_agent);
-  curl_easy_setopt(handle, CURLOPT_FAILONERROR, true);
-  curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, WriteCallback);
-  curl_easy_setopt(handle, CURLOPT_WRITEDATA, this);
+  handle.SetUserAgent(user_agent);
+  handle.SetFailOnError(true);
+  handle.SetWriteFunction(WriteCallback, this);
 
-  CURLcode code = curl_easy_setopt(handle, CURLOPT_URL, url);
-  if (code != CURLE_OK) {
-    curl_easy_cleanup(handle);
-    handle = NULL;
+  if (!handle.SetURL(url)) {
+    handle.Destroy();
     return;
   }
 
-  if (!session.Add(handle)) {
-    curl_easy_cleanup(handle);
-    handle = NULL;
+  if (!session.Add(handle.GetHandle())) {
+    handle.Destroy();
     return;
   }
 }
 
 Net::Request::~Request()
 {
-  if (handle != NULL) {
-    session.Remove(handle);
-    curl_easy_cleanup(handle);
-  }
+  if (handle.IsDefined())
+    session.Remove(handle.GetHandle());
 }
 
 size_t
@@ -90,14 +84,14 @@ Net::Request::WriteCallback(char *ptr, size_t size, size_t nmemb,
 bool
 Net::Request::Send(unsigned _timeout_ms)
 {
-  if (handle == NULL)
+  if (!handle.IsDefined())
     return false;
 
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 
   CURLMcode mcode = CURLM_CALL_MULTI_PERFORM;
   while (buffer.IsEmpty()) {
-    CURLcode code = session.InfoRead(handle);
+    CURLcode code = session.InfoRead(handle.GetHandle());
     if (code != CURLE_AGAIN)
       return code == CURLE_OK;
 
@@ -116,19 +110,13 @@ Net::Request::Send(unsigned _timeout_ms)
 int64_t
 Net::Request::GetLength() const
 {
-  assert(handle != NULL);
-
-  double value;
-  return curl_easy_getinfo(handle, CURLINFO_CONTENT_LENGTH_DOWNLOAD,
-                           &value) == CURLE_OK
-    ? (int64_t)value
-    : -1;
+  return handle.GetContentLength();
 }
 
 ssize_t
 Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
 {
-  assert(handle != NULL);
+  assert(handle.IsDefined());
 
   const int timeout_ms = _timeout_ms == INFINITE ? -1 : _timeout_ms;
 
@@ -139,7 +127,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
     if (!range.IsEmpty())
       break;
 
-    CURLcode code = session.InfoRead(handle);
+    CURLcode code = session.InfoRead(handle.GetHandle());
     if (code != CURLE_AGAIN)
       return code == CURLE_OK ? 0 : -1;
 
@@ -161,7 +149,7 @@ Net::Request::Read(void *_buffer, size_t buffer_size, unsigned _timeout_ms)
   p[buffer_size] = 0;
 
   buffer.Consume(buffer_size);
-  curl_easy_pause(handle, CURLPAUSE_CONT);
+  handle.Unpause();
 
   return buffer_size;
 }

@@ -33,6 +33,7 @@ Copyright_License {
 
 #ifdef HAVE_CURL
 #include "Util/FifoBuffer.hpp"
+#include "Net/CURL/Easy.hpp"
 
 #include <curl/curl.h>
 #include <stdint.h>
@@ -71,7 +72,7 @@ namespace Net {
 #ifdef HAVE_CURL
     Session &session;
 
-    CURL *handle;
+    CurlEasy handle;
 
     typedef FifoBuffer<uint8_t, CURL_MAX_WRITE_SIZE> Buffer;
     Buffer buffer;
