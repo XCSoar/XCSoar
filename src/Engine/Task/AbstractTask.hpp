@@ -100,8 +100,9 @@ public:
    * 
    * @return Index of active task point sequence
    */
-  gcc_pure
-  unsigned GetActiveTaskPointIndex() const;
+  unsigned GetActiveTaskPointIndex() const {
+    return active_task_point;
+  }
 
   /**
    * Test if task has finished.  Used to determine whether

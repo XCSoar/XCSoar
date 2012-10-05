@@ -132,12 +132,6 @@ AbstractTask::UpdateIdle(const AircraftState &state,
   return false;
 }
 
-unsigned 
-AbstractTask::GetActiveTaskPointIndex() const
-{
-  return active_task_point;
-}
-
 void
 AbstractTask::UpdateStatsDistances(const GeoPoint &location,
                                    const bool full_update)
