@@ -40,7 +40,7 @@ TaskAdvanceSmart::SetFactoryConstraints(const TaskFactoryConstraints &constraint
   start_requires_arm = constraints.start_requires_arm;
 }
 
-bool 
+bool
 TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
                                       const AircraftState &aircraft,
                                       const bool x_enter, const bool x_exit)
@@ -77,8 +77,8 @@ TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
   } else if (tp.IsIntermediatePoint()) {
     state = TaskAdvance::AUTO;
     return state_ready;
-  } 
-  
+  }
+
   return false;
 }
 

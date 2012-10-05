@@ -90,7 +90,7 @@ public:
   OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
                    const Waypoint &wp,
                    const OrderedTaskBehaviour &to,
-                   const bool b_scored=false);
+                   const bool b_scored);
 
   virtual ~OrderedTaskPoint() {}
 
