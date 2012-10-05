@@ -36,7 +36,7 @@ OrderedTaskBehaviour::SetDefaults()
   fai_finish = false;
 }
 
-bool 
+bool
 OrderedTaskBehaviour::CheckStartSpeed(const AircraftState &state,
                                       const TaskStartMargins &behaviour,
                                       const bool with_margin) const
@@ -47,12 +47,14 @@ OrderedTaskBehaviour::CheckStartSpeed(const AircraftState &state,
   if (fai_finish)
     return true;
 
-  const fixed margin = with_margin ? behaviour.start_max_speed_margin : fixed_zero;
+  const fixed margin = with_margin
+    ? behaviour.start_max_speed_margin
+    : fixed_zero;
 
   return state.ground_speed <= start_max_speed + margin;
 }
 
-bool 
+bool
 OrderedTaskBehaviour::CheckStartHeight(const AircraftState &state,
                                        const TaskStartMargins &behaviour,
                                        const fixed start_elevation,
@@ -72,7 +74,7 @@ OrderedTaskBehaviour::CheckStartHeight(const AircraftState &state,
     return state.altitude <= (fixed(start_max_height + margin) + start_elevation);
 }
 
-bool 
+bool
 OrderedTaskBehaviour::CheckFinishHeight(const AircraftState &state,
                                         const fixed finish_elevation) const
 {

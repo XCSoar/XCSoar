@@ -49,14 +49,14 @@
 #include "Task/PathSolvers/TaskDijkstraMin.hpp"
 #include "Task/PathSolvers/TaskDijkstraMax.hpp"
 
-OrderedTask::OrderedTask(const TaskBehaviour &tb):
-  AbstractTask(ORDERED, tb),
-  taskpoint_start(NULL),
-  taskpoint_finish(NULL),
-  factory_mode(tb.task_type_default),
-  active_factory(NULL),
-  ordered_behaviour(tb.ordered_defaults),
-  dijkstra_min(NULL), dijkstra_max(NULL)
+OrderedTask::OrderedTask(const TaskBehaviour &tb)
+  :AbstractTask(ORDERED, tb),
+   taskpoint_start(NULL),
+   taskpoint_finish(NULL),
+   factory_mode(tb.task_type_default),
+   active_factory(NULL),
+   ordered_behaviour(tb.ordered_defaults),
+   dijkstra_min(NULL), dijkstra_max(NULL)
 {
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
