@@ -101,7 +101,7 @@ namespace Net {
   protected:
     size_t ResponseData(const uint8_t *ptr, size_t size);
 
-    static size_t WriteCallback(void *ptr, size_t size, size_t nmemb,
+    static size_t WriteCallback(char *ptr, size_t size, size_t nmemb,
                                 void *userdata);
 #endif
 

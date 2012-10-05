@@ -80,7 +80,7 @@ Net::Request::ResponseData(const uint8_t *ptr, size_t size)
 }
 
 size_t
-Net::Request::WriteCallback(void *ptr, size_t size, size_t nmemb,
+Net::Request::WriteCallback(char *ptr, size_t size, size_t nmemb,
                             void *userdata)
 {
   Request *request = (Request *)userdata;
