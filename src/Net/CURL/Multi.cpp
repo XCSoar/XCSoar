@@ -24,7 +24,6 @@ Copyright_License {
 #include "Multi.hpp"
 
 #include <assert.h>
-#include <sys/select.h>
 
 Net::CurlMulti::CurlMulti()
   :multi(curl_multi_init())

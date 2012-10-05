@@ -40,10 +40,6 @@ namespace Net {
     std::map<const CURL *, CURLcode> results;
 
   public:
-    /**
-     * Opens a session that can be used for
-     * connections and registers the necessary callback.
-     */
     CurlMulti();
     ~CurlMulti();
 
