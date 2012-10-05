@@ -158,7 +158,8 @@ PrintHelper::taskpoint_print(std::ostream& f, const TaskPoint& tp,
 
 
 void
-PrintHelper::abstracttask_print(AbstractTask& task, const AircraftState &state) 
+PrintHelper::abstracttask_print(const AbstractTask &task,
+                                const AircraftState &state)
 {
   std::ofstream fs("results/res-stats-all.txt");
   if (!task.stats.task_valid)
@@ -199,7 +200,8 @@ PrintHelper::abstracttask_print(AbstractTask& task, const AircraftState &state)
 
 
 void 
-PrintHelper::gototask_print(GotoTask& task, const AircraftState &state) 
+PrintHelper::gototask_print(const GotoTask &task,
+                            const AircraftState &state)
 {
   abstracttask_print(task, state);
   if (task.tp) {
@@ -209,7 +211,8 @@ PrintHelper::gototask_print(GotoTask& task, const AircraftState &state)
 }
 
 void 
-PrintHelper::orderedtask_print(OrderedTask& task, const AircraftState &state) 
+PrintHelper::orderedtask_print(const OrderedTask &task,
+                               const AircraftState &state)
 {
   abstracttask_print(task, state);
   if (!task.stats.task_valid)
@@ -275,7 +278,8 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AircraftState &state)
 }
 
 
-void PrintHelper::aborttask_print(AbortTask& task, const AircraftState &state)
+void
+PrintHelper::aborttask_print(const AbortTask &task, const AircraftState &state)
 {
   abstracttask_print(task, state);
 
@@ -293,7 +297,9 @@ void PrintHelper::aborttask_print(AbortTask& task, const AircraftState &state)
 }
 
 
-void PrintHelper::taskmanager_print(TaskManager& task, const AircraftState &state)
+void
+PrintHelper::taskmanager_print(const TaskManager &task,
+                               const AircraftState &state)
 {
   if (task.active_task) {
     if (task.active_task == &task.task_abort) {

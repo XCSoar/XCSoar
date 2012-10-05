@@ -57,11 +57,16 @@ std::ostream &operator<< (std::ostream &f, const Waypoint &wp);
 
 class PrintHelper {
 public:
-  static void taskmanager_print(TaskManager& task, const AircraftState &location);
-  static void abstracttask_print(AbstractTask& task, const AircraftState &location);
-  static void aborttask_print(AbortTask& task, const AircraftState &location);
-  static void gototask_print(GotoTask& task, const AircraftState &location);
-  static void orderedtask_print(OrderedTask& task, const AircraftState &location);
+  static void taskmanager_print(const TaskManager &task,
+                                const AircraftState &location);
+  static void abstracttask_print(const AbstractTask &task,
+                                 const AircraftState &location);
+  static void aborttask_print(const AbortTask &task,
+                              const AircraftState &location);
+  static void gototask_print(const GotoTask &task,
+                             const AircraftState &location);
+  static void orderedtask_print(const OrderedTask &task,
+                                const AircraftState &location);
   static void taskpoint_print(std::ostream& f, const TaskPoint& tp, const AircraftState &state);
   static void sampledtaskpoint_print(std::ostream& f, const SampledTaskPoint& tp, 
                                      const AircraftState &state);
