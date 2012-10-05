@@ -88,7 +88,7 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
   search_min = search_reference;
   boundary_points.clear();
 
-  if (boundary_scored) {
+  if (IsBoundaryScored()) {
     for (const SearchPoint sp : GetBoundary())
       boundary_points.push_back(sp);
 

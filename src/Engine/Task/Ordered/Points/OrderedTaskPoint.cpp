@@ -170,7 +170,7 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
   case FINISH:
     return new FinishPoint(GetObservationZone().Clone(waypoint->location),
                            *waypoint, task_behaviour, ordered_task_behaviour,
-                           boundary_scored);
+                           IsBoundaryScored());
 
   case UNORDERED:
   case ROUTE:

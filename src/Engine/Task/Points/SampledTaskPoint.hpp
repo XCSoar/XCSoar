@@ -46,14 +46,12 @@ class SampledTaskPoint : public TaskWaypoint {
   friend class OrderedTask;
   friend class PrintHelper;
 
-protected:
   /**
    * Whether boundaries are used in scoring distance,
    * or just the reference point
    */
   const bool boundary_scored;
 
-private:
   SearchPointVector nominal_points;
   SearchPointVector sampled_points;
   SearchPointVector boundary_points;
