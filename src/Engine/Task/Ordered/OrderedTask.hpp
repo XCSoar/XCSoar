@@ -112,10 +112,8 @@ public:
    * Set type of task factory to be used for constructing tasks
    *
    * @param _factory Type of task
-   *
-   * @return Type of task
    */
-  TaskFactoryType SetFactory(const TaskFactoryType _factory);
+  void SetFactory(const TaskFactoryType _factory);
 
   /** 
    * Return list of factory types

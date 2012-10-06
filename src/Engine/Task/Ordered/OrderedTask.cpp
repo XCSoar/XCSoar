@@ -1283,12 +1283,12 @@ OrderedTask::Relocate(const unsigned position, const Waypoint& waypoint)
   return success;
 }
 
-TaskFactoryType
+void
 OrderedTask::SetFactory(const TaskFactoryType the_factory)
 {
   // detect no change
   if (factory_mode == the_factory)
-    return factory_mode;
+    return;
 
   if (the_factory != TaskFactoryType::MIXED) {
     // can switch from anything to mixed, otherwise need reset
@@ -1302,8 +1302,6 @@ OrderedTask::SetFactory(const TaskFactoryType the_factory)
   delete active_factory;
   active_factory = CreateTaskFactory(factory_mode, *this, task_behaviour);
   active_factory->UpdateOrderedTaskBehaviour(ordered_behaviour);
-
-  return factory_mode;
 }
 
 void 
