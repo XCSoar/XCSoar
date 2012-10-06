@@ -77,7 +77,8 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     && calculated.terrain_valid;
   if (draw_start_height) {
     hstart = fixed(ordered_props->start_max_height);
-    if (ordered_props->start_max_height_ref == HeightReferenceType::AGL)
+    if (ordered_props->start_max_height_ref == HeightReferenceType::AGL &&
+        calculated.terrain_valid)
       hstart += calculated.terrain_altitude;
 
     hstart -= hoffset;
