@@ -33,7 +33,7 @@ FinishPoint::FinishPoint(ObservationZonePoint* _oz, const Waypoint & wp,
   :OrderedTaskPoint(FINISH, _oz, wp, to, boundary_scored),
    safety_height_arrival(tb.safety_height_arrival),
    fai_finish_height(fixed_zero)
-{ 
+{
 }
 
 void
@@ -42,14 +42,14 @@ FinishPoint::SetTaskBehaviour(const TaskBehaviour &tb)
   safety_height_arrival = tb.safety_height_arrival;
 }
 
-void 
+void
 FinishPoint::Reset()
 {
   OrderedTaskPoint::Reset();
   fai_finish_height = fixed_zero;
 }
 
-bool 
+bool
 FinishPoint::EntryPrecondition() const
 {
   return GetPrevious() != NULL && GetPrevious()->HasEntered();
@@ -65,13 +65,12 @@ FinishPoint::GetElevation() const
   } else {
     return max(nominal_elevation,
                fixed(ordered_task_behaviour.finish_min_height) +
-               (ordered_task_behaviour.finish_min_height_ref == HeightReferenceType::AGL ?
-                 GetBaseElevation() : fixed_zero));
+               (ordered_task_behaviour.finish_min_height_ref == HeightReferenceType::AGL
+                ? GetBaseElevation() : fixed_zero));
   }
 }
 
-
-void 
+void
 FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 {
   assert(_next == NULL);
@@ -79,13 +78,13 @@ FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
   OrderedTaskPoint::SetNeighbours(_prev, _next);
 }
 
-void 
+void
 FinishPoint::set_fai_finish_height(const fixed height)
 {
   fai_finish_height = max(fixed_zero, height);
 }
 
-bool 
+bool
 FinishPoint::IsInSector(const AircraftState &state) const
 {
   if (!OrderedTaskPoint::IsInSector(state))
@@ -106,9 +105,9 @@ FinishPoint::is_in_height_limit(const AircraftState &state) const
   return true;
 }
 
-bool 
-FinishPoint::CheckEnterTransition(const AircraftState & ref_now, 
-                                    const AircraftState & ref_last) const
+bool
+FinishPoint::CheckEnterTransition(const AircraftState &ref_now,
+                                  const AircraftState &ref_last) const
 {
   const bool now_in_height = is_in_height_limit(ref_now);
   const bool last_in_height = is_in_height_limit(ref_last);

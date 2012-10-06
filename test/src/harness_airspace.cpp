@@ -80,7 +80,7 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
       GeoPoint c;
       c.longitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
       c.latitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
-      
+
       std::vector<GeoPoint> pts;
       for (unsigned j=0; j<num; j++) {
         GeoPoint p=c;
@@ -112,19 +112,20 @@ class AirspaceVisitorPrint:
   const bool do_report;
 
 public:
-  AirspaceVisitorPrint(const char* fname,
-                       const bool _do_report):
-    do_report(_do_report)
-    {      
-      if (do_report) {
-        fout = new std::ofstream(fname);
-      }
-    };
+  AirspaceVisitorPrint(const char *fname, const bool _do_report)
+    :do_report(_do_report)
+  {
+    if (do_report) {
+      fout = new std::ofstream(fname);
+    }
+  }
+
   ~AirspaceVisitorPrint() {
     if (do_report) {
       delete fout;
     }
   }
+
   virtual void visit_general(const AbstractAirspace& as) {
     if (do_report) {
       *fout << "# Name: " << AirspaceFormatter::GetNameAndClass(as).c_str()
@@ -147,8 +148,7 @@ public:
 };
 
 
-class AirspaceIntersectionVisitorPrint: 
-  public AirspaceIntersectionVisitor {
+class AirspaceIntersectionVisitorPrint : public AirspaceIntersectionVisitor {
   std::ofstream *fout;
   std::ofstream *yout;
   std::ofstream *iout;
@@ -162,17 +162,18 @@ public:
                                    const char* iname,
                                    const bool _do_report,
                                    const AircraftState &state,
-                                   const AirspaceAircraftPerformance &perf):
-    do_report(_do_report),
-    m_state(state),
-    m_perf(perf)
-    {      
-      if (do_report) {
-        fout = new std::ofstream(fname);
-        iout = new std::ofstream(iname);
-        yout = new std::ofstream(yname);
-      }
-    };
+                                   const AirspaceAircraftPerformance &perf)
+    :do_report(_do_report),
+     m_state(state),
+     m_perf(perf)
+  {
+    if (do_report) {
+      fout = new std::ofstream(fname);
+      iout = new std::ofstream(iname);
+      yout = new std::ofstream(yname);
+    }
+  }
+
   ~AirspaceIntersectionVisitorPrint() {
     if (do_report) {
       delete fout;
@@ -180,6 +181,7 @@ public:
       delete yout;
     }
   }
+
   virtual void intersection(const AbstractAirspace& as) {
     *fout << "# intersection point\n";
     for (auto it = intersections.begin(); it != intersections.end(); ++it) {

@@ -62,8 +62,9 @@ AirspaceFormatter::GetAltitude(const AirspaceAltitude &altitude)
 {
   StaticString<64> buffer;
   if (altitude.type != AirspaceAltitude::Type::MSL && positive(altitude.altitude))
-    buffer.Format(_T(" %d %s"), iround(Units::ToUserAltitude(altitude.altitude)),
-                        Units::GetAltitudeName());
+    buffer.Format(_T(" %d %s"),
+                  iround(Units::ToUserAltitude(altitude.altitude)),
+                  Units::GetAltitudeName());
   else
     buffer.clear();
 

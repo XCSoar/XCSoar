@@ -55,10 +55,11 @@ struct AirspaceAltitude
    * 
    * @return Initialised blank object
    */
-  AirspaceAltitude():altitude(fixed_zero),
-                 flight_level(fixed_zero),
-                 altitude_above_terrain(fixed_zero),
-                 type(Type::UNDEFINED) {};
+  AirspaceAltitude()
+    :altitude(fixed_zero),
+     flight_level(fixed_zero),
+     altitude_above_terrain(fixed_zero),
+     type(Type::UNDEFINED) {}
 
   /**
    * Get Altitude AMSL (m) resolved from type.

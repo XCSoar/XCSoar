@@ -55,14 +55,14 @@ public:
    *
    * @return Partially-initialised object
    */
-  AATPoint(ObservationZonePoint* _oz,
-           const Waypoint & wp,
+  AATPoint(ObservationZonePoint *_oz,
+           const Waypoint &wp,
            const TaskBehaviour &tb,
-           const OrderedTaskBehaviour& to) : 
-    IntermediateTaskPoint(AAT, _oz, wp, tb, to, true),
-    target_location(wp.location),
-    target_save(wp.location),
-    target_locked(false)
+           const OrderedTaskBehaviour &to)
+    :IntermediateTaskPoint(AAT, _oz, wp, tb, to, true),
+     target_location(wp.location),
+     target_save(wp.location),
+     target_locked(false)
   {
   }
 

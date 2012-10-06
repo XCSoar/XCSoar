@@ -34,26 +34,25 @@
  * to enter the observation zone)
  * but does not yet have an observation zone.
  */
-class ASTPoint : public IntermediateTaskPoint 
+class ASTPoint : public IntermediateTaskPoint
 {
 public:
-/** 
- * Constructor.
- * Ownership of oz is transferred to this object.  Note that AST boundaries are not scored.
- * 
- * @param _oz Observation zone for this task point
- * @param wp Waypoint associated with this task point
- * @param tb Task Behaviour defining options (esp safety heights)
- * @param to OrderedTask Behaviour defining options 
- * 
- * @return Partially initialised object 
- */
-  ASTPoint(ObservationZonePoint* _oz,
-           const Waypoint & wp,
+  /**
+   * Constructor.
+   * Ownership of oz is transferred to this object.  Note that AST boundaries are not scored.
+   *
+   * @param _oz Observation zone for this task point
+   * @param wp Waypoint associated with this task point
+   * @param tb Task Behaviour defining options (esp safety heights)
+   * @param to OrderedTask Behaviour defining options
+   *
+   * @return Partially initialised object
+   */
+  ASTPoint(ObservationZonePoint *_oz,
+           const Waypoint &wp,
            const TaskBehaviour &tb,
-           const OrderedTaskBehaviour& to) 
-    : IntermediateTaskPoint(AST, _oz, wp, tb, to)
-    { };
+           const OrderedTaskBehaviour &to)
+    :IntermediateTaskPoint(AST, _oz, wp, tb, to) {}
 };
 
 #endif

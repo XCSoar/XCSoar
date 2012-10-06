@@ -38,9 +38,7 @@
  * - gate start time?
  * - enabled/disabled for multiple start points
  */
-class StartPoint:
-  public OrderedTaskPoint
-{
+class StartPoint : public OrderedTaskPoint {
   fixed safety_height_terrain;
 
   TaskStartMargins margins;
@@ -57,10 +55,10 @@ public:
    *
    * @return Partially-initialised object
    */
-  StartPoint(ObservationZonePoint* _oz,
-             const Waypoint & wp,
-             const TaskBehaviour& tb,
-             const OrderedTaskBehaviour& to);
+  StartPoint(ObservationZonePoint *_oz,
+             const Waypoint &wp,
+             const TaskBehaviour &tb,
+             const OrderedTaskBehaviour &to);
 
   /**
    * Search for the min point on the boundary from

@@ -29,10 +29,10 @@
 
 #include <assert.h>
 
-StartPoint::StartPoint(ObservationZonePoint* _oz,
-                       const Waypoint & wp,
-                       const TaskBehaviour& tb,
-                       const OrderedTaskBehaviour& to)
+StartPoint::StartPoint(ObservationZonePoint *_oz,
+                       const Waypoint &wp,
+                       const TaskBehaviour &tb,
+                       const OrderedTaskBehaviour &to)
   :OrderedTaskPoint(START, _oz, wp, to, false),
    safety_height_terrain(tb.route_planner.safety_height_terrain),
    margins(tb.start_margins)
@@ -53,7 +53,7 @@ StartPoint::GetElevation() const
 }
 
 
-void 
+void
 StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 {
   assert(_prev==NULL);
@@ -62,10 +62,10 @@ StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 }
 
 
-bool 
+bool
 StartPoint::UpdateSampleNear(const AircraftState& state,
                              TaskEvents *task_events,
-                               const TaskProjection &projection)
+                             const TaskProjection &projection)
 {
   if (task_events != NULL && IsInSector(state) &&
       !ordered_task_behaviour.CheckStartSpeed(state, margins))
@@ -74,7 +74,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
   return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
 }
 
-void 
+void
 StartPoint::find_best_start(const AircraftState &state,
                             const OrderedTaskPoint &next,
                             const TaskProjection &projection)
@@ -129,25 +129,22 @@ StartPoint::find_best_start(const AircraftState &state,
   SetSearchMin(SearchPoint(solver.solve(), projection));
 }
 
-
-bool 
+bool
 StartPoint::IsInSector(const AircraftState &state) const
 {
-  if (!OrderedTaskPoint::IsInSector(state))
-    return false;
-
-  return ordered_task_behaviour.CheckStartHeight(state, margins,
-                                                 GetBaseElevation());
+  return OrderedTaskPoint::IsInSector(state) &&
+    ordered_task_behaviour.CheckStartHeight(state, margins,
+                                            GetBaseElevation());
 }
 
-bool 
-StartPoint::CheckExitTransition(const AircraftState & ref_now, 
-                                  const AircraftState & ref_last) const
+bool
+StartPoint::CheckExitTransition(const AircraftState &ref_now,
+                                const AircraftState &ref_last) const
 {
-  const bool now_in_height = 
+  const bool now_in_height =
     ordered_task_behaviour.CheckStartHeight(ref_now, margins,
                                             GetBaseElevation());
-  const bool last_in_height = 
+  const bool last_in_height =
     ordered_task_behaviour.CheckStartHeight(ref_last, margins,
                                             GetBaseElevation());
 
@@ -160,8 +157,8 @@ StartPoint::CheckExitTransition(const AircraftState & ref_now,
     return false;
   }
 
-  // transition inside sector to above 
-  return !now_in_height && last_in_height 
+  // transition inside sector to above
+  return !now_in_height && last_in_height
     && OrderedTaskPoint::IsInSector(ref_last)
     && CanStartThroughTop();
 }

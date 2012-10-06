@@ -90,8 +90,9 @@ AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
 }
 
 fixed
-AirspaceAltitude::GetAltitude(const AltitudeState& state) const
+AirspaceAltitude::GetAltitude(const AltitudeState &state) const
 {
-  return (type == Type::AGL) ?
-         altitude_above_terrain + (state.altitude - state.altitude_agl) : altitude;
+  return type == Type::AGL
+    ? altitude_above_terrain + (state.altitude - state.altitude_agl)
+    : altitude;
 }
