@@ -181,33 +181,26 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _T("%.0f %s"), _T("%.0f"),
            fixed_zero, fixed(10000), fixed(25), false, fixed_zero);
 
-  static constexpr StaticEnumChoice start_max_height_ref_list[] = {
-    { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point).") },
-    { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level).") },
+  static constexpr StaticEnumChoice altitude_reference_list[] = {
+    { (unsigned)HeightReferenceType::AGL, N_("AGL"),
+      N_("Reference is altitude above mean sea level."), },
+    { (unsigned)HeightReferenceType::MSL, N_("MSL"),
+      N_("Reference is the height above the task point."), },
     { 0 }
   };
 
   AddEnum(_("Start height ref."),
-          _("Reference used for start max height rule\n"
-            "[MSL] Reference is altitude above mean sea level\n"
-            "[AGL] Reference is the height above the start point"),
-          start_max_height_ref_list);
+          _("Reference used for start max height rule."),
+          altitude_reference_list);
 
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
            fixed_zero, fixed(10000), fixed(25), false, fixed_zero);
 
-  static constexpr StaticEnumChoice finish_min_height_ref_list[] = {
-    { (unsigned)HeightReferenceType::AGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point).") },
-    { (unsigned)HeightReferenceType::MSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level).") },
-    { 0 }
-  };
   AddEnum(_("Finish height ref."),
-          _("Reference used for finish min height rule\n"
-            "[MSL] Reference is altitude above mean sea level\n"
-            "[AGL] Reference is the height above the finish point"),
-          finish_min_height_ref_list);
+          _("Reference used for finish min height rule."),
+          altitude_reference_list);
 
   AddBoolean(_("FAI start / finish rules"),
              _("If enabled, has no max start height or max start speed and requires the minimum height above ground for finish to be greater than 1000m below the start height."),
