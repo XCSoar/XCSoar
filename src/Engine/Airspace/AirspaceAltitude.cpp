@@ -30,14 +30,14 @@ void
 AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
 {
   static const fixed fl_feet_to_m(30.48);
-  if (type == Type::FL)
+  if (reference == AltitudeReference::STD)
     altitude = press.PressureAltitudeToQNHAltitude(flight_level * fl_feet_to_m);
 }
 
 void
 AirspaceAltitude::SetGroundLevel(const fixed alt)
 {
-  if (type == Type::AGL)
+  if (reference == AltitudeReference::AGL)
     altitude = altitude_above_terrain + alt;
 }
 
@@ -60,7 +60,7 @@ AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
 fixed
 AirspaceAltitude::GetAltitude(const AltitudeState &state) const
 {
-  return type == Type::AGL
+  return reference == AltitudeReference::AGL
     ? altitude_above_terrain + (state.altitude - state.altitude_agl)
     : altitude;
 }

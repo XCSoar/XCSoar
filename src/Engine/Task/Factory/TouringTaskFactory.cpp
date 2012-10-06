@@ -67,6 +67,6 @@ TouringTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 
   to.start_max_speed = fixed_zero;
   to.start_max_height = 0;
-  to.start_max_height_ref = HeightReferenceType::AGL;
+  to.start_max_height_ref = AltitudeReference::AGL;
   to.finish_min_height = 0;
 }

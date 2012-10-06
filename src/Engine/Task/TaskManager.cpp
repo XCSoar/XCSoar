@@ -162,7 +162,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
 
     const fixed start_max_height =
       fixed(task_ordered.GetOrderedTaskBehaviour().start_max_height) +
-      (task_ordered.GetOrderedTaskBehaviour().start_max_height_ref == HeightReferenceType::MSL
+      (task_ordered.GetOrderedTaskBehaviour().start_max_height_ref == AltitudeReference::MSL
        ? fixed_zero
        : task_ordered.GetPoint(0).GetElevation());
     if (positive(start_max_height) &&

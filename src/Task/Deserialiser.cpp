@@ -246,14 +246,14 @@ Deserialiser::Deserialise(OrderedTask &task)
   }
 }
 
-HeightReferenceType
+AltitudeReference
 Deserialiser::GetHeightRef(const TCHAR *nodename) const
 {
   const TCHAR *type = node.GetAttribute(nodename);
   if (type != NULL && StringIsEqual(type, _T("MSL")))
-    return HeightReferenceType::MSL;
+    return AltitudeReference::MSL;
 
-  return HeightReferenceType::AGL;
+  return AltitudeReference::AGL;
 }
 
 TaskFactoryType

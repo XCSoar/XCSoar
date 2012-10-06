@@ -102,7 +102,7 @@ protected:
   void DeserialiseTaskpoint(OrderedTask &data);
 
 private:
-  HeightReferenceType GetHeightRef(const TCHAR *nodename) const;
+  AltitudeReference GetHeightRef(const TCHAR *nodename) const;
   TaskFactoryType GetTaskFactoryType() const;
 };
 

@@ -31,23 +31,23 @@
 std::ostream &
 operator<<(std::ostream &os, const AirspaceAltitude &aa)
 {
-  switch (aa.type) {
-  case AirspaceAltitude::Type::UNDEFINED:
+  switch (aa.reference) {
+  case AltitudeReference::NONE:
     os << "unknown";
     break;
 
-  case AirspaceAltitude::Type::AGL:
+  case AltitudeReference::AGL:
     if (!positive(aa.altitude_above_terrain))
       os << "GND";
     else
       os << iround(aa.altitude_above_terrain) << " AGL";
     break;
 
-  case AirspaceAltitude::Type::MSL:
+  case AltitudeReference::MSL:
     os << iround(aa.altitude);
     break;
 
-  case AirspaceAltitude::Type::FL:
+  case AltitudeReference::STD:
     os << "FL" << iround(aa.flight_level);
     break;
   }

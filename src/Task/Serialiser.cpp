@@ -229,13 +229,18 @@ Serialiser::Serialise(const OrderedTask &task)
 }
 
 const TCHAR*
-Serialiser::GetHeightRef(HeightReferenceType height_ref) const
+Serialiser::GetHeightRef(AltitudeReference height_ref) const
 {
   switch(height_ref) {
-  case HeightReferenceType::AGL:
+  case AltitudeReference::AGL:
     return _T("AGL");
-  case HeightReferenceType::MSL:
+  case AltitudeReference::MSL:
     return _T("MSL");
+
+  case AltitudeReference::STD:
+  case AltitudeReference::NONE:
+    /* not applicable here */
+    break;
   }
   return NULL;
 }

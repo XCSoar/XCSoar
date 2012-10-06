@@ -24,6 +24,7 @@
 #define AIRSPACE_ALTITUDE_HPP
 
 #include "Math/fixed.hpp"
+#include "Geo/AltitudeReference.hpp"
 
 #include <stdint.h>
 
@@ -46,8 +47,9 @@ struct AirspaceAltitude
   fixed flight_level;
   /** Height above terrain (m) for ground-referenced boundary */
   fixed altitude_above_terrain;
+
   /** Type of airspace boundary */
-  Type type;
+  AltitudeReference reference;
 
   /** 
    * Constructor.  Initialises to zero.
@@ -58,7 +60,7 @@ struct AirspaceAltitude
     :altitude(fixed_zero),
      flight_level(fixed_zero),
      altitude_above_terrain(fixed_zero),
-     type(Type::UNDEFINED) {}
+     reference(AltitudeReference::NONE) {}
 
   /**
    * Get Altitude AMSL (m) resolved from type.
@@ -79,7 +81,8 @@ struct AirspaceAltitude
    * @return True if this altitude limit is the terrain
    */
   bool IsTerrain() const {
-    return !positive(altitude_above_terrain) && type == Type::AGL;
+    return !positive(altitude_above_terrain) &&
+      reference == AltitudeReference::AGL;
   }
 
   /**
@@ -95,7 +98,7 @@ struct AirspaceAltitude
    * Is it necessary to call SetGroundLevel() for this AirspaceAltitude?
    */
   bool NeedGroundLevel() const {
-    return type == Type::AGL;
+    return reference == AltitudeReference::AGL;
   }
 
   /**

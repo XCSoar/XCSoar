@@ -92,9 +92,9 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   SetExpertRow(StartMaxHeightMargin);
 
   static constexpr StaticEnumChoice altitude_reference_list[] = {
-    { (unsigned)HeightReferenceType::AGL, N_("AGL"),
+    { (unsigned)AltitudeReference::AGL, N_("AGL"),
       N_("Reference is altitude above mean sea level."), },
-    { (unsigned)HeightReferenceType::MSL, N_("MSL"),
+    { (unsigned)AltitudeReference::MSL, N_("MSL"),
       N_("Reference is the height above the task point."), },
     { 0 }
   };

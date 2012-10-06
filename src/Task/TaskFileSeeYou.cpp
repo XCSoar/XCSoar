@@ -494,7 +494,7 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
   if (factType == TaskFactoryType::AAT ||
       factType == TaskFactoryType::RACING) {
     beh.start_max_height = (unsigned)task_info.max_start_altitude;
-    beh.start_max_height_ref = HeightReferenceType::MSL;
+    beh.start_max_height_ref = AltitudeReference::MSL;
   }
   task->SetOrderedTaskBehaviour(beh);
 

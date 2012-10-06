@@ -30,9 +30,9 @@ OrderedTaskBehaviour::SetDefaults()
   aat_min_time = fixed(3600 * 3);
   start_max_speed = fixed_zero;
   start_max_height = 0;
-  start_max_height_ref = HeightReferenceType::AGL;
+  start_max_height_ref = AltitudeReference::AGL;
   finish_min_height = 0;
-  finish_min_height_ref = HeightReferenceType::AGL;
+  finish_min_height_ref = AltitudeReference::AGL;
   fai_finish = false;
 }
 
@@ -70,7 +70,7 @@ OrderedTaskBehaviour::CheckStartHeight(const AircraftState &state,
     ? behaviour.max_height_margin
     : 0u;
 
-  if (start_max_height_ref == HeightReferenceType::MSL)
+  if (start_max_height_ref == AltitudeReference::MSL)
     return state.altitude <= fixed(start_max_height + margin);
   else
     return state.altitude <= (fixed(start_max_height + margin) + start_elevation);
@@ -83,7 +83,7 @@ OrderedTaskBehaviour::CheckFinishHeight(const AircraftState &state,
   if (finish_min_height == 0)
     return true;
 
-  if (finish_min_height_ref == HeightReferenceType::MSL)
+  if (finish_min_height_ref == AltitudeReference::MSL)
     return state.altitude >= fixed(finish_min_height);
   else
     return state.altitude >= (fixed(finish_min_height) + finish_elevation);

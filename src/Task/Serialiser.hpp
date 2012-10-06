@@ -127,7 +127,7 @@ protected:
 
 private:
   const TCHAR *GetTaskFactoryType(TaskFactoryType type) const;
-  const TCHAR *GetHeightRef(HeightReferenceType height_ref) const;
+  const TCHAR *GetHeightRef(AltitudeReference height_ref) const;
 };
 
 #endif

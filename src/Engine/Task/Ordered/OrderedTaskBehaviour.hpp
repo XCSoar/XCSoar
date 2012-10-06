@@ -23,16 +23,10 @@
 #define ORDEREDTASK_BEHAVIOUR_HPP
 
 #include "Math/fixed.hpp"
-
-#include <stdint.h>
+#include "Geo/AltitudeReference.hpp"
 
 struct AircraftState;
 struct TaskStartMargins;
-
-enum class HeightReferenceType: uint8_t {
-  AGL,
-  MSL,
-};
 
 /**
  * Settings for ordered tasks; most of these are set by
@@ -45,12 +39,15 @@ struct OrderedTaskBehaviour {
   fixed start_max_speed;
   /** Maximum height (m) allowed in start sector */
   unsigned start_max_height;
+
   /** Reference for max start height */
-  HeightReferenceType start_max_height_ref;
+  AltitudeReference start_max_height_ref;
+
   /** Minimum height AGL (m) allowed to finish */
   unsigned finish_min_height;
+
   /** Reference for min finish height */
-  HeightReferenceType finish_min_height_ref;
+  AltitudeReference finish_min_height_ref;
 
   /**
    * Whether ordered task start and finish requires FAI height rules
