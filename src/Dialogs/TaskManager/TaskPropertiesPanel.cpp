@@ -52,28 +52,30 @@ TaskPropertiesPanel::RefreshView()
   const OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
 
   bool aat_types = (ftype == TaskFactoryType::AAT);
-  bool fai_start_finish = p.fai_finish;
+  bool fai_start_finish = p.finish_constraints.fai_finish;
 
   SetRowVisible(MIN_TIME, aat_types);
   LoadValueTime(MIN_TIME, (int)p.aat_min_time);
 
   SetRowVisible(START_MAX_SPEED, !fai_start_finish);
-  LoadValue(START_MAX_SPEED, p.start_max_speed, UnitGroup::HORIZONTAL_SPEED);
+  LoadValue(START_MAX_SPEED, p.start_constraints.max_speed,
+            UnitGroup::HORIZONTAL_SPEED);
 
   SetRowVisible(START_MAX_HEIGHT, !fai_start_finish);
-  LoadValue(START_MAX_HEIGHT, fixed(p.start_max_height), UnitGroup::ALTITUDE);
+  LoadValue(START_MAX_HEIGHT, fixed(p.start_constraints.max_height),
+            UnitGroup::ALTITUDE);
 
   SetRowVisible(START_HEIGHT_REF, !fai_start_finish);
-  LoadValueEnum(START_HEIGHT_REF, p.start_max_height_ref);
+  LoadValueEnum(START_HEIGHT_REF, p.start_constraints.max_height_ref);
 
   SetRowVisible(FINISH_MIN_HEIGHT, !fai_start_finish);
-  LoadValue(FINISH_MIN_HEIGHT, fixed(p.finish_min_height),
+  LoadValue(FINISH_MIN_HEIGHT, fixed(p.finish_constraints.min_height),
             UnitGroup::ALTITUDE);
 
   SetRowVisible(FINISH_HEIGHT_REF, !fai_start_finish);
-  LoadValueEnum(FINISH_HEIGHT_REF, p.finish_min_height_ref);
+  LoadValueEnum(FINISH_HEIGHT_REF, p.finish_constraints.min_height_ref);
 
-  LoadValue(FAI_FINISH_HEIGHT, p.fai_finish);
+  LoadValue(FAI_FINISH_HEIGHT, fai_start_finish);
 
   LoadValueEnum(TASK_TYPE, ftype);
 
@@ -100,28 +102,30 @@ TaskPropertiesPanel::ReadValues()
   }
 
   fixed max_speed = Units::ToSysSpeed(GetValueFloat(START_MAX_SPEED));
-  if (max_speed != p.start_max_speed) {
-    p.start_max_speed = max_speed;
+  if (max_speed != p.start_constraints.max_speed) {
+    p.start_constraints.max_speed = max_speed;
     changed = true;
   }
 
   unsigned max_height =
     iround(Units::ToSysAltitude(GetValueFloat(START_MAX_HEIGHT)));
-  if (max_height != p.start_max_height) {
-    p.start_max_height = max_height;
+  if (max_height != p.start_constraints.max_height) {
+    p.start_constraints.max_height = max_height;
     changed = true;
   }
 
-  changed |= SaveValueEnum(START_HEIGHT_REF, p.start_max_height_ref);
+  changed |= SaveValueEnum(START_HEIGHT_REF,
+                           p.start_constraints.max_height_ref);
 
   unsigned min_height =
     iround(Units::ToSysAltitude(GetValueFloat(FINISH_MIN_HEIGHT)));
-  if (min_height != p.finish_min_height) {
-    p.finish_min_height = min_height;
+  if (min_height != p.finish_constraints.min_height) {
+    p.finish_constraints.min_height = min_height;
     changed = true;
   }
 
-  changed |= SaveValueEnum(FINISH_HEIGHT_REF, p.finish_min_height_ref);
+  changed |= SaveValueEnum(FINISH_HEIGHT_REF,
+                           p.finish_constraints.min_height_ref);
 
   if (changed)
     ordered_task->SetOrderedTaskBehaviour(p);
@@ -134,8 +138,9 @@ TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 {
   OrderedTaskBehaviour p = ordered_task->GetOrderedTaskBehaviour();
   bool newvalue = df.GetAsBoolean();
-  if (newvalue != p.fai_finish) {
-    p.fai_finish = newvalue;
+  if (newvalue != p.finish_constraints.fai_finish) {
+    p.finish_constraints.fai_finish = p.start_constraints.fai_finish
+      = newvalue;
     ordered_task->SetOrderedTaskBehaviour(p);
 
     *task_changed = true;

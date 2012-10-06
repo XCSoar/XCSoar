@@ -58,14 +58,16 @@ FinishPoint::EntryPrecondition() const
 fixed
 FinishPoint::GetElevation() const
 {
+  const FinishConstraints &finish_constraints =
+    ordered_task_behaviour.finish_constraints;
   const fixed nominal_elevation = GetBaseElevation() + safety_height_arrival;
 
-  if (ordered_task_behaviour.fai_finish) {
+  if (finish_constraints.fai_finish) {
     return max(nominal_elevation, fai_finish_height);
   } else {
     return max(nominal_elevation,
-               fixed(ordered_task_behaviour.finish_min_height) +
-               (ordered_task_behaviour.finish_min_height_ref == AltitudeReference::AGL
+               fixed(finish_constraints.min_height) +
+               (finish_constraints.min_height_ref == AltitudeReference::AGL
                 ? GetBaseElevation() : fixed_zero));
   }
 }
@@ -96,10 +98,13 @@ FinishPoint::IsInSector(const AircraftState &state) const
 bool
 FinishPoint::is_in_height_limit(const AircraftState &state) const
 {
-  if (!ordered_task_behaviour.CheckFinishHeight(state, GetBaseElevation()))
+  const FinishConstraints &finish_constraints =
+    ordered_task_behaviour.finish_constraints;
+
+  if (!finish_constraints.CheckHeight(state, GetBaseElevation()))
     return false;
 
-  if (ordered_task_behaviour.fai_finish)
+  if (finish_constraints.fai_finish)
     return state.altitude > fai_finish_height;
 
   return true;

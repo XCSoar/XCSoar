@@ -160,9 +160,11 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     common_stats.task_time_remaining = task_stats.total.time_remaining;
     common_stats.task_time_elapsed = task_stats.total.time_elapsed;
 
+    const StartConstraints &start_constraints =
+      task_ordered.GetOrderedTaskBehaviour().start_constraints;
     const fixed start_max_height =
-      fixed(task_ordered.GetOrderedTaskBehaviour().start_max_height) +
-      (task_ordered.GetOrderedTaskBehaviour().start_max_height_ref == AltitudeReference::MSL
+      fixed(start_constraints.max_height) +
+      (start_constraints.max_height_ref == AltitudeReference::MSL
        ? fixed_zero
        : task_ordered.GetPoint(0).GetElevation());
     if (positive(start_max_height) &&

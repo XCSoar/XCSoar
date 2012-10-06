@@ -66,7 +66,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Start max. speed"), _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, UnitGroup::HORIZONTAL_SPEED,
-           task_behaviour.ordered_defaults.start_max_speed);
+           task_behaviour.ordered_defaults.start_constraints.max_speed);
   SetExpertRow(StartMaxSpeed);
 
   AddFloat(_("Start max. speed margin"),
@@ -82,7 +82,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _("Maximum height based on start height reference (AGL or MSL) while starting the task.  "
                "Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
-           fixed(task_behaviour.ordered_defaults.start_max_height));
+           fixed(task_behaviour.ordered_defaults.start_constraints.max_height));
   SetExpertRow(StartMaxHeight);
 
   AddFloat(_("Start max. height margin"),
@@ -102,7 +102,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Start height ref."),
           _("Reference used for start max height rule."),
           altitude_reference_list,
-          (unsigned)task_behaviour.ordered_defaults.start_max_height_ref);
+          (unsigned)task_behaviour.ordered_defaults.start_constraints.max_height_ref);
   SetExpertRow(StartHeightRef);
 
   AddSpacer();
@@ -112,13 +112,13 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  "
                "Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
-           fixed(task_behaviour.ordered_defaults.finish_min_height));
+           fixed(task_behaviour.ordered_defaults.finish_constraints.min_height));
   SetExpertRow(FinishMinHeight);
 
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),
           altitude_reference_list,
-          (unsigned)task_behaviour.ordered_defaults.finish_min_height_ref);
+          (unsigned)task_behaviour.ordered_defaults.finish_constraints.min_height_ref);
   SetExpertRow(FinishHeightRef);
 
   AddSpacer();
@@ -170,22 +170,29 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
   OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
   ContestSettings &contest_settings = settings_computer.contest;
 
-  changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED, ProfileKeys::StartMaxSpeed, otb.start_max_speed);
+  changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED,
+                       ProfileKeys::StartMaxSpeed,
+                       otb.start_constraints.max_speed);
 
   changed |= SaveValue(StartMaxSpeedMargin, UnitGroup::HORIZONTAL_SPEED, ProfileKeys::StartMaxSpeedMargin,
                        task_behaviour.start_margins.max_speed_margin);
 
-  changed |= SaveValue(StartMaxHeight, UnitGroup::ALTITUDE, ProfileKeys::StartMaxHeight, otb.start_max_height);
+  changed |= SaveValue(StartMaxHeight, UnitGroup::ALTITUDE,
+                       ProfileKeys::StartMaxHeight,
+                       otb.start_constraints.max_height);
 
   changed |= SaveValue(StartMaxHeightMargin, UnitGroup::ALTITUDE, ProfileKeys::StartMaxHeightMargin,
                        task_behaviour.start_margins.max_height_margin);
 
-  changed |= SaveValueEnum(StartHeightRef, ProfileKeys::StartHeightRef, otb.start_max_height_ref);
+  changed |= SaveValueEnum(StartHeightRef, ProfileKeys::StartHeightRef,
+                           otb.start_constraints.max_height_ref);
 
-  changed |= SaveValue(FinishMinHeight, UnitGroup::ALTITUDE, ProfileKeys::FinishMinHeight,
-                       otb.finish_min_height);
+  changed |= SaveValue(FinishMinHeight, UnitGroup::ALTITUDE,
+                       ProfileKeys::FinishMinHeight,
+                       otb.finish_constraints.min_height);
 
-  changed |= SaveValueEnum(FinishHeightRef, ProfileKeys::FinishHeightRef, otb.finish_min_height_ref);
+  changed |= SaveValueEnum(FinishHeightRef, ProfileKeys::FinishHeightRef,
+                           otb.finish_constraints.min_height_ref);
 
   changed |= SaveValueEnum(Contests, ProfileKeys::OLCRules,
                            contest_settings.contest);

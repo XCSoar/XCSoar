@@ -68,7 +68,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
                              const TaskProjection &projection)
 {
   if (task_events != NULL && IsInSector(state) &&
-      !ordered_task_behaviour.CheckStartSpeed(state, margins))
+      !ordered_task_behaviour.start_constraints.CheckSpeed(state, margins))
     task_events->StartSpeedWarning();
 
   return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
@@ -133,8 +133,8 @@ bool
 StartPoint::IsInSector(const AircraftState &state) const
 {
   return OrderedTaskPoint::IsInSector(state) &&
-    ordered_task_behaviour.CheckStartHeight(state, margins,
-                                            GetBaseElevation());
+    ordered_task_behaviour.start_constraints.CheckHeight(state, margins,
+                                                         GetBaseElevation());
 }
 
 bool
@@ -142,11 +142,11 @@ StartPoint::CheckExitTransition(const AircraftState &ref_now,
                                 const AircraftState &ref_last) const
 {
   const bool now_in_height =
-    ordered_task_behaviour.CheckStartHeight(ref_now, margins,
-                                            GetBaseElevation());
+    ordered_task_behaviour.start_constraints.CheckHeight(ref_now, margins,
+                                                         GetBaseElevation());
   const bool last_in_height =
-    ordered_task_behaviour.CheckStartHeight(ref_last, margins,
-                                            GetBaseElevation());
+    ordered_task_behaviour.start_constraints.CheckHeight(ref_last, margins,
+                                                         GetBaseElevation());
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks

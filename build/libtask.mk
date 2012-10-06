@@ -6,6 +6,8 @@ TASK_SOURCES = \
 	$(TASK_SRC_DIR)/AbstractTask.cpp \
 	$(TASK_SRC_DIR)/FAITriangleValidator.cpp \
 	$(TASK_SRC_DIR)/FAITrianglePointValidator.cpp \
+	$(TASK_SRC_DIR)/Ordered/StartConstraints.cpp \
+	$(TASK_SRC_DIR)/Ordered/FinishConstraints.cpp \
 	$(TASK_SRC_DIR)/Ordered/OrderedTaskBehaviour.cpp \
 	$(TASK_SRC_DIR)/Ordered/OrderedTask.cpp \
 	$(TASK_SRC_DIR)/Ordered/TaskAdvance.cpp \

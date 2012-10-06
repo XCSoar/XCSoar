@@ -207,14 +207,15 @@ void
 Serialiser::Serialise(const OrderedTaskBehaviour &data)
 {
   node.SetAttribute(_T("aat_min_time"), data.aat_min_time);
-  node.SetAttribute(_T("start_max_speed"), data.start_max_speed);
-  node.SetAttribute(_T("start_max_height"), data.start_max_height);
+  node.SetAttribute(_T("start_max_speed"), data.start_constraints.max_speed);
+  node.SetAttribute(_T("start_max_height"), data.start_constraints.max_height);
   node.SetAttribute(_T("start_max_height_ref"),
-                       GetHeightRef(data.start_max_height_ref));
-  node.SetAttribute(_T("finish_min_height"), data.finish_min_height);
+                       GetHeightRef(data.start_constraints.max_height_ref));
+  node.SetAttribute(_T("finish_min_height"),
+                    data.finish_constraints.min_height);
   node.SetAttribute(_T("finish_min_height_ref"),
-                       GetHeightRef(data.finish_min_height_ref));
-  node.SetAttribute(_T("fai_finish"), data.fai_finish);
+                       GetHeightRef(data.finish_constraints.min_height_ref));
+  node.SetAttribute(_T("fai_finish"), data.finish_constraints.fai_finish);
 }
 
 void 

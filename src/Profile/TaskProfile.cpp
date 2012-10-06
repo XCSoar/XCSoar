@@ -30,6 +30,8 @@ namespace Profile {
   static void Load(GlideSettings &settings);
   static void Load(TaskStartMargins &settings);
   static void Load(SectorDefaults &settings);
+  static void Load(StartConstraints &constraints);
+  static void Load(FinishConstraints &constraints);
   static void Load(OrderedTaskBehaviour &settings);
 };
 
@@ -58,13 +60,25 @@ Profile::Load(SectorDefaults &settings)
 }
 
 void
+Profile::Load(StartConstraints &constraints)
+{
+  GetEnum(ProfileKeys::StartHeightRef, constraints.max_height_ref);
+  Get(ProfileKeys::StartMaxHeight, constraints.max_height);
+  Get(ProfileKeys::StartMaxSpeed, constraints.max_speed);
+}
+
+void
+Profile::Load(FinishConstraints &constraints)
+{
+  GetEnum(ProfileKeys::FinishHeightRef, constraints.min_height_ref);
+  Get(ProfileKeys::FinishMinHeight, constraints.min_height);
+}
+
+void
 Profile::Load(OrderedTaskBehaviour &settings)
 {
-  GetEnum(ProfileKeys::FinishHeightRef, settings.finish_min_height_ref);
-  Get(ProfileKeys::FinishMinHeight, settings.finish_min_height);
-  GetEnum(ProfileKeys::StartHeightRef, settings.start_max_height_ref);
-  Get(ProfileKeys::StartMaxHeight, settings.start_max_height);
-  Get(ProfileKeys::StartMaxSpeed, settings.start_max_speed);
+  Load(settings.start_constraints);
+  Load(settings.finish_constraints);
   Get(ProfileKeys::AATMinTime, settings.aat_min_time);
 }
 

@@ -20,12 +20,26 @@
 }
  */
 
-#include "OrderedTaskBehaviour.hpp"
+#include "FinishConstraints.hpp"
+#include "Navigation/Aircraft.hpp"
 
 void
-OrderedTaskBehaviour::SetDefaults()
+FinishConstraints::SetDefaults()
 {
-  aat_min_time = fixed(3600 * 3);
-  start_constraints.SetDefaults();
-  finish_constraints.SetDefaults();
+  min_height = 0;
+  min_height_ref = AltitudeReference::AGL;
+  fai_finish = false;
+}
+
+bool
+FinishConstraints::CheckHeight(const AircraftState &state,
+                               const fixed finish_elevation) const
+{
+  if (min_height == 0)
+    return true;
+
+  if (min_height_ref == AltitudeReference::MSL)
+    return state.altitude >= fixed(min_height);
+  else
+    return state.altitude >= (fixed(min_height) + finish_elevation);
 }

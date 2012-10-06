@@ -19,25 +19,45 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#ifndef ORDEREDTASK_BEHAVIOUR_HPP
-#define ORDEREDTASK_BEHAVIOUR_HPP
+
+#ifndef XCSOAR_FINISH_CONSTRAINTS_HPP
+#define XCSOAR_FINISH_CONSTRAINTS_HPP
 
 #include "Math/fixed.hpp"
-#include "StartConstraints.hpp"
-#include "FinishConstraints.hpp"
+#include "Geo/AltitudeReference.hpp"
 
-/**
- * Settings for ordered tasks; most of these are set by
- * the #AbstractTaskFactory but can be overriden
- */
-struct OrderedTaskBehaviour {
-  /** Desired AAT minimum task time (s) */
-  fixed aat_min_time;
+struct AircraftState;
 
-  StartConstraints start_constraints;
-  FinishConstraints finish_constraints;
+struct FinishConstraints {
+  /** Minimum height AGL (m) allowed to finish */
+  unsigned min_height;
+
+  /** Reference for min finish height */
+  AltitudeReference min_height_ref;
+
+  /**
+   * Whether ordered task start and finish requires FAI height rules
+   * and (no) speed rule.  The default value is
+   * TaskFactoryConstraints::fai_finish.
+   *
+   * When you modify this value, remember to always keep it in sync
+   * with StartConstraints::fai_finish!
+   */
+  bool fai_finish;
 
   void SetDefaults();
+
+  /**
+   * Check whether aircraft height is within finish height limit
+   *
+   * @param state Aircraft state
+   * @param fpAlt finish point altitude
+   *
+   * @return True if within limits
+   */
+  gcc_pure
+  bool CheckHeight(const AircraftState &state,
+                   const fixed finish_elevation) const;
 };
 
 #endif

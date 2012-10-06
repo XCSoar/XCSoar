@@ -564,7 +564,7 @@ AbstractTaskFactory::GetOrderedTaskBehaviour() const
 void 
 AbstractTaskFactory::UpdateOrderedTaskBehaviour(OrderedTaskBehaviour& to)
 {
-  to.fai_finish = constraints.fai_finish;
+  to.finish_constraints.fai_finish = constraints.fai_finish;
 }
 
 bool 

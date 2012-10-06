@@ -721,7 +721,7 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const fixed maxheight = fixed(protected_task_manager->
-                                GetOrderedTaskBehaviour().start_max_height);
+                                GetOrderedTaskBehaviour().start_constraints.max_height);
 
   if (!task_stats.task_valid || !positive(maxheight)
       || !protected_task_manager
