@@ -47,6 +47,7 @@ class ReachFan;
 class FlatTriangleFanTree;
 class FlatTriangleFan;
 struct Waypoint;
+struct AirspaceAltitude;
 
 #ifdef FIXED_MATH
 #include "Math/fixed.hpp"

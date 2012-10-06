@@ -24,7 +24,6 @@
 #define AIRSPACE_ALTITUDE_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/tstring.hpp"
 
 #include <stdint.h>
 
@@ -107,15 +106,6 @@ struct AirspaceAltitude
    * @param press Atmospheric pressure model (to obtain QNH)
    */
   void SetFlightLevel(const AtmosphericPressure &press);
-
-  /**
-   * Generate text form of airspace altitude boundary
-   *
-   * @param concise Whether to produce short-form
-   *
-   * @return String version of altitude reference
-   */
-  const tstring GetAsText(const bool concise = false) const;
 
   static bool SortHighest(const AirspaceAltitude &a, const AirspaceAltitude &b) {
     return a.altitude > b.altitude;

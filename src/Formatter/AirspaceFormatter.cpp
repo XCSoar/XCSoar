@@ -109,10 +109,3 @@ AirspaceFormatter::GetNameAndClass(const AbstractAirspace &airspace)
 {
   return tstring(airspace.GetName()) + _T(" ") + GetClass(airspace.GetType());
 }
-
-tstring
-AirspaceFormatter::GetVerticalText(const AbstractAirspace &airspace)
-{
-  return _T("Base: ") + airspace.GetBase().GetAsText(false) +
-         _T(" Top: ") + airspace.GetTop().GetAsText(false);
-}

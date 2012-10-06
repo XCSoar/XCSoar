@@ -20,6 +20,7 @@
 }
 */
 
+#include "AirspacePrinting.hpp"
 #include "Printing.hpp"
 #include "harness_airspace.hpp"
 #include "test_debug.hpp"
@@ -129,7 +130,8 @@ public:
   virtual void visit_general(const AbstractAirspace& as) {
     if (do_report) {
       *fout << "# Name: " << AirspaceFormatter::GetNameAndClass(as).c_str()
-            << " " << AirspaceFormatter::GetVerticalText(as).c_str()
+            << "Base: " << as.GetBase()
+            << " Top: " << as.GetTop()
             << "\n";
     }
   }

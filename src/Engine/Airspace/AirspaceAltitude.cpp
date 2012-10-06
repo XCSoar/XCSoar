@@ -23,8 +23,6 @@
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "Math/FastMath.h"
-#include "Util/StaticString.hpp"
 
 #include <stdio.h>
 
@@ -41,36 +39,6 @@ AirspaceAltitude::SetGroundLevel(const fixed alt)
 {
   if (type == Type::AGL)
     altitude = altitude_above_terrain + alt;
-}
-
-const tstring
-AirspaceAltitude::GetAsText(const bool concise) const
-{
-  StaticString<64> buffer;
-
-  switch (type) {
-  case Type::AGL:
-    if (!positive(altitude_above_terrain))
-      buffer = _T("GND");
-    else
-      buffer.Format(_T("%d AGL"), iround(altitude_above_terrain));
-
-    break;
-  case Type::FL:
-    buffer.Format(_T("FL%d"), iround(flight_level));
-    break;
-  case Type::MSL:
-    buffer.Format(_T("%d"), iround(altitude));
-    break;
-  case Type::UNDEFINED:
-    buffer.clear();
-    break;
-  }
-
-  if (!concise && type != Type::MSL && positive(altitude))
-    buffer.AppendFormat(_T(" %d"), iround(altitude));
-
-  return tstring(buffer);
 }
 
 bool

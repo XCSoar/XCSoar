@@ -52,9 +52,6 @@ tstring GetAltitude(const AirspaceAltitude &altitude);
 /** Returns the airspace altitude limit as short text with unit. */
 tstring GetAltitudeShort(const AirspaceAltitude &altitude);
 
-/** Returns the base and top altitudes as text without units */
-tstring GetVerticalText(const AbstractAirspace &airspace);
-
 /** Returns the base altitude as text with unit. */
 tstring GetBase(const AbstractAirspace &airspace);
 /** Returns the base altitude as short text with unit. */

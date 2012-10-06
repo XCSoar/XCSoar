@@ -20,12 +20,40 @@
 }
 */
 
+#include "AirspacePrinting.hpp"
 #include "Printing.hpp"
 #include "Geo/Math.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 
 #include <fstream>
 #include "Airspace/AirspaceCircle.hpp"
+
+std::ostream &
+operator<<(std::ostream &os, const AirspaceAltitude &aa)
+{
+  switch (aa.type) {
+  case AirspaceAltitude::Type::UNDEFINED:
+    os << "unknown";
+    break;
+
+  case AirspaceAltitude::Type::AGL:
+    if (!positive(aa.altitude_above_terrain))
+      os << "GND";
+    else
+      os << iround(aa.altitude_above_terrain) << " AGL";
+    break;
+
+  case AirspaceAltitude::Type::MSL:
+    os << iround(aa.altitude);
+    break;
+
+  case AirspaceAltitude::Type::FL:
+    os << "FL" << iround(aa.flight_level);
+    break;
+  }
+
+  return os;
+}
 
 std::ostream& operator<< (std::ostream& f, 
                           const AirspaceCircle& as)
