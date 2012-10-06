@@ -36,15 +36,13 @@ SectorDefaults::SetDefaults()
 void
 TaskStartMargins::SetDefaults()
 {
-  start_max_speed_margin = fixed_zero;
-  start_max_height_margin = 0u;
+  max_speed_margin = fixed_zero;
+  max_height_margin = 0u;
 }
 
 void
 TaskBehaviour::SetDefaults()
 {
-  TaskStartMargins::SetDefaults();
-
   glide.SetDefaults();
 
   optimise_targets_range = true;
@@ -60,6 +58,7 @@ TaskBehaviour::SetDefaults()
   safety_mc = fixed_half;
   safety_height_arrival = fixed(300);
   task_type_default = TaskFactoryType::RACING;
+  start_margins.SetDefaults();
   sector_defaults.SetDefaults();
   ordered_defaults.SetDefaults();
   route_planner.SetDefaults();

@@ -62,9 +62,10 @@ struct SectorDefaults
 
 struct TaskStartMargins {
   /** Margin in maximum ground speed (m/s) allowed in start sector */
-  fixed start_max_speed_margin;
+  fixed max_speed_margin;
+
   /** Margin in maximum height (m) allowed in start sector */
-  unsigned start_max_height_margin;
+  unsigned max_height_margin;
 
   void SetDefaults();
 };
@@ -73,7 +74,7 @@ struct TaskStartMargins {
  *  Class defining options for task system.
  *  Typical uses might be default values, and simple aspects of task behaviour.
  */
-struct TaskBehaviour : public TaskStartMargins {
+struct TaskBehaviour {
   GlideSettings glide;
 
   /**
@@ -121,6 +122,8 @@ struct TaskBehaviour : public TaskStartMargins {
 
   /** Default task type to use for new tasks */
   TaskFactoryType task_type_default;
+
+  TaskStartMargins start_margins;
 
   /** Default sector info for new ordered task */
   SectorDefaults sector_defaults;

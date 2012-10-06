@@ -72,7 +72,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Start max. speed margin"),
            _("Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(300), fixed(5), false, UnitGroup::HORIZONTAL_SPEED,
-           task_behaviour.start_max_speed_margin);
+           task_behaviour.start_margins.max_speed_margin);
   SetExpertRow(StartMaxSpeedMargin);
 
   AddSpacer();
@@ -88,7 +88,7 @@ TaskRulesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Start max. height margin"),
            _("Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance."),
            _T("%.0f %s"), _T("%.0f"), fixed(0), fixed(10000), fixed(50), false, UnitGroup::ALTITUDE,
-           fixed(task_behaviour.start_max_height_margin));
+           fixed(task_behaviour.start_margins.max_height_margin));
   SetExpertRow(StartMaxHeightMargin);
 
   static constexpr StaticEnumChoice start_max_height_ref_list[] = {
@@ -171,12 +171,12 @@ TaskRulesConfigPanel::Save(bool &_changed, bool &_require_restart)
   changed |= SaveValue(StartMaxSpeed, UnitGroup::HORIZONTAL_SPEED, ProfileKeys::StartMaxSpeed, otb.start_max_speed);
 
   changed |= SaveValue(StartMaxSpeedMargin, UnitGroup::HORIZONTAL_SPEED, ProfileKeys::StartMaxSpeedMargin,
-                       task_behaviour.start_max_speed_margin);
+                       task_behaviour.start_margins.max_speed_margin);
 
   changed |= SaveValue(StartMaxHeight, UnitGroup::ALTITUDE, ProfileKeys::StartMaxHeight, otb.start_max_height);
 
   changed |= SaveValue(StartMaxHeightMargin, UnitGroup::ALTITUDE, ProfileKeys::StartMaxHeightMargin,
-                       task_behaviour.start_max_height_margin);
+                       task_behaviour.start_margins.max_height_margin);
 
   changed |= SaveValueEnum(StartHeightRef, ProfileKeys::StartHeightRef, otb.start_max_height_ref);
 

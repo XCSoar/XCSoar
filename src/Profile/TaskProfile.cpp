@@ -42,8 +42,8 @@ Profile::Load(GlideSettings &settings)
 void
 Profile::Load(TaskStartMargins &settings)
 {
-  Get(ProfileKeys::StartMaxHeightMargin, settings.start_max_height_margin);
-  Get(ProfileKeys::StartMaxSpeedMargin, settings.start_max_speed_margin);
+  Get(ProfileKeys::StartMaxHeightMargin, settings.max_height_margin);
+  Get(ProfileKeys::StartMaxSpeedMargin, settings.max_speed_margin);
 }
 
 void
@@ -71,7 +71,6 @@ Profile::Load(OrderedTaskBehaviour &settings)
 void
 Profile::Load(TaskBehaviour &settings)
 {
-  Load((TaskStartMargins &)settings);
   Load(settings.glide);
 
   Get(ProfileKeys::AATTimeMargin, settings.optimise_targets_margin);
@@ -87,6 +86,7 @@ Profile::Load(TaskBehaviour &settings)
 
   Get(ProfileKeys::SafetyAltitudeArrival, settings.safety_height_arrival);
   GetEnum(ProfileKeys::TaskType, settings.task_type_default);
+  Load(settings.start_margins);
 
   Load(settings.sector_defaults);
   Load(settings.ordered_defaults);
