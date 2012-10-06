@@ -25,6 +25,9 @@
 #define FINISHPOINT_HPP
 
 #include "OrderedTaskPoint.hpp"
+#include "Task/Ordered/FinishConstraints.hpp"
+
+struct FinishConstraints;
 
 /**
  * A FinishPoint is an abstract OrderedTaskPoint,
@@ -37,6 +40,13 @@
 class FinishPoint : public OrderedTaskPoint
 {
   fixed safety_height_arrival;
+
+  /**
+   * A copy of OrderedTaskBehaviour::finish_constraints, managed by
+   * SetOrderedTaskBehaviour().
+   */
+  FinishConstraints constraints;
+
   fixed fai_finish_height;
 
 public:
@@ -52,7 +62,8 @@ public:
    * @return Partially-initialised object
    */
   FinishPoint(ObservationZonePoint *_oz, const Waypoint &wp,
-              const TaskBehaviour &tb, const OrderedTaskBehaviour &to,
+              const TaskBehaviour &tb,
+              const FinishConstraints &constraints,
               bool boundary_scored=true);
 
   /**
@@ -70,6 +81,7 @@ public:
   virtual void Reset();
 
   /* virtual methods from class OrderedTaskPoint */
+  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb);
   virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
 
   /* virtual methods from class ObservationZoneClient */

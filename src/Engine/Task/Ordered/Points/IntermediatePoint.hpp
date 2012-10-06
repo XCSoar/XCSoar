@@ -45,7 +45,6 @@ public:
    * @param _oz Observation zone attached to this point
    * @param wp Waypoint origin of turnpoint
    * @param tb TaskBehaviour defining options (esp safety heights)
-   * @param to OrderedTaskBehaviour defining task options
    * @param b_scored Whether distance within OZ is scored
    *
    * @return Partially-initialised object
@@ -53,7 +52,6 @@ public:
   IntermediateTaskPoint(Type _type, ObservationZonePoint *_oz,
                         const Waypoint &wp,
                         const TaskBehaviour &tb,
-                        const OrderedTaskBehaviour &to,
                         const bool b_scored = false);
 
   gcc_pure

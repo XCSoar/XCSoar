@@ -51,15 +51,13 @@ public:
    * @param _oz Observation zone for this task point
    * @param wp Waypoint origin of turnpoint
    * @param tb Task Behaviour defining options (esp safety heights)
-   * @param to OrderedTask Behaviour defining options
    *
    * @return Partially-initialised object
    */
   AATPoint(ObservationZonePoint *_oz,
            const Waypoint &wp,
-           const TaskBehaviour &tb,
-           const OrderedTaskBehaviour &to)
-    :IntermediateTaskPoint(AAT, _oz, wp, tb, to, true),
+           const TaskBehaviour &tb)
+    :IntermediateTaskPoint(AAT, _oz, wp, tb, true),
      target_location(wp.location),
      target_save(wp.location),
      target_locked(false)

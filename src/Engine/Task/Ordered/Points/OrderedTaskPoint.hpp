@@ -62,10 +62,6 @@ public:
     AFTER_ACTIVE
   };
 
-protected:
-  /** Reference to ordered task behaviour (for task-specific options) */
-  const OrderedTaskBehaviour &ordered_task_behaviour;
-
 private:
   /** ActiveState determined from ScanActive() */
   ActiveState active_state;
@@ -82,14 +78,12 @@ public:
    * @param _oz Observation zone for this task point
    * @param wp Waypoint associated with this task point
    * @param tb Task Behaviour defining options (esp safety heights)
-   * @param to OrderedTask Behaviour defining options
    * @param b_scored Whether distance within OZ is scored
    *
    * @return Partially initialised object
    */
   OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
                    const Waypoint &wp,
-                   const OrderedTaskBehaviour &to,
                    const bool b_scored);
 
   virtual ~OrderedTaskPoint() {}
@@ -122,6 +116,8 @@ public:
   bool IsSuccessorAllowed() const {
     return GetType() != FINISH;
   }
+
+  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) {}
 
   /**
    * Set previous/next task points.

@@ -32,10 +32,11 @@
 StartPoint::StartPoint(ObservationZonePoint *_oz,
                        const Waypoint &wp,
                        const TaskBehaviour &tb,
-                       const OrderedTaskBehaviour &to)
-  :OrderedTaskPoint(START, _oz, wp, to, false),
+                       const StartConstraints &_constraints)
+  :OrderedTaskPoint(START, _oz, wp, false),
    safety_height_terrain(tb.route_planner.safety_height_terrain),
-   margins(tb.start_margins)
+   margins(tb.start_margins),
+   constraints(_constraints)
 {
 }
 
@@ -52,6 +53,12 @@ StartPoint::GetElevation() const
   return GetBaseElevation() + safety_height_terrain;
 }
 
+void
+StartPoint::SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb)
+{
+  OrderedTaskPoint::SetOrderedTaskBehaviour(otb);
+  constraints = otb.start_constraints;
+}
 
 void
 StartPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
@@ -68,7 +75,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
                              const TaskProjection &projection)
 {
   if (task_events != NULL && IsInSector(state) &&
-      !ordered_task_behaviour.start_constraints.CheckSpeed(state, margins))
+      !constraints.CheckSpeed(state, margins))
     task_events->StartSpeedWarning();
 
   return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
@@ -133,8 +140,7 @@ bool
 StartPoint::IsInSector(const AircraftState &state) const
 {
   return OrderedTaskPoint::IsInSector(state) &&
-    ordered_task_behaviour.start_constraints.CheckHeight(state, margins,
-                                                         GetBaseElevation());
+    constraints.CheckHeight(state, margins, GetBaseElevation());
 }
 
 bool
@@ -142,11 +148,9 @@ StartPoint::CheckExitTransition(const AircraftState &ref_now,
                                 const AircraftState &ref_last) const
 {
   const bool now_in_height =
-    ordered_task_behaviour.start_constraints.CheckHeight(ref_now, margins,
-                                                         GetBaseElevation());
+    constraints.CheckHeight(ref_now, margins, GetBaseElevation());
   const bool last_in_height =
-    ordered_task_behaviour.start_constraints.CheckHeight(ref_last, margins,
-                                                         GetBaseElevation());
+    constraints.CheckHeight(ref_last, margins, GetBaseElevation());
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks

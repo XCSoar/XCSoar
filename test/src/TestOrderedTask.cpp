@@ -184,10 +184,12 @@ TestFlightToFinish(fixed aircraft_altitude)
 {
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new CylinderZone(wp1.location),
-                       wp1, task_behaviour, ordered_task_behaviour);
+                       wp1, task_behaviour,
+                       ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   const FinishPoint tp2(new CylinderZone(wp2.location),
-                        wp2, task_behaviour, ordered_task_behaviour, false);
+                        wp2, task_behaviour,
+                        ordered_task_behaviour.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
 
@@ -225,10 +227,12 @@ TestSimpleTask()
 {
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new CylinderZone(wp1.location),
-                       wp1, task_behaviour, ordered_task_behaviour);
+                       wp1, task_behaviour,
+                       ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   const FinishPoint tp2(new CylinderZone(wp3.location),
-                        wp3, task_behaviour, ordered_task_behaviour, false);
+                        wp3, task_behaviour,
+                        ordered_task_behaviour.finish_constraints, false);
   task.Append(tp2);
 
   ok1(task.CheckTask());
@@ -262,12 +266,14 @@ TestHighFinish()
 {
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new CylinderZone(wp1.location),
-                       wp1, task_behaviour, ordered_task_behaviour);
+                       wp1, task_behaviour,
+                       ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   Waypoint wp2b(wp2);
   wp2b.elevation = fixed(1000);
   const FinishPoint tp2(new CylinderZone(wp2b.location),
-                        wp2b, task_behaviour, ordered_task_behaviour, false);
+                        wp2b, task_behaviour,
+                        ordered_task_behaviour.finish_constraints, false);
   task.Append(tp2);
   task.SetActiveTaskPoint(1);
 
@@ -305,15 +311,17 @@ TestHighTP()
 {
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new CylinderZone(wp1.location),
-                       wp1, task_behaviour, ordered_task_behaviour);
+                       wp1, task_behaviour,
+                       ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   const Waypoint wp3b = MakeWaypoint(wp3, 1500);
   const ASTPoint tp2(new CylinderZone(wp3b.location),
-                     wp3b, task_behaviour, ordered_task_behaviour);
+                     wp3b, task_behaviour);
   task.Append(tp2);
   const Waypoint wp4b = MakeWaypoint(wp4, 100);
   const FinishPoint tp3(new CylinderZone(wp4b.location),
-                        wp4b, task_behaviour, ordered_task_behaviour, false);
+                        wp4b, task_behaviour,
+                        ordered_task_behaviour.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 
@@ -341,15 +349,17 @@ TestHighTPFinal()
 {
   OrderedTask task(task_behaviour);
   const StartPoint tp1(new CylinderZone(wp1.location),
-                       wp1, task_behaviour, ordered_task_behaviour);
+                       wp1, task_behaviour,
+                       ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   const Waypoint wp3b = MakeWaypoint(wp3, 1500);
   const ASTPoint tp2(new CylinderZone(wp3b.location),
-                     wp3b, task_behaviour, ordered_task_behaviour);
+                     wp3b, task_behaviour);
   task.Append(tp2);
   const Waypoint wp5b = MakeWaypoint(wp5, 200);
   const FinishPoint tp3(new CylinderZone(wp5b.location),
-                        wp5b, task_behaviour, ordered_task_behaviour, false);
+                        wp5b, task_behaviour,
+                        ordered_task_behaviour.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 
@@ -378,13 +388,15 @@ TestLowTPFinal()
   OrderedTask task(task_behaviour);
   const Waypoint wp1b = MakeWaypoint(wp1, 1500);
   const StartPoint tp1(new CylinderZone(wp1b.location),
-                       wp1b, task_behaviour, ordered_task_behaviour);
+                       wp1b, task_behaviour,
+                       ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   const ASTPoint tp2(new CylinderZone(wp2.location),
-                     wp2, task_behaviour, ordered_task_behaviour);
+                     wp2, task_behaviour);
   task.Append(tp2);
   const FinishPoint tp3(new CylinderZone(wp3.location),
-                        wp3, task_behaviour, ordered_task_behaviour, false);
+                        wp3, task_behaviour,
+                        ordered_task_behaviour.finish_constraints, false);
   task.Append(tp3);
   task.SetActiveTaskPoint(1);
 

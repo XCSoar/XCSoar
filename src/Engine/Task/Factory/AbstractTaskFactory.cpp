@@ -111,28 +111,30 @@ StartPoint*
 AbstractTaskFactory::CreateStart(ObservationZonePoint* oz,
                                  const Waypoint& wp) const
 {
-  return new StartPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
+  return new StartPoint(oz, wp, behaviour,
+                        GetOrderedTaskBehaviour().start_constraints);
 }
 
 FinishPoint*
 AbstractTaskFactory::CreateFinish(ObservationZonePoint* oz,
                                   const Waypoint& wp) const
 {
-  return new FinishPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
+  return new FinishPoint(oz, wp, behaviour,
+                         GetOrderedTaskBehaviour().finish_constraints);
 }
 
 AATPoint*
 AbstractTaskFactory::CreateAATPoint(ObservationZonePoint* oz,
                                const Waypoint& wp) const
 {
-  return new AATPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
+  return new AATPoint(oz, wp, behaviour);
 }
 
 ASTPoint*
 AbstractTaskFactory::CreateASTPoint(ObservationZonePoint* oz,
                                const Waypoint& wp) const
 {
-  return new ASTPoint(oz, wp, behaviour, GetOrderedTaskBehaviour());
+  return new ASTPoint(oz, wp, behaviour);
 }
 
 StartPoint* 

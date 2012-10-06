@@ -44,15 +44,13 @@ public:
    * @param _oz Observation zone for this task point
    * @param wp Waypoint associated with this task point
    * @param tb Task Behaviour defining options (esp safety heights)
-   * @param to OrderedTask Behaviour defining options
    *
    * @return Partially initialised object
    */
   ASTPoint(ObservationZonePoint *_oz,
            const Waypoint &wp,
-           const TaskBehaviour &tb,
-           const OrderedTaskBehaviour &to)
-    :IntermediateTaskPoint(AST, _oz, wp, tb, to) {}
+           const TaskBehaviour &tb)
+    :IntermediateTaskPoint(AST, _oz, wp, tb) {}
 };
 
 #endif

@@ -28,10 +28,11 @@
 
 FinishPoint::FinishPoint(ObservationZonePoint* _oz, const Waypoint & wp,
                          const TaskBehaviour& tb,
-                         const OrderedTaskBehaviour &to,
+                         const FinishConstraints &_constraints,
                          bool boundary_scored)
-  :OrderedTaskPoint(FINISH, _oz, wp, to, boundary_scored),
+  :OrderedTaskPoint(FINISH, _oz, wp, boundary_scored),
    safety_height_arrival(tb.safety_height_arrival),
+   constraints(_constraints),
    fai_finish_height(fixed_zero)
 {
 }
@@ -58,18 +59,23 @@ FinishPoint::EntryPrecondition() const
 fixed
 FinishPoint::GetElevation() const
 {
-  const FinishConstraints &finish_constraints =
-    ordered_task_behaviour.finish_constraints;
   const fixed nominal_elevation = GetBaseElevation() + safety_height_arrival;
 
-  if (finish_constraints.fai_finish) {
+  if (constraints.fai_finish) {
     return max(nominal_elevation, fai_finish_height);
   } else {
     return max(nominal_elevation,
-               fixed(finish_constraints.min_height) +
-               (finish_constraints.min_height_ref == AltitudeReference::AGL
+               fixed(constraints.min_height) +
+               (constraints.min_height_ref == AltitudeReference::AGL
                 ? GetBaseElevation() : fixed_zero));
   }
+}
+
+void
+FinishPoint::SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb)
+{
+  OrderedTaskPoint::SetOrderedTaskBehaviour(otb);
+  constraints = otb.finish_constraints;
 }
 
 void
@@ -98,13 +104,10 @@ FinishPoint::IsInSector(const AircraftState &state) const
 bool
 FinishPoint::is_in_height_limit(const AircraftState &state) const
 {
-  const FinishConstraints &finish_constraints =
-    ordered_task_behaviour.finish_constraints;
-
-  if (!finish_constraints.CheckHeight(state, GetBaseElevation()))
+  if (!constraints.CheckHeight(state, GetBaseElevation()))
     return false;
 
-  if (finish_constraints.fai_finish)
+  if (constraints.fai_finish)
     return state.altitude > fai_finish_height;
 
   return true;

@@ -1308,6 +1308,12 @@ void
 OrderedTask::SetOrderedTaskBehaviour(const OrderedTaskBehaviour& ob)
 {
   ordered_behaviour = ob;
+
+  for (auto tp : task_points)
+    tp->SetOrderedTaskBehaviour(ob);
+
+  for (auto tp : optional_start_points)
+    tp->SetOrderedTaskBehaviour(ob);
 }
 
 bool 

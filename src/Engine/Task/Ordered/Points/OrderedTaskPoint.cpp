@@ -36,10 +36,9 @@
 
 OrderedTaskPoint::OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
                                    const Waypoint &wp,
-                                   const OrderedTaskBehaviour &to,
                                    const bool b_scored)
   :TaskLeg(*this), ScoredTaskPoint(_type, wp, b_scored),
-   ObservationZoneClient(_oz), ordered_task_behaviour(to),
+   ObservationZoneClient(_oz),
    active_state(NOTFOUND_ACTIVE), tp_next(NULL), tp_previous(NULL),
    flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
 {
@@ -157,19 +156,21 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
   switch (GetType()) {
   case START:
     return new StartPoint(GetObservationZone().Clone(waypoint->location),
-                          *waypoint, task_behaviour, ordered_task_behaviour);
+                          *waypoint, task_behaviour,
+                          ordered_task_behaviour.start_constraints);
 
   case AST:
     return new ASTPoint(GetObservationZone().Clone(waypoint->location),
-                        *waypoint, task_behaviour, ordered_task_behaviour);
+                        *waypoint, task_behaviour);
 
   case AAT:
     return new AATPoint(GetObservationZone().Clone(waypoint->location),
-                        *waypoint, task_behaviour, ordered_task_behaviour);
+                        *waypoint, task_behaviour);
 
   case FINISH:
     return new FinishPoint(GetObservationZone().Clone(waypoint->location),
-                           *waypoint, task_behaviour, ordered_task_behaviour,
+                           *waypoint, task_behaviour,
+                           ordered_task_behaviour.finish_constraints,
                            IsBoundaryScored());
 
   case UNORDERED:

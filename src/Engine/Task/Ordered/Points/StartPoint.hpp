@@ -27,6 +27,7 @@
 
 #include "OrderedTaskPoint.hpp"
 #include "Task/TaskBehaviour.hpp"
+#include "Task/Ordered/StartConstraints.hpp"
 
 /**
  * A StartPoint is an abstract OrderedTaskPoint,
@@ -43,6 +44,12 @@ class StartPoint : public OrderedTaskPoint {
 
   TaskStartMargins margins;
 
+  /**
+   * A copy of OrderedTaskBehaviour::start_constraints, managed by
+   * SetOrderedTaskBehaviour().
+   */
+  StartConstraints constraints;
+
 public:
   /**
    * Constructor.  Sets task area to non-scorable; distances
@@ -58,7 +65,7 @@ public:
   StartPoint(ObservationZonePoint *_oz,
              const Waypoint &wp,
              const TaskBehaviour &tb,
-             const OrderedTaskBehaviour &to);
+             const StartConstraints &constraints);
 
   /**
    * Search for the min point on the boundary from
@@ -87,6 +94,7 @@ public:
                                 const TaskProjection &projection);
 
   /* virtual methods from class OrderedTaskPoint */
+  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb);
   virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
 
 private:

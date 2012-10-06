@@ -27,9 +27,8 @@ IntermediateTaskPoint::IntermediateTaskPoint(Type _type,
                                              ObservationZonePoint *_oz,
                                              const Waypoint &wp,
                                              const TaskBehaviour &tb,
-                                             const OrderedTaskBehaviour &to,
                                              const bool b_scored)
-  :OrderedTaskPoint(_type, _oz, wp, to, b_scored),
+  :OrderedTaskPoint(_type, _oz, wp, b_scored),
    safety_height_terrain(tb.route_planner.safety_height_terrain) {}
 
 void
