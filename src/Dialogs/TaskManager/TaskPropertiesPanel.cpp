@@ -88,39 +88,42 @@ void
 TaskPropertiesPanel::ReadValues()
 {
   OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
+  bool changed = false;
 
   TaskFactoryType newtype = ordered_task->GetFactoryType();
-  *task_changed |= SaveValueEnum(TASK_TYPE, newtype);
+  changed |= SaveValueEnum(TASK_TYPE, newtype);
 
   int min_time = GetValueInteger(MIN_TIME);
   if (min_time != (int)p.aat_min_time) {
     p.aat_min_time = fixed(min_time);
-    *task_changed = true;
+    changed = true;
   }
 
   fixed max_speed = Units::ToSysSpeed(GetValueFloat(START_MAX_SPEED));
   if (max_speed != p.start_max_speed) {
     p.start_max_speed = max_speed;
-    *task_changed = true;
+    changed = true;
   }
 
   unsigned max_height =
     iround(Units::ToSysAltitude(GetValueFloat(START_MAX_HEIGHT)));
   if (max_height != p.start_max_height) {
     p.start_max_height = max_height;
-    *task_changed = true;
+    changed = true;
   }
 
-  *task_changed |= SaveValueEnum(START_HEIGHT_REF, p.start_max_height_ref);
+  changed |= SaveValueEnum(START_HEIGHT_REF, p.start_max_height_ref);
 
   unsigned min_height =
     iround(Units::ToSysAltitude(GetValueFloat(FINISH_MIN_HEIGHT)));
   if (min_height != p.finish_min_height) {
     p.finish_min_height = min_height;
-    *task_changed = true;
+    changed = true;
   }
 
-  *task_changed |= SaveValueEnum(FINISH_HEIGHT_REF, p.finish_min_height_ref);
+  changed |= SaveValueEnum(FINISH_HEIGHT_REF, p.finish_min_height_ref);
+
+  *task_changed |= changed;
 }
 
 void
