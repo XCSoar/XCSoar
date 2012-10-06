@@ -86,7 +86,7 @@ AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
     /* special case: GND is always "below" the aircraft, even if the
        aircraft's AGL altitude turns out to be negative due to terrain
        file inaccuracies */
-    (type == Type::AGL && !positive(altitude_above_terrain));
+    IsTerrain();
 }
 
 fixed
