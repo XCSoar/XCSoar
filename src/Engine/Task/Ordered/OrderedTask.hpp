@@ -525,15 +525,6 @@ public:
   }
 
   /** 
-   * Retrieve the OrderedTaskBehaviour used by this task
-   * 
-   * @return Reference to OrderedTaskBehaviour
-   */
-  OrderedTaskBehaviour &GetOrderedTaskBehaviour() {
-    return ordered_behaviour;
-  }
-
-  /** 
    * Copy OrderedTaskBehaviour to this task
    * 
    * @param ob Value to set

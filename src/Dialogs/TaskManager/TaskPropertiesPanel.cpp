@@ -87,7 +87,7 @@ TaskPropertiesPanel::RefreshView()
 void
 TaskPropertiesPanel::ReadValues()
 {
-  OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
+  OrderedTaskBehaviour p = ordered_task->GetOrderedTaskBehaviour();
   bool changed = false;
 
   TaskFactoryType newtype = ordered_task->GetFactoryType();
@@ -123,16 +123,21 @@ TaskPropertiesPanel::ReadValues()
 
   changed |= SaveValueEnum(FINISH_HEIGHT_REF, p.finish_min_height_ref);
 
+  if (changed)
+    ordered_task->SetOrderedTaskBehaviour(p);
+
   *task_changed |= changed;
 }
 
 void
 TaskPropertiesPanel::OnFAIFinishHeightChange(DataFieldBoolean &df)
 {
-  OrderedTaskBehaviour &p = ordered_task->GetOrderedTaskBehaviour();
+  OrderedTaskBehaviour p = ordered_task->GetOrderedTaskBehaviour();
   bool newvalue = df.GetAsBoolean();
   if (newvalue != p.fai_finish) {
     p.fai_finish = newvalue;
+    ordered_task->SetOrderedTaskBehaviour(p);
+
     *task_changed = true;
     RefreshView();
   }

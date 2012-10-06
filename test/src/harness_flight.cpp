@@ -272,7 +272,9 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
   task_manager.SetTaskEvents(default_events);
   task_manager.SetGlidePolar(glide_polar);
 
-  task_manager.GetOrderedTaskBehaviour().aat_min_time = aat_min_time(test_num);
+  OrderedTaskBehaviour otb = task_manager.GetOrderedTaskBehaviour();
+  otb.aat_min_time = aat_min_time(test_num);
+  task_manager.SetOrderedTaskBehaviour(otb);
 
   bool goto_target = false;
 

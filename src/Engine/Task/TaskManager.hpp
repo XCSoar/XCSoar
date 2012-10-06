@@ -518,8 +518,8 @@ public:
    * 
    * @return OrderedTaskBehaviour reference
    */
-  OrderedTaskBehaviour &GetOrderedTaskBehaviour() {
-    return task_ordered.GetOrderedTaskBehaviour();
+  void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) {
+    task_ordered.SetOrderedTaskBehaviour(otb);
   }
 
   /** 
