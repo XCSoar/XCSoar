@@ -76,11 +76,10 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     && (ordered_props->start_max_height != 0)
     && calculated.terrain_valid;
   if (draw_start_height) {
-    if (ordered_props->start_max_height_ref == HeightReferenceType::AGL) {
-      hstart = fixed(ordered_props->start_max_height) + calculated.terrain_altitude;
-    } else {
-      hstart = fixed(ordered_props->start_max_height);
-    }
+    hstart = fixed(ordered_props->start_max_height);
+    if (ordered_props->start_max_height_ref == HeightReferenceType::AGL)
+      hstart += calculated.terrain_altitude;
+
     hstart -= hoffset;
     chart.ScaleYFromValue(hstart);
   }
