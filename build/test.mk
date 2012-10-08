@@ -89,7 +89,7 @@ TEST_NAMES = \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
-	TestMacCready TestOrderedTask \
+	TestMacCready TestOrderedTask TestAATPoint \
 	TestPlanes \
 	TestTaskPoint \
 	TestTaskWaypoint \
@@ -191,6 +191,15 @@ TEST_ORDERED_TASK_SOURCES = \
 TEST_ORDERED_TASK_OBJS = $(call SRC_TO_OBJ,$(TEST_ORDERED_TASK_SOURCES))
 TEST_ORDERED_TASK_DEPENDS = TASK ROUTE GLIDE WAYPOINT GEO MATH UTIL
 $(eval $(call link-program,TestOrderedTask,TEST_ORDERED_TASK))
+
+TEST_AAT_POINT_SOURCES = \
+	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAATPoint.cpp
+TEST_AAT_POINT_OBJS = $(call SRC_TO_OBJ,$(TEST_AAT_POINT_SOURCES))
+TEST_AAT_POINT_DEPENDS = TASK ROUTE GLIDE WAYPOINT GEO MATH UTIL
+$(eval $(call link-program,TestAATPoint,TEST_AAT_POINT))
 
 TEST_PLANES_SOURCES = \
 	$(SRC)/Polar/Parser.cpp \
