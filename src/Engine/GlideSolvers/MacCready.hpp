@@ -44,7 +44,7 @@ class GlidePolar;
  */
 class MacCready 
 {
-#ifdef __clang__
+#if __has_feature(attribute_unused_on_fields)
   /* This attribute is currently not used, but may be some day. */
   gcc_unused
 #endif

@@ -135,4 +135,9 @@ Copyright_License {
 
 #endif
 
+#ifndef __has_feature
+  // define dummy macro for non-clang compilers
+  #define __has_feature(x) 0
+#endif
+
 #endif
