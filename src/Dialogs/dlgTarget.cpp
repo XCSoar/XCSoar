@@ -39,7 +39,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskManager.hpp"
-#include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/Ordered/Points/AATPoint.hpp"
 #include "Units/Units.hpp"
 #include "Asset.hpp"
 #include "Blackboard/RateLimitedBlackboardListener.hpp"
@@ -236,14 +236,16 @@ RefreshCalculator()
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
-    bAAT = lease->HasTarget(target_point);
+    const AATPoint *ap = lease->GetAATTaskPoint(target_point);
+
+    bAAT = ap != nullptr;
 
     if (!bAAT) {
       nodisplay = true;
       IsLocked = false;
     } else {
-      lease->GetTargetRangeRadial(target_point, Range, Radial);
-      IsLocked = lease->TargetIsLocked(target_point);
+      ap->GetTargetRangeRadial(Range, Radial);
+      IsLocked = ap->IsTargetLocked();
     }
 
     aatTime = lease->GetOrderedTaskBehaviour().aat_min_time;
@@ -344,8 +346,13 @@ OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
       if (RangeNew != Range) {
         {
           ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-          lease->SetTarget(target_point, RangeNew, Radial);
-          lease->GetTargetRangeRadial(target_point, Range, Radial);
+          AATPoint *ap = lease->GetAATTaskPoint(target_point);
+
+          if (ap != nullptr) {
+            ap->SetTarget(RangeNew, Radial,
+                          lease->GetOrderedTask().GetTaskProjection());
+            ap->GetTargetRangeRadial(Range, Radial);
+          }
         }
 
         map->Invalidate();

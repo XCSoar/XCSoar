@@ -124,6 +124,14 @@ TaskManager::GetActiveTaskPoint() const
   return NULL;
 }
 
+const AATPoint *
+TaskManager::GetAATTaskPoint(unsigned index) const
+{
+  return CheckOrderedTask()
+    ? task_ordered.GetAATTaskPoint(index)
+    : nullptr;
+}
+
 void
 TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
 {
@@ -461,10 +469,7 @@ const GeoPoint&
 TaskManager::GetLocationTarget(const unsigned index,
                                const GeoPoint &fallback_location) const
 {
-  if (!CheckOrderedTask())
-    return fallback_location;
-
-  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
+  const AATPoint *ap = GetAATTaskPoint(index);
   if (ap)
     return ap->GetTargetLocation();
 
@@ -473,10 +478,7 @@ TaskManager::GetLocationTarget(const unsigned index,
 bool
 TaskManager::TargetIsLocked(const unsigned index) const
 {
-  if (!CheckOrderedTask())
-    return false;
-
-  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
+  const AATPoint *ap = GetAATTaskPoint(index);
   if (ap)
     return ap->IsTargetLocked();
 
@@ -486,10 +488,7 @@ TaskManager::TargetIsLocked(const unsigned index) const
 bool
 TaskManager::HasTarget(const unsigned index) const
 {
-  if (!CheckOrderedTask())
-    return false;
-
-  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
+  const AATPoint *ap = GetAATTaskPoint(index);
   if (ap)
     return ap->HasTarget();
 
@@ -520,20 +519,6 @@ TaskManager::SetTarget(const unsigned index, const fixed range,
   AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
     ap->SetTarget(range, radial, task_ordered.GetTaskProjection());
-
-  return true;
-}
-
-bool
-TaskManager::GetTargetRangeRadial(const unsigned index, fixed &range,
-                                  fixed &radial) const
-{
-  if (!CheckOrderedTask())
-    return false;
-
-  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
-  if (ap)
-    ap->GetTargetRangeRadial(range, radial);
 
   return true;
 }

@@ -102,6 +102,15 @@ public:
     return task_ordered;
   }
 
+  gcc_pure
+  const AATPoint *GetAATTaskPoint(unsigned index) const;
+
+  gcc_pure
+  AATPoint *GetAATTaskPoint(unsigned index) {
+    const AATPoint *ap = ((const TaskManager *)this)->GetAATTaskPoint(index);
+    return const_cast<AATPoint *>(ap);
+  }
+
   /**
    * Increments active taskpoint sequence for active task
    *
@@ -481,20 +490,6 @@ public:
    * @param radial the angle in degrees of the target
    */
  bool SetTarget(const unsigned index, const fixed range, const fixed radial);
-
-  /**
-   * returns position of the target in range / radial format
-   * referenced on the bearing from the previous target
-   * used by dlgTarget
-   *
-   * @param &range returns the range [0,1] from center
-   * to perimeter of the oz
-   *
-   * @param &radial returns the angle in degrees of
-   * the target in the sector in polar coordinates
-   */
- bool GetTargetRangeRadial(const unsigned index, fixed &range,
-                           fixed &radial) const;
 
   /**
    * Lock/unlock the target from automatic shifts of specified tp
