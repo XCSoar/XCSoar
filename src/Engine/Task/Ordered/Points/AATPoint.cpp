@@ -168,12 +168,9 @@ AATPoint::SetTarget(const GeoPoint &loc, const bool override_lock)
 }
 
 void
-AATPoint::SetTarget(const fixed range, const fixed radial,
-                    const TaskProjection &proj)
+AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
 {
-  fixed oldrange = fixed_zero;
-  fixed oldradial = fixed_zero;
-  GetTargetRangeRadial(oldrange, oldradial);
+  RangeAndRadial old = GetTargetRangeRadial();
 
   const FlatPoint fprev =
     proj.ProjectFloat(GetPrevious()->GetLocationRemaining());
@@ -184,13 +181,13 @@ AATPoint::SetTarget(const fixed range, const fixed radial,
   const fixed radius = fradius.d();
 
   fixed swapquadrants = fixed_zero;
-  if (positive(range) != positive(oldrange))
+  if (positive(rar.range) != positive(old.range))
     swapquadrants = fixed(180);
-  const FlatPoint ftarget1 (fabs(range) * radius *
-        cos((bearing + radial + swapquadrants)
+  const FlatPoint ftarget1 (fabs(rar.range) * radius *
+        cos((bearing + rar.radial + swapquadrants)
             / fixed(360) * fixed_two_pi),
-      fabs(range) * radius *
-        sin( fixed_minus_one * (bearing + radial + swapquadrants)
+      fabs(rar.range) * radius *
+        sin(fixed_minus_one * (bearing + rar.radial + swapquadrants)
             / fixed(360) * fixed_two_pi));
 
   const FlatPoint ftarget2 = floc + ftarget1;
@@ -199,11 +196,9 @@ AATPoint::SetTarget(const fixed range, const fixed radial,
   SetTarget(targetG, true);
 }
 
-void
-AATPoint::GetTargetRangeRadial(fixed &range, fixed &radial) const
+RangeAndRadial
+AATPoint::GetTargetRangeRadial(fixed oldrange) const
 {
-  const fixed oldrange = range;
-
   const GeoPoint fprev = GetPrevious()->GetLocationRemaining();
   const GeoPoint floc = GetLocation();
   const Angle radialraw = (floc.Bearing(GetTargetLocation()) -
@@ -213,13 +208,15 @@ AATPoint::GetTargetRangeRadial(fixed &range, fixed &radial) const
   const fixed radius = floc.Distance(GetLocationMin());
   const fixed rangeraw = min(fixed_one, d / radius);
 
-  radial = radialraw.AsDelta().Degrees();
+  fixed radial = radialraw.AsDelta().Degrees();
   const fixed rangesign = (fabs(radial) > fixed(90)) ?
       fixed_minus_one : fixed_one;
-  range = rangeraw * rangesign;
+  fixed range = rangeraw * rangesign;
 
   if ((oldrange == fixed_zero) && (range == fixed_zero))
     radial = fixed_zero;
+
+  return RangeAndRadial{ range, radial };
 }
 
 bool

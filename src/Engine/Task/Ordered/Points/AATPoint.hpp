@@ -26,6 +26,23 @@
 
 #include "IntermediatePoint.hpp"
 
+struct RangeAndRadial {
+  /**
+   * Thesigned range [-1,1] from near point on perimeter through
+   * center to far side of the oz perimeter.
+   */
+  fixed range;
+
+  /**
+   * The bearing of the target [degrees].
+   */
+  fixed radial;
+
+  static constexpr RangeAndRadial Zero() {
+    return RangeAndRadial{fixed_zero, fixed_zero};
+  }
+};
+
 /**
  * An AATPoint is an abstract IntermediatePoint,
  * can manage a target within the observation zone
@@ -85,14 +102,8 @@ public:
    * Set target location from a signed range & radial as bearing
    * referenced from the previous target
    * used by dlgTarget
-   *
-   * @param range the signed range [-1,1] from near point on
-   * perimeter through center to far side of the oz perimeter
-   *
-   * @param radial the bearing in degrees of the target
    */
-  void SetTarget(const fixed range, const fixed radial,
-                 const TaskProjection &projection);
+  void SetTarget(RangeAndRadial rar, const TaskProjection &projection);
 
   /**
    * returns position of the target in signed range & radial as
@@ -105,7 +116,8 @@ public:
    * @param &radial returns the bearing in degrees of
    * the target
    */
-  void GetTargetRangeRadial(fixed &range, fixed &radial) const;
+  gcc_pure
+  RangeAndRadial GetTargetRangeRadial(fixed old_range=fixed_zero) const;
 
   /**
    * Accessor to get target location

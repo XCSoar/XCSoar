@@ -70,8 +70,7 @@ static CheckBoxControl *chkbOptimized = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
 static unsigned TaskSize = 0;
 
-static fixed Range = fixed_zero;
-static fixed Radial = fixed_zero;
+static RangeAndRadial range_and_radial;
 static unsigned target_point = 0;
 static bool IsLocked = true;
 
@@ -244,7 +243,7 @@ RefreshCalculator()
       nodisplay = true;
       IsLocked = false;
     } else {
-      ap->GetTargetRangeRadial(Range, Radial);
+      range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
       IsLocked = ap->IsTargetLocked();
     }
 
@@ -262,9 +261,9 @@ RefreshCalculator()
   ShowOptionalFormControl(*wf, _T("prpRadial"), !nodisplay);
 
   if (!nodisplay) {
-    LoadFormProperty(*wf, _T("prpRange"), Range * 100);
+    LoadFormProperty(*wf, _T("prpRange"), range_and_radial.range * 100);
 
-    fixed rTemp = Radial;
+    fixed rTemp = range_and_radial.radial;
     if (rTemp < fixed(-90))
       rTemp += fixed(180);
     else if (rTemp > fixed(90))
@@ -343,15 +342,16 @@ OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
   case DataField::daChange:
     if (target_point >= ActiveTaskPointOnEntry) {
       const fixed RangeNew = df.GetAsFixed() / fixed(100);
-      if (RangeNew != Range) {
+      if (RangeNew != range_and_radial.range) {
         {
           ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
           AATPoint *ap = lease->GetAATTaskPoint(target_point);
 
           if (ap != nullptr) {
-            ap->SetTarget(RangeNew, Radial,
+            range_and_radial.range = RangeNew;
+            ap->SetTarget(range_and_radial,
                           lease->GetOrderedTask().GetTaskProjection());
-            ap->GetTargetRangeRadial(Range, Radial);
+            range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
           }
         }
 
@@ -379,7 +379,7 @@ OnRadialData(DataField *Sender, DataField::DataAccessMode Mode)
   case DataField::daChange:
     if (target_point >= ActiveTaskPointOnEntry) {
       fixed rTemp = df.GetAsFixed();
-      if (fabs(Radial) > fixed(90)) {
+      if (fabs(range_and_radial.radial) > fixed(90)) {
         if (rTemp < fixed_zero)
           RadialNew = rTemp + fixed(180);
         else
@@ -387,9 +387,10 @@ OnRadialData(DataField *Sender, DataField::DataAccessMode Mode)
       } else {
         RadialNew = rTemp;
       }
-      if (Radial != RadialNew) {
-        protected_task_manager->SetTarget(target_point, Range, RadialNew);
-        Radial = RadialNew;
+
+      if (RadialNew != range_and_radial.radial) {
+        range_and_radial.radial = RadialNew;
+        protected_task_manager->SetTarget(target_point, range_and_radial);
         map->Invalidate();
       }
     }
@@ -418,8 +419,7 @@ RefreshTargetPoint()
 
     RefreshCalculator();
   } else {
-    Range = fixed_zero;
-    Radial = fixed_zero;
+    range_and_radial = RangeAndRadial::Zero();
   }
 }
 

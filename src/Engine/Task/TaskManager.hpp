@@ -38,6 +38,7 @@ class AbstractTaskFactory;
 class TaskEvents;
 class TaskAdvance;
 class Waypoints;
+struct RangeAndRadial;
 
 /**
  *  Main interface exposed to clients for providing access to common types
@@ -483,13 +484,8 @@ public:
    * Set target location from a range and radial
    * referenced on the bearing from the previous target
    * used by dlgTarget
-   *
-   * @param range the range [0,1] from center to perimeter
-   * of the oz
-   *
-   * @param radial the angle in degrees of the target
    */
- bool SetTarget(const unsigned index, const fixed range, const fixed radial);
+ bool SetTarget(const unsigned index, RangeAndRadial rar);
 
   /**
    * Lock/unlock the target from automatic shifts of specified tp

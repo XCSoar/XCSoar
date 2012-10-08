@@ -510,15 +510,14 @@ TaskManager::SetTarget(const unsigned index, const GeoPoint &loc,
 }
 
 bool
-TaskManager::SetTarget(const unsigned index, const fixed range,
-                       const fixed radial)
+TaskManager::SetTarget(const unsigned index, RangeAndRadial rar)
 {
   if (!CheckOrderedTask())
     return false;
 
   AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
-    ap->SetTarget(range, radial, task_ordered.GetTaskProjection());
+    ap->SetTarget(rar, task_ordered.GetTaskProjection());
 
   return true;
 }

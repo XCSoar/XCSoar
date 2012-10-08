@@ -28,6 +28,7 @@ Copyright_License {
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 #include "Task/RoutePlannerGlue.hpp"
+#include "Task/Ordered/Points/AATPoint.hpp"
 #include "Engine/Route/ReachResult.hpp"
 
 #include <windef.h> // for MAX_PATH
@@ -78,11 +79,10 @@ ProtectedTaskManager::IsInSector (const unsigned index,
 }
 
 bool
-ProtectedTaskManager::SetTarget(const unsigned index, const fixed range,
-   const fixed radial)
+ProtectedTaskManager::SetTarget(const unsigned index, RangeAndRadial rar)
 {
   ExclusiveLease lease(*this);
-  return lease->SetTarget(index, range, radial);
+  return lease->SetTarget(index, rar);
 }
 
 bool
