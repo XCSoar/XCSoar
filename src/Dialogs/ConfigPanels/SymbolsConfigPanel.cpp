@@ -97,13 +97,18 @@ static const StaticEnumChoice  trail_length_list[] = {
   { 0 }
 };
 
-const TCHAR *trail_type_help = N_("Sets the type of the snail trail display.");
 static const StaticEnumChoice  trail_type_list[] = {
-  { (unsigned)TrailSettings::Type::VARIO_1, N_("Vario #1"), trail_type_help },
-  { (unsigned)TrailSettings::Type::VARIO_1_DOTS, N_("Vario #1 (with dots)"), trail_type_help },
-  { (unsigned)TrailSettings::Type::VARIO_2, N_("Vario #2"), trail_type_help },
-  { (unsigned)TrailSettings::Type::VARIO_2_DOTS, N_("Vario #2 (with dots)"), trail_type_help },
-  { (unsigned)TrailSettings::Type::ALTITUDE, N_("Altitude"), trail_type_help },
+  { (unsigned)TrailSettings::Type::VARIO_1, N_("Vario #1"), N_("Within lift areas "
+    "lines get displayed green and thicker, while sinking lines are shown brown and thin. "
+    "Zero lift is presented as a grey line.") },
+  { (unsigned)TrailSettings::Type::VARIO_1_DOTS, N_("Vario #1 (with dots)"), N_("The same "
+    "colour scheme as the previous, but with dotted lines while sinking.") },
+  { (unsigned)TrailSettings::Type::VARIO_2, N_("Vario #2"), N_("The climb colour "
+    "for this scheme is orange to red, sinking is displayed as light blue to dark blue. "
+    "Zero lift is presented as a yellow line.") },
+  { (unsigned)TrailSettings::Type::VARIO_2_DOTS, N_("Vario #2 (with dots)"), N_("The same "
+    "colour scheme as the previous, but with dotted lines while sinking.") },
+  { (unsigned)TrailSettings::Type::ALTITUDE, N_("Altitude"), N_("The colour scheme corresponds to the height.") },
   { 0 }
 };
 
@@ -150,7 +155,8 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.trail.wind_drift_enabled);
   SetExpertRow(TRAIL_DRIFT);
 
-  AddEnum(_("Trail type"), NULL, trail_type_list, (int)settings_map.trail.type);
+  AddEnum(_("Trail type"),
+          _("Sets the type of the snail trail display."), trail_type_list, (int)settings_map.trail.type);
   SetExpertRow(TRAIL_TYPE);
 
   AddBoolean(_("Trail scaled"),

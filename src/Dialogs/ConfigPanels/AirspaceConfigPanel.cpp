@@ -62,11 +62,12 @@ static const StaticEnumChoice  as_display_list[] = {
 
 static const StaticEnumChoice  as_fill_mode_list[] = {
   { (unsigned)AirspaceRendererSettings::FillMode::DEFAULT, N_("Default"),
-    _T("") },
+    N_("This selects the best performing option for your hardware. "
+      "In fact it favours 'fill padding' except for PPC 2000 system.") },
   { (unsigned)AirspaceRendererSettings::FillMode::ALL, N_("Fill all"),
-    _T("") },
+    N_("Transparently fills the airspace colour over the whole area.") },
   { (unsigned)AirspaceRendererSettings::FillMode::PADDING, N_("Fill padding"),
-    _T("") },
+    N_("Draws a solid outline with a half transparent border around the airspace.") },
   { 0 }
 };
 
