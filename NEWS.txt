@@ -13,6 +13,7 @@ Version 6.4.2 - not yet released
 * user interface
   - closing the XCSoar window cancels the current modal dialog (was
     broken on Windows)
+  - fix off-by-one bug in combo list (#2382)
 
 Version 6.4.1 - 2012/08/30
 * calculations
