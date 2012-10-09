@@ -334,30 +334,38 @@ OnPrevClicked(gcc_unused WndButton &Sender)
 }
 
 static void
+OnRangeModified(fixed new_value)
+{
+  if (target_point < ActiveTaskPointOnEntry)
+    return;
+
+  const fixed RangeNew = new_value / fixed(100);
+  if (RangeNew == range_and_radial.range)
+    return;
+
+  {
+    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+    AATPoint *ap = lease->GetAATTaskPoint(target_point);
+    if (ap == nullptr)
+      return;
+
+    range_and_radial.range = RangeNew;
+    ap->SetTarget(range_and_radial,
+                  lease->GetOrderedTask().GetTaskProjection());
+    range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
+  }
+
+  map->Invalidate();
+}
+
+static void
 OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 
   switch (Mode) {
   case DataField::daChange:
-    if (target_point >= ActiveTaskPointOnEntry) {
-      const fixed RangeNew = df.GetAsFixed() / fixed(100);
-      if (RangeNew != range_and_radial.range) {
-        {
-          ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-          AATPoint *ap = lease->GetAATTaskPoint(target_point);
-
-          if (ap != nullptr) {
-            range_and_radial.range = RangeNew;
-            ap->SetTarget(range_and_radial,
-                          lease->GetOrderedTask().GetTaskProjection());
-            range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
-          }
-        }
-
-        map->Invalidate();
-      }
-    }
+    OnRangeModified(df.GetAsFixed());
     break;
 
   case DataField::daSpecial:
@@ -370,30 +378,37 @@ OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
  * to [180, -180] based on whether the Range variable is positive or negative
  */
 static void
+OnRadialModified(fixed new_value)
+{
+  if (target_point < ActiveTaskPointOnEntry)
+    return;
+
+  fixed RadialNew;
+  if (fabs(range_and_radial.radial) > fixed(90)) {
+    if (new_value < fixed_zero)
+      RadialNew = new_value + fixed(180);
+    else
+      RadialNew = new_value - fixed(180);
+  } else {
+    RadialNew = new_value;
+  }
+
+  if (RadialNew == range_and_radial.radial)
+    return;
+
+  range_and_radial.radial = RadialNew;
+  protected_task_manager->SetTarget(target_point, range_and_radial);
+  map->Invalidate();
+}
+
+static void
 OnRadialData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
 
-  fixed RadialNew;
   switch (Mode) {
   case DataField::daChange:
-    if (target_point >= ActiveTaskPointOnEntry) {
-      fixed rTemp = df.GetAsFixed();
-      if (fabs(range_and_radial.radial) > fixed(90)) {
-        if (rTemp < fixed_zero)
-          RadialNew = rTemp + fixed(180);
-        else
-          RadialNew = rTemp - fixed(180);
-      } else {
-        RadialNew = rTemp;
-      }
-
-      if (RadialNew != range_and_radial.radial) {
-        range_and_radial.radial = RadialNew;
-        protected_task_manager->SetTarget(target_point, range_and_radial);
-        map->Invalidate();
-      }
-    }
+    OnRadialModified(df.GetAsFixed());
     break;
 
   case DataField::daSpecial:
