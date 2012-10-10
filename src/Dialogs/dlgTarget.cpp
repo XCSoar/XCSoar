@@ -358,10 +358,8 @@ OnRangeModified(fixed new_value)
     range_and_radial.range = new_range;
     ap->SetTarget(range_and_radial,
                   lease->GetOrderedTask().GetTaskProjection());
-    range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
   }
 
-  LoadRangeAndRadial();
   map->Invalidate();
 }
 
@@ -399,10 +397,8 @@ OnRadialModified(fixed new_value)
     range_and_radial.radial = new_radial;
     ap->SetTarget(range_and_radial,
                   lease->GetOrderedTask().GetTaskProjection());
-    range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
   }
 
-  LoadRangeAndRadial();
   map->Invalidate();
 }
 
