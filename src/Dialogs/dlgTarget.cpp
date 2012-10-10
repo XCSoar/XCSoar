@@ -66,13 +66,13 @@ protected:
 
 static WndForm *wf = NULL;
 static TargetMapWindow *map;
-static CheckBoxControl *chkbOptimized = NULL;
-static unsigned ActiveTaskPointOnEntry = 0;
-static unsigned TaskSize = 0;
+static CheckBoxControl *optimized_checkbox = NULL;
+static unsigned initial_active_task_point = 0;
+static unsigned task_size = 0;
 
 static RangeAndRadial range_and_radial;
 static unsigned target_point = 0;
-static bool IsLocked = true;
+static bool is_locked = true;
 
 static Window *
 OnCreateMap(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
@@ -92,7 +92,7 @@ OnCreateMap(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
 }
 
 static void
-OnOKClicked(gcc_unused WndButton &Sender)
+OnOKClicked(gcc_unused WndButton &sender)
 {
   wf->SetModalResult(mrOK);
 }
@@ -188,7 +188,7 @@ MoveTarget(gcc_unused double adjust_angle)
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &sender, unsigned key_code)
 {
   switch (key_code) {
   case VK_APP2:
@@ -219,8 +219,8 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 LockCalculatorUI()
 {
-  SetFormControlEnabled(*wf, _T("prpRange"), IsLocked);
-  SetFormControlEnabled(*wf, _T("prpRadial"), IsLocked);
+  SetFormControlEnabled(*wf, _T("prpRange"), is_locked);
+  SetFormControlEnabled(*wf, _T("prpRadial"), is_locked);
 }
 
 /**
@@ -241,29 +241,29 @@ static void
 RefreshCalculator()
 {
   bool nodisplay = false;
-  bool bAAT;
-  fixed aatTime;
+  bool is_aat;
+  fixed aat_time;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
     const AATPoint *ap = lease->GetAATTaskPoint(target_point);
 
-    bAAT = ap != nullptr;
+    is_aat = ap != nullptr;
 
-    if (!bAAT) {
+    if (!is_aat) {
       nodisplay = true;
-      IsLocked = false;
+      is_locked = false;
     } else {
       range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
-      IsLocked = ap->IsTargetLocked();
+      is_locked = ap->IsTargetLocked();
     }
 
-    aatTime = lease->GetOrderedTaskBehaviour().aat_min_time;
+    aat_time = lease->GetOrderedTaskBehaviour().aat_min_time;
   }
 
-  if (chkbOptimized) {
-    chkbOptimized->SetVisible(bAAT);
-    chkbOptimized->SetState(!IsLocked);
+  if (optimized_checkbox) {
+    optimized_checkbox->SetVisible(is_aat);
+    optimized_checkbox->SetState(!is_locked);
   }
 
   LockCalculatorUI();
@@ -275,14 +275,17 @@ RefreshCalculator()
     LoadRangeAndRadial();
 
   // update outputs
-  fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
-      XCSoarInterface::Calculated().common_stats.task_time_elapsed;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const fixed aat_time_estimated =
+    common_stats.task_time_remaining + common_stats.task_time_elapsed;
 
   ShowOptionalFormControl(*wf, _T("prpAATEst"), !nodisplay);
   ShowFormControl(*wf, _T("prpAATDelta"), !nodisplay);
   if (!nodisplay) {
-    LoadOptionalFormProperty(*wf, _T("prpAATEst"), aattimeEst / fixed(60));
-    LoadFormProperty(*wf, _T("prpAATDelta"), (aattimeEst - aatTime) / 60);
+    LoadOptionalFormProperty(*wf, _T("prpAATEst"),
+                             aat_time_estimated / fixed(60));
+    LoadFormProperty(*wf, _T("prpAATDelta"),
+                     (aat_time_estimated - aat_time) / 60);
   }
 
   const ElementStat &total = CommonInterface::Calculated().task_stats.total;
@@ -305,45 +308,45 @@ TargetDialogMapWindow::OnTaskModified()
 static void
 OnOptimized(CheckBoxControl &control)
 {
-  IsLocked = !control.GetState();
-  protected_task_manager->TargetLock(target_point, IsLocked);
+  is_locked = !control.GetState();
+  protected_task_manager->TargetLock(target_point, is_locked);
   RefreshCalculator();
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &Sender)
+OnNextClicked(gcc_unused WndButton &sender)
 {
-  if (target_point < (TaskSize - 1))
+  if (target_point < (task_size - 1))
     target_point++;
   else
-    target_point = ActiveTaskPointOnEntry;
+    target_point = initial_active_task_point;
 
   LoadFormPropertyEnum(*wf, _T("prpTaskPoint"),
-                       target_point - ActiveTaskPointOnEntry);
+                       target_point - initial_active_task_point);
   RefreshTargetPoint();
 }
 
 static void
-OnPrevClicked(gcc_unused WndButton &Sender)
+OnPrevClicked(gcc_unused WndButton &sender)
 {
-  if (target_point > ActiveTaskPointOnEntry)
+  if (target_point > initial_active_task_point)
     target_point--;
   else
-    target_point = TaskSize - 1;
+    target_point = task_size - 1;
 
   LoadFormPropertyEnum(*wf, _T("prpTaskPoint"),
-                       target_point - ActiveTaskPointOnEntry);
+                       target_point - initial_active_task_point);
   RefreshTargetPoint();
 }
 
 static void
 OnRangeModified(fixed new_value)
 {
-  if (target_point < ActiveTaskPointOnEntry)
+  if (target_point < initial_active_task_point)
     return;
 
-  const fixed RangeNew = new_value / fixed(100);
-  if (RangeNew == range_and_radial.range)
+  const fixed new_range = new_value / fixed(100);
+  if (new_range == range_and_radial.range)
     return;
 
   {
@@ -352,7 +355,7 @@ OnRangeModified(fixed new_value)
     if (ap == nullptr)
       return;
 
-    range_and_radial.range = RangeNew;
+    range_and_radial.range = new_range;
     ap->SetTarget(range_and_radial,
                   lease->GetOrderedTask().GetTaskProjection());
     range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
@@ -363,11 +366,11 @@ OnRangeModified(fixed new_value)
 }
 
 static void
-OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
+OnRangeData(DataField *sender, DataField::DataAccessMode mode)
 {
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+  DataFieldFloat &df = *(DataFieldFloat *)sender;
 
-  switch (Mode) {
+  switch (mode) {
   case DataField::daChange:
     OnRangeModified(df.GetAsFixed());
     break;
@@ -380,11 +383,11 @@ OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
 static void
 OnRadialModified(fixed new_value)
 {
-  if (target_point < ActiveTaskPointOnEntry)
+  if (target_point < initial_active_task_point)
     return;
 
-  fixed RadialNew = new_value;
-  if (RadialNew == range_and_radial.radial)
+  fixed new_radial = new_value;
+  if (new_radial == range_and_radial.radial)
     return;
 
   {
@@ -393,7 +396,7 @@ OnRadialModified(fixed new_value)
     if (ap == nullptr)
       return;
 
-    range_and_radial.radial = RadialNew;
+    range_and_radial.radial = new_radial;
     ap->SetTarget(range_and_radial,
                   lease->GetOrderedTask().GetTaskProjection());
     range_and_radial = ap->GetTargetRangeRadial(range_and_radial.range);
@@ -404,11 +407,11 @@ OnRadialModified(fixed new_value)
 }
 
 static void
-OnRadialData(DataField *Sender, DataField::DataAccessMode Mode)
+OnRadialData(DataField *sender, DataField::DataAccessMode mode)
 {
-  DataFieldFloat &df = *(DataFieldFloat *)Sender;
+  DataFieldFloat &df = *(DataFieldFloat *)sender;
 
-  switch (Mode) {
+  switch (mode) {
   case DataField::daChange:
     OnRadialModified(df.GetAsFixed());
     break;
@@ -431,7 +434,7 @@ SetTarget()
 static void
 RefreshTargetPoint()
 {
-  if (target_point < TaskSize && target_point >= ActiveTaskPointOnEntry) {
+  if (target_point < task_size && target_point >= initial_active_task_point) {
     SetTarget();
 
     RefreshCalculator();
@@ -444,12 +447,12 @@ RefreshTargetPoint()
  * handles UI event where task point is changed
  */
 static void
-OnTaskPointData(DataField *Sender, DataField::DataAccessMode Mode)
+OnTaskPointData(DataField *sender, DataField::DataAccessMode mode)
 {
   unsigned old_target_point = target_point;
-  switch (Mode) {
+  switch (mode) {
   case DataField::daChange:
-    target_point = Sender->GetAsInteger() + ActiveTaskPointOnEntry;
+    target_point = sender->GetAsInteger() + initial_active_task_point;
     if (target_point != old_target_point) {
       RefreshTargetPoint();
     }
@@ -460,7 +463,7 @@ OnTaskPointData(DataField *Sender, DataField::DataAccessMode Mode)
   }
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
+static constexpr CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnCreateMap),
   DeclareCallBackEntry(OnTaskPointData),
   DeclareCallBackEntry(OnRangeData),
@@ -481,10 +484,10 @@ GetTaskData(DataFieldEnum &df)
 
   const OrderedTask &task = task_manager->GetOrderedTask();
 
-  ActiveTaskPointOnEntry = task_manager->GetActiveTaskPointIndex();
-  TaskSize = task.TaskSize();
+  initial_active_task_point = task_manager->GetActiveTaskPointIndex();
+  task_size = task.TaskSize();
 
-  for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
+  for (unsigned i = initial_active_task_point; i < task_size; i++) {
     StaticString<80u> label;
     label.Format(_T("%d %s"), i,
                  task.GetTaskPoint(i).GetWaypoint().name.c_str());
@@ -501,32 +504,30 @@ GetTaskData(DataFieldEnum &df)
 static bool
 InitTargetPoints()
 {
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  DataFieldEnum* dfe;
-  dfe = (DataFieldEnum*)wp->GetDataField();
-
-  if (!GetTaskData(*dfe))
+  WndProperty &wp = *(WndProperty *)wf->FindByName(_T("prpTaskPoint"));
+  DataFieldEnum &dfe = *(DataFieldEnum *)wp.GetDataField();
+  if (!GetTaskData(dfe))
     return false;
 
-  if (TaskSize <= target_point)
-    target_point = ActiveTaskPointOnEntry;
+  if (task_size <= target_point)
+    target_point = initial_active_task_point;
   else
-    target_point = max(target_point, ActiveTaskPointOnEntry);
+    target_point = max(target_point, initial_active_task_point);
 
-  target_point = max(0, min((int)target_point, (int)TaskSize - 1));
+  target_point = max(0, min((int)target_point, (int)task_size - 1));
 
-  dfe->Set(max(0, (int)target_point - (int)ActiveTaskPointOnEntry));
+  dfe.Set(max(0, (int)target_point - (int)initial_active_task_point));
 
-  if (TaskSize > target_point) {
+  if (task_size > target_point) {
     SetTarget();
   }
 
-  wp->RefreshDisplay();
+  wp.RefreshDisplay();
   return true;
 }
 
 static void
-drawBtnNext()
+UpdateButtons()
 {
   if (IsAltair()) {
     // altair already has < and > buttons on WndProperty
@@ -536,18 +537,18 @@ drawBtnNext()
 }
 
 void
-dlgTargetShowModal(int TargetPoint)
+dlgTargetShowModal(int _target_point)
 {
   if (protected_task_manager == NULL)
     return;
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+  wf = LoadDialog(callback_table, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TARGET_L") :
                                       _T("IDR_XML_TARGET"));
   assert(wf != NULL);
 
-  if (TargetPoint >=0)
-    target_point = TargetPoint;
+  if (_target_point >= 0)
+    target_point = _target_point;
 
   if (!InitTargetPoints()) {
     delete wf;
@@ -555,10 +556,10 @@ dlgTargetShowModal(int TargetPoint)
     return;
   }
 
-  chkbOptimized = (CheckBoxControl*)wf->FindByName(_T("chkbOptimized"));
-  assert(chkbOptimized != NULL);
+  optimized_checkbox = (CheckBoxControl*)wf->FindByName(_T("chkbOptimized"));
+  assert(optimized_checkbox != NULL);
 
-  drawBtnNext();
+  UpdateButtons();
 
 #ifdef GNAV
   wf->SetKeyDownNotify(FormKeyDown);
