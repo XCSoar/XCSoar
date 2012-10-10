@@ -170,8 +170,6 @@ AATPoint::SetTarget(const GeoPoint &loc, const bool override_lock)
 void
 AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
 {
-  RangeAndRadial old = GetTargetRangeRadial();
-
   const FlatPoint fprev =
     proj.ProjectFloat(GetPrevious()->GetLocationRemaining());
   const FlatPoint floc = proj.ProjectFloat(GetLocation());
@@ -180,9 +178,7 @@ AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
   const fixed bearing = -flb.angle().Degrees();
   const fixed radius = fradius.d() * fabs(rar.range);
 
-  fixed angle = bearing + rar.radial;
-  if (positive(rar.range) != positive(old.range))
-    angle += fixed(180);
+  const fixed angle = bearing + rar.radial;
 
   const FlatPoint ftarget1(radius * cos(angle * fixed_deg_to_rad),
                            radius * sin(-angle * fixed_deg_to_rad));

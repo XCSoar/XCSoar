@@ -223,6 +223,18 @@ LockCalculatorUI()
   SetFormControlEnabled(*wf, _T("prpRadial"), is_locked);
 }
 
+static void
+LoadRange()
+{
+  LoadFormProperty(*wf, _T("prpRange"), range_and_radial.range * 100);
+}
+
+static void
+LoadRadial()
+{
+  LoadFormProperty(*wf, _T("prpRadial"), range_and_radial.radial);
+}
+
 /**
  * Loads the #range_and_radial variable into the range/radial form
  * controls.
@@ -230,8 +242,8 @@ LockCalculatorUI()
 static void
 LoadRangeAndRadial()
 {
-  LoadFormProperty(*wf, _T("prpRange"), range_and_radial.range * 100);
-  LoadFormProperty(*wf, _T("prpRadial"), range_and_radial.radial);
+  LoadRange();
+  LoadRadial();
 }
 
 /**
@@ -349,13 +361,23 @@ OnRangeModified(fixed new_value)
   if (new_range == range_and_radial.range)
     return;
 
+  if (negative(new_range) != negative(range_and_radial.range)) {
+    /* when the range gets flipped, flip the radial as well */
+    if (negative(range_and_radial.radial))
+      range_and_radial.radial += fixed(180);
+    else
+      range_and_radial.radial -= fixed(180);
+    LoadRadial();
+  }
+
+  range_and_radial.range = new_range;
+
   {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
     AATPoint *ap = lease->GetAATTaskPoint(target_point);
     if (ap == nullptr)
       return;
 
-    range_and_radial.range = new_range;
     ap->SetTarget(range_and_radial,
                   lease->GetOrderedTask().GetTaskProjection());
   }
@@ -388,16 +410,36 @@ OnRadialModified(fixed new_value)
   if (new_radial == range_and_radial.radial)
     return;
 
+  bool must_reload_radial = false;
+  if (new_radial >= fixed(180)) {
+    new_radial -= fixed(360);
+    must_reload_radial = true;
+  } else if (new_radial <= fixed(-180)) {
+    new_radial += fixed(360);
+    must_reload_radial = true;
+  }
+
+  if ((fabs(new_radial) > fixed(90)) != (fabs(range_and_radial.radial) > fixed(90))) {
+    /* when the radial crosses the +/-90 degrees threshold, flip the
+       range */
+    range_and_radial.range = -range_and_radial.range;
+    LoadRange();
+  }
+
+  range_and_radial.radial = new_radial;
+
   {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
     AATPoint *ap = lease->GetAATTaskPoint(target_point);
     if (ap == nullptr)
       return;
 
-    range_and_radial.radial = new_radial;
     ap->SetTarget(range_and_radial,
                   lease->GetOrderedTask().GetTaskProjection());
   }
+
+  if (must_reload_radial)
+    LoadRadial();
 
   map->Invalidate();
 }
