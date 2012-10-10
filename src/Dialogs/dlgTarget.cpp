@@ -232,7 +232,7 @@ LoadRange()
 static void
 LoadRadial()
 {
-  LoadFormProperty(*wf, _T("prpRadial"), range_and_radial.radial);
+  LoadFormProperty(*wf, _T("prpRadial"), range_and_radial.radial.Degrees());
 }
 
 /**
@@ -363,10 +363,10 @@ OnRangeModified(fixed new_value)
 
   if (negative(new_range) != negative(range_and_radial.range)) {
     /* when the range gets flipped, flip the radial as well */
-    if (negative(range_and_radial.radial))
-      range_and_radial.radial += fixed(180);
+    if (negative(range_and_radial.radial.Native()))
+      range_and_radial.radial += Angle::HalfCircle();
     else
-      range_and_radial.radial -= fixed(180);
+      range_and_radial.radial -= Angle::HalfCircle();
     LoadRadial();
   }
 
@@ -406,20 +406,21 @@ OnRadialModified(fixed new_value)
   if (target_point < initial_active_task_point)
     return;
 
-  fixed new_radial = new_value;
+  Angle new_radial = Angle::Degrees(new_value);
   if (new_radial == range_and_radial.radial)
     return;
 
   bool must_reload_radial = false;
-  if (new_radial >= fixed(180)) {
-    new_radial -= fixed(360);
+  if (new_radial >= Angle::HalfCircle()) {
+    new_radial -= Angle::FullCircle();
     must_reload_radial = true;
-  } else if (new_radial <= fixed(-180)) {
-    new_radial += fixed(360);
+  } else if (new_radial <= Angle::HalfCircle()) {
+    new_radial += Angle::FullCircle();
     must_reload_radial = true;
   }
 
-  if ((fabs(new_radial) > fixed(90)) != (fabs(range_and_radial.radial) > fixed(90))) {
+  if ((new_radial.Absolute() > Angle::QuarterCircle()) !=
+      (range_and_radial.radial.Absolute() > Angle::QuarterCircle())) {
     /* when the radial crosses the +/-90 degrees threshold, flip the
        range */
     range_and_radial.range = -range_and_radial.range;

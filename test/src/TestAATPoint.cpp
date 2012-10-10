@@ -98,28 +98,28 @@ TestAATPoint()
 
   RangeAndRadial rar = ap.GetTargetRangeRadial();
   ok1(equals(rar.range, fixed(0.1112), 1000));
-  ok1(equals(rar.radial, fixed_zero, 200));
+  ok1(equals(rar.radial.Degrees(), fixed_zero, 200));
 
   target = MakeGeoPoint(0, 45.29);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
   ok1(equals(rar.range, fixed(-0.1112), 1000));
-  ok1(equals(rar.radial, fixed(180), 200));
+  ok1(equals(rar.radial.Degrees(), fixed(180), 200));
 
   target = MakeGeoPoint(-0.05, 45.3);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
   ok1(equals(rar.range, 0.39107));
-  ok1(equals(rar.radial, -89.98));
+  ok1(equals(rar.radial.Degrees(), -89.98));
 
   target = MakeGeoPoint(0.05, 45.3);
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
   ok1(equals(rar.range, 0.39107));
-  ok1(equals(rar.radial, 89.98));
+  ok1(equals(rar.radial.Degrees(), 89.98));
 
   for (int radial = -170; radial <= 170; radial += 10) {
-    const fixed radial2(radial);
+    const Angle radial2 = Angle::Degrees(radial);
 
     for (int range = 10; range <= 100; range += 10) {
       const fixed range2(fixed(radial >= -90 && radial <= 90
@@ -128,7 +128,7 @@ TestAATPoint()
       ap.SetTarget(RangeAndRadial{range2, radial2}, task.GetTaskProjection());
       rar = ap.GetTargetRangeRadial();
       ok1(equals(rar.range, range2, 100));
-      ok1(equals(rar.radial, radial2, 100));
+      ok1(equals(rar.radial.Degrees(), radial2.Degrees(), 100));
     }
   }
 }

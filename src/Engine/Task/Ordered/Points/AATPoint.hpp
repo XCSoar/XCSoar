@@ -25,6 +25,7 @@
 #define AATPOINT_HPP
 
 #include "IntermediatePoint.hpp"
+#include "Math/Angle.hpp"
 
 struct RangeAndRadial {
   /**
@@ -34,12 +35,12 @@ struct RangeAndRadial {
   fixed range;
 
   /**
-   * The bearing of the target [degrees].
+   * The bearing of the target.
    */
-  fixed radial;
+  Angle radial;
 
   static constexpr RangeAndRadial Zero() {
-    return RangeAndRadial{fixed_zero, fixed_zero};
+    return RangeAndRadial{fixed_zero, Angle::Zero()};
   }
 };
 
