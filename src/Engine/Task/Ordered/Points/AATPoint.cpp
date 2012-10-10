@@ -209,9 +209,9 @@ AATPoint::GetTargetRangeRadial(fixed oldrange) const
   const fixed rangeraw = min(fixed_one, d / radius);
 
   fixed radial = radialraw.AsDelta().Degrees();
-  const fixed rangesign = (fabs(radial) > fixed(90)) ?
-      fixed_minus_one : fixed_one;
-  fixed range = rangeraw * rangesign;
+  fixed range = rangeraw;
+  if (radial < fixed(-90) || radial > fixed(90))
+    range = -range;
 
   if ((oldrange == fixed_zero) && (range == fixed_zero))
     radial = fixed_zero;
