@@ -127,13 +127,6 @@ public:
   bool IsInSector(const unsigned index, const AircraftState &ref) const;
 
   /**
-   * Set target location from a range and radial
-   * referenced on the bearing from the previous target
-   * used by dlgTarget
-   */
-  bool SetTarget(const unsigned index, RangeAndRadial rar);
-
-  /**
    * Lock/unlock the target from automatic shifts of specified tp
    *
    * @param index index of tp in task

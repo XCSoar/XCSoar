@@ -396,8 +396,17 @@ OnRadialModified(fixed new_value)
   if (RadialNew == range_and_radial.radial)
     return;
 
-  range_and_radial.radial = RadialNew;
-  protected_task_manager->SetTarget(target_point, range_and_radial);
+  {
+    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+    AATPoint *ap = lease->GetAATTaskPoint(target_point);
+    if (ap == nullptr)
+      return;
+
+    range_and_radial.radial = RadialNew;
+    ap->SetTarget(range_and_radial,
+                  lease->GetOrderedTask().GetTaskProjection());
+  }
+
   map->Invalidate();
 }
 

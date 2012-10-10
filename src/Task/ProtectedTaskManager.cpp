@@ -79,13 +79,6 @@ ProtectedTaskManager::IsInSector (const unsigned index,
 }
 
 bool
-ProtectedTaskManager::SetTarget(const unsigned index, RangeAndRadial rar)
-{
-  ExclusiveLease lease(*this);
-  return lease->SetTarget(index, rar);
-}
-
-bool
 ProtectedTaskManager::TargetLock(const unsigned index, bool do_lock)
 {
   ExclusiveLease lease(*this);
