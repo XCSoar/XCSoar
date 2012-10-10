@@ -231,13 +231,7 @@ static void
 LoadRangeAndRadial()
 {
   LoadFormProperty(*wf, _T("prpRange"), range_and_radial.range * 100);
-
-  fixed rTemp = range_and_radial.radial;
-  if (rTemp < fixed(-90))
-    rTemp += fixed(180);
-  else if (rTemp > fixed(90))
-    rTemp -= fixed(180);
-  LoadFormProperty(*wf, _T("prpRadial"), rTemp);
+  LoadFormProperty(*wf, _T("prpRadial"), range_and_radial.radial);
 }
 
 /**
@@ -383,26 +377,13 @@ OnRangeData(DataField *Sender, DataField::DataAccessMode Mode)
   }
 }
 
-/**
- * reads Radial from the screen UI,  translates it from [90, -90]
- * to [180, -180] based on whether the Range variable is positive or negative
- */
 static void
 OnRadialModified(fixed new_value)
 {
   if (target_point < ActiveTaskPointOnEntry)
     return;
 
-  fixed RadialNew;
-  if (fabs(range_and_radial.radial) > fixed(90)) {
-    if (new_value < fixed_zero)
-      RadialNew = new_value + fixed(180);
-    else
-      RadialNew = new_value - fixed(180);
-  } else {
-    RadialNew = new_value;
-  }
-
+  fixed RadialNew = new_value;
   if (RadialNew == range_and_radial.radial)
     return;
 
