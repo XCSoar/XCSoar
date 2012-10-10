@@ -177,7 +177,7 @@ AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
   const FlatPoint floc = proj.ProjectFloat(GetLocation());
   const FlatLine flb (fprev,floc);
   const FlatLine fradius (floc,proj.ProjectFloat(GetLocationMin()));
-  const fixed bearing = fixed_minus_one * flb.angle().Degrees();
+  const fixed bearing = -flb.angle().Degrees();
   const fixed radius = fradius.d();
 
   fixed swapquadrants = fixed_zero;
@@ -187,7 +187,7 @@ AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
         cos((bearing + rar.radial + swapquadrants)
             / fixed(360) * fixed_two_pi),
       fabs(rar.range) * radius *
-        sin(fixed_minus_one * (bearing + rar.radial + swapquadrants)
+        sin(-(bearing + rar.radial + swapquadrants)
             / fixed(360) * fixed_two_pi));
 
   const FlatPoint ftarget2 = floc + ftarget1;
