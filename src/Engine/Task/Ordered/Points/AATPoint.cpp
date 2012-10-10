@@ -181,15 +181,14 @@ AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
   const fixed radius = fradius.d();
 
   fixed angle = bearing + rar.radial;
-
-  fixed swapquadrants = fixed_zero;
   if (positive(rar.range) != positive(old.range))
-    swapquadrants = fixed(180);
+    angle += fixed(180);
+
   const FlatPoint ftarget1 (fabs(rar.range) * radius *
-        cos((angle + swapquadrants)
+        cos(angle
             * fixed_deg_to_rad),
       fabs(rar.range) * radius *
-        sin(-(angle + swapquadrants)
+        sin(-angle
             * fixed_deg_to_rad));
 
   const FlatPoint ftarget2 = floc + ftarget1;
