@@ -178,18 +178,14 @@ AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
   const FlatLine flb (fprev,floc);
   const FlatLine fradius (floc,proj.ProjectFloat(GetLocationMin()));
   const fixed bearing = -flb.angle().Degrees();
-  const fixed radius = fradius.d();
+  const fixed radius = fradius.d() * fabs(rar.range);
 
   fixed angle = bearing + rar.radial;
   if (positive(rar.range) != positive(old.range))
     angle += fixed(180);
 
-  const FlatPoint ftarget1 (fabs(rar.range) * radius *
-        cos(angle
-            * fixed_deg_to_rad),
-      fabs(rar.range) * radius *
-        sin(-angle
-            * fixed_deg_to_rad));
+  const FlatPoint ftarget1(radius * cos(angle * fixed_deg_to_rad),
+                           radius * sin(-angle * fixed_deg_to_rad));
 
   const FlatPoint ftarget2 = floc + ftarget1;
   const GeoPoint targetG = proj.Unproject(ftarget2);
