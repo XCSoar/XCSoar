@@ -185,10 +185,10 @@ AATPoint::SetTarget(RangeAndRadial rar, const TaskProjection &proj)
     swapquadrants = fixed(180);
   const FlatPoint ftarget1 (fabs(rar.range) * radius *
         cos((bearing + rar.radial + swapquadrants)
-            / fixed(360) * fixed_two_pi),
+            * fixed_deg_to_rad),
       fabs(rar.range) * radius *
         sin(-(bearing + rar.radial + swapquadrants)
-            / fixed(360) * fixed_two_pi));
+            * fixed_deg_to_rad));
 
   const FlatPoint ftarget2 = floc + ftarget1;
   const GeoPoint targetG = proj.Unproject(ftarget2);
