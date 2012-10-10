@@ -224,6 +224,23 @@ LockCalculatorUI()
 }
 
 /**
+ * Loads the #range_and_radial variable into the range/radial form
+ * controls.
+ */
+static void
+LoadRangeAndRadial()
+{
+  LoadFormProperty(*wf, _T("prpRange"), range_and_radial.range * 100);
+
+  fixed rTemp = range_and_radial.radial;
+  if (rTemp < fixed(-90))
+    rTemp += fixed(180);
+  else if (rTemp > fixed(90))
+    rTemp -= fixed(180);
+  LoadFormProperty(*wf, _T("prpRadial"), rTemp);
+}
+
+/**
  * Refreshes UI based on location of target and current task stats
  */
 static void
@@ -260,16 +277,8 @@ RefreshCalculator()
   ShowOptionalFormControl(*wf, _T("prpRange"), !nodisplay);
   ShowOptionalFormControl(*wf, _T("prpRadial"), !nodisplay);
 
-  if (!nodisplay) {
-    LoadFormProperty(*wf, _T("prpRange"), range_and_radial.range * 100);
-
-    fixed rTemp = range_and_radial.radial;
-    if (rTemp < fixed(-90))
-      rTemp += fixed(180);
-    else if (rTemp > fixed(90))
-      rTemp -= fixed(180);
-    LoadFormProperty(*wf, _T("prpRadial"), rTemp);
-  }
+  if (!nodisplay)
+    LoadRangeAndRadial();
 
   // update outputs
   fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
