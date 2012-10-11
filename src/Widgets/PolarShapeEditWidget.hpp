@@ -60,11 +60,13 @@ public:
 
   void SetDataAccessCallback(DataField::DataAccessCallback callback);
 
-  //TODO: virtual PixelSize GetMinimumSize() const;
-  //TODO: virtual PixelSize GetMaximumSize() const;
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual bool Save(bool &changed, bool &require_restart);
+  /* virtual methods from class Widget */
+  //TODO: virtual PixelSize GetMinimumSize() const gcc_override;
+  //TODO: virtual PixelSize GetMaximumSize() const gcc_override;
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
+  virtual bool Save(bool &changed, bool &require_restart) gcc_override;
 };
 
 #endif

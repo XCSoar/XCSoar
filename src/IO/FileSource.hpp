@@ -49,10 +49,12 @@ public:
   }
 
 public:
-  virtual long size() const;
+  /* virtual methods from class Source */
+  virtual long size() const gcc_override;
 
 protected:
-  virtual unsigned read(char *p, unsigned n);
+  /* virtual methods from class BufferedSource */
+  virtual unsigned read(char *p, unsigned n) gcc_override;
 };
 
 #endif /* HAVE_POSIX */
@@ -86,9 +88,11 @@ public:
   }
 
 public:
-  virtual long size() const;
+  /* virtual methods from class Source */
+  virtual long size() const gcc_override;
 
 protected:
+  /* virtual methods from class BufferedSource */
   virtual unsigned read(char *p, unsigned n);
 };
 

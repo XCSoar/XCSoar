@@ -41,17 +41,20 @@ public:
                             const ThermalAssistantLook &_look)
     :blackboard(_blackboard), look(_look) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-  virtual bool SetFocus();
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
+  virtual void Show(const PixelRect &rc) gcc_override;
+  virtual void Hide() gcc_override;
+  virtual bool SetFocus() gcc_override;
 
 private:
   void Update(const AttitudeState &attitude, const DerivedInfo &calculated);
 
+  /* virtual methods from class BlackboardListener */
   virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated);
+                                  const DerivedInfo &calculated) gcc_override;
 };
 
 #endif

@@ -95,7 +95,7 @@ private:
 #endif
 
   /* virtual methods from class BlackboardListener */
-  virtual void OnGPSUpdate(const MoreData &basic);
+  virtual void OnGPSUpdate(const MoreData &basic) gcc_override;
 };
 
 #endif

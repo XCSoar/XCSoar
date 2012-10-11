@@ -68,7 +68,8 @@ protected:
   virtual void Run() = 0;
 
 private:
-  virtual void OnTimer();
+  /* virtual methods from class Timer */
+  virtual void OnTimer() gcc_override;
 };
 
 #endif

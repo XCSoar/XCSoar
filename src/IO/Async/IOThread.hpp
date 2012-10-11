@@ -160,7 +160,7 @@ protected:
   void HandleReady(File *ready);
 
   /* virtual methods from Thread */
-  virtual void Run();
+  virtual void Run() gcc_override;
 };
 
 #endif

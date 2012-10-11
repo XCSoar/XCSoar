@@ -52,9 +52,10 @@ public:
   }
 
 public:
-  virtual char *read();
-  virtual long size() const;
-  virtual long tell() const;
+  /* virtual methods from class NLineReader */
+  virtual char *read() gcc_override;
+  virtual long size() const gcc_override;
+  virtual long tell() const gcc_override;
 };
 
 /**
@@ -82,9 +83,10 @@ public:
   }
 
 public:
-  virtual TCHAR *read();
-  virtual long size() const;
-  virtual long tell() const;
+  /* virtual methods from class TLineReader */
+  virtual TCHAR *read() gcc_override;
+  virtual long size() const gcc_override;
+  virtual long tell() const gcc_override;
 };
 
 #endif

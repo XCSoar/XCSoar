@@ -56,9 +56,10 @@ public:
   ConvertLineReader(LineReader<char> &_source, charset cs=UTF8);
 
 public:
-  virtual TCHAR *read();
-  virtual long size() const;
-  virtual long tell() const;
+  /* virtual methods from class LineReader */
+  virtual TCHAR *read() gcc_override;
+  virtual long size() const gcc_override;
+  virtual long tell() const gcc_override;
 };
 
 #endif
