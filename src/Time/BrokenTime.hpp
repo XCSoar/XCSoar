@@ -128,10 +128,12 @@ struct BrokenTime {
   gcc_pure
   BrokenTime operator+(int seconds) const;
 
+  gcc_pure
   BrokenTime operator-(int seconds) const {
     return *this + (-seconds);
   }
 
+  gcc_pure
   BrokenTime operator-(unsigned seconds) const {
     return *this - int(seconds);
   }

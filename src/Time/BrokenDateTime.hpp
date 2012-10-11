@@ -90,11 +90,13 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   /**
    * Returns the current system date and time, in UTC.
    */
+  gcc_pure
   static const BrokenDateTime NowUTC();
 
   /**
    * Returns the current system date and time, in the current time zone.
    */
+  gcc_pure
   static const BrokenDateTime NowLocal();
 
   /**
@@ -106,6 +108,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   gcc_pure
   BrokenDateTime operator+(int seconds) const;
 
+  gcc_pure
   BrokenDateTime operator-(int seconds) const {
     return *this + (-seconds);
   }
@@ -116,6 +119,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    *
    * <now> - <old> = positive timespan since <old> in seconds
    */
+  gcc_pure
   int operator-(const BrokenDateTime &other) const;
 };
 
