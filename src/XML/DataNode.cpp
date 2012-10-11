@@ -24,6 +24,7 @@
 #include "Math/Angle.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/NumberParser.hpp"
+#include "Time/RoughTime.hpp"
 
 #include <stdio.h>
 
@@ -67,6 +68,18 @@ DataNode::SetAttribute(const TCHAR *name, bool &value)
   StaticString<4> buf;
   buf.UnsafeFormat(_T("%d"), (int)value);
   SetAttribute(name, buf);
+}
+
+void
+DataNode::SetAttribute(const TCHAR *name, RoughTime value)
+{
+  if (!value.IsValid())
+    /* no-op */
+    return;
+
+  StaticString<8> buffer;
+  buffer.UnsafeFormat(_T("%02u:%02u"), value.GetHour(), value.GetMinute());
+  SetAttribute(name, buffer);
 }
 
 bool
@@ -124,3 +137,30 @@ DataNode::GetAttribute(const TCHAR *name, bool &value) const
   return true;
 }
 
+RoughTime
+DataNode::GetAttributeRoughTime(const TCHAR *name) const
+{
+  const TCHAR *p = GetAttribute(name);
+  if (p == nullptr)
+    return RoughTime::Invalid();
+
+  TCHAR *endptr;
+  unsigned hours = ParseUnsigned(p, &endptr, 10);
+  if (endptr == p || *endptr != ':' || hours >= 24)
+    return RoughTime::Invalid();
+
+  p = endptr + 1;
+  unsigned minutes = ParseUnsigned(p, &endptr, 10);
+  if (endptr == p || *endptr != 0 || minutes >= 60)
+    return RoughTime::Invalid();
+
+  return RoughTime(hours, minutes);
+}
+
+RoughTimeSpan
+DataNode::GetAttributeRoughTimeSpan(const TCHAR *start_name,
+                                    const TCHAR *end_name) const
+{
+  return RoughTimeSpan(GetAttributeRoughTime(start_name),
+                       GetAttributeRoughTime(end_name));
+}

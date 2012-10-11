@@ -223,6 +223,9 @@ Deserialiser::Deserialise(OrderedTaskBehaviour &data)
   node.GetAttribute(_T("start_max_height"), data.start_constraints.max_height);
   data.start_constraints.max_height_ref =
     GetHeightRef(_T("start_max_height_ref"));
+  data.start_constraints.open_time_span =
+    node.GetAttributeRoughTimeSpan(_T("start_open_time"),
+                                   _T("start_close_time"));
   node.GetAttribute(_T("finish_min_height"),
                     data.finish_constraints.min_height);
   data.finish_constraints.min_height_ref =

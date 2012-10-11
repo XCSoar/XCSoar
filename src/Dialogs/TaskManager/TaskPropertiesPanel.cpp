@@ -36,6 +36,8 @@ Copyright_License {
 
 enum Controls {
   MIN_TIME,
+  START_OPEN_TIME,
+  START_CLOSE_TIME,
   START_MAX_SPEED,
   START_MAX_HEIGHT,
   START_HEIGHT_REF,
@@ -56,6 +58,9 @@ TaskPropertiesPanel::RefreshView()
 
   SetRowVisible(MIN_TIME, aat_types);
   LoadValueTime(MIN_TIME, (int)p.aat_min_time);
+
+  LoadValue(START_OPEN_TIME, p.start_constraints.open_time_span.GetStart());
+  LoadValue(START_CLOSE_TIME, p.start_constraints.open_time_span.GetEnd());
 
   SetRowVisible(START_MAX_SPEED, !fai_start_finish);
   LoadValue(START_MAX_SPEED, p.start_constraints.max_speed,
@@ -98,6 +103,14 @@ TaskPropertiesPanel::ReadValues()
   int min_time = GetValueInteger(MIN_TIME);
   if (min_time != (int)p.aat_min_time) {
     p.aat_min_time = fixed(min_time);
+    changed = true;
+  }
+
+  RoughTime new_open = p.start_constraints.open_time_span.GetStart();
+  RoughTime new_close = p.start_constraints.open_time_span.GetEnd();
+  if (SaveValue(START_OPEN_TIME, new_open) ||
+      SaveValue(START_CLOSE_TIME, new_close)) {
+    p.start_constraints.open_time_span = RoughTimeSpan(new_open, new_close);
     changed = true;
   }
 
@@ -175,6 +188,9 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   AddTime(_("AAT min. time"), _("Minimum AAT task time in minutes."),
           0, 36000, 60, 180);
+
+  AddRoughTime(_("Start open time"), nullptr, RoughTime::Invalid());
+  AddRoughTime(_("Start close time"), nullptr, RoughTime::Invalid());
 
   AddFloat(_("Start max. speed"),
            _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),

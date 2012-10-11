@@ -32,6 +32,8 @@
 
 class Angle;
 class TextWriter;
+class RoughTime;
+class RoughTimeSpan;
 
 /**
  * Class used as generic node for tree-structured data.
@@ -133,6 +135,12 @@ public:
   void SetAttribute(const TCHAR *name, bool &value);
 
   /**
+   * Set named attribute value.  No-op if the #RoughTime object is
+   * invalid.
+   */
+  void SetAttribute(const TCHAR *name, RoughTime value);
+
+  /**
    * Retrieve named attribute value
    *
    * @param name Name of attribute
@@ -182,6 +190,13 @@ public:
    * @return True if attribute exists
    */
   bool GetAttribute(const TCHAR *name, bool &value) const;
+
+  gcc_pure
+  RoughTime GetAttributeRoughTime(const TCHAR *name) const;
+
+  gcc_pure
+  RoughTimeSpan GetAttributeRoughTimeSpan(const TCHAR *start_name,
+                                          const TCHAR *end_name) const;
 };
 
 #endif

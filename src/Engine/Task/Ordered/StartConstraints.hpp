@@ -24,12 +24,18 @@
 #define XCSOAR_START_CONSTRAINTS_HPP
 
 #include "Math/fixed.hpp"
+#include "Time/RoughTime.hpp"
 #include "Geo/AltitudeReference.hpp"
 
 struct AircraftState;
 struct TaskStartMargins;
 
 struct StartConstraints {
+  /**
+   * The time span during which the start gate is open.
+   */
+  RoughTimeSpan open_time_span;
+
   /** Maximum ground speed (m/s) allowed in start sector */
   fixed max_speed;
 
