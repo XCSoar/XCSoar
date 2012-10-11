@@ -313,15 +313,15 @@ XCSOAR_SOURCES := \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitor.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitorAATTime.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitorFinalGlide.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitorGlideTerrain.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitorLandableReachable.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitorStartRules.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitorSunset.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitorWind.cpp \
-	$(SRC)/ConditionMonitor/ConditionMonitors.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitor.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorFinalGlide.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorGlideTerrain.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorLandableReachable.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorStartRules.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorSunset.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitorWind.cpp \
+	$(SRC)/Computer/ConditionMonitor/ConditionMonitors.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \

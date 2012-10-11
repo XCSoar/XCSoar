@@ -68,7 +68,7 @@ Copyright_License {
 
 /* fake symbols: */
 
-#include "ConditionMonitor/ConditionMonitors.hpp"
+#include "Computer/ConditionMonitor/ConditionMonitors.hpp"
 #include "Input/InputQueue.hpp"
 #include "Logger/Logger.hpp"
 #include "LocalTime.hpp"
