@@ -42,7 +42,7 @@
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "Time/BrokenDate.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -199,7 +199,7 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
 
   FileLineReaderA reader(path);
   if (reader.error()) {
-    date = BrokenDateTime::NowUTC();
+    date = BrokenDate::TodayUTC();
     return;
   }
 
@@ -209,7 +209,7 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
 
   line = reader.read();
   if (line == NULL || !IGCParseDateRecord(line, date))
-    date = BrokenDateTime::NowUTC();
+    date = BrokenDate::TodayUTC();
 }
 
 /**

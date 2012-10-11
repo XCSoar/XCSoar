@@ -99,6 +99,12 @@ struct BrokenDate {
       day >= 1 && day <= 31;
   }
 
+  /**
+   * Returns the current system date in UTC.
+   */
+  gcc_pure
+  static BrokenDate TodayUTC();
+
   void IncrementDay();
 };
 

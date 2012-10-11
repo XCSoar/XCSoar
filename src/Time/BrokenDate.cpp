@@ -22,7 +22,14 @@ Copyright_License {
 */
 
 #include "BrokenDate.hpp"
+#include "BrokenDateTime.hpp"
 #include "DateUtil.hpp"
+
+BrokenDate
+BrokenDate::TodayUTC()
+{
+  return BrokenDateTime::NowUTC();
+}
 
 void
 BrokenDate::IncrementDay()

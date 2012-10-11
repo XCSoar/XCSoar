@@ -239,8 +239,8 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
   Directory::Create(filename);
 
   const BrokenDate today = gps_info.date_available
-    ? gps_info.date_time_utc
-    : BrokenDateTime::NowUTC();
+    ? (const BrokenDate &)gps_info.date_time_utc
+    : BrokenDate::TodayUTC();
 
   StaticString<64> name;
   for (int i = 1; i < 99; i++) {

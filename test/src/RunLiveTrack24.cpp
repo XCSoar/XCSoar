@@ -67,7 +67,7 @@ TestTracking(int argc, char *argv[])
   if (!result)
     return false;
 
-  BrokenDate now = BrokenDateTime::NowUTC();
+  BrokenDate now = BrokenDate::TodayUTC();
 
   printf("Sending positions ");
   unsigned package_id = 2;

@@ -118,7 +118,7 @@ TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
   date_time = basic.date_time_utc;
   if (!basic.date_available)
     /* use "today" if the GPS didn't provide a date */
-    (BrokenDate &)date_time = (BrokenDate)BrokenDateTime::NowUTC();
+    (BrokenDate &)date_time = BrokenDate::TodayUTC();
 
   location = basic.location;
   /* XXX use nav_altitude? */
