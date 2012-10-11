@@ -752,6 +752,10 @@ XCSOAR_SOURCES := \
 	$(SRC)/Widgets/BigThermalAssistantWidget.cpp \
 	$(SRC)/Widgets/DeviceEditWidget.cpp \
 	$(SRC)/Widgets/PolarShapeEditWidget.cpp \
+	$(SRC)/Widgets/ObservationZoneEditWidget.cpp \
+	$(SRC)/Widgets/CylinderZoneEditWidget.cpp \
+	$(SRC)/Widgets/LineSectorZoneEditWidget.cpp \
+	$(SRC)/Widgets/SectorZoneEditWidget.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \

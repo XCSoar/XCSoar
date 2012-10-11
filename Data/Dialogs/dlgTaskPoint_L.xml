@@ -19,36 +19,8 @@
       <Button Name="butType" Caption="Change Type" X="152" Y="3" Width="81" Height="35" OnClick="OnTypeClicked"/>
       <Canvas Name="frmTaskView" X="2" Y="42" Width="92" Height="82" Border="1" OnPaint="OnTaskPaint" />
 
-      <Panel Name="frmOZLine" X="107" Y="41" Width="126" Height="80">
-        <Edit Name="prpOZLineLength" Caption="Gate Width" Height="25" CaptionWidth="60" Help="Width of the start/finish gate.">
-         <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="1.0" Fine="1" OnDataAccess="OnOZData"/>
-        </Edit>
-     </Panel>
+      <Widget Name="properties" X="107" Y="41" Height="82"/>
 
-      <Panel Name="frmOZCylinder" X="107" Y="41" Width="126" Height="80">
-        <Edit Name="prpOZCylinderRadius" Caption="Radius" Height="25" CaptionWidth="60" Help="Radius of the OZ cylinder.">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="1.0" Fine="1" OnDataAccess="OnOZData"/>
-        </Edit>
-      </Panel>
-
-      <Panel Name="frmOZSector" X="97" Y="41" Width="136" Height="100">
-        <Edit Name="prpOZSectorRadius" Caption="Radius" Height="25" CaptionWidth="80" Help="Radius of the OZ sector.">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="1.0" Fine="1" OnDataAccess="OnOZData"/>
-        </Edit>
-
-        <Edit Name="prpOZSectorStartRadial" Caption="Start radial" Height="25" CaptionWidth="80" Help="Start radial of the OZ area">
-          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="10" Fine="1" OnDataAccess="OnOZData"/>
-        </Edit>
-
-        <Edit Name="prpOZSectorFinishRadial" Caption="Finish radial" Height="25" CaptionWidth="80" Help="Finish radial of the OZ area">
-          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="10" Fine="1" OnDataAccess="OnOZData"/>
-        </Edit>
-
-        <Edit Name="prpOZSectorInnerRadius" Caption="Inner radius" Height="25" CaptionWidth="80" Help="Inner radius of the OZ sector.">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.0" Max="100" Step="1.0" Fine="1"
-           OnDataAccess="OnOZData"/>
-        </Edit>
-      </Panel>
         <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="125" Width="180" Height="25"
   	OnClick="OnOptionalStartsClicked"/>
       
