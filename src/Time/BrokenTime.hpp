@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_BROKEN_TIME_HPP
 
 #include "Util/TypeTraits.hpp"
-#include "Time/BrokenDate.hpp"
 #include "Compiler.h"
 
 #include <stdint.h>
