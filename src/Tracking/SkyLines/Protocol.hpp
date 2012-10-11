@@ -78,8 +78,11 @@ namespace SkyLinesTracking {
     uint32_t magic;
 
     /**
-     * The CRC16-CCITT of this packet including the header, assuming
-     * this attribute is 0.
+     * The CRC of this packet including the header, assuming this
+     * attribute is 0.
+     *
+     * The CRC algorithm is CRC16-CCITT with initial value 0x0000
+     * (XModem) instead of CCITT's default 0xffff.
      */
     uint16_t crc;
 
