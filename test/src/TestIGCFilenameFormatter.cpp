@@ -22,7 +22,7 @@
 
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "Util/StringUtil.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDate.hpp"
 #include "TestUtil.hpp"
 
 static void

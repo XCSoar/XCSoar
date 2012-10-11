@@ -21,46 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#include "BrokenDate.hpp"
+#include "DateUtil.hpp"
 
-#include "Geo/GeoPoint.hpp"
-#include "Time/BrokenDateTime.hpp"
-
-#include <vector>
-
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
-class Markers
+void
+BrokenDate::IncrementDay()
 {
-public:
-  struct Marker {
-    GeoPoint location;
-    BrokenDateTime time;
-  };
+  const unsigned max_day = DaysInMonth(month, year);
 
-  typedef std::vector<Marker>::const_iterator const_iterator;
+  ++day;
 
-private:
-  std::vector<Marker> marker_store;
-
-public:
-  Markers();
-  ~Markers();
-
-  void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look) const;
-  void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
-
-  const_iterator begin() const {
-    return marker_store.begin();
+  if (day > max_day) {
+    /* roll over to next month */
+    day = 1;
+    ++month;
+    if (month > 12) {
+      /* roll over to next year */
+      month = 1;
+      ++year;
+    }
   }
-  const_iterator end() const {
-    return marker_store.end();
-  }
-};
 
-#endif
+  if (day_of_week >= 0) {
+    ++day_of_week;
+    if (day_of_week >= 7)
+      day_of_week = 0;
+  }
+}

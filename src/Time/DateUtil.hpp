@@ -21,46 +21,36 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#ifndef XCSOAR_DATE_UTIL_HPP
+#define XCSOAR_DATE_UTIL_HPP
 
-#include "Geo/GeoPoint.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include "Compiler.h"
 
-#include <vector>
-
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
-class Markers
+gcc_const
+static inline bool
+IsLeapYear(unsigned y)
 {
-public:
-  struct Marker {
-    GeoPoint location;
-    BrokenDateTime time;
-  };
+    y += 1900;
+    return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
+}
 
-  typedef std::vector<Marker>::const_iterator const_iterator;
+gcc_const
+static inline unsigned
+DaysInFebruary(unsigned year)
+{
+  return IsLeapYear(year) ? 29 : 28;
+}
 
-private:
-  std::vector<Marker> marker_store;
-
-public:
-  Markers();
-  ~Markers();
-
-  void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look) const;
-  void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
-
-  const_iterator begin() const {
-    return marker_store.begin();
-  }
-  const_iterator end() const {
-    return marker_store.end();
-  }
-};
+gcc_const
+static inline unsigned
+DaysInMonth(unsigned month, unsigned year)
+{
+  if (month == 4 || month == 6 || month == 9 || month == 11)
+    return 30;
+  else if (month != 2)
+    return 31;
+  else
+    return DaysInFebruary(year);
+}
 
 #endif

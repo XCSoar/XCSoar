@@ -26,7 +26,6 @@ Copyright_License {
 #include "Units/Descriptor.hpp"
 #include "Math/Angle.hpp"
 #include "Atmosphere/Pressure.hpp"
-#include "DateTime.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <stdio.h>

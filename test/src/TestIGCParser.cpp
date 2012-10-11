@@ -25,7 +25,8 @@
 #include "IGC/IGCFix.hpp"
 #include "IGC/IGCHeader.hpp"
 #include "IGC/IGCDeclaration.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDate.hpp"
+#include "Time/BrokenTime.hpp"
 #include "TestUtil.hpp"
 
 #include <string.h>

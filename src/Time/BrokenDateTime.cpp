@@ -21,101 +21,14 @@ Copyright_License {
 }
 */
 
-#include "DateTime.hpp"
-#include "Compiler.h"
-
-#include <assert.h>
+#include "BrokenDateTime.hpp"
+#include "DateUtil.hpp"
 
 #include <time.h>
 
 #ifndef HAVE_POSIX
 #include <windows.h>
 #endif
-
-BrokenTime
-BrokenTime::FromSecondOfDay(unsigned second_of_day)
-{
-  assert(second_of_day < 3600u * 24u);
-
-  unsigned hour = second_of_day / 3600u;
-  unsigned second_of_hour = second_of_day % 3600u;
-  return BrokenTime(hour, second_of_hour / 60u, second_of_hour % 60u);
-}
-
-BrokenTime
-BrokenTime::FromSecondOfDayChecked(unsigned second_of_day)
-{
-  return FromSecondOfDay(second_of_day % (3600u * 24u));
-}
-
-BrokenTime
-BrokenTime::operator+(unsigned seconds) const
-{
-  seconds += GetSecondOfDay();
-  return FromSecondOfDayChecked(seconds);
-}
-
-BrokenTime
-BrokenTime::operator+(int seconds) const
-{
-  seconds += GetSecondOfDay();
-  while (seconds < 0)
-    seconds += 3600 * 24;
-
-  return FromSecondOfDayChecked(seconds);
-}
-
-gcc_const
-static bool
-IsLeapYear(unsigned y)
-{
-    y += 1900;
-    return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
-}
-
-gcc_const
-static unsigned
-DaysInFebruary(unsigned year)
-{
-  return IsLeapYear(year) ? 29 : 28;
-}
-
-gcc_const
-static unsigned
-DaysInMonth(unsigned month, unsigned year)
-{
-  if (month == 4 || month == 6 || month == 9 || month == 11)
-    return 30;
-  else if (month != 2)
-    return 31;
-  else
-    return DaysInFebruary(year);
-}
-
-void
-BrokenDate::IncrementDay()
-{
-  const unsigned max_day = DaysInMonth(month, year);
-
-  ++day;
-
-  if (day > max_day) {
-    /* roll over to next month */
-    day = 1;
-    ++month;
-    if (month > 12) {
-      /* roll over to next year */
-      month = 1;
-      ++year;
-    }
-  }
-
-  if (day_of_week >= 0) {
-    ++day_of_week;
-    if (day_of_week >= 7)
-      day_of_week = 0;
-  }
-}
 
 #ifdef HAVE_POSIX
 

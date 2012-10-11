@@ -42,6 +42,7 @@
 #include "IGC/IGCParser.hpp"
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
+#include "Time/BrokenDateTime.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 

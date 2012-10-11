@@ -24,7 +24,6 @@
 #include "NMEA/CirclingInfo.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "DateTime.hpp"
 
 constexpr fixed MIN_PHASE_TIME = fixed_int_constant(30);
 constexpr fixed FP_TOLERANCE = fixed_constant(0.001, 0x41893LL);

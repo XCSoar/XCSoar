@@ -24,7 +24,7 @@ Copyright_License {
 #include "IGC.hpp"
 #include "Conversion.hpp"
 #include "Checksum.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDateTime.hpp"
 #include "Util/Macros.hpp"
 
 #include <cstdio>

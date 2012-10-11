@@ -26,7 +26,8 @@ Copyright_License {
 #include "IGCFix.hpp"
 #include "IGCExtensions.hpp"
 #include "IGCDeclaration.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDate.hpp"
+#include "Time/BrokenTime.hpp"
 #include "Util/CharUtil.hpp"
 #include "Util/Macros.hpp"
 

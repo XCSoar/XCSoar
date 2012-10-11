@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "Device/Declaration.hpp"
 #include "RadioFrequency.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDate.hpp"
+#include "Time/BrokenTime.hpp"
 #include "Util/StaticArray.hpp"
 
 #include <tchar.h>

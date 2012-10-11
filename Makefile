@@ -80,6 +80,7 @@ include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
 include $(topdir)/build/libgeo.mk
 include $(topdir)/build/libos.mk
+include $(topdir)/build/libtime.mk
 include $(topdir)/build/libprofile.mk
 include $(topdir)/build/libnet.mk
 include $(topdir)/build/zlib.mk
@@ -322,7 +323,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitorSunset.cpp \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitorWind.cpp \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitors.cpp \
-	$(SRC)/DateTime.cpp \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
@@ -854,7 +854,7 @@ XCSOAR_DEPENDS = GETTEXT PROFILE \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	SHAPELIB JASPER ZZIP \
-	LIBNET OS THREAD \
+	LIBNET TIME OS THREAD \
 	UTIL GEO MATH
 
 XCSOAR_STRIP = y

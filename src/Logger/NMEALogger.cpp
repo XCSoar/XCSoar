@@ -24,7 +24,7 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "IO/BatchTextWriter.hpp"
 #include "LocalPath.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDateTime.hpp"
 #include "Thread/Mutex.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hpp"

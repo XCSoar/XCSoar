@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "IGCFilenameFormatter.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDate.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -21,46 +21,39 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#include "BrokenTime.hpp"
 
-#include "Geo/GeoPoint.hpp"
-#include "Time/BrokenDateTime.hpp"
+#include <assert.h>
 
-#include <vector>
-
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
-class Markers
+BrokenTime
+BrokenTime::FromSecondOfDay(unsigned second_of_day)
 {
-public:
-  struct Marker {
-    GeoPoint location;
-    BrokenDateTime time;
-  };
+  assert(second_of_day < 3600u * 24u);
 
-  typedef std::vector<Marker>::const_iterator const_iterator;
+  unsigned hour = second_of_day / 3600u;
+  unsigned second_of_hour = second_of_day % 3600u;
+  return BrokenTime(hour, second_of_hour / 60u, second_of_hour % 60u);
+}
 
-private:
-  std::vector<Marker> marker_store;
+BrokenTime
+BrokenTime::FromSecondOfDayChecked(unsigned second_of_day)
+{
+  return FromSecondOfDay(second_of_day % (3600u * 24u));
+}
 
-public:
-  Markers();
-  ~Markers();
+BrokenTime
+BrokenTime::operator+(unsigned seconds) const
+{
+  seconds += GetSecondOfDay();
+  return FromSecondOfDayChecked(seconds);
+}
 
-  void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look) const;
-  void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
+BrokenTime
+BrokenTime::operator+(int seconds) const
+{
+  seconds += GetSecondOfDay();
+  while (seconds < 0)
+    seconds += 3600 * 24;
 
-  const_iterator begin() const {
-    return marker_store.begin();
-  }
-  const_iterator end() const {
-    return marker_store.end();
-  }
-};
-
-#endif
+  return FromSecondOfDayChecked(seconds);
+}

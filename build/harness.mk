@@ -1,5 +1,4 @@
 HARNESS_SOURCES = \
-	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \

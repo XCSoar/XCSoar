@@ -22,7 +22,7 @@
 
 #include "Math/SunEphemeris.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDateTime.hpp"
 #include "TestUtil.hpp"
 
 static void

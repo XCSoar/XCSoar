@@ -28,7 +28,7 @@ Copyright_License {
 
 #include "Math/SunEphemeris.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "DateTime.hpp"
+#include "Time/BrokenDateTime.hpp"
 
 // Sun radius in degrees (?)
 #define SUN_DIAMETER fixed(0.53)
