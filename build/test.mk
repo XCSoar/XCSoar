@@ -353,7 +353,7 @@ TEST_GEO_CLIP_DEPENDS = GEO MATH
 $(eval $(call link-program,TestGeoClip,TEST_GEO_CLIP))
 
 TEST_CLIMB_AV_CALC_SOURCES = \
-	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestClimbAvCalc.cpp
 TEST_CLIMB_AV_CALC_DEPENDS = MATH
@@ -574,7 +574,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
-	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1136,7 +1136,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
-	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
 	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
@@ -1335,7 +1335,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
-	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \

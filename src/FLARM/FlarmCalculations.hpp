@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FLARM_CALCULATIONS_HPP
 
 #include "FLARM/FlarmId.hpp"
-#include "ClimbAverageCalculator.hpp"
+#include "Computer/ClimbAverageCalculator.hpp"
 
 #include <map>
 

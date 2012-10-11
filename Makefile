@@ -312,7 +312,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Operation/VerboseOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
-	$(SRC)/ClimbAverageCalculator.cpp \
+	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitor.cpp \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp \
 	$(SRC)/Computer/ConditionMonitor/ConditionMonitorFinalGlide.cpp \

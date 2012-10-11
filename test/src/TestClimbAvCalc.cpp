@@ -20,9 +20,11 @@
 }
 */
 
-#include "ClimbAverageCalculator.hpp"
+#include "Computer/ClimbAverageCalculator.hpp"
 #include "TestUtil.hpp"
+
 #include <cstdio>
+
 int main(int argc, char **argv)
 {
   plan_tests(2);
