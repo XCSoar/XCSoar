@@ -185,12 +185,12 @@ public:
   }
 
   void DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                      PixelScalar right, PixelScalar bottom,
-                      const Color color);
+                           PixelScalar right, PixelScalar bottom,
+                           const Color color);
 
   void DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                      PixelScalar right, PixelScalar bottom,
-                      const Brush &brush) {
+                           PixelScalar right, PixelScalar bottom,
+                           const Brush &brush) {
     if (!brush.IsHollow())
       DrawFilledRectangle(left, top, right, bottom, brush.GetColor());
   }
@@ -211,14 +211,14 @@ public:
                           PixelScalar right, PixelScalar bottom);
 
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
-                         PixelScalar right, PixelScalar bottom) {
+                            PixelScalar right, PixelScalar bottom) {
     pen.Set();
     OutlineRectangleGL(left, top, right, bottom);
   }
 
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
-                         PixelScalar right, PixelScalar bottom,
-                         Color color) {
+                            PixelScalar right, PixelScalar bottom,
+                            Color color) {
     color.Set();
 #ifdef HAVE_GLES
     glLineWidthx(1 << 16);
@@ -280,25 +280,25 @@ public:
   void DrawLinePiece(const RasterPoint a, const RasterPoint b);
 
   void DrawTwoLines(PixelScalar ax, PixelScalar ay,
-                 PixelScalar bx, PixelScalar by,
-                 PixelScalar cx, PixelScalar cy);
+                    PixelScalar bx, PixelScalar by,
+                    PixelScalar cx, PixelScalar cy);
   void DrawTwoLines(const RasterPoint a, const RasterPoint b,
-                 const RasterPoint c) {
+                    const RasterPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
   void DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 
   void DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
-               Angle start, Angle end, bool horizon=false);
+                   Angle start, Angle end, bool horizon=false);
 
   void DrawAnnulus(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
-               UPixelScalar big_radius,
-               Angle start, Angle end);
+                   UPixelScalar big_radius,
+                   Angle start, Angle end);
 
   void DrawKeyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
-               UPixelScalar big_radius,
-               Angle start, Angle end);
+                   UPixelScalar big_radius,
+                   Angle start, Angle end);
 
   void DrawFocusRectangle(PixelRect rc);
 

@@ -45,8 +45,8 @@ AllocatedArray<RasterPoint> Canvas::vertex_buffer;
 
 void
 Canvas::DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                       PixelScalar right, PixelScalar bottom,
-                       const Color color)
+                            PixelScalar right, PixelScalar bottom,
+                            const Color color)
 {
   color.Set();
 
@@ -102,12 +102,12 @@ Canvas::DrawRaisedEdge(PixelRect &rc)
   Pen bright(1, Color(240, 240, 240));
   Select(bright);
   DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
-            rc.right - 2, rc.top);
+               rc.right - 2, rc.top);
 
   Pen dark(1, Color(128, 128, 128));
   Select(dark);
   DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-            rc.right - 1, rc.top + 1);
+               rc.right - 1, rc.top + 1);
 
   ++rc.left;
   ++rc.top;

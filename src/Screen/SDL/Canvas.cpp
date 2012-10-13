@@ -99,7 +99,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 
 void
 Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
-                Angle start, Angle end, bool horizon)
+                    Angle start, Angle end, bool horizon)
 {
   // XXX horizon
 
@@ -121,8 +121,8 @@ Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
 
 void
 Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
-                UPixelScalar small_radius, UPixelScalar big_radius,
-                Angle start, Angle end)
+                    UPixelScalar small_radius, UPixelScalar big_radius,
+                    Angle start, Angle end)
 {
   assert(IsDefined());
 
@@ -131,8 +131,8 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
 
 void
 Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
-                UPixelScalar small_radius, UPixelScalar big_radius,
-                Angle start, Angle end)
+                    UPixelScalar small_radius, UPixelScalar big_radius,
+                    Angle start, Angle end)
 {
   assert(IsDefined());
 
@@ -154,15 +154,15 @@ Canvas::DrawButton(PixelRect rc, bool down)
 
   Select(down ? dark : bright);
   DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
-            rc.right - 2, rc.top);
+               rc.right - 2, rc.top);
   DrawTwoLines(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
-            rc.right - 3, rc.top + 1);
+               rc.right - 3, rc.top + 1);
 
   Select(down ? bright : dark);
   DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-            rc.right - 1, rc.top + 1);
+               rc.right - 1, rc.top + 1);
   DrawTwoLines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
-            rc.right - 2, rc.top + 2);
+               rc.right - 2, rc.top + 2);
 
   pen = old_pen;
 }
@@ -962,8 +962,8 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 
 void
 Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                 UPixelScalar dest_width, UPixelScalar dest_height,
-                 SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y)
 {
   assert(src != NULL);
 
@@ -976,42 +976,42 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
 
 void
 Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
-                 UPixelScalar dest_width, UPixelScalar dest_height,
-                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
-{
-  assert(src.IsDefined());
-
-  CopyNot(dest_x, dest_y, dest_width, dest_height,
-           src.GetNative(), src_x, src_y);
-}
-
-void
-Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar dest_width, UPixelScalar dest_height,
                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
   assert(src.IsDefined());
 
-  CopyOr(dest_x, dest_y, dest_width, dest_height,
+  CopyNot(dest_x, dest_y, dest_width, dest_height,
           src.GetNative(), src_x, src_y);
 }
 
 void
+Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+{
+  assert(src.IsDefined());
+
+  CopyOr(dest_x, dest_y, dest_width, dest_height,
+         src.GetNative(), src_x, src_y);
+}
+
+void
 Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                 UPixelScalar dest_width, UPixelScalar dest_height,
-                 const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
   assert(src.IsDefined());
 
   CopyAnd(dest_x, dest_y, dest_width, dest_height,
-           src.GetNative(), src_x, src_y);
+          src.GetNative(), src_x, src_y);
 }
 
 void
 Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
-                        PixelScalar right, PixelScalar bottom,
-                        UPixelScalar ellipse_width,
-                        UPixelScalar ellipse_height)
+                           PixelScalar right, PixelScalar bottom,
+                           UPixelScalar ellipse_width,
+                           UPixelScalar ellipse_height)
 {
   UPixelScalar radius = std::min(ellipse_width, ellipse_height) / 2;
   ::RoundRect(*this, left, top, right, bottom, radius);

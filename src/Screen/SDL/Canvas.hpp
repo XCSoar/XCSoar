@@ -189,8 +189,8 @@ public:
   }
 
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
-                         PixelScalar right, PixelScalar bottom,
-                         Color color) {
+                            PixelScalar right, PixelScalar bottom,
+                            Color color) {
     ::rectangleColor(surface, left + x_offset, top + y_offset,
                      right + x_offset, bottom + y_offset, color.GFXColor());
   }
@@ -204,8 +204,8 @@ public:
   }
 
   void DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                      PixelScalar right, PixelScalar bottom,
-                      const HWColor color) {
+                           PixelScalar right, PixelScalar bottom,
+                           const HWColor color) {
     if (left >= right || top >= bottom)
       return;
 
@@ -220,14 +220,14 @@ public:
   }
 
   void DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                      PixelScalar right, PixelScalar bottom,
-                      const Color color) {
+                           PixelScalar right, PixelScalar bottom,
+                           const Color color) {
     DrawFilledRectangle(left, top, right, bottom, map(color));
   }
 
   void DrawFilledRectangle(PixelScalar left, PixelScalar top,
-                      PixelScalar right, PixelScalar bottom,
-                      const Brush &brush) {
+                           PixelScalar right, PixelScalar bottom,
+                           const Brush &brush) {
     if (brush.IsHollow())
       return;
 
@@ -267,8 +267,8 @@ public:
   }
 
   void DrawRoundRectangle(PixelScalar left, PixelScalar top,
-                       PixelScalar right, PixelScalar bottom,
-                       UPixelScalar ellipse_width, UPixelScalar ellipse_height);
+                          PixelScalar right, PixelScalar bottom,
+                          UPixelScalar ellipse_width, UPixelScalar ellipse_height);
 
   void DrawRaisedEdge(PixelRect &rc) {
     Pen bright(1, Color(240, 240, 240));
@@ -294,7 +294,8 @@ public:
     DrawPolygon(points, num_points);
   }
 
-  void DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by) {
+  void DrawLine(PixelScalar ax, PixelScalar ay,
+                PixelScalar bx, PixelScalar by) {
     ax += x_offset;
     bx += x_offset;
     ay += y_offset;
@@ -473,20 +474,20 @@ public:
                    Color fg_color, Color bg_color);
 
   void CopyNot(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
-
-  void CopyNot(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
-
-  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
-  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
+  void CopyNot(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+
+  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
+              UPixelScalar dest_width, UPixelScalar dest_height,
+              SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
+
+  void CopyOr(PixelScalar dest_x, PixelScalar dest_y,
+              UPixelScalar dest_width, UPixelScalar dest_height,
+              const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyOr(const Bitmap &src) {
     CopyOr(0, 0, GetWidth(), GetHeight(), src, 0, 0);
@@ -501,14 +502,14 @@ public:
                  const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Canvas &src, PixelScalar src_x, PixelScalar src_y) {
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               const Canvas &src, PixelScalar src_x, PixelScalar src_y) {
     CopyAnd(dest_x, dest_y, dest_width, dest_height,
-             src.surface, src_x, src_y);
+            src.surface, src_x, src_y);
   }
 
   void CopyAnd(const Canvas &src) {
@@ -516,17 +517,17 @@ public:
   }
 
   void CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
-                UPixelScalar dest_width, UPixelScalar dest_height,
-                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void CopyAnd(const Bitmap &src) {
     CopyAnd(0, 0, GetWidth(), GetHeight(), src, 0, 0);
   }
 
   void ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,
-                  const Bitmap &src,
-                  PixelScalar src_x, PixelScalar src_y,
-                  UPixelScalar src_width, UPixelScalar src_height);
+                 const Bitmap &src,
+                 PixelScalar src_x, PixelScalar src_y,
+                 UPixelScalar src_width, UPixelScalar src_height);
 };
 
 #endif
