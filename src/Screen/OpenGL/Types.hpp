@@ -35,7 +35,7 @@ Copyright_License {
  */
 typedef GLshort GLvalue;
 typedef GLushort GLuvalue;
-static const GLenum GL_VALUE = GL_SHORT;
+static constexpr GLenum GL_VALUE = GL_SHORT;
 
 #else
 
@@ -46,7 +46,7 @@ static const GLenum GL_VALUE = GL_SHORT;
  */
 typedef GLint GLvalue;
 typedef GLuint GLuvalue;
-static const GLenum GL_VALUE = GL_INT;
+static constexpr GLenum GL_VALUE = GL_INT;
 
 #endif
 
