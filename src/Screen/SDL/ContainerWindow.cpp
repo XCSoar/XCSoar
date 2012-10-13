@@ -374,7 +374,7 @@ ContainerWindow::OnPaint(Canvas &canvas)
   assert(full == NULL);
 
   if (HasBorder())
-    canvas.DrawOutlineRectangle(0, 0, GetWidth() - 1, GetHeight() - 1,
+    canvas.DrawOutlineRectangle(-1, -1, GetWidth(), GetHeight(),
                                 COLOR_BLACK);
 }
 
