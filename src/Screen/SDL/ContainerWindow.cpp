@@ -240,11 +240,9 @@ ContainerWindow::OnPaint(Canvas &canvas)
 {
   children.Paint(canvas);
 
-  if (HasBorder()) {
-    canvas.SelectBlackPen();
-    canvas.SelectHollowBrush();
-    canvas.Rectangle(0, 0, GetWidth() - 1, GetHeight() - 1);
-  }
+  if (HasBorder())
+    canvas.DrawOutlineRectangle(-1, -1, GetWidth(), GetHeight(),
+                                COLOR_BLACK);
 }
 
 void
