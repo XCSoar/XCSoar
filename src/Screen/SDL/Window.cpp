@@ -177,7 +177,7 @@ void
 Window::Invalidate()
 {
   if (visible && parent != NULL)
-    parent->Invalidate();
+    parent->InvalidateChild(*this);
 }
 
 void

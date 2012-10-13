@@ -48,6 +48,30 @@ WindowList::Contains(const Window &w) const
   return std::find(list.begin(), list.end(), &w) != list.end();
 }
 
+bool
+WindowList::IsCovered(const Window &w) const
+{
+  const PixelRect rc = w.GetPosition();
+
+  /* find the last full window which covers all the other windows
+     behind it */
+  for (auto i = list.begin();; ++i) {
+    assert(i != list.end());
+
+    Window &child = **i;
+    if (&child == &w)
+      /* didn't find a covering sibling so far */
+      return false;
+
+    if (child.GetLeft() <= rc.left &&
+        child.GetRight() >= rc.right &&
+        child.GetTop() <= rc.top &&
+        child.GetBottom() >= rc.bottom)
+      /* this sibling covers the specified window completely */
+      return true;
+  }
+}
+
 void
 WindowList::BringToTop(Window &w)
 {

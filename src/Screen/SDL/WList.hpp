@@ -67,6 +67,12 @@ public:
   gcc_pure
   bool Contains(const Window &w) const;
 
+  /**
+   * Is this window covered by a sibling?
+   */
+  gcc_pure
+  bool IsCovered(const Window &w) const;
+
   void BringToTop(Window &w);
   void BringToBottom(Window &w);
 

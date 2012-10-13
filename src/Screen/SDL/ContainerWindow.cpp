@@ -249,17 +249,17 @@ void
 ContainerWindow::AddChild(Window &child) {
   children.Add(child);
 
-  Invalidate();
+  InvalidateChild(child);
 }
 
 void
 ContainerWindow::Removehild(Window &child) {
+  InvalidateChild(child);
+
   children.Remove(child);
 
   if (active_child == &child)
     active_child = NULL;
-
-  Invalidate();
 }
 
 Window *
@@ -275,6 +275,13 @@ ContainerWindow::EventChildAt(PixelScalar x, PixelScalar y)
   else
     /* find the child window at the specified position */
     return ChildAt(x, y);
+}
+
+void
+ContainerWindow::InvalidateChild(const Window &child)
+{
+  if (!children.IsCovered(child))
+    Invalidate();
 }
 
 void

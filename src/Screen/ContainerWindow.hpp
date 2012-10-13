@@ -93,9 +93,15 @@ public:
     return children.Contains(w);
   }
 
+  /**
+   * Like Invalidate(), but if the specified window is covered by a
+   * sibling, this method is a no-op.
+   */
+  void InvalidateChild(const Window &child);
+
   void BringChildToTop(Window &child) {
     children.BringToTop(child);
-    Invalidate();
+    InvalidateChild(child);
   }
 
   void BringChildToBottom(Window &child) {
