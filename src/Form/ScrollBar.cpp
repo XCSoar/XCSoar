@@ -143,8 +143,8 @@ ScrollBar::Paint(Canvas &canvas) const
   // ####  Buttons  ####
   // ###################
 
-  UPixelScalar arrow_padding = max(UPixelScalar(GetWidth() / 4),
-                                   UPixelScalar(4));
+  const UPixelScalar arrow_padding = std::max(UPixelScalar(GetWidth() / 4),
+                                              UPixelScalar(4));
   canvas.SelectBlackBrush();
 
   PixelRect up_arrow_rect = rc;
@@ -154,7 +154,7 @@ ScrollBar::Paint(Canvas &canvas) const
               up_arrow_rect.right, up_arrow_rect.bottom);
   canvas.DrawButton(up_arrow_rect, false);
 
-  RasterPoint up_arrow[3] = {
+  const RasterPoint up_arrow[3] = {
     { PixelScalar((up_arrow_rect.left + rc.right) / 2),
       PixelScalar(up_arrow_rect.top + arrow_padding) },
     { PixelScalar(up_arrow_rect.left + arrow_padding),
@@ -171,7 +171,7 @@ ScrollBar::Paint(Canvas &canvas) const
               down_arrow_rect.right, down_arrow_rect.top - 1);
   canvas.DrawButton(down_arrow_rect, false);
 
-  RasterPoint down_arrow[3] = {
+  const RasterPoint down_arrow[3] = {
     { PixelScalar((down_arrow_rect.left + rc.right) / 2),
       PixelScalar(down_arrow_rect.bottom - arrow_padding) },
     { PixelScalar(down_arrow_rect.left + arrow_padding),
