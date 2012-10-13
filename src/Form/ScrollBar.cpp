@@ -202,9 +202,9 @@ ScrollBar::Paint(Canvas &canvas) const
     canvas.DrawFilledRectangle(rc.left + 1, up_arrow_rect.bottom + 1,
                                rc.right, rc_slider.top, COLOR_GRAY);
 
-  if (rc_slider.bottom < down_arrow_rect.top)
-    canvas.DrawFilledRectangle(rc.left + 1, rc_slider.bottom,
-                               rc.right, down_arrow_rect.top, COLOR_GRAY);
+  if (rc_slider.bottom + 1 < down_arrow_rect.top - 1)
+    canvas.DrawFilledRectangle(rc.left + 1, rc_slider.bottom + 1,
+                               rc.right, down_arrow_rect.top - 1, COLOR_GRAY);
 }
 
 void
