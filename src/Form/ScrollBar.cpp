@@ -126,18 +126,14 @@ ScrollBar::ToOrigin(unsigned size, unsigned view_size,
 void
 ScrollBar::Paint(Canvas &canvas) const
 {
-  // Prepare Pen
-  canvas.SelectBlackPen();
-
   // ###################
   // #### ScrollBar ####
   // ###################
 
   // draw rectangle around entire scrollbar area
-  canvas.DrawTwoLines(rc.left, rc.top, rc.left, rc.bottom,
-                      rc.right, rc.bottom);
-  canvas.DrawTwoLines(rc.right, rc.bottom, rc.right, rc.top,
-                      rc.left, rc.top);
+  canvas.SelectBlackPen();
+  canvas.SelectHollowBrush();
+  canvas.Rectangle(rc.left, rc.top, rc.right, rc.bottom);
 
   // ###################
   // ####  Buttons  ####
@@ -145,14 +141,25 @@ ScrollBar::Paint(Canvas &canvas) const
 
   const UPixelScalar arrow_padding = std::max(UPixelScalar(GetWidth() / 4),
                                               UPixelScalar(4));
-  canvas.SelectBlackBrush();
 
   PixelRect up_arrow_rect = rc;
   ++up_arrow_rect.left;
   up_arrow_rect.bottom = up_arrow_rect.top + GetWidth();
+
+  PixelRect down_arrow_rect = rc;
+  ++down_arrow_rect.left;
+  down_arrow_rect.top = down_arrow_rect.bottom - GetWidth();
+
   canvas.DrawLine(up_arrow_rect.left, up_arrow_rect.bottom,
                   up_arrow_rect.right, up_arrow_rect.bottom);
+  canvas.DrawLine(down_arrow_rect.left, down_arrow_rect.top - 1,
+                  down_arrow_rect.right, down_arrow_rect.top - 1);
+
   canvas.DrawButton(up_arrow_rect, false);
+  canvas.DrawButton(down_arrow_rect, false);
+
+  canvas.SelectNullPen();
+  canvas.SelectBlackBrush();
 
   const RasterPoint up_arrow[3] = {
     { PixelScalar((up_arrow_rect.left + rc.right) / 2),
@@ -163,13 +170,6 @@ ScrollBar::Paint(Canvas &canvas) const
       PixelScalar(up_arrow_rect.bottom - arrow_padding) },
   };
   canvas.DrawTriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
-
-  PixelRect down_arrow_rect = rc;
-  ++down_arrow_rect.left;
-  down_arrow_rect.top = down_arrow_rect.bottom - GetWidth();
-  canvas.DrawLine(down_arrow_rect.left, down_arrow_rect.top - 1,
-                  down_arrow_rect.right, down_arrow_rect.top - 1);
-  canvas.DrawButton(down_arrow_rect, false);
 
   const RasterPoint down_arrow[3] = {
     { PixelScalar((down_arrow_rect.left + rc.right) / 2),
@@ -186,6 +186,7 @@ ScrollBar::Paint(Canvas &canvas) const
   // ###################
 
   if (rc_slider.top + 4 < rc_slider.bottom) {
+    canvas.SelectBlackPen();
     canvas.DrawLine(rc_slider.left, rc_slider.top,
                     rc_slider.right, rc_slider.top);
     canvas.DrawLine(rc_slider.left, rc_slider.bottom,
