@@ -153,16 +153,16 @@ Canvas::DrawButton(PixelRect rc, bool down)
   Pen dark(1, DarkColor(gray));
 
   Select(down ? dark : bright);
-  DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
-               rc.right - 2, rc.top);
-  DrawTwoLines(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
-               rc.right - 3, rc.top + 1);
+  DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top,
+                    rc.right - 2, rc.top);
+  DrawTwoLinesExact(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
+                    rc.right - 3, rc.top + 1);
 
   Select(down ? bright : dark);
-  DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-               rc.right - 1, rc.top + 1);
-  DrawTwoLines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
-               rc.right - 2, rc.top + 2);
+  DrawTwoLinesExact(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+                    rc.right - 1, rc.top + 1);
+  DrawTwoLinesExact(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
+                    rc.right - 2, rc.top + 2);
 
   pen = old_pen;
 }

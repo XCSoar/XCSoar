@@ -256,19 +256,19 @@ InfoBoxWindow::Paint(Canvas &canvas)
       height = canvas.GetHeight();
 
     if (border_kind & BORDERTOP) {
-      canvas.DrawLine(0, 0, width - 1, 0);
+      canvas.DrawExactLine(0, 0, width - 1, 0);
     }
 
     if (border_kind & BORDERRIGHT) {
-      canvas.DrawLine(width - 1, 0, width - 1, height);
+      canvas.DrawExactLine(width - 1, 0, width - 1, height);
     }
 
     if (border_kind & BORDERBOTTOM) {
-      canvas.DrawLine(0, height - 1, width - 1, height - 1);
+      canvas.DrawExactLine(0, height - 1, width - 1, height - 1);
     }
 
     if (border_kind & BORDERLEFT) {
-      canvas.DrawLine(0, 0, 0, height - 1);
+      canvas.DrawExactLine(0, 0, 0, height - 1);
     }
   }
 }

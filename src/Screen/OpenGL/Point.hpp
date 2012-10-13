@@ -63,4 +63,14 @@ struct PixelRect {
   PixelScalar left, top, right, bottom;
 };
 
+struct ExactRasterPoint {
+  GLexact x, y;
+
+  ExactRasterPoint() = default;
+  constexpr ExactRasterPoint(GLexact _x, GLexact _y)
+    :x(_x), y(_y) {}
+  constexpr ExactRasterPoint(RasterPoint p)
+    :x(ToGLexact(p.x)), y(ToGLexact(p.y)) {}
+};
+
 #endif

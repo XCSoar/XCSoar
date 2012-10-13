@@ -69,14 +69,14 @@ void
 Canvas::OutlineRectangleGL(PixelScalar left, PixelScalar top,
                            PixelScalar right, PixelScalar bottom)
 {
-  const RasterPoint vertices[] = {
-    { left, top },
-    { right, top },
-    { right, bottom },
-    { left, bottom },
+  const ExactRasterPoint vertices[] = {
+    RasterPoint{left, top},
+    RasterPoint{right, top},
+    RasterPoint{right, bottom},
+    RasterPoint{left, bottom},
   };
 
-  glVertexPointer(2, GL_VALUE, 0, vertices);
+  glVertexPointer(2, GL_EXACT, 0, vertices);
   glDrawArrays(GL_LINE_LOOP, 0, 4);
 }
 
@@ -101,13 +101,13 @@ Canvas::DrawRaisedEdge(PixelRect &rc)
 {
   Pen bright(1, Color(240, 240, 240));
   Select(bright);
-  DrawTwoLines(rc.left, rc.bottom - 2, rc.left, rc.top,
-               rc.right - 2, rc.top);
+  DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top,
+                    rc.right - 2, rc.top);
 
   Pen dark(1, Color(128, 128, 128));
   Select(dark);
-  DrawTwoLines(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-               rc.right - 1, rc.top + 1);
+  DrawTwoLinesExact(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
+                    rc.right - 1, rc.top + 1);
 
   ++rc.left;
   ++rc.top;
@@ -205,6 +205,23 @@ Canvas::DrawLine(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by)
   pen.Unbind();
 }
 
+void
+Canvas::DrawExactLine(PixelScalar ax, PixelScalar ay,
+                      PixelScalar bx, PixelScalar by)
+{
+  pen.Bind();
+
+  const GLexact v[] = {
+    ToGLexact(ax), ToGLexact(ay),
+    ToGLexact(bx), ToGLexact(by),
+  };
+
+  glVertexPointer(2, GL_EXACT, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 2);
+
+  pen.Unbind();
+}
+
 /**
  * Draw a line from a to b, using triangle caps if pen-size > 2 to hide
  * gaps between consecutive lines.
@@ -239,6 +256,25 @@ Canvas::DrawTwoLines(PixelScalar ax, PixelScalar ay,
 
   const GLvalue v[] = { ax, ay, bx, by, cx, cy };
   glVertexPointer(2, GL_VALUE, 0, v);
+  glDrawArrays(GL_LINE_STRIP, 0, 3);
+
+  pen.Unbind();
+}
+
+void
+Canvas::DrawTwoLinesExact(PixelScalar ax, PixelScalar ay,
+                          PixelScalar bx, PixelScalar by,
+                          PixelScalar cx, PixelScalar cy)
+{
+  pen.Bind();
+
+  const GLexact v[] = {
+    ToGLexact(ax), ToGLexact(ay),
+    ToGLexact(bx), ToGLexact(by),
+    ToGLexact(cx), ToGLexact(cy),
+  };
+
+  glVertexPointer(2, GL_EXACT, 0, v);
   glDrawArrays(GL_LINE_STRIP, 0, 3);
 
   pen.Unbind();

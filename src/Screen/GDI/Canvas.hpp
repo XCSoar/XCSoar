@@ -310,7 +310,7 @@ public:
   void DrawRaisedEdge(PixelRect &rc) {
     assert(IsDefined());
 
-    ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_FLAT | BF_RECT);
+    ::DrawEdge(dc, &rc, EDGE_RAISED, BF_ADJUST | BF_RECT);
   }
 
   void DrawPolyline(const RasterPoint *lppt, unsigned cPoints) {
@@ -338,12 +338,27 @@ public:
     DrawLine(a, b);
   }
 
+  void DrawExactLine(PixelScalar ax, PixelScalar ay,
+                     PixelScalar bx, PixelScalar by) {
+    DrawLine(ax, ay, bx, by);
+  }
+
+  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+    DrawLine(a, b);
+  }
+
   void DrawTwoLines(PixelScalar ax, PixelScalar ay,
                     PixelScalar bx, PixelScalar by,
                     PixelScalar cx, PixelScalar cy);
   void DrawTwoLines(const RasterPoint a, const RasterPoint b,
                     const RasterPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
+  }
+
+  void DrawTwoLinesExact(PixelScalar ax, PixelScalar ay,
+                         PixelScalar bx, PixelScalar by,
+                         PixelScalar cx, PixelScalar cy) {
+    DrawTwoLines(ax, ay, bx, by, cx, cy);
   }
 
   void DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius) {

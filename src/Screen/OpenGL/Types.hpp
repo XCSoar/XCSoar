@@ -37,6 +37,15 @@ typedef GLshort GLvalue;
 typedef GLushort GLuvalue;
 static constexpr GLenum GL_VALUE = GL_SHORT;
 
+typedef GLfixed GLexact;
+static constexpr GLenum GL_EXACT = GL_FIXED;
+
+constexpr static inline GLexact
+ToGLexact(GLvalue value)
+{
+  return (GLexact(value) << 16) + 0x8000;
+}
+
 #else
 
 #include <SDL/SDL_opengl.h>
@@ -47,6 +56,15 @@ static constexpr GLenum GL_VALUE = GL_SHORT;
 typedef GLint GLvalue;
 typedef GLuint GLuvalue;
 static constexpr GLenum GL_VALUE = GL_INT;
+
+typedef GLfloat GLexact;
+static constexpr GLenum GL_EXACT = GL_FLOAT;
+
+constexpr static inline GLexact
+ToGLexact(GLvalue value)
+{
+  return GLexact(value) + 0.5;
+}
 
 #endif
 

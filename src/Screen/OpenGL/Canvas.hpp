@@ -277,6 +277,18 @@ public:
     DrawLine(a.x, a.y, b.x, b.y);
   }
 
+  /**
+   * Similar to DrawLine(), but force exact pixel coordinates.  This
+   * may be more expensive on some platforms, and works only for thin
+   * lines.
+   */
+  void DrawExactLine(PixelScalar ax, PixelScalar ay,
+                     PixelScalar bx, PixelScalar by);
+
+  void DrawExactLine(const RasterPoint a, const RasterPoint b) {
+    DrawExactLine(a.x, a.y, b.x, b.y);
+  }
+
   void DrawLinePiece(const RasterPoint a, const RasterPoint b);
 
   void DrawTwoLines(PixelScalar ax, PixelScalar ay,
@@ -286,6 +298,13 @@ public:
                     const RasterPoint c) {
     DrawTwoLines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
+
+  /**
+   * @see DrawTwoLines(), DrawExactLine()
+   */
+  void DrawTwoLinesExact(PixelScalar ax, PixelScalar ay,
+                         PixelScalar bx, PixelScalar by,
+                         PixelScalar cx, PixelScalar cy);
 
   void DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 
