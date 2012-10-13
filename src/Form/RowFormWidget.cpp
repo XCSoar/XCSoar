@@ -531,6 +531,12 @@ RowFormWidget::LoadValue(unsigned i, fixed value)
 }
 
 void
+RowFormWidget::LoadValue(unsigned i, Angle value)
+{
+  LoadValue(i, value.Degrees());
+}
+
+void
 RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
 {
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
@@ -576,6 +582,12 @@ RowFormWidget::GetValueFloat(unsigned i) const
   return df.GetAsFixed();
 }
 
+Angle
+RowFormWidget::GetValueAngle(unsigned i) const
+{
+  return Angle::Degrees(GetValueFloat(i));
+}
+
 bool
 RowFormWidget::SaveValue(unsigned i, bool &value, bool negated) const
 {
@@ -619,6 +631,17 @@ RowFormWidget::SaveValue(unsigned i, fixed &value) const
     return false;
 
   value = new_value;
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i, Angle &value_r) const
+{
+  Angle new_value = GetValueAngle(i);
+  if (new_value == value_r)
+    return false;
+
+  value_r = new_value;
   return true;
 }
 

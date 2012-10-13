@@ -479,6 +479,7 @@ public:
   }
 
   void LoadValue(unsigned i, fixed value);
+  void LoadValue(unsigned i, Angle value);
   void LoadValue(unsigned i, fixed value, UnitGroup unit_group);
 
   /**
@@ -505,6 +506,9 @@ public:
   fixed GetValueFloat(unsigned i) const;
 
   gcc_pure
+  Angle GetValueAngle(unsigned i) const;
+
+  gcc_pure
   const TCHAR *GetValueString(unsigned i) const {
     return GetDataField(i).GetAsString();
   }
@@ -513,6 +517,7 @@ public:
   bool SaveValue(unsigned i, int &value) const;
   bool SaveValue(unsigned i, uint16_t &value) const;
   bool SaveValue(unsigned i, fixed &value) const;
+  bool SaveValue(unsigned i, Angle &value_r) const;
   bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const;
   bool SaveValue(unsigned i, const TCHAR *registry_key, TCHAR *string, size_t max_size) const;
 
