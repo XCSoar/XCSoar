@@ -87,13 +87,6 @@ configured when flying at a new site.
 \item[Airspaces]  The file name of the primary airspace file.  If left blank,
   airspaces are loaded from the map file (if available).
 \item[More airspaces*]  The file name of the secondary airspace file.
-\item[Terrain file*]  The name of the file containing digital elevation
-  terrain data.  Typically left blank, because terrain is loaded from the map
-  file.
-\item[Topography file*]  Specifies the file defining the topographical features.
-  The topography file defines the map topography in terms of points, lines
-  and areas with optional labels.  Typically left blank, because topography is
-  loaded from the map file.
 \item[Waypoint details*]  The airfields file may contain extracts from 
   Enroute Supplements or other contributed information about individual airfields.
 \end{description}
@@ -104,15 +97,16 @@ for use with NOTAM airspace, and is referred to as the additional
 airspace file.
 \sketch{figures/config-site.png}
 
-The XCM map database concept is the recommended way to setup a site to fly.
-The old method (XCSoar v5.x) requires each to be separate files and to be
-specified separately (as the ``Terrain file'' and ``Topography file'' respectively).  
+The XCM map database concept is the current way to setup a site to fly.
+XCSoar releases prior to v6.4 required each to be separate files and to be
+specified separately (as the `{\it Terrain file}' and `{\it Topography file}' respectively). This 
+option has been dropped in favor to the XCM map database with XCSoar release v6.4.  
 
-When XCM map files are used, however, then these files contain terrain, topography
-and optionally waypoints and airspaces.  In this case, the ``Terrain file'', ``Topography file'' and 
-``Primary waypoint file'' may be left blank and the system will load those items
-from the map file. However, if a map file is used, the user can still specify the other
-files and they will be used instead of the data in the map file.
+The XCM map file, however, contains all these files: Terrain, topography
+and optionally waypoints and airspaces.  If the latter are contained, the e.g. `{\it Primary waypoint file}' 
+may be left blank and the system will load waypoints from the map file. 
+However, the user can still specify other files and they will be used instead of 
+the data in the map file.
 
 See Section~\ref{sec:map} for more details on map files.
 
@@ -120,7 +114,7 @@ See Section~\ref{sec:map} for more details on map files.
 %%%%%%%%%%%%%%%%%%
 \section{Map Display / Orientation}\label{sec:map-projection}
 
-This page let you specify the favoured map orientation and projection.
+This page let you specify the favoured map orientation and view.
 
 \begin{description}
 \item[Cruise/Circling orientation]  \label{conf:orientation} This determines how
@@ -130,6 +124,8 @@ This page let you specify the favoured map orientation and projection.
   may be shown rotated according to the computed heading of the glider taking 
   wind into account. \\
   \sketch{figures/config-map_projection.png}
+  {\bf Heading up}: The moving map display will be rotated so the glider's 
+  heading is oriented up. \\
   {\bf North up}: The moving map display will always be orientated true north to
   south and the glider icon will be rotated to show its course (corrected for
   wind). \\
@@ -173,13 +169,17 @@ This page provides options relating to screen elements overlayed to the map disp
   the snail trail stays uncompensated for wind draft.
 \item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail display. \\
   {\bf Vario \#1}: Within lift areas lines get displayed green and
-  thicker, while sinking lines are shown red and thin.  Zero lift
+  thicker, while sinking lines are shown brown and thin.  Zero lift
   is presented as a grey line. \\
+  {\bf Vario \#1 (with dots)}: The same colour scheme as the previous, but with dotted 
+  lines while sinking. \\
   {\bf Vario \#2}: The climb colour for this scheme is orange to red, sinking is
   displayed as light blue to dark blue. Zero lift is presented as a yellow line. \\
+  {\bf Vario \#2 (with dots)}: The same colour scheme as the previous, but with dotted 
+  lines while sinking. \\
   {\bf Altitude}: The colour scheme corresponds to the height.
-\item[Trail scaled*] \label{conf:trailscaled} If activates, the snail trail width 
-  is scaled according to the vario signal.
+\item[Trail scaled*] \label{conf:trailscaled} If set to ON the snail trail 
+  width is scaled according to the vario signal.
 \item[Detour cost markers*]  If enabled this displays in cruise flight some
   figures projected in front of the nose of the glider icon.  This is the
   additional distance in percent if you fly up the position of the figure and
@@ -188,8 +188,11 @@ This page provides options relating to screen elements overlayed to the map disp
 \item[Aircraft symbol*]  Sets the symbol used for the aircraft. \\
   {\bf Simple}: Simplified line graphics, a black glider shape with white contours. \\
   {\bf Simple (large)}: Enlarged simple graphics for better visibility on a small display. \\
-  {\bf Detailed}: Rendered aircraft graphics.
+  {\bf Detailed}: Rendered aircraft graphics. \\
+  {\bf HangGlider}: Simplified hang glider as line graphics, white with black contours. \\
+  {\bf ParaGlider}: Simplified para glider as line graphics, white with black contours.
 \item[Wind arrow*]  Determines the way the wind arrow is drawn on the map. \\
+  {\bf Off}: No wind arrow is drawn. \\
   {\bf Arrow head}: Draws an arrow head only. \\
   {\bf Full arrow}: Draws an arrow head with a dashed arrow line.
 \end{description}
@@ -202,13 +205,13 @@ This page provides options relating to the map display.
 
 \begin{description}
 \item[Label format]  This setting \label{conf:labels} determines the label format 
-  displayed with each waypoint. There are four different format options.
+  displayed with each waypoint. There are four different format options. \\
   {\bf Full name}: The full name of each waypoint is displayed. \\
   {\bf First word of name}: Only the first word (up to the first space) of the 
-  waypoint name is displayed. \\
-\sketch{figures/config-map_waypoint.png}
-  {\bf First 3}: The first 3 letters of the waypoint name are displayed. \\
-  {\bf First 5}: The first 5 letters of the waypoint name are displayed. \\
+  waypoint name is displayed.
+\sketch{figures/config-map_waypoint.png} \\
+  {\bf First 3 letters}: The first 3 letters of the waypoint name are displayed. \\
+  {\bf First 5 letters}: The first 5 letters of the waypoint name are displayed. \\
   {\bf None}: No name is displayed with the waypoint.
 \item[Arrival height*]  This enables the arrival height info shown additionally 
   for landables. \\
@@ -292,8 +295,8 @@ displayed and how warnings are issued.
   {\bf All on}: All the airspace information is displayed at the same time. \\
   {\bf Clip}: Only airspace below a user determined altitude is shown. \\
   {\bf Auto}: Only airspace at the current altitude plus or minus a user 
-    definable margin is shown. \\
-\sketch{figures/config-airspace.png}
+    definable margin is shown.
+\sketch{figures/config-airspace.png} \\
   {\bf All below}:  Like auto plus every airspace below the glider is shown.
 \item[Clip altitude] For clip mode, this is the altitude below which airspace 
   is displayed.
@@ -310,11 +313,11 @@ displayed and how warnings are issued.
   {\bf Fill padding}: Draws a solid outline with a half transparent border 
     around the airspace. \\
   {\bf Default}:  This selects the best performing option for your hardware. In fact 
-  it favours "fill padding" except for PPC 2000 system.
+    it favours `{\it Fill padding}' except for PPC 2000 system.
 \item[Airspace transparency*]  If enabled, then airspaces are filled transparently.
 \end{description}
 
-This page also has \button{Colours} and \button{Filter} buttons which
+This page also has a \button{Colours} and a \button{Filter} buttons which
 can be used to review or change the colours/patterns used by each
 airspace class, and whether each airspace class will be filtered out
 of warnings and/or display. Depending on the airspace transparency setting it is 
@@ -341,11 +344,9 @@ This page allows the safety heights and behaviour for the alternates mode to be 
 \item[Arrival height]  The height above terrain that the glider
   should arrive at for a safe landing.
 \item[Terrain height]  \label{conf:safetyterrain} The height above terrain that 
-  the glider must clear during final glide.
-\\
+  the glider must clear during final glide. \\
 See Section~\ref{sec:safety-heights} for more details on the meanings
-of the safety heights.
-\\
+of the safety heights. \\
 \item[Alternates mode]  \label{conf:alternatesmode} Determines sorting of alternates 
   in the alternates dialogue. \\
   {\bf Simple}: The alternates will only be sorted by arrival height. 
@@ -378,8 +379,8 @@ This page allows glide computer algorithms to be configured.
 \begin{description}
 \item[Auto MC mode]  This option defines which auto MacCready algorithm is used.
   For more details see Section~\ref{sec:auto-maccready}. \\
-  {\bf Final glide}: Final glide adjusts MC for fastest arrival. \\
-\sketch{figures/config-glidecomputer.png}
+  {\bf Final glide}: Final glide adjusts MC for fastest arrival.
+\sketch{figures/config-glidecomputer.png} \\
   {\bf Trending average climb}: Sets MC to the trending average climb rate based 
   on all climbs. \\
   {\bf Both}: Uses trending average during task, then fastest arrival when in final 
@@ -527,7 +528,7 @@ rules. \label{conf:taskrules}
   (AGL or MSL) while finishing the task.  Set to 0 for no limit.
 \item[Finish height ref.*]  Reference used for finish min. height rule, 
   correspondingly to the start rule height reference.
-\item[On-Line Contest] Determines the rules used to optimize On-Line Contest 
+\item[On-Line Contest]  Determines the rules used to optimize On-Line Contest 
   paths.  The implementation  conforms to the official release 2010, Sept. 23. \\
   {\bf OLC FAI}: Conforms to FAI triangle rule. Three turns and common start and 
   finish.  For tasks longer than
@@ -543,6 +544,9 @@ rules. \label{conf:taskrules}
   {\bf XContest}: \todonum{tbd.} \\
   {\bf DHV-XC}: \todonum{tbd.} \\
   {\bf SIS-AT}: \todonum{tbd.} \\
+  {\bf FFVV NetCoupe}: The FFVV NetCoupe `{\it libre}' competition.
+\item[Predict Contest]  If enabled, then the next task point is included in the 
+  score calculation, assuming that you will reach it.
 \end{description}
 
 
@@ -550,7 +554,7 @@ rules. \label{conf:taskrules}
 \section{Task Defaults / Turnpoint Types}
 
 This page allows to set default turnpoint types used by the task editor. All 
-options are well described for the task editor in chapter~\ref{cha:tasks}.
+options are well described for the task manager in chapter~\ref{cha:tasks}.
 
 
 %%%%%%%%%%%%%%%%%%
@@ -560,8 +564,8 @@ This page allows to customise the way the user controls and interacts with
 XCSoar.
 
 \begin{description}
-\item[Auto Blank*] This determines whether to blank the display after a long
-  period of inactivity when operating on internal battery power (visible for mobile 
+\item[Auto Blank*]  This determines whether to blank the display after a long
+  period of inactivity when operating on internal battery power (visible for some mobile 
   devices only).
 \item[Events*]  The Input Events file defines the menu system and how XCSoar
   responds to button presses and events from external devices.
@@ -574,25 +578,15 @@ XCSoar.
   appear on screen.
 \item[Menu timeout*]  This determines how long menus will appear on screen if the user
   does not make any button presses or interacts with the computer.
-\item[Debounce timeout*]  This is the minimum interval between the system 
-  recognising key presses.  Set this to a low value for a more responsive user 
-  interface; if it is too low, then accidental multiple key presses can occur.
 \item[Text Input Style*]  Determines which style for text entries is used. 
   See Section~\ref{sec:textentry} for further information on textual input. \\
   {\bf HighScore Style}: For entering text you have to change the underlined 
   character to the relevant letter. \\
   {\bf Keyboard}: Uses the on-screen keyboard for entering text. \\
   {\bf Default}: Uses the default input style for your platform.
-\item[Haptic feedback*]  (Android devices only) Let you switch on or off the `brrt' 
+\item[Haptic feedback*]  (Android devices only) Let you switch on or off the `{\it brrt}' 
   when the device accepts your finger press as valid input on the touch-screen.
 \end{description}
-
-Some Pocket PC devices have poorly designed keys that are subject to
-accidental multiple key presses, which is known as key `bouncing'.  The
-de-bounce timeout sets a minimum time between successive key presses
-that is detected by XCSoar, to alleviate this problem.  If this value
-is set very high, then the user interface will feel unresponsive; if
-the value is set too low, then bouncing may occur.
 
 Press the \button{Fonts} button to adjust the fonts XCSoar uses.
 
@@ -615,8 +609,8 @@ This page once more details the appearance of the graphical user interface of XC
 
 \begin{description}
 \item[InfoBox geometry]  A list of possible InfoBox layouts. Do some trials to find the 
-  best for your screen size. The numbers in front refer to the total number of 
-  InfoBoxes.
+  best for your screen size. The preceding number refer to the total number of 
+  InfoBoxes of this geometry.
 \item[FLARM display*]  \label{conf:flarmradar-place}
   In case you enabled the FLARM display this is to configure the
   place on the screen, where the tiny radar window appears. As a default an `Auto' setup 
@@ -624,16 +618,17 @@ This page once more details the appearance of the graphical user interface of XC
   part of the screen.
 \item[Tab dialogue style]  Determines whether tabbed dialogues use text or icons.
 \item[Message display*]  Defines the alignment of the status message box, either 
-  centred or in the top left corner.
+  {\bf Center} or in the {\bf TopLeft} corner.
 \item[Dialogue size*]  Determines the display size of dialogues.
 \item[Inverse InfoBoxes*]  If {\bf On}, the InfoBoxes are white on black, otherwise 
   black on white.
 \item[Colour InfoBoxes*]  If {\bf On}, certain InfoBoxes will have coloured text. For 
   example, the active waypoint InfoBox will turn blue when the glider is above final 
   glide.
-\item[InfoBox border*]  Two styles for InfoBox borders are available: {\bf Box} draws 
-  boxes around each InfoBox. {\bf Tab} draws a tab at the top of the InfoBox across the 
-  title.
+\item[InfoBox border*]  Two styles for InfoBox borders are available. \\
+  {\bf Box}: Draws boxes around each InfoBox. \\
+  {\bf Tab}: Draws a tab at the top of the InfoBox across the 
+  title. \\
 \end{description}
 
 
@@ -652,7 +647,7 @@ and your custom InfoBox sets.
 
 \begin{description}
 \item[Page 1..3]  Select what you feel is appropriate for you to appear on page 1,2,3 etc. 
-  Selecting "---" will let the page inactive.
+  Selecting "- - -" will let the page inactive.
 \item[Page 4..8*]  Experts can configure up to eight pages in the already 
   described manner.
 \end{description}
@@ -661,14 +656,17 @@ and your custom InfoBox sets.
 %%%%%%%%%%
 \section{Look / InfoBox Modes (or InfoBox Sets)}\label{sec:infobox_sets}
 
-This page shows the available InfoBox sets.
+This page shows and let you customise the available InfoBox sets.
 
-There are three predefined InfoBox sets (Circling, Cruise, Final Glide). Additionally you 
-can define up to five more InfoBox sets and name them as you want.   By default they 
-are named AUX-1, AUX-2, and so on.
+\begin{description}
+\item[Circling, Cruise, ...]  There are three predefined InfoBox sets (Circling, Cruise, Final Glide). 
+  Additionally you can define up to five more InfoBox sets and name them as you want.   
+  By default they are named AUX-1, AUX-2, and so on. \\
+  Selecting one of the sets starts a dialogue which provides all means to name and 
+  compose an InfoBox set up to your needs.
 
-Selecting one of the sets starts a dialogue which provides all means to name and 
-compose an InfoBox set up to your needs.
+\item[Use final glide mode]  Controls whether the "final glide" InfoBox mode should be used on "auto" pages.
+\end{description}
 
 \subsection*{InfoBox Set Customisation}
 
@@ -784,7 +782,10 @@ for every glide performance relevant computation of XCSoar.
   A good choice for the point triplet is one at the top most area of the polar, the second at a 
   still very curved area and the third far out where the curvature seems to disappear.
 \item[Reference mass]  Reference weight at which the given polar is valid.
-\item[Dry mass]  The empty weight of the rigged glider as you take it and get ready to start. In the absence of a pilot weight in the XCSoar setup you probably want to add your own weight to the dry mass.
+\item[Dry mass]  The complete weight of the rigged glider including the pilots weight except the 
+  loaded water ballast. 
+  In the absence of a configurable pilot weight XCSoar expect you to include your own weight 
+  to the dry mass.
 \item[Wing area]  Optional specification of the wing area of the glider type.
 \item[V rough air] Optional the maximum manoeuvring speed can 
   be entered on this page to prevent the glide computer from commanding 
@@ -799,8 +800,6 @@ for every glide performance relevant computation of XCSoar.
 %%%%%%%%%%%%%%%%%%
 \section{Setup / Logger} \label{conf:logger}
 
-This page allows you to set the pilot and aircraft details used for
-annotating XCSoar's IGC logger.  
 The internal software logger has adjustable time steps, separate for
 cruise and circling modes.  
 Typically the circling time step is set to a smaller value
@@ -812,6 +811,24 @@ purposes.
   not circling. 
 \item[Time step circling*]  This is the time interval between logged points when 
   circling. 
+\item[Short file name*]  This determines whether the logger uses the short or the 
+  long IGC file name.
+\item[Auto logger*]  Enables the automatic starting and stopping of the logger
+  on takeoff and landing respectively. Disable when flying paragliders to prevent 
+  the low ground speeds from triggering the automatic logger.
+\item[NMEA logger*]  Enable the NMEA logger on startup? If this option is disabled, 
+  the NMEA logger can still be started manually.
+\item[Log book*]  Logs each start and landing.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\section{Setup / Logger info} \label{conf:logger_info}
+
+This page allows you to set the pilot and aircraft details used for
+annotating XCSoar's IGC logger.  
+
+\begin{description}
 \item[Pilot name]  This is the pilot name used in the internal software logger 
   declaration.
 \item[Aircraft type]  This is the aircraft type used in the internal software 
@@ -820,12 +837,6 @@ purposes.
   software logger declaration.
 \item[Competition ID]  This is the aircraft competition ID.
 \item[Logger ID]  This is the logger registration.
-\item[Short file name*]  This determines whether the logger uses the short or the 
-  long IGC file name.
-\item[Auto logger*]  Enables the automatic starting and stopping of the logger
-  on takeoff and landing respectively. Disable when flying paragliders to prevent 
-  the low ground speeds from triggering the automatic logger.
-\item[Log book*]  Logs each start and landing.
 \end{description}
 
 
@@ -860,12 +871,12 @@ will be referenced as `Custom' set and will also be stored in your profile.
 %%%%%%%%%%%%%%%%%%
 \section{Setup / Time}
 
-The UTC offset field allows the UTC local time offset to be specified.
-The local time is displayed below in order to make it easier to verify
-the correct offset has been entered.  Offsets to the half-hour may be
-set.
+Set the local time offset with respect to UTC.
 
 \begin{description}
+\item[UTC offset]  The field allows the UTC local time offset to be specified.
+\item[Local time]  The local time is displayed below in order to make it easier to verify
+  the correct offset has been entered.  Offsets to the half-hour may be set.
 \item[Use GPS time*] This option, if enabled sets the clock of the computer to 
   the GPS time once a fix is set. This is only necessary if your computer does 
   not have a real-time clock with battery backup or your computer 
@@ -876,13 +887,38 @@ set.
 %%%%%%%%%%%%%%%%%%
 \section{Setup / Tracking}
 
-To have live tracking enabled you have to have the capability to connect to 
-mobile networking from your glide computer.
+`{\it Live}'-Tracking means using a GPS to determine your position and a mobile 
+network to send this position in real-time to a server, other people can see 
+your excact position and track presented in a map just in time.
+The tracking option needs the capability to connect to mobile networking as offered by 
+your glide computer.
+
+Currently there are two tracking protocolls implemented. `{\em SkyLines}' as a spin 
+off project from XCSoar itself; for details on this service have a look at 
+\url{http://skylines.xcsoar.org}. 
+And also the `{\em LiveTrack24}' protocoll used e.g. by the tracking 
+portal on \url{http://www.livetrack24.com}.  
 Please consult the web pages of the service provider listed under `Server' 
 for details on this setup.
-%By using a GPS to determine your position and a mobile network to send this 
-%position in Real Time to a server, other people can see your excact 
-%position presented in a map in Real Time.
 
-
+\begin{description}
+\item[SkyLines]  Switch this {\bf On} to enable the live stream of 
+  your position to `{\em SkyLines}'.
+\item[Tracking Interval]  The time intervall for which one position is send to 
+  the tracking service. `{\em SkyLines}' implements a very lean protocoll, so that even
+  a 30 sec. interval does not exhaust a plain GPRS connection (ca. 12kbit/sec). 
+\item[Key]  Create a key on the page \url{http://skylines.xcsoar.org/tracking/info} 
+  and enter it here, to identify your positions at the tracking service.
+\\
+\item[LiveTrack24]  Switch this {\bf On} to enable the live stream of 
+  your position to `{\em LiveTrack24}'.
+\item[Tracking Interval]  The time intervall for which one position is send to 
+  the tracking service.
+\item[Vehicle Type]  Type of vehicle used.
+\item[Server]  The service's web address to stream your position to. Ther is currently 
+  a choice of some predefined.
+\item[Username]  If you created an account you can enter those credentials here. 
+  Otherwise the track will be logged as `{\it guest}' and thus be anonymous.  
+\item[Password]  The password to your tracking account.
+\end{description}
 

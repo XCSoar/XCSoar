@@ -151,7 +151,7 @@ DataFieldInteger::CreateComboList() const
         /* the current value is not listed - insert it here */
         AppendComboValue(*combo_list, value);
 
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      combo_list->ComboPopupItemSavedIndex = combo_list->size() - 1;
       found_current = true;
     }
 
@@ -161,8 +161,8 @@ DataFieldInteger::CreateComboList() const
   if (value > last) {
     /* the current value out of range - append it here */
     last = value;
-    AppendComboValue(*combo_list, value);
     combo_list->ComboPopupItemSavedIndex = combo_list->size();
+    AppendComboValue(*combo_list, value);
   }
 
   if (last < max)

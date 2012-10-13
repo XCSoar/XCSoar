@@ -231,7 +231,7 @@ DataFieldFloat::CreateComboList() const
         /* the current value is not listed - insert it here */
         AppendComboValue(*combo_list, mValue);
 
-      combo_list->ComboPopupItemSavedIndex = combo_list->size();
+      combo_list->ComboPopupItemSavedIndex = combo_list->size() - 1;
       found_current = true;
     }
 
@@ -241,8 +241,8 @@ DataFieldFloat::CreateComboList() const
   if (mValue > last + epsilon) {
     /* the current value out of range - append it here */
     last = mValue;
-    AppendComboValue(*combo_list, mValue);
     combo_list->ComboPopupItemSavedIndex = combo_list->size();
+    AppendComboValue(*combo_list, mValue);
   }
 
   if (last < mMax - epsilon)
