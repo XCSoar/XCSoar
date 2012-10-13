@@ -66,9 +66,6 @@ static bool task_modified = false;
 static unsigned active_index = 0;
 static int next_previous = 0;
 
-// setting to True during refresh so control values don't trigger form save
-static bool Refreshing = false;
-
 static void
 OnCloseClicked(gcc_unused WndButton &Sender)
 {
@@ -92,8 +89,6 @@ RefreshView()
   wTaskView->Invalidate();
 
   const OrderedTaskPoint &tp = ordered_task->GetPoint(active_index);
-
-  Refreshing = true; // tell onChange routines not to save form!
 
   ShowFormControl(*wf, _T("frmOZLine"), false);
   ShowFormControl(*wf, _T("frmOZSector"), false);
@@ -202,8 +197,6 @@ RefreshView()
                   tp.GetWaypoint().name.c_str());
     wfrm->SetCaption(buffer);
   }
-
-  Refreshing = false; // reactivate onChange routines
 }
 
 static void
@@ -375,8 +368,7 @@ static void
 OnOZData(gcc_unused DataField *Sender,
          gcc_unused DataField::DataAccessMode Mode)
 {
-  if (!Refreshing)
-    ReadValues();
+  ReadValues();
   wTaskView->Invalidate();
 }
 
