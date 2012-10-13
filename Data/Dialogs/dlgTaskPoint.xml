@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Caption="Waypoint">
-  <Panel Name="frmPortrait" X="2" Y="2" Width="-2" Height="-37">
+  <Panel X="2" Y="2" Width="-2" Height="66" Border="1">
+    <Label Name="lblLocation" Caption="Location" X="2" Y="2" Height="25"/>
+    <Button Name="butDetails" Caption="Details" X="2" Y="-37" Width="73" Height="-2" OnClick="OnDetailsClicked"/>
+    <Button Name="butRemove" Caption="Remove" X="77" Y="-37" Width="77" Height="-2" OnClick="OnRemoveClicked"/>
+    <Button Name="butRelocate" Caption="Relocate" X="156" Y="-37" Width="78" Height="-2" OnClick="OnRelocateClicked"/>
+  </Panel>
 
-    <Panel Name="frmLocation" Height="68" Border="1">
-  	  <Label Name="lblLocation" Caption="Location" X="2" Y="2" Width="230" Height="25"/>
-      <Button Name="butDetails" Caption="Details" X="2" Y="28" Width="73" Height="35" OnClick="OnDetailsClicked"/>
-      <Button Name="butRemove" Caption="Remove" X="77" Y="28" Width="77" Height="35" OnClick="OnRemoveClicked"/>
-      <Button Name="butRelocate" Caption="Relocate" X="156" Y="28" Width="78" Height="35" OnClick="OnRelocateClicked"/>
-    </Panel>
+  <Panel X="2" Y="70" Width="-2" Height="-37" Border="1">
+    <Label Name="lblType" Caption="Type" X="2" Y="2" Width="-84" Height="38"/>
+    <Button Name="butType" Caption="Change Type" X="-83" Y="2" Width="-2" Height="35" OnClick="OnTypeClicked"/>
 
-    <Panel Name="frmType" Y="67" Border="1">
-      <Label Name="lblType" Caption="Type" X="2" Y="3" Width="144" Height="38"/>
-      <Button Name="butType" Caption="Change Type" X="153" Y="3" Width="81" Height="35" OnClick="OnTypeClicked"/>
-      <Canvas Name="frmTaskView" X="2" Y="42" Width="90" Height="92" Border="1" OnPaint="OnTaskPaint" />
+    <Canvas Name="frmTaskView" X="2" Y="42" Width="90" Height="92" Border="1" OnPaint="OnTaskPaint"/>
 
-      <Widget Name="properties" X="107" Y="41" Height="96"/>
+    <Widget Name="properties" X="107" Y="39" Height="-29"/>
 
-        <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="139" Width="180" Height="25"
-  	     OnClick="OnOptionalStartsClicked"/>
-      
-    </Panel>
-
+    <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="-27" Width="180" Height="25"
+            OnClick="OnOptionalStartsClicked"/>
   </Panel>
 
   <SymbolButton Name="butPrevious" Caption="&lt;" X="0" Y="-35" Width="60" Height="35" OnClick="OnPreviousClicked"/>
