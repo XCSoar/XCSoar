@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "ProgressGlue.hpp"
+#include "ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ProgressWindow.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "PeriodClock.hpp"

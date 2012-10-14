@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 #define XCSOAR_SCREEN_PROGRESS_WINDOW_HXX
 
-#include "ContainerWindow.hpp"
-#include "TextWindow.hpp"
-#include "ProgressBar.hpp"
-#include "Bitmap.hpp"
+#include "Screen/ContainerWindow.hpp"
+#include "Screen/TextWindow.hpp"
+#include "Screen/ProgressBar.hpp"
+#include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 
 /**

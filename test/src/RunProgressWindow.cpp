@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
+#include "ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/ProgressWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"

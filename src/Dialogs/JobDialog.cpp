@@ -24,7 +24,7 @@ Copyright_License {
 #include "Dialogs/JobDialog.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
-#include "Screen/ProgressWindow.hpp"
+#include "ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Layout.hpp"

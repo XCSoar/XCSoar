@@ -1812,7 +1812,7 @@ $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Hardware/Display.cpp \
-	$(SRC)/Screen/ProgressWindow.cpp \
+	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -1829,7 +1829,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Operation/ThreadedOperationEnvironment.cpp \
 	$(SRC)/Job/Thread.cpp \
 	$(SRC)/Hardware/Display.cpp \
-	$(SRC)/Screen/ProgressWindow.cpp \
+	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \

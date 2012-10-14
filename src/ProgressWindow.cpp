@@ -21,13 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Screen/ProgressWindow.hpp"
+#include "ProgressWindow.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "resource.h"
-
-#include <algorithm>
-
-using std::min;
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
   :background_color(COLOR_WHITE),

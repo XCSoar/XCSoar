@@ -629,6 +629,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/UIActions.cpp \
 	$(SRC)/Interface.cpp \
+	$(SRC)/ProgressWindow.cpp \
 	$(SRC)/ProgressGlue.cpp \
 	$(SRC)/LocalTime.cpp \
 	$(SRC)/Units/Units.cpp \
@@ -703,7 +704,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Ramp.cpp \
-	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	\
