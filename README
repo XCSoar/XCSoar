@@ -108,8 +108,12 @@ Supported targets:
 Submitting patches
 ------------------
 
-Submit patches to the XCSoar developer mailing list
-(xcsoar-devel@lists.sourceforge.net).
+Subscribe to the XCSoar developer mailing list:
+
+ https://lists.sourceforge.net/lists/listinfo/xcsoar-devel
+ xcsoar-devel@lists.sourceforge.net
+
+Use this mailing list to submit patches or "git pull" requests.
 
 - patches should be self-contained
 - patches should be self-documenting (add a good description on what
