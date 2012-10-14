@@ -98,6 +98,8 @@ Supported targets:
 
  UNIX: Linux and other UNIX-like operating systems, including Mac OS X
 
+ UNIX32, UNIX64: like UNIX, but explicitly choose 32 or 64 bit build
+
  ANDROID: Android with ARMv6 CPU
 
  ANDROID7: Android with ARMv7 CPU
