@@ -84,25 +84,33 @@ configure script to detect the build toolchain (optional):
 
 Supported targets:
 
- PC: desktop Windows
+ PC: desktop Windows (32 bit)
+
+ WIN64: desktop Windows (64 bit)
 
  PPC2000, PPC2003: Pocket PC (for PPC2002 devices, use PPC2000 target)
 
  WM5: Windows Mobile 5.0 and later
 
- PPC2003X: Pocket PC 2003 with XScale CPU
+ WM5X, PPC2003X: same as above with code optimised for XScale CPUs
 
  ALTAIR: Triadis Altair
 
- WINE: WineLib (experimental)
+ UNIX: Linux and other UNIX-like operating systems, including Mac OS X
 
- UNIX: Linux and others (work in progress)
-
- ANDROID: Android OS
+ ANDROID: Android with ARMv6 CPU
 
  ANDROID7: Android with ARMv7 CPU
 
  ANDROID86: Android with x86 CPU
+
+ ANDROIDMIPS: Android with MIPS CPU
+
+ ANDROIDFAT: "fat" Android package for all supported CPUs
+
+ CYGWIN: desktop Windows with Cygwin (experimental)
+
+ WINE: WineLib (experimental)
 
 
 Submitting patches
