@@ -37,19 +37,16 @@ TARGET_ARCH :=
 
 ifeq ($(TARGET),WIN64)
   X64 := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = PC
 endif
 
 ifeq ($(TARGET),PPC2003X)
   XSCALE := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = PPC2003
 endif
 
 ifeq ($(TARGET),WM5X)
   XSCALE := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = WM5
 endif
 
@@ -64,25 +61,21 @@ endif
 
 ifeq ($(TARGET),ANDROID7)
   ARMV7 := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROID86)
   X86 := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDMIPS)
   MIPS := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDFAT)
   FAT_BINARY := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
