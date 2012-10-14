@@ -294,6 +294,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Engine/Trace/Trace.cpp \
 	$(SRC)/Engine/Trace/Vector.cpp \
 	$(SRC)/Engine/Util/Gradient.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Renderer/TraceHistoryRenderer.cpp \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/Renderer/TaskProgressRenderer.cpp \
@@ -700,9 +702,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/CustomFonts.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Screen/TextInBox.cpp \
 	$(SRC)/Screen/Ramp.cpp \
-	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \

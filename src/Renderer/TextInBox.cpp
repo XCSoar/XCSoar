@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Screen/TextInBox.hpp"
+#include "TextInBox.hpp"
+#include "LabelBlock.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/LabelBlock.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 

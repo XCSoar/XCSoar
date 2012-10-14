@@ -31,7 +31,7 @@ Copyright_License {
 #ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
 #endif
-#include "Screen/LabelBlock.hpp"
+#include "Renderer/LabelBlock.hpp"
 #include "Screen/StopWatch.hpp"
 #include "MapWindowBlackboard.hpp"
 #include "Renderer/BackgroundRenderer.hpp"
@@ -54,7 +54,6 @@ class ProtectedTaskManager;
 class GlideComputer;
 class GlidePolar;
 class ContainerWindow;
-class WaypointLabelList;
 class NOAAStore;
 
 class MapWindow :

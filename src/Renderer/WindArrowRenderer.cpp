@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "WindArrowRenderer.hpp"
+#include "TextInBox.hpp"
 #include "Look/WindArrowLook.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/TextInBox.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"

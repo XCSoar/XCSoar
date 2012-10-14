@@ -26,11 +26,11 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/TextInBox.hpp"
 #include "Util/StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Look/TrafficLook.hpp"
+#include "Renderer/TextInBox.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/FriendsGlue.hpp"
 

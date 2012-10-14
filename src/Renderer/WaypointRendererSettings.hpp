@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_RENDERER_SETTINGS_HPP
 #define XCSOAR_WAYPOINT_RENDERER_SETTINGS_HPP
 
-#include "Screen/TextInBox.hpp"
+#include "TextInBox.hpp"
 
 #include <stdint.h>
 

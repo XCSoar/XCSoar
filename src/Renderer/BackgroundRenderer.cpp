@@ -29,7 +29,7 @@ Copyright_License {
 #include "Geo/SpeedVector.hpp"
 #include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/LabelBlock.hpp"
+#include "Renderer/LabelBlock.hpp"
 #include "Screen/Fonts.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"

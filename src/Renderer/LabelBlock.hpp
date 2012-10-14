@@ -28,6 +28,9 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Compiler.h"
 
+/**
+ * Simple code to prevent text writing over map city names.
+ */
 class LabelBlock {
 #if defined(_WIN32_WCE) && _WIN32_WCE < 0x400
   /* PPC2000 (ancient hardware, expect small screens) */

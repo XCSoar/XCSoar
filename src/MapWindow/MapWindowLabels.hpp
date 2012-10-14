@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MAP_WINDOW_LABELS_HPP
 
 #include "Rough/RoughAltitude.hpp"
-#include "Screen/TextInBox.hpp"
+#include "Renderer/TextInBox.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Sizes.h" /* for NAME_SIZE */

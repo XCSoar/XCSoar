@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "FinalGlideBarRenderer.hpp"
+#include "TextInBox.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/TextInBox.hpp"
 #include "NMEA/Derived.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Look/TaskLook.hpp"

@@ -1556,9 +1556,9 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Hardware/Display.cpp \
-	$(SRC)/Screen/LabelBlock.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/TextInBox.cpp \
+	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
@@ -1739,8 +1739,8 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/LabelBlock.cpp \
-	$(SRC)/Screen/TextInBox.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Units/Units.cpp \
@@ -1760,8 +1760,8 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/LabelBlock.cpp \
-	$(SRC)/Screen/TextInBox.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/HorizonLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Units/Units.cpp \
@@ -1781,8 +1781,8 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/LabelBlock.cpp \
-	$(SRC)/Screen/TextInBox.cpp \
+	$(SRC)/Renderer/LabelBlock.cpp \
+	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
