@@ -30,8 +30,8 @@ Copyright_License {
 class ContainerWindow;
 
 /**
- * A #Window implementation for custom drawing.  Call get_canvas()
- * whenever you want to draw something.
+ * A #Window implementation for custom drawing.  Implement
+ * Window::OnPaint() to draw something.
  */
 class PaintWindow : public Window {
 private:
