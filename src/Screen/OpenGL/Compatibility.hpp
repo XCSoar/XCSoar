@@ -30,7 +30,7 @@ namespace OpenGL {
   static inline void
   glTexEnvi(GLenum target, GLenum pname, GLint param)
   {
-    if (have_gles())
+    if (HaveGLES())
       /* GLES 1.0 (Android emulator) doesn't support glTexEnvi() */
       ::glTexEnvf(target, pname, (GLfloat)param);
     else

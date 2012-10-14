@@ -53,7 +53,7 @@ Copyright_License {
  */
 constexpr
 static inline bool
-have_gles()
+HaveGLES()
 {
 #ifdef HAVE_GLES
   return true;

@@ -94,7 +94,7 @@ public:
    */
   constexpr
   static GLenum GetType() {
-    return have_gles()
+    return HaveGLES()
       ? GL_UNSIGNED_SHORT_5_6_5
       : GL_UNSIGNED_BYTE;
   }

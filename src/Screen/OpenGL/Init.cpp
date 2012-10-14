@@ -109,14 +109,14 @@ static bool
 SupportsNonPowerOfTwoTextures()
 {
   return OpenGL::IsExtensionSupported("GL_ARB_texture_non_power_of_two") ||
-    (have_gles() && SupportsNonPowerOfTwoTexturesGLES());
+    (HaveGLES() && SupportsNonPowerOfTwoTexturesGLES());
 }
 
 gcc_pure
 static bool
 CheckFBO()
 {
-  return have_gles()
+  return HaveGLES()
     ? (OpenGL::IsExtensionSupported("GL_OES_framebuffer_object") &&
        OpenGL::IsExtensionSupported("GL_OES_packed_depth_stencil"))
     : (OpenGL::IsExtensionSupported("GL_EXT_framebuffer_object") &&
