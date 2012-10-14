@@ -12,9 +12,6 @@ else
   endif
 endif
 
-# These targets are built when you don't specify the TARGET variable.
-DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
-
 TARGET_FLAVOR := $(TARGET)
 
 HAVE_CE := n
