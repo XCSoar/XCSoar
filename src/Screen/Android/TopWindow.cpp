@@ -30,6 +30,17 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 
 void
+TopWindow::Invalidate()
+{
+  if (invalidated.exchange(true, std::memory_order_relaxed))
+    /* already invalidated, don't send the event twice */
+    return;
+
+  /* wake up the event loop */
+  event_queue->Push(Event::NOP);
+}
+
+void
 TopWindow::AnnounceResize(UPixelScalar width, UPixelScalar height)
 {
   ScopeLock protect(paused_mutex);

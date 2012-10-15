@@ -23,20 +23,42 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 
-#include <cassert>
+gcc_pure
+static const ContainerWindow *
+IsAncestor(const Window *maybe_ancestor, const Window *w)
+{
+  while (true) {
+    const ContainerWindow *parent = w->GetParent();
+    if (parent == NULL)
+      return NULL;
+
+    if (parent == maybe_ancestor)
+      return parent;
+
+    w = parent;
+  }
+}
 
 bool
-SingleWindow::FilterEvent(const SDL_Event &event, Window *allowed) const
+SingleWindow::FilterMouseEvent(PixelScalar x, PixelScalar y,
+                               Window *allowed) const
 {
-  assert(allowed != NULL);
+  const ContainerWindow *container = this;
+  while (true) {
+    const Window *child =
+      const_cast<ContainerWindow *>(container)->EventChildAt(x, y);
+    if (child == NULL)
+      /* no receiver for the event */
+      return false;
 
-  switch (event.type) {
-  case SDL_MOUSEMOTION:
-  case SDL_MOUSEBUTTONDOWN:
-  case SDL_MOUSEBUTTONUP:
-    return FilterMouseEvent(event.button.x, event.button.y, allowed);
+    if (child == allowed)
+      /* the event reaches an allowed window: success */
+      return true;
 
-  default:
-    return true;
+    const ContainerWindow *next = IsAncestor(allowed, child);
+    if (next == NULL)
+      return false;
+
+    container = next;
   }
 }

@@ -22,16 +22,11 @@ Copyright_License {
 */
 
 #include "Screen/Window.hpp"
-#include "Screen/SDL/Event.hpp"
+#include "Screen/Android/Event.hpp"
+#include "Android/Main.hpp"
 
 void
 Window::SendUser(unsigned id)
 {
-  SDL_Event event;
-  event.user.type = EVENT_USER;
-  event.user.code = (int)id;
-  event.user.data1 = this;
-  event.user.data2 = NULL;
-
-  ::SDL_PushEvent(&event);
+  event_queue->Push(Event(Event::USER, id, this));
 }

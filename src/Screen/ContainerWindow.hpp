@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 
 #ifndef USE_GDI
-#include "Screen/SDL/WList.hpp"
+#include "Screen/Custom/WList.hpp"
 #endif
 
 class WindowReference;

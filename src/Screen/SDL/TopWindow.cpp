@@ -22,58 +22,15 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-
-#ifdef ANDROID
-#include "Screen/Android/Event.hpp"
-#include "Android/Main.hpp"
-#else
 #include "Screen/SDL/Event.hpp"
 #include "Util/ConvertString.hpp"
-#endif
 
-bool
-TopWindow::find(const TCHAR *cls, const TCHAR *text)
-{
-  return false; // XXX
-}
-
-void
-TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
-                  TopWindowStyle style)
-{
-  invalidated.store(true, std::memory_order_relaxed);
-
-  rc.right -= rc.left;
-  rc.bottom -= rc.top;
-  rc.left = rc.top = 0;
-
-  screen.Set(rc.right, rc.bottom, style.GetFullScreen(), style.GetResizable());
-
-  ContainerWindow::Create(NULL, rc, style);
-
-  SetCaption(text);
-}
-
-#ifndef ANDROID
 void
 TopWindow::SetCaption(const TCHAR *caption)
 {
   WideToUTF8Converter caption2(caption);
   if (caption2.IsValid())
     ::SDL_WM_SetCaption(caption2, nullptr);
-}
-#endif
-
-void
-TopWindow::CancelMode()
-{
-  OnCancelMode();
-}
-
-void
-TopWindow::Fullscreen()
-{
-  screen.Fullscreen();
 }
 
 void
@@ -84,9 +41,7 @@ TopWindow::Invalidate()
     return;
 
   /* wake up the event loop */
-#ifdef ANDROID
-  event_queue->Push(Event::NOP);
-#else
+
   /* note that SDL_NOEVENT is not documented, but since we just want
      to wake up without actually sending an event, I hope this works
      on all future SDL versions; if SDL_NOEVENT ever gets remove, I'll
@@ -94,51 +49,7 @@ TopWindow::Invalidate()
   SDL_Event event;
   event.type = SDL_NOEVENT;
   ::SDL_PushEvent(&event);
-#endif
 }
-
-void
-TopWindow::Expose() {
-  OnPaint(screen);
-  screen.Flip();
-}
-
-void
-TopWindow::Refresh()
-{
-#ifdef ANDROID
-  if (!CheckResumeSurface())
-    /* the application is paused/suspended, and we don't have an
-       OpenGL surface - ignore all drawing requests */
-    return;
-#endif
-
-  if (!invalidated.exchange(false, std::memory_order_relaxed))
-    return;
-
-  Expose();
-}
-
-bool
-TopWindow::OnActivate()
-{
-  return false;
-}
-
-bool
-TopWindow::OnDeactivate()
-{
-  return false;
-}
-
-bool
-TopWindow::OnClose()
-{
-  Destroy();
-  return true;
-}
-
-#ifndef ANDROID
 
 bool
 TopWindow::OnEvent(const SDL_Event &event)
@@ -238,4 +149,3 @@ TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
   screen.OnResize(width, height);
 }
 
-#endif /* !ANDROID */

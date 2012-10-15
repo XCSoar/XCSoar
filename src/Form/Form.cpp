@@ -33,7 +33,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 
 #ifndef USE_GDI
-#include "Screen/SDL/Reference.hpp"
+#include "Screen/Custom/Reference.hpp"
 #endif
 
 #ifdef ANDROID

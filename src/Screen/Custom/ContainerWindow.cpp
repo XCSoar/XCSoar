@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/SubCanvas.hpp"
-#include "Screen/SDL/Reference.hpp"
+#include "Reference.hpp"
 
 #include <algorithm>
 #include <assert.h>

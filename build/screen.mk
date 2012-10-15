@@ -22,26 +22,31 @@ SCREEN_SOURCES = \
 
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
-	$(SCREEN_SRC_DIR)/SDL/WList.cpp \
-	$(SCREEN_SRC_DIR)/SDL/ContainerWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/ButtonWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/CheckBox.cpp \
-	$(SCREEN_SRC_DIR)/SDL/EditWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
-	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp
+	$(SCREEN_SRC_DIR)/Custom/ButtonWindow.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Window.cpp \
+	$(SCREEN_SRC_DIR)/Custom/WList.cpp \
+	$(SCREEN_SRC_DIR)/Custom/ContainerWindow.cpp \
+	$(SCREEN_SRC_DIR)/Custom/CheckBox.cpp \
+	$(SCREEN_SRC_DIR)/Custom/EditWindow.cpp \
+	$(SCREEN_SRC_DIR)/Custom/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/Custom/SingleWindow.cpp \
+	$(SCREEN_SRC_DIR)/Custom/Canvas.cpp
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp \
 	$(SCREEN_SRC_DIR)/Android/Timer.cpp \
+	$(SCREEN_SRC_DIR)/Android/Window.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
+	$(SCREEN_SRC_DIR)/Android/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Android/Font.cpp \
 	$(SCREEN_SRC_DIR)/Android/Event.cpp
 else
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
+	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
+	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Font.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
@@ -58,6 +63,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/BufferCanvas.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Buffer.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Shapes.cpp \
@@ -65,6 +71,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
 else
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp

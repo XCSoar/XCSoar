@@ -31,8 +31,8 @@ Copyright_License {
 #endif
 
 #ifndef USE_GDI
-#include "Screen/SDL/TopCanvas.hpp"
-#include "Screen/SDL/DoubleClick.hpp"
+#include "Screen/Custom/TopCanvas.hpp"
+#include "Screen/Custom/DoubleClick.hpp"
 #endif
 
 #ifdef ANDROID
@@ -282,6 +282,10 @@ public:
    */
   void RefreshSize();
 #else
+  bool CheckResumeSurface() {
+    return true;
+  }
+
   void RefreshSize() {}
 #endif
 

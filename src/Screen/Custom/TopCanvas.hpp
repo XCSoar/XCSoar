@@ -21,17 +21,36 @@ Copyright_License {
 }
 */
 
-#include "Screen/Window.hpp"
-#include "Screen/SDL/Event.hpp"
+#ifndef XCSOAR_SCREEN_TOP_CANVAS_HPP
+#define XCSOAR_SCREEN_TOP_CANVAS_HPP
 
-void
-Window::SendUser(unsigned id)
-{
-  SDL_Event event;
-  event.user.type = EVENT_USER;
-  event.user.code = (int)id;
-  event.user.data1 = this;
-  event.user.data2 = NULL;
+#include "Screen/Canvas.hpp"
 
-  ::SDL_PushEvent(&event);
-}
+class TopCanvas : public Canvas {
+#ifndef ANDROID
+  Uint32 flags;
+#endif
+
+public:
+  void Set(UPixelScalar width, UPixelScalar height,
+           bool full_screen, bool resizable);
+
+#ifdef ENABLE_OPENGL
+  /**
+   * Initialise the new OpenGL context.
+   */
+  void Resume();
+#endif
+
+  void OnResize(UPixelScalar width, UPixelScalar height);
+
+#ifdef ANDROID
+  void Fullscreen() {}
+#else
+  void Fullscreen();
+#endif
+
+  void Flip();
+};
+
+#endif

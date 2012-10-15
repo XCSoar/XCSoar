@@ -23,13 +23,10 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/Util.hpp"
 
 #ifndef NDEBUG
 #include "Util/UTF8.hpp"
-#endif
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Cache.hpp"
 #endif
 
 #include <algorithm>
@@ -37,14 +34,8 @@ Copyright_License {
 #include <string.h>
 #include <winuser.h>
 
-#ifndef ENABLE_OPENGL
-#include "Screen/Util.hpp"
-
 #include <SDL_rotozoom.h>
 #include <SDL_imageFilter.h>
-#endif
-
-#ifndef ENABLE_OPENGL
 
 void
 Canvas::reset()
@@ -139,52 +130,6 @@ Canvas::DrawKeyhole(PixelScalar x, PixelScalar y,
   ::KeyHole(*this, x, y, big_radius, start, end, small_radius);
 }
 
-#endif /* !OPENGL */
-
-void
-Canvas::DrawButton(PixelRect rc, bool down)
-{
-  const Pen old_pen = pen;
-
-  Color gray = COLOR_LIGHT_GRAY;
-  DrawFilledRectangle(rc, gray);
-
-  Pen bright(1, LightColor(gray));
-  Pen dark(1, DarkColor(gray));
-
-  Select(down ? dark : bright);
-  DrawTwoLinesExact(rc.left, rc.bottom - 2, rc.left, rc.top,
-                    rc.right - 2, rc.top);
-  DrawTwoLinesExact(rc.left + 1, rc.bottom - 3, rc.left + 1, rc.top + 1,
-                    rc.right - 3, rc.top + 1);
-
-  Select(down ? bright : dark);
-  DrawTwoLinesExact(rc.left + 1, rc.bottom - 1, rc.right - 1, rc.bottom - 1,
-                    rc.right - 1, rc.top + 1);
-  DrawTwoLinesExact(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
-                    rc.right - 2, rc.top + 2);
-
-  pen = old_pen;
-}
-
-const PixelSize
-Canvas::CalcTextSize(const TCHAR *text, size_t length) const
-{
-  assert(text != NULL);
-
-  TCHAR *duplicated = _tcsdup(text);
-  duplicated[length] = 0;
-
-#ifndef UNICODE
-  assert(ValidateUTF8(duplicated));
-#endif
-
-  const PixelSize size = CalcTextSize(duplicated);
-  free(duplicated);
-
-  return size;
-}
-
 const PixelSize
 Canvas::CalcTextSize(const TCHAR *text) const
 {
@@ -198,19 +143,8 @@ Canvas::CalcTextSize(const TCHAR *text) const
   if (font == NULL)
     return size;
 
-#ifdef ENABLE_OPENGL
-  /* see if the TextCache can handle this request */
-  size = TextCache::LookupSize(*font, text);
-  if (size.cy > 0)
-    return size;
-
-  return TextCache::GetSize(*font, text);
-#else
   return font->TextSize(text);
-#endif
 }
-
-#ifndef ENABLE_OPENGL
 
 void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
@@ -275,133 +209,6 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
   copy(x, y, s);
   ::SDL_FreeSurface(s);
 }
-
-#endif /* !OPENGL */
-
-void
-Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
-  assert(text != NULL);
-#ifndef UNICODE
-  assert(ValidateUTF8(text));
-#endif
-
-  if (font == NULL)
-    return;
-
-  UPixelScalar skip = font->GetLineSpacing();
-  unsigned max_lines = (format & DT_CALCRECT) ? -1 :
-                       (rc->bottom - rc->top + skip - 1) / skip;
-
-  size_t len = _tcslen(text);
-  TCHAR *duplicated = new TCHAR[len + 1], *p = duplicated;
-  unsigned lines = 1;
-  for (const TCHAR *i = text; *i != _T('\0'); ++i) {
-    TCHAR ch = *i;
-    if (ch == _T('\n')) {
-      /* explicit line break */
-
-      if (++lines >= max_lines)
-        break;
-
-      ch = _T('\0');
-    } else if (ch == _T('\r'))
-      /* skip */
-      continue;
-    else if ((unsigned)ch < 0x20)
-      /* replace non-printable characters */
-      ch = _T(' ');
-
-    *p++ = ch;
-  }
-
-  *p = _T('\0');
-  len = p - duplicated;
-
-  // simple wordbreak algorithm. looks for single spaces only, no tabs,
-  // no grouping of multiple spaces
-  if (format & DT_WORDBREAK) {
-    for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
-      PixelSize sz = CalcTextSize(duplicated + i);
-      TCHAR *prev_p = NULL;
-
-      // remove words from behind till line fits or no more space is found
-      while (sz.cx > rc->right - rc->left &&
-             (p = _tcsrchr(duplicated + i, _T(' '))) != NULL) {
-        if (prev_p)
-          *prev_p = _T(' ');
-        *p = _T('\0');
-        prev_p = p;
-        sz = CalcTextSize(duplicated + i);
-      }
-
-      if (prev_p) {
-        lines++;
-        if (lines >= max_lines)
-          break;
-      }
-    }
-  }
-
-  if (format & DT_CALCRECT) {
-    rc->bottom = rc->top + lines * skip;
-    delete[] duplicated;
-    return;
-  }
-
-  PixelScalar y = (format & DT_VCENTER) && lines < max_lines
-    ? (PixelScalar)(rc->top + rc->bottom - lines * skip) / 2
-    : rc->top;
-  for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
-    if (duplicated[i] != _T('\0')) {
-      PixelScalar x;
-      if (format & (DT_RIGHT | DT_CENTER)) {
-        PixelSize sz = CalcTextSize(duplicated + i);
-        x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
-                                    rc->right - sz.cx;  // DT_RIGHT
-      } else {  // default is DT_LEFT
-        x = rc->left;
-      }
-
-      TextAutoClipped(x, y, duplicated + i);
-    }
-    y += skip;
-    if (y >= rc->bottom)
-      break;
-  }
-
-  delete[] duplicated;
-}
-
-void
-Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *_text, size_t length)
-{
-  assert(_text != NULL);
-
-  TCHAR copy[length + 1];
-  std::copy(_text, _text + length, copy);
-  copy[length] = _T('\0');
-
-#ifndef UNICODE
-  assert(ValidateUTF8(copy));
-#endif
-
-  text(x, y, copy);
-}
-
-void
-Canvas::text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
-                    const TCHAR *_text)
-{
-  assert(_text != NULL);
-#ifndef UNICODE
-  assert(ValidateUTF8(_text));
-#endif
-
-  DrawFilledRectangle(rc, background_color);
-  text_transparent(x, y, _text);
-}
-
-#ifndef ENABLE_OPENGL
 
 static bool
 clip(PixelScalar &position, UPixelScalar &length, UPixelScalar max,
@@ -1030,5 +837,3 @@ Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
   UPixelScalar radius = std::min(ellipse_width, ellipse_height) / 2;
   ::RoundRect(*this, left, top, right, bottom, radius);
 }
-
-#endif /* !OPENGL */

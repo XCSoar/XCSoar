@@ -21,32 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_TOP_CANVAS_HPP
-#define XCSOAR_SCREEN_TOP_CANVAS_HPP
+#include "Screen/Custom/TopCanvas.hpp"
+#include "Init.hpp"
 
-#include "Screen/Canvas.hpp"
-
-class TopCanvas : public Canvas {
-#ifndef ANDROID
-  Uint32 flags;
-#endif
-
-public:
-  void Set(UPixelScalar width, UPixelScalar height,
-           bool full_screen, bool resizable);
-
-#ifdef ENABLE_OPENGL
-  /**
-   * Initialise the new OpenGL context.
-   */
-  void Resume();
-#endif
-
-  void OnResize(UPixelScalar width, UPixelScalar height);
-
-  void Fullscreen();
-
-  void Flip();
-};
-
-#endif
+void
+TopCanvas::Resume()
+{
+  OpenGL::SetupContext();
+  OpenGL::SetupViewport(width, height);
+}

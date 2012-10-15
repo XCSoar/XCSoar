@@ -499,6 +499,27 @@ Canvas::DrawFocusRectangle(PixelRect rc)
   DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_DARK_GRAY);
 }
 
+const PixelSize
+Canvas::CalcTextSize(const TCHAR *text) const
+{
+  assert(text != NULL);
+#ifndef UNICODE
+  assert(ValidateUTF8(text));
+#endif
+
+  PixelSize size = { 0, 0 };
+
+  if (font == NULL)
+    return size;
+
+  /* see if the TextCache can handle this request */
+  size = TextCache::LookupSize(*font, text);
+  if (size.cy > 0)
+    return size;
+
+  return TextCache::GetSize(*font, text);
+}
+
 void
 Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 {

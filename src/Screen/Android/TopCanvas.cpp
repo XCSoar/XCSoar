@@ -22,65 +22,19 @@ Copyright_License {
 */
 
 #include "Screen/Custom/TopCanvas.hpp"
-#include "Screen/Features.hpp"
-#include "Asset.hpp"
-
-#ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
-#include "Screen/OpenGL/Features.hpp"
-#ifdef HAVE_EGL
 #include "Screen/OpenGL/EGL.hpp"
 #include "Screen/OpenGL/Globals.hpp"
-#endif
-#endif
-
-#include <assert.h>
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
 
 void
 TopCanvas::Set(UPixelScalar width, UPixelScalar height,
                bool full_screen, bool resizable)
 {
-  flags = SDL_ANYFORMAT;
-
-#ifdef ENABLE_OPENGL
-  flags |= SDL_OPENGL;
-#else /* !ENABLE_OPENGL */
-  /* we need async screen updates as long as we don't have a global
-     frame rate */
-  flags |= SDL_ASYNCBLIT;
-
-  const SDL_VideoInfo *info = SDL_GetVideoInfo();
-  assert(info != NULL);
-
-  if (info->hw_available)
-    flags |= SDL_HWSURFACE;
-  else
-    flags |= SDL_SWSURFACE;
-#endif /* !ENABLE_OPENGL */
-
-  if (full_screen)
-    flags |= SDL_FULLSCREEN;
-
-  if (resizable)
-    flags |= SDL_RESIZABLE;
-
-  SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
-  if (s == NULL)
-    return;
-
-#ifdef ENABLE_OPENGL
-  if (full_screen)
-    /* after a X11 mode switch to full-screen mode, the first
-       SDL_GL_SwapBuffers() call gets ignored; could be a SDL bug, and
-       the following dummy call works around it: */
-    ::SDL_GL_SwapBuffers();
-
   OpenGL::SetupContext();
   OpenGL::SetupViewport(width, height);
   Canvas::set(width, height);
-#else
-  Canvas::set(s);
-#endif
 }
 
 void
@@ -89,39 +43,17 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
   if (width == GetWidth() && height == GetHeight())
     return;
 
-  SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
-  if (s == NULL)
-    return;
-
-#ifdef ENABLE_OPENGL
   OpenGL::SetupViewport(width, height);
   Canvas::set(width, height);
-#endif
-}
-
-void
-TopCanvas::Fullscreen()
-{
-#if 0 /* disabled for now, for easier development */
-  ::SDL_WM_ToggleFullScreen(surface);
-#endif
 }
 
 void
 TopCanvas::Flip()
 {
-#ifdef ENABLE_OPENGL
-#ifdef HAVE_EGL
-  if (OpenGL::egl) {
+  if (OpenGL::egl)
     /* if native EGL support was detected, we can circumvent the JNI
        call */
     EGLSwapBuffers();
-    return;
-  }
-#endif
-
-  ::SDL_GL_SwapBuffers();
-#else
-  ::SDL_Flip(surface);
-#endif
+  else
+    native_view->swap();
 }
