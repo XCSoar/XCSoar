@@ -31,7 +31,6 @@ Copyright_License {
 #endif
 
 #ifndef USE_GDI
-#include "Thread/Mutex.hpp"
 #include "Screen/SDL/TopCanvas.hpp"
 #include "Screen/SDL/DoubleClick.hpp"
 #endif
@@ -41,6 +40,10 @@ Copyright_License {
 #include "Thread/Cond.hpp"
 
 struct Event;
+#endif
+
+#ifndef USE_GDI
+#include <atomic>
 #endif
 
 class TopWindowStyle : public WindowStyle {
@@ -106,8 +109,7 @@ class TopWindow : public ContainerWindow {
 #ifndef USE_GDI
   TopCanvas screen;
 
-  Mutex invalidated_lock;
-  bool invalidated;
+  std::atomic<bool> invalidated;
 
 #ifdef ANDROID
   Mutex paused_mutex;

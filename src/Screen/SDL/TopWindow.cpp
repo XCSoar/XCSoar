@@ -41,7 +41,7 @@ void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
                   TopWindowStyle style)
 {
-  invalidated = true;
+  invalidated.store(true, std::memory_order_relaxed);
 
   rc.right -= rc.left;
   rc.bottom -= rc.top;
@@ -79,15 +79,9 @@ TopWindow::Fullscreen()
 void
 TopWindow::Invalidate()
 {
-  invalidated_lock.Lock();
-  if (invalidated) {
+  if (invalidated.exchange(true, std::memory_order_relaxed))
     /* already invalidated, don't send the event twice */
-    invalidated_lock.Unlock();
     return;
-  }
-
-  invalidated = true;
-  invalidated_lock.Unlock();
 
   /* wake up the event loop */
 #ifdef ANDROID
@@ -119,14 +113,8 @@ TopWindow::Refresh()
     return;
 #endif
 
-  invalidated_lock.Lock();
-  if (!invalidated) {
-    invalidated_lock.Unlock();
+  if (!invalidated.exchange(false, std::memory_order_relaxed))
     return;
-  }
-
-  invalidated = false;
-  invalidated_lock.Unlock();
 
   Expose();
 }
@@ -159,9 +147,7 @@ TopWindow::OnEvent(const SDL_Event &event)
     Window *w;
 
   case SDL_VIDEOEXPOSE:
-    invalidated_lock.Lock();
-    invalidated = false;
-    invalidated_lock.Unlock();
+    invalidated.store(false, std::memory_order_relaxed);
 
     Expose();
     return true;
