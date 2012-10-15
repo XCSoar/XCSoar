@@ -34,8 +34,10 @@ Copyright_License {
 #include <winuser.h>
 
 class EditWindowStyle : public WindowStyle {
+#ifndef USE_GDI
 public:
   bool is_read_only;
+#endif
 
 public:
 #ifndef USE_GDI
