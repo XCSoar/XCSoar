@@ -43,14 +43,14 @@ Timer::Cancel()
   id = NULL;
 
   EventQueue::Purge(Invoke, (void *)this);
-  queued.Reset();
+  queued.store(false, std::memory_order_relaxed);
 }
 
 void
 Timer::Invoke()
 {
   OnTimer();
-  queued.Reset();
+  queued.store(false, std::memory_order_relaxed);
 }
 
 void
@@ -63,7 +63,7 @@ Timer::Invoke(void *ctx)
 Uint32
 Timer::Callback(Uint32 interval)
 {
-  if (!queued.GetAndSet(true))
+  if (!queued.exchange(true, std::memory_order_relaxed))
     EventQueue::Push(Invoke, (void *)this);
   return interval;
 }

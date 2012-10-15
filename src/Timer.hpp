@@ -27,8 +27,8 @@ Copyright_License {
 #ifdef ANDROID
 #include "Android/Timer.hpp"
 #elif defined(ENABLE_SDL)
-#include "Thread/Flag.hpp"
 #include <SDL_timer.h>
+#include <atomic>
 #else
 #include "Screen/Window.hpp"
 #include "Screen/Timer.hpp"
@@ -69,7 +69,7 @@ class Timer
    * This is used to prevent duplicate items stacking on the event
    * queue.
    */
-  Flag queued;
+  std::atomic<bool> queued;
 #endif
 
 public:
@@ -79,7 +79,7 @@ public:
 #ifdef ANDROID
   Timer():timer(NULL) {}
 #elif defined(ENABLE_SDL)
-  Timer():id(NULL) {}
+  Timer():id(NULL), queued(false) {}
 #else
   Timer():WindowTimer(*(Window *)this) {
     Window::CreateMessageWindow();
