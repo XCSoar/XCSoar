@@ -160,7 +160,7 @@ BallastProcessTimer()
   if (basic.settings.ballast_overload_available.Modified(
         last_external_settings.ballast_overload_available)) {
 
-    const Plane &plane = device_blackboard->GetComputerSettings().plane;
+    const Plane &plane = CommonInterface::GetComputerSettings().plane;
 
     if (plane.max_ballast > fixed_zero) {
       fixed fraction = ((basic.settings.ballast_overload - fixed_one) *
