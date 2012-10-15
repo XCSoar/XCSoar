@@ -25,7 +25,8 @@ Copyright_License {
 #define XCSOAR_THREAD_DELAYED_NOTIFY_HPP
 
 #include "Timer.hpp"
-#include "Thread/Flag.hpp"
+
+#include <atomic>
 
 /**
  * This class is similar to #Notify, but it delivers the notification
@@ -36,7 +37,7 @@ Copyright_License {
 class DelayedNotify : private Timer {
   const unsigned delay_ms;
 
-  Flag pending;
+  std::atomic<bool> pending;
 
 public:
   DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms) {}
