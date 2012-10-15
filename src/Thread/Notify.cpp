@@ -32,6 +32,7 @@ Copyright_License {
 #endif
 
 Notify::Notify()
+  :pending(false)
 {
 #ifdef USE_GDI
   Window::CreateMessageWindow();
@@ -40,7 +41,7 @@ Notify::Notify()
 
 Notify::~Notify()
 {
-  if (pending.Get()) {
+  if (pending.load(std::memory_order_relaxed)) {
 #ifdef ANDROID
     event_queue->Purge(*this);
 #elif defined(ENABLE_SDL)
@@ -52,7 +53,7 @@ Notify::~Notify()
 void
 Notify::SendNotification()
 {
-  if (pending.GetAndSet())
+  if (pending.exchange(true, std::memory_order_relaxed))
     return;
 
 #ifdef ANDROID
@@ -70,7 +71,7 @@ Notify::SendNotification()
 void
 Notify::ClearNotification()
 {
-  if (!pending.GetAndClear())
+  if (!pending.exchange(false, std::memory_order_relaxed))
     return;
 
 #ifdef ANDROID
@@ -83,7 +84,7 @@ Notify::ClearNotification()
 void
 Notify::RunNotification()
 {
-  if (pending.GetAndClear())
+  if (!pending.exchange(false, std::memory_order_relaxed))
     OnNotification();
 }
 

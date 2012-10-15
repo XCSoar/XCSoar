@@ -25,11 +25,12 @@ Copyright_License {
 #define XCSOAR_THREAD_NOTIFY_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Thread/Flag.hpp"
 
 #ifdef USE_GDI
 #include "Screen/Window.hpp"
 #endif
+
+#include <atomic>
 
 /**
  * This class implements message passing from any thread to the main
@@ -43,7 +44,7 @@ class Notify : private
                Window
 #endif
 {
-  Flag pending;
+  std::atomic<bool> pending;
 
 #ifdef ANDROID
   friend class EventLoop;
