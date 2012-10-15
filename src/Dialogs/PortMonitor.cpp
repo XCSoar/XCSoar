@@ -34,6 +34,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Thread/DelayedNotify.hpp"
+#include "Thread/Mutex.hpp"
 
 static DeviceDescriptor *device;
 static WndForm *dialog;
