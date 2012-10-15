@@ -106,6 +106,11 @@ namespace File
   gcc_pure
   bool Exists(const TCHAR* path);
 
+#if defined(WIN32) && defined(UNICODE) && !defined(_WIN32_WCE)
+  gcc_pure
+  bool Exists(const char *path);
+#endif
+
   /**
    * Deletes the given file
    * @param path Path to the file that should be deleted

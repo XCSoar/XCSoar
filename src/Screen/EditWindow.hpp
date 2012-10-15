@@ -134,7 +134,7 @@ public:
     const TCHAR *str = value.c_str();
     int row_count = 1;
 
-    while ((str = strchr(str, _T('\n'))) != NULL) {
+    while ((str = _tcschr(str, _T('\n'))) != NULL) {
       str++;
       row_count++;
     }

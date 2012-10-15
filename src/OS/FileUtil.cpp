@@ -326,6 +326,18 @@ File::Exists(const TCHAR* path)
 #endif
 }
 
+#if defined(WIN32) && defined(UNICODE) && !defined(_WIN32_WCE)
+
+bool
+File::Exists(const char *path)
+{
+  DWORD attributes = GetFileAttributesA(path);
+  return attributes != INVALID_FILE_ATTRIBUTES &&
+    (attributes & FILE_ATTRIBUTE_DIRECTORY) == 0;
+}
+
+#endif
+
 uint64_t
 File::GetSize(const TCHAR *path)
 {
