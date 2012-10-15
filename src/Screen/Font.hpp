@@ -29,7 +29,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef ANDROID
-#include "Util/tstring.hpp"
 #include "Screen/Color.hpp"
 #else  // !ANDROID
 #ifdef ENABLE_SDL
@@ -55,8 +54,7 @@ protected:
   #ifdef ANDROID
   TextUtil *text_util_object;
 
-  unsigned line_spacing, style;
-  tstring facename;
+  unsigned line_spacing;
   #else // !ANDROID
   #ifdef ENABLE_SDL
   TTF_Font *font;
@@ -135,23 +133,7 @@ public:
   UPixelScalar GetLineSpacing() const {
     return line_spacing;
   }
-  unsigned GetStyle() const {
-    return style;
-  }
-  const TCHAR *GetFacename() const {
-    return facename.c_str();
-  }
 #elif defined(ENABLE_SDL)
-  gcc_pure
-  const TCHAR *GetFacename() const {
-    return ::TTF_FontFaceFamilyName(font);
-  }
-
-  gcc_pure
-  unsigned GetStyle() const {
-    return ::TTF_GetFontStyle(font);
-  }
-
   gcc_pure
   UPixelScalar GetLineSpacing() const {
     return ::TTF_FontLineSkip(font);

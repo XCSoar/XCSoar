@@ -52,7 +52,6 @@ Font::Set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
     return false;
 
   this->height = text_util_object->get_height();
-  style = text_util_object->get_style();
   ascent_height = text_util_object->get_ascent_height();
   capital_height = text_util_object->get_capital_height();
   line_spacing = text_util_object->GetLineSpacing();
