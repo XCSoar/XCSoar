@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
+#include "Screen/EditWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
@@ -64,7 +65,7 @@ dlgHelpShowModal(SingleWindow &parent,
   full_caption.Format(_T("%s: %s"), _("Help"), Caption);
   wf->SetCaption(full_caption);
 
-  SetFormValue(*wf, _T("prpHelpText"), HelpText);
+  ((EditWindow *)wf->FindByName(_T("prpHelpText")))->SetText(HelpText);
 
   wf->ShowModal();
 
