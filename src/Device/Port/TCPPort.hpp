@@ -25,7 +25,10 @@ Copyright_License {
 #define XCSOAR_DEVICE_TCP_PORT_HPP
 
 #include "SocketPort.hpp"
+
+#ifndef HAVE_POSIX
 #include "Thread/Trigger.hpp"
+#endif
 
 /**
  * A TCP listener port class.
@@ -36,9 +39,9 @@ class TCPPort : public SocketPort
 
 #ifndef HAVE_POSIX
   SocketThread thread;
-#endif
 
   Trigger closed_trigger;
+#endif
 
 public:
   /**
