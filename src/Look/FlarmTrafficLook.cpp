@@ -22,9 +22,9 @@
 */
 
 #include "FlarmTrafficLook.hpp"
-#include "Look/TrafficLook.hpp"
+#include "TrafficLook.hpp"
+#include "Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 
 void
 FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)

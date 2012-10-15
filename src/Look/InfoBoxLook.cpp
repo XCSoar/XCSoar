@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxLook.hpp"
-#include "Screen/Fonts.hpp"
+#include "Fonts.hpp"
 #include "Screen/Layout.hpp"
 
 #include <algorithm>

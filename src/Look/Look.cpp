@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Look.hpp"
-#include "Screen/Fonts.hpp"
+#include "Fonts.hpp"
 #include "UISettings.hpp"
 
 void

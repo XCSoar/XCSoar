@@ -22,9 +22,9 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "Interface.hpp"
+#include "Look/Fonts.hpp"
 #include "Look/DialogLook.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Airspace.hpp"

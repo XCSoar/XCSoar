@@ -26,7 +26,6 @@
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"
 #include "Look/ThermalAssistantLook.hpp"

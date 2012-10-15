@@ -30,7 +30,6 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Hardware/Battery.hpp"
 #include "Language/Language.hpp"
 #include "Form/DataField/ComboList.hpp"

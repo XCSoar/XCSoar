@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "Dialogs/Dialogs.h"
 #include "UtilsSystem.hpp"
@@ -39,6 +38,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "LocalPath.hpp"
+#include "Look/Fonts.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

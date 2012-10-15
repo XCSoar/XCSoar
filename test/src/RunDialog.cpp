@@ -27,7 +27,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
 #include "StatusMessage.hpp"
@@ -36,6 +35,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/Fonts.hpp"
 
 #include <tchar.h>
 #include <stdio.h>

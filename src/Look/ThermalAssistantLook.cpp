@@ -22,8 +22,8 @@
 */
 
 #include "ThermalAssistantLook.hpp"
+#include "Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 
 void
 ThermalAssistantLook::Initialise(bool small)

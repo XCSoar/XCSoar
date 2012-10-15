@@ -25,7 +25,6 @@
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FriendsGlue.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
 #include "Math/Screen.hpp"

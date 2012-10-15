@@ -699,14 +699,14 @@ XCSOAR_SOURCES := \
 	$(SRC)/Math/SunEphemeris.cpp \
 	\
 	$(SRC)/Screen/Blank.cpp \
-	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/CustomFonts.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	\
+	$(SRC)/Look/Fonts.cpp \
+	$(SRC)/Look/CustomFonts.cpp \
 	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \

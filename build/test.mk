@@ -1557,7 +1557,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
@@ -1668,7 +1668,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -1705,7 +1705,7 @@ $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 RUN_TERMINAL_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -1738,7 +1738,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
@@ -1759,7 +1759,7 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/HorizonLook.cpp \
@@ -1780,7 +1780,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
@@ -1904,7 +1904,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/Look.cpp \
@@ -2074,8 +2074,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Screen/CustomFonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
@@ -2132,7 +2131,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileIGC.cpp \

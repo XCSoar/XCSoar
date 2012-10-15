@@ -24,11 +24,11 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Init.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Timer.hpp"
 #include "Fonts.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/HorizonLook.hpp"
+#include "Look/Fonts.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "NMEA/Attitude.hpp"
 

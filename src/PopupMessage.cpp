@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "PopupMessage.hpp"
 #include "Protection.hpp"
-#include "Screen/Fonts.hpp"
+#include "Look/Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"

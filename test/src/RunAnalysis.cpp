@@ -24,7 +24,6 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
@@ -60,6 +59,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Operation/Operation.hpp"
 #include "Look/Look.hpp"
+#include "Look/Fonts.hpp"
 #include "OS/Args.hpp"
 
 #ifdef WIN32

@@ -36,7 +36,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Compiler.h"
 #include "Interface.hpp"
-#include "Screen/Fonts.hpp"
 #include "Pan.hpp"
 
 #include <algorithm>

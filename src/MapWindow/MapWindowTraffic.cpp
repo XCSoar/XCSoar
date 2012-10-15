@@ -24,7 +24,6 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Math/Screen.hpp"
 #include "Screen/Icon.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"

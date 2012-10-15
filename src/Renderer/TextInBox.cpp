@@ -24,8 +24,8 @@ Copyright_License {
 #include "TextInBox.hpp"
 #include "LabelBlock.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/Fonts.hpp"
 
 static RasterPoint
 TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)

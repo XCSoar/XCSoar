@@ -24,7 +24,6 @@ Copyright_License {
 #include "MapWindow/MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
 #include "Terrain/RasterWeather.hpp"
@@ -47,6 +46,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Look/MapLook.hpp"
 #include "Look/TrafficLook.hpp"
+#include "Look/Fonts.hpp"
 #include "Thread/Debug.hpp"
 
 void

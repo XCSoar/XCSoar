@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "UnitSymbolRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Pen.hpp"
 #include "Util/Macros.hpp"
