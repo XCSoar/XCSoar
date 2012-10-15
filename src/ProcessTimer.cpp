@@ -152,21 +152,18 @@ BallastProcessTimer()
 {
   static Validity last_fraction, last_overload;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
+  const Plane &plane = CommonInterface::GetComputerSettings().plane;
 
   if (settings.ballast_fraction_available.Modified(last_fraction))
     ActionInterface::SetBallast(settings.ballast_fraction, false);
 
   last_fraction = settings.ballast_fraction_available;
 
-  if (settings.ballast_overload_available.Modified(last_overload)) {
-
-    const Plane &plane = CommonInterface::GetComputerSettings().plane;
-
-    if (plane.max_ballast > fixed_zero) {
-      fixed fraction = ((settings.ballast_overload - fixed_one) *
-                        plane.dry_mass) / plane.max_ballast;
-      ActionInterface::SetBallast(fraction, false);
-    }
+  if (settings.ballast_overload_available.Modified(last_overload) &&
+      positive(plane.max_ballast)) {
+    fixed fraction = ((settings.ballast_overload - fixed_one) *
+                      plane.dry_mass) / plane.max_ballast;
+    ActionInterface::SetBallast(fraction, false);
   }
 
   last_overload = settings.ballast_overload_available;
