@@ -470,8 +470,6 @@ InputEvents::ProcessMenuTimer()
 void
 InputEvents::ProcessTimer()
 {
-  if (globalRunningEvent.Test()) {
-    DoQueuedEvents();
-  }
+  DoQueuedEvents();
   ProcessMenuTimer();
 }
