@@ -93,7 +93,7 @@ SettingsEnter()
 static void
 SettingsLeave(const UISettings &old_ui_settings)
 {
-  if (!globalRunningEvent.Test())
+  if (!global_running)
     return;
 
   SuspendAllThreads();

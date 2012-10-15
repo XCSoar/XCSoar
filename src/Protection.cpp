@@ -34,7 +34,7 @@ Copyright_License {
 
 #include <assert.h>
 
-Flag globalRunningEvent;
+bool global_running;
 
 void
 TriggerMergeThread()

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_PROTECTION_HPP
 #define XCSOAR_PROTECTION_HPP
 
-#include "Thread/Flag.hpp"
 #include "Thread/Mutex.hpp"
 
 /**
@@ -82,7 +81,7 @@ extern bool InputFileChanged;
 extern bool MapFileChanged;
 extern bool LanguageChanged;
 
-extern Flag globalRunningEvent;
+extern bool global_running;
 
 /**
  * Suspend all threads which have unprotected access to shared data.

@@ -498,7 +498,8 @@ XCSoarInterface::Startup()
   tracking->SetSettings(GetComputerSettings().tracking);
 #endif
 
-  globalRunningEvent.Signal();
+  assert(!global_running);
+  global_running = true;
 
   AfterStartup();
 
@@ -526,7 +527,7 @@ XCSoarInterface::Shutdown()
   StartupLogFreeRamAndStorage();
 
   // Turn off all displays
-  globalRunningEvent.Reset();
+  global_running = false;
 
 #ifdef HAVE_TRACKING
   if (tracking != NULL)

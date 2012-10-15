@@ -193,7 +193,7 @@ InputEvents::IsFlavour(const TCHAR *_flavour)
 void
 InputEvents::drawButtons(Mode mode, bool full)
 {
-  if (!globalRunningEvent.Test())
+  if (!global_running)
     return;
 
   const Menu &menu = input_config.menus[mode];
@@ -309,7 +309,7 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code)
     return true;
   }
 
-  if (!globalRunningEvent.Test())
+  if (!global_running)
     return false;
 
   // Which key - can be defined locally or at default (fall back to default)
@@ -366,7 +366,7 @@ InputEvents::processGesture(const TCHAR *data)
 bool
 InputEvents::processNmea_real(unsigned ne_id)
 {
-  if (!globalRunningEvent.Test())
+  if (!global_running)
     return false;
 
   int event_id = 0;
@@ -391,7 +391,7 @@ InputEvents::processNmea_real(unsigned ne_id)
 bool
 InputEvents::processGlideComputer_real(unsigned gce_id)
 {
-  if (!globalRunningEvent.Test())
+  if (!global_running)
     return false;
   int event_id = 0;
 
@@ -416,7 +416,7 @@ InputEvents::processGo(unsigned eventid)
 {
   /* eventid 0 is special for "noop" */
 
-  while (globalRunningEvent.Test() && eventid > 0) {
+  while (global_running && eventid > 0) {
     const InputConfig::Event &event = input_config.events[eventid];
     if (event.event != NULL) {
       event.event(event.misc);
