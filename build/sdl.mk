@@ -17,8 +17,8 @@ SDL_CPPFLAGS :=
 SDL_LDLIBS :=
 else
 OPENGL ?= n
-SDL_CPPFLAGS := -I/usr/local/i586-mingw32msvc/include/SDL
-SDL_LDLIBS := -L/usr/local/i586-mingw32msvc/lib -lSDL -lSDL_image
+SDL_CPPFLAGS := -I/usr/local/i686-w64-mingw32/include/SDL
+SDL_LDLIBS := -L/usr/local/i686-w64-mingw32/lib -lSDL -lSDL_image
 endif
 endif
 
