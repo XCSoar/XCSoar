@@ -30,7 +30,6 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 #include <assert.h>
-#include <winuser.h>
 
 TabMenuControl::TabMenuControl(ContainerWindow &_parent, WndForm &_form,
                                const DialogLook &look, const TCHAR * _caption,
@@ -244,7 +243,7 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
 {
   // scan main menu buttons
   for (unsigned i = 0; i < GetNumMainMenuItems(); i++)
-    if (PtInRect(&GetMainMenuButtonSize(i), Pos))
+    if (IsPointInRect(GetMainMenuButtonSize(i), Pos))
       return MenuTabIndex(i);
 
 
@@ -253,7 +252,7 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
     const MainMenuButton &main_button = GetMainMenuButton(mainIndex);
     for (unsigned i = main_button.first_page_index;
          i <= main_button.last_page_index; ++i) {
-      if (PtInRect(&GetSubMenuButtonSize(i), Pos))
+      if (IsPointInRect(GetSubMenuButtonSize(i), Pos))
         return MenuTabIndex(mainIndex, i - main_button.first_page_index);
     }
   }

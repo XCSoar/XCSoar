@@ -117,7 +117,7 @@ EditWindow::OnPaint(Canvas &canvas)
   canvas.SetBackgroundTransparent();
 
   PixelScalar padding = Layout::FastScale(2);
-  InflateRect(&rc, -padding, -padding);
+  GrowRect(rc, -padding, -padding);
 
   if (HaveClipping() || IsMultiLine()) {
     rc.top -= origin * GetFont().GetHeight();

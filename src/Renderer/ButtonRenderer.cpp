@@ -27,8 +27,6 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Look/ButtonLook.hpp"
 
-#include <winuser.h>
-
 void
 ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
                            bool pressed)
@@ -53,9 +51,9 @@ ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
 PixelRect
 ButtonRenderer::GetDrawingRect(PixelRect rc, bool pressed)
 {
-  InflateRect(&rc, -2, -2);
+  GrowRect(rc, -2, -2);
   if (pressed)
-    OffsetRect(&rc, 1, 1);
+    MoveRect(rc, 1, 1);
 
   return rc;
 }

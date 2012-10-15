@@ -39,7 +39,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const Color &color = AirspaceLook::preset_colors[i];
 
   PixelRect rc2 = rc;
-  InflateRect(&rc2, -Layout::FastScale(2), -Layout::FastScale(2));
+  GrowRect(rc2, -Layout::FastScale(2), -Layout::FastScale(2));
 
 #ifdef USE_GDI
   canvas.DrawFilledRectangle(rc2, color);

@@ -36,6 +36,10 @@ Copyright_License {
 
 #include <stdlib.h>
 
+#ifdef USE_GDI
+#include <windows.h>
+#endif
+
 /**
  * Calculates the "manhattan distance" or "taxicab distance".
  */
@@ -45,12 +49,85 @@ manhattan_distance(RasterPoint a, RasterPoint b)
   return abs(a.x - b.x) + abs(a.y - b.y);
 }
 
+gcc_pure
+static inline bool
+IsPointInRect(const PixelRect &rc, const RasterPoint &pt)
+{
+#ifdef USE_GDI
+  return PtInRect(&rc, pt);
+#else
+  return pt.x >= rc.left && pt.x < rc.right &&
+    pt.y >= rc.top && pt.y < rc.bottom;
+#endif
+}
+
+gcc_pure
+static inline bool
+OverlapsRect(const PixelRect &a, const PixelRect &b)
+{
+  return a.left < b.right && b.left <= a.right &&
+    a.top <= b.bottom && b.top <= a.bottom;
+}
+
 gcc_const
 static inline PixelSize
 GetPixelRectSize(const PixelRect rc)
 {
   return { PixelScalar(rc.right - rc.left),
       PixelScalar(rc.bottom - rc.top) };
+}
+
+static inline void
+ClearRect(PixelRect &rc)
+{
+#ifdef USE_GDI
+  SetRectEmpty(&rc);
+#else
+  rc.left = 0;
+  rc.top = 0;
+  rc.right = 0;
+  rc.bottom = 0;
+#endif
+}
+
+static inline void
+SetRect(PixelRect &rc, PixelScalar left, PixelScalar top,
+        PixelScalar right, PixelScalar bottom)
+{
+#ifdef USE_GDI
+  SetRect(&rc, left, top, right, bottom);
+#else
+  rc.left = left;
+  rc.top = top;
+  rc.right = right;
+  rc.bottom = bottom;
+#endif
+}
+
+static inline void
+MoveRect(PixelRect &rc, int dx, int dy)
+{
+#ifdef USE_GDI
+  OffsetRect(&rc, dx, dy);
+#else
+  rc.left += dx;
+  rc.top += dy;
+  rc.right += dx;
+  rc.bottom += dy;
+#endif
+}
+
+static inline void
+GrowRect(PixelRect &rc, int dx, int dy)
+{
+#ifdef USE_GDI
+  InflateRect(&rc, dx, dy);
+#else
+  rc.left -= dx;
+  rc.top -= dy;
+  rc.right += dx;
+  rc.bottom += dy;
+#endif
 }
 
 #endif

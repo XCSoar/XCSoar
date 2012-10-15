@@ -70,7 +70,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ContainerWindow &client_area = form.GetClientAreaWindow();
 
   PixelRect list_rc = client_area.GetClientRect();
-  InflateRect(&list_rc, -2, -2);
+  GrowRect(list_rc, -2, -2);
 
   WindowStyle style;
   style.TabStop();
