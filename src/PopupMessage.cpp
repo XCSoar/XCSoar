@@ -110,14 +110,12 @@ PopupMessage::Create(const PixelRect _rc)
 {
   rc = _rc;
 
-  EditWindowStyle style;
+  LargeTextWindowStyle style;
   style.Border();
   style.SetCenter();
-  style.SetMultiLine();
-  style.SetReadOnly();
   style.Hide();
 
-  EditWindow::Create(parent, GetRect(100), style);
+  LargeTextWindow::Create(parent, GetRect(100), style);
 
   SetFont(Fonts::map_bold);
   InstallWndProc();

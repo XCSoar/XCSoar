@@ -22,6 +22,7 @@ SCREEN_SOURCES = \
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
+	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Window.cpp \
 	$(SCREEN_SRC_DIR)/Custom/WList.cpp \
@@ -88,6 +89,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TextWindow.cpp \
+	$(SCREEN_SRC_DIR)/GDI/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \

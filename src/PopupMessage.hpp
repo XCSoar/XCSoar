@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Thread/Mutex.hpp"
 #include "Util/StaticString.hpp"
-#include "Screen/EditWindow.hpp"
+#include "Screen/LargeTextWindow.hpp"
 
 #include <tchar.h>
 
@@ -49,7 +49,7 @@ class StatusMessageList;
  * - Optional logging of all messages to file
  * - Thread locking so available from any thread
  */
-class PopupMessage : public EditWindow
+class PopupMessage : public LargeTextWindow
 {
 public:
   enum Type {
