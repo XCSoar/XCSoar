@@ -504,7 +504,7 @@ XCSoarInterface::Startup()
 
   operation.Hide();
 
-  main_window->ResumeThreads();
+  main_window->FinishStartup();
 
   return true;
 }
@@ -520,6 +520,9 @@ XCSoarInterface::Shutdown()
 
   // Log shutdown information
   LogFormat("Entering shutdown...");
+
+  main_window->BeginShutdown();
+
   StartupLogFreeRamAndStorage();
 
   // Turn off all displays

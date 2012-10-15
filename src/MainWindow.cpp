@@ -24,7 +24,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "resource.h"
-#include "Protection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Interface.hpp"
@@ -459,6 +458,20 @@ MainWindow::Destroy()
 }
 
 void
+MainWindow::FinishStartup()
+{
+  timer.Schedule(500); // 2 times per second
+
+  ResumeThreads();
+}
+
+void
+MainWindow::BeginShutdown()
+{
+  timer.Cancel();
+}
+
+void
 MainWindow::SuspendThreads()
 {
   if (map != NULL)
@@ -552,32 +565,30 @@ MainWindow::OnTimer(WindowTimer &_timer)
   if (_timer != timer)
     return SingleWindow::OnTimer(_timer);
 
-  if (globalRunningEvent.Test()) {
-    ProcessTimer();
+  ProcessTimer();
 
-    UpdateGaugeVisibility();
+  UpdateGaugeVisibility();
 
-    if (!CommonInterface::GetUISettings().enable_thermal_assistant_gauge) {
-      thermal_assistant.Clear();
-    } else if (!CommonInterface::Calculated().circling ||
-               InputEvents::IsFlavour(_T("TA"))) {
-      thermal_assistant.Hide();
-    } else if (!HasDialog()) {
-      if (!thermal_assistant.IsDefined())
-        thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard(),
-                                                        look->thermal_assistant_gauge));
+  if (!CommonInterface::GetUISettings().enable_thermal_assistant_gauge) {
+    thermal_assistant.Clear();
+  } else if (!CommonInterface::Calculated().circling ||
+             InputEvents::IsFlavour(_T("TA"))) {
+    thermal_assistant.Hide();
+  } else if (!HasDialog()) {
+    if (!thermal_assistant.IsDefined())
+      thermal_assistant.Set(new GaugeThermalAssistant(CommonInterface::GetLiveBlackboard(),
+                                                      look->thermal_assistant_gauge));
 
-      if (!thermal_assistant.IsVisible()) {
-        thermal_assistant.Show();
+    if (!thermal_assistant.IsVisible()) {
+      thermal_assistant.Show();
 
-        GaugeThermalAssistant *widget =
-          (GaugeThermalAssistant *)thermal_assistant.Get();
-        widget->Raise();
-      }
+      GaugeThermalAssistant *widget =
+        (GaugeThermalAssistant *)thermal_assistant.Get();
+      widget->Raise();
     }
-
-    battery_timer.Process();
   }
+
+  battery_timer.Process();
 
   return true;
 }
@@ -652,14 +663,6 @@ MainWindow::OnUser(unsigned id)
   }
 
   return false;
-}
-
-void
-MainWindow::OnCreate()
-{
-  SingleWindow::OnCreate();
-
-  timer.Schedule(500); // 2 times per second
 }
 
 void

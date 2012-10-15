@@ -192,6 +192,17 @@ private:
 
 public:
   /**
+   * Called by XCSoarInterface::Startup() after startup has been
+   * completed.
+   */
+  void FinishStartup();
+
+  /**
+   * Called by XCSoarInterface::Shutdown() before shutdown begins.
+   */
+  void BeginShutdown();
+
+  /**
    * Destroy and re-create all info boxes, and adjust the map
    * position/size.
    */
@@ -332,7 +343,6 @@ private:
 
 protected:
   /* virtual methods from class Window */
-  virtual void OnCreate() gcc_override;
   virtual void OnDestroy() gcc_override;
   virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
   virtual void OnSetFocus() gcc_override;
