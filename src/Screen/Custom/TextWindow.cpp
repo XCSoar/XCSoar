@@ -22,31 +22,19 @@ Copyright_License {
 */
 
 #include "Screen/TextWindow.hpp"
-
-#ifdef USE_GDI
-#include <commctrl.h>
-#endif
+#include "Screen/Canvas.hpp"
 
 void
 TextWindow::Create(ContainerWindow &parent, const TCHAR *_text,
                    PixelRect rc, const TextWindowStyle style)
 {
-#ifndef USE_GDI
   if (_text != NULL)
     text = _text;
   else
     text.clear();
-#endif
 
-  Window::Create(&parent,
-#ifdef USE_GDI
-                 WC_STATIC, _text,
-#endif
-                 rc, style);
+  Window::Create(&parent, rc, style);
 }
-
-#ifndef USE_GDI
-#include "Screen/Canvas.hpp"
 
 void
 TextWindow::OnPaint(Canvas &canvas)
@@ -61,5 +49,3 @@ TextWindow::OnPaint(Canvas &canvas)
     canvas.text(1, 1, text.c_str());
   }
 }
-
-#endif /* !USE_GDI */
