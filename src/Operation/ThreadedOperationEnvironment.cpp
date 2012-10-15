@@ -32,9 +32,7 @@ ThreadedOperationEnvironment::ThreadedOperationEnvironment(OperationEnvironment 
 bool
 ThreadedOperationEnvironment::IsCancelled() const
 {
-  /* this const_cast is a hack: Trigger::Test() cannot be const,
-     because Test() resets the value for automatic-reset events */
-  return const_cast<Trigger &>(cancelled).Test();
+  return cancelled.Test();
 }
 
 void
