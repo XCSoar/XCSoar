@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4.2 - not yet released
 * calculations
   - contest: relax altitude difference check (#2348)
+  - improve take-off and landing detection (#2391)
 * devices
   - CAI302, B800: fix ballast command (#2387)
 * data files
