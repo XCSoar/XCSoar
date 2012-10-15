@@ -52,7 +52,7 @@ TTYPort::~TTYPort()
 bool
 TTYPort::IsValid() const
 {
-  return valid.Get();
+  return valid.load(std::memory_order_relaxed);
 }
 
 bool
@@ -73,7 +73,7 @@ TTYPort::Open(const TCHAR *path, unsigned _baud_rate)
   if (!SetBaudrate(baud_rate))
     return false;
 
-  valid.Set();
+  valid.store(true, std::memory_order_relaxed);
   io_thread->LockAdd(tty.Get(), Poll::READ, *this);
   return true;
 }
@@ -84,7 +84,7 @@ TTYPort::OpenPseudo()
   if (!tty.OpenNonBlocking("/dev/ptmx") || !tty.Unlock())
     return NULL;
 
-  valid.Set();
+  valid.store(true, std::memory_order_relaxed);
   io_thread->LockAdd(tty.Get(), Poll::READ, *this);
   return tty.GetSlaveName();
 }
@@ -92,7 +92,7 @@ TTYPort::OpenPseudo()
 void
 TTYPort::Flush()
 {
-  if (!valid.Get())
+  if (!valid.load(std::memory_order_relaxed))
     return;
 
   tty.FlushInput();
@@ -104,7 +104,7 @@ TTYPort::WaitWrite(unsigned timeout_ms)
 {
   assert(tty.IsDefined());
 
-  if (!valid.Get())
+  if (!valid.load(std::memory_order_relaxed))
     return WaitResult::FAILED;
 
   int ret = tty.WaitWritable(timeout_ms);
@@ -121,7 +121,7 @@ TTYPort::Write(const void *data, size_t length)
 {
   assert(tty.IsDefined());
 
-  if (!valid.Get())
+  if (!valid.load(std::memory_order_relaxed))
     return 0;
 
   ssize_t nbytes = tty.Write(data, length);
@@ -256,7 +256,7 @@ TTYPort::OnFileEvent(int fd, unsigned mask)
 
   ssize_t nbytes = tty.Read(buffer, sizeof(buffer));
   if (nbytes == 0 || (nbytes < 0 && errno != EAGAIN && errno != EINTR)) {
-    valid.Reset();
+    valid.store(false, std::memory_order_relaxed);
     return false;
   }
 

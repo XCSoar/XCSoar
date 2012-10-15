@@ -25,10 +25,11 @@ Copyright_License {
 #define XCSOAR_DEVICE_TTY_PORT_HPP
 
 #include "Thread/StoppableThread.hpp"
-#include "Thread/Flag.hpp"
 #include "BufferedPort.hpp"
 #include "OS/TTYDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
+
+#include <atomic>
 
 /**
  * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
@@ -39,7 +40,7 @@ class TTYPort : public BufferedPort, protected FileEventHandler
 
   TTYDescriptor tty;
 
-  Flag valid;
+  std::atomic<bool> valid;
 
 public:
   /**
