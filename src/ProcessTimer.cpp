@@ -160,6 +160,7 @@ BallastProcessTimer()
   last_fraction = settings.ballast_fraction_available;
 
   if (settings.ballast_overload_available.Modified(last_overload) &&
+      settings.ballast_overload >= fixed_one &&
       positive(plane.max_ballast)) {
     fixed fraction = ((settings.ballast_overload - fixed_one) *
                       plane.dry_mass) / plane.max_ballast;
