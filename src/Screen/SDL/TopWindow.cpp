@@ -51,12 +51,18 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
 
   ContainerWindow::Create(NULL, rc, style);
 
-#ifndef ANDROID
-  WideToUTF8Converter text2(text);
-  if (text2.IsValid())
-    ::SDL_WM_SetCaption(text2, NULL);
-#endif
+  SetCaption(text);
 }
+
+#ifndef ANDROID
+void
+TopWindow::SetCaption(const TCHAR *caption)
+{
+  WideToUTF8Converter caption2(caption);
+  if (caption2.IsValid())
+    ::SDL_WM_SetCaption(caption2, nullptr);
+}
+#endif
 
 void
 TopWindow::CancelMode()

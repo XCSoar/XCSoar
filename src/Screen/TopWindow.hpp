@@ -176,6 +176,14 @@ public:
   void Destroy();
 #endif
 
+#ifndef USE_GDI
+#ifdef ANDROID
+  void SetCaption(gcc_unused const TCHAR *caption) {}
+#else
+  void SetCaption(const TCHAR *caption);
+#endif
+#endif
+
   /**
    * Triggers an OnCancelMode() call on the focused #Window and/or the
    * #Window currently capturing the mouse.
