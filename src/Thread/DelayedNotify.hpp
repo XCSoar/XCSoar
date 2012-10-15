@@ -40,7 +40,7 @@ class DelayedNotify : private Timer {
   std::atomic<bool> pending;
 
 public:
-  DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms) {}
+  DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms), pending(false) {}
   ~DelayedNotify();
 
   /**
