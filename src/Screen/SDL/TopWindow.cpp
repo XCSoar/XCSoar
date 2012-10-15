@@ -31,14 +31,6 @@ Copyright_License {
 #include "Util/ConvertString.hpp"
 #endif
 
-TopWindow::TopWindow()
-  :invalidated(true)
-#ifdef ANDROID
-  , paused(false), resumed(false), resized(false)
-#endif
-{
-}
-
 bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)
 {
@@ -49,6 +41,8 @@ void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
                   TopWindowStyle style)
 {
+  invalidated = true;
+
   rc.right -= rc.left;
   rc.bottom -= rc.top;
   rc.left = rc.top = 0;

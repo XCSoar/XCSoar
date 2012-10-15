@@ -163,7 +163,9 @@ public:
 #endif
 
 public:
-  TopWindow();
+#ifdef ANDROID
+  TopWindow():paused(false), resumed(false), resized(false) {}
+#endif
 
   static bool find(const TCHAR *cls, const TCHAR *text);
 

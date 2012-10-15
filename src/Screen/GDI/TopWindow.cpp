@@ -24,19 +24,6 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/GDI/Event.hpp"
 
-TopWindow::TopWindow()
-  :hSavedFocus(NULL)
-{
-#ifdef _WIN32_WCE
-  task_bar = NULL;
-#endif
-
-#ifdef HAVE_AYGSHELL_DLL
-  memset(&s_sai, 0, sizeof(s_sai));
-  s_sai.cbSize = sizeof(s_sai);
-#endif
-}
-
 bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)
 {
@@ -63,6 +50,17 @@ void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
                   TopWindowStyle style)
 {
+  hSavedFocus = nullptr;
+
+#ifdef _WIN32_WCE
+  task_bar = NULL;
+#endif
+
+#ifdef HAVE_AYGSHELL_DLL
+  memset(&s_sai, 0, sizeof(s_sai));
+  s_sai.cbSize = sizeof(s_sai);
+#endif
+
   Window::Create(NULL, cls, text, rc, style);
 }
 
