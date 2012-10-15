@@ -202,7 +202,8 @@ test_replay(const Contest olc_type,
       n_samples++;
 
       flying_computer.Compute(glide_polar.GetVTakeoff(),
-                              sim.state, flying_state);
+                              sim.state, sim.state.time - time_last,
+                              flying_state);
 
       calculated.flight.flying = flying_state.flying;
 

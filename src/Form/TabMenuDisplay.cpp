@@ -188,11 +188,7 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     return false;
 
   const PixelRect rc = GetDownButtonRC();
-  RasterPoint Pos;
-  Pos.x = x;
-  Pos.y = y;
-
-  const bool tmp = !PtInRect(&rc, Pos);
+  const bool tmp = !IsPointInRect(rc, RasterPoint{x, y});
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
     Invalidate(rc);

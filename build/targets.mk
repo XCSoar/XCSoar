@@ -1,4 +1,4 @@
-TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 ANDROID86 ANDROIDMIPS ANDROIDFAT CYGWIN
+TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX UNIX32 UNIX64 ANDROID ANDROID7 ANDROID86 ANDROIDMIPS ANDROIDFAT CYGWIN
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
@@ -11,9 +11,6 @@ else
     $(error Unknown target: $(TARGET))
   endif
 endif
-
-# These targets are built when you don't specify the TARGET variable.
-DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
 
 TARGET_FLAVOR := $(TARGET)
 
@@ -40,19 +37,16 @@ TARGET_ARCH :=
 
 ifeq ($(TARGET),WIN64)
   X64 := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = PC
 endif
 
 ifeq ($(TARGET),PPC2003X)
   XSCALE := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = PPC2003
 endif
 
 ifeq ($(TARGET),WM5X)
   XSCALE := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = WM5
 endif
 
@@ -67,25 +61,21 @@ endif
 
 ifeq ($(TARGET),ANDROID7)
   ARMV7 := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROID86)
   X86 := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDMIPS)
   MIPS := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
 ifeq ($(TARGET),ANDROIDFAT)
   FAT_BINARY := y
-  TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
 
@@ -170,6 +160,19 @@ ifeq ($(TARGET),UNIX)
   # LOCAL_TCPREFIX is set in local-config.mk if configure was run.
   TCPREFIX := $(LOCAL_TCPREFIX)
   TCSUFFIX := $(LOCAL_TCSUFFIX)
+endif
+
+ifeq ($(TARGET),UNIX32)
+  override TARGET = UNIX
+  TARGET_ARCH = -m32
+endif
+
+ifeq ($(TARGET),UNIX64)
+  override TARGET = UNIX
+  TARGET_ARCH = -m64
+endif
+
+ifeq ($(TARGET),UNIX)
   HAVE_POSIX := y
   HAVE_WIN32 := n
   HAVE_MSVCRT := n

@@ -28,12 +28,6 @@ Copyright_License {
 
 #include <algorithm>
 
-#ifdef WIN32
-#include <windows.h>
-#else
-#include <winuser.h>
-#endif
-
 class Window;
 class Canvas;
 
@@ -107,7 +101,7 @@ public:
    * False otherwise
    */
   bool IsInside(const RasterPoint &pt) const {
-    return ::PtInRect(&rc, pt);
+    return ::IsPointInRect(rc, pt);
   }
 
   /**
@@ -117,7 +111,7 @@ public:
    * False otherwise
    */
   bool IsInsideSlider(const RasterPoint &pt) const {
-    return ::PtInRect(&rc_slider, pt);
+    return ::IsPointInRect(rc_slider, pt);
   }
 
   /**

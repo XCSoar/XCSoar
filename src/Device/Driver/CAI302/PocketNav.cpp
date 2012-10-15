@@ -50,7 +50,7 @@ CAI302::PutBugs(Port &port, fixed bugs, OperationEnvironment &env)
 bool
 CAI302::PutBallast(Port &port, fixed fraction, OperationEnvironment &env)
 {
-  unsigned ballast = uround(fraction * 100);
+  unsigned ballast = uround(fraction * 10);
 
   char buffer[32];
   sprintf(buffer, "!g,b%u\r", ballast);

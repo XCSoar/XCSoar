@@ -140,7 +140,8 @@ test_replay()
       n_samples++;
 
       flying_computer.Compute(glide_polar.GetVTakeoff(),
-                              sim.state, flying_state);
+                              sim.state, sim.state.time - time_last,
+                              flying_state);
       sim.state.flying = flying_state.flying;
 
       task_manager.Update(sim.state, state_last);

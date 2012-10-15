@@ -55,7 +55,7 @@ WndCustomButton::OnPaint(Canvas &canvas)
 
   // If button is pressed, offset the text for 3D effect
   if (is_down())
-    OffsetRect(&rc, 1, 1);
+    MoveRect(rc, 1, 1);
 
   canvas.SelectNullPen();
   canvas.SetBackgroundTransparent();

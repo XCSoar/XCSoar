@@ -129,7 +129,7 @@ Font::Set(const LOGFONT &log_font)
 {
   assert(IsScreenInitialized());
 
-  const TCHAR *path = (log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH
+  const char *path = (log_font.lfPitchAndFamily & 0x03) == FIXED_PITCH
     ? monospace_font_path
     : font_path;
 

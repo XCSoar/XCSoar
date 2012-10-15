@@ -150,38 +150,36 @@ BlackboardProcessTimer()
 static void
 BallastProcessTimer()
 {
-  static ExternalSettings last_external_settings;
-  const NMEAInfo &basic = CommonInterface::Basic();
+  static Validity last_fraction, last_overload;
+  const ExternalSettings &settings = CommonInterface::Basic().settings;
+  const Plane &plane = CommonInterface::GetComputerSettings().plane;
 
-  if (basic.settings.ballast_fraction_available.Modified(
-        last_external_settings.ballast_fraction_available))
-    ActionInterface::SetBallast(basic.settings.ballast_fraction, false);
+  if (settings.ballast_fraction_available.Modified(last_fraction))
+    ActionInterface::SetBallast(settings.ballast_fraction, false);
 
-  if (basic.settings.ballast_overload_available.Modified(
-        last_external_settings.ballast_overload_available)) {
+  last_fraction = settings.ballast_fraction_available;
 
-    const Plane &plane = device_blackboard->GetComputerSettings().plane;
-
-    if (plane.max_ballast > fixed_zero) {
-      fixed fraction = ((basic.settings.ballast_overload - fixed_one) *
-                        plane.dry_mass) / plane.max_ballast;
-      ActionInterface::SetBallast(fraction, false);
-    }
+  if (settings.ballast_overload_available.Modified(last_overload) &&
+      settings.ballast_overload >= fixed_one &&
+      positive(plane.max_ballast)) {
+    fixed fraction = ((settings.ballast_overload - fixed_one) *
+                      plane.dry_mass) / plane.max_ballast;
+    ActionInterface::SetBallast(fraction, false);
   }
 
-  last_external_settings = basic.settings;
+  last_overload = settings.ballast_overload_available;
 }
 
 static void
 BugsProcessTimer()
 {
-  static ExternalSettings last_external_settings;
-  const NMEAInfo &basic = CommonInterface::Basic();
+  static Validity last;
+  const ExternalSettings &settings = CommonInterface::Basic().settings;
 
-  if (basic.settings.bugs_available.Modified(last_external_settings.bugs_available))
-    ActionInterface::SetBugs(basic.settings.bugs, false);
+  if (settings.bugs_available.Modified(last))
+    ActionInterface::SetBugs(settings.bugs, false);
 
-  last_external_settings = basic.settings;
+  last = settings.bugs_available;
 }
 
 static void
