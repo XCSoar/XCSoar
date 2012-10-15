@@ -150,13 +150,15 @@ BlackboardProcessTimer()
 static void
 BallastProcessTimer()
 {
-  static ExternalSettings last_external_settings;
+  static Validity last_fraction, last_overload;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
 
-  if (settings.ballast_fraction_available.Modified(last_external_settings.ballast_fraction_available))
+  if (settings.ballast_fraction_available.Modified(last_fraction))
     ActionInterface::SetBallast(settings.ballast_fraction, false);
 
-  if (settings.ballast_overload_available.Modified(last_external_settings.ballast_overload_available)) {
+  last_fraction = settings.ballast_fraction_available;
+
+  if (settings.ballast_overload_available.Modified(last_overload)) {
 
     const Plane &plane = CommonInterface::GetComputerSettings().plane;
 
@@ -167,19 +169,19 @@ BallastProcessTimer()
     }
   }
 
-  last_external_settings = settings;
+  last_overload = settings.ballast_overload_available;
 }
 
 static void
 BugsProcessTimer()
 {
-  static ExternalSettings last_external_settings;
+  static Validity last;
   const ExternalSettings &settings = CommonInterface::Basic().settings;
 
-  if (settings.bugs_available.Modified(last_external_settings.bugs_available))
+  if (settings.bugs_available.Modified(last))
     ActionInterface::SetBugs(settings.bugs, false);
 
-  last_external_settings = settings;
+  last = settings.bugs_available;
 }
 
 static void
