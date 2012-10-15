@@ -36,7 +36,7 @@ AsyncJobRunner::Start(Job *_job, OperationEnvironment &_env, Notify *_notify)
   env = new ThreadedOperationEnvironment(_env);
   notify = _notify;
 
-  running.Set();
+  running.store(true, std::memory_order_relaxed);
   Thread::Start();
 }
 
@@ -75,12 +75,12 @@ void
 AsyncJobRunner::Run()
 {
   assert(IsInside());
-  assert(running.Get());
+  assert(running.load(std::memory_order_relaxed));
 
   job->Run(*env);
 
   if (notify != NULL)
     notify->SendNotification();
 
-  running.Reset();
+  running.store(false, std::memory_order_relaxed);
 }

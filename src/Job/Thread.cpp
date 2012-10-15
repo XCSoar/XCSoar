@@ -37,11 +37,11 @@ JobThread::Start()
 void
 JobThread::Run()
 {
-  assert(!running.Get());
+  assert(!running.load(std::memory_order_relaxed));
 
-  running.Set();
+  running.store(true, std::memory_order_relaxed);
   job.Run(*this);
-  running.Reset();
+  running.store(false, std::memory_order_relaxed);
 
   SendNotification();
 }
@@ -51,7 +51,7 @@ JobThread::OnNotification()
 {
   ThreadedOperationEnvironment::OnNotification();
 
-  if (was_running && !running.Get()) {
+  if (was_running && !running.load(std::memory_order_relaxed)) {
     OnComplete();
     was_running = false;
   }

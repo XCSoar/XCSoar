@@ -25,7 +25,8 @@ Copyright_License {
 #define XCSOAR_ASYNC_JOB_RUNNER_HPP
 
 #include "Thread/Thread.hpp"
-#include "Thread/Flag.hpp"
+
+#include <atomic>
 
 #include <assert.h>
 
@@ -45,9 +46,11 @@ class AsyncJobRunner : private Thread {
   ThreadedOperationEnvironment *env;
   Notify *notify;
 
-  Flag running;
+  std::atomic<bool> running;
 
 public:
+  AsyncJobRunner():running(false) {}
+
   ~AsyncJobRunner() {
     /* force the caller to invoke Wait() */
     assert(!IsBusy());
@@ -66,7 +69,7 @@ public:
   bool HasFinished() const {
     assert(IsBusy());
 
-    return !running.Get();
+    return !running.load(std::memory_order_relaxed);
   }
 
   /**
