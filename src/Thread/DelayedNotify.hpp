@@ -34,7 +34,7 @@ Copyright_License {
  * OnNotification().
  */
 class DelayedNotify : private Timer {
-  unsigned delay_ms;
+  const unsigned delay_ms;
 
   Flag pending;
 
