@@ -39,8 +39,6 @@ class FlyingComputer {
   unsigned short time_on_ground;
   unsigned short time_in_flight;
 
-  unsigned short sinking_count;
-
   /**
    * If the aircraft is currenly assumed to be moving, then this
    * denotes the initial moving time stamp.  This gets reset to a

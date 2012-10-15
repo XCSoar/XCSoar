@@ -46,7 +46,6 @@ FlyingComputer::CheckRelease(FlyingState &state, fixed time,
     sinking_since = time;
     sinking_location = location;
     sinking_altitude = altitude;
-    sinking_count = 0;
     return;
   }
 
@@ -63,7 +62,6 @@ FlyingComputer::CheckRelease(FlyingState &state, fixed time,
        enters a thermal right after releasing */
     state.release_time = sinking_since;
     state.release_location = sinking_location;
-
   }
 }
 
