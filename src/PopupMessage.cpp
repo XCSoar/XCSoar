@@ -24,7 +24,6 @@ Copyright_License {
 */
 
 #include "PopupMessage.hpp"
-#include "Protection.hpp"
 #include "Look/Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -196,9 +195,6 @@ PopupMessage::UpdateTextAndLayout(const TCHAR *text)
 bool
 PopupMessage::Render()
 {
-  if (!globalRunningEvent.Test())
-    return false;
-
   mutex.Lock();
   if (parent.HasDialog()) {
     mutex.Unlock();
