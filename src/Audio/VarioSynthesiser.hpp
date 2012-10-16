@@ -77,13 +77,20 @@ class VarioSynthesiser : public ToneSynthesiser {
    */
   unsigned max_period_ms;
 
+  /**
+   * The vario range of the "dead band" during which no sound is emitted
+   * [cm/s].
+   */
+  int min_dead, max_dead;
+
 public:
   VarioSynthesiser()
     :audible_count(0), silence_count(1),
      audible_remaining(0), silence_remaining(0),
      dead_band_enabled(false),
      min_frequency(200), zero_frequency(500), max_frequency(1500),
-     min_period_ms(150), max_period_ms(600) {}
+     min_period_ms(150), max_period_ms(600),
+     min_dead(-30), max_dead(10) {}
 
   /**
    * Update the vario value.  This calculates a new tone frequency and
@@ -122,6 +129,14 @@ public:
     max_period_ms = max;
   }
 
+  /**
+   * Set the vario range of the "dead band" during which no sound is emitted
+   */
+  void SetDeadBandRange(fixed min, fixed max) {
+    min_dead = (int)(min * 10);
+    max_dead = (int)(max * 10);
+  }
+
   /* methods from class PCMSynthesiser */
   virtual void Synthesise(int16_t *buffer, size_t n);
 
@@ -133,6 +148,10 @@ private:
    */
   gcc_const
   unsigned VarioToFrequency(int ivario);
+
+  bool InDeadBand(int ivario) {
+    return ivario >= min_dead && ivario <= max_dead;
+  }
 };
 
 #endif

@@ -32,12 +32,6 @@ Copyright_License {
  */
 static const int min_vario = -500, max_vario = 500;
 
-/**
- * The vario range of the "dead band" during which no sound is emitted
- * [cm/s].
- */
-static const int min_dead = -30, max_dead = 10;
-
 static int
 Clamp(int value, int min, int max)
 {
@@ -51,13 +45,6 @@ VarioSynthesiser::VarioToFrequency(int ivario)
     ? (zero_frequency + (unsigned)ivario * (max_frequency - zero_frequency)
        / (unsigned)max_vario)
     : (zero_frequency - (unsigned)(ivario * (int)(zero_frequency - min_frequency) / min_vario));
-}
-
-gcc_const
-static bool
-InDeadBand(int ivario)
-{
-  return ivario >= min_dead && ivario <= max_dead;
 }
 
 void
