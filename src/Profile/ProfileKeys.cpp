@@ -253,5 +253,7 @@ const TCHAR VarioMaxFrequency[] = _T("VarioMaxFrequency");
 const TCHAR VarioMinPeriod[] = _T("VarioMinPeriod");
 const TCHAR VarioMaxPeriod[] = _T("VarioMaxPeriod");
 const TCHAR VarioDeadBandEnabled[] = _T("VarioDeadBandEnabled");
+const TCHAR VarioDeadBandMin[] = _T("VarioDeadBandMin");
+const TCHAR VarioDeadBandMax[] = _T("VarioDeadBandMax");
 
 }

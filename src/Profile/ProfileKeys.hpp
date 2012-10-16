@@ -251,6 +251,8 @@ extern const TCHAR VarioMaxFrequency[];
 extern const TCHAR VarioMinPeriod[];
 extern const TCHAR VarioMaxPeriod[];
 extern const TCHAR VarioDeadBandEnabled[];
+extern const TCHAR VarioDeadBandMin[];
+extern const TCHAR VarioDeadBandMax[];
 
 }
 

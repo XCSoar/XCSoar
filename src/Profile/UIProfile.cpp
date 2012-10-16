@@ -89,6 +89,9 @@ Profile::Load(VarioSoundSettings &settings)
 
   Get(ProfileKeys::VarioMinPeriod, settings.min_period_ms);
   Get(ProfileKeys::VarioMaxPeriod, settings.max_period_ms);
+
+  Get(ProfileKeys::VarioDeadBandMin, settings.min_dead);
+  Get(ProfileKeys::VarioDeadBandMax, settings.max_dead);
 }
 
 void
