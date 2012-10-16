@@ -305,6 +305,11 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   SetTitle();
   wf->ShowModal();
 
+  /* destroy the TabBar first, to have a well-defined destruction
+     order; this is necessary because some pages refer to buttons
+     belonging to the dialog */
+  wTabBar->reset();
+
   delete wf;
   delete active_task;
 }
