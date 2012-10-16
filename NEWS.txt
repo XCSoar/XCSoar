@@ -8,6 +8,7 @@ Version 6.4.2 - not yet released
   - improve take-off and landing detection (#2391)
 * devices
   - CAI302, B800: fix ballast command (#2387)
+  - IOIO: fix baud rate switching, fixes LXNAV V7 and Volkslogger (#2277)
 * data files
   - added polar of "Ka 6E" and corrected the "Ka 6CR" one (#2327)
   - added polars of "AK-8" and "Blanik L13-AC" (#2329)

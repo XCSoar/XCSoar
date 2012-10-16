@@ -405,6 +405,10 @@ final class IOIOHelper extends Thread {
     public void close() {
       doClose();
       autoClose();
+
+      /* delete the listener reference, to allow reusing this
+         object */
+      setListener(null);
     }
 
     public boolean setBaudRate(int baud) {
