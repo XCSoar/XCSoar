@@ -12,11 +12,6 @@ else
   OPTIONS += DEBUG=n
 endif
 
-# Assume we're building on gcc 4.4 with the C++11 / RTTI bug.  Remove
-# this as soon as we build the official Debian packages on a
-# distribution that provides gcc 4.6.
-OPTIONS += RTTI=y
-
 build: debian/stamp-build
 debian/stamp-build:
 	dh_testdir
