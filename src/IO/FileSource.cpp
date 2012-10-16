@@ -36,13 +36,13 @@ PosixFileSource::PosixFileSource(const char *path)
 }
 
 long
-PosixFileSource::size() const
+PosixFileSource::GetSize() const
 {
   return (long)fd.GetSize();
 }
 
 unsigned
-PosixFileSource::read(char *p, unsigned n)
+PosixFileSource::Read(char *p, unsigned n)
 {
   ssize_t nbytes = fd.Read(p, n);
   return nbytes > 0 ? nbytes : 0;
@@ -91,7 +91,7 @@ WindowsFileSource::~WindowsFileSource()
 }
 
 long
-WindowsFileSource::size() const
+WindowsFileSource::GetSize() const
 {
   struct {
     BY_HANDLE_FILE_INFORMATION i;
@@ -111,7 +111,7 @@ WindowsFileSource::size() const
 }
 
 unsigned
-WindowsFileSource::read(char *p, unsigned n)
+WindowsFileSource::Read(char *p, unsigned n)
 {
   DWORD nbytes;
   if (!::ReadFile(handle, p, n, &nbytes, NULL))

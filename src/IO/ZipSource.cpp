@@ -61,7 +61,7 @@ ZipSource::~ZipSource()
 }
 
 long
-ZipSource::size() const
+ZipSource::GetSize() const
 {
   ZZIP_STAT st;
   return zzip_file_stat(file, &st) >= 0
@@ -70,7 +70,7 @@ ZipSource::size() const
 }
 
 unsigned
-ZipSource::read(char *p, unsigned n)
+ZipSource::Read(char *p, unsigned n)
 {
   zzip_ssize_t nbytes = zzip_read(file, p, n);
   return nbytes >= 0

@@ -50,11 +50,11 @@ public:
 
 public:
   /* virtual methods from class Source */
-  virtual long size() const gcc_override;
+  virtual long GetSize() const gcc_override;
 
 protected:
   /* virtual methods from class BufferedSource */
-  virtual unsigned read(char *p, unsigned n) gcc_override;
+  virtual unsigned Read(char *p, unsigned n) gcc_override;
 };
 
 #endif

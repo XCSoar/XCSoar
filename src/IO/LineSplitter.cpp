@@ -47,7 +47,7 @@ LineSplitter::read()
   /* is there enough data left in the buffer to read another line? */
   if (memchr(remaining.data, '\n', remaining.length) == NULL) {
     /* no: read more data from the Source */
-    remaining = source.read();
+    remaining = source.Read();
     if (remaining.IsEmpty())
       /* end of file */
       return NULL;
@@ -58,7 +58,7 @@ LineSplitter::read()
   Source<char>::Range range = remaining;
   std::pair<unsigned, unsigned> bounds =
     extract_line(range.data, range.length);
-  source.consume(bounds.second);
+  source.Consume(bounds.second);
   remaining.data += bounds.second;
   remaining.length -= bounds.second;
 
@@ -83,11 +83,11 @@ LineSplitter::read()
 long
 LineSplitter::size() const
 {
-  return source.size();
+  return source.GetSize();
 }
 
 long
 LineSplitter::tell() const
 {
-  return source.tell();
+  return source.Tell();
 }
