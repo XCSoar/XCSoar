@@ -85,7 +85,10 @@ EventQueue::Purge(Uint32 mask,
 
   for (int i = count - 1; i >= 0; --i)
     if (!match(events[i], ctx))
-      std::copy(events + i + 1, events + count--, events + i);
+      std::copy(events + i + 1, events + count, events + i);
+    else
+      --count;
+
   SDL_PeepEvents(events, count, SDL_ADDEVENT, mask);
 }
 
