@@ -42,6 +42,9 @@ public:
   LargeTextWindowStyle(const WindowStyle other):WindowStyle(other) {
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
   }
+#else
+  LargeTextWindowStyle() = default;
+  LargeTextWindowStyle(const WindowStyle other):WindowStyle(other) {}
 #endif
 
   void SetCenter() {
