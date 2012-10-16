@@ -83,10 +83,12 @@ EventQueue::Purge(Uint32 mask,
   int count = SDL_PeepEvents(events, 256, SDL_GETEVENT, mask);
   assert(count >= 0);
 
-  for (int i = count - 1; i >= 0; --i)
-    if (!match(events[i], ctx))
-      std::copy(events + i + 1, events + count--, events + i);
-  SDL_PeepEvents(events, count, SDL_ADDEVENT, mask);
+  SDL_Event *dest = events;
+  for (const SDL_Event *src = events, *end = src + count; src != end; ++src)
+    if (!match(*src, ctx))
+      *dest++ = *src;
+
+  SDL_PeepEvents(events, dest - events, SDL_ADDEVENT, mask);
 }
 
 struct MatchCallbackData {

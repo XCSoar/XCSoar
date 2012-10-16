@@ -54,7 +54,6 @@ OpenDataFile(const TCHAR *name)
 TLineReader *
 OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
 {
-#ifdef _UNICODE
   assert(name != NULL);
   assert(!StringIsEmpty(name));
 
@@ -71,9 +70,6 @@ OpenDataTextFile(const TCHAR *name, ConvertLineReader::charset cs)
   }
 
   return reader;
-#else
-  return OpenDataTextFileA(name);
-#endif
 }
 
 NLineReader *

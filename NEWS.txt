@@ -15,12 +15,13 @@ Version 6.5 - not yet released
 * infoboxes
   - added thermal assistant infobox
 
-Version 6.4.2 - not yet released
+Version 6.4.2 - 2012/10/17
 * calculations
   - contest: relax altitude difference check (#2348)
   - improve take-off and landing detection (#2391)
 * devices
   - CAI302, B800: fix ballast command (#2387)
+  - IOIO: fix baud rate switching, fixes LXNAV V7 and Volkslogger (#2277)
 * data files
   - added polar of "Ka 6E" and corrected the "Ka 6CR" one (#2327)
   - added polars of "AK-8" and "Blanik L13-AC" (#2329)
@@ -30,6 +31,10 @@ Version 6.4.2 - not yet released
   - closing the XCSoar window cancels the current modal dialog (was
     broken on Windows)
   - fix off-by-one bug in combo list (#2382)
+  - fix map updates in replay/simulator on Linux (#2236)
+  - fix file manager on new XCSoarData directory
+  - fix excess error messages in file manager (#2395)
+  - validate UTF-8 in xcsoar-checklist.txt (#2396)
 
 Version 6.4.1 - 2012/08/30
 * calculations

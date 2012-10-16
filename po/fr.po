@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-09-16 15:25+0000\n"
-"Last-Translator: Matthieu GAULON <Unknown>\n"
+"PO-Revision-Date: 2012-10-14 09:05+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-23 09:01+0000\n"
-"X-Generator: Launchpad (build 15985)\n"
+"X-Launchpad-Export-Date: 2012-10-15 17:32+0000\n"
+"X-Generator: Launchpad (build 16137)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -1318,6 +1318,13 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"Vitesse de consigne MacCready instantanée, prenant en compte le vario netto "
+"pour déterminer la vitesse en vol dauphin sur le segment courant. En "
+"transition cette consigne est calculée pour maintenir l'altitude. En arrivée "
+"elle est calculée pour la descente. En montée elle indique la vitesse de "
+"taux de chute minimum a facteur de charge courant (si un accéléromètre est "
+"disponible). Si le mode \"vitesse de consigne bloquée\" est sélectionné, "
+"alors la consigne est la vitesse de consigne MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
@@ -1466,6 +1473,10 @@ msgid ""
 "and relative humidity probe. (Touch-screen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
+"Température  prévueau sol à l'aérodrome \"base\", utilisé dans l'estimation "
+"de la hauteur de convection et la base des nuages, en utilisant la "
+"température extérieure et une sonde d'humidité. Pour écrans tactiles et PC : "
+"les flèches haut/bas ajustent cette température prévue."
 
 #: src/InfoBoxes/Content/Factory.cpp:590
 #, no-c-format
@@ -1512,6 +1523,10 @@ msgid ""
 "variometer. Negative values indicate climbing cruise. If the total energy "
 "vario speed is close to zero, the displayed value is '---'."
 msgstr ""
+"Finesse instantanée, fournie par l'indicateur de vitesse divisé par le vario "
+"à énergie total, lorsqu'un tel vario est connecté. Les valeurs négatives "
+"indiquent une transition en montée. Si le vario à énergie totale est proche "
+"de zéro, alors la valeur affichée est '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
@@ -1557,7 +1572,7 @@ msgstr "Relèvement de l'équipier"
 #: src/InfoBoxes/Content/Factory.cpp:641
 #, no-c-format
 msgid "Team Brng"
-msgstr ""
+msgstr "Rlvt Eqp"
 
 #: src/InfoBoxes/Content/Factory.cpp:642
 #, no-c-format
@@ -1574,7 +1589,7 @@ msgstr "Gisement de l'équipier"
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
 msgid "Team BrngD"
-msgstr ""
+msgstr "DRlvt Eqp"
 
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
@@ -6430,6 +6445,8 @@ msgid ""
 "If enabled, then the next task point is included in the score calculation, "
 "assuming that you will reach it."
 msgstr ""
+"Si activé, alors le prochain point est pris en compte dans le calcul de "
+"l'optimisation, en supposant qu'il soit tourné."
 
 #: src/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp:79
 #, no-c-format
@@ -6514,7 +6531,7 @@ msgstr "Dessine un terrain numérique altimétrique sur la carte."
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:166
 msgid "Topography display"
-msgstr "Afficher le relief"
+msgstr "Affichage topographie"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:167
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
@@ -6564,7 +6581,7 @@ msgstr "Gris"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:182
 msgid "Terrain colors"
-msgstr "couleur relief"
+msgstr "Couleurs"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:183
 msgid "Defines the color ramp used in terrain rendering."
@@ -6590,7 +6607,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:201
 msgid "Terrain contrast"
-msgstr "contraste relief"
+msgstr "Contraste"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:202
 msgid ""
@@ -6604,7 +6621,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:208
 msgid "Terrain brightness"
-msgstr "luminosité relief"
+msgstr "Luminosité"
 
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:209
 msgid ""
@@ -7926,7 +7943,7 @@ msgstr "Type de zone muette en spirale."
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:46
 #, no-c-format
 msgid "Circling hi cutoff"
-msgstr ""
+msgstr "Coupure haute spirale"
 
 #: src/Dialogs/Vega/AudioDeadbandParameters.hpp:47
 #, no-c-format

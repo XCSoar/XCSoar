@@ -102,6 +102,7 @@ Copyright_License {
 #include "UIState.hpp"
 #include "Tracking/TrackingGlue.hpp"
 #include "Units/Units.hpp"
+#include "Formatter/UserGeoPointFormatter.hpp"
 #include "Thread/Debug.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -162,6 +163,7 @@ LoadProfile()
   Profile::Use();
 
   Units::SetConfig(CommonInterface::GetUISettings().units);
+  SetUserCoordinateFormat(CommonInterface::GetUISettings().coordinate_format);
 
 #ifdef HAVE_MODEL_TYPE
   global_model_type = CommonInterface::GetSystemSettings().model_type;

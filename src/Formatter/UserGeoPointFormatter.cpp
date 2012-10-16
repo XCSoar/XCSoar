@@ -25,27 +25,36 @@ Copyright_License {
 #include "GeoPointFormatter.hpp"
 #include "Math/Angle.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Interface.hpp"
+
+/**
+ * This is a copy of UISettings::coordinate_format.  We need it
+ * because this library is not allowed to access a blackboard, because
+ * it may be run from either the main thread or the DrawThread.
+ */
+static CoordinateFormat user_coordinate_format = CoordinateFormat::DDMMSS;
+
+void
+SetUserCoordinateFormat(CoordinateFormat _fmt)
+{
+  user_coordinate_format = _fmt;
+}
 
 bool
 FormatLongitude(Angle longitude, TCHAR *buffer, size_t size)
 {
-  return FormatLongitude(longitude, buffer, size,
-                         CommonInterface::GetUISettings().coordinate_format);
+  return FormatLongitude(longitude, buffer, size, user_coordinate_format);
 }
 
 bool
 FormatLatitude(Angle latitude, TCHAR *buffer, size_t size)
 {
-  return FormatLatitude(latitude, buffer, size,
-                        CommonInterface::GetUISettings().coordinate_format);
+  return FormatLatitude(latitude, buffer, size, user_coordinate_format);
 }
 
 TCHAR *
 FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size,
                TCHAR seperator)
 {
-  return FormatGeoPoint(location, buffer, size,
-                        CommonInterface::GetUISettings().coordinate_format,
+  return FormatGeoPoint(location, buffer, size, user_coordinate_format,
                         seperator);
 }
