@@ -41,7 +41,7 @@ Copyright_License {
 #include "Weather/TAF.hpp"
 #include "Weather/NOAAFormatter.hpp"
 #include "Formatter/Units.hpp"
-#include "Screen/EditWindow.hpp"
+#include "Screen/LargeTextWindow.hpp"
 #include "Screen/Layout.hpp"
 
 #include <stdio.h>
@@ -56,7 +56,7 @@ Update()
 
   NOAAFormatter::Format(*station_iterator, metar_taf);
 
-  ((EditWindow *)wf->FindByName(_T("DetailsText")))->SetText(metar_taf.c_str());
+  ((LargeTextWindow *)wf->FindByName(_T("DetailsText")))->SetText(metar_taf.c_str());
 
   StaticString<100> caption;
   caption.Format(_T("%s: "), _("METAR and TAF"));

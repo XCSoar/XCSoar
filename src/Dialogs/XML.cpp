@@ -38,6 +38,7 @@ Copyright_License {
 #include "Form/DataField/Time.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Screen/LargeTextWindow.hpp"
 #include "Interface.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
@@ -755,6 +756,13 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       frame->SetCaptionColor(color);
 
     window = frame;
+
+  } else if (StringIsEqual(node.GetName(), _T("LargeText"))){
+    LargeTextWindow *ltw = new LargeTextWindow();
+    ltw->Create(parent, rc, style);
+    ltw->SetFont(*xml_dialog_look->text_font);
+
+    window = ltw;
 
   // ListBoxControl (ListControl)
   } else if (StringIsEqual(node.GetName(), _T("List"))){

@@ -29,7 +29,7 @@ Copyright_License {
 #include "Form/Tabbed.hpp"
 #include "Form/Draw.hpp"
 #include "Look/Fonts.hpp"
-#include "Screen/EditWindow.hpp"
+#include "Screen/LargeTextWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
@@ -58,8 +58,8 @@ OnPrev(gcc_unused WndButton &button)
 }
 
 gcc_pure
-static EditWindow *
-FindEditWindow()
+static LargeTextWindow *
+FindLargeTextWindow()
 {
   const TCHAR *name;
   switch (tab->GetCurrentPage()) {
@@ -75,17 +75,17 @@ FindEditWindow()
     return NULL;
   }
 
-  return (EditWindow *)wf->FindByName(name);
+  return (LargeTextWindow *)wf->FindByName(name);
 }
 
 static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
-    EditWindow *edit;
+    LargeTextWindow *edit;
 
   case VK_UP:
-    edit = FindEditWindow();
+    edit = FindLargeTextWindow();
     if (edit != NULL) {
       edit->ScrollVertically(-3);
       return true;
@@ -93,7 +93,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
       return false;
 
   case VK_DOWN:
-    edit = FindEditWindow();
+    edit = FindLargeTextWindow();
     if (edit != NULL) {
       edit->ScrollVertically(3);
       return true;
@@ -179,7 +179,7 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
 
   UTF8ToWideConverter text(buffer);
   if (text.IsValid())
-    ((EditWindow *)wf->FindByName(control))->SetText(text);
+    ((LargeTextWindow *)wf->FindByName(control))->SetText(text);
 
   delete[] buffer;
 }

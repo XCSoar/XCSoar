@@ -15,7 +15,7 @@
 
   <Panel Name="frmDetails" X="0" Y="0" Height="-35">
     <List Name="Files" Y="0" ItemHeight="18" />
-    <TextEdit Name="Details" Y="0" ReadOnly="1" MultiLine="1" />
+    <LargeText Name="Details" Y="0"/>
   </Panel>
 
   <Widget Name="commands" Y="0" Height="-35"/>

@@ -3,5 +3,5 @@
 <Form Caption="Help">
   <Button Caption="Close" Y="-35" Width="65" Height="35" OnClick="OnCloseClicked"/>
   
-  <TextEdit Name="prpHelpText" X="65" Y="0" ReadOnly="1" MultiLine="1"/>
+  <LargeText Name="prpHelpText" X="65" Y="0"/>
 </Form>

@@ -389,7 +389,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   ListControl *wFilesList = (ListControl *)wf->FindByName(_T("Files"));
   assert(wFilesList != NULL);
 
-  EditWindow *wDetailsText = (EditWindow *)wf->FindByName(_T("Details"));
+  LargeTextWindow *wDetailsText = (LargeTextWindow *)
+    wf->FindByName(_T("Details"));
   assert(wDetailsText != NULL);
   wDetailsText->SetText(waypoint->details.c_str());
 
