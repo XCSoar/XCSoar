@@ -665,7 +665,9 @@ ManagedFileListWidget::OnNotification()
 {
   mutex.Lock();
   bool repository_modified2 = repository_modified;
+  repository_modified = false;
   const bool repository_failed2 = repository_failed;
+  repository_failed = false;
   mutex.Unlock();
 
   if (repository_modified2)

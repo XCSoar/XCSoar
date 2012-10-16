@@ -19,6 +19,7 @@ Version 6.4.2 - not yet released
   - fix off-by-one bug in combo list (#2382)
   - fix map updates in replay/simulator on Linux (#2236)
   - fix file manager on new XCSoarData directory
+  - fix excess error messages in file manager (#2395)
 
 Version 6.4.1 - 2012/08/30
 * calculations
