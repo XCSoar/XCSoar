@@ -36,4 +36,7 @@ VarioSoundSettings::SetDefaults()
 
   min_period_ms = 150;
   max_period_ms = 600;
+
+  min_dead = fixed(-0.3);
+  max_dead = fixed(0.1);
 }
