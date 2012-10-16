@@ -27,9 +27,12 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Form/Form.hpp"
 #include "Form/RowFormWidget.hpp"
+#include "Form/DataField/Float.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Features.hpp"
 #include "Audio/VarioGlue.hpp"
+#include "Units/Units.hpp"
+#include "Formatter/UserUnits.hpp"
 
 enum ControlIndex {
   Enabled,
@@ -39,6 +42,9 @@ enum ControlIndex {
   MIN_FREQUENCY,
   ZERO_FREQUENCY,
   MAX_FREQUENCY,
+  SPACER2,
+  DEAD_BAND_MIN,
+  DEAD_BAND_MAX,
 };
 
 
@@ -94,6 +100,28 @@ AudioVarioConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              50, 3000, 50, settings.max_frequency);
   SetExpertRow(MAX_FREQUENCY);
 
+  AddSpacer();
+  SetExpertRow(SPACER2);
+
+  AddFloat(_("Deadband min. lift"),
+           _("Below this lift threshold the vario will start to play sounds if the 'Deadband' feature is enabled."),
+           _T("%.1f %s"), _T("%.1f"),
+           Units::ToUserVSpeed(fixed(-2)), fixed_zero,
+           GetUserVerticalSpeedStep(), false, UnitGroup::VERTICAL_SPEED,
+           settings.min_dead);
+  SetExpertRow(DEAD_BAND_MIN);
+  DataFieldFloat &db_min = (DataFieldFloat &)GetDataField(DEAD_BAND_MIN);
+  db_min.SetFormat(GetUserVerticalSpeedFormat(false, true));
+
+  AddFloat(_("Deadband max. lift"),
+           _("Above this lift threshold the vario will start to play sounds if the 'Deadband' feature is enabled."),
+           _T("%.1f %s"), _T("%.1f"),
+           fixed_zero, Units::ToUserVSpeed(fixed(2)),
+           GetUserVerticalSpeedStep(), false, UnitGroup::VERTICAL_SPEED,
+           settings.max_dead);
+  SetExpertRow(DEAD_BAND_MAX);
+  DataFieldFloat &db_max = (DataFieldFloat &)GetDataField(DEAD_BAND_MAX);
+  db_max.SetFormat(GetUserVerticalSpeedFormat(false, true));
 }
 
 bool
@@ -124,6 +152,12 @@ AudioVarioConfigPanel::Save(bool &changed, bool &require_restart)
 
   changed |= SaveValue(MAX_FREQUENCY, ProfileKeys::VarioMaxFrequency,
                        settings.max_frequency);
+
+  changed |= SaveValue(DEAD_BAND_MIN, UnitGroup::VERTICAL_SPEED,
+                       ProfileKeys::VarioDeadBandMin, settings.min_dead);
+
+  changed |= SaveValue(DEAD_BAND_MAX, UnitGroup::VERTICAL_SPEED,
+                       ProfileKeys::VarioDeadBandMax, settings.max_dead);
 
   return true;
 }
