@@ -24,10 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_USER_GEOPOINT_FORMATTER_HPP
 #define XCSOAR_USER_GEOPOINT_FORMATTER_HPP
 
+#include "Geo/CoordinateFormat.hpp"
+
 #include <tchar.h>
 
 class Angle;
 struct GeoPoint;
+
+void
+SetUserCoordinateFormat(CoordinateFormat _fmt);
 
 /**
  * Converts a double-based longitude into a formatted string

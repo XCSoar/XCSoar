@@ -52,6 +52,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Units/Units.hpp"
+#include "Formatter/UserGeoPointFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Audio/VarioGlue.hpp"
 
@@ -185,6 +186,7 @@ SettingsLeave(const UISettings &old_ui_settings)
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 
   Units::SetConfig(ui_settings.units);
+  SetUserCoordinateFormat(ui_settings.coordinate_format);
 
   const MapSettings &old_settings_map = old_ui_settings.map;
   const MapSettings &settings_map = ui_settings.map;
