@@ -92,7 +92,7 @@ CheckLogCat()
 
   FileLineReaderA reader(path);
   char *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (strstr(line, ">>> org.xcsoar") != NULL) {
       const char *p = strstr(line, "pid:");
       if (p != NULL)

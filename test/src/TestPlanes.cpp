@@ -90,7 +90,7 @@ TestWriter()
   bool found9 = false, found10 = false, found11 = false, found12 = false;
 
   TCHAR *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (_tcscmp(line, _T("Registration=\"D-4449\"")) == 0)
       found1 = true;
     if (_tcscmp(line, _T("CompetitionID=\"TH\"")) == 0)

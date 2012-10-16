@@ -203,11 +203,11 @@ ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
     return;
   }
 
-  char *line = reader.read();
+  char *line = reader.ReadLine();
   if (line != NULL)
     IGCParseHeader(line, header);
 
-  line = reader.read();
+  line = reader.ReadLine();
   if (line == NULL || !IGCParseDateRecord(line, date))
     date = BrokenDate::TodayUTC();
 }

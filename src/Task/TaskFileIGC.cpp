@@ -48,7 +48,7 @@ ReadIGCDeclaration(const TCHAR *path, IGCDeclarationHeader &header,
   // Read IGC file
   char *line;
   bool header_found = false;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     // Skip lines which are not declaration records
     if (*line != _T('C'))
       continue;
@@ -148,7 +148,7 @@ TaskFileIGC::Count()
 
   // Search for declaration
   char *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (*line != 'C')
       continue;
 

@@ -856,7 +856,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
   // Create and init ProgressDialog
   operation.SetProgressRange(1024);
 
-  long file_size = reader.size();
+  const long file_size = reader.GetSize();
 
   TempAirspaceType temp_area;
   AirspaceFileType filetype = AFT_UNKNOWN;
@@ -864,7 +864,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
   TCHAR *line;
 
   // Iterate through the lines
-  for (unsigned line_num = 1; (line = reader.read()) != NULL; line_num++) {
+  for (unsigned line_num = 1; (line = reader.ReadLine()) != NULL; line_num++) {
     // Skip empty line
     if (StringIsEmpty(line))
       continue;
@@ -888,7 +888,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
 
     // Update the ProgressDialog
     if ((line_num & 0xff) == 0)
-      operation.SetProgressPosition(reader.tell() * 1024 / file_size);
+      operation.SetProgressPosition(reader.Tell() * 1024 / file_size);
   }
 
   if (filetype == AFT_UNKNOWN) {

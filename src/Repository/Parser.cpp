@@ -71,7 +71,7 @@ ParseFileRepository(FileRepository &repository, NLineReader &reader)
   file.Clear();
 
   char *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     line = const_cast<char *>(TrimLeft(line));
     if (*line == 0 || *line == '#')
       continue;

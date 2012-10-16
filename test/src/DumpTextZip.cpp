@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   }
 
   TCHAR *line;
-  while ((line = reader.read()) != NULL)
+  while ((line = reader.ReadLine()) != NULL)
     _putts(line);
 
   return EXIT_SUCCESS;

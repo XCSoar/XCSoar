@@ -24,37 +24,37 @@ Copyright_License {
 #include "ZipLineReader.hpp"
 
 char *
-ZipLineReaderA::read()
+ZipLineReaderA::ReadLine()
 {
-  return splitter.read();
+  return splitter.ReadLine();
 }
 
 long
-ZipLineReaderA::size() const
+ZipLineReaderA::GetSize() const
 {
-  return splitter.size();
+  return splitter.GetSize();
 }
 
 long
-ZipLineReaderA::tell() const
+ZipLineReaderA::Tell() const
 {
-  return splitter.tell();
+  return splitter.Tell();
 }
 
 TCHAR *
-ZipLineReader::read()
+ZipLineReader::ReadLine()
 {
-  return convert.read();
+  return convert.ReadLine();
 }
 
 long
-ZipLineReader::size() const
+ZipLineReader::GetSize() const
 {
-  return convert.size();
+  return convert.GetSize();
 }
 
 long
-ZipLineReader::tell() const
+ZipLineReader::Tell() const
 {
-  return convert.tell();
+  return convert.Tell();
 }

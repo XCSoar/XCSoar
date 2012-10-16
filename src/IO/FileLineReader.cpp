@@ -24,37 +24,37 @@ Copyright_License {
 #include "FileLineReader.hpp"
 
 char *
-FileLineReaderA::read()
+FileLineReaderA::ReadLine()
 {
-  return splitter.read();
+  return splitter.ReadLine();
 }
 
 long
-FileLineReaderA::size() const
+FileLineReaderA::GetSize() const
 {
-  return splitter.size();
+  return splitter.GetSize();
 }
 
 long
-FileLineReaderA::tell() const
+FileLineReaderA::Tell() const
 {
-  return splitter.tell();
+  return splitter.Tell();
 }
 
 TCHAR *
-FileLineReader::read()
+FileLineReader::ReadLine()
 {
-  return convert.read();
+  return convert.ReadLine();
 }
 
 long
-FileLineReader::size() const
+FileLineReader::GetSize() const
 {
-  return convert.size();
+  return convert.GetSize();
 }
 
 long
-FileLineReader::tell() const
+FileLineReader::Tell() const
 {
-  return convert.tell();
+  return convert.Tell();
 }

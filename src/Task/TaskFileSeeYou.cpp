@@ -241,7 +241,7 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   TCHAR *line;
   int TPIndex = 0;
   const unsigned int max_params = ARRAY_SIZE(params);
-  while ((line = reader.read()) != NULL &&
+  while ((line = reader.ReadLine()) != NULL &&
          line[0] != _T('\"') && line[0] != _T(',')) {
     const size_t n_params = WaypointReaderBase::
         ExtractParameters(line, params_buffer, params, max_params, true);
@@ -427,7 +427,7 @@ AdvanceReaderToTask(FileLineReader &reader, const unsigned index)
   unsigned count = 0;
   bool in_task_section = false;
   TCHAR *line;
-  for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
+  for (unsigned i = 0; (line = reader.ReadLine()) != NULL; i++) {
     if (in_task_section) {
       if (line[0] == _T('\"') || line[0] == _T(',')) {
         if (count == index)
@@ -561,7 +561,7 @@ TaskFileSeeYou::Count()
   unsigned count = 0;
   bool in_task_section = false;
   TCHAR *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (in_task_section) {
       // If the line starts with a string or "nothing" followed
       // by a comma it is a new task definition line

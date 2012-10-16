@@ -42,7 +42,7 @@ extract_line(const char *data, unsigned length)
 }
 
 char *
-LineSplitter::read()
+LineSplitter::ReadLine()
 {
   /* is there enough data left in the buffer to read another line? */
   if (memchr(remaining.data, '\n', remaining.length) == NULL) {
@@ -81,13 +81,13 @@ LineSplitter::read()
 }
 
 long
-LineSplitter::size() const
+LineSplitter::GetSize() const
 {
   return source.GetSize();
 }
 
 long
-LineSplitter::tell() const
+LineSplitter::Tell() const
 {
   return source.Tell();
 }

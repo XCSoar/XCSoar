@@ -127,7 +127,7 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
 bool
 WaypointReaderOzi::VerifyFormat(TLineReader &reader)
 {
-  TCHAR* line = reader.read();
+  const TCHAR *line = reader.ReadLine();
   if (line == NULL)
     return false;
 

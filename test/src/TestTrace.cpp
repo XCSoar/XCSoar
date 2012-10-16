@@ -61,7 +61,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
 
   char *line;
   int i = 0;
-  for (; (line = reader.read()) != NULL; i++) {
+  for (; (line = reader.ReadLine()) != NULL; i++) {
     if (output && (i % 500 == 0)) {
       putchar('.');
       fflush(stdout);

@@ -351,12 +351,12 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     return false;
 
   char *endptr;
-  const char *line = reader.read(); // x scale
+  const char *line = reader.ReadLine(); // x scale
   double x_scale = strtod(line, &endptr);
   if (endptr == line)
     return false;
 
-  line = reader.read(); // y rotation
+  line = reader.ReadLine(); // y rotation
   if (line == NULL)
     return false;
 
@@ -365,7 +365,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     /* we don't support rotation */
     return false;
 
-  line = reader.read(); // x rotation
+  line = reader.ReadLine(); // x rotation
   if (line == NULL)
     return false;
 
@@ -374,7 +374,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
     /* we don't support rotation */
     return false;
 
-  line = reader.read(); // y scale
+  line = reader.ReadLine(); // y scale
   if (line == NULL)
     return false;
 
@@ -382,7 +382,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
   if (endptr == line)
     return false;
 
-  line = reader.read(); // x origin
+  line = reader.ReadLine(); // x origin
   if (line == NULL)
     return false;
 
@@ -390,7 +390,7 @@ RasterTileCache::LoadWorldFile(const TCHAR *path)
   if (endptr == line)
     return false;
 
-  line = reader.read(); // y origin
+  line = reader.ReadLine(); // y origin
   if (line == NULL)
     return false;
 

@@ -52,7 +52,7 @@ IgcReplay::ReadPoint(IGCFix &fix)
 {
   char *buffer;
 
-  while ((buffer = reader->read()) != NULL) {
+  while ((buffer = reader->ReadLine()) != NULL) {
     if (ScanBuffer(buffer, fix))
       return true;
   }

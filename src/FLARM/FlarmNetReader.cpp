@@ -126,12 +126,12 @@ unsigned
 FlarmNetReader::LoadFile(NLineReader &reader, FlarmDatabase &database)
 {
   /* skip first line */
-  const char *line = reader.read();
+  const char *line = reader.ReadLine();
   if (line == NULL)
     return 0;
 
   int itemCount = 0;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     FlarmRecord record;
     if (LoadRecord(record, line)) {
       database.Insert(record);

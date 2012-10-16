@@ -74,7 +74,7 @@ NmeaReplay::ReadUntilRMC(NMEAInfo &data, bool ignore)
 {
   char *buffer;
 
-  while ((buffer = reader->read()) != NULL) {
+  while ((buffer = reader->ReadLine()) != NULL) {
     if (!ignore)
       ParseLine(buffer, data);
 

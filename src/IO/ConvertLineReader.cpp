@@ -47,9 +47,9 @@ iso_latin_1_to_tchar(TCHAR *dest, const char *src)
 #endif
 
 TCHAR *
-ConvertLineReader::read()
+ConvertLineReader::ReadLine()
 {
-  char *narrow = source.read();
+  char *narrow = source.ReadLine();
 
   if (narrow == NULL)
     return NULL;
@@ -129,13 +129,13 @@ ConvertLineReader::read()
 }
 
 long
-ConvertLineReader::size() const
+ConvertLineReader::GetSize() const
 {
-  return source.size();
+  return source.GetSize();
 }
 
 long
-ConvertLineReader::tell() const
+ConvertLineReader::Tell() const
 {
-  return source.tell();
+  return source.Tell();
 }

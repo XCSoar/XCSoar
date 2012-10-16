@@ -36,7 +36,7 @@ CheckTextFile(const TCHAR *path, const char *const* expect)
   ok1(!reader.error());
 
   const char *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (*line == 'G')
       break;
 

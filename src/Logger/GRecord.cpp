@@ -143,7 +143,7 @@ GRecord::LoadFileToBuffer(const TCHAR *filename)
 
   char *line;
 
-  while ((line = reader.read()) != NULL)
+  while ((line = reader.ReadLine()) != NULL)
     AppendRecordToBuffer(line);
 
   return true;
@@ -187,7 +187,7 @@ GRecord::ReadGRecordFromFile(const TCHAR *filename,
 
   unsigned int digest_length = 0;
   char *data;
-  while ((data = reader.read()) != NULL) {
+  while ((data = reader.ReadLine()) != NULL) {
     if (data[0] != 'G')
       continue;
 

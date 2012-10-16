@@ -29,7 +29,7 @@ bool
 KeyValueFileReader::Read(KeyValuePair &pair)
 {
   TCHAR *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (StringIsEmpty(line) || *line == _T('#'))
       continue;
 

@@ -158,7 +158,7 @@ LoadChecklist()
   Name[0] = 0;
 
   TCHAR *TempString;
-  while ((TempString = reader->read()) != NULL) {
+  while ((TempString = reader->ReadLine()) != NULL) {
     // Look for start
     if (TempString[0] == '[') {
       if (inDetails) {

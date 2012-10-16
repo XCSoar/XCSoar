@@ -95,11 +95,11 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
   bool in_details = false;
   int i;
 
-  long filesize = std::max(reader.size(), 1l);
+  const long filesize = std::max(reader.GetSize(), 1l);
   operation.SetProgressRange(100);
 
   TCHAR *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (line[0] == _T('[')) { // Look for start
       if (in_details)
         SetAirfieldDetails(way_points, name, details, files_external,
@@ -120,7 +120,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
 
       in_details = true;
 
-      operation.SetProgressPosition(reader.tell() * 100 / filesize);
+      operation.SetProgressPosition(reader.Tell() * 100 / filesize);
     } else if ((filename =
                 StringAfterPrefixCI(line, _T("image="))) != NULL) {
       files_embed.push_back(filename);

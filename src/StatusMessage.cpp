@@ -86,7 +86,7 @@ StatusMessageList::LoadFile(TLineReader &reader)
   /* Read from the file */
   TCHAR *buffer;
   const TCHAR *key, *value;
-  while ((buffer = reader.read()) != NULL) {
+  while ((buffer = reader.ReadLine()) != NULL) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if (*buffer == _T('#') || !parse_assignment(buffer, key, value)) {
       // Global counter (only if the last entry had some data)

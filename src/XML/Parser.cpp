@@ -975,7 +975,7 @@ ReadTextFile(const TCHAR *path, tstring &buffer)
   if (reader.error())
     return false;
 
-  long size = reader.size();
+  long size = reader.GetSize();
   if (size > 65536)
     return false;
   else if (size < 0)
@@ -984,7 +984,7 @@ ReadTextFile(const TCHAR *path, tstring &buffer)
   buffer.reserve(size);
 
   const TCHAR *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     if (buffer.length() > 65536)
       /* too long */
       return false;

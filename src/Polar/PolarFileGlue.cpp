@@ -30,7 +30,7 @@ bool
 PolarGlue::LoadFromFile(PolarInfo &polar, TLineReader &reader)
 {
   const TCHAR *line;
-  while ((line = reader.read()) != NULL)
+  while ((line = reader.ReadLine()) != NULL)
     if (ParsePolar(polar, line))
       return true;
 

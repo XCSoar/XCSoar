@@ -70,7 +70,7 @@ static void
 LoadSecondaryFile(TLineReader &reader)
 {
   TCHAR *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     TCHAR *endptr;
     FlarmId id = FlarmId::Parse(line, &endptr);
     if (!id.IsDefined())

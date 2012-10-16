@@ -165,16 +165,16 @@ void
 WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
                           OperationEnvironment &operation)
 {
-  long filesize = std::max(reader.size(), 1l);
+  const long filesize = std::max(reader.GetSize(), 1l);
   operation.SetProgressRange(100);
 
   // Read through the lines of the file
   TCHAR *line;
-  for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
+  for (unsigned i = 0; (line = reader.ReadLine()) != NULL; i++) {
     // and parse them
     ParseLine(line, i, way_points);
 
     if ((i & 0x3f) == 0)
-      operation.SetProgressPosition(reader.tell() * 100 / filesize);
+      operation.SetProgressPosition(reader.Tell() * 100 / filesize);
   }
 }

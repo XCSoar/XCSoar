@@ -132,7 +132,7 @@ IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
 
   FlightCheck flight(filename);
   char *line;
-  while ((line = reader.read()) != NULL) {
+  while ((line = reader.ReadLine()) != NULL) {
     unsigned day, month, year;
 
     IGCFix fix;

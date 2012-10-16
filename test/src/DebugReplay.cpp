@@ -58,13 +58,13 @@ DebugReplay::~DebugReplay()
 long
 DebugReplay::Size() const
 {
-  return reader->size();
+  return reader->GetSize();
 }
 
 long
 DebugReplay::Tell() const
 {
-  return reader->tell();
+  return reader->Tell();
 }
 
 void
@@ -109,7 +109,7 @@ DebugReplayNMEA::Next()
   last_basic = computed_basic;
 
   const char *line;
-  while ((line = reader->read()) != NULL) {
+  while ((line = reader->ReadLine()) != NULL) {
     if (raw_basic.time_available)
       raw_basic.clock = raw_basic.time;
     if (!device || !device->ParseNMEA(line, raw_basic))
@@ -150,7 +150,7 @@ DebugReplayIGC::Next()
   last_basic = computed_basic;
 
   const char *line;
-  while ((line = reader->read()) != NULL) {
+  while ((line = reader->ReadLine()) != NULL) {
     if (line[0] == 'B') {
       IGCFix fix;
       if (IGCParseFix(line, extensions, fix) && fix.gps_valid) {

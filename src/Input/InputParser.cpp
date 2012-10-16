@@ -174,7 +174,7 @@ ParseInputFile(InputConfig &config, TLineReader &reader)
 
   // Read from the file
   TCHAR *buffer;
-  while ((buffer = reader.read()) != NULL) {
+  while ((buffer = reader.ReadLine()) != NULL) {
     TrimRight(buffer);
     line++;
 

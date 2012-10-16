@@ -40,14 +40,14 @@ public:
    * It is Invalidated by the next call.  After the last line has been
    * read, this method returns NULL.
    */
-  virtual T *read() = 0;
+  virtual T *ReadLine() = 0;
 
   /**
    * Determins the size of the file.  Returns -1 if the size is
    * unknown.
    */
   gcc_pure
-  virtual long size() const {
+  virtual long GetSize() const {
     return -1;
   }
 
@@ -56,7 +56,7 @@ public:
    * this is unknown.
    */
   gcc_pure
-  virtual long tell() const {
+  virtual long Tell() const {
     return -1;
   }
 };
