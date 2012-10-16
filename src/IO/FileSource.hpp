@@ -93,7 +93,7 @@ public:
 
 protected:
   /* virtual methods from class BufferedSource */
-  virtual unsigned read(char *p, unsigned n);
+  virtual unsigned read(char *p, unsigned n) gcc_override;
 };
 
 #endif /* WIN32 */
