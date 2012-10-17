@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/ActionListener.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Formatter/UserUnits.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
 #include "Units/Units.hpp"
 #include "UIGlobals.hpp"
@@ -82,9 +83,8 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
       airspace.ClosestPoint(basic.location, warnings->GetProjection());
     const fixed distance = closest.Distance(basic.location);
 
-    StaticString<80> buffer;
-    buffer.Format(_T("%d%s"), (int)Units::ToUserDistance(distance),
-                  Units::GetDistanceName());
+    TCHAR buffer[64];
+    FormatUserDistance(distance, buffer);
     AddReadOnly(_("Range"), nullptr, buffer);
   }
 }
