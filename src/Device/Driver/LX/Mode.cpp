@@ -24,7 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "V7.hpp"
 #include "LX1600.hpp"
-#include "Nano.hpp"
+#include "NanoProtocol.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 

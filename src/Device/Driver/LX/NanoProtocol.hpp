@@ -43,7 +43,7 @@ namespace Nano {
   }
 
   /**
-   * Request basic Nano information through an LXNAV V7 (firmward >=
+   * Request basic Nano information through an LXNAV V7 (firmware >=
    * 2.01).
    */
   static bool
