@@ -26,16 +26,19 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <stdint.h>
+
 /**
  * Calculates the checksum for the specified line (without the
  * asterisk and the newline character).
  *
  * @param p a NULL terminated string
  */
-static inline unsigned char
+gcc_pure
+static inline uint8_t
 NMEAChecksum(const char *p)
 {
-  unsigned char checksum = 0;
+  uint8_t checksum = 0;
 
   /* skip the dollar sign at the beginning (the exclamation mark is
      used by CAI302 */
@@ -55,10 +58,11 @@ NMEAChecksum(const char *p)
  * @param p a string
  * @param length the number of characters in the string
  */
-static inline unsigned char
+gcc_pure
+static inline uint8_t
 NMEAChecksum(const char *p, unsigned length)
 {
-  unsigned char checksum = 0;
+  uint8_t checksum = 0;
 
   unsigned i = 0;
 
