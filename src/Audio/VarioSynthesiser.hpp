@@ -133,8 +133,8 @@ public:
    * Set the vario range of the "dead band" during which no sound is emitted
    */
   void SetDeadBandRange(fixed min, fixed max) {
-    min_dead = (int)(min * 10);
-    max_dead = (int)(max * 10);
+    min_dead = (int)(min * 100);
+    max_dead = (int)(max * 100);
   }
 
   /* methods from class PCMSynthesiser */
