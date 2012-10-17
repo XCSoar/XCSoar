@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "AirspaceFormatter.hpp"
-
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Util/Macros.hpp"
 
@@ -102,10 +101,4 @@ const TCHAR *
 AirspaceFormatter::GetClassShort(const AbstractAirspace &airspace)
 {
   return GetClassShort(airspace.GetType());
-}
-
-tstring
-AirspaceFormatter::GetNameAndClass(const AbstractAirspace &airspace)
-{
-  return tstring(airspace.GetName()) + _T(" ") + GetClass(airspace.GetType());
 }

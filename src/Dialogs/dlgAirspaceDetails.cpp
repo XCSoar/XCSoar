@@ -64,6 +64,7 @@ void
 AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
+  TCHAR buffer[64];
 
   AddMultiLine(_("Name"), nullptr, airspace.GetName());
 
@@ -71,17 +72,18 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddReadOnly(_("Radio"), nullptr, airspace.GetRadioText().c_str());
 
   AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(airspace));
-  AddReadOnly(_("Top"), nullptr,
-              AirspaceFormatter::GetAltitude(airspace.GetTop()).c_str());
-  AddReadOnly(_("Base"), nullptr,
-              AirspaceFormatter::GetAltitude(airspace.GetBase()).c_str());
+
+  AirspaceFormatter::FormatAltitude(buffer, airspace.GetTop());
+  AddReadOnly(_("Top"), nullptr, buffer);
+
+  AirspaceFormatter::FormatAltitude(buffer, airspace.GetBase());
+  AddReadOnly(_("Base"), nullptr, buffer);
 
   if (warnings != nullptr) {
     const GeoPoint closest =
       airspace.ClosestPoint(basic.location, warnings->GetProjection());
     const fixed distance = closest.Distance(basic.location);
 
-    TCHAR buffer[64];
     FormatUserDistance(distance, buffer);
     AddReadOnly(_("Range"), nullptr, buffer);
   }

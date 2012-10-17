@@ -28,49 +28,45 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Units/Units.hpp"
 
-tstring
-AirspaceFormatter::GetAltitudeShort(const AirspaceAltitude &altitude)
+void
+AirspaceFormatter::FormatAltitudeShort(TCHAR *buffer,
+                                       const AirspaceAltitude &altitude)
 {
-  StaticString<64> buffer;
-
   switch (altitude.reference) {
   case AltitudeReference::AGL:
     if (!positive(altitude.altitude_above_terrain))
-      buffer = _T("GND");
+      _tcscpy(buffer, _T("GND"));
     else
-      buffer.Format(_T("%d %s AGL"),
-                    iround(Units::ToUserAltitude(altitude.altitude_above_terrain)),
-                    Units::GetAltitudeName());
+      _stprintf(buffer, _T("%d %s AGL"),
+                iround(Units::ToUserAltitude(altitude.altitude_above_terrain)),
+                Units::GetAltitudeName());
     break;
 
   case AltitudeReference::STD:
-    buffer.Format(_T("FL%d"), (int)altitude.flight_level);
+    _stprintf(buffer, _T("FL%d"), (int)altitude.flight_level);
     break;
 
   case AltitudeReference::MSL:
-    buffer.Format(_T("%d %s"), iround(Units::ToUserAltitude(altitude.altitude)),
-                  Units::GetAltitudeName());
+    _stprintf(buffer, _T("%d %s"),
+              iround(Units::ToUserAltitude(altitude.altitude)),
+              Units::GetAltitudeName());
     break;
 
   case AltitudeReference::NONE:
-    buffer.clear();
+    *buffer = _T('\0');
     break;
   }
-
-  return tstring(buffer);
 }
 
-tstring
-AirspaceFormatter::GetAltitude(const AirspaceAltitude &altitude)
+void
+AirspaceFormatter::FormatAltitude(TCHAR *buffer,
+                                  const AirspaceAltitude &altitude)
 {
-  StaticString<64> buffer;
+  FormatAltitudeShort(buffer, altitude);
+
   if (altitude.reference != AltitudeReference::MSL &&
       positive(altitude.altitude))
-    buffer.Format(_T(" %d %s"),
-                  iround(Units::ToUserAltitude(altitude.altitude)),
-                  Units::GetAltitudeName());
-  else
-    buffer.clear();
-
-  return GetAltitudeShort(altitude) + buffer.c_str();
+    _stprintf(buffer + _tcslen(buffer), _T(" %d %s"),
+              iround(Units::ToUserAltitude(altitude.altitude)),
+              Units::GetAltitudeName());
 }

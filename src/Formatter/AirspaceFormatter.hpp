@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_AIRSPACE_FORMATTER_HPP
 
 #include "Engine/Airspace/AirspaceClass.hpp"
-#include "Util/tstring.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -51,13 +50,11 @@ const TCHAR *GetClass(const AbstractAirspace &airspace);
 gcc_pure
 const TCHAR *GetClassShort(const AbstractAirspace &airspace);
 
-/** Returns the airspace name and class as text. */
-tstring GetNameAndClass(const AbstractAirspace &airspace);
+  /** Returns the airspace altitude limit as text with unit. */
+  void FormatAltitude(TCHAR *buffer, const AirspaceAltitude &altitude);
 
-/** Returns the airspace altitude limit as text with unit. */
-tstring GetAltitude(const AirspaceAltitude &altitude);
-/** Returns the airspace altitude limit as short text with unit. */
-tstring GetAltitudeShort(const AirspaceAltitude &altitude);
+  /** Returns the airspace altitude limit as short text with unit. */
+  void FormatAltitudeShort(TCHAR *buffer, const AirspaceAltitude &altitude);
 }
 
 #endif

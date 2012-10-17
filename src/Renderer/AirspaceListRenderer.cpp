@@ -72,20 +72,21 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, comment);
 
-  tstring top = AirspaceFormatter::GetAltitudeShort(airspace.GetTop());
+  TCHAR buffer[40];
+  AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
   PixelScalar altitude_width =
-    canvas.CalcTextWidth(top.c_str());
+    canvas.CalcTextWidth(buffer);
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.GetHeight() -
                       small_font.GetHeight() + Layout::FastScale(2), rc,
-                      top.c_str());
+                      buffer);
 
-  tstring base = AirspaceFormatter::GetAltitudeShort(airspace.GetBase());
-  altitude_width = canvas.CalcTextWidth(base.c_str());
+  AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
+  altitude_width = canvas.CalcTextWidth(buffer);
 
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, base.c_str());
+                      rc, buffer);
 
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
                      PixelScalar(rc.top + line_height / 2) };

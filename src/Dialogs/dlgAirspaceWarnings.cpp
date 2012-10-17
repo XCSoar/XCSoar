@@ -317,10 +317,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   const AbstractAirspace &airspace = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
 
-  tstring name = AirspaceFormatter::GetNameAndClass(airspace);
-  tstring top = AirspaceFormatter::GetAltitudeShort(airspace.GetTop());
-  tstring base = AirspaceFormatter::GetAltitudeShort(airspace.GetBase());
-
   const UPixelScalar text_height = 12, text_top = 1;
 
   // word "inside" is used as the etalon, because it is longer than "near" and
@@ -342,17 +338,19 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     canvas.SetTextColor(COLOR_GRAY);
 
   { // name, altitude info
-    _stprintf(buffer, _T("%-20s"), name.c_str());
+    _sntprintf(buffer, 21, _T("%s %s"),
+               airspace.GetName(),
+               AirspaceFormatter::GetClass(airspace));
 
     canvas.text_clipped(paint_rc.left + left0,
                         paint_rc.top + Layout::Scale(text_top),
                         rc_text_clip, buffer);
 
-    _stprintf(buffer, _T("%-20s"), top.c_str());
+    AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
     canvas.text(paint_rc.left + left1,
                 paint_rc.top + Layout::Scale(text_top), buffer);
 
-    _stprintf(buffer, _T("%-20s"), base.c_str());
+    AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
     canvas.text(paint_rc.left + left1,
                 paint_rc.top + Layout::Scale(text_top + text_height),
                 buffer);
