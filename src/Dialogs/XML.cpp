@@ -619,8 +619,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     }
 
   } else if (StringIsEqual(node.GetName(), _T("TextEdit"))) {
-    // Determine whether the control is multiline or readonly
-    bool multi_line = StringToIntDflt(node.GetAttribute(_T("MultiLine")), 0);
     bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
 
     EditWindowStyle edit_style(style);
@@ -635,11 +633,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       edit_style.Border();
     else
       edit_style.SunkenEdge();
-
-    if (multi_line) {
-      edit_style.SetMultiLine();
-      edit_style.VerticalScroll();
-    }
 
     EditWindow *edit;
     window = edit = new EditWindow();
