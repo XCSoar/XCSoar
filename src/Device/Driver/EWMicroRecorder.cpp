@@ -34,7 +34,7 @@ Copyright_License {
 #include "NMEA/Checksum.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Units/System.hpp"
-#include "TimeoutClock.hpp"
+#include "Time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 #include "Util/StaticString.hpp"
 

@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Internal.hpp"
-#include "TimeoutClock.hpp"
+#include "Time/TimeoutClock.hpp"
 
 #include <assert.h>
 

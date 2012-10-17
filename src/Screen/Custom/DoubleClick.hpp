@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_DOUBLE_CLICK_HPP
 #define XCSOAR_SCREEN_DOUBLE_CLICK_HPP
 
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "Screen/Point.hpp"
 
 /**

@@ -33,7 +33,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Components.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "MainWindow.hpp"
 #include "Asset.hpp"
 #include "Simulator.hpp"

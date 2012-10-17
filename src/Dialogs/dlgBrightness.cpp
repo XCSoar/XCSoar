@@ -35,7 +35,7 @@ Copyright_License {
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Compatibility/string.h"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "Components.hpp"
 #include "Hardware/AltairControl.hpp"
 #include "UIGlobals.hpp"

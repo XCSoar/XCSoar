@@ -30,7 +30,7 @@
 #ifndef KINETIC_MANAGER_HPP
 #define KINETIC_MANAGER_HPP
 
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "Math/fixed.hpp"
 
 /**

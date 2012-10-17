@@ -25,7 +25,7 @@ Copyright_License {
 #define NMEA_REPLAY_GLUE_HPP
 
 #include "Replay/NmeaReplay.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 
 class NmeaReplayGlue:
   public NmeaReplay

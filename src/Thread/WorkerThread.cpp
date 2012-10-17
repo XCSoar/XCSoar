@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Thread/WorkerThread.hpp"
 #include "Thread/Trigger.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 
 WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min,
                            unsigned _delay)

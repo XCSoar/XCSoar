@@ -32,7 +32,7 @@ Copyright_License {
 #include "Tracking/SkyLines/Glue.hpp"
 #include "Thread/StandbyThread.hpp"
 #include "Tracking/LiveTrack24.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Time/BrokenDateTime.hpp"
 

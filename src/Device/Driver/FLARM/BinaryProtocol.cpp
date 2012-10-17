@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device.hpp"
 #include "CRC16.hpp"
 #include "Device/Port/Port.hpp"
-#include "TimeoutClock.hpp"
+#include "Time/TimeoutClock.hpp"
 #include "Operation/Operation.hpp"
 
 gcc_pure

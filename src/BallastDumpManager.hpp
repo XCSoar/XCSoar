@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef BALLAST_DUMP_MANAGER_HPP
 #define BALLAST_DUMP_MANAGER_HPP
 
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 
 class GlidePolar;
 

@@ -25,7 +25,7 @@ Copyright_License {
 #include "Util/CRC.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
-#include "TimeoutClock.hpp"
+#include "Time/TimeoutClock.hpp"
 
 #include <string.h>
 

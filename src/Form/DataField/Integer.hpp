@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DATA_FIELD_INTEGER_HPP
 
 #include "Number.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 
 class DataFieldInteger : public NumberDataField
 {

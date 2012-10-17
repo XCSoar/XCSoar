@@ -25,7 +25,7 @@ Copyright_License {
 #define IGC_REPLAY_GLUE_HPP
 
 #include "Replay/IgcReplay.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 
 class IgcReplayGlue: 
   public IgcReplay

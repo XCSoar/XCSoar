@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_BATTERY_TIMER_HPP
 #define XCSOAR_BATTERY_TIMER_HPP
 
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 
 class BatteryTimer {
   // Battery status for SIMULATOR mode

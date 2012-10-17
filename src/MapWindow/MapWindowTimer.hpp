@@ -23,7 +23,7 @@ Copyright_License {
 #ifndef MAP_WINDOW_TIMER_HPP
 #define MAP_WINDOW_TIMER_HPP
 
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 
 /**
  * This class is used for drawing time calculations

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"
-#include "TimeoutClock.hpp"
+#include "Time/TimeoutClock.hpp"
 
 #include <stdio.h>
 #include <string.h>

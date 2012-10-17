@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_GLUE_MAP_WINDOW_HPP
 
 #include "MapWindow.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "TrackingGestureManager.hpp"
 #include "Renderer/ThermalBandRenderer.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"

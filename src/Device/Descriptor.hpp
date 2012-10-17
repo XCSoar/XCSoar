@@ -30,7 +30,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
 #include "NMEA/ExternalSettings.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "Job/Async.hpp"
 #include "Thread/Notify.hpp"
 

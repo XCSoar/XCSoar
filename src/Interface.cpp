@@ -36,7 +36,7 @@ Copyright_License {
 #include "FLARM/Glue.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Gauge/GaugeFLARM.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "LogFile.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"

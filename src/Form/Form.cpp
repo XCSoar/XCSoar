@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Form.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "Asset.hpp"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"

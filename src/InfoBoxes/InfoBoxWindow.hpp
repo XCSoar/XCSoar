@@ -28,7 +28,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Timer.hpp"
-#include "PeriodClock.hpp"
+#include "Time/PeriodClock.hpp"
 #include "Data.hpp"
 
 struct InfoBoxSettings;

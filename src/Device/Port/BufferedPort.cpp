@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "BufferedPort.hpp"
-#include "TimeoutClock.hpp"
+#include "Time/TimeoutClock.hpp"
 
 #include <algorithm>
 
