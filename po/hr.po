@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-08-05 17:22+0000\n"
+"PO-Revision-Date: 2012-10-15 20:30+0000\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: none\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-06 08:28+0000\n"
-"X-Generator: Launchpad (build 15745)\n"
+"X-Launchpad-Export-Date: 2012-10-17 20:32+0000\n"
+"X-Generator: Launchpad (build 16152)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -4103,13 +4103,13 @@ msgstr "Ponovljeni let"
 #: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:826
 #: Data/Input/default.xci:1245
 msgid "Status"
-msgstr "STATUS"
+msgstr "Status"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:89
 #: src/Dialogs/Waypoint/WaypointInfoWidget.cpp:115
 #: Data/Dialogs/dlgTaskPoint.xml:7 Data/Dialogs/dlgTaskPoint_L.xml:11
 msgid "Location"
-msgstr ""
+msgstr "Lokacija"
 
 #: src/Dialogs/StatusPanels/FlightStatusPanel.cpp:91
 msgid "Max. height gain"

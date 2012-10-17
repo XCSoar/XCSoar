@@ -15,6 +15,10 @@ Version 6.5 - not yet released
 * infoboxes
   - added thermal assistant infobox
 
+Version 6.4.3 - not yet released
+* devices
+  - LXNAV Nano: fix crash in Nano configuration dialog
+
 Version 6.4.2 - 2012/10/17
 * calculations
   - contest: relax altitude difference check (#2348)
