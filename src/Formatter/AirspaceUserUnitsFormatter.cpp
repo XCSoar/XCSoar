@@ -74,27 +74,3 @@ AirspaceFormatter::GetAltitude(const AirspaceAltitude &altitude)
 
   return GetAltitudeShort(altitude) + buffer.c_str();
 }
-
-tstring
-AirspaceFormatter::GetBase(const AbstractAirspace &airspace)
-{
-  return GetAltitude(airspace.GetBase());
-}
-
-tstring
-AirspaceFormatter::GetBaseShort(const AbstractAirspace &airspace)
-{
-  return GetAltitudeShort(airspace.GetBase());
-}
-
-tstring
-AirspaceFormatter::GetTop(const AbstractAirspace &airspace)
-{
-  return GetAltitude(airspace.GetTop());
-}
-
-tstring
-AirspaceFormatter::GetTopShort(const AbstractAirspace &airspace)
-{
-  return GetAltitudeShort(airspace.GetTop());
-}

@@ -72,7 +72,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       rc.top + name_font.GetHeight() + Layout::FastScale(4),
                       rc, comment);
 
-  tstring top = AirspaceFormatter::GetTopShort(airspace);
+  tstring top = AirspaceFormatter::GetAltitudeShort(airspace.GetTop());
   PixelScalar altitude_width =
     canvas.CalcTextWidth(top.c_str());
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
@@ -80,7 +80,7 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       small_font.GetHeight() + Layout::FastScale(2), rc,
                       top.c_str());
 
-  tstring base = AirspaceFormatter::GetBaseShort(airspace);
+  tstring base = AirspaceFormatter::GetAltitudeShort(airspace.GetBase());
   altitude_width = canvas.CalcTextWidth(base.c_str());
 
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),

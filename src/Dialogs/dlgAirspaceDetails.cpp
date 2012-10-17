@@ -71,12 +71,10 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddReadOnly(_("Radio"), nullptr, airspace.GetRadioText().c_str());
 
   AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(airspace));
-  AddReadOnly(_("Top"), nullptr, AirspaceFormatter::GetTop(airspace).c_str());
+  AddReadOnly(_("Top"), nullptr,
+              AirspaceFormatter::GetAltitude(airspace.GetTop()).c_str());
   AddReadOnly(_("Base"), nullptr,
-              AirspaceFormatter::GetBase(airspace).c_str());
-
-  AddReadOnly(_("Base"), nullptr,
-              AirspaceFormatter::GetBase(airspace).c_str());
+              AirspaceFormatter::GetAltitude(airspace.GetBase()).c_str());
 
   if (warnings != nullptr) {
     const GeoPoint closest =
