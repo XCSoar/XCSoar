@@ -84,7 +84,7 @@ Notify::ClearNotification()
 void
 Notify::RunNotification()
 {
-  if (!pending.exchange(false, std::memory_order_relaxed))
+  if (pending.exchange(false, std::memory_order_relaxed))
     OnNotification();
 }
 
