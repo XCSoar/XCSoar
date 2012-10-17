@@ -35,6 +35,7 @@ Copyright_License {
 class LargeTextWindowStyle : public WindowStyle {
 public:
   LargeTextWindowStyle() {
+    VerticalScroll();
 #ifdef USE_GDI
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
 #else
@@ -43,6 +44,7 @@ public:
   }
 
   LargeTextWindowStyle(const WindowStyle other):WindowStyle(other) {
+    VerticalScroll();
 #ifdef USE_GDI
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
 #else
