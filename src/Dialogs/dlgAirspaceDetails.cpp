@@ -28,7 +28,6 @@ Copyright_License {
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
-#include "Geo/GeoVector.hpp"
 #include "Units/Units.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
@@ -81,10 +80,10 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (warnings != nullptr) {
     const GeoPoint closest =
       airspace.ClosestPoint(basic.location, warnings->GetProjection());
-    const GeoVector vec(basic.location, closest);
+    const fixed distance = closest.Distance(basic.location);
 
     StaticString<80> buffer;
-    buffer.Format(_T("%d%s"), (int)Units::ToUserDistance(vec.distance),
+    buffer.Format(_T("%d%s"), (int)Units::ToUserDistance(distance),
                   Units::GetDistanceName());
     AddReadOnly(_("Range"), nullptr, buffer);
   }
