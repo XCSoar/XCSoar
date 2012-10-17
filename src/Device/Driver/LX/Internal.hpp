@@ -29,6 +29,7 @@ Copyright_License {
 #include "Device/SettingsMap.hpp"
 #include "Thread/Mutex.hpp"
 
+#include <atomic>
 #include <stdint.h>
 
 class LXDevice: public AbstractDevice
@@ -43,6 +44,8 @@ class LXDevice: public AbstractDevice
   Port &port;
 
   unsigned bulk_baud_rate;
+
+  std::atomic<bool> busy;
 
   /**
    * Is this ia Colibri or LX20 or a similar "old" logger?  This is
@@ -80,12 +83,12 @@ class LXDevice: public AbstractDevice
 
   Mutex mutex;
   Mode mode;
-  bool busy;
   unsigned old_baud_rate;
 
 public:
   LXDevice(Port &_port, unsigned baud_rate, unsigned _bulk_baud_rate)
     :port(_port), bulk_baud_rate(_bulk_baud_rate),
+     busy(false),
      is_colibri(baud_rate == 4800),
      is_v7(false), is_nano(false), is_forwarded_nano(false),
      mode(Mode::UNKNOWN), old_baud_rate(0) {}

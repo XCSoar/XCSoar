@@ -31,6 +31,8 @@ Copyright_License {
 void
 LXDevice::LinkTimeout()
 {
+  busy = false;
+
   ScopeLock protect(mutex);
 
   is_v7 = is_nano = is_forwarded_nano = false;
@@ -45,7 +47,6 @@ LXDevice::LinkTimeout()
 
   mode = Mode::UNKNOWN;
   old_baud_rate = 0;
-  busy = false;
 }
 
 bool
@@ -179,8 +180,9 @@ LXDevice::EnableCommandMode(OperationEnvironment &env)
     return false;
   }
 
+  busy = false;
+
   ScopeLock protect(mutex);
   mode = Mode::COMMAND;
-  busy = false;
   return true;
 }

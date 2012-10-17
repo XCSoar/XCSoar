@@ -137,17 +137,13 @@ LXDevice::ReadFlightList(RecordedFlightList &flight_list,
     return false;
 
   assert(!busy);
-  mutex.Lock();
   busy = true;
-  mutex.Unlock();
 
   bool success = ReadFlightListInner(port, flight_list, env);
 
   LX::CommandModeQuick(port, env);
 
-  mutex.Lock();
   busy = false;
-  mutex.Unlock();
 
   return success;
 }
@@ -211,18 +207,14 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   assert(!busy);
-  mutex.Lock();
   busy = true;
-  mutex.Unlock();
 
   bool success = DownloadFlightInner(port, flight, file, env);
   fclose(file);
 
   LX::CommandModeQuick(port, env);
 
-  mutex.Lock();
   busy = false;
-  mutex.Unlock();
 
   return success;
 }
