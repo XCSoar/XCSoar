@@ -26,7 +26,7 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Util/Macros.hpp"
 
-static const TCHAR *airspace_class_names[] = {
+static const TCHAR *const airspace_class_names[] = {
   _T("Unknown"),
   _T("Restricted"),
   _T("Prohibited"),
@@ -50,7 +50,7 @@ static_assert(ARRAY_SIZE(airspace_class_names) ==
               "number of airspace class names does not match number of "
               "airspace classes");
 
-static const TCHAR *airspace_class_short_names[] = {
+static const TCHAR *const airspace_class_short_names[] = {
   _T("?"),
   _T("R"),
   _T("P"),
