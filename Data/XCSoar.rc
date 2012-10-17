@@ -212,7 +212,6 @@ IDR_WAV_DRIP            WAVE    DISCARDABLE     "sound/beep_drip.wav"
 // --- XML Dialogs ---
 IDR_XML_AIRSPACE XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspace.xml.gz"
 IDR_XML_AIRSPACE_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspace_L.xml.gz"
-IDR_XML_AIRSPACEDETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspaceDetails.xml.gz"
 IDR_XML_AIRSPACESELECT XMLDIALOG DISCARDABLE "../output/data/dialogs/AirspaceList.xml.gz"
 IDR_XML_AIRSPACESELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/AirspaceList_L.xml.gz"
 IDR_XML_AIRSPACEWARNINGS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspaceWarnings.xml.gz"

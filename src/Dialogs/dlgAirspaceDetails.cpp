@@ -22,137 +22,100 @@ Copyright_License {
 */
 
 #include "Dialogs/Airspace.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Message.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
-#include "Form/Edit.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/RowFormWidget.hpp"
+#include "Form/ActionListener.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Formatter/AirspaceFormatter.hpp"
-#include "Math/FastMath.h"
 #include "Geo/GeoVector.hpp"
 #include "Units/Units.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-
 #include "Compiler.h"
 
 #include <assert.h>
-#include <stdio.h>
 
-static ProtectedAirspaceWarningManager *airspace_warnings;
-static const AbstractAirspace* airspace;
-static WndForm *wf = NULL;
+class AirspaceDetailsWidget : public RowFormWidget, public ActionListener {
+  const AbstractAirspace &airspace;
+  ProtectedAirspaceWarningManager *warnings;
 
-static void
-OnAcknowledgeClicked(gcc_unused WndButton &Sender)
-{
-  assert(airspace);
+public:
+  /**
+   * Hack to allow the widget to close its surrounding dialog.
+   */
+  ActionListener *listener;
 
-  if (airspace_warnings == NULL)
-    return;
+  AirspaceDetailsWidget(const AbstractAirspace &_airspace,
+                        ProtectedAirspaceWarningManager *_warnings)
+    :RowFormWidget(UIGlobals::GetDialogLook()),
+     airspace(_airspace), warnings(_warnings) {}
 
-  bool acked = airspace_warnings->get_ack_day(*airspace);
-  airspace_warnings->acknowledge_day(*airspace, !acked);
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
 
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnAcknowledgeClicked),
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
+  /* methods from ActionListener */
+  virtual void OnAction(int id);
 };
 
-static void
-UpdateAckButton()
+void
+AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  assert(airspace);
+  const NMEAInfo &basic = CommonInterface::Basic();
 
-  if (airspace_warnings == NULL)
-    return;
+  AddMultiLine(_("Name"), nullptr, airspace.GetName());
 
-  WndButton* ack = (WndButton*)wf->FindByName(_T("cmdAcknowledge"));
-  assert(ack != NULL);
-  ack->SetCaption(airspace_warnings->get_ack_day(*airspace) ?
-                  _("Enable") : _("Ack Day"));
-}
+  if (!airspace.GetRadioText().empty())
+    AddReadOnly(_("Radio"), nullptr, airspace.GetRadioText().c_str());
 
-static void
-SetValues()
-{
-  assert(airspace);
+  AddReadOnly(_("Type"), nullptr, AirspaceFormatter::GetClass(airspace));
+  AddReadOnly(_("Top"), nullptr, AirspaceFormatter::GetTop(airspace).c_str());
+  AddReadOnly(_("Base"), nullptr,
+              AirspaceFormatter::GetBase(airspace).c_str());
 
-  WndProperty* wp;
+  AddReadOnly(_("Base"), nullptr,
+              AirspaceFormatter::GetBase(airspace).c_str());
 
-  wp = (WndProperty*)wf->FindByName(_T("prpName"));
-  assert(wp != NULL);
-  wp->SetText(airspace->GetName());
-  wp->RefreshDisplay();
+  if (warnings != nullptr) {
+    const GeoPoint closest =
+      airspace.ClosestPoint(basic.location, warnings->GetProjection());
+    const GeoVector vec(basic.location, closest);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRadio"));
-  assert(wp != NULL);
-  wp->SetText(airspace->GetRadioText().c_str());
-  wp->RefreshDisplay();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpType"));
-  assert(wp != NULL);
-  wp->SetText(AirspaceFormatter::GetClass(*airspace));
-  wp->RefreshDisplay();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpTop"));
-  assert(wp != NULL);
-  wp->SetText(AirspaceFormatter::GetTop(*airspace).c_str());
-  wp->RefreshDisplay();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpBase"));
-  assert(wp != NULL);
-  wp->SetText(AirspaceFormatter::GetBase(*airspace).c_str());
-  wp->RefreshDisplay();
-
-  if (airspace_warnings != NULL) {
-    wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-    assert(wp != NULL);
-    const GeoPoint &ac_loc = XCSoarInterface::Basic().location;
-    const GeoPoint closest_loc =
-      airspace->ClosestPoint(ac_loc, airspace_warnings->GetProjection());
-    const GeoVector vec(ac_loc, closest_loc);
-    StaticString<80> buf;
-    buf.Format(_T("%d%s"), (int)Units::ToUserDistance(vec.distance),
-               Units::GetDistanceName());
-    wp->SetText(buf);
-    wp->RefreshDisplay();
+    StaticString<80> buffer;
+    buffer.Format(_T("%d%s"), (int)Units::ToUserDistance(vec.distance),
+                  Units::GetDistanceName());
+    AddReadOnly(_("Range"), nullptr, buffer);
   }
 }
 
 void
-dlgAirspaceDetails(const AbstractAirspace& the_airspace,
-                   ProtectedAirspaceWarningManager *_airspace_warnings)
+AirspaceDetailsWidget::OnAction(int id)
 {
-  if (wf)
-    return;
+  assert(warnings != nullptr);
 
-  airspace = &the_airspace;
-  airspace_warnings = _airspace_warnings;
+  bool acked = warnings->get_ack_day(airspace);
+  warnings->acknowledge_day(airspace, !acked);
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  _T("IDR_XML_AIRSPACEDETAILS"));
-  assert(wf != NULL);
+  listener->OnAction(mrOK);
+}
 
-  SetValues();
-  UpdateAckButton();
+void
+dlgAirspaceDetails(const AbstractAirspace &airspace,
+                   ProtectedAirspaceWarningManager *warnings)
+{
+  AirspaceDetailsWidget *widget =
+    new AirspaceDetailsWidget(airspace, warnings);
+  WidgetDialog dialog(_("Airspace Details"), widget);
+  dialog.AddButton(_("Close"), mrOK);
 
-  wf->ShowModal();
+  if (warnings != nullptr) {
+    widget->listener = &dialog;
+    dialog.AddButton(warnings->get_ack_day(airspace)
+                     ? _("Enable") : _("Ack Day"),
+                     widget, 1);
+  }
 
-  delete wf;
-  wf = NULL;
+  dialog.ShowModal();
 }
