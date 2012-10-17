@@ -34,18 +34,21 @@ Copyright_License {
 
 class LargeTextWindowStyle : public WindowStyle {
 public:
-#ifdef USE_GDI
   LargeTextWindowStyle() {
+#ifdef USE_GDI
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
+#else
+    text_style |= DT_LEFT | DT_WORDBREAK;
+#endif
   }
 
   LargeTextWindowStyle(const WindowStyle other):WindowStyle(other) {
+#ifdef USE_GDI
     style |= ES_LEFT | ES_MULTILINE | ES_READONLY;
-  }
 #else
-  LargeTextWindowStyle() = default;
-  LargeTextWindowStyle(const WindowStyle other):WindowStyle(other) {}
+    text_style |= DT_LEFT | DT_WORDBREAK;
 #endif
+  }
 
   void SetCenter() {
 #ifndef USE_GDI
