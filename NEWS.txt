@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.4.3 - not yet released
+
 Version 6.4.2 - 2012/10/17
 * calculations
   - contest: relax altitude difference check (#2348)
