@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Engine/Airspace/AirspaceClass.hpp"
 #include "Util/tstring.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -35,13 +36,19 @@ struct AirspaceAltitude;
 namespace AirspaceFormatter {
 
 /** Returns the airspace class as text. */
+gcc_const
 const TCHAR *GetClass(AirspaceClass airspace_class);
+
 /** Returns the airspace class as short text. */
+gcc_const
 const TCHAR *GetClassShort(AirspaceClass airspace_class);
 
 /** Returns the class of the airspace as text. */
+gcc_pure
 const TCHAR *GetClass(const AbstractAirspace &airspace);
+
 /** Returns the class of the airspace as short text. */
+gcc_pure
 const TCHAR *GetClassShort(const AbstractAirspace &airspace);
 
 /** Returns the airspace name and class as text. */
