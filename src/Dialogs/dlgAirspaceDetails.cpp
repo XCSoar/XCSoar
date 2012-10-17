@@ -57,7 +57,7 @@ public:
                        const PixelRect &rc) gcc_override;
 
   /* methods from ActionListener */
-  virtual void OnAction(int id);
+  virtual void OnAction(int id) gcc_override;
 };
 
 void
