@@ -566,7 +566,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     caption_width = ScaleWidth(caption_width);
 
     // Determine whether the control is multiline or readonly
-    bool multi_line = StringToIntDflt(node.GetAttribute(_T("MultiLine")), 0);
     bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
 
     // Load the event callback properties
@@ -594,11 +593,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       edit_style.Border();
     else
       edit_style.SunkenEdge();
-
-    if (multi_line) {
-      edit_style.SetMultiLine();
-      edit_style.VerticalScroll();
-    }
 
     WndProperty *property;
     window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
