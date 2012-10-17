@@ -30,6 +30,7 @@ Copyright_License {
 #include "Dialogs/DialogSettings.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/LargeTextWindow.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/Integer.hpp"
 #include "DataField/Float.hpp"
@@ -435,40 +436,30 @@ RowFormWidget::AddFileReader(const TCHAR *label, const TCHAR *help,
 }
 
 void
-RowFormWidget::AddMultiLine(const TCHAR *label, const TCHAR *help,
-                            const TCHAR *text)
+RowFormWidget::AddMultiLine(const TCHAR *text)
 {
   assert(IsDefined());
 
-  const PixelRect edit_rc =
+  const PixelRect rc =
     InitialControlRect(Layout::GetMinimumControlHeight());
 
-  WindowStyle style;
-
-  EditWindowStyle edit_style;
-  edit_style.SetMultiLine();
-  edit_style.VerticalScroll();
-  edit_style.SetReadOnly();
-
+  LargeTextWindowStyle style;
   if (IsEmbedded() || Layout::scale_1024 < 2048)
     /* sunken edge doesn't fit well on the tiny screen of an embedded
        device */
-    edit_style.Border();
+    style.Border();
   else
-    edit_style.SunkenEdge();
+    style.SunkenEdge();
 
   PanelControl &panel = *(PanelControl *)GetWindow();
-  WndProperty *edit =
-    new WndProperty(panel, look, label,
-                    edit_rc, (*label == '\0') ? 0 : 100,
-                    style, edit_style, NULL);
-  if (help != NULL)
-    edit->SetHelpText(help);
+  LargeTextWindow *ltw = new LargeTextWindow();
+  ltw->SetFont(*look.text_font);
+  ltw->Create(panel, rc, style);
 
-  if (text != NULL)
-    edit->SetText(text);
+  if (text != nullptr)
+    ltw->SetText(text);
 
-  Add(Row::Type::MULTI_LINE, edit);
+  Add(Row::Type::MULTI_LINE, ltw);
 }
 
 void
@@ -488,6 +479,16 @@ RowFormWidget::AddButton(const TCHAR *label, ActionListener *listener, int id)
   WndButton *button = new WndButton(panel, look, label, button_rc, button_style, listener, id);
 
   Add(Row::Type::BUTTON, button);
+}
+
+void
+RowFormWidget::SetMultiLineText(unsigned i, const TCHAR *text)
+{
+  assert(text != nullptr);
+  assert(rows[i].type == Row::Type::MULTI_LINE);
+
+  LargeTextWindow &ltw = *(LargeTextWindow *)rows[i].window;
+  ltw.SetText(text);
 }
 
 void

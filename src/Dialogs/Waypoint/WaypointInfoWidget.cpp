@@ -83,7 +83,7 @@ WaypointInfoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   StaticString<64> buffer;
 
   if (!waypoint.comment.empty())
-    AddMultiLine(_("Comment"), NULL, waypoint.comment.c_str());
+    AddMultiLine(waypoint.comment.c_str());
 
   if (waypoint.radio_frequency.IsDefined() &&
       waypoint.radio_frequency.Format(buffer.buffer(),

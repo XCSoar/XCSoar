@@ -66,7 +66,7 @@ AirspaceDetailsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR buffer[64];
 
-  AddMultiLine(_("Name"), nullptr, airspace.GetName());
+  AddMultiLine(airspace.GetName());
 
   if (!airspace.GetRadioText().empty())
     AddReadOnly(_("Radio"), nullptr, airspace.GetRadioText().c_str());

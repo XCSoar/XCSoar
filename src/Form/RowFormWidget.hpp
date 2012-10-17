@@ -363,8 +363,7 @@ public:
    * Add a read-only multi-line control.  You can use
    * SetMultiLineText() to update its text.
    */
-  void AddMultiLine(const TCHAR *label, const TCHAR *help=NULL,
-                    const TCHAR *text=NULL);
+  void AddMultiLine(const TCHAR *text=nullptr);
 
   void AddButton(const TCHAR *label, ActionListener *listener=NULL, int id=0);
 
@@ -437,14 +436,7 @@ public:
   /**
    * Update the text of a multi line control.
    */
-  void SetMultiLineText(unsigned i, const TCHAR *text) {
-    assert(text != NULL);
-    assert(rows[i].type == Row::Type::MULTI_LINE);
-
-    WndProperty &control = *(WndProperty *)rows[i].window;
-    assert(control.GetDataField() == NULL);
-    control.SetText(text);
-  }
+  void SetMultiLineText(unsigned i, const TCHAR *text);
 
   gcc_pure
   DataField &GetDataField(unsigned i) {
