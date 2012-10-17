@@ -61,6 +61,12 @@ struct RecordedFlightInfo {
     uint32_t imi;
 
     struct {
+      /**
+       * File name.  Only used by the LXNAV Nano sub-driver.  If this
+       * is empty, then the "classic" Colibri protocol is used.
+       */
+      char nano_filename[16];
+
       uint8_t start_address[3];
       uint8_t end_address[3];
     } lx;
