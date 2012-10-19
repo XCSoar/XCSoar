@@ -745,6 +745,13 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     window = frame;
 
   } else if (StringIsEqual(node.GetName(), _T("LargeText"))){
+    if (IsEmbedded() || Layout::scale_1024 < 2048)
+      /* sunken edge doesn't fit well on the tiny screen of an
+         embedded device */
+      style.Border();
+    else
+      style.SunkenEdge();
+
     LargeTextWindow *ltw = new LargeTextWindow();
     ltw->Create(parent, rc, style);
     ltw->SetFont(*xml_dialog_look->text_font);
