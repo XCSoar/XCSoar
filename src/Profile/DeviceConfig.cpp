@@ -35,6 +35,7 @@ static const TCHAR *const port_type_strings[] = {
   _T("rfcomm"),
   _T("rfcomm_server"),
   _T("ioio_uart"),
+  _T("droidsoar_v2"),
   _T("auto"),
   _T("internal"),
   _T("tcp_listener"),
@@ -58,6 +59,7 @@ DeviceConfig::IsAvailable() const
     return IsAndroid();
 
   case PortType::IOIOUART:
+  case PortType::DROIDSOAR_V2:
     return IsAndroid() && HasIOIOLib();
 
   case PortType::AUTO:
@@ -99,6 +101,7 @@ DeviceConfig::ShouldReopenOnTimeout() const
   case PortType::RFCOMM:
   case PortType::RFCOMM_SERVER:
   case PortType::IOIOUART:
+  case PortType::DROIDSOAR_V2:
     /* errors on these are detected automatically by the driver */
     return false;
 
@@ -144,6 +147,9 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
     _sntprintf(buffer, max_size, _T("IOIO UART %d"),
                ioio_uart_id);
     return buffer;
+
+  case PortType::DROIDSOAR_V2:
+    return _T("DroidSoar V2");
 
   case PortType::AUTO:
     return _("GPS Intermediate Driver");

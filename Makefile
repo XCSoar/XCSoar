@@ -809,6 +809,8 @@ XCSOAR_SOURCES += \
 ifneq ($(IOIOLIB_DIR),)
 XCSOAR_SOURCES += \
 	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \
+	$(SRC)/Android/NativeBMP085Listener.cpp \
+	$(SRC)/Android/BMP085Device.cpp \
 	$(SRC)/Android/IOIOHelper.cpp
 endif
 

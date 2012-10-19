@@ -58,6 +58,8 @@ Copyright_License {
 
 #ifdef IOIOLIB
 #include "Android/IOIOHelper.hpp"
+#include "NativeBMP085Listener.hpp"
+#include "BMP085Device.hpp"
 #endif
 
 #ifndef NDEBUG
@@ -113,6 +115,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   BluetoothHelper::Initialise(env);
 #ifdef IOIOLIB
   IOIOHelper::Initialise(env);
+  NativeBMP085Listener::Initialise(env);
+  BMP085Device::Initialise(env);
 #endif
 
   context = new Context(env, _context);
@@ -195,6 +199,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete context;
 
 #ifdef IOIOLIB
+  NativeBMP085Listener::Deinitialise(env);
   IOIOHelper::Deinitialise(env);
 #endif
   BluetoothHelper::Deinitialise(env);

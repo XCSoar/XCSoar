@@ -59,6 +59,8 @@ struct DeviceConfig {
      */
     IOIOUART,
 
+    DROIDSOAR_V2,
+
     /**
      * Attempt to auto-discover the GPS source.
      *

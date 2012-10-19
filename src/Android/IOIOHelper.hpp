@@ -51,6 +51,10 @@ public:
     shutdown(Java::GetEnv());
   }
 
+  jobject GetHolder() {
+    return Java::Object::Get();
+  }
+
   /**
    * Close the connection to the IOIO board.  It can be reopened
    * by calling open().

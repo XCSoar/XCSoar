@@ -10,6 +10,7 @@ Version 6.5 - not yet released
   - basic support for the contest "DMSt" (#2208)
 * devices
   - LX: support flight download from LXNAV Nano
+  - Android/IOIO: support BMP085 sensor (DroidSoar V2)
 * user interface
   - preselect first item with details in map item list for
     faster access (#2069, #2207)

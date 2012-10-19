@@ -48,6 +48,7 @@ class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
 class InternalSensors;
+class BMP085Device;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
@@ -110,6 +111,10 @@ class DeviceDescriptor : private Notify, private PortLineSplitter {
    * baro sensor and others).
    */
   InternalSensors *internal_sensors;
+
+#ifdef IOIOLIB
+  BMP085Device *droidsoar_v2;
+#endif
 #endif
 
   /**
@@ -240,6 +245,8 @@ private:
   bool Open(Port &port, OperationEnvironment &env);
 
   bool OpenInternalSensors();
+
+  bool OpenDroidSoarV2();
 
 public:
   /**

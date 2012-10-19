@@ -51,6 +51,11 @@ Copyright_License {
 #include "Android/Main.hpp"
 #endif
 
+#ifdef IOIOLIB
+#include "Android/IOIOHelper.hpp"
+#include "Android/BMP085Device.hpp"
+#endif
+
 #include <assert.h>
 
 /**
@@ -92,6 +97,9 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
    driver(NULL), device(NULL),
 #ifdef ANDROID
    internal_sensors(NULL),
+#ifdef IOIOLIB
+   droidsoar_v2(nullptr),
+#endif
 #endif
    ticker(false), borrowed(false)
 {
@@ -128,6 +136,11 @@ DeviceDescriptor::GetState() const
 #ifdef ANDROID
   if (internal_sensors != nullptr)
     return PortState::READY;
+
+#ifdef IOIOLIB
+  if (droidsoar_v2 != nullptr)
+    return PortState::READY;
+#endif
 #endif
 
   return PortState::FAILED;
@@ -229,12 +242,34 @@ DeviceDescriptor::OpenInternalSensors()
 }
 
 bool
+DeviceDescriptor::OpenDroidSoarV2()
+{
+#ifdef IOIOLIB
+  if (is_simulator())
+    return true;
+
+  if (ioio_helper == nullptr)
+    return false;
+
+  droidsoar_v2 = new BMP085Device(GetIndex(), Java::GetEnv(),
+                                  ioio_helper->GetHolder(),
+                                  2, 27, 3);
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
 DeviceDescriptor::DoOpen(OperationEnvironment &env)
 {
   assert(config.IsAvailable());
 
   if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalSensors();
+
+  if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2)
+    return OpenDroidSoarV2();
 
   reopen_clock.Update();
 
@@ -299,6 +334,11 @@ DeviceDescriptor::Close()
 #ifdef ANDROID
   delete internal_sensors;
   internal_sensors = NULL;
+
+#ifdef IOIOLIB
+  delete droidsoar_v2;
+  droidsoar_v2 = nullptr;
+#endif
 #endif
 
   delete device;
