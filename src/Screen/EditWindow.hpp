@@ -67,16 +67,6 @@ public:
 #endif
   }
 
-  void SetMultiLine() {
-#ifndef USE_GDI
-    text_style &= ~DT_VCENTER;
-    text_style |= DT_WORDBREAK;
-#else
-    style &= ~ES_AUTOHSCROLL;
-    style |= ES_MULTILINE;
-#endif
-  }
-
   void SetCenter() {
 #ifndef USE_GDI
     text_style &= ~DT_LEFT;
@@ -104,45 +94,19 @@ class EditWindow : public Window {
   bool read_only;
 
   tstring value;
-
-  /**
-   * The first visible line.
-   */
-  unsigned origin;
 #endif
 
 public:
   void Create(ContainerWindow &parent, PixelRect rc,
               const EditWindowStyle style);
 
-#ifndef USE_GDI
-  gcc_pure
-  unsigned GetVisibleRows() const {
-    assert(IsMultiLine());
-
-    return GetHeight() / GetFont().GetHeight();
+#ifdef USE_GDI
+  void SetText(const TCHAR *text) {
+    ::SetWindowText(hWnd, text);
   }
-#endif
-
-  gcc_pure
-  unsigned GetRowCount() const {
-    AssertNoneLocked();
-
-#ifndef USE_GDI
-    const TCHAR *str = value.c_str();
-    int row_count = 1;
-
-    while ((str = _tcschr(str, _T('\n'))) != NULL) {
-      str++;
-      row_count++;
-    }
-    return row_count;
-#else /* USE_GDI */
-    return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
-#endif /* USE_GDI */
-  }
-
+#else
   void SetText(const TCHAR *text);
+#endif
 
   void GetText(TCHAR *text, size_t max_length) {
 #ifndef USE_GDI
@@ -171,14 +135,6 @@ public:
 #endif
   }
 
-  bool IsMultiLine() const {
-#ifndef USE_GDI
-    return (GetTextStyle() & DT_WORDBREAK) != 0;
-#else
-    return (GetStyle() & ES_MULTILINE) != 0;
-#endif
-  }
-
   void Select(int start, int end) {
     AssertNoneLocked();
 
@@ -197,18 +153,9 @@ public:
 #endif
   }
 
-  /**
-   * Scroll the contents of a multi-line control by the specified
-   * number of lines.
-   */
-  void ScrollVertically(int delta_lines);
-
 #ifndef USE_GDI
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual void OnPaint(Canvas &canvas);
-  virtual bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code);
 #endif /* !USE_GDI */
 };
 
