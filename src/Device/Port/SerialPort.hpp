@@ -109,16 +109,16 @@ protected:
 
 public:
   /* virtual methods from class Port */
-  virtual bool IsValid() const;
-  virtual bool Drain();
-  virtual void Flush();
-  virtual bool SetBaudrate(unsigned baud_rate);
-  virtual unsigned GetBaudrate() const;
-  virtual size_t Write(const void *data, size_t length);
+  virtual bool IsValid() const gcc_override;
+  virtual bool Drain() gcc_override;
+  virtual void Flush() gcc_override;
+  virtual bool SetBaudrate(unsigned baud_rate) gcc_override;
+  virtual unsigned GetBaudrate() const gcc_override;
+  virtual size_t Write(const void *data, size_t length) gcc_override;
 
 protected:
   /* virtual methods from class Thread */
-  virtual void Run();
+  virtual void Run() gcc_override;
 };
 
 #endif

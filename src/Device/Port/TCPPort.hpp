@@ -69,11 +69,11 @@ public:
   bool Open(unsigned port);
 
   /* overrided virtual methods from SocketPort */
-  virtual bool IsValid() const;
+  virtual bool IsValid() const gcc_override;
 
 protected:
   /* virtual methods from class FileEventHandler */
-  virtual bool OnFileEvent(int fd, unsigned mask);
+  virtual bool OnFileEvent(int fd, unsigned mask) gcc_override;
 };
 
 #endif

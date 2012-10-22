@@ -35,19 +35,21 @@ public:
   NullPort();
   NullPort(DataHandler  &_handler);
 
-  virtual bool IsValid() const;
-  virtual size_t Write(const void *data, size_t length);
-  virtual bool Drain();
-  virtual void Flush();
-  virtual unsigned GetBaudrate() const;
-  virtual bool SetBaudrate(unsigned baud_rate);
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-  virtual int Read(void *Buffer, size_t Size);
-  virtual WaitResult WaitRead(unsigned timeout_ms);
+  /* virtual methods from class Port */
+  virtual bool IsValid() const gcc_override;
+  virtual size_t Write(const void *data, size_t length) gcc_override;
+  virtual bool Drain() gcc_override;
+  virtual void Flush() gcc_override;
+  virtual unsigned GetBaudrate() const gcc_override;
+  virtual bool SetBaudrate(unsigned baud_rate) gcc_override;
+  virtual bool StopRxThread() gcc_override;
+  virtual bool StartRxThread() gcc_override;
+  virtual int Read(void *Buffer, size_t Size) gcc_override;
+  virtual WaitResult WaitRead(unsigned timeout_ms) gcc_override;
 
 private:
-  virtual void DataReceived(const void *data, size_t length);
-  };
+  /* virtual methods from class DataHandler */
+  virtual void DataReceived(const void *data, size_t length) gcc_override;
+};
 
 #endif
