@@ -23,12 +23,12 @@
 
 package org.xcsoar;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Iterator;
 import android.util.Log;
 import ioio.lib.api.IOIO;
 import ioio.lib.api.IOIOFactory;
-import ioio.lib.api.Uart;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.api.exception.IncompatibilityException;
 
@@ -36,108 +36,106 @@ import ioio.lib.api.exception.IncompatibilityException;
  * A utility class which wraps the Java API into an easier API for the
  * C++ code.
  */
-final class IOIOHelper extends Thread {
+final class IOIOHelper extends Thread implements IOIOConnectionHolder {
   private static final String TAG = "XCSoar";
 
-  private enum Command {
-    NONE,
-    SHUTDOWN,
-    OPEN,
-    CLOSE,
-  }
-
-  /**
-   * The command being sent to the connection thread.
-   */
-  private Command command = Command.NONE;
+  private boolean shutdownFlag;
 
   private IOIO ioio_;
 
   /**
    * The IOIO connection that is currently being established.  It may
-   * be non-null while running the OPEN command, and may be used by
-   * the client thread to cancel the connection.
+   * be used by the client thread to cancel the connection.
    */
   private IOIO connecting;
 
-  private XCSUart[] xuarts_ = new XCSUart[4];
+  /**
+   * The list of listeners that believe there is no IOIO connection.
+   */
+  private Collection<IOIOConnectionListener> closedListeners =
+    new LinkedList<IOIOConnectionListener>();
+
+  /**
+   * The list of listeners that believe a IOIO connection is
+   * established.
+   */
+  private Collection<IOIOConnectionListener> openListeners =
+    new LinkedList<IOIOConnectionListener>();
 
   public IOIOHelper() {
     super("IOIO");
 
-    for (int i = 0; i < 4; i++)
-      xuarts_[i] = new XCSUart(i);
-
     start();
   }
 
-  private boolean isOpen() {
+  private synchronized boolean isOpen() {
     return ioio_ != null;
   }
 
-  private synchronized void wakeUp() {
-    if (isOpen())
-      interrupt();
-    else
-      notifyAll();
-  }
-
-  private synchronized void waitCompletion() throws InterruptedException {
-    while (command != Command.NONE)
-      wait();
-  }
-
-  private synchronized boolean waitCompletion(int timeout_ms)
-    throws InterruptedException {
-    if (command == Command.NONE)
-      return true;
-
-    wait(timeout_ms);
-    return command == Command.NONE;
-  }
-
-  private synchronized void runCommand(Command _cmd)
-    throws InterruptedException {
-    if (command == _cmd) {
-      /* another thread is already running this command */
-      waitCompletion();
-      return;
-    }
-
-    waitCompletion();
-
-    command = _cmd;
-    wakeUp();
-    waitCompletion();
-  }
-
-  private synchronized boolean runCommand(Command _cmd, int timeout_ms)
-    throws InterruptedException {
-    if (command == _cmd)
-      /* another thread is already running this command */
-      return waitCompletion(timeout_ms);
-
-    if (!waitCompletion(timeout_ms))
-      return false;
-
-    command = _cmd;
-    wakeUp();
-    return waitCompletion(timeout_ms);
-  }
-
   /**
-   * Called by the connection thread when a command has been executed.
+   * Is the IOIO connection currently in use?  If not, it may be
+   * closed eventually.
    */
-  private synchronized void commandFinished() {
-    command = Command.NONE;
-    notifyAll();
+  private synchronized boolean isInUse() {
+    return !openListeners.isEmpty() || !closedListeners.isEmpty();
   }
 
   public void shutdown() {
+    synchronized(this) {
+      shutdownFlag = true;
+
+      IOIO ioio = connecting;
+      if (ioio != null)
+        ioio.disconnect();
+    }
+
+    interrupt();
+
     try {
-      runCommand(Command.SHUTDOWN);
       join();
     } catch (InterruptedException e) {
+    }
+  }
+
+  private static void openListener(IOIOConnectionListener listener, IOIO ioio)
+    throws ConnectionLostException {
+    /* clear this thread's "interrupted" flag, to avoid interrupting
+       the listener */
+    interrupted();
+
+    try {
+      try {
+        listener.onIOIOConnect(ioio);
+      } catch (InterruptedException e) {
+        /* got an interrupt from another thread; try again */
+        listener.onIOIOConnect(ioio);
+      }
+    } catch (InterruptedException e) {
+      Log.e(TAG, "Failed to open IOIO device " + listener, e);
+    } catch (RuntimeException e) {
+      Log.e(TAG, "Failed to open IOIO device " + listener, e);
+    }
+  }
+
+  private synchronized void openAllListeners(IOIO ioio)
+    throws ConnectionLostException {
+    for (Iterator<IOIOConnectionListener> i = closedListeners.iterator(); i.hasNext();) {
+      IOIOConnectionListener listener = i.next();
+
+      openListener(listener, ioio);
+
+      i.remove();
+      openListeners.add(listener);
+    }
+  }
+
+  private synchronized void closeAllListeners() {
+    for (Iterator<IOIOConnectionListener> i = openListeners.iterator(); i.hasNext();) {
+      IOIOConnectionListener listener = i.next();
+      listener.onIOIODisconnect();
+
+      i.remove();
+      closedListeners.add(listener);
     }
   }
 
@@ -145,10 +143,16 @@ final class IOIOHelper extends Thread {
    * Called by the connection thread to open a connection.
    */
   private void synchronousOpen() {
-    if (ioio_ != null)
-      return;
+    Log.d(TAG, "open IOIO");
 
-    IOIO ioio = connecting = IOIOFactory.create();
+    IOIO ioio;
+
+    synchronized(this) {
+      if (shutdownFlag || interrupted())
+        return;
+
+      connecting = ioio = IOIOFactory.create();
+    }
 
     try {
       ioio.waitForConnect();
@@ -165,31 +169,84 @@ final class IOIOHelper extends Thread {
               ioio.getImplVersion(IOIO.VersionType.IOIOLIB_VER));
 
         ioio.softReset();
-        ioio_ = ioio;
+
+        synchronized(this) {
+          openAllListeners(ioio);
+          ioio_ = ioio;
+        }
       } else {
         Log.w(TAG, "IOIO connection failed");
         ioio.disconnect();
       }
     } catch (ConnectionLostException e) {
-      Log.w(TAG, "IOIOJWaitConnect() Connection Lost", e);
+      Log.w(TAG, "IOIO connection lost");
       ioio.disconnect();
     } catch (IncompatibilityException e) {
-      Log.e(TAG, "IOIOJWaitConnect() Incompatibility detected", e);
+      Log.e(TAG, "IOIO incompatible", e);
       ioio.disconnect();
     } finally {
-      connecting = null;
+      synchronized(this) {
+        connecting = null;
+      }
     }
+  }
+
+  private synchronized IOIO steal() {
+    IOIO ioio = this.ioio_;
+    this.ioio_ = null;
+    return ioio;
   }
 
   /**
    * Called by the connection thread to close the connection.
    */
-  private synchronized void synchronousClose() {
-    if (ioio_ == null)
+  private void synchronousClose() {
+    IOIO ioio = steal();
+    if (ioio == null)
       return;
 
-    ioio_.disconnect();
-    ioio_ = null;
+    closeAllListeners();
+    ioio.disconnect();
+  }
+
+  private synchronized boolean handleNewListeners() {
+    if (ioio_ == null || closedListeners.isEmpty())
+      return false;
+
+    /* another thread has registered new listeners; notify them
+       that a IOIO connection exists */
+
+    try {
+      openAllListeners(ioio_);
+    } catch (ConnectionLostException e) {
+      Log.w(TAG, "IOIO connection lost");
+    }
+
+    return true;
+  }
+
+  private void idle() {
+    if (interrupted())
+      return;
+
+    try {
+      if (ioio_ != null) {
+        /* there is a connection: wait for connection error or
+           until Thread.interrupt() gets called */
+        ioio_.waitForDisconnect();
+        Log.w(TAG, "IOIO connection lost");
+      } else {
+        /* there is no connection: wait until Thread.interrupt()
+           gets called */
+        synchronized(this) {
+          /* we're not actually waiting for an Object.notify() call,
+             this is just a dummy call to make this thread idle and
+             interruptible */
+          wait();
+        }
+      }
+    } catch (InterruptedException e) {
+    }
   }
 
   /**
@@ -197,237 +254,66 @@ final class IOIOHelper extends Thread {
    */
   public void run() {
     while (true) {
-      synchronized(this) {
-        if (ioio_ != null && ioio_.getState() != IOIO.State.CONNECTED)
-          synchronousClose();
-      }
-
-      switch (command) {
-      case NONE:
-        /* idle: wait for a wakeUp() call */
-        try {
-          if (ioio_ != null) {
-            /* there is a connection: wait for connection error or
-               until Thread.interrupt() gets called */
-            ioio_.waitForDisconnect();
-            Log.w(TAG, "IOIO connection lost");
-          } else {
-            /* there is no connection: wait until Object.notify() gets
-               called */
-            synchronized(this) {
-              wait();
-            }
-          }
-        } catch (InterruptedException e) {
-        }
-        break;
-
-      case SHUTDOWN:
+      if (ioio_ != null && (ioio_.getState() != IOIO.State.CONNECTED ||
+                            !isInUse()))
         synchronousClose();
-        commandFinished();
-        return;
-
-      case OPEN:
+      else if (ioio_ == null && isInUse() && !shutdownFlag)
         synchronousOpen();
-        commandFinished();
-        break;
 
-      case CLOSE:
+      if (shutdownFlag) {
         synchronousClose();
-        commandFinished();
-        break;
+        return;
       }
+
+      if (handleNewListeners())
+        continue;
+
+      idle();
     }
   }
 
-  /**
-   * Cancel #Command.OPEN.  This interrupts IOIO.waitForConnect().
-   * This is a no-op if the IOIOHelper thread is not currently opening
-   * the IOIO connection.
-   */
-  private void cancelOpen() {
-    IOIO ioio = connecting;
-    if (ioio != null)
-      ioio.disconnect();
+  @Override public synchronized void addListener(IOIOConnectionListener l) {
+    closedListeners.add(l);
+
+    /* ask the thread to initiate a connection or to invoke
+       onIOIOConnect() if the connection is already established */
+    interrupt();
   }
 
-  /**
-   * Initializes the connection to the IOIO board.
-   * Waits up to 3000ms to connect to the IOIO board.
-   * @return: True if connection is successful. False if fails to 
-   * connect after 3000ms.
-   */
-  public synchronized boolean open() throws InterruptedException {
-    if (command == Command.OPEN)
-      /* another thread is already opening the connecting */
-      waitCompletion();
+  @Override public synchronized void removeListener(IOIOConnectionListener l) {
+    if (openListeners.remove(l))
+      /* this listener thinks the IOIO connection is established;
+         invoke the onIOIODisconnect() method */
+      l.onIOIODisconnect();
+    else
+      /* no method call necessary */
+      closedListeners.remove(l);
 
-    if (isOpen())
-      /* already open */
-      return true;
+    if (!isInUse()) {
+      if (isOpen())
+        /* ask the thread to auto-close the connection */
+        interrupt();
 
-    try {
-      runCommand(Command.OPEN, 3000);
-    } finally {
-      cancelOpen();
+      if (connecting != null)
+        /* cancel the current connect attempt after the last listener
+           got removed */
+        connecting.disconnect();
     }
-
-    return isOpen();
   }
 
-  /**
-   * Disconnects the ioio board.
-   * The board can be reopened by calling waitConnect()
-   */
-  public synchronized void close() {
-    if (ioio_ == null)
+  @Override
+  public synchronized void cycleListener(IOIOConnectionListener l) {
+    if (!isOpen())
       return;
 
-    try {
-      runCommand(Command.CLOSE);
-    } catch (InterruptedException e) {
-    }
-  }
+    if (openListeners.remove(l)) {
+      l.onIOIODisconnect();
+      closedListeners.add(l);
+    } else if (!closedListeners.contains(l))
+      return;
 
-  /**
-   * Is the IOIO connection currently in use?  If not, it may be
-   * closed eventually.
-   */
-  private boolean isInUse() {
-    for (XCSUart uart : xuarts_)
-      if (!uart.isAvailable())
-        return true;
-
-    return false;
-  }
-
-  void autoClose() {
-    if (isOpen() && !isInUse())
-      close();
-  }
-
-  /**
-   * Supports array of 4 XCSUart with ID=0, 1, 2, 3
-   *
-   * ID = 0, pins TX=3, RX=4
-   * ID = 1, pins TX=5, RX=6
-   * ID = 2, pins TX=10 RX=11
-   * ID = 3, pins TX=12 RX=13
-   *
-   */
-  class XCSUart extends AbstractAndroidPort {
-    private Uart uart;
-    private final int inPin;
-    private final int outPin;
-    private int baudrate = 0;
-    private int ID;
-
-    XCSUart(int ID_) {
-      super("IOIO UART " + ID_);
-
-      ID = ID_;
-
-      switch (ID) {
-      case 0:
-      case 1:
-        inPin = (ID * 2) + 4;
-        outPin = inPin - 1;
-        break;
-      case 2:
-      case 3:
-        inPin = (ID * 2) + 7;
-        outPin = inPin - 1;
-        break;
-      default:
-        throw new IllegalArgumentException();
-      }
-    }
-
-    /**
-     * returns true if the Uart is not in use and can be opened
-     * returns false if Uart is already open
-     */
-    public boolean isAvailable() {
-      return uart == null;
-    }
-
-    private boolean doOpen() {
-      if (baudrate == 0)
-        return false;
-
-      IOIO ioio = ioio_;
-      if (ioio == null)
-        return false;
-
-      try {
-        uart = ioio.openUart(inPin, outPin, baudrate, Uart.Parity.NONE,
-                             Uart.StopBits.ONE);
-        super.set(uart.getInputStream(), uart.getOutputStream());
-        return true;
-      } catch (ConnectionLostException e) {
-        Log.w(TAG, "IOIOJopenUart() Connection Lost.  Baud: " + baudrate, e);
-        return false;
-      } catch (Exception e) {
-        Log.e(TAG, "IOIOJopenUart() Unexpected exception caught", e);
-        return false;
-      }
-    }
-
-    /**
-     * opens the Uart
-     * sets isAvailable to false to indicate that it is no longer 
-     * available to open.
-     * @return true on success
-     */
-    public boolean openUart(int _baud) {
-      if (!isAvailable()) {
-        Log.e(TAG, "IOIOJopenUart() is not available: " + ID);
-        return false;
-      }
-
-      baudrate = _baud;
-      return doOpen();
-    }
-
-    private void doClose() {
-      super.close();
-
-      try {
-        uart.close();
-      } catch (Exception e) {
-        Log.e(TAG, "IOIOJclose() Unexpected exception caught", e);
-      }
-      uart = null;
-    }
-
-    /**
-     * closes the Uart on the ioio
-     * sets isAvailable to true to indicate it is available for reopening
-     */
-    public void close() {
-      doClose();
-      autoClose();
-
-      /* delete the listener reference, to allow reusing this
-         object */
-      setListener(null);
-    }
-
-    public boolean setBaudRate(int baud) {
-      doClose();
-      baudrate = baud;
-      boolean success = doOpen();
-
-      /* check if the IOIO connection can be closed, just in case
-         doOpen() has failed */
-      autoClose();
-
-      return success;
-    }
-
-    public int getBaudRate() {
-      return baudrate;
-    }
+    /* ask the thread to reopen the listener */
+    interrupt();
   }
 
   /**
@@ -435,16 +321,6 @@ final class IOIOHelper extends Thread {
    * @return: ID of opened UArt or -1 if fail
    */
   public AndroidPort openUart(int ID, int baud) {
-    try {
-      if (!open())
-        return null;
-    } catch (InterruptedException e) {
-      return null;
-    }
-
-    XCSUart uart = xuarts_[ID];
-    return uart.openUart(baud)
-      ? uart
-      : null;
+    return new GlueIOIOPort(this, ID, baud);
   }
 }

@@ -82,7 +82,7 @@ abstract class AbstractAndroidPort implements AndroidPort {
       o.close();
   }
 
-  @Override public final int getState() {
+  @Override public int getState() {
     InputThread i = input;
     return i != null && i.isValid()
       ? STATE_READY
