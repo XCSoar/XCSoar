@@ -102,8 +102,7 @@ final class BluetoothHelper {
 
       BluetoothSocket socket =
         device.createRfcommSocketToServiceRecord(THE_UUID);
-      socket.connect();
-      return new BluetoothPort(socket);
+      return new BluetoothClientPort(socket);
     } catch (Exception e) {
       Log.e(TAG, "Failed to connect to Bluetooth", e);
       return null;
