@@ -275,12 +275,13 @@ final class IOIOHelper extends Thread {
       /* already open */
       return true;
 
-    if (!runCommand(Command.OPEN, 3000)) {
+    try {
+      runCommand(Command.OPEN, 3000);
+    } finally {
       cancelOpen();
-      return false;
     }
 
-    return true;
+    return isOpen();
   }
 
   /**
