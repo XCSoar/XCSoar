@@ -56,7 +56,7 @@ NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
 ANDROID_JAVA_SOURCES = android/src/*.java
 ifneq ($(IOIOLIB_DIR),)
-ANDROID_JAVA_SOURCES += android/IOIOHelper/*.java
+ANDROID_JAVA_SOURCES += android/ioio/*.java
 endif
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
@@ -139,7 +139,7 @@ ifneq ($(IOIOLIB_DIR),)
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio_spi
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio_util
 	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio_impl
-	$(Q)ln -s ../../../../android/IOIOHelper $(@D)/src/ioio_xcsoar
+	$(Q)ln -s ../../../../android/ioio $(@D)/src/ioio_xcsoar
 endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 ifeq ($(WINHOST),y)
