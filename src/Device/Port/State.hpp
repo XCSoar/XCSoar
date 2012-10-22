@@ -40,6 +40,11 @@ enum class PortState {
    * should be deleted.
    */
   FAILED,
+
+  /**
+   * Waiting for a connection to the device.
+   */
+  LIMBO,
 };
 
 #endif

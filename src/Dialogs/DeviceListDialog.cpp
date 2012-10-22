@@ -65,17 +65,24 @@ class DeviceListWidget : public ListWidget, private ActionListener,
   UPixelScalar font_height;
 
   struct Flags {
-    bool open:1;
+    bool open:1, error:1;
     bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
 
     void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
       switch (device.GetState()) {
       case PortState::READY:
         open = true;
+        error = false;
         break;
 
       case PortState::FAILED:
         open = false;
+        error = true;
+        break;
+
+      case PortState::LIMBO:
+        open = false;
+        error = false;
         break;
       }
 
@@ -319,6 +326,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     status = _("N/A");
   } else if (flags.open) {
     status = _("No data");
+  } else if (flags.error) {
+    status = _("Error");
   } else {
     status = _("Not connected");
   }

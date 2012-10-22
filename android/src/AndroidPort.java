@@ -29,6 +29,7 @@ package org.xcsoar;
 interface AndroidPort {
   int STATE_READY = 0;
   int STATE_FAILED = 1;
+  int STATE_LIMBO = 2;
 
   void setListener(InputListener listener);
 

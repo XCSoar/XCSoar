@@ -38,9 +38,10 @@ class MultiPort implements AndroidPort, InputListener {
   private static final String TAG = "XCSoar";
 
   private Collection<AndroidPort> ports = new LinkedList<AndroidPort>();
+  private boolean error = false;
 
   private synchronized int checkValid() {
-    boolean ready = false;
+    boolean ready = false, limbo = false;
 
     for (Iterator<AndroidPort> i = ports.iterator(); i.hasNext();) {
       AndroidPort port = i.next();
@@ -55,16 +56,27 @@ class MultiPort implements AndroidPort, InputListener {
 
         i.remove();
         port.close();
+        error = true;
+        break;
+
+      case STATE_LIMBO:
+        limbo = true;
         break;
       }
     }
 
-    return ready
-      ? STATE_READY
-      : STATE_FAILED;
+    if (ready) {
+      error = false;
+      return STATE_READY;
+    } else if (limbo || !error) {
+      error = false;
+      return STATE_LIMBO;
+    } else
+      return STATE_FAILED;
   }
 
   public synchronized void add(AndroidPort port) {
+    error = false;
     checkValid();
 
     ports.add(port);
@@ -76,6 +88,8 @@ class MultiPort implements AndroidPort, InputListener {
   }
 
   @Override public synchronized void close() {
+    error = true;
+
     for (AndroidPort port : ports)
       port.close();
 
@@ -108,6 +122,7 @@ class MultiPort implements AndroidPort, InputListener {
       AndroidPort port = i.next();
       int nbytes = port.write(data, length);
       if (nbytes < 0 && port.getState() == STATE_FAILED) {
+        error = true;
         i.remove();
         port.close();
       } else if (nbytes > result)

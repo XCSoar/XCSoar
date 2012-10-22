@@ -73,11 +73,6 @@ public:
 
   /**
    * Returns the current state of this object.
-   *
-   * Special case: the TCPPort implementation will return READY even if
-   * one client connection has failed, because it is possible to reuse
-   * the listener socket.  Only listener socket failures are fatal by
-   * the definition of this method.
    */
   gcc_pure
   virtual PortState GetState() const = 0;

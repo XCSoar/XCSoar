@@ -62,8 +62,12 @@ TCPPort::Open(unsigned port)
 PortState
 TCPPort::GetState() const
 {
+  PortState state = SocketPort::GetState();
+  if (state != PortState::FAILED)
+    return state;
+
   return listener.IsDefined()
-    ? PortState::READY
+    ? PortState::LIMBO
     : PortState::FAILED;
 }
 
