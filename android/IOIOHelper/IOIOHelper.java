@@ -71,8 +71,12 @@ final class IOIOHelper extends Thread {
     start();
   }
 
+  private boolean isOpen() {
+    return ioio_ != null;
+  }
+
   private synchronized void wakeUp() {
-    if (ioio_ != null)
+    if (isOpen())
       interrupt();
     else
       notifyAll();
@@ -267,7 +271,7 @@ final class IOIOHelper extends Thread {
       /* another thread is already opening the connecting */
       waitCompletion();
 
-    if (ioio_ != null)
+    if (isOpen())
       /* already open */
       return true;
 
@@ -306,7 +310,7 @@ final class IOIOHelper extends Thread {
   }
 
   void autoClose() {
-    if (ioio_ != null && !isInUse())
+    if (isOpen() && !isInUse())
       close();
   }
 
