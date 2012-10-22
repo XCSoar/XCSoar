@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_PORT_HPP
 #define XCSOAR_DEVICE_PORT_HPP
 
+#include "State.hpp"
 #include "Compiler.h"
 
 #include <stddef.h>
@@ -71,15 +72,15 @@ public:
   virtual ~Port();
 
   /**
-   * Is the port still valid, or did it fail?  A failed/stale Port
-   * cannot be used, it should be deleted.
+   * Returns the current state of this object.
    *
-   * Special case: the TCPPort implementation will return true even if
+   * Special case: the TCPPort implementation will return READY even if
    * one client connection has failed, because it is possible to reuse
    * the listener socket.  Only listener socket failures are fatal by
    * the definition of this method.
    */
-  virtual bool IsValid() const = 0;
+  gcc_pure
+  virtual PortState GetState() const = 0;
 
   /**
    * Writes a string to the serial port

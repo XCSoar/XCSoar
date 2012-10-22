@@ -45,12 +45,12 @@ AndroidPort::~AndroidPort()
   EndClose();
 }
 
-bool
-AndroidPort::IsValid() const
+PortState
+AndroidPort::GetState() const
 {
   assert(bridge != nullptr);
 
-  return bridge->isValid(Java::GetEnv());
+  return (PortState)bridge->getState(Java::GetEnv());
 }
 
 bool

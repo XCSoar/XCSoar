@@ -53,7 +53,7 @@ protected:
 
 public:
   /* virtual methods from Port */
-  virtual bool IsValid() const gcc_override;
+  virtual PortState GetState() const gcc_override;
   virtual size_t Write(const void *data, size_t length) gcc_override;
   virtual bool Drain() gcc_override;
   virtual void Flush() gcc_override;

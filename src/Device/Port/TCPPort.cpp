@@ -59,10 +59,12 @@ TCPPort::Open(unsigned port)
   return true;
 }
 
-bool
-TCPPort::IsValid() const
+PortState
+TCPPort::GetState() const
 {
-  return listener.IsDefined();
+  return listener.IsDefined()
+    ? PortState::READY
+    : PortState::FAILED;
 }
 
 bool
@@ -72,7 +74,7 @@ TCPPort::OnFileEvent(int fd, unsigned mask)
 
   if (fd == listener.Get()) {
     /* connection should never be defined here */
-    assert(!SocketPort::IsValid());
+    assert(SocketPort::GetState() == PortState::FAILED);
 
     SocketDescriptor s = listener.Accept();
     if (!s.IsDefined())

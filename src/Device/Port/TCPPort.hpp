@@ -69,7 +69,7 @@ public:
   bool Open(unsigned port);
 
   /* overrided virtual methods from SocketPort */
-  virtual bool IsValid() const gcc_override;
+  virtual PortState GetState() const gcc_override;
 
 protected:
   /* virtual methods from class FileEventHandler */

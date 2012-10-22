@@ -116,6 +116,20 @@ DeviceDescriptor::ClearConfig()
   config.Clear();
 }
 
+PortState
+DeviceDescriptor::GetState() const
+{
+  if (port != nullptr)
+    return port->GetState();
+
+#ifdef ANDROID
+  if (internal_sensors != nullptr)
+    return PortState::READY;
+#endif
+
+  return PortState::FAILED;
+}
+
 bool
 DeviceDescriptor::ShouldReopenDriverOnTimeout() const
 {
@@ -734,7 +748,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 void
 DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
 {
-  if (port != NULL && !port->IsValid() && !IsOccupied())
+  if (port != NULL && port->GetState() == PortState::FAILED && !IsOccupied())
     Close();
 
   if (device == NULL)

@@ -53,10 +53,10 @@ K6BtPort::SendCommand(uint8_t cmd)
   return port->Write(data, sizeof(data)) == sizeof(data);
 }
 
-bool
-K6BtPort::IsValid() const
+PortState
+K6BtPort::GetState() const
 {
-  return port->IsValid();
+  return port->GetState();
 }
 
 size_t

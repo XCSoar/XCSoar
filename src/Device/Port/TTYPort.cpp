@@ -49,10 +49,12 @@ TTYPort::~TTYPort()
   BufferedPort::EndClose();
 }
 
-bool
-TTYPort::IsValid() const
+PortState
+TTYPort::GetState() const
 {
-  return valid.load(std::memory_order_relaxed);
+  return valid.load(std::memory_order_relaxed)
+    ? PortState::READY
+    : PortState::FAILED;
 }
 
 bool

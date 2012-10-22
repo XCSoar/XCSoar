@@ -35,10 +35,10 @@ NullPort::NullPort(DataHandler &_handler)
 {
 }
 
-bool
-NullPort::IsValid() const
+PortState
+NullPort::GetState() const
 {
-  return true;
+  return PortState::READY;
 }
 
 bool

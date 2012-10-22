@@ -87,7 +87,7 @@ main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  while (port->IsValid())
+  while (port->GetState() != PortState::FAILED)
     Sleep(1000);
 
   delete port;

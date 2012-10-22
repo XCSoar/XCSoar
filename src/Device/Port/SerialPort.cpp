@@ -139,10 +139,12 @@ SerialPort::Open(const TCHAR *path, unsigned _baud_rate)
   return true;
 }
 
-bool
-SerialPort::IsValid() const
+PortState
+SerialPort::GetState() const
 {
-  return hPort != INVALID_HANDLE_VALUE;
+  return hPort != INVALID_HANDLE_VALUE
+    ? PortState::READY
+    : PortState::FAILED;
 }
 
 bool

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "IO/DataHandler.hpp"
 #include "Port/LineSplitter.hpp"
+#include "Port/State.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
@@ -184,13 +185,8 @@ public:
     return config.port_type != DeviceConfig::PortType::DISABLED;
   }
 
-  bool IsOpen() const {
-    return port != NULL
-#ifdef ANDROID
-      || internal_sensors != NULL;
-#endif
-    ;
-  }
+  gcc_pure
+  PortState GetState() const;
 
   /**
    * Was there a failure on the #Port object?
@@ -327,7 +323,7 @@ public:
    * @see Borrow()
    */
   bool CanBorrow() const {
-    return device != NULL && port != NULL && !IsOccupied();
+    return device != NULL && GetState() == PortState::READY && !IsOccupied();
   }
 
   /**

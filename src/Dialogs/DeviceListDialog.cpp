@@ -69,7 +69,16 @@ class DeviceListWidget : public ListWidget, private ActionListener,
     bool alive:1, location:1, gps:1, baro:1, airspeed:1, vario:1, traffic:1;
 
     void Set(const DeviceDescriptor &device, const NMEAInfo &basic) {
-      open = device.IsOpen();
+      switch (device.GetState()) {
+      case PortState::READY:
+        open = true;
+        break;
+
+      case PortState::FAILED:
+        open = false;
+        break;
+      }
+
       alive = basic.alive;
       location = basic.location_available;
       gps = basic.gps.fix_quality_available;
@@ -351,7 +360,7 @@ DeviceListWidget::DownloadFlightFromCurrent()
     return;
 
   DeviceDescriptor &device = *device_list[current];
-  if (!device.IsOpen())
+  if (device.GetState() == PortState::READY)
     return;
 
   if (!device.Borrow()) {
@@ -406,7 +415,8 @@ DeviceListWidget::ManageCurrent()
     return;
 
   DeviceDescriptor &descriptor = *device_list[current];
-  if (!descriptor.IsOpen() || !descriptor.IsManageable())
+  if (descriptor.GetState() != PortState::READY ||
+      !descriptor.IsManageable())
     return;
 
   if (!descriptor.Borrow()) {

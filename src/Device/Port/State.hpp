@@ -21,36 +21,25 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+#ifndef XCSOAR_DEVICE_PORT_STATE_HPP
+#define XCSOAR_DEVICE_PORT_STATE_HPP
 
 /**
- * The Java interface of the C++ AndroidPort class.
+ * The state of a #Port object.
+ *
+ * @see Port::GetState()
  */
-interface AndroidPort {
-  int STATE_READY = 0;
-  int STATE_FAILED = 1;
-
-  void setListener(InputListener listener);
-
-  void close();
-
-  int getState();
+enum class PortState {
+  /**
+   * The port is open and ready to be used.
+   */
+  READY,
 
   /**
-   * @see Port::Drain()
+   * There was an error.  This object cannot be used anymore, and
+   * should be deleted.
    */
-  boolean drain();
+  FAILED,
+};
 
-  int getBaudRate();
-  boolean setBaudRate(int baud);
-
-  /**
-   * Write data to the port.  Execution blocks until at least one
-   * bytes is written or an error occurs or until the timeout expires.
-   *
-   * @param data the data to be written
-   * @param length the number of bytes to be written
-   * @return the number of bytes that were written or -1 on error/timeout
-   */
-  int write(byte[] data, int length);
-}
+#endif

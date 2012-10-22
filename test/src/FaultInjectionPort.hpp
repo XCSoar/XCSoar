@@ -41,8 +41,10 @@ public:
     :Port(_handler), running(true), baud_rate(DEFAULT_BAUD_RATE) {}
 
   /* virtual methods from class Port */
-  virtual bool IsValid() const gcc_override {
-    return inject_port_fault > 0;
+  virtual PortState GetState() const gcc_override {
+    return inject_port_fault > 0
+      ? PortState::READY
+      : PortState::FAILED;
   }
 
   virtual size_t Write(const void *data, size_t length) gcc_override {

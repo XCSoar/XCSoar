@@ -70,7 +70,7 @@ public:
   WaitResult WaitWrite(unsigned timeout_ms);
 
   /* virtual methods from class Port */
-  virtual bool IsValid() const gcc_override;
+  virtual PortState GetState() const gcc_override;
   virtual bool Drain() gcc_override;
   virtual void Flush() gcc_override;
   virtual bool SetBaudrate(unsigned baud_rate) gcc_override;

@@ -34,10 +34,10 @@ DumpPort::~DumpPort()
   delete port;
 }
 
-bool
-DumpPort::IsValid() const
+PortState
+DumpPort::GetState() const
 {
-  return port->IsValid();
+  return port->GetState();
 }
 
 size_t

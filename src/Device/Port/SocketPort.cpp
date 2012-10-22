@@ -90,10 +90,12 @@ SocketPort::OpenUDPListener(unsigned port)
   return true;
 }
 
-bool
-SocketPort::IsValid() const
+PortState
+SocketPort::GetState() const
 {
-  return socket.IsDefined();
+  return socket.IsDefined()
+    ? PortState::READY
+    : PortState::FAILED;
 }
 
 bool

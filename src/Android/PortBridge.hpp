@@ -31,7 +31,7 @@ class DataHandler;
 class PortBridge : protected Java::Object {
   static jmethodID close_method;
   static jmethodID setListener_method;
-  static jmethodID isValid_method;
+  static jmethodID getState_method;
   static jmethodID drain_method;
   static jmethodID getBaudRate_method, setBaudRate_method;
   static jmethodID write_method;
@@ -58,8 +58,8 @@ public:
 
   void setListener(JNIEnv *env, DataHandler *handler);
 
-  bool isValid(JNIEnv *env) {
-    return env->CallBooleanMethod(Get(), isValid_method);
+  int getState(JNIEnv *env) {
+    return env->CallBooleanMethod(Get(), getState_method);
   }
 
   bool drain(JNIEnv *env) {

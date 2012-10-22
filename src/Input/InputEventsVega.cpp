@@ -33,8 +33,8 @@ Copyright_License {
 static VegaDevice *
 GetVegaDevice(DeviceDescriptor &device)
 {
-  return !device.IsOccupied() && device.IsOpen() && device.IsVega() &&
-    device.GetDevice() != NULL
+  return !device.IsOccupied() && device.GetState() == PortState::READY &&
+    device.IsVega() && device.GetDevice() != nullptr
     ? (VegaDevice *)device.GetDevice()
     : NULL;
 }

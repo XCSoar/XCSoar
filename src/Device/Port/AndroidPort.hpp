@@ -41,7 +41,7 @@ public:
   virtual ~AndroidPort();
 
   /* virtual methods from class Port */
-  virtual bool IsValid() const gcc_override;
+  virtual PortState GetState() const gcc_override;
   virtual bool Drain() gcc_override;
   virtual unsigned GetBaudrate() const gcc_override;
   virtual bool SetBaudrate(unsigned baud_rate) gcc_override;

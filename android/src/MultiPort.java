@@ -39,18 +39,29 @@ class MultiPort implements AndroidPort, InputListener {
 
   private Collection<AndroidPort> ports = new LinkedList<AndroidPort>();
 
-  private synchronized boolean checkValid() {
+  private synchronized int checkValid() {
+    boolean ready = false;
+
     for (Iterator<AndroidPort> i = ports.iterator(); i.hasNext();) {
       AndroidPort port = i.next();
-      if (!port.isValid()) {
+
+      switch (port.getState()) {
+      case STATE_READY:
+        ready = true;
+        break;
+
+      case STATE_FAILED:
         Log.i(TAG, "Bluetooth disconnect from " + port);
 
         i.remove();
         port.close();
+        break;
       }
     }
 
-    return !ports.isEmpty();
+    return ready
+      ? STATE_READY
+      : STATE_FAILED;
   }
 
   public synchronized void add(AndroidPort port) {
@@ -71,7 +82,7 @@ class MultiPort implements AndroidPort, InputListener {
     ports.clear();
   }
 
-  @Override public boolean isValid() {
+  @Override public int getState() {
     return checkValid();
   }
 
@@ -96,7 +107,7 @@ class MultiPort implements AndroidPort, InputListener {
     for (Iterator<AndroidPort> i = ports.iterator(); i.hasNext();) {
       AndroidPort port = i.next();
       int nbytes = port.write(data, length);
-      if (nbytes < 0 && !port.isValid()) {
+      if (nbytes < 0 && port.getState() == STATE_FAILED) {
         i.remove();
         port.close();
       } else if (nbytes > result)
