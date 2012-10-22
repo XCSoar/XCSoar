@@ -254,9 +254,10 @@ final class IOIOHelper extends Thread {
   public synchronized boolean open() {
     if (command == Command.OPEN)
       /* another thread is already opening the connecting */
-      return waitCompletion();
+      waitCompletion();
 
-    if (command == Command.NONE && ioio_ != null)
+    if (ioio_ != null)
+      /* already open */
       return true;
 
     if (!runCommand(Command.OPEN, 3000)) {
@@ -293,10 +294,6 @@ final class IOIOHelper extends Thread {
         return true;
 
     return false;
-  }
-
-  boolean autoOpen() {
-    return ioio_ != null || open();
   }
 
   void autoClose() {
@@ -433,7 +430,7 @@ final class IOIOHelper extends Thread {
    * @return: ID of opened UArt or -1 if fail
    */
   public AndroidPort openUart(int ID, int baud) {
-    if (!autoOpen())
+    if (!open())
       return null;
 
     XCSUart uart = xuarts_[ID];
