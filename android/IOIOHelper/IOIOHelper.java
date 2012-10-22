@@ -246,6 +246,17 @@ final class IOIOHelper extends Thread {
   }
 
   /**
+   * Cancel #Command.OPEN.  This interrupts IOIO.waitForConnect().
+   * This is a no-op if the IOIOHelper thread is not currently opening
+   * the IOIO connection.
+   */
+  private void cancelOpen() {
+    IOIO ioio = connecting;
+    if (ioio != null)
+      ioio.disconnect();
+  }
+
+  /**
    * Initializes the connection to the IOIO board.
    * Waits up to 3000ms to connect to the IOIO board.
    * @return: True if connection is successful. False if fails to 
@@ -261,9 +272,7 @@ final class IOIOHelper extends Thread {
       return true;
 
     if (!runCommand(Command.OPEN, 3000)) {
-      IOIO ioio = connecting;
-      if (ioio != null)
-        ioio.disconnect();
+      cancelOpen();
       return false;
     }
 
