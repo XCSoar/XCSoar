@@ -82,46 +82,37 @@ final class IOIOHelper extends Thread {
       notifyAll();
   }
 
-  private synchronized boolean waitCompletion() {
-    while (command != Command.NONE) {
-      try {
-        wait();
-      } catch (InterruptedException e) {
-        return false;
-      }
-    }
-
-    return true;
+  private synchronized void waitCompletion() throws InterruptedException {
+    while (command != Command.NONE)
+      wait();
   }
 
-  private synchronized boolean waitCompletion(int timeout_ms) {
+  private synchronized boolean waitCompletion(int timeout_ms)
+    throws InterruptedException {
     if (command == Command.NONE)
       return true;
 
-    try {
-      wait(timeout_ms);
-    } catch (InterruptedException e) {
-      return false;
-    }
-
+    wait(timeout_ms);
     return command == Command.NONE;
   }
 
-  private synchronized boolean runCommand(Command _cmd)
+  private synchronized void runCommand(Command _cmd)
     throws InterruptedException {
-    if (command == _cmd)
+    if (command == _cmd) {
       /* another thread is already running this command */
-      return waitCompletion();
+      waitCompletion();
+      return;
+    }
 
-    if (!waitCompletion())
-      return false;
+    waitCompletion();
 
     command = _cmd;
     wakeUp();
-    return waitCompletion();
+    waitCompletion();
   }
 
-  private synchronized boolean runCommand(Command _cmd, int timeout_ms) {
+  private synchronized boolean runCommand(Command _cmd, int timeout_ms)
+    throws InterruptedException {
     if (command == _cmd)
       /* another thread is already running this command */
       return waitCompletion(timeout_ms);
@@ -266,7 +257,7 @@ final class IOIOHelper extends Thread {
    * @return: True if connection is successful. False if fails to 
    * connect after 3000ms.
    */
-  public synchronized boolean open() {
+  public synchronized boolean open() throws InterruptedException {
     if (command == Command.OPEN)
       /* another thread is already opening the connecting */
       waitCompletion();
@@ -444,8 +435,12 @@ final class IOIOHelper extends Thread {
    * @return: ID of opened UArt or -1 if fail
    */
   public AndroidPort openUart(int ID, int baud) {
-    if (!open())
+    try {
+      if (!open())
+        return null;
+    } catch (InterruptedException e) {
       return null;
+    }
 
     XCSUart uart = xuarts_[ID];
     return uart.openUart(baud)
