@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-10-16 23:17+0000\n"
+"PO-Revision-Date: 2012-10-22 10:08+0000\n"
 "Last-Translator: Krzysztof Kajda <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-17 20:32+0000\n"
-"X-Generator: Launchpad (build 16152)\n"
+"X-Launchpad-Export-Date: 2012-10-23 20:24+0000\n"
+"X-Generator: Launchpad (build 16179)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -123,7 +123,7 @@ msgstr "Zasilanie"
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "Komunikacja GPS"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
@@ -339,7 +339,7 @@ msgstr ""
 msgid ""
 "Abort\n"
 "Turn"
-msgstr ""
+msgstr "Zaprzestanie Zwrotu"
 
 #: src/Menu/ExpandMacros.cpp:302
 msgid ""
@@ -738,7 +738,7 @@ msgstr "Następny punkt zwrotny"
 #: src/InfoBoxes/Content/Factory.cpp:221
 #, no-c-format
 msgid "Next WP"
-msgstr ""
+msgstr "Następny pkt. zwrotny"
 
 #: src/InfoBoxes/Content/Factory.cpp:222
 #, no-c-format
@@ -1127,7 +1127,7 @@ msgstr "Czas lotu"
 #: src/InfoBoxes/Content/Factory.cpp:441
 #, no-c-format
 msgid "Flt Duration"
-msgstr ""
+msgstr "Czas lotu"
 
 #: src/InfoBoxes/Content/Factory.cpp:442
 #, no-c-format
