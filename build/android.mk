@@ -17,7 +17,6 @@ ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS = mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
-ANDROID_JNI = $(TARGET_OUTPUT_DIR)/jni
 
 ifeq ($(HOST_IS_DARWIN),y)
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
@@ -191,17 +190,14 @@ ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp
 	cp $< $@
 
-$(ANDROID_JNI)/build.xml $(ANDROID_JNI)/AndroidManifest.xml: | $(ANDROID_JNI)/dirstamp
-	@$(NQ)echo "  ANDROID $@"
-	$(Q)ln -s ../../../android/$(@F) $@
-
-$(ANDROID_JNI)/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_JNI)/build.xml $(ANDROID_JNI)/AndroidManifest.xml $(ANDROID_BUILD)/build.xml
+$(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES)
 	@$(NQ)echo "  ANT     $@"
-	$(Q)cd $(ANDROID_JNI) && $(ANT) compile-jni-classes
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) compile-jni-classes
+	@touch $@
 
-$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDROID_JNI)/classes/$(CLASS_CLASS)
+$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
 	@$(NQ)echo "  JAVAH   $@"
-	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_JNI)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
+	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_BUILD)/bin/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
 
 endif # !FAT_BINARY

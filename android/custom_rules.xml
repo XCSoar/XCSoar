@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="xcsoar_rules">
+  <target name="compile-jni-classes"
+          depends="-set-debug-mode,-compile"/>
+
   <import file="testing_rules.xml" optional="true" />
 </project>
