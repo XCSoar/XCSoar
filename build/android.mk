@@ -66,13 +66,8 @@ ifeq ($(TESTING),y)
 $(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
 else
-ifeq ($(NO_HORIZON),y)
-$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_no_horizon_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
-	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
-else
 $(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
-endif
 endif
 
 OGGENC = oggenc --quiet --quality 1
@@ -118,16 +113,12 @@ PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml
 else
-ifeq ($(NO_HORIZON),y)
-MANIFEST = android/nohorizon/AndroidManifest.xml
-else
 MANIFEST = android/AndroidManifest.xml
-endif
 endif
 
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.testing.sed build/r.nohorizon.sed | $(TARGET_BIN_DIR)/dirstamp
+$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.testing.sed | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $@ $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
@@ -154,14 +145,6 @@ ifeq ($(HOST_IS_DARWIN),y)
 	$(Q)sed -i "" -f build/r.testing.sed $@
 else
 	$(Q)sed -i -f build/r.testing.sed $@
-endif
-else
-ifeq ($(NO_HORIZON),y)
-ifeq ($(HOST_IS_DARWIN),y)
-	$(Q)sed -i "" -f build/r.nohorizon.sed $@
-else
-	$(Q)sed -i -f build/r.nohorizon.sed $@
-endif
 endif
 endif
 	@touch $@
