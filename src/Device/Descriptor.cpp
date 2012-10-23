@@ -119,6 +119,9 @@ DeviceDescriptor::ClearConfig()
 PortState
 DeviceDescriptor::GetState() const
 {
+  if (open_job != nullptr)
+    return PortState::LIMBO;
+
   if (port != nullptr)
     return port->GetState();
 
