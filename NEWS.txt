@@ -19,7 +19,9 @@ Version 6.5 - not yet released
 
 Version 6.4.3 - not yet released
 * devices
+  - fix freeze bug on device reconnect
   - LXNAV Nano: fix crash in Nano configuration dialog
+  - LXNAV V7: fix NMEA setup over Bluetooth
 
 Version 6.4.2 - 2012/10/17
 * calculations

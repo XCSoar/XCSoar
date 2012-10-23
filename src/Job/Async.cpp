@@ -46,6 +46,11 @@ AsyncJobRunner::Cancel()
   assert(IsBusy());
 
   env->Cancel();
+
+  if (notify != NULL)
+    /* make sure the notification doesn't get delivered, even if
+       this method was invoked too late */
+    notify->ClearNotification();
 }
 
 #if defined(__clang__) || GCC_VERSION >= 40700
@@ -79,7 +84,7 @@ AsyncJobRunner::Run()
 
   job->Run(*env);
 
-  if (notify != NULL)
+  if (notify != NULL && !env->IsCancelled())
     notify->SendNotification();
 
   running.store(false, std::memory_order_relaxed);
