@@ -779,10 +779,6 @@ DeviceDescriptor::OnNotification()
 {
   /* notification from AsyncJobRunner, the Job was finished */
 
-  if (!async.IsBusy())
-    /* this can happen when CancelAsync() has been called */
-    return;
-
   assert(open_job != NULL);
 
   async.Wait();

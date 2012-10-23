@@ -4,6 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.4.3 - not yet released
 * devices
+  - fix freeze bug on device reconnect
   - LXNAV Nano: fix crash in Nano configuration dialog
   - LXNAV V7: fix NMEA setup over Bluetooth
 

@@ -84,6 +84,11 @@ public:
   /**
    * Cancel the current #Job.  Returns immediately; to wait for the
    * #Job to return, call Wait().
+   *
+   * This suppresses the notification: after this method returns, no
+   * notification will be delivered.  It would be dangerous to deliver
+   * the notification, because the notification handler will call
+   * Wait() a second time.
    */
   void Cancel();
 
