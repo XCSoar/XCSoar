@@ -118,9 +118,9 @@ endif
 
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.testing.sed | $(TARGET_BIN_DIR)/dirstamp
+$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
-	$(Q)rm -r -f $@ $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
+	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
 	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
 	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
 	$(Q)ln -s ../bin $(@D)/bin
@@ -139,13 +139,10 @@ ifeq ($(WINHOST),y)
 	cmd
 else
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
+	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
 endif
 ifeq ($(TESTING),y)
-ifeq ($(HOST_IS_DARWIN),y)
-	$(Q)sed -i "" -f build/r.testing.sed $@
-else
-	$(Q)sed -i -f build/r.testing.sed $@
-endif
+	$(Q)ln -s ../../../android/testing/testing_rules.xml $(@D)/
 endif
 	@touch $@
 
