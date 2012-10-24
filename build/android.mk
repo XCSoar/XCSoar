@@ -30,8 +30,10 @@ ANDROID_LIB_NAMES = xcsoar
 
 ifneq ($(V),2)
 ANT += -quiet
+ANDROID_TOOL_OPTIONS = --silent
 else
 JARSIGNER += -verbose
+ANDROID_TOOL_OPTIONS = --verbose
 endif
 
 JARSIGNER += -digestalg SHA1 -sigalg MD5withRSA
@@ -137,7 +139,7 @@ ifeq ($(WINHOST),y)
 	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_PLATFORM)"
 	cmd
 else
-	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
+	$(Q)$(ANDROID_SDK)/tools/android $(ANDROID_TOOL_OPTIONS) update project --path $(@D) --target $(ANDROID_PLATFORM)
 	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
 endif
 ifeq ($(TESTING),y)
