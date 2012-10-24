@@ -277,7 +277,8 @@ final class IOIOHelper extends Thread implements IOIOConnectionHolder {
 
     /* ask the thread to initiate a connection or to invoke
        onIOIOConnect() if the connection is already established */
-    interrupt();
+    if (connecting == null)
+      interrupt();
   }
 
   @Override public synchronized void removeListener(IOIOConnectionListener l) {
