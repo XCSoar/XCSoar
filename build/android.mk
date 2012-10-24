@@ -30,8 +30,10 @@ ANDROID_LIB_NAMES = xcsoar
 
 ifneq ($(V),2)
 ANT += -quiet
+ANDROID_TOOL_OPTIONS = --silent
 else
 JARSIGNER += -verbose
+ANDROID_TOOL_OPTIONS = --verbose
 endif
 
 JARSIGNER += -digestalg SHA1 -sigalg MD5withRSA
@@ -48,7 +50,7 @@ CLASS_NAME = $(JAVA_PACKAGE).NativeView
 CLASS_SOURCE = $(subst .,/,$(CLASS_NAME)).java
 CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 
-NATIVE_CLASSES = NativeView EventBridge Timer InternalGPS NonGPSSensors Settings NativeInputListener DownloadUtil
+NATIVE_CLASSES = NativeView EventBridge Timer InternalGPS NonGPSSensors NativeInputListener DownloadUtil
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
@@ -137,7 +139,7 @@ ifeq ($(WINHOST),y)
 	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_PLATFORM)"
 	cmd
 else
-	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
+	$(Q)$(ANDROID_SDK)/tools/android $(ANDROID_TOOL_OPTIONS) update project --path $(@D) --target $(ANDROID_PLATFORM)
 	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
 endif
 ifeq ($(TESTING),y)
@@ -188,11 +190,11 @@ $(call SRC_TO_OBJ,$(SRC)/Android/DownloadManager.cpp): $(NATIVE_HEADERS)
 
 ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp
-	cp $< $@
+	$(Q)cp $< $@
 
 $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES)
 	@$(NQ)echo "  ANT     $@"
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) compile-jni-classes
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps compile-jni-classes
 	@touch $@
 
 $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: android/src/%.java $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
@@ -205,12 +207,12 @@ endif # !FAT_BINARY
 $(ANDROID_BIN)/XCSoar-debug.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
 	@$(NQ)echo "  ANT     $@"
 	@rm -f $@ $(patsubst %.apk,%-unaligned.apk,$@) $(@D)/classes.dex
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) debug
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps debug
 
 $(ANDROID_BIN)/XCSoar-release-unsigned.apk: $(ANDROID_LIB_BUILD) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES) $(ANDROID_JAVA_SOURCES)
 	@$(NQ)echo "  ANT     $@"
 	@rm -f $@ $(@D)/classes.dex
-	$(Q)cd $(ANDROID_BUILD) && $(ANT) release
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) nodeps release
 
 $(ANDROID_BIN)/XCSoar-release-unaligned.apk: $(ANDROID_BIN)/XCSoar-release-unsigned.apk
 	@$(NQ)echo "  SIGN    $@"
