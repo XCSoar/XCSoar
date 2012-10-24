@@ -54,9 +54,9 @@ NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
-ANDROID_JAVA_SOURCES = android/src/*.java
+ANDROID_JAVA_SOURCES = $(wildcard android/src/*.java)
 ifneq ($(IOIOLIB_DIR),)
-ANDROID_JAVA_SOURCES += android/IOIOHelper/*.java
+ANDROID_JAVA_SOURCES += $(wildcard android/IOIOHelper/*.java)
 endif
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
@@ -121,16 +121,16 @@ endif
 $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
 	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
-	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
+	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoar
 	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
 	$(Q)ln -s ../bin $(@D)/bin
-	$(Q)ln -s ../../../../android/src $(@D)/src/xcsoar
+	$(Q)ln -s $(addprefix ../../../../../../,$(ANDROID_JAVA_SOURCES)) $(@D)/src/org/xcsoar
 ifneq ($(IOIOLIB_DIR),)
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio_api
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio_spi
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio_util
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio_impl
-	$(Q)ln -s ../../../../android/IOIOHelper $(@D)/src/ioio_xcsoar
+	$(Q)mkdir -p $(ANDROID_BUILD)/src/ioio/lib
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio/lib/api
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio/lib/spi
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio/lib/util
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio/lib/impl
 endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 ifeq ($(WINHOST),y)
@@ -142,6 +142,7 @@ else
 	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
 endif
 ifeq ($(TESTING),y)
+	$(Q)ln -s ../../../../../../android/src/testing $(@D)/src/org/xcsoar
 	$(Q)ln -s ../../../android/testing/testing_rules.xml $(@D)/
 endif
 	@touch $@
