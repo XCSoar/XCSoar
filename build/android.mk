@@ -17,7 +17,6 @@ ANDROID_KEYSTORE = $(HOME)/.android/mk.keystore
 ANDROID_KEY_ALIAS = mk
 ANDROID_BUILD = $(TARGET_OUTPUT_DIR)/build
 ANDROID_BIN = $(TARGET_BIN_DIR)
-ANDROID_JNI = $(TARGET_OUTPUT_DIR)/jni
 
 ifeq ($(HOST_IS_DARWIN),y)
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-macosx
@@ -54,9 +53,9 @@ NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
-ANDROID_JAVA_SOURCES = android/src/*.java
-ifneq ($(IOIOLIB_DIR),)
-ANDROID_JAVA_SOURCES += android/ioio/*.java
+ANDROID_JAVA_SOURCES := $(wildcard android/src/*.java)
+ifeq ($(IOIOLIB_DIR),)
+ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*IOIO*.java),$(ANDROID_JAVA_SOURCES))
 endif
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
@@ -66,13 +65,8 @@ ifeq ($(TESTING),y)
 $(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_red_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
 else
-ifeq ($(NO_HORIZON),y)
-$(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_no_horizon_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
-	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
-else
 $(ANDROID_BUILD)/res/drawable/icon.png: $(DATA)/graphics/xcsoarswiftsplash_160.png | $(ANDROID_BUILD)/res/drawable/dirstamp
 	$(Q)$(IM_PREFIX)convert -scale 48x48 $< $@
-endif
 endif
 
 OGGENC = oggenc --quiet --quality 1
@@ -118,28 +112,24 @@ PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG1b) $(PNG2) $(PNG3) $(PNG4) $(
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml
 else
-ifeq ($(NO_HORIZON),y)
-MANIFEST = android/nohorizon/AndroidManifest.xml
-else
 MANIFEST = android/AndroidManifest.xml
-endif
 endif
 
 # symlink some important files to $(ANDROID_BUILD) and let the Android
 # SDK generate build.xml
-$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) build/r.testing.sed build/r.nohorizon.sed | $(TARGET_BIN_DIR)/dirstamp
+$(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  ANDROID $@"
-	$(Q)rm -r -f $@ $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
-	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
+	$(Q)rm -r -f $@ $(@D)/*_rules.xml $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
+	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src/org/xcsoar
 	$(Q)ln -s ../../../$(MANIFEST) $(@D)/AndroidManifest.xml
 	$(Q)ln -s ../bin $(@D)/bin
-	$(Q)ln -s ../../../../android/src $(@D)/src/xcsoar
+	$(Q)ln -s $(addprefix ../../../../../../,$(ANDROID_JAVA_SOURCES)) $(@D)/src/org/xcsoar
 ifneq ($(IOIOLIB_DIR),)
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio_api
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio_spi
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio_util
-	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio_impl
-	$(Q)ln -s ../../../../android/ioio $(@D)/src/ioio_xcsoar
+	$(Q)mkdir -p $(ANDROID_BUILD)/src/ioio/lib
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio/lib/api
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/spi) $(ANDROID_BUILD)/src/ioio/lib/spi
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/util) $(ANDROID_BUILD)/src/ioio/lib/util
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio/lib/impl
 endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 ifeq ($(WINHOST),y)
@@ -148,21 +138,11 @@ ifeq ($(WINHOST),y)
 	cmd
 else
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
+	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
 endif
 ifeq ($(TESTING),y)
-ifeq ($(HOST_IS_DARWIN),y)
-	$(Q)sed -i "" -f build/r.testing.sed $@
-else
-	$(Q)sed -i -f build/r.testing.sed $@
-endif
-else
-ifeq ($(NO_HORIZON),y)
-ifeq ($(HOST_IS_DARWIN),y)
-	$(Q)sed -i "" -f build/r.nohorizon.sed $@
-else
-	$(Q)sed -i -f build/r.nohorizon.sed $@
-endif
-endif
+	$(Q)ln -s ../../../../../../android/src/testing $(@D)/src/org/xcsoar
+	$(Q)ln -s ../../../android/testing/testing_rules.xml $(@D)/
 endif
 	@touch $@
 
@@ -210,17 +190,14 @@ ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES)
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp
 	cp $< $@
 
-$(ANDROID_JNI)/build.xml $(ANDROID_JNI)/AndroidManifest.xml: | $(ANDROID_JNI)/dirstamp
-	@$(NQ)echo "  ANDROID $@"
-	$(Q)ln -s ../../../android/$(@F) $@
-
-$(ANDROID_JNI)/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_JNI)/build.xml $(ANDROID_JNI)/AndroidManifest.xml $(ANDROID_BUILD)/build.xml
+$(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS): $(NATIVE_SOURCES) $(ANDROID_BUILD)/build.xml $(ANDROID_BUILD)/res/drawable/icon.png $(SOUND_FILES)
 	@$(NQ)echo "  ANT     $@"
-	$(Q)cd $(ANDROID_JNI) && $(ANT) compile-jni-classes
+	$(Q)cd $(ANDROID_BUILD) && $(ANT) compile-jni-classes
+	@touch $@
 
-$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: $(ANDROID_JNI)/classes/$(CLASS_CLASS)
+$(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES)): $(NATIVE_PREFIX)%.h: android/src/%.java $(ANDROID_BUILD)/bin/classes/$(CLASS_CLASS)
 	@$(NQ)echo "  JAVAH   $@"
-	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_JNI)/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
+	$(Q)javah -classpath $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(ANDROID_BUILD)/bin/classes -d $(@D) $(subst _,.,$(patsubst $(patsubst ./%,%,$(TARGET_OUTPUT_DIR))/include/%.h,%,$@))
 	@touch $@
 
 endif # !FAT_BINARY
