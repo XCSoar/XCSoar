@@ -54,9 +54,9 @@ NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
 NATIVE_HEADERS = $(patsubst %,$(NATIVE_PREFIX)%.h,$(NATIVE_CLASSES))
 
-ANDROID_JAVA_SOURCES = $(wildcard android/src/*.java)
-ifneq ($(IOIOLIB_DIR),)
-ANDROID_JAVA_SOURCES += $(wildcard android/IOIOHelper/*.java)
+ANDROID_JAVA_SOURCES := $(wildcard android/src/*.java)
+ifeq ($(IOIOLIB_DIR),)
+ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*IOIO*.java),$(ANDROID_JAVA_SOURCES))
 endif
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
