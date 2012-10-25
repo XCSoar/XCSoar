@@ -23,6 +23,7 @@ Version 6.4.3 - not yet released
   - fix freeze bug on device reconnect
   - LXNAV Nano: fix crash in Nano configuration dialog
   - LXNAV V7: fix NMEA setup over Bluetooth
+  - Colibri/LX20: fix LXN/FIL to IGC conversion (#2262)
 
 Version 6.4.2 - 2012/10/17
 * calculations

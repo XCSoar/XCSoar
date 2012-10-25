@@ -87,7 +87,11 @@ HandlePosition(FILE *file, Context &context,
             longitude >= 0 ? 'E' : 'W');
     fprintf(file, "%c", context.fix_stat);
     fprintf(file, "%05d%05d",
-            FromBE16(position.aalt), FromBE16(position.galt));
+            /* altitudes can be negative, so cast the uint16_t to
+               int16_t to interpret the most significant bit as sign
+               bit */
+            (int16_t)FromBE16(position.aalt),
+            (int16_t)FromBE16(position.galt));
 
     if (context.b_ext.num == 0)
         fprintf(file, "\r\n");
@@ -104,9 +108,7 @@ HandleExtConfig(FILE *file, const struct LXN::ExtConfig &packet,
   config.num = 0;
   for (unsigned bit = 0; bit < 16; ++bit) {
     if (ext_dat & (1 << bit)) {
-      column += LXN::extension_defs[bit].width;
       config.extensions[config.num++] = LXN::extension_defs[bit];
-      ++config.num;
     }
   }
 
@@ -326,8 +328,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
     case LXN::B_EXT:
       data += sizeof(*packet.b_ext) +
         context.b_ext.num * sizeof(packet.b_ext->data[0]);
-      if (data > end ||
-          !ValidString(packet.event->foo, sizeof(packet.event->foo)))
+      if (data > end)
         return false;
 
       for (unsigned i = 0; i < context.b_ext.num; ++i)
@@ -341,8 +342,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
     case LXN::K_EXT:
       data += sizeof(*packet.k_ext) +
         context.k_ext.num * sizeof(packet.k_ext->data[0]);
-      if (data > end ||
-          !ValidString(packet.event->foo, sizeof(packet.event->foo)))
+      if (data > end)
         return false;
 
       l = context.time + packet.k_ext->foo;
