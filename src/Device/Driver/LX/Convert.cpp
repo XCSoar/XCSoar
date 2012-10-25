@@ -87,7 +87,11 @@ HandlePosition(FILE *file, Context &context,
             longitude >= 0 ? 'E' : 'W');
     fprintf(file, "%c", context.fix_stat);
     fprintf(file, "%05d%05d",
-            FromBE16(position.aalt), FromBE16(position.galt));
+            /* altitudes can be negative, so cast the uint16_t to
+               int16_t to interpret the most significant bit as sign
+               bit */
+            (int16_t)FromBE16(position.aalt),
+            (int16_t)FromBE16(position.galt));
 
     if (context.b_ext.num == 0)
         fprintf(file, "\r\n");
