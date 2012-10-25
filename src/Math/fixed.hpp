@@ -81,6 +81,13 @@ Half(fixed a)
 
 constexpr
 static inline fixed
+Quarter(fixed a)
+{
+  return a * 0.25;
+}
+
+constexpr
+static inline fixed
 Double(fixed a)
 {
   return a * 2;
@@ -354,6 +361,11 @@ public:
   constexpr
   fixed Half() const {
     return fixed(internal(), m_nVal >> 1);
+  }
+
+  constexpr
+  fixed Quarter() const {
+    return fixed(internal(), m_nVal >> 2);
   }
 
   constexpr
@@ -995,6 +1007,13 @@ static inline fixed
 Half(fixed a)
 {
   return a.Half();
+}
+
+constexpr
+static inline fixed
+Quarter(fixed a)
+{
+  return a.Quarter();
 }
 
 constexpr

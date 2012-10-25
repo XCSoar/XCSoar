@@ -186,7 +186,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
     fixed len;
     if (settings.scale_runway_length && runway.IsLengthDefined())
       len = Half(radius) +
-        (((int) runway.GetLength() - 500) / 500) * (radius / fixed_four);
+        (((int) runway.GetLength() - 500) / 500) * Quarter(radius);
     else
       len = radius;
     len += Double(scale);
