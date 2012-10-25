@@ -683,6 +683,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunRepositoryParser \
 	IGC2NMEA \
 	NearestWaypoints \
+	RunKalmanFilter1d \
 	ArcApprox
 
 ifeq ($(TARGET),UNIX)
@@ -778,6 +779,11 @@ DUMP_TEXT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
 DUMP_TEXT_FILE_DEPENDS = IO OS ZZIP UTIL
 $(eval $(call link-program,DumpTextFile,DUMP_TEXT_FILE))
+
+RUN_KALMAN_FILTER_1D_SOURCES = \
+	$(TEST_SRC_DIR)/RunKalmanFilter1d.cpp
+RUN_KALMAN_FILTER_1D_DEPENDS = IO OS MATH UTIL
+$(eval $(call link-program,RunKalmanFilter1d,RUN_KALMAN_FILTER_1D))
 
 ARC_APPROX_SOURCES = \
 	$(SRC)/Formatter/GeoPointFormatter.cpp \
