@@ -1,4 +1,4 @@
-TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX UNIX32 UNIX64 ANDROID ANDROID7 ANDROID86 ANDROIDMIPS ANDROIDFAT CYGWIN
+TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX UNIX32 UNIX64 ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS ANDROIDFAT CYGWIN
 
 ifeq ($(TARGET),)
   ifeq ($(HOST_IS_UNIX),y)
@@ -21,6 +21,7 @@ XSCALE := n
 ARMV5 = n
 ARMV6 = n
 ARMV7 := n
+NEON := n
 X86 := n
 MIPS := n
 FAT_BINARY := n
@@ -57,6 +58,11 @@ ifeq ($(TARGET),ANDROID)
     # ARMv5 in the debug build, to allow installation on the emulator
     ARMV5 = y
   endif
+endif
+
+ifeq ($(TARGET),ANDROID7NEON)
+  NEON := y
+  override TARGET = ANDROID7
 endif
 
 ifeq ($(TARGET),ANDROID7)
@@ -247,7 +253,12 @@ ifeq ($(TARGET),ANDROID)
     HAVE_FPU := n
   endif
 
-  ifeq ($(ARMV7),y)
+  ifeq ($(ARMV7)$(NEON),yy)
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=neon -mthumb-interwork
+    HAVE_FPU := y
+  endif
+
+  ifeq ($(ARMV7)$(NEON),yn)
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
     HAVE_FPU := y
   endif

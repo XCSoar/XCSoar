@@ -104,6 +104,8 @@ Supported targets:
 
  ANDROID7: Android with ARMv7 CPU
 
+ ANDROID7NEON: Android with ARMv7 CPU and NEON extension
+
  ANDROID86: Android with x86 CPU
 
  ANDROIDMIPS: Android with MIPS CPU
