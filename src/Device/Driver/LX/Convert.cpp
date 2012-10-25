@@ -104,9 +104,7 @@ HandleExtConfig(FILE *file, const struct LXN::ExtConfig &packet,
   config.num = 0;
   for (unsigned bit = 0; bit < 16; ++bit) {
     if (ext_dat & (1 << bit)) {
-      column += LXN::extension_defs[bit].width;
       config.extensions[config.num++] = LXN::extension_defs[bit];
-      ++config.num;
     }
   }
 
