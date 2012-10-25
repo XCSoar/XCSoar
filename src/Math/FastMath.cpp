@@ -257,8 +257,8 @@ void mag_rmag(fixed x,
 #ifdef FIXED_MATH
   unsigned d_shift = 1;
   while (std::max(x,y) > fixed(1000)) {
-    x = half(x);
-    y = half(y);
+    x = Half(x);
+    y = Half(y);
     d_shift = (d_shift << 1);
   }
 #endif

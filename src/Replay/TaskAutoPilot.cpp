@@ -120,7 +120,7 @@ Angle
 TaskAutoPilot::GetHeadingDeviation()
 {
   fixed noise_mag = acstate == Climb
-    ? half(parms.bearing_noise)
+    ? Half(parms.bearing_noise)
     : parms.bearing_noise;
   fixed r = (fixed_two * rand() / RAND_MAX) - fixed_one;
   fixed deviation = fixed(heading_filter.Update(noise_mag * r));

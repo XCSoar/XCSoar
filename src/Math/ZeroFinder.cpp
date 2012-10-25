@@ -43,7 +43,7 @@ fixed ZeroFinder::tolerance_actual_min(const fixed x) const {
 }
 
 fixed ZeroFinder::tolerance_actual_zero(const fixed x) const {
-  return Double(epsilon * fabs(x)) + half(tolerance);
+  return Double(epsilon * fabs(x)) + Half(tolerance);
 }
 
 //#define INSTRUMENT_ZERO
@@ -177,7 +177,7 @@ fixed ZeroFinder::find_zero_actual(const fixed xstart) {
     const fixed tol_act = tolerance_actual_zero(b);
 
     // Step at this iteration
-    fixed new_step = half(c - b);
+    fixed new_step = Half(c - b);
 
     if (fabs(new_step) <= tol_act || fabs(fb) < sqrt_epsilon) {
       if (!b_best)
@@ -224,8 +224,8 @@ fixed ZeroFinder::find_zero_actual(const fixed xstart) {
       // If b+p/q falls in [b,c] and isn't too large it is accepted
       // If p/q is too large then the bissection procedure can
       // reduce [b,c] range to more extent
-      if (p < (fixed_threequaters * cb * q - half(fabs(tol_act * q)))
-          && p < fabs(half(prev_step * q)))
+      if (p < (fixed_threequaters * cb * q - Half(fabs(tol_act * q)))
+          && p < fabs(Half(prev_step * q)))
         new_step = p / q;
     }
 
@@ -335,13 +335,13 @@ fixed ZeroFinder::find_min_actual(const fixed xstart)
   for (;;) {
     // Range over which the minimum is seeked for
     const fixed range = b - a;
-    const fixed middle_range = half(a + b);
+    const fixed middle_range = Half(a + b);
 
     // Actual tolerance
     const fixed tol_act = tolerance_actual_min(x);
     const fixed double_tol_act = Double(tol_act);
 
-    if (fabs(x-middle_range) + half(range) <= double_tol_act) {
+    if (fabs(x-middle_range) + Half(range) <= double_tol_act) {
       if (!x_best)
         // call once more
         fx = f(x);

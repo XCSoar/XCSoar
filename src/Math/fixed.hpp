@@ -74,7 +74,7 @@ sin_cos(const fixed thetha)
 
 constexpr
 static inline fixed
-half(fixed a)
+Half(fixed a)
 {
   return a * 0.5;
 }
@@ -992,7 +992,7 @@ inline bool negative(const fixed f) {
 
 constexpr
 static inline fixed
-half(fixed a)
+Half(fixed a)
 {
   return a.Half();
 }

@@ -119,7 +119,7 @@ Middle(GeoPoint a, GeoPoint b)
 {
   // TODO: optimize this naive approach
   const fixed distance = Distance(a, b);
-  return IntermediatePoint(a, b, half(distance));
+  return IntermediatePoint(a, b, Half(distance));
 }
 
 /**

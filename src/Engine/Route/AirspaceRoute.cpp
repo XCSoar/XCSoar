@@ -250,7 +250,7 @@ AirspaceRoute::Synchronise(const Airspaces& master,
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo condition(h_min, h_max, origin, destination);
   if (m_airspaces.SynchroniseInRange(master, origin.Middle(destination),
-                                       half(origin.Distance(destination)),
+                                     Half(origin.Distance(destination)),
                                        condition))
   {
     if (m_airspaces.size())

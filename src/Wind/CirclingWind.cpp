@@ -234,7 +234,7 @@ CirclingWind::CalcWind()
 
   // attempt to fit cycloid
 
-  fixed mag = half(samples[jmax].mag - samples[jmin].mag);
+  fixed mag = Half(samples[jmax].mag - samples[jmin].mag);
   fixed rthis = fixed_zero;
 
   for (unsigned i = 0; i < samples.size(); i++) {

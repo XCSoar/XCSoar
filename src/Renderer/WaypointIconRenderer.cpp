@@ -152,7 +152,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
                     ? look.reachable_brush
                     : look.terrain_unreachable_brush);
       DrawLandableBase(canvas, point, waypoint.IsAirport(),
-                       radius + half(radius));
+                       radius + Half(radius));
     }
     canvas.Select(look.magenta_brush);
     break;
@@ -185,7 +185,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   if (runway.IsDirectionDefined()) {
     fixed len;
     if (settings.scale_runway_length && runway.IsLengthDefined())
-      len = half(radius) +
+      len = Half(radius) +
         (((int) runway.GetLength() - 500) / 500) * (radius / fixed_four);
     else
       len = radius;

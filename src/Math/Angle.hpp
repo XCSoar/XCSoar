@@ -307,7 +307,7 @@ public:
    */
   constexpr
   Angle Half() const {
-    return Angle(::half(value));
+    return Angle(::Half(value));
   }
 
   /**

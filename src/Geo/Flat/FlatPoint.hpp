@@ -208,7 +208,7 @@ struct FlatPoint
 
   constexpr
   FlatPoint Half() const {
-    return FlatPoint(::half(x), ::half(y));
+    return FlatPoint(::Half(x), ::Half(y));
   }
 };
 

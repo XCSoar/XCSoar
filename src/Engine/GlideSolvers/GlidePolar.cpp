@@ -137,7 +137,7 @@ fixed
 GlidePolar::SinkRate(const fixed V, const fixed n) const
 {
   const fixed w0 = SinkRate(V);
-  const fixed vl = VbestLD / max(half(VbestLD), V);
+  const fixed vl = VbestLD / max(Half(VbestLD), V);
   return max(fixed_zero,
              w0 + (V / Double(bestLD)) * (sqr(n) - fixed_one) * sqr(vl));
 }
@@ -415,7 +415,7 @@ GlidePolar::GetBestGlideRatioSpeed(fixed head_wind) const
 fixed
 GlidePolar::GetVTakeoff() const
 {
-  return half(GetVMin());
+  return Half(GetVMin());
 }
 
 fixed

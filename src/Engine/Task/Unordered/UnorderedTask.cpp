@@ -218,7 +218,7 @@ UnorderedTask::GetTaskRadius(const GeoPoint& fallback_location) const
   if (!tp) {
     return fixed_zero;
   } else {
-    return half(tp->GetLocation().Distance(fallback_location));
+    return Half(tp->GetLocation().Distance(fallback_location));
   }
 }
 
