@@ -328,8 +328,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
     case LXN::B_EXT:
       data += sizeof(*packet.b_ext) +
         context.b_ext.num * sizeof(packet.b_ext->data[0]);
-      if (data > end ||
-          !ValidString(packet.event->foo, sizeof(packet.event->foo)))
+      if (data > end)
         return false;
 
       for (unsigned i = 0; i < context.b_ext.num; ++i)
@@ -343,8 +342,7 @@ LX::ConvertLXNToIGC(const void *_data, size_t _length,
     case LXN::K_EXT:
       data += sizeof(*packet.k_ext) +
         context.k_ext.num * sizeof(packet.k_ext->data[0]);
-      if (data > end ||
-          !ValidString(packet.event->foo, sizeof(packet.event->foo)))
+      if (data > end)
         return false;
 
       l = context.time + packet.k_ext->foo;
