@@ -77,6 +77,15 @@ class FlyingComputer {
 
   fixed sinking_altitude;
 
+  /**
+   * The last altitude when the aircraft was supposed to be on the
+   * ground.  This is usually the elevation of the take-off airfield.
+   *
+   * A negative value means unknown.  Sorry for these few airfields
+   * that are below MSL ...
+   */
+  fixed last_ground_altitude;
+
 public:
   void Reset();
 

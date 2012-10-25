@@ -6,7 +6,7 @@ Version 6.5 - not yet released
 * map
   - lower zoom levels possible while circling (#1120)
 * calculations
-  - don't detect landing while climbing in a wave (#1330, #2289)
+  - don't detect landing while climbing in a wave (#1330, #2289, #2406)
   - basic support for the contest "DMSt" (#2208)
 * devices
   - LX: support flight download from LXNAV Nano
