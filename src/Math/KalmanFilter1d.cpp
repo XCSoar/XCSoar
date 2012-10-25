@@ -62,8 +62,6 @@ KalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs,
 {
   // Some abbreviated constants to make the code line up nicely:
   static const fixed F1 = fixed_one;
-  static const fixed F2 = fixed_two;
-  static const fixed F4 = fixed_four;
 
   // Validity checks. TODO: more?
   assert(positive(dt));
@@ -73,8 +71,8 @@ KalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs,
   // Update state estimate.
   x_abs_ += x_vel_ * dt;
   // Update state covariance. The last term mixes in acceleration noise.
-  p_abs_abs_ += F2*dt*p_abs_vel_+ dt*dt*p_vel_vel_+ var_x_accel_*dt*dt*dt*dt/F4;
-  p_abs_vel_ +=                      dt*p_vel_vel_+ var_x_accel_*dt*dt*dt/F2;
+  p_abs_abs_ += Double(dt*p_abs_vel_) + dt*dt*p_vel_vel_ + Quarter(var_x_accel_*dt*dt*dt*dt);
+  p_abs_vel_ += dt*p_vel_vel_ + Half(var_x_accel_*dt*dt*dt);
   p_vel_vel_ +=                                     var_x_accel_*dt*dt;
 
   // Update step.
