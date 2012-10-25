@@ -34,9 +34,10 @@ FlyingComputer::Reset()
 
   stationary_clock.Clear();
   moving_clock.Clear();
+  climbing_clock.Clear();
   moving_since = fixed_minus_one;
   stationary_since = fixed_minus_one;
-  climbing_since = fixed_minus_one;
+  climbing_altitude = fixed_zero;
   sinking_since = fixed_minus_one;
   last_ground_altitude = fixed_minus_one;
 }
@@ -182,16 +183,16 @@ CheckAltitudeAGL(const DerivedInfo &calculated)
 }
 
 inline bool
-FlyingComputer::CheckClimbing(fixed time, fixed altitude)
+FlyingComputer::CheckClimbing(fixed dt, fixed altitude)
 {
-  if (negative(climbing_since) || altitude <= climbing_altitude) {
-    climbing_since = time;
-    climbing_altitude = altitude;
-    return false;
-  } else {
-    climbing_altitude = altitude;
-    return time >= climbing_since + fixed_ten;
-  }
+  if (altitude > climbing_altitude)
+    climbing_clock.Add(dt);
+  else
+    climbing_clock.Subtract(dt);
+
+  climbing_altitude = altitude;
+
+  return climbing_clock >= dt + fixed_one;
 }
 
 void
@@ -232,7 +233,7 @@ FlyingComputer::Compute(fixed takeoff_speed,
   }
 
   if (CheckTakeOffSpeed(takeoff_speed, basic) ||
-      (any_altitude.first && CheckClimbing(basic.time, any_altitude.second)) ||
+      (any_altitude.first && CheckClimbing(dt, any_altitude.second)) ||
       CheckAltitudeAGL(calculated))
     Moving(flying, basic.time, dt, basic.location);
   else

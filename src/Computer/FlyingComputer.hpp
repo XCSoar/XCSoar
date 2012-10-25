@@ -51,6 +51,15 @@ class FlyingComputer {
   StateClock<30, 5> moving_clock;
 
   /**
+   * Tracks the duration the aircraft has been climbing.  If the
+   * aircraft has been climbing for a certain amount of time, it is
+   * assumed that it is still flying, even if the ground speed is
+   * small (for example, when flying in a wave without airspeed
+   * input).
+   */
+  StateClock<20, 5> climbing_clock;
+
+  /**
    * If the aircraft is currenly assumed to be moving, then this
    * denotes the initial moving time stamp.  This gets reset to a
    * negative value when the aircraft is stationary for a certain
@@ -68,7 +77,6 @@ class FlyingComputer {
   fixed stationary_since;
   GeoPoint stationary_at;
 
-  fixed climbing_since;
   fixed climbing_altitude;
 
   fixed sinking_since;
@@ -117,7 +125,7 @@ protected:
    * @return true if the aircraft has been climbing for more than 10
    * seconds
    */
-  bool CheckClimbing(fixed time, fixed altitude);
+  bool CheckClimbing(fixed dt, fixed altitude);
 
   void Check(FlyingState &state, fixed time);
 
