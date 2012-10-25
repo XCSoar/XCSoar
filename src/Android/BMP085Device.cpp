@@ -75,7 +75,8 @@ BMP085Device::BMP085Device(unsigned _index,
   :index(_index),
    obj(env, CreateBMP085Device(env, holder,
                                twi_num, eoc_pin, oversampling,
-                               *this))
+                               *this)),
+   kalman_filter(fixed(10), fixed(0.0075))
 {
 }
 
@@ -83,6 +84,15 @@ BMP085Device::~BMP085Device()
 {
   JNIEnv *env = Java::GetEnv();
   env->CallVoidMethod(obj.Get(), close_method);
+}
+
+gcc_pure
+static inline
+fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
+{
+  static const fixed FACTOR(-2260.389548275485);
+  static const fixed EXPONENT(-0.8097374740609689);
+  return fixed(FACTOR * pow(pressure, EXPONENT) * d_pressure);
 }
 
 void
@@ -99,7 +109,11 @@ BMP085Device::onBMP085Values(fixed temperature,
   basic.temperature_available = true;
 #endif
 
-  basic.ProvideStaticPressure(pressure);
+  kalman_filter.Update(pressure.GetHectoPascal(), fixed(0.05));
+
+  basic.ProvideNoncompVario(ComputeNoncompVario(kalman_filter.GetXAbs(),
+                                                kalman_filter.GetXVel()));
+  basic.ProvideStaticPressure(AtmosphericPressure::HectoPascal(kalman_filter.GetXAbs()));
 
   device_blackboard->ScheduleMerge();
 }
@@ -115,6 +129,7 @@ BMP085Device::onBMP085Error()
 #endif
 
   basic.static_pressure_available.Clear();
+  basic.noncomp_vario_available.Clear();
 
   device_blackboard->ScheduleMerge();
 }

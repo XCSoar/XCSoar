@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "BMP085Listener.hpp"
 #include "Java/Object.hpp"
+#include "Math/SelfTimingKalmanFilter1d.hpp"
 #include "Compiler.h"
 
 #include <jni.h>
@@ -33,6 +34,11 @@ Copyright_License {
 class BMP085Device : private BMP085Listener {
   unsigned index;
   Java::Object obj;
+
+  /**
+   * This Kalman filter is used to smooth the pressure input.
+   */
+  SelfTimingKalmanFilter1d kalman_filter;
 
 public:
   static void Initialise(JNIEnv *env);
