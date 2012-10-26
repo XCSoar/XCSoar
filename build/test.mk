@@ -857,12 +857,14 @@ RUN_NOAA_DOWNLOADER_DEPENDS = GEO IO MATH LIBNET UTIL TIME
 $(eval $(call link-program,RunNOAADownloader,RUN_NOAA_DOWNLOADER))
 
 RUN_SL_TRACKING_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(TEST_SRC_DIR)/RunSkyLinesTracking.cpp
+RUN_SL_TRACKING_LDADD = $(DEBUG_REPLAY_LDADD)
 RUN_SL_TRACKING_DEPENDS = LIBNET OS GEO MATH UTIL TIME
 $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 

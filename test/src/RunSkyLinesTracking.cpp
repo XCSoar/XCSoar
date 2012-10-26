@@ -26,6 +26,7 @@ Copyright_License {
 #include "OS/Args.hpp"
 #include "Util/NumberParser.hpp"
 #include "Util/StringUtil.hpp"
+#include "DebugReplay.hpp"
 
 int
 main(int argc, char *argv[])
@@ -33,8 +34,6 @@ main(int argc, char *argv[])
   Args args(argc, argv, "HOST KEY");
   const char *host = args.ExpectNext();
   const char *key = args.ExpectNext();
-  const char *cmd = args.IsEmpty() ? "fix" : args.GetNext();
-  args.ExpectEnd();
 
   SkyLinesTracking::Client client;
   client.SetKey(ParseUint64(key, NULL, 16));
@@ -43,7 +42,7 @@ main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
-  if (StringIsEqual(cmd, "fix")) {
+  if (args.IsEmpty() || StringIsEqual(args.PeekNext(), "fix")) {
     NMEAInfo basic;
     basic.Reset();
     basic.UpdateClock();
@@ -51,10 +50,18 @@ main(int argc, char *argv[])
     basic.time_available.Update(basic.clock);
 
     return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
-  } else if (StringIsEqual(cmd, "ping")) {
+  } else if (StringIsEqual(args.PeekNext(), "ping")) {
     client.SendPing(1);
   } else {
-    fprintf(stderr, "Unknown command: %s\n", cmd);
-    return EXIT_FAILURE;
+    DebugReplay *replay = CreateDebugReplay(args);
+    if (replay == NULL)
+      return EXIT_FAILURE;
+
+    while (replay->Next()) {
+      client.SendFix(replay->Basic());
+      usleep(100000);
+    }
   }
+
+  return EXIT_SUCCESS;
 }
