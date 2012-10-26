@@ -417,12 +417,11 @@ ifeq ($(TARGET),ANDROID)
   endif
 endif
 
-ifneq ($(filter PC WINE,$(TARGET)),)
+ifneq ($(filter PC WINE CYGWIN,$(TARGET)),)
   TARGET_LDLIBS += -lwinmm
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  TARGET_LDLIBS += -lwinmm
   TARGET_LDLIBS += -lintl
 endif
 
