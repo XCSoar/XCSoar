@@ -164,12 +164,12 @@ endif
 
 ifeq ($(TARGET),UNIX32)
   override TARGET = UNIX
-  TARGET_ARCH = -m32
+  TARGET_ARCH += -m32
 endif
 
 ifeq ($(TARGET),UNIX64)
   override TARGET = UNIX
-  TARGET_ARCH = -m64
+  TARGET_ARCH += -m64
 endif
 
 ifeq ($(TARGET),UNIX)
