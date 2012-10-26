@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: mapshape.h 10497 2010-09-02 16:23:37Z warmerdam $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  Shapefile access API

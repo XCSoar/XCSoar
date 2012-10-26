@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: mapshape.c 10937 2011-02-04 21:45:29Z tamas $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  Implements support for shapefile access.
@@ -36,7 +36,6 @@
 
 #include <limits.h>
 #include <assert.h>
-#include "mapserver.h"
 
 #include <zzip/util.h>
 
@@ -45,8 +44,9 @@
 #include <sys/param.h>
 #include <stdbool.h>
 #include <math.h>
+#include "mapserver.h"
 
-MS_CVSID("$Id: mapshape.c 10937 2011-02-04 21:45:29Z tamas $")
+MS_CVSID("$Id$")
 
 /* Only use this macro on 32-bit integers! */
 #define SWAP_FOUR_BYTES(data) \
@@ -1995,7 +1995,7 @@ int msTiledSHPOpenFile(layerObj *layer)
 }
 
 
-int msTiledSHPWhichShapes(layerObj *layer, rectObj rect)
+int msTiledSHPWhichShapes(layerObj *layer, rectObj rect, int isQuery)
 {
   int i, status;
   char *filename, tilename[MS_MAXPATHLEN];
@@ -2019,7 +2019,7 @@ int msTiledSHPWhichShapes(layerObj *layer, rectObj rect)
     shapeObj tshape;
 
     tlp = (GET_LAYER(layer->map, tSHP->tilelayerindex));
-    status= msLayerWhichShapes(tlp, rect);
+    status= msLayerWhichShapes(tlp, rect, isQuery);
     if(status != MS_SUCCESS) return(status); /* could be MS_DONE or MS_FAILURE */
 
     msTileIndexAbsoluteDir(tiFileAbsDir, layer);
@@ -2568,7 +2568,7 @@ int msSHPLayerIsOpen(layerObj *layer)
     return MS_FALSE;
 }
 
-int msSHPLayerWhichShapes(layerObj *layer, rectObj rect)
+int msSHPLayerWhichShapes(layerObj *layer, rectObj rect, int isQuery)
 {
   int i, n1=0, n2=0;
   int status;

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: mapprimitive.c 11636 2011-05-03 16:10:44Z assefa $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  Implementations for rectObj, pointObj, lineObj, shapeObj, etc.
@@ -40,7 +40,7 @@
 #include <math.h>
 
 #ifdef SHAPELIB_DISABLED
-MS_CVSID("$Id: mapprimitive.c 11636 2011-05-03 16:10:44Z assefa $")
+MS_CVSID("$Id$")
 
 typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: maperror.h 11128 2011-03-09 20:38:48Z dmorissette $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  Declarations for Error and Debug functions.

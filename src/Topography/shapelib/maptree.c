@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: maptree.c 10772 2010-11-29 18:27:02Z aboudreault $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  .qix spatial index implementation.  Derived from shapelib, and 
@@ -42,7 +42,7 @@
 #include <sys/endian.h>
 #endif
 
-MS_CVSID("$Id: maptree.c 10772 2010-11-29 18:27:02Z aboudreault $")
+MS_CVSID("$Id$")
 
 static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 

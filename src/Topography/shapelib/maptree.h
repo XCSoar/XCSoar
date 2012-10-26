@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: maptree.h 8741 2009-03-09 21:04:52Z jlacroix $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  .qix spatial index declarations.

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: mapprimitive.h 11080 2011-03-05 16:41:32Z tamas $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  Declarations for rectObj, pointObj, lineObj, shapeObj, etc.

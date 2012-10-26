@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: mapsymbol.h 11599 2011-04-19 05:14:17Z tbonfort $
+ * $Id$
  *
  * Project:  MapServer
  * Purpose:  symbolObj related declarations.
