@@ -46,8 +46,8 @@ compare_squared(int a, int b, int c)
  * @param val Value
  * @return Rounded square root of val
  */
-unsigned int
-isqrt4(unsigned long val)
+unsigned
+isqrt4(unsigned val)
 {
 #if defined(__i386__) || defined(__x86_64__)
   /* x86 FPUs are extremely fast */

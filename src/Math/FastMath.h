@@ -193,7 +193,8 @@ extern "C"
 #endif
 
 gcc_const
-unsigned int isqrt4(unsigned long val);
+unsigned
+isqrt4(unsigned val);
 
 #ifdef __cplusplus
 }
