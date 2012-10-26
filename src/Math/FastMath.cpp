@@ -39,9 +39,6 @@ compare_squared(int a, int b, int c)
   return 0;
 }
 
-extern "C"
-{
-
 /**
  * Calculates the square root of val
  *
@@ -93,8 +90,6 @@ isqrt4(unsigned long val)
 
   return g;
 #endif
-}
-
 }
 
 fixed
