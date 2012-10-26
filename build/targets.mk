@@ -354,7 +354,7 @@ ifeq ($(HAVE_WIN32),y)
   endif
 
   WINDRESFLAGS := -I$(SRC) $(TARGET_CPPFLAGS)
-endif # UNIX
+endif
 
 ifeq ($(TARGET),PC)
   TARGET_ARCH += -mwindows -mms-bitfields
