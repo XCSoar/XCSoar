@@ -192,18 +192,13 @@ AndroidDownloadManager::Enqueue(JNIEnv *env, const char *uri,
   assert(uri != NULL);
   assert(path_relative != NULL);
 
-  char tmp_relative[MAX_PATH];
-  strcpy(tmp_relative, path_relative);
-  strcat(tmp_relative, ".tmp");
-
-  {
-    char tmp_absolute[MAX_PATH];
-    LocalPath(tmp_absolute, tmp_relative);
-    File::Delete(tmp_absolute);
-  }
+  char tmp_absolute[MAX_PATH];
+  LocalPath(tmp_absolute, path_relative);
+  strcat(tmp_absolute, ".tmp");
+  File::Delete(tmp_absolute);
 
   Java::String j_uri(env, uri);
-  Java::String j_path(env, tmp_relative);
+  Java::String j_path(env, tmp_absolute);
 
   env->CallStaticLongMethod(util_class, enqueue_method,
                             object.Get(), j_uri.Get(),

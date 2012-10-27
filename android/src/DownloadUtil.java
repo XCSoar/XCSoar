@@ -23,6 +23,7 @@ Copyright_License {
 
 package org.xcsoar;
 
+import java.io.File;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.BroadcastReceiver;
@@ -87,10 +88,21 @@ class DownloadUtil extends BroadcastReceiver {
     } while (c.moveToNext());
   }
 
+  /**
+   * @param path the absolute destination path
+   */
   static long enqueue(DownloadManager dm, String uri, String path) {
     DownloadManager.Request request =
       new DownloadManager.Request(Uri.parse(uri));
-    request.setDestinationInExternalPublicDir("XCSoarData", path);
+
+    /* Unfortunately, we cannot use the simpler "ExternalPublicDir"
+       Android feature, because on some Samsung products, we need to
+       explicitly use the "external_sd" mount instead of the built-in
+       storage.  Here, we must use whatever was returned by
+       FindDataPath() in LocalPath.cpp. */
+    //request.setDestinationInExternalPublicDir("XCSoarData", path);
+    request.setDestinationUri(Uri.fromFile(new File(path)));
+
     request.setAllowedOverRoaming(false);
     request.setShowRunningNotification(true);
     return dm.enqueue(request);
