@@ -499,12 +499,40 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
 #endif /* _WIN32_WCE && !GNAV*/
 }
 
+#ifdef ANDROID
+/**
+ * Resolve all symlinks in the specified (allocated) string, and
+ * returns a newly allocated string.  The specified string is freed by
+ * this function.
+ */
+static char *
+RealPath(char *path)
+{
+  char buffer[4096];
+  char *result = realpath(path, buffer);
+  if (result == NULL)
+    return path;
+
+  free(path);
+  return strdup(result);
+}
+#endif
+
 bool
 InitialiseDataPath()
 {
   data_path = FindDataPath();
   if (data_path == NULL)
     return false;
+
+#ifdef ANDROID
+  /* on some Android devices, /sdcard or /sdcard/external_sd are
+     symlinks, and on some devices (Samsung phones), the Android
+     DownloadManager does not allow destination paths pointing inside
+     these symlinks; to avoid problems with this restriction, all
+     symlinks on the way must be resolved by RealPath(): */
+  data_path = RealPath(data_path);
+#endif
 
   data_path_length = _tcslen(data_path);
   return true;
