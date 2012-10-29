@@ -18,6 +18,12 @@ else
 endif
 endif
 
+# Enable fast floating point math.  XCSoar does not rely on strict
+# IEEE/ISO semantics, for example it is not interested in "errno" or
+# the difference between -0 and +0.  This allows using non-conforming
+# vector units on some platforms, e.g. ARM NEON.
+OPTIMIZE += -ffast-math
+
 ifeq ($(LTO),y)
 OPTIMIZE += -flto -fwhole-program
 
