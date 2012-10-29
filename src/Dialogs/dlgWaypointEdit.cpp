@@ -34,7 +34,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Math/FastMath.h"
 #include "UIGlobals.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoint.hpp"

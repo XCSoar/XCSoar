@@ -39,7 +39,6 @@ Copyright_License {
 #include "Hardware/Battery.hpp"
 #include "Formatter/Units.hpp"
 #include "Logger/Logger.hpp"
-#include "Math/FastMath.h"
 #include "LocalTime.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"

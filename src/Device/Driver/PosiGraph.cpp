@@ -35,7 +35,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Math/FastMath.h"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 

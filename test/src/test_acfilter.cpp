@@ -20,7 +20,6 @@
 }
 */
 
-#include "Math/FastMath.h"
 #include "harness_flight.hpp"
 
 #include "Util/AircraftStateFilter.hpp"

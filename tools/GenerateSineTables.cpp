@@ -3,7 +3,6 @@
 #endif
 
 #include "Math/Constants.h"
-#include "Math/FastMath.h"
 #include "Math/fixed.hpp"
 #include "Computer/ThermalLocator.hpp"
 

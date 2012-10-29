@@ -31,7 +31,6 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Form/Button.hpp"
 #include "Units/Units.hpp"
-#include "Math/FastMath.h"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Compatibility/string.h"

@@ -38,7 +38,6 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Math/FastMath.h"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"

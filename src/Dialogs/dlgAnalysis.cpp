@@ -33,7 +33,6 @@ Copyright_License {
 #include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "ComputerSettings.hpp"
-#include "Math/FastMath.h"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Look/Look.hpp"

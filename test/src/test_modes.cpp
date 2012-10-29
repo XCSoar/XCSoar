@@ -20,7 +20,6 @@
 }
 */
 
-#include "Math/FastMath.h"
 #include "TaskEventsPrint.hpp"
 #include "harness_flight.hpp"
 
