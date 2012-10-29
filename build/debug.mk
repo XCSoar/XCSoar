@@ -24,6 +24,13 @@ endif
 # vector units on some platforms, e.g. ARM NEON.
 OPTIMIZE += -ffast-math
 
+ifeq ($(CLANG)$(DEBUG),nn)
+# Enable gcc auto-vectorisation on some architectures (e.g. ARM NEON).
+# This requires -ffast-math, because some vector units don't conform
+# stricly with IEEE/ISO (see above).
+OPTIMIZE += -ftree-vectorize
+endif
+
 ifeq ($(LTO),y)
 OPTIMIZE += -flto -fwhole-program
 
