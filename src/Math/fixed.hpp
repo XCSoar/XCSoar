@@ -382,11 +382,15 @@ public:
                  x & ((int64_t)-1 << resolution_shift));
   }
 
-  gcc_pure
-  fixed floor() const;
+  constexpr fixed floor() const {
+    return fixed(fixed::internal(),
+                 m_nVal & ~(resolution - 1));
+  }
 
-  gcc_pure
-  fixed ceil() const;
+  constexpr fixed ceil() const {
+    return fixed(fixed::internal(),
+                 ((m_nVal - 1) | ~(resolution - 1)) + 1);
+  }
 
   gcc_pure
   fixed sqrt() const;
@@ -882,13 +886,16 @@ inline fixed trunc(fixed x)
   return x.trunc();
 }
 
-inline fixed floor(fixed const& x)
+constexpr
+static inline fixed
+floor(fixed x)
 {
   return x.floor();
 }
 
-gcc_pure
-inline fixed ceil(fixed const& x)
+constexpr
+static inline fixed
+ceil(fixed x)
 {
   return x.ceil();
 }
@@ -909,27 +916,6 @@ gcc_pure
 static inline fixed fmod(fixed x, fixed y)
 {
   return fixed(fmod((double)x, (double)y));
-}
-
-inline fixed fixed::ceil() const
-{
-  if (m_nVal%resolution)
-    return floor() + fixed(1);
-  else
-    return *this;
-}
-
-inline fixed fixed::floor() const
-{
-  fixed res(*this);
-  value_t const remainder=m_nVal%resolution;
-  if (remainder) {
-    res.m_nVal -= remainder;
-    if (m_nVal < 0)
-      res -= fixed(1);
-  }
-
-  return res;
 }
 
 constexpr
