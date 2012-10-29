@@ -1104,7 +1104,11 @@ inline void limit_tolerance(fixed& f, const fixed tol_act) {
 gcc_const static inline int
 iround(fixed x)
 {
-  return (int)floor(x + fixed_half);
+#ifdef FIXED_MATH
+  return (int)(x + fixed_half);
+#else
+  return (int)lround(x);
+#endif
 }
 
 /**
