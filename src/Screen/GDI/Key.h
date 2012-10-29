@@ -26,14 +26,52 @@ Copyright_License {
 
 #include <windows.h>
 
+enum {
+  KEY_SPACE = VK_SPACE,
+  KEY_UP = VK_UP,
+  KEY_DOWN = VK_DOWN,
+  KEY_LEFT = VK_LEFT,
+  KEY_RIGHT = VK_RIGHT,
+  KEY_HOME = VK_HOME,
+  KEY_END = VK_END,
+  KEY_PRIOR = VK_PRIOR,
+  KEY_NEXT = VK_NEXT,
+  KEY_RETURN = VK_RETURN,
+  KEY_F1 = VK_F1,
+  KEY_F2 = VK_F2,
+  KEY_F3 = VK_F3,
+  KEY_F4 = VK_F4,
+  KEY_F5 = VK_F5,
+  KEY_F6 = VK_F6,
+  KEY_F7 = VK_F7,
+  KEY_F8 = VK_F8,
+  KEY_F9 = VK_F9,
+  KEY_F10 = VK_F10,
+  KEY_F11 = VK_F11,
+  KEY_F12 = VK_F12,
+  KEY_ESCAPE = VK_ESCAPE,
+  KEY_TAB = VK_TAB,
+  KEY_BACK = VK_BACK,
+  KEY_MENU = VK_MENU,
+#ifdef _WIN32_WCE
+  KEY_APP1 = VK_APP1,
+  KEY_APP2 = VK_APP2,
+  KEY_APP3 = VK_APP3,
+  KEY_APP4 = VK_APP4,
+  KEY_APP5 = VK_APP5,
+  KEY_APP6 = VK_APP6,
+#else
+  KEY_APP1 = '1',
+  KEY_APP2 = '2',
+  KEY_APP3 = '3',
+  KEY_APP4 = '4',
+  KEY_APP5 = '5',
+  KEY_APP6 = '6',
+#endif
+};
+
 #ifndef _WIN32_WCE
 enum {
-  VK_APP1 = '1',
-  VK_APP2 = '2',
-  VK_APP3 = '3',
-  VK_APP4 = '4',
-  VK_APP5 = '5',
-  VK_APP6 = '6',
 };
 #endif
 

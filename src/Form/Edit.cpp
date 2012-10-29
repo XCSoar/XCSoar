@@ -66,13 +66,13 @@ bool
 WndProperty::Editor::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
-  case VK_RETURN:
+  case KEY_RETURN:
     return IsReadOnly() ||
       (parent->mDataField != NULL && parent->mDataField->supports_combolist) ||
       !CanEditInPlace() || parent->HasHelp();
 
-  case VK_LEFT:
-  case VK_RIGHT:
+  case KEY_LEFT:
+  case KEY_RIGHT:
     return !IsReadOnly();
 
   default:
@@ -84,17 +84,17 @@ bool
 WndProperty::Editor::OnKeyDown(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)
-  if (key_code == VK_RETURN && parent->OnMouseDown(0, 0))
+  if (key_code == KEY_RETURN && parent->OnMouseDown(0, 0))
     return true;
 
   switch (key_code) {
-  case VK_RIGHT:
+  case KEY_RIGHT:
     if (IsReadOnly())
       break;
 
     parent->IncValue();
     return true;
-  case VK_LEFT:
+  case KEY_LEFT:
     if (IsReadOnly())
       break;
 
@@ -111,11 +111,11 @@ WndProperty::Editor::OnKeyUp(unsigned key_code)
 {
   if (KeyTimer(false, key_code)) {
     // activate tool tips if hit return for long time
-    if (key_code == VK_RETURN) {
+    if (key_code == KEY_RETURN) {
       if (parent->OnHelp())
         return true;
     }
-  } else if (key_code == VK_RETURN) {
+  } else if (key_code == KEY_RETURN) {
     if (parent->CallSpecial())
       return true;
   }

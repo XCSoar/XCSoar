@@ -82,23 +82,23 @@ static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
-  case VK_LEFT:
+  case KEY_LEFT:
     grid_view->MoveFocus(GridView::Direction::LEFT);
     break;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     grid_view->MoveFocus(GridView::Direction::RIGHT);
     break;
 
-  case VK_UP:
+  case KEY_UP:
     grid_view->MoveFocus(GridView::Direction::UP);
     break;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     grid_view->MoveFocus(GridView::Direction::DOWN);
     break;
 
-  case VK_MENU:
+  case KEY_MENU:
     grid_view->ShowNextPage();
     SetFormDefaultFocus();
     break;

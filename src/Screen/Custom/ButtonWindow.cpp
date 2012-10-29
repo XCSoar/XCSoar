@@ -58,7 +58,7 @@ bool
 ButtonWindow::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
-  case VK_RETURN:
+  case KEY_RETURN:
     return true;
 
   default:
@@ -70,8 +70,8 @@ bool
 ButtonWindow::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-  case VK_RETURN:
-  case VK_SPACE:
+  case KEY_RETURN:
+  case KEY_SPACE:
     set_down(false);
 
     if (!OnClicked() && id != 0 && parent != NULL)

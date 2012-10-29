@@ -229,25 +229,25 @@ TabDisplay::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
 
-  case VK_APP1:
-  case VK_APP2:
-  case VK_APP3:
-  case VK_APP4:
+  case KEY_APP1:
+  case KEY_APP2:
+  case KEY_APP3:
+  case KEY_APP4:
     return true;
 
-  case VK_RETURN:
+  case KEY_RETURN:
     return true;
 
-  case VK_LEFT:
+  case KEY_LEFT:
     return (tab_bar.GetCurrentPage() > 0);
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     return tab_bar.GetCurrentPage() < GetSize() - 1;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     return false;
 
-  case VK_UP:
+  case KEY_UP:
     return false;
 
   default:
@@ -261,41 +261,41 @@ TabDisplay::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
 
-  case VK_APP1:
+  case KEY_APP1:
     if (GetSize() > 0)
       tab_bar.ClickPage(0);
     return true;
 
-  case VK_APP2:
+  case KEY_APP2:
     if (GetSize() > 1)
       tab_bar.ClickPage(1);
     return true;
 
-  case VK_APP3:
+  case KEY_APP3:
     if (GetSize() > 2)
       tab_bar.ClickPage(2);
     return true;
 
-  case VK_APP4:
+  case KEY_APP4:
     if (GetSize() > 3)
       tab_bar.ClickPage(3);
     return true;
 
-  case VK_RETURN:
+  case KEY_RETURN:
     tab_bar.ClickPage(tab_bar.GetCurrentPage());
     return true;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     break;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     tab_bar.NextPage();
     return true;
 
-  case VK_UP:
+  case KEY_UP:
     break;
 
-  case VK_LEFT:
+  case KEY_LEFT:
     tab_bar.PreviousPage();
     return true;
   }

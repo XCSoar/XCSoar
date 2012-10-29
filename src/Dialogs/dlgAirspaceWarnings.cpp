@@ -262,27 +262,27 @@ static bool
 OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code){
-    case VK_ESCAPE:
+    case KEY_ESCAPE:
       Hide();
     return true;
 
 #ifdef GNAV
-    case VK_APP1:
+    case KEY_APP1:
     case '6':
       AckWarning();
     return true;
 
-    case VK_APP2:
+    case KEY_APP2:
     case '7':
       AckInside();
     return true;
 
-    case VK_APP3:
+    case KEY_APP3:
     case '8':
       AckDay();
     return true;
 
-    case VK_APP4:
+    case KEY_APP4:
     case '9':
       Enable();
     return true;

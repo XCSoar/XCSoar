@@ -729,28 +729,28 @@ bool
 FlarmTrafficControl::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-  case VK_UP:
+  case KEY_UP:
     if (!HasPointer())
       break;
 
     ZoomIn();
     return true;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     if (!HasPointer())
       break;
 
     ZoomOut();
     return true;
 
-  case VK_LEFT:
+  case KEY_LEFT:
 #ifdef GNAV
   case '6':
 #endif
     PrevTarget();
     return true;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
 #ifdef GNAV
   case '7':
 #endif

@@ -31,6 +31,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Screen/Key.h"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/String.hpp"
 #include "Compiler.h"
@@ -242,31 +243,31 @@ OnKeyDown(WndForm &sender, unsigned key_code)
 
   /* map the Altair hardware buttons */
   switch (key_code){
-  case VK_UP:
+  case KEY_UP:
     dfe = (DataFieldEnum *)edit_select->GetDataField();
     dfe->Dec();
     edit_select->RefreshDisplay();
     return true;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     dfe = (DataFieldEnum *)edit_select->GetDataField();
     dfe->Inc();
     edit_select->RefreshDisplay();
     return true;
 
-  case VK_LEFT:
+  case KEY_LEFT:
     dfe = (DataFieldEnum *)edit_content->GetDataField();
     dfe->Dec();
     edit_content->RefreshDisplay();
     return true;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     dfe = (DataFieldEnum *)edit_content->GetDataField();
     dfe->Inc();
     edit_content->RefreshDisplay();
     return true;
 
-  case VK_APP1:
+  case KEY_APP1:
     edit_name->BeginEditing();
     return true;
 

@@ -198,9 +198,9 @@ WndForm::OnCommand(unsigned id, unsigned code)
 static bool
 is_special_key(unsigned key_code)
 {
-  return key_code == VK_LEFT || key_code == VK_RIGHT ||
-    key_code == VK_UP || key_code == VK_DOWN ||
-    key_code == VK_TAB || key_code == VK_RETURN || key_code == VK_ESCAPE;
+  return key_code == KEY_LEFT || key_code == KEY_RIGHT ||
+    key_code == KEY_UP || key_code == KEY_DOWN ||
+    key_code == KEY_TAB || key_code == KEY_RETURN || key_code == KEY_ESCAPE;
 }
 
 #ifdef ANDROID
@@ -427,14 +427,14 @@ WndForm::ShowModal()
 #ifdef USE_GDI
         IdentifyDescendant(event.hwnd) &&
 #endif
-        (get_key_code(event) == VK_UP || get_key_code(event) == VK_DOWN)) {
-      /* VK_UP and VK_DOWN move the focus only within the current
+        (get_key_code(event) == KEY_UP || get_key_code(event) == KEY_DOWN)) {
+      /* KEY_UP and KEY_DOWN move the focus only within the current
          control group - but we want it to behave like Shift-Tab and
          Tab */
 
       if (!check_key(this, event)) {
-        /* this window doesn't handle VK_UP/VK_DOWN */
-        if (get_key_code(event) == VK_DOWN)
+        /* this window doesn't handle KEY_UP/KEY_DOWN */
+        if (get_key_code(event) == KEY_DOWN)
           FocusNextControl();
         else
           FocusPreviousControl();
@@ -443,17 +443,17 @@ WndForm::ShowModal()
     }
 
 #if !defined USE_GDI || defined _WIN32_WCE
-    // The Windows CE dialog manager does not handle VK_ESCAPE and so we have
+    // The Windows CE dialog manager does not handle KEY_ESCAPE and so we have
     // to do it by ourself.
-    if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
+    if (is_key_down(event) && get_key_code(event) == KEY_ESCAPE) {
       modal_result = mrCancel;
       continue;
     }
 #endif
 
-    /* map VK_ESCAPE to mrOK on Altair, because the Escape key is expected to 
-       be the one that saves and closes a dialog */
-    if (IsAltair() && is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
+    /* map KEY_ESCAPE to mrOK on Altair, because the Escape key is
+       expected to be the one that saves and closes a dialog */
+    if (IsAltair() && is_key_down(event) && get_key_code(event) == KEY_ESCAPE) {
       modal_result = mrOK;
       continue;
     }

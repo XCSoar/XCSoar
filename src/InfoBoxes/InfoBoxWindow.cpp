@@ -412,29 +412,29 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
   /* handle local hot key */
 
   switch (key_code) {
-  case VK_UP:
+  case KEY_UP:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     return HandleKey(InfoBoxContent::ibkUp);
 
-  case VK_DOWN:
+  case KEY_DOWN:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     return HandleKey(InfoBoxContent::ibkDown);
 
-  case VK_LEFT:
+  case KEY_LEFT:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     return HandleKey(InfoBoxContent::ibkLeft);
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     return HandleKey(InfoBoxContent::ibkRight);
 
-  case VK_RETURN:
+  case KEY_RETURN:
     focus_timer.Schedule(FOCUS_TIMEOUT_MAX);
     if (!HandleKey(InfoBoxContent::ibkEnter))
       ShowDialog();
     return true;
 
-  case VK_ESCAPE:
+  case KEY_ESCAPE:
     focus_timer.Cancel();
     FocusParent();
     return true;

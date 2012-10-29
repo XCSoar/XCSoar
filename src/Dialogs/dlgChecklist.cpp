@@ -100,7 +100,7 @@ static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
-  case VK_LEFT:
+  case KEY_LEFT:
 #ifdef GNAV
   case '6':
 #endif
@@ -108,7 +108,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
     NextPage(-1);
     return true;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
 #ifdef GNAV
   case '7':
 #endif

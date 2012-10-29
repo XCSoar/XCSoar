@@ -84,7 +84,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   switch (key_code) {
     LargeTextWindow *edit;
 
-  case VK_UP:
+  case KEY_UP:
     edit = FindLargeTextWindow();
     if (edit != NULL) {
       edit->ScrollVertically(-3);
@@ -92,7 +92,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
     } else
       return false;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     edit = FindLargeTextWindow();
     if (edit != NULL) {
       edit->ScrollVertically(3);
@@ -100,14 +100,14 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
     } else
       return false;
 
-  case VK_LEFT:
+  case KEY_LEFT:
 #ifdef GNAV
   case '6':
 #endif
     tab->PreviousPage();
     return true;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
 #ifdef GNAV
   case '7':
 #endif

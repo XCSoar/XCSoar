@@ -40,6 +40,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
+#include "Screen/Key.h"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Units/Units.hpp"
@@ -271,13 +272,13 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   wp = ((WndProperty *)dialog->FindByName(_T("prpFltType")));
 
   switch(key_code) {
-  case VK_APP1:
+  case KEY_APP1:
     new_index = WILDCARD;
     break;
-  case VK_APP2:
+  case KEY_APP2:
     new_index = RESTRICT;
     break;
-  case VK_APP3:
+  case KEY_APP3:
     new_index = PROHIBITED;
     break;
 

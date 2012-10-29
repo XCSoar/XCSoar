@@ -191,11 +191,11 @@ static bool
 FormKeyDown(gcc_unused WndForm &sender, unsigned key_code)
 {
   switch (key_code) {
-  case VK_APP2:
+  case KEY_APP2:
     MoveTarget(0);
     return true;
 
-  case VK_APP3:
+  case KEY_APP3:
     MoveTarget(180);
     return true;
 

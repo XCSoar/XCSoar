@@ -107,7 +107,7 @@ sub commit(\%) {
                 $data = uc($data);
                 $data = qq{(int)'$data'};
             } else {
-                $data = "VK_$data";
+                $data = "KEY_$data";
             }
 
             push @keys, [ $mode_id, $data, $event_id ];

@@ -141,9 +141,9 @@ static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
-  case VK_UP:
-  case VK_LEFT:
-    if ((key_code == VK_LEFT) ^ IsAltair()) {
+  case KEY_UP:
+  case KEY_LEFT:
+    if ((key_code == KEY_LEFT) ^ IsAltair()) {
       if (cursor < 1)
         return true; // min width
 
@@ -156,9 +156,9 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
       return true;
     }
 
-  case VK_DOWN:
-  case VK_RIGHT:
-    if ((key_code == VK_RIGHT) ^ IsAltair()) {
+  case KEY_DOWN:
+  case KEY_RIGHT:
+    if ((key_code == KEY_RIGHT) ^ IsAltair()) {
       if ((int)cursor >= (max_width - 2))
         return true; // max width
 
@@ -170,7 +170,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
       UpdateCursor();
       return true;
     }
-  case VK_RETURN:
+  case KEY_RETURN:
     wf->SetModalResult(mrOK);
     return true;
 
@@ -182,25 +182,25 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 OnLeftClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, IsAltair()? VK_UP : VK_LEFT);
+  FormKeyDown(*wf, IsAltair() ? KEY_UP : KEY_LEFT);
 }
 
 static void
 OnRightClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, IsAltair()? VK_DOWN : VK_RIGHT);
+  FormKeyDown(*wf, IsAltair() ? KEY_DOWN : KEY_RIGHT);
 }
 
 static void
 OnUpClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, !IsAltair()? VK_UP : VK_LEFT);
+  FormKeyDown(*wf, !IsAltair() ? KEY_UP : KEY_LEFT);
 }
 
 static void
 OnDownClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, !IsAltair()? VK_DOWN : VK_RIGHT);
+  FormKeyDown(*wf, !IsAltair() ? KEY_DOWN : KEY_RIGHT);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {

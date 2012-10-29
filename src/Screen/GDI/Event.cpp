@@ -42,7 +42,7 @@ EventLoop::Get(MSG &msg)
     return false;
 
   if (IsOldWindowsCE() && IsKeyMessage(msg) &&
-      msg.wParam >= VK_APP1 && msg.wParam <= VK_APP4) {
+      msg.wParam >= KEY_APP1 && msg.wParam <= KEY_APP4) {
     /* kludge for iPaq 3xxx: the VK_APPx buttons emit a WM_KEYUP
        instead of WM_KEYDOWN when the user presses the button */
 

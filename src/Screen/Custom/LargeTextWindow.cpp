@@ -107,10 +107,10 @@ bool
 LargeTextWindow::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
-  case VK_UP:
+  case KEY_UP:
     return origin > 0;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     return GetRowCount() > GetVisibleRows() &&
       origin < GetRowCount() - GetVisibleRows();
   }
@@ -122,11 +122,11 @@ bool
 LargeTextWindow::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-  case VK_UP:
+  case KEY_UP:
     ScrollVertically(-1);
     return true;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     ScrollVertically(1);
     return true;
   }

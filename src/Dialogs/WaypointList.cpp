@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
 #include "Math/FastMath.h"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
@@ -429,15 +430,15 @@ FormKeyDown(WndForm &sender, unsigned key_code)
   TypeFilter new_index = dialog_state.type_index;
 
   switch (key_code) {
-  case VK_APP1:
+  case KEY_APP1:
     new_index = TypeFilter::ALL;
     break;
 
-  case VK_APP2:
+  case KEY_APP2:
     new_index = TypeFilter::LANDABLE;
     break;
 
-  case VK_APP3:
+  case KEY_APP3:
     new_index = TypeFilter::TURNPOINT;
     break;
 

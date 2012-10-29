@@ -93,10 +93,10 @@ static bool
 FormKeyDown(WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
-  case VK_RIGHT:
+  case KEY_RIGHT:
     return true;
-  case VK_LEFT:
-  case VK_BACK:
+  case KEY_LEFT:
+  case KEY_BACK:
     DoBackspace();
     return true;
   }
@@ -110,7 +110,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
     return true;
   }
 
-  if (key_code == VK_SPACE) {
+  if (key_code == KEY_SPACE) {
     DoCharacter(_T(' '));
     return true;
   }

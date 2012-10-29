@@ -30,10 +30,10 @@ struct KeyMap {
 };
 
 static constexpr KeyMap altair_key_map[] = {
-  { VK_F1, VK_APP1 },
-  { VK_F2, VK_APP2 },
-  { VK_F3, VK_APP3 },
-  { VK_F4, VK_APP4 },
+  { VK_F1, KEY_APP1 },
+  { VK_F2, KEY_APP2 },
+  { VK_F3, KEY_APP3 },
+  { VK_F4, KEY_APP4 },
   { VK_F5, '6' },
   { VK_F6, '7' },
   { VK_F7, '8' },
@@ -62,20 +62,20 @@ static constexpr KeyMap nokia_500_key_map[] = {
 };
 
 static constexpr KeyMap pn_6000_key_map[] = {
-  { VK_F10, VK_APP1 }, // Upper Silver key short press
-  { VK_F12, VK_APP2 }, // Lower Silver key short press
-  { VK_F3, VK_APP3 }, // Back key plus
-  { VK_F2, VK_APP4 }, // Back key minus
+  { VK_F10, KEY_APP1 }, // Upper Silver key short press
+  { VK_F12, KEY_APP2 }, // Lower Silver key short press
+  { VK_F3, KEY_APP3 }, // Back key plus
+  { VK_F2, KEY_APP4 }, // Back key minus
   { VK_F11, VK_F1 }, // Upper silver key LONG press
   { VK_F13, VK_F2 }, // Lower silver key LONG press
   { 0 }
 };
 
 static constexpr KeyMap lx_mm_key_map[] = {
-  { 'L', VK_APP1 }, // NAV
-  { 'N', VK_APP2 }, // TSK/TRG
-  { 'C', VK_APP3 }, // SET/SYS
-  { 'P', VK_APP4 }, // INFO
+  { 'L', KEY_APP1 }, // NAV
+  { 'N', KEY_APP2 }, // TSK/TRG
+  { 'C', KEY_APP3 }, // SET/SYS
+  { 'P', KEY_APP4 }, // INFO
   { 'F', VK_F1 }, // AN/CLC (long press)
   { 'H', VK_F2 }, // START/R (long press)
   { 'R', VK_F3 }, // INFO (long press)

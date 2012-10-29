@@ -66,8 +66,8 @@ bool
 CheckBox::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-  case VK_RETURN:
-  case VK_SPACE:
+  case KEY_RETURN:
+  case KEY_SPACE:
     checked = !checked;
     Invalidate();
 

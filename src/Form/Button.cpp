@@ -139,10 +139,10 @@ bool
 WndButton::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
-  case VK_LEFT:
+  case KEY_LEFT:
     return left_callback != NULL;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     return right_callback != NULL;
 
   default:
@@ -154,10 +154,10 @@ bool
 WndButton::OnKeyDown(unsigned key_code)
 {
   switch (key_code) {
-  case VK_LEFT:
+  case KEY_LEFT:
     return on_left();
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     return on_right();
   }
 

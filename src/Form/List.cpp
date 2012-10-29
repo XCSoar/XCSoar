@@ -362,18 +362,18 @@ bool
 ListControl::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
-  case VK_RETURN:
+  case KEY_RETURN:
     return CanActivateItem();
 
-  case VK_LEFT:
+  case KEY_LEFT:
     if (!HasPointer())
-      /* no wrap-around on Altair, as VK_LEFT is usually used to
+      /* no wrap-around on Altair, as KEY_LEFT is usually used to
          switch to the previous dialog page */
       return true;
 
     return GetCursorIndex() > 0;
 
-  case VK_UP:
+  case KEY_UP:
     if (!HasPointer() && IsShort())
       /* no page up/down behaviour in short lists on Altair; this
          rotation knob should move focus */
@@ -381,15 +381,15 @@ ListControl::OnKeyCheck(unsigned key_code) const
 
     return GetCursorIndex() > 0;
 
-  case VK_RIGHT:
+  case KEY_RIGHT:
     if (!HasPointer())
-      /* no wrap-around on Altair, as VK_RIGHT is usually used to
+      /* no wrap-around on Altair, as KEY_RIGHT is usually used to
          switch to the next dialog page */
       return true;
 
     return GetCursorIndex() + 1 < length;
 
-  case VK_DOWN:
+  case KEY_DOWN:
     if (!HasPointer() && IsShort())
       /* no page up/down behaviour in short lists on Altair; this
          rotation knob should move focus */
@@ -414,16 +414,16 @@ ListControl::OnKeyDown(unsigned key_code)
   switch (key_code) {
 #ifdef GNAV
   // JMW added this to make data entry easier
-  case VK_APP4:
+  case KEY_APP4:
 #endif
-  case VK_RETURN:
+  case KEY_RETURN:
     if (CanActivateItem())
       ActivateItem();
     return true;
 
-  case VK_UP:
-  case VK_LEFT:
-    if (!HasPointer() ^ (key_code == VK_LEFT)) {
+  case KEY_UP:
+  case KEY_LEFT:
+    if (!HasPointer() ^ (key_code == KEY_LEFT)) {
       // page up
       MoveCursor(-(int)items_visible);
       return true;
@@ -436,9 +436,9 @@ ListControl::OnKeyDown(unsigned key_code)
       return true;
     }
 
-  case VK_DOWN:
-  case VK_RIGHT:
-    if (!HasPointer() ^ (key_code == VK_RIGHT)) {
+  case KEY_DOWN:
+  case KEY_RIGHT:
+    if (!HasPointer() ^ (key_code == KEY_RIGHT)) {
       // page down
       MoveCursor(items_visible);
       return true;
@@ -451,21 +451,21 @@ ListControl::OnKeyDown(unsigned key_code)
       return true;
     }
 
-  case VK_HOME:
+  case KEY_HOME:
     SetCursorIndex(0);
     return true;
 
-  case VK_END:
+  case KEY_END:
     if (length > 0) {
       SetCursorIndex(length - 1);
     }
     return true;
 
-  case VK_PRIOR:
+  case KEY_PRIOR:
     MoveCursor(-(int)items_visible);
     return true;
 
-  case VK_NEXT:
+  case KEY_NEXT:
     MoveCursor(items_visible);
     return true;
   }

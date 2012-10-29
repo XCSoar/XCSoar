@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/CheckBox.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Key.h"
 
 CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
                                  const DialogLook &look,
@@ -54,7 +55,7 @@ bool
 CheckBoxControl::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
-  case VK_RETURN:
+  case KEY_RETURN:
     return true;
 
   default:
@@ -68,9 +69,9 @@ CheckBoxControl::OnKeyDown(unsigned key_code)
   switch (key_code) {
 #ifdef GNAV
   // JMW added this to make data entry easier
-  case VK_APP4:
+  case KEY_APP4:
 #endif
-  case VK_RETURN:
+  case KEY_RETURN:
     SetState(!GetState());
     return OnClicked();
   }

@@ -79,9 +79,9 @@ TabMenuDisplay::OnKeyCheck(unsigned key_code) const
 {
  switch (key_code) {
 
- case VK_RETURN:
- case VK_LEFT:
- case VK_RIGHT:
+ case KEY_RETURN:
+ case KEY_LEFT:
+ case KEY_RIGHT:
    return menu.IsCurrentPageTheMenu();
 
  default:
@@ -97,15 +97,15 @@ TabMenuDisplay::OnKeyDown(unsigned key_code)
  if (menu.IsCurrentPageTheMenu()) {
    switch (key_code) {
 
-   case VK_RETURN:
+   case KEY_RETURN:
      menu.SetCurrentPage(page);
      return true;
 
-   case VK_RIGHT:
+   case KEY_RIGHT:
      menu.HighlightNextMenuItem();
      return true;
 
-   case VK_LEFT:
+   case KEY_LEFT:
      menu.HighlightPreviousMenuItem();
      return true;
    }
