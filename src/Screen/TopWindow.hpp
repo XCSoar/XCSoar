@@ -295,7 +295,7 @@ protected:
 
   virtual bool OnClose();
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   virtual LRESULT OnMessage(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif /* !ENABLE_SDL */
