@@ -87,12 +87,12 @@ EventQueue::Purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 static bool
 match_type(const Event &event, void *ctx)
 {
-  const enum Event::type *type_p = (const enum Event::type *)ctx;
+  const Event::Type *type_p = (const Event::Type *)ctx;
   return event.type == *type_p;
 }
 
 void
-EventQueue::Purge(enum Event::type type)
+EventQueue::Purge(Event::Type type)
 {
   Purge(match_type, &type);
 }

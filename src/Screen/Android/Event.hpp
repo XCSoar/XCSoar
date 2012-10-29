@@ -37,7 +37,7 @@ class AndroidTimer;
 class Notify;
 
 struct Event {
-  enum type {
+  enum Type {
     NOP,
     QUIT,
     TIMER,
@@ -80,7 +80,7 @@ struct Event {
 
   typedef void (*Callback)(void *ctx);
 
-  enum type type;
+  Type type;
 
   unsigned param;
 
@@ -91,14 +91,14 @@ struct Event {
   PixelScalar x, y;
 
   Event() = default;
-  Event(enum type _type):type(_type) {}
-  Event(enum type _type, unsigned _param):type(_type), param(_param) {}
-  Event(enum type _type, unsigned _param, void *_ptr)
+  Event(Type _type):type(_type) {}
+  Event(Type _type, unsigned _param):type(_type), param(_param) {}
+  Event(Type _type, unsigned _param, void *_ptr)
     :type(_type), param(_param), ptr(_ptr) {}
-  Event(enum type _type, void *_ptr):type(_type), ptr(_ptr) {}
+  Event(Type _type, void *_ptr):type(_type), ptr(_ptr) {}
   Event(Callback _callback, void *_ptr)
     :type(CALLBACK), ptr(_ptr), callback(_callback) {}
-  Event(enum type _type, PixelScalar _x, PixelScalar _y)
+  Event(Type _type, PixelScalar _x, PixelScalar _y)
     :type(_type), x(_x), y(_y) {}
 
   constexpr
@@ -108,7 +108,7 @@ struct Event {
 };
 
 static inline bool
-IsUserInput(enum Event::type type)
+IsUserInput(Event::Type type)
 {
   return type == Event::KEY_DOWN || type == Event::KEY_UP ||
     type == Event::MOUSE_MOTION ||
@@ -144,7 +144,7 @@ public:
 
   void Purge(bool (*match)(const Event &event, void *ctx), void *ctx);
 
-  void Purge(enum Event::type type);
+  void Purge(Event::Type type);
   void Purge(Event::Callback callback, void *ctx);
   void Purge(Notify &notify);
   void Purge(Window &window);
