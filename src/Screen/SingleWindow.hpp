@@ -79,7 +79,7 @@ public:
    * rejected when a modal dialog is active, and the event should go
    * to a window outside of the dialog.
    */
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   gcc_pure
   bool FilterEvent(const Event &event, Window *allowed) const;
 #elif defined(ENABLE_SDL)

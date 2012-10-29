@@ -21,17 +21,47 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_KEY_H
-#define XCSOAR_SCREEN_KEY_H
+#include "Timer.hpp"
+#include "Event.hpp"
+#include "Globals.hpp"
+#include "Screen/Timer.hpp"
+#include "Screen/Window.hpp"
 
-#ifdef ANDROID
-#include "Screen/Android/Key.h"
-#elif defined(USE_EGL)
-#include "Screen/EGL/Key.h"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Key.h"
-#else
-#include "Screen/GDI/Key.h"
-#endif
+void
+Timer::Schedule(unsigned _ms)
+{
+  if (queued.exchange(false))
+    event_queue->CancelTimer(*this);
 
-#endif
+  enabled.store(true);
+  ms = _ms;
+
+  if (!queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
+}
+
+void
+Timer::Cancel()
+{
+  if (enabled.exchange(false) && queued.exchange(false))
+    event_queue->CancelTimer(*this);
+}
+
+void
+Timer::Invoke()
+{
+  if (!queued.exchange(false))
+    /* was cancelled by another thread */
+    return;
+
+  OnTimer();
+
+  if (enabled.load() && !queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
+}
+
+void
+WindowTimer::OnTimer()
+{
+  window.OnTimer(*this);
+}

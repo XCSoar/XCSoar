@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_SYSTEM_HPP
-#define XCSOAR_SCREEN_OPENGL_SYSTEM_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_SYSTEM_EXT_HPP
+#define XCSOAR_SCREEN_OPENGL_SYSTEM_EXT_HPP
 
 #include "System.hpp"
 

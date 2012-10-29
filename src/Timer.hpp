@@ -26,6 +26,8 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/Timer.hpp"
+#elif defined(USE_EGL)
+#include <atomic>
 #elif defined(ENABLE_SDL)
 #include <SDL_timer.h>
 #include <atomic>
@@ -61,6 +63,9 @@ class Timer
 #ifdef ANDROID
   friend class AndroidTimer;
   AndroidTimer *timer;
+#elif defined(USE_EGL)
+  std::atomic<bool> enabled, queued;
+  unsigned ms;
 #elif defined(ENABLE_SDL)
   SDL_TimerID id;
 
@@ -78,6 +83,8 @@ public:
    */
 #ifdef ANDROID
   Timer():timer(NULL) {}
+#elif defined(USE_EGL)
+  Timer():enabled(false), queued(false) {}
 #elif defined(ENABLE_SDL)
   Timer():id(NULL), queued(false) {}
 #else
@@ -91,6 +98,11 @@ public:
   ~Timer() {
     /* timer must be cleaned up explicitly */
     assert(!IsActive());
+
+#ifdef USE_EGL
+    assert(!queued.load(std::memory_order_relaxed));
+    assert(!enabled.load(std::memory_order_relaxed));
+#endif
   }
 
 #ifdef USE_GDI
@@ -107,6 +119,8 @@ public:
   bool IsActive() const {
 #ifdef ANDROID
     return timer != NULL;
+#elif defined(USE_EGL)
+    return enabled.load(std::memory_order_relaxed);
 #elif defined(ENABLE_SDL)
     return id != NULL;
 #endif
@@ -138,6 +152,9 @@ public:
   void Invoke() {
     OnTimer();
   }
+#elif defined(USE_EGL)
+public:
+  void Invoke();
 #elif defined(ENABLE_SDL)
 private:
   void Invoke();

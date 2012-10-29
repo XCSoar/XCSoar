@@ -28,6 +28,8 @@ Copyright_License {
 #include "Screen/Android/Event.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
+#elif defined(USE_EGL)
+#include "Screen/EGL/Event.hpp"
 #else
 #include "Screen/GDI/Event.hpp"
 #endif

@@ -48,6 +48,8 @@ struct flat_event_map {
 #else
   unsigned short key;
 #endif
+#elif defined(USE_EGL)
+  uint16_t key;
 #else
   unsigned char key;
 #endif

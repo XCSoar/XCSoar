@@ -21,17 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_KEY_H
-#define XCSOAR_SCREEN_KEY_H
+#ifndef XCSOAR_SCREEN_EGL_GLOBALS_HPP
+#define XCSOAR_SCREEN_EGL_GLOBALS_HPP
 
-#ifdef ANDROID
-#include "Screen/Android/Key.h"
-#elif defined(USE_EGL)
-#include "Screen/EGL/Key.h"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Key.h"
-#else
-#include "Screen/GDI/Key.h"
-#endif
+class EventQueue;
+
+extern EventQueue *event_queue;
 
 #endif

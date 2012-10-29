@@ -21,17 +21,31 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_KEY_H
-#define XCSOAR_SCREEN_KEY_H
+#ifndef XCSOAR_SCREEN_EGL_SYSTEM_HPP
+#define XCSOAR_SCREEN_EGL_SYSTEM_HPP
 
-#ifdef ANDROID
-#include "Screen/Android/Key.h"
-#elif defined(USE_EGL)
-#include "Screen/EGL/Key.h"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Key.h"
-#else
-#include "Screen/GDI/Key.h"
+/* kludges to work around namespace collisions with X11 headers */
+
+#define Font X11Font
+#define Window X11Window
+#define Display X11Display
+
+#include <EGL/egl.h>
+
+#undef Font
+#undef Window
+#undef Display
+
+#ifdef Expose
+#undef Expose
+#endif
+
+#ifdef NoValue
+#undef NoValue
+#endif
+
+#ifdef None
+#undef None
 #endif
 
 #endif

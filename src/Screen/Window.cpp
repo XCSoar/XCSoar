@@ -30,6 +30,9 @@ Copyright_License {
 #include "Android/Main.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
+#elif defined(USE_EGL)
+#include "Screen/EGL/Event.hpp"
+#include "Screen/EGL/Globals.hpp"
 #endif /* ENABLE_SDL */
 
 #ifdef ENABLE_OPENGL
@@ -149,7 +152,7 @@ Window::OnDestroy()
     parent = NULL;
   }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   event_queue->Purge(*this);
 #else
   EventQueue::Purge(*this);

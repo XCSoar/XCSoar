@@ -6,8 +6,8 @@ else ifeq ($(HAVE_WIN32),y)
 # Windows defaults to GDI
 ENABLE_SDL ?= n
 else
-# everything else must use SDL
-ENABLE_SDL = y
+# everything else defaults to SDL
+ENABLE_SDL ?= y
 endif
 
 ifeq ($(ENABLE_SDL),y)

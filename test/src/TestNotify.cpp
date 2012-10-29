@@ -26,7 +26,7 @@
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
 #include "Screen/Android/Event.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"

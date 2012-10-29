@@ -59,6 +59,7 @@ include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
 include $(topdir)/build/libintl.mk
 include $(topdir)/build/boost.mk
+include $(topdir)/build/egl.mk
 include $(topdir)/build/opengl.mk
 include $(topdir)/build/freetype.mk
 include $(topdir)/build/libpng.mk

@@ -26,12 +26,34 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 
+#ifdef USE_EGL
+#include "Screen/EGL/System.hpp"
+#endif
+
 class TopCanvas : public Canvas {
 #ifdef ENABLE_SDL
   Uint32 flags;
+#elif defined(USE_EGL)
+#ifdef USE_X11
+  X11Window x_window;
+#elif defined(USE_VIDEOCORE)
+  /* for Raspberry Pi */
+  DISPMANX_DISPLAY_HANDLE_T vc_display;
+  DISPMANX_UPDATE_HANDLE_T vc_update;
+  DISPMANX_ELEMENT_HANDLE_T vc_element;
+  EGL_DISPMANX_WINDOW_T vc_window;
+#endif
+
+  EGLDisplay display;
+  EGLContext context;
+  EGLSurface surface;
 #endif
 
 public:
+#ifdef USE_EGL
+  ~TopCanvas();
+#endif
+
   void Set(UPixelScalar width, UPixelScalar height,
            bool full_screen, bool resizable);
 
@@ -44,7 +66,7 @@ public:
 
   void OnResize(UPixelScalar width, UPixelScalar height);
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   void Fullscreen() {}
 #else
   void Fullscreen();

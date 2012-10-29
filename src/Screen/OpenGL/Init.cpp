@@ -35,7 +35,7 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
-#ifdef HAVE_EGL
+#if defined(HAVE_EGL) && defined(ANDROID)
 #include "EGL.hpp"
 #endif
 
@@ -126,7 +126,7 @@ CheckFBO()
 void
 OpenGL::SetupContext()
 {
-#ifdef HAVE_EGL
+#if defined(HAVE_EGL) && defined(ANDROID)
   egl = EGLInit();
 #endif
 

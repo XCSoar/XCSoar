@@ -21,17 +21,44 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_KEY_H
-#define XCSOAR_SCREEN_KEY_H
+#include "Screen/Init.hpp"
+#include "Globals.hpp"
+#include "Event.hpp"
+#include "Screen/Debug.hpp"
+#include "Screen/Font.hpp"
+#include "Screen/OpenGL/Init.hpp"
+#include "Screen/FreeType/Init.hpp"
 
-#ifdef ANDROID
-#include "Screen/Android/Key.h"
-#elif defined(USE_EGL)
-#include "Screen/EGL/Key.h"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Key.h"
-#else
-#include "Screen/GDI/Key.h"
+#ifdef USE_VIDEOCORE
+#include "bcm_host.h"
 #endif
 
+EventQueue *event_queue;
+
+ScreenGlobalInit::ScreenGlobalInit()
+{
+#ifdef USE_VIDEOCORE
+  bcm_host_init();
 #endif
+
+  OpenGL::Initialise();
+
+  FreeType::Initialise();
+  Font::Initialise();
+
+  event_queue = new EventQueue();
+
+  ScreenInitialized();
+}
+
+ScreenGlobalInit::~ScreenGlobalInit()
+{
+  delete event_queue;
+  event_queue = nullptr;
+
+  OpenGL::Deinitialise();
+
+  FreeType::Deinitialise();
+
+  ScreenDeinitialized();
+}

@@ -39,6 +39,8 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
+#elif defined(USE_EGL)
+#include "Screen/EGL/Globals.hpp"
 #endif
 
 bool
@@ -204,7 +206,7 @@ is_special_key(unsigned key_code)
     key_code == KEY_TAB || key_code == KEY_RETURN || key_code == KEY_ESCAPE;
 }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
 
 static bool
 is_key_down(const Event &event)
@@ -378,7 +380,7 @@ WndForm::ShowModal()
   main_window.Refresh();
 #endif
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   EventLoop loop(*event_queue, main_window);
   Event event;
 #elif defined(ENABLE_SDL)

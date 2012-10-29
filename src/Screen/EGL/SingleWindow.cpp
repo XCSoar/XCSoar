@@ -21,17 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_KEY_H
-#define XCSOAR_SCREEN_KEY_H
+#include "Screen/SingleWindow.hpp"
+#include "Event.hpp"
 
-#ifdef ANDROID
-#include "Screen/Android/Key.h"
-#elif defined(USE_EGL)
-#include "Screen/EGL/Key.h"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Key.h"
-#else
-#include "Screen/GDI/Key.h"
-#endif
+bool
+SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+{
+  assert(allowed != NULL);
 
-#endif
+  switch (event.type) {
+  case Event::MOUSE_MOTION:
+  case Event::MOUSE_DOWN:
+  case Event::MOUSE_UP:
+    return FilterMouseEvent(event.x, event.y, allowed);
+
+  default:
+    return true;
+  }
+}

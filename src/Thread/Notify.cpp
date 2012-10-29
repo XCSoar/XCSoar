@@ -26,9 +26,11 @@ Copyright_License {
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
+#elif defined(USE_EGL)
+#include "Screen/EGL/Event.hpp"
+#include "Screen/EGL/Globals.hpp"
 #elif defined(ENABLE_SDL)
 #include "Screen/SDL/Event.hpp"
-#else
 #endif
 
 Notify::Notify()
@@ -56,7 +58,7 @@ Notify::SendNotification()
   if (pending.exchange(true, std::memory_order_relaxed))
     return;
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   event_queue->Push(Event(Event::NOTIFY, this));
 #elif defined(ENABLE_SDL)
   SDL_Event event;
@@ -74,7 +76,7 @@ Notify::ClearNotification()
   if (!pending.exchange(false, std::memory_order_relaxed))
     return;
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   event_queue->Purge(*this);
 #elif defined(ENABLE_SDL)
   EventQueue::Purge(*this);

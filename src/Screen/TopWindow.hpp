@@ -40,6 +40,8 @@ Copyright_License {
 
 struct Event;
 
+#elif defined(USE_EGL)
+struct Event;
 #elif defined(ENABLE_SDL)
 #include <SDL_events.h>
 #endif
@@ -264,7 +266,7 @@ public:
 #endif
   }
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   bool OnEvent(const Event &event);
 #elif defined(ENABLE_SDL)
   bool OnEvent(const SDL_Event &event);
