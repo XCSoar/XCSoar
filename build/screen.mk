@@ -113,17 +113,8 @@ GDI_LDLIBS += -Wl,-subsystem,windows
 endif
 endif
 
-ifeq ($(OPENGL),y)
-# Needed for native VBO support
-OPENGL_CPPFLAGS = -DGL_GLEXT_PROTOTYPES
-endif
-
 SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS)
-SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS)
-
-ifeq ($(TARGET),ANDROID)
-SCREEN_LDLIBS += -lGLESv1_CM -ldl
-endif
+SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS) $(OPENGL_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 
