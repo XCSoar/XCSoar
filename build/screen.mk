@@ -45,6 +45,12 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/Event.cpp
 endif
 
+ifeq ($(FREETYPE),y)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/FreeType/Font.cpp \
+	$(SCREEN_SRC_DIR)/FreeType/Init.cpp
+endif
+
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Init.cpp \
@@ -73,9 +79,12 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Font.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
+ifeq ($(FREETYPE),n)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Font.cpp
+endif
 ifeq ($(OPENGL),n)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
@@ -119,8 +128,8 @@ GDI_LDLIBS += -Wl,-subsystem,windows
 endif
 endif
 
-SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS)
-SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS) $(OPENGL_LDLIBS)
+SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS) $(FREETYPE_CPPFLAGS)
+SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS) $(OPENGL_LDLIBS) $(FREETYPE_LDLIBS)
 
 $(eval $(call link-library,screen,SCREEN))
 

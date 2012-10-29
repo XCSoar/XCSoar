@@ -133,7 +133,14 @@ struct RenderedText : public ListHead {
     other.texture = NULL;
   }
 
-#ifdef ANDROID
+#ifdef USE_FREETYPE
+  RenderedText(unsigned width, unsigned height, const uint8_t *buffer) {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    texture = new GLTexture(GL_LUMINANCE, width, height,
+                            GL_LUMINANCE, GL_UNSIGNED_BYTE,
+                            buffer);
+  }
+#elif defined(ANDROID)
   RenderedText(int id, unsigned width, unsigned height)
     :texture(new GLTexture(id, width, height)) {}
 #else
@@ -207,7 +214,20 @@ TextCache::Get(const Font *font, const char *text)
 
   /* render the text into a OpenGL texture */
 
-#ifdef ANDROID
+#ifdef USE_FREETYPE
+  PixelSize size = font->TextSize(text);
+  size_t buffer_size = font->BufferSize(size);
+  if (buffer_size == 0)
+    return nullptr;
+
+  uint8_t *buffer = new uint8_t[buffer_size];
+  if (buffer == nullptr)
+    return nullptr;
+
+  font->Render(text, size, buffer);
+  RenderedText rt(size.cx, size.cy, buffer);
+  delete[] buffer;
+#elif defined(ANDROID)
   PixelSize size;
   int texture_id = font->TextTextureGL(text, size);
   if (texture_id == 0)

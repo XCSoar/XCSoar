@@ -29,8 +29,13 @@ Copyright_License {
 #include "Screen/OpenGL/Init.hpp"
 #endif
 
-#include <SDL.h>
+#ifdef USE_FREETYPE
+#include "Screen/FreeType/Init.hpp"
+#else
 #include <SDL_ttf.h>
+#endif
+
+#include <SDL.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,10 +56,14 @@ ScreenGlobalInit::ScreenGlobalInit()
   OpenGL::Initialise();
 #endif
 
+#ifdef USE_FREETYPE
+  FreeType::Initialise();
+#else
   if (::TTF_Init() != 0) {
     fprintf(stderr, "TTF_Init() has failed\n");
     exit(EXIT_FAILURE);
   }
+#endif
 
   Font::Initialise();
 
@@ -67,7 +76,12 @@ ScreenGlobalInit::~ScreenGlobalInit()
   OpenGL::Deinitialise();
 #endif
 
+#ifdef USE_FREETYPE
+  FreeType::Deinitialise();
+#else
   ::TTF_Quit();
+#endif
+
   ::SDL_Quit();
 
   ScreenDeinitialized();

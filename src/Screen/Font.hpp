@@ -28,13 +28,13 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
-#ifdef ANDROID
+#ifdef USE_FREETYPE
+typedef struct FT_FaceRec_ *FT_Face;
+#elif defined(ANDROID)
 #include "Screen/Color.hpp"
-#else  // !ANDROID
-#ifdef ENABLE_SDL
+#elif defined(ENABLE_SDL)
 #include <SDL_ttf.h>
 #endif
-#endif // !ANDROID
 
 #ifdef WIN32
 #include <windows.h>
@@ -51,7 +51,9 @@ class TextUtil;
  */
 class Font : private NonCopyable {
 protected:
-#ifdef ANDROID
+#ifdef USE_FREETYPE
+  FT_Face face;
+#elif defined(ANDROID)
   TextUtil *text_util_object;
 
   unsigned line_spacing;
@@ -71,7 +73,9 @@ protected:
 #endif
 
 public:
-#ifdef ANDROID
+#ifdef USE_FREETYPE
+  Font():face(nullptr) {}
+#elif defined(ANDROID)
   Font():text_util_object(NULL) {}
 #else
   Font():font(NULL) {}
@@ -87,7 +91,9 @@ public:
 public:
   bool
   IsDefined() const {
-    #ifdef ANDROID
+#ifdef USE_FREETYPE
+    return face != nullptr;
+#elif defined(ANDROID)
     return text_util_object != NULL;
     #else
     return font != NULL;
@@ -102,7 +108,14 @@ public:
   gcc_pure
   PixelSize TextSize(const TCHAR *text) const;
 
-#ifdef ANDROID
+#ifdef USE_FREETYPE
+  gcc_const
+  static size_t BufferSize(const PixelSize size) {
+    return size.cx * size.cy;
+  }
+
+  void Render(const TCHAR *text, const PixelSize size, void *buffer) const;
+#elif defined(ANDROID)
   int TextTextureGL(const TCHAR *text, PixelSize &size) const;
 #elif defined(USE_GDI)
   HFONT Native() const {
@@ -125,7 +138,11 @@ public:
     return capital_height;
   }
 
-#ifdef ANDROID
+#ifdef USE_FREETYPE
+  UPixelScalar GetLineSpacing() const {
+    return height;
+  }
+#elif defined(ANDROID)
   UPixelScalar GetLineSpacing() const {
     return line_spacing;
   }
