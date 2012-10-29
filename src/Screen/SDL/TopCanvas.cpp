@@ -35,6 +35,7 @@ Copyright_License {
 #endif
 
 #include <assert.h>
+#include <stdio.h>
 
 void
 TopCanvas::Set(UPixelScalar width, UPixelScalar height,
@@ -65,8 +66,12 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height,
     flags |= SDL_RESIZABLE;
 
   SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
-  if (s == NULL)
+  if (s == NULL) {
+    fprintf(stderr, "SDL_SetVideoMode(%u, %u, 0, %#x) has failed: %s\n",
+            width, height, (unsigned)flags,
+            ::SDL_GetError());
     return;
+  }
 
 #ifdef ENABLE_OPENGL
   if (full_screen)

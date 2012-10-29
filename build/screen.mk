@@ -123,10 +123,6 @@ SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS)
 
 ifeq ($(TARGET),ANDROID)
 SCREEN_LDLIBS += -lGLESv1_CM -ldl
-
-# for dynamic EGL detection
-SCREEN_LDLIBS += -ldl
-$(call SRC_TO_OBJ,$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp): ANDROID_PLATFORM = android-9
 endif
 
 $(eval $(call link-library,screen,SCREEN))
