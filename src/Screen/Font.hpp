@@ -51,34 +51,32 @@ class TextUtil;
  */
 class Font : private NonCopyable {
 protected:
-  #ifdef ANDROID
+#ifdef ANDROID
   TextUtil *text_util_object;
 
   unsigned line_spacing;
-  #else // !ANDROID
-  #ifdef ENABLE_SDL
-  TTF_Font *font;
-  #else
+#elif defined(USE_GDI)
   HFONT font;
-  #endif
-  #endif
+#else
+  TTF_Font *font;
+#endif
 
   unsigned height, ascent_height, capital_height;
 
   void CalculateHeights();
-  #ifndef ANDROID
-  #ifdef ENABLE_SDL
+
+#ifdef ENABLE_SDL
   bool _set(const char *file, UPixelScalar ptsize, bool bold = false,
             bool italic = false);
-  #endif
-  #endif
+#endif
 
 public:
-  #ifdef ANDROID
+#ifdef ANDROID
   Font():text_util_object(NULL) {}
-  #else
+#else
   Font():font(NULL) {}
-  #endif
+#endif
+
   ~Font() { Reset(); }
 
   /**
@@ -104,21 +102,18 @@ public:
   gcc_pure
   PixelSize TextSize(const TCHAR *text) const;
 
-  #ifdef ANDROID
+#ifdef ANDROID
   int TextTextureGL(const TCHAR *text, PixelSize &size) const;
-  #else // !ANDROID
-  #ifdef ENABLE_SDL
+#elif defined(USE_GDI)
+  HFONT Native() const {
+    return font;
+  }
+#else
   TTF_Font*
   Native() const {
     return font;
   }
-  #else
-  HFONT
-  Native() const {
-    return font;
-  }
-  #endif
-  #endif // !ANDROID
+#endif
 
   UPixelScalar GetHeight() const {
     return height;
@@ -129,7 +124,8 @@ public:
   UPixelScalar GetCapitalHeight() const {
     return capital_height;
   }
-  #ifdef ANDROID
+
+#ifdef ANDROID
   UPixelScalar GetLineSpacing() const {
     return line_spacing;
   }
