@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
-#include "Math/FastMath.h"
 #include "Math/FastRotation.hpp"
 #include "Asset.hpp"
 #include "Math/LeastSquares.hpp"

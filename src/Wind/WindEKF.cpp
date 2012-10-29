@@ -23,7 +23,6 @@ Copyright_License {
 */
 
 #include "Wind/WindEKF.hpp"
-#include "Math/FastMath.h"
 
 #include <math.h>
 

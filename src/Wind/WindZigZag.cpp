@@ -24,7 +24,6 @@ Copyright_License {
 
 #include "Wind/WindZigZag.hpp"
 #include "LogFile.hpp"
-#include "Math/FastMath.h"
 #include "Math/Angle.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"

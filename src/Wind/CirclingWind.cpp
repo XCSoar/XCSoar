@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Wind/CirclingWind.hpp"
 #include "Math/Constants.h"
-#include "Math/FastMath.h"
 #include "LogFile.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"

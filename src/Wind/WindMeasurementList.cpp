@@ -25,7 +25,6 @@ Copyright_License {
    http://kflog.org/cumulus/ */
 
 #include "Wind/WindMeasurementList.hpp"
-#include "Math/FastMath.h"
 
 #include <stdlib.h>
 #include <algorithm>

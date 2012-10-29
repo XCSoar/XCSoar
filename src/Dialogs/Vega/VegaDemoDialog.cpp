@@ -27,7 +27,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
 #include "Device/device.hpp"
-#include "Math/FastMath.h"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Boolean.hpp"

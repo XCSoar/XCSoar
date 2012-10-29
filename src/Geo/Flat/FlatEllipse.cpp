@@ -24,10 +24,8 @@
 // Circle radius r at (0,0)
 
 #include "FlatEllipse.hpp"
-#include "Math/FastMath.h"
-#include <algorithm>
-#include "Math/fixed.hpp"
 
+#include <algorithm>
 
 FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
                          const FlatPoint &_ap)

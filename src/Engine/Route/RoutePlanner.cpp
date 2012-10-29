@@ -23,7 +23,6 @@
 #include "RoutePlanner.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Geo/Flat/TaskProjection.hpp"
-#include "Math/FastMath.h"
 
 RoutePlanner::RoutePlanner()
   :terrain(NULL), planner(0), reach_polar_mode(RoutePlannerConfig::Polar::TASK)

@@ -1099,6 +1099,15 @@ inline void limit_tolerance(fixed& f, const fixed tol_act) {
 }
 
 /**
+ * Convert this number to a signed integer, with rounding.
+ */
+gcc_const static inline int
+iround(fixed x)
+{
+  return (int)floor(x + fixed_half);
+}
+
+/**
  * Convert this number to an unsigned integer, with rounding.
  */
 gcc_const static inline unsigned

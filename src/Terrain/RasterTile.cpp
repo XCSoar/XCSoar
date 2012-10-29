@@ -24,10 +24,8 @@ Copyright_License {
 #include "Terrain/RasterTile.hpp"
 #include "Terrain/RasterLocation.hpp"
 #include "jasper/jas_image.h"
-#include "Math/Angle.hpp"
 #include "IO/ZipLineReader.hpp"
 #include "Operation/Operation.hpp"
-#include "Math/FastMath.h"
 
 #include <stdlib.h>
 #include <algorithm>

@@ -42,12 +42,6 @@ Copyright_License {
  */
 gcc_const int compare_squared(int a, int b, int c);
 
-gcc_const static inline int
-iround(fixed x)
-{
-  return (int)floor(x + fixed_half);
-}
-
 #ifdef FIXED_MATH
 extern const int COSTABLE[4096];
 extern const int SINETABLE[4096];

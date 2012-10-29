@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Float.hpp"
 #include "ComboList.hpp"
-#include "Math/FastMath.h"
 #include "Asset.hpp"
 
 #include <stdlib.h>
