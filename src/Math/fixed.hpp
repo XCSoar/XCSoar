@@ -640,7 +640,6 @@ public:
     return m_nVal==0;
   }
 
-  gcc_pure
   fixed modf(fixed* integral_part) const;
 
   gcc_pure
@@ -887,7 +886,6 @@ inline fixed fabs(fixed const x)
   return x.abs();
 }
 
-gcc_pure
 inline fixed modf(fixed const& x,fixed*integral_part)
 {
   return x.modf(integral_part);
