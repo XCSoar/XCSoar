@@ -56,6 +56,16 @@ For Linux/Unix, you need:
 - to run XCSoar, you need one of the following fonts (Debian package):
   DejaVu (ttf-dejavu), Droid (ttf-droid), Freefont (ttf-freefont)
 
+On Debian, you may install these using the following command:
+
+ apt-get install make g++ \
+   libboost-dev zlib1g-dev \
+   libsdl1.2-dev libsdl-ttf2.0-dev libsdl-image1.2-dev \
+   libcurl4-openssl-dev \
+   libxml-parser-perl \
+   librsvg2-bin xsltproc \
+   ttf-dejavu
+
 For Android, you need:
 
 - Android SDK (http://developer.android.com/sdk/)

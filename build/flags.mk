@@ -3,14 +3,6 @@ CXX_FEATURES += -std=gnu++0x
 CXX_FEATURES += -fno-threadsafe-statics
 CXX_FEATURES += -fmerge-all-constants
 
-# Another instance of the libstdc++ 4.4 workaround.  This command-line
-# option is used by debian/rules, to allow building on old Debian
-# versions.
-RTTI ?= n
-ifeq ($(RTTI),y)
-CXX_FEATURES += -frtti
-endif
-
 ifeq ($(CLANG),n)
 CXX_FEATURES += -fconserve-space -fno-operator-names
 endif

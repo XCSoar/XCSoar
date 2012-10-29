@@ -39,9 +39,6 @@ compare_squared(int a, int b, int c)
   return 0;
 }
 
-extern "C"
-{
-
 /**
  * Calculates the square root of val
  *
@@ -49,8 +46,8 @@ extern "C"
  * @param val Value
  * @return Rounded square root of val
  */
-unsigned int
-isqrt4(unsigned long val)
+unsigned
+isqrt4(unsigned val)
 {
 #if defined(__i386__) || defined(__x86_64__)
   /* x86 FPUs are extremely fast */
@@ -93,8 +90,6 @@ isqrt4(unsigned long val)
 
   return g;
 #endif
-}
-
 }
 
 fixed

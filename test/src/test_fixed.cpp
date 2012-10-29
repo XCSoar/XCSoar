@@ -27,6 +27,49 @@
 
 #include <stdio.h>
 
+static constexpr struct {
+  double in;
+  unsigned out;
+} uround_test_values[] = {
+  { 0, 0 },
+  { 0.1, 0 },
+  { 0.49, 0 },
+  { 0.5, 1 },
+  { 0.51, 1 },
+  { 0.99999, 1 },
+  { 1, 1 },
+  { 4294967295.0, 4294967295u },
+  { 4294967295.4, 4294967295u },
+  { 4294967294.5, 4294967295u },
+};
+
+static constexpr struct {
+  double in;
+  int out;
+} iround_test_values[] = {
+  { 0, 0 },
+  { 0.1, 0 },
+  { 0.49, 0 },
+  { 0.51, 1 },
+  { 0.99999, 1 },
+  { 1, 1 },
+  { 2147483647, 2147483647 },
+  { 2147483647.49, 2147483647 },
+  { 2147483646.51, 2147483647 },
+};
+
+static void
+TestRound()
+{
+  for (unsigned i = 0; i < ARRAY_SIZE(uround_test_values); ++i)
+    ok1(uround(fixed(uround_test_values[i].in)) == uround_test_values[i].out);
+
+  for (unsigned i = 0; i < ARRAY_SIZE(iround_test_values); ++i) {
+    ok1(iround(fixed(iround_test_values[i].in)) == iround_test_values[i].out);
+    ok1(iround(fixed(-iround_test_values[i].in)) == -iround_test_values[i].out);
+  }
+}
+
 // tolerance is 0.3%
 
 static void test_mag_rmag(double mag) {
@@ -104,6 +147,8 @@ TestTinyHypot()
 
 int main(int argc, char** argv) {
   plan_tests(43 + ARRAY_SIZE(Hypot_test_values)
+             + ARRAY_SIZE(uround_test_values)
+             + 2 * ARRAY_SIZE(iround_test_values)
              + ARRAY_SIZE(tiny_hypot_test_values));
 
   /* check the division operator */
@@ -159,6 +204,7 @@ int main(int argc, char** argv) {
     }
   }
 
+  TestRound();
   test_hypot();
   TestTinyHypot();
 
