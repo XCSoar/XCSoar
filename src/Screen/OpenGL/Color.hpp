@@ -26,14 +26,13 @@ Copyright_License {
 
 #include "Screen/OpenGL/Features.hpp"
 
-#ifdef HAVE_GLES
+#ifdef ENABLE_SDL
+#include <SDL/SDL_opengl.h>
+#include <SDL_video.h> // for SDL_Color
+#elif defined(HAVE_GLES)
 #include <GLES/gl.h>
 #else
-#include <SDL/SDL_opengl.h>
-#endif
-
-#ifndef ANDROID
-#include <SDL_video.h> // for SDL_Color
+#include <GL/gl.h>
 #endif
 
 /**
@@ -104,7 +103,7 @@ struct Color {
 #endif
   }
 
-#ifndef HAVE_GLES
+#ifdef ENABLE_SDL
   /**
    * Convert this object to a SDL_Color.
    *
