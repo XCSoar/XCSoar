@@ -153,9 +153,9 @@ class fixed
 public:
   typedef int64_t value_t;
 
-  static const unsigned resolution_shift = 28;
-  static const value_t resolution = 1 << resolution_shift;
-  static const unsigned accurate_cordic_shift = 11;
+  static constexpr unsigned resolution_shift = 28;
+  static constexpr value_t resolution = 1 << resolution_shift;
+  static constexpr unsigned accurate_cordic_shift = 11;
 
 private:
     value_t m_nVal;
