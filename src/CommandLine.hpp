@@ -33,14 +33,14 @@ namespace CommandLine {
   extern unsigned width, height;
 #endif
 
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
 #define HAVE_CMDLINE_FULLSCREEN
   extern bool full_screen;
 #else
   static constexpr bool full_screen = false;
 #endif
 
-#if (defined(ENABLE_SDL) && !defined(ANDROID)) || defined(USE_GDI)
+#if defined(ENABLE_SDL) || defined(USE_GDI)
 #define HAVE_CMDLINE_RESIZABLE
   extern bool resizable;
 #else

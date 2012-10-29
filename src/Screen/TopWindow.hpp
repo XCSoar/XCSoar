@@ -47,14 +47,14 @@ struct Event;
 #endif
 
 class TopWindowStyle : public WindowStyle {
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
   bool full_screen;
   bool resizable;
 #endif
 
 public:
   TopWindowStyle()
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
     :full_screen(false), resizable(false)
 #endif
   {
@@ -63,7 +63,7 @@ public:
 
   TopWindowStyle(const WindowStyle other)
     :WindowStyle(other)
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
     , full_screen(false), resizable(false)
 #endif
   {
@@ -71,13 +71,13 @@ public:
   }
 
   void FullScreen() {
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
     full_screen = true;
 #endif
   }
 
   bool GetFullScreen() const {
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
     return full_screen;
 #else
     return false;
@@ -85,7 +85,7 @@ public:
   }
 
   void Resizable() {
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
     resizable = true;
 #elif defined(USE_GDI)
     style &= ~WS_BORDER;
@@ -94,7 +94,7 @@ public:
   }
 
   bool GetResizable() const {
-#if defined(ENABLE_SDL) && !defined(ANDROID)
+#ifdef ENABLE_SDL
     return resizable;
 #else
     return false;
@@ -247,7 +247,7 @@ public:
 
 #ifndef USE_GDI
     OnClose();
-#else /* ENABLE_SDL */
+#else
     ::SendMessage(hWnd, WM_CLOSE, 0, 0);
 #endif
   }
@@ -298,7 +298,7 @@ protected:
 #ifdef USE_GDI
   virtual LRESULT OnMessage(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
-#endif /* !ENABLE_SDL */
+#endif
 
 #ifndef USE_GDI
   virtual void OnResize(UPixelScalar width, UPixelScalar height);

@@ -19,8 +19,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
-ifeq ($(ENABLE_SDL),y)
-SCREEN_SOURCES += \
+SCREEN_CUSTOM_SOURCES = \
 	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/ButtonWindow.cpp \
@@ -32,8 +31,10 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Custom/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/Canvas.cpp
+
 ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
+	$(SCREEN_CUSTOM_SOURCES) \
 	$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp \
 	$(SCREEN_SRC_DIR)/Android/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Android/Window.cpp \
@@ -42,17 +43,8 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Android/Font.cpp \
 	$(SCREEN_SRC_DIR)/Android/Event.cpp
-else
-SCREEN_SOURCES += \
-	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
-	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Font.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
 endif
+
 ifeq ($(OPENGL),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Init.cpp \
@@ -70,14 +62,27 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Shapes.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
-else
+endif
+
+ifeq ($(ENABLE_SDL),y)
+SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
+SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
+	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
+	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
+	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
+	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
+	$(SCREEN_SRC_DIR)/SDL/Font.cpp \
+	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
+	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
+ifeq ($(OPENGL),n)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
 endif
-else
+else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp \
