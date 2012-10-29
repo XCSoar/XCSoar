@@ -54,9 +54,9 @@ include $(topdir)/build/detect.mk
 include $(topdir)/build/targets.mk
 include $(topdir)/build/pkgconfig.mk
 include $(topdir)/build/resource.mk
+include $(topdir)/build/options.mk
 include $(topdir)/build/debug.mk
 include $(topdir)/build/coverage.mk
-include $(topdir)/build/options.mk
 include $(topdir)/build/libintl.mk
 include $(topdir)/build/boost.mk
 include $(topdir)/build/sdl.mk
