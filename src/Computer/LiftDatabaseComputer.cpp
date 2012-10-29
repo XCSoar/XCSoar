@@ -66,7 +66,7 @@ heading_to_index(Angle &heading)
   static const Angle afive = Angle::Degrees(fixed(5));
 
   unsigned index = (unsigned)
-      floor((heading + afive).AsBearing().Degrees() / 10);
+      ((heading + afive).AsBearing().Degrees() / 10);
 
   return std::max(0u, std::min(35u, index));
 }
