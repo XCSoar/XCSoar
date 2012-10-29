@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/VertexArray.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastTrig.hpp"
+
 #include <assert.h>
 
 GLCircleVertices::GLCircleVertices(GLvalue center_x, GLvalue center_y,

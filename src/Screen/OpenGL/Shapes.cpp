@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/OpenGL/Shapes.hpp"
 #include "Screen/OpenGL/Buffer.hpp"
 #include "Screen/OpenGL/Globals.hpp"
-#include "Math/FastMath.h"
+#include "Math/FastTrig.hpp"
 
 static GLshort circle_data[OpenGL::CIRCLE_SIZE * 2];
 static GLshort small_circle_data[OpenGL::SMALL_CIRCLE_SIZE * 2];

@@ -21,35 +21,5 @@ Copyright_License {
 }
 */
 
-#include "ToneSynthesiser.hpp"
-#include "Math/FastTrig.hpp"
-#include "Util/Macros.hpp"
-
-void
-ToneSynthesiser::SetTone(unsigned sample_rate, unsigned tone_hz)
-{
-  increment = ARRAY_SIZE(ISINETABLE) * tone_hz / sample_rate;
-}
-
-void
-ToneSynthesiser::Synthesise(int16_t *buffer, size_t n)
-{
-  assert(angle < ARRAY_SIZE(ISINETABLE));
-
-  for (int16_t *end = buffer + n; buffer != end; ++buffer) {
-    *buffer = ISINETABLE[angle] * (32767 / 1024) * (int)volume / 100;
-    angle = (angle + increment) & (ARRAY_SIZE(ISINETABLE) - 1);
-  }
-}
-
-unsigned
-ToneSynthesiser::ToZero() const
-{
-  assert(angle < ARRAY_SIZE(ISINETABLE));
-
-  if (angle < increment)
-    /* close enough */
-    return 0;
-
-  return (ARRAY_SIZE(ISINETABLE) - angle) / increment;
-}
+#include "FastTrig.hpp"
+#include "MathTables.h"

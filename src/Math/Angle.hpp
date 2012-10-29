@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
-#include "Math/FastMath.h"
+#include "FastTrig.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
