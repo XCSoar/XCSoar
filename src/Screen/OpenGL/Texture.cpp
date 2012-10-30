@@ -63,6 +63,31 @@ ValidateTextureSize(PixelSize size)
       PixelScalar(ValidateTextureSize(size.cy)) };
 }
 
+/**
+ * Load data into the current texture.  Fixes alignment to the next
+ * power of two if needed.
+ */
+static void
+LoadTextureAutoAlign(GLint internal_format,
+                     GLsizei width, GLsizei height,
+                     GLenum format, GLenum type, const GLvoid *pixels)
+{
+  assert(pixels != nullptr);
+
+  GLsizei width2 = ValidateTextureSize(width);
+  GLsizei height2 = ValidateTextureSize(height);
+
+  if (width2 == width && height2 == height)
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0,
+                 format, type, pixels);
+  else {
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width2, height2, 0,
+                 format, type, NULL);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
+                    format, type, pixels);
+  }
+}
+
 #ifndef ANDROID
 
 /**
@@ -96,29 +121,6 @@ IsLuminanceFormat(const SDL_PixelFormat *format)
     format->Rshift == 0 && format->Gshift == 0 && format->Bshift == 0 &&
     format->Rmask == 0 && format->Gmask == 0 && format->Bmask == 0 &&
     IsLuminancePalette(format->palette);
-}
-
-/**
- * Load data into the current texture.  Fixes alignment to the next
- * power of two if needed.
- */
-static void
-LoadTextureAutoAlign(GLint internal_format,
-                     GLsizei width, GLsizei height,
-                     GLenum format, GLenum type, const GLvoid *pixels)
-{
-  GLsizei width2 = ValidateTextureSize(width);
-  GLsizei height2 = ValidateTextureSize(height);
-
-  if (width2 == width && height2 == height)
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width, height, 0,
-                 format, type, pixels);
-  else {
-    glTexImage2D(GL_TEXTURE_2D, 0, internal_format, width2, height2, 0,
-                 format, type, NULL);
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height,
-                    format, type, pixels);
-  }
 }
 
 static bool
@@ -207,6 +209,18 @@ GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
                ValidateTextureSize(width), ValidateTextureSize(height),
                0, GL_RGB, GetType(), NULL);
+}
+
+GLTexture::GLTexture(GLint internal_format, GLsizei _width, GLsizei _height,
+                     GLenum format, GLenum type, const GLvoid *data)
+  :width(_width), height(_height)
+#ifndef HAVE_OES_DRAW_TEXTURE
+  , allocated_width(ValidateTextureSize(_width)),
+   allocated_height(ValidateTextureSize(_height))
+#endif
+{
+  Initialise();
+  LoadTextureAutoAlign(internal_format, _width, _height, format, type, data);
 }
 
 void

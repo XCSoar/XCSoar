@@ -73,6 +73,9 @@ public:
    */
   GLTexture(UPixelScalar _width, UPixelScalar _height);
 
+  GLTexture(GLint internal_format, GLsizei width, GLsizei height,
+            GLenum format, GLenum type, const GLvoid *data);
+
 #ifndef ANDROID
   GLTexture(SDL_Surface *surface) {
     Initialise();
