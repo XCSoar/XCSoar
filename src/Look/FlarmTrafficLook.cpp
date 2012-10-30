@@ -68,13 +68,15 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
 
   unit_fraction_pen.Set(1, COLOR_BLACK);
 
-  no_traffic_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  label_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
-  side_info_font.Set(Fonts::GetStandardFontFace(),
-                 Layout::FastScale(small ? 12 : 18), true);
+  no_traffic_font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(24));
+  label_font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(14));
+  side_info_font.Load(Fonts::GetStandardFontFace(),
+                      Layout::FastScale(small ? 12 : 18), true);
 
-  info_labels_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(10), true);
-  info_values_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(20));
-  info_units_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(8));
-  call_sign_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(28), true);
+  info_labels_font.Load(Fonts::GetStandardFontFace(),
+                        Layout::FastScale(10), true);
+  info_values_font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(20));
+  info_units_font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(8));
+  call_sign_font.Load(Fonts::GetStandardFontFace(),
+                      Layout::FastScale(28), true);
 }

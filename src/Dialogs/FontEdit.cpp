@@ -113,7 +113,7 @@ FontEditWidget::UpdatePreview()
 {
   SaveValues();
 
-  font.Set(data);
+  font.Load(data);
 
 #ifdef ENABLE_OPENGL
   TextCache::Flush();

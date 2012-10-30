@@ -118,7 +118,7 @@ SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
     --logfont.lfHeight;
 
     Font font;
-    if (!font.Set(logfont))
+    if (!font.Load(logfont))
       break;
 
     tsize = font.TextSize(str);
@@ -187,13 +187,13 @@ Fonts::Initialize()
 {
   InitialiseLogFonts();
 
-  title.Set(log_title);
-  cdi.Set(log_cdi);
-  map_label.Set(log_map_label);
-  map_label_important.Set(log_map_label_important);
-  map.Set(log_map);
-  map_bold.Set(log_map_bold);
-  monospace.Set(log_monospace);
+  title.Load(log_title);
+  cdi.Load(log_cdi);
+  map_label.Load(log_map_label);
+  map_label_important.Load(log_map_label_important);
+  map.Load(log_map);
+  map_bold.Load(log_map_bold);
+  monospace.Load(log_monospace);
 
   return title.IsDefined() && cdi.IsDefined() &&
     map_label.IsDefined() && map_label_important.IsDefined() &&
@@ -208,36 +208,36 @@ Fonts::SizeInfoboxFont(UPixelScalar control_width)
 
   if (!IsAltair())
     SizeLogFont(lf, control_width, _T("1234m"));
-  infobox.Set(lf);
+  infobox.Load(lf);
 
 #ifndef GNAV
   unsigned height = lf.lfHeight;
   lf = log_infobox_units;
   lf.lfHeight = (height * 2) / 5;
-  infobox_units.Set(lf);
+  infobox_units.Load(lf);
 #endif
 
   lf = log_infobox_small;
   if (!IsAltair())
     SizeLogFont(lf, control_width, _T("12345m"));
-  infobox_small.Set(lf);
+  infobox_small.Load(lf);
 }
 
 void
 Fonts::Deinitialize()
 {
-  infobox.Reset();
-  infobox_small.Reset();
+  infobox.Destroy();
+  infobox_small.Destroy();
 #ifndef GNAV
-  infobox_units.Reset();
+  infobox_units.Destroy();
 #endif
-  title.Reset();
-  map.Reset();
-  map_bold.Reset();
-  cdi.Reset();
-  map_label.Reset();
-  map_label_important.Reset();
-  monospace.Reset();
+  title.Destroy();
+  map.Destroy();
+  map_bold.Destroy();
+  cdi.Destroy();
+  map_label.Destroy();
+  map_label_important.Destroy();
+  monospace.Destroy();
 }
 
 const TCHAR*

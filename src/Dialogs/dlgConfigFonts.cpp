@@ -74,7 +74,7 @@ ResetFont(Font &font, bool custom, const TCHAR *profile_key,
   if (!custom || !Profile::GetFont(profile_key, &log_font))
     log_font = default_log_font;
 
-  font.Set(log_font);
+  font.Load(log_font);
 }
 
 static void
@@ -307,12 +307,12 @@ void dlgConfigFontsShowModal()
                 _T(""), MB_OK);
   }
 
-  TempInfoWindowFont.Reset();
-  TempTitleWindowFont.Reset();
-  TempMapWindowFont.Reset();
-  TempTitleSmallWindowFont.Reset();
-  TempMapWindowBoldFont.Reset();
-  TempCDIWindowFont.Reset();
-  TempMapLabelFont.Reset();
-  TempMapLabelImportantFont.Reset();
+  TempInfoWindowFont.Destroy();
+  TempTitleWindowFont.Destroy();
+  TempMapWindowFont.Destroy();
+  TempTitleSmallWindowFont.Destroy();
+  TempMapWindowBoldFont.Destroy();
+  TempCDIWindowFont.Destroy();
+  TempMapLabelFont.Destroy();
+  TempMapLabelImportantFont.Destroy();
 }

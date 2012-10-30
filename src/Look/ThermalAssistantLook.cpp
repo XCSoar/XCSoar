@@ -50,6 +50,6 @@ ThermalAssistantLook::Initialise(bool small)
   outer_circle_pen.Set(Pen::DASH, 1, circle_color);
   plane_pen.Set(width, COLOR_BLACK);
 
-  overlay_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  circle_label_font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(12));
+  overlay_font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(24));
+  circle_label_font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(12));
 }

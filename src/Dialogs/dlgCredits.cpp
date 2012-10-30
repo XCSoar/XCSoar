@@ -143,7 +143,7 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   y += title_size.cy + Layout::FastScale(20);
 
   Font font;
-  font.Set(Fonts::GetStandardFontFace(), Layout::FastScale(16));
+  font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(16));
   canvas.Select(font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();

@@ -31,10 +31,10 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Font::Set(const LOGFONT &log)
+Font::Load(const LOGFONT &log)
 {
-  return Set(log.lfFaceName, (int) log.lfHeight,
-             log.lfWeight > 600, log.lfItalic != 0);
+  return Load(log.lfFaceName, (int) log.lfHeight,
+              log.lfWeight > 600, log.lfItalic != 0);
 }
 
 /*
@@ -42,7 +42,7 @@ Font::Set(const LOGFONT &log)
  * reference in text_util_object member.
  */
 bool
-Font::Set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
+Font::Load(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 
@@ -60,7 +60,7 @@ Font::Set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
 }
 
 void
-Font::Reset()
+Font::Destroy()
 {
   assert(!IsDefined() || IsScreenInitialized());
 

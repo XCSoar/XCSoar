@@ -30,7 +30,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Font::Set(const TCHAR* facename, UPixelScalar height, bool bold, bool italic)
+Font::Load(const TCHAR* facename, UPixelScalar height, bool bold, bool italic)
 {
   LOGFONT font;
   memset((char *)&font, 0, sizeof(LOGFONT));
@@ -44,22 +44,22 @@ Font::Set(const TCHAR* facename, UPixelScalar height, bool bold, bool italic)
     font.lfQuality = NONANTIALIASED_QUALITY;
   else
     font.lfQuality = ANTIALIASED_QUALITY;
-  return Font::Set(font);
+  return Font::Load(font);
 }
 
 bool
-Font::Set(const LOGFONT &log_font)
+Font::Load(const LOGFONT &log_font)
 {
   assert(IsScreenInitialized());
 
-  Reset();
+  Destroy();
 
   font = ::CreateFontIndirect(&log_font);
   if (font == NULL)
     return false;
 
   if (GetObjectType(font) != OBJ_FONT) {
-    Reset();
+    Destroy();
     return false;
   }
 
@@ -127,7 +127,7 @@ Font::CalculateHeights()
 }
 
 void
-Font::Reset()
+Font::Destroy()
 {
   if (font != NULL) {
     assert(IsScreenInitialized());

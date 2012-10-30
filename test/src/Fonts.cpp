@@ -67,19 +67,19 @@ InitialiseFonts()
 
   LOGFONT lf;
   InitialiseLogfont(&lf, face, FontHeight / 2);
-  normal_font.Set(lf);
+  normal_font.Load(lf);
 
   InitialiseLogfont(&lf, face, FontHeight / 2 - Layout::Scale(2));
-  small_font.Set(lf);
+  small_font.Load(lf);
 
   InitialiseLogfont(&lf, face, FontHeight / 2, true);
-  bold_font.Set(lf);
+  bold_font.Load(lf);
 }
 
 void
 DeinitialiseFonts()
 {
-  bold_font.Reset();
-  small_font.Reset();
-  normal_font.Reset();
+  bold_font.Destroy();
+  small_font.Destroy();
+  normal_font.Destroy();
 }

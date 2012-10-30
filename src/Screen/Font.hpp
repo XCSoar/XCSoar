@@ -66,8 +66,8 @@ protected:
   void CalculateHeights();
 
 #ifdef ENABLE_SDL
-  bool _set(const char *file, UPixelScalar ptsize, bool bold = false,
-            bool italic = false);
+  bool LoadFile(const char *file, UPixelScalar ptsize, bool bold = false,
+                bool italic = false);
 #endif
 
 public:
@@ -77,7 +77,7 @@ public:
   Font():font(NULL) {}
 #endif
 
-  ~Font() { Reset(); }
+  ~Font() { Destroy(); }
 
   /**
    * Perform global font initialisation.
@@ -94,10 +94,10 @@ public:
     #endif
   }
 
-  bool Set(const TCHAR *facename, UPixelScalar height, bool bold = false,
-           bool italic = false);
-  bool Set(const LOGFONT &log_font);
-  void Reset();
+  bool Load(const TCHAR *facename, UPixelScalar height, bool bold = false,
+            bool italic = false);
+  bool Load(const LOGFONT &log_font);
+  void Destroy();
 
   gcc_pure
   PixelSize TextSize(const TCHAR *text) const;

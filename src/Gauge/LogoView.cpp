@@ -31,7 +31,7 @@ LogoView::LogoView()
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
 {
 #ifndef USE_GDI
-  font.Set(_T("Droid Sans"), 12);
+  font.Load(_T("Droid Sans"), 12);
 #endif
 }
 

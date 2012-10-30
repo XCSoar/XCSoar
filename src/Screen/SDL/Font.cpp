@@ -41,11 +41,11 @@ Font::Initialise()
 }
 
 bool
-Font::_set(const char *file, UPixelScalar ptsize, bool bold, bool italic)
+Font::LoadFile(const char *file, UPixelScalar ptsize, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 
-  Reset();
+  Destroy();
 
   font = TTF_OpenFont(file, ptsize);
   if (font == NULL)
@@ -64,18 +64,18 @@ Font::_set(const char *file, UPixelScalar ptsize, bool bold, bool italic)
 }
 
 bool
-Font::Set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
+Font::Load(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
 {
   LOGFONT lf;
   lf.lfWeight = bold ? 700 : 500;
   lf.lfHeight = height;
   lf.lfItalic = italic;
   lf.lfPitchAndFamily = FF_DONTCARE | VARIABLE_PITCH;
-  return Set(lf);
+  return Load(lf);
 }
 
 bool
-Font::Set(const LOGFONT &log_font)
+Font::Load(const LOGFONT &log_font)
 {
   assert(IsScreenInitialized());
 
@@ -86,9 +86,9 @@ Font::Set(const LOGFONT &log_font)
   if (path == NULL)
     return false;
 
-  return _set(path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
-              log_font.lfWeight >= 700,
-              log_font.lfItalic);
+  return LoadFile(path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
+                  log_font.lfWeight >= 700,
+                  log_font.lfItalic);
 }
 
 void
@@ -104,7 +104,7 @@ Font::CalculateHeights()
 }
 
 void
-Font::Reset()
+Font::Destroy()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
