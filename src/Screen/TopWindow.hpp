@@ -40,6 +40,9 @@ Copyright_License {
 #include "Thread/Cond.hpp"
 
 struct Event;
+
+#elif defined(ENABLE_SDL)
+#include <SDL_events.h>
 #endif
 
 #ifndef USE_GDI
