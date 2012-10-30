@@ -11,23 +11,21 @@ ENABLE_SDL = y
 endif
 
 ifeq ($(ENABLE_SDL),y)
-$(eval $(call pkg-config-library,SDL,sdl SDL_image))
+
+SDL_PKG = sdl SDL_image
 
 ifeq ($(FREETYPE),n)
-ifndef SDL_TTF_LDLIBS
-$(eval $(call pkg-config-library,SDL_TTF,SDL_ttf))
+SDL_PKG += SDL_ttf
 endif
-SDL_LDLIBS += $(SDL_TTF_LDLIBS)
-SDL_CPPFLAGS += $(SDL_TTF_CPPFLAGS)
 
+ifeq ($(OPENGL),n)
+SDL_PKG += SDL_gfx
 endif
+
+$(eval $(call pkg-config-library,SDL,$(SDL_PKG)))
 
 SDL_CPPFLAGS += -DENABLE_SDL
-ifeq ($(OPENGL),n)
-$(eval $(call pkg-config-library,SDL_GFX,SDL_gfx))
-SDL_LDLIBS += $(SDL_GFX_LDLIBS)
-SDL_CPPFLAGS += $(SDL_GFX_CPPFLAGS)
-endif # !OPENGL
+
 ifeq ($(TARGET_IS_DARWIN),y)
 # the pkg-config file on MacPorts is broken, we must convert all -l
 # flags to link static libraries instead
