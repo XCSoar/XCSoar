@@ -25,6 +25,9 @@ my @numeric;
 my @named;
 
 while (<>) {
+    # merge adjacent strings
+    while (s/"([^"]*)"\s+"([^"]*)"\s*$/"$1$2"/) {}
+
     if (/^\s*(\d+)\s+BITMAP\s+DISCARDABLE\s+"(.*?)"\s*$/) {
         push @numeric, $1;
         generate_blob("resource_$1", "Data/$2");

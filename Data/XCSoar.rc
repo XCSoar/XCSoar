@@ -4,8 +4,36 @@ HI_RES_AWARE CEUX {1}
 
 #include "resource.h"
 
-// on Android, these are included as drawable resources (PNG)
 #if !defined(ANDROID) || defined(ANDROID_DRAWABLE)
+#define BITMAP(name, path) name BITMAP DISCARDABLE path
+#else
+/* on Android, these are included as drawable resources (PNG) */
+#define BITMAP(name, path)
+#endif
+
+#define BITMAP_BITMAP(name, file) BITMAP(name, "bitmaps/" file ".bmp")
+#define BITMAP_ICON(name, file) BITMAP(name, "../output/data/icons/" file ".bmp")
+#define BITMAP_GRAPHIC(name, file) BITMAP(name, "../output/data/graphics/" file ".bmp")
+
+#ifdef WIN32
+/* only GDI knows how to deal with hatched brushes, the rest uses
+   transparency */
+#define HATCH_BITMAP(name, file) BITMAP_BITMAP(name, file)
+#else
+#define HATCH_BITMAP(name, file)
+#endif
+
+#define XMLDIALOG(name, path) name XMLDIALOG DISCARDABLE "../output/data/dialogs/" path ".xml.gz"
+
+#if defined(WIN32) || defined(ANDROID)
+#define MO(name) name.mo MO DISCARDABLE "../output/po/" #name ".mo"
+#else
+#define MO(name)
+#endif
+
+#define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
+
+#define TEXT(name, file) name TEXT DISCARDABLE "../output/data/" file ".gz"
 
 // --- Icons ---
 
@@ -13,321 +41,313 @@ IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps/xcsoarswift.ico"
 
 // --- Bitmaps ---
 
-IDB_ABORT               BITMAP  DISCARDABLE     "../output/data/icons/mode_abort.bmp"
-IDB_ABORT_HD            BITMAP  DISCARDABLE     "../output/data/icons/mode_abort_160.bmp"
+BITMAP_ICON(IDB_ABORT, "mode_abort")
+BITMAP_ICON(IDB_ABORT_HD, "mode_abort_160")
 
-#ifndef ENABLE_SDL
-IDB_ABOVETERRAIN        BITMAP  DISCARDABLE     "bitmaps/aboveterrain.bmp"
-#endif
+HATCH_BITMAP(IDB_ABOVETERRAIN, "aboveterrain")
 
-IDB_AIRPORT_REACHABLE   BITMAP  DISCARDABLE     "../output/data/icons/alt_reachable_airport.bmp"
-IDB_AIRPORT_REACHABLE_HD BITMAP DISCARDABLE     "../output/data/icons/alt_reachable_airport_160.bmp"
-IDB_AIRPORT_MARGINAL BITMAP  DISCARDABLE     "../output/data/icons/alt_marginal_airport.bmp"
-IDB_AIRPORT_MARGINAL_HD BITMAP DISCARDABLE   "../output/data/icons/alt_marginal_airport_160.bmp"
-IDB_AIRPORT_UNREACHABLE BITMAP  DISCARDABLE     "../output/data/icons/alt_landable_airport.bmp"
-IDB_AIRPORT_UNREACHABLE_HD BITMAP DISCARDABLE   "../output/data/icons/alt_landable_airport_160.bmp"
-IDB_AIRPORT_MARGINAL2 BITMAP  DISCARDABLE     "../output/data/icons/alt2_marginal_airport.bmp"
-IDB_AIRPORT_MARGINAL2_HD BITMAP DISCARDABLE   "../output/data/icons/alt2_marginal_airport_160.bmp"
-IDB_AIRPORT_UNREACHABLE2 BITMAP DISCARDABLE     "../output/data/icons/alt2_landable_airport.bmp"
-IDB_AIRPORT_UNREACHABLE2_HD BITMAP DISCARDABLE  "../output/data/icons/alt2_landable_airport_160.bmp"
+BITMAP_ICON(IDB_AIRPORT_REACHABLE, "alt_reachable_airport")
+BITMAP_ICON(IDB_AIRPORT_REACHABLE_HD, "alt_reachable_airport_160")
+BITMAP_ICON(IDB_AIRPORT_MARGINAL, "alt_marginal_airport")
+BITMAP_ICON(IDB_AIRPORT_MARGINAL_HD, "alt_marginal_airport_160")
+BITMAP_ICON(IDB_AIRPORT_UNREACHABLE, "alt_landable_airport")
+BITMAP_ICON(IDB_AIRPORT_UNREACHABLE_HD, "alt_landable_airport_160")
+BITMAP_ICON(IDB_AIRPORT_MARGINAL2, "alt2_marginal_airport")
+BITMAP_ICON(IDB_AIRPORT_MARGINAL2_HD, "alt2_marginal_airport_160")
+BITMAP_ICON(IDB_AIRPORT_UNREACHABLE2, "alt2_landable_airport")
+BITMAP_ICON(IDB_AIRPORT_UNREACHABLE2_HD, "alt2_landable_airport_160")
 
-#ifndef ENABLE_SDL
-IDB_AIRSPACE0           BITMAP  DISCARDABLE     "bitmaps/airspace0.bmp"
-IDB_AIRSPACE1           BITMAP  DISCARDABLE     "bitmaps/airspace1.bmp"
-IDB_AIRSPACE2           BITMAP  DISCARDABLE     "bitmaps/airspace2.bmp"
-IDB_AIRSPACE3           BITMAP  DISCARDABLE     "bitmaps/airspace3.bmp"
-IDB_AIRSPACE4           BITMAP  DISCARDABLE     "bitmaps/airspace4.bmp"
-IDB_AIRSPACE5           BITMAP  DISCARDABLE     "bitmaps/airspace5.bmp"
-IDB_AIRSPACE6           BITMAP  DISCARDABLE     "bitmaps/airspace6.bmp"
-IDB_AIRSPACE7           BITMAP  DISCARDABLE     "bitmaps/airspace7.bmp"
-#endif
+HATCH_BITMAP(IDB_AIRSPACE0, "airspace0")
+HATCH_BITMAP(IDB_AIRSPACE1, "airspace1")
+HATCH_BITMAP(IDB_AIRSPACE2, "airspace2")
+HATCH_BITMAP(IDB_AIRSPACE3, "airspace3")
+HATCH_BITMAP(IDB_AIRSPACE4, "airspace4")
+HATCH_BITMAP(IDB_AIRSPACE5, "airspace5")
+HATCH_BITMAP(IDB_AIRSPACE6, "airspace6")
+HATCH_BITMAP(IDB_AIRSPACE7, "airspace7")
 
-IDB_AIRSPACEI           BITMAP  DISCARDABLE     "../output/data/icons/airspace_intercept.bmp"
-IDB_AIRSPACEI_HD        BITMAP  DISCARDABLE     "../output/data/icons/airspace_intercept_160.bmp"
-IDB_CRUISE              BITMAP  DISCARDABLE     "../output/data/icons/mode_cruise.bmp"
-IDB_CRUISE_HD           BITMAP  DISCARDABLE     "../output/data/icons/mode_cruise_160.bmp"
-IDB_CLIMB               BITMAP  DISCARDABLE     "../output/data/icons/mode_climb.bmp"
-IDB_CLIMB_HD            BITMAP  DISCARDABLE     "../output/data/icons/mode_climb_160.bmp"
-IDB_CLIMBSMALL          BITMAP  DISCARDABLE     "bitmaps/climb_12.bmp"
-IDB_CLIMBSMALLINV       BITMAP  DISCARDABLE     "bitmaps/climb_12inv.bmp"
-IDB_FOLDER              BITMAP  DISCARDABLE     "../output/data/icons/folder.bmp"
-IDB_FOLDER_HD           BITMAP  DISCARDABLE     "../output/data/icons/folder_160.bmp"
-IDB_SETTINGS            BITMAP  DISCARDABLE     "../output/data/icons/settings.bmp"
-IDB_SETTINGS_HD         BITMAP  DISCARDABLE     "../output/data/icons/settings_160.bmp"
-IDB_TASK                BITMAP  DISCARDABLE     "../output/data/icons/task.bmp"
-IDB_TASK_HD             BITMAP  DISCARDABLE     "../output/data/icons/task_160.bmp"
-IDB_CALCULATOR          BITMAP  DISCARDABLE     "../output/data/icons/calculator.bmp"
-IDB_CALCULATOR_HD       BITMAP  DISCARDABLE     "../output/data/icons/calculator_160.bmp"
-IDB_WRENCH              BITMAP  DISCARDABLE     "../output/data/icons/wrench.bmp"
-IDB_WRENCH_HD           BITMAP  DISCARDABLE     "../output/data/icons/wrench_160.bmp"
-IDB_GLOBE               BITMAP  DISCARDABLE     "../output/data/icons/globe.bmp"
-IDB_GLOBE_HD            BITMAP  DISCARDABLE     "../output/data/icons/globe_160.bmp"
-IDB_DEVICE              BITMAP  DISCARDABLE     "../output/data/icons/device.bmp"
-IDB_DEVICE_HD           BITMAP  DISCARDABLE     "../output/data/icons/device_160.bmp"
-IDB_RULES               BITMAP  DISCARDABLE     "../output/data/icons/rules.bmp"
-IDB_RULES_HD            BITMAP  DISCARDABLE     "../output/data/icons/rules_160.bmp"
-IDB_CLOCK               BITMAP  DISCARDABLE     "../output/data/icons/clock.bmp"
-IDB_CLOCK_HD            BITMAP  DISCARDABLE     "../output/data/icons/clock_160.bmp"
+BITMAP_ICON(IDB_AIRSPACEI, "airspace_intercept")
+BITMAP_ICON(IDB_AIRSPACEI_HD, "airspace_intercept_160")
+BITMAP_ICON(IDB_CRUISE, "mode_cruise")
+BITMAP_ICON(IDB_CRUISE_HD, "mode_cruise_160")
+BITMAP_ICON(IDB_CLIMB, "mode_climb")
+BITMAP_ICON(IDB_CLIMB_HD, "mode_climb_160")
+BITMAP_BITMAP(IDB_CLIMBSMALL, "climb_12")
+BITMAP_BITMAP(IDB_CLIMBSMALLINV, "climb_12inv")
+BITMAP_ICON(IDB_FOLDER, "folder")
+BITMAP_ICON(IDB_FOLDER_HD, "folder_160")
+BITMAP_ICON(IDB_SETTINGS, "settings")
+BITMAP_ICON(IDB_SETTINGS_HD, "settings_160")
+BITMAP_ICON(IDB_TASK, "task")
+BITMAP_ICON(IDB_TASK_HD, "task_160")
+BITMAP_ICON(IDB_CALCULATOR, "calculator")
+BITMAP_ICON(IDB_CALCULATOR_HD, "calculator_160")
+BITMAP_ICON(IDB_WRENCH, "wrench")
+BITMAP_ICON(IDB_WRENCH_HD, "wrench_160")
+BITMAP_ICON(IDB_GLOBE, "globe")
+BITMAP_ICON(IDB_GLOBE_HD, "globe_160")
+BITMAP_ICON(IDB_DEVICE, "device")
+BITMAP_ICON(IDB_DEVICE_HD, "device_160")
+BITMAP_ICON(IDB_RULES, "rules")
+BITMAP_ICON(IDB_RULES_HD, "rules_160")
+BITMAP_ICON(IDB_CLOCK, "clock")
+BITMAP_ICON(IDB_CLOCK_HD, "clock_160")
 
 #ifdef EYE_CANDY
 #ifdef TESTING
-IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "../output/data/graphics/dialog_title_red.bmp"
+BITMAP_GRAPHIC(IDB_DIALOGTITLE, "dialog_title_red")
 #else
-IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "../output/data/graphics/dialog_title.bmp"
+BITMAP_GRAPHIC(IDB_DIALOGTITLE, "dialog_title")
 #endif
 #endif
-IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "bitmaps/dialog_button_left_32x32.bmp"
-IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "bitmaps/dialog_button_right_32x32.bmp"
-IDB_FINALGLIDE          BITMAP  DISCARDABLE     "../output/data/icons/mode_finalglide.bmp"
-IDB_FINALGLIDE_HD       BITMAP  DISCARDABLE     "../output/data/icons/mode_finalglide_160.bmp"
-IDB_TRAFFIC_SAFE        BITMAP  DISCARDABLE     "../output/data/icons/flarm_traffic.bmp"
-IDB_TRAFFIC_SAFE_HD     BITMAP  DISCARDABLE     "../output/data/icons/flarm_traffic_160.bmp"
-IDB_TRAFFIC_WARNING     BITMAP  DISCARDABLE     "../output/data/icons/flarm_warning.bmp"
-IDB_TRAFFIC_WARNING_HD  BITMAP  DISCARDABLE     "../output/data/icons/flarm_warning_160.bmp"
-IDB_TRAFFIC_ALARM       BITMAP  DISCARDABLE     "../output/data/icons/flarm_alarm.bmp"
-IDB_TRAFFIC_ALARM_HD    BITMAP  DISCARDABLE     "../output/data/icons/flarm_alarm_160.bmp"
-IDB_GPSSTATUS1          BITMAP  DISCARDABLE     "../output/data/icons/gps_acquiring.bmp"
-IDB_GPSSTATUS1_HD       BITMAP  DISCARDABLE     "../output/data/icons/gps_acquiring_160.bmp"
-IDB_GPSSTATUS2          BITMAP  DISCARDABLE     "../output/data/icons/gps_disconnected.bmp"
-IDB_GPSSTATUS2_HD       BITMAP  DISCARDABLE     "../output/data/icons/gps_disconnected_160.bmp"
-IDB_LANDABLE            BITMAP  DISCARDABLE     "../output/data/icons/winpilot_landable.bmp"
-IDB_LANDABLE_HD         BITMAP  DISCARDABLE     "../output/data/icons/winpilot_landable_160.bmp"
+BITMAP_BITMAP(IDB_DLGBUTTONLEFT32, "dialog_button_left_32x32")
+BITMAP_BITMAP(IDB_DLGBUTTONRIGHT32, "dialog_button_right_32x32")
+BITMAP_ICON(IDB_FINALGLIDE, "mode_finalglide")
+BITMAP_ICON(IDB_FINALGLIDE_HD, "mode_finalglide_160")
+BITMAP_ICON(IDB_TRAFFIC_SAFE, "flarm_traffic")
+BITMAP_ICON(IDB_TRAFFIC_SAFE_HD, "flarm_traffic_160")
+BITMAP_ICON(IDB_TRAFFIC_WARNING, "flarm_warning")
+BITMAP_ICON(IDB_TRAFFIC_WARNING_HD, "flarm_warning_160")
+BITMAP_ICON(IDB_TRAFFIC_ALARM, "flarm_alarm")
+BITMAP_ICON(IDB_TRAFFIC_ALARM_HD, "flarm_alarm_160")
+BITMAP_ICON(IDB_GPSSTATUS1, "gps_acquiring")
+BITMAP_ICON(IDB_GPSSTATUS1_HD, "gps_acquiring_160")
+BITMAP_ICON(IDB_GPSSTATUS2, "gps_disconnected")
+BITMAP_ICON(IDB_GPSSTATUS2_HD, "gps_disconnected_160")
+BITMAP_ICON(IDB_LANDABLE, "winpilot_landable")
+BITMAP_ICON(IDB_LANDABLE_HD, "winpilot_landable_160")
 #ifdef TESTING
-IDB_LAUNCHER1           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_red_224_1.bmp"
-IDB_LAUNCHER2           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_red_224_2.bmp"
+BITMAP_GRAPHIC(IDB_LAUNCHER1, "launcher_red_224_1")
+BITMAP_GRAPHIC(IDB_LAUNCHER2, "launcher_red_224_2")
 #else
-IDB_LAUNCHER1           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_224_1.bmp"
-IDB_LAUNCHER2           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_224_2.bmp"
+BITMAP_GRAPHIC(IDB_LAUNCHER1, "launcher_224_1")
+BITMAP_GRAPHIC(IDB_LAUNCHER2, "launcher_224_2")
 #endif
-IDB_LOGGER              BITMAP  DISCARDABLE     "../output/data/icons/icon_logging.bmp"
-IDB_LOGGER_HD           BITMAP  DISCARDABLE     "../output/data/icons/icon_logging_160.bmp"
-IDB_LOGGEROFF           BITMAP  DISCARDABLE     "../output/data/icons/icon_logging_off.bmp"
-IDB_LOGGEROFF_HD        BITMAP  DISCARDABLE     "../output/data/icons/icon_logging_off_160.bmp"
-IDB_MAPSCALE_LEFT       BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_left.bmp"
-IDB_MAPSCALE_RIGHT      BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_right.bmp"
-IDB_MAPSCALE_LEFT_HD    BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_left_160.bmp"
-IDB_MAPSCALE_RIGHT_HD   BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_right_160.bmp"
-IDB_MARK                BITMAP  DISCARDABLE     "../output/data/icons/map_flag.bmp"
-IDB_MARK_HD             BITMAP  DISCARDABLE     "../output/data/icons/map_flag_160.bmp"
-IDB_OBSTACLE            BITMAP  DISCARDABLE     "../output/data/icons/map_obstacle.bmp"
-IDB_OBSTACLE_HD         BITMAP  DISCARDABLE     "../output/data/icons/map_obstacle_160.bmp"
-IDB_OUTFIELD_REACHABLE  BITMAP  DISCARDABLE     "../output/data/icons/alt_reachable_field.bmp"
-IDB_OUTFIELD_REACHABLE_HD BITMAP DISCARDABLE    "../output/data/icons/alt_reachable_field_160.bmp"
-IDB_OUTFIELD_MARGINAL BITMAP  DISCARDABLE     "../output/data/icons/alt_marginal_field.bmp"
-IDB_OUTFIELD_MARGINAL_HD BITMAP DISCARDABLE   "../output/data/icons/alt_marginal_field_160.bmp"
-IDB_OUTFIELD_UNREACHABLE BITMAP DISCARDABLE     "../output/data/icons/alt_landable_field.bmp"
-IDB_OUTFIELD_UNREACHABLE_HD BITMAP DISCARDABLE  "../output/data/icons/alt_landable_field_160.bmp"
-IDB_OUTFIELD_MARGINAL2 BITMAP  DISCARDABLE     "../output/data/icons/alt2_marginal_field.bmp"
-IDB_OUTFIELD_MARGINAL2_HD BITMAP DISCARDABLE   "../output/data/icons/alt2_marginal_field_160.bmp"
-IDB_OUTFIELD_UNREACHABLE2 BITMAP DISCARDABLE    "../output/data/icons/alt2_landable_field.bmp"
-IDB_OUTFIELD_UNREACHABLE2_HD BITMAP DISCARDABLE "../output/data/icons/alt2_landable_field_160.bmp"
-IDB_MOUNTAIN_PASS       BITMAP  DISCARDABLE     "../output/data/icons/map_pass.bmp"
-IDB_MOUNTAIN_PASS_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_pass_160.bmp"
+BITMAP_ICON(IDB_LOGGER, "icon_logging")
+BITMAP_ICON(IDB_LOGGER_HD, "icon_logging_160")
+BITMAP_ICON(IDB_LOGGEROFF, "icon_logging_off")
+BITMAP_ICON(IDB_LOGGEROFF_HD, "icon_logging_off_160")
+BITMAP_ICON(IDB_MAPSCALE_LEFT, "scalearrow_left")
+BITMAP_ICON(IDB_MAPSCALE_RIGHT, "scalearrow_right")
+BITMAP_ICON(IDB_MAPSCALE_LEFT_HD, "scalearrow_left_160")
+BITMAP_ICON(IDB_MAPSCALE_RIGHT_HD, "scalearrow_right_160")
+BITMAP_ICON(IDB_MARK, "map_flag")
+BITMAP_ICON(IDB_MARK_HD, "map_flag_160")
+BITMAP_ICON(IDB_OBSTACLE, "map_obstacle")
+BITMAP_ICON(IDB_OBSTACLE_HD, "map_obstacle_160")
+BITMAP_ICON(IDB_OUTFIELD_REACHABLE, "alt_reachable_field")
+BITMAP_ICON(IDB_OUTFIELD_REACHABLE_HD, "alt_reachable_field_160")
+BITMAP_ICON(IDB_OUTFIELD_MARGINAL, "alt_marginal_field")
+BITMAP_ICON(IDB_OUTFIELD_MARGINAL_HD, "alt_marginal_field_160")
+BITMAP_ICON(IDB_OUTFIELD_UNREACHABLE, "alt_landable_field")
+BITMAP_ICON(IDB_OUTFIELD_UNREACHABLE_HD, "alt_landable_field_160")
+BITMAP_ICON(IDB_OUTFIELD_MARGINAL2, "alt2_marginal_field")
+BITMAP_ICON(IDB_OUTFIELD_MARGINAL2_HD, "alt2_marginal_field_160")
+BITMAP_ICON(IDB_OUTFIELD_UNREACHABLE2, "alt2_landable_field")
+BITMAP_ICON(IDB_OUTFIELD_UNREACHABLE2_HD, "alt2_landable_field_160")
+BITMAP_ICON(IDB_MOUNTAIN_PASS, "map_pass")
+BITMAP_ICON(IDB_MOUNTAIN_PASS_HD, "map_pass_160")
 #ifdef TESTING
-IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "../output/data/graphics/progress_border_red.bmp"
+BITMAP_GRAPHIC(IDB_PROGRESSBORDER, "progress_border_red")
 #else
-IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "../output/data/graphics/progress_border.bmp"
+BITMAP_GRAPHIC(IDB_PROGRESSBORDER, "progress_border")
 #endif
-IDB_REACHABLE           BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable.bmp"
-IDB_REACHABLE_HD        BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable_160.bmp"
-IDB_MARGINAL            BITMAP  DISCARDABLE     "../output/data/icons/winpilot_marginal.bmp"
-IDB_MARGINAL_HD         BITMAP  DISCARDABLE     "../output/data/icons/winpilot_marginal_160.bmp"
-IDB_SMALL               BITMAP  DISCARDABLE     "../output/data/icons/map_small.bmp"
-IDB_SMALL_HD            BITMAP  DISCARDABLE     "../output/data/icons/map_small_160.bmp"
+BITMAP_ICON(IDB_REACHABLE, "winpilot_reachable")
+BITMAP_ICON(IDB_REACHABLE_HD, "winpilot_reachable_160")
+BITMAP_ICON(IDB_MARGINAL, "winpilot_marginal")
+BITMAP_ICON(IDB_MARGINAL_HD, "winpilot_marginal_160")
+BITMAP_ICON(IDB_SMALL, "map_small")
+BITMAP_ICON(IDB_SMALL_HD, "map_small_160")
 #ifdef TESTING
-IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_red_160.bmp"
-IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_red_80.bmp"
+BITMAP_GRAPHIC(IDB_SWIFT_HD, "xcsoarswiftsplash_red_160")
+BITMAP_GRAPHIC(IDB_SWIFT, "xcsoarswiftsplash_red_80")
 #else
 #ifdef NO_HORIZON
-IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_no_horizon_160.bmp"
-IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_no_horizon_80.bmp"
+BITMAP_GRAPHIC(IDB_SWIFT_HD, "xcsoarswiftsplash_no_horizon_160")
+BITMAP_GRAPHIC(IDB_SWIFT, "xcsoarswiftsplash_no_horizon_80")
 #else
-IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_160.bmp"
-IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_80.bmp"
+BITMAP_GRAPHIC(IDB_SWIFT_HD, "xcsoarswiftsplash_160")
+BITMAP_GRAPHIC(IDB_SWIFT, "xcsoarswiftsplash_80")
 #endif
 #endif
-IDB_TARGET              BITMAP  DISCARDABLE     "../output/data/icons/map_target.bmp"
-IDB_TARGET_HD           BITMAP  DISCARDABLE     "../output/data/icons/map_target_160.bmp"
-IDB_TEAMMATE_POS        BITMAP  DISCARDABLE     "../output/data/icons/map_teammate.bmp"
-IDB_TEAMMATE_POS_HD     BITMAP  DISCARDABLE     "../output/data/icons/map_teammate_160.bmp"
-IDB_TERRAINWARNING      BITMAP  DISCARDABLE     "../output/data/icons/map_terrainw.bmp"
-IDB_TERRAINWARNING_HD   BITMAP  DISCARDABLE     "../output/data/icons/map_terrainw_160.bmp"
-IDB_THERMALSOURCE       BITMAP  DISCARDABLE     "../output/data/icons/map_thermal_source.bmp"
-IDB_THERMALSOURCE_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_thermal_source_160.bmp"
-IDB_TOWN                BITMAP  DISCARDABLE     "../output/data/icons/map_town.bmp"
-IDB_TOWN_HD             BITMAP  DISCARDABLE     "../output/data/icons/map_town_160.bmp"
-IDB_TURNPOINT           BITMAP  DISCARDABLE     "../output/data/icons/map_turnpoint.bmp"
-IDB_TURNPOINT_HD        BITMAP  DISCARDABLE     "../output/data/icons/map_turnpoint_160.bmp"
-IDB_TASKTURNPOINT       BITMAP  DISCARDABLE     "../output/data/icons/map_taskturnpoint.bmp"
-IDB_TASKTURNPOINT_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_taskturnpoint_160.bmp"
-IDB_MOUNTAIN_TOP        BITMAP  DISCARDABLE     "../output/data/icons/map_mountain_top.bmp"
-IDB_MOUNTAIN_TOP_HD     BITMAP  DISCARDABLE     "../output/data/icons/map_mountain_top_160.bmp"
-IDB_BRIDGE              BITMAP  DISCARDABLE     "../output/data/icons/map_bridge.bmp"
-IDB_BRIDGE_HD           BITMAP  DISCARDABLE     "../output/data/icons/map_bridge_160.bmp"
-IDB_TUNNEL              BITMAP  DISCARDABLE     "../output/data/icons/map_tunnel.bmp"
-IDB_TUNNEL_HD           BITMAP  DISCARDABLE     "../output/data/icons/map_tunnel_160.bmp"
-IDB_TOWER               BITMAP  DISCARDABLE     "../output/data/icons/map_tower.bmp"
-IDB_TOWER_HD            BITMAP  DISCARDABLE     "../output/data/icons/map_tower_160.bmp"
-IDB_POWER_PLANT         BITMAP  DISCARDABLE     "../output/data/icons/map_power_plant.bmp"
-IDB_POWER_PLANT_HD      BITMAP  DISCARDABLE     "../output/data/icons/map_power_plant_160.bmp"
-IDB_UNIT_KM             BITMAP  DISCARDABLE     "bitmaps/unit_km.bmp"
-IDB_UNIT_SM             BITMAP  DISCARDABLE     "bitmaps/unit_sm.bmp"
-IDB_UNIT_NM             BITMAP  DISCARDABLE     "bitmaps/unit_nm.bmp"
-IDB_UNIT_M              BITMAP  DISCARDABLE     "bitmaps/unit_m.bmp"
-IDB_UNIT_FT             BITMAP  DISCARDABLE     "bitmaps/unit_ft.bmp"
-IDB_UNIT_MS             BITMAP  DISCARDABLE     "bitmaps/unit_ms.bmp"
-IDB_UNIT_KT             BITMAP  DISCARDABLE     "bitmaps/unit_kt.bmp"
-IDB_UNIT_FL             BITMAP  DISCARDABLE     "bitmaps/unit_fl.bmp"
-IDB_UNIT_DegK           BITMAP  DISCARDABLE     "bitmaps/unit_deg_kelvin.bmp"
-IDB_UNIT_DegC           BITMAP  DISCARDABLE     "bitmaps/unit_deg_celsius.bmp"
-IDB_UNIT_DegF           BITMAP  DISCARDABLE     "bitmaps/unit_deg_fahrenheit.bmp"
-IDB_UNIT_FPM            BITMAP  DISCARDABLE     "bitmaps/unit_fpm.bmp"
-IDB_UNIT_KMH            BITMAP  DISCARDABLE     "bitmaps/unit_kmh.bmp"
-IDB_UNIT_MPH            BITMAP  DISCARDABLE     "bitmaps/unit_mph.bmp"
-IDB_VARIOSCALEA         BITMAP  DISCARDABLE     "bitmaps/vario_scale_b.bmp"
-IDB_VARIOSCALEC         BITMAP  DISCARDABLE     "bitmaps/vario_scale_c.bmp"
+BITMAP_ICON(IDB_TARGET, "map_target")
+BITMAP_ICON(IDB_TARGET_HD, "map_target_160")
+BITMAP_ICON(IDB_TEAMMATE_POS, "map_teammate")
+BITMAP_ICON(IDB_TEAMMATE_POS_HD, "map_teammate_160")
+BITMAP_ICON(IDB_TERRAINWARNING, "map_terrainw")
+BITMAP_ICON(IDB_TERRAINWARNING_HD, "map_terrainw_160")
+BITMAP_ICON(IDB_THERMALSOURCE, "map_thermal_source")
+BITMAP_ICON(IDB_THERMALSOURCE_HD, "map_thermal_source_160")
+BITMAP_ICON(IDB_TOWN, "map_town")
+BITMAP_ICON(IDB_TOWN_HD, "map_town_160")
+BITMAP_ICON(IDB_TURNPOINT, "map_turnpoint")
+BITMAP_ICON(IDB_TURNPOINT_HD, "map_turnpoint_160")
+BITMAP_ICON(IDB_TASKTURNPOINT, "map_taskturnpoint")
+BITMAP_ICON(IDB_TASKTURNPOINT_HD, "map_taskturnpoint_160")
+BITMAP_ICON(IDB_MOUNTAIN_TOP, "map_mountain_top")
+BITMAP_ICON(IDB_MOUNTAIN_TOP_HD, "map_mountain_top_160")
+BITMAP_ICON(IDB_BRIDGE, "map_bridge")
+BITMAP_ICON(IDB_BRIDGE_HD, "map_bridge_160")
+BITMAP_ICON(IDB_TUNNEL, "map_tunnel")
+BITMAP_ICON(IDB_TUNNEL_HD, "map_tunnel_160")
+BITMAP_ICON(IDB_TOWER, "map_tower")
+BITMAP_ICON(IDB_TOWER_HD, "map_tower_160")
+BITMAP_ICON(IDB_POWER_PLANT, "map_power_plant")
+BITMAP_ICON(IDB_POWER_PLANT_HD, "map_power_plant_160")
+BITMAP_BITMAP(IDB_UNIT_KM, "unit_km")
+BITMAP_BITMAP(IDB_UNIT_SM, "unit_sm")
+BITMAP_BITMAP(IDB_UNIT_NM, "unit_nm")
+BITMAP_BITMAP(IDB_UNIT_M, "unit_m")
+BITMAP_BITMAP(IDB_UNIT_FT, "unit_ft")
+BITMAP_BITMAP(IDB_UNIT_MS, "unit_ms")
+BITMAP_BITMAP(IDB_UNIT_KT, "unit_kt")
+BITMAP_BITMAP(IDB_UNIT_FL, "unit_fl")
+BITMAP_BITMAP(IDB_UNIT_DegK, "unit_deg_kelvin")
+BITMAP_BITMAP(IDB_UNIT_DegC, "unit_deg_celsius")
+BITMAP_BITMAP(IDB_UNIT_DegF, "unit_deg_fahrenheit")
+BITMAP_BITMAP(IDB_UNIT_FPM, "unit_fpm")
+BITMAP_BITMAP(IDB_UNIT_KMH, "unit_kmh")
+BITMAP_BITMAP(IDB_UNIT_MPH, "unit_mph")
+BITMAP_BITMAP(IDB_VARIOSCALEA, "vario_scale_b")
+BITMAP_BITMAP(IDB_VARIOSCALEC, "vario_scale_c")
 #ifdef TESTING
-IDB_TITLE             BITMAP  DISCARDABLE     "../output/data/graphics/title_red_110.bmp"
-IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title_red_320.bmp"
+BITMAP_GRAPHIC(IDB_TITLE, "title_red_110")
+BITMAP_GRAPHIC(IDB_TITLE_HD, "title_red_320")
 #else
-IDB_TITLE             BITMAP  DISCARDABLE     "../output/data/graphics/title_110.bmp"
-IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title_320.bmp"
+BITMAP_GRAPHIC(IDB_TITLE, "title_110")
+BITMAP_GRAPHIC(IDB_TITLE_HD, "title_320")
 #endif
-IDB_WEATHER_STATION     BITMAP  DISCARDABLE     "../output/data/icons/map_weather_station.bmp"
-IDB_WEATHER_STATION_HD  BITMAP  DISCARDABLE     "../output/data/icons/map_weather_station_160.bmp"
+BITMAP_ICON(IDB_WEATHER_STATION, "map_weather_station")
+BITMAP_ICON(IDB_WEATHER_STATION_HD, "map_weather_station_160")
 // --- Audio ---
 
-IDR_FAIL                WAVE    DISCARDABLE     "sound/fail.wav"
-IDR_INSERT              WAVE    DISCARDABLE     "sound/insert.wav"
-IDR_REMOVE              WAVE    DISCARDABLE     "sound/remove.wav"
+SOUND(IDR_FAIL, "fail")
+SOUND(IDR_INSERT, "insert")
+SOUND(IDR_REMOVE, "remove")
 
 #ifndef GNAV
-IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "sound/beep_bweep.wav"
-IDR_WAV_CLEAR           WAVE    DISCARDABLE     "sound/beep_clear.wav"
-IDR_WAV_DRIP            WAVE    DISCARDABLE     "sound/beep_drip.wav"
+SOUND(IDR_WAV_BEEPBWEEP, "beep_bweep")
+SOUND(IDR_WAV_CLEAR, "beep_clear")
+SOUND(IDR_WAV_DRIP, "beep_drip")
 #endif
-
-#endif // !ANDROID
 
 // --- XML Dialogs ---
-IDR_XML_AIRSPACE XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspace.xml.gz"
-IDR_XML_AIRSPACE_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspace_L.xml.gz"
-IDR_XML_AIRSPACESELECT XMLDIALOG DISCARDABLE "../output/data/dialogs/AirspaceList.xml.gz"
-IDR_XML_AIRSPACESELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/AirspaceList_L.xml.gz"
-IDR_XML_AIRSPACEWARNINGS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAirspaceWarnings.xml.gz"
-IDR_XML_ANALYSIS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAnalysis.xml.gz"
-IDR_XML_ANALYSIS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgAnalysis_L.xml.gz"
-IDR_XML_BRIGHTNESS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgBrightness.xml.gz"
-IDR_XML_CHECKLIST XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgChecklist.xml.gz"
-IDR_XML_CHECKLIST_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgChecklist_L.xml.gz"
-IDR_XML_COMBOPICKER XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgComboPicker.xml.gz"
-IDR_XML_COMBOPICKER_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgComboPicker_L.xml.gz"
-IDR_XML_CONFIGURATION XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfiguration.xml.gz"
-IDR_XML_CONFIGURATION_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfiguration_L.xml.gz"
-IDR_XML_CONFIG_FONTS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfigFonts.xml.gz"
-IDR_XML_CONFIG_FONTS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfigFonts_L.xml.gz"
-IDR_XML_CONFIG_PAGE XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfigPage.xml.gz"
-IDR_XML_CONFIG_PAGE_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfigPage_L.xml.gz"
-IDR_XML_CONFIG_WAYPOINTS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfigWaypoints.xml.gz"
-IDR_XML_CONFIG_WAYPOINTS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgConfigWaypoints_L.xml.gz"
-IDR_XML_CREDITS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgCredits.xml.gz"
-IDR_XML_CREDITS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgCredits_L.xml.gz"
-IDR_XML_FLARMTRAFFICDETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFlarmTrafficDetails.xml.gz"
-IDR_XML_FLARMTRAFFICDETAILS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFlarmTrafficDetails_L.xml.gz"
-IDR_XML_FONTEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgFontEdit.xml.gz"
-IDR_XML_HELP XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgHelp.xml.gz"
-IDR_XML_HELP_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgHelp_L.xml.gz"
-IDR_XML_LOGGERREPLAY XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgLoggerReplay.xml.gz"
-IDR_XML_NOAA_DETAILS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgNOAADetails_L.xml.gz"
-IDR_XML_NOAA_DETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgNOAADetails.xml.gz"
-IDR_XML_NOAA_LIST_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgNOAAList_L.xml.gz"
-IDR_XML_NOAA_LIST XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgNOAAList.xml.gz"
-IDR_XML_PLANES XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgPlanes.xml.gz"
-IDR_XML_PLANES_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgPlanes_L.xml.gz"
-IDR_XML_PLANE_DETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgPlaneDetails.xml.gz"
-IDR_XML_PLANE_DETAILS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgPlaneDetails_L.xml.gz"
-IDR_XML_PLANE_POLAR XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgPlanePolar.xml.gz"
-IDR_XML_PLANE_POLAR_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgPlanePolar_L.xml.gz"
-IDR_XML_SIMULATORPROMPT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgSimulatorPrompt_L.xml.gz"
-IDR_XML_SIMULATORPROMPT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgSimulatorPrompt.xml.gz"
-IDR_XML_STARTUP XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgStartup.xml.gz"
-IDR_XML_STARTUP_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgStartup_L.xml.gz"
-IDR_XML_STATUS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgStatus.xml.gz"
-IDR_XML_STATUS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgStatus_L.xml.gz"
-IDR_XML_SWITCHES XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgSwitches.xml.gz"
-IDR_XML_TARGET XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTarget.xml.gz"
-IDR_XML_TARGET_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTarget_L.xml.gz"
-IDR_XML_TEAMCODE XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTeamCode.xml.gz"
-IDR_XML_TEAMCODE_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTeamCode_L.xml.gz"
-IDR_XML_TEXTENTRY XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTextEntry.xml.gz"
-IDR_XML_TEXTENTRY_KEYBOARD XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTextEntry_Keyboard.xml.gz"
-IDR_XML_TEXTENTRY_KEYBOARD_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTextEntry_Keyboard_L.xml.gz"
-IDR_XML_VARIO XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgVario.xml.gz"
-IDR_XML_VARIO_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgVario_L.xml.gz"
-IDR_XML_VEGADEMO XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgVegaDemo.xml.gz"
-IDR_XML_VOICE XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgVoice.xml.gz"
-IDR_XML_WAYPOINTDETAILS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointDetails.xml.gz"
-IDR_XML_WAYPOINTDETAILS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointDetails_L.xml.gz"
-IDR_XML_WAYPOINTEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointEdit.xml.gz"
-IDR_XML_WAYPOINTEDIT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWaypointEdit_L.xml.gz"
-IDR_XML_WAYPOINTSELECT XMLDIALOG DISCARDABLE "../output/data/dialogs/WaypointList.xml.gz"
-IDR_XML_WAYPOINTSELECT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/WaypointList_L.xml.gz"
-IDR_XML_WEATHER XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgWeather.xml.gz"
+XMLDIALOG(IDR_XML_AIRSPACE, "dlgAirspace")
+XMLDIALOG(IDR_XML_AIRSPACE_L, "dlgAirspace_L")
+XMLDIALOG(IDR_XML_AIRSPACESELECT, "AirspaceList")
+XMLDIALOG(IDR_XML_AIRSPACESELECT_L, "AirspaceList_L")
+XMLDIALOG(IDR_XML_AIRSPACEWARNINGS, "dlgAirspaceWarnings")
+XMLDIALOG(IDR_XML_ANALYSIS, "dlgAnalysis")
+XMLDIALOG(IDR_XML_ANALYSIS_L, "dlgAnalysis_L")
+XMLDIALOG(IDR_XML_BRIGHTNESS, "dlgBrightness")
+XMLDIALOG(IDR_XML_CHECKLIST, "dlgChecklist")
+XMLDIALOG(IDR_XML_CHECKLIST_L, "dlgChecklist_L")
+XMLDIALOG(IDR_XML_COMBOPICKER, "dlgComboPicker")
+XMLDIALOG(IDR_XML_COMBOPICKER_L, "dlgComboPicker_L")
+XMLDIALOG(IDR_XML_CONFIGURATION, "dlgConfiguration")
+XMLDIALOG(IDR_XML_CONFIGURATION_L, "dlgConfiguration_L")
+XMLDIALOG(IDR_XML_CONFIG_FONTS, "dlgConfigFonts")
+XMLDIALOG(IDR_XML_CONFIG_FONTS_L, "dlgConfigFonts_L")
+XMLDIALOG(IDR_XML_CONFIG_PAGE, "dlgConfigPage")
+XMLDIALOG(IDR_XML_CONFIG_PAGE_L, "dlgConfigPage_L")
+XMLDIALOG(IDR_XML_CONFIG_WAYPOINTS, "dlgConfigWaypoints")
+XMLDIALOG(IDR_XML_CONFIG_WAYPOINTS_L, "dlgConfigWaypoints_L")
+XMLDIALOG(IDR_XML_CREDITS, "dlgCredits")
+XMLDIALOG(IDR_XML_CREDITS_L, "dlgCredits_L")
+XMLDIALOG(IDR_XML_FLARMTRAFFICDETAILS, "dlgFlarmTrafficDetails")
+XMLDIALOG(IDR_XML_FLARMTRAFFICDETAILS_L, "dlgFlarmTrafficDetails_L")
+XMLDIALOG(IDR_XML_FONTEDIT, "dlgFontEdit")
+XMLDIALOG(IDR_XML_HELP, "dlgHelp")
+XMLDIALOG(IDR_XML_HELP_L, "dlgHelp_L")
+XMLDIALOG(IDR_XML_LOGGERREPLAY, "dlgLoggerReplay")
+XMLDIALOG(IDR_XML_NOAA_DETAILS_L, "dlgNOAADetails_L")
+XMLDIALOG(IDR_XML_NOAA_DETAILS, "dlgNOAADetails")
+XMLDIALOG(IDR_XML_NOAA_LIST_L, "dlgNOAAList_L")
+XMLDIALOG(IDR_XML_NOAA_LIST, "dlgNOAAList")
+XMLDIALOG(IDR_XML_PLANES, "dlgPlanes")
+XMLDIALOG(IDR_XML_PLANES_L, "dlgPlanes_L")
+XMLDIALOG(IDR_XML_PLANE_DETAILS, "dlgPlaneDetails")
+XMLDIALOG(IDR_XML_PLANE_DETAILS_L, "dlgPlaneDetails_L")
+XMLDIALOG(IDR_XML_PLANE_POLAR, "dlgPlanePolar")
+XMLDIALOG(IDR_XML_PLANE_POLAR_L, "dlgPlanePolar_L")
+XMLDIALOG(IDR_XML_SIMULATORPROMPT_L, "dlgSimulatorPrompt_L")
+XMLDIALOG(IDR_XML_SIMULATORPROMPT, "dlgSimulatorPrompt")
+XMLDIALOG(IDR_XML_STARTUP, "dlgStartup")
+XMLDIALOG(IDR_XML_STARTUP_L, "dlgStartup_L")
+XMLDIALOG(IDR_XML_STATUS, "dlgStatus")
+XMLDIALOG(IDR_XML_STATUS_L, "dlgStatus_L")
+XMLDIALOG(IDR_XML_SWITCHES, "dlgSwitches")
+XMLDIALOG(IDR_XML_TARGET, "dlgTarget")
+XMLDIALOG(IDR_XML_TARGET_L, "dlgTarget_L")
+XMLDIALOG(IDR_XML_TEAMCODE, "dlgTeamCode")
+XMLDIALOG(IDR_XML_TEAMCODE_L, "dlgTeamCode_L")
+XMLDIALOG(IDR_XML_TEXTENTRY, "dlgTextEntry")
+XMLDIALOG(IDR_XML_TEXTENTRY_KEYBOARD, "dlgTextEntry_Keyboard")
+XMLDIALOG(IDR_XML_TEXTENTRY_KEYBOARD_L, "dlgTextEntry_Keyboard_L")
+XMLDIALOG(IDR_XML_VARIO, "dlgVario")
+XMLDIALOG(IDR_XML_VARIO_L, "dlgVario_L")
+XMLDIALOG(IDR_XML_VEGADEMO, "dlgVegaDemo")
+XMLDIALOG(IDR_XML_VOICE, "dlgVoice")
+XMLDIALOG(IDR_XML_WAYPOINTDETAILS, "dlgWaypointDetails")
+XMLDIALOG(IDR_XML_WAYPOINTDETAILS_L, "dlgWaypointDetails_L")
+XMLDIALOG(IDR_XML_WAYPOINTEDIT, "dlgWaypointEdit")
+XMLDIALOG(IDR_XML_WAYPOINTEDIT_L, "dlgWaypointEdit_L")
+XMLDIALOG(IDR_XML_WAYPOINTSELECT, "WaypointList")
+XMLDIALOG(IDR_XML_WAYPOINTSELECT_L, "WaypointList_L")
+XMLDIALOG(IDR_XML_WEATHER, "dlgWeather")
 
 // configuration menu
-IDR_XML_POLARCONFIGPANEL XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel.xml.gz"
-IDR_XML_POLARCONFIGPANEL_L XMLDIALOG DISCARDABLE "../output/data/dialogs/Configuration/PolarConfigPanel_L.xml.gz"
+XMLDIALOG(IDR_XML_POLARCONFIGPANEL, "Configuration/PolarConfigPanel")
+XMLDIALOG(IDR_XML_POLARCONFIGPANEL_L, "Configuration/PolarConfigPanel_L")
 
 // infobox access
-IDR_XML_INFOBOXMACCREADYEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadyEdit.xml.gz"
-IDR_XML_INFOBOXMACCREADYSETUP XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml.gz"
-IDR_XML_INFOBOXALTITUDEINFO XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml.gz"
-IDR_XML_INFOBOXALTITUDESIMULATOR XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxAltitudeSimulator.xml.gz"
-IDR_XML_INFOBOXALTITUDESETUP XMLDIALOG DISCARDABLE "../output/data/dialogs/Infobox/pnlInfoBoxAltitudeSetup.xml.gz"
+XMLDIALOG(IDR_XML_INFOBOXMACCREADYEDIT, "Infobox/pnlInfoBoxMacCreadyEdit")
+XMLDIALOG(IDR_XML_INFOBOXMACCREADYSETUP, "Infobox/pnlInfoBoxMacCreadySetup")
+XMLDIALOG(IDR_XML_INFOBOXALTITUDEINFO, "Infobox/pnlInfoBoxAltitudeInfo")
+XMLDIALOG(IDR_XML_INFOBOXALTITUDESIMULATOR, "Infobox/pnlInfoBoxAltitudeSimulator")
+XMLDIALOG(IDR_XML_INFOBOXALTITUDESETUP, "Infobox/pnlInfoBoxAltitudeSetup")
 
 // new task editor
-IDR_XML_TASKEDIT XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskEdit.xml.gz"
-IDR_XML_TASKACTIONS XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskActions.xml.gz"
-IDR_XML_TASKLIST XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskList.xml.gz"
-IDR_XML_TASKMANAGER XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskManager.xml.gz"
-IDR_XML_TASKMANAGER_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskManager_L.xml.gz"
-IDR_XML_TASKMANAGERCLOSE XMLDIALOG DISCARDABLE "../output/data/dialogs/pnlTaskManagerClose.xml.gz"
-IDR_XML_TASKPOINT XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskPoint.xml.gz"
-IDR_XML_TASKPOINT_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskPoint_L.xml.gz"
-IDR_XML_TASKPOINTTYPE XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskPointType.xml.gz"
-IDR_XML_TASKPOINTTYPE_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskPointType_L.xml.gz"
-IDR_XML_TASKOPTIONALSTARTS XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskOptionalStarts.xml.gz"
-IDR_XML_TASKOPTIONALSTARTS_L XMLDIALOG DISCARDABLE "../output/data/dialogs/dlgTaskOptionalStarts_L.xml.gz"
+XMLDIALOG(IDR_XML_TASKEDIT, "pnlTaskEdit")
+XMLDIALOG(IDR_XML_TASKACTIONS, "pnlTaskActions")
+XMLDIALOG(IDR_XML_TASKLIST, "pnlTaskList")
+XMLDIALOG(IDR_XML_TASKMANAGER, "dlgTaskManager")
+XMLDIALOG(IDR_XML_TASKMANAGER_L, "dlgTaskManager_L")
+XMLDIALOG(IDR_XML_TASKMANAGERCLOSE, "pnlTaskManagerClose")
+XMLDIALOG(IDR_XML_TASKPOINT, "dlgTaskPoint")
+XMLDIALOG(IDR_XML_TASKPOINT_L, "dlgTaskPoint_L")
+XMLDIALOG(IDR_XML_TASKPOINTTYPE, "dlgTaskPointType")
+XMLDIALOG(IDR_XML_TASKPOINTTYPE_L, "dlgTaskPointType_L")
+XMLDIALOG(IDR_XML_TASKOPTIONALSTARTS, "dlgTaskOptionalStarts")
+XMLDIALOG(IDR_XML_TASKOPTIONALSTARTS_L, "dlgTaskOptionalStarts_L")
 
 // translations
-#if defined(WIN32) || defined(ANDROID)
-cs.mo MO DISCARDABLE "../output/po/cs.mo"
-da.mo MO DISCARDABLE "../output/po/da.mo"
-de.mo MO DISCARDABLE "../output/po/de.mo"
-el.mo MO DISCARDABLE "../output/po/el.mo"
-es.mo MO DISCARDABLE "../output/po/es.mo"
-fr.mo MO DISCARDABLE "../output/po/fr.mo"
-hr.mo MO DISCARDABLE "../output/po/hr.mo"
-hu.mo MO DISCARDABLE "../output/po/hu.mo"
-it.mo MO DISCARDABLE "../output/po/it.mo"
-ja.mo MO DISCARDABLE "../output/po/ja.mo"
-ko.mo MO DISCARDABLE "../output/po/ko.mo"
-nb.mo MO DISCARDABLE "../output/po/nb.mo"
-nl.mo MO DISCARDABLE "../output/po/nl.mo"
-pl.mo MO DISCARDABLE "../output/po/pl.mo"
-pt.mo MO DISCARDABLE "../output/po/pt.mo"
-pt_BR.mo MO DISCARDABLE "../output/po/pt_BR.mo"
-ro.mo MO DISCARDABLE "../output/po/ro.mo"
-ru.mo MO DISCARDABLE "../output/po/ru.mo"
-sk.mo MO DISCARDABLE "../output/po/sk.mo"
-sr.mo MO DISCARDABLE "../output/po/sr.mo"
-sv.mo MO DISCARDABLE "../output/po/sv.mo"
-tr.mo MO DISCARDABLE "../output/po/tr.mo"
-uk.mo MO DISCARDABLE "../output/po/uk.mo"
-#endif
+MO(cs)
+MO(da)
+MO(de)
+MO(el)
+MO(es)
+MO(fr)
+MO(hr)
+MO(hu)
+MO(it)
+MO(ja)
+MO(ko)
+MO(nb)
+MO(nl)
+MO(pl)
+MO(pt)
+MO(pt_BR)
+MO(ro)
+MO(ru)
+MO(sk)
+MO(sr)
+MO(sv)
+MO(tr)
+MO(uk)
 
-LICENSE TEXT DISCARDABLE "../output/data/COPYING.gz"
-AUTHORS TEXT DISCARDABLE "../output/data/AUTHORS.gz"
+TEXT(LICENSE, "COPYING")
+TEXT(AUTHORS, "AUTHORS")
 
 // --- EGM96 Raster Data --- 
 
