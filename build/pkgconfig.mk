@@ -4,6 +4,10 @@ ifeq ($(TARGET_IS_DARWIN),y)
   PKG_CONFIG += --static
 endif
 
+ifeq ($(HOST_IS_WIN32)$(HAVE_WIN32)$(HAVE_CE)$(call string_equals,WINE,$(TARGET)),nynn)
+  PKG_CONFIG := PKG_CONFIG_LIBDIR=/usr/local/i686-w64-mingw32/lib/pkgconfig $(PKG_CONFIG)
+endif
+
 # Generates a pkg-config lookup for a library.
 #
 # Example: $(eval $(call CURL,libcurl >= 2.21))

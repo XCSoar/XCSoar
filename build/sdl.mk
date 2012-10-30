@@ -11,7 +11,6 @@ ENABLE_SDL = y
 endif
 
 ifeq ($(ENABLE_SDL),y)
-ifeq ($(TARGET),UNIX)
 $(eval $(call pkg-config-library,SDL,sdl SDL_image))
 
 ifeq ($(FREETYPE),n)
@@ -20,11 +19,7 @@ $(eval $(call pkg-config-library,SDL_TTF,SDL_ttf))
 endif
 SDL_LDLIBS += $(SDL_TTF_LDLIBS)
 SDL_CPPFLAGS += $(SDL_TTF_CPPFLAGS)
-endif
 
-else
-SDL_CPPFLAGS := -I/usr/local/i686-w64-mingw32/include/SDL
-SDL_LDLIBS := -L/usr/local/i686-w64-mingw32/lib -lSDL -lSDL_image
 endif
 
 SDL_CPPFLAGS += -DENABLE_SDL
