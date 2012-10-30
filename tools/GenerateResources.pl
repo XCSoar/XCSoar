@@ -6,7 +6,7 @@ sub generate_blob($$) {
     my ($var, $path) = @_;
     open FILE, "<$path" or die $!;
 
-    print "static const uint8_t $var\[\] = {\n";
+    print "static constexpr uint8_t $var\[\] = {\n";
 
     my $data;
     while ((my $nbytes = read(FILE, $data, 64)) > 0) {
@@ -40,7 +40,7 @@ while (<>) {
 print "#include <stddef.h>\n";
 print "#include <tchar.h>\n";
 
-print "static const struct {\n";
+print "static constexpr struct {\n";
 print "  unsigned id;\n";
 print "  const unsigned char *data;\n";
 print "  size_t size;\n";
@@ -51,7 +51,7 @@ foreach my $i (@numeric) {
 print "  { 0, NULL, 0 }\n";
 print "};\n";
 
-print "static const struct {\n";
+print "static constexpr struct {\n";
 print "  const TCHAR *name;\n";
 print "  const void *data;\n";
 print "  size_t size;\n";
