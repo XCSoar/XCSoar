@@ -19,6 +19,7 @@ ifndef SDL_TTF_LDLIBS
 $(eval $(call pkg-config-library,SDL_TTF,SDL_ttf))
 endif
 SDL_LDLIBS += $(SDL_TTF_LDLIBS)
+SDL_CPPFLAGS += $(SDL_TTF_CPPFLAGS)
 endif
 
 else
