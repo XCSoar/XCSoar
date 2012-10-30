@@ -29,7 +29,9 @@ endif
 
 SDL_CPPFLAGS += -DENABLE_SDL
 ifeq ($(OPENGL),n)
-SDL_LDLIBS += -lSDL_gfx
+$(eval $(call pkg-config-library,SDL_GFX,SDL_gfx))
+SDL_LDLIBS += $(SDL_GFX_LDLIBS)
+SDL_CPPFLAGS += $(SDL_GFX_CPPFLAGS)
 endif # !OPENGL
 ifeq ($(TARGET_IS_DARWIN),y)
 # the pkg-config file on MacPorts is broken, we must convert all -l
