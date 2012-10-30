@@ -67,6 +67,7 @@ endif
 ifeq ($(ENABLE_SDL),y)
 SCREEN_SOURCES += $(SCREEN_CUSTOM_SOURCES)
 SCREEN_SOURCES += \
+	$(SCREEN_SRC_DIR)/Custom/Files.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Window.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \

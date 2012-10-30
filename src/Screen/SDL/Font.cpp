@@ -23,69 +23,19 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
-#include "OS/FileUtil.hpp"
-#include "Compiler.h"
+#include "Screen/Custom/Files.hpp"
 
 #include <assert.h>
-
-static const char *const all_font_paths[] = {
-#ifdef __APPLE__
-  "/Library/Fonts/Tahoma.ttf",
-  "/Library/Fonts/Georgia.ttf",
-  "/Library/Fonts/Arial Narrow.ttf",
-  "/Library/Fonts/Times New Roman.ttf",
-  "/Library/Fonts/Microsoft/Arial.ttf",
-#else
-  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
-  "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",
-  "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
-  "/usr/share/fonts/droid/DroidSans.ttf",
-  "/usr/share/fonts/truetype/droid/DroidSans.ttf",
-  "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
-  "/usr/share/fonts/corefonts/arial.ttf",
-  "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
-  "/usr/share/fonts/freefont-ttf/FreeSans.ttf",
-  "/usr/share/fonts/truetype/unifont/unifont.ttf",
-  "/usr/share/fonts/unifont/unifont.ttf",
-  "/usr/share/fonts/local/tahoma.ttf",
-  "/usr/share/fonts/corefonts/tahoma.ttf",
-#endif
-  NULL
-};
-
-static const char *const all_monospace_font_paths[] = {
-#ifdef __APPLE__
-  "/Library/Fonts/Courier New.ttf",
-#else
-  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansMono.ttf",
-  "/usr/share/fonts/truetype/ttf-droid/DroidSansMono.ttf",
-  "/usr/share/fonts/truetype/droid/DroidSansMono.ttf",
-  "/usr/share/fonts/truetype/msttcorefonts/couri.ttf",
-  "/usr/share/fonts/truetype/freefont/FreeMono.ttf",
-#endif
-  NULL
-};
 
 static const char *font_path;
 static const char *monospace_font_path;
 
-gcc_const
-static const char *
-DetectFont(const char *const* fonts)
-{
-  for (const char *const* i = fonts; *i != NULL; ++i)
-    if (File::Exists(*i))
-      return *i;
-
-  return NULL;
-}
-
 void
 Font::Initialise()
 {
-  font_path = DetectFont(all_font_paths);
+  font_path = FindDefaultFont();
 
-  monospace_font_path = DetectFont(all_monospace_font_paths);
+  monospace_font_path = FindDefaultMonospaceFont();
   if (monospace_font_path == NULL)
     monospace_font_path = font_path;
 }
