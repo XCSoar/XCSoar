@@ -48,7 +48,11 @@ ToGLexact(GLvalue value)
 
 #else
 
-#include <SDL/SDL_opengl.h>
+#ifdef ENABLE_SDL
+#include <SDL_opengl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 /**
  * A position component in the OpenGL surface.

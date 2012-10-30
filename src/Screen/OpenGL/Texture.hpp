@@ -31,11 +31,13 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef HAVE_GLES
-#include <GLES/gl.h>
-#else
+#ifdef ENABLE_SDL
 #include <SDL.h>
 #include <SDL_opengl.h>
+#elif defined(HAVE_GLES)
+#include <GLES/gl.h>
+#else
+#include <GL/gl.h>
 #endif
 
 #ifndef NDEBUG

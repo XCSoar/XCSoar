@@ -26,10 +26,12 @@ Copyright_License {
 
 #include <string.h>
 
-#ifdef HAVE_GLES
+#ifdef ENABLE_SDL
+#include <SDL_opengl.h>
+#elif defined(HAVE_GLES)
 #include <GLES/gl.h>
 #else
-#include <SDL/SDL_opengl.h>
+#include <GL/gl.h>
 #endif
 
 bool

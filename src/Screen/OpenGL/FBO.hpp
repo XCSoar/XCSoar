@@ -27,11 +27,14 @@ Copyright_License {
 #include "Features.hpp"
 #include "Compiler.h"
 
-#ifdef HAVE_GLES
+#ifdef ENABLE_SDL
+#include <SDL_opengl.h>
+#elif defined(HAVE_GLES)
 #include <GLES/gl.h>
 #include <GLES/glext.h>
 #else
-#include <SDL/SDL_opengl.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
 #endif
 
 /**
