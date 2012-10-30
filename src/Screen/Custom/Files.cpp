@@ -32,6 +32,9 @@ static const char *const all_font_paths[] = {
   "/Library/Fonts/Arial Narrow.ttf",
   "/Library/Fonts/Times New Roman.ttf",
   "/Library/Fonts/Microsoft/Arial.ttf",
+#elif defined(WIN32) && !defined(HAVE_POSIX)
+  /* just for the experimental WINSDL target */
+  "c:\\windows\\fonts\\arial.ttf",
 #else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
   "/usr/share/fonts/dejavu/DejaVuSansCondensed.ttf",
