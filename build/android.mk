@@ -84,7 +84,7 @@ $(SOUND_FILES): $(RAW_DIR)/%.ogg: Data/sound/%.wav | $(RAW_DIR)/dirstamp
 	@$(NQ)echo "  OGGENC  $@"
 	$(Q)$(OGGENC) -o $@ $<
 
-PNG1 := $(patsubst Data/bitmaps/%.bmp,$(DRAWABLE_DIR)/%.png,$(wildcard Data/bitmaps/*.bmp))
+PNG1 := $(patsubst Data/bitmaps/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_BITMAPS))
 
 # workaround for an ImageMagick bug (observed with the Debian package
 # 8:6.7.7.10-2): it corrupts 4-bit gray-scale images when converting

@@ -9,6 +9,10 @@ PNG_MARKET_ICONS = $(patsubst Data/graphics/%.svg,$(DATA)/graphics/%_market.png,
 market-icons: $(PNG_MARKET_ICONS)
 $(eval $(call rsvg-convert,$(PNG_MARKET_ICONS),$(DATA)/graphics/%_market.png,Data/graphics/%.svg,--width=512))
 
+####### bitmaps
+
+BMP_BITMAPS = $(wildcard Data/bitmaps/*.bmp)
+
 ####### icons
 
 SVG_ICONS = $(wildcard Data/icons/*.svg)
@@ -141,7 +145,7 @@ RESOURCE_FILES = $(DIALOG_COMPRESSED) $(TEXT_COMPRESSED)
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
 else
-RESOURCE_FILES += $(wildcard Data/bitmaps/*.bmp)
+RESOURCE_FILES += $(BMP_BITMAPS)
 RESOURCE_FILES += $(BMP_ICONS) $(BMP_ICONS_160) 
 RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
