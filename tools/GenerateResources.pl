@@ -6,7 +6,7 @@ sub generate_blob($$) {
     my ($var, $path) = @_;
     open FILE, "<$path" or die $!;
 
-    print "static const unsigned char $var\[\] = {\n";
+    print "static const uint8_t $var\[\] = {\n";
 
     my $data;
     while ((my $nbytes = read(FILE, $data, 64)) > 0) {
@@ -18,6 +18,8 @@ sub generate_blob($$) {
 
     print "};\n";
 }
+
+print "#include <stdint.h>\n";
 
 my @numeric;
 my @named;
