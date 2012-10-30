@@ -108,7 +108,7 @@ Bitmap::Load(unsigned id, Type type)
   if (data.second < sizeof(*info))
     return false;
 
-  int pitch = (((info->bmiHeader.biWidth * info->bmiHeader.biBitCount) / 8 - 1) | 3) + 1;
+  int pitch = (((info->bmiHeader.biWidth * info->bmiHeader.biBitCount + 7) / 8 - 1) | 3) + 1;
   int data_size = pitch * info->bmiHeader.biHeight;
 
   /* duplicate the BMP file and re-insert the BITMAPFILEHEADER which
