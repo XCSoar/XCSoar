@@ -32,10 +32,9 @@ Copyright_License {
 #include "Screen/OpenGL/Surface.hpp"
 #endif
 
-#ifdef ANDROID
-#elif defined(ENABLE_SDL)
+#ifdef ENABLE_SDL
 #include <SDL_video.h>
-#else
+#elif defined(USE_GDI)
 #include <windows.h>
 #endif
 
@@ -126,10 +125,8 @@ public:
   }
 #endif
 
-#ifndef ANDROID
 #ifdef ENABLE_SDL
   bool Load(SDL_Surface *_surface, Type type=Type::STANDARD);
-#endif
 #endif
 
   bool Load(unsigned id, Type type=Type::STANDARD);
