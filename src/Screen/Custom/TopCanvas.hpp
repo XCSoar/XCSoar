@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 
 class TopCanvas : public Canvas {
-#ifndef ANDROID
+#ifdef ENABLE_SDL
   Uint32 flags;
 #endif
 

@@ -88,7 +88,7 @@ LoadTextureAutoAlign(GLint internal_format,
   }
 }
 
-#ifndef ANDROID
+#ifdef ENABLE_SDL
 
 /**
  * Checks if the specified palette consists of gray shades 0x00..0xff.
@@ -248,7 +248,7 @@ GLTexture::ResizeDiscard(PixelSize new_size)
 
 }
 
-#ifndef ANDROID
+#ifdef ENABLE_SDL
 
 void
 GLTexture::Load(SDL_Surface *src)

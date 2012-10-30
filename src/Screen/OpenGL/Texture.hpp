@@ -78,7 +78,7 @@ public:
   GLTexture(GLint internal_format, GLsizei width, GLsizei height,
             GLenum format, GLenum type, const GLvoid *data);
 
-#ifndef ANDROID
+#ifdef ENABLE_SDL
   GLTexture(SDL_Surface *surface) {
     Initialise();
     Load(surface);
@@ -160,7 +160,7 @@ protected:
                     !IsEmbedded() || mag_linear ? GL_LINEAR : GL_NEAREST);
   }
 
-#ifndef ANDROID
+#ifdef ENABLE_SDL
   void Load(SDL_Surface *surface);
 #endif
 
