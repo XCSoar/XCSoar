@@ -135,10 +135,12 @@ Bitmap::Load(unsigned id, Type type)
 #endif
 
   SDL_RWops *rw = SDL_RWFromConstMem(bmp_data, bmp_size);
-  SDL_Surface *original = ::SDL_LoadBMP_RW(rw, 1);
 
 #ifdef WIN32
+  SDL_Surface *original = ::SDL_LoadBMP_RW(rw, 1);
   free(header);
+#else
+  SDL_Surface *original = ::IMG_LoadPNG_RW(rw);
 #endif
 
   if (original == NULL)

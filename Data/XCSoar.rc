@@ -11,9 +11,15 @@ HI_RES_AWARE CEUX {1}
 #define BITMAP(name, path)
 #endif
 
+#if defined(WIN32) || defined(__WINE__)
 #define BITMAP_BITMAP(name, file) BITMAP(name, "bitmaps/" file ".bmp")
 #define BITMAP_ICON(name, file) BITMAP(name, "../output/data/icons/" file ".bmp")
 #define BITMAP_GRAPHIC(name, file) BITMAP(name, "../output/data/graphics/" file ".bmp")
+#else
+#define BITMAP_BITMAP(name, file) BITMAP(name, "../output/data/bitmaps/" file ".png")
+#define BITMAP_ICON(name, file) BITMAP(name, "../output/data/icons2/" file ".png")
+#define BITMAP_GRAPHIC(name, file) BITMAP(name, "../output/data/graphics2/" file ".png")
+#endif
 
 #ifdef WIN32
 /* only GDI knows how to deal with hatched brushes, the rest uses
