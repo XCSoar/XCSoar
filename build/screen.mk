@@ -41,6 +41,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopCanvas.cpp \
+	$(SCREEN_SRC_DIR)/Android/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/Android/Font.cpp \
 	$(SCREEN_SRC_DIR)/Android/Event.cpp
 endif
@@ -78,6 +79,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
+	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Timer.cpp

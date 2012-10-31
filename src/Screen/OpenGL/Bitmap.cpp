@@ -21,11 +21,10 @@ Copyright_License {
 }
 */
 
-#ifdef ANDROID
-#include "Screen/Android/Bitmap.cpp"
-#else
-#include "Screen/SDL/Bitmap.cpp"
-#endif
+#include "Screen/Bitmap.hpp"
+#include "Screen/Debug.hpp"
+#include "Texture.hpp"
+#include "Debug.hpp"
 
 #ifndef ANDROID
 
