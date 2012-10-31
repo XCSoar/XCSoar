@@ -79,6 +79,8 @@ Bitmap::Load(SDL_Surface *_surface, Type type)
 #endif
 }
 
+#ifndef USE_LIBPNG
+
 bool
 Bitmap::Load(unsigned id, Type type)
 {
@@ -138,6 +140,8 @@ Bitmap::Load(unsigned id, Type type)
   return true;
 }
 
+#endif /* !USE_LIBPNG */
+
 bool
 Bitmap::LoadStretch(unsigned id, unsigned zoom)
 {
@@ -150,9 +154,14 @@ Bitmap::LoadStretch(unsigned id, unsigned zoom)
 bool
 Bitmap::LoadFile(const TCHAR *path)
 {
+#ifdef USE_LIBPNG
+  // TODO: use libjpeg when SDL_image is not available
+  return false;
+#else
   NarrowPathName narrow_path(path);
   SDL_Surface *original = ::IMG_Load(narrow_path);
   return original != NULL && Load(original);
+#endif
 }
 
 #ifndef ENABLE_OPENGL

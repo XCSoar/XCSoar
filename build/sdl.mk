@@ -12,7 +12,11 @@ endif
 
 ifeq ($(ENABLE_SDL),y)
 
-SDL_PKG = sdl SDL_image
+SDL_PKG = sdl
+
+ifeq ($(LIBPNG),n)
+SDL_PKG += SDL_image
+endif
 
 ifeq ($(FREETYPE),n)
 SDL_PKG += SDL_ttf
