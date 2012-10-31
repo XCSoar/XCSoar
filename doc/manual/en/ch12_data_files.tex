@@ -116,27 +116,26 @@ Mandatory, and Other.  All other airspace types will be drawn as type ``Other''.
 In addition to the OpenAir standard the AR command is recognized as the 
 airspace radio frequency.
 
-\section{Airfield details}
+\section{Airfield details}\label{sec:airfield-details}
 
 The airfield details file (extension \verb|.txt|) is a simple text
 format file containing entries for each airfield, marked in square
-brackets in uppercase, followed by the text to be displayed on the
+brackets, followed by the text to be displayed on the
 Waypoint Details Dialogue for that particular waypoint.  The text should
 have a narrow margin because the waypoint details dialogue cannot
 currently handle word wrapping.
 
-The text may also specifiy images or other arbitrary files for airfields.  To
+The text may also specify images for airfields or waypoints.  To
 show an image directly in XCSoar use \verb|image=| followed by the file
-name.  To open a file with an external application you can use
-\verb|file=| followed by an arbitrary filetype (e.g. \verb|.pdf|).  Be sure
+name (this is currently not supported on PC/Windows).  Be sure
 to avoid any additional whitespaces around the equal sign or in front of the
 keyword. Which files are supported depends on your operating system and the
 applications that are installed.  Android supports JPEG files and other
-arbitrary files, others mostly only BMP images.
+file types, others mostly BMP images.
 
 The names of airfields used in the file must correspond exactly to the
-names in the waypoints file, with the exception of being converted to
-uppercase.
+names in the waypoints file, with the exception that converting to
+uppercase is allowed.
 
 The XCSoar website provides airfield details files for several
 countries and includes tools to convert from various Enroute
@@ -166,6 +165,8 @@ REMARKS:
   ABTMT - Rwy 17R-35L fly wide
 
 ICAO: YBLA
+
+image=Benalla_sat.bmp
 
 [GROOTE EYLANDT]
 Blah blah blah blah
