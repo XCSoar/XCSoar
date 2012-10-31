@@ -160,3 +160,10 @@ Bitmap::Load(unsigned id, Type type)
   size = texture->GetSize();
   return true;
 }
+
+bool
+Bitmap::LoadFile(const TCHAR *path)
+{
+  // TODO: use libjpeg when SDL_image is not available
+  return false;
+}

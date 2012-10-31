@@ -151,18 +151,17 @@ Bitmap::LoadStretch(unsigned id, unsigned zoom)
   return Load(id);
 }
 
+#ifndef USE_LIBPNG
+
 bool
 Bitmap::LoadFile(const TCHAR *path)
 {
-#ifdef USE_LIBPNG
-  // TODO: use libjpeg when SDL_image is not available
-  return false;
-#else
   NarrowPathName narrow_path(path);
   SDL_Surface *original = ::IMG_Load(narrow_path);
   return original != NULL && Load(original);
-#endif
 }
+
+#endif /* !USE_LIBPNG */
 
 #ifndef ENABLE_OPENGL
 
