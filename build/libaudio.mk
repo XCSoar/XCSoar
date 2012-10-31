@@ -2,7 +2,11 @@
 
 HAVE_PCM_PLAYER = n
 
-ifneq ($(findstring $(TARGET),UNIX ANDROID),)
+ifeq ($(ENABLE_SDL),y)
+HAVE_PCM_PLAYER = y
+endif
+
+ifeq ($(TARGET),ANDROID)
 HAVE_PCM_PLAYER = y
 endif
 
