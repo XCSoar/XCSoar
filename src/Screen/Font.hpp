@@ -67,7 +67,7 @@ protected:
 
   void CalculateHeights();
 
-#ifdef ENABLE_SDL
+#if defined(ENABLE_SDL) || defined(USE_FREETYPE)
   bool LoadFile(const char *file, UPixelScalar ptsize, bool bold = false,
                 bool italic = false);
 #endif
