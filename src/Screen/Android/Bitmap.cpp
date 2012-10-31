@@ -133,11 +133,3 @@ Bitmap::Reset()
   delete texture;
   texture = NULL;
 }
-
-const PixelSize
-Bitmap::GetSize() const
-{
-  assert(IsDefined());
-
-  return size;
-}

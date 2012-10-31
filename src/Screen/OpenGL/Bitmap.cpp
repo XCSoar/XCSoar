@@ -27,6 +27,31 @@ Copyright_License {
 #include "Screen/SDL/Bitmap.cpp"
 #endif
 
+#ifndef ANDROID
+
+bool
+Bitmap::Reload()
+{
+  assert(id != 0);
+  assert(texture == NULL);
+
+  /* XXX this is no real implementation; we currently support OpenGL
+     surface reinitialisation only on Android */
+  return Load(id);
+}
+
+void
+Bitmap::Reset()
+{
+  assert(!IsDefined() || IsScreenInitialized());
+  assert(!IsDefined() || pthread_equal(pthread_self(), OpenGL::thread));
+
+  delete texture;
+  texture = NULL;
+}
+
+#endif /* !ANDROID */
+
 void
 Bitmap::surface_created()
 {
@@ -38,4 +63,12 @@ Bitmap::surface_destroyed()
 {
   delete texture;
   texture = NULL;
+}
+
+const PixelSize
+Bitmap::GetSize() const
+{
+  assert(IsDefined());
+
+  return size;
 }

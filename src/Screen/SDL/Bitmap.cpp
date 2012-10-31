@@ -79,19 +79,6 @@ Bitmap::Load(SDL_Surface *_surface, Type type)
 #endif
 }
 
-#ifdef ENABLE_OPENGL
-bool
-Bitmap::Reload()
-{
-  assert(id != 0);
-  assert(texture == NULL);
-
-  /* XXX this is no real implementation; we currently support OpenGL
-     surface reinitialisation only on Android */
-  return Load(id);
-}
-#endif
-
 bool
 Bitmap::Load(unsigned id, Type type)
 {
@@ -168,22 +155,17 @@ Bitmap::LoadFile(const TCHAR *path)
   return original != NULL && Load(original);
 }
 
+#ifndef ENABLE_OPENGL
+
 void
 Bitmap::Reset()
 {
   assert(!IsDefined() || IsScreenInitialized());
 
-#ifdef ENABLE_OPENGL
-  assert(!IsDefined() || pthread_equal(pthread_self(), OpenGL::thread));
-
-  delete texture;
-  texture = NULL;
-#else
   if (surface != NULL) {
     SDL_FreeSurface(surface);
     surface = NULL;
   }
-#endif
 }
 
 const PixelSize
@@ -191,8 +173,8 @@ Bitmap::GetSize() const
 {
   assert(IsDefined());
 
-#ifndef ENABLE_OPENGL
   const PixelSize size = { PixelScalar(surface->w), PixelScalar(surface->h) };
-#endif
   return size;
 }
+
+#endif /* !OpenGL */
