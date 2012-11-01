@@ -259,7 +259,7 @@ bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size);
 
-template<unsigned N>
+template<size_t N>
 bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  StaticString<N> &value)
@@ -272,7 +272,7 @@ SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size,
                  const TCHAR *profile_key);
 
-template<unsigned N>
+template<size_t N>
 bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  StaticString<N> &value,
