@@ -59,7 +59,7 @@ public:
   void setListener(JNIEnv *env, DataHandler *handler);
 
   int getState(JNIEnv *env) {
-    return env->CallBooleanMethod(Get(), getState_method);
+    return env->CallIntMethod(Get(), getState_method);
   }
 
   bool drain(JNIEnv *env) {
