@@ -22,6 +22,12 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
+#include "Screen/Custom/TopCanvas.hpp"
+
+TopWindow::~TopWindow()
+{
+  delete screen;
+}
 
 bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)
@@ -39,7 +45,9 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
   rc.bottom -= rc.top;
   rc.left = rc.top = 0;
 
-  screen.Set(rc.right, rc.bottom, style.GetFullScreen(), style.GetResizable());
+  delete screen;
+  screen = new TopCanvas();
+  screen->Set(rc.right, rc.bottom, style.GetFullScreen(), style.GetResizable());
 
   ContainerWindow::Create(NULL, rc, style);
 
@@ -55,14 +63,14 @@ TopWindow::CancelMode()
 void
 TopWindow::Fullscreen()
 {
-  screen.Fullscreen();
+  screen->Fullscreen();
 }
 
 void
 TopWindow::Expose()
 {
-  OnPaint(screen);
-  screen.Flip();
+  OnPaint(*screen);
+  screen->Flip();
 }
 
 void

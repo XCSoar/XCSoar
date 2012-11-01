@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/TopWindow.hpp"
 #include "Screen/SDL/Event.hpp"
+#include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
 
 void
@@ -146,6 +147,6 @@ TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::OnResize(width, height);
 
-  screen.OnResize(width, height);
+  screen->OnResize(width, height);
 }
 

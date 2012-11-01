@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/OpenGL/Surface.hpp"
 #include "Screen/OpenGL/Shapes.hpp"
 #include "Screen/Android/Event.hpp"
+#include "Screen/Custom/TopCanvas.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 
@@ -66,7 +67,7 @@ TopWindow::ResumeSurface()
   paused = false;
   resumed = false;
 
-  screen.Resume();
+  screen->Resume();
 
   ::SurfaceCreated();
 
@@ -104,7 +105,7 @@ TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   if (native_view != NULL) {
     native_view->SetSize(width, height);
-    screen.OnResize(width, height);
+    screen->OnResize(width, height);
   }
 
   ContainerWindow::OnResize(width, height);
@@ -231,7 +232,7 @@ TopWindow::OnEvent(const Event &event)
        is ignored on Android (tested on a Dell Streak / Android
        2.2.2); let's do one dummy call before we really draw
        something */
-    screen.Flip();
+    screen->Flip();
 
     Resize(event.x, event.y);
     return true;

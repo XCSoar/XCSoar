@@ -31,7 +31,6 @@ Copyright_License {
 #endif
 
 #ifndef USE_GDI
-#include "Screen/Custom/TopCanvas.hpp"
 #include "Screen/Custom/DoubleClick.hpp"
 #endif
 
@@ -47,6 +46,10 @@ struct Event;
 
 #ifndef USE_GDI
 #include <atomic>
+#endif
+
+#ifndef USE_GDI
+class TopCanvas;
 #endif
 
 class TopWindowStyle : public WindowStyle {
@@ -110,7 +113,7 @@ public:
  */
 class TopWindow : public ContainerWindow {
 #ifndef USE_GDI
-  TopCanvas screen;
+  TopCanvas *screen;
 
   std::atomic<bool> invalidated;
 
@@ -169,7 +172,13 @@ public:
 
 public:
 #ifdef ANDROID
-  TopWindow():paused(false), resumed(false), resized(false) {}
+  TopWindow():screen(nullptr), paused(false), resumed(false), resized(false) {}
+#elif !defined(USE_GDI)
+  TopWindow():screen(nullptr) {}
+#endif
+
+#ifndef USE_GDI
+  virtual ~TopWindow();
 #endif
 
   static bool find(const TCHAR *cls, const TCHAR *text);
