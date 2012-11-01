@@ -268,8 +268,8 @@ endif
 
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
-	$(SRC)/Dialogs/dlgNOAAList.cpp \
-	$(SRC)/Dialogs/dlgNOAADetails.cpp \
+	$(SRC)/Dialogs/Weather/NOAAList.cpp \
+	$(SRC)/Dialogs/Weather/NOAADetails.cpp \
 	$(SRC)/Dialogs/ConfigPanels/TrackingConfigPanel.cpp
 endif
 
