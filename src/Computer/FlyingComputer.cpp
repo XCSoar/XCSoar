@@ -233,10 +233,10 @@ FlyingComputer::Compute(fixed takeoff_speed,
   }
 
   if (CheckTakeOffSpeed(takeoff_speed, basic) ||
-      (any_altitude.first && CheckClimbing(dt, any_altitude.second)) ||
       CheckAltitudeAGL(calculated))
     Moving(flying, basic.time, dt, basic.location);
-  else
+  else if (!flying.flying ||
+           !any_altitude.first || !CheckClimbing(dt, any_altitude.second))
     Stationary(flying, basic.time, dt, basic.location);
 
   if (any_altitude.first) {
