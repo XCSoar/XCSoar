@@ -24,10 +24,10 @@ Copyright_License {
 #include "Dialogs/Planes.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
-#include "Dialogs/TextEntry.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
 #include "Form/Button.hpp"
+#include "Form/DataField/String.hpp"
 #include "Screen/Layout.hpp"
 #include "Plane/Plane.hpp"
 #include "Language/Language.hpp"
@@ -41,7 +41,8 @@ static void
 UpdateCaption()
 {
   StaticString<128> tmp;
-  tmp.Format(_T("%s: %s"), _("Plane Details"), plane.registration.c_str());
+  tmp.Format(_T("%s: %s"), _("Plane Details"),
+             GetFormValueString(*dialog, _T("Registration")));
   dialog->SetCaption(tmp);
 }
 
@@ -56,11 +57,9 @@ UpdateButton(const TCHAR *button, const TCHAR *caption)
 static void
 Update()
 {
-  UpdateCaption();
-
-  UpdateButton(_T("RegistrationButton"), plane.registration);
-  UpdateButton(_T("CompetitionIDButton"), plane.competition_id);
-  UpdateButton(_T("TypeButton"), plane.type);
+  LoadFormProperty(*dialog, _T("Registration"), plane.registration);
+  LoadFormProperty(*dialog, _T("CompetitionID"), plane.competition_id);
+  LoadFormProperty(*dialog, _T("Type"), plane.type);
   UpdateButton(_T("PolarButton"), plane.polar_name);
 
   LoadFormProperty(*dialog, _T("HandicapEdit"), plane.handicap);
@@ -69,11 +68,15 @@ Update()
   LoadFormProperty(*dialog, _T("DumpTimeEdit"), plane.dump_time);
   LoadFormProperty(*dialog, _T("MaxSpeedEdit"),
                    UnitGroup::HORIZONTAL_SPEED, plane.max_speed);
+
+  UpdateCaption();
 }
 
 static void
 UpdatePlane()
 {
+  SaveFormProperty(*dialog, _T("Registration"), plane.registration);
+  SaveFormProperty(*dialog, _T("CompetitionID"), plane.competition_id);
   SaveFormProperty(*dialog, _T("HandicapEdit"), plane.handicap);
   SaveFormProperty(*dialog, _T("WingAreaEdit"), plane.wing_area);
   SaveFormProperty(*dialog, _T("MaxBallastEdit"), plane.max_ballast);
@@ -95,37 +98,10 @@ CancelClicked(gcc_unused WndButton &button)
 }
 
 static void
-RegistrationClicked(gcc_unused WndButton &button)
+OnRegistrationData(DataField *sender, DataField::DataAccessMode mode)
 {
-  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->GetRootOwner(),
-                             plane.registration.buffer(),
-                             plane.registration.MAX_SIZE))
-    return;
-
-  UpdateCaption();
-  UpdateButton(_T("RegistrationButton"), plane.registration);
-}
-
-static void
-CompetitionIDClicked(gcc_unused WndButton &button)
-{
-  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->GetRootOwner(),
-                             plane.competition_id.buffer(),
-                             plane.competition_id.MAX_SIZE))
-    return;
-
-  UpdateButton(_T("CompetitionIDButton"), plane.competition_id);
-}
-
-static void
-TypeClicked(gcc_unused WndButton &button)
-{
-  if (!dlgTextEntryShowModal(*(SingleWindow *)dialog->GetRootOwner(),
-                             plane.type.buffer(),
-                             plane.type.MAX_SIZE))
-    return;
-
-  UpdateButton(_T("TypeButton"), plane.type);
+  if (mode == DataField::daChange)
+    UpdateCaption();
 }
 
 static void
@@ -138,9 +114,7 @@ PolarClicked(gcc_unused WndButton &button)
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OKClicked),
   DeclareCallBackEntry(CancelClicked),
-  DeclareCallBackEntry(RegistrationClicked),
-  DeclareCallBackEntry(CompetitionIDClicked),
-  DeclareCallBackEntry(TypeClicked),
+  DeclareCallBackEntry(OnRegistrationData),
   DeclareCallBackEntry(PolarClicked),
   DeclareCallBackEntry(NULL)
 };

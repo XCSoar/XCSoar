@@ -1,20 +1,17 @@
 <?xml version="1.0"?>
 
 <Form Caption="Plane Details">
-  <Panel Height="26">
-    <Label Caption="Registration" X="2" Y="6" Height="-2" Width="88" />
-    <Button Name="RegistrationButton" X="90" Y="2" Width="-2" Height="-2" OnClick="RegistrationClicked"/>
-  </Panel>
+  <Edit Name="Registration" Caption="Registration" Height="22" CaptionWidth="88">
+    <DataField DataType="string" OnDataAccess="OnRegistrationData"/>
+  </Edit>
 
-  <Panel Height="26">
-    <Label Caption="Comp. ID" X="2" Y="6" Height="-2" Width="88" />
-    <Button Name="CompetitionIDButton" X="90" Y="2" Width="-2" Height="-2" OnClick="CompetitionIDClicked"/>
-  </Panel>
+  <Edit Name="CompetitionID" Caption="Comp. ID" Height="22" CaptionWidth="88">
+    <DataField DataType="string"/>
+  </Edit>
 
-  <Panel Height="26">
-    <Label Caption="Type" X="2" Y="6" Height="-2" Width="88" />
-    <Button Name="TypeButton" X="90" Y="2" Width="-2" Height="-2" OnClick="TypeClicked"/>
-  </Panel>
+  <Edit Name="Type" Caption="Type" Height="22" CaptionWidth="88">
+    <DataField DataType="string"/>
+  </Edit>
 
   <Panel Height="26">
     <Label Caption="Handicap" X="2" Y="6" Height="-2" Width="88" />
