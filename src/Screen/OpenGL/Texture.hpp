@@ -24,7 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 #define XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 
-#include "Screen/OpenGL/Features.hpp"
+#include "Features.hpp"
+#include "System.hpp"
 #include "Screen/OpenGL/Point.hpp"
 #include "FBO.hpp"
 #include "Asset.hpp"
@@ -32,12 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 #ifdef ENABLE_SDL
-#include <SDL.h>
-#include <SDL_opengl.h>
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
+#include <SDL_video.h>
 #endif
 
 #ifndef NDEBUG

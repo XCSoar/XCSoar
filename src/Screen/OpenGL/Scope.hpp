@@ -24,15 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_SCOPE_HPP
 #define XCSOAR_SCREEN_OPENGL_SCOPE_HPP
 
-#include "Screen/OpenGL/Features.hpp"
-
-#ifdef ENABLE_SDL
-#include <SDL_opengl.h>
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "Features.hpp"
+#include "System.hpp"
 
 /**
  * Enables and auto-disables an OpenGL capability.

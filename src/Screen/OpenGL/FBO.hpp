@@ -25,17 +25,8 @@ Copyright_License {
 #define XCSOAR_OPENGL_FBO_HPP
 
 #include "Features.hpp"
+#include "SystemExt.hpp"
 #include "Compiler.h"
-
-#ifdef ENABLE_SDL
-#include <SDL_opengl.h>
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#include <GLES/glext.h>
-#else
-#include <GL/gl.h>
-#include <GL/glext.h>
-#endif
 
 /**
  * Support for OpenGL framebuffer objects (GL_*_framebuffer_object).

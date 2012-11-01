@@ -21,48 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_TYPES_HPP
-#define XCSOAR_SCREEN_OPENGL_TYPES_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_SYSTEM_HPP
+#define XCSOAR_SCREEN_OPENGL_SYSTEM_HPP
 
-#include "Features.hpp"
 #include "System.hpp"
 
+#ifndef ENABLE_SDL
 #ifdef HAVE_GLES
-
-/**
- * A position component in the OpenGL surface.
- */
-typedef GLshort GLvalue;
-typedef GLushort GLuvalue;
-static constexpr GLenum GL_VALUE = GL_SHORT;
-
-typedef GLfixed GLexact;
-static constexpr GLenum GL_EXACT = GL_FIXED;
-
-constexpr static inline GLexact
-ToGLexact(GLvalue value)
-{
-  return (GLexact(value) << 16) + 0x8000;
-}
-
+#include <GLES/glext.h>
 #else
-
-/**
- * A position component in the OpenGL surface.
- */
-typedef GLint GLvalue;
-typedef GLuint GLuvalue;
-static constexpr GLenum GL_VALUE = GL_INT;
-
-typedef GLfloat GLexact;
-static constexpr GLenum GL_EXACT = GL_FLOAT;
-
-constexpr static inline GLexact
-ToGLexact(GLvalue value)
-{
-  return GLexact(value) + 0.5;
-}
-
+#include <GL/glext.h>
+#endif
 #endif
 
 #endif

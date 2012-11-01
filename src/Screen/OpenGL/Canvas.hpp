@@ -34,19 +34,12 @@ Copyright_License {
 #include "Screen/OpenGL/Point.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#include "Screen/OpenGL/System.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
 #include <tchar.h>
-
-#ifdef ENABLE_SDL
-#include <SDL_opengl.h>
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 
 class Bitmap;
 class GLTexture;

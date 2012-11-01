@@ -39,11 +39,7 @@ Copyright_License {
 #endif /* STOP_WATCH */
 
 #ifdef ENABLE_OPENGL
-#ifdef ANDROID
-#include <GLES/gl.h>
-#else
-#include <SDL/SDL_opengl.h>
-#endif
+#include "Screen/OpenGL/System.hpp"
 #endif
 
 /**

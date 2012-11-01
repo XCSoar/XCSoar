@@ -29,11 +29,7 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
-#ifdef HAVE_GLES
-#include <GLES/gl.h>
-#else
-#include <SDL/SDL_opengl.h>
-#endif
+#include "Screen/OpenGL/System.hpp"
 #endif
 
 /**

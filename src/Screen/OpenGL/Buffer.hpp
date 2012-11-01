@@ -24,17 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_BUFFER_HPP
 #define XCSOAR_SCREEN_OPENGL_BUFFER_HPP
 
-#include "Screen/OpenGL/Features.hpp"
+#include "System.hpp"
 
 #include <assert.h>
-
-#ifdef ENABLE_SDL
-#include <SDL_opengl.h>
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 
 #ifndef NDEBUG
 extern unsigned num_buffers;

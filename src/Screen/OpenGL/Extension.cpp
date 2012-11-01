@@ -21,18 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Screen/OpenGL/Extension.hpp"
-#include "Screen/OpenGL/Features.hpp"
+#include "Extension.hpp"
+#include "Features.hpp"
+#include "System.hpp"
 
 #include <string.h>
-
-#ifdef ENABLE_SDL
-#include <SDL_opengl.h>
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
-#endif
 
 bool
 OpenGL::IsExtensionSupported(const char *extension)

@@ -24,15 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_COLOR_HPP
 #define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
-#include "Screen/OpenGL/Features.hpp"
+#include "Features.hpp"
+#include "System.hpp"
 
 #ifdef ENABLE_SDL
-#include <SDL/SDL_opengl.h>
 #include <SDL_video.h> // for SDL_Color
-#elif defined(HAVE_GLES)
-#include <GLES/gl.h>
-#else
-#include <GL/gl.h>
 #endif
 
 /**
