@@ -48,49 +48,6 @@ Copyright_License {
 static WndForm *wf = NULL;
 static Waypoint *global_wpt = NULL;
 
-static WndButton *buttonName = NULL;
-static WndButton *buttonComment = NULL;
-
-static void
-UpdateButtons()
-{
-  StaticString<64> text;
-
-  text.Format(_T("%s: %s"), _("Name"),
-              global_wpt->name.empty()
-              ? _("(blank)") : global_wpt->name.c_str());
-  buttonName->SetCaption(text);
-
-  text.Format(_T("%s: %s"), _("Comment"),
-              global_wpt->comment.empty()
-              ? _("(blank)") : global_wpt->comment.c_str());
-  buttonComment->SetCaption(text);
-}
-
-static void
-OnNameClicked(gcc_unused WndButton &button)
-{
-  StaticString<NAME_SIZE + 1> buff(global_wpt->name.c_str());
-  if (!TextEntryDialog(*(SingleWindow *)button.GetRootOwner(), buff))
-    return;
-
-  global_wpt->name = buff;
-
-  UpdateButtons();
-}
-
-static void
-OnCommentClicked(gcc_unused WndButton &button)
-{
-  StaticString<51> buff(global_wpt->comment.c_str());
-  if (!TextEntryDialog(*(SingleWindow *)button.GetRootOwner(), buff))
-    return;
-
-  global_wpt->comment = buff;
-
-  UpdateButtons();
-}
-
 static void
 SetUnits()
 {
@@ -170,6 +127,9 @@ SetUnits()
 static void
 SetValues()
 {
+  LoadFormProperty(*wf, _T("Name"), global_wpt->name.c_str());
+  LoadFormProperty(*wf, _T("Comment"), global_wpt->comment.c_str());
+
   WndProperty* wp;
   bool sign;
   int dd,mm,ss;
@@ -264,6 +224,9 @@ SetValues()
 static void
 GetValues()
 {
+  global_wpt->name = GetFormValueString(*wf, _T("Name"));
+  global_wpt->comment = GetFormValueString(*wf, _T("Comment"));
+
   WndProperty* wp;
   bool sign = false;
   int dd = 0;
@@ -355,8 +318,6 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnNameClicked),
-  DeclareCallBackEntry(OnCommentClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -369,13 +330,6 @@ dlgWaypointEditShowModal(Waypoint &way_point)
                   Layout::landscape ?
                   _T("IDR_XML_WAYPOINTEDIT_L") : _T("IDR_XML_WAYPOINTEDIT"));
   assert(wf != NULL);
-
-  buttonName = ((WndButton *)wf->FindByName(_T("cmdName")));
-  buttonComment = ((WndButton *)wf->FindByName(_T("cmdComment")));
-  assert(buttonName != NULL);
-  assert(buttonComment != NULL);
-
-  UpdateButtons();
 
   SetUnits();
 

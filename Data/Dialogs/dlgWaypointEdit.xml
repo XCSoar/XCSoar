@@ -3,9 +3,13 @@
 <Form Caption="Waypoint Editor">
   <Button Caption="Close" X="5" Y="-37" Width="80" Height="35" OnClick="OnCloseClicked"/>
 
-  <Button Name="cmdName" Caption="Name" X="2" Y="0" Height="28" OnClick="OnNameClicked"/>
+  <Edit Name="Name" Caption="Name" Y="0" Height="28" CaptionWidth="75">
+    <DataField DataType="string"/>
+  </Edit>
 
-  <Button Name="cmdComment" Caption="Comment" X="2" Height="28" OnClick="OnCommentClicked"/>
+  <Edit Name="Comment" Caption="Comment" Height="28" CaptionWidth="75">
+    <DataField DataType="string"/>
+  </Edit>
 
   <Edit Name="prpLongitudeSign" Caption="Lon." Y="70" Width="65" Height="28" CaptionWidth="28">
     <DataField DataType="enum"/>
