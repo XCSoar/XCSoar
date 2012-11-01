@@ -10,6 +10,9 @@ static const struct {
 EOT
 
 while (<>) {
+    # merge adjacent strings
+    while (s/"([^"]*)"\s+"([^"]*)"\s*$/"$1$2"/) {}
+
     print qq|  { $1, \"$2\" },\n|
       if /^\s*(\d+)\s+BITMAP\s+DISCARDABLE\s+"(?:.*\/)?([\w]+)\.bmp"\s*$/;
 }
