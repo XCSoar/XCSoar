@@ -212,8 +212,7 @@ WndProperty::BeginEditing()
       return false;
 
     StaticString<EDITSTRINGSIZE> buffer(value);
-    if (!TextEntryDialog(*(SingleWindow *)GetRootOwner(), buffer,
-                         GetCaption()))
+    if (!TextEntryDialog(buffer, GetCaption()))
       return true;
 
     mDataField->SetAsString(buffer);

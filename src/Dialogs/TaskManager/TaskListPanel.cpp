@@ -173,7 +173,7 @@ TaskListPanel::SaveTask()
   (*active_task)->GetFactory().CheckAddFinish();
 
   if ((*active_task)->CheckTask()) {
-    if (!OrderedTaskSave(UIGlobals::GetMainWindow(), **active_task))
+    if (!OrderedTaskSave(**active_task))
       return;
 
     task_store->Scan(more);
@@ -280,7 +280,7 @@ TaskListPanel::RenameTask()
 
   ClearSuffix(newname.buffer(), _T(".tsk"));
 
-  if (!TextEntryDialog(UIGlobals::GetMainWindow(), newname))
+  if (!TextEntryDialog(newname))
     return;
 
   newname.append(_T(".tsk"));

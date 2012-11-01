@@ -318,7 +318,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
   CopyString(new_name_filter, dialog_state.name.c_str(),
              WaypointFilter::NAME_LENGTH + 1);
 
-  dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(), new_name_filter,
+  dlgTextEntryShowModal(new_name_filter,
                         WaypointFilter::NAME_LENGTH, _("Waypoint name"),
                         WaypointNameAllowedCharacters);
 

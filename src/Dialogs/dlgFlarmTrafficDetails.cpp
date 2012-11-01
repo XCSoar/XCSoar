@@ -247,8 +247,7 @@ OnCallsignClicked(gcc_unused WndButton &Sender)
 {
   StaticString<21> newName;
   newName.clear();
-  if (TextEntryDialog(UIGlobals::GetMainWindow(), newName,
-                      _("Competition ID")) &&
+  if (TextEntryDialog(newName, _("Competition ID")) &&
       FlarmDetails::AddSecondaryItem(target_id, newName))
     FlarmDetails::SaveSecondary();
 

@@ -106,8 +106,7 @@ static void
 AddClicked(gcc_unused WndButton &button)
 {
   TCHAR code[5] = _T("");
-  if (!dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(),
-                             code, 5, _("Airport ICAO code")))
+  if (!dlgTextEntryShowModal(code, 5, _("Airport ICAO code")))
     return;
 
   if (_tcslen(code) != 4) {

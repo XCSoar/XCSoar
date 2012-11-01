@@ -26,27 +26,25 @@ Copyright_License {
 
 #include "Util/StaticString.hpp"
 
-class SingleWindow;
-
 typedef const TCHAR *(*AllowedCharactersCallback_t)(const TCHAR *value);
 
 bool
-dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text,
+dlgTextEntryShowModal(TCHAR *text,
                       int width, const TCHAR* caption = NULL,
                       AllowedCharactersCallback_t accb = NULL);
 
 template<size_t N>
 static inline bool
-TextEntryDialog(SingleWindow &parent, StaticString<N> &text,
+TextEntryDialog(StaticString<N> &text,
                 const TCHAR *caption=NULL,
                 AllowedCharactersCallback_t accb=NULL)
 {
-  return dlgTextEntryShowModal(parent, text.buffer(), text.MAX_SIZE,
+  return dlgTextEntryShowModal(text.buffer(), text.MAX_SIZE,
                                caption, accb);
 }
 
 bool
-dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text,
+dlgTextEntryKeyboardShowModal(TCHAR *text,
                               int width = 0, const TCHAR* caption = NULL,
                               AllowedCharactersCallback_t accb = NULL);
 

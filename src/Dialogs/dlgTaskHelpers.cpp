@@ -360,7 +360,7 @@ OrderedTaskPointName(TaskPointFactoryType type)
 }
 
 bool
-OrderedTaskSave(SingleWindow &parent, const OrderedTask& task, bool noask)
+OrderedTaskSave(const OrderedTask& task, bool noask)
 {
   assert(protected_task_manager != NULL);
 
@@ -370,7 +370,7 @@ OrderedTaskSave(SingleWindow &parent, const OrderedTask& task, bool noask)
     return false;
 
   TCHAR fname[69] = _T("");
-  if (!dlgTextEntryShowModal(parent, fname, 64))
+  if (!dlgTextEntryShowModal(fname, 64))
     return false;
 
   TCHAR path[MAX_PATH];

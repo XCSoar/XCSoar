@@ -251,8 +251,7 @@ void
 PolarConfigPanel::Export()
 {
   TCHAR filename[69] = _T("");
-  if (!dlgTextEntryShowModal(*(SingleWindow *)GetWindow()->GetRootOwner(),
-                             filename, 64, _("Polar name")))
+  if (!dlgTextEntryShowModal(filename, 64, _("Polar name")))
     return;
 
   TCHAR path[MAX_PATH];

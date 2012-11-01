@@ -51,7 +51,7 @@ TaskActionsPanel::SaveTask()
   (*active_task)->GetFactory().CheckAddFinish();
 
   if ((*active_task)->CheckTask()) {
-    if (!OrderedTaskSave(UIGlobals::GetMainWindow(), **active_task))
+    if (!OrderedTaskSave(**active_task))
       return;
 
     if (list_panel != NULL)

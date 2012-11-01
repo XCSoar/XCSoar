@@ -32,6 +32,7 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Compatibility/string.h"
 #include "Util/StringUtil.hpp"
+#include "UIGlobals.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -166,7 +167,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text,
+dlgTextEntryKeyboardShowModal(TCHAR *text,
                               int width, const TCHAR* caption,
                               AllowedCharactersCallback_t accb)
 {
@@ -175,7 +176,7 @@ dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text,
 
   max_width = min(MAX_TEXTENTRY, width);
 
-  wf = LoadDialog(CallBackTable, parent,
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_TEXTENTRY_KEYBOARD_L") :
                                       _T("IDR_XML_TEXTENTRY_KEYBOARD"));
   assert(wf != NULL);

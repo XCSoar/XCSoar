@@ -214,7 +214,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 static void
-dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width,
+dlgTextEntryHighscoreType(TCHAR *text, int width,
                           const TCHAR* caption)
 {
   wf = NULL;
@@ -225,9 +225,9 @@ dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width,
 
   max_width = min(MAX_TEXTENTRY, width);
 
-  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TEXTENTRY"));
-  if (!wf)
-    return;
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  _T("IDR_XML_TEXTENTRY"));
+  assert(wf != nullptr);
 
   if (caption)
     wf->SetCaption(caption);
@@ -260,21 +260,21 @@ dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width,
 }
 
 bool
-dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
+dlgTextEntryShowModal(TCHAR *text, int width,
                       const TCHAR* caption, AllowedCharactersCallback_t accb)
 {
   switch (UIGlobals::GetDialogSettings().text_input_style) {
   case DialogSettings::TextInputStyle::Default:
   case DialogSettings::TextInputStyle::Keyboard:
     if (HasPointer())
-      return dlgTextEntryKeyboardShowModal(parent, text, width, caption, accb);
+      return dlgTextEntryKeyboardShowModal(text, width, caption, accb);
     else {
-      dlgTextEntryHighscoreType(parent, text, width, caption);
+      dlgTextEntryHighscoreType(text, width, caption);
       return true;
     }
 
   case DialogSettings::TextInputStyle::HighScore:
-    dlgTextEntryHighscoreType(parent, text, width, caption);
+    dlgTextEntryHighscoreType(text, width, caption);
     return true;
   }
 

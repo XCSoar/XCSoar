@@ -103,8 +103,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   CopyString(newTeammateCode,
              CommonInterface::GetComputerSettings().team_code.team_code.GetCode(), 10);
 
-  if (!dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(),
-                             newTeammateCode, 7))
+  if (!dlgTextEntryShowModal(newTeammateCode, 7))
     return;
 
   TrimRight(newTeammateCode);
@@ -128,8 +127,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   TCHAR newTeamFlarmCNTarget[settings.team_flarm_callsign.MAX_SIZE];
   _tcscpy(newTeamFlarmCNTarget, settings.team_flarm_callsign.c_str());
 
-  if (!dlgTextEntryShowModal(*(SingleWindow *)button.GetRootOwner(),
-                             newTeamFlarmCNTarget, 4))
+  if (!dlgTextEntryShowModal(newTeamFlarmCNTarget, 4))
     return;
 
   settings.team_flarm_callsign = newTeamFlarmCNTarget;

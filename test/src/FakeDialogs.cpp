@@ -31,7 +31,7 @@ ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 }
 
 bool
-dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text,
+dlgTextEntryShowModal(TCHAR *text,
                       int width, const TCHAR *caption,
                       AllowedCharactersCallback_t accb)
 {

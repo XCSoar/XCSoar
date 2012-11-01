@@ -88,8 +88,7 @@ InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
 
   StaticString<4> callsign;
   callsign.clear();
-  if (!TextEntryDialog(*CommonInterface::main_window, callsign,
-                       _("Competition ID")) ||
+  if (!TextEntryDialog(callsign, _("Competition ID")) ||
       callsign.empty())
     return;
 
