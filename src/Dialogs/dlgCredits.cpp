@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Tabbed.hpp"
 #include "Form/Draw.hpp"
 #include "Look/Fonts.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Bitmap.hpp"

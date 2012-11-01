@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "UIGlobals.hpp"
 #include "Profile/Profile.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/Form.hpp"
 #include "Form/Draw.hpp"

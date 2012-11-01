@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Init.hpp"
+#include "Screen/Canvas.hpp"
 #include "Look/DialogLook.hpp"
 #include "Fonts.hpp"
 

@@ -24,6 +24,10 @@ Copyright_License {
 #include "Form/Panel.hpp"
 #include "Look/DialogLook.hpp"
 
+#ifdef HAVE_CLIPPING
+#include "Screen/Canvas.hpp"
+#endif
+
 PanelControl::PanelControl(ContainerWindow &parent, const DialogLook &look,
                            const PixelRect &rc,
                            const WindowStyle style)

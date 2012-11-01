@@ -25,6 +25,7 @@
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Math/Screen.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Form/SymbolButton.hpp"

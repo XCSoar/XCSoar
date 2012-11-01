@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_FRAME_HPP
 
 #include "Screen/PaintWindow.hpp"
+#include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
 #include "Util/StaticString.hpp"
 

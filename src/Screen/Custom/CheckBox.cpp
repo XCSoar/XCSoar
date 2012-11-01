@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/CheckBox.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Util/Macros.hpp"

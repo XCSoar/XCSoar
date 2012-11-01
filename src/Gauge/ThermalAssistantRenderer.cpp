@@ -25,6 +25,7 @@
 #include "Util/Macros.hpp"
 #include "NMEA/Attitude.hpp"
 #include "NMEA/Derived.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Language/Language.hpp"

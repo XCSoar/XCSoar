@@ -32,6 +32,7 @@ Copyright_License {
 #include "Form/DataField/Float.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Icon.hpp"
 #include "UIGlobals.hpp"

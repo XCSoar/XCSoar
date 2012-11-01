@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Init.hpp"
+#include "Screen/Canvas.hpp"
 
 #include <algorithm>
 

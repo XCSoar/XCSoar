@@ -38,6 +38,7 @@ Copyright_License {
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
 #include "Look/MapLook.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Key.h"

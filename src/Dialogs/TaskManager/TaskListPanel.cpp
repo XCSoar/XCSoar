@@ -43,6 +43,7 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Key.h"

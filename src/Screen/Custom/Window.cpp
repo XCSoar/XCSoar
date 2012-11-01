@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Debug.hpp"
+#include "Screen/Canvas.hpp"
 
 void
 Window::Create(ContainerWindow *parent, PixelRect rc,

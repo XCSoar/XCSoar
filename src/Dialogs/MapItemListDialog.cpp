@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Task.hpp"

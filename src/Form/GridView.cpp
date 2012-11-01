@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Form/GridView.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Window.hpp"

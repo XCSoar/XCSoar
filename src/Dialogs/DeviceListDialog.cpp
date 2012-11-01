@@ -45,6 +45,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
 #include "Form/ListWidget.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"

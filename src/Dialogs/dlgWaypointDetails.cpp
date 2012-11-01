@@ -35,6 +35,7 @@ Copyright_License {
 #include "Form/DockWindow.hpp"
 #include "ComputerSettings.hpp"
 #include "LocalPath.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"

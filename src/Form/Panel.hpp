@@ -27,6 +27,10 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Features.hpp"
 
+#ifdef HAVE_CLIPPING
+#include "Screen/Color.hpp"
+#endif
+
 struct DialogLook;
 
 /**

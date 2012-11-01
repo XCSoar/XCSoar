@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/DialogSettings.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Key.h"
 #include "Form/Form.hpp"
 #include "Form/Draw.hpp"

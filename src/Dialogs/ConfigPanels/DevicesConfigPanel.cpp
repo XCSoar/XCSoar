@@ -37,6 +37,7 @@ Copyright_License {
 #include "DevicesConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Compatibility/string.h"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/Macros.hpp"

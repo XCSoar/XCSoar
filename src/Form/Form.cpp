@@ -25,6 +25,7 @@ Copyright_License {
 #include "Time/PeriodClock.hpp"
 #include "Asset.hpp"
 #include "Interface.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"

@@ -30,6 +30,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Airspace/AirspaceWarning.hpp"

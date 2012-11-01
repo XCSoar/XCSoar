@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
+#include "Canvas.hpp"
 #include "Asset.hpp"
 
 bool

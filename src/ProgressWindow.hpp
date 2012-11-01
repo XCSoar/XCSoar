@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/TextWindow.hpp"
 #include "Screen/ProgressBar.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Screen/Brush.hpp"
 #include "Gauge/LogoView.hpp"
 
 /**

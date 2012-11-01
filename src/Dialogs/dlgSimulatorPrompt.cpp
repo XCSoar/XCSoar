@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Draw.hpp"
 #include "UIGlobals.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Gauge/LogoView.hpp"
 #include "resource.h"

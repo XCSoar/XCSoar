@@ -44,6 +44,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Units/Descriptor.hpp"
 #include "LocalPath.hpp"
+#include "Math/Angle.hpp"
 
 #include <windef.h>
 #include <assert.h>

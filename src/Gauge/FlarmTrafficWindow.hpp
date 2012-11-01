@@ -30,6 +30,8 @@
 #include "TeamCodeSettings.hpp"
 #include "Math/FastRotation.hpp"
 
+struct Color;
+class Brush;
 struct FlarmTrafficLook;
 
 /**

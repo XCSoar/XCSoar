@@ -23,6 +23,7 @@
 
 #include "ThermalAssistantWindow.hpp"
 #include "Look/ThermalAssistantLook.hpp"
+#include "Screen/Canvas.hpp"
 
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
                                                unsigned _padding, bool _small)

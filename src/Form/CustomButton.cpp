@@ -24,6 +24,7 @@ Copyright_License {
 #include "Form/CustomButton.hpp"
 #include "Form/Control.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "resource.h"

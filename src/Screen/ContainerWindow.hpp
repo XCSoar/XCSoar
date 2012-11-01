@@ -31,6 +31,7 @@ Copyright_License {
 #endif
 
 class WindowReference;
+class Brush;
 
 /**
  * A container for more #Window objects.  It is also derived from

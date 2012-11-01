@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"

@@ -36,6 +36,10 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 
+#ifdef HAVE_ALPHA_BLEND
+#include "Screen/GDI/AlphaBlend.hpp"
+#endif
+
 enum ControlIndex {
   AirspaceDisplay,
   ClipAltitude,

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Gauge/GaugeVario.hpp"
 #include "Look/VarioLook.hpp"
 #include "Look/UnitsLook.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/FastPixelRotation.hpp"

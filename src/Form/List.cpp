@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/List.hpp"
 #include "Look/DialogLook.hpp"
+#include "Screen/Canvas.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Key.h"
 #include "Screen/Point.hpp"

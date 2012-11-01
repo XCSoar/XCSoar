@@ -32,6 +32,10 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 
+#ifdef HAVE_ALPHA_BLEND
+#include "Screen/GDI/AlphaBlend.hpp"
+#endif
+
 #include <assert.h>
 
 AirspaceClassRendererSettingsPanel::AirspaceClassRendererSettingsPanel(AirspaceClass _type)

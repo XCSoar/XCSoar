@@ -29,6 +29,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Util/StaticArray.hpp"
 #include "Units/Group.hpp"
+#include "Math/fixed.hpp"
 
 #include <assert.h>
 #include <stdint.h>
@@ -36,6 +37,7 @@ Copyright_License {
 struct DialogLook;
 struct StaticEnumChoice;
 class ActionListener;
+class Angle;
 
 /**
  * A #Widget that contains #WndProperty controls, one in a row.
