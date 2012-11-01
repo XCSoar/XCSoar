@@ -86,7 +86,7 @@ $(TARGET_OUTPUT_DIR)/include/android_drawable.h: $(TARGET_OUTPUT_DIR)/XCSoar-dra
 $(call SRC_TO_OBJ,$(SRC)/ResourceLoader.cpp): $(TARGET_OUTPUT_DIR)/include/resource_data.h
 
 ifeq ($(TARGET),ANDROID)
-$(call SRC_TO_OBJ,$(SRC)/Screen/OpenGL/Bitmap.cpp): $(TARGET_OUTPUT_DIR)/include/android_drawable.h
+$(call SRC_TO_OBJ,$(SRC)/Screen/Android/Bitmap.cpp): $(TARGET_OUTPUT_DIR)/include/android_drawable.h
 endif
 
 endif
