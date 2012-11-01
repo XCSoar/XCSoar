@@ -21,6 +21,10 @@
 #include "Screen/OpenGL/Compatibility.hpp"
 #endif
 
+#ifdef ENABLE_SDL
+#include <SDL.h>
+#endif
+
 /**
  * BGRColor structure encapsulates color information about one point. Color
  * order is Blue, Green, Red (not RGB).
