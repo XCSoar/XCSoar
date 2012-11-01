@@ -65,8 +65,6 @@ namespace FBO {
   void GenFramebuffers(GLsizei n, GLuint *framebuffers);
   void FramebufferRenderbuffer(GLenum target, GLenum attachment,
                                GLenum renderbuffertarget, GLuint renderbuffer);
-  void FramebufferRenderbuffer(GLenum target, GLenum attachment,
-                               GLenum renderbuffertarget, GLuint renderbuffer);
   void FramebufferTexture2D(GLenum target, GLenum attachment,
                             GLenum textarget, GLuint texture,
                             GLint level);
