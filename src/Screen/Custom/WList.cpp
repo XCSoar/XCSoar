@@ -63,7 +63,8 @@ WindowList::IsCovered(const Window &w) const
       /* didn't find a covering sibling so far */
       return false;
 
-    if (child.GetLeft() <= rc.left &&
+    if (child.IsVisible() &&
+        child.GetLeft() <= rc.left &&
         child.GetRight() >= rc.right &&
         child.GetTop() <= rc.top &&
         child.GetBottom() >= rc.bottom)
