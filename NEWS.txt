@@ -15,6 +15,7 @@ Version 6.5 - not yet released
   - preselect first item with details in map item list for
     faster access (#2069, #2207)
   - non-modal FLARM radar (with InfoBoxes and menu)
+  - show FAI triangle sectors in task manager
 * infoboxes
   - added thermal assistant infobox
 

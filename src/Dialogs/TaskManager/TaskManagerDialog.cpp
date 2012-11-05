@@ -149,7 +149,8 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
             basic.location_available, basic.location,
             XCSoarInterface::GetMapSettings(),
             look.task, look.airspace,
-            terrain, &airspace_database);
+            terrain, &airspace_database,
+            true);
 }
 
 bool

@@ -36,13 +36,17 @@ struct MapSettings;
 struct TaskLook;
 struct AirspaceLook;
 
+/**
+ * @param fai_sectors render FAI triangle sectors?
+ */
 void
 PaintTask(Canvas &canvas, const PixelRect &rc, const OrderedTask &task,
           bool location_available, const GeoPoint &location,
           const MapSettings &settings_map,
           const TaskLook &task_look,
           const AirspaceLook &airspace_look,
-          const RasterTerrain *terrain, const Airspaces *airspaces);
+          const RasterTerrain *terrain, const Airspaces *airspaces,
+          bool fai_sectors=false);
 
 void
 PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
