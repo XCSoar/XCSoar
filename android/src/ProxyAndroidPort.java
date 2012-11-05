@@ -36,6 +36,9 @@ abstract class ProxyAndroidPort implements AndroidPort {
     port = _port;
     if (oldPort != null)
       oldPort.close();
+
+    if (port != null)
+      port.setListener(listener);
   }
 
   @Override public String toString() {
