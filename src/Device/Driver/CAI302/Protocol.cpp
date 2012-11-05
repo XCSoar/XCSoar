@@ -520,7 +520,7 @@ CAI302::ClearPilot(Port &port, OperationEnvironment &env)
 bool
 CAI302::ClearLog(Port &port, OperationEnvironment &env)
 {
-  return SendCommand(port, "CLEAR LOG\r", env, 5000);
+  return SendCommand(port, "CLEAR LOG\r", env, 60000);
 }
 
 static unsigned

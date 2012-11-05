@@ -135,6 +135,8 @@ RunCommand(CAI302Device &device, const char *command,
     return device.StartLogging(env);
   else if (strcmp(command, "stoplogger") == 0)
     return device.StopLogging(env);
+  else if (strcmp(command, "clearlog") == 0)
+    return device.ClearLog(env);
   else if (strcmp(command, "pilots") == 0)
     return ListPilots(device, env);
   else if (strcmp(command, "navpoints") == 0)

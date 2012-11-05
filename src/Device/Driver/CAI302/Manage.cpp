@@ -215,7 +215,7 @@ int
 CAI302Device::ReadNavpointCount(OperationEnvironment &env)
 {
   if (!UploadMode(env))
-    return false;
+    return -1;
 
   CAI302::NavpointMeta meta;
   if (!CAI302::UploadNavpointMeta(port, meta, env)) {
