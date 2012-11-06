@@ -47,7 +47,7 @@ CalcAngle(Angle angle, fixed dist_a, fixed dist_b, fixed dist_c, bool reverse)
 
 gcc_const
 static GeoPoint
-CalcGeoPoint(GeoPoint origin, Angle angle,
+CalcGeoPoint(const GeoPoint &origin, Angle angle,
              fixed dist_a, fixed dist_b, fixed dist_c, bool reverse)
 {
   return FindLatitudeLongitude(origin, CalcAngle(angle, dist_a, dist_b, dist_c,

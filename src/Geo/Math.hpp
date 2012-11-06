@@ -41,18 +41,21 @@ struct GeoPoint;
  * Finds cross track error in meters and closest point P4 between P3
  * and desired track P1-P2.  Very slow function!
  */
-fixed CrossTrackError(const GeoPoint loc1, const GeoPoint loc2,
-                      const GeoPoint loc3, GeoPoint *loc4);
+fixed
+CrossTrackError(const GeoPoint &loc1, const GeoPoint &loc2,
+                const GeoPoint &loc3, GeoPoint *loc4);
 
 /**
  * Calculates projected distance from P3 along line P1-P2.
  */
 gcc_const
-fixed ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2,
-                        const GeoPoint loc3);
+fixed
+ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
+                  const GeoPoint &loc3);
 
-void DistanceBearing(const GeoPoint loc1, const GeoPoint loc2,
-                     fixed *distance, Angle *bearing);
+void
+DistanceBearing(const GeoPoint &loc1, const GeoPoint &loc2,
+                fixed *distance, Angle *bearing);
 
 /**
  * Calculates the distance between two locations
@@ -61,7 +64,8 @@ void DistanceBearing(const GeoPoint loc1, const GeoPoint loc2,
  * @return The distance
  */
 gcc_const
-fixed Distance(const GeoPoint loc1, const GeoPoint loc2);
+fixed
+Distance(const GeoPoint &loc1, const GeoPoint &loc2);
 
 /**
  * Calculates the bearing between two locations
@@ -70,7 +74,8 @@ fixed Distance(const GeoPoint loc1, const GeoPoint loc2);
  * @return The bearing
  */
 gcc_const
-Angle Bearing(const GeoPoint loc1, const GeoPoint loc2);
+Angle
+Bearing(const GeoPoint &loc1, const GeoPoint &loc2);
 
 /**
  * Finds the point along a distance dthis (m) between p1 and p2, which are
@@ -78,16 +83,17 @@ Angle Bearing(const GeoPoint loc1, const GeoPoint loc2);
  *
  * This is a slow function.  Adapted from The Aviation Formulary 1.42.
  */
-gcc_const
-GeoPoint IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2,
-                           const fixed dthis);
+gcc_pure
+GeoPoint
+IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2,
+                  const fixed dthis);
 
 /**
  * Find the nearest great-circle middle point between the two.
  */
-gcc_const
+gcc_pure
 GeoPoint
-Middle(GeoPoint a, GeoPoint b);
+Middle(const GeoPoint &a, const GeoPoint &b);
 
 /** 
  * Calculate and add distances between point 1 and 2, and point 2 and 3.
@@ -98,9 +104,10 @@ Middle(GeoPoint a, GeoPoint b);
  * 
  * @return Distance 12 plus 23 (m)
  */
-gcc_const
-fixed DoubleDistance(const GeoPoint loc1, const GeoPoint loc2,
-                     const GeoPoint loc3);
+gcc_pure
+fixed
+DoubleDistance(const GeoPoint &loc1, const GeoPoint &loc2,
+               const GeoPoint &loc3);
 
 /**
  * Calculates the location (loc_out) you would have, after being at
@@ -111,8 +118,8 @@ fixed DoubleDistance(const GeoPoint loc1, const GeoPoint loc2,
  * @param Distance Distance to predict
  * @param loc_out Future location
  */
-gcc_const
-GeoPoint FindLatitudeLongitude(const GeoPoint loc,
+gcc_pure
+GeoPoint FindLatitudeLongitude(const GeoPoint &loc,
                                const Angle bearing, const fixed distance);
 
 #endif
