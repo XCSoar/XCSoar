@@ -24,4 +24,6 @@ JASPER_CFLAGS += -Wno-unused-but-set-parameter -Wno-unused-but-set-variable
 endif
 endif
 
+JASPER_CPPFLAGS_INTERNAL = $(ZLIB_CPPFLAGS)
+
 $(eval $(call link-library,jasper,JASPER))

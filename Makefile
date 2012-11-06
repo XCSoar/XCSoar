@@ -778,6 +778,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)
 
+$(call SRC_TO_OBJ,$(SRC)/Dialogs/Inflate.cpp): CPPFLAGS += $(ZLIB_CPPFLAGS)
+
 ifneq ($(NO_HORIZON),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Renderer/HorizonRenderer.cpp
