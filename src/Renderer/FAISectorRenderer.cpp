@@ -30,27 +30,29 @@ Copyright_License {
 
 gcc_const
 static Angle
-CalcAlpha(fixed dist_a, fixed dist_b, fixed dist_c, int dir)
+CalcAlpha(fixed dist_a, fixed dist_b, fixed dist_c)
 {
     const fixed cos_alpha = (sqr(dist_b) + sqr(dist_c) - sqr(dist_a))
       / Double(dist_c * dist_b);
-    return Angle::Radians(acos(cos_alpha) * dir);
+    return Angle::Radians(acos(cos_alpha));
 }
 
 gcc_const
 static Angle
-CalcAngle(Angle angle, fixed dist_a, fixed dist_b, fixed dist_c, int dir)
+CalcAngle(Angle angle, fixed dist_a, fixed dist_b, fixed dist_c, bool reverse)
 {
-  const Angle alpha = CalcAlpha(dist_a, dist_b, dist_c, dir);
-  return angle + alpha;
+  const Angle alpha = CalcAlpha(dist_a, dist_b, dist_c);
+  return reverse
+    ? angle + alpha
+    : angle - alpha;
 }
 
 gcc_const
 static GeoPoint
 CalcGeoPoint(GeoPoint origin, Angle angle,
-             fixed dist_a, fixed dist_b, fixed dist_c, int dir)
+             fixed dist_a, fixed dist_b, fixed dist_c, bool reverse)
 {
-  return GeoVector(dist_b, CalcAngle(angle, dist_a, dist_b, dist_c, dir))
+  return GeoVector(dist_b, CalcAngle(angle, dist_a, dist_b, dist_c, reverse))
     .EndPoint(origin);
 }
 
@@ -71,8 +73,6 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   const fixed fDistMax = fDist_c / FAI_MIN_PERCENTAGE;
   const fixed fDistMin = fDist_c / (fixed_one - 2 * FAI_MIN_PERCENTAGE);
 
-  const int dir = reverse > 0 ? 1 : -1;
-
   // calc right leg
   fixed fDelta_Dist = (fDistMax - fDistMin) / STEPS;
   fixed fDistTri = fDistMin;
@@ -80,7 +80,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fixed fDist_b = fDistMin * FAI_MIN_PERCENTAGE;
   for (unsigned i = 0; i < STEPS; ++i) {
     const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
-                                      fDist_a, fDist_b, fDist_c, dir);
+                                      fDist_a, fDist_b, fDist_c, reverse);
     points.append() = projection.GeoToScreen(ptd);
 
     fDistTri += fDelta_Dist;
@@ -94,7 +94,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fDist_b = fDistMax - fDist_a - fDist_c;
   for (unsigned i = 0; i < STEPS; ++i) {
     const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
-                                      fDist_a, fDist_b, fDist_c, dir);
+                                      fDist_a, fDist_b, fDist_c, reverse);
     points.append() = projection.GeoToScreen(ptd);
 
     fDist_a += fDelta_Dist;
@@ -108,7 +108,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fDist_a = fDistTri - fDist_b - fDist_c;
   for (unsigned i = 0; i < STEPS; ++i) {
     const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
-                                      fDist_a, fDist_b, fDist_c, dir);
+                                      fDist_a, fDist_b, fDist_c, reverse);
     points.append() = projection.GeoToScreen(ptd);
 
     fDistTri -= fDelta_Dist;
