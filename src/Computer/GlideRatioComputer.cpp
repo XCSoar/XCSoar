@@ -37,18 +37,13 @@ GlideRatioComputer::Compute(const MoreData &basic, const MoreData &last_basic,
                             VarioInfo &vario_info,
                             const ComputerSettings &settings)
 {
-  if (!basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
+  if (!last_basic.location_available ||
+      !basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
     vario_info.gr = INVALID_GR;
     return;
   }
 
-  if (basic.HasTimeRetreatedSince(last_basic)) {
-    vario_info.gr = INVALID_GR;
-    return;
-  }
-
-  const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
-  if (!time_advanced)
+  if (!basic.location_available.Modified(last_basic.location_available))
     return;
 
   fixed DistanceFlown = basic.location.Distance(last_basic.location);
