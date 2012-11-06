@@ -178,8 +178,8 @@ endif
 
 # Compile
 $(2)_OBJS = $$(call SRC_TO_OBJ,$$($(2)_SOURCES))
-$$($(2)_OBJS): CFLAGS += $$($(2)_CFLAGS)
-$$($(2)_OBJS): CXXFLAGS += $$($(2)_CXXFLAGS)
+$$($(2)_OBJS): CFLAGS += $$($(2)_CFLAGS) $$($(2)_CFLAGS_INTERNAL)
+$$($(2)_OBJS): CXXFLAGS += $$($(2)_CXXFLAGS) $$($(2)_CXXFLAGS_INTERNAL)
 $$($(2)_OBJS): CPPFLAGS += $$($(2)_CPPFLAGS) $$($(2)_CPPFLAGS_INTERNAL)
 $$($(2)_OBJS): CPPFLAGS += $(patsubst %,$$(%_CPPFLAGS),$($(2)_DEPENDS))
 
