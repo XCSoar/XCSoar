@@ -26,7 +26,7 @@ Copyright_License {
 
 struct GeoPoint;
 
-static constexpr unsigned FAI_TRIANGLE_SECTOR_MAX = 3 * 10;
+static constexpr unsigned FAI_TRIANGLE_SECTOR_MAX = 8 * 3 * 10;
 
 /**
  * @return a pointer after the last generated item
