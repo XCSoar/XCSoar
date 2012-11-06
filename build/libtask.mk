@@ -1,6 +1,7 @@
 TASK_SRC_DIR = $(SRC)/Engine/Task
 
 TASK_SOURCES = \
+	$(TASK_SRC_DIR)/Shapes/FAITriangleSector.cpp \
 	$(TASK_SRC_DIR)/TaskBehaviour.cpp \
 	$(TASK_SRC_DIR)/TaskManager.cpp \
 	$(TASK_SRC_DIR)/AbstractTask.cpp \

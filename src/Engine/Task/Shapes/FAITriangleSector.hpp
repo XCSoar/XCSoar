@@ -21,23 +21,19 @@ Copyright_License {
 }
 */
 
-#include "FAISectorRenderer.hpp"
-#include "Engine/Task/Shapes/FAITriangleSector.hpp"
-#include "Geo/GeoPoint.hpp"
-#include "Projection/Projection.hpp"
-#include "Screen/Canvas.hpp"
+#ifndef XCSOAR_FAI_TRIANGLE_SECTOR_RENDERER_HPP
+#define XCSOAR_FAI_TRIANGLE_SECTOR_RENDERER_HPP
 
-void
-RenderFAISector(Canvas &canvas, const Projection &projection,
-                const GeoPoint &pt1, const GeoPoint &pt2,
-                bool reverse)
-{
-  GeoPoint geo_points[FAI_TRIANGLE_SECTOR_MAX];
-  GeoPoint *geo_end = GenerateFAITriangleSector(geo_points, pt1, pt2, reverse);
+struct GeoPoint;
 
-  RasterPoint points[FAI_TRIANGLE_SECTOR_MAX], *p = points;
-  for (GeoPoint *geo_i = geo_points; geo_i != geo_end;)
-    *p++ = projection.GeoToScreen(*geo_i++);
+static constexpr unsigned FAI_TRIANGLE_SECTOR_MAX = 3 * 10;
 
-  canvas.DrawPolygon(points, p - points);
-}
+/**
+ * @return a pointer after the last generated item
+ */
+GeoPoint *
+GenerateFAITriangleSector(GeoPoint *dest,
+                          const GeoPoint &pt1, const GeoPoint &pt2,
+                          bool reverse);
+
+#endif
