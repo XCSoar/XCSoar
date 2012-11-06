@@ -25,6 +25,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
+#include "Geo/Math.hpp"
 #include "Projection/Projection.hpp"
 #include "Screen/Canvas.hpp"
 
@@ -52,8 +53,8 @@ static GeoPoint
 CalcGeoPoint(GeoPoint origin, Angle angle,
              fixed dist_a, fixed dist_b, fixed dist_c, bool reverse)
 {
-  return GeoVector(dist_b, CalcAngle(angle, dist_a, dist_b, dist_c, reverse))
-    .EndPoint(origin);
+  return FindLatitudeLongitude(origin, CalcAngle(angle, dist_a, dist_b, dist_c,
+                                                 reverse), dist_b);
 }
 
 void
