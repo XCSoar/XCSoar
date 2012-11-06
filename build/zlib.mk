@@ -43,7 +43,7 @@ ZLIB_LDLIBS =
 ZLIB_CPPFLAGS_INTERNAL = -DNO_VIZ -DHAVE_UNISTD_H
 ZLIB_CPPFLAGS = -I$(ZLIB_SRC_DIR)
 
-$(eval $(call link-library,zlip,ZLIB))
+$(eval $(call link-library,zlib,ZLIB))
 
 endif
 endif
