@@ -638,6 +638,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunOLCAnalysis \
 	FlightPath \
 	BenchmarkProjection \
+	BenchmarkFAITriangleSector \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
 	DumpHexColor \
 	RunXMLParser \
@@ -774,6 +775,12 @@ BENCHMARK_PROJECTION_SOURCES = \
 BENCHMARK_PROJECTION_DEPENDS = MATH
 BENCHMARK_PROJECTION_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,BenchmarkProjection,BENCHMARK_PROJECTION))
+
+BENCHMARK_FAI_TRIANGLE_SECTOR_SOURCES = \
+	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSector.cpp \
+	$(TEST_SRC_DIR)/BenchmarkFAITriangleSector.cpp
+BENCHMARK_FAI_TRIANGLE_SECTOR_DEPENDS = GEO MATH
+$(eval $(call link-program,BenchmarkFAITriangleSector,BENCHMARK_FAI_TRIANGLE_SECTOR))
 
 DUMP_TEXT_FILE_SOURCES = \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
