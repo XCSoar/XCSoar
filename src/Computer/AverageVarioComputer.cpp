@@ -28,27 +28,28 @@ Copyright_License {
 void
 AverageVarioComputer::Reset()
 {
+  delta_time.Reset();
   vario_30s_filter.Reset();
   netto_30s_filter.Reset();
 }
 
 void
 AverageVarioComputer::Compute(const MoreData &basic,
-                              const NMEAInfo &last_basic,
                               bool circling, bool last_circling,
                               VarioInfo &vario_info)
 {
-  const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
-  if (!time_advanced || circling != last_circling) {
+  const fixed dt = delta_time.Update(basic.time, fixed_one, fixed_zero);
+  if (negative(dt) || circling != last_circling) {
     Reset();
     vario_info.average = basic.brutto_vario;
     vario_info.netto_average = basic.netto_vario;
+    return;
   }
 
-  if (!time_advanced)
+  if (!positive(dt))
     return;
 
-  const unsigned Elapsed(basic.time - last_basic.time);
+  const unsigned Elapsed = uround(dt);
   if (Elapsed == 0)
     return;
 

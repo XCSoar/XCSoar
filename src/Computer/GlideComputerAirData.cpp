@@ -118,7 +118,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   if (calculated.flight.flying && !calculated.circling)
     calculated.average_gr = gr_calculator.Calculate();
 
-  average_vario.Compute(basic, last_basic, calculated.circling, last_circling,
+  average_vario.Compute(basic, calculated.circling, last_circling,
                         calculated);
   AverageClimbRate(basic, calculated);
   CurrentThermal(basic, calculated, calculated.current_thermal);

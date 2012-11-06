@@ -25,20 +25,22 @@ Copyright_License {
 #define XCSOAR_AVERAGE_VARIO_COMPUTER_HPP
 
 #include "Math/WindowFilter.hpp"
+#include "DeltaTime.hpp"
 
 struct MoreData;
-struct NMEAInfo;
 struct CirclingInfo;
 struct VarioInfo;
 
 class AverageVarioComputer {
+  DeltaTime delta_time;
+
   WindowFilter<30> vario_30s_filter;
   WindowFilter<30> netto_30s_filter;
 
 public:
   void Reset();
 
-  void Compute(const MoreData &basic, const NMEAInfo &last_basic,
+  void Compute(const MoreData &basic,
                bool circling, bool last_circling,
                VarioInfo &calculated);
 };
