@@ -59,7 +59,8 @@ typedef union _zzip_plugin_io
 } zzip_plugin_io_handlers;
 
 #define _zzip_plugin_io_handlers zzip_plugin_io_handlers
-/* for backward compatibility, and the following to your application code:
+
+/* for backward compatibility, add the following to your application code:
  * #ifndef _zzip_plugin_io_handlers
  * #define _zzip_plugin_io_handlers struct zzip_plugin_io
  */
@@ -74,7 +75,9 @@ typedef zzip_plugin_io_handlers* zzip_plugin_io_handlers_t;
 _zzip_export zzip_off_t
 zzip_filesize(int fd);
 
-/* get the default file I/O functions */
+/* get the default file I/O functions.
+ *  This functions returns a pointer to an internal static structure.
+ */
 _zzip_export zzip_plugin_io_t zzip_get_default_io(void);
 
 /*

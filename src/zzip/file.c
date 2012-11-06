@@ -744,6 +744,9 @@ zzip_open(zzip_char_t * filename, int o_flags)
  *
  * This function returns a new zzip-handle (use => zzip_close to return
  * it). On error this function will return null setting => errno(3).
+ * 
+ * If any ext_io handlers were used then the referenced structure
+ * should be static as the allocated ZZIP_FILE does not copy them.
  */
 ZZIP_FILE *
 zzip_open_ext_io(zzip_char_t * filename, int o_flags, int o_modes,
@@ -795,7 +798,7 @@ zzip_open_shared_io(ZZIP_FILE * stream,
     {
         zzip_plugin_io_t os = (o_modes & ZZIP_ALLOWREAL)
             ? zzip_get_default_io() : io;
-        int fd = os->fd.open(filename, o_flags);        /* io->fd.open */
+        int fd = (os->fd.open)(filename, o_flags);        /* io->fd.open */
 
         if (fd != -1)
         {

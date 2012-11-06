@@ -166,7 +166,8 @@ static const struct zzip_plugin_io default_io = {
 
 /** => zzip_init_io
  * This function returns a zzip_plugin_io_t handle to static defaults
- * wrapping the posix io file functions for actual file access.
+ * wrapping the posix io file functions for actual file access. The
+ * returned structure is shared by all threads in the system.
  */
 zzip_plugin_io_t
 zzip_get_default_io(void)
@@ -177,6 +178,9 @@ zzip_get_default_io(void)
 /**
  * This function initializes the users handler struct to default values 
  * being the posix io functions in default configured environments.
+ *
+ * Note that the target io_handlers_t structure should be static or 
+ * atleast it should be kept during the lifetime of zzip operations.
  */
 int
 zzip_init_io(zzip_plugin_io_handlers_t io, int flags)
