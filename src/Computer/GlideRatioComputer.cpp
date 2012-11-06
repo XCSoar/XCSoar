@@ -39,7 +39,9 @@ GlideRatioComputer::Compute(const MoreData &basic, const MoreData &last_basic,
 {
   if (!last_basic.location_available ||
       !basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
+    Reset();
     vario_info.gr = INVALID_GR;
+    vario_info.average_gr = fixed_zero;
     return;
   }
 
