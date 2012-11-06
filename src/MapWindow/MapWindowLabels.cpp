@@ -22,11 +22,9 @@ Copyright_License {
 */
 
 #include "MapWindowLabels.hpp"
-#include "MapWindow.hpp"
 #include "Util/Macros.hpp"
 
 #include <stdlib.h>
-#include <assert.h>
 
 #ifndef WIN32
 #define _cdecl
