@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "FAISectorRenderer.hpp"
-#include "Util/StaticArray.hpp"
+#include "Util/Macros.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Geo/Math.hpp"
@@ -65,7 +65,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   static constexpr fixed FAI_MIN_PERCENTAGE(0.28);
   static constexpr unsigned STEPS = 10;
 
-  StaticArray<RasterPoint, 3 * STEPS> points;
+  RasterPoint points[3 * STEPS], *dest = points;
 
   const GeoVector v = pt1.DistanceBearing(pt2);
   const fixed fDist_c = v.distance;
@@ -82,7 +82,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   for (unsigned i = 0; i < STEPS; ++i) {
     const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
                                       fDist_a, fDist_b, fDist_c, reverse);
-    points.append() = projection.GeoToScreen(ptd);
+    *dest++ = projection.GeoToScreen(ptd);
 
     fDistTri += fDelta_Dist;
     fDist_a = FAI_MIN_PERCENTAGE * fDistTri;
@@ -96,7 +96,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   for (unsigned i = 0; i < STEPS; ++i) {
     const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
                                       fDist_a, fDist_b, fDist_c, reverse);
-    points.append() = projection.GeoToScreen(ptd);
+    *dest++ = projection.GeoToScreen(ptd);
 
     fDist_a += fDelta_Dist;
     fDist_b = fDistMax - fDist_a - fDist_c;
@@ -110,7 +110,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   for (unsigned i = 0; i < STEPS; ++i) {
     const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
                                       fDist_a, fDist_b, fDist_c, reverse);
-    points.append() = projection.GeoToScreen(ptd);
+    *dest++ = projection.GeoToScreen(ptd);
 
     fDistTri -= fDelta_Dist;
     fDist_b = FAI_MIN_PERCENTAGE * fDistTri;
@@ -118,5 +118,5 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   }
 
   // draw polygon
-  canvas.DrawPolygon(points.begin(), points.size());
+  canvas.DrawPolygon(points, ARRAY_SIZE(points));
 }
