@@ -1521,7 +1521,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
-	$(SRC)/MapWindow/MapWindowLabels.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowRender.cpp \
 	$(SRC)/MapWindow/MapWindowSymbols.cpp \
@@ -1547,6 +1546,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/WaypointIconRenderer.cpp \
 	$(SRC)/Renderer/WaypointRenderer.cpp \
 	$(SRC)/Renderer/WaypointRendererSettings.cpp \
+	$(SRC)/Renderer/WaypointLabelList.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Markers/Markers.cpp \
 	$(SRC)/Markers/ProtectedMarkers.cpp \

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MAP_WINDOW_LABELS_HPP
-#define XCSOAR_MAP_WINDOW_LABELS_HPP
+#ifndef XCSOAR_WAYPOINT_LABEL_LIST_HPP
+#define XCSOAR_WAYPOINT_LABEL_LIST_HPP
 
 #include "Rough/RoughAltitude.hpp"
 #include "Renderer/TextInBox.hpp"

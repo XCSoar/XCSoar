@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "MapWindowLabels.hpp"
+#include "WaypointLabelList.hpp"
 #include "Util/Macros.hpp"
 
 #include <stdlib.h>

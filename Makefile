@@ -541,6 +541,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/WaypointIconRenderer.cpp \
 	$(SRC)/Renderer/WaypointRenderer.cpp \
 	$(SRC)/Renderer/WaypointRendererSettings.cpp \
+	$(SRC)/Renderer/WaypointLabelList.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Projection/ChartProjection.cpp \
 	$(SRC)/MapWindow/MapItemList.cpp \
@@ -548,7 +549,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
-	$(SRC)/MapWindow/MapWindowLabels.cpp \
 	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowRender.cpp \
 	$(SRC)/MapWindow/MapWindowSymbols.cpp \
