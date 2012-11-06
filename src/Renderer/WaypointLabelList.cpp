@@ -24,51 +24,46 @@ Copyright_License {
 #include "WaypointLabelList.hpp"
 #include "Util/Macros.hpp"
 
-#include <stdlib.h>
-
-#ifndef WIN32
-#define _cdecl
-#endif
+#include <algorithm>
 
 static constexpr PixelScalar WPCIRCLESIZE = 2;
 
-static int _cdecl
-MapWaypointLabelListCompare(const void *elem1, const void *elem2)
+gcc_pure
+static bool
+MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
+                            const WaypointLabelList::Label &e2)
 {
-  const WaypointLabelList::Label &e1 = *(const WaypointLabelList::Label *)elem1;
-  const WaypointLabelList::Label &e2 = *(const WaypointLabelList::Label *)elem2;
-
   if (e1.inTask && !e2.inTask)
-    return -1;
+    return true;
 
   if (!e1.inTask && e2.inTask)
-    return 1;
+    return false;
 
   if (e1.isAirport && !e2.isAirport)
-    return -1;
+    return true;
 
   if (!e1.isAirport && e2.isAirport)
-    return 1;
+    return false;
 
   if (e1.isLandable && !e2.isLandable)
-    return -1;
+    return true;
 
   if (!e1.isLandable && e2.isLandable)
-    return 1;
+    return false;
 
   if (e1.isWatchedWaypoint && !e2.isWatchedWaypoint)
-    return -1;
+    return true;
 
   if (!e1.isWatchedWaypoint && e2.isWatchedWaypoint)
-    return 1;
+    return false;
 
   if (e1.AltArivalAGL > e2.AltArivalAGL)
-    return -1;
+    return true;
 
   if (e1.AltArivalAGL < e2.AltArivalAGL)
-    return 1;
+    return false;
 
-  return 0;
+  return true;
 }
 
 void
@@ -102,6 +97,6 @@ WaypointLabelList::Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
 void
 WaypointLabelList::Sort()
 {
-  qsort(&labels, num_labels, sizeof(labels[0]),
-        MapWaypointLabelListCompare);
+  std::sort(labels, labels + num_labels,
+            MapWaypointLabelListCompare);
 }
