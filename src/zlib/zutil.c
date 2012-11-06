@@ -10,7 +10,6 @@
 #ifndef Z_SOLO
 #  include "gzguts.h"
 #endif
-#endif
 
 #ifndef NO_DUMMY_DECL
 struct internal_state      {int dummy;}; /* for buggy compilers */
@@ -146,8 +145,7 @@ const char * ZEXPORT zError(err)
      * errno.  We define it as a global variable to simplify porting.
      * Its value is always 0 and should not be used.
      */
-//JMW we have it already
-//    int errno = 0;
+    int errno = 0;
 #endif
 
 #ifndef HAVE_MEMCPY
@@ -185,6 +183,8 @@ void ZLIB_INTERNAL zmemzero(dest, len)
         *dest++ = 0;  /* ??? to be unrolled */
     } while (--len != 0);
 }
+#endif
+
 #endif
 
 #ifndef Z_SOLO

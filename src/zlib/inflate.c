@@ -97,8 +97,10 @@ local int updatewindow OF((z_streamp strm, unsigned out));
 #ifdef BUILDFIXED
    void makefixed OF((void));
 #endif
+#ifdef ZLIB_DISABLED
 local unsigned syncsearch OF((unsigned FAR *have, const unsigned char FAR *buf,
                               unsigned len));
+#endif
 
 int ZEXPORT inflateResetKeep(strm)
 z_streamp strm;
@@ -218,6 +220,8 @@ int stream_size;
     return ret;
 }
 
+#ifdef ZLIB_DISABLED
+
 int ZEXPORT inflateInit_(strm, version, stream_size)
 z_streamp strm;
 const char *version;
@@ -246,6 +250,8 @@ int value;
     state->bits += bits;
     return Z_OK;
 }
+
+#endif
 
 /*
    Return state with length and distance decoding tables and index sizes set to
@@ -1309,8 +1315,6 @@ uInt dictLength;
     return Z_OK;
 }
 
-#endif
-
 int ZEXPORT inflateGetHeader(strm, head)
 z_streamp strm;
 gz_headerp head;
@@ -1498,3 +1502,5 @@ z_streamp strm;
         (state->mode == COPY ? state->length :
             (state->mode == MATCH ? state->was - state->length : 0));
 }
+
+#endif

@@ -8,6 +8,7 @@
 
 #define MAXBITS 15
 
+#ifdef ZLIB_DISABLED
 const char inflate_copyright[] =
    " inflate 1.2.7 Copyright 1995-2012 Mark Adler ";
 /*
@@ -16,6 +17,7 @@ const char inflate_copyright[] =
   include such an acknowledgment, I would appreciate that you keep this
   copyright string in the executable of your product.
  */
+#endif
 
 /*
    Build a set of tables to decode the provided canonical Huffman code.
