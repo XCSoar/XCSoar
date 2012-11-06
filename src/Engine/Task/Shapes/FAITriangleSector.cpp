@@ -65,14 +65,13 @@ GenerateFAITriangleRight(GeoPoint *dest,
 {
   const fixed delta_distance = (dist_max - dist_min) / STEPS;
   fixed total_distance = dist_min;
-  for (unsigned i = 0; i < STEPS; ++i) {
+  for (unsigned i = 0; i < STEPS; ++i,
+         total_distance += delta_distance) {
     const fixed dist_a = FAI_MIN_PERCENTAGE * total_distance;
     const fixed dist_b = total_distance - dist_a - leg_c.distance;
 
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
-
-    total_distance += delta_distance;
   }
 
   return dest;
@@ -88,12 +87,11 @@ GenerateFAITriangleTop(GeoPoint *dest,
     / STEPS;
   fixed dist_a = leg_c.distance;
   fixed dist_b = dist_max - dist_a - leg_c.distance;
-  for (unsigned i = 0; i < STEPS; ++i) {
+  for (unsigned i = 0; i < STEPS; ++i,
+         dist_a += delta_distance,
+         dist_b -= delta_distance) {
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
-
-    dist_a += delta_distance;
-    dist_b -= delta_distance;
   }
 
   return dest;
@@ -107,14 +105,13 @@ GenerateFAITriangleLeft(GeoPoint *dest,
 {
   const fixed delta_distance = (dist_max - dist_min) / STEPS;
   fixed total_distance = dist_max;
-  for (unsigned i = 0; i < STEPS; ++i) {
+  for (unsigned i = 0; i < STEPS; ++i,
+         total_distance -= delta_distance) {
     const fixed dist_b = FAI_MIN_PERCENTAGE * total_distance;
     const fixed dist_a = total_distance - dist_b - leg_c.distance;
 
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
-
-    total_distance -= delta_distance;
   }
 
   return dest;
