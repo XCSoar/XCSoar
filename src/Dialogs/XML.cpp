@@ -301,6 +301,7 @@ LoadXMLFromResource(const TCHAR* resource, XML::Results *xml_results)
   assert(data.first != NULL);
 
   char *buffer = InflateToString(data.first, data.second);
+  assert(buffer != nullptr);
 
   UTF8ToWideConverter buffer2(buffer);
   assert(buffer2.IsValid());

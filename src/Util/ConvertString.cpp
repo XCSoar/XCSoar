@@ -48,12 +48,16 @@ ConvertToWide(const char *p, UINT codepage)
 TCHAR *
 ConvertUTF8ToWide(const char *p)
 {
+  assert(p != nullptr);
+
   return ConvertToWide(p, CP_UTF8);
 }
 
 TCHAR *
 ConvertACPToWide(const char *p)
 {
+  assert(p != nullptr);
+
   return ConvertToWide(p, CP_ACP);
 }
 
@@ -81,12 +85,16 @@ ConvertFromWide(const TCHAR *p, UINT codepage)
 char *
 ConvertWideToUTF8(const TCHAR *p)
 {
+  assert(p != nullptr);
+
   return ConvertFromWide(p, CP_UTF8);
 }
 
 char *
 ConvertWideToACP(const TCHAR *p)
 {
+  assert(p != nullptr);
+
   return ConvertFromWide(p, CP_ACP);
 }
 
