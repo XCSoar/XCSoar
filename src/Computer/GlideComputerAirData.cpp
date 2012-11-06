@@ -54,8 +54,7 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
 {
   auto_qnh.Reset();
 
-  vario_30s_filter.Reset();
-  netto_30s_filter.Reset();
+  average_vario.Reset();
 
   lift_database_computer.Reset(calculated.lift_database,
                                calculated.trace_history.CirclingAverage);
@@ -119,7 +118,8 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   if (calculated.flight.flying && !calculated.circling)
     calculated.average_gr = gr_calculator.Calculate();
 
-  Average30s(basic, last_basic, calculated, last_circling);
+  average_vario.Compute(basic, last_basic, calculated.circling, last_circling,
+                        calculated);
   AverageClimbRate(basic, calculated);
   CurrentThermal(basic, calculated, calculated.current_thermal);
   lift_database_computer.Compute(calculated.lift_database,
@@ -164,34 +164,6 @@ GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
 
     calculated.climb_history.Add(uround(basic.indicated_airspeed), w_tas);
   }
-}
-
-void
-GlideComputerAirData::Average30s(const MoreData &basic,
-                                 const NMEAInfo &last_basic,
-                                 DerivedInfo &calculated, bool last_circling)
-{
-  const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
-  if (!time_advanced || calculated.circling != last_circling) {
-    vario_30s_filter.Reset();
-    netto_30s_filter.Reset();
-    calculated.average = basic.brutto_vario;
-    calculated.netto_average = basic.netto_vario;
-  }
-
-  if (!time_advanced)
-    return;
-
-  const unsigned Elapsed(basic.time - last_basic.time);
-  if (Elapsed == 0)
-    return;
-
-  for (unsigned i = 0; i < Elapsed; ++i) {
-    vario_30s_filter.Update(basic.brutto_vario);
-    netto_30s_filter.Update(basic.netto_vario);
-  }
-  calculated.average = vario_30s_filter.Average();
-  calculated.netto_average = netto_30s_filter.Average();
 }
 
 void

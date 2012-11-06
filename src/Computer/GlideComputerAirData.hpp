@@ -31,6 +31,7 @@ Copyright_License {
 #include "ThermalBandComputer.hpp"
 #include "WindComputer.hpp"
 #include "LiftDatabaseComputer.hpp"
+#include "AverageVarioComputer.hpp"
 #include "ThermalLocator.hpp"
 #include "Math/WindowFilter.hpp"
 
@@ -65,8 +66,7 @@ class GlideComputerAirData {
 
   ThermalLocator thermallocator;
 
-  WindowFilter<30> vario_30s_filter;
-  WindowFilter<30> netto_30s_filter;
+  AverageVarioComputer average_vario;
 
 public:
   GlideComputerAirData(const Waypoints &way_points);
