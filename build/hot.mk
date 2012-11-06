@@ -15,6 +15,7 @@ HOT_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterTileCache.cpp \
 	$(SRC)/Projection/Projection.cpp \
+	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSector.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
 	$(ENGINE_SRC_DIR)/Route/FlatTriangleFan.cpp \
