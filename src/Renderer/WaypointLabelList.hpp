@@ -28,6 +28,7 @@ Copyright_License {
 #include "Renderer/TextInBox.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Util/StaticArray.hpp"
 #include "Sizes.h" /* for NAME_SIZE */
 
 #include <tchar.h>
@@ -48,12 +49,12 @@ public:
 protected:
   UPixelScalar width, height;
   PixelRect bounds;
-  Label labels[128];
-  unsigned num_labels;
+
+  StaticArray<Label, 128u> labels;
 
 public:
   WaypointLabelList(UPixelScalar _width, UPixelScalar _height)
-    :width(_width), height(_height), num_labels(0) {}
+    :width(_width), height(_height) {}
 
   void Add(const TCHAR *Name, PixelScalar X, PixelScalar Y, TextInBoxMode Mode,
            RoughAltitude AltArivalAGL,
@@ -61,8 +62,12 @@ public:
            bool isWatchedWaypoint);
   void Sort();
 
-  unsigned size() const {
-    return num_labels;
+  const Label *begin() const {
+    return labels.begin();
+  }
+
+  const Label *end() const {
+    return labels.end();
   }
 
   const Label &operator[](unsigned i) const {

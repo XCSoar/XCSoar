@@ -454,11 +454,9 @@ MapWaypointLabelRender(Canvas &canvas, UPixelScalar width, UPixelScalar height,
 {
   labels.Sort();
 
-  for (unsigned i = 0; i < labels.size(); i++) {
-    const WaypointLabelList::Label *E = &labels[i];
-    TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode,
+  for (const auto &l : labels)
+    TextInBox(canvas, l.Name, l.Pos.x, l.Pos.y, l.Mode,
               width, height, &label_block);
-  }
 }
 
 void

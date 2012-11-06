@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "WaypointLabelList.hpp"
-#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -78,25 +77,25 @@ WaypointLabelList::Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
       || Y > PixelScalar(height + WPCIRCLESIZE))
     return;
 
-  if (num_labels >= ARRAY_SIZE(labels))
+  if (labels.full())
     return;
 
-  Label *E = &labels[num_labels++];
+  auto &l = labels.append();
 
-  _tcscpy(E->Name, Name);
-  E->Pos.x = X;
-  E->Pos.y = Y;
-  E->Mode = Mode;
-  E->AltArivalAGL = AltArivalAGL;
-  E->inTask = inTask;
-  E->isLandable = isLandable;
-  E->isAirport  = isAirport;
-  E->isWatchedWaypoint = isWatchedWaypoint;
+  _tcscpy(l.Name, Name);
+  l.Pos.x = X;
+  l.Pos.y = Y;
+  l.Mode = Mode;
+  l.AltArivalAGL = AltArivalAGL;
+  l.inTask = inTask;
+  l.isLandable = isLandable;
+  l.isAirport  = isAirport;
+  l.isWatchedWaypoint = isWatchedWaypoint;
 }
 
 void
 WaypointLabelList::Sort()
 {
-  std::sort(labels, labels + num_labels,
+  std::sort(labels.begin(), labels.end(),
             MapWaypointLabelListCompare);
 }
