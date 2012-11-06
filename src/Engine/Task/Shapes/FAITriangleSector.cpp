@@ -87,13 +87,13 @@ GenerateFAITriangleTop(GeoPoint *dest,
   const fixed delta_distance = dist_max * (fixed_one - 3 * FAI_MIN_PERCENTAGE)
     / STEPS;
   fixed dist_a = leg_c.distance;
+  fixed dist_b = dist_max - dist_a - leg_c.distance;
   for (unsigned i = 0; i < STEPS; ++i) {
-    const fixed dist_b = dist_max - dist_a - leg_c.distance;
-
     *dest++ = CalcGeoPoint(origin, leg_c.bearing,
                            dist_a, dist_b, leg_c.distance, reverse);
 
     dist_a += delta_distance;
+    dist_b -= delta_distance;
   }
 
   return dest;
