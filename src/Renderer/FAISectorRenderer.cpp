@@ -45,6 +45,15 @@ CalcAngle(Angle angle, fixed dist_a, fixed dist_b, fixed dist_c, int dir)
   return angle + alpha;
 }
 
+gcc_const
+static GeoPoint
+CalcGeoPoint(GeoPoint origin, Angle angle,
+             fixed dist_a, fixed dist_b, fixed dist_c, int dir)
+{
+  return GeoVector(dist_b, CalcAngle(angle, dist_a, dist_b, dist_c, dir))
+    .EndPoint(origin);
+}
+
 void
 RenderFAISector(Canvas &canvas, const Projection &projection,
                 const GeoPoint &pt1, const GeoPoint &pt2,
@@ -70,8 +79,8 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fixed fDist_a = fDistMin * FAI_MIN_PERCENTAGE;
   fixed fDist_b = fDistMin * FAI_MIN_PERCENTAGE;
   for (unsigned i = 0; i < STEPS; ++i) {
-    const Angle angle = CalcAngle(fAngle, fDist_a, fDist_b, fDist_c, dir);
-    const GeoPoint ptd = GeoVector(fDist_b, angle).EndPoint(pt1);
+    const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
+                                      fDist_a, fDist_b, fDist_c, dir);
     points.append() = projection.GeoToScreen(ptd);
 
     fDistTri += fDelta_Dist;
@@ -84,8 +93,8 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fDist_a = fDist_c;
   fDist_b = fDistMax - fDist_a - fDist_c;
   for (unsigned i = 0; i < STEPS; ++i) {
-    const Angle angle = CalcAngle(fAngle, fDist_a, fDist_b, fDist_c, dir);
-    const GeoPoint ptd = GeoVector(fDist_b, angle).EndPoint(pt1);
+    const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
+                                      fDist_a, fDist_b, fDist_c, dir);
     points.append() = projection.GeoToScreen(ptd);
 
     fDist_a += fDelta_Dist;
@@ -98,8 +107,8 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fDist_b = fDistMax * FAI_MIN_PERCENTAGE;
   fDist_a = fDistTri - fDist_b - fDist_c;
   for (unsigned i = 0; i < STEPS; ++i) {
-    const Angle angle = CalcAngle(fAngle, fDist_a, fDist_b, fDist_c, dir);
-    const GeoPoint ptd = GeoVector(fDist_b, angle).EndPoint(pt1);
+    const GeoPoint ptd = CalcGeoPoint(pt1, fAngle,
+                                      fDist_a, fDist_b, fDist_c, dir);
     points.append() = projection.GeoToScreen(ptd);
 
     fDistTri -= fDelta_Dist;
