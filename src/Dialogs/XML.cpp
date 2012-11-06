@@ -39,7 +39,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/LargeTextWindow.hpp"
-#include "Interface.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"
 #include "Form/Edit.hpp"
@@ -59,8 +58,6 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "Look/DialogLook.hpp"
 #include "Inflate.hpp"
-
-#include <zlib/zlib.h>
 
 #include <stdio.h>    // for _stprintf
 #include <assert.h>
