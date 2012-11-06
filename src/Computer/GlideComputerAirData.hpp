@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_AIRDATA_HPP
 
 #include "AutoQNH.hpp"
-#include "GlideRatioCalculator.hpp"
+#include "GlideRatioComputer.hpp"
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
 #include "ThermalBandComputer.hpp"
@@ -56,7 +56,7 @@ class GlideComputerAirData {
 
   AutoQNH auto_qnh;
 
-  GlideRatioCalculator gr_calculator;
+  GlideRatioComputer gr_computer;
 
   FlyingComputer flying_computer;
   CirclingComputer circling_computer;
@@ -79,8 +79,7 @@ public:
     return wind_computer.GetWindStore();
   }
 
-  void ResetFlight(DerivedInfo &calculated, const ComputerSettings &settings,
-                   const bool full=true);
+  void ResetFlight(DerivedInfo &calculated, const bool full=true);
 
   void ResetStats() {
     circling_computer.ResetStats();
@@ -99,10 +98,6 @@ public:
                        DerivedInfo &calculated,
                        const ComputerSettings &settings);
 
-protected:
-  void OnSwitchClimbMode(const ComputerSettings &settings);
-
-public:
   /**
    * 1. Detects time retreat and calls ResetFlight if GPS lost
    * 2. Detects change in replay status and calls ResetFlight if so
@@ -122,8 +117,8 @@ private:
                   DerivedInfo &calculated, bool last_circling);
   void CurrentThermal(const MoreData &basic, const CirclingInfo &circling,
                       OneClimbInfo &current_thermal);
-  void GR(const MoreData &basic, const MoreData &last_basic,
-          const DerivedInfo &calculated, VarioInfo &vario_info);
+  void GR(const MoreData &basic, const FlyingState &flying,
+          VarioInfo &vario_info);
   void CruiseGR(const MoreData &basic, DerivedInfo &calculated);
 
   void TerrainHeight(const MoreData &basic, TerrainInfo &calculated);

@@ -1991,6 +1991,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/WarningComputer.cpp \
 	$(SRC)/Computer/LiftDatabaseComputer.cpp \
 	$(SRC)/Computer/AverageVarioComputer.cpp \
+	$(SRC)/Computer/GlideRatioComputer.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerTask.cpp \

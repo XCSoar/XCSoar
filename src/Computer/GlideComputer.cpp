@@ -60,7 +60,7 @@ void
 GlideComputer::ResetFlight(const bool full)
 {
   GlideComputerBlackboard::ResetFlight(full);
-  air_data_computer.ResetFlight(SetCalculated(), GetComputerSettings(), full);
+  air_data_computer.ResetFlight(SetCalculated(), full);
   task_computer.ResetFlight(full);
   stats_computer.ResetFlight(full);
   log_computer.Reset();
@@ -270,7 +270,7 @@ void
 GlideComputer::OnTakeoff()
 {
   // reset stats on takeoff
-  air_data_computer.ResetFlight(SetCalculated(), GetComputerSettings(), false);
+  air_data_computer.ResetFlight(SetCalculated(), false);
 
   // save stats in case we never finish
   SaveFinish();

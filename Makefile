@@ -358,6 +358,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/LogComputer.cpp \
 	$(SRC)/Computer/AverageVarioComputer.cpp \
 	$(SRC)/Computer/GlideRatioCalculator.cpp \
+	$(SRC)/Computer/GlideRatioComputer.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerAirData.cpp \

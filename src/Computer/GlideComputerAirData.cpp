@@ -49,7 +49,6 @@ GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
 
 void
 GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
-                                  const ComputerSettings &settings,
                                   const bool full)
 {
   auto_qnh.Reset();
@@ -61,7 +60,7 @@ GlideComputerAirData::ResetFlight(DerivedInfo &calculated,
 
   thermallocator.Reset();
 
-  gr_calculator.Initialize(settings);
+  gr_computer.Reset();
 
   if (full)
     flying_computer.Reset();
@@ -112,11 +111,13 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
                          calculated.thermal_locator);
 
   LastThermalStats(basic, calculated, last_circling);
-  GR(basic, last_basic, calculated, calculated);
-  CruiseGR(basic, calculated);
 
-  if (calculated.flight.flying && !calculated.circling)
-    calculated.average_gr = gr_calculator.Calculate();
+  gr_computer.Compute(basic, last_basic, calculated,
+                      calculated,
+                      settings);
+
+  GR(basic, calculated.flight, calculated);
+  CruiseGR(basic, calculated);
 
   average_vario.Compute(basic, calculated.circling, last_circling,
                         calculated);
@@ -182,36 +183,12 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
 }
 
 void
-GlideComputerAirData::GR(const MoreData &basic, const MoreData &last_basic,
-                         const DerivedInfo &calculated, VarioInfo &vario_info)
+GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
+                         VarioInfo &vario_info)
 {
-  if (!basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
-    vario_info.ld_vario = INVALID_GR;
-    vario_info.gr = INVALID_GR;
-    return;
-  }
-
-  if (basic.HasTimeRetreatedSince(last_basic)) {
-    vario_info.ld_vario = INVALID_GR;
-    vario_info.gr = INVALID_GR;
-  }
-
-  const bool time_advanced = basic.HasTimeAdvancedSince(last_basic);
-  if (time_advanced) {
-    fixed DistanceFlown = basic.location.Distance(last_basic.location);
-
-    // Glide ratio over ground
-    vario_info.gr =
-      UpdateGR(vario_info.gr, DistanceFlown,
-               last_basic.nav_altitude - basic.nav_altitude, fixed(0.1));
-
-    if (calculated.flight.flying && !calculated.circling)
-      gr_calculator.Add((int)DistanceFlown, (int)basic.nav_altitude);
-  }
-
   // Lift / drag instantaneous from vario, updated every reading..
   if (basic.total_energy_vario_available && basic.airspeed_available &&
-      calculated.flight.flying) {
+      flying.flying) {
     vario_info.ld_vario =
       UpdateGR(vario_info.ld_vario, basic.indicated_airspeed,
                -basic.total_energy_vario, fixed(0.3));
@@ -287,14 +264,14 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
 {
   if (basic.gps.replay != last_basic.gps.replay)
     // reset flight before/after replay logger
-    ResetFlight(calculated, settings, basic.gps.replay);
+    ResetFlight(calculated, basic.gps.replay);
 
   if (basic.time_available && basic.HasTimeRetreatedSince(last_basic)) {
     // 20060519:sgi added (basic.Time != 0) due to always return here
     // if no GPS time available
     if (basic.location_available)
       // Reset statistics.. (probably due to being in IGC replay mode)
-      ResetFlight(calculated, settings, false);
+      ResetFlight(calculated, false);
 
     return false;
   }
@@ -322,25 +299,14 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
 }
 
 void
-GlideComputerAirData::OnSwitchClimbMode(const ComputerSettings &settings)
-{
-  gr_calculator.Initialize(settings);
-}
-
-void
 GlideComputerAirData::Turning(const MoreData &basic,
                               DerivedInfo &calculated,
                               const ComputerSettings &settings)
 {
-  const bool last_circling = calculated.circling;
-
   circling_computer.Turning(calculated,
                             basic,
                             calculated.flight,
                             settings.circling);
-
-  if (calculated.circling != last_circling)
-    OnSwitchClimbMode(settings);
 
   // Calculate circling time percentage and call thermal band calculation
   circling_computer.PercentCircling(basic, calculated);
