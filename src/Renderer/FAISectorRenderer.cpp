@@ -28,6 +28,15 @@ Copyright_License {
 #include "Projection/Projection.hpp"
 #include "Screen/Canvas.hpp"
 
+gcc_const
+static Angle
+CalcAlpha(fixed dist_a, fixed dist_b, fixed dist_c, int dir)
+{
+    const fixed cos_alpha = (sqr(dist_b) + sqr(dist_c) - sqr(dist_a))
+      / Double(dist_c * dist_b);
+    return Angle::Radians(acos(cos_alpha) * dir);
+}
+
 void
 RenderFAISector(Canvas &canvas, const Projection &projection,
                 const GeoPoint &pt1, const GeoPoint &pt2,
@@ -53,10 +62,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fixed fDist_a = fDistMin * FAI_MIN_PERCENTAGE;
   fixed fDist_b = fDistMin * FAI_MIN_PERCENTAGE;
   for (unsigned i = 0; i < STEPS; ++i) {
-    const fixed cos_alpha = (sqr(fDist_b) + sqr(fDist_c) - sqr(fDist_a))
-      / (2 * fDist_c * fDist_b);
-    const Angle alpha = Angle::Radians(acos(cos_alpha) * dir);
-
+    const Angle alpha = CalcAlpha(fDist_a, fDist_b, fDist_c, dir);
     const GeoPoint ptd = GeoVector(fDist_b, fAngle + alpha).EndPoint(pt1);
     points.append() = projection.GeoToScreen(ptd);
 
@@ -70,10 +76,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fDist_a = fDist_c;
   fDist_b = fDistMax - fDist_a - fDist_c;
   for (unsigned i = 0; i < STEPS; ++i) {
-    const fixed cos_alpha = (sqr(fDist_b) + sqr(fDist_c) - sqr(fDist_a))
-      / (2 * fDist_c * fDist_b);
-    const Angle alpha = Angle::Radians(acos(cos_alpha) * dir);
-
+    const Angle alpha = CalcAlpha(fDist_a, fDist_b, fDist_c, dir);
     const GeoPoint ptd = GeoVector(fDist_b, fAngle + alpha).EndPoint(pt1);
     points.append() = projection.GeoToScreen(ptd);
 
@@ -87,10 +90,7 @@ RenderFAISector(Canvas &canvas, const Projection &projection,
   fDist_b = fDistMax * FAI_MIN_PERCENTAGE;
   fDist_a = fDistTri - fDist_b - fDist_c;
   for (unsigned i = 0; i < STEPS; ++i) {
-    const fixed cos_alpha = (sqr(fDist_b) + sqr(fDist_c) - sqr(fDist_a))
-      / (2 * fDist_c * fDist_b);
-    const Angle alpha = Angle::Radians(acos(cos_alpha) * dir);
-
+    const Angle alpha = CalcAlpha(fDist_a, fDist_b, fDist_c, dir);
     const GeoPoint ptd = GeoVector(fDist_b, fAngle + alpha).EndPoint(pt1);
     points.append() = projection.GeoToScreen(ptd);
 
