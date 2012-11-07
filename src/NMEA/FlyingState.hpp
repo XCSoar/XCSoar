@@ -65,6 +65,18 @@ struct FlyingState
   GeoPoint release_location;
 
   /**
+   * The location that is most far away from the release location.
+   * Always check GeoPoint::IsValid() before using this value.
+   */
+  GeoPoint far_location;
+
+  /**
+   * The distance from #release_location to #far_location.  This value
+   * is negative if it was not calculated yet.
+   */
+  fixed far_distance;
+
+  /**
    * Time stamp of the landing.  Invalid if negative.
    */
   fixed landing_time;

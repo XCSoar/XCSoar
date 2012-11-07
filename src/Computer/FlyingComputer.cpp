@@ -69,6 +69,8 @@ FlyingComputer::CheckRelease(FlyingState &state, fixed time,
        enters a thermal right after releasing */
     state.release_time = sinking_since;
     state.release_location = sinking_location;
+    state.far_location.SetInvalid();
+    state.far_distance = fixed_minus_one;
   }
 }
 
@@ -93,6 +95,8 @@ FlyingComputer::Check(FlyingState &state, fixed time)
 
       /* when a new flight starts, forget the old release time */
       state.release_time = fixed_minus_one;
+      state.far_location.SetInvalid();
+      state.far_distance = fixed_minus_one;
     }
   } else {
     // update time of flight
@@ -241,6 +245,14 @@ FlyingComputer::Compute(fixed takeoff_speed,
     CheckRelease(flying, basic.time, basic.location, any_altitude.second);
   } else
     sinking_since = fixed_minus_one;
+
+  if (flying.flying && flying.release_location.IsValid()) {
+    fixed distance = basic.location.Distance(flying.release_location);
+    if (distance > flying.far_distance) {
+      flying.far_location = basic.location;
+      flying.far_distance = distance;
+    }
+  }
 }
 
 void

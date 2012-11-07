@@ -32,6 +32,8 @@ FlyingState::Reset()
   takeoff_location.SetInvalid();
   release_time = fixed_minus_one;
   release_location.SetInvalid();
+  far_location.SetInvalid();
+  far_distance = fixed_minus_one;
   landing_time = fixed_minus_one;
   landing_location.SetInvalid();
 }
