@@ -143,14 +143,17 @@ RouteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           this);
 
   static constexpr StaticEnumChoice final_glide_terrain_list[] = {
-    { FeaturesSettings::FGT_OFF, N_("Off"), N_("Disables the reach display.") },
-    { FeaturesSettings::FGT_LINE, N_("Line"), N_("Draws a dashed line at the glide reach.") },
-    { FeaturesSettings::FGT_SHADE, N_("Shade"), N_("Shades terrain outside glide reach.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::OFF, N_("Off"),
+      N_("Disables the reach display.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::LINE, N_("Line"),
+      N_("Draws a dashed line at the glide reach.") },
+    { (unsigned)FeaturesSettings::FinalGlideTerrain::SHADE, N_("Shade"),
+      N_("Shades terrain outside glide reach.") },
     { 0 }
   };
 
   AddEnum(_("Reach display"), NULL, final_glide_terrain_list,
-          settings_computer.features.final_glide_terrain);
+          (unsigned)settings_computer.features.final_glide_terrain);
 
   static constexpr StaticEnumChoice reach_polar_list[] = {
     { (unsigned)RoutePlannerConfig::Polar::TASK, N_("Task"),

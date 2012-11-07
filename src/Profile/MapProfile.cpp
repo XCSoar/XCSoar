@@ -27,6 +27,20 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "MapSettings.hpp"
 
+static bool
+IsValidMapOrientation(unsigned value)
+{
+  switch (value) {
+  case (unsigned)DisplayOrientation::TRACK_UP:
+  case (unsigned)DisplayOrientation::NORTH_UP:
+  case (unsigned)DisplayOrientation::TARGET_UP:
+  case (unsigned)DisplayOrientation::HEADING_UP:
+    return true;
+  }
+
+  return false;
+}
+
 void
 Profile::Load(MapSettings &settings)
 {
@@ -52,67 +66,43 @@ Profile::Load(MapSettings &settings)
 
   bool orientation_found = false;
 
-  unsigned Temp = NORTHUP;
+  unsigned Temp = (unsigned)DisplayOrientation::NORTH_UP;
   if (Get(ProfileKeys::OrientationCircling, Temp))
     orientation_found = true;
 
-  switch (Temp) {
-  case TRACKUP:
-    settings.circling_orientation = TRACKUP;
-    break;
-  case NORTHUP:
-    settings.circling_orientation = NORTHUP;
-    break;
-  case TARGETUP:
-    settings.circling_orientation = TARGETUP;
-    break;
-  case HEADINGUP:
-    settings.circling_orientation = HEADINGUP;
-    break;
-  }
+  if (IsValidMapOrientation(Temp))
+    settings.circling_orientation = (DisplayOrientation)Temp;
 
-  Temp = NORTHUP;
+  Temp = (unsigned)DisplayOrientation::NORTH_UP;
   if (Get(ProfileKeys::OrientationCruise, Temp))
     orientation_found = true;
 
-  switch (Temp) {
-  case TRACKUP:
-    settings.cruise_orientation = TRACKUP;
-    break;
-  case NORTHUP:
-    settings.cruise_orientation = NORTHUP;
-    break;
-  case TARGETUP:
-    settings.cruise_orientation = TARGETUP;
-    break;
-  case HEADINGUP:
-    settings.cruise_orientation = HEADINGUP;
-    break;
-  }
+  if (IsValidMapOrientation(Temp))
+    settings.cruise_orientation = (DisplayOrientation)Temp;
 
   if (!orientation_found) {
     Temp = 1;
     Get(ProfileKeys::DisplayUpValue, Temp);
     switch (Temp) {
     case 0:
-      settings.cruise_orientation = TRACKUP;
-      settings.circling_orientation = TRACKUP;
+      settings.cruise_orientation = DisplayOrientation::TRACK_UP;
+      settings.circling_orientation = DisplayOrientation::TRACK_UP;
       break;
     case 1:
-      settings.cruise_orientation = NORTHUP;
-      settings.circling_orientation = NORTHUP;
+      settings.cruise_orientation = DisplayOrientation::NORTH_UP;
+      settings.circling_orientation = DisplayOrientation::NORTH_UP;
       break;
     case 2:
-      settings.cruise_orientation = TRACKUP;
-      settings.circling_orientation = NORTHUP;
+      settings.cruise_orientation = DisplayOrientation::TRACK_UP;
+      settings.circling_orientation = DisplayOrientation::NORTH_UP;
       break;
     case 3:
-      settings.cruise_orientation = TRACKUP;
-      settings.circling_orientation = TARGETUP;
+      settings.cruise_orientation = DisplayOrientation::TRACK_UP;
+      settings.circling_orientation = DisplayOrientation::TARGET_UP;
       break;
     case 4:
-      settings.cruise_orientation = NORTHUP;
-      settings.circling_orientation = TRACKUP;
+      settings.cruise_orientation = DisplayOrientation::NORTH_UP;
+      settings.circling_orientation = DisplayOrientation::TRACK_UP;
       break;
     }
   }

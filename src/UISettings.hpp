@@ -36,6 +36,8 @@ Copyright_License {
 #include "DisplaySettings.hpp"
 #include "Audio/Settings.hpp"
 
+#include <stdint.h>
+
 /**
  * User interface settings.
  */
@@ -50,16 +52,16 @@ struct UISettings {
   /** Show ThermalAssistant if circling */
   bool enable_thermal_assistant_gauge;
 
-  enum StateMessageAlign_t {
-    smAlignCenter = 0,
-    smAlignTopLeft,
+  enum class PopupMessagePosition : uint8_t {
+    CENTER,
+    TOP_LEFT,
   } popup_message_position;
 
   /** Haptic feedback settings */
-  enum HapticFeedback {
-    Default,
-    Off,
-    On,
+  enum class HapticFeedback : uint8_t {
+    DEFAULT,
+    OFF,
+    ON,
   } haptic_feedback;
 
   CoordinateFormat coordinate_format;

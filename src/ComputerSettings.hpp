@@ -195,10 +195,10 @@ struct PlacesOfInterestSettings {
  */
 struct FeaturesSettings {
   /** Calculate final glide over terrain */
-  enum FinalGlideTerrain {
-    FGT_OFF,
-    FGT_LINE,
-    FGT_SHADE,
+  enum class FinalGlideTerrain : uint8_t {
+    OFF,
+    LINE,
+    SHADE,
   } final_glide_terrain;
 
   /** block speed to fly instead of dolphin */

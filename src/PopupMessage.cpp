@@ -135,7 +135,7 @@ PopupMessage::GetRect(UPixelScalar height) const
 {
   PixelRect rthis;
 
-  if (settings.popup_message_position == UISettings::smAlignTopLeft){
+  if (settings.popup_message_position == UISettings::PopupMessagePosition::TOP_LEFT) {
     rthis.top = 0;
     rthis.left = 0;
     rthis.bottom = height;

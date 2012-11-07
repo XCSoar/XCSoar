@@ -205,9 +205,9 @@ InterfaceConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
 #ifdef HAVE_VIBRATOR
   static constexpr StaticEnumChoice haptic_feedback_list[] = {
-    { (unsigned) UISettings::HapticFeedback::Default, N_("OS settings") },
-    { (unsigned) UISettings::HapticFeedback::Off, N_("Off") },
-    { (unsigned) UISettings::HapticFeedback::On, N_("On") },
+    { (unsigned)UISettings::HapticFeedback::DEFAULT, N_("OS settings") },
+    { (unsigned)UISettings::HapticFeedback::OFF, N_("Off") },
+    { (unsigned)UISettings::HapticFeedback::ON, N_("On") },
     { 0 }
   };
 

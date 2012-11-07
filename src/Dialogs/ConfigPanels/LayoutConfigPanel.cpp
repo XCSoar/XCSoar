@@ -126,9 +126,11 @@ static const StaticEnumChoice tabdialog_style_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice popup_msg_position_list[] = {
-  { 0, N_("Center"), N_("Center the status message boxes.") },
-  { 1, N_("Topleft"), N_("Show status message boxes in the top left corner.") },
+static constexpr StaticEnumChoice popup_msg_position_list[] = {
+  { (unsigned)UISettings::PopupMessagePosition::CENTER, N_("Center"),
+    N_("Center the status message boxes.") },
+  { (unsigned)UISettings::PopupMessagePosition::TOP_LEFT, N_("Topleft"),
+    N_("Show status message boxes ina the top left corner.") },
   { 0 }
 };
 
@@ -182,7 +184,8 @@ LayoutConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           tabdialog_style_list, (unsigned)ui_settings.dialog.tab_style);
 
   AddEnum(_("Message display"), NULL,
-          popup_msg_position_list, ui_settings.popup_message_position);
+          popup_msg_position_list,
+          (unsigned)ui_settings.popup_message_position);
   SetExpertRow(AppStatusMessageAlignment);
 
   AddEnum(_("Dialog size"), _("Choose the display size of dialogs."),

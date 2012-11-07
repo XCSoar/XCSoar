@@ -76,7 +76,7 @@ PlacesOfInterestSettings::SetHome(const Waypoint &wp)
 void
 FeaturesSettings::SetDefaults()
 {
-  final_glide_terrain = FGT_LINE;
+  final_glide_terrain = FinalGlideTerrain::LINE;
   block_stf_enabled = false;
   nav_baro_altitude_enabled = true;
 }

@@ -112,16 +112,16 @@ static const StaticEnumChoice  trail_type_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice  aircraft_symbol_list[] = {
-  { acSimple, N_("Simple"),
+static constexpr StaticEnumChoice  aircraft_symbol_list[] = {
+  { (unsigned)AircraftSymbol::SIMPLE, N_("Simple"),
     N_("Simplified line graphics, black with white contours.") },
-  { acSimpleLarge, N_("Simple (large)"),
+  { (unsigned)AircraftSymbol::SIMPLE_LARGE, N_("Simple (large)"),
     N_("Enlarged simple graphics.") },
-  { acDetailed, N_("Detailed"),
+  { (unsigned)AircraftSymbol::DETAILED, N_("Detailed"),
     N_("Detailed rendered aircraft graphics.") },
-  { acHangGlider, N_("HangGlider"),
+  { (unsigned)AircraftSymbol::HANGGLIDER, N_("HangGlider"),
     N_("Simplified hang glider as line graphics, white with black contours.") },
-  { acParaGlider, N_("ParaGlider"),
+  { (unsigned)AircraftSymbol::PARAGLIDER, N_("ParaGlider"),
     N_("Simplified para glider as line graphics, white with black contours.") },
   { 0 }
 };
@@ -171,7 +171,8 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
              settings_map.detour_cost_markers_enabled);
   SetExpertRow(ENABLE_DETOUR_COST_MARKERS);
 
-  AddEnum(_("Aircraft symbol"), NULL, aircraft_symbol_list, settings_map.aircraft_symbol);
+  AddEnum(_("Aircraft symbol"), NULL, aircraft_symbol_list,
+          (unsigned)settings_map.aircraft_symbol);
   SetExpertRow(AIRCRAFT_SYMBOL);
 
   AddEnum(_("Wind arrow"), _("Determines the way the wind arrow is drawn on the map."),

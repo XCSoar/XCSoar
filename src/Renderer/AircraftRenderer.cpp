@@ -253,21 +253,25 @@ AircraftRenderer::Draw(Canvas &canvas, const MapSettings &settings_map,
                        const Angle angle, const RasterPoint aircraft_pos)
 {
   switch (settings_map.aircraft_symbol) {
-  case acDetailed:
+  case AircraftSymbol::DETAILED:
     DrawDetailedAircraft(canvas, !settings_map.terrain.enable,
                          look, angle, aircraft_pos);
     break;
-  case acSimpleLarge:
+
+  case AircraftSymbol::SIMPLE_LARGE:
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, true);
     break;
-  case acSimple:
+
+  case AircraftSymbol::SIMPLE:
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, false);
     break;
-  case acHangGlider:
+
+  case AircraftSymbol::HANGGLIDER:
     DrawHangGlider(canvas, look, angle, aircraft_pos,
                    !settings_map.terrain.enable);
     break;
-  case acParaGlider:
+
+  case AircraftSymbol::PARAGLIDER:
     DrawParaGlider(canvas, look, angle, aircraft_pos,
                    !settings_map.terrain.enable);
     break;

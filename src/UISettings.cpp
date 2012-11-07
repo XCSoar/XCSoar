@@ -34,9 +34,9 @@ UISettings::SetDefaults()
 
   enable_thermal_assistant_gauge = true;
 
-  popup_message_position = smAlignCenter;
+  popup_message_position = PopupMessagePosition::CENTER;
 
-  haptic_feedback = HapticFeedback::Default;
+  haptic_feedback = HapticFeedback::DEFAULT;
 
   coordinate_format = CoordinateFormat::DDMMSS;
 

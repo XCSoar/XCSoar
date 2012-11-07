@@ -36,25 +36,25 @@ Copyright_License {
 
 #include <stdint.h>
 
-enum AircraftSymbol {
-  acSimple = 0,
-  acDetailed,
-  acSimpleLarge,
-  acHangGlider,
-  acParaGlider,
+enum class AircraftSymbol : uint8_t {
+  SIMPLE,
+  DETAILED,
+  SIMPLE_LARGE,
+  HANGGLIDER,
+  PARAGLIDER,
 };
 
-enum DisplayOrientation {
-  TRACKUP = 0,
-  NORTHUP,
-  TARGETUP,
-  HEADINGUP,
+enum class DisplayOrientation : uint8_t {
+  TRACK_UP,
+  NORTH_UP,
+  TARGET_UP,
+  HEADING_UP,
 };
 
-enum MapShiftBias {
-  MAP_SHIFT_BIAS_NONE = 0,
-  MAP_SHIFT_BIAS_TRACK,
-  MAP_SHIFT_BIAS_TARGET
+enum class MapShiftBias : uint8_t {
+  NONE,
+  TRACK,
+  TARGET
 };
 
 enum class DisplayGroundTrack: uint8_t {

@@ -182,19 +182,20 @@ GlueMapWindow::UpdateScreenAngle()
     ? settings.circling_orientation
     : settings.cruise_orientation;
 
-  if (orientation == TARGETUP &&
+  if (orientation == DisplayOrientation::TARGET_UP &&
       calculated.task_stats.current_leg.vector_remaining.IsValid())
     visible_projection.SetScreenAngle(calculated.task_stats.current_leg.
                                       vector_remaining.bearing);
-  else if (orientation == HEADINGUP)
+  else if (orientation == DisplayOrientation::HEADING_UP)
     visible_projection.SetScreenAngle(basic.attitude.heading);
-  else if (orientation == NORTHUP || !basic.track_available)
+  else if (orientation == DisplayOrientation::NORTH_UP ||
+           !basic.track_available)
     visible_projection.SetScreenAngle(Angle::Zero());
   else
     // normal, glider forward
     visible_projection.SetScreenAngle(basic.track);
 
-  compass_visible = orientation != NORTHUP;
+  compass_visible = orientation != DisplayOrientation::NORTH_UP;
 }
 
 void
@@ -266,13 +267,13 @@ GlueMapWindow::UpdateProjection()
 
   if (circling || !IsNearSelf())
     visible_projection.SetScreenOrigin(center.x, center.y);
-  else if (settings_map.cruise_orientation == NORTHUP) {
+  else if (settings_map.cruise_orientation == DisplayOrientation::NORTH_UP) {
     RasterPoint offset{0, 0};
     if (settings_map.glider_screen_position != 50 &&
-        settings_map.map_shift_bias != MAP_SHIFT_BIAS_NONE) {
+        settings_map.map_shift_bias != MapShiftBias::NONE) {
       fixed x = fixed_zero;
       fixed y = fixed_zero;
-      if (settings_map.map_shift_bias == MAP_SHIFT_BIAS_TRACK) {
+      if (settings_map.map_shift_bias == MapShiftBias::TRACK) {
         if (basic.track_available &&
             basic.ground_speed_available &&
              /* 8 m/s ~ 30 km/h */
@@ -281,7 +282,7 @@ GlueMapWindow::UpdateProjection()
           x = sc.first;
           y = sc.second;
         }
-      } else if (settings_map.map_shift_bias == MAP_SHIFT_BIAS_TARGET) {
+      } else if (settings_map.map_shift_bias == MapShiftBias::TARGET) {
         if (calculated.task_stats.current_leg.solution_remaining.IsDefined()) {
           const auto sc =calculated.task_stats.current_leg.solution_remaining
             .vector.bearing.Reciprocal().SinCos();

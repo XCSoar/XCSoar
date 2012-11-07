@@ -41,8 +41,8 @@ VibrateShort()
 {
   if (vibrator != NULL) {
     const UISettings &ui_settings = CommonInterface::GetUISettings();
-    if (ui_settings.haptic_feedback == UISettings::HapticFeedback::On ||
-         (ui_settings.haptic_feedback == UISettings::HapticFeedback::Default &&
+    if (ui_settings.haptic_feedback == UISettings::HapticFeedback::ON ||
+         (ui_settings.haptic_feedback == UISettings::HapticFeedback::DEFAULT &&
           vibrator->IsOSHapticFeedbackEnabled()))
       vibrator->Vibrate(Java::GetEnv(), 25);
   }

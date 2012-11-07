@@ -34,28 +34,28 @@ enum ControlIndex {
   OrientationCruise,
   OrientationCircling,
   CirclingZoom,
-  MapShiftBias,
+  MAP_SHIFT_BIAS,
   GliderScreenPosition,
   MaxAutoZoomDistance,
 };
 
-static const StaticEnumChoice orientation_list[] = {
-  { TRACKUP, N_("Track up"),
+static constexpr StaticEnumChoice orientation_list[] = {
+  { (unsigned)DisplayOrientation::TRACK_UP, N_("Track up"),
     N_("The moving map display will be rotated so the glider's track is oriented up.") },
-  { HEADINGUP, N_("Heading up"),
+  { (unsigned)DisplayOrientation::HEADING_UP, N_("Heading up"),
     N_("The moving map display will be rotated so the glider's heading is oriented up.") },
-  { NORTHUP, N_("North up"),
+  { (unsigned)DisplayOrientation::NORTH_UP, N_("North up"),
     N_("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.") },
-  { TARGETUP, N_("Target up"),
+  { (unsigned)DisplayOrientation::TARGET_UP, N_("Target up"),
     N_("The moving map display will be rotated so the navigation target is oriented up.") },
   { 0 }
 };
 
-static const StaticEnumChoice shift_bias_list[] = {
-  { MAP_SHIFT_BIAS_NONE, N_("None"), N_("Disable adjustments.") },
-  { MAP_SHIFT_BIAS_TRACK, N_("Track"),
+static constexpr StaticEnumChoice shift_bias_list[] = {
+  { (unsigned)MapShiftBias::NONE, N_("None"), N_("Disable adjustments.") },
+  { (unsigned)MapShiftBias::TRACK, N_("Track"),
     N_("Use a recent average of the ground track as basis.") },
-  { MAP_SHIFT_BIAS_TARGET, N_("Target"),
+  { (unsigned)MapShiftBias::TARGET, N_("Target"),
     N_("Use the current target waypoint as basis.") },
   { 0 }
 };
@@ -80,7 +80,8 @@ private:
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  SetRowVisible(MapShiftBias, GetValueInteger(OrientationCruise) == NORTHUP);
+  SetRowVisible(MAP_SHIFT_BIAS,
+                (DisplayOrientation)GetValueInteger(OrientationCruise) == DisplayOrientation::NORTH_UP);
 }
 
 void
@@ -88,7 +89,7 @@ MapDisplayConfigPanel::OnModified(DataField &df)
 {
   if (IsDataField(OrientationCruise, df) ||
       IsDataField(OrientationCircling, df) ||
-      IsDataField(MapShiftBias, df)) {
+      IsDataField(MAP_SHIFT_BIAS, df)) {
     UpdateVisibilities();
   }
 }
@@ -103,13 +104,13 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Cruise orientation"),
           _("Determines how the screen is rotated with the glider"),
           orientation_list,
-          settings_map.cruise_orientation,
+          (unsigned)settings_map.cruise_orientation,
           this);
 
   AddEnum(_("Circling orientation"),
           _("Determines how the screen is rotated with the glider while circling"),
           orientation_list,
-          settings_map.circling_orientation,
+          (unsigned)settings_map.circling_orientation,
           this);
 
   AddBoolean(_("Circling zoom"),
@@ -119,9 +120,9 @@ MapDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Map shift reference"),
           _("Determines what is used to shift the glider from the map center"),
           shift_bias_list,
-          settings_map.map_shift_bias,
+          (unsigned)settings_map.map_shift_bias,
           this);
-  SetExpertRow(MapShiftBias);
+  SetExpertRow(MAP_SHIFT_BIAS);
 
   AddInteger(_("Glider position offset"),
              _("Defines the location of the glider drawn on the screen in percent from the screen edge."),
@@ -151,7 +152,7 @@ MapDisplayConfigPanel::Save(bool &_changed, bool &require_restart)
   changed |= SaveValueEnum(OrientationCircling, ProfileKeys::OrientationCircling,
                            settings_map.circling_orientation);
 
-  changed |= SaveValueEnum(MapShiftBias, ProfileKeys::MapShiftBias,
+  changed |= SaveValueEnum(MAP_SHIFT_BIAS, ProfileKeys::MapShiftBias,
                            settings_map.map_shift_bias);
 
   changed |= SaveValue(GliderScreenPosition, ProfileKeys::GliderScreenPosition,
