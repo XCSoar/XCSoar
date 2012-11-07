@@ -51,6 +51,8 @@ class WndProperty : public WindowControl {
 
   bool read_only;
 
+  bool dragging, pressed;
+
 public:
   /**
    * Constructor of the WndProperty
@@ -114,10 +116,14 @@ protected:
    * (derived from Window)
    */
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) gcc_override;
 
   virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
   virtual bool OnKeyDown(unsigned key_code) gcc_override;
   virtual bool OnKeyUp(unsigned key_code) gcc_override;
+
+  virtual bool OnCancelMode() gcc_override;
 
 public:
   /**

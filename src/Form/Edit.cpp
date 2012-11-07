@@ -134,7 +134,8 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
   :look(_look),
    caption_width(CaptionWidth),
    mDataField(NULL),
-   read_only(false)
+   read_only(false),
+   dragging(false), pressed(false)
 {
   caption = Caption;
 
@@ -234,13 +235,60 @@ WndProperty::OnResize(UPixelScalar width, UPixelScalar height)
 bool
 WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  return BeginEditing();
+  dragging = true;
+  pressed = true;
+  Invalidate();
+  SetCapture();
+  return true;
 }
 
 bool
 WndProperty::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  return true;
+  if (dragging) {
+    dragging = false;
+    ReleaseCapture();
+
+    if (pressed) {
+      pressed = false;
+      Invalidate();
+      BeginEditing();
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WndProperty::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+{
+  if (dragging) {
+    const bool inside = x >= 0 && y >= 0 &&
+      (unsigned)x < GetWidth() && (unsigned)y < GetHeight();
+    if (inside != pressed) {
+      pressed = inside;
+      Invalidate();
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WndProperty::OnCancelMode()
+{
+  if (dragging) {
+    dragging = false;
+    pressed = false;
+    Invalidate();
+    ReleaseCapture();
+  }
+
+  return WindowControl::OnCancelMode();
 }
 
 int
@@ -279,7 +327,9 @@ WndProperty::OnPaint(Canvas &canvas)
   const bool focused = HasFocus();
 
   /* background and selector */
-  if (focused) {
+  if (pressed) {
+    canvas.Clear(look.list.pressed.background_color);
+  } else if (focused) {
     canvas.Clear(look.focused.background_color);
   } else {
     /* don't need to erase the background when it has been done by the
@@ -320,7 +370,10 @@ WndProperty::OnPaint(Canvas &canvas)
   }
 
   Color background_color, text_color;
-  if (IsEnabled()) {
+  if (pressed) {
+    background_color = COLOR_BLACK;
+    text_color = COLOR_WHITE;
+  } else if (IsEnabled()) {
     if (IsReadOnly())
       background_color = Color(0xf0, 0xf0, 0xf0);
     else
