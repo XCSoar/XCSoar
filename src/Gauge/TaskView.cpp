@@ -137,7 +137,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
     GLEnable blend(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     canvas.Select(Brush(fill_color.WithAlpha(40)));
-    canvas.SelectBlackPen();
+    canvas.Select(Pen(1, COLOR_BLACK.WithAlpha(80)));
     RenderFAISectors(canvas, projection, task);
 #else
     BufferCanvas buffer_canvas;
