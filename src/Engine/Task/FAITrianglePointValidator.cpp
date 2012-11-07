@@ -30,10 +30,10 @@
 static constexpr fixed min_fai_leg(2000);
 
 /** min angle allowable in a FAI Triangle 31.5 degrees */
-static constexpr fixed min_fai_angle(31.5);
+static constexpr Angle min_fai_angle = Angle::Degrees(31.5);
 
 /** max angle allowable in a FAI Triangle 113.2 degrees */
-static constexpr fixed max_fai_angle(114);
+static constexpr Angle max_fai_angle = Angle::Degrees(114);
 
 FAITrianglePointValidator::FAITrianglePointValidator(
     OrderedTask *ordered_task, const unsigned ordered_task_index)
@@ -61,13 +61,12 @@ FAITrianglePointValidator::IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1,
 {
   const Angle a01 = p0.Bearing(p1);
   const Angle a21 = p2.Bearing(p1);
-  const fixed diff = (a01 - a21).AsDelta().Degrees();
+  const Angle diff = (a01 - a21).AsDelta();
 
   if (right)
     return (diff > min_fai_angle) && (diff < max_fai_angle);
   else
-    return (diff < fixed(-1) * min_fai_angle) && (diff > fixed(-1)
-            * max_fai_angle);
+    return diff < -min_fai_angle && diff > -max_fai_angle;
 }
 
 bool
