@@ -340,7 +340,7 @@ WndProperty::OnPaint(Canvas &canvas)
   /* kludge: don't draw caption if width is too small (but not 0),
      used by the polar configuration panel.  This concept needs to be
      redesigned. */
-  if (caption_width != 0 && !caption.empty()) {
+  if (!caption.empty()) {
     canvas.SetTextColor(focused
                           ? look.focused.text_color
                           : look.text_color);
