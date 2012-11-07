@@ -49,6 +49,7 @@ public:
   FAITrianglePointValidator(OrderedTask *ordered_task,
                             const unsigned ordered_task_index);
 
+  gcc_pure
   static bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3);
 
   /**
@@ -61,6 +62,7 @@ public:
    * @returns False if angle from three points is out of possible range for
    * an FAI triangle.
    */
+  gcc_pure
   static bool IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1,
                          const GeoPoint &p2, bool right);
 
@@ -71,6 +73,7 @@ public:
    * @param right = 1 if triangle turns are to right, -1 if turns are to left
    * @return True if point would be valid in an FAI Triangle
    */
+  gcc_pure
   bool IsFAITrianglePoint(const Waypoint &wp, bool right) const;
 
 private:

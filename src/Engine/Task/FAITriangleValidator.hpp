@@ -30,7 +30,9 @@ class OrderedTask;
 
 namespace FAITriangleValidator
 {
+  gcc_pure
   bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
+
   bool Validate(const OrderedTask &task);
 }
 
