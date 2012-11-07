@@ -34,7 +34,7 @@ ContestComputer::ContestComputer(const Trace &trace_full,
 
 void
 ContestComputer::Solve(const ContestSettings &settings,
-                       DerivedInfo &calculated)
+                       ContestStatistics &contest_stats)
 {
   if (!settings.enable)
     return;
@@ -44,12 +44,12 @@ ContestComputer::Solve(const ContestSettings &settings,
 
   contest_manager.UpdateIdle();
 
-  calculated.contest_stats = contest_manager.GetStats();
+  contest_stats = contest_manager.GetStats();
 }
 
 bool
 ContestComputer::SolveExhaustive(const ContestSettings &settings,
-                                 DerivedInfo &calculated)
+                                 ContestStatistics &contest_stats)
 {
   if (!settings.enable)
     return false;
@@ -59,7 +59,7 @@ ContestComputer::SolveExhaustive(const ContestSettings &settings,
 
   bool result = contest_manager.SolveExhaustive();
 
-  calculated.contest_stats = contest_manager.GetStats();
+  contest_stats = contest_manager.GetStats();
 
   return result;
 }

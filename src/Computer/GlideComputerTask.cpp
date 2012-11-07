@@ -148,9 +148,10 @@ GlideComputerTask::ProcessIdle(const MoreData &basic, DerivedInfo &calculated,
                                  calculated.task_stats.current_leg));
 
   if (exhaustive)
-    contest.SolveExhaustive(settings_computer.contest, calculated);
+    contest.SolveExhaustive(settings_computer.contest,
+                            calculated.contest_stats);
   else
-    contest.Solve(settings_computer.contest, calculated);
+    contest.Solve(settings_computer.contest, calculated.contest_stats);
 
   const AircraftState as = ToAircraftState(basic, calculated);
 
