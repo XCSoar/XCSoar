@@ -26,10 +26,10 @@ Copyright_License {
 
 struct GeoPoint;
 class Canvas;
-class Projection;
+class WindowProjection;
 
 void
-RenderFAISector(Canvas &canvas, const Projection &projection,
+RenderFAISector(Canvas &canvas, const WindowProjection &projection,
                 const GeoPoint &pt1, const GeoPoint &pt2,
                 bool reverse);
 

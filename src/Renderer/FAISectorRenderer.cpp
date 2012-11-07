@@ -24,19 +24,25 @@ Copyright_License {
 #include "FAISectorRenderer.hpp"
 #include "Engine/Task/Shapes/FAITriangleSector.hpp"
 #include "Geo/GeoPoint.hpp"
-#include "Projection/Projection.hpp"
+#include "Geo/GeoClip.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 
 void
-RenderFAISector(Canvas &canvas, const Projection &projection,
+RenderFAISector(Canvas &canvas, const WindowProjection &projection,
                 const GeoPoint &pt1, const GeoPoint &pt2,
                 bool reverse)
 {
   GeoPoint geo_points[FAI_TRIANGLE_SECTOR_MAX];
   GeoPoint *geo_end = GenerateFAITriangleSector(geo_points, pt1, pt2, reverse);
 
+  GeoPoint clipped[FAI_TRIANGLE_SECTOR_MAX * 3],
+    *clipped_end = clipped +
+    GeoClip(projection.GetScreenBounds().Scale(fixed(1.1)))
+    .ClipPolygon(clipped, geo_points, geo_end - geo_points);
+
   RasterPoint points[FAI_TRIANGLE_SECTOR_MAX], *p = points;
-  for (GeoPoint *geo_i = geo_points; geo_i != geo_end;)
+  for (GeoPoint *geo_i = clipped; geo_i != clipped_end;)
     *p++ = projection.GeoToScreen(*geo_i++);
 
   canvas.DrawPolygon(points, p - points);
