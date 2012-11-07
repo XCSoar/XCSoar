@@ -669,6 +669,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunWindArrowRenderer \
 	RunHorizonRenderer \
 	RunFinalGlideBarRenderer \
+	RunFAITriangleSectorRenderer \
 	RunProgressWindow \
 	RunJobDialog \
 	RunAnalysis \
@@ -1823,6 +1824,23 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 RUN_FINAL_GLIDE_BAR_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN OS THREAD TASK GLIDE GEO MATH UTIL
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
+
+RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
+	$(SRC)/Math/Screen.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Renderer/FAISectorRenderer.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSector.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/RunFAITriangleSectorRenderer.cpp
+RUN_FAI_TRIANGLE_SECTOR_RENDERER_LDADD = $(RESOURCE_BINARY)
+RUN_FAI_TRIANGLE_SECTOR_RENDERER_DEPENDS = FORM SCREEN OS THREAD GEO MATH UTIL
+$(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_RENDERER))
 
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
