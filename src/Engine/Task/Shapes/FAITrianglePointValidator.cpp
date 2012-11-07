@@ -52,7 +52,7 @@ FAITrianglePointValidator::TestFAITriangle(const fixed d1, const fixed d2,
   if ((d1 < min_fai_leg) || (d2 < min_fai_leg) || (d3 < min_fai_leg))
     return false;
 
-  return FAITriangleValidator::TestDistances(d1, d2, d3);
+  return FAITriangleRules::TestDistances(d1, d2, d3);
 }
 
 bool

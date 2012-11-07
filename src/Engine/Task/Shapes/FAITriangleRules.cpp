@@ -23,7 +23,7 @@
 #include "FAITriangleRules.hpp"
 
 bool
-FAITriangleValidator::TestDistances(const fixed d1, const fixed d2, const fixed d3)
+FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
 {
   const fixed d_wp = d1 + d2 + d3;
   const fixed d_wp28 = d_wp * fixed(0.28);

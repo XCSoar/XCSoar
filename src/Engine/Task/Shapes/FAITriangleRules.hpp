@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-namespace FAITriangleValidator
+namespace FAITriangleRules
 {
   gcc_pure
   bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
