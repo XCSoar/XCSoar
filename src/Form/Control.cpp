@@ -82,7 +82,7 @@ WindowControl::OnKeyDown(unsigned key_code)
 {
   KeyTimer(true, key_code);
 
-  return ContainerWindow::OnKeyDown(key_code);
+  return PaintWindow::OnKeyDown(key_code);
 }
 
 bool
@@ -94,19 +94,5 @@ WindowControl::OnKeyUp(unsigned key_code)
   if (KeyTimer(false, key_code) && key_code == KEY_RETURN && OnHelp())
     return true;
 
-  return ContainerWindow::OnKeyUp(key_code);
-}
-
-void
-WindowControl::OnSetFocus()
-{
-  ContainerWindow::OnSetFocus();
-  Invalidate();
-}
-
-void
-WindowControl::OnKillFocus()
-{
-  ContainerWindow::OnKillFocus();
-  Invalidate();
+  return PaintWindow::OnKeyUp(key_code);
 }

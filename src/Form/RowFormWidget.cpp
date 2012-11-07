@@ -185,28 +185,15 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
 
   WindowStyle style;
   if (!read_only)
-    style.ControlParent();
-
-  EditWindowStyle edit_style;
-  edit_style.SetVerticalCenter();
-
-  if (read_only)
-    edit_style.SetReadOnly();
-  else
-    edit_style.TabStop();
-
-  if (IsEmbedded() || Layout::scale_1024 < 2048)
-    /* sunken edge doesn't fit well on the tiny screen of an embedded
-       device */
-    edit_style.Border();
-  else
-    edit_style.SunkenEdge();
+    style.TabStop();
 
   PanelControl &panel = *(PanelControl *)GetWindow();
   WndProperty *edit =
     new WndProperty(panel, look, label,
                     edit_rc, (*label == '\0') ? 0 : 100,
-                    style, edit_style);
+                    style);
+  edit->SetReadOnly(read_only);
+
   if (help != NULL)
     edit->SetHelpText(help);
 

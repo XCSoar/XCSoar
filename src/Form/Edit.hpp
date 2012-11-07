@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_FORM_EDIT_HPP
 
 #include "Form/Control.hpp"
-#include "Screen/EditWindow.hpp"
 #include "Screen/Point.hpp"
+#include "Util/tstring.hpp"
 
 struct DialogLook;
 class DataField;
@@ -37,50 +37,7 @@ class ContainerWindow;
  * an editable field (the Editor).
  */
 class WndProperty : public WindowControl {
-  class Editor : public EditWindow {
-  private:
-    /** The parent Control */
-    WndProperty *parent;
-
-  public:
-    /**
-     * Constructor of the Editor class
-     * @param _parent The parent Control the Editor belongs to
-     */
-    Editor(WndProperty *_parent):parent(_parent) {}
-
-    /**
-     * The OnMouseDown event is called when the mouse is pressed over the button
-     * (derived from Window)
-     */
-    virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-
-    virtual bool OnKeyCheck(unsigned key_code) const;
-
-    /**
-     * The OnKeyDown event is called when a key is pressed while the
-     * button is focused
-     * (derived from Window)
-     */
-    virtual bool OnKeyDown(unsigned key_code);
-    /**
-     * The OnKeyDown event is called when a key is released while the
-     * button is focused
-     * (derived from Window)
-     */
-    virtual bool OnKeyUp(unsigned key_code);
-
-    virtual void OnSetFocus();
-    virtual void OnKillFocus();
-  };
-
-  friend class Editor;
-
-private:
   const DialogLook &look;
-
-  /** Editor Control */
-  Editor edit;
 
   /** Position of the Editor Control */
   PixelRect edit_rc;
@@ -88,7 +45,11 @@ private:
   /** Width reserved for the caption of the Control */
   PixelScalar caption_width;
 
+  tstring value;
+
   DataField *mDataField;
+
+  bool read_only;
 
 public:
   /**
@@ -100,17 +61,13 @@ public:
   WndProperty(ContainerWindow &parent, const DialogLook &look,
               const TCHAR *Caption,
               const PixelRect &rc, int CaptionWidth,
-              const WindowStyle style,
-              const EditWindowStyle edit_style);
+              const WindowStyle style);
 
   /** Destructor */
   ~WndProperty();
 
 protected:
   int CallSpecial();
-
-  void on_editor_setfocus();
-  void on_editor_killfocus();
 
 public:
   /**
@@ -124,18 +81,13 @@ public:
 
   void RefreshDisplay();
 
-  void SetEnabled(bool enabled) {
-    WindowControl::SetEnabled(enabled);
-    edit.SetEnabled(enabled);
-  }
-
-  void SetReadOnly(bool read_only=true) {
-    edit.SetReadOnly(read_only);
+  void SetReadOnly(bool _read_only=true) {
+    read_only = _read_only;
   }
 
   gcc_pure
   bool IsReadOnly() const {
-    return edit.IsReadOnly();
+    return read_only;
   }
 
   /**
@@ -149,6 +101,8 @@ public:
 
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnSetFocus() gcc_override;
+  virtual void OnKillFocus() gcc_override;
 
   /**
    * The OnMouseDown event is called when the mouse is pressed over the button
@@ -160,6 +114,10 @@ protected:
    * (derived from Window)
    */
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+
+  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
+  virtual bool OnKeyUp(unsigned key_code) gcc_override;
 
 public:
   /**
@@ -184,9 +142,7 @@ public:
    * Sets the Editors text to the given Value
    * @param Value The new text of the Editor Control
    */
-  void SetText(const TCHAR *value) {
-    edit.SetText(value);
-  }
+  void SetText(const TCHAR *_value);
 
 private:
   /**

@@ -131,11 +131,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   const UPixelScalar edit_width = (width - label_width) / ARRAY_SIZE(points);
 
   WindowStyle style;
-  style.ControlParent();
-
-  EditWindowStyle edit_style;
-  edit_style.SetVerticalCenter();
-  edit_style.TabStop();
+  style.TabStop();
 
   PixelRect label_rc { 0, 0, PixelScalar(label_width),
       PixelScalar(row_height) };
@@ -150,7 +146,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
     points[i].v = new WndProperty(panel, look, _T(""),
-                                  rc, 0, style, edit_style);
+                                  rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
                                             fixed_zero, fixed(300), fixed_zero,
                                             fixed_one, false, NULL);
@@ -186,7 +182,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
     points[i].w = new WndProperty(panel, look, _T(""),
-                                  rc, 0, style, edit_style);
+                                  rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
                                             min, fixed_zero, fixed_zero,
                                             step, false, NULL);

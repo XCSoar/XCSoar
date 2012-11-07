@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_CONTROL_HPP
 #define XCSOAR_FORM_CONTROL_HPP
 
-#include "Screen/ContainerWindow.hpp"
+#include "Screen/PaintWindow.hpp"
 #include "Util/StaticString.hpp"
 
 #include <tchar.h>
@@ -35,7 +35,7 @@ struct DialogLook;
  * The WindowControl class is the base class for every other control
  * including the forms/windows itself, using the ContainerControl.
  */
-class WindowControl : public ContainerWindow {
+class WindowControl : public PaintWindow {
 public:
   typedef void (*HelpCallback)(WindowControl *Sender);
 
@@ -59,18 +59,6 @@ public:
 
   /** Destructor */
   virtual ~WindowControl();
-
-  /**
-   * The OnSetFocus event is called when the control gets focused
-   * (derived from Window)
-   */
-  virtual void OnSetFocus();
-
-  /**
-   * The OnKillFocus event is called when the control loses the focus
-   * (derived from Window)
-   */
-  virtual void OnKillFocus();
 
   /**
    * The OnKeyDown event is called when a key is pressed while the

@@ -326,18 +326,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   rc = info_box_layout.remaining;
 
   WindowStyle style;
-  style.ControlParent();
-
-  EditWindowStyle edit_style;
-  edit_style.SetVerticalCenter();
-  edit_style.TabStop();
-
-  if (IsEmbedded() || Layout::scale_1024 < 2048)
-    /* sunken edge doesn't fit well on the tiny screen of an
-       embedded device */
-    edit_style.Border();
-  else
-    edit_style.SunkenEdge();
+  style.TabStop();
 
   PixelRect control_rc = rc;
   control_rc.right -= Layout::FastScale(2);
@@ -351,7 +340,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   control_rc.bottom = control_rc.top + height;
   edit_name = new WndProperty(client_area, dialog_look, _("Name"),
                               control_rc, caption_width,
-                              style, edit_style);
+                              style);
   DataFieldString *dfs = new DataFieldString(allow_name_change
                                              ? (const TCHAR *)data.name
                                              : gettext(data.name),
@@ -364,7 +353,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   edit_select = new WndProperty(client_area, dialog_look, _("InfoBox"),
                                 control_rc, caption_width,
-                                style, edit_style);
+                                style);
 
   DataFieldEnum *dfe = new DataFieldEnum(OnSelectAccess);
   for (unsigned i = 0; i < info_box_layout.count; ++i) {
@@ -380,7 +369,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   edit_content = new WndProperty(client_area, dialog_look, _("Content"),
                                  control_rc, caption_width,
-                                 style, edit_style);
+                                 style);
 
   dfe = new DataFieldEnum(OnContentAccess);
   for (unsigned i = InfoBoxFactory::MIN_TYPE_VAL; i < InfoBoxFactory::NUM_TYPES; i++) {

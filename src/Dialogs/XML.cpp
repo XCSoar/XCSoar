@@ -572,25 +572,13 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
       GetCallBack(lookup_table, node, _T("OnHelp"));
 
     // Create the Property Control
-    style.ControlParent();
-
-    EditWindowStyle edit_style;
-    edit_style.SetVerticalCenter();
-    if (read_only)
-      edit_style.SetReadOnly();
-    else
-      edit_style.TabStop();
-
-    if (IsEmbedded() || Layout::scale_1024 < 2048)
-      /* sunken edge doesn't fit well on the tiny screen of an
-         embedded device */
-      edit_style.Border();
-    else
-      edit_style.SunkenEdge();
+    if (!read_only)
+      style.TabStop();
 
     WndProperty *property;
     window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
-                                        caption_width, style, edit_style);
+                                        caption_width, style);
+    property->SetReadOnly(read_only);
 
     // Set the help function event callback
     property->SetOnHelpCallback(help_callback);
