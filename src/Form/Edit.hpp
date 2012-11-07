@@ -78,8 +78,6 @@ class WndProperty : public WindowControl {
 
 public:
   typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
-  typedef void (*ClickUpCallback_t)(WindowControl *Sender);
-  typedef void (*ClickDownCallback_t)(WindowControl *Sender);
 
 private:
   const DialogLook &look;
@@ -92,9 +90,6 @@ private:
 
   /** Width reserved for the caption of the Control */
   PixelScalar caption_width;
-
-  /** Function to call when the Editor data has changed */
-  DataChangeCallback_t mOnDataChangeNotify;
 
   DataField *mDataField;
 
@@ -124,10 +119,6 @@ protected:
   void on_editor_killfocus();
 
 public:
-  void SetDataChangeCallback(DataChangeCallback_t data_change_callback) {
-    mOnDataChangeNotify = data_change_callback;
-  }
-
   /**
    * Returns the recommended caption width, measured by the dialog
    * font.
