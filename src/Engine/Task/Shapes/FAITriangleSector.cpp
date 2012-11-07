@@ -57,6 +57,9 @@ CalcGeoPoint(const GeoPoint &origin, Angle angle,
                                                  reverse), dist_b);
 }
 
+/**
+ * Total=min..max; A=28%
+ */
 static GeoPoint *
 GenerateFAITriangleRight(GeoPoint *dest,
                          const GeoPoint &origin, const GeoVector &leg_c,
@@ -77,6 +80,9 @@ GenerateFAITriangleRight(GeoPoint *dest,
   return dest;
 }
 
+/**
+ * Total=max
+ */
 static GeoPoint *
 GenerateFAITriangleTop(GeoPoint *dest,
                        const GeoPoint &origin, const GeoVector &leg_c,
@@ -97,6 +103,9 @@ GenerateFAITriangleTop(GeoPoint *dest,
   return dest;
 }
 
+/**
+ * Total=max..min; B=28%
+ */
 static GeoPoint *
 GenerateFAITriangleLeft(GeoPoint *dest,
                         const GeoPoint &origin, const GeoVector &leg_c,
