@@ -46,6 +46,7 @@ protected:
     projection.SetGeoLocation(a.Middle(b));
     projection.SetScreenSize(canvas.GetWidth(), canvas.GetHeight());
     projection.SetScaleFromRadius(fixed(400000));
+    projection.UpdateScreenBounds();
 
     canvas.SelectBlackPen();
     canvas.SelectHollowBrush();
