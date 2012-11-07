@@ -22,11 +22,37 @@
 
 #include "FAITriangleRules.hpp"
 
+using namespace FAITriangleRules;
+
+gcc_const
+static bool
+IsSmallFAITriangle(const fixed d_total,
+                   const fixed d1, const fixed d2, const fixed d3)
+{
+  const fixed d_min = d_total * SMALL_MIN_LEG;
+  return d1 >= d_min && d2 >= d_min && d3 >= d_min;
+}
+
+gcc_const
+static bool
+IsLargeFAITriangle(const fixed d_total,
+                   const fixed d1, const fixed d2, const fixed d3)
+{
+  if (d_total < LARGE_THRESHOLD)
+    return false;
+
+  const fixed d_min = LargeMinLeg(d_total);
+  if (d1 < d_min || d2 < d_min || d3 < d_min)
+    return false;
+
+  const fixed d_max = d_total * LARGE_MAX_LEG;
+  return d1 <= d_max && d2 <= d_max && d3 <= d_max;
+}
+
 bool
 FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
 {
   const fixed d_wp = d1 + d2 + d3;
-  const fixed d_wp28 = d_wp * SMALL_MIN_LEG;
 
   /*
    * A triangle is a valid FAI-triangle, if no side is less than
@@ -35,19 +61,6 @@ FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
    * (totallength >= 750km).
    */
 
-  if (d_wp < LARGE_THRESHOLD &&
-      d1 >= d_wp28 && d2 >= d_wp28 && d3 >= d_wp28)
-    // small FAI
-    return true;
-
-  const fixed d_wp25 = LargeMinLeg(d_wp);
-  const fixed d_wp45 = d_wp * LARGE_MAX_LEG;
-
-  if (d_wp >= LARGE_THRESHOLD &&
-      d1 > d_wp25 && d2 > d_wp25 && d3 > d_wp25 &&
-      d1 <= d_wp45 && d2 <= d_wp45 && d3 <= d_wp45)
-    // large FAI
-    return true;
-
-  return false;
+  return IsSmallFAITriangle(d_wp, d1, d2, d3) ||
+    IsLargeFAITriangle(d_wp, d1, d2, d3);
 }
