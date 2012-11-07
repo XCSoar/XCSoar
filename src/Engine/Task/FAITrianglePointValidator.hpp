@@ -49,7 +49,7 @@ public:
   FAITrianglePointValidator(OrderedTask *ordered_task,
                             const unsigned ordered_task_index);
 
-  bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3) const;
+  static bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3);
 
   /**
    * Perform fast check to exclude point as from further consideration
@@ -61,8 +61,8 @@ public:
    * @returns False if angle from three points is out of possible range for
    * an FAI triangle.
    */
-  bool IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
-                  bool right) const;
+  static bool IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1,
+                         const GeoPoint &p2, bool right);
 
   /** Test whether wp could be a point in an FAI triangle based on the other
    * points in the task and the current ordered task index

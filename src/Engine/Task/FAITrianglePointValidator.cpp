@@ -47,7 +47,7 @@ FAITrianglePointValidator::FAITrianglePointValidator(
 
 bool
 FAITrianglePointValidator::TestFAITriangle(const fixed d1, const fixed d2,
-                                           const fixed d3) const
+                                           const fixed d3)
 {
   if ((d1 < min_fai_leg) || (d2 < min_fai_leg) || (d3 < min_fai_leg))
     return false;
@@ -57,7 +57,7 @@ FAITrianglePointValidator::TestFAITriangle(const fixed d1, const fixed d2,
 
 bool
 FAITrianglePointValidator::IsFAIAngle(const GeoPoint &p0, const GeoPoint &p1,
-                                      const GeoPoint &p2, bool right) const
+                                      const GeoPoint &p2, bool right)
 {
   const Angle a01 = p0.Bearing(p1);
   const Angle a21 = p2.Bearing(p1);
