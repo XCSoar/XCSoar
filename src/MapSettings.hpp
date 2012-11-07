@@ -168,6 +168,11 @@ struct MapSettings {
   /** Show FinalGlideBar mc0 arrow */
   bool final_glide_bar_mc0_enabled;
 
+  /**
+   * Overlay FAI triangle areas on the map while flying?
+   */
+  bool show_fai_triangle_areas;
+
   TrailSettings trail;
   MapItemListSettings item_list;
 

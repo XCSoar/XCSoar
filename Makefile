@@ -552,6 +552,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowRender.cpp \
 	$(SRC)/MapWindow/MapWindowSymbols.cpp \
+	$(SRC)/MapWindow/MapWindowContest.cpp \
 	$(SRC)/MapWindow/MapWindowTask.cpp \
 	$(SRC)/MapWindow/MapWindowThermal.cpp \
 	$(SRC)/MapWindow/MapWindowTimer.cpp \

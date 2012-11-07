@@ -122,6 +122,8 @@ Profile::Load(MapSettings &settings)
   Get(ProfileKeys::EnableThermalProfile, settings.show_thermal_profile);
   Get(ProfileKeys::EnableFinalGlideBarMC0,
       settings.final_glide_bar_mc0_enabled);
+  Get(ProfileKeys::ShowFAITriangleAreas,
+      settings.show_fai_triangle_areas);
 
   Load(settings.trail);
   Load(settings.item_list);

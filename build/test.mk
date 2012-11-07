@@ -1532,6 +1532,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowRender.cpp \
 	$(SRC)/MapWindow/MapWindowSymbols.cpp \
+	$(SRC)/MapWindow/MapWindowContest.cpp \
 	$(SRC)/MapWindow/MapWindowTask.cpp \
 	$(SRC)/MapWindow/MapWindowThermal.cpp \
 	$(SRC)/MapWindow/MapWindowTimer.cpp \
@@ -1540,6 +1541,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
+	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
 	$(SRC)/Renderer/TaskPointRenderer.cpp \

@@ -186,6 +186,7 @@ extern const TCHAR RiskGamma[];
 extern const TCHAR PredictWindDrift[];
 extern const TCHAR WindArrowStyle[];
 extern const TCHAR EnableFinalGlideBarMC0[];
+extern const TCHAR ShowFAITriangleAreas[];
 extern const TCHAR AutoLogger[];
 extern const TCHAR DisableAutoLogger[];
 extern const TCHAR EnableFlightLogger[];

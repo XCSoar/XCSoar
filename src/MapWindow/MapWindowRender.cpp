@@ -142,6 +142,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   RenderAirspace(canvas);
 
   // Render task, waypoints
+  draw_sw.Mark("DrawContest");
+  DrawContest(canvas);
+
   draw_sw.Mark("DrawTask");
   DrawTask(canvas);
 
