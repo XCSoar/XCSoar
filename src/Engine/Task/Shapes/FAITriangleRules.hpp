@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+struct GeoPoint;
+
 namespace FAITriangleRules
 {
   /**
@@ -62,6 +64,9 @@ namespace FAITriangleRules
 
   gcc_pure
   bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
+
+  gcc_pure
+  bool TestDistances(const GeoPoint &a, const GeoPoint &b, const GeoPoint &c);
 }
 
 #endif

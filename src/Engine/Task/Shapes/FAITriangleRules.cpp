@@ -21,6 +21,7 @@
 */
 
 #include "FAITriangleRules.hpp"
+#include "Geo/Math.hpp"
 
 using namespace FAITriangleRules;
 
@@ -63,4 +64,11 @@ FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
 
   return IsSmallFAITriangle(d_wp, d1, d2, d3) ||
     IsLargeFAITriangle(d_wp, d1, d2, d3);
+}
+
+bool
+FAITriangleRules::TestDistances(const GeoPoint &a, const GeoPoint &b,
+                                const GeoPoint &c)
+{
+  return TestDistances(Distance(a, b), Distance(b, c), Distance(c, a));
 }

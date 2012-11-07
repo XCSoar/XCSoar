@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_FAI_TRIANGLE_AREA_HPP
 #define XCSOAR_FAI_TRIANGLE_AREA_HPP
 
+#include "Compiler.h"
+
 struct GeoPoint;
 
 static constexpr unsigned FAI_TRIANGLE_SECTOR_MAX = 8 * 3 * 10;
