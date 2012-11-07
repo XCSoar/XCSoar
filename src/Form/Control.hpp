@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_FORM_CONTROL_HPP
 #define XCSOAR_FORM_CONTROL_HPP
 
-#include "Screen/Brush.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticString.hpp"
 
