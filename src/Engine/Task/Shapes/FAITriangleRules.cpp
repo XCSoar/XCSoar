@@ -26,7 +26,7 @@ bool
 FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
 {
   const fixed d_wp = d1 + d2 + d3;
-  const fixed d_wp28 = d_wp * fixed(0.28);
+  const fixed d_wp28 = d_wp * SMALL_MIN_LEG;
 
   /*
    * A triangle is a valid FAI-triangle, if no side is less than
@@ -35,15 +35,15 @@ FAITriangleRules::TestDistances(const fixed d1, const fixed d2, const fixed d3)
    * (totallength >= 750km).
    */
 
-  if (d_wp < fixed(750000) &&
+  if (d_wp < LARGE_THRESHOLD &&
       d1 >= d_wp28 && d2 >= d_wp28 && d3 >= d_wp28)
     // small FAI
     return true;
 
-  const fixed d_wp25 = d_wp / 4;
-  const fixed d_wp45 = d_wp * fixed(0.45);
+  const fixed d_wp25 = LargeMinLeg(d_wp);
+  const fixed d_wp45 = d_wp * LARGE_MAX_LEG;
 
-  if (d_wp >= fixed(750000) &&
+  if (d_wp >= LARGE_THRESHOLD &&
       d1 > d_wp25 && d2 > d_wp25 && d3 > d_wp25 &&
       d1 <= d_wp45 && d2 <= d_wp45 && d3 <= d_wp45)
     // large FAI

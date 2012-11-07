@@ -28,6 +28,38 @@ Copyright_License {
 
 namespace FAITriangleRules
 {
+  /**
+   * The minimum leg percentage for "small FAI triangles".
+   */
+  static constexpr fixed SMALL_MIN_LEG(0.28);
+
+  /**
+   * The maximum leg percentage for "small FAI triangles".  This is a
+   * derived value, assuming the other two legs are as short as
+   * possible.
+   */
+  static constexpr fixed SMALL_MAX_LEG(fixed_one - Double(SMALL_MIN_LEG));
+
+  /**
+   * The threshold which allows applying the "large FAI triangle"
+   * rules [m].
+   */
+  static constexpr fixed LARGE_THRESHOLD(750000);
+
+  /**
+   * The minimum leg percentage for "large FAI triangles".
+   */
+  static constexpr fixed LARGE_MIN_LEG(0.25);
+
+  /**
+   * The maximum leg percentage for "large FAI triangles".
+   */
+  static constexpr fixed LARGE_MAX_LEG(0.45);
+
+  static constexpr inline fixed LargeMinLeg(fixed total) {
+    return Quarter(total);
+  }
+
   gcc_pure
   bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
 }
