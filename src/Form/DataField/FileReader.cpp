@@ -205,7 +205,7 @@ DataFieldFileReader::GetAsString() const
   if (mValue < files.size())
     return files[mValue].path;
   else
-    return NULL;
+    return _T("");
 }
 
 const TCHAR *
@@ -223,7 +223,7 @@ DataFieldFileReader::GetAsDisplayString() const
   if (mValue < files.size())
     return files[mValue].filename;
   else
-    return NULL;
+    return _T("");
 }
 
 void

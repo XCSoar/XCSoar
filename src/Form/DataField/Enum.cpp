@@ -131,7 +131,7 @@ DataFieldEnum::GetAsString() const
 {
   if (entries.empty()) {
     assert(value == 0);
-    return NULL;
+    return _T("");
   } else {
     assert(value < entries.size());
     return entries[value].GetString();
@@ -143,7 +143,7 @@ DataFieldEnum::GetAsDisplayString() const
 {
   if (entries.empty()) {
     assert(value == 0);
-    return NULL;
+    return _T("");
   } else {
     assert(value < entries.size());
     return entries[value].GetDisplayString();
