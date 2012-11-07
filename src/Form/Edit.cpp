@@ -146,8 +146,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const PixelRect &rc,
                          int CaptionWidth,
                          const WindowStyle style,
-                         const EditWindowStyle edit_style,
-                         DataChangeCallback_t DataChangeNotify)
+                         const EditWindowStyle edit_style)
   :look(_look), edit(this),
    caption_width(CaptionWidth),
    mDataField(NULL)

@@ -150,7 +150,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
     points[i].v = new WndProperty(panel, look, _T(""),
-                                  rc, 0, style, edit_style, NULL);
+                                  rc, 0, style, edit_style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
                                             fixed_zero, fixed(300), fixed_zero,
                                             fixed_one, false, NULL);
@@ -186,7 +186,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   for (unsigned i = 0; i < ARRAY_SIZE(points);
        ++i, rc.left += edit_width, rc.right += edit_width) {
     points[i].w = new WndProperty(panel, look, _T(""),
-                                  rc, 0, style, edit_style, NULL);
+                                  rc, 0, style, edit_style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
                                             min, fixed_zero, fixed_zero,
                                             step, false, NULL);

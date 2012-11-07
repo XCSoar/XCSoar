@@ -206,7 +206,7 @@ RowFormWidget::CreateEdit(const TCHAR *label, const TCHAR *help,
   WndProperty *edit =
     new WndProperty(panel, look, label,
                     edit_rc, (*label == '\0') ? 0 : 100,
-                    style, edit_style, NULL);
+                    style, edit_style);
   if (help != NULL)
     edit->SetHelpText(help);
 

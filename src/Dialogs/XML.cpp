@@ -567,10 +567,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
 
     // Load the event callback properties
-    WndProperty::DataChangeCallback_t data_notify_callback =
-      (WndProperty::DataChangeCallback_t)
-      GetCallBack(lookup_table, node, _T("OnDataNotify"));
-
     WindowControl::HelpCallback help_callback =
       (WindowControl::HelpCallback)
       GetCallBack(lookup_table, node, _T("OnHelp"));
@@ -594,8 +590,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     WndProperty *property;
     window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
-                                        caption_width, style, edit_style,
-                                        data_notify_callback);
+                                        caption_width, style, edit_style);
 
     // Set the help function event callback
     property->SetOnHelpCallback(help_callback);

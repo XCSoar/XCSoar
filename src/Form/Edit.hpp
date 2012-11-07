@@ -76,9 +76,6 @@ class WndProperty : public WindowControl {
 
   friend class Editor;
 
-public:
-  typedef int (*DataChangeCallback_t)(WindowControl *Sender, int Mode, int Value);
-
 private:
   const DialogLook &look;
 
@@ -99,15 +96,12 @@ public:
    * @param Parent The parent ContainerControl
    * @param Caption Caption of the Control
    * @param CaptionWidth Width of the Caption of the Control
-   * @param DataChangeNotify Function to call when the data changed
-   * @param MultiLine If true, the Control can handle mutliple lines
    */
   WndProperty(ContainerWindow &parent, const DialogLook &look,
               const TCHAR *Caption,
               const PixelRect &rc, int CaptionWidth,
               const WindowStyle style,
-              const EditWindowStyle edit_style,
-              DataChangeCallback_t DataChangeNotify);
+              const EditWindowStyle edit_style);
 
   /** Destructor */
   ~WndProperty();
