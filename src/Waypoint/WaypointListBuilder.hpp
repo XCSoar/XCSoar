@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_WAYPOINT_LIST_BUILDER_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Engine/Task/FAITrianglePointValidator.hpp"
+#include "Engine/Task/Shapes/FAITrianglePointValidator.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 
 struct WaypointFilter;

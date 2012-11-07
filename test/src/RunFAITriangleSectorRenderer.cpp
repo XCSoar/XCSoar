@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Canvas.hpp"
 #include "Fonts.hpp"
-#include "Renderer/FAISectorRenderer.hpp"
+#include "Renderer/FAITriangleAreaRenderer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Projection/WindowProjection.hpp"
 

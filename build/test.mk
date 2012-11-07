@@ -778,7 +778,7 @@ BENCHMARK_PROJECTION_CPPFLAGS = $(SCREEN_CPPFLAGS)
 $(eval $(call link-program,BenchmarkProjection,BENCHMARK_PROJECTION))
 
 BENCHMARK_FAI_TRIANGLE_SECTOR_SOURCES = \
-	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSector.cpp \
+	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \
 	$(TEST_SRC_DIR)/BenchmarkFAITriangleSector.cpp
 BENCHMARK_FAI_TRIANGLE_SECTOR_DEPENDS = GEO MATH
 $(eval $(call link-program,BenchmarkFAITriangleSector,BENCHMARK_FAI_TRIANGLE_SECTOR))
@@ -1829,11 +1829,11 @@ RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Renderer/FAISectorRenderer.cpp \
+	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/ResourceLoader.cpp \
-	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleSector.cpp \
+	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \

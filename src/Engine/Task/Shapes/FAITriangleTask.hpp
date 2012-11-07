@@ -21,8 +21,8 @@ Copyright_License {
 }
  */
 
-#ifndef FAI_TRIANGLE_VALIDATOR_HPP
-#define FAI_TRIANGLE_VALIDATOR_HPP
+#ifndef XCSOAR_FAI_TRIANGLE_TASK_HPP
+#define XCSOAR_FAI_TRIANGLE_TASK_HPP
 
 #include "Math/fixed.hpp"
 
@@ -30,9 +30,6 @@ class OrderedTask;
 
 namespace FAITriangleValidator
 {
-  gcc_pure
-  bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
-
   bool Validate(const OrderedTask &task);
 }
 

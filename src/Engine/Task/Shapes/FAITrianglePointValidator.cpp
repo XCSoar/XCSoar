@@ -21,9 +21,9 @@
  */
 
 #include "FAITrianglePointValidator.hpp"
-#include "FAITriangleValidator.hpp"
-#include "Ordered/OrderedTask.hpp"
-#include "Ordered/Points/OrderedTaskPoint.hpp"
+#include "FAITriangleRules.hpp"
+#include "../Ordered/OrderedTask.hpp"
+#include "../Ordered/Points/OrderedTaskPoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 
 /** min distance for any FAI Leg -- derived from circular FAI sector radius */

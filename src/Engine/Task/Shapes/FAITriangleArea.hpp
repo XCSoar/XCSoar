@@ -21,16 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FAI_SECTOR_RENDERER_HPP
-#define XCSOAR_FAI_SECTOR_RENDERER_HPP
+#ifndef XCSOAR_FAI_TRIANGLE_AREA_HPP
+#define XCSOAR_FAI_TRIANGLE_AREA_HPP
 
 struct GeoPoint;
-class Canvas;
-class WindowProjection;
 
-void
-RenderFAISector(Canvas &canvas, const WindowProjection &projection,
-                const GeoPoint &pt1, const GeoPoint &pt2,
-                bool reverse);
+static constexpr unsigned FAI_TRIANGLE_SECTOR_MAX = 8 * 3 * 10;
+
+/**
+ * @return a pointer after the last generated item
+ */
+GeoPoint *
+GenerateFAITriangleArea(GeoPoint *dest,
+                        const GeoPoint &pt1, const GeoPoint &pt2,
+                        bool reverse);
 
 #endif

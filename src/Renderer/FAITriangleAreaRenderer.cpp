@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "FAISectorRenderer.hpp"
-#include "Engine/Task/Shapes/FAITriangleSector.hpp"
+#include "FAITriangleAreaRenderer.hpp"
+#include "Engine/Task/Shapes/FAITriangleArea.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -34,7 +34,7 @@ RenderFAISector(Canvas &canvas, const WindowProjection &projection,
                 bool reverse)
 {
   GeoPoint geo_points[FAI_TRIANGLE_SECTOR_MAX];
-  GeoPoint *geo_end = GenerateFAITriangleSector(geo_points, pt1, pt2, reverse);
+  GeoPoint *geo_end = GenerateFAITriangleArea(geo_points, pt1, pt2, reverse);
 
   GeoPoint clipped[FAI_TRIANGLE_SECTOR_MAX * 3],
     *clipped_end = clipped +

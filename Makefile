@@ -520,7 +520,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Projection/CompareProjection.cpp \
 	$(SRC)/Renderer/ChartRenderer.cpp \
 	$(SRC)/Renderer/BackgroundRenderer.cpp \
-	$(SRC)/Renderer/FAISectorRenderer.cpp \
+	$(SRC)/Renderer/FAITriangleAreaRenderer.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/TaskPointRenderer.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \

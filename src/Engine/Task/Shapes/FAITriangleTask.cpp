@@ -1,5 +1,4 @@
-/*
-Copyright_License {
+/* Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -21,22 +20,24 @@ Copyright_License {
 }
 */
 
-#include "Engine/Task/Shapes/FAITriangleArea.hpp"
-#include "Geo/GeoPoint.hpp"
-#include "Compiler.h"
+#include "FAITriangleTask.hpp"
+#include "FAITriangleRules.hpp"
+#include "../Ordered/OrderedTask.hpp"
+#include "../Ordered/Points/OrderedTaskPoint.hpp"
+#include "../Factory/AbstractTaskFactory.hpp"
 
-int
-main(gcc_unused int argc, gcc_unused char **argv)
+bool
+FAITriangleValidator::Validate(const OrderedTask &task)
 {
-  const GeoPoint a(Angle::Degrees(fixed(7.70722)),
-                   Angle::Degrees(fixed(51.052)));
-  const GeoPoint b(Angle::Degrees(fixed(11.5228)),
-                   Angle::Degrees(fixed(50.3972)));
+  if (!task.GetFactory().IsUnique())
+    return false;
 
-  GeoPoint buffer[FAI_TRIANGLE_SECTOR_MAX];
+  if (task.TaskSize() != 4)
+    return false;
 
-  for (unsigned i = 256 * 1024; i-- > 0;)
-    GenerateFAITriangleArea(buffer, a, b, false);
+  const fixed d1 = task.GetTaskPoint(1).GetVectorPlanned().distance;
+  const fixed d2 = task.GetTaskPoint(2).GetVectorPlanned().distance;
+  const fixed d3 = task.GetTaskPoint(3).GetVectorPlanned().distance;
 
-  return 0;
+  return TestDistances(d1, d2, d3);
 }

@@ -18,12 +18,9 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "FAITriangleValidator.hpp"
-#include "Ordered/OrderedTask.hpp"
-#include "Ordered/Points/OrderedTaskPoint.hpp"
-#include "Factory/AbstractTaskFactory.hpp"
+#include "FAITriangleRules.hpp"
 
 bool
 FAITriangleValidator::TestDistances(const fixed d1, const fixed d2, const fixed d3)
@@ -53,20 +50,4 @@ FAITriangleValidator::TestDistances(const fixed d1, const fixed d2, const fixed 
     return true;
 
   return false;
-}
-
-bool
-FAITriangleValidator::Validate(const OrderedTask &task)
-{
-  if (!task.GetFactory().IsUnique())
-    return false;
-
-  if (task.TaskSize() != 4)
-    return false;
-
-  const fixed d1 = task.GetTaskPoint(1).GetVectorPlanned().distance;
-  const fixed d2 = task.GetTaskPoint(2).GetVectorPlanned().distance;
-  const fixed d3 = task.GetTaskPoint(3).GetVectorPlanned().distance;
-
-  return TestDistances(d1, d2, d3);
 }

@@ -29,7 +29,7 @@
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/TaskPointRenderer.hpp"
 #include "Renderer/TaskRenderer.hpp"
-#include "Renderer/FAISectorRenderer.hpp"
+#include "Renderer/FAITriangleAreaRenderer.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"

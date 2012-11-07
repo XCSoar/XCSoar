@@ -30,7 +30,7 @@ Copyright_License {
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/FAITriangleValidator.hpp"
+#include "Task/Shapes/FAITriangleTask.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"

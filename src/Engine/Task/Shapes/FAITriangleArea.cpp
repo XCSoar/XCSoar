@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "FAITriangleSector.hpp"
+#include "FAITriangleArea.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Geo/Math.hpp"
@@ -345,9 +345,9 @@ GenerateFAITriangleLargeBottomLeft(GeoPoint *dest,
 }
 
 GeoPoint *
-GenerateFAITriangleSector(GeoPoint *dest,
-                          const GeoPoint &pt1, const GeoPoint &pt2,
-                          bool reverse)
+GenerateFAITriangleArea(GeoPoint *dest,
+                        const GeoPoint &pt1, const GeoPoint &pt2,
+                        bool reverse)
 {
   const GeoVector leg_c = pt1.DistanceBearing(pt2);
 

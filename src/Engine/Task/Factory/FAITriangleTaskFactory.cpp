@@ -22,7 +22,7 @@
 
 #include "FAITriangleTaskFactory.hpp"
 #include "TaskFactoryConstraints.hpp"
-#include "Task/FAITriangleValidator.hpp"
+#include "Task/Shapes/FAITriangleTask.hpp"
 
 static constexpr TaskFactoryConstraints fai_triangle_constraints = {
   true,

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "WaypointFilter.hpp"
 #include "Waypoint/Waypoint.hpp"
-#include "Task/FAITrianglePointValidator.hpp"
+#include "Engine/Task/Shapes/FAITrianglePointValidator.hpp"
 #include "Compatibility/string.h"
 
 bool

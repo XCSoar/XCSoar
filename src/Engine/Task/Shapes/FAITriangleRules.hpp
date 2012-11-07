@@ -19,24 +19,17 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-*/
+ */
 
-#include "Engine/Task/Shapes/FAITriangleArea.hpp"
-#include "Geo/GeoPoint.hpp"
-#include "Compiler.h"
+#ifndef XCSOAR_FAI_TRIANGLE_RULES_HPP
+#define XCSOAR_FAI_TRIANGLE_RULES_HPP
 
-int
-main(gcc_unused int argc, gcc_unused char **argv)
+#include "Math/fixed.hpp"
+
+namespace FAITriangleValidator
 {
-  const GeoPoint a(Angle::Degrees(fixed(7.70722)),
-                   Angle::Degrees(fixed(51.052)));
-  const GeoPoint b(Angle::Degrees(fixed(11.5228)),
-                   Angle::Degrees(fixed(50.3972)));
-
-  GeoPoint buffer[FAI_TRIANGLE_SECTOR_MAX];
-
-  for (unsigned i = 256 * 1024; i-- > 0;)
-    GenerateFAITriangleArea(buffer, a, b, false);
-
-  return 0;
+  gcc_pure
+  bool TestDistances(const fixed d1, const fixed d2, const fixed d3);
 }
+
+#endif
