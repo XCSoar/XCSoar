@@ -26,12 +26,19 @@
 #include "Ordered/Points/OrderedTaskPoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 
+/** min distance for any FAI Leg -- derived from circular FAI sector radius */
+static constexpr fixed min_fai_leg(2000);
+
+/** min angle allowable in a FAI Triangle 31.5 degrees */
+static constexpr fixed min_fai_angle(31.5);
+
+/** max angle allowable in a FAI Triangle 113.2 degrees */
+static constexpr fixed max_fai_angle(114);
+
 FAITrianglePointValidator::FAITrianglePointValidator(
     OrderedTask *ordered_task, const unsigned ordered_task_index)
   :task(ordered_task), t_index(ordered_task_index), t_size(0),
    leg1(fixed_zero), leg2(fixed_zero), leg3(fixed_zero),
-   min_fai_leg(fixed(2000)),
-   min_fai_angle(fixed(31.5)), max_fai_angle(fixed(114)),
    fai_triangle_point_invalid(false)
 {
   PrepareFAITest(ordered_task, ordered_task_index);

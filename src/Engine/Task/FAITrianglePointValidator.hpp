@@ -43,12 +43,6 @@ class FAITrianglePointValidator
   fixed leg2;
   fixed leg3;
 
-  /** min distance for any FAI Leg -- derived from circular FAI sector radius */
-  const fixed min_fai_leg;
-  /** min angle allowable in a FAI Triangle 31.5 degrees */
-  const fixed min_fai_angle;
-  /** max angle allowable in a FAI Triangle 113.2 degrees */
-  const fixed max_fai_angle;
   bool fai_triangle_point_invalid;
 
 public:
