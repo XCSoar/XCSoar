@@ -62,7 +62,7 @@ MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
   if (e1.AltArivalAGL < e2.AltArivalAGL)
     return false;
 
-  return true;
+  return false;
 }
 
 void
