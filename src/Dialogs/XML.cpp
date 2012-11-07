@@ -616,28 +616,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
         property->SetDataField(data_field);
     }
 
-  } else if (StringIsEqual(node.GetName(), _T("TextEdit"))) {
-    bool read_only = StringToIntDflt(node.GetAttribute(_T("ReadOnly")), 0);
-
-    EditWindowStyle edit_style(style);
-    if (read_only)
-      edit_style.SetReadOnly();
-    else
-      edit_style.TabStop();
-
-    if (IsEmbedded() || Layout::scale_1024 < 2048)
-      /* sunken edge doesn't fit well on the tiny screen of an
-         embedded device */
-      edit_style.Border();
-    else
-      edit_style.SunkenEdge();
-
-    EditWindow *edit;
-    window = edit = new EditWindow();
-    edit->Create(parent, rc, edit_style);
-    edit->InstallWndProc();
-    edit->SetFont(*xml_dialog_look->text_font);
-
   // ButtonControl (WndButton)
   } else if (StringIsEqual(node.GetName(), _T("Button"))) {
     // Determine ClickCallback function
