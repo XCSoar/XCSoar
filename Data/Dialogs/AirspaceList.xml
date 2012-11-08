@@ -5,9 +5,7 @@
 
   <Button Name="cmdClose" Caption="Close" X="-77" Y="0" Width="75" Height="35" OnClick="CloseClicked" />
 
-  <Edit Name="prpFltName" Caption="Name" X="2" Y="32" Width="98" Height="40" CaptionWidth="-1">
-    <DataField DataType="string"/>
-  </Edit>
+  <Edit Name="prpFltName" Caption="Name" X="2" Y="32" Width="98" Height="40" CaptionWidth="-1"/>
 
   <Edit Name="prpFltType" Caption="Type" X="100" Y="32" Width="98" Height="40" CaptionWidth="-1">
     <DataField DataType="enum"/>

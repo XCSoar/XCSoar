@@ -34,6 +34,7 @@ Copyright_License {
 #include "Form/DataField/String.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Form/DataField/Prefix.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 #include "Renderer/AirspaceListRenderer.hpp"
@@ -365,6 +366,7 @@ PrepareAirspaceSelectDialog()
 
   name_control = (WndProperty*)dialog->FindByName(_T("prpFltName"));
   assert(name_control != NULL);
+  name_control->SetDataField(new PrefixDataField());
 
   distance_control = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
   assert(distance_control != NULL);
