@@ -40,6 +40,7 @@ Copyright_License {
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -134,7 +135,7 @@ SetPointType(TaskPointFactoryType type)
         ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
         : CommonInterface::Basic().location;
       way_point =
-        ShowWaypointListDialog(wf->GetMainWindow(), location);
+        ShowWaypointListDialog(UIGlobals::GetMainWindow(), location);
     }
     if (!way_point)
       return false;
@@ -176,13 +177,13 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index)
+dlgTaskPointNew(OrderedTask** task, const unsigned index)
 {
-  return dlgTaskPointType(parent, task, index);
+  return dlgTaskPointType(task, index);
 }
 
 bool
-dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
+dlgTaskPointType(OrderedTask** task, const unsigned index)
 {
   ordered_task = *task;
   task_modified = false;
@@ -202,11 +203,10 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
     return task_modified;
   }
 
-  if (Layout::landscape)
-    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE_L"));
-  else
-    wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE"));
-
+  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                  Layout::landscape
+                  ? _T("IDR_XML_TASKPOINTTYPE_L")
+                  : _T("IDR_XML_TASKPOINTTYPE"));
   if (!wf)
     return false;
 

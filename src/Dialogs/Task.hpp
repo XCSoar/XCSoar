@@ -34,13 +34,13 @@ bool
 dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index);
 
 bool
-dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index);
+dlgTaskPointType(OrderedTask **task, unsigned index);
 
 bool
 dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task);
 
 bool
-dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
+dlgTaskPointNew(OrderedTask** task, const unsigned index);
 
 /**
  * Shows map display zoomed to target point

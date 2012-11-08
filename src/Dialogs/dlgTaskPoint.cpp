@@ -262,7 +262,7 @@ OnRelocateClicked(gcc_unused WndButton &Sender)
 static void
 OnTypeClicked(gcc_unused WndButton &Sender)
 {
-  if (dlgTaskPointType(wf->GetMainWindow(), &ordered_task, active_index)) {
+  if (dlgTaskPointType(&ordered_task, active_index)) {
     task_modified = true;
     RefreshView();
   }
