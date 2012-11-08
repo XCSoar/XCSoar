@@ -241,11 +241,15 @@ WndProperty::OnResize(UPixelScalar width, UPixelScalar height)
 bool
 WndProperty::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  dragging = true;
-  pressed = true;
-  Invalidate();
-  SetCapture();
-  return true;
+  if (!IsReadOnly() || HasHelp()) {
+    dragging = true;
+    pressed = true;
+    Invalidate();
+    SetCapture();
+    return true;
+  }
+
+  return false;
 }
 
 bool
