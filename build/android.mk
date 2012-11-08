@@ -23,7 +23,7 @@ ifeq ($(HOST_IS_DARWIN),y)
 else
   ANDROID_SDK ?= $(HOME)/opt/android-sdk-linux_x86
 endif
-ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_PLATFORM)
+ANDROID_SDK_PLATFORM_DIR = $(ANDROID_SDK)/platforms/$(ANDROID_SDK_PLATFORM)
 ANDROID_ABI_DIR = $(ANDROID_BUILD)/libs/$(ANDROID_ABI3)
 
 ANDROID_LIB_NAMES = xcsoar
@@ -140,10 +140,10 @@ endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/values
 ifeq ($(WINHOST),y)
 	echo "now run your android build followed by exit.  For example:"
-	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_PLATFORM)"
+	echo "c:\opt\android-sdk\tools\android.bat update project --path c:\xcsoar\output\android\build --target $(ANDROID_SDK_PLATFORM)"
 	cmd
 else
-	$(Q)$(ANDROID_SDK)/tools/android $(ANDROID_TOOL_OPTIONS) update project --path $(@D) --target $(ANDROID_PLATFORM)
+	$(Q)$(ANDROID_SDK)/tools/android $(ANDROID_TOOL_OPTIONS) update project --path $(@D) --target $(ANDROID_SDK_PLATFORM)
 	$(Q)ln -s ../../../android/custom_rules.xml $(@D)/
 endif
 ifeq ($(TESTING),y)
