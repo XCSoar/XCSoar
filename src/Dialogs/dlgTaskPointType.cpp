@@ -56,7 +56,7 @@ static AbstractTaskFactory::LegalPointVector point_types;
 
 static void OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  wf->SetModalResult(mrOK);
+  wf->SetModalResult(mrCancel);
 }
 
 static TaskPointFactoryType
@@ -151,28 +151,16 @@ SetPointType(TaskPointFactoryType type)
   return true;
 }
 
-static void
-OnSelect()
-{
-  if (wPointTypes->GetCursorIndex() >= point_types.size())
-    return;
-
-  if (SetPointType(get_cursor_type()))
-    wf->SetModalResult(mrOK);
-  else
-    wf->SetModalResult(mrCancel);
-}
-
 static void 
 OnSelectClicked(gcc_unused WndButton &Sender)
 {
-  OnSelect();
+  wf->SetModalResult(mrOK);
 }
 
 static void
 OnPointListEnter(gcc_unused unsigned ItemIndex)
 {
-  OnSelect();
+  wf->SetModalResult(mrOK);
 }
 
 static void
@@ -239,10 +227,15 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   RefreshView();
 
-  wf->ShowModal();
+  int result = wf->ShowModal() == mrOK
+    ? wPointTypes->GetCursorIndex()
+    : -1;
 
   delete wf;
   wf = NULL;
+
+  if (result >= 0)
+    SetPointType(point_types[result]);
 
   return task_modified;
 }
