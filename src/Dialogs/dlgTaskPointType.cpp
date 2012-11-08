@@ -105,58 +105,50 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
 static bool
 SetPointType(TaskPointFactoryType type)
 {
-  bool apply = false;
-
-  if (!point) {
-    apply = true;
-    // empty point, don't ask confirmation
-  } else {
+  if (point != nullptr) {
     if (type == get_point_type())
       // no change
       return true;
 
     if (ShowMessageBox(_("Change point type?"), _("Task Point"),
-                    MB_YESNO | MB_ICONQUESTION) == IDYES)
-      apply = true;
+                    MB_YESNO | MB_ICONQUESTION) != IDYES)
+      return false;
   }
 
-  if (apply) {
-    AbstractTaskFactory &factory = ordered_task->GetFactory();
+  AbstractTaskFactory &factory = ordered_task->GetFactory();
 
-    if (point) {
-      point = factory.CreateMutatedPoint(*point, type);
-      if (point == NULL)
-        return false;
+  if (point) {
+    point = factory.CreateMutatedPoint(*point, type);
+    if (point == NULL)
+      return false;
 
-      if (factory.Replace(*point, active_index, true))
-        task_modified = true;
-      delete point;
-    } else {
-      if (factory.IsValidFinishType(type) &&
-          ordered_task->GetFactoryConstraints().is_closed)
-        way_point = &ordered_task->GetPoint(0).GetWaypoint();
-      else {
-        const GeoPoint &location = ordered_task->TaskSize() > 0
-          ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
-          : CommonInterface::Basic().location;
-        way_point =
-          ShowWaypointListDialog(wf->GetMainWindow(), location);
-      }
-      if (!way_point)
-        return false;
-
-      point = factory.CreatePoint(type, *way_point);
-      if (point == NULL)
-        return false;
-
-      if (factory.Append(*point, true))
-        task_modified = true;
-
-      delete point;
+    if (factory.Replace(*point, active_index, true))
+      task_modified = true;
+    delete point;
+  } else {
+    if (factory.IsValidFinishType(type) &&
+        ordered_task->GetFactoryConstraints().is_closed)
+      way_point = &ordered_task->GetPoint(0).GetWaypoint();
+    else {
+      const GeoPoint &location = ordered_task->TaskSize() > 0
+        ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
+        : CommonInterface::Basic().location;
+      way_point =
+        ShowWaypointListDialog(wf->GetMainWindow(), location);
     }
-    return true;
+    if (!way_point)
+      return false;
+
+    point = factory.CreatePoint(type, *way_point);
+    if (point == NULL)
+      return false;
+
+    if (factory.Append(*point, true))
+      task_modified = true;
+
+    delete point;
   }
-  return false;
+  return true;
 }
 
 static void
