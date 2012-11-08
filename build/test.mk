@@ -2105,7 +2105,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
-	$(SRC)/Dialogs/dlgAirspaceWarnings.cpp \
+	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Audio/Sound.cpp \

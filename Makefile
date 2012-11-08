@@ -168,14 +168,14 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsPanel.cpp \
 	$(SRC)/Dialogs/WindSettingsPanel.cpp \
-	$(SRC)/Dialogs/dlgAirspace.cpp \
 	$(SRC)/Dialogs/ColorListDialog.cpp \
-	$(SRC)/Dialogs/dlgAirspacePatterns.cpp \
-	$(SRC)/Dialogs/dlgAirspaceDetails.cpp \
-	$(SRC)/Dialogs/AirspaceList.cpp \
-	$(SRC)/Dialogs/AirspaceCRendererSettingsDialog.cpp \
-	$(SRC)/Dialogs/AirspaceCRendererSettingsPanel.cpp \
-	$(SRC)/Dialogs/dlgAirspaceWarnings.cpp \
+	$(SRC)/Dialogs/Airspace/dlgAirspace.cpp \
+	$(SRC)/Dialogs/Airspace/dlgAirspacePatterns.cpp \
+	$(SRC)/Dialogs/Airspace/dlgAirspaceDetails.cpp \
+	$(SRC)/Dialogs/Airspace/AirspaceList.cpp \
+	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp \
+	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp \
+	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/dlgAlternatesList.cpp \
 	$(SRC)/Dialogs/dlgFlarmDetailsList.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \

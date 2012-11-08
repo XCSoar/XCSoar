@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Airspace.hpp"
 #include "AirspaceCRendererSettingsPanel.hpp"
-#include "WidgetDialog.hpp"
+#include "../WidgetDialog.hpp"
 #include "Language/Language.hpp"
 
 bool

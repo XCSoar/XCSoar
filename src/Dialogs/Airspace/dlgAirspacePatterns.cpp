@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Airspace.hpp"
+#include "Airspace.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Canvas.hpp"

@@ -32,7 +32,7 @@ Copyright_License {
 #include "Menu/ButtonLabel.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Blank.hpp"
-#include "Dialogs/AirspaceWarningDialog.hpp"
+#include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Audio/Sound.hpp"
 #include "Audio/VarioGlue.hpp"
 #include "Components.hpp"

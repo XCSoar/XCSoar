@@ -25,7 +25,7 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Dialogs/Airspace.hpp"
+#include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Traffic.hpp"

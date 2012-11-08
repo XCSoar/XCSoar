@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AirspaceCRendererSettingsPanel.hpp"
 #include "Airspace.hpp"
-#include "ColorListDialog.hpp"
+#include "../ColorListDialog.hpp"
 #include "Screen/Features.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Profile/AirspaceConfig.hpp"

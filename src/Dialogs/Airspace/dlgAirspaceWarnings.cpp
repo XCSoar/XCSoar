@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/AirspaceWarningDialog.hpp"
+#include "AirspaceWarningDialog.hpp"
+#include "Airspace.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Airspace.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
 #include "Form/List.hpp"

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Airspace.hpp"
+#include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"

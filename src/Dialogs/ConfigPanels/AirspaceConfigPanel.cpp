@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Form/Button.hpp"
 #include "Form/RowFormWidget.hpp"
-#include "Dialogs/Airspace.hpp"
+#include "Dialogs/Airspace/Airspace.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"

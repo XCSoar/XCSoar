@@ -32,8 +32,8 @@ Copyright_License {
 #include "Airspace/AirspaceSoonestSort.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceAircraftPerformance.hpp"
-#include "Dialogs/Airspace.hpp"
-#include "Dialogs/AirspaceWarningDialog.hpp"
+#include "Dialogs/Airspace/Airspace.hpp"
+#include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "MainWindow.hpp"
 #include "NMEA/Aircraft.hpp"
 

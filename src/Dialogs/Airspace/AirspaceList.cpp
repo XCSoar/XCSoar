@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Airspace.hpp"
+#include "Airspace.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Airspace/AirspaceSorter.hpp"
