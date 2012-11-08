@@ -197,9 +197,12 @@ endif
 ifeq ($(TARGET),ANDROID)
   ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8b
 
-  ANDROID_PLATFORM = android-14
+  ANDROID_PLATFORM = android-16
   ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
-  ANDROID_NDK_PLATFORM = $(ANDROID_PLATFORM)
+
+  # NDK r8b has only android-14
+  ANDROID_NDK_PLATFORM = android-14
+
   ANDROID_ARCH = arm
   ANDROID_ABI2 = arm-linux-androideabi
   ANDROID_ABI3 = armeabi
