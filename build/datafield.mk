@@ -13,6 +13,7 @@ DATA_FIELD_SOURCES = \
 	$(DATA_FIELD_SRC_DIR)/Time.cpp \
 	$(DATA_FIELD_SRC_DIR)/Integer.cpp \
 	$(DATA_FIELD_SRC_DIR)/String.cpp \
+	$(DATA_FIELD_SRC_DIR)/Prefix.cpp \
 	$(DATA_FIELD_SRC_DIR)/Password.cpp
 
 $(eval $(call link-library,datafield,DATA_FIELD))

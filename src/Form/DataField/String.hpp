@@ -33,6 +33,10 @@ class DataFieldString: public DataField
 {
   StaticString<EDITSTRINGSIZE> mValue;
 
+protected:
+  DataFieldString(Type _type, const TCHAR *_value)
+    :DataField(_type, false), mValue(_value) {}
+
 public:
   DataFieldString(const TCHAR *Default,
                   DataAccessCallback OnDataAccess) :

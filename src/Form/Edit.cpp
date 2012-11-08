@@ -26,6 +26,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
 #include "DataField/String.hpp"
+#include "DataField/Prefix.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
@@ -192,7 +193,12 @@ WndProperty::BeginEditing()
       return false;
 
     StaticString<EDITSTRINGSIZE> buffer(value);
-    if (!TextEntryDialog(buffer, GetCaption()))
+
+    PrefixDataField::AllowedCharactersFunction acf;
+    if (mDataField->GetType() == DataField::Type::PREFIX)
+      acf = ((PrefixDataField *)mDataField)->GetAllowedCharactersFunction();
+
+    if (!TextEntryDialog(buffer, GetCaption(), acf))
       return true;
 
     mDataField->SetAsString(buffer);

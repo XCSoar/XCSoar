@@ -46,6 +46,7 @@ public:
     ENUM,
     FILE,
     TIME,
+    PREFIX,
   };
 
   enum DataAccessMode {
