@@ -34,9 +34,47 @@ Copyright_License {
 static WndForm *wf;
 static ListHelpCallback_t help_callback;
 
-static WndFrame *wItemHelp;
 static ListControl *list_control;
-static ItemHelpCallback_t itemhelp_callback;
+
+class ListPickerController : public ListControl::Handler {
+  WndForm &form;
+
+  ListControl::PaintItemCallback paint_callback;
+
+  ItemHelpCallback_t item_help_callback;
+  WndFrame *item_help_window;
+
+public:
+  ListPickerController(WndForm &_form,
+                       ListControl::PaintItemCallback _paint_callback,
+                       ItemHelpCallback_t _item_help_callback,
+                       WndFrame *_item_help_window)
+    :form(_form), paint_callback(_paint_callback),
+     item_help_callback(_item_help_callback),
+     item_help_window(_item_help_window) {}
+
+  void UpdateItemHelp(unsigned index) {
+    if (item_help_callback != nullptr)
+      item_help_window->SetText(item_help_callback(index));
+  }
+
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override {
+    paint_callback(canvas, rc, idx);
+  }
+
+  virtual void OnCursorMoved(unsigned index) gcc_override {
+    UpdateItemHelp(index);
+  }
+
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override {
+    form.SetModalResult(mrOK);
+  }
+};
 
 static void
 OnHelpClicked(gcc_unused WndButton &button)
@@ -55,12 +93,6 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnComboPopupListEnter(gcc_unused unsigned i)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OnCancelClicked(gcc_unused WndButton &Sender)
 {
   wf->SetModalResult(mrCancel);
@@ -70,15 +102,6 @@ static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
   list_control->Invalidate();
-}
-
-static void
-OnPointCursorCallback(unsigned i)
-{
-  assert(wItemHelp);
-  assert(itemhelp_callback);
-  const TCHAR* itemhelp = itemhelp_callback(i);
-  wItemHelp->SetText(itemhelp);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
@@ -111,15 +134,9 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
 
   list_control = (ListControl *)wf->FindByName(_T("frmComboPopupList"));
   assert(list_control != NULL);
-  list_control->SetItemHeight(item_height);
-  list_control->SetLength(num_items);
-  list_control->SetActivateCallback(OnComboPopupListEnter);
-  list_control->SetPaintItemCallback(paint_callback);
 
-  help_callback = _help_callback;
-  itemhelp_callback = _itemhelp_callback;
-
-  if (itemhelp_callback != NULL) {
+  WndFrame *wItemHelp;
+  if (_itemhelp_callback != NULL) {
     wItemHelp = (WndFrame *)wf->FindByName(_T("lblItemHelp"));
     assert(wItemHelp);
     wItemHelp->Show();
@@ -128,11 +145,20 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     assert(rc.bottom - rc.top - help_height > 0);
     rc.bottom -= help_height;
     list_control->Move(rc);
-    list_control->SetCursorCallback(OnPointCursorCallback);
-    OnPointCursorCallback(initial_value);
   }
   else
     wItemHelp = NULL;
+
+  ListPickerController controller(*wf, paint_callback,
+                                  _itemhelp_callback, wItemHelp);
+  if (initial_value == 0 && num_items > 0)
+    controller.UpdateItemHelp(0);
+
+  list_control->SetHandler(&controller);
+  list_control->SetItemHeight(item_height);
+  list_control->SetLength(num_items);
+
+  help_callback = _help_callback;
 
   list_control->SetCursorIndex(initial_value);
 
