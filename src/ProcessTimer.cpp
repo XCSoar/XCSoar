@@ -28,7 +28,6 @@ Copyright_License {
 #include "Input/InputEvents.hpp"
 #include "Device/device.hpp"
 #include "Device/All.hpp"
-#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Screen/Blank.hpp"
 #include "UtilsSystem.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -63,10 +62,9 @@ static void
 MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
-  if (!dlgAirspaceWarningVisible())
-    if (CommonInterface::main_window->popup.Render())
-      // turn screen on if blanked and receive a new message
-      ResetDisplayTimeOut();
+  if (CommonInterface::main_window->popup.Render())
+    // turn screen on if blanked and receive a new message
+    ResetDisplayTimeOut();
 }
 
 /**
