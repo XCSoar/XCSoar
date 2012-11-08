@@ -211,6 +211,12 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   point = &ordered_task->GetPoint(active_index);
   way_point = &point->GetWaypoint();
 
+  point_types = ordered_task->GetFactory().GetValidTypes(index);
+  if (point_types.empty()) {
+    assert(1);
+    return false;
+  }
+
   if (Layout::landscape)
     wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE_L"));
   else
@@ -223,12 +229,6 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   wPointTypes = (ListControl*)wf->FindByName(_T("frmPointTypes"));
   assert(wPointTypes != NULL);
-
-  point_types = ordered_task->GetFactory().GetValidTypes(index);
-  if (point_types.empty()) {
-    assert(1);
-    return false;
-  }
 
   wPointTypes->SetActivateCallback(OnPointListEnter);
   wPointTypes->SetPaintItemCallback(OnPointPaintListItem);
