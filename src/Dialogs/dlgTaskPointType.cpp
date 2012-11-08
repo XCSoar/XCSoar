@@ -217,6 +217,11 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
     return false;
   }
 
+  if (point_types.size() == 1) {
+    SetPointType(point_types[0]);
+    return task_modified;
+  }
+
   if (Layout::landscape)
     wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TASKPOINTTYPE_L"));
   else
@@ -242,10 +247,7 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   RefreshView();
 
-  if (point_types.size()==1)
-    SetPointType(point_types[0]);
-  else
-    wf->ShowModal();
+  wf->ShowModal();
 
   delete wf;
   wf = NULL;
