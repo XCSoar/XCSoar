@@ -35,6 +35,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Form/DataField/Prefix.hpp"
 #include "Profile/Profile.hpp"
 #include "OS/PathName.hpp"
 #include "Waypoint/LastUsed.hpp"
@@ -70,7 +71,7 @@ class FAITrianglePointValidator;
 static GeoPoint location;
 static WndForm *dialog = NULL;
 static ListControl *waypoint_list_control = NULL;
-static WndButton *name_button;
+static WndProperty *name_control;
 static WndProperty *distance_filter;
 static WndProperty *direction_filter;
 static WndProperty *type_filter;
@@ -87,11 +88,6 @@ static constexpr int direction_filter_items[] = {
 };
 
 static Angle last_heading = Angle::Zero();
-
-/**
- * used for single-letter name search with Left/Right keys
- */
-static int name_filter_index = -1;
 
 static const TCHAR *const type_filter_items[] = {
   _T("*"), _T("Airport"), _T("Landable"),
@@ -170,20 +166,9 @@ InitializeDirection(bool only_heading)
 }
 
 static void
-UpdateNameButtonCaption()
-{
-  if (dialog_state.name.empty())
-    name_button->SetCaption(_T("*"));
-  else
-    name_button->SetCaption(dialog_state.name);
-}
-
-static void
 PrepareData()
 {
   dialog_state.name.clear();
-
-  UpdateNameButtonCaption();
 
   // initialize datafieldenum for Distance
   DataFieldEnum* data_field = (DataFieldEnum*)distance_filter->GetDataField();
@@ -274,71 +259,6 @@ WaypointNameAllowedCharacters(const TCHAR *prefix)
   return way_points.SuggestNamePrefix(prefix, buffer, ARRAY_SIZE(buffer));
 }
 
-static void
-NameButtonUpdateChar()
-{
-  const TCHAR *name_filter = WaypointNameAllowedCharacters(_T(""));
-  if (name_filter_index == -1) {
-    dialog_state.name.clear();
-  } else {
-    dialog_state.name[0u] = name_filter[name_filter_index];
-    dialog_state.name[1u] = _T('\0');
-  }
-
-  UpdateNameButtonCaption();
-  UpdateList();
-}
-
-static void
-OnFilterNameButtonRight(gcc_unused WndButton &button)
-{
-  const TCHAR * name_filter = WaypointNameAllowedCharacters(_T(""));
-  name_filter_index++;
-  if (name_filter_index > (int)(_tcslen(name_filter) - 2))
-    name_filter_index = -1;
-
-  NameButtonUpdateChar();
-}
-
-static void
-OnFilterNameButtonLeft(gcc_unused WndButton &button)
-{
-  const TCHAR * name_filter = WaypointNameAllowedCharacters(_T(""));
-  if (name_filter_index == -1)
-    name_filter_index = (int)(_tcslen(name_filter)-1);
-  else
-    name_filter_index--;
-
-  NameButtonUpdateChar();
-}
-
-static void
-OnFilterNameButton(gcc_unused WndButton &button)
-{
-  TCHAR new_name_filter[WaypointFilter::NAME_LENGTH + 1];
-  CopyString(new_name_filter, dialog_state.name.c_str(),
-             WaypointFilter::NAME_LENGTH + 1);
-
-  dlgTextEntryShowModal(new_name_filter,
-                        WaypointFilter::NAME_LENGTH, _("Waypoint name"),
-                        WaypointNameAllowedCharacters);
-
-  int i = _tcslen(new_name_filter) - 1;
-  while (i >= 0) {
-    if (new_name_filter[i] != _T(' '))
-      break;
-
-    new_name_filter[i] = 0;
-    i--;
-  }
-
-  CopyString(dialog_state.name.buffer(), new_name_filter,
-             WaypointFilter::NAME_LENGTH + 1);
-
-  UpdateNameButtonCaption();
-  UpdateList();
-}
-
 class FilterDataFieldListener: public DataFieldListener
 {
 private:
@@ -349,7 +269,9 @@ private:
 void
 FilterDataFieldListener::OnModified(DataField &df)
 {
-  if (&df == distance_filter->GetDataField())
+  if (&df == name_control->GetDataField())
+    dialog_state.name = df.GetAsString();
+  else if (&df == distance_filter->GetDataField())
     dialog_state.distance_index = df.GetAsInteger();
   else if (&df == direction_filter->GetDataField())
     dialog_state.direction_index = df.GetAsInteger();
@@ -394,7 +316,7 @@ OnWaypointListEnter(gcc_unused unsigned i)
   if (waypoint_list.size() > 0)
     dialog->SetModalResult(mrOK);
   else
-    OnFilterNameButton(*name_button);
+    name_control->BeginEditing();
 }
 
 static void
@@ -460,7 +382,6 @@ FormKeyDown(WndForm &sender, unsigned key_code)
 #endif /* GNAV */
 
 static constexpr CallBackTableEntry callback_table[] = {
-  DeclareCallBackEntry(OnFilterNameButton),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnSelectClicked),
   DeclareCallBackEntry(NULL)
@@ -486,11 +407,14 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
   waypoint_list_control->SetPaintItemCallback(OnPaintListItem);
   waypoint_list_control->SetItemHeight(WaypointListRenderer::GetHeight(dialog_look));
 
-  name_button = (WndButton*)dialog->FindByName(_T("cmdFltName"));
-  name_button->SetOnLeftNotify(OnFilterNameButtonLeft);
-  name_button->SetOnRightNotify(OnFilterNameButtonRight);
-
   FilterDataFieldListener listener;
+
+  name_control = (WndProperty *)dialog->FindByName(_T("name"));
+  assert(name_control != nullptr);
+  DataField *name_df = new PrefixDataField(_T(""),
+                                           WaypointNameAllowedCharacters);
+  name_control->SetDataField(name_df);
+  name_df->SetListener(&listener);
 
   distance_filter = (WndProperty*)dialog->FindByName(_T("prpFltDistance"));
   assert(distance_filter != NULL);

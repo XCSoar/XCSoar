@@ -1,6 +1,5 @@
 <Form Caption="Select Waypoint">
-  <Label X="2" Y="0" Width="61" Height="14" Caption="Name" />
-  <Button Name="cmdFltName" Caption="*" X="3" Y="14" Width="60"  Height="18" OnClick="OnFilterNameButton" />
+  <Edit Name="name" Caption="Name" X="2" Width="61" Height="36" CaptionWidth="-1"/>
 
   <Edit Name="prpFltDistance" Caption="Distance" X="0" Width="65" Height="36" CaptionWidth="-1">
     <DataField DataType="enum"/>
