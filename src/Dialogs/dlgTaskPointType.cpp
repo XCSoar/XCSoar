@@ -46,7 +46,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static bool task_modified = false;
 static OrderedTask* ordered_task = NULL;
 static OrderedTaskPoint* point = NULL;
 static unsigned active_index = 0;
@@ -84,13 +83,16 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
               rc.top + Layout::FastScale(2), buffer);
 }
 
+/**
+ * @return true if the task was modified
+ */
 static bool
 SetPointType(TaskPointFactoryType type)
 {
   if (point != nullptr) {
     if (type == get_point_type())
       // no change
-      return true;
+      return false;
 
     if (ShowMessageBox(_("Change point type?"), _("Task Point"),
                     MB_YESNO | MB_ICONQUESTION) != IDYES)
@@ -98,6 +100,7 @@ SetPointType(TaskPointFactoryType type)
   }
 
   AbstractTaskFactory &factory = ordered_task->GetFactory();
+  bool task_modified = false;
 
   if (point) {
     point = factory.CreateMutatedPoint(*point, type);
@@ -131,7 +134,8 @@ SetPointType(TaskPointFactoryType type)
 
     delete point;
   }
-  return true;
+
+  return task_modified;
 }
 
 bool
@@ -144,7 +148,6 @@ bool
 dlgTaskPointType(OrderedTask** task, const unsigned index)
 {
   ordered_task = *task;
-  task_modified = false;
   active_index = index;
 
   point = &ordered_task->GetPoint(active_index);
@@ -155,10 +158,8 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
     return false;
   }
 
-  if (point_types.size() == 1) {
-    SetPointType(point_types[0]);
-    return task_modified;
-  }
+  if (point_types.size() == 1)
+    return SetPointType(point_types[0]);
 
   unsigned initial_index = 0;
   if (point != nullptr) {
@@ -173,8 +174,5 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
                           Layout::Scale(18),
                           OnPointPaintListItem, false,
                           nullptr, TPTypeItemHelp);
-  if (result >= 0)
-    SetPointType(point_types[result]);
-
-  return task_modified;
+  return result >= 0 && SetPointType(point_types[result]);
 }
