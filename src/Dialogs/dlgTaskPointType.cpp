@@ -50,7 +50,6 @@ static bool task_modified = false;
 static OrderedTask* ordered_task = NULL;
 static OrderedTaskPoint* point = NULL;
 static unsigned active_index = 0;
-static const Waypoint* way_point = NULL;
 
 static AbstractTaskFactory::LegalPointVector point_types;
 
@@ -109,6 +108,7 @@ SetPointType(TaskPointFactoryType type)
       task_modified = true;
     delete point;
   } else {
+    const Waypoint *way_point;
     if (factory.IsValidFinishType(type) &&
         ordered_task->GetFactoryConstraints().is_closed)
       way_point = &ordered_task->GetPoint(0).GetWaypoint();
@@ -148,7 +148,6 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
   active_index = index;
 
   point = &ordered_task->GetPoint(active_index);
-  way_point = &point->GetWaypoint();
 
   point_types = ordered_task->GetFactory().GetValidTypes(index);
   if (point_types.empty()) {
