@@ -26,18 +26,20 @@ Copyright_License {
 
 #include "Util/StaticString.hpp"
 
-typedef const TCHAR *(*AllowedCharactersCallback_t)(const TCHAR *value);
+#include <functional>
+
+typedef std::function<const TCHAR *(const TCHAR *)> AllowedCharacters;
 
 bool
 dlgTextEntryShowModal(TCHAR *text,
                       int width, const TCHAR* caption = NULL,
-                      AllowedCharactersCallback_t accb = NULL);
+                      AllowedCharacters ac=AllowedCharacters());
 
 template<size_t N>
 static inline bool
 TextEntryDialog(StaticString<N> &text,
                 const TCHAR *caption=NULL,
-                AllowedCharactersCallback_t accb=NULL)
+                AllowedCharacters accb=AllowedCharacters())
 {
   return dlgTextEntryShowModal(text.buffer(), text.MAX_SIZE,
                                caption, accb);
@@ -46,6 +48,6 @@ TextEntryDialog(StaticString<N> &text,
 bool
 dlgTextEntryKeyboardShowModal(TCHAR *text,
                               int width = 0, const TCHAR* caption = NULL,
-                              AllowedCharactersCallback_t accb = NULL);
+                              AllowedCharacters ac=AllowedCharacters());
 
 #endif

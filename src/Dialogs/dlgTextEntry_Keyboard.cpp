@@ -42,7 +42,7 @@ using std::min;
 static WndForm *wf = NULL;
 static KeyboardControl *kb = NULL;
 
-static AllowedCharactersCallback_t AllowedCharactersCallback;
+static AllowedCharacters AllowedCharactersCallback;
 
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
@@ -52,7 +52,7 @@ static TCHAR edittext[MAX_TEXTENTRY];
 static void
 UpdateAllowedCharacters()
 {
-  if (AllowedCharactersCallback != NULL)
+  if (AllowedCharactersCallback)
     kb->SetAllowedCharacters(AllowedCharactersCallback(edittext));
 }
 
@@ -169,7 +169,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 bool
 dlgTextEntryKeyboardShowModal(TCHAR *text,
                               int width, const TCHAR* caption,
-                              AllowedCharactersCallback_t accb)
+                              AllowedCharacters accb)
 {
   if (width == 0)
     width = MAX_TEXTENTRY;

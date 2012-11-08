@@ -262,7 +262,7 @@ dlgTextEntryHighscoreType(TCHAR *text, int width,
 
 bool
 dlgTextEntryShowModal(TCHAR *text, int width,
-                      const TCHAR* caption, AllowedCharactersCallback_t accb)
+                      const TCHAR* caption, AllowedCharacters accb)
 {
   switch (UIGlobals::GetDialogSettings().text_input_style) {
   case DialogSettings::TextInputStyle::Default:

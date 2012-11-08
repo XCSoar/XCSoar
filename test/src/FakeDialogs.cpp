@@ -33,7 +33,7 @@ ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 bool
 dlgTextEntryShowModal(TCHAR *text,
                       int width, const TCHAR *caption,
-                      AllowedCharactersCallback_t accb)
+                      AllowedCharacters accb)
 {
   return false;
 }
