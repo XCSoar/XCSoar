@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Task.hpp"
+#include "ListPicker.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
@@ -45,8 +46,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static WndForm *wf = NULL;
-static ListControl* wPointTypes = NULL;
 static bool task_modified = false;
 static OrderedTask* ordered_task = NULL;
 static OrderedTaskPoint* point = NULL;
@@ -55,34 +54,17 @@ static const Waypoint* way_point = NULL;
 
 static AbstractTaskFactory::LegalPointVector point_types;
 
-static void OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrCancel);
-}
-
 static TaskPointFactoryType
 get_point_type() 
 {
   return ordered_task->GetFactory().GetType(*point);
 }
 
-
-static TaskPointFactoryType
-get_cursor_type() 
+static const TCHAR *
+TPTypeItemHelp(unsigned i)
 {
-  return point_types[wPointTypes->GetCursorIndex()];
+  return OrderedTaskPointDescription(point_types[i]);
 }
-
-static void
-RefreshView()
-{
-  WndFrame* wSummary = (WndFrame *)wf->FindByName(_T("frmSummary"));
-  if (wSummary) {
-    const TCHAR* text = OrderedTaskPointDescription(get_cursor_type());
-    wSummary->SetCaption(text);
-  }
-}
-
 
 static void
 OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
@@ -152,30 +134,6 @@ SetPointType(TaskPointFactoryType type)
   return true;
 }
 
-static void 
-OnSelectClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnPointListEnter(gcc_unused unsigned ItemIndex)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnPointCursorCallback(gcc_unused unsigned i)
-{
-  RefreshView();
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnSelectClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 bool
 dlgTaskPointNew(OrderedTask** task, const unsigned index)
 {
@@ -203,37 +161,19 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
     return task_modified;
   }
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape
-                  ? _T("IDR_XML_TASKPOINTTYPE_L")
-                  : _T("IDR_XML_TASKPOINTTYPE"));
-  if (!wf)
-    return false;
+  unsigned initial_index = 0;
+  if (point != nullptr) {
+    const auto b = point_types.begin(), e = point_types.end();
+    auto i = std::find(b, e, get_point_type());
+    if (i != e)
+      initial_index = std::distance(b, i);
+  }
 
-  assert(wf != NULL);
-
-  wPointTypes = (ListControl*)wf->FindByName(_T("frmPointTypes"));
-  assert(wPointTypes != NULL);
-
-  wPointTypes->SetActivateCallback(OnPointListEnter);
-  wPointTypes->SetPaintItemCallback(OnPointPaintListItem);
-  wPointTypes->SetCursorCallback(OnPointCursorCallback);
-  wPointTypes->SetLength(point_types.size());
-
-  if (point)
-    for (unsigned i=0; i<point_types.size(); i++)
-      if (point_types[i] == get_point_type())
-        wPointTypes->SetCursorIndex(i); 
-
-  RefreshView();
-
-  int result = wf->ShowModal() == mrOK
-    ? wPointTypes->GetCursorIndex()
-    : -1;
-
-  delete wf;
-  wf = NULL;
-
+  int result = ListPicker(UIGlobals::GetMainWindow(), _("Task Point Type"),
+                          point_types.size(), initial_index,
+                          Layout::Scale(18),
+                          OnPointPaintListItem, false,
+                          nullptr, TPTypeItemHelp);
   if (result >= 0)
     SetPointType(point_types[result]);
 
