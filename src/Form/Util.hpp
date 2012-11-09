@@ -132,14 +132,6 @@ gcc_pure
 const TCHAR *
 GetFormValueFile(const SubForm &form, const TCHAR *control_name);
 
-template<typename T>
-static inline void
-GetFormValueEnum(const SubForm &form, const TCHAR *control_name,
-                 T &value)
-{
-  value = (T)GetFormValueInteger(form, control_name);
-}
-
 bool
 SaveFormProperty(const SubForm &form, const TCHAR* field, bool &value);
 
@@ -228,32 +220,6 @@ bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed &value,
                  const TCHAR *registry_name);
-
-template<typename T>
-static inline bool
-SaveFormPropertyEnum(const SubForm &form, const TCHAR *field,
-                     T &value)
-{
-  int value2 = (int)value;
-  if (!SaveFormProperty(form, field, value2))
-    return false;
-
-  value = (T)value2;
-  return true;
-}
-
-template<typename T>
-static inline bool
-SaveFormPropertyEnum(const SubForm &form, const TCHAR *field, const TCHAR *reg,
-                     T &value)
-{
-  int value2 = (int)value;
-  if (!SaveFormProperty(form, field, reg, value2))
-    return false;
-
-  value = (T)value2;
-  return true;
-}
 
 bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
