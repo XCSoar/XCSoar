@@ -134,12 +134,4 @@ public class TextUtil {
     id[2] = extent[1];
     return id;
   }
-
-  private int next_power_of_two(int i) {
-    int p = 1;
-    while (p < i) {
-      p <<= 1;
-    }
-    return p;
-  }
 }
