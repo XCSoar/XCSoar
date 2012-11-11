@@ -157,6 +157,7 @@ OpenPortInternal(const DeviceConfig &config, DataHandler &handler)
 
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::DROIDSOAR_V2:
+  case DeviceConfig::PortType::MS5611:
     break;
 
   case DeviceConfig::PortType::TCP_LISTENER: {

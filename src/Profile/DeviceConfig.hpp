@@ -60,6 +60,7 @@ struct DeviceConfig {
     IOIOUART,
 
     DROIDSOAR_V2,
+    MS5611,
 
     /**
      * Attempt to auto-discover the GPS source.

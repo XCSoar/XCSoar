@@ -53,6 +53,7 @@ CLASS_CLASS = $(patsubst %.java,%.class,$(CLASS_SOURCE))
 NATIVE_CLASSES = NativeView EventBridge Timer InternalGPS NonGPSSensors NativeInputListener DownloadUtil
 ifneq ($(IOIOLIB_DIR),)
 NATIVE_CLASSES += NativeBMP085Listener
+NATIVE_CLASSES += NativeMS5611Listener
 endif
 NATIVE_SOURCES = $(patsubst %,android/src/%.java,$(NATIVE_CLASSES))
 NATIVE_PREFIX = $(TARGET_OUTPUT_DIR)/include/$(subst .,_,$(JAVA_PACKAGE))_
@@ -62,6 +63,7 @@ ANDROID_JAVA_SOURCES := $(wildcard android/src/*.java)
 ifeq ($(IOIOLIB_DIR),)
 ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*IOIO*.java),$(ANDROID_JAVA_SOURCES))
 ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*BMP085*.java),$(ANDROID_JAVA_SOURCES))
+ANDROID_JAVA_SOURCES := $(filter-out $(wildcard android/src/*MS5611*.java),$(ANDROID_JAVA_SOURCES))
 endif
 
 DRAWABLE_DIR = $(ANDROID_BUILD)/res/drawable
@@ -192,6 +194,7 @@ $(call SRC_TO_OBJ,$(SRC)/Android/Battery.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeInputListener.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/DownloadManager.cpp): $(NATIVE_HEADERS)
 $(call SRC_TO_OBJ,$(SRC)/Android/NativeBMP085Listener.cpp): $(NATIVE_HEADERS)
+$(call SRC_TO_OBJ,$(SRC)/Android/NativeMS5611Listener.cpp): $(NATIVE_HEADERS)
 
 ANDROID_LIB_BUILD = $(patsubst %,$(ANDROID_ABI_DIR)/lib%.so,$(ANDROID_LIB_NAMES))
 $(ANDROID_LIB_BUILD): $(ANDROID_ABI_DIR)/lib%.so: $(TARGET_BIN_DIR)/lib%.so $(ANDROID_ABI_DIR)/dirstamp

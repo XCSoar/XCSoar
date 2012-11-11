@@ -54,6 +54,7 @@ Copyright_License {
 #ifdef IOIOLIB
 #include "Android/IOIOHelper.hpp"
 #include "Android/BMP085Device.hpp"
+#include "Android/MS5611Device.hpp"
 #endif
 
 #include <assert.h>
@@ -253,7 +254,25 @@ DeviceDescriptor::OpenDroidSoarV2()
 
   droidsoar_v2 = new BMP085Device(GetIndex(), Java::GetEnv(),
                                   ioio_helper->GetHolder(),
-                                  2, 27, 3);
+                                  2, 27, 3);	// twi, eoc_pin, oversampling
+  return true;
+#else
+  return false;
+#endif
+}
+
+bool
+DeviceDescriptor::OpenMS5611()
+{
+#ifdef IOIOLIB
+  if (is_simulator())
+    return true;
+
+  if (ioio_helper == nullptr)
+    return false;
+
+  ms5611 = new MS5611Device(GetIndex(), Java::GetEnv(),
+                                  ioio_helper->GetHolder(), 2, 20); // twi, sleep
   return true;
 #else
   return false;
@@ -270,6 +289,9 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
 
   if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2)
     return OpenDroidSoarV2();
+
+  if (config.port_type == DeviceConfig::PortType::MS5611)
+    return OpenMS5611();
 
   reopen_clock.Update();
 
