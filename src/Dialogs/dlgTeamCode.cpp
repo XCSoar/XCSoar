@@ -43,6 +43,7 @@
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Interface.hpp"
+#include "Blackboard/ScopeCalculatedListener.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
@@ -50,10 +51,9 @@
 static WndForm *wf = NULL;
 
 static void
-Update()
+Update(const MoreData &basic, const DerivedInfo &calculated)
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
-  const TeamInfo &teamcode_info = CommonInterface::Calculated();
+  const TeamInfo &teamcode_info = calculated;
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
   StaticString<100> buffer;
@@ -169,12 +169,6 @@ OnCloseClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  Update();
-}
-
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnFlarmLockClicked),
@@ -193,9 +187,10 @@ dlgTeamCodeShowModal()
   if (!wf)
     return;
 
-  Update();
+  Update(CommonInterface::Basic(), CommonInterface::Calculated());
 
-  wf->SetTimerNotify(OnTimerNotify);
+  const ScopeCalculatedListener l(CommonInterface::GetLiveBlackboard(),
+                                  Update);
 
   wf->ShowModal();
 

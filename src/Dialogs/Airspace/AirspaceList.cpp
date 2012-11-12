@@ -49,6 +49,7 @@ Copyright_License {
 #include "Formatter/AngleFormatter.hpp"
 #include "UIGlobals.hpp"
 #include "Interface.hpp"
+#include "Blackboard/ScopeGPSListener.hpp"
 #include "Language/Language.hpp"
 
 #include <assert.h>
@@ -245,10 +246,10 @@ GetHeadingString(TCHAR *buffer)
 }
 
 static void
-OnTimerNotify(gcc_unused WndForm &Sender)
+OnGPSUpdate(const MoreData &basic)
 {
   if (dialog_state.direction == 0 && !CommonInterface::Calculated().circling) {
-    const Angle heading = CommonInterface::Basic().attitude.heading;
+    const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(10)) {
       last_heading = heading;
@@ -381,8 +382,6 @@ PrepareAirspaceSelectDialog()
   type_control = (WndProperty*)dialog->FindByName(_T("prpFltType"));
   assert(type_control != NULL);
   LoadFormProperty(*dialog, _T("prpFltType"), type_filter_list, WILDCARD);
-
-  dialog->SetTimerNotify(OnTimerNotify);
 }
 
 void
@@ -405,6 +404,8 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   airspace_sorter = &_airspace_sorter;
 
   UpdateList();
+
+  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(), OnGPSUpdate);
 
   dialog->ShowModal();
   delete dialog;

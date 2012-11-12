@@ -30,6 +30,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Interface.hpp"
+#include "Blackboard/ScopeGPSListener.hpp"
 
 class WndButton;
 
@@ -42,10 +43,8 @@ Update(const TCHAR *name, bool value)
 }
 
 static void
-UpdateValues()
+UpdateValues(const SwitchInfo &switches)
 {
-  const SwitchInfo &switches = XCSoarInterface::Basic().switch_state;
-
   Update(_T("prpFlapLanding"), switches.flap_landing);
   Update(_T("prpAirbrakeExtended"), switches.airbrake_locked);
   Update(_T("prpFlapPositive"), switches.flap_positive);
@@ -60,12 +59,6 @@ UpdateValues()
   Update(_T("prpUserSwitchDown"), switches.user_switch_down);
   Update(_T("prpVarioCircling"),
          switches.flight_mode == SwitchInfo::FlightMode::CIRCLING);
-}
-
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  UpdateValues();
 }
 
 static void
@@ -87,9 +80,13 @@ dlgSwitchesShowModal()
   if (wf == NULL)
     return;
 
-  wf->SetTimerNotify(OnTimerNotify);
+  UpdateValues(CommonInterface::Basic().switch_state);
 
-  UpdateValues();
+  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(),
+                           [](const MoreData &basic){
+                             UpdateValues(basic.switch_state);
+                           });
+
   wf->ShowModal();
 
   delete wf;

@@ -57,6 +57,7 @@ Copyright_License {
 #include "Formatter/AngleFormatter.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Interface.hpp"
+#include "Blackboard/ScopeGPSListener.hpp"
 #include "Language/Language.hpp"
 
 #include <algorithm>
@@ -332,10 +333,10 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnTimerNotify(gcc_unused WndForm &sender)
+OnGPSUpdate(const MoreData &basic)
 {
   if (dialog_state.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
-    const Angle heading = CommonInterface::Basic().attitude.heading;
+    const Angle heading = basic.attitude.heading;
     Angle a = last_heading - heading;
     if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
       last_heading = heading;
@@ -436,7 +437,7 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
   PrepareData();
   UpdateList();
 
-  dialog->SetTimerNotify(OnTimerNotify);
+  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(), OnGPSUpdate);
 
   if (dialog->ShowModal() != mrOK) {
     delete dialog;

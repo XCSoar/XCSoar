@@ -52,6 +52,7 @@
 #include "Util/Macros.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
+#include "Blackboard/ScopeGPSListener.hpp"
 #include "Compiler.h"
 
 #include <math.h>
@@ -65,11 +66,11 @@ static FlarmId target_id;
  * e.g. climb speed, distance, height
  */
 static void
-UpdateChanging()
+UpdateChanging(const MoreData &basic)
 {
   TCHAR tmp[20];
   const FlarmTraffic* target =
-    XCSoarInterface::Basic().flarm.traffic.FindTraffic(target_id);
+    basic.flarm.traffic.FindTraffic(target_id);
 
   bool target_ok = target && target->IsDefined();
 
@@ -83,7 +84,7 @@ UpdateChanging()
   // Fill horizontal direction field
   if (target_ok)
     FormatAngleDelta(tmp, ARRAY_SIZE(tmp),
-                     target->Bearing() - CommonInterface::Basic().track);
+                     target->Bearing() - basic.track);
   else
     _tcscpy(tmp, _T("--"));
   SetFormValue(*wf, _T("prpDirectionH"), tmp);
@@ -185,17 +186,7 @@ Update()
   SetFormValue(*wf, _T("prpCallsign"), tmp);
 
   // Update the frequently changing fields too
-  UpdateChanging();
-}
-
-/**
- * This event handler is called when the timer is activated and triggers the
- * update of the variable fields of the dialog
- */
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  UpdateChanging();
+  UpdateChanging(CommonInterface::Basic());
 }
 
 /**
@@ -318,11 +309,10 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
       _T("IDR_XML_FLARMTRAFFICDETAILS_L") : _T("IDR_XML_FLARMTRAFFICDETAILS"));
   assert(wf != NULL);
 
-  // Set dialog events
-  wf->SetTimerNotify(OnTimerNotify);
-
   // Update fields for the first time
   Update();
+
+  const ScopeGPSListener l(CommonInterface::GetLiveBlackboard(), UpdateChanging);
 
   // Show the dialog
   wf->ShowModal();
