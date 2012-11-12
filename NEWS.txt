@@ -8,6 +8,8 @@ Version 6.4.4 - not yet released
 * user interface
   - fix font preview in configuration dialog
   - fix the Escape key on Altair
+* Android
+  - fix text rendering on some PowerVR GPUs
 
 Version 6.4.3 - 2012/11/01
 * devices

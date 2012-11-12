@@ -32,14 +32,10 @@ import android.graphics.Typeface;
 import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.opengl.GLES11;
-import static android.opengl.GLES11.*;
-import java.nio.ByteBuffer;
 
 public class TextUtil {
   private Paint paint;
   private Paint.FontMetricsInt metrics;
-  private ByteBuffer pixels;
   private int[] extent = new int[2];
   private int[] id = new int[3];
 
@@ -76,27 +72,6 @@ public class TextUtil {
     return extent;
   }
 
-  /**
-   * Ensures that the #pixels variable has enough room for a bitmap of
-   * the specified size.
-   */
-  private void makeBuffer(int width, int height) {
-    /* start off with a buffer that is pretty large */
-    if (width < 256)
-      width = 256;
-    if (height < 128)
-      height = 128;
-
-    /* round up */
-    int requiredCapacity = ((width * height - 1) | 0x3fff) + 1;
-
-    /* check if the existing buffer is already large enough */
-    if (pixels == null || pixels.capacity() < requiredCapacity)
-      pixels = ByteBuffer.allocate(requiredCapacity);
-    else if (pixels != null)
-      pixels.clear();
-  }
-
   public int[] getTextTextureGL(String text) {
     getTextBounds(text);
 
@@ -108,31 +83,10 @@ public class TextUtil {
     Canvas canvas = new Canvas(bmp);
     canvas.drawText(text, 0, -paint.getFontMetricsInt().ascent, paint);
 
-    // get bitmap pixels
-    makeBuffer(extent[0], extent[1]);
-    bmp.copyPixelsToBuffer(pixels);
-    bmp.recycle();
-
     // create OpenGL texture
-    int width2 = NativeView.validateTextureSize(extent[0]);
-    int height2 = NativeView.validateTextureSize(extent[1]);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glGenTextures(1, id, 0);
-    glBindTexture(GL_TEXTURE_2D, id[0]);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    if (extent[0] == width2 && extent[1] == height2) {
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, width2, height2,
-                   0, GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels);
-    } else {
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, width2, height2,
-                   0, GL_LUMINANCE, GL_UNSIGNED_BYTE, null);
-      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, extent[0], extent[1],
-                      GL_LUMINANCE, GL_UNSIGNED_BYTE, pixels);
-    }
+    if (!BitmapUtil.bitmapToOpenGL(bmp, id))
+      return null;
 
-    id[1] = extent[0];
-    id[2] = extent[1];
     return id;
   }
 }
