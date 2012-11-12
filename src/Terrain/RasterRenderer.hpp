@@ -26,10 +26,12 @@ Copyright_License {
 
 #include "Terrain/HeightMatrix.hpp"
 #include "Screen/RawBitmap.hpp"
+#include "Math/fixed.hpp"
 #include "Util/NonCopyable.hpp"
 
 #define NUM_COLOR_RAMP_LEVELS 13
 
+class Angle;
 class Canvas;
 class RasterMap;
 class WindowProjection;
