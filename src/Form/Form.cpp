@@ -448,17 +448,15 @@ WndForm::ShowModal()
     // The Windows CE dialog manager does not handle VK_ESCAPE and so we have
     // to do it by ourself.
     if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
-      modal_result = mrCancel;
+      if (IsAltair())
+        /* map VK_ESCAPE to mrOK on Altair, because the Escape key is
+           expected to be the one that saves and closes a dialog */
+        modal_result = mrOK;
+      else
+        modal_result = mrCancel;
       continue;
     }
 #endif
-
-    /* map VK_ESCAPE to mrOK on Altair, because the Escape key is expected to 
-       be the one that saves and closes a dialog */
-    if (IsAltair() && is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
-      modal_result = mrOK;
-      continue;
-    }
 
     loop.Dispatch(event);
   } // End Modal Loop

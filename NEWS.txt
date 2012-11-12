@@ -7,6 +7,7 @@ Version 6.4.4 - not yet released
   - CAI302: longer timeout for "CLEAR LOG"
 * user interface
   - fix font preview in configuration dialog
+  - fix the Escape key on Altair
 
 Version 6.4.3 - 2012/11/01
 * devices
