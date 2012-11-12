@@ -111,6 +111,7 @@ public class TextUtil {
     // get bitmap pixels
     makeBuffer(extent[0], extent[1]);
     bmp.copyPixelsToBuffer(pixels);
+    bmp.recycle();
 
     // create OpenGL texture
     int width2 = NativeView.validateTextureSize(extent[0]);
