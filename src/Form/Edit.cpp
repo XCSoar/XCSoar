@@ -418,6 +418,8 @@ WndProperty::OnPaint(Canvas &canvas)
 void
 WndProperty::SetText(const TCHAR *_value)
 {
+  assert(_value != nullptr);
+
   if (value.compare(_value) == 0)
     return;
 
