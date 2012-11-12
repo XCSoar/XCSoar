@@ -72,7 +72,9 @@ TopWindow::OnEvent(const SDL_Event &event)
     if (!w->IsEnabled())
       return false;
 
-    return w->OnKeyDown(event.key.keysym.sym);
+    return w->OnKeyDown(event.key.keysym.sym) ||
+      (event.key.keysym.unicode != 0 &&
+       w->OnCharacter(event.key.keysym.unicode));
 
   case SDL_KEYUP:
     w = GetFocusedWindow();

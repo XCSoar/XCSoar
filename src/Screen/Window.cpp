@@ -240,6 +240,12 @@ Window::OnKeyUp(unsigned key_code)
 }
 
 bool
+Window::OnCharacter(unsigned ch)
+{
+  return false;
+}
+
+bool
 Window::OnCommand(unsigned id, unsigned code)
 {
   return false;

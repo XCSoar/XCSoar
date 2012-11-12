@@ -210,6 +210,13 @@ Window::OnMessage(HWND _hWnd, UINT message,
     }
     break;
 
+  case WM_CHAR:
+    if (OnCharacter((TCHAR)wParam))
+      /* true returned: message was handled */
+      return 0;
+
+    break;
+
   case WM_COMMAND:
     if (OnCommand(LOWORD(wParam), HIWORD(wParam))) {
       /* true returned: message was handled */

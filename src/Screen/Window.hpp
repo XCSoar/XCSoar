@@ -925,6 +925,16 @@ public:
 
   virtual bool OnKeyDown(unsigned key_code);
   virtual bool OnKeyUp(unsigned key_code);
+
+  /**
+   * A character was entered with the (virtual) keyboard.  This will
+   * not be called if OnKeydown() has been handled already.
+   *
+   * @param ch the unicode character
+   * @return true if the event was handled
+   */
+  virtual bool OnCharacter(unsigned ch);
+
   virtual bool OnCommand(unsigned id, unsigned code);
   virtual bool OnCancelMode();
   virtual void OnSetFocus();

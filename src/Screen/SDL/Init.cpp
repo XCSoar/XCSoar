@@ -48,6 +48,7 @@ ScreenGlobalInit::ScreenGlobalInit()
   }
 
   ::SDL_EnableKeyRepeat(250, 50);
+  ::SDL_EnableUNICODE(true);
 
 #if defined(ENABLE_OPENGL)
   ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
