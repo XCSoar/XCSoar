@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_BLACKBOARD_LISTENER_HPP
 #define XCSOAR_BLACKBOARD_LISTENER_HPP
 
+#include "Compiler.h"
+
 struct MoreData;
 struct DerivedInfo;
 struct ComputerSettings;
@@ -66,14 +68,14 @@ public:
  */
 class NullBlackboardListener : public BlackboardListener {
 public:
-  virtual void OnGPSUpdate(const MoreData &basic);
+  virtual void OnGPSUpdate(const MoreData &basic) gcc_override;
 
   virtual void OnCalculatedUpdate(const MoreData &basic,
-                                  const DerivedInfo &calculated);
+                                  const DerivedInfo &calculated) gcc_override;
 
-  virtual void OnComputerSettingsUpdate(const ComputerSettings &settings);
+  virtual void OnComputerSettingsUpdate(const ComputerSettings &settings) gcc_override;
 
-  virtual void OnUISettingsUpdate(const UISettings &settings);
+  virtual void OnUISettingsUpdate(const UISettings &settings) gcc_override;
 };
 
 #endif
