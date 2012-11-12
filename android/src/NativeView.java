@@ -46,7 +46,6 @@ import android.content.res.Resources;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.opengl.GLUtils;
 import android.webkit.MimeTypeMap;
 
 /**
@@ -66,7 +65,6 @@ class NativeView extends SurfaceView
   EGLDisplay display;
   EGLSurface surface;
   EGLContext context;
-  GL10 gl;
 
   /**
    * Is the extension ARB_texture_non_power_of_two present?  If yes,
@@ -172,7 +170,7 @@ class NativeView extends SurfaceView
                                          holder, null);
     egl.eglMakeCurrent(display, surface, surface, context);
 
-    gl = (GL10)context.getGL();
+    GL10 gl = (GL10)context.getGL();
     Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
     Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
     Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
@@ -291,98 +289,6 @@ class NativeView extends SurfaceView
   }
 
   /**
-   * Initialize the current texture and load the specified Bitmap into
-   * it.
-   */
-  private void loadTexture(Bitmap bmp) {
-    /* try the easy way - however this fails on Android 2.2; Android
-       1.6 and 2.3 are doing fine */
-
-    GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
-    if (gl.glGetError() != gl.GL_INVALID_VALUE)
-      /* success */
-      return;
-
-    /* size must be a power of two; create an empty texture, and load
-       the Bitmap into it */
-
-    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGBA,
-                    nextPowerOfTwo(bmp.getWidth()),
-                    nextPowerOfTwo(bmp.getHeight()),
-                    0, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, null);
-    GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, bmp);
-    if (gl.glGetError() != gl.GL_INVALID_OPERATION)
-      /* success */
-      return;
-
-    /* the two attempts above fail on the Samsung Galaxy Tab; the
-       following has been verified to work */
-
-    Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
-    if (tmp == null)
-      return;
-
-    gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB,
-                    nextPowerOfTwo(bmp.getWidth()),
-                    nextPowerOfTwo(bmp.getHeight()),
-                    0, GL10.GL_RGB, GL10.GL_UNSIGNED_SHORT_5_6_5, null);
-    GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, tmp);
-    tmp.recycle();
-  }
-
-  /**
-   * Loads an Android Bitmap as OpenGL texture.
-   *
-   * @param result an array of 3 integers: texture id, width, height
-   * (all output)
-   * @return true on success
-   */
-  private boolean bitmapToOpenGL(Bitmap bmp, int[] result) {
-    if (bmp == null)
-      return false;
-
-    result[1] = bmp.getWidth();
-    result[2] = bmp.getHeight();
-
-    if (bmp.getConfig() == null) {
-      /* convert to a format compatible with OpenGL */
-      Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
-      bmp.recycle();
-
-      if (tmp == null)
-        return false;
-
-      bmp = tmp;
-    }
-
-    /* create and configure an OpenGL texture */
-
-    gl.glGenTextures(1, result, 0);
-    gl.glBindTexture(GL10.GL_TEXTURE_2D, result[0]);
-    gl.glTexParameterf(GL10.GL_TEXTURE_2D,
-                       GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE);
-    gl.glTexParameterf(GL10.GL_TEXTURE_2D,
-                       GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE);
-    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER,
-                       GL10.GL_NEAREST);
-    gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER,
-                       GL10.GL_NEAREST);
-
-    try {
-      loadTexture(bmp);
-    } catch (Exception e) {
-      Log.e(TAG, "GLUtils error: " + e);
-      return false;
-    } finally {
-      bmp.recycle();
-    }
-
-    /* done */
-
-    return true;
-  }
-
-  /**
    * Loads the specified bitmap resource as OpenGL texture.
    *
    * @param result an array of 3 integers: texture id, width, height
@@ -405,7 +311,7 @@ class NativeView extends SurfaceView
 
     Bitmap bmp = BitmapFactory.decodeResource(resources, resourceId, opts);
 
-    return bitmapToOpenGL(bmp, result);
+    return BitmapUtil.bitmapToOpenGL(bmp, result);
   }
 
   /**
@@ -422,7 +328,7 @@ class NativeView extends SurfaceView
 
     Bitmap bmp = BitmapFactory.decodeFile(pathName, opts);
 
-    return bitmapToOpenGL(bmp, result);
+    return BitmapUtil.bitmapToOpenGL(bmp, result);
   }
 
   /**
