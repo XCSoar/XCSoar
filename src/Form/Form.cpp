@@ -471,6 +471,10 @@ WndForm::ShowModal()
 #endif
     }
 
+    if (event.IsCharacter() && character_function &&
+        character_function(event.GetCharacter()))
+      continue;
+
     loop.Dispatch(event);
   } // End Modal Loop
 

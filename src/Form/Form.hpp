@@ -67,6 +67,7 @@ class WndForm : public ContainerWindow, public SubForm,
 
 public:
   typedef std::function<bool(unsigned)> KeyDownFunction;
+  typedef std::function<bool(unsigned)> CharacterFunction;
 
 protected:
   const DialogLook &look;
@@ -95,6 +96,7 @@ protected:
   PixelRect title_rect;
 
   KeyDownFunction key_down_function;
+  CharacterFunction character_function;
 
   /*
    * Control which should get the focus by default
@@ -212,6 +214,10 @@ public:
 
   void ClearKeyDownFunction() {
     key_down_function = KeyDownFunction();
+  }
+
+  void SetCharacterFunction(CharacterFunction function) {
+    character_function = function;
   }
 
   void SetDefaultFocus(Window *_defaultFocus) {
