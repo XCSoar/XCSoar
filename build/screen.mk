@@ -5,7 +5,6 @@ SCREEN_SRC_DIR = $(SRC)/Screen
 SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Debug.cpp \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
-	$(SCREEN_SRC_DIR)/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \
 	$(SCREEN_SRC_DIR)/Icon.cpp \
 	$(SCREEN_SRC_DIR)/Brush.cpp \
@@ -64,6 +63,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/FBO.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/VertexArray.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/BufferCanvas.cpp \
@@ -93,6 +93,7 @@ ifeq ($(OPENGL),n)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/SDL/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
 	$(SCREEN_SRC_DIR)/WindowCanvas.cpp
 endif
@@ -123,6 +124,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
+	$(SCREEN_SRC_DIR)/GDI/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp

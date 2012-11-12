@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Screen/RawBitmap.hpp"
+#include "../RawBitmap.hpp"
 
 #include <assert.h>
 
@@ -38,43 +38,10 @@ CorrectedWidth(UPixelScalar nWidth)
 RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
-#ifdef ENABLE_OPENGL
-  , texture(new GLTexture(CorrectedWidth(nWidth), nHeight))
-  , dirty(true)
-#endif
 {
   assert(nWidth > 0);
   assert(nHeight > 0);
 
-#ifdef ENABLE_OPENGL
-  AddSurfaceListener(*this);
-
-  buffer = new BGRColor[corrected_width * height];
-#elif defined(ENABLE_SDL)
-  Uint32 rmask, gmask, bmask, amask;
-  int depth;
-
-#ifdef HAVE_GLES
-  rmask = 0x0000f800;
-  gmask = 0x000007e0;
-  bmask = 0x0000001f;
-  depth = 16;
-#else
-  rmask = 0x00ff0000;
-  gmask = 0x0000ff00;
-  bmask = 0x000000ff;
-  depth = 32;
-#endif
-  amask = 0x00000000;
-
-  assert(sizeof(BGRColor) * 8 == depth);
-
-  surface = ::SDL_CreateRGBSurface(SDL_SWSURFACE, corrected_width, height,
-                                   depth, rmask, gmask, bmask, amask);
-  assert(!SDL_MUSTLOCK(surface));
-
-  buffer = (BGRColor *)surface->pixels;
-#else /* !ENABLE_SDL */
   bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
   bi.bmiHeader.biWidth = corrected_width;
   bi.bmiHeader.biHeight = height;
@@ -109,41 +76,13 @@ RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
 #else
   buffer = new BGRColor[corrected_width * height];
 #endif
-#endif /* !ENABLE_SDL */
 }
 
 RawBitmap::~RawBitmap()
 {
-#ifdef ENABLE_OPENGL
-  RemoveSurfaceListener(*this);
-
-  delete texture;
-  delete[] buffer;
-#elif defined(ENABLE_SDL)
-  ::SDL_FreeSurface(surface);
-#elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
   ::DeleteObject(bitmap);
 #else
   delete[] buffer;
 #endif
 }
-
-#ifdef ENABLE_OPENGL
-
-void
-RawBitmap::surface_created()
-{
-  if (texture == NULL)
-    texture = new GLTexture(corrected_width, height);
-}
-
-void
-RawBitmap::surface_destroyed()
-{
-  delete texture;
-  texture = NULL;
-
-  dirty = true;
-}
-
-#endif
