@@ -11,14 +11,11 @@
 #ifndef XCSOAR_SCREEN_RAW_BITMAP_HPP
 #define XCSOAR_SCREEN_RAW_BITMAP_HPP
 
-#include "Screen/Canvas.hpp"
+#include "Screen/Point.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Surface.hpp"
-#include "Screen/OpenGL/Texture.hpp"
-#include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Features.hpp"
-#include "Screen/OpenGL/Compatibility.hpp"
 #endif
 
 #ifdef ENABLE_SDL
@@ -26,6 +23,12 @@
 #endif
 
 #include <stdint.h>
+
+class Canvas;
+
+#ifdef ENABLE_OPENGL
+class GLTexture;
+#endif
 
 /**
  * BGRColor structure encapsulates color information about one point. Color
@@ -210,48 +213,7 @@ public:
   }
 
   void StretchTo(UPixelScalar width, UPixelScalar height, Canvas &dest_canvas,
-                  UPixelScalar dest_width, UPixelScalar dest_height) const {
-#ifdef ENABLE_OPENGL
-    texture->Bind();
-
-    if (dirty) {
-#ifdef HAVE_GLES
-      /* 16 bit 5/6/5 on Android */
-      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                      GL_RGB, GL_UNSIGNED_SHORT_5_6_5, buffer);
-#else
-      /* 32 bit R/G/B/A on full OpenGL */
-      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                      GL_BGRA, GL_UNSIGNED_BYTE, buffer);
-#endif
-
-      dirty = false;
-    }
-
-    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    GLEnable scope(GL_TEXTURE_2D);
-    dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                        *texture, 0, 0, width, height);
-#elif defined(ENABLE_SDL)
-    Canvas src_canvas(surface);
-    dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                        src_canvas, 0, 0, width, height);
-#elif defined(_WIN32_WCE) && _WIN32_WCE < 0x0400
-    /* StretchDIBits() is bugged on PPC2002, workaround follows */
-    HDC source_dc = ::CreateCompatibleDC(dest_canvas);
-    ::SelectObject(source_dc, bitmap);
-    ::StretchBlt(dest_canvas, 0, 0,
-                 dest_width, dest_height,
-                 source_dc, 0, 0, width, height,
-                 SRCCOPY);
-    ::DeleteDC(source_dc);
-#else
-    ::StretchDIBits(dest_canvas, 0, 0,
-                    dest_width, dest_height,
-                    0, GetHeight() - height, width, height,
-                    buffer, &bi, DIB_RGB_COLORS, SRCCOPY);
-#endif
-  }
+                 UPixelScalar dest_width, UPixelScalar dest_height) const;
 
 #ifdef ENABLE_OPENGL
 private:

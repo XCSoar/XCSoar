@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "../RawBitmap.hpp"
+#include "Canvas.hpp"
 
 #include <assert.h>
 
@@ -70,4 +71,14 @@ RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
 RawBitmap::~RawBitmap()
 {
   ::SDL_FreeSurface(surface);
+}
+
+void
+RawBitmap::StretchTo(UPixelScalar width, UPixelScalar height,
+                     Canvas &dest_canvas,
+                     UPixelScalar dest_width, UPixelScalar dest_height) const
+{
+  Canvas src_canvas(surface);
+  dest_canvas.Stretch(0, 0, dest_width, dest_height,
+                      src_canvas, 0, 0, width, height);
 }

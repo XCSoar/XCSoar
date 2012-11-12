@@ -22,6 +22,10 @@ Copyright_License {
 */
 
 #include "../RawBitmap.hpp"
+#include "Canvas.hpp"
+#include "Texture.hpp"
+#include "Scope.hpp"
+#include "Compatibility.hpp"
 
 #include <assert.h>
 
@@ -71,4 +75,31 @@ RawBitmap::surface_destroyed()
   texture = NULL;
 
   dirty = true;
+}
+
+void
+RawBitmap::StretchTo(UPixelScalar width, UPixelScalar height,
+                     Canvas &dest_canvas,
+                     UPixelScalar dest_width, UPixelScalar dest_height) const
+{
+  texture->Bind();
+
+  if (dirty) {
+#ifdef HAVE_GLES
+    /* 16 bit 5/6/5 on Android */
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
+                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5, buffer);
+#else
+    /* 32 bit R/G/B/A on full OpenGL */
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
+                    GL_BGRA, GL_UNSIGNED_BYTE, buffer);
+#endif
+
+    dirty = false;
+  }
+
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+  GLEnable scope(GL_TEXTURE_2D);
+  dest_canvas.Stretch(0, 0, dest_width, dest_height,
+                      *texture, 0, 0, width, height);
 }
