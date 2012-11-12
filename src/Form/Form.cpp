@@ -99,9 +99,8 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
    modal_result(0), force(false),
    modeless(false),
    client_area(_look),
-   timer_notify_callback(NULL), key_down_notify_callback(NULL),
-   default_focus(NULL),
-   timer(*this)
+   key_down_notify_callback(NULL),
+   default_focus(NULL)
 {
   caption = Caption;
 
@@ -116,17 +115,6 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, caption.c_str());
 #endif
-}
-
-void
-WndForm::SetTimerNotify(TimerNotifyCallback OnTimerNotify, unsigned ms)
-{
-  if (timer_notify_callback != NULL && OnTimerNotify == NULL)
-    timer.Cancel();
-  else if (timer_notify_callback == NULL && OnTimerNotify != NULL)
-    timer.Schedule(ms);
-
-  timer_notify_callback = OnTimerNotify;
 }
 
 WndForm::~WndForm()
@@ -173,20 +161,7 @@ WndForm::OnDestroy()
   if (modal_result == 0)
     modal_result = mrCancel;
 
-  timer.Cancel();
-
   ContainerWindow::OnDestroy();
-}
-
-bool
-WndForm::OnTimer(WindowTimer &_timer)
-{
-  if (_timer == timer) {
-    if (timer_notify_callback)
-      timer_notify_callback(*this);
-    return true;
-  } else
-    return ContainerWindow::OnTimer(_timer);
 }
 
 #ifdef WIN32

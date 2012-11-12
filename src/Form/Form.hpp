@@ -27,7 +27,6 @@ Copyright_License {
 #include "ActionListener.hpp"
 #include "SubForm.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/Timer.hpp"
 #include "Util/StaticString.hpp"
 #include "Util/tstring.hpp"
 
@@ -66,7 +65,6 @@ class WndForm : public ContainerWindow, public SubForm,
   };
 
 public:
-  typedef void (*TimerNotifyCallback)(WndForm &sender);
   typedef bool (*KeyDownNotifyCallback)(WndForm &sender, unsigned key_code);
 
 protected:
@@ -95,7 +93,6 @@ protected:
   /** Coordinates of the titlebar */
   PixelRect title_rect;
 
-  TimerNotifyCallback timer_notify_callback;
   KeyDownNotifyCallback key_down_notify_callback;
 
   /*
@@ -108,8 +105,6 @@ protected:
    * (derived from PaintWindow)
    */
   virtual void OnPaint(Canvas &canvas);
-
-  WindowTimer timer;
 
   StaticString<256> caption;
 
@@ -186,7 +181,6 @@ public:
   /** from class Window */
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual void OnDestroy();
-  virtual bool OnTimer(WindowTimer &timer);
 
 #ifdef WIN32
   virtual bool OnCommand(unsigned id, unsigned code);
@@ -195,8 +189,6 @@ public:
   void SetKeyDownNotify(KeyDownNotifyCallback KeyDownNotify) {
     key_down_notify_callback = KeyDownNotify;
   }
-
-  void SetTimerNotify(TimerNotifyCallback OnTimerNotify, unsigned ms = 500);
 
   void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
     client_area.command_callback = CommandCallback;
