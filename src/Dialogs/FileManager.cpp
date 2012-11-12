@@ -54,7 +54,7 @@ Copyright_License {
 #include "Net/DownloadManager.hpp"
 #include "Thread/Notify.hpp"
 #include "Thread/Mutex.hpp"
-#include "Timer.hpp"
+#include "Event/Timer.hpp"
 
 #include <map>
 #include <set>

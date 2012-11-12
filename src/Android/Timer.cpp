@@ -25,7 +25,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
-#include "../Timer.hpp"
+#include "Event/Timer.hpp"
 #include "Screen/Android/Event.hpp"
 #include "org_xcsoar_Timer.h"
 #include "Compiler.h"

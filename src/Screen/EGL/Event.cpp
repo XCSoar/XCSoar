@@ -24,7 +24,7 @@ Copyright_License {
 #include "Event.hpp"
 #include "Screen/TopWindow.hpp"
 #include "Thread/Notify.hpp"
-#include "Timer.hpp"
+#include "Event/Timer.hpp"
 #include "OS/Clock.hpp"
 #include "Util/Macros.hpp"
 

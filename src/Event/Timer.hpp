@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TIMER_HPP
-#define XCSOAR_TIMER_HPP
+#ifndef XCSOAR_EVENT_TIMER_HPP
+#define XCSOAR_EVENT_TIMER_HPP
 
 #ifdef ANDROID
 #include "Android/Timer.hpp"

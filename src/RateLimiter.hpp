@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_RATE_LIMITER_HPP
 #define XCSOAR_RATE_LIMITER_HPP
 
-#include "Timer.hpp"
+#include "Event/Timer.hpp"
 #include "Time/PeriodClock.hpp"
 
 /**

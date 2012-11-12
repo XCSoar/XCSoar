@@ -27,7 +27,7 @@ Copyright_License {
 #ifdef USE_GDI
 #include <windows.h>
 #else
-#include "../Timer.hpp"
+#include "Event/Timer.hpp"
 #endif
 
 #include <assert.h>

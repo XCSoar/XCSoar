@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/Timer.hpp"
 #include "Screen/Window.hpp"
-#include "Timer.hpp"
+#include "Event/Timer.hpp"
 
 void
 WindowTimer::Schedule(unsigned ms)

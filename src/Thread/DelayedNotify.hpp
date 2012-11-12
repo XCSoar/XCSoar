@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_DELAYED_NOTIFY_HPP
 #define XCSOAR_THREAD_DELAYED_NOTIFY_HPP
 
-#include "Timer.hpp"
+#include "Event/Timer.hpp"
 
 #include <atomic>
 
