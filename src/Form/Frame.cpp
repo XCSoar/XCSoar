@@ -33,7 +33,6 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    const WindowStyle style)
   :look(_look),
    caption_color(look.text_color),
-   font(look.text_font),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
   text.clear();
@@ -70,7 +69,7 @@ WndFrame::GetTextHeight()
   GrowRect(rc, -2, -2); // todo border width
 
   AnyCanvas canvas;
-  canvas.Select(*font);
+  canvas.Select(*look.text_font);
   canvas.formatted_text(&rc, text.c_str(), mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
@@ -86,7 +85,7 @@ WndFrame::OnPaint(Canvas &canvas)
   canvas.SetTextColor(caption_color);
   canvas.SetBackgroundTransparent();
 
-  canvas.Select(*font);
+  canvas.Select(*look.text_font);
 
   PixelRect rc = GetClientRect();
   const int padding = Layout::GetTextPadding();

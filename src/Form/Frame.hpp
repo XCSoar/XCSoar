@@ -36,7 +36,6 @@ class WndFrame : public PaintWindow {
 
   Color caption_color;
 
-  const Font *font;
   StaticString<300> text;
 
 public:
@@ -46,15 +45,6 @@ public:
 
   void SetAlignCenter();
   void SetVAlignCenter();
-
-  const Font &GetFont() const {
-    return *font;
-  }
-
-  void SetFont(const Font &_font) {
-    font = &_font;
-    Invalidate();
-  }
 
   void SetText(const TCHAR *_text);
 
