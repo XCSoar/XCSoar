@@ -57,13 +57,6 @@ Copyright_License {
 #include "Event/GDI/Loop.hpp"
 #endif
 
-bool
-WndForm::ClientAreaWindow::OnCommand(unsigned id, unsigned code)
-{
-  return (command_callback != NULL && command_callback(id))
-    || ContainerWindow::OnCommand(id, code);
-}
-
 const Brush *
 WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
 {

@@ -51,15 +51,10 @@ class WndForm : public ContainerWindow, public SubForm,
     const DialogLook &look;
 
   public:
-    typedef bool (*CommandCallback_t)(unsigned cmd);
-    CommandCallback_t command_callback;
-
-  public:
     ClientAreaWindow(const DialogLook &_look)
-      :look(_look), command_callback(NULL) {}
+      :look(_look) {}
 
   protected:
-    virtual bool OnCommand(unsigned id, unsigned code);
     virtual const Brush *on_color(Window &window, Canvas &canvas);
     virtual void OnPaint(Canvas &canvas);
   };
@@ -197,10 +192,6 @@ public:
 
   void SetKeyDownNotify(KeyDownNotifyCallback KeyDownNotify) {
     key_down_notify_callback = KeyDownNotify;
-  }
-
-  void SetCommandCallback(ClientAreaWindow::CommandCallback_t CommandCallback) {
-    client_area.command_callback = CommandCallback;
   }
 
   void SetDefaultFocus(Window *_defaultFocus) {
