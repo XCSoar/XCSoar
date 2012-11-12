@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_SCREEN_WINDOW_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Screen/Font.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
 #include "Thread/Debug.hpp"
@@ -34,6 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 #ifdef USE_GDI
+#include "Font.hpp"
 #include <windows.h>
 #endif /* GDI */
 
@@ -41,6 +41,7 @@ Copyright_License {
 struct Event;
 #endif
 
+class Font;
 class Canvas;
 class ContainerWindow;
 class WindowTimer;

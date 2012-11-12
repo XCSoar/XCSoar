@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Form/List.hpp"
 
+#include <tchar.h>
+
 class SingleWindow;
 
 typedef void (*ListHelpCallback_t)(unsigned item);

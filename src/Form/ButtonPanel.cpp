@@ -25,6 +25,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Font.hpp"
 
 ButtonPanel::ButtonPanel(ContainerWindow &_parent, const DialogLook &_look)
   :parent(_parent), look(_look) {

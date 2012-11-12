@@ -50,6 +50,8 @@ struct Event;
 #include <atomic>
 #endif
 
+#include <tchar.h>
+
 #ifndef USE_GDI
 class TopCanvas;
 #endif

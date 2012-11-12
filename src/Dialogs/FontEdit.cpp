@@ -27,6 +27,7 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Font.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Util/StringUtil.hpp"

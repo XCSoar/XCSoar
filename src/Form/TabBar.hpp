@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "PagerWidget.hpp"
 
+#include <tchar.h>
+
 struct DialogLook;
 class Bitmap;
 class ContainerWindow;

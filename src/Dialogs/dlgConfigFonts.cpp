@@ -35,6 +35,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Font.hpp"
 #include "UIGlobals.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Util/StringUtil.hpp"

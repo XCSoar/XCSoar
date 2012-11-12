@@ -27,6 +27,7 @@ Copyright_License {
 #include "Look/Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Font.hpp"
 #include "LocalPath.hpp"
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"
