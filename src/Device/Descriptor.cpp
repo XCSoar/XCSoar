@@ -100,6 +100,7 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
    internal_sensors(NULL),
 #ifdef IOIOLIB
    droidsoar_v2(nullptr),
+   ms5611(nullptr),
 #endif
 #endif
    ticker(false), borrowed(false)
@@ -140,6 +141,9 @@ DeviceDescriptor::GetState() const
 
 #ifdef IOIOLIB
   if (droidsoar_v2 != nullptr)
+    return PortState::READY;
+
+  if (ms5611 != nullptr)
     return PortState::READY;
 #endif
 #endif
@@ -360,7 +364,11 @@ DeviceDescriptor::Close()
 #ifdef IOIOLIB
   delete droidsoar_v2;
   droidsoar_v2 = nullptr;
+
+  delete ms5611;
+  ms5611 = nullptr;
 #endif
+
 #endif
 
   delete device;
