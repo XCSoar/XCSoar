@@ -167,7 +167,8 @@ DataFieldFileReader::GetPathFile() const
     return _T("");
 
   const TCHAR *path = files[mValue].path;
-  return path != NULL ? path : _T("");
+  assert(path != nullptr);
+  return path;
 }
 
 void
@@ -193,7 +194,9 @@ DataFieldFileReader::AddNull()
 {
   assert(!files.full());
 
-  files.append();
+  Item &item = files.append();
+  item.filename = _T("");
+  item.path = _tcsdup(_T(""));
 }
 
 const TCHAR *
@@ -263,12 +266,6 @@ DataFieldFileReader::Dec()
 static int _cdecl
 DataFieldFileReaderCompare(const void *elem1, const void *elem2)
 {
-  if (((const DataFieldFileReader::Item *)elem1)->filename == NULL)
-    return -1;
-
-  if (((const DataFieldFileReader::Item *)elem2)->filename == NULL)
-    return 1;
-
   // Compare by filename
   return _tcscmp(((const DataFieldFileReader::Item *)elem1)->filename,
                  ((const DataFieldFileReader::Item *)elem2)->filename);
@@ -302,8 +299,7 @@ DataFieldFileReader::CreateComboList() const
 
   for (unsigned i = 0; i < files.size(); i++) {
     const TCHAR *path = files[i].filename;
-    if (path == NULL)
-      path = _T("");
+    assert(path != nullptr);
 
     /* is a file with the same base name present in another data
        directory? */

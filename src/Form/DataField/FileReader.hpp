@@ -46,7 +46,7 @@ public:
     /** Path including Filename */
     TCHAR *path;
 
-    Item():filename(NULL), path(NULL) {}
+    Item():filename(nullptr), path(nullptr) {}
     ~Item();
   };
 
