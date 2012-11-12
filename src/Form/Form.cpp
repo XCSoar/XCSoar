@@ -36,6 +36,10 @@ Copyright_License {
 #include "Screen/Custom/Reference.hpp"
 #endif
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Event/Android/Event.hpp"
@@ -98,6 +102,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
   :main_window(_main_window), look(_look),
    modal_result(0), force(false),
    modeless(false),
+   dragging(false),
    client_area(_look),
    key_down_notify_callback(NULL),
    default_focus(NULL)
@@ -162,6 +167,95 @@ WndForm::OnDestroy()
     modal_result = mrCancel;
 
   ContainerWindow::OnDestroy();
+}
+
+bool
+WndForm::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+{
+  if (ContainerWindow::OnMouseMove(x, y, keys))
+    return true;
+
+  if (dragging) {
+    const PixelRect position = GetPosition();
+    const int dx = position.left + x - last_drag.x;
+    const int dy = position.top + y - last_drag.y;
+    last_drag.x = position.left + x;
+    last_drag.y = position.top + y;
+
+    PixelRect parent = GetParentClientRect();
+    GrowRect(parent, -client_rect.top, -client_rect.top);
+
+    PixelRect new_position = position;
+    MoveRect(new_position, dx, dy);
+
+    if (new_position.right < parent.left)
+      MoveRect(new_position, parent.left - new_position.right, 0);
+
+    if (new_position.left > parent.right)
+      MoveRect(new_position, parent.right - new_position.left, 0);
+
+    if (new_position.top > parent.bottom)
+      MoveRect(new_position, 0, parent.bottom - new_position.top);
+
+    if (new_position.top < 0)
+      MoveRect(new_position, 0, -new_position.top);
+
+    Move(new_position.left, new_position.top);
+
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WndForm::OnMouseDown(PixelScalar x, PixelScalar y)
+{
+  if (ContainerWindow::OnMouseDown(x, y))
+    return true;
+
+  if (!dragging && !IsMaximised()) {
+    dragging = true;
+    Invalidate();
+
+    const PixelRect position = GetPosition();
+    last_drag.x = position.left + x;
+    last_drag.y = position.top + y;
+    SetCapture();
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WndForm::OnMouseUp(PixelScalar x, PixelScalar y)
+{
+  if (ContainerWindow::OnMouseUp(x, y))
+    return true;
+
+  if (dragging) {
+    dragging = false;
+    Invalidate();
+    ReleaseCapture();
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WndForm::OnCancelMode()
+{
+  ContainerWindow::OnCancelMode();
+
+  if (dragging) {
+    dragging = false;
+    Invalidate();
+    ReleaseCapture();
+  }
+
+  return true;
 }
 
 #ifdef WIN32
@@ -499,6 +593,17 @@ WndForm::OnPaint(Canvas &canvas)
                               : look.caption.inactive_background_color);
     canvas.text_opaque(title_rect.left + Layout::FastScale(2),
                        title_rect.top, title_rect, caption.c_str());
+#endif
+  }
+
+  if (dragging) {
+#ifdef ENABLE_OPENGL
+    GLEnable blend(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
+                               COLOR_YELLOW.WithAlpha(80));
+#elif defined(USE_GDI)
+    ::InvertRect(canvas, &title_rect);
 #endif
   }
 }

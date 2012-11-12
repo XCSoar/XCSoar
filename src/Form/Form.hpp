@@ -86,6 +86,8 @@ protected:
    */
   bool modeless;
 
+  bool dragging;
+
   /** The ClientWindow */
   ClientAreaWindow client_area;
   /** Coordinates of the ClientWindow */
@@ -99,6 +101,8 @@ protected:
    * Control which should get the focus by default
    */
   Window *default_focus;
+
+  RasterPoint last_drag;
 
   /**
    * The OnPaint event is called when the button needs to be drawn
@@ -181,6 +185,11 @@ public:
   /** from class Window */
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
   virtual void OnDestroy();
+
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) gcc_override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnCancelMode() gcc_override;
 
 #ifdef WIN32
   virtual bool OnCommand(unsigned id, unsigned code);
