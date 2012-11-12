@@ -42,6 +42,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Cache.hpp"
+#endif
+
 #include <assert.h>
 
 static Font TempInfoWindowFont;
@@ -132,6 +136,10 @@ RefreshFonts()
     ResetFonts(bUseCustomFonts);
     ShowFontEditButtons(bUseCustomFonts);
   }
+
+#ifdef ENABLE_OPENGL
+  TextCache::Flush();
+#endif
 
   // now set SampleTexts on the Fonts frame
   RefreshPreview(_T("prpInfoWindowFont"), TempInfoWindowFont);
