@@ -21,21 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/EGL/Event.hpp"
+#ifndef XCSOAR_EVENT_GDI_TRANSCODE_HPP
+#define XCSOAR_EVENT_GDI_TRANSCODE_HPP
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
-{
-  assert(allowed != NULL);
+#include "Compiler.h"
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+gcc_const
+unsigned
+TranscodeKey(unsigned key_code);
 
-  default:
-    return true;
-  }
-}
+#endif

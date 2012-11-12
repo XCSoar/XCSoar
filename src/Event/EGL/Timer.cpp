@@ -21,21 +21,39 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/EGL/Event.hpp"
+#include "../Timer.hpp"
+#include "Globals.hpp"
+#include "Queue.hpp"
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+void
+Timer::Schedule(unsigned _ms)
 {
-  assert(allowed != NULL);
+  if (queued.exchange(false))
+    event_queue->CancelTimer(*this);
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+  enabled.store(true);
+  ms = _ms;
 
-  default:
-    return true;
-  }
+  if (!queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
+}
+
+void
+Timer::Cancel()
+{
+  if (enabled.exchange(false) && queued.exchange(false))
+    event_queue->CancelTimer(*this);
+}
+
+void
+Timer::Invoke()
+{
+  if (!queued.exchange(false))
+    /* was cancelled by another thread */
+    return;
+
+  OnTimer();
+
+  if (enabled.load() && !queued.exchange(true))
+    event_queue->AddTimer(*this, ms);
 }

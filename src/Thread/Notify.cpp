@@ -24,13 +24,14 @@ Copyright_License {
 #include "Thread/Notify.hpp"
 
 #ifdef ANDROID
-#include "Screen/Android/Event.hpp"
+#include "Event/Android/Queue.hpp"
 #include "Android/Main.hpp"
 #elif defined(USE_EGL)
-#include "Screen/EGL/Event.hpp"
-#include "Screen/EGL/Globals.hpp"
+#include "Event/EGL/Queue.hpp"
+#include "Event/EGL/Globals.hpp"
 #elif defined(ENABLE_SDL)
-#include "Screen/SDL/Event.hpp"
+#include "Event/SDL/Event.hpp"
+#include "Event/SDL/Queue.hpp"
 #endif
 
 Notify::Notify()

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "Screen/SDL/Event.hpp"
+#include "Event/SDL/Loop.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
 

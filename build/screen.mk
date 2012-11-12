@@ -20,6 +20,7 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
 
 SCREEN_CUSTOM_SOURCES = \
+	$(SCREEN_SRC_DIR)/Custom/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Custom/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/LargeTextWindow.cpp \
 	$(SCREEN_SRC_DIR)/Custom/ButtonWindow.cpp \
@@ -36,14 +37,12 @@ ifeq ($(TARGET),ANDROID)
 SCREEN_SOURCES += \
 	$(SCREEN_CUSTOM_SOURCES) \
 	$(SCREEN_SRC_DIR)/OpenGL/EGL.cpp \
-	$(SCREEN_SRC_DIR)/Android/Timer.cpp \
 	$(SCREEN_SRC_DIR)/Android/Window.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/Android/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/Android/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/Android/Font.cpp \
-	$(SCREEN_SRC_DIR)/Android/Event.cpp
+	$(SCREEN_SRC_DIR)/Android/Font.cpp
 endif
 
 ifeq ($(FREETYPE),y)
@@ -85,9 +84,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/SDL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/SDL/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Init.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Event.cpp \
-	$(SCREEN_SRC_DIR)/SDL/Timer.cpp
+	$(SCREEN_SRC_DIR)/SDL/Init.cpp
 ifeq ($(FREETYPE),n)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/SDL/Font.cpp
@@ -107,9 +104,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/EGL/TopCanvas.cpp \
 	$(SCREEN_SRC_DIR)/EGL/Window.cpp \
 	$(SCREEN_SRC_DIR)/EGL/TopWindow.cpp \
-	$(SCREEN_SRC_DIR)/EGL/SingleWindow.cpp \
-	$(SCREEN_SRC_DIR)/EGL/Timer.cpp \
-	$(SCREEN_SRC_DIR)/EGL/Event.cpp
+	$(SCREEN_SRC_DIR)/EGL/SingleWindow.cpp
 else ifeq ($(HAVE_WIN32),y)
 SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/VirtualCanvas.cpp \
@@ -128,8 +123,6 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/SingleWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/TopWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
-	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
-	$(SCREEN_SRC_DIR)/GDI/Transcode.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp

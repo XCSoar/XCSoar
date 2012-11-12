@@ -21,61 +21,16 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_SDL_EVENT_HPP
-#define XCSOAR_SCREEN_SDL_EVENT_HPP
+#ifndef XCSOAR_EVENT_SDL_QUEUE_HPP
+#define XCSOAR_EVENT_SDL_QUEUE_HPP
 
-#include "Util/NonCopyable.hpp"
+#include "Loop.hpp"
 
 #include <SDL_version.h>
 #include <SDL_events.h>
 
-class TopWindow;
 class Window;
 class Notify;
-
-enum {
-  /**
-   * A "user" event for a #Window.
-   */
-  EVENT_USER = SDL_USEREVENT,
-
-  /**
-   * A function pointer with a pointer argument gets called.
-   */
-  EVENT_CALLBACK,
-
-  /**
-   * An event for class #Notify.
-   */
-  EVENT_NOTIFY,
-};
-
-static inline bool
-IsUserInput(const SDL_Event &event)
-{
-  return event.type == SDL_KEYDOWN || event.type == SDL_KEYUP ||
-    event.type == SDL_MOUSEMOTION ||
-    event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP;
-}
-
-class EventLoop : private NonCopyable {
-  TopWindow &top_window;
-
-  /**
-   * True if working on a bulk of events.  At the end of that bulk,
-   * TopWindow::validate() gets called.
-   */
-  bool bulk;
-
-public:
-  typedef void (*Callback)(void *ctx);
-
-  EventLoop(TopWindow &_top_window)
-    :top_window(_top_window), bulk(true) {}
-
-  bool Get(SDL_Event &event);
-  void Dispatch(SDL_Event &event);
-};
 
 namespace EventQueue {
   void Push(EventLoop::Callback callback, void *ctx);

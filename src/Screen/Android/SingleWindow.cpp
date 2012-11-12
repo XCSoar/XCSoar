@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Android/Event.hpp"
+#include "Event/Android/Event.hpp"
 
 bool
 SingleWindow::FilterEvent(const Event &event, Window *allowed) const

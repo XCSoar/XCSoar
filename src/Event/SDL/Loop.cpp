@@ -21,21 +21,44 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/EGL/Event.hpp"
+#include "Loop.hpp"
+#include "Event.hpp"
+#include "Thread/Debug.hpp"
+#include "Thread/Notify.hpp"
+#include "Screen/TopWindow.hpp"
 
 bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+EventLoop::Get(SDL_Event &event)
 {
-  assert(allowed != NULL);
+  if (bulk) {
+    if (::SDL_PollEvent(&event))
+      return true;
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+    /* that was the last event for now, refresh the screen now */
+    top_window.Refresh();
+    bulk = false;
+  }
 
-  default:
+  if (::SDL_WaitEvent(&event)) {
+    bulk = true;
     return true;
   }
+
+  return false;
+}
+
+void
+EventLoop::Dispatch(SDL_Event &event)
+{
+  if (event.type == EVENT_USER && event.user.data1 != NULL) {
+    Window *window = (Window *)event.user.data1;
+    window->OnUser(event.user.code);
+  } else if (event.type == EVENT_CALLBACK) {
+    Callback callback = (Callback)event.user.data1;
+    callback(event.user.data2);
+  } else if (event.type == EVENT_NOTIFY && event.user.data1 != NULL) {
+    Notify *notify = (Notify *)event.user.data1;
+    notify->RunNotification();
+  } else
+    top_window.OnEvent(event);
 }

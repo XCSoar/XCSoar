@@ -21,48 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Screen/SDL/Event.hpp"
+#include "Queue.hpp"
+#include "Event.hpp"
 #include "Thread/Debug.hpp"
 #include "Thread/Notify.hpp"
 #include "Asset.hpp"
 
 #include "Screen/TopWindow.hpp"
-
-bool
-EventLoop::Get(SDL_Event &event)
-{
-  if (bulk) {
-    if (::SDL_PollEvent(&event))
-      return true;
-
-    /* that was the last event for now, refresh the screen now */
-    top_window.Refresh();
-    bulk = false;
-  }
-
-  if (::SDL_WaitEvent(&event)) {
-    bulk = true;
-    return true;
-  }
-
-  return false;
-}
-
-void
-EventLoop::Dispatch(SDL_Event &event)
-{
-  if (event.type == EVENT_USER && event.user.data1 != NULL) {
-    Window *window = (Window *)event.user.data1;
-    window->OnUser(event.user.code);
-  } else if (event.type == EVENT_CALLBACK) {
-    Callback callback = (Callback)event.user.data1;
-    callback(event.user.data2);
-  } else if (event.type == EVENT_NOTIFY && event.user.data1 != NULL) {
-    Notify *notify = (Notify *)event.user.data1;
-    notify->RunNotification();
-  } else
-    top_window.OnEvent(event);
-}
 
 void
 EventQueue::Push(EventLoop::Callback callback, void *ctx)

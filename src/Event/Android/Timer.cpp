@@ -21,49 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_GDI_EVENT_HPP
-#define XCSOAR_SCREEN_GDI_EVENT_HPP
+#include "../Timer.hpp"
 
-#include "Util/NonCopyable.hpp"
-#include "Compiler.h"
-
-#include <windows.h>
-
-static inline bool
-IsUserInput(UINT message)
+void
+Timer::Schedule(unsigned ms)
 {
-  return message == WM_KEYDOWN || message == WM_KEYUP ||
-    message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_LBUTTONDBLCLK;
+  Cancel();
+
+  timer = new AndroidTimer(*this, ms);
 }
 
-static inline bool
-IsUserInput(const MSG &msg)
+void
+Timer::Cancel()
 {
-  return IsUserInput(msg.message);
+  if (!IsActive())
+    return;
+
+  timer->disable();
+  timer = NULL;
 }
-
-class EventLoop : private NonCopyable {
-public:
-  bool Get(MSG &msg);
-  void Dispatch(const MSG &msg);
-};
-
-class DialogEventLoop : public EventLoop {
-  HWND dialog;
-
-public:
-  DialogEventLoop(HWND _dialog):dialog(_dialog) {}
-
-  void Dispatch(MSG &msg);
-};
-
-namespace EventQueue {
-  /**
-   * Handle all pending repaint messages.
-   */
-  void
-  HandlePaintMessages();
-}
-
-#endif

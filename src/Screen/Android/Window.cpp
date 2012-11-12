@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Window.hpp"
-#include "Screen/Android/Event.hpp"
+#include "Event/Android/Queue.hpp"
 #include "Android/Main.hpp"
 
 void

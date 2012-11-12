@@ -21,86 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_EGL_EVENT_HPP
-#define XCSOAR_SCREEN_EGL_EVENT_HPP
+#ifndef XCSOAR_EVENT_EGL_QUEUE_HPP
+#define XCSOAR_EVENT_EGL_QUEUE_HPP
 
+#include "Event.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
-#include "Thread/Cond.hpp"
-#include "Screen/Point.hpp"
 #include "OS/EventPipe.hpp"
 
 #include <queue>
 #include <set>
 
-class TopWindow;
 class Window;
 class Timer;
 class Notify;
-
-struct Event {
-  enum Type {
-    NOP,
-    QUIT,
-    TIMER,
-    USER,
-
-    CALLBACK,
-
-    /**
-     * @see #Notify
-     */
-    NOTIFY,
-
-    KEY_DOWN,
-    KEY_UP,
-    MOUSE_MOTION,
-    MOUSE_DOWN,
-    MOUSE_UP,
-  };
-
-  typedef void (*Callback)(void *ctx);
-
-  Type type;
-
-  unsigned param;
-
-  void *ptr;
-
-  Callback callback;
-
-  PixelScalar x, y;
-
-  Event() = default;
-  Event(Type _type):type(_type) {}
-  Event(Type _type, unsigned _param):type(_type), param(_param) {}
-  Event(Type _type, unsigned _param, void *_ptr)
-    :type(_type), param(_param), ptr(_ptr) {}
-  Event(Type _type, void *_ptr):type(_type), ptr(_ptr) {}
-  Event(Callback _callback, void *_ptr)
-    :type(CALLBACK), ptr(_ptr), callback(_callback) {}
-  Event(Type _type, PixelScalar _x, PixelScalar _y)
-    :type(_type), x(_x), y(_y) {}
-
-  constexpr
-  RasterPoint GetPoint() const {
-    return RasterPoint{x, y};
-  }
-};
-
-static inline bool
-IsUserInput(enum Event::Type type)
-{
-  return type == Event::KEY_DOWN || type == Event::KEY_UP ||
-    type == Event::MOUSE_MOTION ||
-    type == Event::MOUSE_DOWN || type == Event::MOUSE_UP;
-}
-
-static inline bool
-IsUserInput(const Event &event)
-{
-  return IsUserInput(event.type);
-}
 
 class EventQueue : private NonCopyable {
   struct TimerRecord {
@@ -168,24 +102,6 @@ public:
 
   void AddTimer(Timer &timer, unsigned ms);
   void CancelTimer(Timer &timer);
-};
-
-class EventLoop : private NonCopyable {
-  EventQueue &queue;
-  TopWindow &top_window;
-
-  /**
-   * True if working on a bulk of events.  At the end of that bulk,
-   * TopWindow::validate() gets called.
-   */
-  bool bulk;
-
-public:
-  EventLoop(EventQueue &_queue, TopWindow &_top_window)
-    :queue(_queue), top_window(_top_window), bulk(true) {}
-
-  bool Get(Event &event);
-  void Dispatch(const Event &event);
 };
 
 #endif

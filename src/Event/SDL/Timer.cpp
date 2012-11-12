@@ -21,21 +21,56 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/EGL/Event.hpp"
+#include "../Timer.hpp"
+#include "Queue.hpp"
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+void
+Timer::Schedule(unsigned ms)
 {
-  assert(allowed != NULL);
+  Cancel();
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+  id = ::SDL_AddTimer(ms, Callback, this);
+}
 
-  default:
-    return true;
-  }
+void
+Timer::Cancel()
+{
+  if (!IsActive())
+    return;
+
+  ::SDL_RemoveTimer(id);
+  id = NULL;
+
+  EventQueue::Purge(Invoke, (void *)this);
+  queued.store(false, std::memory_order_relaxed);
+}
+
+void
+Timer::Invoke()
+{
+  OnTimer();
+  queued.store(false, std::memory_order_relaxed);
+}
+
+void
+Timer::Invoke(void *ctx)
+{
+  Timer *timer = (Timer *)ctx;
+  timer->Invoke();
+}
+
+Uint32
+Timer::Callback(Uint32 interval)
+{
+  if (!queued.exchange(true, std::memory_order_relaxed))
+    EventQueue::Push(Invoke, (void *)this);
+  return interval;
+}
+
+Uint32
+Timer::Callback(Uint32 interval, void *param)
+{
+  Timer *timer = (Timer *)param;
+
+  return timer->Callback(interval);
 }

@@ -21,20 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_ANDROID_EVENT_HPP
-#define XCSOAR_SCREEN_ANDROID_EVENT_HPP
+#ifndef XCSOAR_EVENT_EGL_EVENT_HPP
+#define XCSOAR_EVENT_EGL_EVENT_HPP
 
-#include "Util/NonCopyable.hpp"
-#include "Thread/Mutex.hpp"
-#include "Thread/Cond.hpp"
 #include "Screen/Point.hpp"
-
-#include <queue>
-
-class TopWindow;
-class Window;
-class AndroidTimer;
-class Notify;
 
 struct Event {
   enum Type {
@@ -55,27 +45,6 @@ struct Event {
     MOUSE_MOTION,
     MOUSE_DOWN,
     MOUSE_UP,
-
-    POINTER_DOWN,
-    POINTER_UP,
-
-    /**
-     * The NativeView was resized (e.g. by changing the screen
-     * orientation).
-     */
-    RESIZE,
-
-    /**
-     * The Android Activity is being paused, and the OpenGL surface
-     * will be destroyed.
-     */
-    PAUSE,
-
-    /**
-     * The Android Activity is being resumed, and the OpenGL surface
-     * can be created again.
-     */
-    RESUME,
   };
 
   typedef void (*Callback)(void *ctx);
@@ -108,7 +77,7 @@ struct Event {
 };
 
 static inline bool
-IsUserInput(Event::Type type)
+IsUserInput(enum Event::Type type)
 {
   return type == Event::KEY_DOWN || type == Event::KEY_UP ||
     type == Event::MOUSE_MOTION ||
@@ -120,53 +89,5 @@ IsUserInput(const Event &event)
 {
   return IsUserInput(event.type);
 }
-
-class EventQueue : private NonCopyable {
-  std::queue<Event> events;
-
-  Mutex mutex;
-  Cond cond;
-
-  bool running;
-
-public:
-  EventQueue():running(true) {}
-
-  void Quit() {
-    running = false;
-  }
-
-  void Push(const Event &event);
-
-  bool Pop(Event &event);
-
-  bool Wait(Event &event);
-
-  void Purge(bool (*match)(const Event &event, void *ctx), void *ctx);
-
-  void Purge(Event::Type type);
-  void Purge(Event::Callback callback, void *ctx);
-  void Purge(Notify &notify);
-  void Purge(Window &window);
-  void Purge(AndroidTimer &timer);
-};
-
-class EventLoop : private NonCopyable {
-  EventQueue &queue;
-  TopWindow &top_window;
-
-  /**
-   * True if working on a bulk of events.  At the end of that bulk,
-   * TopWindow::validate() gets called.
-   */
-  bool bulk;
-
-public:
-  EventLoop(EventQueue &_queue, TopWindow &_top_window)
-    :queue(_queue), top_window(_top_window), bulk(true) {}
-
-  bool Get(Event &event);
-  void Dispatch(const Event &event);
-};
 
 #endif

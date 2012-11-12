@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Transcode.hpp"
-#include "Key.h"
+#include "Screen/GDI/Key.h"
 #include "Asset.hpp"
 
 struct KeyMap {

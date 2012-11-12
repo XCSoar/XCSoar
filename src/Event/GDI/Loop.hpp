@@ -21,17 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_EVENT_HPP
-#define XCSOAR_SCREEN_EVENT_HPP
+#ifndef XCSOAR_EVENT_GDI_LOOP_HPP
+#define XCSOAR_EVENT_GDI_LOOP_HPP
 
-#ifdef ANDROID
-#include "Screen/Android/Event.hpp"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Event.hpp"
-#elif defined(USE_EGL)
-#include "Screen/EGL/Event.hpp"
-#else
-#include "Screen/GDI/Event.hpp"
-#endif
+#include "Util/NonCopyable.hpp"
+#include "Compiler.h"
+
+#include <windows.h>
+
+class EventLoop : private NonCopyable {
+public:
+  bool Get(MSG &msg);
+  void Dispatch(const MSG &msg);
+};
+
+class DialogEventLoop : public EventLoop {
+  HWND dialog;
+
+public:
+  DialogEventLoop(HWND _dialog):dialog(_dialog) {}
+
+  void Dispatch(MSG &msg);
+};
 
 #endif

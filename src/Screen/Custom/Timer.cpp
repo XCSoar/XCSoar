@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_GDI_TRANSCODE_HPP
-#define XCSOAR_SCREEN_GDI_TRANSCODE_HPP
+#include "Screen/Timer.hpp"
+#include "Screen/Window.hpp"
 
-#include "Compiler.h"
-
-gcc_const
-unsigned
-TranscodeKey(unsigned key_code);
-
-#endif
+void
+WindowTimer::OnTimer()
+{
+  window.OnTimer(*this);
+}

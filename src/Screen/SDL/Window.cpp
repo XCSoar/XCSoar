@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Window.hpp"
-#include "Screen/SDL/Event.hpp"
+#include "Event/SDL/Event.hpp"
 
 void
 Window::SendUser(unsigned id)

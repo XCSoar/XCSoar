@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "org_xcsoar_EventBridge.h"
-#include "Screen/Android/Event.hpp"
+#include "Event/Android/Queue.hpp"
 #include "Android/Main.hpp"
 #include "Compiler.h"
 

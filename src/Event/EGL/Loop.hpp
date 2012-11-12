@@ -21,21 +21,31 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/EGL/Event.hpp"
+#ifndef XCSOAR_EVENT_EGL_LOOP_HPP
+#define XCSOAR_EVENT_EGL_LOOP_HPP
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
-{
-  assert(allowed != NULL);
+#include "Util/NonCopyable.hpp"
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+struct Event;
+class EventQueue;
+class TopWindow;
 
-  default:
-    return true;
-  }
-}
+class EventLoop : private NonCopyable {
+  EventQueue &queue;
+  TopWindow &top_window;
+
+  /**
+   * True if working on a bulk of events.  At the end of that bulk,
+   * TopWindow::validate() gets called.
+   */
+  bool bulk;
+
+public:
+  EventLoop(EventQueue &_queue, TopWindow &_top_window)
+    :queue(_queue), top_window(_top_window), bulk(true) {}
+
+  bool Get(Event &event);
+  void Dispatch(const Event &event);
+};
+
+#endif

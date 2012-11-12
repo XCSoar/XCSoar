@@ -21,47 +21,23 @@ Copyright_License {
 }
 */
 
-#include "Event/Timer.hpp"
-#include "Event.hpp"
-#include "Globals.hpp"
-#include "Screen/Timer.hpp"
-#include "Screen/Window.hpp"
+#ifndef XCSOAR_EVENT_GDI_EVENT_HPP
+#define XCSOAR_EVENT_GDI_EVENT_HPP
 
-void
-Timer::Schedule(unsigned _ms)
+#include <windows.h>
+
+static inline bool
+IsUserInput(UINT message)
 {
-  if (queued.exchange(false))
-    event_queue->CancelTimer(*this);
-
-  enabled.store(true);
-  ms = _ms;
-
-  if (!queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
+  return message == WM_KEYDOWN || message == WM_KEYUP ||
+    message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
+    message == WM_LBUTTONDBLCLK;
 }
 
-void
-Timer::Cancel()
+static inline bool
+IsUserInput(const MSG &msg)
 {
-  if (enabled.exchange(false) && queued.exchange(false))
-    event_queue->CancelTimer(*this);
+  return IsUserInput(msg.message);
 }
 
-void
-Timer::Invoke()
-{
-  if (!queued.exchange(false))
-    /* was cancelled by another thread */
-    return;
-
-  OnTimer();
-
-  if (enabled.load() && !queued.exchange(true))
-    event_queue->AddTimer(*this, ms);
-}
-
-void
-WindowTimer::OnTimer()
-{
-  window.OnTimer(*this);
-}
+#endif

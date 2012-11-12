@@ -21,30 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Screen/Timer.hpp"
-#include "Screen/Android/Event.hpp"
-#include "Screen/Window.hpp"
+#include "Globals.hpp"
 
-void
-Timer::Schedule(unsigned ms)
-{
-  Cancel();
-
-  timer = new AndroidTimer(*this, ms);
-}
-
-void
-Timer::Cancel()
-{
-  if (!IsActive())
-    return;
-
-  timer->disable();
-  timer = NULL;
-}
-
-void
-WindowTimer::OnTimer()
-{
-  window.OnTimer(*this);
-}
+EventQueue *event_queue;

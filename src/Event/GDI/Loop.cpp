@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Screen/GDI/Event.hpp"
+#include "Loop.hpp"
+#include "Transcode.hpp"
 #include "Screen/GDI/Key.h"
-#include "Screen/GDI/Transcode.hpp"
 #include "Thread/Debug.hpp"
 #include "Asset.hpp"
 
@@ -104,23 +104,4 @@ DialogEventLoop::Dispatch(MSG &msg)
   }
 
   EventLoop::Dispatch(msg);
-}
-
-static void
-HandleMessages(UINT wMsgFilterMin, UINT wMsgFilterMax)
-{
-  MSG msg;
-  while (::PeekMessage(&msg, NULL, wMsgFilterMin, wMsgFilterMax, PM_REMOVE)) {
-    ::TranslateMessage(&msg);
-    ::DispatchMessage(&msg);
-  }
-}
-
-void
-EventQueue::HandlePaintMessages()
-{
-  AssertNoneLocked();
-
-  HandleMessages(WM_SIZE, WM_SIZE);
-  HandleMessages(WM_PAINT, WM_PAINT);
 }

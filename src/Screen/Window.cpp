@@ -26,13 +26,13 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 
 #ifdef ANDROID
-#include "Screen/Android/Event.hpp"
+#include "Event/Android/Queue.hpp"
 #include "Android/Main.hpp"
 #elif defined(ENABLE_SDL)
-#include "Screen/SDL/Event.hpp"
+#include "Event/SDL/Queue.hpp"
 #elif defined(USE_EGL)
-#include "Screen/EGL/Event.hpp"
-#include "Screen/EGL/Globals.hpp"
+#include "Event/EGL/Queue.hpp"
+#include "Event/EGL/Globals.hpp"
 #endif /* ENABLE_SDL */
 
 #ifdef ENABLE_OPENGL

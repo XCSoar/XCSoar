@@ -23,14 +23,6 @@ Copyright_License {
 
 #include "Thread/DelayedNotify.hpp"
 
-#ifdef ANDROID
-#include "Screen/Android/Event.hpp"
-#include "Android/Main.hpp"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Event.hpp"
-#else
-#endif
-
 DelayedNotify::~DelayedNotify()
 {
   Cancel();

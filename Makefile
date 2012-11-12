@@ -102,6 +102,7 @@ include $(topdir)/build/libroute.mk
 include $(topdir)/build/libcontest.mk
 include $(topdir)/build/libglide.mk
 include $(topdir)/build/datafield.mk
+include $(topdir)/build/libevent.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/libthread.mk
 include $(topdir)/build/form.mk
@@ -869,7 +870,7 @@ XCSOAR_LDADD = \
 
 XCSOAR_DEPENDS = GETTEXT PROFILE \
 	FORM DATA_FIELD \
-	AUDIO EVENT SCREEN \
+	AUDIO SCREEN EVENT \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \
 	SHAPELIB JASPER ZZIP \

@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/Init.hpp"
-#include "Globals.hpp"
-#include "Event.hpp"
+#include "Event/EGL/Globals.hpp"
+#include "Event/EGL/Queue.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/OpenGL/Init.hpp"
@@ -32,8 +32,6 @@ Copyright_License {
 #ifdef USE_VIDEOCORE
 #include "bcm_host.h"
 #endif
-
-EventQueue *event_queue;
 
 ScreenGlobalInit::ScreenGlobalInit()
 {

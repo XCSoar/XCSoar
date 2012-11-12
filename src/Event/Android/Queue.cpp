@@ -21,10 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Screen/Android/Event.hpp"
-#include "Screen/TopWindow.hpp"
-#include "Thread/Notify.hpp"
-#include "Android/Timer.hpp"
+#include "Queue.hpp"
 
 void
 EventQueue::Push(const Event &event)
@@ -146,42 +143,4 @@ void
 EventQueue::Purge(AndroidTimer &timer)
 {
   Purge(match_timer, (void *)&timer);
-}
-
-bool
-EventLoop::Get(Event &event)
-{
-  if (bulk) {
-    if (queue.Pop(event))
-      return event.type != Event::QUIT;
-
-    /* that was the last event for now, refresh the screen now */
-    top_window.Refresh();
-    bulk = false;
-  }
-
-  if (queue.Wait(event)) {
-    bulk = true;
-    return event.type != Event::QUIT;
-  }
-
-  return false;
-}
-
-void
-EventLoop::Dispatch(const Event &event)
-{
-  if (event.type == Event::USER) {
-    Window *window = (Window *)event.ptr;
-    window->OnUser(event.param);
-  } else if (event.type == Event::TIMER) {
-    AndroidTimer *timer = (AndroidTimer *)event.ptr;
-    timer->run();
-  } else if (event.type == Event::CALLBACK) {
-    event.callback(event.ptr);
-  } else if (event.type == Event::NOTIFY) {
-    Notify *notify = (Notify *)event.ptr;
-    notify->RunNotification();
-  } else if (event.type != Event::NOP)
-    top_window.OnEvent(event);
 }

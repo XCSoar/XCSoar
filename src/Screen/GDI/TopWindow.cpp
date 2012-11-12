@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
-#include "Screen/GDI/Event.hpp"
+#include "Event/GDI/Loop.hpp"
+#include "Event/GDI/Queue.hpp"
 
 bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)

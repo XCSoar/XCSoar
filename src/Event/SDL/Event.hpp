@@ -21,21 +21,35 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/EGL/Event.hpp"
+#ifndef XCSOAR_EVENT_SDL_HPP
+#define XCSOAR_EVENT_SDL_HPP
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
+#include <SDL_version.h>
+#include <SDL_events.h>
+
+enum {
+  /**
+   * A "user" event for a #Window.
+   */
+  EVENT_USER = SDL_USEREVENT,
+
+  /**
+   * A function pointer with a pointer argument gets called.
+   */
+  EVENT_CALLBACK,
+
+  /**
+   * An event for class #Notify.
+   */
+  EVENT_NOTIFY,
+};
+
+static inline bool
+IsUserInput(const SDL_Event &event)
 {
-  assert(allowed != NULL);
-
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
-
-  default:
-    return true;
-  }
+  return event.type == SDL_KEYDOWN || event.type == SDL_KEYUP ||
+    event.type == SDL_MOUSEMOTION ||
+    event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP;
 }
+
+#endif

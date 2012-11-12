@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_EGL_GLOBALS_HPP
-#define XCSOAR_SCREEN_EGL_GLOBALS_HPP
+#ifndef XCSOAR_EVENT_EGL_GLOBALS_HPP
+#define XCSOAR_EVENT_EGL_GLOBALS_HPP
 
 class EventQueue;
 

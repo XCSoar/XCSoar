@@ -26,12 +26,16 @@
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"
 
-#if defined(ANDROID) || defined(USE_EGL)
-#include "Screen/Android/Event.hpp"
+#ifdef ANDROID
+#include "Event/Android/Loop.hpp"
+#elif defined(USE_EGL)
+#include "Event/EGL/Event.hpp"
+#include "Event/EGL/Loop.hpp"
+#include "Event/EGL/Globals.hpp"
 #elif defined(ENABLE_SDL)
-#include "Screen/SDL/Event.hpp"
+#include "Event/SDL/Loop.hpp"
 #else
-#include "Screen/GDI/Event.hpp"
+#include "Event/GDI/Loop.hpp"
 #endif
 
 static bool quit;
@@ -61,7 +65,7 @@ int main(int argc, char **argv)
 
   ScreenGlobalInit screen;
 
-#ifdef ANDROID
+#if defined(ANDROID) || defined(USE_EGL)
   TopWindow main_window;
   EventLoop loop(*event_queue, main_window);
   Event event;

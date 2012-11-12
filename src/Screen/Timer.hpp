@@ -35,10 +35,6 @@ Copyright_License {
 
 class Window;
 
-#ifdef ANDROID
-class AndroidTimer;
-#endif
-
 /**
  * A timer that, once initialized, periodically calls
  * Window::OnTimer() after a specified amount of time, until Cancel()

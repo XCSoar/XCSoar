@@ -21,21 +21,48 @@ Copyright_License {
 }
 */
 
-#include "Screen/SingleWindow.hpp"
-#include "Event/EGL/Event.hpp"
+#ifndef XCSOAR_EVENT_ANDROID_QUEUE_HPP
+#define XCSOAR_EVENT_ANDROID_QUEUE_HPP
 
-bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed) const
-{
-  assert(allowed != NULL);
+#include "Event.hpp"
+#include "Util/NonCopyable.hpp"
+#include "Thread/Mutex.hpp"
+#include "Thread/Cond.hpp"
 
-  switch (event.type) {
-  case Event::MOUSE_MOTION:
-  case Event::MOUSE_DOWN:
-  case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y, allowed);
+#include <queue>
 
-  default:
-    return true;
+class Window;
+class AndroidTimer;
+class Notify;
+
+class EventQueue : private NonCopyable {
+  std::queue<Event> events;
+
+  Mutex mutex;
+  Cond cond;
+
+  bool running;
+
+public:
+  EventQueue():running(true) {}
+
+  void Quit() {
+    running = false;
   }
-}
+
+  void Push(const Event &event);
+
+  bool Pop(Event &event);
+
+  bool Wait(Event &event);
+
+  void Purge(bool (*match)(const Event &event, void *ctx), void *ctx);
+
+  void Purge(Event::Type type);
+  void Purge(Event::Callback callback, void *ctx);
+  void Purge(Notify &notify);
+  void Purge(Window &window);
+  void Purge(AndroidTimer &timer);
+};
+
+#endif

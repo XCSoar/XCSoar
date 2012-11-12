@@ -40,7 +40,7 @@ Copyright_License {
 #include "Version.hpp"
 #include "Screen/Debug.hpp"
 #include "Look/Fonts.hpp"
-#include "Screen/Android/Event.hpp"
+#include "Event/Android/Queue.hpp"
 #include "Screen/OpenGL/Init.hpp"
 #include "Dialogs/Message.hpp"
 #include "Simulator.hpp"
