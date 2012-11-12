@@ -33,7 +33,6 @@ Copyright_License {
 
 class Window;
 class AndroidTimer;
-class Notify;
 
 class EventQueue : private NonCopyable {
   std::queue<Event> events;
@@ -60,7 +59,6 @@ public:
 
   void Purge(Event::Type type);
   void Purge(Event::Callback callback, void *ctx);
-  void Purge(Notify &notify);
   void Purge(Window &window);
   void Purge(AndroidTimer &timer);
 };

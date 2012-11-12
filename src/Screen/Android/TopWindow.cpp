@@ -180,7 +180,6 @@ TopWindow::OnEvent(const Event &event)
   case Event::QUIT:
   case Event::TIMER:
   case Event::USER:
-  case Event::NOTIFY:
   case Event::CALLBACK:
     break;
 

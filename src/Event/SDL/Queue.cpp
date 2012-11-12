@@ -24,7 +24,6 @@ Copyright_License {
 #include "Queue.hpp"
 #include "Event.hpp"
 #include "Thread/Debug.hpp"
-#include "Thread/Notify.hpp"
 #include "Asset.hpp"
 
 #include "Screen/TopWindow.hpp"
@@ -73,18 +72,6 @@ EventQueue::Purge(EventLoop::Callback callback, void *ctx)
 {
   MatchCallbackData data { (void *)callback, ctx };
   Purge(SDL_EVENTMASK(EVENT_CALLBACK), MatchCallback, (void *)&data);
-}
-
-static bool
-match_notify(const SDL_Event &event, void *ctx)
-{
-  return event.type == EVENT_NOTIFY && event.user.data1 == ctx;
-}
-
-void
-EventQueue::Purge(Notify &notify)
-{
-  Purge(SDL_EVENTMASK(EVENT_NOTIFY), match_notify, (void *)&notify);
 }
 
 static bool

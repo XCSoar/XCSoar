@@ -37,11 +37,6 @@ enum {
    * A function pointer with a pointer argument gets called.
    */
   EVENT_CALLBACK,
-
-  /**
-   * An event for class #Notify.
-   */
-  EVENT_NOTIFY,
 };
 
 static inline bool

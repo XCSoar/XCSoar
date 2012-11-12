@@ -34,7 +34,6 @@ Copyright_License {
 
 class Window;
 class Timer;
-class Notify;
 
 class EventQueue : private NonCopyable {
   struct TimerRecord {
@@ -97,7 +96,6 @@ public:
 
   void Purge(enum Event::Type type);
   void Purge(Event::Callback callback, void *ctx);
-  void Purge(Notify &notify);
   void Purge(Window &window);
 
   void AddTimer(Timer &timer, unsigned ms);

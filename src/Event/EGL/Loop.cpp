@@ -26,7 +26,6 @@ Copyright_License {
 #include "Event.hpp"
 #include "../Timer.hpp"
 #include "Screen/TopWindow.hpp"
-#include "Thread/Notify.hpp"
 
 bool
 EventLoop::Get(Event &event)
@@ -59,9 +58,6 @@ EventLoop::Dispatch(const Event &event)
     timer->Invoke();
   } else if (event.type == Event::CALLBACK) {
     event.callback(event.ptr);
-  } else if (event.type == Event::NOTIFY) {
-    Notify *notify = (Notify *)event.ptr;
-    notify->RunNotification();
   } else if (event.type != Event::NOP)
     top_window.OnEvent(event);
 }

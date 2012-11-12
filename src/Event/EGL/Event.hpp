@@ -35,11 +35,6 @@ struct Event {
 
     CALLBACK,
 
-    /**
-     * @see #Notify
-     */
-    NOTIFY,
-
     KEY_DOWN,
     KEY_UP,
     MOUSE_MOTION,

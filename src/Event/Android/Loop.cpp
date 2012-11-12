@@ -25,7 +25,6 @@ Copyright_License {
 #include "Queue.hpp"
 #include "Event.hpp"
 #include "Screen/TopWindow.hpp"
-#include "Thread/Notify.hpp"
 #include "Android/Timer.hpp"
 
 bool
@@ -59,9 +58,6 @@ EventLoop::Dispatch(const Event &event)
     timer->run();
   } else if (event.type == Event::CALLBACK) {
     event.callback(event.ptr);
-  } else if (event.type == Event::NOTIFY) {
-    Notify *notify = (Notify *)event.ptr;
-    notify->RunNotification();
   } else if (event.type != Event::NOP)
     top_window.OnEvent(event);
 }

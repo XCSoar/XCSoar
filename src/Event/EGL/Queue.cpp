@@ -182,18 +182,6 @@ EventQueue::Purge(Event::Callback callback, void *ctx)
 }
 
 static bool
-match_notify(const Event &event, void *ctx)
-{
-  return event.type == Event::NOTIFY && event.ptr == ctx;
-}
-
-void
-EventQueue::Purge(Notify &notify)
-{
-  Purge(match_notify, (void *)&notify);
-}
-
-static bool
 match_window(const Event &event, void *ctx)
 {
   return event.type == Event::USER && event.ptr == ctx;

@@ -46,9 +46,9 @@ Notify::~Notify()
 {
   if (pending.load(std::memory_order_relaxed)) {
 #ifdef ANDROID
-    event_queue->Purge(*this);
+    event_queue->Purge(Callback, this);
 #elif defined(ENABLE_SDL)
-    EventQueue::Purge(*this);
+    EventQueue::Purge(Callback, this);
 #endif
   }
 }
@@ -60,12 +60,9 @@ Notify::SendNotification()
     return;
 
 #if defined(ANDROID) || defined(USE_EGL)
-  event_queue->Push(Event(Event::NOTIFY, this));
+  event_queue->Push(Event(Callback, this));
 #elif defined(ENABLE_SDL)
-  SDL_Event event;
-  event.type = EVENT_NOTIFY;
-  event.user.data1 = this;
-  ::SDL_PushEvent(&event);
+  EventQueue::Push(Callback, this);
 #else
   SendUser(0);
 #endif
@@ -78,9 +75,9 @@ Notify::ClearNotification()
     return;
 
 #if defined(ANDROID) || defined(USE_EGL)
-  event_queue->Purge(*this);
+  event_queue->Purge(Callback, this);
 #elif defined(ENABLE_SDL)
-  EventQueue::Purge(*this);
+  EventQueue::Purge(Callback, this);
 #endif
 }
 
@@ -89,6 +86,13 @@ Notify::RunNotification()
 {
   if (pending.exchange(false, std::memory_order_relaxed))
     OnNotification();
+}
+
+void
+Notify::Callback(void *ctx)
+{
+  Notify &notify = *(Notify *)ctx;
+  notify.RunNotification();
 }
 
 #ifdef USE_GDI

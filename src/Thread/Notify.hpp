@@ -68,10 +68,12 @@ public:
   void ClearNotification();
 
 private:
+  void RunNotification();
+
   /**
    * Called by the event loop when the "notify" message is received.
    */
-  void RunNotification();
+  static void Callback(void *ctx);
 
 protected:
   /**

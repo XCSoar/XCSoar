@@ -30,7 +30,6 @@ Copyright_License {
 #include <SDL_events.h>
 
 class Window;
-class Notify;
 
 namespace EventQueue {
   void Push(EventLoop::Callback callback, void *ctx);
@@ -45,11 +44,6 @@ namespace EventQueue {
    * Purge all events for this callback from the event queue.
    */
   void Purge(EventLoop::Callback callback, void *ctx);
-
-  /**
-   * Purge all events for this #Notify from the event queue.
-   */
-  void Purge(Notify &notify);
 
   /**
    * Purge all events for this Window from the event queue.

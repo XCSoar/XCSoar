@@ -24,7 +24,6 @@ Copyright_License {
 #include "Loop.hpp"
 #include "Event.hpp"
 #include "Thread/Debug.hpp"
-#include "Thread/Notify.hpp"
 #include "Screen/TopWindow.hpp"
 
 bool
@@ -56,9 +55,6 @@ EventLoop::Dispatch(SDL_Event &event)
   } else if (event.type == EVENT_CALLBACK) {
     Callback callback = (Callback)event.user.data1;
     callback(event.user.data2);
-  } else if (event.type == EVENT_NOTIFY && event.user.data1 != NULL) {
-    Notify *notify = (Notify *)event.user.data1;
-    notify->RunNotification();
   } else
     top_window.OnEvent(event);
 }
