@@ -54,6 +54,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Math/FastMath.h"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Vega/VoiceSettingsDialog.hpp"
+#include "Dialogs/Vega/SwitchesDialog.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Traffic.hpp"

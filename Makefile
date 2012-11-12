@@ -163,6 +163,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \
 	$(SRC)/Dialogs/Vega/VegaDemoDialog.cpp \
 	$(SRC)/Dialogs/Vega/VoiceSettingsDialog.cpp \
+	$(SRC)/Dialogs/Vega/SwitchesDialog.cpp \
 	$(SRC)/Dialogs/FLARM/ConfigWidget.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
@@ -208,8 +209,6 @@ DIALOG_SOURCES = \
 	\
 	$(SRC)/Dialogs/Waypoint/WaypointInfoWidget.cpp \
 	$(SRC)/Dialogs/Waypoint/WaypointCommandsWidget.cpp \
-	\
-	$(SRC)/Dialogs/dlgSwitches.cpp \
 	\
 	$(SRC)/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/DevicesConfigPanel.cpp \

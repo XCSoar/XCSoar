@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Dialogs.h"
+#include "SwitchesDialog.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
