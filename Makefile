@@ -578,6 +578,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Blackboard/RateLimitedBlackboardListener.cpp \
 	$(SRC)/Blackboard/LiveBlackboard.cpp \
 	$(SRC)/Blackboard/InterfaceBlackboard.cpp \
+	$(SRC)/Blackboard/ScopeGPSListener.cpp \
+	$(SRC)/Blackboard/ScopeCalculatedListener.cpp \
 	\
 	$(SRC)/Blackboard/DeviceBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
