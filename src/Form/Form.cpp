@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 #include "Look/DialogLook.hpp"
 
 #ifndef USE_GDI
@@ -560,6 +561,61 @@ WndForm::ShowModal()
 void
 WndForm::OnPaint(Canvas &canvas)
 {
+#ifdef ENABLE_OPENGL
+  if (!IsMaximised() && main_window.IsTopDialog(*this)) {
+    /* draw a shade around the current dialog to emphasise it */
+    GLEnable blend(GL_BLEND);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    const PixelRect rc = GetClientRect();
+    const PixelScalar size = Layout::SmallScale(4);
+
+    const RasterPoint vertices[8] = {
+      { rc.left, rc.top },
+      { rc.right, rc.top },
+      { rc.right, rc.bottom },
+      { rc.left, rc.bottom },
+      { PixelScalar(rc.left - size), PixelScalar(rc.top - size) },
+      { PixelScalar(rc.right + size), PixelScalar(rc.top - size) },
+      { PixelScalar(rc.right + size), PixelScalar(rc.bottom + size) },
+      { PixelScalar(rc.left - size), PixelScalar(rc.bottom + size) },
+    };
+
+    glVertexPointer(2, GL_VALUE, 0, vertices);
+
+    static constexpr Color inner_color = COLOR_BLACK.WithAlpha(192);
+    static constexpr Color outer_color = COLOR_BLACK.WithAlpha(16);
+    static constexpr Color colors[8] = {
+      inner_color,
+      inner_color,
+      inner_color,
+      inner_color,
+      outer_color,
+      outer_color,
+      outer_color,
+      outer_color,
+    };
+
+#ifdef HAVE_GLES
+    glColorPointer(4, GL_FIXED, 0, colors);
+#else
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+#endif
+
+    static constexpr GLubyte indices[] = {
+      0, 4, 1, 4, 5, 1,
+      1, 5, 2, 5, 6, 2,
+      2, 6, 3, 6, 7, 3,
+      3, 7, 0, 7, 4, 0,
+    };
+
+    glDrawElements(GL_TRIANGLES, ARRAY_SIZE(indices),
+                   GL_UNSIGNED_BYTE, indices);
+
+    glDisableClientState(GL_COLOR_ARRAY);
+  }
+#endif
+
   ContainerWindow::OnPaint(canvas);
 
   // Get window coordinates
