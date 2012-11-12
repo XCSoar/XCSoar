@@ -195,7 +195,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
@@ -261,7 +261,7 @@ PrepareConfigurationDialog()
   if (dialog == NULL)
     return;
 
-  dialog->SetKeyDownNotify(FormKeyDown);
+  dialog->SetKeyDownFunction(FormKeyDown);
 
   bool expert_mode = CommonInterface::GetUISettings().dialog.expert;
   CheckBox *cb = (CheckBox *)dialog->FindByName(_T("Expert"));

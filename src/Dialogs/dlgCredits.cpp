@@ -80,7 +80,7 @@ FindLargeTextWindow()
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
     LargeTextWindow *edit;
@@ -203,7 +203,7 @@ dlgCreditsShowModal(SingleWindow &parent)
   tab = ((TabbedControl *)wf->FindByName(_T("tab")));
   assert(tab != NULL);
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 
   LoadTextFromResource(_T("LICENSE"), _T("prpLicense"));
   LoadTextFromResource(_T("AUTHORS"), _T("prpAuthors"));

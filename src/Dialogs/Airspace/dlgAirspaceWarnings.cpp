@@ -261,7 +261,7 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 }
 
 static bool
-OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+OnKeyDown(unsigned key_code)
 {
   switch (key_code){
     case KEY_ESCAPE:
@@ -506,7 +506,7 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   assert(ack_space_button != NULL);
   assert(enable_button != NULL);
 
-  dialog->SetKeyDownNotify(OnKeyDown);
+  dialog->SetKeyDownFunction(OnKeyDown);
 
   warning_list_frame =
     (ListControl*)dialog->FindByName(_T("frmAirspaceWarningList"));

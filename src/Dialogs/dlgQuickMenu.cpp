@@ -79,7 +79,7 @@ SetFormDefaultFocus()
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
@@ -187,7 +187,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   SetFormDefaultFocus();
   SetFormCaption();
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 
   wf->ShowModal();
 

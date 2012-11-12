@@ -188,7 +188,7 @@ MoveTarget(gcc_unused double adjust_angle)
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_APP2:
@@ -601,7 +601,7 @@ dlgTargetShowModal(int _target_point)
   UpdateButtons();
 
 #ifdef GNAV
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 #endif
 
   struct TargetDialogUpdateListener : public NullBlackboardListener {

@@ -369,12 +369,6 @@ TaskEditPanel::OnKeyDown(unsigned key_code)
   }
 }
 
-static bool
-OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
-{
-  return instance->OnKeyDown(key_code);
-}
-
 static constexpr CallBackTableEntry task_edit_callbacks[] = {
   DeclareCallBackEntry(OnMakeFinish),
   DeclareCallBackEntry(OnMoveUpClicked),
@@ -426,7 +420,9 @@ TaskEditPanel::Show(const PixelRect &rc)
 
   RefreshView();
 
-  wf.SetKeyDownNotify(::OnKeyDown);
+  wf.SetKeyDownFunction([this](unsigned key_code){
+      return this->OnKeyDown(key_code);
+    });
 
   XMLWidget::Show(rc);
 }
@@ -437,7 +433,7 @@ TaskEditPanel::Hide()
   if (wTaskView != NULL)
     dlgTaskManager::ResetTaskView(wTaskView);
 
-  wf.SetKeyDownNotify(NULL);
+  wf.ClearKeyDownFunction();
 
   XMLWidget::Hide();
 }

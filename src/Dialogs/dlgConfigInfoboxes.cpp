@@ -238,7 +238,7 @@ OnContentHelp(WindowControl *Sender)
 #ifdef _WIN32_WCE
 
 static bool
-OnKeyDown(WndForm &sender, unsigned key_code)
+OnKeyDown(unsigned key_code)
 {
   DataFieldEnum *dfe;
 
@@ -273,7 +273,7 @@ OnKeyDown(WndForm &sender, unsigned key_code)
     return true;
 
   case '6':
-    sender.SetModalResult(mrOK);
+    wf->SetModalResult(mrOK);
     return true;
 
   case '7':
@@ -308,7 +308,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
 #ifdef _WIN32_WCE
   if (IsAltair())
-    wf->SetKeyDownNotify(OnKeyDown);
+    wf->SetKeyDownFunction(OnKeyDown);
 #endif
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();

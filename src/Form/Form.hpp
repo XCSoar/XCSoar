@@ -30,6 +30,8 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Util/tstring.hpp"
 
+#include <functional>
+
 struct DialogLook;
 class SingleWindow;
 class PeriodClock;
@@ -60,7 +62,7 @@ class WndForm : public ContainerWindow, public SubForm,
   };
 
 public:
-  typedef bool (*KeyDownNotifyCallback)(WndForm &sender, unsigned key_code);
+  typedef std::function<bool(unsigned)> KeyDownFunction;
 
 protected:
   SingleWindow &main_window;
@@ -90,7 +92,7 @@ protected:
   /** Coordinates of the titlebar */
   PixelRect title_rect;
 
-  KeyDownNotifyCallback key_down_notify_callback;
+  KeyDownFunction key_down_function;
 
   /*
    * Control which should get the focus by default
@@ -190,8 +192,12 @@ public:
   virtual bool OnCommand(unsigned id, unsigned code);
 #endif
 
-  void SetKeyDownNotify(KeyDownNotifyCallback KeyDownNotify) {
-    key_down_notify_callback = KeyDownNotify;
+  void SetKeyDownFunction(KeyDownFunction function) {
+    key_down_function = function;
+  }
+
+  void ClearKeyDownFunction() {
+    key_down_function = KeyDownFunction();
   }
 
   void SetDefaultFocus(Window *_defaultFocus) {

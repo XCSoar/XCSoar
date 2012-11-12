@@ -98,7 +98,6 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
    modeless(false),
    dragging(false),
    client_area(_look),
-   key_down_notify_callback(NULL),
    default_focus(NULL)
 {
   caption = Caption;
@@ -481,12 +480,12 @@ WndForm::ShowModal()
         hastimed = true;
     }
 
-    if (key_down_notify_callback != NULL && is_key_down(event) &&
+    if (key_down_function && is_key_down(event) &&
 #ifdef USE_GDI
         IdentifyDescendant(event.hwnd) &&
 #endif
         !check_special_key(this, event) &&
-        key_down_notify_callback(*this, get_key_code(event)))
+        key_down_function(get_key_code(event)))
       continue;
 
 #ifdef ENABLE_SDL

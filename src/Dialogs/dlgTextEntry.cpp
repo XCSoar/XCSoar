@@ -139,7 +139,7 @@ MoveCursor()
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_UP:
@@ -183,25 +183,25 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 OnLeftClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, IsAltair() ? KEY_UP : KEY_LEFT);
+  FormKeyDown(IsAltair() ? KEY_UP : KEY_LEFT);
 }
 
 static void
 OnRightClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, IsAltair() ? KEY_DOWN : KEY_RIGHT);
+  FormKeyDown(IsAltair() ? KEY_DOWN : KEY_RIGHT);
 }
 
 static void
 OnUpClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, !IsAltair() ? KEY_UP : KEY_LEFT);
+  FormKeyDown(!IsAltair() ? KEY_UP : KEY_LEFT);
 }
 
 static void
 OnDownClicked(gcc_unused WndButton &button)
 {
-  FormKeyDown(*wf, !IsAltair() ? KEY_DOWN : KEY_RIGHT);
+  FormKeyDown(!IsAltair() ? KEY_DOWN : KEY_RIGHT);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
@@ -244,7 +244,7 @@ dlgTextEntryHighscoreType(TCHAR *text, int width,
   }
   MoveCursor();
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 
   if (wf->ShowModal() == mrOK) {
     CopyString(text, edittext, max_width);

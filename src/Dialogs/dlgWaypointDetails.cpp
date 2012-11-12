@@ -152,7 +152,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
@@ -369,7 +369,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
 
   UpdateCaption(waypoint->name.c_str(), waypoint->file_num);
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 
   wInfo = (DockWindow *)wf->FindByName(_T("info"));
   assert(wInfo != NULL);

@@ -91,7 +91,7 @@ DoCharacter(TCHAR character)
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_RIGHT:
@@ -199,7 +199,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text,
   }
 
   UpdateTextboxProp();
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
   bool result = (wf->ShowModal() == mrOK);
 
   if (result) {

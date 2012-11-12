@@ -97,7 +97,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
@@ -216,7 +216,7 @@ dlgChecklistShowModal()
 
   nTextLines = 0;
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 
   wDetails = (LargeTextWindow *)wf->FindByName(_T("frmDetails"));
   assert(wDetails != NULL);

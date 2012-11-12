@@ -481,7 +481,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   assert(wf != NULL);
 
@@ -596,7 +596,7 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
                                       _T("IDR_XML_ANALYSIS"));
   assert(wf != NULL);
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 
   wGrid = (ChartControl*)wf->FindByName(_T("frmGrid"));
   wInfo = (WndFrame *)wf->FindByName(_T("frmInfo"));

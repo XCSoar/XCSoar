@@ -349,7 +349,7 @@ OnGPSUpdate(const MoreData &basic)
 #ifdef GNAV
 
 static bool
-FormKeyDown(WndForm &sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   TypeFilter new_index = dialog_state.type_index;
 
@@ -397,7 +397,7 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
   assert(dialog != NULL);
 
 #ifdef GNAV
-  dialog->SetKeyDownNotify(FormKeyDown);
+  dialog->SetKeyDownFunction(FormKeyDown);
 #endif
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();

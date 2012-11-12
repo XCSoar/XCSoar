@@ -180,7 +180,7 @@ OnDemoClicked(gcc_unused WndButton &Sender)
 }
 
 static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   switch (key_code) {
   case KEY_LEFT:
@@ -300,7 +300,7 @@ dlgConfigurationVarioShowModal(Device &_device)
   if (!wf)
     return false;
 
-  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownFunction(FormKeyDown);
 
   UpdateCaption();
 

@@ -267,7 +267,7 @@ OnGPSUpdate(const MoreData &basic)
 #ifdef GNAV
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(unsigned key_code)
 {
   WndProperty* wp;
   unsigned new_index = dialog_state.type;
@@ -354,7 +354,7 @@ PrepareAirspaceSelectDialog()
   assert(dialog != NULL);
 
 #ifdef GNAV
-  dialog->SetKeyDownNotify(FormKeyDown);
+  dialog->SetKeyDownFunction(FormKeyDown);
 #endif
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
