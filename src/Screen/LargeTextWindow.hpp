@@ -82,9 +82,7 @@ public:
 
 #ifndef USE_GDI
   gcc_pure
-  unsigned GetVisibleRows() const {
-    return GetHeight() / GetFont().GetHeight();
-  }
+  unsigned GetVisibleRows() const;
 #endif
 
   gcc_pure

@@ -36,6 +36,12 @@ LargeTextWindow::Create(ContainerWindow &parent, PixelRect rc,
   Window::Create(&parent, rc, style);
 }
 
+unsigned
+LargeTextWindow::GetVisibleRows() const
+{
+  return GetHeight() / GetFont().GetHeight();
+}
+
 void
 LargeTextWindow::ScrollVertically(int delta_lines)
 {
