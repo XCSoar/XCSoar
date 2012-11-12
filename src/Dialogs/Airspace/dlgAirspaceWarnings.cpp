@@ -41,6 +41,7 @@ Copyright_License {
 #include "Util/TrivialArray.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Event/ScopeTimer.hpp"
 
 #include "Compiler.h"
 
@@ -466,12 +467,6 @@ UpdateList()
   AutoHide();
 }
 
-static void
-OnTimer(gcc_unused WndForm &Sender)
-{
-  UpdateList();
-}
-
 bool
 dlgAirspaceWarningVisible()
 {
@@ -527,10 +522,10 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   selected_airspace = NULL;
   focused_airspace = NULL;
 
-  dialog->SetTimerNotify(OnTimer);
+  const ScopeTimer update_timer(UpdateList, 500);
+
   warning_list_frame->SetCursorIndex(0);
   dialog->ShowModal();
-  dialog->SetTimerNotify(NULL);
 
   delete dialog;
 

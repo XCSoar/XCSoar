@@ -42,6 +42,7 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
+#include "Event/ScopeTimer.hpp"
 #include "Compiler.h"
 
 #include <math.h>
@@ -102,6 +103,11 @@ public:
   void SetBugs(fixed bugs);
   void SetQNH(AtmosphericPressure qnh);
 
+  /**
+   * This function is called repeatedly by the timer and updates the
+   * current altitude and ballast. The ballast can change without user
+   * input due to the dump function.
+   */
   void OnTimer();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
@@ -114,8 +120,6 @@ private:
   virtual void OnModified(DataField &df);
   virtual void OnSpecial(DataField &df);
 };
-
-static FlightSetupPanel *instance;
 
 void
 FlightSetupPanel::SetButtons()
@@ -340,26 +344,18 @@ FlightSetupPanel::OnAction(int id)
     FlipBallastTimer();
 }
 
-/**
- * This function is called repeatedly by the timer and updates the
- * current altitude and ballast. The ballast can change without user
- * input due to the dump function.
- */
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  instance->OnTimer();
-}
-
 void
 dlgBasicSettingsShowModal()
 {
-  instance = new FlightSetupPanel();
+  FlightSetupPanel *instance = new FlightSetupPanel();
 
   WidgetDialog dialog(_("Flight Setup"), instance);
-  dialog.SetTimerNotify(OnTimerNotify);
   instance->SetDumpButton(dialog.AddButton(_("Dump"), instance, DUMP));
   dialog.AddButton(_("OK"), mrOK);
+
+  const ScopeTimer update_ballast_timer([instance]() {
+      instance->OnTimer();
+    }, 500);
 
   dialog.ShowModal();
 }

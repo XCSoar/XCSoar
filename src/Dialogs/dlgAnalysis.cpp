@@ -53,6 +53,7 @@ Copyright_License {
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
+#include "Event/ScopeTimer.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -564,12 +565,6 @@ OnCreateChartControl(ContainerWindow &parent, PixelRect rc,
                           look->thermal_band);
 }
 
-static void
-OnTimer(WndForm &Sender)
-{
-  Update();
-}
-
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateCrossSectionControl),
   DeclareCallBackEntry(OnCreateChartControl),
@@ -612,7 +607,8 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
 
   Update();
 
-  wf->SetTimerNotify(OnTimer, 2500);
+  const ScopeTimer update_timer(Update, 2500);
+
   wf->ShowModal();
 
   delete wf;

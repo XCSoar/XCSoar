@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
+#include "Event/FunctionalTimer.hpp"
 
 #include <assert.h>
 
@@ -96,12 +97,6 @@ static void
 OnCancelClicked(gcc_unused WndButton &Sender)
 {
   wf->SetModalResult(mrCancel);
-}
-
-static void
-OnTimerNotify(gcc_unused WndForm &Sender)
-{
-  list_control->Invalidate();
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
@@ -173,12 +168,16 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     select_button->SetEnabled(false);
   }
 
+  FunctionalTimer update_timer;
   if (update)
-    wf->SetTimerNotify(OnTimerNotify);
+    update_timer.Schedule([]() {
+        list_control->Invalidate();
+      }, 1000);
 
   int result = wf->ShowModal() == mrOK
     ? (int)list_control->GetCursorIndex()
     : -1;
+  update_timer.Cancel();
   delete wf;
 
   return result;
