@@ -73,6 +73,16 @@ Window::CreateMessageWindow()
   assert(hWnd != NULL);
 }
 
+bool
+Window::IsMaximised() const
+{
+  const PixelRect this_rc = GetPosition();
+  const PixelRect parent_rc = GetParentClientRect();
+
+  return (this_rc.right - this_rc.left) >= (parent_rc.right - parent_rc.left) &&
+    (this_rc.bottom - this_rc.top) >= (parent_rc.bottom - parent_rc.top);
+}
+
 void
 Window::SetEnabled(bool enabled)
 {

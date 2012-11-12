@@ -367,6 +367,14 @@ public:
   gcc_pure
   ContainerWindow *GetRootOwner();
 
+  /**
+   * Checks whether the window is "maximised" within its parent
+   * window, i.e. whether its dimensions are not smaller than its
+   * parent's dimensions.
+   */
+  gcc_pure
+  bool IsMaximised() const;
+
   void Move(PixelScalar left, PixelScalar top) {
     AssertNoneLocked();
     AssertThread();

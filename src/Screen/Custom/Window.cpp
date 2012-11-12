@@ -77,6 +77,13 @@ Window::GetParentClientRect() const
   return parent->GetClientRect();
 }
 
+bool
+Window::IsMaximised() const
+{
+  return parent != nullptr &&
+    width >= parent->width && height >= parent->height;
+}
+
 void
 Window::SetEnabled(bool enabled)
 {
