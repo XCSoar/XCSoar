@@ -194,7 +194,7 @@ public:
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, color);
   }
 
-  void DrawFilledRectangle(const PixelRect rc, const Brush &brush) {
+  void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 

@@ -259,7 +259,7 @@ public:
     DrawFilledRectangle(rc, map(color));
   }
 
-  void DrawFilledRectangle(const PixelRect rc, const Brush &brush) {
+  void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
     assert(IsDefined());
 
     ::FillRect(dc, &rc, brush.Native());
@@ -376,7 +376,7 @@ public:
   void DrawKeyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
                    UPixelScalar big_radius, Angle start, Angle end);
 
-  void DrawFocusRectangle(PixelRect rc) {
+  void DrawFocusRectangle(const PixelRect &rc) {
     assert(IsDefined());
 
     ::DrawFocusRect(dc, &rc);

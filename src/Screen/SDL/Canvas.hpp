@@ -242,7 +242,7 @@ public:
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, color);
   }
 
-  void DrawFilledRectangle(const PixelRect rc, const Brush &brush) {
+  void DrawFilledRectangle(const PixelRect &rc, const Brush &brush) {
     DrawFilledRectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
@@ -362,9 +362,9 @@ public:
                UPixelScalar small_radius, UPixelScalar big_radius,
                Angle start, Angle end);
 
-  void DrawFocusRectangle(PixelRect rc) {
+  void DrawFocusRectangle(const PixelRect &rc) {
     DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
-                      COLOR_DARK_GRAY);
+                         COLOR_DARK_GRAY);
   }
 
   void DrawButton(PixelRect rc, bool down);
