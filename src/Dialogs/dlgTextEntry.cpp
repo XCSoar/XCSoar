@@ -98,7 +98,7 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_WHITE);
-  canvas.text(p[0].x, p[0].y, edittext);
+  canvas.DrawText(p[0].x, p[0].y, edittext);
 }
 
 static void

@@ -104,7 +104,7 @@ Font::CalculateHeights()
     rec.top = 0;
     rec.right = tm.tmAveCharWidth;
     rec.bottom = tm.tmHeight;
-    buffer.text_opaque(0, 0, rec, _T("M"));
+    buffer.DrawOpaqueText(0, 0, rec, _T("M"));
 
     UPixelScalar top = tm.tmHeight, bottom = 0;
 

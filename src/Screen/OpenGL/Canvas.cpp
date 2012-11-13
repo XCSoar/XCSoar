@@ -144,7 +144,7 @@ Canvas::DrawPolygon(const RasterPoint *points, unsigned num_points)
                      triangle_buffer.begin());
   }
 
-  if (pen_over_brush()) {
+  if (IsPenOverBrush()) {
     pen.Bind();
 
     if (pen.GetWidth() <= 2) {
@@ -175,7 +175,7 @@ Canvas::DrawTriangleFan(const RasterPoint *points, unsigned num_points)
     glDrawArrays(GL_TRIANGLE_FAN, 0, num_points);
   }
 
-  if (pen_over_brush()) {
+  if (IsPenOverBrush()) {
     pen.Bind();
 
     if (pen.GetWidth() <= 2) {
@@ -283,7 +283,7 @@ Canvas::DrawTwoLinesExact(PixelScalar ax, PixelScalar ay,
 void
 Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 {
-  if (pen_over_brush() && pen.GetWidth() > 2) {
+  if (IsPenOverBrush() && pen.GetWidth() > 2) {
     GLDonutVertices vertices(x, y,
                              radius - pen.GetWidth() / 2,
                              radius + pen.GetWidth() / 2);
@@ -316,7 +316,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
       glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::SMALL_CIRCLE_SIZE);
     }
 
-    if (pen_over_brush()) {
+    if (IsPenOverBrush()) {
       pen.Bind();
       glDrawArrays(GL_LINE_LOOP, 0, OpenGL::SMALL_CIRCLE_SIZE);
       pen.Unbind();
@@ -346,7 +346,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
       glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::CIRCLE_SIZE);
     }
 
-    if (pen_over_brush()) {
+    if (IsPenOverBrush()) {
       pen.Bind();
       glDrawArrays(GL_LINE_LOOP, 0, OpenGL::CIRCLE_SIZE);
       pen.Unbind();
@@ -364,7 +364,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
       glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.SIZE);
     }
 
-    if (pen_over_brush()) {
+    if (IsPenOverBrush()) {
       pen.Bind();
       glDrawArrays(GL_LINE_LOOP, 0, vertices.SIZE);
       pen.Unbind();
@@ -449,7 +449,7 @@ Canvas::DrawAnnulus(PixelScalar x, PixelScalar y,
     }
   }
 
-  if (pen_over_brush()) {
+  if (IsPenOverBrush()) {
     pen.Bind();
 
     if (istart != iend && iend != GLDonutVertices::MAX_ANGLE) {
@@ -521,7 +521,7 @@ Canvas::CalcTextSize(const TCHAR *text) const
 }
 
 void
-Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
   assert(text != NULL);
   assert(ValidateUTF8(text));
@@ -564,7 +564,7 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 void
-Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
   assert(text != NULL);
   assert(ValidateUTF8(text));
@@ -599,9 +599,9 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
 }
 
 void
-Canvas::TextClipped(PixelScalar x, PixelScalar y,
-                    UPixelScalar width, UPixelScalar height,
-                    const TCHAR *text)
+Canvas::DrawClippedText(PixelScalar x, PixelScalar y,
+                        UPixelScalar width, UPixelScalar height,
+                        const TCHAR *text)
 {
   assert(text != NULL);
   assert(ValidateUTF8(text));
@@ -666,7 +666,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
              UPixelScalar dest_width, UPixelScalar dest_height,
              const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
@@ -675,13 +675,13 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::copy(const Bitmap &src)
+Canvas::Copy(const Bitmap &src)
 {
-  copy(0, 0, src.GetWidth(), src.GetHeight(), src, 0, 0);
+  Copy(0, 0, src.GetWidth(), src.GetHeight(), src, 0, 0);
 }
 
 void
-Canvas::stretch_transparent(const Bitmap &src, Color key)
+Canvas::StretchTransparent(const Bitmap &src, Color key)
 {
   assert(src.IsDefined());
 
@@ -690,7 +690,7 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 }
 
 void
-Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
+Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
 {
   assert(src.IsDefined());
 
@@ -841,7 +841,7 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
   assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_OR);
-  copy(dest_x, dest_y, dest_width, dest_height,
+  Copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
 
@@ -853,7 +853,7 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
   assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_OR_INVERTED);
-  copy(dest_x, dest_y, dest_width, dest_height,
+  Copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
 
@@ -865,7 +865,7 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
   assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_AND);
-  copy(dest_x, dest_y, dest_width, dest_height,
+  Copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
 
@@ -877,7 +877,7 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
   assert(src.IsDefined());
 
   GLLogicOp logic_op(GL_COPY_INVERTED);
-  copy(dest_x, dest_y, dest_width, dest_height,
+  Copy(dest_x, dest_y, dest_width, dest_height,
        src, src_x, src_y);
 }
 
@@ -900,9 +900,9 @@ Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
 
 void
 Canvas::DrawRoundRectangle(PixelScalar left, PixelScalar top,
-                        PixelScalar right, PixelScalar bottom,
-                        UPixelScalar ellipse_width,
-                        UPixelScalar ellipse_height)
+                           PixelScalar right, PixelScalar bottom,
+                           UPixelScalar ellipse_width,
+                           UPixelScalar ellipse_height)
 {
   UPixelScalar radius = std::min(std::min(ellipse_width, ellipse_height),
                                  (UPixelScalar) std::min(bottom - top,

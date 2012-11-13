@@ -210,8 +210,8 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   if (airspace_list.empty()) {
     assert(i == 0);
 
-    canvas.text(rc.left + Layout::FastScale(2),
-                rc.top + Layout::FastScale(2), _("No Match!"));
+    canvas.DrawText(rc.left + Layout::FastScale(2),
+                    rc.top + Layout::FastScale(2), _("No Match!"));
     return;
   }
 

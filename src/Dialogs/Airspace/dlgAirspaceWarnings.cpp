@@ -308,8 +308,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     /* the warnings were emptied between the opening of the dialog and
        this refresh, so only need to display "No Warnings" for top
        item, otherwise exit immediately */
-    canvas.text(paint_rc.left + Layout::Scale(padding),
-                paint_rc.top + Layout::Scale(padding), _("No Warnings"));
+    canvas.DrawText(paint_rc.left + Layout::Scale(padding),
+                    paint_rc.top + Layout::Scale(padding), _("No Warnings"));
     return;
   }
 
@@ -344,18 +344,18 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
                airspace.GetName(),
                AirspaceFormatter::GetClass(airspace));
 
-    canvas.text_clipped(paint_rc.left + left0,
-                        paint_rc.top + Layout::Scale(text_top),
-                        rc_text_clip, buffer);
+    canvas.DrawClippedText(paint_rc.left + left0,
+                           paint_rc.top + Layout::Scale(text_top),
+                           rc_text_clip, buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
-    canvas.text(paint_rc.left + left1,
-                paint_rc.top + Layout::Scale(text_top), buffer);
+    canvas.DrawText(paint_rc.left + left1,
+                    paint_rc.top + Layout::Scale(text_top), buffer);
 
     AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
-    canvas.text(paint_rc.left + left1,
-                paint_rc.top + Layout::Scale(text_top + text_height),
-                buffer);
+    canvas.DrawText(paint_rc.left + left1,
+                    paint_rc.top + Layout::Scale(text_top + text_height),
+                    buffer);
   }
 
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
@@ -377,9 +377,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
       FormatRelativeUserAltitude(delta, buffer + _tcslen(buffer), true);
     }
 
-    canvas.text_clipped(paint_rc.left + left0,
-                        paint_rc.top + Layout::Scale(text_top + text_height),
-                        rc_text_clip, buffer);
+    canvas.DrawClippedText(paint_rc.left + left0,
+                           paint_rc.top + Layout::Scale(text_top + text_height),
+                           rc_text_clip, buffer);
   }
 
   /* draw the warning state indicator */
@@ -420,9 +420,9 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 
   if (state_text != NULL) {
     // -- status text will be centered inside its table cell:
-    canvas.text(paint_rc.left + left2 + Layout::FastScale(padding) + (status_width / 2)  - (canvas.CalcTextWidth(state_text) / 2),
-                (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
-                state_text);
+    canvas.DrawText(paint_rc.left + left2 + Layout::FastScale(padding) + (status_width / 2)  - (canvas.CalcTextWidth(state_text) / 2),
+                    (paint_rc.bottom + paint_rc.top - state_text_size.cy) / 2,
+                    state_text);
   }
 }
 

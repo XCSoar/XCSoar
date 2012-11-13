@@ -43,9 +43,9 @@ OnPaintComboPopupListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < (unsigned)ComboListPopup->size());
 
-  canvas.text_clipped(rc.left + padding,
-                      rc.top + padding, rc,
-                      (*ComboListPopup)[i].StringValueFormatted);
+  canvas.DrawClippedText(rc.left + padding,
+                         rc.top + padding, rc,
+                         (*ComboListPopup)[i].StringValueFormatted);
 }
 static const TCHAR*
 OnItemHelp(unsigned i)

@@ -111,9 +111,9 @@ WndSymbolButton::OnPaint(Canvas &canvas)
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
     canvas.ClearWhite();
     if (is_down())
-      canvas.invert_stretch_transparent(launcher1_bitmap, COLOR_YELLOW);
+      canvas.InvertStretchTransparent(launcher1_bitmap, COLOR_YELLOW);
     else
-      canvas.stretch_transparent(launcher1_bitmap, COLOR_BLUE);
+      canvas.StretchTransparent(launcher1_bitmap, COLOR_BLUE);
   }
 
   // Draw Simulator bitmap
@@ -121,9 +121,9 @@ WndSymbolButton::OnPaint(Canvas &canvas)
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
     canvas.ClearWhite();
     if (is_down())
-      canvas.invert_stretch_transparent(launcher2_bitmap, COLOR_YELLOW);
+      canvas.InvertStretchTransparent(launcher2_bitmap, COLOR_YELLOW);
     else
-      canvas.stretch_transparent(launcher2_bitmap, COLOR_BLUE);
+      canvas.StretchTransparent(launcher2_bitmap, COLOR_BLUE);
   }
 
   else if (ParseHexColor(caption.c_str(), color)) {

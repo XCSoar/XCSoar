@@ -293,10 +293,10 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
       *UIGlobals::GetDialogLook().list.font;
     canvas.SetTextColor(COLOR_BLACK);
     canvas.Select(name_font);
-    canvas.text(rc.left + line_height + Layout::FastScale(2),
-                rc.top + line_height / 2 - name_font.GetHeight() / 2,
-                dialog_state.IsDefined() || way_points.IsEmpty() ?
-                _("No Match!") : _("Choose a filter or click here"));
+    canvas.DrawText(rc.left + line_height + Layout::FastScale(2),
+                    rc.top + line_height / 2 - name_font.GetHeight() / 2,
+                    dialog_state.IsDefined() || way_points.IsEmpty() ?
+                    _("No Match!") : _("Choose a filter or click here"));
     return;
   }
 

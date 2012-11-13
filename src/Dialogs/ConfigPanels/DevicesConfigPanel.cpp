@@ -187,7 +187,7 @@ DevicesConfigPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
     text.append(port_name);
   }
 
-  canvas.text(rc.left + margin, rc.top + margin, text);
+  canvas.DrawText(rc.left + margin, rc.top + margin, text);
 }
 
 void

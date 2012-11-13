@@ -102,7 +102,7 @@ protected:
       TCHAR buffer[64];
       _stprintf(buffer, _T("key %s = 0x%x"),
                 event.down ? _T("down") : _T("up"), event.code);
-      canvas.text(4, y, buffer);
+      canvas.DrawText(4, y, buffer);
     }
   }
 };

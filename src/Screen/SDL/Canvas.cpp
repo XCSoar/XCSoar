@@ -70,7 +70,7 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
     ::filledPolygonColor(surface, vx, vy, cPoints,
                          brush.GetColor().GFXColor());
 
-  if (pen_over_brush())
+  if (IsPenOverBrush())
     ::polygonColor(surface, vx, vy, cPoints, pen.GetColor().GFXColor());
 }
 
@@ -84,7 +84,7 @@ Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
     ::filledCircleColor(surface, x, y, radius,
                         brush.GetColor().GFXColor());
 
-  if (pen_over_brush())
+  if (IsPenOverBrush())
     ::circleColor(surface, x, y, radius, pen.GetColor().GFXColor());
 }
 
@@ -103,7 +103,7 @@ Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                      (int)end.Degrees() - 90,
                      brush.GetColor().GFXColor());
 
-  if (pen_over_brush())
+  if (IsPenOverBrush())
     ::pieColor(surface, x, y, radius, 
                (int)start.Degrees() - 90,
                (int)end.Degrees() - 90,
@@ -147,7 +147,7 @@ Canvas::CalcTextSize(const TCHAR *text) const
 }
 
 void
-Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
   assert(text != NULL);
 #ifndef UNICODE
@@ -177,12 +177,12 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *text)
     }
   }
 
-  copy(x, y, s);
+  Copy(x, y, s);
   ::SDL_FreeSurface(s);
 }
 
 void
-Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
+Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
 {
   assert(text != NULL);
 #ifndef UNICODE
@@ -206,12 +206,12 @@ Canvas::text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text)
   if (s->format->palette != NULL && s->format->palette->ncolors >= 2)
     s->format->palette->colors[1] = text_color;
 
-  copy(x, y, s);
+  Copy(x, y, s);
   ::SDL_FreeSurface(s);
 }
 
 static bool
-clip(PixelScalar &position, UPixelScalar &length, UPixelScalar max,
+Clip(PixelScalar &position, UPixelScalar &length, UPixelScalar max,
      PixelScalar &src_position)
 {
   if (position < 0) {
@@ -233,14 +233,14 @@ clip(PixelScalar &position, UPixelScalar &length, UPixelScalar max,
 }
 
 void
-Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
              UPixelScalar dest_width, UPixelScalar dest_height,
              SDL_Surface *src_surface, PixelScalar src_x, PixelScalar src_y)
 {
   assert(src_surface != NULL);
 
-  if (!clip(dest_x, dest_width, width, src_x) ||
-      !clip(dest_y, dest_height, height, src_y))
+  if (!Clip(dest_x, dest_width, width, src_x) ||
+      !Clip(dest_y, dest_height, height, src_y))
     return;
 
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
@@ -251,55 +251,55 @@ Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
 }
 
 void
-Canvas::copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y)
+Canvas::Copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y)
 {
-  copy(0, 0, src.GetWidth(), src.GetHeight(), src, src_x, src_y);
+  Copy(0, 0, src.GetWidth(), src.GetHeight(), src, src_x, src_y);
 }
 
 void
-Canvas::copy(const Canvas &src)
+Canvas::Copy(const Canvas &src)
 {
-  copy(src, 0, 0);
+  Copy(src, 0, 0);
 }
 
 void
-Canvas::copy(PixelScalar dest_x, PixelScalar dest_y,
+Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
              UPixelScalar dest_width, UPixelScalar dest_height,
              const Bitmap &src, PixelScalar src_x, PixelScalar src_y)
 {
-  copy(dest_x, dest_y, dest_width, dest_height,
+  Copy(dest_x, dest_y, dest_width, dest_height,
        src.GetNative(), src_x, src_y);
 }
 
 void
-Canvas::copy(const Bitmap &src)
+Canvas::Copy(const Bitmap &src)
 {
   SDL_Surface *surface = src.GetNative();
-  copy(0, 0, surface->w, surface->h, surface, 0, 0);
+  Copy(0, 0, surface->w, surface->h, surface, 0, 0);
 }
 
 void
-Canvas::copy_transparent_white(const Canvas &src)
+Canvas::CopyTransparentWhite(const Canvas &src)
 {
   assert(src.surface != NULL);
 
   ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(COLOR_WHITE));
-  copy(src);
+  Copy(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
 }
 
 void
-Canvas::copy_transparent_black(const Canvas &src)
+Canvas::CopyTransparentBlack(const Canvas &src)
 {
   assert(src.surface != NULL);
 
   ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(COLOR_BLACK));
-  copy(src);
+  Copy(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
 }
 
 void
-Canvas::stretch_transparent(const Bitmap &src, Color key)
+Canvas::StretchTransparent(const Bitmap &src, Color key)
 {
   assert(src.IsDefined());
 
@@ -313,7 +313,7 @@ Canvas::stretch_transparent(const Bitmap &src, Color key)
 }
 
 void
-Canvas::invert_stretch_transparent(const Bitmap &src, Color key)
+Canvas::InvertStretchTransparent(const Bitmap &src, Color key)
 {
   assert(src.IsDefined());
 
@@ -356,7 +356,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 
   if (dest_width == src_width && dest_height == src_height) {
     /* fast path: no zooming needed */
-    copy(dest_x, dest_y, dest_width, dest_height, src, src_x, src_y);
+    Copy(dest_x, dest_y, dest_width, dest_height, src, src_x, src_y);
     return;
   }
 
@@ -374,7 +374,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
 
   ::SDL_SetColorKey(zoomed, 0, 0);
 
-  copy(dest_x, dest_y, dest_width, dest_height,
+  Copy(dest_x, dest_y, dest_width, dest_height,
        zoomed, (src_x * dest_width) / src_width,
        (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
@@ -453,16 +453,16 @@ Canvas::StretchMono(PixelScalar dest_x, PixelScalar dest_y,
   zoomed->format->palette->colors[0] = text_color;
   zoomed->format->palette->colors[1] = bg_color;
 
-  copy(dest_x, dest_y, dest_width, dest_height,
+  Copy(dest_x, dest_y, dest_width, dest_height,
        zoomed, (src_x * dest_width) / src_width,
        (src_y * dest_height) / src_height);
   ::SDL_FreeSurface(zoomed);
 }
 
 static bool
-clip_range(PixelScalar &a, UPixelScalar a_size,
-           PixelScalar &b, UPixelScalar b_size,
-           UPixelScalar &size)
+ClipRange(PixelScalar &a, UPixelScalar a_size,
+          PixelScalar &b, UPixelScalar b_size,
+          UPixelScalar &size)
 {
   if (a < 0) {
     b -= a;
@@ -500,8 +500,8 @@ blit_not(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* obey the dest and src surface borders */
 
-  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
     return;
 
   ret = ::SDL_LockSurface(dest);
@@ -558,8 +558,8 @@ blit_or(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* obey the dest and src surface borders */
 
-  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
     return;
 
   ret = ::SDL_LockSurface(dest);
@@ -616,8 +616,8 @@ BlitNotOr(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* obey the dest and src surface borders */
 
-  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
     return;
 
   ret = ::SDL_LockSurface(dest);
@@ -679,8 +679,8 @@ blit_and(SDL_Surface *dest, PixelScalar dest_x, PixelScalar dest_y,
 
   /* obey the dest and src surface borders */
 
-  if (!clip_range(dest_x, dest->w, src_x, _src->w, dest_width) ||
-      !clip_range(dest_y, dest->h, src_y, _src->h, dest_height))
+  if (!ClipRange(dest_x, dest->w, src_x, _src->w, dest_width) ||
+      !ClipRange(dest_y, dest->h, src_y, _src->h, dest_height))
     return;
 
   ret = ::SDL_LockSurface(dest);

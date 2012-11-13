@@ -68,6 +68,6 @@ BufferWindow::OnPaint(Canvas &canvas)
     OnPaintBuffer(buffer);
   }
 
-  canvas.copy(buffer);
+  canvas.Copy(buffer);
 #endif
 }

@@ -88,7 +88,7 @@ protected:
    * been filled.  As an optimization, this function returns false if
    * brush and pen share the same color.
    */
-  bool pen_over_brush() const {
+  bool IsPenOverBrush() const {
     return pen.IsDefined() &&
       (brush.IsHollow() || brush.GetColor() != pen.GetColor());
   }
@@ -175,7 +175,7 @@ public:
                  PixelScalar right, PixelScalar bottom) {
     DrawFilledRectangle(left, top, right, bottom, brush);
 
-    if (pen_over_brush())
+    if (IsPenOverBrush())
       DrawOutlineRectangle(left, top, right, bottom);
   }
 
@@ -334,29 +334,30 @@ public:
     return font != NULL ? font->GetHeight() : 0;
   }
 
-  void text(PixelScalar x, PixelScalar y, const TCHAR *text);
-  void text(PixelScalar x, PixelScalar y, const TCHAR *text, size_t length);
+  void DrawText(PixelScalar x, PixelScalar y, const TCHAR *text);
+  void DrawText(PixelScalar x, PixelScalar y,
+                const TCHAR *text, size_t length);
 
-  void text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text);
+  void DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text);
 
-  void text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
-                   const TCHAR *text);
+  void DrawOpaqueText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                      const TCHAR *text);
 
-  void text_clipped(PixelScalar x, PixelScalar y, const PixelRect &rc,
-                    const TCHAR *text) {
+  void DrawClippedText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                       const TCHAR *text) {
     // XXX
 
     if (x < rc.right)
-      text_clipped(x, y, rc.right - x, text);
+      DrawClippedText(x, y, rc.right - x, text);
   }
 
-  void TextClipped(PixelScalar x, PixelScalar y,
-                   UPixelScalar width, UPixelScalar height,
-                   const TCHAR *text);
+  void DrawClippedText(PixelScalar x, PixelScalar y,
+                       UPixelScalar width, UPixelScalar height,
+                       const TCHAR *text);
 
-  void text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
-                    const TCHAR *text) {
-    TextClipped(x, y, width, 16384, text);
+  void DrawClippedText(PixelScalar x, PixelScalar y, UPixelScalar width,
+                       const TCHAR *text) {
+    DrawClippedText(x, y, width, 16384, text);
   }
 
   /**
@@ -364,10 +365,10 @@ public:
    */
   void TextAutoClipped(PixelScalar x, PixelScalar y, const TCHAR *t) {
     if (x < (int)GetWidth() && y < (int)GetHeight())
-      TextClipped(x, y, GetWidth() - x, GetHeight() - y, t);
+      DrawClippedText(x, y, GetWidth() - x, GetHeight() - y, t);
   }
 
-  void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);
+  void DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format);
 
   /**
    * Draws a texture.  The caller is responsible for binding it and
@@ -384,13 +385,13 @@ public:
                const GLTexture &texture);
 
 
-  void copy(PixelScalar dest_x, PixelScalar dest_y,
+  void Copy(PixelScalar dest_x, PixelScalar dest_y,
             UPixelScalar dest_width, UPixelScalar dest_height,
             const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
-  void copy(const Bitmap &src);
+  void Copy(const Bitmap &src);
 
-  void stretch_transparent(const Bitmap &src, Color key);
-  void invert_stretch_transparent(const Bitmap &src, Color key);
+  void StretchTransparent(const Bitmap &src, Color key);
+  void InvertStretchTransparent(const Bitmap &src, Color key);
 
   void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,

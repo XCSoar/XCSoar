@@ -126,7 +126,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   canvas.Select(name_font);
 
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, info_buffer);
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc, info_buffer);
 
 
   TCHAR elevation_buffer[32];
@@ -138,9 +138,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, info_buffer);
+  canvas.DrawClippedText(left,
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, info_buffer);
 }
 
 void
@@ -219,7 +219,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw title row
 
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc, buffer);
 
   // Format comment row
 
@@ -253,9 +253,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw comment row
 
   canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, buffer);
+  canvas.DrawClippedText(left,
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, buffer);
 }
 
 void
@@ -272,16 +272,16 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                      _("Your Position"));
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc,
+                         _("Your Position"));
 
   TCHAR buffer[128];
   FormatGeoPoint(item.location, buffer, 128);
 
   canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, buffer);
+  canvas.DrawClippedText(left,
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, buffer);
 
   RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
                      (PixelScalar)(rc.top + line_height / 2) };
@@ -333,7 +333,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   StaticString<256> buffer;
   buffer.Format(_T("%s #%d"), _("Marker"), item.id + 1);
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc, buffer);
 
   TCHAR time_buffer[32], timespan_buffer[32];
   FormatSignedTimeHHMM(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
@@ -341,9 +341,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   buffer.Format(_("dropped %s ago"), timespan_buffer);
   buffer.AppendFormat(_T(" (%s)"), time_buffer);
   canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, buffer);
+  canvas.DrawClippedText(left,
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, buffer);
 }
 
 #ifdef HAVE_NOAA
@@ -379,7 +379,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
 
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, _("Thermal"));
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+                         rc, _("Thermal"));
 
   StaticString<256> buffer;
   TCHAR lift_buffer[32], time_buffer[32], timespan_buffer[32];
@@ -397,9 +398,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   buffer.AppendFormat(_("left %s ago"), timespan_buffer);
   buffer.AppendFormat(_T(" (%s)"), time_buffer);
   canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, buffer);
+  canvas.DrawClippedText(left,
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, buffer);
 }
 
 void
@@ -429,14 +430,14 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
   OrderedTaskPointRadiusLabel(*item.oz, buffer);
   if (!StringIsEmpty(buffer))
-    canvas.text_clipped(left, top2, rc.right - left, buffer);
+    canvas.DrawClippedText(left, top2, rc.right - left, buffer);
 
   // Draw waypoint name
   canvas.Select(name_font);
   OrderedTaskPointLabel(item.tp_type, waypoint.name.c_str(),
                         item.index, buffer);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2),
-                      rc.right - left, buffer);
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+                         rc.right - left, buffer);
 
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
                      PixelScalar(rc.top + line_height / 2) };
@@ -480,7 +481,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   }
 
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, title_string);
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+                         rc, title_string);
 
   StaticString<256> info_string;
   if (record && !StringIsEmpty(record->plane_type))
@@ -504,9 +506,9 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
     }
   }
   canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, info_string);
+  canvas.DrawClippedText(left,
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, info_string);
 
   RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
                      (PixelScalar)(rc.top + line_height / 2) };

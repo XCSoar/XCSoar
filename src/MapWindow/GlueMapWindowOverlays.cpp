@@ -261,8 +261,9 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);
   x += text_padding_x;
-  canvas.text(x, rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
-              buffer);
+  canvas.DrawText(x,
+                  rc.bottom - Fonts::map_bold.GetAscentHeight() - Layout::Scale(1),
+                  buffer);
 
   x += text_padding_x + text_size.cx;
   look.map_scale_right_icon.Draw(canvas, x, rc.bottom - height);
@@ -311,7 +312,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     canvas.SetBackgroundOpaque();
     canvas.SetBackgroundColor(COLOR_WHITE);
 
-    canvas.text(0, y - canvas.CalcTextSize(buffer).cy, buffer);
+    canvas.DrawText(0, y - canvas.CalcTextSize(buffer).cy, buffer);
   }
 }
 

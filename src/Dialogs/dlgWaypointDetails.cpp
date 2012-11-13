@@ -308,8 +308,9 @@ OnFileListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
-  canvas.text(paint_rc.left + Layout::GetTextPadding(),
-              paint_rc.top + Layout::GetTextPadding(), file->c_str());
+  canvas.DrawText(paint_rc.left + Layout::GetTextPadding(),
+                  paint_rc.top + Layout::GetTextPadding(),
+                  file->c_str());
 }
 #endif
 

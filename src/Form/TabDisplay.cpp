@@ -158,8 +158,7 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
                       bitmap_size.cx / 2, 0);
 
   } else {
-    canvas.formatted_text(&rcTextFinal, caption,
-        CaptionStyle);
+    canvas.DrawFormattedText(&rcTextFinal, caption, CaptionStyle);
   }
 }
 

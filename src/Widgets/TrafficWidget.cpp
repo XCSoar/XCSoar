@@ -289,7 +289,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   // Paint label
   canvas.Select(look.info_labels_font);
   PixelScalar label_width = canvas.CalcTextSize(_("Vario")).cx;
-  canvas.text(rc.right - label_width, rc.top, _("Vario"));
+  canvas.DrawText(rc.right - label_width, rc.top, _("Vario"));
 
   // Format climb rate
   TCHAR buffer[20];
@@ -314,7 +314,9 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
   PixelScalar y = rc.top + look.info_units_font.GetHeight() + max_height;
 
   // Paint value
-  canvas.text(rc.right - unit_width - space_width - value_width, y - value_height, buffer);
+  canvas.DrawText(rc.right - unit_width - space_width - value_width,
+                  y - value_height,
+                  buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
@@ -347,7 +349,7 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
   PixelScalar max_height = max(unit_height, value_height);
 
   // Paint value
-  canvas.text(rc.left, rc.bottom - value_height, buffer);
+  canvas.DrawText(rc.left, rc.bottom - value_height, buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
@@ -357,7 +359,9 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
 
   // Paint label
   canvas.Select(look.info_labels_font);
-  canvas.text(rc.left, rc.bottom - max_height - look.info_labels_font.GetHeight(), _("Distance"));
+  canvas.DrawText(rc.left,
+                  rc.bottom - max_height - look.info_labels_font.GetHeight(),
+                  _("Distance"));
 }
 
 void
@@ -386,7 +390,9 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   PixelScalar max_height = max(unit_height, value_height);
 
   // Paint value
-  canvas.text(rc.right - unit_width - space_width - value_width, rc.bottom - value_height, buffer);
+  canvas.DrawText(rc.right - unit_width - space_width - value_width,
+                  rc.bottom - value_height,
+                  buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
@@ -397,7 +403,9 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
   // Paint label
   canvas.Select(look.info_labels_font);
   PixelScalar label_width = canvas.CalcTextSize(_("Rel. Alt.")).cx;
-  canvas.text(rc.right - label_width, rc.bottom - max_height - look.info_labels_font.GetHeight(), _("Rel. Alt."));
+  canvas.DrawText(rc.right - label_width,
+                  rc.bottom - max_height - look.info_labels_font.GetHeight(),
+                  _("Rel. Alt."));
 }
 
 void
@@ -457,7 +465,7 @@ FlarmTrafficControl::PaintID(Canvas &canvas, PixelRect rc,
     }
   }
 
-  canvas.text(rc.left, rc.top, buffer);
+  canvas.DrawText(rc.left, rc.top, buffer);
 }
 
 /**

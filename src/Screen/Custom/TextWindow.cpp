@@ -46,6 +46,6 @@ TextWindow::OnPaint(Canvas &canvas)
   if (!text.empty()) {
     canvas.SetTextColor(COLOR_BLACK);
     canvas.SetBackgroundTransparent();
-    canvas.text(1, 1, text.c_str());
+    canvas.DrawText(1, 1, text.c_str());
   }
 }

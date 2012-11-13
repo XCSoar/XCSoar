@@ -78,13 +78,13 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text,
   canvas.SetBackgroundTransparent();
 
   canvas.SetTextColor(inverted ? COLOR_BLACK : COLOR_WHITE);
-  canvas.text(x + Layout::SmallScale(1), y, text);
-  canvas.text(x - Layout::SmallScale(1), y, text);
-  canvas.text(x, y + 1, text);
-  canvas.text(x, y - 1, text);
+  canvas.DrawText(x + Layout::SmallScale(1), y, text);
+  canvas.DrawText(x - Layout::SmallScale(1), y, text);
+  canvas.DrawText(x, y + 1, text);
+  canvas.DrawText(x, y - 1, text);
 
   canvas.SetTextColor(inverted ? COLOR_WHITE : COLOR_BLACK);
-  canvas.text(x, y, text);
+  canvas.DrawText(x, y, text);
 }
 
 // returns true if really wrote something
@@ -135,12 +135,12 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
 
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.text(x, y, text);
+    canvas.DrawText(x, y, text);
     canvas.SetBackgroundOpaque();
   } else if (mode.mode == RM_FILLED) {
     canvas.SetBackgroundColor(COLOR_WHITE);
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.text_opaque(x, y, rc, text);
+    canvas.DrawOpaqueText(x, y, rc, text);
   } else if (mode.mode == RM_OUTLINED) {
     RenderShadowedText(canvas, text, x, y, false);
   } else if (mode.mode == RM_OUTLINED_INVERTED) {
@@ -148,7 +148,7 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
   } else {
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
-    canvas.text(x, y, text);
+    canvas.DrawText(x, y, text);
     canvas.SetBackgroundOpaque();
   }
 

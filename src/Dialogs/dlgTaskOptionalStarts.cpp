@@ -146,8 +146,9 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
   const unsigned index_optional_starts = DrawListIndex - (RealStartExists ? 1 : 0);
 
   if (DrawListIndex == GetList().GetLength() - 1) {
-    canvas.text(rc.left + Layout::FastScale(2),
-                rc.top + Layout::FastScale(2), _("(Add Alternate Start)"));
+    canvas.DrawText(rc.left + Layout::FastScale(2),
+                    rc.top + Layout::FastScale(2),
+                    _("(Add Alternate Start)"));
   } else {
     RasterPoint pt = { PixelScalar(rc.left + Layout::FastScale(2)),
                        PixelScalar(rc.top + Layout::FastScale(2)) };
@@ -155,14 +156,14 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     const OrderedTaskPoint *tp;
     if (DrawListIndex == 0 && RealStartExists) {
       tp = &task.GetPoint(0);
-      canvas.text(pt.x, pt.y, _T("*"));
+      canvas.DrawText(pt.x, pt.y, _T("*"));
       pt.x += canvas.CalcTextWidth(_T("*"));
     } else
       tp = &task.GetOptionalStartPoint(index_optional_starts);
 
     assert(tp != NULL);
 
-    canvas.text(pt.x, pt.y, tp->GetWaypoint().name.c_str());
+    canvas.DrawText(pt.x, pt.y, tp->GetWaypoint().name.c_str());
   }
 }
 

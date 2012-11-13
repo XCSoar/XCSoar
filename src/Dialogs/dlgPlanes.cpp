@@ -126,17 +126,17 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
   if (Profile::GetPathIsEqual(_T("PlanePath"), list[i].path)) {
     StaticString<256> buffer;
     buffer.Format(_T("%s - %s"), list[i].name.c_str(), _("Active"));
-    canvas.text_clipped(rc.left + Layout::FastScale(2),
-                        rc.top + Layout::FastScale(2), rc, buffer);
+    canvas.DrawClippedText(rc.left + Layout::FastScale(2),
+                           rc.top + Layout::FastScale(2), rc, buffer);
   } else
-    canvas.text_clipped(rc.left + Layout::FastScale(2),
-                        rc.top + Layout::FastScale(2), rc, list[i].name);
+    canvas.DrawClippedText(rc.left + Layout::FastScale(2),
+                           rc.top + Layout::FastScale(2), rc, list[i].name);
 
   canvas.Select(details_font);
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, list[i].path);
+  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, list[i].path);
 }
 
 static bool

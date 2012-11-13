@@ -87,17 +87,18 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     }
   } else {
     if (computer.warnings.class_warnings[i])
-      canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
-                  _("Warn"));
+      canvas.DrawText(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
+                      _("Warn"));
 
     if (renderer.classes[i].display)
-      canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
-                  _("Display"));
+      canvas.DrawText(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
+                      _("Display"));
   }
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), x0 - Layout::FastScale(10),
-                      AirspaceFormatter::GetClass((AirspaceClass)i));
+  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
+                         rc.top + Layout::FastScale(2),
+                         x0 - Layout::FastScale(10),
+                         AirspaceFormatter::GetClass((AirspaceClass)i));
 }
 
 static void

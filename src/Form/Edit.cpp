@@ -373,10 +373,10 @@ WndProperty::OnPaint(Canvas &canvas)
       org.x = 1;
 
     if (HaveClipping())
-      canvas.text(org.x, org.y, caption.c_str());
+      canvas.DrawText(org.x, org.y, caption.c_str());
     else
-      canvas.text_clipped(org.x, org.y, caption_width - org.x,
-                          caption.c_str());
+      canvas.DrawClippedText(org.x, org.y, caption_width - org.x,
+                             caption.c_str());
   }
 
   Color background_color, text_color;

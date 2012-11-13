@@ -36,6 +36,6 @@ Canvas::ScaleCopy(PixelScalar dest_x, PixelScalar dest_y,
             Layout::Scale(src_width), Layout::Scale(src_height),
             src, src_x, src_y, src_width, src_height);
   else
-    copy(dest_x, dest_y, src_width, src_height,
-            src, src_x, src_y);
+    Copy(dest_x, dest_y, src_width, src_height,
+         src, src_x, src_y);
 }

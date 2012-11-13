@@ -147,7 +147,7 @@ BackgroundRenderer::DrawSpotHeight(Canvas &canvas, LabelBlock &block,
   if (!block.check(block_rect))
     return;
 
-  canvas.text(pt.x, pt.y, buffer);
+  canvas.DrawText(pt.x, pt.y, buffer);
 }
 
 bool

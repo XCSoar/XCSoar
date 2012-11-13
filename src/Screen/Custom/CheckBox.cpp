@@ -196,7 +196,7 @@ CheckBox::OnPaint(Canvas &canvas)
                       ? (HasFocus() ? COLOR_WHITE : COLOR_BLACK)
                       : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
-  canvas.text(canvas.GetHeight() + 2, 2, text.c_str());
+  canvas.DrawText(canvas.GetHeight() + 2, 2, text.c_str());
 }
 
 bool

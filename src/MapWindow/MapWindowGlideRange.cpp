@@ -341,7 +341,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     visitor.fans.DrawFill(buffer);
 
     // Copy everything non-white to the buffer
-    canvas.copy_transparent_white(buffer);
+    canvas.CopyTransparentWhite(buffer);
 
     /* skip the separate terrain line step below, because we have done
        it already */
@@ -425,7 +425,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   visitor.fans.DrawFill(buffer);
 
   // Copy everything non-white to the buffer
-  canvas.copy_transparent_white(buffer);
+  canvas.CopyTransparentWhite(buffer);
 
 #endif
   }

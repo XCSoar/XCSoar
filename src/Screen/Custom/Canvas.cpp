@@ -77,7 +77,8 @@ Canvas::CalcTextSize(const TCHAR *text, size_t length) const
 }
 
 void
-Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
+Canvas::DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format)
+{
   assert(text != NULL);
 #ifndef UNICODE
   assert(ValidateUTF8(text));
@@ -171,7 +172,8 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
 }
 
 void
-Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *_text, size_t length)
+Canvas::DrawText(PixelScalar x, PixelScalar y,
+                 const TCHAR *_text, size_t length)
 {
   assert(_text != NULL);
 
@@ -183,12 +185,12 @@ Canvas::text(PixelScalar x, PixelScalar y, const TCHAR *_text, size_t length)
   assert(ValidateUTF8(copy));
 #endif
 
-  text(x, y, copy);
+  DrawText(x, y, copy);
 }
 
 void
-Canvas::text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
-                    const TCHAR *_text)
+Canvas::DrawOpaqueText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                       const TCHAR *_text)
 {
   assert(_text != NULL);
 #ifndef UNICODE
@@ -196,5 +198,5 @@ Canvas::text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
 #endif
 
   DrawFilledRectangle(rc, background_color);
-  text_transparent(x, y, _text);
+  DrawTransparentText(x, y, _text);
 }

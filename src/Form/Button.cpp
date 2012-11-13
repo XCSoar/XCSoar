@@ -191,12 +191,12 @@ WndButton::OnPaint(Canvas &canvas)
   canvas.Select(*(look.button.font));
 
 #ifndef USE_GDI
-  canvas.formatted_text(&rc, caption.c_str(), GetTextStyle());
+  canvas.DrawFormattedText(&rc, caption.c_str(), GetTextStyle());
 #else
   unsigned style = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
 
   PixelRect text_rc = rc;
-  canvas.formatted_text(&text_rc, caption.c_str(), style | DT_CALCRECT);
+  canvas.DrawFormattedText(&text_rc, caption.c_str(), style | DT_CALCRECT);
   text_rc.right = rc.right;
 
   PixelScalar offset = rc.bottom - text_rc.bottom;
@@ -206,6 +206,6 @@ WndButton::OnPaint(Canvas &canvas)
     text_rc.bottom += offset;
   }
 
-  canvas.formatted_text(&text_rc, caption.c_str(), style);
+  canvas.DrawFormattedText(&text_rc, caption.c_str(), style);
 #endif
 }

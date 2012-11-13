@@ -126,12 +126,12 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   }
 
   UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
-  canvas.text_clipped(left, top2, rc, buffer);
+  canvas.DrawClippedText(left, top2, rc, buffer);
 
   // Draw waypoint name
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                      waypoint.name.c_str());
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc,
+                         waypoint.name.c_str());
 
   // Draw icon
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
@@ -170,15 +170,16 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   if (vector) {
     FormatUserDistanceSmart(vector->distance, buffer.buffer(), true);
     UPixelScalar width = leg_info_width = canvas.CalcTextWidth(buffer.c_str());
-    canvas.text(rc.right - Layout::FastScale(2) - width,
-                rc.top + Layout::FastScale(2) +
-                (name_font.GetHeight() - small_font.GetHeight()) / 2,
-                buffer.c_str());
+    canvas.DrawText(rc.right - Layout::FastScale(2) - width,
+                    rc.top + Layout::FastScale(2) +
+                    (name_font.GetHeight() - small_font.GetHeight()) / 2,
+                    buffer.c_str());
 
     // Draw leg bearing
     FormatBearing(buffer.buffer(), buffer.MAX_SIZE, vector->bearing);
     width = canvas.CalcTextWidth(buffer.c_str());
-    canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer.c_str());
+    canvas.DrawText(rc.right - Layout::FastScale(2) - width, top2,
+                    buffer.c_str());
 
     if (width > leg_info_width)
       leg_info_width = width;
@@ -190,13 +191,14 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   FormatWaypointDetails(buffer, waypoint);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
-  canvas.text_clipped(left, top2, rc.right - leg_info_width - left,
-                      buffer.c_str());
+  canvas.DrawClippedText(left, top2, rc.right - leg_info_width - left,
+                         buffer.c_str());
 
   // Draw waypoint name
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2),
-                      rc.right - leg_info_width - left, waypoint.name.c_str());
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
+                         rc.right - leg_info_width - left,
+                         waypoint.name.c_str());
 
   // Draw icon
   RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),

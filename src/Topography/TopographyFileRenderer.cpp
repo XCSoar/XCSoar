@@ -426,7 +426,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
       if (!label_block.check(brect))
         continue;
 
-      canvas.text(minx, miny, label);
+      canvas.DrawText(minx, miny, label);
     }
   }
 }

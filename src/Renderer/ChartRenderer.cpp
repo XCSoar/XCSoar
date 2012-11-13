@@ -165,7 +165,7 @@ ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 
   PixelSize tsize = canvas.CalcTextSize(text);
   RasterPoint pt = ToScreen(xv, yv);
-  canvas.text(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
+  canvas.DrawText(pt.x - tsize.cx / 2, pt.y - tsize.cy / 2, text);
 }
 
 void
@@ -180,7 +180,7 @@ ChartRenderer::DrawNoData()
   PixelScalar x = (rc.left + rc.right - tsize.cx) / 2;
   PixelScalar y = (rc.top + rc.bottom - tsize.cy) / 2;
 
-  canvas.text(x, y, text);
+  canvas.DrawText(x, y, text);
 }
 
 void
@@ -193,7 +193,7 @@ ChartRenderer::DrawXLabel(const TCHAR *text)
   PixelScalar x = rc.right - tsize.cx - Layout::Scale(3);
   PixelScalar y = rc.bottom - tsize.cy;
 
-  canvas.text(x, y, text);
+  canvas.DrawText(x, y, text);
 }
 
 void
@@ -217,7 +217,7 @@ ChartRenderer::DrawYLabel(const TCHAR *text)
   PixelScalar x = max(PixelScalar(2), PixelScalar(rc.left - tsize.cx));
   PixelScalar y = rc.top;
 
-  canvas.text(x, y, text);
+  canvas.DrawText(x, y, text);
 }
 
 void
@@ -449,7 +449,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.text(xmin, rc.bottom - Layout::Scale(17), unit_text);
+        canvas.DrawText(xmin, rc.bottom - Layout::Scale(17), unit_text);
 
         next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
       }
@@ -469,7 +469,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
-        canvas.text(xmin, rc.bottom - Layout::Scale(17), unit_text);
+        canvas.DrawText(xmin, rc.bottom - Layout::Scale(17), unit_text);
       }
     }
   }
@@ -517,7 +517,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.text(rc.left + Layout::Scale(8), ymin, unit_text);
+        canvas.DrawText(rc.left + Layout::Scale(8), ymin, unit_text);
       }
     }
   }
@@ -534,7 +534,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         TCHAR unit_text[MAX_PATH];
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
-        canvas.text(rc.left + Layout::Scale(8), ymin, unit_text);
+        canvas.DrawText(rc.left + Layout::Scale(8), ymin, unit_text);
       }
     }
   }

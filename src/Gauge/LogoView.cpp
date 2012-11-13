@@ -95,10 +95,10 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   // Draw 'XCSoar N.N' title
   if (orientation != SQUARE)
-    canvas.copy(titlex, titley, title_size.cx, title_size.cy, bitmap_title, 0, 0);
+    canvas.Copy(titlex, titley, title_size.cx, title_size.cy, bitmap_title, 0, 0);
 
   // Draw XCSoar swift logo
-  canvas.copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo, 0, 0);
+  canvas.Copy(logox, logoy, logo_size.cx, logo_size.cy, bitmap_logo, 0, 0);
 
   // Draw full XCSoar version number
 
@@ -108,9 +108,9 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();
-  canvas.text(2, 2, XCSoar_ProductToken);
+  canvas.DrawText(2, 2, XCSoar_ProductToken);
 #ifdef NO_HORIZON
   const int text_height = canvas.CalcTextSize(XCSoar_ProductToken).cy;
-  canvas.text(2, 4 + text_height, _T("Horizon: disabled"));
+  canvas.DrawText(2, 4 + text_height, _T("Horizon: disabled"));
 #endif
 }

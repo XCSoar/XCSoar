@@ -108,6 +108,6 @@ DoubleBufferWindow::OnPaint(Canvas &canvas)
 
 #else
   ScopeLock protect(mutex);
-  canvas.copy(get_visible_canvas());
+  canvas.Copy(get_visible_canvas());
 #endif
 }

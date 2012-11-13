@@ -77,8 +77,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   else
     tmp.Format(_T("%s"), tmp_id);
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc, tmp);
+  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
+                         rc.top + Layout::FastScale(2), rc, tmp);
 
   canvas.Select(small_font);
 
@@ -105,9 +105,9 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   if (tmp.empty())
     tmp = _("No further information");
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, tmp);
+  canvas.DrawClippedText(rc.left + Layout::FastScale(2),
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, tmp);
 }
 
 FlarmId

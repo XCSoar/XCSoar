@@ -177,10 +177,10 @@ private:
     }
 
     canvas.SetTextColor(Color(0, 0, 128));
-    canvas.text(5, 5, label);
+    canvas.DrawText(5, 5, label);
 #ifndef ENABLE_OPENGL
-    canvas.text(5, 25,
-                buffered ? _T("buffered") : _T("not buffered"));
+    canvas.DrawText(5, 25,
+                    buffered ? _T("buffered") : _T("not buffered"));
 #endif
   }
 
@@ -237,7 +237,7 @@ protected:
       paint(canvas);
 #ifndef ENABLE_OPENGL
     } else
-      canvas.copy(buffer);
+      canvas.Copy(buffer);
 #endif
 
     SingleWindow::OnPaint(canvas);

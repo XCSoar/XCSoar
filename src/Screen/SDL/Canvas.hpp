@@ -98,7 +98,7 @@ protected:
    * been filled.  As an optimization, this function returns false if
    * brush and pen share the same color.
    */
-  bool pen_over_brush() const {
+  bool IsPenOverBrush() const {
     return pen.IsDefined() &&
       (brush.IsHollow() || brush.GetColor() != pen.GetColor());
   }
@@ -199,7 +199,7 @@ public:
                  PixelScalar right, PixelScalar bottom) {
     DrawFilledRectangle(left, top, right, bottom, brush);
 
-    if (pen_over_brush())
+    if (IsPenOverBrush())
       DrawOutlineRectangle(left, top, right, bottom, pen.GetColor());
   }
 
@@ -385,63 +385,64 @@ public:
     return font != NULL ? font->GetHeight() : 0;
   }
 
-  void text(PixelScalar x, PixelScalar y, const TCHAR *text);
-  void text(PixelScalar x, PixelScalar y, const TCHAR *text, size_t length);
+  void DrawText(PixelScalar x, PixelScalar y, const TCHAR *text);
+  void DrawText(PixelScalar x, PixelScalar y,
+                const TCHAR *text, size_t length);
 
-  void text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text);
+  void DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text);
 
-  void text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
-                   const TCHAR *text);
+  void DrawOpaqueText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                      const TCHAR *text);
 
-  void text_clipped(PixelScalar x, PixelScalar y, const PixelRect &rc,
-                    const TCHAR *text) {
+  void DrawClippedText(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                       const TCHAR *text) {
     // XXX
-    this->text(x, y, text);
+    DrawText(x, y, text);
   }
 
-  void text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
-                    const TCHAR *text) {
+  void DrawClippedText(PixelScalar x, PixelScalar y, UPixelScalar width,
+                       const TCHAR *text) {
     // XXX
-    this->text(x, y, text);
+    DrawText(x, y, text);
   }
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
   void TextAutoClipped(PixelScalar x, PixelScalar y, const TCHAR *t) {
-    text(x, y, t);
+    DrawText(x, y, t);
   }
 
-  void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);
+  void DrawFormattedText(PixelRect *rc, const TCHAR *text, unsigned format);
 
-  void copy(PixelScalar dest_x, PixelScalar dest_y,
+  void Copy(PixelScalar dest_x, PixelScalar dest_y,
             UPixelScalar dest_width, UPixelScalar dest_height,
             SDL_Surface *surface, PixelScalar src_x, PixelScalar src_y);
 
-  void copy(PixelScalar dest_x, PixelScalar dest_y, SDL_Surface *surface) {
-    copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
+  void Copy(PixelScalar dest_x, PixelScalar dest_y, SDL_Surface *surface) {
+    Copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
   }
 
-  void copy(PixelScalar dest_x, PixelScalar dest_y,
+  void Copy(PixelScalar dest_x, PixelScalar dest_y,
             UPixelScalar dest_width, UPixelScalar dest_height,
             const Canvas &src, PixelScalar src_x, PixelScalar src_y) {
-    copy(dest_x, dest_y, dest_width, dest_height,
+    Copy(dest_x, dest_y, dest_width, dest_height,
          src.surface, src_x, src_y);
   }
 
-  void copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y);
-  void copy(const Canvas &src);
+  void Copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y);
+  void Copy(const Canvas &src);
 
-  void copy(PixelScalar dest_x, PixelScalar dest_y,
+  void Copy(PixelScalar dest_x, PixelScalar dest_y,
             UPixelScalar dest_width, UPixelScalar dest_height,
             const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
-  void copy(const Bitmap &src);
+  void Copy(const Bitmap &src);
 
-  void copy_transparent_white(const Canvas &src);
-  void copy_transparent_black(const Canvas &src);
+  void CopyTransparentWhite(const Canvas &src);
+  void CopyTransparentBlack(const Canvas &src);
 
-  void stretch_transparent(const Bitmap &src, Color key);
-  void invert_stretch_transparent(const Bitmap &src, Color key);
+  void StretchTransparent(const Bitmap &src, Color key);
+  void InvertStretchTransparent(const Bitmap &src, Color key);
 
   void Stretch(PixelScalar dest_x, PixelScalar dest_y,
                UPixelScalar dest_width, UPixelScalar dest_height,

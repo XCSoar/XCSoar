@@ -431,7 +431,7 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const UPixelScalar margin = Layout::GetTextPadding();
 
-  canvas.text(rc.left + margin, rc.top + margin, file.name.c_str());
+  canvas.DrawText(rc.left + margin, rc.top + margin, file.name.c_str());
 
   if (file.downloading) {
     StaticString<64> text;
@@ -448,18 +448,18 @@ ManagedFileListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     }
 
     UPixelScalar width = canvas.CalcTextWidth(text);
-    canvas.text(rc.right - width - margin, rc.top + margin, text);
+    canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
   } else if (file.failed) {
     const TCHAR *text = _("Error");
     UPixelScalar width = canvas.CalcTextWidth(text);
-    canvas.text(rc.right - width - margin, rc.top + margin, text);
+    canvas.DrawText(rc.right - width - margin, rc.top + margin, text);
   }
 
-  canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
-              file.size.c_str());
+  canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
+                  file.size.c_str());
 
-  canvas.text((rc.left + rc.right) / 2, rc.top + 2 * margin + font_height,
-              file.last_modified.c_str());
+  canvas.DrawText((rc.left + rc.right) / 2, rc.top + 2 * margin + font_height,
+                  file.last_modified.c_str());
 }
 
 void
@@ -508,8 +508,8 @@ OnPaintAddItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   ACPToWideConverter name(file.GetName());
   if (name.IsValid())
-    canvas.text(rc.left + Layout::GetTextPadding(),
-                rc.top + Layout::GetTextPadding(), name);
+    canvas.DrawText(rc.left + Layout::GetTextPadding(),
+                    rc.top + Layout::GetTextPadding(), name);
 }
 
 #endif

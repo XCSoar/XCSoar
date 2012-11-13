@@ -375,12 +375,13 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
 
     if (is_persistent()) {
       canvas.SetBackgroundColor(look.background_color);
-      canvas.text_opaque(diLabel->text_position.x, diLabel->text_position.y,
-                         diLabel->rc, Label);
+      canvas.DrawOpaqueText(diLabel->text_position.x, diLabel->text_position.y,
+                            diLabel->rc, Label);
       diLabel->rc.left = diLabel->text_position.x;
       _tcscpy(diLabel->last_text, Label);
     } else {
-      canvas.text(diLabel->text_position.x, diLabel->text_position.y, Label);
+      canvas.DrawText(diLabel->text_position.x, diLabel->text_position.y,
+                      Label);
     }
   }
 
@@ -394,15 +395,15 @@ GaugeVario::RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
     value_info->text_position.x = value_info->rc.right - tsize.cx;
 
     if (is_persistent()) {
-      canvas.text_opaque(value_info->text_position.x,
-                         value_info->text_position.y,
-                         value_info->rc, buffer);
+      canvas.DrawOpaqueText(value_info->text_position.x,
+                            value_info->text_position.y,
+                            value_info->rc, buffer);
 
       value_info->rc.left = value_info->text_position.x;
       value_info->last_value = Value;
     } else {
-      canvas.text(value_info->text_position.x, value_info->text_position.y,
-                  buffer);
+      canvas.DrawText(value_info->text_position.x, value_info->text_position.y,
+                      buffer);
     }
   }
 
@@ -611,9 +612,9 @@ GaugeVario::RenderBallast(Canvas &canvas)
         canvas.SetTextColor(look.dimmed_text_color);
         // ols ballast was 0, show label
         if (is_persistent())
-          canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
+          canvas.DrawOpaqueText(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
         else
-          canvas.text(orgLabel.x, orgLabel.y, TextBal);
+          canvas.DrawText(orgLabel.x, orgLabel.y, TextBal);
       } else if (is_persistent())
         canvas.DrawFilledRectangle(recLabelBk, look.background_color);
     }
@@ -625,9 +626,9 @@ GaugeVario::RenderBallast(Canvas &canvas)
       canvas.SetTextColor(look.text_color);
 
       if (is_persistent())
-        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, buffer);
+        canvas.DrawOpaqueText(orgValue.x, orgValue.y, recValueBk, buffer);
       else
-        canvas.text(orgValue.x, orgValue.y, buffer);
+        canvas.DrawText(orgValue.x, orgValue.y, buffer);
     } else if (is_persistent())
       canvas.DrawFilledRectangle(recValueBk, look.background_color);
 
@@ -699,9 +700,9 @@ GaugeVario::RenderBugs(Canvas &canvas)
       if (bugs > 0) {
         canvas.SetTextColor(look.dimmed_text_color);
         if (is_persistent())
-          canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
+          canvas.DrawOpaqueText(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
         else
-          canvas.text(orgLabel.x, orgLabel.y, TextBug);
+          canvas.DrawText(orgLabel.x, orgLabel.y, TextBug);
       } else if (is_persistent())
         canvas.DrawFilledRectangle(recLabelBk, look.background_color);
     }
@@ -711,9 +712,9 @@ GaugeVario::RenderBugs(Canvas &canvas)
       _stprintf(buffer, _T("%d%%"), bugs);
       canvas.SetTextColor(look.text_color);
       if (is_persistent())
-        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, buffer);
+        canvas.DrawOpaqueText(orgValue.x, orgValue.y, recValueBk, buffer);
       else 
-        canvas.text(orgValue.x, orgValue.y, buffer);
+        canvas.DrawText(orgValue.x, orgValue.y, buffer);
     } else if (is_persistent())
       canvas.DrawFilledRectangle(recValueBk, look.background_color);
 

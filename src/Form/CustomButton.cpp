@@ -61,10 +61,10 @@ WndCustomButton::OnPaint(Canvas &canvas)
   canvas.SelectNullPen();
   canvas.SetBackgroundTransparent();
 #ifndef USE_GDI
-  canvas.formatted_text(&rc, caption.c_str(), GetTextStyle());
+  canvas.DrawFormattedText(&rc, caption.c_str(), GetTextStyle());
 #else
   unsigned s = DT_CENTER | DT_NOCLIP | DT_WORDBREAK;
   canvas.Select(*(look.button.font));
-  canvas.formatted_text(&rc, caption.c_str(), s);
+  canvas.DrawFormattedText(&rc, caption.c_str(), s);
 #endif
 }

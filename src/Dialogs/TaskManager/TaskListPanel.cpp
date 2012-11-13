@@ -132,8 +132,8 @@ TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   const TCHAR *name = task_store->GetName(DrawListIndex);
 
-  canvas.text(rc.left + Layout::FastScale(2),
-              rc.top + Layout::FastScale(2), name);
+  canvas.DrawText(rc.left + Layout::FastScale(2),
+                  rc.top + Layout::FastScale(2), name);
 }
 
 void

@@ -79,8 +79,9 @@ OnPointPaintListItem(Canvas &canvas, const PixelRect rc,
   else
     buffer.Format(_T(" %s"), text);
 
-  canvas.text(rc.left + Layout::FastScale(2),
-              rc.top + Layout::FastScale(2), buffer);
+  canvas.DrawText(rc.left + Layout::FastScale(2),
+                  rc.top + Layout::FastScale(2),
+                  buffer);
 }
 
 /**

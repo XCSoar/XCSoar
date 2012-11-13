@@ -174,7 +174,7 @@ ButtonWindow::OnPaint(Canvas &canvas)
 
   canvas.SetTextColor(IsEnabled() ? COLOR_BLACK : COLOR_GRAY);
   canvas.SetBackgroundTransparent();
-  canvas.formatted_text(&rc, text.c_str(), GetTextStyle());
+  canvas.DrawFormattedText(&rc, text.c_str(), GetTextStyle());
 }
 
 bool

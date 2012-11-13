@@ -147,13 +147,15 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) c
   TCHAR lift_string[10];
   FormatUserVerticalSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
   PixelSize s = canvas.CalcTextSize(lift_string);
-  canvas.text(mid.x - s.cx / 2,
-              mid.y + radius - s.cy * 0.75, lift_string);
+  canvas.DrawText(mid.x - s.cx / 2,
+                  mid.y + radius - s.cy * 0.75,
+                  lift_string);
 
   FormatUserVerticalSpeed(fixed_zero, lift_string, ARRAY_SIZE(lift_string));
   s = canvas.CalcTextSize(lift_string);
-  canvas.text(mid.x - s.cx / 2,
-              mid.y + radius / 2 - s.cy * 0.75, lift_string);
+  canvas.DrawText(mid.x - s.cx / 2,
+                  mid.y + radius / 2 - s.cy * 0.75,
+                  lift_string);
 
   canvas.SetBackgroundTransparent();
 }
@@ -190,7 +192,7 @@ ThermalAssistantRenderer::PaintNotCircling(Canvas &canvas) const
   canvas.Select(look.overlay_font);
   PixelSize ts = canvas.CalcTextSize(str);
   canvas.SetTextColor(look.text_color);
-  canvas.text(mid.x - (ts.cx / 2), mid.y - (radius / 2), str);
+  canvas.DrawText(mid.x - (ts.cx / 2), mid.y - (radius / 2), str);
 }
 
 void

@@ -60,8 +60,8 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
       station.parsed_metar.name_available)
     title.AppendFormat(_T(": %s"), station.parsed_metar.name.c_str());
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2) + padding_left,
-                      rc.top + Layout::FastScale(2), rc, title);
+  canvas.DrawClippedText(rc.left + Layout::FastScale(2) + padding_left,
+                         rc.top + Layout::FastScale(2), rc, title);
 
   canvas.Select(details_font);
 
@@ -71,9 +71,9 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   else
     tmp = station.metar.content.c_str();
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2) + padding_left,
-                      rc.top + code_font.GetHeight() + Layout::FastScale(4),
-                      rc, tmp);
+  canvas.DrawClippedText(rc.left + Layout::FastScale(2) + padding_left,
+                         rc.top + code_font.GetHeight() + Layout::FastScale(4),
+                         rc, tmp);
 }
 
 void

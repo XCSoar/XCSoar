@@ -64,29 +64,29 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.Select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                      airspace.GetName());
+  canvas.DrawClippedText(left, rc.top + Layout::FastScale(2), rc,
+                         airspace.GetName());
 
   canvas.Select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, comment);
+  canvas.DrawClippedText(left,
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, comment);
 
   TCHAR buffer[40];
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetTop());
   PixelScalar altitude_width =
     canvas.CalcTextWidth(buffer);
-  canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.GetHeight() -
-                      small_font.GetHeight() + Layout::FastScale(2), rc,
-                      buffer);
+  canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() -
+                         small_font.GetHeight() + Layout::FastScale(2), rc,
+                         buffer);
 
   AirspaceFormatter::FormatAltitudeShort(buffer, airspace.GetBase());
   altitude_width = canvas.CalcTextWidth(buffer);
 
-  canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.GetHeight() + Layout::FastScale(4),
-                      rc, buffer);
+  canvas.DrawClippedText(rc.right - altitude_width - Layout::FastScale(4),
+                         rc.top + name_font.GetHeight() + Layout::FastScale(4),
+                         rc, buffer);
 
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
                      PixelScalar(rc.top + line_height / 2) };

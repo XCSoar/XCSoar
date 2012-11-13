@@ -190,7 +190,7 @@ paint_oz_type_name(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   assert(idx < NUM_OZ_TYPES);
 
-  canvas.text(rc.left + 2, rc.top + 2, oz_type_names[idx]);
+  canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
 }
 
 static OZWindow *oz_window;

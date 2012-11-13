@@ -286,7 +286,7 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     text.append(port_name);
   }
 
-  canvas.text(rc.left + margin, rc.top + margin, text);
+  canvas.DrawText(rc.left + margin, rc.top + margin, text);
 
   /* show a list of features that are available in the second row */
 
@@ -333,8 +333,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     status = _("Not connected");
   }
 
-  canvas.text(rc.left + margin, rc.top + 2 * margin + font_height,
-              status);
+  canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
+                  status);
 }
 
 void
