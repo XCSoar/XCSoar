@@ -235,8 +235,8 @@ TextCache::Get(const Font *font, const char *text)
 
   RenderedText rt(texture_id, size.cx, size.cy);
 #else
-  const Color background_color = COLOR_BLACK;
-  const Color text_color = COLOR_WHITE;
+  static constexpr SDL_Color background_color { 0, 0, 0, 0 };
+  static constexpr SDL_Color text_color = { 0xff, 0xff, 0xff, 0 };
   SDL_Surface *surface = ::TTF_RenderUTF8_Shaded(font->Native(), text,
                                                  text_color, background_color);
   if (surface == NULL)

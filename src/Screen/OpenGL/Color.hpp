@@ -27,9 +27,7 @@ Copyright_License {
 #include "Features.hpp"
 #include "System.hpp"
 
-#ifdef ENABLE_SDL
-#include <SDL_video.h> // for SDL_Color
-#endif
+#include <stdint.h>
 
 /**
  * This class represents a color in the RGB color space.  This is used
@@ -98,23 +96,6 @@ struct Color {
     return b;
 #endif
   }
-
-#ifdef ENABLE_SDL
-  /**
-   * Convert this object to a SDL_Color.
-   *
-   * This function must be removed as soon as we have a pure OpenGL
-   * renderer (without libSDL).
-   */
-  operator SDL_Color() const {
-    SDL_Color color;
-    color.r = Red();
-    color.g = Green();
-    color.b = Blue();
-    color.unused = SDL_ALPHA_OPAQUE;
-    return color;
-  }
-#endif
 
   constexpr
   Color
