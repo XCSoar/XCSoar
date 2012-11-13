@@ -59,6 +59,12 @@ final class BitmapUtil {
       unpackAlignment = 2;
       break;
 
+    case ALPHA_8:
+      internalFormat = format = GL_LUMINANCE;
+      type = GL_UNSIGNED_BYTE;
+      unpackAlignment = 1;
+      break;
+
     default:
       return false;
     }
