@@ -65,23 +65,25 @@ protected:
   virtual const Brush *on_color(Window &window, Canvas &canvas);
 
 #ifndef USE_GDI
-  virtual void OnDestroy();
-  virtual bool OnCancelMode();
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
+  virtual void OnDestroy() gcc_override;
+  virtual bool OnCancelMode() gcc_override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) gcc_override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y,
+                            int delta) gcc_override;
 
 #ifdef HAVE_MULTI_TOUCH
-  virtual bool OnMultiTouchDown();
-  virtual bool OnMultiTouchUp();
+  virtual bool OnMultiTouchDown() gcc_override;
+  virtual bool OnMultiTouchUp() gcc_override;
 #endif
 
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 #else /* USE_GDI */
   virtual LRESULT OnMessage(HWND hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
+                             WPARAM wParam, LPARAM lParam) gcc_override;
 #endif
 
 public:
@@ -126,22 +128,22 @@ public:
   Window *EventChildAt(PixelScalar x, PixelScalar y);
 
   void SetActiveChild(Window &child);
-  virtual void SetFocus();
-  virtual void ClearFocus();
+  virtual void SetFocus() gcc_override;
+  virtual void ClearFocus() gcc_override;
 
   /**
    * Override the Window::GetFocusedWindow() method, and search in
    * the active child window.
    */
   gcc_pure
-  virtual Window *GetFocusedWindow();
+  virtual Window *GetFocusedWindow() gcc_override;
 
   gcc_pure
   WindowReference GetFocusedWindowReference();
 
   void SetChildCapture(Window *window);
   void ReleaseChildCapture(Window *window);
-  virtual void ClearCapture();
+  virtual void ClearCapture() gcc_override;
 
 protected:
   gcc_pure

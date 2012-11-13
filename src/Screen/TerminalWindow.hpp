@@ -52,10 +52,10 @@ private:
   void Advance();
 
 protected:
-  virtual void OnCreate();
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnPaint(Canvas &canvas);
-  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty);
+  virtual void OnCreate() gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) gcc_override;
 };
 
 #endif

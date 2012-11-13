@@ -244,7 +244,7 @@ public:
   void Fullscreen();
 
 #ifndef USE_GDI
-  virtual void Invalidate();
+  virtual void Invalidate() gcc_override;
 
 protected:
   void Expose();
@@ -313,11 +313,11 @@ protected:
 
 #ifdef USE_GDI
   virtual LRESULT OnMessage(HWND _hWnd, UINT message,
-                             WPARAM wParam, LPARAM lParam);
+                             WPARAM wParam, LPARAM lParam) gcc_override;
 #endif
 
 #ifndef USE_GDI
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
 #endif
 
 #ifdef ANDROID

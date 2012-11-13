@@ -91,8 +91,8 @@ public:
 #endif
 
 protected:
-  virtual bool OnClose();
-  virtual void OnDestroy();
+  virtual bool OnClose() gcc_override;
+  virtual void OnDestroy() gcc_override;
 };
 
 #endif

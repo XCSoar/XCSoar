@@ -113,10 +113,10 @@ public:
 
 #ifndef USE_GDI
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnPaint(Canvas &canvas);
-  virtual bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
 #endif /* !USE_GDI */
 };
 

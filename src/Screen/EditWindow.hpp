@@ -155,7 +155,7 @@ public:
 
 #ifndef USE_GDI
 protected:
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 #endif /* !USE_GDI */
 };
 

@@ -218,8 +218,8 @@ public:
 #ifdef ENABLE_OPENGL
 private:
   /* from GLSurfaceListener */
-  virtual void surface_created();
-  virtual void surface_destroyed();
+  virtual void surface_created() gcc_override;
+  virtual void surface_destroyed() gcc_override;
 #endif
 };
 
