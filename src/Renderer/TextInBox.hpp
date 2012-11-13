@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 
 #include "Screen/Point.hpp"
+#include "LabelShape.hpp"
 
 #include <tchar.h>
 
@@ -43,24 +44,15 @@ enum VerticalPosition {
   BELOW,
 };
 
-enum RenderMode {
-  RM_SIMPLE,
-  RM_FILLED,
-  RM_OUTLINED,
-  RM_OUTLINED_INVERTED,
-  RM_ROUNDED_WHITE,
-  RM_ROUNDED_BLACK,
-};
-
 struct TextInBoxMode {
-  RenderMode mode;
+  LabelShape shape;
   TextAlign align;
   VerticalPosition vertical_position;
   bool bold;
   bool move_in_view;
 
   constexpr TextInBoxMode()
-    :mode(RM_SIMPLE), align(A_LEFT),
+    :shape(LabelShape::SIMPLE), align(A_LEFT),
      vertical_position(VerticalPosition::BELOW),
      bold(false), move_in_view(false) {}
 };

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_RENDERER_SETTINGS_HPP
 #define XCSOAR_WAYPOINT_RENDERER_SETTINGS_HPP
 
-#include "TextInBox.hpp"
+#include "LabelShape.hpp"
 
 #include <stdint.h>
 
@@ -59,7 +59,7 @@ struct WaypointRendererSettings {
   } label_selection;
 
   /** What type of waypoint labels to render */
-  RenderMode landable_render_mode;
+  LabelShape landable_render_mode;
 
   enum class LandableStyle : uint8_t {
     PURPLE_CIRCLE,
@@ -77,7 +77,7 @@ struct WaypointRendererSettings {
     display_text_type = DisplayTextType::FIRST_FIVE;
     arrival_height_display = ArrivalHeightDisplay::GLIDE;
     label_selection = LabelSelection::ALL;
-    landable_render_mode = RM_ROUNDED_BLACK;
+    landable_render_mode = LabelShape::ROUNDED_BLACK;
 
     landable_style = LandableStyle::PURPLE_CIRCLE;
     vector_landable_rendering = true;

@@ -129,12 +129,13 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
 
   const TCHAR *wp_label_help = N_("Select a label shape.");
   static const StaticEnumChoice wp_label_list[] = {
-    { RM_ROUNDED_BLACK, N_("Rounded rectangle"), wp_label_help },
-    { RM_OUTLINED_INVERTED, N_("Outlined"), wp_label_help },
+    { (unsigned)LabelShape::ROUNDED_BLACK, N_("Rounded rectangle"), wp_label_help },
+    { (unsigned)LabelShape::OUTLINED_INVERTED, N_("Outlined"), wp_label_help },
     { 0 }
   };
 
-  AddEnum(_("Label style"), NULL, wp_label_list, settings.landable_render_mode);
+  AddEnum(_("Label style"), NULL, wp_label_list,
+          (unsigned)settings.landable_render_mode);
   SetExpertRow(WaypointLabelStyle);
 
   static constexpr StaticEnumChoice wp_selection_list[] = {

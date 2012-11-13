@@ -123,8 +123,9 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
   if (label_block != NULL && !label_block->check(rc))
     return false;
 
-  if (mode.mode == RM_ROUNDED_BLACK || mode.mode == RM_ROUNDED_WHITE) {
-    if (mode.mode == RM_ROUNDED_BLACK)
+  if (mode.shape == LabelShape::ROUNDED_BLACK ||
+      mode.shape == LabelShape::ROUNDED_WHITE) {
+    if (mode.shape == LabelShape::ROUNDED_BLACK)
       canvas.SelectBlackPen();
     else
       canvas.SelectWhitePen();
@@ -136,13 +137,13 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
     canvas.DrawText(x, y, text);
-  } else if (mode.mode == RM_FILLED) {
+  } else if (mode.shape == LabelShape::FILLED) {
     canvas.SetBackgroundColor(COLOR_WHITE);
     canvas.SetTextColor(COLOR_BLACK);
     canvas.DrawOpaqueText(x, y, rc, text);
-  } else if (mode.mode == RM_OUTLINED) {
+  } else if (mode.shape == LabelShape::OUTLINED) {
     RenderShadowedText(canvas, text, x, y, false);
-  } else if (mode.mode == RM_OUTLINED_INVERTED) {
+  } else if (mode.shape == LabelShape::OUTLINED_INVERTED) {
     RenderShadowedText(canvas, text, x, y, true);
   } else {
     canvas.SetBackgroundTransparent();

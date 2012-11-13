@@ -87,7 +87,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   GeoPoint location = render_projection.GetGeoLocation();
 
   TextInBoxMode mode;
-  mode.mode = RenderMode::RM_OUTLINED_INVERTED;
+  mode.shape = LabelShape::OUTLINED_INVERTED;
   mode.bold = true;
   mode.align = A_RIGHT;
 
@@ -161,7 +161,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   y = rc.bottom - Layout::FastScale(34);
 
   TextInBoxMode mode;
-  mode.mode = RM_ROUNDED_BLACK;
+  mode.shape = LabelShape::ROUNDED_BLACK;
   mode.bold = true;
 
   TextInBox(canvas, txt, x, y, mode, rc, NULL);

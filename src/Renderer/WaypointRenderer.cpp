@@ -312,14 +312,14 @@ protected:
     TextInBoxMode text_mode;
     if (vwp.reachable != WaypointRenderer::Unreachable &&
         way_point.IsLandable()) {
-      text_mode.mode = settings.landable_render_mode;
+      text_mode.shape = settings.landable_render_mode;
       text_mode.bold = true;
       text_mode.move_in_view = true;
     } else if (vwp.in_task) {
-      text_mode.mode = RM_OUTLINED_INVERTED;
+      text_mode.shape = LabelShape::OUTLINED_INVERTED;
       text_mode.bold = true;
     } else if (watchedWaypoint) {
-      text_mode.mode = RM_OUTLINED;
+      text_mode.shape = LabelShape::OUTLINED;
       text_mode.bold = false;
       text_mode.move_in_view = true;
     }
