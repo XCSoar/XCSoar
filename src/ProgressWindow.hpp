@@ -67,7 +67,8 @@ public:
 protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
   virtual void OnPaint(Canvas &canvas) gcc_override;
-  virtual const Brush *on_color(Window &window, Canvas &canvas) gcc_override;
+  virtual const Brush *OnChildColor(Window &window,
+                                    Canvas &canvas) gcc_override;
 };
 
 #endif

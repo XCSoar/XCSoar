@@ -24,7 +24,7 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 
 const Brush *
-ContainerWindow::on_color(Window &window, Canvas &canvas)
+ContainerWindow::OnChildColor(Window &window, Canvas &canvas)
 {
   return NULL;
 }

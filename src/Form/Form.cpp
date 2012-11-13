@@ -58,7 +58,7 @@ Copyright_License {
 #endif
 
 const Brush *
-WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
+WndForm::ClientAreaWindow::OnChildColor(Window &window, Canvas &canvas)
 {
 #ifdef _WIN32_WCE
   if ((window.GetStyle() & 0xf) == BS_PUSHBUTTON)
@@ -66,7 +66,7 @@ WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
        while desktop Windows does not; to make push buttons retain
        their normal background color, we're implementing this
        exception */
-    return ContainerWindow::on_color(window, canvas);
+    return ContainerWindow::OnChildColor(window, canvas);
 #endif
 
   canvas.SetTextColor(COLOR_BLACK);

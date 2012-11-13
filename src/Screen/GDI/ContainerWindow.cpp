@@ -86,7 +86,7 @@ ContainerWindow::OnMessage(HWND hWnd, UINT message,
         break;
 
       Canvas canvas((HDC)wParam, 1, 1);
-      const Brush *brush = on_color(*window, canvas);
+      const Brush *brush = OnChildColor(*window, canvas);
       if (brush == NULL)
         break;
 

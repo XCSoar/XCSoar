@@ -62,7 +62,7 @@ public:
 #endif /* !USE_GDI */
 
 protected:
-  virtual const Brush *on_color(Window &window, Canvas &canvas);
+  virtual const Brush *OnChildColor(Window &window, Canvas &canvas);
 
 #ifndef USE_GDI
   virtual void OnDestroy() gcc_override;
