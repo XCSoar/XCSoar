@@ -41,31 +41,33 @@ final class BitmapUtil {
    * Initialize the current texture and load the specified Bitmap into
    * it.
    */
-  private static void loadTexture(Bitmap bmp) {
+  private static boolean loadTexture(Bitmap bmp) {
+    int internalFormat, format, type;
+
+    switch (bmp.getConfig()) {
+    case ARGB_4444:
+    case ARGB_8888:
+      internalFormat = format = GL_RGBA;
+      type = GL_UNSIGNED_BYTE;
+      break;
+
+    case RGB_565:
+      internalFormat = format = GL_RGB;
+      type = GL_UNSIGNED_SHORT_5_6_5;
+      break;
+
+    default:
+      return false;
+    }
+
     /* create an empty texture, and load the Bitmap into it */
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat,
                  validateTextureSize(bmp.getWidth()),
                  validateTextureSize(bmp.getHeight()),
-                 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
-    GLUtils.texSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bmp);
-    if (glGetError() != GL_INVALID_OPERATION)
-      /* success */
-      return;
-
-    /* the above fails on the Samsung Galaxy Tab; the following has
-       been verified to work */
-
-    Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
-    if (tmp == null)
-      return;
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-                 validateTextureSize(bmp.getWidth()),
-                 validateTextureSize(bmp.getHeight()),
-                 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, null);
-    GLUtils.texSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tmp);
-    tmp.recycle();
+                 0, format, type, null);
+    GLUtils.texSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bmp, format, type);
+    return true;
   }
 
   /**
@@ -107,7 +109,10 @@ final class BitmapUtil {
                     GL_NEAREST);
 
     try {
-      loadTexture(bmp);
+      if (!loadTexture(bmp)) {
+        glDeleteTextures(1, result, 0);
+        return false;
+      }
     } catch (Exception e) {
       glDeleteTextures(1, result, 0);
       Log.e(TAG, "GLUtils error: " + e);
