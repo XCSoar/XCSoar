@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <assert.h>
 
-const ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
+static constexpr ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
   {
     {0,           0x70, 0xc0, 0xa7},
     {250,         0xca, 0xe7, 0xb9},
