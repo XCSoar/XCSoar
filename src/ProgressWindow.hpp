@@ -65,9 +65,9 @@ public:
   void Step();
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnPaint(Canvas &canvas);
-  virtual const Brush *on_color(Window &window, Canvas &canvas);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual const Brush *on_color(Window &window, Canvas &canvas) gcc_override;
 };
 
 #endif

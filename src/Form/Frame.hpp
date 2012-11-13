@@ -66,7 +66,7 @@ protected:
   unsigned mCaptionStyle;
 
   /** from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 };
 
 #endif

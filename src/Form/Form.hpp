@@ -57,8 +57,8 @@ class WndForm : public ContainerWindow, public SubForm,
       :look(_look) {}
 
   protected:
-    virtual const Brush *on_color(Window &window, Canvas &canvas);
-    virtual void OnPaint(Canvas &canvas);
+    virtual const Brush *on_color(Window &window, Canvas &canvas) gcc_override;
+    virtual void OnPaint(Canvas &canvas) gcc_override;
   };
 
 public:
@@ -105,7 +105,7 @@ protected:
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 
   StaticString<256> caption;
 
@@ -156,7 +156,7 @@ public:
   }
 
   /** inherited from ActionListener */
-  virtual void OnAction(int id) {
+  virtual void OnAction(int id) gcc_override {
     SetModalResult(id);
   }
 
@@ -180,8 +180,8 @@ public:
   void SetCaption(const TCHAR *_caption);
 
   /** from class Window */
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnDestroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnDestroy() gcc_override;
 
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) gcc_override;
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
@@ -189,7 +189,7 @@ public:
   virtual bool OnCancelMode() gcc_override;
 
 #ifdef WIN32
-  virtual bool OnCommand(unsigned id, unsigned code);
+  virtual bool OnCommand(unsigned id, unsigned code) gcc_override;
 #endif
 
   void SetKeyDownFunction(KeyDownFunction function) {
