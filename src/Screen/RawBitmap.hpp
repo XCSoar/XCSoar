@@ -25,6 +25,8 @@
 #include <SDL.h>
 #endif
 
+#include <stdint.h>
+
 /**
  * BGRColor structure encapsulates color information about one point. Color
  * order is Blue, Green, Red (not RGB).
@@ -37,9 +39,9 @@ struct BGRColor
   /**
    * RGB color value encoded with 5/6/5 bits per channel.
    */
-  unsigned short value;
+  uint16_t value;
 
-  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+  BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(((R & 0xf8) << 8) |
            ((G & 0xfc) << 3) |
            (B >> 3)) {}
@@ -47,20 +49,20 @@ struct BGRColor
 #elif defined(ENABLE_SDL)
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-  unsigned char dummy;
-  unsigned char r;
-  unsigned char g;
-  unsigned char b;
+  uint8_t dummy;
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
 
-  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+  BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :r(R), g(G), b(B) {}
 #else /* little endian */
-  unsigned char b;
-  unsigned char g;
-  unsigned char r;
-  unsigned char dummy;
+  uint8_t b;
+  uint8_t g;
+  uint8_t r;
+  uint8_t dummy;
 
-  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+  BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :b(B), g(G), r(R) {}
 #endif /* little endian */
 
@@ -71,19 +73,19 @@ struct BGRColor
    * RGB color value encoded with 5/5/5 bits per channel.  The most
    * significant bit is unused.
    */
-  unsigned short value;
+  uint16_t value;
 
-  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+  BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(((R & 0xf8) << 7) |
            ((G & 0xf8) << 2) |
            (B >> 3)) {}
 
 #else /* !_WIN32_WCE */
-  unsigned char b;
-  unsigned char g;
-  unsigned char r;
+  uint8_t b;
+  uint8_t g;
+  uint8_t r;
 
-  BGRColor(unsigned char R, unsigned char G, unsigned char B)
+  BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :b(B), g(G), r(R) {}
 #endif /* !_WIN32_WCE */
 
