@@ -30,8 +30,6 @@ Copyright_License {
 
 #ifdef USE_FREETYPE
 typedef struct FT_FaceRec_ *FT_Face;
-#elif defined(ANDROID)
-#include "Screen/Color.hpp"
 #elif defined(ENABLE_SDL)
 #include <SDL_ttf.h>
 #endif
