@@ -122,6 +122,7 @@ final class BitmapUtil {
     try {
       loadTexture(bmp);
     } catch (Exception e) {
+      glDeleteTextures(1, result, 0);
       Log.e(TAG, "GLUtils error: " + e);
       return false;
     } finally {
