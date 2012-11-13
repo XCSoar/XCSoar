@@ -54,7 +54,7 @@ SurfaceCreated()
 
   const GLSurfaceListenerList copy(surface_listeners);
   for (GLSurfaceListener *listener : copy)
-    listener->surface_created();
+    listener->SurfaceCreated();
 }
 
 void
@@ -62,7 +62,7 @@ SurfaceDestroyed()
 {
   const GLSurfaceListenerList copy(surface_listeners);
   for (GLSurfaceListener *listener : copy)
-    listener->surface_destroyed();
+    listener->SurfaceDestroyed();
 
   surface_valid = false;
 }

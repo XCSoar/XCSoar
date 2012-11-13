@@ -52,13 +52,13 @@ Bitmap::Reset()
 #endif /* !ANDROID */
 
 void
-Bitmap::surface_created()
+Bitmap::SurfaceCreated()
 {
   Reload();
 }
 
 void
-Bitmap::surface_destroyed()
+Bitmap::SurfaceDestroyed()
 {
   delete texture;
   texture = NULL;

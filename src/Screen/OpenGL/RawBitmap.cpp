@@ -62,14 +62,14 @@ RawBitmap::~RawBitmap()
 }
 
 void
-RawBitmap::surface_created()
+RawBitmap::SurfaceCreated()
 {
   if (texture == NULL)
     texture = new GLTexture(corrected_width, height);
 }
 
 void
-RawBitmap::surface_destroyed()
+RawBitmap::SurfaceDestroyed()
 {
   delete texture;
   texture = NULL;

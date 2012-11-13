@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_SURFACE_HPP
 
 struct GLSurfaceListener {
-  virtual void surface_created() = 0;
-  virtual void surface_destroyed() = 0;
+  virtual void SurfaceCreated() = 0;
+  virtual void SurfaceDestroyed() = 0;
 };
 
 /**

@@ -197,12 +197,12 @@ BufferCanvas::CopyTo(Canvas &other)
 }
 
 void
-BufferCanvas::surface_created()
+BufferCanvas::SurfaceCreated()
 {
 }
 
 void
-BufferCanvas::surface_destroyed()
+BufferCanvas::SurfaceDestroyed()
 {
   /* discard the buffer when the Android app is suspended; it needs a
      full redraw to restore it after resuming */
