@@ -99,9 +99,6 @@ void
 MapDrawHelper::BufferRenderFinish() 
 {
   if (buffer_drawn) {
-    // need to do this to prevent drawing of colored outline
-    buffer.SelectWhitePen();
-    
     if (use_stencil) {
 #ifdef ENABLE_SDL
       buffer.copy_transparent_black(stencil);
