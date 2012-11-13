@@ -43,6 +43,10 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Cache.hpp"
+#endif
+
 #include <assert.h>
 
 static Font TempInfoWindowFont;
@@ -113,6 +117,15 @@ ShowFontEditButtons(bool bVisible)
 }
 
 static void
+RefreshPreview(const TCHAR *name, Font &font)
+{
+  WndFrame *sample = (WndFrame *)wf->FindByName(name);
+  assert(sample != nullptr);
+
+  sample->SetFont(font);
+}
+
+static void
 RefreshFonts()
 {
   WndProperty * wp;
@@ -125,40 +138,19 @@ RefreshFonts()
     ShowFontEditButtons(bUseCustomFonts);
   }
 
+#ifdef ENABLE_OPENGL
+  TextCache::Flush();
+#endif
+
   // now set SampleTexts on the Fonts frame
-  WndFrame *sample;
-
-  sample = (WndFrame *)wf->FindByName(_T("prpInfoWindowFont"));
-  if (sample)
-    sample->SetFont(TempInfoWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpTitleWindowFont"));
-  if (sample)
-    sample->SetFont(TempTitleWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpMapWindowFont"));
-  if (sample)
-    sample->SetFont(TempMapWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpTitleSmallWindowFont"));
-  if (sample)
-    sample->SetFont(TempTitleSmallWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpMapWindowBoldFont"));
-  if (sample)
-    sample->SetFont(TempMapWindowBoldFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpCDIWindowFont"));
-  if (sample)
-    sample->SetFont(TempCDIWindowFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpMapLabelFont"));
-  if (sample)
-    sample->SetFont(TempMapLabelFont);
-
-  sample = (WndFrame *)wf->FindByName(_T("prpMapLabelImportantFont"));
-  if (sample)
-    sample->SetFont(TempMapLabelImportantFont);
+  RefreshPreview(_T("prpInfoWindowFont"), TempInfoWindowFont);
+  RefreshPreview(_T("prpTitleWindowFont"), TempTitleWindowFont);
+  RefreshPreview(_T("prpMapWindowFont"), TempMapWindowFont);
+  RefreshPreview(_T("prpTitleSmallWindowFont"), TempTitleSmallWindowFont);
+  RefreshPreview(_T("prpMapWindowBoldFont"), TempMapWindowBoldFont);
+  RefreshPreview(_T("prpCDIWindowFont"), TempCDIWindowFont);
+  RefreshPreview(_T("prpMapLabelFont"), TempMapLabelFont);
+  RefreshPreview(_T("prpMapLabelImportantFont"), TempMapLabelImportantFont);
 }
 
 static void
