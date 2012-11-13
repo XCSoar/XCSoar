@@ -26,6 +26,10 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
+#ifdef USE_GDI
+#include <tchar.h>
+#endif
+
 class ContainerWindow;
 
 /**

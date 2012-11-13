@@ -120,6 +120,16 @@ Window::Created(HWND _hWnd)
   AssertThread();
 }
 
+void
+Window::SetFont(const Font &_font)
+{
+  AssertNoneLocked();
+  AssertThread();
+
+  ::SendMessage(hWnd, WM_SETFONT,
+                (WPARAM)_font.Native(), MAKELPARAM(TRUE, 0));
+}
+
 LRESULT
 Window::OnUnhandledMessage(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam)

@@ -33,7 +33,6 @@ Copyright_License {
 #include <assert.h>
 
 #ifdef USE_GDI
-#include "Font.hpp"
 #include <windows.h>
 #endif /* GDI */
 
@@ -510,7 +509,17 @@ public:
 #endif
   }
 
-#ifndef USE_GDI
+#ifdef USE_GDI
+  void SetFont(const Font &_font);
+#else
+  void SetFont(const Font &_font) {
+    AssertNoneLocked();
+    AssertThread();
+
+    font = &_font;
+    Invalidate();
+  }
+
   const Font &GetFont() const {
     AssertThread();
     assert(IsDefined());
@@ -519,19 +528,6 @@ public:
     return *font;
   }
 #endif
-
-  void SetFont(const Font &_font) {
-    AssertNoneLocked();
-    AssertThread();
-
-#ifndef USE_GDI
-    font = &_font;
-    Invalidate();
-#else
-    ::SendMessage(hWnd, WM_SETFONT,
-                  (WPARAM)_font.Native(), MAKELPARAM(TRUE,0));
-#endif
-  }
 
   /**
    * Determine whether this Window is visible.  This method disregards

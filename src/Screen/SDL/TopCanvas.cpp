@@ -34,6 +34,8 @@ Copyright_License {
 #endif
 #endif
 
+#include <SDL_video.h>
+
 #include <assert.h>
 #include <stdio.h>
 

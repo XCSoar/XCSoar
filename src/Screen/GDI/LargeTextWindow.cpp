@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/LargeTextWindow.hpp"
 
+#include <tchar.h>
 #include <commctrl.h>
 #include <windowsx.h>
 
