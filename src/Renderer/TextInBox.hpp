@@ -31,22 +31,19 @@ Copyright_License {
 class Canvas;
 class LabelBlock;
 
-enum TextAlign
-{
+enum TextAlign {
   A_LEFT,
   A_CENTER,
   A_RIGHT,
 };
 
-enum VerticalPosition
-{
+enum VerticalPosition {
   ABOVE,
   CENTERED,
   BELOW,
 };
 
-enum RenderMode
-{
+enum RenderMode {
   RM_SIMPLE,
   RM_FILLED,
   RM_OUTLINED,
@@ -55,28 +52,29 @@ enum RenderMode
   RM_ROUNDED_BLACK,
 };
 
-struct TextInBoxMode
-{
+struct TextInBoxMode {
   RenderMode mode;
   TextAlign align;
   VerticalPosition vertical_position;
   bool bold;
   bool move_in_view;
 
-  TextInBoxMode() :
-    mode(RM_SIMPLE), align(A_LEFT), vertical_position(VerticalPosition::BELOW),
-    bold(false), move_in_view(false) {}
+  constexpr TextInBoxMode()
+    :mode(RM_SIMPLE), align(A_LEFT),
+     vertical_position(VerticalPosition::BELOW),
+     bold(false), move_in_view(false) {}
 };
 
-bool TextInBox(Canvas &canvas, const TCHAR *value,
-               PixelScalar x, PixelScalar y,
-               TextInBoxMode mode, const PixelRect &map_rc,
-               LabelBlock *label_block = NULL);
+bool
+TextInBox(Canvas &canvas, const TCHAR *value,
+          PixelScalar x, PixelScalar y,
+          TextInBoxMode mode, const PixelRect &map_rc,
+          LabelBlock *label_block=nullptr);
 
 bool
 TextInBox(Canvas &canvas, const TCHAR *value, PixelScalar x, PixelScalar y,
           TextInBoxMode mode,
           UPixelScalar screen_width, UPixelScalar screen_height,
-          LabelBlock *label_block = NULL);
+          LabelBlock *label_block=nullptr);
 
 #endif

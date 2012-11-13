@@ -71,7 +71,7 @@ TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
 }
 
 static void
-RenderShadowedText(Canvas &canvas, const TCHAR* text,
+RenderShadowedText(Canvas &canvas, const TCHAR *text,
                    PixelScalar x, PixelScalar y,
                    bool inverted)
 {
@@ -89,7 +89,7 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text,
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
+TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
           TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
 {
   // landable waypoint label inside white box
