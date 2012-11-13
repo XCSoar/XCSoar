@@ -106,8 +106,6 @@ BITMAP_GRAPHIC(IDB_DIALOGTITLE, "dialog_title_red")
 BITMAP_GRAPHIC(IDB_DIALOGTITLE, "dialog_title")
 #endif
 #endif
-BITMAP_BITMAP(IDB_DLGBUTTONLEFT32, "dialog_button_left_32x32")
-BITMAP_BITMAP(IDB_DLGBUTTONRIGHT32, "dialog_button_right_32x32")
 BITMAP_ICON(IDB_FINALGLIDE, "mode_finalglide")
 BITMAP_ICON(IDB_FINALGLIDE_HD, "mode_finalglide_160")
 BITMAP_ICON(IDB_TRAFFIC_SAFE, "flarm_traffic")

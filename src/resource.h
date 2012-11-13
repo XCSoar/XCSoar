@@ -37,7 +37,6 @@
 #define IDB_LOGGEROFF                   272
 #define IDB_LOGGEROFF_HD               5272
 #define IDB_AIRSPACE3                   280
-#define IDB_DLGBUTTONLEFT32             282
 #define IDB_UNIT_KM                     284
 #define IDB_UNIT_SM                     285
 #define IDB_UNIT_NM                     286
@@ -61,7 +60,6 @@
 #define IDB_UNIT_FPM                    300
 #define IDB_UNIT_KMH                    301
 #define IDB_UNIT_MPH                    302
-#define IDB_DLGBUTTONRIGHT32            304
 #define IDB_AIRSPACE4                   306
 #define IDB_AIRSPACE5                   311
 #define IDB_CLIMBSMALL                  313
