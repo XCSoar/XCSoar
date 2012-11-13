@@ -136,7 +136,6 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
     canvas.DrawText(x, y, text);
-    canvas.SetBackgroundOpaque();
   } else if (mode.mode == RM_FILLED) {
     canvas.SetBackgroundColor(COLOR_WHITE);
     canvas.SetTextColor(COLOR_BLACK);
@@ -149,7 +148,6 @@ TextInBox(Canvas &canvas, const TCHAR* text, PixelScalar x, PixelScalar y,
     canvas.SetBackgroundTransparent();
     canvas.SetTextColor(COLOR_BLACK);
     canvas.DrawText(x, y, text);
-    canvas.SetBackgroundOpaque();
   }
 
   return true;
