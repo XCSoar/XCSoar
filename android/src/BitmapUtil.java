@@ -42,14 +42,6 @@ final class BitmapUtil {
    * it.
    */
   private static void loadTexture(Bitmap bmp) {
-    /* try the easy way - however this fails on Android 2.2; Android
-       1.6 and 2.3 are doing fine */
-
-    GLUtils.texImage2D(GL_TEXTURE_2D, 0, bmp, 0);
-    if (glGetError() != GL_INVALID_VALUE)
-      /* success */
-      return;
-
     /* create an empty texture, and load the Bitmap into it */
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
@@ -61,8 +53,8 @@ final class BitmapUtil {
       /* success */
       return;
 
-    /* the two attempts above fail on the Samsung Galaxy Tab; the
-       following has been verified to work */
+    /* the above fails on the Samsung Galaxy Tab; the following has
+       been verified to work */
 
     Bitmap tmp = bmp.copy(Bitmap.Config.RGB_565, false);
     if (tmp == null)
