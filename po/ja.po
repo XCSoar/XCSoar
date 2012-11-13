@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-21 01:46+0200\n"
-"PO-Revision-Date: 2012-08-15 14:38+0000\n"
-"Last-Translator: Jinichi Nakazawa <jin-nakazawa@wkk.co.jp>\n"
+"PO-Revision-Date: 2012-11-06 09:08+0000\n"
+"Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-29 12:48+0000\n"
-"X-Generator: Launchpad (build 15864)\n"
+"X-Launchpad-Export-Date: 2012-11-13 10:28+0000\n"
+"X-Generator: Launchpad (build 16251)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -9111,7 +9111,7 @@ msgstr "機体設定"
 
 #: Data/Input/default.xci:517 Data/Input/default.xci:1126
 msgid "Topo."
-msgstr "地形"
+msgstr "地勢"
 
 #: Data/Input/default.xci:375 Data/Input/default.xci:1030
 msgid ""
