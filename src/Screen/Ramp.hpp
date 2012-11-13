@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_RAMP_HPP
 #define XCSOAR_SCREEN_RAMP_HPP
 
-#include "Screen/Color.hpp"
+struct Color;
 
 struct ColorRamp {
   short h;

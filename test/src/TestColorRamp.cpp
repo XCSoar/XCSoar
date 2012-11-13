@@ -21,6 +21,7 @@
 */
 
 #include "Screen/Ramp.hpp"
+#include "Screen/Color.hpp"
 #include "TestUtil.hpp"
 
 int main(int argc, char **argv)

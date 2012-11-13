@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Ramp.hpp"
+#include "Color.hpp"
 
 #include <assert.h>
 #include <stddef.h>
