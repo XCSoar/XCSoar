@@ -35,6 +35,7 @@ Copyright_License {
 
 //#define FAST_RSQRT
 
+constexpr
 static inline unsigned
 MIX(unsigned x, unsigned y, unsigned i)
 {
