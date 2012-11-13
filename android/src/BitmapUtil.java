@@ -43,17 +43,20 @@ final class BitmapUtil {
    */
   private static boolean loadTexture(Bitmap bmp) {
     int internalFormat, format, type;
+    int unpackAlignment;
 
     switch (bmp.getConfig()) {
     case ARGB_4444:
     case ARGB_8888:
       internalFormat = format = GL_RGBA;
       type = GL_UNSIGNED_BYTE;
+      unpackAlignment = 4;
       break;
 
     case RGB_565:
       internalFormat = format = GL_RGB;
       type = GL_UNSIGNED_SHORT_5_6_5;
+      unpackAlignment = 2;
       break;
 
     default:
@@ -66,6 +69,7 @@ final class BitmapUtil {
                  validateTextureSize(bmp.getWidth()),
                  validateTextureSize(bmp.getHeight()),
                  0, format, type, null);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, unpackAlignment);
     GLUtils.texSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bmp, format, type);
     return true;
   }
