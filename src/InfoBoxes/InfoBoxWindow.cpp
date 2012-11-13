@@ -471,7 +471,7 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
     ReleaseCapture();
 
     if ((unsigned)x < GetWidth() && (unsigned)y < GetHeight() &&
-        click_clock.Check(1000))
+        (click_clock.Check(1000) || GetDialogContent() != nullptr))
       ShowDialog();
 
     click_clock.Reset();

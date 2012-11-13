@@ -18,6 +18,7 @@ Version 6.5 - not yet released
   - non-modal FLARM radar (with InfoBoxes and menu)
   - show FAI triangle sectors in task manager
   - can drag modal dialogs
+  - short click opens InfoBox dialog
 * infoboxes
   - added thermal assistant infobox
 
