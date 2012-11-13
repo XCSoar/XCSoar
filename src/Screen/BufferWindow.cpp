@@ -35,7 +35,7 @@ BufferWindow::OnCreate()
   dirty = true;
 
   WindowCanvas a_canvas(*this);
-  buffer.set(a_canvas);
+  buffer.Create(a_canvas);
 }
 
 void
@@ -43,13 +43,13 @@ BufferWindow::OnDestroy()
 {
   PaintWindow::OnDestroy();
 
-  buffer.reset();
+  buffer.Destroy();
 }
 
 void
 BufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  buffer.resize(width, height);
+  buffer.Resize(width, height);
   PaintWindow::OnResize(width, height);
   Invalidate();
 }

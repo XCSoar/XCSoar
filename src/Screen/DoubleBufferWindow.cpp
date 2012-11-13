@@ -36,7 +36,7 @@ DoubleBufferWindow::OnCreate()
 void
 DoubleBufferWindow::OnDestroy()
 {
-  buffer.reset();
+  buffer.Destroy();
   PaintWindow::OnDestroy();
 }
 
@@ -44,7 +44,7 @@ void
 DoubleBufferWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::OnResize(width, height);
-  buffer.reset();
+  buffer.Destroy();
   Invalidate();
 }
 
@@ -58,8 +58,8 @@ DoubleBufferWindow::OnCreate()
   PaintWindow::OnCreate();
 
   WindowCanvas a_canvas(*this);
-  buffers[0].set(a_canvas);
-  buffers[1].set(a_canvas);
+  buffers[0].Create(a_canvas);
+  buffers[1].Create(a_canvas);
 }
 
 void
@@ -67,8 +67,8 @@ DoubleBufferWindow::OnDestroy()
 {
   PaintWindow::OnDestroy();
 
-  buffers[0].reset();
-  buffers[1].reset();
+  buffers[0].Destroy();
+  buffers[1].Destroy();
 }
 
 void
@@ -84,7 +84,7 @@ DoubleBufferWindow::flip()
 
   /* grow the current buffer, just in case the window has been
      resized */
-  buffers[current].grow(GetWidth(), GetHeight());
+  buffers[current].Grow(GetWidth(), GetHeight());
 }
 
 #endif
@@ -94,7 +94,7 @@ DoubleBufferWindow::OnPaint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   if (!buffer.IsDefined()) {
-    buffer.set(canvas, canvas.GetWidth(), canvas.GetHeight());
+    buffer.Create(canvas, canvas.GetWidth(), canvas.GetHeight());
     dirty = true;
   }
 

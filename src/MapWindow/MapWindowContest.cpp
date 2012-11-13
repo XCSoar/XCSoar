@@ -58,7 +58,7 @@ MapWindow::DrawContest(Canvas &canvas)
                      flying.release_location, flying.far_location);
 #else
     BufferCanvas buffer_canvas;
-    buffer_canvas.set(canvas);
+    buffer_canvas.Create(canvas);
     buffer_canvas.ClearWhite();
 #ifdef HAVE_HATCHED_BRUSH
     buffer_canvas.Select(look.airspace.brushes[3]);

@@ -38,7 +38,7 @@ Copyright_License {
 #include <SDL_imageFilter.h>
 
 void
-Canvas::reset()
+Canvas::Destroy()
 {
   if (surface != NULL) {
     SDL_FreeSurface(surface);

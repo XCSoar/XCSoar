@@ -114,8 +114,8 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 
 #ifndef ENABLE_OPENGL
     BufferCanvas buffer_canvas, stencil_canvas;
-    buffer_canvas.set(canvas);
-    stencil_canvas.set(canvas);
+    buffer_canvas.Create(canvas);
+    stencil_canvas.Create(canvas);
 #endif
 
     airspace_renderer.Draw(canvas,
@@ -141,7 +141,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
     RenderFAISectors(canvas, projection, task);
 #else
     BufferCanvas buffer_canvas;
-    buffer_canvas.set(canvas);
+    buffer_canvas.Create(canvas);
     buffer_canvas.ClearWhite();
 #ifdef HAVE_HATCHED_BRUSH
     buffer_canvas.Select(airspace_look.brushes[3]);

@@ -43,10 +43,10 @@ MapWindow::OnResize(UPixelScalar width, UPixelScalar height)
 
   // We only grow() the buffer here because resizing it everytime has
   // a huge negative effect on the heap fragmentation
-  buffer_canvas.grow(width, height);
+  buffer_canvas.Grow(width, height);
 
   if (!IsAncientHardware())
-    stencil_canvas.grow(width, height);
+    stencil_canvas.Grow(width, height);
 #endif
 
   visible_projection.SetScreenSize(width, height);
@@ -60,10 +60,10 @@ MapWindow::OnCreate()
 
 #ifndef ENABLE_OPENGL
   WindowCanvas canvas(*this);
-  buffer_canvas.set(canvas);
+  buffer_canvas.Create(canvas);
 
   if (!IsAncientHardware())
-    stencil_canvas.set(canvas);
+    stencil_canvas.Create(canvas);
 #endif
 }
 
@@ -81,10 +81,10 @@ MapWindow::OnDestroy()
   SetWeather(NULL);
 
 #ifndef ENABLE_OPENGL
-  buffer_canvas.reset();
+  buffer_canvas.Destroy();
 
   if (!IsAncientHardware())
-    stencil_canvas.reset();
+    stencil_canvas.Destroy();
 #endif
 
   DoubleBufferWindow::OnDestroy();

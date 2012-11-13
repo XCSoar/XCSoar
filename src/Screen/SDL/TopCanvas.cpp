@@ -38,8 +38,8 @@ Copyright_License {
 #include <stdio.h>
 
 void
-TopCanvas::Set(UPixelScalar width, UPixelScalar height,
-               bool full_screen, bool resizable)
+TopCanvas::Create(UPixelScalar width, UPixelScalar height,
+                  bool full_screen, bool resizable)
 {
   flags = SDL_ANYFORMAT;
 
@@ -82,9 +82,9 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height,
 
   OpenGL::SetupContext();
   OpenGL::SetupViewport(width, height);
-  Canvas::set(width, height);
+  Canvas::Create(width, height);
 #else
-  Canvas::set(s);
+  Canvas::Create(s);
 #endif
 }
 
@@ -100,7 +100,7 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 
 #ifdef ENABLE_OPENGL
   OpenGL::SetupViewport(width, height);
-  Canvas::set(width, height);
+  Canvas::Create(width, height);
 #endif
 }
 

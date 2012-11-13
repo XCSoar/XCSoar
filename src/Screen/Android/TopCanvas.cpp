@@ -29,12 +29,12 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 
 void
-TopCanvas::Set(UPixelScalar width, UPixelScalar height,
-               bool full_screen, bool resizable)
+TopCanvas::Create(UPixelScalar width, UPixelScalar height,
+                  bool full_screen, bool resizable)
 {
   OpenGL::SetupContext();
   OpenGL::SetupViewport(width, height);
-  Canvas::set(width, height);
+  Canvas::Create(width, height);
 }
 
 void
@@ -44,7 +44,7 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
     return;
 
   OpenGL::SetupViewport(width, height);
-  Canvas::set(width, height);
+  Canvas::Create(width, height);
 }
 
 void

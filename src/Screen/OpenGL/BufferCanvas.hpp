@@ -53,27 +53,27 @@ public:
   BufferCanvas(const Canvas &canvas,
                UPixelScalar _width, UPixelScalar _height);
   ~BufferCanvas() {
-    reset();
+    Destroy();
   }
 
   bool IsDefined() const {
     return texture != NULL;
   }
 
-  void set(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
+  void Create(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
 
-  void set(const Canvas &canvas) {
-    set(canvas, canvas.GetWidth(), canvas.GetHeight());
+  void Create(const Canvas &canvas) {
+    Create(canvas, canvas.GetWidth(), canvas.GetHeight());
   }
 
-  void reset();
+  void Destroy();
 
-  void resize(UPixelScalar _width, UPixelScalar _height);
+  void Resize(UPixelScalar _width, UPixelScalar _height);
 
   /**
-   * Similar to resize(), but never shrinks the buffer.
+   * Similar to Resize(), but never shrinks the buffer.
    */
-  void grow(UPixelScalar _width, UPixelScalar _height);
+  void Grow(UPixelScalar _width, UPixelScalar _height);
 
   /**
    * Begin painting to the buffer and to the specified #Canvas.

@@ -35,34 +35,37 @@ BufferCanvas::BufferCanvas(const Canvas &canvas,
 
 BufferCanvas::~BufferCanvas()
 {
-  reset();
+  Destroy();
 }
 
-void BufferCanvas::set(const Canvas &canvas,
-                       UPixelScalar _width, UPixelScalar _height)
+void
+BufferCanvas::Create(const Canvas &canvas,
+                     UPixelScalar _width, UPixelScalar _height)
 {
   assert(canvas.IsDefined());
 
-  reset();
-  VirtualCanvas::set(canvas, _width, _height);
+  Destroy();
+  VirtualCanvas::Create(canvas, _width, _height);
   bitmap = ::CreateCompatibleBitmap(canvas, width, height);
   ::SelectObject(dc, bitmap);
 }
 
 void
-BufferCanvas::set(const Canvas &canvas)
+BufferCanvas::Create(const Canvas &canvas)
 {
-  set(canvas, canvas.GetWidth(), canvas.GetHeight());
+  Create(canvas, canvas.GetWidth(), canvas.GetHeight());
 }
 
-void BufferCanvas::reset()
+void
+BufferCanvas::Destroy()
 {
-  VirtualCanvas::reset();
+  VirtualCanvas::Destroy();
   if (bitmap != NULL)
     ::DeleteObject(bitmap);
 }
 
-void BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
+void
+BufferCanvas::Resize(UPixelScalar _width, UPixelScalar _height)
 {
   assert(dc != NULL);
 
@@ -70,7 +73,7 @@ void BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
     return;
 
   ::DeleteObject(bitmap);
-  Canvas::resize(_width, _height);
+  Canvas::Resize(_width, _height);
   bitmap = ::CreateCompatibleBitmap(dc, width, height);
   ::SelectObject(dc, bitmap);
 }

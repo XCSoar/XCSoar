@@ -29,13 +29,13 @@ Copyright_License {
 
 VirtualCanvas::VirtualCanvas(UPixelScalar _width, UPixelScalar _height)
 {
-  set(_width, _height);
+  Create(_width, _height);
 }
 
 VirtualCanvas::VirtualCanvas(const Canvas &canvas,
                              UPixelScalar _width, UPixelScalar _height)
 {
-  set(_width, _height);
+  Create(_width, _height);
 }
 
 #else /* !ENABLE_SDL */
@@ -58,22 +58,22 @@ VirtualCanvas::VirtualCanvas(const Canvas &canvas,
 
 VirtualCanvas::~VirtualCanvas()
 {
-  reset();
+  Destroy();
 }
 
 #endif /* !OPENGL */
 
 void
-VirtualCanvas::set(UPixelScalar _width, UPixelScalar _height)
+VirtualCanvas::Create(UPixelScalar _width, UPixelScalar _height)
 {
   assert((PixelScalar)_width >= 0);
   assert((PixelScalar)_height >= 0);
 
 #ifdef ENABLE_OPENGL
-  Canvas::set(_width, _height);
+  Canvas::Create(_width, _height);
 #else /* !OPENGL */
 
-  reset();
+  Destroy();
 
 #ifdef ENABLE_SDL
   const SDL_Surface *video = ::SDL_GetVideoSurface();
@@ -86,37 +86,37 @@ VirtualCanvas::set(UPixelScalar _width, UPixelScalar _height)
                                    format->Rmask, format->Gmask,
                                    format->Bmask, format->Amask);
   if (surface != NULL)
-    Canvas::set(surface);
+    Canvas::Create(surface);
 #else /* !ENABLE_SDL */
-  Canvas::set(CreateCompatibleDC(NULL), _width, _height);
+  Canvas::Create(CreateCompatibleDC(NULL), _width, _height);
 #endif /* !ENABLE_SDL */
 #endif /* !OPENGL */
 }
 
 void
-VirtualCanvas::set(const Canvas &canvas,
-                   UPixelScalar _width, UPixelScalar _height)
+VirtualCanvas::Create(const Canvas &canvas,
+                      UPixelScalar _width, UPixelScalar _height)
 {
   assert(canvas.IsDefined());
 
 #ifdef ENABLE_SDL
-  set(_width, _height);
+  Create(_width, _height);
 #else /* !ENABLE_SDL */
-  reset();
-  Canvas::set(CreateCompatibleDC(canvas), _width, _height);
+  Destroy();
+  Canvas::Create(CreateCompatibleDC(canvas), _width, _height);
 #endif /* !ENABLE_SDL */
 }
 
 void
-VirtualCanvas::set(const Canvas &canvas)
+VirtualCanvas::Create(const Canvas &canvas)
 {
-  set(canvas, canvas.GetWidth(), canvas.GetHeight());
+  Create(canvas, canvas.GetWidth(), canvas.GetHeight());
 }
 
 #ifndef ENABLE_SDL
-void VirtualCanvas::reset()
+void VirtualCanvas::Destroy()
 {
-  Canvas::reset();
+  Canvas::Destroy();
 
   if (dc != NULL)
     ::DeleteDC(dc);

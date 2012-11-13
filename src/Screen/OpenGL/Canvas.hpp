@@ -77,7 +77,7 @@ public:
     :width(_width), height(_height),
      font(NULL), background_mode(OPAQUE) {}
 
-  void set(UPixelScalar _width, UPixelScalar _height) {
+  void Create(UPixelScalar _width, UPixelScalar _height) {
     width = _width;
     height = _height;
   }

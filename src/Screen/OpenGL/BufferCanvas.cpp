@@ -41,13 +41,13 @@ BufferCanvas::BufferCanvas(const Canvas &canvas,
 }
 
 void
-BufferCanvas::set(const Canvas &canvas,
-                  UPixelScalar _width, UPixelScalar _height)
+BufferCanvas::Create(const Canvas &canvas,
+                     UPixelScalar _width, UPixelScalar _height)
 {
   assert(canvas.IsDefined());
   assert(!active);
 
-  reset();
+  Destroy();
   texture = new GLTexture(_width, _height);
 
   if (OpenGL::frame_buffer_object) {
@@ -64,12 +64,12 @@ BufferCanvas::set(const Canvas &canvas,
     stencil_buffer->Unbind();
   }
 
-  Canvas::set(_width, _height);
+  Canvas::Create(_width, _height);
   AddSurfaceListener(*this);
 }
 
 void
-BufferCanvas::reset()
+BufferCanvas::Destroy()
 {
   assert(!active);
 
@@ -88,7 +88,7 @@ BufferCanvas::reset()
 }
 
 void
-BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
+BufferCanvas::Resize(UPixelScalar _width, UPixelScalar _height)
 {
   assert(IsDefined());
 
@@ -109,7 +109,7 @@ BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
     stencil_buffer->Unbind();
   }
 
-  Canvas::set(_width, _height);
+  Canvas::Create(_width, _height);
 }
 
 void
@@ -118,7 +118,7 @@ BufferCanvas::Begin(Canvas &other)
   assert(IsDefined());
   assert(!active);
 
-  resize(other.GetWidth(), other.GetHeight());
+  Resize(other.GetWidth(), other.GetHeight());
 
   if (frame_buffer != NULL) {
     /* activate the frame buffer */
@@ -207,5 +207,5 @@ BufferCanvas::surface_destroyed()
   /* discard the buffer when the Android app is suspended; it needs a
      full redraw to restore it after resuming */
 
-  reset();
+  Destroy();
 }

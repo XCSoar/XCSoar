@@ -42,22 +42,22 @@ public:
   ~VirtualCanvas();
 #endif
 
-  void set(UPixelScalar _width, UPixelScalar _height);
+  void Create(UPixelScalar _width, UPixelScalar _height);
 
-  void set(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
-  void set(const Canvas &canvas);
+  void Create(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
+  void Create(const Canvas &canvas);
 
 #ifndef ENABLE_SDL
-  void reset();
+  void Destroy();
 #endif
 
 #ifdef ENABLE_SDL
-  void resize(UPixelScalar _width, UPixelScalar _height) {
+  void Resize(UPixelScalar _width, UPixelScalar _height) {
     if (_width != GetWidth() || _height != GetHeight())
-      set(*this, _width, _height);
+      Create(*this, _width, _height);
   }
 
-  void grow(UPixelScalar _width, UPixelScalar _height);
+  void Grow(UPixelScalar _width, UPixelScalar _height);
 #endif
 };
 

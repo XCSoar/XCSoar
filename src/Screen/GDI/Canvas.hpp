@@ -55,23 +55,23 @@ public:
   }
 
   ~Canvas() {
-    reset();
+    Destroy();
   }
 
 protected:
-  void reset() {
+  void Destroy() {
     if (compatible_dc != NULL) {
       ::DeleteDC(compatible_dc);
       compatible_dc = NULL;
     }
   }
 
-  void set(HDC _dc, UPixelScalar _width, UPixelScalar _height) {
+  void Create(HDC _dc, UPixelScalar _width, UPixelScalar _height) {
     assert(_dc != NULL);
     assert(_width > 0);
     assert(_height > 0);
 
-    reset();
+    Destroy();
 
     dc = _dc;
     compatible_dc = NULL;
@@ -115,7 +115,7 @@ public:
     return PixelRect{0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight())};
   }
 
-  void resize(UPixelScalar _width, UPixelScalar _height) {
+  void Resize(UPixelScalar _width, UPixelScalar _height) {
     width = _width;
     height = _height;
   }

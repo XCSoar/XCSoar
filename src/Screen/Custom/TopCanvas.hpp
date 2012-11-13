@@ -54,8 +54,8 @@ public:
   ~TopCanvas();
 #endif
 
-  void Set(UPixelScalar width, UPixelScalar height,
-           bool full_screen, bool resizable);
+  void Create(UPixelScalar width, UPixelScalar height,
+              bool full_screen, bool resizable);
 
 #ifdef ENABLE_OPENGL
   /**

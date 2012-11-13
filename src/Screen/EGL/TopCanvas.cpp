@@ -30,8 +30,8 @@ Copyright_License {
 #include <stdlib.h>
 
 void
-TopCanvas::Set(UPixelScalar width, UPixelScalar height,
-               bool full_screen, bool resizable)
+TopCanvas::Create(UPixelScalar width, UPixelScalar height,
+                  bool full_screen, bool resizable)
 {
 #ifdef USE_X11
   X11Display *const x_display = XOpenDisplay(nullptr);
@@ -131,7 +131,7 @@ TopCanvas::Set(UPixelScalar width, UPixelScalar height,
 
   OpenGL::SetupContext();
   OpenGL::SetupViewport(width, height);
-  Canvas::set(width, height);
+  Canvas::Create(width, height);
 }
 
 TopCanvas::~TopCanvas()
@@ -149,7 +149,7 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
     return;
 
   OpenGL::SetupViewport(width, height);
-  Canvas::set(width, height);
+  Canvas::Create(width, height);
 }
 
 void

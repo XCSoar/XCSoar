@@ -47,7 +47,8 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
 
   delete screen;
   screen = new TopCanvas();
-  screen->Set(rc.right, rc.bottom, style.GetFullScreen(), style.GetResizable());
+  screen->Create(rc.right, rc.bottom,
+                 style.GetFullScreen(), style.GetResizable());
 
   ContainerWindow::Create(NULL, rc, style);
 

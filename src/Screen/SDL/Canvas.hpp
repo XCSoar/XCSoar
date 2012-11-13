@@ -82,15 +82,15 @@ public:
     :surface(_surface), width(_surface->w), height(_surface->h),
      font(NULL), background_mode(OPAQUE) {}
 
-  void set(SDL_Surface *_surface) {
-    reset();
+  void Create(SDL_Surface *_surface) {
+    Destroy();
 
     surface = _surface;
     width = surface->w;
     height = surface->h;
   }
 
-  void reset();
+  void Destroy();
 
 protected:
   /**
