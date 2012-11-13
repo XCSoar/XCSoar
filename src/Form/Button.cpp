@@ -42,7 +42,6 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
 {
   style.EnableCustomPainting();
   Create(parent, Caption, rc, style);
-  SetFont(*look.button.font);
 }
 
 
