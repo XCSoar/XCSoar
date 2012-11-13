@@ -41,7 +41,7 @@ struct BGRColor
    */
   uint16_t value;
 
-  BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(((R & 0xf8) << 8) |
            ((G & 0xfc) << 3) |
            (B >> 3)) {}
@@ -54,16 +54,16 @@ struct BGRColor
   uint8_t g;
   uint8_t b;
 
-  BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :r(R), g(G), b(B) {}
+  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+    :dummy(), r(R), g(G), b(B) {}
 #else /* little endian */
   uint8_t b;
   uint8_t g;
   uint8_t r;
   uint8_t dummy;
 
-  BGRColor(uint8_t R, uint8_t G, uint8_t B)
-    :b(B), g(G), r(R) {}
+  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
+    :b(B), g(G), r(R), dummy() {}
 #endif /* little endian */
 
 #else /* !SDL */
@@ -75,7 +75,7 @@ struct BGRColor
    */
   uint16_t value;
 
-  BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :value(((R & 0xf8) << 7) |
            ((G & 0xf8) << 2) |
            (B >> 3)) {}
@@ -85,7 +85,7 @@ struct BGRColor
   uint8_t g;
   uint8_t r;
 
-  BGRColor(uint8_t R, uint8_t G, uint8_t B)
+  constexpr BGRColor(uint8_t R, uint8_t G, uint8_t B)
     :b(B), g(G), r(R) {}
 #endif /* !_WIN32_WCE */
 
