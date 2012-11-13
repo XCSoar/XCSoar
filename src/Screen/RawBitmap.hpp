@@ -19,7 +19,7 @@
 #endif
 
 #ifdef ENABLE_SDL
-#include <SDL.h>
+#include <SDL_endian.h>
 #endif
 
 #include <stdint.h>
@@ -28,6 +28,8 @@ class Canvas;
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
+#elif defined(ENABLE_SDL)
+struct SDL_Surface;
 #endif
 
 /**
