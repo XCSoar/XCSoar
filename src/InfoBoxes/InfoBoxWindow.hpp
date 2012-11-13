@@ -135,7 +135,8 @@ public:
    */
   bool HandleQuickAccess(const TCHAR *value);
 
-  const InfoBoxContent::DialogContent *GetDialogContent();
+  gcc_pure
+  const InfoBoxContent::DialogContent *GetDialogContent() const;
 
   const PixelRect GetValueRect() const {
     return value_rect;
