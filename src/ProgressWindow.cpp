@@ -172,6 +172,8 @@ ProgressWindow::OnPaint(Canvas &canvas)
   ContainerWindow::OnPaint(canvas);
 }
 
+#ifdef USE_GDI
+
 const Brush *
 ProgressWindow::OnChildColor(Window &window, Canvas &canvas)
 {
@@ -179,3 +181,5 @@ ProgressWindow::OnChildColor(Window &window, Canvas &canvas)
   canvas.SetBackgroundColor(background_color);
   return &background_brush;
 }
+
+#endif

@@ -57,8 +57,11 @@ class WndForm : public ContainerWindow, public SubForm,
       :look(_look) {}
 
   protected:
+#ifdef USE_GDI
     virtual const Brush *OnChildColor(Window &window,
                                       Canvas &canvas) gcc_override;
+#endif
+
     virtual void OnPaint(Canvas &canvas) gcc_override;
   };
 

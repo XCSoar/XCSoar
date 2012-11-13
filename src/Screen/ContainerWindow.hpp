@@ -30,8 +30,11 @@ Copyright_License {
 #include "Screen/Custom/WList.hpp"
 #endif
 
-class WindowReference;
+#ifdef USE_GDI
 class Brush;
+#else
+class WindowReference;
+#endif
 
 /**
  * A container for more #Window objects.  It is also derived from
@@ -62,8 +65,6 @@ public:
 #endif /* !USE_GDI */
 
 protected:
-  virtual const Brush *OnChildColor(Window &window, Canvas &canvas);
-
 #ifndef USE_GDI
   virtual void OnDestroy() gcc_override;
   virtual bool OnCancelMode() gcc_override;
@@ -82,6 +83,8 @@ protected:
 
   virtual void OnPaint(Canvas &canvas) gcc_override;
 #else /* USE_GDI */
+  virtual const Brush *OnChildColor(Window &window, Canvas &canvas);
+
   virtual LRESULT OnMessage(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam) gcc_override;
 #endif

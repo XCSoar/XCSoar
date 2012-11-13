@@ -73,6 +73,12 @@ ContainerWindow::FocusPreviousControl()
   return true;
 }
 
+const Brush *
+ContainerWindow::OnChildColor(Window &window, Canvas &canvas)
+{
+  return NULL;
+}
+
 LRESULT
 ContainerWindow::OnMessage(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam)

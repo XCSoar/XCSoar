@@ -57,6 +57,8 @@ Copyright_License {
 #include "Event/GDI/Loop.hpp"
 #endif
 
+#ifdef USE_GDI
+
 const Brush *
 WndForm::ClientAreaWindow::OnChildColor(Window &window, Canvas &canvas)
 {
@@ -73,6 +75,8 @@ WndForm::ClientAreaWindow::OnChildColor(Window &window, Canvas &canvas)
   canvas.SetBackgroundColor(look.background_color);
   return &look.background_brush;
 }
+
+#endif
 
 void
 WndForm::ClientAreaWindow::OnPaint(Canvas &canvas)
