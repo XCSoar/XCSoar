@@ -37,11 +37,11 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-void
-TopCanvas::Create(UPixelScalar width, UPixelScalar height,
-                  bool full_screen, bool resizable)
+gcc_const
+static Uint32
+MakeSDLFlags(bool full_screen, bool resizable)
 {
-  flags = SDL_ANYFORMAT;
+  Uint32 flags = SDL_ANYFORMAT;
 
 #ifdef ENABLE_OPENGL
   flags |= SDL_OPENGL;
@@ -64,6 +64,15 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
 
   if (resizable)
     flags |= SDL_RESIZABLE;
+
+  return flags;
+}
+
+void
+TopCanvas::Create(UPixelScalar width, UPixelScalar height,
+                  bool full_screen, bool resizable)
+{
+  flags = MakeSDLFlags(full_screen, resizable);
 
   SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
   if (s == NULL) {
