@@ -33,10 +33,6 @@ import android.opengl.GLUtils;
 final class BitmapUtil {
   private static final String TAG = "XCSoar";
 
-  private static int nextPowerOfTwo(int i) {
-    return NativeView.nextPowerOfTwo(i);
-  }
-
   public static int validateTextureSize(int i) {
     return NativeView.validateTextureSize(i);
   }
@@ -54,12 +50,11 @@ final class BitmapUtil {
       /* success */
       return;
 
-    /* size must be a power of two; create an empty texture, and load
-       the Bitmap into it */
+    /* create an empty texture, and load the Bitmap into it */
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                 nextPowerOfTwo(bmp.getWidth()),
-                 nextPowerOfTwo(bmp.getHeight()),
+                 validateTextureSize(bmp.getWidth()),
+                 validateTextureSize(bmp.getHeight()),
                  0, GL_RGBA, GL_UNSIGNED_BYTE, null);
     GLUtils.texSubImage2D(GL_TEXTURE_2D, 0, 0, 0, bmp);
     if (glGetError() != GL_INVALID_OPERATION)
@@ -74,8 +69,8 @@ final class BitmapUtil {
       return;
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-                 nextPowerOfTwo(bmp.getWidth()),
-                 nextPowerOfTwo(bmp.getHeight()),
+                 validateTextureSize(bmp.getWidth()),
+                 validateTextureSize(bmp.getHeight()),
                  0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, null);
     GLUtils.texSubImage2D(GL_TEXTURE_2D, 0, 0, 0, tmp);
     tmp.recycle();
