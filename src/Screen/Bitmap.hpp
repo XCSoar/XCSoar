@@ -32,9 +32,7 @@ Copyright_License {
 #include "Screen/OpenGL/Surface.hpp"
 #endif
 
-#ifdef ENABLE_SDL
-#include <SDL_video.h>
-#elif defined(USE_GDI)
+#ifdef USE_GDI
 #include <windows.h>
 #endif
 
@@ -44,6 +42,10 @@ Copyright_License {
 
 #ifdef ENABLE_OPENGL
 class GLTexture;
+#endif
+
+#ifdef ENABLE_SDL
+struct SDL_Surface;
 #endif
 
 /**
