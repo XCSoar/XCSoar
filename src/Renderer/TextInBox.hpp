@@ -32,27 +32,27 @@ Copyright_License {
 class Canvas;
 class LabelBlock;
 
-enum TextAlign {
-  A_LEFT,
-  A_CENTER,
-  A_RIGHT,
-};
-
-enum VerticalPosition {
-  ABOVE,
-  CENTERED,
-  BELOW,
-};
-
 struct TextInBoxMode {
+  enum Alignment : uint8_t {
+    LEFT,
+    CENTER,
+    RIGHT,
+  };
+
+  enum VerticalPosition : uint8_t {
+    ABOVE,
+    CENTERED,
+    BELOW,
+  };
+
   LabelShape shape;
-  TextAlign align;
+  Alignment align;
   VerticalPosition vertical_position;
   bool bold;
   bool move_in_view;
 
   constexpr TextInBoxMode()
-    :shape(LabelShape::SIMPLE), align(A_LEFT),
+    :shape(LabelShape::SIMPLE), align(Alignment::LEFT),
      vertical_position(VerticalPosition::BELOW),
      bold(false), move_in_view(false) {}
 };

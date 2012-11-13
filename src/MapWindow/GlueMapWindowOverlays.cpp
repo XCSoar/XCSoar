@@ -89,7 +89,7 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
   TextInBoxMode mode;
   mode.shape = LabelShape::OUTLINED_INVERTED;
   mode.bold = true;
-  mode.align = A_RIGHT;
+  mode.align = TextInBoxMode::Alignment::RIGHT;
 
   UPixelScalar padding = Layout::FastScale(4);
   UPixelScalar height = Fonts::map_bold.GetHeight();

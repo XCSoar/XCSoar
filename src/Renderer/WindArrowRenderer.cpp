@@ -99,8 +99,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                      pos.x, pos.y, wind.bearing - screen_angle);
 
   TextInBoxMode style;
-  style.align = A_CENTER;
-  style.vertical_position = VerticalPosition::CENTERED;
+  style.align = TextInBoxMode::Alignment::CENTER;
+  style.vertical_position = TextInBoxMode::VerticalPosition::CENTERED;
   style.shape = LabelShape::OUTLINED;
 
   TextInBox(canvas, buffer, label[0].x, label[0].y, style, rc);
