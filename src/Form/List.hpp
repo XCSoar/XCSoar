@@ -309,52 +309,22 @@ protected:
   virtual void OnDestroy() gcc_override;
 #endif
 
-  /**
-   * The OnResize event is called when the Control is resized
-   * (derived from Window)
-   */
   virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
 
   virtual void OnSetFocus() gcc_override;
   virtual void OnKillFocus() gcc_override;
 
-  /**
-   * The OnMouseDown event is called when the mouse is pressed over the button
-   * (derived from Window)
-   */
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  /**
-   * The OnMouseUp event is called when the mouse is released over the button
-   * (derived from Window)
-   */
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
-  /**
-   * The OnMouseMove event is called when the mouse is moved over the button
-   * (derived from Window)
-   */
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) gcc_override;
-  /**
-   * The OnMouseWheel event is called when the mouse wheel is turned
-   * (derived from Window)
-   */
   virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) gcc_override;
 
   virtual bool OnKeyCheck(unsigned key_code) const;
-
-  /**
-   * The OnKeyDown event is called when a key is pressed while the
-   * button is focused
-   * (derived from Window)
-   */
   virtual bool OnKeyDown(unsigned key_code) gcc_override;
 
   virtual bool OnCancelMode() gcc_override;
 
-  /**
-   * The OnPaint event is called when the button needs to be drawn
-   * (derived from PaintWindow)
-   */
   virtual void OnPaint(Canvas &canvas) gcc_override;
   virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) gcc_override;
 };

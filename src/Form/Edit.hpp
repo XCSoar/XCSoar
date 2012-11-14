@@ -106,15 +106,7 @@ protected:
   virtual void OnSetFocus() gcc_override;
   virtual void OnKillFocus() gcc_override;
 
-  /**
-   * The OnMouseDown event is called when the mouse is pressed over the button
-   * (derived from Window)
-   */
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
-  /**
-   * The OnMouseUp event is called when the mouse is released over the button
-   * (derived from Window)
-   */
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) gcc_override;
