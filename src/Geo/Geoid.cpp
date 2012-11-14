@@ -44,13 +44,9 @@ EGM96::Load()
 {
   ResourceLoader::Data data = ResourceLoader::Load(_T("IDR_RASTER_EGM96S"),
                                                    _T("RASTERDATA"));
-  if (data.first == NULL) {
-    // unable to find the resource
-    egm96data = NULL;
-    return;
-  }
-
+  assert(data.first != nullptr);
   assert(data.second == EGM96SIZE);
+
   egm96data = (unsigned char *)malloc(data.second);
   memcpy(egm96data, data.first, data.second);
 }
