@@ -87,12 +87,18 @@ dlgInfoBoxAccessShowModeless(const int id,
   if (wf != NULL) return;
   assert (id > -1);
 
+  const InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = InfoBoxManager::GetCurrentPanel();
+  const InfoBoxSettings::Panel &panel = settings.panels[panel_index];
+  const InfoBoxFactory::Type old_type = panel.contents[id];
+
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   PixelRect form_rc = InfoBoxManager::layout.remaining;
   form_rc.top = form_rc.bottom - Layout::Scale(107);
 
-  wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc);
+  wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc,
+                   gettext(InfoBoxFactory::GetName(old_type)));
 
   WindowStyle tab_style;
   tab_style.ControlParent();
@@ -126,15 +132,6 @@ dlgInfoBoxAccessShowModeless(const int id,
   Widget *wClose = new CloseInfoBoxAccess(*wf);
   wTabBar->AddTab(wClose, _("Close"));
 
-  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = InfoBoxManager::GetCurrentPanel();
-  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
-  const InfoBoxFactory::Type old_type = panel.contents[id];
-
-  StaticString<32> buffer;
-  buffer = gettext(InfoBoxFactory::GetName(old_type));
-
-  wf->SetCaption(buffer);
   wf->ShowModeless();
 
   if (wf->IsDefined()) {

@@ -8,6 +8,7 @@ Version 6.4.4 - not yet released
 * user interface
   - fix font preview in configuration dialog
   - fix the Escape key on Altair
+  - fix wind InfoBox dialog layout (#2192)
 * Android
   - fix text rendering on some PowerVR GPUs
 
