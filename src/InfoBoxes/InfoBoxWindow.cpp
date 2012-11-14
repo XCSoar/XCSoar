@@ -238,7 +238,7 @@ InfoBoxWindow::Paint(Canvas &canvas)
 {
   canvas.Clear(pressed
                ? look.pressed_background_color
-               : (HasFocus() || force_draw_selector
+               : (HasFocus() || dragging || force_draw_selector
                   ? look.focused_background_color
                   : look.background_color));
 
@@ -468,8 +468,6 @@ InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
     dialog_timer.Schedule(1000);
   }
 
-  // if single clicked -> focus the InfoBoxWindow
-  SetFocus();
   return true;
 }
 
@@ -487,9 +485,13 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
     ReleaseCapture();
 
-    if (was_pressed && GetDialogContent() != nullptr)
-      /* delay the dialog, so double click detection works */
-      dialog_timer.Schedule(300);
+    if (was_pressed) {
+      SetFocus();
+
+      if (GetDialogContent() != nullptr)
+        /* delay the dialog, so double click detection works */
+        dialog_timer.Schedule(300);
+    }
 
     return true;
   }
