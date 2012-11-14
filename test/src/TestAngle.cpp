@@ -27,7 +27,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(96);
+  plan_tests(93);
 
   // Test Native() and Native()
   ok1(equals(Angle::Native(fixed_zero).Native(), fixed_zero));
@@ -88,12 +88,6 @@ int main(int argc, char **argv)
   // Test DMS()
   ok1(equals(Angle::DMS(fixed_90, fixed(30), fixed(15)).Degrees(),
              fixed(90.504166667)));
-  ok1(equals(Angle::DMS(fixed_90, -fixed(30), -fixed(15)).Degrees(),
-             fixed(89.495833333)));
-  ok1(equals(Angle::DMS(-fixed_90, -fixed(30), -fixed(15)).Degrees(),
-             fixed(-90.504166667)));
-  ok1(equals(Angle::DMS(-fixed_90, fixed(30), fixed(15)).Degrees(),
-             fixed(-89.495833333)));
 
   // Test AbsoluteDegrees()
   ok1(equals(Angle::Degrees(fixed_90).AbsoluteDegrees(), 90));
