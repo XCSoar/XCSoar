@@ -58,7 +58,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
    id(_id),
    dragging(false), pressed(false),
    force_draw_selector(false),
-   focus_timer(*this)
+   focus_timer(*this), dialog_timer(*this)
 {
   data.Clear();
 
@@ -455,13 +455,17 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 bool
 InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
+  dialog_timer.Cancel();
+
   if (!dragging) {
     dragging = true;
     SetCapture();
-    click_clock.Update();
 
     pressed = true;
     Invalidate();
+
+    /* start "long click" detection */
+    dialog_timer.Schedule(1000);
   }
 
   // if single clicked -> focus the InfoBoxWindow
@@ -472,6 +476,8 @@ InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
+  dialog_timer.Cancel();
+
   if (dragging) {
     const bool was_pressed = pressed;
 
@@ -481,9 +487,9 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
     ReleaseCapture();
 
-    if (was_pressed &&
-        (click_clock.Check(1000) || GetDialogContent() != nullptr))
-      ShowDialog();
+    if (was_pressed && GetDialogContent() != nullptr)
+      /* delay the dialog, so double click detection works */
+      dialog_timer.Schedule(300);
 
     return true;
   }
@@ -494,6 +500,8 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
 {
+  dialog_timer.Cancel();
+
   if (!IsAltair())
     InputEvents::ShowMenu();
 
@@ -505,6 +513,8 @@ InfoBoxWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     SetPressed(IsInside(x, y));
+    if (!pressed)
+      dialog_timer.Cancel();
     return true;
   }
 
@@ -526,6 +536,8 @@ InfoBoxWindow::OnCancelMode()
     Invalidate();
     ReleaseCapture();
   }
+
+  dialog_timer.Cancel();
 
   PaintWindow::OnCancelMode();
   return true;
@@ -564,6 +576,10 @@ InfoBoxWindow::OnTimer(WindowTimer &timer)
   if (timer == focus_timer) {
     focus_timer.Cancel();
     FocusParent();
+    return true;
+  } else if (timer == dialog_timer) {
+    dialog_timer.Cancel();
+    ShowDialog();
     return true;
   } else
     return PaintWindow::OnTimer(timer);

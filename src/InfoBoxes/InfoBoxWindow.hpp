@@ -28,7 +28,6 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
 #include "Screen/Timer.hpp"
-#include "Time/PeriodClock.hpp"
 #include "Data.hpp"
 
 struct InfoBoxSettings;
@@ -68,12 +67,17 @@ private:
   /** a timer which returns keyboard focus back to the map window after a while */
   WindowTimer focus_timer;
 
+  /**
+   * This timer opens the dialog.  It is used to check for "long
+   * click" and to delay the dialog a bit (for double click
+   * detection).
+   */
+  WindowTimer dialog_timer;
+
   PixelRect title_rect;
   PixelRect value_rect;
   PixelRect comment_rect;
   PixelRect value_and_comment_rect;
-
-  PeriodClock click_clock;
 
   /**
    * Paints the InfoBox title to the given canvas
