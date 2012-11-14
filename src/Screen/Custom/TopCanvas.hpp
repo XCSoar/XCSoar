@@ -31,9 +31,7 @@ Copyright_License {
 #endif
 
 class TopCanvas : public Canvas {
-#ifdef ENABLE_SDL
-  Uint32 flags;
-#elif defined(USE_EGL)
+#ifdef USE_EGL
 #ifdef USE_X11
   X11Window x_window;
 #elif defined(USE_VIDEOCORE)

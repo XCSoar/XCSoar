@@ -72,7 +72,7 @@ void
 TopCanvas::Create(UPixelScalar width, UPixelScalar height,
                   bool full_screen, bool resizable)
 {
-  flags = MakeSDLFlags(full_screen, resizable);
+  const Uint32 flags = MakeSDLFlags(full_screen, resizable);
 
   SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
   if (s == NULL) {
@@ -102,6 +102,16 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 {
   if (width == GetWidth() && height == GetHeight())
     return;
+
+#ifdef ENABLE_OPENGL
+  const SDL_Surface *old = ::SDL_GetVideoSurface();
+#else
+  const SDL_Surface *old = surface;
+#endif
+  if (old == nullptr)
+    return;
+
+  const Uint32 flags = old->flags;
 
   SDL_Surface *s = ::SDL_SetVideoMode(width, height, 0, flags);
   if (s == NULL)
