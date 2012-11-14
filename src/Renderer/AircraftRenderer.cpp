@@ -143,7 +143,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
 
   static constexpr unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
   static constexpr unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
-  static const unsigned AIRCRAFT_POINTS_MAX =
+  const unsigned AIRCRAFT_POINTS_MAX =
     std::max(AIRCRAFT_POINTS_LARGE, AIRCRAFT_POINTS_SMALL);
 
   const RasterPoint *Aircraft = large ? AircraftLarge : AircraftSmall;
