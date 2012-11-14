@@ -36,9 +36,6 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,
                              const WindowStyle style, bool vertical)
   :tab_display(NULL),
-   tab_line_height(vertical
-                   ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
-                   : Layout::Scale(TabLineHeightInitUnscaled)),
    page_flipped_callback(NULL)
 {
   Create(_parent, _parent.GetClientRect(), style);

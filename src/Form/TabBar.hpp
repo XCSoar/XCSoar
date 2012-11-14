@@ -48,7 +48,6 @@ class TabBarControl : public ContainerWindow {
   PagerWidget pager;
 
   TabDisplay * tab_display;
-  const UPixelScalar tab_line_height;
 
   PageFlippedCallback page_flipped_callback;
 
@@ -72,9 +71,6 @@ public:
 
     page_flipped_callback = _page_flipped_callback;
   }
-
-private:
-  static constexpr unsigned TabLineHeightInitUnscaled = 5;
 
 public:
   unsigned AddTab(Widget *widget, const TCHAR *caption, const Bitmap *bmp = NULL);
@@ -113,10 +109,6 @@ public:
 
   gcc_pure
   const TCHAR *GetButtonCaption(unsigned i) const;
-
-  UPixelScalar GetTabLineHeight() const {
-    return tab_line_height;
-  }
 
 protected:
   virtual void OnCreate() gcc_override;

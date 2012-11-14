@@ -33,6 +33,8 @@ Copyright_License {
 #include <assert.h>
 #include <winuser.h>
 
+static constexpr unsigned TabLineHeightInitUnscaled = 5;
+
 TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
                        bool _vertical)
@@ -41,7 +43,10 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
    vertical(_vertical),
    dragging(false),
    drag_off_button(false),
-   down_index(-1)
+   down_index(-1),
+   tab_line_height(vertical
+                   ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
+                   : Layout::Scale(TabLineHeightInitUnscaled))
 {
   WindowStyle mystyle;
   mystyle.TabStop();
@@ -81,7 +86,7 @@ TabDisplay::GetButtonSize(unsigned i) const
        (GetTabHeight() - finalmargin) / GetSize() - margin;
 
     rc.left = 0;
-    rc.right = GetTabWidth() - tab_bar.GetTabLineHeight();
+    rc.right = GetTabWidth() - tab_line_height;
 
     rc.top = finalmargin + (margin + but_height) * i;
     rc.bottom = rc.top + but_height;
@@ -96,7 +101,7 @@ TabDisplay::GetButtonSize(unsigned i) const
 
     const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
 
-    const UPixelScalar rowheight = (GetTabHeight() - tab_bar.GetTabLineHeight())
+    const UPixelScalar rowheight = (GetTabHeight() - tab_line_height)
         / portraitRows - margin;
 
     const UPixelScalar but_width =
