@@ -140,7 +140,7 @@ public:
 
   gcc_pure
   fixed Hours() const {
-    return value * fixed(24) / fixed_two_pi;
+    return value * fixed(24 / M_2PI);
   }
 #else
   constexpr
