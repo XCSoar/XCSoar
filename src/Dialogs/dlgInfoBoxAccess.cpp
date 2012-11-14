@@ -100,7 +100,7 @@ dlgInfoBoxAccessShowModeless(const int id,
   PixelRect tab_rc = client_area.GetClientRect();
   tab_rc.bottom = tab_rc.top + Layout::Scale(45);
   wTabBar = new TabBarControl(client_area, look, tab_rc,
-                              tab_style, Layout::landscape);
+                              tab_style, false);
 
   if (dlgContent != NULL) {
     for (int i = 0; i < dlgContent->PANELSIZE; i++) {

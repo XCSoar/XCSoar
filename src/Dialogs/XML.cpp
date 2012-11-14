@@ -767,7 +767,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     style.ControlParent();
     TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look, rc,
-                                              style);
+                                              style, Layout::landscape);
     window = tabbar;
 
     // TabMenuControl (TabMenu)

@@ -34,21 +34,19 @@ Copyright_License {
 
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,
-                             const WindowStyle style, bool _flipOrientation)
+                             const WindowStyle style, bool vertical)
   :tab_display(NULL),
-   tab_line_height((Layout::landscape ^ _flipOrientation)
-                 ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
-                 : Layout::Scale(TabLineHeightInitUnscaled)),
-   flip_orientation(_flipOrientation),
+   tab_line_height(vertical
+                   ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
+                   : Layout::Scale(TabLineHeightInitUnscaled)),
    page_flipped_callback(NULL)
 {
   Create(_parent, _parent.GetClientRect(), style);
 
-  tab_display = new TabDisplay(*this, look, *this, tab_rc,
-                               Layout::landscape ^ flip_orientation);
+  tab_display = new TabDisplay(*this, look, *this, tab_rc, vertical);
 
   PixelRect rc = GetClientRect();
-  if (Layout::landscape ^ flip_orientation)
+  if (vertical)
     rc.left += tab_display->GetTabWidth();
   else
     rc.top += tab_display->GetTabHeight();

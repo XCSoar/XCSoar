@@ -49,7 +49,6 @@ class TabBarControl : public ContainerWindow {
 
   TabDisplay * tab_display;
   const UPixelScalar tab_line_height;
-  bool flip_orientation;
 
   PageFlippedCallback page_flipped_callback;
 
@@ -62,8 +61,8 @@ public:
    */
   TabBarControl(ContainerWindow &parent, const DialogLook &look,
                 PixelRect tab_rc,
-                const WindowStyle style = WindowStyle(),
-                bool _flipOrientation = false);
+                const WindowStyle style,
+                bool vertical);
 
   ~TabBarControl();
 
