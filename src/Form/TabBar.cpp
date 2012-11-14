@@ -23,14 +23,7 @@ Copyright_License {
 
 #include "Form/TabBar.hpp"
 #include "Form/TabDisplay.hpp"
-#include "Screen/PaintWindow.hpp"
-#include "Screen/Layout.hpp"
-#include "Screen/Key.h"
-#include "Screen/Canvas.hpp"
 #include "Asset.hpp"
-
-#include <assert.h>
-#include <winuser.h>
 
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,

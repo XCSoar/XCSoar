@@ -25,10 +25,9 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Key.h"
-#include "Screen/Icon.hpp"
+#include "Screen/Bitmap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Asset.hpp"
 
 #include <assert.h>
 #include <winuser.h>
