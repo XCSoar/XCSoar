@@ -30,9 +30,9 @@ class BatteryTimer {
   // Battery status for SIMULATOR mode
   // 10% reminder, 5% exit, 5 minute reminders on warnings
 
-  static const unsigned BATTERY_WARNING = 10;
-  static const unsigned BATTERY_EXIT = 5;
-  static const unsigned BATTERY_REMINDER = 5 * 60 * 1000;
+  static constexpr unsigned BATTERY_WARNING = 10;
+  static constexpr unsigned BATTERY_EXIT = 5;
+  static constexpr unsigned BATTERY_REMINDER = 5 * 60 * 1000;
 
   PeriodClock last_warning;
 

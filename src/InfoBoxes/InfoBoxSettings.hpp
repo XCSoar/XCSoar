@@ -37,7 +37,7 @@ enum InfoBoxBorderAppearance_t {
 
 struct InfoBoxSettings {
   struct Panel {
-    static const unsigned MAX_CONTENTS = 24;
+    static constexpr unsigned MAX_CONTENTS = 24;
 
     StaticString<32u> name;
     InfoBoxFactory::Type contents[MAX_CONTENTS];
@@ -48,8 +48,8 @@ struct InfoBoxSettings {
     bool IsEmpty() const;
   };
 
-  static const unsigned int MAX_PANELS = 8;
-  static const unsigned int PREASSIGNED_PANELS = 3;
+  static constexpr unsigned MAX_PANELS = 8;
+  static constexpr unsigned PREASSIGNED_PANELS = 3;
 
   /**
    * Auto-switch to the "final glide" panel if above final glide?

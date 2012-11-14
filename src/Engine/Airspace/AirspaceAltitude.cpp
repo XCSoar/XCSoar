@@ -29,7 +29,7 @@
 void
 AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
 {
-  static const fixed fl_feet_to_m(30.48);
+  static constexpr fixed fl_feet_to_m(30.48);
   if (reference == AltitudeReference::STD)
     altitude = press.PressureAltitudeToQNHAltitude(flight_level * fl_feet_to_m);
 }

@@ -37,7 +37,7 @@ enum ControlIndex {
 };
 
 
-static const StaticEnumChoice  model_type_list[] = {
+static constexpr StaticEnumChoice model_type_list[] = {
   { (unsigned)ModelType::GENERIC, N_("Generic") },
   { (unsigned)ModelType::HP31X, _T("HP31x") },
   { (unsigned)ModelType::MEDION_P5, _T("MedionP5") },

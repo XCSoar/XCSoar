@@ -49,8 +49,6 @@ class InfoBoxContentWind : public InfoBoxContent
 {
 public:
   virtual const DialogContent *GetDialogContent();
-
-  static const DialogContent dlgContent;
 };
 
 class InfoBoxContentWindSpeed : public InfoBoxContentWind

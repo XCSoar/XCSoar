@@ -63,7 +63,7 @@ static constexpr InfoBoxContentMacCready::PanelContent panels[] = {
     LoadMacCreadySetupPanel),
 };
 
-const InfoBoxContentMacCready::DialogContent InfoBoxContentMacCready::dlgContent = {
+static constexpr InfoBoxContentMacCready::DialogContent dlgContent = {
   ARRAY_SIZE(panels), &panels[0],
 };
 

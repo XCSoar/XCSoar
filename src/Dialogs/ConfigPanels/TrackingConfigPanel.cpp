@@ -98,14 +98,14 @@ TrackingConfigPanel::OnModified(DataField &df)
   }
 }
 
-static const StaticEnumChoice  server_list[] = {
+static constexpr StaticEnumChoice server_list[] = {
   { 0, _T("www.livetrack24.com") },
   { 1, _T("test.livetrack24.com") },
   { 2, _T("livexc.dhv1.de") },
   { 0 },
 };
 
-static const StaticEnumChoice vehicle_type_list[] = {
+static constexpr StaticEnumChoice vehicle_type_list[] = {
   { (unsigned) TrackingSettings::VehicleType::GLIDER, N_("Glider") },
   { (unsigned) TrackingSettings::VehicleType::PARAGLIDER, N_("Paraglider") },
   { (unsigned) TrackingSettings::VehicleType::POWERED_AIRCRAFT, N_("Powered aircraft") },

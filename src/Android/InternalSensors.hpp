@@ -68,10 +68,10 @@ public:
   /* Sensor type identifier constants for use with subscription
      methods below.  These must have the same numerical values as
      their counterparts in the Android API's Sensor class. */
-  static const int TYPE_ACCELEROMETER = 0x1;
-  static const int TYPE_GYROSCOPE = 0x4;
-  static const int TYPE_MAGNETIC_FIELD = 0x2;
-  static const int TYPE_PRESSURE = 0x6;
+  static constexpr int TYPE_ACCELEROMETER = 0x1;
+  static constexpr int TYPE_GYROSCOPE = 0x4;
+  static constexpr int TYPE_MAGNETIC_FIELD = 0x2;
+  static constexpr int TYPE_PRESSURE = 0x6;
 
   // For information on these methods, see comments around analogous methods
   // in NonGPSSensors.java.

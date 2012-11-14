@@ -64,7 +64,7 @@ private:
   bool expired;
   bool expired_last;
 
-  static const unsigned null_acktime = -1;
+  static constexpr unsigned null_acktime = -1;
 
 public:
   /**

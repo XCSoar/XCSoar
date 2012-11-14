@@ -46,7 +46,7 @@ EventPipe::Create()
 void
 EventPipe::Signal()
 {
-  static const char dummy = 0;
+  static constexpr char dummy = 0;
   w.Write(&dummy, 1);
 }
 

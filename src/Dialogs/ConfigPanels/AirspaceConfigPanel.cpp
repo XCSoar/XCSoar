@@ -52,7 +52,7 @@ enum ControlIndex {
   AirspaceTransparency
 };
 
-static const StaticEnumChoice  as_display_list[] = {
+static constexpr StaticEnumChoice as_display_list[] = {
   { (unsigned)AirspaceDisplayMode::ALLON, N_("All on"),
     N_("All airspaces are displayed.") },
   { (unsigned)AirspaceDisplayMode::CLIP, N_("Clip"),
@@ -64,7 +64,7 @@ static const StaticEnumChoice  as_display_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice  as_fill_mode_list[] = {
+static constexpr StaticEnumChoice as_fill_mode_list[] = {
   { (unsigned)AirspaceRendererSettings::FillMode::DEFAULT, N_("Default"),
     N_("This selects the best performing option for your hardware. "
       "In fact it favours 'fill padding' except for PPC 2000 system.") },

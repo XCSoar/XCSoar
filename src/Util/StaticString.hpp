@@ -47,8 +47,8 @@ class StaticStringBase
 public:
   typedef size_t size_type;
 
-  static const size_type MAX_SIZE = max;
-  static const T SENTINEL = '\0';
+  static constexpr size_type MAX_SIZE = max;
+  static constexpr T SENTINEL = '\0';
 
 protected:
   T data[max];

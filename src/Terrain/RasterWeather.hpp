@@ -39,8 +39,8 @@ struct zzip_dir;
  */
 class RasterWeather {
 public:
-  static const unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
-  static const unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
+  static constexpr unsigned MAX_WEATHER_MAP = 16; /**< Max number of items stored */
+  static constexpr unsigned MAX_WEATHER_TIMES = 48; /**< Max time segments of each item */
 
 private:
   GeoPoint center;

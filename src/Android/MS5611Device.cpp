@@ -84,8 +84,8 @@ gcc_pure
 static inline
 fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
 {
-  static const fixed FACTOR(-2260.389548275485);
-  static const fixed EXPONENT(-0.8097374740609689);
+  static constexpr fixed FACTOR(-2260.389548275485);
+  static constexpr fixed EXPONENT(-0.8097374740609689);
   return fixed(FACTOR * pow(pressure, EXPONENT) * d_pressure);
 }
 

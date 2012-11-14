@@ -30,7 +30,7 @@ Copyright_License {
 /**
  * The minimum and maximum vario range for the constants below [cm/s].
  */
-static const int min_vario = -500, max_vario = 500;
+static constexpr int min_vario = -500, max_vario = 500;
 
 static int
 Clamp(int value, int min, int max)

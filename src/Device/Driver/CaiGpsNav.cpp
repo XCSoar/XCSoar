@@ -35,7 +35,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-static const char CtrlC = '\x03';
+static constexpr char CtrlC = '\x03';
 
 class CaiGpsNavDevice : public AbstractDevice {
 private:

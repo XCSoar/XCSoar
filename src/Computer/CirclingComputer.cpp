@@ -27,9 +27,9 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "Math/LowPassFilter.hpp"
 
-static const fixed MIN_TURN_RATE(4);
-static const fixed CRUISE_CLIMB_SWITCH(15);
-static const fixed CLIMB_CRUISE_SWITCH(10);
+static constexpr fixed MIN_TURN_RATE(4);
+static constexpr fixed CRUISE_CLIMB_SWITCH(15);
+static constexpr fixed CLIMB_CRUISE_SWITCH(10);
 
 void
 CirclingComputer::Reset()

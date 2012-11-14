@@ -46,7 +46,7 @@ enum ControlIndex {
   AppInfoBoxBorder
 };
 
-static const StaticEnumChoice display_orientation_list[] = {
+static constexpr StaticEnumChoice display_orientation_list[] = {
   { (unsigned)DisplaySettings::Orientation::DEFAULT,
     N_("Default") },
   { (unsigned)DisplaySettings::Orientation::PORTRAIT,
@@ -60,7 +60,7 @@ static const StaticEnumChoice display_orientation_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice info_box_geometry_list[] = {
+static constexpr StaticEnumChoice info_box_geometry_list[] = {
   { (unsigned)InfoBoxSettings::Geometry::TOP_4_BOTTOM_4,
     N_("8 Top + Bottom (Portrait)") },
   { (unsigned)InfoBoxSettings::Geometry::BOTTOM_8,
@@ -100,7 +100,7 @@ static const StaticEnumChoice info_box_geometry_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice flarm_display_location_list[] = {
+static constexpr StaticEnumChoice flarm_display_location_list[] = {
   { (unsigned)TrafficSettings::GaugeLocation::Auto,
     N_("Auto (follow infoboxes)") },
   { (unsigned)TrafficSettings::GaugeLocation::TopLeft,
@@ -118,7 +118,7 @@ static const StaticEnumChoice flarm_display_location_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice tabdialog_style_list[] = {
+static constexpr StaticEnumChoice tabdialog_style_list[] = {
   { (unsigned)DialogSettings::TabStyle::Text, N_("Text"),
     N_("Show text on tabbed dialogs.") },
   { (unsigned)DialogSettings::TabStyle::Icon, N_("Icons"),
@@ -134,7 +134,7 @@ static constexpr StaticEnumChoice popup_msg_position_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice dialog_style_list[] = {
+static constexpr StaticEnumChoice dialog_style_list[] = {
   { 0, N_("Full width") },
   { 1, N_("Scaled") },
   { 2, N_("Scaled centered") },
@@ -142,7 +142,7 @@ static const StaticEnumChoice dialog_style_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice infobox_border_list[] = {
+static constexpr StaticEnumChoice infobox_border_list[] = {
   { 0, N_("Box"), N_("Draws boxes around each InfoBox.") },
   { 1, N_("Tab"), N_("Draws a tab at the top of the InfoBox across the title.") },
   { 0 }

@@ -73,7 +73,7 @@ UpdateComboBox(DataFieldEnum* dfe, unsigned page)
 void
 PagesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  static const StaticEnumChoice  empty_list[] = { { 0 }  };
+  static constexpr StaticEnumChoice empty_list[] = { { 0 }  };
 
   RowFormWidget::Prepare(parent, rc);
 

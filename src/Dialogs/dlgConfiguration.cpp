@@ -94,7 +94,7 @@ const TCHAR *main_menu_captions[] = {
   N_("Setup"),
 };
 
-static const TabMenuControl::PageItem pages[] = {
+static constexpr TabMenuControl::PageItem pages[] = {
   {N_("Site Files"), 0, CreateSiteConfigPanel },
   {N_("Orientation"), 1, CreateMapDisplayConfigPanel },
   {N_("Elements"), 1, CreateSymbolsConfigPanel },

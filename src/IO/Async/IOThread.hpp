@@ -82,8 +82,8 @@ class IOThread : protected Thread {
   bool modified, quit, running;
 
 public:
-  static const unsigned READ = Poll::READ;
-  static const unsigned WRITE = Poll::WRITE;
+  static constexpr unsigned READ = Poll::READ;
+  static constexpr unsigned WRITE = Poll::WRITE;
 
   /**
    * Start the thread.  This method should be called after creating

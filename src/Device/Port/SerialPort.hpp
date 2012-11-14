@@ -48,7 +48,7 @@ class SerialPort : public BufferedPort, protected StoppableThread
    */
   bool is_widcomm;
 #else
-  static const bool is_widcomm = false;
+  static constexpr bool is_widcomm = false;
 #endif
 
 public:

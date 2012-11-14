@@ -46,7 +46,7 @@ public:
   friend class WaypointVisitorMap; // for intersection rendering
 
   /** invalid value for terrain */
-  static const short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
+  static constexpr short TERRAIN_INVALID = RasterBuffer::TERRAIN_INVALID;
 
 protected:
   RasterMap map;

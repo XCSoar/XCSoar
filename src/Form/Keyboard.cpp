@@ -31,7 +31,7 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 
-static const TCHAR keyboard_letters[] =
+static constexpr TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 KeyboardControl::KeyboardControl(ContainerWindow &parent,

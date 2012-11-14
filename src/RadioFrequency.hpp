@@ -35,8 +35,8 @@ Copyright_License {
  * This class tores a VHF radio frequency.
  */
 class RadioFrequency {
-  static const unsigned BASE_KHZ = 100000;
-  static const unsigned MAX_KHZ = BASE_KHZ + 50000;
+  static constexpr unsigned BASE_KHZ = 100000;
+  static constexpr unsigned MAX_KHZ = BASE_KHZ + 50000;
 
   /**
    * The radio frequency in kilohertz minus 100 MHz.

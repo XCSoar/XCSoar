@@ -249,7 +249,7 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.ClearWhite();
   if (page >= 3 && page < 3 + (int)images.size()) {
     Bitmap &img = images[page-3];
-    static const int zoom_factors[] = { 1, 2, 4, 8, 16, 32 };
+    static constexpr int zoom_factors[] = { 1, 2, 4, 8, 16, 32 };
     RasterPoint img_pos, screen_pos;
     PixelSize screen_size;
     PixelSize img_size = img.GetSize();

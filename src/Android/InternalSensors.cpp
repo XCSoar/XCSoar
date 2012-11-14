@@ -332,8 +332,8 @@ gcc_pure
 static inline
 fixed ComputeNoncompVario(const fixed pressure, const fixed d_pressure)
 {
-  static const fixed FACTOR(-2260.389548275485);
-  static const fixed EXPONENT(-0.8097374740609689);
+  static constexpr fixed FACTOR(-2260.389548275485);
+  static constexpr fixed EXPONENT(-0.8097374740609689);
   return fixed(FACTOR * pow(pressure, EXPONENT) * d_pressure);
 }
 
@@ -353,8 +353,8 @@ Java_org_xcsoar_NonGPSSensors_setBarometricPressure(
      turns out that the distribution is more heavy-tailed than a
      normal distribution, probably because glider pilots usually
      experience fairly constant pressure change most of the time. */
-  static const fixed KF_VAR_ACCEL(0.0075);
-  static const fixed KF_MAX_DT(60);
+  static constexpr fixed KF_VAR_ACCEL(0.0075);
+  static constexpr fixed KF_MAX_DT(60);
 
   // XXX this shouldn't be a global variable
   static SelfTimingKalmanFilter1d kalman_filter(KF_MAX_DT, KF_VAR_ACCEL);

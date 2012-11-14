@@ -38,8 +38,8 @@ struct ThermalLocatorInfo;
  */
 class ThermalLocator {
 public:
-  static const unsigned TLOCATOR_NMIN = 5;
-  static const unsigned TLOCATOR_NMAX = 60;
+  static constexpr unsigned TLOCATOR_NMIN = 5;
+  static constexpr unsigned TLOCATOR_NMAX = 60;
 
 private:
   /** Class used to hold thermal estimate samples */

@@ -37,7 +37,7 @@ class ClimbHistory {
   /**
    * Store vario history from 0 to 360 kph.
    */
-  static const unsigned SIZE = 100;
+  static constexpr unsigned SIZE = 100;
 
   /** Average climb rate for each episode */
   fixed vario[SIZE];

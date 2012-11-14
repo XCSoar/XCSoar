@@ -30,7 +30,7 @@ Copyright_License {
 /**
  * The number of info boxes in each geometry.
  */
-static const unsigned char geometry_counts[] = {
+static constexpr unsigned char geometry_counts[] = {
   8, 8, 8, 8, 8, 8,
   9, 5, 12, 24, 12,
   12, 9, 8, 4, 4, 4, 4,

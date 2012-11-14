@@ -31,7 +31,7 @@ Copyright_License {
 #include "UIState.hpp"
 
 /** timeout of display/battery mode in quarter seconds */
-static const unsigned DISPLAYTIMEOUTMAX = 60 * 4;
+static constexpr unsigned DISPLAYTIMEOUTMAX = 60 * 4;
 
 unsigned DisplayTimeOut = 0;
 

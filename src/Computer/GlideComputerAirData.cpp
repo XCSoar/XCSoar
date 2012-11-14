@@ -37,7 +37,7 @@ Copyright_License {
 using std::min;
 using std::max;
 
-static const fixed THERMAL_TIME_MIN(45);
+static constexpr fixed THERMAL_TIME_MIN(45);
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
   :waypoints(_way_points),

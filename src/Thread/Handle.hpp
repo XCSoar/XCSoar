@@ -51,9 +51,9 @@ public:
   ThreadHandle() = default;
 
 #ifdef HAVE_POSIX
-  ThreadHandle(pthread_t _handle):handle(_handle) {}
+  constexpr ThreadHandle(pthread_t _handle):handle(_handle) {}
 #else
-  ThreadHandle(DWORD _handle):handle(_handle) {}
+  constexpr ThreadHandle(DWORD _handle):handle(_handle) {}
 #endif
 
   static const ThreadHandle GetCurrent() {

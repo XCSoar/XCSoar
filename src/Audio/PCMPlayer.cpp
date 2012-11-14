@@ -165,7 +165,7 @@ PCMPlayer::Start(PCMSynthesiser &_synthesiser, unsigned _sample_rate)
     *SLES::IID_PLAY,
     *SLES::IID_ANDROIDSIMPLEBUFFERQUEUE,
   };
-  static const SLboolean req2[] = {
+  static constexpr SLboolean req2[] = {
     SL_BOOLEAN_TRUE,
     SL_BOOLEAN_TRUE,
   };

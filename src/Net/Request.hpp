@@ -64,9 +64,9 @@ namespace Net {
     /** The last error code that was retrieved by the Callback() function */
     DWORD last_error;
 #elif defined(ANDROID)
-    static const unsigned INFINITE = 0;
+    static constexpr unsigned INFINITE = 0;
 #else
-    static const unsigned INFINITE = (unsigned)-1;
+    static constexpr unsigned INFINITE = (unsigned)-1;
 #endif
 
 #ifdef HAVE_CURL

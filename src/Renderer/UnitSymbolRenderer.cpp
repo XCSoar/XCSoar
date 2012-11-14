@@ -36,7 +36,7 @@ struct UnitSymbolStrings {
   bool is_fraction;
 };
 
-static const UnitSymbolStrings symbol_strings[] = {
+static constexpr UnitSymbolStrings symbol_strings[] = {
   { NULL, NULL },
   { NULL, _T("km"), false },
   { NULL, _T("NM"), false },

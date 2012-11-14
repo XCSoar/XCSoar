@@ -32,7 +32,7 @@ Copyright_License {
  */
 struct ThermalBandInfo
 {
-  static const unsigned NUMTHERMALBUCKETS = 10;
+  static constexpr unsigned NUMTHERMALBUCKETS = 10;
 
   /** Height above working band/safety (m) */
   fixed working_band_height;

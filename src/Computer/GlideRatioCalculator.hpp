@@ -28,7 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-static const fixed INVALID_GR = fixed(999);
+static constexpr fixed INVALID_GR = fixed(999);
 
 struct ComputerSettings;
 

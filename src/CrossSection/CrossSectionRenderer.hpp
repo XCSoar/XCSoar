@@ -46,7 +46,7 @@ class CrossSectionRenderer :
   public BaseBlackboard
 {
 public:
-  static const unsigned NUM_SLICES = 16;
+  static constexpr unsigned NUM_SLICES = 16;
 
 protected:
   const CrossSectionLook &look;

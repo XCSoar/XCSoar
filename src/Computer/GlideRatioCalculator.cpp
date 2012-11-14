@@ -29,7 +29,7 @@ Copyright_License {
 #include <assert.h>
 
 /** over this, show INVALID_GR */
-static const fixed MAXEFFICIENCYSHOW = fixed(200);
+static constexpr fixed MAXEFFICIENCYSHOW = fixed(200);
 
 void
 GlideRatioCalculator::Initialize(const ComputerSettings &settings)

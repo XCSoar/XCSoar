@@ -30,7 +30,7 @@ Copyright_License {
 void
 CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  static const StaticEnumChoice vario_list[] = {
+  static constexpr StaticEnumChoice vario_list[] = {
     { 0, _T("m/s"), },
     { 1, _T("kt"), },
     { 0 }
@@ -38,7 +38,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Vario"), NULL, vario_list,
           data.GetVarioUnit());
 
-  static const StaticEnumChoice altitude_list[] = {
+  static constexpr StaticEnumChoice altitude_list[] = {
     { 0, _T("m"), },
     { 1, _T("ft"), },
     { 0 }
@@ -46,7 +46,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Altitude"), NULL, altitude_list,
           data.GetAltitudeUnit());
 
-  static const StaticEnumChoice temperature_list[] = {
+  static constexpr StaticEnumChoice temperature_list[] = {
     { 0, _T(DEG "C"), },
     { 1, _T(DEG "F"), },
     { 0 }
@@ -54,7 +54,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Temperature"), NULL, temperature_list,
           data.GetTemperatureUnit());
 
-  static const StaticEnumChoice pressure_list[] = {
+  static constexpr StaticEnumChoice pressure_list[] = {
     { 0, _T("hPa"), },
     { 1, _T("inHg"), },
     { 0 }
@@ -62,7 +62,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Pressure"), NULL, pressure_list,
           data.GetPressureUnit());
 
-  static const StaticEnumChoice distance_list[] = {
+  static constexpr StaticEnumChoice distance_list[] = {
     { 0, _T("km"), },
     { 1, _T("NM"), },
     { 2, _T("mi"), },
@@ -71,7 +71,7 @@ CAI302UnitsEditor::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddEnum(_("Distance"), NULL, distance_list,
           data.GetDistanceUnit());
 
-  static const StaticEnumChoice speed_list[] = {
+  static constexpr StaticEnumChoice speed_list[] = {
     { 0, _T("m/s"), },
     { 1, _T("kt"), },
     { 2, _T("mph"), },

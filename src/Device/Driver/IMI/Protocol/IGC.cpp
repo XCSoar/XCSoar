@@ -43,7 +43,7 @@ static IMI::FixB fixBLastFull = {0};
 static IMI::FixB fixB1 = {0};
 static IMI::FixB fixB2 = {0};
 
-static const IMI::IMICHAR snDigits[] = "0123456789ABCDEFHJKLMNPRSTUVWXYZ";
+static constexpr IMI::IMICHAR snDigits[] = "0123456789ABCDEFHJKLMNPRSTUVWXYZ";
 
 void
 IMI::WriteString(const char *buffer, size_t max_length, FILE *file)

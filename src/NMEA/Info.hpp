@@ -83,7 +83,7 @@ enum class FixQuality: uint8_t {
  */
 struct GPSState
 {
-  static const unsigned MAXSATELLITES = 12;
+  static constexpr unsigned MAXSATELLITES = 12;
 
   //############
   //   Status

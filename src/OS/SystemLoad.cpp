@@ -103,7 +103,7 @@ SystemLoadCPU()
 
   line[nbytes] = 0;
 
-  static const unsigned HISTORY_LENGTH = 5;
+  static constexpr unsigned HISTORY_LENGTH = 5;
   static cpu history[HISTORY_LENGTH];
 
   cpu current;

@@ -127,7 +127,7 @@ WaypointDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc
           wp_arrival_list, (unsigned)settings.arrival_height_display);
   SetExpertRow(WaypointArrivalHeightDisplay);
 
-  static const StaticEnumChoice wp_label_list[] = {
+  static constexpr StaticEnumChoice wp_label_list[] = {
     { (unsigned)LabelShape::ROUNDED_BLACK, N_("Rounded rectangle"), nullptr },
     { (unsigned)LabelShape::OUTLINED_INVERTED, N_("Outlined"), nullptr },
     { 0 }

@@ -64,7 +64,7 @@ struct AirspaceClassStringCouple
   AirspaceClass type;
 };
 
-static const AirspaceClassStringCouple airspace_class_strings[] = {
+static constexpr AirspaceClassStringCouple airspace_class_strings[] = {
   { _T("R"), RESTRICT },
   { _T("Q"), DANGER },
   { _T("P"), PROHIBITED },
@@ -81,7 +81,7 @@ static const AirspaceClassStringCouple airspace_class_strings[] = {
   { _T("G"), CLASSG },
 };
 
-static const AirspaceClassCharCouple airspace_tnp_class_chars[] = {
+static constexpr AirspaceClassCharCouple airspace_tnp_class_chars[] = {
   { _T('A'), CLASSA },
   { _T('B'), CLASSB },
   { _T('C'), CLASSC },
@@ -91,7 +91,7 @@ static const AirspaceClassCharCouple airspace_tnp_class_chars[] = {
   { _T('G'), CLASSG },
 };
 
-static const AirspaceClassStringCouple airspace_tnp_type_strings[] = {
+static constexpr AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { _T("C"), CTR },
   { _T("CTA"), CTR },
   { _T("CTR"), CTR },

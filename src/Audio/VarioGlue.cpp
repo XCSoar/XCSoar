@@ -32,7 +32,7 @@ Copyright_License {
 
 #include <assert.h>
 
-static const unsigned sample_rate = 44100;
+static constexpr unsigned sample_rate = 44100;
 
 #ifdef ANDROID
 static bool have_sles;

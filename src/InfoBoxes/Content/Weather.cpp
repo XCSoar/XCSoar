@@ -113,7 +113,7 @@ InfoBoxContentWind::PanelContent (
   LoadWindSetupPanel),
 };
 
-const InfoBoxContentWind::DialogContent InfoBoxContentWind::dlgContent = {
+static constexpr InfoBoxContentWind::DialogContent dlgContent = {
   ARRAY_SIZE(Panels), &Panels[0],
 };
 

@@ -68,8 +68,8 @@ public:
 
   /* internally used structure for tracking menu down and selection status */
   struct MenuTabIndex {
-    static const unsigned NO_MAIN_MENU = 997;
-    static const unsigned NO_SUB_MENU = 998;
+    static constexpr unsigned NO_MAIN_MENU = 997;
+    static constexpr unsigned NO_SUB_MENU = 998;
 
     unsigned main_index;
     unsigned sub_index;

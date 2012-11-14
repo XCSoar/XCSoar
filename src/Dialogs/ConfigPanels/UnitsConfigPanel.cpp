@@ -136,7 +136,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddSpacer();
   SetExpertRow(spacer_1);
 
-  static const StaticEnumChoice  units_speed_list[] = {
+  static constexpr StaticEnumChoice units_speed_list[] = {
     { (unsigned)Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
     { (unsigned)Unit::KNOTS, N_("knots") },
     { (unsigned)Unit::KILOMETER_PER_HOUR, _T("km/h") },
@@ -149,7 +149,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned int)config.speed_unit, this);
   SetExpertRow(UnitsSpeed);
 
-  static const StaticEnumChoice  units_distance_list[] = {
+  static constexpr StaticEnumChoice units_distance_list[] = {
     { (unsigned)Unit::STATUTE_MILES, _T("sm") },
     { (unsigned)Unit::NAUTICAL_MILES, _T("nm") },
     { (unsigned)Unit::KILOMETER, _T("km") },
@@ -162,7 +162,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned)config.distance_unit, this);
   SetExpertRow(UnitsDistance);
 
-  static const StaticEnumChoice  units_lift_list[] = {
+  static constexpr StaticEnumChoice units_lift_list[] = {
     { (unsigned)Unit::KNOTS, N_("knots") },
     { (unsigned)Unit::METER_PER_SECOND, _T("m/s") },
     { (unsigned)Unit::FEET_PER_MINUTE, _T("ft/min") },
@@ -173,7 +173,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned)config.vertical_speed_unit, this);
   SetExpertRow(UnitsLift);
 
-  static const StaticEnumChoice  units_altitude_list[] = {
+  static constexpr StaticEnumChoice units_altitude_list[] = {
     { (unsigned)Unit::FEET,  N_("foot") },
     { (unsigned)Unit::METER, N_("meter") },
     { 0 }
@@ -183,7 +183,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned)config.altitude_unit, this);
   SetExpertRow(UnitsAltitude);
 
-  static const StaticEnumChoice  units_temperature_list[] = {
+  static constexpr StaticEnumChoice units_temperature_list[] = {
     { (unsigned)Unit::DEGREES_CELCIUS, _T(DEG "C") },
     { (unsigned)Unit::DEGREES_FAHRENHEIT, _T(DEG "F") },
     { 0 }
@@ -193,7 +193,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned)config.temperature_unit, this);
   SetExpertRow(UnitsTemperature);
 
-  static const StaticEnumChoice  units_taskspeed_list[] = {
+  static constexpr StaticEnumChoice units_taskspeed_list[] = {
     { (unsigned)Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
     { (unsigned)Unit::KNOTS, N_("knots") },
     { (unsigned)Unit::KILOMETER_PER_HOUR, _T("km/h") },
@@ -204,7 +204,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
           (unsigned)config.task_speed_unit, this);
   SetExpertRow(UnitsTaskSpeed);
 
-  static const StaticEnumChoice pressure_labels_list[] = {
+  static constexpr StaticEnumChoice pressure_labels_list[] = {
     { (unsigned)Unit::HECTOPASCAL, _T("hPa") },
     { (unsigned)Unit::MILLIBAR, _T("mb") },
     { (unsigned)Unit::INCH_MERCURY, _T("inHg") },
@@ -218,7 +218,7 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddSpacer();
   SetExpertRow(spacer_2);
 
-  static const StaticEnumChoice units_lat_lon_list[] = {
+  static constexpr StaticEnumChoice units_lat_lon_list[] = {
     { (unsigned)CoordinateFormat::DDMMSS, _T("DDMMSS") },
     { (unsigned)CoordinateFormat::DDMMSS_SS, _T("DDMMSS.ss") },
     { (unsigned)CoordinateFormat::DDMM_MMM, _T("DDMM.mmm") },

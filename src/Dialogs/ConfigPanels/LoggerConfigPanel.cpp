@@ -49,7 +49,7 @@ public:
   virtual bool Save(bool &changed, bool &require_restart);
 };
 
-static const StaticEnumChoice auto_logger_list[] = {
+static constexpr StaticEnumChoice auto_logger_list[] = {
   { (unsigned)LoggerSettings::AutoLogger::ON, N_("On"), NULL },
   { (unsigned)LoggerSettings::AutoLogger::START_ONLY, N_("Start only"), NULL },
   { (unsigned)LoggerSettings::AutoLogger::OFF, N_("Off"), NULL },

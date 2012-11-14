@@ -39,7 +39,7 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-static const unsigned FILE_CACHE_MAGIC = 0xab352f8a;
+static constexpr unsigned FILE_CACHE_MAGIC = 0xab352f8a;
 
 struct FileInfo {
   uint64_t mtime;

@@ -68,7 +68,7 @@ class QuadTree : private NonCopyable {
   /**
    * Split a bucket when it has this number of leaves.
    */
-  static const unsigned SPLIT_THRESHOLD = 16;
+  static constexpr unsigned SPLIT_THRESHOLD = 16;
 
 public:
   typedef int position_type;
@@ -729,7 +729,7 @@ protected:
   };
 
   struct QuadBucket {
-    static const unsigned N = 4;
+    static constexpr unsigned N = 4;
 
     Bucket buckets[N];
 

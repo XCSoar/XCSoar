@@ -24,14 +24,14 @@ Copyright_License {
 #include "Geo/UTM.hpp"
 #include "Geo/GeoPoint.hpp"
 
-static const double k0 = 0.9996;
+static constexpr double k0 = 0.9996;
 
-static const double e = 0.00669438;
-static const double e2 = e * e;
-static const double e3 = e * e;
-static const double e_p2 = e / (1.0 - e);
+static constexpr double e = 0.00669438;
+static constexpr double e2 = e * e;
+static constexpr double e3 = e * e;
+static constexpr double e_p2 = e / (1.0 - e);
 
-static const double r = 6378137;
+static constexpr double r = 6378137;
 
 char
 UTM::CalculateZoneLetter(const Angle latitude)

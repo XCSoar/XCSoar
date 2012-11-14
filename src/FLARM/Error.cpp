@@ -41,7 +41,7 @@ FlarmError::ToString(Severity severity)
     : N_("Unknown");
 }
 
-static const struct {
+static constexpr struct {
   FlarmError::Code code;
   const TCHAR *string;
 } error_strings[] = {

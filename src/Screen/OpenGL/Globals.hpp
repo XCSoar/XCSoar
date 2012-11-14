@@ -66,7 +66,7 @@ namespace OpenGL {
 #ifdef ANDROID
   extern bool vertex_buffer_object;
 #else
-  static const bool vertex_buffer_object = true;
+  static constexpr bool vertex_buffer_object = true;
 #endif
 
   /**

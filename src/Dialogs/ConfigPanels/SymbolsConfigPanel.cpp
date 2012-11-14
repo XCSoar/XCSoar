@@ -82,14 +82,14 @@ SymbolsConfigPanel::OnModified(DataField &df)
   }
 }
 
-static const StaticEnumChoice  ground_track_mode_list[] = {
+static constexpr StaticEnumChoice ground_track_mode_list[] = {
   { (unsigned)DisplayGroundTrack::OFF, N_("Off"), N_("Disable display of ground track line.") },
   { (unsigned)DisplayGroundTrack::ON, N_("On"), N_("Always display ground track line.") },
   { (unsigned)DisplayGroundTrack::AUTO, N_("Auto"), N_("Display ground track line if there is a significant difference to plane heading.") },
   { 0 }
 };
 
-static const StaticEnumChoice  trail_length_list[] = {
+static constexpr StaticEnumChoice trail_length_list[] = {
   { (unsigned)TrailSettings::Length::OFF, N_("Off") },
   { (unsigned)TrailSettings::Length::LONG, N_("Long") },
   { (unsigned)TrailSettings::Length::SHORT, N_("Short") },
@@ -97,7 +97,7 @@ static const StaticEnumChoice  trail_length_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice  trail_type_list[] = {
+static constexpr StaticEnumChoice trail_type_list[] = {
   { (unsigned)TrailSettings::Type::VARIO_1, N_("Vario #1"), N_("Within lift areas "
     "lines get displayed green and thicker, while sinking lines are shown brown and thin. "
     "Zero lift is presented as a grey line.") },
@@ -126,7 +126,7 @@ static constexpr StaticEnumChoice  aircraft_symbol_list[] = {
   { 0 }
 };
 
-static const StaticEnumChoice  wind_arrow_list[] = {
+static constexpr StaticEnumChoice wind_arrow_list[] = {
   { (unsigned)WindArrowStyle::NO_ARROW, N_("Off"), N_("No wind arrow is drawn.") },
   { (unsigned)WindArrowStyle::ARROW_HEAD, N_("Arrow head"), N_("Draws an arrow head only.") },
   { (unsigned)WindArrowStyle::FULL_ARROW, N_("Full arrow"), N_("Draws an arrow head with a dashed arrow line.") },

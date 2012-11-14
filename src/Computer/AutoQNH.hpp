@@ -32,7 +32,7 @@ struct ComputerSettings;
 class Waypoints;
 
 class AutoQNH {
-  static const unsigned QNH_TIME = 10;
+  static constexpr unsigned QNH_TIME = 10;
 
   unsigned countdown_autoqnh;
 

@@ -30,7 +30,7 @@ Copyright_License {
 #include <math.h>
 #include <assert.h>
 
-static const unsigned ScaleList[] = {
+static constexpr unsigned ScaleList[] = {
   100,
   200,
   300,
@@ -50,7 +50,7 @@ static const unsigned ScaleList[] = {
   1000000,
 };
 
-static const unsigned ScaleListCount = ARRAY_SIZE(ScaleList);
+static constexpr unsigned ScaleListCount = ARRAY_SIZE(ScaleList);
 
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const

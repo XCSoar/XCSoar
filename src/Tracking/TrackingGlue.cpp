@@ -31,7 +31,7 @@ Copyright_License {
 static LiveTrack24::VehicleType
 MapVehicleTypeToLifetrack24(TrackingSettings::VehicleType vt)
 {
-  static const LiveTrack24::VehicleType vehicleTypeMap[] = {
+  static constexpr LiveTrack24::VehicleType vehicleTypeMap[] = {
     LiveTrack24::VehicleType::GLIDER,
     LiveTrack24::VehicleType::PARAGLIDER,
     LiveTrack24::VehicleType::POWERED_AIRCRAFT,
