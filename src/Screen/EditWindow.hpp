@@ -156,9 +156,32 @@ public:
 #endif
   }
 
+  /**
+   * Simulate a key press.
+   */
+  void SendKey(unsigned key_code) {
+#ifdef USE_GDI
+    ::SendMessage(hWnd, WM_KEYDOWN, (WPARAM)key_code, (LPARAM)0);
+#else
+    OnKeyDown(key_code);
+#endif
+  }
+
+  /**
+   * Simulate a key press.
+   */
+  void SendCharacter(TCHAR ch) {
+#ifdef USE_GDI
+    ::SendMessage(hWnd, WM_CHAR, (WPARAM)ch, (LPARAM)0);
+#else
+    OnCharacter(ch);
+#endif
+  }
+
 #ifndef USE_GDI
 protected:
   virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual bool OnCharacter(unsigned ch) gcc_override;
 #endif /* !USE_GDI */
 };
 

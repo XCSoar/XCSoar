@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Key.h"
+#include "Util/CharUtil.hpp"
 
 void
 EditWindow::Create(ContainerWindow &parent, PixelRect rc,
@@ -68,6 +70,41 @@ EditWindow::OnPaint(Canvas &canvas)
   const PixelScalar y = (canvas_height - text_height) / 2;
 
   canvas.TextAutoClipped(x, y, value.c_str());
+}
+
+bool
+EditWindow::OnCharacter(unsigned ch)
+{
+  if (IsReadOnly())
+    return false;
+
+  if (ch == '\b') {
+    /* backspace */
+    if (!value.empty()) {
+      value.erase(value.end() - 1);
+      Invalidate();
+    }
+
+    return true;
+  }
+
+  if (value.length() >= max_length)
+    return false;
+
+  if (ch < 0x20)
+    return false;
+
+  if (ch >= 0x80)
+    // TODO: ignoring non-ASCII characters for now
+    return false;
+
+  if (IsAlphaNumericASCII(ch) || ch == ' ') {
+    value.push_back((TCHAR)ch);
+    Invalidate();
+    return true;
+  }
+
+  return false;
 }
 
 void
