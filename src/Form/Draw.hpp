@@ -75,10 +75,10 @@ protected:
   OnMouseDownCallback_t mOnMouseDownCallback;
 
   /** from class PaintWindow */
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 
   /** from class Window */
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
 };
 
 #endif

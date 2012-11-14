@@ -68,9 +68,9 @@ protected:
   }
 
 public:
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-  virtual void Move(const PixelRect &rc);
+  virtual void Show(const PixelRect &rc) gcc_override;
+  virtual void Hide() gcc_override;
+  virtual void Move(const PixelRect &rc) gcc_override;
 };
 
 #endif

@@ -120,8 +120,8 @@ public:
   }
 
 protected:
-  virtual void OnCreate();
-  virtual void OnDestroy();
+  virtual void OnCreate() gcc_override;
+  virtual void OnDestroy() gcc_override;
 };
 
 #endif

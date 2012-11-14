@@ -127,9 +127,9 @@ public:
   void UpdateLayout();
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnCreate();
-  virtual void OnDestroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnCreate() gcc_override;
+  virtual void OnDestroy() gcc_override;
 };
 
 #endif

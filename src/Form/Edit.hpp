@@ -102,7 +102,7 @@ public:
   bool BeginEditing();
 
 protected:
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
   virtual void OnSetFocus() gcc_override;
   virtual void OnKillFocus() gcc_override;
 
@@ -110,12 +110,12 @@ protected:
    * The OnMouseDown event is called when the mouse is pressed over the button
    * (derived from Window)
    */
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
   /**
    * The OnMouseUp event is called when the mouse is released over the button
    * (derived from Window)
    */
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) gcc_override;
 
@@ -155,7 +155,7 @@ private:
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 
   /** Increases the Editor value */
   int IncValue();

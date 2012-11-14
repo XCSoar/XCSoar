@@ -65,14 +65,14 @@ public:
    * control is focused
    * (derived from Window)
    */
-  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
 
   /**
    * The OnKeyUp event is called when a key is released while the
    * control is focused
    * (derived from Window)
    */
-  virtual bool OnKeyUp(unsigned key_code);
+  virtual bool OnKeyUp(unsigned key_code) gcc_override;
 
   /**
    * Does this control have a help text?

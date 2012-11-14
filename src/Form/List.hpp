@@ -304,35 +304,41 @@ protected:
   /** Draws the ScrollBar */
   void DrawScrollBar(Canvas &canvas);
 
+#ifndef _WIN32_WCE
+  virtual bool OnTimer(WindowTimer &timer) gcc_override;
+  virtual void OnDestroy() gcc_override;
+#endif
+
   /**
    * The OnResize event is called when the Control is resized
    * (derived from Window)
    */
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
 
-  virtual void OnSetFocus();
-  virtual void OnKillFocus();
+  virtual void OnSetFocus() gcc_override;
+  virtual void OnKillFocus() gcc_override;
 
   /**
    * The OnMouseDown event is called when the mouse is pressed over the button
    * (derived from Window)
    */
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
   /**
    * The OnMouseUp event is called when the mouse is released over the button
    * (derived from Window)
    */
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
   /**
    * The OnMouseMove event is called when the mouse is moved over the button
    * (derived from Window)
    */
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) gcc_override;
   /**
    * The OnMouseWheel event is called when the mouse wheel is turned
    * (derived from Window)
    */
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) gcc_override;
 
   virtual bool OnKeyCheck(unsigned key_code) const;
 
@@ -341,21 +347,16 @@ protected:
    * button is focused
    * (derived from Window)
    */
-  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
 
-  virtual bool OnCancelMode();
+  virtual bool OnCancelMode() gcc_override;
 
   /**
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void OnPaint(Canvas &canvas);
-  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty);
-
-#ifndef _WIN32_WCE
-  virtual bool OnTimer(WindowTimer &timer);
-  virtual void OnDestroy();
-#endif
+  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) gcc_override;
 };
 
 #endif

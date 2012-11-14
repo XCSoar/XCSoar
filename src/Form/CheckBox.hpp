@@ -66,12 +66,12 @@ public:
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
-  virtual bool OnClicked();
+  virtual bool OnClicked() gcc_override;
 
 #ifdef _WIN32_WCE
 protected:
-  virtual bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code);
+  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
 #endif
 
 private:

@@ -141,7 +141,7 @@ public:
    * keyboard).  The default implementation invokes the OnClick
    * callback.
    */
-  virtual bool OnClicked();
+  virtual bool OnClicked() gcc_override;
 
 private:
   /**
@@ -153,13 +153,13 @@ private:
 
 protected:
 #ifdef USE_GDI
-  virtual void OnSetFocus();
-  virtual void OnKillFocus();
+  virtual void OnSetFocus() gcc_override;
+  virtual void OnKillFocus() gcc_override;
 #endif
 
-  virtual bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code);
-  virtual void OnPaint(Canvas &canvas);
+  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 };
 
 #endif

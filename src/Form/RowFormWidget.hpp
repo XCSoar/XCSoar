@@ -594,12 +594,13 @@ protected:
 
 public:
   /* virtual methods from Widget */
-  virtual PixelSize GetMinimumSize() const;
-  virtual PixelSize GetMaximumSize() const;
-  virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual void Move(const PixelRect &rc);
-  virtual bool SetFocus();
+  virtual PixelSize GetMinimumSize() const gcc_override;
+  virtual PixelSize GetMaximumSize() const gcc_override;
+  virtual void Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) gcc_override;
+  virtual void Show(const PixelRect &rc) gcc_override;
+  virtual void Move(const PixelRect &rc) gcc_override;
+  virtual bool SetFocus() gcc_override;
 };
 
 #endif

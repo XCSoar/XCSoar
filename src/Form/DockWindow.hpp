@@ -66,8 +66,8 @@ public:
 protected:
   void DeleteWidget();
 
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
-  virtual void OnDestroy();
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnDestroy() gcc_override;
 };
 
 #endif

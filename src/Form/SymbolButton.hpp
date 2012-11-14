@@ -64,7 +64,7 @@ protected:
    * The OnPaint event is called when the button needs to be drawn
    * (derived from PaintWindow)
    */
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 };
 
 #endif

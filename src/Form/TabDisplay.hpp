@@ -133,7 +133,7 @@ protected:
    * paints the tab buttons
    * @param canvas
    */
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
   //ToDo: support function buttons
 
   /**
@@ -141,17 +141,18 @@ protected:
    * @param key_code
    * @return
    */
-  virtual void OnKillFocus();
-  virtual void OnSetFocus();
-  virtual bool OnKeyCheck(unsigned key_code) const;
-  virtual bool OnKeyDown(unsigned key_code);
+  virtual void OnKillFocus() gcc_override;
+  virtual void OnSetFocus() gcc_override;
+  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
 
   /**
    * track mouse clicks
    */
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) gcc_override;
 
   void EndDrag();
 };

@@ -77,7 +77,7 @@ protected:
   signed GetNextEnabledItemIndex(signed currIndex, Direction direction) const;
 
 #ifdef USE_GDI
-  virtual void OnPaint(Canvas &canvas);
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 #endif
 };
 

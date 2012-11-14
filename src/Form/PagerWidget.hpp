@@ -143,19 +143,21 @@ public:
   }
 
   /* methods from Widget */
-  virtual PixelSize GetMinimumSize() const;
-  virtual PixelSize GetMaximumSize() const;
-  virtual void Initialise(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-  virtual bool Save(bool &changed, bool &require_restart);
-  virtual bool Click();
-  virtual void ReClick();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-  virtual bool Leave();
-  virtual void Move(const PixelRect &rc);
-  virtual bool SetFocus();
+  virtual PixelSize GetMinimumSize() const gcc_override;
+  virtual PixelSize GetMaximumSize() const gcc_override;
+  virtual void Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) gcc_override;
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
+  virtual bool Save(bool &changed, bool &require_restart) gcc_override;
+  virtual bool Click() gcc_override;
+  virtual void ReClick() gcc_override;
+  virtual void Show(const PixelRect &rc) gcc_override;
+  virtual void Hide() gcc_override;
+  virtual bool Leave() gcc_override;
+  virtual void Move(const PixelRect &rc) gcc_override;
+  virtual bool SetFocus() gcc_override;
 };
 
 #endif
