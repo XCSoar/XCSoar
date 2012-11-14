@@ -66,7 +66,7 @@ EGM96::Close()
 }
 
 fixed
-EGM96::LookupSeparation(const GeoPoint pt)
+EGM96::LookupSeparation(const GeoPoint &pt)
 {
   if (!egm96data)
     return fixed_zero;

@@ -46,7 +46,8 @@ namespace EGM96
    * @param lon Longitude
    * @return The geoid separation
    */
-  fixed LookupSeparation(const GeoPoint pt);
+  gcc_pure
+  fixed LookupSeparation(const GeoPoint &pt);
 }
 
 #endif

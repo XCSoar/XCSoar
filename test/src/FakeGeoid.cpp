@@ -25,7 +25,7 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 
 fixed
-EGM96::LookupSeparation(gcc_unused const GeoPoint pt)
+EGM96::LookupSeparation(gcc_unused const GeoPoint &pt)
 {
   return fixed_zero;
 }
