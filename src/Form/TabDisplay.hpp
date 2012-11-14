@@ -146,6 +146,8 @@ protected:
    */
   virtual void OnKillFocus() gcc_override;
   virtual void OnSetFocus() gcc_override;
+  virtual bool OnCancelMode() gcc_override;
+
   virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
   virtual bool OnKeyDown(unsigned key_code) gcc_override;
 

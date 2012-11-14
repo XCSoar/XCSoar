@@ -227,6 +227,14 @@ TabDisplay::OnSetFocus()
 }
 
 bool
+TabDisplay::OnCancelMode()
+{
+  PaintWindow::OnCancelMode();
+  EndDrag();
+  return true;
+}
+
+bool
 TabDisplay::OnKeyCheck(unsigned key_code) const
 {
   switch (key_code) {
