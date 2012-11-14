@@ -663,7 +663,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunCirclingWind RunWindZigZag RunWindEKF \
 	RunTask \
 	RunCanvas RunMapWindow \
-	RunDialog RunListControl \
+	RunDialog RunListControl RunTextEntry \
 	RunTerminal \
 	RunRenderOZ \
 	RunWindArrowRenderer \
@@ -1719,6 +1719,33 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(TEST_SRC_DIR)/RunListControl.cpp
 RUN_LIST_CONTROL_DEPENDS = SCREEN EVENT OS THREAD MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
+
+RUN_TEXT_ENTRY_SOURCES = \
+	$(SRC)/Dialogs/dlgTextEntry.cpp \
+	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
+	$(SRC)/Dialogs/HelpDialog.cpp \
+	$(SRC)/Dialogs/ComboPicker.cpp \
+	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/Dialogs/XML.cpp \
+	$(SRC)/Dialogs/Inflate.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/KineticManager.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/XML/Node.cpp \
+	$(SRC)/XML/Parser.cpp \
+	$(SRC)/Formatter/HexColor.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/RunTextEntry.cpp
+RUN_TEXT_ENTRY_DEPENDS = DATA_FIELD FORM SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
+$(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
