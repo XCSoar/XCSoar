@@ -25,7 +25,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-Angle::ToDMS(int &dd, int &mm, int &ss, bool &is_positive) const
+Angle::ToDMS(unsigned &dd, unsigned &mm, unsigned &ss, bool &is_positive) const
 {
   is_positive = !negative(value);
 

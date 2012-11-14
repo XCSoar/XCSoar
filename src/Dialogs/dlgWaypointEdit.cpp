@@ -132,7 +132,7 @@ SetValues()
 
   WndProperty* wp;
   bool sign;
-  int dd,mm,ss;
+  unsigned dd,mm,ss;
 
   global_wpt->location.longitude.ToDMS(dd, mm, ss, sign);
 

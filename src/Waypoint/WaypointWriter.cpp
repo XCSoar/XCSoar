@@ -74,12 +74,13 @@ WaypointWriter::WriteAngle(TextWriter &writer, const Angle &angle,
                            bool is_latitude)
 {
   // Calculate degrees, minutes and seconds
-  int deg, min, sec;
+  unsigned deg, min, sec;
   bool is_positive;
   angle.ToDMS(deg, min, sec, is_positive);
 
   // Save them into the buffer string
-  writer.Format(is_latitude ? "%02d:%02d:%02d" : "%03d:%02d:%02d", deg, min, sec);
+  writer.Format(is_latitude ? "%02u:%02u:%02u" : "%03u:%02u:%02u",
+                deg, min, sec);
 
   // Attach the buffer string to the output
   if (is_latitude)

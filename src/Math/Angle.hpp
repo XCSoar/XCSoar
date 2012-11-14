@@ -200,7 +200,8 @@ public:
    * @param ss Seconds (pointer)
    * @param east True if East, False if West (pointer)
    */
-  void ToDMS(int &dd, int &mm, int &ss, bool &is_positive) const;
+  void ToDMS(unsigned &dd, unsigned &mm, unsigned &ss,
+             bool &is_positive) const;
 
   gcc_pure
   Angle Absolute() const {
