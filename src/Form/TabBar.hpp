@@ -79,6 +79,12 @@ public:
 
 public:
   gcc_pure
+  PixelSize GetMinimumSize() const;
+
+  gcc_pure
+  PixelSize GetMaximumSize() const;
+
+  gcc_pure
   unsigned GetTabCount() const {
     return pager.GetSize();
   }

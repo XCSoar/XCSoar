@@ -55,6 +55,34 @@ TabBarControl::~TabBarControl()
   Destroy();
 }
 
+PixelSize
+TabBarControl::GetMinimumSize() const
+{
+  PixelSize s = pager.GetMinimumSize();
+  if (tab_display != nullptr) {
+    if (tab_display->IsVertical())
+      s.cx += tab_display->GetWidth();
+    else
+      s.cy += tab_display->GetHeight();
+  }
+
+  return s;
+}
+
+PixelSize
+TabBarControl::GetMaximumSize() const
+{
+  PixelSize s = pager.GetMaximumSize();
+  if (tab_display != nullptr) {
+    if (tab_display->IsVertical())
+      s.cx += tab_display->GetWidth();
+    else
+      s.cy += tab_display->GetHeight();
+  }
+
+  return s;
+}
+
 const TCHAR*
 TabBarControl::GetButtonCaption(unsigned i) const
 {
