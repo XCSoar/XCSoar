@@ -68,7 +68,7 @@ protected:
 
   StaticArray<TabButton *, 32> buttons;
 
-  const bool flip_orientation;
+  const bool vertical;
 
   bool dragging; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
@@ -82,7 +82,7 @@ public:
    */
   TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
              ContainerWindow &parent, PixelRect rc,
-             bool _flipOrientation = false);
+             bool vertical);
 
   virtual ~TabDisplay();
 

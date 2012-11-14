@@ -35,10 +35,10 @@ Copyright_License {
 
 TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
                        ContainerWindow &parent, PixelRect rc,
-                       bool _flipOrientation)
+                       bool _vertical)
   :tab_bar(_theTabBar),
    look(_look),
-   flip_orientation(_flipOrientation),
+   vertical(_vertical),
    dragging(false),
    drag_off_button(false),
    down_index(-1)
@@ -65,10 +65,9 @@ TabDisplay::GetButtonSize(unsigned i) const
   const UPixelScalar margin = 1;
 
   /*
-  bool partialTab = false;
-  if ( ((Layout::landscape ^ flip_orientation) && tab_display->GetTabHeight() < get_height()) ||
-      ((!Layout::landscape ^ flip_orientation) && tab_display->GetTabWidth() < get_width()) )
-    partialTab = true;
+  const bool partialTab = vertial
+    ? tab_display->GetTabHeight() < GetHeight()
+    : tab_display->GetTabWidth() < GetWidth();
   */
 
   const UPixelScalar finalmargin = 1; //partialTab ? tab_line_height - 1 * margin : margin;
@@ -77,7 +76,7 @@ TabDisplay::GetButtonSize(unsigned i) const
 
   PixelRect rc;
 
-  if (Layout::landscape ^ flip_orientation) {
+  if (vertical) {
     const UPixelScalar but_height =
        (GetTabHeight() - finalmargin) / GetSize() - margin;
 

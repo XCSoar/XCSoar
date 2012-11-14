@@ -44,7 +44,8 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
 {
   Create(_parent, _parent.GetClientRect(), style);
 
-  tab_display = new TabDisplay(*this, look, *this, tab_rc, flip_orientation);
+  tab_display = new TabDisplay(*this, look, *this, tab_rc,
+                               Layout::landscape ^ flip_orientation);
 
   PixelRect rc = GetClientRect();
   if (Layout::landscape ^ flip_orientation)
