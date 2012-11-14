@@ -275,8 +275,7 @@ bool
 WndProperty::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
-    const bool inside = x >= 0 && y >= 0 &&
-      (unsigned)x < GetWidth() && (unsigned)y < GetHeight();
+    const bool inside = IsInside(x, y);
     if (inside != pressed) {
       pressed = inside;
       Invalidate();

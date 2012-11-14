@@ -779,6 +779,21 @@ public:
   }
 
   /**
+   * Checks whether the specified coordinates are inside the Window's
+   * client area.
+   */
+  gcc_pure
+  bool IsInside(int x, int y) const {
+    const PixelSize size = GetSize();
+    return unsigned(x) < unsigned(size.cx) && unsigned(y) < unsigned(size.cy);
+  }
+
+  gcc_pure
+  bool IsInside(RasterPoint pt) const {
+    return IsInside(pt.x, pt.y);
+  }
+
+  /**
    * Returns the parent's client area rectangle.
    */
 #ifdef USE_GDI

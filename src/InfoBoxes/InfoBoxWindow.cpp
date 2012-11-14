@@ -470,7 +470,7 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
   if (click_clock.IsDefined()) {
     ReleaseCapture();
 
-    if ((unsigned)x < GetWidth() && (unsigned)y < GetHeight() &&
+    if (IsInside(x, y) &&
         (click_clock.Check(1000) || GetDialogContent() != nullptr))
       ShowDialog();
 

@@ -85,8 +85,7 @@ bool
 CheckBox::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
-    SetPressed(x >= 0 && y >= 0 &&
-                (unsigned)x < GetWidth() && (unsigned)y < GetHeight());
+    SetPressed(IsInside(x, y));
     return true;
   } else
     return PaintWindow::OnMouseMove(x, y, keys);

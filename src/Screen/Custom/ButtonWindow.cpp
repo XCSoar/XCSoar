@@ -88,8 +88,7 @@ bool
 ButtonWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
-    set_down(x >= 0 && y >= 0 &&
-             (unsigned)x < GetWidth() && (unsigned)y < GetHeight());
+    set_down(IsInside(x, y));
     return true;
   } else
     return PaintWindow::OnMouseMove(x, y, keys);
