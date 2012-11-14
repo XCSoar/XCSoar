@@ -765,14 +765,9 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
   } else if (StringIsEqual(node.GetName(), _T("TabBar"))) {
     // Create the TabBarControl
 
-    bool flip_orientation = false;
-    if ( (Layout::landscape && StringToIntDflt(node.GetAttribute(_T("Horizontal")), 0)) ||
-         (!Layout::landscape && StringToIntDflt(node.GetAttribute(_T("Vertical")), 0) ) )
-      flip_orientation = true;
-
     style.ControlParent();
     TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look, rc,
-                                              style, flip_orientation);
+                                              style);
     window = tabbar;
 
     // TabMenuControl (TabMenu)
