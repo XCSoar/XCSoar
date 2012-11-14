@@ -37,7 +37,7 @@ namespace EGM96
   /**
    * Clear the EGM96 from the memory
    */
-  void Close();
+  static inline void Close() {}
 
   /**
    * Returns the geoid separation between the EGS96

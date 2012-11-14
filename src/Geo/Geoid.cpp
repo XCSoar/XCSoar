@@ -31,13 +31,11 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 #include "Geo/GeoPoint.hpp"
 
-#include <stdlib.h>
-#include <string.h>
 #include <tchar.h>
 
 #define EGM96SIZE 16200
 
-unsigned char* egm96data= NULL;
+static const uint8_t *egm96data;
 
 void
 EGM96::Load()
@@ -47,18 +45,7 @@ EGM96::Load()
   assert(data.first != nullptr);
   assert(data.second == EGM96SIZE);
 
-  egm96data = (unsigned char *)malloc(data.second);
-  memcpy(egm96data, data.first, data.second);
-}
-
-void
-EGM96::Close()
-{
-  if (!egm96data)
-    return;
-
-  free(egm96data);
-  egm96data = NULL;
+  egm96data = (const uint8_t *)data.first;
 }
 
 fixed
