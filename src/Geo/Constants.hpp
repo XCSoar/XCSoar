@@ -26,8 +26,9 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-#define REARTH 6371000
-#define fixed_earth_r fixed_int_constant(REARTH)
-#define fixed_inv_earth_r fixed(1.0 / REARTH)
+static constexpr unsigned REARTH = 6371000;
+
+static constexpr fixed fixed_earth_r(REARTH);
+static constexpr fixed fixed_inv_earth_r(1.0 / REARTH);
 
 #endif
