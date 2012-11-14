@@ -56,7 +56,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
    settings(_settings), look(_look), units_look(_units_look),
    border_kind(border_flags),
    id(_id),
-   dragging(false),
+   dragging(false), pressed(false),
    force_draw_selector(false),
    focus_timer(*this)
 {
@@ -236,10 +236,11 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 void
 InfoBoxWindow::Paint(Canvas &canvas)
 {
-  if (HasFocus() || force_draw_selector)
-    canvas.Clear(look.focused_background_color);
-  else
-    canvas.Clear(look.background_color);
+  canvas.Clear(pressed
+               ? look.pressed_background_color
+               : (HasFocus() || force_draw_selector
+                  ? look.focused_background_color
+                  : look.background_color));
 
   if (data.GetCustom() && content != NULL)
     content->OnCustomPaint(*this, canvas);
@@ -458,6 +459,9 @@ InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
     dragging = true;
     SetCapture();
     click_clock.Update();
+
+    pressed = true;
+    Invalidate();
   }
 
   // if single clicked -> focus the InfoBoxWindow
@@ -469,11 +473,15 @@ bool
 InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (dragging) {
+    const bool was_pressed = pressed;
+
     dragging = false;
+    pressed = false;
+    Invalidate();
 
     ReleaseCapture();
 
-    if (IsInside(x, y) &&
+    if (was_pressed &&
         (click_clock.Check(1000) || GetDialogContent() != nullptr))
       ShowDialog();
 
@@ -492,6 +500,17 @@ InfoBoxWindow::OnMouseDouble(PixelScalar x, PixelScalar y)
   return true;
 }
 
+bool
+InfoBoxWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
+{
+  if (dragging) {
+    SetPressed(IsInside(x, y));
+    return true;
+  }
+
+  return false;
+}
+
 void
 InfoBoxWindow::OnPaint(Canvas &canvas)
 {
@@ -503,6 +522,8 @@ InfoBoxWindow::OnCancelMode()
 {
   if (dragging) {
     dragging = false;
+    pressed = false;
+    Invalidate();
     ReleaseCapture();
   }
 

@@ -36,7 +36,7 @@ struct InfoBoxLook {
   bool inverse;
 
   Pen border_pen, selector_pen;
-  Color background_color, focused_background_color;
+  Color background_color, focused_background_color, pressed_background_color;
 
   struct {
     Color fg_color;

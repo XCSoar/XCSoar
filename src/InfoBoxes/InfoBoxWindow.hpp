@@ -56,6 +56,11 @@ private:
   bool dragging;
 
   /**
+   * Is the mouse currently pressed inside this InfoBox?
+   */
+  bool pressed;
+
+  /**
    * draw the selector event if the InfoBox window is not the system focus
    */
   bool force_draw_selector;
@@ -123,6 +128,15 @@ public:
   void SetContentProvider(InfoBoxContent *_content);
   void UpdateContent();
 
+private:
+  void SetPressed(bool _pressed) {
+    if (_pressed == pressed)
+      return;
+
+    pressed = _pressed;
+    Invalidate();
+  }
+
 protected:
   void ShowDialog();
 
@@ -160,6 +174,8 @@ protected:
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) gcc_override;
 
   virtual void OnPaint(Canvas &canvas) gcc_override;
 };
