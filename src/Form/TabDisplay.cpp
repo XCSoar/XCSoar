@@ -334,8 +334,6 @@ TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
     if (i == down_index)
       tab_bar.ClickPage(i);
 
-    if (down_index > -1)
-      Invalidate();
     down_index = -1;
     return true;
   } else {
@@ -366,5 +364,6 @@ TabDisplay::EndDrag()
     dragging = false;
     drag_off_button = false;
     ReleaseCapture();
+    Invalidate();
   }
 }
