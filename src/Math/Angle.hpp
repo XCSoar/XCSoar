@@ -155,7 +155,7 @@ public:
 
   constexpr
   static Angle Degrees(unsigned value) {
-    return Angle(int(value));
+    return Degrees(int(value));
   }
 
   constexpr
