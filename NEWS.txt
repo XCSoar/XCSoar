@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.4.4 - not yet released
+Version 6.4.4 - 2012/11/15
 * devices
   - CAI302: longer timeout for "CLEAR LOG"
 * user interface
