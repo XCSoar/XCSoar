@@ -89,12 +89,11 @@ static const StaticEnumChoice  ground_track_mode_list[] = {
   { 0 }
 };
 
-const TCHAR *trail_length_help = N_("Determines whether and how long a snail trail is drawn behind the glider.");
 static const StaticEnumChoice  trail_length_list[] = {
-  { (unsigned)TrailSettings::Length::OFF, N_("Off"), trail_length_help },
-  { (unsigned)TrailSettings::Length::LONG, N_("Long"), trail_length_help },
-  { (unsigned)TrailSettings::Length::SHORT, N_("Short"), trail_length_help },
-  { (unsigned)TrailSettings::Length::FULL, N_("Full"), trail_length_help },
+  { (unsigned)TrailSettings::Length::OFF, N_("Off") },
+  { (unsigned)TrailSettings::Length::LONG, N_("Long") },
+  { (unsigned)TrailSettings::Length::SHORT, N_("Short") },
+  { (unsigned)TrailSettings::Length::FULL, N_("Full") },
   { 0 }
 };
 
@@ -146,7 +145,9 @@ SymbolsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_("FLARM traffic"), _("This enables the display of FLARM traffic on the map window."),
              settings_map.show_flarm_on_map);
 
-  AddEnum(_("Trail length"), NULL, trail_length_list,
+  AddEnum(_("Trail length"),
+          _("Determines whether and how long a snail trail is drawn behind the glider."),
+          trail_length_list,
           (unsigned)settings_map.trail.length, this);
   SetExpertRow(TRAIL_LENGTH);
 

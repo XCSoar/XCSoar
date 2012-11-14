@@ -122,15 +122,13 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   RowFormWidget::Prepare(parent, rc);
 
-  static const TCHAR * preset_help = N_("Load a set of units.");
-  WndProperty *wp = AddEnum(_("Preset"), NULL);
+  WndProperty *wp = AddEnum(_("Preset"), _("Load a set of units."));
   DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-  df.EnableItemHelp(true);
 
   df.addEnumText(_("Custom"), (unsigned)0, _("My individual set of units."));
   unsigned len = Units::Store::Count();
   for (unsigned i = 0; i < len; i++)
-    df.addEnumText(Units::Store::GetName(i), i+1, preset_help);
+    df.addEnumText(Units::Store::GetName(i), i+1);
 
   LoadValueEnum(UnitsPreset, Units::Store::EqualsPresetUnits(config));
   wp->GetDataField()->SetListener(this);
@@ -138,96 +136,98 @@ UnitsConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddSpacer();
   SetExpertRow(spacer_1);
 
-  static const TCHAR * units_speed_help = N_("Units used for airspeed and ground speed.  "
-      "A separate unit is available for task speeds.");
   static const StaticEnumChoice  units_speed_list[] = {
-    { (unsigned)Unit::STATUTE_MILES_PER_HOUR,  _T("mph"), units_speed_help },
-    { (unsigned)Unit::KNOTS,                N_("knots"), units_speed_help },
-    { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_speed_help },
+    { (unsigned)Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
+    { (unsigned)Unit::KNOTS, N_("knots") },
+    { (unsigned)Unit::KILOMETER_PER_HOUR, _T("km/h") },
     { 0 }
   };
-  AddEnum(_("Aircraft/Wind speed"), NULL, units_speed_list,
+  AddEnum(_("Aircraft/Wind speed"),
+          _("Units used for airspeed and ground speed.  "
+            "A separate unit is available for task speeds."),
+          units_speed_list,
           (unsigned int)config.speed_unit, this);
   SetExpertRow(UnitsSpeed);
 
-  static const TCHAR *units_distance_help = _("Units used for horizontal distances e.g. "
-      "range to waypoint, distance to go.");
   static const StaticEnumChoice  units_distance_list[] = {
-    { (unsigned)Unit::STATUTE_MILES,  _T("sm"), units_distance_help },
-    { (unsigned)Unit::NAUTICAL_MILES, _T("nm"), units_distance_help },
-    { (unsigned)Unit::KILOMETER,     _T("km"), units_distance_help },
+    { (unsigned)Unit::STATUTE_MILES, _T("sm") },
+    { (unsigned)Unit::NAUTICAL_MILES, _T("nm") },
+    { (unsigned)Unit::KILOMETER, _T("km") },
     { 0 }
   };
-  AddEnum(_("Distance"), NULL, units_distance_list,
+  AddEnum(_("Distance"),
+          _("Units used for horizontal distances e.g. "
+            "range to waypoint, distance to go."),
+          units_distance_list,
           (unsigned)config.distance_unit, this);
   SetExpertRow(UnitsDistance);
 
-  static const TCHAR *units_lift_help = _("Units used for vertical speeds (variometer).");
   static const StaticEnumChoice  units_lift_list[] = {
-    { (unsigned)Unit::KNOTS,          N_("knots"), units_lift_help },
-    { (unsigned)Unit::METER_PER_SECOND, _T("m/s"), units_lift_help },
-    { (unsigned)Unit::FEET_PER_MINUTE,  _T("ft/min"), units_lift_help },
+    { (unsigned)Unit::KNOTS, N_("knots") },
+    { (unsigned)Unit::METER_PER_SECOND, _T("m/s") },
+    { (unsigned)Unit::FEET_PER_MINUTE, _T("ft/min") },
     { 0 }
   };
-  AddEnum(_("Lift"), NULL, units_lift_list,
+  AddEnum(_("Lift"), _("Units used for vertical speeds (variometer)."),
+          units_lift_list,
           (unsigned)config.vertical_speed_unit, this);
   SetExpertRow(UnitsLift);
 
-  static const TCHAR *units_altitude_help = _("Units used for altitude and heights.");
   static const StaticEnumChoice  units_altitude_list[] = {
-    { (unsigned)Unit::FEET,  N_("foot"), units_altitude_help },
-    { (unsigned)Unit::METER, N_("meter"), units_altitude_help },
+    { (unsigned)Unit::FEET,  N_("foot") },
+    { (unsigned)Unit::METER, N_("meter") },
     { 0 }
   };
-  AddEnum(_("Altitude"), NULL, units_altitude_list,
+  AddEnum(_("Altitude"), _("Units used for altitude and heights."),
+          units_altitude_list,
           (unsigned)config.altitude_unit, this);
   SetExpertRow(UnitsAltitude);
 
-  static const TCHAR *units_temperature_help = _("Units used for temperature.");
   static const StaticEnumChoice  units_temperature_list[] = {
-    { (unsigned)Unit::DEGREES_CELCIUS,    _T(DEG "C"), units_temperature_help },
-    { (unsigned)Unit::DEGREES_FAHRENHEIT, _T(DEG "F"), units_temperature_help },
+    { (unsigned)Unit::DEGREES_CELCIUS, _T(DEG "C") },
+    { (unsigned)Unit::DEGREES_FAHRENHEIT, _T(DEG "F") },
     { 0 }
   };
-  AddEnum(_("Temperature"), NULL, units_temperature_list,
+  AddEnum(_("Temperature"), _("Units used for temperature."),
+          units_temperature_list,
           (unsigned)config.temperature_unit, this);
   SetExpertRow(UnitsTemperature);
 
-  static const TCHAR *units_taskspeed_help = _("Units used for task speeds.");
   static const StaticEnumChoice  units_taskspeed_list[] = {
-    { (unsigned)Unit::STATUTE_MILES_PER_HOUR,  _T("mph"), units_taskspeed_help },
-    { (unsigned)Unit::KNOTS,                N_("knots"), units_taskspeed_help },
-    { (unsigned)Unit::KILOMETER_PER_HOUR,     _T("km/h"), units_taskspeed_help },
+    { (unsigned)Unit::STATUTE_MILES_PER_HOUR, _T("mph") },
+    { (unsigned)Unit::KNOTS, N_("knots") },
+    { (unsigned)Unit::KILOMETER_PER_HOUR, _T("km/h") },
     { 0 }
   };
-  AddEnum(_("Task speed"), NULL, units_taskspeed_list,
+  AddEnum(_("Task speed"), _("Units used for task speeds."),
+          units_taskspeed_list,
           (unsigned)config.task_speed_unit, this);
   SetExpertRow(UnitsTaskSpeed);
 
-  static const TCHAR *units_pressure_help = _("Units used for pressures.");
   static const StaticEnumChoice pressure_labels_list[] = {
-    { (unsigned)Unit::HECTOPASCAL, _T("hPa"), units_pressure_help },
-    { (unsigned)Unit::MILLIBAR,    _T("mb"), units_pressure_help },
-    { (unsigned)Unit::INCH_MERCURY, _T("inHg"), units_pressure_help },
+    { (unsigned)Unit::HECTOPASCAL, _T("hPa") },
+    { (unsigned)Unit::MILLIBAR, _T("mb") },
+    { (unsigned)Unit::INCH_MERCURY, _T("inHg") },
     { 0 }
   };
-  AddEnum(_("Pressure"), NULL, pressure_labels_list,
+  AddEnum(_("Pressure"), _("Units used for pressures."),
+          pressure_labels_list,
           (unsigned)config.pressure_unit, this);
   SetExpertRow(UnitsPressure);
 
   AddSpacer();
   SetExpertRow(spacer_2);
 
-  static const TCHAR *units_lat_lon_help = _("Units used for latitude and longitude.");
   static const StaticEnumChoice units_lat_lon_list[] = {
-    { (unsigned)CoordinateFormat::DDMMSS, _T("DDMMSS"), units_lat_lon_help },
-    { (unsigned)CoordinateFormat::DDMMSS_SS, _T("DDMMSS.ss"), units_lat_lon_help },
-    { (unsigned)CoordinateFormat::DDMM_MMM, _T("DDMM.mmm"), units_lat_lon_help },
-    { (unsigned)CoordinateFormat::DD_DDDD, _T("DD.dddd"), units_lat_lon_help },
-    { (unsigned)CoordinateFormat::UTM, _T("UTM"), units_lat_lon_help },
+    { (unsigned)CoordinateFormat::DDMMSS, _T("DDMMSS") },
+    { (unsigned)CoordinateFormat::DDMMSS_SS, _T("DDMMSS.ss") },
+    { (unsigned)CoordinateFormat::DDMM_MMM, _T("DDMM.mmm") },
+    { (unsigned)CoordinateFormat::DD_DDDD, _T("DD.dddd") },
+    { (unsigned)CoordinateFormat::UTM, _T("UTM") },
     { 0 }
   };
-  AddEnum(_("Lat./Lon."), NULL, units_lat_lon_list,
+  AddEnum(_("Lat./Lon."), _("Units used for latitude and longitude."),
+          units_lat_lon_list,
           (unsigned)coordinate_format);
   SetExpertRow(UnitsLatLon);
 }
