@@ -34,7 +34,7 @@ class BallastDumpManager
   PeriodClock ballast_clock;
 
 public:
-  BallastDumpManager():enabled(false) {}
+  constexpr BallastDumpManager():enabled(false) {}
 
   bool IsEnabled() const {
     return enabled;
