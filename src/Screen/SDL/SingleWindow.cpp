@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 
+#include <SDL_events.h>
+
 #include <cassert>
 
 bool

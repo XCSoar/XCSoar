@@ -43,7 +43,7 @@ struct Event;
 #elif defined(USE_EGL)
 struct Event;
 #elif defined(ENABLE_SDL)
-#include <SDL_events.h>
+union SDL_Event;
 #endif
 
 #ifndef USE_GDI
