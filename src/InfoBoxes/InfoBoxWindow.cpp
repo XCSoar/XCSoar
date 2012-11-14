@@ -56,6 +56,7 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &parent, PixelRect rc,
    settings(_settings), look(_look), units_look(_units_look),
    border_kind(border_flags),
    id(_id),
+   dragging(false),
    force_draw_selector(false),
    focus_timer(*this)
 {
@@ -453,8 +454,11 @@ InfoBoxWindow::OnKeyDown(unsigned key_code)
 bool
 InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  SetCapture();
-  click_clock.Update();
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+    click_clock.Update();
+  }
 
   // if single clicked -> focus the InfoBoxWindow
   SetFocus();
@@ -464,14 +468,15 @@ InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  if (click_clock.IsDefined()) {
+  if (dragging) {
+    dragging = false;
+
     ReleaseCapture();
 
     if (IsInside(x, y) &&
         (click_clock.Check(1000) || GetDialogContent() != nullptr))
       ShowDialog();
 
-    click_clock.Reset();
     return true;
   }
 
@@ -496,10 +501,13 @@ InfoBoxWindow::OnPaint(Canvas &canvas)
 bool
 InfoBoxWindow::OnCancelMode()
 {
-  click_clock.Reset();
-  ReleaseCapture();
+  if (dragging) {
+    dragging = false;
+    ReleaseCapture();
+  }
+
   PaintWindow::OnCancelMode();
-  return false;
+  return true;
 }
 
 void

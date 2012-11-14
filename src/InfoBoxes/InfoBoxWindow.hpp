@@ -53,6 +53,8 @@ private:
 
   InfoBoxData data;
 
+  bool dragging;
+
   /**
    * draw the selector event if the InfoBox window is not the system focus
    */
