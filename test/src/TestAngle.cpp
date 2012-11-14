@@ -86,7 +86,7 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Degrees(-fixed_90).Hours(), -fixed(6)));
 
   // Test DMS()
-  ok1(equals(Angle::DMS(fixed_90, fixed(30), fixed(15)).Degrees(),
+  ok1(equals(Angle::DMS(90, 30, 15).Degrees(),
              fixed(90.504166667)));
 
   // Test AbsoluteDegrees()

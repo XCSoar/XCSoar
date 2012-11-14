@@ -672,7 +672,7 @@ ParseCoordsTNP(const TCHAR *buffer, GeoPoint &point)
   min = labs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.latitude = Angle::DMS(fixed(deg), fixed(min), fixed(sec));
+  point.latitude = Angle::DMS(deg, min, sec);
   if (negative)
     point.latitude.Flip();
 
@@ -689,7 +689,7 @@ ParseCoordsTNP(const TCHAR *buffer, GeoPoint &point)
   min = labs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.longitude = Angle::DMS(fixed(deg), fixed(min), fixed(sec));
+  point.longitude = Angle::DMS(deg, min, sec);
   if (negative)
     point.longitude.Flip();
 

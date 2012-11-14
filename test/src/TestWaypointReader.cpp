@@ -458,8 +458,8 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp);
 
   // Aconcagua
-  loc.latitude = Angle::DMS(fixed(32), fixed(39), fixed(12)).Flipped();
-  loc.longitude = Angle::DMS(fixed(70), fixed(0), fixed(42)).Flipped();
+  loc.latitude = Angle::DMS(32, 39, 12).Flipped();
+  loc.longitude = Angle::DMS(70, 0, 42).Flipped();
 
   Waypoint wp2(loc);
   wp2.elevation = fixed(6962);
@@ -474,8 +474,8 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp2);
 
   // Golden Gate Bridge
-  loc.latitude = Angle::DMS(fixed(37), fixed(49), fixed(3));
-  loc.longitude = Angle::DMS(fixed(122), fixed(28), fixed(42)).Flipped();
+  loc.latitude = Angle::DMS(37, 49, 3);
+  loc.longitude = Angle::DMS(122, 28, 42).Flipped();
 
   Waypoint wp3(loc);
   wp3.elevation = fixed(227);
@@ -490,8 +490,8 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp3);
 
   // Red Square
-  loc.latitude = Angle::DMS(fixed(55), fixed(45), fixed(15));
-  loc.longitude = Angle::DMS(fixed(37), fixed(37), fixed(12));
+  loc.latitude = Angle::DMS(55, 45, 15);
+  loc.longitude = Angle::DMS(37, 37, 12);
 
   Waypoint wp4(loc);
   wp4.elevation = fixed(123);
@@ -507,8 +507,8 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp4);
 
   // Sydney Opera
-  loc.latitude = Angle::DMS(fixed(33), fixed(51), fixed(25)).Flipped();
-  loc.longitude = Angle::DMS(fixed(151), fixed(12), fixed(55));
+  loc.latitude = Angle::DMS(33, 51, 25).Flipped();
+  loc.longitude = Angle::DMS(151, 12, 55);
 
   Waypoint wp5(loc);
   wp5.elevation = fixed(5);

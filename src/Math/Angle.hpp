@@ -186,9 +186,13 @@ public:
   }
 #endif
 
+#ifdef FIXED_MATH
   gcc_const
-  static Angle DMS(const fixed d, const fixed m, const fixed s) {
-    return Angle::Degrees(d + m / 60 + s / 3600);
+#else
+  constexpr
+#endif
+  static Angle DMS(unsigned d, unsigned m, unsigned s) {
+    return Angle::Degrees(fixed(d) + fixed(m) / 60 + fixed(s) / 3600);
   }
 
   /**

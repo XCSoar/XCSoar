@@ -109,20 +109,20 @@ TestOpenAir()
         continue;
 
       ok1(equals(points[0].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
+                 Angle::DMS(1, 30, 30),
+                 Angle::DMS(1, 30, 30).Flipped()));
       ok1(equals(points[1].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30))));
+                 Angle::DMS(1, 30, 30),
+                 Angle::DMS(1, 30, 30)));
       ok1(equals(points[2].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30))));
+                 Angle::DMS(1, 30, 30).Flipped(),
+                 Angle::DMS(1, 30, 30)));
       ok1(equals(points[3].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
+                 Angle::DMS(1, 30, 30).Flipped(),
+                 Angle::DMS(1, 30, 30).Flipped()));
       ok1(equals(points[4].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
+                 Angle::DMS(1, 30, 30),
+                 Angle::DMS(1, 30, 30).Flipped()));
     } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {
       ok1(_tcscmp(_T("130.125 MHz"), airspace.GetRadioText().c_str()) == 0);
     } else if (_tcscmp(_T("Height-Test-1"), airspace.GetName()) == 0) {
@@ -214,20 +214,20 @@ TestTNP()
         continue;
 
       ok1(equals(points[0].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
+                 Angle::DMS(1, 30, 30),
+                 Angle::DMS(1, 30, 30).Flipped()));
       ok1(equals(points[1].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30))));
+                 Angle::DMS(1, 30, 30),
+                 Angle::DMS(1, 30, 30)));
       ok1(equals(points[2].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30))));
+                 Angle::DMS(1, 30, 30).Flipped(),
+                 Angle::DMS(1, 30, 30)));
       ok1(equals(points[3].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
+                 Angle::DMS(1, 30, 30).Flipped(),
+                 Angle::DMS(1, 30, 30).Flipped()));
       ok1(equals(points[4].GetLocation(),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)),
-                 Angle::DMS(fixed(1), fixed(30), fixed(30)).Flipped()));
+                 Angle::DMS(1, 30, 30),
+                 Angle::DMS(1, 30, 30).Flipped()));
     } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {
       ok1(_tcscmp(_T("130.125 MHz"), airspace.GetRadioText().c_str()) == 0);
     } else if (_tcscmp(_T("Height-Test-1"), airspace.GetName()) == 0) {
