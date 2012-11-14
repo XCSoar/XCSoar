@@ -35,12 +35,12 @@ class DoubleClick {
   /**
    * The maximum time span between two clicks for a double click [ms].
    */
-  static const unsigned INTERVAL_MS = 500;
+  static constexpr unsigned INTERVAL_MS = 500;
 
   /**
    * The maximum distance between two clicks.
    */
-  static const unsigned MAX_DISTANCE_PX = 50;
+  static constexpr unsigned MAX_DISTANCE_PX = 50;
 
   PeriodClock clock;
 
