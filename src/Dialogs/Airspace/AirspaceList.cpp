@@ -142,7 +142,7 @@ UpdateList()
     sort_distance = true;
     Angle a = dialog_state.direction == 0
       ? CommonInterface::Basic().attitude.heading
-      : Angle::Degrees(fixed(dialog_state.direction));
+      : Angle::Degrees(dialog_state.direction);
     airspace_sorter->FilterByDirection(airspace_list, a);
   }
 

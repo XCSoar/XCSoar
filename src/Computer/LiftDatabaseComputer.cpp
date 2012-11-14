@@ -63,7 +63,7 @@ LiftDatabaseComputer::Reset(LiftDatabase &lift_database,
 static unsigned
 heading_to_index(Angle &heading)
 {
-  static const Angle afive = Angle::Degrees(fixed(5));
+  static constexpr Angle afive = Angle::Degrees(5);
 
   unsigned index = (unsigned)
       ((heading + afive).AsBearing().Degrees() / 10);
@@ -87,7 +87,7 @@ LiftDatabaseComputer::Compute(LiftDatabase &lift_database,
 
   // Depending on the direction set the step size sign for the
   // following loop
-  Angle heading_step = Angle::Degrees(fixed(left ? -10 : 10));
+  Angle heading_step = left ? Angle::Degrees(-10) : Angle::Degrees(10);
 
   const Angle heading = basic.attitude.heading;
 

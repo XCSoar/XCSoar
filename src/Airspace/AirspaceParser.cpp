@@ -183,17 +183,17 @@ struct TempAirspaceType
     airspace_database.Add(as);
   }
 
-  static fixed
+  static int
   ArcStepWidth(fixed radius)
   {
     if (radius > fixed_int_constant(50000))
-      return fixed_int_constant(1);
+      return 1;
     if (radius > fixed_int_constant(25000))
-      return fixed_int_constant(2);
+      return 2;
     if (radius > fixed_int_constant(10000))
-      return fixed_int_constant(3);
+      return 3;
 
-    return fixed_int_constant(5);
+    return 5;
   }
 
   void
@@ -206,7 +206,7 @@ struct TempAirspaceType
     const fixed radius = v.distance;
 
     // 5 or -5, depending on direction
-    const fixed _step = ArcStepWidth(radius);
+    const auto _step = ArcStepWidth(radius);
     const Angle step = Angle::Degrees(rotation * _step);
     const fixed threshold = _step * fixed(1.5);
 
@@ -230,7 +230,7 @@ struct TempAirspaceType
   AppendArc(Angle start, Angle end)
   {
     // 5 or -5, depending on direction
-    const fixed _step = ArcStepWidth(radius);
+    const auto _step = ArcStepWidth(radius);
     const Angle step = Angle::Degrees(rotation * _step);
     const fixed threshold = _step * fixed(1.5);
 
@@ -385,7 +385,7 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
     }
   }
 
-  point.latitude = Angle::Degrees(fixed(deg));
+  point.latitude = Angle::Degrees(deg);
 
   if (*endptr == ' ')
     endptr++;
@@ -424,7 +424,7 @@ ReadCoords(const TCHAR *buffer, GeoPoint &point)
     }
   }
 
-  point.longitude = Angle::Degrees(fixed(deg));
+  point.longitude = Angle::Degrees(deg);
 
   if (*endptr == ' ')
     endptr++;
@@ -445,8 +445,8 @@ ParseArcBearings(const TCHAR *buffer, TempAirspaceType &temp_area)
   // Determine radius and start/end bearing
   TCHAR *endptr;
   temp_area.radius = Units::ToSysUnit(fixed(_tcstod(&buffer[2], &endptr)), Unit::NAUTICAL_MILES);
-  Angle start_bearing = Angle::Degrees(fixed(_tcstod(&endptr[1], &endptr))).AsBearing();
-  Angle end_bearing = Angle::Degrees(fixed(_tcstod(&endptr[1], &endptr))).AsBearing();
+  Angle start_bearing = Angle::Degrees(_tcstod(&endptr[1], &endptr)).AsBearing();
+  Angle end_bearing = Angle::Degrees(_tcstod(&endptr[1], &endptr)).AsBearing();
 
   temp_area.AppendArc(start_bearing, end_bearing);
 }

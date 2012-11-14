@@ -65,8 +65,8 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   if (i > 80)
     return;
 
-  const Angle angle = Angle::Degrees(fixed((i * 360) / 255)).AsBearing();
-  Angle dangle = (angle + Angle::Degrees(fixed(120))).AsBearing();
+  const Angle angle = Angle::FullCircle() * i / 255;
+  Angle dangle = (angle + Angle::Degrees(120)).AsBearing();
   Angle hangle = dangle.Flipped().AsBearing();
 
   int alt = (angle.ifastsine()) / 7;

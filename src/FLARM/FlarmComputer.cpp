@@ -40,8 +40,8 @@ FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
   if (basic.location_available) {
     // Precalculate relative east and north projection to lat/lon
     // for Location calculations of each target
-    Angle delta_lat = Angle::Degrees(fixed(0.01));
-    Angle delta_lon = Angle::Degrees(fixed(0.01));
+    constexpr Angle delta_lat = Angle::Degrees(0.01);
+    constexpr Angle delta_lon = Angle::Degrees(0.01);
 
     GeoPoint plat = basic.location;
     plat.latitude += delta_lat;

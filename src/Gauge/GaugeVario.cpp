@@ -191,7 +191,7 @@ GaugeVario::MakePolygon(const int i)
   RasterPoint *bit = getPolygon(i);
   RasterPoint *bline = &lines[i + gmax];
 
-  const FastPixelRotation r(Angle::Degrees(fixed(i)));
+  const FastPixelRotation r(Angle::Degrees(i));
 
   bit[0] = TransformRotatedPoint(r.Rotate(-xoffset + nlength0, nwidth),
                                  xoffset, yoffset);

@@ -33,10 +33,12 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
   m_is_convex = true;
 
   // @todo: find better enclosing radius as fn of NUM_SEGMENTS
-  #define NUM_SEGMENTS 12
+
+  static constexpr unsigned NUM_SEGMENTS = 12;
   m_border.reserve(NUM_SEGMENTS);
-  for (unsigned i = 0; i <= 12; ++i) {
-    const Angle angle = Angle::Degrees(fixed(i * 360 / NUM_SEGMENTS));
+  Angle angle = Angle::Zero();
+  static constexpr Angle delta = Angle::FullCircle() / NUM_SEGMENTS;
+  for (unsigned i = 0; i <= NUM_SEGMENTS; ++i, angle += delta) {
     const GeoPoint p = GeoVector(m_radius * fixed(1.1), angle).EndPoint(m_center);
     m_border.push_back(SearchPoint(p));
   }

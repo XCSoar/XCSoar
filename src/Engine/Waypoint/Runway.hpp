@@ -71,7 +71,7 @@ public:
   Angle GetDirection() const {
     assert(IsDirectionDefined());
 
-    return Angle::Degrees(fixed(direction));
+    return Angle::Degrees(direction);
   }
 
   gcc_pure
