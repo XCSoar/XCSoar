@@ -62,12 +62,6 @@ Angle::Sign() const
   return 0;
 }
 
-void
-Angle::Flip()
-{
-  value = -value;
-}
-
 fixed
 Angle::AbsoluteDegrees() const 
 {
@@ -78,14 +72,6 @@ fixed
 Angle::AbsoluteRadians() const 
 {
   return Absolute().Radians();
-}
-
-Angle
-Angle::Flipped() const
-{
-  Angle retval(value);
-  retval.Flip();
-  return retval;
 }
 
 Angle

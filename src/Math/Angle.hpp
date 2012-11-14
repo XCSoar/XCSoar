@@ -297,10 +297,14 @@ public:
   gcc_pure
   fixed AbsoluteRadians() const;
 
-  void Flip();
+  void Flip() {
+    value = -value;
+  }
 
-  gcc_pure
-  Angle Flipped() const;
+  constexpr
+  Angle Flipped() const {
+    return Angle(-value);
+  }
 
   /**
    * Limits the angle (theta) to -180 - +180 degrees
@@ -352,14 +356,14 @@ public:
     return Angle(value * x);
   }
 
-  gcc_pure
+  constexpr
   Angle
   operator*(const int x) const
   {
     return Angle(value * x);
   }
 
-  gcc_pure
+  constexpr
   Angle
   operator*(const unsigned x) const
   {
@@ -373,14 +377,14 @@ public:
     return Angle(value / x);
   }
 
-  gcc_pure
+  constexpr
   Angle
   operator/(const int x) const
   {
     return Angle(value / x);
   }
 
-  gcc_pure
+  constexpr
   Angle
   operator/(const unsigned x) const
   {
