@@ -148,49 +148,17 @@ public:
 protected:
   virtual void OnDestroy();
 
-  /**
-   * This event handler is called when a key is pressed down while the InfoBox
-   * is focused
-   * @param key_code The code of the key that was pressed
-   * @return True if the event has been handled, False otherwise
-   */
   virtual bool OnKeyDown(unsigned key_code);
-  /**
-   * This event handler is called when a mouse button is pressed down over
-   * the InfoBox
-   * @param x x-Coordinate where the mouse button was pressed
-   * @param y y-Coordinate where the mouse button was pressed
-   * @return True if the event has been handled, False otherwise
-   */
+
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-
-  /**
-   * This event handler is called when a mouse button is double clicked over
-   * the InfoBox
-   * @param x x-Coordinate where the mouse button was pressed
-   * @param y y-Coordinate where the mouse button was pressed
-   * @return True if the event has been handled, False otherwise
-   */
   virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
 
   virtual void OnResize(UPixelScalar width, UPixelScalar height);
-
-  /**
-   * This event handler is called when the InfoBox needs to be repainted
-   * @param canvas The canvas to paint on
-   */
   virtual void OnPaint(Canvas &canvas);
-
   virtual bool OnCancelMode();
   virtual void OnSetFocus();
   virtual void OnKillFocus();
-
-  /**
-   * This event handler is called when a timer is triggered
-   * @param id Id of the timer that triggered the handler
-   */
   virtual bool OnTimer(WindowTimer &timer);
 };
 
