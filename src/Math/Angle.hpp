@@ -107,6 +107,11 @@ public:
   }
 
   constexpr
+  static Angle Degrees(unsigned value) {
+    return Degrees(int(value));
+  }
+
+  constexpr
   static Angle Degrees(double value) {
     return Angle(fixed(value * DEG_TO_RAD));
   }
@@ -144,8 +149,13 @@ public:
   }
 
   constexpr
-  static Angle Radians(int value) {
-    return Angle(fixed(value * RAD_TO_DEG));
+  static Angle Degrees(int value) {
+    return Angle(fixed(value));
+  }
+
+  constexpr
+  static Angle Degrees(unsigned value) {
+    return Angle(int(value));
   }
 
   constexpr
