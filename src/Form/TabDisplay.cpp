@@ -336,11 +336,12 @@ bool
 TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (dragging) {
+    const bool was_down = !drag_off_button;
+
     EndDrag();
 
-    int i = GetButtonIndexAt({ x, y });
-    if (i == down_index)
-      tab_bar.ClickPage(i);
+    if (was_down)
+      tab_bar.ClickPage(down_index);
 
     down_index = -1;
     return true;
