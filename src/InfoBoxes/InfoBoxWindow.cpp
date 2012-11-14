@@ -464,9 +464,6 @@ InfoBoxWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 bool
 InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 {
-  if (!HasFocus())
-    return PaintWindow::OnMouseUp(x, y);
-
   if (click_clock.IsDefined()) {
     ReleaseCapture();
 
@@ -476,8 +473,9 @@ InfoBoxWindow::OnMouseUp(PixelScalar x, PixelScalar y)
 
     click_clock.Reset();
     return true;
-  } else
-    return PaintWindow::OnMouseUp(x, y);
+  }
+
+  return false;
 }
 
 bool
