@@ -38,10 +38,10 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
                        bool _flipOrientation)
   :tab_bar(_theTabBar),
    look(_look),
+   flip_orientation(_flipOrientation),
    dragging(false),
-   down_index(-1),
    drag_off_button(false),
-   flip_orientation(_flipOrientation)
+   down_index(-1)
 {
   WindowStyle mystyle;
   mystyle.TabStop();

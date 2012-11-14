@@ -68,10 +68,11 @@ protected:
 
   StaticArray<TabButton *, 32> buttons;
 
+  const bool flip_orientation;
+
   bool dragging; // tracks that mouse is down and captured
-  int down_index; // index of tab where mouse down occurred
   bool drag_off_button; // set by mouse_move
-  bool flip_orientation;
+  int down_index; // index of tab where mouse down occurred
 
 public:
   /**
