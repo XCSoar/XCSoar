@@ -72,7 +72,7 @@ protected:
 
   bool dragging; // tracks that mouse is down and captured
   bool drag_off_button; // set by mouse_move
-  int down_index; // index of tab where mouse down occurred
+  unsigned down_index; // index of tab where mouse down occurred
 
   const UPixelScalar tab_line_height;
 

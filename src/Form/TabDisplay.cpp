@@ -41,8 +41,6 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
    look(_look),
    vertical(_vertical),
    dragging(false),
-   drag_off_button(false),
-   down_index(-1),
    tab_line_height(vertical
                    ? (Layout::Scale(TabLineHeightInitUnscaled) * 0.75)
                    : Layout::Scale(TabLineHeightInitUnscaled))
@@ -197,7 +195,7 @@ TabDisplay::OnPaint(Canvas &canvas)
   for (unsigned i = 0; i < buttons.size(); i++) {
     const TabButton &button = *buttons[i];
 
-    const bool is_down = (int)i == down_index && !drag_off_button;
+    const bool is_down = dragging && i == down_index && !drag_off_button;
     const bool is_selected = i == tab_bar.GetCurrentPage();
 
     canvas.SetTextColor(look.list.GetTextColor(is_selected, is_focused,
@@ -323,6 +321,7 @@ TabDisplay::OnMouseDown(PixelScalar x, PixelScalar y)
   int i = GetButtonIndexAt({ x, y });
   if (i >= 0) {
     dragging = true;
+    drag_off_button = false;
     down_index = i;
     SetCapture();
     Invalidate();
@@ -336,14 +335,11 @@ bool
 TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 {
   if (dragging) {
-    const bool was_down = !drag_off_button;
-
     EndDrag();
 
-    if (was_down)
+    if (!drag_off_button)
       tab_bar.ClickPage(down_index);
 
-    down_index = -1;
     return true;
   } else {
     return PaintWindow::OnMouseUp(x, y);
@@ -353,7 +349,7 @@ TabDisplay::OnMouseUp(PixelScalar x, PixelScalar y)
 bool
 TabDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
-  if (down_index == -1)
+  if (!dragging)
     return false;
 
   const PixelRect rc = GetButtonSize(down_index);
@@ -371,7 +367,6 @@ TabDisplay::EndDrag()
 {
   if (dragging) {
     dragging = false;
-    drag_off_button = false;
     ReleaseCapture();
     Invalidate();
   }
