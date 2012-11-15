@@ -76,15 +76,21 @@ TwoWidgets::CalculateSplit(const PixelRect &rc) const
   const PixelSize min_b = second->GetMinimumSize();
   const PixelSize max_b = second->GetMaximumSize();
 
-  return ::CalculateSplit(rc.top, rc.bottom, min_a.cy,
-                          min_b.cy, max_b.cy);
+  return vertical
+    ? ::CalculateSplit(rc.top, rc.bottom, min_a.cy,
+                       min_b.cy, max_b.cy)
+    : ::CalculateSplit(rc.left, rc.right, min_a.cx,
+                       min_b.cx, max_b.cx);
 }
 
 std::pair<PixelRect,PixelRect>
 TwoWidgets::CalculateLayout(const PixelRect &rc) const
 {
   PixelRect a = rc, b = rc;
-  a.bottom = b.top = CalculateSplit(rc);
+  if (vertical)
+    a.bottom = b.top = CalculateSplit(rc);
+  else
+    a.right = b.left = CalculateSplit(rc);
   return std::make_pair(a, b);
 }
 
@@ -94,7 +100,9 @@ TwoWidgets::GetMinimumSize() const
   const PixelSize a = first->GetMinimumSize();
   const PixelSize b = second->GetMinimumSize();
 
-  return PixelSize{ std::max(a.cx, b.cx), PixelScalar(a.cy + b.cy) };
+  return vertical
+    ? PixelSize{ std::max(a.cx, b.cx), PixelScalar(a.cy + b.cy) }
+    : PixelSize{ PixelScalar(a.cx + b.cx), std::max(a.cy, b.cy) };
 }
 
 PixelSize
@@ -103,7 +111,9 @@ TwoWidgets::GetMaximumSize() const
   const PixelSize a = first->GetMaximumSize();
   const PixelSize b = second->GetMaximumSize();
 
-  return PixelSize{ std::max(a.cx, b.cx), PixelScalar(a.cy + b.cy) };
+  return vertical
+    ? PixelSize{ std::max(a.cx, b.cx), PixelScalar(a.cy + b.cy) }
+    : PixelSize{ PixelScalar(a.cx + b.cx), std::max(a.cy, b.cy) };
 }
 
 /**
@@ -113,10 +123,13 @@ TwoWidgets::GetMaximumSize() const
  */
 gcc_const
 static std::pair<PixelRect,PixelRect>
-DummyLayout(const PixelRect rc)
+DummyLayout(const PixelRect rc, bool vertical)
 {
   PixelRect a = rc, b = rc;
-  a.bottom = b.top = (rc.top + rc.bottom) / 2;
+  if (vertical)
+    a.bottom = b.top = (rc.top + rc.bottom) / 2;
+  else
+    a.right = b.left = (rc.left + rc.right) / 2;
   return std::make_pair(a, b);
 }
 
@@ -124,7 +137,7 @@ void
 TwoWidgets::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
   this->rc = rc;
-  const auto layout = DummyLayout(rc);
+  const auto layout = DummyLayout(rc, vertical);
   first->Initialise(parent, layout.first);
   second->Initialise(parent, layout.second);
 }
@@ -133,7 +146,7 @@ void
 TwoWidgets::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   this->rc = rc;
-  const auto layout = DummyLayout(rc);
+  const auto layout = DummyLayout(rc, vertical);
   first->Prepare(parent, layout.first);
   second->Prepare(parent, layout.second);
 }

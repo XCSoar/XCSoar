@@ -33,17 +33,22 @@ Copyright_License {
  * A #Widget that contains two other widgets, the second one following
  * below the first one.  The two #Widget pointers are deleted in the
  * destructor.
+ *
+ * If you construct this object with vertical=false, the second Widget
+ * will be right of the first one.
  */
 class TwoWidgets : public NullWidget {
+  const bool vertical;
+
   Widget *first, *second;
 
   PixelRect rc;
 
 public:
-  TwoWidgets() = default;
+  TwoWidgets(bool _vertical=true):vertical(_vertical) {}
 
-  TwoWidgets(Widget *_first, Widget *_second)
-    :first(_first), second(_second) {
+  TwoWidgets(Widget *_first, Widget *_second, bool _vertical=true)
+    :vertical(_vertical), first(_first), second(_second) {
     assert(first != NULL);
     assert(second != NULL);
   }
