@@ -39,6 +39,36 @@ TwoWidgets::UpdateLayout()
   second->Move(layout.second);
 }
 
+gcc_const
+static int
+CalculateSplit(int top, int bottom, unsigned min_a,
+               unsigned min_b, unsigned max_b)
+{
+  assert(bottom >= top);
+  assert(min_b <= max_b);
+
+  const unsigned height = bottom - top;
+
+  if (min_a <= 0 || min_b <= 0)
+    /* at least one Widet doesn't know its minimums size; there may be
+       better solutions for this, but this workaround is good enough
+       for fixing the assertion failure in DevicesConfigPanel */
+    return (top + bottom) / 2;
+  else if (height >= min_a + max_b)
+    /* more than enough space: align the second Widget at the bottom
+       and give the rest to the first Widget */
+    return bottom - max_b;
+  else if (height >= min_a + min_b)
+    /* still somewhat enough space */
+    return bottom - min_b;
+  else {
+    /* give the best for the rest */
+    const PixelScalar first_height =
+      std::min(min_a, height / 2);
+    return top + first_height;
+  }
+}
+
 PixelScalar
 TwoWidgets::CalculateSplit(const PixelRect &rc) const
 {
@@ -46,26 +76,8 @@ TwoWidgets::CalculateSplit(const PixelRect &rc) const
   const PixelSize min_b = second->GetMinimumSize();
   const PixelSize max_b = second->GetMaximumSize();
 
-  assert(min_b.cy <= max_b.cy);
-
-  if (min_a.cy <= 0 || min_b.cy <= 0)
-    /* at least one Widet doesn't know its minimums size; there may be
-       better solutions for this, but this workaround is good enough
-       for fixing the assertion failure in DevicesConfigPanel */
-    return (rc.top + rc.bottom) / 2;
-  else if (rc.bottom - rc.top >= min_a.cy + max_b.cy)
-    /* more than enough space: align the second Widget at the bottom
-       and give the rest to the first Widget */
-    return rc.bottom - max_b.cy;
-  else if (rc.bottom - rc.top >= min_a.cy + min_b.cy)
-    /* still somewhat enough space */
-    return rc.bottom - min_b.cy;
-  else {
-    /* give the best for the rest */
-    const PixelScalar first_height =
-      std::min(min_a.cy, PixelScalar((rc.bottom - rc.top) / 2));
-    return rc.top + first_height;
-  }
+  return ::CalculateSplit(rc.top, rc.bottom, min_a.cy,
+                          min_b.cy, max_b.cy);
 }
 
 std::pair<PixelRect,PixelRect>
