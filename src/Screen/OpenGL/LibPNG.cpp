@@ -172,9 +172,13 @@ Bitmap::LoadStretch(unsigned id, unsigned zoom)
 }
 #endif
 
+#ifndef USE_LIBJPEG
+
 bool
 Bitmap::LoadFile(const TCHAR *path)
 {
   // TODO: use libjpeg when SDL_image is not available
   return false;
 }
+
+#endif
