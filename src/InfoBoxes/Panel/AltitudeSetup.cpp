@@ -27,34 +27,20 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Simulator.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Form/Util.hpp"
 #include "Form/Edit.hpp"
-#include "Form/TabBar.hpp"
 #include "Form/XMLWidget.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
 class WndButton;
 
 class AltitudeSetupPanel : public XMLWidget {
-  unsigned id;
-
 public:
-  AltitudeSetupPanel(unsigned _id):id(_id) {}
-
-  void Setup();
-
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Show(const PixelRect &rc);
 };
-
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static AltitudeSetupPanel *instance;
 
 static void
 PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessMode Mode)
@@ -80,23 +66,9 @@ PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessMode Mode)
   }
 }
 
-void
-AltitudeSetupPanel::Setup()
-{
-  InfoBoxManager::ShowInfoBoxPicker(id);
-  dlgInfoBoxAccess::OnClose();
-}
-
-static void
-PnlSetupOnSetup(gcc_unused WndButton &Sender)
-{
-  instance->Setup();
-}
-
 static constexpr
 CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PnlSetupOnQNH),
-  DeclareCallBackEntry(PnlSetupOnSetup),
   DeclareCallBackEntry(NULL)
 };
 
@@ -132,5 +104,5 @@ AltitudeSetupPanel::Show(const PixelRect &rc)
 Widget *
 LoadAltitudeSetupPanel(unsigned id)
 {
-  return instance = new AltitudeSetupPanel(id);
+  return new AltitudeSetupPanel();
 }

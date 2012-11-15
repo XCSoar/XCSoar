@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "MacCreadySetup.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Form/TabBar.hpp"
 #include "Form/XMLWidget.hpp"
 #include "Form/Button.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -53,18 +51,6 @@ public:
     context pointer - please refactor! */
 static MacCreadySetupPanel *instance;
 
-void
-MacCreadySetupPanel::Setup()
-{
-  InfoBoxManager::ShowInfoBoxPicker(id);
-  dlgInfoBoxAccess::OnClose();
-}
-
-static void
-PnlSetupOnSetup(gcc_unused WndButton &Sender) {
-  instance->Setup();
-}
-
 static void
 PnlSetupOnMode(gcc_unused WndButton &Sender)
 {
@@ -77,7 +63,6 @@ PnlSetupOnMode(gcc_unused WndButton &Sender)
 }
 
 static constexpr CallBackTableEntry call_back_table[] = {
-  DeclareCallBackEntry(PnlSetupOnSetup),
   DeclareCallBackEntry(PnlSetupOnMode),
   DeclareCallBackEntry(NULL)
 };

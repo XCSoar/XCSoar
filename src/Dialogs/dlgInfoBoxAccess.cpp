@@ -32,7 +32,10 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/ActionWidget.hpp"
+#include "Form/WindowWidget.hpp"
+#include "Form/TwoWidgets.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
@@ -85,6 +88,30 @@ dlgInfoBoxAccessShowModeless(const int id,
 
       if (widget == NULL)
         continue;
+
+      if (i == dlgContent->PANELSIZE - 1) {
+        /* add a "Switch InfoBox" button to the last tab, which we
+           expect to be the "Setup" tab - kludge! */
+
+        PixelRect button_rc;
+        button_rc.left = 0;
+        button_rc.top = 0;
+        button_rc.right = Layout::Scale(60);
+        button_rc.bottom = std::max(UPixelScalar(2 * Layout::GetMinimumControlHeight()),
+                                    Layout::GetMaximumControlHeight());
+
+        ButtonWindowStyle button_style;
+        button_style.Hide();
+        button_style.TabStop();
+        button_style.multiline();
+
+        WndButton *button =
+          new WndButton(*wTabBar, look, _("Switch InfoBox"),
+                        button_rc, button_style,
+                        wf, SWITCH_INFO_BOX);
+
+        widget = new TwoWidgets(widget, new WindowWidget(button), false);
+      }
 
       wTabBar->AddTab(widget, gettext(dlgContent->Panels[i].name));
     }
