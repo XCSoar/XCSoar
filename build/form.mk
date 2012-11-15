@@ -20,6 +20,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/ScrollBar.cpp \
 	$(FORM_SRC_DIR)/Edit.cpp \
 	$(FORM_SRC_DIR)/Widget.cpp \
+	$(FORM_SRC_DIR)/ActionWidget.cpp \
 	$(FORM_SRC_DIR)/WindowWidget.cpp \
 	$(FORM_SRC_DIR)/ListWidget.cpp \
 	$(FORM_SRC_DIR)/PanelWidget.cpp \
