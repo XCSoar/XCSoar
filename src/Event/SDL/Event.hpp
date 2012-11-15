@@ -27,6 +27,8 @@ Copyright_License {
 #include <SDL_version.h>
 #include <SDL_events.h>
 
+#include <assert.h>
+
 enum {
   /**
    * A "user" event for a #Window.
@@ -39,12 +41,35 @@ enum {
   EVENT_CALLBACK,
 };
 
-static inline bool
-IsUserInput(const SDL_Event &event)
-{
-  return event.type == SDL_KEYDOWN || event.type == SDL_KEYUP ||
-    event.type == SDL_MOUSEMOTION ||
-    event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP;
-}
+struct Event {
+  SDL_Event event;
+
+  bool IsKeyDown() const {
+    return event.type == SDL_KEYDOWN;
+  }
+
+  bool IsKey() const {
+    return IsKeyDown() || event.type == SDL_KEYUP;
+  }
+
+  unsigned GetKeyCode() const {
+    assert(IsKey());
+
+    return event.key.keysym.sym;
+  }
+
+  bool IsMouseDown() const {
+    return event.type == SDL_MOUSEBUTTONDOWN;
+  }
+
+  bool IsMouse() const {
+    return IsMouseDown() || event.type == SDL_MOUSEBUTTONUP ||
+      event.type == SDL_MOUSEMOTION;
+  }
+
+  bool IsUserInput() const {
+    return IsKey() || IsMouse();
+  }
+};
 
 #endif

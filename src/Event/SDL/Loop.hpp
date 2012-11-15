@@ -26,10 +26,8 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 
-#include <SDL_version.h>
-#include <SDL_events.h>
-
 class TopWindow;
+struct Event;
 
 class EventLoop : private NonCopyable {
   TopWindow &top_window;
@@ -46,8 +44,8 @@ public:
   EventLoop(TopWindow &_top_window)
     :top_window(_top_window), bulk(true) {}
 
-  bool Get(SDL_Event &event);
-  void Dispatch(SDL_Event &event);
+  bool Get(Event &event);
+  void Dispatch(const Event &event);
 };
 
 #endif

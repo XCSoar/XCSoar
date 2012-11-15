@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
+#include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
 #include "Event/GDI/Queue.hpp"
 
@@ -192,11 +193,11 @@ int
 TopWindow::RunEventLoop()
 {
   EventLoop loop;
-  MSG msg;
-  while (loop.Get(msg))
-    loop.Dispatch(msg);
+  Event event;
+  while (loop.Get(event))
+    loop.Dispatch(event);
 
-  return msg.wParam;
+  return event.msg.wParam;
 }
 
 void

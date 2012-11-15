@@ -22,15 +22,18 @@ Copyright_License {
 */
 
 #include "Screen/SingleWindow.hpp"
+#include "Event/SDL/Event.hpp"
 
 #include <SDL_events.h>
 
 #include <cassert>
 
 bool
-SingleWindow::FilterEvent(const SDL_Event &event, Window *allowed) const
+SingleWindow::FilterEvent(const Event &_event, Window *allowed) const
 {
   assert(allowed != NULL);
+
+  const SDL_Event &event = _event.event;
 
   switch (event.type) {
   case SDL_MOUSEMOTION:

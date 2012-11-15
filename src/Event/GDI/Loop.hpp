@@ -29,10 +29,12 @@ Copyright_License {
 
 #include <windows.h>
 
+struct Event;
+
 class EventLoop : private NonCopyable {
 public:
-  bool Get(MSG &msg);
-  void Dispatch(const MSG &msg);
+  bool Get(Event &msg);
+  void Dispatch(const Event &msg);
 };
 
 class DialogEventLoop : public EventLoop {
@@ -41,7 +43,7 @@ class DialogEventLoop : public EventLoop {
 public:
   DialogEventLoop(HWND _dialog):dialog(_dialog) {}
 
-  void Dispatch(MSG &msg);
+  void Dispatch(Event &msg);
 };
 
 #endif

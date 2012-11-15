@@ -69,20 +69,32 @@ struct Event {
   RasterPoint GetPoint() const {
     return RasterPoint{x, y};
   }
+
+  bool IsKeyDown() const {
+    return type == KEY_DOWN;
+  }
+
+  bool IsKey() const {
+    return IsKeyDown() || type == KEY_UP;
+  }
+
+  unsigned GetKeyCode() const {
+    assert(IsKey());
+
+    return param;
+  }
+
+  bool IsMouseDown() const {
+    return type == MOUSE_DOWN;
+  }
+
+  bool IsMouse() const {
+    return IsMouseDown() || type == MOUSE_UP || type == MOUSE_MOTION;
+  }
+
+  bool IsUserInput() const {
+    return IsKey() || IsMouseDown();
+  }
 };
-
-static inline bool
-IsUserInput(enum Event::Type type)
-{
-  return type == Event::KEY_DOWN || type == Event::KEY_UP ||
-    type == Event::MOUSE_MOTION ||
-    type == Event::MOUSE_DOWN || type == Event::MOUSE_UP;
-}
-
-static inline bool
-IsUserInput(const Event &event)
-{
-  return IsUserInput(event.type);
-}
 
 #endif

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/TopWindow.hpp"
+#include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #include "Screen/Custom/TopCanvas.hpp"
 #include "Util/ConvertString.hpp"
@@ -129,7 +130,7 @@ TopWindow::RunEventLoop()
   Refresh();
 
   EventLoop loop(*this);
-  SDL_Event event;
+  Event event;
   while (IsDefined() && loop.Get(event))
     loop.Dispatch(event);
 

@@ -25,19 +25,37 @@ Copyright_License {
 #define XCSOAR_EVENT_GDI_EVENT_HPP
 
 #include <windows.h>
+#include <assert.h>
 
-static inline bool
-IsUserInput(UINT message)
-{
-  return message == WM_KEYDOWN || message == WM_KEYUP ||
-    message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_LBUTTONDBLCLK;
-}
+struct Event {
+  MSG msg;
 
-static inline bool
-IsUserInput(const MSG &msg)
-{
-  return IsUserInput(msg.message);
-}
+  bool IsKeyDown() const {
+    return msg.message == WM_KEYDOWN;
+  }
+
+  bool IsKey() const {
+    return IsKeyDown() || msg.message == WM_KEYUP;
+  }
+
+  unsigned GetKeyCode() const {
+    assert(IsKey());
+
+    return msg.wParam;
+  }
+
+  bool IsMouseDown() const {
+    return msg.message == WM_LBUTTONDOWN;
+  }
+
+  bool IsMouse() const {
+    return IsMouseDown() || msg.message == WM_LBUTTONUP ||
+      msg.message == WM_LBUTTONDBLCLK;
+  }
+
+  bool IsUserInput() const {
+    return IsKey() || IsMouse();
+  }
+};
 
 #endif

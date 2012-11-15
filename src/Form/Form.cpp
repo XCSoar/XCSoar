@@ -281,119 +281,26 @@ IsSpecialKey(unsigned key_code)
     key_code == KEY_TAB || key_code == KEY_RETURN || key_code == KEY_ESCAPE;
 }
 
-#if defined(ANDROID) || defined(USE_EGL)
-
-static bool
-IsKeyDown(const Event &event)
-{
-  return event.type == Event::KEY_DOWN;
-}
-
-static unsigned
-GetKeyCode(const Event &event)
-{
-  assert(event.type == Event::KEY_DOWN || event.type == Event::KEY_UP);
-
-  return event.param;
-}
-
-static bool
-IsMouseDown(const Event &event)
-{
-  return event.type == Event::MOUSE_DOWN;
-}
-
-gcc_pure
-static bool
-CheckKey(ContainerWindow *container, const Event &event)
-{
-  Window *focused = container->GetFocusedWindow();
-  if (focused == NULL)
-    return false;
-
-  return focused->OnKeyCheck(GetKeyCode(event));
-}
-
-gcc_pure
-static bool
-CheckSpecialKey(ContainerWindow *container, const Event &event)
-{
-  return IsSpecialKey(GetKeyCode(event)) && CheckKey(container, event);
-}
-
-#elif defined(ENABLE_SDL)
-
-static bool
-IsKeyDown(const SDL_Event &event)
-{
-  return event.type == SDL_KEYDOWN;
-}
-
-static unsigned
-GetKeyCode(const SDL_Event &event)
-{
-  assert(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP);
-
-  return event.key.keysym.sym;
-}
-
-static bool
-IsMouseDown(const SDL_Event &event)
-{
-  return event.type == SDL_MOUSEBUTTONDOWN;
-}
-
-gcc_pure
-static bool
-CheckKey(ContainerWindow *container, const SDL_Event &event)
-{
-  Window *focused = container->GetFocusedWindow();
-  if (focused == NULL)
-    return false;
-
-  return focused->OnKeyCheck(GetKeyCode(event));
-}
-
-gcc_pure
-static bool
-CheckSpecialKey(ContainerWindow *container, const SDL_Event &event)
-{
-  return IsSpecialKey(GetKeyCode(event)) && CheckKey(container, event);
-}
-
-#else /* GDI follows: */
-
-static bool
-IsKeyDown(const MSG &msg)
-{
-  return msg.message == WM_KEYDOWN;
-}
-
-static unsigned
-GetKeyCode(const MSG &msg)
-{
-  assert(msg.message == WM_KEYDOWN || msg.message == WM_KEYUP);
-
-  return msg.wParam;
-}
-
-static bool
-IsMouseDown(const MSG &msg)
-{
-  return msg.message == WM_LBUTTONDOWN;
-}
-
 /**
  * Is this key handled by the focused control? (bypassing the dialog
  * manager)
  */
 gcc_pure
 static bool
-CheckKey(ContainerWindow *container, const MSG &msg)
+CheckKey(ContainerWindow *container, const Event &event)
 {
+#ifdef USE_GDI
+  const MSG &msg = event.msg;
   LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
                             (LPARAM)&msg);
   return (r & DLGC_WANTMESSAGE) != 0;
+#else
+  Window *focused = container->GetFocusedWindow();
+  if (focused == NULL)
+    return false;
+
+  return focused->OnKeyCheck(event.GetKeyCode());
+#endif
 }
 
 /**
@@ -402,12 +309,10 @@ CheckKey(ContainerWindow *container, const MSG &msg)
  */
 gcc_pure
 static bool
-CheckSpecialKey(ContainerWindow *container, const MSG &msg)
+CheckSpecialKey(ContainerWindow *container, const Event &event)
 {
-  return IsSpecialKey(msg.wParam) && CheckKey(container, msg);
+  return IsSpecialKey(event.GetKeyCode()) && CheckKey(container, event);
 }
-
-#endif /* !ENABLE_SDL */
 
 int WndForm::ShowModeless()
 {
@@ -457,18 +362,16 @@ WndForm::ShowModal()
 
 #if defined(ANDROID) || defined(USE_EGL)
   EventLoop loop(*event_queue, main_window);
-  Event event;
 #elif defined(ENABLE_SDL)
   EventLoop loop(main_window);
-  SDL_Event event;
 #else
   DialogEventLoop loop(*this);
-  MSG event;
 #endif
+  Event event;
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
     if (!main_window.FilterEvent(event, this)) {
-      if (modeless && IsMouseDown(event))
+      if (modeless && event.IsMouseDown())
         break;
       else
         continue;
@@ -476,7 +379,7 @@ WndForm::ShowModal()
 
     // hack to stop exiting immediately
     if (IsEmbedded() && !IsAltair() && !hastimed &&
-        IsUserInput(event)) {
+        event.IsUserInput()) {
       if (!enter_clock.Check(200))
         /* ignore user input in the first 200ms */
         continue;
@@ -484,36 +387,37 @@ WndForm::ShowModal()
         hastimed = true;
     }
 
-    if (IsKeyDown(event)) {
+    if (event.IsKeyDown()) {
       if (key_down_function &&
 #ifdef USE_GDI
-          IdentifyDescendant(event.hwnd) &&
+          IdentifyDescendant(event.msg.hwnd) &&
 #endif
           !CheckSpecialKey(this, event) &&
-          key_down_function(GetKeyCode(event)))
+          key_down_function(event.GetKeyCode()))
         continue;
 
 #ifdef ENABLE_SDL
-      if (GetKeyCode(event) == SDLK_TAB) {
+      if (event.GetKeyCode() == SDLK_TAB) {
         /* the Tab key moves the keyboard focus */
         const Uint8 *keystate = ::SDL_GetKeyState(NULL);
-        event.key.keysym.sym = keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
+        event.event.key.keysym.sym =
+          keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
           ? SDLK_UP : SDLK_DOWN;
       }
 #endif
 
       if (
 #ifdef USE_GDI
-          IdentifyDescendant(event.hwnd) &&
+          IdentifyDescendant(event.msg.hwnd) &&
 #endif
-          (GetKeyCode(event) == KEY_UP || GetKeyCode(event) == KEY_DOWN)) {
+          (event.GetKeyCode() == KEY_UP || event.GetKeyCode() == KEY_DOWN)) {
         /* KEY_UP and KEY_DOWN move the focus only within the current
            control group - but we want it to behave like Shift-Tab and
            Tab */
 
         if (!CheckKey(this, event)) {
           /* this window doesn't handle KEY_UP/KEY_DOWN */
-          if (GetKeyCode(event) == KEY_DOWN)
+          if (event.GetKeyCode() == KEY_DOWN)
             FocusNextControl();
           else
             FocusPreviousControl();
@@ -524,7 +428,7 @@ WndForm::ShowModal()
 #if !defined USE_GDI || defined _WIN32_WCE
       /* The Windows CE dialog manager does not handle KEY_ESCAPE and
          so we have to do it by ourself */
-      if (GetKeyCode(event) == KEY_ESCAPE) {
+      if (event.GetKeyCode() == KEY_ESCAPE) {
         if (IsAltair())
           /* map VK_ESCAPE to mrOK on Altair, because the Escape key is
              expected to be the one that saves and closes a dialog */

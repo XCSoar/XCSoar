@@ -29,6 +29,7 @@ Copyright_License {
 #include <stack>
 #include <assert.h>
 
+struct Event;
 class WndForm;
 
 /**
@@ -79,16 +80,8 @@ public:
    * rejected when a modal dialog is active, and the event should go
    * to a window outside of the dialog.
    */
-#if defined(ANDROID) || defined(USE_EGL)
   gcc_pure
   bool FilterEvent(const Event &event, Window *allowed) const;
-#elif defined(ENABLE_SDL)
-  gcc_pure
-  bool FilterEvent(const SDL_Event &event, Window *allowed) const;
-#else
-  gcc_pure
-  bool FilterEvent(const MSG &message, Window *allowed) const;
-#endif
 
 protected:
   virtual bool OnClose() gcc_override;

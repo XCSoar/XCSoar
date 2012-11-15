@@ -33,8 +33,10 @@
 #include "Event/EGL/Loop.hpp"
 #include "Event/EGL/Globals.hpp"
 #elif defined(ENABLE_SDL)
+#include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #else
+#include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
 #endif
 
@@ -68,15 +70,13 @@ int main(int argc, char **argv)
 #if defined(ANDROID) || defined(USE_EGL)
   TopWindow main_window;
   EventLoop loop(*event_queue, main_window);
-  Event event;
 #elif defined(ENABLE_SDL)
   TopWindow main_window;
   EventLoop loop(main_window);
-  SDL_Event event;
 #else
   EventLoop loop;
-  MSG event;
 #endif
+  Event event;
 
   TestNotify notify;
   TestThread thread(notify);

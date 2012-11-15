@@ -27,10 +27,10 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 
 bool
-EventLoop::Get(SDL_Event &event)
+EventLoop::Get(Event &event)
 {
   if (bulk) {
-    if (::SDL_PollEvent(&event))
+    if (::SDL_PollEvent(&event.event))
       return true;
 
     /* that was the last event for now, refresh the screen now */
@@ -38,7 +38,7 @@ EventLoop::Get(SDL_Event &event)
     bulk = false;
   }
 
-  if (::SDL_WaitEvent(&event)) {
+  if (::SDL_WaitEvent(&event.event)) {
     bulk = true;
     return true;
   }
@@ -47,8 +47,10 @@ EventLoop::Get(SDL_Event &event)
 }
 
 void
-EventLoop::Dispatch(SDL_Event &event)
+EventLoop::Dispatch(const Event &_event)
 {
+  const SDL_Event &event = _event.event;
+
   if (event.type == EVENT_USER && event.user.data1 != NULL) {
     Window *window = (Window *)event.user.data1;
     window->OnUser(event.user.code);
