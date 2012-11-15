@@ -484,55 +484,57 @@ WndForm::ShowModal()
         hastimed = true;
     }
 
-    if (key_down_function && is_key_down(event) &&
+    if (is_key_down(event)) {
+      if (key_down_function &&
 #ifdef USE_GDI
-        IdentifyDescendant(event.hwnd) &&
+          IdentifyDescendant(event.hwnd) &&
 #endif
-        !check_special_key(this, event) &&
-        key_down_function(get_key_code(event)))
-      continue;
+          !check_special_key(this, event) &&
+          key_down_function(get_key_code(event)))
+        continue;
 
 #ifdef ENABLE_SDL
-    if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_TAB) {
-      /* the Tab key moves the keyboard focus */
-      const Uint8 *keystate = ::SDL_GetKeyState(NULL);
-      event.key.keysym.sym = keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
-        ? SDLK_UP : SDLK_DOWN;
-    }
-#endif
-
-    if (is_key_down(event) &&
-#ifdef USE_GDI
-        IdentifyDescendant(event.hwnd) &&
-#endif
-        (get_key_code(event) == KEY_UP || get_key_code(event) == KEY_DOWN)) {
-      /* KEY_UP and KEY_DOWN move the focus only within the current
-         control group - but we want it to behave like Shift-Tab and
-         Tab */
-
-      if (!check_key(this, event)) {
-        /* this window doesn't handle KEY_UP/KEY_DOWN */
-        if (get_key_code(event) == KEY_DOWN)
-          FocusNextControl();
-        else
-          FocusPreviousControl();
-        continue;
+      if (get_key_code(event) == SDLK_TAB) {
+        /* the Tab key moves the keyboard focus */
+        const Uint8 *keystate = ::SDL_GetKeyState(NULL);
+        event.key.keysym.sym = keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
+          ? SDLK_UP : SDLK_DOWN;
       }
-    }
+#endif
+
+      if (
+#ifdef USE_GDI
+          IdentifyDescendant(event.hwnd) &&
+#endif
+          (get_key_code(event) == KEY_UP || get_key_code(event) == KEY_DOWN)) {
+        /* KEY_UP and KEY_DOWN move the focus only within the current
+           control group - but we want it to behave like Shift-Tab and
+           Tab */
+
+        if (!check_key(this, event)) {
+          /* this window doesn't handle KEY_UP/KEY_DOWN */
+          if (get_key_code(event) == KEY_DOWN)
+            FocusNextControl();
+          else
+            FocusPreviousControl();
+          continue;
+        }
+      }
 
 #if !defined USE_GDI || defined _WIN32_WCE
-    // The Windows CE dialog manager does not handle KEY_ESCAPE and so we have
-    // to do it by ourself.
-    if (is_key_down(event) && get_key_code(event) == KEY_ESCAPE) {
-      if (IsAltair())
-        /* map VK_ESCAPE to mrOK on Altair, because the Escape key is
-           expected to be the one that saves and closes a dialog */
-        modal_result = mrOK;
-      else
-        modal_result = mrCancel;
-      continue;
-    }
+      /* The Windows CE dialog manager does not handle KEY_ESCAPE and
+         so we have to do it by ourself */
+      if (get_key_code(event) == KEY_ESCAPE) {
+        if (IsAltair())
+          /* map VK_ESCAPE to mrOK on Altair, because the Escape key is
+             expected to be the one that saves and closes a dialog */
+          modal_result = mrOK;
+        else
+          modal_result = mrCancel;
+        continue;
+      }
 #endif
+    }
 
     loop.Dispatch(event);
   } // End Modal Loop
