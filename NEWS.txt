@@ -22,14 +22,18 @@ Version 6.5 - not yet released
 * infoboxes
   - added thermal assistant infobox
 
-Version 6.4.4 - not yet released
+Version 6.4.4 - 2012/11/15
 * devices
   - CAI302: longer timeout for "CLEAR LOG"
 * user interface
   - fix font preview in configuration dialog
   - fix the Escape key on Altair
+  - fix wind InfoBox dialog layout (#2192)
+  - add missing "Switch InfoBox" button (#2246)
 * Android
   - fix text rendering on some PowerVR GPUs
+* Windows
+  - fix garbled screen area in task manager (#2272)
 
 Version 6.4.3 - 2012/11/01
 * devices

@@ -2,5 +2,4 @@
 
 <Panel Name="frmInfoBoxMacCreadySetup" Border="0">
   <Button Name="cmdMode" Caption="Setup Mode" X="5" Y="2" Width="80" Height="45" onClick="PnlSetupOnMode"/>
-  <Button Name="cmdSetup" Caption="Switch InfoBox" X="-85" Y="2" Width="80" Height="45" onClick="PnlSetupOnSetup"/>
 </Panel>

@@ -25,6 +25,11 @@ Copyright_License {
 #include "Form/TabDisplay.hpp"
 #include "Asset.hpp"
 
+#ifdef HAVE_CLIPPING
+#include "Screen/Canvas.hpp"
+#include "Look/DialogLook.hpp"
+#endif
+
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,
                              const WindowStyle style, bool vertical)
@@ -161,3 +166,18 @@ TabBarControl::OnDestroy()
 
   ContainerWindow::OnDestroy();
 }
+
+#ifdef HAVE_CLIPPING
+
+void
+TabBarControl::OnPaint(Canvas &canvas)
+{
+  /* erase the remaining background area, just in case the TabDisplay
+     does not cover the whole height or width; this is necessary only
+     on GDI */
+
+  if (tab_display != NULL)
+    canvas.Clear(tab_display->GetLook().background_color);
+}
+
+#endif

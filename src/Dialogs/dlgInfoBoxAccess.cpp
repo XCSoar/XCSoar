@@ -32,48 +32,20 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
-#include "Form/Panel.hpp"
-#include "Form/PanelWidget.hpp"
+#include "Form/Button.hpp"
+#include "Form/ActionWidget.hpp"
+#include "Form/WindowWidget.hpp"
+#include "Form/TwoWidgets.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
-class CloseInfoBoxAccess : public PanelWidget {
-protected:
-  /**
-   * The parent form that needs to be closed
-   */
-  WndForm &wf;
-public:
-  CloseInfoBoxAccess(WndForm &_wf) :
-    wf(_wf) {
-  }
-  virtual bool Click();
-  virtual void ReClick();
-};
-
-class SwitchInfoBox : public PanelWidget {
-protected:
-
-  /**
-   * The parent form that needs to be closed
-   * after the SwitchInfoBox popup routine is called
-   */
-  WndForm &wf;
-
-  /**
-   * id of the InfoBox
-   */
-  int id;
-public:
-  SwitchInfoBox(int _id, WndForm &_wf) :
-    wf(_wf), id(_id) {
-  }
-  virtual bool Click();
-  virtual void ReClick();
-};
+/**
+ * This modal result will trigger the "Switch InfoBox" dialog.
+ */
+static constexpr int SWITCH_INFO_BOX = 100;
 
 static WndForm *wf = NULL;
 
@@ -87,12 +59,18 @@ dlgInfoBoxAccessShowModeless(const int id,
   if (wf != NULL) return;
   assert (id > -1);
 
+  const InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = InfoBoxManager::GetCurrentPanel();
+  const InfoBoxSettings::Panel &panel = settings.panels[panel_index];
+  const InfoBoxFactory::Type old_type = panel.contents[id];
+
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   PixelRect form_rc = InfoBoxManager::layout.remaining;
   form_rc.top = form_rc.bottom - Layout::Scale(107);
 
-  wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc);
+  wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc,
+                   gettext(InfoBoxFactory::GetName(old_type)));
 
   WindowStyle tab_style;
   tab_style.ControlParent();
@@ -111,6 +89,30 @@ dlgInfoBoxAccessShowModeless(const int id,
       if (widget == NULL)
         continue;
 
+      if (i == dlgContent->PANELSIZE - 1) {
+        /* add a "Switch InfoBox" button to the last tab, which we
+           expect to be the "Setup" tab - kludge! */
+
+        PixelRect button_rc;
+        button_rc.left = 0;
+        button_rc.top = 0;
+        button_rc.right = Layout::Scale(60);
+        button_rc.bottom = std::max(UPixelScalar(2 * Layout::GetMinimumControlHeight()),
+                                    Layout::GetMaximumControlHeight());
+
+        ButtonWindowStyle button_style;
+        button_style.Hide();
+        button_style.TabStop();
+        button_style.multiline();
+
+        WndButton *button =
+          new WndButton(*wTabBar, look, _("Switch InfoBox"),
+                        button_rc, button_style,
+                        wf, SWITCH_INFO_BOX);
+
+        widget = new TwoWidgets(widget, new WindowWidget(button), false);
+      }
+
       wTabBar->AddTab(widget, gettext(dlgContent->Panels[i].name));
     }
   }
@@ -119,23 +121,14 @@ dlgInfoBoxAccessShowModeless(const int id,
     form_rc.top = form_rc.bottom - Layout::Scale(58);
     wf->Move(form_rc);
 
-    Widget *wSwitch = new SwitchInfoBox(id, *wf);
+    Widget *wSwitch = new ActionWidget(*wf, SWITCH_INFO_BOX);
     wTabBar->AddTab(wSwitch, _("Switch InfoBox"));
   }
 
-  Widget *wClose = new CloseInfoBoxAccess(*wf);
+  Widget *wClose = new ActionWidget(*wf, mrOK);
   wTabBar->AddTab(wClose, _("Close"));
 
-  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = InfoBoxManager::GetCurrentPanel();
-  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
-  const InfoBoxFactory::Type old_type = panel.contents[id];
-
-  StaticString<32> buffer;
-  buffer = gettext(InfoBoxFactory::GetName(old_type));
-
-  wf->SetCaption(buffer);
-  wf->ShowModeless();
+  int result = wf->ShowModeless();
 
   if (wf->IsDefined()) {
     bool changed = false, require_restart = false;
@@ -146,6 +139,9 @@ dlgInfoBoxAccessShowModeless(const int id,
   delete wf;
   // unset wf because wf is still static and public
   wf = NULL;
+
+  if (result == SWITCH_INFO_BOX)
+    InfoBoxManager::ShowInfoBoxPicker(id);
 }
 
 bool
@@ -153,31 +149,4 @@ dlgInfoBoxAccess::OnClose()
 {
   wf->SetModalResult(mrOK);
   return true;
-}
-
-bool
-CloseInfoBoxAccess::Click()
-{
-  ReClick();
-  return false;
-}
-
-void
-CloseInfoBoxAccess::ReClick()
-{
-  wf.SetModalResult(mrOK);
-}
-
-bool
-SwitchInfoBox::Click()
-{
-  ReClick();
-  return false;
-}
-
-void
-SwitchInfoBox::ReClick()
-{
-  InfoBoxManager::ShowInfoBoxPicker(id);
-  wf.SetModalResult(mrOK);
 }
