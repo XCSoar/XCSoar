@@ -32,8 +32,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
-#include "Form/Panel.hpp"
-#include "Form/PanelWidget.hpp"
 #include "Form/ActionWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -41,26 +39,10 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-class SwitchInfoBox : public PanelWidget {
-protected:
-
-  /**
-   * The parent form that needs to be closed
-   * after the SwitchInfoBox popup routine is called
-   */
-  WndForm &wf;
-
-  /**
-   * id of the InfoBox
-   */
-  int id;
-public:
-  SwitchInfoBox(int _id, WndForm &_wf) :
-    wf(_wf), id(_id) {
-  }
-  virtual bool Click();
-  virtual void ReClick();
-};
+/**
+ * This modal result will trigger the "Switch InfoBox" dialog.
+ */
+static constexpr int SWITCH_INFO_BOX = 100;
 
 static WndForm *wf = NULL;
 
@@ -112,14 +94,14 @@ dlgInfoBoxAccessShowModeless(const int id,
     form_rc.top = form_rc.bottom - Layout::Scale(58);
     wf->Move(form_rc);
 
-    Widget *wSwitch = new SwitchInfoBox(id, *wf);
+    Widget *wSwitch = new ActionWidget(*wf, SWITCH_INFO_BOX);
     wTabBar->AddTab(wSwitch, _("Switch InfoBox"));
   }
 
   Widget *wClose = new ActionWidget(*wf, mrOK);
   wTabBar->AddTab(wClose, _("Close"));
 
-  wf->ShowModeless();
+  int result = wf->ShowModeless();
 
   if (wf->IsDefined()) {
     bool changed = false, require_restart = false;
@@ -130,6 +112,9 @@ dlgInfoBoxAccessShowModeless(const int id,
   delete wf;
   // unset wf because wf is still static and public
   wf = NULL;
+
+  if (result == SWITCH_INFO_BOX)
+    InfoBoxManager::ShowInfoBoxPicker(id);
 }
 
 bool
@@ -137,18 +122,4 @@ dlgInfoBoxAccess::OnClose()
 {
   wf->SetModalResult(mrOK);
   return true;
-}
-
-bool
-SwitchInfoBox::Click()
-{
-  ReClick();
-  return false;
-}
-
-void
-SwitchInfoBox::ReClick()
-{
-  InfoBoxManager::ShowInfoBoxPicker(id);
-  wf.SetModalResult(mrOK);
 }
