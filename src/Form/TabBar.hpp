@@ -123,6 +123,10 @@ public:
 protected:
   virtual void OnCreate();
   virtual void OnDestroy();
+
+#ifdef HAVE_CLIPPING
+  virtual void OnPaint(Canvas &canvas) gcc_override;
+#endif
 };
 
 #endif

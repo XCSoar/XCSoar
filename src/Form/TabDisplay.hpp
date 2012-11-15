@@ -91,6 +91,10 @@ public:
 
   virtual ~TabDisplay();
 
+  const DialogLook &GetLook() const {
+    return look;
+  }
+
   /**
    * Paints one button
    */

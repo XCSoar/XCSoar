@@ -12,6 +12,8 @@ Version 6.4.4 - not yet released
   - add missing "Switch InfoBox" button (#2246)
 * Android
   - fix text rendering on some PowerVR GPUs
+* Windows
+  - fix garbled screen area in task manager (#2272)
 
 Version 6.4.3 - 2012/11/01
 * devices
