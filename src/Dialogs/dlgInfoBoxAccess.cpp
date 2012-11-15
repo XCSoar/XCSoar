@@ -34,25 +34,12 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Panel.hpp"
 #include "Form/PanelWidget.hpp"
+#include "Form/ActionWidget.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>
-
-class CloseInfoBoxAccess : public PanelWidget {
-protected:
-  /**
-   * The parent form that needs to be closed
-   */
-  WndForm &wf;
-public:
-  CloseInfoBoxAccess(WndForm &_wf) :
-    wf(_wf) {
-  }
-  virtual bool Click();
-  virtual void ReClick();
-};
 
 class SwitchInfoBox : public PanelWidget {
 protected:
@@ -129,7 +116,7 @@ dlgInfoBoxAccessShowModeless(const int id,
     wTabBar->AddTab(wSwitch, _("Switch InfoBox"));
   }
 
-  Widget *wClose = new CloseInfoBoxAccess(*wf);
+  Widget *wClose = new ActionWidget(*wf, mrOK);
   wTabBar->AddTab(wClose, _("Close"));
 
   wf->ShowModeless();
@@ -150,19 +137,6 @@ dlgInfoBoxAccess::OnClose()
 {
   wf->SetModalResult(mrOK);
   return true;
-}
-
-bool
-CloseInfoBoxAccess::Click()
-{
-  ReClick();
-  return false;
-}
-
-void
-CloseInfoBoxAccess::ReClick()
-{
-  wf.SetModalResult(mrOK);
 }
 
 bool
