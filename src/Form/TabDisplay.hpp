@@ -132,18 +132,8 @@ private:
   const PixelRect &GetButtonSize(unsigned i) const;
 
 protected:
-  /**
-   * paints the tab buttons
-   * @param canvas
-   */
   virtual void OnPaint(Canvas &canvas) gcc_override;
-  //ToDo: support function buttons
 
-  /**
-   * track key presses to navigate without mouse
-   * @param key_code
-   * @return
-   */
   virtual void OnKillFocus() gcc_override;
   virtual void OnSetFocus() gcc_override;
   virtual bool OnCancelMode() gcc_override;
@@ -151,9 +141,6 @@ protected:
   virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
   virtual bool OnKeyDown(unsigned key_code) gcc_override;
 
-  /**
-   * track mouse clicks
-   */
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
