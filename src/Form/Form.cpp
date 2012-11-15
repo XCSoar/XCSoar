@@ -87,7 +87,7 @@ WndForm::ClientAreaWindow::OnPaint(Canvas &canvas)
 }
 
 static WindowStyle
-add_border(WindowStyle style)
+AddBorder(WindowStyle style)
 {
   style.Border();
   return style;
@@ -106,7 +106,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
 {
   caption = Caption;
 
-  Create(main_window, rc, add_border(style));
+  Create(main_window, rc, AddBorder(style));
 
   // Create ClientWindow
 
@@ -274,7 +274,7 @@ WndForm::OnCommand(unsigned id, unsigned code)
 #endif
 
 static bool
-is_special_key(unsigned key_code)
+IsSpecialKey(unsigned key_code)
 {
   return key_code == KEY_LEFT || key_code == KEY_RIGHT ||
     key_code == KEY_UP || key_code == KEY_DOWN ||
@@ -284,13 +284,13 @@ is_special_key(unsigned key_code)
 #if defined(ANDROID) || defined(USE_EGL)
 
 static bool
-is_key_down(const Event &event)
+IsKeyDown(const Event &event)
 {
   return event.type == Event::KEY_DOWN;
 }
 
 static unsigned
-get_key_code(const Event &event)
+GetKeyCode(const Event &event)
 {
   assert(event.type == Event::KEY_DOWN || event.type == Event::KEY_UP);
 
@@ -298,39 +298,39 @@ get_key_code(const Event &event)
 }
 
 static bool
-is_mouse_down(const Event &event)
+IsMouseDown(const Event &event)
 {
   return event.type == Event::MOUSE_DOWN;
 }
 
 gcc_pure
 static bool
-check_key(ContainerWindow *container, const Event &event)
+CheckKey(ContainerWindow *container, const Event &event)
 {
   Window *focused = container->GetFocusedWindow();
   if (focused == NULL)
     return false;
 
-  return focused->OnKeyCheck(get_key_code(event));
+  return focused->OnKeyCheck(GetKeyCode(event));
 }
 
 gcc_pure
 static bool
-check_special_key(ContainerWindow *container, const Event &event)
+CheckSpecialKey(ContainerWindow *container, const Event &event)
 {
-  return is_special_key(get_key_code(event)) && check_key(container, event);
+  return IsSpecialKey(GetKeyCode(event)) && CheckKey(container, event);
 }
 
 #elif defined(ENABLE_SDL)
 
 static bool
-is_key_down(const SDL_Event &event)
+IsKeyDown(const SDL_Event &event)
 {
   return event.type == SDL_KEYDOWN;
 }
 
 static unsigned
-get_key_code(const SDL_Event &event)
+GetKeyCode(const SDL_Event &event)
 {
   assert(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP);
 
@@ -338,39 +338,39 @@ get_key_code(const SDL_Event &event)
 }
 
 static bool
-is_mouse_down(const SDL_Event &event)
+IsMouseDown(const SDL_Event &event)
 {
   return event.type == SDL_MOUSEBUTTONDOWN;
 }
 
 gcc_pure
 static bool
-check_key(ContainerWindow *container, const SDL_Event &event)
+CheckKey(ContainerWindow *container, const SDL_Event &event)
 {
   Window *focused = container->GetFocusedWindow();
   if (focused == NULL)
     return false;
 
-  return focused->OnKeyCheck(get_key_code(event));
+  return focused->OnKeyCheck(GetKeyCode(event));
 }
 
 gcc_pure
 static bool
-check_special_key(ContainerWindow *container, const SDL_Event &event)
+CheckSpecialKey(ContainerWindow *container, const SDL_Event &event)
 {
-  return is_special_key(get_key_code(event)) && check_key(container, event);
+  return IsSpecialKey(GetKeyCode(event)) && CheckKey(container, event);
 }
 
 #else /* GDI follows: */
 
 static bool
-is_key_down(const MSG &msg)
+IsKeyDown(const MSG &msg)
 {
   return msg.message == WM_KEYDOWN;
 }
 
 static unsigned
-get_key_code(const MSG &msg)
+GetKeyCode(const MSG &msg)
 {
   assert(msg.message == WM_KEYDOWN || msg.message == WM_KEYUP);
 
@@ -378,7 +378,7 @@ get_key_code(const MSG &msg)
 }
 
 static bool
-is_mouse_down(const MSG &msg)
+IsMouseDown(const MSG &msg)
 {
   return msg.message == WM_LBUTTONDOWN;
 }
@@ -389,7 +389,7 @@ is_mouse_down(const MSG &msg)
  */
 gcc_pure
 static bool
-check_key(ContainerWindow *container, const MSG &msg)
+CheckKey(ContainerWindow *container, const MSG &msg)
 {
   LRESULT r = ::SendMessage(msg.hwnd, WM_GETDLGCODE, msg.wParam,
                             (LPARAM)&msg);
@@ -402,9 +402,9 @@ check_key(ContainerWindow *container, const MSG &msg)
  */
 gcc_pure
 static bool
-check_special_key(ContainerWindow *container, const MSG &msg)
+CheckSpecialKey(ContainerWindow *container, const MSG &msg)
 {
-  return is_special_key(msg.wParam) && check_key(container, msg);
+  return IsSpecialKey(msg.wParam) && CheckKey(container, msg);
 }
 
 #endif /* !ENABLE_SDL */
@@ -468,7 +468,7 @@ WndForm::ShowModal()
 
   while ((modal_result == 0 || force) && loop.Get(event)) {
     if (!main_window.FilterEvent(event, this)) {
-      if (modeless && is_mouse_down(event))
+      if (modeless && IsMouseDown(event))
         break;
       else
         continue;
@@ -484,17 +484,17 @@ WndForm::ShowModal()
         hastimed = true;
     }
 
-    if (is_key_down(event)) {
+    if (IsKeyDown(event)) {
       if (key_down_function &&
 #ifdef USE_GDI
           IdentifyDescendant(event.hwnd) &&
 #endif
-          !check_special_key(this, event) &&
-          key_down_function(get_key_code(event)))
+          !CheckSpecialKey(this, event) &&
+          key_down_function(GetKeyCode(event)))
         continue;
 
 #ifdef ENABLE_SDL
-      if (get_key_code(event) == SDLK_TAB) {
+      if (GetKeyCode(event) == SDLK_TAB) {
         /* the Tab key moves the keyboard focus */
         const Uint8 *keystate = ::SDL_GetKeyState(NULL);
         event.key.keysym.sym = keystate[SDLK_LSHIFT] || keystate[SDLK_RSHIFT]
@@ -506,14 +506,14 @@ WndForm::ShowModal()
 #ifdef USE_GDI
           IdentifyDescendant(event.hwnd) &&
 #endif
-          (get_key_code(event) == KEY_UP || get_key_code(event) == KEY_DOWN)) {
+          (GetKeyCode(event) == KEY_UP || GetKeyCode(event) == KEY_DOWN)) {
         /* KEY_UP and KEY_DOWN move the focus only within the current
            control group - but we want it to behave like Shift-Tab and
            Tab */
 
-        if (!check_key(this, event)) {
+        if (!CheckKey(this, event)) {
           /* this window doesn't handle KEY_UP/KEY_DOWN */
-          if (get_key_code(event) == KEY_DOWN)
+          if (GetKeyCode(event) == KEY_DOWN)
             FocusNextControl();
           else
             FocusPreviousControl();
@@ -524,7 +524,7 @@ WndForm::ShowModal()
 #if !defined USE_GDI || defined _WIN32_WCE
       /* The Windows CE dialog manager does not handle KEY_ESCAPE and
          so we have to do it by ourself */
-      if (get_key_code(event) == KEY_ESCAPE) {
+      if (GetKeyCode(event) == KEY_ESCAPE) {
         if (IsAltair())
           /* map VK_ESCAPE to mrOK on Altair, because the Escape key is
              expected to be the one that saves and closes a dialog */
