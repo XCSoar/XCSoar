@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-13 10:28+0000\n"
-"X-Generator: Launchpad (build 16251)\n"
+"X-Launchpad-Export-Date: 2012-11-15 11:32+0000\n"
+"X-Generator: Launchpad (build 16272)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -1190,14 +1190,14 @@ msgstr ""
 "マイナス数値の場合はピッチダウン操作をした場合"
 
 #: src/InfoBoxes/Content/Factory.cpp:460
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next GR"
-msgstr "次"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:461
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "WP GR"
-msgstr "WP　滑空比 TE"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:462
 #, no-c-format
@@ -2766,9 +2766,8 @@ msgid "around terrain"
 msgstr "地形"
 
 #: src/Renderer/MapItemListRenderer.cpp:246
-#, fuzzy
 msgid "Unreachable through terrain."
-msgstr "地形ごしのファイナルグライド"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:251
 msgid "Arrival altitude incl. safety height"
@@ -3500,9 +3499,8 @@ msgid "Select a file"
 msgstr "ファイルを選択してください"
 
 #: src/Dialogs/FileManager.cpp:682
-#, fuzzy
 msgid "Failed to download the repository index."
-msgstr "フライト　ファイルの読み込みに失敗しました"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:690 src/Dialogs/FileManager.cpp:717
 #: Data/Input/default.xci:673
@@ -3510,9 +3508,8 @@ msgid "File Manager"
 msgstr "ファイルマネージャー"
 
 #: src/Dialogs/FileManager.cpp:711
-#, fuzzy
 msgid "The file manager is not available on this device."
-msgstr "この機能はあなたのシステムでは使用できません"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:714
 msgid "The file manager requires Android 2.3."
@@ -3891,9 +3888,8 @@ msgid "This allows switching on or off the automatic wind algorithm."
 msgstr "このスイッチは風　表示アルゴリズムをON OFF することができる"
 
 #: src/Dialogs/WindSettingsPanel.cpp:64
-#, fuzzy
 msgid "Prefer external wind"
-msgstr "外部風情報"
+msgstr ""
 
 #: src/Dialogs/WindSettingsPanel.cpp:65
 msgid ""
@@ -4766,10 +4762,10 @@ msgid "Fill padding"
 msgstr "半透明の点線で囲む"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:74
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Draws a solid outline with a half transparent border around the airspace."
-msgstr "空域色のほかに空域外周に使用する黒い太線"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:146
 msgid "Colours"
@@ -5440,9 +5436,9 @@ msgid "Topleft"
 msgstr "左上"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:133
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Show status message boxes ina the top left corner."
-msgstr "メッセ時を左上　角に表示"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:138
 #, no-c-format
@@ -6275,14 +6271,12 @@ msgid "Determines the way the wind arrow is drawn on the map."
 msgstr "地図上に風向矢印を表示する方法の選択"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:183
-#, fuzzy
 msgid "FAI triangle areas"
-msgstr "FAI　三角コース"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:184
-#, fuzzy
 msgid "Show FAI triangle areas on the map."
-msgstr "FAIルールに適合しない　三角コースです\n"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:67
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:179
@@ -6335,15 +6329,15 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:96
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:191
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Reference is altitude above mean sea level."
-msgstr "最大スタート高度　海面高度"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:98
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:193
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Reference is the height above the task point."
-msgstr "最大スタート高度　対地高度　（スタート地点上空）"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:102
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:197
@@ -6352,9 +6346,8 @@ msgstr "スタート高度設定"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:103
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:198
-#, fuzzy
 msgid "Reference used for start max height rule."
-msgstr "最大スタート高度　海面高度"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:111
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:201
@@ -6377,9 +6370,8 @@ msgstr "フィニッシュ高度"
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:119
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:207
-#, fuzzy
 msgid "Reference used for finish min height rule."
-msgstr "最小フィニッシュ高度　（海面高度）"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp:129
 #, no-c-format
@@ -9437,283 +9429,3 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
-
-#~ msgid "Final GR (TE Compensated)"
-#~ msgstr "ファイナル　滑空比　（TE補正）"
-
-#~ msgid "Fin GR-TE"
-#~ msgstr "Fin 滑空比　TE"
-
-#~ msgid ""
-#~ "The required glide ratio over ground to finish the task, given by the "
-#~ "distance to go divided by the height required to arrive at the safety "
-#~ "arrival height. Negative values indicate a climb is necessary to finish. "
-#~ "If the height required is close to zero, the displayed value is '---'. "
-#~ "Note that this calculation may be optimistic because it reduces the "
-#~ "height required to finish by the excess energy height of the glider if "
-#~ "its true airspeed is greater than the MacCready and best L/D speeds."
-#~ msgstr ""
-#~ "タスクを安全にフィニッシュするのに必要な滑空比　残りの距離を必要な高さで"
-#~ "割った値\r\n"
-#~ "マイナスの数字は上昇が必要な場合\r\n"
-#~ "数値がゼロに近い場合”－－－”と表示\r\n"
-#~ "実際の飛行速度が現在のマクレディー値や最良滑空速度より大きい場合楽観的な数"
-#~ "字となる"
-
-#~ msgid "Next GR (TE Compensated)"
-#~ msgstr "NEXT　滑空比 TE"
-
-#~ msgid ""
-#~ "The required glide ratio over ground to reach the next waypoint, given by "
-#~ "the distance to next waypoint divided by the height required to arrive at "
-#~ "the safety arrival height. Negative values indicate a climb is necessary "
-#~ "to reach the waypoint. If the height required is close to zero, the "
-#~ "displayed value is '---'.   Note that this calculation may be optimistic "
-#~ "because it reduces the height required to reach the waypoint by the "
-#~ "excess energy height of the glider if its true airspeed is greater than "
-#~ "the MacCready and best L/D speeds."
-#~ msgstr ""
-#~ "次のウエイポイントに到着するのに必要な滑空比\r\n"
-#~ "次のウエイポイントまでの距離を安全に飛行するのに必要な高度で割った値\r\n"
-#~ "数値がゼロに近い場合”－－－”と表示される\r\n"
-#~ "真対気速度がマクレディー値や最良L/Dより大きい場合　楽観的な数字となる場合"
-#~ "がある"
-
-#~ msgid ""
-#~ "Geometric gradient to the arrival height above the final waypoint. This "
-#~ "is not adjusted for total energy."
-#~ msgstr "現在の条件でのフィニッシュ予想到達高度"
-
-#~ msgid "Reference AGL for finish minimum height rule (above finish point)."
-#~ msgstr "最小フィニッシュ高度　対地高度（フィニッシュポイント上空」）"
-
-#~ msgid "Select a label shape."
-#~ msgstr "ラベルの形　設定"
-
-#~ msgid ""
-#~ "Reference used for start max height rule\n"
-#~ "[MSL] Reference is altitude above mean sea level\n"
-#~ "[AGL] Reference is the height above the start point"
-#~ msgstr ""
-#~ "最高スタート高度の設定ルール\n"
-#~ "「MSL」　海面高度　標高\n"
-#~ "「AGL」　対地高度　スタート地点からの高さ"
-
-#~ msgid ""
-#~ "Reference used for finish min height rule\n"
-#~ "[MSL] Reference is altitude above mean sea level\n"
-#~ "[AGL] Reference is the height above the finish point"
-#~ msgstr ""
-#~ "最小フィニッシュト高度の設定ルール\n"
-#~ "「MSL」　海面高度　標高\n"
-#~ "「AGL」　対地高度　スタート地点からの高さ"
-
-#~ msgid "(blank)"
-#~ msgstr "（空白）"
-
-#~ msgid "Waypoint name"
-#~ msgstr "ウエイポイントの名前"
-
-#~ msgid "Auto. zoom"
-#~ msgstr "自動ズーム"
-
-#~ msgid "Unknown Filetype."
-#~ msgstr "対応していない種類のファイルです"
-
-#~ msgid "Task declared"
-#~ msgstr "タスクを設定しました"
-
-#~ msgid "Could not open NMEA file!"
-#~ msgstr "NMEAファイルが開けません"
-
-#~ msgid "System"
-#~ msgstr "システム"
-
-#~ msgid "Times"
-#~ msgstr "時刻"
-
-#~ msgid "Flap"
-#~ msgstr "フラップ"
-
-#~ msgid "Freq."
-#~ msgstr "周波数"
-
-#~ msgid "Cambridge"
-#~ msgstr "ケンブリッジ"
-
-#~ msgid "Length"
-#~ msgstr "距離"
-
-#~ msgid "Refresh"
-#~ msgstr "更新"
-
-#~ msgid "File type"
-#~ msgstr "ファイルの種類"
-
-#~ msgid ""
-#~ "Nearest\n"
-#~ "Waypoint"
-#~ msgstr ""
-#~ "最寄りの\n"
-#~ "ウェイポイント"
-
-#~ msgid "V Opt"
-#~ msgstr "最良速度"
-
-#~ msgid "V Gnd"
-#~ msgstr "対地速度"
-
-#~ msgid "Wind B"
-#~ msgstr "風向"
-
-#~ msgid "Time of flight"
-#~ msgstr "飛行時間"
-
-#~ msgid "L/D Avg"
-#~ msgstr "平均滑空比"
-
-#~ msgid "Airspaces at this location"
-#~ msgstr "現在地の空域"
-
-#~ msgid "Configuration saved"
-#~ msgstr "設定を保存しました"
-
-#~ msgid "FAI"
-#~ msgstr "FAI"
-
-#~ msgid "L/D cruise"
-#~ msgstr "巡航滑空比"
-
-#~ msgid "L/D Inst"
-#~ msgstr "滑空比"
-
-#~ msgid "L/D Cru"
-#~ msgstr "巡航滑空比"
-
-#~ msgid ""
-#~ "Instantaneous glide ratio, given by the ground speed divided by the "
-#~ "vertical speed (GPS speed) over the last 20 seconds. Negative values "
-#~ "indicate climbing cruise. If the vertical speed is close to zero, the "
-#~ "displayed value is '---'."
-#~ msgstr ""
-#~ "20秒間の対地速度（GPS速度）を垂直高度変化で割った数値\r\n"
-#~ "マイナス数値は上昇を意味します。\r\n"
-#~ "高度変化がゼロに近い場合”－－－”と表示される"
-
-#~ msgid "Additional altitude required to reach the next turn point."
-#~ msgstr "次のウエイポイントに到着するために必要な高度"
-
-#~ msgid ""
-#~ "Altitude gained/lost in the current thermal, divided by time spent "
-#~ "thermaling."
-#~ msgstr ""
-#~ "サーマル平均上昇率\r\n"
-#~ "現在のサーマル旋回中の昇降高度を所要時間で割った数値"
-
-#~ msgid "Fin LD"
-#~ msgstr "フィナル必要滑空比"
-
-#~ msgid ""
-#~ "This is the height above mean sea level reported by the GPS. Touchscreen/"
-#~ "PC only: in simulation mode, this value is adjustable with the up/down "
-#~ "arrow keys and the right/left arrow keys also cause the glider to turn."
-#~ msgstr ""
-#~ "GPS高度　\r\n"
-#~ "シュミレーターモードの場合で、タッチスクリーンPADまたはPCの場合\r\n"
-#~ "UP/DOWNキーで高度を　Light/Left矢印で期待の進路を操作することができる"
-
-#~ msgid "L/D instantaneous"
-#~ msgstr "滑空比"
-
-#~ msgid ""
-#~ "Forecast temperature of the ground at the home airfield, used in "
-#~ "estimating convection height and cloud base in conjunction with outside "
-#~ "air temperature and relative humidity probe. (Touchscreen/PC only) "
-#~ "Pressing the up/down cursor keys adjusts this forecast temperature."
-#~ msgstr ""
-#~ "飛行場予想気温\r\n"
-#~ "プローブから取り入れた外気温と湿度から予想される　雲低の高さと外気温\r\n"
-#~ "プローブが無い場合タッチスクリーンPDA やPC の場合UP/DOWNキーで設定できる"
-
-#~ msgid "Tm Brng"
-#~ msgstr "チーム　針路"
-
-#~ msgid "Team Bd"
-#~ msgstr "チーム針路差"
-
-#~ msgid ""
-#~ "Instantaneous glide ratio, given by the indicated airspeed divided by the "
-#~ "total energy vertical speed, when connected to an intelligent variometer. "
-#~ "Negative values indicate climbing cruise. If the total energy vario speed "
-#~ "is close to zero, the displayed value is '---'."
-#~ msgstr ""
-#~ "現況滑空比\r\n"
-#~ "飛行距離を使用した高度で割った値\r\n"
-#~ "高機能バリオからの信号が有る場合\r\n"
-#~ "マイナス値は高度が不足し上昇が必要な場合\r\n"
-#~ "すうチュがゼロに近い場合”－－－”を表示"
-
-#~ msgid "TeamCode"
-#~ msgstr "チームコード"
-
-#~ msgid "Team Dis"
-#~ msgstr "チーム距離"
-
-#~ msgid "V Tsk Ins"
-#~ msgstr "タスク平均速度"
-
-#~ msgid "Home Dis"
-#~ msgstr "ホーム距離"
-
-#~ msgid ""
-#~ "Difference between estimated task time and AAT minimum time. Colored red "
-#~ "if negative (expected arrival too early), or blue if in sector and can "
-#~ "turn now with estimated arrival time greater than AAT time plus 5 minutes."
-#~ msgstr ""
-#~ "AATデルタ時間\r\n"
-#~ "AAT タスク予想時間と最小時間の差　\r\n"
-#~ "赤く表示されている場合まだ到着していない\r\n"
-#~ "青表示の場合ターンすることができる\r\n"
-#~ "AAT 時間より5分以上"
-
-#~ msgid "V Tsk Ach"
-#~ msgstr "タスク平均速度"
-
-#~ msgid ""
-#~ "The distance made in the configured period of time , divided by the "
-#~ "altitude lost since then. Negative values are shown as ^^^ and indicate "
-#~ "climbing cruise (height gain). Over 200 of LD the value is shown as +++ . "
-#~ "You can configure the period of averaging in the Special config menu. "
-#~ "Suggested values for this configuration are 60, 90 or 120: lower values "
-#~ "will be closed to LD INST, and higher values will be closed to LD Cruise. "
-#~ "Notice that the distance is NOT the straight line between your old and "
-#~ "current position: it's exactly the distance you have made even in a "
-#~ "zigzag glide. This value is not calculated while circling. "
-#~ msgstr ""
-#~ "現在の滑空比\r\n"
-#~ "飛行距離を使用した高度で割った値\r\n"
-#~ "マイナス値の場合＾＾＾マーク　獲得高度を表示　滑空比が200以上の場合＋＋＋"
-#~ "と表示される\r\n"
-#~ "滑空比を計算する時間はConfig　メニューで設定できる　推奨値は60，90，１２０"
-#~ "など低い値は　現在値、高い値は巡航\r\n"
-#~ "飛行距離はGPSの航跡を使用する　ジグザグに飛んだ場合その距離　前のポイント"
-#~ "からの直線距離ではない\r\n"
-#~ "サーマル旋回中は距離に含めない "
-
-#~ msgid "Absolute arrival altitude at the next waypoint in final glide."
-#~ msgstr "ファイナルグライド中に通過する次のウエイポイント到着見込み高度"
-
-#~ msgid "Baudrate"
-#~ msgstr "ボーレート（通信速度）"
-
-#~ msgid "Acknowledge for day?"
-#~ msgstr "日付"
-
-#~ msgid "WP LD"
-#~ msgstr "次WP到達滑空比"
-
-#~ msgid "WP AltA"
-#~ msgstr "WP到着高度"
-
-#~ msgid "The name of the file containing digital elevation terrain data."
-#~ msgstr "標高データーを持っているデジタルマップファイル名"
