@@ -26,7 +26,7 @@ Copyright_License {
 
 class Font;
 
-extern Font normal_font, small_font, bold_font;
+extern Font normal_font, small_font, bold_font, monospace_font;
 
 void
 InitialiseFonts();

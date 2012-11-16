@@ -26,7 +26,16 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Asset.hpp"
 
-Font normal_font, small_font, bold_font;
+Font normal_font, small_font, bold_font, monospace_font;
+
+static const TCHAR *
+GetStandardMonospaceFontFace()
+{
+  if (IsAndroid())
+    return _T("Droid Sans Mono");
+
+  return _T("Courier");
+}
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
@@ -74,11 +83,16 @@ InitialiseFonts()
 
   InitialiseLogfont(&lf, face, FontHeight / 2, true);
   bold_font.Load(lf);
+
+  InitialiseLogfont(&lf, GetStandardMonospaceFontFace(),
+                    10, false, false, false);
+  monospace_font.Load(lf);
 }
 
 void
 DeinitialiseFonts()
 {
+  monospace_font.Destroy();
   bold_font.Destroy();
   small_font.Destroy();
   normal_font.Destroy();
