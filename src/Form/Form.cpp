@@ -93,6 +93,16 @@ AddBorder(WindowStyle style)
   return style;
 }
 
+WndForm::WndForm(const DialogLook &_look)
+  :look(_look),
+   modal_result(0), force(false),
+   modeless(false),
+   dragging(false),
+   client_area(_look),
+   default_focus(nullptr)
+{
+}
+
 WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const PixelRect &rc,
                  const TCHAR *Caption,
@@ -104,9 +114,16 @@ WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
    client_area(_look),
    default_focus(NULL)
 {
-  caption = Caption;
+  Create(main_window, rc, Caption, AddBorder(style));
+}
 
-  Create(main_window, rc, AddBorder(style));
+void
+WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
+                const TCHAR *_caption, const WindowStyle style)
+{
+  caption = _caption;
+
+  ContainerWindow::Create(main_window, rc, AddBorder(style));
 
   // Create ClientWindow
 

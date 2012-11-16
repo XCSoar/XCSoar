@@ -112,6 +112,8 @@ protected:
   StaticString<256> caption;
 
 public:
+  WndForm(const DialogLook &_look);
+
   /**
    * Constructor of the WndForm class
    * @param _main_window
@@ -124,6 +126,10 @@ public:
 
   /** Destructor */
   virtual ~WndForm();
+
+  void Create(SingleWindow &main_window, const PixelRect &rc,
+              const TCHAR *caption=_T(""),
+              const WindowStyle style=WindowStyle());
 
 protected:
   void UpdateLayout();
