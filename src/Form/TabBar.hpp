@@ -101,11 +101,9 @@ public:
     return pager.Save(changed, require_restart);
   }
 
-  gcc_pure
-  UPixelScalar GetTabHeight() const;
-
-  gcc_pure
-  UPixelScalar GetTabWidth() const;
+  const PixelRect &GetPagerPosition() const {
+    return pager.GetPosition();
+  }
 
   gcc_pure
   const TCHAR *GetButtonCaption(unsigned i) const;

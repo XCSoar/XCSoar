@@ -97,11 +97,7 @@ dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
     TaskViewRect = Sender->GetPosition();
 
   if (!fullscreen) {
-    const UPixelScalar xoffset = Layout::landscape ? wTabBar->GetTabWidth() : 0;
-    const UPixelScalar yoffset = !Layout::landscape ? wTabBar->GetTabHeight() : 0;
-    Sender->Move(xoffset, yoffset,
-                 wf->GetClientAreaWindow().GetWidth() - xoffset,
-                 wf->GetClientAreaWindow().GetHeight() - yoffset);
+    Sender->Move(wTabBar->GetPagerPosition());
     fullscreen = true;
     Sender->ShowOnTop();
   } else {

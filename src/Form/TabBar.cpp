@@ -135,18 +135,6 @@ TabBarControl::PreviousPage()
     page_flipped_callback();
 }
 
-UPixelScalar
-TabBarControl::GetTabHeight() const
-{
-  return tab_display->GetTabHeight();
-}
-
-UPixelScalar
-TabBarControl::GetTabWidth() const
-{
-  return tab_display->GetTabWidth();
-}
-
 void
 TabBarControl::OnCreate()
 {

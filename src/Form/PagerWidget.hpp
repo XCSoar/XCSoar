@@ -58,6 +58,10 @@ public:
   PagerWidget():initialised(false) {}
   virtual ~PagerWidget();
 
+  const PixelRect &GetPosition() const {
+    return position;
+  }
+
   /**
    * Append a child #Widget to the end.  The program will abort when
    * the list of pages is already full.
