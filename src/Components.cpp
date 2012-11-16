@@ -217,11 +217,8 @@ XCSoarInterface::Startup()
 {
   VerboseOperationEnvironment operation;
 
-  // Set the application title to "XCSoar"
-  const TCHAR *const title = _T("XCSoar");
-
   //If "XCSoar" is already running, stop this instance
-  if (MainWindow::find(title))
+  if (MainWindow::Find())
     return false;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
@@ -239,7 +236,7 @@ XCSoarInterface::Startup()
     style.Resizable();
 
   main_window = new MainWindow(status_messages);
-  main_window->Create(title, SystemWindowSize(), style);
+  main_window->Create(SystemWindowSize(), style);
   if (!main_window->IsDefined())
     return false;
 

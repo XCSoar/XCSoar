@@ -72,6 +72,8 @@ class MainWindow : public SingleWindow {
     ACTIVATE_MAP,
   };
 
+  static constexpr const TCHAR *title = _T("XCSoar");
+
   Look *look;
 
   GlueMapWindow *map;
@@ -122,8 +124,8 @@ public:
   MainWindow(const StatusMessageList &status_messages);
   virtual ~MainWindow();
 
-  static bool find(const TCHAR *text) {
-    return TopWindow::find(_T("XCSoarMain"), text);
+  static bool Find() {
+    return TopWindow::find(_T("XCSoarMain"), title);
   }
 
 #ifdef USE_GDI
@@ -147,8 +149,7 @@ protected:
   void KillWidget();
 
 public:
-  void Create(const TCHAR *text, PixelRect rc,
-              TopWindowStyle style=TopWindowStyle());
+  void Create(PixelRect rc, TopWindowStyle style=TopWindowStyle());
 
   void Destroy();
 

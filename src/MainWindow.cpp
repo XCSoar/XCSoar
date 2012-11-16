@@ -151,9 +151,9 @@ MainWindow::register_class(HINSTANCE hInstance)
 #endif /* USE_GDI */
 
 void
-MainWindow::Create(const TCHAR* text, PixelRect rc, TopWindowStyle style)
+MainWindow::Create(PixelRect rc, TopWindowStyle style)
 {
-  SingleWindow::Create(_T("XCSoarMain"), text, rc, style);
+  SingleWindow::Create(_T("XCSoarMain"), title, rc, style);
 }
 
 gcc_noreturn
