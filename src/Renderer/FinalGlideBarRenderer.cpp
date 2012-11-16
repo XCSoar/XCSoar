@@ -28,7 +28,6 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Look/TaskLook.hpp"
-#include "Look/Fonts.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Util/Macros.hpp"
 
@@ -68,7 +67,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   FormatUserAltitude(solution.SelectAltitudeDifference(glide_settings),
                             Value, false);
-  canvas.Select(Fonts::map_bold);
+  canvas.Select(*look.font);
   const PixelSize text_size = canvas.CalcTextSize(Value);
 
   PixelScalar clipping_arrow_offset = Layout::Scale(4);
@@ -223,7 +222,6 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundColor(COLOR_WHITE);
-  canvas.Select(Fonts::map);
 
   TextInBoxMode style;
   style.shape = LabelShape::ROUNDED_BLACK;

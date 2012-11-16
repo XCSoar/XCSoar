@@ -27,6 +27,8 @@
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 
+class Font;
+
 struct FinalGlideBarLook {
   Pen pen_above;
   Brush brush_above;
@@ -40,7 +42,9 @@ struct FinalGlideBarLook {
   Brush brush_below_landable;
   Brush brush_below_landable_mc0;
 
-  void Initialise();
+  const Font *font;
+
+  void Initialise(const Font &font);
 };
 
 #endif

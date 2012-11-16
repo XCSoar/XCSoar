@@ -209,7 +209,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Fonts::Initialize();
 
   FinalGlideBarLook final_glide_look;
-  final_glide_look.Initialise();
+  final_glide_look.Initialise(Fonts::map);
 
   TaskLook task_look;
   task_look.Initialise();

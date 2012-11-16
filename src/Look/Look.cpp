@@ -72,7 +72,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                       infobox_unit_font,
 #endif
                       infobox_title_font);
-  final_glide_bar.Initialise();
+  final_glide_bar.Initialise(map_font);
   map.Initialise(settings.map, map_font, map_bold_font);
   icon.Initialise();
 }

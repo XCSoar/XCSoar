@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-FinalGlideBarLook::Initialise()
+FinalGlideBarLook::Initialise(const Font &_font)
 {
   brush_below.Set(COLOR_RED);
   brush_below_mc0.Set(LightColor(COLOR_RED));
@@ -39,4 +39,6 @@ FinalGlideBarLook::Initialise()
   brush_above.Set(COLOR_GREEN);
   brush_above_mc0.Set(LightColor(LightColor(COLOR_GREEN)));
   pen_above.Set(Layout::ScalePenWidth(1), DarkColor(COLOR_GREEN));
+
+  font = &_font;
 }
