@@ -49,14 +49,16 @@ public:
    */
   void CancelDialog();
 
-  bool HasDialog() {
+  gcc_pure
+  bool HasDialog() const {
     return !dialogs.empty();
   }
 
   /**
    * Check whether the specified dialog is the top-most one.
    */
-  bool IsTopDialog(WndForm &dialog) {
+  gcc_pure
+  bool IsTopDialog(const WndForm &dialog) const {
     assert(HasDialog());
 
     return &dialog == dialogs.top();
