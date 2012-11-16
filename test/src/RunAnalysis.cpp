@@ -239,8 +239,15 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dialog_settings.SetDefaults();
 
   Look *look = new Look();
-  look->Initialise();
-  look->InitialiseConfigured(blackboard.GetUISettings());
+  look->Initialise(Fonts::map, Fonts::map_bold, Fonts::map_label);
+  look->InitialiseConfigured(blackboard.GetUISettings(),
+                             Fonts::map, Fonts::map_bold, Fonts::map_label,
+                             Fonts::cdi, Fonts::monospace,
+                             Fonts::infobox, Fonts::infobox_small,
+#ifndef GNAV
+                             Fonts::infobox_units,
+#endif
+                             Fonts::title);
 
   SetXMLDialogLook(look->dialog);
 

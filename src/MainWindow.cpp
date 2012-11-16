@@ -168,7 +168,7 @@ MainWindow::Initialise()
   if (look == NULL)
     look = new Look();
 
-  look->Initialise();
+  look->Initialise(Fonts::map, Fonts::map_bold, Fonts::map_label);
 }
 
 void
@@ -201,7 +201,14 @@ MainWindow::InitialiseConfigured()
   }
 
   assert(look != NULL);
-  look->InitialiseConfigured(CommonInterface::GetUISettings());
+  look->InitialiseConfigured(CommonInterface::GetUISettings(),
+                             Fonts::map, Fonts::map_bold, Fonts::map_label,
+                             Fonts::cdi, Fonts::monospace,
+                             Fonts::infobox, Fonts::infobox_small,
+#ifndef GNAV
+                             Fonts::infobox_units,
+#endif
+                             Fonts::title);
 
   InfoBoxManager::Create(*this, ib_layout, look->info_box, look->units);
   map_rect = ib_layout.remaining;

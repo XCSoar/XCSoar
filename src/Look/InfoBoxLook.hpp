@@ -51,7 +51,13 @@ struct InfoBoxLook {
 
   Color colors[6];
 
-  void Initialise(bool inverse, bool use_colors);
+  void Initialise(bool inverse, bool use_colors,
+                  const Font &value_font,
+                  const Font &small_font,
+#ifndef GNAV
+                  const Font &unit_font,
+#endif
+                  const Font &title_font);
 
   Color GetColor(int i, Color default_color) const {
     if (i < 0)

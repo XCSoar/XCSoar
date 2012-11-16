@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "InfoBoxLook.hpp"
-#include "Fonts.hpp"
 #include "Screen/Layout.hpp"
 
 #include <algorithm>
@@ -34,7 +33,13 @@ Copyright_License {
 #define COLOR_INVERSE_MAGENTA COLOR_MAGENTA
 
 void
-InfoBoxLook::Initialise(bool _inverse, bool use_colors)
+InfoBoxLook::Initialise(bool _inverse, bool use_colors,
+                        const Font &value_font,
+                        const Font &_small_font,
+#ifndef GNAV
+                        const Font &_unit_font,
+#endif
+                        const Font &title_font)
 {
   inverse = _inverse;
 
@@ -48,12 +53,12 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors)
   border_pen.Set(BORDER_WIDTH, border_color);
   selector_pen.Set(Layout::Scale(1) + 2, value.fg_color);
 
-  value.font = &Fonts::infobox;
-  title.font = &Fonts::title;
-  comment.font = &Fonts::title;
-  small_font = &Fonts::infobox_small;
+  value.font = &value_font;
+  title.font = &title_font;
+  comment.font = &title_font;
+  small_font = &_small_font;
 #ifndef GNAV
-  unit_font = &Fonts::infobox_units;
+  unit_font = &_unit_font;
   unit_fraction_pen.Set(1, value.fg_color);
 #endif
 

@@ -22,14 +22,14 @@ Copyright_License {
 */
 
 #include "Look.hpp"
-#include "Fonts.hpp"
 #include "UISettings.hpp"
 
 void
-Look::Initialise()
+Look::Initialise(const Font &map_font, const Font &map_bold_font,
+                 const Font &map_label_font)
 {
-  dialog.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
-                    Fonts::map_bold, Fonts::map_bold);
+  dialog.Initialise(map_bold_font, map_font, map_label_font,
+                    map_bold_font, map_bold_font);
   traffic.Initialise();
   flarm_dialog.Initialise(traffic, false);
   flarm_gauge.Initialise(traffic, true);
@@ -39,24 +39,40 @@ Look::Initialise()
 }
 
 void
-Look::InitialiseConfigured(const UISettings &settings)
+Look::InitialiseConfigured(const UISettings &settings,
+                           const Font &map_font, const Font &map_bold_font,
+                           const Font &map_label_font,
+                           const Font &cdi_font,
+                           const Font &monospace_font,
+                           const Font &infobox_value_font,
+                           const Font &infobox_small_font,
+#ifndef GNAV
+                           const Font &infobox_unit_font,
+#endif
+                           const Font &infobox_title_font)
 {
-  dialog.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
-                    Fonts::map_bold, Fonts::map_bold);
-  terminal.Initialise(Fonts::monospace);
+  dialog.Initialise(map_bold_font, map_font, map_label_font,
+                    map_bold_font, map_bold_font);
+  terminal.Initialise(monospace_font);
   units.Initialise();
   vario.Initialise(settings.info_boxes.inverse,
                    settings.info_boxes.use_colors,
-                   Fonts::title, Fonts::cdi);
-  chart.Initialise(Fonts::map, Fonts::map_label, Fonts::title);
+                   infobox_title_font, cdi_font);
+  chart.Initialise(map_font, map_label_font, infobox_title_font);
   cross_section.Initialise();
   horizon.Initialise();
   thermal_band.Initialise(settings.info_boxes.inverse,
                           cross_section.sky_color);
   trace_history.Initialise(settings.info_boxes.inverse);
   info_box.Initialise(settings.info_boxes.inverse,
-                      settings.info_boxes.use_colors);
+                      settings.info_boxes.use_colors,
+                      infobox_value_font,
+                      infobox_small_font,
+#ifndef GNAV
+                      infobox_unit_font,
+#endif
+                      infobox_title_font);
   final_glide_bar.Initialise();
-  map.Initialise(settings.map, Fonts::map, Fonts::map_bold);
+  map.Initialise(settings.map, map_font, map_bold_font);
   icon.Initialise();
 }
