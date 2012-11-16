@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/TabBar.hpp"
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
@@ -44,26 +44,63 @@ Copyright_License {
 static int status_page = 0;
 
 static void
-SetTitle(WndForm &form, TabBarControl *wTabBar)
+SetTitle(WndForm &form, const TabBarControl &tab_bar)
 {
   StaticString<128> title;
   title.Format(_T("%s: %s"), _("Status"),
-               wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+               tab_bar.GetButtonCaption(tab_bar.GetCurrentPage()));
   form.SetCaption(title);
 }
 
 void
 dlgStatusShowModal(int start_page)
 {
-  WndForm *wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
-                           Layout::landscape
-                           ? _T("IDR_XML_STATUS_L") : _T("IDR_XML_STATUS"));
-  assert(wf);
+  const DialogLook &look = UIGlobals::GetDialogLook();
 
-  TabBarControl *wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
-  assert(wTabBar != NULL);
-  wTabBar->SetPageFlippedCallback([wf, wTabBar]() {
-      SetTitle(*wf, wTabBar);
+  WndForm form(look);
+  form.Create(UIGlobals::GetMainWindow(), _("Status"));
+
+  const PixelRect rc = form.GetClientAreaWindow().GetClientRect();
+
+  PixelRect close_rc, tab_rc;
+
+  close_rc.left = 0;
+  close_rc.top = 0;
+
+  if (Layout::landscape) {
+    const unsigned tab_width = Layout::Scale(80);
+
+    close_rc.right = tab_width;
+    close_rc.bottom = Layout::Scale(28);
+
+    tab_rc.left = 0;
+    tab_rc.top = close_rc.bottom;
+    tab_rc.right = tab_width;
+    tab_rc.bottom = rc.bottom;
+  } else {
+    close_rc.right = Layout::Scale(55);
+    close_rc.bottom = Layout::Scale(76);
+
+    tab_rc.left = close_rc.right;
+    tab_rc.top = 0;
+    tab_rc.right = rc.right;
+    tab_rc.bottom = close_rc.bottom;
+  }
+
+  ButtonWindowStyle button_style;
+  button_style.TabStop();
+
+  WndButton close_button(form.GetClientAreaWindow(), look,
+                         _("Close"), close_rc, button_style,
+                         &form, mrOK);
+
+  ButtonWindowStyle tab_style;
+  tab_style.ControlParent();
+
+  TabBarControl tab_bar(form.GetClientAreaWindow(), look, tab_rc,
+                        tab_style, Layout::landscape);
+  tab_bar.SetPageFlippedCallback([&form, &tab_bar]() {
+      SetTitle(form, tab_bar);
     });
 
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -77,7 +114,6 @@ dlgStatusShowModal(int start_page)
     CommonInterface::GetUISettings().dialog.tab_style
     == DialogSettings::TabStyle::Icon;
 
-  const DialogLook &look = UIGlobals::GetDialogLook();
   const IconLook &icons = UIGlobals::GetIconLook();
   const Bitmap *FlightIcon = enable_icons ? &icons.hBmpTabFlight : NULL;
   const Bitmap *SystemIcon = enable_icons ? &icons.hBmpTabSystem : NULL;
@@ -86,19 +122,19 @@ dlgStatusShowModal(int start_page)
   const Bitmap *TimesIcon = enable_icons ? &icons.hBmpTabTimes : NULL;
 
   Widget *flight_panel = new FlightStatusPanel(look, nearest_waypoint);
-  wTabBar->AddTab(flight_panel, _T("Flight"), FlightIcon);
+  tab_bar.AddTab(flight_panel, _T("Flight"), FlightIcon);
 
   Widget *system_panel = new SystemStatusPanel(look);
-  wTabBar->AddTab(system_panel, _T("System"), SystemIcon);
+  tab_bar.AddTab(system_panel, _T("System"), SystemIcon);
 
   Widget *task_panel = new TaskStatusPanel(look);
-  wTabBar->AddTab(task_panel, _T("Task"), TaskIcon);
+  tab_bar.AddTab(task_panel, _T("Task"), TaskIcon);
 
   Widget *rules_panel = new RulesStatusPanel(look);
-  wTabBar->AddTab(rules_panel, _T("Rules"), RulesIcon);
+  tab_bar.AddTab(rules_panel, _T("Rules"), RulesIcon);
 
   Widget *times_panel = new TimesStatusPanel(look);
-  wTabBar->AddTab(times_panel, _T("Times"), TimesIcon);
+  tab_bar.AddTab(times_panel, _T("Times"), TimesIcon);
 
   /* restore previous page */
 
@@ -106,14 +142,12 @@ dlgStatusShowModal(int start_page)
     status_page = start_page;
   }
 
-  wTabBar->SetCurrentPage(status_page);
+  tab_bar.SetCurrentPage(status_page);
 
-  SetTitle(*wf, wTabBar);
+  SetTitle(form, tab_bar);
 
-  wf->ShowModal();
+  form.ShowModal();
 
   /* save page number for next time this dialog is opened */
-  status_page = wTabBar->GetCurrentPage();
-
-  delete wf;
+  status_page = tab_bar.GetCurrentPage();
 }
