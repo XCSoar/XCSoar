@@ -54,11 +54,10 @@ Copyright_License {
 class WndButton;
 
 static WndForm *wf = NULL;
-static TabBarControl *wTabBar;
 static int status_page = 0;
 
 static void
-SetTitle()
+SetTitle(TabBarControl *wTabBar)
 {
   StaticString<128> title;
   title.Format(_T("%s: %s"), _("Status"),
@@ -85,9 +84,11 @@ dlgStatusShowModal(int start_page)
                   _T("IDR_XML_STATUS_L") : _T("IDR_XML_STATUS"));
   assert(wf);
 
-  wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
+  TabBarControl *wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
   assert(wTabBar != NULL);
-  wTabBar->SetPageFlippedCallback(SetTitle);
+  wTabBar->SetPageFlippedCallback([wTabBar]() {
+      SetTitle(wTabBar);
+    });
 
   const NMEAInfo &basic = CommonInterface::Basic();
   const Waypoint *nearest_waypoint = basic.location_available
@@ -131,7 +132,7 @@ dlgStatusShowModal(int start_page)
 
   wTabBar->SetCurrentPage(status_page);
 
-  SetTitle();
+  SetTitle(wTabBar);
 
   wf->ShowModal();
 

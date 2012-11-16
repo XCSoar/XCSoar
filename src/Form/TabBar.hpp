@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "PagerWidget.hpp"
 
+#include <functional>
+
 #include <tchar.h>
 
 struct DialogLook;
@@ -43,7 +45,7 @@ class TabButton;
  * ToDo: support lazy loading
  */
 class TabBarControl : public ContainerWindow {
-  typedef void (*PageFlippedCallback)();
+  typedef std::function<void()> PageFlippedCallback;
 
   PagerWidget pager;
 
@@ -66,8 +68,8 @@ public:
   ~TabBarControl();
 
   void SetPageFlippedCallback(PageFlippedCallback _page_flipped_callback) {
-    assert(page_flipped_callback == NULL);
-    assert(_page_flipped_callback != NULL);
+    assert(!page_flipped_callback);
+    assert(_page_flipped_callback);
 
     page_flipped_callback = _page_flipped_callback;
   }

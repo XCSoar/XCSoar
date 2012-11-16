@@ -33,8 +33,7 @@ Copyright_License {
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                              PixelRect tab_rc,
                              const WindowStyle style, bool vertical)
-  :tab_display(NULL),
-   page_flipped_callback(NULL)
+  :tab_display(NULL)
 {
   Create(_parent, _parent.GetClientRect(), style);
 
@@ -85,7 +84,7 @@ TabBarControl::ClickPage(unsigned i)
   if (tab_display != NULL)
     tab_display->Invalidate();
 
-  if (page_flipped_callback != NULL)
+  if (page_flipped_callback)
     page_flipped_callback();
 }
 
@@ -103,7 +102,7 @@ TabBarControl::SetCurrentPage(unsigned i)
   if (tab_display != NULL)
     tab_display->Invalidate();
 
-  if (page_flipped_callback != NULL)
+  if (page_flipped_callback)
     page_flipped_callback();
 }
 
@@ -117,7 +116,7 @@ TabBarControl::NextPage()
   if (tab_display != NULL)
     tab_display->Invalidate();
 
-  if (page_flipped_callback != NULL)
+  if (page_flipped_callback)
     page_flipped_callback();
 }
 
@@ -131,7 +130,7 @@ TabBarControl::PreviousPage()
   if (tab_display != NULL)
     tab_display->Invalidate();
 
-  if (page_flipped_callback != NULL)
+  if (page_flipped_callback)
     page_flipped_callback();
 }
 
