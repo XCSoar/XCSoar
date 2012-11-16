@@ -57,6 +57,6 @@ Look::InitialiseConfigured(const UISettings &settings)
   info_box.Initialise(settings.info_boxes.inverse,
                       settings.info_boxes.use_colors);
   final_glide_bar.Initialise();
-  map.Initialise(settings.map);
+  map.Initialise(settings.map, Fonts::map, Fonts::map_bold);
   icon.Initialise();
 }

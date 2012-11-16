@@ -169,7 +169,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Fonts::Initialize();
 
   WindArrowLook wind_look;
-  wind_look.Initialise();
+  wind_look.Initialise(Fonts::map_bold);
 
   TestWindow window(wind_look);
   window.Create(PixelRect{0, 0, 160, 160});

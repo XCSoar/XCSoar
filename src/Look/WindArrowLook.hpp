@@ -27,12 +27,16 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 
+class Font;
+
 struct WindArrowLook
 {
   Pen arrow_pen, tail_pen;
   Brush arrow_brush;
 
-  void Initialise();
+  const Font *font;
+
+  void Initialise(const Font &font);
 };
 
 #endif

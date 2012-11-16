@@ -24,7 +24,6 @@ Copyright_License {
 #include "WindArrowRenderer.hpp"
 #include "TextInBox.hpp"
 #include "Look/WindArrowLook.hpp"
-#include "Look/Fonts.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
@@ -89,7 +88,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   buffer.Format(_T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
   canvas.SetTextColor(COLOR_BLACK);
-  canvas.Select(Fonts::map_bold);
+  canvas.Select(*look.font);
 
   PixelScalar offset = iround(fixed_sqrt_two * wind.norm);
   RasterPoint label[] = {

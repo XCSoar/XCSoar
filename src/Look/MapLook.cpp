@@ -27,7 +27,8 @@ Copyright_License {
 #include "resource.h"
 
 void
-MapLook::Initialise(const MapSettings &settings)
+MapLook::Initialise(const MapSettings &settings,
+                    const Font &font, const Font &bold_font)
 {
   waypoint.Initialise(settings.waypoint);
   airspace.Initialise(settings.airspace);
@@ -35,7 +36,7 @@ MapLook::Initialise(const MapSettings &settings)
   task.Initialise();
   marker.Initialise();
   trail.Initialise(settings.trail);
-  wind.Initialise();
+  wind.Initialise(bold_font);
 
 #ifdef HAVE_NOAA
   noaa.Initialise();

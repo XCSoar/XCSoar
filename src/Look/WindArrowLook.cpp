@@ -25,9 +25,10 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-WindArrowLook::Initialise()
+WindArrowLook::Initialise(const Font &_font)
 {
   arrow_pen.Set(Layout::Scale(1), DarkColor(COLOR_GRAY));
   tail_pen.Set(Pen::DASH, 1, COLOR_BLACK);
   arrow_brush.Set(COLOR_GRAY);
+  font = &_font;
 }
