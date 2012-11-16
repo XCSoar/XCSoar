@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Airspace.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Airspace/AirspaceSorter.hpp"
 #include "Math/FastMath.h"
@@ -226,13 +225,6 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
       CommonInterface::GetMapSettings().airspace);
 }
 
-
-static void
-CloseClicked(gcc_unused WndButton &button)
-{
-  dialog->SetModalResult(mrCancel);
-}
-
 gcc_pure
 static const TCHAR *
 GetHeadingString(TCHAR *buffer)
@@ -299,11 +291,6 @@ FormKeyDown(unsigned key_code)
 
 #endif /* GNAV */
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(CloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 static void
 FillDistanceEnum(DataFieldEnum &df)
 {
@@ -348,7 +335,7 @@ PrepareAirspaceSelectDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
 
-  dialog = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+  dialog = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
                   Layout::landscape ? _T("IDR_XML_AIRSPACESELECT_L") :
                                       _T("IDR_XML_AIRSPACESELECT"));
   assert(dialog != NULL);

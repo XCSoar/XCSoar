@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <Form Caption="Status">
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="76" Height="28" OnClick="OnCloseClicked" />
+  <CloseButton X="2" Y="2" Width="76" Height="28"/>
   <TabBar Name="TabBar" X="0" Y="32" Width="80"/>
 </Form>

@@ -38,17 +38,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-class WindowControl;
-class WndButton;
-
-static WndForm *wf = NULL;
-
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
 static void
 OnWeatherHelp(WindowControl * Sender)
 {
@@ -70,7 +59,6 @@ OnWeatherHelp(WindowControl * Sender)
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnWeatherHelp),
   DeclareCallBackEntry(NULL)
 };
@@ -78,9 +66,8 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 void
 dlgWeatherShowModal()
 {
-
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  _T("IDR_XML_WEATHER"));
+  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                           _T("IDR_XML_WEATHER"));
   if (wf == NULL)
     return;
 

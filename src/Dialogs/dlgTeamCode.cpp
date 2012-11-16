@@ -163,14 +163,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   settings.team_flarm_callsign.clear();
 }
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnFlarmLockClicked),
   DeclareCallBackEntry(OnCodeClicked),
   DeclareCallBackEntry(OnSetWaypointClicked),

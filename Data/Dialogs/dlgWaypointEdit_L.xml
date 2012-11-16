@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Caption="Waypoint Editor">
-  <Button Caption="Close" X="5" Y="-37" Width="70" Height="35" OnClick="OnCloseClicked"/>
+  <CloseButton X="5" Y="-37" Width="70" Height="35"/>
 
   <Edit Name="Name" Caption="Name" Y="0" Height="28" CaptionWidth="75">
     <DataField DataType="string"/>

@@ -9,5 +9,5 @@
     <DataField DataType="enum"/>
   </Edit>
 
-  <Button Caption="Close" X="-68" Y="-24" Width="-2" Height="22" OnClick="OnCloseClicked" />
+  <CloseButton X="-68" Y="-24" Width="-2" Height="22"/>
 </Form>

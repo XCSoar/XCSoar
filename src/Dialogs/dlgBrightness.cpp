@@ -41,12 +41,6 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-	wf->SetModalResult(mrOK);
-}
-
 static bool EnableAutoBrightness = true;
 static int BrightnessValue = 0;
 
@@ -94,7 +88,6 @@ static void OnBrightnessData(DataField *Sender,
 static constexpr CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnAutoData),
   DeclareCallBackEntry(OnBrightnessData),
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 

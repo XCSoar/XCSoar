@@ -4,5 +4,5 @@
   <List Name="frmAirspaceList" X="75" Y="0" ItemHeight="18"/>
 
   <Button Name="cmdLookup" Caption="Lookup" Y="-70" Width="75" Height="35" OnClick="OnLookupClicked"/>
-  <Button Name="cmdClose" Caption="Close" Y="-35" Width="75" Height="35" OnClick="OnCloseClicked"/>
+  <CloseButton Y="-35" Width="75" Height="35"/>
 </Form>

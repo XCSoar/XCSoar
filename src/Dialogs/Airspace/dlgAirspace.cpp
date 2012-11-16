@@ -48,7 +48,6 @@ Copyright_License {
 
 #include <assert.h>
 
-static WndForm *wf = NULL;
 static ListControl *airspace_list = NULL;
 
 static bool color_mode = false;
@@ -136,19 +135,12 @@ OnAirspaceListEnter(unsigned index)
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OnLookupClicked(gcc_unused WndButton &Sender)
 {
   ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLookupClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -158,9 +150,10 @@ dlgAirspaceShowModal(bool _color_mode)
 {
   color_mode = _color_mode;
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ? _T("IDR_XML_AIRSPACE_L") :
-                                      _T("IDR_XML_AIRSPACE"));
+  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                           Layout::landscape
+                           ? _T("IDR_XML_AIRSPACE_L")
+                           : _T("IDR_XML_AIRSPACE"));
   assert(wf != NULL);
 
   airspace_list = (ListControl*)wf->FindByName(_T("frmAirspaceList"));

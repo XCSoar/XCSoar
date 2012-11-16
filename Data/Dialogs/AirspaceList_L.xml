@@ -17,7 +17,7 @@
     <DataField DataType="enum"/>
   </Edit>
 
-  <Button Name="cmdClose" Caption="Close" X="2" Y="-37" Width="75" Height="35" OnClick="CloseClicked" />
+  <closeButton X="2" Y="-37" Width="75" Height="35"/>
 
   <List Name="frmAirspaceList" X="102" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
 </Form>

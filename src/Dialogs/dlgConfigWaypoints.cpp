@@ -42,13 +42,6 @@ Copyright_License {
 #include <assert.h>
 
 static bool WaypointsNeedSave = false;
-static WndForm *wf = NULL;
-
-static void
-OnCloseClicked(gcc_unused WndButton &button)
-{
-  wf->SetModalResult(mrOK);
-}
 
 static void
 OnWaypointNewClicked(gcc_unused WndButton &Sender)
@@ -142,16 +135,16 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnWaypointDeleteClicked),
   DeclareCallBackEntry(OnWaypointEditClicked),
   DeclareCallBackEntry(OnWaypointSaveClicked),
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
 void
 dlgConfigWaypointsShowModal()
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ? _T("IDR_XML_CONFIG_WAYPOINTS_L") :
-                                      _T("IDR_XML_CONFIG_WAYPOINTS"));
+  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                           Layout::landscape
+                           ? _T("IDR_XML_CONFIG_WAYPOINTS_L")
+                           : _T("IDR_XML_CONFIG_WAYPOINTS"));
   assert(wf != NULL);
 
   WaypointsNeedSave = false;

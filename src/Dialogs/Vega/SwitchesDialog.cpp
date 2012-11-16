@@ -23,16 +23,11 @@ Copyright_License {
 
 #include "SwitchesDialog.hpp"
 #include "Dialogs/XML.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "UIGlobals.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
-#include "Units/Units.hpp"
-#include "Form/DataField/Boolean.hpp"
 #include "Interface.hpp"
 #include "Blackboard/ScopeGPSListener.hpp"
-
-class WndButton;
 
 static WndForm *wf = NULL;
 
@@ -61,21 +56,10 @@ UpdateValues(const SwitchInfo &switches)
          switches.flight_mode == SwitchInfo::FlightMode::CIRCLING);
 }
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 dlgSwitchesShowModal()
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+  wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
 		              _T("IDR_XML_SWITCHES"));
   if (wf == NULL)
     return;

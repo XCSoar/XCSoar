@@ -80,12 +80,6 @@ public:
 
 static TPOZListener listener;
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
 static ObservationZoneEditWidget *
 CreateObservationZoneEditWidget(ObservationZonePoint &oz, bool is_fai_general)
 {
@@ -307,7 +301,6 @@ TPOZListener::OnModified(ObservationZoneEditWidget &widget)
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRemoveClicked),
   DeclareCallBackEntry(OnRelocateClicked),
   DeclareCallBackEntry(OnDetailsClicked),

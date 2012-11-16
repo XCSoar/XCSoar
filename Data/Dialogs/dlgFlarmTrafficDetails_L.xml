@@ -10,7 +10,7 @@
   <SymbolButton Name="cmdFriendMagenta" Caption="#FF00CB" X="35" Y="90" Width="35" Height="35" OnClick="OnFriendMagentaClicked" />
   <Button Name="cmdFriendClear" Caption="Clear" Width="70" Height="30" OnClick="OnFriendClearClicked" />
 
-  <Button Name="cmdClose" Caption="Close" Y="-30" Width="70" Height="30" OnClick="OnCloseClicked" />
+  <CloseButton Y="-30" Width="70" Height="30"/>
 
   <Edit Name="prpCallsign" Caption="Callsign" X="70" Y="0" Height="22" CaptionWidth="90" ReadOnly="1" />
   <Button Name="cmdCallsign" Caption="Change callsign" X="160" Height="22" OnClick="OnCallsignClicked" />

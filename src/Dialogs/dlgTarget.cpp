@@ -91,12 +91,6 @@ OnCreateMap(ContainerWindow &parent, PixelRect rc, const WindowStyle style)
   return map;
 }
 
-static void
-OnOKClicked(gcc_unused WndButton &sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
 static void RefreshTargetPoint();
 
 #ifdef GNAV
@@ -507,7 +501,6 @@ static constexpr CallBackTableEntry callback_table[] = {
   DeclareCallBackEntry(OnTaskPointData),
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),
-  DeclareCallBackEntry(OnOKClicked),
   DeclareCallBackEntry(OnOptimized),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),

@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
 #include "Form/TabBar.hpp"
@@ -34,60 +33,37 @@ Copyright_License {
 #include "StatusPanels/SystemStatusPanel.hpp"
 #include "StatusPanels/TimesStatusPanel.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Key.h"
-#include "Protection.hpp"
-#include "Hardware/Battery.hpp"
-#include "Formatter/Units.hpp"
-#include "Logger/Logger.hpp"
-#include "LocalTime.hpp"
 #include "Components.hpp"
-#include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
-#include <stdio.h>
 
-#include <algorithm>
-
-class WndButton;
-
-static WndForm *wf = NULL;
 static int status_page = 0;
 
 static void
-SetTitle(TabBarControl *wTabBar)
+SetTitle(WndForm &form, TabBarControl *wTabBar)
 {
   StaticString<128> title;
   title.Format(_T("%s: %s"), _("Status"),
                wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
-  wf->SetCaption(title);
+  form.SetCaption(title);
 }
-
-static void
-OnCloseClicked(gcc_unused WndButton &button)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 dlgStatusShowModal(int start_page)
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  Layout::landscape ?
-                  _T("IDR_XML_STATUS_L") : _T("IDR_XML_STATUS"));
+  WndForm *wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
+                           Layout::landscape
+                           ? _T("IDR_XML_STATUS_L") : _T("IDR_XML_STATUS"));
   assert(wf);
 
   TabBarControl *wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
   assert(wTabBar != NULL);
-  wTabBar->SetPageFlippedCallback([wTabBar]() {
-      SetTitle(wTabBar);
+  wTabBar->SetPageFlippedCallback([wf, wTabBar]() {
+      SetTitle(*wf, wTabBar);
     });
 
   const NMEAInfo &basic = CommonInterface::Basic();
@@ -132,7 +108,7 @@ dlgStatusShowModal(int start_page)
 
   wTabBar->SetCurrentPage(status_page);
 
-  SetTitle(wTabBar);
+  SetTitle(*wf, wTabBar);
 
   wf->ShowModal();
 

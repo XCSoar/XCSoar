@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form X="5" Y="5" Width="240" Height="127" Caption="Replay">
-  <Button Caption="Close" X="2" Y="2" Width="66" Height="35" OnClick="OnCloseClicked" />
+  <CloseButton X="2" Y="2" Width="66" Height="35"/>
 
   <Edit Name="prpFile" Caption="File" X="2" Y="39" Width="235" Height="22" CaptionWidth="60" Help="Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (.nmea), or if blank, runs the demo.">
     <DataField DataType="filereader"/>

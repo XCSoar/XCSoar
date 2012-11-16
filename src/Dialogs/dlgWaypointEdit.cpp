@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/Form.hpp"
@@ -310,23 +309,12 @@ GetValues()
   };
 }
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 bool
 dlgWaypointEditShowModal(Waypoint &way_point)
 {
   global_wpt = &way_point;
 
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+  wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
                   Layout::landscape ?
                   _T("IDR_XML_WAYPOINTEDIT_L") : _T("IDR_XML_WAYPOINTEDIT"));
   assert(wf != NULL);

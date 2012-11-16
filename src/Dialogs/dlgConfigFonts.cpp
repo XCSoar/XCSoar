@@ -246,12 +246,6 @@ OnEditMapLabelImportantFontClicked(gcc_unused WndButton &button)
            log_map_label_important);
 }
 
-static void
-OnCloseClicked(gcc_unused WndButton &button)
-{
-  wf->SetModalResult(mrOK);
-}
-
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnUseCustomFontData),
   DeclareCallBackEntry(OnEditInfoWindowFontClicked),
@@ -262,7 +256,6 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnEditCDIWindowFontClicked),
   DeclareCallBackEntry(OnEditMapLabelFontClicked),
   DeclareCallBackEntry(OnEditMapLabelImportantFontClicked),
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 

@@ -190,15 +190,6 @@ Update()
 }
 
 /**
- * This event handler is called when the "Close" button is pressed
- */
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-/**
  * This event handler is called when the "Team" button is pressed
  */
 static void
@@ -281,7 +272,6 @@ OnFriendClearClicked(gcc_unused WndButton &Sender)
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnTeamClicked),
   DeclareCallBackEntry(OnCallsignClicked),
   DeclareCallBackEntry(OnFriendGreenClicked),

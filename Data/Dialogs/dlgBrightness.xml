@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form X="5" Y="5" Width="153" Height="111" Caption="Screen Brightness">
-  <Button Caption="Close" X="68" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
+  <CloseButton X="68" Y="2" Width="60" Height="22"/>
 
   <Edit Name="prpAuto" Caption="Auto" X="2" Width="-2" Height="22" CaptionWidth="68" Help="Enables automatic backlight, responsive to light sensor.">
     <DataField DataType="boolean" OnDataAccess="OnAutoData"/>

@@ -37,5 +37,5 @@
 
   <CheckBox Name="chkbOptimized" Caption="Optimized" X="-115" Y="-57" Height="22" OnClick="OnOptimized"/>
 
-  <Button Name="btnOK" Caption="Close" X="-120" Y="-35" Height="35" OnClick="OnOKClicked" />
+  <CloseButton X="-120" Y="-35" Height="35"/>
 </Form>

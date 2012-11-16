@@ -11,5 +11,5 @@
   <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-60" Width="40" Height="30" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="40" Y="-60" Width="40" Height="30" OnClick="OnNextClicked" />
 
-  <Button Name="cmdClose" Caption="Close" Y="-30" Width="80" Height="30" OnClick="OnCloseClicked" />
+  <CloseButton Y="-30" Width="80" Height="30"/>
 </Form>

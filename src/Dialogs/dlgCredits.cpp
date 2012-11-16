@@ -121,12 +121,6 @@ FormKeyDown(unsigned key_code)
 }
 
 static void
-OnClose(gcc_unused WndButton &button)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   const UPixelScalar width = canvas.GetWidth();
@@ -186,7 +180,6 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnClose),
   DeclareCallBackEntry(OnNext),
   DeclareCallBackEntry(OnPrev),
   DeclareCallBackEntry(OnLogoPaint),

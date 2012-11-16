@@ -90,12 +90,6 @@ OnPrevClicked(gcc_unused WndButton &button)
   NextPage(-1);
 }
 
-static void
-OnCloseClicked(gcc_unused WndButton &button)
-{
-  wf->SetModalResult(mrOK);
-}
-
 static bool
 FormKeyDown(unsigned key_code)
 {
@@ -195,7 +189,6 @@ LoadChecklist()
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 

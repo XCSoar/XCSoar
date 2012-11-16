@@ -9,7 +9,7 @@
   <SymbolButton Name="cmdPrev" Caption="&lt;" Y="-70" Width="35" Height="35" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="-70" Width="35" Height="35" OnClick="OnNextClicked" />
 
-  <Button Name="cmdClose" Caption="Close" Y="-35" Width="70" Height="35" OnClick="OnCloseClicked" />
+  <CloseButton Y="-35" Width="70" Height="35"/>
 
   <Widget Name="info" X="70" Y="0"/>
 

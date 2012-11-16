@@ -97,16 +97,9 @@ RemoveClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-static void
-CloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(UpdateClicked),
   DeclareCallBackEntry(RemoveClicked),
-  DeclareCallBackEntry(CloseClicked),
   DeclareCallBackEntry(NULL)
 };
 

@@ -2,7 +2,7 @@
 
 <Form Caption="Configuration">
   <SymbolButton Name="cmdNext" Caption="&gt;" X="60" Y="-35" Width="60" Height="35" OnClick="OnNext" />
-  <Button Name="cmdClose" Caption="Close" X="-120" Y="-35" Height="35" OnClick="OnClose" />
+  <CloseButton X="-120" Y="-35" Height="35"/>
 
   <Tabbed Name="tab" X="0" Y="0" Height="-35">
     <Canvas OnPaint="OnLogoPaint" />

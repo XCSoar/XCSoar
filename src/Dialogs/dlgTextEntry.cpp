@@ -57,12 +57,6 @@ static TCHAR EntryLetters[] = _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 #define MAXENTRYLETTERS (ARRAY_SIZE(EntryLetters) - 1)
 
 static void
-OnCloseClicked(gcc_unused WndButton &button)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   const PixelRect rc = Sender->GetClientRect();
@@ -206,7 +200,6 @@ OnDownClicked(gcc_unused WndButton &button)
 
 static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnTextPaint),
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLeftClicked),
   DeclareCallBackEntry(OnRightClicked),
   DeclareCallBackEntry(OnUpClicked),

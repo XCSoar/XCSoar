@@ -23,30 +23,10 @@ Copyright_License {
 
 #include "HelpDialog.hpp"
 #include "Dialogs/XML.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Form/Form.hpp"
-#include "Form/Util.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Units/Units.hpp"
 #include "Language/Language.hpp"
-
-class WndButton;
-
-#include <stdio.h>
-
-static WndForm *wf = NULL;
-
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 dlgHelpShowModal(SingleWindow &parent,
@@ -55,8 +35,9 @@ dlgHelpShowModal(SingleWindow &parent,
   if (!Caption || !HelpText)
     return;
 
-  wf = LoadDialog(CallBackTable, parent,
-                  Layout::landscape ? _T("IDR_XML_HELP_L"): _T("IDR_XML_HELP"));
+  WndForm *wf = LoadDialog(nullptr, parent,
+                           Layout::landscape
+                           ? _T("IDR_XML_HELP_L"): _T("IDR_XML_HELP"));
 
   if (wf == NULL)
     return;

@@ -9,7 +9,7 @@
   
   <Button Name="cmdGoto" Caption="GoTo" X="80" Y="-35" Width="-80" Height="35" OnClick="OnGotoClicked" />
 
-  <Button Name="cmdClose" Caption="Close" X="-80" Y="-35" Height="35" OnClick="OnCloseClicked" />
+  <CloseButton X="-80" Y="-35" Height="35"/>
 
   <Widget Name="info" Y="0" Height="-35"/>
 

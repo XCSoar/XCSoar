@@ -188,12 +188,6 @@ LoadClicked(gcc_unused WndButton &button)
 }
 
 static void
-CloseClicked(gcc_unused WndButton &button)
-{
-  dialog->SetModalResult(mrCancel);
-}
-
-static void
 NewClicked(gcc_unused WndButton &button)
 {
   Plane plane = CommonInterface::GetComputerSettings().plane;
@@ -312,7 +306,6 @@ ListItemSelected(unsigned i)
 
 static constexpr CallBackTableEntry CallBackTable[] = {
    DeclareCallBackEntry(LoadClicked),
-   DeclareCallBackEntry(CloseClicked),
    DeclareCallBackEntry(NewClicked),
    DeclareCallBackEntry(EditClicked),
    DeclareCallBackEntry(DeleteClicked),

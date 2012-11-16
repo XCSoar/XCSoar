@@ -8,5 +8,5 @@
   <Button Name="RemoveButton" Caption="Remove" X="160" Y="-70" Width="80" Height="35" OnClick="RemoveClicked"/>
   
   <Button Name="DetailsButton" Caption="Details" X="0" Y="-35" Width="120" Height="35" OnClick="DetailsClicked"/>
-  <Button Caption="Close" X="120" Y="-35" Width="120" Height="35" OnClick="CloseClicked"/>
+  <CloseButton X="120" Y="-35" Width="120" Height="35"/>
 </Form>

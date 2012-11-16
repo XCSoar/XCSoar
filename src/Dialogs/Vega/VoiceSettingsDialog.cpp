@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "VoiceSettingsDialog.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
 #include "Form/Util.hpp"
@@ -35,20 +34,6 @@ Copyright_License {
 #include "Audio/VegaVoice.hpp"
 #include "LogFile.hpp"
 #include "Interface.hpp"
-
-static WndForm *wf=NULL;
-
-static void OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-
-static constexpr CallBackTableEntry CallBackTable[]={
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 
 static void LoadIntoForm(WndForm &form, const VoiceSettings &settings){
   LoadFormProperty(form, _T("prpVoiceClimbRate"),
@@ -95,11 +80,9 @@ SaveFromForm(const WndForm &form, VoiceSettings &settings)
 
 
 void dlgVoiceShowModal(){
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-		      _T("IDR_XML_VOICE"));
-
-  
-  if (!wf) return;
+  WndForm *wf = LoadDialog(nullptr, UIGlobals::GetMainWindow(),
+                           _T("IDR_XML_VOICE"));
+  assert(wf != nullptr);
 
   LoadIntoForm(*wf, CommonInterface::GetComputerSettings().voice);
 

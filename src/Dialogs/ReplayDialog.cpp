@@ -55,12 +55,6 @@ OnStartClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OnRateData(DataField *Sender, DataField::DataAccessMode Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
@@ -79,7 +73,6 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnStopClicked),
   DeclareCallBackEntry(OnStartClicked),
   DeclareCallBackEntry(OnRateData),
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 

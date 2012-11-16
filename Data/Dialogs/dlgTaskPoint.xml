@@ -22,5 +22,5 @@
 
   <SymbolButton Name="butPrevious" Caption="&lt;" X="0" Y="-35" Width="60" Height="35" OnClick="OnPreviousClicked"/>
   <SymbolButton Name="butNext" Caption="&gt;" X="60" Y="-35" Width="60" Height="35" OnClick="OnNextClicked"/>
-  <Button Caption="Close" X="120" Y="-35" Height="35" OnClick="OnCloseClicked"/>
+  <CloseButton X="120" Y="-35" Height="35"/>
 </Form>

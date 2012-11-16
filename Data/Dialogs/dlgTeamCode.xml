@@ -5,7 +5,7 @@
   <Button Name="cmdSetWaypoint" Caption="Set WP" X="-120" Y="-60" Height="30" OnClick="OnSetWaypointClicked" />
 
   <Button Caption="Flarm Lock" Y="-30" Width="-120" Height="30" OnClick="OnFlarmLockClicked" />
-  <Button Name="cmdClose" Caption="Close" X="-120" Y="-30" Height="30" OnClick="OnCloseClicked" />
+  <CloseButton X="-120" Y="-30" Height="30"/>
 
   <Edit Name="prpOwnCode" Caption="Own code" Y="15" Width="-20" Height="22" CaptionWidth="115" ReadOnly="1" />
   <Edit Name="prpMateCode" Caption="Mate code" Width="-20" Height="22" CaptionWidth="115" ReadOnly="1" />

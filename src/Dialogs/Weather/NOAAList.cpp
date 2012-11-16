@@ -161,12 +161,6 @@ RemoveClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-CloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OpenDetails(unsigned index)
 {
   assert(index < list.size());
@@ -194,7 +188,6 @@ static constexpr CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(AddClicked),
   DeclareCallBackEntry(UpdateClicked),
   DeclareCallBackEntry(RemoveClicked),
-  DeclareCallBackEntry(CloseClicked),
   DeclareCallBackEntry(DetailsClicked),
   DeclareCallBackEntry(NULL)
 };

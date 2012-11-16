@@ -35,17 +35,9 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
-static WndForm *wf;
-
 static fixed VegaDemoW = fixed_zero;
 static fixed VegaDemoV = fixed_zero;
 static bool VegaDemoAudioClimb = true;
-
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
 
 static void
 VegaWriteDemo()
@@ -113,15 +105,14 @@ static constexpr CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnVegaDemoW),
   DeclareCallBackEntry(OnVegaDemoV),
   DeclareCallBackEntry(OnVegaDemoAudioClimb),
-  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
 void
 dlgVegaDemoShowModal()
 {
-  wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                  _T("IDR_XML_VEGADEMO"));
+  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
+                           _T("IDR_XML_VEGADEMO"));
 
   if (!wf) return;
 

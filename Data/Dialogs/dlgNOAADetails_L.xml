@@ -6,5 +6,5 @@
   <Button Caption="Update" X="0" Y="0" Width="60" Height="35" OnClick="UpdateClicked"/>
   <Button Caption="Remove" X="0" Y="35" Width="60" Height="35" OnClick="RemoveClicked"/>
   
-  <Button Caption="Close" X="0" Y="-35" Width="60" Height="35" OnClick="CloseClicked"/>
+  <CloseButton X="0" Y="-35" Width="60" Height="35"/>
 </Form>

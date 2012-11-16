@@ -2,7 +2,7 @@
 
 <Form Caption="FLARM Traffic Details">
   <Button Name="cmdSetAsTeamMate" Caption="Team" Y="-35" Width="120" Height="35" OnClick="OnTeamClicked" />
-  <Button Name="cmdClose" Caption="Close" X="120" Y="-35" Height="35" OnClick="OnCloseClicked" />
+  <CloseButton X="120" Y="-35" Height="35"/>
 
   <Edit Name="prpCallsign" Caption="Callsign" Y="0" Height="22" CaptionWidth="80" ReadOnly="1" />
   <Button Name="cmdCallsign" Caption="Change callsign" X="80" Height="22" OnClick="OnCallsignClicked" />
