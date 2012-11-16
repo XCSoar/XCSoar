@@ -51,7 +51,7 @@ OnStartClicked(gcc_unused WndButton &Sender)
   const TCHAR *path = GetFormValueFile(*wf, _T("prpFile"));
   if (!replay->Start(path))
     ShowMessageBox(_("Could not open IGC file!"),
-                   _("Flight replay"), MB_OK | MB_ICONINFORMATION);
+                   _("Replay"), MB_OK | MB_ICONINFORMATION);
 }
 
 static void
