@@ -4,6 +4,5 @@
   <Canvas Name="TaskView" X="0" Y="0" Width="61" Height="71" Visible="0"/>
   <Button Name="Target" Caption="Target" X="2" Y="2" Width="57" Height="67" Visible="0"/>
 
-  <TabBar Name="TabBar" X="60" Y="0" Width="181" Height="76">
-  </TabBar>
+  <TabBar Name="TabBar" X="60" Y="0" Height="76"/>
 </Form>
