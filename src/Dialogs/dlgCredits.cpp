@@ -28,7 +28,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/Tabbed.hpp"
 #include "Form/Draw.hpp"
-#include "Look/Fonts.hpp"
+#include "Look/StandardFonts.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/LargeTextWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -138,7 +138,7 @@ OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
   y += title_size.cy + Layout::FastScale(20);
 
   Font font;
-  font.Load(Fonts::GetStandardFontFace(), Layout::FastScale(16));
+  font.Load(GetStandardFontFace(), Layout::FastScale(16));
   canvas.Select(font);
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundTransparent();

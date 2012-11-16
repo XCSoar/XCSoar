@@ -21,50 +21,32 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_FONTS_HPP
-#define XCSOAR_FONTS_HPP
+#ifndef XCSOAR_STANDARD_FONTS_HPP
+#define XCSOAR_STANDARD_FONTS_HPP
 
-#include "Screen/Point.hpp"
+#include "Asset.hpp"
 
-#include <tchar.h>
-
-struct Appearance;
-class Font;
-
-namespace Fonts
+gcc_const
+static inline const TCHAR *
+GetStandardMonospaceFontFace()
 {
-  extern Font infobox;
-  extern Font infobox_small;
-#ifndef GNAV
-  extern Font infobox_units;
-#endif
+  if (IsAndroid())
+    return _T("Droid Sans Mono");
 
-  extern Font title;
-  extern Font cdi;
-  extern Font monospace;
+  return _T("Courier");
+}
 
-  extern Font map;
-  extern Font map_bold;
-  extern Font map_label;
-  extern Font map_label_important;
+gcc_const
+static inline const TCHAR *
+GetStandardFontFace()
+{
+  if (IsAltair())
+    return _T("RasterGothicFourteenCond");
 
-  /**
-   * Load all fonts.
-   *
-   * @return true on success
-   */
-  bool Initialize();
+  if (IsAndroid())
+    return _T("Droid Sans");
 
-  void SizeInfoboxFont(UPixelScalar control_width);
-
-  /**
-   * Load custom fonts from the profile.
-   *
-   * @return true on success
-   */
-  bool LoadCustom();
-
-  void Deinitialize();
+  return _T("Tahoma");
 }
 
 #endif

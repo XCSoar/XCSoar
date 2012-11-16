@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Fonts.hpp"
+#include "StandardFonts.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Layout.hpp"
 
@@ -58,15 +59,6 @@ LOGFONT log_cdi;
 LOGFONT log_map_label;
 LOGFONT log_map_label_important;
 static LOGFONT log_monospace;
-
-static const TCHAR *
-GetStandardMonospaceFontFace()
-{
-  if (IsAndroid())
-    return _T("Droid Sans Mono");
-
-  return _T("Courier");
-}
 
 static void
 InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
@@ -142,40 +134,40 @@ InitialiseLogFonts()
 #endif
 
   // oversize first so can then scale down
-  InitialiseLogfont(&log_infobox, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_infobox, GetStandardFontFace(),
                     (int)(FontHeight * 1.4), true, false, true);
 
 #ifdef WIN32
   log_infobox.lfCharSet = ANSI_CHARSET;
 #endif
 
-  InitialiseLogfont(&log_title, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_title, GetStandardFontFace(),
                     FontHeight / 3, true);
 
   // new font for CDI Scale
-  InitialiseLogfont(&log_cdi, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_cdi, GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.6), false, false, false);
 
   // new font for map labels
-  InitialiseLogfont(&log_map_label, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map_label, GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.39), false, true);
 
   // new font for map labels big/medium cities
-  InitialiseLogfont(&log_map_label_important, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map_label_important, GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.39), true, true);
 
   // new font for map labels
-  InitialiseLogfont(&log_map, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map, GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.507));
 
   // Font for map bold text
-  InitialiseLogfont(&log_map_bold, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_map_bold, GetStandardFontFace(),
                     UPixelScalar(FontHeight * 0.507), true);
 
-  InitialiseLogfont(&log_infobox_small, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_infobox_small, GetStandardFontFace(),
                     Layout::Scale(20));
 
-  InitialiseLogfont(&log_infobox_small, Fonts::GetStandardFontFace(),
+  InitialiseLogfont(&log_infobox_small, GetStandardFontFace(),
                     (int)(FontHeight * 0.56), true);
 
   InitialiseLogfont(&log_monospace, GetStandardMonospaceFontFace(),
@@ -238,16 +230,4 @@ Fonts::Deinitialize()
   map_label.Destroy();
   map_label_important.Destroy();
   monospace.Destroy();
-}
-
-const TCHAR*
-Fonts::GetStandardFontFace()
-{
-  if (IsAltair())
-    return _T("RasterGothicFourteenCond");
-
-  if (IsAndroid())
-    return _T("Droid Sans");
-
-  return _T("Tahoma");
 }
