@@ -93,11 +93,11 @@ AddBorder(WindowStyle style)
   return style;
 }
 
-WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
+WndForm::WndForm(SingleWindow &main_window, const DialogLook &_look,
                  const PixelRect &rc,
                  const TCHAR *Caption,
                  const WindowStyle style)
-  :main_window(_main_window), look(_look),
+  :look(_look),
    modal_result(0), force(false),
    modeless(false),
    dragging(false),
@@ -126,6 +126,12 @@ WndForm::~WndForm()
      destruction, this object loses its identity) */
   Destroy();
   SubForm::Clear();
+}
+
+SingleWindow &
+WndForm::GetMainWindow()
+{
+  return *(SingleWindow *)GetRootOwner();
 }
 
 void
@@ -341,6 +347,7 @@ WndForm::ShowModal()
 
   modal_result = 0;
 
+  SingleWindow &main_window = GetMainWindow();
   main_window.CancelMode();
 
 #ifdef USE_GDI
@@ -584,6 +591,8 @@ WndForm::SetCaption(const TCHAR *_caption)
 void
 WndForm::ReinitialiseLayout()
 {
+  const SingleWindow &main_window = GetMainWindow();
+
   if (main_window.GetWidth() < GetWidth() ||
       main_window.GetHeight() < GetHeight()) {
     // close dialog, it's creator may want to create a new layout

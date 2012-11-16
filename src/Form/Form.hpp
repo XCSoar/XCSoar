@@ -69,8 +69,6 @@ public:
   typedef std::function<bool(unsigned)> KeyDownFunction;
 
 protected:
-  SingleWindow &main_window;
-
   const DialogLook &look;
 
   int modal_result;
@@ -135,9 +133,8 @@ public:
    * Returns a reference to the main window.  This is used by dialogs
    * when they want to open another dialog.
    */
-  SingleWindow &GetMainWindow() {
-    return main_window;
-  }
+  gcc_pure
+  SingleWindow &GetMainWindow();
 
   const DialogLook &GetLook() const {
     return look;
