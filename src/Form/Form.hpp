@@ -131,6 +131,13 @@ public:
               const TCHAR *caption=_T(""),
               const WindowStyle style=WindowStyle());
 
+  /**
+   * Create a full-screen dialog.
+   */
+  void Create(SingleWindow &main_window,
+              const TCHAR *caption=_T(""),
+              const WindowStyle style=WindowStyle());
+
 protected:
   void UpdateLayout();
 

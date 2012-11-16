@@ -136,6 +136,13 @@ WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
 #endif
 }
 
+void
+WndForm::Create(SingleWindow &main_window,
+                const TCHAR *_caption, const WindowStyle style)
+{
+  Create(main_window, main_window.GetClientRect(), _caption, style);
+}
+
 WndForm::~WndForm()
 {
   /* we must override the ~Window() reset call, because in ~Window(),
