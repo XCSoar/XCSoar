@@ -21,13 +21,11 @@ Copyright_License {
 }
 */
 
+#define ENABLE_XML_DIALOG
+
+#include "Main.hpp"
 #include "UIGlobals.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Init.hpp"
-#include "Fonts.hpp"
-#include "Look/DialogLook.hpp"
-#include "ResourceLoader.hpp"
-#include "Dialogs/DialogSettings.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Util/Macros.hpp"
@@ -35,21 +33,7 @@ Copyright_License {
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
-static DialogSettings dialog_settings;
-static DialogLook dialog_look;
 static SingleWindow main_window;
-
-const DialogSettings &
-UIGlobals::GetDialogSettings()
-{
-  return dialog_settings;
-}
-
-const DialogLook &
-UIGlobals::GetDialogLook()
-{
-  return dialog_look;
-}
 
 SingleWindow &
 UIGlobals::GetMainWindow()
@@ -57,32 +41,9 @@ UIGlobals::GetMainWindow()
   return main_window;
 }
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
-#ifdef USE_GDI
-  ResourceLoader::Init(hInstance);
-#endif
-
-  InitialiseFonts();
-
-  dialog_settings.SetDefaults();
-  dialog_look.Initialise(bold_font, normal_font, small_font,
-                         bold_font, bold_font);
-  SetXMLDialogLook(dialog_look);
-
   main_window.Create(_T("RunTextEntry"), PixelRect{0, 0, 640, 480});
   main_window.Show();
 
@@ -90,8 +51,4 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dlgTextEntryShowModal(text, ARRAY_SIZE(text), _T("The caption"));
 
   main_window.Destroy();
-
-  DeinitialiseFonts();
-
-  return 0;
 }

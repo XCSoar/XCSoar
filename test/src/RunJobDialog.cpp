@@ -21,15 +21,14 @@ Copyright_License {
 }
 */
 
+#define ENABLE_DIALOG
+
+#include "Main.hpp"
 #include "Dialogs/JobDialog.hpp"
-#include "Look/DialogLook.hpp"
-#include "Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
 #include "Job/Job.hpp"
 #include "Operation/Operation.hpp"
-#include "ResourceLoader.hpp"
 
 class TestJob : public Job {
 public:
@@ -43,29 +42,9 @@ public:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
-#ifdef WIN32
-  ResourceLoader::Init(hInstance);
-#endif
-
-  InitialiseFonts();
-  DialogLook *look = new DialogLook();
-  look->Initialise(bold_font, normal_font, small_font, bold_font, bold_font);
-
   Layout::Initialize(320,240);
   SingleWindow main_window;
   main_window.Create(_T("RunProgressWindow"),
@@ -73,10 +52,5 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.Show();
 
   TestJob job;
-  JobDialog(main_window, *look, _T("RunJobDialog"), job);
-
-  delete look;
-  DeinitialiseFonts();
-
-  return 0;
+  JobDialog(main_window, *dialog_look, _T("RunJobDialog"), job);
 }

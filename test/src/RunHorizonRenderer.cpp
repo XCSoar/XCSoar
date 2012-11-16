@@ -21,21 +21,16 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Timer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Fonts.hpp"
-#include "Look/DialogLook.hpp"
 #include "Look/HorizonLook.hpp"
-#include "Look/Fonts.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "NMEA/Attitude.hpp"
-
-#ifdef USE_GDI
-#include "ResourceLoader.hpp"
-#endif
 
 class HorizonWindow : public PaintWindow
 {
@@ -130,27 +125,9 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
-#ifdef USE_GDI
-  ResourceLoader::Init(hInstance);
-#endif
-
-  Fonts::Initialize();
-
   HorizonLook horizon_look;
   horizon_look.Initialise();
 
@@ -159,8 +136,4 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   window.Show();
   window.RunEventLoop();
-
-  Fonts::Deinitialize();
-
-  return 0;
 }

@@ -21,12 +21,17 @@ Copyright_License {
 }
 */
 
+#define ENABLE_LOOK
+#define ENABLE_XML_DIALOG
+#define ENABLE_CMDLINE
+#define ENABLE_PROFILE
+#define USAGE "DRIVER FILE"
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Init.hpp"
-#include "ResourceLoader.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
@@ -41,7 +46,6 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/AirspaceGlue.hpp"
-#include "Profile/Profile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -78,21 +82,6 @@ TaskFile::GetTask(const TCHAR *path, const TaskBehaviour &task_behaviour,
                   const Waypoints *waypoints, unsigned index)
 {
   return NULL;
-}
-
-static DialogSettings dialog_settings;
-static const DialogLook *dialog_look;
-
-const DialogSettings &
-UIGlobals::GetDialogSettings()
-{
-  return dialog_settings;
-}
-
-const DialogLook &
-UIGlobals::GetDialogLook()
-{
-  return *dialog_look;
 }
 
 void dlgBasicSettingsShowModal() {}
@@ -163,34 +152,19 @@ LoadReplay(DebugReplay *replay, GlideComputer &glide_computer,
   blackboard.ReadBlackboardCalculated(glide_computer.Calculated());
 }
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static DebugReplay *replay;
+
+static void
+ParseCommandLine(Args &args)
 {
-#ifdef WIN32
-  Args args(GetCommandLine(), "DRIVER FILE");
-#else
-  Args args(argc, argv, "DRIVER FILE");
-#endif
-  DebugReplay *replay = CreateDebugReplay(args);
-  if (replay == NULL)
-    return EXIT_FAILURE;
+  replay = CreateDebugReplay(args);
+  if (replay == nullptr)
+    exit(EXIT_FAILURE);
+}
 
-  args.ExpectEnd();
-
-  InitialiseDataPath();
-  Profile::SetFiles(_T(""));
-  Profile::Load();
-
+static void
+Main()
+{
   const Waypoints way_points;
 
   InterfaceBlackboard blackboard;
@@ -219,14 +193,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   glide_computer.SetTerrain(terrain);
   glide_computer.Initialise();
 
-  ScreenGlobalInit screen_init;
-
   LoadReplay(replay, glide_computer, blackboard);
   delete replay;
-
-#ifdef WIN32
-  ResourceLoader::Init(hInstance);
-#endif
 
   Layout::Initialize(640, 480);
 
@@ -234,38 +202,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   main_window.Create(_T("RunAnalysis"),
                      PixelRect{0, 0, 640, 480});
 
-  Fonts::Initialize();
-
-  dialog_settings.SetDefaults();
-
-  Look *look = new Look();
-  look->Initialise(Fonts::map, Fonts::map_bold, Fonts::map_label);
-  look->InitialiseConfigured(blackboard.GetUISettings(),
-                             Fonts::map, Fonts::map_bold, Fonts::map_label,
-                             Fonts::cdi, Fonts::monospace,
-                             Fonts::infobox, Fonts::infobox_small,
-#ifndef GNAV
-                             Fonts::infobox_units,
-#endif
-                             Fonts::title);
-
-  SetXMLDialogLook(look->dialog);
-
-  dialog_look = &look->dialog;
-
-  main_window.Show();
-
   dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,
                        &protected_task_manager,
                        &airspace_database,
                        terrain);
 
-  delete look;
-  Fonts::Deinitialize();
-
   delete terrain;
-
-  DeinitialiseDataPath();
-
-  return 0;
 }

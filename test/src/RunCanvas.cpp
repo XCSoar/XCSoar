@@ -21,10 +21,12 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/Init.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "Screen/WindowCanvas.hpp"
@@ -75,12 +77,14 @@ public:
     button_rc.right = button_rc.left + 65;
 
     buffer_button.Create(*this, _T("Buffer"), ID_BUFFER, button_rc);
+    buffer_button.SetFont(normal_font);
 #endif
 
     button_rc.right = rc.right - 5;
     button_rc.left = button_rc.right - 65;
 
     close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.SetFont(normal_font);
   }
 
 private:
@@ -158,6 +162,8 @@ private:
     }
 
     canvas.SetTextColor(Color(0, 0, 128));
+    canvas.SetBackgroundTransparent();
+    canvas.Select(normal_font);
     canvas.DrawText(5, 5, label);
 #ifndef ENABLE_OPENGL
     canvas.DrawText(5, 25,
@@ -225,26 +231,12 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
   TestWindow window;
   window.Create(PixelRect{0, 0, 250, 250});
   window.Show();
 
   window.RunEventLoop();
-
-  return 0;
 }

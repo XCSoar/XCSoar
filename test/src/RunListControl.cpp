@@ -21,14 +21,14 @@ Copyright_License {
 }
 */
 
+#define ENABLE_DIALOG
+
+#include "Main.hpp"
 #include "Form/List.hpp"
 #include "Form/Form.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Canvas.hpp"
-#include "Look/DialogLook.hpp"
-#include "Fonts.hpp"
 
 static void
 PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
@@ -38,29 +38,13 @@ PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
   canvas.DrawText(rc.left + 2, rc.top + 2, text);
 }
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
   PixelRect screen_rc{0, 0, 640, 480};
 
-  ScreenGlobalInit screen_init;
   Layout::Initialize(screen_rc.right - screen_rc.left,
                      screen_rc.bottom - screen_rc.top);
-
-  InitialiseFonts();
-  DialogLook *dialog_look = new DialogLook();
-  dialog_look->Initialise(bold_font, normal_font, small_font,
-                          bold_font, bold_font);
 
   SingleWindow main_window;
   main_window.Create(_T("RunListControl"), screen_rc);
@@ -82,9 +66,4 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   list.SetFocus();
 
   form.ShowModal();
-
-  delete dialog_look;
-  DeinitialiseFonts();
-
-  return 0;
 }

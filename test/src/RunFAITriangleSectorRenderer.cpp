@@ -21,11 +21,12 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Canvas.hpp"
-#include "Fonts.hpp"
 #include "Renderer/FAITriangleAreaRenderer.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Projection/WindowProjection.hpp"
@@ -109,30 +110,12 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
-  InitialiseFonts();
-
   TestWindow window;
   window.Create(PixelRect{0, 0, 640, 480});
 
   window.Show();
   window.RunEventLoop();
-
-  DeinitialiseFonts();
-
-  return 0;
 }

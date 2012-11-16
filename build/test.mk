@@ -978,6 +978,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
@@ -1480,6 +1481,7 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
@@ -1686,7 +1688,6 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Formatter/TimeFormatter.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -1694,6 +1695,7 @@ RUN_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunDialog.cpp \
 	$(SRC)/Compatibility/fmode.c
 RUN_DIALOG_LDADD = \
@@ -1713,6 +1715,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Form/Form.cpp \
 	$(SRC)/Form/List.cpp \
 	$(SRC)/Form/ScrollBar.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -1751,12 +1754,12 @@ $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
 RUN_TERMINAL_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Screen/TerminalWindow.cpp \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunTerminal.cpp
 RUN_TERMINAL_DEPENDS = SCREEN EVENT OS THREAD MATH UTIL
 $(eval $(call link-program,RunTerminal,RUN_TERMINAL))
@@ -1784,7 +1787,6 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/WindArrowLook.cpp \
@@ -1796,6 +1798,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
 RUN_WIND_ARROW_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT OS THREAD MATH UTIL
@@ -1805,16 +1808,10 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
-	$(SRC)/Renderer/LabelBlock.cpp \
-	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/HorizonLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
-	$(SRC)/Units/Units.cpp \
-	$(SRC)/Units/Settings.cpp \
-	$(SRC)/Units/Descriptor.cpp \
-	$(SRC)/Units/System.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
@@ -1826,7 +1823,6 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Renderer/LabelBlock.cpp \
 	$(SRC)/Renderer/TextInBox.cpp \
 	$(SRC)/Look/FinalGlideBarLook.cpp \
@@ -1850,6 +1846,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
 RUN_FINAL_GLIDE_BAR_RENDERER_LDADD = $(RESOURCE_BINARY)
 RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT OS THREAD TASK GLIDE GEO MATH UTIL
@@ -1881,6 +1878,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
 RUN_PROGRESS_WINDOW_LDADD = $(RESOURCE_BINARY)
 RUN_PROGRESS_WINDOW_DEPENDS = SCREEN EVENT OS THREAD MATH UTIL
@@ -1899,6 +1897,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(SRC)/Form/SubForm.cpp \
 	$(SRC)/Form/Form.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -1967,7 +1966,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/Look.cpp \
@@ -2104,6 +2102,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/DebugReplay.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_LDADD = \
 	$(RESOURCE_BINARY)
@@ -2139,9 +2138,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Look/Fonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
-	$(SRC)/LocalPath.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Operation/Operation.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
@@ -2154,6 +2151,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_LDADD = \
 	$(FAKE_LIBS) \

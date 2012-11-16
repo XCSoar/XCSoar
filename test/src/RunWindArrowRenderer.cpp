@@ -21,21 +21,16 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Timer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Fonts.hpp"
-#include "Look/DialogLook.hpp"
 #include "Look/WindArrowLook.hpp"
-#include "Look/Fonts.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
 #include "Geo/SpeedVector.hpp"
-
-#ifdef USE_GDI
-#include "ResourceLoader.hpp"
-#endif
 
 class WindWindow : public PaintWindow
 {
@@ -147,37 +142,15 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
-#ifdef USE_GDI
-  ResourceLoader::Init(hInstance);
-#endif
-
-  Fonts::Initialize();
-
   WindArrowLook wind_look;
-  wind_look.Initialise(Fonts::map_bold);
+  wind_look.Initialise(bold_font);
 
   TestWindow window(wind_look);
   window.Create(PixelRect{0, 0, 160, 160});
 
   window.Show();
   window.RunEventLoop();
-
-  Fonts::Deinitialize();
-
-  return 0;
 }

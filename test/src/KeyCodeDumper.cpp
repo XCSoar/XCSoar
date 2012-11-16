@@ -21,9 +21,11 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Canvas.hpp"
 
 #include <algorithm>
@@ -96,6 +98,10 @@ protected:
       canvas.SelectWhitePen();
     canvas.Clear();
 
+    canvas.SetTextColor(COLOR_BLACK);
+    canvas.SetBackgroundTransparent();
+    canvas.Select(normal_font);
+
     unsigned text_height = canvas.CalcTextSize(_T("W")).cy;
     for (int i = num_events - 1, y = 4; i >= 0; --i, y += text_height) {
       const struct key_event &event = events[i];
@@ -130,6 +136,7 @@ public:
     button_rc.top = (rc.top + rc.bottom + 1) / 2;
 
     close_button.Create(*this, _T("Close"), ID_CLOSE, button_rc);
+    close_button.SetFont(normal_font);
 
     key_code_dumper.SetFocus();
   }
@@ -152,26 +159,12 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
   TestWindow window;
   window.Create(PixelRect{0, 0, 240, 100});
   window.Show();
 
   window.RunEventLoop();
-
-  return 0;
 }

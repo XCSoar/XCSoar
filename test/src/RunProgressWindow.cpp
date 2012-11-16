@@ -21,32 +21,17 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Init.hpp"
-#include "ResourceLoader.hpp"
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
   PixelRect screen_rc{0, 0, 640, 480};
-
-  ScreenGlobalInit screen_init;
-
-#ifdef WIN32
-  ResourceLoader::Init(hInstance);
-#endif
 
   Layout::Initialize(screen_rc.right - screen_rc.left,
                      screen_rc.bottom - screen_rc.top);
@@ -61,6 +46,4 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   progress.SetValue(768);
 
   main_window.RunEventLoop();
-
-  return 0;
 }

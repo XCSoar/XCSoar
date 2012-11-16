@@ -21,12 +21,11 @@ Copyright_License {
 }
 */
 
+#define ENABLE_XML_DIALOG
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Interface.hpp"
-#include "Look/Fonts.hpp"
-#include "Look/DialogLook.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Dialogs/DialogSettings.hpp"
@@ -48,24 +47,11 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
+
 InterfaceBlackboard CommonInterface::Private::blackboard;
 
 ProtectedAirspaceWarningManager *airspace_warnings;
-
-static DialogSettings dialog_settings;
-static DialogLook dialog_look;
-
-const DialogSettings &
-UIGlobals::GetDialogSettings()
-{
-  return dialog_settings;
-}
-
-const DialogLook &
-UIGlobals::GetDialogLook()
-{
-  return dialog_look;
-}
 
 void
 dlgAirspaceDetails(const AbstractAirspace &the_airspace,
@@ -87,33 +73,14 @@ LoadFiles(Airspaces &airspace_database)
   }
 }
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
   Airspaces airspace_database;
   AirspaceWarningManager airspace_warning(airspace_database);
   airspace_warnings = new ProtectedAirspaceWarningManager(airspace_warning);
 
-  InitialiseDataPath();
-  ScreenGlobalInit screen_init;
-
-#ifdef WIN32
-  ResourceLoader::Init(hInstance);
-#endif
-
   LoadFiles(airspace_database);
-
-  Fonts::Initialize();
 
   Airspaces::AirspaceTree::const_iterator it = airspace_database.begin();
 
@@ -129,20 +96,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   Layout::Initialize(640, 480);
 
-  Fonts::Initialize();
-
-  dialog_settings.SetDefaults();
-
-  dialog_look.Initialise(Fonts::map_bold, Fonts::map, Fonts::map_label,
-                         Fonts::map_bold, Fonts::map_bold);
-  SetXMLDialogLook(dialog_look);
-
   dlgAirspaceWarningsShowModal(main_window, *airspace_warnings);
 
-  Fonts::Deinitialize();
-  DeinitialiseDataPath();
-
   delete airspace_warnings;
-
-  return 0;
 }

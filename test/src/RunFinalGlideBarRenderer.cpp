@@ -21,14 +21,14 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Timer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Fonts.hpp"
-#include "Look/Fonts.hpp"
-#include "Look/DialogLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/FinalGlideBarLook.hpp"
 #include "Renderer/FinalGlideBarRenderer.hpp"
@@ -186,30 +186,11 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
-#ifdef USE_GDI
-  ResourceLoader::Init(hInstance);
-  TestWindow::register_class(hInstance);
-#endif
-
-  Fonts::Initialize();
-
   FinalGlideBarLook final_glide_look;
-  final_glide_look.Initialise(Fonts::map);
+  final_glide_look.Initialise(normal_font);
 
   TaskLook task_look;
   task_look.Initialise();
@@ -219,8 +200,4 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   window.Show();
   window.RunEventLoop();
-
-  Fonts::Deinitialize();
-
-  return 0;
 }

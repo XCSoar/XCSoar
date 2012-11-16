@@ -21,14 +21,13 @@ Copyright_License {
 }
 */
 
+#define ENABLE_SCREEN
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/TerminalWindow.hpp"
-#include "Screen/Init.hpp"
 #include "Screen/Timer.hpp"
 #include "Look/TerminalLook.hpp"
-#include "Look/Fonts.hpp"
-
-#include <stdlib.h>
 
 class TestWindow : public SingleWindow {
   TerminalWindow terminal;
@@ -73,32 +72,15 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-  Fonts::Initialize();
-
   TerminalLook look;
-  look.Initialise(Fonts::monospace);
+  look.Initialise(monospace_font);
 
   TestWindow window(look);
   window.Create(PixelRect{0, 0, 400, 400});
   window.Show();
 
   window.RunEventLoop();
-
-  Fonts::Deinitialize();
-
-  return 0;
 }

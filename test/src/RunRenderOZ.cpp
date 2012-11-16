@@ -27,12 +27,12 @@ Copyright_License {
  *
  */
 
+#define ENABLE_DIALOG_LOOK
+
+#include "Main.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/Init.hpp"
-#include "Fonts.hpp"
-#include "Look/DialogLook.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Form/List.hpp"
@@ -48,7 +48,6 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/Boundary.hpp"
 #include "Projection/Projection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
-#include "ResourceLoader.hpp"
 
 enum {
   NUM_OZ_TYPES = 9,
@@ -265,30 +264,10 @@ protected:
   }
 };
 
-#ifndef WIN32
-int main(int argc, char **argv)
-#else
-int WINAPI
-WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-#ifdef _WIN32_WCE
-        LPWSTR lpCmdLine,
-#else
-        LPSTR lpCmdLine2,
-#endif
-        int nCmdShow)
-#endif
+static void
+Main()
 {
-  ScreenGlobalInit screen_init;
-
   airspace_renderer_settings.SetDefaults();
-
-#ifdef USE_GDI
-  ResourceLoader::Init(hInstance);
-#endif
-
-  InitialiseFonts();
-  DialogLook *look = new DialogLook();
-  look->Initialise(bold_font, normal_font, small_font, bold_font, bold_font);
 
   TaskLook *task_look = new TaskLook();
   task_look->Initialise();
@@ -297,15 +276,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   airspace_look->Initialise(airspace_renderer_settings);
 
   TestWindow window(*task_look, *airspace_look);
-  window.Create(*look, PixelRect{0, 0, 480, 480});
+  window.Create(*dialog_look, PixelRect{0, 0, 480, 480});
 
   window.Show();
   window.RunEventLoop();
 
   delete airspace_look;
   delete task_look;
-  delete look;
-  DeinitialiseFonts();
-
-  return 0;
 }
