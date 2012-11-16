@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 
+class Font;
+
 struct CrossSectionLook {
   /** Background color */
   Color background_color;
@@ -49,7 +51,9 @@ struct CrossSectionLook {
 
   Brush aircraft_brush;
 
-  void Initialise();
+  const Font *grid_font;
+
+  void Initialise(const Font &grid_font);
 };
 
 #endif

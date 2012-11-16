@@ -23,17 +23,9 @@
 
 #include "CrossSectionRenderer.hpp"
 #include "Renderer/ChartRenderer.hpp"
-#include "Components.hpp"
-#include "Interface.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/CrossSectionLook.hpp"
-#include "Look/AirspaceLook.hpp"
-#include "Look/Fonts.hpp"
-#include "Airspace/AirspaceIntersectionVisitor.hpp"
-#include "Airspace/AirspaceCircle.hpp"
-#include "Airspace/AirspacePolygon.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Aircraft.hpp"
@@ -66,7 +58,7 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
   canvas.Clear(look.background_color);
   canvas.SetTextColor(look.text_color);
-  canvas.Select(Fonts::map);
+  canvas.Select(*look.grid_font);
 
   ChartRenderer chart(chart_look, canvas, rc);
 

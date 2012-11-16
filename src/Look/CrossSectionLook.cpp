@@ -24,7 +24,7 @@ Copyright_License {
 #include "CrossSectionLook.hpp"
 
 void
-CrossSectionLook::Initialise()
+CrossSectionLook::Initialise(const Font &_grid_font)
 {
   background_color = COLOR_WHITE;
   text_color = COLOR_BLACK;
@@ -37,4 +37,6 @@ CrossSectionLook::Initialise()
 
   grid_pen.Set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
   aircraft_brush.Set(text_color);
+
+  grid_font = &_grid_font;
 }

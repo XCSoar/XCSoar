@@ -59,7 +59,7 @@ Look::InitialiseConfigured(const UISettings &settings,
                    settings.info_boxes.use_colors,
                    infobox_title_font, cdi_font);
   chart.Initialise(map_font, map_label_font, infobox_title_font);
-  cross_section.Initialise();
+  cross_section.Initialise(map_font);
   horizon.Initialise();
   thermal_band.Initialise(settings.info_boxes.inverse,
                           cross_section.sky_color);
