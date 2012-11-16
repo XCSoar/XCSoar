@@ -5,17 +5,9 @@
   <Button Name="cmdClose" Caption="Close" X="-120" Y="-35" Height="35" OnClick="OnClose" />
 
   <Tabbed Name="tab" X="0" Y="0" Height="-35">
-    <Panel Name="frmInfo">
-      <Canvas OnPaint="OnLogoPaint" />
-    </Panel>
-  
-    <Panel Name="frmAuthors">
-      <LargeText Name="prpAuthors"/>
-    </Panel>
-  
-    <Panel Name="frmLicense">
-      <LargeText Name="prpLicense"/>
-    </Panel>
+    <Canvas OnPaint="OnLogoPaint" />
+    <LargeText Name="prpAuthors"/>
+    <LargeText Name="prpLicense"/>
   </Tabbed>
 
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="-35" Width="60" Height="35" OnClick="OnPrev" />
