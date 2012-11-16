@@ -26,15 +26,11 @@ Copyright_License {
 #include "Main.hpp"
 #include "ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Layout.hpp"
 
 static void
 Main()
 {
   PixelRect screen_rc{0, 0, 640, 480};
-
-  Layout::Initialize(screen_rc.right - screen_rc.left,
-                     screen_rc.bottom - screen_rc.top);
 
   SingleWindow main_window;
   main_window.Create(_T("RunProgressWindow"), screen_rc);

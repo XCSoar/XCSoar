@@ -35,7 +35,6 @@ Copyright_License {
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
@@ -93,8 +92,6 @@ Main()
   main_window.Create(_T("RunAirspaceWarningDialog"),
                      PixelRect{0, 0, 640, 480});
   main_window.Show();
-
-  Layout::Initialize(640, 480);
 
   dlgAirspaceWarningsShowModal(main_window, *airspace_warnings);
 

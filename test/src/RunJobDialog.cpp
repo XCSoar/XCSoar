@@ -26,7 +26,6 @@ Copyright_License {
 #include "Main.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Layout.hpp"
 #include "Job/Job.hpp"
 #include "Operation/Operation.hpp"
 
@@ -45,7 +44,6 @@ public:
 static void
 Main()
 {
-  Layout::Initialize(320,240);
   SingleWindow main_window;
   main_window.Create(_T("RunProgressWindow"),
                      PixelRect{0, 0, 640, 480});

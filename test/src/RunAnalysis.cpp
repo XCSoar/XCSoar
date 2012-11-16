@@ -31,7 +31,6 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/BufferCanvas.hpp"
-#include "Screen/Layout.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
@@ -195,8 +194,6 @@ Main()
 
   LoadReplay(replay, glide_computer, blackboard);
   delete replay;
-
-  Layout::Initialize(640, 480);
 
   SingleWindow main_window;
   main_window.Create(_T("RunAnalysis"),

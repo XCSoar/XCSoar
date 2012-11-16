@@ -27,7 +27,6 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Form.hpp"
 #include "Screen/SingleWindow.hpp"
-#include "Screen/Layout.hpp"
 #include "Screen/Canvas.hpp"
 
 static void
@@ -42,9 +41,6 @@ static void
 Main()
 {
   PixelRect screen_rc{0, 0, 640, 480};
-
-  Layout::Initialize(screen_rc.right - screen_rc.left,
-                     screen_rc.bottom - screen_rc.top);
 
   SingleWindow main_window;
   main_window.Create(_T("RunListControl"), screen_rc);

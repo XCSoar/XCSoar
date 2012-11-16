@@ -35,6 +35,7 @@
 
 #ifdef ENABLE_SCREEN
 #include "Screen/Init.hpp"
+#include "Screen/Layout.hpp"
 #include "Fonts.hpp"
 #endif
 
@@ -111,6 +112,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef ENABLE_SCREEN
   ScreenGlobalInit screen_init;
+  Layout::Initialize(640, 480);
   InitialiseFonts();
 #endif
 

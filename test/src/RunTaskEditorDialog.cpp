@@ -31,7 +31,6 @@ Copyright_License {
 #include "TaskClientUI.hpp"
 #include "Task/TaskManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Logger/Logger.hpp"
@@ -162,7 +161,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ((Window &)main_window).InstallWndProc();
   main_window.Show();
 
-  Layout::Initialize(640, 480);
   Fonts::Initialize();
 
   dlgTaskOverviewShowModal(main_window);
