@@ -30,7 +30,7 @@ TopWindow::~TopWindow()
 }
 
 void
-TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+TopWindow::Create(const TCHAR *text, PixelRect rc,
                   TopWindowStyle style)
 {
   invalidated.store(true, std::memory_order_relaxed);

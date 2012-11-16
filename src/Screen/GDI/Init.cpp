@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Debug.hpp"
 #include "Screen/GDI/AlphaBlend.hpp"
 #include "Screen/PaintWindow.hpp"
+#include "Screen/SingleWindow.hpp"
 
 #include <windows.h>
 #include <commctrl.h>
@@ -39,6 +40,7 @@ ScreenGlobalInit::ScreenGlobalInit()
 
   HINSTANCE hInstance = ::GetModuleHandle(NULL);
   PaintWindow::register_class(hInstance);
+  SingleWindow::RegisterClass(hInstance);
 
   ScreenInitialized();
 }

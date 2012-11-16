@@ -72,32 +72,11 @@ class TestWindow : public SingleWindow
   };
 
 public:
-
-#ifdef USE_GDI
-  static bool RegisterClass(HINSTANCE hInstance) {
-    WNDCLASS wc;
-
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = Window::WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
-    wc.hIcon = NULL;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = NULL;
-    wc.lpszMenuName = 0;
-    wc.lpszClassName = _T("RunFAITriangleSectorRenderer");
-
-    return ::RegisterClass(&wc);
-  }
-#endif /* USE_GDI */
-
   void Create(PixelRect _rc) {
     TopWindowStyle style;
     style.Resizable();
 
     SingleWindow::Create(_T("RunFAITriangleSectorRenderer"),
-                         _T("RunFAITriangleSectorRenderer"),
                          _rc, style);
 
     const PixelRect rc = GetClientRect();
@@ -144,10 +123,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
   ScreenGlobalInit screen_init;
-
-#ifdef USE_GDI
-  TestWindow::RegisterClass(hInstance);
-#endif
 
   InitialiseFonts();
 

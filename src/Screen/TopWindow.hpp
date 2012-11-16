@@ -187,10 +187,13 @@ public:
 
 #ifdef USE_GDI
   static bool find(const TCHAR *cls, const TCHAR *text);
-#endif
 
   void Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
               TopWindowStyle style=TopWindowStyle());
+#else
+  void Create(const TCHAR *text, PixelRect rc,
+              TopWindowStyle style=TopWindowStyle());
+#endif
 
 #ifdef _WIN32_WCE
   void Destroy();

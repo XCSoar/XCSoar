@@ -127,33 +127,10 @@ MainWindow::~MainWindow()
   Destroy();
 }
 
-#ifdef USE_GDI
-
-bool
-MainWindow::register_class(HINSTANCE hInstance)
-{
-  WNDCLASS wc;
-
-  wc.style                      = CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc = Window::WndProc;
-  wc.cbClsExtra                 = 0;
-  wc.cbWndExtra = 0;
-  wc.hInstance                  = hInstance;
-  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
-  wc.hCursor                    = 0;
-  wc.hbrBackground = NULL;
-  wc.lpszMenuName               = 0;
-  wc.lpszClassName = _T("XCSoarMain");
-
-  return (RegisterClass(&wc)!= FALSE);
-}
-
-#endif /* USE_GDI */
-
 void
 MainWindow::Create(PixelRect rc, TopWindowStyle style)
 {
-  SingleWindow::Create(_T("XCSoarMain"), title, rc, style);
+  SingleWindow::Create(title, rc, style);
 }
 
 gcc_noreturn

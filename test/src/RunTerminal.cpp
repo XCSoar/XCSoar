@@ -39,27 +39,8 @@ public:
   TestWindow(const TerminalLook &look)
     :terminal(look), timer(*this) {}
 
-#ifdef USE_GDI
-  static bool register_class(HINSTANCE hInstance) {
-    WNDCLASS wc;
-
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = Window::WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
-    wc.hIcon = NULL;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-    wc.lpszMenuName = 0;
-    wc.lpszClassName = _T("RunTerminal");
-
-    return RegisterClass(&wc);
-  }
-#endif /* USE_GDI */
-
   void Create(PixelRect _rc) {
-    SingleWindow::Create(_T("RunTerminal"), _T("RunTerminal"), _rc);
+    SingleWindow::Create(_T("RunTerminal"), _rc);
 
     PixelRect rc = GetClientRect();
 
@@ -107,10 +88,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
   ScreenGlobalInit screen_init;
   Fonts::Initialize();
-
-#ifdef USE_GDI
-  TestWindow::register_class(hInstance);
-#endif
 
   TerminalLook look;
   look.Initialise(Fonts::monospace);

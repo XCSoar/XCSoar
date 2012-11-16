@@ -21,12 +21,6 @@ Copyright_License {
 }
 */
 
-/*
- * This program demonstrates the OZRenderer library.  It
- * shows a list of shapes, and draws the selected shape on the right.
- *
- */
-
 #include "UIGlobals.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Init.hpp"
@@ -41,35 +35,9 @@ Copyright_License {
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
-class TestWindow : public SingleWindow {
-public:
-#ifdef USE_GDI
-  static bool register_class(HINSTANCE hInstance) {
-    WNDCLASS wc;
-
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = Window::WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
-    wc.hIcon = NULL;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = NULL;
-    wc.lpszMenuName = 0;
-    wc.lpszClassName = _T("RunTextEntry");
-
-    return RegisterClass(&wc);
-  }
-#endif /* USE_GDI */
-
-  void Create(PixelRect _rc) {
-    SingleWindow::Create(_T("RunTextEntry"), _T("RunTextEntry"), _rc);
-  }
-};
-
 static DialogSettings dialog_settings;
 static DialogLook dialog_look;
-static TestWindow main_window;
+static SingleWindow main_window;
 
 const DialogSettings &
 UIGlobals::GetDialogSettings()
@@ -106,7 +74,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef USE_GDI
   ResourceLoader::Init(hInstance);
-  TestWindow::register_class(hInstance);
 #endif
 
   InitialiseFonts();
@@ -116,7 +83,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                          bold_font, bold_font);
   SetXMLDialogLook(dialog_look);
 
-  main_window.Create(PixelRect{0, 0, 640, 480});
+  main_window.Create(_T("RunTextEntry"), PixelRect{0, 0, 640, 480});
   main_window.Show();
 
   TCHAR text[64] = _T("");

@@ -121,11 +121,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 #endif
 
-  // Register window classes
-#ifdef USE_GDI
-  MainWindow::register_class(hInstance);
-#endif
-
   AllowLanguage();
 
   InitialiseIOThread();

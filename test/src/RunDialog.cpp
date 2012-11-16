@@ -110,7 +110,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Layout::Initialize(screen_rc.right - screen_rc.left,
                      screen_rc.bottom - screen_rc.top);
   SingleWindow main_window;
-  main_window.Create(_T("STATIC"), _T("RunDialog"), screen_rc);
+  main_window.Create(_T("RunDialog"), screen_rc);
   main_window.Show();
 
   Fonts::Initialize();

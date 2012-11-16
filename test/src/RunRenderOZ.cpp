@@ -220,27 +220,8 @@ public:
     delete type_list;
   }
 
-#ifdef USE_GDI
-  static bool register_class(HINSTANCE hInstance) {
-    WNDCLASS wc;
-
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = Window::WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
-    wc.hIcon = NULL;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = NULL;
-    wc.lpszMenuName = 0;
-    wc.lpszClassName = _T("RunRenderOZ");
-
-    return RegisterClass(&wc);
-  }
-#endif /* USE_GDI */
-
   void Create(const DialogLook &look, PixelRect _rc) {
-    SingleWindow::Create(_T("RunRenderOZ"), _T("RunRenderOZ"), _rc);
+    SingleWindow::Create(_T("RunRenderOZ"), _rc);
 
     const PixelRect rc = GetClientRect();
 
@@ -303,7 +284,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef USE_GDI
   ResourceLoader::Init(hInstance);
-  TestWindow::register_class(hInstance);
 #endif
 
   InitialiseFonts();

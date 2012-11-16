@@ -23,8 +23,28 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Event/GDI/Event.hpp"
+#include "resource.h"
 
 #include <cassert>
+
+bool
+SingleWindow::RegisterClass(HINSTANCE hInstance)
+{
+  WNDCLASS wc;
+
+  wc.hInstance = hInstance;
+  wc.style = CS_VREDRAW | CS_HREDRAW;
+  wc.lpfnWndProc = Window::WndProc;
+  wc.cbClsExtra = 0;
+  wc.cbWndExtra = 0;
+  wc.hIcon = ::LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
+  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hbrBackground = nullptr;
+  wc.lpszMenuName = 0;
+  wc.lpszClassName = class_name;
+
+  return ::RegisterClass(&wc) != 0;
+}
 
 bool
 SingleWindow::FilterEvent(const Event &event, Window *allowed) const

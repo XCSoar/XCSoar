@@ -37,10 +37,34 @@ class WndForm;
  * the process quits.
  */
 class SingleWindow : public TopWindow {
+#ifdef USE_GDI
+  static constexpr const TCHAR *class_name = _T("XCSoarMain");
+#endif
+
 protected:
   std::stack<WndForm *> dialogs;
 
 public:
+#ifdef USE_GDI
+  static bool Find(const TCHAR *text) {
+    return TopWindow::find(class_name, text);
+  }
+
+  /**
+   * Register the WIN32 window class.
+   */
+  static bool RegisterClass(HINSTANCE hInstance);
+#endif
+
+  void Create(const TCHAR *text, PixelRect rc,
+              TopWindowStyle style=TopWindowStyle()) {
+#ifdef USE_GDI
+    TopWindow::Create(class_name, text, rc, style);
+#else
+    TopWindow::Create(text, rc, style);
+#endif
+  }
+
   void AddDialog(WndForm *dialog);
   void RemoveDialog(WndForm *dialog);
 

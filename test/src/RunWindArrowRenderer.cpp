@@ -95,32 +95,11 @@ public:
     timer.Cancel();
   }
 
-
-#ifdef USE_GDI
-  static bool register_class(HINSTANCE hInstance) {
-    WNDCLASS wc;
-
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = Window::WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
-    wc.hIcon = NULL;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = NULL;
-    wc.lpszMenuName = 0;
-    wc.lpszClassName = _T("RunWindArrowRenderer");
-
-    return RegisterClass(&wc);
-  }
-#endif /* USE_GDI */
-
   void Create(PixelRect _rc) {
     TopWindowStyle style;
     style.Resizable();
 
     SingleWindow::Create(_T("RunWindArrowRenderer"),
-                         _T("RunWindArrowRenderer"),
                          _rc, style);
 
     const PixelRect rc = GetClientRect();
@@ -185,7 +164,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef USE_GDI
   ResourceLoader::Init(hInstance);
-  TestWindow::register_class(hInstance);
 #endif
 
   Fonts::Initialize();

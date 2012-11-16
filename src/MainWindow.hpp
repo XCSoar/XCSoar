@@ -126,10 +126,8 @@ public:
 
 #ifdef USE_GDI
   static bool Find() {
-    return TopWindow::find(_T("XCSoarMain"), title);
+    return SingleWindow::Find(title);
   }
-
-  static bool register_class(HINSTANCE hInstance);
 #endif
 
 protected:

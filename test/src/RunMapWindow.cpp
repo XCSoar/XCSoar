@@ -114,30 +114,11 @@ public:
   {
   }
 
-#ifdef USE_GDI
-  static bool register_class(HINSTANCE hInstance) {
-    WNDCLASS wc;
-
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = Window::WndProc;
-    wc.cbClsExtra = 0;
-    wc.cbWndExtra = 0;
-    wc.hInstance = hInstance;
-    wc.hIcon = NULL;
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-    wc.lpszMenuName = 0;
-    wc.lpszClassName = _T("RunMapWindow");
-
-    return RegisterClass(&wc);
-  }
-#endif /* USE_GDI */
-
   void Create(PixelRect _rc) {
     TopWindowStyle style;
     style.Resizable();
 
-    SingleWindow::Create(_T("RunMapWindow"), _T("RunMapWindow"), _rc, style);
+    SingleWindow::Create(_T("RunMapWindow"), _rc, style);
 
     PixelRect rc = GetClientRect();
     map.Create(*this, rc);
@@ -276,10 +257,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
-#endif
-
-#ifdef USE_GDI
-  TestWindow::register_class(hInstance);
 #endif
 
   MapLook *map_look = new MapLook();
