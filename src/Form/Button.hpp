@@ -40,7 +40,6 @@ class ActionListener;
 class WndButton : public ButtonWindow {
 public:
   typedef void (*ClickNotifyCallback)(WndButton &button);
-  typedef void (*LeftRightNotifyCallback)(WndButton &button);
 
 protected:
   const DialogLook &look;
@@ -59,14 +58,6 @@ private:
    */
   ClickNotifyCallback click_callback;
 
-  /**
-   * The callback-functions that should be called when the Left and Right
-   * keys are pressed
-   * @see SetOnLeftNotify() and SetOnRightNotify()
-   */
-  LeftRightNotifyCallback left_callback;
-  LeftRightNotifyCallback right_callback;
-
 public:
   /**
    * Constructor of the WndButton class
@@ -78,9 +69,7 @@ public:
   WndButton(ContainerWindow &parent, const DialogLook &look,
             const TCHAR *caption, const PixelRect &rc,
             ButtonWindowStyle style,
-            ClickNotifyCallback click_callback = NULL,
-            LeftRightNotifyCallback left_callback = NULL,
-            LeftRightNotifyCallback right_callback = NULL);
+            ClickNotifyCallback click_callback = NULL);
 
   WndButton(ContainerWindow &parent, const DialogLook &look,
             const TCHAR *caption, const PixelRect &rc,
@@ -109,25 +98,6 @@ public:
   }
 
   /**
-   * Sets the function that should be called when the Left key is pressed
-   * @param Function Pointer to the function to be called
-   */
-  void
-  SetOnLeftNotify(LeftRightNotifyCallback _left_callback)
-  {
-    left_callback = _left_callback;
-  }
-
-  /**
-   * Sets the function that should be called when the Right key is pressed
-   * @param Function Pointer to the function to be called
-   */
-  void
-  SetOnRightNotify(LeftRightNotifyCallback _right_callback)
-  {
-    right_callback = _right_callback;
-  }
-  /**
    * Sets the Caption/Text of the Control and resets the cached text height
    * (derived from WindowControl)
    * @param Value The new Caption/Text of the Control
@@ -143,22 +113,12 @@ public:
    */
   virtual bool OnClicked() gcc_override;
 
-private:
-  /**
-   * Called when the Left (Right) key is pressed
-   * Only called if callback have been explicitly set
-   */
-  bool on_left();
-  bool on_right();
-
 protected:
 #ifdef USE_GDI
   virtual void OnSetFocus() gcc_override;
   virtual void OnKillFocus() gcc_override;
 #endif
 
-  virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
-  virtual bool OnKeyDown(unsigned key_code) gcc_override;
   virtual void OnPaint(Canvas &canvas) gcc_override;
 };
 

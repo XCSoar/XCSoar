@@ -31,14 +31,10 @@ Copyright_License {
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
                      const TCHAR *Caption, const PixelRect &rc,
                      ButtonWindowStyle style,
-                     ClickNotifyCallback _click_callback,
-                     LeftRightNotifyCallback _left_callback,
-                     LeftRightNotifyCallback _right_callback)
+                     ClickNotifyCallback _click_callback)
   :look(_look), renderer(look.button),
    listener(NULL),
-   click_callback(_click_callback),
-   left_callback(_left_callback),
-   right_callback(_right_callback)
+   click_callback(_click_callback)
 {
   style.EnableCustomPainting();
   Create(parent, Caption, rc, style);
@@ -54,7 +50,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
    id(_id),
 #endif
    listener(_listener),
-   click_callback(NULL), left_callback(NULL), right_callback(NULL)
+   click_callback(NULL)
 {
   style.EnableCustomPainting();
 #ifdef USE_GDI
@@ -87,28 +83,6 @@ WndButton::OnClicked()
   return ButtonWindow::OnClicked();
 }
 
-bool
-WndButton::on_left()
-{
-  // call on Left key function
-  if (left_callback != NULL) {
-    left_callback(*this);
-    return true;
-  }
-  return false;
-}
-
-bool
-WndButton::on_right()
-{
-  // call on Left key function
-  if (right_callback != NULL) {
-    right_callback(*this);
-    return true;
-  }
-  return false;
-}
-
 #ifdef USE_GDI
 
 void
@@ -133,35 +107,6 @@ WndButton::OnKillFocus()
 }
 
 #endif
-
-bool
-WndButton::OnKeyCheck(unsigned key_code) const
-{
-  switch (key_code) {
-  case KEY_LEFT:
-    return left_callback != NULL;
-
-  case KEY_RIGHT:
-    return right_callback != NULL;
-
-  default:
-    return ButtonWindow::OnKeyCheck(key_code);
-  }
-}
-
-bool
-WndButton::OnKeyDown(unsigned key_code)
-{
-  switch (key_code) {
-  case KEY_LEFT:
-    return on_left();
-
-  case KEY_RIGHT:
-    return on_right();
-  }
-
-  return ButtonWindow::OnKeyDown(key_code);
-}
 
 void
 WndButton::OnPaint(Canvas &canvas)
