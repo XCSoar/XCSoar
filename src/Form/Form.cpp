@@ -461,8 +461,11 @@ WndForm::ShowModal()
 void
 WndForm::OnPaint(Canvas &canvas)
 {
+  const SingleWindow &main_window = GetMainWindow();
+  gcc_unused const bool is_active = main_window.IsTopDialog(*this);
+
 #ifdef ENABLE_OPENGL
-  if (!IsMaximised() && main_window.IsTopDialog(*this)) {
+  if (!IsMaximised() && is_active) {
     /* draw a shade around the current dialog to emphasise it */
     GLEnable blend(GL_BLEND);
     glEnableClientState(GL_COLOR_ARRAY);
@@ -544,7 +547,7 @@ WndForm::OnPaint(Canvas &canvas)
     canvas.DrawText(title_rect.left + Layout::FastScale(2), title_rect.top,
                     caption.c_str());
 #else
-    canvas.SetBackgroundColor(main_window.IsTopDialog(*this)
+    canvas.SetBackgroundColor(is_active
                               ? look.caption.background_color
                               : look.caption.inactive_background_color);
     canvas.DrawOpaqueText(title_rect.left + Layout::FastScale(2),
