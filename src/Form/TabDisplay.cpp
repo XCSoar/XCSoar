@@ -80,10 +80,10 @@ TabDisplay::GetButtonSize(unsigned i) const
 
   if (vertical) {
     const UPixelScalar but_height =
-       (GetTabHeight() - finalmargin) / GetSize() - margin;
+       (GetHeight() - finalmargin) / GetSize() - margin;
 
     rc.left = 0;
-    rc.right = GetTabWidth() - tab_line_height;
+    rc.right = GetWidth() - tab_line_height;
 
     rc.top = finalmargin + (margin + but_height) * i;
     rc.bottom = rc.top + but_height;
@@ -98,11 +98,11 @@ TabDisplay::GetButtonSize(unsigned i) const
 
     const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
 
-    const UPixelScalar rowheight = (GetTabHeight() - tab_line_height)
+    const UPixelScalar rowheight = (GetHeight() - tab_line_height)
         / portraitRows - margin;
 
     const UPixelScalar but_width =
-          (GetTabWidth() - finalmargin) /
+          (GetWidth() - finalmargin) /
           ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
 
     rc.top = row * (rowheight + margin);

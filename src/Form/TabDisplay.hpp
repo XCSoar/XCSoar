@@ -116,15 +116,6 @@ public:
   gcc_pure
   int GetButtonIndexAt(RasterPoint p) const;
 
-public:
-  UPixelScalar GetTabHeight() const {
-    return this->GetHeight();
-  }
-
-  UPixelScalar GetTabWidth() const {
-    return this->GetWidth();
-  }
-
 private:
   /**
    * calculates the size and position of ith button

@@ -42,9 +42,9 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
 
   PixelRect rc = GetClientRect();
   if (vertical)
-    rc.left += tab_display->GetTabWidth();
+    rc.left = tab_rc.right;
   else
-    rc.top += tab_display->GetTabHeight();
+    rc.top = tab_rc.bottom;
 
   pager.Move(rc);
 }
