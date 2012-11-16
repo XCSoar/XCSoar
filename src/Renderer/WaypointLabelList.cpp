@@ -67,7 +67,7 @@ MapWaypointLabelListCompare(const WaypointLabelList::Label &e1,
 
 void
 WaypointLabelList::Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
-                       TextInBoxMode Mode,
+                       TextInBoxMode Mode, bool bold,
                        RoughAltitude AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport, bool isWatchedWaypoint)
 {
@@ -87,6 +87,7 @@ WaypointLabelList::Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
   l.Pos.y = Y;
   l.Mode = Mode;
   l.AltArivalAGL = AltArivalAGL;
+  l.bold = bold;
   l.inTask = inTask;
   l.isLandable = isLandable;
   l.isAirport  = isAirport;

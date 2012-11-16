@@ -223,10 +223,10 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 
   canvas.SetTextColor(COLOR_BLACK);
   canvas.SetBackgroundColor(COLOR_WHITE);
+  canvas.Select(Fonts::map);
 
   TextInBoxMode style;
   style.shape = LabelShape::ROUNDED_BLACK;
-  style.bold = true;
   style.move_in_view = true;
 
   if (text_size.cx < Layout::Scale(18)) {

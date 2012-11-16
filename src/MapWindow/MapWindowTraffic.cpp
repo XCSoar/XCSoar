@@ -32,6 +32,7 @@ Copyright_License {
 #include "Renderer/TextInBox.hpp"
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/FriendsGlue.hpp"
+#include "Look/Fonts.hpp"
 
 #include <stdio.h>
 
@@ -59,6 +60,8 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   // the pilot)
   if (projection.GetMapScale() > fixed_int_constant(7300))
     return;
+
+  canvas.Select(Fonts::map);
 
   // Circle through the FLARM targets
   for (auto it = flarm.list.begin(), end = flarm.list.end();

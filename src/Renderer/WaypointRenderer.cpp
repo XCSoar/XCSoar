@@ -52,6 +52,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Engine/Route/ReachResult.hpp"
+#include "Look/Fonts.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -310,17 +311,17 @@ protected:
     }
 
     TextInBoxMode text_mode;
+    bool bold = false;
     if (vwp.reachable != WaypointRenderer::Unreachable &&
         way_point.IsLandable()) {
       text_mode.shape = settings.landable_render_mode;
-      text_mode.bold = true;
+      bold = true;
       text_mode.move_in_view = true;
     } else if (vwp.in_task) {
       text_mode.shape = LabelShape::OUTLINED_INVERTED;
-      text_mode.bold = true;
+      bold = true;
     } else if (watchedWaypoint) {
       text_mode.shape = LabelShape::OUTLINED;
-      text_mode.bold = false;
       text_mode.move_in_view = true;
     }
 
@@ -334,7 +335,7 @@ protected:
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, vwp.reach.direct,
+    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, bold, vwp.reach.direct,
                vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }
@@ -454,9 +455,12 @@ MapWaypointLabelRender(Canvas &canvas, UPixelScalar width, UPixelScalar height,
 {
   labels.Sort();
 
-  for (const auto &l : labels)
+  for (const auto &l : labels) {
+    canvas.Select(l.bold ? Fonts::map_bold : Fonts::map);
+
     TextInBox(canvas, l.Name, l.Pos.x, l.Pos.y, l.Mode,
               width, height, &label_block);
+  }
 }
 
 void

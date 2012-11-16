@@ -44,6 +44,7 @@ public:
     bool isLandable;
     bool isAirport;
     bool isWatchedWaypoint;
+    bool bold;
   };
 
 protected:
@@ -56,7 +57,8 @@ public:
   WaypointLabelList(UPixelScalar _width, UPixelScalar _height)
     :width(_width), height(_height) {}
 
-  void Add(const TCHAR *Name, PixelScalar X, PixelScalar Y, TextInBoxMode Mode,
+  void Add(const TCHAR *Name, PixelScalar X, PixelScalar Y,
+           TextInBoxMode Mode, bool bold,
            RoughAltitude AltArivalAGL,
            bool inTask, bool isLandable, bool isAirport,
            bool isWatchedWaypoint);

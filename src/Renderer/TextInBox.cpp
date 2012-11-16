@@ -25,7 +25,6 @@ Copyright_License {
 #include "LabelBlock.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "Look/Fonts.hpp"
 
 static RasterPoint
 TextInBoxMoveInView(PixelRect &rc, const PixelRect &map_rc)
@@ -93,8 +92,6 @@ TextInBox(Canvas &canvas, const TCHAR *text, PixelScalar x, PixelScalar y,
           TextInBoxMode mode, const PixelRect &map_rc, LabelBlock *label_block)
 {
   // landable waypoint label inside white box
-
-  canvas.Select(mode.bold ? Fonts::map_bold : Fonts::map);
 
   PixelSize tsize = canvas.CalcTextSize(text);
 

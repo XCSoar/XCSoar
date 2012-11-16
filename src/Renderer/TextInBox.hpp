@@ -48,13 +48,12 @@ struct TextInBoxMode {
   LabelShape shape;
   Alignment align;
   VerticalPosition vertical_position;
-  bool bold;
   bool move_in_view;
 
   constexpr TextInBoxMode()
     :shape(LabelShape::SIMPLE), align(Alignment::LEFT),
      vertical_position(VerticalPosition::BELOW),
-     bold(false), move_in_view(false) {}
+     move_in_view(false) {}
 };
 
 bool

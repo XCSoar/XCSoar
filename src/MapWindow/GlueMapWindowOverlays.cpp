@@ -88,8 +88,9 @@ GlueMapWindow::DrawPanInfo(Canvas &canvas) const
 
   TextInBoxMode mode;
   mode.shape = LabelShape::OUTLINED_INVERTED;
-  mode.bold = true;
   mode.align = TextInBoxMode::Alignment::RIGHT;
+
+  canvas.Select(Fonts::map_bold);
 
   UPixelScalar padding = Layout::FastScale(4);
   UPixelScalar height = Fonts::map_bold.GetHeight();
@@ -162,8 +163,8 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
 
   TextInBoxMode mode;
   mode.shape = LabelShape::ROUNDED_BLACK;
-  mode.bold = true;
 
+  canvas.Select(Fonts::map_bold);
   TextInBox(canvas, txt, x, y, mode, rc, NULL);
 }
 
