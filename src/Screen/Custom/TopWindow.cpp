@@ -29,12 +29,6 @@ TopWindow::~TopWindow()
   delete screen;
 }
 
-bool
-TopWindow::find(const TCHAR *cls, const TCHAR *text)
-{
-  return false; // XXX
-}
-
 void
 TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
                   TopWindowStyle style)

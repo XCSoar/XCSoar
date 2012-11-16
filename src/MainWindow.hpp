@@ -124,11 +124,11 @@ public:
   MainWindow(const StatusMessageList &status_messages);
   virtual ~MainWindow();
 
+#ifdef USE_GDI
   static bool Find() {
     return TopWindow::find(_T("XCSoarMain"), title);
   }
 
-#ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance);
 #endif
 
