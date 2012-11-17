@@ -37,30 +37,30 @@ static constexpr TCHAR keyboard_letters[] =
 KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  const DialogLook &_look,
                                  PixelRect rc,
-                                 OnCharacterCallback_t function,
+                                 OnCharacterCallback_t _on_character,
                                  const WindowStyle _style)
   :look(_look),
-   mOnCharacter(function),
+   on_character(_on_character),
    button_width(50), button_height(50),
    num_buttons(0)
 {
   Create(parent, rc, _style);
-  set_buttons_size();
+  SetButtonsSize();
 
   TCHAR caption[] = _T(" ");
 
   for (const TCHAR *i = keyboard_letters; !StringIsEmpty(i); ++i) {
     caption[0] = *i;
 
-    add_button(caption);
+    AddButton(caption);
   }
 
-  add_button(_T(" Space "));
-  add_button(_T("."));
-  add_button(_T(","));
-  add_button(_T("-"));
+  AddButton(_T(" Space "));
+  AddButton(_T("."));
+  AddButton(_T(","));
+  AddButton(_T("-"));
 
-  move_buttons();
+  MoveButtons();
 }
 
 void
@@ -72,7 +72,7 @@ KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
 }
 
 ButtonWindow *
-KeyboardControl::get_button(TCHAR ch)
+KeyboardControl::FindButton(TCHAR ch)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     if (button_values[i] == ch)
@@ -92,9 +92,9 @@ KeyboardControl::get_button(TCHAR ch)
  * @param top     Number of pixels from the top (in screen pixels)
  */
 void
-KeyboardControl::move_button(TCHAR ch, PixelScalar left, PixelScalar top)
+KeyboardControl::MoveButton(TCHAR ch, PixelScalar left, PixelScalar top)
 {
-  ButtonWindow *kb = get_button(ch);
+  ButtonWindow *kb = FindButton(ch);
   if (kb)
     kb->Move(left, top);
 }
@@ -108,16 +108,16 @@ KeyboardControl::move_button(TCHAR ch, PixelScalar left, PixelScalar top)
  * @param height  Height measured in display pixels!
  */
 void
-KeyboardControl::resize_button(TCHAR ch,
-                               UPixelScalar width, UPixelScalar height)
+KeyboardControl::ResizeButton(TCHAR ch,
+                              UPixelScalar width, UPixelScalar height)
 {
-  ButtonWindow *kb = get_button(ch);
+  ButtonWindow *kb = FindButton(ch);
   if (kb)
     kb->Resize(width, height);
 }
 
 void
-KeyboardControl::resize_buttons()
+KeyboardControl::ResizeButtons()
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].Resize(button_width, button_height);
@@ -131,22 +131,22 @@ KeyboardControl::resize_buttons()
  *
  */
 void
-KeyboardControl::set_buttons_size()
+KeyboardControl::SetButtonsSize()
 {
   button_width = GetWidth() / 10;
   button_height = GetHeight() / 5;
 }
 
 void
-KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row,
-                                     PixelScalar offset)
+KeyboardControl::MoveButtonsToRow(const TCHAR* buttons, int row,
+                                  PixelScalar offset)
 {
   if (StringIsEmpty(buttons))
     return;
 
   ButtonWindow *kb;
   for (unsigned i = 0; buttons[i] != _T('\0'); i++) {
-    kb = get_button(buttons[i]);
+    kb = FindButton(buttons[i]);
     if (!kb)
       continue;
 
@@ -155,23 +155,23 @@ KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row,
 }
 
 void
-KeyboardControl::move_buttons()
+KeyboardControl::MoveButtons()
 {
-  move_buttons_to_row(_T("1234567890"), 0);
-  move_buttons_to_row(_T("QWERTYUIOP"), 1);
-  move_buttons_to_row(_T("ASDFGHJKL"), 2, button_width / 3);
-  move_buttons_to_row(_T("ZXCVBNM,."), 3, button_width * 2 / 3);
+  MoveButtonsToRow(_T("1234567890"), 0);
+  MoveButtonsToRow(_T("QWERTYUIOP"), 1);
+  MoveButtonsToRow(_T("ASDFGHJKL"), 2, button_width / 3);
+  MoveButtonsToRow(_T("ZXCVBNM,."), 3, button_width * 2 / 3);
 
-  if (is_landscape()) {
-    move_button(_T('-'), button_width * 9, Layout::Scale(160));
+  if (IsLandscape()) {
+    MoveButton(_T('-'), button_width * 9, Layout::Scale(160));
 
-    move_button(_T(' '), Layout::Scale(80), Layout::Scale(160));
-    resize_button(_T(' '), Layout::Scale(93), Layout::Scale(40));
+    MoveButton(_T(' '), Layout::Scale(80), Layout::Scale(160));
+    ResizeButton(_T(' '), Layout::Scale(93), Layout::Scale(40));
   } else {
-    move_button(_T('-'), button_width * 8, button_height * 4);
+    MoveButton(_T('-'), button_width * 8, button_height * 4);
 
-    move_button(_T(' '), button_width * 2, button_height * 4);
-    resize_button(_T(' '), button_width * 11 / 2, button_height);
+    MoveButton(_T(' '), button_width * 2, button_height * 4);
+    ResizeButton(_T(' '), button_width * 11 / 2, button_height);
   }
 }
 
@@ -186,8 +186,8 @@ KeyboardControl::OnPaint(Canvas &canvas)
 bool
 KeyboardControl::OnCommand(unsigned id, unsigned code)
 {
-  if (id >= 0x20 && mOnCharacter != NULL) {
-    mOnCharacter((TCHAR)id);
+  if (id >= 0x20 && on_character != NULL) {
+    on_character((TCHAR)id);
     return true;
   } else
     return ContainerWindow::OnCommand(id, code);
@@ -196,18 +196,13 @@ KeyboardControl::OnCommand(unsigned id, unsigned code)
 void
 KeyboardControl::OnResize(UPixelScalar width, UPixelScalar height)
 {
-  set_buttons_size();
-  resize_buttons();
-  move_buttons();
-}
-
-bool
-KeyboardControl::is_landscape() {
-  return GetWidth() >= GetHeight();
+  SetButtonsSize();
+  ResizeButtons();
+  MoveButtons();
 }
 
 void
-KeyboardControl::add_button(const TCHAR* caption)
+KeyboardControl::AddButton(const TCHAR *caption)
 {
   assert(num_buttons < MAX_BUTTONS);
 

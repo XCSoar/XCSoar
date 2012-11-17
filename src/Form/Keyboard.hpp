@@ -42,7 +42,7 @@ protected:
 
   const DialogLook &look;
 
-  OnCharacterCallback_t mOnCharacter;
+  OnCharacterCallback_t on_character;
 
   UPixelScalar button_width;
   UPixelScalar button_height;
@@ -54,7 +54,7 @@ protected:
 public:
   KeyboardControl(ContainerWindow &parent, const DialogLook &look,
                   PixelRect rc,
-                  OnCharacterCallback_t function,
+                  OnCharacterCallback_t on_character,
                   const WindowStyle _style = WindowStyle());
 
   /**
@@ -62,8 +62,8 @@ public:
    */
   void SetAllowedCharacters(const TCHAR *allowed);
 
-  void SetOnCharacterCallback(OnCharacterCallback_t Function) {
-    mOnCharacter = Function;
+  void SetOnCharacterCallback(OnCharacterCallback_t _on_character) {
+    on_character = _on_character;
   }
 
 protected:
@@ -72,19 +72,23 @@ protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
 
 private:
-  ButtonWindow *get_button(TCHAR ch);
+  gcc_pure
+  ButtonWindow *FindButton(TCHAR ch);
 
-  void move_button(TCHAR ch, PixelScalar left, PixelScalar top);
-  void resize_button(TCHAR ch, UPixelScalar width, UPixelScalar height);
-  void resize_buttons();
-  void set_buttons_size();
-  void move_buttons_to_row(const TCHAR* buttons, int row,
-                           PixelScalar offset_left = 0);
-  void move_buttons();
+  void MoveButton(TCHAR ch, PixelScalar left, PixelScalar top);
+  void ResizeButton(TCHAR ch, UPixelScalar width, UPixelScalar height);
+  void ResizeButtons();
+  void SetButtonsSize();
+  void MoveButtonsToRow(const TCHAR *buttons, int row,
+                        PixelScalar offset_left = 0);
+  void MoveButtons();
 
-  bool is_landscape();
+  gcc_pure
+  bool IsLandscape() const {
+    return GetWidth() >= GetHeight();
+  }
 
-  void add_button(const TCHAR* caption);
+  void AddButton(const TCHAR *caption);
 };
 
 #endif
