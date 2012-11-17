@@ -52,9 +52,9 @@ public:
   WndCustomButton(ContainerWindow &Parent, const DialogLook &look,
                   const TCHAR *Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
-                  ClickNotifyCallback Function = NULL)
+                  ActionListener &listener, int id)
     :WndButton(Parent, look, Caption, rc,
-               custom_painting(style), Function) {}
+               custom_painting(style), &listener, id) {}
 
 protected:
   /**

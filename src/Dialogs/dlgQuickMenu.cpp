@@ -39,7 +39,11 @@ static WndForm *wf;
 static GridView *grid_view;
 
 static TrivialArray<Window *, GridView::MAX_ITEMS> buttons;
-static TrivialArray<unsigned, GridView::MAX_ITEMS> events;
+
+class QuickMenu : public ActionListener {
+public:
+  virtual void OnAction(int id) gcc_override;
+};
 
 static void
 SetFormCaption()
@@ -111,19 +115,13 @@ FormKeyDown(unsigned key_code)
   return true;
 }
 
-static void
-OnButtonClicked(gcc_unused WndButton &sender)
+void
+QuickMenu::OnAction(int id)
 {
-  signed focusPos = grid_view->GetIndexOfItemInFocus();
-
   wf->SetModalResult(mrOK);
+  wf->Hide();
 
-  if (focusPos != -1) {
-    wf->Hide();
-    unsigned event = events[focusPos];
-    if (event > 0)
-      InputEvents::ProcessEvent(event);
-  }
+  InputEvents::ProcessEvent(id);
 }
 
 void
@@ -132,6 +130,8 @@ dlgQuickMenuShowModal(SingleWindow &parent)
   const Menu *menu = InputEvents::GetMenu(_T("RemoteStick"));
   if (menu == NULL)
     return;
+
+  QuickMenu quick_menu;
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
@@ -176,11 +176,11 @@ dlgQuickMenuShowModal(SingleWindow &parent)
     button_rc.bottom = 30;
     WndButton *button =
       new WndCustomButton(*grid_view, dialog_look, expanded.text,
-                          button_rc, buttonStyle, OnButtonClicked);
+                          button_rc, buttonStyle,
+                          quick_menu, menuItem.event);
     button->SetEnabled(expanded.enabled);
 
     buttons.append(button);
-    events.append(menuItem.event);
   }
 
   grid_view->SetItems(buttons);
@@ -195,7 +195,6 @@ dlgQuickMenuShowModal(SingleWindow &parent)
     delete *it;
 
   buttons.clear();
-  events.clear();
 
   delete wf;
   delete grid_view;
