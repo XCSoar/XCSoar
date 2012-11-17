@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_OS_COMMAND_LINE_HPP
 #define XCSOAR_OS_COMMAND_LINE_HPP
 
-#include <tchar.h>
-
 class Args;
 
 namespace CommandLine {
