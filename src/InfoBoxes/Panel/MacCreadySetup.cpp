@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MacCreadySetup.hpp"
+#include "Screen/Layout.hpp"
 #include "Form/WindowWidget.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
@@ -59,6 +60,10 @@ public:
   }
 
   /* virtual methods from class Widget */
+  virtual PixelSize GetMinimumSize() const gcc_override {
+    return PixelSize{Layout::Scale(80u), Layout::Scale(30u)};
+  }
+
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
 
   /* virtual methods from class ActionListener */

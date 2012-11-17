@@ -61,7 +61,6 @@ dlgInfoBoxAccessShowModeless(const int id,
   const DialogLook &look = UIGlobals::GetDialogLook();
 
   PixelRect form_rc = InfoBoxManager::layout.remaining;
-  form_rc.top = form_rc.bottom - Layout::Scale(107);
 
   WndForm form(UIGlobals::GetMainWindow(), look, form_rc,
                gettext(InfoBoxFactory::GetName(old_type)));
@@ -69,7 +68,8 @@ dlgInfoBoxAccessShowModeless(const int id,
   WindowStyle tab_style;
   tab_style.ControlParent();
   ContainerWindow &client_area = form.GetClientAreaWindow();
-  PixelRect tab_rc = client_area.GetClientRect();
+  PixelRect client_rc = client_area.GetClientRect();
+  PixelRect tab_rc = client_rc;
   tab_rc.bottom = tab_rc.top + Layout::Scale(45);
 
   TabBarControl tab_bar(client_area, look, tab_rc, tab_style, false);
@@ -112,15 +112,19 @@ dlgInfoBoxAccessShowModeless(const int id,
   }
 
   if (tab_bar.GetTabCount() == 0) {
-    form_rc.top = form_rc.bottom - Layout::Scale(58);
-    form.Move(form_rc);
-
     Widget *wSwitch = new ActionWidget(form, SWITCH_INFO_BOX);
     tab_bar.AddTab(wSwitch, _("Switch InfoBox"));
   }
 
   Widget *wClose = new ActionWidget(form, mrOK);
   tab_bar.AddTab(wClose, _("Close"));
+
+  const PixelSize max_size = tab_bar.GetMaximumSize();
+  if (unsigned(max_size.cy) < unsigned(client_rc.bottom - client_rc.top)) {
+    form_rc.top += client_rc.bottom - client_rc.top - max_size.cy;
+    form.Move(form_rc);
+    tab_bar.Move(client_area.GetClientRect());
+  }
 
   int result = form.ShowModeless();
 

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "AltitudeInfo.hpp"
+#include "Screen/Layout.hpp"
 #include "Util/Macros.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -35,6 +36,10 @@ Copyright_License {
 class AltitudeInfoPanel : public XMLWidget, NullBlackboardListener {
 public:
   void Refresh();
+
+  virtual PixelSize GetMinimumSize() const gcc_override {
+    return PixelSize{Layout::Scale(205u), Layout::Scale(46)};
+  }
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
   virtual void Show(const PixelRect &rc);

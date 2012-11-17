@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "MacCreadyEdit.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "Screen/Layout.hpp"
 #include "Simulator.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
@@ -42,6 +43,10 @@ public:
 
   void QuickAccess(const TCHAR *value) {
     InfoBoxManager::ProcessQuickAccess(id, value);
+  }
+
+  virtual PixelSize GetMinimumSize() const gcc_override {
+    return PixelSize{Layout::Scale(205u), Layout::Scale(49)};
   }
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

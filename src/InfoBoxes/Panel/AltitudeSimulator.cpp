@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "AltitudeSimulator.hpp"
+#include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
@@ -35,6 +36,10 @@ class WndButton;
 class AltitudeSimulatorPanel : public XMLWidget {
 public:
   void Refresh();
+
+  virtual PixelSize GetMinimumSize() const gcc_override {
+    return PixelSize{Layout::Scale(205u), Layout::Scale(49)};
+  }
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
 };
