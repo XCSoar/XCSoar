@@ -58,36 +58,6 @@ GridView::SetItems(const TrivialArray<Window *, MAX_ITEMS> &items)
   RefreshLayout();
 }
 
-UPixelScalar
-GridView::GetColumnWidth() const
-{
-  return column_width;
-}
-
-UPixelScalar
-GridView::GetRowHeight() const
-{
-  return row_height;
-}
-
-unsigned
-GridView::GetCurrentPage() const
-{
-  return current_page;
-}
-
-unsigned
-GridView::GetNumColumns() const
-{
-  return num_columns;
-}
-
-unsigned
-GridView::GetNumRows() const
-{
-  return num_rows;
-}
-
 void
 GridView::SetNumRows(unsigned _numRows)
 {

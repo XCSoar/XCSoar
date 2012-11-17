@@ -61,13 +61,32 @@ public:
            const WindowStyle style=WindowStyle());
 
   void SetItems(const TrivialArray<Window *, MAX_ITEMS> &items);
-  UPixelScalar GetColumnWidth() const;
-  UPixelScalar GetRowHeight() const;
-  unsigned GetCurrentPage() const;
-  unsigned GetNumColumns() const;
-  unsigned GetNumRows() const;
+
+  UPixelScalar GetColumnWidth() const {
+    return column_width;
+  }
+
+  UPixelScalar GetRowHeight() const {
+    return row_height;
+  }
+
+  unsigned GetCurrentPage() const {
+    return current_page;
+  }
+
+  unsigned GetNumColumns() const {
+    return num_columns;
+  }
+
+  unsigned GetNumRows() const {
+    return num_rows;
+  }
+
   void SetNumRows(unsigned numRows);
+
+  gcc_pure
   signed GetIndexOfItemInFocus() const;
+
   void MoveFocus(Direction direction);
   void ShowNextPage(Direction direction = Direction::RIGHT);
   void RefreshLayout();
