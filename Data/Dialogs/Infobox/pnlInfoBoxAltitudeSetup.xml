@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<Panel Name="frmInfoBoxAltitudeSetup" Border="0">
-  <Edit Name="prpQNH" Caption="QNH" X="2" Y="2" Width="80" Height="22" CaptionWidth="30" Help="Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected.">
-    <DataField DataType="double" OnDataAccess="PnlSetupOnQNH"/>
-  </Edit>
-</Panel>

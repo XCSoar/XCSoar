@@ -28,77 +28,61 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Form/DataField/Float.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Form/Util.hpp"
+#include "Form/DataField/Listener.hpp"
 #include "Form/Edit.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/RowFormWidget.hpp"
+#include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 
 class WndButton;
 
-class AltitudeSetupPanel : public XMLWidget {
+class AltitudeSetupPanel : public RowFormWidget,
+                           private DataFieldListener {
 public:
+  AltitudeSetupPanel():RowFormWidget(UIGlobals::GetDialogLook()) {}
+
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
+
+private:
+  virtual void OnModified(DataField &df) gcc_override;
 };
 
-static void
-PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessMode Mode)
+void
+AltitudeSetupPanel::OnModified(DataField &_df)
 {
-  DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
-  ComputerSettings &settings_computer =
+  DataFieldFloat &df = (DataFieldFloat &)_df;
+  ComputerSettings &settings =
     CommonInterface::SetComputerSettings();
 
-  switch (Mode) {
-  case DataField::daChange:
-    settings_computer.pressure = Units::FromUserPressure(Sender->GetAsFixed());
-    settings_computer.pressure_available.Update(CommonInterface::Basic().clock);
+  settings.pressure = Units::FromUserPressure(df.GetAsFixed());
+  settings.pressure_available.Update(CommonInterface::Basic().clock);
 
-    {
-      MessageOperationEnvironment env;
-      device_blackboard->SetQNH(Units::FromUserPressure(Sender->GetAsFixed()),
-                                env);
-    }
-    break;
-
-  case DataField::daSpecial:
-    return;
+  {
+    MessageOperationEnvironment env;
+    device_blackboard->SetQNH(settings.pressure, env);
   }
 }
-
-static constexpr
-CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(PnlSetupOnQNH),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 AltitudeSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXALTITUDESETUP"));
-}
+  const ComputerSettings &settings =
+    CommonInterface::GetComputerSettings();
 
-void
-AltitudeSetupPanel::Show(const PixelRect &rc)
-{
-  LoadFormProperty(form, _T("prpQNH"),
-                   Units::ToUserPressure(CommonInterface::GetComputerSettings().pressure));
-
-  WndProperty* wp;
-  wp = (WndProperty*)form.FindByName(_T("prpQNH"));
-  if (wp) {
+  WndProperty *wp;
+  wp = AddFloat(_("QNH"),
+                _("Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected."),
+                GetUserPressureFormat(), GetUserPressureFormat(),
+                Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)),
+                Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)),
+                GetUserPressureStep(), false,
+                Units::ToUserPressure(settings.pressure), this);
+  {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-
-    df.SetMin(Units::ToUserPressure(Units::ToSysUnit(fixed(850), Unit::HECTOPASCAL)));
-    df.SetMax(Units::ToUserPressure(Units::ToSysUnit(fixed(1300), Unit::HECTOPASCAL)));
-    df.SetStep(Units::ToUserPressure(Units::ToSysUnit(fixed_one, Unit::HECTOPASCAL)));
     df.SetUnits(Units::GetPressureName());
-    df.SetStep(GetUserPressureStep());
-    df.SetFormat(GetUserPressureFormat());
     wp->RefreshDisplay();
-}
-
-  XMLWidget::Show(rc);
+  }
 }
 
 Widget *
