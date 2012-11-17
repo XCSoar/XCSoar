@@ -58,6 +58,8 @@ WndCustomButton::OnPaint(Canvas &canvas)
   if (is_down())
     MoveRect(rc, 1, 1);
 
+  canvas.Select(*look.button.font);
+
   canvas.SelectNullPen();
   canvas.SetBackgroundTransparent();
 #ifndef USE_GDI
