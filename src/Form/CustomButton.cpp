@@ -32,20 +32,14 @@ Copyright_License {
 void
 WndCustomButton::OnPaint(Canvas &canvas)
 {
-#ifdef HAVE_CLIPPING
-  /* background and selector */
-  canvas.Clear(look.background_brush);
-#endif
-
-  PixelRect rc = GetClientRect();
-
   // Draw focus rectangle
   if (HasFocus()) {
-    canvas.DrawFilledRectangle(rc, look.focused.background_color);
+    canvas.Clear(look.focused.background_color);
     canvas.SetTextColor(IsEnabled()
                         ? look.focused.text_color : look.button.disabled.color);
   } else {
-    canvas.DrawFilledRectangle(rc, look.background_color);
+    if (HaveClipping())
+      canvas.Clear(look.background_brush);
     canvas.SetTextColor(IsEnabled() ? look.text_color : look.button.disabled.color);
   }
 
@@ -55,6 +49,7 @@ WndCustomButton::OnPaint(Canvas &canvas)
     return;
 
   // If button is pressed, offset the text for 3D effect
+  PixelRect rc = GetClientRect();
   if (IsDown())
     MoveRect(rc, 1, 1);
 
