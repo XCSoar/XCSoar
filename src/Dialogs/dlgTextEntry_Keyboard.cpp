@@ -102,21 +102,24 @@ FormKeyDown(unsigned key_code)
     return true;
   }
 
-  if (!HasKeyboard())
+  return false;
+}
+
+static bool
+FormCharacter(unsigned ch)
+{
+  if (ch < 0x20)
     return false;
 
-  if ((key_code >= 'A' && key_code <= 'Z') ||
-      (key_code >= '0' && key_code <= '9')) {
-    DoCharacter(key_code);
-    return true;
-  }
+#ifndef _UNICODE
+  if (ch >= 0x80)
+    /* TODO: ASCII only for now, because we don't have proper UTF-8
+       support yet */
+    return false;
+#endif
 
-  if (key_code == KEY_SPACE) {
-    DoCharacter(_T(' '));
-    return true;
-  }
-
-  return false;
+  DoCharacter((TCHAR)ch);
+  return true;
 }
 
 static void
@@ -200,6 +203,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
 
   UpdateTextboxProp();
   wf->SetKeyDownFunction(FormKeyDown);
+  wf->SetCharacterFunction(FormCharacter);
   bool result = (wf->ShowModal() == mrOK);
 
   if (result) {

@@ -19,6 +19,7 @@ Version 6.5 - not yet released
   - show FAI triangle sectors in task manager
   - can drag modal dialogs
   - short click opens InfoBox dialog
+  - support keyboard input on desktop computer
 * infoboxes
   - added thermal assistant infobox
 
