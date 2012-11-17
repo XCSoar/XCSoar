@@ -60,7 +60,6 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
   /* our custom SDL/OpenGL button doesn't need this hack */
   Create(parent, caption, _id, rc, style);
 #endif
-  SetFont(*look.button.font);
 }
 
 bool
