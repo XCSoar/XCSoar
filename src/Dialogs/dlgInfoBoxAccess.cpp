@@ -63,17 +63,16 @@ dlgInfoBoxAccessShowModeless(const int id,
   PixelRect form_rc = InfoBoxManager::layout.remaining;
   form_rc.top = form_rc.bottom - Layout::Scale(107);
 
-  WndForm *wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc,
-                            gettext(InfoBoxFactory::GetName(old_type)));
+  WndForm form(UIGlobals::GetMainWindow(), look, form_rc,
+               gettext(InfoBoxFactory::GetName(old_type)));
 
   WindowStyle tab_style;
   tab_style.ControlParent();
-  ContainerWindow &client_area = wf->GetClientAreaWindow();
+  ContainerWindow &client_area = form.GetClientAreaWindow();
   PixelRect tab_rc = client_area.GetClientRect();
   tab_rc.bottom = tab_rc.top + Layout::Scale(45);
 
-  TabBarControl* wTabBar = new TabBarControl(client_area, look, tab_rc,
-                                             tab_style, false);
+  TabBarControl tab_bar(client_area, look, tab_rc, tab_style, false);
 
   if (dlgContent != NULL) {
     for (int i = 0; i < dlgContent->PANELSIZE; i++) {
@@ -101,37 +100,34 @@ dlgInfoBoxAccessShowModeless(const int id,
         button_style.multiline();
 
         WndButton *button =
-          new WndButton(*wTabBar, look, _("Switch InfoBox"),
+          new WndButton(tab_bar, look, _("Switch InfoBox"),
                         button_rc, button_style,
-                        wf, SWITCH_INFO_BOX);
+                        &form, SWITCH_INFO_BOX);
 
         widget = new TwoWidgets(widget, new WindowWidget(button), false);
       }
 
-      wTabBar->AddTab(widget, gettext(dlgContent->Panels[i].name));
+      tab_bar.AddTab(widget, gettext(dlgContent->Panels[i].name));
     }
   }
 
-  if (!wTabBar->GetTabCount()) {
+  if (tab_bar.GetTabCount() == 0) {
     form_rc.top = form_rc.bottom - Layout::Scale(58);
-    wf->Move(form_rc);
+    form.Move(form_rc);
 
-    Widget *wSwitch = new ActionWidget(*wf, SWITCH_INFO_BOX);
-    wTabBar->AddTab(wSwitch, _("Switch InfoBox"));
+    Widget *wSwitch = new ActionWidget(form, SWITCH_INFO_BOX);
+    tab_bar.AddTab(wSwitch, _("Switch InfoBox"));
   }
 
-  Widget *wClose = new ActionWidget(*wf, mrOK);
-  wTabBar->AddTab(wClose, _("Close"));
+  Widget *wClose = new ActionWidget(form, mrOK);
+  tab_bar.AddTab(wClose, _("Close"));
 
-  int result = wf->ShowModeless();
+  int result = form.ShowModeless();
 
-  if (wf->IsDefined()) {
+  if (form.IsDefined()) {
     bool changed = false, require_restart = false;
-    wTabBar->Save(changed, require_restart);
+    tab_bar.Save(changed, require_restart);
   }
-
-  delete wTabBar;
-  delete wf;
 
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
