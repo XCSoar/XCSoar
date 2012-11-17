@@ -28,9 +28,10 @@ Copyright_License {
 
 void
 EditWindow::Create(ContainerWindow &parent, PixelRect rc,
-                   const EditWindowStyle style)
+                   const EditWindowStyle style, size_t _max_length)
 {
   read_only = style.is_read_only;
+  max_length = _max_length;
 
   Window::Create(&parent, rc, style);
 }

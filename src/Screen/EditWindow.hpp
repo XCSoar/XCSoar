@@ -93,12 +93,15 @@ class EditWindow : public Window {
 #ifndef USE_GDI
   bool read_only;
 
+  size_t max_length;
+
   tstring value;
 #endif
 
 public:
   void Create(ContainerWindow &parent, PixelRect rc,
-              const EditWindowStyle style);
+              const EditWindowStyle style,
+              size_t max_length=0);
 
 #ifdef USE_GDI
   void SetText(const TCHAR *text) {

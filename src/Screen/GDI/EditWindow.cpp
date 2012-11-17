@@ -28,6 +28,9 @@ Copyright_License {
 
 void
 EditWindow::Create(ContainerWindow &parent, PixelRect rc,
-                   const EditWindowStyle style) {
+                   const EditWindowStyle style, size_t max_length) {
   Window::Create(&parent, WC_EDIT, NULL, rc, style);
+
+  if (max_length > 0)
+    ::SendMessage(hWnd, EM_LIMITTEXT, (WPARAM)max_length, (LPARAM)0);
 }
