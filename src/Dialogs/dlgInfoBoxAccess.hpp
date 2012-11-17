@@ -26,17 +26,6 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class WndForm;
-
-class dlgInfoBoxAccess
-{
-public:
-  /**
-   * @returns True if validated, False if window shall remain open
-   */
-  static bool OnClose();
-};
-
 void
 dlgInfoBoxAccessShowModeless(int id,
                              const InfoBoxContent::DialogContent *content);

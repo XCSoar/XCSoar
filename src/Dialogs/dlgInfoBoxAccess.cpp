@@ -143,10 +143,3 @@ dlgInfoBoxAccessShowModeless(const int id,
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
 }
-
-bool
-dlgInfoBoxAccess::OnClose()
-{
-  wf->SetModalResult(mrOK);
-  return true;
-}
