@@ -32,5 +32,5 @@ EditWindow::Create(ContainerWindow &parent, PixelRect rc,
   Window::Create(&parent, WC_EDIT, NULL, rc, style);
 
   if (max_length > 0)
-    ::SendMessage(hWnd, EM_LIMITTEXT, (WPARAM)max_length, (LPARAM)0);
+    ::SendMessage(hWnd, EM_LIMITTEXT, (WPARAM)(max_length - 1), (LPARAM)0);
 }
