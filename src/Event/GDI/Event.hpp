@@ -44,6 +44,16 @@ struct Event {
     return msg.wParam;
   }
 
+  bool IsCharacter() const {
+    return msg.message == WM_CHAR;
+  }
+
+  unsigned GetCharacter() const {
+    assert(IsCharacter());
+
+    return msg.wParam;
+  }
+
   bool IsMouseDown() const {
     return msg.message == WM_LBUTTONDOWN;
   }
@@ -54,7 +64,7 @@ struct Event {
   }
 
   bool IsUserInput() const {
-    return IsKey() || IsMouse();
+    return IsKey() || IsCharacter() || IsMouse();
   }
 };
 

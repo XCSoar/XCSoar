@@ -58,6 +58,16 @@ struct Event {
     return event.key.keysym.sym;
   }
 
+  bool IsCharacter() const {
+    return IsKeyDown() && event.key.keysym.unicode != 0;
+  }
+
+  unsigned GetCharacter() const {
+    assert(IsCharacter());
+
+    return event.key.keysym.unicode;
+  }
+
   bool IsMouseDown() const {
     return event.type == SDL_MOUSEBUTTONDOWN;
   }

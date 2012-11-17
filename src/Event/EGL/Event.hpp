@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
+#include <assert.h>
+
 struct Event {
   enum Type {
     NOP,
@@ -82,6 +84,15 @@ struct Event {
     assert(IsKey());
 
     return param;
+  }
+
+  bool IsCharacter() const {
+    return false;
+  }
+
+  unsigned GetCharacter() const {
+    assert(false);
+    return 0;
   }
 
   bool IsMouseDown() const {
