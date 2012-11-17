@@ -47,16 +47,10 @@ Copyright_License {
  */
 static constexpr int SWITCH_INFO_BOX = 100;
 
-static WndForm *wf = NULL;
-
-static TabBarControl* wTabBar = NULL;
-
 void
 dlgInfoBoxAccessShowModeless(const int id,
                              const InfoBoxContent::DialogContent *dlgContent)
 {
-  // check for another instance of this window
-  if (wf != NULL) return;
   assert (id > -1);
 
   const InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
@@ -69,16 +63,17 @@ dlgInfoBoxAccessShowModeless(const int id,
   PixelRect form_rc = InfoBoxManager::layout.remaining;
   form_rc.top = form_rc.bottom - Layout::Scale(107);
 
-  wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc,
-                   gettext(InfoBoxFactory::GetName(old_type)));
+  WndForm *wf = new WndForm(UIGlobals::GetMainWindow(), look, form_rc,
+                            gettext(InfoBoxFactory::GetName(old_type)));
 
   WindowStyle tab_style;
   tab_style.ControlParent();
   ContainerWindow &client_area = wf->GetClientAreaWindow();
   PixelRect tab_rc = client_area.GetClientRect();
   tab_rc.bottom = tab_rc.top + Layout::Scale(45);
-  wTabBar = new TabBarControl(client_area, look, tab_rc,
-                              tab_style, false);
+
+  TabBarControl* wTabBar = new TabBarControl(client_area, look, tab_rc,
+                                             tab_style, false);
 
   if (dlgContent != NULL) {
     for (int i = 0; i < dlgContent->PANELSIZE; i++) {
@@ -137,8 +132,6 @@ dlgInfoBoxAccessShowModeless(const int id,
 
   delete wTabBar;
   delete wf;
-  // unset wf because wf is still static and public
-  wf = NULL;
 
   if (result == SWITCH_INFO_BOX)
     InfoBoxManager::ShowInfoBoxPicker(id);
