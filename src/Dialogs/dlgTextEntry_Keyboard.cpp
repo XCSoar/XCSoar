@@ -46,7 +46,7 @@ static AllowedCharacters AllowedCharactersCallback;
 
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
-static unsigned int max_width = MAX_TEXTENTRY;
+static unsigned int max_width;
 static TCHAR edittext[MAX_TEXTENTRY];
 
 static void

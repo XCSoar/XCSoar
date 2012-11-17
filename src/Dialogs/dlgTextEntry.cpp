@@ -48,7 +48,7 @@ static WndOwnerDrawFrame *wGrid = NULL;
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
 static int lettercursor = 0;
-static int max_width = MAX_TEXTENTRY;
+static int max_width;
 
 static TCHAR edittext[MAX_TEXTENTRY];
 
