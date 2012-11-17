@@ -42,6 +42,8 @@ static TrivialArray<Window *, GridView::MAX_ITEMS> buttons;
 
 class QuickMenu : public ActionListener {
 public:
+  unsigned clicked_event;
+
   virtual void OnAction(int id) gcc_override;
 };
 
@@ -118,10 +120,8 @@ FormKeyDown(unsigned key_code)
 void
 QuickMenu::OnAction(int id)
 {
+  clicked_event = id;
   wf->SetModalResult(mrOK);
-  wf->Hide();
-
-  InputEvents::ProcessEvent(id);
 }
 
 void
@@ -189,7 +189,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
 
   wf->SetKeyDownFunction(FormKeyDown);
 
-  wf->ShowModal();
+  int result = wf->ShowModal();
 
   for (auto it = buttons.begin(), end = buttons.end(); it != end; ++it)
     delete *it;
@@ -198,4 +198,7 @@ dlgQuickMenuShowModal(SingleWindow &parent)
 
   delete wf;
   delete grid_view;
+
+  if (result == mrOK)
+    InputEvents::ProcessEvent(quick_menu.clicked_event);
 }
