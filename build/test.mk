@@ -662,6 +662,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunFlightLogger \
 	RunCirclingWind RunWindZigZag RunWindEKF \
 	RunTask \
+	ViewImage \
 	RunCanvas RunMapWindow \
 	RunDialog RunListControl RunTextEntry \
 	RunTerminal \
@@ -1475,6 +1476,19 @@ FLIGHT_PATH_SOURCES = \
 FLIGHT_PATH_LDADD = $(DEBUG_REPLAY_LDADD)
 FLIGHT_PATH_DEPENDS = UTIL GEO MATH TIME
 $(eval $(call link-program,FlightPath,FLIGHT_PATH))
+
+VIEW_IMAGE_SOURCES = \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/ResourceLoader.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/ViewImage.cpp
+VIEW_IMAGE_LDADD = $(FAKE_LIBS)
+VIEW_IMAGE_DEPENDS = SCREEN EVENT OS THREAD MATH UTIL
+$(eval $(call link-program,ViewImage,VIEW_IMAGE))
 
 RUN_CANVAS_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \
