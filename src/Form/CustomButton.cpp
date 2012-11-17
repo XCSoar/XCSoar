@@ -33,7 +33,10 @@ void
 WndCustomButton::OnPaint(Canvas &canvas)
 {
   // Draw focus rectangle
-  if (HasFocus()) {
+  if (IsDown()) {
+    canvas.Clear(look.list.pressed.background_color);
+    canvas.SetTextColor(look.list.pressed.text_color);
+  } else if (HasFocus()) {
     canvas.Clear(look.focused.background_color);
     canvas.SetTextColor(IsEnabled()
                         ? look.focused.text_color : look.button.disabled.color);
@@ -50,8 +53,6 @@ WndCustomButton::OnPaint(Canvas &canvas)
 
   // If button is pressed, offset the text for 3D effect
   PixelRect rc = GetClientRect();
-  if (IsDown())
-    MoveRect(rc, 1, 1);
 
   canvas.Select(*look.button.font);
 
