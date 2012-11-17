@@ -31,9 +31,6 @@ Copyright_License {
 
 struct DialogLook;
 
-/**
- * The PanelControl class implements the simplest form of a ContainerControl
- */
 class KeyboardControl : public ContainerWindow {
 public:
   typedef void (*OnCharacterCallback_t)(TCHAR key);
@@ -50,10 +47,6 @@ protected:
   TCHAR button_values[MAX_BUTTONS];
 
 public:
-  /**
-   * Constructor of the KeyboardControl class
-   * @param parent the parent window
-   */
   KeyboardControl(ContainerWindow &parent, const DialogLook &look,
                   PixelRect rc,
                   OnCharacterCallback_t function,
