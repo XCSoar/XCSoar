@@ -22,16 +22,18 @@ Copyright_License {
 */
 
 #include "MacCreadySetup.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/WindowWidget.hpp"
 #include "Form/Button.hpp"
+#include "Form/ActionListener.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Interface.hpp"
+#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 
 class WndButton;
 
-class MacCreadySetupPanel : public XMLWidget {
+class MacCreadySetupPanel : public WindowWidget,
+                            private ActionListener {
   unsigned id;
 
 public:
@@ -41,51 +43,49 @@ public:
     InfoBoxManager::ProcessQuickAccess(id, value);
   }
 
-  void Setup();
+  WndButton &GetButton() {
+    return *(WndButton *)GetWindow();
+  }
 
+  gcc_pure
+  static const TCHAR *GetCaption() {
+    return CommonInterface::GetComputerSettings().task.auto_mc
+      ? _("MANUAL")
+      : _("AUTO");
+  }
+
+  void UpdateCaption() {
+    GetButton().SetCaption(GetCaption());
+  }
+
+  /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
+
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) gcc_override;
 };
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static MacCreadySetupPanel *instance;
-
-static void
-PnlSetupOnMode(gcc_unused WndButton &Sender)
+void
+MacCreadySetupPanel::OnAction(int id)
 {
-  if (XCSoarInterface::GetComputerSettings().task.auto_mc)
-    Sender.SetCaption(_("AUTO"));
-  else
-    Sender.SetCaption(_("MANUAL"));
+  QuickAccess(_T("mode"));
 
-  instance->QuickAccess(_T("mode"));
+  UpdateCaption();
 }
-
-static constexpr CallBackTableEntry call_back_table[] = {
-  DeclareCallBackEntry(PnlSetupOnMode),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(call_back_table, parent, _T("IDR_XML_INFOBOXMACCREADYSETUP"));
-}
+  ButtonWindowStyle style;
+  style.Hide();
+  style.TabStop();
 
-void
-MacCreadySetupPanel::Show(const PixelRect &rc)
-{
-  if (XCSoarInterface::GetComputerSettings().task.auto_mc)
-    ((WndButton *)form.FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
-  else
-    ((WndButton *)form.FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));
-
-  XMLWidget::Show(rc);
+  SetWindow(new WndButton(parent, UIGlobals::GetDialogLook(), GetCaption(), rc,
+                          style, this, 1));
 }
 
 Widget *
 LoadMacCreadySetupPanel(unsigned id)
 {
-  return instance = new MacCreadySetupPanel(id);
+  return new MacCreadySetupPanel(id);
 }

@@ -304,7 +304,6 @@ XMLDIALOG(IDR_XML_POLARCONFIGPANEL_L, "Configuration/PolarConfigPanel_L")
 
 // infobox access
 XMLDIALOG(IDR_XML_INFOBOXMACCREADYEDIT, "Infobox/pnlInfoBoxMacCreadyEdit")
-XMLDIALOG(IDR_XML_INFOBOXMACCREADYSETUP, "Infobox/pnlInfoBoxMacCreadySetup")
 XMLDIALOG(IDR_XML_INFOBOXALTITUDEINFO, "Infobox/pnlInfoBoxAltitudeInfo")
 XMLDIALOG(IDR_XML_INFOBOXALTITUDESIMULATOR, "Infobox/pnlInfoBoxAltitudeSimulator")
 
