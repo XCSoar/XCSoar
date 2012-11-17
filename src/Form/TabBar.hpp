@@ -113,6 +113,7 @@ public:
 protected:
   virtual void OnCreate() gcc_override;
   virtual void OnDestroy() gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
 
 #ifdef HAVE_CLIPPING
   virtual void OnPaint(Canvas &canvas) gcc_override;

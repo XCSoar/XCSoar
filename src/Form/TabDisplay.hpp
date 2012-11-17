@@ -92,6 +92,10 @@ public:
     return look;
   }
 
+  bool IsVertical() const {
+    return vertical;
+  }
+
   /**
    * Paints one button
    */

@@ -154,6 +154,23 @@ TabBarControl::OnDestroy()
   ContainerWindow::OnDestroy();
 }
 
+void
+TabBarControl::OnResize(UPixelScalar width, UPixelScalar height)
+{
+  ContainerWindow::OnResize(width, height);
+
+  if (tab_display != nullptr) {
+    const PixelRect tab_rc = tab_display->GetPosition();
+    PixelRect rc = GetClientRect();
+    if (tab_display->IsVertical())
+      rc.left = tab_rc.right;
+    else
+      rc.top = tab_rc.bottom;
+
+    pager.Move(rc);
+  }
+}
+
 #ifdef HAVE_CLIPPING
 
 void
