@@ -31,8 +31,8 @@ Copyright_License {
 typedef std::function<const TCHAR *(const TCHAR *)> AllowedCharacters;
 
 bool
-dlgTextEntryShowModal(TCHAR *text,
-                      int width, const TCHAR* caption = NULL,
+dlgTextEntryShowModal(TCHAR *text, size_t size,
+                      const TCHAR *caption=nullptr,
                       AllowedCharacters ac=AllowedCharacters());
 
 template<size_t N>
@@ -46,8 +46,8 @@ TextEntryDialog(StaticString<N> &text,
 }
 
 bool
-dlgTextEntryKeyboardShowModal(TCHAR *text,
-                              int width = 0, const TCHAR* caption = NULL,
+dlgTextEntryKeyboardShowModal(TCHAR *text, size_t size,
+                              const TCHAR* caption=nullptr,
                               AllowedCharacters ac=AllowedCharacters());
 
 #endif

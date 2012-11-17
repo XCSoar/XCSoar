@@ -45,10 +45,10 @@ using std::min;
 static WndForm *wf = NULL;
 static WndOwnerDrawFrame *wGrid = NULL;
 
-#define MAX_TEXTENTRY 40
+static constexpr size_t MAX_TEXTENTRY = 40;
 static unsigned int cursor = 0;
 static int lettercursor = 0;
-static int max_width;
+static size_t max_width;
 
 static TCHAR edittext[MAX_TEXTENTRY];
 
@@ -154,7 +154,7 @@ FormKeyDown(unsigned key_code)
   case KEY_DOWN:
   case KEY_RIGHT:
     if ((key_code == KEY_RIGHT) ^ IsAltair()) {
-      if ((int)cursor >= (max_width - 2))
+      if (cursor + 2 >= max_width)
         return true; // max width
 
       cursor++;
@@ -208,7 +208,7 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 static void
-dlgTextEntryHighscoreType(TCHAR *text, int width,
+dlgTextEntryHighscoreType(TCHAR *text, size_t width,
                           const TCHAR* caption)
 {
   wf = NULL;
@@ -254,7 +254,7 @@ dlgTextEntryHighscoreType(TCHAR *text, int width,
 }
 
 bool
-dlgTextEntryShowModal(TCHAR *text, int width,
+dlgTextEntryShowModal(TCHAR *text, size_t width,
                       const TCHAR* caption, AllowedCharacters accb)
 {
   switch (UIGlobals::GetDialogSettings().text_input_style) {

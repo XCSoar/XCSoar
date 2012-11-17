@@ -44,9 +44,9 @@ static KeyboardControl *kb = NULL;
 
 static AllowedCharacters AllowedCharactersCallback;
 
-#define MAX_TEXTENTRY 40
+static constexpr size_t MAX_TEXTENTRY = 40;
 static unsigned int cursor = 0;
-static unsigned int max_width;
+static size_t max_width;
 static TCHAR edittext[MAX_TEXTENTRY];
 
 static void
@@ -167,8 +167,8 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgTextEntryKeyboardShowModal(TCHAR *text,
-                              int width, const TCHAR* caption,
+dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
+                              const TCHAR* caption,
                               AllowedCharacters accb)
 {
   if (width == 0)
