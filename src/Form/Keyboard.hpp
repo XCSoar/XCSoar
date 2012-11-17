@@ -42,6 +42,11 @@ protected:
 
   const DialogLook &look;
 
+  OnCharacterCallback_t mOnCharacter;
+
+  UPixelScalar button_width;
+  UPixelScalar button_height;
+
   unsigned num_buttons;
   ButtonWindow buttons[MAX_BUTTONS];
   TCHAR button_values[MAX_BUTTONS];
@@ -67,9 +72,6 @@ protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
 
 private:
-  UPixelScalar button_width;
-  UPixelScalar button_height;
-
   ButtonWindow *get_button(TCHAR ch);
 
   void move_button(TCHAR ch, PixelScalar left, PixelScalar top);
@@ -83,8 +85,6 @@ private:
   bool is_landscape();
 
   void add_button(const TCHAR* caption);
-
-  OnCharacterCallback_t mOnCharacter;
 };
 
 #endif

@@ -40,9 +40,9 @@ KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  OnCharacterCallback_t function,
                                  const WindowStyle _style)
   :look(_look),
-  num_buttons(0),
-  button_width(50), button_height(50),
-  mOnCharacter(function)
+   mOnCharacter(function),
+   button_width(50), button_height(50),
+   num_buttons(0)
 {
   Create(parent, rc, _style);
   set_buttons_size();
