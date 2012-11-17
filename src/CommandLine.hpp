@@ -49,7 +49,7 @@ namespace CommandLine {
  * Reads and parses arguments/options from the command line
  * @param CommandLine command line argument string
  */
-  void Parse(Args args);
+  void Parse(Args &args);
 }
 
 #endif

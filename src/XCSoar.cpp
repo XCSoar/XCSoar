@@ -108,11 +108,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LogStartUp(_T("Starting XCSoar %s"), XCSoar_ProductToken);
 
   // Read options from the command line
-#ifndef WIN32
-  CommandLine::Parse(Args(argc, argv, Usage));
+  {
+#ifdef WIN32
+    Args args(GetCommandLine(), Usage);
 #else
-  CommandLine::Parse(Args(GetCommandLine(), Usage));
+    Args args(argc, argv, Usage);
 #endif
+    CommandLine::Parse(args);
+  }
 
   ScreenGlobalInit screen_init;
 

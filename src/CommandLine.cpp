@@ -47,7 +47,7 @@ namespace CommandLine {
 }
 
 void
-CommandLine::Parse(Args args)
+CommandLine::Parse(Args &args)
 {
   while (!args.IsEmpty()) {
     const char *s = args.GetNext();
