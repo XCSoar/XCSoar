@@ -33,12 +33,12 @@ Copyright_License {
 void
 WndSymbolButton::OnPaint(Canvas &canvas)
 {
-  bool pressed = is_down();
+  const bool pressed = IsDown();
 
   PixelRect rc = canvas.GetRect();
   renderer.DrawButton(canvas, rc, HasFocus(), pressed);
   // If button has text on it
-  tstring caption = get_text();
+  const tstring caption = GetText();
   if (caption.empty())
     return;
 
@@ -110,7 +110,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   else if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
     canvas.ClearWhite();
-    if (is_down())
+    if (pressed)
       canvas.InvertStretchTransparent(launcher1_bitmap, COLOR_YELLOW);
     else
       canvas.StretchTransparent(launcher1_bitmap, COLOR_BLUE);
@@ -120,7 +120,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   else if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
     canvas.ClearWhite();
-    if (is_down())
+    if (pressed)
       canvas.InvertStretchTransparent(launcher2_bitmap, COLOR_YELLOW);
     else
       canvas.StretchTransparent(launcher2_bitmap, COLOR_BLUE);

@@ -144,7 +144,7 @@ MenuBar::ShowButton(unsigned i, bool enabled, const TCHAR *text,
 
   Button &button = buttons[i];
 
-  button.set_text(text);
+  button.SetText(text);
   button.SetEnabled(enabled && event > 0);
   button.SetEvent(event);
   button.ShowOnTop();

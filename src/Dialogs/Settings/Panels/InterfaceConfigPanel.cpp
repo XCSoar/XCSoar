@@ -79,7 +79,7 @@ OnFonts(gcc_unused WndButton &button)
 void
 InterfaceConfigPanel::Show(const PixelRect &rc)
 {
-  buttonFonts->set_text(_("Fonts"));
+  buttonFonts->SetText(_("Fonts"));
   buttonFonts->SetOnClickNotify(OnFonts);
   buttonFonts->Show();
 

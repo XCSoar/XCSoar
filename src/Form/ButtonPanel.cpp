@@ -82,7 +82,7 @@ ButtonPanel::Add(const TCHAR *caption, ActionListener *listener, int id)
 UPixelScalar
 ButtonPanel::Width(unsigned i) const
 {
-  return look.button.font->TextSize(buttons[i]->get_text().c_str()).cx +
+  return look.button.font->TextSize(buttons[i]->GetText().c_str()).cx +
     Layout::SmallScale(8);
 }
 

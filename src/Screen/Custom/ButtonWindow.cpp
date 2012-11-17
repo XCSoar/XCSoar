@@ -42,7 +42,7 @@ ButtonWindow::Create(ContainerWindow &parent, const TCHAR *text, unsigned id,
 }
 
 void
-ButtonWindow::set_down(bool _down)
+ButtonWindow::SetDown(bool _down)
 {
   if (_down == down)
     return;
@@ -73,7 +73,7 @@ ButtonWindow::OnKeyDown(unsigned key_code)
   switch (key_code) {
   case KEY_RETURN:
   case KEY_SPACE:
-    set_down(false);
+    SetDown(false);
 
     if (!OnClicked() && id != 0 && parent != NULL)
       parent->OnCommand(id, 0);
@@ -88,7 +88,7 @@ bool
 ButtonWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
-    set_down(IsInside(x, y));
+    SetDown(IsInside(x, y));
     return true;
   } else
     return PaintWindow::OnMouseMove(x, y, keys);
@@ -100,7 +100,7 @@ ButtonWindow::OnMouseDown(PixelScalar x, PixelScalar y)
   if (IsTabStop())
     SetFocus();
 
-  set_down(true);
+  SetDown(true);
   SetCapture();
   dragging = true;
   return true;
@@ -118,7 +118,7 @@ ButtonWindow::OnMouseUp(PixelScalar x, PixelScalar y)
   if (!down)
     return true;
 
-  set_down(false);
+  SetDown(false);
 
   if (!OnClicked() && id != 0 && parent != NULL)
     parent->OnCommand(id, 0);
@@ -144,7 +144,7 @@ bool
 ButtonWindow::OnCancelMode()
 {
   dragging = false;
-  set_down(false);
+  SetDown(false);
 
   return PaintWindow::OnCancelMode();
 }

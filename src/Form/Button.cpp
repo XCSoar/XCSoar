@@ -111,13 +111,13 @@ void
 WndButton::OnPaint(Canvas &canvas)
 {
   const bool focused = HasFocus();
-  const bool pressed = is_down();
+  const bool pressed = IsDown();
 
   PixelRect rc = canvas.GetRect();
   renderer.DrawButton(canvas, rc, focused, pressed);
 
   // If button has text on it
-  tstring caption = get_text();
+  const tstring caption = GetText();
   if (caption.empty())
     return;
 

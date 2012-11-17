@@ -143,12 +143,12 @@ void
 AirspaceConfigPanel::Show(const PixelRect &rc)
 {
   if (buttonColors != NULL) {
-    buttonColors->set_text(_("Colours"));
+    buttonColors->SetText(_("Colours"));
     buttonColors->SetOnClickNotify(OnAirspaceColoursClicked);
   }
 
   if (buttonMode != NULL) {
-    buttonMode->set_text(_("Filter"));
+    buttonMode->SetText(_("Filter"));
     buttonMode->SetOnClickNotify(OnAirspaceModeClicked);
   }
 

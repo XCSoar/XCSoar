@@ -57,7 +57,8 @@ BaseButtonWindow::Click()
 }
 
 void
-ButtonWindow::set_text(const TCHAR *_text) {
+ButtonWindow::SetText(const TCHAR *_text)
+{
   AssertNoneLocked();
   AssertThread();
 
@@ -87,7 +88,7 @@ ButtonWindow::set_text(const TCHAR *_text) {
 }
 
 const tstring
-ButtonWindow::get_text() const
+ButtonWindow::GetText() const
 {
   AssertNoneLocked();
   AssertThread();

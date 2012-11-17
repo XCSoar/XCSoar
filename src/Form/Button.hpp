@@ -103,7 +103,7 @@ public:
    * @param Value The new Caption/Text of the Control
    */
   void SetCaption(const TCHAR *caption) {
-    set_text(caption);
+    SetText(caption);
   }
 
   /**

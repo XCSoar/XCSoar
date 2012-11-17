@@ -92,7 +92,7 @@ public:
     return id;
   }
 
-  void set_text(const TCHAR *_text) {
+  void SetText(const TCHAR *_text) {
     AssertNoneLocked();
     AssertThread();
 
@@ -100,15 +100,15 @@ public:
     Invalidate();
   }
 
-  const tstring &get_text() const {
+  const tstring &GetText() const {
     return text;
   }
 
 protected:
-  void set_down(bool _down);
+  void SetDown(bool _down);
 
 public:
-  bool is_down() const {
+  bool IsDown() const {
     return down;
   }
 
@@ -195,16 +195,16 @@ public:
     BaseButtonWindow::Create(parent, text, rc, style);
   }
 
-  bool is_down() const {
+  bool IsDown() const {
     AssertNoneLocked();
     AssertThread();
 
     return (Button_GetState(hWnd) & BST_PUSHED) != 0;
   }
 
-  void set_text(const TCHAR *text);
+  void SetText(const TCHAR *text);
 
-  const tstring get_text() const;
+  const tstring GetText() const;
 
 protected:
   virtual bool OnKeyCheck(unsigned key_code) const;
