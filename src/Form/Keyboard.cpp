@@ -34,6 +34,28 @@ Copyright_License {
 static constexpr TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
+void
+CharacterButton::Create(ContainerWindow &parent, const DialogLook &look,
+                        const TCHAR *text, PixelRect rc,
+                        OnCharacterCallback _on_character, unsigned _character,
+                        const ButtonWindowStyle style)
+{
+  assert(_on_character);
+
+  on_character = _on_character;
+  character = _character;
+
+  ButtonWindow::Create(parent, text, rc, style);
+  SetFont(*look.button.font);
+}
+
+bool
+CharacterButton::OnClicked()
+{
+  on_character(character);
+  return true;
+}
+
 KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  const DialogLook &_look,
                                  PixelRect rc,
@@ -66,14 +88,14 @@ KeyboardControl::SetAllowedCharacters(const TCHAR *allowed)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
     buttons[i].SetVisible(allowed == NULL ||
-                          _tcschr(allowed, button_values[i]) != NULL);
+                          _tcschr(allowed, buttons[i].GetCharacter()) != NULL);
 }
 
 ButtonWindow *
 KeyboardControl::FindButton(unsigned ch)
 {
   for (unsigned i = 0; i < num_buttons; ++i)
-    if (button_values[i] == ch)
+    if (buttons[i].GetCharacter() == ch)
       return &buttons[i];
 
   return NULL;
@@ -167,16 +189,6 @@ KeyboardControl::OnPaint(Canvas &canvas)
   ContainerWindow::OnPaint(canvas);
 }
 
-bool
-KeyboardControl::OnCommand(unsigned id, unsigned code)
-{
-  if (id >= 0x20 && on_character != NULL) {
-    on_character(id);
-    return true;
-  } else
-    return ContainerWindow::OnCommand(id, code);
-}
-
 void
 KeyboardControl::OnResize(PixelSize new_size)
 {
@@ -192,15 +204,12 @@ KeyboardControl::AddButton(const TCHAR *caption, unsigned ch)
 {
   assert(num_buttons < MAX_BUTTONS);
 
-  button_values[num_buttons] = ch;
-
   PixelRect rc;
   rc.left = 0;
   rc.top = 0;
   rc.right = button_width;
   rc.bottom = button_height;
 
-  ButtonWindow *button = &buttons[num_buttons++];
-  button->Create(*this, caption, ch, rc);
-  button->SetFont(*look.button.font);
+  CharacterButton &button = buttons[num_buttons++];
+  button.Create(*this, look, caption, rc, on_character, ch);
 }

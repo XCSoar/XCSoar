@@ -31,6 +31,30 @@ Copyright_License {
 
 struct DialogLook;
 
+/**
+ * A button that emits a character on press.
+ */
+class CharacterButton : public ButtonWindow {
+  typedef bool (*OnCharacterCallback)(unsigned key);
+
+  OnCharacterCallback on_character;
+  unsigned character;
+
+public:
+  void Create(ContainerWindow &parent, const DialogLook &look,
+              const TCHAR *text, PixelRect rc,
+              OnCharacterCallback on_character, unsigned character,
+              const ButtonWindowStyle _style=ButtonWindowStyle());
+
+  unsigned GetCharacter() const {
+    return character;
+  }
+
+protected:
+  /* virtual methods from class ButtonWindow */
+  virtual bool OnClicked();
+};
+
 class KeyboardControl : public ContainerWindow {
 public:
   typedef bool (*OnCharacterCallback_t)(unsigned ch);
@@ -48,8 +72,7 @@ protected:
   UPixelScalar button_height;
 
   unsigned num_buttons;
-  ButtonWindow buttons[MAX_BUTTONS];
-  unsigned button_values[MAX_BUTTONS];
+  CharacterButton buttons[MAX_BUTTONS];
 
 public:
   KeyboardControl(ContainerWindow &parent, const DialogLook &look,
@@ -62,13 +85,8 @@ public:
    */
   void SetAllowedCharacters(const TCHAR *allowed);
 
-  void SetOnCharacterCallback(OnCharacterCallback_t _on_character) {
-    on_character = _on_character;
-  }
-
 protected:
   virtual void OnPaint(Canvas &canvas) override;
-  virtual bool OnCommand(unsigned id, unsigned code) override;
   virtual void OnResize(PixelSize new_size) override;
 
 private:
