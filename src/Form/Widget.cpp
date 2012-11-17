@@ -40,7 +40,9 @@ NullWidget::GetMinimumSize() const
 PixelSize
 NullWidget::GetMaximumSize() const
 {
-  return PixelSize{0,0};
+  /* map to GetMinimumSize() by default, so simple derived classes
+     need to implement only GetMinimumSize() */
+  return GetMinimumSize();
 }
 
 void
