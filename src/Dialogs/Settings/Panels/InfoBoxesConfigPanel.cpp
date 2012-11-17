@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxesConfigPanel.hpp"
+#include "../dlgConfigInfoboxes.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
@@ -30,7 +31,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "Dialogs/dlgConfigInfoboxes.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"

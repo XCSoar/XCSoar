@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/dlgConfigInfoboxes.hpp"
+#include "dlgConfigInfoboxes.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/HelpDialog.hpp"
 #include "Dialogs/TextEntry.hpp"

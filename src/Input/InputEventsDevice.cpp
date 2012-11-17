@@ -25,7 +25,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
-#include "Dialogs/DeviceListDialog.hpp"
+#include "Dialogs/Device/DeviceListDialog.hpp"
 #include "Device/device.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"

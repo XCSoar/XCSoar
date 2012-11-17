@@ -21,13 +21,13 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/DeviceListDialog.hpp"
-#include "Dialogs/Vega/VegaDialogs.hpp"
-#include "Dialogs/ManageCAI302Dialog.hpp"
-#include "Dialogs/ManageFlarmDialog.hpp"
-#include "Dialogs/LX/ManageV7Dialog.hpp"
-#include "Dialogs/LX/ManageNanoDialog.hpp"
-#include "Dialogs/PortMonitor.hpp"
+#include "DeviceListDialog.hpp"
+#include "Vega/VegaDialogs.hpp"
+#include "ManageCAI302Dialog.hpp"
+#include "ManageFlarmDialog.hpp"
+#include "LX/ManageV7Dialog.hpp"
+#include "LX/ManageNanoDialog.hpp"
+#include "PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Widgets/DeviceEditWidget.hpp"

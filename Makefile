@@ -151,22 +151,22 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
-	$(SRC)/Dialogs/DeviceListDialog.cpp \
-	$(SRC)/Dialogs/PortMonitor.cpp \
-	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
-	$(SRC)/Dialogs/CAI302/UnitsEditor.cpp \
-	$(SRC)/Dialogs/CAI302/WaypointUploader.cpp \
-	$(SRC)/Dialogs/ManageFlarmDialog.cpp \
-	$(SRC)/Dialogs/LX/ManageV7Dialog.cpp \
-	$(SRC)/Dialogs/LX/V7ConfigWidget.cpp \
-	$(SRC)/Dialogs/LX/ManageNanoDialog.cpp \
-	$(SRC)/Dialogs/LX/NanoConfigWidget.cpp \
-	$(SRC)/Dialogs/Vega/VegaParametersWidget.cpp \
-	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \
-	$(SRC)/Dialogs/Vega/VegaDemoDialog.cpp \
-	$(SRC)/Dialogs/Vega/VoiceSettingsDialog.cpp \
-	$(SRC)/Dialogs/Vega/SwitchesDialog.cpp \
-	$(SRC)/Dialogs/FLARM/ConfigWidget.cpp \
+	$(SRC)/Dialogs/Device/DeviceListDialog.cpp \
+	$(SRC)/Dialogs/Device/PortMonitor.cpp \
+	$(SRC)/Dialogs/Device/ManageCAI302Dialog.cpp \
+	$(SRC)/Dialogs/Device/CAI302/UnitsEditor.cpp \
+	$(SRC)/Dialogs/Device/CAI302/WaypointUploader.cpp \
+	$(SRC)/Dialogs/Device/ManageFlarmDialog.cpp \
+	$(SRC)/Dialogs/Device/LX/ManageV7Dialog.cpp \
+	$(SRC)/Dialogs/Device/LX/V7ConfigWidget.cpp \
+	$(SRC)/Dialogs/Device/LX/ManageNanoDialog.cpp \
+	$(SRC)/Dialogs/Device/LX/NanoConfigWidget.cpp \
+	$(SRC)/Dialogs/Device/Vega/VegaParametersWidget.cpp \
+	$(SRC)/Dialogs/Device/Vega/VegaConfigurationDialog.cpp \
+	$(SRC)/Dialogs/Device/Vega/VegaDemoDialog.cpp \
+	$(SRC)/Dialogs/Device/Vega/VoiceSettingsDialog.cpp \
+	$(SRC)/Dialogs/Device/Vega/SwitchesDialog.cpp \
+	$(SRC)/Dialogs/Device/FLARM/ConfigWidget.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsDialog.cpp \
 	$(SRC)/Dialogs/MapItemListSettingsPanel.cpp \
@@ -179,10 +179,15 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsDialog.cpp \
 	$(SRC)/Dialogs/Airspace/AirspaceCRendererSettingsPanel.cpp \
 	$(SRC)/Dialogs/Airspace/dlgAirspaceWarnings.cpp \
+	$(SRC)/Dialogs/Settings/dlgBasicSettings.cpp \
+	$(SRC)/Dialogs/Settings/dlgConfiguration.cpp \
+	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
+	$(SRC)/Dialogs/Settings/dlgConfigInfoboxes.cpp \
+	$(SRC)/Dialogs/Settings/dlgConfigWaypoints.cpp \
+	$(SRC)/Dialogs/Settings/FontEdit.cpp \
 	$(SRC)/Dialogs/dlgAlternatesList.cpp \
 	$(SRC)/Dialogs/dlgFlarmDetailsList.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
-	$(SRC)/Dialogs/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
 	$(SRC)/Dialogs/dlgPlanes.cpp \
@@ -190,10 +195,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgPlanePolar.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
-	$(SRC)/Dialogs/dlgConfiguration.cpp \
-	$(SRC)/Dialogs/dlgConfigFonts.cpp \
-	$(SRC)/Dialogs/dlgConfigInfoboxes.cpp \
-	$(SRC)/Dialogs/dlgConfigWaypoints.cpp \
 	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
@@ -211,32 +212,34 @@ DIALOG_SOURCES = \
 	\
 	$(SRC)/Dialogs/Waypoint/WaypointInfoWidget.cpp \
 	$(SRC)/Dialogs/Waypoint/WaypointCommandsWidget.cpp \
+	$(SRC)/Dialogs/Waypoint/dlgWaypointDetails.cpp \
+	$(SRC)/Dialogs/Waypoint/dlgWaypointEdit.cpp \
 	\
-	$(SRC)/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/DevicesConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/ExperimentalConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/GaugesConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/VarioConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/WindConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/InfoBoxesConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/LayoutConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/LoggerConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/LoggerInfoConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/PagesConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/PolarConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/RouteConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/SiteConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/TaskRulesConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/UnitsConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/TimeConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/DevicesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/ExperimentalConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/GaugesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/VarioConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/GlideComputerConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/WindConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/InfoBoxesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/InterfaceConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/LayoutConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/LoggerConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/LoggerInfoConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/MapDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/PagesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/PolarConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/RouteConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/SafetyFactorsConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/SiteConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/TaskRulesConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/TaskDefaultsConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/TerrainDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/UnitsConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
+	$(SRC)/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/TaskManager/TaskManagerDialog.cpp \
 	$(SRC)/Dialogs/TaskManager/TaskClosePanel.cpp \
@@ -256,23 +259,20 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
-	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
-	$(SRC)/Dialogs/dlgWaypointEdit.cpp \
 	$(SRC)/Dialogs/WaypointList.cpp \
 	$(SRC)/Dialogs/WindSettingsDialog.cpp \
-	$(SRC)/Dialogs/FontEdit.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
 
 ifeq ($(HAVE_PCM_PLAYER),y)
-DIALOG_SOURCES += $(SRC)/Dialogs/ConfigPanels/AudioVarioConfigPanel.cpp
+DIALOG_SOURCES += $(SRC)/Dialogs/Settings/Panels/AudioVarioConfigPanel.cpp
 endif
 
 ifeq ($(HAVE_HTTP),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/Weather/NOAAList.cpp \
 	$(SRC)/Dialogs/Weather/NOAADetails.cpp \
-	$(SRC)/Dialogs/ConfigPanels/TrackingConfigPanel.cpp
+	$(SRC)/Dialogs/Settings/Panels/TrackingConfigPanel.cpp
 endif
 
 XCSOAR_SOURCES := \

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/ManageCAI302Dialog.hpp"
+#include "ManageCAI302Dialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/FilePicker.hpp"

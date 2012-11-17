@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InputEvents.hpp"
-#include "Dialogs/Vega/VegaDialogs.hpp"
+#include "Dialogs/Device/Vega/VegaDialogs.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Driver/Vega/Internal.hpp"
