@@ -41,11 +41,9 @@ KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  const WindowStyle _style)
   :look(_look),
    on_character(_on_character),
-   button_width(50), button_height(50),
    num_buttons(0)
 {
   Create(parent, rc, _style);
-  SetButtonsSize();
 
   TCHAR caption[] = _T(" ");
 
