@@ -20,6 +20,7 @@ Version 6.5 - not yet released
   - can drag modal dialogs
   - short click opens InfoBox dialog
   - support keyboard input on desktop computer
+  - improved angle input (e.g. wind direction, sector radials)
 * infoboxes
   - added thermal assistant infobox
 

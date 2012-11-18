@@ -35,6 +35,7 @@ Copyright_License {
 #include "DataField/Boolean.hpp"
 #include "DataField/Integer.hpp"
 #include "DataField/Float.hpp"
+#include "DataField/Angle.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/String.hpp"
 #include "DataField/Password.hpp"
@@ -319,6 +320,17 @@ RowFormWidget::AddFloat(const TCHAR *label, const TCHAR *help,
 }
 
 WndProperty *
+RowFormWidget::AddAngle(const TCHAR *label, const TCHAR *help,
+                        Angle value, unsigned step,
+                        DataFieldListener *listener)
+{
+  WndProperty *edit = Add(label, help);
+  AngleDataField *df = new AngleDataField(value, step, listener);
+  edit->SetDataField(df);
+  return edit;
+}
+
+WndProperty *
 RowFormWidget::AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value,
                        DataField::DataAccessCallback callback)
@@ -575,7 +587,19 @@ RowFormWidget::GetValueFloat(unsigned i) const
 Angle
 RowFormWidget::GetValueAngle(unsigned i) const
 {
-  return Angle::Degrees(GetValueFloat(i));
+  const AngleDataField &df =
+    (const AngleDataField &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::ANGLE);
+  return df.GetValue();
+}
+
+unsigned
+RowFormWidget::GetValueIntegerAngle(unsigned i) const
+{
+  const AngleDataField &df =
+    (const AngleDataField &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::ANGLE);
+  return df.GetIntegerValue();
 }
 
 bool
@@ -627,11 +651,12 @@ RowFormWidget::SaveValue(unsigned i, fixed &value) const
 bool
 RowFormWidget::SaveValue(unsigned i, Angle &value_r) const
 {
-  Angle new_value = GetValueAngle(i);
-  if (new_value == value_r)
+  unsigned old_value = AngleDataField::Import(value_r);
+  unsigned new_value = GetValueIntegerAngle(i);
+  if (new_value == old_value)
     return false;
 
-  value_r = new_value;
+  value_r = GetValueAngle(i);
   return true;
 }
 

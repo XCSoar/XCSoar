@@ -47,16 +47,12 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
            UnitGroup::DISTANCE, GetObject().GetRadius(),
            this);
 
-  AddFloat(_("Start radial"), _("Start radial of the OZ area"),
-           _T("%.0f°"), _T("%.0f"),
-           fixed_zero, fixed(360), fixed(10), true,
-           GetObject().GetStartRadial().Degrees(),
+  AddAngle(_("Start radial"), _("Start radial of the OZ area"),
+           GetObject().GetStartRadial(), 10,
            this);
 
-  AddFloat(_("Finish radial"), _("Finish radial of the OZ area"),
-           _T("%.0f°"), _T("%.0f"),
-           fixed_zero, fixed(360), fixed(10), true,
-           GetObject().GetEndRadial().Degrees(),
+  AddAngle(_("Finish radial"), _("Finish radial of the OZ area"),
+           GetObject().GetEndRadial(), 10,
            this);
 
   if (GetObject().shape == ObservationZonePoint::Shape::ANNULAR_SECTOR) {

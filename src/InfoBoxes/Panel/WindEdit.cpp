@@ -29,6 +29,7 @@ Copyright_License {
 #include "Units/Group.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
+#include "Form/DataField/Angle.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Layout.hpp"
@@ -52,7 +53,7 @@ protected:
 
 private:
   void OnWindSpeed(DataFieldFloat &Sender);
-  void OnWindDirection(DataFieldFloat &Sender);
+  void OnWindDirection(AngleDataField &df);
 };
 
 void
@@ -62,7 +63,7 @@ WindEditPanel::OnModified(DataField &df)
     OnWindSpeed((DataFieldFloat&)df);
 
   else if (IsDataField(WindDirection, df))
-    OnWindDirection((DataFieldFloat&)df);
+    OnWindDirection((AngleDataField &)df);
 }
 
 void
@@ -80,7 +81,7 @@ WindEditPanel::OnWindSpeed(DataFieldFloat &Sender)
 }
 
 void
-WindEditPanel::OnWindDirection(DataFieldFloat &Sender)
+WindEditPanel::OnWindDirection(AngleDataField &df)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   WindSettings &settings = CommonInterface::SetComputerSettings().wind;
@@ -88,7 +89,7 @@ WindEditPanel::OnWindDirection(DataFieldFloat &Sender)
     settings.use_external_wind;
 
   if (!external_wind) {
-    settings.manual_wind.bearing = Angle::Degrees(Sender.GetAsFixed());
+    settings.manual_wind.bearing = df.GetValue();
     settings.manual_wind_available.Update(basic.clock);
   }
 }
@@ -103,9 +104,8 @@ WindEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
            UnitGroup::WIND_SPEED,
            CommonInterface::Calculated().GetWindOrZero().norm, this);
 
-  AddFloat(_("Direction"), _("Manual adjustment of wind direction."),
-           _T("%.0f°"), _T("%.0f"), fixed_zero, fixed(355), fixed(5), false, // TO DO Add degrees to first display format
-           CommonInterface::Calculated().GetWindOrZero().bearing.Degrees(),
+  AddAngle(_("Direction"), _("Manual adjustment of wind direction."),
+           CommonInterface::Calculated().GetWindOrZero().bearing, 5u,
            this);
 }
 

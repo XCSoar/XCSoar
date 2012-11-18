@@ -93,10 +93,8 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     df.SetUnits(Units::GetWindSpeedName());
     wp->RefreshDisplay();
 
-    wp = AddFloat(_("Direction"), _("Manual adjustment of wind direction."),
-                  _T("%.0f°"), _T("%.0f"),
-                  fixed_zero, fixed(355), fixed(5), false,
-                  manual_wind.bearing.Degrees());
+    wp = AddAngle(_("Direction"), _("Manual adjustment of wind direction."),
+                  manual_wind.bearing, 5u);
     wp->SetEnabled(!external_wind);
   }
 }
@@ -125,7 +123,7 @@ WindSettingsPanel::Save(bool &_changed, bool &_require_restart)
 
   if (edit_manual_wind && !external_wind) {
     settings.manual_wind.norm = Units::ToSysWindSpeed(GetValueFloat(Speed));
-    settings.manual_wind.bearing = Angle::Degrees(GetValueFloat(Direction));
+    settings.manual_wind.bearing = GetValueAngle(Direction);
     settings.manual_wind_available.Update(basic.clock);
   }
 

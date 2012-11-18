@@ -43,6 +43,7 @@ public:
     BOOLEAN,
     INTEGER,
     REAL,
+    ANGLE,
     ENUM,
     FILE,
     TIME,

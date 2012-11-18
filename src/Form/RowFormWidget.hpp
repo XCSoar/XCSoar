@@ -308,6 +308,10 @@ public:
     return control;
   }
 
+  WndProperty *AddAngle(const TCHAR *label, const TCHAR *help,
+                        Angle value, unsigned step,
+                        DataFieldListener *listener=nullptr);
+
   WndProperty *AddEnum(const TCHAR *label, const TCHAR *help,
                        const StaticEnumChoice *list, unsigned value=0,
                        DataField::DataAccessCallback callback=NULL);
@@ -501,6 +505,9 @@ public:
 
   gcc_pure
   Angle GetValueAngle(unsigned i) const;
+
+  gcc_pure
+  unsigned GetValueIntegerAngle(unsigned i) const;
 
   gcc_pure
   const TCHAR *GetValueString(unsigned i) const {
