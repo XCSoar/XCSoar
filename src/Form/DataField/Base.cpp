@@ -33,6 +33,14 @@ enum {
 };
 
 DataField::DataField(Type _type, bool _supports_combolist,
+                     DataFieldListener *_listener)
+  :listener(_listener), data_access_callback(nullptr),
+   supports_combolist(_supports_combolist), type(_type),
+   item_help_enabled(false), detach_gui(false)
+{
+}
+
+DataField::DataField(Type _type, bool _supports_combolist,
                      DataAccessCallback _data_access_callback)
   :listener(NULL), data_access_callback(_data_access_callback),
    supports_combolist(_supports_combolist), type(_type),

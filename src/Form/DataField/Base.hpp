@@ -72,6 +72,9 @@ private:
 
 protected:
   DataField(Type type, bool supports_combolist,
+            DataFieldListener *listener);
+
+  DataField(Type type, bool supports_combolist,
             DataAccessCallback data_access_callback = NULL);
 
 public:
