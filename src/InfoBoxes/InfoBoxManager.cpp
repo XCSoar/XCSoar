@@ -124,7 +124,7 @@ InfoBoxManager::Event_Select(int i)
   if (InfoFocus >= 0)
     infoboxes[InfoFocus]->SetFocus();
   else
-    infoboxes[InfoFocus]->FocusParent();
+    infoboxes[0]->FocusParent();
 }
 
 unsigned
