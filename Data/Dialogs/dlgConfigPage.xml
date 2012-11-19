@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<Form Caption="Page Configuration">
-  <Button Name="cmdOk" Caption="Ok" X="5" Y="270" Width="60" Height="28" />
-
-  <List Name="lstPageLayouts" X="0" Y="0" Width="0" Height="265" />
-
-  <Button Name="cmdCancel" Caption="Cancel" X="70" Y="270" Width="60" Height="28" />
-</Form>
