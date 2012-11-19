@@ -62,7 +62,8 @@ public:
     caption_color = color;
   }
 
-  unsigned GetTextHeight();
+  gcc_pure
+  unsigned GetTextHeight() const;
 
 protected:
   /** from class PaintWindow */

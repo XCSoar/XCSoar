@@ -63,7 +63,7 @@ WndFrame::SetText(const TCHAR *_text)
 }
 
 unsigned
-WndFrame::GetTextHeight()
+WndFrame::GetTextHeight() const
 {
   PixelRect rc = GetClientRect();
   GrowRect(rc, -2, -2); // todo border width
