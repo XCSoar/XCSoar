@@ -29,7 +29,8 @@ Copyright_License {
 void
 ShowMapItemListSettingsDialog()
 {
-  WidgetDialog dialog(_("Map Item List Settings"), new MapItemListSettingsPanel());
+  WidgetDialog dialog;
+  dialog.Create(_("Map Item List Settings"), new MapItemListSettingsPanel());
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();

@@ -185,7 +185,8 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
   FontEditWidget *widget =
     new FontEditWidget(log_font, autoLogFont);
 
-  WidgetDialog dialog(title, widget);
+  WidgetDialog dialog;
+  dialog.Create(title, widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Reset"), widget, 1);
   dialog.AddButton(_("Cancel"), mrCancel);

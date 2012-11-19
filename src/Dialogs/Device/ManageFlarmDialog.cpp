@@ -105,9 +105,10 @@ ManageFLARMWidget::OnAction(int id)
 void
 ManageFlarmDialog(Device &device, const FlarmVersion &version)
 {
-  WidgetDialog dialog(_T("FLARM"),
-                      new ManageFLARMWidget(UIGlobals::GetDialogLook(),
-                                            (FlarmDevice &)device, version));
+  WidgetDialog dialog;
+  dialog.Create(_T("FLARM"),
+                new ManageFLARMWidget(UIGlobals::GetDialogLook(),
+                                      (FlarmDevice &)device, version));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

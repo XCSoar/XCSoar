@@ -29,8 +29,9 @@ Copyright_License {
 bool
 ShowAirspaceClassRendererSettingsDialog(AirspaceClass selected)
 {
-  WidgetDialog dialog(_("Airspace Renderer Settings"),
-                      new AirspaceClassRendererSettingsPanel(selected));
+  WidgetDialog dialog;
+  dialog.Create(_("Airspace Renderer Settings"),
+                new AirspaceClassRendererSettingsPanel(selected));
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();

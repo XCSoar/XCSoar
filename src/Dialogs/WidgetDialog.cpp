@@ -41,27 +41,32 @@ GetDialogStyle()
   return style;
 }
 
-WidgetDialog::WidgetDialog(const TCHAR *caption, const PixelRect &rc,
-                           Widget *_widget)
-  :WndForm(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-           rc, caption, GetDialogStyle()),
+WidgetDialog::WidgetDialog()
+  :WndForm(UIGlobals::GetDialogLook()),
    buttons(GetClientAreaWindow(), UIGlobals::GetDialogLook()),
-   widget(GetClientAreaWindow(), _widget),
-   auto_size(false),
+   widget(GetClientAreaWindow()),
    changed(false)
 {
   widget.Move(buttons.UpdateLayout());
 }
 
-WidgetDialog::WidgetDialog(const TCHAR *caption, Widget *_widget)
-  :WndForm(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-           UIGlobals::GetMainWindow().GetClientRect(),
-           caption, GetDialogStyle()),
-   buttons(GetClientAreaWindow(), UIGlobals::GetDialogLook()),
-   widget(GetClientAreaWindow(), _widget),
-   auto_size(true),
-   changed(false)
+void
+WidgetDialog::Create(const TCHAR *caption, const PixelRect &rc,
+                     Widget *_widget)
 {
+  auto_size = false;
+  WndForm::Create(UIGlobals::GetMainWindow(), rc,
+                  caption, GetDialogStyle());
+  widget.Set(_widget);
+  widget.Move(buttons.UpdateLayout());
+}
+
+void
+WidgetDialog::Create(const TCHAR *caption, Widget *_widget)
+{
+  auto_size = true;
+  WndForm::Create(UIGlobals::GetMainWindow(), caption, GetDialogStyle());
+  widget.Set(_widget);
   widget.Move(buttons.UpdateLayout());
 }
 
@@ -161,7 +166,8 @@ WidgetDialog::OnResize(UPixelScalar width, UPixelScalar height)
 bool
 DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget)
 {
-  WidgetDialog dialog(caption, rc, &widget);
+  WidgetDialog dialog;
+  dialog.Create(caption, rc, &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
@@ -176,7 +182,8 @@ DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget)
 bool
 DefaultWidgetDialog(const TCHAR *caption, Widget &widget)
 {
-  WidgetDialog dialog(caption, &widget);
+  WidgetDialog dialog;
+  dialog.Create(caption, &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 

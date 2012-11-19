@@ -520,7 +520,8 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
 {
   DeviceListWidget widget(look, terminal_look);
 
-  WidgetDialog dialog(_("Devices"), &widget);
+  WidgetDialog dialog;
+  dialog.Create(_("Devices"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   widget.CreateButtons(dialog);
 

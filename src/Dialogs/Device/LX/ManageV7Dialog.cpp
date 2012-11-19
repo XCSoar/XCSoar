@@ -119,10 +119,11 @@ void
 ManageV7Dialog(Device &device, const DeviceInfo &info,
                const DeviceInfo &secondary_info)
 {
-  WidgetDialog dialog(_T("LXNAV V7"),
-                      new ManageV7Widget(UIGlobals::GetDialogLook(),
-                                         (LXDevice &)device, info,
-                                         secondary_info));
+  WidgetDialog dialog;
+  dialog.Create(_T("LXNAV V7"),
+                new ManageV7Widget(UIGlobals::GetDialogLook(),
+                                   (LXDevice &)device, info,
+                                   secondary_info));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();
 }

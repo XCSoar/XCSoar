@@ -240,7 +240,8 @@ bool
 dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task)
 {
   OptionStartsWidget widget(**task);
-  WidgetDialog dialog(_("Alternate Start Points"), &widget);
+  WidgetDialog dialog;
+  dialog.Create(_("Alternate Start Points"), &widget);
   widget.CreateButtons(dialog);
 
   dialog.ShowModal();
