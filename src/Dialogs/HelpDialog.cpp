@@ -32,7 +32,7 @@ void
 dlgHelpShowModal(SingleWindow &parent,
                  const TCHAR* Caption, const TCHAR* HelpText)
 {
-  if (!Caption || !HelpText)
+  if (!HelpText)
     return;
 
   WndForm *wf = LoadDialog(nullptr, parent,
@@ -42,9 +42,15 @@ dlgHelpShowModal(SingleWindow &parent,
   if (wf == NULL)
     return;
 
+  const TCHAR *prefix = _("Help");
+
   StaticString<100> full_caption;
-  full_caption.Format(_T("%s: %s"), _("Help"), Caption);
-  wf->SetCaption(full_caption);
+  if (Caption != nullptr) {
+    full_caption.Format(_T("%s: %s"), prefix, Caption);
+    Caption = full_caption.c_str();
+  } else
+    Caption = prefix;
+  wf->SetCaption(Caption);
 
   ((LargeTextWindow *)wf->FindByName(_T("prpHelpText")))->SetText(HelpText);
 
