@@ -85,7 +85,9 @@ EditUnits(const DialogLook &look, CAI302Device &device)
     return;
 
   CAI302UnitsEditor widget(look, data);
-  if (!DefaultWidgetDialog(_("Units"), widget))
+  if (!DefaultWidgetDialog(UIGlobals::GetMainWindow(),
+                           UIGlobals::GetDialogLook(),
+                           _("Units"), widget))
     return;
 
   device.WriteActivePilot(widget.GetData(), env);
@@ -152,8 +154,8 @@ void
 ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
                    Device &device)
 {
-  WidgetDialog dialog;
-  dialog.Create(_T("CAI 302"),
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _T("CAI 302"),
                 new ManageCAI302Widget(look, (CAI302Device &)device));
   dialog.AddButton(_("Close"), mrCancel);
   dialog.ShowModal();

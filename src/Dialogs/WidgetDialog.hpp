@@ -43,15 +43,16 @@ class WidgetDialog : public WndForm {
   bool changed;
 
 public:
-  WidgetDialog();
+  WidgetDialog(const DialogLook &look);
 
-  void Create(const TCHAR *caption, const PixelRect &rc, Widget *widget);
+  void Create(SingleWindow &parent, const TCHAR *caption,
+              const PixelRect &rc, Widget *widget);
 
   /**
    * Create a dialog with an automatic size (by
    * Widget::GetMinimumSize() and Widget::GetMaximumSize()).
    */
-  void Create(const TCHAR *caption, Widget *widget);
+  void Create(SingleWindow &parent, const TCHAR *caption, Widget *widget);
 
   bool GetChanged() const {
     return changed;
@@ -103,9 +104,11 @@ protected:
  * @return true if changed data was saved
  */
 bool
-DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget);
+DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
+                    const TCHAR *caption, const PixelRect &rc, Widget &widget);
 
 bool
-DefaultWidgetDialog(const TCHAR *caption, Widget &widget);
+DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
+                    const TCHAR *caption, Widget &widget);
 
 #endif

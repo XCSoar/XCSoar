@@ -25,12 +25,14 @@ Copyright_License {
 #include "MapItemListSettingsPanel.hpp"
 #include "WidgetDialog.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 void
 ShowMapItemListSettingsDialog()
 {
-  WidgetDialog dialog;
-  dialog.Create(_("Map Item List Settings"), new MapItemListSettingsPanel());
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _("Map Item List Settings"),
+                new MapItemListSettingsPanel());
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();

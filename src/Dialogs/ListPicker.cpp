@@ -163,7 +163,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   assert(item_height > 0);
   assert(paint_callback != NULL);
 
-  WidgetDialog dialog;
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
 
   ListPickerWidget *const list_widget =
     new ListPickerWidget(num_items, initial_value, item_height,
@@ -180,7 +180,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     list_widget->EnableItemHelp(_itemhelp_callback, text_widget, two_widgets);
   }
 
-  dialog.Create(caption, widget);
+  dialog.Create(parent, caption, widget);
 
   if (_help_callback != nullptr)
     dialog.AddButton(_("Help"), list_widget, HELP);

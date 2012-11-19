@@ -393,7 +393,8 @@ DeviceListWidget::EditCurrent()
   DeviceConfig &config = CommonInterface::SetSystemSettings().devices[index];
   DeviceEditWidget widget(config);
 
-  if (!DefaultWidgetDialog(_("Edit device"), widget))
+  if (!DefaultWidgetDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                           _("Edit device"), widget))
     /* not modified */
     return;
 
@@ -520,8 +521,8 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
 {
   DeviceListWidget widget(look, terminal_look);
 
-  WidgetDialog dialog;
-  dialog.Create(_("Devices"), &widget);
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _("Devices"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   widget.CreateButtons(dialog);
 

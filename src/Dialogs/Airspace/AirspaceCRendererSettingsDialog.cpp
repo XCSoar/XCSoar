@@ -25,12 +25,13 @@ Copyright_License {
 #include "AirspaceCRendererSettingsPanel.hpp"
 #include "../WidgetDialog.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 bool
 ShowAirspaceClassRendererSettingsDialog(AirspaceClass selected)
 {
-  WidgetDialog dialog;
-  dialog.Create(_("Airspace Renderer Settings"),
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _("Airspace Renderer Settings"),
                 new AirspaceClassRendererSettingsPanel(selected));
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);

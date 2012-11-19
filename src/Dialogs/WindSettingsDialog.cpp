@@ -25,12 +25,14 @@ Copyright_License {
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/WindSettingsPanel.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 void
 ShowWindSettingsDialog()
 {
-  WidgetDialog dialog;
-  dialog.Create(_("Wind Settings"), new WindSettingsPanel(true, true));
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _("Wind Settings"),
+                new WindSettingsPanel(true, true));
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();

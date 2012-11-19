@@ -26,7 +26,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
 #include "Form/Widget.hpp"
-#include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
@@ -41,9 +40,9 @@ GetDialogStyle()
   return style;
 }
 
-WidgetDialog::WidgetDialog()
-  :WndForm(UIGlobals::GetDialogLook()),
-   buttons(GetClientAreaWindow(), UIGlobals::GetDialogLook()),
+WidgetDialog::WidgetDialog(const DialogLook &look)
+  :WndForm(look),
+   buttons(GetClientAreaWindow(), look),
    widget(GetClientAreaWindow()),
    changed(false)
 {
@@ -51,21 +50,22 @@ WidgetDialog::WidgetDialog()
 }
 
 void
-WidgetDialog::Create(const TCHAR *caption, const PixelRect &rc,
+WidgetDialog::Create(SingleWindow &parent,
+                     const TCHAR *caption, const PixelRect &rc,
                      Widget *_widget)
 {
   auto_size = false;
-  WndForm::Create(UIGlobals::GetMainWindow(), rc,
-                  caption, GetDialogStyle());
+  WndForm::Create(parent, rc, caption, GetDialogStyle());
   widget.Set(_widget);
   widget.Move(buttons.UpdateLayout());
 }
 
 void
-WidgetDialog::Create(const TCHAR *caption, Widget *_widget)
+WidgetDialog::Create(SingleWindow &parent, const TCHAR *caption,
+                     Widget *_widget)
 {
   auto_size = true;
-  WndForm::Create(UIGlobals::GetMainWindow(), caption, GetDialogStyle());
+  WndForm::Create(parent, caption, GetDialogStyle());
   widget.Set(_widget);
   widget.Move(buttons.UpdateLayout());
 }
@@ -164,10 +164,11 @@ WidgetDialog::OnResize(UPixelScalar width, UPixelScalar height)
 }
 
 bool
-DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget)
+DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
+                    const TCHAR *caption, const PixelRect &rc, Widget &widget)
 {
-  WidgetDialog dialog;
-  dialog.Create(caption, rc, &widget);
+  WidgetDialog dialog(look);
+  dialog.Create(parent, caption, rc, &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
@@ -180,10 +181,11 @@ DefaultWidgetDialog(const TCHAR *caption, const PixelRect &rc, Widget &widget)
 }
 
 bool
-DefaultWidgetDialog(const TCHAR *caption, Widget &widget)
+DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
+                    const TCHAR *caption, Widget &widget)
 {
-  WidgetDialog dialog;
-  dialog.Create(caption, &widget);
+  WidgetDialog dialog(look);
+  dialog.Create(parent, caption, &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 

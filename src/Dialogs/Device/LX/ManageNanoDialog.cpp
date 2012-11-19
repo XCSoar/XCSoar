@@ -91,7 +91,8 @@ ManageNanoWidget::OnAction(int id)
   case SETUP:
     {
       NanoConfigWidget widget(GetLook(), device);
-      DefaultWidgetDialog(_T("LXNAV Nano"), widget);
+      DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                          _T("LXNAV Nano"), widget);
     }
     break;
   }
@@ -100,8 +101,8 @@ ManageNanoWidget::OnAction(int id)
 void
 ManageNanoDialog(Device &device, const DeviceInfo &info)
 {
-  WidgetDialog dialog;
-  dialog.Create(_T("LXNAV Nano"),
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _T("LXNAV Nano"),
                 new ManageNanoWidget(UIGlobals::GetDialogLook(),
                                      (LXDevice &)device, info));
   dialog.AddButton(_("Close"), mrCancel);

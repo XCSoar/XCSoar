@@ -89,7 +89,8 @@ ManageFLARMWidget::OnAction(int id)
   case Setup:
     {
       FLARMConfigWidget widget(GetLook(), device);
-      DefaultWidgetDialog(_T("FLARM"), widget);
+      DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                          _T("FLARM"), widget);
     }
     break;
 
@@ -105,8 +106,8 @@ ManageFLARMWidget::OnAction(int id)
 void
 ManageFlarmDialog(Device &device, const FlarmVersion &version)
 {
-  WidgetDialog dialog;
-  dialog.Create(_T("FLARM"),
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _T("FLARM"),
                 new ManageFLARMWidget(UIGlobals::GetDialogLook(),
                                       (FlarmDevice &)device, version));
   dialog.AddButton(_("Close"), mrCancel);

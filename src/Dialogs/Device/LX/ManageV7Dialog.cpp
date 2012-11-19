@@ -101,7 +101,8 @@ ManageV7Widget::OnAction(int id)
   case SETUP:
     {
       V7ConfigWidget widget(GetLook(), device);
-      DefaultWidgetDialog(_T("LXNAV V7"), widget);
+      DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                          _T("LXNAV V7"), widget);
     }
     break;
 
@@ -119,8 +120,8 @@ void
 ManageV7Dialog(Device &device, const DeviceInfo &info,
                const DeviceInfo &secondary_info)
 {
-  WidgetDialog dialog;
-  dialog.Create(_T("LXNAV V7"),
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _T("LXNAV V7"),
                 new ManageV7Widget(UIGlobals::GetDialogLook(),
                                    (LXDevice &)device, info,
                                    secondary_info));

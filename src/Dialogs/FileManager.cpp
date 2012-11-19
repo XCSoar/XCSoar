@@ -687,8 +687,8 @@ static void
 ShowFileManager2()
 {
   ManagedFileListWidget widget;
-  WidgetDialog dialog;
-  dialog.Create(_("File Manager"), &widget);
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), _("File Manager"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   widget.CreateButtons(dialog);
 

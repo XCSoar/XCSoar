@@ -185,8 +185,8 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
   FontEditWidget *widget =
     new FontEditWidget(log_font, autoLogFont);
 
-  WidgetDialog dialog;
-  dialog.Create(title, widget);
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.Create(UIGlobals::GetMainWindow(), title, widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Reset"), widget, 1);
   dialog.AddButton(_("Cancel"), mrCancel);
