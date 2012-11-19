@@ -33,6 +33,7 @@
 #include "Device/Driver/FlyNet.hpp"
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/GTAltimeter.hpp"
+#include "Device/Driver/LevilAHRS_G.hpp"
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
@@ -714,6 +715,41 @@ TestLeonardo()
 }
 
 static void
+TestLevilAHRS()
+{
+  NullPort null;
+  Device *device = levil_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  NMEAInfo nmea_info;
+  nmea_info.Reset();
+  nmea_info.clock = fixed_one;
+
+  // All angles in tenth of degrees
+  ok1(device->ParseNMEA("$RPYL,127,729,3215,99,88,1376,0,", nmea_info));
+  ok1(nmea_info.attitude.bank_angle_available);
+  ok1(equals(nmea_info.attitude.bank_angle, 12.7));
+  ok1(nmea_info.attitude.pitch_angle_available);
+  ok1(equals(nmea_info.attitude.pitch_angle, 72.9));
+  ok1(nmea_info.attitude.heading_available);
+  ok1(equals(nmea_info.attitude.heading, 321.5));
+  ok1(nmea_info.acceleration.available);
+  ok1(nmea_info.acceleration.real);
+  ok1(equals(nmea_info.acceleration.g_load, 1.376));
+
+  // speed in kn, alt in ft, vs in ft/min
+  ok1(device->ParseNMEA("$APENV1,94,1500,0,0,0,0,", nmea_info));
+  ok1(nmea_info.airspeed_available);
+  ok1(equals(nmea_info.indicated_airspeed, 48.357777777));
+  ok1(nmea_info.pressure_altitude_available);
+  ok1(equals(nmea_info.pressure_altitude, 457.2));
+  // vertical speed not implemented
+
+  delete device;
+}
+
+
+static void
 TestLX(const struct DeviceRegister &driver, bool condor=false)
 {
   NullPort null;
@@ -1075,7 +1111,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(552);
+  plan_tests(568);
 
   TestGeneric();
   TestTasman();
@@ -1088,6 +1124,7 @@ int main(int argc, char **argv)
   TestFlymasterF1();
   TestFlytec();
   TestLeonardo();
+  TestLevilAHRS();
   TestLX(lxDevice);
   TestLX(condorDevice, true);
   TestLXV7();

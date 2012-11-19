@@ -93,6 +93,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/FlymasterF1.cpp \
 	$(DRIVER_SRC_DIR)/FlyNet.cpp \
 	$(DRIVER_SRC_DIR)/Generic.cpp \
+	$(DRIVER_SRC_DIR)/LevilAHRS_G.cpp \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
 	$(DRIVER_SRC_DIR)/GTAltimeter.cpp \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \
