@@ -22,42 +22,96 @@ Copyright_License {
 */
 
 #include "Dialogs/ListPicker.hpp"
-#include "Dialogs/XML.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Form/Form.hpp"
-#include "Form/Frame.hpp"
-#include "Form/Button.hpp"
+#include "WidgetDialog.hpp"
+#include "Form/ListWidget.hpp"
+#include "Form/TextWidget.hpp"
+#include "Form/TwoWidgets.hpp"
 #include "Screen/Layout.hpp"
+#include "UIGlobals.hpp"
+#include "Language/Language.hpp"
 #include "Event/FunctionalTimer.hpp"
+#include "Event/Timer.hpp"
 
 #include <assert.h>
 
-static WndForm *wf;
-static ListHelpCallback_t help_callback;
+static constexpr int HELP = 100;
 
-static ListControl *list_control;
+class ListPickerWidget : public ListWidget, public ActionListener,
+                         private Timer {
+  unsigned num_items;
+  unsigned initial_value;
+  UPixelScalar row_height;
 
-class ListPickerController : public ListControl::Handler {
-  WndForm &form;
+  bool visible;
 
   ListControl::PaintItemCallback paint_callback;
+  ActionListener &action_listener;
 
+  ListHelpCallback_t help_callback;
   ItemHelpCallback_t item_help_callback;
-  WndFrame *item_help_window;
+  TextWidget *help_widget;
+  TwoWidgets *two_widgets;
 
 public:
-  ListPickerController(WndForm &_form,
-                       ListControl::PaintItemCallback _paint_callback,
-                       ItemHelpCallback_t _item_help_callback,
-                       WndFrame *_item_help_window)
-    :form(_form), paint_callback(_paint_callback),
-     item_help_callback(_item_help_callback),
-     item_help_window(_item_help_window) {}
+  ListPickerWidget(unsigned _num_items, unsigned _initial_value,
+                   UPixelScalar _row_height,
+                   ListControl::PaintItemCallback _paint_callback,
+                   ActionListener &_action_listener,
+                   ListHelpCallback_t _help_callback)
+    :num_items(_num_items), initial_value(_initial_value),
+     row_height(_row_height),
+     visible(false),
+     paint_callback(_paint_callback),
+     action_listener(_action_listener),
+     help_callback(_help_callback),
+     item_help_callback(nullptr) {}
 
-  void UpdateItemHelp(unsigned index) {
-    if (item_help_callback != nullptr)
-      item_help_window->SetText(item_help_callback(index));
+  using ListWidget::GetList;
+
+  void EnableItemHelp(ItemHelpCallback_t _item_help_callback,
+                      TextWidget *_help_widget,
+                      TwoWidgets *_two_widgets) {
+    item_help_callback = _item_help_callback;
+    help_widget = _help_widget;
+    two_widgets = _two_widgets;
   }
+
+  void UpdateHelp(unsigned index) {
+    if (!visible || item_help_callback == nullptr)
+      return;
+
+    help_widget->SetText(item_help_callback(index));
+    two_widgets->UpdateLayout();
+  }
+
+  /* virtual methods from class Widget */
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override {
+    ListControl &list = CreateList(parent, UIGlobals::GetDialogLook(), rc,
+                                   row_height);
+    list.SetLength(num_items);
+    list.SetCursorIndex(initial_value);
+  }
+
+  virtual void Unprepare() gcc_override {
+    DeleteWindow();
+  }
+
+  virtual void Show(const PixelRect &rc) gcc_override {
+    ListWidget::Show(rc);
+
+    visible = true;
+    Schedule(0);
+  }
+
+  virtual void Hide() gcc_override {
+    visible = false;
+    Cancel();
+    ListWidget::Hide();
+  }
+
+  /* virtual methods from class ListControl::Handler */
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) gcc_override {
@@ -65,7 +119,7 @@ public:
   }
 
   virtual void OnCursorMoved(unsigned index) gcc_override {
-    UpdateItemHelp(index);
+    UpdateHelp(index);
   }
 
   virtual bool CanActivateItem(unsigned index) const gcc_override {
@@ -73,37 +127,27 @@ public:
   }
 
   virtual void OnActivateItem(unsigned index) gcc_override {
-    form.SetModalResult(mrOK);
+    action_listener.OnAction(mrOK);
   }
-};
 
-static void
-OnHelpClicked(gcc_unused WndButton &button)
-{
-  assert(help_callback != NULL);
+  /* virtual methods from class ActionListener */
 
-  unsigned i = list_control->GetCursorIndex();
-  if (i < list_control->GetLength())
-    help_callback(i);
-}
+  virtual void OnAction(int id) gcc_override {
+    help_callback(GetList().GetCursorIndex());
+  }
 
-static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
+private:
+  /* virtual methods from class Timer */
 
-static void
-OnCancelClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrCancel);
-}
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnCancelClicked),
-  DeclareCallBackEntry(OnHelpClicked),
-  DeclareCallBackEntry(NULL)
+  /**
+   * This timer is used to postpone the initial UpdateHelp() call.
+   * This is necessary because the TwoWidgets instance is not fully
+   * initialised yet in Show(), and recursively calling into Widget
+   * methods is dangerous anyway.
+   */
+  virtual void OnTimer() gcc_override {
+    UpdateHelp(GetList().GetCursorIndex());
+  }
 };
 
 int
@@ -119,66 +163,40 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   assert(item_height > 0);
   assert(paint_callback != NULL);
 
-  wf = LoadDialog(CallBackTable, parent, Layout::landscape
-                  ? _T("IDR_XML_COMBOPICKER_L")
-                  : _T("IDR_XML_COMBOPICKER"));
-  assert(wf != NULL);
+  WidgetDialog dialog;
 
-  if (caption != NULL)
-    wf->SetCaption(caption);
+  ListPickerWidget *const list_widget =
+    new ListPickerWidget(num_items, initial_value, item_height,
+                         paint_callback, dialog, _help_callback);
+  TextWidget *text_widget = nullptr;
+  TwoWidgets *two_widgets = nullptr;
 
-  list_control = (ListControl *)wf->FindByName(_T("frmComboPopupList"));
-  assert(list_control != NULL);
+  Widget *widget = list_widget;
 
-  WndFrame *wItemHelp;
-  if (_itemhelp_callback != NULL) {
-    wItemHelp = (WndFrame *)wf->FindByName(_T("lblItemHelp"));
-    assert(wItemHelp);
-    wItemHelp->Show();
-    const UPixelScalar help_height = wItemHelp->GetHeight();
-    PixelRect rc = list_control->GetPosition();
-    assert(rc.bottom - rc.top - help_height > 0);
-    rc.bottom -= help_height;
-    list_control->Move(rc);
+  if (_itemhelp_callback != nullptr) {
+    text_widget = new TextWidget();
+    widget = two_widgets = new TwoWidgets(list_widget, text_widget);
+
+    list_widget->EnableItemHelp(_itemhelp_callback, text_widget, two_widgets);
   }
-  else
-    wItemHelp = NULL;
 
-  ListPickerController controller(*wf, paint_callback,
-                                  _itemhelp_callback, wItemHelp);
-  if (initial_value == 0 && num_items > 0)
-    controller.UpdateItemHelp(0);
+  dialog.Create(caption, widget);
 
-  list_control->SetHandler(&controller);
-  list_control->SetItemHeight(item_height);
-  list_control->SetLength(num_items);
+  if (_help_callback != nullptr)
+    dialog.AddButton(_("Help"), list_widget, HELP);
 
-  help_callback = _help_callback;
+  if (num_items > 0)
+    dialog.AddButton(_("Select"), mrOK);
 
-  list_control->SetCursorIndex(initial_value);
-
-  WndButton *help_button = (WndButton *)wf->FindByName(_T("cmdHelp"));
-  assert(help_button != NULL);
-  if (help_callback == NULL)
-    help_button->Hide();
-
-  if (num_items == 0) {
-    WndButton *select_button = (WndButton *)wf->FindByName(_T("SelectButton"));
-    assert(select_button != NULL);
-    select_button->SetEnabled(false);
-  }
+  dialog.AddButton(_("Cancel"), mrCancel);
 
   FunctionalTimer update_timer;
   if (update)
-    update_timer.Schedule([]() {
-        list_control->Invalidate();
+    update_timer.Schedule([list_widget]() {
+        list_widget->GetList().Invalidate();
       }, 1000);
 
-  int result = wf->ShowModal() == mrOK
-    ? (int)list_control->GetCursorIndex()
+  return dialog.ShowModal() == mrOK
+    ? (int)list_widget->GetList().GetCursorIndex()
     : -1;
-  update_timer.Cancel();
-  delete wf;
-
-  return result;
 }
