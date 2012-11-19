@@ -49,7 +49,6 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/TabMenu.hpp"
 #include "Form/Panel.hpp"
-#include "Form/Keyboard.hpp"
 #include "Form/CheckBox.hpp"
 #include "Form/DockWindow.hpp"
 #include "Util/StringUtil.hpp"
@@ -671,18 +670,6 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     LoadChildrenFromXML(form, *frame,
                         lookup_table, &node);
 
-  // KeyboardControl
-  } else if (StringIsEqual(node.GetName(), _T("Keyboard"))) {
-    KeyboardControl::OnCharacterCallback_t character_callback =
-      (KeyboardControl::OnCharacterCallback_t)
-      GetCallBack(lookup_table, node, _T("OnCharacter"));
-
-    // Create the KeyboardControl
-    KeyboardControl *kb =
-      new KeyboardControl(parent, *xml_dialog_look, rc,
-                          character_callback, style);
-
-    window = kb;
   // DrawControl (WndOwnerDrawFrame)
   } else if (StringIsEqual(node.GetName(), _T("Canvas"))) {
     // Determine DrawCallback function
