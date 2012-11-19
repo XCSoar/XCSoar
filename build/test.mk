@@ -1702,6 +1702,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/HelpDialog.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
