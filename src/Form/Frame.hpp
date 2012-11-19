@@ -36,6 +36,8 @@ class WndFrame : public PaintWindow {
 
   Color caption_color;
 
+  unsigned mCaptionStyle;
+
   StaticString<300> text;
 
 public:
@@ -63,8 +65,6 @@ public:
   unsigned GetTextHeight();
 
 protected:
-  unsigned mCaptionStyle;
-
   /** from class PaintWindow */
   virtual void OnPaint(Canvas &canvas) gcc_override;
 };
