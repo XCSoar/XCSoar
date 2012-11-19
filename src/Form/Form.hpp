@@ -155,7 +155,9 @@ public:
     return look;
   }
 
-  ContainerWindow &GetClientAreaWindow();
+  ContainerWindow &GetClientAreaWindow() {
+    return client_area;
+  }
 
   unsigned GetTitleHeight() const {
     return title_rect.bottom - title_rect.top;

@@ -174,12 +174,6 @@ WndForm::UpdateLayout()
     client_area.Move(client_rect);
 }
 
-ContainerWindow &
-WndForm::GetClientAreaWindow()
-{
-  return client_area;
-}
-
 void
 WndForm::OnResize(UPixelScalar width, UPixelScalar height)
 {
