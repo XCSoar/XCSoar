@@ -135,6 +135,7 @@ ButtonPanel::HorizontalRange(PixelRect rc, unsigned start, unsigned end)
   const UPixelScalar total_width = rc.right - rc.left;
   const UPixelScalar row_height = Layout::GetMaximumControlHeight();
   const UPixelScalar width = total_width / n;
+  assert(width > 0);
 
   PixelRect button_rc = {
     rc.left, PixelScalar(rc.bottom - row_height),
