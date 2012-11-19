@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<Form Caption="Help">
-  <CloseButton Y="-35" Height="35"/>
-
-  <LargeText Name="prpHelpText" Y="0" Height="-35"/>
-</Form>

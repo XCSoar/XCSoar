@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "HelpDialog.hpp"
-#include "Dialogs/XML.hpp"
+#include "WidgetDialog.hpp"
 #include "Form/Form.hpp"
-#include "Screen/LargeTextWindow.hpp"
-#include "Screen/Layout.hpp"
+#include "Form/LargeTextWidget.hpp"
 #include "Language/Language.hpp"
+#include "UIGlobals.hpp"
 
 #include <assert.h>
 
@@ -36,13 +36,6 @@ dlgHelpShowModal(SingleWindow &parent,
 {
   assert(HelpText != nullptr);
 
-  WndForm *wf = LoadDialog(nullptr, parent,
-                           Layout::landscape
-                           ? _T("IDR_XML_HELP_L"): _T("IDR_XML_HELP"));
-
-  if (wf == NULL)
-    return;
-
   const TCHAR *prefix = _("Help");
 
   StaticString<100> full_caption;
@@ -51,11 +44,9 @@ dlgHelpShowModal(SingleWindow &parent,
     Caption = full_caption.c_str();
   } else
     Caption = prefix;
-  wf->SetCaption(Caption);
 
-  ((LargeTextWindow *)wf->FindByName(_T("prpHelpText")))->SetText(HelpText);
-
-  wf->ShowModal();
-
-  delete wf;
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateFull(parent, Caption, new LargeTextWidget(HelpText));
+  dialog.AddButton(_("Close"), mrCancel);
+  dialog.ShowModal();
 }
