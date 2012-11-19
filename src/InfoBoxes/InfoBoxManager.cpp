@@ -340,11 +340,10 @@ OnInfoBoxHelp(unsigned item)
                  gettext(InfoBoxFactory::GetName(type)));
 
   const TCHAR* text = InfoBoxFactory::GetDescription(type);
-  if (text)
-    dlgHelpShowModal(UIGlobals::GetMainWindow(), caption, gettext(text));
-  else
-    dlgHelpShowModal(UIGlobals::GetMainWindow(), caption,
-                     _("No help available on this item"));
+  if (text == nullptr)
+    text = N_("No help available on this item");
+
+  dlgHelpShowModal(UIGlobals::GetMainWindow(), caption, gettext(text));
 }
 
 void
