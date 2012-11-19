@@ -51,6 +51,8 @@ Window::~Window()
 void
 Window::AssertThread() const
 {
+  assert(IsDefined());
+
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
 #elif defined(USE_GDI)
@@ -102,6 +104,8 @@ Window::Destroy()
 ContainerWindow *
 Window::GetRootOwner()
 {
+  assert(IsDefined());
+
 #ifndef USE_GDI
   if (parent == NULL)
     /* no parent?  We must be a ContainerWindow instance */

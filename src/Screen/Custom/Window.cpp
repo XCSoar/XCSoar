@@ -61,6 +61,8 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
 void
 Window::ToScreen(PixelRect &rc) const
 {
+  assert(IsDefined());
+
   for (const Window *p = parent; p != NULL; p = p->parent) {
     rc.left += p->left;
     rc.top += p->top;
@@ -72,6 +74,7 @@ Window::ToScreen(PixelRect &rc) const
 PixelRect
 Window::GetParentClientRect() const
 {
+  assert(IsDefined());
   assert(parent != NULL);
 
   return parent->GetClientRect();
@@ -80,6 +83,8 @@ Window::GetParentClientRect() const
 bool
 Window::IsMaximised() const
 {
+  assert(IsDefined());
+
   return parent != nullptr &&
     width >= parent->width && height >= parent->height;
 }
@@ -103,12 +108,16 @@ Window::SetEnabled(bool enabled)
 Window *
 Window::GetFocusedWindow()
 {
+  assert(IsDefined());
+
   return focused ? this : NULL;
 }
 
 void
 Window::SetFocus()
 {
+  assert(IsDefined());
+
   if (parent != NULL)
     parent->SetActiveChild(*this);
 
@@ -170,6 +179,8 @@ Window::ClearCapture()
 void
 Window::Setup(Canvas &canvas)
 {
+  assert(IsDefined());
+
   if (font != NULL)
     canvas.Select(*font);
 }
@@ -177,6 +188,8 @@ Window::Setup(Canvas &canvas)
 void
 Window::Invalidate()
 {
+  assert(IsDefined());
+
   if (visible && parent != NULL)
     parent->InvalidateChild(*this);
 }

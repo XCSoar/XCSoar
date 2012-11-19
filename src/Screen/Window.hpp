@@ -243,10 +243,14 @@ public:
 
 #ifndef USE_GDI
   const ContainerWindow *GetParent() const {
+    assert(IsDefined());
+
     return parent;
   }
 #else
   operator HWND() const {
+    assert(IsDefined());
+
     return hWnd;
   };
 
@@ -255,6 +259,8 @@ public:
    */
   gcc_pure
   bool Identify(HWND h) const {
+    assert(IsDefined());
+
     return h == hWnd;
   }
 
@@ -263,6 +269,8 @@ public:
    */
   gcc_pure
   bool IdentifyDescendant(HWND h) const {
+    assert(IsDefined());
+
     return h == hWnd || ::IsChild(hWnd, h);
   }
 #endif
@@ -303,18 +311,26 @@ public:
 
 #ifndef USE_GDI
   PixelScalar GetTop() const {
+    assert(IsDefined());
+
     return top;
   }
 
   PixelScalar GetLeft() const {
+    assert(IsDefined());
+
     return left;
   }
 
   UPixelScalar GetWidth() const {
+    assert(IsDefined());
+
     return width;
   }
 
   UPixelScalar GetHeight() const {
+    assert(IsDefined());
+
     return height;
   }
 
@@ -522,7 +538,6 @@ public:
 
   const Font &GetFont() const {
     AssertThread();
-    assert(IsDefined());
     assert(font != NULL);
 
     return *font;
@@ -536,6 +551,8 @@ public:
    */
   gcc_pure
   bool IsVisible() const {
+    assert(IsDefined());
+
 #ifndef USE_GDI
     return visible;
 #else
@@ -587,10 +604,14 @@ public:
 
 #ifndef USE_GDI
   bool IsTabStop() const {
+    assert(IsDefined());
+
     return tab_stop;
   }
 
   bool IsControlParent() const {
+    assert(IsDefined());
+
     return control_parent;
   }
 #endif
@@ -600,6 +621,8 @@ public:
    */
   gcc_pure
   bool IsEnabled() const {
+    assert(IsDefined());
+
 #ifndef USE_GDI
     return enabled;
 #else
@@ -651,6 +674,8 @@ public:
 
   gcc_pure
   bool HasFocus() const {
+    assert(IsDefined());
+
 #ifndef USE_GDI
     return focused;
 #else
@@ -708,6 +733,8 @@ public:
   gcc_pure
   const PixelRect GetScreenPosition() const
   {
+    assert(IsDefined());
+
     PixelRect rc;
 #ifndef USE_GDI
     rc = GetPosition();
@@ -724,6 +751,8 @@ public:
   gcc_pure
   const PixelRect GetPosition() const
   {
+    assert(IsDefined());
+
 #ifndef USE_GDI
     return { GetLeft(), GetTop(), GetRight(), GetBottom() };
 #else
@@ -752,6 +781,8 @@ public:
   gcc_pure
   const PixelRect GetClientRect() const
   {
+    assert(IsDefined());
+
     PixelRect rc;
 #ifndef USE_GDI
     rc.left = 0;
@@ -767,6 +798,8 @@ public:
   gcc_pure
   const PixelSize GetSize() const
   {
+    assert(IsDefined());
+
 #ifdef USE_GDI
     PixelRect rc = GetClientRect();
     PixelSize s;
@@ -784,6 +817,8 @@ public:
    */
   gcc_pure
   bool IsInside(int x, int y) const {
+    assert(IsDefined());
+
     const PixelSize size = GetSize();
     return unsigned(x) < unsigned(size.cx) && unsigned(y) < unsigned(size.cy);
   }
@@ -799,6 +834,8 @@ public:
 #ifdef USE_GDI
   gcc_pure
   PixelRect GetParentClientRect() const {
+    assert(IsDefined());
+
     HWND hParent = ::GetParent(hWnd);
     assert(hParent != NULL);
 
@@ -829,6 +866,8 @@ public:
   }
 
   void Scroll(PixelScalar dx, PixelScalar dy, const PixelRect &rc) {
+    assert(IsDefined());
+
     ::ScrollWindowEx(hWnd, dx, dy, &rc, NULL, NULL, NULL, SW_INVALIDATE);
   }
 
@@ -863,10 +902,14 @@ public:
 
   gcc_pure
   LONG GetWindowLong(int nIndex) const {
+    assert(IsDefined());
+
     return ::GetWindowLong(hWnd, nIndex);
   }
 
   void SetWindowLong(int nIndex, LONG value) {
+    assert(IsDefined());
+
     ::SetWindowLong(hWnd, nIndex, value);
   }
 
@@ -891,6 +934,8 @@ public:
   void SendUser(unsigned id);
 #else
   void SendUser(unsigned id) {
+    assert(IsDefined());
+
     ::PostMessage(hWnd, WM_USER + id, (WPARAM)0, (LPARAM)0);
   }
 #endif
