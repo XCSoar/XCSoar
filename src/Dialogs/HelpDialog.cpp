@@ -28,12 +28,13 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 
+#include <assert.h>
+
 void
 dlgHelpShowModal(SingleWindow &parent,
                  const TCHAR* Caption, const TCHAR* HelpText)
 {
-  if (!HelpText)
-    return;
+  assert(HelpText != nullptr);
 
   WndForm *wf = LoadDialog(nullptr, parent,
                            Layout::landscape
