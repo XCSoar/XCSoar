@@ -28,7 +28,7 @@ ClimbAverageCalculator::Reset()
 {
   newestValIndex = -1;
   for (int i = 0; i < MAX_HISTORY; i++)
-    history[i].valid = false;
+    history[i].Reset();
 }
 
 fixed
@@ -40,14 +40,12 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
 
   // Don't update newestValIndex if the time didn't move forward
   if (newestValIndex < 0 ||
-      !history[newestValIndex].valid ||
+      !history[newestValIndex].IsDefined() ||
       time > history[newestValIndex].time)
     newestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
 
   // add the new sample
-  history[newestValIndex].valid = true;
-  history[newestValIndex].time = time;
-  history[newestValIndex].altitude = altitude;
+  history[newestValIndex] = HistoryItem(time, altitude);
 
   // initially bestHistory is the current...
   bestHistory = newestValIndex;
@@ -55,7 +53,7 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
   // now run through the history and find the best sample
   // for average period within the average time period
   for (int i = 0; i < MAX_HISTORY; i++) {
-    if (!history[i].valid)
+    if (!history[i].IsDefined())
       continue;
 
     // outside the period -> skip value

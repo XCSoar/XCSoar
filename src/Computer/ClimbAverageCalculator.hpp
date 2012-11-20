@@ -31,9 +31,21 @@ class ClimbAverageCalculator
   static int const MAX_HISTORY = 40;
   struct HistoryItem
   {
-    bool valid;
     fixed time;
     fixed altitude;
+
+    HistoryItem() = default;
+
+    constexpr HistoryItem(fixed _time, fixed _altitude)
+      :time(_time), altitude(_altitude) {}
+
+    bool IsDefined() const {
+      return !negative(time);
+    }
+
+    void Reset() {
+      time = fixed_minus_one;
+    }
   };
 
   HistoryItem history[MAX_HISTORY];
