@@ -24,6 +24,7 @@ Copyright_License {
 #include "org_xcsoar_EventBridge.h"
 #include "Event/Android/Queue.hpp"
 #include "Android/Main.hpp"
+#include "OS/Clock.hpp"
 #include "Compiler.h"
 
 /**
@@ -59,6 +60,7 @@ Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
     return;
 
   event_queue->Push(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
+  last_user_input_ms = MonotonicClockMS();
 }
 
 gcc_visibility_default
@@ -70,6 +72,7 @@ Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
     return;
 
   event_queue->Push(Event(Event::KEY_UP, TranslateKeyCode(key_code)));
+  last_user_input_ms = MonotonicClockMS();
 }
 
 gcc_visibility_default
@@ -82,6 +85,7 @@ Java_org_xcsoar_EventBridge_onMouseDown(JNIEnv *env, jclass cls,
     return;
 
   event_queue->Push(Event(Event::MOUSE_DOWN, x, y));
+  last_user_input_ms = MonotonicClockMS();
 }
 
 gcc_visibility_default
@@ -94,6 +98,7 @@ Java_org_xcsoar_EventBridge_onMouseUp(JNIEnv *env, jclass cls,
     return;
 
   event_queue->Push(Event(Event::MOUSE_UP, x, y));
+  last_user_input_ms = MonotonicClockMS();
 }
 
 gcc_visibility_default
@@ -107,6 +112,7 @@ Java_org_xcsoar_EventBridge_onMouseMove(JNIEnv *env, jclass cls,
 
   event_queue->Purge(Event::MOUSE_MOTION);
   event_queue->Push(Event(Event::MOUSE_MOTION, x, y));
+  last_user_input_ms = MonotonicClockMS();
 }
 
 gcc_visibility_default
@@ -118,6 +124,7 @@ Java_org_xcsoar_EventBridge_onPointerDown(JNIEnv *env, jclass cls)
     return;
 
   event_queue->Push(Event(Event::POINTER_DOWN));
+  last_user_input_ms = MonotonicClockMS();
 }
 
 gcc_visibility_default
@@ -129,4 +136,5 @@ Java_org_xcsoar_EventBridge_onPointerUp(JNIEnv *env, jclass cls)
     return;
 
   event_queue->Push(Event(Event::POINTER_UP));
+  last_user_input_ms = MonotonicClockMS();
 }

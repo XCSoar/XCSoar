@@ -77,6 +77,8 @@ NativeView *native_view;
 
 EventQueue *event_queue;
 
+volatile unsigned last_user_input_ms;
+
 Vibrator *vibrator;
 bool os_haptic_feedback_enabled;
 
