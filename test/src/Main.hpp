@@ -24,6 +24,11 @@
 #define ENABLE_DIALOG_LOOK
 #endif
 
+#ifdef ENABLE_MAIN_WINDOW
+#include "Screen/SingleWindow.hpp"
+#include "UIGlobals.hpp"
+#endif
+
 #ifdef ENABLE_LOOK
 #include "Look/Look.hpp"
 #include "UISettings.hpp"
@@ -80,6 +85,16 @@ const DialogLook &
 UIGlobals::GetDialogLook()
 {
   return *dialog_look;
+}
+#endif
+
+#ifdef ENABLE_MAIN_WINDOW
+static SingleWindow main_window;
+
+SingleWindow &
+UIGlobals::GetMainWindow()
+{
+  return main_window;
 }
 #endif
 
@@ -157,7 +172,16 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Profile::Load();
 #endif
 
+#ifdef ENABLE_MAIN_WINDOW
+  main_window.Create(_T("Test"), PixelRect{0, 0, 640, 480});
+  main_window.Show();
+#endif
+
   Main();
+
+#ifdef ENABLE_MAIN_WINDOW
+  main_window.Destroy();
+#endif
 
 #ifdef ENABLE_DATA_PATH
   DeinitialiseDataPath();

@@ -22,33 +22,18 @@ Copyright_License {
 */
 
 #define ENABLE_XML_DIALOG
+#define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"
-#include "UIGlobals.hpp"
-#include "Screen/SingleWindow.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Util/Macros.hpp"
 #include "LocalPath.hpp"
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
-static SingleWindow main_window;
-
-SingleWindow &
-UIGlobals::GetMainWindow()
-{
-  return main_window;
-}
-
 static void
 Main()
 {
-  main_window.Create(_T("RunTextEntry"), PixelRect{0, 0, 640, 480});
-  main_window.Show();
-
   TCHAR text[64] = _T("");
   dlgTextEntryShowModal(text, ARRAY_SIZE(text), _T("The caption"));
-
-  main_window.Destroy();
 }

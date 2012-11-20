@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #define ENABLE_DIALOG
+#define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"
 #include "Form/List.hpp"
 #include "Form/Form.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Screen/Canvas.hpp"
 
 static void
@@ -40,12 +40,6 @@ PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
 static void
 Main()
 {
-  PixelRect screen_rc{0, 0, 640, 480};
-
-  SingleWindow main_window;
-  main_window.Create(_T("RunListControl"), screen_rc);
-  main_window.Show();
-
   WndForm form(main_window, *dialog_look, main_window.GetClientRect(),
                _T("RunListControl"));
   ContainerWindow &client_area = form.GetClientAreaWindow();

@@ -22,20 +22,14 @@ Copyright_License {
 */
 
 #define ENABLE_SCREEN
+#define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"
 #include "ProgressWindow.hpp"
-#include "Screen/SingleWindow.hpp"
 
 static void
 Main()
 {
-  PixelRect screen_rc{0, 0, 640, 480};
-
-  SingleWindow main_window;
-  main_window.Create(_T("RunProgressWindow"), screen_rc);
-  main_window.Show();
-
   ProgressWindow progress(main_window);
   progress.SetMessage(_T("Testing..."));
   progress.SetRange(0, 1024);

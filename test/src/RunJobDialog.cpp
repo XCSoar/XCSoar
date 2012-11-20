@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #define ENABLE_DIALOG
+#define ENABLE_MAIN_WINDOW
 
 #include "Main.hpp"
 #include "Dialogs/JobDialog.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Job/Job.hpp"
 #include "Operation/Operation.hpp"
 
@@ -44,11 +44,6 @@ public:
 static void
 Main()
 {
-  SingleWindow main_window;
-  main_window.Create(_T("RunProgressWindow"),
-                     PixelRect{0, 0, 640, 480});
-  main_window.Show();
-
   TestJob job;
   JobDialog(main_window, *dialog_look, _T("RunJobDialog"), job);
 }
