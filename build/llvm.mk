@@ -1,14 +1,16 @@
 ifeq ($(CLANG),y)
 
+ifneq ($(TARGET),ANDROID)
 ifneq ($(ANALYZER),y)
 CXX = clang++
 CC = clang
 endif
 
-DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
-
 HOSTCC = $(CC)
 HOSTCXX = $(CXX)
+endif
+
+DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
 ifneq ($(DEBUG),y)
 OPTIMIZE := -O4 -DNDEBUG -Wuninitialized
@@ -24,11 +26,10 @@ ifeq ($(USE_CCACHE),y)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_ARCH := $(subst armv5te,armv5,$(TARGET_ARCH))
   TARGET_ARCH := $(filter-out -mthumb-interwork,$(TARGET_ARCH))
-  TARGET_ARCH += -ccc-host-triple arm-android-eabi -integrated-as
+  TARGET_ARCH += -gcc-toolchain $(ANDROID_GCC_TOOLCHAIN)
+  TARGET_ARCH += -ccc-host-triple $(LLVM_TRIPLE)
   TARGET_CPPFLAGS += -DBIONIC -DLIBCPP_NO_IOSTREAM
-  CXX_FEATURES := $(filter-out -frtti,$(CXX_FEATURES))
 endif # Android
 
 endif

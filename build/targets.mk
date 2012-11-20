@@ -232,7 +232,13 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_NDK_PLATFORM_DIR = $(ANDROID_NDK)/platforms/$(ANDROID_NDK_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM_DIR)/arch-$(ANDROID_ARCH)
 
-  ANDROID_TOOLCHAIN_NAME = $(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)
+  ANDROID_GCC_TOOLCHAIN_NAME = $(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)
+
+  ifeq ($(CLANG),y)
+    ANDROID_TOOLCHAIN_NAME = llvm-3.1
+  else
+    ANDROID_TOOLCHAIN_NAME = $(ANDROID_GCC_TOOLCHAIN_NAME)
+  endif
 
   ifeq ($(HOST_IS_DARWIN),y)
     ANDROID_HOST_TAG = darwin-x86
@@ -242,9 +248,14 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_HOST_TAG = linux-x86
   endif
 
+  ANDROID_GCC_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_GCC_TOOLCHAIN_NAME)/prebuilt/$(ANDROID_HOST_TAG)
   ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_TOOLCHAIN_NAME)/prebuilt/$(ANDROID_HOST_TAG)
 
-  TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI4)-
+  ifeq ($(CLANG),y)
+    TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/
+  else
+    TCPREFIX = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI4)-
+  endif
 
   ifeq ($(X86),y)
     HAVE_FPU := y
@@ -255,16 +266,19 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(ARMV5),y)
+    LLVM_TRIPLE = armv5te-none-linux-androideabi
     TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
     HAVE_FPU := n
   endif
 
   ifeq ($(ARMV6),y)
+    LLVM_TRIPLE = armv6-none-linux-androideabi
     TARGET_ARCH += -march=armv6 -mtune=xscale -msoft-float -mthumb-interwork
     HAVE_FPU := n
   endif
 
   ifeq ($(ARMV7),y)
+    LLVM_TRIPLE = armv7-none-linux-androideabi
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mthumb-interwork
     HAVE_FPU := y
   endif
@@ -467,7 +481,7 @@ endif
 ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += -lc -lm
   TARGET_LDLIBS += -llog
-  TARGET_LDADD += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION2)/$(ANDROID_ABI_SUBDIR)/libgcc.a
+  TARGET_LDADD += $(ANDROID_GCC_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION2)/$(ANDROID_ABI_SUBDIR)/libgcc.a
 endif
 
 ######## output files

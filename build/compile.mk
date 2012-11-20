@@ -8,8 +8,13 @@ endif
 EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPREFIX)ar$(EXE)
 ifneq ($(ANALYZER),y)
-CXX = $(TCPREFIX)g++$(TCSUFFIX)$(EXE)
-CC = $(TCPREFIX)gcc$(TCSUFFIX)$(EXE)
+  ifeq ($(CLANG),y)
+    CXX = $(TCPREFIX)clang++$(TCSUFFIX)$(EXE)
+    CC = $(TCPREFIX)clang$(TCSUFFIX)$(EXE)
+  else
+    CXX = $(TCPREFIX)g++$(TCSUFFIX)$(EXE)
+    CC = $(TCPREFIX)gcc$(TCSUFFIX)$(EXE)
+  endif
 endif
 DLLTOOL = $(TCPREFIX)dlltool$(EXE)
 SIZE = $(TCPREFIX)size$(EXE)
@@ -21,6 +26,12 @@ ifeq ($(TARGET),WINE)
 AR = ar$(EXE)
 STRIP = strip$(EXE)
 WINDRES = wrc$(EXE)
+endif
+
+ifeq ($(TARGET)$(CLANG),ANDROIDy)
+# on NDK r8c, binutils are only in the gcc toolchain directory
+AR = $(ANDROID_GCC_TOOLCHAIN)/bin/$(ANDROID_ABI4)-ar$(EXE)
+STRIP = $(ANDROID_GCC_TOOLCHAIN)/bin/$(ANDROID_ABI4)-strip$(EXE)
 endif
 
 ####### paths
