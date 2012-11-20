@@ -104,7 +104,8 @@ TestAATPoint()
   ap.SetTarget(target, true);
   rar = ap.GetTargetRangeRadial();
   ok1(equals(rar.range, fixed(-0.1112), 1000));
-  ok1(equals(rar.radial.Degrees(), fixed(180), 200));
+  ok1(equals(rar.radial.Degrees(), fixed(180), 200) ||
+      equals(rar.radial.Degrees(), fixed(-180), 200));
 
   target = MakeGeoPoint(-0.05, 45.3);
   ap.SetTarget(target, true);

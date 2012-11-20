@@ -39,11 +39,11 @@ int main(int argc, char **argv)
   ok1(equals(Angle::Zero().Native(), fixed_zero));
 
   // test constants
-  ok1(equals(Angle::QuarterCircle().Native(), fixed_half_pi));
-  ok1(equals(Angle::HalfCircle().Native(), fixed_pi));
-  ok1(equals((Angle::HalfCircle() + Angle::QuarterCircle()).Native(),
+  ok1(equals(Angle::QuarterCircle().Radians(), fixed_half_pi));
+  ok1(equals(Angle::HalfCircle().Radians(), fixed_pi));
+  ok1(equals((Angle::HalfCircle() + Angle::QuarterCircle()).Radians(),
              fixed_pi + fixed_half_pi));
-  ok1(equals(Angle::FullCircle().Native(), fixed_two_pi));
+  ok1(equals(Angle::FullCircle().Radians(), fixed_two_pi));
 
   // Test degrees()
 #ifdef RADIANS
