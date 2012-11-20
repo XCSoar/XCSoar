@@ -25,9 +25,18 @@
 #include "Look/ThermalAssistantLook.hpp"
 #include "Screen/Canvas.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 ThermalAssistantWindow::ThermalAssistantWindow(const ThermalAssistantLook &_look,
-                                               unsigned _padding, bool _small)
-  :renderer(_look, _padding, _small) {}
+                                               unsigned _padding, bool _small,
+                                               bool _transparent)
+  :renderer(_look, _padding, _small)
+#ifdef ENABLE_OPENGL
+  , transparent(_transparent)
+#endif
+{}
 
 void
 ThermalAssistantWindow::Update(const AttitudeState &attitude,
@@ -40,6 +49,18 @@ ThermalAssistantWindow::Update(const AttitudeState &attitude,
 void
 ThermalAssistantWindow::OnPaintBuffer(Canvas &canvas)
 {
-  canvas.Clear(renderer.GetLook().background_color);
+#ifdef ENABLE_OPENGL
+  if (transparent) {
+    GLEnable blend(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    canvas.SelectBlackPen();
+    canvas.Select(Brush(COLOR_WHITE.WithAlpha(0xd0)));
+    canvas.DrawCircle(renderer.GetMiddle().x, renderer.GetMiddle().y,
+                      renderer.GetRadius());
+  } else
+#endif
+    canvas.Clear(renderer.GetLook().background_color);
+
   renderer.Paint(canvas, GetClientRect());
 }

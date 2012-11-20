@@ -70,6 +70,14 @@ public:
                            unsigned _padding, bool _small = false);
 
 public:
+  const RasterPoint &GetMiddle() const {
+    return mid;
+  }
+
+  unsigned GetRadius() const{
+    return radius;
+  }
+
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 
   void Paint(Canvas &canvas, PixelRect rc);

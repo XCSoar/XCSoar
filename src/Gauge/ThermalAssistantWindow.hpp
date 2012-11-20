@@ -33,9 +33,18 @@ class ThermalAssistantWindow : public BufferWindow
 {
   ThermalAssistantRenderer renderer;
 
+#ifdef ENABLE_OPENGL
+  const bool transparent;
+#endif
+
 public:
+  /**
+   * @param transparent draw in a circular area only, the rest of the
+   * window is transparent (OpenGL only)
+   */
   ThermalAssistantWindow(const ThermalAssistantLook &look,
-                         unsigned _padding, bool _small = false);
+                         unsigned _padding, bool _small = false,
+                         bool transparent=false);
 
   void Update(const AttitudeState &attitude, const DerivedInfo &_derived);
 

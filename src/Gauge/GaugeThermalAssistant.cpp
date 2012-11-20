@@ -44,7 +44,7 @@ public:
                               PixelRect rc,
                               const ThermalAssistantLook &look,
                               WindowStyle style=WindowStyle())
-    :ThermalAssistantWindow(look, 5, true),
+    :ThermalAssistantWindow(look, 5, true, true),
      dragging(false), pressed(false)
   {
     Create(parent, rc, style);
