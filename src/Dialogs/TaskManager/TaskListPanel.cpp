@@ -311,25 +311,25 @@ TaskListPanel::OnMoreClicked()
 class WndButton;
 
 static void
-OnMoreClicked(gcc_unused WndButton &Sender)
+OnMoreClicked()
 {
   instance->OnMoreClicked();
 }
 
 static void
-OnLoadClicked(gcc_unused WndButton &Sender)
+OnLoadClicked()
 {
   instance->LoadTask();
 }
 
 static void
-OnDeleteClicked(gcc_unused WndButton &Sender)
+OnDeleteClicked()
 {
   instance->DeleteTask();
 }
 
 static void
-OnRenameClicked(gcc_unused WndButton &Sender)
+OnRenameClicked()
 {
   instance->RenameTask();
 }

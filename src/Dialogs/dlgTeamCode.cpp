@@ -85,7 +85,7 @@ Update(const MoreData &basic, const DerivedInfo &calculated)
 }
 
 static void
-OnSetWaypointClicked(gcc_unused WndButton &button)
+OnSetWaypointClicked()
 {
   const Waypoint* wp = ShowWaypointListDialog(UIGlobals::GetMainWindow(),
                                          XCSoarInterface::Basic().location);
@@ -96,7 +96,7 @@ OnSetWaypointClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnCodeClicked(gcc_unused WndButton &button)
+OnCodeClicked()
 {
   TCHAR newTeammateCode[10];
 
@@ -120,7 +120,7 @@ OnCodeClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnFlarmLockClicked(gcc_unused WndButton &button)
+OnFlarmLockClicked()
 {
   TeamCodeSettings &settings =
     CommonInterface::SetComputerSettings().team_code;

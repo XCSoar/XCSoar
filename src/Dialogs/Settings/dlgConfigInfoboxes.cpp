@@ -94,7 +94,7 @@ RefreshEditContent()
 }
 
 static void
-OnCopy(gcc_unused WndButton &button)
+OnCopy()
 {
   clipboard = data;
   clipboard_size = InfoBoxSettings::Panel::MAX_CONTENTS;
@@ -103,7 +103,7 @@ OnCopy(gcc_unused WndButton &button)
 }
 
 static void
-OnPaste(gcc_unused WndButton &button)
+OnPaste()
 {
   if (clipboard_size == 0)
     return;
@@ -271,11 +271,11 @@ OnKeyDown(unsigned key_code)
     return true;
 
   case '7':
-    OnCopy(*buttonPaste);
+    OnCopy();
     return true;
 
   case '8':
-    OnPaste(*buttonPaste);
+    OnPaste();
     return true;
 
   default:

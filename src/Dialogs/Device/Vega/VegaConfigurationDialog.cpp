@@ -128,21 +128,21 @@ PageSwitched()
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &Sender)
+OnNextClicked()
 {
   tabbed->NextPage();
   PageSwitched();
 }
 
 static void
-OnPrevClicked(gcc_unused WndButton &Sender)
+OnPrevClicked()
 {
   tabbed->PreviousPage();
   PageSwitched();
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &button)
+OnCloseClicked()
 {
   bool require_restart = false;
   if (!tabbed->Save(changed, require_restart))
@@ -153,7 +153,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnSaveClicked(gcc_unused WndButton &Sender)
+OnSaveClicked()
 {
   bool _changed = false, require_restart = false;
   if (!tabbed->Save(_changed, require_restart))
@@ -169,7 +169,7 @@ OnSaveClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnDemoClicked(gcc_unused WndButton &Sender)
+OnDemoClicked()
 {
   // retrieve changes from form
   bool require_restart = false;

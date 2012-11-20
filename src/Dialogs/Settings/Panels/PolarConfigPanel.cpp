@@ -183,7 +183,7 @@ PolarConfigPanel::LoadInternal()
 }
 
 static void
-OnLoadInternal(WndButton &button)
+OnLoadInternal()
 {
   instance->LoadInternal();
 }
@@ -242,7 +242,7 @@ PolarConfigPanel::LoadFromFile()
 }
 
 static void
-OnLoadFromFile(WndButton &button)
+OnLoadFromFile()
 {
   instance->LoadFromFile();
 }
@@ -267,7 +267,7 @@ PolarConfigPanel::Export()
 }
 
 static void
-OnExport(WndButton &button)
+OnExport()
 {
   instance->Export();
 }

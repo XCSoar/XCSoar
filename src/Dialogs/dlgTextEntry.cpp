@@ -175,25 +175,25 @@ FormKeyDown(unsigned key_code)
 }
 
 static void
-OnLeftClicked(gcc_unused WndButton &button)
+OnLeftClicked()
 {
   FormKeyDown(IsAltair() ? KEY_UP : KEY_LEFT);
 }
 
 static void
-OnRightClicked(gcc_unused WndButton &button)
+OnRightClicked()
 {
   FormKeyDown(IsAltair() ? KEY_DOWN : KEY_RIGHT);
 }
 
 static void
-OnUpClicked(gcc_unused WndButton &button)
+OnUpClicked()
 {
   FormKeyDown(!IsAltair() ? KEY_UP : KEY_LEFT);
 }
 
 static void
-OnDownClicked(gcc_unused WndButton &button)
+OnDownClicked()
 {
   FormKeyDown(!IsAltair() ? KEY_DOWN : KEY_RIGHT);
 }

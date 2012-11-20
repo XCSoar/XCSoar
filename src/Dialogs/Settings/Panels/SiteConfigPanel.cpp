@@ -73,18 +73,12 @@ SiteConfigPanel::Hide()
   RowFormWidget::Hide();
 }
 
-static void
-OnWaypoints(gcc_unused WndButton &button)
-{
-  dlgConfigWaypointsShowModal();
-}
-
 void
 SiteConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   buttonWaypoints = ((WndButton *)ConfigPanel::GetForm().FindByName(_T("cmdWaypoints")));
   assert (buttonWaypoints);
-  buttonWaypoints->SetOnClickNotify(OnWaypoints);
+  buttonWaypoints->SetOnClickNotify(dlgConfigWaypointsShowModal);
 
   WndProperty *wp = Add(_T(""), 0, true);
   wp->SetText(GetPrimaryDataPath());

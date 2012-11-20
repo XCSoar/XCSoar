@@ -56,19 +56,19 @@ OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 static void
-OnSimulatorClicked(gcc_unused WndButton &button)
+OnSimulatorClicked()
 {
   wf->SetModalResult(mrSimulator);
 }
 
 static void
-OnFlyClicked(gcc_unused WndButton &button)
+OnFlyClicked()
 {
   wf->SetModalResult(mrFly);
 }
 
 static void
-OnQuitClicked(gcc_unused WndButton &button)
+OnQuitClicked()
 {
   wf->SetModalResult(mrCancel);
 }

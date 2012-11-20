@@ -73,7 +73,7 @@ Update()
 }
 
 static void
-UpdateClicked(gcc_unused WndButton &Sender)
+UpdateClicked()
 {
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
@@ -82,7 +82,7 @@ UpdateClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-RemoveClicked(gcc_unused WndButton &Sender)
+RemoveClicked()
 {
   StaticString<256> tmp;
   tmp.Format(_("Do you want to remove station %s?"),

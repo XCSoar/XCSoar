@@ -57,13 +57,13 @@ OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &button)
+OnCloseClicked()
 {
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnQuitClicked(gcc_unused WndButton &button)
+OnQuitClicked()
 {
   wf->SetModalResult(mrCancel);
 }

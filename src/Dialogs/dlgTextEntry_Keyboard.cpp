@@ -73,6 +73,12 @@ DoBackspace()
   return true;
 }
 
+static void
+OnBackspace()
+{
+  DoBackspace();
+}
+
 static bool
 DoCharacter(TCHAR character)
 {
@@ -83,6 +89,12 @@ DoCharacter(TCHAR character)
   edittext[cursor] = 0;
   UpdateTextboxProp();
   return true;
+}
+
+static void
+OnCharacter(TCHAR character)
+{
+  DoCharacter(character);
 }
 
 static bool
@@ -118,29 +130,11 @@ FormCharacter(unsigned ch)
 }
 
 static void
-OnBackspace(WndButton &Sender)
-{
-  DoBackspace();
-}
-
-static void
 ClearText()
 {
   cursor = 0;
   edittext[0] = 0;
   UpdateTextboxProp();
-}
-
-static void
-OnClear(WndButton &Sender)
-{
-  ClearText();
-}
-
-static void
-OnCharacter(TCHAR character)
-{
-  DoCharacter(character);
 }
 
 bool
@@ -232,7 +226,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
   WndButton clear_button(client_area, look, _("Clear"),
                          { clear_left, button_top,
                              clear_right, button_bottom },
-                         button_style, OnClear);
+                         button_style, ClearText);
 
   KeyboardControl keyboard(client_area, look,
                            { padding, keyboard_top,

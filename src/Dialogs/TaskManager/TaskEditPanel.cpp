@@ -120,7 +120,7 @@ TaskEditPanel::OnClearAllClicked()
 }
 
 static void
-OnClearAllClicked(gcc_unused WndButton &Sender)
+OnClearAllClicked()
 {
   instance->OnClearAllClicked();
 }
@@ -218,7 +218,7 @@ TaskEditPanel::OnEditTurnpointClicked()
 }
 
 static void
-OnEditTurnpointClicked(gcc_unused WndButton &Sender)
+OnEditTurnpointClicked()
 {
   instance->OnEditTurnpointClicked();
 }
@@ -287,7 +287,7 @@ TaskEditPanel::OnMakeFinish()
 }
 
 static void
-OnMakeFinish(gcc_unused WndButton &Sender)
+OnMakeFinish()
 {
   instance->OnMakeFinish();
 }
@@ -312,7 +312,7 @@ TaskEditPanel::MoveUp()
 }
 
 static void
-OnMoveUpClicked(gcc_unused WndButton &Sender)
+OnMoveUpClicked()
 {
   instance->MoveUp();
 }
@@ -337,7 +337,7 @@ TaskEditPanel::MoveDown()
 }
 
 static void
-OnMoveDownClicked(gcc_unused WndButton &Sender)
+OnMoveDownClicked()
 {
   instance->MoveDown();
 }

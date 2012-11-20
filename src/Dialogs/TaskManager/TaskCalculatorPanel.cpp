@@ -53,8 +53,6 @@ enum Controls {
   CRUISE_EFFICIENCY,
 };
 
-class WndButton;
-
 /** XXX this hack is needed because the form callbacks don't get a
     context pointer - please refactor! */
 static TaskCalculatorPanel *instance;
@@ -123,7 +121,7 @@ TaskCalculatorPanel::Refresh()
 }
 
 static void
-OnTargetClicked(gcc_unused WndButton &Sender)
+OnTargetClicked()
 {
   dlgTargetShowModal();
 }

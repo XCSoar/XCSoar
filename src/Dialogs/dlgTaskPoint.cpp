@@ -214,8 +214,8 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
                  terrain, &airspace_database);
 }
 
-static void 
-OnRemoveClicked(gcc_unused WndButton &Sender)
+static void
+OnRemoveClicked()
 {
   if (ShowMessageBox(_("Remove task point?"), _("Task Point"),
                   MB_YESNO | MB_ICONQUESTION) != IDYES)
@@ -229,7 +229,7 @@ OnRemoveClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnDetailsClicked(gcc_unused WndButton &Sender)
+OnDetailsClicked()
 {
   const OrderedTaskPoint &task_point = ordered_task->GetPoint(active_index);
   dlgWaypointDetailsShowModal(wf->GetMainWindow(),
@@ -237,7 +237,7 @@ OnDetailsClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnRelocateClicked(gcc_unused WndButton &Sender)
+OnRelocateClicked()
 {
   const GeoPoint &gpBearing = active_index > 0
     ? ordered_task->GetPoint(active_index - 1).GetLocation()
@@ -254,7 +254,7 @@ OnRelocateClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnTypeClicked(gcc_unused WndButton &Sender)
+OnTypeClicked()
 {
   if (dlgTaskPointType(&ordered_task, active_index)) {
     task_modified = true;
@@ -263,7 +263,7 @@ OnTypeClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnPreviousClicked(gcc_unused WndButton &Sender)
+OnPreviousClicked()
 {
   if (active_index > 0) {
     next_previous=-1;
@@ -272,7 +272,7 @@ OnPreviousClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &Sender)
+OnNextClicked()
 {
   if (active_index < (ordered_task->TaskSize() - 1)) {
     next_previous=1;
@@ -285,7 +285,7 @@ OnNextClicked(gcc_unused WndButton &Sender)
  * @param Sender
  */
 static void
-OnOptionalStartsClicked(gcc_unused WndButton &Sender)
+OnOptionalStartsClicked()
 {
   if (dlgTaskOptionalStarts(wf->GetMainWindow(), &ordered_task)) {
     task_modified = true;

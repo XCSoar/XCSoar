@@ -54,7 +54,7 @@ ChangeAltitude(const fixed step)
 }
 
 static void
-PnlSimulatorOnPlusBig(gcc_unused WndButton &Sender)
+PnlSimulatorOnPlusBig()
 {
   if (!is_simulator())
     return;
@@ -63,7 +63,7 @@ PnlSimulatorOnPlusBig(gcc_unused WndButton &Sender)
 }
 
 static void
-PnlSimulatorOnPlusSmall(gcc_unused WndButton &Sender)
+PnlSimulatorOnPlusSmall()
 {
   if (!is_simulator())
     return;
@@ -72,7 +72,7 @@ PnlSimulatorOnPlusSmall(gcc_unused WndButton &Sender)
 }
 
 static void
-PnlSimulatorOnMinusSmall(gcc_unused WndButton &Sender)
+PnlSimulatorOnMinusSmall()
 {
   if (!is_simulator())
     return;
@@ -81,7 +81,7 @@ PnlSimulatorOnMinusSmall(gcc_unused WndButton &Sender)
 }
 
 static void
-PnlSimulatorOnMinusBig(gcc_unused WndButton &Sender)
+PnlSimulatorOnMinusBig()
 {
   if (!is_simulator())
     return;

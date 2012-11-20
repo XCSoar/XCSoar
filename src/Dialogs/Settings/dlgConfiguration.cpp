@@ -171,13 +171,13 @@ OnUserLevel(CheckBoxControl &control)
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &button)
+OnNextClicked()
 {
   tab_menu->NextPage();
 }
 
 static void
-OnPrevClicked(gcc_unused WndButton &button)
+OnPrevClicked()
 {
   tab_menu->PreviousPage();
 }
@@ -186,7 +186,7 @@ OnPrevClicked(gcc_unused WndButton &button)
  * close dialog from menu page.  from content, goes to menu page
  */
 static void
-OnCloseClicked(gcc_unused WndButton &button)
+OnCloseClicked()
 {
   if (tab_menu->IsCurrentPageTheMenu())
     dialog->SetModalResult(mrOK);

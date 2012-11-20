@@ -57,25 +57,25 @@ public:
 static MacCreadyEditPanel *instance;
 
 static void
-PnlEditOnPlusSmall(gcc_unused WndButton &Sender)
+PnlEditOnPlusSmall()
 {
   instance->QuickAccess(_T("+0.1"));
 }
 
 static void
-PnlEditOnPlusBig(gcc_unused WndButton &Sender)
+PnlEditOnPlusBig()
 {
   instance->QuickAccess(_T("+0.5"));
 }
 
 static void
-PnlEditOnMinusSmall(gcc_unused WndButton &Sender)
+PnlEditOnMinusSmall()
 {
   instance->QuickAccess(_T("-0.1"));
 }
 
 static void
-PnlEditOnMinusBig(gcc_unused WndButton &Sender)
+PnlEditOnMinusBig()
 {
   instance->QuickAccess(_T("-0.5"));
 }

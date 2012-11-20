@@ -47,13 +47,13 @@ static WndForm *wf = NULL;
 static TabbedControl *tab = NULL;
 
 static void
-OnNext(gcc_unused WndButton &button)
+OnNext()
 {
   tab->NextPage();
 }
 
 static void
-OnPrev(gcc_unused WndButton &button)
+OnPrev()
 {
   tab->PreviousPage();
 }

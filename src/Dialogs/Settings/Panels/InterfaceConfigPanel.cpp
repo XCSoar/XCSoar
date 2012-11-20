@@ -70,17 +70,11 @@ public:
   virtual void Hide();
 };
 
-static void
-OnFonts(gcc_unused WndButton &button)
-{
-  dlgConfigFontsShowModal();
-}
-
 void
 InterfaceConfigPanel::Show(const PixelRect &rc)
 {
   buttonFonts->SetText(_("Fonts"));
-  buttonFonts->SetOnClickNotify(OnFonts);
+  buttonFonts->SetOnClickNotify(dlgConfigFontsShowModal);
   buttonFonts->Show();
 
   RowFormWidget::Show(rc);

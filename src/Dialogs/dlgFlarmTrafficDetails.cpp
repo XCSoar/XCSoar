@@ -193,7 +193,7 @@ Update()
  * This event handler is called when the "Team" button is pressed
  */
 static void
-OnTeamClicked(gcc_unused WndButton &Sender)
+OnTeamClicked()
 {
   // Ask for confirmation
   if (ShowMessageBox(_("Do you want to set this FLARM contact as your new teammate?"),
@@ -225,7 +225,7 @@ OnTeamClicked(gcc_unused WndButton &Sender)
  * This event handler is called when the "Change Callsign" button is pressed
  */
 static void
-OnCallsignClicked(gcc_unused WndButton &Sender)
+OnCallsignClicked()
 {
   StaticString<21> newName;
   newName.clear();
@@ -237,35 +237,35 @@ OnCallsignClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnFriendBlueClicked(gcc_unused WndButton &Sender)
+OnFriendBlueClicked()
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::BLUE);
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnFriendGreenClicked(gcc_unused WndButton &Sender)
+OnFriendGreenClicked()
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::GREEN);
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnFriendYellowClicked(gcc_unused WndButton &Sender)
+OnFriendYellowClicked()
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::YELLOW);
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnFriendMagentaClicked(gcc_unused WndButton &Sender)
+OnFriendMagentaClicked()
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::MAGENTA);
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnFriendClearClicked(gcc_unused WndButton &Sender)
+OnFriendClearClicked()
 {
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::Color::NONE);
   wf->SetModalResult(mrOK);

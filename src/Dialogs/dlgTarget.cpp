@@ -320,7 +320,7 @@ OnOptimized(CheckBoxControl &control)
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &sender)
+OnNextClicked()
 {
   if (target_point < (task_size - 1))
     target_point++;
@@ -333,7 +333,7 @@ OnNextClicked(gcc_unused WndButton &sender)
 }
 
 static void
-OnPrevClicked(gcc_unused WndButton &sender)
+OnPrevClicked()
 {
   if (target_point > initial_active_task_point)
     target_point--;

@@ -38,6 +38,7 @@ Copyright_License {
 
 static DeviceDescriptor *device;
 static WndForm *dialog;
+static WndButton *pause_button;
 static TerminalWindow *terminal;
 static bool paused;
 
@@ -91,13 +92,13 @@ private:
 static PortTerminalBridge *bridge;
 
 static void
-OnClearClicked(gcc_unused WndButton &button)
+OnClearClicked()
 {
   terminal->Clear();
 }
 
 static void
-OnReconnectClicked(gcc_unused WndButton &button)
+OnReconnectClicked()
 {
   if (device->IsOccupied()) {
     ShowMessageBox(_("Device is occupied"), _("Manage"), MB_OK | MB_ICONERROR);
@@ -111,15 +112,15 @@ OnReconnectClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnPauseClicked(WndButton &button)
+OnPauseClicked()
 {
   paused = !paused;
 
   if (paused) {
-    button.SetCaption(_("Resume"));
+    pause_button->SetCaption(_("Resume"));
     device->SetMonitor(NULL);
   } else {
-    button.SetCaption(_("Pause"));
+    pause_button->SetCaption(_("Pause"));
     device->SetMonitor(bridge);
   }
 }
@@ -151,7 +152,7 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   buttons.Add(_("Close"), *dialog, mrOK);
   buttons.Add(_("Clear"), OnClearClicked);
   buttons.Add(_("Reconnect"), OnReconnectClicked);
-  buttons.Add(_("Pause"), OnPauseClicked);
+  pause_button = buttons.Add(_("Pause"), OnPauseClicked);
 
   const PixelRect rc = buttons.UpdateLayout();
 

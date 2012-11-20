@@ -40,13 +40,13 @@ Copyright_License {
 static WndForm *wf = NULL;
 
 static void
-OnStopClicked(gcc_unused WndButton &Sender)
+OnStopClicked()
 {
   replay->Stop();
 }
 
 static void
-OnStartClicked(gcc_unused WndButton &Sender)
+OnStartClicked()
 {
   const TCHAR *path = GetFormValueFile(*wf, _T("prpFile"));
   if (!replay->Start(path))

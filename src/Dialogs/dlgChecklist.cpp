@@ -79,13 +79,13 @@ NextPage(int Step)
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &button)
+OnNextClicked()
 {
   NextPage(+1);
 }
 
 static void
-OnPrevClicked(gcc_unused WndButton &button)
+OnPrevClicked()
 {
   NextPage(-1);
 }

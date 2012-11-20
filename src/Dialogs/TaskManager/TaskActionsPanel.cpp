@@ -74,7 +74,7 @@ TaskActionsPanel::OnBrowseClicked()
 }
 
 static void
-OnBrowseClicked(gcc_unused WndButton &Sender)
+OnBrowseClicked()
 {
   instance->OnBrowseClicked();
 }
@@ -94,13 +94,13 @@ TaskActionsPanel::OnNewTaskClicked()
 }
 
 static void
-OnNewTaskClicked(gcc_unused WndButton &Sender)
+OnNewTaskClicked()
 {
   instance->OnNewTaskClicked();
 }
 
 static void
-OnSaveClicked(gcc_unused WndButton &Sender)
+OnSaveClicked()
 {
   instance->SaveTask();
 }
@@ -122,7 +122,7 @@ TaskActionsPanel::OnDeclareClicked()
 }
 
 static void
-OnDeclareClicked(gcc_unused WndButton &Sender)
+OnDeclareClicked()
 {
   instance->OnDeclareClicked();
 }

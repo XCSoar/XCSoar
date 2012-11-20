@@ -463,13 +463,13 @@ CrossSectionControl::OnMouseUp(PixelScalar x, PixelScalar y)
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &Sender)
+OnNextClicked()
 {
   NextPage(+1);
 }
 
 static void
-OnPrevClicked(gcc_unused WndButton &Sender)
+OnPrevClicked()
 {
   NextPage(-1);
 }
@@ -502,7 +502,7 @@ FormKeyDown(unsigned key_code)
 }
 
 static void
-OnCalcClicked(gcc_unused WndButton &Sender)
+OnCalcClicked()
 {
   assert(wf != NULL);
 

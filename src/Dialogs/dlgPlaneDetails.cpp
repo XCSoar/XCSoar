@@ -86,13 +86,13 @@ UpdatePlane()
 }
 
 static void
-OKClicked(gcc_unused WndButton &button)
+OKClicked()
 {
   dialog->SetModalResult(mrOK);
 }
 
 static void
-CancelClicked(gcc_unused WndButton &button)
+CancelClicked()
 {
   dialog->SetModalResult(mrCancel);
 }
@@ -105,7 +105,7 @@ OnRegistrationData(DataField *sender, DataField::DataAccessMode mode)
 }
 
 static void
-PolarClicked(gcc_unused WndButton &button)
+PolarClicked()
 {
   dlgPlanePolarShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane);
   Update();

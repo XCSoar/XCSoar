@@ -103,7 +103,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 }
 
 static void
-AddClicked(gcc_unused WndButton &button)
+AddClicked()
 {
   TCHAR code[5] = _T("");
   if (!dlgTextEntryShowModal(code, 5, _("Airport ICAO code")))
@@ -133,7 +133,7 @@ AddClicked(gcc_unused WndButton &button)
 }
 
 static void
-UpdateClicked(gcc_unused WndButton &Sender)
+UpdateClicked()
 {
   DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
                          _("Download"), true);
@@ -142,7 +142,7 @@ UpdateClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-RemoveClicked(gcc_unused WndButton &Sender)
+RemoveClicked()
 {
   unsigned index = station_list->GetCursorIndex();
   assert(index < list.size());
@@ -170,7 +170,7 @@ OpenDetails(unsigned index)
 }
 
 static void
-DetailsClicked(gcc_unused WndButton &Sender)
+DetailsClicked()
 {
   if (station_list->GetLength() > 0)
     OpenDetails(station_list->GetCursorIndex());

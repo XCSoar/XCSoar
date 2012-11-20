@@ -135,7 +135,7 @@ OnAirspaceListEnter(unsigned index)
 }
 
 static void
-OnLookupClicked(gcc_unused WndButton &Sender)
+OnLookupClicked()
 {
   ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
 }

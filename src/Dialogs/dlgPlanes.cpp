@@ -181,14 +181,14 @@ LoadWithDialog(unsigned i)
 }
 
 static void
-LoadClicked(gcc_unused WndButton &button)
+LoadClicked()
 {
   if (LoadWithDialog(plane_list->GetCursorIndex()))
     dialog->SetModalResult(mrOK);
 }
 
 static void
-NewClicked(gcc_unused WndButton &button)
+NewClicked()
 {
   Plane plane = CommonInterface::GetComputerSettings().plane;
 
@@ -221,7 +221,7 @@ NewClicked(gcc_unused WndButton &button)
 }
 
 static void
-EditClicked(gcc_unused WndButton &button)
+EditClicked()
 {
   assert(plane_list->GetCursorIndex() < list.size());
 
@@ -276,7 +276,7 @@ EditClicked(gcc_unused WndButton &button)
 }
 
 static void
-DeleteClicked(gcc_unused WndButton &button)
+DeleteClicked()
 {
   assert(plane_list->GetCursorIndex() < list.size());
 

@@ -321,13 +321,13 @@ OnWaypointListEnter(gcc_unused unsigned i)
 }
 
 static void
-OnSelectClicked(gcc_unused WndButton &button)
+OnSelectClicked()
 {
   OnWaypointListEnter(0);
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &button)
+OnCloseClicked()
 {
   dialog->SetModalResult(mrCancel);
 }

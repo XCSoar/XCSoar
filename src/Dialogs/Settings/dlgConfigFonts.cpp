@@ -196,51 +196,51 @@ EditFont(const TCHAR *prp_name, const TCHAR *profile_key,
 }
 
 static void
-OnEditInfoWindowFontClicked(gcc_unused WndButton &button)
+OnEditInfoWindowFontClicked()
 {
   EditFont(_T("prpInfoWindowFont"), ProfileKeys::FontInfoWindowFont, log_infobox);
 }
 
 static void
-OnEditTitleWindowFontClicked(gcc_unused WndButton &button)
+OnEditTitleWindowFontClicked()
 {
   EditFont(_T("prpTitleWindowFont"), ProfileKeys::FontTitleWindowFont, log_title);
 }
 
 static void
-OnEditMapWindowFontClicked(gcc_unused WndButton &button)
+OnEditMapWindowFontClicked()
 {
   EditFont(_T("prpMapWindowFont"), ProfileKeys::FontMapWindowFont, log_map);
 }
 
 static void
-OnEditTitleSmallWindowFontClicked(gcc_unused WndButton &button)
+OnEditTitleSmallWindowFontClicked()
 {
   EditFont(_T("prpTitleSmallWindowFont"), ProfileKeys::FontTitleSmallWindowFont,
            log_infobox_small);
 }
 
 static void
-OnEditMapWindowBoldFontClicked(gcc_unused WndButton &button)
+OnEditMapWindowBoldFontClicked()
 {
   EditFont(_T("prpMapWindowBoldFont"), ProfileKeys::FontMapWindowBoldFont,
            log_map_bold);
 }
 
 static void
-OnEditCDIWindowFontClicked(gcc_unused WndButton &button)
+OnEditCDIWindowFontClicked()
 {
   EditFont(_T("prpCDIWindowFont"), ProfileKeys::FontCDIWindowFont, log_cdi);
 }
 
 static void
-OnEditMapLabelFontClicked(gcc_unused WndButton &button)
+OnEditMapLabelFontClicked()
 {
   EditFont(_T("prpMapLabelFont"), ProfileKeys::FontMapLabelFont, log_map_label);
 }
 
 static void
-OnEditMapLabelImportantFontClicked(gcc_unused WndButton &button)
+OnEditMapLabelImportantFontClicked()
 {
   EditFont(_T("prpMapLabelImportantFont"), ProfileKeys::FontMapLabelImportantFont,
            log_map_label_important);

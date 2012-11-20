@@ -132,19 +132,19 @@ UpdatePlane()
 }
 
 static void
-OKClicked(gcc_unused WndButton &button)
+OKClicked()
 {
   dialog->SetModalResult(mrOK);
 }
 
 static void
-CancelClicked(gcc_unused WndButton &button)
+CancelClicked()
 {
   dialog->SetModalResult(mrCancel);
 }
 
 static void
-ListClicked(gcc_unused WndButton &button)
+ListClicked()
 {
   ComboList list;
   unsigned len = PolarStore::Count();
@@ -197,7 +197,7 @@ public:
 };
 
 static void
-ImportClicked(gcc_unused WndButton &button)
+ImportClicked()
 {
   ComboList list;
   PolarFileVisitor fv(list);

@@ -100,13 +100,13 @@ private:
 };
 
 static void
-OnAirspaceColoursClicked(gcc_unused WndButton &button)
+OnAirspaceColoursClicked()
 {
   dlgAirspaceShowModal(true);
 }
 
 static void
-OnAirspaceModeClicked(gcc_unused WndButton &button)
+OnAirspaceModeClicked()
 {
   dlgAirspaceShowModal(false);
 }

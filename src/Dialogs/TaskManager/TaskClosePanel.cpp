@@ -51,13 +51,13 @@ TaskClosePanel::RefreshStatus()
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &Sender)
+OnCloseClicked()
 {
   dlgTaskManager::OnClose();
 }
 
 static void
-OnRevertClicked(gcc_unused WndButton &Sender)
+OnRevertClicked()
 {
   dlgTaskManager::RevertTask();
   instance->RefreshStatus();

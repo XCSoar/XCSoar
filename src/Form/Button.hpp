@@ -39,7 +39,7 @@ class ActionListener;
  */
 class WndButton : public ButtonWindow {
 public:
-  typedef void (*ClickNotifyCallback)(WndButton &button);
+  typedef void (*ClickNotifyCallback)();
 
 protected:
   const DialogLook &look;

@@ -110,7 +110,7 @@ NextPage(int Step)
 }
 
 static void
-OnMagnifyClicked(gcc_unused WndButton &button)
+OnMagnifyClicked()
 {
   if (zoom >= 5)
     return;
@@ -122,7 +122,7 @@ OnMagnifyClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnShrinkClicked(gcc_unused WndButton &button)
+OnShrinkClicked()
 {
   if (zoom <= 0)
     return;
@@ -134,13 +134,13 @@ OnShrinkClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnNextClicked(gcc_unused WndButton &button)
+OnNextClicked()
 {
   NextPage(+1);
 }
 
 static void
-OnPrevClicked(gcc_unused WndButton &button)
+OnPrevClicked()
 {
   NextPage(-1);
 }
@@ -171,7 +171,7 @@ FormKeyDown(unsigned key_code)
 }
 
 static void
-OnGotoClicked(gcc_unused WndButton &button)
+OnGotoClicked()
 {
   if (protected_task_manager == NULL)
     return;
@@ -213,7 +213,7 @@ ordered_task_size()
 }
 
 static void
-OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
+OnGotoAndClearTaskClicked()
 {
   if (protected_task_manager == NULL)
     return;

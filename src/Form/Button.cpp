@@ -75,7 +75,7 @@ WndButton::OnClicked()
 
   // Call the OnClick function
   if (click_callback != NULL) {
-    click_callback(*this);
+    click_callback();
     return true;
   }
 

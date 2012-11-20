@@ -44,7 +44,7 @@ Copyright_License {
 static bool WaypointsNeedSave = false;
 
 static void
-OnWaypointNewClicked(gcc_unused WndButton &Sender)
+OnWaypointNewClicked()
 {
   if (!WaypointGlue::IsWritable()) {
     ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
@@ -67,7 +67,7 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnWaypointEditClicked(gcc_unused WndButton &Sender)
+OnWaypointEditClicked()
 {
   if (!WaypointGlue::IsWritable()) {
     ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);
@@ -100,13 +100,13 @@ SaveWaypoints()
 }
 
 static void
-OnWaypointSaveClicked(gcc_unused WndButton &Sender)
+OnWaypointSaveClicked()
 {
   SaveWaypoints();
 }
 
 static void
-OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
+OnWaypointDeleteClicked()
 {
   if (!WaypointGlue::IsWritable()) {
     ShowMessageBox(_("Waypoints not editable"), _("Error"), MB_OK);

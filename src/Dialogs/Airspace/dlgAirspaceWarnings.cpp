@@ -188,7 +188,7 @@ AckInside()
 }
 
 static void
-OnAckClicked(gcc_unused WndButton &Sender)
+OnAckClicked()
 {
   AckInside();
 }
@@ -205,7 +205,7 @@ AckWarning()
 }
 
 static void
-OnAck1Clicked(gcc_unused WndButton &Sender)
+OnAck1Clicked()
 {
   AckWarning();
 }
@@ -222,7 +222,7 @@ AckDay()
 }
 
 static void
-OnAck2Clicked(gcc_unused WndButton &Sender)
+OnAck2Clicked()
 {
   AckDay();
 }
@@ -249,13 +249,13 @@ Enable()
 }
 
 static void
-OnEnableClicked(gcc_unused WndButton &Sender)
+OnEnableClicked()
 {
   Enable();
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &Sender)
+OnCloseClicked()
 {
   Hide();
 }
