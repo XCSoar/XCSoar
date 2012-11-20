@@ -195,7 +195,7 @@ ifeq ($(filter $(TARGET),UNIX WINE),$(TARGET))
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8b
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r8c
 
   ANDROID_PLATFORM = android-16
   ANDROID_SDK_PLATFORM = $(ANDROID_PLATFORM)
@@ -209,7 +209,7 @@ ifeq ($(TARGET),ANDROID)
   ANDROID_ABI4 = $(ANDROID_ABI2)
   ANDROID_ABI_SUBDIR = .
   ANDROID_GCC_VERSION = 4.6
-  ANDROID_GCC_VERSION2 = $(ANDROID_GCC_VERSION).x-google
+  ANDROID_GCC_VERSION2 = $(ANDROID_GCC_VERSION)
 
   ifeq ($(ARMV7),y)
     ANDROID_ABI3 = armeabi-v7a
@@ -264,7 +264,7 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(ARMV7)$(NEON),yn)
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb-interwork
     HAVE_FPU := y
   endif
 
