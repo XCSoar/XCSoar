@@ -46,7 +46,6 @@ WidgetDialog::WidgetDialog(const DialogLook &look)
    widget(GetClientAreaWindow()),
    changed(false)
 {
-  widget.Move(buttons.UpdateLayout());
 }
 
 void
