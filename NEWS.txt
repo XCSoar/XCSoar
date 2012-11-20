@@ -21,6 +21,7 @@ Version 6.5 - not yet released
   - short click opens InfoBox dialog
   - support keyboard input on desktop computer
   - improved angle input (e.g. wind direction, sector radials)
+  - faster map initialisation during startup
 * infoboxes
   - added thermal assistant infobox
 

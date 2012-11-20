@@ -32,7 +32,7 @@ Copyright_License {
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
    logger(NULL),
-   idle_robin(2),
+   idle_robin(-1),
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
    arm_mapitem_list(false),
@@ -174,6 +174,13 @@ GlueMapWindow::QuickRedraw()
 bool
 GlueMapWindow::Idle()
 {
+  if (idle_robin == unsigned(-1)) {
+    /* draw the first frame as quickly as possible, so the user can
+       start interacting with XCSoar immediately */
+    idle_robin = 2;
+    return true;
+  }
+
   PeriodClock clock;
   clock.Update();
 
