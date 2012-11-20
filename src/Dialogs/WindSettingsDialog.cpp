@@ -31,8 +31,8 @@ void
 ShowWindSettingsDialog()
 {
   WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.Create(UIGlobals::GetMainWindow(), _("Wind Settings"),
-                new WindSettingsPanel(true, true));
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Wind Settings"),
+                    new WindSettingsPanel(true, true));
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();

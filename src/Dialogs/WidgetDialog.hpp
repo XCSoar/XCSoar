@@ -57,7 +57,7 @@ public:
    * Create a dialog with an automatic size (by
    * Widget::GetMinimumSize() and Widget::GetMaximumSize()).
    */
-  void Create(SingleWindow &parent, const TCHAR *caption, Widget *widget);
+  void CreateAuto(SingleWindow &parent, const TCHAR *caption, Widget *widget);
 
   bool GetChanged() const {
     return changed;

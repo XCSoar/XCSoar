@@ -350,7 +350,7 @@ dlgBasicSettingsShowModal()
   FlightSetupPanel *instance = new FlightSetupPanel();
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.Create(UIGlobals::GetMainWindow(), _("Flight Setup"), instance);
+  dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Flight Setup"), instance);
   instance->SetDumpButton(dialog.AddButton(_("Dump"), instance, DUMP));
   dialog.AddButton(_("OK"), mrOK);
 

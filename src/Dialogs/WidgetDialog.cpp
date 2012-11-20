@@ -67,8 +67,8 @@ WidgetDialog::CreateFull(SingleWindow &parent, const TCHAR *caption,
 }
 
 void
-WidgetDialog::Create(SingleWindow &parent, const TCHAR *caption,
-                     Widget *_widget)
+WidgetDialog::CreateAuto(SingleWindow &parent, const TCHAR *caption,
+                         Widget *_widget)
 {
   auto_size = true;
   WndForm::Create(parent, caption, GetDialogStyle());
@@ -195,7 +195,7 @@ DefaultWidgetDialog(SingleWindow &parent, const DialogLook &look,
                     const TCHAR *caption, Widget &widget)
 {
   WidgetDialog dialog(look);
-  dialog.Create(parent, caption, &widget);
+  dialog.CreateAuto(parent, caption, &widget);
   dialog.AddButton(_("OK"), mrOK);
   dialog.AddButton(_("Cancel"), mrCancel);
 
