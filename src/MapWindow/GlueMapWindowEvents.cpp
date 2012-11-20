@@ -303,15 +303,6 @@ GlueMapWindow::OnCancelMode()
 void
 GlueMapWindow::OnPaint(Canvas &canvas)
 {
-#ifdef ENABLE_OPENGL
-  ExchangeBlackboard();
-
-  /* update terrain, topography, ... */
-  EnterDrawThread();
-  Idle();
-  LeaveDrawThread();
-#endif
-
   MapWindow::OnPaint(canvas);
 
   // Draw center screen cross hair in pan mode
@@ -325,7 +316,12 @@ void
 GlueMapWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
+  ExchangeBlackboard();
+
   EnterDrawThread();
+
+  /* update terrain, topography, ... */
+  Idle();
 #endif
 
   MapWindow::OnPaintBuffer(canvas);
