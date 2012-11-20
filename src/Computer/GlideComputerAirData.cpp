@@ -125,7 +125,7 @@ GlideComputerAirData::ProcessVertical(const MoreData &basic,
   NextLegEqThermal(basic, calculated, settings);
 }
 
-void
+inline void
 GlideComputerAirData::NettoVario(const NMEAInfo &basic,
                                  const FlyingState &flight,
                                  VarioInfo &vario,
@@ -143,7 +143,7 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
     : fixed_zero;
 }
 
-void
+inline void
 GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
                                        DerivedInfo &calculated)
 {
@@ -162,7 +162,7 @@ GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
   }
 }
 
-void
+inline void
 GlideComputerAirData::CurrentThermal(const MoreData &basic,
                                      const CirclingInfo &circling,
                                      OneClimbInfo &current_thermal)
@@ -177,7 +177,7 @@ GlideComputerAirData::CurrentThermal(const MoreData &basic,
     current_thermal.Clear();
 }
 
-void
+inline void
 GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
                          VarioInfo &vario_info)
 {
@@ -192,7 +192,7 @@ GlideComputerAirData::GR(const MoreData &basic, const FlyingState &flying,
   }
 }
 
-void
+inline void
 GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
 {
   if (!calculated.circling && basic.NavAltitudeAvailable()) {
@@ -215,7 +215,7 @@ GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
 /**
  * Reads the current terrain height
  */
-void
+inline void
 GlideComputerAirData::TerrainHeight(const MoreData &basic,
                                     TerrainInfo &calculated)
 {
@@ -277,7 +277,7 @@ GlideComputerAirData::FlightTimes(const NMEAInfo &basic,
   return true;
 }
 
-void
+inline void
 GlideComputerAirData::FlightState(const NMEAInfo &basic,
                                   const DerivedInfo &calculated,
                                   FlyingState &flying,
@@ -293,7 +293,7 @@ GlideComputerAirData::FlightState(const NMEAInfo &basic,
                           calculated, flying);
 }
 
-void
+inline void
 GlideComputerAirData::Turning(const MoreData &basic,
                               DerivedInfo &calculated,
                               const ComputerSettings &settings)
@@ -311,7 +311,7 @@ GlideComputerAirData::Turning(const MoreData &basic,
                                 settings);
 }
 
-void
+inline void
 GlideComputerAirData::ThermalSources(const MoreData &basic,
                                      const DerivedInfo &calculated,
                                      ThermalLocatorInfo &thermal_locator)
@@ -348,7 +348,7 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
   }
 }
 
-void
+inline void
 GlideComputerAirData::LastThermalStats(const MoreData &basic,
                                        DerivedInfo &calculated,
                                        bool last_circling)
@@ -385,7 +385,7 @@ GlideComputerAirData::LastThermalStats(const MoreData &basic,
   ThermalSources(basic, calculated, calculated.thermal_locator);
 }
 
-void
+inline void
 GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
                                  DerivedInfo &calculated,
                                  const ComputerSettings &settings)
@@ -404,7 +404,7 @@ GlideComputerAirData::ProcessSun(const NMEAInfo &basic,
   calculated.sun_data_available.Update(basic.clock);
 }
 
-void
+inline void
 GlideComputerAirData::NextLegEqThermal(const NMEAInfo &basic,
                                        DerivedInfo &calculated,
                                        const ComputerSettings &settings)

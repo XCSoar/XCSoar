@@ -41,7 +41,7 @@ FlyingComputer::Reset()
   last_ground_altitude = fixed_minus_one;
 }
 
-void
+inline void
 FlyingComputer::CheckRelease(FlyingState &state, fixed time,
                              const GeoPoint &location, fixed altitude)
 {
@@ -181,7 +181,7 @@ CheckAltitudeAGL(const DerivedInfo &calculated)
   return calculated.altitude_agl_valid && calculated.altitude_agl >= fixed(300);
 }
 
-bool
+inline bool
 FlyingComputer::CheckClimbing(fixed time, fixed altitude)
 {
   if (negative(climbing_since) || altitude <= climbing_altitude) {

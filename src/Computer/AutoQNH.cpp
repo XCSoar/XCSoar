@@ -61,7 +61,7 @@ AutoQNH::Reset()
   countdown_autoqnh = QNH_TIME;
 }
 
-bool
+inline bool
 AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                       const Waypoints &way_points)
 {
@@ -78,7 +78,7 @@ AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
   return true;
 }
 
-void
+inline void
 AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                       fixed altitude)
 {

@@ -183,7 +183,7 @@ GlideComputer::DetermineTeamCodeRefLocation()
 /**
  * Calculates the own TeamCode and saves it to Calculated
  */
-void
+inline void
 GlideComputer::CalculateOwnTeamCode()
 {
   // No reference waypoint for teamcode calculation chosen -> cancel
@@ -266,7 +266,7 @@ GlideComputer::CalculateTeammateBearingRange()
   }
 }
 
-void
+inline void
 GlideComputer::OnTakeoff()
 {
   // reset stats on takeoff
@@ -276,7 +276,7 @@ GlideComputer::OnTakeoff()
   SaveFinish();
 }
 
-void
+inline void
 GlideComputer::OnLanding()
 {
   // JMWX  restore data calculated at finish so
@@ -286,7 +286,7 @@ GlideComputer::OnLanding()
     RestoreFinish();
 }
 
-void
+inline void
 GlideComputer::TakeoffLanding(bool last_flying)
 {
   if (Calculated().flight.flying && !last_flying)

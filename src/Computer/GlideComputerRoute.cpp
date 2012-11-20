@@ -71,7 +71,7 @@ GlideComputerRoute::ProcessRoute(const MoreData &basic,
   TerrainWarning(basic, calculated, config);
 }
 
-void
+inline void
 GlideComputerRoute::TerrainWarning(const MoreData &basic,
                                    DerivedInfo &calculated,
                                    const RoutePlannerConfig &config)
@@ -135,7 +135,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
   calculated.terrain_warning = false;
 }
 
-void
+inline void
 GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
                           const RoutePlannerConfig &config)
 {

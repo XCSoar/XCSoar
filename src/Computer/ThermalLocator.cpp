@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <assert.h>
 
-void
+inline void
 ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
                              const GeoPoint& wind_drift)
 {
@@ -57,7 +57,7 @@ ThermalLocator::Reset()
   n_points = 0;
 }
 
-void
+inline void
 ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 {
   points[n_index].location = location;
@@ -113,7 +113,7 @@ ThermalLocator::Update(const fixed t_0,
   therm.estimate_valid = true;
 }
 
-FlatPoint
+inline FlatPoint
 ThermalLocator::glider_average()
 {
   FlatPoint result(fixed_zero, fixed_zero);
@@ -136,7 +136,7 @@ ThermalLocator::glider_average()
   return result;
 }
 
-void
+inline void
 ThermalLocator::Drift(const fixed t_0, const TaskProjection& projection,
                       const GeoPoint& traildrift)
 {
