@@ -29,9 +29,6 @@ Copyright_License {
 #include "ComputerSettings.hpp"
 #include "UIActions.hpp"
 
-/**
- * Widget to display a FLARM gauge
- */
 class SmallTrafficWindow : public FlarmTrafficWindow {
 public:
   SmallTrafficWindow(ContainerWindow &parent, const PixelRect &rc,
@@ -44,10 +41,6 @@ protected:
   bool OnMouseDown(PixelScalar x, PixelScalar y);
 };
 
-/**
- * Constructor of the SmallTrafficWindow class
- * @param parent Parent window
- */
 SmallTrafficWindow::SmallTrafficWindow(ContainerWindow &parent,
                                        const PixelRect &rc,
                                        const FlarmTrafficLook &look,
@@ -64,12 +57,6 @@ SmallTrafficWindow::Update(const NMEAInfo &gps_info,
   FlarmTrafficWindow::Update(gps_info.track, gps_info.flarm.traffic, settings);
 }
 
-/**
- * This function is called when the mouse is pressed on the FLARM gauge and
- * opens the FLARM Traffic dialog
- * @param x x-Coordinate of the click
- * @param y y-Coordinate of the click
- */
 bool
 SmallTrafficWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
