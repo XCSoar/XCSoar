@@ -149,6 +149,8 @@ void
 WidgetDialog::OnDestroy()
 {
   widget.Unprepare();
+
+  WndForm::OnDestroy();
 }
 
 void
