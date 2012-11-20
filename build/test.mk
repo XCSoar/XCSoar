@@ -1551,7 +1551,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapWindowContest.cpp \
 	$(SRC)/MapWindow/MapWindowTask.cpp \
 	$(SRC)/MapWindow/MapWindowThermal.cpp \
-	$(SRC)/MapWindow/MapWindowTimer.cpp \
 	$(SRC)/MapWindow/MapWindowTraffic.cpp \
 	$(SRC)/MapWindow/MapWindowTrail.cpp \
 	$(SRC)/MapWindow/MapWindowWaypoints.cpp \

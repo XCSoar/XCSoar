@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_MAP_WINDOW_HPP
 
 #include "Projection/MapWindowProjection.hpp"
-#include "MapWindowTimer.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Screen/DoubleBufferWindow.hpp"
 #ifndef ENABLE_OPENGL
@@ -58,8 +57,7 @@ class NOAAStore;
 
 class MapWindow :
   public DoubleBufferWindow,
-  public MapWindowBlackboard,
-  public MapWindowTimer
+  public MapWindowBlackboard
 {
 #ifndef ENABLE_OPENGL
   // graphics vars

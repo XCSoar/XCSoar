@@ -179,9 +179,6 @@ MapWindow::OnPaintBuffer(Canvas &canvas)
 {
 #ifndef ENABLE_OPENGL
   unsigned render_generation = ui_generation;
-
-  // Start the drawing timer (for drawing time calculation)
-  StartTimer();
 #endif
 
   // Render the moving map

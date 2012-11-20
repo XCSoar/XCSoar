@@ -27,6 +27,7 @@ Copyright_License {
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
 #include "Interface.hpp"
+#include "Time/PeriodClock.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
   :MapWindow(look.map, look.traffic),
@@ -173,12 +174,13 @@ GlueMapWindow::QuickRedraw()
 bool
 GlueMapWindow::Idle()
 {
+  PeriodClock clock;
+  clock.Update();
+
   bool still_dirty;
   bool topography_dirty = true; /* scan topography in every Idle() call */
   bool terrain_dirty = true;
   bool weather_dirty = true;
-
-  // StartTimer();
 
   do {
     idle_robin = (idle_robin + 1) % 3;
@@ -197,7 +199,7 @@ GlueMapWindow::Idle()
     }
 
     still_dirty = terrain_dirty || topography_dirty || weather_dirty;
-  } while (RenderTimeAvailable() &&
+  } while (!clock.Check(700) && /* stop after 700ms */
 #ifndef ENABLE_OPENGL
            !draw_thread->IsTriggered() &&
 #endif
