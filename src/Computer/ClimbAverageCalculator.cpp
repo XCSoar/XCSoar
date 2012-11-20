@@ -23,9 +23,6 @@ Copyright_License {
 
 #include "ClimbAverageCalculator.hpp"
 
-ClimbAverageCalculator::ClimbAverageCalculator():
-  newestValIndex(-1) {}
-
 void
 ClimbAverageCalculator::Reset()
 {

@@ -34,15 +34,12 @@ class ClimbAverageCalculator
     bool valid;
     fixed time;
     fixed altitude;
-
-    HistoryItem(): valid(false) {}
   };
 
   HistoryItem history[MAX_HISTORY];
   int newestValIndex;
 
 public:
-  ClimbAverageCalculator();
   fixed GetAverage(fixed time, fixed altitude, fixed average_time);
   void Reset();
 };

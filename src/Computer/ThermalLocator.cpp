@@ -45,11 +45,6 @@ ThermalLocator::Point::Drift(fixed t, const TaskProjection& projection,
   loc_drift = projection.ProjectFloat(p);
 }
 
-ThermalLocator::ThermalLocator()
-{
-  Reset();
-}
-
 void
 ThermalLocator::Reset()
 {

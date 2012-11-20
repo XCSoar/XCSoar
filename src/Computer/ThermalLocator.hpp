@@ -80,11 +80,6 @@ private:
 
 public:
   /** 
-   * Default constructor.  Initialises object
-   */
-  ThermalLocator();
-
-  /** 
    * Update locator estimate.  If not in circling mode, resets the 
    * object.
    * 
