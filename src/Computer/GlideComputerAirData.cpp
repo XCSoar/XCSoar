@@ -32,11 +32,6 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Math/SunEphemeris.hpp"
 
-#include <algorithm>
-
-using std::min;
-using std::max;
-
 static constexpr fixed THERMAL_TIME_MIN(45);
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)

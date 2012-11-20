@@ -109,7 +109,6 @@ public:
                    const ComputerSettings &settings);
 
 private:
-  void EnergyHeight();
   void NettoVario(const NMEAInfo &basic, const FlyingState &flight,
                   VarioInfo &vario, const ComputerSettings &settings_computer);
   void AverageClimbRate(const NMEAInfo &basic, DerivedInfo &calculated);
