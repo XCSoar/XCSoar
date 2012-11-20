@@ -84,7 +84,10 @@ GlueMapWindow::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 
   case DRAG_GESTURE:
     gestures.Update(x, y);
-    Invalidate();
+
+    /* invoke PaintWindow's Invalidate() implementation instead of
+       DoubleBufferWindow's in order to reuse the buffered map */
+    PaintWindow::Invalidate();
     return true;
 
   case DRAG_SIMULATOR:
