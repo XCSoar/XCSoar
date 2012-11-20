@@ -47,6 +47,9 @@ public:
 static void
 ChangeAltitude(const fixed step)
 {
+  if (!is_simulator())
+    return;
+
   const NMEAInfo &basic = CommonInterface::Basic();
 
   device_blackboard->SetAltitude(basic.gps_altitude +
@@ -56,36 +59,24 @@ ChangeAltitude(const fixed step)
 static void
 PnlSimulatorOnPlusBig()
 {
-  if (!is_simulator())
-    return;
-
   ChangeAltitude(fixed(+100));
 }
 
 static void
 PnlSimulatorOnPlusSmall()
 {
-  if (!is_simulator())
-    return;
-
   ChangeAltitude(fixed(+10));
 }
 
 static void
 PnlSimulatorOnMinusSmall()
 {
-  if (!is_simulator())
-    return;
-
   ChangeAltitude(fixed(-10));
 }
 
 static void
 PnlSimulatorOnMinusBig()
 {
-  if (!is_simulator())
-    return;
-
   ChangeAltitude(fixed(-100));
 }
 
