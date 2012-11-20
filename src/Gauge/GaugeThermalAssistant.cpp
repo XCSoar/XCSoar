@@ -24,36 +24,127 @@ Copyright_License {
 
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Gauge/ThermalAssistantWindow.hpp"
+#include "Screen/Canvas.hpp"
 #include "Blackboard/LiveBlackboard.hpp"
 #include "Input/InputEvents.hpp"
 
+#ifdef USE_GDI
+#include "Screen/Canvas.hpp"
+#endif
+
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scope.hpp"
+#endif
+
 class GaugeThermalAssistantWindow : public ThermalAssistantWindow {
+  bool dragging, pressed;
+
 public:
   GaugeThermalAssistantWindow(ContainerWindow &parent,
                               PixelRect rc,
                               const ThermalAssistantLook &look,
                               WindowStyle style=WindowStyle())
-    :ThermalAssistantWindow(look, 5, true)
+    :ThermalAssistantWindow(look, 5, true),
+     dragging(false), pressed(false)
   {
     Create(parent, rc, style);
   }
 
+private:
+  void SetPressed(bool _pressed) {
+    if (_pressed == pressed)
+      return;
+
+    pressed = _pressed;
+    Invalidate();
+  }
+
 protected:
-  bool OnMouseDown(PixelScalar x, PixelScalar y);
+  virtual bool OnCancelMode() gcc_override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) gcc_override;
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 };
 
-/**
- * This function is called when the mouse is pressed on the FLARM gauge and
- * opens the FLARM Traffic dialog
- * @param x x-Coordinate of the click
- * @param y x-Coordinate of the click
- * @return
- */
+bool
+GaugeThermalAssistantWindow::OnCancelMode()
+{
+  if (dragging) {
+    dragging = false;
+    pressed = false;
+    Invalidate();
+    ReleaseCapture();
+  }
+
+  ThermalAssistantWindow::OnCancelMode();
+  return true;
+}
+
 bool
 GaugeThermalAssistantWindow::OnMouseDown(PixelScalar x, PixelScalar y)
 {
-  InputEvents::eventThermalAssistant(_T(""));
+  if (!dragging) {
+    dragging = true;
+    SetCapture();
+
+    pressed = true;
+    Invalidate();
+  }
+
   return true;
+}
+
+bool
+GaugeThermalAssistantWindow::OnMouseUp(PixelScalar x, PixelScalar y)
+{
+  if (dragging) {
+    const bool was_pressed = pressed;
+
+    dragging = false;
+    pressed = false;
+    Invalidate();
+
+    ReleaseCapture();
+
+    if (was_pressed)
+      InputEvents::eventThermalAssistant(_T(""));
+
+    return true;
+  }
+
+  return false;
+}
+
+bool
+GaugeThermalAssistantWindow::OnMouseMove(PixelScalar x, PixelScalar y,
+                                         unsigned keys)
+{
+  if (dragging) {
+    SetPressed(IsInside(x, y));
+    return true;
+  }
+
+  return false;
+}
+
+void
+GaugeThermalAssistantWindow::OnPaint(Canvas &canvas)
+{
+  ThermalAssistantWindow::OnPaint(canvas);
+
+  if (pressed) {
+#ifdef ENABLE_OPENGL
+    GLEnable blend(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    canvas.DrawFilledRectangle(0, 0, canvas.GetWidth(), canvas.GetHeight(),
+                               COLOR_YELLOW.WithAlpha(80));
+#elif defined(USE_GDI)
+    const PixelRect rc = GetClientRect();
+    ::InvertRect(canvas, &rc);
+#endif
+  }
 }
 
 void
