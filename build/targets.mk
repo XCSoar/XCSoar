@@ -258,14 +258,17 @@ ifeq ($(TARGET),ANDROID)
     HAVE_FPU := n
   endif
 
-  ifeq ($(ARMV7)$(NEON),yy)
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=neon -mthumb-interwork
+  ifeq ($(ARMV7),y)
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mthumb-interwork
     HAVE_FPU := y
   endif
 
+  ifeq ($(ARMV7)$(NEON),yy)
+    TARGET_ARCH += -mfpu=neon
+  endif
+
   ifeq ($(ARMV7)$(NEON),yn)
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb-interwork
-    HAVE_FPU := y
+    TARGET_ARCH += -mfpu=vfpv3-d16
   endif
 
   TARGET_ARCH += -fpic -funwind-tables
