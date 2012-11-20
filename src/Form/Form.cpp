@@ -125,12 +125,6 @@ WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
 
   ContainerWindow::Create(main_window, rc, AddBorder(style));
 
-  // Create ClientWindow
-
-  WindowStyle client_style;
-  client_style.ControlParent();
-  client_area.Create(*this, client_rect, client_style);
-
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, caption.c_str());
 #endif
@@ -169,9 +163,18 @@ WndForm::UpdateLayout()
 
   client_rect = rc;
   client_rect.top = title_rect.bottom;
+}
 
-  if (client_area.IsDefined())
-    client_area.Move(client_rect);
+void
+WndForm::OnCreate()
+{
+  ContainerWindow::OnCreate();
+
+  UpdateLayout();
+
+  WindowStyle client_style;
+  client_style.ControlParent();
+  client_area.Create(*this, client_rect, client_style);
 }
 
 void
@@ -179,6 +182,7 @@ WndForm::OnResize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::OnResize(width, height);
   UpdateLayout();
+  client_area.Move(client_rect);
 }
 
 void
@@ -605,6 +609,7 @@ WndForm::SetCaption(const TCHAR *_caption)
   if (!caption.equals(_caption)) {
     caption = _caption;
     UpdateLayout();
+    client_area.Move(client_rect);
     Invalidate(title_rect);
   }
 }

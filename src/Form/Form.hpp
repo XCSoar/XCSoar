@@ -198,6 +198,7 @@ public:
   void SetCaption(const TCHAR *_caption);
 
   /** from class Window */
+  virtual void OnCreate() gcc_override;
   virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
   virtual void OnDestroy() gcc_override;
 
