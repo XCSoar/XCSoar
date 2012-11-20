@@ -522,7 +522,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look,
   DeviceListWidget widget(look, terminal_look);
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.Create(UIGlobals::GetMainWindow(), _("Devices"), &widget);
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Devices"), &widget);
   dialog.AddButton(_("Close"), mrOK);
   widget.CreateButtons(dialog);
 

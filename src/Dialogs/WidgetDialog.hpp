@@ -49,6 +49,11 @@ public:
               const PixelRect &rc, Widget *widget);
 
   /**
+   * Create a full-screen dialog.
+   */
+  void CreateFull(SingleWindow &parent, const TCHAR *caption, Widget *widget);
+
+  /**
    * Create a dialog with an automatic size (by
    * Widget::GetMinimumSize() and Widget::GetMaximumSize()).
    */

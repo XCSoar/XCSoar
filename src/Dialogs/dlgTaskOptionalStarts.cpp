@@ -241,7 +241,7 @@ dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task)
 {
   OptionStartsWidget widget(**task);
   WidgetDialog dialog(UIGlobals::GetDialogLook());
-  dialog.Create(parent, _("Alternate Start Points"), &widget);
+  dialog.CreateFull(parent, _("Alternate Start Points"), &widget);
   widget.CreateButtons(dialog);
 
   dialog.ShowModal();

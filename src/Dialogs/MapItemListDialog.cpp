@@ -236,7 +236,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                            traffic_look, final_glide_look,
                            settings);
   WidgetDialog dialog(dialog_look);
-  dialog.Create(parent, _("Map elements at this location"), &widget);
+  dialog.CreateFull(parent, _("Map elements at this location"), &widget);
   widget.CreateButtons(dialog);
 
   int result = dialog.ShowModal() == mrOK

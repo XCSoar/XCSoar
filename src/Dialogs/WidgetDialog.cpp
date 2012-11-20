@@ -60,6 +60,13 @@ WidgetDialog::Create(SingleWindow &parent,
 }
 
 void
+WidgetDialog::CreateFull(SingleWindow &parent, const TCHAR *caption,
+                         Widget *widget)
+{
+  Create(parent, caption, parent.GetClientRect(), widget);
+}
+
+void
 WidgetDialog::Create(SingleWindow &parent, const TCHAR *caption,
                      Widget *_widget)
 {

@@ -180,7 +180,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     list_widget->EnableItemHelp(_itemhelp_callback, text_widget, two_widgets);
   }
 
-  dialog.Create(parent, caption, widget);
+  dialog.CreateFull(parent, caption, widget);
 
   if (_help_callback != nullptr)
     dialog.AddButton(_("Help"), list_widget, HELP);
