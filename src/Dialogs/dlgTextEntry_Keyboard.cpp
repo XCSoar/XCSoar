@@ -222,12 +222,12 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
 
   WndButton ok_button(client_area, look, _("OK"),
                       { ok_left, button_top, ok_right, button_bottom },
-                      button_style, &form, mrOK);
+                      button_style, form, mrOK);
 
   WndButton cancel_button(client_area, look, _("Cancel"),
                           { cancel_left, button_top,
                               cancel_right, button_bottom },
-                          button_style, &form, mrCancel);
+                          button_style, form, mrCancel);
 
   WndButton clear_button(client_area, look, _("Clear"),
                          { clear_left, button_top,

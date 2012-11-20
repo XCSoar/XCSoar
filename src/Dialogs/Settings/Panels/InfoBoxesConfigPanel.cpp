@@ -80,7 +80,7 @@ InfoBoxesConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++) {
     const InfoBoxSettings::Panel &data = settings.panels[i];
 
-    AddButton(gettext(data.name), this, i);
+    AddButton(gettext(data.name), *this, i);
     if (i>2)
       SetExpertRow(i);
   }

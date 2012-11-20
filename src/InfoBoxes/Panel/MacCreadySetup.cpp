@@ -86,7 +86,7 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   style.TabStop();
 
   SetWindow(new WndButton(parent, UIGlobals::GetDialogLook(), GetCaption(), rc,
-                          style, this, 1));
+                          style, *this, 1));
 }
 
 Widget *

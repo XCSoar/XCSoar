@@ -183,7 +183,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   dialog.CreateFull(parent, caption, widget);
 
   if (_help_callback != nullptr)
-    dialog.AddButton(_("Help"), list_widget, HELP);
+    dialog.AddButton(_("Help"), *list_widget, HELP);
 
   if (num_items > 0)
     dialog.AddButton(_("Select"), mrOK);

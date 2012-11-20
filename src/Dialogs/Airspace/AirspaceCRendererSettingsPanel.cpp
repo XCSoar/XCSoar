@@ -76,15 +76,15 @@ AirspaceClassRendererSettingsPanel::Prepare(ContainerWindow &parent, const Pixel
   settings = CommonInterface::GetMapSettings().airspace.classes[type];
 
   // Add controls
-  AddButton(_("Change Border Color"), this, BorderColor);
-  AddButton(_("Change Fill Color"), this, FillColor);
+  AddButton(_("Change Border Color"), *this, BorderColor);
+  AddButton(_("Change Fill Color"), *this, FillColor);
 
 #ifdef HAVE_HATCHED_BRUSH
 #ifdef HAVE_ALPHA_BLEND
   bool transparency = CommonInterface::GetMapSettings().airspace.transparency;
   if (!transparency || !AlphaBlendAvailable())
 #endif
-    AddButton(_("Change Fill Brush"), this, FillBrush);
+    AddButton(_("Change Fill Brush"), *this, FillBrush);
 #ifdef HAVE_ALPHA_BLEND
   else
     AddDummy();

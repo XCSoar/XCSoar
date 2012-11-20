@@ -44,12 +44,12 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
                      const TCHAR *caption, const PixelRect &rc,
                      ButtonWindowStyle style,
-                     ActionListener *_listener, int _id)
+                     ActionListener &_listener, int _id)
   :look(_look), renderer(look.button),
 #ifdef USE_GDI
    id(_id),
 #endif
-   listener(_listener),
+   listener(&_listener),
    click_callback(NULL)
 {
   style.EnableCustomPainting();

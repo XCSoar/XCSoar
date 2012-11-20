@@ -114,7 +114,7 @@ dlgAirspaceDetails(const AbstractAirspace &airspace,
     widget->listener = &dialog;
     dialog.AddButton(warnings->get_ack_day(airspace)
                      ? _("Enable") : _("Ack Day"),
-                     widget, 1);
+                     *widget, 1);
   }
 
   dialog.ShowModal();

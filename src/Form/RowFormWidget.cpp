@@ -464,7 +464,7 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
 }
 
 void
-RowFormWidget::AddButton(const TCHAR *label, ActionListener *listener, int id)
+RowFormWidget::AddButton(const TCHAR *label, ActionListener &listener, int id)
 {
   assert(IsDefined());
 

@@ -351,7 +351,7 @@ dlgBasicSettingsShowModal()
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
   dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Flight Setup"), instance);
-  instance->SetDumpButton(dialog.AddButton(_("Dump"), instance, DUMP));
+  instance->SetDumpButton(dialog.AddButton(_("Dump"), *instance, DUMP));
   dialog.AddButton(_("OK"), mrOK);
 
   const ScopeTimer update_ballast_timer([instance]() {

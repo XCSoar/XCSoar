@@ -58,8 +58,8 @@ public:
      modified(false) {}
 
   void CreateButtons(WidgetDialog &dialog) {
-    relocate_button = dialog.AddButton(_("Relocate"), this, RELOCATE);
-    remove_button = dialog.AddButton(_("Remove"), this, REMOVE);
+    relocate_button = dialog.AddButton(_("Relocate"), *this, RELOCATE);
+    remove_button = dialog.AddButton(_("Remove"), *this, REMOVE);
     dialog.AddButton(_("Close"), mrCancel);
   }
 

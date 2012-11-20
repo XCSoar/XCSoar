@@ -102,7 +102,7 @@ dlgInfoBoxAccessShowModeless(const int id,
         WndButton *button =
           new WndButton(tab_bar, look, _("Switch InfoBox"),
                         button_rc, button_style,
-                        &form, SWITCH_INFO_BOX);
+                        form, SWITCH_INFO_BOX);
 
         widget = new TwoWidgets(widget, new WindowWidget(button), false);
       }

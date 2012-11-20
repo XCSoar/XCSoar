@@ -92,7 +92,7 @@ dlgStatusShowModal(int start_page)
 
   WndButton close_button(form.GetClientAreaWindow(), look,
                          _("Close"), close_rc, button_style,
-                         &form, mrOK);
+                         form, mrOK);
 
   ButtonWindowStyle tab_style;
   tab_style.ControlParent();

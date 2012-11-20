@@ -231,11 +231,11 @@ DeviceListWidget::RefreshList()
 void
 DeviceListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  reconnect_button = dialog.AddButton(_("Reconnect"), this, RECONNECT);
-  flight_button = dialog.AddButton(_("Flight download"), this, FLIGHT);
-  edit_button = dialog.AddButton(_("Edit"), this, EDIT);
-  manage_button = dialog.AddButton(_("Manage"), this, MANAGE);
-  monitor_button = dialog.AddButton(_("Monitor"), this, MONITOR);
+  reconnect_button = dialog.AddButton(_("Reconnect"), *this, RECONNECT);
+  flight_button = dialog.AddButton(_("Flight download"), *this, FLIGHT);
+  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
+  manage_button = dialog.AddButton(_("Manage"), *this, MANAGE);
+  monitor_button = dialog.AddButton(_("Monitor"), *this, MONITOR);
 }
 
 void

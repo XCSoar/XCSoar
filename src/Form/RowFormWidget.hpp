@@ -371,7 +371,7 @@ public:
    */
   void AddMultiLine(const TCHAR *text=nullptr);
 
-  void AddButton(const TCHAR *label, ActionListener *listener=NULL, int id=0);
+  void AddButton(const TCHAR *label, ActionListener &listener, int id);
 
   gcc_pure
   Window &GetRow(unsigned i) {

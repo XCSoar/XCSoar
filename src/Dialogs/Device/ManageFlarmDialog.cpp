@@ -78,8 +78,8 @@ ManageFLARMWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     }
   }
 
-  AddButton(_("Setup"), this, Setup);
-  AddButton(_("Reboot"), this, Reboot);
+  AddButton(_("Setup"), *this, Setup);
+  AddButton(_("Reboot"), *this, Reboot);
 }
 
 void

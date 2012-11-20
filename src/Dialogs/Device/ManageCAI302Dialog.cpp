@@ -67,12 +67,12 @@ private:
 void
 ManageCAI302Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
-  AddButton(_("Units"), this, Units);
-  AddButton(_("Waypoints"), this, Waypoints);
-  AddButton(_("Start Logger"), this, StartLogger);
-  AddButton(_("Stop Logger"), this, StopLogger);
-  AddButton(_("Delete all flights"), this, DeleteAllFlights);
-  AddButton(_("Reboot"), this, Reboot);
+  AddButton(_("Units"), *this, Units);
+  AddButton(_("Waypoints"), *this, Waypoints);
+  AddButton(_("Start Logger"), *this, StartLogger);
+  AddButton(_("Stop Logger"), *this, StopLogger);
+  AddButton(_("Delete all flights"), *this, DeleteAllFlights);
+  AddButton(_("Reboot"), *this, Reboot);
 }
 
 static void

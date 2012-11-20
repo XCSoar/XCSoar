@@ -217,10 +217,10 @@ public:
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc) {
     RowFormWidget::Prepare(parent, rc);
 
-    AddButton(_T("Vega"), this, 0);
-    AddButton(_T("Borgelt"), this, 1);
-    AddButton(_T("Cambridge"), this, 2);
-    AddButton(_T("Zander"), this, 3);
+    AddButton(_T("Vega"), *this, 0);
+    AddButton(_T("Borgelt"), *this, 1);
+    AddButton(_T("Cambridge"), *this, 2);
+    AddButton(_T("Zander"), *this, 3);
   }
 
   /* methods from ActionListener */

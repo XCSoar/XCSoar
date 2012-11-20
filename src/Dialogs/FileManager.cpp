@@ -402,9 +402,9 @@ ManagedFileListWidget::CreateButtons(WidgetDialog &dialog)
 {
 #ifdef HAVE_DOWNLOAD_MANAGER
   if (Net::DownloadManager::IsAvailable()) {
-    download_button = dialog.AddButton(_("Download"), this, DOWNLOAD);
-    add_button = dialog.AddButton(_("Add"), this, ADD);
-    cancel_button = dialog.AddButton(_("Cancel"), this, CANCEL);
+    download_button = dialog.AddButton(_("Download"), *this, DOWNLOAD);
+    add_button = dialog.AddButton(_("Add"), *this, ADD);
+    cancel_button = dialog.AddButton(_("Cancel"), *this, CANCEL);
   }
 #endif
 }

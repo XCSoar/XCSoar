@@ -86,10 +86,10 @@ ManageV7Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
   }
 
-  AddButton(_("Setup"), this, SETUP);
+  AddButton(_("Setup"), *this, SETUP);
 
   if (device.IsNano())
-    AddButton(_T("LXNAV Nano"), this, NANO);
+    AddButton(_T("LXNAV Nano"), *this, NANO);
 }
 
 void

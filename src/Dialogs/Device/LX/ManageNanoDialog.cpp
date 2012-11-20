@@ -81,7 +81,7 @@ ManageNanoWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
     AddReadOnly(_("Firmware version"), NULL, buffer.c_str());
   }
 
-  AddButton(_("Setup"), this, SETUP);
+  AddButton(_("Setup"), *this, SETUP);
 }
 
 void

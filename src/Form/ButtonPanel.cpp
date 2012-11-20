@@ -70,7 +70,7 @@ ButtonPanel::Add(const TCHAR *caption,
 }
 
 WndButton *
-ButtonPanel::Add(const TCHAR *caption, ActionListener *listener, int id)
+ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
 {
   WndButton *button = new WndButton(parent, look, caption,
                                     dummy_rc, style, listener, id);

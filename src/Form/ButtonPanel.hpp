@@ -41,7 +41,7 @@ public:
   WndButton *Add(const TCHAR *caption,
                  WndButton::ClickNotifyCallback callback);
 
-  WndButton *Add(const TCHAR *caption, ActionListener *listener, int id);
+  WndButton *Add(const TCHAR *caption, ActionListener &listener, int id);
 
   /**
    * Call this after all buttons have been added or after the parent

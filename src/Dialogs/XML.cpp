@@ -621,7 +621,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
 
     window = new WndButton(parent, *xml_dialog_look, _("Close"),
                            rc,
-                           button_style, (WndForm *)&form, mrOK);
+                           button_style, (WndForm &)form, mrOK);
   } else if (StringIsEqual(node.GetName(), _T("CheckBox"))) {
     // Determine click_callback function
     CheckBoxControl::ClickNotifyCallback click_callback =

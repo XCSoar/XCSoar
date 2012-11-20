@@ -55,7 +55,7 @@ public:
   WndSymbolButton(ContainerWindow &Parent, const DialogLook &look,
                   const TCHAR *Caption,
                   const PixelRect &rc, const ButtonWindowStyle style,
-                  ActionListener *listener, int id)
+                  ActionListener &listener, int id)
     :WndButton(Parent, look, Caption, rc,
                style, listener, id) {}
 

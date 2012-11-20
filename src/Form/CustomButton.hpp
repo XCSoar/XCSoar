@@ -54,7 +54,7 @@ public:
                   const PixelRect &rc, const ButtonWindowStyle style,
                   ActionListener &listener, int id)
     :WndButton(Parent, look, Caption, rc,
-               custom_painting(style), &listener, id) {}
+               custom_painting(style), listener, id) {}
 
 protected:
   /**

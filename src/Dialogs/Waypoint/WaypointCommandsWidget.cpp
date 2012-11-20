@@ -239,14 +239,14 @@ WaypointCommandsWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   if (task_manager != NULL) {
-    AddButton(_("Replace In Task"), this, REPLACE_IN_TASK);
-    AddButton(_("Insert In Task"), this, INSERT_IN_TASK);
-    AddButton(_("Append To Task"), this, APPEND_TO_TASK);
+    AddButton(_("Replace In Task"), *this, REPLACE_IN_TASK);
+    AddButton(_("Insert In Task"), *this, INSERT_IN_TASK);
+    AddButton(_("Append To Task"), *this, APPEND_TO_TASK);
 
     if (MapTaskManager::GetIndexInTask(waypoint) >= 0)
-      AddButton(_("Remove From Task"), this, REMOVE_FROM_TASK);
+      AddButton(_("Remove From Task"), *this, REMOVE_FROM_TASK);
   }
 
-  AddButton(_("Set As New Home"), this, SET_HOME);
-  AddButton(_("Pan To Waypoint"), this, PAN);
+  AddButton(_("Set As New Home"), *this, SET_HOME);
+  AddButton(_("Pan To Waypoint"), *this, PAN);
 }

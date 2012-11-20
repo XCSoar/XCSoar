@@ -74,7 +74,7 @@ public:
   WndButton(ContainerWindow &parent, const DialogLook &look,
             const TCHAR *caption, const PixelRect &rc,
             ButtonWindowStyle style,
-            ActionListener *listener, int id);
+            ActionListener &listener, int id);
 
   /**
    * Set the object that will receive click events.

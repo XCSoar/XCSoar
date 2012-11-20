@@ -855,22 +855,22 @@ TrafficWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
 #ifndef GNAV
   zoom_in_button = new WndSymbolButton(GetContainer(), look.dialog,
                                        _T("+"), rc, ButtonWindowStyle(),
-                                       this, ZOOM_IN);
+                                       *this, ZOOM_IN);
   zoom_out_button = new WndSymbolButton(GetContainer(), look.dialog,
                                         _T("-"), rc, ButtonWindowStyle(),
-                                        this, ZOOM_OUT);
+                                        *this, ZOOM_OUT);
   previous_item_button = new WndSymbolButton(GetContainer(), look.dialog,
                                              _T("<"), rc, ButtonWindowStyle(),
-                                             this, PREVIOUS_ITEM);
+                                             *this, PREVIOUS_ITEM);
   next_item_button = new WndSymbolButton(GetContainer(), look.dialog,
                                          _T(">"), rc, ButtonWindowStyle(),
-                                         this, NEXT_ITEM);
+                                         *this, NEXT_ITEM);
   details_button = new WndButton(GetContainer(), look.dialog,
                                  _("Details"), rc, ButtonWindowStyle(),
-                                 this, DETAILS);
+                                 *this, DETAILS);
   close_button = new WndButton(GetContainer(), look.dialog,
                                _("Close"), rc, ButtonWindowStyle(),
-                               this, CLOSE);
+                               *this, CLOSE);
 #endif
 
   WindowStyle style;

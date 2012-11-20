@@ -80,12 +80,12 @@ public:
   }
 
   WndButton *AddButton(const TCHAR *caption,
-                       ActionListener *listener, int id) {
+                       ActionListener &listener, int id) {
     return buttons.Add(caption, listener, id);
   }
 
   WndButton *AddButton(const TCHAR *caption, int modal_result) {
-    return AddButton(caption, this, modal_result);
+    return AddButton(caption, *this, modal_result);
   }
 
   int ShowModal();
