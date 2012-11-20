@@ -128,6 +128,8 @@ WidgetDialog::ShowModal()
 {
   if (auto_size)
     AutoSize();
+  else
+    widget.Move(buttons.UpdateLayout());
 
   widget.Show();
   return WndForm::ShowModal();
