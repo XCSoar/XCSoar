@@ -36,8 +36,6 @@ Copyright_License {
 #include <algorithm>
 #include <assert.h>
 
-using std::min;
-
 static WndProperty *editor;
 static KeyboardControl *kb = NULL;
 
@@ -153,7 +151,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
   if (width == 0)
     width = MAX_TEXTENTRY;
 
-  max_width = min(MAX_TEXTENTRY, width);
+  max_width = std::min(MAX_TEXTENTRY, width);
 
   const DialogLook &look = UIGlobals::GetDialogLook();
   WndForm form(look);
