@@ -804,6 +804,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Device/Port/AndroidPort.cpp \
 	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
 	$(SRC)/Android/Environment.cpp \
+	$(SRC)/Android/Product.cpp \
 	$(SRC)/Android/InternalSensors.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \

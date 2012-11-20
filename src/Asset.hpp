@@ -25,11 +25,6 @@ Copyright_License {
 
 #include "Hardware/ModelType.hpp"
 #include "Compiler.h"
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/NativeView.hpp"
-#include "unix/tchar.h"
-#endif
 
 #include <tchar.h>
 
@@ -160,22 +155,6 @@ IsAndroid()
 {
 #if defined(ANDROID)
   return true;
-#else
-  return false;
-#endif
-}
-
-/**
- * Returns whether the application is running on Galaxy Tab with Android 2.2
- */
-static inline bool
-IsGalaxyTab22()
-{
-#if defined(ANDROID)
-  assert(native_view);
-  return native_view->GetAPILevel() == 8 &&
-         (_tcscmp(native_view->GetProduct(), _T("GT-P1000")) == 0 ||
-          _tcscmp(native_view->GetProduct(), _T("GT-P1010")) == 0);
 #else
   return false;
 #endif

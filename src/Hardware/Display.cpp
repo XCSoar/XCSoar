@@ -28,6 +28,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
+#include "Android/Product.hpp"
 #endif
 
 #ifdef WIN32
