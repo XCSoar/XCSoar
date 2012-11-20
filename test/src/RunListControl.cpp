@@ -40,8 +40,8 @@ PaintItemCallback(Canvas &canvas, const PixelRect rc, unsigned idx)
 static void
 Main()
 {
-  WndForm form(main_window, *dialog_look, main_window.GetClientRect(),
-               _T("RunListControl"));
+  WndForm form(*dialog_look);
+  form.Create(main_window, _T("RunListControl"));
   ContainerWindow &client_area = form.GetClientAreaWindow();
 
   PixelRect list_rc = client_area.GetClientRect();
