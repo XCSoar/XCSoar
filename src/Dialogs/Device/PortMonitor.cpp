@@ -97,12 +97,6 @@ OnClearClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &button)
-{
-  dialog->SetModalResult(mrOK);
-}
-
-static void
 OnReconnectClicked(gcc_unused WndButton &button)
 {
   if (device->IsOccupied()) {
@@ -154,7 +148,7 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   ContainerWindow &client_area = dialog->GetClientAreaWindow();
 
   ButtonPanel buttons(client_area, dialog_look);
-  buttons.Add(_("Close"), OnCloseClicked);
+  buttons.Add(_("Close"), *dialog, mrOK);
   buttons.Add(_("Clear"), OnClearClicked);
   buttons.Add(_("Reconnect"), OnReconnectClicked);
   buttons.Add(_("Pause"), OnPauseClicked);

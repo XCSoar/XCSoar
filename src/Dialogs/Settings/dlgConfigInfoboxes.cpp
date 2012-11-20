@@ -94,12 +94,6 @@ RefreshEditContent()
 }
 
 static void
-OnCloseClicked(gcc_unused WndButton &Sender)
-{
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OnCopy(gcc_unused WndButton &button)
 {
   clipboard = data;
@@ -401,7 +395,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   WndButton *close_button =
     new WndButton(client_area, dialog_look, _("Close"),
-                  button_rc, button_style, OnCloseClicked);
+                  button_rc, button_style, *wf, mrOK);
 
   button_rc.left += button_width + Layout::Scale(2);
   button_rc.right += button_width + Layout::Scale(2);
