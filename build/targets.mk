@@ -248,7 +248,7 @@ ifeq ($(TARGET),ANDROID)
   endif
 
   ifeq ($(ARMV7),y)
-    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
+    TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb-interwork
     HAVE_FPU := y
   endif
 
