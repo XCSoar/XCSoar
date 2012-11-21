@@ -88,6 +88,11 @@ public:
   }
 
   WndButton *AddButton(const TCHAR *caption,
+                       WndButton::ClickFunction function) {
+    return buttons.Add(caption, function);
+  }
+
+  WndButton *AddButton(const TCHAR *caption,
                        ActionListener &listener, int id) {
     return buttons.Add(caption, listener, id);
   }
