@@ -50,7 +50,7 @@ struct has_trivial_copy_and_destructor
                                   std::is_trivially_copy_assignable<T>::value &&
                                   std::is_trivially_destructible<T>::value>
 #else
-#if GCC_VERSION >= 40600 || (defined(__clang__) && !defined(ANDROID))
+#if GCC_VERSION >= 40600 || defined(__clang__)
                                   std::has_trivial_copy_assign<T>::value &&
 #else
                                   std::has_trivial_assign<T>::value &&
@@ -63,7 +63,7 @@ struct has_trivial_copy_and_destructor
 /**
  * Wrapper for std::is_trivial with a fallback for GCC 4.4.
  */
-#if GCC_VERSION >= 40500 || (defined(__clang__) && !defined(ANDROID))
+#if GCC_VERSION >= 40500 || defined(__clang__)
 template<typename T>
 struct is_trivial : public std::is_trivial<T> {};
 #else
