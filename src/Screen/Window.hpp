@@ -486,6 +486,10 @@ public:
 #endif
   }
 
+  void Resize(PixelSize size) {
+    Resize(size.cx, size.cy);
+  }
+
 #ifndef USE_GDI
   void BringToTop();
   void BringToBottom();

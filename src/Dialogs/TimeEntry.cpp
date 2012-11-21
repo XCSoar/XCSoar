@@ -66,7 +66,7 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
 
   DigitEntry entry(look);
   entry.CreateTime(client_area, client_area.GetClientRect(), control_style);
-  entry.Resize(entry.GetRecommendedSize().cx, entry.GetRecommendedSize().cy);
+  entry.Resize(entry.GetRecommendedSize());
   entry.SetValue(value);
   entry.SetActionListener(dialog, mrOK);
 
