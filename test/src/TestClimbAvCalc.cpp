@@ -30,6 +30,8 @@ int main(int argc, char **argv)
   plan_tests(2);
 
   ClimbAverageCalculator c;
+  c.Reset();
+
   fixed av;
 
   // Test normal behavior
