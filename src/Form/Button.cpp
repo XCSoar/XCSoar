@@ -40,6 +40,16 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
   Create(parent, Caption, rc, style);
 }
 
+WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
+                     const TCHAR *Caption, const PixelRect &rc,
+                     ButtonWindowStyle style,
+                     ClickFunction _click_function)
+  :look(_look), renderer(look.button),
+   listener(nullptr), click_function(_click_function), click_callback(nullptr)
+{
+  style.EnableCustomPainting();
+  Create(parent, Caption, rc, style);
+}
 
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
                      const TCHAR *caption, const PixelRect &rc,
@@ -70,6 +80,11 @@ WndButton::OnClicked()
     unsigned id = GetID();
 #endif
     listener->OnAction(id);
+    return true;
+  }
+
+  if (click_function) {
+    click_function();
     return true;
   }
 
