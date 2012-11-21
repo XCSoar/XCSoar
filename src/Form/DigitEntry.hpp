@@ -135,6 +135,12 @@ public:
   void CreateTime(ContainerWindow &parent, const PixelRect &rc,
                   const WindowStyle style);
 
+  gcc_pure
+  PixelSize GetRecommendedSize() const {
+    return PixelSize{ PixelScalar(columns[length - 1].right),
+        PixelScalar(bottom + top) };
+  }
+
   /**
    * Sets a listener that will be notified when the user "activates"
    * the control (for example by pressing the "enter" key).
