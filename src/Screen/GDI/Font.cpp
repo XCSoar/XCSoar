@@ -99,7 +99,7 @@ Font::CalculateHeights()
     buffer.SetTextColor(COLOR_BLACK);
     buffer.Select(*this);
 
-    RECT rec;
+    PixelRect rec;
     rec.left = 0;
     rec.top = 0;
     rec.right = tm.tmAveCharWidth;

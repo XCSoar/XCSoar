@@ -39,7 +39,7 @@ Copyright_License {
 static const AirspaceLook *look;
 
 static void
-OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
+OnAirspacePatternsPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < ARRAY_SIZE(AirspaceLook::brushes));
 

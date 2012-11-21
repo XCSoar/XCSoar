@@ -227,7 +227,7 @@ public:
         placement.rcNormalPosition.bottom -= placement.rcNormalPosition.top;
         placement.rcNormalPosition.left = 0;
         placement.rcNormalPosition.top = 0;
-        return placement.rcNormalPosition;
+        return reinterpret_cast<const PixelRect &>(placement.rcNormalPosition);
       }
     }
 

@@ -26,11 +26,43 @@ Copyright_License {
 
 #include <windef.h>
 
-#define RasterPoint tagPOINT
-#define PixelSize tagSIZE
-#define PixelRect tagRECT
-
 typedef LONG PixelScalar;
 typedef ULONG UPixelScalar;
+
+struct RasterPoint : public tagPOINT {
+  RasterPoint() = default;
+
+  constexpr RasterPoint(PixelScalar _x, PixelScalar _y)
+    :tagPOINT({_x, _y}) {}
+};
+
+static_assert(sizeof(RasterPoint) == sizeof(POINT), "not same size");
+
+struct PixelRect : public tagRECT {
+  PixelRect() = default;
+
+  constexpr PixelRect(PixelScalar _left, PixelScalar _top,
+                      PixelScalar _right, PixelScalar _bottom)
+    :tagRECT({_left, _top, _right, _bottom}) {}
+};
+
+static_assert(sizeof(PixelRect) == sizeof(RECT), "not same size");
+
+struct PixelSize : public tagSIZE {
+  PixelSize() = default;
+
+  constexpr PixelSize(PixelScalar _width, PixelScalar _height)
+    :tagSIZE({_width, _height}) {}
+
+  bool operator==(const PixelSize &other) const {
+    return cx == other.cx && cy == other.cy;
+  }
+
+  bool operator!=(const PixelSize &other) const {
+    return !(*this == other);
+  }
+};
+
+static_assert(sizeof(PixelSize) == sizeof(SIZE), "not same size");
 
 #endif

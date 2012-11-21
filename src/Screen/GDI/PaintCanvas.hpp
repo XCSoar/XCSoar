@@ -41,8 +41,8 @@ public:
   PaintCanvas(Window &_window);
   ~PaintCanvas();
 
-  const RECT &get_dirty() const {
-    return ps.rcPaint;
+  const PixelRect &get_dirty() const {
+    return reinterpret_cast<const PixelRect &>(ps.rcPaint);
   }
 };
 
