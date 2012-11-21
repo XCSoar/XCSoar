@@ -360,7 +360,8 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
   for (auto i = lsdata.slots.begin(), end = lsdata.slots.end();
        i != end; ++i)
     *p++ = ToScreen(i->x, i->y);
-  *p++ = RasterPoint{ p[-1].x, PixelScalar(rc.bottom - padding_bottom) };
+  const RasterPoint &last = p[-1];
+  *p++ = RasterPoint{ last.x, PixelScalar(rc.bottom - padding_bottom) };
   *p++ = RasterPoint{ points[0].x, PixelScalar(rc.bottom - padding_bottom) };
 
   assert(p == points + n);
