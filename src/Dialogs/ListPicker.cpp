@@ -196,7 +196,10 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
         list_widget->GetList().Invalidate();
       }, 1000);
 
-  return dialog.ShowModal() == mrOK
+  int result = dialog.ShowModal() == mrOK
     ? (int)list_widget->GetList().GetCursorIndex()
     : -1;
+
+  update_timer.Cancel();
+  return result;
 }
