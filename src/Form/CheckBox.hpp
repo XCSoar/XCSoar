@@ -31,7 +31,6 @@ class ContainerWindow;
 
 /**
  * This class is used for creating buttons.
- * It is based on the WindowControl class.
  */
 class CheckBoxControl : public CheckBox {
 public:
@@ -46,10 +45,9 @@ private:
 
 public:
   /**
-   * Constructor of the WndButton class
-   * @param Parent Parent window/ContainerControl
-   * @param Caption Text on the button
-   * @param Function The function that should be called
+   * @param parent Parent window/ContainerControl
+   * @param caption Text on the button
+   * @param click_notify_callback The function that should be called
    * when the button is clicked
    */
   CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
@@ -68,11 +66,6 @@ public:
     click_notify_callback = _click_notify_callback;
   }
 
-  /**
-   * Called when the button is clicked (either by mouse or by
-   * keyboard).  The default implementation invokes the OnClick
-   * callback.
-   */
   virtual bool OnClicked() gcc_override;
 
 #ifdef _WIN32_WCE
