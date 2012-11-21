@@ -21,9 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Hardware/ModelType.hpp"
-#include "Compiler.h"
-
 #include "Product.hpp"
 #include "Main.hpp"
 #include "NativeView.hpp"
