@@ -37,6 +37,13 @@ class CheckBoxControl : public CheckBox {
 public:
   typedef void (*ClickNotifyCallback)(CheckBoxControl &button);
 
+private:
+  /**
+   * The callback-function that should be called when the button is pressed
+   * @see SetOnClickNotify()
+   */
+  ClickNotifyCallback click_notify_callback;
+
 public:
   /**
    * Constructor of the WndButton class
@@ -73,13 +80,6 @@ protected:
   virtual bool OnKeyCheck(unsigned key_code) const gcc_override;
   virtual bool OnKeyDown(unsigned key_code) gcc_override;
 #endif
-
-private:
-  /**
-   * The callback-function that should be called when the button is pressed
-   * @see SetOnClickNotify()
-   */
-  ClickNotifyCallback click_notify_callback;
 };
 
 #endif
