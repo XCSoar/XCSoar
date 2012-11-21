@@ -40,3 +40,19 @@ IsGalaxyTab22()
     (strcmp(native_view->GetProduct(), "GT-P1000") == 0 ||
      strcmp(native_view->GetProduct(), "GT-P1010") == 0);
 }
+
+bool
+IsNookSimpleTouch()
+{
+  if (native_view == nullptr)
+    return false;
+
+  static int cached_type = -1;
+  if (cached_type == -1) {
+    if (strcmp(native_view->GetProduct(), "NOOK") == 0)
+      cached_type = 1;
+    else
+      cached_type = 0;
+  }
+  return cached_type == 1;
+}

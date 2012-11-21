@@ -33,4 +33,11 @@ gcc_const
 bool
 IsGalaxyTab22();
 
+/**
+ * Returns whether the application is running on Nook Simple Touch
+ */
+gcc_const
+bool
+IsNookSimpleTouch();
+
 #endif
