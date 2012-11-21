@@ -30,11 +30,8 @@ Copyright_License {
 
 struct InfoBoxData;
 class InfoBoxWindow;
-struct Waypoint;
-class Angle;
 class Widget;
 class Canvas;
-struct CallBackTableEntry;
 
 class InfoBoxContent
 {
