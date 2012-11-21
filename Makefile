@@ -259,6 +259,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
+	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
 	$(SRC)/Dialogs/WaypointList.cpp \
 	$(SRC)/Dialogs/WindSettingsDialog.cpp \

@@ -27,6 +27,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "DataField/String.hpp"
 #include "DataField/Prefix.hpp"
+#include "DataField/RoughTime.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
@@ -34,6 +35,7 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Dialogs/TimeEntry.hpp"
 #include "resource.h"
 
 #include <assert.h>
@@ -183,6 +185,16 @@ WndProperty::BeginEditing()
     assert(root != NULL);
 
     dlgComboPicker(*root, this);
+    return true;
+  } else if (mDataField != NULL &&
+             mDataField->GetType() == DataField::Type::ROUGH_TIME) {
+    RoughTimeDataField &df = *(RoughTimeDataField *)mDataField;
+    RoughTime value = df.GetValue();
+    if (!TimeEntryDialog(GetCaption(), value, true))
+      return true;
+
+    df.ModifyValue(value);
+    RefreshDisplay();
     return true;
   } else if (CanEditInPlace()) {
     // TODO: implement

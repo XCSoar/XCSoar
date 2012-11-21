@@ -21,26 +21,41 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Message.hpp"
-#include "Dialogs/TextEntry.hpp"
-#include "Dialogs/TimeEntry.hpp"
+#ifndef XCSOAR_DATA_FIELD_ROUGH_TIME_HPP
+#define XCSOAR_DATA_FIELD_ROUGH_TIME_HPP
 
-int
-ShowMessageBox(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
-{
-  return -1;
-}
+#include "Base.hpp"
+#include "Time/RoughTime.hpp"
+#include "Compiler.h"
 
-bool
-dlgTextEntryShowModal(TCHAR *text, size_t size,
-                      const TCHAR *caption,
-                      AllowedCharacters accb)
-{
-  return false;
-}
+/**
+ * This #DataField implementation stores a time of day with a
+ * precision of one minute.
+ */
+class RoughTimeDataField : public DataField {
+  RoughTime value;
 
-bool
-TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
-{
-  return false;
-}
+public:
+  RoughTimeDataField(RoughTime _value, DataFieldListener *listener=nullptr)
+    :DataField(Type::ROUGH_TIME, false, listener),
+     value(_value) {}
+
+  RoughTime GetValue() const {
+    return value;
+  }
+
+  void SetValue(RoughTime _value) {
+    value = _value;
+  }
+
+  void ModifyValue(RoughTime _value);
+
+  /* virtual methods from class DataField */
+  virtual int GetAsInteger() const gcc_override;
+  virtual const TCHAR *GetAsString() const gcc_override;
+
+  virtual void Inc() gcc_override;
+  virtual void Dec() gcc_override;
+};
+
+#endif

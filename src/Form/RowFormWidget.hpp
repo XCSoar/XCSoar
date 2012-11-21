@@ -38,6 +38,7 @@ struct DialogLook;
 struct StaticEnumChoice;
 class ActionListener;
 class Angle;
+class RoughTime;
 
 /**
  * A #Widget that contains #WndProperty controls, one in a row.
@@ -359,6 +360,10 @@ public:
     return control;
   }
 
+  WndProperty *AddRoughTime(const TCHAR *label, const TCHAR *help,
+                            RoughTime value,
+                            DataFieldListener *listener=nullptr);
+
   void AddSpacer();
 
   WndProperty *AddFileReader(const TCHAR *label, const TCHAR *help,
@@ -480,6 +485,8 @@ public:
   void LoadValue(unsigned i, Angle value);
   void LoadValue(unsigned i, fixed value, UnitGroup unit_group);
 
+  void LoadValue(unsigned i, RoughTime value);
+
   /**
    * Load a value into a control created by AddTime().
    */
@@ -510,6 +517,9 @@ public:
   unsigned GetValueIntegerAngle(unsigned i) const;
 
   gcc_pure
+  RoughTime GetValueRoughTime(unsigned i) const;
+
+  gcc_pure
   const TCHAR *GetValueString(unsigned i) const {
     return GetDataField(i).GetAsString();
   }
@@ -519,6 +529,7 @@ public:
   bool SaveValue(unsigned i, uint16_t &value) const;
   bool SaveValue(unsigned i, fixed &value) const;
   bool SaveValue(unsigned i, Angle &value_r) const;
+  bool SaveValue(unsigned i, RoughTime &value_r) const;
   bool SaveValue(unsigned i, TCHAR *string, size_t max_size) const;
   bool SaveValue(unsigned i, const TCHAR *registry_key, TCHAR *string, size_t max_size) const;
 

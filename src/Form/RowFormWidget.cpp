@@ -41,6 +41,8 @@ Copyright_License {
 #include "DataField/Password.hpp"
 #include "DataField/FileReader.hpp"
 #include "DataField/Time.hpp"
+#include "DataField/RoughTime.hpp"
+#include "Time/RoughTime.hpp"
 #include "Language/Language.hpp"
 #include "Profile/Profile.hpp"
 #include "Units/Units.hpp"
@@ -397,6 +399,16 @@ RowFormWidget::AddTime(const TCHAR *label, const TCHAR *help,
   return edit;
 }
 
+WndProperty *
+RowFormWidget::AddRoughTime(const TCHAR *label, const TCHAR *help,
+                            RoughTime value, DataFieldListener *listener)
+{
+  WndProperty *edit = Add(label, help);
+  RoughTimeDataField *df = new RoughTimeDataField(value, listener);
+  edit->SetDataField(df);
+  return edit;
+}
+
 void
 RowFormWidget::AddSpacer()
 {
@@ -551,6 +563,15 @@ RowFormWidget::LoadValue(unsigned i, fixed value, UnitGroup unit_group)
 }
 
 void
+RowFormWidget::LoadValue(unsigned i, RoughTime value)
+{
+  WndProperty &control = GetControl(i);
+  RoughTimeDataField &df = *(RoughTimeDataField *)control.GetDataField();
+  df.SetValue(value);
+  control.RefreshDisplay();
+}
+
+void
 RowFormWidget::LoadValueTime(unsigned i, int value)
 {
   WndProperty &control = GetControl(i);
@@ -600,6 +621,15 @@ RowFormWidget::GetValueIntegerAngle(unsigned i) const
     (const AngleDataField &)GetDataField(i);
   assert(df.GetType() == DataField::Type::ANGLE);
   return df.GetIntegerValue();
+}
+
+RoughTime
+RowFormWidget::GetValueRoughTime(unsigned i) const
+{
+  const RoughTimeDataField &df =
+    (const RoughTimeDataField &)GetDataField(i);
+  assert(df.GetType() == DataField::Type::ROUGH_TIME);
+  return df.GetValue();
 }
 
 bool
@@ -657,6 +687,17 @@ RowFormWidget::SaveValue(unsigned i, Angle &value_r) const
     return false;
 
   value_r = GetValueAngle(i);
+  return true;
+}
+
+bool
+RowFormWidget::SaveValue(unsigned i, RoughTime &value_r) const
+{
+  const auto new_value = GetValueRoughTime(i);
+  if (new_value == value_r)
+    return false;
+
+  value_r = new_value;
   return true;
 }
 

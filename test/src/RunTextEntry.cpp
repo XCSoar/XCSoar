@@ -28,8 +28,15 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Util/Macros.hpp"
 #include "LocalPath.hpp"
+#include "Dialogs/TimeEntry.hpp"
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
+
+bool
+TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
+{
+  return false;
+}
 
 static void
 Main()

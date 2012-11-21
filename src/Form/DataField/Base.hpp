@@ -46,6 +46,7 @@ public:
     ANGLE,
     ENUM,
     FILE,
+    ROUGH_TIME,
     TIME,
     PREFIX,
   };
