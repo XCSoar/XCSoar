@@ -77,6 +77,25 @@ WidgetDialog::CreateAuto(SingleWindow &parent, const TCHAR *caption,
 }
 
 void
+WidgetDialog::CreatePreliminary(SingleWindow &parent, const TCHAR *caption)
+{
+  WndForm::Create(parent, parent.GetClientRect(), caption, GetDialogStyle());
+}
+
+void
+WidgetDialog::FinishPreliminary(Widget *_widget)
+{
+  assert(IsDefined());
+  assert(!widget.IsDefined());
+  assert(_widget != nullptr);
+
+  widget.Set(_widget);
+  widget.Move(buttons.UpdateLayout());
+
+  AutoSize();
+}
+
+void
 WidgetDialog::AutoSize()
 {
   const PixelRect parent_rc = GetParentClientRect();

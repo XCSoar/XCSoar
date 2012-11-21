@@ -59,6 +59,14 @@ public:
    */
   void CreateAuto(SingleWindow &parent, const TCHAR *caption, Widget *widget);
 
+  /**
+   * Create a dialog, but do not associate it with a #Widget yet.
+   * Call FinishPreliminary() to resume building the dialog.
+   */
+  void CreatePreliminary(SingleWindow &parent, const TCHAR *caption);
+
+  void FinishPreliminary(Widget *widget);
+
   bool GetChanged() const {
     return changed;
   }
