@@ -466,8 +466,8 @@ RowFormWidget::AddMultiLine(const TCHAR *text)
 
   PanelControl &panel = *(PanelControl *)GetWindow();
   LargeTextWindow *ltw = new LargeTextWindow();
-  ltw->SetFont(*look.text_font);
   ltw->Create(panel, rc, style);
+  ltw->SetFont(*look.text_font);
 
   if (text != nullptr)
     ltw->SetText(text);
