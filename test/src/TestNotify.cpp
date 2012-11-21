@@ -28,6 +28,8 @@
 
 #ifdef ANDROID
 #include "Event/Android/Loop.hpp"
+#include "Event/Android/Event.hpp"
+#include "Android/Main.hpp"
 #elif defined(USE_EGL)
 #include "Event/EGL/Event.hpp"
 #include "Event/EGL/Loop.hpp"
