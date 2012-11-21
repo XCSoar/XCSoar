@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_HPP
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 struct InfoBoxData;
@@ -75,6 +77,7 @@ public:
     const PanelContent *Panels;
   };
 
+  gcc_pure
   virtual const DialogContent *GetDialogContent();
 };
 
