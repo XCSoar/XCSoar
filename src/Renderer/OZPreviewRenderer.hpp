@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OZ_PREVIEW_RENDERER_HPP
 #define XCSOAR_OZ_PREVIEW_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct RasterPoint;
 class Canvas;
 class ObservationZonePoint;
 struct TaskLook;

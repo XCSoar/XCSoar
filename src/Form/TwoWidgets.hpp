@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ROW_TWO_WIDGETS_HPP
 
 #include "Widget.hpp"
+#include "Screen/Point.hpp"
 
 #include <utility>
 #include <assert.h>

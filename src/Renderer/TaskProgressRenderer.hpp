@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef TASK_PROGRESS_RENDERER_HPP
 #define TASK_PROGRESS_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 class Canvas;
 struct TaskLook;
 struct TaskSummary;

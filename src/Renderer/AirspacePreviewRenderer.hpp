@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_PREVIEW_RENDERER_HPP
 #define XCSOAR_AIRSPACE_PREVIEW_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "Engine/Airspace/AirspaceClass.hpp"
 
+struct RasterPoint;
 class Canvas;
 class AbstractAirspace;
 struct AirspaceRendererSettings;

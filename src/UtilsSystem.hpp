@@ -23,10 +23,9 @@ Copyright_License {
 #if !defined(XCSOAR_UTILS_SYSTEM_H)
 #define XCSOAR_UTILS_SYSTEM_H
 
-#include "Screen/Point.hpp"
-
 #include <tchar.h>
 
+struct PixelRect;
 
 #ifdef _WIN32_WCE
 void MyCompactHeaps();

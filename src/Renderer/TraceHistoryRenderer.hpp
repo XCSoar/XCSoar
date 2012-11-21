@@ -24,9 +24,9 @@ Copyright_License {
 #ifndef TRACE_HISTORY_RENDERER_HPP
 #define TRACE_HISTORY_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
+struct PixelRect;
 struct TraceHistoryLook;
 struct VarioLook;
 struct ChartLook;

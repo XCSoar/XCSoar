@@ -26,10 +26,10 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
-#include "Screen/Point.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Util/AllocatedArray.hpp"
 
+struct RasterPoint;
 class Canvas;
 class Projection;
 class WindowProjection;

@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WIND_CHART_RENDERER_HPP
 #define XCSOAR_WIND_CHART_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 class Canvas;
 struct ChartLook;
 struct NMEAInfo;

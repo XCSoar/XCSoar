@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_BAROGRAPH_RENDERER_HPP
 #define XCSOAR_BAROGRAPH_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
 #include <tchar.h>
 
+struct PixelRect;
 class Canvas;
 struct ChartLook;
 struct CrossSectionLook;

@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
 #include "Compiler.h"
-#include "Screen/Point.hpp"
 
 #include <tchar.h>
 
+struct PixelRect;
 struct InfoBoxData;
 class Widget;
 class Canvas;

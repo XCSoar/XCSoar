@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Widget.hpp"
 #include "Util/StaticArray.hpp"
+#include "Screen/Point.hpp"
 
 /**
  * A #Widget that host multiple other widgets, displaying one at a

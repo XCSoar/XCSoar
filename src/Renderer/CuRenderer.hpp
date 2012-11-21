@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_CU_RENDERER_HPP
 #define XCSOAR_CU_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
 #include <tchar.h>
 
+struct PixelRect;
 class Canvas;
 struct ChartLook;
 class CuSonde;

@@ -36,18 +36,18 @@ class WindowWidget : public NullWidget {
   Window *window;
 
 public:
-  WindowWidget():window(NULL) {}
+  WindowWidget():window(nullptr) {}
 
   WindowWidget(Window *_window);
 
 protected:
   bool IsDefined() const {
-    return window != NULL;
+    return window != nullptr;
   }
 
   void SetWindow(Window *_window) {
-    assert(window == NULL);
-    assert(_window != NULL);
+    assert(window == nullptr);
+    assert(_window != nullptr);
 
     window = _window;
   }
@@ -58,12 +58,12 @@ protected:
   void DeleteWindow();
 
   const Window *GetWindow() const {
-    assert(window != NULL);
+    assert(window != nullptr);
     return window;
   }
 
   Window *GetWindow() {
-    assert(window != NULL);
+    assert(window != nullptr);
     return window;
   }
 

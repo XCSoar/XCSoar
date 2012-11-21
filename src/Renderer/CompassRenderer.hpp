@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_COMPASS_RENDERER_HPP
 #define XCSOAR_COMPASS_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct RasterPoint;
+struct PixelRect;
 struct MapLook;
 class Canvas;
 class Angle;

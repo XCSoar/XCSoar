@@ -25,8 +25,10 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_TRIANGULATE_HPP
 
 #include "Util/AllocatedArray.hpp"
-#include "Screen/Point.hpp"
-#include "Topography/XShapePoint.hpp"
+#include "System.hpp"
+
+struct RasterPoint;
+struct ShapePoint;
 
 /**
  * cutting ears - simple algorithm, no support for holes

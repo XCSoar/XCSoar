@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_BEST_CRUISE_ARROW_RENDERER_HPP
 #define XCSOAR_BEST_CRUISE_ARROW_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct RasterPoint;
 class Canvas;
 struct TaskLook;
 class Angle;

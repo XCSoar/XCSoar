@@ -25,10 +25,10 @@ Copyright_License {
 #define XCSOAR_TRAIL_RENDERER_HPP
 
 #include "Util/AllocatedArray.hpp"
-#include "Screen/Point.hpp"
 #include "Engine/Trace/Point.hpp"
 #include "Engine/Trace/Vector.hpp"
 
+struct RasterPoint;
 class Canvas;
 class TraceComputer;
 class Projection;

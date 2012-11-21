@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FINAL_GLIDE_BAR_RENDERER_HPP
 #define XCSOAR_FINAL_GLIDE_BAR_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 class Canvas;
 struct DerivedInfo;
 struct FinalGlideBarLook;

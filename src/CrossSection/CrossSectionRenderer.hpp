@@ -27,8 +27,8 @@
 #include "Blackboard/BaseBlackboard.hpp"
 #include "TerrainXSRenderer.hpp"
 #include "AirspaceXSRenderer.hpp"
-#include "Screen/Point.hpp"
 
+struct PixelRect;
 struct MoreData;
 struct CrossSectionLook;
 struct AirspaceLook;

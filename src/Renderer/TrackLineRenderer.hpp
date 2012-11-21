@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACK_LINE_RENDERER_HPP
 #define XCSOAR_TRACK_LINE_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct RasterPoint;
 class Canvas;
 class Angle;
 struct MapLook;

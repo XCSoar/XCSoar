@@ -24,9 +24,7 @@ Copyright_License {
 #ifndef THERMAL_BAND_RENDERER_HPP
 #define THERMAL_BAND_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-#include "Math/fixed.hpp"
-
+struct PixelRect;
 struct ThermalBandLook;
 struct ChartLook;
 class ChartRenderer;
@@ -53,7 +51,7 @@ public:
                        const PixelRect &rc,
                        const TaskBehaviour& task_props,
                        const bool is_map,
-                       const OrderedTaskBehaviour* ordered_props=NULL) const;
+                       const OrderedTaskBehaviour *ordered_props=nullptr) const;
 
   void DrawThermalBandSpark(const MoreData &basic,
                             const DerivedInfo& calculated,

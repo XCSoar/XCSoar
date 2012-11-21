@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef FLIGHT_STATISTICS_RENDERER_HPP
 #define FLIGHT_STATISTICS_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "Renderer/TrailRenderer.hpp"
 
 #include <tchar.h>
 
+struct PixelRect;
 struct NMEAInfo;
 struct DerivedInfo;
 struct ContestSettings;

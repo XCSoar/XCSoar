@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/OpenGL/Triangulate.hpp"
 #include "Screen/Point.hpp"
+#include "Topography/XShapePoint.hpp"
 
 #include <algorithm>
 #include <math.h>

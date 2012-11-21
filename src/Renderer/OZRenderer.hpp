@@ -24,9 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 #define XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 
-#include "Math/Angle.hpp"
-#include "Screen/Point.hpp"
-
 struct TaskLook;
 struct AirspaceLook;
 class Canvas;

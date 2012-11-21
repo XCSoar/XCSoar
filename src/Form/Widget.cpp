@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Widget.hpp"
+#include "Screen/Point.hpp"
 
 Widget::~Widget()
 {

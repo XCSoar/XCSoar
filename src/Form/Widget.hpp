@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_WIDGET_HPP
 #define XCSOAR_WIDGET_HPP
 
-#include "Screen/Point.hpp"
 #include "Compiler.h"
 
 #include "assert.h"
 
+struct PixelSize;
+struct PixelRect;
 class ContainerWindow;
 
 /**

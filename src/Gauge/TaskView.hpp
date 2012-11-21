@@ -24,8 +24,7 @@
 #ifndef XCSOAR_TASK_VIEW_HPP
 #define XCSOAR_TASK_VIEW_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 class Canvas;
 class OrderedTask;
 class OrderedTaskPoint;

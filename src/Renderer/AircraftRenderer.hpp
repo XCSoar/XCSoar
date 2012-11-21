@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRCRAFT_RENDERER_HPP
 #define XCSOAR_AIRCRAFT_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct RasterPoint;
 struct MapSettings;
 struct AircraftLook;
 class Canvas;

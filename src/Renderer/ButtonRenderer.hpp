@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_BUTTON_RENDERER_HPP
 #define XCSOAR_BUTTON_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 struct ButtonLook;
 class Canvas;
 

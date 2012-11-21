@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef HORIZON_RENDERER_HPP
 #define HORIZON_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 struct HorizonLook;
 struct AttitudeState;
 class Canvas;

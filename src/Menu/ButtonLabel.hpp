@@ -25,11 +25,11 @@ Copyright_License {
 #define BUTTON_LABEL_HPP
 
 #include "Compiler.h"
-#include "Screen/Point.hpp"
 
 #include <tchar.h>
 #include <stddef.h>
 
+struct PixelRect;
 class Font;
 class ContainerWindow;
 class Menu;

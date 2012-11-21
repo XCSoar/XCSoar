@@ -24,8 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_ITEM_LIST_RENDERER_HPP
 #define XCSOAR_MAP_ITEM_LIST_RENDERER_HPP
 
-#include "Screen/Point.hpp"
-
+struct PixelRect;
 class Canvas;
 struct MapItem;
 struct DialogLook;
@@ -43,7 +42,7 @@ namespace MapItemListRenderer
             const TrafficLook &traffic_look,
             const FinalGlideBarLook &final_glide_look,
             const MapSettings &settings,
-            const TrafficList *traffic_list = NULL);
+            const TrafficList *traffic_list=nullptr);
 }
 
 #endif

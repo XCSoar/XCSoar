@@ -25,8 +25,8 @@
 #define XCSOAR_TRAFFIC_RENDERER_HPP
 
 #include "FLARM/Friends.hpp"
-#include "Screen/Point.hpp"
 
+struct RasterPoint;
 class Canvas;
 struct TrafficLook;
 struct FlarmTraffic;

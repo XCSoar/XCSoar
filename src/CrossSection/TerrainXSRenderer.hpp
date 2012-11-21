@@ -25,11 +25,11 @@
 #define TERRAIN_CROSS_SECTION_RENDERER_HPP
 
 #include "Terrain/RasterBuffer.hpp"
-#include "Screen/Point.hpp"
 
 class Canvas;
 class ChartRenderer;
 struct CrossSectionLook;
+struct RasterPoint;
 
 /**
  * A Window which renders a terrain and airspace cross-section

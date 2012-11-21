@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_BACKGROUND_RENDERER_HPP
 #define XCSOAR_BACKGROUND_RENDERER_HPP
 
-#include "Screen/Point.hpp"
 #include "Math/Angle.hpp"
 
 #include <tchar.h>
 
+struct RasterPoint;
 class Canvas;
 class WindowProjection;
 struct TerrainRendererSettings;
