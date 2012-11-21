@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Altitude.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "InfoBoxes/Panel/AltitudeInfo.hpp"
 #include "InfoBoxes/Panel/AltitudeSimulator.hpp"
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"

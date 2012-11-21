@@ -79,7 +79,7 @@ class InfoBoxContentWindArrow: public InfoBoxContentWind
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
 };
 
 #endif

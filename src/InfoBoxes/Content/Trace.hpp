@@ -32,7 +32,7 @@ class TraceVariableHistory;
 class InfoBoxContentSpark: public InfoBoxContent
 {
 protected:
-  void Paint(InfoBoxWindow &infobox, Canvas &canvas,
+  void Paint(Canvas &canvas, const PixelRect &rc,
                 const TraceVariableHistory& var,
                 const bool center = true);
   void SetVSpeedComment(InfoBoxData &data,
@@ -44,28 +44,28 @@ class InfoBoxContentVarioSpark : public InfoBoxContentSpark
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
 };
 
 class InfoBoxContentNettoVarioSpark : public InfoBoxContentSpark
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
 };
 
 class InfoBoxContentCirclingAverageSpark : public InfoBoxContentSpark
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
 };
 
 class InfoBoxContentBarogram : public InfoBoxContentAltitude
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
@@ -73,14 +73,14 @@ class InfoBoxContentThermalBand : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
 };
 
 class InfoBoxContentTaskProgress : public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
 };
 
 #endif

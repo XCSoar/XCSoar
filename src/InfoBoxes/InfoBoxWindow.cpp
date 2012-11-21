@@ -242,8 +242,14 @@ InfoBoxWindow::Paint(Canvas &canvas)
                   ? look.focused_background_color
                   : look.background_color));
 
-  if (data.GetCustom() && content != NULL)
-    content->OnCustomPaint(*this, canvas);
+  if (data.GetCustom() && content != NULL) {
+    /* if there's no comment, the content object may paint that area,
+       too */
+    const PixelRect &rc = data.comment.empty()
+      ? value_and_comment_rect
+      : value_rect;
+    content->OnCustomPaint(canvas, rc);
+  }
 
   canvas.SetBackgroundTransparent();
 

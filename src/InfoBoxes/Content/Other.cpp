@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Other.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
+#include "InfoBoxes/Data.hpp"
 #include "Interface.hpp"
 #include "Renderer/HorizonRenderer.hpp"
 #include "Hardware/Battery.hpp"
@@ -153,12 +153,12 @@ InfoBoxContentFreeRAM::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentHorizon::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentHorizon::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
 #ifndef NO_HORIZON
   if (CommonInterface::Basic().acceleration.available) {
     const Look &look = UIGlobals::GetLook();
-    HorizonRenderer::Draw(canvas, infobox.GetValueAndCommentRect(),
+    HorizonRenderer::Draw(canvas, rc,
                           look.horizon, CommonInterface::Basic().attitude);
   }
 #endif

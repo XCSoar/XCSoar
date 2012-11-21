@@ -25,11 +25,11 @@ Copyright_License {
 #define XCSOAR_INFOBOX_CONTENT_HPP
 
 #include "Compiler.h"
+#include "Screen/Point.hpp"
 
 #include <tchar.h>
 
 struct InfoBoxData;
-class InfoBoxWindow;
 class Widget;
 class Canvas;
 
@@ -49,7 +49,7 @@ public:
   virtual void Update(InfoBoxData &data) = 0;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode);
 
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc);
 
   /**
    * This is a generic handler for the InfoBox. It takes the argument and

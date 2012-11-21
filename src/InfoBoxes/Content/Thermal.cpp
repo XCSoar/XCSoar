@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "InfoBoxes/Data.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -208,8 +207,8 @@ InfoBoxContentThermalAssistant::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalAssistant::OnCustomPaint(InfoBoxWindow &infobox,
-                                              Canvas &canvas)
+InfoBoxContentThermalAssistant::OnCustomPaint(Canvas &canvas,
+                                              const PixelRect &rc)
 {
-  renderer.Paint(canvas, infobox.GetValueAndCommentRect());
+  renderer.Paint(canvas, rc);
 }

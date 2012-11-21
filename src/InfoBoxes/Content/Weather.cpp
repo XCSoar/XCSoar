@@ -25,7 +25,6 @@ Copyright_License {
 #include "InfoBoxes/Panel/WindEdit.hpp"
 #include "InfoBoxes/Panel/WindSetup.hpp"
 #include "InfoBoxes/Data.hpp"
-#include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Util/Macros.hpp"
@@ -215,11 +214,10 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentWindArrow::OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas)
+InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
   const auto &info = CommonInterface::Calculated();
 
-  auto rc = infobox.GetValueRect();
   RasterPoint pt = {
     PixelScalar((rc.left + rc.right) / 2),
     PixelScalar((rc.top + rc.bottom) / 2),
