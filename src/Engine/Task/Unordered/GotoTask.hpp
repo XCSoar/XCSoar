@@ -80,8 +80,6 @@ public:
   virtual void SetActiveTaskPoint(unsigned index);
   virtual bool IsValidTaskPoint(const int index_offset) const;
 
-  /* virtual methods from class AbstractTask */
-  virtual void Reset();
 protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
