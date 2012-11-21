@@ -1789,6 +1789,7 @@ $(eval $(call link-program,RunNumberEntry,RUN_NUMBER_ENTRY))
 RUN_TIME_ENTRY_SOURCES = \
 	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/ResourceLoader.cpp \

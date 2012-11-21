@@ -22,9 +22,10 @@ Copyright_License {
 */
 
 #include "Dialogs/TimeEntry.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Form/Form.hpp"
-#include "Form/ButtonPanel.hpp"
 #include "Form/DigitEntry.hpp"
+#include "Form/WindowWidget.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -35,6 +36,16 @@ enum {
   CLEAR = 100,
 };
 
+class FixedWindowWidget : public WindowWidget {
+public:
+  FixedWindowWidget() = default;
+  FixedWindowWidget(Window *window):WindowWidget(window) {}
+
+  virtual PixelSize GetMinimumSize() const gcc_override {
+    return GetWindow()->GetSize();
+  }
+};
+
 bool
 TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
 {
@@ -42,48 +53,43 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WindowStyle dialog_style;
-  dialog_style.Hide();
-  dialog_style.ControlParent();
-
-  WndForm dialog(look);
-  dialog.Create(UIGlobals::GetMainWindow(), caption, dialog_style);
+  WidgetDialog dialog(look);
+  dialog.CreatePreliminary(UIGlobals::GetMainWindow(), caption);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
-  /* create button panel */
-
-  ButtonPanel buttons(client_area, look);
-  const PixelRect rc = buttons.UpdateLayout();
-
-  /* create the command buttons */
+  /* create the input control */
 
   WindowStyle control_style;
+  control_style.Hide();
   control_style.TabStop();
 
   DigitEntry entry(look);
-  entry.CreateTime(client_area, rc, control_style);
+  entry.CreateTime(client_area, client_area.GetClientRect(), control_style);
+  entry.Resize(entry.GetRecommendedSize().cx, entry.GetRecommendedSize().cy);
   entry.SetValue(value);
   entry.SetActionListener(dialog, mrOK);
 
   /* create buttons */
 
-  buttons.Add(_("OK"), dialog, mrOK);
-  buttons.Add(_("Cancel"), dialog, mrCancel);
+  dialog.AddButton(_("OK"), dialog, mrOK);
+  dialog.AddButton(_("Cancel"), dialog, mrCancel);
 
-  buttons.Add(_("Now"), [&entry](){
+  dialog.AddButton(_("Now"), [&entry](){
       const BrokenTime bt = BrokenDateTime::NowUTC();
       entry.SetValue(RoughTime(bt.hour, bt.minute));
     });
 
   if (nullable)
-    buttons.Add(_("Clear"), [&entry](){ entry.SetInvalid(); });
-
-  entry.Move(buttons.UpdateLayout());
+    dialog.AddButton(_("Clear"), [&entry](){ entry.SetInvalid(); });
 
   /* run it */
 
+  FixedWindowWidget widget(&entry);
+  dialog.FinishPreliminary(&widget);
+
   bool result = dialog.ShowModal() == mrOK;
+  dialog.StealWidget();
   if (!result)
     return false;
 
