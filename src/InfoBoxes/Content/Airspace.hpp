@@ -28,12 +28,12 @@ Copyright_License {
 
 class InfoBoxContentNearestAirspaceHorizontal : public InfoBoxContent {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNearestAirspaceVertical : public InfoBoxContent {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 #endif

@@ -41,11 +41,12 @@ public:
     return PixelSize{Layout::Scale(205u), Layout::Scale(46)};
   }
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Show(const PixelRect &rc) gcc_override;
+  virtual void Hide() gcc_override;
 
-  virtual void OnGPSUpdate(const MoreData &basic);
+  virtual void OnGPSUpdate(const MoreData &basic) gcc_override;
 };
 
 void

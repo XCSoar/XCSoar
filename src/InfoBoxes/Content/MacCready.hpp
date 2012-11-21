@@ -29,11 +29,11 @@ Copyright_License {
 class InfoBoxContentMacCready : public InfoBoxContent
 {
 public:
-  virtual const DialogContent *GetDialogContent();
+  virtual const DialogContent *GetDialogContent() gcc_override;
 
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
-  virtual bool HandleQuickAccess(const TCHAR *misc);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
+  virtual bool HandleQuickAccess(const TCHAR *misc) gcc_override;
 };
 
 #endif

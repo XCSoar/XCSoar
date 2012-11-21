@@ -41,7 +41,8 @@ public:
     return PixelSize{Layout::Scale(205u), Layout::Scale(49)};
   }
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
 };
 
 static void

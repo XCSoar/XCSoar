@@ -31,8 +31,8 @@ class InfoBoxContentAlternateName : public InfoBoxContent
 public:
   InfoBoxContentAlternateName(const unsigned _index):
     InfoBoxContent(), index(_index) {}
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 
 private:
   unsigned index;
@@ -43,8 +43,8 @@ class InfoBoxContentAlternateGR : public InfoBoxContent
 public:
   InfoBoxContentAlternateGR(const unsigned _index):
     InfoBoxContent(), index(_index) {}
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 
 private:
   unsigned index;

@@ -29,57 +29,57 @@ Copyright_License {
 class InfoBoxContentHumidity : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTemperature : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTemperatureForecast : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
 class InfoBoxContentWind : public InfoBoxContent
 {
 public:
-  virtual const DialogContent *GetDialogContent();
+  virtual const DialogContent *GetDialogContent() gcc_override;
 };
 
 class InfoBoxContentWindSpeed : public InfoBoxContentWind
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentWindBearing : public InfoBoxContentWind
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentHeadWind: public InfoBoxContentWind
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentHeadWindSimplified: public InfoBoxContentWind
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentWindArrow: public InfoBoxContentWind
 {
 public:
-  virtual void Update(InfoBoxData &data);
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
 };
 
 #endif

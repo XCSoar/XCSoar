@@ -29,212 +29,212 @@ Copyright_License {
 class InfoBoxContentBearing : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentBearingDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextWaypoint : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
 class InfoBoxContentNextDistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextETE : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextETA : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextAltitudeDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextMC0AltitudeDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextAltitudeRequire : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextAltitudeArrival : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextGR: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalDistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalETE : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalETA : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalAltitudeDiff : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalAltitudeRequire : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalGRTE: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalGR: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentHomeDistance: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentOLC: public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
 class InfoBoxContentTaskSpeed : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskSpeedAchieved : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskSpeedInstant : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAATime : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAATimeDelta : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAADistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAADistanceMax : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAADistanceMin : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAASpeed : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAASpeedMax : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskAASpeedMin : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentTaskTimeUnderMaxHeight : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextETEVMG : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFinalETEVMG : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentCruiseEfficiency : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 #endif

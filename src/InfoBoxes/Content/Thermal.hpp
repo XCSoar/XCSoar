@@ -30,73 +30,73 @@ Copyright_License {
 class InfoBoxContentVario : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentVarioNetto : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermal30s : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalLastAvg : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalLastGain : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalLastTime : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalAllAvg : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalAvg : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalGain : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalRatio : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentVarioDistance : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentNextLegEqThermal : public InfoBoxContent
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentThermalAssistant: public InfoBoxContent
@@ -106,8 +106,8 @@ class InfoBoxContentThermalAssistant: public InfoBoxContent
 public:
   InfoBoxContentThermalAssistant();
 
-  virtual void Update(InfoBoxData &data);
-  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual void OnCustomPaint(InfoBoxWindow &infobox, Canvas &canvas) gcc_override;
 };
 
 #endif

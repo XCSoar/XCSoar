@@ -52,11 +52,12 @@ public:
   WindSetupPanel(unsigned _id)
     :RowFormWidget(UIGlobals::GetDialogLook()), id(_id) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
 
 protected:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) gcc_override;
 
 private:
   void OnAutoWind(DataFieldEnum &Sender);

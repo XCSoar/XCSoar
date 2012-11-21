@@ -45,11 +45,12 @@ public:
   WindEditPanel()
     :RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
 
 protected:
   /* methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
+  virtual void OnModified(DataField &df) gcc_override;
 
 private:
   void OnWindSpeed(DataFieldFloat &Sender);

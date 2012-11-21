@@ -29,44 +29,44 @@ Copyright_License {
 class InfoBoxContentAltitude : public InfoBoxContent
 {
 public:
-  virtual const DialogContent *GetDialogContent();
+  virtual const DialogContent *GetDialogContent() gcc_override;
 };
 
 class InfoBoxContentAltitudeNav : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data);
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
+  virtual void Update(InfoBoxData &data) gcc_override;
+  virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
 class InfoBoxContentAltitudeAGL : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentAltitudeBaro : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentAltitudeQFE : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 class InfoBoxContentFlightLevel : public InfoBoxContentAltitude
 {
 public:
-  virtual void Update(InfoBoxData &data);
+  virtual void Update(InfoBoxData &data) gcc_override;
 };
 
 #endif

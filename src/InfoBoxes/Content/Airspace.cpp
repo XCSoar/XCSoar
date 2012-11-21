@@ -87,7 +87,7 @@ public:
     }
   }
 
-  virtual bool operator()(const AbstractAirspace &airspace) const {
+  virtual bool operator()(const AbstractAirspace &airspace) const gcc_override {
     return CheckAirspace(airspace) &&
       /* skip airspaces that we already entered */
       !airspace.Inside(location) &&
@@ -171,11 +171,11 @@ protected:
     }
   }
 
-  virtual void Visit(const AirspaceCircle &as) {
+  virtual void Visit(const AirspaceCircle &as) gcc_override {
     Check(as);
   }
 
-  virtual void Visit(const AirspacePolygon &as) {
+  virtual void Visit(const AirspacePolygon &as) gcc_override {
     Check(as);
   }
 

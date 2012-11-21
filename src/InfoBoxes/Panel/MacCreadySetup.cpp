@@ -64,7 +64,8 @@ public:
     return PixelSize{Layout::Scale(80u), Layout::Scale(30u)};
   }
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
 
   /* virtual methods from class ActionListener */
   virtual void OnAction(int id) gcc_override;

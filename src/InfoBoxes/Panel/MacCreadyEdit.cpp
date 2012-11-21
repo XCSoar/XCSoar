@@ -49,7 +49,8 @@ public:
     return PixelSize{Layout::Scale(205u), Layout::Scale(49)};
   }
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
 };
 
 /** XXX this hack is needed because the form callbacks don't get a

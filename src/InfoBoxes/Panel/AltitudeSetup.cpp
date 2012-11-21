@@ -42,7 +42,8 @@ class AltitudeSetupPanel : public RowFormWidget,
 public:
   AltitudeSetupPanel():RowFormWidget(UIGlobals::GetDialogLook()) {}
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
 
 private:
   virtual void OnModified(DataField &df) gcc_override;
