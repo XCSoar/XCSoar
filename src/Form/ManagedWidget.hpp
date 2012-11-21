@@ -49,7 +49,7 @@ class ManagedWidget {
 
 public:
   ManagedWidget(ContainerWindow &_parent)
-    :parent(_parent), widget(NULL) {}
+    :parent(_parent), widget(nullptr) {}
 
   ManagedWidget(ContainerWindow &_parent, Widget *_widget)
     :parent(_parent), widget(_widget), prepared(false) {}
@@ -64,12 +64,12 @@ public:
    */
   Widget *Steal() {
     Widget *result = widget;
-    widget = NULL;
+    widget = nullptr;
     return result;
   }
 
   bool IsDefined() const {
-    return widget != NULL;
+    return widget != nullptr;
   }
 
   bool IsPrepared() const {
