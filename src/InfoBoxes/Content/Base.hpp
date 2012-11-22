@@ -51,14 +51,6 @@ public:
 
   virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc);
 
-  /**
-   * This is a generic handler for the InfoBox. It takes the argument and
-   * processes it like the HandleKey handler, but is just more generic.
-   * @param misc
-   * @return True on success, Fales otherwise
-   */
-  virtual bool HandleQuickAccess(const TCHAR *misc);
-
   struct PanelContent {
     constexpr
     PanelContent(const TCHAR* _name,

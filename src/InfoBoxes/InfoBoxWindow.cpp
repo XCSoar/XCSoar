@@ -356,16 +356,6 @@ InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   return false;
 }
 
-bool
-InfoBoxWindow::HandleQuickAccess(const TCHAR *value)
-{
-  if (content != NULL && content->HandleQuickAccess(value)) {
-    UpdateContent();
-    return true;
-  }
-  return false;
-}
-
 const InfoBoxContent::DialogContent *
 InfoBoxWindow::GetDialogContent() const
 {

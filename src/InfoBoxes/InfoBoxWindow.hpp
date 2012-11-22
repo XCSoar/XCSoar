@@ -147,14 +147,6 @@ protected:
   bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);
 
 public:
-  /**
-   * This passes a given value to the InfoBoxContent for further processing
-   * and updates the InfoBox.
-   * @param Value Value to handle
-   * @return True on success, Fales otherwise
-   */
-  bool HandleQuickAccess(const TCHAR *value);
-
   gcc_pure
   const InfoBoxContent::DialogContent *GetDialogContent() const;
 

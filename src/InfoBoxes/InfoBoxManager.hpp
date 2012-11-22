@@ -53,14 +53,6 @@ namespace InfoBoxManager
   void Event_Select(int i);
   void Event_Change(int i);
 
-  /**
-   * ProcessQuickAccess takes the id of the InfoBox where to pass the
-   * value Value. It doesn't expect the target InfoBox to be focussed.
-   * @param id
-   * @param Value
-   */
-  void ProcessQuickAccess(const int id, const TCHAR *Value);
-
   bool Click(InfoBoxWindow &ib);
 
   void ProcessTimer();

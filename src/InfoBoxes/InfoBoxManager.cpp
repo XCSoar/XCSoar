@@ -243,19 +243,6 @@ InfoBoxManager::DisplayInfoBox()
   first = false;
 }
 
-void
-InfoBoxManager::ProcessQuickAccess(const int id, const TCHAR *Value)
-{
-  if (id < 0)
-    return;
-
-  // do approciate action
-  if (infoboxes[id] != NULL)
-    infoboxes[id]->HandleQuickAccess(Value);
-
-  SetDirty();
-}
-
 bool
 InfoBoxManager::HasFocus()
 {

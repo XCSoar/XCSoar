@@ -37,12 +37,6 @@ InfoBoxContent::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
 }
 
-bool
-InfoBoxContent::HandleQuickAccess(const TCHAR *misc)
-{
-  return false;
-}
-
 const InfoBoxContent::DialogContent *
 InfoBoxContent::GetDialogContent()
 {
