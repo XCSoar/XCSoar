@@ -91,6 +91,7 @@ InfoBoxContentMacCready::Update(InfoBoxData &data)
 bool
 InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 {
+  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
   const GlidePolar &polar = settings_computer.polar.glide_polar_task;
@@ -99,14 +100,12 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 
   switch (keycode) {
   case ibkUp:
-    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
-                  fixed(5));
+    mc = std::min(mc + step, fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   case ibkDown:
-    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
-                  fixed_zero);
+    mc = std::max(mc - step, fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;
 
@@ -131,32 +130,29 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 bool
 InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
 {
+  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
   const GlidePolar &polar = settings_computer.polar.glide_polar_task;
   fixed mc = polar.GetMC();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {
-    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
-                  fixed(5));
+    mc = std::min(mc + step, fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
-    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep() * 5),
-                  fixed(5));
+    mc = std::min(mc + step * 5, fixed(5));
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.1")) == 0) {
-    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
-                  fixed_zero);
+    mc = std::max(mc - step, fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
-    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep() * 5),
-                  fixed_zero);
+    mc = std::max(mc - step * 5, fixed_zero);
     ActionInterface::SetManualMacCready(mc);
     return true;
 

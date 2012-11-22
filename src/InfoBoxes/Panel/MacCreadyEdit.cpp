@@ -94,30 +94,27 @@ MacCreadyEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   LoadWindow(call_back_table, parent, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
 
+  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
   TCHAR caption[16];
 
   WndButton *button = (WndButton *)form.FindByName(_T("cmdPlusBig"));
   assert(button != NULL);
-  FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(GetUserVerticalSpeedStep() * 5), caption, false);
+  FormatUserVerticalSpeed(step * 5, caption, false);
   button->SetCaption(caption);
 
   button = (WndButton *)form.FindByName(_T("cmdPlusSmall"));
   assert(button != NULL);
-  FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(GetUserVerticalSpeedStep()), caption, false);
+  FormatUserVerticalSpeed(step, caption, false);
   button->SetCaption(caption);
 
   button = (WndButton *)form.FindByName(_T("cmdMinusBig"));
   assert(button != NULL);
-  FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(-GetUserVerticalSpeedStep() * 5), caption, false);
+  FormatUserVerticalSpeed(step * -5, caption, false);
   button->SetCaption(caption);
 
   button = (WndButton *)form.FindByName(_T("cmdMinusSmall"));
   assert(button != NULL);
-  FormatUserVerticalSpeed(
-      Units::ToSysVSpeed(-GetUserVerticalSpeedStep()), caption, false);
+  FormatUserVerticalSpeed(-step, caption, false);
   button->SetCaption(caption);
 }
 
