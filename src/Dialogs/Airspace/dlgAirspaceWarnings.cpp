@@ -41,7 +41,7 @@ Copyright_License {
 #include "Util/TrivialArray.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Event/ScopeTimer.hpp"
+#include "Event/LambdaTimer.hpp"
 
 #include "Compiler.h"
 
@@ -522,10 +522,12 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   selected_airspace = NULL;
   focused_airspace = NULL;
 
-  const ScopeTimer update_timer(UpdateList, 500);
+  auto update_timer = MakeLambdaTimer([](){ UpdateList(); });
+  update_timer.Schedule(500);
 
   warning_list_frame->SetCursorIndex(0);
   dialog->ShowModal();
+  update_timer.Cancel();
 
   delete dialog;
 

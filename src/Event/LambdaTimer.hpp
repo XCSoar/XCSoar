@@ -21,12 +21,42 @@ Copyright_License {
 }
 */
 
-#include "FunctionalTimer.hpp"
+#ifndef XCSOAR_EVENT_LAMBDA_TIMER_HPP
+#define XCSOAR_EVENT_LAMBDA_TIMER_HPP
 
-void
-FunctionalTimer::OnTimer()
+#include "Timer.hpp"
+#include "Compiler.h"
+
+#include <utility>
+
+/**
+ * An adapter that forwards Timer::OnTimer() calls to a lambda
+ * expression.
+ */
+template<typename C>
+class LambdaTimer : public Timer, private C {
+public:
+  LambdaTimer(C &&c):C(std::move(c)) {}
+
+  using Timer::IsActive;
+  using Timer::Schedule;
+  using Timer::Cancel;
+
+protected:
+  virtual void OnTimer() gcc_override {
+    C::operator()();
+  }
+};
+
+/**
+ * Convert a lambda expression (a closure object) to a Timer.  This is
+ * a convenience function.
+ */
+template<typename C>
+LambdaTimer<C>
+MakeLambdaTimer(C &&c)
 {
-  assert(callback);
-
-  callback();
+  return LambdaTimer<C>(std::move(c));
 }
+
+#endif

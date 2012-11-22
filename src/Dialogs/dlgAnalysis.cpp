@@ -53,7 +53,7 @@ Copyright_License {
 #include "Blackboard/FullBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Engine/Contest/Solvers/Contests.hpp"
-#include "Event/ScopeTimer.hpp"
+#include "Event/LambdaTimer.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"
@@ -600,9 +600,11 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
 
   Update();
 
-  const ScopeTimer update_timer(Update, 2500);
+  auto update_timer = MakeLambdaTimer([](){ Update(); });
+  update_timer.Schedule(2500);
 
   wf->ShowModal();
+  update_timer.Cancel();
 
   delete wf;
 }

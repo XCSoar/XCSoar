@@ -1,5 +1,4 @@
-EVENT_SOURCES = \
-	$(SRC)/Event/FunctionalTimer.cpp
+EVENT_SOURCES =
 
 ifeq ($(TARGET),ANDROID)
 EVENT_SOURCES += \

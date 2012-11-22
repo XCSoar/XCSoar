@@ -29,7 +29,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Event/FunctionalTimer.hpp"
+#include "Event/LambdaTimer.hpp"
 #include "Event/Timer.hpp"
 
 #include <assert.h>
@@ -190,11 +190,11 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
 
   dialog.AddButton(_("Cancel"), mrCancel);
 
-  FunctionalTimer update_timer;
+  auto update_timer = MakeLambdaTimer([list_widget](){
+      list_widget->GetList().Invalidate();
+    });
   if (update)
-    update_timer.Schedule([list_widget]() {
-        list_widget->GetList().Invalidate();
-      }, 1000);
+    update_timer.Schedule(1000);
 
   int result = dialog.ShowModal() == mrOK
     ? (int)list_widget->GetList().GetCursorIndex()
