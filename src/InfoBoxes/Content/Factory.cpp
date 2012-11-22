@@ -67,6 +67,22 @@ struct MetaData {
   const TCHAR *description;
   InfoBoxContent *(*create)();
   Type next, previous;
+
+  /**
+   * Implicit instances shall not exist.  This declaration ensures at
+   * compile time that the meta_data array is not larger than the
+   * number of explicitly initialised elements.
+   */
+  MetaData() = delete;
+
+  constexpr MetaData(const TCHAR *_name,
+                     const TCHAR *_caption,
+                     const TCHAR *_description,
+                     InfoBoxContent *(*_create)(),
+                     Type _next, Type _previous)
+    :name(_name), caption(_caption), description(_description),
+     create(_create),
+     next(_next), previous(_previous) {}
 };
 
 // Groups:
