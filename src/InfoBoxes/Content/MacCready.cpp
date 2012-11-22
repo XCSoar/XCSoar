@@ -120,13 +120,3 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
   }
   return false;
 }
-
-bool
-InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
-{
-  if (_tcscmp(misc, _T("mode")) == 0) {
-    return HandleKey(ibkEnter);
-  }
-
-  return false;
-}

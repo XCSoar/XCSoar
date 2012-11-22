@@ -26,24 +26,16 @@ Copyright_License {
 #include "Form/WindowWidget.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
+#include "Profile/Profile.hpp"
 
 class WndButton;
 
 class MacCreadySetupPanel : public WindowWidget,
                             private ActionListener {
-  unsigned id;
-
 public:
-  MacCreadySetupPanel(unsigned _id):id(_id) {}
-
-  void QuickAccess(const TCHAR *value) {
-    InfoBoxManager::ProcessQuickAccess(id, value);
-  }
-
   WndButton &GetButton() {
     return *(WndButton *)GetWindow();
   }
@@ -74,7 +66,9 @@ public:
 void
 MacCreadySetupPanel::OnAction(int id)
 {
-  QuickAccess(_T("mode"));
+  TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
+  task_behaviour.auto_mc = !task_behaviour.auto_mc;
+  Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);
 
   UpdateCaption();
 }
@@ -93,5 +87,5 @@ MacCreadySetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 Widget *
 LoadMacCreadySetupPanel(unsigned id)
 {
-  return new MacCreadySetupPanel(id);
+  return new MacCreadySetupPanel();
 }

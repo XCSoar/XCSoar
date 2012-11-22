@@ -33,7 +33,6 @@ public:
 
   virtual void Update(InfoBoxData &data) gcc_override;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
-  virtual bool HandleQuickAccess(const TCHAR *misc) gcc_override;
 };
 
 #endif
