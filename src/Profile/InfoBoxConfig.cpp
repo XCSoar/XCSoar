@@ -24,6 +24,7 @@ Copyright_License {
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
+#include "InfoBoxes/Content/Factory.hpp"
 
 using namespace InfoBoxFactory;
 
@@ -75,7 +76,7 @@ Profile::Load(InfoBoxSettings &settings)
 
     for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
       _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
-      GetEnum(profileKey, panel.contents[j]);
+      Get(profileKey, panel.contents[j]);
     }
   }
 }
