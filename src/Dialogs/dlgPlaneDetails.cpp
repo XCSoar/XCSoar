@@ -77,6 +77,7 @@ UpdatePlane()
 {
   SaveFormProperty(*dialog, _T("Registration"), plane.registration);
   SaveFormProperty(*dialog, _T("CompetitionID"), plane.competition_id);
+  SaveFormProperty(*dialog, _T("Type"), plane.type);
   SaveFormProperty(*dialog, _T("HandicapEdit"), plane.handicap);
   SaveFormProperty(*dialog, _T("WingAreaEdit"), plane.wing_area);
   SaveFormProperty(*dialog, _T("MaxBallastEdit"), plane.max_ballast);
