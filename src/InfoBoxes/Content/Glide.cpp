@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentGRInstant::Update(InfoBoxData &data)
+UpdateInfoBoxGRInstant(InfoBoxData &data)
 {
   const fixed gr = XCSoarInterface::Calculated().gr;
 
@@ -45,7 +45,7 @@ InfoBoxContentGRInstant::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentGRCruise::Update(InfoBoxData &data)
+UpdateInfoBoxGRCruise(InfoBoxData &data)
 {
   const fixed cruise_gr = XCSoarInterface::Calculated().cruise_gr;
 
@@ -59,7 +59,7 @@ InfoBoxContentGRCruise::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentGRAvg::Update(InfoBoxData &data)
+UpdateInfoBoxGRAvg(InfoBoxData &data)
 {
   const fixed average_gr = XCSoarInterface::Calculated().average_gr;
 
@@ -78,7 +78,7 @@ InfoBoxContentGRAvg::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentLDVario::Update(InfoBoxData &data)
+UpdateInfoBoxLDVario(InfoBoxData &data)
 {
   const fixed ld_vario = XCSoarInterface::Calculated().ld_vario;
 

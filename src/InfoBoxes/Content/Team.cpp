@@ -94,7 +94,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentTeamBearing::Update(InfoBoxData &data)
+UpdateInfoBoxTeamBearing(InfoBoxData &data)
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
@@ -123,7 +123,7 @@ InfoBoxContentTeamBearing::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data)
+UpdateInfoBoxTeamBearingDiff(InfoBoxData &data)
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;
@@ -153,7 +153,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTeamDistance::Update(InfoBoxData &data)
+UpdateInfoBoxTeamDistance(InfoBoxData &data)
 {
   const TeamCodeSettings &settings =
     CommonInterface::GetComputerSettings().team_code;

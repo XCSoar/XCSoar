@@ -24,30 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_GLIDE_HPP
 #define XCSOAR_INFOBOX_CONTENT_GLIDE_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
+struct InfoBoxData;
 
-class InfoBoxContentGRInstant : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxGRInstant(InfoBoxData &data);
 
-class InfoBoxContentGRCruise : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxGRCruise(InfoBoxData &data);
 
-class InfoBoxContentGRAvg : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxGRAvg(InfoBoxData &data);
 
-class InfoBoxContentLDVario : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxLDVario(InfoBoxData &data);
 
 #endif

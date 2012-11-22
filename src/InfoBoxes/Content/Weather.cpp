@@ -41,7 +41,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentHumidity::Update(InfoBoxData &data)
+UpdateInfoBoxHumidity(InfoBoxData &data)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   if (!basic.humidity_available) {
@@ -54,7 +54,7 @@ InfoBoxContentHumidity::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTemperature::Update(InfoBoxData &data)
+UpdateInfoBoxTemperature(InfoBoxData &data)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   if (!basic.temperature_available) {

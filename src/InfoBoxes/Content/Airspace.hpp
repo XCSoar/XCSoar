@@ -24,16 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_AIRSPACE_HPP
 #define XCSOAR_INFOBOX_CONTENT_AIRSPACE_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
+struct InfoBoxData;
 
-class InfoBoxContentNearestAirspaceHorizontal : public InfoBoxContent {
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data);
 
-class InfoBoxContentNearestAirspaceVertical : public InfoBoxContent {
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data);
 
 #endif

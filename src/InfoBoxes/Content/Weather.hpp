@@ -26,17 +26,11 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentHumidity : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxHumidity(InfoBoxData &data);
 
-class InfoBoxContentTemperature : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTemperature(InfoBoxData &data);
 
 class InfoBoxContentTemperatureForecast : public InfoBoxContent
 {

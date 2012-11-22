@@ -31,7 +31,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentTimeLocal::Update(InfoBoxData &data)
+UpdateInfoBoxTimeLocal(InfoBoxData &data)
 {
   if (!CommonInterface::Basic().time_available) {
     data.SetInvalid();
@@ -50,7 +50,7 @@ InfoBoxContentTimeLocal::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTimeUTC::Update(InfoBoxData &data)
+UpdateInfoBoxTimeUTC(InfoBoxData &data)
 {
   if (!CommonInterface::Basic().time_available) {
     data.SetInvalid();
@@ -66,7 +66,7 @@ InfoBoxContentTimeUTC::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTimeFlight::Update(InfoBoxData &data)
+UpdateInfoBoxTimeFlight(InfoBoxData &data)
 {
   if (!positive(CommonInterface::Calculated().flight.flight_time)) {
     data.SetInvalid();

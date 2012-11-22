@@ -24,16 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_TERRAIN_HPP
 #define XCSOAR_INFOBOX_CONTENT_TERRAIN_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
+struct InfoBoxData;
 
-class InfoBoxContentTerrainHeight : public InfoBoxContent {
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTerrainHeight(InfoBoxData &data);
 
-class InfoBoxContentTerrainCollision : public InfoBoxContent {
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTerrainCollision(InfoBoxData &data);
 
 #endif

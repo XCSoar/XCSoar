@@ -27,77 +27,41 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Gauge/ThermalAssistantRenderer.hpp"
 
-class InfoBoxContentVario : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxVario(InfoBoxData &data);
 
-class InfoBoxContentVarioNetto : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxVarioNetto(InfoBoxData &data);
 
-class InfoBoxContentThermal30s : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermal30s(InfoBoxData &data);
 
-class InfoBoxContentThermalLastAvg : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermalLastAvg(InfoBoxData &data);
 
-class InfoBoxContentThermalLastGain : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermalLastGain(InfoBoxData &data);
 
-class InfoBoxContentThermalLastTime : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermalLastTime(InfoBoxData &data);
 
-class InfoBoxContentThermalAllAvg : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermalAllAvg(InfoBoxData &data);
 
-class InfoBoxContentThermalAvg : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermalAvg(InfoBoxData &data);
 
-class InfoBoxContentThermalGain : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermalGain(InfoBoxData &data);
 
-class InfoBoxContentThermalRatio : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxThermalRatio(InfoBoxData &data);
 
-class InfoBoxContentVarioDistance : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxVarioDistance(InfoBoxData &data);
 
-class InfoBoxContentNextLegEqThermal : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxNextLegEqThermal(InfoBoxData &data);
 
 class InfoBoxContentThermalAssistant: public InfoBoxContent
 {

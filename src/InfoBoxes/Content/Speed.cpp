@@ -84,7 +84,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentSpeedIndicated::Update(InfoBoxData &data)
+UpdateInfoBoxSpeedIndicated(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.airspeed_available) {
@@ -96,7 +96,7 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentSpeed::Update(InfoBoxData &data)
+UpdateInfoBoxSpeed(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   if (!basic.airspeed_available) {
@@ -108,14 +108,14 @@ InfoBoxContentSpeed::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentSpeedMacCready::Update(InfoBoxData &data)
+UpdateInfoBoxSpeedMacCready(InfoBoxData &data)
 {
   const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
   data.SetValueFromSpeed(common_stats.V_block, false);
 }
 
 void
-InfoBoxContentSpeedDolphin::Update(InfoBoxData &data)
+UpdateInfoBoxSpeedDolphin(InfoBoxData &data)
 {
   // Set Value
   const DerivedInfo &calculated = CommonInterface::Calculated();
@@ -128,4 +128,3 @@ InfoBoxContentSpeedDolphin::Update(InfoBoxData &data)
     data.SetComment(_("DOLPHIN"));
 
 }
-

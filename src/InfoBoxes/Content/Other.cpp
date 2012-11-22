@@ -41,7 +41,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentGLoad::Update(InfoBoxData &data)
+UpdateInfoBoxGLoad(InfoBoxData &data)
 {
   if (!XCSoarInterface::Basic().acceleration.available) {
     data.SetInvalid();
@@ -53,7 +53,7 @@ InfoBoxContentGLoad::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentBattery::Update(InfoBoxData &data)
+UpdateInfoBoxBattery(InfoBoxData &data)
 {
 #ifdef HAVE_BATTERY
   bool DisplaySupplyVoltageAsValue=false;
@@ -118,21 +118,21 @@ InfoBoxContentBattery::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentExperimental1::Update(InfoBoxData &data)
+UpdateInfoBoxExperimental1(InfoBoxData &data)
 {
   // Set Value
   data.SetInvalid();
 }
 
 void
-InfoBoxContentExperimental2::Update(InfoBoxData &data)
+UpdateInfoBoxExperimental2(InfoBoxData &data)
 {
   // Set Value
   data.SetInvalid();
 }
 
 void
-InfoBoxContentCPULoad::Update(InfoBoxData &data)
+UpdateInfoBoxCPULoad(InfoBoxData &data)
 {
   unsigned percent_load = SystemLoadCPU();
   if (percent_load <= 100) {
@@ -143,7 +143,7 @@ InfoBoxContentCPULoad::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFreeRAM::Update(InfoBoxData &data)
+UpdateInfoBoxFreeRAM(InfoBoxData &data)
 {
 #ifdef HAVE_MEM_INFO
   FormatByteSize(data.value.buffer(), data.value.MAX_SIZE, SystemFreeRAM(), true);

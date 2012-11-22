@@ -39,7 +39,7 @@ Copyright_License {
 #include <stdio.h>
 
 void
-InfoBoxContentBearing::Update(InfoBoxData &data)
+UpdateInfoBoxBearing(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   const GeoVector &vector_remaining = task_stats.current_leg.vector_remaining;
@@ -54,7 +54,7 @@ InfoBoxContentBearing::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentBearingDiff::Update(InfoBoxData &data)
+UpdateInfoBoxBearingDiff(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -143,7 +143,7 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentNextDistance::Update(InfoBoxData &data)
+UpdateInfoBoxNextDistance(InfoBoxData &data)
 {
   const Waypoint* way_point = protected_task_manager != NULL
     ? protected_task_manager->GetActiveWaypoint()
@@ -176,7 +176,7 @@ InfoBoxContentNextDistance::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextETE::Update(InfoBoxData &data)
+UpdateInfoBoxNextETE(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
@@ -198,7 +198,7 @@ InfoBoxContentNextETE::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextETA::Update(InfoBoxData &data)
+UpdateInfoBoxNextETA(InfoBoxData &data)
 {
   // use proper non-terminal next task stats
 
@@ -235,7 +235,7 @@ SetValueFromAltDiff(InfoBoxData &data, const TaskStats &task_stats,
 }
 
 void
-InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeDiff(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -246,7 +246,7 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextMC0AltitudeDiff::Update(InfoBoxData &data)
+UpdateInfoBoxNextMC0AltitudeDiff(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
@@ -255,7 +255,7 @@ InfoBoxContentNextMC0AltitudeDiff::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextAltitudeRequire::Update(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeRequire(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -270,7 +270,7 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
+UpdateInfoBoxNextAltitudeArrival(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp
 
@@ -288,7 +288,7 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxData &data)
 
 
 void
-InfoBoxContentNextGR::Update(InfoBoxData &data)
+UpdateInfoBoxNextGR(InfoBoxData &data)
 {
   // pilots want this to be assuming terminal flight to this wp, and this
   // is what current_leg gradient does.
@@ -312,7 +312,7 @@ InfoBoxContentNextGR::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalDistance::Update(InfoBoxData &data)
+UpdateInfoBoxFinalDistance(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
@@ -332,7 +332,7 @@ InfoBoxContentFinalDistance::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalETE::Update(InfoBoxData &data)
+UpdateInfoBoxFinalETE(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
@@ -353,7 +353,7 @@ InfoBoxContentFinalETE::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalETA::Update(InfoBoxData &data)
+UpdateInfoBoxFinalETA(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
@@ -373,7 +373,7 @@ InfoBoxContentFinalETA::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalAltitudeDiff::Update(InfoBoxData &data)
+UpdateInfoBoxFinalAltitudeDiff(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
@@ -381,7 +381,7 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalAltitudeRequire::Update(InfoBoxData &data)
+UpdateInfoBoxFinalAltitudeRequire(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
@@ -394,7 +394,7 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskSpeed::Update(InfoBoxData &data)
+UpdateInfoBoxTaskSpeed(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.total.travelled.IsDefined()) {
@@ -411,7 +411,7 @@ InfoBoxContentTaskSpeed::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskSpeedAchieved::Update(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedAchieved(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
@@ -429,7 +429,7 @@ InfoBoxContentTaskSpeedAchieved::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskSpeedInstant::Update(InfoBoxData &data)
+UpdateInfoBoxTaskSpeedInstant(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.IsPirkerSpeedAvailable()) {
@@ -446,7 +446,7 @@ InfoBoxContentTaskSpeedInstant::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalGRTE::Update(InfoBoxData &data)
+UpdateInfoBoxFinalGRTE(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
@@ -467,7 +467,7 @@ InfoBoxContentFinalGRTE::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalGR::Update(InfoBoxData &data)
+UpdateInfoBoxFinalGR(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid) {
@@ -488,7 +488,7 @@ InfoBoxContentFinalGR::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentHomeDistance::Update(InfoBoxData &data)
+UpdateInfoBoxHomeDistance(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -551,7 +551,7 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentTaskAATime::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAATime(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -575,7 +575,7 @@ InfoBoxContentTaskAATime::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAATimeDelta(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -607,7 +607,7 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskAADistance::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAADistance(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -624,7 +624,7 @@ InfoBoxContentTaskAADistance::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskAADistanceMax::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAADistanceMax(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -640,7 +640,7 @@ InfoBoxContentTaskAADistanceMax::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskAADistanceMin::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAADistanceMin(InfoBoxData &data)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
@@ -656,7 +656,7 @@ InfoBoxContentTaskAADistanceMin::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskAASpeed::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeed(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
@@ -676,7 +676,7 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskAASpeedMax::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeedMax(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
@@ -696,7 +696,7 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskAASpeedMin::Update(InfoBoxData &data)
+UpdateInfoBoxTaskAASpeedMin(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
@@ -716,7 +716,7 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
+UpdateInfoBoxTaskTimeUnderMaxHeight(InfoBoxData &data)
 {
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
@@ -742,7 +742,7 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
+UpdateInfoBoxNextETEVMG(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -773,7 +773,7 @@ InfoBoxContentNextETEVMG::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
+UpdateInfoBoxFinalETEVMG(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
@@ -804,7 +804,7 @@ InfoBoxContentFinalETEVMG::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentCruiseEfficiency::Update(InfoBoxData &data)
+UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
 {
   const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
   if (!task_stats.task_valid || !task_stats.task_started) {

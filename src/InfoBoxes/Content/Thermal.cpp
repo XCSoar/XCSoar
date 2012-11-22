@@ -45,19 +45,19 @@ SetVSpeed(InfoBoxData &data, fixed value)
 }
 
 void
-InfoBoxContentVario::Update(InfoBoxData &data)
+UpdateInfoBoxVario(InfoBoxData &data)
 {
   SetVSpeed(data, CommonInterface::Basic().brutto_vario);
 }
 
 void
-InfoBoxContentVarioNetto::Update(InfoBoxData &data)
+UpdateInfoBoxVarioNetto(InfoBoxData &data)
 {
   SetVSpeed(data, CommonInterface::Basic().netto_vario);
 }
 
 void
-InfoBoxContentThermal30s::Update(InfoBoxData &data)
+UpdateInfoBoxThermal30s(InfoBoxData &data)
 {
   SetVSpeed(data, XCSoarInterface::Calculated().average);
 
@@ -67,7 +67,7 @@ InfoBoxContentThermal30s::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalLastAvg::Update(InfoBoxData &data)
+UpdateInfoBoxThermalLastAvg(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().last_thermal;
   if (!thermal.IsDefined()) {
@@ -79,7 +79,7 @@ InfoBoxContentThermalLastAvg::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalLastGain::Update(InfoBoxData &data)
+UpdateInfoBoxThermalLastGain(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().last_thermal;
   if (!thermal.IsDefined()) {
@@ -91,7 +91,7 @@ InfoBoxContentThermalLastGain::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalLastTime::Update(InfoBoxData &data)
+UpdateInfoBoxThermalLastTime(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().last_thermal;
   if (!thermal.IsDefined()) {
@@ -109,7 +109,7 @@ InfoBoxContentThermalLastTime::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalAllAvg::Update(InfoBoxData &data)
+UpdateInfoBoxThermalAllAvg(InfoBoxData &data)
 {
   if (!positive(XCSoarInterface::Calculated().time_climb)) {
     data.SetInvalid();
@@ -121,7 +121,7 @@ InfoBoxContentThermalAllAvg::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalAvg::Update(InfoBoxData &data)
+UpdateInfoBoxThermalAvg(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().current_thermal;
   if (!thermal.IsDefined()) {
@@ -137,7 +137,7 @@ InfoBoxContentThermalAvg::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalGain::Update(InfoBoxData &data)
+UpdateInfoBoxThermalGain(InfoBoxData &data)
 {
   const OneClimbInfo &thermal = CommonInterface::Calculated().current_thermal;
   if (!thermal.IsDefined()) {
@@ -149,7 +149,7 @@ InfoBoxContentThermalGain::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentThermalRatio::Update(InfoBoxData &data)
+UpdateInfoBoxThermalRatio(InfoBoxData &data)
 {
   // Set Value
 
@@ -161,7 +161,7 @@ InfoBoxContentThermalRatio::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentVarioDistance::Update(InfoBoxData &data)
+UpdateInfoBoxVarioDistance(InfoBoxData &data)
 {
   if (!XCSoarInterface::Calculated().task_stats.task_valid) {
     data.SetInvalid();
@@ -178,7 +178,7 @@ InfoBoxContentVarioDistance::Update(InfoBoxData &data)
 
 
 void
-InfoBoxContentNextLegEqThermal::Update(InfoBoxData &data)
+UpdateInfoBoxNextLegEqThermal(InfoBoxData &data)
 {
   const fixed next_leg_eq_thermal = CommonInterface::Calculated().next_leg_eq_thermal;
   if (negative(next_leg_eq_thermal)) {

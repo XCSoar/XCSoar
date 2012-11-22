@@ -26,41 +26,23 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
-class InfoBoxContentGLoad : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxGLoad(InfoBoxData &data);
 
-class InfoBoxContentBattery : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxBattery(InfoBoxData &data);
 
-class InfoBoxContentExperimental1 : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxExperimental1(InfoBoxData &data);
 
-class InfoBoxContentExperimental2 : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxExperimental2(InfoBoxData &data);
 
-class InfoBoxContentCPULoad : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxCPULoad(InfoBoxData &data);
 
-class InfoBoxContentFreeRAM : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxFreeRAM(InfoBoxData &data);
 
 class InfoBoxContentHorizon : public InfoBoxContent
 {

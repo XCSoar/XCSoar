@@ -33,28 +33,16 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
-class InfoBoxContentSpeedIndicated : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxSpeedIndicated(InfoBoxData &data);
 
-class InfoBoxContentSpeed : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxSpeed(InfoBoxData &data);
 
-class InfoBoxContentSpeedMacCready : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxSpeedMacCready(InfoBoxData &data);
 
-class InfoBoxContentSpeedDolphin : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxSpeedDolphin(InfoBoxData &data);
 
 #endif

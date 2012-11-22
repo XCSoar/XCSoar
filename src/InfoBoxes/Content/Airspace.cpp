@@ -122,7 +122,7 @@ FindNearestHorizontalAirspace()
 }
 
 void
-InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxData &data)
+UpdateInfoBoxNearestAirspaceHorizontal(InfoBoxData &data)
 {
   NearestAirspace nearest = FindNearestHorizontalAirspace();
   if (!nearest.IsDefined()) {
@@ -210,7 +210,7 @@ FindNearestVerticalAirspace()
 }
 
 void
-InfoBoxContentNearestAirspaceVertical::Update(InfoBoxData &data)
+UpdateInfoBoxNearestAirspaceVertical(InfoBoxData &data)
 {
   NearestAirspace nearest = FindNearestVerticalAirspace();
   if (!nearest.IsDefined()) {

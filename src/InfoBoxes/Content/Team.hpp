@@ -33,22 +33,13 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
-class InfoBoxContentTeamBearing : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTeamBearing(InfoBoxData &data);
 
-class InfoBoxContentTeamBearingDiff : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTeamBearingDiff(InfoBoxData &data);
 
-class InfoBoxContentTeamDistance : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTeamDistance(InfoBoxData &data);
 
 #endif

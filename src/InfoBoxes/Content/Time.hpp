@@ -24,24 +24,15 @@ Copyright_License {
 #ifndef XCSOAR_INFOBOX_CONTENT_TIME_HPP
 #define XCSOAR_INFOBOX_CONTENT_TIME_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
+struct InfoBoxData;
 
-class InfoBoxContentTimeLocal : public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTimeLocal(InfoBoxData &data);
 
-class InfoBoxContentTimeUTC: public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTimeUTC(InfoBoxData &data);
 
-class InfoBoxContentTimeFlight: public InfoBoxContent
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxTimeFlight(InfoBoxData &data);
 
 #endif
