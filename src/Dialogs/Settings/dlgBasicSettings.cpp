@@ -110,15 +110,18 @@ public:
    */
   void OnTimer();
 
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual bool Save(bool &changed, bool &require_restart);
+  /* virtual methods from Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual bool Save(bool &changed, bool &require_restart) gcc_override;
 
+  /* virtual methods from ActionListener */
   virtual void OnAction(int id);
 
 private:
   /* virtual methods from DataFieldListener */
-  virtual void OnModified(DataField &df);
-  virtual void OnSpecial(DataField &df);
+  virtual void OnModified(DataField &df) gcc_override;
+  virtual void OnSpecial(DataField &df) gcc_override;
 };
 
 void
