@@ -22,104 +22,24 @@ Copyright_License {
 */
 
 #include "MacCreadyEdit.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
-#include "Screen/Layout.hpp"
-#include "Simulator.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Form/TabBar.hpp"
-#include "Form/Button.hpp"
-#include "Form/XMLWidget.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
-#include "Util/Macros.hpp"
+#include "Widgets/OffsetButtonsWidget.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
-
-class MacCreadyEditPanel : public XMLWidget {
-  unsigned id;
-
-public:
-  MacCreadyEditPanel(unsigned _id):id(_id) {}
-
-  void QuickAccess(const TCHAR *value) {
-    InfoBoxManager::ProcessQuickAccess(id, value);
-  }
-
-  virtual PixelSize GetMinimumSize() const gcc_override {
-    return PixelSize{Layout::Scale(205u), Layout::Scale(49)};
-  }
-
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-};
-
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static MacCreadyEditPanel *instance;
+#include "Interface.hpp"
+#include "UIGlobals.hpp"
 
 static void
-PnlEditOnPlusSmall()
+MacCreadyOffsetCallback(fixed offset)
 {
-  instance->QuickAccess(_T("+0.1"));
-}
-
-static void
-PnlEditOnPlusBig()
-{
-  instance->QuickAccess(_T("+0.5"));
-}
-
-static void
-PnlEditOnMinusSmall()
-{
-  instance->QuickAccess(_T("-0.1"));
-}
-
-static void
-PnlEditOnMinusBig()
-{
-  instance->QuickAccess(_T("-0.5"));
-}
-
-static constexpr CallBackTableEntry call_back_table[] = {
-  DeclareCallBackEntry(PnlEditOnPlusSmall),
-  DeclareCallBackEntry(PnlEditOnPlusBig),
-  DeclareCallBackEntry(PnlEditOnMinusSmall),
-  DeclareCallBackEntry(PnlEditOnMinusBig),
-  DeclareCallBackEntry(NULL)
-};
-
-void
-MacCreadyEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
-{
-  LoadWindow(call_back_table, parent, _T("IDR_XML_INFOBOXMACCREADYEDIT"));
-
-  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-  TCHAR caption[16];
-
-  WndButton *button = (WndButton *)form.FindByName(_T("cmdPlusBig"));
-  assert(button != NULL);
-  FormatUserVerticalSpeed(step * 5, caption, false);
-  button->SetCaption(caption);
-
-  button = (WndButton *)form.FindByName(_T("cmdPlusSmall"));
-  assert(button != NULL);
-  FormatUserVerticalSpeed(step, caption, false);
-  button->SetCaption(caption);
-
-  button = (WndButton *)form.FindByName(_T("cmdMinusBig"));
-  assert(button != NULL);
-  FormatUserVerticalSpeed(step * -5, caption, false);
-  button->SetCaption(caption);
-
-  button = (WndButton *)form.FindByName(_T("cmdMinusSmall"));
-  assert(button != NULL);
-  FormatUserVerticalSpeed(-step, caption, false);
-  button->SetCaption(caption);
+  ActionInterface::OffsetManualMacCready(offset);
 }
 
 Widget *
 LoadMacCreadyEditPanel(unsigned id)
 {
-  return instance = new MacCreadyEditPanel(id);
+  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+  return new OffsetButtonsWidget(UIGlobals::GetDialogLook(),
+                                 GetUserVerticalSpeedFormat(false, true),
+                                 step, 5 * step,
+                                 MacCreadyOffsetCallback);
 }

@@ -759,6 +759,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Components.cpp \
 	\
+	$(SRC)/Widgets/OffsetButtonsWidget.cpp \
 	$(SRC)/Widgets/TrafficWidget.cpp \
 	$(SRC)/Widgets/CrossSectionWidget.cpp \
 	$(SRC)/Widgets/BigThermalAssistantWidget.cpp \
