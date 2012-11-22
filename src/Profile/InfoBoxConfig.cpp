@@ -24,7 +24,6 @@ Copyright_License {
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "InfoBoxes/InfoBoxSettings.hpp"
-#include "InfoBoxes/Content/Factory.hpp"
 
 using namespace InfoBoxFactory;
 
@@ -45,6 +44,19 @@ GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
       settings.panels[3].contents[i] = (Type)((temp >> 24) & 0xFF);
     }
   }
+}
+
+static bool
+GetIBType(const TCHAR *key, InfoBoxFactory::Type &val)
+{
+  unsigned _val = val;
+  bool ret = ProfileMap::Get(key, _val);
+
+  if (_val >= e_NUM_TYPES)
+    return false;
+
+  val = (InfoBoxFactory::Type)_val;
+  return ret;
 }
 
 void
@@ -76,7 +88,7 @@ Profile::Load(InfoBoxSettings &settings)
 
     for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
       _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
-      Get(profileKey, panel.contents[j]);
+      GetIBType(profileKey, panel.contents[j]);
     }
   }
 }

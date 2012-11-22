@@ -94,9 +94,6 @@ namespace InfoBoxFactory
     return meta_data[type].previous;
   }
 
-  bool
-  Get(const TCHAR *key, Type &val);
-
   InfoBoxContent* Create(Type infobox_type);
 };
 

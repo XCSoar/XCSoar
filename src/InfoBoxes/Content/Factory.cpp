@@ -42,8 +42,6 @@ Copyright_License {
 
 #include "Language/Language.hpp"
 
-#include "Profile/ProfileMap.hpp"
-
 #include <stddef.h>
 
 template<class T>
@@ -1078,19 +1076,6 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
   },
 
 };
-
-bool
-InfoBoxFactory::Get(const TCHAR *key, InfoBoxFactory::Type &val)
-{
-  unsigned _val = val;
-  bool ret = ProfileMap::Get(key, _val);
-
-  if (_val >= e_NUM_TYPES)
-    return false;
-
-  val = (InfoBoxFactory::Type)_val;
-  return ret;
-}
 
 InfoBoxContent*
 InfoBoxFactory::Create(Type infobox_type)
