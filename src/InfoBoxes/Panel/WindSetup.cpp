@@ -22,21 +22,13 @@ Copyright_License {
 */
 
 #include "WindSetup.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Form/Util.hpp"
-#include "Form/TabBar.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
-#include "InfoBoxes/InfoBoxManager.hpp"
-#include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
-#include "Units/Group.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Layout.hpp"
-#include "Look/DialogLook.hpp"
 
 enum ControlIndex {
   AutoWind,

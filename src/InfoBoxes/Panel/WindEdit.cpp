@@ -22,17 +22,14 @@ Copyright_License {
 */
 
 #include "WindEdit.hpp"
-#include "Form/Edit.hpp"
 #include "Form/DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
-#include "Units/Group.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Angle.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
-#include "Screen/Layout.hpp"
 
 enum ControlIndex {
   WindSpeed,
