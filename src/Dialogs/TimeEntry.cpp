@@ -26,6 +26,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/DigitEntry.hpp"
 #include "Form/WindowWidget.hpp"
+#include "Form/LambdaActionListener.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
@@ -75,13 +76,17 @@ TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
   dialog.AddButton(_("OK"), dialog, mrOK);
   dialog.AddButton(_("Cancel"), dialog, mrCancel);
 
-  dialog.AddButton(_("Now"), [&entry](){
+  auto now_listener = MakeLambdaActionListener([&entry](unsigned){
       const BrokenTime bt = BrokenDateTime::NowUTC();
       entry.SetValue(RoughTime(bt.hour, bt.minute));
     });
+  dialog.AddButton(_("Now"), now_listener, 0);
 
+  auto clear_listener = MakeLambdaActionListener([&entry](unsigned){
+      entry.SetInvalid();
+    });
   if (nullable)
-    dialog.AddButton(_("Clear"), [&entry](){ entry.SetInvalid(); });
+    dialog.AddButton(_("Clear"), clear_listener, 0);
 
   /* run it */
 
