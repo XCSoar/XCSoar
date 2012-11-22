@@ -27,8 +27,6 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Renderer/ButtonRenderer.hpp"
 
-#include <functional>
-
 #include <assert.h>
 
 struct DialogLook;
@@ -41,7 +39,6 @@ class ActionListener;
  */
 class WndButton : public ButtonWindow {
 public:
-  typedef std::function<void(void)> ClickFunction;
   typedef void (*ClickNotifyCallback)();
 
 protected:
@@ -54,8 +51,6 @@ private:
 #endif
 
   ActionListener *listener;
-
-  ClickFunction click_function;
 
   /**
    * The callback-function that should be called when the button is pressed
@@ -75,11 +70,6 @@ public:
             const TCHAR *caption, const PixelRect &rc,
             ButtonWindowStyle style,
             ClickNotifyCallback click_callback = NULL);
-
-  WndButton(ContainerWindow &parent, const DialogLook &look,
-            const TCHAR *caption, const PixelRect &rc,
-            ButtonWindowStyle style,
-            ClickFunction click_function);
 
   WndButton(ContainerWindow &parent, const DialogLook &look,
             const TCHAR *caption, const PixelRect &rc,
