@@ -24,16 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_MANAGER_HPP
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
-#include "Screen/PaintWindow.hpp"
-#include "InfoBoxes/Content/Base.hpp"
-#include "InfoBoxes/Content/Factory.hpp"
-#include "Profile/InfoBoxConfig.hpp"
-
-struct InfoBoxSettings;
+#include <tchar.h>
 
 struct InfoBoxLook;
 struct UnitsLook;
 class InfoBoxWindow;
+class ContainerWindow;
 
 namespace InfoBoxLayout {
   struct Layout;

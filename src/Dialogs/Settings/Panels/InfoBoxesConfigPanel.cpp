@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxesConfigPanel.hpp"
 #include "../dlgConfigInfoboxes.hpp"
 #include "Profile/Profile.hpp"
+#include "Profile/InfoBoxConfig.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Dialogs/Dialogs.h"
