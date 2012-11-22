@@ -65,7 +65,7 @@ struct MetaData {
   const TCHAR *name;
   const TCHAR *caption;
   const TCHAR *description;
-  InfoBoxContent *(*Create)();
+  InfoBoxContent *(*create)();
   Type next, previous;
 };
 
@@ -1134,7 +1134,7 @@ InfoBoxFactory::GetPrevious(Type type)
 InfoBoxContent*
 InfoBoxFactory::Create(Type infobox_type)
 {
-  assert(meta_data[infobox_type].Create != NULL);
+  assert(meta_data[infobox_type].create != nullptr);
 
-  return meta_data[infobox_type].Create();
+  return meta_data[infobox_type].create();
 }
