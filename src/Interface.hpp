@@ -265,6 +265,12 @@ namespace ActionInterface {
   void SetManualMacCready(fixed mc, bool to_devices=true);
 
   /**
+   * Same as SetManualMacCready(), but adds the given value to the
+   * current MacCready setting.  It performs bounds checking.
+   */
+  void OffsetManualMacCready(fixed offset, bool to_devices=true);
+
+  /**
    * Call this after MapSettings has been modified with
    * SetMapSettings().  It sends the new values to all sub systems,
    * and optionally forces a redraw.

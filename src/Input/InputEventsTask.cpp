@@ -135,13 +135,11 @@ InputEvents::eventMacCready(const TCHAR *misc)
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
 
   if (StringIsEqual(misc, _T("up"))) {
-    mc = std::min(mc + Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
-                  fixed(5));
-    ActionInterface::SetManualMacCready(mc);
+    const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+    ActionInterface::OffsetManualMacCready(step);
   } else if (StringIsEqual(misc, _T("down"))) {
-    mc = std::max(mc - Units::ToSysVSpeed(GetUserVerticalSpeedStep()),
-                  fixed_zero);
-    ActionInterface::SetManualMacCready(mc);
+    const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
+    ActionInterface::OffsetManualMacCready(-step);
   } else if (StringIsEqual(misc, _T("auto toggle"))) {
     task_behaviour.auto_mc = !task_behaviour.auto_mc;
     Profile::Set(ProfileKeys::AutoMc, task_behaviour.auto_mc);

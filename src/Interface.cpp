@@ -219,6 +219,21 @@ void ActionInterface::SetManualMacCready(fixed mc, bool to_devices)
 }
 
 void
+ActionInterface::OffsetManualMacCready(fixed offset, bool to_devices)
+{
+  const GlidePolar &polar = GetComputerSettings().polar.glide_polar_task;
+  const fixed old_mc = polar.GetMC();
+  fixed mc = old_mc + offset;
+  if (negative(mc))
+    mc = fixed_zero;
+  else if (mc > fixed(5))
+    mc = fixed(5);
+
+  if (mc != old_mc)
+    SetManualMacCready(mc, to_devices);
+}
+
+void
 ActionInterface::SendMapSettings(const bool trigger_draw)
 {
   // trigger_draw: asks for an immediate exchange of blackboard data

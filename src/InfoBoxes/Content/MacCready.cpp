@@ -92,21 +92,15 @@ bool
 InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 {
   const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
-  const GlidePolar &polar = settings_computer.polar.glide_polar_task;
   TaskBehaviour &task_behaviour = CommonInterface::SetComputerSettings().task;
-  fixed mc = polar.GetMC();
 
   switch (keycode) {
   case ibkUp:
-    mc = std::min(mc + step, fixed(5));
-    ActionInterface::SetManualMacCready(mc);
+    ActionInterface::OffsetManualMacCready(step);
     return true;
 
   case ibkDown:
-    mc = std::max(mc - step, fixed_zero);
-    ActionInterface::SetManualMacCready(mc);
+    ActionInterface::OffsetManualMacCready(-step);
     return true;
 
   case ibkLeft:
@@ -131,29 +125,21 @@ bool
 InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
 {
   const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-  const ComputerSettings &settings_computer =
-    CommonInterface::GetComputerSettings();
-  const GlidePolar &polar = settings_computer.polar.glide_polar_task;
-  fixed mc = polar.GetMC();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {
-    mc = std::min(mc + step, fixed(5));
-    ActionInterface::SetManualMacCready(mc);
+    ActionInterface::OffsetManualMacCready(step);
     return true;
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
-    mc = std::min(mc + step * 5, fixed(5));
-    ActionInterface::SetManualMacCready(mc);
+    ActionInterface::OffsetManualMacCready(step * 5);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.1")) == 0) {
-    mc = std::max(mc - step, fixed_zero);
-    ActionInterface::SetManualMacCready(mc);
+    ActionInterface::OffsetManualMacCready(-step);
     return true;
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
-    mc = std::max(mc - step * 5, fixed_zero);
-    ActionInterface::SetManualMacCready(mc);
+    ActionInterface::OffsetManualMacCready(step * -5);
     return true;
 
   } else if (_tcscmp(misc, _T("mode")) == 0) {
