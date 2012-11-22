@@ -28,8 +28,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Components.hpp"
-#include "Task/ProtectedTaskManager.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
@@ -93,9 +91,6 @@ InfoBoxContentMacCready::Update(InfoBoxData &data)
 bool
 InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 {
-  if (protected_task_manager == NULL)
-    return false;
-
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
   const GlidePolar &polar = settings_computer.polar.glide_polar_task;
@@ -136,9 +131,6 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 bool
 InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
 {
-  if (protected_task_manager == NULL)
-    return false;
-
   const ComputerSettings &settings_computer =
     CommonInterface::GetComputerSettings();
   const GlidePolar &polar = settings_computer.polar.glide_polar_task;
