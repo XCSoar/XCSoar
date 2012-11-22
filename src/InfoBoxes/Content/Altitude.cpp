@@ -91,9 +91,9 @@ InfoBoxContentAltitudeNav::Update(InfoBoxData &data)
 
   if (basic.baro_altitude_available &&
       settings_computer.features.nav_baro_altitude_enabled)
-    data.SetTitle(InfoBoxFactory::meta_data[InfoBoxFactory::e_H_Baro].caption);
+    data.SetTitle(InfoBoxFactory::GetCaption(InfoBoxFactory::e_H_Baro));
   else
-    data.SetTitle(InfoBoxFactory::meta_data[InfoBoxFactory::e_HeightGPS].caption);
+    data.SetTitle(InfoBoxFactory::GetCaption(InfoBoxFactory::e_HeightGPS));
 
   data.SetValueFromAltitude(basic.nav_altitude);
   data.SetCommentFromAlternateAltitude(basic.nav_altitude);

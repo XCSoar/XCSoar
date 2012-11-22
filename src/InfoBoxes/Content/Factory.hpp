@@ -25,74 +25,44 @@ Copyright_License {
 #define XCSOAR_INFOBOX_FACTORY_HPP
 
 #include "Type.hpp"
+#include "Compiler.h"
 
-#include <assert.h>
 #include <tchar.h>
 
 class InfoBoxContent;
 
 namespace InfoBoxFactory
 {
-  struct MetaData {
-    const TCHAR *name;
-    const TCHAR *caption;
-    const TCHAR *description;
-    InfoBoxContent *(*Create)();
-    Type next, previous;
-  };
-
-  extern const MetaData meta_data[NUM_TYPES];
-
   /**
    * Returns the human-readable name of the info box type.
    */
-  static inline const TCHAR *
-  GetName(Type type)
-  {
-    assert(type < NUM_TYPES);
-
-    return meta_data[type].name;
-  }
+  gcc_const
+  const TCHAR *
+  GetName(Type type);
 
   /**
    * Returns the default caption of the info box type.  This is
    * usually a shorter version of the string returned by GetName(), to
    * fit in the small #InfoBoxWindow.
    */
-  static inline const TCHAR *
-  GetCaption(Type type)
-  {
-    assert(type < NUM_TYPES);
-
-    return meta_data[type].caption;
-  }
+  gcc_const
+  const TCHAR *
+  GetCaption(Type type);
 
   /**
    * Returns the long description (help text) of the info box type.
    */
-  static inline const TCHAR *
-  GetDescription(Type type)
-  {
-    assert(type < NUM_TYPES);
+  gcc_const
+  const TCHAR *
+  GetDescription(Type type);
 
-    return meta_data[type].description;
-  }
+  gcc_const
+  Type
+  GetNext(Type type);
 
-  static inline Type
-  GetNext(Type type)
-  {
-    assert(type < NUM_TYPES);
-
-    return meta_data[type].next;
-  }
-
-  static inline Type
-  GetPrevious(Type type)
-  {
-    assert(type < NUM_TYPES);
-
-    return meta_data[type].previous;
-  }
+  gcc_const
+  Type
+  GetPrevious(Type type);
 
   InfoBoxContent* Create(Type infobox_type);
 };

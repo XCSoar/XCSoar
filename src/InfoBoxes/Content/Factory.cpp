@@ -43,6 +43,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 
 #include <stddef.h>
+#include <assert.h>
 
 template<class T>
 struct IBFHelper {
@@ -56,6 +57,16 @@ struct IBFHelperInt {
   static InfoBoxContent *Create() {
     return new T(param);
   }
+};
+
+using namespace InfoBoxFactory;
+
+struct MetaData {
+  const TCHAR *name;
+  const TCHAR *caption;
+  const TCHAR *description;
+  InfoBoxContent *(*Create)();
+  Type next, previous;
 };
 
 // Groups:
@@ -72,7 +83,7 @@ struct IBFHelperInt {
 //   Alternates: e_Alternate_1_Name,e_Alternate_2_Name,e_Alternate_1_GR
 //   Experimental: e_Experimental1,e_Experimental2
 //   Obstacles: e_NearestAirspaceHorizontal,e_NearestAirspaceVertical,TerrainCollision
-const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
+static constexpr MetaData meta_data[NUM_TYPES] = {
   // e_HeightGPS
   {
     N_("Height GPS"),
@@ -1076,6 +1087,49 @@ const InfoBoxFactory::MetaData InfoBoxFactory::meta_data[NUM_TYPES] = {
   },
 
 };
+
+const TCHAR *
+InfoBoxFactory::GetName(Type type)
+{
+  assert(type < NUM_TYPES);
+
+  return meta_data[type].name;
+}
+
+const TCHAR *
+InfoBoxFactory::GetCaption(Type type)
+{
+  assert(type < NUM_TYPES);
+
+  return meta_data[type].caption;
+}
+
+/**
+ * Returns the long description (help text) of the info box type.
+ */
+const TCHAR *
+InfoBoxFactory::GetDescription(Type type)
+{
+  assert(type < NUM_TYPES);
+
+  return meta_data[type].description;
+}
+
+InfoBoxFactory::Type
+InfoBoxFactory::GetNext(Type type)
+{
+  assert(type < NUM_TYPES);
+
+  return meta_data[type].next;
+}
+
+InfoBoxFactory::Type
+InfoBoxFactory::GetPrevious(Type type)
+{
+  assert(type < NUM_TYPES);
+
+  return meta_data[type].previous;
+}
 
 InfoBoxContent*
 InfoBoxFactory::Create(Type infobox_type)
