@@ -124,25 +124,7 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 bool
 InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
 {
-  const fixed step = Units::ToSysVSpeed(GetUserVerticalSpeedStep());
-
-  if (_tcscmp(misc, _T("+0.1")) == 0) {
-    ActionInterface::OffsetManualMacCready(step);
-    return true;
-
-  } else if (_tcscmp(misc, _T("+0.5")) == 0) {
-    ActionInterface::OffsetManualMacCready(step * 5);
-    return true;
-
-  } else if (_tcscmp(misc, _T("-0.1")) == 0) {
-    ActionInterface::OffsetManualMacCready(-step);
-    return true;
-
-  } else if (_tcscmp(misc, _T("-0.5")) == 0) {
-    ActionInterface::OffsetManualMacCready(step * -5);
-    return true;
-
-  } else if (_tcscmp(misc, _T("mode")) == 0) {
+  if (_tcscmp(misc, _T("mode")) == 0) {
     return HandleKey(ibkEnter);
   }
 
