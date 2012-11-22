@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Util/StaticString.hpp"
 #include "Compiler.h"
-#include "InfoBoxes/Content/Factory.hpp"
+#include "InfoBoxes/Content/Type.hpp"
 
 #include <stdint.h>
 

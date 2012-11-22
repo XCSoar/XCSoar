@@ -30,6 +30,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "InfoBoxes/Content/Factory.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"

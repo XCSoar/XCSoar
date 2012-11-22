@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Altitude.hpp"
+#include "Factory.hpp"
 #include "InfoBoxes/Data.hpp"
 #include "InfoBoxes/Panel/AltitudeInfo.hpp"
 #include "InfoBoxes/Panel/AltitudeSimulator.hpp"
