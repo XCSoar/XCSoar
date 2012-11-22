@@ -108,6 +108,7 @@ OnRegistrationData(DataField *sender, DataField::DataAccessMode mode)
 static void
 PolarClicked()
 {
+  UpdatePlane();
   dlgPlanePolarShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane);
   Update();
 }
