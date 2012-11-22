@@ -45,8 +45,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using namespace InfoBoxFactory;
-
 namespace InfoBoxManager
 {
   InfoBoxLayout::Layout layout;
@@ -320,7 +318,8 @@ static const ComboList *info_box_combo_list;
 static void
 OnInfoBoxHelp(unsigned item)
 {
-  Type type = (Type)(*info_box_combo_list)[item].DataFieldIndex;
+  InfoBoxFactory::Type type = (InfoBoxFactory::Type)
+    (*info_box_combo_list)[item].DataFieldIndex;
 
   StaticString<100> caption;
   caption.Format(_T("%s: %s"), _("InfoBox"),
@@ -352,9 +351,9 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
 
   ComboList list;
   for (unsigned j = InfoBoxFactory::MIN_TYPE_VAL; j < InfoBoxFactory::NUM_TYPES; j++) {
-    const TCHAR * desc = InfoBoxFactory::GetDescription((Type) j);
-    list.Append(j, gettext(InfoBoxFactory::GetName((Type) j)),
-                gettext(InfoBoxFactory::GetName((Type) j)),
+    const TCHAR *desc = InfoBoxFactory::GetDescription((InfoBoxFactory::Type)j);
+    list.Append(j, gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),
+                gettext(InfoBoxFactory::GetName((InfoBoxFactory::Type)j)),
                 desc != NULL ? gettext(desc) : NULL);
   }
 
