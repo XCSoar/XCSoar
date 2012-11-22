@@ -42,7 +42,7 @@ Copyright_License {
 #include "Form/ButtonPanel.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "Event/ScopeTimer.hpp"
+#include "Event/Timer.hpp"
 #include "Compiler.h"
 
 #include <math.h>
@@ -62,6 +62,7 @@ enum Actions {
 
 class FlightSetupPanel : public RowFormWidget,
                          DataFieldListener,
+                         private Timer,
                          public ActionListener {
   WndButton *dump_button;
 
@@ -103,17 +104,24 @@ public:
   void SetBugs(fixed bugs);
   void SetQNH(AtmosphericPressure qnh);
 
-  /**
-   * This function is called repeatedly by the timer and updates the
-   * current altitude and ballast. The ballast can change without user
-   * input due to the dump function.
-   */
-  void OnTimer();
-
   /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) gcc_override;
   virtual bool Save(bool &changed, bool &require_restart) gcc_override;
+
+  virtual void Show(const PixelRect &rc) gcc_override {
+    RowFormWidget::Show(rc);
+    Timer::Schedule(500);
+
+    OnTimer();
+    SetButtons();
+    SetBallast();
+  }
+
+  virtual void Hide() gcc_override {
+    Timer::Cancel();
+    RowFormWidget::Hide();
+  }
 
   /* virtual methods from ActionListener */
   virtual void OnAction(int id);
@@ -122,6 +130,9 @@ private:
   /* virtual methods from DataFieldListener */
   virtual void OnModified(DataField &df) gcc_override;
   virtual void OnSpecial(DataField &df) gcc_override;
+
+  /* virtual methods from Timer */
+  virtual void OnTimer() gcc_override;
 };
 
 void
@@ -323,10 +334,6 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     df.SetUnits(Units::GetTemperatureName());
     wp->RefreshDisplay();
   }
-
-  OnTimer();
-  SetButtons();
-  SetBallast();
 }
 
 bool
@@ -356,10 +363,6 @@ dlgBasicSettingsShowModal()
   dialog.CreateAuto(UIGlobals::GetMainWindow(), _("Flight Setup"), instance);
   instance->SetDumpButton(dialog.AddButton(_("Dump"), *instance, DUMP));
   dialog.AddButton(_("OK"), mrOK);
-
-  const ScopeTimer update_ballast_timer([instance]() {
-      instance->OnTimer();
-    }, 500);
 
   dialog.ShowModal();
 }
