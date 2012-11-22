@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_MANAGER_HPP
 #define XCSOAR_INFO_BOX_MANAGER_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 struct InfoBoxLook;
@@ -60,14 +62,22 @@ namespace InfoBoxManager
   void Show();
   void Hide();
 
+  gcc_pure
   unsigned GetCurrentPanel();
+
+  gcc_pure
   const TCHAR* GetCurrentPanelName();
+
+  gcc_pure
   const TCHAR* GetPanelName(unsigned panel);
 
+  gcc_pure
   const TCHAR* GetTitle(unsigned box);
 
+  gcc_pure
   bool IsEmpty(unsigned panel);
 
+  gcc_pure
   bool HasFocus();
 
   /**
