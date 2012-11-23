@@ -89,7 +89,8 @@ public:
   }
 
   constexpr bool operator <(RoughTime other) const {
-    return value < other.value;
+    /* this formula supports midnight wraparound */
+    return (MAX - 1 + other.value - value) % MAX < MAX / 2;
   }
 
   constexpr bool operator >(RoughTime other) const {

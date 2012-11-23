@@ -25,7 +25,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(39);
+  plan_tests(67);
 
   RoughTime a = RoughTime::Invalid();
   ok1(!a.IsValid());
@@ -85,6 +85,46 @@ int main(int argc, char **argv)
   ok1(s.IsDefined());
   ok1(s.IsInside(a));
   ok1(!s.IsInside(b));
+
+  /* test midnight wraparound */
+  a = RoughTime(0, 0);
+  b = RoughTime(23, 59);
+  ok1(b.IsValid());
+  ok1(a != b);
+  ok1(!(a == b));
+  ok1(!(a <= b));
+  ok1(a >= b);
+  ok1(!(a < b));
+  ok1(a > b);
+  ok1(b != a);
+  ok1(!(b == a));
+  ok1(b <= a);
+  ok1(!(b >= a));
+  ok1(b < a);
+  ok1(!(b > a));
+
+  RoughTime c(22, 0);
+  RoughTime d(2, 0);
+  s = RoughTimeSpan(RoughTime(23, 0), RoughTime::Invalid());
+  ok1(s.IsDefined());
+  ok1(s.IsInside(a));
+  ok1(s.IsInside(b));
+  ok1(!s.IsInside(c));
+  ok1(s.IsInside(d));
+
+  s = RoughTimeSpan(RoughTime::Invalid(), RoughTime(1, 0));
+  ok1(s.IsDefined());
+  ok1(s.IsInside(a));
+  ok1(s.IsInside(b));
+  ok1(s.IsInside(c));
+  ok1(!s.IsInside(d));
+
+  s = RoughTimeSpan(RoughTime(23, 1), RoughTime(0, 30));
+  ok1(s.IsDefined());
+  ok1(s.IsInside(a));
+  ok1(s.IsInside(b));
+  ok1(!s.IsInside(c));
+  ok1(!s.IsInside(d));
 
   return exit_status();
 }
