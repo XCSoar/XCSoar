@@ -88,20 +88,20 @@ public:
     return value != other.value;
   }
 
-  constexpr bool operator >(RoughTime other) const {
-    return value > other.value;
-  }
-
   constexpr bool operator <(RoughTime other) const {
     return value < other.value;
   }
 
-  constexpr bool operator >=(RoughTime other) const {
-    return value >= other.value;
+  constexpr bool operator >(RoughTime other) const {
+    return other < *this;
   }
 
   constexpr bool operator <=(RoughTime other) const {
-    return value <= other.value;
+    return !(*this > other);
+  }
+
+  constexpr bool operator >=(RoughTime other) const {
+    return !(*this < other);
   }
 
   constexpr unsigned GetHour() const {
