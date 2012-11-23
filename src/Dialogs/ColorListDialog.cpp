@@ -62,9 +62,18 @@ ShowColorListDialog(Color &color)
     if (AirspaceLook::preset_colors[i] == color)
       default_index = i;
 
+  /*
+  auto item_renderer = MakeListItemRenderer([](Canvas &canvas,
+                                               const PixelRect rc, unsigned i){
+                                              OnPaintListItem(canvas, rc, i);
+                                            });
+  */
+
+  FunctionListItemRenderer item_renderer(OnPaintListItem);
+
   int index = ListPicker(UIGlobals::GetMainWindow(), _("Select Color"),
                          ARRAY_SIZE(AirspaceLook::preset_colors), default_index,
-                         Layout::FastScale(18), OnPaintListItem);
+                         Layout::FastScale(18), item_renderer);
 
   if (index < 0)
     return false;

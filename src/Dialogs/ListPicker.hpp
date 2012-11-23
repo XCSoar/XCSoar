@@ -29,6 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 class SingleWindow;
+class ListItemRenderer;
 
 typedef void (*ListHelpCallback_t)(unsigned item);
 
@@ -42,7 +43,7 @@ typedef const TCHAR* (*ItemHelpCallback_t)(unsigned item);
  * @param num_items
  * @param initial_value
  * @param item_height
- * @param paint_callback Paint a single item
+ * @param item_renderer Paint a single item
  * @param update Update per timer
  * @param help_callback Callback for Helpbutton
  * @param itemhelp_callback Callback to return string for current item help
@@ -52,7 +53,7 @@ int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            UPixelScalar item_height,
-           ListControl::PaintItemCallback paint_callback, bool update = false,
+           ListItemRenderer &item_renderer, bool update = false,
            ListHelpCallback_t help_callback = NULL,
            ItemHelpCallback_t itemhelp_callback = NULL);
 

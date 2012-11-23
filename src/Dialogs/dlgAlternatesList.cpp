@@ -33,30 +33,30 @@ Copyright_License {
 #include "Renderer/WaypointListRenderer.hpp"
 #include "Language/Language.hpp"
 
-static AbortTask::AlternateVector alternates;
+class AlternatesListDialog : public ListItemRenderer {
+public:
+  AbortTask::AlternateVector alternates;
 
-static void
-UpdateAlternates()
-{
-  ProtectedTaskManager::Lease lease(*protected_task_manager);
-  alternates = lease->GetAlternates();
-}
+  void Update() {
+    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    alternates = lease->GetAlternates();
+  }
 
-static void
-PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
-{
-  assert(index < alternates.size());
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned index) gcc_override {
+    assert(index < alternates.size());
 
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  const Waypoint &waypoint = alternates[index].waypoint;
-  const GlideResult& solution = alternates[index].solution;
+    const ComputerSettings &settings = CommonInterface::GetComputerSettings();
+    const Waypoint &waypoint = alternates[index].waypoint;
+    const GlideResult& solution = alternates[index].solution;
 
-  WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
-                             solution.SelectAltitudeDifference(settings.task.glide),
-                             UIGlobals::GetDialogLook(),
-                             UIGlobals::GetMapLook().waypoint,
-                             CommonInterface::GetMapSettings().waypoint);
-}
+    WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
+                               solution.SelectAltitudeDifference(settings.task.glide),
+                               UIGlobals::GetDialogLook(),
+                               UIGlobals::GetMapLook().waypoint,
+                               CommonInterface::GetMapSettings().waypoint);
+  }
+};
 
 void
 dlgAlternatesListShowModal(SingleWindow &parent)
@@ -64,15 +64,16 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   if (protected_task_manager == NULL)
     return;
 
-  UpdateAlternates();
+  AlternatesListDialog dialog;
+  dialog.Update();
 
   const DialogLook &look = UIGlobals::GetDialogLook();
-  int i = ListPicker(parent, _("Alternates"), alternates.size(), 0,
+  int i = ListPicker(parent, _("Alternates"), dialog.alternates.size(), 0,
                      WaypointListRenderer::GetHeight(look),
-                     PaintListItem, true);
+                     dialog, true);
 
-  if (i < 0 || (unsigned)i >= alternates.size())
+  if (i < 0 || (unsigned)i >= dialog.alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(parent, alternates[i].waypoint);
+  dlgWaypointDetailsShowModal(parent, dialog.alternates[i].waypoint);
 }

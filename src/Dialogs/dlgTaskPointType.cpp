@@ -170,10 +170,12 @@ dlgTaskPointType(OrderedTask** task, const unsigned index)
       initial_index = std::distance(b, i);
   }
 
+  FunctionListItemRenderer item_renderer(OnPointPaintListItem);
+
   int result = ListPicker(UIGlobals::GetMainWindow(), _("Task Point Type"),
                           point_types.size(), initial_index,
                           Layout::Scale(18),
-                          OnPointPaintListItem, false,
+                          item_renderer, false,
                           nullptr, TPTypeItemHelp);
   return result >= 0 && SetPointType(point_types[result]);
 }

@@ -118,7 +118,9 @@ dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
 
   array = _array;
   UPixelScalar line_height = GetRowHeight(UIGlobals::GetDialogLook());
-  unsigned index = ListPicker(parent, title, count, 0, line_height, PaintListItem, true);
+  FunctionListItemRenderer item_renderer(PaintListItem);
+  unsigned index = ListPicker(parent, title, count, 0, line_height,
+                              item_renderer, true);
   return index < count
     ? array[index]
     : FlarmId::Undefined();

@@ -36,6 +36,9 @@ Copyright_License {
 struct DialogLook;
 class ContainerWindow;
 
+typedef void (*ListItemRendererFunction)(Canvas &canvas, const PixelRect rc,
+                                         unsigned idx);
+
 class ListItemRenderer {
 public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
@@ -62,6 +65,19 @@ MakeListItemRenderer(C &&c)
 {
   return LambdaListItemRenderer<C>(std::move(c));
 }
+
+class FunctionListItemRenderer : public ListItemRenderer {
+  const ListItemRendererFunction function;
+
+public:
+  FunctionListItemRenderer(ListItemRendererFunction _function)
+    :function(_function) {}
+
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override {
+    function(canvas, rc, idx);
+  }
+};
 
 class ListCursorHandler {
 public:

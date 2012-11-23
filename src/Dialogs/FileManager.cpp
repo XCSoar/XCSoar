@@ -540,9 +540,11 @@ ManagedFileListWidget::Add()
     return;
 
   add_list = &list;
+
+  FunctionListItemRenderer item_renderer(OnPaintAddItem);
   int i = ListPicker(UIGlobals::GetMainWindow(), _("Select a file"),
                      list.size(), 0, Layout::FastScale(18),
-                     OnPaintAddItem);
+                     item_renderer);
   add_list = NULL;
   if (i < 0)
     return;

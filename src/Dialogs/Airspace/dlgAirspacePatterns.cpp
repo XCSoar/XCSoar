@@ -36,30 +36,35 @@ Copyright_License {
 /* brush patterns are only available on GDI */
 #ifdef HAVE_HATCHED_BRUSH
 
-static const AirspaceLook *look;
+class AirspacePatternsDialog : public ListItemRenderer {
+  const AirspaceLook &look;
 
-static void
-OnAirspacePatternsPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
-{
-  assert(i < ARRAY_SIZE(AirspaceLook::brushes));
+public:
+  AirspacePatternsDialog(const AirspaceLook &_look)
+    :look(_look) {}
 
-  canvas.SetBackgroundTransparent();
-  canvas.Select(look->brushes[i]);
-  canvas.SetTextColor(COLOR_BLACK);
-  canvas.Rectangle(rc.left + Layout::FastScale(2),
-                   rc.top + Layout::FastScale(2),
-                   rc.right - Layout::FastScale(2),
-                   rc.bottom - Layout::FastScale(2));
-}
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned i) gcc_override {
+    assert(i < ARRAY_SIZE(AirspaceLook::brushes));
+
+    canvas.SetBackgroundTransparent();
+    canvas.Select(look.brushes[i]);
+    canvas.SetTextColor(COLOR_BLACK);
+    canvas.Rectangle(rc.left + Layout::FastScale(2),
+                     rc.top + Layout::FastScale(2),
+                     rc.right - Layout::FastScale(2),
+                     rc.bottom - Layout::FastScale(2));
+  }
+};
 
 int
-dlgAirspacePatternsShowModal(const AirspaceLook &_look)
+dlgAirspacePatternsShowModal(const AirspaceLook &look)
 {
-  look = &_look;
+  AirspacePatternsDialog dialog(look);
 
   return ListPicker(UIGlobals::GetMainWindow(), _("Select Pattern"),
                     ARRAY_SIZE(AirspaceLook::brushes), 0, Layout::FastScale(18),
-                    OnAirspacePatternsPaintListItem);
+                    dialog);
 }
 
 #endif /* HAVE_HATCHED_BRUSH */

@@ -36,17 +36,25 @@ Copyright_License {
 static WndProperty *wComboPopupWndProperty;
 static DataField *ComboPopupDataField;
 static const ComboList *ComboListPopup;
-static UPixelScalar padding;
 
-static void
-OnPaintComboPopupListItem(Canvas &canvas, const PixelRect rc, unsigned i)
-{
-  assert(i < (unsigned)ComboListPopup->size());
+class ComboPickerSupport : public ListItemRenderer {
+  const ComboList &combo_list;
+  const UPixelScalar padding;
 
-  canvas.DrawClippedText(rc.left + padding,
-                         rc.top + padding, rc,
-                         (*ComboListPopup)[i].StringValueFormatted);
-}
+public:
+  ComboPickerSupport(const ComboList &_combo_list,
+                     const UPixelScalar _padding)
+    :combo_list(_combo_list), padding(_padding) {}
+
+
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned i) gcc_override {
+    canvas.DrawClippedText(rc.left + padding,
+                           rc.top + padding, rc,
+                           combo_list[i].StringValueFormatted);
+  }
+};
+
 static const TCHAR*
 OnItemHelp(unsigned i)
 {
@@ -73,13 +81,14 @@ ComboPicker(SingleWindow &parent, const TCHAR *caption,
        and too large: */
     : (font_height + max_height) / 2;
 
-  padding = (row_height - font_height) / 2;
+  const UPixelScalar padding = (row_height - font_height) / 2;
 
+  ComboPickerSupport support(combo_list, padding);
   return ListPicker(parent, caption,
                     combo_list.size(),
                     combo_list.ComboPopupItemSavedIndex,
                     row_height,
-                    OnPaintComboPopupListItem, false,
+                    support, false,
                     help_callback,
                     enable_item_help ? OnItemHelp : NULL);
 }

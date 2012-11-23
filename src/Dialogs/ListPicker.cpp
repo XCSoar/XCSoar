@@ -44,7 +44,7 @@ class ListPickerWidget : public ListWidget, public ActionListener,
 
   bool visible;
 
-  ListControl::PaintItemCallback paint_callback;
+  ListItemRenderer &item_renderer;
   ActionListener &action_listener;
 
   ListHelpCallback_t help_callback;
@@ -55,13 +55,13 @@ class ListPickerWidget : public ListWidget, public ActionListener,
 public:
   ListPickerWidget(unsigned _num_items, unsigned _initial_value,
                    UPixelScalar _row_height,
-                   ListControl::PaintItemCallback _paint_callback,
+                   ListItemRenderer &_item_renderer,
                    ActionListener &_action_listener,
                    ListHelpCallback_t _help_callback)
     :num_items(_num_items), initial_value(_initial_value),
      row_height(_row_height),
      visible(false),
-     paint_callback(_paint_callback),
+     item_renderer(_item_renderer),
      action_listener(_action_listener),
      help_callback(_help_callback),
      item_help_callback(nullptr) {}
@@ -115,7 +115,7 @@ public:
 
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) gcc_override {
-    paint_callback(canvas, rc, idx);
+    item_renderer.OnPaintItem(canvas, rc, idx);
   }
 
   virtual void OnCursorMoved(unsigned index) gcc_override {
@@ -154,20 +154,19 @@ int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
            unsigned num_items, unsigned initial_value,
            UPixelScalar item_height,
-           ListControl::PaintItemCallback paint_callback, bool update,
+           ListItemRenderer &item_renderer, bool update,
            ListHelpCallback_t _help_callback,
            ItemHelpCallback_t _itemhelp_callback)
 {
   assert(num_items <= 0x7fffffff);
   assert((num_items == 0 && initial_value == 0) || initial_value < num_items);
   assert(item_height > 0);
-  assert(paint_callback != NULL);
 
   WidgetDialog dialog(UIGlobals::GetDialogLook());
 
   ListPickerWidget *const list_widget =
     new ListPickerWidget(num_items, initial_value, item_height,
-                         paint_callback, dialog, _help_callback);
+                         item_renderer, dialog, _help_callback);
   TextWidget *text_widget = nullptr;
   TwoWidgets *two_widgets = nullptr;
 
