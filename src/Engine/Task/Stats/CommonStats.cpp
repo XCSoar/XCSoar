@@ -3,6 +3,7 @@
 void
 CommonStats::ResetTask()
 {
+  start_open_time_span = RoughTimeSpan::Invalid();
   landable_reachable = false;
   task_started = false;
   TimeUnderStartMaxHeight = -fixed_one;

@@ -23,6 +23,7 @@
 #define COMMON_STATS_HPP
 
 #include "Math/fixed.hpp"
+#include "Time/RoughTime.hpp"
 #include "Geo/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
 #include "Util/TypeTraits.hpp"
@@ -37,6 +38,11 @@
 class CommonStats 
 {
 public:
+  /**
+   * A copy of #StartConstraints::open_time_span.
+   */
+  RoughTimeSpan start_open_time_span;
+
   /** Whether the task found landable reachable waypoints (aliases abort) */
   bool landable_reachable;
   /** Whether the task is started (aliases ordered task) */
