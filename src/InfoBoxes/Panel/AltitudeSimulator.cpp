@@ -22,28 +22,13 @@ Copyright_License {
 */
 
 #include "AltitudeSimulator.hpp"
-#include "Screen/Layout.hpp"
-#include "Interface.hpp"
+#include "Widgets/OffsetButtonsWidget.hpp"
 #include "Components.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Units/Units.hpp"
+#include "Interface.hpp"
+#include "UIGlobals.hpp"
 #include "Simulator.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Form/XMLWidget.hpp"
-
-class WndButton;
-
-class AltitudeSimulatorPanel : public XMLWidget {
-public:
-  void Refresh();
-
-  virtual PixelSize GetMinimumSize() const gcc_override {
-    return PixelSize{Layout::Scale(205u), Layout::Scale(49)};
-  }
-
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-};
 
 static void
 ChangeAltitude(const fixed step)
@@ -57,53 +42,10 @@ ChangeAltitude(const fixed step)
                                  (fixed)Units::ToSysAltitude(step));
 }
 
-static void
-PnlSimulatorOnPlusBig()
-{
-  ChangeAltitude(fixed(+100));
-}
-
-static void
-PnlSimulatorOnPlusSmall()
-{
-  ChangeAltitude(fixed(+10));
-}
-
-static void
-PnlSimulatorOnMinusSmall()
-{
-  ChangeAltitude(fixed(-10));
-}
-
-static void
-PnlSimulatorOnMinusBig()
-{
-  ChangeAltitude(fixed(-100));
-}
-
-static constexpr
-CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(PnlSimulatorOnPlusBig),
-  DeclareCallBackEntry(PnlSimulatorOnPlusSmall),
-  DeclareCallBackEntry(PnlSimulatorOnMinusSmall),
-  DeclareCallBackEntry(PnlSimulatorOnMinusBig),
-  DeclareCallBackEntry(NULL)
-};
-
-void
-AltitudeSimulatorPanel::Prepare(ContainerWindow &parent,
-                                const PixelRect &rc)
-{
-  LoadWindow(CallBackTable, parent, _T("IDR_XML_INFOBOXALTITUDESIMULATOR"));
-}
-
 Widget *
 LoadAltitudeSimulatorPanel(unsigned id)
 {
-  const NMEAInfo &basic = CommonInterface::Basic();
-
-  if (!basic.gps.simulator)
-    return NULL;
-
-  return new AltitudeSimulatorPanel();
+  return new OffsetButtonsWidget(UIGlobals::GetDialogLook(),
+                                 _T("%+.0f"), fixed(10), fixed(100),
+                                 ChangeAltitude);
 }

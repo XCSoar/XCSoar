@@ -295,7 +295,6 @@ XMLDIALOG(IDR_XML_POLARCONFIGPANEL_L, "Configuration/PolarConfigPanel_L")
 
 // infobox access
 XMLDIALOG(IDR_XML_INFOBOXALTITUDEINFO, "Infobox/pnlInfoBoxAltitudeInfo")
-XMLDIALOG(IDR_XML_INFOBOXALTITUDESIMULATOR, "Infobox/pnlInfoBoxAltitudeSimulator")
 
 // new task editor
 XMLDIALOG(IDR_XML_TASKEDIT, "pnlTaskEdit")
