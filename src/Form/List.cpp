@@ -52,7 +52,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    origin(0), pixel_pan(0),
    cursor(0),
    drag_mode(DragMode::NONE),
-   handler(NULL),
+   item_renderer(nullptr), cursor_handler(nullptr),
    activate_callback(NULL),
    cursor_callback(NULL),
    paint_item_callback(NULL)
@@ -69,8 +69,8 @@ ListControl::CanActivateItem() const
   if (IsEmpty())
     return false;
 
-  return handler != NULL
-    ? handler->CanActivateItem(GetCursorIndex())
+  return cursor_handler != NULL
+    ? cursor_handler->CanActivateItem(GetCursorIndex())
     : activate_callback != NULL;
 }
 
@@ -81,8 +81,8 @@ ListControl::ActivateItem()
 
   unsigned index = GetCursorIndex();
   assert(index < GetLength());
-  if (handler != NULL)
-    handler->OnActivateItem(index);
+  if (cursor_handler != NULL)
+    cursor_handler->OnActivateItem(index);
   else if (activate_callback != NULL)
     activate_callback(index);
 }
@@ -166,8 +166,8 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
     canvas.SetTextColor(look.list.GetTextColor(selected, focused, pressed));
 
-    if (handler != NULL)
-      handler->OnPaintItem(canvas, rc, i);
+    if (item_renderer != nullptr)
+      item_renderer->OnPaintItem(canvas, rc, i);
     else
       paint_item_callback(canvas, rc, i);
 
@@ -186,7 +186,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 void
 ListControl::OnPaint(Canvas &canvas)
 {
-  if (handler != NULL || paint_item_callback != NULL)
+  if (item_renderer != nullptr || paint_item_callback != NULL)
     DrawItems(canvas, origin, origin + items_visible + 2);
 
   DrawScrollBar(canvas);
@@ -195,7 +195,7 @@ ListControl::OnPaint(Canvas &canvas)
 void
 ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
-  if (handler != NULL || paint_item_callback != NULL)
+  if (item_renderer != nullptr || paint_item_callback != nullptr)
     DrawItems(canvas, origin + (dirty.top + pixel_pan) / item_height,
               origin + (dirty.bottom + pixel_pan + item_height - 1) / item_height);
 
@@ -282,8 +282,8 @@ ListControl::SetCursorIndex(unsigned i)
   cursor = i;
   Invalidate_item(cursor);
 
-  if (handler != NULL)
-    handler->OnCursorMoved(i);
+  if (cursor_handler != nullptr)
+    cursor_handler->OnCursorMoved(i);
   else if (cursor_callback != NULL)
     cursor_callback(i);
   return true;

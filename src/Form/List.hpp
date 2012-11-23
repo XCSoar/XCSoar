@@ -36,6 +36,45 @@ Copyright_License {
 struct DialogLook;
 class ContainerWindow;
 
+class ListItemRenderer {
+public:
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) = 0;
+};
+
+template<typename C>
+class LambdaListItemRenderer : public ListItemRenderer, private C {
+public:
+  LambdaListItemRenderer(C &&c):C(std::move(c)) {}
+
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override {
+    C::operator()(canvas, rc, idx);
+  }
+};
+
+/**
+ * Convert a lambda expression (a closure object) to ListItemRenderer.
+ */
+template<typename C>
+LambdaListItemRenderer<C>
+MakeListItemRenderer(C &&c)
+{
+  return LambdaListItemRenderer<C>(std::move(c));
+}
+
+class ListCursorHandler {
+public:
+  virtual void OnCursorMoved(unsigned index) {}
+
+  gcc_pure
+  virtual bool CanActivateItem(unsigned index) const {
+    return false;
+  }
+
+  virtual void OnActivateItem(unsigned index) {}
+};
+
 /**
  * A ListControl implements a scrollable list control based on the
  * WindowControl class.
@@ -47,18 +86,7 @@ public:
   typedef void (*PaintItemCallback)(Canvas &canvas, const PixelRect rc,
                                       unsigned idx);
 
-  struct Handler {
-    virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                             unsigned idx) = 0;
-
-    virtual void OnCursorMoved(unsigned index) {}
-
-    gcc_pure
-    virtual bool CanActivateItem(unsigned index) const {
-      return false;
-    }
-
-    virtual void OnActivateItem(unsigned index) {}
+  struct Handler : public ListItemRenderer, ListCursorHandler {
   };
 
 protected:
@@ -120,7 +148,8 @@ protected:
    */
   int drag_y_window;
 
-  Handler *handler;
+  ListItemRenderer *item_renderer;
+  ListCursorHandler *cursor_handler;
 
   ActivateCallback activate_callback;
   CursorCallback cursor_callback;
@@ -140,33 +169,48 @@ public:
               PixelRect rc, const WindowStyle style,
               UPixelScalar _item_height);
 
-  void SetHandler(Handler *_handler) {
-    assert(handler == NULL);
-    assert(_handler != NULL);
-    assert(activate_callback == NULL);
-    assert(cursor_callback == NULL);
+  void SetItemRenderer(ListItemRenderer *_item_renderer) {
+    assert(_item_renderer != nullptr);
+    assert(item_renderer == nullptr);
     assert(paint_item_callback == NULL);
 
-    handler = _handler;
+    item_renderer = _item_renderer;
+  }
+
+  void SetCursorHandler(ListCursorHandler *_cursor_handler) {
+    assert(_cursor_handler != nullptr);
+    assert(cursor_handler == nullptr);
+    assert(activate_callback == nullptr);
+    assert(cursor_callback == nullptr);
+
+    cursor_handler = _cursor_handler;
+  }
+
+  void SetHandler(Handler *_handler) {
+    SetItemRenderer(_handler);
+    SetCursorHandler(_handler);
   }
 
   /** Sets the function to call when a ListItem is chosen */
   void SetActivateCallback(ActivateCallback cb) {
-    assert(handler == NULL);
+    assert(item_renderer == nullptr);
+    assert(cursor_handler == nullptr);
 
     activate_callback = cb;
   }
 
   /** Sets the function to call when cursor has changed */
   void SetCursorCallback(CursorCallback cb) {
-    assert(handler == NULL);
+    assert(item_renderer == nullptr);
+    assert(cursor_handler == nullptr);
 
     cursor_callback = cb;
   }
 
   /** Sets the function to call when painting an item */
   void SetPaintItemCallback(PaintItemCallback cb) {
-    assert(handler == NULL);
+    assert(item_renderer == nullptr);
+    assert(cursor_handler == nullptr);
 
     paint_item_callback = cb;
   }
