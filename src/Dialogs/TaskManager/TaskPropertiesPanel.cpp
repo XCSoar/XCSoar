@@ -108,8 +108,9 @@ TaskPropertiesPanel::ReadValues()
 
   RoughTime new_open = p.start_constraints.open_time_span.GetStart();
   RoughTime new_close = p.start_constraints.open_time_span.GetEnd();
-  if (SaveValue(START_OPEN_TIME, new_open) ||
-      SaveValue(START_CLOSE_TIME, new_close)) {
+  const bool start_open_modified = SaveValue(START_OPEN_TIME, new_open);
+  const bool start_close_modified = SaveValue(START_CLOSE_TIME, new_close);
+  if (start_open_modified || start_close_modified) {
     p.start_constraints.open_time_span = RoughTimeSpan(new_open, new_close);
     changed = true;
   }
