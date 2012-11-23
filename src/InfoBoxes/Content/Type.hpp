@@ -138,6 +138,9 @@ namespace InfoBoxFactory
     WIND_ARROW,
     THERMAL_ASSISTANT,
 
+    START_OPEN_TIME,
+    START_OPEN_ARRIVAL_TIME,
+
     e_NUM_TYPES /* Last item */
   };
 

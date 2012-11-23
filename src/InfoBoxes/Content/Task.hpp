@@ -138,4 +138,11 @@ UpdateInfoBoxFinalETEVMG(InfoBoxData &data);
 
 void
 UpdateInfoBoxCruiseEfficiency(InfoBoxData &data);
+
+void
+UpdateInfoBoxStartOpen(InfoBoxData &data);
+
+void
+UpdateInfoBoxStartOpenArrival(InfoBoxData &data);
+
 #endif

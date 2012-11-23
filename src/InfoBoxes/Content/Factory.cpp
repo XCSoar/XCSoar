@@ -1129,6 +1129,25 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     THERMAL_ASSISTANT,
   },
 
+
+  {
+    N_("Start open/close countdown"),
+    N_("Start open"),
+    N_("Shows the time left until the start point opens or closes."),
+    UpdateInfoBoxStartOpen,
+    START_OPEN_ARRIVAL_TIME,
+    START_OPEN_ARRIVAL_TIME,
+  },
+
+  {
+    N_("Start open/close countdown at arrival"),
+    N_("Start open arr"),
+    N_("Shows the time left until the start point opens or closes, compared to the calculated arrival time."),
+    UpdateInfoBoxStartOpenArrival,
+    START_OPEN_TIME,
+    START_OPEN_TIME,
+  },
+
 };
 
 const TCHAR *

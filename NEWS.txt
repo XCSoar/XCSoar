@@ -9,6 +9,8 @@ Version 6.5 - not yet released
 * calculations
   - don't detect landing while climbing in a wave (#1330, #2289, #2406)
   - basic support for the contest "DMSt" (#2208)
+* tasks
+  - add task start countdown (#136, #1080)
 * devices
   - LX: support flight download from LXNAV Nano (#2085)
   - Android/IOIO: support BMP085 sensor (DroidSoar V2)

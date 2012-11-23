@@ -815,3 +815,90 @@ UpdateInfoBoxCruiseEfficiency(InfoBoxData &data)
   data.UnsafeFormatValue(_T("%d"), (int) (task_stats.cruise_efficiency * 100));
   data.SetCommentFromVerticalSpeed(task_stats.effective_mc, false);
 }
+
+gcc_pure
+static unsigned
+SecondsUntil(unsigned now, RoughTime until)
+{
+  int d = until.GetMinuteOfDay() * 60 - now;
+  if (d < 0)
+    d += 24 * 60 * 60;
+  return d;
+}
+
+void
+UpdateInfoBoxStartOpen(InfoBoxData &data)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const RoughTimeSpan &open = common_stats.start_open_time_span;
+
+  /* reset color that may have been set by a previous call */
+  data.SetValueColor(0);
+
+  if (!basic.time_available || !common_stats.ordered_valid ||
+      common_stats.ordered_summary.active != 0 ||
+      !open.IsDefined()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const unsigned now_s(basic.time);
+  const RoughTime now = RoughTime::FromSecondOfDayChecked(now_s);
+
+  if (open.HasEnded(now)) {
+    data.SetValueInvalid();
+    data.SetComment(_("Closed"));
+  } else if (open.HasBegun(now)) {
+    unsigned seconds = SecondsUntil(now_s, open.GetEnd());
+    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+    data.SetValueColor(3);
+    data.SetComment(_("Open"));
+  } else {
+    unsigned seconds = SecondsUntil(now_s, open.GetStart());
+    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+    data.SetValueColor(2);
+    data.SetComment(_("Waiting"));
+  }
+}
+
+void
+UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
+{
+  const NMEAInfo &basic = CommonInterface::Basic();
+  const TaskStats &task_stats = CommonInterface::Calculated().task_stats;
+  const GlideResult &current_remaining =
+    task_stats.current_leg.solution_remaining;
+  const CommonStats &common_stats = CommonInterface::Calculated().common_stats;
+  const RoughTimeSpan &open = common_stats.start_open_time_span;
+
+  /* reset color that may have been set by a previous call */
+  data.SetValueColor(0);
+
+  if (!basic.time_available || !common_stats.ordered_valid ||
+      !common_stats.mode_ordered ||
+      common_stats.ordered_summary.active != 0 ||
+      !open.IsDefined() ||
+      !current_remaining.IsOk()) {
+    data.SetInvalid();
+    return;
+  }
+
+  const unsigned arrival_s(basic.time + current_remaining.time_elapsed);
+  const RoughTime arrival = RoughTime::FromSecondOfDayChecked(arrival_s);
+
+  if (open.HasEnded(arrival)) {
+    data.SetValueInvalid();
+    data.SetComment(_("Closed"));
+  } else if (open.HasBegun(arrival)) {
+    unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
+    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+    data.SetValueColor(3);
+    data.SetComment(_("Open"));
+  } else {
+    unsigned seconds = SecondsUntil(arrival_s, open.GetStart());
+    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+    data.SetValueColor(2);
+    data.SetComment(_("Waiting"));
+  }
+}
