@@ -49,6 +49,23 @@ public:
   constexpr RoughTime(unsigned hour, unsigned minute)
     :value(hour * 60 + minute) {}
 
+  gcc_const
+  static RoughTime FromMinuteOfDay(unsigned mod) {
+    assert(mod < MAX);
+
+    return RoughTime(mod);
+  }
+
+  gcc_const
+  static RoughTime FromMinuteOfDayChecked(unsigned mod) {
+    return RoughTime(mod % MAX);
+  }
+
+  gcc_const
+  static RoughTime FromSecondOfDayChecked(unsigned sod) {
+    return FromMinuteOfDayChecked(sod / 60);
+  }
+
   static constexpr RoughTime Invalid() {
     return RoughTime(INVALID);
   }
