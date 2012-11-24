@@ -285,8 +285,16 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 
 // TODO: support other platforms
 
-static void
-OnFileListEnter(gcc_unused unsigned i)
+class WaypointExternalFileListHandler : public ListControl::Handler {
+public:
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  virtual void OnCursorMoved(unsigned index) gcc_override;
+};
+
+void
+WaypointExternalFileListHandler::OnCursorMoved(unsigned i)
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
@@ -297,8 +305,10 @@ OnFileListEnter(gcc_unused unsigned i)
   native_view->openFile(path);
 }
 
-static void
-OnFileListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
+void
+WaypointExternalFileListHandler::OnPaintItem(Canvas &canvas,
+                                             const PixelRect paint_rc,
+                                             unsigned i)
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
@@ -389,12 +399,11 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   wDetailsText->SetText(waypoint->details.c_str());
 
 #ifdef ANDROID
+  WaypointExternalFileListHandler handler;
   int num_files = std::distance(waypoint->files_external.begin(),
                                 waypoint->files_external.end());
   if (num_files > 0) {
-    wFilesList->SetPaintItemCallback(OnFileListItemPaint);
-    wFilesList->SetCursorCallback(OnFileListEnter);
-    wFilesList->SetActivateCallback(OnFileListEnter);
+    wFilesList->SetHandler(&handler);
 
     unsigned list_height = wFilesList->GetItemHeight() * std::min(num_files, 5);
     wFilesList->Resize(wFilesList->GetWidth(), list_height);

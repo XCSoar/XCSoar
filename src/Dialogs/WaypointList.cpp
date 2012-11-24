@@ -129,6 +129,12 @@ struct WaypointListDialogState
   }
 };
 
+class WaypointListDialog : public ListItemRenderer {
+public:
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+};
+
 static WaypointListDialogState dialog_state;
 static WaypointList waypoint_list;
 
@@ -282,8 +288,9 @@ FilterDataFieldListener::OnModified(DataField &df)
   UpdateList();
 }
 
-static void
-OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
+void
+WaypointListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                unsigned i)
 {
   if (waypoint_list.empty()) {
     assert(i == 0);
@@ -402,10 +409,12 @@ ShowWaypointListDialog(SingleWindow &parent, const GeoPoint &_location,
 
   const DialogLook &dialog_look = UIGlobals::GetDialogLook();
 
+  WaypointListDialog dialog2;
+
   waypoint_list_control = (ListControl*)dialog->FindByName(_T("frmWaypointList"));
   assert(waypoint_list_control != NULL);
   waypoint_list_control->SetActivateCallback(OnWaypointListEnter);
-  waypoint_list_control->SetPaintItemCallback(OnPaintListItem);
+  waypoint_list_control->SetItemRenderer(&dialog2);
   waypoint_list_control->SetItemHeight(WaypointListRenderer::GetHeight(dialog_look));
 
   FilterDataFieldListener listener;

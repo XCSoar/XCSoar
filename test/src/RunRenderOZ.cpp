@@ -184,14 +184,6 @@ OZWindow::OnPaint(Canvas &canvas)
   }
 }
 
-static void
-paint_oz_type_name(Canvas &canvas, const PixelRect rc, unsigned idx)
-{
-  assert(idx < NUM_OZ_TYPES);
-
-  canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
-}
-
 static OZWindow *oz_window;
 
 static void
@@ -238,7 +230,12 @@ public:
 
     type_list = new ListControl(*this, look, list_rc,
                                 with_border, 25);
-    type_list->SetPaintItemCallback(paint_oz_type_name);
+
+    auto renderer = MakeListItemRenderer([](Canvas &canvas, const PixelRect rc,
+                                  unsigned idx){
+        canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
+      });
+    type_list->SetItemRenderer(&renderer);
     type_list->SetCursorCallback(oz_type_cursor_callback);
     type_list->SetLength(NUM_OZ_TYPES);
 

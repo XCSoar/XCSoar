@@ -55,6 +55,12 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
+class AirspaceListDialog : public ListItemRenderer {
+public:
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+};
+
 /**
  * Special enum integer value for "filter disabled".
  */
@@ -203,8 +209,9 @@ AirspaceFilterListener::OnModified(DataField &df)
   UpdateList();
 }
 
-static void
-OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
+void
+AirspaceListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                unsigned i)
 {
   if (airspace_list.empty()) {
     assert(i == 0);
@@ -349,7 +356,6 @@ PrepareAirspaceSelectDialog()
   airspace_list_control = (ListControl*)dialog->FindByName(_T("frmAirspaceList"));
   assert(airspace_list_control != NULL);
   airspace_list_control->SetActivateCallback(OnAirspaceListEnter);
-  airspace_list_control->SetPaintItemCallback(OnPaintListItem);
   airspace_list_control->SetItemHeight(AirspaceListRenderer::GetHeight(dialog_look));
 
   name_control = (WndProperty*)dialog->FindByName(_T("prpFltName"));
@@ -380,6 +386,9 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
   location = XCSoarInterface::Basic().location;
 
   PrepareAirspaceSelectDialog();
+
+  AirspaceListDialog dialog2;
+  airspace_list_control->SetItemRenderer(&dialog2);
 
   AirspaceFilterListener listener;
   name_control->GetDataField()->SetListener(&listener);

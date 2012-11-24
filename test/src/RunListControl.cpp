@@ -51,7 +51,9 @@ Main()
   style.TabStop();
   ListControl list(client_area, *dialog_look, list_rc,
                    style, normal_font.GetHeight() + 4);
-  list.SetPaintItemCallback(PaintItemCallback);
+
+  FunctionListItemRenderer renderer(PaintItemCallback);
+  list.SetItemRenderer(&renderer);
   list.SetLength(64);
   list.SetFocus();
 

@@ -69,6 +69,20 @@ struct WarningItem
   }
 };
 
+class AirspaceWarningListHandler : public ListControl::Handler {
+public:
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  virtual void OnCursorMoved(unsigned index);
+
+  virtual bool CanActivateItem(unsigned index) const {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
+};
+
 typedef TrivialArray<WarningItem, 64u> WarningList;
 
 static ProtectedAirspaceWarningManager *airspace_warnings;
@@ -139,8 +153,14 @@ AirspaceWarningCursorCallback(unsigned i)
   UpdateButtons();
 }
 
-static void
-OnAirspaceListEnter(gcc_unused unsigned i)
+void
+AirspaceWarningListHandler::OnCursorMoved(unsigned i)
+{
+  AirspaceWarningCursorCallback(i);
+}
+
+void
+AirspaceWarningListHandler::OnActivateItem(gcc_unused unsigned i)
 {
   if (!HasPointer())
     /* on platforms without a pointing device (e.g. ALTAIR), allow
@@ -295,8 +315,9 @@ OnKeyDown(unsigned key_code)
   }
 }
 
-static void
-OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
+void
+AirspaceWarningListHandler::OnPaintItem(Canvas &canvas,
+                                        const PixelRect paint_rc, unsigned i)
 {
   TCHAR buffer[128];
 
@@ -511,9 +532,9 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent,
   warning_list_frame =
     (ListControl*)dialog->FindByName(_T("frmAirspaceWarningList"));
   assert(warning_list_frame != NULL);
-  warning_list_frame->SetPaintItemCallback(OnAirspaceListItemPaint);
-  warning_list_frame->SetCursorCallback(AirspaceWarningCursorCallback);
-  warning_list_frame->SetActivateCallback(OnAirspaceListEnter);
+
+  AirspaceWarningListHandler handler;
+  warning_list_frame->SetHandler(&handler);
 
   auto_close = _auto_close;
   UpdateList();

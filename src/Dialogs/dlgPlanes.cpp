@@ -49,6 +49,18 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
+class PlaneListHandler : public ListControl::Handler {
+public:
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  virtual bool CanActivateItem(unsigned index) const {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
+};
+
 static WndForm *dialog = NULL;
 static ListControl *plane_list = NULL;
 
@@ -111,8 +123,8 @@ UpdateList()
   b->SetEnabled(len > 0);
 }
 
-static void
-OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
+void
+PlaneListHandler::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < list.size());
 
@@ -290,8 +302,8 @@ DeleteClicked()
   UpdateList();
 }
 
-static void
-ListItemSelected(unsigned i)
+void
+PlaneListHandler::OnActivateItem(unsigned i)
 {
   assert(i < list.size());
 
@@ -322,11 +334,12 @@ dlgPlanesShowModal(SingleWindow &parent)
 
   UPixelScalar item_height = GetRowHeight(UIGlobals::GetDialogLook());
 
+  PlaneListHandler handler;
+
   plane_list = (ListControl*)dialog->FindByName(_T("List"));
   assert(plane_list != NULL);
   plane_list->SetItemHeight(item_height);
-  plane_list->SetPaintItemCallback(OnPlaneListPaint);
-  plane_list->SetActivateCallback(ListItemSelected);
+  plane_list->SetHandler(&handler);
 
   UpdateList();
   dialog->ShowModal();

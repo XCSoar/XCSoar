@@ -183,7 +183,6 @@ ListItemSelected(unsigned index)
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(PaintListItem),
   DeclareCallBackEntry(ListItemSelected),
   DeclareCallBackEntry(AddClicked),
   DeclareCallBackEntry(UpdateClicked),
@@ -200,10 +199,12 @@ dlgNOAAListShowModal(SingleWindow &parent)
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
 
+  FunctionListItemRenderer renderer(PaintListItem);
+
   station_list = (ListControl *)wf->FindByName(_T("StationList"));
   assert(station_list != NULL);
   station_list->SetItemHeight(NOAAListRenderer::GetHeight(UIGlobals::GetDialogLook()));
-  station_list->SetPaintItemCallback(PaintListItem);
+  station_list->SetItemRenderer(&renderer);
   station_list->SetActivateCallback(ListItemSelected);
 
   add_button = (WndButton *)wf->FindByName(_T("AddButton"));

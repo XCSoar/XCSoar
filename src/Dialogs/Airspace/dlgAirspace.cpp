@@ -48,13 +48,35 @@ Copyright_License {
 
 #include <assert.h>
 
-static ListControl *airspace_list = NULL;
+class AirspaceSettingsListHandler : public ListControl::Handler {
+  ListControl &airspace_list;
 
-static bool color_mode = false;
-static bool changed = false;
+  const bool color_mode;
+  bool changed;
 
-static void
-OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
+public:
+  AirspaceSettingsListHandler(ListControl &_airspace_list,
+                              bool _color_mode)
+    :airspace_list(_airspace_list), color_mode(_color_mode),
+     changed(false) {}
+
+  bool IsModified() const {
+    return changed;
+  }
+
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  virtual bool CanActivateItem(unsigned index) const {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
+};
+
+void
+AirspaceSettingsListHandler::OnPaintItem(Canvas &canvas, const PixelRect rc,
+                                         unsigned i)
 {
   assert(i < AIRSPACECLASSCOUNT);
 
@@ -100,8 +122,8 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
                          AirspaceFormatter::GetClass((AirspaceClass)i));
 }
 
-static void
-OnAirspaceListEnter(unsigned index)
+void
+AirspaceSettingsListHandler::OnActivateItem(unsigned index)
 {
   assert(index < AIRSPACECLASSCOUNT);
 
@@ -119,7 +141,7 @@ OnAirspaceListEnter(unsigned index)
 
     ActionInterface::SendMapSettings();
     look.Initialise(renderer);
-    airspace_list->Invalidate();
+    airspace_list.Invalidate();
   } else {
     renderer.classes[index].display = !renderer.classes[index].display;
     if (!renderer.classes[index].display)
@@ -130,7 +152,7 @@ OnAirspaceListEnter(unsigned index)
                              computer.warnings.class_warnings[index]);
     changed = true;
     ActionInterface::SendMapSettings();
-    airspace_list->Invalidate();
+    airspace_list.Invalidate();
   }
 }
 
@@ -146,29 +168,25 @@ static constexpr CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAirspaceShowModal(bool _color_mode)
+dlgAirspaceShowModal(bool color_mode)
 {
-  color_mode = _color_mode;
-
   WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
                            Layout::landscape
                            ? _T("IDR_XML_AIRSPACE_L")
                            : _T("IDR_XML_AIRSPACE"));
   assert(wf != NULL);
 
-  airspace_list = (ListControl*)wf->FindByName(_T("frmAirspaceList"));
-  assert(airspace_list != NULL);
-  airspace_list->SetActivateCallback(OnAirspaceListEnter);
-  airspace_list->SetPaintItemCallback(OnAirspacePaintListItem);
-  airspace_list->SetLength(AIRSPACECLASSCOUNT);
-
-  changed = false;
+  ListControl &airspace_list = *(ListControl *)
+    wf->FindByName(_T("frmAirspaceList"));
+  AirspaceSettingsListHandler handler(airspace_list, color_mode);
+  airspace_list.SetHandler(&handler);
+  airspace_list.SetLength(AIRSPACECLASSCOUNT);
 
   wf->ShowModal();
   delete wf;
 
   // now retrieve back the properties...
-  if (changed) {
+  if (handler.IsModified()) {
     if (!color_mode && glide_computer != NULL) {
       ProtectedAirspaceWarningManager::ExclusiveLease awm(glide_computer->GetAirspaceWarnings());
       awm->SetConfig(CommonInterface::SetComputerSettings().airspace.warnings);
