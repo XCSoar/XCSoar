@@ -209,7 +209,6 @@ public:
 
   /** Sets the function to call when a ListItem is chosen */
   void SetActivateCallback(ActivateCallback cb) {
-    assert(item_renderer == nullptr);
     assert(cursor_handler == nullptr);
 
     activate_callback = cb;
@@ -217,7 +216,6 @@ public:
 
   /** Sets the function to call when cursor has changed */
   void SetCursorCallback(CursorCallback cb) {
-    assert(item_renderer == nullptr);
     assert(cursor_handler == nullptr);
 
     cursor_callback = cb;
@@ -226,7 +224,6 @@ public:
   /** Sets the function to call when painting an item */
   void SetPaintItemCallback(PaintItemCallback cb) {
     assert(item_renderer == nullptr);
-    assert(cursor_handler == nullptr);
 
     paint_item_callback = cb;
   }
