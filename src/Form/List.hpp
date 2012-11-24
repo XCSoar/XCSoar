@@ -99,8 +99,6 @@ class ListControl : public PaintWindow {
 public:
   typedef void (*ActivateCallback)(unsigned idx);
   typedef void (*CursorCallback)(unsigned idx);
-  typedef void (*PaintItemCallback)(Canvas &canvas, const PixelRect rc,
-                                      unsigned idx);
 
   struct Handler : public ListItemRenderer, ListCursorHandler {
   };
@@ -169,7 +167,6 @@ protected:
 
   ActivateCallback activate_callback;
   CursorCallback cursor_callback;
-  PaintItemCallback paint_item_callback;
 
 #ifndef _WIN32_WCE
   KineticManager kinetic;
@@ -188,7 +185,6 @@ public:
   void SetItemRenderer(ListItemRenderer *_item_renderer) {
     assert(_item_renderer != nullptr);
     assert(item_renderer == nullptr);
-    assert(paint_item_callback == NULL);
 
     item_renderer = _item_renderer;
   }
@@ -219,13 +215,6 @@ public:
     assert(cursor_handler == nullptr);
 
     cursor_callback = cb;
-  }
-
-  /** Sets the function to call when painting an item */
-  void SetPaintItemCallback(PaintItemCallback cb) {
-    assert(item_renderer == nullptr);
-
-    paint_item_callback = cb;
   }
 
   /**

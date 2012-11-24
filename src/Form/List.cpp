@@ -54,8 +54,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    drag_mode(DragMode::NONE),
    item_renderer(nullptr), cursor_handler(nullptr),
    activate_callback(NULL),
-   cursor_callback(NULL),
-   paint_item_callback(NULL)
+   cursor_callback(NULL)
 #ifndef _WIN32_WCE
    , kinetic_timer(*this)
 #endif
@@ -168,8 +167,6 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
     if (item_renderer != nullptr)
       item_renderer->OnPaintItem(canvas, rc, i);
-    else
-      paint_item_callback(canvas, rc, i);
 
     if (focused && selected)
       canvas.DrawFocusRectangle(rc);
@@ -186,7 +183,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 void
 ListControl::OnPaint(Canvas &canvas)
 {
-  if (item_renderer != nullptr || paint_item_callback != NULL)
+  if (item_renderer != nullptr)
     DrawItems(canvas, origin, origin + items_visible + 2);
 
   DrawScrollBar(canvas);
@@ -195,7 +192,7 @@ ListControl::OnPaint(Canvas &canvas)
 void
 ListControl::OnPaint(Canvas &canvas, const PixelRect &dirty)
 {
-  if (item_renderer != nullptr || paint_item_callback != nullptr)
+  if (item_renderer != nullptr)
     DrawItems(canvas, origin + (dirty.top + pixel_pan) / item_height,
               origin + (dirty.bottom + pixel_pan + item_height - 1) / item_height);
 
