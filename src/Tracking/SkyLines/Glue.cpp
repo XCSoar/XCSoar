@@ -41,10 +41,17 @@ SkyLinesTracking::Glue::Glue()
 }
 
 void
-SkyLinesTracking::Glue::SendFix(const NMEAInfo &basic)
+SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 {
-  if (client.IsDefined() && basic.time_available &&
-      clock.CheckAdvance(basic.time))
+  if (!client.IsDefined())
+    return;
+
+  if (!basic.time_available) {
+    clock.Reset();
+    return;
+  }
+
+  if (clock.CheckAdvance(basic.time))
     client.SendFix(basic);
 }
 

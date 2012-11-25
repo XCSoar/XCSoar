@@ -40,7 +40,7 @@ namespace SkyLinesTracking {
 
     void SetSettings(const Settings &settings);
 
-    void SendFix(const NMEAInfo &basic);
+    void Tick(const NMEAInfo &basic);
   };
 }
 

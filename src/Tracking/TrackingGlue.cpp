@@ -93,7 +93,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 void
 TrackingGlue::OnTimer(const MoreData &basic, const DerivedInfo &calculated)
 {
-  skylines.SendFix(basic);
+  skylines.Tick(basic);
 
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */
