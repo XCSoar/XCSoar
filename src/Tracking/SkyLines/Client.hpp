@@ -48,13 +48,8 @@ namespace SkyLinesTracking {
       key = _key;
     }
 
-    bool Open(const char *host) {
-      return address.Lookup(host, "5597", SOCK_DGRAM) && socket.CreateUDP();
-    }
-
-    void Close() {
-      socket.Close();
-    }
+    bool Open(const char *host);
+    void Close();
 
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);

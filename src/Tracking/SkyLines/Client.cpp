@@ -28,6 +28,18 @@ Copyright_License {
 #include "Util/CRC.hpp"
 
 bool
+SkyLinesTracking::Client::Open(const char *host)
+{
+  return address.Lookup(host, "5597", SOCK_DGRAM) && socket.CreateUDP();
+}
+
+void
+SkyLinesTracking::Client::Close()
+{
+  socket.Close();
+}
+
+bool
 SkyLinesTracking::Client::SendFix(const NMEAInfo &basic)
 {
   assert(basic.time_available);
