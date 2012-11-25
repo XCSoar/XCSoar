@@ -85,6 +85,13 @@ public:
     address.ss_family = AF_UNSPEC;
   }
 
+  gcc_pure
+  bool operator==(const SocketAddress &other) const;
+
+  bool operator!=(const SocketAddress &other) const {
+    return !(*this == other);
+  }
+
   /**
    * Set up a wildcard address with the specified port.
    */

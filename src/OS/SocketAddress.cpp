@@ -42,6 +42,13 @@
 #include <ws2tcpip.h>
 #endif
 
+bool
+SocketAddress::operator==(const SocketAddress &other) const
+{
+  return length == other.length &&
+    memcmp(&address, &other.address, length) == 0;
+}
+
 void
 SocketAddress::Port(unsigned port)
 {
