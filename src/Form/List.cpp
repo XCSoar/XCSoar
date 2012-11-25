@@ -40,9 +40,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::min;
-using std::max;
-
 ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
                          PixelRect rc, const WindowStyle style,
                          UPixelScalar _item_height)
@@ -145,7 +142,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
                     scroll_bar.GetLeft(GetSize()), canvas.GetHeight());
 #endif
 
-  unsigned last_item = min(length, end);
+  unsigned last_item = std::min(length, end);
 
   const bool focused = HasFocus();
 
