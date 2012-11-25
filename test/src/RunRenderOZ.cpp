@@ -195,7 +195,8 @@ oz_type_cursor_callback(unsigned idx)
   oz_window->set_shape((ObservationZonePoint::Shape)idx);
 }
 
-class TestWindow : public SingleWindow {
+class TestWindow : public SingleWindow,
+                   ListItemRenderer {
   ButtonWindow close_button;
   ListControl *type_list;
   OZWindow oz;
@@ -232,11 +233,7 @@ public:
     type_list = new ListControl(*this, look, list_rc,
                                 with_border, 25);
 
-    auto renderer = MakeListItemRenderer([](Canvas &canvas, const PixelRect rc,
-                                  unsigned idx){
-        canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
-      });
-    type_list->SetItemRenderer(&renderer);
+    type_list->SetItemRenderer(this);
     type_list->SetCursorCallback(oz_type_cursor_callback);
     type_list->SetLength(NUM_OZ_TYPES);
 
@@ -259,6 +256,12 @@ protected:
     }
 
     return SingleWindow::OnCommand(id, code);
+  }
+
+  /* virtual methods from ListItemRenderer */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) {
+    canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
   }
 };
 
