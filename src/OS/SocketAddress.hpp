@@ -39,7 +39,7 @@
 #endif
 
 /**
- * An OO wrapper for a UNIX socket descriptor.
+ * An OO wrapper for a UNIX socket address.
  */
 class SocketAddress {
   size_t length;
