@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Glue.hpp"
 #include "NMEA/Info.hpp"
-#include "LogFile.hpp"
 
 void
 SkyLinesTracking::Glue::SendFix(const NMEAInfo &basic)
