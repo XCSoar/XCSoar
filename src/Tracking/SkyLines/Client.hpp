@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 #define XCSOAR_TRACKING_SKYLINES_CLIENT_HPP
 
+#include "Handler.hpp"
 #include "OS/SocketAddress.hpp"
 #include "OS/SocketDescriptor.hpp"
 #include "IO/Async/FileEventHandler.hpp"
@@ -33,16 +34,7 @@ Copyright_License {
 struct NMEAInfo;
 class IOThread;
 
-#ifdef HAVE_POSIX
-#define HAVE_SKYLINES_TRACKING_HANDLER
-#endif
-
 namespace SkyLinesTracking {
-  class Handler {
-  public:
-    virtual void OnAck(uint16_t id) {}
-  };
-
   class Client
 #ifdef HAVE_SKYLINES_TRACKING_HANDLER
     : private FileEventHandler

@@ -53,7 +53,7 @@ protected:
   }
 
 public:
-  virtual void OnAck(uint16_t id) gcc_override {
+  virtual void OnAck(unsigned id) gcc_override {
     printf("received ack %u\n", id);
     Done();
   }
