@@ -55,10 +55,18 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
-class AirspaceListDialog : public ListItemRenderer {
+class AirspaceListDialog : public ListItemRenderer, public ListCursorHandler {
 public:
+  /* virtual methods from ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) gcc_override;
+
+  /* virtual methods from ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
 };
 
 /**
@@ -114,8 +122,8 @@ struct AirspaceListDialogState
 
 static AirspaceListDialogState dialog_state;
 
-static void
-OnAirspaceListEnter(unsigned i)
+void
+AirspaceListDialog::OnActivateItem(unsigned i)
 {
   if (airspace_list.empty()) {
     assert(i == 0);
@@ -126,7 +134,6 @@ OnAirspaceListEnter(unsigned i)
 
   dlgAirspaceDetails(*airspace_list[i].airspace, airspace_warnings);
 }
-
 
 static void
 UpdateList()
@@ -355,7 +362,6 @@ PrepareAirspaceSelectDialog()
 
   airspace_list_control = (ListControl*)dialog->FindByName(_T("frmAirspaceList"));
   assert(airspace_list_control != NULL);
-  airspace_list_control->SetActivateCallback(OnAirspaceListEnter);
   airspace_list_control->SetItemHeight(AirspaceListRenderer::GetHeight(dialog_look));
 
   name_control = (WndProperty*)dialog->FindByName(_T("prpFltName"));
@@ -389,6 +395,7 @@ ShowAirspaceListDialog(const Airspaces &_airspaces,
 
   AirspaceListDialog dialog2;
   airspace_list_control->SetItemRenderer(&dialog2);
+  airspace_list_control->SetCursorHandler(&dialog2);
 
   AirspaceFilterListener listener;
   name_control->GetDataField()->SetListener(&listener);
