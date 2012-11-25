@@ -32,6 +32,8 @@
 
 #include "Compiler.h"
 
+#include <assert.h>
+
 #ifdef HAVE_POSIX
 #include <sys/socket.h>
 #else
@@ -48,12 +50,27 @@ class SocketAddress {
 public:
   SocketAddress() = default;
 
+  operator struct sockaddr *() {
+    return reinterpret_cast<struct sockaddr *>(&address);
+  }
+
   operator const struct sockaddr *() const {
     return reinterpret_cast<const struct sockaddr *>(&address);
   }
 
+  constexpr size_t GetCapacity() const {
+    return sizeof(address);
+  }
+
   size_t GetLength() const {
     return length;
+  }
+
+  void SetLength(size_t _length) {
+    assert(_length > 0);
+    assert(_length <= sizeof(address));
+
+    length = _length;
   }
 
   int GetFamily() const {

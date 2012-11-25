@@ -226,6 +226,28 @@ SocketDescriptor::WaitWritable(int timeout_ms) const
 #ifndef _WIN32_WCE
 
 ssize_t
+SocketDescriptor::Read(void *buffer, size_t length,
+                       SocketAddress &address)
+{
+  socklen_t addrlen = address.GetCapacity();
+  ssize_t nbytes = ::recvfrom(Get(), (char *)buffer, length,
+#ifdef HAVE_POSIX
+#ifdef __linux__
+                              MSG_DONTWAIT|MSG_NOSIGNAL,
+#else
+                              MSG_DONTWAIT,
+#endif
+#else
+                              0,
+#endif
+                              address, &addrlen);
+  if (nbytes > 0)
+    address.SetLength(addrlen);
+
+  return nbytes;
+}
+
+ssize_t
 SocketDescriptor::Write(const void *buffer, size_t length,
                         const SocketAddress &address)
 {
