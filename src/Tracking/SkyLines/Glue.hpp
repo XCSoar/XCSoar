@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_GLUE_HPP
 #define XCSOAR_TRACKING_SKYLINES_GLUE_HPP
 
-#include "Settings.hpp"
 #include "Client.hpp"
 #include "GPSClock.hpp"
 
 namespace SkyLinesTracking {
+  struct Settings;
+
   class Glue {
     Client client;
     unsigned interval;
@@ -37,20 +38,7 @@ namespace SkyLinesTracking {
   public:
     Glue():interval(0), clock(fixed(10)) {}
 
-    void SetSettings(const Settings &settings) {
-      client.SetKey(settings.key);
-
-      if (interval != settings.interval) {
-        interval = settings.interval;
-        clock = GPSClock(fixed(std::max(settings.interval, 1u)));
-      }
-
-      if (!settings.enabled)
-        client.Close();
-      else if (!client.IsDefined())
-        // TODO: fix hard-coded IP address:
-        client.Open("78.47.50.46");
-    }
+    void SetSettings(const Settings &settings);
 
     void SendFix(const NMEAInfo &basic);
   };

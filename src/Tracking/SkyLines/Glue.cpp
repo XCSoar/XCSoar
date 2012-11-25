@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Glue.hpp"
+#include "Settings.hpp"
 #include "NMEA/Info.hpp"
 
 void
@@ -30,4 +31,21 @@ SkyLinesTracking::Glue::SendFix(const NMEAInfo &basic)
   if (client.IsDefined() && basic.time_available &&
       clock.CheckAdvance(basic.time))
     client.SendFix(basic);
+}
+
+void
+SkyLinesTracking::Glue::SetSettings(const Settings &settings)
+{
+  client.SetKey(settings.key);
+
+  if (interval != settings.interval) {
+    interval = settings.interval;
+    clock = GPSClock(fixed(std::max(settings.interval, 1u)));
+  }
+
+  if (!settings.enabled)
+    client.Close();
+  else if (!client.IsDefined())
+    // TODO: fix hard-coded IP address:
+    client.Open("78.47.50.46");
 }
