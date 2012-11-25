@@ -38,6 +38,12 @@ namespace SkyLinesTracking {
   public:
     Glue();
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    void SetHandler(Handler *handler) {
+      client.SetHandler(handler);
+    }
+#endif
+
     void SetSettings(const Settings &settings);
 
     void Tick(const NMEAInfo &basic);
