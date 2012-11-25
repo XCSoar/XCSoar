@@ -98,7 +98,6 @@ public:
 class ListControl : public PaintWindow {
 public:
   typedef void (*ActivateCallback)(unsigned idx);
-  typedef void (*CursorCallback)(unsigned idx);
 
   struct Handler : public ListItemRenderer, ListCursorHandler {
   };
@@ -166,7 +165,6 @@ protected:
   ListCursorHandler *cursor_handler;
 
   ActivateCallback activate_callback;
-  CursorCallback cursor_callback;
 
 #ifndef _WIN32_WCE
   KineticManager kinetic;
@@ -193,7 +191,6 @@ public:
     assert(_cursor_handler != nullptr);
     assert(cursor_handler == nullptr);
     assert(activate_callback == nullptr);
-    assert(cursor_callback == nullptr);
 
     cursor_handler = _cursor_handler;
   }
@@ -208,13 +205,6 @@ public:
     assert(cursor_handler == nullptr);
 
     activate_callback = cb;
-  }
-
-  /** Sets the function to call when cursor has changed */
-  void SetCursorCallback(CursorCallback cb) {
-    assert(cursor_handler == nullptr);
-
-    cursor_callback = cb;
   }
 
   /**

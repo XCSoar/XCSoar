@@ -53,8 +53,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    cursor(0),
    drag_mode(DragMode::NONE),
    item_renderer(nullptr), cursor_handler(nullptr),
-   activate_callback(NULL),
-   cursor_callback(NULL)
+   activate_callback(NULL)
 #ifndef _WIN32_WCE
    , kinetic_timer(*this)
 #endif
@@ -281,8 +280,6 @@ ListControl::SetCursorIndex(unsigned i)
 
   if (cursor_handler != nullptr)
     cursor_handler->OnCursorMoved(i);
-  else if (cursor_callback != NULL)
-    cursor_callback(i);
   return true;
 }
 
