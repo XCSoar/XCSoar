@@ -38,6 +38,7 @@ Copyright_License {
 #include "Renderer/TrailRenderer.hpp"
 #include "Compiler.h"
 #include "Weather/Features.hpp"
+#include "Tracking/SkyLines/Features.hpp"
 
 struct MapLook;
 struct TrafficLook;
@@ -54,6 +55,10 @@ class GlideComputer;
 class GlidePolar;
 class ContainerWindow;
 class NOAAStore;
+
+namespace SkyLinesTracking {
+  struct Data;
+}
 
 class MapWindow :
   public DoubleBufferWindow,
@@ -139,6 +144,10 @@ protected:
   NOAAStore *noaa_store;
 #endif
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  const SkyLinesTracking::Data *skylines_data;
+#endif
+
   bool compass_visible;
 
 #ifndef ENABLE_OPENGL
@@ -216,6 +225,12 @@ public:
   }
 #endif
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  void SetSkyLinesData(const SkyLinesTracking::Data *_data) {
+    skylines_data = _data;
+  }
+#endif
+
   void ReadBlackboard(const MoreData &nmea_info,
                       const DerivedInfo &derived_info);
 
@@ -250,6 +265,11 @@ public:
   void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                  unsigned min_time, bool enable_traildrift = false);
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  void DrawSkyLinesTraffic(Canvas &canvas) const;
+#endif
+
   void DrawTeammate(Canvas &canvas) const;
   void DrawContest(Canvas &canvas);
   void DrawTask(Canvas &canvas);

@@ -33,6 +33,7 @@ Copyright_License {
 #include "Renderer/TrafficRenderer.hpp"
 #include "FLARM/FriendsGlue.hpp"
 #include "Look/Fonts.hpp"
+#include "Tracking/SkyLines/Data.hpp"
 
 #include <stdio.h>
 
@@ -137,3 +138,24 @@ MapWindow::DrawTeammate(Canvas &canvas) const
       traffic_look.teammate_icon.Draw(canvas, sc);
   }
 }
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
+void
+MapWindow::DrawSkyLinesTraffic(Canvas &canvas) const
+{
+  if (skylines_data == nullptr)
+    return;
+
+  canvas.Select(Fonts::map);
+
+  ScopeLock protect(skylines_data->mutex);
+  for (auto &i : skylines_data->traffic) {
+    RasterPoint pt;
+    if (render_projection.GeoToScreenIfVisible(i.second.location, pt)) {
+      traffic_look.teammate_icon.Draw(canvas, pt);
+    }
+  }
+}
+
+#endif

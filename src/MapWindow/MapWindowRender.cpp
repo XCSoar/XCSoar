@@ -187,6 +187,11 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
     DrawWind(canvas, aircraft_pos, rc);
 
   // Draw traffic
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  DrawSkyLinesTraffic(canvas);
+#endif
+
   DrawTeammate(canvas);
 
   if (basic.location_available)

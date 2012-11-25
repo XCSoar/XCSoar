@@ -496,6 +496,11 @@ XCSoarInterface::Startup()
 #ifdef HAVE_TRACKING
   tracking = new TrackingGlue();
   tracking->SetSettings(GetComputerSettings().tracking);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  if (map_window != nullptr)
+    map_window->SetSkyLinesData(&tracking->GetSkyLinesData());
+#endif
 #endif
 
   assert(!global_running);
