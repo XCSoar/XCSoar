@@ -147,7 +147,8 @@ public:
     if (oz != NULL)
       oz->SetLegs(&previous, &location, &next);
 
-    Invalidate();
+    if (IsDefined())
+      Invalidate();
   }
 
 protected:
