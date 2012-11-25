@@ -185,18 +185,8 @@ OZWindow::OnPaint(Canvas &canvas)
   }
 }
 
-static OZWindow *oz_window;
-
-static void
-oz_type_cursor_callback(unsigned idx)
-{
-  assert(idx < NUM_OZ_TYPES);
-
-  oz_window->set_shape((ObservationZonePoint::Shape)idx);
-}
-
 class TestWindow : public SingleWindow,
-                   ListItemRenderer {
+                   ListItemRenderer, ListCursorHandler {
   ButtonWindow close_button;
   ListControl *type_list;
   OZWindow oz;
@@ -224,7 +214,6 @@ public:
     PixelRect oz_rc = rc;
     oz_rc.left = oz_rc.right / 2;
     oz.Create(*this, oz_rc, with_border);
-    oz_window = &oz;
 
     const PixelRect list_rc = {
       0, 0, PixelScalar(rc.right / 2), PixelScalar(rc.bottom - 30),
@@ -234,7 +223,7 @@ public:
                                 with_border, 25);
 
     type_list->SetItemRenderer(this);
-    type_list->SetCursorCallback(oz_type_cursor_callback);
+    type_list->SetCursorHandler(this);
     type_list->SetLength(NUM_OZ_TYPES);
 
     PixelRect button_rc = rc;
@@ -262,6 +251,13 @@ protected:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) {
     canvas.DrawText(rc.left + 2, rc.top + 2, oz_type_names[idx]);
+  }
+
+  /* virtual methods from ListCursorHandler */
+  virtual void OnCursorMoved(unsigned idx) gcc_override {
+    assert(idx < NUM_OZ_TYPES);
+
+    oz.set_shape((ObservationZonePoint::Shape)idx);
   }
 };
 
