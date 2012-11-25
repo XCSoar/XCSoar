@@ -49,6 +49,20 @@ Copyright_License {
 
 #include <stdio.h>
 
+class NOAAListDialog : public ListItemRenderer, public ListCursorHandler {
+public:
+  /* virtual methods from ListItemRenderer */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  /* virtual methods from ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
+};
+
 static WndForm *wf;
 static ListControl *station_list;
 static WndButton *add_button;
@@ -93,8 +107,8 @@ UpdateList()
   details_button->SetEnabled(!empty);
 }
 
-static void
-PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
+void
+NOAAListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < list.size());
 
@@ -176,14 +190,13 @@ DetailsClicked()
     OpenDetails(station_list->GetCursorIndex());
 }
 
-static void
-ListItemSelected(unsigned index)
+void
+NOAAListDialog::OnActivateItem(unsigned index)
 {
   OpenDetails(index);
 }
 
 static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(ListItemSelected),
   DeclareCallBackEntry(AddClicked),
   DeclareCallBackEntry(UpdateClicked),
   DeclareCallBackEntry(RemoveClicked),
@@ -199,13 +212,13 @@ dlgNOAAListShowModal(SingleWindow &parent)
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
 
-  FunctionListItemRenderer renderer(PaintListItem);
+  NOAAListDialog dialog;
 
   station_list = (ListControl *)wf->FindByName(_T("StationList"));
   assert(station_list != NULL);
   station_list->SetItemHeight(NOAAListRenderer::GetHeight(UIGlobals::GetDialogLook()));
-  station_list->SetItemRenderer(&renderer);
-  station_list->SetActivateCallback(ListItemSelected);
+  station_list->SetItemRenderer(&dialog);
+  station_list->SetCursorHandler(&dialog);
 
   add_button = (WndButton *)wf->FindByName(_T("AddButton"));
   assert(add_button != NULL);
