@@ -28,6 +28,39 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "DebugReplay.hpp"
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#include "IO/Async/GlobalIOThread.hpp"
+
+class Handler : public SkyLinesTracking::Handler {
+  Mutex mutex;
+  Cond cond;
+
+  bool done;
+
+public:
+  Handler():done(false) {}
+
+  bool Wait(unsigned timeout_ms=5000) {
+    const ScopeLock protect(mutex);
+    return done || (cond.Wait(mutex, timeout_ms) && done);
+  }
+
+protected:
+  void Done() {
+    const ScopeLock protect(mutex);
+    done = true;
+    cond.Broadcast();
+  }
+
+public:
+  virtual void OnAck(uint16_t id) gcc_override {
+    printf("received ack %u\n", id);
+    Done();
+  }
+};
+
+#endif
+
 int
 main(int argc, char *argv[])
 {
@@ -35,7 +68,19 @@ main(int argc, char *argv[])
   const char *host = args.ExpectNext();
   const char *key = args.ExpectNext();
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  InitialiseIOThread();
+#endif
+
   SkyLinesTracking::Client client;
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  client.SetIOThread(io_thread);
+
+  Handler handler;
+  client.SetHandler(&handler);
+#endif
+
   client.SetKey(ParseUint64(key, NULL, 16));
   if (!client.Open(host)) {
     fprintf(stderr, "Failed to create client\n");
@@ -52,6 +97,10 @@ main(int argc, char *argv[])
     return client.SendFix(basic) ? EXIT_SUCCESS : EXIT_FAILURE;
   } else if (StringIsEqual(args.PeekNext(), "ping")) {
     client.SendPing(1);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    handler.Wait();
+#endif
   } else {
     DebugReplay *replay = CreateDebugReplay(args);
     if (replay == NULL)
@@ -62,6 +111,11 @@ main(int argc, char *argv[])
       usleep(100000);
     }
   }
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  client.Close();
+  DeinitialiseIOThread();
+#endif
 
   return EXIT_SUCCESS;
 }

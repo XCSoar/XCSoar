@@ -25,6 +25,21 @@ Copyright_License {
 #include "Settings.hpp"
 #include "NMEA/Info.hpp"
 
+#ifdef HAVE_POSIX
+#include "IO/Async/GlobalIOThread.hpp"
+#endif
+
+#include <assert.h>
+
+SkyLinesTracking::Glue::Glue()
+  :interval(0), clock(fixed(10))
+{
+#ifdef HAVE_POSIX
+  assert(io_thread != nullptr);
+  client.SetIOThread(io_thread);
+#endif
+}
+
 void
 SkyLinesTracking::Glue::SendFix(const NMEAInfo &basic)
 {

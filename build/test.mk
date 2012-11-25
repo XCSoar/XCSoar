@@ -879,7 +879,7 @@ RUN_SL_TRACKING_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(TEST_SRC_DIR)/RunSkyLinesTracking.cpp
-RUN_SL_TRACKING_LDADD = $(DEBUG_REPLAY_LDADD)
+RUN_SL_TRACKING_LDADD = $(ASYNC_LDADD) $(DEBUG_REPLAY_LDADD)
 RUN_SL_TRACKING_DEPENDS = LIBNET OS GEO MATH UTIL TIME
 $(eval $(call link-program,RunSkyLinesTracking,RUN_SL_TRACKING))
 

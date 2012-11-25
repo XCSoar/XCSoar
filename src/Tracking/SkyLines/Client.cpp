@@ -27,15 +27,65 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Util/CRC.hpp"
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+#include "IO/Async/IOThread.hpp"
+#endif
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
+void
+SkyLinesTracking::Client::SetIOThread(IOThread *_io_thread)
+{
+  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
+    io_thread->LockRemove(socket.Get());
+
+  io_thread = _io_thread;
+
+  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
+    io_thread->LockAdd(socket.Get(), IOThread::READ, *this);
+}
+
+void
+SkyLinesTracking::Client::SetHandler(Handler *_handler)
+{
+  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
+    io_thread->LockRemove(socket.Get());
+
+  handler = _handler;
+
+  if (socket.IsDefined() && io_thread != nullptr && handler != nullptr)
+    io_thread->LockAdd(socket.Get(), IOThread::READ, *this);
+}
+
+#endif
+
 bool
 SkyLinesTracking::Client::Open(const char *host)
 {
-  return address.Lookup(host, "5597", SOCK_DGRAM) && socket.CreateUDP();
+  Close();
+
+  if (!address.Lookup(host, "5597", SOCK_DGRAM) || !socket.CreateUDP())
+    return false;
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  if (io_thread != nullptr && handler != nullptr)
+    io_thread->LockAdd(socket.Get(), IOThread::READ, *this);
+#endif
+
+  return true;
 }
 
 void
 SkyLinesTracking::Client::Close()
 {
+  if (!socket.IsDefined())
+    return;
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  if (io_thread != nullptr && handler != nullptr)
+    io_thread->LockRemove(socket.Get());
+#endif
+
   socket.Close();
 }
 
@@ -135,3 +185,51 @@ SkyLinesTracking::Client::SendPing(uint16_t id)
 
   return socket.Write(&packet, sizeof(packet), address) == sizeof(packet);
 }
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+
+inline void
+SkyLinesTracking::Client::OnDatagramReceived(void *data, size_t length)
+{
+  Header &header = *(Header *)data;
+  if (length < sizeof(header))
+    return;
+
+  const uint16_t received_crc = FromBE16(header.crc);
+  header.crc = 0;
+
+  const uint16_t calculated_crc = UpdateCRC16CCITT(data, length, 0);
+  if (received_crc != calculated_crc)
+    return;
+
+  const ACKPacket &ack = *(const ACKPacket *)data;
+
+  switch ((Type)FromBE16(header.type)) {
+  case PING:
+  case FIX:
+    break;
+
+  case ACK:
+    handler->OnAck(FromBE16(ack.id));
+    break;
+  }
+}
+
+bool
+SkyLinesTracking::Client::OnFileEvent(int fd, unsigned mask)
+{
+  if (!socket.IsDefined())
+    return false;
+
+  uint8_t buffer[4096];
+  ssize_t nbytes;
+  SocketAddress source_address;
+
+  while ((nbytes = socket.Read(buffer, sizeof(buffer), source_address)) > 0)
+    if (source_address == address)
+      OnDatagramReceived(buffer, nbytes);
+
+  return true;
+}
+
+#endif

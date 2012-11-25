@@ -26,19 +26,51 @@ Copyright_License {
 
 #include "OS/SocketAddress.hpp"
 #include "OS/SocketDescriptor.hpp"
+#include "IO/Async/FileEventHandler.hpp"
 
 #include <stdint.h>
 
 struct NMEAInfo;
+class IOThread;
+
+#ifdef HAVE_POSIX
+#define HAVE_SKYLINES_TRACKING_HANDLER
+#endif
 
 namespace SkyLinesTracking {
-  class Client {
+  class Handler {
+  public:
+    virtual void OnAck(uint16_t id) {}
+  };
+
+  class Client
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    : private FileEventHandler
+#endif
+  {
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    IOThread *io_thread;
+    Handler *handler;
+#endif
+
     uint64_t key;
+
     SocketAddress address;
     SocketDescriptor socket;
 
   public:
-    Client():key(0) {}
+    Client()
+      :
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+      io_thread(nullptr), handler(nullptr),
+#endif
+      key(0) {}
+    ~Client() { Close(); }
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    void SetIOThread(IOThread *io_thread);
+    void SetHandler(Handler *handler);
+#endif
 
     bool IsDefined() const {
       return socket.IsDefined();
@@ -53,6 +85,14 @@ namespace SkyLinesTracking {
 
     bool SendFix(const NMEAInfo &basic);
     bool SendPing(uint16_t id);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  private:
+    void OnDatagramReceived(void *data, size_t length);
+
+    /* virtual methods from FileEventHandler */
+    virtual bool OnFileEvent(int fd, unsigned mask) gcc_override;
+#endif
   };
 }
 
