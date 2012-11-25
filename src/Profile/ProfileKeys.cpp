@@ -239,6 +239,7 @@ const TCHAR TrackingInterval[] = _T("TrackingInterval");
 const TCHAR TrackingVehicleType[] = _T("TrackingVehicleType");
 const TCHAR SkyLinesTrackingEnabled[] = _T("SkyLinesTrackingEnabled");
 const TCHAR SkyLinesTrackingInterval[] = _T("SkyLinesTrackingInterval");
+const TCHAR SkyLinesTrafficEnabled[] = _T("SkyLinesTrafficEnabled");
 const TCHAR SkyLinesTrackingKey[] = _T("SkyLinesTrackingKey");
 const TCHAR LiveTrack24Enabled[] = _T("LiveTrack24Enabled");
 const TCHAR LiveTrack24Server[] = _T("LiveTrack24Server");

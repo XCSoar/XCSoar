@@ -40,6 +40,9 @@ Copyright_License {
 enum ControlIndex {
   SL_ENABLED,
   SL_INTERVAL,
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  SL_TRAFFIC_ENABLED,
+#endif
   SL_KEY,
   SPACER,
   LT24Enabled,
@@ -73,6 +76,9 @@ void
 TrackingConfigPanel::SetSkyLinesEnabled(bool enabled)
 {
   SetRowEnabled(SL_INTERVAL, enabled);
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  SetRowEnabled(SL_TRAFFIC_ENABLED, enabled);
+#endif
   SetRowEnabled(SL_KEY, enabled);
 }
 
@@ -124,6 +130,12 @@ TrackingConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddBoolean(_T("SkyLines"), NULL, settings.skylines.enabled, this);
   AddTime(_T("Tracking Interval"), NULL, 5, 1200, 5,
           settings.skylines.interval);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  AddBoolean(_("Track friends"),
+             _("Download the position of your friends live from the SkyLines server."),
+             settings.skylines.traffic_enabled, this);
+#endif
 
   StaticString<64> buffer;
   if (settings.skylines.key != 0)
@@ -184,6 +196,11 @@ TrackingConfigPanel::Save(bool &_changed, bool &_require_restart)
 
   changed |= SaveValue(SL_INTERVAL, ProfileKeys::SkyLinesTrackingInterval,
                        settings.skylines.interval);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  changed |= SaveValue(SL_TRAFFIC_ENABLED, ProfileKeys::SkyLinesTrafficEnabled,
+                       settings.skylines.traffic_enabled);
+#endif
 
   changed |= SaveKey(*this, SL_KEY, ProfileKeys::SkyLinesTrackingKey,
                      settings.skylines.key);

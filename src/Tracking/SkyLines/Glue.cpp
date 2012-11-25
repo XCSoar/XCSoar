@@ -33,6 +33,9 @@ Copyright_License {
 
 SkyLinesTracking::Glue::Glue()
   :interval(0), clock(fixed(10))
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  , traffic_clock(fixed(60)), traffic_enabled(false)
+#endif
 {
 #ifdef HAVE_POSIX
   assert(io_thread != nullptr);
@@ -48,11 +51,19 @@ SkyLinesTracking::Glue::Tick(const NMEAInfo &basic)
 
   if (!basic.time_available) {
     clock.Reset();
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    traffic_clock.Reset();
+#endif
     return;
   }
 
   if (clock.CheckAdvance(basic.time))
     client.SendFix(basic);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  if (traffic_enabled && traffic_clock.CheckAdvance(basic.time))
+    client.SendTrafficRequest(true, true);
+#endif
 }
 
 void
@@ -70,4 +81,8 @@ SkyLinesTracking::Glue::SetSettings(const Settings &settings)
   else if (!client.IsDefined())
     // TODO: fix hard-coded IP address:
     client.Open("78.47.50.46");
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  traffic_enabled = settings.traffic_enabled;
+#endif
 }

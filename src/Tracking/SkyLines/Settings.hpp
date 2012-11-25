@@ -24,11 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
 #define XCSOAR_TRACKING_SKYLINES_SETTINGS_HPP
 
+#include "Features.hpp"
+
 #include <stdint.h>
 
 namespace SkyLinesTracking {
   struct Settings {
     bool enabled;
+
+    /**
+     * Periodically request traffic information?
+     */
+    bool traffic_enabled;
 
     /**
      * Tracking interval in seconds.
@@ -39,6 +46,7 @@ namespace SkyLinesTracking {
 
     void SetDefaults() {
       enabled = false;
+      traffic_enabled = false;
       interval = 20;
       key = 0;
     }

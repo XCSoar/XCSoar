@@ -35,6 +35,11 @@ namespace SkyLinesTracking {
     unsigned interval;
     GPSClock clock;
 
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+    GPSClock traffic_clock;
+    bool traffic_enabled;
+#endif
+
   public:
     Glue();
 

@@ -33,6 +33,7 @@ namespace Profile {
   static void Load(SkyLinesTracking::Settings &settings) {
     Get(ProfileKeys::SkyLinesTrackingEnabled, settings.enabled);
     Get(ProfileKeys::SkyLinesTrackingInterval, settings.interval);
+    Get(ProfileKeys::SkyLinesTrafficEnabled, settings.traffic_enabled);
 
     const TCHAR *key = Get(ProfileKeys::SkyLinesTrackingKey);
     if (key != NULL)
