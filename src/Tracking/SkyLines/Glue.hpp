@@ -35,7 +35,6 @@ namespace SkyLinesTracking {
     GPSClock clock;
 
   public:
-    // TODO: make the interval configurable
     Glue():interval(0), clock(fixed(10)) {}
 
     void SetSettings(const Settings &settings) {
