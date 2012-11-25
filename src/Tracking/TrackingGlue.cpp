@@ -51,6 +51,10 @@ TrackingGlue::TrackingGlue()
 {
   settings.SetDefaults();
   LiveTrack24::SetServer(settings.livetrack24.server);
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  skylines.SetHandler(this);
+#endif
 }
 
 void
@@ -203,3 +207,14 @@ TrackingGlue::Tick()
 
   mutex.Lock();
 }
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+void
+TrackingGlue::OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
+                        const GeoPoint &location, int altitude)
+{
+  const ScopeLock protect(skylines_data.mutex);
+  const SkyLinesTracking::Data::Traffic traffic(location, altitude);
+  skylines_data.traffic[pilot_id] = traffic;
+}
+#endif

@@ -29,7 +29,9 @@ Copyright_License {
 #ifdef HAVE_TRACKING
 
 #include "Tracking/TrackingSettings.hpp"
+#include "Tracking/SkyLines/Handler.hpp"
 #include "Tracking/SkyLines/Glue.hpp"
+#include "Tracking/SkyLines/Data.hpp"
 #include "Thread/StandbyThread.hpp"
 #include "Tracking/LiveTrack24.hpp"
 #include "Time/PeriodClock.hpp"
@@ -39,7 +41,11 @@ Copyright_License {
 struct MoreData;
 struct DerivedInfo;
 
-class TrackingGlue : protected StandbyThread {
+class TrackingGlue : protected StandbyThread
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+                   , private SkyLinesTracking::Handler
+#endif
+{
   struct LiveTrack24State
   {
     LiveTrack24::SessionID session_id;
@@ -59,6 +65,10 @@ class TrackingGlue : protected StandbyThread {
   TrackingSettings settings;
 
   SkyLinesTracking::Glue skylines;
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+  SkyLinesTracking::Data skylines_data;
+#endif
 
   LiveTrack24State state;
 
@@ -85,6 +95,18 @@ public:
 
 protected:
   virtual void Tick();
+
+#ifdef HAVE_SKYLINES_TRACKING_HANDLER
+private:
+  /* virtual methods from SkyLinesTracking::Handler */
+  virtual void OnTraffic(unsigned pilot_id, unsigned time_of_day_ms,
+                         const GeoPoint &location, int altitude) gcc_override;
+
+public:
+  const SkyLinesTracking::Data &GetSkyLinesData() const {
+    return skylines_data;
+  }
+#endif
 };
 
 #endif /* HAVE_TRACKING */
