@@ -52,8 +52,7 @@ ListControl::ListControl(ContainerWindow &parent, const DialogLook &_look,
    origin(0), pixel_pan(0),
    cursor(0),
    drag_mode(DragMode::NONE),
-   item_renderer(nullptr), cursor_handler(nullptr),
-   activate_callback(NULL)
+   item_renderer(nullptr), cursor_handler(nullptr)
 #ifndef _WIN32_WCE
    , kinetic_timer(*this)
 #endif
@@ -67,9 +66,8 @@ ListControl::CanActivateItem() const
   if (IsEmpty())
     return false;
 
-  return cursor_handler != NULL
-    ? cursor_handler->CanActivateItem(GetCursorIndex())
-    : activate_callback != NULL;
+  return cursor_handler != NULL &&
+    cursor_handler->CanActivateItem(GetCursorIndex());
 }
 
 void
@@ -81,8 +79,6 @@ ListControl::ActivateItem()
   assert(index < GetLength());
   if (cursor_handler != NULL)
     cursor_handler->OnActivateItem(index);
-  else if (activate_callback != NULL)
-    activate_callback(index);
 }
 
 void
