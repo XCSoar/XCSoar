@@ -32,7 +32,7 @@ void
 dlgWeatherShowModal();
 
 void
-dlgNOAAListShowModal(SingleWindow &parent);
+dlgNOAAListShowModal();
 
 void
 dlgNOAADetailsShowModal(SingleWindow &parent,

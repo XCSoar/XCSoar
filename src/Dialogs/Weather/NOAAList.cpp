@@ -22,10 +22,8 @@ Copyright_License {
 */
 
 #include "Dialogs/Weather.hpp"
-#include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/JobDialog.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Language/Language.hpp"
 #include "Weather/Features.hpp"
 
@@ -33,12 +31,11 @@ Copyright_License {
 
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
+#include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
-#include "Form/List.hpp"
+#include "Form/ListWidget.hpp"
 #include "Form/Button.hpp"
-#include "Screen/Layout.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/NOAAUpdater.hpp"
@@ -46,29 +43,6 @@ Copyright_License {
 #include "Util/TrivialArray.hpp"
 #include "Compiler.h"
 #include "Renderer/NOAAListRenderer.hpp"
-
-#include <stdio.h>
-
-class NOAAListDialog : public ListItemRenderer, public ListCursorHandler {
-public:
-  /* virtual methods from ListItemRenderer */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
-
-  /* virtual methods from ListCursorHandler */
-  virtual bool CanActivateItem(unsigned index) const gcc_override {
-    return true;
-  }
-
-  virtual void OnActivateItem(unsigned index) gcc_override;
-};
-
-static WndForm *wf;
-static ListControl *station_list;
-static WndButton *add_button;
-static WndButton *update_button;
-static WndButton *remove_button;
-static WndButton *details_button;
 
 struct NOAAListItem
 {
@@ -80,44 +54,112 @@ struct NOAAListItem
   }
 };
 
-static TrivialArray<NOAAListItem, 20> list;
+class NOAAListWidget : public ListWidget, private ActionListener {
+  enum Buttons {
+    DETAILS,
+    ADD,
+    UPDATE,
+    REMOVE,
+  };
 
-static void
-UpdateList()
+  WndButton *details_button, *add_button, *update_button, *remove_button;
+
+  TrivialArray<NOAAListItem, 20> stations;
+
+public:
+  void CreateButtons(WidgetDialog &dialog);
+
+private:
+  void UpdateList();
+
+  void OpenDetails(unsigned index);
+  void DetailsClicked();
+  void AddClicked();
+  void UpdateClicked();
+  void RemoveClicked();
+
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
+
+protected:
+  /* virtual methods from ListItemRenderer */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  /* virtual methods from ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
+
+private:
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id);
+};
+
+void
+NOAAListWidget::CreateButtons(WidgetDialog &dialog)
 {
-  list.clear();
+  details_button = dialog.AddButton(_("Details"), *this, DETAILS);
+  add_button = dialog.AddButton(_("Add"), *this, ADD);
+  update_button = dialog.AddButton(_("Update"), *this, UPDATE);
+  remove_button = dialog.AddButton(_("Remove"), *this, REMOVE);
+}
+
+void
+NOAAListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  CreateList(parent, look, rc, NOAAListRenderer::GetHeight(look));
+  UpdateList();
+}
+
+void
+NOAAListWidget::Unprepare()
+{
+  DeleteWindow();
+}
+
+void
+NOAAListWidget::UpdateList()
+{
+  stations.clear();
 
   for (auto i = noaa_store->begin(), end = noaa_store->end(); i != end; ++i) {
     NOAAListItem item;
     item.code = i->GetCodeT();
     item.iterator = i;
-    list.push_back(item);
+    stations.push_back(item);
   }
 
-  std::sort(list.begin(), list.end());
+  std::sort(stations.begin(), stations.end());
 
-  station_list->SetLength(list.size());
-  station_list->Invalidate();
+  ListControl &list = GetList();
+  list.SetLength(stations.size());
+  list.Invalidate();
 
-  add_button->SetEnabled(!list.full());
-
-  bool empty = list.empty();
+  const bool empty = stations.empty(), full = stations.full();
+  add_button->SetEnabled(!full);
   update_button->SetEnabled(!empty);
   remove_button->SetEnabled(!empty);
   details_button->SetEnabled(!empty);
 }
 
 void
-NOAAListDialog::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned index)
+NOAAListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
-  assert(index < list.size());
+  assert(index < stations.size());
 
-  NOAAListRenderer::Draw(canvas, rc, *list[index].iterator,
+  NOAAListRenderer::Draw(canvas, rc, *stations[index].iterator,
                          UIGlobals::GetDialogLook());
 }
 
-static void
-AddClicked()
+inline void
+NOAAListWidget::AddClicked()
 {
   TCHAR code[5] = _T("");
   if (!dlgTextEntryShowModal(code, 5, _("Airport ICAO code")))
@@ -138,7 +180,8 @@ AddClicked()
   NOAAStore::iterator i = noaa_store->AddStation(code);
   noaa_store->SaveToProfile();
 
-  DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
+  DialogJobRunner runner(UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(),
                          _("Download"), true);
 
   NOAAUpdater::Update(*i, runner);
@@ -146,102 +189,95 @@ AddClicked()
   UpdateList();
 }
 
-static void
-UpdateClicked()
+inline void
+NOAAListWidget::UpdateClicked()
 {
-  DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
+  DialogJobRunner runner(UIGlobals::GetMainWindow(),
+                         UIGlobals::GetDialogLook(),
                          _("Download"), true);
   NOAAUpdater::Update(*noaa_store, runner);
   UpdateList();
 }
 
-static void
-RemoveClicked()
+inline void
+NOAAListWidget::RemoveClicked()
 {
-  unsigned index = station_list->GetCursorIndex();
-  assert(index < list.size());
+  unsigned index = GetList().GetCursorIndex();
+  assert(index < stations.size());
 
   StaticString<256> tmp;
   tmp.Format(_("Do you want to remove station %s?"),
-             list[index].code.c_str());
+             stations[index].code.c_str());
 
   if (ShowMessageBox(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
-  noaa_store->erase(list[index].iterator);
+  noaa_store->erase(stations[index].iterator);
   noaa_store->SaveToProfile();
 
   UpdateList();
 }
 
-static void
-OpenDetails(unsigned index)
+void
+NOAAListWidget::OpenDetails(unsigned index)
 {
-  assert(index < list.size());
-  dlgNOAADetailsShowModal(*(SingleWindow *)wf->GetRootOwner(),
-                          list[index].iterator);
+  assert(index < stations.size());
+  dlgNOAADetailsShowModal(UIGlobals::GetMainWindow(),
+                          stations[index].iterator);
   UpdateList();
 }
 
-static void
-DetailsClicked()
+inline void
+NOAAListWidget::DetailsClicked()
 {
-  if (station_list->GetLength() > 0)
-    OpenDetails(station_list->GetCursorIndex());
+  if (!stations.empty())
+    OpenDetails(GetList().GetCursorIndex());
 }
 
 void
-NOAAListDialog::OnActivateItem(unsigned index)
+NOAAListWidget::OnActivateItem(unsigned index)
 {
   OpenDetails(index);
 }
 
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(AddClicked),
-  DeclareCallBackEntry(UpdateClicked),
-  DeclareCallBackEntry(RemoveClicked),
-  DeclareCallBackEntry(DetailsClicked),
-  DeclareCallBackEntry(NULL)
-};
+void
+NOAAListWidget::OnAction(int id)
+{
+  switch ((Buttons)id) {
+  case DETAILS:
+    DetailsClicked();
+    break;
+
+  case ADD:
+    AddClicked();
+    break;
+
+  case UPDATE:
+    UpdateClicked();
+    break;
+
+  case REMOVE:
+    RemoveClicked();
+    break;
+  }
+}
 
 void
-dlgNOAAListShowModal(SingleWindow &parent)
+dlgNOAAListShowModal()
 {
-  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
-                  _T("IDR_XML_NOAA_LIST_L") :
-                  _T("IDR_XML_NOAA_LIST"));
-  assert(wf != NULL);
+  NOAAListWidget widget;
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("METAR and TAF"), &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  widget.CreateButtons(dialog);
 
-  NOAAListDialog dialog;
-
-  station_list = (ListControl *)wf->FindByName(_T("StationList"));
-  assert(station_list != NULL);
-  station_list->SetItemHeight(NOAAListRenderer::GetHeight(UIGlobals::GetDialogLook()));
-  station_list->SetItemRenderer(&dialog);
-  station_list->SetCursorHandler(&dialog);
-
-  add_button = (WndButton *)wf->FindByName(_T("AddButton"));
-  assert(add_button != NULL);
-
-  update_button = (WndButton *)wf->FindByName(_T("UpdateButton"));
-  assert(update_button != NULL);
-
-  remove_button = (WndButton *)wf->FindByName(_T("RemoveButton"));
-  assert(remove_button != NULL);
-
-  details_button = (WndButton *)wf->FindByName(_T("DetailsButton"));
-  assert(details_button != NULL);
-
-  UpdateList();
-
-  wf->ShowModal();
-
-  delete wf;
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
 
 #else
 void
-dlgNOAAListShowModal(SingleWindow &parent)
+dlgNOAAListShowModal()
 {
   ShowMessageBox(_("This function is not available on your platform yet."),
               _("Error"), MB_OK);

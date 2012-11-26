@@ -624,7 +624,7 @@ InputEvents::eventWeather(const TCHAR *misc)
 {
 #ifdef HAVE_NOAA
   if (StringIsEqual(misc, _T("list")))
-    dlgNOAAListShowModal(*CommonInterface::main_window);
+    dlgNOAAListShowModal();
 #endif
 }
 
