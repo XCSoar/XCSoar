@@ -456,7 +456,6 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   TCHAR display_format[32];
   TCHAR edit_format[32];
   double step;
-  bool fine;
 
   _tcscpy(data_type,
           StringToStringDflt(node.GetAttribute(_T("DataType")), _T("")));
@@ -468,7 +467,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
   fixed min = fixed(StringToFloatDflt(node.GetAttribute(_T("Min")), INT_MIN));
   fixed max = fixed(StringToFloatDflt(node.GetAttribute(_T("Max")), INT_MAX));
   step = StringToFloatDflt(node.GetAttribute(_T("Step")), 1);
-  fine = StringToIntDflt(node.GetAttribute(_T("Fine")), false);
+  const bool fine = false;
 
   DataField::DataAccessCallback callback = (DataField::DataAccessCallback)
     GetCallBack(LookUpTable, node, _T("OnDataAccess"));
@@ -499,10 +498,6 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
     df->SetMaxTokenNumber(max_token);
     return df;
   }
-
-  if (StringIsEqualIgnoreCase(data_type, _T("integer")))
-    return new DataFieldInteger(edit_format, display_format, (int)min, (int)max,
-                                0, (int)step, callback);
 
   if (StringIsEqualIgnoreCase(data_type, _T("string")))
     return new DataFieldString(_T(""), callback);
