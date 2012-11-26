@@ -22,19 +22,8 @@ Copyright_License {
 */
 
 #include "ChartProjection.hpp"
-#include "Engine/Task/TaskManager.hpp"
+#include "Engine/Task/AbstractTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
-
-void
-ChartProjection::Set(const PixelRect &rc, const TaskManager &task_manager,
-                     const GeoPoint &fallback_loc)
-{
-  const AbstractTask *task = task_manager.GetActiveTask();
-  if (task != NULL)
-    Set(rc, *task, fallback_loc);
-  else
-    Set(rc, fallback_loc, fixed_zero);
-}
 
 void
 ChartProjection::Set(const PixelRect &rc,

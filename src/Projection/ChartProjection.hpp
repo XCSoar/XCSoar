@@ -24,10 +24,8 @@ Copyright_License {
 #include "WindowProjection.hpp"
 
 class TaskProjection;
-class TaskManager;
 class AbstractTask;
 class OrderedTaskPoint;
-class ContestTraceVector;
 
 /**
  * Utility class to determine projection for a chart from task data,
@@ -45,11 +43,6 @@ public:
     Set(rc, task_projection, radius_factor);
   }
 
-  ChartProjection(const PixelRect &rc, const TaskManager &task,
-                  const GeoPoint &fallback_loc) {
-    Set(rc, task, fallback_loc);
-  }
-
   ChartProjection(const PixelRect &rc, const AbstractTask &task,
                   const GeoPoint &fallback_loc) {
     Set(rc, task, fallback_loc);
@@ -62,9 +55,6 @@ public:
 
   void Set(const PixelRect &rc, const TaskProjection &task_projection,
            fixed radius_factor=fixed(1.1));
-
-  void Set(const PixelRect &rc, const TaskManager &task,
-           const GeoPoint &fallback_loc);
 
   void Set(const PixelRect &rc, const AbstractTask &task,
            const GeoPoint &fallback_loc);
