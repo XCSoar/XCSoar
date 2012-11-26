@@ -193,8 +193,8 @@ protected:
   ContainerWindow *parent;
 
 private:
-  PixelScalar left, top;
-  UPixelScalar width, height;
+  RasterPoint position;
+  PixelSize size;
 
 private:
   const Font *font;
@@ -221,7 +221,7 @@ private:
 public:
 #ifndef USE_GDI
   Window()
-    :parent(NULL), width(0), height(0),
+    :parent(NULL), size(0, 0),
      font(NULL),
      visible(true), focused(false), capture(false), has_border(false),
      double_clicks(false) {}
@@ -303,7 +303,7 @@ protected:
 public:
   bool IsDefined() const {
 #ifndef USE_GDI
-    return width > 0;
+    return size.cx > 0;
 #else
     return hWnd != NULL;
 #endif
@@ -313,25 +313,25 @@ public:
   PixelScalar GetTop() const {
     assert(IsDefined());
 
-    return top;
+    return position.y;
   }
 
   PixelScalar GetLeft() const {
     assert(IsDefined());
 
-    return left;
+    return position.x;
   }
 
   UPixelScalar GetWidth() const {
     assert(IsDefined());
 
-    return width;
+    return size.cx;
   }
 
   UPixelScalar GetHeight() const {
     assert(IsDefined());
 
-    return height;
+    return size.cy;
   }
 
   PixelScalar GetRight() const {
@@ -395,8 +395,7 @@ public:
     AssertThread();
 
 #ifndef USE_GDI
-    this->left = left;
-    this->top = top;
+    position = { left, top };
     Invalidate();
 #else
     ::SetWindowPos(hWnd, NULL, left, top, 0, 0,
@@ -470,11 +469,10 @@ public:
     AssertThread();
 
 #ifndef USE_GDI
-    if (width == this->width && height == this->height)
+    if (width == GetWidth() && height == GetHeight())
       return;
 
-    this->width = width;
-    this->height = height;
+    size = { width, height };
 
     Invalidate();
     OnResize(width, height);
@@ -787,16 +785,13 @@ public:
   {
     assert(IsDefined());
 
-    PixelRect rc;
 #ifndef USE_GDI
-    rc.left = 0;
-    rc.top = 0;
-    rc.right = GetWidth();
-    rc.bottom = GetHeight();
+    return PixelRect(size);
 #else
+    PixelRect rc;
     ::GetClientRect(hWnd, &rc);
-#endif
     return rc;
+#endif
   }
 
   gcc_pure
@@ -811,7 +806,7 @@ public:
     s.cy = rc.bottom;
     return s;
 #else
-    return { GetWidth(), GetHeight() };
+    return size;
 #endif
   }
 

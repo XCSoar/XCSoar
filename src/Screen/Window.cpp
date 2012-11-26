@@ -87,8 +87,7 @@ Window::Destroy()
 #ifndef USE_GDI
   OnDestroy();
 
-  width = 0;
-  height = 0;
+  size = {0, 0};
 #else /* USE_GDI */
   ::DestroyWindow(hWnd);
 

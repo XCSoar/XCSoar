@@ -39,10 +39,8 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
   double_clicks = window_style.double_clicks;
 
   this->parent = parent;
-  this->left = rc.left;
-  this->top = rc.top;
-  this->width = rc.right - rc.left;
-  this->height = rc.bottom - rc.top;
+  position = rc.GetOrigin();
+  size = rc.GetSize();
 
   tab_stop = window_style.tab_stop;
   control_parent = window_style.control_parent;
@@ -55,7 +53,7 @@ Window::Create(ContainerWindow *parent, PixelRect rc,
     parent->AddChild(*this);
 
   OnCreate();
-  OnResize(width, height);
+  OnResize(size.cx, size.cy);
 }
 
 void
@@ -64,10 +62,10 @@ Window::ToScreen(PixelRect &rc) const
   assert(IsDefined());
 
   for (const Window *p = parent; p != NULL; p = p->parent) {
-    rc.left += p->left;
-    rc.top += p->top;
-    rc.right += p->left;
-    rc.bottom += p->top;
+    rc.left += p->position.x;
+    rc.top += p->position.y;
+    rc.right += p->position.x;
+    rc.bottom += p->position.y;
   }
 }
 
@@ -86,7 +84,7 @@ Window::IsMaximised() const
   assert(IsDefined());
 
   return parent != nullptr &&
-    width >= parent->width && height >= parent->height;
+    GetWidth() >= parent->GetWidth() && GetHeight() >= parent->GetHeight();
 }
 
 void
