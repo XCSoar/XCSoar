@@ -1336,11 +1336,15 @@ OrderedTask::GetFactoryTypes(bool all) const
 void
 OrderedTask::RemoveAllPoints()
 {
-  while (task_points.size())
-    ErasePoint(0);
+  for (auto i : task_points)
+    delete i;
 
-  while (optional_start_points.size())
-    EraseOptionalStartPoint(0);
+  task_points.clear();
+
+  for (auto i : optional_start_points)
+    delete i;
+
+  optional_start_points.clear();
 }
 
 void
