@@ -42,29 +42,29 @@ public:
 
 public:
   /* virtual methods from class AbstractTask */
-  virtual bool CheckTask() const;
-  virtual fixed GetFinishHeight() const;
+  virtual bool CheckTask() const gcc_override;
+  virtual fixed GetFinishHeight() const gcc_override;
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
-                          fixed& best) const;
+                          fixed& best) const gcc_override;
   virtual fixed CalcRequiredGlide(const AircraftState &state_now,
-                                  const GlidePolar &glide_polar) const;
-  virtual fixed CalcGradient(const AircraftState &state_now) const;
-  virtual fixed ScanTotalStartTime(const AircraftState &state_now);
-  virtual fixed ScanLegStartTime(const AircraftState &state_now);
-  virtual fixed ScanDistanceNominal();
-  virtual fixed ScanDistancePlanned();
-  virtual fixed ScanDistanceRemaining(const GeoPoint &ref);
-  virtual fixed ScanDistanceScored(const GeoPoint &ref);
-  virtual fixed ScanDistanceTravelled(const GeoPoint &ref);
+                                  const GlidePolar &glide_polar) const gcc_override;
+  virtual fixed CalcGradient(const AircraftState &state_now) const gcc_override;
+  virtual fixed ScanTotalStartTime(const AircraftState &state_now) gcc_override;
+  virtual fixed ScanLegStartTime(const AircraftState &state_now) gcc_override;
+  virtual fixed ScanDistanceNominal() gcc_override;
+  virtual fixed ScanDistancePlanned() gcc_override;
+  virtual fixed ScanDistanceRemaining(const GeoPoint &ref) gcc_override;
+  virtual fixed ScanDistanceScored(const GeoPoint &ref) gcc_override;
+  virtual fixed ScanDistanceTravelled(const GeoPoint &ref) gcc_override;
   virtual void ScanDistanceMinMax(const GeoPoint &ref, bool full,
-                                  fixed *dmin, fixed *dmax);
+                                  fixed *dmin, fixed *dmax) gcc_override;
   virtual void GlideSolutionRemaining(const AircraftState &state_now,
                                       const GlidePolar &polar,
-                                      GlideResult &total, GlideResult &leg);
+                                      GlideResult &total, GlideResult &leg) gcc_override;
   virtual void GlideSolutionTravelled(const AircraftState &state_now,
                                       const GlidePolar &glide_polar,
-                                      GlideResult &total, GlideResult &leg);
+                                      GlideResult &total, GlideResult &leg) gcc_override;
   virtual void GlideSolutionPlanned(const AircraftState &state_now,
                                     const GlidePolar &glide_polar,
                                     GlideResult &total,
@@ -72,9 +72,9 @@ public:
                                     DistanceStat &total_remaining_effective,
                                     DistanceStat &leg_remaining_effective,
                                     const GlideResult &solution_remaining_total,
-                                    const GlideResult &solution_remaining_leg);
-  virtual bool HasTargets() const { return false; }
-  virtual bool IsScored() const { return false; }
+                                    const GlideResult &solution_remaining_leg) gcc_override;
+  virtual bool HasTargets() const gcc_override { return false; }
+  virtual bool IsScored() const gcc_override { return false; }
 };
 
 #endif

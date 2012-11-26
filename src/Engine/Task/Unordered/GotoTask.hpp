@@ -72,20 +72,20 @@ public:
 
 public:
   /* virtual methods from class TaskInterface */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-  virtual unsigned TaskSize() const;
-  virtual TaskWaypoint *GetActiveTaskPoint() const;
-  virtual void SetActiveTaskPoint(unsigned index);
-  virtual bool IsValidTaskPoint(const int index_offset) const;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
+  virtual unsigned TaskSize() const gcc_override;
+  virtual TaskWaypoint *GetActiveTaskPoint() const gcc_override;
+  virtual void SetActiveTaskPoint(unsigned index) gcc_override;
+  virtual bool IsValidTaskPoint(const int index_offset) const gcc_override;
 
   /* virtual methods from class AbstractTask */
-  virtual void Reset();
+  virtual void Reset() gcc_override;
 protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,
-                            const bool full_update);
+                            const bool full_update) gcc_override;
   virtual bool CheckTransitions(const AircraftState &state_now,
-                                const AircraftState &state_last);
+                                const AircraftState &state_last) gcc_override;
 public:
   virtual void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const gcc_override;
 };

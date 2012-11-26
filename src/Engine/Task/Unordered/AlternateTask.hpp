@@ -94,12 +94,13 @@ private:
 
 public:
   /* virtual methods from class AbstractTask */
-  virtual void Reset();
+  virtual void Reset() gcc_override;
 
 protected:
   /* virtual methods from class AbortTask */
-  virtual void Clear();
-  virtual void ClientUpdate(const AircraftState &state_now, bool reachable);
+  virtual void Clear() gcc_override;
+  virtual void ClientUpdate(const AircraftState &state_now,
+                            bool reachable) gcc_override;
 };
 
 #endif //ALTERNATETASK_HPP

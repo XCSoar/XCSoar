@@ -461,9 +461,9 @@ public:
 
   virtual bool Update(const AircraftState &state_now,
                       const AircraftState &state_last,
-                      const GlidePolar &glide_polar);
+                      const GlidePolar &glide_polar) gcc_override;
   virtual bool UpdateIdle(const AircraftState &state_now,
-                          const GlidePolar &glide_polar);
+                          const GlidePolar &glide_polar) gcc_override;
 };
 
 #endif //ABSTRACTTASK_H
