@@ -25,101 +25,11 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_POINT_HPP
 
 #include "Screen/OpenGL/Types.hpp"
-#include "Screen/OpenGL/Features.hpp"
 
 typedef GLvalue PixelScalar;
 typedef GLuvalue UPixelScalar;
 
-struct PixelSize;
-
-struct RasterPoint {
-  /**
-   * Type to be used by vector math, where a range of
-   * max(GLvalue)*max(GLvalue) is needed.
-   */
-  typedef int SquareType;
-  PixelScalar x, y;
-
-  RasterPoint() = default;
-
-  constexpr RasterPoint(int _x, int _y)
-    :x(_x), y(_y) {}
-
-  bool operator==(const RasterPoint &other) const {
-    return x == other.x && y == other.y;
-  }
-
-  bool operator!=(const RasterPoint &other) const {
-    return !(*this == other);
-  }
-
-  constexpr RasterPoint operator+(RasterPoint other) const {
-    return { x + other.x, y + other.y };
-  }
-
-  RasterPoint &operator+=(RasterPoint other) {
-    x += other.x;
-    y += other.y;
-    return *this;
-  }
-
-  RasterPoint &operator-=(RasterPoint other) {
-    x -= other.x;
-    y -= other.y;
-    return *this;
-  }
-
-  constexpr RasterPoint operator+(PixelSize size) const;
-};
-
-struct PixelSize {
-  PixelScalar cx, cy;
-
-  PixelSize() = default;
-
-  constexpr PixelSize(int _width, int _height)
-    :cx(_width), cy(_height) {}
-
-  constexpr PixelSize(unsigned _width, unsigned _height)
-    :cx(_width), cy(_height) {}
-
-  bool operator==(const PixelSize &other) const {
-    return cx == other.cx && cy == other.cy;
-  }
-
-  bool operator!=(const PixelSize &other) const {
-    return !(*this == other);
-  }
-};
-
-inline constexpr RasterPoint
-RasterPoint::operator+(PixelSize size) const {
-  return { x + size.cx, y + size.cy };
-}
-
-struct PixelRect {
-  PixelScalar left, top, right, bottom;
-
-  PixelRect() = default;
-
-  constexpr PixelRect(int _left, int _top, int _right, int _bottom)
-    :left(_left), top(_top), right(_right), bottom(_bottom) {}
-
-  constexpr PixelRect(RasterPoint origin, PixelSize size)
-    :left(origin.x), top(origin.y),
-     right(origin.x + size.cx), bottom(origin.y + size.cy) {}
-
-  explicit constexpr PixelRect(PixelSize size)
-    :left(0), top(0), right(size.cx), bottom(size.cy) {}
-
-  constexpr RasterPoint GetOrigin() const {
-    return { left, top };
-  }
-
-  constexpr PixelSize GetSize() const {
-    return { right - left, bottom - top };
-  }
-};
+#include "Screen/Custom/Point.hpp"
 
 struct ExactRasterPoint {
   GLexact x, y;
