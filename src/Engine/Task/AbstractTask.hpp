@@ -469,15 +469,6 @@ public:
    */
   virtual void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const = 0;
 
-  /**
-   * Accept a (const) task point visitor; makes the visitor visit
-   * all optional start points in the task
-   *
-   * @param visitor Visitor to accept
-   * @param reverse Visit task points in reverse order
-   */
-  virtual void AcceptStartPointVisitor(TaskPointConstVisitor &visitor) const = 0;
-
 public:
   /* virtual methods from class TaskInterface */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) {

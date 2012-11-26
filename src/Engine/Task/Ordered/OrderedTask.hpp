@@ -646,7 +646,15 @@ protected:
   virtual bool IsScored() const;
 public:
   virtual void AcceptTaskPointVisitor(TaskPointConstVisitor &visitor) const gcc_override;
-  virtual void AcceptStartPointVisitor(TaskPointConstVisitor &visitor) const gcc_override;
+
+  /**
+   * Accept a (const) task point visitor; makes the visitor visit
+   * all optional start points in the task
+   *
+   * @param visitor Visitor to accept
+   * @param reverse Visit task points in reverse order
+   */
+  void AcceptStartPointVisitor(TaskPointConstVisitor &visitor) const;
 };
 
 #endif //ORDEREDTASK_H

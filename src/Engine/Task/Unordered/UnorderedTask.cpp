@@ -221,9 +221,3 @@ UnorderedTask::GetTaskRadius(const GeoPoint& fallback_location) const
     return Half(tp->GetLocation().Distance(fallback_location));
   }
 }
-
-void 
-UnorderedTask::AcceptStartPointVisitor(TaskPointConstVisitor &visitor) const
-{
-  // do nothing!
-}
