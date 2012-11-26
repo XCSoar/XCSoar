@@ -128,6 +128,10 @@ public:
     return true;
   }
 
+  const TaskStats &GetStats() const {
+    return stats;
+  }
+
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings
    * 
@@ -473,10 +477,6 @@ public:
   /* virtual methods from class TaskInterface */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) {
     task_behaviour = tb;
-  }
-
-  virtual const TaskStats& GetStats() const {
-    return stats;
   }
 
   virtual bool Update(const AircraftState &state_now,

@@ -98,14 +98,6 @@ public:
   virtual bool IsValidTaskPoint(const int index_offset) const = 0;
 
   /**
-   * Accessor for task statistics for this task
-   *
-   * @return Task statistics reference
-   */
-  gcc_pure
-  virtual const TaskStats &GetStats() const = 0;
-
-  /**
    * Update internal states as flight progresses.  This may perform
    * callbacks to the task_events, and advance the active task point
    * based on task_behaviour.
