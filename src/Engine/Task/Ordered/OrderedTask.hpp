@@ -579,22 +579,18 @@ public:
   /**
    * Find location of center of task (for rendering purposes)
    *
-   * @param fallback_location Location to use if no valid task
-   *
-   * @return Location of center of task
+   * @return Location of center of task or GeoPoint::Invalid()
    */
   gcc_pure
-  GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
+  GeoPoint GetTaskCenter() const;
 
   /**
    * Find approximate radius of task from center to edge (for rendering purposes)
    *
-   * @param fallback_location Location to use if no valid task
-   *
    * @return Radius (m) from center to edge of task
    */
   gcc_pure
-  fixed GetTaskRadius(const GeoPoint& fallback_location) const;
+  fixed GetTaskRadius() const;
 
 public:
   /* virtual methods from class TaskInterface */

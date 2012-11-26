@@ -40,8 +40,11 @@ void
 ChartProjection::Set(const PixelRect &rc, const OrderedTask &task,
                      const GeoPoint &fallback_loc)
 {
-  const GeoPoint center = task.GetTaskCenter(fallback_loc);
-  const fixed radius = max(fixed(10000), task.GetTaskRadius(fallback_loc));
+  GeoPoint center = task.GetTaskCenter();
+  if (!center.IsValid())
+    center = fallback_loc;
+
+  const fixed radius = max(fixed(10000), task.GetTaskRadius());
   Set(rc, center, radius);
 }
 

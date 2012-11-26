@@ -1124,16 +1124,16 @@ OrderedTask::GetFinishHeight() const
 }
 
 GeoPoint 
-OrderedTask::GetTaskCenter(const GeoPoint& fallback_location) const
+OrderedTask::GetTaskCenter() const
 {
   if (!HasStart() || !task_points[0])
-    return fallback_location;
+    return GeoPoint::Invalid();
 
   return task_projection.GetCenter();
 }
 
 fixed 
-OrderedTask::GetTaskRadius(const GeoPoint& fallback_location) const
+OrderedTask::GetTaskRadius() const
 { 
   if (!HasStart() || !task_points[0])
     return fixed_zero;
