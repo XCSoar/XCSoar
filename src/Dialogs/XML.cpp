@@ -109,8 +109,8 @@ LoadChildrenFromXML(SubForm &form, ContainerWindow &parent,
  * @param Default The default return value
  * @return The parsed Integer value
  */
-static long
-StringToIntDflt(const TCHAR *string, long _default)
+static int
+StringToIntDflt(const TCHAR *string, int _default)
 {
   if (string == NULL || StringIsEmpty(string))
     return _default;
@@ -155,7 +155,7 @@ StringToStringDflt(const TCHAR *string, const TCHAR *_default)
 static bool
 StringToColor(const TCHAR *string, Color &color)
 {
-  long value = StringToIntDflt(string, -1);
+  int value = StringToIntDflt(string, -1);
   if (value & ~0xffffff)
     return false;
 
