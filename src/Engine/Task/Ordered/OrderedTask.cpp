@@ -65,15 +65,7 @@ OrderedTask::OrderedTask(const TaskBehaviour &tb)
 
 OrderedTask::~OrderedTask()
 {
-  for (auto v = task_points.begin(); v != task_points.end();) {
-    delete *v;
-    task_points.erase(v);
-  }
-
-  for (auto v = optional_start_points.begin(); v != optional_start_points.end();) {
-    delete *v;
-    optional_start_points.erase(v);
-  }
+  RemoveAllPoints();
 
   delete active_factory;
 
