@@ -567,7 +567,7 @@ bool
 OrderedTask::ScanStartFinish()
 {
   /// @todo also check there are not more than one start/finish point
-  if (!task_points.size()) {
+  if (task_points.empty()) {
     taskpoint_start = NULL;
     taskpoint_finish = NULL;
     return false;
@@ -921,7 +921,7 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 fixed 
 OrderedTask::CalcGradient(const AircraftState &state) const
 {
-  if (task_points.size() < 1)
+  if (task_points.empty())
     return fixed_zero;
 
   // Iterate through remaining turnpoints
