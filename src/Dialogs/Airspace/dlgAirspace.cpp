@@ -22,11 +22,8 @@ Copyright_License {
 */
 
 #include "Airspace.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
-#include "Form/Button.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/ListWidget.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -48,26 +45,41 @@ Copyright_License {
 
 #include <assert.h>
 
-class AirspaceSettingsListHandler : public ListControl::Handler {
-  ListControl &airspace_list;
+enum Buttons {
+  LOOKUP = 100,
+};
 
+class AirspaceSettingsListWidget : public ListWidget {
   const bool color_mode;
   bool changed;
 
 public:
-  AirspaceSettingsListHandler(ListControl &_airspace_list,
-                              bool _color_mode)
-    :airspace_list(_airspace_list), color_mode(_color_mode),
-     changed(false) {}
+  AirspaceSettingsListWidget(bool _color_mode)
+    :color_mode(_color_mode), changed(false) {}
 
   bool IsModified() const {
     return changed;
   }
 
+  /* virtual methods from class Widget */
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override {
+    ListControl &list = CreateList(parent, UIGlobals::GetDialogLook(), rc,
+                                   Layout::Scale(18u));
+    list.SetLength(AIRSPACECLASSCOUNT);
+  }
+
+  virtual void Unprepare() gcc_override {
+    DeleteWindow();
+  }
+
+  /* virtual methods from class ListItemRenderer */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) gcc_override;
 
-  virtual bool CanActivateItem(unsigned index) const {
+  /* virtual methods from class ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
     return true;
   }
 
@@ -75,7 +87,7 @@ public:
 };
 
 void
-AirspaceSettingsListHandler::OnPaintItem(Canvas &canvas, const PixelRect rc,
+AirspaceSettingsListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                                          unsigned i)
 {
   assert(i < AIRSPACECLASSCOUNT);
@@ -123,7 +135,7 @@ AirspaceSettingsListHandler::OnPaintItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-AirspaceSettingsListHandler::OnActivateItem(unsigned index)
+AirspaceSettingsListWidget::OnActivateItem(unsigned index)
 {
   assert(index < AIRSPACECLASSCOUNT);
 
@@ -141,7 +153,6 @@ AirspaceSettingsListHandler::OnActivateItem(unsigned index)
 
     ActionInterface::SendMapSettings();
     look.Initialise(renderer);
-    airspace_list.Invalidate();
   } else {
     renderer.classes[index].display = !renderer.classes[index].display;
     if (!renderer.classes[index].display)
@@ -152,41 +163,25 @@ AirspaceSettingsListHandler::OnActivateItem(unsigned index)
                              computer.warnings.class_warnings[index]);
     changed = true;
     ActionInterface::SendMapSettings();
-    airspace_list.Invalidate();
   }
-}
 
-static void
-OnLookupClicked()
-{
-  ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
+  GetList().Invalidate();
 }
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnLookupClicked),
-  DeclareCallBackEntry(NULL)
-};
 
 void
 dlgAirspaceShowModal(bool color_mode)
 {
-  WndForm *wf = LoadDialog(CallBackTable, UIGlobals::GetMainWindow(),
-                           Layout::landscape
-                           ? _T("IDR_XML_AIRSPACE_L")
-                           : _T("IDR_XML_AIRSPACE"));
-  assert(wf != NULL);
+  AirspaceSettingsListWidget widget(color_mode);
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Airspace"), &widget);
+  dialog.AddButton(_("Lookup"), LOOKUP);
+  dialog.AddButton(_("Close"), mrOK);
 
-  ListControl &airspace_list = *(ListControl *)
-    wf->FindByName(_T("frmAirspaceList"));
-  AirspaceSettingsListHandler handler(airspace_list, color_mode);
-  airspace_list.SetHandler(&handler);
-  airspace_list.SetLength(AIRSPACECLASSCOUNT);
-
-  wf->ShowModal();
-  delete wf;
+  const int result = dialog.ShowModal();
+  dialog.StealWidget();
 
   // now retrieve back the properties...
-  if (handler.IsModified()) {
+  if (widget.IsModified()) {
     if (!color_mode && glide_computer != NULL) {
       ProtectedAirspaceWarningManager::ExclusiveLease awm(glide_computer->GetAirspaceWarnings());
       awm->SetConfig(CommonInterface::SetComputerSettings().airspace.warnings);
@@ -194,4 +189,7 @@ dlgAirspaceShowModal(bool color_mode)
 
     Profile::Save();
   }
+
+  if (result == LOOKUP)
+    ShowAirspaceListDialog(airspace_database, GetAirspaceWarnings());
 }
