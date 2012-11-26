@@ -28,5 +28,5 @@ void
 TopCanvas::Resume()
 {
   OpenGL::SetupContext();
-  OpenGL::SetupViewport(width, height);
+  OpenGL::SetupViewport(size.cx, size.cy);
 }

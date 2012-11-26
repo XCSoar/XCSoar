@@ -34,7 +34,7 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
 {
   OpenGL::SetupContext();
   OpenGL::SetupViewport(width, height);
-  Canvas::Create(width, height);
+  Canvas::Create({width, height});
 }
 
 void
@@ -44,7 +44,7 @@ TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
     return;
 
   OpenGL::SetupViewport(width, height);
-  Canvas::Create(width, height);
+  Canvas::Create({width, height});
 }
 
 void

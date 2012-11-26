@@ -62,8 +62,8 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
   Sint16 vx[cPoints], vy[cPoints];
 
   for (unsigned i = 0; i < cPoints; ++i) {
-    vx[i] = x_offset + lppt[i].x;
-    vy[i] = y_offset + lppt[i].y;
+    vx[i] = offset.x + lppt[i].x;
+    vy[i] = offset.y + lppt[i].y;
   }
 
   if (!brush.IsHollow())
@@ -77,8 +77,8 @@ Canvas::DrawPolygon(const RasterPoint *lppt, unsigned cPoints)
 void
 Canvas::DrawCircle(PixelScalar x, PixelScalar y, UPixelScalar radius)
 {
-  x += x_offset;
-  y += y_offset;
+  x += offset.x;
+  y += offset.y;
 
   if (!brush.IsHollow())
     ::filledCircleColor(surface, x, y, radius,
@@ -94,8 +94,8 @@ Canvas::DrawSegment(PixelScalar x, PixelScalar y, UPixelScalar radius,
 {
   // XXX horizon
 
-  x += x_offset;
-  y += y_offset;
+  x += offset.x;
+  y += offset.y;
 
   if (!brush.IsHollow())
     ::filledPieColor(surface, x, y, radius, 
@@ -239,13 +239,13 @@ Canvas::Copy(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src_surface != NULL);
 
-  if (!Clip(dest_x, dest_width, width, src_x) ||
-      !Clip(dest_y, dest_height, height, src_y))
+  if (!Clip(dest_x, dest_width, GetWidth(), src_x) ||
+      !Clip(dest_y, dest_height, GetHeight(), src_y))
     return;
 
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
-  SDL_Rect dest_rect = { PixelScalar(x_offset + dest_x),
-                         PixelScalar(y_offset + dest_y) };
+  SDL_Rect dest_rect = { PixelScalar(offset.x + dest_x),
+                         PixelScalar(offset.y + dest_y) };
 
   ::SDL_BlitSurface(src_surface, &src_rect, surface, &dest_rect);
 }
@@ -735,8 +735,8 @@ Canvas::CopyNot(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-  dest_x += x_offset;
-  dest_y += y_offset;
+  dest_x += offset.x;
+  dest_y += offset.y;
 
   ::blit_not(surface, dest_x, dest_y, dest_width, dest_height,
              src, src_x, src_y);
@@ -749,8 +749,8 @@ Canvas::CopyOr(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-  dest_x += x_offset;
-  dest_y += y_offset;
+  dest_x += offset.x;
+  dest_y += offset.y;
 
   ::blit_or(surface, dest_x, dest_y, dest_width, dest_height,
             src, src_x, src_y);
@@ -763,8 +763,8 @@ Canvas::CopyNotOr(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-  dest_x += x_offset;
-  dest_y += y_offset;
+  dest_x += offset.x;
+  dest_y += offset.y;
 
   ::BlitNotOr(surface, dest_x, dest_y, dest_width, dest_height,
               src, src_x, src_y);
@@ -788,8 +788,8 @@ Canvas::CopyAnd(PixelScalar dest_x, PixelScalar dest_y,
 {
   assert(src != NULL);
 
-  dest_x += x_offset;
-  dest_y += y_offset;
+  dest_x += offset.x;
+  dest_y += offset.y;
 
   ::blit_and(surface, dest_x, dest_y, dest_width, dest_height,
              src, src_x, src_y);

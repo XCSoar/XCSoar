@@ -83,7 +83,7 @@ namespace OpenGL {
   /**
    * The current SubCanvas translation in pixels.
    */
-  extern PixelScalar translate_x, translate_y;
+  extern RasterPoint translate;
 };
 
 #endif

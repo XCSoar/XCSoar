@@ -285,7 +285,7 @@ InfoBoxWindow::PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
                          UPixelScalar width, UPixelScalar height)
 {
 #ifdef ENABLE_OPENGL
-  SubCanvas canvas(dest, xoff, yoff, width, height);
+  SubCanvas canvas(dest, RasterPoint(xoff, yoff), PixelSize(width, height));
   Paint(canvas);
 #else
   const PixelSize size = GetSize();

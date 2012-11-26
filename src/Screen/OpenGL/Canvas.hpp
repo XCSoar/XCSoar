@@ -53,8 +53,8 @@ class Canvas : private NonCopyable {
   friend class BufferCanvas;
 
 protected:
-  PixelScalar x_offset, y_offset;
-  UPixelScalar width, height;
+  RasterPoint offset;
+  PixelSize size;
 
   Pen pen;
   Brush brush;
@@ -71,15 +71,14 @@ protected:
 
 public:
   Canvas()
-    :x_offset(0), y_offset(0), width(0), height(0),
+    :offset(0, 0), size(0, 0),
      font(NULL), background_mode(OPAQUE) {}
-  Canvas(UPixelScalar _width, UPixelScalar _height)
-    :width(_width), height(_height),
+  Canvas(PixelSize _size)
+    :offset(0, 0), size(_size),
      font(NULL), background_mode(OPAQUE) {}
 
-  void Create(UPixelScalar _width, UPixelScalar _height) {
-    width = _width;
-    height = _height;
+  void Create(PixelSize _size) {
+    size = _size;
   }
 
 protected:
@@ -98,17 +97,21 @@ public:
     return true;
   }
 
+  PixelSize GetSize() const {
+    return size;
+  }
+
   UPixelScalar GetWidth() const {
-    return width;
+    return size.cx;
   }
 
   UPixelScalar GetHeight() const {
-    return height;
+    return size.cy;
   }
 
   gcc_pure
   PixelRect GetRect() const {
-    return {0, 0, int(GetWidth()), int(GetHeight())};
+    return PixelRect(size);
   }
 
   void SelectNullPen() {
@@ -403,7 +406,7 @@ public:
                const Bitmap &src);
 
   void Stretch(const Bitmap &src) {
-    Stretch(0, 0, width, height, src);
+    Stretch(0, 0, size.cx, size.cy, src);
   }
 
   void StretchAnd(PixelScalar dest_x, PixelScalar dest_y,

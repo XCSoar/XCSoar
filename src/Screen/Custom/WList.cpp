@@ -229,8 +229,8 @@ WindowList::Paint(Canvas &canvas)
     if (!child.IsVisible())
       continue;
 
-    SubCanvas sub_canvas(canvas, child.GetLeft(), child.GetTop(),
-                         child.GetWidth(), child.GetHeight());
+    SubCanvas sub_canvas(canvas, { child.GetLeft(), child.GetTop() },
+                         child.GetSize());
     child.Setup(sub_canvas);
     child.OnPaint(sub_canvas);
   }

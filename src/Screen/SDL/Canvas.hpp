@@ -63,8 +63,8 @@ class Canvas : private NonCopyable {
 protected:
   SDL_Surface *surface;
 
-  PixelScalar x_offset, y_offset;
-  UPixelScalar width, height;
+  RasterPoint offset;
+  PixelSize size;
 
   Pen pen;
   Brush brush;
@@ -76,18 +76,17 @@ protected:
 
 public:
   Canvas()
-    :surface(NULL), x_offset(0), y_offset(0), width(0), height(0),
+    :surface(NULL), offset(0, 0), size(0, 0),
      font(NULL), background_mode(OPAQUE) {}
   explicit Canvas(SDL_Surface *_surface)
-    :surface(_surface), width(_surface->w), height(_surface->h),
+    :surface(_surface), offset(0, 0), size(_surface->w, _surface->h),
      font(NULL), background_mode(OPAQUE) {}
 
   void Create(SDL_Surface *_surface) {
     Destroy();
 
     surface = _surface;
-    width = surface->w;
-    height = surface->h;
+    size = { surface->w, surface->h };
   }
 
   void Destroy();
@@ -108,17 +107,21 @@ public:
     return surface != NULL;
   }
 
+  PixelSize GetSize() const {
+    return size;
+  }
+
   UPixelScalar GetWidth() const {
-    return width;
+    return size.cx;
   }
 
   UPixelScalar GetHeight() const {
-    return height;
+    return size.cy;
   }
 
   gcc_pure
   PixelRect GetRect() const {
-    return PixelRect{0, 0, GetWidth(), GetHeight()};
+    return PixelRect(size);
   }
 
   gcc_pure
@@ -191,8 +194,8 @@ public:
   void DrawOutlineRectangle(PixelScalar left, PixelScalar top,
                             PixelScalar right, PixelScalar bottom,
                             Color color) {
-    ::rectangleColor(surface, left + x_offset, top + y_offset,
-                     right + x_offset, bottom + y_offset, color.GFXColor());
+    ::rectangleColor(surface, left + offset.x, top + offset.y,
+                     right + offset.x, bottom + offset.y, color.GFXColor());
   }
 
   void Rectangle(PixelScalar left, PixelScalar top,
@@ -209,10 +212,10 @@ public:
     if (left >= right || top >= bottom)
       return;
 
-    left += x_offset;
-    right += x_offset;
-    top += y_offset;
-    bottom += y_offset;
+    left += offset.x;
+    right += offset.x;
+    top += offset.y;
+    bottom += offset.y;
 
     SDL_Rect r = { (Sint16)left, (Sint16)top,
                    (Uint16)(right - left), (Uint16)(bottom - top) };
@@ -296,10 +299,10 @@ public:
 
   void DrawLine(PixelScalar ax, PixelScalar ay,
                 PixelScalar bx, PixelScalar by) {
-    ax += x_offset;
-    bx += x_offset;
-    ay += y_offset;
-    by += y_offset;
+    ax += offset.x;
+    bx += offset.x;
+    ay += offset.y;
+    by += offset.y;
 
 #if SDL_GFXPRIMITIVES_MAJOR > 2 || \
   (SDL_GFXPRIMITIVES_MAJOR == 2 && (SDL_GFXPRIMITIVES_MINOR > 0 || \
@@ -479,7 +482,7 @@ public:
                const Bitmap &src);
 
   void Stretch(const Bitmap &src) {
-    Stretch(0, 0, width, height, src);
+    Stretch(0, 0, size.cx, size.cy, src);
   }
 
   void StretchMono(PixelScalar dest_x, PixelScalar dest_y,

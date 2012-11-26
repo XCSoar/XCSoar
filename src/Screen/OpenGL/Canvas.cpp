@@ -527,8 +527,7 @@ Canvas::DrawText(PixelScalar x, PixelScalar y, const TCHAR *text)
   assert(ValidateUTF8(text));
 
 #ifdef HAVE_GLES
-  assert(x_offset == OpenGL::translate_x);
-  assert(y_offset == OpenGL::translate_y);
+  assert(offset == OpenGL::translate);
 #endif
 
   if (font == NULL)
@@ -570,8 +569,7 @@ Canvas::DrawTransparentText(PixelScalar x, PixelScalar y, const TCHAR *text)
   assert(ValidateUTF8(text));
 
 #ifdef HAVE_GLES
-  assert(x_offset == OpenGL::translate_x);
-  assert(y_offset == OpenGL::translate_y);
+  assert(offset == OpenGL::translate);
 #endif
 
   if (font == NULL)
@@ -607,8 +605,7 @@ Canvas::DrawClippedText(PixelScalar x, PixelScalar y,
   assert(ValidateUTF8(text));
 
 #ifdef HAVE_GLES
-  assert(x_offset == OpenGL::translate_x);
-  assert(y_offset == OpenGL::translate_y);
+  assert(offset == OpenGL::translate);
 #endif
 
   if (font == NULL)
@@ -648,8 +645,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
 #ifdef HAVE_GLES
-  assert(x_offset == OpenGL::translate_x);
-  assert(y_offset == OpenGL::translate_y);
+  assert(offset == OpenGL::translate);
 #endif
 
   texture.Draw(dest_x, dest_y, dest_width, dest_height,
@@ -706,8 +702,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 UPixelScalar src_width, UPixelScalar src_height)
 {
 #ifdef HAVE_GLES
-  assert(x_offset == OpenGL::translate_x);
-  assert(y_offset == OpenGL::translate_y);
+  assert(offset == OpenGL::translate);
 #endif
   assert(src.IsDefined());
 
@@ -726,8 +721,7 @@ Canvas::Stretch(PixelScalar dest_x, PixelScalar dest_y,
                 const Bitmap &src)
 {
 #ifdef HAVE_GLES
-  assert(x_offset == OpenGL::translate_x);
-  assert(y_offset == OpenGL::translate_y);
+  assert(offset == OpenGL::translate);
 #endif
   assert(src.IsDefined());
 
@@ -885,14 +879,13 @@ void
 Canvas::CopyToTexture(GLTexture &texture, PixelRect src_rc) const
 {
 #ifdef HAVE_GLES
-  assert(x_offset == OpenGL::translate_x);
-  assert(y_offset == OpenGL::translate_y);
+  assert(offset == OpenGL::translate);
 #endif
 
   texture.Bind();
   glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-                      OpenGL::translate_x + src_rc.left,
-                      OpenGL::screen_height - OpenGL::translate_y - src_rc.bottom,
+                      OpenGL::translate.x + src_rc.left,
+                      OpenGL::screen_height - OpenGL::translate.y - src_rc.bottom,
                       src_rc.right - src_rc.left,
                       src_rc.bottom - src_rc.top);
 

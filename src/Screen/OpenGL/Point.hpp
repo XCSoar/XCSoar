@@ -30,6 +30,8 @@ Copyright_License {
 typedef GLvalue PixelScalar;
 typedef GLuvalue UPixelScalar;
 
+struct PixelSize;
+
 struct RasterPoint {
   /**
    * Type to be used by vector math, where a range of
@@ -50,6 +52,24 @@ struct RasterPoint {
   bool operator!=(const RasterPoint &other) const {
     return !(*this == other);
   }
+
+  constexpr RasterPoint operator+(RasterPoint other) const {
+    return { x + other.x, y + other.y };
+  }
+
+  RasterPoint &operator+=(RasterPoint other) {
+    x += other.x;
+    y += other.y;
+    return *this;
+  }
+
+  RasterPoint &operator-=(RasterPoint other) {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+  }
+
+  constexpr RasterPoint operator+(PixelSize size) const;
 };
 
 struct PixelSize {
@@ -72,6 +92,11 @@ struct PixelSize {
   }
 };
 
+inline constexpr RasterPoint
+RasterPoint::operator+(PixelSize size) const {
+  return { x + size.cx, y + size.cy };
+}
+
 struct PixelRect {
   PixelScalar left, top, right, bottom;
 
@@ -79,6 +104,21 @@ struct PixelRect {
 
   constexpr PixelRect(int _left, int _top, int _right, int _bottom)
     :left(_left), top(_top), right(_right), bottom(_bottom) {}
+
+  constexpr PixelRect(RasterPoint origin, PixelSize size)
+    :left(origin.x), top(origin.y),
+     right(origin.x + size.cx), bottom(origin.y + size.cy) {}
+
+  explicit constexpr PixelRect(PixelSize size)
+    :left(0), top(0), right(size.cx), bottom(size.cy) {}
+
+  constexpr RasterPoint GetOrigin() const {
+    return { left, top };
+  }
+
+  constexpr PixelSize GetSize() const {
+    return { right - left, bottom - top };
+  }
 };
 
 struct ExactRasterPoint {

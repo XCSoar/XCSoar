@@ -317,8 +317,8 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
-  glDrawTexiOES(OpenGL::translate_x + dest_x,
-                OpenGL::screen_height - OpenGL::translate_y - dest_y - dest_height,
+  glDrawTexiOES(OpenGL::translate.x + dest_x,
+                OpenGL::screen_height - OpenGL::translate.y - dest_y - dest_height,
                 0, dest_width, dest_height);
 #else
   const PixelScalar vertices[] = {
@@ -360,8 +360,8 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
 
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
-  glDrawTexiOES(OpenGL::translate_x + dest.left,
-                OpenGL::screen_height - OpenGL::translate_y - dest.bottom,
+  glDrawTexiOES(OpenGL::translate.x + dest.left,
+                OpenGL::screen_height - OpenGL::translate.y - dest.bottom,
                 0, dest.right - dest.left, dest.bottom - dest.top);
 #else
   const PixelScalar vertices[] = {

@@ -37,7 +37,7 @@ namespace OpenGL {
 
   UPixelScalar screen_width, screen_height;
 
-  PixelScalar translate_x, translate_y;
+  RasterPoint translate;
 
 #ifndef NDEBUG
   pthread_t thread;

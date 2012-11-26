@@ -34,7 +34,7 @@ Copyright_License {
 
 BufferCanvas::BufferCanvas(const Canvas &canvas,
                            UPixelScalar _width, UPixelScalar _height)
-  :Canvas(_width, _height),
+  :Canvas({_width, _height}),
    texture(new GLTexture(_width, _height))
 {
   assert(canvas.IsDefined());
@@ -46,6 +46,8 @@ BufferCanvas::Create(const Canvas &canvas,
 {
   assert(canvas.IsDefined());
   assert(!active);
+
+  const PixelSize new_size(_width, _height);
 
   Destroy();
   texture = new GLTexture(_width, _height);
@@ -64,7 +66,7 @@ BufferCanvas::Create(const Canvas &canvas,
     stencil_buffer->Unbind();
   }
 
-  Canvas::Create(_width, _height);
+  Canvas::Create(new_size);
   AddSurfaceListener(*this);
 }
 
@@ -92,10 +94,10 @@ BufferCanvas::Resize(UPixelScalar _width, UPixelScalar _height)
 {
   assert(IsDefined());
 
-  if (_width == width && _height == height)
+  const PixelSize new_size(_width, _height);
+  if (new_size == GetSize())
     return;
 
-  const PixelSize new_size(_width, _height);
   texture->ResizeDiscard(new_size);
 
   if (stencil_buffer != NULL) {
@@ -109,7 +111,7 @@ BufferCanvas::Resize(UPixelScalar _width, UPixelScalar _height)
     stencil_buffer->Unbind();
   }
 
-  Canvas::Create(_width, _height);
+  Canvas::Create(new_size);
 }
 
 void
@@ -129,19 +131,16 @@ BufferCanvas::Begin(Canvas &other)
     stencil_buffer->AttachFramebuffer(FBO::STENCIL_ATTACHMENT);
 
     /* save the old viewport */
-    old_translate.x = OpenGL::translate_x;
-    old_translate.y = OpenGL::translate_y;
+    old_translate = OpenGL::translate;
     old_size.cx = OpenGL::screen_width;
     old_size.cy = OpenGL::screen_height;
     glPushMatrix();
 
     /* configure a new viewport */
     OpenGL::SetupViewport(GetWidth(), GetHeight());
-    OpenGL::translate_x = 0;
-    OpenGL::translate_y = 0;
+    OpenGL::translate = {0, 0};
   } else {
-    x_offset = other.x_offset;
-    y_offset = other.y_offset;
+    offset = other.offset;
   }
 
   active = true;
@@ -160,21 +159,18 @@ BufferCanvas::Commit(Canvas &other)
 
     /* restore the old viewport */
 
-    assert(OpenGL::translate_x == 0);
-    assert(OpenGL::translate_y == 0);
+    assert(OpenGL::translate == RasterPoint(0, 0));
 
     OpenGL::SetupViewport(old_size.cx, old_size.cy);
 
-    OpenGL::translate_x = old_translate.x;
-    OpenGL::translate_y = old_translate.y;
+    OpenGL::translate = old_translate;
 
     glPopMatrix();
 
     /* copy frame buffer to screen */
     CopyTo(other);
   } else {
-    assert(x_offset == other.x_offset);
-    assert(y_offset == other.y_offset);
+    assert(offset == other.offset);
 
     /* copy screen to texture */
     CopyToTexture(*texture, GetRect());

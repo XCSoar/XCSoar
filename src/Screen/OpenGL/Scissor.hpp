@@ -32,8 +32,8 @@ Copyright_License {
 class GLCanvasScissor : public GLScissor {
 public:
   GLCanvasScissor(const Canvas &canvas)
-    :GLScissor(OpenGL::translate_x,
-               OpenGL::screen_height - OpenGL::translate_y - canvas.GetHeight() - 1,
+    :GLScissor(OpenGL::translate.x,
+               OpenGL::screen_height - OpenGL::translate.y - canvas.GetHeight() - 1,
                canvas.GetWidth(), canvas.GetHeight()) {}
 };
 
