@@ -94,8 +94,8 @@ static void
 SetTaskBehaviour(OrderedTask::OrderedTaskPointVector &vector,
                  const TaskBehaviour &tb)
 {
-  for (auto i = vector.begin(), end = vector.end(); i != end; ++i)
-    (*i)->SetTaskBehaviour(tb);
+  for (auto i : vector)
+    i->SetTaskBehaviour(tb);
 }
 
 void
@@ -111,8 +111,8 @@ static void
 UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
                        const TaskProjection &task_projection)
 {
-  for (auto i = points.begin(), end = points.end(); i != end; ++i)
-    (*i)->UpdateOZ(task_projection);
+  for (auto i : points)
+    i->UpdateOZ(task_projection);
 }
 
 void
@@ -124,13 +124,10 @@ OrderedTask::UpdateGeometry()
     return;
 
   // scan location of task points
-  for (auto begin = task_points.cbegin(), end = task_points.cend(), i = begin;
-       i != end; ++i) {
-    if (i == begin)
-      task_projection.Reset((*i)->GetLocation());
+  task_projection.Reset(task_points[0]->GetLocation());
+  for (const auto *tp : task_points)
+    tp->ScanProjection(task_projection);
 
-    (*i)->ScanProjection(task_projection);
-  }
   // ... and optional start points
   for (const OrderedTaskPoint *tp : optional_start_points)
     tp->ScanProjection(task_projection);
@@ -952,8 +949,8 @@ OrderedTask::AcceptStartPointVisitor(TaskPointConstVisitor& visitor) const
 static void
 ResetPoints(OrderedTask::OrderedTaskPointVector &points)
 {
-  for (auto it = points.begin(), end = points.end(); it != end; ++it)
-    (*it)->Reset();
+  for (auto *i : points)
+    i->Reset();
 }
 
 void
@@ -1414,13 +1411,14 @@ OrderedTask::UpdateSummary(TaskSummary& ordered_summary) const
 
   ordered_summary.active = active_task_point;
 
-  for (auto begin = task_points.cbegin(), end = task_points.cend(), i = begin;
-       i != end; ++i) {
-    const OrderedTaskPoint &tp = **i;
+  bool first = true;
+  for (const auto *tpp : task_points) {
+    const OrderedTaskPoint &tp = *tpp;
 
     TaskSummaryPoint tsp;
     tsp.d_planned = tp.GetVectorPlanned().distance;
-    if (i == begin) {
+    if (first) {
+      first = false;
       tsp.achieved = tp.HasExited();
     } else {
       tsp.achieved = tp.HasSampled();
