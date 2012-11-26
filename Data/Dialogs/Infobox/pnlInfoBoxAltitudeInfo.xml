@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<Panel Name="frmInfoBoxAltitudeInfo" Border="0">
-  <Edit Name="prpAltGPS" Caption="H GPS" X="5" Y="2" CaptionWidth="50" Width="100" Height="22" ReadOnly="1"/>
-  <Edit Name="prpAltBaro" Caption="H Baro" X="5" Y="24" CaptionWidth="50" Width="100" Height="22" ReadOnly="1"/>
-  
-  <Edit Name="prpAltAGL" Caption="H AGL" X="-105" Y="2" CaptionWidth="50" Width="100" Height="22" ReadOnly="1"/>
-  <Edit Name="prpTerrain" Caption="H GND" X="-105" Y="24" CaptionWidth="50" Width="100" Height="22" ReadOnly="1"/>
-</Panel>

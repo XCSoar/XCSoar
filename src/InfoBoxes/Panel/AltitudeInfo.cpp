@@ -27,22 +27,19 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Simulator.hpp"
-#include "Dialogs/dlgInfoBoxAccess.hpp"
-#include "Form/Util.hpp"
-#include "Form/XMLWidget.hpp"
+#include "Form/TwoWidgets.hpp"
+#include "Form/RowFormWidget.hpp"
+#include "UIGlobals.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
-class AltitudeInfoPanel : public XMLWidget, NullBlackboardListener {
+class AltitudeInfoPanel : public TwoWidgets, NullBlackboardListener {
 public:
+  AltitudeInfoPanel():TwoWidgets(false) {}
+
   void Refresh();
 
-  virtual PixelSize GetMinimumSize() const gcc_override {
-    return PixelSize{Layout::Scale(205u), Layout::Scale(46)};
-  }
-
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
+  virtual void Initialise(ContainerWindow &parent,
+                          const PixelRect &rc) gcc_override;
   virtual void Show(const PixelRect &rc) gcc_override;
   virtual void Hide() gcc_override;
 
@@ -56,51 +53,64 @@ AltitudeInfoPanel::Refresh()
   const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
+  RowFormWidget &first = (RowFormWidget &)GetFirst();
+  RowFormWidget &second = (RowFormWidget &)GetSecond();
+
   if (!calculated.altitude_agl_valid) {
-    SetFormValue(form, _T("prpAltAGL"), _("N/A"));
+    second.SetText(0, _("N/A"));
   } else {
     // Set Value
     FormatUserAltitude(calculated.altitude_agl, sTmp, ARRAY_SIZE(sTmp));
-    SetFormValue(form, _T("prpAltAGL"), sTmp);
+    second.SetText(0, sTmp);
   }
 
   if (!basic.baro_altitude_available) {
-    SetFormValue(form, _T("prpAltBaro"), _("N/A"));
+    first.SetText(1, _("N/A"));
   } else {
     // Set Value
     FormatUserAltitude(basic.baro_altitude, sTmp, ARRAY_SIZE(sTmp));
-    SetFormValue(form, _T("prpAltBaro"), sTmp);
+    first.SetText(1, sTmp);
   }
 
   if (!basic.gps_altitude_available) {
-    SetFormValue(form, _T("prpAltGPS"), _("N/A"));
+    first.SetText(0, _("N/A"));
   } else {
     // Set Value
     FormatUserAltitude(basic.gps_altitude, sTmp, ARRAY_SIZE(sTmp));
-    SetFormValue(form, _T("prpAltGPS"), sTmp);
+    first.SetText(0, sTmp);
   }
 
   if (!calculated.terrain_valid){
-    SetFormValue(form, _T("prpTerrain"), _("N/A"));
+    second.SetText(1, _("N/A"));
   } else {
     // Set Value
     FormatUserAltitude(calculated.terrain_altitude,
                               sTmp, ARRAY_SIZE(sTmp));
-    SetFormValue(form, _T("prpTerrain"), sTmp);
+    second.SetText(1, sTmp);
   }
 }
 
 void
-AltitudeInfoPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
+AltitudeInfoPanel::Initialise(ContainerWindow &parent, const PixelRect &rc)
 {
-  LoadWindow(NULL, parent, _T("IDR_XML_INFOBOXALTITUDEINFO"));
+  const DialogLook &look = UIGlobals::GetDialogLook();
+
+  RowFormWidget *first = new RowFormWidget(look);
+  RowFormWidget *second = new RowFormWidget(look);
+  TwoWidgets::Set(first, second);
+  TwoWidgets::Initialise(parent, rc);
+
+  first->AddReadOnly(_("H GPS"));
+  first->AddReadOnly(_("H Baro"));
+  second->AddReadOnly(_("H AGL"));
+  second->AddReadOnly(_("H GND"));
 }
 
 void
 AltitudeInfoPanel::Show(const PixelRect &rc)
 {
   Refresh();
-  XMLWidget::Show(rc);
+  TwoWidgets::Show(rc);
 
   CommonInterface::GetLiveBlackboard().AddListener(*this);
 }
@@ -110,7 +120,7 @@ AltitudeInfoPanel::Hide()
 {
   CommonInterface::GetLiveBlackboard().RemoveListener(*this);
 
-  XMLWidget::Hide();
+  TwoWidgets::Hide();
 }
 
 void
