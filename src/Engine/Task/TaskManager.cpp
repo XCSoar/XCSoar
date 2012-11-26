@@ -216,7 +216,7 @@ TaskManager::UpdateCommonStatsTask()
   common_stats.ordered_valid = task_ordered.CheckTask();
 
   common_stats.ordered_has_optional_starts = common_stats.ordered_valid &&
-    task_ordered.OptionalStartsSize() > 0;
+    task_ordered.HasOptionalStarts() > 0;
 
   if (active_task && active_task->GetStats().task_valid) {
     common_stats.active_has_next = active_task->IsValidTaskPoint(1);

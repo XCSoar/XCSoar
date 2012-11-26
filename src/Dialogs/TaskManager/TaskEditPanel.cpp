@@ -108,7 +108,7 @@ TaskEditPanel::OnClearAllClicked()
       (ShowMessageBox(_("Clear all points?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
 
-    while (ordered_task->OptionalStartsSize())
+    while (ordered_task->HasOptionalStarts())
       ordered_task->RemoveOptionalStart(0);
 
     while (ordered_task->TaskSize())

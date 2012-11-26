@@ -1430,8 +1430,3 @@ OrderedTask::UpdateSummary(TaskSummary& ordered_summary) const
     ordered_summary.update(stats.total.remaining.GetDistance(),
                            stats.total.planned.GetDistance());
 }
-
-unsigned 
-OrderedTask::OptionalStartsSize() const {
-  return optional_start_points.size();
-}

@@ -200,9 +200,12 @@ public:
   void RotateOptionalStarts();
 
   /**
-   * Return number of optional start points
+   * Returns true if there are optional start points.
    */
-  unsigned OptionalStartsSize() const;
+  gcc_pure
+  bool HasOptionalStarts() const {
+    return !optional_start_points.empty();
+  }
 
   /**
    * Insert taskpoint before specified index in task.  May fail if the candidate
