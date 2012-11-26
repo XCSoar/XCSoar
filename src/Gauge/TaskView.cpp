@@ -69,7 +69,7 @@ static bool
 IsFAITriangleApplicable(const OrderedTask &task)
 {
   return IsFAITriangleApplicable(task.GetFactoryType()) &&
-    task.GetOptionalStartPointCount() == 0 &&
+    !task.HasOptionalStarts() &&
     // TODO: allow start on first leg
     task.TaskSize() >= 2 && task.TaskSize() <= 4;
 }

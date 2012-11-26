@@ -136,7 +136,7 @@ RefreshView()
   wb = (WndButton*)wf->FindByName(_T("cmdOptionalStarts"));
   assert(wb);
   wb->SetVisible(active_index == 0);
-  if (ordered_task->GetOptionalStartPointCount() == 0)
+  if (!ordered_task->HasOptionalStarts())
     wb->SetCaption(_("Enable Alternate Starts"));
   else {
     StaticString<50> tmp;
