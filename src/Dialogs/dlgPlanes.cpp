@@ -22,11 +22,9 @@ Copyright_License {
 */
 
 #include "Dialogs/Planes.hpp"
-#include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
-#include "Form/Form.hpp"
-#include "Form/List.hpp"
+#include "Dialogs/WidgetDialog.hpp"
+#include "Form/ListWidget.hpp"
 #include "Form/Button.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -49,21 +47,6 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
-class PlaneListHandler : public ListControl::Handler {
-public:
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx) gcc_override;
-
-  virtual bool CanActivateItem(unsigned index) const {
-    return true;
-  }
-
-  virtual void OnActivateItem(unsigned index) gcc_override;
-};
-
-static WndForm *dialog = NULL;
-static ListControl *plane_list = NULL;
-
 struct ListItem
 {
   StaticString<32> name;
@@ -74,16 +57,73 @@ struct ListItem
   }
 };
 
-static std::vector<ListItem> list;
-
 class PlaneFileVisitor: public File::Visitor
 {
+  std::vector<ListItem> &list;
+
+public:
+  PlaneFileVisitor(std::vector<ListItem> &_list):list(_list) {}
+
   void Visit(const TCHAR* path, const TCHAR* filename) {
     ListItem item;
     item.name = filename;
     item.path = path;
     list.push_back(item);
   }
+};
+
+/* this macro exists in the WIN32 API */
+#ifdef DELETE
+#undef DELETE
+#endif
+
+class PlaneListWidget : public ListWidget, private ActionListener {
+  enum Buttons {
+    NEW,
+    EDIT,
+    DELETE,
+    LOAD,
+  };
+
+  WndForm *form;
+  WndButton *edit_button, *delete_button, *load_button;
+
+  std::vector<ListItem> list;
+
+public:
+  void CreateButtons(WidgetDialog &dialog);
+
+private:
+  void UpdateList();
+  bool Load(unsigned i);
+  bool LoadWithDialog(unsigned i);
+
+  void LoadClicked();
+  void NewClicked();
+  void EditClicked();
+  void DeleteClicked();
+
+public:
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
+
+protected:
+  /* virtual methods from ListItemRenderer */
+  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
+                           unsigned idx) gcc_override;
+
+  /* virtual methods from ListCursorHandler */
+  virtual bool CanActivateItem(unsigned index) const gcc_override {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
+
+private:
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id);
 };
 
 gcc_pure
@@ -94,12 +134,12 @@ GetRowHeight(const DialogLook &look)
     + look.small_font->GetHeight();
 }
 
-static void
-UpdateList()
+void
+PlaneListWidget::UpdateList()
 {
   list.clear();
 
-  PlaneFileVisitor pfv;
+  PlaneFileVisitor pfv(list);
   VisitDataFiles(_T("*.xcp"), pfv);
 
   unsigned len = list.size();
@@ -107,24 +147,43 @@ UpdateList()
   if (len > 0)
     std::sort(list.begin(), list.end());
 
-  plane_list->SetLength(len);
-  plane_list->Invalidate();
+  ListControl &list_control = GetList();
+  list_control.SetLength(len);
+  list_control.Invalidate();
 
-  WndButton* b = (WndButton*)dialog->FindByName(_T("LoadButton"));
-  assert(b != NULL);
-  b->SetEnabled(len > 0);
-
-  b = (WndButton*)dialog->FindByName(_T("EditButton"));
-  assert(b != NULL);
-  b->SetEnabled(len > 0);
-
-  b = (WndButton*)dialog->FindByName(_T("DeleteButton"));
-  assert(b != NULL);
-  b->SetEnabled(len > 0);
+  const bool empty = list.empty();
+  load_button->SetEnabled(!empty);
+  edit_button->SetEnabled(!empty);
+  delete_button->SetEnabled(!empty);
 }
 
 void
-PlaneListHandler::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
+PlaneListWidget::CreateButtons(WidgetDialog &dialog)
+{
+  form = &dialog;
+
+  dialog.AddButton(_("New"), *this, NEW);
+  edit_button = dialog.AddButton(_("Edit"), *this, EDIT);
+  delete_button = dialog.AddButton(_("Delete"), *this, DELETE);
+  load_button = dialog.AddButton(_("Load"), *this, LOAD);
+}
+
+void
+PlaneListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  CreateList(parent, look, rc, GetRowHeight(look));
+  UpdateList();
+}
+
+void
+PlaneListWidget::Unprepare()
+{
+  DeleteWindow();
+}
+
+void
+PlaneListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < list.size());
 
@@ -152,16 +211,14 @@ PlaneListHandler::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned i)
 }
 
 static bool
-Load(unsigned i)
+LoadFile(const TCHAR *path)
 {
-  assert(i < list.size());
-
   ComputerSettings &settings = CommonInterface::SetComputerSettings();
 
-  if (!PlaneGlue::ReadFile(settings.plane, list[i].path))
+  if (!PlaneGlue::ReadFile(settings.plane, path))
     return false;
 
-  Profile::SetPath(_T("PlanePath"), list[i].path);
+  Profile::SetPath(_T("PlanePath"), path);
   PlaneGlue::Synchronize(settings.plane, settings,
                          settings.polar.glide_polar_task);
   if (protected_task_manager != NULL)
@@ -170,8 +227,16 @@ Load(unsigned i)
   return true;
 }
 
-static bool
-LoadWithDialog(unsigned i)
+bool
+PlaneListWidget::Load(unsigned i)
+{
+  assert(i < list.size());
+
+  return LoadFile(list[i].path);
+}
+
+bool
+PlaneListWidget::LoadWithDialog(unsigned i)
 {
   const TCHAR *title;
   StaticString<256> text;
@@ -192,19 +257,19 @@ LoadWithDialog(unsigned i)
   return result;
 }
 
-static void
-LoadClicked()
+inline void
+PlaneListWidget::LoadClicked()
 {
-  if (LoadWithDialog(plane_list->GetCursorIndex()))
-    dialog->SetModalResult(mrOK);
+  if (LoadWithDialog(GetList().GetCursorIndex()))
+    form->SetModalResult(mrOK);
 }
 
-static void
-NewClicked()
+inline void
+PlaneListWidget::NewClicked()
 {
   Plane plane = CommonInterface::GetComputerSettings().plane;
 
-  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane)) {
+  while (dlgPlaneDetailsShowModal(UIGlobals::GetMainWindow(), plane)) {
     if (plane.registration.empty()) {
       ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);
@@ -232,19 +297,19 @@ NewClicked()
   }
 }
 
-static void
-EditClicked()
+inline void
+PlaneListWidget::EditClicked()
 {
-  assert(plane_list->GetCursorIndex() < list.size());
+  assert(GetList().GetCursorIndex() < list.size());
 
-  const unsigned index = plane_list->GetCursorIndex();
+  const unsigned index = GetList().GetCursorIndex();
   const TCHAR *old_path = list[index].path;
   const TCHAR *old_filename = list[index].name;
 
   Plane plane;
   PlaneGlue::ReadFile(plane, old_path);
 
-  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->GetRootOwner(), plane)) {
+  while (dlgPlaneDetailsShowModal(UIGlobals::GetMainWindow(), plane)) {
     if (plane.registration.empty()) {
       ShowMessageBox(_("Please enter the registration of the plane!"),
                   _("Error"), MB_OK);
@@ -287,23 +352,45 @@ EditClicked()
   }
 }
 
-static void
-DeleteClicked()
+inline void
+PlaneListWidget::DeleteClicked()
 {
-  assert(plane_list->GetCursorIndex() < list.size());
+  assert(GetList().GetCursorIndex() < list.size());
 
   StaticString<256> tmp;
   tmp.Format(_("Do you really want to delete plane profile \"%s\"?"),
-             list[plane_list->GetCursorIndex()].name.c_str());
+             list[GetList().GetCursorIndex()].name.c_str());
   if (ShowMessageBox(tmp, _("Delete"), MB_YESNO) != IDYES)
     return;
 
-  File::Delete(list[plane_list->GetCursorIndex()].path);
+  File::Delete(list[GetList().GetCursorIndex()].path);
   UpdateList();
 }
 
 void
-PlaneListHandler::OnActivateItem(unsigned i)
+PlaneListWidget::OnAction(int id)
+{
+  switch ((Buttons)id) {
+  case NEW:
+    NewClicked();
+    break;
+
+  case EDIT:
+    EditClicked();
+    break;
+
+  case DELETE:
+    DeleteClicked();
+    break;
+
+  case LOAD:
+    LoadClicked();
+    break;
+  }
+}
+
+void
+PlaneListWidget::OnActivateItem(unsigned i)
 {
   assert(i < list.size());
 
@@ -313,37 +400,18 @@ PlaneListHandler::OnActivateItem(unsigned i)
 
   if (ShowMessageBox(tmp, _("Load"), MB_YESNO) == IDYES)
     if (LoadWithDialog(i))
-      dialog->SetModalResult(mrOK);
+      form->SetModalResult(mrOK);
 }
-
-static constexpr CallBackTableEntry CallBackTable[] = {
-   DeclareCallBackEntry(LoadClicked),
-   DeclareCallBackEntry(NewClicked),
-   DeclareCallBackEntry(EditClicked),
-   DeclareCallBackEntry(DeleteClicked),
-   DeclareCallBackEntry(NULL)
-};
 
 void
-dlgPlanesShowModal(SingleWindow &parent)
+dlgPlanesShowModal()
 {
-  dialog = LoadDialog(CallBackTable, parent,
-                      Layout::landscape ?
-                      _T("IDR_XML_PLANES_L") : _T("IDR_XML_PLANES"));
-  assert(dialog != NULL);
+  PlaneListWidget widget;
+  WidgetDialog dialog(UIGlobals::GetDialogLook());
+  dialog.CreateFull(UIGlobals::GetMainWindow(), _("Planes"), &widget);
+  dialog.AddButton(_("Close"), mrOK);
+  widget.CreateButtons(dialog);
 
-  UPixelScalar item_height = GetRowHeight(UIGlobals::GetDialogLook());
-
-  PlaneListHandler handler;
-
-  plane_list = (ListControl*)dialog->FindByName(_T("List"));
-  assert(plane_list != NULL);
-  plane_list->SetItemHeight(item_height);
-  plane_list->SetHandler(&handler);
-
-  UpdateList();
-  dialog->ShowModal();
-
-  delete dialog;
+  dialog.ShowModal();
+  dialog.StealWidget();
 }
-

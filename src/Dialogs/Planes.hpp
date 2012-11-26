@@ -27,7 +27,7 @@ Copyright_License {
 class SingleWindow;
 struct Plane;
 
-void dlgPlanesShowModal(SingleWindow &parent);
+void dlgPlanesShowModal();
 bool dlgPlaneDetailsShowModal(SingleWindow &parent, Plane &plane);
 bool dlgPlanePolarShowModal(SingleWindow &parent, Plane &plane);
 

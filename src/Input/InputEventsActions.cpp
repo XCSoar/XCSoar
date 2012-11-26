@@ -483,7 +483,7 @@ InputEvents::eventSetup(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("Target")))
     dlgTargetShowModal();
   else if (StringIsEqual(misc, _T("Plane")))
-    dlgPlanesShowModal(*CommonInterface::main_window);
+    dlgPlanesShowModal();
   else if (StringIsEqual(misc, _T("Alternates")))
     dlgAlternatesListShowModal(*CommonInterface::main_window);
 
