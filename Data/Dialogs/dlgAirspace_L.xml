@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-
-<Form Caption="Airspace">
-  <List Name="frmAirspaceList" X="75" Y="0" ItemHeight="18"/>
-
-  <Button Name="cmdLookup" Caption="Lookup" Y="-70" Width="75" Height="35" OnClick="OnLookupClicked"/>
-  <CloseButton Y="-35" Width="75" Height="35"/>
-</Form>
