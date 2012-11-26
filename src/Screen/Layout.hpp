@@ -85,14 +85,40 @@ namespace Layout
   }
 
   gcc_const
-  static inline PixelScalar
-  Scale(PixelScalar x)
+  static inline int
+  Scale(int x)
   {
     if (!ScaleSupported())
       return x;
 
-    return ((int)x * (int)scale_1024) >> 10;
+    return (x * int(scale_1024)) >> 10;
   }
+
+  gcc_const
+  static inline unsigned
+  Scale(unsigned x)
+  {
+    if (!ScaleSupported())
+      return x;
+
+    return (x * scale_1024) >> 10;
+  }
+
+#ifdef USE_GDI
+  gcc_const
+  static inline int
+  Scale(PixelScalar x)
+  {
+    return Scale(int(x));
+  }
+
+  gcc_const
+  static inline int
+  Scale(UPixelScalar x)
+  {
+    return Scale(unsigned(x));
+  }
+#endif
 
   gcc_const
   static inline PixelScalar

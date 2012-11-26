@@ -144,13 +144,13 @@ private:
 public:
   /* virtual methods from Widget */
   virtual PixelSize GetMinimumSize() const override {
-    return { ::Layout::Scale(180),
-        PixelScalar(::Layout::GetMinimumControlHeight()) };
+    return { ::Layout::Scale(180u),
+        ::Layout::GetMinimumControlHeight() };
   }
 
   virtual PixelSize GetMaximumSize() const override {
-    return { ::Layout::Scale(400),
-        PixelScalar(::Layout::GetMaximumControlHeight()) };
+    return { ::Layout::Scale(400u),
+        ::Layout::GetMaximumControlHeight() };
   }
 
   virtual void Prepare(ContainerWindow &parent,
