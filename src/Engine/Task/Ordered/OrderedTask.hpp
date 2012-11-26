@@ -576,6 +576,26 @@ public:
     return *optional_start_points[i];
   }
 
+  /**
+   * Find location of center of task (for rendering purposes)
+   *
+   * @param fallback_location Location to use if no valid task
+   *
+   * @return Location of center of task
+   */
+  gcc_pure
+  GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
+
+  /**
+   * Find approximate radius of task from center to edge (for rendering purposes)
+   *
+   * @param fallback_location Location to use if no valid task
+   *
+   * @return Radius (m) from center to edge of task
+   */
+  gcc_pure
+  fixed GetTaskRadius(const GeoPoint& fallback_location) const;
+
 public:
   /* virtual methods from class TaskInterface */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
@@ -592,8 +612,6 @@ public:
   virtual bool TaskStarted(bool soft=false) const;
   virtual bool CheckTask() const;
   virtual fixed GetFinishHeight() const;
-  virtual GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
-  virtual fixed GetTaskRadius(const GeoPoint &fallback_location) const;
 
 protected:
   /* virtual methods from class AbstractTask */

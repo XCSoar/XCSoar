@@ -158,26 +158,6 @@ public:
   gcc_pure
   virtual fixed GetFinishHeight() const = 0;
 
-  /** 
-   * Find location of center of task (for rendering purposes)
-   * 
-   * @param fallback_location Location to use if no valid task
-   * 
-   * @return Location of center of task
-   */
-  gcc_pure
-  virtual GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const = 0;
-
-  /** 
-   * Find approximate radius of task from center to edge (for rendering purposes)
-   * 
-   * @param fallback_location Location to use if no valid task
-   * 
-   * @return Radius (m) from center to edge of task
-   */
-  gcc_pure
-  virtual fixed GetTaskRadius(const GeoPoint& fallback_location) const = 0;
-    
 protected:
   /**
    * Pure abstract method to be defined for concrete task classes to update

@@ -44,8 +44,6 @@ public:
   /* virtual methods from class AbstractTask */
   virtual bool CheckTask() const;
   virtual fixed GetFinishHeight() const;
-  virtual GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
-  virtual fixed GetTaskRadius(const GeoPoint &fallback_location) const;
   virtual bool CalcBestMC(const AircraftState &state_now,
                           const GlidePolar &glide_polar,
                           fixed& best) const;

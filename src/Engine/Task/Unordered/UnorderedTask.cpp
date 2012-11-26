@@ -199,25 +199,3 @@ UnorderedTask::GetFinishHeight() const
   }
   return tp->GetElevation();
 }
-
-GeoPoint 
-UnorderedTask::GetTaskCenter(const GeoPoint& fallback_location) const
-{
-  TaskPoint *tp = GetActiveTaskPoint();
-  if (!tp) {
-    return fallback_location;
-  } else {
-    return tp->GetLocation().Interpolate(fallback_location, fixed_half);
-  }
-}
-
-fixed 
-UnorderedTask::GetTaskRadius(const GeoPoint& fallback_location) const
-{
-  TaskPoint *tp = GetActiveTaskPoint();
-  if (!tp) {
-    return fixed_zero;
-  } else {
-    return Half(tp->GetLocation().Distance(fallback_location));
-  }
-}

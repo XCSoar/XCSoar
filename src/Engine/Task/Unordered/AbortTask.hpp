@@ -242,8 +242,7 @@ public:
 
   /* virtual methods from class AbstractTask */
   virtual void Reset();
-  virtual GeoPoint GetTaskCenter(const GeoPoint &fallback_location) const;
-  virtual fixed GetTaskRadius(const GeoPoint &fallback_location) const;
+
 protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,

@@ -327,39 +327,3 @@ AbortTask::GetHomeVector(const AircraftState &state) const
 
   return GeoVector(fixed_zero);
 }
-
-GeoPoint 
-AbortTask::GetTaskCenter(const GeoPoint& fallback_location) const
-{
-  if (task_points.empty())
-    return fallback_location;
-
-  TaskProjection task_projection;
-  for (unsigned i = 0; i < task_points.size(); ++i) {
-    const GeoPoint location = task_points[i].GetLocation();
-    if (i == 0)
-      task_projection.Reset(location);
-    else
-      task_projection.Scan(location);
-  }
-  task_projection.Update();
-  return task_projection.GetCenter();
-}
-
-fixed 
-AbortTask::GetTaskRadius(const GeoPoint& fallback_location) const
-{ 
-  if (task_points.empty())
-    return fixed_zero;
-
-  TaskProjection task_projection;
-  for (unsigned i = 0; i < task_points.size(); ++i) {
-    const GeoPoint location = task_points[i].GetLocation();
-    if (i == 0)
-      task_projection.Reset(location);
-    else
-      task_projection.Scan(location);
-  }
-  task_projection.Update();
-  return task_projection.ApproxRadius();
-}
