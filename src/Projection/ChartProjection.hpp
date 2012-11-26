@@ -24,7 +24,7 @@ Copyright_License {
 #include "WindowProjection.hpp"
 
 class TaskProjection;
-class AbstractTask;
+class OrderedTask;
 class OrderedTaskPoint;
 
 /**
@@ -43,7 +43,7 @@ public:
     Set(rc, task_projection, radius_factor);
   }
 
-  ChartProjection(const PixelRect &rc, const AbstractTask &task,
+  ChartProjection(const PixelRect &rc, const OrderedTask &task,
                   const GeoPoint &fallback_loc) {
     Set(rc, task, fallback_loc);
   }
@@ -56,7 +56,7 @@ public:
   void Set(const PixelRect &rc, const TaskProjection &task_projection,
            fixed radius_factor=fixed(1.1));
 
-  void Set(const PixelRect &rc, const AbstractTask &task,
+  void Set(const PixelRect &rc, const OrderedTask &task,
            const GeoPoint &fallback_loc);
 
   void Set(const PixelRect &rc, const OrderedTaskPoint &point,

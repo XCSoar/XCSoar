@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ChartProjection.hpp"
-#include "Engine/Task/AbstractTask.hpp"
+#include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 
 void
@@ -37,7 +37,7 @@ ChartProjection::Set(const PixelRect &rc,
 }
 
 void
-ChartProjection::Set(const PixelRect &rc, const AbstractTask &task,
+ChartProjection::Set(const PixelRect &rc, const OrderedTask &task,
                      const GeoPoint &fallback_loc)
 {
   const GeoPoint center = task.GetTaskCenter(fallback_loc);
