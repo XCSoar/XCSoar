@@ -29,15 +29,15 @@ Copyright_License {
 PixelSize
 OffsetButtonsWidget::GetMinimumSize() const
 {
-  return { PixelScalar(4 * Layout::GetMinimumControlHeight()),
-      PixelScalar(Layout::GetMinimumControlHeight()) };
+  return { 4u * Layout::GetMinimumControlHeight(),
+      Layout::GetMinimumControlHeight() };
 }
 
 PixelSize
 OffsetButtonsWidget::GetMaximumSize() const
 {
-  return { PixelScalar(4 * Layout::GetMaximumControlHeight()),
-      PixelScalar(Layout::GetMaximumControlHeight()) };
+  return { 4u * Layout::GetMaximumControlHeight(),
+      Layout::GetMaximumControlHeight() };
 }
 
 static void

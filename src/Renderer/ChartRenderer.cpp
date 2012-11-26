@@ -361,8 +361,8 @@ ChartRenderer::DrawFilledLineGraph(const LeastSquares &lsdata)
        i != end; ++i)
     *p++ = ToScreen(i->x, i->y);
   const RasterPoint &last = p[-1];
-  *p++ = RasterPoint{ last.x, PixelScalar(rc.bottom - padding_bottom) };
-  *p++ = RasterPoint{ points[0].x, PixelScalar(rc.bottom - padding_bottom) };
+  *p++ = RasterPoint{ last.x, rc.bottom - padding_bottom };
+  *p++ = RasterPoint{ points[0].x, rc.bottom - padding_bottom };
 
   assert(p == points + n);
 
@@ -652,10 +652,10 @@ void
 ChartRenderer::DrawDot(const fixed x, const fixed y, const PixelScalar width)
 {
   RasterPoint p = ToScreen(x, y);
-  RasterPoint line[4] = { { p.x, PixelScalar(p.y - width) },
-                          { PixelScalar(p.x - width), p.y },
-                          { p.x, PixelScalar(p.y + width) },
-                          { PixelScalar(p.x + width), p.y } };
+  RasterPoint line[4] = { { p.x, p.y - width },
+                          { p.x - width, p.y },
+                          { p.x, p.y + width },
+                          { p.x + width, p.y } };
   canvas.SelectNullPen();
   canvas.DrawTriangleFan(line, 4);
 }

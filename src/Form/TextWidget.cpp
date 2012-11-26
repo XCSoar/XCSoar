@@ -37,7 +37,7 @@ TextWidget::SetText(const TCHAR *text)
 PixelSize
 TextWidget::GetMinimumSize() const
 {
-  return PixelSize{0, PixelScalar(Layout::GetMinimumControlHeight())};
+  return {0u, Layout::GetMinimumControlHeight()};
 }
 
 PixelSize

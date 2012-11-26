@@ -94,7 +94,7 @@ NOAAListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   Draw(canvas, rc, line_height, station, dialog_look);
 
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
   look.icon.Draw(canvas, pt);
 }

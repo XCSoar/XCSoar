@@ -154,10 +154,8 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
   bool show_leg_info = leg.distance > fixed(0.01);
 
   // Draw icon
-  const RasterPoint pt = {
-    PixelScalar(rc.left + line_height / 2),
-    PixelScalar(rc.top + line_height / 2),
-  };
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
 
   PixelScalar radius = std::min(PixelScalar(line_height / 2
                                             - Layout::FastScale(4)),

@@ -150,8 +150,8 @@ OptionStartsWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
                     rc.top + Layout::FastScale(2),
                     _("(Add Alternate Start)"));
   } else {
-    RasterPoint pt = { PixelScalar(rc.left + Layout::FastScale(2)),
-                       PixelScalar(rc.top + Layout::FastScale(2)) };
+    RasterPoint pt(rc.left + Layout::FastScale(2),
+                   rc.top + Layout::FastScale(2));
 
     const OrderedTaskPoint *tp;
     if (DrawListIndex == 0 && RealStartExists) {

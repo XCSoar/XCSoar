@@ -118,7 +118,7 @@ public:
 
   gcc_pure
   PixelRect GetRect() const {
-    return PixelRect{0, 0, PixelScalar(GetWidth()), PixelScalar(GetHeight())};
+    return PixelRect{0, 0, GetWidth(), GetHeight()};
   }
 
   gcc_pure

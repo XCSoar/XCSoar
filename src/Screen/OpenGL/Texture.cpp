@@ -59,8 +59,7 @@ gcc_const
 static inline PixelSize
 ValidateTextureSize(PixelSize size)
 {
-  return { PixelScalar(ValidateTextureSize(size.cx)),
-      PixelScalar(ValidateTextureSize(size.cy)) };
+  return { ValidateTextureSize(size.cx), ValidateTextureSize(size.cy) };
 }
 
 /**
@@ -324,9 +323,9 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
 #else
   const PixelScalar vertices[] = {
     dest_x, dest_y,
-    PixelScalar(dest_x + dest_width), dest_y,
-    dest_x, PixelScalar(dest_y + dest_height),
-    PixelScalar(dest_x + dest_width), PixelScalar(dest_y + dest_height),
+    dest_x + int(dest_width), dest_y,
+    dest_x, dest_y + int(dest_height),
+    dest_x + int(dest_width), dest_y + int(dest_height),
   };
 
   glVertexPointer(2, GL_VALUE, 0, vertices);

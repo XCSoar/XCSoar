@@ -51,9 +51,9 @@ public:
   }
 
   gcc_pure
-  RasterPoint Rotate(PixelScalar x, PixelScalar y) const {
+  RasterPoint Rotate(int x, int y) const {
     auto result = rotation.Rotate(x, y);
-    return RasterPoint{ PixelScalar(result.first), PixelScalar(result.second) };
+    return RasterPoint{result.first, result.second};
   }
 
   gcc_pure

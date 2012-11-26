@@ -95,21 +95,21 @@ private:
     Brush red_brush(COLOR_RED);
 
     const PixelRect rc = GetClientRect();
-    const UPixelScalar width = rc.right - rc.left;
-    const UPixelScalar height = rc.bottom - rc.top;
-    const UPixelScalar hmiddle = (rc.left + rc.right) / 2;
-    const UPixelScalar vmiddle = (rc.top + rc.bottom) / 2;
+    const int width = rc.right - rc.left;
+    const int height = rc.bottom - rc.top;
+    const int hmiddle = (rc.left + rc.right) / 2;
+    const int vmiddle = (rc.top + rc.bottom) / 2;
 
     RasterPoint p1[3] = {
-      { -100, PixelScalar(vmiddle) },
-      { PixelScalar((width * 2) / 3), -100 },
-      { PixelScalar(hmiddle), PixelScalar(height * 2) },
+      { -100, vmiddle },
+      { (width * 2) / 3, -100 },
+      { hmiddle, height * 2 },
     };
 
     RasterPoint p2[3] = {
-      { -2000, PixelScalar(vmiddle) },
-      { PixelScalar(width * 10), -3000 },
-      { PixelScalar(width * 5), 3000 },
+      { -2000, vmiddle },
+      { width * 10, -3000 },
+      { width * 5, 3000 },
     };
 
     const TCHAR *label;

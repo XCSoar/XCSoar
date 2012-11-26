@@ -88,8 +88,8 @@ AirspaceListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          rc.top + name_font.GetHeight() + Layout::FastScale(4),
                          rc, buffer);
 
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
   PixelScalar radius = std::min(PixelScalar(line_height / 2
                                             - Layout::FastScale(4)),
                                 Layout::FastScale(10));

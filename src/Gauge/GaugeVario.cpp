@@ -181,8 +181,7 @@ gcc_const
 static RasterPoint
 TransformRotatedPoint(RasterPoint pt, PixelScalar xoffset, PixelScalar yoffset)
 {
-  return RasterPoint{ PixelScalar(pt.x + xoffset),
-      PixelScalar((pt.y * 112 / 100) + yoffset + 1) };
+  return { pt.x + xoffset, (pt.y * 112 / 100) + yoffset + 1 };
 }
 
 void

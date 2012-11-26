@@ -28,10 +28,10 @@ Copyright_License {
 PixelSize
 ListWidget::GetMinimumSize() const
 {
-  return PixelSize { Layout::Scale(200),
+  return { unsigned(Layout::Scale(200u)),
       /* a list makes only sense when the user sees more than one row
          at a time */
-      PixelScalar(2 * GetList().GetItemHeight()) };
+      2u * GetList().GetItemHeight() };
 }
 
 PixelSize

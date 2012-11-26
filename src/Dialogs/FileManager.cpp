@@ -163,7 +163,7 @@ class ManagedFileListWidget
     }
   };
 
-  UPixelScalar font_height;
+  unsigned font_height;
 
 #ifdef HAVE_DOWNLOAD_MANAGER
   WndButton *download_button, *add_button, *cancel_button;
@@ -300,10 +300,10 @@ void
 ManagedFileListWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   const DialogLook &look = UIGlobals::GetDialogLook();
-  const UPixelScalar margin = Layout::GetTextPadding();
+  const unsigned margin = Layout::GetTextPadding();
   font_height = look.list.font->GetHeight();
 
-  UPixelScalar row_height = std::max(UPixelScalar(3 * margin + 2 * font_height),
+  UPixelScalar row_height = std::max(3u * margin + 2u * font_height,
                                      Layout::GetMaximumControlHeight());
   CreateList(parent, look, rc, row_height);
   LoadRepositoryFile();

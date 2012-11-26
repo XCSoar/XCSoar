@@ -138,7 +138,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
         UnitSymbolRenderer::GetSize(canvas, data.value_unit).cx;
 
     canvas.Select(*look.value.font);
-    UPixelScalar ascent_height = look.value.font->GetAscentHeight();
+    int ascent_height = look.value.font->GetAscentHeight();
 
     PixelSize value_size = canvas.CalcTextSize(data.value);
     if (value_size.cx > value_rect.right - value_rect.left) {
@@ -147,22 +147,21 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
       value_size = canvas.CalcTextSize(data.value);
     }
 
-    PixelScalar x = max(
-        PixelScalar(0),
-        PixelScalar((value_rect.left + value_rect.right - value_size.cx - unit_width) / 2));
+    PixelScalar x = max(PixelScalar(0),
+                        PixelScalar((value_rect.left + value_rect.right - value_size.cx - unit_width) / 2));
 
     PixelScalar y = (value_rect.top + value_rect.bottom - value_size.cy) / 2;
 
     canvas.TextAutoClipped(x, y, data.value);
 
     if (unit_width != 0) {
-      UPixelScalar unit_height =
-          UnitSymbolRenderer::GetAscentHeight(*look.unit_font, data.value_unit);
+      const int unit_height =
+        UnitSymbolRenderer::GetAscentHeight(*look.unit_font, data.value_unit);
 
       canvas.Select(*look.unit_font);
       UnitSymbolRenderer::Draw(canvas,
-                               { PixelScalar(x + value_size.cx),
-                                 PixelScalar(y + ascent_height - unit_height) },
+                               { x + value_size.cx,
+                                 y + ascent_height - unit_height },
                                data.value_unit, look.unit_fraction_pen);
     }
     return;

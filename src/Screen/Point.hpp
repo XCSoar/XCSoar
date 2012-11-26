@@ -73,8 +73,7 @@ gcc_const
 static inline PixelSize
 GetPixelRectSize(const PixelRect rc)
 {
-  return { PixelScalar(rc.right - rc.left),
-      PixelScalar(rc.bottom - rc.top) };
+  return { rc.right - rc.left, rc.bottom - rc.top };
 }
 
 static inline void

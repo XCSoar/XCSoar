@@ -963,12 +963,12 @@ RowFormWidget::UpdateLayout()
 PixelSize
 RowFormWidget::GetMinimumSize() const
 {
-  const UPixelScalar value_width =
+  const unsigned value_width =
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx;
 
   const bool expert = UIGlobals::GetDialogSettings().expert;
 
-  PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
+  PixelSize size(GetRecommendedCaptionWidth() + value_width, 0u);
   for (const auto &i : rows)
     if (i.available && (!i.expert || expert))
       size.cy += i.GetMinimumHeight();
@@ -979,10 +979,10 @@ RowFormWidget::GetMinimumSize() const
 PixelSize
 RowFormWidget::GetMaximumSize() const
 {
-  const UPixelScalar value_width =
+  const unsigned value_width =
     look.text_font->TextSize(_T("Foo Bar Foo Bar")).cx * 2;
 
-  PixelSize size{ PixelScalar(GetRecommendedCaptionWidth() + value_width), 0 };
+  PixelSize size(GetRecommendedCaptionWidth() + value_width, 0u);
   for (const auto &i : rows)
     size.cy += i.GetMaximumHeight();
 

@@ -181,8 +181,7 @@ Bitmap::GetSize() const
 {
   assert(IsDefined());
 
-  const PixelSize size = { PixelScalar(surface->w), PixelScalar(surface->h) };
-  return size;
+  return { surface->w, surface->h };
 }
 
 #endif /* !OpenGL */

@@ -159,10 +159,7 @@ ButtonWindow::OnPaint(Canvas &canvas)
     canvas.Rectangle(-1, -1, canvas.GetWidth(), canvas.GetHeight());
   }
 
-  PixelRect rc = {
-    2, 2, PixelScalar(canvas.GetWidth() - 4),
-    PixelScalar(canvas.GetHeight() - 4),
-  };
+  PixelRect rc(2, 2, canvas.GetWidth() - 4, canvas.GetHeight() - 4);
 
   if (down) {
     rc.left += Layout::FastScale(1);

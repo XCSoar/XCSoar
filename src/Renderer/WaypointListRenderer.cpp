@@ -134,8 +134,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                          waypoint.name.c_str());
 
   // Draw icon
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
 
   WaypointIconRenderer::Reachability reachable =
       positive(arrival_altitude) ?

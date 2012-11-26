@@ -101,8 +101,8 @@ TwoWidgets::GetMinimumSize() const
   const PixelSize b = second->GetMinimumSize();
 
   return vertical
-    ? PixelSize{ std::max(a.cx, b.cx), PixelScalar(a.cy + b.cy) }
-    : PixelSize{ PixelScalar(a.cx + b.cx), std::max(a.cy, b.cy) };
+    ? PixelSize{ std::max(a.cx, b.cx), a.cy + b.cy }
+    : PixelSize{ a.cx + b.cx, std::max(a.cy, b.cy) };
 }
 
 PixelSize
@@ -112,8 +112,8 @@ TwoWidgets::GetMaximumSize() const
   const PixelSize b = second->GetMaximumSize();
 
   return vertical
-    ? PixelSize{ std::max(a.cx, b.cx), PixelScalar(a.cy + b.cy) }
-    : PixelSize{ PixelScalar(a.cx + b.cx), std::max(a.cy, b.cy) };
+    ? PixelSize{ std::max(a.cx, b.cx), a.cy + b.cy }
+    : PixelSize{ a.cx + b.cx, std::max(a.cy, b.cy) };
 }
 
 /**

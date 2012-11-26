@@ -110,10 +110,7 @@ ButtonPanel::VerticalRange(PixelRect rc, unsigned start, unsigned end)
   const UPixelScalar max_height = n * Layout::GetMaximumControlHeight();
   const UPixelScalar row_height = std::min(total_height, max_height) / n;
 
-  PixelRect button_rc = {
-    rc.left, rc.top, PixelScalar(rc.left + width),
-    PixelScalar(rc.top + row_height),
-  };
+  PixelRect button_rc(rc.left, rc.top, rc.left + width, rc.top + row_height);
   rc.left += width;
 
   for (unsigned i = start; i < end; ++i) {
@@ -137,10 +134,8 @@ ButtonPanel::HorizontalRange(PixelRect rc, unsigned start, unsigned end)
   const UPixelScalar width = total_width / n;
   assert(width > 0);
 
-  PixelRect button_rc = {
-    rc.left, PixelScalar(rc.bottom - row_height),
-    PixelScalar(rc.left + width), rc.bottom,
-  };
+  PixelRect button_rc(rc.left, rc.bottom - row_height,
+                      rc.left + width, rc.bottom);
   rc.bottom -= row_height;
 
   for (unsigned i = start; i < end; ++i) {

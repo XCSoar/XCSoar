@@ -218,10 +218,8 @@ InfoBoxContentWindArrow::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
   const auto &info = CommonInterface::Calculated();
 
-  RasterPoint pt = {
-    PixelScalar((rc.left + rc.right) / 2),
-    PixelScalar((rc.top + rc.bottom) / 2),
-  };
+  const RasterPoint pt((rc.left + rc.right) / 2,
+                       (rc.top + rc.bottom) / 2);
 
   UPixelScalar padding = Layout::FastScale(5);
   UPixelScalar size = std::min(rc.right - rc.left, rc.bottom - rc.top);

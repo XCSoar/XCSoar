@@ -154,7 +154,7 @@ namespace Layout
    * Returns the minimum height of an dialog control.
    */
   gcc_pure
-  static inline UPixelScalar
+  static inline unsigned
   GetMinimumControlHeight()
   {
     if (IsAltair())
@@ -167,7 +167,7 @@ namespace Layout
    * Returns the maximum useful height of a dialog control.
    */
   gcc_pure
-  static inline UPixelScalar
+  static inline unsigned
   GetMaximumControlHeight()
   {
     if (IsAltair())

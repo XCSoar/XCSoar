@@ -92,7 +92,7 @@ dlgInfoBoxAccessShowModeless(const int id,
         button_rc.left = 0;
         button_rc.top = 0;
         button_rc.right = Layout::Scale(60);
-        button_rc.bottom = std::max(UPixelScalar(2 * Layout::GetMinimumControlHeight()),
+        button_rc.bottom = std::max(2u * Layout::GetMinimumControlHeight(),
                                     Layout::GetMaximumControlHeight());
 
         ButtonWindowStyle button_style;

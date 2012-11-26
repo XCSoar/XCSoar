@@ -51,8 +51,16 @@ static_assert(sizeof(PixelRect) == sizeof(RECT), "not same size");
 struct PixelSize : public tagSIZE {
   PixelSize() = default;
 
+#ifndef __WINE__
   constexpr PixelSize(PixelScalar _width, PixelScalar _height)
     :tagSIZE({_width, _height}) {}
+#endif
+
+  constexpr PixelSize(int _width, int _height)
+    :tagSIZE({_width, _height}) {}
+
+  constexpr PixelSize(unsigned _width, unsigned _height)
+    :tagSIZE({PixelScalar(_width), PixelScalar(_height)}) {}
 
   bool operator==(const PixelSize &other) const {
     return cx == other.cx && cy == other.cy;

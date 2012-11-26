@@ -723,11 +723,7 @@ LoadChild(SubForm &form, ContainerWindow &parent, const PixelRect &parent_rc,
     else
       style.SunkenEdge();
 
-    const PixelRect rc = {
-      pos.x, pos.y,
-      PixelScalar(pos.x + size.cx),
-      PixelScalar(pos.y + size.cy),
-    };
+    const PixelRect rc(pos.x, pos.y, pos.x + size.cx, pos.y + size.cy);
 
     window = new ListControl(parent, *xml_dialog_look,
                              rc, style, item_height);

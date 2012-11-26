@@ -52,10 +52,7 @@ EditWindow::OnPaint(Canvas &canvas)
     canvas.SetTextColor(COLOR_DARK_GRAY);
   }
 
-  PixelRect rc = {
-    0, 0, PixelScalar(canvas.GetWidth() - 1),
-    PixelScalar(canvas.GetHeight() - 1),
-  };
+  const PixelRect rc(0, 0, canvas.GetWidth() - 1, canvas.GetHeight() - 1);
 
   canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_BLACK);
 

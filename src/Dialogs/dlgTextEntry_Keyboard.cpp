@@ -198,9 +198,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
     : clear_left + Layout::Scale(50);
 
   WndProperty _editor(client_area, look, _T(""),
-                      { 0, padding,
-                          PixelScalar(backspace_left - padding),
-                          editor_bottom },
+                      { 0, padding, backspace_left - padding, editor_bottom },
                       0, WindowStyle());
   _editor.SetReadOnly();
   editor = &_editor;
@@ -209,8 +207,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
   button_style.TabStop();
 
   WndButton backspace_button(client_area, look, _T("<-"),
-                             { backspace_left, padding,
-                                 PixelScalar(rc.right - padding),
+                             { backspace_left, padding, rc.right - padding,
                                  editor_bottom },
                              button_style, OnBackspace);
 
@@ -230,7 +227,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, size_t width,
 
   KeyboardControl keyboard(client_area, look,
                            { padding, keyboard_top,
-                              PixelScalar(rc.right - padding),
+                              rc.right - padding,
                               keyboard_bottom },
                            OnCharacter);
   kb = &keyboard;

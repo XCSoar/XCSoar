@@ -97,8 +97,7 @@ TopWindow::OnEvent(const SDL_Event &event)
     else if (event.button.button == SDL_BUTTON_WHEELDOWN)
       return OnMouseWheel(event.button.x, event.button.y, -1);
 
-    return double_click.Check(RasterPoint{PixelScalar(event.button.x),
-                                          PixelScalar(event.button.y)})
+    return double_click.Check(RasterPoint(event.button.x, event.button.y))
       ? OnMouseDouble(event.button.x, event.button.y)
       : OnMouseDown(event.button.x, event.button.y);
 
@@ -108,8 +107,7 @@ TopWindow::OnEvent(const SDL_Event &event)
       /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
       return false;
 
-    double_click.Moved(RasterPoint{PixelScalar(event.button.x),
-                                   PixelScalar(event.button.y)});
+    double_click.Moved(RasterPoint(event.button.x, event.button.y));
 
     return OnMouseUp(event.button.x, event.button.y);
 

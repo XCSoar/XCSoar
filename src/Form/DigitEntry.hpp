@@ -60,7 +60,7 @@ class DigitEntry : public PaintWindow {
 
     uint8_t value;
 
-    UPixelScalar left, right;
+    unsigned left, right;
 
     constexpr bool IsSign() const {
       return type == Type::SIGN ||
@@ -137,8 +137,7 @@ public:
 
   gcc_pure
   PixelSize GetRecommendedSize() const {
-    return PixelSize{ PixelScalar(columns[length - 1].right),
-        PixelScalar(bottom + top) };
+    return PixelSize(columns[length - 1].right, bottom + top);
   }
 
   /**

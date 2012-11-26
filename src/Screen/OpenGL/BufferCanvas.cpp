@@ -95,7 +95,7 @@ BufferCanvas::Resize(UPixelScalar _width, UPixelScalar _height)
   if (_width == width && _height == height)
     return;
 
-  PixelSize new_size { PixelScalar(_width), PixelScalar(_height) };
+  const PixelSize new_size(_width, _height);
   texture->ResizeDiscard(new_size);
 
   if (stencil_buffer != NULL) {

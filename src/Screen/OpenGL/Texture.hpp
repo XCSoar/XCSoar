@@ -110,8 +110,7 @@ public:
 
   gcc_pure
   PixelSize GetSize() const {
-    const PixelSize size{ PixelScalar(width), PixelScalar(height) };
-    return size;
+    return { width, height };
   }
 
   /**
@@ -122,7 +121,7 @@ public:
 #ifdef HAVE_OES_DRAW_TEXTURE
     return GetSize();
 #else
-    return { PixelScalar(allocated_width), PixelScalar(allocated_height) };
+    return { allocated_width, allocated_height };
 #endif
   }
 

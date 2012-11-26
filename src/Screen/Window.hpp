@@ -811,7 +811,7 @@ public:
     s.cy = rc.bottom;
     return s;
 #else
-    return { PixelScalar(GetWidth()), PixelScalar(GetHeight()) };
+    return { GetWidth(), GetHeight() };
 #endif
   }
 

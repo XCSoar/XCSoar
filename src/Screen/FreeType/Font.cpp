@@ -187,7 +187,7 @@ Font::TextSize(const TCHAR *text) const
     x += glyph_advance;
   }
 
-  return PixelSize{PixelScalar(maxx - minx), PixelScalar(height)};
+  return PixelSize{unsigned(maxx - minx), height};
 }
 
 static void

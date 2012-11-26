@@ -88,11 +88,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
 {
   canvas.ClearWhite();
 
-  PixelRect rc = {
-    0, 0, PixelScalar(canvas.GetWidth() - 1),
-    PixelScalar(canvas.GetHeight() - 1),
-  };
-
+  PixelRect rc(0, 0, canvas.GetWidth() - 1, canvas.GetHeight() - 1);
   canvas.DrawOutlineRectangle(rc.left, rc.top, rc.right, rc.bottom,
                               COLOR_BLACK);
 

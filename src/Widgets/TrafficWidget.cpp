@@ -288,7 +288,7 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
 {
   // Paint label
   canvas.Select(look.info_labels_font);
-  PixelScalar label_width = canvas.CalcTextSize(_("Vario")).cx;
+  const unsigned label_width = canvas.CalcTextSize(_("Vario")).cx;
   canvas.DrawText(rc.right - label_width, rc.top, _("Vario"));
 
   // Format climb rate
@@ -298,20 +298,20 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
 
   // Calculate unit size
   canvas.Select(look.info_units_font);
-  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
-  UPixelScalar unit_height =
+  const unsigned unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  const unsigned unit_height =
       UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
 
   UPixelScalar space_width = unit_width / 3;
 
   // Calculate value size
   canvas.Select(look.info_values_font);
-  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
-  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
+  const unsigned value_height = look.info_values_font.GetAscentHeight();
+  const unsigned value_width = canvas.CalcTextSize(buffer).cx;
 
   // Calculate positions
-  PixelScalar max_height = max(unit_height, value_height);
-  PixelScalar y = rc.top + look.info_units_font.GetHeight() + max_height;
+  const int max_height = max(unit_height, value_height);
+  const int y = rc.top + look.info_units_font.GetHeight() + max_height;
 
   // Paint value
   canvas.DrawText(rc.right - unit_width - space_width - value_width,
@@ -320,8 +320,9 @@ FlarmTrafficControl::PaintClimbRate(Canvas &canvas, PixelRect rc,
 
   // Paint unit
   canvas.Select(look.info_units_font);
-  UnitSymbolRenderer::Draw(
-      canvas, { PixelScalar(rc.right - unit_width), PixelScalar(y - unit_height) }, unit, look.unit_fraction_pen);
+  UnitSymbolRenderer::Draw(canvas,
+                           RasterPoint(rc.right - unit_width, y - unit_height),
+                           unit, look.unit_fraction_pen);
 }
 
 void
@@ -334,27 +335,29 @@ FlarmTrafficControl::PaintDistance(Canvas &canvas, PixelRect rc,
 
   // Calculate unit size
   canvas.Select(look.info_units_font);
-  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
-  UPixelScalar unit_height =
+  const unsigned unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  const unsigned unit_height =
       UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
 
-  UPixelScalar space_width = unit_width / 3;
+  const unsigned space_width = unit_width / 3;
 
   // Calculate value size
   canvas.Select(look.info_values_font);
-  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
-  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
+  const unsigned value_height = look.info_values_font.GetAscentHeight();
+  const unsigned value_width = canvas.CalcTextSize(buffer).cx;
 
   // Calculate positions
-  PixelScalar max_height = max(unit_height, value_height);
+  const unsigned max_height = max(unit_height, value_height);
 
   // Paint value
   canvas.DrawText(rc.left, rc.bottom - value_height, buffer);
 
   // Paint unit
   canvas.Select(look.info_units_font);
-  UnitSymbolRenderer::Draw(
-      canvas, { PixelScalar(rc.left + value_width + space_width), PixelScalar(rc.bottom - unit_height) }, unit, look.unit_fraction_pen);
+  UnitSymbolRenderer::Draw(canvas,
+                           RasterPoint(rc.left + value_width + space_width,
+                                       rc.bottom - unit_height),
+                           unit, look.unit_fraction_pen);
 
 
   // Paint label
@@ -375,19 +378,19 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
 
   // Calculate unit size
   canvas.Select(look.info_units_font);
-  UPixelScalar unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
-  UPixelScalar unit_height =
+  const unsigned unit_width = UnitSymbolRenderer::GetSize(canvas, unit).cx;
+  const unsigned unit_height =
       UnitSymbolRenderer::GetAscentHeight(look.info_units_font, unit);
 
-  UPixelScalar space_width = unit_width / 3;
+  const unsigned space_width = unit_width / 3;
 
   // Calculate value size
   canvas.Select(look.info_values_font);
-  UPixelScalar value_height = look.info_values_font.GetAscentHeight();
-  UPixelScalar value_width = canvas.CalcTextSize(buffer).cx;
+  const unsigned value_height = look.info_values_font.GetAscentHeight();
+  const unsigned value_width = canvas.CalcTextSize(buffer).cx;
 
   // Calculate positions
-  PixelScalar max_height = max(unit_height, value_height);
+  const unsigned max_height = max(unit_height, value_height);
 
   // Paint value
   canvas.DrawText(rc.right - unit_width - space_width - value_width,
@@ -396,13 +399,15 @@ FlarmTrafficControl::PaintRelativeAltitude(Canvas &canvas, PixelRect rc,
 
   // Paint unit
   canvas.Select(look.info_units_font);
-  UnitSymbolRenderer::Draw(
-      canvas, { PixelScalar(rc.right - unit_width), PixelScalar(rc.bottom - unit_height) }, unit, look.unit_fraction_pen);
+  UnitSymbolRenderer::Draw(canvas,
+                           RasterPoint(rc.right - unit_width,
+                                       rc.bottom - unit_height),
+                           unit, look.unit_fraction_pen);
 
 
   // Paint label
   canvas.Select(look.info_labels_font);
-  PixelScalar label_width = canvas.CalcTextSize(_("Rel. Alt.")).cx;
+  const unsigned label_width = canvas.CalcTextSize(_("Rel. Alt.")).cx;
   canvas.DrawText(rc.right - label_width,
                   rc.bottom - max_height - look.info_labels_font.GetHeight(),
                   _("Rel. Alt."));
@@ -483,7 +488,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   FlarmTraffic traffic = data.list[WarningMode() ? warning : selection];
   assert(traffic.IsDefined());
 
-  const UPixelScalar padding = Layout::GetTextPadding();
+  const unsigned padding = Layout::GetTextPadding();
   PixelRect rc;
   rc.left = padding;
   rc.top = padding;
@@ -778,19 +783,19 @@ TrafficWidget::UpdateLayout()
   view->Move(rc);
 
 #ifndef GNAV
-  const UPixelScalar margin = Layout::Scale(1);
-  const UPixelScalar button_height = Layout::GetMinimumControlHeight();
-  const UPixelScalar button_width = std::max(UPixelScalar(rc.right / 6),
-                                             button_height);
+  const unsigned margin = Layout::Scale(1);
+  const unsigned button_height = Layout::GetMinimumControlHeight();
+  const unsigned button_width = std::max(unsigned(rc.right / 6),
+                                         button_height);
 
   const PixelScalar x1 = rc.right / 2;
   const PixelScalar x0 = x1 - button_width;
   const PixelScalar x2 = x1 + button_width;
 
-  const PixelScalar y0 = margin;
-  const PixelScalar y1 = y0 + button_height;
-  const PixelScalar y3 = rc.bottom - margin;
-  const PixelScalar y2 = y3 - button_height;
+  const int y0 = margin;
+  const int y1 = y0 + button_height;
+  const int y3 = rc.bottom - margin;
+  const int y2 = y3 - button_height;
 
   PixelRect button_rc;
 

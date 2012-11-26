@@ -511,10 +511,10 @@ WndForm::OnPaint(Canvas &canvas)
       { rc.right, rc.top },
       { rc.right, rc.bottom },
       { rc.left, rc.bottom },
-      { PixelScalar(rc.left - size), PixelScalar(rc.top - size) },
-      { PixelScalar(rc.right + size), PixelScalar(rc.top - size) },
-      { PixelScalar(rc.right + size), PixelScalar(rc.bottom + size) },
-      { PixelScalar(rc.left - size), PixelScalar(rc.bottom + size) },
+      { rc.left - size, rc.top - size },
+      { rc.right + size, rc.top - size },
+      { rc.right + size, rc.bottom + size },
+      { rc.left - size, rc.bottom + size },
     };
 
     glVertexPointer(2, GL_VALUE, 0, vertices);

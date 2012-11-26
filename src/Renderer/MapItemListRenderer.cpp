@@ -320,8 +320,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Markers::Marker &marker = item.marker;
 
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
 
   look.icon.Draw(canvas, pt);
 
@@ -368,8 +368,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const ThermalSource &thermal = item.thermal;
 
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
 
   look.thermal_source_icon.Draw(canvas, pt);
 
@@ -439,8 +439,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.DrawClippedText(left, rc.top + Layout::FastScale(2),
                          rc.right - left, buffer);
 
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
+  const RasterPoint pt(rc.left + line_height / 2,
+                       rc.top + line_height / 2);
   PixelScalar radius = std::min(PixelScalar(line_height / 2
                                             - Layout::FastScale(4)),
                                 Layout::FastScale(10));

@@ -30,8 +30,7 @@ Copyright_License {
 PixelSize
 UnitSymbol::GetScreenSize() const
 {
-  return PixelSize{ PixelScalar(Layout::Scale(size.cx)),
-      PixelScalar(Layout::Scale(size.cy)) };
+  return { Layout::Scale(size.cx), Layout::Scale(size.cy) };
 }
 
 void 

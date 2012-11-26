@@ -215,9 +215,7 @@ public:
     oz_rc.left = oz_rc.right / 2;
     oz.Create(*this, oz_rc, with_border);
 
-    const PixelRect list_rc = {
-      0, 0, PixelScalar(rc.right / 2), PixelScalar(rc.bottom - 30),
-    };
+    const PixelRect list_rc(0, 0, rc.right / 2, rc.bottom - 30);
 
     type_list = new ListControl(*this, look, list_rc,
                                 with_border, 25);

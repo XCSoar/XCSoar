@@ -132,8 +132,8 @@ TerminalWindow::OnPaint(Canvas &canvas, const PixelRect &p_dirty)
   canvas.Select(*look.font);
 
   const PixelRect cell_dirty = {
-    PixelScalar(p_dirty.left / cell_size.cx),
-    PixelScalar(p_dirty.top / cell_size.cy),
+    p_dirty.left / cell_size.cx,
+    p_dirty.top / cell_size.cy,
     std::min(PixelScalar(p_dirty.right / cell_size.cx + 1),
              PixelScalar(data.GetWidth())),
     std::min(PixelScalar(p_dirty.bottom / cell_size.cy + 1),

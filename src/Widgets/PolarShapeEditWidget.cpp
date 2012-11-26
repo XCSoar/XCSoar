@@ -119,14 +119,14 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   const DialogLook &look = UIGlobals::GetDialogLook();
   ContainerWindow &panel = *(ContainerWindow *)GetWindow();
 
-  const UPixelScalar width = _rc.right - _rc.left;
-  const UPixelScalar height = _rc.bottom - _rc.top;
+  const unsigned width = _rc.right - _rc.left;
+  const unsigned height = _rc.bottom - _rc.top;
 
   const TCHAR *v_text = _("Polar V");
   const TCHAR *w_text = _("Polar W");
 
-  const UPixelScalar row_height = height / 2;
-  const UPixelScalar label_width = Layout::Scale(8) +
+  const unsigned row_height = height / 2;
+  const unsigned label_width = Layout::Scale(8) +
     std::max(look.text_font->TextSize(v_text).cx,
              look.text_font->TextSize(v_text).cx);
   const UPixelScalar edit_width = (width - label_width) / ARRAY_SIZE(points);
@@ -134,8 +134,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   WindowStyle style;
   style.TabStop();
 
-  PixelRect label_rc { 0, 0, PixelScalar(label_width),
-      PixelScalar(row_height) };
+  PixelRect label_rc(0, 0, label_width, row_height);
   v_label = new WndFrame(panel, look, label_rc);
   v_label->SetText(v_text);
 

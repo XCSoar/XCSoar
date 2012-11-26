@@ -38,6 +38,11 @@ struct RasterPoint {
   typedef int SquareType;
   PixelScalar x, y;
 
+  RasterPoint() = default;
+
+  constexpr RasterPoint(int _x, int _y)
+    :x(_x), y(_y) {}
+
   bool operator==(const RasterPoint &other) const {
     return x == other.x && y == other.y;
   }
@@ -50,6 +55,14 @@ struct RasterPoint {
 struct PixelSize {
   PixelScalar cx, cy;
 
+  PixelSize() = default;
+
+  constexpr PixelSize(int _width, int _height)
+    :cx(_width), cy(_height) {}
+
+  constexpr PixelSize(unsigned _width, unsigned _height)
+    :cx(_width), cy(_height) {}
+
   bool operator==(const PixelSize &other) const {
     return cx == other.cx && cy == other.cy;
   }
@@ -61,6 +74,11 @@ struct PixelSize {
 
 struct PixelRect {
   PixelScalar left, top, right, bottom;
+
+  PixelRect() = default;
+
+  constexpr PixelRect(int _left, int _top, int _right, int _bottom)
+    :left(_left), top(_top), right(_right), bottom(_bottom) {}
 };
 
 struct ExactRasterPoint {

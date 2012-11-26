@@ -31,14 +31,32 @@ typedef Uint16 UPixelScalar;
 
 struct RasterPoint {
   PixelScalar x, y;
+
+  RasterPoint() = default;
+
+  constexpr RasterPoint(int _x, int _y)
+    :x(_x), y(_y) {}
 };
 
 struct PixelSize {
   PixelScalar cx, cy;
+
+  PixelSize() = default;
+
+  constexpr PixelSize(int _width, int _height)
+    :cx(_width), cy(_height) {}
+
+  constexpr PixelSize(unsigned _width, unsigned _height)
+    :cx(_width), cy(_height) {}
 };
 
 struct PixelRect {
   PixelScalar left, top, right, bottom;
+
+  PixelRect() = default;
+
+  constexpr PixelRect(int _left, int _top, int _right, int _bottom)
+    :left(_left), top(_top), right(_right), bottom(_bottom) {}
 };
 
 #endif

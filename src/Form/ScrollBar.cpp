@@ -139,8 +139,7 @@ ScrollBar::Paint(Canvas &canvas) const
   // ####  Buttons  ####
   // ###################
 
-  const UPixelScalar arrow_padding = std::max(UPixelScalar(GetWidth() / 4),
-                                              UPixelScalar(4));
+  const int arrow_padding = std::max(GetWidth() / 4, 4);
 
   PixelRect up_arrow_rect = rc;
   ++up_arrow_rect.left;
@@ -162,22 +161,22 @@ ScrollBar::Paint(Canvas &canvas) const
   canvas.SelectBlackBrush();
 
   const RasterPoint up_arrow[3] = {
-    { PixelScalar((up_arrow_rect.left + rc.right) / 2),
-      PixelScalar(up_arrow_rect.top + arrow_padding) },
-    { PixelScalar(up_arrow_rect.left + arrow_padding),
-      PixelScalar(up_arrow_rect.bottom - arrow_padding) },
-    { PixelScalar(rc.right - arrow_padding),
-      PixelScalar(up_arrow_rect.bottom - arrow_padding) },
+    { (up_arrow_rect.left + rc.right) / 2,
+      up_arrow_rect.top + arrow_padding },
+    { up_arrow_rect.left + arrow_padding,
+      up_arrow_rect.bottom - arrow_padding },
+    { rc.right - arrow_padding,
+      up_arrow_rect.bottom - arrow_padding },
   };
   canvas.DrawTriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
 
   const RasterPoint down_arrow[3] = {
-    { PixelScalar((down_arrow_rect.left + rc.right) / 2),
-      PixelScalar(down_arrow_rect.bottom - arrow_padding) },
-    { PixelScalar(down_arrow_rect.left + arrow_padding),
-      PixelScalar(down_arrow_rect.top + arrow_padding) },
-    { PixelScalar(rc.right - arrow_padding),
-      PixelScalar(down_arrow_rect.top + arrow_padding) },
+    { (down_arrow_rect.left + rc.right) / 2,
+      down_arrow_rect.bottom - arrow_padding },
+    { down_arrow_rect.left + arrow_padding,
+      down_arrow_rect.top + arrow_padding },
+    { rc.right - arrow_padding,
+      down_arrow_rect.top + arrow_padding },
   };
   canvas.DrawTriangleFan(down_arrow, ARRAY_SIZE(down_arrow));
 

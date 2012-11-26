@@ -205,10 +205,8 @@ TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas) const
   const PixelRect rcFirst = tb.GetMainMenuButtonSize(0);
   const UPixelScalar menuBottom = tb.GetMainMenuButtonSize(
       tb.GetNumMainMenuItems() - 1).bottom;
-  const PixelRect rcBlackBorder = { PixelScalar(rcFirst.left - bwidth),
-                                    PixelScalar(rcFirst.top - bwidth),
-                                    PixelScalar(rcFirst.right + bwidth),
-                                    PixelScalar(menuBottom + bwidth) };
+  const PixelRect rcBlackBorder(rcFirst.left - bwidth, rcFirst.top - bwidth,
+                                rcFirst.right + bwidth, menuBottom + bwidth);
 
   canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
 }
@@ -256,10 +254,8 @@ TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas,
   const UPixelScalar subTop =
     tb.GetSubMenuButtonSize(main_button.first_page_index).top;
   const PixelRect bLast = tb.GetSubMenuButtonSize(main_button.last_page_index);
-  const PixelRect rcBlackBorder = { PixelScalar(bLast.left - bwidth),
-                                    PixelScalar(subTop - bwidth),
-                                    PixelScalar(bLast.right + bwidth),
-                                    PixelScalar(bLast.bottom + bwidth) };
+  const PixelRect rcBlackBorder(bLast.left - bwidth, subTop - bwidth,
+                                bLast.right + bwidth, bLast.bottom + bwidth);
 
   canvas.DrawFilledRectangle(rcBlackBorder, COLOR_BLACK);
 }
