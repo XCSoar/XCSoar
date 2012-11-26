@@ -1333,14 +1333,20 @@ OrderedTask::GetFactoryTypes(bool all) const
   return f_list;
 }
 
-void 
-OrderedTask::Clear()
+void
+OrderedTask::RemoveAllPoints()
 {
   while (task_points.size())
     ErasePoint(0);
 
   while (optional_start_points.size())
     EraseOptionalStartPoint(0);
+}
+
+void
+OrderedTask::Clear()
+{
+  RemoveAllPoints();
 
   Reset();
   ordered_behaviour = task_behaviour.ordered_defaults;

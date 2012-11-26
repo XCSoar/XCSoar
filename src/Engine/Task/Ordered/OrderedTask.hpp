@@ -125,6 +125,11 @@ public:
   gcc_pure
   std::vector<TaskFactoryType> GetFactoryTypes(bool all = true) const;
 
+  /**
+   * Removes all task points.
+   */
+  void RemoveAllPoints();
+
   /** 
    * Clear all points and restore default ordered task behaviour
    * for the active factory
