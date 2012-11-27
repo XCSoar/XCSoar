@@ -13,8 +13,8 @@
    width="19"
    height="19"
    id="svg4754"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="abort.svg"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="mode_abort.svg"
    inkscape:label="Layer">
   <metadata
      id="metadata18">
@@ -48,33 +48,7 @@
      inkscape:window-maximized="0"
      inkscape:current-layer="Abort" />
   <defs
-     id="defs4756">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 10 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="20 : 10 : 1"
-       inkscape:persp3d-origin="10 : 6.6666667 : 1"
-       id="perspective20" />
-    <inkscape:path-effect
-       effect="spiro"
-       id="path-effect5350"
-       is_visible="true" />
-    <inkscape:perspective
-       id="perspective3604"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-    <inkscape:perspective
-       id="perspective3645"
-       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
-       inkscape:vp_z="1 : 0.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 0.5 : 1"
-       sodipodi:type="inkscape:persp3d" />
-  </defs>
+     id="defs4756" />
   <g
      inkscape:groupmode="layer"
      id="layer2"

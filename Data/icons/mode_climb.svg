@@ -13,8 +13,8 @@
    width="19"
    height="19"
    id="svg2816"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="climb.svg">
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="mode_climb.svg">
   <metadata
      id="metadata20">
     <rdf:RDF>
@@ -49,15 +49,7 @@
      showguides="true"
      inkscape:guide-bbox="true" />
   <defs
-     id="defs2818">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 9.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="19 : 9.5 : 1"
-       inkscape:persp3d-origin="9.5 : 6.3333333 : 1"
-       id="perspective25" />
-  </defs>
+     id="defs2818" />
   <g
      transform="translate(0,3)"
      id="layer1" />

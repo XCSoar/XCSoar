@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -12,8 +13,8 @@
    width="19"
    height="19"
    id="svg2816"
-   inkscape:version="0.46"
-   sodipodi:docname="flarm_traffic.svg"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="flarm_warning.svg"
    sodipodi:version="0.32"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <metadata
@@ -55,22 +56,7 @@
        id="grid3254" />
   </sodipodi:namedview>
   <defs
-     id="defs2818">
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 9.5 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="19 : 9.5 : 1"
-       inkscape:persp3d-origin="9.5 : 6.3333333 : 1"
-       id="perspective25" />
-    <inkscape:perspective
-       id="perspective2461"
-       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
-       inkscape:vp_z="744.09448 : 526.18109 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_x="0 : 526.18109 : 1"
-       sodipodi:type="inkscape:persp3d" />
-  </defs>
+     id="defs2818" />
   <g
      transform="translate(0,3)"
      id="layer1" />

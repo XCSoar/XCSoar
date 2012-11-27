@@ -13,56 +13,13 @@
    height="32"
    id="svg2985"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
+   inkscape:version="0.48.3.1 r9886"
    inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\folder.png"
    inkscape:export-xdpi="180"
    inkscape:export-ydpi="180"
-   sodipodi:docname="folder.svg">
+   sodipodi:docname="wrench.svg">
   <defs
-     id="defs2987">
-    <inkscape:path-effect
-       effect="skeletal"
-       id="path-effect4407"
-       is_visible="true"
-       pattern="M 0,5 10,10 10,0 z"
-       copytype="single_stretched"
-       prop_scale="1"
-       scale_y_rel="false"
-       spacing="0"
-       normal_offset="0"
-       tang_offset="0"
-       prop_units="false"
-       vertical_pattern="false"
-       fuse_tolerance="0" />
-    <inkscape:path-effect
-       effect="skeletal"
-       id="path-effect4403"
-       is_visible="true"
-       pattern="M 0,5 10,10 10,0 z"
-       copytype="single_stretched"
-       prop_scale="1"
-       scale_y_rel="false"
-       spacing="0"
-       normal_offset="0"
-       tang_offset="0"
-       prop_units="false"
-       vertical_pattern="false"
-       fuse_tolerance="0" />
-    <inkscape:path-effect
-       effect="skeletal"
-       id="path-effect4399"
-       is_visible="true"
-       pattern="M 0,5 10,10 10,0 z"
-       copytype="single_stretched"
-       prop_scale="1"
-       scale_y_rel="false"
-       spacing="0"
-       normal_offset="0"
-       tang_offset="0"
-       prop_units="false"
-       vertical_pattern="false"
-       fuse_tolerance="0" />
-  </defs>
+     id="defs2987" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -104,7 +61,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
