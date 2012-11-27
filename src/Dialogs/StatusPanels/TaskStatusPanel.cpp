@@ -48,12 +48,13 @@ TaskStatusPanel::Refresh()
 
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   TCHAR Temp[80];
 
   FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
-  SetRowVisible(TaskTime, task_stats.has_targets);
-  if (task_stats.has_targets)
+  SetRowVisible(TaskTime, common_stats.ordered_has_targets);
+  if (common_stats.ordered_has_targets)
     SetText(TaskTime, Temp);
 
   int ete_time(task_stats.total.time_elapsed +
