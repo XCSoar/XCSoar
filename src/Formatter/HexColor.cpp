@@ -24,24 +24,16 @@ Copyright_License {
 #include "HexColor.hpp"
 #include "Screen/Color.hpp"
 #include "Util/NumberParser.hpp"
-#include "Compiler.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
 void
-FormatHexColor(TCHAR *buffer, size_t size, const Color _color)
+FormatHexColor(TCHAR *buffer, size_t size, const Color color)
 {
   assert(size >= 7);
 
-#if defined(__ARM_ARCH_7A__) && GCC_VERSION < 40500
-  // NOTE: The local "c" copy of "color" works around an android compiler
-  //       bug (observed with gcc version 4.4.3)
-  const Color color(_color.Red(), _color.Green(), _color.Blue());
-#else
-  const Color color(_color);
-#endif
   _sntprintf(buffer, size, _T("#%02X%02X%02X"),
              color.Red(), color.Green(), color.Blue());
 }
