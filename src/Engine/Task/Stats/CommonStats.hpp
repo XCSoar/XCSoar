@@ -25,7 +25,6 @@
 #include "Math/fixed.hpp"
 #include "Time/RoughTime.hpp"
 #include "Geo/GeoVector.hpp"
-#include "GlideSolvers/GlideResult.hpp"
 #include "Util/TypeTraits.hpp"
 #include "TaskSummary.hpp"
 
