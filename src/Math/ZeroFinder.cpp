@@ -38,11 +38,15 @@ static const fixed r((3. - sqrt(5.0)) / 2); /* Gold section ratio */
 
 #define fixed_threequaters fixed(0.75)
 
-fixed ZeroFinder::tolerance_actual_min(const fixed x) const {
+inline fixed
+ZeroFinder::tolerance_actual_min(const fixed x) const
+{
   return sqrt_epsilon * fabs(x) + tolerance * fixed_third;
 }
 
-fixed ZeroFinder::tolerance_actual_zero(const fixed x) const {
+inline fixed
+ZeroFinder::tolerance_actual_zero(const fixed x) const
+{
   return Double(epsilon * fabs(x)) + Half(tolerance);
 }
 
@@ -52,8 +56,10 @@ unsigned long zero_skipped = 0;
 unsigned long zero_total = 0;
 #endif
 
-bool ZeroFinder::solution_within_tolerance(const fixed x,
-                                           const fixed tol_act) {
+inline bool
+ZeroFinder::solution_within_tolerance(const fixed x,
+                                      const fixed tol_act)
+{
 
   // are we away from the edges? if so, check improved solution
   const fixed x_minus = x-tol_act;
@@ -138,8 +144,9 @@ fixed ZeroFinder::find_zero(const fixed xstart) {
   return xstart;
 }
 
-
-fixed ZeroFinder::find_zero_actual(const fixed xstart) {
+inline fixed
+ZeroFinder::find_zero_actual(const fixed xstart)
+{
   fixed a, b, c; // Abscissae, descr. see above
   fixed fa; // f(a)
   fixed fb; // f(b)
@@ -315,7 +322,8 @@ fixed ZeroFinder::find_min(const fixed xstart) {
   return xstart;
 }
 
-fixed ZeroFinder::find_min_actual(const fixed xstart)
+inline fixed
+ZeroFinder::find_min_actual(const fixed xstart)
 {
   fixed x, v, w; // Abscissae, descr. see above
   fixed fx; // f(x)
