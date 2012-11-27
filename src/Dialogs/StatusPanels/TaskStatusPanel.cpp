@@ -52,10 +52,11 @@ TaskStatusPanel::Refresh()
 
   TCHAR Temp[80];
 
-  FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
   SetRowVisible(TaskTime, common_stats.ordered_has_targets);
-  if (common_stats.ordered_has_targets)
+  if (common_stats.ordered_has_targets) {
+    FormatSignedTimeHHMM(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
     SetText(TaskTime, Temp);
+  }
 
   int ete_time(task_stats.total.time_elapsed +
                task_stats.total.time_remaining);
