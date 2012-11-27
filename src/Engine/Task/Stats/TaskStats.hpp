@@ -63,8 +63,6 @@ public:
   bool task_started;
   /** Whether the task is finished */
   bool task_finished;
-  /** Whether the task has adjustable targets */
-  bool has_targets;
   /** Whether the task is appoximately in final glide */
   bool flight_mode_final_glide;
   /** Margin for final glide flight mode transition (m) */

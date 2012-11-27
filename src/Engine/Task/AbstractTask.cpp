@@ -238,7 +238,6 @@ AbstractTask::Update(const AircraftState &state,
                      const GlidePolar &glide_polar)
 {
   stats.task_valid = CheckTask();
-  stats.has_targets = HasTargets();
 
   const bool full_update = 
     CheckTransitions(state, state_last) ||

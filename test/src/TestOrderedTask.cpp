@@ -207,7 +207,6 @@ TestFlightToFinish(fixed aircraft_altitude)
   ok1(stats.task_valid);
   ok1(!stats.task_started);
   ok1(!stats.task_finished);
-  ok1(!stats.has_targets);
   ok1(stats.flight_mode_final_glide == !negative(stats.total.solution_remaining.altitude_difference));
   ok1(equals(stats.distance_nominal, vector.distance));
   ok1(between(stats.distance_min,
@@ -249,7 +248,6 @@ TestSimpleTask()
   ok1(stats.task_valid);
   ok1(!stats.task_started);
   ok1(!stats.task_finished);
-  ok1(!stats.has_targets);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, tp1_to_tp2.distance));
   ok1(between(stats.distance_min,
@@ -291,7 +289,6 @@ TestHighFinish()
   ok1(stats.task_valid);
   ok1(!stats.task_started);
   ok1(!stats.task_finished);
-  ok1(!stats.has_targets);
   ok1(!stats.flight_mode_final_glide);
   ok1(equals(stats.distance_nominal, vector.distance));
   ok1(between(stats.distance_min,
@@ -337,7 +334,6 @@ TestHighTP()
   ok1(stats.task_valid);
   ok1(!stats.task_started);
   ok1(!stats.task_finished);
-  ok1(!stats.has_targets);
   ok1(!stats.flight_mode_final_glide);
 
   CheckLeg(tp2, aircraft, stats);
@@ -375,7 +371,6 @@ TestHighTPFinal()
   ok1(stats.task_valid);
   ok1(!stats.task_started);
   ok1(!stats.task_finished);
-  ok1(!stats.has_targets);
   ok1(!stats.flight_mode_final_glide);
 
   CheckLeg(tp2, aircraft, stats);
@@ -412,7 +407,6 @@ TestLowTPFinal()
   ok1(stats.task_valid);
   ok1(!stats.task_started);
   ok1(!stats.task_finished);
-  ok1(!stats.has_targets);
   ok1(!stats.flight_mode_final_glide);
 
   CheckLeg(tp2, aircraft, stats);
@@ -433,7 +427,7 @@ TestAll()
 
 int main(int argc, char **argv)
 {
-  plan_tests(756);
+  plan_tests(728);
 
   task_behaviour.SetDefaults();
 
