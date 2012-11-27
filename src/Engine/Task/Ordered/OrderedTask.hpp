@@ -166,7 +166,9 @@ public:
    * @return Index of active task point sequence
    */
   gcc_pure
-  unsigned GetActiveIndex() const;
+  unsigned GetActiveIndex() const {
+    return active_task_point;
+  }
 
   /**
    * Retrieve task point by sequence index

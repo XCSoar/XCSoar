@@ -181,7 +181,7 @@ OrderedTask::ScanLegStartTime(const AircraftState &)
 
 // DISTANCES
 
-fixed
+inline fixed
 OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
 {
   if (full) {
@@ -200,7 +200,7 @@ OrderedTask::ScanDistanceMin(const GeoPoint &location, bool full)
   return taskpoint_start->ScanDistanceMin();
 }
 
-fixed
+inline fixed
 OrderedTask::ScanDistanceMax()
 {
   if (task_points.empty()) // nothing to do!
@@ -391,8 +391,7 @@ OrderedTask::CheckTransitions(const AircraftState &state,
   return full_update;
 }
 
-
-bool
+inline bool
 OrderedTask::CheckTransitionOptionalStart(const AircraftState &state,
                                           const AircraftState &state_last,
                                           const FlatBoundingBox& bb_now,
@@ -574,14 +573,14 @@ OrderedTask::ScanStartFinish()
   return HasStart() && HasFinish();
 }
 
-void
+inline void
 OrderedTask::ErasePoint(const unsigned index)
 {
   delete task_points[index];
   task_points.erase(task_points.begin() + index);
 }
 
-void
+inline void
 OrderedTask::EraseOptionalStartPoint(const unsigned index)
 {
   delete optional_start_points[index];
@@ -1004,7 +1003,7 @@ DistanceIsSignificant(const SearchPoint &a1, const SearchPoint &a2,
   return a1.FlatSquareDistanceTo(a2) > (dist_threshold * dist_threshold);
 }
 
-bool 
+inline bool
 OrderedTask::DistanceIsSignificant(const GeoPoint &location,
                                    const GeoPoint &location_last) const
 {
@@ -1048,13 +1047,7 @@ OrderedTask::IsFull() const
   return TaskSize() == GetFactory().GetConstraints().max_points;
 }
 
-unsigned 
-OrderedTask::GetActiveIndex() const
-{
-  return active_task_point;
-}
-
-void
+inline void
 OrderedTask::UpdateStartTransition(const AircraftState &state,
                                    OrderedTaskPoint &start)
 {
