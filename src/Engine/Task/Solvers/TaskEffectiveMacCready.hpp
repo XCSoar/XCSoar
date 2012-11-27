@@ -32,8 +32,7 @@
  *
  *  This is calculated for the part of the task that has been travelled
  */
-class TaskEffectiveMacCready: 
-  public TaskSolveTravelled
+class TaskEffectiveMacCready gcc_final : public TaskSolveTravelled
 {
 public:
 /** 

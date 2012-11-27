@@ -38,7 +38,7 @@ class StartPoint;
  * - Allow for other schemes or weightings in how much to adjust each
  *   target.
  */
-class TaskMinTarget : private ZeroFinder
+class TaskMinTarget gcc_final : private ZeroFinder
 {
   TaskMacCreadyRemaining tm;
   GlideResult res;

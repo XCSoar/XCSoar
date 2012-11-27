@@ -39,7 +39,7 @@
  * - gate start time?
  * - enabled/disabled for multiple start points
  */
-class StartPoint : public OrderedTaskPoint {
+class StartPoint gcc_final : public OrderedTaskPoint {
   fixed safety_height_terrain;
 
   TaskStartMargins margins;

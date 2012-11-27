@@ -33,8 +33,7 @@
  * \todo
  * - f() fails if Mc too low for wind, need to account for failed solution
  */
-class TaskBestMc: 
-  public ZeroFinder
+class TaskBestMc gcc_final : public ZeroFinder
 {
   TaskMacCreadyRemaining tm;
   GlideResult res;

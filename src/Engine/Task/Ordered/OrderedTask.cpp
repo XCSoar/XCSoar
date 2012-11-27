@@ -1048,12 +1048,6 @@ OrderedTask::SetPointSearchMax(unsigned tp, const SearchPoint &sol)
   task_points[tp]->SetSearchMax(sol);
 }
 
-unsigned 
-OrderedTask::TaskSize() const 
-{
-  return task_points.size();
-}
-
 bool
 OrderedTask::IsFull() const
 {

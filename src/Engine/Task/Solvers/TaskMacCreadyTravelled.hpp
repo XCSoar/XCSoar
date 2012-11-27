@@ -27,7 +27,7 @@
 /**
  * Specialisation of TaskMacCready for task travelled
  */
-class TaskMacCreadyTravelled : public TaskMacCready
+class TaskMacCreadyTravelled gcc_final : public TaskMacCready
 {
 public:
   /**

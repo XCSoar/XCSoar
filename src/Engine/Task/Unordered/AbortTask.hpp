@@ -82,7 +82,7 @@ public:
   typedef std::vector <Alternate> AlternateVector;
 
 protected:
-  struct AlternateTaskPoint: public UnorderedTaskPoint
+  struct AlternateTaskPoint gcc_final : public UnorderedTaskPoint
   {
     GlideResult solution;
 

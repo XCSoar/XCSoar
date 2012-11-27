@@ -28,7 +28,7 @@
 struct TaskFactoryConstraints;
 
 /** Class used to control advancement through an OrderedTask */
-class TaskAdvanceSmart : public TaskAdvance {
+class TaskAdvanceSmart gcc_final : public TaskAdvance {
   /** active advance state */
   State state;
 

@@ -129,8 +129,10 @@ Copyright_License {
 
 #if GCC_VERSION >= 40700 || defined(__clang__)
 #define gcc_override override
+#define gcc_final final
 #else
 #define gcc_override
+#define gcc_final
 #endif
 
 #endif

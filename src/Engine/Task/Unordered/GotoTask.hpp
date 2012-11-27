@@ -30,8 +30,7 @@
 /**
  * Class providing ability to go to a single task point
  */
-class GotoTask : 
-  public UnorderedTask 
+class GotoTask gcc_final : public UnorderedTask
 {
   TaskWaypoint* tp;
   const Waypoints &waypoints;

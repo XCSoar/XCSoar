@@ -31,8 +31,7 @@
  *
  * @todo: take user preferences of landing points into account.
  */
-class AlternateTask : 
-  public AbortTask 
+class AlternateTask gcc_final : public AbortTask
 {
 public:
   struct Divert : public Alternate {

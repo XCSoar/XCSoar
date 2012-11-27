@@ -27,7 +27,7 @@
 /**
  * Specialisation of TaskMacCready for total task
  */
-class TaskMacCreadyTotal : public TaskMacCready {
+class TaskMacCreadyTotal gcc_final : public TaskMacCready {
 public:
   /**
    * Constructor for ordered task points

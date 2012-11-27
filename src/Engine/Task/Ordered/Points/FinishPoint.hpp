@@ -37,7 +37,7 @@ struct FinishConstraints;
  *
  * Entry requires previous point to have entered to prevent spurious crossing.
  */
-class FinishPoint : public OrderedTaskPoint
+class FinishPoint gcc_final : public OrderedTaskPoint
 {
   fixed safety_height_arrival;
 

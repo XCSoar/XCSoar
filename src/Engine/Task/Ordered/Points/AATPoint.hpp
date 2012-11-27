@@ -52,7 +52,7 @@ struct RangeAndRadial {
  * \todo
  * - Elevation may vary with target shift
  */
-class AATPoint: public IntermediateTaskPoint
+class AATPoint gcc_final : public IntermediateTaskPoint
 {
   /** Location of target within OZ */
   GeoPoint target_location;

@@ -27,7 +27,7 @@
 /**
  * Specialisation of TaskMacCready for task remaining
  */
-class TaskMacCreadyRemaining : public TaskMacCready {
+class TaskMacCreadyRemaining gcc_final : public TaskMacCready {
 public:
   /**
    * Constructor for ordered task points

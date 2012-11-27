@@ -31,7 +31,7 @@ Copyright_License {
  * Currently the validate() method simply checks that there is at least one
  * AAT turnpoint.
  */
-class AATTaskFactory: public AbstractTaskFactory 
+class AATTaskFactory gcc_final : public AbstractTaskFactory
 {
 public:
 /** 

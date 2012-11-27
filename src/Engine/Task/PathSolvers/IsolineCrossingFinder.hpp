@@ -31,8 +31,7 @@ class AATPoint;
 /**
  *  Calculate where Isoline ellipse crosses border of observation zone
  */
-class IsolineCrossingFinder:
-  public ZeroFinder
+class IsolineCrossingFinder gcc_final : public ZeroFinder
 {
   const AATPoint &aap;
   const GeoEllipse &ell;

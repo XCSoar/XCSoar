@@ -57,8 +57,7 @@ struct TaskFactoryConstraints;
  * - have a method to check if a potential taskpoint is distinct from its neighbours?
  * - multiple start points
  */
-class OrderedTask:
-  public AbstractTask
+class OrderedTask gcc_final : public AbstractTask
 {
 public:
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
@@ -595,7 +594,11 @@ public:
 public:
   /* virtual methods from class TaskInterface */
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
-  virtual unsigned TaskSize() const gcc_override;
+
+  virtual unsigned TaskSize() const gcc_override {
+    return task_points.size();
+  }
+
   virtual void SetActiveTaskPoint(unsigned desired) gcc_override;
   virtual TaskWaypoint *GetActiveTaskPoint() const gcc_override;
   virtual bool IsValidTaskPoint(const int index_offset=0) const gcc_override;
