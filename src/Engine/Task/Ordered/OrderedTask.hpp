@@ -28,6 +28,7 @@
 #include "Task/AbstractTask.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "TaskAdvanceSmart.hpp"
+#include "Util/DereferenceIterator.hpp"
 
 #include <assert.h>
 #include <vector>
@@ -61,6 +62,9 @@ class OrderedTask gcc_final : public AbstractTask
 {
 public:
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
+
+  typedef DereferenceContainerAdapter<const OrderedTaskPointVector,
+                                      const OrderedTaskPoint> ConstTaskPointList;
 
 private:
   OrderedTaskPointVector task_points;
@@ -538,6 +542,10 @@ public:
    */
   void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &ob);
 
+  ConstTaskPointList GetPoints() const {
+    return task_points;
+  }
+
   gcc_pure
   OrderedTaskPoint &GetPoint(const unsigned i) {
     assert(i < task_points.size());
@@ -552,6 +560,10 @@ public:
     assert(task_points[i] != NULL);
 
     return *task_points[i];
+  }
+
+  ConstTaskPointList GetOptionalStartPoints() const {
+    return optional_start_points;
   }
 
   /**

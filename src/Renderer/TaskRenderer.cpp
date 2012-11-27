@@ -57,13 +57,13 @@ TaskRenderer::Draw(const OrderedTask &task)
         i != TaskPointRenderer::LAYER_LEG) {
       tpv.SetModeOptional(true);
 
-      for (unsigned j = 0, end = task.GetOptionalStartPointCount(); j < end; ++j)
-        tpv.Draw(task.GetOptionalStartPoint(j), (TaskPointRenderer::Layer)i);
+      for (const auto &tp : task.GetOptionalStartPoints())
+        tpv.Draw(tp, (TaskPointRenderer::Layer)i);
     }
 
     tpv.SetModeOptional(false);
-    for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-      tpv.Draw(task.GetTaskPoint(j), (TaskPointRenderer::Layer)i);
+    for (const auto &tp : task.GetPoints())
+      tpv.Draw(tp, (TaskPointRenderer::Layer)i);
   }
 }
 
