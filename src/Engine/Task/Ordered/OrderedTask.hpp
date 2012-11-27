@@ -24,7 +24,6 @@
 #define ORDEREDTASK_H
 
 #include "Geo/Flat/TaskProjection.hpp"
-#include "Geo/SearchPointVector.hpp"
 #include "Task/AbstractTask.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "TaskAdvanceSmart.hpp"
@@ -33,6 +32,8 @@
 #include <assert.h>
 #include <vector>
 
+class SearchPoint;
+class SearchPointVector;
 class OrderedTaskPoint;
 class StartPoint;
 class FinishPoint;
