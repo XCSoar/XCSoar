@@ -36,33 +36,37 @@
 #include <assert.h>
 #include <memory>
 
-void
-Serialiser::Visit(const StartPoint &data)
+gcc_const
+static const TCHAR *
+GetName(TaskPoint::Type type, bool mode_optional_start)
 {
-  Serialise(data, mode_optional_start ? _T("OptionalStart"): _T("Start"));
+  switch (type) {
+  case TaskPoint::ROUTE:
+  case TaskPoint::UNORDERED:
+    assert(false);
+    break;
+
+  case TaskPoint::START:
+    return mode_optional_start ? _T("OptionalStart") : _T("Start");
+
+  case TaskPoint::AST:
+    return _T("Turn");
+
+  case TaskPoint::AAT:
+    return _T("Area");
+
+  case TaskPoint::FINISH:
+    return _T("Finish");
+  }
+
+  return nullptr;
 }
 
-void
-Serialiser::Visit(const ASTPoint &data)
+gcc_pure
+static const TCHAR *
+GetName(const OrderedTaskPoint &tp, bool mode_optional_start)
 {
-  Serialise(data, _T("Turn"));
-}
-
-void
-Serialiser::Visit(const AATPoint &data)
-{
-  Serialise(data, _T("Area"));
-}
-
-void
-Serialiser::Visit(const FinishPoint &data)
-{
-  Serialise(data, _T("Finish"));
-}
-
-void
-Serialiser::Visit(gcc_unused const UnorderedTaskPoint &data)
-{
+  return GetName(tp.GetType(), mode_optional_start);
 }
 
 void
@@ -79,6 +83,14 @@ Serialiser::Serialise(const OrderedTaskPoint &data, const TCHAR* name)
   std::unique_ptr<DataNode> ochild(child->AppendChild(_T("ObservationZone")));
   Serialiser oser(*ochild);
   oser.Serialise(data.GetObservationZone());
+}
+
+void
+Serialiser::Serialise(const OrderedTaskPoint &tp)
+{
+  const TCHAR *name = GetName(tp, mode_optional_start);
+  assert(name != nullptr);
+  Serialise(tp, name);
 }
 
 void 
@@ -228,9 +240,13 @@ Serialiser::Serialise(const OrderedTask &task)
   node.SetAttribute(_T("type"), GetTaskFactoryType(task.GetFactoryType()));
   Serialise(task.GetOrderedTaskBehaviour());
   mode_optional_start = false;
-  task.AcceptTaskPointVisitor(*this);
+
+  for (const auto &tp : task.GetPoints())
+    Serialise(tp);
+
   mode_optional_start = true;
-  task.AcceptStartPointVisitor(*this);
+  for (const auto &tp : task.GetOptionalStartPoints())
+    Serialise(tp);
 }
 
 const TCHAR*
