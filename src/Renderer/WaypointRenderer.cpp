@@ -362,36 +362,24 @@ public:
     AddWaypoint(way_point, false);
   }
 
-  void
-  Visit(const UnorderedTaskPoint& tp)
-  {
-    AddWaypoint(tp.GetWaypoint(), true);
-  }
+  virtual void Visit(const TaskPoint &tp) gcc_override {
+    switch (tp.GetType()) {
+    case TaskPoint::ROUTE:
+      assert(false);
+      break;
 
-  void
-  Visit(const StartPoint& tp)
-  {
-    AddWaypoint(tp.GetWaypoint(), true);
-  }
+    case TaskPoint::UNORDERED:
+      AddWaypoint(((const UnorderedTaskPoint &)tp).GetWaypoint(), true);
+      break;
 
-  void
-  Visit(const FinishPoint& tp)
-  {
-    AddWaypoint(tp.GetWaypoint(), true);
+    case TaskPoint::START:
+    case TaskPoint::AST:
+    case TaskPoint::AAT:
+    case TaskPoint::FINISH:
+      AddWaypoint(((const OrderedTaskPoint &)tp).GetWaypoint(), true);
+      break;
+    }
   }
-
-  void
-  Visit(const AATPoint& tp)
-  {
-    AddWaypoint(tp.GetWaypoint(), true);
-  }
-
-  void
-  Visit(const ASTPoint& tp)
-  {
-    AddWaypoint(tp.GetWaypoint(), true);
-  }
-
 
 public:
   void set_task_valid() {

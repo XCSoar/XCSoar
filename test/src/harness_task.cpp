@@ -120,29 +120,38 @@ public:
 class TaskPointVisitorPrint: public TaskPointConstVisitor
 {
 public:
-  virtual void Visit(const UnorderedTaskPoint& tp) {
-    printf("# got a tp\n");
+  virtual void Visit(const TaskPoint& tp) gcc_override {
+    switch (tp.GetType()) {
+    case TaskPoint::ROUTE:
+      assert(false);
+      break;
+
+    case TaskPoint::UNORDERED:
+      printf("# got a tp\n");
+      break;
+
+    case TaskPoint::FINISH:
+      printf("# got an ftp\n");
+      ozv.Visit(((const FinishPoint &)tp).GetObservationZone());
+      break;
+
+    case TaskPoint::START:
+      printf("# got an stp\n");
+      ozv.Visit(((const StartPoint &)tp).GetObservationZone());
+      break;
+
+    case TaskPoint::AAT:
+      printf("# got an aat\n");
+      ozv.Visit(((const AATPoint &)tp).GetObservationZone());
+      break;
+
+    case TaskPoint::AST:
+      printf("# got an ast\n");
+      ozv.Visit(((const ASTPoint &)tp).GetObservationZone());
+      break;
+    }
   }
-  virtual void Visit(const OrderedTaskPoint& tp) {
-    printf("# got an otp\n");
-    ozv.Visit(tp.GetObservationZone());
-  }
-  virtual void Visit(const FinishPoint& tp) {
-    printf("# got an ftp\n");
-    ozv.Visit(tp.GetObservationZone());
-  }
-  virtual void Visit(const StartPoint& tp) {
-    printf("# got an stp\n");
-    ozv.Visit(tp.GetObservationZone());
-  }
-  virtual void Visit(const AATPoint& tp) {
-    printf("# got an aat\n");
-    ozv.Visit(tp.GetObservationZone());
-  }
-  virtual void Visit(const ASTPoint& tp) {
-    printf("# got an ast\n");
-    ozv.Visit(tp.GetObservationZone());
-  }
+
 private:
   ObservationZoneVisitorPrint ozv;
 };
