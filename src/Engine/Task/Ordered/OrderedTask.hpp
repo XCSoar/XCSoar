@@ -590,6 +590,10 @@ public:
     return *optional_start_points[i];
   }
 
+  /** Determines whether the task has adjustable targets */
+  gcc_pure
+  bool HasTargets() const;
+
   /**
    * Find location of center of task (for rendering purposes)
    *
@@ -672,8 +676,6 @@ protected:
                                     DistanceStat &leg_remaining_effective,
                                     const GlideResult &solution_remaining_total,
                                     const GlideResult &solution_remaining_leg) gcc_override;
-public:
-  virtual bool HasTargets() const gcc_override;
 protected:
   virtual bool IsScored() const gcc_override;
 public:

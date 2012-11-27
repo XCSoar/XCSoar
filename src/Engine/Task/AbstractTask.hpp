@@ -414,10 +414,6 @@ protected:
                                     const GlideResult &solution_remaining_total,
                                     const GlideResult &solution_remaining_leg) = 0;
 
-  /** Determines whether the task has adjustable targets */
-  gcc_pure
-  virtual bool HasTargets() const = 0;
-
   /** Determines whether this task is scored */
   gcc_pure
   virtual bool IsScored() const = 0;

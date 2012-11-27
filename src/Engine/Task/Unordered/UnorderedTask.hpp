@@ -73,7 +73,6 @@ public:
                                     DistanceStat &leg_remaining_effective,
                                     const GlideResult &solution_remaining_total,
                                     const GlideResult &solution_remaining_leg) gcc_override;
-  virtual bool HasTargets() const gcc_override { return false; }
   virtual bool IsScored() const gcc_override { return false; }
 };
 
