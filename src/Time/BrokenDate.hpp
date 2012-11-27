@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_BROKEN_DATE_HPP
 #define XCSOAR_BROKEN_DATE_HPP
 
-#include "Util/TypeTraits.hpp"
+#include "Compiler.h"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -108,6 +110,6 @@ struct BrokenDate {
   void IncrementDay();
 };
 
-static_assert(is_trivial<BrokenDate>::value, "type is not trivial");
+static_assert(std::is_trivial<BrokenDate>::value, "type is not trivial");
 
 #endif

@@ -27,7 +27,8 @@
 #include "GlideSolvers/GlideResult.hpp"
 #include "DistanceStat.hpp"
 #include "TaskVario.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 struct AircraftState;
 
@@ -116,7 +117,7 @@ struct ElementStat
   }
 };
 
-static_assert(is_trivial<ElementStat>::value, "type is not trivial");
+static_assert(std::is_trivial<ElementStat>::value, "type is not trivial");
 
 class ElementStatComputer
 {

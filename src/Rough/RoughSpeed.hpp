@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_ROUGH_SPEED_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -63,6 +64,6 @@ public:
   }
 };
 
-static_assert(is_trivial<RoughSpeed>::value, "type is not trivial");
+static_assert(std::is_trivial<RoughSpeed>::value, "type is not trivial");
 
 #endif

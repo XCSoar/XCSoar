@@ -25,7 +25,8 @@
 
 #include "Geo/GeoPoint.hpp"
 #include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /**
  *  Structure to hold data for intercepts between aircraft and airspace.
@@ -68,7 +69,7 @@ public:
   };
 };
 
-static_assert(is_trivial<AirspaceInterceptSolution>::value,
+static_assert(std::is_trivial<AirspaceInterceptSolution>::value,
               "type is not trivial");
 
 #endif

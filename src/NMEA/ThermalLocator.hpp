@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_NMEA_THERMAL_LOCATOR_HPP
 
 #include "Geo/GeoPoint.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Util/TrivialArray.hpp"
+
+#include <type_traits>
 
 struct SpeedVector;
 
@@ -64,7 +65,7 @@ struct ThermalLocatorInfo
   ThermalSource &AllocateSource();
 };
 
-static_assert(is_trivial<ThermalLocatorInfo>::value,
+static_assert(std::is_trivial<ThermalLocatorInfo>::value,
               "type is not trivial");
 
 #endif

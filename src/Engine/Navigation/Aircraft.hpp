@@ -22,10 +22,11 @@
 #ifndef AIRCRAFT_HPP
 #define AIRCRAFT_HPP
 
-#include "Util/TypeTraits.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Geo/SpeedVector.hpp"
 #include "Compiler.h"
+
+#include <type_traits>
 
 /**
  * @file
@@ -155,6 +156,6 @@ struct AircraftState:
   void Reset();
 };
 
-static_assert(is_trivial<AircraftState>::value, "type is not trivial");
+static_assert(std::is_trivial<AircraftState>::value, "type is not trivial");
 
 #endif

@@ -31,10 +31,11 @@ Copyright_License {
 #include "Gauge/TrafficSettings.hpp"
 #include "PageSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Geo/CoordinateFormat.hpp"
 #include "DisplaySettings.hpp"
 #include "Audio/Settings.hpp"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -78,6 +79,6 @@ struct UISettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<UISettings>::value, "type is not trivial");
+static_assert(std::is_trivial<UISettings>::value, "type is not trivial");
 
 #endif

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DISPLAY_SETTINGS_HPP
 #define XCSOAR_DISPLAY_SETTINGS_HPP
 
-#include "Util/TypeTraits.hpp"
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -45,6 +45,6 @@ struct DisplaySettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<DisplaySettings>::value, "type is not trivial");
+static_assert(std::is_trivial<DisplaySettings>::value, "type is not trivial");
 
 #endif

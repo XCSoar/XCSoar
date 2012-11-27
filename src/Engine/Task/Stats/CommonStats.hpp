@@ -25,8 +25,9 @@
 #include "Math/fixed.hpp"
 #include "Time/RoughTime.hpp"
 #include "Geo/GeoVector.hpp"
-#include "Util/TypeTraits.hpp"
 #include "TaskSummary.hpp"
+
+#include <type_traits>
 
 /** 
  * Task statistics that are common across all managed tasks.
@@ -113,6 +114,6 @@ public:
   void ResetTask();
 };
 
-static_assert(is_trivial<CommonStats>::value, "type is not trivial");
+static_assert(std::is_trivial<CommonStats>::value, "type is not trivial");
 
 #endif

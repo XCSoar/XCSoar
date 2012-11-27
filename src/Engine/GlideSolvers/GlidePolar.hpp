@@ -22,15 +22,15 @@
 #ifndef GLIDEPOLAR_HPP
 #define GLIDEPOLAR_HPP
 
+#include "PolarCoefficients.hpp"
+#include "Math/fixed.hpp"
+#include "Compiler.h"
+
+#include <type_traits>
+
 struct GlideState;
 struct GlideResult;
 struct AircraftState;
-
-#include "PolarCoefficients.hpp"
-#include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
-#include "Compiler.h"
-
 class Angle;
 struct PolarInfo;
 struct SpeedVector;
@@ -585,6 +585,6 @@ private:
   void UpdateSMin();
 };
 
-static_assert(is_trivial<GlidePolar>::value, "type is not trivial");
+static_assert(std::is_trivial<GlidePolar>::value, "type is not trivial");
 
 #endif

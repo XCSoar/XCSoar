@@ -23,7 +23,8 @@
 #define TASKSTATS_HPP
 
 #include "ElementStat.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 struct TaskBehaviour;
 
@@ -91,7 +92,7 @@ public:
   bool calc_flight_mode(const TaskBehaviour &settings);
 };
 
-static_assert(is_trivial<TaskStats>::value, "type is not trivial");
+static_assert(std::is_trivial<TaskStats>::value, "type is not trivial");
 
 class TaskStatsComputer {
 public:

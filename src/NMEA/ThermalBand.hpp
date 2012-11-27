@@ -25,7 +25,8 @@ Copyright_License {
 #define XCSOAR_NMEA_THERMAL_BAND_H
 
 #include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /**
  * Derived thermal climb rate histogram by altitude (time averaged)
@@ -68,6 +69,6 @@ private:
   void Expand(const fixed height);
 };
 
-static_assert(is_trivial<ThermalBandInfo>::value, "type is not trivial");
+static_assert(std::is_trivial<ThermalBandInfo>::value, "type is not trivial");
 
 #endif

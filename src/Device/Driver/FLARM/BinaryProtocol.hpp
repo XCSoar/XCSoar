@@ -25,11 +25,12 @@ Copyright_License {
 #define XCSOAR_FLARM_BINARY_PROTOCOL_HPP
 
 #include "Util/AllocatedArray.hpp"
-#include "Util/TypeTraits.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 #include "tchar.h"
 #include "Device/Driver.hpp"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -121,7 +122,7 @@ namespace FLARM {
 
   static_assert(sizeof(FrameHeader) == 8,
                 "The FrameHeader struct needs to have a size of 8 bytes");
-  static_assert(is_trivial<FrameHeader>::value, "type is not trivial");
+  static_assert(std::is_trivial<FrameHeader>::value, "type is not trivial");
 
   /**
    * Convenience function. Returns a pre-populated FrameHeader instance that is

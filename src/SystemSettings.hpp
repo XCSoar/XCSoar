@@ -24,11 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_SYSTEM_SETTINGS_HPP
 #define XCSOAR_SYSTEM_SETTINGS_HPP
 
-#include "Util/TypeTraits.hpp"
 #include "Device/List.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Hardware/ModelType.hpp"
 
+#include <type_traits>
 #include <array>
 
 struct SystemSettings {
@@ -41,6 +41,6 @@ struct SystemSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<SystemSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<SystemSettings>::value, "type is not trivial");
 
 #endif

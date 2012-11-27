@@ -27,8 +27,9 @@
 #include "Task/Factory/TaskPointFactoryType.hpp"
 #include "Engine/Route/Config.hpp"
 #include "GlideSolvers/GlideSettings.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Task/Factory/TaskFactoryType.hpp"
+
+#include <type_traits>
 
 struct AircraftState;
 
@@ -162,6 +163,6 @@ struct TaskBehaviour {
   }
 };
 
-static_assert(is_trivial<TaskBehaviour>::value, "type is not trivial");
+static_assert(std::is_trivial<TaskBehaviour>::value, "type is not trivial");
 
 #endif

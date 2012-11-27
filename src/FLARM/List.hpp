@@ -27,7 +27,8 @@ Copyright_License {
 #include "Traffic.hpp"
 #include "NMEA/Validity.hpp"
 #include "Util/TrivialArray.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /**
  * This class keeps track of the traffic objects received from a
@@ -184,6 +185,6 @@ struct TrafficList {
   }
 };
 
-static_assert(is_trivial<TrafficList>::value, "type is not trivial");
+static_assert(std::is_trivial<TrafficList>::value, "type is not trivial");
 
 #endif

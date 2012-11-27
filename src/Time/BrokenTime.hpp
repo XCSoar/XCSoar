@@ -24,8 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_BROKEN_TIME_HPP
 #define XCSOAR_BROKEN_TIME_HPP
 
-#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -139,6 +140,6 @@ struct BrokenTime {
   }
 };
 
-static_assert(is_trivial<BrokenTime>::value, "type is not trivial");
+static_assert(std::is_trivial<BrokenTime>::value, "type is not trivial");
 
 #endif

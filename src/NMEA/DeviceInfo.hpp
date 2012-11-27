@@ -24,8 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_VERSION_INFO_H
 #define XCSOAR_VERSION_INFO_H
 
-#include "Util/TypeTraits.hpp"
 #include "Util/StaticString.hpp"
+
+#include <type_traits>
 
 /**
  * Some generic information about the connected device.
@@ -69,6 +70,6 @@ struct DeviceInfo {
   }
 };
 
-static_assert(is_trivial<DeviceInfo>::value, "type is not trivial");
+static_assert(std::is_trivial<DeviceInfo>::value, "type is not trivial");
 
 #endif

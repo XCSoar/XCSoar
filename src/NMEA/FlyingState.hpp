@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_FLYING_STATE_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Geo/GeoPoint.hpp"
+
+#include <type_traits>
 
 /**
  * Structure for flying state (takeoff/landing)
@@ -91,6 +92,6 @@ struct FlyingState
   }
 };
 
-static_assert(is_trivial<FlyingState>::value, "type is not trivial");
+static_assert(std::is_trivial<FlyingState>::value, "type is not trivial");
 
 #endif

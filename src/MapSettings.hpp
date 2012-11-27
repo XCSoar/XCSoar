@@ -31,8 +31,9 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Renderer/WaypointRendererSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -74,7 +75,7 @@ struct MapItemListSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<MapItemListSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<MapItemListSettings>::value, "type is not trivial");
 
 struct TrailSettings {
   /** Snailtrail wind drifting in circling mode */
@@ -100,7 +101,7 @@ struct TrailSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<TrailSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<TrailSettings>::value, "type is not trivial");
 
 // user interface options
 
@@ -179,6 +180,6 @@ struct MapSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<MapSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<MapSettings>::value, "type is not trivial");
 
 #endif

@@ -131,8 +131,7 @@ inline fixed accurate_half_sin(fixed a) {
 #define FIXED_DOUBLE(x) x.as_double()
 #define FIXED_INT(x) x.as_int()
 
-#include "Util/TypeTraits.hpp"
-
+#include <type_traits>
 #include <complex>
 #include <climits>
 
@@ -700,7 +699,7 @@ public:
   fixed abs() const;
 };
 
-static_assert(is_trivial<fixed>::value, "type is not trivial");
+static_assert(std::is_trivial<fixed>::value, "type is not trivial");
 
 constexpr
 inline bool fixed::positive() const

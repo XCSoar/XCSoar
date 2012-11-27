@@ -24,8 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_VARIO_SOUND_SETTINGS_HPP
 #define XCSOAR_VARIO_SOUND_SETTINGS_HPP
 
-#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -47,7 +48,7 @@ struct VarioSoundSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<VarioSoundSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<VarioSoundSettings>::value, "type is not trivial");
 
 #endif
 

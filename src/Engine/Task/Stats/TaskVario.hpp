@@ -4,7 +4,8 @@
 #include "Math/fixed.hpp"
 #include "Math/Filter.hpp"
 #include "Math/DiffFilter.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 struct GlideResult;
 
@@ -33,7 +34,7 @@ public:
   }
 };
 
-static_assert(is_trivial<TaskVario>::value, "type is not trivial");
+static_assert(std::is_trivial<TaskVario>::value, "type is not trivial");
 
 class TaskVarioComputer
 {

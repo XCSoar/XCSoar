@@ -28,7 +28,8 @@ Copyright_License {
 #include "FLARM/Version.hpp"
 #include "FLARM/Status.hpp"
 #include "FLARM/List.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /**
  * A container for all data received by a FLARM.
@@ -68,6 +69,6 @@ struct FlarmData {
   }
 };
 
-static_assert(is_trivial<FlarmData>::value, "type is not trivial");
+static_assert(std::is_trivial<FlarmData>::value, "type is not trivial");
 
 #endif

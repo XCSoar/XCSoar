@@ -23,8 +23,9 @@
 #ifndef CONTEST_RESULT_HPP
 #define CONTEST_RESULT_HPP
 
-#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
+
+#include <type_traits>
 
 struct ContestResult
 {
@@ -57,6 +58,6 @@ struct ContestResult
   }
 };
 
-static_assert(is_trivial<ContestResult>::value, "type is not trivial");
+static_assert(std::is_trivial<ContestResult>::value, "type is not trivial");
 
 #endif

@@ -24,8 +24,9 @@
 #define GEO_VECTOR_HPP
 
 #include "Math/Angle.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Compiler.h"
+
+#include <type_traits>
 
 struct GeoPoint;
 
@@ -108,6 +109,6 @@ struct GeoVector {
   }
 };
 
-static_assert(is_trivial<GeoVector>::value, "type is not trivial");
+static_assert(std::is_trivial<GeoVector>::value, "type is not trivial");
 
 #endif

@@ -24,9 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_CIRCLING_INFO_HPP
 #define XCSOAR_CIRCLING_INFO_HPP
 
-#include "Util/TypeTraits.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Math/fixed.hpp"
+
+#include <type_traits>
 
 /** Enumeration for cruise/circling mode detection */
 enum class CirclingMode: uint8_t {
@@ -110,6 +111,6 @@ struct CirclingInfo
   }
 };
 
-static_assert(is_trivial<CirclingInfo>::value, "type is not trivial");
+static_assert(std::is_trivial<CirclingInfo>::value, "type is not trivial");
 
 #endif

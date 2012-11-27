@@ -23,10 +23,11 @@ Copyright_License {
 #ifndef ANGLE_HPP
 #define ANGLE_HPP
 
-#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
 #include "FastTrig.hpp"
 #include "Compiler.h"
+
+#include <type_traits>
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -493,6 +494,6 @@ public:
   }
 };
 
-static_assert(is_trivial<Angle>::value, "type is not trivial");
+static_assert(std::is_trivial<Angle>::value, "type is not trivial");
 
 #endif

@@ -25,7 +25,8 @@ Copyright_License {
 #define XCSOAR_CLIMB_HISTORY_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 #include <assert.h>
 
@@ -68,6 +69,6 @@ public:
   }
 };
 
-static_assert(is_trivial<ClimbHistory>::value, "type is not trivial");
+static_assert(std::is_trivial<ClimbHistory>::value, "type is not trivial");
 
 #endif

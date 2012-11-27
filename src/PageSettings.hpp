@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_PAGE_SETTINGS_HPP
 #define XCSOAR_PAGE_SETTINGS_HPP
 
-#include "Util/TypeTraits.hpp"
+#include <type_traits>
 
 #include <tchar.h>
 
@@ -96,6 +96,6 @@ struct PageSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<PageSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<PageSettings>::value, "type is not trivial");
 
 #endif

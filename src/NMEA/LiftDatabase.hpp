@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_LIFT_DATABASE_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
 
+#include <type_traits>
 #include <array>
 
 class LiftDatabase : public std::array<fixed, 36> {
@@ -36,7 +36,7 @@ public:
   }
 };
 
-static_assert(is_trivial<LiftDatabase>::value, "type is not trivial");
+static_assert(std::is_trivial<LiftDatabase>::value, "type is not trivial");
 
 #ifdef __clang__
 #pragma GCC diagnostic push

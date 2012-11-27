@@ -27,7 +27,8 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "TeamCode.hpp"
 #include "FLARM/FlarmId.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /**
  * Settings for teamcode calculations
@@ -51,7 +52,7 @@ struct TeamCodeSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<TeamCodeSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<TeamCodeSettings>::value, "type is not trivial");
 
 #endif
 

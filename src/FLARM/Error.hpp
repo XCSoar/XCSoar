@@ -25,7 +25,8 @@ Copyright_License {
 #define XCSOAR_FLARM_ERROR_HPP
 
 #include "NMEA/Validity.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 #include <stdint.h>
 #include <tchar.h>
@@ -116,6 +117,6 @@ struct FlarmError {
   }
 };
 
-static_assert(is_trivial<FlarmError>::value, "type is not trivial");
+static_assert(std::is_trivial<FlarmError>::value, "type is not trivial");
 
 #endif

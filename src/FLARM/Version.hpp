@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "NMEA/Validity.hpp"
 #include "Util/StaticString.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /**
  * The FLARM version read from the PFLAV sentence.
@@ -55,6 +56,6 @@ struct FlarmVersion {
   }
 };
 
-static_assert(is_trivial<FlarmVersion>::value, "type is not trivial");
+static_assert(std::is_trivial<FlarmVersion>::value, "type is not trivial");
 
 #endif

@@ -30,7 +30,6 @@ Copyright_License {
 #include "Engine/Route/Config.hpp"
 #include "Engine/Contest/Settings.hpp"
 #include "Util/StaticString.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Geo/SpeedVector.hpp"
@@ -39,6 +38,8 @@ Copyright_License {
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "TeamCodeSettings.hpp"
 #include "Plane/Plane.hpp"
+
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -111,7 +112,7 @@ struct WindSettings {
   }
 };
 
-static_assert(is_trivial<WindSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<WindSettings>::value, "type is not trivial");
 
 /**
  * Glide polar settings
@@ -277,7 +278,7 @@ struct ComputerSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<ComputerSettings>::value,
+static_assert(std::is_trivial<ComputerSettings>::value,
               "type is not trivial");
 
 #endif

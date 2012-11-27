@@ -23,8 +23,9 @@
 #define TASK_SUMMARY_HPP
 
 #include "Util/TrivialArray.hpp"
-#include "Util/TypeTraits.hpp"
 #include "Math/fixed.hpp"
+
+#include <type_traits>
 
 struct TaskSummaryPoint {
   /** Distance planned to this point from previous, (m) */
@@ -67,6 +68,6 @@ struct TaskSummary {
   }
 };
 
-static_assert(is_trivial<TaskSummary>::value, "type is not trivial");
+static_assert(std::is_trivial<TaskSummary>::value, "type is not trivial");
 
 #endif

@@ -23,7 +23,7 @@
 #ifndef XCSOAR_CONTEST_SETTINGS_HPP
 #define XCSOAR_CONTEST_SETTINGS_HPP
 
-#include "Util/TypeTraits.hpp"
+#include <type_traits>
 
 #include <stdint.h>
 
@@ -67,6 +67,6 @@ struct ContestSettings {
   void SetDefaults();
 };
 
-static_assert(is_trivial<ContestSettings>::value, "type is not trivial");
+static_assert(std::is_trivial<ContestSettings>::value, "type is not trivial");
 
 #endif

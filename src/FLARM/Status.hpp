@@ -26,7 +26,8 @@ Copyright_License {
 
 #include "FLARM/Traffic.hpp"
 #include "NMEA/Validity.hpp"
-#include "Util/TypeTraits.hpp"
+
+#include <type_traits>
 
 /**
  * The FLARM operation status read from the PFLAU sentence.
@@ -66,6 +67,6 @@ struct FlarmStatus {
   }
 };
 
-static_assert(is_trivial<FlarmStatus>::value, "type is not trivial");
+static_assert(std::is_trivial<FlarmStatus>::value, "type is not trivial");
 
 #endif

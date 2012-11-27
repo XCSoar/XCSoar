@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_VARIO_INFO_HPP
 
 #include "Math/fixed.hpp"
-#include "Util/TypeTraits.hpp"
 #include "LiftDatabase.hpp"
+
+#include <type_traits>
 
 /** Derived vario data */
 struct VarioInfo
@@ -60,6 +61,6 @@ struct VarioInfo
   void Clear();
 };
 
-static_assert(is_trivial<VarioInfo>::value, "type is not trivial");
+static_assert(std::is_trivial<VarioInfo>::value, "type is not trivial");
 
 #endif

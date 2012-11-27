@@ -23,9 +23,10 @@
 #define GLIDERESULT_HPP
 
 #include "Geo/GeoVector.hpp"
-#include "Util/TypeTraits.hpp"
 #include "GlideSettings.hpp"
 #include "Compiler.h"
+
+#include <type_traits>
 
 struct GlideState;
 struct AircraftState;
@@ -317,6 +318,6 @@ private:
   void CalcCruiseBearing();
 };
 
-static_assert(is_trivial<GlideResult>::value, "type is not trivial");
+static_assert(std::is_trivial<GlideResult>::value, "type is not trivial");
 
 #endif
