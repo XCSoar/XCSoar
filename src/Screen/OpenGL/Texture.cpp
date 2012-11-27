@@ -321,11 +321,11 @@ GLTexture::Draw(PixelScalar dest_x, PixelScalar dest_y,
                 OpenGL::screen_height - OpenGL::translate.y - dest_y - dest_height,
                 0, dest_width, dest_height);
 #else
-  const PixelScalar vertices[] = {
-    dest_x, dest_y,
-    dest_x + int(dest_width), dest_y,
-    dest_x, dest_y + int(dest_height),
-    dest_x + int(dest_width), dest_y + int(dest_height),
+  const RasterPoint vertices[] = {
+    { dest_x, dest_y },
+    { dest_x + int(dest_width), dest_y },
+    { dest_x, dest_y + int(dest_height) },
+    { dest_x + int(dest_width), dest_y + int(dest_height) },
   };
 
   glVertexPointer(2, GL_VALUE, 0, vertices);
@@ -364,11 +364,11 @@ GLTexture::DrawFlipped(PixelRect dest, PixelRect src) const
                 OpenGL::screen_height - OpenGL::translate.y - dest.bottom,
                 0, dest.right - dest.left, dest.bottom - dest.top);
 #else
-  const PixelScalar vertices[] = {
-    dest.left, dest.top,
-    dest.right, dest.top,
-    dest.left, dest.bottom,
-    dest.right, dest.bottom,
+  const RasterPoint vertices[] = {
+    dest.GetTopLeft(),
+    dest.GetTopRight(),
+    dest.GetBottomLeft(),
+    dest.GetBottomRight(),
   };
 
   glVertexPointer(2, GL_VALUE, 0, vertices);

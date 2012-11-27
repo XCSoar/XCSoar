@@ -113,6 +113,22 @@ struct PixelRect {
   constexpr PixelSize GetSize() const {
     return { right - left, bottom - top };
   }
+
+  constexpr RasterPoint GetTopLeft() const {
+    return { left, top };
+  }
+
+  constexpr RasterPoint GetTopRight() const {
+    return { right, top };
+  }
+
+  constexpr RasterPoint GetBottomLeft() const {
+    return { left, bottom };
+  }
+
+  constexpr RasterPoint GetBottomRight() const {
+    return { right, bottom };
+  }
 };
 
 #endif
