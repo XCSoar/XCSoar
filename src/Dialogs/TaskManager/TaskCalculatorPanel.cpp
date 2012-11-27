@@ -75,8 +75,8 @@ TaskCalculatorPanel::Refresh()
   LoadValue(AAT_ESTIMATED, (common_stats.task_time_remaining
                             + common_stats.task_time_elapsed) / 60);
 
-  SetRowVisible(AAT_TIME, task_stats.has_targets);
-  if (task_stats.has_targets)
+  SetRowVisible(AAT_TIME, common_stats.ordered_has_targets);
+  if (common_stats.ordered_has_targets)
     LoadValue(AAT_TIME,
               protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
 
