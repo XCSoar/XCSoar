@@ -940,12 +940,6 @@ OrderedTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor) const
   Visit(task_points, visitor);
 }
 
-void 
-OrderedTask::AcceptStartPointVisitor(TaskPointConstVisitor& visitor) const
-{
-  Visit(optional_start_points, visitor);
-}
-
 static void
 ResetPoints(OrderedTask::OrderedTaskPointVector &points)
 {
