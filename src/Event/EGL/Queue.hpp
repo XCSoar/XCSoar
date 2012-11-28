@@ -66,10 +66,17 @@ class EventQueue : private NonCopyable {
   Poll poll;
   EventPipe event_pipe;
 
+  enum class InputState : uint8_t {
+    NONE, ESCAPE, ESCAPE_BRACKET, ESCAPE_NUMBER,
+  } input_state;
+
+  unsigned input_number;
+
   bool running;
 
 public:
   EventQueue();
+  ~EventQueue();
 
   void Quit() {
     running = false;
@@ -84,6 +91,8 @@ private:
   int GetTimeout() const;
 
   void Poll();
+  void PushKeyPress(unsigned key_code);
+  void HandleInputByte(char ch);
   void Fill();
   bool Generate(Event &event);
 

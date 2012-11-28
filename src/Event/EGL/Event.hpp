@@ -32,6 +32,7 @@ struct Event {
   enum Type {
     NOP,
     QUIT,
+    CLOSE,
     TIMER,
     USER,
 

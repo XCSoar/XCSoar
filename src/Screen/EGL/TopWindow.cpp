@@ -65,6 +65,10 @@ TopWindow::OnEvent(const Event &event)
   case Event::CALLBACK:
     break;
 
+  case Event::CLOSE:
+    OnClose();
+    break;
+
   case Event::KEY_DOWN:
     w = GetFocusedWindow();
     if (w == NULL)
