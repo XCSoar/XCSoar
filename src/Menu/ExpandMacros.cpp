@@ -92,16 +92,14 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                  const DerivedInfo &calculated,
                  const ComputerSettings &settings_computer)
 {
-  if (protected_task_manager == NULL)
-    return true;
+  const TaskStats &task_stats = calculated.task_stats;
+  const CommonStats &common_stats = calculated.common_stats;
 
   bool invalid = false;
-  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
 
   if (_tcsstr(OutBuffer, _T("$(CheckTaskResumed)"))) {
     // TODO code: check, does this need to be set with temporary task?
-    if (task_manager->IsMode(TaskManager::MODE_ABORT) ||
-        task_manager->IsMode(TaskManager::MODE_GOTO))
+    if (common_stats.mode_abort || common_stats.mode_goto)
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckTaskResumed)"), _T(""), Size);
   }
@@ -113,9 +111,14 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     ReplaceInString(OutBuffer, _T("$(CheckTask)"), _T(""), Size);
   }
 
+  if (protected_task_manager == NULL)
+    return true;
+
+  ProtectedTaskManager::Lease task_manager(*protected_task_manager);
+
   const AbstractTask *task = task_manager->GetActiveTask();
-  if (task == NULL || !task->CheckTask() ||
-      task_manager->IsMode(TaskManager::MODE_GOTO)) {
+  if (task == NULL || !task_stats.task_valid ||
+      common_stats.mode_goto) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       invalid = true;
@@ -138,43 +141,43 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
           _("Previous Turnpoint"), Size);
     }
 
-  } else if (task_manager->IsMode(TaskManager::MODE_ABORT)) {
+  } else if (common_stats.mode_abort) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
-      if (!task->IsValidTaskPoint(1))
+      if (!common_stats.active_has_next)
         invalid = true;
 
-      CondReplaceInString(task->IsValidTaskPoint(1) && !task->IsValidTaskPoint(2),
+      CondReplaceInString(common_stats.next_is_last,
                           OutBuffer,
                           _T("$(WaypointNext)"),
                           _("Furthest Landpoint"),
                           _("Next Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      if (!task->IsValidTaskPoint(-1))
+      if (!common_stats.active_has_previous)
         invalid = true;
 
-      CondReplaceInString(task->IsValidTaskPoint(-1) && !task->IsValidTaskPoint(-2),
+      CondReplaceInString(common_stats.previous_is_first,
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
                           _("Closest Landpoint"),
                           _("Previous Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
-      if (!task->IsValidTaskPoint(1))
+      if (!common_stats.active_has_next)
         invalid = true;
 
-      CondReplaceInString(task->IsValidTaskPoint(1) && !task->IsValidTaskPoint(2),
+      CondReplaceInString(common_stats.next_is_last,
                           OutBuffer,
                           _T("$(WaypointNextArm)"),
                           _("Furthest Landpoint"),
                           _("Next Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
-      if (!task->IsValidTaskPoint(-1))
+      if (!common_stats.active_has_previous)
         invalid = true;
 
-      CondReplaceInString(task->IsValidTaskPoint(-1) && !task->IsValidTaskPoint(-2),
+      CondReplaceInString(common_stats.previous_is_first,
                           OutBuffer,
                           _T("$(WaypointPreviousArm)"),
                           _("Closest Landpoint"),
@@ -183,13 +186,13 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   } else { // ordered task mode
 
-    const bool next_is_final = task->IsValidTaskPoint(1) && !task->IsValidTaskPoint(2);
-    const bool previous_is_start = task->IsValidTaskPoint(-1) && !task->IsValidTaskPoint(-2);
+    const bool next_is_final = common_stats.next_is_last;
+    const bool previous_is_start = common_stats.previous_is_first;
     const bool has_optional_starts = calculated.common_stats.ordered_has_optional_starts;
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext
-      if (!task->IsValidTaskPoint(1))
+      if (!common_stats.active_has_next)
         invalid = true;
 
       CondReplaceInString(next_is_final,
@@ -200,7 +203,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
 
-      if (has_optional_starts && !task->IsValidTaskPoint(-1)) {
+      if (has_optional_starts && !common_stats.active_has_previous) {
         ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"), _("Next Startpoint"), Size);
       } else {
 
@@ -210,7 +213,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                             _("Start Turnpoint"),
                             _("Previous Turnpoint"), Size);
 
-        if (!task->IsValidTaskPoint(-1))
+        if (!common_stats.active_has_previous)
           invalid = true;
       }
 
@@ -227,7 +230,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                             _T("$(WaypointNextArm)"),
                             _("Finish Turnpoint"),
                             _("Next Turnpoint"), Size);
-        if (!task->IsValidTaskPoint(1))
+        if (!common_stats.active_has_next)
           invalid = true;
         break;
       case TaskAdvance::START_DISARMED:
@@ -246,7 +249,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::START_DISARMED:
       case TaskAdvance::TURN_DISARMED:
 
-        if (has_optional_starts && !task->IsValidTaskPoint(-1)) {
+        if (has_optional_starts && !common_stats.active_has_previous) {
           ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Next Startpoint"), Size);
         } else {
 
@@ -256,7 +259,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                               _("Start Turnpoint"),
                               _("Previous Turnpoint"), Size);
 
-          if (!task->IsValidTaskPoint(-1))
+          if (!common_stats.active_has_previous)
             invalid = true;
         }
 
@@ -315,12 +318,12 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
-    if (task_manager->IsMode(TaskManager::MODE_GOTO)) {
-      CondReplaceInString(task_manager->GetOrderedTask().CheckTask(),
+    if (common_stats.mode_goto) {
+      CondReplaceInString(common_stats.ordered_valid,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
     } else 
-      CondReplaceInString(task_manager->IsMode(TaskManager::MODE_ABORT),
+      CondReplaceInString(common_stats.mode_abort,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
   }
