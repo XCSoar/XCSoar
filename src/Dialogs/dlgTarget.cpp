@@ -516,7 +516,7 @@ GetTaskData(DataFieldEnum &df)
 
   const OrderedTask &task = task_manager->GetOrderedTask();
 
-  initial_active_task_point = task_manager->GetActiveTaskPointIndex();
+  initial_active_task_point = task.GetActiveIndex();
   task_size = task.TaskSize();
 
   for (unsigned i = initial_active_task_point; i < task_size; i++) {
