@@ -25,11 +25,10 @@ Copyright_License {
 #include "OS/Clock.hpp"
 #include "Util/Macros.hpp"
 
-#include <poll.h>
-
 EventQueue::EventQueue():running(true)
 {
   event_pipe.Create();
+  poll.SetMask(event_pipe.GetReadFD(), Poll::READ);
 }
 
 void
@@ -60,11 +59,7 @@ EventQueue::GetTimeout() const
 void
 EventQueue::Poll()
 {
-  pollfd pfds[1] = {
-    { event_pipe.GetReadFD(), POLLIN },
-  };
-
-  poll(pfds, ARRAY_SIZE(pfds), GetTimeout());
+  poll.Wait(GetTimeout());
   event_pipe.Read();
 }
 

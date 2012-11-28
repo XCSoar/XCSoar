@@ -27,6 +27,7 @@ Copyright_License {
 #include "Event.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
+#include "OS/Poll.hpp"
 #include "OS/EventPipe.hpp"
 
 #include <queue>
@@ -62,6 +63,7 @@ class EventQueue : private NonCopyable {
 
   std::multiset<TimerRecord> timers;
 
+  Poll poll;
   EventPipe event_pipe;
 
   bool running;
