@@ -294,11 +294,6 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
   }
 }
 
-#if GCC_VERSION >= 40400 && GCC_VERSION < 40500
-/* workaround for bogus warning on Android's gcc 4.4 */
-#pragma GCC diagnostic ignored "-Wtype-limits"
-#endif
-
 void
 InputEvents::eventDeclutterLabels(const TCHAR *misc)
 {
