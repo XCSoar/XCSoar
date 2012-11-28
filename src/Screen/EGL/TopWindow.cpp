@@ -28,6 +28,11 @@ Copyright_License {
 #include "Event/EGL/Queue.hpp"
 #include "Event/EGL/Globals.hpp"
 
+#ifdef USE_VIDEOCORE
+#include "Util/Macros.hpp"
+#include "Screen/Layout.hpp"
+#endif
+
 void
 TopWindow::SetCaption(const TCHAR *caption)
 {
@@ -48,9 +53,31 @@ TopWindow::Invalidate()
 void
 TopWindow::OnResize(UPixelScalar width, UPixelScalar height)
 {
+  event_queue->SetScreenSize(GetWidth(), GetHeight());
   screen->OnResize(width, height);
   ContainerWindow::OnResize(width, height);
 }
+
+#ifdef USE_VIDEOCORE
+void
+TopWindow::OnPaint(Canvas &canvas)
+{
+  ContainerWindow::OnPaint(canvas);
+
+  /* draw the mouse cursor */
+
+  const RasterPoint m = event_queue->GetMousePosition();
+  const RasterPoint p[] = {
+    { m.x, m.y },
+    { m.x + Layout::Scale(4), m.y + Layout::Scale(4) },
+    { m.x, m.y + Layout::Scale(6) },
+  };
+
+  canvas.SelectBlackPen();
+  canvas.SelectWhiteBrush();
+  canvas.DrawTriangleFan(p, ARRAY_SIZE(p));
+}
+#endif
 
 bool
 TopWindow::OnEvent(const Event &event)
@@ -84,6 +111,11 @@ TopWindow::OnEvent(const Event &event)
     return w->OnKeyUp(event.param);
 
   case Event::MOUSE_MOTION:
+#ifdef USE_VIDEOCORE
+    /* redraw to update the mouse cursor position */
+    Invalidate();
+#endif
+
     // XXX keys
     return OnMouseMove(event.x, event.y, 0);
 

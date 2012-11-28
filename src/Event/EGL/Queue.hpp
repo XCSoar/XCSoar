@@ -29,6 +29,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "OS/Poll.hpp"
 #include "OS/EventPipe.hpp"
+#include "OS/FileDescriptor.hpp"
 
 #include <queue>
 #include <set>
@@ -57,6 +58,10 @@ class EventQueue : private NonCopyable {
     }
   };
 
+  unsigned screen_width, screen_height;
+  unsigned mouse_x, mouse_y;
+  bool mouse_pressed;
+
   Mutex mutex;
 
   std::queue<Event> events;
@@ -65,6 +70,7 @@ class EventQueue : private NonCopyable {
 
   Poll poll;
   EventPipe event_pipe;
+  FileDescriptor mouse;
 
   enum class InputState : uint8_t {
     NONE, ESCAPE, ESCAPE_BRACKET, ESCAPE_NUMBER,
@@ -77,6 +83,12 @@ class EventQueue : private NonCopyable {
 public:
   EventQueue();
   ~EventQueue();
+
+  void SetScreenSize(unsigned width, unsigned height);
+
+  RasterPoint GetMousePosition() const {
+    return { mouse_x, mouse_y };
+  }
 
   void Quit() {
     running = false;

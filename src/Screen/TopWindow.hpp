@@ -316,6 +316,10 @@ protected:
 
   virtual bool OnClose();
 
+#ifdef USE_VIDEOCORE
+  virtual void OnPaint(Canvas &canvas) gcc_override;
+#endif
+
 #ifdef USE_GDI
   virtual LRESULT OnMessage(HWND _hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam) gcc_override;

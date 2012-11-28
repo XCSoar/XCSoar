@@ -36,7 +36,9 @@ Copyright_License {
 static struct termios restore_attr;
 
 EventQueue::EventQueue()
-  :input_state(InputState::NONE), running(true)
+  :screen_width(0), screen_height(0),
+   mouse_x(0), mouse_y(0), mouse_pressed(false),
+   input_state(InputState::NONE), running(true)
 {
   event_pipe.Create();
   poll.SetMask(event_pipe.GetReadFD(), Poll::READ);
@@ -56,11 +58,30 @@ EventQueue::EventQueue()
   }
 
   poll.SetMask(STDIN_FILENO, Poll::READ);
+
+  if (mouse.OpenReadOnly("/dev/input/mice")) {
+    mouse.SetNonBlocking();
+    poll.SetMask(mouse.Get(), Poll::READ);
+  }
 }
 
 EventQueue::~EventQueue()
 {
   tcsetattr(STDIN_FILENO, TCSANOW, &restore_attr);
+}
+
+void
+EventQueue::SetScreenSize(unsigned width, unsigned height)
+{
+  if (width != screen_width) {
+    screen_width = width;
+    mouse_x = screen_width / 2;
+  }
+
+  if (height != screen_height) {
+    screen_height = height;
+    mouse_y = screen_height / 2;
+  }
 }
 
 void
@@ -204,6 +225,40 @@ EventQueue::Fill()
   } else if (nbytes == 0 || errno != EAGAIN) {
     running = false;
   }
+
+  const unsigned old_x = mouse_x, old_y = mouse_y;
+  const bool old_pressed = mouse_pressed;
+  int8_t mb[3];
+  while (read(mouse.Get(), mb, sizeof(mb)) == sizeof(mb)) {
+    mouse_pressed = (mb[0] & 0x7) != 0;
+
+    const int dx = mb[1], dy = mb[2];
+
+    if (screen_width > 0) {
+      int new_x = mouse_x + dx;
+      if (new_x < 0)
+        new_x = 0;
+      else if (unsigned(new_x) > screen_width)
+        new_x = screen_width - 1;
+      mouse_x = new_x;
+    }
+
+    if (screen_height > 0) {
+      int new_y = mouse_y - dy;
+      if (new_y < 0)
+        new_y = 0;
+      else if (unsigned(new_y) > screen_height)
+        new_y = screen_height - 1;
+      mouse_y = new_y;
+    }
+  }
+
+  if (mouse_x != old_x || mouse_y != old_y)
+    events.push(Event(Event::MOUSE_MOTION, mouse_x, mouse_y));
+
+  if (mouse_pressed != old_pressed)
+    events.push(Event(mouse_pressed ? Event::MOUSE_DOWN : Event::MOUSE_UP,
+                      mouse_x, mouse_y));
 }
 
 bool
