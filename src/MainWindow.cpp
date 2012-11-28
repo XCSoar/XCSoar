@@ -428,12 +428,6 @@ MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout i
 }
 
 void
-MainWindow::ReinitialisePosition()
-{
-  FastMove(SystemWindowSize());
-}
-
-void
 MainWindow::Destroy()
 {
   Deinitialise();

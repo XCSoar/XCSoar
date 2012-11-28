@@ -183,12 +183,6 @@ private:
 
   void ReinitialiseLayoutTA(PixelRect rc, const InfoBoxLayout::Layout &layout);
 
-  /**
-   * Adjust the window position and size, to make it full-screen again
-   * after display rotation.
-   */
-  void ReinitialisePosition();
-
 public:
   /**
    * Called by XCSoarInterface::Startup() after startup has been
