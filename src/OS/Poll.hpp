@@ -104,7 +104,7 @@ public:
    * @return false on error
    */
   bool Wait(int timeout_ms=-1) {
-    return poll(&list[0], list.size(), -1) >= 0;
+    return poll(&list[0], list.size(), timeout_ms) >= 0;
   }
 
   /**
