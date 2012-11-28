@@ -55,14 +55,10 @@ public:
  */
 class AbortTask: public UnorderedTask
 {
-public:
   /** max number of items in list */
-  static const unsigned max_abort;
-  /** min search range in m */
-  static const fixed min_search_range;
-  /** max search range in m */
-  static const fixed max_search_range;
+  static constexpr unsigned max_abort = 10;
 
+public:
   struct Alternate {
     Waypoint waypoint;
 

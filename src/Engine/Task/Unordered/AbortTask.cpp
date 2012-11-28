@@ -30,9 +30,11 @@
 #include "Waypoint/WaypointVisitor.hpp"
 #include "Util/ReservablePriorityQueue.hpp"
 
-const unsigned AbortTask::max_abort = 10; 
-const fixed AbortTask::min_search_range(50000.0);
-const fixed AbortTask::max_search_range(100000.0);
+/** min search range in m */
+static constexpr fixed min_search_range = fixed(50000);
+
+/** max search range in m */
+static constexpr fixed max_search_range = fixed(100000);
 
 AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
                      const Waypoints &wps)
