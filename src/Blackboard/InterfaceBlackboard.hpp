@@ -48,6 +48,10 @@ public:
     return ui_settings;
   }
 
+  inline void ReadCommonStats(const CommonStats &common_stats) {
+    calculated_info.common_stats = common_stats;
+  }
+
   void ReadComputerSettings(const ComputerSettings &settings);
 };
 

@@ -187,6 +187,12 @@ namespace CommonInterface {
     Private::blackboard.ReadBlackboardCalculated(derived_info);
   }
 
+  static inline void ReadCommonStats(const CommonStats &common_stats) {
+    assert(InMainThread());
+
+    Private::blackboard.ReadCommonStats(common_stats);
+  }
+
   static inline void AddListener(BlackboardListener &listener) {
     assert(InMainThread());
 
