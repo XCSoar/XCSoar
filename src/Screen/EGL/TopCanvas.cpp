@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/OpenGL/Init.hpp"
 #include "Screen/OpenGL/EGL.hpp"
 #include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Features.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,8 +52,6 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
 
   const EGLNativeDisplayType native_display = x_display;
   const EGLNativeWindowType native_window = x_window;
-  const EGLenum bind_api = EGL_OPENGL_API;
-  const EGLint renderable_type = EGL_OPENGL_BIT;
 #elif defined(USE_VIDEOCORE)
   vc_display = vc_dispmanx_display_open(0);
   vc_update = vc_dispmanx_update_start(0);
@@ -80,8 +79,6 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
 
   const EGLNativeDisplayType native_display = EGL_DEFAULT_DISPLAY;
   const EGLNativeWindowType native_window = &vc_window;
-  const EGLenum bind_api = EGL_OPENGL_ES_API;
-  const EGLint renderable_type = EGL_OPENGL_ES_BIT;
 #endif
 
   display = eglGetDisplay(native_display);
@@ -95,7 +92,7 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
     exit(EXIT_FAILURE);
   }
 
-  if (!eglBindAPI(bind_api)) {
+  if (!eglBindAPI(HaveGLES() ? EGL_OPENGL_ES_API : EGL_OPENGL_API)) {
     fprintf(stderr, "eglBindAPI() failed\n");
     exit(EXIT_FAILURE);
   }
@@ -105,7 +102,7 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
     EGL_GREEN_SIZE, 8,
     EGL_BLUE_SIZE, 8,
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-    EGL_RENDERABLE_TYPE, renderable_type,
+    EGL_RENDERABLE_TYPE, HaveGLES() ? EGL_OPENGL_ES_BIT : EGL_OPENGL_BIT,
     EGL_NONE
   };
 
