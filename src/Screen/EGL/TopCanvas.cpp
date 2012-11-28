@@ -98,9 +98,6 @@ TopCanvas::Create(UPixelScalar width, UPixelScalar height,
   }
 
   static constexpr EGLint attributes[] = {
-    EGL_RED_SIZE, 8,
-    EGL_GREEN_SIZE, 8,
-    EGL_BLUE_SIZE, 8,
     EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
     EGL_RENDERABLE_TYPE, HaveGLES() ? EGL_OPENGL_ES_BIT : EGL_OPENGL_BIT,
     EGL_NONE
