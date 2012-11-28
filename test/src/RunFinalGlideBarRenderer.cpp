@@ -125,9 +125,9 @@ public:
   }
 
 
-  void Create(PixelRect _rc) {
+  void Create(PixelSize size) {
     SingleWindow::Create(_T("RunFinalGlideBarRenderer"),
-                         _rc);
+                         size);
 
     const PixelRect rc = GetClientRect();
 
@@ -196,7 +196,7 @@ Main()
   task_look.Initialise();
 
   TestWindow window(final_glide_look, task_look);
-  window.Create(PixelRect{0, 0, 60, 320});
+  window.Create({60, 320});
 
   window.Show();
   window.RunEventLoop();

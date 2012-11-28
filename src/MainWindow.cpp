@@ -128,9 +128,9 @@ MainWindow::~MainWindow()
 }
 
 void
-MainWindow::Create(PixelRect rc, TopWindowStyle style)
+MainWindow::Create(PixelSize size, TopWindowStyle style)
 {
-  SingleWindow::Create(title, rc, style);
+  SingleWindow::Create(title, size, style);
 }
 
 gcc_noreturn

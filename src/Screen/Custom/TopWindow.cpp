@@ -30,21 +30,17 @@ TopWindow::~TopWindow()
 }
 
 void
-TopWindow::Create(const TCHAR *text, PixelRect rc,
+TopWindow::Create(const TCHAR *text, PixelSize size,
                   TopWindowStyle style)
 {
   invalidated.store(true, std::memory_order_relaxed);
 
-  rc.right -= rc.left;
-  rc.bottom -= rc.top;
-  rc.left = rc.top = 0;
-
   delete screen;
   screen = new TopCanvas();
-  screen->Create(rc.right, rc.bottom,
+  screen->Create(size.cx, size.cy,
                  style.GetFullScreen(), style.GetResizable());
 
-  ContainerWindow::Create(NULL, rc, style);
+  ContainerWindow::Create(NULL, screen->GetRect(), style);
 
   SetCaption(text);
 }

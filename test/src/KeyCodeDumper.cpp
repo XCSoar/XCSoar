@@ -123,8 +123,8 @@ class TestWindow : public SingleWindow {
   };
 
 public:
-  void Create(PixelRect _rc) {
-    SingleWindow::Create(_T("KeyCodeDumper"), _rc);
+  void Create(PixelSize size) {
+    SingleWindow::Create(_T("KeyCodeDumper"), size);
 
     PixelRect rc = GetClientRect();
 
@@ -163,7 +163,7 @@ static void
 Main()
 {
   TestWindow window;
-  window.Create(PixelRect{0, 0, 240, 100});
+  window.Create({240, 100});
   window.Show();
 
   window.RunEventLoop();

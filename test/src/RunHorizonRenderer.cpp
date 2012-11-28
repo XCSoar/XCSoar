@@ -75,11 +75,11 @@ public:
     timer.Cancel();
   }
 
-  void Create(PixelRect _rc) {
+  void Create(PixelSize size) {
     TopWindowStyle style;
     style.Resizable();
 
-    SingleWindow::Create(_T("RunHorizonRenderer"), _rc, style);
+    SingleWindow::Create(_T("RunHorizonRenderer"), size, style);
 
     const PixelRect rc = GetClientRect();
 
@@ -132,7 +132,7 @@ Main()
   horizon_look.Initialise();
 
   TestWindow window(horizon_look);
-  window.Create(PixelRect{0, 0, 160, 160});
+  window.Create({160, 160});
 
   window.Show();
   window.RunEventLoop();

@@ -64,16 +64,13 @@ ParseCommandLine(Args &args)
 static void
 Main()
 {
-  PixelRect screen_rc{0, 0, 320, 240};
-  if (portrait) {
-    screen_rc.right = 240;
-    screen_rc.bottom = 320;
-  }
+  PixelSize screen_size(320, 240);
+  if (portrait)
+    std::swap(screen_size.cx, screen_size.cy);
 
-  Layout::Initialize(screen_rc.right - screen_rc.left,
-                     screen_rc.bottom - screen_rc.top);
+  Layout::Initialize(screen_size.cx, screen_size.cy);
   SingleWindow main_window;
-  main_window.Create(_T("RunDialog"), screen_rc);
+  main_window.Create(_T("RunDialog"), screen_size);
   main_window.Show();
 
   WndForm *form = LoadDialog(NULL, main_window, xmlfile.c_str());

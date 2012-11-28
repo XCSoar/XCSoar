@@ -90,7 +90,7 @@ Main()
 
   SingleWindow main_window;
   main_window.Create(_T("RunAirspaceWarningDialog"),
-                     PixelRect{0, 0, 640, 480});
+                     {640, 480});
   main_window.Show();
 
   dlgAirspaceWarningsShowModal(main_window, *airspace_warnings);

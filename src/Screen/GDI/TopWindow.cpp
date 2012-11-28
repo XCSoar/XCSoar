@@ -49,7 +49,7 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
 }
 
 void
-TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
                   TopWindowStyle style)
 {
   hSavedFocus = nullptr;
@@ -63,7 +63,14 @@ TopWindow::Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
   s_sai.cbSize = sizeof(s_sai);
 #endif
 
-  Window::Create(NULL, cls, text, rc, style);
+#ifdef _WIN32_WCE
+  /* full-screen on Windows CE */
+  const RasterPoint position(0, 0);
+#else
+  const RasterPoint position(CW_USEDEFAULT, CW_USEDEFAULT);
+#endif
+
+  Window::Create(NULL, cls, text, PixelRect(position, size), style);
 }
 
 #ifdef _WIN32_WCE

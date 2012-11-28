@@ -173,7 +173,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
 #ifdef ENABLE_MAIN_WINDOW
-  main_window.Create(_T("Test"), PixelRect{0, 0, 640, 480});
+  main_window.Create(_T("Test"), {640, 480});
   main_window.Show();
 #endif
 

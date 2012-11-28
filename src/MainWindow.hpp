@@ -147,7 +147,7 @@ protected:
   void KillWidget();
 
 public:
-  void Create(PixelRect rc, TopWindowStyle style=TopWindowStyle());
+  void Create(PixelSize size, TopWindowStyle style=TopWindowStyle());
 
   void Destroy();
 

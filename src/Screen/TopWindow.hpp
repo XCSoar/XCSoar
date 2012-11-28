@@ -188,10 +188,10 @@ public:
 #ifdef USE_GDI
   static bool find(const TCHAR *cls, const TCHAR *text);
 
-  void Create(const TCHAR *cls, const TCHAR *text, PixelRect rc,
+  void Create(const TCHAR *cls, const TCHAR *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle());
 #else
-  void Create(const TCHAR *text, PixelRect rc,
+  void Create(const TCHAR *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle());
 #endif
 

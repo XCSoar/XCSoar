@@ -38,8 +38,8 @@ public:
   TestWindow(const TerminalLook &look)
     :terminal(look), timer(*this) {}
 
-  void Create(PixelRect _rc) {
-    SingleWindow::Create(_T("RunTerminal"), _rc);
+  void Create(PixelSize size) {
+    SingleWindow::Create(_T("RunTerminal"), size);
 
     PixelRect rc = GetClientRect();
 
@@ -79,7 +79,7 @@ Main()
   look.Initialise(monospace_font);
 
   TestWindow window(look);
-  window.Create(PixelRect{0, 0, 400, 400});
+  window.Create({400, 400});
   window.Show();
 
   window.RunEventLoop();

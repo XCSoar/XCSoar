@@ -73,12 +73,12 @@ class TestWindow : public SingleWindow
   };
 
 public:
-  void Create(PixelRect _rc) {
+  void Create(PixelSize size) {
     TopWindowStyle style;
     style.Resizable();
 
     SingleWindow::Create(_T("RunFAITriangleSectorRenderer"),
-                         _rc, style);
+                         size, style);
 
     const PixelRect rc = GetClientRect();
 
@@ -114,7 +114,7 @@ static void
 Main()
 {
   TestWindow window;
-  window.Create(PixelRect{0, 0, 640, 480});
+  window.Create({640, 480});
 
   window.Show();
   window.RunEventLoop();

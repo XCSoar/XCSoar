@@ -60,7 +60,7 @@ static void
 Main()
 {
   TestWindow window;
-  window.Create(_T("ViewImage"), PixelRect{0, 0, 640, 480});
+  window.Create(_T("ViewImage"), {640, 480});
   if (window.LoadFile(path.c_str()))
     window.RunEventLoop();
   else

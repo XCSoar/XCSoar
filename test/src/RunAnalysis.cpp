@@ -197,7 +197,7 @@ Main()
 
   SingleWindow main_window;
   main_window.Create(_T("RunAnalysis"),
-                     PixelRect{0, 0, 640, 480});
+                     {640, 480});
 
   dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,
                        &protected_task_manager,

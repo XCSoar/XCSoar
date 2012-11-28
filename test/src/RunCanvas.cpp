@@ -63,8 +63,8 @@ public:
 #endif
   {}
 
-  void Create(PixelRect _rc) {
-    SingleWindow::Create(_T("RunCanvas"), _rc);
+  void Create(PixelSize size) {
+    SingleWindow::Create(_T("RunCanvas"), size);
 
     PixelRect rc = GetClientRect();
 
@@ -235,7 +235,7 @@ static void
 Main()
 {
   TestWindow window;
-  window.Create(PixelRect{0, 0, 250, 250});
+  window.Create({250, 250});
   window.Show();
 
   window.RunEventLoop();

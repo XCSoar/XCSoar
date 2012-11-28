@@ -56,12 +56,12 @@ public:
   static bool RegisterClass(HINSTANCE hInstance);
 #endif
 
-  void Create(const TCHAR *text, PixelRect rc,
+  void Create(const TCHAR *text, PixelSize size,
               TopWindowStyle style=TopWindowStyle()) {
 #ifdef USE_GDI
-    TopWindow::Create(class_name, text, rc, style);
+    TopWindow::Create(class_name, text, size, style);
 #else
-    TopWindow::Create(text, rc, style);
+    TopWindow::Create(text, size, style);
 #endif
   }
 

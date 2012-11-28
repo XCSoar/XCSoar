@@ -114,38 +114,24 @@ StartupLogFreeRamAndStorage()
  * Returns the screen dimension rect to be used
  * @return The screen dimension rect to be used
  */
-PixelRect
+PixelSize
 SystemWindowSize()
 {
-  PixelRect WindowSize;
-
 #if defined(WIN32) && !defined(_WIN32_WCE)
   unsigned width = CommandLine::width + 2 * GetSystemMetrics(SM_CXFIXEDFRAME);
   unsigned height = CommandLine::height + 2 * GetSystemMetrics(SM_CYFIXEDFRAME)
     + GetSystemMetrics(SM_CYCAPTION);
 
-  WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
-  WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
-
-  WindowSize.right = WindowSize.left + width;
-  WindowSize.bottom = WindowSize.top + height;
+  return { width, height };
 #else
-  WindowSize.left = 0;
-  WindowSize.top = 0;
-
   #ifdef WIN32
-  WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
-  WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
+  return { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 #elif defined(ANDROID)
-  WindowSize.right = native_view->get_width();
-  WindowSize.bottom = native_view->get_height();
+  return { native_view->get_width(), native_view->get_height() };
   #else /* !WIN32 */
   /// @todo implement this properly for SDL/UNIX
-  WindowSize.right = CommandLine::width;
-  WindowSize.bottom = CommandLine::height;
+  return { CommandLine::width, CommandLine::height };
   #endif /* !WIN32 */
 
 #endif
-
-  return WindowSize;
 }

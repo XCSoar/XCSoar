@@ -25,7 +25,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct PixelRect;
+struct PixelSize;
 
 #ifdef _WIN32_WCE
 void MyCompactHeaps();
@@ -35,7 +35,7 @@ unsigned long FindFreeSpace(const TCHAR *path);
 
 void StartupLogFreeRamAndStorage();
 
-PixelRect
+PixelSize
 SystemWindowSize();
 
 #endif

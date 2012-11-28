@@ -90,12 +90,12 @@ public:
     timer.Cancel();
   }
 
-  void Create(PixelRect _rc) {
+  void Create(PixelSize size) {
     TopWindowStyle style;
     style.Resizable();
 
     SingleWindow::Create(_T("RunWindArrowRenderer"),
-                         _rc, style);
+                         size, style);
 
     const PixelRect rc = GetClientRect();
 
@@ -149,7 +149,7 @@ Main()
   wind_look.Initialise(bold_font);
 
   TestWindow window(wind_look);
-  window.Create(PixelRect{0, 0, 160, 160});
+  window.Create({160, 160});
 
   window.Show();
   window.RunEventLoop();

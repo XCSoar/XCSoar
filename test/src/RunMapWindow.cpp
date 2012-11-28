@@ -114,11 +114,11 @@ public:
   {
   }
 
-  void Create(PixelRect _rc) {
+  void Create(PixelSize size) {
     TopWindowStyle style;
     style.Resizable();
 
-    SingleWindow::Create(_T("RunMapWindow"), _rc, style);
+    SingleWindow::Create(_T("RunMapWindow"), size, style);
 
     PixelRect rc = GetClientRect();
     map.Create(*this, rc);
@@ -266,7 +266,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   traffic_look->Initialise();
 
   TestWindow window(*map_look, *traffic_look);
-  window.Create(PixelRect{0, 0, 640, 480});
+  window.Create({640, 480});
 
   GenerateBlackboard(window.map, settings_computer, settings_map);
   Fonts::Initialize();

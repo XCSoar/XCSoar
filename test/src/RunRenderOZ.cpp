@@ -203,8 +203,8 @@ public:
     delete type_list;
   }
 
-  void Create(const DialogLook &look, PixelRect _rc) {
-    SingleWindow::Create(_T("RunRenderOZ"), _rc);
+  void Create(const DialogLook &look, PixelSize size) {
+    SingleWindow::Create(_T("RunRenderOZ"), size);
 
     const PixelRect rc = GetClientRect();
 
@@ -271,7 +271,7 @@ Main()
   airspace_look->Initialise(airspace_renderer_settings);
 
   TestWindow window(*task_look, *airspace_look);
-  window.Create(*dialog_look, PixelRect{0, 0, 480, 480});
+  window.Create(*dialog_look, {480, 480});
 
   window.Show();
   window.RunEventLoop();
