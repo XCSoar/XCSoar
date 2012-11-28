@@ -47,6 +47,10 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#ifdef USE_VIDEOCORE
+#include <bcm_host.h>
+#endif
+
 #ifdef _WIN32_WCE
 // This is necessary to be called periodically to get rid of
 // memory defragmentation, since on pocket pc platforms there is no
@@ -128,7 +132,12 @@ SystemWindowSize()
   return { GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN) };
 #elif defined(ANDROID)
   return { native_view->get_width(), native_view->get_height() };
-  #else /* !WIN32 */
+#elif defined(USE_VIDEOCORE)
+  uint32_t width, height;
+  return graphics_get_display_size(0, &width, &height) >= 0
+    ? PixelSize(width, height)
+    : PixelSize(640, 480);
+#else
   /// @todo implement this properly for SDL/UNIX
   return { CommandLine::width, CommandLine::height };
   #endif /* !WIN32 */
