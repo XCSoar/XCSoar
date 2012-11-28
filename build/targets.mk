@@ -2,6 +2,7 @@ TARGETS = PC WIN64 \
 	PPC2000 PPC2003 PPC2003X WM5 WM5X \
 	ALTAIR \
 	UNIX UNIX32 UNIX64 \
+	PI \
 	ANDROID ANDROID7 ANDROID7NEON ANDROID86 ANDROIDMIPS \
 	ANDROIDFAT \
 	WINE CYGWIN
@@ -184,6 +185,14 @@ endif
 ifeq ($(TARGET),UNIX64)
   override TARGET = UNIX
   TARGET_ARCH += -m64
+endif
+
+ifeq ($(TARGET),PI)
+  override TARGET = UNIX
+  TCPREFIX := arm-linux-gnueabihf-
+  PI ?= /opt/pi/root
+  TARGET_ARCH += -march=armv6j -mfpu=vfp -mfloat-abi=hard
+  TARGET_IS_PI = y
 endif
 
 ifeq ($(TARGET),UNIX)
@@ -380,6 +389,10 @@ ifeq ($(TARGET),WINE)
   TARGET_INCLUDES += -I$(SRC)/wine
 endif
 
+ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
+  TARGET_CPPFLAGS += --sysroot=$(PI) -isystem $(PI)/usr/include/arm-linux-gnueabihf
+endif
+
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += --sysroot=$(ANDROID_TARGET_ROOT)
   TARGET_CPPFLAGS += -DANDROID
@@ -452,6 +465,10 @@ endif
 
 ifeq ($(TARGET_IS_DARWIN),y)
   TARGET_LDFLAGS += -static-libgcc
+endif
+
+ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
+  TARGET_LDFLAGS += --sysroot=$(PI) -L$(PI)/usr/lib/arm-linux-gnueabihf
 endif
 
 ifeq ($(TARGET),ANDROID)

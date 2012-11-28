@@ -18,8 +18,8 @@ EGL_LDLIBS = -lEGL
 ifeq ($(TARGET_IS_PI),y)
 # Raspberry Pi detected
 EGL_CPPFLAGS += -DUSE_VIDEOCORE
-EGL_CPPFLAGS += -isystem /opt/vc/include -isystem /opt/vc/include/interface/vcos/pthreads
-EGL_LDLIBS += -L/opt/vc/lib -lvchostif -lvchiq_arm -lvcos -lbcm_host
+EGL_CPPFLAGS += -isystem $(PI)/opt/vc/include -isystem $(PI)/opt/vc/include/interface/vcos/pthreads
+EGL_LDLIBS += -L$(PI)/opt/vc/lib -lvchostif -lvchiq_arm -lvcos -lbcm_host
 else
 EGL_CPPFLAGS += -DUSE_X11
 EGL_LDLIBS += -lX11
