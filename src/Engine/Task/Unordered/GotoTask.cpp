@@ -27,7 +27,7 @@
 
 GotoTask::GotoTask(const TaskBehaviour &tb,
                    const Waypoints &wps)
-  :UnorderedTask(GOTO, tb),
+  :UnorderedTask(TaskType::GOTO, tb),
    tp(NULL),
    waypoints(wps)
 {

@@ -37,7 +37,7 @@ public:
    * @param tb Global task behaviour settings
    * 
    */
-  UnorderedTask(const enum Type _type,
+  UnorderedTask(TaskType _type,
                 const TaskBehaviour &tb);
 
 public:

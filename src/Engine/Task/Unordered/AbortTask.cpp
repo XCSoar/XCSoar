@@ -38,7 +38,7 @@ static constexpr fixed max_search_range = fixed(100000);
 
 AbortTask::AbortTask(const TaskBehaviour &_task_behaviour,
                      const Waypoints &wps)
-  :UnorderedTask(ABORT, _task_behaviour),
+  :UnorderedTask(TaskType::ABORT, _task_behaviour),
    waypoints(wps),
    intersection_test(NULL),
    active_waypoint(0)

@@ -83,15 +83,15 @@ void
 TaskRenderer::Draw(const TaskInterface &task)
 {
   switch (task.GetType()) {
-  case TaskInterface::ORDERED:
+  case TaskType::ORDERED:
     Draw((const OrderedTask &)task);
     break;
 
-  case TaskInterface::ABORT:
+  case TaskType::ABORT:
     Draw((const AbortTask &)task);
     break;
 
-  case TaskInterface::GOTO:
+  case TaskType::GOTO:
     Draw((const GotoTask &)task);
     break;
   }

@@ -28,7 +28,7 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 
-AbstractTask::AbstractTask(enum Type _type,
+AbstractTask::AbstractTask(TaskType _type,
                            const TaskBehaviour &tb)
   :TaskInterface(_type),
    active_task_point(0),

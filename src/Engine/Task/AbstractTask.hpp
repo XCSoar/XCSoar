@@ -75,7 +75,7 @@ public:
    * 
    * @param tb Global task behaviour settings
    */
-  AbstractTask(Type _type, const TaskBehaviour &tb);
+  AbstractTask(TaskType _type, const TaskBehaviour &tb);
 
   /**
    * Set the handler for task events.  This method may be called only

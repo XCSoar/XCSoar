@@ -23,6 +23,7 @@
 #ifndef TASKINTERFACE_H
 #define TASKINTERFACE_H
 
+#include "TaskType.hpp"
 #include "Compiler.h"
 
 struct AircraftState;
@@ -42,22 +43,14 @@ class GlidePolar;
  */
 class TaskInterface
 {
-public:
-  enum Type {
-    ORDERED,
-    ABORT,
-    GOTO,
-  };
-
-private:
-  const Type type;
+  const TaskType type;
 
 public:
   constexpr
-  TaskInterface(const Type _type):type(_type) {}
+  TaskInterface(const TaskType _type):type(_type) {}
 
   constexpr
-  Type GetType() const {
+  TaskType GetType() const {
     return type;
   }
 

@@ -50,7 +50,7 @@
 #include "Task/PathSolvers/TaskDijkstraMax.hpp"
 
 OrderedTask::OrderedTask(const TaskBehaviour &tb)
-  :AbstractTask(ORDERED, tb),
+  :AbstractTask(TaskType::ORDERED, tb),
    taskpoint_start(NULL),
    taskpoint_finish(NULL),
    factory_mode(tb.task_type_default),

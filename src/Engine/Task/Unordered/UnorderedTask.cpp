@@ -27,7 +27,7 @@
 #include "Task/Points/TaskWaypoint.hpp"
 #include "Navigation/Aircraft.hpp"
 
-UnorderedTask::UnorderedTask(const enum Type _type,
+UnorderedTask::UnorderedTask(const TaskType _type,
                              const TaskBehaviour &tb):
   AbstractTask(_type, tb)
 {

@@ -37,7 +37,7 @@ public:
   gcc_pure
   bool IsOrdered() const {
     const TaskInterface *task = task_manager.GetActiveTask();
-    return task != NULL && task->GetType() == TaskInterface::ORDERED;
+    return task != NULL && task->GetType() == TaskType::ORDERED;
   }
 
   gcc_pure
@@ -74,7 +74,7 @@ public:
   gcc_pure
   bool HasEntered(unsigned index) const {
     const TaskInterface *task = task_manager.GetActiveTask();
-    if (task == NULL || task->GetType() != TaskInterface::ORDERED)
+    if (task == NULL || task->GetType() != TaskType::ORDERED)
       return true;
 
     const OrderedTask &o_task = *(const OrderedTask *)task;
