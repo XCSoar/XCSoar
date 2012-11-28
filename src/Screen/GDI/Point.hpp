@@ -38,16 +38,6 @@ struct RasterPoint : public tagPOINT {
 
 static_assert(sizeof(RasterPoint) == sizeof(POINT), "not same size");
 
-struct PixelRect : public tagRECT {
-  PixelRect() = default;
-
-  constexpr PixelRect(PixelScalar _left, PixelScalar _top,
-                      PixelScalar _right, PixelScalar _bottom)
-    :tagRECT({_left, _top, _right, _bottom}) {}
-};
-
-static_assert(sizeof(PixelRect) == sizeof(RECT), "not same size");
-
 struct PixelSize : public tagSIZE {
   PixelSize() = default;
 
@@ -72,5 +62,21 @@ struct PixelSize : public tagSIZE {
 };
 
 static_assert(sizeof(PixelSize) == sizeof(SIZE), "not same size");
+
+struct PixelRect : public tagRECT {
+  PixelRect() = default;
+
+  constexpr PixelRect(PixelScalar _left, PixelScalar _top,
+                      PixelScalar _right, PixelScalar _bottom)
+    :tagRECT({_left, _top, _right, _bottom}) {}
+
+  constexpr PixelRect(RasterPoint origin, PixelSize size)
+    :tagRECT({origin.x, origin.y, origin.x + size.cx, origin.y + size.cy}) {}
+
+  constexpr PixelRect(PixelSize size)
+    :tagRECT({0, 0, size.cx, size.cy}) {}
+};
+
+static_assert(sizeof(PixelRect) == sizeof(RECT), "not same size");
 
 #endif
