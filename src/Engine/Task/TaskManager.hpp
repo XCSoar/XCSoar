@@ -544,12 +544,13 @@ public:
    */
   void TakeoffAutotask(const GeoPoint &ref, const fixed terrain_alt);
 
+  void UpdateCommonStatsTask();
+
 private:
   TaskMode SetMode(const TaskMode mode);
 
   void UpdateCommonStats(const AircraftState &state);
   void UpdateCommonStatsTimes(const AircraftState &state);
-  void UpdateCommonStatsTask();
   void UpdateCommonStatsWaypoints(const AircraftState &state);
   void UpdateCommonStatsPolar(const AircraftState &state);
 };

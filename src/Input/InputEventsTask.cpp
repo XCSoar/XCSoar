@@ -93,6 +93,11 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
       break;
     }
   }
+
+  /* quickly propagate the updated values from the TaskManager to the
+     InterfaceBlackboard, so they are available immediately */
+  task_manager->UpdateCommonStatsTask();
+  CommonInterface::ReadCommonStats(task_manager->GetCommonStats());
 }
 
 void
@@ -187,6 +192,14 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("previousarm")))
     protected_task_manager->IncrementActiveTaskPointArm(-1); // arm sensitive previous
 
+  {
+    /* quickly propagate the updated values from the TaskManager to
+       the InterfaceBlackboard, so they are available immediately */
+    ProtectedTaskManager::ExclusiveLease tm(*protected_task_manager);
+    tm->UpdateCommonStatsTask();
+    CommonInterface::ReadCommonStats(tm->GetCommonStats());
+  }
+
   trigger_redraw();
 }
 
@@ -241,6 +254,11 @@ InputEvents::eventAbortTask(const TCHAR *misc)
       break;
     }
   }
+
+  /* quickly propagate the updated values from the TaskManager to the
+     InterfaceBlackboard, so they are available immediately */
+  task_manager->UpdateCommonStatsTask();
+  CommonInterface::ReadCommonStats(task_manager->GetCommonStats());
 
   trigger_redraw();
 }
