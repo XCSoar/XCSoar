@@ -49,8 +49,8 @@ GlideComputerRoute::ResetFlight()
   reach_clock.Reset();
   protected_route_planner.Reset();
 
+  last_task_type = TaskType::NONE;
   last_active_tp = 0;
-  last_mode_abort = last_mode_goto = last_mode_ordered = false;
 }
 
 void
@@ -103,9 +103,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
       if (!dirty) {
         dirty =
           calculated.common_stats.active_taskpoint_index != last_active_tp ||
-          calculated.common_stats.mode_abort != last_mode_abort ||
-          calculated.common_stats.mode_goto != last_mode_goto ||
-          calculated.common_stats.mode_ordered != last_mode_ordered;
+          calculated.common_stats.task_type != last_task_type;
         if (dirty) {
           // restart clock
           route_clock.CheckAdvance(basic.time);
@@ -113,10 +111,8 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
         }
       }
 
+      last_task_type = calculated.common_stats.task_type;
       last_active_tp = calculated.common_stats.active_taskpoint_index;
-      last_mode_abort = calculated.common_stats.mode_abort;
-      last_mode_goto = calculated.common_stats.mode_goto;
-      last_mode_ordered = calculated.common_stats.mode_ordered;
 
       if (dirty) {
         protected_route_planner.SolveRoute(dest, start, config, h_ceiling);

@@ -26,6 +26,7 @@
 #include "Time/RoughTime.hpp"
 #include "Geo/GeoVector.hpp"
 #include "TaskSummary.hpp"
+#include "../TaskType.hpp"
 
 #include <type_traits>
 
@@ -68,12 +69,10 @@ public:
   fixed task_time_elapsed;
   /** Vector to home waypoint */
   GeoVector vector_home;
-  /** Whether task is abort mode */
-  bool mode_abort;
-  /** Whether task is goto mode */
-  bool mode_ordered;
-  /** Whether task is goto mode */
-  bool mode_goto;
+
+  /** The current task type/mode */
+  TaskType task_type;
+
   /** Whether ordered task is valid */
   bool ordered_valid;
   /** Whether ordered task has AAT areas */

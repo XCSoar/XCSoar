@@ -184,7 +184,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
   // draw flight mode
   const MaskedIcon *bmp;
 
-  if (Calculated().common_stats.mode_abort)
+  if (Calculated().common_stats.task_type == TaskType::ABORT)
     bmp = &look.abort_mode_icon;
   else if (GetDisplayMode() == DisplayMode::CIRCLING)
     bmp = &look.climb_mode_icon;

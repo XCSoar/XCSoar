@@ -99,7 +99,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   if (_tcsstr(OutBuffer, _T("$(CheckTaskResumed)"))) {
     // TODO code: check, does this need to be set with temporary task?
-    if (common_stats.mode_abort || common_stats.mode_goto)
+    if (common_stats.task_type == TaskType::ABORT ||
+        common_stats.task_type == TaskType::GOTO)
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckTaskResumed)"), _T(""), Size);
   }
@@ -118,7 +119,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   const AbstractTask *task = task_manager->GetActiveTask();
   if (task == NULL || !task_stats.task_valid ||
-      common_stats.mode_goto) {
+      common_stats.task_type == TaskType::GOTO) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       invalid = true;
@@ -141,7 +142,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
           _("Previous Turnpoint"), Size);
     }
 
-  } else if (common_stats.mode_abort) {
+  } else if (common_stats.task_type == TaskType::ABORT) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       if (!common_stats.active_has_next)
@@ -318,12 +319,12 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
-    if (common_stats.mode_goto) {
+    if (common_stats.task_type == TaskType::GOTO) {
       CondReplaceInString(common_stats.ordered_valid,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
     } else 
-      CondReplaceInString(common_stats.mode_abort,
+      CondReplaceInString(common_stats.task_type == TaskType::ABORT,
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
   }

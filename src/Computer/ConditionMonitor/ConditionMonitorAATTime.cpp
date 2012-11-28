@@ -34,7 +34,7 @@ ConditionMonitorAATTime::CheckCondition(const NMEAInfo &basic,
 {
   if (!calculated.flight.flying ||
       !calculated.task_stats.task_valid ||
-      !calculated.common_stats.mode_ordered ||
+      calculated.common_stats.task_type != TaskType::ORDERED ||
       !calculated.common_stats.ordered_valid ||
       !calculated.common_stats.ordered_has_targets ||
       !calculated.common_stats.task_started ||

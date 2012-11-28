@@ -876,7 +876,7 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
   data.SetValueColor(0);
 
   if (!basic.time_available || !common_stats.ordered_valid ||
-      !common_stats.mode_ordered ||
+      common_stats.task_type != TaskType::ORDERED ||
       common_stats.ordered_summary.active != 0 ||
       !open.IsDefined() ||
       !current_remaining.IsOk()) {

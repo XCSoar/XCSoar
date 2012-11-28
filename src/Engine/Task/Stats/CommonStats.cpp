@@ -14,9 +14,7 @@ CommonStats::ResetTask()
   aat_speed_min = -fixed_one;
   task_time_remaining = fixed_zero;
   task_time_elapsed = fixed_zero;
-  mode_abort = false;
-  mode_goto = false;
-  mode_ordered = false;
+  task_type = TaskType::NONE;
   ordered_valid = false;
   ordered_has_targets = false;
   ordered_has_optional_starts = false;

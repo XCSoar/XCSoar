@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
 
 #include "Task/ProtectedRoutePlanner.hpp"
+#include "Engine/Task/TaskType.hpp"
 #include "Engine/Route/RoutePlanner.hpp"
 #include "GPSClock.hpp"
 
@@ -46,8 +47,8 @@ class GlideComputerRoute {
 
   const RasterTerrain *terrain;
 
+  TaskType last_task_type;
   unsigned last_active_tp;
-  bool last_mode_abort, last_mode_goto, last_mode_ordered;
 
 public:
   GlideComputerRoute(const Airspaces &airspace_database);

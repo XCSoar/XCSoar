@@ -209,9 +209,7 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
 void
 TaskManager::UpdateCommonStatsTask()
 {
-  common_stats.mode_abort = mode == TaskType::ABORT;
-  common_stats.mode_goto = mode == TaskType::GOTO;
-  common_stats.mode_ordered = mode == TaskType::ORDERED;
+  common_stats.task_type = mode;
 
   common_stats.ordered_valid = task_ordered.CheckTask();
 
