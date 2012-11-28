@@ -66,13 +66,8 @@ TargetMapWindow::isClickOnTarget(const RasterPoint pc)
     return false;
 
   ProtectedTaskManager::Lease task_manager(*task);
-  if (!task_manager->HasTarget(target_index))
-    return false;
-
-  const GeoPoint gnull(Angle::Zero(), Angle::Zero());
-  const GeoPoint& t = task_manager->GetLocationTarget(target_index, gnull);
-
-  if (t == gnull)
+  const GeoPoint t = task_manager->GetLocationTarget(target_index);
+  if (!t.IsValid())
     return false;
 
   const GeoPoint gp = projection.ScreenToGeo(pc.x, pc.y);

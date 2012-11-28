@@ -452,15 +452,14 @@ TaskManager::IsInSector (const unsigned index, const AircraftState &ref,
   return false;
 }
 
-const GeoPoint&
-TaskManager::GetLocationTarget(const unsigned index,
-                               const GeoPoint &fallback_location) const
+const GeoPoint
+TaskManager::GetLocationTarget(const unsigned index) const
 {
   const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
     return ap->GetTargetLocation();
 
- return fallback_location;
+  return GeoPoint::Invalid();
 }
 bool
 TaskManager::TargetIsLocked(const unsigned index) const
@@ -468,16 +467,6 @@ TaskManager::TargetIsLocked(const unsigned index) const
   const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
     return ap->IsTargetLocked();
-
- return false;
-}
-
-bool
-TaskManager::HasTarget(const unsigned index) const
-{
-  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
-  if (ap)
-    return ap->HasTarget();
 
  return false;
 }

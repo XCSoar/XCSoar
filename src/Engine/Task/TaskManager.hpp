@@ -424,12 +424,10 @@ public:
    * Accessor to get target location of specified tp
    *
    * @param TPindex index of tp in task
-   *
-   * @return Target location or fallback_location if TPindex is
-   *    invalid or has no target
+   * @return the target location or GeoPoint::Invalid() if that's not
+   * a valid AAT point
    */
- const GeoPoint& GetLocationTarget(const unsigned index,
-                                   const GeoPoint& fallback_location) const;
+ const GeoPoint GetLocationTarget(const unsigned index) const;
 
   /**
    * Accessor for locked state of target of specified tp
@@ -439,15 +437,6 @@ public:
    * @return True if target is locked or tp location if has no target
    */
  bool TargetIsLocked(const unsigned index) const;
-
-  /**
-   * Capability of specified TaskPoint to have adjustable range (true for AAT)
-   *
-   * @param TPindex index of tp in task
-   *
-   * @return True if task point has a target (can have range set)
-   */
- bool HasTarget(const unsigned index) const;
 
   /**
    * Set target location explicitly of specified tp
