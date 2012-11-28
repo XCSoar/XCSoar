@@ -28,6 +28,7 @@ FAT_BINARY := n
 
 TARGET_IS_DARWIN := n
 TARGET_IS_LINUX := n
+TARGET_IS_PI := n
 HAVE_POSIX := n
 HAVE_WIN32 := y
 HAVE_MSVCRT := y
@@ -166,6 +167,7 @@ ifeq ($(TARGET),UNIX)
   # LOCAL_TCPREFIX is set in local-config.mk if configure was run.
   TCPREFIX := $(LOCAL_TCPREFIX)
   TCSUFFIX := $(LOCAL_TCSUFFIX)
+  TARGET_IS_PI = $(HOST_IS_PI)
 endif
 
 ifeq ($(TARGET),UNIX32)

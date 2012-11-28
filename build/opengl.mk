@@ -16,7 +16,7 @@ ifeq ($(TARGET_IS_DARWIN),y)
 OPENGL_LDLIBS = -framework OpenGL
 else ifeq ($(TARGET),ANDROID)
 OPENGL_LDLIBS = -lGLESv1_CM -ldl
-else ifeq ($(shell test -f /opt/vc/include/interface/vmcs_host/vc_dispmanx.h && echo y),y)
+else ifeq ($(TARGET_IS_PI),y)
 OPENGL_LDLIBS = -lGLESv1_CM -ldl
 else
 OPENGL_LDLIBS = -lGL
