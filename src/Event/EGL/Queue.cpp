@@ -123,7 +123,9 @@ EventQueue::Wait(Event &event)
 
     Fill();
     while (events.empty()) {
+      mutex.Unlock();
       Poll();
+      mutex.Lock();
 
       if (Generate(event))
         return true;
