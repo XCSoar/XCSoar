@@ -49,18 +49,7 @@ struct TextCacheKey {
   char *allocated;
   size_t hash;
 
-#if GCC_VERSION > 40500
   TextCacheKey(const TextCacheKey &other) = delete;
-#else
-  /* workaround for gcc version in the Android NDK */
-  TextCacheKey(const TextCacheKey &other)
-    :font(other.font),
-     text(other.text), allocated(NULL),
-     hash(other.hash) {
-    if (other.allocated != NULL)
-      Allocate();
-  }
-#endif
 
   TextCacheKey(TextCacheKey &&other)
     :font(other.font),
