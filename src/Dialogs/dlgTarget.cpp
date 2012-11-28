@@ -511,7 +511,7 @@ static bool
 GetTaskData(DataFieldEnum &df)
 {
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
-  if (task_manager->GetMode() != TaskManager::MODE_ORDERED)
+  if (task_manager->GetMode() != TaskType::ORDERED)
     return false;
 
   const OrderedTask &task = task_manager->GetOrderedTask();

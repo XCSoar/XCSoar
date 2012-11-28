@@ -26,6 +26,7 @@
 #include <stdint.h>
 
 enum class TaskType : uint8_t {
+  NONE,
   ORDERED,
   ABORT,
   GOTO,

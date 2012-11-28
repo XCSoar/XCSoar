@@ -47,18 +47,6 @@ struct RangeAndRadial;
 class TaskManager: 
   private NonCopyable
 {
-public:
-  /**
-   * Enumeration of task modes
-   */
-  enum TaskMode {
-    MODE_NULL = 0,
-    MODE_ORDERED,
-    MODE_ABORT,
-    MODE_GOTO
-  };
-
-private:
   GlidePolar glide_polar;
 
   /**
@@ -72,7 +60,7 @@ private:
   GotoTask task_goto;
   AlternateTask task_abort;
 
-  TaskMode mode;
+  TaskType mode;
   AbstractTask* active_task;
 
   TaskStats null_stats;
@@ -169,7 +157,7 @@ public:
 
   /** Set active task to abort mode. */
   void Abort() {
-    SetMode(MODE_ABORT);
+    SetMode(TaskType::ABORT);
   }
 
   /**
@@ -177,7 +165,7 @@ public:
    * goto or aborting.
    */
   void Resume() {
-    SetMode(MODE_ORDERED);
+    SetMode(TaskType::ORDERED);
   }
 
   /**
@@ -345,7 +333,7 @@ public:
    * @return Active task mode
    */
   gcc_pure
-  TaskMode GetMode() const {
+  TaskType GetMode() const {
     return mode;
   }
 
@@ -357,7 +345,7 @@ public:
    * @return True if modes match
    */
   gcc_pure
-  bool IsMode(const TaskMode _mode) const {
+  bool IsMode(const TaskType _mode) const {
     return mode == _mode;
   }
 
@@ -547,7 +535,7 @@ public:
   void UpdateCommonStatsTask();
 
 private:
-  TaskMode SetMode(const TaskMode mode);
+  TaskType SetMode(const TaskType mode);
 
   void UpdateCommonStats(const AircraftState &state);
   void UpdateCommonStatsTimes(const AircraftState &state);

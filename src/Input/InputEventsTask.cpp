@@ -223,13 +223,13 @@ InputEvents::eventAbortTask(const TCHAR *misc)
     task_manager->Resume();
   else if (StringIsEqual(misc, _T("show"))) {
     switch (task_manager->GetMode()) {
-    case TaskManager::MODE_ABORT:
+    case TaskType::ABORT:
       Message::AddMessage(_("Task aborted"));
       break;
-    case TaskManager::MODE_GOTO:
+    case TaskType::GOTO:
       Message::AddMessage(_("Go to target"));
       break;
-    case TaskManager::MODE_ORDERED:
+    case TaskType::ORDERED:
       Message::AddMessage(_("Ordered task"));
       break;
     default:
@@ -238,18 +238,18 @@ InputEvents::eventAbortTask(const TCHAR *misc)
   } else {
     // toggle
     switch (task_manager->GetMode()) {
-    case TaskManager::MODE_NULL:
-    case TaskManager::MODE_ORDERED:
+    case TaskType::NONE:
+    case TaskType::ORDERED:
       task_manager->Abort();
       break;
-    case TaskManager::MODE_GOTO:
+    case TaskType::GOTO:
       if (task_manager->CheckOrderedTask()) {
         task_manager->Resume();
       } else {
         task_manager->Abort();
       }
       break;
-    case TaskManager::MODE_ABORT:
+    case TaskType::ABORT:
       task_manager->Resume();
       break;
     }

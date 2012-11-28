@@ -395,18 +395,18 @@ PrintHelper::taskmanager_print(const TaskManager &task,
                                const AircraftState &state)
 {
   switch (task.GetMode()) {
-  case TaskManager::MODE_NULL:
+  case TaskType::NONE:
     break;
 
-  case TaskManager::MODE_ABORT:
+  case TaskType::ABORT:
     aborttask_print(*(const AbortTask *)task.GetActiveTask(), state);
     break;
 
-  case TaskManager::MODE_GOTO:
+  case TaskType::GOTO:
     gototask_print(*(const GotoTask *)task.GetActiveTask(), state);
     break;
 
-  case TaskManager::MODE_ORDERED:
+  case TaskType::ORDERED:
     orderedtask_print(task.GetOrderedTask(), state);
     break;
   }

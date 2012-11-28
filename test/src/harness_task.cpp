@@ -172,6 +172,10 @@ void task_report(TaskManager& task_manager, const char* text)
     const AbstractTask *task = task_manager.GetActiveTask();
     if (task != NULL) {
       switch (task->GetType()) {
+      case TaskType::NONE:
+        printf("# task is none\n");
+        break;
+
       case TaskType::ORDERED:
         printf("# task is ordered\n");
         break;

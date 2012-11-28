@@ -35,7 +35,7 @@ TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
    task_ordered(task_behaviour),
    task_goto(task_behaviour, wps),
    task_abort(task_behaviour, wps),
-   mode(MODE_NULL),
+   mode(TaskType::NONE),
    active_task(NULL) {
   null_stats.reset();
 }
@@ -52,32 +52,32 @@ TaskManager::SetTaskBehaviour(const TaskBehaviour &behaviour)
   task_abort.SetTaskBehaviour(behaviour);
 }
 
-TaskManager::TaskMode
-TaskManager::SetMode(const TaskMode _mode)
+TaskType
+TaskManager::SetMode(const TaskType _mode)
 {
   switch(_mode) {
-  case (MODE_ABORT):
+  case TaskType::ABORT:
     active_task = &task_abort;
-    mode = MODE_ABORT;
+    mode = TaskType::ABORT;
     break;
 
-  case (MODE_ORDERED):
+  case TaskType::ORDERED:
     if (task_ordered.TaskSize()) {
       active_task = &task_ordered;
-      mode = MODE_ORDERED;
+      mode = TaskType::ORDERED;
       break;
     }
 
-  case (MODE_GOTO):
+  case TaskType::GOTO:
     if (task_goto.GetActiveTaskPoint()) {
       active_task = &task_goto;
-      mode = MODE_GOTO;
+      mode = TaskType::GOTO;
       break;
     }
 
-  case (MODE_NULL):
+  case TaskType::NONE:
     active_task = NULL;
-    mode = MODE_NULL;
+    mode = TaskType::NONE;
     break;
   };
   return mode;
@@ -105,7 +105,7 @@ TaskManager::IncrementActiveTaskPoint(int offset)
   if (active_task) {
     unsigned i = GetActiveTaskPointIndex();
     if ((int)i+offset<0) { // prevent wrap-around
-      if (mode == MODE_ORDERED)
+      if (mode == TaskType::ORDERED)
         task_ordered.RotateOptionalStarts();
       else
         SetActiveTaskPoint(0);
@@ -209,9 +209,9 @@ TaskManager::UpdateCommonStatsWaypoints(const AircraftState &state)
 void
 TaskManager::UpdateCommonStatsTask()
 {
-  common_stats.mode_abort = (mode == MODE_ABORT);
-  common_stats.mode_goto = (mode == MODE_GOTO);
-  common_stats.mode_ordered = (mode == MODE_ORDERED);
+  common_stats.mode_abort = mode == TaskType::ABORT;
+  common_stats.mode_goto = mode == TaskType::GOTO;
+  common_stats.mode_ordered = mode == TaskType::ORDERED;
 
   common_stats.ordered_valid = task_ordered.CheckTask();
 
@@ -356,7 +356,7 @@ bool
 TaskManager::DoGoto(const Waypoint &wp)
 {
   if (task_goto.DoGoto(wp)) {
-    SetMode(MODE_GOTO);
+    SetMode(TaskType::GOTO);
     return true;
   }
 
@@ -546,23 +546,23 @@ TaskManager::Commit(const OrderedTask &other)
   if (other.TaskSize()) {
     // if valid, resume the task
     switch (mode) {
-    case MODE_NULL:
-      SetMode(MODE_ORDERED); // set mode first
+    case TaskType::NONE:
+      SetMode(TaskType::ORDERED); // set mode first
       SetActiveTaskPoint(0); // then set tp
       break;
-    case MODE_GOTO:
-    case MODE_ABORT:
+    case TaskType::GOTO:
+    case TaskType::ABORT:
       // resume on load
-      SetMode(MODE_ORDERED);
+      SetMode(TaskType::ORDERED);
       break;
-    case MODE_ORDERED:
+    case TaskType::ORDERED:
       IncrementActiveTaskPoint(0); // ensure tp is within size
       break;
     };
-  } else if (mode == MODE_ORDERED) {
+  } else if (mode == TaskType::ORDERED) {
     SetActiveTaskPoint(0); // reset tp of ordered task so will be zero
                            // on next load if valid
-    SetMode(MODE_NULL);
+    SetMode(TaskType::NONE);
   }
 
   return retval;
@@ -573,5 +573,5 @@ TaskManager::TakeoffAutotask(const GeoPoint &loc, const fixed terrain_alt)
 {
   // create a goto task on takeoff
   if (!active_task && task_goto.TakeoffAutotask(loc, terrain_alt))
-    SetMode(MODE_GOTO);
+    SetMode(TaskType::GOTO);
 }

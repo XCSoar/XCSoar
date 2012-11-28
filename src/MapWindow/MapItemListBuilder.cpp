@@ -255,7 +255,7 @@ void
 MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
 {
   ProtectedTaskManager::Lease task_manager(task);
-  if (task_manager->GetMode() != TaskManager::MODE_ORDERED)
+  if (task_manager->GetMode() != TaskType::ORDERED)
     return;
 
   const OrderedTask &ordered_task = task_manager->GetOrderedTask();
