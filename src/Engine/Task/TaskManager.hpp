@@ -91,15 +91,6 @@ public:
     return task_ordered;
   }
 
-  gcc_pure
-  const AATPoint *GetAATTaskPoint(unsigned index) const;
-
-  gcc_pure
-  AATPoint *GetAATTaskPoint(unsigned index) {
-    const AATPoint *ap = ((const TaskManager *)this)->GetAATTaskPoint(index);
-    return const_cast<AATPoint *>(ap);
-  }
-
   /**
    * Increments active taskpoint sequence for active task
    *

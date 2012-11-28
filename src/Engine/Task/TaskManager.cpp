@@ -124,14 +124,6 @@ TaskManager::GetActiveTaskPoint() const
   return NULL;
 }
 
-const AATPoint *
-TaskManager::GetAATTaskPoint(unsigned index) const
-{
-  return CheckOrderedTask()
-    ? task_ordered.GetAATTaskPoint(index)
-    : nullptr;
-}
-
 void
 TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
 {
@@ -464,7 +456,7 @@ const GeoPoint&
 TaskManager::GetLocationTarget(const unsigned index,
                                const GeoPoint &fallback_location) const
 {
-  const AATPoint *ap = GetAATTaskPoint(index);
+  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
     return ap->GetTargetLocation();
 
@@ -473,7 +465,7 @@ TaskManager::GetLocationTarget(const unsigned index,
 bool
 TaskManager::TargetIsLocked(const unsigned index) const
 {
-  const AATPoint *ap = GetAATTaskPoint(index);
+  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
     return ap->IsTargetLocked();
 
@@ -483,7 +475,7 @@ TaskManager::TargetIsLocked(const unsigned index) const
 bool
 TaskManager::HasTarget(const unsigned index) const
 {
-  const AATPoint *ap = GetAATTaskPoint(index);
+  const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
   if (ap)
     return ap->HasTarget();
 

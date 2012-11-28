@@ -252,7 +252,8 @@ RefreshCalculator()
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AATPoint *ap = lease->GetAATTaskPoint(target_point);
+    const OrderedTask &task = lease->GetOrderedTask();
+    const AATPoint *ap = task.GetAATTaskPoint(target_point);
 
     is_aat = ap != nullptr;
 
@@ -368,7 +369,8 @@ OnRangeModified(fixed new_value)
 
   {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-    AATPoint *ap = lease->GetAATTaskPoint(target_point);
+    const OrderedTask &task = lease->GetOrderedTask();
+    AATPoint *ap = task.GetAATTaskPoint(target_point);
     if (ap == nullptr)
       return;
 
@@ -425,7 +427,8 @@ OnRadialModified(fixed new_value)
 
   {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-    AATPoint *ap = lease->GetAATTaskPoint(target_point);
+    const OrderedTask &task = lease->GetOrderedTask();
+    AATPoint *ap = task.GetAATTaskPoint(target_point);
     if (ap == nullptr)
       return;
 
