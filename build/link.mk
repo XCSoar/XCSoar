@@ -1,5 +1,8 @@
 LINK = $(CXX)
 
+ld-flags = $(ALL_LDFLAGS)
+ld-libs = $(ALL_LDLIBS)
+
 # Generates a program linking rule.
 #
 # Example: $(eval $(call link-program,Foo,FOO))
@@ -84,13 +87,13 @@ $$($(2)_NOSTRIP).o: $$($(2)_NOSTRIP).s
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_NOSTRIP).o $$(TARGET_LDADD)
 	@$$(NQ)echo "  CLANG   $$@"
-	$$(Q)$$(LINK) $$(LDFLAGS) $$(TARGET_ARCH) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
+	$$(Q)$$(LINK) $$(ld-flags) $$(TARGET_ARCH) -o $$@ $$^ $$(ld-libs) $$($(2)_LDLIBS)
 else
 
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
-	$$(Q)$$(LINK) $$(LDFLAGS) $$(TARGET_ARCH) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
+	$$(Q)$$(LINK) $$(ld-flags) $$(TARGET_ARCH) -o $$@ $$^ $$(ld-libs) $$($(2)_LDLIBS)
 
 endif
 
@@ -156,7 +159,7 @@ $$($(2)_NOSTRIP): LDFLAGS += -nostdlib
 endif
 $$($(2)_NOSTRIP): $$($(2)_OBJS) $$($(2)_LDADD) $$(TARGET_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 	@$$(NQ)echo "  LINK    $$@"
-	$$(Q)$$(LINK) $$(LDFLAGS) $$(TARGET_ARCH) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
+	$$(Q)$$(LINK) $$(ld-flags) $$(TARGET_ARCH) -o $$@ $$^ $$(ld-libs) $$($(2)_LDLIBS)
 
 # Strip the binary (optional)
 ifeq ($$($(2)_STRIP),y)
