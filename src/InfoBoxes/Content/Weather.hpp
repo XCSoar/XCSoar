@@ -39,41 +39,26 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
-class InfoBoxContentWind : public InfoBoxContent
-{
-public:
-  virtual const InfoBoxPanel *GetDialogContent() gcc_override;
-};
+extern const InfoBoxPanel wind_infobox_panels[];
 
-class InfoBoxContentWindSpeed : public InfoBoxContentWind
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxWindSpeed(InfoBoxData &data);
 
-class InfoBoxContentWindBearing : public InfoBoxContentWind
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxWindBearing(InfoBoxData &data);
 
-class InfoBoxContentHeadWind: public InfoBoxContentWind
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxHeadWind(InfoBoxData &data);
 
-class InfoBoxContentHeadWindSimplified: public InfoBoxContentWind
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxHeadWindSimplified(InfoBoxData &data);
 
-class InfoBoxContentWindArrow: public InfoBoxContentWind
+class InfoBoxContentWindArrow: public InfoBoxContent
 {
 public:
   virtual void Update(InfoBoxData &data) gcc_override;
   virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc) gcc_override;
+  virtual const InfoBoxPanel *GetDialogContent() gcc_override;
 };
 
 #endif

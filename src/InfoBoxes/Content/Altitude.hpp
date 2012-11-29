@@ -26,17 +26,16 @@ Copyright_License {
 
 #include "InfoBoxes/Content/Base.hpp"
 
+extern const InfoBoxPanel altitude_infobox_panels[];
+
 class InfoBoxContentAltitude : public InfoBoxContent
 {
 public:
   virtual const InfoBoxPanel *GetDialogContent() gcc_override;
 };
 
-class InfoBoxContentAltitudeNav : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxAltitudeNav(InfoBoxData &data);
 
 class InfoBoxContentAltitudeGPS : public InfoBoxContentAltitude
 {
@@ -45,28 +44,16 @@ public:
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) gcc_override;
 };
 
-class InfoBoxContentAltitudeAGL : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxAltitudeAGL(InfoBoxData &data);
 
-class InfoBoxContentAltitudeBaro : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxAltitudeBaro(InfoBoxData &data);
 
-class InfoBoxContentAltitudeQFE : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxAltitudeQFE(InfoBoxData &data);
 
-class InfoBoxContentFlightLevel : public InfoBoxContentAltitude
-{
-public:
-  virtual void Update(InfoBoxData &data) gcc_override;
-};
+void
+UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data);
 
 #endif

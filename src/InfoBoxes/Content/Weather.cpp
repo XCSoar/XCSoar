@@ -103,20 +103,24 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
  * Subpart callback function pointers
  */
 
-static constexpr InfoBoxPanel Panels[] = {
+#ifdef __clang__
+/* gcc gives "redeclaration differs in 'constexpr'" */
+constexpr
+#endif
+const InfoBoxPanel wind_infobox_panels[] = {
   { N_("Edit"), LoadWindEditPanel },
   { N_("Setup"), LoadWindSetupPanel },
   { nullptr, nullptr }
 };
 
 const InfoBoxPanel *
-InfoBoxContentWind::GetDialogContent() {
-  return Panels;
+InfoBoxContentWindArrow::GetDialogContent()
+{
+  return wind_infobox_panels;
 }
 
-
 void
-InfoBoxContentWindSpeed::Update(InfoBoxData &data)
+UpdateInfoBoxWindSpeed(InfoBoxData &data)
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
@@ -136,7 +140,7 @@ InfoBoxContentWindSpeed::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentWindBearing::Update(InfoBoxData &data)
+UpdateInfoBoxWindBearing(InfoBoxData &data)
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
@@ -152,7 +156,7 @@ InfoBoxContentWindBearing::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentHeadWind::Update(InfoBoxData &data)
+UpdateInfoBoxHeadWind(InfoBoxData &data)
 {
   const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.head_wind_available) {
@@ -169,7 +173,7 @@ InfoBoxContentHeadWind::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentHeadWindSimplified::Update(InfoBoxData &data)
+UpdateInfoBoxHeadWindSimplified(InfoBoxData &data)
 {
   const NMEAInfo &basic = XCSoarInterface::Basic();
   if (!basic.ground_speed_available || !basic.airspeed_available) {

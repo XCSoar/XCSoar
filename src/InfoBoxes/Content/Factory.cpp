@@ -52,13 +52,19 @@ Copyright_License {
  */
 class InfoBoxContentCallback : public InfoBoxContent {
   void (*update)(InfoBoxData &data);
+  const InfoBoxPanel *panels;
 
 public:
-  InfoBoxContentCallback(void (*_update)(InfoBoxData &data))
-    :update(_update) {}
+  InfoBoxContentCallback(void (*_update)(InfoBoxData &data),
+                         const InfoBoxPanel *_panels)
+    :update(_update), panels(_panels) {}
 
   virtual void Update(InfoBoxData &data) gcc_override {
     update(data);
+  }
+
+  virtual const InfoBoxPanel *GetDialogContent() gcc_override {
+    return panels;
   }
 };
 
@@ -84,6 +90,7 @@ struct MetaData {
   const TCHAR *description;
   InfoBoxContent *(*create)();
   void (*update)(InfoBoxData &data);
+  const InfoBoxPanel *panels;
   Type next, previous;
 
   /**
@@ -99,7 +106,7 @@ struct MetaData {
                      InfoBoxContent *(*_create)(),
                      Type _next, Type _previous)
     :name(_name), caption(_caption), description(_description),
-     create(_create), update(nullptr),
+     create(_create), update(nullptr), panels(nullptr),
      next(_next), previous(_previous) {}
 
   constexpr MetaData(const TCHAR *_name,
@@ -108,7 +115,17 @@ struct MetaData {
                      void (*_update)(InfoBoxData &data),
                      Type _next, Type _previous)
     :name(_name), caption(_caption), description(_description),
-     create(nullptr), update(_update),
+     create(nullptr), update(_update), panels(nullptr),
+     next(_next), previous(_previous) {}
+
+  constexpr MetaData(const TCHAR *_name,
+                     const TCHAR *_caption,
+                     const TCHAR *_description,
+                     void (*_update)(InfoBoxData &data),
+                     const InfoBoxPanel _panels[],
+                     Type _next, Type _previous)
+    :name(_name), caption(_caption), description(_description),
+     create(nullptr), update(_update), panels(_panels),
      next(_next), previous(_previous) {}
 };
 
@@ -142,7 +159,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Height AGL"),
     N_("H AGL"),
     N_("This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height."),
-    IBFHelper<InfoBoxContentAltitudeAGL>::Create,
+    UpdateInfoBoxAltitudeAGL,
+    altitude_infobox_panels,
     e_H_Terrain, // H GND
     e_HeightGPS, // H GPS
   },
@@ -382,7 +400,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Wind speed"),
     N_("Wind V"),
     N_("Wind speed estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust magnitude and left/right cursor keys to adjust bearing when the InfoBox is active. Pressing the enter cursor key saves the wind value as the initial value when XCSoar next starts."),
-    IBFHelper<InfoBoxContentWindSpeed>::Create,
+    UpdateInfoBoxWindSpeed,
+    wind_infobox_panels,
     e_WindBearing_Est, // Wind B
     e_Home_Temperature, // Max Temp
   },
@@ -392,7 +411,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Wind bearing"),
     N_("Wind Brng"),
     N_("Wind bearing estimated by XCSoar. (Touch-screen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust bearing when the InfoBox is active."),
-    IBFHelper<InfoBoxContentWindBearing>::Create,
+    UpdateInfoBoxWindBearing,
+    wind_infobox_panels,
     HeadWindSimplified,
     e_WindSpeed_Est, // Wind V
   },
@@ -462,7 +482,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Barometric altitude"),
     N_("Alt Baro"),
     N_("This is the barometric altitude obtained from a device equipped with a pressure sensor."),
-    IBFHelper<InfoBoxContentAltitudeBaro>::Create,
+    UpdateInfoBoxAltitudeBaro,
+    altitude_infobox_panels,
     e_H_QFE, // QFE GPS
     e_H_Terrain, // H GND
   },
@@ -836,7 +857,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("QFE GPS"),
     N_("QFE GPS"),
     N_("Automatic QFE. This altitude value is constantly reset to 0 on ground BEFORE taking off. After takeoff, it is no more reset automatically even if on ground. During flight you can change QFE with up and down keys. Bottom line shows QNH altitude. Changing QFE does not affect QNH altitude."),
-    IBFHelper<InfoBoxContentAltitudeQFE>::Create,
+    UpdateInfoBoxAltitudeQFE,
+    altitude_infobox_panels,
     e_FlightLevel, // Flight Level
     e_H_Baro, // H Baro
   },
@@ -916,7 +938,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Flight level"),
     N_("FL"),
     N_("Pressure Altitude given as Flight Level. Only available if barometric altitude available and correct QNH set."),
-    IBFHelper<InfoBoxContentFlightLevel>::Create,
+    UpdateInfoBoxAltitudeFlightLevel,
+    altitude_infobox_panels,
     e_Barogram, // Barogram
     e_H_QFE, // QFE GPS
   },
@@ -1056,7 +1079,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Head wind component"),
     N_("Head Wind"),
     N_("The current head wind component. Head wind is calculated from TAS and GPS ground speed if airspeed is available from external device. Otherwise the estimated wind is used for the calculation."),
-    IBFHelper<InfoBoxContentHeadWind>::Create,
+    UpdateInfoBoxHeadWind,
+    wind_infobox_panels,
     e_Temperature, // OAT
     HeadWindSimplified,
   },
@@ -1075,7 +1099,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Altitude (Auto)"),
     N_("Alt Auto"),
     N_("This is the barometric altitude obtained from a device equipped with a pressure sensor or the GPS altitude if the barometric altitude is not available."),
-    IBFHelper<InfoBoxContentAltitudeNav>::Create,
+    UpdateInfoBoxAltitudeNav,
+    altitude_infobox_panels,
     NavAltitude,
     NavAltitude,
   },
@@ -1095,7 +1120,8 @@ static constexpr MetaData meta_data[NUM_TYPES] = {
     N_("Head wind component (simplified)"),
     N_("Head Wind *"),
     N_("The current head wind component. The simplified head wind is calculated by subtracting GPS ground speed from the TAS if airspeed is available from external device."),
-    IBFHelper<InfoBoxContentHeadWindSimplified>::Create,
+    UpdateInfoBoxHeadWindSimplified,
+    wind_infobox_panels,
     e_HeadWind, // OAT
     e_WindBearing_Est,
   },
@@ -1205,5 +1231,5 @@ InfoBoxFactory::Create(Type type)
   if (m.create != nullptr)
     return m.create();
   else
-    return new InfoBoxContentCallback(m.update);
+    return new InfoBoxContentCallback(m.update, m.panels);
 }

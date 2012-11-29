@@ -49,8 +49,11 @@ Copyright_License {
  * Subpart callback function pointers
  */
 
-static constexpr
-InfoBoxPanel Panels[] = {
+#ifdef __clang__
+/* gcc gives "redeclaration differs in 'constexpr'" */
+constexpr
+#endif
+const InfoBoxPanel altitude_infobox_panels[] = {
   { N_("Simulator"), LoadAltitudeSimulatorPanel },
   { N_("Info"), LoadAltitudeInfoPanel },
   { N_("Setup"), LoadAltitudeSetupPanel },
@@ -59,11 +62,11 @@ InfoBoxPanel Panels[] = {
 
 const InfoBoxPanel *
 InfoBoxContentAltitude::GetDialogContent() {
-  return Panels;
+  return altitude_infobox_panels;
 }
 
 void
-InfoBoxContentAltitudeNav::Update(InfoBoxData &data)
+UpdateInfoBoxAltitudeNav(InfoBoxData &data)
 {
   const MoreData &basic = CommonInterface::Basic();
 
@@ -150,7 +153,7 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 }
 
 void
-InfoBoxContentAltitudeAGL::Update(InfoBoxData &data)
+UpdateInfoBoxAltitudeAGL(InfoBoxData &data)
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
@@ -168,7 +171,7 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentAltitudeBaro::Update(InfoBoxData &data)
+UpdateInfoBoxAltitudeBaro(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -186,7 +189,7 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentAltitudeQFE::Update(InfoBoxData &data)
+UpdateInfoBoxAltitudeQFE(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
 
@@ -206,7 +209,7 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxData &data)
 }
 
 void
-InfoBoxContentFlightLevel::Update(InfoBoxData &data)
+UpdateInfoBoxAltitudeFlightLevel(InfoBoxData &data)
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const ComputerSettings &settings_computer =
