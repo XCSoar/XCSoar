@@ -32,7 +32,7 @@ ifeq ($(TARGET),ANDROID)
 endif # Android
 
 ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
-  TARGET_ARCH := -target armv6-none-linux-gnueabihf -mfloat-abi=hard -integrated-as
+  TARGET_ARCH := -target armv6-none-linux-gnueabihf -mfloat-abi=hard -mfpu=vfp -integrated-as
   TARGET_CPPFLAGS += -isystem /opt/pi/root/usr/include/c++/4.6
   TARGET_CPPFLAGS += -isystem /opt/pi/root/usr/include/c++/4.6/arm-linux-gnueabihf
   TARGET_LDFLAGS += -L$(PI)/usr/lib/gcc/arm-linux-gnueabihf/4.6
