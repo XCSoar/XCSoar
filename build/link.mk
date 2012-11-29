@@ -76,8 +76,13 @@ $$($(2)_NOSTRIP).s: $$($(2)_NOSTRIP)-opt.bc
 	@$$(NQ)echo "  LLC     $$@"
 	$$(Q)llc -o $$@ $$^ -O2
 
+# Assemble to native CPU object
+$$($(2)_NOSTRIP).o: $$($(2)_NOSTRIP).s
+	@$$(NQ)echo "  AS      $$@"
+	$$(Q)$(AS) -o $$@ $$^
+
 # Link the unstripped binary
-$$($(2)_NOSTRIP): $$($(2)_NOSTRIP).s $$(TARGET_LDADD)
+$$($(2)_NOSTRIP): $$($(2)_NOSTRIP).o $$(TARGET_LDADD)
 	@$$(NQ)echo "  CLANG   $$@"
 	$$(Q)$$(LINK) $$(LDFLAGS) $$(TARGET_ARCH) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
 else
