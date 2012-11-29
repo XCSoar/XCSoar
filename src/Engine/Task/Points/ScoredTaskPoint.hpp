@@ -57,18 +57,18 @@ public:
   virtual ~ScoredTaskPoint() {}
 
   /* virtual methods from class TaskPoint */
-  virtual const GeoPoint &GetLocationRemaining() const;
+  virtual const GeoPoint &GetLocationRemaining() const gcc_override;
 
-  virtual bool HasEntered() const {
+  virtual bool HasEntered() const gcc_override {
     return positive(state_entered.time);
   }
 
-  const AircraftState &GetEnteredState() const {
+  const AircraftState &GetEnteredState() const gcc_override {
     return state_entered;
   }
 
   /* virtual methods from class SampledTaskPoint */
-  virtual void Reset();
+  virtual void Reset() gcc_override;
 
   /**
    * Test whether aircraft has exited the OZ

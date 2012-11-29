@@ -60,8 +60,8 @@ public:
   }
 
   /* virtual methods from class TaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-  virtual fixed GetElevation() const;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
+  virtual fixed GetElevation() const gcc_override;
 };
 
 #endif //INTERMEDIATEPOINT_H

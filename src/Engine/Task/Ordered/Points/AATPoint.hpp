@@ -179,36 +179,36 @@ private:
 public:
 
   /* virtual methods from class TaskPoint */
-  const GeoPoint& GetLocationRemaining() const;
-  virtual bool SetRange(const fixed p, const bool force_if_current);
+  const GeoPoint& GetLocationRemaining() const gcc_override;
+  virtual bool SetRange(const fixed p, bool force_if_current) gcc_override;
 
-  virtual bool IsTargetLocked() const {
+  virtual bool IsTargetLocked() const gcc_override {
     return target_locked;
   }
 
-  virtual void SaveTarget() {
+  virtual void SaveTarget() gcc_override {
     target_save = target_location;
   }
 
-  virtual void RestoreTarget() {
+  virtual void RestoreTarget() gcc_override {
     target_location = target_save;
   }
 
   /* virtual methods from class SampledTaskPoint */
   virtual bool UpdateSampleNear(const AircraftState &state,
                                 TaskEvents *task_events,
-                                const TaskProjection &projection);
+                                const TaskProjection &projection) gcc_override;
   virtual bool UpdateSampleFar(const AircraftState &state,
                                TaskEvents *task_events,
-                               const TaskProjection &projection);
+                               const TaskProjection &projection) gcc_override;
 
   /* virtual methods from class ObservationZoneClient */
-  virtual fixed ScoreAdjustment() const {
+  virtual fixed ScoreAdjustment() const gcc_override {
     return fixed_zero;
   }
 
 private:
   /* virtual methods from class OrderedTaskPoint */
-  virtual bool Equals(const OrderedTaskPoint &other) const;
+  virtual bool Equals(const OrderedTaskPoint &other) const gcc_override;
 };
 #endif

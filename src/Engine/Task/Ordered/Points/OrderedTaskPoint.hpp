@@ -220,37 +220,37 @@ protected:
 
 public:
   /* virtual methods from class TaskPoint */
-  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
+  virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const  gcc_override{
     return vector_remaining;
   }
-  virtual GeoVector GetVectorPlanned() const {
+  virtual GeoVector GetVectorPlanned() const gcc_override {
     return vector_planned;
   }
-  virtual GeoVector GetVectorTravelled() const {
+  virtual GeoVector GetVectorTravelled() const gcc_override {
     return vector_travelled;
   }
-  virtual GeoVector GetNextLegVector() const;
+  virtual GeoVector GetNextLegVector() const gcc_override;
 
   /* virtual methods from class SampledTaskPoint */
-  virtual void UpdateOZ(const TaskProjection &projection);
+  virtual void UpdateOZ(const TaskProjection &projection) gcc_override;
 
 private:
   /* virtual methods from class SampledTaskPoint */
-  virtual bool SearchNominalIfUnsampled() const;
-  virtual bool SearchBoundaryPoints() const;
+  virtual bool SearchNominalIfUnsampled() const gcc_override;
+  virtual bool SearchBoundaryPoints() const gcc_override;
 
 public:
   /* virtual methods from class SampledTaskPoint */
-  virtual bool IsInSector(const AircraftState &ref) const;
-  virtual OZBoundary GetBoundary() const;
+  virtual bool IsInSector(const AircraftState &ref) const gcc_override;
+  virtual OZBoundary GetBoundary() const gcc_override;
 
 protected:
   /* virtual methods from class ScoredTaskPoint */
   virtual bool CheckEnterTransition(const AircraftState &ref_now,
-                                    const AircraftState &ref_last) const;
+                                    const AircraftState &ref_last) const gcc_override;
 
   virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const {
+                                   const AircraftState &ref_last) const  gcc_override{
     return CheckEnterTransition(ref_last, ref_now);
   }
 };

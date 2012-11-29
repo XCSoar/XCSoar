@@ -80,26 +80,27 @@ public:
                        const TaskProjection &projection);
 
   /* virtual methods from class TaskPoint */
-  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
-  virtual fixed GetElevation() const;
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) gcc_override;
+  virtual fixed GetElevation() const gcc_override;
 
   /* virtual methods from class ObservationZoneClient */
-  virtual bool IsInSector(const AircraftState &ref) const;
+  virtual bool IsInSector(const AircraftState &ref) const gcc_override;
   virtual bool CheckExitTransition(const AircraftState &ref_now,
-                                   const AircraftState &ref_last) const;
+                                   const AircraftState &ref_last) const gcc_override;
 
   /* virtual methods from class SampledTaskPoint */
   virtual bool UpdateSampleNear(const AircraftState &state,
                                 TaskEvents *task_events,
-                                const TaskProjection &projection);
+                                const TaskProjection &projection) gcc_override;
 
   /* virtual methods from class OrderedTaskPoint */
-  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb);
-  virtual void SetNeighbours(OrderedTaskPoint *prev, OrderedTaskPoint *next);
+  virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) gcc_override;
+  virtual void SetNeighbours(OrderedTaskPoint *prev,
+                             OrderedTaskPoint *next) gcc_override;
 
 private:
   /* virtual methods from class ScoredTaskPoint */
-  virtual bool ScoreLastExit() const {
+  virtual bool ScoreLastExit() const gcc_override {
     return true;
   }
 };
