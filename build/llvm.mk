@@ -15,7 +15,7 @@ DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 ifneq ($(DEBUG),y)
 OPTIMIZE := -O4 -DNDEBUG -Wuninitialized
 TARGET_LDFLAGS += -use-gold-plugin
-ARFLAGS += --plugin /usr/local/lib/LLVMgold.so
+AR += --plugin /usr/local/lib/LLVMgold.so
 endif
 
 ifeq ($(USE_CCACHE),y)
