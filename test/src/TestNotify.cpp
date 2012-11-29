@@ -87,13 +87,8 @@ int main(int argc, char **argv)
   TestThread thread(notify);
   thread.Start();
 
-#ifndef USE_GDI
   while (!quit && loop.Get(event))
     loop.Dispatch(event);
-#else
-  while (!quit && loop.Get(event))
-    loop.Dispatch(event);
-#endif
 
   ok1(quit);
 
