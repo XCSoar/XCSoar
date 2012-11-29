@@ -14,7 +14,6 @@ DEPFLAGS = -MD -MF $(DEPFILE) -MT $@
 
 ifneq ($(DEBUG),y)
 OPTIMIZE := -O4 -DNDEBUG -Wuninitialized
-TARGET_LDFLAGS += -use-gold-plugin
 AR += --plugin /usr/local/lib/LLVMgold.so
 endif
 
