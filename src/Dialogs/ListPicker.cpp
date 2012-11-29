@@ -147,6 +147,7 @@ private:
    */
   virtual void OnTimer() gcc_override {
     UpdateHelp(GetList().GetCursorIndex());
+    Timer::Cancel();
   }
 };
 
