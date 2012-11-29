@@ -79,8 +79,6 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
 
 // BOUNDARY
 
-#define fixed_steps fixed(0.05)
-
 void 
 SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
 { 
