@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_THREAD_OPERATION_HPP
 
 #include "Operation/Operation.hpp"
-#include "Thread/DelayedNotify.hpp"
+#include "Event/DelayedNotify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Trigger.hpp"
 #include "Util/StaticString.hpp"

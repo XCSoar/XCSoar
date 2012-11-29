@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Thread/Notify.hpp"
+#include "Notify.hpp"
 
 #ifdef ANDROID
 #include "Event/Android/Queue.hpp"

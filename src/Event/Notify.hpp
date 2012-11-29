@@ -21,27 +21,40 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_THREAD_DELAYED_NOTIFY_HPP
-#define XCSOAR_THREAD_DELAYED_NOTIFY_HPP
+#ifndef XCSOAR_EVENT_NOTIFY_HPP
+#define XCSOAR_EVENT_NOTIFY_HPP
 
-#include "Event/Timer.hpp"
+#include "Util/NonCopyable.hpp"
+
+#ifdef USE_GDI
+#include "Screen/Window.hpp"
+#endif
 
 #include <atomic>
 
 /**
- * This class is similar to #Notify, but it delivers the notification
- * with a certain delay, to limit the rate of redundant notifications.
- * To use it, subclass it and implement the abstract method
+ * This class implements message passing from any thread to the main
+ * thread.  To use it, subclass it and implement the abstract method
  * OnNotification().
  */
-class DelayedNotify : private Timer {
-  const unsigned delay_ms;
-
+class Notify : private
+#ifndef USE_GDI
+               NonCopyable
+#else
+               Window
+#endif
+{
   std::atomic<bool> pending;
 
+#if defined(ANDROID) || defined(USE_EGL)
+  friend class EventLoop;
+#elif defined(ENABLE_SDL)
+  friend class EventLoop;
+#endif
+
 public:
-  DelayedNotify(unsigned _delay_ms):delay_ms(_delay_ms), pending(false) {}
-  ~DelayedNotify();
+  Notify();
+  ~Notify();
 
   /**
    * Send a notification to this object.  This method can be called
@@ -54,6 +67,14 @@ public:
    */
   void ClearNotification();
 
+private:
+  void RunNotification();
+
+  /**
+   * Called by the event loop when the "notify" message is received.
+   */
+  static void Callback(void *ctx);
+
 protected:
   /**
    * Called after SendNotification() has been called at least once.
@@ -61,9 +82,9 @@ protected:
    */
   virtual void OnNotification() = 0;
 
-private:
-  /* virtual methods from class Timer */
-  virtual void OnTimer();
+#ifdef USE_GDI
+  virtual bool OnUser(unsigned id);
+#endif
 };
 
 #endif

@@ -21,7 +21,7 @@
 */
 
 #include "Thread/Thread.hpp"
-#include "Thread/Notify.hpp"
+#include "Event/Notify.hpp"
 #include "Screen/TopWindow.hpp"
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"

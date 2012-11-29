@@ -52,7 +52,7 @@ Copyright_License {
 #include "ListPicker.hpp"
 #include "Form/Button.hpp"
 #include "Net/DownloadManager.hpp"
-#include "Thread/Notify.hpp"
+#include "Event/Notify.hpp"
 #include "Thread/Mutex.hpp"
 #include "Event/Timer.hpp"
 

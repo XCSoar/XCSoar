@@ -33,7 +33,7 @@ Copyright_License {
 #include "Util/FifoBuffer.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
-#include "Thread/DelayedNotify.hpp"
+#include "Event/DelayedNotify.hpp"
 #include "Thread/Mutex.hpp"
 
 static DeviceDescriptor *device;

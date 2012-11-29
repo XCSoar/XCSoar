@@ -1,4 +1,6 @@
-EVENT_SOURCES =
+EVENT_SOURCES = \
+	$(SRC)/Event/DelayedNotify.cpp \
+	$(SRC)/Event/Notify.cpp
 
 ifeq ($(TARGET),ANDROID)
 EVENT_SOURCES += \

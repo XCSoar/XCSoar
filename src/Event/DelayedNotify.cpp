@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Thread/DelayedNotify.hpp"
+#include "DelayedNotify.hpp"
 
 DelayedNotify::~DelayedNotify()
 {
