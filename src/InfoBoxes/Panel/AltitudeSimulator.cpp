@@ -45,6 +45,10 @@ ChangeAltitude(const fixed step)
 Widget *
 LoadAltitudeSimulatorPanel(unsigned id)
 {
+  const NMEAInfo &basic = CommonInterface::Basic();
+  if (!basic.gps.simulator)
+    return nullptr;
+
   return new OffsetButtonsWidget(UIGlobals::GetDialogLook(),
                                  _T("%+.0f"), fixed(10), fixed(100),
                                  ChangeAltitude);
