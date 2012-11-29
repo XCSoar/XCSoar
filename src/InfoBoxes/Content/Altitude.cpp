@@ -50,17 +50,9 @@ Copyright_License {
 
 static constexpr
 InfoBoxContentAltitude::PanelContent Panels[] = {
-  InfoBoxContentAltitude::PanelContent (
-    N_("Simulator"),
-    LoadAltitudeSimulatorPanel),
-
-  InfoBoxContentAltitude::PanelContent (
-    N_("Info"),
-    LoadAltitudeInfoPanel),
-
-  InfoBoxContentAltitude::PanelContent (
-    N_("Setup"),
-    LoadAltitudeSetupPanel)
+  { N_("Simulator"), LoadAltitudeSimulatorPanel },
+  { N_("Info"), LoadAltitudeInfoPanel },
+  { N_("Setup"), LoadAltitudeSetupPanel },
 };
 
 static constexpr
