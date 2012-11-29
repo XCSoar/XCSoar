@@ -41,7 +41,7 @@ ProtectedTaskManager::ProtectedTaskManager(TaskManager &_task_manager,
 }
 
 ProtectedTaskManager::~ProtectedTaskManager() {
-  ExclusiveLease lease(*this);
+  UnprotectedLease lease(*this);
   lease->SetIntersectionTest(NULL); // de-register
 }
 
