@@ -72,12 +72,12 @@ $$($(2)_NOSTRIP).bc: $$($(2)_OBJS) $$($(2)_LDADD) | $$(TARGET_BIN_DIR)/dirstamp
 # Optimise the large bitcode file
 $$($(2)_NOSTRIP)-opt.bc: $$($(2)_NOSTRIP).bc
 	@$$(NQ)echo "  OPT     $$@"
-	$$(Q)opt -o $$@ $$^ -std-compile-opts -std-link-opts -O2
+	$$(Q)opt -o $$@ $$^ -std-compile-opts -std-link-opts -O2 $(TARGET_LLVM_FLAGS)
 
 # Compile to native CPU assembly
 $$($(2)_NOSTRIP).s: $$($(2)_NOSTRIP)-opt.bc
 	@$$(NQ)echo "  LLC     $$@"
-	$$(Q)llc -o $$@ $$^ -O2
+	$$(Q)llc -o $$@ $$^ -O2 $(TARGET_LLVM_FLAGS)
 
 # Assemble to native CPU object
 $$($(2)_NOSTRIP).o: $$($(2)_NOSTRIP).s
