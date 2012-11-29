@@ -355,7 +355,7 @@ InfoBoxWindow::HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   return false;
 }
 
-const InfoBoxContent::DialogContent *
+const InfoBoxContent::PanelContent *
 InfoBoxWindow::GetDialogContent() const
 {
   if (content != NULL)

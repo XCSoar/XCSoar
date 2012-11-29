@@ -54,15 +54,12 @@ SetVSpeed(InfoBoxData &data, fixed value)
 static constexpr InfoBoxContentMacCready::PanelContent panels[] = {
   { N_("Edit"), LoadMacCreadyEditPanel },
   { N_("Setup"), LoadMacCreadySetupPanel },
+  { nullptr, nullptr }
 };
 
-static constexpr InfoBoxContentMacCready::DialogContent dlgContent = {
-  ARRAY_SIZE(panels), &panels[0],
-};
-
-const InfoBoxContentMacCready::DialogContent*
+const InfoBoxContentMacCready::PanelContent *
 InfoBoxContentMacCready::GetDialogContent() {
-  return &dlgContent;
+  return panels;
 }
 
 /*

@@ -53,16 +53,12 @@ InfoBoxContentAltitude::PanelContent Panels[] = {
   { N_("Simulator"), LoadAltitudeSimulatorPanel },
   { N_("Info"), LoadAltitudeInfoPanel },
   { N_("Setup"), LoadAltitudeSetupPanel },
+  { nullptr, nullptr }
 };
 
-static constexpr
-InfoBoxContentAltitude::DialogContent dlgContent = {
-  ARRAY_SIZE(Panels), &Panels[0],
-};
-
-const InfoBoxContentAltitude::DialogContent *
+const InfoBoxContentAltitude::PanelContent *
 InfoBoxContentAltitude::GetDialogContent() {
-  return &dlgContent;
+  return Panels;
 }
 
 void

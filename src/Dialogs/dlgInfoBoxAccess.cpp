@@ -50,7 +50,7 @@ static constexpr int SWITCH_INFO_BOX = 100;
 
 void
 dlgInfoBoxAccessShowModeless(const int id,
-                             const InfoBoxContent::DialogContent *dlgContent)
+                             const InfoBoxContent::PanelContent *panels)
 {
   assert (id > -1);
 
@@ -75,16 +75,16 @@ dlgInfoBoxAccessShowModeless(const int id,
 
   TabBarControl tab_bar(client_area, look, tab_rc, tab_style, false);
 
-  if (dlgContent != NULL) {
-    for (int i = 0; i < dlgContent->PANELSIZE; i++) {
-      assert(dlgContent->Panels[i].load != NULL);
+  if (panels != nullptr) {
+    for (; panels->load != nullptr; ++panels) {
+      assert(panels->name != nullptr);
 
-      Widget *widget = dlgContent->Panels[i].load(id);
+      Widget *widget = panels->load(id);
 
       if (widget == NULL)
         continue;
 
-      if (i == dlgContent->PANELSIZE - 1) {
+      if (panels[1].load == nullptr) {
         /* add a "Switch InfoBox" button to the last tab, which we
            expect to be the "Setup" tab - kludge! */
 
@@ -108,7 +108,7 @@ dlgInfoBoxAccessShowModeless(const int id,
         widget = new TwoWidgets(widget, new WindowWidget(button), false);
       }
 
-      tab_bar.AddTab(widget, gettext(dlgContent->Panels[i].name));
+      tab_bar.AddTab(widget, gettext(panels->name));
     }
   }
 

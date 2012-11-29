@@ -37,7 +37,7 @@ InfoBoxContent::OnCustomPaint(Canvas &canvas, const PixelRect &rc)
 {
 }
 
-const InfoBoxContent::DialogContent *
+const InfoBoxContent::PanelContent *
 InfoBoxContent::GetDialogContent()
 {
   return NULL;

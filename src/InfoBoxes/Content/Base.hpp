@@ -61,13 +61,8 @@ public:
     Widget *(*load)(unsigned id); // ptr to Load function
   };
 
-  struct DialogContent {
-    const int PANELSIZE;
-    const PanelContent *Panels;
-  };
-
   gcc_pure
-  virtual const DialogContent *GetDialogContent();
+  virtual const PanelContent *GetDialogContent();
 };
 
 #endif

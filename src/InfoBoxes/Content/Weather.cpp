@@ -105,15 +105,12 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 static constexpr InfoBoxContentWind::PanelContent Panels[] = {
   { N_("Edit"), LoadWindEditPanel },
   { N_("Setup"), LoadWindSetupPanel },
+  { nullptr, nullptr }
 };
 
-static constexpr InfoBoxContentWind::DialogContent dlgContent = {
-  ARRAY_SIZE(Panels), &Panels[0],
-};
-
-const InfoBoxContentWind::DialogContent *
+const InfoBoxContentWind::PanelContent *
 InfoBoxContentWind::GetDialogContent() {
-  return &dlgContent;
+  return Panels;
 }
 
 

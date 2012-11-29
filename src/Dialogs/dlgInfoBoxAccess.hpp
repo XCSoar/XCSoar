@@ -28,6 +28,6 @@ Copyright_License {
 
 void
 dlgInfoBoxAccessShowModeless(int id,
-                             const InfoBoxContent::DialogContent *content);
+                             const InfoBoxContent::PanelContent *panels);
 
 #endif /* DLGINFOBOXACCESS_H_ */
