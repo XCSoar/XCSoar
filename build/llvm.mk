@@ -31,8 +31,11 @@ ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -DBIONIC -DLIBCPP_NO_IOSTREAM
 endif # Android
 
-ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
+ifeq ($(TARGET_IS_PI),y)
   TARGET_ARCH := -target armv6-none-linux-gnueabihf -mfloat-abi=hard -mfpu=vfp -integrated-as
+endif
+
+ifeq ($(HOST_IS_PI)$(TARGET_IS_PI),ny)
   TARGET_CPPFLAGS += -isystem /opt/pi/root/usr/include/c++/4.6
   TARGET_CPPFLAGS += -isystem /opt/pi/root/usr/include/c++/4.6/arm-linux-gnueabihf
   TARGET_LDFLAGS += -L$(PI)/usr/lib/gcc/arm-linux-gnueabihf/4.6
