@@ -68,7 +68,7 @@ class EventQueue : private NonCopyable {
 
   std::multiset<TimerRecord> timers;
 
-  Poll poll;
+  ::Poll poll;
   EventPipe event_pipe;
   FileDescriptor mouse;
 
