@@ -79,7 +79,7 @@ $$($(2)_NOSTRIP).s: $$($(2)_NOSTRIP)-opt.bc
 # Link the unstripped binary
 $$($(2)_NOSTRIP): $$($(2)_NOSTRIP).s $$(TARGET_LDADD)
 	@$$(NQ)echo "  CLANG   $$@"
-	$$(Q)$$(LINK) $$(LDFLAGS) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
+	$$(Q)$$(LINK) $$(LDFLAGS) $$(TARGET_ARCH) -o $$@ $$^ $$(LDLIBS) $$($(2)_LDLIBS)
 else
 
 # Link the unstripped binary
