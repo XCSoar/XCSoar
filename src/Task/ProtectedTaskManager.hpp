@@ -116,17 +116,6 @@ public:
   void Reset();
 
   /**
-   * Check whether observer is within OZ of specified tp
-   *
-   * @param index index of tp in task
-   * @param ref state of aircraft to be checked
-   *
-   * @return True if reference point is inside sector
-   */
-  gcc_pure
-  bool IsInSector(const unsigned index, const AircraftState &ref) const;
-
-  /**
    * Lock/unlock the target from automatic shifts of specified tp
    *
    * @param index index of tp in task

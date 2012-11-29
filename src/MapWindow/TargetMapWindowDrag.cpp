@@ -24,8 +24,9 @@ Copyright_License {
 #include "TargetMapWindow.hpp"
 #include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
-#include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/Ordered/Points/AATPoint.hpp"
+#include "Engine/Task/ObservationZones/ObservationZonePoint.hpp"
 #include "Screen/Layout.hpp"
 
 void
@@ -83,7 +84,8 @@ TargetMapWindow::isInSector(const int x, const int y)
   assert(task != NULL);
 
   GeoPoint gp = projection.ScreenToGeo(x, y);
-  AircraftState a;
-  a.location = gp;
-  return task->IsInSector(target_index, a);
+
+  ProtectedTaskManager::Lease lease(*task);
+  AATPoint *p = lease->GetOrderedTask().GetAATTaskPoint(target_index);
+  return p != nullptr && p->GetObservationZone().IsInSector(gp);
 }

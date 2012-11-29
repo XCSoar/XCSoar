@@ -434,24 +434,6 @@ TaskManager::UpdateAutoMC(const AircraftState &state_now,
   return false;
 }
 
-bool
-TaskManager::IsInSector (const unsigned index, const AircraftState &ref,
-                         const bool AATOnly) const
-{
-  if (!CheckOrderedTask())
-    return false;
-
-  if (AATOnly) {
-    const AATPoint *ap = task_ordered.GetAATTaskPoint(index);
-    if (ap)
-      return ap->IsInSector(ref);
-  }
-  else
-    return task_ordered.GetTaskPoint(index).IsInSector(ref);
-
-  return false;
-}
-
 const GeoPoint
 TaskManager::GetLocationTarget(const unsigned index) const
 {

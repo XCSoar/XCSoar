@@ -71,14 +71,6 @@ ProtectedTaskManager::GetActiveWaypoint() const
 }
 
 bool
-ProtectedTaskManager::IsInSector (const unsigned index,
-                                  const AircraftState &ref) const
-{
-  Lease lease(*this);
-  return lease->IsInSector(index, ref);
-}
-
-bool
 ProtectedTaskManager::TargetLock(const unsigned index, bool do_lock)
 {
   ExclusiveLease lease(*this);

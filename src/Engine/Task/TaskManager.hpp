@@ -409,18 +409,6 @@ public:
   fixed GetFinishHeight() const;
 
   /**
-   * Check whether observer is within OZ of specified tp
-   *
-   * @param TPindex index of tp in task
-   * @param ref state of aircraft to be checked
-   * @parm AATOnly if true then returns false for non-AAT points
-   *
-   * @return True if reference point is inside sector
-   */
- bool IsInSector(const unsigned index, const AircraftState &ref,
-                 const bool AATOnly = true) const;
-
-  /**
    * Accessor to get target location of specified tp
    *
    * @param TPindex index of tp in task
