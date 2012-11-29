@@ -21,39 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_INFOBOX_CONTENT_HPP
-#define XCSOAR_INFOBOX_CONTENT_HPP
-
-#include "Compiler.h"
+#ifndef XCSOAR_INFOBOX_PANEL_HPP
+#define XCSOAR_INFOBOX_PANEL_HPP
 
 #include <tchar.h>
 
-struct PixelRect;
-struct InfoBoxData;
-struct InfoBoxPanel;
 class Widget;
-class Canvas;
 
-class InfoBoxContent
-{
-public:
-  enum InfoBoxKeyCodes {
-    ibkLeft = -2,
-    ibkDown = -1,
-    ibkEnter = 0,
-    ibkUp = 1,
-    ibkRight = 2
-  };
+struct InfoBoxPanel {
+  constexpr
+  InfoBoxPanel(const TCHAR *_name, Widget *(*_load)(unsigned id))
+    :name(_name), load(_load) {};
 
-  virtual ~InfoBoxContent();
-
-  virtual void Update(InfoBoxData &data) = 0;
-  virtual bool HandleKey(const InfoBoxKeyCodes keycode);
-
-  virtual void OnCustomPaint(Canvas &canvas, const PixelRect &rc);
-
-  gcc_pure
-  virtual const InfoBoxPanel *GetDialogContent();
+  const TCHAR *name;
+  Widget *(*load)(unsigned id);
 };
 
 #endif

@@ -24,10 +24,9 @@ Copyright_License {
 #ifndef DLGINFOBOXACCESS_HPP
 #define DLGINFOBOXACCESS_HPP
 
-#include "InfoBoxes/Content/Base.hpp"
+struct InfoBoxPanel;
 
 void
-dlgInfoBoxAccessShowModeless(int id,
-                             const InfoBoxContent::PanelContent *panels);
+dlgInfoBoxAccessShowModeless(int id, const InfoBoxPanel *panels);
 
 #endif /* DLGINFOBOXACCESS_H_ */

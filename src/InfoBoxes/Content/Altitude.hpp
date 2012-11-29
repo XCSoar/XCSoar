@@ -29,7 +29,7 @@ Copyright_License {
 class InfoBoxContentAltitude : public InfoBoxContent
 {
 public:
-  virtual const PanelContent *GetDialogContent() gcc_override;
+  virtual const InfoBoxPanel *GetDialogContent() gcc_override;
 };
 
 class InfoBoxContentAltitudeNav : public InfoBoxContentAltitude

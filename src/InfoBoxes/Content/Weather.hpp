@@ -42,7 +42,7 @@ public:
 class InfoBoxContentWind : public InfoBoxContent
 {
 public:
-  virtual const PanelContent *GetDialogContent() gcc_override;
+  virtual const InfoBoxPanel *GetDialogContent() gcc_override;
 };
 
 class InfoBoxContentWindSpeed : public InfoBoxContentWind

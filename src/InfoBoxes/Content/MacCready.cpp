@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "InfoBoxes/Content/MacCready.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/MacCreadyEdit.hpp"
 #include "InfoBoxes/Panel/MacCreadySetup.hpp"
 #include "Interface.hpp"
@@ -51,13 +52,13 @@ SetVSpeed(InfoBoxData &data, fixed value)
  * Subpart callback function pointers
  */
 
-static constexpr InfoBoxContentMacCready::PanelContent panels[] = {
+static constexpr InfoBoxPanel panels[] = {
   { N_("Edit"), LoadMacCreadyEditPanel },
   { N_("Setup"), LoadMacCreadySetupPanel },
   { nullptr, nullptr }
 };
 
-const InfoBoxContentMacCready::PanelContent *
+const InfoBoxPanel *
 InfoBoxContentMacCready::GetDialogContent() {
   return panels;
 }

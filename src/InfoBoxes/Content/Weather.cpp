@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Weather.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/WindEdit.hpp"
 #include "InfoBoxes/Panel/WindSetup.hpp"
 #include "InfoBoxes/Data.hpp"
@@ -102,13 +103,13 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
  * Subpart callback function pointers
  */
 
-static constexpr InfoBoxContentWind::PanelContent Panels[] = {
+static constexpr InfoBoxPanel Panels[] = {
   { N_("Edit"), LoadWindEditPanel },
   { N_("Setup"), LoadWindSetupPanel },
   { nullptr, nullptr }
 };
 
-const InfoBoxContentWind::PanelContent *
+const InfoBoxPanel *
 InfoBoxContentWind::GetDialogContent() {
   return Panels;
 }

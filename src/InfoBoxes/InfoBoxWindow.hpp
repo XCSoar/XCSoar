@@ -148,7 +148,7 @@ protected:
 
 public:
   gcc_pure
-  const InfoBoxContent::PanelContent *GetDialogContent() const;
+  const InfoBoxPanel *GetDialogContent() const;
 
   const PixelRect GetValueRect() const {
     return value_rect;

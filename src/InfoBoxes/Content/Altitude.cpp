@@ -24,6 +24,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Altitude.hpp"
 #include "Factory.hpp"
 #include "InfoBoxes/Data.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "InfoBoxes/Panel/AltitudeInfo.hpp"
 #include "InfoBoxes/Panel/AltitudeSimulator.hpp"
 #include "InfoBoxes/Panel/AltitudeSetup.hpp"
@@ -49,14 +50,14 @@ Copyright_License {
  */
 
 static constexpr
-InfoBoxContentAltitude::PanelContent Panels[] = {
+InfoBoxPanel Panels[] = {
   { N_("Simulator"), LoadAltitudeSimulatorPanel },
   { N_("Info"), LoadAltitudeInfoPanel },
   { N_("Setup"), LoadAltitudeSetupPanel },
   { nullptr, nullptr }
 };
 
-const InfoBoxContentAltitude::PanelContent *
+const InfoBoxPanel *
 InfoBoxContentAltitude::GetDialogContent() {
   return Panels;
 }

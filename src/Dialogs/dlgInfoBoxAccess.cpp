@@ -31,6 +31,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
+#include "InfoBoxes/Panel/Panel.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
@@ -49,8 +50,7 @@ Copyright_License {
 static constexpr int SWITCH_INFO_BOX = 100;
 
 void
-dlgInfoBoxAccessShowModeless(const int id,
-                             const InfoBoxContent::PanelContent *panels)
+dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
 {
   assert (id > -1);
 
