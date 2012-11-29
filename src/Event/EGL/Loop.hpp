@@ -32,7 +32,7 @@ class TopWindow;
 
 class EventLoop : private NonCopyable {
   EventQueue &queue;
-  TopWindow &top_window;
+  TopWindow *top_window;
 
   /**
    * True if working on a bulk of events.  At the end of that bulk,
@@ -42,7 +42,10 @@ class EventLoop : private NonCopyable {
 
 public:
   EventLoop(EventQueue &_queue, TopWindow &_top_window)
-    :queue(_queue), top_window(_top_window), bulk(true) {}
+    :queue(_queue), top_window(&_top_window), bulk(true) {}
+
+  EventLoop(EventQueue &_queue)
+    :queue(_queue), top_window(nullptr), bulk(true) {}
 
   bool Get(Event &event);
   void Dispatch(const Event &event);

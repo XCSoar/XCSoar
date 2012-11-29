@@ -22,7 +22,6 @@
 
 #include "Thread/Thread.hpp"
 #include "Event/Notify.hpp"
-#include "Screen/TopWindow.hpp"
 #include "Screen/Init.hpp"
 #include "TestUtil.hpp"
 
@@ -34,12 +33,20 @@
 #include "Event/EGL/Event.hpp"
 #include "Event/EGL/Loop.hpp"
 #include "Event/EGL/Globals.hpp"
+#include "Screen/TopWindow.hpp"
 #elif defined(ENABLE_SDL)
 #include "Event/SDL/Event.hpp"
 #include "Event/SDL/Loop.hpp"
 #else
 #include "Event/GDI/Event.hpp"
 #include "Event/GDI/Loop.hpp"
+#endif
+
+#ifdef USE_EGL
+/* avoid TopWindow.cpp from being linked, as it brings some heavy
+   dependencies */
+void TopWindow::Refresh() {}
+bool TopWindow::OnEvent(const Event &event) { return false; }
 #endif
 
 static bool quit;
@@ -70,11 +77,7 @@ int main(int argc, char **argv)
   ScreenGlobalInit screen;
 
 #if defined(ANDROID) || defined(USE_EGL)
-  TopWindow main_window;
-  EventLoop loop(*event_queue, main_window);
-#elif defined(ENABLE_SDL)
-  TopWindow main_window;
-  EventLoop loop(main_window);
+  EventLoop loop(*event_queue);
 #else
   EventLoop loop;
 #endif

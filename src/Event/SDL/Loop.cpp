@@ -34,7 +34,9 @@ EventLoop::Get(Event &event)
       return true;
 
     /* that was the last event for now, refresh the screen now */
-    top_window.Refresh();
+    if (top_window != nullptr)
+      top_window->Refresh();
+
     bulk = false;
   }
 
@@ -57,6 +59,6 @@ EventLoop::Dispatch(const Event &_event)
   } else if (event.type == EVENT_CALLBACK) {
     Callback callback = (Callback)event.user.data1;
     callback(event.user.data2);
-  } else
-    top_window.OnEvent(event);
+  } else if (top_window != nullptr)
+    top_window->OnEvent(event);
 }

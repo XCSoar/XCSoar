@@ -30,7 +30,7 @@ class TopWindow;
 struct Event;
 
 class EventLoop : private NonCopyable {
-  TopWindow &top_window;
+  TopWindow *top_window;
 
   /**
    * True if working on a bulk of events.  At the end of that bulk,
@@ -42,7 +42,10 @@ public:
   typedef void (*Callback)(void *ctx);
 
   EventLoop(TopWindow &_top_window)
-    :top_window(_top_window), bulk(true) {}
+    :top_window(&_top_window), bulk(true) {}
+
+  EventLoop()
+    :top_window(nullptr), bulk(true) {}
 
   bool Get(Event &event);
   void Dispatch(const Event &event);
