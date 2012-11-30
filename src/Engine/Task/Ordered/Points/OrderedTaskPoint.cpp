@@ -161,7 +161,7 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
 
   case AST:
     return new ASTPoint(GetObservationZone().Clone(waypoint->location),
-                        *waypoint, task_behaviour);
+                        *waypoint, task_behaviour, IsBoundaryScored());
 
   case AAT:
     return new AATPoint(GetObservationZone().Clone(waypoint->location),
