@@ -347,7 +347,7 @@ protected:
   virtual bool OnKeyCheck(unsigned key_code) const;
   virtual bool OnKeyDown(unsigned key_code) gcc_override;
 
-  virtual bool OnCancelMode() gcc_override;
+  virtual void OnCancelMode() gcc_override;
 
   virtual void OnPaint(Canvas &canvas) gcc_override;
   virtual void OnPaint(Canvas &canvas, const PixelRect &dirty) gcc_override;

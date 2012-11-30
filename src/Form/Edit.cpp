@@ -299,7 +299,7 @@ WndProperty::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
   return false;
 }
 
-bool
+void
 WndProperty::OnCancelMode()
 {
   if (dragging) {
@@ -309,7 +309,7 @@ WndProperty::OnCancelMode()
     ReleaseCapture();
   }
 
-  return WindowControl::OnCancelMode();
+  WindowControl::OnCancelMode();
 }
 
 int

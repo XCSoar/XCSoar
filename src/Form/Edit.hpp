@@ -115,7 +115,7 @@ protected:
   virtual bool OnKeyDown(unsigned key_code) gcc_override;
   virtual bool OnKeyUp(unsigned key_code) gcc_override;
 
-  virtual bool OnCancelMode() gcc_override;
+  virtual void OnCancelMode() gcc_override;
 
 public:
   /**

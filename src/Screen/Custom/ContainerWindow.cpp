@@ -135,18 +135,16 @@ ContainerWindow::OnDestroy()
   PaintWindow::OnDestroy();
 }
 
-bool
+void
 ContainerWindow::OnCancelMode()
 {
-  bool result = Window::OnCancelMode();
+  Window::OnCancelMode();
 
   if (active_child != NULL)
-    result |= active_child->OnCancelMode();
+    active_child->OnCancelMode();
 
   if (capture_child != NULL)
-    result |= capture_child->OnCancelMode();
-
-  return result;
+    capture_child->OnCancelMode();
 }
 
 bool

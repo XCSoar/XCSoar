@@ -277,7 +277,7 @@ GlueMapWindow::OnKeyDown(unsigned key_code)
   return false;
 }
 
-bool
+void
 GlueMapWindow::OnCancelMode()
 {
   MapWindow::OnCancelMode();
@@ -296,8 +296,6 @@ GlueMapWindow::OnCancelMode()
   }
 
   map_item_timer.Cancel();
-
-  return false;
 }
 
 void

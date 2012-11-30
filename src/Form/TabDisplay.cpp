@@ -224,12 +224,11 @@ TabDisplay::OnSetFocus()
   PaintWindow::OnSetFocus();
 }
 
-bool
+void
 TabDisplay::OnCancelMode()
 {
   PaintWindow::OnCancelMode();
   EndDrag();
-  return true;
 }
 
 bool

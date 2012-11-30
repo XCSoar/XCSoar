@@ -524,7 +524,7 @@ InfoBoxWindow::OnPaint(Canvas &canvas)
   Paint(canvas);
 }
 
-bool
+void
 InfoBoxWindow::OnCancelMode()
 {
   if (dragging) {
@@ -537,7 +537,6 @@ InfoBoxWindow::OnCancelMode()
   dialog_timer.Cancel();
 
   PaintWindow::OnCancelMode();
-  return true;
 }
 
 void

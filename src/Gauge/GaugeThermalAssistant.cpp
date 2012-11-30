@@ -60,7 +60,7 @@ private:
   }
 
 protected:
-  virtual bool OnCancelMode() gcc_override;
+  virtual void OnCancelMode() gcc_override;
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
@@ -68,7 +68,7 @@ protected:
   virtual void OnPaint(Canvas &canvas) gcc_override;
 };
 
-bool
+void
 GaugeThermalAssistantWindow::OnCancelMode()
 {
   if (dragging) {
@@ -79,7 +79,6 @@ GaugeThermalAssistantWindow::OnCancelMode()
   }
 
   ThermalAssistantWindow::OnCancelMode();
-  return true;
 }
 
 bool

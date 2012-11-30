@@ -90,7 +90,7 @@ protected:
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
   virtual void OnSetFocus();
   virtual void OnKillFocus();
-  virtual bool OnCancelMode();
+  virtual void OnCancelMode() gcc_override;
   virtual void OnPaint(Canvas &canvas);
 
   virtual bool OnClicked();

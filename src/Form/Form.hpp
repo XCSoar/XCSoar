@@ -205,7 +205,7 @@ public:
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) gcc_override;
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
-  virtual bool OnCancelMode() gcc_override;
+  virtual void OnCancelMode() gcc_override;
 
 #ifdef WIN32
   virtual bool OnCommand(unsigned id, unsigned code) gcc_override;

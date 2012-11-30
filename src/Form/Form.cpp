@@ -270,7 +270,7 @@ WndForm::OnMouseUp(PixelScalar x, PixelScalar y)
   return false;
 }
 
-bool
+void
 WndForm::OnCancelMode()
 {
   ContainerWindow::OnCancelMode();
@@ -280,8 +280,6 @@ WndForm::OnCancelMode()
     Invalidate();
     ReleaseCapture();
   }
-
-  return true;
 }
 
 #ifdef WIN32

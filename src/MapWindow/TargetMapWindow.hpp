@@ -208,7 +208,7 @@ protected:
   virtual void OnPaintBuffer(Canvas& canvas);
   virtual void OnPaint(Canvas& canvas);
 
-  virtual bool OnCancelMode();
+  virtual void OnCancelMode() gcc_override;
 
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
   virtual bool OnMouseUp(PixelScalar x, PixelScalar y);

@@ -162,7 +162,7 @@ protected:
   virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
   virtual void OnSetFocus() gcc_override;
   virtual void OnKillFocus() gcc_override;
-  virtual bool OnCancelMode() gcc_override;
+  virtual void OnCancelMode() gcc_override;
   virtual bool OnTimer(WindowTimer &timer) gcc_override;
 
   virtual bool OnKeyDown(unsigned key_code) gcc_override;

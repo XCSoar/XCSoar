@@ -620,7 +620,7 @@ ListControl::OnMouseWheel(PixelScalar x, PixelScalar y, int delta)
   return true;
 }
 
-bool
+void
 ListControl::OnCancelMode()
 {
   PaintWindow::OnCancelMode();
@@ -631,8 +631,6 @@ ListControl::OnCancelMode()
 #ifndef _WIN32_WCE
   kinetic_timer.Cancel();
 #endif
-
-  return false;
 }
 
 #ifndef _WIN32_WCE

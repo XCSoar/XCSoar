@@ -140,13 +140,13 @@ ButtonWindow::OnKillFocus()
   Invalidate();
 }
 
-bool
+void
 ButtonWindow::OnCancelMode()
 {
   dragging = false;
   SetDown(false);
 
-  return PaintWindow::OnCancelMode();
+  PaintWindow::OnCancelMode();
 }
 
 void

@@ -254,14 +254,12 @@ Window::OnCommand(unsigned id, unsigned code)
   return false;
 }
 
-bool
+void
 Window::OnCancelMode()
 {
 #ifndef USE_GDI
   ReleaseCapture();
 #endif
-
-  return false;
 }
 
 void

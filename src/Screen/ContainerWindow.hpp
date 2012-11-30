@@ -67,7 +67,7 @@ public:
 protected:
 #ifndef USE_GDI
   virtual void OnDestroy() gcc_override;
-  virtual bool OnCancelMode() gcc_override;
+  virtual void OnCancelMode() gcc_override;
   virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
                            unsigned keys) gcc_override;
   virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;

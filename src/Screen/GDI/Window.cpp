@@ -236,8 +236,8 @@ Window::OnMessage(HWND _hWnd, UINT message,
     break;
 
   case WM_CANCELMODE:
-    if (OnCancelMode())
-      return 0;
+    OnCancelMode();
+    /* pass on to DefWindowProc(), there may be more to do */
     break;
 
   case WM_SETFOCUS:

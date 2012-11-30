@@ -194,7 +194,7 @@ protected:
   bool OnMouseGesture(const TCHAR* gesture);
 
   virtual bool OnKeyDown(unsigned key_code);
-  virtual bool OnCancelMode();
+  virtual void OnCancelMode() gcc_override;
   virtual void OnPaint(Canvas &canvas);
   virtual void OnPaintBuffer(Canvas& canvas);
   bool OnTimer(WindowTimer &timer);

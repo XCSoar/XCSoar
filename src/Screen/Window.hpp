@@ -991,7 +991,7 @@ public:
   virtual bool OnCharacter(unsigned ch);
 
   virtual bool OnCommand(unsigned id, unsigned code);
-  virtual bool OnCancelMode();
+  virtual void OnCancelMode();
   virtual void OnSetFocus();
   virtual void OnKillFocus();
   virtual bool OnTimer(WindowTimer &timer);

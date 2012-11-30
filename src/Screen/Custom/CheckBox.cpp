@@ -139,13 +139,13 @@ CheckBox::OnKillFocus()
   Invalidate();
 }
 
-bool
+void
 CheckBox::OnCancelMode()
 {
   dragging = false;
   SetPressed(false);
 
-  return PaintWindow::OnCancelMode();
+  PaintWindow::OnCancelMode();
 }
 
 void

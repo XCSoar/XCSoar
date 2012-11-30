@@ -24,7 +24,7 @@ Copyright_License {
 #include "TargetMapWindow.hpp"
 #include "Screen/Layout.hpp"
 
-bool
+void
 TargetMapWindow::OnCancelMode()
 {
   if (drag_mode != DRAG_NONE) {
@@ -32,7 +32,7 @@ TargetMapWindow::OnCancelMode()
     drag_mode = DRAG_NONE;
   }
 
-  return BufferWindow::OnCancelMode();
+  BufferWindow::OnCancelMode();
 }
 
 bool
