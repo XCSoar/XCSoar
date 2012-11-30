@@ -64,7 +64,7 @@ public:
   FinishPoint(ObservationZonePoint *_oz, const Waypoint &wp,
               const TaskBehaviour &tb,
               const FinishConstraints &constraints,
-              bool boundary_scored=true);
+              bool boundary_scored=false);
 
   /**
    * Set FAI finish height

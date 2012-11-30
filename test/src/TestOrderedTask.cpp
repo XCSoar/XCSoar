@@ -306,17 +306,18 @@ TestHighFinish()
 static void
 TestHighTP()
 {
+  const fixed width(1);
   OrderedTask task(task_behaviour);
-  const StartPoint tp1(new LineSectorZone(wp1.location),
+  const StartPoint tp1(new LineSectorZone(wp1.location, width),
                        wp1, task_behaviour,
                        ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   const Waypoint wp3b = MakeWaypoint(wp3, 1500);
-  const ASTPoint tp2(new LineSectorZone(wp3b.location),
+  const ASTPoint tp2(new LineSectorZone(wp3b.location, width),
                      wp3b, task_behaviour);
   task.Append(tp2);
   const Waypoint wp4b = MakeWaypoint(wp4, 100);
-  const FinishPoint tp3(new LineSectorZone(wp4b.location),
+  const FinishPoint tp3(new LineSectorZone(wp4b.location, width),
                         wp4b, task_behaviour,
                         ordered_task_behaviour.finish_constraints, false);
   task.Append(tp3);
@@ -343,17 +344,18 @@ TestHighTP()
 static void
 TestHighTPFinal()
 {
+  const fixed width(1);
   OrderedTask task(task_behaviour);
-  const StartPoint tp1(new LineSectorZone(wp1.location),
+  const StartPoint tp1(new LineSectorZone(wp1.location, width),
                        wp1, task_behaviour,
                        ordered_task_behaviour.start_constraints);
   task.Append(tp1);
   const Waypoint wp3b = MakeWaypoint(wp3, 1500);
-  const ASTPoint tp2(new LineSectorZone(wp3b.location),
+  const ASTPoint tp2(new LineSectorZone(wp3b.location, width),
                      wp3b, task_behaviour);
   task.Append(tp2);
   const Waypoint wp5b = MakeWaypoint(wp5, 200);
-  const FinishPoint tp3(new LineSectorZone(wp5b.location),
+  const FinishPoint tp3(new LineSectorZone(wp5b.location, width),
                         wp5b, task_behaviour,
                         ordered_task_behaviour.finish_constraints, false);
   task.Append(tp3);
@@ -380,16 +382,17 @@ TestHighTPFinal()
 static void
 TestLowTPFinal()
 {
+  const fixed width(1);
   OrderedTask task(task_behaviour);
   const Waypoint wp1b = MakeWaypoint(wp1, 1500);
-  const StartPoint tp1(new LineSectorZone(wp1b.location),
+  const StartPoint tp1(new LineSectorZone(wp1b.location, width),
                        wp1b, task_behaviour,
                        ordered_task_behaviour.start_constraints);
   task.Append(tp1);
-  const ASTPoint tp2(new LineSectorZone(wp2.location),
+  const ASTPoint tp2(new LineSectorZone(wp2.location, width),
                      wp2, task_behaviour);
   task.Append(tp2);
-  const FinishPoint tp3(new LineSectorZone(wp3.location),
+  const FinishPoint tp3(new LineSectorZone(wp3.location, width),
                         wp3, task_behaviour,
                         ordered_task_behaviour.finish_constraints, false);
   task.Append(tp3);

@@ -11,6 +11,7 @@ Version 6.5 - not yet released
   - basic support for the contest "DMSt" (#2208)
 * tasks
   - add task start countdown (#136, #1080)
+  - optimise racing tasks for minimum distance
 * devices
   - LX: support flight download from LXNAV Nano (#2085)
   - Android/IOIO: support BMP085 sensor (DroidSoar V2)
