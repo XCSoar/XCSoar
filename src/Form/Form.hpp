@@ -123,21 +123,21 @@ public:
    */
   WndForm(SingleWindow &_main_window, const DialogLook &_look,
           const PixelRect &rc,
-          const TCHAR *Caption = _T(""),
+          const TCHAR *caption=nullptr,
           const WindowStyle style = WindowStyle());
 
   /** Destructor */
   virtual ~WndForm();
 
   void Create(SingleWindow &main_window, const PixelRect &rc,
-              const TCHAR *caption=_T(""),
+              const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
   /**
    * Create a full-screen dialog.
    */
   void Create(SingleWindow &main_window,
-              const TCHAR *caption=_T(""),
+              const TCHAR *caption=nullptr,
               const WindowStyle style=WindowStyle());
 
 protected:

@@ -121,7 +121,8 @@ void
 WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
                 const TCHAR *_caption, const WindowStyle style)
 {
-  caption = _caption;
+  if (_caption != nullptr)
+    caption = _caption;
 
   ContainerWindow::Create(main_window, rc, AddBorder(style));
 
