@@ -49,8 +49,9 @@ public:
    */
   ASTPoint(ObservationZonePoint *_oz,
            const Waypoint &wp,
-           const TaskBehaviour &tb)
-    :IntermediateTaskPoint(AST, _oz, wp, tb) {}
+           const TaskBehaviour &tb,
+           bool boundary_scored=false)
+    :IntermediateTaskPoint(AST, _oz, wp, tb, boundary_scored) {}
 };
 
 #endif
