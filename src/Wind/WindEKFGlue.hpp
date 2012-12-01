@@ -33,6 +33,11 @@ struct DerivedInfo;
 
 class WindEKFGlue
 {
+  /**
+   * time to not add points after flight condition is false
+   */
+  static constexpr unsigned BLACKOUT_TIME = 3;
+
   WindEKF ekf;
 
   /**

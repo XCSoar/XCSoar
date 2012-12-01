@@ -27,11 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 
-/**
- * time to not add points after flight condition is false
- */
-#define BLACKOUT_TIME 3
-
 void
 WindEKFGlue::Reset()
 {
