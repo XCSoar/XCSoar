@@ -88,7 +88,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
     return Result(0);
 
   // clear blackout
-  SetBlackout((unsigned)-1);
+  ResetBlackout();
 
   fixed V = basic.true_airspeed;
   fixed dynamic_pressure = sqr(V);
