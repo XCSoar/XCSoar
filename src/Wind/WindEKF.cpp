@@ -229,7 +229,8 @@ WindEKF::LinearizeH(float gps_vel[2])
   H[0][2] = dx*dx+dy*dy;
 }
 
-void WindEKF::Init()
+void
+WindEKF::Init()
 {
   for (unsigned i = 0; i < NUMX; i++) {
     for (unsigned j = 0; j < NUMX; j++) {
