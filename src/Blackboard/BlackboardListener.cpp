@@ -22,24 +22,25 @@ Copyright_License {
 */
 
 #include "BlackboardListener.hpp"
+#include "Compiler.h"
 
 void
-NullBlackboardListener::OnGPSUpdate(const MoreData &basic)
+NullBlackboardListener::OnGPSUpdate(gcc_unused const MoreData &basic)
 {
 }
 
 void
-NullBlackboardListener::OnCalculatedUpdate(const MoreData &basic,
-                                           const DerivedInfo &calculated)
+NullBlackboardListener::OnCalculatedUpdate(gcc_unused const MoreData &basic,
+                                           gcc_unused const DerivedInfo &calculated)
 {
 }
 
 void
-NullBlackboardListener::OnComputerSettingsUpdate(const ComputerSettings &settings)
+NullBlackboardListener::OnComputerSettingsUpdate(gcc_unused const ComputerSettings &settings)
 {
 }
 
 void
-NullBlackboardListener::OnUISettingsUpdate(const UISettings &settings)
+NullBlackboardListener::OnUISettingsUpdate(gcc_unused const UISettings &settings)
 {
 }
