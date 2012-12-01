@@ -80,15 +80,15 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
        basic.acceleration.real &&
        fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
 
-    blackout(time);
+    SetBlackout(time);
     return Result(0);
   }
 
-  if (in_blackout(time))
+  if (InBlackout(time))
     return Result(0);
 
   // clear blackout
-  blackout((unsigned)-1);
+  SetBlackout((unsigned)-1);
 
   fixed V = basic.true_airspeed;
   fixed dynamic_pressure = sqr(V);
@@ -125,13 +125,13 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 }
 
 void
-WindEKFGlue::blackout(const unsigned time)
+WindEKFGlue::SetBlackout(const unsigned time)
 {
   time_blackout = time;
 }
 
 bool
-WindEKFGlue::in_blackout(const unsigned time) const
+WindEKFGlue::InBlackout(const unsigned time) const
 {
   return (time < time_blackout + BLACKOUT_TIME);
 }
