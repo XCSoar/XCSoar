@@ -76,8 +76,13 @@ private:
     time_blackout = (unsigned)-1;
   }
 
-  bool InBlackout(const unsigned time) const;
-  void SetBlackout(const unsigned time);
+  bool InBlackout(const unsigned time) const {
+    return (time < time_blackout + BLACKOUT_TIME);
+  }
+
+  void SetBlackout(const unsigned time) {
+    time_blackout = time;
+  }
 };
 
 #endif

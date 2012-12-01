@@ -118,15 +118,3 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   return res;
 }
-
-void
-WindEKFGlue::SetBlackout(const unsigned time)
-{
-  time_blackout = time;
-}
-
-bool
-WindEKFGlue::InBlackout(const unsigned time) const
-{
-  return (time < time_blackout + BLACKOUT_TIME);
-}
