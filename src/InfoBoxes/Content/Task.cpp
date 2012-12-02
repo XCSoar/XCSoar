@@ -850,9 +850,13 @@ UpdateInfoBoxStartOpen(InfoBoxData &data)
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
   } else if (open.HasBegun(now)) {
-    unsigned seconds = SecondsUntil(now_s, open.GetEnd());
-    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
-    data.SetValueColor(3);
+    if (open.GetEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(now_s, open.GetEnd());
+      data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+      data.SetValueColor(3);
+    } else
+      data.SetValueInvalid();
+
     data.SetComment(_("Open"));
   } else {
     unsigned seconds = SecondsUntil(now_s, open.GetStart());
@@ -891,9 +895,13 @@ UpdateInfoBoxStartOpenArrival(InfoBoxData &data)
     data.SetValueInvalid();
     data.SetComment(_("Closed"));
   } else if (open.HasBegun(arrival)) {
-    unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
-    data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
-    data.SetValueColor(3);
+    if (open.GetEnd().IsValid()) {
+      unsigned seconds = SecondsUntil(arrival_s, open.GetEnd());
+      data.UnsafeFormatValue(_T("%02u:%02u"), seconds / 60, seconds % 60);
+      data.SetValueColor(3);
+    } else
+      data.SetValueInvalid();
+
     data.SetComment(_("Open"));
   } else {
     unsigned seconds = SecondsUntil(arrival_s, open.GetStart());
