@@ -34,6 +34,11 @@ void
 WindowWidget::DeleteWindow()
 {
   assert(window != NULL);
+
+  /* we must call Window::Destroy() explicitly here, because when
+     Window::~Window() attempts to do that, it's too late already to
+     invoke virtual overrides */
+  window->Destroy();
   delete window;
 }
 
