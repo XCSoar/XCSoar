@@ -331,8 +331,8 @@ TerrainRenderer::Draw(Canvas &canvas,
   const GLTexture &texture = raster_renderer.BindAndGetTexture();
   const PixelSize allocated = texture.GetAllocatedSize();
 
-  const int src_x = 0, src_y = 0, src_width = texture.GetWidth(),
-    src_height = texture.GetHeight();
+  const int src_x = 0, src_y = 0, src_width = raster_renderer.GetWidth(),
+    src_height = raster_renderer.GetHeight();
 
   GLfloat x0 = (GLfloat)src_x / allocated.cx;
   GLfloat y0 = (GLfloat)src_y / allocated.cy;
