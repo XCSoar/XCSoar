@@ -214,6 +214,15 @@ public:
     return height;
   }
 
+#ifdef ENABLE_OPENGL
+  /**
+   * Bind the texture and return a reference to it.  If the texture is
+   * "dirty", then the RAM buffer will be copied to the texture by
+   * this method.
+   */
+  GLTexture &BindAndGetTexture() const;
+#endif
+
   void StretchTo(UPixelScalar width, UPixelScalar height, Canvas &dest_canvas,
                  UPixelScalar dest_width, UPixelScalar dest_height) const;
 

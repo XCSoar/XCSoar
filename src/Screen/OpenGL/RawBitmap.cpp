@@ -77,10 +77,8 @@ RawBitmap::SurfaceDestroyed()
   dirty = true;
 }
 
-void
-RawBitmap::StretchTo(UPixelScalar width, UPixelScalar height,
-                     Canvas &dest_canvas,
-                     UPixelScalar dest_width, UPixelScalar dest_height) const
+GLTexture &
+RawBitmap::BindAndGetTexture() const
 {
   texture->Bind();
 
@@ -98,8 +96,18 @@ RawBitmap::StretchTo(UPixelScalar width, UPixelScalar height,
     dirty = false;
   }
 
+  return *texture;
+}
+
+void
+RawBitmap::StretchTo(UPixelScalar width, UPixelScalar height,
+                     Canvas &dest_canvas,
+                     UPixelScalar dest_width, UPixelScalar dest_height) const
+{
+  GLTexture &texture = BindAndGetTexture();
+
   OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
   GLEnable scope(GL_TEXTURE_2D);
   dest_canvas.Stretch(0, 0, dest_width, dest_height,
-                      *texture, 0, 0, width, height);
+                      texture, 0, 0, width, height);
 }
