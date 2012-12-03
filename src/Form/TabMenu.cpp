@@ -250,7 +250,7 @@ TabMenuControl::IsPointOverButton(RasterPoint Pos, unsigned mainIndex) const
     const MainMenuButton &main_button = GetMainMenuButton(mainIndex);
     for (unsigned i = main_button.first_page_index;
          i <= main_button.last_page_index; ++i) {
-      if (GetMainMenuButtonSize(i).IsInside(Pos))
+      if (GetSubMenuButtonSize(i).IsInside(Pos))
         return MenuTabIndex(mainIndex, i - main_button.first_page_index);
     }
   }
