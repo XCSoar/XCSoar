@@ -33,6 +33,11 @@ struct DerivedInfo;
 
 class WindEKFGlue
 {
+  /**
+   * time to not add points after flight condition is false
+   */
+  static constexpr unsigned BLACKOUT_TIME = 3;
+
   WindEKF ekf;
 
   /**
@@ -71,8 +76,13 @@ private:
     time_blackout = (unsigned)-1;
   }
 
-  bool in_blackout(const unsigned time) const;
-  void blackout(const unsigned time);
+  bool InBlackout(const unsigned time) const {
+    return (time < time_blackout + BLACKOUT_TIME);
+  }
+
+  void SetBlackout(const unsigned time) {
+    time_blackout = time;
+  }
 };
 
 #endif
