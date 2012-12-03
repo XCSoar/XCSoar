@@ -24,7 +24,6 @@ Copyright_License {
 #include "TerrainDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/Draw.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
@@ -42,8 +41,6 @@ Copyright_License {
 #include "Screen/OpenGL/Scissor.hpp"
 #endif
 
-class WndOwnerDrawFrame;
-
 enum ControlIndex {
   EnableTerrain,
   EnableTopography,
@@ -52,6 +49,21 @@ enum ControlIndex {
   TerrainContrast,
   TerrainBrightness,
   TerrainPreview,
+};
+
+class TerrainPreviewWindow : public PaintWindow {
+  TerrainRenderer renderer;
+
+public:
+  TerrainPreviewWindow(const RasterTerrain *terrain)
+    :renderer(terrain) {}
+
+  void SetSettings(const TerrainRendererSettings &settings) {
+    renderer.SetSettings(settings);
+    Invalidate();
+  }
+
+  virtual void OnPaint(Canvas &canvas) gcc_override;
 };
 
 class TerrainDisplayConfigPanel : public RowFormWidget, DataFieldListener {
@@ -118,16 +130,13 @@ TerrainDisplayConfigPanel::OnModified(DataField &df)
 
     // Invalidate terrain preview
     if (terrain != NULL)
-      ((WndOwnerDrawFrame &)GetRow(TerrainPreview)).Invalidate();
+      ((TerrainPreviewWindow &)GetRow(TerrainPreview)).SetSettings(terrain_settings);
   }
 }
 
 void
-TerrainDisplayConfigPanel::OnPreviewPaint(Canvas &canvas)
+TerrainPreviewWindow::OnPaint(Canvas &canvas)
 {
-  TerrainRenderer renderer(terrain);
-  renderer.SetSettings(terrain_settings);
-
   const GlueMapWindow *map = UIGlobals::GetMap();
   if (map == NULL)
     return;
@@ -137,7 +146,7 @@ TerrainDisplayConfigPanel::OnPreviewPaint(Canvas &canvas)
   projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);
 
   Angle sun_azimuth(Angle::Degrees(-45));
-  if (terrain_settings.slope_shading == SlopeShading::SUN &&
+  if (renderer.GetSettings().slope_shading == SlopeShading::SUN &&
       XCSoarInterface::Calculated().sun_data_available)
     sun_azimuth = XCSoarInterface::Calculated().sun_azimuth;
 
@@ -150,13 +159,6 @@ TerrainDisplayConfigPanel::OnPreviewPaint(Canvas &canvas)
 #endif
 
   renderer.Draw(canvas, projection);
-}
-
-static void
-OnPreviewPaint(gcc_unused WndOwnerDrawFrame *Sender,
-               Canvas &canvas)
-{
-  instance->OnPreviewPaint(canvas);
 }
 
 void
@@ -226,10 +228,10 @@ TerrainDisplayConfigPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   if (::terrain != NULL) {
     WindowStyle style;
     style.Border();
-    AddRemaining(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),
-                                       {0, 0, 100, 100},
-                                       style,
-                                       ::OnPreviewPaint));
+
+    TerrainPreviewWindow *preview = new TerrainPreviewWindow(::terrain);
+    preview->Create(*(ContainerWindow *)GetWindow(), {0, 0, 100, 100}, style);
+    AddRemaining(preview);
   }
 
   terrain_settings = terrain;
