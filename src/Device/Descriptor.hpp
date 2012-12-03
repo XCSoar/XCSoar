@@ -49,7 +49,8 @@ class AtmosphericPressure;
 struct DeviceRegister;
 class InternalSensors;
 class BMP085Device;
-class MS5611Device;
+class I2CbaroDevice;
+class NunchuckDevice;
 class RecordedFlightList;
 struct RecordedFlightInfo;
 class OperationEnvironment;
@@ -115,7 +116,8 @@ class DeviceDescriptor : private Notify, private PortLineSplitter {
 
 #ifdef IOIOLIB
   BMP085Device *droidsoar_v2;
-  MS5611Device *ms5611;
+  I2CbaroDevice *i2cbaro[3]; // static, pitot, tek; in any order
+  NunchuckDevice *nunchuck;
 #endif
 #endif
 
@@ -250,8 +252,9 @@ private:
 
   bool OpenDroidSoarV2();
 
-  bool OpenMS5611();
+  bool OpenI2Cbaro();
 
+  bool OpenNunchuck();
 public:
   /**
    * To be used by OpenDeviceJob, don't call directly.

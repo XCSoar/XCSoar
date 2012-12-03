@@ -21,39 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MS5611_DEVICE_HPP
-#define XCSOAR_ANDROID_MS5611_DEVICE_HPP
+package org.xcsoar;
 
-#include "MS5611Listener.hpp"
-#include "Java/Object.hpp"
-#include "Math/SelfTimingKalmanFilter1d.hpp"
-#include "Compiler.h"
-
-#include <jni.h>
-
-class MS5611Device : private MS5611Listener {
-  unsigned index;
-  Java::Object obj;
-
+/**
+ * A #Nunchuck.Listener implementation that passes method calls to
+ * native code.
+ */
+class NativeNunchuckListener implements Nunchuck.Listener {
   /**
-   * This Kalman filter is used to smooth the pressure input.
+   * A native pointer.
    */
-  SelfTimingKalmanFilter1d kalman_filter;
+  private final long ptr;
 
-public:
-  static void Initialise(JNIEnv *env);
-  static void Deinitialise(JNIEnv *env);
+  NativeNunchuckListener(long _ptr) {
+    ptr = _ptr;
+  }
 
-  MS5611Device(unsigned index,
-               JNIEnv *env, jobject holder,
-               unsigned twi_num, unsigned sleeptime);
-
-  ~MS5611Device();
-
-private:
-  /* virtual methods from class MS5611Listener */
-  virtual void onMS5611Values(AtmosphericPressure pressure);
-  virtual void onMS5611Error() gcc_override;
-};
-
-#endif
+  @Override public native void onNunchuckValues(int joy_x, int joy_y, int acc_x, int acc_y, int acc_z, int switches);
+  @Override public native void onNunchuckError();
+}

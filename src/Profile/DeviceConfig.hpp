@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_PROFILE_DEVICE_CONFIG_HPP
 
 #include "Util/StaticString.hpp"
+#include "Math/fixed.hpp"
 
 #include <tchar.h>
 #include <stdint.h>
@@ -59,8 +60,12 @@ struct DeviceConfig {
      */
     IOIOUART,
 
+    /**
+     * Android IOIO Misc. devices
+     */
     DROIDSOAR_V2,
-    MS5611,
+    NUNCHUCK,
+    I2CPRESSURESENSOR,
 
     /**
      * Attempt to auto-discover the GPS source.
@@ -126,6 +131,34 @@ struct DeviceConfig {
    * The IOIO UART ID.
    */
   unsigned ioio_uart_id;
+
+
+  /**
+   * The IOIO I2C bus.
+   */
+  /* For some devices (e.g DroidSoar) this may hold the i2c address # in bits 15-8
+   * and other device specific data in 31-16.
+   * In these cases i2c_addr is not used. */
+  unsigned i2c_bus;
+  unsigned i2c_addr;
+
+  /**
+   * What is the purpose of this pressure sensor.
+   */
+  enum class PressureUse : unsigned {
+        NONE = 0,
+	STATIC_WITH_VARIO, /* ProvidePressureAltitude() and ProvideNoncompVario() */
+	STATIC_ONLY,    /* ProvidePressureAltitude() */
+	TEK_PRESSURE,	/* ProvideNettoVario() */
+	PITOT,          /* ProvideIndicatedAirspeedWithAltitude() */
+	PITOT_ZERO,     /* Determine and then save the offset between static and pitot sensor */
+  };
+  PressureUse press_use;
+
+  /**
+   * Offset in hPa of the pitot pressure sensor relative to the static pressure sensor.
+   */
+  fixed pitot_offset;
 
   /**
    * Name of the driver.
@@ -291,11 +324,31 @@ struct DeviceConfig {
     return UsesPort(port_type);
   }
 
+  static bool IsPressureSensor(PortType port_type) {
+    return port_type == PortType::I2CPRESSURESENSOR;
+  }
+
+  bool IsPressureSensor() const {
+    return IsPressureSensor(port_type);
+  }
+
+  static bool UsesI2C(PortType port_type) {
+    return port_type == PortType::NUNCHUCK ||
+           port_type == PortType::I2CPRESSURESENSOR;
+  }
+
+  bool UsesI2C() const {
+    return UsesI2C(port_type);
+  }
+
   void Clear() {
     port_type = PortType::DISABLED;
     baud_rate = 4800u;
     bulk_baud_rate = 0u;
     tcp_port = 4353u;
+    i2c_bus = 2u;
+    i2c_addr = 0;
+    press_use = PressureUse::STATIC_ONLY;
     path.clear();
     bluetooth_mac.clear();
     driver_name.clear();

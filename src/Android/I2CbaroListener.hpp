@@ -21,17 +21,17 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_MS5611_LISTENER_HPP
-#define XCSOAR_ANDROID_MS5611_LISTENER_HPP
+#ifndef XCSOAR_ANDROID_I2CBARO_LISTENER_HPP
+#define XCSOAR_ANDROID_I2CBARO_LISTENER_HPP
 
 #include "Math/fixed.hpp"
 
 class AtmosphericPressure;
 
-class MS5611Listener {
+class I2CbaroListener {
 public:
-  virtual void onMS5611Values(AtmosphericPressure pressure) = 0;
-  virtual void onMS5611Error() = 0;
+  virtual void onI2CbaroValues(unsigned sensor, AtmosphericPressure pressure) = 0;
+  virtual void onI2CbaroError() = 0;
 };
 
 #endif

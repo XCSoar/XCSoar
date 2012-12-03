@@ -21,18 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANDROID_NATIVE_MS5611_LISTENER_HPP
-#define XCSOAR_ANDROID_NATIVE_MS5611_LISTENER_HPP
+package org.xcsoar;
 
-#include <jni.h>
+/**
+ * A #I2Cbaro.Listener implementation that passes method calls to
+ * native code.
+ */
+class NativeI2CbaroListener implements I2Cbaro.Listener {
+  /**
+   * A native pointer.
+   */
+  private final long ptr;
 
-class MS5611Listener;
+  NativeI2CbaroListener(long _ptr) {
+    ptr = _ptr;
+  }
 
-namespace NativeMS5611Listener {
-  void Initialise(JNIEnv *env);
-  void Deinitialise(JNIEnv *env);
-
-  jobject Create(JNIEnv *env, MS5611Listener &listener);
+  @Override public native void onI2CbaroValues(int sensor, int pressure);
+  @Override public native void onI2CbaroError();
 }
-
-#endif

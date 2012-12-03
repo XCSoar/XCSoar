@@ -822,8 +822,10 @@ XCSOAR_SOURCES += \
 	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \
 	$(SRC)/Android/NativeBMP085Listener.cpp \
 	$(SRC)/Android/BMP085Device.cpp \
-	$(SRC)/Android/NativeMS5611Listener.cpp \
-	$(SRC)/Android/MS5611Device.cpp \
+	$(SRC)/Android/NativeI2CbaroListener.cpp \
+	$(SRC)/Android/I2CbaroDevice.cpp \
+	$(SRC)/Android/NativeNunchuckListener.cpp \
+	$(SRC)/Android/NunchuckDevice.cpp \
 	$(SRC)/Android/IOIOHelper.cpp
 endif
 

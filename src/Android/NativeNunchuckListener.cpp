@@ -21,61 +21,59 @@ Copyright_License {
 }
 */
 
-#include "NativeMS5611Listener.hpp"
-#include "MS5611Listener.hpp"
-#include "Atmosphere/Temperature.hpp"
-#include "Atmosphere/Pressure.hpp"
+#include "NativeNunchuckListener.hpp"
+#include "NunchuckListener.hpp"
 #include "Java/Class.hpp"
-#include "org_xcsoar_NativeMS5611Listener.h"
+#include "org_xcsoar_NativeNunchuckListener.h"
 
 #include <stddef.h>
 
-namespace NativeMS5611Listener {
+namespace NativeNunchuckListener {
   static Java::TrivialClass cls;
   static jmethodID ctor;
   static jfieldID ptr_field;
 };
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeMS5611Listener_onMS5611Values(JNIEnv *env, jobject obj,
-                                                    jint pressure)
+Java_org_xcsoar_NativeNunchuckListener_onNunchuckValues(JNIEnv *env, jobject obj,
+                       jint joy_x, jint joy_y, jint acc_x, jint acc_y, jint acc_z, jint switches)
  {
-  jlong ptr = env->GetLongField(obj, NativeMS5611Listener::ptr_field);
+  jlong ptr = env->GetLongField(obj, NativeNunchuckListener::ptr_field);
   if (ptr == 0)
     return;
 
-  MS5611Listener &listener = *(MS5611Listener *)(void *)ptr;
-  listener.onMS5611Values(AtmosphericPressure::Pascal(fixed(pressure)));
+  NunchuckListener &listener = *(NunchuckListener *)(void *)ptr;
+  listener.onNunchuckValues(joy_x, joy_y, acc_x, acc_y, acc_z, switches);
 }
 
 JNIEXPORT void JNICALL
-Java_org_xcsoar_NativeMS5611Listener_onMS5611Error(JNIEnv *env, jobject obj)
+Java_org_xcsoar_NativeNunchuckListener_onNunchuckError(JNIEnv *env, jobject obj)
 {
-  jlong ptr = env->GetLongField(obj, NativeMS5611Listener::ptr_field);
+  jlong ptr = env->GetLongField(obj, NativeNunchuckListener::ptr_field);
   if (ptr == 0)
     return;
 
-  MS5611Listener &listener = *(MS5611Listener *)(void *)ptr;
-  listener.onMS5611Error();
+  NunchuckListener &listener = *(NunchuckListener *)(void *)ptr;
+  listener.onNunchuckError();
 }
 
 void
-NativeMS5611Listener::Initialise(JNIEnv *env)
+NativeNunchuckListener::Initialise(JNIEnv *env)
 {
-  cls.Find(env, "org/xcsoar/NativeMS5611Listener");
+  cls.Find(env, "org/xcsoar/NativeNunchuckListener");
 
   ctor = env->GetMethodID(cls, "<init>", "(J)V");
   ptr_field = env->GetFieldID(cls, "ptr", "J");
 }
 
 void
-NativeMS5611Listener::Deinitialise(JNIEnv *env)
+NativeNunchuckListener::Deinitialise(JNIEnv *env)
 {
   cls.Clear(env);
 }
 
 jobject
-NativeMS5611Listener::Create(JNIEnv *env, MS5611Listener &listener)
+NativeNunchuckListener::Create(JNIEnv *env, NunchuckListener &listener)
 {
   assert(cls != NULL);
 

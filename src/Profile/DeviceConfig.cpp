@@ -26,6 +26,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Language/Language.hpp"
 #include "Util/Macros.hpp"
+#include "Interface.hpp"
 
 #include <stdio.h>
 
@@ -36,7 +37,8 @@ static const TCHAR *const port_type_strings[] = {
   _T("rfcomm_server"),
   _T("ioio_uart"),
   _T("droidsoar_v2"),
-  _T("ms5611"),
+  _T("nunchuck"),
+  _T("i2c_baro"),
   _T("auto"),
   _T("internal"),
   _T("tcp_listener"),
@@ -61,7 +63,8 @@ DeviceConfig::IsAvailable() const
 
   case PortType::IOIOUART:
   case PortType::DROIDSOAR_V2:
-  case PortType::MS5611:
+  case PortType::NUNCHUCK:
+  case PortType::I2CPRESSURESENSOR:
     return IsAndroid() && HasIOIOLib();
 
   case PortType::AUTO:
@@ -104,7 +107,8 @@ DeviceConfig::ShouldReopenOnTimeout() const
   case PortType::RFCOMM_SERVER:
   case PortType::IOIOUART:
   case PortType::DROIDSOAR_V2:
-  case PortType::MS5611:
+  case PortType::NUNCHUCK:
+  case PortType::I2CPRESSURESENSOR:
     /* errors on these are detected automatically by the driver */
     return false;
 
@@ -154,8 +158,11 @@ DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
   case PortType::DROIDSOAR_V2:
     return _T("DroidSoar V2");
 
-  case PortType::MS5611:
-    return _T("ms5611");
+  case PortType::NUNCHUCK:
+    return _T("Nunchuck");
+
+  case PortType::I2CPRESSURESENSOR:
+    return _T("IOIO i2c pressure sensor");
 
   case PortType::AUTO:
     return _("GPS Intermediate Driver");
@@ -319,6 +326,18 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
   if (!Get(buffer, config.ignore_checksum))
     Get(ProfileKeys::IgnoreNMEAChecksum, config.ignore_checksum);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("I2C_Bus"));
+  Get(buffer, config.i2c_bus);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("I2C_Addr"));
+  Get(buffer, config.i2c_addr);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("PressureUse"));
+  GetEnum(buffer, config.press_use);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("PitotOffset"));
+  Get(buffer, config.pitot_offset);
 }
 
 static const TCHAR *
@@ -388,4 +407,26 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
   Set(buffer, config.ignore_checksum);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("I2C_Bus"));
+  Set(buffer, config.i2c_bus);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("I2C_Addr"));
+  Set(buffer, config.i2c_addr);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("PressureUse"));
+  SetEnum(buffer, config.press_use);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("PitotOffset"));
+  if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2 ||
+      config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR) {
+    // Has a new offset been determined ?
+    if (XCSoarInterface::Basic().pitot_offset_available) {
+      Set(buffer, XCSoarInterface::Basic().pitot_offset);
+    } else {
+      Set(buffer, config.pitot_offset);
+    }
+  } else {
+    Set(buffer, fixed(0.0));	// invalid value
+  }
 }

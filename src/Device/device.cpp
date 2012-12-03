@@ -65,14 +65,18 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
     return (b.port_type == DeviceConfig::PortType::IOIOUART) &&
       a.ioio_uart_id == b.ioio_uart_id;
 
+  case DeviceConfig::PortType::I2CPRESSURESENSOR:
+    return b.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR &&
+      a.i2c_bus == b.i2c_bus && a.i2c_addr == b.i2c_addr;
+
   case DeviceConfig::PortType::DISABLED:
   case DeviceConfig::PortType::AUTO:
   case DeviceConfig::PortType::INTERNAL:
   case DeviceConfig::PortType::DROIDSOAR_V2:
-  case DeviceConfig::PortType::MS5611:
   case DeviceConfig::PortType::TCP_LISTENER:
   case DeviceConfig::PortType::UDP_LISTENER:
   case DeviceConfig::PortType::RFCOMM_SERVER:
+  case DeviceConfig::PortType::NUNCHUCK: // Who wants 2 nunchucks ??
     break;
   }
 

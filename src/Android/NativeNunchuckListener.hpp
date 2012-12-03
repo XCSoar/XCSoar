@@ -21,22 +21,18 @@ Copyright_License {
 }
 */
 
-package org.xcsoar;
+#ifndef XCSOAR_ANDROID_NATIVE_NUNCHUCK_LISTENER_HPP
+#define XCSOAR_ANDROID_NATIVE_NUNCHUCK_LISTENER_HPP
 
-/**
- * A #MS5611.Listener implementation that passes method calls to
- * native code.
- */
-class NativeMS5611Listener implements MS5611.Listener {
-  /**
-   * A native pointer.
-   */
-  private final long ptr;
+#include <jni.h>
 
-  NativeMS5611Listener(long _ptr) {
-    ptr = _ptr;
-  }
+class NunchuckListener;
 
-  @Override public native void onMS5611Values(int pressure);
-  @Override public native void onMS5611Error();
+namespace NativeNunchuckListener {
+  void Initialise(JNIEnv *env);
+  void Deinitialise(JNIEnv *env);
+
+  jobject Create(JNIEnv *env, NunchuckListener &listener);
 }
+
+#endif

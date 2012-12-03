@@ -60,8 +60,10 @@ Copyright_License {
 #include "Android/IOIOHelper.hpp"
 #include "NativeBMP085Listener.hpp"
 #include "BMP085Device.hpp"
-#include "NativeMS5611Listener.hpp"
-#include "MS5611Device.hpp"
+#include "NativeI2CbaroListener.hpp"
+#include "I2CbaroDevice.hpp"
+#include "NativeNunchuckListener.hpp"
+#include "NunchuckDevice.hpp"
 #endif
 
 #ifndef NDEBUG
@@ -121,8 +123,10 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   IOIOHelper::Initialise(env);
   NativeBMP085Listener::Initialise(env);
   BMP085Device::Initialise(env);
-  NativeMS5611Listener::Initialise(env);
-  MS5611Device::Initialise(env);
+  NativeI2CbaroListener::Initialise(env);
+  I2CbaroDevice::Initialise(env);
+  NativeNunchuckListener::Initialise(env);
+  NunchuckDevice::Initialise(env);
 #endif
 
   context = new Context(env, _context);
@@ -207,8 +211,10 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 #ifdef IOIOLIB
   BMP085Device::Deinitialise(env);
   NativeBMP085Listener::Deinitialise(env);
-  MS5611Device::Deinitialise(env);
-  NativeMS5611Listener::Deinitialise(env);
+  I2CbaroDevice::Deinitialise(env);
+  NativeI2CbaroListener::Deinitialise(env);
+  NunchuckDevice::Deinitialise(env);
+  NativeNunchuckListener::Deinitialise(env);
   IOIOHelper::Deinitialise(env);
 #endif
   BluetoothHelper::Deinitialise(env);

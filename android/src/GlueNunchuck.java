@@ -27,20 +27,20 @@ import ioio.lib.api.IOIO;
 import ioio.lib.api.exception.ConnectionLostException;
 
 /**
- * A driver for the MS5611 pressure sensor, connected via IOIO.
+ * A driver for the Nintendo Nunchuck, connected via IOIO.
  */
-final class GlueMS5611 implements IOIOConnectionListener {
+final class GlueNunchuck implements IOIOConnectionListener {
   private IOIOConnectionHolder holder;
-  private final int twiNum, sleeptime;
-  private final MS5611.Listener listener;
+  private final int twiNum, sample_rate;
+  private final Nunchuck.Listener listener;
 
-  private MS5611 instance;
+  private Nunchuck instance;
 
-  GlueMS5611(IOIOConnectionHolder _holder,
-              int _twiNum, int _sleeptime,
-             MS5611.Listener _listener) {
+  GlueNunchuck(IOIOConnectionHolder _holder,
+              int _twiNum, int _sample_rate,
+             Nunchuck.Listener _listener) {
     twiNum = _twiNum;
-    sleeptime = _sleeptime;
+    sample_rate = _sample_rate;
     listener = _listener;
 
     holder = _holder;
@@ -60,7 +60,7 @@ final class GlueMS5611 implements IOIOConnectionListener {
 
   @Override public void onIOIOConnect(IOIO ioio)
     throws ConnectionLostException, InterruptedException {
-    instance = new MS5611(ioio, twiNum, sleeptime, listener);
+    instance = new Nunchuck(ioio, twiNum, sample_rate, listener);
   }
 
   @Override public void onIOIODisconnect() {

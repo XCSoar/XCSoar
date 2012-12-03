@@ -54,7 +54,8 @@ Copyright_License {
 #ifdef IOIOLIB
 #include "Android/IOIOHelper.hpp"
 #include "Android/BMP085Device.hpp"
-#include "Android/MS5611Device.hpp"
+#include "Android/I2CbaroDevice.hpp"
+#include "Android/NunchuckDevice.hpp"
 #endif
 
 #include <assert.h>
@@ -100,12 +101,16 @@ DeviceDescriptor::DeviceDescriptor(unsigned _index)
    internal_sensors(NULL),
 #ifdef IOIOLIB
    droidsoar_v2(nullptr),
-   ms5611(nullptr),
+   nunchuck(nullptr),
 #endif
 #endif
    ticker(false), borrowed(false)
 {
   config.Clear();
+#ifdef IOIOLIB
+  for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++)
+    i2cbaro[i] = nullptr;
+#endif
 }
 
 void
@@ -143,7 +148,10 @@ DeviceDescriptor::GetState() const
   if (droidsoar_v2 != nullptr)
     return PortState::READY;
 
-  if (ms5611 != nullptr)
+  if (i2cbaro[0] != nullptr)
+    return PortState::READY;
+
+  if (nunchuck != nullptr)
     return PortState::READY;
 #endif
 #endif
@@ -256,17 +264,24 @@ DeviceDescriptor::OpenDroidSoarV2()
   if (ioio_helper == nullptr)
     return false;
 
-  droidsoar_v2 = new BMP085Device(GetIndex(), Java::GetEnv(),
+  if (i2cbaro[0] == NULL) {
+    i2cbaro[0] = new I2CbaroDevice(GetIndex(), Java::GetEnv(), 
                                   ioio_helper->GetHolder(),
-                                  2, 27, 3);	// twi, eoc_pin, oversampling
-  return true;
-#else
-  return false;
+                                  DeviceConfig::PressureUse::STATIC_ONLY,
+                                  config.pitot_offset, 2 + (0x77 << 8) + (27 << 16), 0 , 5, 0);
+
+    i2cbaro[1] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
+                                  ioio_helper->GetHolder(),
+                                  (config.pitot_offset == fixed(0)) ? DeviceConfig::PressureUse::PITOT_ZERO : DeviceConfig::PressureUse::PITOT,
+                                  config.pitot_offset, 1 + (0x77 << 8) + (46 << 16), 0 , 5, 0);
+    return true;
+  }
 #endif
+  return false;
 }
 
 bool
-DeviceDescriptor::OpenMS5611()
+DeviceDescriptor::OpenI2Cbaro()
 {
 #ifdef IOIOLIB
   if (is_simulator())
@@ -275,8 +290,33 @@ DeviceDescriptor::OpenMS5611()
   if (ioio_helper == nullptr)
     return false;
 
-  ms5611 = new MS5611Device(GetIndex(), Java::GetEnv(),
-                                  ioio_helper->GetHolder(), 2, 20); // twi, sleep
+  for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++) {
+    if (i2cbaro[i] == NULL) {
+      i2cbaro[i] = new I2CbaroDevice(GetIndex(), Java::GetEnv(),
+                                  ioio_helper->GetHolder(),
+                                  config.press_use, config.pitot_offset, config.i2c_bus, config.i2c_addr,
+                                  config.press_use == DeviceConfig::PressureUse::TEK_PRESSURE ? 20 : 5,
+                                  0); // called flags, actually reserved for future use.
+      return true;
+    }
+  }
+#endif
+  return false;
+}
+
+bool
+DeviceDescriptor::OpenNunchuck()
+{
+#ifdef IOIOLIB
+  if (is_simulator())
+    return true;
+
+  if (ioio_helper == nullptr)
+    return false;
+
+  nunchuck = new NunchuckDevice(GetIndex(), Java::GetEnv(),
+                                  ioio_helper->GetHolder(),
+                                  config.i2c_bus, 5); // twi, sample_rate
   return true;
 #else
   return false;
@@ -294,8 +334,11 @@ DeviceDescriptor::DoOpen(OperationEnvironment &env)
   if (config.port_type == DeviceConfig::PortType::DROIDSOAR_V2)
     return OpenDroidSoarV2();
 
-  if (config.port_type == DeviceConfig::PortType::MS5611)
-    return OpenMS5611();
+  if (config.port_type == DeviceConfig::PortType::I2CPRESSURESENSOR)
+    return OpenI2Cbaro();
+
+  if (config.port_type == DeviceConfig::PortType::NUNCHUCK)
+    return OpenNunchuck();
 
   reopen_clock.Update();
 
@@ -365,8 +408,12 @@ DeviceDescriptor::Close()
   delete droidsoar_v2;
   droidsoar_v2 = nullptr;
 
-  delete ms5611;
-  ms5611 = nullptr;
+  for (unsigned i=0; i<sizeof i2cbaro/sizeof i2cbaro[0]; i++) {
+    delete i2cbaro[i];
+    i2cbaro[i] = nullptr;
+  }
+  delete nunchuck;
+  nunchuck = nullptr;
 #endif
 
 #endif
