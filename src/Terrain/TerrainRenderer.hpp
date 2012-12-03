@@ -72,6 +72,10 @@ protected:
   void CopyTo(Canvas &canvas, unsigned width, unsigned height) const;
 
 public:
+  const TerrainRendererSettings &GetSettings() const {
+    return settings;
+  }
+
   void SetSettings(const TerrainRendererSettings &_settings);
 
   virtual void Generate(const WindowProjection &map_projection,
