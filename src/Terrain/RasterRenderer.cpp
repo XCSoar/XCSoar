@@ -62,7 +62,7 @@ TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
 }
 
 RasterRenderer::RasterRenderer()
-  :quantisation_pixels(1),
+  :quantisation_pixels(2),
 #ifdef ENABLE_OPENGL
    bounds(GeoBounds::Invalid()),
 #endif
