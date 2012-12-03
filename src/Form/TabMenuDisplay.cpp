@@ -188,7 +188,7 @@ TabMenuDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     return false;
 
   const PixelRect rc = GetDownButtonRC();
-  const bool tmp = !IsPointInRect(rc, RasterPoint{x, y});
+  const bool tmp = !rc.IsInside({x, y});
   if (drag_off_button != tmp) {
     drag_off_button = tmp;
     Invalidate(rc);

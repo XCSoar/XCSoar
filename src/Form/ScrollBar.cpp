@@ -66,8 +66,8 @@ ScrollBar::SetSize(const PixelSize size)
 void
 ScrollBar::Reset()
 {
-  ClearRect(rc);
-  ClearRect(rc_slider);
+  rc.SetEmpty();
+  rc_slider.SetEmpty();
 }
 
 void

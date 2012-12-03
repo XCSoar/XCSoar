@@ -45,7 +45,7 @@ Main()
   ContainerWindow &client_area = form.GetClientAreaWindow();
 
   PixelRect list_rc = client_area.GetClientRect();
-  GrowRect(list_rc, -2, -2);
+  list_rc.Grow(-2);
 
   WindowStyle style;
   style.TabStop();

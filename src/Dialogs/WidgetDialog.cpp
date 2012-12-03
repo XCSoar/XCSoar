@@ -99,7 +99,7 @@ void
 WidgetDialog::AutoSize()
 {
   const PixelRect parent_rc = GetParentClientRect();
-  const PixelSize parent_size = GetPixelRectSize(parent_rc);
+  const PixelSize parent_size = parent_rc.GetSize();
 
   widget.Prepare();
   PixelSize min_size = widget.Get()->GetMinimumSize();
@@ -124,7 +124,7 @@ WidgetDialog::AutoSize()
       rc.bottom = rc.top + max_size.cy;
 
     PixelRect remaining = buttons.LeftLayout(rc);
-    PixelSize remaining_size = GetPixelRectSize(remaining);
+    PixelSize remaining_size = remaining.GetSize();
     if (remaining_size.cx > max_size.cx)
       rc.right -= remaining_size.cx - max_size.cx;
 
@@ -140,7 +140,7 @@ WidgetDialog::AutoSize()
     rc.right = rc.left + max_size.cx;
 
   PixelRect remaining = buttons.BottomLayout(rc);
-  PixelSize remaining_size = GetPixelRectSize(remaining);
+  PixelSize remaining_size = remaining.GetSize();
 
   if (remaining_size.cy > max_size.cy)
     rc.bottom -= remaining_size.cy - max_size.cy;

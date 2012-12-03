@@ -66,7 +66,7 @@ unsigned
 WndFrame::GetTextHeight() const
 {
   PixelRect rc = GetClientRect();
-  GrowRect(rc, -2, -2); // todo border width
+  rc.Grow(-2); // todo border width
 
   AnyCanvas canvas;
   canvas.Select(*look.text_font);
@@ -89,7 +89,7 @@ WndFrame::OnPaint(Canvas &canvas)
 
   PixelRect rc = GetClientRect();
   const int padding = Layout::GetTextPadding();
-  GrowRect(rc, -padding, -padding);
+  rc.Grow(-padding);
 
   canvas.DrawFormattedText(&rc, text.c_str(), mCaptionStyle);
 }

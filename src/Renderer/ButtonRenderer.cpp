@@ -51,9 +51,9 @@ ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
 PixelRect
 ButtonRenderer::GetDrawingRect(PixelRect rc, bool pressed)
 {
-  GrowRect(rc, -2, -2);
+  rc.Grow(-2);
   if (pressed)
-    MoveRect(rc, 1, 1);
+    rc.Offset(1, 1);
 
   return rc;
 }

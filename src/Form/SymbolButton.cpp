@@ -127,7 +127,7 @@ WndSymbolButton::OnPaint(Canvas &canvas)
   }
 
   else if (ParseHexColor(caption.c_str(), color)) {
-    GrowRect(rc, -3, -3);
+    rc.Grow(-3);
     canvas.DrawFilledRectangle(rc, color);
   }
 }

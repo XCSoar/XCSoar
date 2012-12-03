@@ -209,22 +209,22 @@ WndForm::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
     last_drag.y = position.top + y;
 
     PixelRect parent = GetParentClientRect();
-    GrowRect(parent, -client_rect.top, -client_rect.top);
+    parent.Grow(-client_rect.top);
 
     PixelRect new_position = position;
-    MoveRect(new_position, dx, dy);
+    new_position.Offset(dx, dy);
 
     if (new_position.right < parent.left)
-      MoveRect(new_position, parent.left - new_position.right, 0);
+      new_position.Offset(parent.left - new_position.right, 0);
 
     if (new_position.left > parent.right)
-      MoveRect(new_position, parent.right - new_position.left, 0);
+      new_position.Offset(parent.right - new_position.left, 0);
 
     if (new_position.top > parent.bottom)
-      MoveRect(new_position, 0, parent.bottom - new_position.top);
+      new_position.Offset(0, parent.bottom - new_position.top);
 
     if (new_position.top < 0)
-      MoveRect(new_position, 0, -new_position.top);
+      new_position.Offset(0, -new_position.top);
 
     Move(new_position.left, new_position.top);
 

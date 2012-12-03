@@ -96,7 +96,7 @@ LargeTextWindow::OnPaint(Canvas &canvas)
     return;
 
   const PixelScalar padding = Layout::GetTextPadding();
-  GrowRect(rc, -padding, -padding);
+  rc.Grow(-padding);
 
   canvas.SetBackgroundTransparent();
   canvas.SetTextColor(COLOR_BLACK);

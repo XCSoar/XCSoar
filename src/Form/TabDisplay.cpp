@@ -175,7 +175,7 @@ TabDisplay::GetButtonIndexAt(RasterPoint p) const
 {
   for (unsigned i = 0; i < GetSize(); i++) {
     const PixelRect &rc = GetButtonSize(i);
-    if (IsPointInRect(rc, p))
+    if (rc.IsInside(p))
       return i;
   }
 
@@ -353,7 +353,7 @@ TabDisplay::OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys)
 
   const PixelRect rc = GetButtonSize(down_index);
 
-  bool not_on_button = !IsPointInRect(rc, { x, y });
+  bool not_on_button = !rc.IsInside({ x, y });
   if (drag_off_button != not_on_button) {
     drag_off_button = not_on_button;
     Invalidate(rc);

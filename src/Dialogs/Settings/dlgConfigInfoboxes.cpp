@@ -307,7 +307,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();
   rc = client_area.GetClientRect();
-  GrowRect(rc, Layout::FastScale(-2), Layout::FastScale(-2));
+  rc.Grow(Layout::FastScale(-2));
   info_box_layout = InfoBoxLayout::Calculate(rc, geometry);
 
   WindowStyle preview_style;

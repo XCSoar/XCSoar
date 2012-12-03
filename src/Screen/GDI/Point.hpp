@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_GDI_POINT_HPP
 #define XCSOAR_SCREEN_GDI_POINT_HPP
 
-#include <windef.h>
+#include <windows.h>
 
 typedef LONG PixelScalar;
 typedef ULONG UPixelScalar;
@@ -75,6 +75,30 @@ struct PixelRect : public tagRECT {
 
   constexpr PixelRect(PixelSize size)
     :tagRECT({0, 0, size.cx, size.cy}) {}
+
+  void SetEmpty() {
+    ::SetRectEmpty(this);
+  }
+
+  void Offset(int dx, int dy) {
+    ::OffsetRect(this, dx, dy);
+  }
+
+  void Grow(int dx, int dy) {
+    InflateRect(this, dx, dy);
+  }
+
+  void Grow(int d) {
+    Grow(d, d);
+  }
+
+  constexpr PixelSize GetSize() const {
+    return { right - left, bottom - top };
+  }
+
+  bool IsInside(RasterPoint pt) const {
+    return ::PtInRect(this, pt);
+  }
 };
 
 static_assert(sizeof(PixelRect) == sizeof(RECT), "not same size");

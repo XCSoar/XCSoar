@@ -99,7 +99,7 @@ public:
    * False otherwise
    */
   bool IsInside(const RasterPoint &pt) const {
-    return ::IsPointInRect(rc, pt);
+    return rc.IsInside(pt);
   }
 
   /**
@@ -109,7 +109,7 @@ public:
    * False otherwise
    */
   bool IsInsideSlider(const RasterPoint &pt) const {
-    return ::IsPointInRect(rc_slider, pt);
+    return rc_slider.IsInside(pt);
   }
 
   /**

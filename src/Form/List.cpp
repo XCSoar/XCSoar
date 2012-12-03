@@ -163,7 +163,7 @@ ListControl::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
     if (focused && selected)
       canvas.DrawFocusRectangle(rc);
 
-    ::MoveRect(rc, 0, rc.bottom - rc.top);
+    rc.Offset(0, rc.bottom - rc.top);
   }
 
   /* paint the bottom part below the last item */

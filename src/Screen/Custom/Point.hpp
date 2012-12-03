@@ -106,6 +106,28 @@ struct PixelRect {
   explicit constexpr PixelRect(PixelSize size)
     :left(0), top(0), right(size.cx), bottom(size.cy) {}
 
+  void SetEmpty() {
+    left = top = right = bottom = 0;
+  }
+
+  void Offset(int dx, int dy) {
+    left += dx;
+    top += dy;
+    right += dx;
+    bottom += dy;
+  }
+
+  void Grow(int dx, int dy) {
+    left -= dx;
+    top -= dy;
+    right += dx;
+    bottom += dy;
+  }
+
+  void Grow(int d) {
+    Grow(d, d);
+  }
+
   constexpr RasterPoint GetOrigin() const {
     return { left, top };
   }
@@ -128,6 +150,10 @@ struct PixelRect {
 
   constexpr RasterPoint GetBottomRight() const {
     return { right, bottom };
+  }
+
+  constexpr bool IsInside(RasterPoint pt) const {
+    return pt.x >= left && pt.x < right && pt.y >= top && pt.y < bottom;
   }
 };
 
