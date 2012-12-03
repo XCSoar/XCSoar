@@ -81,6 +81,14 @@ struct GeoBounds {
     return west == east && north == south;
   }
 
+  Angle GetWidth() const {
+    return (east - west).AsBearing();
+  }
+
+  Angle GetHeight() const {
+    return (north - south).AsBearing();
+  }
+
   void Extend(const GeoPoint pt);
 
   bool IsInside(Angle longitude, Angle latitude) const {
