@@ -66,33 +66,33 @@ isLeft( const FlatGeoPoint &P0, const FlatGeoPoint &P1, const FlatGeoPoint &P2 )
 //      Return:  true if P is inside V
 
 bool
-PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
+PolygonInterior(const GeoPoint &P,
+                const SearchPoint *begin, const SearchPoint *end)
 {
-  if (V.size()<3) {
+  if (std::distance(begin, end) < 3)
     return false;
-  }
-  const int n = V.size()-1;
 
   int    wn = 0;    // the winding number counter
 
   // loop through all edges of the polygon
-  for (int i = 0; i < n; ++i) {
-    // edge from V[i] to V[i+1]
-    if (V[i].GetLocation().latitude <= P.latitude) {
+  for (auto i = begin, next = std::next(i); next != end;
+       i = next, next = std::next(i)) {
+    // edge from current to next
+    if (i->GetLocation().latitude <= P.latitude) {
       // start y <= P.latitude
 
-      if (V[i + 1].GetLocation().latitude > P.latitude)
+      if (next->GetLocation().latitude > P.latitude)
         // an upward crossing
-        if (isLeft(V[i].GetLocation(), V[i+1].GetLocation(), P) > 0)
+        if (isLeft(i->GetLocation(), next->GetLocation(), P) > 0)
           // P left of edge
           // have a valid up intersect
           ++wn;
     } else {
       // start y > P.latitude (no test needed)
 
-      if (V[i + 1].GetLocation().latitude <= P.latitude)
+      if (next->GetLocation().latitude <= P.latitude)
         // a downward crossing
-        if (isLeft(V[i].GetLocation(), V[i + 1].GetLocation(), P) < 0)
+        if (isLeft(i->GetLocation(), next->GetLocation(), P) < 0)
           // P right of edge
           // have a valid down intersect
           --wn;
@@ -103,32 +103,32 @@ PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
 
 
 bool
-PolygonInterior( const FlatGeoPoint &P, const std::vector<SearchPoint>& V)
+PolygonInterior(const FlatGeoPoint &P,
+                const SearchPoint *begin, const SearchPoint *end)
 {
-  if (V.size()<3) {
+  if (std::distance(begin, end) < 3)
     return false;
-  }
-  const int n = V.size()-1;
 
   int    wn = 0;    // the winding number counter
 
   // loop through all edges of the polygon
-  for (int i = 0; i < n; ++i) {
-    // edge from V[i] to V[i+1]
-    if (V[i].GetFlatLocation().latitude <= P.latitude) {
+  for (auto i = begin, next = std::next(i); next != end;
+       i = next, next = std::next(i)) {
+    // edge from current to next
+    if (i->GetFlatLocation().latitude <= P.latitude) {
       // start y <= P.latitude
-      if (V[i + 1].GetFlatLocation().latitude > P.latitude)
+      if (next->GetFlatLocation().latitude > P.latitude)
         // an upward crossing
-        if (isLeft(V[i].GetFlatLocation(), V[i + 1].GetFlatLocation(), P) > 0)
+        if (isLeft(i->GetFlatLocation(), next->GetFlatLocation(), P) > 0)
           // P left of edge
           // have a valid up intersect
           ++wn;
     } else {
       // start y > P.latitude (no test needed)
 
-      if (V[i + 1].GetFlatLocation().latitude <= P.latitude)
+      if (next->GetFlatLocation().latitude <= P.latitude)
         // a downward crossing
-        if (isLeft(V[i].GetFlatLocation(), V[i + 1].GetFlatLocation(), P) < 0)
+        if (isLeft(i->GetFlatLocation(), next->GetFlatLocation(), P) < 0)
           // P right of edge
           // have a valid down intersect
           --wn;

@@ -26,14 +26,20 @@
 #include "Geo/SearchPoint.hpp"
 #include "Compiler.h"
 
+struct GeoPoint;
+struct FlatGeoPoint;
+class SearchPoint;
+
 /**
  * Note that this expects the vector to be closed, that is, starting point
  * and ending point are the same
  */
 gcc_pure bool
-PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V);
+PolygonInterior(const GeoPoint &p,
+                const SearchPoint *begin, const SearchPoint *end);
 
 gcc_pure bool
-PolygonInterior( const FlatGeoPoint &P, const std::vector<SearchPoint>& V);
+PolygonInterior(const FlatGeoPoint &p,
+                const SearchPoint *begin, const SearchPoint *end);
 
 #endif
