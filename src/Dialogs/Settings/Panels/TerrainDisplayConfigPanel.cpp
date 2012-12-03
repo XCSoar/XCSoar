@@ -38,6 +38,10 @@ Copyright_License {
 #include "Form/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scissor.hpp"
+#endif
+
 class WndOwnerDrawFrame;
 
 enum ControlIndex {
@@ -138,6 +142,13 @@ TerrainDisplayConfigPanel::OnPreviewPaint(Canvas &canvas)
     sun_azimuth = XCSoarInterface::Calculated().sun_azimuth;
 
   renderer.Generate(projection, sun_azimuth);
+
+#ifdef ENABLE_OPENGL
+  /* enable clipping because the OpenGL terrain renderer uses a large
+     texture that exceeds the window dimensions */
+  GLCanvasScissor scissor(canvas);
+#endif
+
   renderer.Draw(canvas, projection);
 }
 

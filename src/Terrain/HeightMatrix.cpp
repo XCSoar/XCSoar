@@ -23,9 +23,13 @@ Copyright_License {
 
 #include "HeightMatrix.hpp"
 #include "RasterMap.hpp"
-#include "Projection/WindowProjection.hpp"
 
-#include <algorithm>
+#ifdef ENABLE_OPENGL
+#include "Geo/GeoBounds.hpp"
+#else
+#include "Projection/WindowProjection.hpp"
+#endif
+
 #include <assert.h>
 
 void
@@ -53,6 +57,26 @@ HeightMatrix::SetSize(unsigned width, unsigned height,
           (height + quantisation_pixels - 1) / quantisation_pixels);
 }
 
+#ifdef ENABLE_OPENGL
+
+void
+HeightMatrix::Fill(const RasterMap &map, const GeoBounds &bounds,
+                   unsigned width, unsigned height, bool interpolate)
+{
+  SetSize(width, height);
+
+  const Angle delta_y = bounds.GetHeight().AsBearing() / height;
+  Angle latitude = bounds.north;
+  for (short *p = data.begin(), *const end = p + width * height;
+       p != end; p += width, latitude -= delta_y) {
+    map.ScanLine(GeoPoint(bounds.west, latitude),
+                 GeoPoint(bounds.east, latitude),
+                 p, width, interpolate);
+  }
+}
+
+#else
+
 void
 HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
                    unsigned quantisation_pixels, bool interpolate)
@@ -71,3 +95,5 @@ HeightMatrix::Fill(const RasterMap &map, const WindowProjection &projection,
                  p, width, interpolate);
   }
 }
+
+#endif

@@ -124,7 +124,12 @@ void
 BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
                                     Angle angle)
 {
+#ifdef ENABLE_OPENGL
+  /* on OpenGL, the texture is rotated to apply the screen angle */
+  shading_angle = angle;
+#else
   shading_angle = angle - projection.GetScreenAngle();
+#endif
 }
 
 void

@@ -26,6 +26,12 @@ Copyright_License {
 #include "Screen/Ramp.hpp"
 #include "Projection/WindowProjection.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Compatibility.hpp"
+#endif
+
 #include <assert.h>
 
 static constexpr ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
@@ -225,18 +231,53 @@ TerrainRenderer::SetSettings(const TerrainRendererSettings &_settings)
     return;
 
   settings = _settings;
+
+#ifdef ENABLE_OPENGL
+  raster_renderer.Invalidate();
+#else
   compare_projection.Clear();
+#endif
 }
+
+#ifdef ENABLE_OPENGL
+/**
+ * Checks if the size difference of any dimension is more than a
+ * factor of two.  This is used to check whether the terrain has to be
+ * redrawn after zooming in.
+ */
+static bool
+IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
+{
+  assert(a.IsValid());
+  assert(b.IsValid());
+
+  return a.GetWidth().Native() > Double(b.GetWidth().Native()) ||
+    a.GetHeight().Native() > Double(b.GetHeight().Native());
+}
+#endif
 
 void
 TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
+#ifdef ENABLE_OPENGL
+  const GeoBounds &old_bounds = raster_renderer.GetBounds();
+  const GeoBounds &new_bounds = map_projection.GetScreenBounds();
+  assert(new_bounds.IsValid());
+
+  if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
+      !IsLargeSizeDifference(old_bounds, new_bounds) &&
+      terrain_serial == terrain->GetSerial() &&
+      last_sun_azimuth == sunazimuth)
+    /* no change since previous frame */
+    return;
+#else
   if (compare_projection.CompareAndUpdate(map_projection) &&
       terrain_serial == terrain->GetSerial() &&
       last_sun_azimuth == sunazimuth)
     /* no change since previous frame */
     return;
+#endif
 
   terrain_serial = terrain->GetSerial();
 
@@ -276,6 +317,44 @@ void
 TerrainRenderer::Draw(Canvas &canvas,
                       const WindowProjection &map_projection) const
 {
+#ifdef ENABLE_OPENGL
+  const GeoBounds &bounds = raster_renderer.GetBounds();
+  const RasterPoint vertices[] = {
+    map_projection.GeoToScreen(GeoPoint(bounds.west, bounds.north)),
+    map_projection.GeoToScreen(GeoPoint(bounds.east, bounds.north)),
+    map_projection.GeoToScreen(GeoPoint(bounds.west, bounds.south)),
+    map_projection.GeoToScreen(GeoPoint(bounds.east, bounds.south)),
+  };
+
+  glVertexPointer(2, GL_VALUE, 0, vertices);
+
+  const GLTexture &texture = raster_renderer.BindAndGetTexture();
+  const PixelSize allocated = texture.GetAllocatedSize();
+
+  const int src_x = 0, src_y = 0, src_width = texture.GetWidth(),
+    src_height = texture.GetHeight();
+
+  GLfloat x0 = (GLfloat)src_x / allocated.cx;
+  GLfloat y0 = (GLfloat)src_y / allocated.cy;
+  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated.cx;
+  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated.cy;
+
+  const GLfloat coord[] = {
+    x0, y0,
+    x1, y0,
+    x0, y1,
+    x1, y1,
+  };
+
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+  GLEnable scope(GL_TEXTURE_2D);
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glTexCoordPointer(2, GL_FLOAT, 0, coord);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#else
   CopyTo(canvas, map_projection.GetScreenWidth(),
          map_projection.GetScreenHeight());
+#endif
 }

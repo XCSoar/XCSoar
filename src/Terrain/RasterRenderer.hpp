@@ -29,6 +29,10 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Util/NonCopyable.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Geo/GeoBounds.hpp"
+#endif
+
 #define NUM_COLOR_RAMP_LEVELS 13
 
 class Angle;
@@ -46,6 +50,15 @@ class RasterRenderer : private NonCopyable {
    * when this attribute is 0.
    */
   unsigned quantisation_effective;
+
+#ifdef ENABLE_OPENGL
+  /**
+   * The area that was rendered previously into the #HeightMatrix and
+   * the #RawBitmap.  This attribute is used to decide whether the
+   * texture has to be redrawn.
+   */
+  GeoBounds bounds;
+#endif
 
   HeightMatrix height_matrix;
   RawBitmap *image;
@@ -73,6 +86,20 @@ public:
   unsigned GetHeight() const {
     return height_matrix.GetHeight();
   }
+
+#ifdef ENABLE_OPENGL
+  void Invalidate() {
+    bounds.SetInvalid();
+  }
+
+  const GeoBounds &GetBounds() const {
+    return bounds;
+  }
+
+  const GLTexture &BindAndGetTexture() const {
+    return image->BindAndGetTexture();
+  }
+#endif
 
   /**
    * Generate the color table.

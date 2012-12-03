@@ -71,7 +71,13 @@ int main(int argc, char **argv)
   projection.UpdateScreenBounds();
 
   HeightMatrix matrix;
+#ifdef ENABLE_OPENGL
+  matrix.Fill(map, projection.GetScreenBounds(),
+              projection.GetScreenWidth(), projection.GetScreenHeight(),
+              false);
+#else
   matrix.Fill(map, projection, 1, false);
+#endif
 
   return EXIT_SUCCESS;
 }

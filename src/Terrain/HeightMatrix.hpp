@@ -29,7 +29,12 @@ Copyright_License {
 #include "Compiler.h"
 
 class RasterMap;
+
+#ifdef ENABLE_OPENGL
+struct GeoBounds;
+#else
 class WindowProjection;
+#endif
 
 class HeightMatrix : private NonCopyable {
   AllocatedArray<short> data;
@@ -44,11 +49,19 @@ protected:
   void SetSize(unsigned width, unsigned height, unsigned quantisation_pixels);
 
 public:
+#ifdef ENABLE_OPENGL
+  /**
+   * Copy values from the #RasterMap to the buffer, north-up only.
+   */
+  void Fill(const RasterMap &map, const GeoBounds &bounds,
+            unsigned _width, unsigned _height, bool interpolate);
+#else
   /**
    * @param interpolate true enables interpolation of sub-pixel values
    */
   void Fill(const RasterMap &map, const WindowProjection &map_projection,
             unsigned quantisation_pixels, bool interpolate);
+#endif
 
   unsigned GetWidth() const {
     return width;

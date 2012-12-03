@@ -62,7 +62,10 @@ TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
 }
 
 RasterRenderer::RasterRenderer()
-  :quantisation_pixels(2),
+  :quantisation_pixels(1),
+#ifdef ENABLE_OPENGL
+   bounds(GeoBounds::Invalid()),
+#endif
    image(NULL)
 {
   // scale quantisation_pixels so resolution is not too high on old hardware
@@ -109,7 +112,15 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
     /* disable slope shading when zoomed out very far (too tiny) */
     quantisation_effective = 0;
 
+#ifdef ENABLE_OPENGL
+  bounds = projection.GetScreenBounds().Scale(fixed(1.5));
+  height_matrix.Fill(map, bounds,
+                     projection.GetScreenWidth() / quantisation_pixels,
+                     projection.GetScreenHeight() / quantisation_pixels,
+                     true);
+#else
   height_matrix.Fill(map, projection, quantisation_pixels, true);
+#endif
 }
 
 void
