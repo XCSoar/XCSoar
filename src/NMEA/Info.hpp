@@ -227,6 +227,26 @@ struct NMEAInfo {
   Validity static_pressure_available;
 
   /**
+   * Pitot pressure value [Pa].
+   */
+  AtmosphericPressure pitot_pressure;
+  Validity pitot_pressure_available;
+
+  /**
+   * Dynamic pressure value = pitot_pressure - static_pressure [Pa].
+   * Use only to compute indicated airspeed.
+   */
+  AtmosphericPressure dyn_pressure;
+  Validity dyn_pressure_available;
+
+  /**
+   * Pitot pressure offset relative to static_pressure [hPa].
+   * Used only for calibration of the pitot pressure.
+   */
+  fixed pitot_offset;
+  Validity pitot_offset_available;
+
+  /**
    * Is a barometric altitude available?
    * @see BaroAltitude
    */
@@ -520,6 +540,36 @@ struct NMEAInfo {
   }
 
   /**
+   * Provide dynamic pressure from a pitot tube.
+   * Use only to compute indicated airspeed when static pressure is known.
+   * When both pitot- and dynamic pressure are available use dynamic.
+   */
+  void ProvideDynamicPressure(AtmosphericPressure value) {
+    dyn_pressure = value;
+    dyn_pressure_available.Update(clock);
+  }
+
+  /**
+   * Used to compute indicated airspeed
+   * when static pressure is known.
+   */
+  void ProvidePitotPressure(AtmosphericPressure value) {
+    pitot_pressure = value;
+    pitot_pressure_available.Update(clock);
+  }
+
+  /**
+   * Used only as a config value that should be saved.
+   * Provide the offset between the pitot- and the static pressure sensor in hPa (zero).
+   * The pressure passed to ProvidePitotPressure() should already include the
+   *pitot pressure offset. See ProvidePitotOffset()
+   */
+  void ProvidePitotOffset(fixed value) {
+    pitot_offset = value;
+    pitot_offset_available.Update(clock);
+  }
+
+  /**
    * Returns the pressure altitude, and falls back to the barometric
    * altitude or the GPS altitude.  The "first" element is false if no
    * altitude is available.  The "second" element contains the
@@ -571,7 +621,7 @@ struct NMEAInfo {
   }
 
   /**
-   * Set the true airspeed [m/s] and derive the indicated airspeed
+   * Set the indicated airspeed [m/s] and derive the true airspeed
    * from it, using the specified altitude [m].
    */
   void ProvideIndicatedAirspeedWithAltitude(fixed ias, fixed altitude) {

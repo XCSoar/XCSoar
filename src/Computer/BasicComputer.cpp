@@ -176,8 +176,10 @@ ComputeGroundSpeed(NMEAInfo &basic, const NMEAInfo &last)
 }
 
 /**
- * Attempt to compute airspeed from ground speed and wind if it's not
- * available.
+ * Attempt to compute airspeed when it is not yet available from:
+ * 1) dynamic pressure and air density derived from some altitude.
+ * 2) pitot pressure and static pressure.
+ * 3) ground speed and wind.
  */
 static void
 ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
@@ -185,6 +187,28 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
   if (basic.airspeed_available && basic.airspeed_real)
     /* got it already */
     return;
+
+  const auto any_altitude = basic.GetAnyAltitude();
+
+  if (!basic.airspeed_available && any_altitude.first) {
+    fixed dyn; bool available = false;
+    if (basic.dyn_pressure_available) {
+      dyn = basic.dyn_pressure.GetHectoPascal();
+      available = true;
+    } else if (basic.pitot_pressure_available && basic.static_pressure_available) {
+      dyn = basic.pitot_pressure.GetHectoPascal() - basic.static_pressure.GetHectoPascal();
+      available = true;
+    }
+    if (available) {
+      basic.indicated_airspeed = sqrt(fixed(163.2653061) * dyn);
+      basic.true_airspeed = basic.indicated_airspeed *
+                            AtmosphericPressure::AirDensityRatio(any_altitude.second);
+
+      basic.airspeed_available.Update(basic.clock);
+      basic.airspeed_real = true; // Anyway not less real then any other method.
+      return;
+    }
+  }
 
   if (!basic.ground_speed_available || !calculated.wind_available ||
       !calculated.flight.flying) {
@@ -207,7 +231,6 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
 
   basic.true_airspeed = TrueAirspeedEstimated;
 
-  const auto any_altitude = basic.GetAnyAltitude();
   basic.indicated_airspeed = TrueAirspeedEstimated;
   if (any_altitude.first)
     basic.indicated_airspeed /= AtmosphericPressure::AirDensityRatio(any_altitude.second);
@@ -409,6 +432,12 @@ BasicComputer::Compute(MoreData &data,
     ComputeGroundSpeed(data, last_gps);
     ComputeAirspeed(data, calculated);
   }
+#ifndef NDEBUG
+  // For testing without gps.
+  // When CPU load is low enough it can be done for every sample.
+  else if (data.dyn_pressure_available)
+    ComputeAirspeed(data, calculated);
+#endif
 
   ComputeHeading(data.attitude, data, calculated);
 
