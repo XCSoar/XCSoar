@@ -30,6 +30,8 @@ Copyright_License {
 void
 ThermalLocatorInfo::Clear()
 {
+  estimate_valid = false;
+
   // clear thermal sources for first time.
   sources.clear();
 }
