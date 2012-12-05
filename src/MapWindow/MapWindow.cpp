@@ -94,13 +94,6 @@ MapWindow::SetGlideComputer(GlideComputer *_gc)
                                         : NULL);
 }
 
-void
-MapWindow::ReadBlackboard(const MoreData &nmea_info,
-                          const DerivedInfo &derived_info)
-{
-  MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
-}
-
 /**
  * Copies the given basic and calculated info to the MapWindowBlackboard
  * and reads the Settings from the DeviceBlackboard.

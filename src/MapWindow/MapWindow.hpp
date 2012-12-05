@@ -231,8 +231,7 @@ public:
   }
 #endif
 
-  void ReadBlackboard(const MoreData &nmea_info,
-                      const DerivedInfo &derived_info);
+  using MapWindowBlackboard::ReadBlackboard;
 
   void ReadBlackboard(const MoreData &nmea_info,
                       const DerivedInfo &derived_info,
