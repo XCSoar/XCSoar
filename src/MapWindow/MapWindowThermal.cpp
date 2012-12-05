@@ -25,31 +25,45 @@ Copyright_License {
 #include "Look/MapLook.hpp"
 #include "Screen/Icon.hpp"
 
+template<typename T>
+static void
+DrawThermalSources(Canvas &canvas, const MaskedIcon &icon,
+                   const WindowProjection &projection,
+                   const T &sources,
+                   const fixed aircraft_altitude,
+                   const SpeedVector &wind)
+{
+  for (const auto &source : sources) {
+    // find height difference
+    if (aircraft_altitude < source.ground_height)
+      continue;
+
+    // draw thermal at location it would be at the glider's height
+    GeoPoint location = wind.IsNonZero()
+      ? source.CalculateAdjustedLocation(aircraft_altitude, wind)
+      : source.location;
+
+    // draw if it is in the field of view
+    RasterPoint pt;
+    if (projection.GeoToScreenIfVisible(location, pt))
+      icon.Draw(canvas, pt);
+  }
+}
+
 void
 MapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
+  const MoreData &basic = Basic();
+  const DerivedInfo &calculated = Calculated();
+  const ThermalLocatorInfo &thermal_locator = calculated.thermal_locator;
+
   if (render_projection.GetMapScale() > fixed(4000))
     return;
 
   // draw only at close map scales in non-circling mode
-  // draw thermal at location it would be at the glider's height
 
-  const ThermalLocatorInfo &thermal_locator = Calculated().thermal_locator;
-
-  for (auto it = thermal_locator.sources.begin(),
-       end = thermal_locator.sources.end(); it != end; ++it) {
-    // find height difference
-    if (Basic().nav_altitude < it->ground_height)
-      continue;
-
-    GeoPoint loc =
-        Calculated().wind_available ?
-        it->CalculateAdjustedLocation(Basic().nav_altitude, Calculated().wind) :
-        it->location;
-
-    // draw if it is in the field of view
-    RasterPoint pt;
-    if (render_projection.GeoToScreenIfVisible(loc, pt))
-      look.thermal_source_icon.Draw(canvas, pt);
-  }
+  DrawThermalSources(canvas, look.thermal_source_icon, render_projection,
+                     thermal_locator.sources, basic.nav_altitude,
+                     calculated.wind_available
+                     ? calculated.wind : SpeedVector::Zero());
 }
