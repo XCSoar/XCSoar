@@ -257,3 +257,14 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
 
   // TODO: trigger refresh if the settings are changed
 }
+
+void
+ActionInterface::UpdateDisplayMode()
+{
+  UIState &state = SetUIState();
+  const UISettings &settings = GetUISettings();
+
+  state.display_mode = GetNewDisplayMode(settings.info_boxes, state,
+                                         Calculated());
+  state.panel_name = InfoBoxManager::GetCurrentPanelName();
+}

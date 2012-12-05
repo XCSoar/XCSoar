@@ -617,12 +617,7 @@ MainWindow::OnUser(unsigned id)
   case Command::CALCULATED_UPDATE:
     XCSoarInterface::ReceiveCalculated();
 
-    CommonInterface::SetUIState().display_mode =
-      GetNewDisplayMode(CommonInterface::GetUISettings().info_boxes,
-                        CommonInterface::GetUIState(),
-                        CommonInterface::Calculated());
-    CommonInterface::SetUIState().panel_name =
-      InfoBoxManager::GetCurrentPanelName();
+    ActionInterface::UpdateDisplayMode();
 
     if (map != NULL) {
       map->SetUIState(CommonInterface::GetUIState());

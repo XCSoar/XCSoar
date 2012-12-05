@@ -283,6 +283,11 @@ namespace ActionInterface {
    * @param trigger_draw Triggers the draw event after sending if true
    */
   void SendMapSettings(const bool trigger_draw = false);
+
+  /**
+   * Update UIState::display_mode and other attributes related to it.
+   */
+  void UpdateDisplayMode();
 };
 
 /** 
