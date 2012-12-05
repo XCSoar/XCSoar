@@ -187,7 +187,6 @@ void
 OrderedTaskPoint::ScanProjection(TaskProjection &task_projection) const
 {
   task_projection.Scan(GetLocation());
-  #define fixed_steps fixed(0.05)
 
   for (const auto &i : GetBoundary())
     task_projection.Scan(i);
