@@ -190,7 +190,7 @@ public:
     return follow_mode == FOLLOW_PAN;
   }
 
-  virtual void Create(ContainerWindow &parent, const PixelRect &rc);
+  void Create(ContainerWindow &parent, const PixelRect &rc);
 
   void SetWaypoints(const Waypoints *_waypoints) {
     waypoints = _waypoints;
