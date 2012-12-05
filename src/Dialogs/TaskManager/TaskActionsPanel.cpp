@@ -39,6 +39,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Device/Declaration.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 /** XXX this hack is needed because the form callbacks don't get a
@@ -109,7 +110,7 @@ void
 TaskActionsPanel::OnDeclareClicked()
 {
   if (!(*active_task)->CheckTask()) {
-    const AbstractTaskFactory::TaskValidationErrorVector errors =
+    const TaskValidationErrorVector errors =
       (*active_task)->GetFactory().GetValidationErrors();
     ShowMessageBox(getTaskValidationErrors(errors), _("Declare task"),
                 MB_ICONEXCLAMATION);

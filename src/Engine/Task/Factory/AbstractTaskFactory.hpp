@@ -29,6 +29,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "Math/fixed.hpp"
 #include "TaskPointFactoryType.hpp"
+#include "ValidationError.hpp"
 
 #include <vector>
 #include <stdint.h>
@@ -77,24 +78,6 @@ public:
   typedef std::vector<TaskPointFactoryType> LegalPointVector;
 
   typedef ConstArray<TaskPointFactoryType> LegalPointConstArray;
-
-  /** Task Validation Error Types */
-  enum TaskValidationErrorType: uint8_t {
-    NO_VALID_START,
-    NO_VALID_FINISH,
-    TASK_NOT_CLOSED,
-    TASK_NOT_HOMOGENEOUS,
-    INCORRECT_NUMBER_TURNPOINTS,
-    EXCEEDS_MAX_TURNPOINTS,
-    UNDER_MIN_TURNPOINTS,
-    TURNPOINTS_NOT_UNIQUE,
-    INVALID_FAI_TRIANGLE_GEOMETRY,
-    EMPTY_TASK,
-    NON_FAI_OZS
-  };
-
-  /** Vector of errors returned by validation routine */
-  typedef std::vector<TaskValidationErrorType> TaskValidationErrorVector;
 
 protected:
   const TaskFactoryConstraints &constraints;

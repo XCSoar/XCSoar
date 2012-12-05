@@ -80,7 +80,7 @@ FAITaskFactory::Validate()
   bool valid = AbstractTaskFactory::Validate();
 
   if (!IsUnique()) {
-    AddValidationError(TURNPOINTS_NOT_UNIQUE);
+    AddValidationError(TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE);
     // warning only
   }
   return valid;

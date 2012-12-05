@@ -31,6 +31,7 @@ Copyright_License {
 #include "Task/ObservationZones/SectorZone.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/Shapes/FAITriangleTask.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
@@ -384,9 +385,8 @@ OrderedTaskSave(const OrderedTask& task, bool noask)
 }
 
 const TCHAR*
-getTaskValidationErrors(const AbstractTaskFactory::TaskValidationErrorVector v)
+getTaskValidationErrors(const TaskValidationErrorVector &v)
 {
-
   static TCHAR err[MAX_PATH];
   err[0] = '\0';
 
@@ -397,30 +397,30 @@ getTaskValidationErrors(const AbstractTaskFactory::TaskValidationErrorVector v)
   return err;
 }
 const TCHAR*
-TaskValidationError(AbstractTaskFactory::TaskValidationErrorType type)
+TaskValidationError(TaskValidationErrorType type)
 {
   switch (type) {
-  case AbstractTaskFactory::NO_VALID_START:
+  case TaskValidationErrorType::NO_VALID_START:
     return _("No valid start.\n");
-  case AbstractTaskFactory::NO_VALID_FINISH:
+  case TaskValidationErrorType::NO_VALID_FINISH:
     return _("No valid finish.\n");
-  case AbstractTaskFactory::TASK_NOT_CLOSED:
+  case TaskValidationErrorType::TASK_NOT_CLOSED:
     return _("Task not closed.\n");
-  case AbstractTaskFactory::TASK_NOT_HOMOGENEOUS:
+  case TaskValidationErrorType::TASK_NOT_HOMOGENEOUS:
     return _("All turnpoints not the same type.\n");
-  case AbstractTaskFactory::INCORRECT_NUMBER_TURNPOINTS:
+  case TaskValidationErrorType::INCORRECT_NUMBER_TURNPOINTS:
     return _("Incorrect number of turnpoints.\n");
-  case AbstractTaskFactory::EXCEEDS_MAX_TURNPOINTS:
+  case TaskValidationErrorType::EXCEEDS_MAX_TURNPOINTS:
     return _("Too many turnpoints.\n");
-  case AbstractTaskFactory::UNDER_MIN_TURNPOINTS:
+  case TaskValidationErrorType::UNDER_MIN_TURNPOINTS:
     return _("Not enough turnpoints.\n");
-  case AbstractTaskFactory::TURNPOINTS_NOT_UNIQUE:
+  case TaskValidationErrorType::TURNPOINTS_NOT_UNIQUE:
     return _("Turnpoints not unique.\n");
-  case AbstractTaskFactory::INVALID_FAI_TRIANGLE_GEOMETRY:
+  case TaskValidationErrorType::INVALID_FAI_TRIANGLE_GEOMETRY:
     return _("Invalid FAI triangle shape.\n");
-  case AbstractTaskFactory::EMPTY_TASK:
+  case TaskValidationErrorType::EMPTY_TASK:
     return _("Empty task.\n");
-  case AbstractTaskFactory::NON_FAI_OZS:
+  case TaskValidationErrorType::NON_FAI_OZS:
     return _("non-FAI turn points");
   }
 

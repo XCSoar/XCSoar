@@ -715,7 +715,7 @@ AbstractTaskFactory::ClearValidationErrors()
   validation_errors.clear();
 }
 
-AbstractTaskFactory::TaskValidationErrorVector
+TaskValidationErrorVector
 AbstractTaskFactory::GetValidationErrors()
 {
   return validation_errors;
@@ -799,7 +799,7 @@ AbstractTaskFactory::ValidateFAIOZs()
   }
 
   if (!valid)
-    AddValidationError(NON_FAI_OZS);
+    AddValidationError(TaskValidationErrorType::NON_FAI_OZS);
 
   return valid;
 }
@@ -812,37 +812,37 @@ AbstractTaskFactory::Validate()
   bool valid = true;
 
   if (!task.HasStart()) {
-    AddValidationError(NO_VALID_START);
+    AddValidationError(TaskValidationErrorType::NO_VALID_START);
     valid = false;
   }
   if (!task.HasFinish()) {
-    AddValidationError(NO_VALID_FINISH);
+    AddValidationError(TaskValidationErrorType::NO_VALID_FINISH);
     valid = false;
   }
 
   if (constraints.is_closed && !IsClosed()) {
-    AddValidationError(TASK_NOT_CLOSED);
+    AddValidationError(TaskValidationErrorType::TASK_NOT_CLOSED);
     valid = false;
   }
 
   if (constraints.IsFixedSize()) {
     if (task.TaskSize() != constraints.max_points) {
-      AddValidationError(INCORRECT_NUMBER_TURNPOINTS);
+      AddValidationError(TaskValidationErrorType::INCORRECT_NUMBER_TURNPOINTS);
       valid = false;
     }
   } else {
     if (task.TaskSize() < constraints.min_points) {
-      AddValidationError(UNDER_MIN_TURNPOINTS);
+      AddValidationError(TaskValidationErrorType::UNDER_MIN_TURNPOINTS);
       valid = false;
     }
     if (task.TaskSize() > constraints.max_points) {
-      AddValidationError(EXCEEDS_MAX_TURNPOINTS);
+      AddValidationError(TaskValidationErrorType::EXCEEDS_MAX_TURNPOINTS);
       valid = false;
     }
   }
 
   if (constraints.homogeneous_tps && !IsHomogeneous()) {
-    AddValidationError(TASK_NOT_HOMOGENEOUS);
+    AddValidationError(TaskValidationErrorType::TASK_NOT_HOMOGENEOUS);
     valid = false;
   }
 

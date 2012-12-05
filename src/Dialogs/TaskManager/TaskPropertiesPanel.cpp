@@ -31,6 +31,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Draw.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 

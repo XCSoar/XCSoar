@@ -39,6 +39,7 @@ Copyright_License {
 #include "Gauge/TaskView.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskStore.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "Logger/Logger.hpp"

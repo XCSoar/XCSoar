@@ -20,16 +20,21 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef DIALOG_TASK_HELPERS_HPP
 #define DIALOG_TASK_HELPERS_HPP
 
-#include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Points/TaskPoint.hpp"
 
 #include <tchar.h>
 #include <stdint.h>
 
 enum class TaskFactoryType : uint8_t;
+enum class TaskPointFactoryType : uint8_t;
+enum class TaskValidationErrorType : uint8_t;
+class TaskValidationErrorVector;
+class OrderedTask;
+class ObservationZonePoint;
 
 const TCHAR* OrderedTaskFactoryDescription(TaskFactoryType type);
 const TCHAR* OrderedTaskFactoryName(TaskFactoryType type);
@@ -48,10 +53,12 @@ bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
 
 const TCHAR* OrderedTaskPointDescription(TaskPointFactoryType type);
 const TCHAR* OrderedTaskPointName(TaskPointFactoryType type);
-const TCHAR* getTaskValidationErrors(
-   const AbstractTaskFactory::TaskValidationErrorVector v);
-const TCHAR* TaskValidationError(
-   AbstractTaskFactory::TaskValidationErrorType type);
+
+const TCHAR *
+getTaskValidationErrors(const TaskValidationErrorVector &v);
+
+const TCHAR *
+TaskValidationError(TaskValidationErrorType type);
 
 #endif
 

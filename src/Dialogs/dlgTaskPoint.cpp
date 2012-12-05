@@ -42,6 +42,7 @@ Copyright_License {
 #include "Engine/Task/Ordered/Points/FinishPoint.hpp"
 #include "Engine/Task/Ordered/Points/ASTPoint.hpp"
 #include "Engine/Task/Ordered/Points/AATPoint.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"

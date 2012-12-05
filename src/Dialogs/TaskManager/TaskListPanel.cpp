@@ -46,6 +46,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scissor.hpp"

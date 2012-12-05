@@ -46,6 +46,7 @@ Copyright_License {
 #include "Look/AirspaceLook.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
+#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Util/Macros.hpp"
