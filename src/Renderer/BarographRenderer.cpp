@@ -70,7 +70,6 @@ IsTaskLegVisible(const OrderedTaskPoint &tp)
     return tp.HasEntered();
 
   case TaskPointType::UNORDERED:
-  case TaskPointType::ROUTE:
     break;
   }
 

@@ -121,10 +121,6 @@ class TaskPointVisitorPrint: public TaskPointConstVisitor
 public:
   virtual void Visit(const TaskPoint& tp) gcc_override {
     switch (tp.GetType()) {
-    case TaskPointType::ROUTE:
-      assert(false);
-      break;
-
     case TaskPointType::UNORDERED:
       printf("# got a tp\n");
       break;

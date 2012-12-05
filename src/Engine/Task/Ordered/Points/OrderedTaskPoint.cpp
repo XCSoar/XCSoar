@@ -175,8 +175,7 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
                            IsBoundaryScored());
 
   case TaskPointType::UNORDERED:
-  case TaskPointType::ROUTE:
-    /* an OrderedTaskPoint must never be UNORDERED or ROUTE */
+    /* an OrderedTaskPoint must never be UNORDERED */
     assert(false);
     break;
   }

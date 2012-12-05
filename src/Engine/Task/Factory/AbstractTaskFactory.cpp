@@ -101,7 +101,6 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     break;
 
   case TaskPointType::UNORDERED:
-  case TaskPointType::ROUTE:
     break;
   }
   return newtype;
@@ -260,9 +259,8 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     break;
 
   case TaskPointType::UNORDERED:
-  case TaskPointType::ROUTE:
     /* obviously, when we check the type of an OrderedTaskPoint, we
-       should never get type==UNORDERED or ROUTE. */
+       should never get type==UNORDERED */
     assert(false);
     break;
   }
@@ -655,9 +653,8 @@ AbstractTaskFactory::IsValidType(const OrderedTaskPoint &new_tp,
         IsValidFinishType(GetType(new_tp));
 
   case TaskPointType::UNORDERED:
-  case TaskPointType::ROUTE:
     /* obviously, when we check the type of an OrderedTaskPoint, we
-       should never get type==UNORDERED or ROUTE */
+       should never get type==UNORDERED */
     assert(false);
     break;
   }

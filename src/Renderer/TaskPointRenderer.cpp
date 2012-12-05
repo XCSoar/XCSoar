@@ -260,10 +260,5 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
       DrawTarget(tp);
     }
     break;
-
-  case TaskPointType::ROUTE:
-    /* unreachable */
-    assert(false);
-    break;
   }
 }

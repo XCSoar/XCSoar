@@ -41,7 +41,6 @@ static const TCHAR *
 GetName(TaskPointType type, bool mode_optional_start)
 {
   switch (type) {
-  case TaskPointType::ROUTE:
   case TaskPointType::UNORDERED:
     assert(false);
     break;

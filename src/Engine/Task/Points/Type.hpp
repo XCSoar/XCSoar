@@ -32,7 +32,6 @@ enum class TaskPointType : uint8_t {
   AST,
   AAT,
   FINISH,
-  ROUTE
 };
 
 #endif
