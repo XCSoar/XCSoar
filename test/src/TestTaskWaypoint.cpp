@@ -32,7 +32,7 @@ class DummyTaskWaypoint: public TaskWaypoint
 public:
   friend class TaskWaypointTest;
 
-  DummyTaskWaypoint(Type _type, const Waypoint & wp)
+  DummyTaskWaypoint(TaskPointType _type, const Waypoint & wp)
     :TaskWaypoint(_type, wp) {}
 
   virtual GeoVector GetVectorRemaining(const GeoPoint &reference) const {
@@ -74,7 +74,7 @@ TaskWaypointTest::Run()
   wp.name = _T("Test");
   wp.elevation = fixed(42);
 
-  DummyTaskWaypoint tw(TaskPoint::AST, wp);
+  DummyTaskWaypoint tw(TaskPointType::AST, wp);
 
   const Waypoint &wp2 = tw.GetWaypoint();
   ok1(wp2.name == _T("Test"));

@@ -34,7 +34,8 @@
 #include <assert.h>
 #include <math.h>
 
-OrderedTaskPoint::OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
+OrderedTaskPoint::OrderedTaskPoint(TaskPointType _type,
+                                   ObservationZonePoint *_oz,
                                    const Waypoint &wp,
                                    const bool b_scored)
   :TaskLeg(*this), ScoredTaskPoint(_type, wp, b_scored),
@@ -154,27 +155,27 @@ OrderedTaskPoint::Clone(const TaskBehaviour &task_behaviour,
     waypoint = &GetWaypoint();
 
   switch (GetType()) {
-  case START:
+  case TaskPointType::START:
     return new StartPoint(GetObservationZone().Clone(waypoint->location),
                           *waypoint, task_behaviour,
                           ordered_task_behaviour.start_constraints);
 
-  case AST:
+  case TaskPointType::AST:
     return new ASTPoint(GetObservationZone().Clone(waypoint->location),
                         *waypoint, task_behaviour, IsBoundaryScored());
 
-  case AAT:
+  case TaskPointType::AAT:
     return new AATPoint(GetObservationZone().Clone(waypoint->location),
                         *waypoint, task_behaviour);
 
-  case FINISH:
+  case TaskPointType::FINISH:
     return new FinishPoint(GetObservationZone().Clone(waypoint->location),
                            *waypoint, task_behaviour,
                            ordered_task_behaviour.finish_constraints,
                            IsBoundaryScored());
 
-  case UNORDERED:
-  case ROUTE:
+  case TaskPointType::UNORDERED:
+  case TaskPointType::ROUTE:
     /* an OrderedTaskPoint must never be UNORDERED or ROUTE */
     assert(false);
     break;

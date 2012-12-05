@@ -82,7 +82,7 @@ public:
    *
    * @return Partially initialised object
    */
-  OrderedTaskPoint(Type _type, ObservationZonePoint* _oz,
+  OrderedTaskPoint(TaskPointType _type, ObservationZonePoint *_oz,
                    const Waypoint &wp,
                    const bool b_scored);
 
@@ -109,12 +109,12 @@ public:
 
   /** Is it possible to insert a task point before this one? */
   bool IsPredecessorAllowed() const {
-    return GetType() != START;
+    return GetType() != TaskPointType::START;
   }
 
   /** Is it possible to insert a task point after this one? */
   bool IsSuccessorAllowed() const {
-    return GetType() != FINISH;
+    return GetType() != TaskPointType::FINISH;
   }
 
   virtual void SetOrderedTaskBehaviour(const OrderedTaskBehaviour &otb) {}

@@ -50,7 +50,7 @@ TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
   if (armed)
     request_armed = false;
 
-  if (tp.GetType() == TaskPoint::START) {
+  if (tp.GetType() == TaskPointType::START) {
     const StartPoint *sp = (const StartPoint *)&tp;
     if (start_requires_arm) {
       if (armed) {
@@ -65,7 +65,7 @@ TaskAdvanceSmart::CheckReadyToAdvance(const TaskPoint &tp,
       state = TaskAdvance::AUTO;
       return state_ready;
     }
-  } else if (tp.GetType() == TaskPoint::AAT) {
+  } else if (tp.GetType() == TaskPointType::AAT) {
     if (armed) {
       state = TaskAdvance::TURN_ARMED;
     } else {

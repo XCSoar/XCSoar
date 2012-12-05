@@ -149,22 +149,22 @@ RefreshView()
   StaticString<100> name_prefix_buffer, type_buffer;
 
   switch (tp.GetType()) {
-  case TaskPoint::START:
+  case TaskPointType::START:
     type_buffer = _T("Start point");
     name_prefix_buffer = _T("Start: ");
     break;
 
-  case TaskPoint::AST:
+  case TaskPointType::AST:
     type_buffer = _T("Task point");
     name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
-  case TaskPoint::AAT:
+  case TaskPointType::AAT:
     type_buffer = _T("Assigned area point");
     name_prefix_buffer.Format(_T("%d: "), active_index);
     break;
 
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     type_buffer = _T("Finish point");
     name_prefix_buffer = _T("Finish: ");
     break;

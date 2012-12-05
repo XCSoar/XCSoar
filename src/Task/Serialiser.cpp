@@ -38,24 +38,24 @@
 
 gcc_const
 static const TCHAR *
-GetName(TaskPoint::Type type, bool mode_optional_start)
+GetName(TaskPointType type, bool mode_optional_start)
 {
   switch (type) {
-  case TaskPoint::ROUTE:
-  case TaskPoint::UNORDERED:
+  case TaskPointType::ROUTE:
+  case TaskPointType::UNORDERED:
     assert(false);
     break;
 
-  case TaskPoint::START:
+  case TaskPointType::START:
     return mode_optional_start ? _T("OptionalStart") : _T("Start");
 
-  case TaskPoint::AST:
+  case TaskPointType::AST:
     return _T("Turn");
 
-  case TaskPoint::AAT:
+  case TaskPointType::AAT:
     return _T("Area");
 
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     return _T("Finish");
   }
 

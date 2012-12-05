@@ -53,7 +53,7 @@ public:
    *
    * @return Partially initialised object
    */
-  ScoredTaskPoint(Type _type, const Waypoint &wp, bool b_scored);
+  ScoredTaskPoint(TaskPointType _type, const Waypoint &wp, bool b_scored);
   virtual ~ScoredTaskPoint() {}
 
   /* virtual methods from class TaskPoint */

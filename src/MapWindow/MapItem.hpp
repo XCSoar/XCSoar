@@ -28,7 +28,6 @@ Copyright_License {
 #include "Geo/GeoPoint.hpp"
 #include "Geo/GeoVector.hpp"
 #include "Task/ObservationZones/ObservationZonePoint.hpp"
-#include "Engine/Task/Points/TaskPoint.hpp"
 #include "Markers/Markers.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/Friends.hpp"
@@ -39,6 +38,8 @@ Copyright_License {
 #ifdef HAVE_NOAA
 #include "Weather/NOAAStore.hpp"
 #endif
+
+enum class TaskPointType : uint8_t;
 
 class AbstractAirspace;
 struct Waypoint;
@@ -110,11 +111,11 @@ struct TaskOZMapItem: public MapItem
 {
   int index;
   const ObservationZonePoint *oz;
-  TaskPoint::Type tp_type;
+  TaskPointType tp_type;
   const Waypoint &waypoint;
 
   TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
-                TaskPoint::Type _tp_type, const Waypoint &_waypoint)
+                TaskPointType _tp_type, const Waypoint &_waypoint)
     :MapItem(TASK_OZ), index(_index), oz(_oz.Clone()),
      tp_type(_tp_type), waypoint(_waypoint) {}
 

@@ -312,7 +312,7 @@ PrintHelper::orderedtask_print(const OrderedTask &task,
   for (unsigned i = 0; i < task.TaskSize(); ++i) {
     const OrderedTaskPoint &tp = task.GetPoint(i);
     fi << "## point " << i << "\n";
-    if (tp.GetType() == TaskPoint::AAT) {
+    if (tp.GetType() == TaskPointType::AAT) {
       aatpoint_print(fi, (const AATPoint &)tp, state,
                      task.GetTaskProjection(), 1);
     } else {
@@ -327,7 +327,7 @@ PrintHelper::orderedtask_print(const OrderedTask &task,
   for (unsigned i = 0; i < task.TaskSize(); ++i) {
     f1 << "## point " << i << " ###################\n";
     const OrderedTaskPoint &tp = task.GetPoint(i);
-    if (tp.GetType() == TaskPoint::AAT) {
+    if (tp.GetType() == TaskPointType::AAT) {
       aatpoint_print(f1, (const AATPoint &)tp, state,
                      task.GetTaskProjection(), 0);
     } else {

@@ -24,6 +24,7 @@
 #ifndef TASKPOINT_HPP
 #define TASKPOINT_HPP
 
+#include "Type.hpp"
 #include "Geo/GeoPoint.hpp"
 #include "Compiler.h"
 
@@ -35,18 +36,7 @@ struct AircraftState;
  */
 class TaskPoint
 {
-public:
-  enum Type: uint8_t {
-    UNORDERED,
-    START,
-    AST,
-    AAT,
-    FINISH,
-    ROUTE
-  };
-
-private:
-  Type type;
+  TaskPointType type;
 
   GeoPoint location;
 
@@ -55,7 +45,7 @@ private:
 
 public:
   bool IsIntermediatePoint() const {
-    return type == AST || type == AAT;
+    return type == TaskPointType::AST || type == TaskPointType::AAT;
   }
 
   /**
@@ -67,7 +57,7 @@ public:
    *
    * @return Initialised object
    */
-  TaskPoint(Type _type, const GeoPoint &_location,
+  TaskPoint(TaskPointType _type, const GeoPoint &_location,
             const fixed _elevation) :
     type(_type), location(_location),
     elevation(_elevation) {}
@@ -77,7 +67,7 @@ public:
    */
   virtual ~TaskPoint() {};
 
-  Type GetType() const {
+  TaskPointType GetType() const {
     return type;
   }
 
@@ -167,7 +157,7 @@ public:
    */
   gcc_pure
   bool HasTarget() const {
-    return type == AAT;
+    return type == TaskPointType::AAT;
   }
 
   /**

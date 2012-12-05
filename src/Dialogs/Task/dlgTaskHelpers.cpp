@@ -202,23 +202,23 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 }
 
 void
-OrderedTaskPointLabel(TaskPoint::Type type, const TCHAR *name,
+OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
                       unsigned index, TCHAR* buffer)
 {
   switch (type) {
-  case TaskPoint::START:
+  case TaskPointType::START:
     _stprintf(buffer, _T("S: %s"), name);
     break;
 
-  case TaskPoint::AST:
+  case TaskPointType::AST:
     _stprintf(buffer, _T("T%d: %s"), index, name);
     break;
 
-  case TaskPoint::AAT:
+  case TaskPointType::AAT:
     _stprintf(buffer, _T("A%d: %s"), index, name);
     break;
 
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     _stprintf(buffer, _T("F: %s"), name);
     break;
 

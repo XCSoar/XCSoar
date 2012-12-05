@@ -71,7 +71,7 @@ static fixed
 GetSafetyHeight(const TaskPoint &tp)
 {
   switch (tp.GetType()) {
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     return task_behaviour.safety_height_arrival;
 
   default:

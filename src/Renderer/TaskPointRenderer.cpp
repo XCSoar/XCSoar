@@ -209,7 +209,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
   const AATPoint &atp = (const AATPoint &)tp;
 
   switch (tp.GetType()) {
-  case TaskPoint::UNORDERED:
+  case TaskPointType::UNORDERED:
     if (layer == LAYER_LEG && location_available)
       DrawTaskLine(location, tp.GetLocationRemaining());
 
@@ -219,7 +219,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     index++;
     break;
 
-  case TaskPoint::START:
+  case TaskPointType::START:
     index = 0;
 
     DrawOrdered(otp, layer);
@@ -230,7 +230,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
 
     break;
 
-  case TaskPoint::AST:
+  case TaskPointType::AST:
     index++;
 
     DrawOrdered(otp, layer);
@@ -240,7 +240,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     }
     break;
 
-  case TaskPoint::AAT:
+  case TaskPointType::AAT:
     index++;
 
     DrawOrdered(otp, layer);
@@ -251,7 +251,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     }
     break;
 
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     index++;
 
     DrawOrdered(otp, layer);
@@ -261,7 +261,7 @@ TaskPointRenderer::Draw(const TaskPoint &tp, Layer layer)
     }
     break;
 
-  case TaskPoint::ROUTE:
+  case TaskPointType::ROUTE:
     /* unreachable */
     assert(false);
     break;

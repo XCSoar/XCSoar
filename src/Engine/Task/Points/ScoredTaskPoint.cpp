@@ -21,8 +21,9 @@
  */
 #include "ScoredTaskPoint.hpp"
 
-ScoredTaskPoint::ScoredTaskPoint(Type _type, const Waypoint & wp, bool b_scored):
-  SampledTaskPoint(_type, wp, b_scored)
+ScoredTaskPoint::ScoredTaskPoint(TaskPointType _type, const Waypoint &wp,
+                                 bool b_scored)
+  :SampledTaskPoint(_type, wp, b_scored)
 {
   Reset();
 }

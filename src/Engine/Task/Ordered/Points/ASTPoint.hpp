@@ -51,7 +51,7 @@ public:
            const Waypoint &wp,
            const TaskBehaviour &tb,
            bool boundary_scored=false)
-    :IntermediateTaskPoint(AST, _oz, wp, tb, boundary_scored) {}
+    :IntermediateTaskPoint(TaskPointType::AST, _oz, wp, tb, boundary_scored) {}
 };
 
 #endif

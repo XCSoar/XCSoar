@@ -24,11 +24,10 @@ Copyright_License {
 #ifndef DIALOG_TASK_HELPERS_HPP
 #define DIALOG_TASK_HELPERS_HPP
 
-#include "Task/Points/TaskPoint.hpp"
-
 #include <tchar.h>
 #include <stdint.h>
 
+enum class TaskPointType : uint8_t;
 enum class TaskFactoryType : uint8_t;
 enum class TaskPointFactoryType : uint8_t;
 enum class TaskValidationErrorType : uint8_t;
@@ -46,8 +45,11 @@ const TCHAR* OrderedTaskFactoryName(TaskFactoryType type);
  * @param linebreaks True if each summary item should be separated with a line break
  */
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
-void OrderedTaskPointLabel(TaskPoint::Type type, const TCHAR *name,
-                           unsigned index, TCHAR* buffer);
+
+void
+OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
+                      unsigned index, TCHAR *buffer);
+
 void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius);
 bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
 

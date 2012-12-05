@@ -49,7 +49,7 @@ public:
    *
    * @return Partially-initialised object
    */
-  IntermediateTaskPoint(Type _type, ObservationZonePoint *_oz,
+  IntermediateTaskPoint(TaskPointType _type, ObservationZonePoint *_oz,
                         const Waypoint &wp,
                         const TaskBehaviour &tb,
                         const bool b_scored = false);

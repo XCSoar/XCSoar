@@ -66,7 +66,7 @@ public:
    *
    * @return Partially initialised object
    */
-  SampledTaskPoint(Type type,
+  SampledTaskPoint(TaskPointType type,
                    const Waypoint &wp,
                    const bool is_scored);
 

@@ -24,7 +24,7 @@
 #include "Task/ObservationZones/Boundary.hpp"
 #include "Navigation/Aircraft.hpp"
 
-SampledTaskPoint::SampledTaskPoint(Type _type, const Waypoint & wp,
+SampledTaskPoint::SampledTaskPoint(TaskPointType _type, const Waypoint & wp,
                                    const bool b_scored)
   :TaskWaypoint(_type, wp),
    boundary_scored(b_scored),

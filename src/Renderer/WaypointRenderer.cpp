@@ -364,18 +364,18 @@ public:
 
   virtual void Visit(const TaskPoint &tp) gcc_override {
     switch (tp.GetType()) {
-    case TaskPoint::ROUTE:
+    case TaskPointType::ROUTE:
       assert(false);
       break;
 
-    case TaskPoint::UNORDERED:
+    case TaskPointType::UNORDERED:
       AddWaypoint(((const UnorderedTaskPoint &)tp).GetWaypoint(), true);
       break;
 
-    case TaskPoint::START:
-    case TaskPoint::AST:
-    case TaskPoint::AAT:
-    case TaskPoint::FINISH:
+    case TaskPointType::START:
+    case TaskPointType::AST:
+    case TaskPointType::AAT:
+    case TaskPointType::FINISH:
       AddWaypoint(((const OrderedTaskPoint &)tp).GetWaypoint(), true);
       break;
     }

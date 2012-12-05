@@ -61,16 +61,16 @@ static bool
 IsTaskLegVisible(const OrderedTaskPoint &tp)
 {
   switch (tp.GetType()) {
-  case TaskPoint::START:
+  case TaskPointType::START:
     return tp.HasExited();
 
-  case TaskPoint::FINISH:
-  case TaskPoint::AAT:
-  case TaskPoint::AST:
+  case TaskPointType::FINISH:
+  case TaskPointType::AAT:
+  case TaskPointType::AST:
     return tp.HasEntered();
 
-  case TaskPoint::UNORDERED:
-  case TaskPoint::ROUTE:
+  case TaskPointType::UNORDERED:
+  case TaskPointType::ROUTE:
     break;
   }
 

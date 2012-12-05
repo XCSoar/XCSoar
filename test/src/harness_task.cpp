@@ -121,30 +121,30 @@ class TaskPointVisitorPrint: public TaskPointConstVisitor
 public:
   virtual void Visit(const TaskPoint& tp) gcc_override {
     switch (tp.GetType()) {
-    case TaskPoint::ROUTE:
+    case TaskPointType::ROUTE:
       assert(false);
       break;
 
-    case TaskPoint::UNORDERED:
+    case TaskPointType::UNORDERED:
       printf("# got a tp\n");
       break;
 
-    case TaskPoint::FINISH:
+    case TaskPointType::FINISH:
       printf("# got an ftp\n");
       ozv.Visit(((const FinishPoint &)tp).GetObservationZone());
       break;
 
-    case TaskPoint::START:
+    case TaskPointType::START:
       printf("# got an stp\n");
       ozv.Visit(((const StartPoint &)tp).GetObservationZone());
       break;
 
-    case TaskPoint::AAT:
+    case TaskPointType::AAT:
       printf("# got an aat\n");
       ozv.Visit(((const AATPoint &)tp).GetObservationZone());
       break;
 
-    case TaskPoint::AST:
+    case TaskPointType::AST:
       printf("# got an ast\n");
       ozv.Visit(((const ASTPoint &)tp).GetObservationZone());
       break;

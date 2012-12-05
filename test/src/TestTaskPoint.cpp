@@ -32,7 +32,7 @@ class DummyTaskPoint: public TaskPoint
 public:
   friend class TaskPointTest;
 
-  DummyTaskPoint(Type _type, const GeoPoint &_location,
+  DummyTaskPoint(TaskPointType _type, const GeoPoint &_location,
                  const fixed _elevation)
     :TaskPoint(_type, _location, _elevation) {}
 
@@ -73,28 +73,28 @@ TaskPointTest::Run()
   GeoPoint gp1(Angle::Degrees(fixed(20)), Angle::Degrees(fixed(50)));
   GeoPoint gp2(Angle::Degrees(fixed(21)), Angle::Degrees(fixed(50)));
 
-  DummyTaskPoint tp1(TaskPoint::AST, gp1, fixed(1234));
-  DummyTaskPoint tp2(TaskPoint::AAT, gp2, fixed(1337));
-  DummyTaskPoint tp3(TaskPoint::START, gp1, fixed(1234));
-  DummyTaskPoint tp4(TaskPoint::FINISH, gp2, fixed(1337));
+  DummyTaskPoint tp1(TaskPointType::AST, gp1, fixed(1234));
+  DummyTaskPoint tp2(TaskPointType::AAT, gp2, fixed(1337));
+  DummyTaskPoint tp3(TaskPointType::START, gp1, fixed(1234));
+  DummyTaskPoint tp4(TaskPointType::FINISH, gp2, fixed(1337));
 
   ok1(tp1.IsIntermediatePoint());
-  ok1(tp1.GetType() == TaskPoint::AST);
+  ok1(tp1.GetType() == TaskPointType::AST);
   ok1(equals(tp1.GetBaseElevation(), 1234));
   ok1(!tp1.HasTarget());
   ok1(equals(tp1.Distance(gp2), gp1.Distance(gp2)));
   ok1(equals(tp1.GetLocation(), gp1));
 
   ok1(tp2.IsIntermediatePoint());
-  ok1(tp2.GetType() == TaskPoint::AAT);
+  ok1(tp2.GetType() == TaskPointType::AAT);
   ok1(tp2.HasTarget());
 
   ok1(!tp3.IsIntermediatePoint());
-  ok1(tp3.GetType() == TaskPoint::START);
+  ok1(tp3.GetType() == TaskPointType::START);
   ok1(!tp3.HasTarget());
 
   ok1(!tp4.IsIntermediatePoint());
-  ok1(tp4.GetType() == TaskPoint::FINISH);
+  ok1(tp4.GetType() == TaskPointType::FINISH);
   ok1(!tp4.HasTarget());
 }
 

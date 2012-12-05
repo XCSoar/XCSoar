@@ -27,7 +27,7 @@
 
 UnorderedTaskPoint::UnorderedTaskPoint(const Waypoint &wp,
                                        const TaskBehaviour &tb)
-  :TaskWaypoint(UNORDERED, wp),
+  :TaskWaypoint(TaskPointType::UNORDERED, wp),
    safety_height_arrival(tb.safety_height_arrival) {}
 
 void

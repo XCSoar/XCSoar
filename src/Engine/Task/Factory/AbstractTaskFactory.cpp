@@ -74,7 +74,7 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
   TaskPointFactoryType newtype = oldtype;
 
   switch (tp.GetType()) {
-  case TaskPoint::START:
+  case TaskPointType::START:
     if (!IsValidStartType(newtype)) {
       newtype = behaviour.sector_defaults.start_type;
       if (!IsValidStartType(newtype))
@@ -82,8 +82,8 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     }
     break;
 
-  case TaskPoint::AST:
-  case TaskPoint::AAT:
+  case TaskPointType::AST:
+  case TaskPointType::AAT:
     if (!IsValidIntermediateType(newtype)) {
       newtype = behaviour.sector_defaults.turnpoint_type;
       if (!IsValidIntermediateType(newtype)) {
@@ -92,7 +92,7 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     }
     break;
 
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     if (!IsValidFinishType(newtype)) {
       newtype = behaviour.sector_defaults.finish_type;
       if (!IsValidFinishType(newtype))
@@ -100,8 +100,8 @@ AbstractTaskFactory::GetMutatedPointType(const OrderedTaskPoint &tp) const
     }
     break;
 
-  case TaskPoint::UNORDERED:
-  case TaskPoint::ROUTE:
+  case TaskPointType::UNORDERED:
+  case TaskPointType::ROUTE:
     break;
   }
   return newtype;
@@ -179,7 +179,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
   const ObservationZonePoint &oz = point.GetObservationZone();
 
   switch (point.GetType()) {
-  case TaskPoint::START:
+  case TaskPointType::START:
     switch (oz.shape) {
     case ObservationZonePoint::FAI_SECTOR:
       return TaskPointFactoryType::START_SECTOR;
@@ -200,7 +200,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     }
     break;
 
-  case TaskPoint::AAT:
+  case TaskPointType::AAT:
     switch (oz.shape) {
     case ObservationZonePoint::SECTOR:
     case ObservationZonePoint::FAI_SECTOR:
@@ -217,7 +217,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     }
     break;
 
-  case TaskPoint::AST:
+  case TaskPointType::AST:
     switch (oz.shape) {
     case ObservationZonePoint::FAI_SECTOR:
       return TaskPointFactoryType::FAI_SECTOR;
@@ -240,7 +240,7 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     }
     break;
 
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     switch (oz.shape) {
     case ObservationZonePoint::BGA_START:
     case ObservationZonePoint::FAI_SECTOR:
@@ -259,8 +259,8 @@ AbstractTaskFactory::GetType(const OrderedTaskPoint &point) const
     }
     break;
 
-  case TaskPoint::UNORDERED:
-  case TaskPoint::ROUTE:
+  case TaskPointType::UNORDERED:
+  case TaskPointType::ROUTE:
     /* obviously, when we check the type of an OrderedTaskPoint, we
        should never get type==UNORDERED or ROUTE. */
     assert(false);
@@ -638,24 +638,24 @@ AbstractTaskFactory::IsValidType(const OrderedTaskPoint &new_tp,
                                unsigned position) const
 {
   switch (new_tp.GetType()) {
-  case TaskPoint::START:
+  case TaskPointType::START:
     return ValidAbstractType(POINT_START, position) &&
         IsValidStartType(GetType(new_tp));
 
-  case TaskPoint::AST:
+  case TaskPointType::AST:
     return ValidAbstractType(POINT_AST, position) &&
         IsValidIntermediateType(GetType(new_tp));
 
-  case TaskPoint::AAT:
+  case TaskPointType::AAT:
     return ValidAbstractType(POINT_AAT, position)&&
         IsValidIntermediateType(GetType(new_tp));
 
-  case TaskPoint::FINISH:
+  case TaskPointType::FINISH:
     return ValidAbstractType(POINT_FINISH, position)&&
         IsValidFinishType(GetType(new_tp));
 
-  case TaskPoint::UNORDERED:
-  case TaskPoint::ROUTE:
+  case TaskPointType::UNORDERED:
+  case TaskPointType::ROUTE:
     /* obviously, when we check the type of an OrderedTaskPoint, we
        should never get type==UNORDERED or ROUTE */
     assert(false);
@@ -942,7 +942,7 @@ AbstractTaskFactory::IsHomogeneous() const
 
     for (unsigned i = 2; i < size; i++) {
       const OrderedTaskPoint &tp = task.GetPoint(i);
-      if (tp.GetType() == TaskPoint::FINISH) {
+      if (tp.GetType() == TaskPointType::FINISH) {
         ; // don't check a valid finish point
       } else {
         if (GetType(tp) != homogtype) {
@@ -1039,7 +1039,7 @@ AbstractTaskFactory::MutateClosedFinishPerTaskType()
   if (constraints.is_closed) {
     if (!IsClosed()) {
       const OrderedTaskPoint &tp = task.GetPoint(task.TaskSize() - 1);
-      if (tp.GetType() == TaskPoint::FINISH) {
+      if (tp.GetType() == TaskPointType::FINISH) {
         FinishPoint *fp = CreateFinish(task.GetPoint(0).GetWaypoint());
         assert(fp);
         Remove(task.TaskSize() - 1, false);

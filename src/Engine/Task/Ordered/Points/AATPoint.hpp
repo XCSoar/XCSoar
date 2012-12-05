@@ -75,7 +75,7 @@ public:
   AATPoint(ObservationZonePoint *_oz,
            const Waypoint &wp,
            const TaskBehaviour &tb)
-    :IntermediateTaskPoint(AAT, _oz, wp, tb, true),
+    :IntermediateTaskPoint(TaskPointType::AAT, _oz, wp, tb, true),
      target_location(wp.location),
      target_save(wp.location),
      target_locked(false)
