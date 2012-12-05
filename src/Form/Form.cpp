@@ -123,6 +123,8 @@ WndForm::Create(SingleWindow &main_window, const PixelRect &rc,
 {
   if (_caption != nullptr)
     caption = _caption;
+  else
+    caption.clear();
 
   ContainerWindow::Create(main_window, rc, AddBorder(style));
 
