@@ -24,8 +24,6 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-#include <tchar.h>
-
 class SingleWindow;
 
 void dlgAlternatesListShowModal(SingleWindow &parent);

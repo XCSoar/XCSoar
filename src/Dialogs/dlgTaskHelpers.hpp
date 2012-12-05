@@ -23,11 +23,13 @@ Copyright_License {
 #ifndef DIALOG_TASK_HELPERS_HPP
 #define DIALOG_TASK_HELPERS_HPP
 
-#include <tchar.h>
-
 #include "Task/Factory/AbstractTaskFactory.hpp"
-#include "Task/TaskBehaviour.hpp"
 #include "Task/Points/TaskPoint.hpp"
+
+#include <tchar.h>
+#include <stdint.h>
+
+enum class TaskFactoryType : uint8_t;
 
 const TCHAR* OrderedTaskFactoryDescription(TaskFactoryType type);
 const TCHAR* OrderedTaskFactoryName(TaskFactoryType type);
