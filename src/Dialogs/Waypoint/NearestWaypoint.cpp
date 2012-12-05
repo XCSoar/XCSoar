@@ -22,7 +22,7 @@ Copyright_License {
 
 */
 
-#include "Dialogs/Waypoint.hpp"
+#include "WaypointDialogs.hpp"
 #include "UIGlobals.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/LastUsed.hpp"

@@ -27,7 +27,7 @@ Copyright_License {
 #include "../dlgTaskHelpers.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/Waypoint.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"

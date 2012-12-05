@@ -21,9 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Waypoint.hpp"
-#include "Dialogs/Waypoint/WaypointInfoWidget.hpp"
-#include "Dialogs/Waypoint/WaypointCommandsWidget.hpp"
+#include "WaypointDialogs.hpp"
+#include "WaypointInfoWidget.hpp"
+#include "WaypointCommandsWidget.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/XML.hpp"

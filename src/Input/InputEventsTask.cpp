@@ -37,7 +37,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Dialogs/Task/TaskDialogs.hpp"
-#include "Dialogs/Waypoint.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskFile.hpp"
 

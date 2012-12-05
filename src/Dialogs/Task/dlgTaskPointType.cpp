@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TaskDialogs.hpp"
 #include "Dialogs/ListPicker.hpp"
-#include "Dialogs/Waypoint.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"

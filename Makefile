@@ -178,7 +178,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/dlgConfiguration.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfigFonts.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfigInfoboxes.cpp \
-	$(SRC)/Dialogs/Settings/dlgConfigWaypoints.cpp \
 	$(SRC)/Dialogs/Settings/FontEdit.cpp \
 	$(SRC)/Dialogs/dlgFlarmDetailsList.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
@@ -207,7 +206,10 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Waypoint/WaypointInfoWidget.cpp \
 	$(SRC)/Dialogs/Waypoint/WaypointCommandsWidget.cpp \
 	$(SRC)/Dialogs/Waypoint/dlgWaypointDetails.cpp \
+	$(SRC)/Dialogs/Waypoint/Manager.cpp \
 	$(SRC)/Dialogs/Waypoint/dlgWaypointEdit.cpp \
+	$(SRC)/Dialogs/Waypoint/WaypointList.cpp \
+	$(SRC)/Dialogs/Waypoint/NearestWaypoint.cpp \
 	\
 	$(SRC)/Dialogs/Settings/Panels/AirspaceConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/DevicesConfigPanel.cpp \
@@ -256,7 +258,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
 	$(SRC)/Dialogs/TimeEntry.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
-	$(SRC)/Dialogs/WaypointList.cpp \
 	$(SRC)/Dialogs/WindSettingsDialog.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 	$(SRC)/Dialogs/dlgQuickMenu.cpp \
@@ -453,7 +454,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Menu/MenuData.cpp \
 	$(SRC)/Menu/MenuBar.cpp \
 	$(SRC)/Menu/ButtonLabel.cpp \
-	$(SRC)/Dialogs/Dialogs.cpp \
 	$(SRC)/Menu/ExpandMacros.cpp \
 	$(SRC)/InfoBoxes/Content/Factory.cpp \
 	$(SRC)/InfoBoxes/Content/Alternate.cpp \

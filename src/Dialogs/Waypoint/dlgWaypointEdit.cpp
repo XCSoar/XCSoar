@@ -21,8 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Waypoint.hpp"
-#include "Dialogs/TextEntry.hpp"
+#include "WaypointDialogs.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
 #include "Form/Form.hpp"

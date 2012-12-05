@@ -26,7 +26,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Dialogs/Waypoint.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Engine/Util/Gradient.hpp"
 #include "Units/Units.hpp"

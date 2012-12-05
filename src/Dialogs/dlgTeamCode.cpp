@@ -23,7 +23,7 @@
 
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Dialogs/Waypoint.hpp"
+#include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"
