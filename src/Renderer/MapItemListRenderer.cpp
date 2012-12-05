@@ -35,7 +35,7 @@ Copyright_License {
 #include "Formatter/UserGeoPointFormatter.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "Formatter/AngleFormatter.hpp"
-#include "Dialogs/dlgTaskHelpers.hpp"
+#include "Dialogs/Task/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"

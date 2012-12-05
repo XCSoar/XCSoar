@@ -36,7 +36,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
-#include "Dialogs/Task.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskFile.hpp"

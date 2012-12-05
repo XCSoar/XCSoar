@@ -180,7 +180,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/dlgConfigInfoboxes.cpp \
 	$(SRC)/Dialogs/Settings/dlgConfigWaypoints.cpp \
 	$(SRC)/Dialogs/Settings/FontEdit.cpp \
-	$(SRC)/Dialogs/dlgAlternatesList.cpp \
 	$(SRC)/Dialogs/dlgFlarmDetailsList.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \
@@ -236,19 +235,20 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp \
 	\
-	$(SRC)/Dialogs/TaskManager/TaskManagerDialog.cpp \
-	$(SRC)/Dialogs/TaskManager/TaskClosePanel.cpp \
-	$(SRC)/Dialogs/TaskManager/TaskEditPanel.cpp \
-	$(SRC)/Dialogs/TaskManager/TaskPropertiesPanel.cpp \
-	$(SRC)/Dialogs/TaskManager/TaskMiscPanel.cpp \
-	$(SRC)/Dialogs/TaskManager/TaskActionsPanel.cpp \
-	$(SRC)/Dialogs/TaskManager/TaskListPanel.cpp \
-	$(SRC)/Dialogs/TaskManager/TaskCalculatorPanel.cpp \
-	$(SRC)/Dialogs/dlgTaskOptionalStarts.cpp \
-	$(SRC)/Dialogs/dlgTaskPoint.cpp \
-	$(SRC)/Dialogs/dlgTaskPointType.cpp \
-	$(SRC)/Dialogs/dlgTaskHelpers.cpp \
-	$(SRC)/Dialogs/dlgTarget.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskManagerDialog.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskClosePanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskEditPanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskPropertiesPanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskMiscPanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskActionsPanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskListPanel.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskCalculatorPanel.cpp \
+	$(SRC)/Dialogs/Task/dlgTaskOptionalStarts.cpp \
+	$(SRC)/Dialogs/Task/dlgTaskPoint.cpp \
+	$(SRC)/Dialogs/Task/dlgTaskPointType.cpp \
+	$(SRC)/Dialogs/Task/dlgTaskHelpers.cpp \
+	$(SRC)/Dialogs/Task/dlgTarget.cpp \
+	$(SRC)/Dialogs/Task/dlgAlternatesList.cpp \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/dlgTeamCode.cpp \

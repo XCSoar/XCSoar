@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Task.hpp"
+#include "TaskDialogs.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"

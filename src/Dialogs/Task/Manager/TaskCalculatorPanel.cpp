@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "TaskCalculatorPanel.hpp"
 #include "Internal.hpp"
-#include "Dialogs/Task.hpp"
+#include "../TaskDialogs.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
 #include "Formatter/UserUnits.hpp"

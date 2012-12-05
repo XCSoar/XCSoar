@@ -23,7 +23,6 @@
 #include "harness_task.hpp"
 #include "test_debug.hpp"
 
-#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/Factory/TaskFactoryConstraints.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"

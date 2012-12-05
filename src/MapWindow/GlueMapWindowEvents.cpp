@@ -32,7 +32,6 @@ Copyright_License {
 #include "Components.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Waypoint.hpp"
-#include "Dialogs/Task.hpp"
 #include "Math/FastMath.h"
 #include "Compiler.h"
 #include "Interface.hpp"

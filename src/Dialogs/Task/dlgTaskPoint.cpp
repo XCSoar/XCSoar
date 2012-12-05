@@ -21,7 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Task.hpp"
+#include "TaskDialogs.hpp"
+#include "dlgTaskHelpers.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
@@ -35,7 +36,6 @@ Copyright_License {
 #include "Form/PanelWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Components.hpp"
-#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Units/Units.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/StartPoint.hpp"

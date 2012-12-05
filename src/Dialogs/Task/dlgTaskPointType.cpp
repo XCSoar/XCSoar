@@ -21,8 +21,9 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Task.hpp"
-#include "ListPicker.hpp"
+#include "TaskDialogs.hpp"
+#include "dlgTaskHelpers.hpp"
+#include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
@@ -38,7 +39,6 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"
 #include "Engine/Task/Factory/TaskFactoryConstraints.hpp"
-#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"

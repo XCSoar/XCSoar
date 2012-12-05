@@ -25,7 +25,7 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
-#include "Dialogs/Task.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/XML.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"

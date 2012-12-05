@@ -23,10 +23,10 @@ Copyright_License {
 
 #include "TaskEditPanel.hpp"
 #include "Internal.hpp"
-#include "Dialogs/Task.hpp"
+#include "../TaskDialogs.hpp"
+#include "../dlgTaskHelpers.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CallBackTable.hpp"
-#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"

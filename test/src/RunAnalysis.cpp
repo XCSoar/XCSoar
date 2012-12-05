@@ -38,7 +38,7 @@ Copyright_License {
 #include "Waypoint/WaypointGlue.hpp"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
-#include "Dialogs/Task.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Airspace/AirspaceWarningDialog.hpp"
 #include "Dialogs/DialogSettings.hpp"

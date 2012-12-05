@@ -56,7 +56,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Device/Vega/VoiceSettingsDialog.hpp"
 #include "Dialogs/Device/Vega/SwitchesDialog.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
-#include "Dialogs/Task.hpp"
+#include "Dialogs/Task/TaskDialogs.hpp"
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Weather.hpp"
