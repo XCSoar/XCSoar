@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TaskDialogs.hpp"
-#include "dlgTaskHelpers.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
@@ -35,6 +34,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
+#include "Task/TypeStrings.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Ordered/Points/OrderedTaskPoint.hpp"

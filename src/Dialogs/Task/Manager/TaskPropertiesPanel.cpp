@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "TaskPropertiesPanel.hpp"
 #include "Internal.hpp"
-#include "../dlgTaskHelpers.hpp"
 #include "Screen/Layout.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
@@ -32,6 +31,7 @@ Copyright_License {
 #include "Form/Draw.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/TypeStrings.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
 

@@ -287,6 +287,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Task/ProtectedRoutePlanner.cpp \
 	$(SRC)/Task/TaskStore.cpp \
+	$(SRC)/Task/TypeStrings.cpp \
 	\
 	$(SRC)/RadioFrequency.cpp \
 	\

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Interface.hpp"
-#include "Dialogs/Task/dlgTaskHelpers.hpp"
+#include "Task/TypeStrings.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Form/RowFormWidget.hpp"

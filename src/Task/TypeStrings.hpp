@@ -21,38 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef DIALOG_TASK_HELPERS_HPP
-#define DIALOG_TASK_HELPERS_HPP
+#ifndef XCSOAR_TASK_TYPE_STRINGS_HPP
+#define XCSOAR_TASK_TYPE_STRINGS_HPP
+
+#include "Compiler.h"
 
 #include <tchar.h>
 #include <stdint.h>
 
 enum class TaskPointType : uint8_t;
-enum class TaskValidationErrorType : uint8_t;
-class TaskValidationErrorVector;
-class OrderedTask;
-class ObservationZonePoint;
+enum class TaskFactoryType : uint8_t;
+enum class TaskPointFactoryType : uint8_t;
 
-/**
- *
- * @param task The Task
- * @param text A buffer written to
- * @param linebreaks True if each summary item should be separated with a line break
- */
-void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
-
-void
-OrderedTaskPointLabel(TaskPointType type, const TCHAR *name,
-                      unsigned index, TCHAR *buffer);
-
-void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius);
-bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
-
+gcc_const
 const TCHAR *
-getTaskValidationErrors(const TaskValidationErrorVector &v);
+OrderedTaskFactoryDescription(TaskFactoryType type);
 
+gcc_const
 const TCHAR *
-TaskValidationError(TaskValidationErrorType type);
+OrderedTaskFactoryName(TaskFactoryType type);
+
+gcc_const
+const TCHAR *
+OrderedTaskPointDescription(TaskPointFactoryType type);
+
+gcc_const
+const TCHAR *
+OrderedTaskPointName(TaskPointFactoryType type);
 
 #endif
 

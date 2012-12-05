@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "TaskDialogs.hpp"
-#include "dlgTaskHelpers.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/XML.hpp"
@@ -46,6 +45,7 @@ Copyright_License {
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
+#include "Task/TypeStrings.hpp"
 #include "Gauge/TaskView.hpp"
 #include "Compiler.h"
 #include "UIGlobals.hpp"
