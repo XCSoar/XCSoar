@@ -201,18 +201,20 @@ protected:
   virtual void OnTaskModified();
 
 protected:
-  virtual void OnCreate();
-  virtual void OnDestroy();
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  /* virtual methods from class Window */
+  virtual void OnCreate() gcc_override;
+  virtual void OnDestroy() gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
 
-  virtual void OnPaintBuffer(Canvas& canvas);
-  virtual void OnPaint(Canvas& canvas);
+  virtual void OnPaintBuffer(Canvas& canvas) gcc_override;
+  virtual void OnPaint(Canvas& canvas) gcc_override;
 
   virtual void OnCancelMode() gcc_override;
 
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y,
+                           unsigned keys) gcc_override;
 };
 
 #endif

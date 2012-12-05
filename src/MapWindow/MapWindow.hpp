@@ -252,7 +252,7 @@ public:
     visible_projection.SetGeoLocation(location);
   }
 
-public:
+protected:
   void DrawBestCruiseTrack(Canvas &canvas,
                            const RasterPoint aircraft_pos) const;
   void DrawTrackBearing(Canvas &canvas,
@@ -289,7 +289,6 @@ public:
    */
   virtual void Render(Canvas &canvas, const PixelRect &rc);
 
-protected:
   unsigned UpdateTopography(unsigned max_update=1024);
 
   /**
@@ -309,12 +308,14 @@ protected:
   }
 
 protected:
-  virtual void OnCreate();
-  virtual void OnDestroy();
-  virtual void OnResize(UPixelScalar width, UPixelScalar height);
+  /* virtual methods from class Window */
+  virtual void OnCreate() gcc_override;
+  virtual void OnDestroy() gcc_override;
+  virtual void OnResize(UPixelScalar width, UPixelScalar height) gcc_override;
+  virtual void OnPaint(Canvas& canvas) gcc_override;
 
-  virtual void OnPaint(Canvas& canvas);
-  virtual void OnPaintBuffer(Canvas& canvas);
+  /* virtual methods from class DoubleBufferWindow */
+  virtual void OnPaintBuffer(Canvas& canvas) gcc_override;
 
 private:
   /**

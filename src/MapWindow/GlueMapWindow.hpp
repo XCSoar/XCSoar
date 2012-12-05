@@ -161,8 +161,6 @@ public:
 
   bool Idle();
 
-  virtual void Render(Canvas &canvas, const PixelRect &rc);
-
   void Create(ContainerWindow &parent, const PixelRect &rc);
 
   void SetPan(bool enable);
@@ -173,16 +171,28 @@ public:
                     bool show_empty_message = true) const;
 
 protected:
-  // events
-  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys);
-  virtual bool OnMouseDown(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseUp(PixelScalar x, PixelScalar y);
-  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta);
+  /* virtual methods from class MapWindow */
+  virtual void Render(Canvas &canvas, const PixelRect &rc) gcc_override;
+  virtual void DrawThermalEstimate(Canvas &canvas) const gcc_override;
+  virtual void RenderTrail(Canvas &canvas,
+                           const RasterPoint aircraft_pos) gcc_override;
+
+  /* virtual methods from class Window */
+  virtual bool OnMouseDouble(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseMove(PixelScalar x, PixelScalar y, unsigned keys) gcc_override;
+  virtual bool OnMouseDown(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseUp(PixelScalar x, PixelScalar y) gcc_override;
+  virtual bool OnMouseWheel(PixelScalar x, PixelScalar y, int delta) gcc_override;
 
 #ifdef HAVE_MULTI_TOUCH
-  virtual bool OnMultiTouchDown();
+  virtual bool OnMultiTouchDown() gcc_override;
 #endif
+
+  virtual bool OnKeyDown(unsigned key_code) gcc_override;
+  virtual void OnCancelMode() gcc_override;
+  virtual void OnPaint(Canvas &canvas) gcc_override;
+  virtual void OnPaintBuffer(Canvas& canvas) gcc_override;
+  virtual bool OnTimer(WindowTimer &timer) gcc_override;
 
   /**
    * This event handler gets called when a gesture has
@@ -192,12 +202,6 @@ protected:
    * event handler, False otherwise
    */
   bool OnMouseGesture(const TCHAR* gesture);
-
-  virtual bool OnKeyDown(unsigned key_code);
-  virtual void OnCancelMode() gcc_override;
-  virtual void OnPaint(Canvas &canvas);
-  virtual void OnPaintBuffer(Canvas& canvas);
-  bool OnTimer(WindowTimer &timer);
 
 private:
   void DrawGesture(Canvas &canvas) const;
@@ -211,8 +215,6 @@ private:
   void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const;
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const;
   void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const;
-  virtual void DrawThermalEstimate(Canvas &canvas) const;
-  virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos);
 
   void SwitchZoomClimb(bool circling);
 
