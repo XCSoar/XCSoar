@@ -268,6 +268,9 @@ static constexpr PolarStore::Item internal_polars[] =
   { _T("Blanik L13-AC"), 500, 0, 70, -0.85, 110, -1.25, 160, -3.2, 17.44, 44.44, 0 },
   // from idaflieg measured 1970
   { _T("Ka 6E"),  310, 0, 87.35, -0.81, 141.92, -2.03, 174.68, -3.5, 12.4, 0.0, 85 },
+
+  // from marius@sargevicius.com
+  { _T("LAK-12"),  430, 190, 75, -0.48, 125, -0.88, 175, -1.97, 14.63, 48.611, 114 },
 };
 
 const PolarStore::Item &
