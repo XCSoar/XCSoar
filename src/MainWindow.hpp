@@ -334,6 +334,7 @@ public:
   void ToggleForceFLARMRadar();
 
 private:
+  void UpdateVarioGaugeVisibility();
   void UpdateTrafficGaugeVisibility();
 
 protected:

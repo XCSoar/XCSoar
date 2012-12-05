@@ -678,6 +678,8 @@ MainWindow::SetFullScreen(bool _full_screen)
     map->FastMove(GetMainRect());
 
   // the repaint will be triggered by the DrawThread
+
+  UpdateVarioGaugeVisibility();
 }
 
 void
@@ -858,13 +860,18 @@ MainWindow::GetFlavourWidget(const TCHAR *flavour)
 }
 
 void
-MainWindow::UpdateGaugeVisibility()
+MainWindow::UpdateVarioGaugeVisibility()
 {
   bool full_screen = GetFullScreen();
 
   vario.SetVisible(!full_screen &&
                    !CommonInterface::GetUIState().screen_blanked);
+}
 
+void
+MainWindow::UpdateGaugeVisibility()
+{
+  UpdateVarioGaugeVisibility();
   UpdateTrafficGaugeVisibility();
 }
 
