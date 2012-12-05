@@ -38,25 +38,22 @@ unsigned DisplayTimeOut = 0;
 static void
 BlankDisplay(bool doblank)
 {
-  static bool oldblank = false;
-
   if (!XCSoarInterface::GetUISettings().display.enable_auto_blank)
     return;
 
-  if (doblank == oldblank)
+  UIState &ui_state = CommonInterface::SetUIState();
+
+  if (doblank == ui_state.screen_blanked)
     return;
 
   if (!Display::BlankSupported())
     // can't do it, not supported
     return;
 
-  UIState &ui_state = CommonInterface::SetUIState();
-
   if (doblank) {
     if (Power::External::Status == Power::External::OFF) {
       // Power off the display
       Display::Blank(true);
-      oldblank = true;
       ui_state.screen_blanked = true;
     } else {
       ResetDisplayTimeOut();
@@ -65,7 +62,6 @@ BlankDisplay(bool doblank)
     // was blanked
     // Power on the display
     Display::Blank(false);
-    oldblank = false;
     ui_state.screen_blanked = false;
   }
 }
