@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "UIGlobals.hpp"
+#include "UIState.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Components.hpp"
@@ -55,7 +56,7 @@ dlgInfoBoxAccessShowModeless(const int id, const InfoBoxPanel *panels)
   assert (id > -1);
 
   const InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = InfoBoxManager::GetCurrentPanel();
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   const InfoBoxSettings::Panel &panel = settings.panels[panel_index];
   const InfoBoxFactory::Type old_type = panel.contents[id];
 

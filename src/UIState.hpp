@@ -58,6 +58,13 @@ struct UIState {
   unsigned auxiliary_index;
 
   /**
+   * The index of the InfoBox panel currently being displayed.  If
+   * #auxiliary_enabled is true, then this is the same as
+   * #auxiliary_index.
+   */
+  unsigned panel_index;
+
+  /**
    * A copy of the current InfoBox panel name.  This copy is necessary
    * because the original name is in InfoBoxSettings, but MapWindow
    * does not know InfoBoxSettings or UISettings, and needs to know

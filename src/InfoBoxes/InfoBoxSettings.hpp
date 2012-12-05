@@ -36,6 +36,13 @@ enum InfoBoxBorderAppearance_t {
 };
 
 struct InfoBoxSettings {
+  enum PanelIndex {
+    PANEL_CIRCLING,
+    PANEL_CRUISE,
+    PANEL_FINAL_GLIDE,
+    PANEL_AUXILIARY,
+  };
+
   struct Panel {
     static constexpr unsigned MAX_CONTENTS = 24;
 

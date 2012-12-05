@@ -139,7 +139,7 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
     return;
   }
 
-  ui_state.panel_name = InfoBoxManager::GetCurrentPanelName();
+  ActionInterface::UpdateDisplayMode();
 
   InfoBoxManager::SetDirty();
   XCSoarInterface::SendMapSettings(true);

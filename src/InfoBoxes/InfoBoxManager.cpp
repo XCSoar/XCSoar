@@ -124,40 +124,6 @@ InfoBoxManager::Event_Select(int i)
     infoboxes[0]->FocusParent();
 }
 
-unsigned
-InfoBoxManager::GetCurrentPanel()
-{
-  const UIState &ui_state = CommonInterface::GetUIState();
-
-  if (ui_state.auxiliary_enabled) {
-    unsigned panel = ui_state.auxiliary_index;
-    if (panel >= InfoBoxSettings::MAX_PANELS)
-      panel = PANEL_AUXILIARY;
-    return panel;
-  }
-  else if (ui_state.display_mode == DisplayMode::CIRCLING)
-    return PANEL_CIRCLING;
-  else if (ui_state.display_mode == DisplayMode::FINAL_GLIDE)
-    return PANEL_FINAL_GLIDE;
-  else
-    return PANEL_CRUISE;
-}
-
-const TCHAR*
-InfoBoxManager::GetPanelName(unsigned panelIdx)
-{
-  const InfoBoxSettings &infoBoxManagerConfig =
-    CommonInterface::GetUISettings().info_boxes;
-
-  return gettext(infoBoxManagerConfig.panels[panelIdx].name);
-}
-
-const TCHAR*
-InfoBoxManager::GetCurrentPanelName()
-{
-  return GetPanelName(GetCurrentPanel());
-}
-
 const TCHAR*
 InfoBoxManager::GetTitle(unsigned box)
 {
@@ -187,7 +153,7 @@ InfoBoxManager::Event_Change(int i)
     return;
 
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = GetCurrentPanel();
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   InfoBoxSettings::Panel &panel = settings.panels[panel_index];
 
   k = panel.contents[InfoFocus];
@@ -213,7 +179,7 @@ InfoBoxManager::DisplayInfoBox()
 
   // JMW note: this is updated every GPS time step
 
-  const unsigned panel = GetCurrentPanel();
+  const unsigned panel = CommonInterface::GetUIState().panel_index;
 
   const InfoBoxSettings::Panel &settings =
     CommonInterface::GetUISettings().info_boxes.panels[panel];
@@ -344,7 +310,7 @@ InfoBoxManager::ShowInfoBoxPicker(const int id)
     return;
 
   InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
-  const unsigned panel_index = GetCurrentPanel();
+  const unsigned panel_index = CommonInterface::GetUIState().panel_index;
   InfoBoxSettings::Panel &panel = settings.panels[panel_index];
 
   const InfoBoxFactory::Type old_type = panel.contents[i];

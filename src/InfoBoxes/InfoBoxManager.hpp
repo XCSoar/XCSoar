@@ -39,13 +39,6 @@ namespace InfoBoxLayout {
 
 namespace InfoBoxManager
 {
-  enum PanelSelection {
-    PANEL_CIRCLING,
-    PANEL_CRUISE,
-    PANEL_FINAL_GLIDE,
-    PANEL_AUXILIARY,
-  };
-
   extern InfoBoxLayout::Layout layout;
 
   void Event_Select(int i);
@@ -61,15 +54,6 @@ namespace InfoBoxManager
   void Destroy();
   void Show();
   void Hide();
-
-  gcc_pure
-  unsigned GetCurrentPanel();
-
-  gcc_pure
-  const TCHAR* GetCurrentPanelName();
-
-  gcc_pure
-  const TCHAR* GetPanelName(unsigned panel);
 
   gcc_pure
   const TCHAR* GetTitle(unsigned box);

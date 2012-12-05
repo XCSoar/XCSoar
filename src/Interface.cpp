@@ -258,6 +258,24 @@ ActionInterface::SendMapSettings(const bool trigger_draw)
   // TODO: trigger refresh if the settings are changed
 }
 
+gcc_pure
+static unsigned
+GetPanelIndex(const UIState &ui_state)
+{
+  if (ui_state.auxiliary_enabled) {
+    unsigned panel = ui_state.auxiliary_index;
+    if (panel >= InfoBoxSettings::MAX_PANELS)
+      panel = InfoBoxSettings::PANEL_AUXILIARY;
+    return panel;
+  }
+  else if (ui_state.display_mode == DisplayMode::CIRCLING)
+    return InfoBoxSettings::PANEL_CIRCLING;
+  else if (ui_state.display_mode == DisplayMode::FINAL_GLIDE)
+    return InfoBoxSettings::PANEL_FINAL_GLIDE;
+  else
+    return InfoBoxSettings::PANEL_CRUISE;
+}
+
 void
 ActionInterface::UpdateDisplayMode()
 {
@@ -266,5 +284,8 @@ ActionInterface::UpdateDisplayMode()
 
   state.display_mode = GetNewDisplayMode(settings.info_boxes, state,
                                          Calculated());
-  state.panel_name = InfoBoxManager::GetCurrentPanelName();
+  state.panel_index = GetPanelIndex(state);
+
+  const auto &panel = settings.info_boxes.panels[state.panel_index];
+  state.panel_name = gettext(panel.name);
 }
