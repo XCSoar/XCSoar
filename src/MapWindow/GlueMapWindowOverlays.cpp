@@ -320,7 +320,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 void
 GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
-  if (InCirclingMode()) {
+  if (InCirclingMode() && IsNearSelf()) {
     // in circling mode, draw thermal at actual estimated location
     const MapWindowProjection &projection = render_projection;
     const ThermalLocatorInfo &thermal_locator = Calculated().thermal_locator;
