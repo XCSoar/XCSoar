@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-26 23:00+0100\n"
-"PO-Revision-Date: 2012-04-10 12:28+0000\n"
-"Last-Translator: Tiago Silva <Unknown>\n"
+"PO-Revision-Date: 2012-12-04 11:24+0000\n"
+"Last-Translator: David Felix <dfelix@live.com.pt>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-14 10:32+0000\n"
-"X-Generator: Launchpad (build 15070)\n"
+"X-Launchpad-Export-Date: 2012-12-05 23:28+0000\n"
+"X-Generator: Launchpad (build 16341)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -33,7 +33,7 @@ msgstr "Tarefa"
 
 #: src/Airspace/AirspaceGlue.cpp:63
 msgid "Loading Airspace File..."
-msgstr ""
+msgstr "A Carregar Ficheiro de Espaço Aéreo..."
 
 #: src/Airspace/AirspaceParser.cpp:256
 msgid "Parse Error at Line"
@@ -51,7 +51,7 @@ msgstr ""
 #: Data/Dialogs/dlgVoice.xml:34 Data/Input/default.xci:534
 #, no-c-format
 msgid "Airspace"
-msgstr ""
+msgstr "Espaço Aereo"
 
 #: src/Airspace/AirspaceParser.cpp:895
 msgid "Unknown airspace filetype"
@@ -82,22 +82,22 @@ msgstr ""
 #: src/FLARM/Error.cpp:29
 #, no-c-format
 msgid "No error"
-msgstr ""
+msgstr "Sem erros"
 
 #: src/FLARM/Error.cpp:30
 #, no-c-format
 msgid "Information"
-msgstr ""
+msgstr "Informação"
 
 #: src/FLARM/Error.cpp:31
 #, no-c-format
 msgid "Reduced functionality"
-msgstr ""
+msgstr "Funcionalidades Reduzidas"
 
 #: src/FLARM/Error.cpp:32
 #, no-c-format
 msgid "Fatal problem"
-msgstr ""
+msgstr "Erro Falta"
 
 #. valid but unknown number of sats
 #: src/FLARM/Error.cpp:41 src/FLARM/Error.cpp:71
@@ -106,7 +106,7 @@ msgstr ""
 #: src/Dialogs/dlgTaskHelpers.cpp:113
 #, no-c-format
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: src/FLARM/Error.cpp:48
 #, no-c-format
@@ -116,42 +116,42 @@ msgstr ""
 #: src/FLARM/Error.cpp:49
 #, no-c-format
 msgid "Power"
-msgstr ""
+msgstr "Ligar/Desligar"
 
 #: src/FLARM/Error.cpp:50
 #, no-c-format
 msgid "GPS communication"
-msgstr ""
+msgstr "Comunicação GPS"
 
 #: src/FLARM/Error.cpp:51
 #, no-c-format
 msgid "GPS configuration"
-msgstr ""
+msgstr "Configuração GPS"
 
 #: src/FLARM/Error.cpp:52
 #, no-c-format
 msgid "RF communication"
-msgstr ""
+msgstr "Comunicação RF"
 
 #: src/FLARM/Error.cpp:53
 #, no-c-format
 msgid "Communication"
-msgstr ""
+msgstr "Comunicação"
 
 #: src/FLARM/Error.cpp:54
 #, no-c-format
 msgid "Flash memory"
-msgstr ""
+msgstr "Memória Flash"
 
 #: src/FLARM/Error.cpp:55
 #, no-c-format
 msgid "Pressure sensor"
-msgstr ""
+msgstr "Barómetro"
 
 #: src/FLARM/Error.cpp:56 src/Dialogs/Device/ManageFlarmDialog.cpp:77
 #, no-c-format
 msgid "Obstacle database"
-msgstr ""
+msgstr "Base de Dados de Obstáculos"
 
 #: src/FLARM/Error.cpp:57
 #, no-c-format
@@ -161,51 +161,53 @@ msgstr ""
 #: src/FLARM/Error.cpp:59
 #, no-c-format
 msgid "Transponder receiver"
-msgstr ""
+msgstr "Receptor Transponder"
 
 #: src/FLARM/Error.cpp:60
 #, no-c-format
 msgid "Other"
-msgstr ""
+msgstr "Outro"
 
 #: src/Logger/Logger.cpp:112 src/Dialogs/Device/ManageCAI302Dialog.cpp:72
 msgid "Start Logger"
-msgstr ""
+msgstr "Iniciar Logger"
 
 #: src/Logger/Logger.cpp:119
 msgid "Logger inactive, insufficient storage!"
-msgstr ""
+msgstr "Logger inactivo, espaço de armazenamento insuficiente!"
 
 #: src/Logger/Logger.cpp:120
 msgid "Logger Error"
-msgstr ""
+msgstr "Erro no Logger"
 
 #: src/Logger/Logger.cpp:148 src/Dialogs/Device/ManageCAI302Dialog.cpp:73
 msgid "Stop Logger"
-msgstr ""
+msgstr "Parar Logger"
 
 #: src/Logger/ExternalLogger.cpp:89
 msgid "Declare task?"
-msgstr ""
+msgstr "Declarar tarefa?"
 
 #: src/Logger/ExternalLogger.cpp:98 src/Logger/ExternalLogger.cpp:130
 #: src/Dialogs/TaskManager/TaskActionsPanel.cpp:114
 msgid "Declare task"
-msgstr ""
+msgstr "Declarar tarefa"
 
 #: src/Logger/ExternalLogger.cpp:104
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Erro,\n"
+"Tarefa NÃO declarada!"
 
 #: src/Logger/ExternalLogger.cpp:109
 msgid "Task declared!"
-msgstr ""
+msgstr "Tarefa declarada!"
 
 #: src/Logger/ExternalLogger.cpp:129
 msgid "No logger connected"
-msgstr ""
+msgstr "Sem Logger ligado"
 
 #: src/Logger/ExternalLogger.cpp:273
 msgid "Failed to download flight list."
@@ -1809,9 +1811,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:956
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Thermal climb trace"
-msgstr "Assistente Térmico"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:957
 #, no-c-format
