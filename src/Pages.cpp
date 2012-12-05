@@ -140,9 +140,7 @@ Pages::OpenLayout(const PageSettings::PageLayout &layout)
   }
 
   ActionInterface::UpdateDisplayMode();
-
-  InfoBoxManager::SetDirty();
-  XCSoarInterface::SendMapSettings(true);
+  ActionInterface::SendUIState();
 }
 
 

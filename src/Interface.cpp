@@ -289,3 +289,14 @@ ActionInterface::UpdateDisplayMode()
   const auto &panel = settings.info_boxes.panels[state.panel_index];
   state.panel_name = gettext(panel.name);
 }
+
+void
+ActionInterface::SendUIState()
+{
+  /* force-update all InfoBoxes just in case the display mode has
+     changed */
+  InfoBoxManager::SetDirty();
+  InfoBoxManager::ProcessTimer();
+
+  main_window->SetUIState(GetUIState());
+}

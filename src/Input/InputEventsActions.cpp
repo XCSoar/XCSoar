@@ -543,8 +543,8 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
   else if (StringIsEqual(misc, _T("forcefinal")))
     ui_state.force_display_mode = DisplayMode::FINAL_GLIDE;
 
-  /* trigger mode update by GlueMapWindow */
-  CommonInterface::main_window->FullRedraw();
+  ActionInterface::UpdateDisplayMode();
+  ActionInterface::SendUIState();
 }
 
 void

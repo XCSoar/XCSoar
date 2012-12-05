@@ -36,6 +36,7 @@ Copyright_License {
 
 struct ComputerSettings;
 struct MapSettings;
+struct UIState;
 struct Look;
 class GlueMapWindow;
 class Widget;
@@ -263,6 +264,7 @@ public:
 
   void SetComputerSettings(const ComputerSettings &settings_computer);
   void SetMapSettings(const MapSettings &settings_map);
+  void SetUIState(const UIState &ui_state);
 
   /**
    * Returns the map even if it is not active.  May return NULL if

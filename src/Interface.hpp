@@ -286,8 +286,16 @@ namespace ActionInterface {
 
   /**
    * Update UIState::display_mode and other attributes related to it.
+   * You may have to call SendUIState() after this.
    */
   void UpdateDisplayMode();
+
+  /**
+   * Call this after UIState has been modified (via SetUIState() or
+   * UpdateDisplayMode()).  It sends the new values to all subsystems,
+   * and redraws relevant parts of the screen.
+   */
+  void SendUIState();
 };
 
 /** 

@@ -619,10 +619,8 @@ MainWindow::OnUser(unsigned id)
 
     ActionInterface::UpdateDisplayMode();
 
-    if (map != NULL) {
-      map->SetUIState(CommonInterface::GetUIState());
+    if (map != NULL)
       map->FullRedraw();
-    }
 
     InfoBoxManager::SetDirty();
     InfoBoxManager::ProcessTimer();
@@ -708,6 +706,15 @@ MainWindow::SetMapSettings(const MapSettings &settings_map)
 {
   if (map != NULL)
     map->SetMapSettings(settings_map);
+}
+
+void
+MainWindow::SetUIState(const UIState &ui_state)
+{
+  if (map != NULL) {
+    map->SetUIState(ui_state);
+    map->FullRedraw();
+  }
 }
 
 GlueMapWindow *
