@@ -542,8 +542,6 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
     ui_state.force_display_mode = DisplayMode::CRUISE;
   else if (StringIsEqual(misc, _T("forcefinal")))
     ui_state.force_display_mode = DisplayMode::FINAL_GLIDE;
-  else if (StringIsEqual(misc, _T("show")))
-    Message::AddMessage(_("Map labels on"));
 
   /* trigger mode update by GlueMapWindow */
   CommonInterface::main_window->FullRedraw();
