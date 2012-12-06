@@ -618,12 +618,7 @@ MainWindow::OnUser(unsigned id)
     XCSoarInterface::ReceiveCalculated();
 
     ActionInterface::UpdateDisplayMode();
-
-    if (map != NULL)
-      map->FullRedraw();
-
-    InfoBoxManager::SetDirty();
-    InfoBoxManager::ProcessTimer();
+    ActionInterface::SendUIState();
 
     return true;
 
