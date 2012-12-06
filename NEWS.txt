@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4.5 - not yet released
 * user interface
   - faster gesture drawing
+* map
+  - fix crash in terrain renderer with broken map file (#2478)
 * data files
   - added "LAK-12" polar
 
