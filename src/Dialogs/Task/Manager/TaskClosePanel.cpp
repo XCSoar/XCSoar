@@ -53,13 +53,14 @@ TaskClosePanel::RefreshStatus()
 static void
 OnCloseClicked()
 {
-  dlgTaskManager::OnClose();
+  if (instance->dialog.Commit())
+    instance->dialog.SetModalResult(mrOK);
 }
 
 static void
 OnRevertClicked()
 {
-  dlgTaskManager::RevertTask();
+  instance->dialog.Revert();
   instance->RefreshStatus();
 }
 
@@ -93,7 +94,7 @@ bool
 TaskClosePanel::Click()
 {
   if (!(*task_modified)) {
-    dlgTaskManager::OnClose();
+    OnCloseClicked();
     return false;
   }
 
@@ -103,14 +104,13 @@ TaskClosePanel::Click()
 void
 TaskClosePanel::ReClick()
 {
-  dlgTaskManager::OnClose();
+  OnCloseClicked();
 }
 
 void
 TaskClosePanel::Show(const PixelRect &rc)
 {
-  if (wTaskView != NULL)
-    wTaskView->Show();
+  dialog.ShowTaskView();
 
   RefreshStatus();
 
@@ -120,8 +120,7 @@ TaskClosePanel::Show(const PixelRect &rc)
 void
 TaskClosePanel::Hide()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::ResetTaskView(wTaskView);
+  dialog.ResetTaskView();
 
   XMLWidget::Hide();
 }

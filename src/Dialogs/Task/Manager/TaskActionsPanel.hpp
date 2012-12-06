@@ -26,39 +26,28 @@ Copyright_License {
 
 #include "Widget/XMLWidget.hpp"
 
+class TaskManagerDialog;
 class TaskMiscPanel;
-class TabBarControl;
 class WndOwnerDrawFrame;
 class TabbedControl;
 class OrderedTask;
 class TaskListPanel;
 
 class TaskActionsPanel : public XMLWidget {
+  TaskManagerDialog &dialog;
   TaskMiscPanel &parent;
-
-  TabBarControl &tab_bar;
 
   OrderedTask **active_task;
   bool *task_modified;
 
-  WndOwnerDrawFrame* wTaskView;
-
   TaskListPanel *list_panel;
 
 public:
-  TaskActionsPanel(TaskMiscPanel &_parent,
-                   TabBarControl &_tab_bar,
+  TaskActionsPanel(TaskManagerDialog &_dialog, TaskMiscPanel &_parent,
                    OrderedTask **_active_task, bool *_task_modified)
-    :parent(_parent), tab_bar(_tab_bar),
+    :dialog(_dialog), parent(_parent),
      active_task(_active_task), task_modified(_task_modified),
-     wTaskView(NULL), list_panel(NULL) {}
-
-  void SetTaskView(WndOwnerDrawFrame *_task_view) {
-    assert(wTaskView == NULL);
-    assert(_task_view != NULL);
-
-    wTaskView = _task_view;
-  }
+     list_panel(NULL) {}
 
   void SetListPanel(TaskListPanel *_list_panel) {
     assert(list_panel == NULL);

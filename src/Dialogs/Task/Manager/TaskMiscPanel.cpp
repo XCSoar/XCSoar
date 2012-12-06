@@ -25,28 +25,18 @@ Copyright_License {
 #include "TaskActionsPanel.hpp"
 #include "TaskListPanel.hpp"
 
-TaskMiscPanel::TaskMiscPanel(TabBarControl &_tab_bar,
+TaskMiscPanel::TaskMiscPanel(TaskManagerDialog &dialog,
                              OrderedTask **_active_task, bool *_task_modified)
 {
   TaskActionsPanel *actions_panel =
-    new TaskActionsPanel(*this, _tab_bar, _active_task, _task_modified);
+    new TaskActionsPanel(dialog, *this, _active_task, _task_modified);
   Add(actions_panel);
 
   TaskListPanel *list_panel =
-    new TaskListPanel(_tab_bar, _active_task, _task_modified);
+    new TaskListPanel(dialog, _active_task, _task_modified);
   Add(list_panel);
 
   actions_panel->SetListPanel(list_panel);
-}
-
-void
-TaskMiscPanel::SetTaskView(WndOwnerDrawFrame *_task_view)
-{
-  TaskActionsPanel &actions_panel = (TaskActionsPanel &)GetWidget(0);
-  actions_panel.SetTaskView(_task_view);
-
-  TaskListPanel &list_panel = (TaskListPanel &)GetWidget(1);
-  list_panel.SetTaskView(_task_view);
 }
 
 void

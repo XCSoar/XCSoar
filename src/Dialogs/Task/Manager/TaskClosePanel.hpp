@@ -26,28 +26,24 @@ Copyright_License {
 
 #include "Widget/XMLWidget.hpp"
 
+class TaskManagerDialog;
 class OrderedTask;
-class WndOwnerDrawFrame;
 class WndFrame;
 class WndButton;
 
 class TaskClosePanel : public XMLWidget {
+public:
+  TaskManagerDialog &dialog;
+
+private:
   bool *task_modified;
 
-  WndOwnerDrawFrame *wTaskView;
   WndFrame *wStatus;
   WndButton *cmdRevert, *cmdClose;
 
 public:
-  TaskClosePanel(bool *_task_modified)
-    :task_modified(_task_modified), wTaskView(NULL) {}
-
-  void SetTaskView(WndOwnerDrawFrame *_task_view) {
-    assert(wTaskView == NULL);
-    assert(_task_view != NULL);
-
-    wTaskView = _task_view;
-  }
+  TaskClosePanel(TaskManagerDialog &_dialog, bool *_task_modified)
+    :dialog(_dialog), task_modified(_task_modified) {}
 
   void RefreshStatus();
 

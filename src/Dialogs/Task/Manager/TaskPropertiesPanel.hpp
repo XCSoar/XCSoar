@@ -28,14 +28,14 @@ Copyright_License {
 #include "Form/DataField/Listener.hpp"
 #include "Engine/Task/TaskBehaviour.hpp"
 
-class WndOwnerDrawFrame;
+class TaskManagerDialog;
 class OrderedTask;
 class DataFieldBoolean;
 class DataFieldEnum;
 
 class TaskPropertiesPanel : public RowFormWidget,
                             private DataFieldListener {
-  WndOwnerDrawFrame *wTaskView;
+  TaskManagerDialog &dialog;
 
   OrderedTask **ordered_task_pointer, *ordered_task;
   bool *task_changed;
@@ -43,18 +43,8 @@ class TaskPropertiesPanel : public RowFormWidget,
   TaskFactoryType orig_taskType;
 
 public:
-  TaskPropertiesPanel(const DialogLook &look,
-                      OrderedTask **_active_task, bool *_task_modified)
-    :RowFormWidget(look), wTaskView(NULL),
-     ordered_task_pointer(_active_task), ordered_task(*ordered_task_pointer),
-     task_changed(_task_modified) {}
-
-  void SetTaskView(WndOwnerDrawFrame *_task_view) {
-    assert(wTaskView == NULL);
-    assert(_task_view != NULL);
-
-    wTaskView = _task_view;
-  }
+  TaskPropertiesPanel(TaskManagerDialog &_dialog,
+                      OrderedTask **_active_task, bool *_task_modified);
 
   void OnFAIFinishHeightChange(DataFieldBoolean &df);
   void OnTaskTypeChange(DataFieldEnum &df);

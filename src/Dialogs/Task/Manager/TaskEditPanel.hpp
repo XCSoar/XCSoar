@@ -27,18 +27,17 @@ Copyright_License {
 #include "Widget/XMLWidget.hpp"
 #include "Form/List.hpp"
 
-class WndForm;
+class TaskManagerDialog;
 struct DialogLook;
 struct TaskLook;
 struct AirspaceLook;
 class OrderedTask;
 class ListControl;
-class WndOwnerDrawFrame;
 class WndFrame;
 class Canvas;
 
 class TaskEditPanel : public XMLWidget, private ListControl::Handler {
-  WndForm &wf;
+  TaskManagerDialog &dialog;
 
   const TaskLook &task_look;
   const AirspaceLook &airspace_look;
@@ -47,24 +46,15 @@ class TaskEditPanel : public XMLWidget, private ListControl::Handler {
   bool *task_modified;
 
   ListControl *wTaskPoints;
-  WndOwnerDrawFrame *wTaskView;
   WndFrame *wSummary;
 
 public:
-  TaskEditPanel(WndForm &_wf,
+  TaskEditPanel(TaskManagerDialog &_dialog,
                 const TaskLook &_task_look, const AirspaceLook &_airspace_look,
                 OrderedTask **_active_task, bool *_task_modified)
-    :wf(_wf),
+    :dialog(_dialog),
      task_look(_task_look), airspace_look(_airspace_look),
-     ordered_task_pointer(_active_task), task_modified(_task_modified),
-     wTaskView(NULL) {}
-
-  void SetTaskView(WndOwnerDrawFrame *_task_view) {
-    assert(wTaskView == NULL);
-    assert(_task_view != NULL);
-
-    wTaskView = _task_view;
-  }
+     ordered_task_pointer(_active_task), task_modified(_task_modified) {}
 
   void UpdateButtons();
 

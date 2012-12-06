@@ -48,6 +48,13 @@ enum Controls {
   TASK_TYPE,
 };
 
+TaskPropertiesPanel::TaskPropertiesPanel(TaskManagerDialog &_dialog,
+                                         OrderedTask **_active_task,
+                                         bool *_task_modified)
+  :RowFormWidget(_dialog.GetLook()), dialog(_dialog),
+   ordered_task_pointer(_active_task), ordered_task(*ordered_task_pointer),
+   task_changed(_task_modified) {}
+
 void
 TaskPropertiesPanel::RefreshView()
 {
@@ -85,8 +92,7 @@ TaskPropertiesPanel::RefreshView()
 
   LoadValueEnum(TASK_TYPE, ftype);
 
-  if (wTaskView != NULL)
-    wTaskView->Invalidate();
+  dialog.InvalidateTaskView();
 
   // fixed aat_min_time
   // finish_min_height
@@ -247,15 +253,13 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 TaskPropertiesPanel::ReClick()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+  dialog.TaskViewClicked();
 }
 
 void
 TaskPropertiesPanel::Show(const PixelRect &rc)
 {
-  if (wTaskView != NULL)
-    wTaskView->Show();
+  dialog.ShowTaskView();
 
   ordered_task = *ordered_task_pointer;
   orig_taskType = ordered_task->GetFactoryType();
@@ -268,8 +272,7 @@ TaskPropertiesPanel::Show(const PixelRect &rc)
 void
 TaskPropertiesPanel::Hide()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::ResetTaskView(wTaskView);
+  dialog.ResetTaskView();
 
   RowFormWidget::Hide();
 }

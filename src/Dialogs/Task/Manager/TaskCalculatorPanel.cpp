@@ -120,12 +120,6 @@ TaskCalculatorPanel::Refresh()
   LoadValue(CRUISE_EFFICIENCY, task_stats.cruise_efficiency * 100);
 }
 
-static void
-OnTargetClicked()
-{
-  dlgTargetShowModal();
-}
-
 void
 TaskCalculatorPanel::OnModified(DataField &df)
 {
@@ -191,9 +185,6 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   assert(protected_task_manager != NULL);
 
   instance = this;
-
-  if (target_button != NULL)
-    target_button->SetOnClickNotify(OnTargetClicked);
 
   Add(new WndOwnerDrawFrame(*(ContainerWindow *)GetWindow(),
                             PixelRect{0, 0, 100, Layout::Scale(17)},

@@ -26,16 +26,13 @@ Copyright_License {
 
 #include "Widget/PagerWidget.hpp"
 
-class TabBarControl;
-class WndOwnerDrawFrame;
+class TaskManagerDialog;
 class OrderedTask;
 
 class TaskMiscPanel : public PagerWidget {
 public:
-  TaskMiscPanel(TabBarControl &_tab_bar,
+  TaskMiscPanel(TaskManagerDialog &dialog,
                 OrderedTask **_active_task, bool *_task_modified);
-
-  void SetTaskView(WndOwnerDrawFrame *_task_view);
 
   virtual void ReClick();
   virtual void Show(const PixelRect &rc);

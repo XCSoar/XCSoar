@@ -32,9 +32,9 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/XML.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Screen/SingleWindow.hpp"
 #include "Components.hpp"
 #include "Gauge/TaskView.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -46,8 +46,8 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Look/Look.hpp"
 #include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/TabBar.hpp"
-#include "Form/Panel.hpp"
 #include "Form/Draw.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
@@ -59,98 +59,251 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-static WndForm *wf = NULL;
+enum Buttons {
+  TARGET,
+};
 
-static TabBarControl* wTabBar = NULL;
-static OrderedTask* active_task = NULL;
-static bool task_modified = false;
-static bool fullscreen;
-static PixelRect TaskViewRect;
+struct TaskManagerLayout {
+  PixelRect task_view, target_button, tab_bar;
+  bool vertical;
+};
+
+/* TODO: eliminate all global variables */
+static TaskManagerDialog *instance;
 static unsigned TurnpointTab = 0;
 static unsigned PropertiesTab = 0;
 
 namespace dlgTaskManager {
-  /**
-   * Validates task and prompts if change or error
-   * Commits task if no error
-   * @return True if task manager should close
-   *         False if window should remain open
-   */
-  static bool CommitTaskChanges();
-
-  static void dlgTaskManagerShowModal(SingleWindow &parent);
-
   /**
    * paints the task int the frame
    * @param Sender the frame in which to paint the task
    * @param canvas the canvas in which to paint the task
    */
   static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-
-  static void SetTitle();
 }
 
-unsigned
-dlgTaskManager::GetTurnpointTab()
+TaskManagerDialog::~TaskManagerDialog()
 {
-  return TurnpointTab;
-}
-
-unsigned
-dlgTaskManager::GetPropertiesTab()
-{
-  return PropertiesTab;
+  delete task_view;
+  delete target_button;
+  delete tab_bar;
+  delete task;
 }
 
 void
-dlgTaskManager::SetTitle()
+TaskManagerDialog::OnAction(int id)
+{
+  switch (id) {
+  case TARGET:
+    dlgTargetShowModal();
+    break;
+
+  default:
+    WndForm::OnAction(id);
+  }
+}
+
+gcc_pure
+static TaskManagerLayout
+CalculateTaskManagerLayout(PixelRect rc)
+{
+  TaskManagerLayout layout;
+
+  layout.task_view.left = 0;
+  layout.task_view.top = 0;
+
+  layout.vertical = rc.right > rc.left;
+  if (rc.right > rc.left) {
+    layout.task_view = { 0, 0, Layout::Scale(80), Layout::Scale(52) };
+    layout.target_button = { Layout::Scale(5), Layout::Scale(18),
+                             Layout::Scale(58), Layout::Scale(51) };
+    layout.tab_bar = { 0, Layout::Scale(52), Layout::Scale(80), rc.bottom };
+  } else {
+    layout.task_view = { 0, 0, Layout::Scale(60), Layout::Scale(76) };
+    layout.target_button = { Layout::Scale(2), Layout::Scale(2),
+                             Layout::Scale(59), Layout::Scale(69) };
+    layout.tab_bar = { Layout::Scale(60), 0, rc.right, Layout::Scale(76) };
+  }
+
+  return layout;
+}
+
+void
+TaskManagerDialog::Create(SingleWindow &parent)
+{
+  WndForm::Create(parent, parent.GetClientRect(), _("Task Manager"));
+
+  task = protected_task_manager->TaskClone();
+
+  /* create the controls */
+
+  ContainerWindow &client_area = GetClientAreaWindow();
+  const TaskManagerLayout layout =
+    CalculateTaskManagerLayout(client_area.GetClientRect());
+
+  task_view_position = layout.task_view;
+
+  WindowStyle hidden;
+  hidden.Hide();
+  task_view = new WndOwnerDrawFrame(client_area, layout.task_view,
+                                    hidden, dlgTaskManager::OnTaskPaint);
+
+  ButtonWindowStyle button_style(hidden);
+  button_style.TabStop();
+  target_button = new WndButton(client_area, GetLook(), _("Target"),
+                                layout.target_button, button_style,
+                                *this, TARGET);
+
+  WindowStyle tab_style;
+  tab_style.ControlParent();
+  tab_bar = new TabBarControl(client_area, GetLook(), layout.tab_bar,
+                              tab_style, layout.vertical);
+  tab_bar->SetPageFlippedCallback([this]() { UpdateCaption(); });
+
+  /* create pages */
+
+  TaskPropertiesPanel *wProps =
+    new TaskPropertiesPanel(*this, &task, &modified);
+
+  TaskClosePanel *wClose = new TaskClosePanel(*this, &modified);
+
+  TaskCalculatorPanel *wCalculator =
+    new TaskCalculatorPanel(UIGlobals::GetDialogLook(), &modified);
+  wCalculator->SetTargetButton(target_button);
+
+  const MapLook &look = UIGlobals::GetMapLook();
+  TaskEditPanel *wEdit = new TaskEditPanel(*this, look.task, look.airspace,
+                                           &task, &modified);
+
+  TaskMiscPanel *list_tab = new TaskMiscPanel(*this, &task, &modified);
+
+  const bool enable_icons =
+    CommonInterface::GetUISettings().dialog.tab_style
+    == DialogSettings::TabStyle::Icon;
+  const IconLook &icons = UIGlobals::GetIconLook();
+  const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : NULL;
+  const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : NULL;
+  const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : NULL;
+  const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : NULL;
+
+  tab_bar->AddTab(wCalculator, _("Calculator"), CalcIcon);
+
+  if (layout.vertical) {
+    tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
+    TurnpointTab = 1;
+
+    tab_bar->AddTab(list_tab, _("Manage"), BrowseIcon);
+
+    tab_bar->AddTab(wProps, _("Rules"), PropertiesIcon);
+    PropertiesTab = 3;
+
+    tab_bar->AddTab(wClose, _("Close"));
+
+    tab_bar->SetCurrentPage(0);
+  } else {
+    tab_bar->AddTab(wClose, _("Close"));
+
+    tab_bar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
+    TurnpointTab = 2;
+
+    tab_bar->AddTab(list_tab, _("Manage"), BrowseIcon);
+
+    tab_bar->AddTab(wProps, _("Rules"), PropertiesIcon);
+    PropertiesTab = 4;
+
+    tab_bar->SetCurrentPage(0);
+  }
+
+  UpdateCaption();
+}
+
+void
+TaskManagerDialog::Destroy()
+{
+  /* destroy the TabBar first, to have a well-defined destruction
+     order; this is necessary because some pages refer to buttons
+     belonging to the dialog */
+  tab_bar->Destroy();
+
+  WndForm::Destroy();
+}
+
+void
+TaskManagerDialog::UpdateCaption()
 {
   StaticString<128> title;
   title.Format(_T("%s - %s"), _("Task Manager"),
-               wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
-  wf->SetCaption(title);
+               tab_bar->GetButtonCaption(tab_bar->GetCurrentPage()));
+  SetCaption(title);
 }
 
-bool
-dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
-                                PixelScalar x, PixelScalar y)
+void
+TaskManagerDialog::InvalidateTaskView()
 {
-  if (TaskViewRect.right == 0)
-    TaskViewRect = Sender->GetPosition();
+  task_view->Invalidate();
+}
 
-  if (!fullscreen) {
-    Sender->Move(wTabBar->GetPagerPosition());
-    fullscreen = true;
-    Sender->ShowOnTop();
-  } else {
-    Sender->Move(TaskViewRect);
+void
+TaskManagerDialog::TaskViewClicked()
+{
+  fullscreen = !fullscreen;
+  task_view->Move(fullscreen
+                  ? tab_bar->GetPagerPosition() : task_view_position);
+}
+
+void
+TaskManagerDialog::RestoreTaskView()
+{
+  if (fullscreen) {
     fullscreen = false;
+    task_view->Move(task_view_position);
   }
-  Sender->Invalidate();
+}
+
+static bool
+OnTaskViewClick(WndOwnerDrawFrame *Sender, PixelScalar x, PixelScalar y)
+{
+  instance->TaskViewClicked();
   return true;
 }
 
 void
-dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
+TaskManagerDialog::ShowTaskView(void (*paint)(WndOwnerDrawFrame *sender,
+                                              Canvas &canvas))
 {
-  if (TaskViewRect.right == 0) {
-    TaskViewRect = wTaskView->GetPosition();
-    return;
-  }
-
-  fullscreen = false;
-  wTaskView->Move(TaskViewRect);
+  RestoreTaskView();
+  task_view->SetOnPaintNotify(paint);
+  task_view->SetOnMouseDownNotify(OnTaskViewClick);
+  task_view->Show();
 }
 
 void
-dlgTaskManager::ResetTaskView(WndOwnerDrawFrame *task_view)
+TaskManagerDialog::ShowTaskView()
 {
-  assert(task_view != NULL);
+  ShowTaskView(dlgTaskManager::OnTaskPaint);
+}
 
+void
+TaskManagerDialog::ResetTaskView()
+{
   task_view->Hide();
-  TaskViewRestore(task_view);
-  task_view->SetOnPaintNotify(OnTaskPaint);
-  task_view->SetOnMouseDownNotify(dlgTaskManager::OnTaskViewClick);
+  RestoreTaskView();
+  task_view->SetOnPaintNotify(dlgTaskManager::OnTaskPaint);
+  task_view->SetOnMouseDownNotify(OnTaskViewClick);
+}
+
+void
+TaskManagerDialog::SwitchToEditTab()
+{
+  tab_bar->SetCurrentPage(TurnpointTab);
+  tab_bar->SetFocus();
+}
+
+void
+TaskManagerDialog::SwitchToPropertiesPanel()
+{
+  tab_bar->SetCurrentPage(PropertiesTab);
+  tab_bar->SetFocus();
 }
 
 void
@@ -163,7 +316,7 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   const MapLook &look = UIGlobals::GetMapLook();
   const NMEAInfo &basic = CommonInterface::Basic();
-  PaintTask(canvas, Sender->GetClientRect(), *active_task,
+  PaintTask(canvas, Sender->GetClientRect(), instance->GetTask(),
             basic.location_available, basic.location,
             XCSoarInterface::GetMapSettings(),
             look.task, look.airspace,
@@ -172,163 +325,57 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 bool
-dlgTaskManager::CommitTaskChanges()
+TaskManagerDialog::Commit()
 {
-  if (!task_modified)
+  if (!modified)
     return true;
 
-  task_modified |= active_task->GetFactory().CheckAddFinish();
+  modified |= task->GetFactory().CheckAddFinish();
 
-  if (!active_task->TaskSize() || active_task->CheckTask()) {
+  if (!task->TaskSize() || task->CheckTask()) {
 
     { // this must be done in thread lock because it potentially changes the
       // waypoints database
       ScopeSuspendAllThreads suspend;
-      active_task->CheckDuplicateWaypoints(way_points);
+      task->CheckDuplicateWaypoints(way_points);
       way_points.Optimise();
     }
 
-    protected_task_manager->TaskCommit(*active_task);
+    protected_task_manager->TaskCommit(*task);
     protected_task_manager->TaskSaveDefault();
 
-    task_modified = false;
+    modified = false;
     return true;
   }
 
-  ShowMessageBox(getTaskValidationErrors(
-    active_task->GetFactory().GetValidationErrors()),
+  ShowMessageBox(getTaskValidationErrors(task->GetFactory().GetValidationErrors()),
     _("Validation Errors"), MB_ICONEXCLAMATION);
 
   return (ShowMessageBox(_("Task not valid. Changes will be lost.\nContinue?"),
                       _("Task Manager"), MB_YESNO | MB_ICONQUESTION) == IDYES);
 }
 
-bool
-dlgTaskManager::OnClose()
+void
+TaskManagerDialog::Revert()
 {
-  if (CommitTaskChanges()) {
-    wf->SetModalResult(mrOK);
-    return true;
-  }
-
-  return false;
+  // create new task first to guarantee pointers are different
+  OrderedTask *temp = protected_task_manager->TaskClone();
+  delete task;
+  task = temp;
+  modified = false;
 }
 
 void
 dlgTaskManagerShowModal(SingleWindow &parent)
 {
-  dlgTaskManager::dlgTaskManagerShowModal(parent);
-}
-
-void
-dlgTaskManager::RevertTask()
-{
-  // create new task first to guarantee pointers are different
-  OrderedTask* temptask = protected_task_manager->TaskClone();
-  delete active_task;
-  active_task = temptask;
-  task_modified = false;
-}
-
-void
-dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
-{
   if (protected_task_manager == NULL)
     return;
 
-  /* invalidate the preview layout */
-  TaskViewRect.right = 0;
+  TaskManagerDialog dialog(UIGlobals::GetDialogLook());
+  instance = &dialog;
 
-  wf = LoadDialog(NULL, parent,
-                  Layout::landscape ?
-                  _T("IDR_XML_TASKMANAGER_L") : _T("IDR_XML_TASKMANAGER"));
+  dialog.Create(parent);
 
-  assert(wf != NULL);
-
-  active_task = protected_task_manager->TaskClone();
-  task_modified = false;
-
-  // Load tabs
-  wTabBar = (TabBarControl*)wf->FindByName(_T("TabBar"));
-  assert(wTabBar != NULL);
-
-  wTabBar->SetPageFlippedCallback(SetTitle);
-
-  const MapLook &look = UIGlobals::GetMapLook();
-
-  WndOwnerDrawFrame *task_view =
-    (WndOwnerDrawFrame *)wf->FindByName(_T("TaskView"));
-  assert(task_view != NULL);
-  ResetTaskView(task_view);
-
-  TaskPropertiesPanel *wProps =
-    new TaskPropertiesPanel(UIGlobals::GetDialogLook(),
-                            &active_task, &task_modified);
-  wProps->SetTaskView(task_view);
-
-  TaskClosePanel *wClose = new TaskClosePanel(&task_modified);
-  wClose->SetTaskView(task_view);
-
-  TaskCalculatorPanel *wCalculator =
-    new TaskCalculatorPanel(UIGlobals::GetDialogLook(), &task_modified);
-  wCalculator->SetTargetButton((WndButton *)wf->FindByName(_T("Target")));
-
-  TaskEditPanel *wEdit = new TaskEditPanel(*wf, look.task, look.airspace,
-                                           &active_task, &task_modified);
-  wEdit->SetTaskView(task_view);
-
-  TaskMiscPanel *list_tab = new TaskMiscPanel(*wTabBar,
-                                              &active_task, &task_modified);
-  list_tab->SetTaskView(task_view);
-
-  const bool enable_icons =
-    CommonInterface::GetUISettings().dialog.tab_style
-    == DialogSettings::TabStyle::Icon;
-
-  const IconLook &icons = UIGlobals::GetIconLook();
-  const Bitmap *CalcIcon = enable_icons ? &icons.hBmpTabCalculator : NULL;
-  const Bitmap *TurnPointIcon = enable_icons ? &icons.hBmpTabTask : NULL;
-  const Bitmap *BrowseIcon = enable_icons ? &icons.hBmpTabWrench : NULL;
-  const Bitmap *PropertiesIcon = enable_icons ? &icons.hBmpTabSettings : NULL;
-
-  wTabBar->AddTab(wCalculator, _("Calculator"), CalcIcon);
-
-  if (Layout::landscape) {
-    wTabBar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
-    TurnpointTab = 1;
-
-    wTabBar->AddTab(list_tab, _("Manage"), BrowseIcon);
-
-    wTabBar->AddTab(wProps, _("Rules"), PropertiesIcon);
-    PropertiesTab = 3;
-
-    wTabBar->AddTab(wClose, _("Close"));
-
-    wTabBar->SetCurrentPage(0);
-  } else {
-    wTabBar->AddTab(wClose, _("Close"));
-
-    wTabBar->AddTab(wEdit, _("Turn Points"), TurnPointIcon);
-    TurnpointTab = 2;
-
-    wTabBar->AddTab(list_tab, _("Manage"), BrowseIcon);
-
-    wTabBar->AddTab(wProps, _("Rules"), PropertiesIcon);
-    PropertiesTab = 4;
-
-    wTabBar->SetCurrentPage(0);
-  }
-
-  fullscreen = false;
-
-  SetTitle();
-  wf->ShowModal();
-
-  /* destroy the TabBar first, to have a well-defined destruction
-     order; this is necessary because some pages refer to buttons
-     belonging to the dialog */
-  wTabBar->Destroy();
-
-  delete wf;
-  delete active_task;
+  dialog.ShowModal();
+  dialog.Destroy();
 }

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Widget/XMLWidget.hpp"
 #include "Form/List.hpp"
 
-class TabBarControl;
+class TaskManagerDialog;
 class WndButton;
 class WndOwnerDrawFrame;
 class TabbedControl;
@@ -36,7 +36,7 @@ class OrderedTask;
 class TaskStore;
 
 class TaskListPanel : public XMLWidget, private ListControl::Handler {
-  TabBarControl &tab_bar;
+  TaskManagerDialog &dialog;
 
   OrderedTask **active_task;
   bool *task_modified;
@@ -52,22 +52,13 @@ class TaskListPanel : public XMLWidget, private ListControl::Handler {
 
   ListControl *wTasks;
   WndButton *more_button;
-  WndOwnerDrawFrame* wTaskView;
 
 public:
-  TaskListPanel(TabBarControl &_tab_bar,
+  TaskListPanel(TaskManagerDialog &_dialog,
                 OrderedTask **_active_task, bool *_task_modified)
-    :tab_bar(_tab_bar),
+    :dialog(_dialog),
      active_task(_active_task), task_modified(_task_modified),
-     more(false),
-     wTaskView(NULL) {}
-
-  void SetTaskView(WndOwnerDrawFrame *_task_view) {
-    assert(wTaskView == NULL);
-    assert(_task_view != NULL);
-
-    wTaskView = _task_view;
-  }
+     more(false) {}
 
   void RefreshView();
   void DirtyList();

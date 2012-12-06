@@ -142,8 +142,7 @@ TaskListPanel::RefreshView()
 {
   wTasks->SetLength(task_store->Size());
 
-  if (wTaskView != NULL)
-    wTaskView->Invalidate();
+  dialog.InvalidateTaskView();
 
   WndFrame* wSummary = (WndFrame*)form.FindByName(_T("frmSummary1"));
   assert(wSummary != NULL);
@@ -210,8 +209,7 @@ TaskListPanel::LoadTask()
   RefreshView();
   *task_modified = true;
 
-  tab_bar.SetCurrentPage(dlgTaskManager::GetTurnpointTab());
-  tab_bar.SetFocus();
+  dialog.SwitchToEditTab();
 }
 
 void
@@ -380,10 +378,7 @@ TaskListPanel::Show(const PixelRect &rc)
     task_store->Scan(more);
   }
 
-  if (wTaskView != NULL) {
-    wTaskView->SetOnPaintNotify(::OnTaskPaint);
-    wTaskView->Show();
-  }
+  dialog.ShowTaskView(::OnTaskPaint);
 
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
   RefreshView();
@@ -393,8 +388,7 @@ TaskListPanel::Show(const PixelRect &rc)
 void
 TaskListPanel::Hide()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::ResetTaskView(wTaskView);
+  dialog.ResetTaskView();
 
   XMLWidget::Hide();
 }

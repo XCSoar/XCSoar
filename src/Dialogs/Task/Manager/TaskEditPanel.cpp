@@ -85,14 +85,12 @@ TaskEditPanel::RefreshView()
 {
   UpdateButtons();
 
+  dialog.InvalidateTaskView();
+
   if (!ordered_task->IsFull())
     wTaskPoints->SetLength(ordered_task->TaskSize()+1);
   else
     wTaskPoints->SetLength(ordered_task->TaskSize());
-
-  if (wTaskView != NULL)
-    wTaskView->Invalidate();
-
   wTaskPoints->Invalidate();
 
   if (wSummary) {
@@ -132,8 +130,8 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 
   TCHAR buffer[120];
 
-  const Font &name_font = *wf.GetLook().list.font;
-  const Font &small_font = *wf.GetLook().small_font;
+  const Font &name_font = *dialog.GetLook().list.font;
+  const Font &small_font = *dialog.GetLook().small_font;
 
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->TaskSize()) {
@@ -228,7 +226,8 @@ void
 TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
 {
   if (ItemIndex < ordered_task->TaskSize()) {
-    if (dlgTaskPointShowModal(wf.GetMainWindow(), &ordered_task, ItemIndex)) {
+    if (dlgTaskPointShowModal(dialog.GetMainWindow(),
+                              &ordered_task, ItemIndex)) {
       *task_modified = true;
       RefreshView();
     }
@@ -237,7 +236,7 @@ TaskEditPanel::EditTaskPoint(unsigned ItemIndex)
     OrderedTaskPoint* point = NULL;
     AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
-      ShowWaypointListDialog(wf.GetMainWindow(),
+      ShowWaypointListDialog(dialog.GetMainWindow(),
                              ordered_task->TaskSize() > 0
                              ? ordered_task->GetPoint(ordered_task->TaskSize() - 1).GetLocation()
                              : XCSoarInterface::Basic().location,
@@ -343,7 +342,7 @@ TaskEditPanel::OnKeyDown(unsigned key_code)
   switch (key_code){
   case KEY_ESCAPE:
     if (IsAltair() && wTaskPoints->HasFocus()){
-       wf.FocusFirstControl();
+       dialog.FocusFirstControl();
       return true;
     }
     return false;
@@ -392,8 +391,8 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   wSummary = (WndFrame *)form.FindByName(_T("frmSummary"));
   assert(wSummary);
 
-  UPixelScalar line_height = wf.GetLook().list.font->GetHeight()
-    + Layout::Scale(6) + wf.GetLook().small_font->GetHeight();
+  UPixelScalar line_height = dialog.GetLook().list.font->GetHeight()
+    + Layout::Scale(6) + dialog.GetLook().small_font->GetHeight();
   wTaskPoints->SetItemHeight(line_height);
   wTaskPoints->SetHandler(this);
 }
@@ -401,15 +400,13 @@ TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 TaskEditPanel::ReClick()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+  dialog.TaskViewClicked();
 }
 
 void
 TaskEditPanel::Show(const PixelRect &rc)
 {
-  if (wTaskView != NULL)
-    wTaskView->Show();
+  dialog.ShowTaskView();
 
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;
@@ -418,7 +415,7 @@ TaskEditPanel::Show(const PixelRect &rc)
 
   RefreshView();
 
-  wf.SetKeyDownFunction([this](unsigned key_code){
+  dialog.SetKeyDownFunction([this](unsigned key_code){
       return this->OnKeyDown(key_code);
     });
 
@@ -428,10 +425,8 @@ TaskEditPanel::Show(const PixelRect &rc)
 void
 TaskEditPanel::Hide()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::ResetTaskView(wTaskView);
-
-  wf.ClearKeyDownFunction();
+  dialog.ResetTaskView();
+  dialog.ClearKeyDownFunction();
 
   XMLWidget::Hide();
 }

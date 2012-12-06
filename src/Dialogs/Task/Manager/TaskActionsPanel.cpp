@@ -64,13 +64,10 @@ TaskActionsPanel::SaveTask()
   }
 }
 
-class WndButton;
-
 void
 TaskActionsPanel::OnBrowseClicked()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::TaskViewRestore(wTaskView);
+  dialog.RestoreTaskView();
   parent.SetCurrent(1);
 }
 
@@ -89,8 +86,7 @@ TaskActionsPanel::OnNewTaskClicked()
     (*active_task)->Clear();
     (*active_task)->SetFactory(XCSoarInterface::GetComputerSettings().task.task_type_default);
     *task_modified = true;
-    tab_bar.SetCurrentPage(dlgTaskManager::GetPropertiesTab());
-    tab_bar.SetFocus();
+    dialog.SwitchToPropertiesPanel();
   }
 }
 
@@ -131,8 +127,7 @@ OnDeclareClicked()
 void
 TaskActionsPanel::ReClick()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::OnTaskViewClick(wTaskView, 0, 0);
+  dialog.TaskViewClicked();
 }
 
 static constexpr CallBackTableEntry task_list_callbacks[] = {
@@ -160,8 +155,7 @@ TaskActionsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 void
 TaskActionsPanel::Show(const PixelRect &rc)
 {
-  if (wTaskView != NULL)
-    wTaskView->Show();
+  dialog.ShowTaskView();
 
   XMLWidget::Show(rc);
 }
@@ -169,8 +163,7 @@ TaskActionsPanel::Show(const PixelRect &rc)
 void
 TaskActionsPanel::Hide()
 {
-  if (wTaskView != NULL)
-    dlgTaskManager::ResetTaskView(wTaskView);
+  dialog.ResetTaskView();
 
   XMLWidget::Hide();
 }

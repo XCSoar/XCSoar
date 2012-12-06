@@ -24,46 +24,66 @@ Copyright_License {
 #ifndef XCSOAR_TASK_MANAGER_INTERNAL_HPP
 #define XCSOAR_TASK_MANAGER_INTERNAL_HPP
 
-#include "Screen/Point.hpp"
+#include "Form/Form.hpp"
 
 class WndOwnerDrawFrame;
+class WndButton;
+class TabBarControl;
+class OrderedTask;
 
-namespace dlgTaskManager
-{
+class TaskManagerDialog : public WndForm {
+  PixelRect task_view_position;
+
+  WndOwnerDrawFrame *task_view;
+  WndButton *target_button;
+  TabBarControl *tab_bar;
+
+  OrderedTask *task;
+
+  bool fullscreen;
+
+  bool modified;
+
+public:
+  TaskManagerDialog(const DialogLook &look)
+    :WndForm(look),
+     task_view(nullptr), target_button(nullptr), tab_bar(nullptr),
+     task(nullptr),
+     fullscreen(false), modified(false) {}
+
+  virtual ~TaskManagerDialog();
+
+  const OrderedTask &GetTask() const {
+    return *task;
+  }
+
+  void Create(SingleWindow &parent);
+  void Destroy();
+
+  void UpdateCaption();
+
+  void InvalidateTaskView();
+  void TaskViewClicked();
+  void RestoreTaskView();
+  void ShowTaskView();
+  void ShowTaskView(void (*paint)(WndOwnerDrawFrame *sender, Canvas &canvas));
+  void ResetTaskView();
+
+  void SwitchToEditTab();
+  void SwitchToPropertiesPanel();
+
   /**
-   * Commits the temporary task to the system and closes
-   * the task manager dialog it the commit succeeds.
-   * @returns True if validated, False if window shall remain open
+   * Validates task and prompts if change or error
+   * Commits task if no error
+   * @return True if task manager should close
+   *         False if window should remain open
    */
-  bool OnClose();
+  bool Commit();
 
-  void RevertTask();
+  void Revert();
 
-  /**
-   * restores task view rect
-   */
-  void TaskViewRestore(WndOwnerDrawFrame *wTaskView);
-  void ResetTaskView(WndOwnerDrawFrame *task_view);
-
-  /**
-   * toggles maximize or restore state of the TaskView frame
-   */
-  bool OnTaskViewClick(WndOwnerDrawFrame *Sender,
-                       PixelScalar x, PixelScalar y);
-
-  /**
-   * different for landscape and for portrait mode
-   * Used by TaskList after loading
-   * @return Tab index that shows turnpoints
-   */
-  unsigned GetTurnpointTab();
-
-  /**
-   * different for landscape and for portrait mode
-   * Used by TaskList after new task
-   * @return Tab index that shows task properties
-   */
-  unsigned GetPropertiesTab();
+  /* virtual methods from class ActionListener */
+  virtual void OnAction(int id) gcc_override;
 };
 
 #endif /* DLGTASKMANAGER_HPP */
