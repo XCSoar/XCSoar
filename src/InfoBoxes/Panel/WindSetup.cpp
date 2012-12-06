@@ -25,7 +25,7 @@ Copyright_License {
 #include "Form/DataField/Enum.hpp"
 #include "Form/DataField/Boolean.hpp"
 #include "Interface.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"

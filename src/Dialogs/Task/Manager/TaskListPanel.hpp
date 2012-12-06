@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_LIST_PANEL_HPP
 #define XCSOAR_TASK_LIST_PANEL_HPP
 
-#include "Form/XMLWidget.hpp"
+#include "Widget/XMLWidget.hpp"
 #include "Form/List.hpp"
 
 class TabBarControl;

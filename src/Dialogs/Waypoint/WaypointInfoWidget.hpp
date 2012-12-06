@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_INFO_WIDGET_HPP
 #define XCSOAR_WAYPOINT_INFO_WIDGET_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 
 struct Waypoint;
 struct GlideResult;

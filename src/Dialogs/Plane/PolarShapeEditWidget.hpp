@@ -24,7 +24,7 @@
 #ifndef XCSOAR_DEVICE_EDIT_WIDGET_HPP
 #define XCSOAR_DEVICE_EDIT_WIDGET_HPP
 
-#include "Form/PanelWidget.hpp"
+#include "Widget/PanelWidget.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Polar/Shape.hpp"
 

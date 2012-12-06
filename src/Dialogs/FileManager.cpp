@@ -27,7 +27,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
-#include "Form/ListWidget.hpp"
+#include "Widget/ListWidget.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"

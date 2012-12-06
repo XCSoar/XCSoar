@@ -43,7 +43,7 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Menu/MenuBar.hpp"
 #include "Form/Form.hpp"
-#include "Form/Widget.hpp"
+#include "Widget/Widget.hpp"
 #include "UtilsSystem.hpp"
 #include "Look/Fonts.hpp"
 #include "Look/Look.hpp"

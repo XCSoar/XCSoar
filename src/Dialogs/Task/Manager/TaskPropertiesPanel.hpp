@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_PROPERTIES_PANEL_HPP
 #define XCSOAR_TASK_PROPERTIES_PANEL_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Engine/Task/TaskBehaviour.hpp"
 

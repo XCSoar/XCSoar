@@ -31,7 +31,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/XML.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {

@@ -25,8 +25,8 @@ Copyright_License {
 #define XCSOAR_ROW_FORM_WIDGET_HPP
 
 #include "WindowWidget.hpp"
-#include "Edit.hpp"
-#include "DataField/Base.hpp"
+#include "Form/Edit.hpp"
+#include "Form/DataField/Base.hpp"
 #include "Util/StaticArray.hpp"
 #include "Units/Group.hpp"
 #include "Math/fixed.hpp"

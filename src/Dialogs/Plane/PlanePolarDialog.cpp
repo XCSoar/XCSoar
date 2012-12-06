@@ -32,7 +32,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Form/DataField/ComboList.hpp"
 #include "Form/DataField/Base.hpp"
-#include "Form/DockWindow.hpp"
+#include "Widget/DockWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarStore.hpp"

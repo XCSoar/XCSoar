@@ -21,54 +21,27 @@ Copyright_License {
 }
 */
 
-#include "TextWidget.hpp"
-#include "UIGlobals.hpp"
-#include "Frame.hpp"
-#include "Screen/Layout.hpp"
+#ifndef XCSOAR_TEXT_WIDGET_HPP
+#define XCSOAR_TEXT_WIDGET_HPP
 
-void
-TextWidget::SetText(const TCHAR *text)
-{
-  WndFrame &w = *(WndFrame *)GetWindow();
+#include "WindowWidget.hpp"
 
-  w.SetText(text);
-}
+#include <tchar.h>
 
-PixelSize
-TextWidget::GetMinimumSize() const
-{
-  return {0u, Layout::GetMinimumControlHeight()};
-}
+/**
+ * A #Widget implementation that displays multi-line text.
+ */
+class TextWidget : public WindowWidget {
+public:
+  void SetText(const TCHAR *text);
 
-PixelSize
-TextWidget::GetMaximumSize() const
-{
-  PixelSize size = GetMinimumSize();
+  /* virtual methods from class Widget */
+  virtual PixelSize GetMinimumSize() const gcc_override;
+  virtual PixelSize GetMaximumSize() const gcc_override;
 
-  if (IsDefined()) {
-    const WndFrame &w = *(const WndFrame *)GetWindow();
-    PixelScalar text_height = w.GetTextHeight() + Layout::Scale(4);
-    if (text_height > size.cy)
-      size.cy = text_height;
-  }
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
+};
 
-  return size;
-}
-
-void
-TextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
-{
-  WindowStyle style;
-  style.Hide();
-
-  WndFrame *w = new WndFrame(parent, UIGlobals::GetDialogLook(), rc, style);
-  SetWindow(w);
-}
-
-void
-TextWidget::Unprepare()
-{
-  DeleteWindow();
-}
-
-
+#endif

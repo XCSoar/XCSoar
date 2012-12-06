@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Asset.hpp"
 #include "ExperimentalConfigPanel.hpp"

@@ -21,24 +21,54 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PANEL_WIDGET_HPP
-#define XCSOAR_PANEL_WIDGET_HPP
+#include "TextWidget.hpp"
+#include "UIGlobals.hpp"
+#include "Form/Frame.hpp"
+#include "Screen/Layout.hpp"
 
-#include "Form/WindowWidget.hpp"
+void
+TextWidget::SetText(const TCHAR *text)
+{
+  WndFrame &w = *(WndFrame *)GetWindow();
+
+  w.SetText(text);
+}
+
+PixelSize
+TextWidget::GetMinimumSize() const
+{
+  return {0u, Layout::GetMinimumControlHeight()};
+}
+
+PixelSize
+TextWidget::GetMaximumSize() const
+{
+  PixelSize size = GetMinimumSize();
+
+  if (IsDefined()) {
+    const WndFrame &w = *(const WndFrame *)GetWindow();
+    PixelScalar text_height = w.GetTextHeight() + Layout::Scale(4);
+    if (text_height > size.cy)
+      size.cy = text_height;
+  }
+
+  return size;
+}
+
+void
+TextWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
+{
+  WindowStyle style;
+  style.Hide();
+
+  WndFrame *w = new WndFrame(parent, UIGlobals::GetDialogLook(), rc, style);
+  SetWindow(w);
+}
+
+void
+TextWidget::Unprepare()
+{
+  DeleteWindow();
+}
 
 
-/**
- * Class to be inherited.
- * Window widget with a panel the size of the rect passed to Prepare().
- * Panel is automatically created by Prepare() and deleted in Unprepare().
- * Panel is accessed via WindowWidget's GetWindow().
- */
-class PanelWidget : public WindowWidget {
-protected:
-
-public:
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void Unprepare();
-};
-
-#endif

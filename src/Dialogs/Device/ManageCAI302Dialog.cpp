@@ -29,7 +29,7 @@ Copyright_License {
 #include "UIGlobals.hpp"
 #include "CAI302/UnitsEditor.hpp"
 #include "CAI302/WaypointUploader.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"

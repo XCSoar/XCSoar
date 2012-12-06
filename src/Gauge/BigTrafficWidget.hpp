@@ -24,7 +24,7 @@
 #ifndef XCSOAR_TRAFFIC_WIDGET_HPP
 #define XCSOAR_TRAFFIC_WIDGET_HPP
 
-#include "Form/ContainerWidget.hpp"
+#include "Widget/ContainerWidget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Compiler.h"

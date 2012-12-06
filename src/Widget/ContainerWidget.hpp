@@ -21,29 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LARGE_TEXT_WIDGET_HPP
-#define XCSOAR_LARGE_TEXT_WIDGET_HPP
+#ifndef XCSOAR_CONTAINER_WIDGET_HPP
+#define XCSOAR_CONTAINER_WIDGET_HPP
 
-#include "Form/WindowWidget.hpp"
-
-#include <tchar.h>
+#include "WindowWidget.hpp"
+#include "Screen/ContainerWindow.hpp"
 
 /**
- * A #Widget implementation that displays multi-line text.
+ * Utility base class that creates a ContainerWindow, allowing the
+ * derived class to add child windows to it.
  */
-class LargeTextWidget : public WindowWidget {
-  const TCHAR *text;
+class ContainerWidget : public WindowWidget {
+  ContainerWindow container;
+
+protected:
+  ContainerWindow &GetContainer() {
+    return container;
+  }
 
 public:
-  LargeTextWidget(const TCHAR *_text=nullptr)
-    :text(_text) {}
-
-  void SetText(const TCHAR *text);
-
-  /* virtual methods from class Widget */
   virtual void Prepare(ContainerWindow &parent,
                        const PixelRect &rc) gcc_override;
-  virtual void Unprepare() gcc_override;
 };
 
 #endif

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_ACTIONS_PANEL_HPP
 #define XCSOAR_TASK_ACTIONS_PANEL_HPP
 
-#include "Form/XMLWidget.hpp"
+#include "Widget/XMLWidget.hpp"
 
 class TaskMiscPanel;
 class TabBarControl;

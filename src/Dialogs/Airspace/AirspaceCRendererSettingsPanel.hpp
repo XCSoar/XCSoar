@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_CLASS_RENDERER_SETTINGS_PANEL_HPP
 #define XCSOAR_AIRSPACE_CLASS_RENDERER_SETTINGS_PANEL_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WIND_SETTINGS_PANEL_HPP
 #define XCSOAR_WIND_SETTINGS_PANEL_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 
 class WindSettingsPanel : public RowFormWidget {
   enum ControlIndex {

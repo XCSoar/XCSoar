@@ -29,7 +29,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Form/Form.hpp"
 #include "Form/DataField/Base.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {

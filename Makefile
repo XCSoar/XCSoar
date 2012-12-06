@@ -107,6 +107,7 @@ include $(topdir)/build/libevent.mk
 include $(topdir)/build/screen.mk
 include $(topdir)/build/libthread.mk
 include $(topdir)/build/form.mk
+include $(topdir)/build/libwidget.mk
 include $(topdir)/build/libaudio.mk
 include $(topdir)/build/harness.mk
 
@@ -138,7 +139,6 @@ INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR)
 ####### sources
 
 DIALOG_SOURCES = \
-	$(SRC)/Form/XMLWidget.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Inflate.cpp \
 	$(SRC)/Dialogs/Message.cpp \
@@ -764,8 +764,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Components.cpp \
 	\
-	$(SRC)/Widgets/OffsetButtonsWidget.cpp \
-	\
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Register.cpp \
@@ -869,7 +867,7 @@ XCSOAR_LDADD = \
 	$(RESOURCE_BINARY)
 
 XCSOAR_DEPENDS = GETTEXT PROFILE \
-	FORM DATA_FIELD \
+	WIDGET FORM DATA_FIELD \
 	AUDIO SCREEN EVENT \
 	DRIVER PORT \
 	IO ASYNC TASK CONTEST ROUTE GLIDE WAYPOINT AIRSPACE \

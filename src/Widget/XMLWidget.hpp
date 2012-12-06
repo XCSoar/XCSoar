@@ -21,27 +21,44 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_CONTAINER_WIDGET_HPP
-#define XCSOAR_CONTAINER_WIDGET_HPP
+#ifndef XCSOAR_XML_WIDGET_HPP
+#define XCSOAR_XML_WIDGET_HPP
 
-#include "Form/WindowWidget.hpp"
-#include "Screen/ContainerWindow.hpp"
+#include "WindowWidget.hpp"
+#include "Form/SubForm.hpp"
+
+struct CallBackTableEntry;
 
 /**
- * Utility base class that creates a ContainerWindow, allowing the
- * derived class to add child windows to it.
+ * A WindowWidget that is loaded from a XML resource.
  */
-class ContainerWidget : public WindowWidget {
-  ContainerWindow container;
-
+class XMLWidget : public WindowWidget {
 protected:
-  ContainerWindow &GetContainer() {
-    return container;
+  SubForm form;
+
+  void LoadWindow(const CallBackTableEntry *callbacks,
+                  ContainerWindow &parent, const PixelRect &rc,
+                  const TCHAR *resource);
+
+  /**
+   * Called from Prepare()
+   * Creates the window object
+   * @param callbacks
+   * @param parent
+   * @param resource
+   */
+  void LoadWindow(const CallBackTableEntry *callbacks,
+                  ContainerWindow &parent, const TCHAR *resource);
+
+  /**
+   * Clears and deletes the windows created by LoadWindow
+   * during Prepare() associated with the WindowWidget
+   */
+  virtual void Unprepare() gcc_override {
+    form.Clear();
   }
 
-public:
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
+  virtual bool SetFocus() gcc_override;
 };
 
 #endif

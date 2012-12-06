@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 #define XCSOAR_BIG_THERMAL_ASSISTANT_WIDGET_HPP
 
-#include "Form/OverlappedWidget.hpp"
+#include "Widget/OverlappedWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 struct AttitudeState;

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_ITEM_LIST_SETTINGS_PANEL_HPP
 #define XCSOAR_MAP_ITEM_LIST_SETTINGS_PANEL_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 
 class MapItemListSettingsPanel : public RowFormWidget {
   enum ControlIndex {

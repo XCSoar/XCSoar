@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_CALCULATOR_PANEL_HPP
 #define XCSOAR_TASK_CALCULATOR_PANEL_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Math/fixed.hpp"

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_TABBAR_HPP
 
 #include "Screen/ContainerWindow.hpp"
-#include "PagerWidget.hpp"
+#include "Widget/PagerWidget.hpp"
 
 #include <functional>
 

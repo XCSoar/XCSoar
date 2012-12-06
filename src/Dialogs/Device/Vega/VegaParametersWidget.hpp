@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_VEGA_PARAMETERS_WIDGET_HPP
 #define XCSOAR_VEGA_PARAMETERS_WIDGET_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Util/StaticArray.hpp"
 

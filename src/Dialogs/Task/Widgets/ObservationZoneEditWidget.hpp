@@ -24,7 +24,7 @@
 #ifndef XCSOAR_OBSERVATION_ZONE_EDIT_WIDGET_HPP
 #define XCSOAR_OBSERVATION_ZONE_EDIT_WIDGET_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 
 #include <assert.h>

@@ -34,7 +34,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "Interface.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
 #ifdef ENABLE_OPENGL

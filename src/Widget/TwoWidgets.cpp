@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Form/TwoWidgets.hpp"
+#include "TwoWidgets.hpp"
 
 #include <algorithm>
 

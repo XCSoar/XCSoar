@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"

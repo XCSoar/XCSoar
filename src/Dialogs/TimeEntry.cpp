@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Dialogs/TimeEntry.hpp"
 #include "Dialogs/WidgetDialog.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Form/Form.hpp"
 #include "Form/DigitEntry.hpp"
-#include "Form/WindowWidget.hpp"
 #include "Form/LambdaActionListener.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Language/Language.hpp"

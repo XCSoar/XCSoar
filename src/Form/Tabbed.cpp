@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#include "Form/Tabbed.hpp"
-#include "WindowWidget.hpp"
+#include "Tabbed.hpp"
+#include "Widget/WindowWidget.hpp"
 
 #include <assert.h>
 

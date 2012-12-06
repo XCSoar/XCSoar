@@ -21,44 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_XML_WIDGET_HPP
-#define XCSOAR_XML_WIDGET_HPP
+#ifndef XCSOAR_PANEL_WIDGET_HPP
+#define XCSOAR_PANEL_WIDGET_HPP
 
 #include "WindowWidget.hpp"
-#include "SubForm.hpp"
-
-struct CallBackTableEntry;
 
 /**
- * A WindowWidget that is loaded from a XML resource.
+ * Class to be inherited.
+ * Window widget with a panel the size of the rect passed to Prepare().
+ * Panel is automatically created by Prepare() and deleted in Unprepare().
+ * Panel is accessed via WindowWidget's GetWindow().
  */
-class XMLWidget : public WindowWidget {
+class PanelWidget : public WindowWidget {
 protected:
-  SubForm form;
 
-  void LoadWindow(const CallBackTableEntry *callbacks,
-                  ContainerWindow &parent, const PixelRect &rc,
-                  const TCHAR *resource);
-
-  /**
-   * Called from Prepare()
-   * Creates the window object
-   * @param callbacks
-   * @param parent
-   * @param resource
-   */
-  void LoadWindow(const CallBackTableEntry *callbacks,
-                  ContainerWindow &parent, const TCHAR *resource);
-
-  /**
-   * Clears and deletes the windows created by LoadWindow
-   * during Prepare() associated with the WindowWidget
-   */
-  virtual void Unprepare() gcc_override {
-    form.Clear();
-  }
-
-  virtual bool SetFocus() gcc_override;
+public:
+  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+  virtual void Unprepare();
 };
 
 #endif

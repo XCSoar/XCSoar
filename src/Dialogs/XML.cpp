@@ -50,7 +50,7 @@ Copyright_License {
 #include "Form/TabMenu.hpp"
 #include "Form/Panel.hpp"
 #include "Form/CheckBox.hpp"
-#include "Form/DockWindow.hpp"
+#include "Widget/DockWindow.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/ConvertString.hpp"
 #include "Util/NumberParser.hpp"

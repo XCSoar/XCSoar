@@ -32,7 +32,7 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/List.hpp"
 #include "Form/Button.hpp"
-#include "Form/DockWindow.hpp"
+#include "Widget/DockWindow.hpp"
 #include "ComputerSettings.hpp"
 #include "LocalPath.hpp"
 #include "Screen/Canvas.hpp"

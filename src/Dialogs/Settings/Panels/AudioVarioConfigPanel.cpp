@@ -26,7 +26,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Form/Form.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Float.hpp"
 #include "UIGlobals.hpp"
 #include "Audio/Features.hpp"

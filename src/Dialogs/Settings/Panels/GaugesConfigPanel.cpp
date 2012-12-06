@@ -24,7 +24,7 @@ Copyright_License {
 #include "GaugesConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Interface.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 

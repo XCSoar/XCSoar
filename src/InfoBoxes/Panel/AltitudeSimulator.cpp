@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "AltitudeSimulator.hpp"
-#include "Widgets/OffsetButtonsWidget.hpp"
+#include "Widget/OffsetButtonsWidget.hpp"
 #include "Components.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Units/Units.hpp"

@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "MacCreadySetup.hpp"
 #include "Screen/Layout.hpp"
-#include "Form/WindowWidget.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Form/Button.hpp"
 #include "Form/ActionListener.hpp"
 #include "Interface.hpp"

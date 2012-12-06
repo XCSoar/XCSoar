@@ -36,9 +36,9 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
-#include "Form/ActionWidget.hpp"
-#include "Form/WindowWidget.hpp"
-#include "Form/TwoWidgets.hpp"
+#include "Widget/ActionWidget.hpp"
+#include "Widget/WindowWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 

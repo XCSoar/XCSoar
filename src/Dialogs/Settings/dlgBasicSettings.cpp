@@ -36,7 +36,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/Button.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"

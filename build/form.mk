@@ -20,20 +20,6 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/ScrollBar.cpp \
 	$(FORM_SRC_DIR)/Edit.cpp \
 	$(FORM_SRC_DIR)/DigitEntry.cpp \
-	$(FORM_SRC_DIR)/Widget.cpp \
-	$(FORM_SRC_DIR)/ActionWidget.cpp \
-	$(FORM_SRC_DIR)/WindowWidget.cpp \
-	$(FORM_SRC_DIR)/ListWidget.cpp \
-	$(FORM_SRC_DIR)/ContainerWidget.cpp \
-	$(FORM_SRC_DIR)/PanelWidget.cpp \
-	$(FORM_SRC_DIR)/TextWidget.cpp \
-	$(FORM_SRC_DIR)/LargeTextWidget.cpp \
-	$(FORM_SRC_DIR)/OverlappedWidget.cpp \
-	$(FORM_SRC_DIR)/TwoWidgets.cpp \
-	$(FORM_SRC_DIR)/RowFormWidget.cpp \
-	$(FORM_SRC_DIR)/ManagedWidget.cpp \
-	$(FORM_SRC_DIR)/PagerWidget.cpp \
-	$(FORM_SRC_DIR)/DockWindow.cpp \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
 	$(FORM_SRC_DIR)/TabBar.cpp \
 	$(FORM_SRC_DIR)/TabDisplay.cpp \

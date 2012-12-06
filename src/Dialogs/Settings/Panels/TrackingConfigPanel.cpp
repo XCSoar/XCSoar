@@ -31,7 +31,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Tracking/TrackingSettings.hpp"
 #include "Form/DataField/Base.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"

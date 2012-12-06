@@ -21,36 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LIST_WIDGET_HPP
-#define XCSOAR_LIST_WIDGET_HPP
+#ifndef XCSOAR_LARGE_TEXT_WIDGET_HPP
+#define XCSOAR_LARGE_TEXT_WIDGET_HPP
 
 #include "WindowWidget.hpp"
-#include "List.hpp"
 
-class Window;
+#include <tchar.h>
 
 /**
- * A wrapper that turns a #ListControl into a #Widget.  Call
- * CreateList() in your implementation to create and set the
- * #ListControl.  It is not deleted automatically; call
- * WindowWidget::DeleteWindow() to do that at your choice.
+ * A #Widget implementation that displays multi-line text.
  */
-class ListWidget : public WindowWidget, protected ListControl::Handler {
-protected:
-  const ListControl &GetList() const {
-    return *(const ListControl *)GetWindow();
-  }
-
-  ListControl &GetList() {
-    return *(ListControl *)GetWindow();
-  }
-
-  ListControl &CreateList(ContainerWindow &parent, const DialogLook &look,
-                          const PixelRect &rc, UPixelScalar row_height);
+class LargeTextWidget : public WindowWidget {
+  const TCHAR *text;
 
 public:
-  virtual PixelSize GetMinimumSize() const gcc_override;
-  virtual PixelSize GetMaximumSize() const gcc_override;
+  LargeTextWidget(const TCHAR *_text=nullptr)
+    :text(_text) {}
+
+  void SetText(const TCHAR *text);
+
+  /* virtual methods from class Widget */
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override;
+  virtual void Unprepare() gcc_override;
 };
 
 #endif

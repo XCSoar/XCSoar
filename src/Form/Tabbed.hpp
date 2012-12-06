@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticArray.hpp"
-#include "PagerWidget.hpp"
+#include "Widget/PagerWidget.hpp"
 
 class Widget;
 

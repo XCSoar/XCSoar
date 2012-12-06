@@ -25,7 +25,7 @@ Copyright_License {
 #include "V7ConfigWidget.hpp"
 #include "ManageNanoDialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"

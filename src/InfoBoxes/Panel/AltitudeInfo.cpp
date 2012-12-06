@@ -27,8 +27,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 #include "Formatter/UserUnits.hpp"
-#include "Form/TwoWidgets.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 

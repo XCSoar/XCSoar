@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_MISC_PANEL_HPP
 #define XCSOAR_TASK_MISC_PANEL_HPP
 
-#include "Form/PagerWidget.hpp"
+#include "Widget/PagerWidget.hpp"
 
 class TabBarControl;
 class WndOwnerDrawFrame;

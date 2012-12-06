@@ -26,7 +26,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Form/Form.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {

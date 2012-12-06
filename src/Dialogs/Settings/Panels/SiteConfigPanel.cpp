@@ -30,7 +30,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 
 enum ControlIndex {

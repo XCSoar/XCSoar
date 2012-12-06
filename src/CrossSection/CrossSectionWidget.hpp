@@ -24,7 +24,7 @@
 #ifndef XCSOAR_CROSS_SECTION_WIDGET_HPP
 #define XCSOAR_CROSS_SECTION_WIDGET_HPP
 
-#include "Form/WindowWidget.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 #include "Compiler.h"
 

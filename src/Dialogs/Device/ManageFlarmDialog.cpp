@@ -24,7 +24,7 @@ Copyright_License {
 #include "ManageFlarmDialog.hpp"
 #include "FLARM/ConfigWidget.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"

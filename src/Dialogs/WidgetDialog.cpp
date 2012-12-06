@@ -25,7 +25,7 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Form/Widget.hpp"
+#include "Widget/Widget.hpp"
 #include "Language/Language.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"

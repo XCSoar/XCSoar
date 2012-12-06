@@ -24,7 +24,7 @@ Copyright_License {
 #include "InterfaceConfigPanel.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Button.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Enum.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"

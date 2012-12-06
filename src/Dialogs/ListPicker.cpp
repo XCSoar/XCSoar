@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Dialogs/ListPicker.hpp"
 #include "WidgetDialog.hpp"
-#include "Form/ListWidget.hpp"
-#include "Form/TextWidget.hpp"
-#include "Form/TwoWidgets.hpp"
+#include "Widget/ListWidget.hpp"
+#include "Widget/TextWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
 #include "Language/Language.hpp"

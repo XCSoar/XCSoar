@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef GLUE_GAUGE_VARIO_H
 #define GLUE_GAUGE_VARIO_H
 
-#include "Form/WindowWidget.hpp"
+#include "Widget/WindowWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 struct VarioLook;

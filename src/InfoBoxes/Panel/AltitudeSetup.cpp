@@ -30,7 +30,7 @@ Copyright_License {
 #include "Form/DataField/Float.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/Edit.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"

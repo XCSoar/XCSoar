@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/DataField/Boolean.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/Button.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Dialogs/Airspace/Airspace.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"

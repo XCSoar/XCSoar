@@ -31,7 +31,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Asset.hpp"
 

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_OFFSET_BUTTONS_WIDGET_HPP
 #define XCSOAR_OFFSET_BUTTONS_WIDGET_HPP
 
-#include "Form/Widget.hpp"
+#include "Widget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Math/fixed.hpp"
 

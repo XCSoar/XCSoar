@@ -35,7 +35,7 @@ Copyright_License {
 #include "MapWindow/MapItem.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "Renderer/MapItemListRenderer.hpp"
-#include "Form/ListWidget.hpp"
+#include "Widget/ListWidget.hpp"
 #include "Form/Button.hpp"
 #include "Weather/Features.hpp"
 #include "Components.hpp"

@@ -29,7 +29,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
-#include "Form/ManagedWidget.hpp"
+#include "Widget/ManagedWidget.hpp"
 
 #include <stdint.h>
 #include <assert.h>

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MacCreadyEdit.hpp"
-#include "Widgets/OffsetButtonsWidget.hpp"
+#include "Widget/OffsetButtonsWidget.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef GAUGE_THERMAL_ASSISTENT_HPP
 #define GAUGE_THERMAL_ASSISTENT_HPP
 
-#include "Form/OverlappedWidget.hpp"
+#include "Widget/OverlappedWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 struct AttitudeState;

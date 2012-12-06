@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CAI302_UNITS_EDITOR_HPP
 #define XCSOAR_CAI302_UNITS_EDITOR_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Device/Driver/CAI302/Protocol.hpp"
 
 class CAI302UnitsEditor : public RowFormWidget {

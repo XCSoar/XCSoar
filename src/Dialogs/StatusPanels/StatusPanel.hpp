@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_STATUS_PANEL_HPP
 #define XCSOAR_STATUS_PANEL_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 
 class StatusPanel : public RowFormWidget {
 public:

@@ -24,7 +24,7 @@ Copyright_License {
 #include "FontEdit.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/Frame.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Font.hpp"

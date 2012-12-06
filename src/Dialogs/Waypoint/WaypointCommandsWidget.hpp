@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_COMMANDS_WIDGET_HPP
 #define XCSOAR_WAYPOINT_COMMANDS_WIDGET_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/ActionListener.hpp"
 
 class WndForm;

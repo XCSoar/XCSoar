@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Airspace.hpp"
 #include "Dialogs/WidgetDialog.hpp"
-#include "Form/ListWidget.hpp"
+#include "Widget/ListWidget.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/ProfileKeys.hpp"

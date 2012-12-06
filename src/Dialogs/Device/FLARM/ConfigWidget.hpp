@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_CONFIG_WIDGET_HPP
 #define XCSOAR_FLARM_CONFIG_WIDGET_HPP
 
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 
 class FlarmDevice;
 

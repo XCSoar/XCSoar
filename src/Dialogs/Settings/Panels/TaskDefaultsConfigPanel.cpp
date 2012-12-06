@@ -29,7 +29,7 @@ Copyright_License {
 #include "Task/TypeStrings.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "TaskDefaultsConfigPanel.hpp"
 #include "UIGlobals.hpp"
 

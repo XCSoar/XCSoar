@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef GAUGE_FLARM_HPP
 #define GAUGE_FLARM_HPP
 
-#include "Form/OverlappedWidget.hpp"
+#include "Widget/OverlappedWidget.hpp"
 #include "Blackboard/BlackboardListener.hpp"
 
 class LiveBlackboard;

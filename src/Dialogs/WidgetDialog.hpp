@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
-#include "Form/ManagedWidget.hpp"
+#include "Widget/ManagedWidget.hpp"
 
 #include <tchar.h>
 

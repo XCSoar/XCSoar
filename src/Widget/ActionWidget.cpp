@@ -21,27 +21,30 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_TEXT_WIDGET_HPP
-#define XCSOAR_TEXT_WIDGET_HPP
+#include "ActionWidget.hpp"
+#include "Form/ActionListener.hpp"
 
-#include "Form/WindowWidget.hpp"
+bool
+ActionWidget::Click()
+{
+  listener.OnAction(id);
+  return false;
+}
 
-#include <tchar.h>
+void
+ActionWidget::ReClick()
+{
+  listener.OnAction(id);
+}
 
-/**
- * A #Widget implementation that displays multi-line text.
- */
-class TextWidget : public WindowWidget {
-public:
-  void SetText(const TCHAR *text);
+#ifndef HAVE_CLIPPING
+void
+ActionWidget::Show(const PixelRect &rc)
+{
+}
 
-  /* virtual methods from class Widget */
-  virtual PixelSize GetMinimumSize() const gcc_override;
-  virtual PixelSize GetMaximumSize() const gcc_override;
-
-  virtual void Prepare(ContainerWindow &parent,
-                       const PixelRect &rc) gcc_override;
-  virtual void Unprepare() gcc_override;
-};
-
+void
+ActionWidget::Hide()
+{
+}
 #endif

@@ -23,8 +23,7 @@ Copyright_License {
 
 #include "HelpDialog.hpp"
 #include "WidgetDialog.hpp"
-#include "Form/Form.hpp"
-#include "Form/LargeTextWidget.hpp"
+#include "Widget/LargeTextWidget.hpp"
 #include "Language/Language.hpp"
 #include "UIGlobals.hpp"
 

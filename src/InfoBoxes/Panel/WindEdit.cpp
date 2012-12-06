@@ -25,7 +25,7 @@ Copyright_License {
 #include "Form/DataField/Float.hpp"
 #include "Interface.hpp"
 #include "Units/Units.hpp"
-#include "Form/RowFormWidget.hpp"
+#include "Widget/RowFormWidget.hpp"
 #include "Form/DataField/Listener.hpp"
 #include "Form/DataField/Angle.hpp"
 #include "UIGlobals.hpp"

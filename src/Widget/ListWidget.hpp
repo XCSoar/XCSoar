@@ -21,30 +21,36 @@ Copyright_License {
 }
 */
 
-#include "ActionWidget.hpp"
-#include "ActionListener.hpp"
+#ifndef XCSOAR_LIST_WIDGET_HPP
+#define XCSOAR_LIST_WIDGET_HPP
 
-bool
-ActionWidget::Click()
-{
-  listener.OnAction(id);
-  return false;
-}
+#include "WindowWidget.hpp"
+#include "Form/List.hpp"
 
-void
-ActionWidget::ReClick()
-{
-  listener.OnAction(id);
-}
+class Window;
 
-#ifndef HAVE_CLIPPING
-void
-ActionWidget::Show(const PixelRect &rc)
-{
-}
+/**
+ * A wrapper that turns a #ListControl into a #Widget.  Call
+ * CreateList() in your implementation to create and set the
+ * #ListControl.  It is not deleted automatically; call
+ * WindowWidget::DeleteWindow() to do that at your choice.
+ */
+class ListWidget : public WindowWidget, protected ListControl::Handler {
+protected:
+  const ListControl &GetList() const {
+    return *(const ListControl *)GetWindow();
+  }
 
-void
-ActionWidget::Hide()
-{
-}
+  ListControl &GetList() {
+    return *(ListControl *)GetWindow();
+  }
+
+  ListControl &CreateList(ContainerWindow &parent, const DialogLook &look,
+                          const PixelRect &rc, UPixelScalar row_height);
+
+public:
+  virtual PixelSize GetMinimumSize() const gcc_override;
+  virtual PixelSize GetMaximumSize() const gcc_override;
+};
+
 #endif
