@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Planes.hpp"
+#include "PlaneDialogs.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Form/ListWidget.hpp"

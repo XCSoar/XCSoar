@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/Planes.hpp"
+#include "PlaneDialogs.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/XML.hpp"

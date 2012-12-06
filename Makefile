@@ -183,9 +183,9 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
-	$(SRC)/Dialogs/dlgPlanes.cpp \
-	$(SRC)/Dialogs/dlgPlaneDetails.cpp \
-	$(SRC)/Dialogs/dlgPlanePolar.cpp \
+	$(SRC)/Dialogs/Plane/PlaneListDialog.cpp \
+	$(SRC)/Dialogs/Plane/PlaneDetailsDialog.cpp \
+	$(SRC)/Dialogs/Plane/PlanePolarDialog.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
 	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
