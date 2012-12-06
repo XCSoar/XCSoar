@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "TaskMapWindow.hpp"
 #include "TaskCalculatorPanel.hpp"
 #include "TaskEditPanel.hpp"
 #include "TaskPropertiesPanel.hpp"
@@ -31,12 +32,12 @@ Copyright_License {
 #include "../dlgTaskHelpers.hpp"
 #include "UIGlobals.hpp"
 #include "Look/IconLook.hpp"
+#include "Look/MapLook.hpp"
 #include "Dialogs/Message.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/SingleWindow.hpp"
 #include "Components.hpp"
-#include "Gauge/TaskView.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/TaskStore.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
@@ -44,22 +45,16 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Logger/Logger.hpp"
 #include "Protection.hpp"
-#include "Look/Look.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/TabBar.hpp"
-#include "Form/Draw.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
-#endif
-
 #include <assert.h>
-#include <stdio.h>
 
 enum Buttons {
+  MAP = 100,
   TARGET,
 };
 
@@ -73,15 +68,6 @@ static TaskManagerDialog *instance;
 static unsigned TurnpointTab = 0;
 static unsigned PropertiesTab = 0;
 
-namespace dlgTaskManager {
-  /**
-   * paints the task int the frame
-   * @param Sender the frame in which to paint the task
-   * @param canvas the canvas in which to paint the task
-   */
-  static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-}
-
 TaskManagerDialog::~TaskManagerDialog()
 {
   delete task_view;
@@ -94,6 +80,10 @@ void
 TaskManagerDialog::OnAction(int id)
 {
   switch (id) {
+  case MAP:
+    TaskViewClicked();
+    break;
+
   case TARGET:
     dlgTargetShowModal();
     break;
@@ -145,8 +135,8 @@ TaskManagerDialog::Create(SingleWindow &parent)
 
   WindowStyle hidden;
   hidden.Hide();
-  task_view = new WndOwnerDrawFrame(client_area, layout.task_view,
-                                    hidden, dlgTaskManager::OnTaskPaint);
+  task_view = new TaskMapWindow(UIGlobals::GetMapLook(), *this, MAP);
+  task_view->Create(client_area, layout.task_view, hidden);
 
   ButtonWindowStyle button_style(hidden);
   button_style.TabStop();
@@ -260,27 +250,18 @@ TaskManagerDialog::RestoreTaskView()
   }
 }
 
-static bool
-OnTaskViewClick(WndOwnerDrawFrame *Sender, PixelScalar x, PixelScalar y)
-{
-  instance->TaskViewClicked();
-  return true;
-}
-
 void
-TaskManagerDialog::ShowTaskView(void (*paint)(WndOwnerDrawFrame *sender,
-                                              Canvas &canvas))
+TaskManagerDialog::ShowTaskView(const OrderedTask *_task)
 {
   RestoreTaskView();
-  task_view->SetOnPaintNotify(paint);
-  task_view->SetOnMouseDownNotify(OnTaskViewClick);
+  task_view->SetTask(_task);
   task_view->Show();
 }
 
 void
 TaskManagerDialog::ShowTaskView()
 {
-  ShowTaskView(dlgTaskManager::OnTaskPaint);
+  ShowTaskView(task);
 }
 
 void
@@ -288,8 +269,7 @@ TaskManagerDialog::ResetTaskView()
 {
   task_view->Hide();
   RestoreTaskView();
-  task_view->SetOnPaintNotify(dlgTaskManager::OnTaskPaint);
-  task_view->SetOnMouseDownNotify(OnTaskViewClick);
+  task_view->SetTask(nullptr);
 }
 
 void
@@ -304,24 +284,6 @@ TaskManagerDialog::SwitchToPropertiesPanel()
 {
   tab_bar->SetCurrentPage(PropertiesTab);
   tab_bar->SetFocus();
-}
-
-void
-dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-#ifdef ENABLE_OPENGL
-  /* enable clipping */
-  GLCanvasScissor scissor(canvas);
-#endif
-
-  const MapLook &look = UIGlobals::GetMapLook();
-  const NMEAInfo &basic = CommonInterface::Basic();
-  PaintTask(canvas, Sender->GetClientRect(), instance->GetTask(),
-            basic.location_available, basic.location,
-            XCSoarInterface::GetMapSettings(),
-            look.task, look.airspace,
-            terrain, &airspace_database,
-            true);
 }
 
 bool

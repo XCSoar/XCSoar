@@ -68,8 +68,6 @@ public:
   void DeleteTask();
   void RenameTask();
 
-  void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
-
   void OnMoreClicked();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);

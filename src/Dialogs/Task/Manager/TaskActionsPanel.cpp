@@ -29,8 +29,6 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Form/Draw.hpp"
-#include "Form/TabBar.hpp"
 #include "Components.hpp"
 #include "Logger/ExternalLogger.hpp"
 #include "UIGlobals.hpp"

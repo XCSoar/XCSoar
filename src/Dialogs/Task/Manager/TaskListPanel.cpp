@@ -28,29 +28,19 @@ Copyright_License {
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
-#include "Form/Draw.hpp"
-#include "Form/TabBar.hpp"
 #include "Task/TaskStore.hpp"
 #include "Components.hpp"
 #include "LocalPath.hpp"
-#include "Gauge/TaskView.hpp"
 #include "OS/FileUtil.hpp"
-#include "UIGlobals.hpp"
-#include "Look/MapLook.hpp"
 #include "Language/Language.hpp"
 #include "Interface.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
-
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scissor.hpp"
-#endif
 
 #include <assert.h>
 #include <windef.h>
@@ -96,36 +86,6 @@ TaskListPanel::get_cursor_name()
 }
 
 void
-TaskListPanel::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  OrderedTask *ordered_task = get_cursor_task();
-
-  if (ordered_task == NULL) {
-    canvas.ClearWhite();
-    return;
-  }
-
-#ifdef ENABLE_OPENGL
-  /* enable clipping */
-  GLCanvasScissor scissor(canvas);
-#endif
-
-  const MapLook &look = UIGlobals::GetMapLook();
-  const NMEAInfo &basic = CommonInterface::Basic();
-  PaintTask(canvas, Sender->GetClientRect(), *ordered_task,
-            basic.location_available, basic.location,
-            XCSoarInterface::GetMapSettings(),
-            look.task, look.airspace,
-            terrain, &airspace_database);
-}
-
-static void
-OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
-{
-  instance->OnTaskPaint(Sender, canvas);
-}
-
-void
 TaskListPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned DrawListIndex)
 {
@@ -148,6 +108,7 @@ TaskListPanel::RefreshView()
   assert(wSummary != NULL);
 
   OrderedTask* ordered_task = get_cursor_task();
+  dialog.ShowTaskView(ordered_task);
 
   if (ordered_task == NULL) {
     wSummary->SetCaption(_T(""));
@@ -378,7 +339,7 @@ TaskListPanel::Show(const PixelRect &rc)
     task_store->Scan(more);
   }
 
-  dialog.ShowTaskView(::OnTaskPaint);
+  dialog.ShowTaskView(get_cursor_task());
 
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
   RefreshView();

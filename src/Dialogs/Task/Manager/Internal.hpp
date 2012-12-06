@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Form/Form.hpp"
 
-class WndOwnerDrawFrame;
+class TaskMapWindow;
 class WndButton;
 class TabBarControl;
 class OrderedTask;
@@ -34,7 +34,7 @@ class OrderedTask;
 class TaskManagerDialog : public WndForm {
   PixelRect task_view_position;
 
-  WndOwnerDrawFrame *task_view;
+  TaskMapWindow *task_view;
   WndButton *target_button;
   TabBarControl *tab_bar;
 
@@ -66,7 +66,7 @@ public:
   void TaskViewClicked();
   void RestoreTaskView();
   void ShowTaskView();
-  void ShowTaskView(void (*paint)(WndOwnerDrawFrame *sender, Canvas &canvas));
+  void ShowTaskView(const OrderedTask *task);
   void ResetTaskView();
 
   void SwitchToEditTab();

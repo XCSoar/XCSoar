@@ -243,6 +243,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp \
+	$(SRC)/Dialogs/Task/Manager/TaskMapWindow.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskManagerDialog.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskClosePanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskEditPanel.cpp \
