@@ -30,64 +30,60 @@ class SingleWindow;
 class WndOwnerDrawFrame;
 class Canvas;
 
-class dlgTaskManager
+namespace dlgTaskManager
 {
-public:
-  dlgTaskManager();
-
   /**
    * Validates task and prompts if change or error
    * Commits task if no error
    * @return True if task manager should close
    *         False if window should remain open
    */
-  static bool CommitTaskChanges();
+  bool CommitTaskChanges();
 
   /**
    * Commits the temporary task to the system and closes
    * the task manager dialog it the commit succeeds.
    * @returns True if validated, False if window shall remain open
    */
-  static bool OnClose();
+  bool OnClose();
 
-  static void dlgTaskManagerShowModal(SingleWindow &parent);
-  static void RevertTask();
+  void dlgTaskManagerShowModal(SingleWindow &parent);
+  void RevertTask();
 
   /**
    * restores task view rect
    */
-  static void TaskViewRestore(WndOwnerDrawFrame *wTaskView);
-  static void ResetTaskView(WndOwnerDrawFrame *task_view);
+  void TaskViewRestore(WndOwnerDrawFrame *wTaskView);
+  void ResetTaskView(WndOwnerDrawFrame *task_view);
 
-public:
   /**
    * paints the task int the frame
    * @param Sender the frame in which to paint the task
    * @param canvas the canvas in which to paint the task
    */
-  static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
+  void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
 
   /**
    * toggles maximize or restore state of the TaskView frame
    */
-  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender,
-                              PixelScalar x, PixelScalar y);
+  bool OnTaskViewClick(WndOwnerDrawFrame *Sender,
+                       PixelScalar x, PixelScalar y);
 
   /**
    * different for landscape and for portrait mode
    * Used by TaskList after loading
    * @return Tab index that shows turnpoints
    */
-  static unsigned GetTurnpointTab();
+  unsigned GetTurnpointTab();
 
   /**
    * different for landscape and for portrait mode
    * Used by TaskList after new task
    * @return Tab index that shows task properties
    */
-  static unsigned GetPropertiesTab();
+  unsigned GetPropertiesTab();
 
-  static void SetTitle();
+  void SetTitle();
 };
 
 #endif /* DLGTASKMANAGER_HPP */
