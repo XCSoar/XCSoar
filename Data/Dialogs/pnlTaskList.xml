@@ -3,7 +3,7 @@
 <Panel>
   <List Name="frmTasks" Height="-90" ItemHeight="18"/>
    
-  <Label Name="frmSummary1" Y="-90" Height="50" Border="0"/>
+  <Label Name="frmSummary1" Y="-90" Height="50"/>
 
   <Button Name="cmdLoad" Caption="Load" X="0" Y="-37" Width="55" Height="35" OnClick="OnLoadClicked"/>
   <Button Name="cmdRename" Caption="Rename" X="55" Y="-37" Width="65" Height="35" OnClick="OnRenameClicked"/>

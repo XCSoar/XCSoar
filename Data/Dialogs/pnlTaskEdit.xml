@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Panel Name="frmTurnpoints" Border="0">
+<Panel>
   <List Name="frmTaskPoints" Height="-90" ItemHeight="18"/>
 
   <Label Name="frmSummary" Y="-90" Height="50"/>
