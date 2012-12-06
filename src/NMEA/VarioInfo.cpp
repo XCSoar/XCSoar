@@ -28,6 +28,7 @@ void
 VarioInfo::Clear()
 {
   sink_rate = fixed_zero;
+  average = netto_average = fixed_zero;
   cruise_gr = INVALID_GR;
   average_gr = fixed_zero;
   gr = INVALID_GR;
