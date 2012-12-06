@@ -130,6 +130,7 @@ Bitmap::Load(unsigned id, Type type)
   free(header);
 #else
   SDL_Surface *original = ::IMG_LoadPNG_RW(rw);
+  SDL_RWclose(rw);
 #endif
 
   if (original == NULL)
