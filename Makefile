@@ -146,6 +146,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/WidgetDialog.cpp \
 	$(SRC)/Dialogs/FileManager.cpp \
+	$(SRC)/Dialogs/Device/DeviceEditWidget.cpp \
 	$(SRC)/Dialogs/Device/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/Device/PortMonitor.cpp \
 	$(SRC)/Dialogs/Device/ManageCAI302Dialog.cpp \
@@ -186,6 +187,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Plane/PlaneListDialog.cpp \
 	$(SRC)/Dialogs/Plane/PlaneDetailsDialog.cpp \
 	$(SRC)/Dialogs/Plane/PlanePolarDialog.cpp \
+	$(SRC)/Dialogs/Plane/PolarShapeEditWidget.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/FilePicker.cpp \
 	$(SRC)/Dialogs/dlgFlarmTrafficDetails.cpp \
@@ -237,6 +239,10 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Settings/Panels/TimeConfigPanel.cpp \
 	$(SRC)/Dialogs/Settings/Panels/WaypointDisplayConfigPanel.cpp \
 	\
+	$(SRC)/Dialogs/Task/Widgets/ObservationZoneEditWidget.cpp \
+	$(SRC)/Dialogs/Task/Widgets/CylinderZoneEditWidget.cpp \
+	$(SRC)/Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp \
+	$(SRC)/Dialogs/Task/Widgets/SectorZoneEditWidget.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskManagerDialog.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskClosePanel.cpp \
 	$(SRC)/Dialogs/Task/Manager/TaskEditPanel.cpp \
@@ -435,11 +441,14 @@ XCSOAR_SOURCES := \
 	$(SRC)/CrossSection/TerrainXSRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionRenderer.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
+	$(SRC)/CrossSection/CrossSectionWidget.cpp \
 	\
 	$(SRC)/Gauge/ThermalAssistantRenderer.cpp \
 	$(SRC)/Gauge/ThermalAssistantWindow.cpp \
 	$(SRC)/Gauge/BigThermalAssistantWindow.cpp \
+	$(SRC)/Gauge/BigThermalAssistantWidget.cpp \
 	$(SRC)/Gauge/FlarmTrafficWindow.cpp \
+	$(SRC)/Gauge/BigTrafficWidget.cpp \
 	$(SRC)/Look/FlarmTrafficLook.cpp \
 	$(SRC)/Gauge/GaugeFLARM.cpp \
 	$(SRC)/Gauge/GaugeThermalAssistant.cpp \
@@ -756,15 +765,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Components.cpp \
 	\
 	$(SRC)/Widgets/OffsetButtonsWidget.cpp \
-	$(SRC)/Widgets/TrafficWidget.cpp \
-	$(SRC)/Widgets/CrossSectionWidget.cpp \
-	$(SRC)/Widgets/BigThermalAssistantWidget.cpp \
-	$(SRC)/Widgets/DeviceEditWidget.cpp \
-	$(SRC)/Widgets/PolarShapeEditWidget.cpp \
-	$(SRC)/Widgets/ObservationZoneEditWidget.cpp \
-	$(SRC)/Widgets/CylinderZoneEditWidget.cpp \
-	$(SRC)/Widgets/LineSectorZoneEditWidget.cpp \
-	$(SRC)/Widgets/SectorZoneEditWidget.cpp \
 	\
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Declaration.cpp \

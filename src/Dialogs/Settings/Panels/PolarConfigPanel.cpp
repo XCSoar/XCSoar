@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "PolarConfigPanel.hpp"
+#include "Dialogs/Plane/PolarShapeEditWidget.hpp"
 #include "ConfigPanel.hpp"
 #include "UIGlobals.hpp"
 #include "Form/DataField/Enum.hpp"
@@ -35,7 +36,6 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Form/Form.hpp"
 #include "Form/DockWindow.hpp"
-#include "Widgets/PolarShapeEditWidget.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/CallBackTable.hpp"

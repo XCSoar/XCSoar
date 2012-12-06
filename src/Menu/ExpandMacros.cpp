@@ -27,7 +27,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
-#include "Widgets/TrafficWidget.hpp"
+#include "Gauge/BigTrafficWidget.hpp"
 #include "ComputerSettings.hpp"
 #include "Components.hpp"
 #include "Compatibility/string.h"

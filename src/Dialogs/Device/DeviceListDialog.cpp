@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DeviceListDialog.hpp"
+#include "DeviceEditWidget.hpp"
 #include "Vega/VegaDialogs.hpp"
 #include "ManageCAI302Dialog.hpp"
 #include "ManageFlarmDialog.hpp"
@@ -30,7 +31,6 @@ Copyright_License {
 #include "PortMonitor.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
-#include "Widgets/DeviceEditWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Util/TrivialArray.hpp"
 #include "Util/StaticString.hpp"

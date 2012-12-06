@@ -24,7 +24,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "Widgets/BigThermalAssistantWidget.hpp"
+#include "Gauge/BigThermalAssistantWidget.hpp"
 #include "UIGlobals.hpp"
 #include "Look/Look.hpp"
 

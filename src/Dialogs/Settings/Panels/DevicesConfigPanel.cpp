@@ -26,7 +26,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/ListWidget.hpp"
 #include "Form/TwoWidgets.hpp"
-#include "Widgets/DeviceEditWidget.hpp"
+#include "Dialogs/Device/DeviceEditWidget.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "Profile/DeviceConfig.hpp"

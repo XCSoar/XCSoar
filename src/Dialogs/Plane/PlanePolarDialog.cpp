@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "PlaneDialogs.hpp"
+#include "PolarShapeEditWidget.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Dialogs/XML.hpp"
@@ -32,7 +33,6 @@ Copyright_License {
 #include "Form/DataField/ComboList.hpp"
 #include "Form/DataField/Base.hpp"
 #include "Form/DockWindow.hpp"
-#include "Widgets/PolarShapeEditWidget.hpp"
 #include "Screen/Layout.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarStore.hpp"

@@ -21,7 +21,7 @@
 }
 */
 
-#include "TrafficWidget.hpp"
+#include "BigTrafficWidget.hpp"
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/CallBackTable.hpp"
 #include "Math/Screen.hpp"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
 #include "FLARM/Glue.hpp"
-#include "Widgets/TrafficWidget.hpp"
+#include "Gauge/BigTrafficWidget.hpp"
 
 static bool force_shutdown = false;
 

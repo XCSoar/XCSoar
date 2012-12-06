@@ -25,7 +25,7 @@ Copyright_License {
 #include "UIActions.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "Widgets/TrafficWidget.hpp"
+#include "Gauge/BigTrafficWidget.hpp"
 #include "FLARM/Glue.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/TextEntry.hpp"
