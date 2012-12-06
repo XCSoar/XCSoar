@@ -26,8 +26,6 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-struct CallBackTableEntry;
-class OrderedTask;
 class SingleWindow;
 class WndOwnerDrawFrame;
 class Canvas;
@@ -54,7 +52,6 @@ public:
 
   static void dlgTaskManagerShowModal(SingleWindow &parent);
   static void RevertTask();
-  static const CallBackTableEntry CallBackTable[];
 
   /**
    * restores task view rect
