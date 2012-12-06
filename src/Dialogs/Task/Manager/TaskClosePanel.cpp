@@ -50,11 +50,17 @@ TaskClosePanel::RefreshStatus()
   cmdRevert->SetVisible(*task_modified);
 }
 
+void
+TaskClosePanel::CommitAndClose()
+{
+  if (dialog.Commit())
+    dialog.SetModalResult(mrOK);
+}
+
 static void
 OnCloseClicked()
 {
-  if (instance->dialog.Commit())
-    instance->dialog.SetModalResult(mrOK);
+  instance->CommitAndClose();
 }
 
 static void
@@ -94,7 +100,7 @@ bool
 TaskClosePanel::Click()
 {
   if (!(*task_modified)) {
-    OnCloseClicked();
+    CommitAndClose();
     return false;
   }
 
@@ -104,7 +110,7 @@ TaskClosePanel::Click()
 void
 TaskClosePanel::ReClick()
 {
-  OnCloseClicked();
+  CommitAndClose();
 }
 
 void

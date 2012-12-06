@@ -45,6 +45,7 @@ public:
   TaskClosePanel(TaskManagerDialog &_dialog, bool *_task_modified)
     :dialog(_dialog), task_modified(_task_modified) {}
 
+  void CommitAndClose();
   void RefreshStatus();
 
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
