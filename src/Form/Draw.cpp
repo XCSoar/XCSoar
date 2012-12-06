@@ -22,13 +22,11 @@ Copyright_License {
 */
 
 #include "Form/Draw.hpp"
-#include "Screen/ContainerWindow.hpp"
 
 WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
                                      PixelRect rc, const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
-  :mOnPaintCallback(OnPaintCallback),
-   mOnMouseDownCallback(NULL)
+  :mOnPaintCallback(OnPaintCallback)
 {
   Create(parent, rc, style);
 }
@@ -40,13 +38,4 @@ WndOwnerDrawFrame::OnPaint(Canvas &canvas)
     return;
 
   mOnPaintCallback(this, canvas);
-}
-
-bool
-WndOwnerDrawFrame::OnMouseDown(PixelScalar x, PixelScalar y)
-{
-  if (mOnMouseDownCallback)
-    return mOnMouseDownCallback(this, x, y);
-
-  return PaintWindow::OnMouseDown(x, y);
 }
