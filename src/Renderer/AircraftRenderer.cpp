@@ -30,10 +30,13 @@ Copyright_License {
 #include "Math/Angle.hpp"
 
 static void
-DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
+DrawMirroredPolygon(const RasterPoint *src, unsigned points,
                     Canvas &canvas, const Angle angle,
                     const RasterPoint pos)
 {
+  RasterPoint dst[64];
+  assert(2 * points <= ARRAY_SIZE(dst));
+
   std::copy(src, src + points, dst);
   for (unsigned i = 0; i < points; ++i) {
     dst[2 * points - i - 1].x = -dst[i].x;
@@ -66,7 +69,6 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       {0, 18},
     };
     static constexpr unsigned AIRCRAFT_POINTS = ARRAY_SIZE(Aircraft);
-    RasterPoint buffer[2 * AIRCRAFT_POINTS];
 
     if (!inverse) {
       canvas.SelectWhiteBrush();
@@ -76,7 +78,7 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       canvas.SelectWhitePen();
     }
 
-    DrawMirroredPolygon(Aircraft, buffer, AIRCRAFT_POINTS,
+    DrawMirroredPolygon(Aircraft, AIRCRAFT_POINTS,
                         canvas, angle, aircraft_pos);
   }
 
@@ -88,11 +90,10 @@ DrawDetailedAircraft(Canvas &canvas, bool inverse,
       {0, -1},
     };
     const unsigned CANOPY_POINTS = ARRAY_SIZE(Canopy);
-    RasterPoint buffer[2 * CANOPY_POINTS];
 
     canvas.Select(look.canopy_pen);
     canvas.Select(look.canopy_brush);
-    DrawMirroredPolygon(Canopy, buffer, CANOPY_POINTS,
+    DrawMirroredPolygon(Canopy, CANOPY_POINTS,
                         canvas, angle, aircraft_pos);
   }
 }
