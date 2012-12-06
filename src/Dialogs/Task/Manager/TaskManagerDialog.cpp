@@ -69,6 +69,27 @@ static PixelRect TaskViewRect;
 static unsigned TurnpointTab = 0;
 static unsigned PropertiesTab = 0;
 
+namespace dlgTaskManager {
+  /**
+   * Validates task and prompts if change or error
+   * Commits task if no error
+   * @return True if task manager should close
+   *         False if window should remain open
+   */
+  static bool CommitTaskChanges();
+
+  static void dlgTaskManagerShowModal(SingleWindow &parent);
+
+  /**
+   * paints the task int the frame
+   * @param Sender the frame in which to paint the task
+   * @param canvas the canvas in which to paint the task
+   */
+  static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
+
+  static void SetTitle();
+}
+
 unsigned
 dlgTaskManager::GetTurnpointTab()
 {

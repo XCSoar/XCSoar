@@ -26,20 +26,10 @@ Copyright_License {
 
 #include "Screen/Point.hpp"
 
-class SingleWindow;
 class WndOwnerDrawFrame;
-class Canvas;
 
 namespace dlgTaskManager
 {
-  /**
-   * Validates task and prompts if change or error
-   * Commits task if no error
-   * @return True if task manager should close
-   *         False if window should remain open
-   */
-  bool CommitTaskChanges();
-
   /**
    * Commits the temporary task to the system and closes
    * the task manager dialog it the commit succeeds.
@@ -47,7 +37,6 @@ namespace dlgTaskManager
    */
   bool OnClose();
 
-  void dlgTaskManagerShowModal(SingleWindow &parent);
   void RevertTask();
 
   /**
@@ -55,13 +44,6 @@ namespace dlgTaskManager
    */
   void TaskViewRestore(WndOwnerDrawFrame *wTaskView);
   void ResetTaskView(WndOwnerDrawFrame *task_view);
-
-  /**
-   * paints the task int the frame
-   * @param Sender the frame in which to paint the task
-   * @param canvas the canvas in which to paint the task
-   */
-  void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
 
   /**
    * toggles maximize or restore state of the TaskView frame
@@ -82,8 +64,6 @@ namespace dlgTaskManager
    * @return Tab index that shows task properties
    */
   unsigned GetPropertiesTab();
-
-  void SetTitle();
 };
 
 #endif /* DLGTASKMANAGER_HPP */
