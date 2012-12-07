@@ -492,6 +492,12 @@ public:
   static Angle FromXY(const fixed& x, const fixed& y) {
     return Angle::Radians(atan2(y,x));
   }
+
+  /**
+   * Check whether the two angles are roughly equal.
+   */
+  gcc_const
+  bool CompareRoughly(Angle other, Angle threshold = Angle::Degrees(10)) const;
 };
 
 static_assert(std::is_trivial<Angle>::value, "type is not trivial");

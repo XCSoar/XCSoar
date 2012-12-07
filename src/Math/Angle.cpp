@@ -153,3 +153,10 @@ Angle::Between(const Angle start, const Angle end) const
 
   return delta <= width;
 }
+
+bool
+Angle::CompareRoughly(Angle other, Angle threshold) const
+{
+  const Angle delta = (*this - other).AsDelta();
+  return delta >= -threshold && delta <= threshold;
+}

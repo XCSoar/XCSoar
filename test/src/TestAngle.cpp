@@ -27,7 +27,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(93);
+  plan_tests(105);
 
   // Test Native() and Native()
   ok1(equals(Angle::Native(fixed_zero).Native(), fixed_zero));
@@ -204,6 +204,21 @@ int main(int argc, char **argv)
   ok1(equals(Angle::FromXY(-fixed_one, fixed_zero), 180));
   ok1(equals(Angle::FromXY(fixed_zero, -fixed_one), -90));
   ok1(equals(Angle::FromXY(fixed_one, -fixed_one), -45));
+
+  // Test CompareRoughly()
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(0)));
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(5)));
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(9.9)));
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(10)));
+  ok1(!Angle::Degrees(0).CompareRoughly(Angle::Degrees(10.1)));
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(-9.9)));
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(-10)));
+  ok1(!Angle::Degrees(0).CompareRoughly(Angle::Degrees(-10.1)));
+
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(4), Angle::Degrees(5)));
+  ok1(Angle::Degrees(0).CompareRoughly(Angle::Degrees(-4), Angle::Degrees(5)));
+  ok1(!Angle::Degrees(0).CompareRoughly(Angle::Degrees(6), Angle::Degrees(5)));
+  ok1(!Angle::Degrees(0).CompareRoughly(Angle::Degrees(-6), Angle::Degrees(5)));
 
   return exit_status();
 }
