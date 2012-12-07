@@ -66,7 +66,7 @@ OffsetButtonsWidget::Prepare(ContainerWindow &parent,
 
   for (unsigned i = 0; i < ARRAY_SIZE(buttons); ++i) {
     TCHAR caption[16];
-    _stprintf(caption, format, offsets[i]);
+    _stprintf(caption, format, (double)offsets[i]);
     buttons[i] = new WndButton(parent, look, caption, rc[i], style,
                                *this, i);
   }
