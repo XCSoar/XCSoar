@@ -404,8 +404,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   edit_content_description = new WndFrame(client_area, dialog_look,
                                           control_rc.left, control_rc.top,
                                           control_rc.right - control_rc.left,
-                                          control_rc.bottom - control_rc.top,
-                                          style);
+                                          control_rc.bottom - control_rc.top);
 
   RefreshEditContent();
 

@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.4.5 - not yet released
 * user interface
   - faster gesture drawing
+  - fix crash in InfoBox page setup (#2122)
 * map
   - fix crash in terrain renderer with broken map file (#2478)
 * data files
