@@ -176,7 +176,7 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
   else
     return false;
 
-  parsed.wind.bearing = Angle::Degrees(fixed(bearing));
+  parsed.wind.bearing = Angle::Degrees(bearing);
   parsed.wind_available = true;
   return true;
 }

@@ -28,8 +28,8 @@
 static void
 test_times()
 {
-  const GeoPoint location(Angle::Degrees(fixed(7.7061111111111114)),
-                          Angle::Degrees(fixed(51.051944444444445)));
+  const GeoPoint location(Angle::Degrees(7.7061111111111114),
+                          Angle::Degrees(51.051944444444445));
   BrokenDateTime dt;
   dt.year = 2010;
   dt.month = 9;
@@ -105,7 +105,7 @@ test_azimuth()
       152.198463
   };
 
-  GeoPoint location(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(51)));
+  GeoPoint location(Angle::Degrees(7), Angle::Degrees(51));
 
   BrokenDateTime dt;
   dt.year = 2010;

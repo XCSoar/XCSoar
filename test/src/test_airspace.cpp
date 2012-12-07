@@ -27,7 +27,7 @@ test_airspace(const unsigned n_airspaces)
 {
   TestFlightComponents components;
   components.airspaces = new Airspaces;
-  setup_airspaces(*components.airspaces, GeoPoint(Angle::Degrees(fixed(0.5)), Angle::Degrees(fixed(0.5))), n_airspaces);
+  setup_airspaces(*components.airspaces, GeoPoint(Angle::Degrees(0.5), Angle::Degrees(0.5)), n_airspaces);
   bool fine = test_flight(components, 4, 0);
   delete components.airspaces;
   return fine;

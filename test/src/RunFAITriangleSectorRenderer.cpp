@@ -37,10 +37,10 @@ protected:
   void OnPaint(Canvas &canvas) {
     canvas.ClearWhite();
 
-    const GeoPoint a(Angle::Degrees(fixed(7.70722)),
-                     Angle::Degrees(fixed(51.052)));
-    const GeoPoint b(Angle::Degrees(fixed(11.5228)),
-                     Angle::Degrees(fixed(50.3972)));
+    const GeoPoint a(Angle::Degrees(7.70722),
+                     Angle::Degrees(51.052));
+    const GeoPoint b(Angle::Degrees(11.5228),
+                     Angle::Degrees(50.3972));
 
     WindowProjection projection;
     projection.SetScreenOrigin(canvas.GetWidth() / 2, canvas.GetHeight() / 2);

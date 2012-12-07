@@ -121,7 +121,7 @@ test_replay()
   state_last = sim.state;
 
   sim.state.wind.norm = fixed(7);
-  sim.state.wind.bearing = Angle::Degrees(fixed(330));
+  sim.state.wind.bearing = Angle::Degrees(330);
 
   fixed time_last = sim.state.time;
 

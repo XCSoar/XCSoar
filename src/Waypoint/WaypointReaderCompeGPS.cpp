@@ -42,7 +42,7 @@ ParseAngle(const TCHAR *&src, Angle &angle)
     return false;
 
   src = endptr;
-  angle = Angle::Degrees(fixed(value));
+  angle = Angle::Degrees(value);
 
   // Skip until next whitespace and look for NSEW signs
   bool found = false;

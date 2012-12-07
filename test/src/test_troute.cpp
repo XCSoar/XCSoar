@@ -40,7 +40,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
   GlideSettings settings;
   settings.SetDefaults();
   GlidePolar polar(mc);
-  SpeedVector wind(Angle::Degrees(fixed(0)), mwind);
+  SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
   route.UpdatePolar(settings, polar, polar, wind);
   route.SetTerrain(&map);

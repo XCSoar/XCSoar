@@ -87,8 +87,8 @@ static Waypoint
 MakeWaypoint(const TCHAR *name, int altitude,
              double longitude, double latitude)
 {
-  Waypoint wp(GeoPoint(Angle::Degrees(fixed(longitude)),
-                       Angle::Degrees(fixed(latitude))));
+  Waypoint wp(GeoPoint(Angle::Degrees(longitude),
+                       Angle::Degrees(latitude)));
   wp.name = name;
   wp.elevation = fixed(altitude);
   return wp;

@@ -38,7 +38,7 @@ BackgroundRenderer::BackgroundRenderer():
   terrain(NULL),
   weather(NULL),
   renderer(NULL),
-  shading_angle(Angle::Degrees(fixed(-45)))
+  shading_angle(Angle::Degrees(-45))
 {
 }
 
@@ -116,7 +116,7 @@ BackgroundRenderer::SetShadingAngle(const WindowProjection& projection,
     SetShadingAngle(projection, calculated.sun_azimuth);
 
   else
-    SetShadingAngle(projection, Angle::Degrees(fixed(-45.0)));
+    SetShadingAngle(projection, Angle::Degrees(-45));
 
 }
 

@@ -70,8 +70,8 @@ public:
 void
 TaskPointTest::Run()
 {
-  GeoPoint gp1(Angle::Degrees(fixed(20)), Angle::Degrees(fixed(50)));
-  GeoPoint gp2(Angle::Degrees(fixed(21)), Angle::Degrees(fixed(50)));
+  GeoPoint gp1(Angle::Degrees(20), Angle::Degrees(50));
+  GeoPoint gp2(Angle::Degrees(21), Angle::Degrees(50));
 
   DummyTaskPoint tp1(TaskPointType::AST, gp1, fixed(1234));
   DummyTaskPoint tp2(TaskPointType::AAT, gp2, fixed(1337));

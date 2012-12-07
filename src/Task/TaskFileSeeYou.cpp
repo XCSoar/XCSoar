@@ -115,7 +115,7 @@ ParseAngle(const TCHAR* str)
   if (str == end)
     angle = 0;
 
-  return Angle::Degrees(fixed(angle));
+  return Angle::Degrees(angle);
 }
 
 static fixed

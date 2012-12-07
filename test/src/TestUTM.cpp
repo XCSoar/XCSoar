@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 {
   plan_tests(5);
 
-  GeoPoint p(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(50)));
+  GeoPoint p(Angle::Degrees(7), Angle::Degrees(50));
   UTM u = UTM::FromGeoPoint(p);
 
   ok1(u.zone_number == 32);

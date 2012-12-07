@@ -44,8 +44,8 @@ static GlidePolar glide_polar(fixed(0));
 static GeoPoint
 MakeGeoPoint(double longitude, double latitude)
 {
-  return GeoPoint(Angle::Degrees(fixed(longitude)),
-                  Angle::Degrees(fixed(latitude)));
+  return GeoPoint(Angle::Degrees(longitude),
+                  Angle::Degrees(latitude));
 }
 
 static Waypoint

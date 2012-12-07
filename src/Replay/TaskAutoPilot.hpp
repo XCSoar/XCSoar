@@ -65,7 +65,7 @@ public:
   void SetDefaultLocation(const GeoPoint& default_location) {
     location_start = default_location;
     location_previous = default_location;
-    location_previous.latitude-= Angle::Degrees(fixed(1.0));
+    location_previous.latitude -= Angle::Degrees(1);
   }
 
 protected:

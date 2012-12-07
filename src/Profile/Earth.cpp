@@ -45,8 +45,8 @@ Profile::GetGeoPoint(const TCHAR *key, GeoPoint &value)
       longitude < -90.0 || longitude > 90.0)
     return false;
 
-  value.longitude = Angle::Degrees(fixed(longitude));
-  value.latitude = Angle::Degrees(fixed(latitude));
+  value.longitude = Angle::Degrees(longitude);
+  value.latitude = Angle::Degrees(latitude);
   return true;
 }
 

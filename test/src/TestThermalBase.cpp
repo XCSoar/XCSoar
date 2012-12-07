@@ -28,10 +28,10 @@ int main(int argc, char **argv)
 {
   plan_tests(3);
 
-  GeoPoint location(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(45)));
+  GeoPoint location(Angle::Degrees(7), Angle::Degrees(45));
   fixed altitude(1300);
   fixed average(2.5);
-  SpeedVector wind(Angle::Degrees(fixed(60)), fixed(20));
+  SpeedVector wind(Angle::Degrees(60), fixed(20));
 
   GeoPoint ground_location(Angle::Zero(), Angle::Zero());
   fixed ground_alt;

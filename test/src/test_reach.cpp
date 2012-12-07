@@ -39,7 +39,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
   GlideSettings settings;
   settings.SetDefaults();
   GlidePolar polar(mc);
-  SpeedVector wind(Angle::Degrees(fixed(0)), mwind);
+  SpeedVector wind(Angle::Degrees(0), mwind);
   TerrainRoute route;
   route.UpdatePolar(settings, polar, polar, wind);
   route.SetTerrain(&map);
@@ -62,8 +62,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 
   PrintHelper::print_reach_tree(route);
 
-  GeoPoint dest(origin.longitude-Angle::Degrees(fixed(0.02)),
-                origin.latitude-Angle::Degrees(fixed(0.02)));
+  GeoPoint dest(origin.longitude-Angle::Degrees(0.02),
+                origin.latitude-Angle::Degrees(0.02));
 
   {
     std::ofstream fout ("results/terrain.txt");

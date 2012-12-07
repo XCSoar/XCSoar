@@ -124,7 +124,7 @@ protected:
     if (_timer == timer) {
       SpeedVector _wind = wind.GetWind();
 
-      _wind.bearing = (_wind.bearing + Angle::Degrees(fixed(5))).AsBearing();
+      _wind.bearing = (_wind.bearing + Angle::Degrees(5)).AsBearing();
       _wind.norm += fixed(1);
       if (_wind.norm > fixed(15))
         _wind.norm = fixed(0);

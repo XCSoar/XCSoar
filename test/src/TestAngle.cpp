@@ -162,9 +162,9 @@ int main(int argc, char **argv)
   ok1(Angle::Degrees(-90).Sign() == -1);
 
   ok1(Angle::Degrees(90).Sign(fixed(1)) == 1);
-  ok1(Angle::Degrees(fixed(0.5)).Sign(fixed(1)) == 0);
+  ok1(Angle::Degrees(0.5).Sign(fixed(1)) == 0);
   ok1(Angle::Zero().Sign(fixed(1)) == 0);
-  ok1(Angle::Degrees(-fixed(0.5)).Sign(fixed(1)) == 0);
+  ok1(Angle::Degrees(-0.5).Sign(fixed(1)) == 0);
   ok1(Angle::Degrees(-90).Sign(fixed(1)) == -1);
 
   // Test SinCos()

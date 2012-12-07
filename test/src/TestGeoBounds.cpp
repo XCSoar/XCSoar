@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 {
   plan_tests(24);
 
-  GeoPoint g(Angle::Degrees(fixed(2)), Angle::Degrees(fixed(4)));
+  GeoPoint g(Angle::Degrees(2), Angle::Degrees(4));
 
   GeoBounds b(g);
 
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 
   ok1(b.IsEmpty());
 
-  g.latitude = Angle::Degrees(fixed(6));
-  g.longitude = Angle::Degrees(fixed(8));
+  g.latitude = Angle::Degrees(6);
+  g.longitude = Angle::Degrees(8);
   b.Extend(g);
 
   ok1(equals(b.east, 8));
@@ -55,10 +55,10 @@ int main(int argc, char **argv)
   ok1(equals(g.latitude, 5));
   ok1(equals(g.longitude, 5));
 
-  ok1(b.IsInside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(4.5))));
-  ok1(!b.IsInside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(4.5))));
-  ok1(!b.IsInside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(1))));
-  ok1(!b.IsInside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(1))));
+  ok1(b.IsInside(Angle::Degrees(7), Angle::Degrees(4.5)));
+  ok1(!b.IsInside(Angle::Degrees(9), Angle::Degrees(4.5)));
+  ok1(!b.IsInside(Angle::Degrees(7), Angle::Degrees(1)));
+  ok1(!b.IsInside(Angle::Degrees(9), Angle::Degrees(1)));
 
   b = b.Scale(fixed(2));
 

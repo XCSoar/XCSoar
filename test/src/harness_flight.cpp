@@ -102,7 +102,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
   PrintTaskAutoPilot autopilot(parms);
   AircraftSim aircraft;
 
-  autopilot.SetDefaultLocation(GeoPoint(Angle::Degrees(fixed(1.0)), Angle::Degrees(fixed(0.0))));
+  autopilot.SetDefaultLocation(GeoPoint(Angle::Degrees(1), Angle::Degrees(0)));
 
   unsigned print_counter=0;
   if (n_wind)

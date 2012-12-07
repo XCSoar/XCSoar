@@ -26,10 +26,10 @@
 static void
 TestLinearDistance()
 {
-  const GeoPoint lon_start(Angle::Degrees(fixed(90)),
+  const GeoPoint lon_start(Angle::Degrees(90),
                            Angle::Zero());
   for (unsigned i = 0; i < 180; i += 5) {
-    const GeoPoint lon_end(lon_start.longitude + Angle::Degrees(fixed(i)),
+    const GeoPoint lon_end(lon_start.longitude + Angle::Degrees(i),
                            lon_start.latitude);
     fixed distance = Distance(lon_start, lon_end);
 
@@ -43,7 +43,7 @@ TestLinearDistance()
                            Angle::Zero());
   for (unsigned i = 0; i < 90; i += 5) {
     const GeoPoint lat_end(lat_start.longitude,
-                           lat_start.latitude + Angle::Degrees(fixed(i)));
+                           lat_start.latitude + Angle::Degrees(i));
     fixed distance = Distance(lat_start, lat_end);
 
     double min = 111100 * i;
@@ -57,12 +57,12 @@ int main(int argc, char **argv)
 {
   plan_tests(9 + 36 + 18);
 
-  const GeoPoint a(Angle::Degrees(fixed(7.7061111111111114)),
-                   Angle::Degrees(fixed(51.051944444444445)));
-  const GeoPoint b(Angle::Degrees(fixed(7.599444444444444)),
-                   Angle::Degrees(fixed(51.099444444444444)));
-  const GeoPoint c(Angle::Degrees(fixed(4.599444444444444)),
-                   Angle::Degrees(fixed(47.099444444444444)));
+  const GeoPoint a(Angle::Degrees(7.7061111111111114),
+                   Angle::Degrees(51.051944444444445));
+  const GeoPoint b(Angle::Degrees(7.599444444444444),
+                   Angle::Degrees(51.099444444444444));
+  const GeoPoint c(Angle::Degrees(4.599444444444444),
+                   Angle::Degrees(47.099444444444444));
 
   fixed distance = Distance(a, b);
   ok1(distance > fixed(9130) && distance < fixed(9140));

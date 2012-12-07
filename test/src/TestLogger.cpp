@@ -88,10 +88,10 @@ static const char *const expect[] = {
 static void
 Run(IGCWriter &writer)
 {
-  static const GeoPoint home(Angle::Degrees(fixed(7.7061111111111114)),
-                             Angle::Degrees(fixed(51.051944444444445)));
-  static const GeoPoint tp(Angle::Degrees(fixed(10.726111111111111)),
-                           Angle::Degrees(fixed(50.6322)));
+  static const GeoPoint home(Angle::Degrees(7.7061111111111114),
+                             Angle::Degrees(51.051944444444445));
+  static const GeoPoint tp(Angle::Degrees(10.726111111111111),
+                           Angle::Degrees(50.6322));
 
   static NMEAInfo i;
   i.clock = fixed(1);
@@ -138,8 +138,8 @@ Run(IGCWriter &writer)
   i.date_time_utc.second += 5;
   writer.LogFRecord(i.date_time_utc, satellites);
 
-  i.location = GeoPoint(Angle::Degrees(fixed(-7.7061111111111114)),
-                        Angle::Degrees(fixed(-51.051944444444445)));
+  i.location = GeoPoint(Angle::Degrees(-7.7061111111111114),
+                        Angle::Degrees(-51.051944444444445));
   writer.LogPoint(i);
 
   writer.Flush();

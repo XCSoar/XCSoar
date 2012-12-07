@@ -54,10 +54,10 @@ public:
 
 static void
 AddSpiralWaypoints(Waypoints &waypoints,
-                   const GeoPoint &center = GeoPoint(Angle::Degrees(fixed(51.4)),
-                                                     Angle::Degrees(fixed(7.85))),
-                   Angle angle_start = Angle::Degrees(fixed(0)),
-                   Angle angle_step = Angle::Degrees(fixed(15)),
+                   const GeoPoint &center = GeoPoint(Angle::Degrees(51.4),
+                                                     Angle::Degrees(7.85)),
+                   Angle angle_start = Angle::Degrees(0),
+                   Angle angle_step = Angle::Degrees(15),
                    fixed distance_start = fixed(0),
                    fixed distance_step = fixed(1000),
                    fixed distance_max = fixed(150000))
@@ -203,9 +203,9 @@ static void
 TestGetNearest(const Waypoints &waypoints, const GeoPoint &center)
 {
   const Waypoint *waypoint;
-  GeoPoint near = GeoVector(fixed(250), Angle::Degrees(fixed(15))).EndPoint(center);
-  GeoPoint far = GeoVector(fixed(750), Angle::Degrees(fixed(15))).EndPoint(center);
-  GeoPoint further = GeoVector(fixed(4200), Angle::Degrees(fixed(48))).EndPoint(center);
+  GeoPoint near = GeoVector(fixed(250), Angle::Degrees(15)).EndPoint(center);
+  GeoPoint far = GeoVector(fixed(750), Angle::Degrees(15)).EndPoint(center);
+  GeoPoint further = GeoVector(fixed(4200), Angle::Degrees(48)).EndPoint(center);
 
   ok1((waypoint = waypoints.GetNearest(center, fixed(1))) != NULL);
   ok1(waypoint->original_id == 0);
@@ -310,7 +310,7 @@ main(int argc, char** argv)
   plan_tests(52);
 
   Waypoints waypoints;
-  GeoPoint center(Angle::Degrees(fixed(51.4)), Angle::Degrees(fixed(7.85)));
+  GeoPoint center(Angle::Degrees(51.4), Angle::Degrees(7.85));
 
   // AddSpiralWaypoints creates 151 waypoints from
   // 0km to 150km distance in 1km steps

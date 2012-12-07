@@ -68,10 +68,10 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
   {
     // local scope, see what happens when we go out of scope
-    GeoPoint p_start(Angle::Degrees(fixed(-0.3)), Angle::Degrees(fixed(0.0)));
+    GeoPoint p_start(Angle::Degrees(-0.3), Angle::Degrees(0.0));
     p_start += map.GetMapCenter();
 
-    GeoPoint p_dest(Angle::Degrees(fixed(0.8)), Angle::Degrees(fixed(-0.7)));
+    GeoPoint p_dest(Angle::Degrees(0.8), Angle::Degrees(-0.7));
     p_dest += map.GetMapCenter();
 
     AGeoPoint loc_start(p_start, RoughAltitude(map.GetHeight(p_start) + 100));
@@ -124,7 +124,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     }
 
     // try the solver
-    SpeedVector wind(Angle::Degrees(fixed(0)), fixed(0.0));
+    SpeedVector wind(Angle::Degrees(0), fixed(0));
     GlidePolar polar(fixed(1));
 
     GlideSettings settings;
@@ -137,7 +137,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     bool sol = false;
     for (int i = 0; i < NUM_SOL; i++) {
-      loc_end.latitude += Angle::Degrees(fixed(0.1));
+      loc_end.latitude += Angle::Degrees(0.1);
       loc_end.altitude = map.GetHeight(loc_end) + 100;
       route.Synchronise(airspaces, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {

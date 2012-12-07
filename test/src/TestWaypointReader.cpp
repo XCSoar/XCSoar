@@ -440,14 +440,14 @@ CreateOriginalWaypoints()
   GeoPoint loc;
 
   // Bergneustadt
-  loc.latitude = Angle::Degrees(fixed(51.051944444444445));
-  loc.longitude = Angle::Degrees(fixed(7.7061111111111114));
+  loc.latitude = Angle::Degrees(51.051944444444445);
+  loc.longitude = Angle::Degrees(7.7061111111111114);
 
   Waypoint wp(loc);
   wp.elevation = fixed(488);
   wp.name = _T("Bergneustadt");
   wp.comment = _T("Rabbit holes, 20\" ditch south end of rwy");
-  wp.runway.SetDirection(Angle::Degrees(fixed(40)));
+  wp.runway.SetDirection(Angle::Degrees(40));
   wp.runway.SetLength(590);
 
   wp.type = Waypoint::Type::AIRFIELD;
@@ -496,7 +496,7 @@ CreateOriginalWaypoints()
   Waypoint wp4(loc);
   wp4.elevation = fixed(123);
   wp4.name = _T("Red Square");
-  wp4.runway.SetDirection(Angle::Degrees(fixed(90)));
+  wp4.runway.SetDirection(Angle::Degrees(90));
   wp4.runway.SetLength((unsigned)Units::ToSysUnit(fixed(0.01), Unit::STATUTE_MILES));
 
   wp4.type = Waypoint::Type::OUTLANDING;

@@ -62,14 +62,14 @@ ParseGeopoint(const char *line, GeoPoint &location)
   if (line == endptr)
     return false;
 
-  location.latitude = Angle::Degrees(fixed(value));
+  location.latitude = Angle::Degrees(value);
   line = endptr;
 
   value = strtod(line, &endptr);
   if (line == endptr)
     return false;
 
-  location.longitude = Angle::Degrees(fixed(value));
+  location.longitude = Angle::Degrees(value);
 
   return true;
 }

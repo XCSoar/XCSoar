@@ -28,10 +28,10 @@ Copyright_License {
 int
 main(gcc_unused int argc, gcc_unused char **argv)
 {
-  const GeoPoint a(Angle::Degrees(fixed(7.70722)),
-                   Angle::Degrees(fixed(51.052)));
-  const GeoPoint b(Angle::Degrees(fixed(11.5228)),
-                   Angle::Degrees(fixed(50.3972)));
+  const GeoPoint a(Angle::Degrees(7.70722),
+                   Angle::Degrees(51.052));
+  const GeoPoint b(Angle::Degrees(11.5228),
+                   Angle::Degrees(50.3972));
 
   GeoPoint buffer[FAI_TRIANGLE_SECTOR_MAX];
 

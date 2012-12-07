@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   plan_tests(66);
 
   // test constructor
-  GeoPoint p1(Angle::Degrees(fixed(345.32)), Angle::Degrees(fixed(-6.332)));
+  GeoPoint p1(Angle::Degrees(345.32), Angle::Degrees(-6.332));
   ok1(p1.IsValid());
   ok1(equals(p1, -6.332, 345.32));
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   ok1(equals(p1, -6.332, -14.68));
 
   // test parametric()
-  GeoPoint p2(Angle::Degrees(fixed(2)), Angle::Degrees(fixed(1)));
+  GeoPoint p2(Angle::Degrees(2), Angle::Degrees(1));
   GeoPoint p3 = p1.Parametric(p2, fixed(5));
   ok1(p2.IsValid());
   ok1(p3.IsValid());
@@ -148,18 +148,18 @@ int main(int argc, char **argv)
   // Tests moved here from test_fixed.cpp
   GeoPoint l1(Angle::Zero(), Angle::Zero());
   ok1(l1.IsValid());
-  GeoPoint l2(Angle::Degrees(fixed(-0.3)), Angle::Degrees(fixed(1.0)));
+  GeoPoint l2(Angle::Degrees(-0.3), Angle::Degrees(1.0));
   ok1(l2.IsValid());
-  GeoPoint l3(Angle::Degrees(fixed(0.00001)), Angle::Zero());
+  GeoPoint l3(Angle::Degrees(0.00001), Angle::Zero());
   ok1(l3.IsValid());
-  GeoPoint l4(Angle::Degrees(fixed(10)), Angle::Zero());
+  GeoPoint l4(Angle::Degrees(10), Angle::Zero());
   ok1(l4.IsValid());
   l4.SetInvalid();
   ok1(!l4.IsValid());
 
   bool find_lat_lon_okay = true;
   for (Angle bearing = Angle::Zero(); bearing < Angle::FullCircle();
-      bearing += Angle::Degrees(fixed(5))) {
+      bearing += Angle::Degrees(5)) {
     GeoPoint p_test = FindLatitudeLongitude(p1, bearing, fixed(50000));
     find_lat_lon_okay = equals(p_test.Distance(p1), 50000) && find_lat_lon_okay;
   }

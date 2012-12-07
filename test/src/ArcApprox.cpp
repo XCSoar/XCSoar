@@ -53,7 +53,7 @@ AppendArc(std::vector<GeoPoint> &points, GeoPoint center,
 static void
 TestApproximation(fixed radius, fixed step)
 {
-  GeoPoint center(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(51)));
+  GeoPoint center(Angle::Degrees(7), Angle::Degrees(51));
 
   std::vector<GeoPoint> points;
   AppendArc(points, center, radius, step);

@@ -54,8 +54,8 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
   wp.elevation = fixed(0.5);
   waypoints.Append(wp);
 
-  wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed(0.8)),
-                                 Angle::Degrees(fixed(0.5))));
+  wp = waypoints.Create(GeoPoint(Angle::Degrees(0.8),
+                                 Angle::Degrees(0.5)));
   wp.name = _T("Unk");
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed(0.25);
@@ -68,7 +68,7 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
   waypoints.Append(wp);
 
   wp = waypoints.Create(GeoPoint(Angle::Zero(),
-                                 Angle::Degrees(fixed(0.23))));
+                                 Angle::Degrees(0.23)));
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed(0.25);
   waypoints.Append(wp);
@@ -77,8 +77,8 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
     int x = rand()%1200-100;
     int y = rand()%1200-100;
     double z = rand()% std::max(terrain_height,1);
-    wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed(x/1000.0)), 
-                                   Angle::Degrees(fixed(y/1000.0))));
+    wp = waypoints.Create(GeoPoint(Angle::Degrees(x / 1000.0),
+                                   Angle::Degrees(y / 1000.0)));
     wp.type = Waypoint::Type::NORMAL;
     wp.elevation = fixed(z);
     waypoints.Append(wp);

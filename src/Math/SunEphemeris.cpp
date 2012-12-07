@@ -108,7 +108,7 @@ SunEphemeris::GetHourAngle(Angle lat, Angle declin)
 Angle
 SunEphemeris::GetHourAngleTwilight(Angle lat, Angle declin)
 {
-  Angle df1 = Angle::Degrees(fixed(6));
+  Angle df1 = Angle::Degrees(6);
 
   // Correction: different sign at southern hemisphere
   if (negative(lat.Degrees()))
@@ -127,8 +127,8 @@ SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
   Angle g = Angle::Degrees(fixed(357.528) + fixed(.9856003) * d).AsBearing();
 
   //   Ecliptic longitude of the Sun
-  return (Angle::Degrees(fixed(1.915)) * g.sin() + L +
-          Angle::Degrees(fixed(.02)) * (g * fixed(2)).sin()).AsBearing();
+  return (Angle::Degrees(1.915) * g.sin() + L +
+          Angle::Degrees(.02) * (g * fixed(2)).sin()).AsBearing();
 }
 
 Angle
@@ -153,7 +153,7 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
   assert(time.Plausible());
 
   fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12) + time_zone;
-  Angle t = Angle::Degrees(fixed(15)) * T;
+  Angle t = Angle::Degrees(15) * T;
 
   return Angle::Radians(-atan2(dec.cos() * t.sin(),
                                Location.latitude.cos() * dec.sin() -

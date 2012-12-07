@@ -1057,8 +1057,8 @@ TestDeclare(const struct DeviceRegister &driver)
   plane.type = _T("Cirrus");
 
   Declaration declaration(logger_settings, plane, NULL);
-  const GeoPoint gp(Angle::Degrees(fixed(7.7061111111111114)),
-                    Angle::Degrees(fixed(51.051944444444445)));
+  const GeoPoint gp(Angle::Degrees(7.7061111111111114),
+                    Angle::Degrees(51.051944444444445));
   Waypoint wp(gp);
   wp.name = _T("Foo");
   wp.elevation = fixed(123);

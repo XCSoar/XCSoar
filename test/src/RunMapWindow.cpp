@@ -199,8 +199,8 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   if (settings_computer.poi.home_location_available)
     nmea_info.location = settings_computer.poi.home_location;
   else {
-    nmea_info.location.latitude = Angle::Degrees(fixed(51.2));
-    nmea_info.location.longitude = Angle::Degrees(fixed(7.7));
+    nmea_info.location.latitude = Angle::Degrees(51.2);
+    nmea_info.location.longitude = Angle::Degrees(7.7);
   }
 
   nmea_info.location_available.Update(nmea_info.clock);
