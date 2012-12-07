@@ -32,7 +32,7 @@ TerrainInfo::Clear()
   terrain_base_valid = false;
 
   altitude_agl_valid = false;
-  altitude_agl = fixed_zero;
+  altitude_agl = fixed(0);
 }
 
 void

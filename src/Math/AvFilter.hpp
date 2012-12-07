@@ -67,7 +67,7 @@ public:
   fixed Average() const {
     assert(!x.empty());
 
-    fixed y = fixed_zero;
+    fixed y = fixed(0);
     for (unsigned i = 0; i < x.size(); i++)
       y += x[i];
 

@@ -39,7 +39,7 @@
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskBehaviour ordered_task_behaviour;
-static GlidePolar glide_polar(fixed_zero);
+static GlidePolar glide_polar(fixed(0));
 
 static GeoPoint
 MakeGeoPoint(double longitude, double latitude)
@@ -166,7 +166,7 @@ CheckTotal(const AircraftState &aircraft, const TaskStats &stats,
   ok1(equals(solution_remaining.height_climb,
              positive(glide_polar.GetMC())
              ? alt_required_at_aircraft - aircraft.altitude
-             : fixed_zero));
+             : fixed(0)));
 }
 
 static void
@@ -436,13 +436,13 @@ int main(int argc, char **argv)
 
   TestAll();
 
-  glide_polar.SetMC(fixed_one);
+  glide_polar.SetMC(fixed(1));
   TestAll();
 
-  glide_polar.SetMC(fixed_two);
+  glide_polar.SetMC(fixed(2));
   TestAll();
 
-  glide_polar.SetMC(fixed_four);
+  glide_polar.SetMC(fixed(4));
   TestAll();
 
   return exit_status();

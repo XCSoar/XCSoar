@@ -44,15 +44,15 @@ static inline fixed
 EarthDistance(const fixed a)
 {
   if (!positive(a))
-    return fixed_zero;
+    return fixed(0);
 
 #ifdef FIXED_MATH
   // acos(1-x) = 2*asin(sqrt(x/2))
   // acos(1-2*x) = 2*asin(sqrt(x))
-  //    = 2*atan2(sqrt(x), sqrt(fixed_one-x));
+  //    = 2*atan2(sqrt(x), sqrt(fixed(1)-x));
   return Double(EarthASin(sqrt(a) / (1 << fixed::accurate_cordic_shift)));
 #else
-  return acos(fixed_one - Double(a));
+  return acos(fixed(1) - Double(a));
 #endif
 }
 
@@ -68,7 +68,7 @@ IntermediatePoint(const GeoPoint &loc1, const GeoPoint &loc2, fixed dthis,
   if (!positive(dtotal))
     return loc1;
 
-  assert(dthis <= dtotal && dthis >= fixed_zero);
+  assert(dthis <= dtotal && dthis >= fixed(0));
 
   const fixed A = sin(dtotal - dthis);
   const fixed B = sin(dthis);
@@ -160,7 +160,7 @@ DistanceBearingS(const GeoPoint &loc1, const GeoPoint &loc2,
     const fixed y = sin_dlon * cos_lat2;
     const fixed x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
 
-    *bearing = (x == fixed_zero && y == fixed_zero)
+    *bearing = (x == fixed(0) && y == fixed(0))
       ? Angle::Zero()
       : Angle::Radians(atan2(y, x)).AsBearing();
   }
@@ -227,14 +227,14 @@ ProjectedDistance(const GeoPoint &loc1, const GeoPoint &loc2,
   if (!positive(dist_AD.Native()))
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
-    return fixed_zero;
+    return fixed(0);
 
   Angle dist_AB, crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
   if (!positive(dist_AB.Native()))
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
-    return fixed_zero;
+    return fixed(0);
 
   // The "along track distance", along_track_distance, the distance from A along the
   // course towards B to the point abeam D

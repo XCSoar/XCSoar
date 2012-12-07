@@ -42,7 +42,7 @@ class GeoVectorMemento
 public:
   /** Constructor, initialises to trigger update on first call. */
   GeoVectorMemento()
-    :value(-fixed_one) {}
+    :value(fixed(-1)) {}
 
   /**
    * Returns a GeoVector object from the origin to destination, 

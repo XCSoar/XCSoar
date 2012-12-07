@@ -44,7 +44,7 @@ class StateClock {
 
 public:
   void Clear() {
-    value = fixed_zero;
+    value = fixed(0);
   }
 
   bool IsDefined() const {
@@ -76,7 +76,7 @@ public:
 
     value -= LimitDelta(delta);
     if (negative(value))
-      value = fixed_zero;
+      value = fixed(0);
   }
 
   bool operator>=(fixed other) const {

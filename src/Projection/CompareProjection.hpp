@@ -53,7 +53,7 @@ public:
   /**
    * Creates a "cleared" object, so that comparisons are always false.
    */
-  CompareProjection():max_delta(fixed_minus_one) {}
+  CompareProjection():max_delta(fixed(-1)) {}
 
   explicit CompareProjection(const WindowProjection &projection);
 
@@ -62,7 +62,7 @@ public:
    * to Invalidate a cache.
    */
   void Clear() {
-    max_delta = fixed_minus_one;
+    max_delta = fixed(-1);
   }
 
   bool Compare(const CompareProjection &other) const;

@@ -44,8 +44,8 @@ Simulator::Init(NMEAInfo &basic)
 
   basic.location = GeoPoint::Zero();
   basic.track = Angle::Zero();
-  basic.ground_speed = fixed_zero;
-  basic.gps_altitude = fixed_zero;
+  basic.ground_speed = fixed(0);
+  basic.gps_altitude = fixed(0);
   basic.date_available = true;
 }
 
@@ -117,7 +117,7 @@ Simulator::Touch(NMEAInfo &basic)
   basic.gps_altitude_available.Update(basic.clock);
 
   basic.time_available.Update(basic.clock);
-  basic.time += fixed_one;
+  basic.time += fixed(1);
   basic.date_time_utc = basic.date_time_utc + 1;
 }
 

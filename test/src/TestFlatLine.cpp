@@ -29,9 +29,9 @@ int main(int argc, char **argv)
 {
   plan_tests(39);
 
-  FlatPoint p1(fixed_one, fixed_one);
-  FlatPoint p2(fixed_one, fixed_two);
-  FlatPoint p3(fixed(3), fixed_ten);
+  FlatPoint p1(fixed(1), fixed(1));
+  FlatPoint p2(fixed(1), fixed(2));
+  FlatPoint p3(fixed(3), fixed(10));
 
   FlatLine l1(p1, p2); // 0, 1
   FlatLine l2(p1, p3); // 2, 9
@@ -89,14 +89,14 @@ int main(int argc, char **argv)
   ok1(equals(i2.y, -5.829411));
 
   // test intersect_circle()
-  FlatPoint c(fixed_one, fixed(1.5));
+  FlatPoint c(fixed(1), fixed(1.5));
   ok1(l1.intersect_circle(fixed(0.25), c, i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 1.75));
   ok1(equals(i2.x, 1));
   ok1(equals(i2.y, 1.25));
 
-  ok1(l1.intersect_circle(fixed_one, c, i1, i2));
+  ok1(l1.intersect_circle(fixed(1), c, i1, i2));
   ok1(equals(i1.x, 1));
   ok1(equals(i1.y, 2.5));
   ok1(equals(i2.x, 1));

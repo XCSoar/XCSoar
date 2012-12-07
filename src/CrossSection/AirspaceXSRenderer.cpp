@@ -142,7 +142,7 @@ public:
     // Calculate top and bottom coordinate
     rcd.top = chart.ScreenY(as.GetTopAltitude(state));
     if (as.IsBaseTerrain())
-      rcd.bottom = chart.ScreenY(fixed_zero);
+      rcd.bottom = chart.ScreenY(fixed(0));
     else
       rcd.bottom = chart.ScreenY(as.GetBaseAltitude(state));
 

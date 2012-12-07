@@ -69,12 +69,12 @@ CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 
   const fixed nav_altitude = gps_info.NavAltitudeAvailable()
     ? gps_info.nav_altitude
-    : fixed_zero;
-  fixed hmin = max(fixed_zero, nav_altitude - fixed(3300));
+    : fixed(0);
+  fixed hmin = max(fixed(0), nav_altitude - fixed(3300));
   fixed hmax = max(fixed(3300), nav_altitude + fixed(1000));
 
   chart.ResetScale();
-  chart.ScaleXFromValue(fixed_zero);
+  chart.ScaleXFromValue(fixed(0));
   chart.ScaleXFromValue(vec.distance);
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
@@ -116,7 +116,7 @@ CrossSectionRenderer::PaintGlide(ChartRenderer &chart) const
 {
   if (gps_info.ground_speed_available && gps_info.ground_speed > fixed(10)) {
     fixed t = vec.distance / gps_info.ground_speed;
-    chart.DrawLine(fixed_zero, gps_info.nav_altitude, vec.distance,
+    chart.DrawLine(fixed(0), gps_info.nav_altitude, vec.distance,
                    gps_info.nav_altitude + calculated_info.average * t,
                    ChartLook::STYLE_BLUETHIN);
   }
@@ -133,7 +133,7 @@ CrossSectionRenderer::PaintAircraft(Canvas &canvas, const ChartRenderer &chart,
   canvas.SelectNullPen();
 
   RasterPoint line[4];
-  line[0] = chart.ToScreen(fixed_zero, gps_info.nav_altitude);
+  line[0] = chart.ToScreen(fixed(0), gps_info.nav_altitude);
   line[1].x = rc.left;
   line[1].y = line[0].y;
   line[2].x = line[1].x;
@@ -148,9 +148,9 @@ CrossSectionRenderer::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 {
   canvas.SetTextColor(look.text_color);
 
-  chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed_zero,
+  chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed(0),
                   look.grid_pen, fixed(5), true);
-  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)), fixed_zero,
+  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)), fixed(0),
                   look.grid_pen, fixed(1000), true);
 
   chart.DrawXLabel(_T("D"), Units::GetDistanceName());

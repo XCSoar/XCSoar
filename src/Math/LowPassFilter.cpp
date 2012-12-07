@@ -34,5 +34,5 @@ Copyright_License {
 fixed
 LowPassFilter(fixed y_last, fixed x_in, fixed fact)
 {
-  return (fixed_one - fact) * y_last + (fact) * x_in;
+  return (fixed(1) - fact) * y_last + (fact) * x_in;
 }

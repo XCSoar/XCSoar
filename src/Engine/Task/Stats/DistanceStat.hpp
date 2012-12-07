@@ -49,9 +49,9 @@ protected:
 
 public:
   void Reset() {
-    distance = fixed_minus_one;
-    speed = fixed_zero;
-    speed_incremental = fixed_zero;
+    distance = fixed(-1);
+    speed = fixed(0);
+    speed_incremental = fixed(0);
   }
 
   bool IsDefined() const {

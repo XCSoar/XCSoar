@@ -39,7 +39,7 @@ test_times()
   dt.second = 12;
 
   SunEphemeris::Result sun =
-      SunEphemeris::CalcSunTimes(location, dt, fixed_two);
+      SunEphemeris::CalcSunTimes(location, dt, fixed(2));
 
   ok1(between(sun.morning_twilight, 6.88, 6.9));
   ok1(between(sun.time_of_noon, 13.3, 13.4));
@@ -118,7 +118,7 @@ test_azimuth()
     dt.hour = hour;
 
     SunEphemeris::Result sun =
-        SunEphemeris::CalcSunTimes(location, dt, fixed_zero);
+        SunEphemeris::CalcSunTimes(location, dt, fixed(0));
 
     ok1(equals(sun.azimuth, test_data1[hour]));
   }
@@ -129,7 +129,7 @@ test_azimuth()
     dt.hour = hour;
 
     SunEphemeris::Result sun =
-        SunEphemeris::CalcSunTimes(location, dt, fixed_two);
+        SunEphemeris::CalcSunTimes(location, dt, fixed(2));
 
     ok1(equals(sun.azimuth, test_data2[hour]));
   }

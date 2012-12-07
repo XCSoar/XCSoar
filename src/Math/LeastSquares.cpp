@@ -90,19 +90,19 @@ void
 LeastSquares::Reset()
 {
   sum_n = 0;
-  sum_xi = fixed_zero;
-  sum_yi = fixed_zero;
-  sum_xi_2 = fixed_zero;
-  sum_xi_yi = fixed_zero;
-  max_error = fixed_zero;
-  sum_error = fixed_zero;
-  rms_error = fixed_zero;
-  sum_weights = fixed_zero;
-  y_max = fixed_zero;
-  y_min = fixed_zero;
-  x_min = fixed_zero;
-  x_max = fixed_zero;
-  y_ave = fixed_zero;
+  sum_xi = fixed(0);
+  sum_yi = fixed(0);
+  sum_xi_2 = fixed(0);
+  sum_xi_yi = fixed(0);
+  max_error = fixed(0);
+  sum_error = fixed(0);
+  rms_error = fixed(0);
+  sum_weights = fixed(0);
+  y_max = fixed(0);
+  y_min = fixed(0);
+  x_min = fixed(0);
+  x_max = fixed(0);
+  y_ave = fixed(0);
 }
 
 /**
@@ -116,7 +116,7 @@ LeastSquares::LeastSquaresUpdate()
   if (positive(fabs(denom))) {
     m = (sum_weights * sum_xi_yi - sum_xi * sum_yi) / denom;
   } else {
-    m = fixed_zero;
+    m = fixed(0);
   }
   b = (sum_yi - m * sum_xi) / sum_weights;
 

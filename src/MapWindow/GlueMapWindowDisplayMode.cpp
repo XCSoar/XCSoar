@@ -244,7 +244,7 @@ GlueMapWindow::SetLocationLazy(const GeoPoint location)
     visible_projection.GetGeoLocation().Distance(location);
   const fixed distance_pixels =
     visible_projection.DistanceMetersToPixels(distance_meters);
-  if (distance_pixels > fixed_half)
+  if (distance_pixels > fixed(0.5))
     SetLocation(location);
 }
 
@@ -271,8 +271,8 @@ GlueMapWindow::UpdateProjection()
     RasterPoint offset{0, 0};
     if (settings_map.glider_screen_position != 50 &&
         settings_map.map_shift_bias != MapShiftBias::NONE) {
-      fixed x = fixed_zero;
-      fixed y = fixed_zero;
+      fixed x = fixed(0);
+      fixed y = fixed(0);
       if (settings_map.map_shift_bias == MapShiftBias::TRACK) {
         if (basic.track_available &&
             basic.ground_speed_available &&

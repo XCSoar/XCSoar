@@ -71,7 +71,7 @@ struct SpeedVector {
    * Returns the null vector.
    */
   static constexpr SpeedVector Zero() {
-    return SpeedVector(Angle::Zero(), fixed_zero);
+    return SpeedVector(Angle::Zero(), fixed(0));
   }
 
   /**

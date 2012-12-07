@@ -101,7 +101,7 @@ thermal_recency_fn(unsigned x)
 #else
     ? THERMALRECENCY[x]
 #endif
-    : fixed_zero;
+    : fixed(0);
 }
 
 // find inverse sqrt of x scaled to NORMALISE_BITS^2 by using
@@ -245,8 +245,8 @@ void mag_rmag(fixed x,
   x = fabs(x);
   y = fabs(y);
   if (!positive(x) && !positive(y)) {
-    dist = fixed_zero;
-    inv_dist = fixed_zero;
+    dist = fixed(0);
+    inv_dist = fixed(0);
     return;
   }
 #ifdef FIXED_MATH

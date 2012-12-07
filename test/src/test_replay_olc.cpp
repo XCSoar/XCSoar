@@ -53,10 +53,10 @@ inline void load_score_file(std::ifstream& fscore,
   fscore >> tmp; score.score = (fixed)tmp;
   fscore >> tmp; score.distance = (fixed)tmp;
   fscore >> tmp; fixed speed(tmp);
-  if (speed>fixed_zero) {
+  if (speed>fixed(0)) {
     score.time = fixed(3600)*score.distance/speed;
   } else {
-    score.time = fixed_zero;
+    score.time = fixed(0);
   }
   score.distance *= fixed(1000);
 }
@@ -115,8 +115,8 @@ protected:
     state.ground_speed = speed;
     state.track = bearing;
     state.altitude = alt;
-    state.netto_vario = fixed_zero;
-    state.vario = fixed_zero;
+    state.netto_vario = fixed(0);
+    state.vario = fixed(0);
     state.time = t;
     if (positive(t)) {
       started = true;
@@ -130,7 +130,7 @@ test_replay(const Contest olc_type,
 {
   std::ofstream f("results/res-sample.txt");
 
-  GlidePolar glide_polar(fixed_two);
+  GlidePolar glide_polar(fixed(2));
   AircraftState state_last;
 
   FileLineReaderA *reader = new FileLineReaderA(replay_file.c_str());
@@ -175,7 +175,7 @@ test_replay(const Contest olc_type,
   MoreData basic;
   basic.Reset();
 
-  while (sim.Update(basic, fixed_one) && !sim.started) {
+  while (sim.Update(basic, fixed(1)) && !sim.started) {
   }
   state_last = sim.state;
 
@@ -196,7 +196,7 @@ test_replay(const Contest olc_type,
 
   DerivedInfo calculated;
 
-  while (sim.Update(basic, fixed_one)) {
+  while (sim.Update(basic, fixed(1))) {
     if (sim.state.time>time_last) {
 
       n_samples++;

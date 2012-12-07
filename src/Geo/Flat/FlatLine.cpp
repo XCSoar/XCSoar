@@ -108,7 +108,7 @@ FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
     return false;
 
   det = sqrt(det);
-  const fixed inv_dr = fixed_one / dr;
+  const fixed inv_dr = fixed(1) / dr;
   i1.x = (D * _dy + sgn(_dy, _dx) * det) * inv_dr;
   i2.x = (D * _dy - sgn(_dy, _dx) * det) * inv_dr;
   i1.y = (-D * _dx + fabs(_dy) * det) * inv_dr;

@@ -28,7 +28,7 @@
 void
 AutopilotParameters::SetIdeal()
 {
-  bearing_noise = fixed_zero;
+  bearing_noise = fixed(0);
   turn_speed = fixed(90.0);
 }
 
@@ -80,7 +80,7 @@ TaskAutoPilot::Start(const TaskAccessor& task)
 
   // reset the heading
   heading = Angle::Zero();
-  heading_filter.Reset(fixed_zero);
+  heading_filter.Reset(fixed(0));
 
   acstate = Cruise;
 }
@@ -122,7 +122,7 @@ TaskAutoPilot::GetHeadingDeviation()
   fixed noise_mag = acstate == Climb
     ? Half(parms.bearing_noise)
     : parms.bearing_noise;
-  fixed r = (fixed_two * rand() / RAND_MAX) - fixed_one;
+  fixed r = (fixed(2) * rand() / RAND_MAX) - fixed(1);
   fixed deviation = fixed(heading_filter.Update(noise_mag * r));
   return Angle::Degrees(deviation).AsDelta();
 }
@@ -226,7 +226,7 @@ TaskAutoPilot::UpdateState(const TaskAccessor& task, AircraftState& state,
   case Climb: {
     state.true_airspeed = glide_polar.GetVMin();
     fixed d = parms.turn_speed * timestep;
-    if (d < fixed_360)
+    if (d < fixed(360))
       heading += Angle::Degrees(d);
 
     if (positive(parms.bearing_noise))

@@ -28,7 +28,7 @@
 #include "Task/Stats/TaskStats.hpp"
 #include "Predicate/AirspacePredicateAircraftInside.hpp"
 
-#define CRUISE_FILTER_FACT fixed_half
+#define CRUISE_FILTER_FACT fixed(0.5)
 
 AirspaceWarningManager::AirspaceWarningManager(const Airspaces &_airspaces,
                                                fixed prediction_time_glide,
@@ -180,7 +180,7 @@ public:
                                      AirspaceWarningManager &_warning_manager,
                                      const AirspaceWarning::State _warning_state,
                                      const fixed _max_time,
-                                     const fixed _max_alt = -fixed_one):
+                                     const fixed _max_alt = fixed(-1)):
     state(_state),
     perf(_perf),
     warning_manager(_warning_manager),

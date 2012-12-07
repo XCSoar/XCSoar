@@ -203,7 +203,7 @@ run_flight(TestFlightComponents components, TaskManager &task_manager,
       const AircraftState state_last = aircraft.GetLastState();
       task_manager.Update(state, state_last);
       task_manager.UpdateIdle(state);
-      task_manager.UpdateAutoMC(state, fixed_zero);
+      task_manager.UpdateAutoMC(state, fixed(0));
     }
 
   } while (autopilot.UpdateAutopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
@@ -251,7 +251,7 @@ test_flight(TestFlightComponents components, int test_num, int n_wind,
 {
   // multipurpose flight test
 
-  GlidePolar glide_polar(fixed_two);
+  GlidePolar glide_polar(fixed(2));
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 

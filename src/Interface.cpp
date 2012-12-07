@@ -176,9 +176,9 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
   // Repeated adjustment of MC with the +/- UI elements could result in
   // an MC which is slightly larger than 0. Since the calculations
   // fundamentally change depending on  "MC == 0" or "MC <> 0" force
-  // a fixed_zero for small MC values.
+  // a fixed(0) for small MC values.
   if (mc < fixed(0.01))
-    mc = fixed_zero;
+    mc = fixed(0);
 
   /* update interface settings */
 
@@ -225,7 +225,7 @@ ActionInterface::OffsetManualMacCready(fixed offset, bool to_devices)
   const fixed old_mc = polar.GetMC();
   fixed mc = old_mc + offset;
   if (negative(mc))
-    mc = fixed_zero;
+    mc = fixed(0);
   else if (mc > fixed(5))
     mc = fixed(5);
 

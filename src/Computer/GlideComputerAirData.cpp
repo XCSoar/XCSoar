@@ -132,7 +132,7 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
                                  const ComputerSettings &settings_computer)
 {
   fixed g_load = basic.acceleration.available ?
-                 basic.acceleration.g_load : fixed_one;
+                 basic.acceleration.g_load : fixed(1);
 
   vario.sink_rate =
     flight.flying && basic.airspeed_available &&
@@ -140,7 +140,7 @@ GlideComputerAirData::NettoVario(const NMEAInfo &basic,
     ? - settings_computer.polar.glide_polar_task.SinkRate(basic.indicated_airspeed,
                                                           g_load)
     /* the glider sink rate is useless when not flying */
-    : fixed_zero;
+    : fixed(0);
 }
 
 inline void
@@ -153,7 +153,7 @@ GlideComputerAirData::AverageClimbRate(const NMEAInfo &basic,
       !calculated.circling &&
       (!basic.acceleration.available ||
        !basic.acceleration.real ||
-       fabs(basic.acceleration.g_load - fixed_one) <= fixed(0.25))) {
+       fabs(basic.acceleration.g_load - fixed(1)) <= fixed(0.25))) {
     // TODO: Check this is correct for TAS/IAS
     fixed ias_to_tas = basic.indicated_airspeed / basic.true_airspeed;
     fixed w_tas = basic.total_energy_vario * ias_to_tas;
@@ -207,7 +207,7 @@ GlideComputerAirData::CruiseGR(const MoreData &basic, DerivedInfo &calculated)
       calculated.cruise_gr =
           UpdateGR(calculated.cruise_gr, DistanceFlown,
                    calculated.cruise_start_altitude - basic.nav_altitude,
-                   fixed_half);
+                   fixed(0.5));
     }
   }
 }
@@ -221,9 +221,9 @@ GlideComputerAirData::TerrainHeight(const MoreData &basic,
 {
   if (!basic.location_available || terrain == NULL) {
     calculated.terrain_valid = false;
-    calculated.terrain_altitude = fixed_zero;
+    calculated.terrain_altitude = fixed(0);
     calculated.altitude_agl_valid = false;
-    calculated.altitude_agl = fixed_zero;
+    calculated.altitude_agl = fixed(0);
     return;
   }
 
@@ -234,9 +234,9 @@ GlideComputerAirData::TerrainHeight(const MoreData &basic,
       Alt = 0;
     else {
       calculated.terrain_valid = false;
-      calculated.terrain_altitude = fixed_zero;
+      calculated.terrain_altitude = fixed(0);
       calculated.altitude_agl_valid = false;
-      calculated.altitude_agl = fixed_zero;
+      calculated.altitude_agl = fixed(0);
       return;
     }
   }
@@ -330,7 +330,7 @@ GlideComputerAirData::ThermalSources(const MoreData &basic,
   }
 
   GeoPoint ground_location;
-  fixed ground_altitude = fixed_minus_one;
+  fixed ground_altitude = fixed(-1);
   EstimateThermalBase(terrain, thermal_locator.estimate_location,
                       basic.nav_altitude,
                       calculated.last_thermal.lift_rate,
@@ -418,7 +418,7 @@ GlideComputerAirData::NextLegEqThermal(const NMEAInfo &basic,
       !vector_remaining.IsValid() ||
       !calculated.wind_available) {
     // Assign a negative value to invalidate the result
-    calculated.next_leg_eq_thermal = fixed_minus_one;
+    calculated.next_leg_eq_thermal = fixed(-1);
     return;
   }
 

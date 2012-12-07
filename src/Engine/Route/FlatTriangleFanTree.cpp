@@ -210,7 +210,7 @@ FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint &o,
   }
 
   for (const auto &x : vs) {
-    const FlatGeoPoint av = (o + x) * fixed_half;
+    const FlatGeoPoint av = (o + x) * fixed(0.5);
     const GeoPoint p = parms.task_proj.Unproject(av);
     short h = parms.terrain->GetHeight(p);
 

@@ -38,7 +38,7 @@ static constexpr Angle max_fai_angle = Angle::Degrees(114);
 FAITrianglePointValidator::FAITrianglePointValidator(
     OrderedTask *ordered_task, const unsigned ordered_task_index)
   :task(ordered_task), t_index(ordered_task_index), t_size(0),
-   leg1(fixed_zero), leg2(fixed_zero), leg3(fixed_zero),
+   leg1(fixed(0)), leg2(fixed(0)), leg3(fixed(0)),
    fai_triangle_point_invalid(false)
 {
   PrepareFAITest(ordered_task, ordered_task_index);
@@ -177,13 +177,13 @@ FAITrianglePointValidator::PrepareFAITest(OrderedTask *ordered_task,
   if (ordered_task) {
     t_size = task->TaskSize();
     leg1 = t_size > 1
-      ? task->GetTaskPoint(1).GetVectorPlanned().distance : fixed_zero;
+      ? task->GetTaskPoint(1).GetVectorPlanned().distance : fixed(0);
     leg2 = t_size > 2
-      ? task->GetTaskPoint(2).GetVectorPlanned().distance : fixed_zero;
+      ? task->GetTaskPoint(2).GetVectorPlanned().distance : fixed(0);
     leg3 = t_size > 3
-      ? task->GetTaskPoint(3).GetVectorPlanned().distance : fixed_zero;
+      ? task->GetTaskPoint(3).GetVectorPlanned().distance : fixed(0);
   } else {
-    leg1 = leg2 = leg3 = fixed_zero;
+    leg1 = leg2 = leg3 = fixed(0);
     t_size = 0;
     t_index = 0;
   }

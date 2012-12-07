@@ -33,10 +33,10 @@ AirspaceAircraftPerformance::SolutionGeneral(const fixed &distance,
                                               const fixed &dh) const
 {
   const fixed t_cruise =
-      positive(distance) ? distance / GetCruiseSpeed() : fixed_zero;
+      positive(distance) ? distance / GetCruiseSpeed() : fixed(0);
   const fixed h_descent = dh - t_cruise * GetCruiseDescent();
 
-  if (fabs(h_descent) < fixed_one)
+  if (fabs(h_descent) < fixed(1))
     return t_cruise;
 
   if (positive(h_descent)) {
@@ -87,7 +87,7 @@ public:
                                     const fixed &alt,
                                     const fixed &h_min,
                                     const fixed &h_max)
-    :ZeroFinder(h_min, h_max, fixed_one),
+    :ZeroFinder(h_min, h_max, fixed(1)),
      m_perf(aap), m_distance(distance), m_alt(alt),
      m_h_min(h_min) {}
 
@@ -109,7 +109,7 @@ public:
       h = h_this;
       return t;
     }
-    return -fixed_one;
+    return fixed(-1);
   }
 
 private:
@@ -127,7 +127,7 @@ AirspaceAircraftPerformance::SolutionVertical(const fixed &distance,
                                                fixed &intercept_alt) const
 {
   if (!SolutionExists(distance, altitude, base, top))
-    return -fixed_one;
+    return fixed(-1);
 
   if (top <= base) {
     // unique solution
@@ -136,7 +136,7 @@ AirspaceAircraftPerformance::SolutionVertical(const fixed &distance,
       intercept_alt = top;
       return t_this;
     }
-    return -fixed_one;
+    return fixed(-1);
   }
 
   AirspaceAircraftInterceptVertical aaiv(*this, distance, altitude, base, top);
@@ -165,7 +165,7 @@ public:
                                       const fixed &distance_min,
                                       const fixed &distance_max,
                                       const fixed &dh)
-    :ZeroFinder(distance_min, distance_max, fixed_one),
+    :ZeroFinder(distance_min, distance_max, fixed(1)),
      m_perf(aap), m_d_min(distance_min), m_dh(dh) {}
 
   fixed f(const fixed distance) {
@@ -186,7 +186,7 @@ public:
       distance = distance_this;
       return t;
     }
-    return -fixed_one;
+    return fixed(-1);
   }
 
 private:
@@ -203,7 +203,7 @@ AirspaceAircraftPerformance::SolutionHorizontal(const fixed &distance_min,
                                                  fixed &intercept_distance) const
 {
   if (!SolutionExists(distance_max, altitude, h, h))
-    return -fixed_one;
+    return fixed(-1);
 
   const fixed dh = altitude - h;
 
@@ -214,7 +214,7 @@ AirspaceAircraftPerformance::SolutionHorizontal(const fixed &distance_min,
       intercept_distance = distance_max;
       return t_this;
     }
-    return -fixed_one;
+    return fixed(-1);
   }
   AirspaceAircraftInterceptHorizontal aaih(*this, distance_min, distance_max, dh);
   return aaih.solve(intercept_distance);
@@ -258,12 +258,12 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const GlidePola
       m_climb_rate = polar.GetMC();
     } else {
       m_cruise_descent = solution.height_glide / time_remaining;
-      m_climb_rate = fixed_zero;
+      m_climb_rate = fixed(0);
     }
   } else {
-    m_v = fixed_one;
-    m_cruise_descent = fixed_zero;
-    m_climb_rate = fixed_zero;
+    m_v = fixed(1);
+    m_cruise_descent = fixed(0);
+    m_climb_rate = fixed(0);
   }
   m_max_descent = polar.GetSBestLD();
 

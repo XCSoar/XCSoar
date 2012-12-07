@@ -39,7 +39,7 @@ class DeltaTime {
 
 public:
   void Reset() {
-    last_time = fixed_minus_one;
+    last_time = fixed(-1);
   }
 
   gcc_pure
@@ -67,7 +67,7 @@ public:
     if (!IsDefined()) {
       /* first call */
       last_time = current_time;
-      return fixed_zero;
+      return fixed(0);
     }
 
     if (current_time < last_time) {
@@ -75,21 +75,21 @@ public:
 
       const fixed delta = last_time - current_time;
       last_time = current_time;
-      return delta < warp_tolerance ? fixed_zero : fixed_minus_one;
+      return delta < warp_tolerance ? fixed(0) : fixed(-1);
     }
 
     const fixed delta = current_time - last_time;
     if (delta < min_delta)
       /* difference too small, don't update "last" time stamp to let
          small differences add up eventually */
-      return fixed_zero;
+      return fixed(0);
 
     last_time = current_time;
 
     if (delta > fixed(4 * 3600))
       /* after several hours without a signal, we can assume there was
          a time warp */
-      return fixed_minus_one;
+      return fixed(-1);
 
     return delta;
   }

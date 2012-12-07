@@ -44,7 +44,7 @@ class ClimbAverageCalculator
     }
 
     void Reset() {
-      time = fixed_minus_one;
+      time = fixed(-1);
     }
   };
 

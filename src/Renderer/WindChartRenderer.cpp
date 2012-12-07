@@ -46,7 +46,7 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   LeastSquares windstats_mag;
   ChartRenderer chart(chart_look, canvas, rc);
 
-  if (fs.altitude_ceiling.y_max - fs.altitude_ceiling.y_min <= fixed_ten) {
+  if (fs.altitude_ceiling.y_max - fs.altitude_ceiling.y_min <= fixed(10)) {
     chart.DrawNoData();
     return;
   }
@@ -62,15 +62,15 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
   }
 
   chart.ScaleXFromData(windstats_mag);
-  chart.ScaleXFromValue(fixed_zero);
-  chart.ScaleXFromValue(fixed_ten);
+  chart.ScaleXFromValue(fixed(0));
+  chart.ScaleXFromValue(fixed(10));
 
   chart.ScaleYFromData(windstats_mag);
 
-  chart.DrawXGrid(Units::ToSysSpeed(fixed(5)), fixed_zero,
+  chart.DrawXGrid(Units::ToSysSpeed(fixed(5)), fixed(0),
                   ChartLook::STYLE_THINDASHPAPER, fixed(5), true);
   chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                  fixed_zero,
+                  fixed(0),
                   ChartLook::STYLE_THINDASHPAPER, fixed(1000), true);
   chart.DrawLineGraph(windstats_mag, ChartLook::STYLE_MEDIUMBLACK);
 
@@ -86,8 +86,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
         fixed(fs.altitude_base.y_min);
 
     wind = wind_store.GetWind(nmea_info.time, h, found);
-    if (windstats_mag.x_max == fixed_zero)
-      windstats_mag.x_max = fixed_one; // prevent /0 problems
+    if (windstats_mag.x_max == fixed(0))
+      windstats_mag.x_max = fixed(1); // prevent /0 problems
     wind.x /= fixed(windstats_mag.x_max);
     wind.y /= fixed(windstats_mag.x_max);
     mag = wind.Magnitude();

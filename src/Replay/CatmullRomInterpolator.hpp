@@ -90,7 +90,7 @@ public:
     assert(Ready());
 
     if (!positive(p[2].time-p[1].time))
-      return GeoVector(fixed_zero, Angle::Zero());
+      return GeoVector(fixed(0), Angle::Zero());
 
     const Record r0 = Interpolate(_time - fixed(0.05));
     const Record r1 = Interpolate(_time + fixed(0.05));
@@ -120,8 +120,8 @@ public:
     const fixed u2 = u * u;
     const fixed u3 = u2 * u;
     const fixed c[4]= {-time * u3 + 2 * time * u2 - time * u,
-                       (fixed_two - time) * u3 + (time - fixed(3)) * u2 + fixed_one,
-                       (time - fixed_two) * u3 + (fixed(3) - 2 * time) * u2 + time * u,
+                       (fixed(2) - time) * u3 + (time - fixed(3)) * u2 + fixed(1),
+                       (time - fixed(2)) * u3 + (fixed(3) - 2 * time) * u2 + time * u,
                         time * u3 - time * u2};
 
     Record r;
@@ -159,7 +159,7 @@ public:
   {
     assert(Ready());
 
-    return max(fixed_zero, max(p[0].time, max(p[1].time, max(p[2].time, p[3].time))));
+    return max(fixed(0), max(p[0].time, max(p[1].time, max(p[2].time, p[3].time))));
   }
 
   bool
@@ -178,7 +178,7 @@ private:
     const fixed fraction = (time - p[1].time) / (p[2].time - p[1].time);
 
     if (limit_range)
-      return max(fixed_zero, min(fixed_one, fraction));
+      return max(fixed(0), min(fixed(1), fraction));
     else
       return fraction;
   }

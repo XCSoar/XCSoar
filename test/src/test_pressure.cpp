@@ -53,7 +53,7 @@ static bool
 test_qnh_to_static()
 {
   AtmosphericPressure pres = AtmosphericPressure::Standard();
-  fixed p0 = pres.QNHAltitudeToStaticPressure(fixed_zero).GetPascal();
+  fixed p0 = pres.QNHAltitudeToStaticPressure(fixed(0)).GetPascal();
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(p0));
   }

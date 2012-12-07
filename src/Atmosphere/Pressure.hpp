@@ -56,7 +56,7 @@ public:
    */
   static constexpr
   AtmosphericPressure Zero() {
-    return AtmosphericPressure(fixed_zero);
+    return AtmosphericPressure(fixed(0));
   }
 
   /**

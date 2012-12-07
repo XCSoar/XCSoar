@@ -51,12 +51,12 @@ private:
 
 public:
   static AirspaceInterceptSolution Invalid() {
-    return AirspaceInterceptSolution(fixed_minus_one, fixed_minus_one);
+    return AirspaceInterceptSolution(fixed(-1), fixed(-1));
   }
 
   void SetInvalid() {
-    distance = fixed_minus_one;
-    elapsed_time = fixed_minus_one;
+    distance = fixed(-1);
+    elapsed_time = fixed(-1);
   }
 
   /**

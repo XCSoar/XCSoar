@@ -160,7 +160,7 @@ PrintHelper::aatpoint_print(std::ostream& f,
           }
         }
       } else {
-        GeoPoint ga = seg.Parametric(fixed_zero);
+        GeoPoint ga = seg.Parametric(fixed(0));
         f << ga.longitude << " " << ga.latitude << "\n";
       }
       f << "\n";
@@ -201,7 +201,7 @@ PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f,
     GeoPoint loc = tp.GetBoundaryParametric(fixed(t));
     f << "     " << loc.longitude << " " << loc.latitude << "\n";
   }
-  GeoPoint loc = tp.GetBoundaryParametric(fixed_zero);
+  GeoPoint loc = tp.GetBoundaryParametric(fixed(0));
   f << "     " << loc.longitude << " " << loc.latitude << "\n";
   f << "\n";
 }

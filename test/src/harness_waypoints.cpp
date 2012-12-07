@@ -51,7 +51,7 @@ bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
                                  Angle::Degrees(1)));
   wp.name = _T("Hello");
   wp.type = Waypoint::Type::AIRFIELD;
-  wp.elevation = fixed_half;
+  wp.elevation = fixed(0.5);
   waypoints.Append(wp);
 
   wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed(0.8)),

@@ -43,7 +43,7 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Radius"), _("Radius of the OZ sector."),
            _T("%.1f %s"), _T("%.1f"),
-           fixed(0.1), fixed(100), fixed_one, true,
+           fixed(0.1), fixed(100), fixed(1), true,
            UnitGroup::DISTANCE, GetObject().GetRadius(),
            this);
 
@@ -60,7 +60,7 @@ SectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
     AddFloat(_("Inner radius"), _("Inner radius of the OZ sector."),
              _T("%.1f %s"), _T("%.1f"),
-             fixed(0.1), fixed(100), fixed_one, true,
+             fixed(0.1), fixed(100), fixed(1), true,
              UnitGroup::DISTANCE, annulus.GetInnerRadius(),
              this);
   }

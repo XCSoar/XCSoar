@@ -47,7 +47,7 @@ ThermalBandComputer::Compute(const MoreData &basic,
 
   tbi.working_band_height = basic.TE_altitude - h_safety;
   if (negative(tbi.working_band_height)) {
-    tbi.working_band_fraction = fixed_zero;
+    tbi.working_band_fraction = fixed(0);
     return;
   }
 
@@ -55,7 +55,7 @@ ThermalBandComputer::Compute(const MoreData &basic,
   if (positive(max_height))
     tbi.working_band_fraction = tbi.working_band_height / max_height;
   else
-    tbi.working_band_fraction = fixed_one;
+    tbi.working_band_fraction = fixed(1);
 
   tbi.working_band_ceiling = std::max(max_height + h_safety,
                                       basic.TE_altitude);
@@ -68,7 +68,7 @@ ThermalBandComputer::Compute(const MoreData &basic,
     // JMW TODO accuracy: Should really work out dt here,
     //           but i'm assuming constant time steps
 
-    if (tbi.max_thermal_height == fixed_zero)
+    if (tbi.max_thermal_height == fixed(0))
       tbi.max_thermal_height = tbi.working_band_height;
 
     // only do this if in thermal and have been climbing

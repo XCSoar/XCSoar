@@ -29,7 +29,7 @@ fixed
 AngleToGradient(const fixed d)
 {
   if (fabs(d)) {
-    return min(fixed(999), max(fixed(-999), fixed_one / d));
+    return min(fixed(999), max(fixed(-999), fixed(1) / d));
   } else {
     return fixed(999);
   }

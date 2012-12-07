@@ -47,7 +47,7 @@ is_zero(const fixed value, const int accuracy=ACCURACY)
 static inline bool
 is_one(const fixed value, const int accuracy=ACCURACY)
 {
-  return is_zero(value - fixed_one, accuracy);
+  return is_zero(value - fixed(1), accuracy);
 }
 
 static inline bool

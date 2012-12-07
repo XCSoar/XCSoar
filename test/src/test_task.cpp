@@ -34,7 +34,7 @@ int main(int argc, char** argv)
   #define NUM_TYPE_MANIPS 50
   plan_tests(NUM_TASKS+2+NUM_RANDOM+8+NUM_TYPE_MANIPS);
 
-  GlidePolar glide_polar(fixed_two);
+  GlidePolar glide_polar(fixed(2));
 
   TaskBehaviour task_behaviour;
   task_behaviour.SetDefaults();

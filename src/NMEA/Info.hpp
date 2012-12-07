@@ -448,7 +448,7 @@ struct NMEAInfo {
   BrokenDateTime GetDateTimeAt(fixed other_time) const;
 
   bool MovementDetected() const {
-    return ground_speed_available && ground_speed > fixed_two;
+    return ground_speed_available && ground_speed > fixed(2);
   }
 
   /**
@@ -583,7 +583,7 @@ struct NMEAInfo {
          ? std::make_pair(true, baro_altitude)
          : (gps_altitude_available
             ? std::make_pair(true, gps_altitude)
-            : std::make_pair(false, fixed_zero)));
+            : std::make_pair(false, fixed(0))));
   }
 
   /**

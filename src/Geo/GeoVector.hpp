@@ -69,7 +69,7 @@ struct GeoVector {
    */
   gcc_const
   static GeoVector Invalid() {
-    return GeoVector(fixed_minus_one);
+    return GeoVector(fixed(-1));
   }
 
   /**
@@ -105,7 +105,7 @@ struct GeoVector {
   }
 
   void SetInvalid() {
-    distance = fixed_minus_one;
+    distance = fixed(-1);
   }
 };
 

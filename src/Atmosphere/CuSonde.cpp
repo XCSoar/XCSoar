@@ -48,9 +48,9 @@ void
 CuSonde::Reset()
 {
   last_level = 0;
-  thermalHeight = fixed_zero;
-  cloudBase = fixed_zero;
-  hGround = fixed_zero;
+  thermalHeight = fixed(0);
+  cloudBase = fixed(0);
+  hGround = fixed(0);
   maxGroundTemperature = fixed(25);
 
   for (unsigned i = 0; i < NUM_LEVELS; ++i)
@@ -74,8 +74,8 @@ CuSonde::SetForecastTemperature(fixed val)
   unsigned zlevel = 0;
 
   // set these to invalid, so old values must be overwritten
-  cloudBase = fixed_minus_one;
-  thermalHeight = fixed_minus_one;
+  cloudBase = fixed(-1);
+  thermalHeight = fixed(-1);
 
   // iterate through all levels
   fixed h_agl = -CuSonde::hGround;
@@ -193,7 +193,7 @@ CuSonde::FindThermalHeight(unsigned short level)
   fixed dti = cslevels[level + 1].thermalIndex - cslevels[level].thermalIndex;
 
   // Reset estimated ThermalHeight
-  cslevels[level].thermalHeight = fixed_minus_one;
+  cslevels[level].thermalHeight = fixed(-1);
 
   if (fabs(dti) < fixed(0.001))
     return;
@@ -204,7 +204,7 @@ CuSonde::FindThermalHeight(unsigned short level)
   fixed dlevel = (TITHRESHOLD - cslevels[level].thermalIndex) / dti;
   fixed dthermalheight = (fixed(level) + dlevel) * HEIGHT_STEP;
 
-  if ((dlevel > fixed_one)
+  if ((dlevel > fixed(1))
       && (level + 2u < NUM_LEVELS)
       && !cslevels[level + 2].empty())
       // estimated point should be in next level.
@@ -236,7 +236,7 @@ CuSonde::FindCloudBase(unsigned short level)
                - (cslevels[level].tempDry - cslevels[level].dewpoint);
 
   // Reset estimated CloudBase
-  cslevels[level].cloudBase = fixed_minus_one;
+  cslevels[level].cloudBase = fixed(-1);
 
   if (fabs(dti) < fixed(0.001))
     return;
@@ -247,7 +247,7 @@ CuSonde::FindCloudBase(unsigned short level)
   fixed dlevel = -(cslevels[level].tempDry - cslevels[level].dewpoint) / dti;
   fixed dcloudbase = (fixed(level) + dlevel) * HEIGHT_STEP;
 
-  if ((dlevel > fixed_one)
+  if ((dlevel > fixed(1))
       && (level + 2u < NUM_LEVELS)
       && !cslevels[level + 2].empty())
     // estimated point should be in next level.
@@ -273,7 +273,7 @@ CuSonde::Level::UpdateTemps(fixed humidity, fixed temperature)
   fixed log_ex, _dewpoint;
 
   log_ex = fixed(7.5) * temperature / (fixed(237.3) + temperature) +
-          (fixed(log10((double)humidity)) - fixed_two);
+          (fixed(log10((double)humidity)) - fixed(2));
   _dewpoint = log_ex * fixed(237.3) / (fixed(7.5) - log_ex);
 
   // update statistics

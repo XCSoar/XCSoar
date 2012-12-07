@@ -186,16 +186,16 @@ Deserialiser::DeserialiseWaypoint()
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != NULL &&
-        from_database->location.Distance(loc) <= fixed_ten)
+        from_database->location.Distance(loc) <= fixed(10))
       // Use this waypoint for the task
       return new Waypoint(*from_database);
 
     // Try finding the closest waypoint to the original one
-    from_database = waypoints->GetNearest(loc, fixed_ten);
+    from_database = waypoints->GetNearest(loc, fixed(10));
 
     // If closest waypoint found and closer than 10m to the original
     if (from_database != NULL &&
-        from_database->location.Distance(loc) <= fixed_ten)
+        from_database->location.Distance(loc) <= fixed(10))
       // Use this waypoint for the task
       return new Waypoint(*from_database);
   }

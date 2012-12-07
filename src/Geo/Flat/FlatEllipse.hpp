@@ -59,11 +59,11 @@ public:
    * @return Initialised object
    */
   FlatEllipse()
-    :f1(fixed_zero, fixed_zero),
-     f2(fixed_zero, fixed_zero),
-     ap(fixed_zero, fixed_zero),
-     p(fixed_zero, fixed_zero),
-     a(fixed_one), b(fixed_one),
+    :f1(fixed(0), fixed(0)),
+     f2(fixed(0), fixed(0)),
+     ap(fixed(0), fixed(0)),
+     p(fixed(0), fixed(0)),
+     a(fixed(1)), b(fixed(1)),
      theta(Angle::Zero()),
      theta_initial(Angle::Zero()) {}
 

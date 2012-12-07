@@ -95,7 +95,7 @@ UTM::CalculateZoneNumber(const GeoPoint &p)
 
   if (p.latitude.Degrees() <= fixed(84) &&
       p.latitude.Degrees() >= fixed(72) &&
-      p.longitude.Degrees() >= fixed_zero) {
+      p.longitude.Degrees() >= fixed(0)) {
     if (p.longitude.Degrees() <= fixed(9))
       return 31;
     if (p.longitude.Degrees() <= fixed(21))
@@ -106,7 +106,7 @@ UTM::CalculateZoneNumber(const GeoPoint &p)
       return 37;
   }
 
-  return (int)floor((p.longitude.Degrees() + fixed_180) / 6) + 1;
+  return (int)floor((p.longitude.Degrees() + fixed(180)) / 6) + 1;
 }
 
 Angle

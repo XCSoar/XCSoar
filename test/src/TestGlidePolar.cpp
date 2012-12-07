@@ -55,11 +55,11 @@ GlidePolarTest::Init()
   polar.SetWingArea(fixed(9.8));
 
   // No ballast and no bugs on the wings
-  polar.ballast = fixed_zero;
-  polar.bugs = fixed_one;
+  polar.ballast = fixed(0);
+  polar.bugs = fixed(1);
 
   // MC zero
-  polar.mc = fixed_zero;
+  polar.mc = fixed(0);
 
   polar.SetVMax(Units::ToSysUnit(fixed(200), Unit::KILOMETER_PER_HOUR), false);
 }
@@ -126,7 +126,7 @@ GlidePolarTest::TestBallast()
   ok1(equals(polar.GetVMin(), 21.44464));
   ok1(equals(polar.GetVBestLD(), 27.78703));
 
-  polar.SetBallast(fixed_zero);
+  polar.SetBallast(fixed(0));
   ok1(!polar.HasBallast());
 }
 
@@ -136,9 +136,9 @@ GlidePolarTest::TestBugs()
   polar.SetBugs(fixed(0.75));
   ok1(equals(polar.GetBugs(), 0.75));
 
-  ok1(equals(polar.polar.a, polar.ideal_polar.a * fixed_four / 3));
-  ok1(equals(polar.polar.b, polar.ideal_polar.b * fixed_four / 3));
-  ok1(equals(polar.polar.c, polar.ideal_polar.c * fixed_four / 3));
+  ok1(equals(polar.polar.a, polar.ideal_polar.a * fixed(4) / 3));
+  ok1(equals(polar.polar.b, polar.ideal_polar.b * fixed(4) / 3));
+  ok1(equals(polar.polar.c, polar.ideal_polar.c * fixed(4) / 3));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), Unit::KILOMETER_PER_HOUR)),
              0.808));
@@ -150,16 +150,16 @@ GlidePolarTest::TestBugs()
   ok1(equals(polar.GetVMin(), 19.93464));
   ok1(equals(polar.GetVBestLD(), 25.83043));
 
-  polar.SetBugs(fixed_one);
+  polar.SetBugs(fixed(1));
 }
 
 void
 GlidePolarTest::TestMC()
 {
-  polar.SetMC(fixed_one);
+  polar.SetMC(fixed(1));
   ok1(equals(polar.GetVBestLD(), 33.482780452));
 
-  polar.SetMC(fixed_zero);
+  polar.SetMC(fixed(0));
   ok1(equals(polar.GetVBestLD(), 25.830434162));
 }
 

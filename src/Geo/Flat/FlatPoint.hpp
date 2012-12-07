@@ -53,7 +53,7 @@ struct FlatPoint
    * @return Initialised object
    */
   constexpr
-  FlatPoint(): x(fixed_zero), y(fixed_zero) {}
+  FlatPoint(): x(fixed(0)), y(fixed(0)) {}
 
   /**
    * Calculate cross product of two points

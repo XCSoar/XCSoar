@@ -85,11 +85,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
   case ibkUp:
-    CommonInterface::SetComputerSettings().forecast_temperature += fixed_half;
+    CommonInterface::SetComputerSettings().forecast_temperature += fixed(0.5);
     return true;
 
   case ibkDown:
-    CommonInterface::SetComputerSettings().forecast_temperature -= fixed_half;
+    CommonInterface::SetComputerSettings().forecast_temperature -= fixed(0.5);
     return true;
 
   default:

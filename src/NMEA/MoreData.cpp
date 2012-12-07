@@ -26,16 +26,16 @@ Copyright_License {
 void
 MoreData::Reset()
 {
-  nav_altitude = fixed_zero;
-  energy_height = fixed_zero;
-  TE_altitude = fixed_zero;
+  nav_altitude = fixed(0);
+  energy_height = fixed(0);
+  TE_altitude = fixed(0);
 
-  gps_vario = gps_vario_TE = fixed_zero;
+  gps_vario = gps_vario_TE = fixed(0);
   gps_vario_available.Clear();
 
-  netto_vario = fixed_zero;
+  netto_vario = fixed(0);
 
-  brutto_vario = fixed_zero;
+  brutto_vario = fixed(0);
   brutto_vario_available.Clear();
 
   NMEAInfo::Reset();

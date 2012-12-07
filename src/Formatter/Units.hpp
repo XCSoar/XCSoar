@@ -91,7 +91,7 @@ Unit FormatSmallDistance(TCHAR *buffer, fixed value, Unit unit,
  */
 Unit FormatDistanceSmart(TCHAR *buffer, fixed value, Unit unit,
                          bool include_unit = true,
-                         fixed small_unit_threshold = fixed_zero,
+                         fixed small_unit_threshold = fixed(0),
                          fixed precision_threshold = fixed(100));
 
 /**

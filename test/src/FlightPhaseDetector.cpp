@@ -104,7 +104,7 @@ CalcCirclingDirection(const DerivedInfo &calculated)
 fixed
 Phase::GetSpeed() const {
   if (duration < FP_TOLERANCE) {
-    return fixed_zero;
+    return fixed(0);
   }
   return distance / duration;
 }
@@ -112,7 +112,7 @@ Phase::GetSpeed() const {
 fixed
 Phase::GetVario() const {
   if (duration < FP_TOLERANCE) {
-    return fixed_zero;
+    return fixed(0);
   }
   return alt_diff / duration;
 }
@@ -120,7 +120,7 @@ Phase::GetVario() const {
 fixed
 Phase::GetGlideRate() const {
   if (fabs(alt_diff) < FP_TOLERANCE) {
-    return fixed_zero;
+    return fixed(0);
   }
   return distance / -alt_diff;
 }
@@ -233,11 +233,11 @@ FlightPhaseDetector::Finish()
   fixed total_circling = totals.total_circstats.duration;
   fixed total_cruise = totals.total_cruisestats.duration;
   fixed total_duration = total_circling + total_cruise;
-  if (total_duration > fixed_zero) {
+  if (total_duration > fixed(0)) {
       totals.total_circstats.fraction = total_circling / total_duration;
       totals.total_cruisestats.fraction = total_cruise / total_duration;
 
-      if (total_circling > fixed_zero) {
+      if (total_circling > fixed(0)) {
           totals.left_circstats.fraction =
               totals.left_circstats.duration / total_circling;
           totals.right_circstats.fraction =

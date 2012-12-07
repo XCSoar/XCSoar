@@ -62,15 +62,15 @@ bool
 TaskBestMc::valid(const fixed mc)
 {
   return res.IsOk() &&
-         res.altitude_difference >= -tolerance * fixed_two * res.vector.distance;
+         res.altitude_difference >= -tolerance * fixed(2) * res.vector.distance;
 }
 
 fixed
 TaskBestMc::search(const fixed mc)
 {
   // only search if mc zero is valid
-  f(fixed_zero);
-  if (valid(fixed_zero)) {
+  f(fixed(0));
+  if (valid(fixed(0))) {
     fixed a = find_zero(mc);
     if (valid(a))
       return a;
@@ -82,8 +82,8 @@ bool
 TaskBestMc::search(const fixed mc, fixed& result)
 {
   // only search if mc zero is valid
-  f(fixed_zero);
-  if (valid(fixed_zero)) {
+  f(fixed(0));
+  if (valid(fixed(0))) {
     fixed a = find_zero(mc);
     if (valid(a)) {
       result = a;

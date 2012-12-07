@@ -78,7 +78,7 @@ ConditionMonitor::Ready_Time_Check(fixed T, bool *restart)
     return false;
 
   if (negative(LastTime_Check) || T < LastTime_Check) {
-    LastTime_Notification = fixed_minus_one;
+    LastTime_Notification = fixed(-1);
     *restart = true;
     return true;
   }

@@ -27,9 +27,9 @@
 #include <algorithm>
 
 TaskLeg::TaskLeg(OrderedTaskPoint &_destination):
-  vector_travelled(fixed_zero),
-  vector_remaining(fixed_zero),
-  vector_planned(fixed_zero),
+  vector_travelled(fixed(0)),
+  vector_remaining(fixed(0)),
+  vector_planned(fixed(0)),
   destination(_destination)
 {
 }
@@ -56,7 +56,7 @@ GeoVector
 TaskLeg::GetPlannedVector() const
 {
   if (!GetOrigin()) {
-    return GeoVector(fixed_zero);
+    return GeoVector(fixed(0));
   } else {
     return memo_planned.calc(GetOrigin()->GetLocationRemaining(),
                              destination.GetLocationRemaining());
@@ -69,7 +69,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::AFTER_ACTIVE:
     if (!GetOrigin())
-      return GeoVector(fixed_zero);
+      return GeoVector(fixed(0));
 
     // this leg totally included
     return memo_remaining.calc(GetOrigin()->GetLocationRemaining(),
@@ -83,7 +83,7 @@ TaskLeg::GetRemainingVector(const GeoPoint &ref) const
     // this leg not included
   default:
     assert(1); // error!
-    return GeoVector(fixed_zero);
+    return GeoVector(fixed(0));
   };
 }
 
@@ -93,7 +93,7 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
     if (!GetOrigin())
-      return GeoVector(fixed_zero);
+      return GeoVector(fixed(0));
 
     // this leg totally included
     return memo_travelled.calc(GetOrigin()->GetLocationTravelled(),
@@ -102,7 +102,7 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (!GetOrigin())
-      return GeoVector(fixed_zero, 
+      return GeoVector(fixed(0), 
                        ref.Bearing(destination.GetLocationRemaining()));
 
     if (destination.HasEntered())
@@ -113,14 +113,14 @@ TaskLeg::GetTravelledVector(const GeoPoint &ref) const
 
   case OrderedTaskPoint::AFTER_ACTIVE:
     if (!GetOrigin())
-      return GeoVector(fixed_zero);
+      return GeoVector(fixed(0));
 
     // this leg may be partially included
     if (GetOrigin()->HasEntered())
       return memo_travelled.calc(GetOrigin()->GetLocationTravelled(), ref);
 
   default:
-    return GeoVector(fixed_zero);
+    return GeoVector(fixed(0));
   };
 }
 
@@ -128,25 +128,25 @@ fixed
 TaskLeg::GetScoredDistance(const GeoPoint &ref) const
 {
   if (!GetOrigin())
-    return fixed_zero;
+    return fixed(0);
 
   switch (destination.GetActiveState()) {
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg totally included
     return 
-      max(fixed_zero,
+      max(fixed(0),
           GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
           - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (destination.HasEntered()) {
-      max(fixed_zero,
+      max(fixed(0),
           GetOrigin()->GetLocationScored().Distance(destination.GetLocationScored())
           - GetOrigin()->ScoreAdjustment()-destination.ScoreAdjustment());
     } else {
       return 
-        max(fixed_zero,
+        max(fixed(0),
             ref.ProjectedDistance(GetOrigin()->GetLocationScored(),
                                   destination.GetLocationScored())
                  -GetOrigin()->ScoreAdjustment());
@@ -155,16 +155,16 @@ TaskLeg::GetScoredDistance(const GeoPoint &ref) const
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg may be partially included
     if (GetOrigin()->HasEntered()) {
-      return max(fixed_zero,
+      return max(fixed(0),
                  memo_travelled.calc(GetOrigin()->GetLocationScored(),
                                      ref).distance
                       -GetOrigin()->ScoreAdjustment());
     }
   default:
-    return fixed_zero;
+    return fixed(0);
     break;
   };
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed 
@@ -177,7 +177,7 @@ GeoVector
 TaskLeg::GetNominalLegVector() const
 {
   if (!GetOrigin()) {
-    return GeoVector(fixed_zero);
+    return GeoVector(fixed(0));
   } else {
     return memo_nominal.calc(GetOrigin()->GetLocation(),
                              destination.GetLocation());
@@ -190,7 +190,7 @@ TaskLeg::GetMaximumLegDistance() const
   if (GetOrigin())
     return memo_max.Distance(GetOrigin()->GetLocationMax(),
                              destination.GetLocationMax());
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed 
@@ -199,7 +199,7 @@ TaskLeg::GetMinimumLegDistance() const
   if (GetOrigin())
     return memo_min.Distance(GetOrigin()->GetLocationMin(),
                              destination.GetLocationMin());
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed 
@@ -207,7 +207,7 @@ TaskLeg::ScanDistanceTravelled(const GeoPoint &ref)
 {
   vector_travelled = GetTravelledVector(ref);
   return vector_travelled.distance +
-    (GetNext() ? GetNext()->ScanDistanceTravelled(ref) : fixed_zero);
+    (GetNext() ? GetNext()->ScanDistanceTravelled(ref) : fixed(0));
 }
 
 fixed 
@@ -215,7 +215,7 @@ TaskLeg::ScanDistanceRemaining(const GeoPoint &ref)
 {
   vector_remaining = GetRemainingVector(ref);
   return vector_remaining.distance +
-    (GetNext() ? GetNext()->ScanDistanceRemaining(ref) : fixed_zero);
+    (GetNext() ? GetNext()->ScanDistanceRemaining(ref) : fixed(0));
 }
 
 fixed 
@@ -223,33 +223,33 @@ TaskLeg::ScanDistancePlanned()
 {
   vector_planned = GetPlannedVector();
   return vector_planned.distance +
-    (GetNext() ? GetNext()->ScanDistancePlanned() : fixed_zero);
+    (GetNext() ? GetNext()->ScanDistancePlanned() : fixed(0));
 }
 
 fixed 
 TaskLeg::ScanDistanceMax() const
 {
   return GetMaximumLegDistance() +
-    (GetNext() ? GetNext()->ScanDistanceMax() : fixed_zero);
+    (GetNext() ? GetNext()->ScanDistanceMax() : fixed(0));
 }
 
 fixed 
 TaskLeg::ScanDistanceMin() const
 {
   return GetMinimumLegDistance() +
-    (GetNext() ? GetNext()->ScanDistanceMin() : fixed_zero);
+    (GetNext() ? GetNext()->ScanDistanceMin() : fixed(0));
 }
 
 fixed 
 TaskLeg::ScanDistanceNominal() const
 {
   return GetNominalLegDistance() +
-    (GetNext() ? GetNext()->ScanDistanceNominal() : fixed_zero);
+    (GetNext() ? GetNext()->ScanDistanceNominal() : fixed(0));
 }
 
 fixed 
 TaskLeg::ScanDistanceScored(const GeoPoint &ref) const
 {
   return GetScoredDistance(ref) +
-    (GetNext() ? GetNext()->ScanDistanceScored(ref) : fixed_zero);
+    (GetNext() ? GetNext()->ScanDistanceScored(ref) : fixed(0));
 }

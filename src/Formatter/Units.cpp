@@ -175,7 +175,7 @@ GetVerticalSpeedStep(Unit unit)
 {
   switch (unit) {
   case Unit::FEET_PER_MINUTE:
-    return fixed_ten;
+    return fixed(10);
   case Unit::KNOTS:
     return fixed(0.2);
   default:
@@ -234,5 +234,5 @@ GetPressureFormat(Unit unit, bool include_unit)
 fixed
 GetPressureStep(Unit unit)
 {
-  return unit == Unit::INCH_MERCURY ? fixed(0.01) : fixed_one;
+  return unit == Unit::INCH_MERCURY ? fixed(0.01) : fixed(1);
 }

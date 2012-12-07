@@ -263,9 +263,9 @@ DigitEntry::GetPositiveFractional() const
 {
   const int dp = FindDecimalPoint();
   if (dp < 0)
-    return fixed_zero;
+    return fixed(0);
 
-  fixed value = fixed_zero;
+  fixed value = fixed(0);
   unsigned factor = 10;
 
   for (unsigned i = dp + 1; i < length; ++i) {

@@ -21,7 +21,7 @@ class TaskVario
 
 public:
   void Reset() {
-    value = fixed_zero;
+    value = fixed(0);
   }
 
 /** 

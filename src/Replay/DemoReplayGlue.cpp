@@ -35,7 +35,7 @@ DemoReplayGlue::DemoReplayGlue(ProtectedTaskManager &_task_manager)
   :task_manager(&_task_manager)
 {
   ProtectedTaskManager::ExclusiveLease protected_task_manager(*task_manager);
-  const TaskAccessor ta(protected_task_manager, fixed_zero);
+  const TaskAccessor ta(protected_task_manager, fixed(0));
   parms.SetRealistic();
   parms.start_alt = device_blackboard->Basic().nav_altitude;
   DemoReplay::Start(ta, device_blackboard->Basic().location);

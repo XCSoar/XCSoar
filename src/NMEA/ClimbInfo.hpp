@@ -62,7 +62,7 @@ struct OneClimbInfo
   void CalculateLiftRate() {
     lift_rate = positive(duration)
       ? gain / duration
-      : fixed_zero;
+      : fixed(0);
   }
 
   void CalculateAll() {

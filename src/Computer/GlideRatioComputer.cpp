@@ -41,7 +41,7 @@ GlideRatioComputer::Compute(const MoreData &basic, const MoreData &last_basic,
       !basic.NavAltitudeAvailable() || !last_basic.NavAltitudeAvailable()) {
     Reset();
     vario_info.gr = INVALID_GR;
-    vario_info.average_gr = fixed_zero;
+    vario_info.average_gr = fixed(0);
     return;
   }
 

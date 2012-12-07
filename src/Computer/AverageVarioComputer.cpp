@@ -38,7 +38,7 @@ AverageVarioComputer::Compute(const MoreData &basic,
                               bool circling, bool last_circling,
                               VarioInfo &vario_info)
 {
-  const fixed dt = delta_time.Update(basic.time, fixed_one, fixed_zero);
+  const fixed dt = delta_time.Update(basic.time, fixed(1), fixed(0));
   if (negative(dt) || circling != last_circling) {
     Reset();
     vario_info.average = basic.brutto_vario;

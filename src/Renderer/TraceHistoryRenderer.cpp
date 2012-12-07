@@ -41,14 +41,14 @@ TraceHistoryRenderer::scale_chart(ChartRenderer &chart,
   chart.ScaleXFromValue(fixed(0));
   chart.ScaleXFromValue(fixed(var.capacity()-1));
 
-  fixed vmin = fixed_zero;
-  fixed vmax = fixed_zero;
+  fixed vmin = fixed(0);
+  fixed vmax = fixed(0);
   for (auto it = var.begin(); it != var.end(); ++it) {
     vmin = std::min(*it, vmin);
     vmax = std::max(*it, vmax);
   }
   if (!(vmax>vmin)) {
-    vmax += fixed_one;
+    vmax += fixed(1);
   }
   if (centered) {
     vmax = std::max(vmax, -vmin);
@@ -62,8 +62,8 @@ void
 TraceHistoryRenderer::render_axis(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
-  chart.DrawLine(fixed_zero, fixed_zero, 
-                 fixed(var.capacity()-1), fixed_zero, 
+  chart.DrawLine(fixed(0), fixed(0), 
+                 fixed(var.capacity()-1), fixed(0), 
                  look.axis_pen);
 }
 
@@ -96,7 +96,7 @@ void
 TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
                                            const TraceVariableHistory& var) const
 {
-  fixed x_last(fixed_zero), y_last(fixed_zero);
+  fixed x_last(fixed(0)), y_last(fixed(0));
   unsigned i=0;
   for (auto it = var.begin(); it != var.end(); ++it, ++i) {
     fixed x= fixed(i);
@@ -104,14 +104,14 @@ TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
     if (i) {
       if (sgn(y)*sgn(y_last)<0) {
         if (positive(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed(0.5), fixed(0),
                                vario_look.lift_brush);
         else if (negative(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed(0.5), fixed(0),
                                vario_look.sink_brush);
         
-        x_last = x-fixed_half;
-        y_last = fixed_zero;
+        x_last = x-fixed(0.5);
+        y_last = fixed(0);
 
       }
       if (positive(y) || positive(y_last))
@@ -143,7 +143,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
 
   if (positive(mc)) {
     canvas.SetBackgroundTransparent();
-    chart.DrawLine(fixed_zero, mc, 
+    chart.DrawLine(fixed(0), mc, 
                    fixed(var.capacity()-1), mc, 
                    ChartLook::STYLE_DASHGREEN);
   }

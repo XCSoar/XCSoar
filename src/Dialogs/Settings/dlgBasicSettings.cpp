@@ -195,7 +195,7 @@ FlightSetupPanel::FlipBallastTimer()
 void
 FlightSetupPanel::ShowAltitude(fixed altitude)
 {
-  if (fabs(altitude - last_altitude) >= fixed_one) {
+  if (fabs(altitude - last_altitude) >= fixed(1)) {
     last_altitude = altitude;
     LoadValue(Altitude, altitude, UnitGroup::ALTITUDE);
   }
@@ -267,7 +267,7 @@ FlightSetupPanel::OnModified(DataField &df)
     SetBallastLitres(dff.GetAsFixed());
   } else if (IsDataField(Bugs, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
-    SetBugs(fixed_one - (dff.GetAsFixed() / 100));
+    SetBugs(fixed(1) - (dff.GetAsFixed() / 100));
   } else if (IsDataField(QNH, df)) {
     const DataFieldFloat &dff = (const DataFieldFloat &)df;
     SetQNH(Units::FromUserPressure(dff.GetAsFixed()));
@@ -291,18 +291,18 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Ballast"),
            _("Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings."),
            _T("%.0f l"), _T("%.0f"),
-           fixed_zero, fixed(500), fixed(5), false,
-           fixed_zero,
+           fixed(0), fixed(500), fixed(5), false,
+           fixed(0),
            this);
 
-  AddReadOnly(_("Wing loading"), NULL, _T("%.1f kg/m2"), fixed_zero);
+  AddReadOnly(_("Wing loading"), NULL, _T("%.1f kg/m2"), fixed(0));
 
   AddFloat(_("Bugs"), /* xgettext:no-c-format */
            _("How clean the glider is. Set to 0% for clean, larger numbers as the wings "
                "pick up bugs or gets wet.  50% indicates the glider's sink rate is doubled."),
            _T("%.0f %%"), _T("%.0f"),
-           fixed_zero, fixed(50), fixed_one, false,
-           (fixed_one - polar_settings.bugs) * 100,
+           fixed(0), fixed(50), fixed(1), false,
+           (fixed(1) - polar_settings.bugs) * 100,
            this);
 
   WndProperty *wp;
@@ -320,14 +320,14 @@ FlightSetupPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   }
 
   AddReadOnly(_("Altitude"), NULL, _T("%.0f %s"),
-              UnitGroup::ALTITUDE, fixed_zero);
+              UnitGroup::ALTITUDE, fixed(0));
 
   wp = AddFloat(_("Max. temp."),
                 _("Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)"),
                 _T("%.0f %s"), _T("%.0f"),
                 Units::ToUserTemperature(CelsiusToKelvin(fixed(-50))),
                 Units::ToUserTemperature(CelsiusToKelvin(fixed(60))),
-                fixed_one, false,
+                fixed(1), false,
                 Units::ToUserTemperature(settings.forecast_temperature));
   {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();

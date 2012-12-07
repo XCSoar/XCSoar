@@ -39,7 +39,7 @@ public:
    *
    * @param x_default Default value of input
    */
-  DiffFilter(const fixed x_default = fixed_zero)
+  DiffFilter(const fixed x_default = fixed(0))
   {
     Reset(x_default);
   }
@@ -60,7 +60,7 @@ public:
    * @param x0 Steady state value of filter input
    * @param y0 Desired value of differentiated output
    */
-  void Reset(const fixed x0 = fixed_zero, const fixed y0 = fixed_zero);
+  void Reset(const fixed x0 = fixed(0), const fixed y0 = fixed(0));
 };
 
 

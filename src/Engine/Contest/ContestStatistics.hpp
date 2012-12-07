@@ -61,7 +61,7 @@ struct ContestStatistics
       return solution_index;
 
     // Search for best solution by score
-    fixed best = fixed_zero;
+    fixed best = fixed(0);
     int i_best = 0;
     for (int i = 0; i < 3; ++i) {
       if (result[i].IsDefined() && (result[i].score > best)) {

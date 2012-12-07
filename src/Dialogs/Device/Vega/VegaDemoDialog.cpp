@@ -35,8 +35,8 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
 
-static fixed VegaDemoW = fixed_zero;
-static fixed VegaDemoV = fixed_zero;
+static fixed VegaDemoW = fixed(0);
+static fixed VegaDemoV = fixed(0);
 static bool VegaDemoAudioClimb = true;
 
 static void

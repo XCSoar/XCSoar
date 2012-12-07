@@ -67,7 +67,7 @@ int main(int argc, char **argv)
       fixed mag = result.wind.Magnitude();
 
       Angle bearing;
-      if (result.wind.y == fixed_zero && result.wind.x == fixed_zero)
+      if (result.wind.y == fixed(0) && result.wind.x == fixed(0))
         bearing = Angle::Zero();
       else
         bearing = Angle::Radians(atan2(result.wind.y, result.wind.x)).AsBearing();

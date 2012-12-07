@@ -178,17 +178,17 @@ InputEvents::eventBugs(const TCHAR *misc)
   fixed oldBugs = BUGS;
 
   if (StringIsEqual(misc, _T("up"))) {
-    BUGS += fixed_one / 10;
-    if (BUGS > fixed_one)
-      BUGS = fixed_one;
+    BUGS += fixed(1) / 10;
+    if (BUGS > fixed(1))
+      BUGS = fixed(1);
   } else if (StringIsEqual(misc, _T("down"))) {
-    BUGS -= fixed_one / 10;
-    if (BUGS < fixed_half)
-      BUGS = fixed_half;
+    BUGS -= fixed(1) / 10;
+    if (BUGS < fixed(0.5))
+      BUGS = fixed(0.5);
   } else if (StringIsEqual(misc, _T("max")))
-    BUGS = fixed_one;
+    BUGS = fixed(1);
   else if (StringIsEqual(misc, _T("min")))
-    BUGS = fixed_half;
+    BUGS = fixed(0.5);
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BUGS * 100));
@@ -220,17 +220,17 @@ InputEvents::eventBallast(const TCHAR *misc)
   fixed oldBallast = BALLAST;
 
   if (StringIsEqual(misc, _T("up"))) {
-    BALLAST += fixed_one / 10;
-    if (BALLAST >= fixed_one)
-      BALLAST = fixed_one;
+    BALLAST += fixed(1) / 10;
+    if (BALLAST >= fixed(1))
+      BALLAST = fixed(1);
   } else if (StringIsEqual(misc, _T("down"))) {
-    BALLAST -= fixed_one / 10;
-    if (BALLAST < fixed_zero)
-      BALLAST = fixed_zero;
+    BALLAST -= fixed(1) / 10;
+    if (BALLAST < fixed(0))
+      BALLAST = fixed(0);
   } else if (StringIsEqual(misc, _T("max")))
-    BALLAST = fixed_one;
+    BALLAST = fixed(1);
   else if (StringIsEqual(misc, _T("min")))
-    BALLAST = fixed_zero;
+    BALLAST = fixed(0);
   else if (StringIsEqual(misc, _T("show"))) {
     TCHAR Temp[100];
     _stprintf(Temp, _T("%d"), (int)(BALLAST * 100));
@@ -281,9 +281,9 @@ void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
   if (StringIsEqual(misc, _T("+")))
-    CommonInterface::SetComputerSettings().forecast_temperature += fixed_one;
+    CommonInterface::SetComputerSettings().forecast_temperature += fixed(1);
   else if (StringIsEqual(misc, _T("-")))
-    CommonInterface::SetComputerSettings().forecast_temperature -= fixed_one;
+    CommonInterface::SetComputerSettings().forecast_temperature -= fixed(1);
   else if (StringIsEqual(misc, _T("show"))) {
     fixed temperature =
       CommonInterface::GetComputerSettings().forecast_temperature;

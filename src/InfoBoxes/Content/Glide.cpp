@@ -63,13 +63,13 @@ UpdateInfoBoxGRAvg(InfoBoxData &data)
 {
   const fixed average_gr = XCSoarInterface::Calculated().average_gr;
 
-  if (average_gr == fixed_zero) {
+  if (average_gr == fixed(0)) {
     data.SetInvalid();
     return;
   }
 
   // Set Value
-  if (average_gr < fixed_zero)
+  if (average_gr < fixed(0))
     data.SetValue(_T("^^^"));
   else if (!::GradientValid(average_gr))
     data.SetValue(_T("+++"));

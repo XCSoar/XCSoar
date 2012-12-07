@@ -74,9 +74,9 @@ class RoutePolar
       :slowness(_slowness), gradient(_gradient), valid(true)
     {
       if (positive(gradient))
-        inv_gradient = fixed_one / gradient;
+        inv_gradient = fixed(1) / gradient;
       else
-        inv_gradient = fixed_zero;
+        inv_gradient = fixed(0);
     };
   };
 

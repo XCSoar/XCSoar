@@ -88,7 +88,7 @@ static void
 DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
                    const Angle &angle, fixed radius, fixed width)
 {
-  if (radius <= fixed_zero)
+  if (radius <= fixed(0))
     return;
 
   const auto sc = angle.SinCos();

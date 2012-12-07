@@ -98,13 +98,13 @@ struct Phase {
     phase_type = NO_PHASE;
     start_datetime.Clear();
     end_datetime.Clear();
-    start_time = fixed_zero;
-    end_time = fixed_zero;
-    duration = fixed_zero;
-    fraction = fixed_zero;
+    start_time = fixed(0);
+    end_time = fixed(0);
+    duration = fixed(0);
+    fraction = fixed(0);
     circling_direction = NO_DIRECTION;
-    alt_diff = fixed_zero;
-    distance = fixed_zero;
+    alt_diff = fixed(0);
+    distance = fixed(0);
     merges = 0;
   }
 };

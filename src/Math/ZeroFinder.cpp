@@ -211,14 +211,14 @@ ZeroFinder::find_zero_actual(const fixed xstart)
       if (a == c) {
         const fixed t1 = fb / fa;
         p = cb * t1;
-        q = fixed_one - t1;
+        q = fixed(1) - t1;
       } else {
         // Quadric inverse interpolation
         q = fa / fc;
         const fixed t1 = fb / fc;
         const fixed t2 = fb / fa;
-        p = t2 * (cb * q * (q - t1) - (b - a) * (t1 - fixed_one));
-        q = (q - fixed_one) * (t1 - fixed_one) * (t2 - fixed_one);
+        p = t2 * (cb * q * (q - t1) - (b - a) * (t1 - fixed(1)));
+        q = (q - fixed(1)) * (t1 - fixed(1)) * (t2 - fixed(1));
       }
 
       // p was calculated with the opposite sign;

@@ -154,7 +154,7 @@ void VegaVoiceMessage::Initialise(int the_id) {
   last_messageText[0]=0;
   id_active = -1;
 
-  lastTime = fixed_zero;
+  lastTime = fixed(0);
   id = the_id;
   active = false;
   alarmlevel = 0;

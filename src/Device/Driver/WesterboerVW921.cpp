@@ -322,7 +322,7 @@ WesterboerVW921Device::SentenceOne(const void *_data, size_t length,
 
     uint8_t polar_type = *(data + 30);
     if (polar_type == 0)
-      info.settings.ProvideBugs(fixed_one, info.clock);
+      info.settings.ProvideBugs(fixed(1), info.clock);
     else if (polar_type == 1)
       info.settings.ProvideBugs(fixed(0.85), info.clock);
     else if (polar_type == 2)
@@ -337,7 +337,7 @@ WesterboerVW921Device::SentenceOne(const void *_data, size_t length,
 
     uint8_t polar_type = *(data + 13);
     if (polar_type == 0)
-      info.settings.ProvideBugs(fixed_one, info.clock);
+      info.settings.ProvideBugs(fixed(1), info.clock);
     else if (polar_type == 1)
       info.settings.ProvideBugs(fixed(0.95), info.clock);
     else if (polar_type == 2)

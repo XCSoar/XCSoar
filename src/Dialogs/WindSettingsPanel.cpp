@@ -83,10 +83,10 @@ WindSettingsPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
     WndProperty *wp =
       AddFloat(_("Speed"), _("Manual adjustment of wind speed."),
                _T("%.0f %s"), _T("%.0f"),
-               fixed_zero,
+               fixed(0),
                Units::ToUserWindSpeed(Units::ToSysUnit(fixed(200),
                                                        Unit::KILOMETER_PER_HOUR)),
-               fixed_one, false,
+               fixed(1), false,
                Units::ToUserWindSpeed(manual_wind.norm));
     wp->SetEnabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();

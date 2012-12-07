@@ -109,9 +109,9 @@ void
 DataFieldFloat::Inc()
 {
   // no keypad, allow user to scroll small values
-  if (mFine && mValue < fixed(0.95) && mStep >= fixed_half &&
-      mMin >= fixed_zero)
-    SetAsFloat(mValue + fixed_one / 10);
+  if (mFine && mValue < fixed(0.95) && mStep >= fixed(0.5) &&
+      mMin >= fixed(0))
+    SetAsFloat(mValue + fixed(1) / 10);
   else
     SetAsFloat(fixed(mValue + mStep * SpeedUp(true)));
 }
@@ -120,9 +120,9 @@ void
 DataFieldFloat::Dec()
 {
   // no keypad, allow user to scroll small values
-  if (mFine && mValue <= fixed_one && mStep >= fixed_half &&
-      mMin >= fixed_zero)
-    SetAsFloat(mValue - fixed_one / 10);
+  if (mFine && mValue <= fixed(1) && mStep >= fixed(0.5) &&
+      mMin >= fixed(0))
+    SetAsFloat(mValue - fixed(1) / 10);
   else
     SetAsFloat(fixed(mValue - mStep * SpeedUp(false)));
 }
@@ -131,27 +131,27 @@ fixed
 DataFieldFloat::SpeedUp(bool keyup)
 {
   if (IsAltair())
-    return fixed_one;
+    return fixed(1);
 
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
     DataFieldKeyUp = keyup;
     last_step.Update();
-    return fixed_one;
+    return fixed(1);
   }
 
   if (!last_step.Check(200)) {
     mSpeedup++;
     if (mSpeedup > 5) {
       last_step.UpdateWithOffset(350);
-      return fixed_ten;
+      return fixed(10);
     }
   } else
     mSpeedup = 0;
 
   last_step.Update();
 
-  return fixed_one;
+  return fixed(1);
 }
 
 void

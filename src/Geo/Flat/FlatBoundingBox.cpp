@@ -44,8 +44,8 @@ FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 bool
 FlatBoundingBox::Intersects(const FlatRay& ray) const
 {
-  fixed tmin = fixed_zero;
-  fixed tmax = fixed_one;
+  fixed tmin = fixed(0);
+  fixed tmax = fixed(1);
   
   // Longitude
   if (ray.vector.longitude == 0) {

@@ -54,15 +54,15 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 #define fixed_89 fixed_int_constant(89)
 
   fixed bank_degrees = attitude.bank_angle_available ?
-                       attitude.bank_angle.Degrees() : fixed_zero;
+                       attitude.bank_angle.Degrees() : fixed(0);
 
   fixed pitch_degrees = attitude.pitch_angle_available ?
-                        attitude.pitch_angle.Degrees() : fixed_zero;
+                        attitude.pitch_angle.Degrees() : fixed(0);
 
   fixed phi = max(-fixed_89, min(fixed_89, bank_degrees));
-  fixed alpha = fixed_rad_to_deg * acos(max(-fixed_one,min(fixed_one,
+  fixed alpha = fixed_rad_to_deg * acos(max(fixed(-1),min(fixed(1),
                   pitch_degrees * fixed_div)));
-  fixed sphi = fixed_180 - phi;
+  fixed sphi = fixed(180) - phi;
   Angle alpha1 = Angle::Degrees(sphi - alpha);
   Angle alpha2 = Angle::Degrees(sphi + alpha);
 

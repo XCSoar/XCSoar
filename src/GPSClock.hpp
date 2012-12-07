@@ -41,13 +41,13 @@ public:
    * default behaviour, call update() immediately after creating the
    * object.
    */
-  GPSClock(const fixed _minstep):last(fixed_zero), dt(_minstep) {}
+  GPSClock(const fixed _minstep):last(fixed(0)), dt(_minstep) {}
 
   /**
    * Resets the clock.
    */
   void Reset() {
-    last = fixed_zero;
+    last = fixed(0);
   }
 
   /**
@@ -91,7 +91,7 @@ public:
 
   fixed DeltaAdvance(const fixed now) {
     if (CheckReverse(now))
-      return fixed_minus_one;
+      return fixed(-1);
 
     // check if time has advanced past dt
     if (now - last >= dt) {
@@ -99,7 +99,7 @@ public:
       Update(now);
       return dt;
     } else {
-      return fixed_zero;
+      return fixed(0);
     }
   }
 

@@ -70,5 +70,5 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
     return (altitude - history[bestHistory].altitude) /
            (time - history[bestHistory].time);
 
-  return fixed_zero;
+  return fixed(0);
 }

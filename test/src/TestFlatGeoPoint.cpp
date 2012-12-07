@@ -58,9 +58,9 @@ int main(int argc, char **argv)
   ok1(p3.Sort(p2));
 
   // test * (and ==)
-  ok1(p1 * fixed_two == FlatGeoPoint(2, 2));
-  ok1(p2 * fixed_two == FlatGeoPoint(2, 4));
-  ok1(p3 * fixed_two == FlatGeoPoint(6, 20));
+  ok1(p1 * fixed(2) == FlatGeoPoint(2, 2));
+  ok1(p2 * fixed(2) == FlatGeoPoint(2, 4));
+  ok1(p3 * fixed(2) == FlatGeoPoint(6, 20));
 
   // test +
   p2 = p2 + p1;

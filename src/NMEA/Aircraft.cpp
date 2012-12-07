@@ -52,7 +52,7 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   aircraft.track = info.track;
   aircraft.g_load = info.acceleration.available
     ? info.acceleration.g_load
-    : fixed_one;
+    : fixed(1);
   aircraft.wind = calculated.GetWindOrZero();
   aircraft.flying = calculated.flight.flying;
 

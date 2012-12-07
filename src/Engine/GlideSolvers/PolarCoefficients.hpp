@@ -39,11 +39,11 @@ struct PolarCoefficients
    */
   gcc_const
   static PolarCoefficients Invalid() {
-    return PolarCoefficients(fixed_zero, fixed_zero, fixed_zero);
+    return PolarCoefficients(fixed(0), fixed(0), fixed(0));
   }
 
   void SetInvalid() {
-    a = b = c = fixed_zero;
+    a = b = c = fixed(0);
   }
 
   gcc_pure

@@ -117,7 +117,7 @@ struct AirspaceListDialogState
   unsigned type;
 
   AirspaceListDialogState()
-    :distance(fixed_minus_one), direction(WILDCARD), type(WILDCARD) {}
+    :distance(fixed(-1)), direction(WILDCARD), type(WILDCARD) {}
 };
 
 static AirspaceListDialogState dialog_state;
@@ -174,7 +174,7 @@ static void
 FilterMode(bool direction)
 {
   if (direction) {
-    dialog_state.distance = fixed_minus_one;
+    dialog_state.distance = fixed(-1);
     dialog_state.direction = WILDCARD;
 
     DataFieldEnum *df = (DataFieldEnum *)distance_control->GetDataField();
@@ -204,7 +204,7 @@ AirspaceFilterListener::OnModified(DataField &df)
   if (&df == distance_control->GetDataField())
     dialog_state.distance = (unsigned)df.GetAsInteger() != WILDCARD
       ? Units::ToSysDistance(fixed(df.GetAsInteger()))
-      : fixed_minus_one;
+      : fixed(-1);
 
   else if (&df == direction_control->GetDataField())
     dialog_state.direction = df.GetAsInteger();

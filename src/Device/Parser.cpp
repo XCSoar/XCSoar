@@ -58,7 +58,7 @@ NMEAParser::Reset()
 {
   real = true;
   use_geoid = true;
-  last_time = fixed_zero;
+  last_time = fixed(0);
 }
 
 bool
@@ -305,7 +305,7 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
 {
   /* tolerance is two seconds: fast-forward if the new time stamp is
      less than two seconds behind the previous one */
-  return time < last_time && time > last_time - fixed_two
+  return time < last_time && time > last_time - fixed(2)
     ? last_time
     : time;
 }
@@ -386,7 +386,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed this_time = TimeModify(line.Read(fixed_zero), info.date_time_utc,
+  fixed this_time = TimeModify(line.Read(fixed(0)), info.date_time_utc,
                                info.date_available);
   this_time = TimeAdvanceTolerance(this_time);
 
@@ -589,7 +589,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   info.gps.android_internal_gps = false;
 #endif
 
-  gps.hdop = line.Read(fixed_zero);
+  gps.hdop = line.Read(fixed(0));
 
   bool altitude_available = ReadAltitude(line, info.gps_altitude);
   if (altitude_available)

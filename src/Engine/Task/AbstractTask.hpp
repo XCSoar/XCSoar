@@ -228,7 +228,7 @@ protected:
   virtual bool CalcCruiseEfficiency(const AircraftState &state_now,
                                     const GlidePolar &glide_polar,
                                     fixed &val) const {
-    val = fixed_one;
+    val = fixed(1);
     return true;
   }
 
@@ -263,7 +263,7 @@ protected:
   virtual fixed CalcMinTarget(const AircraftState &state_now, 
                               const GlidePolar &glide_polar,
                               const fixed t_target) {
-    return fixed_zero;
+    return fixed(0);
   };
 
   /**

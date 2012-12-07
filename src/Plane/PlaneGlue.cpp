@@ -59,7 +59,7 @@ PlaneGlue::FromProfile(Plane &plane)
   if (positive(polar.v_no))
     plane.max_speed = polar.v_no;
   else if (!Profile::Get(ProfileKeys::SafteySpeed, plane.max_speed))
-    plane.max_speed = fixed_zero;
+    plane.max_speed = fixed(0);
 
   if (!Profile::Get(ProfileKeys::DryMass, plane.dry_mass))
     plane.dry_mass = plane.reference_mass;

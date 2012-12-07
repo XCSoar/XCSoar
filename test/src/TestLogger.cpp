@@ -94,7 +94,7 @@ Run(IGCWriter &writer)
                            Angle::Degrees(fixed(50.6322)));
 
   static NMEAInfo i;
-  i.clock = fixed_one;
+  i.clock = fixed(1);
   i.time = fixed(1);
   i.time_available.Update(i.clock);
   i.date_time_utc.year = 2010;

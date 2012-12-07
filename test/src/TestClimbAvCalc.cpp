@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   fixed av;
 
   // Test normal behavior
-  c.GetAverage(fixed_zero, fixed_zero, fixed(30));
+  c.GetAverage(fixed(0), fixed(0), fixed(30));
   for (unsigned i = 1; i <= 15; i++)
     c.GetAverage(fixed(i), fixed(i), fixed(30));
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
   // Test time difference = zero behavior
   c.Reset();
-  c.GetAverage(fixed_zero, fixed_zero, fixed(30));
+  c.GetAverage(fixed(0), fixed(0), fixed(30));
   for (unsigned i = 1; i <= 15; i++)
     c.GetAverage(fixed(i), fixed(i), fixed(30));
 

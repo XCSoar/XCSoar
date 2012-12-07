@@ -47,7 +47,7 @@ ZeroFinderTest::f(const fixed x)
     return cos(x);
 
   assert(true);
-  return fixed_zero;
+  return fixed(0);
 }
 
 int main(int argc, char **argv)
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
   ok1(equals(zf3.find_zero(fixed(1)), fixed(1.584963)));
   ok1(equals(zf3.find_zero(fixed(140)), fixed(1.584963)));
 
-  ZeroFinderTest zf4(fixed(0), fixed_pi + fixed_one, 2);
+  ZeroFinderTest zf4(fixed(0), fixed_pi + fixed(1), 2);
   ok1(equals(zf4.find_zero(fixed(-150)), fixed_half_pi));
   ok1(equals(zf4.find_zero(fixed(1)), fixed_half_pi));
   ok1(equals(zf4.find_zero(fixed(140)), fixed_half_pi));

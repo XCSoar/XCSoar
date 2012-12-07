@@ -40,7 +40,7 @@ struct RangeAndRadial {
   Angle radial;
 
   static constexpr RangeAndRadial Zero() {
-    return RangeAndRadial{fixed_zero, Angle::Zero()};
+    return RangeAndRadial{fixed(0), Angle::Zero()};
   }
 };
 
@@ -118,7 +118,7 @@ public:
    * the target
    */
   gcc_pure
-  RangeAndRadial GetTargetRangeRadial(fixed old_range=fixed_zero) const;
+  RangeAndRadial GetTargetRangeRadial(fixed old_range=fixed(0)) const;
 
   /**
    * Accessor to get target location
@@ -139,7 +139,7 @@ public:
    */
   gcc_pure
   bool IsCloseToTarget(const AircraftState& state,
-                       const fixed threshold=fixed_zero) const;
+                       const fixed threshold=fixed(0)) const;
 
 private:
   /**
@@ -204,7 +204,7 @@ public:
 
   /* virtual methods from class ObservationZoneClient */
   virtual fixed ScoreAdjustment() const gcc_override {
-    return fixed_zero;
+    return fixed(0);
   }
 
 private:

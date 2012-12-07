@@ -32,7 +32,7 @@ class ConditionMonitorFinalGlide: public ConditionMonitor
   fixed last_tad;
 
 public:
-  ConditionMonitorFinalGlide():ConditionMonitor(60 * 5, 1), tad(fixed_zero) {}
+  ConditionMonitorFinalGlide():ConditionMonitor(60 * 5, 1), tad(fixed(0)) {}
 
 protected:
   virtual bool CheckCondition(const NMEAInfo &basic,

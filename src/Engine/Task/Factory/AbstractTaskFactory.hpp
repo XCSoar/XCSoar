@@ -256,9 +256,9 @@ public:
   }
 
   /**
-   * @param start_radius: either fixed_minus_one or a valid value
-   * @param turnpoint_radius: either fixed_minus_one or a valid value
-   * @param finish_radius: either fixed_minus_one or a valid value
+   * @param start_radius: either fixed(-1) or a valid value
+   * @param turnpoint_radius: either fixed(-1) or a valid value
+   * @param finish_radius: either fixed(-1) or a valid value
    *
    * sets radiuses to the correct default for that task type or general defaults
    */

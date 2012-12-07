@@ -28,9 +28,9 @@ int main(int argc, char **argv)
 {
   plan_tests(41);
 
-  FlatPoint p1(fixed_one, fixed_one);
-  FlatPoint p2(fixed_one, fixed_two);
-  FlatPoint p3(fixed(3), fixed_ten);
+  FlatPoint p1(fixed(1), fixed(1));
+  FlatPoint p2(fixed(1), fixed(2));
+  FlatPoint p3(fixed(3), fixed(10));
 
   // test cross()
   ok1(equals(p1.CrossProduct(p2), 1));
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   ok1(equals(p3.CrossProduct(p2), -4));
 
   // test mul_y()
-  p2.MultiplyY(fixed_two);
+  p2.MultiplyY(fixed(2));
   ok1(equals(p2.x, 1));
   ok1(equals(p2.y, 4));
 
@@ -93,9 +93,9 @@ int main(int argc, char **argv)
   ok1(p3 == p3);
   /*
   // Test #2 fails due to floating point inaccuracies
-  ok1(p1 == FlatPoint(fixed_one, fixed_one));
+  ok1(p1 == FlatPoint(fixed(1), fixed(1)));
   ok1(p2 == FlatPoint(fixed(3), fixed(13)));
-  ok1(p3 == FlatPoint(fixed(3), fixed_ten));
+  ok1(p3 == FlatPoint(fixed(3), fixed(10)));
   */
 
   // test *

@@ -489,7 +489,7 @@ LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable)
 
   if (StringIsEqualIgnoreCase(data_type, _T("double")))
     return new DataFieldFloat(edit_format, display_format, min, max,
-                              fixed_zero, fixed(step), fine, callback);
+                              fixed(0), fixed(step), fine, callback);
 
   if (StringIsEqualIgnoreCase(data_type, _T("time"))) {
     DataFieldTime *df = new DataFieldTime((int)min, (int)max, 0,

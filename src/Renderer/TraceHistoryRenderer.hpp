@@ -49,7 +49,7 @@ public:
                    const PixelRect rc,
                    const TraceVariableHistory& var,
                    const bool centered = false,
-                   const fixed mc=fixed_zero) const;
+                   const fixed mc=fixed(0)) const;
 
 private:
   void scale_chart(ChartRenderer &chart,

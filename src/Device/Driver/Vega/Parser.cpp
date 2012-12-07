@@ -214,8 +214,8 @@ PDVDV(NMEAInputLine &line, NMEAInfo &info)
 static bool
 PDVDS(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed AccelX = line.Read(fixed_zero);
-  fixed AccelZ = line.Read(fixed_zero);
+  fixed AccelX = line.Read(fixed(0));
+  fixed AccelZ = line.Read(fixed(0));
 
   fixed mag = SmallHypot(AccelX, AccelZ);
   info.acceleration.ProvideGLoad(fixed(mag) / 100, true);
@@ -225,7 +225,7 @@ PDVDS(NMEAInputLine &line, NMEAInfo &info)
   */
   line.Skip();
 
-  info.stall_ratio = line.Read(fixed_zero);
+  info.stall_ratio = line.Read(fixed(0));
   info.stall_ratio_available.Update(info.clock);
 
   fixed value;

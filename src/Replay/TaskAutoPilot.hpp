@@ -104,7 +104,7 @@ public:
                           const AircraftState& state);
 
   virtual void UpdateState(const TaskAccessor& task,
-                           AircraftState& state, const fixed timestep=fixed_one);
+                           AircraftState& state, const fixed timestep=fixed(1));
 
   bool UpdateAutopilot(TaskAccessor& task,
                        const AircraftState& state,

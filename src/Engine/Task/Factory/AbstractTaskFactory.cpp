@@ -55,7 +55,7 @@ GetOZSize(const ObservationZonePoint &oz)
     return ((const AnnularSectorZone &)oz).GetRadius();
 
   default:
-    return fixed_minus_one;
+    return fixed(-1);
   }
 }
 
@@ -274,7 +274,7 @@ OrderedTaskPoint*
 AbstractTaskFactory::CreatePoint(const TaskPointFactoryType type,
                                  const Waypoint &wp) const
 {
-  return CreatePoint(type, wp, fixed_minus_one, fixed_minus_one, fixed_minus_one);
+  return CreatePoint(type, wp, fixed(-1), fixed(-1), fixed(-1));
 }
 
 void
@@ -285,13 +285,13 @@ AbstractTaskFactory::GetPointDefaultSizes(const TaskPointFactoryType type,
 {
   TaskBehaviour ob = this->behaviour;
 
-  if (start_radius < fixed_zero)
+  if (start_radius < fixed(0))
     start_radius = ob.sector_defaults.start_radius;
 
-  if (turnpoint_radius < fixed_zero)
+  if (turnpoint_radius < fixed(0))
     turnpoint_radius = ob.sector_defaults.turnpoint_radius;
 
-  if (finish_radius < fixed_zero)
+  if (finish_radius < fixed(0))
     finish_radius = ob.sector_defaults.finish_radius;
 }
 

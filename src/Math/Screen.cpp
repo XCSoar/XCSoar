@@ -56,7 +56,7 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
         proj = mag12 / 2;
       }
     }
-    const fixed f = min(fixed_one, max(fixed_zero, fixed(proj) / mag12));
+    const fixed f = min(fixed(1), max(fixed(0), fixed(proj) / mag12));
     // location of 'closest' point
     p4->x = iround(v12x * f) + p1.x;
     p4->y = iround(v12y * f) + p1.y;
@@ -92,7 +92,7 @@ PolygonRotateShift(RasterPoint *poly, const int n,
                    const PixelScalar xs, const PixelScalar ys,
                    Angle angle, const int scale)
 {
-  static Angle lastangle = Angle::Native(-fixed_one);
+  static Angle lastangle = Angle::Native(fixed(-1));
   static int cost = 1024, sint = 0;
   static int last_scale = 0;
   angle = angle.AsBearing();

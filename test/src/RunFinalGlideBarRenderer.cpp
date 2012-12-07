@@ -57,9 +57,9 @@ public:
     :renderer(look, task_look),
      state(GeoVector(fixed(100), Angle::Zero()),
            fixed(1000), fixed(1000),
-           SpeedVector(Angle::Zero(), fixed_zero))
+           SpeedVector(Angle::Zero(), fixed(0)))
   {
-    glide_polar = GlidePolar(fixed_zero);
+    glide_polar = GlidePolar(fixed(0));
 
     calculated.task_stats.total.solution_remaining =
       MacCready::Solve(glide_settings, glide_polar, state);

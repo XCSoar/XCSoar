@@ -31,9 +31,9 @@ ElementStat::Reset()
   vector_remaining = GeoVector::Invalid();
   next_leg_vector = GeoVector::Invalid();
 
-  time_started = fixed_minus_one;
-  time_elapsed = time_remaining = time_planned = fixed_zero;
-  gradient = fixed_zero;
+  time_started = fixed(-1);
+  time_elapsed = time_remaining = time_planned = fixed(0);
+  gradient = fixed(0);
 
   remaining_effective.Reset();
   remaining.Reset();
@@ -55,15 +55,15 @@ ElementStat::SetTimes(const fixed ts, const AircraftState& state)
   time_started = ts;
   if (negative(time_started))
     /* not yet started */
-    time_elapsed = fixed_zero;
+    time_elapsed = fixed(0);
   else
-    time_elapsed = max(state.time - fixed(ts), fixed_zero);
+    time_elapsed = max(state.time - fixed(ts), fixed(0));
 
   if (solution_remaining.IsOk()) {
     time_remaining = solution_remaining.time_elapsed;
     time_planned = time_elapsed + time_remaining;
   } else {
-    time_remaining = time_planned = fixed_zero;
+    time_remaining = time_planned = fixed(0);
   }
 }
 
@@ -72,7 +72,7 @@ ElementStatComputer::Reset(ElementStat &data)
 {
   initialised = false;
 
-  CalcSpeeds(data, fixed_zero);
+  CalcSpeeds(data, fixed(0));
 }
 
 void 
@@ -90,11 +90,11 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
 
     vario.reset(data.vario, data.solution_remaining);
     remaining_effective.CalcIncrementalSpeed(data.remaining_effective,
-                                               fixed_zero);
-    remaining.CalcIncrementalSpeed(data.remaining, fixed_zero);
-    planned.CalcIncrementalSpeed(data.planned, fixed_zero);
-    travelled.CalcIncrementalSpeed(data.travelled, fixed_zero);
-    pirker.CalcIncrementalSpeed(data.pirker, fixed_zero);
+                                               fixed(0));
+    remaining.CalcIncrementalSpeed(data.remaining, fixed(0));
+    planned.CalcIncrementalSpeed(data.planned, fixed(0));
+    travelled.CalcIncrementalSpeed(data.travelled, fixed(0));
+    pirker.CalcIncrementalSpeed(data.pirker, fixed(0));
     return;
   }
 
@@ -111,8 +111,8 @@ ElementStatComputer::CalcSpeeds(ElementStat &data, const fixed dt)
     vario.update(data.vario, data.solution_remaining, fixed(dt));
   } else {
     remaining_effective.CalcIncrementalSpeed(data.remaining_effective,
-                                               fixed_zero);
-    pirker.CalcIncrementalSpeed(data.pirker, fixed_zero);
+                                               fixed(0));
+    pirker.CalcIncrementalSpeed(data.pirker, fixed(0));
     vario.reset(data.vario, data.solution_remaining);
   }
 }

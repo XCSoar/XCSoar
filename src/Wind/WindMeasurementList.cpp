@@ -52,7 +52,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
 
   unsigned int total_quality = 0;
 
-  Vector result(fixed_zero, fixed_zero);
+  Vector result(fixed(0), fixed(0));
   int now = (int)(Time);
 
   found = false;
@@ -65,19 +65,19 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
     fixed altdiff = (alt - m.altitude) / altRange;
     fixed timediff = fabs(fixed(now - m.time) / timeRange);
 
-    if ((fabs(altdiff) < fixed_one) && (timediff < fixed_one)) {
+    if ((fabs(altdiff) < fixed(1)) && (timediff < fixed(1))) {
       // measurement quality
       unsigned int q_quality = min(5,m.quality) * REL_FACTOR_QUALITY / 5;
 
       // factor in altitude difference between current altitude and
       // measurement.  Maximum alt difference is 1000 m.
       unsigned int a_quality =
-          iround(((fixed_two / (altdiff * altdiff + fixed_one)) - fixed_one)
+          iround(((fixed(2) / (altdiff * altdiff + fixed(1))) - fixed(1))
           * REL_FACTOR_ALTITUDE);
 
       // factor in timedifference. Maximum difference is 1 hours.
       unsigned int t_quality =
-          iround(k * (fixed_one - timediff) / (timediff * timediff + k)
+          iround(k * (fixed(1) - timediff) / (timediff * timediff + k)
           * REL_FACTOR_TIME);
 
       if (m.quality == 6) {
@@ -85,8 +85,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
           // over-ride happened, so re-set accumulator
           override_time = timediff;
           total_quality = 0;
-          result.x = fixed_zero;
-          result.y = fixed_zero;
+          result.x = fixed(0);
+          result.y = fixed(0);
           overridden = true;
         } else {
           // this isn't the latest over-ride or obtained fix, so ignore
@@ -101,8 +101,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
             // re-set accumulators
             overridden = false;
             total_quality = 0;
-            result.x = fixed_zero;
-            result.y = fixed_zero;
+            result.x = fixed(0);
+            result.y = fixed(0);
           }
         }
       }

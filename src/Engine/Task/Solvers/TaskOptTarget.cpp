@@ -65,7 +65,7 @@ TaskOptTarget::search(const fixed tp)
 {
   if (tp_current.IsTargetLocked()) {
     // can't move, don't bother
-    return -fixed_one;
+    return fixed(-1);
   }
   if (iso.IsValid()) {
     tm.target_save();
@@ -73,12 +73,12 @@ TaskOptTarget::search(const fixed tp)
     if (!valid(t)) {
       // invalid, so restore old value
       tm.target_restore();
-      return -fixed_one;
+      return fixed(-1);
     } else {
       return t;
     }
   } else {
-    return -fixed_one;
+    return fixed(-1);
   }
 }
 

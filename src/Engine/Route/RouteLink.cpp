@@ -69,8 +69,8 @@ RouteLink::CalcSpeedups(const TaskProjection& proj)
   const fixed dx = fixed(first.longitude - second.longitude);
   const fixed dy = fixed(first.latitude - second.latitude);
   if (!positive(fabs(dx)) && !positive(fabs(dy))) {
-    d = fixed_zero;
-    inv_d = fixed_zero;
+    d = fixed(0);
+    inv_d = fixed(0);
     polar_index = 0;
     return;
   }

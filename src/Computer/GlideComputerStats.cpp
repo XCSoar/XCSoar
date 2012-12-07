@@ -33,9 +33,9 @@ void
 GlideComputerStats::ResetFlight(const bool full)
 {
   last_location = GeoPoint::Invalid();
-  last_climb_start_time = fixed_minus_one;
-  last_cruise_start_time = fixed_minus_one;
-  last_thermal_end_time = fixed_minus_one;
+  last_climb_start_time = fixed(-1);
+  last_cruise_start_time = fixed(-1);
+  last_thermal_end_time = fixed(-1);
 
   if (full)
     flightstats.Reset();
@@ -135,5 +135,5 @@ GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated)
   last_climb_start_time = calculated.climb_start_time;
   last_cruise_start_time = calculated.cruise_start_time;
   last_thermal_end_time = calculated.last_thermal.IsDefined()
-    ? calculated.last_thermal.end_time : fixed_minus_one;
+    ? calculated.last_thermal.end_time : fixed(-1);
 }

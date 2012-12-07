@@ -74,7 +74,7 @@ static int
 GetSnailColorIndex(fixed cv)
 {
   return max((short)0, min((short)(TrailLook::NUMSNAILCOLORS - 1),
-                           (short)((cv + fixed_one) / 2 * TrailLook::NUMSNAILCOLORS)));
+                           (short)((cv + fixed(1)) / 2 * TrailLook::NUMSNAILCOLORS)));
 }
 
 static void
@@ -130,7 +130,7 @@ TrailRenderer::Draw(Canvas &canvas, const TraceComputer &trace_computer,
   bool scaled_trail = settings.scaling_enabled &&
                       projection.GetMapScale() <= fixed_int_constant(6000);
 
-  const GeoBounds bounds = projection.GetScreenBounds().Scale(fixed_four);
+  const GeoBounds bounds = projection.GetScreenBounds().Scale(fixed(4));
 
   RasterPoint last_point;
   bool last_valid = false;

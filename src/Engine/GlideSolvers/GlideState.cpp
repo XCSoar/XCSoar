@@ -58,7 +58,7 @@ public:
       /// @todo check this is correct for all theta
       return SolutionMax();
 
-    return -fixed_one;
+    return fixed(-1);
   }
 };
 
@@ -94,8 +94,8 @@ GlideState::CalcSpeedups(const SpeedVector _wind)
   } else {
     wind = SpeedVector::Zero();
     effective_wind_angle = Angle::Zero();
-    head_wind = fixed_zero;
-    wind_speed_squared = fixed_zero;
+    head_wind = fixed(0);
+    wind_speed_squared = fixed(0);
   }
 }
 

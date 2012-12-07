@@ -56,7 +56,7 @@ bool
 TaskMinTarget::valid(const fixed tp) 
 {
   //  const fixed ff = f(tp);
-  return res.IsOk(); // && (ff>= -tolerance*fixed_two);
+  return res.IsOk(); // && (ff>= -tolerance*fixed(2));
 }
 
 fixed 

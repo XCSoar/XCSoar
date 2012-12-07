@@ -37,9 +37,9 @@ struct ContestResult
   fixed time;
 
   void Reset() {
-    score = fixed_zero;
-    distance = fixed_zero;
-    time = fixed_zero;
+    score = fixed(0);
+    distance = fixed(0);
+    time = fixed(0);
   }
 
   bool IsDefined() const {
@@ -54,7 +54,7 @@ struct ContestResult
   fixed GetSpeed() const {
     return positive(time)
       ? distance / time
-      : fixed_zero;
+      : fixed(0);
   }
 };
 

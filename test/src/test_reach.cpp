@@ -71,10 +71,10 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        fixed fx = (fixed)i/(nx-1)*fixed_two-fixed_one;
-        fixed fy = (fixed)j/(ny-1)*fixed_two-fixed_one;
-        GeoPoint x(origin.longitude+Angle::Degrees(fixed(0.6)*fx),
-                   origin.latitude+Angle::Degrees(fixed(0.6)*fy));
+        fixed fx = (fixed)i / (nx - 1) * fixed(2) - fixed(1);
+        fixed fy = (fixed)j / (ny - 1) * fixed(2) - fixed(1);
+        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
+                   origin.latitude + Angle::Degrees(fixed(0.6) * fy));
         short h = map.GetInterpolatedHeight(x);
         AGeoPoint adest(x, RoughAltitude(h));
         ReachResult reach;
@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
   } while (map.IsDirty());
 
   plan_tests(1);
-  test_reach(map, fixed_zero, fixed(0.1));
+  test_reach(map, fixed(0), fixed(0.1));
 
   return exit_status();
 }

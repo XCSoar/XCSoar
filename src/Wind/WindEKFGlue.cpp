@@ -50,7 +50,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   if (!basic.track_available || !basic.ground_speed_available ||
       !basic.airspeed_available || !basic.airspeed_real ||
-      basic.true_airspeed < fixed_one) {
+      basic.true_airspeed < fixed(1)) {
     ResetBlackout();
     return Result(0);
   }
@@ -73,7 +73,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (basic.acceleration.available &&
        basic.acceleration.real &&
-       fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
+       fabs(basic.acceleration.g_load - fixed(1)) > fixed(0.3))) {
 
     SetBlackout(time);
     return Result(0);

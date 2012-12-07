@@ -27,10 +27,10 @@ Copyright_License {
 void
 VarioInfo::Clear()
 {
-  sink_rate = fixed_zero;
-  average = netto_average = fixed_zero;
+  sink_rate = fixed(0);
+  average = netto_average = fixed(0);
   cruise_gr = INVALID_GR;
-  average_gr = fixed_zero;
+  average_gr = fixed(0);
   gr = INVALID_GR;
   ld_vario = INVALID_GR;
 

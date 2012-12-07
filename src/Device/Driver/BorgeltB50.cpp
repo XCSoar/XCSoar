@@ -97,7 +97,7 @@ PBB50(NMEAInputLine &line, NMEAInfo &info)
   // of max performance
 
   if (line.ReadChecked(value))
-    info.settings.ProvideBugs(fixed_one - max(fixed_zero,
+    info.settings.ProvideBugs(fixed(1) - max(fixed(0),
                                               min(fixed(30), value)) / 100,
                               info.clock);
 

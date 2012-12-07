@@ -23,20 +23,20 @@
 #include "DistanceStat.hpp"
 
 DistanceStatComputer::DistanceStatComputer(const bool _is_positive)
-  :df(fixed_zero),
+  :df(fixed(0)),
    v_lpf(fixed(400) / N_AV, false),
    is_positive(_is_positive) {}
 
 void
 DistanceStatComputer::CalcIncrementalSpeed(DistanceStat &data, const fixed dt)
 {
-  if ((dt + fixed_half >= fixed_one) && data.IsDefined()) {
+  if ((dt + fixed(0.5) >= fixed(1)) && data.IsDefined()) {
     if (av_dist.Update(data.distance)) {
       const fixed d_av = av_dist.Average() / N_AV;
       av_dist.Reset();
 
-      fixed v_f = fixed_zero;
-      for (unsigned i = 0; i < (unsigned)(dt + fixed_half); ++i) {
+      fixed v_f = fixed(0);
+      for (unsigned i = 0; i < (unsigned)(dt + fixed(0.5)); ++i) {
         const fixed v = df.Update(d_av);
         v_f = v_lpf.Update(v);
       }
@@ -50,12 +50,12 @@ DistanceStatComputer::CalcIncrementalSpeed(DistanceStat &data, const fixed dt)
 void
 DistanceStatComputer::ResetIncrementalSpeed(DistanceStat &data)
 {
-  fixed distance = data.IsDefined() ? data.GetDistance() : fixed_zero;
-  fixed speed = data.IsDefined() ? data.GetSpeed() : fixed_zero;
+  fixed distance = data.IsDefined() ? data.GetDistance() : fixed(0);
+  fixed speed = data.IsDefined() ? data.GetSpeed() : fixed(0);
 
   df.Reset(distance, (is_positive ? -1 : 1) * speed);
   v_lpf.Reset((is_positive ? -1 : 1) * speed);
-  data.speed_incremental = fixed_zero; // data.speed;
+  data.speed_incremental = fixed(0); // data.speed;
   av_dist.Reset();
 }
 
@@ -65,5 +65,5 @@ DistanceStatComputer::CalcSpeed(DistanceStat &data, fixed time)
   if (positive(time) && data.IsDefined())
     data.speed = data.GetDistance() / time;
   else
-    data.speed = fixed_zero;
+    data.speed = fixed(0);
 }

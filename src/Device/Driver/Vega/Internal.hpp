@@ -54,7 +54,7 @@ private:
 public:
   VegaDevice(Port &_port)
     :port(_port),
-     mc(fixed_zero), qnh(AtmosphericPressure::Standard()),
+     mc(fixed(0)), qnh(AtmosphericPressure::Standard()),
      detected(false) {}
 
   /**

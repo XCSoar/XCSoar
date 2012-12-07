@@ -278,7 +278,7 @@ ContestDijkstra::CalculateResult(const ContestTraceVector &solution) const
 
   ContestResult result;
   result.time = fixed(solution[num_stages - 1].DeltaTime(solution[0]));
-  result.distance = result.score = fixed_zero;
+  result.distance = result.score = fixed(0);
 
   GeoPoint previous = solution[0].GetLocation();
   for (unsigned i = 1; i < num_stages; ++i) {

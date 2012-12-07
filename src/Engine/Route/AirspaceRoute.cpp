@@ -52,7 +52,7 @@ public:
       const RoutePolars& _rpolar):
     AirspaceIntersectionVisitor(),
     link(_e),
-    min_distance(-fixed_one),
+    min_distance(fixed(-1)),
     proj(_proj),
     rpolar(_rpolar),
     origin(proj.Unproject(_e.first)),
@@ -132,7 +132,7 @@ const AbstractAirspace*
 AirspaceRoute::InsideOthers(const AGeoPoint& origin) const
 {
   AirspaceInsideOtherVisitor visitor;
-  m_airspaces.VisitWithinRange(origin, fixed_one, visitor);
+  m_airspaces.VisitWithinRange(origin, fixed(1), visitor);
   count_airspace++;
   return visitor.found();
 }

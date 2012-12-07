@@ -149,7 +149,7 @@ struct TempAirspaceType
     center.longitude = Angle::Zero();
     center.latitude = Angle::Zero();
     rotation = 1;
-    radius = fixed_zero;
+    radius = fixed(0);
   }
 
   void
@@ -160,7 +160,7 @@ struct TempAirspaceType
     center.longitude = Angle::Zero();
     center.latitude = Angle::Zero();
     rotation = 1;
-    radius = fixed_zero;
+    radius = fixed(0);
   }
 
   void
@@ -263,7 +263,7 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
 {
   Unit unit = Unit::FEET;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
-  fixed value = fixed_zero;
+  fixed value = fixed(0);
 
   const TCHAR *p = buffer;
   while (true) {
@@ -321,7 +321,7 @@ ReadAltitude(const TCHAR *buffer, AirspaceAltitude &altitude)
 
   case SFC:
     altitude.reference = AltitudeReference::AGL;
-    altitude.altitude_above_terrain = fixed_minus_one;
+    altitude.altitude_above_terrain = fixed(-1);
     return;
 
   default:

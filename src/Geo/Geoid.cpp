@@ -52,7 +52,7 @@ fixed
 EGM96::LookupSeparation(const GeoPoint &pt)
 {
   if (!egm96data)
-    return fixed_zero;
+    return fixed(0);
 
   int ilat, ilon;
   ilat = iround((Angle::QuarterCircle() - pt.latitude).Half().Degrees());
@@ -60,9 +60,9 @@ EGM96::LookupSeparation(const GeoPoint &pt)
 
   int offset = ilat * 180 + ilon;
   if (offset >= EGM96SIZE)
-    return fixed_zero;
+    return fixed(0);
   if (offset < 0)
-    return fixed_zero;
+    return fixed(0);
 
   return fixed((int)egm96data[offset] - 127);
 }

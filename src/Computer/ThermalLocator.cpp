@@ -89,8 +89,8 @@ ThermalLocator::Update(const fixed t_0,
   FlatPoint av = glider_average();
   // find thermal center relative to glider's average position
 
-  FlatPoint f0(fixed_zero, fixed_zero);
-  fixed acc = fixed_zero;
+  FlatPoint f0(fixed(0), fixed(0));
+  fixed acc = fixed(0);
   for (unsigned i = 0; i < n_points; ++i) {
     f0 += (points[i].loc_drift-av)*points[i].lift_weight;
     acc += points[i].lift_weight;
@@ -102,7 +102,7 @@ ThermalLocator::Update(const fixed t_0,
     therm.estimate_valid = false;
     return;
   }
-  f0 = f0 * (fixed_one/acc) + av;
+  f0 = f0 * (fixed(1)/acc) + av;
 
   therm.estimate_location = projection.Unproject(f0);
   therm.estimate_valid = true;
@@ -111,13 +111,13 @@ ThermalLocator::Update(const fixed t_0,
 inline FlatPoint
 ThermalLocator::glider_average()
 {
-  FlatPoint result(fixed_zero, fixed_zero);
+  FlatPoint result(fixed(0), fixed(0));
   assert(n_points>0);
   if (n_points == 0)
     return result;
 
   // find glider's average position
-  fixed acc = fixed_zero;
+  fixed acc = fixed(0);
   for (unsigned i = 0; i < n_points; ++i) {
     result += points[i].loc_drift*points[i].recency_weight;
     acc += points[i].recency_weight;

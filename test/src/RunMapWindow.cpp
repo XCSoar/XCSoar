@@ -192,7 +192,7 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   DerivedInfo derived_info;
 
   nmea_info.Reset();
-  nmea_info.clock = fixed_one;
+  nmea_info.clock = fixed(1);
   nmea_info.time = fixed(1297230000);
   nmea_info.alive.Update(nmea_info.clock);
 

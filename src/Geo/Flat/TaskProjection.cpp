@@ -72,11 +72,11 @@ TaskProjection::Update()
   GeoPoint old_loc = location_mid;
 
   location_mid.longitude =
-    location_max.longitude.Fraction(location_min.longitude, fixed_half);
+    location_max.longitude.Fraction(location_min.longitude, fixed(0.5));
   location_mid.latitude =
-    location_max.latitude.Fraction(location_min.latitude, fixed_half);
+    location_max.latitude.Fraction(location_min.latitude, fixed(0.5));
   cos_midloc = location_mid.latitude.fastcosine() * fixed_scale;
-  r_cos_midloc = fixed_one/cos_midloc;
+  r_cos_midloc = fixed(1)/cos_midloc;
   approx_scale = Unproject(FlatGeoPoint(0,-1)).Distance(Unproject(FlatGeoPoint(0,1))) / 2;
 
   return !(old_loc == location_mid);

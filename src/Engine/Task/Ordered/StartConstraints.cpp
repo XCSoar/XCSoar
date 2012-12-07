@@ -28,7 +28,7 @@ void
 StartConstraints::SetDefaults()
 {
   open_time_span = RoughTimeSpan::Invalid();
-  max_speed = fixed_zero;
+  max_speed = fixed(0);
   max_height = 0;
   max_height_ref = AltitudeReference::AGL;
   fai_finish = false;
@@ -39,7 +39,7 @@ StartConstraints::CheckSpeed(const AircraftState &state,
                              const TaskStartMargins &behaviour,
                              const bool with_margin) const
 {
-  if (max_speed == fixed_zero)
+  if (max_speed == fixed(0))
     return true;
 
   if (fai_finish)
@@ -47,7 +47,7 @@ StartConstraints::CheckSpeed(const AircraftState &state,
 
   const fixed margin = with_margin
     ? behaviour.max_speed_margin
-    : fixed_zero;
+    : fixed(0);
 
   return state.ground_speed <= max_speed + margin;
 }

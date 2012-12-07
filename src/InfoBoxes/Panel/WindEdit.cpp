@@ -98,7 +98,7 @@ WindEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   RowFormWidget::Prepare(parent, rc);
 
   AddFloat(_("Speed"), _("Manual adjustment of wind speed."), _T("%.0f"),
-           _T("%.0f"), fixed_zero, fixed(130), fixed(1), false,
+           _T("%.0f"), fixed(0), fixed(130), fixed(1), false,
            UnitGroup::WIND_SPEED,
            CommonInterface::Calculated().GetWindOrZero().norm, this);
 

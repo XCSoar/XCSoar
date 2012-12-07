@@ -96,7 +96,7 @@ StartPoint::find_best_start(const AircraftState &state,
     StartPointBestStart(const StartPoint& ts,
                         const GeoPoint &_loc_from,
                         const GeoPoint &_loc_to):
-      ZeroFinder(-fixed_half, fixed_half, fixed(0.01)),
+      ZeroFinder(-fixed(0.5), fixed(0.5), fixed(0.01)),
       start(ts),
       loc_from(_loc_from),
       loc_to(_loc_to) {};
@@ -108,25 +108,25 @@ StartPoint::find_best_start(const AircraftState &state,
     GeoPoint solve() {
       // find approx solution first, being the offset for the local function
       // minimiser search
-      p_offset = fixed_zero;
-      fixed f_best= f(fixed_zero);
-      for (; p_offset < fixed_one; p_offset += fixed(0.25)) {
-        fixed ff = f(fixed_zero);
+      p_offset = fixed(0);
+      fixed f_best= f(fixed(0));
+      for (; p_offset < fixed(1); p_offset += fixed(0.25)) {
+        fixed ff = f(fixed(0));
         if (ff< f_best) {
           f_best = ff;
         }
       }
       // now detailed search, returning result
-      return parametric(find_min(fixed_zero));
+      return parametric(find_min(fixed(0)));
     }
   private:
     GeoPoint parametric(const fixed p) {
       // ensure parametric input is between 0 and 1
       fixed pp = p+p_offset;
       if (negative(pp)) {
-        pp+= fixed_one;
+        pp+= fixed(1);
       }
-      pp = fmod(pp,fixed_one);
+      pp = fmod(pp,fixed(1));
       return start.GetBoundaryParametric(pp);
     }
   };

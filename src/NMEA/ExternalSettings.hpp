@@ -121,7 +121,7 @@ struct ExternalSettings {
    */
   bool CompareWingLoading(fixed value) const {
     return wing_loading_available &&
-      fabs(wing_loading - value) <= fixed_half;
+      fabs(wing_loading - value) <= fixed(0.5);
   }
 
   /**
@@ -142,7 +142,7 @@ struct ExternalSettings {
    */
   bool CompareQNH(AtmosphericPressure value) const {
     return qnh_available &&
-      fabs(qnh.GetHectoPascal() - value.GetHectoPascal()) <= fixed_half;
+      fabs(qnh.GetHectoPascal() - value.GetHectoPascal()) <= fixed(0.5);
   }
 
   /**

@@ -23,14 +23,6 @@ using std::min;
 
 #define fixed_int_constant(i) fixed_constant((double)(i), ((fixed::value_t)(i)) << fixed::resolution_shift)
 
-#define fixed_zero fixed_int_constant(0)
-#define fixed_one fixed_int_constant(1)
-#define fixed_minus_one fixed_int_constant(-1)
-#define fixed_two fixed_int_constant(2)
-#define fixed_four fixed_int_constant(4)
-#define fixed_ten fixed_int_constant(10)
-
-#define fixed_half fixed_constant(0.5, 1 << (fixed::resolution_shift - 1))
 #define fixed_third fixed_constant(1./3., (1 << fixed::resolution_shift) / 3)
 #define fixed_two_thirds fixed_constant(2./3., (2 << (fixed::resolution_shift)) / 3)
 
@@ -40,11 +32,6 @@ using std::min;
 #define fixed_two_pi fixed_constant(M_2PI, 0x6487ed51LL)
 #define fixed_half_pi fixed_constant(M_HALFPI, 0x1921fb54LL)
 #define fixed_quarter_pi fixed_constant(M_HALFPI/2, 0xc90fdaaLL)
-
-#define fixed_90 fixed_int_constant(90)
-#define fixed_180 fixed_int_constant(180)
-#define fixed_270 fixed_int_constant(270)
-#define fixed_360 fixed_int_constant(360)
 
 #define fixed_sqrt_two fixed_constant(1.4142135623730951, 0x16a09e66LL)
 #define fixed_sqrt_half fixed_constant(0.70710678118654757, 0xb504f33LL)
@@ -832,12 +819,12 @@ inline fixed atan2(fixed const& y, fixed const& x)
 
 static inline fixed asin(fixed x)
 {
-  return atan2(x, (fixed_one-x*x).sqrt());
+  return atan2(x, (fixed(1)-x*x).sqrt());
 }
 
 static inline fixed acos(fixed x)
 {
-  return atan2((fixed_one-x*x).sqrt(), x);
+  return atan2((fixed(1)-x*x).sqrt(), x);
 }
 
 gcc_pure
@@ -857,7 +844,7 @@ inline fixed fast_sqrt(fixed const& x)
 {
   assert(!x.negative());
   if (!x.positive())
-    return fixed_zero;
+    return fixed(0);
   return x.rsqrt()*x;
 }
 
@@ -972,7 +959,7 @@ inline fixed sigmoid(fixed const& x)
 #define fixed_max fixed(fixed::internal(), 0x7fffffffffffffffLL)
 
 inline fixed fixed::sigmoid(const fixed&x) {
-  return fixed_two/(fixed_one+(-x).exp())-fixed_one;
+  return fixed(2) / (fixed(1) + (-x).exp()) - fixed(1);
 }
 
 constexpr
@@ -1088,7 +1075,7 @@ gcc_const static inline int
 iround(fixed x)
 {
 #ifdef FIXED_MATH
-  return (int)(x + fixed_half);
+  return (int)(x + fixed(0.5));
 #else
   return (int)lround(x);
 #endif
@@ -1100,7 +1087,7 @@ iround(fixed x)
 gcc_const static inline unsigned
 uround(const fixed x)
 {
-  return (unsigned)(x + fixed_half);
+  return (unsigned)(x + fixed(0.5));
 }
 
 #endif

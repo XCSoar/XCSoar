@@ -33,7 +33,7 @@ FinishPoint::FinishPoint(ObservationZonePoint* _oz, const Waypoint & wp,
   :OrderedTaskPoint(TaskPointType::FINISH, _oz, wp, boundary_scored),
    safety_height_arrival(tb.safety_height_arrival),
    constraints(_constraints),
-   fai_finish_height(fixed_zero)
+   fai_finish_height(fixed(0))
 {
 }
 
@@ -47,7 +47,7 @@ void
 FinishPoint::Reset()
 {
   OrderedTaskPoint::Reset();
-  fai_finish_height = fixed_zero;
+  fai_finish_height = fixed(0);
 }
 
 bool
@@ -67,7 +67,7 @@ FinishPoint::GetElevation() const
     return max(nominal_elevation,
                fixed(constraints.min_height) +
                (constraints.min_height_ref == AltitudeReference::AGL
-                ? GetBaseElevation() : fixed_zero));
+                ? GetBaseElevation() : fixed(0)));
   }
 }
 
@@ -89,7 +89,7 @@ FinishPoint::SetNeighbours(OrderedTaskPoint *_prev, OrderedTaskPoint *_next)
 void
 FinishPoint::set_fai_finish_height(const fixed height)
 {
-  fai_finish_height = max(fixed_zero, height);
+  fai_finish_height = max(fixed(0), height);
 }
 
 bool

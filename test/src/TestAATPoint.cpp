@@ -32,7 +32,7 @@
 
 static TaskBehaviour task_behaviour;
 static OrderedTaskBehaviour ordered_task_behaviour;
-static GlidePolar glide_polar(fixed_zero);
+static GlidePolar glide_polar(fixed(0));
 
 static GeoPoint
 MakeGeoPoint(double longitude, double latitude)
@@ -98,7 +98,7 @@ TestAATPoint()
 
   RangeAndRadial rar = ap.GetTargetRangeRadial();
   ok1(equals(rar.range, fixed(0.1112), 1000));
-  ok1(equals(rar.radial.Degrees(), fixed_zero, 200));
+  ok1(equals(rar.radial.Degrees(), fixed(0), 200));
 
   target = MakeGeoPoint(0, 45.29);
   ap.SetTarget(target, true);

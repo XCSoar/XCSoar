@@ -44,7 +44,7 @@ public:
              const GeoPoint& location_last,
              const fixed& altitude);
 
-  bool Update(const Angle heading, const fixed timestep=fixed_one);
+  bool Update(const Angle heading, const fixed timestep=fixed(1));
 
   fixed GetTime() const {
     return state.time;

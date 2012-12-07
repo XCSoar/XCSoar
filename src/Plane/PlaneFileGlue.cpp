@@ -128,13 +128,13 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
   if (!has_handicap)
     plane.handicap = 100;
   if (!has_max_ballast)
-    plane.max_ballast = fixed_zero;
+    plane.max_ballast = fixed(0);
   if (!has_dump_time)
     plane.dump_time = 0;
   if (!has_max_speed)
     plane.max_speed = fixed(55.555);
   if (!has_wing_area)
-    plane.wing_area = fixed_zero;
+    plane.wing_area = fixed(0);
 
   return true;
 }

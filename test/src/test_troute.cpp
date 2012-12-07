@@ -58,10 +58,10 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
     unsigned ny = 100;
     for (unsigned i=0; i< nx; ++i) {
       for (unsigned j=0; j< ny; ++j) {
-        fixed fx = (fixed)i/(nx-1)*fixed_two-fixed_one;
-        fixed fy = (fixed)j/(ny-1)*fixed_two-fixed_one;
-        GeoPoint x(origin.longitude+Angle::Degrees(fixed(0.6)*fx),
-                   origin.latitude+Angle::Degrees(fixed(0.4)*fy));
+        fixed fx = (fixed)i / (nx - 1) * fixed(2) - fixed(1);
+        fixed fy = (fixed)j / (ny - 1) * fixed(2) - fixed(1);
+        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.6) * fx),
+                   origin.latitude + Angle::Degrees(fixed(0.4) * fy));
         short h = map.GetInterpolatedHeight(x);
         fout << x.longitude.Degrees() << " " << x.latitude.Degrees() << " " << h << "\n";
       }
@@ -74,7 +74,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
   config.mode = RoutePlannerConfig::Mode::BOTH;
 
   unsigned i=0;
-  for (fixed ang=fixed_zero; ang< fixed_two_pi; ang+= fixed_quarter_pi*fixed_half) {
+  for (fixed ang=fixed(0); ang< fixed_two_pi; ang+= fixed_quarter_pi*fixed(0.5)) {
     GeoPoint dest = GeoVector(fixed(40000.0), Angle::Radians(ang)).EndPoint(origin);
 
     short hdest = map.GetHeight(dest)+100;
@@ -94,7 +94,7 @@ test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
     i++;
   }
 
-  // polar.SetMC(fixed_zero);
+  // polar.SetMC(fixed(0));
   // route.UpdatePolar(polar, wind);
 }
 
@@ -123,9 +123,9 @@ int main(int argc, char** argv) {
   } while (map.IsDirty());
 
   plan_tests(16*3);
-  test_troute(map, fixed_zero, fixed(0.1), RoughAltitude(10000));
-  test_troute(map, fixed_zero, fixed_zero, RoughAltitude(10000));
-  test_troute(map, fixed(5.0), fixed_one, RoughAltitude(10000));
+  test_troute(map, fixed(0), fixed(0.1), RoughAltitude(10000));
+  test_troute(map, fixed(0), fixed(0), RoughAltitude(10000));
+  test_troute(map, fixed(5.0), fixed(1), RoughAltitude(10000));
 
   return exit_status();
 }

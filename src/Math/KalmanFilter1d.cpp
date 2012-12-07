@@ -29,7 +29,7 @@ KalmanFilter1d::KalmanFilter1d(const fixed var_x_accel)
 }
 
 KalmanFilter1d::KalmanFilter1d()
-  :var_x_accel_(fixed_one)
+  :var_x_accel_(fixed(1))
 {
   Reset();
 }
@@ -37,13 +37,13 @@ KalmanFilter1d::KalmanFilter1d()
 void
 KalmanFilter1d::Reset()
 {
-  Reset(fixed_zero, fixed_zero);
+  Reset(fixed(0), fixed(0));
 }
 
 void
 KalmanFilter1d::Reset(const fixed x_abs_value)
 {
-  Reset(x_abs_value, fixed_zero);
+  Reset(x_abs_value, fixed(0));
 }
 
 void
@@ -52,7 +52,7 @@ KalmanFilter1d::Reset(const fixed x_abs_value, const fixed x_vel_value)
   x_abs_ = x_abs_value;
   x_vel_ = x_vel_value;
   p_abs_abs_ = fixed(1.e10);
-  p_abs_vel_ = fixed_zero;
+  p_abs_vel_ = fixed(0);
   p_vel_vel_ = var_x_accel_;
 }
 
@@ -61,7 +61,7 @@ KalmanFilter1d::Update(const fixed z_abs, const fixed var_z_abs,
                        const fixed dt)
 {
   // Some abbreviated constants to make the code line up nicely:
-  static const fixed F1 = fixed_one;
+  static const fixed F1 = fixed(1);
 
   // Validity checks. TODO: more?
   assert(positive(dt));

@@ -50,7 +50,7 @@ struct SeeYouTaskInformation {
   fixed max_start_altitude;
 
   SeeYouTaskInformation():
-    wp_dis(true), task_time(fixed_zero), max_start_altitude(fixed_zero) {}
+    wp_dis(true), task_time(fixed(0)), max_start_altitude(fixed(0)) {}
 };
 
 struct SeeYouTurnpointInformation {
@@ -74,7 +74,7 @@ struct SeeYouTurnpointInformation {
   SeeYouTurnpointInformation():
     valid(false), style(SYMMETRICAL), is_line(false), reduce(false),
     radius1(fixed(500)), radius2(fixed(500)),
-    max_altitude(fixed_zero),
+    max_altitude(fixed(0)),
     angle1(Angle::Zero()),
     angle2(Angle::Zero()),
     angle12(Angle::Zero()) {}
@@ -133,11 +133,11 @@ ParseRadius(const TCHAR* str)
 static fixed
 ParseMaxAlt(const TCHAR* str)
 {
-  fixed maxalt = fixed_zero;
+  fixed maxalt = fixed(0);
   TCHAR* end;
   maxalt = fixed(_tcstod(str, &end));
   if (str == end)
-    return fixed_zero;
+    return fixed(0);
 
   if (_tcslen(end) >= 2 && end[0] == _T('f') && end[1] == _T('t'))
     maxalt = Units::ToSysUnit(maxalt, Unit::FEET);
@@ -372,8 +372,8 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     const Angle RadialStart = (A12adj - turnpoint_infos.angle1).AsBearing();
     const Angle RadialEnd = (A12adj + turnpoint_infos.angle1).AsBearing();
 
-    if (turnpoint_infos.radius2 > fixed_zero &&
-        (turnpoint_infos.angle2.AsBearing().Degrees()) < fixed_one) {
+    if (turnpoint_infos.radius2 > fixed(0) &&
+        (turnpoint_infos.angle2.AsBearing().Degrees()) < fixed(1)) {
       oz = new AnnularSectorZone(wp->location, turnpoint_infos.radius1,
           RadialStart, RadialEnd, turnpoint_infos.radius2);
     } else {
@@ -509,18 +509,18 @@ TaskFileSeeYou::GetTask(const TaskBehaviour &task_behaviour,
 
     // If waypoint by name found and closer than 10m to the original
     if (wp != NULL &&
-        wp->location.Distance(file_wp->location) <= fixed_ten) {
+        wp->location.Distance(file_wp->location) <= fixed(10)) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
       continue;
     }
 
     // Try finding the closest waypoint to the original one
-    wp = waypoints->GetNearest(file_wp->location, fixed_ten);
+    wp = waypoints->GetNearest(file_wp->location, fixed(10));
 
     // If closest waypoint found and closer than 10m to the original
     if (wp != NULL &&
-        wp->location.Distance(file_wp->location) <= fixed_ten) {
+        wp->location.Distance(file_wp->location) <= fixed(10)) {
       // Use this waypoint for the task
       waypoints_in_task[i] = wp;
       continue;

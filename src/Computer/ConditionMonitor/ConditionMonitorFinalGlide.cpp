@@ -51,11 +51,11 @@ ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
   } else {
     Interval_Notification = fixed(60);
     if (res.IsFinalGlide()) {
-      if ((last_tad < fixed(-50)) && (tad > fixed_one))
+      if ((last_tad < fixed(-50)) && (tad > fixed(1)))
         // just reached final glide, previously well below
         return true;
 
-      if ((last_tad > fixed_one) && (tad < fixed(-50))) {
+      if ((last_tad > fixed(1)) && (tad < fixed(-50))) {
         // dropped well below final glide, previously above
         last_tad = tad;
         return true; // JMW this was true before
@@ -68,9 +68,9 @@ ConditionMonitorFinalGlide::CheckCondition(const NMEAInfo &basic,
 void
 ConditionMonitorFinalGlide::Notify()
 {
-  if (tad > fixed_one)
+  if (tad > fixed(1))
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
-  if (tad < fixed_minus_one)
+  if (tad < fixed(-1))
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_BELOW);
 }
 

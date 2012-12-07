@@ -29,19 +29,19 @@ CirclingInfo::Clear()
   turning = false;
   circling = false;
 
-  turn_rate = turn_rate_heading = fixed_zero;
+  turn_rate = turn_rate_heading = fixed(0);
 
-  time_cruise = fixed_zero;
-  time_climb = fixed_zero;
-  total_height_gain = fixed_zero;
+  time_cruise = fixed(0);
+  time_climb = fixed(0);
+  total_height_gain = fixed(0);
 
-  cruise_start_time = fixed_minus_one;
-  climb_start_time = fixed_minus_one;
+  cruise_start_time = fixed(-1);
+  climb_start_time = fixed(-1);
 
-  max_height_gain = fixed_zero;
+  max_height_gain = fixed(0);
 
-  turn_rate_smoothed = fixed_zero;
+  turn_rate_smoothed = fixed(0);
   turn_mode = CirclingMode::CRUISE;
 
-  circling_percentage = fixed_minus_one;
+  circling_percentage = fixed(-1);
 }

@@ -71,7 +71,7 @@ LXWP0(NMEAInputLine &line, NMEAInfo &info)
     /* implausible */
     return false;
 
-  fixed alt = fixed_zero;
+  fixed alt = fixed(0);
   if (line.ReadChecked(alt))
     /* a dump on a LX7007 has confirmed that the LX sends uncorrected
        altitude above 1013.25hPa here */

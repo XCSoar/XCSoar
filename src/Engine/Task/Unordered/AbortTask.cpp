@@ -327,5 +327,5 @@ AbortTask::GetHomeVector(const AircraftState &state) const
   if (home_waypoint)
     return GeoVector(state.location, home_waypoint->location);
 
-  return GeoVector(fixed_zero);
+  return GeoVector(fixed(0));
 }

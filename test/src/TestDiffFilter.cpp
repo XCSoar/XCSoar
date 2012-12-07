@@ -52,7 +52,7 @@ main(int argc, char **argv)
 
   // Test steady-state response scaling with reset(0, dX) call
   for (long dY = 1; dY <= 10000000; dY *= 10) {
-    df.Reset(fixed_zero, fixed(dY));
+    df.Reset(fixed(0), fixed(dY));
     for (int Y = dY; Y < 30 * dY; Y += dY) {
       // test if the filter response is close enough to dX
       //

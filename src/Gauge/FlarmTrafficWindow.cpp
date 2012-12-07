@@ -209,7 +209,7 @@ fixed
 FlarmTrafficWindow::RangeScale(fixed d) const
 {
   d = d / distance;
-  return std::min(d, fixed_one) * radius;
+  return std::min(d, fixed(1)) * radius;
 }
 
 /**
@@ -254,8 +254,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     x /= traffic.distance;
     y /= traffic.distance;
   } else {
-    x = fixed_zero;
-    y = fixed_zero;
+    x = fixed(0);
+    y = fixed(0);
   }
 
   if (!enable_north_up) {
@@ -611,7 +611,7 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 void
 FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
 {
-  fixed x = fixed_zero, y = fixed_minus_one;
+  fixed x = fixed(0), y = fixed(-1);
   if (!enable_north_up) {
     FastRotation::Pair p = fr.Rotate(x, y);
     x = p.first;

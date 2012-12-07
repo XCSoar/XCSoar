@@ -54,7 +54,7 @@ ParseData(NMEAInputLine &line, NMEAInfo &info)
       q[i] = fixed((int16_t)_q[i]) / 1000;
 
     fixed sin_pitch = -2 * (q[0] * q[2] - q[3] * q[1]);
-    if (sin_pitch <= fixed_one && sin_pitch >= fixed_minus_one) {
+    if (sin_pitch <= fixed(1) && sin_pitch >= fixed(-1)) {
       fixed pitch = asin(sin_pitch);
 
       info.attitude.pitch_angle_available = true;

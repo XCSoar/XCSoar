@@ -70,7 +70,7 @@ FlyNetDevice::ParsePRS(const char *content, NMEAInfo &info)
       filtered_pressure = pressure;
     else
       filtered_pressure = alpha * pressure +
-          (fixed_one - alpha) * info.static_pressure.GetPascal();
+          (fixed(1) - alpha) * info.static_pressure.GetPascal();
 
     info.ProvideStaticPressure(AtmosphericPressure::Pascal(filtered_pressure));
   }

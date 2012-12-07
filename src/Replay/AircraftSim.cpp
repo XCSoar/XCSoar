@@ -31,8 +31,8 @@ AircraftSim::Start(const GeoPoint& location_start,
   state.Reset();
   state.location = location_start;
   state.altitude = altitude;
-  state.time = fixed_zero;
-  state.wind.norm = fixed_zero;
+  state.time = fixed(0);
+  state.wind.norm = fixed(0);
   state.wind.bearing = Angle();
   state.ground_speed = fixed(16);
   state_last = state;

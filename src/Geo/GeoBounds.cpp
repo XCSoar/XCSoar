@@ -50,8 +50,8 @@ GeoBounds::GetCenter() const
   if (!IsValid())
     return GeoPoint::Invalid();
 
-  return GeoPoint(west.Fraction(east, fixed_half),
-                  south.Fraction(north, fixed_half));
+  return GeoPoint(west.Fraction(east, fixed(0.5)),
+                  south.Fraction(north, fixed(0.5)));
 }
 
 GeoBounds
@@ -61,9 +61,9 @@ GeoBounds::Scale(fixed factor) const
     return Invalid();
 
   Angle diff_lat_half =
-    (north - south).AsBearing() / fixed_two * (factor - fixed_one);
+    (north - south).AsBearing() / fixed(2) * (factor - fixed(1));
   Angle diff_lon_half =
-    (east - west).AsBearing() / fixed_two * (factor - fixed_one);
+    (east - west).AsBearing() / fixed(2) * (factor - fixed(1));
 
   GeoBounds br = *this;
   br.east += diff_lon_half;

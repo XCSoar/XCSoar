@@ -79,7 +79,7 @@ FlatRay::Intersects(const FlatRay &that) const
 {
   std::pair<int, int> r = IntersectsRatio(that);
   if (r.second == 0)
-    return -fixed_one;
+    return fixed(-1);
   return ((fixed)r.first) / r.second;
 }
 
@@ -102,5 +102,5 @@ FlatRay::DistinctIntersection(const FlatRay& that) const
     return fixed(r.first) / r.second;
   }
 
-  return fixed_minus_one;
+  return fixed(-1);
 }

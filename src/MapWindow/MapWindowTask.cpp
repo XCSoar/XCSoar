@@ -131,13 +131,13 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   
   GeoPoint dloc;
   int ilast = 0;
-  for (fixed d = fixed_one / 4; d <= fixed_one; d += fixed_one / 4) {
+  for (fixed d = fixed(1) / 4; d <= fixed(1); d += fixed(1) / 4) {
     dloc = FindLatitudeLongitude(start, Basic().track, distance_max * d);
     
     fixed distance0 = start.Distance(dloc);
     fixed distance1 = target.Distance(dloc);
     fixed distance = fixed(distance0 + distance1) / vec.distance;
-    int idist = iround((distance - fixed_one) * 100);
+    int idist = iround((distance - fixed(1)) * 100);
     
     if ((idist != ilast) && (idist > 0) && (idist < 1000)) {
       TCHAR Buffer[5];

@@ -52,7 +52,7 @@ namespace TaskSolution
                                      const AircraftState &state,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
-                                     const fixed min_h = fixed_zero);
+                                     const fixed min_h = fixed(0));
 
   GlideResult GlideSolutionRemaining(const GeoPoint &location,
                                      const GeoPoint &target,
@@ -93,7 +93,7 @@ namespace TaskSolution
                                      const AircraftState &state,
                                      const GlideSettings &settings,
                                      const GlidePolar &polar,
-                                     const fixed min_h = fixed_zero);
+                                     const fixed min_h = fixed(0));
 
   /**
    * Compute optimal glide solution from aircraft to destination, or modified
@@ -109,7 +109,7 @@ namespace TaskSolution
                                    const AircraftState &state,
                                    const GlideSettings &settings,
                                    const GlidePolar &polar,
-                                   const fixed min_h = fixed_zero);
+                                   const fixed min_h = fixed(0));
 };
 
 #endif

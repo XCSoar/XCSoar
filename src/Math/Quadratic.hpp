@@ -44,7 +44,7 @@ public:
    * @param _c Value of c
    */
   Quadratic(const fixed _b, const fixed _c) :
-    da(fixed_two), b(_b), denom(sqr(b) - fixed_four * _c)
+    da(fixed(2)), b(_b), denom(sqr(b) - fixed(4) * _c)
   {
   }
 
@@ -71,7 +71,7 @@ public:
     if (negative(denom))
       return false;
 
-    if (da == fixed_zero)
+    if (da == fixed(0))
       return false;
 
     return true;

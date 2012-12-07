@@ -41,5 +41,5 @@ LineSectorZone::GetBoundary() const
 fixed
 LineSectorZone::ScoreAdjustment() const
 {
-  return fixed_zero;
+  return fixed(0);
 }

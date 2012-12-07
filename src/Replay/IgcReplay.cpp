@@ -31,7 +31,7 @@ IgcReplay::IgcReplay(NLineReader *_reader)
   :AbstractReplay(),
    cli(fixed(0.98)),
    reader(_reader),
-   t_simulation(fixed_zero)
+   t_simulation(fixed(0))
 {
   cli.Reset();
 }
@@ -65,7 +65,7 @@ IgcReplay::UpdateTime(fixed time_scale)
 {
   const fixed t_simulation_last = t_simulation;
 
-  t_simulation += fixed_one * time_scale;
+  t_simulation += fixed(1) * time_scale;
 
   return (t_simulation > t_simulation_last);
 }

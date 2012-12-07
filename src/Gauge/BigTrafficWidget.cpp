@@ -183,7 +183,7 @@ void
 FlarmTrafficControl::CalcAutoZoom()
 {
   bool warning_mode = WarningMode();
-  RoughDistance zoom_dist = fixed_zero;
+  RoughDistance zoom_dist = fixed(0);
 
   for (auto it = data.list.begin(), end = data.list.end();
       it != end; ++it) {

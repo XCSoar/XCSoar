@@ -114,15 +114,15 @@ public:
    * @param _bugs Bugs (clean) ratio (default clean)
    * @param _ballast Ballast ratio (default empty)
    */
-  GlidePolar(const fixed _mc, const fixed _bugs = fixed_one,
-      const fixed _ballast = fixed_zero);
+  GlidePolar(const fixed _mc, const fixed _bugs = fixed(1),
+      const fixed _ballast = fixed(0));
 
   /**
    * Constructs a GlidePolar object that is invalid.
    */
   gcc_const
   static GlidePolar Invalid() {
-    GlidePolar gp(fixed_zero);
+    GlidePolar gp(fixed(0));
     gp.SetInvalid();
     return gp;
   }

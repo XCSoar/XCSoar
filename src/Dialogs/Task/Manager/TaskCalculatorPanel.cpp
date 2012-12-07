@@ -82,7 +82,7 @@ TaskCalculatorPanel::Refresh()
 
   fixed rPlanned = task_stats.total.solution_planned.IsDefined()
     ? task_stats.total.solution_planned.vector.distance
-    : fixed_zero;
+    : fixed(0);
 
   if (positive(rPlanned))
     LoadValue(DISTANCE, rPlanned, UnitGroup::DISTANCE);
@@ -98,7 +98,7 @@ TaskCalculatorPanel::Refresh()
     fixed rMin = task_stats.distance_min;
 
     if (rMin < rMax) {
-      fixed range = Double((rPlanned - rMin) / (rMax - rMin)) - fixed_one;
+      fixed range = Double((rPlanned - rMin) / (rMax - rMin)) - fixed(1);
       LoadValue(RANGE, range * 100);
     } else
       ClearValue(RANGE);
@@ -190,18 +190,18 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
                             PixelRect{0, 0, 100, Layout::Scale(17)},
                             WindowStyle(), OnWarningPaint));
 
-  AddReadOnly(_("Assigned task time"), NULL, _T("%.0f min"), fixed_zero);
-  AddReadOnly(_("Estimated task time"), NULL, _T("%.0f min"), fixed_zero);
+  AddReadOnly(_("Assigned task time"), NULL, _T("%.0f min"), fixed(0));
+  AddReadOnly(_("Estimated task time"), NULL, _T("%.0f min"), fixed(0));
   AddReadOnly(_("Task distance"), NULL, _T("%.0f %s"),
-              UnitGroup::DISTANCE, fixed_zero);
+              UnitGroup::DISTANCE, fixed(0));
 
   AddFloat(_("Set MacCready"),
            _("Adjusts MC value used in the calculator.  "
              "Use this to determine the effect on estimated task time due to changes in conditions.  "
              "This value will not affect the main computer's setting if the dialog is exited with the Cancel button."),
            _T("%.1f %s"), _T("%.1f"),
-           fixed_zero, Units::ToUserVSpeed(fixed(5)),
-           GetUserVerticalSpeedStep(), false, fixed_zero,
+           fixed(0), Units::ToUserVSpeed(fixed(5)),
+           GetUserVerticalSpeedStep(), false, fixed(0),
            this);
   DataFieldFloat &mc_df = (DataFieldFloat &)GetDataField(MC);
   mc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
@@ -209,23 +209,23 @@ TaskCalculatorPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddReadOnly(_("AAT range"),
               /* xgettext:no-c-format */
               _("For AAT tasks, this value tells you how far based on the targets of your task you will fly relative to the minimum and maximum possible tasks. -100% indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% is maximum AAT distance."),
-              _T("%.0f %%"), fixed_zero);
+              _T("%.0f %%"), fixed(0));
 
   AddReadOnly(_("Speed remaining"), NULL, _T("%.0f %s"),
-              UnitGroup::TASK_SPEED, fixed_zero);
+              UnitGroup::TASK_SPEED, fixed(0));
 
   AddReadOnly(_("Achieved MacCready"), NULL, _T("%.1f %s"),
-              UnitGroup::VERTICAL_SPEED, fixed_zero);
+              UnitGroup::VERTICAL_SPEED, fixed(0));
   DataFieldFloat &emc_df = (DataFieldFloat &)GetDataField(EFFECTIVE_MC);
   emc_df.SetFormat(GetUserVerticalSpeedFormat(false, false));
 
   AddReadOnly(_("Achieved speed"), NULL, _T("%.0f %s"),
-              UnitGroup::TASK_SPEED, fixed_zero);
+              UnitGroup::TASK_SPEED, fixed(0));
 
   AddFloat(_("Cruise efficiency"),
            _("Efficiency of cruise.  100 indicates perfect MacCready performance, greater than 100 indicates better than MacCready performance is achieved through flying in streets.  Less than 100 is appropriate if you fly considerably off-track.  This value estimates your cruise efficiency according to the current flight history with the set MC value.  Calculation begins after task is started."),
            _T("%.0f %%"), _T("%.0f"),
-           fixed_zero, fixed(100), fixed_one, false, fixed_zero,
+           fixed(0), fixed(100), fixed(1), false, fixed(0),
            this);
 }
 

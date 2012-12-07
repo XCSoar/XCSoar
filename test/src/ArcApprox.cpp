@@ -60,11 +60,11 @@ TestApproximation(fixed radius, fixed step)
 
   printf("Number of points: %u\n\n", (unsigned)points.size());
 
-  fixed max_error = fixed_zero;
+  fixed max_error = fixed(0);
 
   for (auto it = points.begin(), it_last = it++, it_end = points.end();
       it != it_end; it_last = it++) {
-    for (fixed x = fixed_zero; x < fixed_one; x += fixed(0.1)) {
+    for (fixed x = fixed(0); x < fixed(1); x += fixed(0.1)) {
       GeoPoint test_point = (*it_last).Interpolate(*it, x);
       fixed distance = center.Distance(test_point);
       fixed error = fabs(radius - distance);

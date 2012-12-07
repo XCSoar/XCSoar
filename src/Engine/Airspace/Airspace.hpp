@@ -74,7 +74,7 @@ public:
    * @return dummy airspace envelope
    */
   Airspace(const GeoPoint&loc, const TaskProjection& task_projection,
-           const fixed range=fixed_zero)
+           const fixed range=fixed(0))
     :FlatBoundingBox(task_projection.ProjectInteger(loc),
                      task_projection.ProjectRangeInteger(loc, range)),
      airspace(NULL)

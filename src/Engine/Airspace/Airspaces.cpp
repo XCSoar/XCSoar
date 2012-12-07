@@ -160,7 +160,7 @@ Airspaces::ScanNearest(const GeoPoint &location,
     // also should do scan_range with range = 0 since there
     // could be more than one with zero dist
     if (found.second.is_zero())
-      return ScanRange(location, fixed_zero, condition);
+      return ScanRange(location, fixed(0), condition);
 
     if (condition(*found.first->GetAirspace()))
       res.push_back(*found.first);

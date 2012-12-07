@@ -51,8 +51,8 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     for (unsigned i = 0; i < nx; ++i) {
       for (unsigned j = 0; j < ny; ++j) {
-        fixed fx = (fixed)i / (nx - 1) * fixed(2.0) - fixed_one;
-        fixed fy = (fixed)j / (ny - 1) * fixed(2.0) - fixed_one;
+        fixed fx = (fixed)i / (nx - 1) * fixed(2.0) - fixed(1);
+        fixed fy = (fixed)j / (ny - 1) * fixed(2.0) - fixed(1);
         GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.2) + fixed(0.7) * fx),
                    origin.latitude + Angle::Degrees(fixed(0.9) * fy));
         short h = map.GetInterpolatedHeight(x);
@@ -97,7 +97,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       if (verbose)
         printf("# route airspace size %d\n", size_1);
 
-      as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), fixed_one);
+      as_route.SynchroniseInRange(airspaces, vec.MidPoint(loc_start), fixed(1));
       int size_2 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_2);
@@ -125,7 +125,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     // try the solver
     SpeedVector wind(Angle::Degrees(fixed(0)), fixed(0.0));
-    GlidePolar polar(fixed_one);
+    GlidePolar polar(fixed(1));
 
     GlideSettings settings;
     settings.SetDefaults();

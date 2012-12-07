@@ -110,7 +110,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
                           CommonInterface::GetMapSettings().airspace,
                           aircraft_state);
   GlidePolar polar = settings_computer.polar.glide_polar_task;
-  polar.SetMC(max(polar.GetMC(),fixed_one));
+  polar.SetMC(max(polar.GetMC(),fixed(1)));
   AirspaceAircraftPerformanceGlide perf(polar);
   AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
 

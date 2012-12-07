@@ -121,7 +121,7 @@ NMEAInfo::Reset()
 
   ground_speed_available.Clear();
   airspeed_available.Clear();
-  ground_speed = true_airspeed = indicated_airspeed = fixed_zero;
+  ground_speed = true_airspeed = indicated_airspeed = fixed(0);
   airspeed_real = false;
 
   gps_altitude_available.Clear();
@@ -132,15 +132,15 @@ NMEAInfo::Reset()
   pitot_offset_available.Clear();
 
   baro_altitude_available.Clear();
-  baro_altitude = fixed_zero;
+  baro_altitude = fixed(0);
 
   pressure_altitude_available.Clear();
-  pressure_altitude = fixed_zero;
+  pressure_altitude = fixed(0);
 
   date_available = false;
 
   time_available.Clear();
-  time = fixed_zero;
+  time = fixed(0);
   date_time_utc.hour = date_time_utc.minute = date_time_utc.second = 0;
 
   noncomp_vario_available.Clear();

@@ -46,14 +46,14 @@ int main(int argc, char **argv)
   ok1(equals(p1, -6.332, -14.68));
 
   // test parametric()
-  GeoPoint p2(Angle::Degrees(fixed_two), Angle::Degrees(fixed_one));
+  GeoPoint p2(Angle::Degrees(fixed(2)), Angle::Degrees(fixed(1)));
   GeoPoint p3 = p1.Parametric(p2, fixed(5));
   ok1(p2.IsValid());
   ok1(p3.IsValid());
   ok1(equals(p3, -1.332, -4.68));
 
   // test interpolate
-  GeoPoint p4 = p1.Interpolate(p3, fixed_half);
+  GeoPoint p4 = p1.Interpolate(p3, fixed(0.5));
   ok1(p4.IsValid());
   ok1(equals(p4, -3.832, -9.68));
 
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
   // test projected_distance()
   ok1(equals(p8.ProjectedDistance(p7, p2), 100000));
   ok1(equals(p4.ProjectedDistance(p1, p3), 619599.304393));
-  ok1(equals((p2 * fixed_two).ProjectedDistance(p2, p6), 248567.832772));
+  ok1(equals((p2 * fixed(2)).ProjectedDistance(p2, p6), 248567.832772));
 
   // Tests moved here from test_fixed.cpp
   GeoPoint l1(Angle::Zero(), Angle::Zero());
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
   v = l1.DistanceBearing(l3);
   printf("Dist %g bearing %d\n",
          FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
-  ok(positive(v.distance) && v.distance < fixed_two, "earth distance short", 0);
+  ok(positive(v.distance) && v.distance < fixed(2), "earth distance short", 0);
 
   v = l1.DistanceBearing(l4);
   printf("Dist %g bearing %d\n",

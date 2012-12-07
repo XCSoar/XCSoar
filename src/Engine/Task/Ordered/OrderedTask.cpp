@@ -167,7 +167,7 @@ OrderedTask::ScanTotalStartTime(const AircraftState &)
   if (taskpoint_start)
     return taskpoint_start->GetEnteredState().time;
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed 
@@ -176,7 +176,7 @@ OrderedTask::ScanLegStartTime(const AircraftState &)
   if (active_task_point)
     return task_points[active_task_point-1]->GetEnteredState().time;
 
-  return -fixed_one;
+  return fixed(-1);
 }
 
 // DISTANCES
@@ -204,7 +204,7 @@ inline fixed
 OrderedTask::ScanDistanceMax()
 {
   if (task_points.empty()) // nothing to do!
-    return fixed_zero;
+    return fixed(0);
 
   assert(active_task_point < task_points.size());
 
@@ -257,7 +257,7 @@ OrderedTask::ScanDistanceNominal()
   if (taskpoint_start)
     return taskpoint_start->ScanDistanceNominal();
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed
@@ -266,7 +266,7 @@ OrderedTask::ScanDistanceScored(const GeoPoint &location)
   if (taskpoint_start)
     return taskpoint_start->ScanDistanceScored(location);
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed
@@ -275,7 +275,7 @@ OrderedTask::ScanDistanceRemaining(const GeoPoint &location)
   if (taskpoint_start)
     return taskpoint_start->ScanDistanceRemaining(location);
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed
@@ -284,7 +284,7 @@ OrderedTask::ScanDistanceTravelled(const GeoPoint &location)
   if (taskpoint_start)
     return taskpoint_start->ScanDistanceTravelled(location);
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed
@@ -293,7 +293,7 @@ OrderedTask::ScanDistancePlanned()
   if (taskpoint_start)
     return taskpoint_start->ScanDistancePlanned();
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 // TRANSITIONS
@@ -825,7 +825,7 @@ OrderedTask::CalcRequiredGlide(const AircraftState &aircraft,
 {
   TaskGlideRequired bgr(task_points, active_task_point, aircraft,
                         task_behaviour.glide, glide_polar);
-  return bgr.search(fixed_zero);
+  return bgr.search(fixed(0));
 }
 
 bool
@@ -865,10 +865,10 @@ OrderedTask::CalcCruiseEfficiency(const AircraftState &aircraft,
   if (AllowIncrementalBoundaryStats(aircraft)) {
     TaskCruiseEfficiency bce(task_points, active_task_point, aircraft,
                              task_behaviour.glide, glide_polar);
-    val = bce.search(fixed_one);
+    val = bce.search(fixed(1));
     return true;
   } else {
-    val = fixed_one;
+    val = fixed(1);
     return false;
   }
 }
@@ -897,16 +897,16 @@ OrderedTask::CalcMinTarget(const AircraftState &aircraft,
 {
   if (stats.distance_max > stats.distance_min) {
     // only perform scan if modification is possible
-    const fixed t_rem = max(fixed_zero, t_target - stats.total.time_elapsed);
+    const fixed t_rem = max(fixed(0), t_target - stats.total.time_elapsed);
 
     TaskMinTarget bmt(task_points, active_task_point, aircraft,
                       task_behaviour.glide, glide_polar,
                       t_rem, taskpoint_start);
-    fixed p = bmt.search(fixed_zero);
+    fixed p = bmt.search(fixed(0));
     return p;
   }
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 
@@ -914,16 +914,16 @@ fixed
 OrderedTask::CalcGradient(const AircraftState &state) const
 {
   if (task_points.empty())
-    return fixed_zero;
+    return fixed(0);
 
   // Iterate through remaining turnpoints
-  fixed distance = fixed_zero;
+  fixed distance = fixed(0);
   for (const OrderedTaskPoint *tp : task_points)
     // Sum up the leg distances
     distance += tp->GetVectorRemaining(state.location).distance;
 
   if (!distance)
-    return fixed_zero;
+    return fixed(0);
 
   // Calculate gradient to the last turnpoint of the remaining task
   return (state.altitude - task_points[task_points.size() - 1]->GetElevation()) / distance;
@@ -1105,7 +1105,7 @@ OrderedTask::GetFinishHeight() const
   if (taskpoint_finish)
     return taskpoint_finish->GetElevation();
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 GeoPoint 
@@ -1121,7 +1121,7 @@ fixed
 OrderedTask::GetTaskRadius() const
 { 
   if (!HasStart() || !task_points[0])
-    return fixed_zero;
+    return fixed(0);
 
   return task_projection.ApproxRadius();
 }

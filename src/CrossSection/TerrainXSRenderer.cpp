@@ -38,7 +38,7 @@ TerrainXSRenderer::Draw(Canvas &canvas, const ChartRenderer &chart, const short 
   canvas.SelectNullPen();
 
   RasterBuffer::TerrainType last_type = RasterBuffer::TerrainType::UNKNOWN;
-  fixed last_distance = fixed_zero;
+  fixed last_distance = fixed(0);
 
   for (unsigned j = 0; j < CrossSectionRenderer::NUM_SLICES; ++j) {
     const fixed distance_factor =

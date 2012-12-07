@@ -35,7 +35,7 @@ KineticManager::MouseDown(int x)
   steady = false;
   last = x;
   clock.Update();
-  v = fixed_zero;
+  v = fixed(0);
 }
 
 void

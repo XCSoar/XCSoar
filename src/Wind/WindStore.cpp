@@ -35,9 +35,9 @@ void
 WindStore::reset()
 {
   windlist.Reset();
-  update_clock = fixed_zero;
+  update_clock = fixed(0);
   updated = true;
-  _lastAltitude = fixed_zero;
+  _lastAltitude = fixed(0);
 }
 
 void
@@ -85,7 +85,7 @@ WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
   fixed mag = wind.Magnitude();
   Angle bearing;
 
-  if (wind.y == fixed_zero && wind.x == fixed_zero)
+  if (wind.y == fixed(0) && wind.x == fixed(0))
     bearing = Angle::Zero();
   else
     bearing = Angle::Radians(atan2(wind.y, wind.x));

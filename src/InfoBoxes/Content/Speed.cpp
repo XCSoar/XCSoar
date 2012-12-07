@@ -54,7 +54,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   if (!XCSoarInterface::Basic().gps.simulator)
     return false;
 
-  fixed fixed_step = (fixed)Units::ToSysSpeed(fixed_ten);
+  fixed fixed_step = (fixed)Units::ToSysSpeed(fixed(10));
   const Angle a5 = Angle::Degrees(fixed(5));
 
   switch (keycode) {
@@ -65,7 +65,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 
   case ibkDown:
     device_blackboard->SetSpeed(
-        max(fixed_zero, XCSoarInterface::Basic().ground_speed - fixed_step));
+        max(fixed(0), XCSoarInterface::Basic().ground_speed - fixed_step));
     return true;
 
   case ibkLeft:

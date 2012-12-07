@@ -51,8 +51,8 @@ VegaDevice::OnSysTicker(const DerivedInfo &calculated)
           (int)(t.estimate_valid),
           (double)t.estimate_location.Longitude.Degrees(),
           (double)t.estimate_location.Latitude.Degrees(),
-          (double)fixed_zero,
-          (double)fixed_zero);
+          (double)fixed(0),
+          (double)fixed(0));
 
   PortWriteNMEA(port, tbuf);
 #endif

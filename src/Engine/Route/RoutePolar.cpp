@@ -45,7 +45,7 @@ RoutePolar::SolveTask(const GlideSettings &settings,
                        const Angle theta, const bool glide) const
 {
   const MacCready mac_cready(settings, glide_polar);
-  GlideState task(GeoVector(fixed_one, theta), fixed_zero, fixed_zero, wind);
+  GlideState task(GeoVector(fixed(1), theta), fixed(0), fixed(0), wind);
   return glide
     ? mac_cready.SolveStraight(task)
     : mac_cready.Solve(task);

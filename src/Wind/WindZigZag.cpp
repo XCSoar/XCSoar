@@ -77,7 +77,7 @@ WindZigZagGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   // reset if flight hasnt started or airspeed instrument not available
   if (!derived.flight.flying ||
       !basic.airspeed_available || !basic.airspeed_real ||
-      basic.true_airspeed < fixed_one) {
+      basic.true_airspeed < fixed(1)) {
     reset();
     return Result(0);
   }
@@ -92,7 +92,7 @@ WindZigZagGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (basic.acceleration.available &&
        basic.acceleration.real &&
-       fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
+       fabs(basic.acceleration.g_load - fixed(1)) > fixed(0.3))) {
 
     blackout((unsigned)basic.time);
     return Result(0);
@@ -183,7 +183,7 @@ WindZigZag::correlation(const ZZBeta& beta) const
   }
 
   if (!n)
-    return std::make_pair(fixed_zero, fixed_one);
+    return std::make_pair(fixed(0), fixed(1));
 
   x_av /= n;
   y_av /= n;
@@ -199,7 +199,7 @@ WindZigZag::correlation(const ZZBeta& beta) const
     acc_yy += yd * yd;
   }
   if (!positive(acc_xx) || !positive(acc_yy))
-    return std::make_pair(fixed_zero, fixed_one);
+    return std::make_pair(fixed(0), fixed(1));
   fixed r = acc_xy / (sqrt(acc_xx) * sqrt(acc_yy));
   fixed slope = y_av / x_av;
 

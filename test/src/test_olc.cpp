@@ -28,7 +28,7 @@
 static bool
 test_olc(int n_wind, Contest olc_type)
 {
-  GlidePolar glide_polar(fixed_two);
+  GlidePolar glide_polar(fixed(2));
   Waypoints waypoints;
   SetupWaypoints(waypoints);
 

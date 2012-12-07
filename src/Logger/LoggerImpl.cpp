@@ -157,7 +157,7 @@ LoggerImpl::LogPoint(const NMEAInfo &gps_info)
 
     // NOTE: clock is only used to set the validity of valid objects to true
     //       for which "1" is sufficient. This kludge needs to be rewritten.
-    tmp_info.clock = fixed_one;
+    tmp_info.clock = fixed(1);
 
     tmp_info.alive.Update(tmp_info.clock);
 

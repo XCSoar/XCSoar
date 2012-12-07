@@ -365,7 +365,7 @@ XCSoarInterface::Startup()
   EGM96::Load();
 
   GlidePolar &gp = SetComputerSettings().polar.glide_polar_task;
-  gp = GlidePolar(fixed_zero);
+  gp = GlidePolar(fixed(0));
   gp.SetMC(GetComputerSettings().task.safety_mc);
   gp.SetBugs(GetComputerSettings().polar.degradation_factor);
   PlaneGlue::FromProfile(SetComputerSettings().plane);

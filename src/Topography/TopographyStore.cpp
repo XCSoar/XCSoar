@@ -178,7 +178,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
       label_range = fixed(strtod(p + 1, &p)) * 1000;
 
     // Parse range for displaying labels with "important" rendering style
-    fixed labelImportantRange = fixed_zero;
+    fixed labelImportantRange = fixed(0);
     if (*p == _T(','))
       labelImportantRange = fixed(strtod(p + 1, &p)) * 1000;
 

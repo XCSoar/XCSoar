@@ -70,7 +70,7 @@ ThermalAssistantRenderer::Update(const AttitudeState &attitude,
 fixed
 ThermalAssistantRenderer::CalculateMaxLift() const
 {
-  return std::max(fixed_one,
+  return std::max(fixed(1),
                   *std::max_element(vario.lift_database.begin(),
                                     vario.lift_database.end()));
 }
@@ -103,7 +103,7 @@ fixed
 ThermalAssistantRenderer::NormalizeLift(fixed lift, fixed max_lift)
 {
   lift = (lift + max_lift) / Double(max_lift);
-  return std::min(fixed_one, std::max(fixed_zero, lift));
+  return std::min(fixed(1), std::max(fixed(0), lift));
 }
 
 void
@@ -152,7 +152,7 @@ ThermalAssistantRenderer::PaintRadarBackground(Canvas &canvas, fixed max_lift) c
                   mid.y + radius - s.cy * 0.75,
                   lift_string);
 
-  FormatUserVerticalSpeed(fixed_zero, lift_string, ARRAY_SIZE(lift_string));
+  FormatUserVerticalSpeed(fixed(0), lift_string, ARRAY_SIZE(lift_string));
   s = canvas.CalcTextSize(lift_string);
   canvas.DrawText(mid.x - s.cx / 2,
                   mid.y + radius / 2 - s.cy * 0.75,

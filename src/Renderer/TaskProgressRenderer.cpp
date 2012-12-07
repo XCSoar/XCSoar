@@ -47,7 +47,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
     canvas.Select(look.hbGray);
     canvas.SelectNullPen();
     canvas.DrawSegment(center.x, center.y, radius, Angle::Zero(),
-                   Angle::Radians(sweep * (fixed_one -  summary.p_remaining)));
+                   Angle::Radians(sweep * (fixed(1) -  summary.p_remaining)));
   }
 
   canvas.Select(pen_f);

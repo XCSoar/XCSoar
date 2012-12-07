@@ -229,7 +229,7 @@ public:
    * @return Pointer to waypoint if found (or NULL if none found)
    */
   const Waypoint* LookupLocation(const GeoPoint &loc,
-                                 const fixed range = fixed_zero) const;
+                                 const fixed range = fixed(0)) const;
 
   /**
    * Look up waypoint by name (returns first match)

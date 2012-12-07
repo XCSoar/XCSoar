@@ -47,7 +47,7 @@ public:
    *
    * @param tolerance Tolerance of vertical speeds (m/s)
    */
-  AirspaceAircraftPerformance(const fixed _tolerance = fixed_zero)
+  AirspaceAircraftPerformance(const fixed _tolerance = fixed(0))
     :vertical_tolerance(_tolerance) {};
 
   /**

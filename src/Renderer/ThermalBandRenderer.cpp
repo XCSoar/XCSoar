@@ -38,11 +38,11 @@ ThermalBandRenderer::scale_chart(const DerivedInfo &calculated,
                                  const ComputerSettings &settings_computer,
                                  ChartRenderer &chart) const
 {
-  chart.ScaleYFromValue(fixed_zero);
+  chart.ScaleYFromValue(fixed(0));
   chart.ScaleYFromValue(calculated.thermal_band.max_thermal_height);
 
-  chart.ScaleXFromValue(fixed_zero);
-  chart.ScaleXFromValue(fixed_half);
+  chart.ScaleXFromValue(fixed(0));
+  chart.ScaleXFromValue(fixed(0.5));
   chart.ScaleXFromValue(settings_computer.polar.glide_polar_task.GetMC());
 }
 
@@ -62,14 +62,14 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   fixed hoffset = task_props.route_planner.safety_height_terrain +
     calculated.GetTerrainBaseFallback();
 
-  fixed h = fixed_zero;
+  fixed h = fixed(0);
   if (basic.NavAltitudeAvailable()) {
     h = basic.nav_altitude - hoffset;
     chart.ScaleYFromValue(h);
   }
 
   bool draw_start_height = false;
-  fixed hstart = fixed_zero;
+  fixed hstart = fixed(0);
 
   draw_start_height = ordered_props
     && calculated.common_stats.ordered_valid
@@ -92,8 +92,8 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   // calculate averages
   int numtherm = 0;
 
-  fixed Wmax = fixed_zero;
-  fixed Wav = fixed_zero;
+  fixed Wmax = fixed(0);
+  fixed Wav = fixed(0);
   fixed Wt[ThermalBandInfo::NUMTHERMALBUCKETS];
   fixed ht[ThermalBandInfo::NUMTHERMALBUCKETS];
 
@@ -139,7 +139,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   if (basic.NavAltitudeAvailable()) {
     const Pen &pen = is_infobox && look.inverse
       ? look.white_pen : look.black_pen;
-    chart.DrawLine(fixed_zero, h,
+    chart.DrawLine(fixed(0), h,
                    settings_computer.polar.glide_polar_task.GetMC(), h, pen);
 
     if (is_infobox && look.inverse)
@@ -152,7 +152,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
   /*
   RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
-  GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed_one - hglider)) + rc.top;
+  GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed(1) - hglider)) + rc.top;
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[1].x =
       max(iround((mc / Wmax) * Layout::Scale(TBSCALEX)), Layout::Scale(4)) + rc.left;
@@ -171,7 +171,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
   if (draw_start_height) {
     canvas.Select(Graphics::hpFinalGlideBelow);
-    GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
+    GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed(1) - hstart)) + rc.top;
     GliderBand[1].y = GliderBand[0].y;
     canvas.DrawPolyline(GliderBand, 2);
   }
@@ -198,10 +198,10 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                    chart, task_props, false, ordered_props);
 
   if (!is_map) {
-    chart.DrawXGrid(Units::ToSysVSpeed(fixed_one), fixed_zero,
-                    ChartLook::STYLE_THINDASHPAPER, fixed_one, true);
+    chart.DrawXGrid(Units::ToSysVSpeed(fixed(1)), fixed(0),
+                    ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
     chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                    fixed_zero,
+                    fixed(0),
                     ChartLook::STYLE_THINDASHPAPER,
                     fixed(1000), true);
     chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());

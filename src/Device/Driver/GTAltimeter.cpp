@@ -59,7 +59,7 @@ LK8EX1(NMEAInputLine &line, NMEAInfo &info)
 
   fixed battery_value;
   if (line.ReadChecked(battery_value) &&
-      (unsigned)(battery_value + fixed_half) != 999) {
+      (unsigned)(battery_value + fixed(0.5)) != 999) {
     if (battery_value > fixed(1000)) {
       info.battery_level = battery_value - fixed(1000);
       info.battery_level_available.Update(info.clock);

@@ -39,12 +39,12 @@ ChartRenderer::ResetScale()
 {
   unscaled_y = true;
   unscaled_x = true;
-  xscale = fixed_zero;
-  yscale = fixed_zero;
-  x_min = fixed_zero;
-  x_max = fixed_zero;
-  y_min = fixed_zero;
-  y_max = fixed_zero;
+  xscale = fixed(0);
+  yscale = fixed(0);
+  x_min = fixed(0);
+  x_max = fixed(0);
+  y_min = fixed(0);
+  y_max = fixed(0);
 }
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
@@ -270,8 +270,8 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style Style)
     return;
 
   fixed xmin, xmax, ymin, ymax;
-  xmin = fixed_half;
-  xmax = fixed(lsdata.sum_n) + fixed_half;
+  xmin = fixed(0.5);
+  xmax = fixed(lsdata.sum_n) + fixed(0.5);
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
@@ -397,7 +397,7 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata,
 void
 ChartRenderer::FormatTicText(TCHAR *text, const fixed val, const fixed step)
 {
-  if (step < fixed_one) {
+  if (step < fixed(1)) {
     _stprintf(text, _T("%.1f"), (double)val);
   } else {
     _stprintf(text, _T("%.0f"), (double)val);
@@ -429,9 +429,9 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
   PixelScalar next_text = rc.left;
 
   /* increase tic step so graph not too crowded */
-  while ((x_max-x_min)/tic_step > fixed_ten) {
-    tic_step *= fixed_two;
-    unit_step *= fixed_two;
+  while ((x_max-x_min)/tic_step > fixed(10)) {
+    tic_step *= fixed(2);
+    unit_step *= fixed(2);
   }
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
@@ -498,9 +498,9 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
   RasterPoint line[2];
 
   /* increase tic step so graph not too crowded */
-  while ((y_max-y_min)/tic_step > fixed_ten) {
-    tic_step *= fixed_two;
-    unit_step *= fixed_two;
+  while ((y_max-y_min)/tic_step > fixed(10)) {
+    tic_step *= fixed(2);
+    unit_step *= fixed(2);
   }
 
   line[0].x = rc.left + padding_left;
@@ -557,14 +557,14 @@ ChartRenderer::ScaleMakeSquare()
 
   fixed delta;
 
-  if (armod < fixed_one) {
+  if (armod < fixed(1)) {
     // need to expand width
-    delta = (x_max - x_min) * (fixed_one / armod - fixed_one);
+    delta = (x_max - x_min) * (fixed(1) / armod - fixed(1));
     x_max += delta / 2;
     x_min -= delta / 2;
   } else {
     // need to expand height
-    delta = (y_max - y_min) * (armod - fixed_one);
+    delta = (y_max - y_min) * (armod - fixed(1));
     y_max += delta / 2;
     y_min -= delta / 2;
   }
@@ -606,7 +606,7 @@ ChartRenderer::DrawArrow(const fixed x, const fixed y, const fixed mag,
   const FastRotation r(angle);
   FastRotation::Pair p;
 
-  p = r.Rotate(mag, fixed_zero);
+  p = r.Rotate(mag, fixed(0));
   wv[1].x = wv[0].x + (int)p.first;
   wv[1].y = wv[0].y + (int)p.second;
   canvas.DrawLine(wv[0], wv[1]);

@@ -49,7 +49,7 @@ public:
 
   constexpr
   static Angle Zero() {
-    return Native(fixed_zero);
+    return Native(fixed(0));
   }
 
   constexpr
@@ -66,7 +66,7 @@ public:
 #ifdef RADIANS
     return Native(fixed_two_pi);
 #else
-    return Native(fixed_360);
+    return Native(fixed(360));
 #endif
   }
 
@@ -79,7 +79,7 @@ public:
 #ifdef RADIANS
     return Native(fixed_pi);
 #else
-    return Native(fixed_180);
+    return Native(fixed(180));
 #endif
   }
 
@@ -92,7 +92,7 @@ public:
 #ifdef RADIANS
     return Native(fixed_half_pi);
 #else
-    return Native(fixed_90);
+    return Native(fixed(90));
 #endif
   }
 

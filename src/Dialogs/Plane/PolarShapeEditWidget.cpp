@@ -148,8 +148,8 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
     points[i].v = new WndProperty(panel, look, _T(""),
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.0f"), _T("%.0f %s"),
-                                            fixed_zero, fixed(300), fixed_zero,
-                                            fixed_one, false, NULL);
+                                            fixed(0), fixed(300), fixed(0),
+                                            fixed(1), false, NULL);
     points[i].v->SetDataField(df);
   }
 
@@ -166,7 +166,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
   fixed step = fixed(0.05), min = fixed(-10);
   switch (Units::current.vertical_speed_unit) {
   case Unit::FEET_PER_MINUTE:
-    step = fixed_ten;
+    step = fixed(10);
     min = fixed(-2000);
     break;
 
@@ -184,7 +184,7 @@ PolarShapeEditWidget::Prepare(ContainerWindow &parent, const PixelRect &_rc)
     points[i].w = new WndProperty(panel, look, _T(""),
                                   rc, 0, style);
     DataFieldFloat *df = new DataFieldFloat(_T("%.2f"), _T("%.2f %s"),
-                                            min, fixed_zero, fixed_zero,
+                                            min, fixed(0), fixed(0),
                                             step, false, NULL);
 
     points[i].w->SetDataField(df);

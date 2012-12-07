@@ -155,7 +155,7 @@ TestBuiltInPolarsPlausibility()
 
     ok(pc.IsValid(), polarName);
 
-    GlidePolar gp(fixed_zero);
+    GlidePolar gp(fixed(0));
     gp.SetCoefficients(pc, false);
 
     // Glider empty weight

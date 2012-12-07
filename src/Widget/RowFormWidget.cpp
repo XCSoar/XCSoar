@@ -228,8 +228,8 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
 {
   WndProperty *edit = Add(label, help, true);
   DataFieldFloat *df = new DataFieldFloat(display_format, display_format,
-                                          fixed_zero, fixed_zero,
-                                          value, fixed_one, false, NULL);
+                                          fixed(0), fixed(0),
+                                          value, fixed(1), false, NULL);
   edit->SetDataField(df);
 }
 
@@ -242,8 +242,8 @@ RowFormWidget::AddReadOnly(const TCHAR *label, const TCHAR *help,
   const Unit unit = Units::GetUserUnitByGroup(unit_group);
   value = Units::ToUserUnit(value, unit);
   DataFieldFloat *df = new DataFieldFloat(display_format, display_format,
-                                          fixed_zero, fixed_zero,
-                                          value, fixed_one, false, NULL);
+                                          fixed(0), fixed(0),
+                                          value, fixed(1), false, NULL);
   df->SetUnits(Units::GetUnitName(unit));
   edit->SetDataField(df);
 }

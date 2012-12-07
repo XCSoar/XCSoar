@@ -45,7 +45,7 @@ public:
    * 
    * @param cutoff_wavelength -3db cutoff wavelength (s) of filters
    */
-  AircraftStateFilter(const fixed cutoff_wavelength = fixed_ten);
+  AircraftStateFilter(const fixed cutoff_wavelength = fixed(10));
 
   /**
    * Reset filters to initial state

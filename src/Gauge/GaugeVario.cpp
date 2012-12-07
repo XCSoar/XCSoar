@@ -39,7 +39,7 @@ Copyright_License {
 using std::min;
 using std::max;
 
-#define DeltaVstep fixed_four
+#define DeltaVstep fixed(4)
 #define DeltaVlimit fixed(16)
 #define TextBug _T("Bug")
 #define TextBal _T("Bal")
@@ -448,7 +448,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y)
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else
-    vdiff = fixed_zero;
+    vdiff = fixed(0);
 
   if (!is_persistent() || lastVdiff != vdiff || dirty) {
     lastVdiff = vdiff;
@@ -685,7 +685,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
     bugs_initialised = true;
   }
 
-  int bugs = iround((fixed_one - GetComputerSettings().polar.bugs) * 100);
+  int bugs = iround((fixed(1) - GetComputerSettings().polar.bugs) * 100);
   if (is_persistent() || bugs != last_bugs) {
 
     canvas.Select(*look.text_font);

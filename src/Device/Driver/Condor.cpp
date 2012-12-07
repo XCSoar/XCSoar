@@ -80,7 +80,7 @@ cLXWP0(NMEAInputLine &line, NMEAInfo &info)
   fixed airspeed;
   bool tas_available = line.ReadChecked(airspeed);
 
-  fixed alt = line.Read(fixed_zero);
+  fixed alt = line.Read(fixed(0));
 
   if (tas_available)
     info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,

@@ -106,12 +106,12 @@ AbstractAirspace::Intercept(const AircraftState &state,
                              (loc_start == state.location);
 
   const fixed distance_start = only_vertical ?
-                               fixed_zero : state.location.Distance(loc_start);
+                               fixed(0) : state.location.Distance(loc_start);
 
   const fixed distance_end =
       (loc_start == loc_end) ?
       distance_start :
-      (only_vertical ? fixed_zero : state.location.Distance(loc_end));
+      (only_vertical ? fixed(0) : state.location.Distance(loc_end));
 
   AirspaceInterceptSolution solution_this =
     AirspaceInterceptSolution::Invalid();

@@ -49,7 +49,7 @@ struct TaskSummary {
 
   void clear() {
     active = 0;
-    p_remaining = fixed_one;
+    p_remaining = fixed(1);
     pts.clear();
   }
   void append(const TaskSummaryPoint& tsp) {
@@ -60,7 +60,7 @@ struct TaskSummary {
       return;
 
     p_remaining = d_remaining/d_planned;
-    fixed p = fixed_zero;
+    fixed p = fixed(0);
     for (auto &i : pts) {
       p += i.d_planned / d_planned;
       i.p = p;

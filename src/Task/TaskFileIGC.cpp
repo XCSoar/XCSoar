@@ -114,7 +114,7 @@ TaskFileIGC::GetTask(const TaskBehaviour &task_behaviour,
 
     /* we don't know the elevation, so we just set it to zero; this is
        not correct, but better than leaving it uninitialised */
-    wp.elevation = fixed_zero;
+    wp.elevation = fixed(0);
 
     OrderedTaskPoint *tp;
 

@@ -65,9 +65,9 @@ test_fixed_err()
 {
   bool err_ok=true;
   for (fixed x=fixed(0.0001); x< fixed(100000.0); x*= fixed(1.5)) {
-    fixed y0 = fixed_one/sqrt(x);
+    fixed y0 = fixed(1)/sqrt(x);
     fixed y1 = rsqrt(x);
-    fixed err = fabs(y1/y0-fixed_one);
+    fixed err = fabs(y1 / y0 - fixed(1));
     bool this_ok = err< fixed(0.0001);
     err_ok &= this_ok;
     if (!this_ok) {

@@ -147,7 +147,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   traffic.turn_rate_received = line.ReadChecked(value);
   if (!traffic.turn_rate_received) {
     // Field is empty in stealth mode
-    traffic.turn_rate = fixed_zero;
+    traffic.turn_rate = fixed(0);
   } else
     traffic.turn_rate = value;
 
@@ -155,7 +155,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   if (!traffic.speed_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.speed = fixed_zero;
+    traffic.speed = fixed(0);
   } else
     traffic.speed = value;
 
@@ -163,7 +163,7 @@ ParsePFLAA(NMEAInputLine &line, TrafficList &flarm, fixed clock)
   if (!traffic.climb_rate_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.climb_rate = fixed_zero;
+    traffic.climb_rate = fixed(0);
   } else
     traffic.climb_rate = value;
 

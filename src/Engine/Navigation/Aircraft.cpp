@@ -38,7 +38,7 @@ AircraftState::Reset()
 {
   AltitudeState::Reset();
 
-  g_load = fixed_one;
+  g_load = fixed(1);
   wind = SpeedVector::Zero();
   flying = false;
 }
@@ -46,7 +46,7 @@ AircraftState::Reset()
 void
 AltitudeState::Reset()
 {
-  altitude = fixed_zero;
-  working_band_fraction = fixed_zero;
-  altitude_agl = fixed_zero;
+  altitude = fixed(0);
+  working_band_fraction = fixed(0);
+  altitude_agl = fixed(0);
 }

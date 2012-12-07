@@ -30,7 +30,7 @@
 
 TaskManager::TaskManager(const TaskBehaviour &_task_behaviour,
                          const Waypoints &wps)
-  :glide_polar(fixed_zero), safety_polar(fixed_one),
+  :glide_polar(fixed(0)), safety_polar(fixed(1)),
    task_behaviour(_task_behaviour),
    task_ordered(task_behaviour),
    task_goto(task_behaviour, wps),
@@ -145,7 +145,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
           fixed(task_stats.total.remaining.GetDistance()) /
           common_stats.aat_time_remaining;
     else
-      common_stats.aat_speed_remaining = -fixed_one;
+      common_stats.aat_speed_remaining = fixed(-1);
 
     fixed aat_min_time = task_ordered.GetOrderedTaskBehaviour().aat_min_time;
 
@@ -153,8 +153,8 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
       common_stats.aat_speed_max = task_stats.distance_max / aat_min_time;
       common_stats.aat_speed_min = task_stats.distance_min / aat_min_time;
     } else {
-      common_stats.aat_speed_max = -fixed_one;
-      common_stats.aat_speed_min = -fixed_one;
+      common_stats.aat_speed_max = fixed(-1);
+      common_stats.aat_speed_min = fixed(-1);
     }
 
     common_stats.task_time_remaining = task_stats.total.time_remaining;
@@ -166,7 +166,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     const fixed start_max_height =
       fixed(start_constraints.max_height) +
       (start_constraints.max_height_ref == AltitudeReference::MSL
-       ? fixed_zero
+       ? fixed(0)
        : task_ordered.GetPoint(0).GetElevation());
     if (positive(start_max_height) &&
         state.location.IsValid() && state.flying) {
@@ -175,10 +175,10 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
         common_stats.TimeUnderStartMaxHeight = state.time;
       }
       if (state.altitude > start_max_height) {
-          common_stats.TimeUnderStartMaxHeight = -fixed_one;
+          common_stats.TimeUnderStartMaxHeight = fixed(-1);
       }
     } else {
-      common_stats.TimeUnderStartMaxHeight = -fixed_one;
+      common_stats.TimeUnderStartMaxHeight = fixed(-1);
     }
 
     task_ordered.UpdateSummary(common_stats.ordered_summary);
@@ -369,7 +369,7 @@ TaskManager::Reset()
   task_goto.Reset();
   task_abort.Reset();
   common_stats.Reset();
-  glide_polar.SetCruiseEfficiency(fixed_one);
+  glide_polar.SetCruiseEfficiency(fixed(1));
 }
 
 unsigned
@@ -409,7 +409,7 @@ TaskManager::GetFinishHeight() const
   if (active_task)
     return active_task->GetFinishHeight();
 
-  return fixed_zero;
+  return fixed(0);
 }
 
 bool

@@ -29,7 +29,7 @@ Projection::Projection() :
   geo_location(Angle::Zero(), Angle::Zero()),
   screen_rotation(Angle::Zero())
 {
-  SetScale(fixed_one);
+  SetScale(fixed(1));
   screen_origin.x = 0;
   screen_origin.y = 0;
 }
@@ -80,5 +80,5 @@ Projection::SetScale(const fixed _scale)
   // Calculate earth radius in pixels
   draw_scale = fixed_earth_r * scale;
   // Save inverted value for faster calculations
-  inv_draw_scale = fixed_one / draw_scale;
+  inv_draw_scale = fixed(1) / draw_scale;
 }

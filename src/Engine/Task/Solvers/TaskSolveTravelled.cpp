@@ -37,9 +37,9 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
 {
   dt = aircraft.time-tps[0]->GetEnteredState().time;
   if (positive(dt)) {
-    inv_dt = fixed_one/dt;
+    inv_dt = fixed(1)/dt;
   } else {
-    inv_dt = fixed_zero; // error!
+    inv_dt = fixed(0); // error!
   }
 }
 

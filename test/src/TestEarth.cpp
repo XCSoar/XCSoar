@@ -80,8 +80,8 @@ int main(int argc, char **argv)
   distance = ProjectedDistance(a, b, b);
   ok1(distance > fixed(9120) && distance < fixed(9140));
 
-  const GeoPoint middle(a.longitude.Fraction(b.longitude, fixed_half),
-                        a.latitude.Fraction(b.latitude, fixed_half));
+  const GeoPoint middle(a.longitude.Fraction(b.longitude, fixed(0.5)),
+                        a.latitude.Fraction(b.latitude, fixed(0.5)));
   distance = ProjectedDistance(a, b, middle);
   ok1(distance > fixed(9100/2) && distance < fixed(9140/2));
 

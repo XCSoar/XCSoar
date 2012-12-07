@@ -84,6 +84,6 @@ void
 ScoredTaskPoint::Reset()
 {
   SampledTaskPoint::Reset();
-  state_entered.time = fixed_minus_one;
+  state_entered.time = fixed(-1);
   has_exited = false;
 }

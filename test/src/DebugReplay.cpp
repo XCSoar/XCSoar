@@ -42,7 +42,7 @@ static DeviceConfig config;
 static NullPort port;
 
 DebugReplay::DebugReplay(NLineReader *_reader)
-  :reader(_reader), glide_polar(fixed_one)
+  :reader(_reader), glide_polar(fixed(1))
 {
   raw_basic.Reset();
   calculated.Reset();

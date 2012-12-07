@@ -251,7 +251,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
       new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
 
     // Runway length (e.g. 546.0m)
-    fixed rwlen = fixed_minus_one;
+    fixed rwlen = fixed(-1);
     if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
         positive(rwlen))
       new_waypoint.runway.SetLength(uround(rwlen));

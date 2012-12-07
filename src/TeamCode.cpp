@@ -99,8 +99,8 @@ NumberToTeamCode(fixed value, TCHAR *code, int minCiffers)
       maxCif = curCif;
     }
 
-    if (rest < fixed_one)
-      rest = fixed_zero;
+    if (rest < fixed(1))
+      rest = fixed(0);
   }
 }
 

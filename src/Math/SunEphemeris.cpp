@@ -128,7 +128,7 @@ SunEphemeris::GetEclipticLongitude(fixed d, Angle L)
 
   //   Ecliptic longitude of the Sun
   return (Angle::Degrees(fixed(1.915)) * g.sin() + L +
-          Angle::Degrees(fixed(.02)) * (g * fixed_two).sin()).AsBearing();
+          Angle::Degrees(fixed(.02)) * (g * fixed(2)).sin()).AsBearing();
 }
 
 Angle
@@ -189,7 +189,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
   if (l.Radians() < fixed_pi)
     ll += fixed_two_pi;
 
-  fixed equation = fixed(1440) * (fixed_one - ll / fixed_two_pi);
+  fixed equation = fixed(1440) * (fixed(1) - ll / fixed_two_pi);
 
   Angle hour_angle = GetHourAngle(location.latitude, delta);
   Angle hour_angle_twilight = GetHourAngleTwilight(location.latitude, delta);
@@ -204,7 +204,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &location,
 
   if (result.day_length < fixed(0.0001))
     // arctic winter
-    result.day_length = fixed_zero;
+    result.day_length = fixed(0);
 
   result.time_of_sunrise = fixed(12) - hour_angle.Hours() + time_zone
     - location.longitude.Degrees() / 15 + equation / 60;

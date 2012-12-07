@@ -60,10 +60,10 @@ UnorderedTask::CalcRequiredGlide(const AircraftState &aircraft,
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
-    return fixed_zero;
+    return fixed(0);
   }
   TaskGlideRequired bgr(tp, aircraft, task_behaviour.glide, glide_polar);
-  return bgr.search(fixed_zero);
+  return bgr.search(fixed(0));
 }
 
 void
@@ -143,7 +143,7 @@ UnorderedTask::ScanDistanceMinMax(const GeoPoint &location, bool full,
 {
   *dmin = *dmax = stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
-    : fixed_zero;
+    : fixed(0);
 }
 
 fixed 
@@ -151,7 +151,7 @@ UnorderedTask::ScanDistanceNominal()
 {
   return stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
-    : fixed_zero;
+    : fixed(0);
 }
 
 fixed
@@ -159,19 +159,19 @@ UnorderedTask::ScanDistancePlanned()
 {
   return stats.total.remaining.IsDefined()
     ? stats.total.remaining.GetDistance()
-    : fixed_zero;
+    : fixed(0);
 }
 
 fixed 
 UnorderedTask::ScanDistanceScored(const GeoPoint &location)
 {
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed 
 UnorderedTask::ScanDistanceTravelled(const GeoPoint &location)
 {
-  return fixed_zero;
+  return fixed(0);
 }
 
 fixed 
@@ -179,7 +179,7 @@ UnorderedTask::ScanDistanceRemaining(const GeoPoint &location)
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
-    return fixed_zero;
+    return fixed(0);
   }
   return tp->Distance(location);
 }
@@ -195,7 +195,7 @@ UnorderedTask::GetFinishHeight() const
 {
   TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
-    return fixed_zero;
+    return fixed(0);
   }
   return tp->GetElevation();
 }

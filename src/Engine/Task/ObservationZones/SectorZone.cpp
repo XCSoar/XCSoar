@@ -65,7 +65,7 @@ SectorZone::GetBoundary() const
 fixed
 SectorZone::ScoreAdjustment() const
 {
-  return fixed_zero;
+  return fixed(0);
 }
 
 void 

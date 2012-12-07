@@ -41,7 +41,7 @@ LineSectorZoneEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 
   AddFloat(_("Gate Width"), _("Width of the start/finish gate."),
            _T("%.1f %s"), _T("%.1f"),
-           fixed(0.1), fixed(100), fixed_one, true,
+           fixed(0.1), fixed(100), fixed(1), true,
            UnitGroup::DISTANCE, GetObject().GetLength(),
            this);
   SetRowEnabled(LENGTH, length_editable);

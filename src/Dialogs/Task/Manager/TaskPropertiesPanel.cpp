@@ -201,12 +201,12 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Start max. speed"),
            _("Maximum speed allowed in start observation zone.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
-           fixed_zero, fixed(300), fixed(5), false, fixed_zero);
+           fixed(0), fixed(300), fixed(5), false, fixed(0));
 
   AddFloat(_("Start max. height"),
            _("Maximum height based on start height reference (AGL or MSL) while starting the task.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
-           fixed_zero, fixed(10000), fixed(25), false, fixed_zero);
+           fixed(0), fixed(10000), fixed(25), false, fixed(0));
 
   static constexpr StaticEnumChoice altitude_reference_list[] = {
     { (unsigned)AltitudeReference::AGL, N_("AGL"),
@@ -223,7 +223,7 @@ TaskPropertiesPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
   AddFloat(_("Finish min. height"),
            _("Minimum height based on finish height reference (AGL or MSL) while finishing the task.  Set to 0 for no limit."),
            _T("%.0f %s"), _T("%.0f"),
-           fixed_zero, fixed(10000), fixed(25), false, fixed_zero);
+           fixed(0), fixed(10000), fixed(25), false, fixed(0));
 
   AddEnum(_("Finish height ref."),
           _("Reference used for finish min height rule."),

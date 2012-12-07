@@ -123,7 +123,7 @@ ExternalSettings::ProvideMacCready(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 {
-  if (negative(value) || value > fixed_one)
+  if (negative(value) || value > fixed(1))
     /* failed sanity check */
     return false;
 
@@ -138,7 +138,7 @@ ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
 {
-  if (value < fixed_one || value > fixed(5))
+  if (value < fixed(1) || value > fixed(5))
     /* failed sanity check */
     return false;
 
@@ -153,7 +153,7 @@ ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
 bool
 ExternalSettings::ProvideWingLoading(fixed value, fixed time)
 {
-  if (value < fixed_one || value > fixed(200))
+  if (value < fixed(1) || value > fixed(200))
     /* failed sanity check */
     return false;
 
@@ -168,7 +168,7 @@ ExternalSettings::ProvideWingLoading(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBugs(fixed value, fixed time)
 {
-  if (value < fixed_half || value > fixed_one)
+  if (value < fixed(0.5) || value > fixed(1))
     /* failed sanity check */
     return false;
 

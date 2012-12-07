@@ -66,7 +66,7 @@ LogComputer::Run(const MoreData &basic, const DerivedInfo &calculated,
     log_clock.SetDT(fixed(settings_logger.time_step_cruise));
 
   if (fast_log_num) {
-    log_clock.SetDT(fixed_one);
+    log_clock.SetDT(fixed(1));
     fast_log_num--;
   }
 

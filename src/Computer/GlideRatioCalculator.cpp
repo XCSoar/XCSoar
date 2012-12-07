@@ -109,11 +109,11 @@ GlideRatioCalculator::Calculate() const
   short bcold;
 
   if (start >= size)
-    return fixed_zero;
+    return fixed(0);
 
   if (!valid) {
     if (start == 0)
-      return fixed_zero; // unavailable
+      return fixed(0); // unavailable
 
     bcold = 0;
   } else {
@@ -144,11 +144,11 @@ LimitGR(fixed gr)
   if (fabs(gr) > INVALID_GR)
     return INVALID_GR;
 
-  if (gr >= fixed_zero && gr < fixed_one)
-    return fixed_one;
+  if (gr >= fixed(0) && gr < fixed(1))
+    return fixed(1);
 
-  if (gr < fixed_zero && gr > fixed_minus_one)
-    return fixed_minus_one;
+  if (gr < fixed(0) && gr > fixed(-1))
+    return fixed(-1);
 
   return gr;
 }
@@ -162,10 +162,10 @@ UpdateGR(fixed gr, fixed leg_distance, fixed height_above_leg,
 
   fixed glideangle = height_above_leg / leg_distance;
   if (gr != INVALID_GR)
-    glideangle = LowPassFilter(fixed_one / gr, glideangle, filter_factor);
+    glideangle = LowPassFilter(fixed(1) / gr, glideangle, filter_factor);
 
-  if (fabs(glideangle) > fixed_one / INVALID_GR)
-    gr = LimitGR(fixed_one / glideangle);
+  if (fabs(glideangle) > fixed(1) / INVALID_GR)
+    gr = LimitGR(fixed(1) / glideangle);
   else
     gr = INVALID_GR;
 

@@ -44,7 +44,7 @@ MapWindow::MapWindow(const MapLook &_look,
    waypoints(NULL),
    topography(NULL), topography_renderer(NULL),
    terrain(NULL),
-   terrain_radius(fixed_zero),
+   terrain_radius(fixed(0)),
    weather(NULL),
    traffic_look(_traffic_look),
    waypoint_renderer(NULL, look.waypoint),
@@ -139,7 +139,7 @@ MapWindow::UpdateTerrain()
   RasterTerrain::ExclusiveLease lease(*terrain);
   lease->SetViewCenter(location, radius);
   if (lease->IsDirty())
-    terrain_radius = fixed_zero;
+    terrain_radius = fixed(0);
   else {
     terrain_radius = radius;
     terrain_center = location;

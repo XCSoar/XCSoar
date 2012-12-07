@@ -32,7 +32,7 @@ Copyright_License {
 class LiftDatabase : public std::array<fixed, 36> {
 public:
   void Clear() {
-    fill(fixed_zero);
+    fill(fixed(0));
   }
 };
 

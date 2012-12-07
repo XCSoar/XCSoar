@@ -51,7 +51,7 @@ KeyholeZone::GetBoundaryParametric(fixed t) const
     a = GetStartRadial() + Angle::Radians((tt - l) / c1 * sweep);
   } else if (tt < l + l + c1) {
     // second straight element
-    d = (fixed_one - (tt - l - c1) / l) * (GetRadius() - SmallRadius) + SmallRadius;
+    d = (fixed(1) - (tt - l - c1) / l) * (GetRadius() - SmallRadius) + SmallRadius;
     a = GetEndRadial();
   } else {
     // cylinder element

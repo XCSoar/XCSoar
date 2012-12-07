@@ -72,9 +72,9 @@ public:
 
 
   /**
-   * @param start_radius: either fixed_minus_one or a valid value
-   * @param turnpoint_radius: either fixed_minus_one or a valid value
-   * @param finish_radius: either fixed_minus_one or a valid value
+   * @param start_radius: either fixed(-1) or a valid value
+   * @param turnpoint_radius: either fixed(-1) or a valid value
+   * @param finish_radius: either fixed(-1) or a valid value
    *
    * only affects start cylinder/line, finish cylinder/line and
    * turnpoint sector

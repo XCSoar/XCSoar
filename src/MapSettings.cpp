@@ -56,8 +56,8 @@ MapSettings::SetDefaults()
   glider_screen_position = 20; // 20% from bottom
   circling_orientation = DisplayOrientation::TRACK_UP;
   cruise_orientation = DisplayOrientation::TRACK_UP;
-  circling_scale = fixed_one / 2;
-  cruise_scale = fixed_one / 60;
+  circling_scale = fixed(1) / 2;
+  cruise_scale = fixed(1) / 60;
   show_flarm_on_map = true;
   show_flarm_alarm_level = true;
   show_thermal_profile = true;

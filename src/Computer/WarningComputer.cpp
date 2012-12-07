@@ -30,7 +30,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 
 WarningComputer::WarningComputer(Airspaces &_airspaces)
-  :clock(fixed_one), // scan airspace every second
+  :clock(fixed(1)), // scan airspace every second
    airspaces(_airspaces),
    manager(airspaces),
    protected_manager(manager)

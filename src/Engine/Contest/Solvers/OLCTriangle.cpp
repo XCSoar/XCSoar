@@ -322,10 +322,10 @@ OLCTriangle::CalculateResult(const ContestTraceVector &solution) const
   ContestResult result;
   result.time = n_points > 0
     ? fixed(GetPoint(n_points - 1).DeltaTime(GetPoint(0)))
-    : fixed_zero;
+    : fixed(0);
   result.distance = is_complete
     ? CalcLegDistance(solution, 0) + CalcLegDistance(solution, 1) + CalcLegDistance(solution, 2)
-    : fixed_zero;
+    : fixed(0);
   result.score = ApplyHandicap(result.distance * fixed(0.001));
   return result;
 }

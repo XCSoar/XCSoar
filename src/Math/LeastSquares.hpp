@@ -134,11 +134,11 @@ public:
 
   void LeastSquaresUpdate();
   void LeastSquaresUpdate(fixed y);
-  void LeastSquaresUpdate(fixed x, fixed y, fixed weight = fixed_one);
+  void LeastSquaresUpdate(fixed x, fixed y, fixed weight = fixed(1));
 
   void LeastSquaresErrorUpdate();
 
-  void LeastSquaresAdd(fixed x, fixed y, fixed weight = fixed_one);
+  void LeastSquaresAdd(fixed x, fixed y, fixed weight = fixed(1));
 };
 
 #endif // _LEASTSQS_H

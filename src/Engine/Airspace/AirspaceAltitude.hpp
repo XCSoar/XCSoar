@@ -57,9 +57,9 @@ struct AirspaceAltitude
    * @return Initialised blank object
    */
   AirspaceAltitude()
-    :altitude(fixed_zero),
-     flight_level(fixed_zero),
-     altitude_above_terrain(fixed_zero),
+    :altitude(fixed(0)),
+     flight_level(fixed(0)),
+     altitude_above_terrain(fixed(0)),
      reference(AltitudeReference::NONE) {}
 
   /**
@@ -70,10 +70,10 @@ struct AirspaceAltitude
   fixed GetAltitude(const AltitudeState &state) const;
 
   /** Is this altitude reference at or above the aircraft state? */
-  bool IsAbove(const AltitudeState &state, const fixed margin = fixed_zero) const;
+  bool IsAbove(const AltitudeState &state, const fixed margin = fixed(0)) const;
 
   /** Is this altitude reference at or below the aircraft state? */
-  bool IsBelow(const AltitudeState &state, const fixed margin = fixed_zero) const;
+  bool IsBelow(const AltitudeState &state, const fixed margin = fixed(0)) const;
 
   /**
    * Test whether airspace boundary is the terrain

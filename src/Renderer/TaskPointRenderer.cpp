@@ -160,8 +160,8 @@ TaskPointRenderer::DrawIsoline(const AATPoint &tp)
 
   #define fixed_twentieth fixed(1.0 / 20.0)
 
-  GeoPoint start = seg.Parametric(fixed_zero);
-  GeoPoint end = seg.Parametric(fixed_one);
+  GeoPoint start = seg.Parametric(fixed(0));
+  GeoPoint end = seg.Parametric(fixed(1));
 
   if (m_proj.GeoToScreenDistance(start.Distance(end)) <= 2)
     return;

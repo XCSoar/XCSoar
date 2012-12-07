@@ -172,7 +172,7 @@ struct FlarmTraffic {
   }
 
   bool IsPassive() const {
-    return IsPowered() || speed < fixed_four;
+    return IsPowered() || speed < fixed(4);
   }
 
   /**
@@ -181,7 +181,7 @@ struct FlarmTraffic {
    * @return true if the object is still valid
    */
   bool Refresh(fixed Time) {
-    valid.Expire(Time, fixed_two);
+    valid.Expire(Time, fixed(2));
     return valid;
   }
 

@@ -40,7 +40,7 @@ namespace FAITriangleRules
    * derived value, assuming the other two legs are as short as
    * possible.
    */
-  static constexpr fixed SMALL_MAX_LEG(fixed_one - Double(SMALL_MIN_LEG));
+  static constexpr fixed SMALL_MAX_LEG(fixed(1) - Double(SMALL_MIN_LEG));
 
   /**
    * The threshold which allows applying the "large FAI triangle"

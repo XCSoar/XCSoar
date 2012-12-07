@@ -275,7 +275,7 @@ GetRadius(const ObservationZonePoint &oz)
     return cz.GetRadius();
   }
 
-  return fixed_one;
+  return fixed(1);
 }
 
 static fixed

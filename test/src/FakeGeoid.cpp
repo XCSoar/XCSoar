@@ -27,5 +27,5 @@ Copyright_License {
 fixed
 EGM96::LookupSeparation(gcc_unused const GeoPoint &pt)
 {
-  return fixed_zero;
+  return fixed(0);
 }

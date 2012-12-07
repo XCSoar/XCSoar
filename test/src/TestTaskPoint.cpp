@@ -57,7 +57,7 @@ public:
   }
 
   virtual fixed GetElevation() const {
-    return fixed_zero;
+    return fixed(0);
   }
 };
 

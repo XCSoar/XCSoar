@@ -16,7 +16,7 @@ AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a,
     valid = false;
   }
   if (!valid) {
-    sol.elapsed_time = -fixed_one;
+    sol.elapsed_time = fixed(-1);
   }
   return sol;
 }

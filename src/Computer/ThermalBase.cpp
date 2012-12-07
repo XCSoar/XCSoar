@@ -46,7 +46,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
 {
   if (!positive(average) || !positive(altitude)) {    
     ground_location = location;
-    ground_alt = fixed_zero;
+    ground_alt = fixed(0);
     return;
   }
 
@@ -59,7 +59,7 @@ EstimateThermalBase(const RasterTerrain *terrain,
     ground_location = FindLatitudeLongitude(location, 
                                             wind.bearing,
                                             wind.norm * Tmax);
-    ground_alt = fixed_zero;
+    ground_alt = fixed(0);
     return;
   }
 

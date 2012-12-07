@@ -58,7 +58,7 @@ fixed
 NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
                        bool date_available)
 {
-  return fixed_zero;
+  return fixed(0);
 }
 
 static void

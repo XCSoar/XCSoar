@@ -39,8 +39,8 @@ WindSettings::SetDefaults()
 void
 PolarSettings::SetDefaults()
 {
-  degradation_factor = fixed_one;
-  bugs = fixed_one;
+  degradation_factor = fixed(1);
+  bugs = fixed(1);
   glide_polar_task = GlidePolar::Invalid();
   ballast_timer_active = false;
 }

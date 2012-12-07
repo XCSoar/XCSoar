@@ -120,7 +120,7 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
     return;
 
   const GeoVector v = last.location.DistanceBearing(basic.location);
-  if (v.distance >= fixed_one)
+  if (v.distance >= fixed(1))
     basic.track = v.bearing;
 }
 
@@ -166,7 +166,7 @@ ComputeGroundSpeed(NMEAInfo &basic, const NMEAInfo &last)
   if (basic.ground_speed_available)
     return;
 
-  basic.ground_speed = fixed_zero;
+  basic.ground_speed = fixed(0);
   if (!basic.location_available || !last.location_available)
     return;
 
@@ -217,7 +217,7 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
     return;
   }
 
-  fixed TrueAirspeedEstimated = fixed_zero;
+  fixed TrueAirspeedEstimated = fixed(0);
 
   const SpeedVector wind = calculated.wind;
   if (positive(basic.ground_speed) || wind.IsNonZero()) {
@@ -252,7 +252,7 @@ ComputeEnergyHeight(MoreData &basic)
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
-    basic.energy_height = fixed_zero;
+    basic.energy_height = fixed(0);
 
   basic.TE_altitude = basic.nav_altitude + basic.energy_height;
 }
@@ -338,7 +338,7 @@ ComputeGPSVario(MoreData &basic,
       basic.gps_vario_available = basic.gps_altitude_available;
     }
   } else {
-    basic.gps_vario = basic.gps_vario_TE = fixed_zero;
+    basic.gps_vario = basic.gps_vario_TE = fixed(0);
     basic.gps_vario_available.Clear();
   }
 }
@@ -400,7 +400,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 
   if (!basic.acceleration.available)
     basic.acceleration.ProvideGLoad(
-        fixed_one / max(fixed_small, fabs(cos(angle))), false);
+        fixed(1) / max(fixed_small, fabs(cos(angle))), false);
 }
 
 void

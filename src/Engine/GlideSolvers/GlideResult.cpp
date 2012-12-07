@@ -59,7 +59,7 @@ GlideResult::CalcCruiseBearing()
     return;
 
   const fixed sintheta = effective_wind_angle.sin();
-  if (sintheta == fixed_zero)
+  if (sintheta == fixed(0))
     return;
 
   cruise_track_bearing -=

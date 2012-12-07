@@ -28,7 +28,7 @@ Copyright_License {
 void
 ClimbHistory::Clear()
 {
-  std::fill(vario, vario + SIZE, fixed_zero);
+  std::fill(vario, vario + SIZE, fixed(0));
   std::fill(count, count + SIZE, 0);
 }
 

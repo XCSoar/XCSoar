@@ -78,7 +78,7 @@ Test2()
   ok1(equals(fixed(line.Read(0.0)), 4.5555));
 
   // Test read(fixed)
-  ok1(equals(line.Read(fixed_zero), 4.5555));
+  ok1(equals(line.Read(fixed(0)), 4.5555));
 
   // Test read(bool)
   ok1(line.Read(false) == true);

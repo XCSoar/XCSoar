@@ -44,7 +44,7 @@ CirclingComputer::Reset()
 void
 CirclingComputer::ResetStats()
 {
-  min_altitude = fixed_zero;
+  min_altitude = fixed(0);
 }
 
 void
@@ -53,18 +53,18 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
                            const FlyingState &flight)
 {
   if (!basic.time_available || !flight.flying) {
-    circling_info.turn_rate = fixed_zero;
-    circling_info.turn_rate_heading = fixed_zero;
-    circling_info.turn_rate_smoothed = fixed_zero;
+    circling_info.turn_rate = fixed(0);
+    circling_info.turn_rate_heading = fixed(0);
+    circling_info.turn_rate_smoothed = fixed(0);
     return;
   }
 
   const fixed dt = turn_rate_delta_time.Update(basic.time,
-                                               fixed_third, fixed_ten);
+                                               fixed_third, fixed(10));
   if (negative(dt)) {
-    circling_info.turn_rate = fixed_zero;
-    circling_info.turn_rate_heading = fixed_zero;
-    circling_info.turn_rate_smoothed = fixed_zero;
+    circling_info.turn_rate = fixed(0);
+    circling_info.turn_rate_heading = fixed(0);
+    circling_info.turn_rate_smoothed = fixed(0);
   }
 
   if (!positive(dt))
@@ -99,7 +99,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     return;
 
   const fixed dt = turning_delta_time.Update(basic.time,
-                                             fixed_zero, fixed_zero);
+                                             fixed(0), fixed(0));
   if (!positive(dt))
     return;
 
@@ -220,7 +220,7 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   // to prevent bad stats due to flap switches and dolphin soaring
 
   const fixed dt = percent_delta_time.Update(basic.time,
-                                             fixed_zero, fixed_zero);
+                                             fixed(0), fixed(0));
   if (!positive(dt))
     return;
 
@@ -239,11 +239,11 @@ CirclingComputer::PercentCircling(const MoreData &basic,
   }
 
   // Calculate the circling percentage
-  if (circling_info.time_cruise + circling_info.time_climb > fixed_one)
+  if (circling_info.time_cruise + circling_info.time_climb > fixed(1))
     circling_info.circling_percentage = 100 * circling_info.time_climb /
         (circling_info.time_cruise + circling_info.time_climb);
   else
-    circling_info.circling_percentage = fixed_minus_one;
+    circling_info.circling_percentage = fixed(-1);
 }
 
 void

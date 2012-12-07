@@ -84,7 +84,7 @@ GlideComputerTask::ProcessBasicTask(const MoreData &basic,
     const fixed fallback_mc = calculated.last_thermal.IsDefined() &&
       positive(calculated.last_thermal_average_smooth)
       ? calculated.last_thermal_average_smooth
-      : fixed_zero;
+      : fixed(0);
     if (_task->UpdateAutoMC(current_as, fallback_mc))
       calculated.ProvideAutoMacCready(basic.clock,
                                       _task->GetGlidePolar().GetMC());
@@ -136,7 +136,7 @@ Predicted(const ContestSettings &settings,
   return TracePoint(current_leg.location_remaining,
                     unsigned(basic.time + current_leg.time_remaining),
                     current_leg.solution_remaining.min_arrival_altitude,
-                    fixed_zero, 0);
+                    fixed(0), 0);
 }
 
 void

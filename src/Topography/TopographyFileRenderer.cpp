@@ -51,7 +51,7 @@ TopographyFileRenderer::UpdateVisibleShapes(const WindowProjection &projection)
 {
   if (file.GetSerial() == visible_serial &&
       visible_bounds.IsInside(projection.GetScreenBounds()) &&
-      projection.GetScreenBounds().Scale(fixed_two).IsInside(visible_bounds))
+      projection.GetScreenBounds().Scale(fixed(2)).IsInside(visible_bounds))
     /* cache is clean */
     return;
 

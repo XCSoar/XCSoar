@@ -40,7 +40,7 @@ class FlytecDevice : public AbstractDevice
   fixed last_time;
 
 public:
-  FlytecDevice(Port &_port):port(_port), last_time(fixed_zero) {}
+  FlytecDevice(Port &_port):port(_port), last_time(fixed(0)) {}
 
   virtual bool ParseNMEA(const char *line, NMEAInfo &info);
 

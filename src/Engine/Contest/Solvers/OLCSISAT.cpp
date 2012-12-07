@@ -51,7 +51,7 @@ OLCSISAT::CalculateResult(const ContestTraceVector &solution) const
   spv.PruneInterior();
 
   // now add leg distances making up the convex hull
-  fixed G = fixed_zero;
+  fixed G = fixed(0);
 
   if (spv.size() > 1) {
     for (unsigned i = 0; i + 1 < spv.size(); ++i)

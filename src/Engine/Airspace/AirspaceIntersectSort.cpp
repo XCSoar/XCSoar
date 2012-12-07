@@ -27,7 +27,7 @@
 void 
 AirspaceIntersectSort::add(const fixed t, const GeoPoint &p)
 {
-  if (t >= fixed_zero)
+  if (t >= fixed(0))
     m_q.push(std::make_pair(t, p));
 }
 
@@ -64,7 +64,7 @@ AirspaceIntersectSort::all()
     const GeoPoint p_this = m_q.top().second;
     const GeoPoint p_mid = start
       ? p_last
-      : p_last.Interpolate(p_this, fixed_half);
+      : p_last.Interpolate(p_this, fixed(0.5));
 
     // when inside, checking midpoint is ok, otherwise we should
     // check just beyond the last location
@@ -73,7 +73,7 @@ AirspaceIntersectSort::all()
       res.push_back(std::make_pair(p_last, p_this));
       waiting = false;
     } else {
-      if (m_q.top().first >= fixed_one)
+      if (m_q.top().first >= fixed(1))
         // exit on reaching first point out of range
         break;
 

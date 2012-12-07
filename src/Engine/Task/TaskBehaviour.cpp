@@ -36,7 +36,7 @@ SectorDefaults::SetDefaults()
 void
 TaskStartMargins::SetDefaults()
 {
-  max_speed_margin = fixed_zero;
+  max_speed_margin = fixed(0);
   max_height_margin = 0u;
 }
 
@@ -54,8 +54,8 @@ TaskBehaviour::SetDefaults()
   calc_effective_mc = true;
   calc_glide_required = true;
   goto_nonlandable = true;
-  risk_gamma = fixed_zero;
-  safety_mc = fixed_half;
+  risk_gamma = fixed(0);
+  safety_mc = fixed(0.5);
   safety_height_arrival = fixed(300);
   task_type_default = TaskFactoryType::RACING;
   start_margins.SetDefaults();

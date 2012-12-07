@@ -130,7 +130,7 @@ public:
    * @return Location of point
    */
   GeoPoint RandomPointInTask(const unsigned index,
-                             const fixed mag = fixed_one) const;
+                             const fixed mag = fixed(1)) const;
 
   /**
    * Retrieve a copy of the task alternates

@@ -35,11 +35,11 @@ FlyingComputer::Reset()
   stationary_clock.Clear();
   moving_clock.Clear();
   climbing_clock.Clear();
-  moving_since = fixed_minus_one;
-  stationary_since = fixed_minus_one;
-  climbing_altitude = fixed_zero;
-  sinking_since = fixed_minus_one;
-  last_ground_altitude = fixed_minus_one;
+  moving_since = fixed(-1);
+  stationary_since = fixed(-1);
+  climbing_altitude = fixed(0);
+  sinking_since = fixed(-1);
+  last_ground_altitude = fixed(-1);
 }
 
 inline void
@@ -60,7 +60,7 @@ FlyingComputer::CheckRelease(FlyingState &state, fixed time,
   if (time < sinking_since || altitude >= sinking_altitude) {
     /* cancel release detection when the aircraft has been climbing
        more than it has lost recently */
-    sinking_since = fixed_minus_one;
+    sinking_since = fixed(-1);
     return;
   }
 
@@ -71,7 +71,7 @@ FlyingComputer::CheckRelease(FlyingState &state, fixed time,
     state.release_time = sinking_since;
     state.release_location = sinking_location;
     state.far_location.SetInvalid();
-    state.far_distance = fixed_minus_one;
+    state.far_distance = fixed(-1);
   }
 }
 
@@ -85,19 +85,19 @@ FlyingComputer::Check(FlyingState &state, fixed time)
 
   if (!state.flying) {
     // We are moving for 10sec now
-    if (moving_clock >= fixed_ten) {
+    if (moving_clock >= fixed(10)) {
       // We certainly must be flying after 10sec movement
       assert(!negative(moving_since));
 
       state.flying = true;
       state.takeoff_time = moving_since;
       state.takeoff_location = moving_at;
-      state.flight_time = fixed_zero;
+      state.flight_time = fixed(0);
 
       /* when a new flight starts, forget the old release time */
-      state.release_time = fixed_minus_one;
+      state.release_time = fixed(-1);
       state.far_location.SetInvalid();
-      state.far_distance = fixed_minus_one;
+      state.far_distance = fixed(-1);
     }
   } else {
     // update time of flight
@@ -135,7 +135,7 @@ FlyingComputer::Moving(FlyingState &state, fixed time, fixed dt,
 
   // We are moving so we are certainly not on the ground
   stationary_clock.Clear();
-  stationary_since = fixed_minus_one;
+  stationary_since = fixed(-1);
 
   // Update flying state
   Check(state, time);
@@ -149,7 +149,7 @@ FlyingComputer::Stationary(FlyingState &state, fixed time, fixed dt,
   if (moving_clock.IsDefined()) {
     moving_clock.Subtract(dt);
     if (!moving_clock.IsDefined())
-      moving_since = fixed_minus_one;
+      moving_since = fixed(-1);
   }
 
   stationary_clock.Add(dt);
@@ -192,7 +192,7 @@ FlyingComputer::CheckClimbing(fixed dt, fixed altitude)
 
   climbing_altitude = altitude;
 
-  return climbing_clock >= dt + fixed_one;
+  return climbing_clock >= dt + fixed(1);
 }
 
 void
@@ -204,7 +204,7 @@ FlyingComputer::Compute(fixed takeoff_speed,
   if (!basic.time_available || !basic.location_available)
     return;
 
-  const fixed dt = delta_time.Update(basic.time, fixed_half, fixed(20));
+  const fixed dt = delta_time.Update(basic.time, fixed(0.5), fixed(20));
   if (negative(dt)) {
     Reset();
     flying.Reset();
@@ -245,7 +245,7 @@ FlyingComputer::Compute(fixed takeoff_speed,
 
     CheckRelease(flying, basic.time, basic.location, any_altitude.second);
   } else
-    sinking_since = fixed_minus_one;
+    sinking_since = fixed(-1);
 
   if (flying.flying && flying.release_location.IsValid()) {
     fixed distance = basic.location.Distance(flying.release_location);

@@ -231,7 +231,7 @@ fixed fixed::log() const
       return -fixed_max;
 
   if (m_nVal == resolution)
-      return fixed_zero;
+      return fixed(0);
 
   uvalue_t temp=m_nVal;
   int left_shift=0;
@@ -403,7 +403,7 @@ fixed::sin_cos(fixed theta)
 fixed fixed::atan() const
 {
     fixed r,theta;
-    to_polar(fixed_one, *this, &r, &theta);
+    to_polar(fixed(1), *this, &r, &theta);
     return theta;
 }
 
@@ -495,7 +495,7 @@ fixed::rsqrt() const
   value_t v_last= y.m_nVal;
   while (1) {
     y *= threehalfs-x2*y.sqr();
-    assert(y>= fixed_zero);
+    assert(y>= fixed(0));
     const value_t err = y.m_nVal-v_last;
     if ((y.m_nVal<2) || ((err>0? err:-err) < tolerance))
       return y;

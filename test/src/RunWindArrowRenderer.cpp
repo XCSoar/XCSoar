@@ -39,7 +39,7 @@ class WindWindow : public PaintWindow
 
 public:
   WindWindow(const WindArrowLook &look)
-    :renderer(look), wind(fixed(10), fixed_zero) {}
+    :renderer(look), wind(fixed(10), fixed(0)) {}
 
   SpeedVector GetWind() const {
     return wind;
@@ -125,9 +125,9 @@ protected:
       SpeedVector _wind = wind.GetWind();
 
       _wind.bearing = (_wind.bearing + Angle::Degrees(fixed(5))).AsBearing();
-      _wind.norm += fixed_one;
+      _wind.norm += fixed(1);
       if (_wind.norm > fixed(15))
-        _wind.norm = fixed_zero;
+        _wind.norm = fixed(0);
 
       wind.SetWind(_wind);
       return true;
