@@ -176,7 +176,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
       { -7, -3 }, { 0, 4 }, { 7, -3 }
   };
 
-  Angle arrow_angle = reachable ? Angle::Degrees(fixed_180) : Angle::Zero();
+  Angle arrow_angle = reachable ? Angle::HalfCircle() : Angle::Zero();
   PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pt.x, pt.y, arrow_angle, 100);
 
   if (reachable) {

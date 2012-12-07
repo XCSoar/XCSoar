@@ -130,7 +130,7 @@ int main(int argc, char **argv)
   ok1(equals(v.bearing, 63.272424));
 
   // test intermediate_point()
-  GeoPoint p7(Angle::Degrees(fixed_zero), Angle::Degrees(fixed_zero));
+  GeoPoint p7(Angle::Zero(), Angle::Zero());
   ok1(p7.IsValid());
   GeoPoint p8 = p7.IntermediatePoint(p2, fixed(100000));
   ok1(p8.IsValid());
@@ -150,9 +150,9 @@ int main(int argc, char **argv)
   ok1(l1.IsValid());
   GeoPoint l2(Angle::Degrees(fixed(-0.3)), Angle::Degrees(fixed(1.0)));
   ok1(l2.IsValid());
-  GeoPoint l3(Angle::Degrees(fixed(0.00001)), Angle::Degrees(fixed_zero));
+  GeoPoint l3(Angle::Degrees(fixed(0.00001)), Angle::Zero());
   ok1(l3.IsValid());
-  GeoPoint l4(Angle::Degrees(fixed(10)), Angle::Degrees(fixed_zero));
+  GeoPoint l4(Angle::Degrees(fixed(10)), Angle::Zero());
   ok1(l4.IsValid());
   l4.SetInvalid();
   ok1(!l4.IsValid());

@@ -60,7 +60,7 @@ public:
                         Layout::GetMinimumControlHeight() + Layout::Scale(2)),
      enable_auto_zoom(true),
      zoom(2),
-     task_direction(Angle::Degrees(fixed_minus_one)) {}
+     task_direction(Angle::Degrees(-1)) {}
 
 protected:
   void CalcAutoZoom();
@@ -216,7 +216,7 @@ void
 FlarmTrafficControl::UpdateTaskDirection(bool show_task_direction, Angle bearing)
 {
   if (!show_task_direction)
-    task_direction = Angle::Degrees(fixed_minus_one);
+    task_direction = Angle::Degrees(-1);
   else
     task_direction = bearing.AsBearing();
 }

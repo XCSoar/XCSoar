@@ -75,9 +75,9 @@ struct SeeYouTurnpointInformation {
     valid(false), style(SYMMETRICAL), is_line(false), reduce(false),
     radius1(fixed(500)), radius2(fixed(500)),
     max_altitude(fixed_zero),
-    angle1(Angle::Degrees(fixed_zero)),
-    angle2(Angle::Degrees(fixed_zero)),
-    angle12(Angle::Degrees(fixed_zero)) {}
+    angle1(Angle::Zero()),
+    angle2(Angle::Zero()),
+    angle12(Angle::Zero()) {}
 };
 
 static fixed

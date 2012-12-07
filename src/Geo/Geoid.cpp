@@ -55,7 +55,7 @@ EGM96::LookupSeparation(const GeoPoint &pt)
     return fixed_zero;
 
   int ilat, ilon;
-  ilat = iround((Angle::Degrees(fixed_90) - pt.latitude).Half().Degrees());
+  ilat = iround((Angle::QuarterCircle() - pt.latitude).Half().Degrees());
   ilon = iround(pt.longitude.AsBearing().Half().Degrees());
 
   int offset = ilat * 180 + ilon;

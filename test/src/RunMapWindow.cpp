@@ -204,7 +204,7 @@ GenerateBlackboard(MapWindow &map, const ComputerSettings &settings_computer,
   }
 
   nmea_info.location_available.Update(nmea_info.clock);
-  nmea_info.track = Angle::Degrees(fixed_90);
+  nmea_info.track = Angle::Degrees(90);
   nmea_info.track_available.Update(nmea_info.clock);
   nmea_info.ground_speed = fixed(50);
   nmea_info.ground_speed_available.Update(nmea_info.clock);

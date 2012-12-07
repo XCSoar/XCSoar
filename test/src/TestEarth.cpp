@@ -27,7 +27,7 @@ static void
 TestLinearDistance()
 {
   const GeoPoint lon_start(Angle::Degrees(fixed(90)),
-                           Angle::Degrees(fixed_zero));
+                           Angle::Zero());
   for (unsigned i = 0; i < 180; i += 5) {
     const GeoPoint lon_end(lon_start.longitude + Angle::Degrees(fixed(i)),
                            lon_start.latitude);
@@ -39,8 +39,8 @@ TestLinearDistance()
     ok1(between(distance, min, max));
   }
 
-  const GeoPoint lat_start(Angle::Degrees(fixed_zero),
-                           Angle::Degrees(fixed_zero));
+  const GeoPoint lat_start(Angle::Zero(),
+                           Angle::Zero());
   for (unsigned i = 0; i < 90; i += 5) {
     const GeoPoint lat_end(lat_start.longitude,
                            lat_start.latitude + Angle::Degrees(fixed(i)));

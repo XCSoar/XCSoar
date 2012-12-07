@@ -35,39 +35,39 @@
  */
 bool SetupWaypoints(Waypoints &waypoints, const unsigned n)
 {
-  Waypoint wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_zero),
-                                          Angle::Degrees(fixed_zero)));
+  Waypoint wp = waypoints.Create(GeoPoint(Angle::Zero(),
+                                          Angle::Zero()));
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed(0.25);
   waypoints.Append(wp);
 
-  wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_zero), 
-                                 Angle::Degrees(fixed_one)));
+  wp = waypoints.Create(GeoPoint(Angle::Zero(),
+                                 Angle::Degrees(1)));
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed(0.25);
   waypoints.Append(wp);
 
-  wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_one), 
-                                 Angle::Degrees(fixed_one)));
+  wp = waypoints.Create(GeoPoint(Angle::Degrees(1),
+                                 Angle::Degrees(1)));
   wp.name = _T("Hello");
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed_half;
   waypoints.Append(wp);
 
-  wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed(0.8)), 
+  wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed(0.8)),
                                  Angle::Degrees(fixed(0.5))));
   wp.name = _T("Unk");
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed(0.25);
   waypoints.Append(wp);
 
-  wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_one), 
-                                 Angle::Degrees(fixed_zero)));
+  wp = waypoints.Create(GeoPoint(Angle::Degrees(1),
+                                 Angle::Zero()));
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed(0.25);
   waypoints.Append(wp);
 
-  wp = waypoints.Create(GeoPoint(Angle::Degrees(fixed_zero), 
+  wp = waypoints.Create(GeoPoint(Angle::Zero(),
                                  Angle::Degrees(fixed(0.23))));
   wp.type = Waypoint::Type::AIRFIELD;
   wp.elevation = fixed(0.25);

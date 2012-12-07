@@ -117,7 +117,7 @@ private:
     case 0:
       canvas.DrawSegment(hmiddle, vmiddle,
                      min(width, height) / 3,
-                     Angle::Degrees(fixed_zero), Angle::Degrees(fixed(90)),
+                     Angle::Zero(), Angle::Degrees(90),
                      false);
       label = _T("segment 0-90 horizon=false");
       break;
@@ -125,7 +125,7 @@ private:
     case 1:
       canvas.DrawSegment(hmiddle, vmiddle,
                      min(width, height) / 3,
-                     Angle::Degrees(fixed(45)), Angle::Degrees(fixed_180),
+                     Angle::Degrees(45), Angle::Degrees(180),
                      true);
       label = _T("segment 45-180 horizon=true");
       break;
