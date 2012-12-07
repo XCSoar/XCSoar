@@ -290,11 +290,15 @@ public:
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx) gcc_override;
 
-  virtual void OnCursorMoved(unsigned index) gcc_override;
+  virtual bool CanActivateItem(unsigned index) const {
+    return true;
+  }
+
+  virtual void OnActivateItem(unsigned index) gcc_override;
 };
 
 void
-WaypointExternalFileListHandler::OnCursorMoved(unsigned i)
+WaypointExternalFileListHandler::OnActivateItem(unsigned i)
 {
   auto file = waypoint->files_external.begin();
   std::advance(file, i);
