@@ -256,20 +256,6 @@ IsLargeSizeDifference(const GeoBounds &a, const GeoBounds &b)
 }
 #endif
 
-/**
- * Check whether the two azimuth angles are roughly equal.  Repainting
- * the terrain is only necessary if the change is significant.
- */
-gcc_const
-static bool
-CompareAzimuthAngle(Angle a, Angle b)
-{
-  static constexpr Angle threshold = Angle::Degrees(10);
-
-  const Angle delta = (a - b).AsDelta();
-  return delta >= -threshold && delta <= threshold;
-}
-
 void
 TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
@@ -282,13 +268,13 @@ TerrainRenderer::Generate(const WindowProjection &map_projection,
   if (old_bounds.IsValid() && old_bounds.IsInside(new_bounds) &&
       !IsLargeSizeDifference(old_bounds, new_bounds) &&
       terrain_serial == terrain->GetSerial() &&
-      CompareAzimuthAngle(last_sun_azimuth, sunazimuth))
+      sunazimuth.CompareRoughly(last_sun_azimuth))
     /* no change since previous frame */
     return;
 #else
   if (compare_projection.CompareAndUpdate(map_projection) &&
       terrain_serial == terrain->GetSerial() &&
-      CompareAzimuthAngle(last_sun_azimuth, sunazimuth))
+      sunazimuth.CompareRoughly(last_sun_azimuth))
     /* no change since previous frame */
     return;
 #endif
