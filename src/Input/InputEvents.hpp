@@ -82,6 +82,12 @@ namespace InputEvents
   bool IsFlavour(const TCHAR *flavour);
 
   /**
+   * @return: true if current mode is MODE_DEFAULT
+   */
+  gcc_pure
+  bool IsDefault();
+
+  /**
    * Process an event chain.
    */
   void ProcessEvent(unsigned event_id);

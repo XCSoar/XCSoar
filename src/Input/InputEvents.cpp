@@ -190,6 +190,13 @@ InputEvents::IsFlavour(const TCHAR *_flavour)
   return StringIsEqual(flavour, _flavour);
 }
 
+bool
+InputEvents::IsDefault()
+{
+  return current_mode == MODE_DEFAULT;
+}
+
+
 void
 InputEvents::drawButtons(Mode mode, bool full)
 {
