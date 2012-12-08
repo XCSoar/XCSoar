@@ -547,27 +547,18 @@ ChartRenderer::DrawArrow(const fixed x, const fixed y, const fixed mag,
 {
   canvas.Select(look.GetPen(style));
 
-  RasterPoint wv[2];
-
-  wv[0] = ToScreen(x, y);
+  RasterPoint point = ToScreen(x, y);
 
   const FastRotation r(angle);
-  FastRotation::Pair p;
 
-  p = r.Rotate(mag, fixed(0));
-  wv[1].x = wv[0].x + (int)p.first;
-  wv[1].y = wv[0].y + (int)p.second;
-  canvas.DrawLine(wv[0], wv[1]);
+  FastRotation::Pair p = r.Rotate(mag, fixed(0));
+  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
 
   p = r.Rotate(mag - fixed(5), fixed(-3));
-  wv[1].x = wv[0].x + (int)p.first;
-  wv[1].y = wv[0].y + (int)p.second;
-  canvas.DrawLine(wv[0], wv[1]);
+  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
 
   p = r.Rotate(mag - fixed(5), fixed(3));
-  wv[1].x = wv[0].x + (int)p.first;
-  wv[1].y = wv[0].y + (int)p.second;
-  canvas.DrawLine(wv[0], wv[1]);
+  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
 }
 
 void 
