@@ -28,6 +28,23 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Math/LeastSquares.hpp"
 #include "Units/Units.hpp"
+#include "Math/FastRotation.hpp"
+#include "Screen/Canvas.hpp"
+
+static void
+DrawArrow(Canvas &canvas, RasterPoint point, const fixed mag, const Angle angle)
+{
+  const FastRotation r(angle);
+
+  FastRotation::Pair p = r.Rotate(mag, fixed(0));
+  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
+
+  p = r.Rotate(mag - fixed(5), fixed(-3));
+  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
+
+  p = r.Rotate(mag - fixed(5), fixed(3));
+  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
+}
 
 void
 RenderWindChart(Canvas &canvas, const PixelRect rc,
@@ -73,6 +90,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   numsteps = (int)((rc.bottom - rc.top) / WINDVECTORMAG) - 1;
 
+  canvas.Select(chart_look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
+
   // draw direction vectors
   fixed hfact;
   for (unsigned i = 0; i < numsteps; i++) {
@@ -91,8 +110,9 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
     Angle angle = Angle::Radians(atan2(-wind.x, wind.y));
 
-    chart.DrawArrow((chart.GetXMin() + chart.GetXMax()) / 2, h,
-                    mag * WINDVECTORMAG, angle, ChartLook::STYLE_MEDIUMBLACK);
+    RasterPoint point = chart.ToScreen((chart.GetXMin() + chart.GetXMax()) / 2, h);
+
+    DrawArrow(canvas, point, mag * WINDVECTORMAG, angle);
   }
 
   chart.DrawXLabel(_T("w"), Units::GetSpeedName());

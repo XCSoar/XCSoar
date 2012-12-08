@@ -25,7 +25,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
-#include "Math/FastRotation.hpp"
 #include "Asset.hpp"
 #include "Math/LeastSquares.hpp"
 #include "Util/StaticString.hpp"
@@ -539,26 +538,6 @@ PixelScalar
 ChartRenderer::ScreenY(fixed y) const
 {
   return (long)((y_max - y) * yscale) + rc.top;
-}
-
-void
-ChartRenderer::DrawArrow(const fixed x, const fixed y, const fixed mag,
-                         const Angle angle, ChartLook::Style style)
-{
-  canvas.Select(look.GetPen(style));
-
-  RasterPoint point = ToScreen(x, y);
-
-  const FastRotation r(angle);
-
-  FastRotation::Pair p = r.Rotate(mag, fixed(0));
-  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
-
-  p = r.Rotate(mag - fixed(5), fixed(-3));
-  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
-
-  p = r.Rotate(mag - fixed(5), fixed(3));
-  canvas.DrawLine(point, point + RasterPoint((int)p.first, (int)p.second));
 }
 
 void 
