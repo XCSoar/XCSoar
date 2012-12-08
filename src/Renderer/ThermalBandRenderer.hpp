@@ -69,7 +69,7 @@ protected:
                         const bool is_infobox,
                         const OrderedTaskBehaviour* ordered_props) const;
 
-  void scale_chart(const DerivedInfo &calculated,
+  void ScaleChart(const DerivedInfo &calculated,
                    const ComputerSettings &settings_computer,
                    ChartRenderer &chart) const;
 };

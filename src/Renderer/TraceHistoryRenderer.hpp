@@ -52,14 +52,14 @@ public:
                    const fixed mc=fixed(0)) const;
 
 private:
-  void scale_chart(ChartRenderer &chart,
+  void ScaleChart(ChartRenderer &chart,
                    const TraceVariableHistory& var,
                    const bool centered) const;
 
-  void render_axis(ChartRenderer &chart,
+  void RenderAxis(ChartRenderer &chart,
                    const TraceVariableHistory& var) const;
 
-  void render_line(ChartRenderer &chart,
+  void RenderLines(ChartRenderer &chart,
                    const TraceVariableHistory& var) const;
 
   void render_filled_posneg(ChartRenderer &chart,

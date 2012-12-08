@@ -32,7 +32,7 @@ Copyright_License {
 #include <algorithm>
 
 void
-TraceHistoryRenderer::scale_chart(ChartRenderer &chart,
+TraceHistoryRenderer::ScaleChart(ChartRenderer &chart,
                                   const TraceVariableHistory& var,
                                   const bool centered) const
 {
@@ -59,7 +59,7 @@ TraceHistoryRenderer::scale_chart(ChartRenderer &chart,
 }
 
 void
-TraceHistoryRenderer::render_axis(ChartRenderer &chart,
+TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
   chart.DrawLine(fixed(0), fixed(0), 
@@ -69,7 +69,7 @@ TraceHistoryRenderer::render_axis(ChartRenderer &chart,
 
 
 void 
-TraceHistoryRenderer::render_line(ChartRenderer &chart,
+TraceHistoryRenderer::RenderLines(ChartRenderer &chart,
                                   const TraceVariableHistory& var) const
 {
   fixed x_last, y_last;
@@ -109,7 +109,7 @@ TraceHistoryRenderer::render_filled_posneg(ChartRenderer &chart,
         else if (negative(y_last))
           chart.DrawFilledLine(x_last, y_last, x_last+fixed(0.5), fixed(0),
                                vario_look.sink_brush);
-        
+
         x_last = x-fixed(0.5);
         y_last = fixed(0);
 
@@ -137,9 +137,9 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const fixed mc) const
 {
   ChartRenderer chart(chart_look, canvas, rc);
-  scale_chart(chart, var, centered);
+  ScaleChart(chart, var, centered);
   chart.ScaleYFromValue(mc);
-  // render_line(chart, var);
+  // RenderLines(chart, var);
 
   if (positive(mc)) {
     canvas.SetBackgroundTransparent();
@@ -149,5 +149,5 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
   }
 
   render_filled_posneg(chart, var);
-  render_axis(chart, var);
+  RenderAxis(chart, var);
 }
