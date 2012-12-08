@@ -63,8 +63,6 @@ public:
   ChartRenderer(const ChartLook &look, Canvas &the_canvas,
                 const PixelRect the_rc);
 
-  void Reset();
-
   void DrawBarChart(const LeastSquares &lsdata);
   void DrawFilledLineGraph(const LeastSquares &lsdata);
   void DrawLineGraph(const LeastSquares &lsdata, const Pen &pen);
