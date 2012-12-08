@@ -59,9 +59,6 @@ private:
   void RenderAxis(ChartRenderer &chart,
                    const TraceVariableHistory& var) const;
 
-  void RenderLines(ChartRenderer &chart,
-                   const TraceVariableHistory& var) const;
-
   void render_filled_posneg(ChartRenderer &chart,
                             const TraceVariableHistory& var) const;
 };

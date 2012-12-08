@@ -67,23 +67,6 @@ TraceHistoryRenderer::RenderAxis(ChartRenderer &chart,
                  look.axis_pen);
 }
 
-
-void 
-TraceHistoryRenderer::RenderLines(ChartRenderer &chart,
-                                  const TraceVariableHistory& var) const
-{
-  fixed x_last, y_last;
-  unsigned i=0;
-  for (auto it = var.begin(); it != var.end(); ++it, ++i) {
-    fixed x= fixed(i);
-    fixed y= *it;
-    if (i)
-      chart.DrawLine(x_last, y_last, x, y, look.line_pen);
-    x_last = x;
-    y_last = y;
-  }
-}
-
 static int sgn(const fixed x) {
   if (positive(x))
     return 1;
@@ -139,7 +122,6 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
   ChartRenderer chart(chart_look, canvas, rc);
   ScaleChart(chart, var, centered);
   chart.ScaleYFromValue(mc);
-  // RenderLines(chart, var);
 
   if (positive(mc)) {
     canvas.SetBackgroundTransparent();
