@@ -86,7 +86,6 @@ public:
   void ScaleXFromValue(const fixed val);
 
   void StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen);
-  void StyleLine(const RasterPoint l1, const RasterPoint l2, ChartLook::Style style);
 
   void ResetScale();
 

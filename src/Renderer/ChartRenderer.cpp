@@ -142,13 +142,6 @@ ChartRenderer::ScaleXFromValue(const fixed value)
 
 void
 ChartRenderer::StyleLine(const RasterPoint l1, const RasterPoint l2,
-                         ChartLook::Style style)
-{
-  StyleLine(l1, l2, look.GetPen(style));
-}
-
-void
-ChartRenderer::StyleLine(const RasterPoint l1, const RasterPoint l2,
                          const Pen &pen)
 {
   assert(pen.IsDefined());
@@ -249,7 +242,7 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
   line[0] = ToScreen(xmin, ymin);
   line[1] = ToScreen(xmax, ymax);
 
-  StyleLine(line[0], line[1], style);
+  StyleLine(line[0], line[1], look.GetPen(style));
 }
 
 void
@@ -278,7 +271,7 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
   line[1].x = (int)xmax;
   line[1].y = (int)ymax;
 
-  StyleLine(line[0], line[1], style);
+  StyleLine(line[0], line[1], look.GetPen(style));
 }
 
 void
