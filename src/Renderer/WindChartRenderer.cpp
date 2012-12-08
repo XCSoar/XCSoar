@@ -36,12 +36,8 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
                 const NMEAInfo &nmea_info,
                 const WindStore &wind_store)
 {
-  int numsteps = 10;
-  int i;
-  fixed h;
-  Vector wind;
+  unsigned numsteps = 10;
   bool found = true;
-  fixed mag;
 
   LeastSquares windstats_mag;
   ChartRenderer chart(chart_look, canvas, rc);
@@ -51,12 +47,12 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  for (i = 0; i < numsteps; i++) {
-    h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * i /
-        (numsteps - 1) + fixed(fs.altitude_base.y_min);
+  for (unsigned i = 0; i < numsteps; i++) {
+    fixed h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * i /
+              (numsteps - 1) + fixed(fs.altitude_base.y_min);
 
-    wind = wind_store.GetWind(nmea_info.time, h, found);
-    mag = wind.Magnitude();
+    Vector wind = wind_store.GetWind(nmea_info.time, h, found);
+    fixed mag = wind.Magnitude();
 
     windstats_mag.LeastSquaresUpdate(mag, h);
   }
@@ -79,17 +75,17 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   // draw direction vectors
   fixed hfact;
-  for (i = 0; i < numsteps; i++) {
+  for (unsigned i = 0; i < numsteps; i++) {
     hfact = fixed(i + 1) / (numsteps + 1);
-    h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * hfact +
-        fixed(fs.altitude_base.y_min);
+    fixed h = fixed(fs.altitude_ceiling.y_max - fs.altitude_base.y_min) * hfact +
+              fixed(fs.altitude_base.y_min);
 
-    wind = wind_store.GetWind(nmea_info.time, h, found);
+    Vector wind = wind_store.GetWind(nmea_info.time, h, found);
     if (windstats_mag.x_max == fixed(0))
       windstats_mag.x_max = fixed(1); // prevent /0 problems
     wind.x /= fixed(windstats_mag.x_max);
     wind.y /= fixed(windstats_mag.x_max);
-    mag = wind.Magnitude();
+    fixed mag = wind.Magnitude();
     if (negative(mag))
       continue;
 
