@@ -246,16 +246,9 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style Style)
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  xmin = (xmin - x_min) * xscale + fixed(rc.left + padding_left);
-  xmax = (xmax - x_min) * xscale + fixed(rc.left + padding_left);
-  ymin = (y_max - ymin) * yscale + fixed(rc.top);
-  ymax = (y_max - ymax) * yscale + fixed(rc.top);
-
   RasterPoint line[2];
-  line[0].x = (int)xmin;
-  line[0].y = (int)ymin;
-  line[1].x = (int)xmax;
-  line[1].y = (int)ymax;
+  line[0] = ToScreen(xmin, ymin);
+  line[1] = ToScreen(xmax, ymax);
 
   StyleLine(line[0], line[1], Style);
 }
@@ -310,9 +303,9 @@ ChartRenderer::DrawFilledLine(const fixed xmin, const fixed ymin,
   line[1] = ToScreen(xmax, ymax);
 
   line[2].x = line[1].x;
-  line[2].y = (int)((y_max) * yscale) + rc.top;
+  line[2].y = ScreenY(fixed(0));
   line[3].x = line[0].x;
-  line[3].y = (int)((y_max) * yscale) + rc.top;
+  line[3].y = line[2].y;
 
   canvas.Select(brush);
   canvas.SelectNullPen();
@@ -340,10 +333,10 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
   for (unsigned i = 0, n = lsdata.slots.size(); i != n; i++) {
     PixelScalar xmin((fixed(i) + fixed(1.2)) * xscale
                      + fixed(rc.left + padding_left));
-    PixelScalar ymin((y_max - y_min) * yscale + fixed(rc.top));
+    PixelScalar ymin = ScreenY(y_min);
     PixelScalar xmax((fixed(i) + fixed(1.8)) * xscale
                      + fixed(rc.left + padding_left));
-    PixelScalar ymax((y_max - lsdata.slots[i].y) * yscale + fixed(rc.top));
+    PixelScalar ymax = ScreenY(lsdata.slots[i].y);
     canvas.Rectangle(xmin, ymin, xmax, ymax);
   }
 }
