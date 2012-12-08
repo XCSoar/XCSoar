@@ -238,7 +238,7 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  StyleLine(ToScreen(xmin, ymin), ToScreen(xmax, ymax), look.GetPen(style));
+  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
 
 void
@@ -256,7 +256,7 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  StyleLine(ToScreen(xmin, ymin), ToScreen(xmax, ymax), look.GetPen(style));
+  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
 
 void
