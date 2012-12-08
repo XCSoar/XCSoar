@@ -100,10 +100,10 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
                       look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
 
     renderer.DrawXGrid(fixed(20), look.GetPen(ChartLook::STYLE_THINDASHPAPER),
-                       fixed(20));
+                       fixed(20), true);
 
     renderer.DrawYGrid(fixed(20), look.GetPen(ChartLook::STYLE_THINDASHPAPER),
-                       fixed(20));
+                       fixed(20), true);
 }
 }
 
