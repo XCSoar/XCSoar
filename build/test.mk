@@ -674,6 +674,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunDialog RunListControl RunTextEntry RunNumberEntry RunTimeEntry \
 	RunTerminal \
 	RunRenderOZ \
+	RunChartRenderer \
 	RunWindArrowRenderer \
 	RunHorizonRenderer \
 	RunFinalGlideBarRenderer \
@@ -1842,6 +1843,23 @@ RUN_RENDER_OZ_SOURCES = \
 RUN_RENDER_OZ_LDADD = $(RESOURCE_BINARY)
 RUN_RENDER_OZ_DEPENDS = TASK FORM SCREEN EVENT OS THREAD GEO MATH UTIL
 $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
+
+RUN_CHART_RENDERER_SOURCES = \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Look/ChartLook.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Renderer/ChartRenderer.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/RunChartRenderer.cpp
+RUN_CHART_RENDERER_LDADD = $(RESOURCE_BINARY)
+RUN_CHART_RENDERER_DEPENDS = FORM SCREEN EVENT OS THREAD MATH UTIL
+$(eval $(call link-program,RunChartRenderer,RUN_CHART_RENDERER))
 
 RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Math/Screen.cpp \
