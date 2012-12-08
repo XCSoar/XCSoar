@@ -408,8 +408,7 @@ void
 ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
                          fixed unit_step, bool draw_units)
 {
-  if (!positive(tic_step))
-    return;
+  assert(positive(tic_step));
 
   canvas.Select(pen);
   canvas.Select(*look.axis_value_font);
@@ -479,8 +478,7 @@ void
 ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
                          fixed unit_step, bool draw_units)
 {
-  if (!positive(tic_step))
-    return;
+  assert(positive(tic_step));
 
   canvas.Select(pen);
   canvas.Select(*look.axis_value_font);
