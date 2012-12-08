@@ -85,8 +85,6 @@ public:
   void ScaleYFromValue(const fixed val);
   void ScaleXFromValue(const fixed val);
 
-  void StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen);
-
   void ResetScale();
 
   static void FormatTicText(TCHAR *text, const fixed val, const fixed step);

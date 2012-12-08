@@ -141,15 +141,6 @@ ChartRenderer::ScaleXFromValue(const fixed value)
 }
 
 void
-ChartRenderer::StyleLine(const RasterPoint l1, const RasterPoint l2,
-                         const Pen &pen)
-{
-  assert(pen.IsDefined());
-  canvas.Select(pen);
-  canvas.DrawLine(l1, l2);
-}
-
-void
 ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
   canvas.Select(*look.label_font);
@@ -266,7 +257,9 @@ ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
   if (unscaled_x || unscaled_y)
     return;
 
-  StyleLine(ToScreen(xmin, ymin), ToScreen(xmax, ymax), pen);
+  assert(pen.IsDefined());
+  canvas.Select(pen);
+  canvas.DrawLine(ToScreen(xmin, ymin), ToScreen(xmax, ymax));
 }
 
 void 
