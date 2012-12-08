@@ -86,6 +86,10 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
     renderer.DrawLine(fixed(0), fixed(10), fixed(100), fixed(70),
                       look.GetPen(ChartLook::STYLE_BLUETHIN));
   } else if (chart == 1) {
+    renderer.ScaleXFromValue(fixed(-50));
+    renderer.ScaleXFromValue(fixed(110));
+    renderer.ScaleYFromValue(fixed(110));
+
     renderer.DrawLine(fixed(0), fixed(10), fixed(100), fixed(70),
                       look.GetPen(ChartLook::STYLE_BLUETHIN));
 
@@ -94,6 +98,12 @@ ChartWindow::DrawChart(ChartRenderer &renderer)
 
     renderer.DrawLine(fixed(0), fixed(10), fixed(100), fixed(100),
                       look.GetPen(ChartLook::STYLE_MEDIUMBLACK));
+
+    renderer.DrawXGrid(fixed(20), look.GetPen(ChartLook::STYLE_THINDASHPAPER),
+                       fixed(20));
+
+    renderer.DrawYGrid(fixed(20), look.GetPen(ChartLook::STYLE_THINDASHPAPER),
+                       fixed(20));
 }
 }
 
