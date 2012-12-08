@@ -143,9 +143,9 @@ ChartRenderer::ScaleXFromValue(const fixed value)
 
 void
 ChartRenderer::StyleLine(const RasterPoint l1, const RasterPoint l2,
-                         ChartLook::Style Style)
+                         ChartLook::Style style)
 {
-  StyleLine(l1, l2, look.GetPen(Style));
+  StyleLine(l1, l2, look.GetPen(style));
 }
 
 void
@@ -232,7 +232,7 @@ ChartRenderer::DrawYLabel(const TCHAR *text, const TCHAR *unit)
 }
 
 void
-ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style Style)
+ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
 {
   if (lsdata.sum_n < 2)
     return;
@@ -250,11 +250,11 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style Style)
   line[0] = ToScreen(xmin, ymin);
   line[1] = ToScreen(xmax, ymax);
 
-  StyleLine(line[0], line[1], Style);
+  StyleLine(line[0], line[1], style);
 }
 
 void
-ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style Style)
+ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
 {
   if (lsdata.sum_n < 2)
     return;
@@ -279,7 +279,7 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style Style)
   line[1].x = (int)xmax;
   line[1].y = (int)ymax;
 
-  StyleLine(line[0], line[1], Style);
+  StyleLine(line[0], line[1], style);
 }
 
 void
@@ -315,9 +315,9 @@ ChartRenderer::DrawFilledLine(const fixed xmin, const fixed ymin,
 void
 ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
                         const fixed xmax, const fixed ymax,
-                        ChartLook::Style Style)
+                        ChartLook::Style style)
 {
-  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(Style));
+  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(style));
 }
 
 void
@@ -382,9 +382,9 @@ ChartRenderer::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 
 void
 ChartRenderer::DrawLineGraph(const LeastSquares &lsdata,
-                             ChartLook::Style Style)
+                             ChartLook::Style style)
 {
-  DrawLineGraph(lsdata, look.GetPen(Style));
+  DrawLineGraph(lsdata, look.GetPen(style));
 }
 
 void
@@ -398,10 +398,10 @@ ChartRenderer::FormatTicText(TCHAR *text, const fixed val, const fixed step)
 }
 
 void
-ChartRenderer::DrawXGrid(const fixed tic_step, ChartLook::Style Style,
+ChartRenderer::DrawXGrid(const fixed tic_step, ChartLook::Style style,
                          const fixed unit_step, bool draw_units)
 {
-  DrawXGrid(tic_step, look.GetPen(Style), unit_step, draw_units);
+  DrawXGrid(tic_step, look.GetPen(style), unit_step, draw_units);
 }
 
 void
@@ -468,10 +468,10 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
 }
 
 void
-ChartRenderer::DrawYGrid(const fixed tic_step, ChartLook::Style Style,
+ChartRenderer::DrawYGrid(const fixed tic_step, ChartLook::Style style,
                          const fixed unit_step, bool draw_units)
 {
-  DrawYGrid(tic_step, look.GetPen(Style), unit_step, draw_units);
+  DrawYGrid(tic_step, look.GetPen(style), unit_step, draw_units);
 }
 
 void
@@ -544,9 +544,9 @@ ChartRenderer::ScreenY(fixed y) const
 
 void
 ChartRenderer::DrawArrow(const fixed x, const fixed y, const fixed mag,
-                         const Angle angle, ChartLook::Style Style)
+                         const Angle angle, ChartLook::Style style)
 {
-  canvas.Select(look.GetPen(Style));
+  canvas.Select(look.GetPen(style));
 
   RasterPoint wv[2];
 

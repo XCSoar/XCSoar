@@ -66,13 +66,13 @@ public:
   void DrawBarChart(const LeastSquares &lsdata);
   void DrawFilledLineGraph(const LeastSquares &lsdata);
   void DrawLineGraph(const LeastSquares &lsdata, const Pen &pen);
-  void DrawLineGraph(const LeastSquares &lsdata, ChartLook::Style Style);
-  void DrawTrend(const LeastSquares &lsdata, ChartLook::Style Style);
-  void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style Style);
+  void DrawLineGraph(const LeastSquares &lsdata, ChartLook::Style style);
+  void DrawTrend(const LeastSquares &lsdata, ChartLook::Style style);
+  void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style);
   void DrawLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, const Pen &pen);
   void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, ChartLook::Style Style);
+                const fixed xmax, const fixed ymax, ChartLook::Style style);
   void DrawFilledLine(const fixed xmin, const fixed ymin,
                       const fixed xmax, const fixed ymax,
                       const Brush &brush);
@@ -86,18 +86,18 @@ public:
   void ScaleXFromValue(const fixed val);
 
   void StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen);
-  void StyleLine(const RasterPoint l1, const RasterPoint l2, ChartLook::Style Style);
+  void StyleLine(const RasterPoint l1, const RasterPoint l2, ChartLook::Style style);
 
   void ResetScale();
 
   static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
   void DrawXGrid(fixed tic_step, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
-  void DrawXGrid(const fixed tic_step, ChartLook::Style Style,
+  void DrawXGrid(const fixed tic_step, ChartLook::Style style,
                  const fixed unit_step, bool draw_units = false);
   void DrawYGrid(fixed tic_step, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
-  void DrawYGrid(const fixed tic_step, ChartLook::Style Style,
+  void DrawYGrid(const fixed tic_step, ChartLook::Style style,
                  const fixed unit_step, bool draw_units = false);
 
   void DrawXLabel(const TCHAR *text);
@@ -108,7 +108,7 @@ public:
 
   void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
   void DrawArrow(const fixed x, const fixed y, const fixed mag,
-                 const Angle angle, ChartLook::Style Style);
+                 const Angle angle, ChartLook::Style style);
   void DrawNoData();
 
   fixed GetYMin() const { return y_min; }
