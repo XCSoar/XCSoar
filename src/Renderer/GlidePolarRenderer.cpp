@@ -76,10 +76,10 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.ScaleXFromValue(glide_polar.GetVMin() * fixed(0.8));
   chart.ScaleXFromValue(glide_polar.GetVMax() + fixed(2));
 
-  chart.DrawXGrid(Units::ToSysSpeed(fixed(10)), fixed(0),
+  chart.DrawXGrid(Units::ToSysSpeed(fixed(10)),
                   ChartLook::STYLE_THINDASHPAPER, fixed(10), true);
   chart.DrawYGrid(Units::ToSysVSpeed(fixed(1)),
-                  fixed(0), ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
+                  ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
 
   fixed sinkrate0, sinkrate1;
   fixed v0 = fixed(0), v1;

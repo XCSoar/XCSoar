@@ -198,10 +198,9 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                    chart, task_props, false, ordered_props);
 
   if (!is_map) {
-    chart.DrawXGrid(Units::ToSysVSpeed(fixed(1)), fixed(0),
+    chart.DrawXGrid(Units::ToSysVSpeed(fixed(1)),
                     ChartLook::STYLE_THINDASHPAPER, fixed(1), true);
     chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                    fixed(0),
                     ChartLook::STYLE_THINDASHPAPER,
                     fixed(1000), true);
     chart.DrawXLabel(_T("w"), Units::GetVerticalSpeedName());

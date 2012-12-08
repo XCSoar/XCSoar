@@ -405,15 +405,14 @@ ChartRenderer::FormatTicText(TCHAR *text, const fixed val, const fixed step)
 }
 
 void
-ChartRenderer::DrawXGrid(const fixed tic_step, const fixed zero,
-                         ChartLook::Style Style,
+ChartRenderer::DrawXGrid(const fixed tic_step, ChartLook::Style Style,
                          const fixed unit_step, bool draw_units)
 {
-  DrawXGrid(tic_step, zero, look.GetPen(Style), unit_step, draw_units);
+  DrawXGrid(tic_step, look.GetPen(Style), unit_step, draw_units);
 }
 
 void
-ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
+ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
                          fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
@@ -438,7 +437,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
   line[0].y = rc.top;
   line[1].y = rc.bottom - padding_bottom;
 
-  for (fixed xval = zero; xval <= x_max; xval += tic_step) {
+  for (fixed xval = fixed(0); xval <= x_max; xval += tic_step) {
     const PixelScalar xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
@@ -457,7 +456,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
     }
   }
 
-  for (fixed xval = zero - tic_step; xval >= x_min; xval -= tic_step) {
+  for (fixed xval = fixed(0) - tic_step; xval >= x_min; xval -= tic_step) {
     const PixelScalar xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
@@ -477,15 +476,14 @@ ChartRenderer::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
 }
 
 void
-ChartRenderer::DrawYGrid(const fixed tic_step, const fixed zero,
-                         ChartLook::Style Style,
+ChartRenderer::DrawYGrid(const fixed tic_step, ChartLook::Style Style,
                          const fixed unit_step, bool draw_units)
 {
-  DrawYGrid(tic_step, zero, look.GetPen(Style), unit_step, draw_units);
+  DrawYGrid(tic_step, look.GetPen(Style), unit_step, draw_units);
 }
 
 void
-ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
+ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
                          fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
@@ -506,7 +504,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
   line[0].x = rc.left + padding_left;
   line[1].x = rc.right;
 
-  for (fixed yval = zero; yval <= y_max; yval += tic_step) {
+  for (fixed yval = fixed(0); yval <= y_max; yval += tic_step) {
     const PixelScalar ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 
@@ -523,7 +521,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
     }
   }
 
-  for (fixed yval = zero - tic_step; yval >= y_min; yval -= tic_step) {
+  for (fixed yval = fixed(0) - tic_step; yval >= y_min; yval -= tic_step) {
     const PixelScalar ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 

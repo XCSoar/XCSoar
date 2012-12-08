@@ -148,9 +148,9 @@ CrossSectionRenderer::PaintGrid(Canvas &canvas, ChartRenderer &chart) const
 {
   canvas.SetTextColor(look.text_color);
 
-  chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed(0),
+  chart.DrawXGrid(Units::ToSysDistance(fixed(5)),
                   look.grid_pen, fixed(5), true);
-  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)), fixed(0),
+  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
                   look.grid_pen, fixed(1000), true);
 
   chart.DrawXLabel(_T("D"), Units::GetDistanceName());

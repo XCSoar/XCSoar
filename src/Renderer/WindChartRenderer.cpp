@@ -67,10 +67,9 @@ RenderWindChart(Canvas &canvas, const PixelRect rc,
 
   chart.ScaleYFromData(windstats_mag);
 
-  chart.DrawXGrid(Units::ToSysSpeed(fixed(5)), fixed(0),
+  chart.DrawXGrid(Units::ToSysSpeed(fixed(5)),
                   ChartLook::STYLE_THINDASHPAPER, fixed(5), true);
   chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                  fixed(0),
                   ChartLook::STYLE_THINDASHPAPER, fixed(1000), true);
   chart.DrawLineGraph(windstats_mag, ChartLook::STYLE_MEDIUMBLACK);
 

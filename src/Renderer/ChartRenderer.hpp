@@ -94,15 +94,13 @@ public:
   void ResetScale();
 
   static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
-  void DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
+  void DrawXGrid(fixed tic_step, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
-  void DrawXGrid(const fixed tic_step, const fixed zero,
-                 ChartLook::Style Style,
+  void DrawXGrid(const fixed tic_step, ChartLook::Style Style,
                  const fixed unit_step, bool draw_units = false);
-  void DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
+  void DrawYGrid(fixed tic_step, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
-  void DrawYGrid(const fixed tic_step, const fixed zero,
-                 ChartLook::Style Style,
+  void DrawYGrid(const fixed tic_step, ChartLook::Style Style,
                  const fixed unit_step, bool draw_units = false);
 
   void DrawXLabel(const TCHAR *text);
