@@ -539,46 +539,6 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   }
 }
 
-void
-ChartRenderer::ScaleMakeSquare()
-{
-  if (y_max <= y_min)
-    return;
-
-  if (rc.bottom - rc.top - padding_bottom <= 0)
-    return;
-
-  fixed ar = fixed(rc.right - rc.left - padding_left)
-              / (rc.bottom - rc.top - padding_bottom);
-  fixed ard = (x_max - x_min) / (y_max - y_min);
-  fixed armod = ard / ar;
-
-  fixed delta;
-
-  if (armod < fixed(1)) {
-    // need to expand width
-    delta = (x_max - x_min) * (fixed(1) / armod - fixed(1));
-    x_max += delta / 2;
-    x_min -= delta / 2;
-  } else {
-    // need to expand height
-    delta = (y_max - y_min) * (armod - fixed(1));
-    y_max += delta / 2;
-    y_min -= delta / 2;
-  }
-
-  // shrink both by 10%
-  delta = (x_max - x_min) / 10;
-  x_max += delta / 2;
-  x_min -= delta / 2;
-  delta = (y_max - y_min) / 10;
-  y_max += delta / 2;
-  y_min -= delta / 2;
-
-  yscale = fixed(rc.bottom - rc.top - padding_bottom) / (y_max - y_min);
-  xscale = fixed(rc.right - rc.left - padding_left) / (x_max - x_min);
-}
-
 PixelScalar
 ChartRenderer::ScreenX(fixed x) const
 {
