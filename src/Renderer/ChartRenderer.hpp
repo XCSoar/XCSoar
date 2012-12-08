@@ -130,6 +130,10 @@ public:
   }
 
   Canvas& GetCanvas() { return canvas; }
+
+  const ChartLook &GetLook() const {
+    return look;
+  }
 };
 
 #endif
