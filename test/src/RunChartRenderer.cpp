@@ -185,7 +185,7 @@ static void
 Main()
 {
   ChartLook chart_look;
-  chart_look.Initialise(normal_font, small_font, small_font);
+  chart_look.Initialise();
 
   TestWindow window(chart_look);
   window.Create(*dialog_look, {640, 480});

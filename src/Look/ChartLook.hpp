@@ -24,12 +24,11 @@ Copyright_License {
 #ifndef CHART_LOOK_HPP
 #define CHART_LOOK_HPP
 
+#include "Screen/Font.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 
 #include <assert.h>
-
-class Font;
 
 struct ChartLook {
   enum Style {
@@ -48,20 +47,19 @@ struct ChartLook {
   /**
    * Font for miscellaneous labels in the chart.
    */
-  const Font *label_font;
+  Font label_font;
 
   /**
    * Font for the two axis labels.
    */
-  const Font *axis_label_font;
+  Font axis_label_font;
 
   /**
    * Font for tick values along the axis.
    */
-  const Font *axis_value_font;
+  Font axis_value_font;
 
-  void Initialise(const Font &label_font,
-                  const Font &axis_label_font, const Font &axis_value_font);
+  void Initialise();
 
   const Pen &GetPen(Style style) const {
     unsigned i = (unsigned)style;

@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "ChartLook.hpp"
 #include "Asset.hpp"
+#include "StandardFonts.hpp"
+#include "Screen/Layout.hpp"
 
 void
-ChartLook::Initialise(const Font &_label_font,
-                      const Font &_axis_label_font,
-                      const Font &_axis_value_font)
+ChartLook::Initialise()
 {
   pens[STYLE_BLUETHIN].Set(Pen::DASH, IsAltair() ? 1 : 2, Color(0, 50, 255));
   pens[STYLE_REDTHICK].Set(Pen::DASH, 3, Color(200, 50, 50));
@@ -37,7 +37,10 @@ ChartLook::Initialise(const Font &_label_font,
 
   bar_brush.Set(COLOR_GREEN);
 
-  label_font = &_label_font;
-  axis_label_font = &_axis_label_font;
-  axis_value_font = &_axis_value_font;
+  PixelScalar axis_label_size = std::max(PixelScalar(8), Layout::FastScale(6));
+  PixelScalar axis_value_size = std::max(PixelScalar(8), Layout::FastScale(7));
+
+  label_font.Load(GetStandardFontFace(), Layout::FastScale(12));
+  axis_label_font.Load(GetStandardFontFace(), axis_label_size, true);
+  axis_value_font.Load(GetStandardFontFace(), axis_value_size);
 }

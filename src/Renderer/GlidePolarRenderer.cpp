@@ -117,7 +117,7 @@ RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   chart.DrawXLabel(_T("V"), Units::GetSpeedName());
   chart.DrawYLabel(_T("w"), Units::GetVerticalSpeedName());
 
-  canvas.Select(*chart_look.label_font);
+  canvas.Select(chart_look.label_font);
 
   StaticString<80> text;
   canvas.SetBackgroundTransparent();

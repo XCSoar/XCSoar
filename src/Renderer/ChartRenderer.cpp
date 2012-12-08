@@ -152,7 +152,7 @@ ChartRenderer::ScaleXFromValue(const fixed value)
 void
 ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
-  canvas.Select(*look.label_font);
+  canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
@@ -163,7 +163,7 @@ ChartRenderer::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 void
 ChartRenderer::DrawNoData()
 {
-  canvas.Select(*look.label_font);
+  canvas.Select(look.label_font);
   canvas.SetBackgroundTransparent();
 
   const TCHAR *text = _("No data");
@@ -178,7 +178,7 @@ ChartRenderer::DrawNoData()
 void
 ChartRenderer::DrawXLabel(const TCHAR *text)
 {
-  canvas.Select(*look.axis_label_font);
+  canvas.Select(look.axis_label_font);
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
@@ -202,7 +202,7 @@ ChartRenderer::DrawXLabel(const TCHAR *text, const TCHAR *unit)
 void
 ChartRenderer::DrawYLabel(const TCHAR *text)
 {
-  canvas.Select(*look.axis_label_font);
+  canvas.Select(look.axis_label_font);
   canvas.SetBackgroundTransparent();
 
   PixelSize tsize = canvas.CalcTextSize(text);
@@ -389,7 +389,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   assert(positive(tic_step));
 
   canvas.Select(pen);
-  canvas.Select(*look.axis_value_font);
+  canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 
   RasterPoint line[2];
@@ -443,7 +443,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   assert(positive(tic_step));
 
   canvas.Select(pen);
-  canvas.Select(*look.axis_value_font);
+  canvas.Select(look.axis_value_font);
   canvas.SetBackgroundTransparent();
 
   RasterPoint line[2];
