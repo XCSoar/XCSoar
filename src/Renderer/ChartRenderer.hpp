@@ -53,6 +53,8 @@ class ChartRenderer
     bool unscaled;
 
     void Reset();
+
+    PixelScalar ToScreen(fixed value) const;
   } x, y;
 
 public:

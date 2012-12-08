@@ -42,6 +42,12 @@ ChartRenderer::Axis::Reset()
   max = fixed(0);
 }
 
+PixelScalar
+ChartRenderer::Axis::ToScreen(fixed value) const
+{
+  return (long)((value - min) * scale);
+}
+
 void
 ChartRenderer::ResetScale()
 {
@@ -505,13 +511,13 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
 PixelScalar
 ChartRenderer::ScreenX(fixed _x) const
 {
-  return (long)((_x - x.min) * x.scale) + rc.left + padding_left;
+  return rc.left + padding_left + x.ToScreen(_x);
 }
 
 PixelScalar
 ChartRenderer::ScreenY(fixed _y) const
 {
-  return (long)((y.max - _y) * y.scale) + rc.top;
+  return rc.bottom - padding_bottom - y.ToScreen(_y);
 }
 
 void 
