@@ -48,12 +48,12 @@ class ChartRenderer
 
   ReusableArray<RasterPoint> point_buffer;
 
-  fixed yscale;
-  fixed xscale;
-  fixed y_min, x_min;
-  fixed x_max, y_max;
-  bool unscaled_x;
-  bool unscaled_y;
+  struct Axis {
+    fixed scale, min, max;
+    bool unscaled;
+
+    void Reset();
+  } x, y;
 
 public:
   int padding_left;
@@ -106,10 +106,10 @@ public:
   void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
   void DrawNoData();
 
-  fixed GetYMin() const { return y_min; }
-  fixed GetYMax() const { return y_max; }
-  fixed GetXMin() const { return x_min; }
-  fixed GetXMax() const { return x_max; }
+  fixed GetYMin() const { return y.min; }
+  fixed GetYMax() const { return y.max; }
+  fixed GetXMin() const { return x.min; }
+  fixed GetXMax() const { return x.max; }
 
   gcc_pure
   PixelScalar ScreenX(fixed x) const;

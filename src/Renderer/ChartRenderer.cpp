@@ -34,16 +34,19 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 void
+ChartRenderer::Axis::Reset()
+{
+  unscaled = true;
+  scale = fixed(0);
+  min = fixed(0);
+  max = fixed(0);
+}
+
+void
 ChartRenderer::ResetScale()
 {
-  unscaled_y = true;
-  unscaled_x = true;
-  xscale = fixed(0);
-  yscale = fixed(0);
-  x_min = fixed(0);
-  x_max = fixed(0);
-  y_min = fixed(0);
-  y_max = fixed(0);
+  x.Reset();
+  y.Reset();
 }
 
 ChartRenderer::ChartRenderer(const ChartLook &_look, Canvas &the_canvas,
@@ -60,29 +63,29 @@ ChartRenderer::ScaleYFromData(const LeastSquares &lsdata)
   if (lsdata.IsEmpty())
     return;
 
-  if (unscaled_y) {
-    y_min = lsdata.y_min;
-    y_max = lsdata.y_max;
-    unscaled_y = false;
+  if (y.unscaled) {
+    y.min = lsdata.y_min;
+    y.max = lsdata.y_max;
+    y.unscaled = false;
   } else {
-    y_min = min(y_min, lsdata.y_min);
-    y_max = max(y_max, lsdata.y_max);
+    y.min = min(y.min, lsdata.y_min);
+    y.max = max(y.max, lsdata.y_max);
   }
 
   if (lsdata.sum_n > 1) {
     fixed y0, y1;
     y0 = lsdata.x_min * lsdata.m + lsdata.b;
     y1 = lsdata.x_max * lsdata.m + lsdata.b;
-    y_min = min(y_min, min(y0, y1));
-    y_max = max(y_max, max(y0, y1));
+    y.min = min(y.min, min(y0, y1));
+    y.max = max(y.max, max(y0, y1));
   }
 
-  if (fabs(y_max - y_min) > fixed(50)) {
-    yscale = (y_max - y_min);
-    if (positive(yscale))
-      yscale = fixed(rc.bottom - rc.top - padding_bottom) / yscale;
+  if (fabs(y.max - y.min) > fixed(50)) {
+    y.scale = (y.max - y.min);
+    if (positive(y.scale))
+      y.scale = fixed(rc.bottom - rc.top - padding_bottom) / y.scale;
   } else {
-    yscale = fixed(2000);
+    y.scale = fixed(2000);
   }
 }
 
@@ -92,52 +95,52 @@ ChartRenderer::ScaleXFromData(const LeastSquares &lsdata)
   if (lsdata.IsEmpty())
     return;
 
-  if (unscaled_x) {
-    x_min = lsdata.x_min;
-    x_max = lsdata.x_max;
-    unscaled_x = false;
+  if (x.unscaled) {
+    x.min = lsdata.x_min;
+    x.max = lsdata.x_max;
+    x.unscaled = false;
   } else {
-    x_min = min(x_min, lsdata.x_min);
-    x_max = max(x_max, lsdata.x_max);
+    x.min = min(x.min, lsdata.x_min);
+    x.max = max(x.max, lsdata.x_max);
   }
 
-  xscale = (x_max - x_min);
-  if (positive(xscale))
-    xscale = fixed(rc.right - rc.left - padding_left) / xscale;
+  x.scale = (x.max - x.min);
+  if (positive(x.scale))
+    x.scale = fixed(rc.right - rc.left - padding_left) / x.scale;
 }
 
 void
 ChartRenderer::ScaleYFromValue(const fixed value)
 {
-  if (unscaled_y) {
-    y_min = value;
-    y_max = value;
-    unscaled_y = false;
+  if (y.unscaled) {
+    y.min = value;
+    y.max = value;
+    y.unscaled = false;
   } else {
-    y_min = min(value, y_min);
-    y_max = max(value, y_max);
+    y.min = min(value, y.min);
+    y.max = max(value, y.max);
   }
 
-  yscale = (y_max - y_min);
-  if (positive(yscale))
-    yscale = fixed(rc.bottom - rc.top - padding_bottom) / yscale;
+  y.scale = (y.max - y.min);
+  if (positive(y.scale))
+    y.scale = fixed(rc.bottom - rc.top - padding_bottom) / y.scale;
 }
 
 void
 ChartRenderer::ScaleXFromValue(const fixed value)
 {
-  if (unscaled_x) {
-    x_min = value;
-    x_max = value;
-    unscaled_x = false;
+  if (x.unscaled) {
+    x.min = value;
+    x.max = value;
+    x.unscaled = false;
   } else {
-    x_min = min(value, x_min);
-    x_max = max(value, x_max);
+    x.min = min(value, x.min);
+    x.max = max(value, x.max);
   }
 
-  xscale = (x_max - x_min);
-  if (positive(xscale))
-    xscale = fixed(rc.right - rc.left - padding_left) / xscale;
+  x.scale = (x.max - x.min);
+  if (positive(x.scale))
+    x.scale = fixed(rc.right - rc.left - padding_left) / x.scale;
 }
 
 void
@@ -220,7 +223,7 @@ ChartRenderer::DrawTrend(const LeastSquares &lsdata, ChartLook::Style style)
   if (lsdata.sum_n < 2)
     return;
 
-  if (unscaled_x || unscaled_y)
+  if (x.unscaled || y.unscaled)
     return;
 
   fixed xmin, xmax, ymin, ymax;
@@ -238,7 +241,7 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
   if (lsdata.sum_n < 2)
     return;
 
-  if (unscaled_x || unscaled_y)
+  if (x.unscaled || y.unscaled)
     return;
 
   fixed xmin, xmax, ymin, ymax;
@@ -254,7 +257,7 @@ void
 ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
                         const fixed xmax, const fixed ymax, const Pen &pen)
 {
-  if (unscaled_x || unscaled_y)
+  if (x.unscaled || y.unscaled)
     return;
 
   assert(pen.IsDefined());
@@ -293,17 +296,17 @@ ChartRenderer::DrawLine(const fixed xmin, const fixed ymin,
 void
 ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
 {
-  if (unscaled_x || unscaled_y)
+  if (x.unscaled || y.unscaled)
     return;
 
   canvas.Select(look.bar_brush);
   canvas.SelectNullPen();
 
   for (unsigned i = 0, n = lsdata.slots.size(); i != n; i++) {
-    PixelScalar xmin((fixed(i) + fixed(1.2)) * xscale
+    PixelScalar xmin((fixed(i) + fixed(1.2)) * x.scale
                      + fixed(rc.left + padding_left));
-    PixelScalar ymin = ScreenY(y_min);
-    PixelScalar xmax((fixed(i) + fixed(1.8)) * xscale
+    PixelScalar ymin = ScreenY(y.min);
+    PixelScalar xmax((fixed(i) + fixed(1.8)) * x.scale
                      + fixed(rc.left + padding_left));
     PixelScalar ymax = ScreenY(lsdata.slots[i].y);
     canvas.Rectangle(xmin, ymin, xmax, ymax);
@@ -389,16 +392,16 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   PixelScalar next_text = rc.left;
 
   /* increase tic step so graph not too crowded */
-  while ((x_max-x_min)/tic_step > fixed(10)) {
+  while ((x.max-x.min)/tic_step > fixed(10)) {
     tic_step *= fixed(2);
     unit_step *= fixed(2);
   }
-  //  bool do_units = ((x_max-zero)/tic_step)<10;
+  //  bool do_units = ((x.max-zero)/tic_step)<10;
 
   line[0].y = rc.top;
   line[1].y = rc.bottom - padding_bottom;
 
-  for (fixed xval = fixed(0); xval <= x_max; xval += tic_step) {
+  for (fixed xval = fixed(0); xval <= x.max; xval += tic_step) {
     const PixelScalar xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
@@ -417,7 +420,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
     }
   }
 
-  for (fixed xval = fixed(0) - tic_step; xval >= x_min; xval -= tic_step) {
+  for (fixed xval = fixed(0) - tic_step; xval >= x.min; xval -= tic_step) {
     const PixelScalar xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
@@ -456,7 +459,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   RasterPoint line[2];
 
   /* increase tic step so graph not too crowded */
-  while ((y_max-y_min)/tic_step > fixed(10)) {
+  while ((y.max-y.min)/tic_step > fixed(10)) {
     tic_step *= fixed(2);
     unit_step *= fixed(2);
   }
@@ -464,7 +467,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   line[0].x = rc.left + padding_left;
   line[1].x = rc.right;
 
-  for (fixed yval = fixed(0); yval <= y_max; yval += tic_step) {
+  for (fixed yval = fixed(0); yval <= y.max; yval += tic_step) {
     const PixelScalar ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 
@@ -481,7 +484,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
     }
   }
 
-  for (fixed yval = fixed(0) - tic_step; yval >= y_min; yval -= tic_step) {
+  for (fixed yval = fixed(0) - tic_step; yval >= y.min; yval -= tic_step) {
     const PixelScalar ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 
@@ -500,15 +503,15 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
 }
 
 PixelScalar
-ChartRenderer::ScreenX(fixed x) const
+ChartRenderer::ScreenX(fixed _x) const
 {
-  return (long)((x - x_min) * xscale) + rc.left + padding_left;
+  return (long)((_x - x.min) * x.scale) + rc.left + padding_left;
 }
 
 PixelScalar
-ChartRenderer::ScreenY(fixed y) const
+ChartRenderer::ScreenY(fixed _y) const
 {
-  return (long)((y_max - y) * yscale) + rc.top;
+  return (long)((y.max - _y) * y.scale) + rc.top;
 }
 
 void 
