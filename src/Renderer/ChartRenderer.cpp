@@ -407,7 +407,9 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
   line[0].y = rc.top;
   line[1].y = rc.bottom - padding_bottom;
 
-  for (fixed xval = fixed(0); xval <= x.max; xval += tic_step) {
+  fixed start = (int)(x.min / tic_step) * tic_step;
+
+  for (fixed xval = start; xval <= x.max; xval += tic_step) {
     const PixelScalar xmin = ScreenX(xval);
     line[0].x = line[1].x = xmin;
 
@@ -422,24 +424,6 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
         canvas.DrawText(xmin, rc.bottom - Layout::Scale(17), unit_text);
 
         next_text = xmin + canvas.CalcTextSize(unit_text).cx + Layout::FastScale(2);
-      }
-    }
-  }
-
-  for (fixed xval = fixed(0) - tic_step; xval >= x.min; xval -= tic_step) {
-    const PixelScalar xmin = ScreenX(xval);
-    line[0].x = line[1].x = xmin;
-
-    // STYLE_THINDASHPAPER
-
-    if (xmin >= rc.left + padding_left && xmin <= rc.right) {
-      canvas.DrawLine(line[0], line[1]);
-
-      if (draw_units) {
-        TCHAR unit_text[MAX_PATH];
-        FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
-
-        canvas.DrawText(xmin, rc.bottom - Layout::Scale(17), unit_text);
       }
     }
   }
@@ -473,24 +457,9 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
   line[0].x = rc.left + padding_left;
   line[1].x = rc.right;
 
-  for (fixed yval = fixed(0); yval <= y.max; yval += tic_step) {
-    const PixelScalar ymin = ScreenY(yval);
-    line[0].y = line[1].y = ymin;
+  fixed start = (int)(y.min / tic_step) * tic_step;
 
-    // STYLE_THINDASHPAPER
-    if (ymin >= rc.top && ymin <= rc.bottom - padding_bottom) {
-      canvas.DrawLine(line[0], line[1]);
-
-      if (draw_units) {
-        TCHAR unit_text[MAX_PATH];
-        FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
-
-        canvas.DrawText(rc.left + Layout::Scale(8), ymin, unit_text);
-      }
-    }
-  }
-
-  for (fixed yval = fixed(0) - tic_step; yval >= y.min; yval -= tic_step) {
+  for (fixed yval = start; yval <= y.max; yval += tic_step) {
     const PixelScalar ymin = ScreenY(yval);
     line[0].y = line[1].y = ymin;
 
