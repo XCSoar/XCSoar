@@ -442,7 +442,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
     line[0].x = line[1].x = xmin;
 
     // STYLE_THINDASHPAPER
-    if ((xval < x_max) && (xmin >= rc.left + padding_left) && (xmin <= rc.right)) {
+    if (xmin >= rc.left + padding_left && xmin <= rc.right) {
       canvas.DrawLine(line[0], line[1]);
 
       if (draw_units && xmin >= next_text) {
@@ -462,7 +462,7 @@ ChartRenderer::DrawXGrid(fixed tic_step, const Pen &pen,
 
     // STYLE_THINDASHPAPER
 
-    if ((xval > x_min) && (xmin >= rc.left + padding_left) && (xmin <= rc.right)) {
+    if (xmin >= rc.left + padding_left && xmin <= rc.right) {
       canvas.DrawLine(line[0], line[1]);
 
       if (draw_units) {
@@ -509,7 +509,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
     line[0].y = line[1].y = ymin;
 
     // STYLE_THINDASHPAPER
-    if ((yval < y_max) && (ymin >= rc.top) && (ymin <= rc.bottom - padding_bottom)) {
+    if (ymin >= rc.top && ymin <= rc.bottom - padding_bottom) {
       canvas.DrawLine(line[0], line[1]);
 
       if (draw_units) {
@@ -526,7 +526,7 @@ ChartRenderer::DrawYGrid(fixed tic_step, const Pen &pen,
     line[0].y = line[1].y = ymin;
 
     // STYLE_THINDASHPAPER
-    if ((yval > y_min) && (ymin >= rc.top) && (ymin <= rc.bottom - padding_bottom)) {
+    if (ymin >= rc.top && ymin <= rc.bottom - padding_bottom) {
       canvas.DrawLine(line[0], line[1]);
 
       if (draw_units) {
