@@ -334,8 +334,7 @@ ChartRenderer::DrawBarChart(const LeastSquares &lsdata)
   if (unscaled_x || unscaled_y)
     return;
 
-  Brush green_brush(COLOR_GREEN);
-  canvas.Select(green_brush);
+  canvas.Select(look.bar_brush);
   canvas.SelectNullPen();
 
   for (unsigned i = 0, n = lsdata.slots.size(); i != n; i++) {
