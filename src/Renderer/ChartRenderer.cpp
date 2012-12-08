@@ -260,16 +260,9 @@ ChartRenderer::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style style)
   ymin = lsdata.x_min * lsdata.m + lsdata.b;
   ymax = lsdata.x_max * lsdata.m + lsdata.b;
 
-  xmin = (xmin) * xscale + fixed(rc.left + padding_left);
-  xmax = (xmax) * xscale + fixed(rc.left + padding_left);
-  ymin = (y_max - ymin * yscale) + fixed(rc.top);
-  ymax = (y_max - ymax * yscale) + fixed(rc.top);
-
   RasterPoint line[2];
-  line[0].x = (int)xmin;
-  line[0].y = (int)ymin;
-  line[1].x = (int)xmax;
-  line[1].y = (int)ymax;
+  line[0] = ToScreen(xmin, ymin);
+  line[1] = ToScreen(xmax, ymax);
 
   StyleLine(line[0], line[1], look.GetPen(style));
 }
