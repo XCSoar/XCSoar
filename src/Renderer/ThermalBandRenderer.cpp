@@ -149,33 +149,6 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     chart.DrawDot(settings_computer.polar.glide_polar_task.GetMC(),
                   h, Layout::Scale(2));
   }
-
-  /*
-  RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
-  GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed(1) - hglider)) + rc.top;
-  GliderBand[1].y = GliderBand[0].y;
-  GliderBand[1].x =
-      max(iround((mc / Wmax) * Layout::Scale(TBSCALEX)), Layout::Scale(4)) + rc.left;
-
-  GliderBand[2].x = GliderBand[1].x - Layout::Scale(4);
-  GliderBand[2].y = GliderBand[0].y - Layout::Scale(4);
-  GliderBand[3].x = GliderBand[1].x;
-  GliderBand[3].y = GliderBand[1].y;
-  GliderBand[4].x = GliderBand[1].x - Layout::Scale(4);
-  GliderBand[4].y = GliderBand[0].y + Layout::Scale(4);
-
-  canvas.Select(look.pen);
-
-  canvas.DrawPolyline(GliderBand, 2);
-  canvas.DrawPolyline(GliderBand + 2, 3); // arrow head
-
-  if (draw_start_height) {
-    canvas.Select(Graphics::hpFinalGlideBelow);
-    GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed(1) - hstart)) + rc.top;
-    GliderBand[1].y = GliderBand[0].y;
-    canvas.DrawPolyline(GliderBand, 2);
-  }
-  */
 }
 
 void 
