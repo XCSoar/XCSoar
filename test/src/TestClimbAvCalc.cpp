@@ -25,7 +25,7 @@
 #include <cstdio>
 int main(int argc, char **argv)
 {
-  plan_tests(2);
+  plan_tests(4);
 
   ClimbAverageCalculator c;
   fixed av;
@@ -37,10 +37,17 @@ int main(int argc, char **argv)
   for (unsigned i = 1; i <= 15; i++)
     av = c.GetAverage(fixed(i), fixed(i), AVERAGE_TIME);
 
+  ok1(equals(av, 1.0));
+
   for (unsigned i = 1; i <= 15; i++)
     av = c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
 
   ok1(equals(av, 1.5));
+
+  for (unsigned i = 1; i <= 15; i++)
+    av = c.GetAverage(fixed(30 + i), fixed(45 + i * 2), AVERAGE_TIME);
+
+  ok1(equals(av, 2.0));
 
   // Test time difference = zero behavior
   c.Reset();
