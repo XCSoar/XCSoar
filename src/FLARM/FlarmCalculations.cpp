@@ -24,8 +24,8 @@ Copyright_License {
 #include "FLARM/FlarmCalculations.hpp"
 
 fixed
-FlarmCalculations::Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude)
+FlarmCalculations::Average30s(FlarmId id, fixed time, fixed altitude)
 {
-  ClimbAverageCalculator &item = averageCalculatorMap[flarmId];
-  return item.GetAverage(curTime, curAltitude, fixed(30));
+  ClimbAverageCalculator &item = averageCalculatorMap[id];
+  return item.GetAverage(time, altitude, fixed(30));
 }
