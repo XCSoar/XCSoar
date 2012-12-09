@@ -22,11 +22,12 @@
 
 #include "ClimbAverageCalculator.hpp"
 #include "TestUtil.hpp"
-#include <cstdio>
-int main(int argc, char **argv)
-{
-  plan_tests(4);
 
+#include <cstdio>
+
+static void
+TestBasic()
+{
   ClimbAverageCalculator c;
   fixed av;
 
@@ -48,6 +49,15 @@ int main(int argc, char **argv)
     av = c.GetAverage(fixed(30 + i), fixed(45 + i * 2), AVERAGE_TIME);
 
   ok1(equals(av, 2.0));
+}
+
+static void
+TestDuplicateTimestamps()
+{
+  ClimbAverageCalculator c;
+  fixed av;
+
+  constexpr fixed AVERAGE_TIME = fixed(30);
 
   // Test time difference = zero behavior
   c.Reset();
@@ -62,6 +72,14 @@ int main(int argc, char **argv)
   }
 
   ok1(equals(av, 1.5));
+}
+
+int main(int argc, char **argv)
+{
+  plan_tests(4);
+
+  TestBasic();
+  TestDuplicateTimestamps();
 
   return exit_status();
 }
