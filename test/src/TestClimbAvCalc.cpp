@@ -30,26 +30,28 @@ int main(int argc, char **argv)
   ClimbAverageCalculator c;
   fixed av;
 
+  constexpr fixed AVERAGE_TIME = fixed(30);
+
   // Test normal behavior
-  c.GetAverage(fixed_zero, fixed_zero, fixed(30));
+  c.GetAverage(fixed_zero, fixed_zero, AVERAGE_TIME);
   for (unsigned i = 1; i <= 15; i++)
-    c.GetAverage(fixed(i), fixed(i), fixed(30));
+    av = c.GetAverage(fixed(i), fixed(i), AVERAGE_TIME);
 
   for (unsigned i = 1; i <= 15; i++)
-    av = c.GetAverage(fixed(15 + i), fixed(15 + i * 2), fixed(30));
+    av = c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
 
   ok1(equals(av, 1.5));
 
   // Test time difference = zero behavior
   c.Reset();
-  c.GetAverage(fixed_zero, fixed_zero, fixed(30));
+  c.GetAverage(fixed_zero, fixed_zero, AVERAGE_TIME);
   for (unsigned i = 1; i <= 15; i++)
-    c.GetAverage(fixed(i), fixed(i), fixed(30));
+    c.GetAverage(fixed(i), fixed(i), AVERAGE_TIME);
 
   for (unsigned i = 1; i <= 15; i++) {
-    c.GetAverage(fixed(15 + i), fixed(15 + i * 2), fixed(30));
-    c.GetAverage(fixed(15 + i), fixed(15 + i * 2), fixed(30));
-    av = c.GetAverage(fixed(15 + i), fixed(15 + i * 2), fixed(30));
+    c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
+    c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
+    av = c.GetAverage(fixed(15 + i), fixed(15 + i * 2), AVERAGE_TIME);
   }
 
   ok1(equals(av, 1.5));
