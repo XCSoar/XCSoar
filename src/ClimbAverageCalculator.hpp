@@ -28,7 +28,7 @@ Copyright_License {
 
 class ClimbAverageCalculator
 {
-  static int const MAX_HISTORY = 40;
+  static constexpr int MAX_HISTORY = 40;
   struct HistoryItem
   {
     bool valid;
