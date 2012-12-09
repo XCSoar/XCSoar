@@ -74,12 +74,51 @@ TestDuplicateTimestamps()
   ok1(equals(av, 1.5));
 }
 
+static void
+TestExpiration()
+{
+  ClimbAverageCalculator c;
+  c.Reset();
+
+  constexpr fixed AVERAGE_TIME = fixed(30);
+
+
+  // Test expiration for empty data
+  ok1(c.Expired(fixed(0), fixed(60)));
+  ok1(c.Expired(fixed(15), fixed(60)));
+
+  // Add values and test non-expiration
+  bool expired = false;
+  for (unsigned i = 1; i <= 60; i++) {
+    c.GetAverage(fixed(i), fixed(i), AVERAGE_TIME);
+    expired = expired || c.Expired(fixed(i), fixed(60));
+  }
+
+  ok1(!expired);
+
+  // Test expiration with 30sec
+  ok1(!c.Expired(fixed(89), fixed(30)));
+  ok1(!c.Expired(fixed(90), fixed(30)));
+  ok1(c.Expired(fixed(91), fixed(30)));
+
+  // Test expiration with 60sec
+  ok1(!c.Expired(fixed(119), fixed(60)));
+  ok1(!c.Expired(fixed(120), fixed(60)));
+  ok1(c.Expired(fixed(121), fixed(60)));
+
+  // Time warp
+  ok1(c.Expired(fixed(59), fixed(60)));
+  ok1(!c.Expired(fixed(60), fixed(60)));
+  ok1(!c.Expired(fixed(61), fixed(60)));
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(4);
+  plan_tests(16);
 
   TestBasic();
   TestDuplicateTimestamps();
+  TestExpiration();
 
   return exit_status();
 }

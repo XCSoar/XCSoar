@@ -45,6 +45,7 @@ public:
   ClimbAverageCalculator();
   fixed GetAverage(fixed time, fixed altitude, fixed average_time);
   void Reset();
+  bool Expired(fixed now, fixed max_age) const;
 };
 
 #endif

@@ -77,3 +77,16 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
 
   return fixed_zero;
 }
+
+bool
+ClimbAverageCalculator::Expired(fixed now, fixed max_age) const
+{
+  if (newestValIndex < 0)
+    return true;
+
+  auto item = history[newestValIndex];
+  if (!item.valid)
+    return true;
+
+  return now < item.time || now > item.time + max_age;
+}
