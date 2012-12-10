@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-26 23:00+0100\n"
-"PO-Revision-Date: 2012-11-13 10:59+0000\n"
-"Last-Translator: Matthieu GAULON <Unknown>\n"
+"PO-Revision-Date: 2012-12-09 16:47+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-11-15 11:32+0000\n"
-"X-Generator: Launchpad (build 16272)\n"
+"X-Launchpad-Export-Date: 2012-12-10 10:24+0000\n"
+"X-Generator: Launchpad (build 16341)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -876,6 +876,9 @@ msgid ""
 "distance to go divided by the height required to arrive at the safety "
 "arrival height."
 msgstr ""
+"Finesse nécessaire pour finir le circuit, calculée comme la distance "
+"restante à parcourir divisée par la hauteur nécessaire pour arriver à la "
+"hauteur de sécurité."
 
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
@@ -1208,12 +1211,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:512
 #, no-c-format
 msgid "Next GR"
-msgstr ""
+msgstr "Proch Fin"
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
 msgid "WP GR"
-msgstr ""
+msgstr "Fin WP"
 
 #: src/InfoBoxes/Content/Factory.cpp:514
 #, no-c-format
@@ -1222,6 +1225,9 @@ msgid ""
 "the distance to next waypoint divided by the height required to arrive at "
 "the safety arrival height."
 msgstr ""
+"Finesse nécessaire pour atteindre le prochain point de virage, calculée "
+"comme le distance au prochain point divisée par la hauteur nécessaire pour y "
+"arriver à la hauteur de sécurité."
 
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
@@ -2333,6 +2339,8 @@ msgid ""
 "A circular thermal assistant that shows the lift distribution over each part "
 "of the circle."
 msgstr ""
+"Assistant circulaire de spirale qui montre la distribution des zones de "
+"montée le long de la spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:1134
 #, no-c-format
@@ -2340,9 +2348,9 @@ msgid "Start open/close countdown"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1135
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Départ seulement"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1136
 #, no-c-format
@@ -2355,9 +2363,9 @@ msgid "Start open/close countdown at arrival"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open arr"
-msgstr "Logger ON"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1145
 #, no-c-format
@@ -2455,18 +2463,16 @@ msgid "Time Below"
 msgstr "Tps sous alt. depart"
 
 #: src/InfoBoxes/Content/Task.cpp:851 src/InfoBoxes/Content/Task.cpp:892
-#, fuzzy
 msgid "Closed"
-msgstr "Fermer"
+msgstr "Fermé"
 
 #: src/InfoBoxes/Content/Task.cpp:856 src/InfoBoxes/Content/Task.cpp:897
 msgid "Open"
-msgstr ""
+msgstr "Ouvert"
 
 #: src/InfoBoxes/Content/Task.cpp:861 src/InfoBoxes/Content/Task.cpp:902
-#, fuzzy
 msgid "Waiting"
-msgstr "Coupe le son du vario"
+msgstr "En attente"
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:79 src/InfoBoxes/Panel/WindSetup.cpp:81
 #: src/Dialogs/WindSettingsPanel.cpp:51 Data/Dialogs/dlgVegaDemo.xml:14
@@ -7266,14 +7272,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr "Temps minimum de l'épreuve AAT en minutes."
 
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:193
-#, fuzzy
 msgid "Start open time"
-msgstr "Heure de départ"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:194
-#, fuzzy
 msgid "Start close time"
-msgstr "Heure de départ"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:227
 msgid "FAI start / finish rules"
@@ -7842,9 +7846,8 @@ msgid "Not Found"
 msgstr "Non trouvé"
 
 #: src/Dialogs/TimeEntry.cpp:83
-#, fuzzy
 msgid "Now"
-msgstr "Non"
+msgstr ""
 
 #: src/Dialogs/dlgWeather.cpp:47
 msgid "Weather parameters"
@@ -7966,9 +7969,8 @@ msgid "Hot-air balloon"
 msgstr "Ballon"
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
-#, fuzzy
 msgid "Track friends"
-msgstr "Tracking"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
 msgid "Download the position of your friends live from the SkyLines server."
@@ -8834,7 +8836,7 @@ msgstr ""
 
 #: Data/Input/default.xci:1013
 msgid "Map"
-msgstr ""
+msgstr "Carte"
 
 #: Data/Input/default.xci:132
 msgid ""
@@ -9017,362 +9019,3 @@ msgid ""
 msgstr ""
 "METAR\n"
 "TAF"
-
-#~ msgid "Flight replay"
-#~ msgstr "Rejoue un vol"
-
-#~ msgid "Gear on delay"
-#~ msgstr "Instrument non compensé"
-
-#~ msgid "Gear off delay"
-#~ msgstr "Instrument compensé"
-
-#~ msgid "Interval; gear"
-#~ msgstr "Intervalle"
-
-#~ msgid "Radio com. max. delay"
-#~ msgstr "Radio com. retard max."
-
-#~ msgid "Battery low delay"
-#~ msgstr "Délai batterie faible"
-
-#~ msgid "Battery empty delay"
-#~ msgstr "Temps restant de batterie"
-
-#~ msgid "Interval; battery"
-#~ msgstr "Intervalle; batterie"
-
-#~ msgid "Step"
-#~ msgstr "Pas"
-
-#~ msgid "Ramp"
-#~ msgstr "Dégradé"
-
-#~ msgid "Circling deadband type"
-#~ msgstr "Zone muette spirale"
-
-#~ msgid "Type of dead band used in circling mode."
-#~ msgstr "Type de zone muette en spirale."
-
-#~ msgid "Circling hi cutoff"
-#~ msgstr "Coupure haute spirale"
-
-#~ msgid "High limit of circling dead band"
-#~ msgstr "Limite haute de la bande muette en spirale"
-
-#~ msgid "Circling low cutoff"
-#~ msgstr "Coupure basse en spirale"
-
-#~ msgid "Low limit of circling dead band"
-#~ msgstr "Limite basse de la bande muette en spirale"
-
-#~ msgid "Cruise deadband type"
-#~ msgstr "Type de bande muette en transition"
-
-#~ msgid "Type of dead band used in cruise mode."
-#~ msgstr "Type de bande muette en transition"
-
-#~ msgid "Cruise hi cutoff"
-#~ msgstr "Coupure haute en transition"
-
-#~ msgid "High limit of cruise dead band"
-#~ msgstr "Limite haute de la bande muette en transition"
-
-#~ msgid "Cruise low cutoff"
-#~ msgstr "Coupure basse en transition"
-
-#~ msgid "Low limit of cruise dead band"
-#~ msgstr "Limite basse de la bande muette en transition"
-
-#~ msgid ""
-#~ "Comparison method used to detect climb states (HIGH/LOW).\n"
-#~ "[NONE]: State LOW disabled\n"
-#~ "[MACCREADY]: State High if gross vario is greater than MacCready "
-#~ "setting.\n"
-#~ "[AVERAGE]: State HIGH if gross vario value is greater than average gross "
-#~ "vario value."
-#~ msgstr ""
-#~ "Méthode de comparaison pour détecter le passage en ascendance (Haut/"
-#~ "Bas).\n"
-#~ "[AUCUN] : Etat Bas désactivé\n"
-#~ "[MACCREADY] : Etat Haut si le vario est supérieur au calage MacCready.\n"
-#~ "[MOYEN] : Etat Haut si le vario est supérieur au vario moyen."
-
-#~ msgid "Cruise lift trigger"
-#~ msgstr "Déclencheur de montée en transition"
-
-#~ msgid "Climb averager scale"
-#~ msgstr "Intervalle de lissage en montée"
-
-#~ msgid "Time scale used for vario averager."
-#~ msgstr "Échelle de temps utilisée pour la moyenne du vario."
-
-#~ msgid "Cruise averager scale"
-#~ msgstr "Intervalle de lissage en transition"
-
-#~ msgid "Time scale used for cruise speed command averager."
-#~ msgstr ""
-#~ "Echelle de temps utilisée pour lisser vitesse de consigne en transition."
-
-#~ msgid "Circling volume"
-#~ msgstr "Volume en spirale"
-
-#~ msgid "Mean volume level in circling modes."
-#~ msgstr "Niveau moyen du volume dans en spirale."
-
-#~ msgid "Cruise volume"
-#~ msgstr "Volume en transition"
-
-#~ msgid ""
-#~ "Mean volume level in cruise modes.  If set to zero, scales with airspeed."
-#~ msgstr ""
-#~ "Niveau moyen du volume en transition. A zéro, dépend de la vitesse air."
-
-#~ msgid "Base frequency"
-#~ msgstr "Fréquence de base"
-
-#~ msgid "Adjustment to base frequency of tones in all modes."
-#~ msgstr "Réglage de la fréquence de base des sons dans tous les modes."
-
-#~ msgid "Filter circling"
-#~ msgstr "Filtre en spirale"
-
-#~ msgid "Variometer low pass filter time constant in circling mode."
-#~ msgstr "Constante de temps du filtre passe-bas du variomètre en spirale."
-
-#~ msgid "Filter cruise"
-#~ msgstr "Filtre en transition"
-
-#~ msgid "Variometer low pass filter time constant in cruise mode."
-#~ msgstr "Constante de temps du filtre du variomètre en mode transition"
-
-#~ msgid "Tone pitch scale"
-#~ msgstr "Echelle de tonalité"
-
-#~ msgid "Adjustment to base pitch scale of tones in all modes."
-#~ msgstr "Réglage de l'échelle de tonalité de base dans tous les modes."
-
-#~ msgid "Beep type"
-#~ msgstr "Type de beep"
-
-#~ msgid "TE mixing"
-#~ msgstr "Mélange Energie Totale"
-
-#~ msgid ""
-#~ "Proportion of TE probe value used in total energy mixing with pitot/"
-#~ "static total energy."
-#~ msgstr ""
-#~ "Part de la sonde de compensation utilisée dans la détermination de "
-#~ "l'énergie totale avec l'énergie totale provenant les prises pitots et "
-#~ "statiques"
-
-#~ msgid ""
-#~ "Calibration factor applied to measured airspeed to obtain indicated "
-#~ "airspeed."
-#~ msgstr ""
-#~ "Coefficient de calibration appliqué à la vitesse air mesurée pour obtenir "
-#~ "la vitesse air indiquée."
-
-#~ msgid ""
-#~ "Calibration factor applied to static pressure used in total energy "
-#~ "calculation."
-#~ msgstr ""
-#~ "Coefficient de calibration appliqué à la pression statique utilisée pour "
-#~ "le calcul de l'énergie totale."
-
-#~ msgid "TE dynamic cal."
-#~ msgstr "Calc. EnTot dynamique"
-
-#~ msgid ""
-#~ "Calibration factor applied to dynamic pressure used in total energy "
-#~ "calculation."
-#~ msgstr ""
-#~ "Coefficient appliqué à la pression dynamique utilisée dans le calcul de "
-#~ "l'énergie totale."
-
-#~ msgid "Needle gauge type"
-#~ msgstr "Indication à aiguille"
-
-#~ msgid "Max. objects reported"
-#~ msgstr "Nbr max d'objets"
-
-#~ msgid "Flarm interface"
-#~ msgstr "Interface du Flarm"
-
-#~ msgid "Disable circling"
-#~ msgstr "Désactiver spirale"
-
-#~ msgid "No aircraft type"
-#~ msgstr "Pas de type d'aéronef"
-
-#~ msgid "Privacy"
-#~ msgstr "Confidentialité"
-
-#~ msgid "Interval; info"
-#~ msgstr "Intervalle; info"
-
-#~ msgid "Interval; warning"
-#~ msgstr "Intervalle; avertissement"
-
-#~ msgid "TE port"
-#~ msgstr "Prise ET"
-
-#~ msgid "Whether the Total Energy port is connected."
-#~ msgstr "Connexion d'une sonde à Energie Totale"
-
-#~ msgid "Pitot port"
-#~ msgstr "Port pitot"
-
-#~ msgid "Whether the Pitot port is connected."
-#~ msgstr "Connection d'une sonde pitot"
-
-#~ msgid "Static port"
-#~ msgstr "Prise statique"
-
-#~ msgid "Whether the Static port is connected."
-#~ msgstr "Connexion d'une prise statique"
-
-#~ msgid "Stall port"
-#~ msgstr "Prise de l'indicateur de décrochage"
-
-#~ msgid "Whether the Stall pressure port is connected."
-#~ msgstr "Connexion du système de détection du décrochage."
-
-#~ msgid "Accelerometer"
-#~ msgstr "Acceleromètre"
-
-#~ msgid ""
-#~ "Whether the internal accelerometer is used.  Only change this if the "
-#~ "accelerometer has malfunctioned or the instrument cannot be installed "
-#~ "with correct alignment."
-#~ msgstr ""
-#~ "Utilisation de l’accéléromètre interne. Ne changer ceci que si "
-#~ "l'accéléromètre est défectueux ou que l'instrument ne peut être aligné "
-#~ "correctement."
-
-#~ msgid ""
-#~ "Whether a temperature and humidity sensor is installed.  Set to 0 to "
-#~ "disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be "
-#~ "specified."
-#~ msgstr ""
-#~ "Si une sonde de température et d'humidité est branchée. Mettre 0 pour ne "
-#~ "pas utilisiser.  255 pour détection automatique. Sinon le numéro "
-#~ "d'identification de l'appareil (1Wire)."
-
-#~ msgid "Baud rate Vega"
-#~ msgstr "Baud pour Vega"
-
-#~ msgid ""
-#~ "Baud rate of serial device connected to Vega port X1.  Use this as "
-#~ "necessary when using a third party GPS or data-logger instead of FLARM.  "
-#~ "If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, "
-#~ "the value can be set to 19200."
-#~ msgstr ""
-#~ "Vitesse de transfert du port série connecté au port X1 du Vega. A "
-#~ "utiliser avec un GPS externe tiers ou un logger au lieu d'un FLARM. Si un "
-#~ "FLARM est connecté la vitesse doit être de 38400. Pour un OzFLARM elle "
-#~ "doit être réglée à 19200."
-
-#~ msgid "FLARM connected"
-#~ msgstr "FLARM connecté"
-
-#~ msgid ""
-#~ "Enable detection of FLARM.  Disable only if FLARM is not used or "
-#~ "disconnected."
-#~ msgstr ""
-#~ "Permet la détection d'un FLARM.  Désactiver seulement si le FLARM est "
-#~ "déconnecté ou pas utilisé."
-
-#~ msgid "PDA power"
-#~ msgstr "Alimentation PDA"
-
-#~ msgid ""
-#~ "Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If "
-#~ "Vega is connected to Altair, this should be set to False."
-#~ msgstr ""
-#~ "Active la sortie +5V pour PDA ou autre, sur le connecteur X2 du Vega. Si "
-#~ "Vega est connecté à un Altair, il doit être désactivé."
-
-#~ msgid "VNE"
-#~ msgstr "VNE"
-
-#~ msgid "V terrain"
-#~ msgstr "V relief"
-
-#~ msgid "Height terrain"
-#~ msgstr "Hauteur relief"
-
-#~ msgid "V manoeuvering"
-#~ msgstr "V Max en air agité"
-
-#~ msgid "V airbrake"
-#~ msgstr "V Max sortie AF"
-
-#~ msgid "V flap"
-#~ msgstr "V volets"
-
-#~ msgid "IGC logging"
-#~ msgstr "Enregistrement IGC"
-
-#~ msgid "Mute vario on voice"
-#~ msgstr "Taire le vario lors d'un appel"
-
-#~ msgid "Mute vario on radio"
-#~ msgstr "Couper le vario sur la radio"
-
-#~ msgid "Voice muting"
-#~ msgstr "Coupe le son des synthèses vocales"
-
-#~ msgid "Speaker threshold"
-#~ msgstr "Seuil du haut-parleur"
-
-#~ msgid "Headset threshold"
-#~ msgstr "Seuil des écouteurs"
-
-#~ msgid "Urgent min. volume"
-#~ msgstr "Volume min. urgent"
-
-#~ msgid "Task Status"
-#~ msgstr "Status Circuit"
-
-#~ msgid "Setup Mode"
-#~ msgstr "Mode de configuration"
-
-#~ msgid "System Status"
-#~ msgstr "Etat du Système"
-
-#~ msgid "Page Configuration"
-#~ msgstr "Page de configuration"
-
-#~ msgid "Standard names of fonts available"
-#~ msgstr "Noms standards des polices disponibles"
-
-#~ msgid "Italic"
-#~ msgstr "Italique"
-
-#~ msgid "Ok"
-#~ msgstr "Ok"
-
-#~ msgid "Speed achieved"
-#~ msgstr "Vitesse Réalisée"
-
-#~ msgid "Bold"
-#~ msgstr "Gras"
-
-#~ msgid "Edit Text"
-#~ msgstr "Saisie texte"
-
-#~ msgid "Height of font.  65 is large, 20 is very small."
-#~ msgstr "Hauteur de la police. 65 est grand, 20 est très petit."
-
-#~ msgid "FLARM"
-#~ msgstr "FLARM"
-
-#~ msgid "Italic font"
-#~ msgstr "Caractères italiques"
-
-#~ msgid "Bold font"
-#~ msgstr "Gras"
-
-#~ msgid "Aircraft Status"
-#~ msgstr "Etat Aéronef"
