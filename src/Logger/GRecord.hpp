@@ -55,11 +55,6 @@ public:
    */
   void GetDigest(char *buffer) const;
 
-  gcc_const
-  static bool IsValidIGCChar(char c) {
-    return MD5::IsValidIGCChar(c);
-  }
-
   /** loads a file into the data buffer */
   bool LoadFileToBuffer(const TCHAR *path);
 

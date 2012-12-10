@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "IGC/IGCWriter.hpp"
+#include "IGCString.hpp"
 #include "NMEA/Info.hpp"
 #include "Version.hpp"
 #include "Compatibility/string.h"
@@ -84,7 +85,7 @@ static void
 ReplaceNonIGCChars(char *p)
 {
   for (; *p != 0; ++p)
-    if (!GRecord::IsValidIGCChar(*p))
+    if (!IsValidIGCChar(*p))
       *p = ' ';
 }
 

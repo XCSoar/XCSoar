@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2012 The XCSoar Project
@@ -20,45 +21,36 @@
 }
 */
 
-#ifndef MD5_HPP
-#define MD5_HPP
+#ifndef XCSOAR_IGC_STRING_HPP
+#define XCSOAR_IGC_STRING_HPP
 
-#include <stdint.h>
-#include <stddef.h>
-
-class MD5
+/**
+ * Is this a "reserved" character?
+ *
+ * Note that this doesn't check for CR/LF because these aren't allowed
+ * within a line anyway.  No idea why these are mentioned in the
+ * specification.
+ *
+ * @see IGC specification, section A6
+ */
+constexpr
+static inline bool
+IsReservedIGCChar(char ch)
 {
-public:
-  static constexpr size_t DIGEST_LENGTH = 32;
+  return ch == '$' || ch == '*' || ch == '!' || ch == '\\' ||
+    ch == '^' || ch == '~';
+}
 
-private:
-  uint8_t buff512bits[64];
-  uint32_t h0, h1, h2, h3;
-  uint64_t message_length;
-
-  void Process512(const uint8_t *in);
-
-public:
-  /**
-   * Initialise with the default key.
-   */
-  void InitKey();
-
-  /**
-   * Initialise with a custom key.
-   */
-  void InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in);
-
-  void Append(uint8_t ch);
-  void Append(const void *data, size_t length);
-  void AppendString(const unsigned char *in, bool skip_invalid_igc_chars); // must be NULL-terminated string!
-
-  void Finalize();
-
-  /**
-   * @param buffer a buffer of at least #DIGEST_LENGTH+1 bytes
-   */
-  void GetDigest(char *buffer) const;
-};
+/**
+ * Is this a "valid" character?
+ *
+ * @see IGC specification, section A6
+ */
+constexpr
+static inline bool
+IsValidIGCChar(char ch)
+{
+  return ch >= 0x20 && ch <= 0x7e && !IsReservedIGCChar(ch);
+}
 
 #endif

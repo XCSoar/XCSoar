@@ -21,6 +21,7 @@
  */
 
 #include "Logger/MD5.hpp"
+#include "IGC/IGCString.hpp"
 #include "Util/Macros.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
@@ -124,23 +125,6 @@ void
 MD5::InitKey()
 {
   InitKey(0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476);
-}
-
-bool
-MD5::IsValidIGCChar(char c)
-{
-  /*
-   * Version 1.0.0 first posted to OLC 8/23/2008 supressed 0x0D only, and used Key#1
-   * Version 1.0.2 which uses the correct suppression filter from IGC spec and uses key #2
-   * This is the version we want to use, but we're reverting to 1.0.0 until OLC can upgrade to 1.0.3
-   * Validation program 1.0.3 is backwards compatible and reads either 1.0.0 or 1.0.2
-   */
-
-  // 1.0.2 filtering (and use key #2, 3 or 4 b/c key #1 used by 1.0.0 has a dupe in it
-
-  return c >= 0x20 && c <= 0x7E && c != 0x24 &&
-         c != 0x2A && c != 0x2C && c != 0x21 && c != 0x5C && c != 0x5E &&
-         c != 0x7E;
 }
 
 void
