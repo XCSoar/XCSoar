@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_IGC_WRITER_HPP
 
 #include "Logger/GRecord.hpp"
-#include "Util/BatchBuffer.hpp"
 #include "Math/fixed.hpp"
 #include "IGCFix.hpp"
 #include "IO/TextWriter.hpp"
@@ -35,23 +34,20 @@ Copyright_License {
 struct GPSState;
 struct BrokenDateTime;
 struct NMEAInfo;
-struct Declaration;
 struct GeoPoint;
 
 class IGCWriter {
   enum {
-    /** Number of records in disk buffer */
-    LOGGER_DISK_BUFFER_NUM_RECS = 10,
     MAX_IGC_BUFF = 255,
   };
 
   TextWriter file;
 
-  BatchBuffer<char[MAX_IGC_BUFF],LOGGER_DISK_BUFFER_NUM_RECS> buffer;
-
   GRecord grecord;
 
   IGCFix fix;
+
+  char buffer[MAX_IGC_BUFF];
 
 public:
   /**
@@ -63,7 +59,10 @@ public:
     return file.IsOpen();
   }
 
-  bool Flush();
+  bool Flush() {
+    return file.Flush();
+  }
+
   void Sign();
 
 private:
@@ -73,7 +72,9 @@ private:
    *
    * @return nullptr on error
    */
-  char *BeginLine();
+  char *BeginLine() {
+    return buffer;
+  }
 
   /**
    * Finish writing the line.

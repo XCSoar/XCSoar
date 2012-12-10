@@ -59,37 +59,11 @@ IGCWriter::IGCWriter(const TCHAR *path)
 }
 
 bool
-IGCWriter::Flush()
-{
-  assert(file.IsOpen());
-
-  if (buffer.IsEmpty())
-    return true;
-
-  for (const char *i : buffer)
-    if (!file.WriteLine(i))
-      return false;
-
-  if (!file.Flush())
-    return false;
-
-  buffer.Clear();
-  return true;
-}
-
-char *
-IGCWriter::BeginLine()
-{
-  if (!buffer.IsFull() && !Flush())
-    return nullptr;
-
-  assert(!buffer.IsFull());
-  return buffer.Append();
-}
-
-bool
 IGCWriter::CommitLine(char *line)
 {
+  if (!file.WriteLine(line))
+    return false;
+
   grecord.AppendRecordToBuffer(line);
   return true;
 }
@@ -284,6 +258,7 @@ IGCWriter::LogPoint(const IGCFix &fix, int epe, int satellites)
           epe, satellites);
 
   WriteLine(b_record);
+  Flush();
 }
 
 void
