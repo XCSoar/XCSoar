@@ -33,10 +33,11 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Form/Button.hpp"
-#include "Form/Frame.hpp"
+#include "Form/SymbolButton.hpp"
 #include "Form/List.hpp"
-#include "Form/Util.hpp"
-#include "Widget/XMLWidget.hpp"
+#include "Widget/ListWidget.hpp"
+#include "Widget/TextWidget.hpp"
+#include "Widget/TwoWidgets.hpp"
 #include "Formatter/UserUnits.hpp"
 #include "Formatter/AngleFormatter.hpp"
 #include "Look/DialogLook.hpp"
@@ -48,21 +49,171 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Util/Macros.hpp"
+#include "UIGlobals.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
-class TaskEditPanel
-  : public XMLWidget, public ActionListener,
-    private ListControl::Handler {
-  enum Buttons {
-    EDIT = 100,
-    DOWN,
-    UP,
-    MUTATE,
-    CLEAR_ALL,
+enum Buttons {
+  EDIT = 100,
+  MUTATE,
+  DOWN,
+  UP,
+  CLEAR_ALL,
+};
+
+/**
+ * The bottom panel showing four buttons.  Internally, there are five
+ * button objects, because the "down" and the "mutate" buttons are
+ * exclusive.
+ */
+class TaskEditButtons gcc_final : public NullWidget {
+  ActionListener *listener;
+
+  WndButton *edit_button, *mutate_button;
+  WndSymbolButton *down_button, *up_button;
+  WndButton *clear_all_button;
+  bool visible;
+
+  bool show_edit, show_mutate, show_down, show_up;
+
+  struct Layout {
+    PixelRect edit, down, up, clear_all;
   };
 
+public:
+  TaskEditButtons()
+    :visible(false), show_edit(false), show_mutate(false),
+     show_down(false), show_up(false) {}
+
+  void SetListener(ActionListener &_listener) {
+    assert(!visible);
+
+    listener = &_listener;
+  }
+
+  void Update(bool _edit, bool _mutate, bool _down, bool _up) {
+    show_edit = _edit;
+    show_mutate = _mutate;
+    show_down = _down;
+    show_up = _up;
+
+    if (visible)
+      UpdateVisibility();
+  }
+
+private:
+  void UpdateVisibility() {
+    assert(visible);
+
+    edit_button->SetVisible(show_edit);
+    mutate_button->SetVisible(show_mutate);
+    down_button->SetVisible(show_down);
+    up_button->SetVisible(show_up);
+    clear_all_button->Show();
+  }
+
+  Layout CalculateLayout(const PixelRect &rc) const {
+    const PixelScalar x2 = (rc.left + rc.right) / 2,
+      x1 = (rc.left + x2) / 2,
+      x3 = (x2 + rc.right) / 2;
+
+    return {
+      { rc.left, rc.top, x1, rc.bottom },
+      { x1, rc.top, x2, rc.bottom },
+      { x2, rc.top, x3, rc.bottom },
+      { x3, rc.top, rc.right, rc.bottom },
+    };
+  }
+
+  void UpdatePositions(const PixelRect &rc) {
+    assert(visible);
+
+    const Layout layout = CalculateLayout(rc);
+
+    edit_button->Move(layout.edit);
+    mutate_button->Move(layout.down);
+    down_button->Move(layout.down);
+    up_button->Move(layout.up);
+    clear_all_button->Move(layout.clear_all);
+  }
+
+public:
+  /* virtual methods from Widget */
+  virtual PixelSize GetMinimumSize() const gcc_override {
+    return { ::Layout::Scale(180),
+        PixelScalar(::Layout::GetMinimumControlHeight()) };
+  }
+
+  virtual PixelSize GetMaximumSize() const gcc_override {
+    return { ::Layout::Scale(400),
+        PixelScalar(::Layout::GetMaximumControlHeight()) };
+  }
+
+  virtual void Prepare(ContainerWindow &parent,
+                       const PixelRect &rc) gcc_override {
+    assert(!visible);
+
+    ButtonWindowStyle style;
+    style.Hide();
+    style.TabStop();
+
+    const DialogLook &look = UIGlobals::GetDialogLook();
+
+    const Layout layout = CalculateLayout(rc);
+    edit_button = new WndButton(parent, look, _("Edit Point"),
+                                layout.edit, style,
+                                *listener, EDIT);
+    mutate_button = new WndButton(parent, look, _("Make Finish"),
+                                  layout.down, style,
+                                  *listener, MUTATE);
+    down_button = new WndSymbolButton(parent, look, _("v"),
+                                      layout.down, style,
+                                      *listener, DOWN);
+    up_button = new WndSymbolButton(parent, look, _("^"),
+                                    layout.down, style,
+                                    *listener, UP);
+    clear_all_button = new WndButton(parent, look, _("Clear All"),
+                                     layout.clear_all, style,
+                                     *listener, CLEAR_ALL);
+  }
+
+  virtual void Unprepare() gcc_override {
+    assert(!visible);
+
+    delete clear_all_button;
+    delete down_button;
+    delete up_button;
+    delete mutate_button;
+    delete edit_button;
+  }
+
+  virtual void Show(const PixelRect &rc) gcc_override {
+    assert(!visible);
+    visible = true;
+
+    UpdatePositions(rc);
+    UpdateVisibility();
+  }
+
+  virtual void Hide() gcc_override {
+    assert(visible);
+    visible = false;
+
+    edit_button->Hide();
+    mutate_button->Hide();
+    down_button->Hide();
+    up_button->Hide();
+    clear_all_button->Hide();
+  }
+
+  virtual void Move(const PixelRect &rc) gcc_override {
+    UpdatePositions(rc);
+  }
+};
+
+class TaskEditPanel
+  : public ListWidget, public ActionListener {
   TaskManagerDialog &dialog;
 
   const TaskLook &task_look;
@@ -71,16 +222,24 @@ class TaskEditPanel
   OrderedTask **ordered_task_pointer, *ordered_task;
   bool *task_modified;
 
-  ListControl *wTaskPoints;
-  WndFrame *wSummary;
+  TextWidget &summary;
+  TaskEditButtons &buttons;
+
+  TwoWidgets *two_widgets;
 
 public:
   TaskEditPanel(TaskManagerDialog &_dialog,
                 const TaskLook &_task_look, const AirspaceLook &_airspace_look,
-                OrderedTask **_active_task, bool *_task_modified)
+                OrderedTask **_active_task, bool *_task_modified,
+                TextWidget &_summary, TaskEditButtons &_buttons)
     :dialog(_dialog),
      task_look(_task_look), airspace_look(_airspace_look),
-     ordered_task_pointer(_active_task), task_modified(_task_modified) {}
+     ordered_task_pointer(_active_task), task_modified(_task_modified),
+     summary(_summary), buttons(_buttons), two_widgets(nullptr) {}
+
+  void SetTwoWidgets(TwoWidgets &_two_widgets) {
+    two_widgets = &_two_widgets;
+  }
 
   void UpdateButtons();
 
@@ -94,7 +253,13 @@ public:
 
   bool OnKeyDown(unsigned key_code);
 
+  /* virtual methods from Widget */
   virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
+
+  virtual void Unprepare() gcc_override {
+    DeleteWindow();
+  }
+
   virtual void ReClick();
   virtual void Show(const PixelRect &rc);
   virtual void Hide();
@@ -117,21 +282,14 @@ private:
 void
 TaskEditPanel::UpdateButtons()
 {
-  const unsigned index = wTaskPoints->GetCursorIndex();
-  // Todo check if point is already finish
-  ShowFormControl(form, _T("cmdMakeFinish"),
-                  index > 0 &&
-                  (index == ordered_task->TaskSize() - 1) &&
-                  !ordered_task->HasFinish());
+  const unsigned index = GetList().GetCursorIndex();
 
-  ShowFormControl(form, _T("cmdDown"),
-                  (int)index < ((int)(ordered_task->TaskSize()) - 1));
-
-  ShowFormControl(form, _T("cmdUp"),
-                  index > 0 && index < ordered_task->TaskSize());
-
-  ShowFormControl(form, _T("cmdEditTurnpoint"),
-                  index < ordered_task->TaskSize());
+  buttons.Update(index < ordered_task->TaskSize(),
+                 index > 0 &&
+                 (index == ordered_task->TaskSize() - 1) &&
+                 !ordered_task->HasFinish(),
+                 (int)index < ((int)(ordered_task->TaskSize()) - 1),
+                 index > 0 && index < ordered_task->TaskSize());
 }
 
 void
@@ -141,17 +299,20 @@ TaskEditPanel::RefreshView()
 
   dialog.InvalidateTaskView();
 
+  unsigned length = ordered_task->TaskSize();
   if (!ordered_task->IsFull())
-    wTaskPoints->SetLength(ordered_task->TaskSize()+1);
-  else
-    wTaskPoints->SetLength(ordered_task->TaskSize());
-  wTaskPoints->Invalidate();
+    ++length;
+  GetList().SetLength(length);
+  GetList().Invalidate();
 
-  if (wSummary) {
+  {
     TCHAR text[300];
     OrderedTaskSummary(ordered_task, text, false);
-    wSummary->SetCaption(text);
+    summary.SetText(text);
   }
+
+  if (GetList().IsVisible() && two_widgets != nullptr)
+    two_widgets->UpdateLayout();
 }
 
 void
@@ -281,7 +442,7 @@ TaskEditPanel::OnPaintItem(Canvas &canvas, const PixelRect rc,
 void
 TaskEditPanel::OnEditTurnpointClicked()
 {
-  EditTaskPoint(wTaskPoints->GetCursorIndex());
+  EditTaskPoint(GetList().GetCursorIndex());
 }
 
 bool
@@ -351,17 +512,14 @@ TaskEditPanel::OnMakeFinish()
 void
 TaskEditPanel::MoveUp()
 {
-  if (!wTaskPoints)
-    return;
-
-  unsigned index = wTaskPoints->GetCursorIndex();
+  unsigned index = GetList().GetCursorIndex();
   if (index == 0)
     return;
 
   if (!ordered_task->GetFactory().Swap(index - 1, true))
     return;
 
-  wTaskPoints->SetCursorIndex(index - 1);
+  GetList().SetCursorIndex(index - 1);
   *task_modified = true;
 
   RefreshView();
@@ -370,17 +528,14 @@ TaskEditPanel::MoveUp()
 void
 TaskEditPanel::MoveDown()
 {
-  if (!wTaskPoints)
-    return;
-
-  unsigned index = wTaskPoints->GetCursorIndex();
+  unsigned index = GetList().GetCursorIndex();
   if (index >= ordered_task->TaskSize())
     return;
 
   if (!ordered_task->GetFactory().Swap(index, true))
     return;
 
-  wTaskPoints->SetCursorIndex(index + 1);
+  GetList().SetCursorIndex(index + 1);
   *task_modified = true;
 
   RefreshView();
@@ -391,7 +546,7 @@ TaskEditPanel::OnKeyDown(unsigned key_code)
 {
   switch (key_code){
   case KEY_ESCAPE:
-    if (IsAltair() && wTaskPoints->HasFocus()){
+    if (IsAltair() && GetList().HasFocus()){
        dialog.FocusFirstControl();
       return true;
     }
@@ -416,36 +571,15 @@ TaskEditPanel::OnKeyDown(unsigned key_code)
   }
 }
 
-static void
-SetActionListener(SubForm &form, const TCHAR *name,
-                  ActionListener *listener, int id)
-{
-  ((WndButton *)form.FindByName(name))->SetListener(listener, id);
-}
-
 void
 TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  const DialogLook &look = UIGlobals::GetDialogLook();
+  UPixelScalar line_height = look.list.font->GetHeight()
+    + Layout::Scale(6) + look.small_font->GetHeight();
+  CreateList(parent, look, rc, line_height);
+
   ordered_task = *ordered_task_pointer;;
-
-  LoadWindow(nullptr, parent, rc, _T("IDR_XML_TASKEDIT"));
-
-  SetActionListener(form, _T("cmdEditTurnpoint"), this, EDIT);
-  SetActionListener(form, _T("cmdMakeFinish"), this, MUTATE);
-  SetActionListener(form, _T("cmdDown"), this, DOWN);
-  SetActionListener(form, _T("cmdUp"), this, UP);
-  SetActionListener(form, _T("cmdNew"), this, CLEAR_ALL);
-
-  wTaskPoints = (ListControl*)form.FindByName(_T("frmTaskPoints"));
-  assert(wTaskPoints != NULL);
-
-  wSummary = (WndFrame *)form.FindByName(_T("frmSummary"));
-  assert(wSummary);
-
-  UPixelScalar line_height = dialog.GetLook().list.font->GetHeight()
-    + Layout::Scale(6) + dialog.GetLook().small_font->GetHeight();
-  wTaskPoints->SetItemHeight(line_height);
-  wTaskPoints->SetHandler(this);
 }
 
 void
@@ -461,7 +595,7 @@ TaskEditPanel::Show(const PixelRect &rc)
 
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;
-    wTaskPoints->SetCursorIndex(0);
+    GetList().SetCursorIndex(0);
   }
 
   RefreshView();
@@ -470,7 +604,7 @@ TaskEditPanel::Show(const PixelRect &rc)
       return this->OnKeyDown(key_code);
     });
 
-  XMLWidget::Show(rc);
+  ListWidget::Show(rc);
 }
 
 void
@@ -479,7 +613,7 @@ TaskEditPanel::Hide()
   dialog.ResetTaskView();
   dialog.ClearKeyDownFunction();
 
-  XMLWidget::Hide();
+  ListWidget::Hide();
 }
 
 Widget *
@@ -488,6 +622,14 @@ CreateTaskEditPanel(TaskManagerDialog &dialog,
                     const AirspaceLook &airspace_look,
                     OrderedTask **active_task, bool *task_modified)
 {
-  return new TaskEditPanel(dialog, task_look, airspace_look,
-                           active_task, task_modified);
+  TaskEditButtons *buttons = new TaskEditButtons();
+  TextWidget *summary = new TextWidget();
+  TaskEditPanel *widget = new TaskEditPanel(dialog, task_look, airspace_look,
+                                            active_task, task_modified,
+                                            *summary, *buttons);
+  buttons->SetListener(*widget);
+  TwoWidgets *tw1 = new TwoWidgets(widget, summary);
+  widget->SetTwoWidgets(*tw1);
+  TwoWidgets *tw2 = new TwoWidgets(tw1, buttons);
+  return tw2;
 }
