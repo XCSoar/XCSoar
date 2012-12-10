@@ -25,7 +25,7 @@ Copyright_License {
 #define WINDMEASUREMENTLIST_H
 
 #include "Util/StaticArray.hpp"
-#include "Vector.hpp"
+#include "Math/Vector.hpp"
 
 /**
  * Structure to hold a single wind measurement
