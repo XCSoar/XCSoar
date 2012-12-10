@@ -28,6 +28,7 @@ Copyright_License {
 #include "Compatibility/string.h"
 
 #include <assert.h>
+#include <windef.h> /* for MAX_PATH */
 
 static char *
 FormatIGCLocation(char *buffer, const GeoPoint &location)

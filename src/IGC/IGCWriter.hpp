@@ -31,7 +31,6 @@ Copyright_License {
 #include "IO/TextWriter.hpp"
 
 #include <tchar.h>
-#include <windef.h> /* for MAX_PATH */
 
 struct GPSState;
 struct BrokenDateTime;
