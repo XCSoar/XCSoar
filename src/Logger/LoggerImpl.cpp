@@ -258,6 +258,12 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
 
   frecord.Reset();
   writer = new IGCWriter(filename);
+  if (!writer->IsOpen()) {
+    LogStartUp(_T("Failed to create file %s"), filename);
+    delete writer;
+    writer = nullptr;
+    return;
+  }
 
   LogStartUp(_T("Logger Started: %s"), filename);
 }

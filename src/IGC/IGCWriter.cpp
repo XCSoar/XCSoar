@@ -61,11 +61,10 @@ IGCWriter::IGCWriter(const TCHAR *path)
 bool
 IGCWriter::Flush()
 {
+  assert(file.IsOpen());
+
   if (buffer.IsEmpty())
     return true;
-
-  if (!file.IsOpen())
-    return false;
 
   for (const char *i : buffer)
     if (!file.WriteLine(i))
@@ -350,8 +349,7 @@ IGCWriter::LogFRecord(const BrokenTime &time, const int *satellite_ids)
 void
 IGCWriter::Sign()
 {
-  if (!file.IsOpen())
-    return;
+  assert(file.IsOpen());
 
   grecord.FinalizeBuffer();
   grecord.WriteTo(file);

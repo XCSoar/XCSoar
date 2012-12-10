@@ -54,7 +54,14 @@ class IGCWriter {
   IGCFix fix;
 
 public:
+  /**
+   * Create a new IGC file.  The caller must check IsOpen().
+   */
   IGCWriter(const TCHAR *path);
+
+  bool IsOpen() const {
+    return file.IsOpen();
+  }
 
   bool Flush();
   void Sign();
