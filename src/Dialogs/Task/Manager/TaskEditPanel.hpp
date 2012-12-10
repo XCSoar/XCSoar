@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Widget/XMLWidget.hpp"
 #include "Form/List.hpp"
+#include "Form/ActionListener.hpp"
 
 class TaskManagerDialog;
 struct DialogLook;
@@ -36,7 +37,9 @@ class ListControl;
 class WndFrame;
 class Canvas;
 
-class TaskEditPanel : public XMLWidget, private ListControl::Handler {
+class TaskEditPanel
+  : public XMLWidget, public ActionListener,
+    private ListControl::Handler {
   TaskManagerDialog &dialog;
 
   const TaskLook &task_look;
@@ -77,6 +80,9 @@ protected:
   void RefreshView();
 
 private:
+  /* virtual methods from ActionListener */
+  virtual void OnAction(int id) gcc_override;
+
   /* virtual methods from List::Handler */
   virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
                            unsigned idx);

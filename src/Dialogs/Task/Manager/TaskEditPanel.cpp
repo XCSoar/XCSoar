@@ -26,7 +26,6 @@ Copyright_License {
 #include "../TaskDialogs.hpp"
 #include "../dlgTaskHelpers.hpp"
 #include "Dialogs/Message.hpp"
-#include "Dialogs/CallBackTable.hpp"
 #include "Dialogs/Waypoint/WaypointDialogs.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
@@ -34,6 +33,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Form/Form.hpp"
+#include "Form/Button.hpp"
 #include "Form/Frame.hpp"
 #include "Form/List.hpp"
 #include "Form/Draw.hpp"
@@ -54,11 +54,15 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-class WndButton;
+enum Buttons {
+  EDIT = 100,
+  DOWN,
+  UP,
+  MUTATE,
+  CLEAR_ALL,
+};
 
-/** XXX this hack is needed because the form callbacks don't get a
-    context pointer - please refactor! */
-static TaskEditPanel *instance;
+class WndButton;
 
 void
 TaskEditPanel::UpdateButtons()
@@ -114,10 +118,30 @@ TaskEditPanel::OnClearAllClicked()
   }
 }
 
-static void
-OnClearAllClicked()
+void
+TaskEditPanel::OnAction(int id)
 {
-  instance->OnClearAllClicked();
+  switch (id) {
+  case EDIT:
+    OnEditTurnpointClicked();
+    break;
+
+  case MUTATE:
+    OnMakeFinish();
+    break;
+
+  case UP:
+    MoveUp();
+    break;
+
+  case DOWN:
+    MoveDown();
+    break;
+
+  case CLEAR_ALL:
+    OnClearAllClicked();
+    break;
+  }
 }
 
 void
@@ -210,12 +234,6 @@ TaskEditPanel::OnEditTurnpointClicked()
   EditTaskPoint(wTaskPoints->GetCursorIndex());
 }
 
-static void
-OnEditTurnpointClicked()
-{
-  instance->OnEditTurnpointClicked();
-}
-
 bool
 TaskEditPanel::CanActivateItem(unsigned index) const
 {
@@ -280,12 +298,6 @@ TaskEditPanel::OnMakeFinish()
   RefreshView();
 }
 
-static void
-OnMakeFinish()
-{
-  instance->OnMakeFinish();
-}
-
 void
 TaskEditPanel::MoveUp()
 {
@@ -305,12 +317,6 @@ TaskEditPanel::MoveUp()
   RefreshView();
 }
 
-static void
-OnMoveUpClicked()
-{
-  instance->MoveUp();
-}
-
 void
 TaskEditPanel::MoveDown()
 {
@@ -328,12 +334,6 @@ TaskEditPanel::MoveDown()
   *task_modified = true;
 
   RefreshView();
-}
-
-static void
-OnMoveDownClicked()
-{
-  instance->MoveDown();
 }
 
 bool
@@ -366,24 +366,25 @@ TaskEditPanel::OnKeyDown(unsigned key_code)
   }
 }
 
-static constexpr CallBackTableEntry task_edit_callbacks[] = {
-  DeclareCallBackEntry(OnMakeFinish),
-  DeclareCallBackEntry(OnMoveUpClicked),
-  DeclareCallBackEntry(OnMoveDownClicked),
-  DeclareCallBackEntry(OnEditTurnpointClicked),
-  DeclareCallBackEntry(OnClearAllClicked),
-
-  DeclareCallBackEntry(NULL)
-};
+static void
+SetActionListener(SubForm &form, const TCHAR *name,
+                  ActionListener *listener, int id)
+{
+  ((WndButton *)form.FindByName(name))->SetListener(listener, id);
+}
 
 void
 TaskEditPanel::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
   ordered_task = *ordered_task_pointer;;
 
-  LoadWindow(task_edit_callbacks, parent, rc, _T("IDR_XML_TASKEDIT"));
+  LoadWindow(nullptr, parent, rc, _T("IDR_XML_TASKEDIT"));
 
-  instance = this;
+  SetActionListener(form, _T("cmdEditTurnpoint"), this, EDIT);
+  SetActionListener(form, _T("cmdMakeFinish"), this, MUTATE);
+  SetActionListener(form, _T("cmdDown"), this, DOWN);
+  SetActionListener(form, _T("cmdUp"), this, UP);
+  SetActionListener(form, _T("cmdNew"), this, CLEAR_ALL);
 
   wTaskPoints = (ListControl*)form.FindByName(_T("frmTaskPoints"));
   assert(wTaskPoints != NULL);

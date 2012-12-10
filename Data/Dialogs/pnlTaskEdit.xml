@@ -5,9 +5,9 @@
 
   <Label Name="frmSummary" Y="-90" Height="50"/>
 
-  <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="2" Y="-37" Width="60" Height="35" OnClick="OnEditTurnpointClicked"/>
-  <Button Name="cmdMakeFinish" Caption="Make Finish" X="62" Y="-37" Width="58" Height="35" OnClick="OnMakeFinish"/>
-  <SymbolButton Name="cmdDown" Caption="v" X="62" Y="-37" Width="58" Height="35" OnClick="OnMoveDownClicked"/>
-  <SymbolButton Name="cmdUp" Caption="^" X="120" Y="-37" Width="60" Height="35" OnClick="OnMoveUpClicked"/>
-  <Button Name="cmdNew" Caption="Clear All" X="180" Y="-37" Width="60" Height="35" OnClick="OnClearAllClicked"/>
+  <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="2" Y="-37" Width="60" Height="35"/>
+  <Button Name="cmdMakeFinish" Caption="Make Finish" X="62" Y="-37" Width="58" Height="35"/>
+  <SymbolButton Name="cmdDown" Caption="v" X="62" Y="-37" Width="58" Height="35"/>
+  <SymbolButton Name="cmdUp" Caption="^" X="120" Y="-37" Width="60" Height="35"/>
+  <Button Name="cmdNew" Caption="Clear All" X="180" Y="-37" Width="60" Height="35"/>
 </Panel>
