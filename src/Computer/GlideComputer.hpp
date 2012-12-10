@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "GlideComputerBlackboard.hpp"
 #include "Audio/VegaVoice.hpp"
-#include "GPSClock.hpp"
 #include "Time/PeriodClock.hpp"
 #include "GlideComputerAirData.hpp"
 #include "GlideComputerStats.hpp"
