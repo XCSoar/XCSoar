@@ -167,7 +167,7 @@ IsAlphaNumericASCII(TCHAR ch)
  * Unlike toupper(), it ignores the system locale.
  */
 constexpr
-static inline bool
+static inline char
 ToUpperASCII(char ch)
 {
   return ch >= 'a' && ch <= 'z'
