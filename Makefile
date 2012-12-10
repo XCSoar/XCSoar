@@ -384,6 +384,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Logger/IGCFileCleanup.cpp \
 	$(SRC)/IGC/IGCFix.cpp \
 	$(SRC)/IGC/IGCWriter.cpp \
+	$(SRC)/IGC/IGCString.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Logger/NMEALogger.cpp \
 	$(SRC)/Logger/ExternalLogger.cpp \

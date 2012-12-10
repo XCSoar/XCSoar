@@ -81,14 +81,6 @@ IGCWriter::Flush()
   return true;
 }
 
-static void
-ReplaceNonIGCChars(char *p)
-{
-  for (; *p != 0; ++p)
-    if (!IsValidIGCChar(*p))
-      *p = ' ';
-}
-
 bool
 IGCWriter::WriteLine(const char *line)
 {
@@ -100,11 +92,12 @@ IGCWriter::WriteLine(const char *line)
 
   assert(!buffer.IsFull());
 
-  char *dest = buffer.Append();
-  strncpy(dest, line, MAX_IGC_BUFF);
-  dest[MAX_IGC_BUFF - 1] = '\0';
+  char *const dest = buffer.Append(), *const end = dest + MAX_IGC_BUFF - 1,
+    *p = dest;
 
-  ReplaceNonIGCChars(dest);
+  p = CopyIGCString(dest, end, line);
+  *p = '\0';
+
   grecord.AppendRecordToBuffer(dest);
 
   return true;
