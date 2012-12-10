@@ -59,17 +59,6 @@ ButtonPanel::UpdateLayout()
 static constexpr PixelRect dummy_rc = { 0, 0, 100, 40 };
 
 WndButton *
-ButtonPanel::Add(const TCHAR *caption,
-                 WndButton::ClickNotifyCallback callback)
-{
-  WndButton *button = new WndButton(parent, look, caption,
-                                    dummy_rc, style, callback);
-  buttons.append(button);
-
-  return button;
-}
-
-WndButton *
 ButtonPanel::Add(const TCHAR *caption, ActionListener &listener, int id)
 {
   WndButton *button = new WndButton(parent, look, caption,
