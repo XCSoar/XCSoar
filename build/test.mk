@@ -1732,16 +1732,12 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(SRC)/KineticManager.cpp \
-	$(SRC)/Form/SubForm.cpp \
-	$(SRC)/Form/Form.cpp \
-	$(SRC)/Form/List.cpp \
-	$(SRC)/Form/ScrollBar.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/RunListControl.cpp
-RUN_LIST_CONTROL_DEPENDS = SCREEN EVENT OS THREAD MATH UTIL
+RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT OS THREAD MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
 
 RUN_TEXT_ENTRY_SOURCES = \
@@ -1962,15 +1958,13 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
-	$(SRC)/Form/SubForm.cpp \
-	$(SRC)/Form/Form.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
 RUN_JOB_DIALOG_LDADD = $(RESOURCE_BINARY)
-RUN_JOB_DIALOG_DEPENDS = THREAD SCREEN EVENT OS MATH UTIL
+RUN_JOB_DIALOG_DEPENDS = THREAD FORM SCREEN EVENT OS MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
 
 RUN_ANALYSIS_SOURCES = \
