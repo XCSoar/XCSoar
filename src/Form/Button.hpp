@@ -79,9 +79,14 @@ public:
   /**
    * Set the object that will receive click events.
    */
-  void SetListener(ActionListener *_listener) {
+  void SetListener(ActionListener *_listener, int _id) {
     assert(click_callback == NULL);
 
+#ifdef USE_GDI
+    id = _id;
+#else
+    SetID(_id);
+#endif
     listener = _listener;
   }
 

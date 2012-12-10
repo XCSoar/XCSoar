@@ -92,6 +92,10 @@ public:
     return id;
   }
 
+  void SetID(unsigned _id) {
+    id = _id;
+  }
+
   void SetText(const TCHAR *_text) {
     AssertNoneLocked();
     AssertThread();
@@ -164,6 +168,10 @@ public:
   gcc_pure
   unsigned GetID() const {
     return ::GetWindowLong(hWnd, GWL_ID);
+  }
+
+  void SetID(unsigned _id) {
+    ::SetWindowLong(hWnd, GWL_ID, _id);
   }
 
   /**
