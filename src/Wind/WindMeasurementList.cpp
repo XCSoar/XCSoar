@@ -29,8 +29,6 @@ Copyright_License {
 #include <stdlib.h>
 #include <algorithm>
 
-using std::min;
-
 /**
  * Returns the weighted mean windvector over the stored values, or 0
  * if no valid vector could be calculated (for instance: too little or
@@ -67,7 +65,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
 
     if ((fabs(altdiff) < fixed(1)) && (timediff < fixed(1))) {
       // measurement quality
-      unsigned int q_quality = min(5,m.quality) * REL_FACTOR_QUALITY / 5;
+      unsigned int q_quality = std::min(5, m.quality) * REL_FACTOR_QUALITY / 5;
 
       // factor in altitude difference between current altitude and
       // measurement.  Maximum alt difference is 1000 m.
