@@ -33,7 +33,7 @@ struct Vector {
 
   Vector() = default;
 
-  Vector(fixed _x, fixed _y):x(_x), y(_y) {}
+  constexpr Vector(fixed _x, fixed _y):x(_x), y(_y) {}
 
   Vector(const SpeedVector speed) {
     auto sc = speed.bearing.SinCos();
