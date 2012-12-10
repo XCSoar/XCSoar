@@ -25,6 +25,7 @@ Copyright_License {
 #define CHART_LOOK_HPP
 
 #include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
 #include <assert.h>
 
@@ -41,6 +42,8 @@ struct ChartLook {
   };
 
   Pen pens[STYLE_COUNT];
+
+  Brush bar_brush;
 
   /**
    * Font for miscellaneous labels in the chart.

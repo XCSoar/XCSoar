@@ -29,6 +29,7 @@ Copyright_License {
 #include "Operation/Operation.hpp"
 #include "Math/FastMath.h"
 
+#include <string.h>
 #include <stdlib.h>
 #include <algorithm>
 #include <limits.h>
@@ -461,6 +462,10 @@ RasterTileCache::SaveCache(FILE *file) const
 
   /* save metadata */
   CacheHeader header;
+
+  /* zero-fill all implicit padding bytes (to make valgrind happy) */
+  memset(&header, 0, sizeof(header));
+
   header.version = CacheHeader::VERSION;
   header.width = width;
   header.height = height;

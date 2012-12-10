@@ -28,7 +28,7 @@ Copyright_License {
 
 class ClimbAverageCalculator
 {
-  static int const MAX_HISTORY = 40;
+  static constexpr int MAX_HISTORY = 40;
   struct HistoryItem
   {
     fixed time;
@@ -54,6 +54,7 @@ class ClimbAverageCalculator
 public:
   fixed GetAverage(fixed time, fixed altitude, fixed average_time);
   void Reset();
+  bool Expired(fixed now, fixed max_age) const;
 };
 
 #endif

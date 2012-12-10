@@ -37,6 +37,8 @@ private:
 
 public:
   fixed Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude);
+
+  void CleanUp(fixed now);
 };
 
 #endif

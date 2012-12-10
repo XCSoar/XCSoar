@@ -108,14 +108,6 @@ GotoTask::TaskSize() const
   return tp ? 1 : 0;
 }
 
-void
-GotoTask::Reset()
-{
-  delete tp;
-  UnorderedTask::Reset();
-}
-
-
 bool 
 GotoTask::TakeoffAutotask(const GeoPoint& location, const fixed terrain_alt)
 {

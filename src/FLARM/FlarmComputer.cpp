@@ -30,6 +30,10 @@ void
 FlarmComputer::Process(FlarmData &flarm, const FlarmData &last_flarm,
                        const NMEAInfo &basic)
 {
+  // Cleanup old calculation instances
+  if (basic.time_available)
+    flarm_calculations.CleanUp(basic.time);
+
   // if (FLARM data is available)
   if (!flarm.IsDetected())
     return;

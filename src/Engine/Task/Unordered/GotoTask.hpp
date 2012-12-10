@@ -77,8 +77,6 @@ public:
   virtual void SetActiveTaskPoint(unsigned index) gcc_override;
   virtual bool IsValidTaskPoint(const int index_offset) const gcc_override;
 
-  /* virtual methods from class AbstractTask */
-  virtual void Reset() gcc_override;
 protected:
   virtual bool UpdateSample(const AircraftState &state_now,
                             const GlidePolar &glide_polar,

@@ -179,6 +179,23 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
   image->SetDirty();
 }
 
+/**
+ * Clip the difference between two adjacent terrain height values to
+ * sane bounds.  This works around integer overflows in the
+ * GenerateSlopeImage() formula when the map file is broken, avoiding
+ * the sqrt() call with a negative argument.
+ */
+gcc_const
+static int
+ClipHeightDelta(int d)
+{
+  if (d > 512)
+    d = 512;
+  else if (d < -512)
+    d = -512;
+  return d;
+}
+
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
 // grid), then increase the step size to be equal to the terrain
 // grid for purposes of calculating slope, to avoid shading problems
@@ -272,8 +289,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
           continue;
         }
 
-        const int p32 = h_above - h_below;
-        const int p22 = h_right - h_left;
+        const int p32 = ClipHeightDelta(h_above - h_below);
+        const int p22 = ClipHeightDelta(h_right - h_left);
 
         const unsigned p20 = column_plus_index + column_minus_index;
 
