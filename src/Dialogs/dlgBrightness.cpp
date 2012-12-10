@@ -111,15 +111,10 @@ void dlgBrightnessShowModal(){
 
 #else /* !GNAV */
 
-#include "Dialogs/Message.hpp"
-
 void
 dlgBrightnessShowModal()
 {
-  /* XXX this is ugly, non-Altair platforms should not even see the
-     according menu item; not translating this superfluous message */
-  ShowMessageBox(_T("Only available on Altair"), _T("Brightness"),
-              MB_OK|MB_ICONERROR);
+  /* only available on Altair */
 }
 
 #endif /* !GNAV */
