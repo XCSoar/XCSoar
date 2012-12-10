@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "PortMonitor.hpp"
 #include "Dialogs/Message.hpp"
-#include "Screen/SingleWindow.hpp"
 #include "Screen/TerminalWindow.hpp"
 #include "Form/Form.hpp"
 #include "Form/ButtonPanel.hpp"
@@ -188,8 +187,8 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device.GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  WndForm dialog(parent, dialog_look, parent.GetClientRect(),
-                 caption, dialog_style);
+  WndForm dialog(dialog_look);
+  dialog.Create(parent, caption, dialog_style);
 
   ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
