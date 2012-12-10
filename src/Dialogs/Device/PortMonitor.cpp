@@ -37,7 +37,6 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 
 static DeviceDescriptor *device;
-static WndForm *dialog;
 static WndButton *pause_button;
 static TerminalWindow *terminal;
 static bool paused;
@@ -143,13 +142,13 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   caption.Format(_T("%s: %s"), _("Port monitor"),
                  device->GetConfig().GetPortName(buffer, ARRAY_SIZE(buffer)));
 
-  dialog = new WndForm(parent, dialog_look, parent.GetClientRect(),
-                       caption, dialog_style);
+  WndForm dialog(parent, dialog_look, parent.GetClientRect(),
+                 caption, dialog_style);
 
-  ContainerWindow &client_area = dialog->GetClientAreaWindow();
+  ContainerWindow &client_area = dialog.GetClientAreaWindow();
 
   ButtonPanel buttons(client_area, dialog_look);
-  buttons.Add(_("Close"), *dialog, mrOK);
+  buttons.Add(_("Close"), dialog, mrOK);
   buttons.Add(_("Clear"), OnClearClicked);
   buttons.Add(_("Reconnect"), OnReconnectClicked);
   pause_button = buttons.Add(_("Pause"), OnPauseClicked);
@@ -159,7 +158,7 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
   /* create the terminal */
 
   terminal = new TerminalWindow(terminal_look);
-  terminal->Create(dialog->GetClientAreaWindow(), rc);
+  terminal->Create(client_area, rc);
 
   bridge = new PortTerminalBridge(*terminal);
   device->SetMonitor(bridge);
@@ -167,10 +166,9 @@ ShowPortMonitor(SingleWindow &parent, const DialogLook &dialog_look,
 
   /* run it */
 
-  dialog->ShowModal();
+  dialog.ShowModal();
 
   device->SetMonitor(NULL);
   delete bridge;
   delete terminal;
-  delete dialog;
 }
