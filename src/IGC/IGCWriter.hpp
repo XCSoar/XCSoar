@@ -60,9 +60,8 @@ public:
   bool Flush();
   void Sign();
 
-  bool WriteLine(const char *line);
-
 private:
+  bool WriteLine(const char *line);
   bool WriteLine(const char *a, const TCHAR *b);
 
   static const char *GetHFFXARecord();
