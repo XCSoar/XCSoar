@@ -30,7 +30,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
-#include <stdint.h>
 
 struct StaticEnumChoice;
 class SubForm;
@@ -67,8 +66,6 @@ SetFormValue(SubForm &form, const TCHAR *control_name, const TCHAR *value);
 void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value);
 void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, int value);
-void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value);
 
 void
@@ -84,10 +81,6 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name, fixed value);
 void
 LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
                          fixed value);
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, int value);
 
 void
 LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
@@ -107,10 +100,6 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name,
 void
 LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  const TCHAR *value);
-
-void
-LoadFormPropertyFromProfile(SubForm &form, const TCHAR *control_name,
-                            const TCHAR *profile_key);
 
 gcc_pure
 int
@@ -137,18 +126,6 @@ SaveFormProperty(const SubForm &form, const TCHAR* field, bool &value);
 
 bool
 SaveFormProperty(const SubForm &form, const TCHAR* field, unsigned int &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR* field, int &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR* field, short &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR* field, uint8_t &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR* field, uint16_t &value);
 
 bool
 SaveFormProperty(SubForm &form, const TCHAR *control_name, fixed &value);
@@ -179,48 +156,6 @@ bool
 SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
                  bool &value);
 
-/**
- * Same as SaveFormProperty(), but negates the input value.
- */
-bool
-SaveFormPropertyNegated(const SubForm &form, const TCHAR *field,
-                        const TCHAR *profile_key, bool &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
-                 unsigned int &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
-                 int &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
-                 short &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
-                 uint8_t &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, const TCHAR *reg,
-                 uint16_t &value);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, int &value,
-                 const TCHAR *registry_name);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, unsigned &value,
-                 const TCHAR *registry_name);
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, fixed &value,
-                 const TCHAR *registry_name);
-
 bool
 SaveFormProperty(const SubForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size);
@@ -232,24 +167,5 @@ SaveFormProperty(const SubForm &form, const TCHAR *control_name,
 {
   return SaveFormProperty(form, control_name, value.buffer(), value.MAX_SIZE);
 }
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 TCHAR *buffer, size_t max_size,
-                 const TCHAR *profile_key);
-
-template<size_t N>
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 StaticString<N> &value,
-                 const TCHAR *profile_key)
-{
-  return SaveFormProperty(form, control_name, value.buffer(), value.MAX_SIZE,
-                          profile_key);
-}
-
-bool
-SaveFormPropertyToProfile(const SubForm &form, const TCHAR *control_name,
-                          const TCHAR *profile_key);
 
 #endif

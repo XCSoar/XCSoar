@@ -86,19 +86,6 @@ LoadFormProperty(SubForm &form, const TCHAR *control_name, bool value)
 }
 
 void
-LoadFormProperty(SubForm &form, const TCHAR *control_name, int value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
-
-  ctl->GetDataField()->SetAsInteger(value);
-  ctl->RefreshDisplay();
-}
-
-void
 LoadFormProperty(SubForm &form, const TCHAR *control_name, unsigned int value)
 {
   assert(control_name != NULL);
@@ -277,50 +264,6 @@ bool
 SaveFormProperty(const SubForm &form, const TCHAR *field, unsigned int &value)
 {
   unsigned new_value = (unsigned)GetFormValueInteger(form, field);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, int &value)
-{
-  int new_value = GetFormValueInteger(form, field);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, short &value)
-{
-  short new_value = (short)GetFormValueInteger(form, field);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, uint8_t &value)
-{
-  uint8_t new_value = (uint8_t)GetFormValueInteger(form, field);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *field, uint16_t &value)
-{
-  uint16_t new_value = (uint16_t)GetFormValueInteger(form, field);
   if (new_value == value)
     return false;
 

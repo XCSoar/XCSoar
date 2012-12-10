@@ -32,24 +32,6 @@ Copyright_License {
 
 void
 LoadFormProperty(SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, int value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
-
-  Unit unit = Units::GetUserUnitByGroup(unit_group);
-  DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
-  assert(df.GetType() == DataField::Type::REAL);
-  df.SetUnits(Units::GetUnitName(unit));
-  df.Set(fixed(iround(Units::ToUserUnit(fixed(value), unit))));
-  ctl->RefreshDisplay();
-}
-
-void
-LoadFormProperty(SubForm &form, const TCHAR *control_name,
                  UnitGroup unit_group, fixed value)
 {
   assert(control_name != NULL);
@@ -83,20 +65,6 @@ LoadOptionalFormProperty(SubForm &form, const TCHAR *control_name,
   df.SetUnits(Units::GetUnitName(unit));
   df.Set(fixed(iround(Units::ToUserUnit(fixed(value), unit))));
   ctl->RefreshDisplay();
-}
-
-bool
-SaveFormProperty(const SubForm &form, const TCHAR *control_name,
-                 UnitGroup unit_group, unsigned &value,
-                 const TCHAR *registry_name)
-{
-  int value2 = value;
-  if (SaveFormProperty(form, control_name, unit_group, value2,
-                       registry_name)) {
-    value = value2;
-    return true;
-  } else
-    return false;
 }
 
 bool
