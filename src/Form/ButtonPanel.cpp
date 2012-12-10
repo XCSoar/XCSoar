@@ -186,3 +186,17 @@ ButtonPanel::BottomLayout()
 {
   return BottomLayout(parent.GetClientRect());
 }
+
+void
+ButtonPanel::ShowAll()
+{
+  for (auto i : buttons)
+    i->Show();
+}
+
+void
+ButtonPanel::HideAll()
+{
+  for (auto i : buttons)
+    i->Hide();
+}

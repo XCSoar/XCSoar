@@ -38,6 +38,10 @@ public:
   ButtonPanel(ContainerWindow &parent, const DialogLook &look);
   ~ButtonPanel();
 
+  void SetDefaultHidden() {
+    style.Hide();
+  }
+
   WndButton *Add(const TCHAR *caption, ActionListener &listener, int id);
 
   /**
@@ -60,6 +64,9 @@ public:
    */
   PixelRect BottomLayout(PixelRect rc);
   PixelRect BottomLayout();
+
+  void ShowAll();
+  void HideAll();
 
 protected:
   gcc_pure
