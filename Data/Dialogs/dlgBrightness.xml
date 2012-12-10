@@ -8,6 +8,6 @@
   </Edit>
 
   <Edit Name="prpBrightness" Caption="Brightness" X="2" Width="-2" Height="22" CaptionWidth="68" Help="Adjusts backlight. When automatic backlight is enabled, this biases the backlight algorithm. When the automatic backlight is disabled, this controls the backlight directly.">
-    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="100" Step="5" OnDataAccess="OnBrightnessData"/>
+    <DataField DataType="integer" DisplayFormat="%u %%" EditFormat="%u" Min="0" Max="100" Step="5" OnDataAccess="OnBrightnessData"/>
   </Edit>
 </Form>

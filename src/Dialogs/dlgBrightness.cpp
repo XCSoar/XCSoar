@@ -42,7 +42,7 @@ Copyright_License {
 static WndForm *wf=NULL;
 
 static bool EnableAutoBrightness = true;
-static int BrightnessValue = 0;
+static unsigned BrightnessValue = 0;
 
 static void UpdateValues() {
   static PeriodClock last_time;
