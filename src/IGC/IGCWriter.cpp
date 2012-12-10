@@ -29,10 +29,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
 static char *
 FormatIGCLocation(char *buffer, const GeoPoint &location)
 {
@@ -107,27 +103,23 @@ bool
 IGCWriter::WriteLine(const char *a, const TCHAR *b)
 {
   size_t a_length = strlen(a);
-  size_t b_length = _tcslen(b);
-  char buffer[a_length + b_length * 4 + 1];
-  memcpy(buffer, a, a_length);
+  assert(a_length < MAX_IGC_BUFF);
 
-#ifdef _UNICODE
-  if (b_length > 0) {
-    int len = ::WideCharToMultiByte(CP_ACP, 0, b, b_length,
-                                    buffer + a_length, b_length * 4,
-                                    NULL, NULL);
-    if (len <= 0)
-      return false;
+  if (buffer.IsFull() && !Flush())
+    return false;
 
-    a_length += len;
-  }
+  assert(!buffer.IsFull());
 
-  buffer[a_length] = 0;
-#else
-  memcpy(buffer + a_length, b, b_length + 1);
-#endif
+  char *const dest = buffer.Append(), *const end = dest + MAX_IGC_BUFF - 1,
+    *p = dest;
 
-  return WriteLine(buffer);
+  p = std::copy(a, a + a_length, p);
+  p = CopyIGCString(p, end, b);
+  *p = '\0';
+
+  grecord.AppendRecordToBuffer(dest);
+
+  return true;
 }
 
 void

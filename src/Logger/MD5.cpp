@@ -149,7 +149,7 @@ void
 MD5::AppendString(const unsigned char *in, bool skip_invalid_igc_chars)
 {
   for (; *in != 0; ++in) {
-    if (skip_invalid_igc_chars && !IsValidIGCChar(*in))
+    if (skip_invalid_igc_chars && !IsValidIGCChar(char(*in)))
       continue;
 
     Append(*in);
