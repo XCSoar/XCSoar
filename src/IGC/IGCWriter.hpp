@@ -61,6 +61,22 @@ public:
   void Sign();
 
 private:
+  /**
+   * Begin writing a new line.  The returned buffer has #MAX_IGC_BUFF
+   * bytes.  Call CommitLine() when you are done writing to the buffer.
+   *
+   * @return nullptr on error
+   */
+  char *BeginLine();
+
+  /**
+   * Finish writing the line.
+   *
+   * @param line the buffer obtained with BeginLine()
+   * @return true on success
+   */
+  bool CommitLine(char *line);
+
   bool WriteLine(const char *line);
   bool WriteLine(const char *a, const TCHAR *b);
 

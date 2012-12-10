@@ -77,26 +77,39 @@ IGCWriter::Flush()
   return true;
 }
 
+char *
+IGCWriter::BeginLine()
+{
+  if (!buffer.IsFull() && !Flush())
+    return nullptr;
+
+  assert(!buffer.IsFull());
+  return buffer.Append();
+}
+
+bool
+IGCWriter::CommitLine(char *line)
+{
+  grecord.AppendRecordToBuffer(line);
+  return true;
+}
+
 bool
 IGCWriter::WriteLine(const char *line)
 {
   assert(strchr(line, '\r') == NULL);
   assert(strchr(line, '\n') == NULL);
 
-  if (buffer.IsFull() && !Flush())
+  char *const dest = BeginLine();
+  if (dest == nullptr)
     return false;
 
-  assert(!buffer.IsFull());
-
-  char *const dest = buffer.Append(), *const end = dest + MAX_IGC_BUFF - 1,
-    *p = dest;
+  char *const end = dest + MAX_IGC_BUFF - 1, *p = dest;
 
   p = CopyIGCString(dest, end, line);
   *p = '\0';
 
-  grecord.AppendRecordToBuffer(dest);
-
-  return true;
+  return CommitLine(dest);
 }
 
 bool
@@ -105,21 +118,17 @@ IGCWriter::WriteLine(const char *a, const TCHAR *b)
   size_t a_length = strlen(a);
   assert(a_length < MAX_IGC_BUFF);
 
-  if (buffer.IsFull() && !Flush())
+  char *const dest = BeginLine();
+  if (dest == nullptr)
     return false;
 
-  assert(!buffer.IsFull());
-
-  char *const dest = buffer.Append(), *const end = dest + MAX_IGC_BUFF - 1,
-    *p = dest;
+  char *const end = dest + MAX_IGC_BUFF - 1, *p = dest;
 
   p = std::copy(a, a + a_length, p);
   p = CopyIGCString(p, end, b);
   *p = '\0';
 
-  grecord.AppendRecordToBuffer(dest);
-
-  return true;
+  return CommitLine(dest);
 }
 
 void
