@@ -50,7 +50,6 @@ struct WindMeasurement
 /**
  * The WindMeasurementList is a list that can contain and
  * process windmeasurements.
- * @author Andr� Somers
  */
 class WindMeasurementList
 {
