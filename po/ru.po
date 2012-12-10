@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-26 23:00+0100\n"
-"PO-Revision-Date: 2012-08-25 22:22+0000\n"
-"Last-Translator: Grigory A. <ryhor.a@gmail.com>\n"
+"PO-Revision-Date: 2012-12-08 04:02+0000\n"
+"Last-Translator: Глория Хрусталёва <gloriya@hushmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-29 12:48+0000\n"
-"X-Generator: Launchpad (build 15864)\n"
+"X-Launchpad-Export-Date: 2012-12-10 10:24+0000\n"
+"X-Generator: Launchpad (build 16341)\n"
 
 #. #-#-#-#-#  cpp.pot (PACKAGE VERSION)  #-#-#-#-#
 #. .. append " - Task #[n]" suffix to the task name
@@ -55,7 +55,7 @@ msgstr "Воздушное пространство"
 
 #: src/Airspace/AirspaceParser.cpp:895
 msgid "Unknown airspace filetype"
-msgstr ""
+msgstr "Неизвестный тип файла воздушного пространства"
 
 #: src/Computer/ConditionMonitor/ConditionMonitorAATTime.cpp:52
 msgid "Expect early task arrival"
@@ -1180,9 +1180,9 @@ msgid ""
 msgstr "Величина силы тяжести (перегрузки). Из внешнего варио."
 
 #: src/InfoBoxes/Content/Factory.cpp:512
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Next GR"
-msgstr "Следующий"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:513
 #, no-c-format
@@ -2239,9 +2239,9 @@ msgid "Start open/close countdown"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1135
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open"
-msgstr "Точка старта"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1136
 #, no-c-format
@@ -2254,9 +2254,9 @@ msgid "Start open/close countdown at arrival"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Start open arr"
-msgstr "Начать запись"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:1145
 #, no-c-format
@@ -2354,18 +2354,16 @@ msgid "Time Below"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:851 src/InfoBoxes/Content/Task.cpp:892
-#, fuzzy
 msgid "Closed"
-msgstr "Закрыть"
+msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:856 src/InfoBoxes/Content/Task.cpp:897
 msgid "Open"
 msgstr ""
 
 #: src/InfoBoxes/Content/Task.cpp:861 src/InfoBoxes/Content/Task.cpp:902
-#, fuzzy
 msgid "Waiting"
-msgstr "Настройки ветра"
+msgstr ""
 
 #: src/InfoBoxes/InfoBoxSettings.cpp:79 src/InfoBoxes/Panel/WindSetup.cpp:81
 #: src/Dialogs/WindSettingsPanel.cpp:51 Data/Dialogs/dlgVegaDemo.xml:14
@@ -2748,9 +2746,8 @@ msgid "around terrain"
 msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:246
-#, fuzzy
 msgid "Unreachable through terrain."
-msgstr "ФИНАЛЬНЫЙ ГЛАЙД ПЕРЕСЕКАЕТ РЕЛЬЕФ"
+msgstr ""
 
 #: src/Renderer/MapItemListRenderer.cpp:251
 msgid "Arrival altitude incl. safety height"
@@ -3456,9 +3453,8 @@ msgid "Select a file"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:684
-#, fuzzy
 msgid "Failed to download the repository index."
-msgstr "Ошибка загрузки листа полетов"
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:693 src/Dialogs/FileManager.cpp:720
 #: Data/Input/default.xci:673
@@ -3466,9 +3462,8 @@ msgid "File Manager"
 msgstr ""
 
 #: src/Dialogs/FileManager.cpp:714
-#, fuzzy
 msgid "The file manager is not available on this device."
-msgstr "Нет подсказки для этого..."
+msgstr ""
 
 #: src/Dialogs/FileManager.cpp:717
 msgid "The file manager requires Android 2.3."
@@ -6159,9 +6154,8 @@ msgid "Determines the way the wind arrow is drawn on the map."
 msgstr "Определяет как \"стрелка ветра\" рисуется на карте"
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:184
-#, fuzzy
 msgid "FAI triangle areas"
-msgstr "Треугольник FAI"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/SymbolsConfigPanel.cpp:185
 msgid "Show FAI triangle areas on the map."
@@ -6906,14 +6900,12 @@ msgid "Minimum AAT task time in minutes."
 msgstr ""
 
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:193
-#, fuzzy
 msgid "Start open time"
-msgstr "Время старта"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:194
-#, fuzzy
 msgid "Start close time"
-msgstr "Время старта"
+msgstr ""
 
 #: src/Dialogs/TaskManager/TaskPropertiesPanel.cpp:227
 msgid "FAI start / finish rules"
@@ -7434,9 +7426,8 @@ msgid "Not Found"
 msgstr ""
 
 #: src/Dialogs/TimeEntry.cpp:83
-#, fuzzy
 msgid "Now"
-msgstr "Нет"
+msgstr ""
 
 #: src/Dialogs/dlgWeather.cpp:47
 msgid "Weather parameters"
@@ -7556,9 +7547,8 @@ msgid "Hot-air balloon"
 msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:135
-#, fuzzy
 msgid "Track friends"
-msgstr "Друзья"
+msgstr ""
 
 #: src/Dialogs/Settings/Panels/TrackingConfigPanel.cpp:136
 msgid "Download the position of your friends live from the SkyLines server."
@@ -8560,407 +8550,3 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#~ msgid "Flight replay"
-#~ msgstr "Просмотр полета."
-
-#~ msgid "Task Status"
-#~ msgstr "Сост. задачи"
-
-#~ msgid "Setup Mode"
-#~ msgstr "Режим настройки"
-
-#~ msgid "System Status"
-#~ msgstr "Состояние сисиемы"
-
-#~ msgid "Italic"
-#~ msgstr "Курсив"
-
-#~ msgid "Speed achieved"
-#~ msgstr "Достигн скорость"
-
-#~ msgid "Bold"
-#~ msgstr "Жирный"
-
-#~ msgid "Edit Text"
-#~ msgstr "Ввод текста"
-
-#~ msgid "Height of font.  65 is large, 20 is very small."
-#~ msgstr "Размер шрифта. 60 большой, 20 очень маленький"
-
-#~ msgid "FLARM"
-#~ msgstr "FLARM"
-
-#~ msgid "Picker"
-#~ msgstr "Сортиров."
-
-#~ msgid "Italic font"
-#~ msgstr "Курсив"
-
-#~ msgid "Bold font"
-#~ msgstr "Жирный шрифт"
-
-#~ msgid "Aircraft Status"
-#~ msgstr "Статус ЛА"
-
-#~ msgid ""
-#~ "Geometric gradient to the arrival height above the final waypoint. This "
-#~ "is not adjusted for total energy."
-#~ msgstr ""
-#~ "Геометрический градиент высоты прибытия на финиш. Не скомпенсирован по "
-#~ "полной энергии."
-
-#~ msgid "Select a label shape."
-#~ msgstr "Выберите форму меток"
-
-#~ msgid ""
-#~ "Reference used for start max height rule\n"
-#~ "[MSL] Reference is altitude above mean sea level\n"
-#~ "[AGL] Reference is the height above the start point"
-#~ msgstr ""
-#~ "Нулевой уровень для правила \"макс высота старта\"\n"
-#~ "[MSL] высота относительно среднего уровня моря\n"
-#~ "[AGL] высота относительно места старта"
-
-#~ msgid ""
-#~ "Reference used for finish min height rule\n"
-#~ "[MSL] Reference is altitude above mean sea level\n"
-#~ "[AGL] Reference is the height above the finish point"
-#~ msgstr ""
-#~ "Нулевой уровень для правила \"мин высота финиша\"\n"
-#~ "[MSL] высота относительно среднего уровня моря\n"
-#~ "[AGL] высота относительно места старта"
-
-#~ msgid "(blank)"
-#~ msgstr "(пустой)"
-
-#~ msgid "Waypoint name"
-#~ msgstr "Имя точки"
-
-#~ msgid "Auto. zoom"
-#~ msgstr "Авто увеличение"
-
-#~ msgid "Previous turnpoint"
-#~ msgstr "прошлый поворотный пункт"
-
-#~ msgid "Battery Voltage"
-#~ msgstr "Напряжение батареи"
-
-#~ msgid "CPU Load"
-#~ msgstr "Загрузка процессора"
-
-#~ msgid "No Task"
-#~ msgstr "Задач Нет"
-
-#~ msgid "Finish turnpoint"
-#~ msgstr "завершать поворотный пункт"
-
-#~ msgid "Start turnpoint"
-#~ msgstr "запускать поворотный пункт"
-
-#~ msgid "Numbers"
-#~ msgstr "Числа"
-
-#~ msgid "Names"
-#~ msgstr "Имена"
-
-#~ msgid "Meters"
-#~ msgstr "Метры"
-
-#~ msgid "Feet"
-#~ msgstr "Футы"
-
-#~ msgid "2 minutes"
-#~ msgstr "2 минут"
-
-#~ msgid "3 minutes"
-#~ msgstr "3 минут"
-
-#~ msgid "60 seconds"
-#~ msgstr "60 секунд"
-
-#~ msgid "90 seconds"
-#~ msgstr "90 секунд"
-
-#~ msgid "15 seconds"
-#~ msgstr "15 секунд"
-
-#~ msgid "30 seconds"
-#~ msgstr "30 секунд"
-
-#~ msgid "Auxiliary"
-#~ msgstr "Дополнение"
-
-#~ msgid "Task declared"
-#~ msgstr "Упражнение объявлено"
-
-#~ msgid "Next landpoint"
-#~ msgstr "Следующий посадочный пункт"
-
-#~ msgid "Furthest landpoint"
-#~ msgstr "Дальний посадочный пункт"
-
-#~ msgid "Closest landpoint"
-#~ msgstr "Ближайший посадочный пункт"
-
-#~ msgid "Previous landpoint"
-#~ msgstr "Предыдущий посадочный пункт"
-
-#~ msgid "Topology on"
-#~ msgstr "Топология включена"
-
-#~ msgid ""
-#~ "This is the height above mean sea level reported by the GPS. Touchscreen/"
-#~ "PC only: in simulation mode, this value is adjustable with the up/down "
-#~ "arrow keys and the right/left arrow keys also cause the glider to turn."
-#~ msgstr ""
-#~ "Эта высота над уровнем моря по данным GPS. Сенсорный экран/ Только для "
-#~ "ПК: в режиме симуляции, это значение устанавливается  вверх / вниз  и "
-#~ "правой / левой клавишами со стрелками к тому же заставляет планер "
-#~ "поворачивать."
-
-#~ msgid ""
-#~ "This is the barometric altitude obtained from a GPS equipped with "
-#~ "pressure sensor, or a supported external intelligent vario."
-#~ msgstr ""
-#~ "Высота полученная из GPS оснащенных барометрическими датчиками или от "
-#~ "электронного вариометра."
-
-#~ msgid "Time of flight"
-#~ msgstr "Время полета"
-
-#~ msgid "Unknown Filetype."
-#~ msgstr "Неизвестный формат файлов"
-
-#~ msgid ""
-#~ "Error occured,\n"
-#~ "Task NOT Declared!"
-#~ msgstr ""
-#~ "Произошла ошибка,\n"
-#~ "Задача не объявлена!"
-
-#~ msgid "Declare Task?"
-#~ msgstr "Объявить упражнение?"
-
-#~ msgid "Task Declared!"
-#~ msgstr "Упражнение объявлено!"
-
-#~ msgid "OK to invalidate declaration?"
-#~ msgstr "Ок для аннулирования объявленной задачи"
-
-#~ msgid "Could not open NMEA file!"
-#~ msgstr "Не могу открыть NMEA файл!"
-
-#~ msgid "L/D instantaneous"
-#~ msgstr "Качество текущее"
-
-#~ msgid ""
-#~ "Instantaneous glide ratio, given by the ground speed divided by the "
-#~ "vertical speed (GPS speed) over the last 20 seconds. Negative values "
-#~ "indicate climbing cruise. If the vertical speed is close to zero, the "
-#~ "displayed value is '---'."
-#~ msgstr ""
-#~ "Текущее качество планера, полученное путем деления скорости движения "
-#~ "относительно земли  на скороподъемность (GPS) в течение последних 20 "
-#~ "секунд. В режиме полета с набором высоты показывается отрицательные "
-#~ "значения. Если вертикальная скорость близка к нулю, отображается "
-#~ "значение'---'."
-
-#~ msgid ""
-#~ "Arrival altitude at the next waypoint relative to the safety arrival "
-#~ "altitude."
-#~ msgstr ""
-#~ "Высота прибытия на следующий поворотный сотносительно с безопасной "
-#~ "высотой прибытия."
-
-#~ msgid "Additional altitude required to reach the next turn point."
-#~ msgstr "Высота необходимая для достижения следующего поворотного пункта."
-
-#~ msgid ""
-#~ "Arrival altitude at the final task turn point relative to the safety "
-#~ "arrival altitude."
-#~ msgstr "Высота прибытия на финиш касательно безопасной высоты прибытия."
-
-#~ msgid ""
-#~ "The required glide ratio to finish the task, given by the distance to go "
-#~ "divided by the height required to arrive at the safety arrival altitude. "
-#~ "Negative values indicate a climb is necessary to finish. If the height "
-#~ "required is close to zero, the displayed value is '---'. Note that this "
-#~ "calculation may be optimistic because it reduces the height required to "
-#~ "finish by the excess energy height of the glider if its true airspeed is "
-#~ "greater than the MacCready and best LD speeds."
-#~ msgstr ""
-#~ "Потребное аэродинамическое качество необходимое что бы прийти к финишу, "
-#~ "определяется: дистанция до финиша деленная на безопасную высоту прибытия. "
-#~ "Отрицательные значения говорят о том что необходимо добрать высоты для "
-#~ "долета.Если потребная высота близка к нулю показывается значение '---'. "
-#~ "Обратите внимание на то что расчет может быть оптимистичным поскольку "
-#~ "снижает высоту необходимую для финиша на избыточную энергию высоты "
-#~ "планера если его истинная воздушная скорость больше Маккриди и лучшие LD "
-#~ "скоростей"
-
-#~ msgid "Start point cycle"
-#~ msgstr "Стартовый круг"
-
-#~ msgid ""
-#~ "The required glide ratio to reach the next waypoint, given by the "
-#~ "distance to next waypoint divided by the height required to arrive at the "
-#~ "safety arrival altitude. Negative values indicate a climb is necessary to "
-#~ "reach the waypoint. If the height required is close to zero, the "
-#~ "displayed value is '---'.   Note that this calculation may be optimistic "
-#~ "because it reduces the height required to reach the waypoint by the "
-#~ "excess energy height of the glider if its true airspeed is greater than "
-#~ "the MacCready and best LD speeds."
-#~ msgstr ""
-#~ "Потребное качество до следующей путевой точки. Определяется расстоянием "
-#~ "до нее деленным на потребную высоту для безопасного прибытия туда."
-
-#~ msgid ""
-#~ "Forecast temperature of the ground at the home airfield, used in "
-#~ "estimating convection height and cloud base in conjunction with outside "
-#~ "air temperature and relative humidity probe. (Touchscreen/PC only) "
-#~ "Pressing the up/down cursor keys adjusts this forecast temperature."
-#~ msgstr ""
-#~ "Прогноз температуры почвы на домашнем аэродроме, используемый при оценке "
-#~ "высоты конвекции и нижней границы облаков в сочетании с температурой и "
-#~ "относительной влажности воздуха полученные с внешнего датчика."
-
-#~ msgid ""
-#~ "Instantaneous glide ratio, given by the indicated airspeed divided by the "
-#~ "total energy vertical speed, when connected to an intelligent variometer. "
-#~ "Negative values indicate climbing cruise. If the total energy vario speed "
-#~ "is close to zero, the displayed value is '---'."
-#~ msgstr ""
-#~ "Аэродинамическое качество планера, вычисляется воздушной скоростью, "
-#~ "деленной на скомпенсированную скороподьемность,полученные из электронного "
-#~ "вариометра. Отрицательные значения указывают на восхождящее движениез. "
-#~ "Если общая скороподъемность близка к нулю, отображается значение'---'."
-
-#~ msgid ""
-#~ "Difference between estimated task time and AAT minimum time. Colored red "
-#~ "if negative (expected arrival too early), or blue if in sector and can "
-#~ "turn now with estimated arrival time greater than AAT time plus 5 minutes."
-#~ msgstr ""
-#~ "Разница между расчетным временем прибытия и назначенным временем задачи. "
-#~ "Окрашено красным если время прибытия меньше назначеного (ранее прибытие)  "
-#~ "или синим если вы в в зоне отметки и можете возвращатся, и предполагаемое "
-#~ "время прибытия больше назначенного времени на 5 минут."
-
-#~ msgid ""
-#~ "The distance made in the configured period of time , divided by the "
-#~ "altitude lost since then. Negative values are shown as ^^^ and indicate "
-#~ "climbing cruise (height gain). Over 200 of LD the value is shown as +++ . "
-#~ "You can configure the period of averaging in the Special config menu. "
-#~ "Suggested values for this configuration are 60, 90 or 120: lower values "
-#~ "will be closed to LD INST, and higher values will be closed to LD Cruise. "
-#~ "Notice that the distance is NOT the straight line between your old and "
-#~ "current position: it's exactly the distance you have made even in a "
-#~ "zigzag glide. This value is not calculated while circling. "
-#~ msgstr ""
-#~ "Усредненное качество. Расстояние, пройденное в указзаный отрезок времени, "
-#~ "деленное на потеряную высоту. Отрицательные значения отображаются как ^ ^ "
-#~ "^ и указывают на восходящий полет (высота увеличилась).Качество более 200 "
-#~ "едениц отображается как \"+ + +. Вы можете настроить период усреднения на "
-#~ "специальном конфигурационном меню. Предлагаемые значения для этой "
-#~ "конфигурации 60, 90 или 120 минут: более низкие значения будут закрыты "
-#~ "для LD INST, и более высокие значения будут закрыты. Обратите внимание, "
-#~ "что расстояние не прямая линия между старой и текущей позицией: это точно "
-#~ "расстояние, которое вы прошли учитывая все изгибы пути. Время проведеное "
-#~ "в спиралях не учитывается. "
-
-#~ msgid "Absolute arrival altitude at the next waypoint in final glide."
-#~ msgstr "Абсолютная высота прибытия на следующую точку в финишном режиме."
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "Разряжена батарея"
-
-#~ msgid "Configuration saved"
-#~ msgstr "Настройки сохранены"
-
-#~ msgid "Acknowledge for day?"
-#~ msgstr "Подтвердить на день?"
-
-#~ msgid "Waypoint not editable"
-#~ msgstr "Точка не редактируемая"
-
-#~ msgid "Trending Average climb"
-#~ msgstr "Тенденции среднего набора"
-
-#~ msgid "C"
-#~ msgstr "C"
-
-#~ msgid "F"
-#~ msgstr "F"
-
-#~ msgid "ft/min"
-#~ msgstr "фут/мин"
-
-#~ msgid "AA Time"
-#~ msgstr "AAТ время"
-
-#~ msgid "Terrain Display"
-#~ msgstr "Показать ландшафт"
-
-#~ msgid "System"
-#~ msgstr "Система"
-
-#~ msgid "No fix"
-#~ msgstr "Нет положения"
-
-#~ msgid "Alternate"
-#~ msgstr "Настроить"
-
-#~ msgid "Start Anyway"
-#~ msgstr "Старт по-любому"
-
-#~ msgid "Map waypoints"
-#~ msgstr "Отображение точек на карте"
-
-#~ msgid "Locked"
-#~ msgstr "Блокир."
-
-#~ msgid "Task Start"
-#~ msgstr "Старт задачи"
-
-#~ msgid "Device A"
-#~ msgstr "Прибор A"
-
-#~ msgid "Device B"
-#~ msgstr "Прибор B"
-
-#~ msgid "Refresh"
-#~ msgstr "Обновить"
-
-#~ msgid "Declared"
-#~ msgstr "Заявлено"
-
-#~ msgid "Set speed remaining"
-#~ msgstr "Расчетная скорость"
-
-#~ msgid "Free"
-#~ msgstr "Свбодн."
-
-#~ msgid "Setup ..."
-#~ msgstr "Установки ..."
-
-#~ msgid "Baudrate"
-#~ msgstr "Скорость"
-
-#~ msgid "Dialog boxes"
-#~ msgstr "Диалоговые окна"
-
-#~ msgid "File type"
-#~ msgstr "Тип файла"
-
-#~ msgid "Glide terrain line"
-#~ msgstr "Отображение долета"
-
-#~ msgid "Marks cleared"
-#~ msgstr "ОЧИСТКА МЕТОК"
-
-#~ msgid ""
-#~ "Nearest\n"
-#~ "Waypoint"
-#~ msgstr ""
-#~ "Ближайшая\n"
-#~ "точка"
