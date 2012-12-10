@@ -31,10 +31,6 @@
 
 #include <assert.h>
 
-#if defined(__WINE__) && !defined(_UNICODE)
-#include <windows.h>
-#endif
-
 AbstractAirspace::~AbstractAirspace() {}
 
 bool
@@ -208,20 +204,7 @@ bool
 AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const
 {
   size_t prefix_length = _tcslen(prefix);
-#if defined(__WINE__) && !defined(_UNICODE)
-  if (name.length() < prefix_length)
-    return false;
-
-  /* on WINE, we don't have _tcsnicmp() */
-  return CompareStringA(LOCALE_USER_DEFAULT,
-                        NORM_IGNORECASE|NORM_IGNOREKANATYPE|
-                        NORM_IGNORENONSPACE|NORM_IGNORESYMBOLS|
-                        NORM_IGNOREWIDTH,
-                        name.c_str(), prefix_length,
-                        prefix, prefix_length) == CSTR_EQUAL;
-#else
   return StringIsEqualIgnoreCase(name.c_str(), prefix, prefix_length);
-#endif
 }
 
 const tstring 
