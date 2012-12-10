@@ -24,71 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_TASK_EDIT_PANEL_HPP
 #define XCSOAR_TASK_EDIT_PANEL_HPP
 
-#include "Widget/XMLWidget.hpp"
-#include "Form/List.hpp"
-#include "Form/ActionListener.hpp"
-
+class Widget;
 class TaskManagerDialog;
-struct DialogLook;
 struct TaskLook;
 struct AirspaceLook;
 class OrderedTask;
-class ListControl;
-class WndFrame;
-class Canvas;
 
-class TaskEditPanel
-  : public XMLWidget, public ActionListener,
-    private ListControl::Handler {
-  TaskManagerDialog &dialog;
-
-  const TaskLook &task_look;
-  const AirspaceLook &airspace_look;
-
-  OrderedTask **ordered_task_pointer, *ordered_task;
-  bool *task_modified;
-
-  ListControl *wTaskPoints;
-  WndFrame *wSummary;
-
-public:
-  TaskEditPanel(TaskManagerDialog &_dialog,
-                const TaskLook &_task_look, const AirspaceLook &_airspace_look,
-                OrderedTask **_active_task, bool *_task_modified)
-    :dialog(_dialog),
-     task_look(_task_look), airspace_look(_airspace_look),
-     ordered_task_pointer(_active_task), task_modified(_task_modified) {}
-
-  void UpdateButtons();
-
-  void MoveUp();
-  void MoveDown();
-
-  void OnClearAllClicked();
-  void OnEditTurnpointClicked();
-  void EditTaskPoint(unsigned ItemIndex);
-  void OnMakeFinish();
-
-  bool OnKeyDown(unsigned key_code);
-
-  virtual void Prepare(ContainerWindow &parent, const PixelRect &rc);
-  virtual void ReClick();
-  virtual void Show(const PixelRect &rc);
-  virtual void Hide();
-
-protected:
-  void RefreshView();
-
-private:
-  /* virtual methods from ActionListener */
-  virtual void OnAction(int id) gcc_override;
-
-  /* virtual methods from List::Handler */
-  virtual void OnPaintItem(Canvas &canvas, const PixelRect rc,
-                           unsigned idx);
-  virtual void OnCursorMoved(unsigned index);
-  virtual bool CanActivateItem(unsigned index) const;
-  virtual void OnActivateItem(unsigned index);
-};
+Widget *
+CreateTaskEditPanel(TaskManagerDialog &dialog,
+                    const TaskLook &task_look,
+                    const AirspaceLook &airspace_look,
+                    OrderedTask **active_task, bool *task_modified);
 
 #endif

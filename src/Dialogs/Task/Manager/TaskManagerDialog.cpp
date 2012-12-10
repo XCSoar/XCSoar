@@ -162,8 +162,8 @@ TaskManagerDialog::Create(SingleWindow &parent)
   wCalculator->SetTargetButton(target_button);
 
   const MapLook &look = UIGlobals::GetMapLook();
-  TaskEditPanel *wEdit = new TaskEditPanel(*this, look.task, look.airspace,
-                                           &task, &modified);
+  Widget *wEdit = CreateTaskEditPanel(*this, look.task, look.airspace,
+                                      &task, &modified);
 
   TaskMiscPanel *list_tab = new TaskMiscPanel(*this, &task, &modified);
 
