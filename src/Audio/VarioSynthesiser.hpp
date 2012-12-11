@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_AUDIO_VARIO_SYNTHESISER_HPP
 
 #include "ToneSynthesiser.hpp"
+#include "Thread/Mutex.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
@@ -32,6 +33,12 @@ Copyright_License {
  * This class generates vario sound.
  */
 class VarioSynthesiser : public ToneSynthesiser {
+  /**
+   * This mutex protects all atttributes below.  It is locked
+   * automatically by all public methods.
+   */
+  Mutex mutex;
+
   /**
    * The number of audible samples in each period.
    */
@@ -141,6 +148,11 @@ public:
   virtual void Synthesise(int16_t *buffer, size_t n);
 
 private:
+  /**
+   * Same as SetSilence(), but doesn't lock the mutex.
+   */
+  void UnsafeSetSilence();
+
   /**
    * Convert a vario value to a tone frequency.
    *

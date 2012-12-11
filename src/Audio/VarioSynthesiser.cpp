@@ -50,11 +50,13 @@ VarioSynthesiser::VarioToFrequency(int ivario)
 void
 VarioSynthesiser::SetVario(unsigned sample_rate, fixed vario)
 {
+  const ScopeLock protect(mutex);
+
   const int ivario = Clamp((int)(vario * 100), min_vario, max_vario);
 
   if (dead_band_enabled && InDeadBand(ivario)) {
     /* inside the "dead band" */
-    SetSilence();
+    UnsafeSetSilence();
     return;
   }
 
@@ -91,6 +93,13 @@ VarioSynthesiser::SetVario(unsigned sample_rate, fixed vario)
 void
 VarioSynthesiser::SetSilence()
 {
+  const ScopeLock protect(mutex);
+  UnsafeSetSilence();
+}
+
+void
+VarioSynthesiser::UnsafeSetSilence()
+{
   audible_count = 0;
   silence_count = 1;
 
@@ -103,9 +112,12 @@ VarioSynthesiser::SetSilence()
   silence_remaining = 0;
 }
 
+
 void
 VarioSynthesiser::Synthesise(int16_t *buffer, size_t n)
 {
+  const ScopeLock protect(mutex);
+
   assert(audible_count > 0 || silence_count > 0);
 
   if (silence_count == 0) {
