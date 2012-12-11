@@ -28,9 +28,9 @@ Copyright_License {
 
 #ifdef HAVE_PCM_PLAYER
 #include "Math/fixed.hpp"
+#endif
 
 struct VarioSoundSettings;
-#endif
 
 namespace AudioVarioGlue {
 #ifdef HAVE_PCM_PLAYER
