@@ -34,6 +34,10 @@ struct RasterPoint : public tagPOINT {
 
   constexpr RasterPoint(PixelScalar _x, PixelScalar _y)
     :tagPOINT({_x, _y}) {}
+
+  constexpr RasterPoint operator+(RasterPoint other) const {
+    return { x + other.x, y + other.y };
+  }
 };
 
 static_assert(sizeof(RasterPoint) == sizeof(POINT), "not same size");
