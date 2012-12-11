@@ -39,7 +39,6 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Task/Ordered/OrderedTask.hpp"
-#include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 
 #include <assert.h>
 #include <windef.h>
@@ -85,9 +84,7 @@ public:
      more(false) {}
 
   void RefreshView();
-  void DirtyList();
 
-  void SaveTask();
   void LoadTask();
   void DeleteTask();
   void RenameTask();
@@ -217,33 +214,6 @@ TaskListPanel::RefreshView()
   TCHAR text[300];
   OrderedTaskSummary(ordered_task, text, false);
   wSummary->SetCaption(text);
-}
-
-void
-TaskListPanel::DirtyList()
-{
-  if (task_store != NULL) {
-    task_store->Scan(more);
-    RefreshView();
-  }
-}
-
-void
-TaskListPanel::SaveTask()
-{
-  (*active_task)->GetFactory().CheckAddFinish();
-
-  if ((*active_task)->CheckTask()) {
-    if (!OrderedTaskSave(**active_task))
-      return;
-
-    task_store->Scan(more);
-    RefreshView();
-  } else {
-    ShowMessageBox(getTaskValidationErrors(
-        (*active_task)->GetFactory().GetValidationErrors()), _("Task not saved"),
-        MB_ICONEXCLAMATION);
-  }
 }
 
 void
